@@ -27,9 +27,16 @@ struct imageCloneTbl *imageCloneTblNew(struct sqlConnection *conn,
 void imageCloneTblFree(struct imageCloneTbl **ictPtr);
 /* Free object */
 
+unsigned imageCloneTblGetId(struct sqlConnection *conn, char *acc);
+/* get id for an acc, or 0 if none */
+
 void imageCloneTblAdd(struct imageCloneTbl *ict, unsigned imageId,
                       char *acc, unsigned type, char direction);
 /* Add an entry to the table */
+
+void imageCloneTblMod(struct imageCloneTbl *ict, unsigned imageId,
+                      char *acc, char direction);
+/* update an entry in the table */
 
 void imageCloneTblCommit(struct imageCloneTbl *ict,
                          struct sqlConnection *conn);

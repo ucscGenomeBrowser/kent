@@ -106,8 +106,8 @@ sub downloadOrCheckFull($$$$;$) {
 }
 
 # Download or check daily files.
-sub downloadOrCheckDaily($$$;$) {
-    my($remDir, $outDir, $fileRE, $minModTime) = @_;
+sub downloadOrCheckDaily($$$) {
+    my($remDir, $outDir, $fileRE) = @_;
     my @files = ftpGetDirList($remDir);
 
     if ($main::verbose) {
@@ -119,7 +119,7 @@ sub downloadOrCheckDaily($$$;$) {
         my $file = basename($remFile);
         if ($file =~ $fileRE) {
             my $localFile = "$outDir/$file";
-            if (ftpGetOrCheck(0, $remFile, $localFile, $minModTime)) {
+            if (ftpGetOrCheck(0, $remFile, $localFile)) {
                 md5Files("$outDir/$file.md5", $localFile);
             }
         } else {
@@ -169,8 +169,6 @@ sub updateGenBank($) {
 # every night, we can't verify it.
 sub updateRefSeq($) {
     my($version) = @_;
-
-    # mRNA and peptide fasta
     my $fullRE = qr/(^rscu\.gbff\.Z$)|(^README$)/;
     my $dailyRE = qr/(^.*\.gbff\.Z$)/;
 
@@ -186,14 +184,9 @@ sub updateRefSeq($) {
         ftpOpen(); # reopen
     }
 
-    # Since older dailies are around, we skip ones older than the cummulative
-    # download time, however we go back one day to make sure we don't
-    my $cumModTime = getFileModTime("$refSeqDir/cumulative/rscu.gbff.Z");
-    $cumModTime -= 60*60*24;  # one day in seconds
-
-    # now get or verify dailies
-    downloadOrCheckDaily("refseq/daily", "$refSeqDir/daily", $dailyRE,
-                         $cumModTime);
+    # Get or verify dailies. We just download all dailiess, even if they are
+    # before cummulative download.  It's to risky to rely on my times.  my
+    downloadOrCheckDaily("refseq/daily", "$refSeqDir/daily", $dailyRE);
     ftpClose();
 }
 

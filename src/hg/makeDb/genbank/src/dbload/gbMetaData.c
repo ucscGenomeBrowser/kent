@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.8 2003/07/11 04:13:40 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.9 2003/07/25 18:25:33 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -112,7 +112,7 @@ static char *raFieldTables[] =
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static char gTmpDir[PATH_LEN];      /* tmp dir for load file */
 static unsigned gSrcDb = 0;         /* source database */
-static char gbdbGenBank[PATH_LEN];  /* root dir to store in database */
+static char gGbdbGenBank[PATH_LEN];  /* root dir to store in database */
 
 /* FIXME: maybe should drop gSrcDb ??? */
 
@@ -306,15 +306,15 @@ return ((s == NULL) ? "" : s);
 }
 
 void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
-                    struct dbLoadOptions* options, char *gbdbGenBankPath,
+                    struct dbLoadOptions* options, char *gbdbGenBank,
                     char *tmpDir)
 /* initialize for parsing metadata */
 {
 gOptions = options;
 gSrcDb = srcDb;
-gbdbGenBank[0] = '\0';
-if (gbdbGenBankPath != NULL)
-    strcpy(gbdbGenBank, gbdbGenBankPath);
+gGbdbGenBank[0] = '\0';
+if (gbdbGenBank != NULL)
+    strcpy(gGbdbGenBank, gbdbGenBank);
 strcpy(gTmpDir, tmpDir);
 
 /* field table is cached in goFaster mode */
@@ -351,9 +351,9 @@ static HGID getExtFileId(struct sqlConnection *conn, char* relPath)
 {
 char path[PATH_LEN];
 path[0] = '\0';
-if (gbdbGenBank[0] != '\0')
+if (gGbdbGenBank[0] != '\0')
     {
-    strcpy(path, gbdbGenBank);
+    strcpy(path, gGbdbGenBank);
     strcat(path, "/");
     }
 strcat(path, relPath);
@@ -577,14 +577,32 @@ else if (status->stateChg & GB_META_CHG)
     }
 }
 
-static void imageCloneUpdate(struct gbStatus* status)
+static void imageCloneUpdate(struct gbStatus* status, struct sqlConnection *conn)
 /* update image clone table */
 {
-/* add to image table if it has a IMAGE clone id */
-unsigned imageId = imageCloneGBParse(raFieldCurVal("clo"));
-if (imageId != 0)
-    imageCloneTblAdd(imageCloneTbl, imageId, status->acc, status->type,
-                     raDir);
+/* assumes image id is never removed; most like true, would only
+ * be changed on a mistake */
+if (status->stateChg & (GB_NEW|GB_META_CHG))
+    {
+    unsigned imageId = imageCloneGBParse(raFieldCurVal("clo"));
+    if (imageId != 0)
+        {
+        if (status->stateChg & GB_NEW)
+            {
+            imageCloneTblAdd(imageCloneTbl, imageId, status->acc, status->type,
+                             raDir);
+            }
+        else if (status->stateChg & GB_META_CHG)
+            {
+            unsigned oldImageId = imageCloneTblGetId(conn, status->acc);
+            if (oldImageId == 0)
+                imageCloneTblAdd(imageCloneTbl, imageId, status->acc, status->type,
+                                 raDir);
+            else if (imageId != oldImageId)
+                imageCloneTblMod(imageCloneTbl, imageId, status->acc, raDir);
+            }
+        }
+    }
 }
 
 static void refSeqStatusUpdate(struct gbStatus* status)
@@ -594,7 +612,7 @@ if (status->stateChg & GB_NEW)
     sqlUpdaterAddRow(refSeqStatusUpd, "%s\t%s", raAcc, raRefSeqStatus);
 else if (status->stateChg & GB_META_CHG)
     sqlUpdaterModRow(refSeqStatusUpd, 1, "status='%s' WHERE mrnaAcc='%s'",
-                       raRefSeqStatus, raAcc);
+                     raRefSeqStatus, raAcc);
 }
 
 static void refLinkUpdate(struct sqlConnection *conn, struct gbStatus* status)
@@ -657,7 +675,7 @@ if (!keepDesc(status))
 
 seqUpdate(status, faFileId);  /* must be first to get status->gbSeqId */
 mrnaUpdate(status, conn);
-imageCloneUpdate(status);
+imageCloneUpdate(status, conn);
 
 if (gSrcDb == GB_REFSEQ)
     {

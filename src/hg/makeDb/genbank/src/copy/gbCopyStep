@@ -10,7 +10,8 @@
 #
 # Options:
 #   -rsyncPort=port - rsync port to use, or `rsh' or `ssh'. Defaults to ssh.
-#   -gbdb=dir - Use this directory for /gbdb (useful in debugging).
+#   -gbdb=dir - Use this directory for /gbdb (useful in debugging), set to
+#    empty or "no" to disable link into /gbdb.
 #   -verbose
 # Arguments:`
 #   - buildServer - host with build files.
@@ -142,21 +143,23 @@ my($buildServer, $buildRoot, @databases) = @ARGV;
 # This allows for frequent polling without unnecessary noise.
 my $buildTimeTmp = getBuildTimeFile($rsyncPort, $buildServer, $buildRoot);
 my $lastBuildTime = "var/copy/build.time";
+my $copyTime = "var/copy/copy.time";
 
 if (defined($buildTimeTmp)
-    && checkBuildTime($lastBuildTime, $buildTimeTmp)) {
+    && (checkBuildTime($lastBuildTime, $buildTimeTmp) || (!-e $copyTime))) {
 
     # build time has changed
     beginTask("copy", "copy");
-    my $copyTime = "var/copy/copy.time";
 
     rsyncBuildFiles($rsyncPort, $buildServer, $buildRoot, @databases);
 
-    if (checkIfGbdbLinkable($gbdbDir)) {
-        linkProcessedFastas($gbdbDir);
-    } else {
-        # haven't implemented copying with local rsync
-        gbError("can link, not on same filesystem: data/processed and $gbdbDir/genbank/data/Processed");
+    if (($gbdbDir ne "no") && ($gbdbDir ne "")) {
+        if (checkIfGbdbLinkable($gbdbDir)) {
+            linkProcessedFastas($gbdbDir);
+        } else {
+            # haven't implemented copying with local rsync
+            gbError("can link, not on same filesystem: data/processed and $gbdbDir/genbank/data/Processed");
+        }
     }
 
     # install time files.

@@ -150,11 +150,17 @@ if ($usingIservers) {
     if (dirname($workDir) eq ".") {
         gbError("work directory must have at least two level, got: $workDir");
     }
+    if (!defined($clusterRootDir)) {
+        $clusterRootDir = "/iscratch/genbank";
+    }
     # use last two directories in workDir on cluster
     $clusterWorkDir = $clusterRootDir . "/" . basename(dirname($workDir)) . "/"
         . basename($workDir);
     $localWorkDir = $workDir;
 } else {
+    if (!defined($clusterRootDir)) {
+        $clusterRootDir = "/iscratch/genbank";
+    }
     $clusterWorkDir = "$clusterRootDir/$workDir";
     $localWorkDir = $clusterWorkDir;
 }

@@ -29,7 +29,7 @@ short version = gbSplitAccVer(psl->qName, acc);
 
 /* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (version  != entry->selectVer))
+if ((entry != NULL) && (version == entry->selectVer))
     {
     /* selected */
     if (!gInclVersion)

@@ -5,7 +5,7 @@
 #include "sqlDeleter.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.1 2003/06/03 01:27:45 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.2 2003/07/25 18:25:33 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -22,7 +22,7 @@ static char* createSql =
 "create table gbExtFile ("
   "id int unsigned not null primary key,"  /* Unique ID. */
   "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
-  "size bigint not null,"            /* Size of file (checked) */
+  "size bigint unsigned not null,"            /* Size of file (checked) */
                    /* Extra indices. */
   "index (path))";
 

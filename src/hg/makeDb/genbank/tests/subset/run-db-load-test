@@ -10,7 +10,7 @@ GBROOT=`dirname $dir`
 # FIXME: need to parameterize or figure out version; check for unreadable dirs.
 
 doOrphanTest=NO
-confFile='-conf refseq,xeno.conf'
+#confFile='-conf refseq,xeno.conf'
 
 shopt -s nullglob
 

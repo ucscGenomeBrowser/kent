@@ -24,7 +24,8 @@ BEGIN {
                            gbChmod getReleases getLastRelease getUpdates
                            parseOptEq inList getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
-                           findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList);
+                           findConf getConf getConfNo getDbConf getDbConfNo splitSpaceList
+                           callMysql runMysqlDump);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
@@ -599,20 +600,29 @@ sub trim($) {
     return $str;
 }
 
+# parse a line in the conf file, return (key, val) or undef.
+sub parseConfLine($$) {
+    my($file, $line) = @_;
+
+    $line = trim($line);
+    if (!(($line =~ /^$/) || ($line =~ /^\#/))) {
+        if ($line =~ /^([^=]+)=(.*)$/) {
+            return (trim($1), trim($2));
+        } else {
+            die("invalid line in $file: $line");
+        }
+    }
+    return undef
+}
+
 # read the configuration file into global has.
 sub loadConf() {
     open(CONFIG, $gbCommon::confFile) || die("can't open $gbCommon::confFile");
     my $line;
     while ($line = <CONFIG>) {
-        $line = trim($line);
-        if (!(($line =~ /^$/) || ($line =~ /^\#/))) {
-            if ($line =~ /^([^=]+)=(.*)$/) {
-                my $name = trim($1);
-                my $value = trim($2);
-                $gbCommon::conf{$name} = $value;
-            } else {
-                die("invalid line in $gbCommon::confFile: $line");
-            }
+        my($key, $value) = parseConfLine($gbCommon::confFile, $line);
+        if (defined($key)) {
+            $gbCommon::conf{$key} = $value;
         }
     }
     close(CONFIG);
@@ -683,6 +693,54 @@ sub splitSpaceList($) {
     } else {
         return split(/\s+/, $strList);
     }
+}
+
+# catch of .hg.conf users/password
+my $hgUser;
+my $hgPassword;
+
+# get the db.user and db.password from ~/.hg.conf, caching the results.
+sub getMysqlUser() {
+   if (!defined($hgUser)) {
+       my $conf = glob("~/.hg.conf");
+       open(HGCONF, "<$conf") || die("can't open $conf");
+       my $line;
+       while (($line = <HGCONF>)) {
+           my($key,$val) = parseConfLine($conf, $line);
+           if (defined($key)) {
+               if ($key eq "db.user") {
+                   $hgUser = $val;
+               } elsif ($key eq "db.password") {
+                   $hgPassword = $val;
+               }
+           }
+           
+       }
+       close(HGCONF);
+       if (!defined($hgUser)) {
+           die("$conf doesn't set db.user");
+       }
+       if (!defined($hgPassword)) {
+           die("$conf doesn't set db.password");
+       }
+   }
+   return ($hgUser, $hgPassword);
+}
+
+# execute a mysql with genome user/password, return the output.
+sub callMysql($) {
+    my($args) = @_;
+
+    my($user, $pass) = getMysqlUser();
+    return callProg("mysql -u$user -p$pass $args");
+}
+
+# execute a mysqldump with genome user/password
+sub runMysqlDump($) {
+    my($args) = @_;
+
+    my($user, $pass) = getMysqlUser();
+    runProg("mysqldump -u$user -p$pass $args");
 }
 
 # perl requires a true value at the end

@@ -4,7 +4,7 @@
 #include "gbDefs.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: seqTbl.c,v 1.1 2003/06/03 01:27:47 markd Exp $";
+static char const rcsid[] = "$Id: seqTbl.c,v 1.2 2003/07/25 18:25:33 markd Exp $";
 
 /*
  * Note: don't use autoincrement for id column, as it causes problems for
@@ -105,7 +105,7 @@ if (extFileId != 0)
                  seqSize, extFileId, fileOff, recSize);
 len += safef(query+len, sizeof(query)-len, " WHERE id=%u", id);
 
-sqlUpdaterModRow(st->updater, 1, query);
+sqlUpdaterModRow(st->updater, 1, "%s", query);
 }
 
 HGID seqTblGetId(struct seqTbl *st, struct sqlConnection *conn, char* acc)

@@ -215,8 +215,8 @@ sub ftpSafeGet($$) {
 # size matches the remote size.  Verify that the local size matches the
 # remote size after download.  True return if gotten, false if exists.
 # If justCheck is true, just do the size check or error if not found.
-sub ftpGetOrCheck($$$;$) {
-    my($justCheck, $remFile, $localFile, $minModTime) = @_;
+sub ftpGetOrCheck($$$) {
+    my($justCheck, $remFile, $localFile) = @_;
 
     my $remSize = ftpGetSize($remFile);
     if (!defined($remSize)) {
@@ -235,16 +235,6 @@ sub ftpGetOrCheck($$$;$) {
     } elsif ($justCheck) {
         die("download file should exist: $localFile");
     } else {
-        if (defined($minModTime)) {
-            my $modTime = ftpGetModTime($remFile);
-            if ($modTime < $minModTime) {
-                if ($main::verbose) {
-                    print STDERR "remote file modTime ($modTime) before minimum ($minModTime): $remFile\n";
-                }
-                return 0;
-            }
-        }
-
         ftpSafeGet($remFile, $localFile);
         return 1;
     }

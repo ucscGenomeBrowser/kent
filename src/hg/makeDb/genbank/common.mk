@@ -3,11 +3,13 @@
 OPT= -ggdb
 
 KENT = ${GBROOT}/../kent/src
-export MYSQLINC=/usr/include/mysql
-export MYSQLLIBS=-lmysqlclient
-ifeq ($(wildcard ${MYSQLINC}/*.h),)
-    export MYSQLINC=/projects/hg2/usr/markd/genefind/mysql/include/mysql
-    export MYSQLLIBS=/projects/hg2/usr/markd/genefind/mysql/lib/mysql/libmysqlclient.a
+ifneq ($(wildcard ${GBROOT}/extern/lib/libmysqlclient.a),)
+    export MYSQLINC=${GBROOT}/extern/include/mysql
+    ABSGBROOT=$(shell cd ${GBROOT} && pwd)
+    export MYSQLLIBS=${ABSGBROOT}/extern/lib/libmysqlclient.a
+else
+    export MYSQLINC=/usr/include/mysql
+    export MYSQLLIBS=-lmysqlclient
 endif
 
 INCL = -I${GBROOT}/src/inc -I${KENT}/inc -I${KENT}/hg/inc -I$(MYSQLINC)
@@ -20,8 +22,12 @@ LIBARCH = ${LIBDIR}/${MACHTYPE}
 
 LIBGENBANK = $(LIBARCH)/libgenbank.a
 
+# FIXME: not implemented yet:
+# MYSQLLIBS are not included by default, as most programs don't need them
+# and on linux if one uses shared libraries, they endup being required
+# even if no symbol is refereneced.
 MYLIBDIR = ${KENT}/lib/$(MACHTYPE)
-LIBS = $(LIBGENBANK)  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(MYSQLLIBS) -lm
+LIBS = $(LIBGENBANK) $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ${MYSQLLIBS} -lm
 
 TESTBIN = ${GBROOT}/tests/bin
 TESTBINARCH = ${TESTBIN}/$(MACHTYPE)

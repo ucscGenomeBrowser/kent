@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "gbDefs.h"
 
-static char const rcsid[] = "$Id: imageCloneTbl.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: imageCloneTbl.c,v 1.2 2003/07/25 18:25:33 markd Exp $";
 
 /* name of the table */
 char *IMAGE_CLONE_TBL = "imageClone";
@@ -125,6 +125,15 @@ if (ict != NULL)
     }
 }
 
+unsigned imageCloneTblGetId(struct sqlConnection *conn, char *acc)
+/* get id for an acc, or 0 if none */
+{
+char query[256];
+safef(query, sizeof(query), "SELECT imageId from %s WHERE acc = '%s'",
+      IMAGE_CLONE_TBL, acc);
+return sqlQuickNum(conn, query);
+}
+
 void imageCloneTblAdd(struct imageCloneTbl *ict, unsigned imageId,
                       char *acc, unsigned type, char direction)
 /* Add an entry to the table */
@@ -134,6 +143,22 @@ if (!((direction == '5') || (direction == '3') || (direction == '0')))
 
 sqlUpdaterAddRow(ict->updater, "%u\t%s\t%s\t%c", imageId, acc,
                  gbTypeName(type), direction);
+}
+
+void imageCloneTblMod(struct imageCloneTbl *ict, unsigned imageId,
+                      char *acc, char direction)
+/* update an entry in the table */
+{
+char query[512];
+
+if (!((direction == '5') || (direction == '3') || (direction == '0')))
+    errAbort("invalid direction value for imageCLone table: %d", direction);
+
+/* if type changes, entry is already deleted */
+safef(query, sizeof(query), "imageId = %u, direction = '%c' WHERE acc = '%s'",
+      imageId, direction, acc);
+
+sqlUpdaterModRow(ict->updater, 1, "%s", query);
 }
 
 void imageCloneTblCommit(struct imageCloneTbl *ict,

@@ -16,7 +16,7 @@ struct sqlDeleter;
 struct dbLoadOptions;
 
 void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,
-                    struct dbLoadOptions* options, char *gbdbGenBankPath, 
+                    struct dbLoadOptions* options, char *gbdbGenBank, 
                     char *tmpDir);
 /* initialize for parsing metadata */
 

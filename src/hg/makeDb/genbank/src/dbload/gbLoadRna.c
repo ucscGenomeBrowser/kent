@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.7 2003/07/22 21:54:40 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.8 2003/07/25 18:25:33 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 /* FIXME: ignored deletion could be in it's own module */
@@ -343,8 +343,12 @@ boolean needsLoaded = FALSE;
 select->update = update;
 
 /* If the table indicates that this partition has not been loaded, we check to
- * see if there are readable index files */
-needsLoaded = !gbLoadedTblIsLoaded(gLoadedTbl, select)
+ * see if there are readable index files.  However if we are updating the
+ * extFiles, we need to visit everything
+ */
+needsLoaded = 
+    (!gbLoadedTblIsLoaded(gLoadedTbl, select)
+     || (gOptions.flags & DBLOAD_EXT_FILE_UPDATE))
     && updateHasAligned(select, update);
 
 select->update = updateHold;

@@ -35,9 +35,10 @@ exec </dev/null
 
 RSH=ssh
 
+# use archive mode to preserve permissions and recursion
 (
   $RSH $iserver mkdir -p $destdir 2>&1 &&\
-  rsync --rsh=$RSH --delete --recursive --checksum \
+  rsync --rsh=$RSH --delete --archive --checksum \
       --exclude=align.jobs --exclude=align.expected \
       $workdir ${iserver}:$destdir  2>&1
 ) | awk -v host=$iserver '{print host ": " $0}'
