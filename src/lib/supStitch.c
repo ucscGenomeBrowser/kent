@@ -199,9 +199,23 @@ for (i=0; i<overlap; ++i)
 return bestPos;
 }
 
+boolean tripleCanFollow(struct ffAli *a, struct ffAli *b, aaSeq *qSeq, aaSeq **tripleSeq)
+/* Figure out if a can follow b in any one of three reading frames of haystack. */
+{
+int ahStart, ahEnd, bhStart, bhEnd;
+aaSeq *seq;
 
-static struct ssGraph *ssGraphMake(struct ffAli *ffList, DNA *needle, DNA *haystack, 
-	enum ffStringency stringency, boolean isProt)
+seq = whichSeqIn(tripleSeq, 3, a->hStart);
+ahStart = a->hStart - seq->dna;
+ahEnd = a->hEnd - seq->dna;
+seq = whichSeqIn(tripleSeq, 3, b->hStart);
+bhStart = b->hStart - seq->dna;
+bhEnd = b->hEnd - seq->dna;
+return  (a->nStart < b->nStart && a->nEnd < b->nEnd && ahStart < bhStart && ahEnd < bhEnd);
+}
+
+static struct ssGraph *ssGraphMake(struct ffAli *ffList, bioSeq *qSeq,
+	enum ffStringency stringency, boolean isProt, aaSeq **tripleSeq)
 /* Make a graph corresponding to ffList */
 {
 int nodeCount = ffAliCount(ffList);
@@ -213,6 +227,7 @@ struct ssGraph *graph;
 struct ffAli *ff, *mid;
 int i, midIx;
 int overlap;
+boolean canFollow;
 
 if (nodeCount == 1)
     maxEdgeCount = 1;
@@ -238,8 +253,14 @@ for (mid = ffList, midIx=1; mid != NULL; mid = mid->right, ++midIx)
     midNode->waysIn = e;
     for (ff = ffList,i=1; ff != mid; ff = ff->right,++i)
 	{
-	if (ff->nStart < mid->nStart && ff->nEnd < mid->nEnd 
-	    && ff->hStart < mid->hStart && ff->hEnd < mid->hEnd)
+	if (tripleSeq)
+	    canFollow = tripleCanFollow(ff, mid, qSeq, tripleSeq);
+	else 
+	    {
+	    canFollow = (ff->nStart < mid->nStart && ff->nEnd < mid->nEnd 
+			&& ff->hStart < mid->hStart && ff->hEnd < mid->hEnd);
+	    }
+	if (canFollow)
 	    {
 	    struct ssNode *ffNode = &nodes[i];
 	    int score;
@@ -376,7 +397,7 @@ leftovers = ffMakeRightLinks(leftovers);
 *retLeftovers = leftovers;
 }
 
-struct ffAli *ffMergeExactly(struct ffAli *aliList, DNA *needle, DNA *haystack)
+static struct ffAli *ffMergeExactly(struct ffAli *aliList)
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors.*/
 {
@@ -459,7 +480,7 @@ int ssStitch(struct ssBundle *bundle, enum ffStringency stringency)
  * alignments after stitching. Updates bundle->ffList with stitched
  * together version. */
 {
-struct dnaSeq *mrnaSeq =  bundle->qSeq;
+struct dnaSeq *qSeq =  bundle->qSeq;
 struct dnaSeq *genoSeq = bundle->genoSeq;
 struct ffAli *ff, *ffList = NULL;
 struct ssFfItem *ffl;
@@ -468,7 +489,7 @@ struct ssGraph *graph;
 int score;
 int newAliCount = 0;
 int totalFfCount = 0;
-int trimCount = mrnaSeq->size/200 + 1000;
+int trimCount = qSeq->size/200 + 1000;
 
 if (bundle->ffList == NULL)
     return;
@@ -484,7 +505,7 @@ if (trimCount > 8000)	/* This is all the memory we can spare, sorry. */
 if (totalFfCount > trimCount)
     {
     if (totalFfCount > 6*trimCount)
-	warn("In %s vs. %s trimming from %d to %d blocks", mrnaSeq->name, genoSeq->name, totalFfCount, trimCount);
+	warn("In %s vs. %s trimming from %d to %d blocks", qSeq->name, genoSeq->name, totalFfCount, trimCount);
     trimBundle(bundle, trimCount, stringency);
     }
 
@@ -494,18 +515,19 @@ for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
 slFreeList(&bundle->ffList);
 
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
-ffList = ffMergeExactly(ffList, mrnaSeq->dna, genoSeq->dna);
+ffList = ffMergeExactly(ffList);
 
 
 while (ffList != NULL)
     {
-    graph = ssGraphMake(ffList, mrnaSeq->dna, genoSeq->dna, stringency, bundle->isProt);
+    graph = ssGraphMake(ffList, qSeq, stringency, bundle->isProt, bundle->tripleSeq);
     ssGraphFindBest(graph, &bestPath, &score, &ffList);
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     bestPath = ffMergeHayOverlaps(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
-    ffSlideIntrons(bestPath);
+    if (!bundle->isProt)
+	ffSlideIntrons(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
     if (score > 32)
 	{

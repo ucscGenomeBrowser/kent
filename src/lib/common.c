@@ -805,6 +805,20 @@ for (i=0; i<arraySize; ++i)
 return -1;
 }
 
+int ptArrayIx(void *pt, void *array, int arraySize)
+/* Return index of pt in array or -1 if not there. */
+{
+int i;
+void **a = array;
+for (i=0; i<arraySize; ++i)
+    {
+    if (pt == a[i])
+        return i;
+    }
+return -1;
+}
+
+
 
 FILE *mustOpen(char *fileName, char *mode)
 /* Open a file - or squawk and die. */

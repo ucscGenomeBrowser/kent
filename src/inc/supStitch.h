@@ -50,6 +50,7 @@ struct ssBundle
     int genoContigIx;           /* Index of contig inside of seq. */
     void *data;			/* User defined data pointer. */
     boolean isProt;		/* True if it's a protein based bundle. */
+    aaSeq **tripleSeq;		/* Sometimes set to three translated frames. */
     };
 
 void ssBundleFree(struct ssBundle **pEl);

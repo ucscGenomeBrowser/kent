@@ -382,6 +382,9 @@ char *nextWord(char **pLine);
 int stringArrayIx(char *string, char *array[], int arraySize);
 /* Return index of string in array or -1 if not there. */
 
+int ptArrayIx(void *pt, void *array, int arraySize);
+/* Return index of pt in array or -1 if not there. */
+
 #define stringIx(string, array) stringArrayIx( (string), (array), ArraySize(array))
 
 

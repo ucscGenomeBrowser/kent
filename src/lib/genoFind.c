@@ -764,10 +764,20 @@ return clumpHits(gf, hitList, minMatch);
 }
 
 struct gfClump *gfFindClumps(struct genoFind *gf, bioSeq *seq)
+/* Find clump whether its peptide or dna. */
 {
 if (gf->isPep)
     return gfFindPepClumps(gf, seq);
 else
     return gfFindDnaClumps(gf, seq);
 }
+
+void gfTransFindClumps(struct genoFind *gfs[3], bioSeq *seq, struct gfClump *clumps[3])
+/* Find clumps associated with one sequence in three translated reading frames. */
+{
+int frame;
+for (frame = 0; frame < 3; ++frame)
+    clumps[frame] = gfFindPepClumps(gfs[frame], seq);
+}
+
 

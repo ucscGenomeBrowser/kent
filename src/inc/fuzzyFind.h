@@ -180,10 +180,6 @@ struct ffAli *ffMergeNeedleAlis(struct ffAli *ali, boolean doFree);
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors.*/
 
-struct ffAli *ffMergeExactly(struct ffAli *aliList, DNA *needle, DNA *haystack);
-/* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors.*/
-
 struct ffAli *ffRightmost(struct ffAli *ff);
 /* Return rightmost block of alignment. */
 

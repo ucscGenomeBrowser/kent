@@ -31,5 +31,13 @@ void freeDnaSeq(struct dnaSeq **pSeq);
 void freeDnaSeqList(struct dnaSeq **pSeqList);
 /* Free up list of DNA sequences. */
 
+aaSeq *translateSeq(struct dnaSeq *inSeq, int offset, boolean stop);
+/* Return a translated sequence.  Offset is position of first base to
+ * translate. If stop is TRUE then stop at first stop codon.  (Otherwise 
+ * represent stop codons as 'Z'). */
+
+bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters);
+/* Figure out which if any sequence letters is in. */
+
 #endif /* DNASEQ_H */
 

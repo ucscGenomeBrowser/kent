@@ -75,8 +75,24 @@ for (i=offset; i <= lastCodon; i += 3)
     ++actualSize;
     }
 *pep = 0;
+assert(actualSize <= txSize);
 seq->size = actualSize;
 seq->name = cloneString(inSeq->name);
 return seq;
+}
+
+bioSeq *whichSeqIn(bioSeq **seqs, int seqCount, char *letters)
+/* Figure out which if any sequence letters is in. */
+{
+aaSeq *seq;
+int i;
+
+for (i=0; i<seqCount; ++i)
+    {
+    seq = seqs[i];
+    if (seq->dna <= letters && letters < seq->dna + seq->size)
+        return seq;
+    }
+internalErr();
 }
 

@@ -10,6 +10,7 @@
 #include "cheapcgi.h"
 #include "obscure.h"
 #include "genoFind.h"
+#include "trans3.h"
 
 
 /* Variables that can be set from command line. */
@@ -183,6 +184,7 @@ gfClumpFreeList(&clumpList);
 void searchOne(bioSeq *seq, struct genoFind *gf, FILE *psl, boolean isProt)
 /* Search for seq on either strand in index. */
 {
+uglyf("Searching for hits to %s\n", seq->name);
 if (isProt)
     {
     searchOneProt(seq, gf, psl);
@@ -246,55 +248,6 @@ carefulClose(&psl);
 printf("Searched %lu bases in %d sequences\n", totalSize, count);
 }
 
-struct trans3
-/* A sequence and three translations of it. */
-     {
-     struct trans3 *next;		/* Next in list. */
-     char *name;			/* Name (not allocated here) */
-     struct dnaSeq *seq;		/* Untranslated sequence.  Not allocated here. */
-     aaSeq *trans[3];			/* Translated sequences.  Allocated here*/
-     };
-
-struct trans3 *trans3New(struct dnaSeq *seq)
-/* Create a new set of translated sequences. */
-{
-struct trans3 *t3;
-int frame;
-
-AllocVar(t3);
-t3->name = seq->name;
-t3->seq = seq;
-for (frame=0; frame<3; ++frame)
-    t3->trans[frame] = translateSeq(seq, frame, FALSE);
-return t3;
-}
-
-void trans3Free(struct trans3 **pT3)
-/* Free a trans3 structure. */
-{
-struct trans3 *t3 = *pT3;
-if (t3 != NULL)
-    {
-    freeDnaSeq(&t3->trans[0]);
-    freeDnaSeq(&t3->trans[1]);
-    freeDnaSeq(&t3->trans[2]);
-    freez(pT3);
-    }
-}
-
-void trans3FreeList(struct trans3 **pList)
-/* Free a list of dynamically allocated trans3's */
-{
-struct trans3 *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    trans3Free(&el);
-    }
-*pList = NULL;
-}
-
 struct trans3 *seqListToTrans3List(struct dnaSeq *seqList, aaSeq *transLists[3], struct hash **retHash)
 /* Convert sequence list to a trans3 list and lists for each of three frames. */
 {
@@ -325,7 +278,14 @@ return t3List;
 void tripleSearch(aaSeq *qSeq, struct genoFind *gfs[3], struct hash *t3Hash, boolean isRc, FILE *f)
 /* Look for qSeq in indices for three frames.  Then do rest of alignment. */
 {
-uglyf("Triple search %s on %c strand\n", qSeq->name, (isRc ? '+' : '-'));
+struct gfClump *clumps[3];
+int frame;
+struct gfSavePslxData data;
+
+data.f = f;
+data.t3Hash = t3Hash;
+uglyf("\nTriple search %s on %c strand\n", qSeq->name, (isRc ? '-' : '+'));
+gfFindAlignAaTrans3Clumps(gfs, qSeq, t3Hash, isRc, ffCdna, minBases, gfSavePslx, &data);
 }
 
 void blatx(struct dnaSeq *untransList, int queryCount, char *queryFiles[], char *outFile)
@@ -466,7 +426,6 @@ if ((dIsProtLike ^ qIsProtLike) != 0)
 /* Set default tile size for protein-based comparisons. */
 if (dIsProtLike)
     {
-    uglyf("is prot-like\n");
     tileSize = 4;
     minMatch = 3;
     maxGap = 0;

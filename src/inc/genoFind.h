@@ -12,6 +12,20 @@
 #include "fuzzyFind.h"
 #endif
 
+#ifndef HASH_H
+#include "hash.h"
+#endif
+
+enum gfType
+/* Types of sequence genoFind deals with. */
+    {
+    gftDna = 0,		/* DNA (genomic) */
+    gftRna = 1,		/* RNA */
+    gftProt = 2,         /* Protein. */
+    gftDnaX = 3,		/* Genomic DNA translated to protein */
+    gftRnaX = 4,         /* RNA translated to protein */
+    };
+
 enum gfConstants {
     gfMinMatch = 3,
     gfMaxGap = 2,
@@ -98,8 +112,11 @@ struct genoFind *gfIndexNibs(int nibCount, char *nibNames[],
 struct gfClump *gfFindClumps(struct genoFind *gf, struct dnaSeq *seq);
 /* Find clumps associated with one sequence. */
 
-struct gfClump *gfPepFindClumps(struct genoFind *gf, struct dnaSeq *seq);
+struct gfClump *gfPepFindClumps(struct genoFind *gf, aaSeq *seq);
 /* Find clumps associated with one sequence. */
+
+void gfTransFindClumps(struct genoFind *gfs[3], bioSeq *seq, struct gfClump *clumps[3]);
+/* Find clumps associated with one sequence in three translated reading frames. */
 
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
 /* Print out info on clump */
@@ -121,6 +138,12 @@ void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq
     GfSaveAli outFunction, void *outData);
 /* Convert gfClumps to an actual alignment that gets saved via 
  * outFunction/outData. */
+
+void gfFindAlignAaTrans3Clumps(struct genoFind *gfs[3], aaSeq *qSeq, struct hash *t3Hash, 
+	boolean isRc, enum ffStringency stringency, int minMatch, 
+	GfSaveAli outFunction, void *outData);
+/* Look for qSeq alignment in three translated reading frames. Save alignment
+ * via outFunction/outData. */
 
 /* ---  Some routines for dealing with gfServer at a low level ---- */
 
@@ -150,6 +173,19 @@ void gfSavePsl(char *chromName, int chromSize, int chromOffset,
 	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
 /* Analyse one alignment and if it looks good enough write it out to file in
  * psl format.  */
+
+struct gfSavePslxData
+/* This is the data structure passed as output data for gfSavePslx below. */
+    {
+    FILE *f;			/* Output file. */
+    struct hash *t3Hash;	/* Hash to associate names and frames. */
+    };
+
+void gfSavePslx(char *chromName, int chromSize, int chromOffset,
+	struct ffAli *ali, struct dnaSeq *genoSeq, struct dnaSeq *otherSeq, 
+	boolean isRc, enum ffStringency stringency, int minMatch, void *outputData);
+/* Analyse one alignment and if it looks good enough write it out to file in
+ * pslx format.  This is meant for translated alignments. */
 
 void gfAlignStrand(char *hostName, char *portName, char *nibDir, struct dnaSeq *seq,
     boolean isRc,  enum ffStringency stringency, int minMatch, GfSaveAli outFunction, void *outData);
