@@ -1869,6 +1869,52 @@ freeDyString(&ds);
 hFreeConn(&conn);
 }
 
+static void findRgdGenes(char *spec, struct hgPositions *hgp)
+/* Look up zoo gene names in manual annotation table. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+struct dyString *ds = newDyString(256);
+char **row = NULL;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+char *specCopy = NULL;
+char *specPtr = spec;
+char name[32];
+
+AllocVar(table);
+slAddHead(&hgp->tableList, table);
+/* Default values */
+table->description = cloneString("RGD Curated Genes");
+table->name = cloneString("rgdGene");
+
+if (sqlTableExists(conn, "rgdLink") && sqlTableExists(conn, "rgdGene"))
+    {
+    dyStringPrintf(ds, "select name from rgdLink where id = '%s'", spec);
+    sqlQuickQuery(conn, ds->string, name, sizeof(name));
+    specPtr = name; 
+/* Use the id->name relationship 
+   and then search the main table using name found in ID table */
+    dyStringClear(ds);
+    dyStringPrintf(ds, "select * from rgdGene where name like '%%%s%%'", specPtr);    
+    sr = sqlGetResult(conn, ds->string);
+
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        AllocVar(pos);
+        slAddHead(&table->posList, pos);
+        pos->name = cloneString(row[0]);
+        pos->description = cloneString(row[0]);
+        pos->chrom = hgOfficialChromName(row[1]);
+        pos->chromStart = sqlUnsigned(row[5]);
+        pos->chromEnd = sqlUnsigned(row[6]);
+        }
+    }
+
+freeDyString(&ds);
+hFreeConn(&conn);
+}
+
 static boolean isAffyProbeName(char *name)
 /* Return TRUE if name is an Affymetrix Probe ID for HG-U95Av2. */
 {
@@ -2200,6 +2246,7 @@ else
     findStsPos(query, hgp);
     findMrnaKeys(query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
+    findRgdGenes(query, hgp);
     }
 
 slReverse(&hgp->tableList);
