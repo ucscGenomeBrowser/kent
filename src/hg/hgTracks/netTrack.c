@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.10 2003/07/26 05:12:13 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.11 2003/11/19 04:55:04 kate Exp $";
 
 struct netItem
 /* A net track item. */
@@ -70,20 +70,42 @@ static int rNextLine;   /* Y offset to next line. */
 static double rScale;   /* Scale from bases to pixels. */
 static boolean rIsFull; /* Full display? */
 
-static char *netColorLastChrom = NULL;
+static char *netColorLastChrom;
+static Color lastNonChromColor;
+
+static void setCachedColor(char *chrom, Color color)
+/* set last chrom and last color */
+{
+netColorLastChrom = chrom;
+lastNonChromColor = color;
+}
 
 static void netColorClearCashe()
 {
-netColorLastChrom = NULL;
+setCachedColor("UNKNOWN", altNonChromColor(nonChromColor()));
 }
 
-static Color netColor(char *chrom)
+static Color netColor(char *chrom, int level)
+/* return appropriate color for a chromosome
+ * or else use alternating black/gray for level 1 if item is not a chromosome */
 {
 static Color color;
-if (chrom != netColorLastChrom)
+if (!sameString(chrom, netColorLastChrom))
     {
     color = getChromColor(chrom+3, rVg);
-    netColorLastChrom = chrom;
+    if (isNonChromColor(color)) 
+       {
+       if (level == 1)
+           {
+            color = altNonChromColor(lastNonChromColor);
+            netColorLastChrom = chrom;
+            lastNonChromColor = color;
+           }
+        }
+    else
+        {
+        netColorLastChrom = chrom;
+        }
     }
 return color;
 }
@@ -171,7 +193,7 @@ int orientation;
 
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    color = netColor(fill->qName);
+    color = netColor(fill->qName, level);
     invColor = contrastingColor(rVg, color);
     orientation = orientFromChar(fill->qStrand);
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
