@@ -5,7 +5,7 @@ L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = testXap.o xp.o
+O = testXap.o
 
 testXap: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/testXap $O $(MYLIBS) $L

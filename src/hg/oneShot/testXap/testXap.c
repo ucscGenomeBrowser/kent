@@ -14,9 +14,11 @@ errAbort(
   "usage:\n"
   "   testXap file.xml\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -simple Just print out tag names.\n"
   );
 }
+
+boolean simple = FALSE;
 
 struct testData
     {
@@ -41,7 +43,7 @@ void testStart(void *userData, char *name, char **atts)
 struct testData *td = userData;
 int i;
 indent(stdout, td->depth);
-printf("%s", name);
+printf("<%s", name);
 for (i=0; ; i += 2)
     {
     char *name, *val;
@@ -50,7 +52,7 @@ for (i=0; ; i += 2)
     val = atts[i+1];
     printf(" %s='%s'", name, val);
     }
-printf("\n");
+printf(">\n");
 td->depth += 1;
 }
 
@@ -58,8 +60,11 @@ void testEnd(void *userData, char *name, char *text)
 {
 struct testData *td = userData;
 td->depth -= 1;
+text = skipLeadingSpaces(text);
+if (text[0] != 0)
+    printf("%s\n", text);
 indent(stdout, td->depth);
-printf("/%s %d\n", name, strlen(text));
+printf("</%s>\n", name);
 }
 
 void simpleStart(void *userData, char *name, char **atts)
@@ -89,7 +94,10 @@ struct xp *xp;
 static struct testData td;
 td.f = mustOpen(xmlFile, "r");
 td.depth = 0;
-xp = xpNew(&td, simpleStart, simpleEnd, testRead, xmlFile);
+if (simple)
+    xp = xpNew(&td, simpleStart, simpleEnd, testRead, xmlFile);
+else
+    xp = xpNew(&td, testStart, testEnd, testRead, xmlFile);
 xpParse(xp);
 xpFree(&xp);
 }
@@ -98,6 +106,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+simple = cgiBoolean("simple");
 if (argc != 2)
     usage();
 testXap(argv[1]);
