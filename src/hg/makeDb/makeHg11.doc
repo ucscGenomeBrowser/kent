@@ -345,30 +345,69 @@ o - Add Jackson labs info DONE
      load data local infile 'jaxOrtholog.tab' into table jaxOrtholog;
 
 
-PRODUCING GENSCAN PREDICTIONS (todo)
-    
+PRODUCING GENSCAN PREDICTIONS (done)
+   
 o - Produce contig genscan.gtf genscan.pep and genscanExtra.bed files like so:
-     ssh roar
-     cd ~/build29
-     source jkStuff/gsBig.sh &
-    Wait about 3 1/2 days for these to finish.
-     started 11:00 am Oct 5.
-     finished by 9:00 pm Oct 8.
 
-o - Convert these to chromosome level files as so:
-     cd ~/build29
-     mkdir bed/genscan
-     liftUp bed/genscan/genscan.gtf jkStuff/liftAll.lft warn ?/ctg*/genscan.gtf ??/ctg*/genscan.gtf
-     liftUp bed/genscan/genscanSubopt.bed jkStuff/liftAll.lft warn ?/ctg*/genscanSub.bed ??/ctg*/genscanSub.bed
-     cat ?/ctg*/genscan.pep ??/ctg*/genscan.pep > bed/genscan/genscan.pep
+        Load up the cluster with hard-masked contigs in
+		/cluster/store1/gs.12/build29/bed/genscan/mContigs
+	(For hg11, the .masked files were not saved during repeat masking.  
+	So the contig (.fa) files in /cluster/store1/gs.12/build29/? and ?? 
+	were processed to convert all lower case bases into N and named 
+	as *.fa.masked and placed under genscan/mContigs).
+
+        Log into kkr1u00 (not kk!).  kkr1u00 is the driver node for the small
+        cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+        big cluster, due to limitation of memory and swap space on each
+        processing node).
+                cd ~/oo
+                cd bed/genscan
+        Make 3 subdirectories for genscan to put their output files in
+                mkdir gtf pep subopt
+        Generate a list file, genome.list, of all the contigs
+		ls -1S ./mContigs/*.masked > genome.list
+        
+	Edit genome.list to remove jobs on files of "*.fa.masked" which
+        have pure Ns due to heterochromatin (unsequencable stuff) and 
+	will cause genscan to run forever.
+        
+	Create template file, gsub, for gensub2.  For example (3 lines file):
+                #LOOP
+                /cluster/home/fanhsu/bin/i386/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/genscan -par=/cluster/home/fanhsu/projects/compbio/bin/genscan-linux/HumanIso.smat -tmp=/tmp -window=2400000
+                #ENDLOOP
+        Create a file containing a single line.
+                echo single > single
+        Generate job list file, jobList, for Parasol
+                gensub2 genome.list single gsub jobList
+
+        First issue the following Parasol command:
+                para create jobList
+        Run the following command, which will try first 10 jobs from jobList
+                para try
+        Check if these 10 jobs run OK by
+                para check
+        If they have problems, debug and fix your program, template file,
+        commands, etc. and try again.  If they are OK, then issue the following
+        command, which will ask Parasol to start all the remaining jobs.  For
+	hg11, there were 2043 jobs in total.
+                para push
+        Issue either one of the following two commands to check the
+        status of the cluster and your jobs, until they are done.
+                parasol status
+                para check
+
+o - Convert these to chromosome level files as so:     
+     cd ~/mm
+     cd bed/genscan
+     liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+     liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+     cat pep/*.pep > genscan.pep
 
 o - Load into the database as so:
      ssh hgwdev
-     cd ~/build29/bed/genscan
+     cd ~/mm/bed/genscan
      ldHgGene hg11 genscan genscan.gtf
      hgPepPred hg11 generic genscanPep genscan.pep
-     hgLoadBed hg11 genscanSubopt genscanSubopt.bed
-
 
 
 CREATE GOLDEN TRIANGLE (todo)
@@ -945,3 +984,4 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
      Ryan create:
        /cluster/store1/gs.12/build29/bed/blastz.mm2.2002-04-14/aar/xali
      - Loaded into aarMm2
+
