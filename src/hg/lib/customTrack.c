@@ -135,7 +135,7 @@ row[12] = "";
 static boolean isChromName(char *word)
 /* Return TRUE if it's a contig or chromosome */
 {
-return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word);
+return startsWith("chr", word)  || startsWith("ctg", word) || startsWith("NT_", word) || startsWith("target", word);
 }
 
 static boolean checkChromName(char *word, int lineIx)
@@ -627,7 +627,7 @@ for (;;)
 	    bed = customTrackPsl(row, wordCount, chromHash, lineIx);
 	else
 	    bed = customTrackBed(row, wordCount, chromHash, lineIx);
-	if (!startsWith("chr", bed->chrom))
+	if (!startsWith("chr", bed->chrom) && !startsWith("target", bed->chrom))
 	    track->needsLift = TRUE;
 	slAddHead(&track->bedList, bed);
 	}
