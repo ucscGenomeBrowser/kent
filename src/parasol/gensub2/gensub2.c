@@ -49,8 +49,6 @@ char *lastSlash = strrchr(pathToParse, '/');
 char *slash = strchr(pathToParse,'/');
 char *result = pathToParse;
 
-printf("Path to parse = %s\n", pathToParse);
-
 if (NULL == slash)   /** Do a little coping with MS-DOS style paths. */
     {
     char *dosSlash = strchr(pathToParse, '\\');
@@ -88,7 +86,6 @@ if (NULL != lastSlash)
     }
 
 strcpy(retDir, result);
-printf("RETURNING: %s\n", retDir);
 return;
 }
 
