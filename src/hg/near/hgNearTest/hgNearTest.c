@@ -12,7 +12,7 @@
 #include "../hgNear/hgNear.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.13 2004/03/04 07:53:59 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.14 2004/04/26 21:15:59 kent Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -47,29 +47,36 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+char *stringBetween(char *text, char *startPattern, char *endPattern)
+/* Return text that occurs between startPattern and endPattern,
+ * or NULL if no startPattern.  (Will return up to 100 characters
+ * after startPattern if there is no endPattern) */
+{
+char *startMid = stringIn(startPattern, text);
+if (startMid != NULL)
+    {
+    char *endMid;
+    int midSize;
+    startMid += strlen(startPattern);
+    endMid = stringIn(startMid, endPattern);
+    if (endMid == NULL)
+        {
+	midSize = strlen(startMid);
+	if (midSize > 100)
+	    midSize = 100;
+	}
+    else
+        midSize = endMid - startMid;
+    return cloneStringZ(startMid, midSize);
+    }
+return NULL;
+}
+
 char *qaTestScanForErrorMessage(char *text)
 /* Scan text for error message.  If one exists then
  * return copy of it.  Else return NULL. */
 {
-char *startPat = htmlWarnStartPattern();
-char *startErr = stringIn(startPat, text);
-if (startErr != NULL)
-    {
-    char *endErr;
-    int errSize;
-    startErr += strlen(startPat);
-    endErr = stringIn(startErr, htmlWarnEndPattern());
-    if (endErr == NULL)
-        {
-	errSize = strlen(startErr);
-	if (errSize > 100)
-	    errSize = 100;
-	}
-    else
-        errSize = endErr - startErr;
-    return cloneStringZ(startErr, errSize);
-    }
-return NULL;
+return stringBetween(text, htmlWarnStartPattern(), htmlWarnEndPattern());
 }
 
 int qaCountBetween(char *s, char *startPattern, char *endPattern, 
@@ -325,13 +332,60 @@ for (i=0; i<ArraySize(test->info); ++i)
 fprintf(f, "%s\n", test->status->errMessage);
 }
 
+char *nearStartTablePat = "<!-- Start Rows -->";
+char *nearEndTablePat = "<!-- End Rows -->";
+char *nearEndRowPat = "<!-- Row -->";
+
 int nearCountRows(struct htmlPage *page)
 /* Count number of rows in big table. */
 {
+return qaCountBetween(page->htmlText, nearStartTablePat,
+	nearEndTablePat, nearEndRowPat);
+}
+
+int nearCountUniqAccRows(struct htmlPage *page)
+/* Count number of unique rows in table containing just hyperlinked 
+ * accessions. */
+{
+char *startTable, *endTable, *startRow;
+char *s, *e, *row, *acc;
+int count = 0;
+struct hash *uniqHash = hashNew(0);
+
 if (page == NULL)
     return -1;
-return qaCountBetween(page->htmlText, 
-	"<!-- Start Rows -->", "<!-- End Rows -->", "<!-- Row -->");
+
+/* Set s to first row. */
+s = stringIn(nearStartTablePat, page->htmlText);
+if (s == NULL)
+    return -1;
+s += strlen(nearStartTablePat);
+
+for (;;)
+    {
+    e = stringIn(nearEndRowPat, s);
+    if (e == NULL)
+        break;
+    row = cloneStringZ(s, e-s);
+    acc = stringBetween(row, "_blank>", "</a>");
+    if (acc == NULL)
+        {
+	warn("Can't find between _blank> and </a> while counting uniq row %s",
+		row);
+	freez(&row);
+	break;
+	}
+    if (!hashLookup(uniqHash, acc))
+        {
+	hashAdd(uniqHash, acc, NULL);
+	++count;
+	}
+    freez(&row);
+    freez(&acc);
+    s = e + strlen(nearEndRowPat);
+    }
+hashFree(&uniqHash);
+return count;
 }
 
 struct htmlPage *quickSubmit(struct htmlPage *basePage,
@@ -546,7 +600,7 @@ if (page == NULL)
 	return;
 
     /* Make sure really got one gene. */
-    rowCount = nearCountRows(page);
+    rowCount = nearCountUniqAccRows(page);
     if (rowCount != 1)
 	{
 	qaStatusSoftError(nearTestList->status, 
@@ -566,7 +620,7 @@ if (page == NULL)
     dyStringFree(&dy);
     if (page == NULL)
 	return;
-    rowCount = nearCountRows(page);
+    rowCount = nearCountUniqAccRows(page);
     if (rowCount != geneCount)
 	{
 	qaStatusSoftError(nearTestList->status, 
