@@ -206,39 +206,39 @@ identifier ncbiTaxon
 
 # Various types of gene predictions in UCSC Genome Browser
 
-identifier acemblyName
+identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
     $hg,!hg13.acemblyPep.name full unique
     hg13.acemblyPep.name unique minCheck=0.90
 
-identifier ECgeneName
+identifier ECgeneName dependency
 "Link together EC gene predicted gene structure and peptide"
     $gbd.ECgene.name
     $gbd.ECgenePep.name full unique
 
-identifier geneidName
+identifier geneidName dependency
 "Link together geneid predicted gene structure and peptide"
     $gbd.geneid.name
     $gbd.geneidPep.name full unique
 
-identifier genscanName
+identifier genscanName dependency
 "Link together genscan predicted gene structure and peptide"
     $gbd.genscan.name
     $gbd.genscanPep.name full unique
 
-identifier sgpGeneName
+identifier sgpGeneName dependency
 "Link together sgp predicted gene structure and peptide"
     $gbd.sgpGene.name
     $gbd.sgpPep.name full unique
 
-identifier softberryGeneName
+identifier softberryGeneName dependency
 "Link together Fshgene++ gene structure, pepdide, and homolog"
     $gbd.softberryGene.name
     $gbd.softberryPep.name full unique
     $gbd.softberryHom.name unique
 
-identifier twinscanName
+identifier twinscanName dependency
 "Link together twinscan predicted gene structure and peptide"
     $gbd.twinscan.name
     $gbd.twinscanPep.name full unique
@@ -247,7 +247,7 @@ identifier vegaName
 "Link together various VEGA human curated gene annotation"
     $gbd.vegaInfo.transcriptId
 
-identifier vegaGeneName typeOf=vegaName
+identifier vegaGeneName typeOf=vegaName dependency
 "Link together VEGA predicted gene structure and peptide"
     $gbd.vegaGene.name
     $gbd.vegaPep.name full unique
