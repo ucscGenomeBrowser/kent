@@ -1,12 +1,6 @@
-DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
-       getgene idbQuery index primeMate protDust reformat \
-       scanIntrons tracks weblet wormAli xenoAli
-
-all: libs
-	for i in $(DIRS); do cd $$i; make; cd ..; done; cd hg; make; cd ..;
-
-full: clean
-	all
+usual:
+	echo "You probably want to 'make libs' or 'make clean'"
+	echo "from here.  "
 
 libs:
 	cd lib; make; cd ..
@@ -20,3 +14,12 @@ clean:
 
 tags:
 	ctags $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h $(HOME)/src/hg/lib/*.c $(HOME)/src/jkOwnLib/*.c
+
+DIRS = aladdin ameme cdnaAli dnaDust fuzzyFind \
+       getgene idbQuery index primeMate protDust reformat \
+       scanIntrons tracks weblet wormAli xenoAli
+
+intronerator: 
+	cd lib; make; cd ..
+	for i in $(DIRS); do cd $$i; make; cd ..; done; cd hg; make; cd ..;
+
