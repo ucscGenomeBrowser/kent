@@ -159,7 +159,7 @@
 #include "pscreen.h"
 #include "jalview.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.839 2005/02/25 21:51:33 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.840 2005/02/28 23:08:47 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7887,7 +7887,6 @@ if (xref != NULL)
     if (isNotEmpty(xref->type))
 	printf("<B>Type:</B> %s<BR>\n", xref->type);
     printFBLinkLine("FlyBase Gene", xref->fbgn);
-    printFBLinkLine("FlyBase Transcript", xref->fbtr);
     printFBLinkLine("FlyBase Protein", xref->fbpp);
     printFBLinkLine("FlyBase Annotation", xref->fban);
     }
