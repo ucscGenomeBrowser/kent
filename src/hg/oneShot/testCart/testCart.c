@@ -6,6 +6,7 @@
 #include "htmshell.h"
 #include "jksql.h"
 #include "cartDb.h"
+#include "cart.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -58,17 +59,6 @@ while (namePt != NULL && namePt[0] != 0)
 }
 
 
-struct cart
-/* A cart of settings that persist. */
-   {
-   struct cart *next;	/* Next in list. */
-   unsigned int userId;	/* User ID in database. */
-   unsigned int sessionId;	/* Session ID in database. */
-   struct hash *hash;	/* String valued hash. */
-   struct cartDb *userInfo;	/* Info on user. */
-   struct cartDb *sessionInfo;	/* Info on session. */
-   };
-
 void cartSetString(struct cart *cart, char *var, char *val)
 /* Set string valued cart variable. */
 {
@@ -111,21 +101,35 @@ else
 return cdb;
 }
 
-struct cart *cartNew(unsigned int userId, unsigned int sessionId)
-/* Load up cart from user & session id's. */
+void cartExclude(struct cart *cart, char *var)
+/* Exclude var from persistent storage. */
+{
+hashAdd(cart->exclude, var, NULL);
+}
+
+struct cart *cartNew(unsigned int userId, unsigned int sessionId, char **exclude)
+/* Load up cart from user & session id's.  Exclude is a null-terminated list of
+ * strings to not include */
 {
 struct cgiVar *cv;
 struct cart *cart;
 struct sqlConnection *conn = sqlConnect("hgcentral");
+char *ex;
 
 AllocVar(cart);
 cart->hash = newHash(8);
+cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
 cart->userInfo = loadDbOverHash(conn, "userDb", userId, cart->hash);
 cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart->hash);
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     cartSetString(cart, cv->name, cv->val);
+if (exclude != NULL)
+    {
+    while (ex = *exclude++)
+	cartExclude(cart, ex);
+    }
 sqlDisconnect(&conn);
 return cart;
 }
@@ -156,15 +160,18 @@ char *s = NULL;
 /* Make up encoded string holding all variables. */
 for (el = elList; el != NULL; el = el->next)
     {
-    if (firstTime)
-        firstTime = FALSE;
-    else
-        dyStringAppendC(encoded, '&');
-    dyStringAppend(encoded, el->name);
-    dyStringAppendC(encoded, '=');
-    s = cgiEncode(el->val);
-    dyStringAppend(encoded, s);
-    freez(&s);
+    if (!hashLookup(cart->exclude, el->name))
+	{
+	if (firstTime)
+	    firstTime = FALSE;
+	else
+	    dyStringAppendC(encoded, '&');
+	dyStringAppend(encoded, el->name);
+	dyStringAppendC(encoded, '=');
+	s = cgiEncode(el->val);
+	dyStringAppend(encoded, s);
+	freez(&s);
+	}
     }
 
 /* Make up update statement. */
@@ -187,11 +194,12 @@ if (cart != NULL)
     cartDbFree(&cart->userInfo);
     cartDbFree(&cart->sessionInfo);
     freeHash(&cart->hash);
+    freeHash(&cart->exclude);
     freez(pCart);
     }
 }
 
-void cartDumpItem(struct hashEl *hel)
+static void cartDumpItem(struct hashEl *hel)
 /* Dump one item in cart hash */
 {
 printf("%s %s\n", hel->name, (char*)(hel->val));
@@ -201,6 +209,17 @@ void cartDump(struct cart *cart)
 /* Dump contents of cart. */
 {
 hashTraverseEls(cart->hash, cartDumpItem);
+}
+
+void cartRemove(struct cart *cart, char *var)
+/* Remove variable from cart. */
+{
+struct hashEl *hel = hashLookup(cart->hash, var);
+if (hel != NULL)
+    {
+    freez(&hel->val);
+    hashRemove(cart->hash, var);
+    }
 }
 
 char *cartString(struct cart *cart, char *var)
@@ -216,12 +235,109 @@ return hashFindVal(cart->hash, var);
 }
 
 char *cartUsualString(struct cart *cart, char *var, char *usual)
-/* Return variable value, or 'usual' if it doesn't exist. */
+/* Return variable value if it exists or usual if not. */
 {
 char *s = cartOptionalString(cart, var);
 if (s == NULL)
-    s = usual;
+    return usual;
 return s;
+}
+
+int cartInt(struct cart *cart, char *var)
+/* Return int valued variable. */
+{
+char *s = cartString(cart, var);
+return atoi(s);
+}
+
+int cartUsualInt(struct cart *cart, char *var, int usual)
+/* Return variable value if it exists or usual if not. */
+{
+char *s = cartOptionalString(cart, var);
+if (s == NULL)
+    return usual;
+return atoi(s);
+}
+
+void cartSetInt(struct cart *cart, char *var, int val)
+/* Set integer value. */
+{
+char buf[32];
+sprintf(buf, "%d", val);
+cartSetString(cart, var, buf);
+}
+
+double cartDouble(struct cart *cart, char *var)
+/* Return double valued variable. */
+{
+char *s = cartString(cart, var);
+return atof(s);
+}
+
+double cartUsualDouble(struct cart *cart, char *var, double usual)
+/* Return variable value if it exists or usual if not. */
+{
+char *s = cartOptionalString(cart, var);
+if (s == NULL)
+    return usual;
+return atof(s);
+}
+
+void cartSetDouble(struct cart *cart, char *var, double val)
+/* Set double value. */
+{
+char buf[32];
+sprintf(buf, "%f", val);
+cartSetString(cart, var, buf);
+}
+
+static char *boolName(char *name)
+/* Return name with "bool" prepended. */
+{
+static char buf[128];
+sprintf(buf, "bool.%s", name);
+return buf;
+}
+
+boolean cartBoolean(struct cart *cart, char *var)
+/* Retrieve cart boolean.   Since CGI booleans simply
+ * don't exist when they're false - which messes up
+ * cart persistence,  we have to jump through some
+ * hoops.   We prepend 'bool.' to the cart representation
+ * of the variable to separate it from the cgi
+ * representation that may or may not be transiently
+ * in the cart.
+ *
+ * You may need to either call this function or
+ * cartCgiBoolean depending on the context. */
+{
+var = boolName(var);
+return cartInt(cart, var);
+}
+
+boolean cartUsualBoolean(struct cart *cart, char *var, boolean usual)
+/* Return variable value if it exists or usual if not. */
+{
+var = boolName(var);
+return cartUsualInt(cart, var, usual);
+}
+
+void cartSetBoolean(struct cart *cart, char *var, boolean val)
+/* Set boolean value. */
+{
+var = boolName(var);
+cartSetInt(cart,var,val);
+}
+
+boolean cartCgiBoolean(struct cart *cart, char *var)
+/* Return boolean variable from CGI.  Remove it from cart.
+ * CGI booleans alas do not store cleanly in cart. */
+{
+boolean val;
+cartRemove(cart, var);
+val = cgiBoolean(var);
+cartSetBoolean(cart, var, val);
+return val;
 }
 
 void cartSaveSession(struct cart *cart)
@@ -238,16 +354,29 @@ void doMiddle(struct cart *cart)
 {
 char *old;
 
-cartSetString(cart, "killroy", "was here");
-cartSetString(cart, "lost", "G*d d*ng it!");
-printf("<FORM ACTION=\"../cgi-bin/testCart\">\n");
+printf("<FORM ACTION=\"../cgi-bin/testCart\" METHOD=POST>\n");
+cartSaveSession(cart);
+
 printf("<H3>Just a Test</H3>\n");
 printf("<B>Filter:</B> ");
 old = cartUsualString(cart, "filter", "red");
 cgiMakeRadioButton("filter", "red", sameString(old, "red"));
+printf("red ");
 cgiMakeRadioButton("filter", "green", sameString(old, "green"));
+printf("green ");
 cgiMakeRadioButton("filter", "blue", sameString(old, "blue"));
+printf("blue ");
 cgiMakeButton("submit", "Submit");
+printf("<BR>\n");
+printf("<B>Font Attributes:</B> ");
+cgiMakeCheckBox("fBold", cartCgiBoolean(cart, "fBold"));
+printf("bold ");
+cgiMakeCheckBox("fItalic", cartCgiBoolean(cart, "fItalic"));
+printf("italic ");
+cgiMakeCheckBox("fUnderline", cartCgiBoolean(cart, "fUnderline"));
+printf("underline ");
+printf("<BR>\n");
+
 printf("</FORM>");
 printf("<TT><PRE>");
 cartDump(cart);
@@ -259,13 +388,13 @@ char *cookieDate(char *relative)
 return "Thu, 31-Dec-2037 23:59:59 GMT";
 }
 
-void cartHtmShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName)
+void cartHtmShell(char *title, void (*doMiddle)(struct cart *cart), char *cookieName, char **exclude)
 /* Load cart from cookie and session cgi variable. */
 {
 char *hguidString = findCookieData("hguid");
 int hguid = (hguidString == NULL ? 0 : atoi(hguidString));
 int hgsid = cgiUsualInt("hgsid", 0);
-struct cart *cart = cartNew(hguid, hgsid);
+struct cart *cart = cartNew(hguid, hgsid, exclude);
 
 printf("Set-Cookie: %s=%u; path=/; domain=.ucsc.edu; expires=%s\n",
 	cookieName, cart->userInfo->id, cookieDate("+2y"));
@@ -278,10 +407,12 @@ cartFree(&cart);
 htmlEnd();
 }
 
+char *exclude[] = {"hgsid", "submit", NULL};
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-cartHtmShell("testCart", doMiddle, "hguid");
+cartHtmShell("testCart", doMiddle, "hguid", exclude);
 return 0;
 }
