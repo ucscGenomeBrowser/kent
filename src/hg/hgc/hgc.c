@@ -1393,10 +1393,10 @@ cgiMakeHiddenVar("table", tbl);
 savePosInHidden();
 hgSeqOptionsHti(hti);
 puts("<P>");
-cgiMakeButton("Submit", "Submit");
+cgiMakeButton("submit", "Get DNA");
+cgiMakeButton("submit", "Extended case/color options");
 puts("</FORM><P>");
-hgcAnchorSomewhere("htcGetDnaExtended1", cgiString("i"), tbl, cgiString("c"));
-puts("<H3> Extended case/color options </H3></A><BR>");
+puts("Note: The \"Mask repeats\" option applies only to \"Get DNA\", not to \"Extended case/color options\". <P>");
 }
 
 void maskRepeats(char *chrom, int chromStart, int chromEnd, DNA *dna, int offset, boolean soft)
@@ -1559,6 +1559,14 @@ void doGetDnaExtended1()
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
+boolean isRc     = cartUsualBoolean(cart, "hgc.dna.rc", FALSE);
+boolean revComp  = cgiBoolean("hgSeq.revComp");
+boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
+int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
+int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
+char *casing     = cgiUsualString("hgSeq.casing", "");
+char *repMasking = cgiUsualString("hgSeq.repMasking", "");
+boolean caseUpper= FALSE;
 
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
@@ -1569,7 +1577,39 @@ puts(
 "Use this page to highlight features in genomic DNA text. "
 "DNA covered by a particular track can be hilighted by "
 "case, underline, bold, italic, or color.  See below for "
-"details about color, and for examples.");
+"details about color, and for examples. <P>");
+
+if (cgiBooleanDefined("hgSeq.revComp"))
+    {
+    isRc = revComp;
+    // don't set revComp in cart -- it shouldn't be a default.
+    }
+if (cgiBooleanDefined("hgSeq.maskRepeats"))
+    cartSetBoolean(cart, "hgSeq.maskRepeats", revComp);
+if (*repMasking != 0)
+    cartSetString(cart, "hgSeq.repMasking", repMasking);
+if (maskRep)
+    {
+    struct trackDb *rtdb;
+    char *visString = cartOptionalString(cart, "rmsk");
+    for (rtdb = tdbList;  rtdb != NULL;  rtdb=rtdb->next)
+	{
+	if (sameString(rtdb->tableName, "rmsk"))
+	    break;
+	}
+    printf("<P> <B>Note:</B> repeat masking style from previous page will <B>not</B> apply to this page.\n");
+    if ((rtdb != NULL) &&
+	((visString == NULL) || !sameString(visString, "hide")))
+	printf("Use the case/color options for the RepeatMasker track below. <P>\n");
+    else
+	printf("Unhide the RepeatMasker track in the genome browser, then return to this page and use the case/color options for the RepeatMasker track below. <P>\n");
+    }
+cartSetInt(cart, "padding5", padding5);
+cartSetInt(cart, "padding3", padding3);
+if (sameString(casing, "upper"))
+    caseUpper = TRUE;
+if (*casing != 0)
+    cartSetString(cart, "hgSeq.casing", casing);
 
 printf("<FORM ACTION=\"%s\" METHOD=\"GET\">\n\n", hgcPath());
 cartSaveSession(cart);
@@ -1577,19 +1617,19 @@ cgiMakeHiddenVar("g", "htcGetDna3");
 printf("Chromosome ");
 cgiMakeTextVar("c", seqName, 6);
 printf(" Start ");
-cgiMakeIntVar("l", winStart, 9);
+cgiMakeIntVar("l", winStart+1 - (revComp ? padding3 : padding5), 9);
 printf(" End ");
-cgiMakeIntVar("r", winEnd, 9);
+cgiMakeIntVar("r", winEnd   + (revComp ? padding5 : padding3), 9);
 cgiContinueHiddenVar("db");
 printf(" Reverse complement ");
-cgiMakeCheckBox("hgc.dna.rc", cartUsualBoolean(cart, "hgc.dna.rc", FALSE));
+cgiMakeCheckBox("hgc.dna.rc", isRc);
 printf("<BR>\n");
 printf("Letters per line ");
 cgiMakeIntVar("lineWidth", 60, 3);
 printf(" Default case: ");
-cgiMakeRadioButton("case", "upper", FALSE);
+cgiMakeRadioButton("case", "upper", caseUpper);
 printf(" Upper ");
-cgiMakeRadioButton("case", "lower", TRUE);
+cgiMakeRadioButton("case", "lower", !caseUpper);
 printf(" Lower ");
 cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
@@ -1708,7 +1748,14 @@ void doGetDna2()
 /* Do second DNA dialog (or just fetch DNA) */
 {
 char *tbl = cgiUsualString("table", "");
+char *action = cgiUsualString("submit", "");
 int itemCount;
+
+if (sameString(action, "Extended case/color options"))
+    {
+    doGetDnaExtended1();
+    return;
+    }
 
 puts("<PRE>");
 if (tbl[0] == 0)
@@ -1937,7 +1984,7 @@ struct cfm *cfm;
 int i;
 boolean isRc = cgiBoolean("hgc.dna.rc");
 boolean defaultUpper = sameString(cartString(cart, "case"), "upper");
-int winSize = winEnd - winStart;
+int winSize;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
 struct trackDb *tdbList = hTrackDb(seqName), *tdb;
@@ -1947,6 +1994,11 @@ struct trackDb *utdbList = tdbForUserPsl();
 Bits *uBits = bitAlloc(winSize);	/* Underline bits. */
 Bits *iBits = bitAlloc(winSize);	/* Italic bits. */
 Bits *bBits = bitAlloc(winSize);	/* Bold bits. */
+
+/* The range entry input is 1-based, to be consistent with the coord range 
+ * displayed to the user. Adjust it back here: */
+winStart -= 1;
+winSize = winEnd - winStart;
 
 ctdbList = slCat(ctdbList, tdbList);
 tdbList = slCat(utdbList, ctdbList);
