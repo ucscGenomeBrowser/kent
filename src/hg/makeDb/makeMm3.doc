@@ -816,13 +816,79 @@ NCBI GENOMESCAN MODELS (TODO)
     hgPepPred mm3 generic genomeScanPep GS_prot.fsa
 
 
+GET FRESH MRNA SEQUENCE FROM GENBANK
+
+This will create a genbank.133 directory containing compressed
+GenBank flat files and a mrna.133 containing unpacked sequence
+info and auxiliary info in a relatively easy to parse (.ra)
+format.
+
+  o - Point your browser to ftp://ftp.ncbi.nih.gov/genbank and
+      look at the README.genbank.  Figure out the current release number
+      (which is 133).
+  o - Consider deleting one of the older genbank releases.  It''s
+      good to at least keep one previous release though.
+  o - Where there is space make a new genbank directory.  Create a
+      symbolic link to it:
+          mkdir /cluster/store2/genbank.133
+          ln -s /cluster/store2/genbank.133 ~/genbank
+      cd ~/genbank
+  o - ftp ftp.ncbi.nih.gov  (do anonymous log-in).  Then do the
+      following commands inside ftp:
+           cd genbank
+           prompt
+           mget gbpri* gbrod* gbv* gbsts* gbest* gbmam* gbinv* gbbct* gbhtc* gbpat* gbphg* gbpln*
+      This will take at least 2 hours.
+  o - Make the refSeq subdir and download files:
+       mkdir -p /cluster/store2/mrna.133/refSeq
+       cd /cluster/store2/mrna.133/refSeq
+
+  o - ftp ftp.ncbi.nih.gov  (do anonymous log-in).  Then do the
+      following commands inside ftp:
+           cd refseq/cumulative
+           prompt
+           mget *.gz
+  o - Unpack this into species-specific fa files and get extra info with:
+      cd /cluster/store2/mrna.133/refSeq
+      gunzip -c rscu.gbff.Z  | \
+        gbToFaRa -byOrganism=org ../anyRna.fil refSeq.fa refSeq.ra refSeq.ta stdin
+
+  o - ssh kkstore
+      cd /cluster/store2/mrna.133
+
+# Make the RNAs
+        gunzip -c /cluster/store2/genbank.133/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa -byOrganism=org anyRna.fil mrna.fa mrna.ra mrna.ta stdin
+
+# Make the ESTs
+        gunzip -c /cluster/store2/genbank.133/gbest*.gz | \
+        gbToFaRa anyRna.fil est.fa est.ra est.ta stdin -byOrganism=org
+
+DONE TO HERE
+# Make the nonhuman RNAs
+        gunzip -c /cluster/store2/genbank.133/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa humanXenoRna.fil humanXenoRna.fa humanXenoRna.ra humanXenoRna.ta stdin
+
+# Make the nonMouse RNAs
+        gunzip -c /cluster/store2/genbank.133/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa mouseXenoRna.fil mouseXenoRna.fa mouseXenoRna.ra mouseXenoRna.ta stdin
+
+# Make the nonRat RNAs
+        gunzip -c /cluster/store2/genbank.133/gb{pri,rod,v,mam,inv,bct,htc,pat,phg,pln}* \
+        | gbToFaRa ratXenoRna.fil ratXenoRna.fa ratXenoRna.ra ratXenoRna.ta stdin
+
+# Make the nonhuman ESTs
+        gunzip -c /cluster/store2/genbank.133/gbest*.gz | \
+        gbToFaRa humanXenoRna.fil humanXenoEst.fa humanXenoEst.ra humanXenoEst.ta stdin
+
+
 PRODUCING CROSS_SPECIES mRNA ALIGMENTS (TODO)
 
 Here you align vertebrate mRNAs against the masked genome on the
 cluster you set up during the previous step.
 
 Make sure that gbpri, gbmam, gbrod, and gbvert are downloaded from Genbank into
-/cluster/store1/genbank.128 and unpacked by organism into /cluster/store1/mrna.128/org. 
+/cluster/store1/genbank.133 and unpacked by organism into /cluster/store1/mrna.133/org. 
 
 Set up cluster run more or less as so:
       ssh kk
@@ -830,7 +896,7 @@ Set up cluster run more or less as so:
       mkdir xenoMrna
       cd xenoMrna
       ls -1S /scratch/hg/mm3/mContigs/* > genome.lst
-      ls -1S /scratch/hg/mrna.128/org/*/mrna.fa > allMrna
+      ls -1S /scratch/hg/mrna.133/org/*/mrna.fa > allMrna
 Then edit allMrna removing the Mus.musculus line,  and writing
 the first line into 1.org, the second line into 2.org,  and
 so forth.  After the 6th line just leave the rest in 7.org.
@@ -859,7 +925,7 @@ Load into database as so:
        cd ~/mm/bed/xenoMrna
        hgLoadPsl mm3 xenoMrna.psl -tNameIx
 Load other RNA into database as so:
-       cd /cluster/store1/mrna.128/topOrg
+       cd /cluster/store1/mrna.133/topOrg
 Note - need to describe how topOrg was made.  See topOrg/README...
     #*** Make /gbdb/mm3/mrna links
        foreach i (*/mrna.fa)
