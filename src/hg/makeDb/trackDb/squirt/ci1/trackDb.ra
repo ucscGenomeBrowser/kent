@@ -93,14 +93,14 @@ shortLabel Non-ciona EST
 longLabel Non$organism ESTs from Genbank 
 group rna
 priority 65
-visibility hide
+visibility dense
 spectrum on
 type psl xeno
 url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
 
-track humanRefSeq
-shortLabel Human RefSeq Genes
-longLabel  Human RefSeq Genes
+track hg15repeats
+shortLabel hg15repeats
+longLabel  hg15repeats
 group compGeno
 priority 172
 visibility dense
@@ -114,3 +114,13 @@ priority 173
 visibility dense
 type psl 
 
+track chainHg15
+shortLabel Chained Hg15
+longLabel Chained Hg15 translated blats
+group compGeno
+priority 174
+visibility dense
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain hg15
