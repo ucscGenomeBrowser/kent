@@ -70,11 +70,10 @@ return diff;
 }
 
 
-void gffSyntaxError(struct lineFile *lf)
+static void gffSyntaxError(char *fileName, int line)
 /* Complain about syntax error in GFF file. */
 {
-errAbort("Bad line %d of %s:\n%s",
-    lf->lineIx, lf->fileName, lf->buf + lf->lineStart);
+errAbort("Bad line %d of %s:\n%s", line, fileName);
 }
 
 static char *gffTnName(char *seqName, char *groupName)
@@ -86,7 +85,10 @@ if (startsWith("gene-", groupName))
     groupName += 5;
 if (startsWith("cc_", groupName))
     groupName += 3;
+#ifdef OLD
 sprintf(nameBuf, "%s.%s", seqName, groupName);
+#endif /* OLD */
+strcpy(nameBuf, groupName);
 return nameBuf;
 }
 
@@ -116,14 +118,15 @@ if (strstr(group, "transcript_id") != NULL)
 return FALSE;
 }
 
-static void readQuotedString(struct lineFile *lf, char *in, char *out, char **retNext)
+static void readQuotedString(char *fileName, int lineIx, char *in, char *out, char **retNext)
 /* Parse quoted string and abort on error. */
 {
 if (!parseQuotedString(in, out, retNext))
-    errAbort("Line %d of %s\n", lf->lineIx, lf->fileName);
+    errAbort("Line %d of %s\n", lineIx, fileName);
 }
 
-static void parseGtfEnd(char *s, struct gffFile *gff, struct gffLine *gl, struct lineFile *lf)
+static void parseGtfEnd(char *s, struct gffFile *gff, struct gffLine *gl, 
+    char *fileName, int lineIx)
 /* Read the semi-colon separated end bits of a GTF line into gl and
  * hashes. */
 {
@@ -138,11 +141,11 @@ for (;;)
        break;
    s = skipLeadingSpaces(s);
    if (s[0] == 0 || s == NULL)
-       errAbort("Unpaired type/val on end of gtf line %d of %s", lf->lineIx, lf->fileName);
+       errAbort("Unpaired type/val on end of gtf line %d of %s", lineIx, fileName);
    if (s[0] == '"' || s[0] == '\'')
        {
        val = s;
-       readQuotedString(lf, s, val, &s);
+       readQuotedString(fileName, lineIx, s, val, &s);
        }
    else
        {
@@ -204,106 +207,111 @@ for (;;)
    else if (sameString("exon_number", type))
        {
        if (!isdigit(val[0]))
-           errAbort("Expecting number after exon_number, got %s line %d of %s", val, lf->lineIx, lf->fileName);
+           errAbort("Expecting number after exon_number, got %s line %d of %s", val, lineIx, fileName);
        gl->exonNumber = atoi(val);
        }
    }
 if (gl->group == NULL)
     {
     if (gl->geneId == NULL)
-        warn("No gene_id or transcript_id line %d of %s", lf->lineIx, lf->fileName);
+        warn("No gene_id or transcript_id line %d of %s", lineIx, fileName);
     }
 }
+
+void gffFileAddRow(struct gffFile *gff, int baseOffset, char *words[], int wordCount, 
+    char *fileName, int lineIx)
+/* Process one row of GFF file (a non-comment line parsed by tabs normally). */
+{
+struct hashEl *hel;
+struct gffLine *gl;
+
+if (wordCount < 8)
+    gffSyntaxError(fileName, lineIx);
+AllocVar(gl);
+
+if ((hel = hashLookup(gff->seqHash, words[0])) == NULL)
+    {
+    struct gffSeqName *el;
+    AllocVar(el);
+    hel = hashAdd(gff->seqHash, words[0], el);
+    el->name = hel->name;
+    slAddHead(&gff->seqList, el);
+    }
+gl->seq = hel->name;
+
+if ((hel = hashLookup(gff->sourceHash, words[1])) == NULL)
+    {
+    struct gffSource *el;
+    AllocVar(el);
+    hel = hashAdd(gff->sourceHash, words[1], el);
+    el->name = hel->name;
+    slAddHead(&gff->sourceList, el);
+    }
+gl->source = hel->name;
+
+if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
+    {
+    struct gffFeature *el;
+    AllocVar(el);
+    hel = hashAdd(gff->featureHash, words[2], el);
+    el->name = hel->name;
+    slAddHead(&gff->featureList, el);
+    }
+gl->feature = hel->name;
+
+if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
+   gffSyntaxError(fileName, lineIx);	
+gl->start = atoi(words[3])-1 + baseOffset;
+gl->end = atoi(words[4]) + baseOffset;
+gl->score = atof(words[5]);
+gl->strand = words[6][0];
+gl->frame = words[7][0];
+
+if (wordCount >= 9)
+    {
+    if (!gff->typeKnown)
+	{
+	gff->typeKnown = TRUE;
+	gff->isGtf = isGtfGroup(words[8]);
+	}
+    if (gff->isGtf)
+	{
+	parseGtfEnd(words[8], gff, gl, fileName, lineIx);
+	}
+    else
+	{
+	char *tnName = gffTnName(gl->seq, words[8]);
+	if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
+	    {
+	    struct gffGroup *group;
+	    AllocVar(group);
+	    hel = hashAdd(gff->groupHash, tnName, group);
+	    group->name = hel->name;
+	    group->seq = gl->seq;
+	    group->source = gl->source;
+	    slAddHead(&gff->groupList, group);
+	    }
+	gl->group = hel->name;
+	}
+    }
+slAddHead(&gff->lineList, gl);
+}
+
 
 void gffFileAdd(struct gffFile *gff, char *fileName, int baseOffset)
 /* Create a gffFile structure from a GFF file. */
 {
 /* Open file and do basic allocations. */
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line;
-int lineSize;
-boolean typeKnown = FALSE;
-boolean isGtf = FALSE;
+char *line, *words[9];
+int lineSize, wordCount;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] != '#')
 	{
-	int wordCount;
-	char *words[9];
-	struct hashEl *hel;
-	struct gffLine *gl;
 	wordCount = chopTabs(line, words);
-	if (wordCount < 8)
-	    gffSyntaxError(lf);
-	AllocVar(gl);
-
-	if ((hel = hashLookup(gff->seqHash, words[0])) == NULL)
-	    {
-	    struct gffSeqName *el;
-	    AllocVar(el);
-	    hel = hashAdd(gff->seqHash, words[0], el);
-	    el->name = hel->name;
-	    slAddHead(&gff->seqList, el);
-	    }
-	gl->seq = hel->name;
-
-	if ((hel = hashLookup(gff->sourceHash, words[1])) == NULL)
-	    {
-	    struct gffSource *el;
-	    AllocVar(el);
-	    hel = hashAdd(gff->sourceHash, words[1], el);
-	    el->name = hel->name;
-	    slAddHead(&gff->sourceList, el);
-	    }
-	gl->source = hel->name;
-
-	if ((hel = hashLookup(gff->featureHash, words[2])) == NULL)
-	    {
-	    struct gffFeature *el;
-	    AllocVar(el);
-	    hel = hashAdd(gff->featureHash, words[2], el);
-	    el->name = hel->name;
-	    slAddHead(&gff->featureList, el);
-	    }
-	gl->feature = hel->name;
-
-	if (!isdigit(words[3][0]) || !isdigit(words[4][0]))
-	   gffSyntaxError(lf);	
-	gl->start = atoi(words[3])-1 + baseOffset;
-	gl->end = atoi(words[4]) + baseOffset;
-	gl->score = atof(words[5]);
-	gl->strand = words[6][0];
-	gl->frame = words[7][0];
-
-	if (wordCount >= 9)
-	    {
-	    if (!typeKnown)
-	        {
-		typeKnown = TRUE;
-		isGtf = isGtfGroup(words[8]);
-		}
-	    if (isGtf)
-	        {
-		parseGtfEnd(words[8], gff, gl, lf);
-		}
-	    else
-	        {
-		char *tnName = gffTnName(gl->seq, words[8]);
-		if ((hel = hashLookup(gff->groupHash, tnName)) == NULL)
-		    {
-		    struct gffGroup *group;
-		    AllocVar(group);
-		    hel = hashAdd(gff->groupHash, tnName, group);
-		    group->name = hel->name;
-		    group->seq = gl->seq;
-		    group->source = gl->source;
-		    slAddHead(&gff->groupList, group);
-		    }
-		gl->group = hel->name;
-		}
-	    }
-	slAddHead(&gff->lineList, gl);
+	gffFileAddRow(gff, baseOffset, words, wordCount, lf->fileName, lf->lineIx);
 	}
     }
 slReverse(&gff->lineList);
