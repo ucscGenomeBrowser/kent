@@ -12,7 +12,7 @@
 #include "jksql.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.39 2003/10/01 06:21:33 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.40 2003/10/11 09:27:13 kent Exp $";
 
 boolean sqlTrace = FALSE;  /* setting to true prints each query */
 int sqlTraceIndent = 0;    /* number of spaces to indent traces */
@@ -321,6 +321,15 @@ void sqlRemakeTable(struct sqlConnection *sc, char *table, char *create)
 {
 sqlDropTable(sc, table);
 sqlUpdate(sc, create);
+}
+
+boolean sqlDatabaseExists(char *database)
+/* Return TRUE if database exists. */
+{
+struct sqlConnection *conn = sqlMayConnect(database);
+boolean exists = (conn != NULL);
+sqlDisconnect(&conn);
+return exists;
 }
 
 boolean sqlTableExists(struct sqlConnection *sc, char *table)

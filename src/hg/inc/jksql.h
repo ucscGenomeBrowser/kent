@@ -125,6 +125,9 @@ int sqlCountColumns(struct sqlResult *sr);
 int sqlCountRows(struct sqlConnection *sc, char *table);
 /* Count the number of rows in a table. */
 
+boolean sqlDatabaseExists(char *database);
+/* Return TRUE if database exists. */
+
 boolean sqlTableExists(struct sqlConnection *sc, char *table);
 /* Return TRUE if a table exists. */
 
