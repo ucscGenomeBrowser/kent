@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.3 2004/06/06 03:23:37 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.4 2004/09/27 21:48:38 angie Exp $";
 
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
@@ -577,7 +577,6 @@ for (range = rangeList; range != NULL; range = range->next)
     AllocVar(bun);
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
-    bun->data = range;
     alignComponents(range, bun, ffCdna);
     ssStitch(bun, ffCdna, minMatch, 3);
     saveAlignments(targetName, range->tTotalSize, range->tStart, 
@@ -649,7 +648,6 @@ for (range = rangeList; range != NULL; range = range->next)
     AllocVar(bun);
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
-    bun->data = range;
     alignComponents(range, bun, ffCdna);
     ssStitch(bun, ffCdna, minScore, 16);
     slAddHead(&bunList, bun);
@@ -850,7 +848,7 @@ ffi->ff = ffMakeRightLinks(ffList);
 return ffi;
 }
 
-static struct ssBundle *fastMapClumpsToBundles(struct genoFind *gf,  struct gfClump *clumpList, bioSeq *qSeq, int qSeqOffset)
+static struct ssBundle *fastMapClumpsToBundles(struct genoFind *gf, struct gfClump *clumpList, bioSeq *qSeq)
 /* Convert gfClumps ffAlis. */
 {
 struct gfClump *clump;
@@ -865,13 +863,10 @@ slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, 256);
 for (range = rangeList; range != NULL; range = range->next)
     {
-    range->qStart += qSeqOffset;
-    range->qEnd += qSeqOffset;
     targetSeq = range->tSeq;
     AllocVar(bun);
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
-    bun->data = range;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     slAddHead(&bunList, bun);
@@ -907,7 +902,6 @@ for (range = rangeList; range != NULL; range = range->next)
     AllocVar(bun);
     bun->qSeq = seq;
     bun->genoSeq = targetSeq;
-    bun->data = range;
     bun->ffList = gfRangesToFfItem(range->components, seq);
     bun->isProt = isProt;
     ssStitch(bun, stringency, minMatch, 16);
@@ -977,7 +971,6 @@ for (range = rangeList; range != NULL; range = range->next)
     AllocVar(bun);
     bun->qSeq = qSeq;
     bun->genoSeq = targetSeq;
-    bun->data = range;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = TRUE;
     bun->t3List = t3;
@@ -1117,7 +1110,6 @@ for (isRc = 0; isRc <= 1;  ++isRc)
 	AllocVar(bun);
 	bun->qSeq = seq;
 	bun->genoSeq = targetSeq;
-	bun->data = range;
 	bun->ffList = gfRangesToFfItem(range->components, seq);
 	bun->isProt = TRUE;
 	t3 = hashMustFindVal(t3Hash, range->tName);
@@ -1249,7 +1241,6 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	AllocVar(bun);
 	bun->qSeq = qSeq;
 	bun->genoSeq = targetSeq;
-	bun->data = range;
 	bun->ffList = gfRangesToFfItem(range->components, qSeq);
 	ssStitch(bun, stringency, minMatch, 16);
 	getTargetName(range->tName, out->includeTargetFile, targetName);
@@ -1258,8 +1249,6 @@ for (tIsRc=0; tIsRc <= 1; ++tIsRc)
 	    bun, NULL, qIsRc, tIsRc, stringency, minMatch, out);
 	ssBundleFree(&bun);
 	}
-
-
 
     /* Cleanup for this strand of database. */
     gfRangeFreeList(&rangeList);
@@ -1513,7 +1502,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 	clumpList = gfFindClumpsWithQmask(gf, &subQuery, qMaskBits, subOffset, lm, &hitCount);
 	if (fastMap)
 	    {
-	    oneBunList = fastMapClumpsToBundles(gf, clumpList, query, subOffset);
+	    oneBunList = fastMapClumpsToBundles(gf, clumpList, &subQuery);
 	    }
 	else
 	    {
