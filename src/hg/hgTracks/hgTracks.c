@@ -7008,47 +7008,6 @@ x = atof(stringVal);
 return round(x*guideBases);
 }
 
-boolean findGenomePos(char *spec, char **retChromName, 
-	int *retWinStart, int *retWinEnd)
-/* Search for positions in genome that match user query.   
-Return TRUE if the query results in a unique position.  
-Otherwise display list of positions and return FALSE. */
-
-{
-struct hgPositions *hgp;
-struct hgPos *pos;
-struct dyString *ui;
-
-
-if (strstr(spec,";") != NULL)
-    return handleTwoSites(spec, retChromName, retWinStart, retWinEnd);
-
-
-hgp = hgPositionsFind(spec, "", TRUE, cart);
-if (hgp == NULL || hgp->posCount == 0)
-    {
-    hgPositionsFree(&hgp);
-    errAbort("Sorry, couldn't locate %s in genome database\n", spec);
-    return TRUE;
-    }
-if (((pos = hgp->singlePos) != NULL) && (!hgp->useAlias))
-    {
-    *retChromName = pos->chrom;
-    *retWinStart = pos->chromStart;
-    *retWinEnd = pos->chromEnd;
-    hgPositionsFree(&hgp);
-    return TRUE;
-    }
-else
-    {
-    if (*retWinStart != 1)
-	hgPositionsHtml(hgp, stdout, TRUE, cart);
-    else
-	*retWinStart = hgp->posCount;
-    hgPositionsFree(&hgp);
-    return FALSE;
-    }
-}
 
 
 void tracksDisplay()
@@ -7059,7 +7018,7 @@ char newPos[256];
 
 /* Read in input from CGI. */
 position = cartString(cart, "position");
-if (!findGenomePos(position, &chromName, &winStart, &winEnd)) 
+if (!findGenomePos(position, &chromName, &winStart, &winEnd, cart)) 
     return;
 
 seqBaseCount = hChromSize(chromName);
