@@ -345,6 +345,24 @@ printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
 	maxDigits, initialVal);
 }
 
+void cgiMakeDropList(char *name, char *menu[], int menuSize, char *checked)
+/* Make a drop-down list. */
+{
+int i;
+char *selString;
+if (checked == NULL) checked = menu[0];
+printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+for (i=0; i<menuSize; ++i)
+    {
+    if (!differentWord(menu[i], checked))
+        selString = " SELECTED";
+    else
+        selString = "";
+    printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
+    }
+printf("</SELECT>");
+}
+
 
 void cgiMakeHiddenVar(char *varName, char *string)
 /* Store string in hidden input for next time around. */
