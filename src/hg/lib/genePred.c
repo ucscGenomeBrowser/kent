@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.30 2004/02/15 04:57:44 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.31 2004/02/15 21:22:47 baertsch Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -484,7 +484,7 @@ return gp;
 }
 
 
-struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name)
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name, boolean gFrame)
 /* Convert gff->groupList to genePred list, using GTF feature conventions;
  * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
  * gffGroup is sorted in assending coords, with overlaping starts sorted by
@@ -495,7 +495,7 @@ int stopCodonStart = -1, stopCodonEnd = -1;
 int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
 int exonCount = 0;
 struct gffLine *gl;
-unsigned *eStarts, *eEnds;
+unsigned *eStarts, *eEnds, *eFrames;
 int i;
 boolean anyExon = FALSE;
 
@@ -546,6 +546,16 @@ gp->cdsStart = cdsStart;
 gp->cdsEnd = cdsEnd;
 gp->exonStarts = AllocArray(eStarts, exonCount);
 gp->exonEnds = AllocArray(eEnds, exonCount);
+if (gFrame)
+    {
+    gp->exonFrames = AllocArray(eFrames, exonCount);
+    gp->optFields |= genePredExonFramesFld;
+    gp->optFields |= genePredCdsStatFld;
+    gp->cdsStartStat = cdsComplete;
+    gp->cdsEndStat = cdsComplete;
+    }
+else
+    eFrames = NULL;
 
 /* adjust tx range to include stop codon */
 if ((group->strand == '+') && (gp->txEnd == stopCodonStart))
@@ -571,6 +581,10 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
             {
             eStarts[i] = gl->start;
             eEnds[i] = gl->end;
+            if (gFrame && isdigit(gl->frame))
+                {
+                eFrames[i] = (int)gl->frame - '0';
+                }
             ++i;
             }
         else
