@@ -311,6 +311,14 @@ visibility hide
 color 200,0,50
 type bed 12
 
+track transfacHit
+shortLabel Transfac Hits 
+longLabel Transfac Transcription Factor Binding Sites Near Transcription Start
+priority 18.28
+visibility dense
+spectrum on
+type bed 6
+
 track triangle
 shortLabel Golden Triangle
 longLabel Golden Triangle Possible Transcription Factor Binding Sites
