@@ -173,7 +173,7 @@ shortLabel Rat Net
 longLabel Rat (rn3-Jun 03)/$Organism Alignment Net
 group compGeno
 priority 143
-visibility dense
+visibility hide 
 spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
