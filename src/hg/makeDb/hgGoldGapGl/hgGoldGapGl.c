@@ -261,6 +261,7 @@ sprintf(pathName, "%s/ffa/sequence.inf", gsDir);
 makeCloneVerHash(pathName, cloneVerHash);
 
 chrFiList = listDirX(ooDir, "*", FALSE);
+uglyf("%d elements in list of %s\n", slCount(chrFiList), ooDir);
 for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
     if (chrFi->isDir && strlen(chrFi->name) <= 2)
