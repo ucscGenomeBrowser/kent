@@ -1,0 +1,27 @@
+<p>Transcriptome data from tiling GeneChips produced by <a
+href="http://www.affymetrix.com">Affymetrix</a>.  For the ten
+Chromosomes 6, 7, 13, 14, 19, 20, 21, 22, X, and Y probes were tiled
+every 5bp in areas that were not repeat masked (over 74 million
+probes) and hybridized to mRNA from the SK-N-AS cell line. This data
+is a preview of the phase two of the transcriptome project which will
+include data from 7 additional cell lines when completed. While the
+coverage of the genome is much larger and the probe density greater,
+the general method is similar to the phase one project carried out on
+chromosomes 21 and 22 (<a
+href="http://www.netaffx.com/transcriptome/sci_21_22_paper/index.html">"Large-Scale
+Transcriptional Activity in Chromosomes 21 and 22"</A>, Kapranov, P.,
+Cawley, S. E., Drenkow, J., Bekiranov, S, Strausberg, R. L., Fodor,
+S.P.A. and Gingeras, T.R.).
+
+<p>For each data point probes within 30bp on either side were used to help better estimate the expression level of a particular probe. This helps to smooth the
+data and produce a more robust estimate of the transcription level at a particular genomic location. Specifically the analysis method used was as follows:
+<ul>
+    <li>Replicate arrays were quantile-normalized and the median intensity (using both pm and mm intensities) of each array was scaled to a target value of 44.
+    <li>The expression level was estimated for each mapped probe position, i, by 
+    <ul>
+       <li>collecting all the probe pairs that fell within a window of +\- 30bp
+       <li>calculating all non-redundant pairwise averages of pm - mm values of all probe pairs in the window
+       <li>taking the median of all resulting pairwise averages.
+   </ul>
+   <li>The resulting signal value is the Hodges-Lehmann estimator associated with the Wilcoxon signed rank statistic of the pm - mm values that lie within &#177 30bp of the sliding window centered at every genomic coordinate
+</ul>
