@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.30 2005/02/09 23:26:42 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.31 2005/02/10 00:32:03 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -382,9 +382,9 @@ void doOutCustomTrack(char *table, struct sqlConnection *conn)
 doBedOrCtOptions(table, conn, TRUE);
 }
 
-void doGetBedOrCt(struct sqlConnection *conn, boolean doCt, 
-	boolean doCtFile, boolean redirectToGb)
-/* Actually output bed or custom track. */
+boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt, 
+		     boolean doCtFile, boolean redirectToGb)
+/* Actually output bed or custom track. Return TRUE unless no results. */
 {
 char *table = curTable;
 struct hTableInfo *hti = getHti(database, table);
@@ -543,8 +543,7 @@ for (region = regionList; region != NULL; region = region->next)
     }
 if (!gotResults)
     {
-    if (!doCt)
-	hPrintf("\n# No results returned from query.\n\n");
+    hPrintf("\n# No results returned from query.\n\n");
     }
 else if (doCt)
     {
@@ -638,6 +637,7 @@ else if (isWig && wigOutData)
     wds->asciiOut(wds, "stdout", TRUE, FALSE);
     wiggleDataStreamFree(&wds);
     }
+return gotResults;
 }
 
 void doGetBed(struct sqlConnection *conn)
@@ -655,10 +655,13 @@ doGetBedOrCt(conn, TRUE, FALSE, TRUE);
 void doGetCustomTrackTb(struct sqlConnection *conn)
 /* Get Custom Track output (UI has already told us how). */
 {
-doGetBedOrCt(conn, TRUE, FALSE, FALSE);
-flushCustomTracks();
-initGroupsTracksTables(conn);
-doMainPage(conn);
+boolean gotResults = doGetBedOrCt(conn, TRUE, FALSE, FALSE);
+if (gotResults)
+    {
+    flushCustomTracks();
+    initGroupsTracksTables(conn);
+    doMainPage(conn);
+    }
 }
 
 void doGetCustomTrackFile(struct sqlConnection *conn)
