@@ -17,7 +17,7 @@
 #include "joiner.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.4 2004/08/25 15:35:44 kent Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.5 2004/08/28 20:07:38 kent Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -341,7 +341,7 @@ for (dt = dtList; dt != NULL; dt = dt->next)
 static void doBigSelectPage(char *db, char *table)
 /* Put up big field selection page. Assumes html page open already*/
 {
-struct joiner *joiner = joinerRead("all.joiner");
+struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
 
 htmlOpen("Select Fields from %s.%s", db, table);
@@ -696,7 +696,7 @@ for (dt = dtList; dt != NULL; dt = dt->next)
 static void doBigFilterPage(struct sqlConnection *conn, char *db, char *table)
 /* Put up filter page on given db.table. */
 {
-struct joiner *joiner = joinerRead("all.joiner");
+struct joiner *joiner = allJoiner;
 struct dbTable *dtList, *dt;
 
 htmlOpen("Filter on Fields from %s.%s", db, table);

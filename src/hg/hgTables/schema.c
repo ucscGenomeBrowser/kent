@@ -18,7 +18,7 @@
 #include "customTrack.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.19 2004/08/26 21:05:44 markd Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.20 2004/08/28 20:07:38 kent Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -232,7 +232,7 @@ static void showSchemaDb(char *db, char *table)
 /* Show schema to open html page. */
 {
 struct sqlConnection *conn = sqlConnect(db);
-struct joiner *joiner = joinerRead("all.joiner");
+struct joiner *joiner = allJoiner;
 struct joinerPair *jpList, *jp;
 struct asObject *asObj = asForTable(conn, table);
 char *splitTable = chromTable(conn, table);

@@ -14,8 +14,9 @@
 #include "trackDb.h"
 #include "grp.h"
 #include "hgTables.h"
+#include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.25 2004/07/24 05:32:38 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.26 2004/08/28 20:07:38 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -111,6 +112,7 @@ struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaTrack);
 jsDropDownCarryOver(dy, hgtaGroup);
+jsDropDownCarryOver(dy, hgtaTable);
 jsTrackedVarCarryOver(dy, hgtaRegionType, "regionType");
 jsTextCarryOver(dy, hgtaRange);
 jsDropDownCarryOver(dy, hgtaOutputType);
@@ -151,17 +153,13 @@ void makeRegionButton(char *val, char *selVal)
 jsMakeTrackingRadioButton(hgtaRegionType, "regionType", val, selVal);
 }
 
-struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
-    char *trackVar, char *trackScript, struct sqlConnection *conn)
-/* Show group & track row of controls.  Returns selected track */
+struct grp *showGroupField(char *groupVar, char *groupScript,
+    struct sqlConnection *conn)
+/* Show group control. Returns selected group. */
 {
 struct grp *group, *groupList = makeGroupList(conn, fullTrackList);
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
-struct trackDb *track, *selTrack;
-
-if (trackScript == NULL)
-    trackScript = "";
-hPrintf("<TR><TD><B>group:</B>\n");
+hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
 for (group = groupList; group != NULL; group = group->next)
     {
@@ -170,7 +168,16 @@ for (group = groupList; group != NULL; group = group->next)
 	group->label);
     }
 hPrintf("</SELECT>\n");
+return selGroup;
+}
 
+struct trackDb *showTrackField(struct grp *selGroup,
+	char *trackVar, char *trackScript)
+/* Show track control. Returns selected track. */
+{
+struct trackDb *track, *selTrack;
+if (trackScript == NULL)
+    trackScript = "";
 hPrintf("<B>track:</B>\n");
 if (selGroup != NULL && sameString(selGroup->name, "all"))
     selGroup = NULL;
@@ -186,9 +193,82 @@ for (track = fullTrackList; track != NULL; track = track->next)
 	    track->shortLabel);
     }
 hPrintf("</SELECT>\n");
-hPrintf("</TD></TR>\n");
+hPrintf("\n");
 return selTrack;
 }
+
+struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
+    char *trackVar, char *trackScript, struct sqlConnection *conn)
+/* Show group & track row of controls.  Returns selected track */
+{
+struct trackDb *track;
+struct grp *selGroup;
+hPrintf("<TR><TD>");
+selGroup = showGroupField(groupVar, groupScript, conn);
+track = showTrackField(selGroup, trackVar, trackScript);
+hPrintf("</TD></TR>\n");
+return track;
+}
+
+char *showTableField(struct trackDb *track)
+/* Show table control and label. */
+{
+struct joinerPair *jpList, *jp;
+struct slName *name, *nameList = NULL;
+char *selTable;
+boolean gotSelTable = FALSE;
+struct hash *uniqHash = hashNew(8);
+
+/* Construct an alphabetical list of all joining tables, with
+ * the track name on top. */
+    {
+    hashAdd(uniqHash, track->tableName, NULL);
+    jpList = joinerRelate(allJoiner, database, track->tableName);
+    for (jp = jpList; jp != NULL; jp = jp->next)
+	{
+	struct joinerDtf *dtf = jp->b;
+	char buf[256];
+	char *s;
+	if (sameString(dtf->database, database))
+	    s = dtf->table;
+	else
+	    {
+	    safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
+	    s = buf;
+	    }
+	if (!hashLookup(uniqHash, s))
+	    {
+	    hashAdd(uniqHash, s, NULL);
+	    name = slNameNew(s);
+	    slAddHead(&nameList, name);
+	    }
+	}
+    slNameSort(&nameList);
+    name = slNameNew(track->tableName);
+    slAddHead(&nameList, name);
+    }
+
+/* Get currently selected table.  If it isn't in our list
+ * then revert to default. */
+selTable = cartUsualString(cart, hgtaTable, track->tableName);
+if (!hashLookup(uniqHash, selTable))
+    selTable = track->tableName;
+
+/* Print out label and drop-down list. */
+hPrintf("<B>table:</B>");
+hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeGroupOrTrack());
+for (name = nameList; name != NULL; name = name->next)
+    {
+    hPrintf("<OPTION");
+    if (sameString(selTable, name->name))
+        hPrintf(" SELECTED");
+    hPrintf(">%s", name->name);
+    }
+hPrintf("</SELECT>\n");
+return selTable;
+}
+
+
 
 static void showOutDropDown(char **types, char **labels, int typeCount)
 /* Display output drop-down. */
@@ -248,6 +328,7 @@ else
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
+struct grp *selGroup;
 boolean isWig;
 hPrintf("<TABLE BORDER=0>\n");
 
@@ -260,10 +341,21 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("</TD></TR>\n");
     }
 
-/* Print group and track line. */
-curTrack = showGroupTrackRow(hgtaGroup, onChangeGroupOrTrack(), hgtaTrack, 
-	onChangeGroupOrTrack(), conn);
-isWig = isWiggle(database, curTrack->tableName);
+/* Print group line. */
+    {
+    hPrintf("<TR><TD>");
+    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn);
+    hPrintf("</TD></TR>\n");
+    }
+
+/* Print track and table line. */
+    {
+    hPrintf("<TR><TD>");
+    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
+    curTable = showTableField(curTrack);
+    isWig = isWiggle(database, curTable);
+    hPrintf("</TD></TR>\n");
+    }
 
 /* Region line */
     {
@@ -387,7 +479,7 @@ hPrintf("</FORM>\n");
 /* Hidden form - for benefit of javascript. */
     {
     static char *saveVars[] = {
-      "org", "db", hgtaGroup, hgtaTrack, hgtaRegionType,
+      "org", "db", hgtaGroup, hgtaTrack, hgtaTable, hgtaRegionType,
       hgtaRange, hgtaOutputType, };
     jsCreateHiddenForm(saveVars, ArraySize(saveVars));
     }

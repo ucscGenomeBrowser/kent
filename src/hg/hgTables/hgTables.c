@@ -18,8 +18,9 @@
 #include "grp.h"
 #include "customTrack.h"
 #include "hgTables.h"
+#include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.54 2004/08/28 00:38:17 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.55 2004/08/28 20:07:38 kent Exp $";
 
 
 void usage()
@@ -42,6 +43,8 @@ char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *freezeName;	/* Date of assembly. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct trackDb *curTrack;	/* Currently selected track. */
+char *curTable;		/* Currently selected table. */
+struct joiner *allJoiner;	/* Info on how to join tables. */
 
 /* --------------- HTML Helpers ----------------- */
 
@@ -816,6 +819,7 @@ oldVars = hashNew(10);
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
 /* Set up global variables. */
+allJoiner = joinerRead("all.joiner");
 getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
 freezeName = hFreezeFromDb(database);

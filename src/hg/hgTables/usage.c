@@ -5,7 +5,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.3 2004/07/20 09:31:52 kent Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.4 2004/08/28 20:07:38 kent Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -22,11 +22,8 @@ hPrintf("%s",
 "   corresponds to the grouping of tracks as separated by the blue\n"
 "   bars in the genome browser.</LI>\n"
 "   \n"
-"   <LI><B>track: </B>Which track to work with. (Hint: there is a lot\n"
-"   of data associated with the known genes, RefSeq, and Ensembl\n"
-"   tracks, all of which are in the Gene and Gene Prediction\n"
-"   group).</LI>\n"
-"   \n"
+"   <LI><B>track: </B>Which track to work with.</LI>\n"
+"   <LI><B>table: </B>Which SQL table associated with track to use.\n"
 "   <LI><B>region: </B>With this one can restrict the query to a\n"
 "   particular chromosome or region. Select genome to apply the query\n"
 "   to the entire genome.  Alternatively select range and type in either \n"

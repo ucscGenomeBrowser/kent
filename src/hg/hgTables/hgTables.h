@@ -27,6 +27,9 @@
 #include "grp.h"
 #endif
 
+#ifndef JOINER_H
+#include "joiner.h"
+#endif
 struct region
 /* A part (or all) of a chromosome. */
     {
@@ -45,6 +48,8 @@ extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
 extern struct customTrack *theCtList;	/* List of custom tracks. */
+extern char *curTable;	/* Current selected table. */
+struct joiner *allJoiner;	/* Info on how to join tables. */
 
 /* --------------- HTML Helpers ----------------- */
 

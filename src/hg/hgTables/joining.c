@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.23 2004/07/27 11:36:56 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.24 2004/08/28 20:07:38 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -759,7 +759,7 @@ if (joinerDtfAllSameTable(dtfList))
     }
 else
     {
-    struct joiner *joiner = joinerRead("all.joiner");
+    struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
     	primaryDb, primaryTable, dtfList, 1000000);
     joinedTablesTabOut(joined);
