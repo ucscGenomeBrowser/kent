@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.66 2004/11/22 21:51:55 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.67 2004/11/24 20:22:24 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -47,10 +47,9 @@ else
 void wigPrintDataConstraint(struct wiggleDataStream *wds, FILE * fh)
 /*	output string to file handle fh indicating current data constraint */
 {
-if (wds->useDataConstraint)
+if (wds->useDataConstraint && wds->dataConstraint)
     {
-    if ((wds->dataConstraint) &&
-	sameWord(wds->dataConstraint,"in range"))
+    if (sameWord(wds->dataConstraint,"in range"))
 	    fprintf (fh, "#\tdata values in range [%g : %g)\n",
 		    wds->limit_0, wds->limit_1);
     else

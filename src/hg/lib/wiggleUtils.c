@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.37 2004/11/17 17:59:02 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.38 2004/11/24 20:22:24 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -157,30 +157,29 @@ char **row;
 int minSpan = BIGNUM;
 int maxSpan = 0;
 int spanCount = 0;
-struct hash *spans = newHash(0);	/* list of spans in this table */
+struct hash *spans = (struct hash *)NULL;  /* list of spans in this table */
 struct hashEl *el;
 int *tdbSpanList = (int *)NULL;
 	/* array of positive integers terminated by a value 0	*/
 
 /*	Check if we have done this before via trackDb entry	*/
 if (tdb && (prevTdb == tdb) && prevTdbSpanList)
-    {
-    freeHash(&spans);
     return(prevMin);
-    }
 
 /*	Check if we have done this before not via a trackDb entry */
-if  (	(prevConn == conn) &&
-	(prevTable == table) &&
-	(prevChrom == chrom) &&
+if  ( prevTable && prevChrom && prevConn &&
+	(sameWord(sqlGetDatabase(prevConn), sqlGetDatabase(conn))) &&
+	(sameWord(prevTable,table)) &&
+	(sameWord(prevChrom,chrom)) &&
 	(prevWinStart == winStart) &&
 	(prevWinEnd == winEnd) &&
 	(prevCart == cart)
     )
     {
-    freeHash(&spans);
     return(prevMin);
     }
+
+spans = newHash(0);	/* list of spans in this table */
 
 /*	Not here before with this one, seems to be new	*/
 prevConn = conn;
