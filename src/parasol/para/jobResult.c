@@ -66,7 +66,7 @@ while (lineFileNext(lf, &line, &lineSize))
     char lastChar = line[lineSize-1];
     if (lastChar != '\n')
     	{
-	warn("Skipping incomplete last line of %s", fileName);
+	// warn("Skipping incomplete last line of %s", fileName);
 	break;
 	}
     line[lineSize-1] = 0;
