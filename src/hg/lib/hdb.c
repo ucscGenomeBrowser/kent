@@ -28,13 +28,24 @@ static char *hdbUser;
 static char *hdbPassword;
 static char *hdbTrackDb = NULL;
 
+static char* getCfgValue(char* envName, char* cfgName)
+/* get a configuration value, from either the environment or the cfg file,
+ * with the env take precedence.
+ */
+{
+char *val = getenv(envName);
+if (val == NULL)
+    val = cfgOption(cfgName);
+return val;
+}
+
 void hDefaultConnect()
 /* read in the connection options from config file */
 {
-hdbHost 	= cfgOption("db.host");
-hdbUser 	= cfgOption("db.user");
-hdbPassword	= cfgOption("db.password");
-hdbTrackDb      = cfgOption("db.trackDb");
+hdbHost 	= getCfgValue("HGDB_HOST", "db.host");
+hdbUser 	= getCfgValue("HGDB_USER", "db.user");
+hdbPassword	= getCfgValue("HGDB_PASSWORD", "db.password");
+hdbTrackDb      = getCfgValue("HGDB_TRACKDB", "db.trackDb");
 if(hdbHost == NULL || hdbUser == NULL || hdbPassword == NULL)
     errAbort("cannot read in connection setting from configuration file.");
 }
