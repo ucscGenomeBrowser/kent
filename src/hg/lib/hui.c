@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.53 2004/12/15 04:17:05 kate Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.54 2005/01/12 03:39:56 donnak Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -465,7 +465,7 @@ cgiMakeDropList(var, nci60Options, ArraySize(nci60Options),
 /****** Some stuff for cdsColoring of mrna track related controls *******/
 
 static char *cdsColorOptions[] = {
-    "off",
+    "OFF",
     "genomic codons",
     "mRNA codons",
     "different mRNA codons",
@@ -639,9 +639,9 @@ cgiMakeDropList(var, chainColorOptions, ArraySize(chainColorOptions), curVal);
 /****** Options for the wiggle track Windowing *******/
 
 static char *wiggleWindowingOptions[] = {
-    "Maximum",
-    "Mean",
-    "Minimum"
+    "maximum",
+    "mean",
+    "minimum"
     };
 
 enum wiggleWindowingEnum wiggleWindowingStringToEnum(char *string)
@@ -727,8 +727,8 @@ cgiMakeDropList(var, wiggleYLineMarkOptions, ArraySize(wiggleYLineMarkOptions),
 /****** Options for the wiggle track AutoScale *******/
 
 static char *wiggleScaleOptions[] = {
-    "Use Vertical Viewing Range Setting",
-    "Auto-Scale to data view"
+    "use vertical viewing range setting",
+    "auto-scale to data view"
     };
 
 enum wiggleScaleOptEnum wiggleScaleStringToEnum(char *string)
@@ -756,8 +756,8 @@ cgiMakeDropList(var, wiggleScaleOptions, ArraySize(wiggleScaleOptions),
 /****** Options for the wiggle track type of graph *******/
 
 static char *wiggleGraphOptions[] = {
-    "Points",
-    "Bar"
+    "points",
+    "bar"
     };
 
 enum wiggleGraphOptEnum wiggleGraphStringToEnum(char *string)
@@ -814,8 +814,8 @@ cgiMakeDropList(var, wiggleGridOptions, ArraySize(wiggleGridOptions),
 /****** Some stuff for wiggle track related controls *******/
 
 static char *wiggleOptions[] = {
-    "Only samples",
-    "Linear interpolation"
+    "samples only",
+    "linear interpolation"
     };
 
 enum wiggleOptEnum wiggleStringToEnum(char *string)
@@ -844,8 +844,8 @@ cgiMakeDropList(var, wiggleOptions, ArraySize(wiggleOptions),
 /****** Some stuff for GCwiggle track related controls *******/
 
 static char *GCwiggleOptions[] = {
-    "Only samples",
-    "Linear interpolation"
+    "samples only",
+    "linear interpolation"
     };
 
 enum GCwiggleOptEnum GCwiggleStringToEnum(char *string)
@@ -873,8 +873,8 @@ cgiMakeDropList(var, GCwiggleOptions, ArraySize(GCwiggleOptions),
 /****** Some stuff for chimp track related controls *******/
 
 static char *chimpOptions[] = {
-    "Only samples",
-    "Linear interpolation"
+    "samples only",
+    "linear interpolation"
     };
 
 enum chimpOptEnum chimpStringToEnum(char *string)
