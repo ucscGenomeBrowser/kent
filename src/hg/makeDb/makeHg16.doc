@@ -2121,3 +2121,43 @@ mv ucsc100k.bed ucsc100k.bed.Rn3
 	   were built for hg16.  makeKgHg16.doc could be merged 
  	   with makeHg16.doc after minor editing of the format style.
 
+# LIFTING REPEATMASKER .ALIGN FILES
+
+# for this work, I had to delete some comments that were in the .align files.
+# The edited files were
+#   NT_008046_01.fa.align   (around line 10586)
+#   NT_008046_75.fa.align   (around line 3320)
+# The lines I deleted are:
+#
+# These elements can be clipped out with the options is_clip or is_only.
+# The latter does not run the 'normal' RepeatMasker routine and positions in the current
+# .out file will not correspond with the -is_only reconstructed sequence.
+#
+foreach d (?{,?}/NT_??????)
+  set c=$d:t
+  cd $d
+  echo $c to $c.fa.align
+  /cluster/bin/scripts/liftRMAlign.pl $c.lft > $c.fa.align
+  cd ../..
+end
+
+foreach chr (?{,?})
+  cd $chr
+  echo making symbolic links for chr$chr NT .fa.align files
+  foreach ctg (NT_??????)
+    ln -s $ctg/$ctg.fa.align
+  end
+  cd ..
+  if (-e $chr/lift/ordered.lft) then
+    echo making $chr/chr$chr.fa.align
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/ordered.lft \
+      > $chr/chr$chr.fa.align
+  endif
+  if (-e $chr/lift/random.lft) then
+    echo making $chr/chr${chr}_random.fa.align
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/random.lft \
+      > $chr/chr${chr}_random.fa.align
+  endif
+  echo removing symbolic links for chr$chr NT .fa.align files
+  rm $chr/NT_??????.fa.align
+end
