@@ -37,6 +37,16 @@ color 150,0,0
 type genePred ensPep
 url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
 
+track slamHuman
+shortLabel Slam Human
+longLabel SLAM gene predictions using human/mouse homology
+group genes
+priority 45.5
+visibility hide
+color 100,50,0
+altColor 175,150,128
+type genePred 
+
 track blatFish
 shortLabel Tetraodon Blat
 longLabel Tetraodon nigriviridis Translated Blat Alignments
