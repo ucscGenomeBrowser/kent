@@ -3,6 +3,7 @@
  */
 
 #include "common.h"
+#include "obscure.h"
 #include "hash.h"
 #include "linefile.h"
 #include "jksql.h"
@@ -13,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.65 2005/03/04 19:26:05 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.66 2005/03/04 19:27:24 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
