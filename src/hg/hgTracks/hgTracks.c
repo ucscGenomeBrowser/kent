@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.753 2004/06/07 18:36:19 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.754 2004/06/08 16:55:38 angie Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -7308,6 +7308,42 @@ tg->itemNameColor = blastNameColor;
 }
 
 
+static void triangleDrawAt(struct track *tg, void *item,
+	struct vGfx *vg, int xOff, int y, double scale, 
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a right- or left-pointing triangle at position. 
+ * If item has width > 1 or block/cds structure, those will be ignored -- 
+ * this only draws a triangle (direction depending on strand). */
+{
+struct bed *bed = item; 
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int y2 = y + tg->heightPer;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    }
+
+if (bed->strand[0] == '-')
+    vgTriLeft(vg, x1, y, y2, color);
+else
+    vgTriRight(vg, x1, y, y2, color);
+}
+
+void simpleBedTriangleMethods(struct track *tg)
+/* Load up simple bed features methods, but use triangleDrawAt. */
+{
+bedMethods(tg);
+tg->drawItemAt = triangleDrawAt;
+}
+
+
 void loadGenePred(struct track *tg)
 /* Convert bed info in window to linked feature. */
 {
@@ -8113,6 +8149,7 @@ registerTrackHandler("altGraphXPsb2004", altGraphXMethods );
 /* registerTrackHandler("altGraphXT6Con", altGraphXMethods ); */
 registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
+registerTrackHandler("pscreen", simpleBedTriangleMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
