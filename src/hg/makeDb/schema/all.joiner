@@ -39,7 +39,7 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2
+set chainDest Hg15,Hg16,Pt0,Mm2,Mm3,Mm4,Rn2,Rn3,Cb1,Dp1,PanTro1,GalGal2,Fr1
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
