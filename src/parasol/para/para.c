@@ -15,20 +15,21 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.58 2004/12/14 23:36:58 hiram Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.59 2005/01/07 23:38:49 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"retries", OPTION_INT},
-    {"maxQueue", OPTION_INT},
-    {"minPush", OPTION_INT},
-    {"maxPush", OPTION_INT},
-    {"warnTime", OPTION_INT},
-    {"killTime", OPTION_INT},
+    {"retries"  , OPTION_INT},
+    {"maxQueue" , OPTION_INT},
+    {"minPush"  , OPTION_INT},
+    {"maxPush"  , OPTION_INT},
+    {"warnTime" , OPTION_INT},
+    {"killTime" , OPTION_INT},
     {"delayTime", OPTION_INT},
-    {"eta", OPTION_BOOLEAN},
-    {"pri", OPTION_STRING},
-    {"priority", OPTION_STRING},
+    {"eta"      , OPTION_BOOLEAN},
+    {"pri"      , OPTION_STRING},
+    {"priority" , OPTION_STRING},
+    {"maxNode"  , OPTION_STRING},
     {NULL, 0}
 };
 
@@ -66,7 +67,7 @@ errAbort(
   "      -delayTime=N  Number of seconds to delay before submitting next job \n"
   "         to minimize i/o load at startup - default 0.\n"
   "      -eta  Show estimated time to completion with 'time' function.\n"
-  "         This is a rough estimated based on average job time and jobs left\n"
+  "         This is a rough estimated based on average job time and jobs left.\n"
   "      -priority=x  Set batch priority to high, medium, or low.\n"
   "         Default medium (use high only with approval).\n"
   "         If needed, use with make, push, create, shove, or try.\n"
@@ -76,6 +77,9 @@ errAbort(
   "         %d is low for bottomfeeders.\n"
   "         Setting priority higher than normal (1-%d) will be logged.\n"
   "         Please keep low priority jobs short, they won't be pre-empted.\n"
+  "      -maxNode=x  Limit the number of nodes the batch can use.\n"
+  "         Specify number of nodes, for example 10 or 'unlimited'.\n"
+  "         Default unlimited displays as -1.\n"
   "para try \n"
   "   This is like para push, but only submits up to 10 jobs.\n"
   "para shove\n"
@@ -114,6 +118,8 @@ errAbort(
   "   the `check out' tests fail.\n"
   "para priority 999\n"
   "   Set batch priority. Values explained under 'push' options above.\n"
+  "para maxNode 999\n"
+  "   Set batch maxNode. Values explained under 'push' options above.\n"
   "\n"
   "Common options\n"
   "   -verbose=1 - set verbosity level.\n",
@@ -135,6 +141,7 @@ int killTime = 14*24*60;
 int sleepTime = 5*60;
 int delayTime = 0;
 int priority = NORMAL_PRIORITY;
+int maxNode  = -1;
 boolean eta = FALSE;
 
 /* Some variable we might want to move to a config file someday. */
@@ -144,6 +151,7 @@ char *statusCommand = "parasol pstat";
 char *killCommand = "parasol remove job";
 
 void checkPrioritySetting(); /* fwd reference */
+void  checkMaxNodeSetting(); /* fwd reference */
 
 void beginHappy()
 /* Call before a loop where happy dots maybe written */
@@ -593,13 +601,13 @@ for (lineEl = lineList; lineEl != NULL; lineEl = lineEl->next)
     {
     int wordCount;
     char *line = lineEl->val;
-    char *row[7];
+    char *row[8];
     if (line[0] != '#')
 	{
 	char *b;
 	wordCount = chopLine(line, row);
-	b = row[6];
-	if (wordCount < 7 || b[0] != '/')
+	b = row[7];
+	if (wordCount < 8 || b[0] != '/')
 	    errAbort("paraHub and para out of sync on listBatches");
 	if (sameString(b, batchName))
 	    ret = TRUE;
@@ -662,6 +670,7 @@ atomicWriteBatch(db, backup);
 atomicWriteBatch(db, batch);
 verbose(1, "%d jobs written to %s\n", db->jobCount, batch);
 checkPrioritySetting();
+checkMaxNodeSetting();
 }
 
 void paraRecover(char *batch, char *jobList, char *newJobList)
@@ -1355,6 +1364,44 @@ freez(&result);
 verbose(1, "Told hub to chill out\n");
 }
 
+void sendSetMaxNodeMessage(int maxNode)
+/* Tell hub to change maxNode on batch */
+{
+struct dyString *dy = newDyString(1024);
+char curDir[512];
+char *result;
+if (maxNode <-1) 
+    errAbort("maxNode %d out of range, should be >=-1",maxNode);
+if (getcwd(curDir, sizeof(curDir)) == NULL)
+    errAbort("Couldn't get current directory");
+dyStringPrintf(dy, "setMaxNode %s %s/para.results %d", getUser(), curDir, maxNode);
+result = hubSingleLineQuery(dy->string);
+dyStringFree(&dy);
+if (result == NULL || sameString(result, "-2"))
+    errAbort("Couldn't set maxNode %d for %s\n", maxNode, curDir);
+freez(&result);
+verbose(1, "Told hub to set maxNode %d\n",maxNode);
+}
+
+void paraMaxNode(char *val)
+/* Tell hub to change maxNode on batch */
+{
+if (sameWord(val,"unlimited"))
+    maxNode = -1;
+else
+    maxNode = atoi(val);
+sendSetMaxNodeMessage(maxNode);
+}
+
+void checkMaxNodeSetting()
+/* see if we can and need to set maxNode */
+{
+if (optionVal("maxNode",NULL)!=NULL)
+    paraMaxNode(optionVal("maxNode","unlimited"));
+}   
+
+
+
 void sendSetPriorityMessage(int priority)
 /* Tell hub to change priority on batch */
 {
@@ -1699,7 +1746,10 @@ command = argv[1];
 batch = "batch";
 
 if (!sameWord(command,"create") && !sameWord(command,"make"))
+    {
     checkPrioritySetting();
+    checkMaxNodeSetting();
+    }
 
 pushWarnHandler(paraVaWarn);
 
@@ -1785,6 +1835,12 @@ else if (sameWord(command, "priority"))
     if (argc != 3)
         usage();
     paraPriority(argv[2]);
+    }
+else if (sameWord(command, "maxNode"))
+    {
+    if (argc != 3)
+        usage();
+    paraMaxNode(argv[2]);
     }
 else
     {
