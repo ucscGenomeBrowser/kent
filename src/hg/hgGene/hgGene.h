@@ -27,6 +27,9 @@ struct section
     void (*print)(struct section *section, struct sqlConnection *conn,
     	char *geneId);
     /* Print section given connection to genome database. */
+
+    /* Some section-specific data. */
+    char *raFile;	/* Ra file to load additional info from. */
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);

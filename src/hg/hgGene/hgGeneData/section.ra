@@ -5,7 +5,7 @@ priority 10
 
 name otherOrgs
 shortLabel Other Species
-longLabel Homologous Genes in Other Species
+longLabel Homologous Genes in Other Species (BLASTP Best Hit)
 priority 20
 
 name sequence

@@ -1,4 +1,4 @@
-/* links.c - Handle links section. */
+/* links.c - Handle links section and other species homologies. */
 
 #include "common.h"
 #include "hash.h"
@@ -87,11 +87,12 @@ freeMem(dupe);
 return ok;
 }
 
-static struct link *getLinkList(struct sqlConnection *conn)
+static struct link *getLinkList(struct sqlConnection *conn,
+	char *raFile)
 /* Get list of links - starting with everything in .ra file,
  * and making sure any associated tables and databases exist. */
 {
-struct hash *ra, *raList = readRa("links.ra", NULL);
+struct hash *ra, *raList = readRa(raFile, NULL);
 struct link *linkList = NULL, *link;
 for (ra = raList; ra != NULL; ra = ra->next)
     {
@@ -211,7 +212,7 @@ static void linksPrint(struct section *section, struct sqlConnection *conn,
 /* Print the links section. */
 {
 int maxPerRow = 6, itemPos = 0;
-struct link *link, *linkList = getLinkList(conn);
+struct link *link, *linkList = getLinkList(conn, section->raFile);
 
 hPrintf("<TABLE><TR><TD BGCOLOR=#888888>\n");
 hPrintf("<TABLE CELLSPACING=1 CELLPADDING=3><TR>\n");
@@ -219,24 +220,22 @@ for (link = linkList; link != NULL; link = link->next)
     {
     char query[256];
     char *url = linkGetUrl(link, conn, geneId);
-    char *name = linkGetName(link, conn, geneId);
-    if (++itemPos > maxPerRow)
-        {
-	hPrintf("</TR>\n<TR>");
-	itemPos = 1;
-	}
-    hPrintf("<TD BGCOLOR=\"#D9F8E4\">");
-    if (url != NULL && name != NULL)
+    if (url != NULL)
 	{
+	if (++itemPos > maxPerRow)
+	    {
+	    hPrintf("</TR>\n<TR>");
+	    itemPos = 1;
+	    }
+	hPrintf("<TD BGCOLOR=\"#D9F8E4\">");
 	hPrintf("<A HREF=\"%s\" class=\"toc\">", url);
 	hPrintf("%s", link->shortLabel);
 	hPrintf("</A>");
+	hPrintf("</TD>");
+	freez(&url);
 	}
     else
-        hPrintf("n/a");
-    hPrintf("</TD>");
-    freez(&url);
-    freez(&name);
+        hPrintf("n/a: %s %s %s", link->shortLabel, url);
     }
 hPrintf("</TR></TABLE>\n");
 hPrintf("</TD></TR></TABLE>\n");
@@ -248,5 +247,16 @@ struct section *linksSection(struct sqlConnection *conn,
 {
 struct section *section = sectionNew(sectionRa, "links");
 section->print = linksPrint;
+section->raFile = "links.ra";
+return section;
+}
+
+struct section *otherOrgsSection(struct sqlConnection *conn,
+	struct hash *sectionRa)
+/* Create links section. */
+{
+struct section *section = sectionNew(sectionRa, "otherOrgs");
+section->print = linksPrint;
+section->raFile = "otherOrgs.ra";
 return section;
 }
