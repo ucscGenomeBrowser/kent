@@ -538,10 +538,11 @@ for (track = trackList; track != NULL; track = track->next)
 	 }
      if (track->offset != 0)
 	 {
-	 for (bed = track->bedList; track != NULL; track = track->next)
+	 int offset = track->offset;
+	 for (bed = track->bedList; bed != NULL; bed = bed->next)
 	     {
-	     bed->chromStart += track->offset;
-	     bed->chromEnd += track->offset;
+	     bed->chromStart += offset;
+	     bed->chromEnd += offset;
 	     }
 	 }
      }
