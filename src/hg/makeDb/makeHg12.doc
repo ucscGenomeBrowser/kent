@@ -1822,8 +1822,23 @@ TWINSCAN GENE PREDICTIONS (DONE 8/22/02)
     end
     hgPepPred hg12 generic twinscanPep chr*-fixed.fa
 
+o Load Ingo Ebersber's chimp BLAT alignments
+cd ~/oo
+mkdir bed/chimpBlat
+cd bed/chimpBlat
 
-MAKING THE DOWNLOADABLE DATABASE FILES - TODO
+#!/bin/sh
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+do
+  wget http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_apr02/chr${i}_gp_F01Apr02.psl
+done
+
+Remove the first line from each psl file. It is junk.
+pslCat *.psl chimpBlat.psl
+hgLoadPsl chimpBlat.psl
+
+
+MAKING THE DOWNLOADABLE DATABASE FILES - DONE
 
 ssh hgwdev
 

@@ -1,0 +1,10 @@
+track chimpBlat
+shortLabel Chimp Blat
+longLabel Pan troglodytes Blat Alignments
+priority 28
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+url http://email.eva.mpg.de/~ebersber/custom_track_chimp/MPI-sg_apr02/$S_gp_F01Apr02.psl
