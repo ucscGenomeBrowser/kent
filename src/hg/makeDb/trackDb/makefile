@@ -48,15 +48,16 @@ MGC_DBS = \
 update:
 	@for DB in $(DBS) x; do \
 	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB` ; \
-		org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		if test -a $$dbpath/visibility.ra ; then \
-		    vis="-visibility=$$dbpath/visibility.ra" ; \
-		else if test -a $$org/visibility.ra ; then \
-		    vis="-visibility=$$org/visibility.ra" ; \
-		else \
-		    vis="" ; \
-		fi ; fi; \
+		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
+		if test -n "$$dbpath" ; then \
+		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
+		    if test -a $$dbpath/visibility.ra ; then \
+			vis="-visibility=$$dbpath/visibility.ra" ; \
+		    else if test -a $$org/visibility.ra ; then \
+			vis="-visibility=$$org/visibility.ra" ; \
+		    else \
+			vis="" ; \
+		fi ; fi ; fi; \
 		cmd="hgTrackDb $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
@@ -69,15 +70,16 @@ alpha:
 	cvs up -d -P .
 	@for DB in $(DBS) x; do \
 	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB` ; \
-		org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		if test -a $$dbpath/visibility.ra ; then \
-		    vis="-visibility=$$dbpath/visibility.ra" ; \
-		else if test -a $$org/visibility.ra ; then \
-		    vis="-visibility=$$org/visibility.ra" ; \
-		else \
-		    vis="" ; \
-		fi ; fi; \
+		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
+		if test -n "$$dbpath" ; then \
+		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
+		    if test -a $$dbpath/visibility.ra ; then \
+			vis="-visibility=$$dbpath/visibility.ra" ; \
+		    else if test -a $$org/visibility.ra ; then \
+			vis="-visibility=$$org/visibility.ra" ; \
+		    else \
+			vis="" ; \
+		fi ; fi ; fi; \
 		cmd="hgTrackDb $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
@@ -93,15 +95,16 @@ strict:
 	cvs up -d -P .
 	@for DB in $(DBS) x; do \
 	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB` ; \
-		org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		if test -a $$dbpath/visibility.ra ; then \
-		    vis="-visibility=$$dbpath/visibility.ra" ; \
-		else if test -a $$org/visibility.ra ; then \
-		    vis="-visibility=$$org/visibility.ra" ; \
-		else \
-		    vis="" ; \
-		fi ; fi; \
+		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
+		if test -n "$$dbpath" ; then \
+		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
+		    if test -a $$dbpath/visibility.ra ; then \
+			vis="-visibility=$$dbpath/visibility.ra" ; \
+		    else if test -a $$org/visibility.ra ; then \
+			vis="-visibility=$$org/visibility.ra" ; \
+		    else \
+			vis="" ; \
+		fi ; fi ; fi; \
 		cmd="hgTrackDb -strict=yes $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
@@ -120,13 +123,15 @@ beta: checkbeta strict
 mgc:
 	@for DB in $(MGC_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
-		dbpath=`ls -1 -d */$$DB` ; \
-		org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
-		vis="" ; \
-		cmd="hgTrackDb -strict=yes -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
-		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
-		echo $$cmd ;  $$cmd ; \
+		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
+		if test -n "$$dbpath" ; then \
+		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
+		    vis="" ; \
+		    cmd="hgTrackDb -strict=yes -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
+		    echo $$cmd ;  $$cmd ; \
+		    cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
+		    echo $$cmd ;  $$cmd ; \
+		fi ; \
 	    fi ; \
 	done
 
