@@ -316,6 +316,31 @@ if (matched != NULL)
 return numChanged;
 }
 
+void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table)
+/* Load a tab-seperated file into a database table, checking for errors */
+{
+char query[PATH_LEN+256];
+int numScan, numRecs, numSkipped, numWarnings;
+char *info;
+struct sqlResult *sr;
+
+safef(query, sizeof(query),  "LOAD data local infile '%s' into table %s",
+      path, table);
+sr = sqlGetResult(conn, query);
+info = mysql_info(conn->conn);
+if (info == NULL)
+    errAbort("no info available for result of sql query: %s", query);
+numScan = sscanf(info, "Records: %d Deleted: %*d  Skipped: %d  Warnings: %d",
+                 &numRecs, &numSkipped, &numWarnings);
+if (numScan != 3)
+    errAbort("can't parse sql load info: %s", info);
+if ((numSkipped > 0) || (numWarnings > 0))
+    errAbort("load of %s did not go as planned: %d record(s), "
+             "%d row(s) skipped, %d warning(s) loading %s",
+             table, numRecs, numSkipped, numWarnings, path);
+sqlFreeResult(&sr);
+}
+
 boolean sqlExists(struct sqlConnection *conn, char *query)
 /* Query database and return TRUE if it had a non-empty result. */
 {

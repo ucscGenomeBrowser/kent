@@ -71,6 +71,9 @@ int sqlUpdateRows(struct sqlConnection *conn, char *query, int* matched);
 boolean sqlExists(struct sqlConnection *conn, char *query);
 /* Query database and return TRUE if it had a non-empty result. */
 
+void sqlLoadTabFile(struct sqlConnection *conn, char *path, char *table);
+/* Load a tab-seperated file into a database table, checking for errors */
+
 struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* Query database.
  * Returns NULL if result was empty.  Otherwise returns a structure
