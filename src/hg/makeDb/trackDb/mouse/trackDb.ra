@@ -211,7 +211,7 @@ type psl xeno
 
 track blastzBestMouse
 shortLabel Self Best
-longLabel Self Blastz Best-in-Genome Alignments
+longLabel $Organism Blastz Best-in-Genome Self Alignments
 group varRep
 priority 132
 visibility hide
