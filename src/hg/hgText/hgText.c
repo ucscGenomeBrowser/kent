@@ -397,6 +397,11 @@ if(hFindChromStartEndFields(table, chromFieldName, startName, endName))
 		table, chromFieldName, choosenChromName, startName, winStart, endName, winEnd);
             }
         }
+else
+    {
+    snprintf(query, 256, "SELECT * FROM %s ", table);
+    }
+
 
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);
