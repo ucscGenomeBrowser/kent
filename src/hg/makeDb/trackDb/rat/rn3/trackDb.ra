@@ -59,7 +59,7 @@ group compGeno
 priority 116
 visibility dense
 spectrum on
-type netAlign hg15 humanChain
+type netAlign hg15 chainHg15
 
 track hg15SynNet
 shortLabel Human Syntenic Net
@@ -68,7 +68,7 @@ group compGeno
 priority 117
 visibility hide
 spectrum on
-type netAlign hg15
+type netAlign hg15 chainHg15
 
 track blastzTightMm3
 shortLabel Tight Mouse
@@ -121,7 +121,7 @@ group compGeno
 priority 216
 visibility dense
 spectrum on
-type netAlign mm3 humanChain
+type netAlign mm3 chainHg15
 
 track mm3SynNet
 shortLabel Mouse Syntenic Net
@@ -130,4 +130,4 @@ group compGeno
 priority 217
 visibility hide
 spectrum on
-type netAlign mm3
+type netAlign mm3 chainHg15
