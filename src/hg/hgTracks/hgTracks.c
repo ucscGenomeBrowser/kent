@@ -4808,7 +4808,8 @@ void lfsMapItemName(struct trackGroup *tg, void *item, char *itemName, int start
 {
 struct linkedFeaturesSeries *lfs = tg->items;
 struct linkedFeaturesSeries *lfsItem = item;
-mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, lfsItem->name, itemName, itemName);
+if(tg->visibility == tvFull)
+    mapBoxHcTwoItems(start, end, x,y, width, height, tg->mapName, lfsItem->name, itemName, itemName);
 }
 
 
@@ -4896,11 +4897,29 @@ const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
 return(strcmp(a->name, b->name));
 }
 
+int nci60LfsSortByName(const void *va, const void *vb)    
+/* used for slSorting linkedFeaturesSeries */
+{
+const struct linkedFeaturesSeries *a = *((struct linkedFeaturesSeries **)va);
+const struct linkedFeaturesSeries *b = *((struct linkedFeaturesSeries **)vb);
+/* make sure that the duplicate and nsclc end up at the end */
+if(sameString(a->name, "DUPLICATE"))
+    return 1;
+if(sameString(a->name, "NSCLC"))
+    return 1;
+if(sameString(b->name, "DUPLICATE"))
+    return -1;
+if(sameString(b->name, "NSCLC"))
+    return -1;
+return(strcmp(a->name, b->name));
+}
+
 
 struct linkedFeaturesSeries *msBedGroupByIndex(struct bed *bedList, char *database, char *table, int expIndex, 
 					       char *filter, int filterIndex) 
 /* groups bed expScores in multiple scores bed by the expIndex 
-   in the expRecord->extras array. */
+   in the expRecord->extras array. Makes use of hashes to remember numerical
+   index of experiments, as hard to do in a list. */
 {
 struct linkedFeaturesSeries *lfsList = NULL, *lfs, **lfsArray;
 struct linkedFeatures *lf = NULL;
@@ -4942,6 +4961,8 @@ for(er = erList; er != NULL; er = er->next)
 /* get the number of indexes and the experiment values associated
    with each index */
 expRecordMapTypes(expIndexesToNames, indexes, &numIndexes, erList, expIndex, filter, filterIndex);
+if(numIndexes == 0)
+    errAbort("hgTracks::msBedGroupByIndex() - numIndexes can't be 0");
 lfsArray = needMem(sizeof(struct linkedFeaturesSeries*) * numIndexes);
 
 /* initialize our different tissue linkedFeatureSeries) */
@@ -5001,7 +5022,6 @@ for(i=0; i<numIndexes; i++)
     {
     slAddHead(&lfsList, lfsArray[i]);
     }
-slSort(&lfsList,lfsSortByName);
 
 hashTraverseVals(indexes, freeMem);
 expRecordFreeList(&erList);
@@ -5031,6 +5051,7 @@ if(tg->limitedVis == tvDense)
 else if(nci60Type == nci60Tissue)
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 1, NULL, -1);
+    slSort(&tg->items,nci60LfsSortByName);
     }
 else if(nci60Type == nci60All)
     {
@@ -5039,8 +5060,46 @@ else if(nci60Type == nci60All)
 else
     {
     tg->items = msBedGroupByIndex(bedList, "hgFixed", "nci60Exps", 0, nci60Map, 1);
+    slSort(&tg->items,lfsSortByName);
     }
 bedFreeList(&bedList);
+}
+
+struct bed *rosettaFilterByExonType(struct bed *bedList)
+/* remove beds from list depending on user preference for 
+   seeing confirmed and/or predicted exons */
+{
+struct bed *bed=NULL, *tmp=NULL, *tmpList=NULL;
+char *exonTypes = cartUsualString(cart, "rosetta.et", rosettaExonEnumToString(0));
+enum rosettaExonOptEnum et = rosettaStringToExonEnum(exonTypes);
+
+if(et == rosettaAllEx)
+    return bedList;
+
+/* go through and remove appropriate beds */
+for(bed = bedList; bed != NULL; )
+    {
+    if(et == rosettaConfEx)
+	{
+	tmp = bed->next;
+	if(bed->name[strlen(bed->name) -2] == 't')
+	    slSafeAddHead(&tmpList, bed);
+	else
+	    bedFree(&bed);
+	bed = tmp;
+	}
+    else if(et == rosettaPredEx)
+	{
+	tmp = bed->next;
+	if(bed->name[strlen(bed->name) -2] == 'p')
+	    slSafeAddHead(&tmpList, bed);
+	else
+	    bedFree(&bed);
+	bed = tmp;
+	}
+    }
+slReverse(&tmpList);
+return tmpList;
 }
 
 void lfsFromRosettaBed(struct trackGroup *tg)
@@ -5057,47 +5116,7 @@ char *exonTypes = cartUsualString(cart, "rosetta.et", "Confirmed Only");
 int i=0, et=-1;
 bedList = tg->items;
 
-/* remove predicted or confirmed exons if necessary. */
-
-/* first get a numeric type so cheap to compare. */
-if(sameString(exonTypes, "All"))
-    et = 0;
-else if(sameString(exonTypes, "Confirmed Only"))
-    et =1;
-else if(sameString(exonTypes, "Predicted Only"))
-    et =2;
-else 
-    errAbort("hgTracks::lfsFromRosettaBed() - don't recognize exonTypes: %s", exonTypes);
-
-/* go through and remove appropriate beds */
-for(bed = bedList; bed != NULL; )
-    {
-    if(et == 0)
-	break;
-    else if(et == 1)
-	{
-	tmp = bed->next;
-	if(bed->name[strlen(bed->name) -2] == 't')
-	    slSafeAddHead(&tmpList, bed);
-	else
-	    bedFree(&bed);
-	bed = tmp;
-	}
-    else if(et == 2)
-	{
-	tmp = bed->next;
-	if(bed->name[strlen(bed->name) -2] == 'p')
-	    slSafeAddHead(&tmpList, bed);
-	else
-	    bedFree(&bed);
-	bed = tmp;
-	}
-    }
-if(et != 0)
-    {
-    slReverse(&tmpList);
-    bedList = tmpList;
-    }
+bedList = rosettaFilterByExonType(bedList);
 
 /* determine how to display the experiments */
 if(tg->limitedVis == tvDense)
@@ -5111,7 +5130,7 @@ else if(rosettaType == rosettaAll)
 else if(rosettaType == rosettaPoolOther)
     {
     lfsList = msBedGroupByIndex(bedList, "hgFixed", "rosettaExps", 1, NULL, -1);
-    lfsList->name=cloneString("Common Pool");
+    lfsList->name=cloneString("Common Reference");
     lfsList->next->name=cloneString("Other Exps");
     tg->items = lfsList;
     }
@@ -5285,30 +5304,30 @@ if(colorSchemeFlag == -1)
     colorSchemeFlag = stringArrayIx(colorScheme, colorSchemes, ArraySize(colorSchemes));
 
 /* if val is error value show make it gray */
-if(val == -10000)
+if(val <= -10000)
     return shadesOfGray[5];
 
 /* we approximate a float by storing it as an int,
-   thus to bring us back to right scale divide by 100.
-   i.e. 1.27 was stored as 127 and needs to be converted to 1.27 */
+   thus to bring us back to right scale divide by 1000.
+   i.e. 1.27 was stored as 1270 and needs to be converted to 1.27 */
 if(tg->limitedVis == tvDense)
-    absVal = absVal/100;
+    absVal = absVal/1000;
 
 if(!exprBedColorsMade)
     makeRedGreenShades(mg);
 
 /* cap the value to be less than or equal to maxDeviation */
 if (tg->limitedVis == tvFull)
-    maxDeviation = 0.9;
+    maxDeviation = 1.0 ;
 else 
-    maxDeviation = 0.6;
+    maxDeviation = .6;
 
 /* cap the value to be less than or equal to maxDeviation */
 if(absVal > maxDeviation)
     absVal = maxDeviation;
 
 /* project the value into the number of colors we have.  
- *   * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
+ * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
  * 1 * 15 /2.0 = 7.5 = 7
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
