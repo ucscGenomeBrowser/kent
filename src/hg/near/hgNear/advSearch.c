@@ -9,7 +9,23 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.10 2003/07/30 04:00:17 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.11 2003/07/31 02:51:43 kent Exp $";
+
+struct genePos *advancedSearchResults(struct column *colList, 
+	struct sqlConnection *conn)
+/* First get full list. */
+{
+struct genePos *list = knownPosAll(conn);
+struct column *col;
+
+/* Then go through and filter it down by column. */
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (col->advancedSearch)
+        list = col->advancedSearch(col, conn, list);
+    }
+return list;
+}
 
 static boolean anyRealInCart(struct cart *cart, char *wild)
 /* Return TRUE if advanced search variables are set. */
@@ -88,21 +104,24 @@ char *val = cartOptionalString(cart, var);
 cgiMakeTextVar(var, val, 8);
 }
 
-void advSearchAnyAllMenu(struct column *col, char *varName)
+static char *anyAllMenu[] = {"all", "any"};
+
+void advSearchAnyAllMenu(struct column *col, char *varName, 
+	boolean defaultAny)
 /* Make a drop-down menu with value all/any. */
 {
 char *var = advSearchNameI(col, varName);
-char *val = cartUsualString(cart, var, "all");
-static char *menu[] = {"all", "any"};
-cgiMakeDropList(var, menu, ArraySize(menu), val);
+char *val = cartUsualString(cart, var, anyAllMenu[defaultAny]);
+cgiMakeDropList(var, anyAllMenu, ArraySize(anyAllMenu), val);
 }
 
-boolean advSearchOrLogic(struct column *col, char *varName)
+boolean advSearchOrLogic(struct column *col, char *varName, 
+	boolean defaultOr)
 /* Return TRUE if user has selected 'all' from any/all menu
  * of given name. */
 {
 char *var = advSearchNameI(col, varName);
-char *val = cartUsualString(cart, var, "all");
+char *val = cartUsualString(cart, var, anyAllMenu[defaultOr]);
 return sameWord(val, "any");
 }
 
@@ -111,9 +130,11 @@ static void bigButtons()
 {
 hPrintf("<TABLE><TR><TD>");
 hPrintf("Advanced search form: ");
-cgiMakeButton(advSearchClearVarName, "clear all");
+cgiMakeButton(advSearchClearVarName, "Clear All");
 hPrintf(" ");
-cgiMakeButton(advSearchSubmitVarName, "submit");
+cgiMakeButton(advSearchListVarName, "List Matching IDs");
+hPrintf(" ");
+cgiMakeButton(advSearchBrowseVarName, "Browse Results");
 hPrintf("</TD></TR></TABLE>\n");
 }
 
@@ -186,8 +207,8 @@ cartRemoveLike(cart, like);
 doAdvancedSearch(conn, colList);
 }
 
-void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList)
-/* Handle submission in advanced search page. */
+void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList)
+/* List gene names matching advanced search. */
 {
 if (gotAdvSearch())
     {
@@ -195,6 +216,26 @@ if (gotAdvSearch())
     cartSetString(cart, groupVarName, groupOn);
     }
 doSearch(conn, colList);
+}
+
+void doAdvancedSearchList(struct sqlConnection *conn, struct column *colList)
+/* List gene names matching advanced search. */
+{
+struct genePos *gp, *list = NULL;
+struct hash *uniqHash = newHash(16);
+hPrintf("<TT><PRE>");
+if (gotAdvSearch())
+    {
+    list = getSearchNeighbors(colList, conn);
+    }
+else
+    {
+    hPrintf("#No search limits activated. List contains all genes.\n");
+    list = knownPosAll(conn);
+    }
+for (gp = list; gp != NULL; gp = gp->next)
+    hPrintf("%s\n", gp->name);
+hPrintf("</PRE></TT>");
 }
 
 static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
@@ -219,21 +260,13 @@ slReverse(&outList);
 return outList;
 }
 
-struct genePos *getSearchNeighbors(struct column *colList, struct sqlConnection *conn)
+struct genePos *getSearchNeighbors(struct column *colList, 
+	struct sqlConnection *conn)
 /* Get neighbors by search. */
 {
-/* First get full list. */
-struct genePos *list = knownPosAll(conn);
-struct genePos *rejectList = NULL;
-struct column *col;
+struct genePos *list, *rejectList = NULL;
 
-/* Then go through and filter it down by column. */
-for (col = colList; col != NULL; col = col->next)
-    {
-    if (col->advancedSearch)
-        list = col->advancedSearch(col, conn, list);
-    }
-
+list = advancedSearchResults(colList, conn);
 list = firstBitsOfList(list, displayCount, &rejectList);
 return list;
 }

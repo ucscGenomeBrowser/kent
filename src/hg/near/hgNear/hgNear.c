@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
@@ -13,13 +14,13 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.35 2003/07/30 04:00:17 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.36 2003/07/31 02:51:43 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
 	getSeqVarName, getTextVarName, 
-	advSearchVarName, advSearchClearVarName, advSearchSubmitVarName,
-        resetConfName, idVarName, idPosVarName, NULL }; 
+	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
+	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -30,6 +31,16 @@ char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
+
+/* ---- General purpose helper routines. ---- */
+
+int genePosCmpName(const void *va, const void *vb)
+/* Sort function to compare two genePos by name. */
+{
+const struct genePos *a = *((struct genePos **)va);
+const struct genePos *b = *((struct genePos **)vb);
+return strcmp(a->name, b->name);
+}
 
 /* ---- Some html helper routines. ---- */
 
@@ -260,8 +271,41 @@ return resList;
 void lookupSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
-hPrintf("%s search (including * and ? wildcards): ", col->shortLabel);
+hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
 advSearchRemakeTextVar(col, "wild", 18);
+hPrintf("<BR>\n");
+hPrintf("Include if ");
+advSearchAnyAllMenu(col, "logic", TRUE);
+hPrintf("words in search term match.");
+}
+
+boolean wildMatchAny(char *word, struct slName *wildList)
+/* Return TRUE if word matches any thing in wildList. */
+{
+struct slName *w;
+for (w = wildList; w != NULL; w = w->next)
+    if (wildMatch(w->name, word) )
+        return TRUE;
+return FALSE;
+}
+
+boolean wildMatchAll(char *word, struct slName *wildList)
+/* Return TRUE if word matches all things in wildList. */
+{
+struct slName *w;
+for (w = wildList; w != NULL; w = w->next)
+    if (!wildMatch(w->name, word) )
+        return FALSE;
+return TRUE;
+}
+
+boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic)
+/* Return TRUE if word matches things in wildList. */
+{
+if (orLogic)
+   return wildMatchAny(word, wildList);
+else
+   return wildMatchAll(word, wildList);
 }
 
 struct genePos *lookupAdvancedSearch(struct column *col, 
@@ -271,16 +315,18 @@ struct genePos *lookupAdvancedSearch(struct column *col,
 char *wild = advSearchVal(col, "wild");
 if (wild != NULL)
     {
+    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
     struct hash *hash = newHash(17);
     char query[256];
     struct sqlResult *sr;
     char **row;
+    struct slName *wildList = stringToSlNames(wild);
     safef(query, sizeof(query), "select %s,%s from %s",
     	col->keyField, col->valField, col->table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (wildMatch(wild, row[1]))
+	if (wildMatchList(row[1], wildList, orLogic))
 	    hashAdd(hash, row[0], NULL);
 	}
     list = weedUnlessInHash(list, hash);
@@ -1064,8 +1110,10 @@ else if (cartVarExists(cart, advSearchVarName))
     doAdvancedSearch(conn, colList);
 else if (cartVarExists(cart, advSearchClearVarName))
     doAdvancedSearchClear(conn, colList);
-else if (cartVarExists(cart, advSearchSubmitVarName))
-    doAdvancedSearchSubmit(conn, colList);
+else if (cartVarExists(cart, advSearchBrowseVarName))
+    doAdvancedSearchBrowse(conn, colList);
+else if (cartVarExists(cart, advSearchListVarName))
+    doAdvancedSearchList(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
 else

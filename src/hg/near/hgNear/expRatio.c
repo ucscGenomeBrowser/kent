@@ -11,7 +11,7 @@
 #include "hgNear.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.11 2003/07/30 04:00:17 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.12 2003/07/31 02:51:43 kent Exp $";
 
 
 static boolean loadExpVals(struct sqlConnection *conn,
@@ -394,8 +394,8 @@ for (i=0; i<numExpts; ++i)
     }
 hPrintf("</TABLE>\n");
 hPrintf("Include if ");
-advSearchAnyAllMenu(col, "logic");
-hPrintf(" tissues meet min/max criteria.");
+advSearchAnyAllMenu(col, "logic", FALSE);
+hPrintf(" tissues meet minimum/maximum criteria.");
 }
 
 static struct hash *expValHash(struct sqlConnection *conn, char *table)
@@ -464,7 +464,7 @@ if (advSearchColAnySet(col))
     struct hash *expHash = expValHash(conn, col->posTable);
     struct hash *nameExpHash = getNameExpHash(conn, col->table, "name", "value", expHash);
     int i, numExpts = col->representativeCount;
-    boolean orLogic = advSearchOrLogic(col, "logic");
+    boolean orLogic = advSearchOrLogic(col, "logic", FALSE);
     int isMax;
     int repIx;
     char *varValString;

@@ -22,6 +22,9 @@ struct genePos
     int end;		/* End in chromosome. Disregarded if chrom == NULL. */
     };
 
+int genePosCmpName(const void *va, const void *vb);
+/* Sort function to compare two genePos by name. */
+
 struct searchResult
 /* A result from simple search - includes short and long names as well
  * as genePos. */
@@ -120,7 +123,8 @@ extern struct genePos *curGeneId;	  /* Identity of current gene. */
 #define getTextVarName "near.getText"	/* Button to get as text. */
 #define advSearchVarName "near.advSearch"      /* Advanced search */
 #define advSearchClearVarName "near.advSearchClear" /* Advanced search clear all button. */
-#define advSearchSubmitVarName "near.advSearchSubmit" /* Advanced search submit button. */
+#define advSearchBrowseVarName "near.advSearchBrowse" /* Advanced search browse  button. */
+#define advSearchListVarName "near.advSearchList" /* Advanced search submit list. */
 #define colOrderVar "near.colOrder"     /* Order of columns. */
 #define defaultConfName "near.default"  /* Restore to default settings. */
 #define hideAllConfName "near.hideAll"  /* Hide all columns. */
@@ -203,12 +207,13 @@ void advSearchRemakeTextVar(struct column *col, char *varName, int size);
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
 
-void advSearchAnyAllMenu(struct column *col, char *varName);
+void advSearchAnyAllMenu(struct column *col, char *varName, 
+	boolean defaultAny);
 /* Make a drop-down menu with value all/any. */
 
-boolean advSearchOrLogic(struct column *col, char *varName);
+boolean advSearchOrLogic(struct column *col, char *varName, 
+	boolean defaultOr);
 /* Return TRUE if user has selected 'all' from any/all menu
- * of given name. */
 
 struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 /* Return input list with stuff not in hash removed. */
@@ -267,8 +272,11 @@ void doAdvancedSearch(struct sqlConnection *conn, struct column *colList);
 void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList);
 /* Clear variables in advanced search page. */
 
-void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList);
-/* Handle submission in advanced search page. */
+void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList);
+/* Put up family browser with advanced search group by. */
+
+void doAdvancedSearchList(struct sqlConnection *conn, struct column *colList);
+/* List gene names matching advanced search. */
 
 void doConfigure(struct sqlConnection *conn, struct column *colList, 
 	char *bumpVar);
