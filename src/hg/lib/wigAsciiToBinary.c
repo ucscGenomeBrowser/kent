@@ -40,7 +40,7 @@
 #include	"wiggle.h"
 
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.10 2004/10/29 23:45:42 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.11 2004/11/01 18:46:23 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -216,7 +216,7 @@ if (fixedStart == 0)
     errAbort("Found start=0 at line %lu, the first chrom position is 1, not 0",
 	lineCount);
 else
-    fixedStart -= 1;	/* zero relative half-open */
+    fixedStart = BASE_0(fixedStart);	/* zero relative half-open */
 freeMem(clone);
 }
 
@@ -465,7 +465,7 @@ while (lineFileNext(lf, &line, NULL))
     if (variableStep)
 	{
 	Offset = sqlLongLong(words[0]);
-	Offset -= 1;	/* zero relative half open */
+	Offset = BASE_0(Offset);	/* zero relative half open */
 	dataValue = sqlDouble(words[1]);
 	}
     else if (fixedStep)
@@ -491,7 +491,7 @@ while (lineFileNext(lf, &line, NULL))
 	verbose(2, "first offset: %llu\n", chromStart);
 	}
     else if ((validLines > 1) && (Offset <= previousOffset))
-	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, previousOffset+1, Offset+1);
+	errAbort("chrom positions not in numerical order at line %lu. previous: %llu > %llu <-current", lineCount, BASE_1(previousOffset), BASE_1(Offset));
 
     /* if we are working on a zoom level and the data is not exactly
      * spaced according to the span, then we need to put each value
@@ -523,7 +523,7 @@ while (lineFileNext(lf, &line, NULL))
 	unsigned long long fillSize;	/* number of bytes */
 
 	verbose(2, "missing data offsets: %llu - %llu\n",
-		previousOffset+1,Offset-1);
+		BASE_1(previousOffset),BASE_0(Offset));
 	/*	If we are just going to fill the rest of this bin with
 	 *  no data, then may as well stop here.  No need to fill
 	 *  it with nothing.

@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.33 2004/10/06 21:57:50 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.34 2004/11/01 18:46:23 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -139,7 +139,7 @@ void statsPreamble(struct wiggleDataStream *wds, char *chrom,
 {
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
 
-sprintLongWithCommas(num1Buf, winStart + 1);
+sprintLongWithCommas(num1Buf, BASE_1(winStart));
 sprintLongWithCommas(num2Buf, winEnd);
 printf("<P><B> Position: </B> %s:%s-%s</P>\n", chrom, num1Buf, num2Buf );
 sprintLongWithCommas(num1Buf, winEnd - winStart);

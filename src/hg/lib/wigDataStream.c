@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.60 2004/10/29 19:05:53 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.61 2004/11/01 18:46:23 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wds, char *left, char *right)
@@ -394,7 +394,7 @@ if (wds->array)
 	slSort(&wds->array, arrayDataCmp);
 
     dataPtr = wds->array->data;
-    /*	user visible coordinates are 1 relative	*/
+    /*	user visible coordinates are wds->offset relative/based */
     chromPosition = wds->array->winStart + wds->offset;
     pointCount = wds->array->winEnd - wds->array->winStart;
     for (inx = 0; inx < pointCount; ++inx)
@@ -2004,7 +2004,7 @@ if (wds->ascii)
 	    data = asciiData->data;
 	    for (i = 0; i < asciiData->count; ++i)
 		{
-		/*	user visible coordinates are 1 relative	*/
+		/* user visible coordinates are wds->offset relative/based */
 		if (rawDataOut)
 		    fprintf (fh, "%g\n", data->value);
 		else
@@ -2082,7 +2082,7 @@ wdstream->asciiToDataArray = asciiToDataArray;
 wdstream->getDataViaBed = getDataViaBed;
 wdstream->getData = getData;
 wdstream->maxOutput = 0;
-wdstream->offset = 1;	/*	default 1-relative output	*/
+wdstream->offset = 1;	/*	default 1-relative/based output	*/
 return wdstream;
 }
 
