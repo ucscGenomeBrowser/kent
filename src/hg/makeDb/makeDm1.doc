@@ -772,7 +772,7 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/dm1/bed/blastz.dp1.2003-10-14/axtChain/chain
     foreach i (*.chain)
       set c = $i:r
-      hgLoadChain dm1 ${c}_dpseudoChain $i
+      hgLoadChain dm1 ${c}_chainDp1 $i
       echo done $c
     end
 
@@ -810,7 +810,7 @@ SEQ2_LEN=$BASE/S2.len
     netClass -noAr noClass.net dm1 dp1 fruitfly.net
     rm -r n1 noClass.net
     # Load the net into the database as so:
-    netFilter -minGap=10 fruitfly.net |  hgLoadNet dm1 dpseudoNet stdin
+    netFilter -minGap=10 fruitfly.net |  hgLoadNet dm1 netDp1 stdin
 
     # Move back to the file server to create axt files corresponding
     # to the net.
@@ -1424,3 +1424,70 @@ end
 # now reload:
     cd /cluster/data/genbank
     ./bin/gbDbLoadStep -type=mrna dm1
+
+
+# MASKED-QUERY XENO RNA ALIGNMENTS (DONE 10/21/03 angie)
+    # Experimental track... if this TRF-masking works out, then find out 
+    # what it would take to add it as an option to Mark's genbank stuff.
+    ssh kksilo
+    mkdir /cluster/data/dm1/bed/xenoMrnaMasked
+    cd /cluster/data/dm1/bed/xenoMrnaMasked
+    # Grab the latest full-release (137) genbank mRNA's.  Strip the 
+    # .version suffixes so we can use accessions from mrna.gbidx to 
+    # pick out the non-D.mel. mrnas.  
+    perl -wpe 's/^>(\w+).\d+/>$1/' \
+      /cluster/store5/genbank/data/processed/genbank.137.0/full/mrna.fa \
+      > allMrna.fa
+    grep -v "Drosophila melanogaster" \
+      /cluster/store5/genbank/data/processed/genbank.137.0/full/mrna.gbidx \
+	| awk '{print $1;}' | grep -v "^#" \
+    > xenoAcc.lst
+    faSomeRecords allMrna.fa xenoAcc.lst flyXenoRna.fa
+    # Split up the sequences into manageably sized files.  
+    mkdir flyXenoRnaSplit
+    faSplit about flyXenoRna.fa 10000000 flyXenoRnaSplit/xenoRna
+    # Now TRF-mask the sequences... use repeats with period <= 9 to mask.
+    mkdir trf
+    rm -f trf.log; touch trf.log
+    foreach f (flyXenoRnaSplit/*.fa)
+      set b = trf/$f:t:r.bed
+      echo $f to $b...
+      /cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null \
+        -bedAt=$b -tempDir=/tmp -maxPeriod=9 >& trf.log
+      maskOutFa -soft $f $b $f
+    end
+    # distribute masked xenoRna sequence on i-servers
+    mkdir /cluster/bluearc/dm1/mrna.137
+    cp -p /cluster/data/dm1/bed/xenoMrnaMasked/flyXenoRnaSplit/*.fa \
+      /cluster/bluearc/dm1/mrna.137/
+
+    ssh kk
+    cd /cluster/data/dm1/bed/xenoMrnaMasked
+    mkdir psl
+    ls -1S /iscratch/i/dm1/nib/chr*.nib > fly.lst
+    ls -1S /cluster/bluearc/dm1/mrna.137/xenoRna*.fa > mrna.lst
+    echo '#LOOP \
+/cluster/bin/i386/blat $(path1) {check in line+ $(path2)} -q=rnax -t=dnax -mask=lower {check out line+ psl/$(root1)_$(root2).psl} \
+#ENDLOOP' > gsub
+    gensub2 fly.lst mrna.lst gsub spec
+    para create spec
+    para try, check, push, check, ...
+#Completed: 814 of 814 jobs
+#Average job time:                 403s       6.71m     0.11h    0.00d
+#Longest job:                     1405s      23.42m     0.39h    0.02d
+#Submission to last job:          2430s      40.50m     0.68h    0.03d
+    ssh kksilo
+    cd /cluster/data/dm1/bed/xenoMrnaMasked
+    pslSort dirs raw.psl /cluster/store2/temp psl
+    pslReps raw.psl cooked.psl /dev/null -minAli=0.25
+    pslSortAcc nohead chrom /cluster/store2/temp cooked.psl
+    pslCat -dir chrom > xenoMrnaMasked.psl
+    rm -r chrom raw.psl cooked.psl 
+    # Load into database as so:
+    ssh hgwdev
+    cd /cluster/data/dm1/bed/xenoMrnaMasked
+    hgLoadPsl dm1 xenoMrnaMasked.psl -tNameIx
+    # Looks like no need to hgLoadSeq -- seqs are already loaded by Mark's 
+    # stuff.
+
+
