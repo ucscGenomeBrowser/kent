@@ -1363,7 +1363,7 @@ for (user = userList; user != NULL; user = user->next)
 pmSendString(pm, rudpOut, "");
 }
 
-void onePstatList(struct paraMessage *pm, struct dlList *list, boolean running)
+boolean onePstatList(struct paraMessage *pm, struct dlList *list, boolean running)
 /* Write out one job list in pstat format. */
 {
 struct dlNode *node;
@@ -1388,8 +1388,10 @@ for (node = list->head; !dlEnd(node); node = node->next)
     pmClear(pm);
     pmPrintf(pm, "%s %d %s %s %lu %s", 
         state, job->id, job->batch->user->name, job->exe, t, machName);
-    pmSend(pm, rudpOut);
+    if (!pmSend(pm, rudpOut))
+        return FALSE;
     }
+return TRUE;
 }
 
 void pstat(struct paraMessage *pm)
@@ -1398,13 +1400,15 @@ void pstat(struct paraMessage *pm)
 struct user *user;
 struct dlNode *bNode;
 struct batch *batch;
-onePstatList(pm, runningJobs, TRUE);
+if (!onePstatList(pm, runningJobs, TRUE))
+    return;
 for (user = userList; user != NULL; user = user->next)
     {
     for (bNode = user->curBatches->head; !dlEnd(bNode); bNode = bNode->next)
         {
 	batch = bNode->val;
-	onePstatList(pm, batch->jobQueue, FALSE);
+	if (!onePstatList(pm, batch->jobQueue, FALSE))
+	    return;
 	}
     }
 pmSendString(pm, rudpOut, "");
