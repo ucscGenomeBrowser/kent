@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.27 2004/03/25 07:11:13 baertsch Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.28 2004/03/25 07:18:44 baertsch Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -355,10 +355,7 @@ int i;
 if (!inittedCompTable) initNtCompTable();
 for (i=0; i<length; ++i)
     {
-    char base = ntCompTable[*dna];
-    if (base == 0 && *dna != 0)
-        errAbort("%c not found in initNtCompTable at offset %d, complement failed\n",*dna,i);
-    *dna = base;
+    *dna = ntCompTable[*dna];
     ++dna;
     }
 }
