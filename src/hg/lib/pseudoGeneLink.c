@@ -8,43 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.5 2003/11/19 09:57:49 baertsch Exp $";
-
-void pseudoGeneLinkStaticLoad(char **row, struct pseudoGeneLink *ret)
-/* Load a row from pseudoGeneLink table into ret.  The contents of ret will
- * be replaced at the next call to this function. */
-{
-int sizeOne,i;
-char *s;
-
-ret->bin = sqlSigned(row[0]);
-ret->chrom = row[1];
-ret->chromStart = sqlUnsigned(row[2]);
-ret->chromEnd = sqlUnsigned(row[3]);
-ret->name = row[4];
-ret->score = sqlUnsigned(row[5]);
-ret->strand = row[6];
-ret->assembly = row[7];
-ret->geneTable = row[8];
-ret->gene = row[9];
-ret->gChrom = row[10];
-ret->gStart = sqlUnsigned(row[11]);
-ret->gEnd = sqlUnsigned(row[12]);
-ret->score2 = sqlUnsigned(row[13]);
-ret->score3 = sqlUnsigned(row[14]);
-ret->chainId = sqlUnsigned(row[15]);
-ret->gStrand = row[16];
-ret->polyA = sqlUnsigned(row[17]);
-ret->polyAstart = sqlUnsigned(row[18]);
-ret->exonCover = sqlUnsigned(row[19]);
-ret->intronCount = sqlUnsigned(row[20]);
-ret->bestAliCount = sqlUnsigned(row[21]);
-ret->matches = sqlUnsigned(row[22]);
-ret->qSize = sqlUnsigned(row[23]);
-ret->tReps = sqlUnsigned(row[24]);
-ret->qReps = sqlUnsigned(row[25]);
-ret->overlapDiag = sqlUnsigned(row[26]);
-}
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.6 2003/11/24 11:47:25 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -55,6 +19,7 @@ int sizeOne,i;
 char *s;
 
 AllocVar(ret);
+ret->blockCount = sqlSigned(row[10]);
 ret->bin = sqlSigned(row[0]);
 ret->chrom = cloneString(row[1]);
 ret->chromStart = sqlUnsigned(row[2]);
@@ -62,26 +27,33 @@ ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = cloneString(row[4]);
 ret->score = sqlUnsigned(row[5]);
 ret->strand = cloneString(row[6]);
-ret->assembly = cloneString(row[7]);
-ret->geneTable = cloneString(row[8]);
-ret->gene = cloneString(row[9]);
-ret->gChrom = cloneString(row[10]);
-ret->gStart = sqlUnsigned(row[11]);
-ret->gEnd = sqlUnsigned(row[12]);
-ret->score2 = sqlUnsigned(row[13]);
-ret->score3 = sqlUnsigned(row[14]);
-ret->chainId = sqlUnsigned(row[15]);
-ret->gStrand = cloneString(row[16]);
-ret->polyA = sqlUnsigned(row[17]);
-ret->polyAstart = sqlUnsigned(row[18]);
-ret->exonCover = sqlUnsigned(row[19]);
-ret->intronCount = sqlUnsigned(row[20]);
-ret->bestAliCount = sqlUnsigned(row[21]);
-ret->matches = sqlUnsigned(row[22]);
-ret->qSize = sqlUnsigned(row[23]);
-ret->tReps = sqlUnsigned(row[24]);
-ret->qReps = sqlUnsigned(row[25]);
-ret->overlapDiag = sqlUnsigned(row[26]);
+ret->thickStart = sqlUnsigned(row[7]);
+ret->thickEnd = sqlUnsigned(row[8]);
+ret->reserved = sqlUnsigned(row[9]);
+sqlSignedDynamicArray(row[11], &ret->blockSizes, &sizeOne);
+assert(sizeOne == ret->blockCount);
+sqlSignedDynamicArray(row[12], &ret->chromStarts, &sizeOne);
+assert(sizeOne == ret->blockCount);
+ret->assembly = cloneString(row[13]);
+ret->geneTable = cloneString(row[14]);
+ret->gene = cloneString(row[15]);
+ret->gChrom = cloneString(row[16]);
+ret->gStart = sqlUnsigned(row[17]);
+ret->gEnd = sqlUnsigned(row[18]);
+ret->score2 = sqlUnsigned(row[19]);
+ret->score3 = sqlUnsigned(row[20]);
+ret->chainId = sqlUnsigned(row[21]);
+ret->gStrand = cloneString(row[22]);
+ret->polyA = sqlUnsigned(row[23]);
+ret->polyAstart = sqlUnsigned(row[24]);
+ret->exonCover = sqlUnsigned(row[25]);
+ret->intronCount = sqlUnsigned(row[26]);
+ret->bestAliCount = sqlUnsigned(row[27]);
+ret->matches = sqlUnsigned(row[28]);
+ret->qSize = sqlUnsigned(row[29]);
+ret->tReps = sqlUnsigned(row[30]);
+ret->qReps = sqlUnsigned(row[31]);
+ret->overlapDiag = sqlUnsigned(row[32]);
 return ret;
 }
 
@@ -91,7 +63,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAll(char *fileName)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[27];
+char *row[33];
 
 while (lineFileRow(lf, row))
     {
@@ -109,7 +81,7 @@ struct pseudoGeneLink *pseudoGeneLinkLoadAllByChar(char *fileName, char chopper)
 {
 struct pseudoGeneLink *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[27];
+char *row[33];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -138,6 +110,26 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 ret->strand = sqlStringComma(&s);
+ret->thickStart = sqlUnsignedComma(&s);
+ret->thickEnd = sqlUnsignedComma(&s);
+ret->reserved = sqlUnsignedComma(&s);
+ret->blockCount = sqlSignedComma(&s);
+s = sqlEatChar(s, '{');
+AllocArray(ret->blockSizes, ret->blockCount);
+for (i=0; i<ret->blockCount; ++i)
+    {
+    ret->blockSizes[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
+s = sqlEatChar(s, '{');
+AllocArray(ret->chromStarts, ret->blockCount);
+for (i=0; i<ret->blockCount; ++i)
+    {
+    ret->chromStarts[i] = sqlSignedComma(&s);
+    }
+s = sqlEatChar(s, '}');
+s = sqlEatChar(s, ',');
 ret->assembly = sqlStringComma(&s);
 ret->geneTable = sqlStringComma(&s);
 ret->gene = sqlStringComma(&s);
@@ -172,6 +164,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->strand);
+freeMem(el->blockSizes);
+freeMem(el->chromStarts);
 freeMem(el->assembly);
 freeMem(el->geneTable);
 freeMem(el->gene);
@@ -216,6 +210,30 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->thickStart);
+fputc(sep,f);
+fprintf(f, "%u", el->thickEnd);
+fputc(sep,f);
+fprintf(f, "%u", el->reserved);
+fputc(sep,f);
+fprintf(f, "%d", el->blockCount);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->blockSizes[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
+fputc(sep,f);
+if (sep == ',') fputc('{',f);
+for (i=0; i<el->blockCount; ++i)
+    {
+    fprintf(f, "%d", el->chromStarts[i]);
+    fputc(',', f);
+    }
+if (sep == ',') fputc('}',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->assembly);
