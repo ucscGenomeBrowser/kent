@@ -56,7 +56,7 @@ spectrum on
 type psl xeno mm3
 
 track blastzTightMm3
-shortLabel Tight Mouse
+shortLabel Mouse Tight
 longLabel Blastz Mouse (mm3-Feb 03), Tight Subset of Best Alignments
 group compGeno
 priority 127.5
@@ -133,7 +133,7 @@ spectrum on
 type psl xeno rn3
 
 track blastzTightRn3
-shortLabel Tight Rat 
+shortLabel Rat Tight
 longLabel Rat Blastz (rn3-Jun 03), Tight Subset of Best Alignments
 group compGeno
 priority 141.5
