@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgText hgTracks \
+BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear
 
 all::    cgi utils
