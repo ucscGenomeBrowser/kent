@@ -35,3 +35,4 @@ uglyf("Stitching %s to %s\n", argv[1], argv[2]);
 xenStitcher(argv[1], out, 150000, compact);
 return 0;
 }
+

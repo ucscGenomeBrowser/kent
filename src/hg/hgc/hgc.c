@@ -111,7 +111,7 @@
 #include "axtLib.h"
 #include "ensFace.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.458 2003/07/23 16:32:26 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.461 2003/07/29 17:51:17 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3119,7 +3119,7 @@ boolean hasBin;
 char splitTable[64];
 char query[256];
 hFindSplitTable(seqName, table, splitTable, &hasBin);
-safef(query, sizeof(query), "select * from %s where qName = '%s'", table, acc);
+safef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3144,7 +3144,7 @@ char *table;
 int start = cartInt(cart, "o");
 struct psl *pslList = NULL;
 
-if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track)|| sameWord("mrnaBlastz", track))
+if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) || sameString("pseudoMrna",track))
     {
     char temp[256];
     sprintf(temp, "non-%s RNA", organism);
@@ -3166,6 +3166,11 @@ else if (sameWord("xenoBlastzMrna", track) )
     {
     type = "Blastz to foreign mRNA";
     table = "xenoBlastzMrna";
+    }
+else if (sameWord("mrnaBlastz", track))
+    {
+    type = "mRNA";
+    table = "mrnaBlastz";
     }
 else 
     {
@@ -3844,6 +3849,288 @@ freeMem(dna);
 freeMem(oLetters);
 return psl->blockCount;
 }
+int showChesAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, 
+		    enum gfType qType, int qStart, int qEnd, char *qName)
+/* Show protein/DNA alignment or translated DNA alignment. */
+{
+struct dnaSeq *dnaSeq = NULL;
+boolean tIsRc = (psl->strand[1] == '-');
+boolean qIsRc = (psl->strand[0] == '-');
+boolean isProt = (qType == gftProt)|| (qType == gftProtChes);
+int tStart = psl->tStart, tEnd = psl->tEnd;
+int mulFactor = (isProt ? 3 : 1);
+int dnaSize = 0;
+DNA *dna = NULL;	/* Mixed case version of genomic DNA. */
+int oSize = oSeq->size;
+char *oLetters = cloneString(oSeq->dna);
+//int cfmStart=0;
+int qbafStart, qbafEnd, tbafStart, tbafEnd;
+int qcfmStart, qcfmEnd, tcfmStart, tcfmEnd;
+int protEnd;
+
+/* Load dna sequence. */
+/*
+if (isProt)
+{
+    protEnd = tStart + mulFactor * oSize;
+    if (tEnd < protEnd)
+	tEnd = protEnd;
+}
+*/
+dnaSeq = hDnaFromSeq(seqName, tStart, tEnd, dnaLower);
+freez(&dnaSeq->name);
+dnaSeq->name = cloneString(psl->tName);
+dnaSize = dnaSeq->size;
+
+tbafStart = psl->tStart;
+tbafEnd   = psl->tEnd;
+tcfmStart = psl->tStart;
+tcfmEnd   = psl->tEnd;
+
+qbafStart = qStart;
+qbafEnd   = qEnd;
+qcfmStart = qStart;
+qcfmEnd   = qEnd;
+
+/* Deal with minus strand. */
+if (tIsRc)
+    {
+    int temp;
+    reverseComplement(dnaSeq->dna, dnaSize);
+    temp = psl->tSize - tEnd;
+    tEnd = psl->tSize - tStart;
+    tStart = temp;
+    
+    tbafStart = psl->tEnd;
+    tbafEnd   = psl->tStart;
+    tcfmStart = psl->tEnd;
+    tcfmEnd   = psl->tStart;
+    }
+if (qIsRc)
+    {
+    int temp;
+    reverseComplement(oSeq->dna, oSeq->size);
+    reverseComplement(oLetters, oSeq->size);
+
+    qcfmStart = qEnd;
+    qcfmEnd   = qStart;
+    qbafStart = qEnd;
+    qbafEnd   = qStart;
+    
+    temp = psl->qSize - qEnd;
+    qEnd = psl->qSize - qStart;
+    qStart = temp;
+    }
+dna = cloneString(dnaSeq->dna);
+
+if (qName == NULL) 
+    qName = psl->qName;
+
+
+fprintf(f, "<H4><A NAME=cDNA></A>%s%s</H4>\n", qName, (qIsRc  ? " (reverse complemented)" : ""));
+fprintf(f, "<PRE><TT>");
+tolowers(oLetters);
+
+/* Display query sequence. */
+{
+struct cfm *cfm;
+char *colorFlags = needMem(oSeq->size);
+int i,j;
+
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int qs = psl->qStarts[i] - qStart;
+    int ts = psl->tStarts[i] - tStart;
+    int sz = psl->blockSizes[i]-1;
+    colorFlags[qs] = socBrightBlue;
+    oLetters[qs] = toupper(oLetters[qs]);
+    colorFlags[qs+sz] = socBrightBlue;
+    oLetters[qs+sz] = toupper(oLetters[qs+sz]);
+    if (isProt)
+	{
+	for (j=1; j<sz; ++j)
+	    {
+	    AA aa = oSeq->dna[qs+j];
+	    DNA *codon = &dnaSeq->dna[ts + 3*j];
+	    AA trans = lookupCodon(codon);
+	    if (trans != 'X' && trans == aa)
+		{
+		colorFlags[qs+j] = socBlue;
+		oLetters[qs+j] = toupper(oLetters[qs+j]);
+		}
+	    }
+	}
+    else
+	{
+	for (j=1; j<sz; ++j)
+	    {
+	    if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		{
+		colorFlags[qs+j] = socBlue;
+		oLetters[qs+j] = toupper(oLetters[qs+j]);
+		}
+	    }
+	}
+    }
+cfm = cfmNew(10, 60, TRUE, qIsRc, f, qcfmStart);
+for (i=0; i<oSize; ++i)
+    cfmOut(cfm, oLetters[i], seqOutColorLookup[colorFlags[i]]);
+cfmFree(&cfm);
+freez(&colorFlags);
+htmHorizontalLine(f);
+}
+fprintf(f, "</TT></PRE>\n");
+#if 0
+fprintf(f, "<H4><A NAME=genomic></A>%s.%s %s:</H4>\n", 
+	organism, psl->tName, (tIsRc ? "(reverse strand)" : ""));
+fprintf(f, "<PRE><TT>");
+/* Display DNA sequence. */
+{
+struct cfm *cfm;
+char *colorFlags = needMem(dnaSeq->size);
+int i,j;
+int curBlock = 0;
+int anchorCount = 0;
+
+for (i=0; i<psl->blockCount; ++i)
+    {
+    int qs = psl->qStarts[i] - qStart;
+    int ts = psl->tStarts[i] - tStart;
+    int sz = psl->blockSizes[i];
+    if (isProt)
+	{
+	for (j=0; j<sz; ++j)
+	    {
+	    AA aa = oSeq->dna[qs+j];
+	    int codonStart = ts + 3*j;
+	    DNA *codon = &dnaSeq->dna[codonStart];
+	    AA trans = lookupCodon(codon);
+	    if (trans != 'X' && trans == aa)
+		{
+		colorFlags[codonStart] = socBlue;
+		colorFlags[codonStart+1] = socBlue;
+		colorFlags[codonStart+2] = socBlue;
+		toUpperN(dna+codonStart, 3);
+		}
+	    }
+	}
+    else
+	{
+	for (j=0; j<sz; ++j)
+	    {
+	    if (oSeq->dna[qs+j] == dnaSeq->dna[ts+j])
+		{
+		colorFlags[ts+j] = socBlue;
+		dna[ts+j] = toupper(dna[ts+j]);
+		}
+	    }
+	}
+    colorFlags[ts] = socBrightBlue;
+    colorFlags[ts+sz*mulFactor-1] = socBrightBlue;
+    }
+
+cfm = cfmNew(10, 60, TRUE, tIsRc, f, tcfmStart);
+    
+for (i=0; i<dnaSeq->size; ++i)
+    {
+    /* Put down "anchor" on first match position in haystack
+     * so user can hop here with a click on the needle. */
+    if (curBlock < psl->blockCount && psl->tStarts[curBlock] == (i + tStart) )
+	{
+	fprintf(f, "<A NAME=%d></A>", ++curBlock);
+	}
+    cfmOut(cfm, dna[i], seqOutColorLookup[colorFlags[i]]);
+    }
+cfmFree(&cfm);
+//freez(&colorFlags);
+htmHorizontalLine(f);
+}
+#endif
+
+/* Display side by side. */
+fprintf(f, "</TT></PRE>\n");
+fprintf(f, "<H4><A NAME=ali></A>Side by Side Alignment*</H4>\n");
+fprintf(f, "<PRE><TT>");
+{
+struct baf baf;
+int i,j;
+
+bafInit(&baf, oSeq->dna, qbafStart, qIsRc,
+	dnaSeq->dna, tbafStart, tIsRc, f, 60, isProt);
+	    
+if (isProt)
+    {
+    for (i=0; i<psl->blockCount; ++i)
+	{
+	int qs = psl->qStarts[i] - qStart;
+	int ts = psl->tStarts[i] - tStart;
+	int sz = psl->blockSizes[i];
+
+	bafSetPos(&baf, qs, ts);
+	bafStartLine(&baf);
+	for (j=0; j<sz; ++j)
+	    {
+	    AA aa = oSeq->dna[qs+j];
+	    int codonStart = ts + 3*j;
+	    DNA *codon = &dnaSeq->dna[codonStart];
+	    bafOut(&baf, ' ', codon[0]);
+	    bafOut(&baf, aa, codon[1]);
+	    bafOut(&baf, ' ', codon[2]);
+	    }
+	bafFlushLine(&baf);
+	}
+    }
+else
+    {
+    int lastQe = psl->qStarts[0] - qStart;
+    int lastTe = psl->tStarts[0] - tStart;
+    int maxSkip = 20;
+    bafSetPos(&baf, lastQe, lastTe);
+    bafStartLine(&baf);
+    for (i=0; i<psl->blockCount; ++i)
+	{
+	int qs = psl->qStarts[i] - qStart;
+	int ts = psl->tStarts[i] - tStart;
+	int sz = psl->blockSizes[i];
+	boolean doBreak = TRUE;
+	int qSkip = qs - lastQe;
+	int tSkip = ts - lastTe;
+
+	if (qSkip >= 0 && qSkip <= maxSkip && tSkip == 0)
+	    {
+	    for (j=0; j<qSkip; ++j)
+		bafOut(&baf, oSeq->dna[lastQe+j], '-');
+	    doBreak = FALSE;
+	    }
+	else if (tSkip > 0 && tSkip <= maxSkip && qSkip == 0)
+	    {
+	    for (j=0; j<tSkip; ++j)
+		bafOut(&baf, '-', dnaSeq->dna[lastTe+j]);
+	    doBreak = FALSE;
+	    }
+	if (doBreak)
+	    {
+	    bafFlushLine(&baf);
+	    bafSetPos(&baf, qs, ts);
+	    bafStartLine(&baf);
+	    }
+	for (j=0; j<sz; ++j)
+	    bafOut(&baf, oSeq->dna[qs+j], dnaSeq->dna[ts+j]);
+	lastQe = qs + sz;
+	lastTe = ts + sz;
+	}
+    bafFlushLine(&baf);
+
+    fprintf( f, "<I>*Aligned Blocks with gaps <= %d bases are merged for this display</I>\n", maxSkip);
+    }
+}
+fprintf(f, "</TT></PRE>");
+if (qIsRc)
+reverseComplement(oSeq->dna, oSeq->size);
+freeMem(dna);
+freeMem(oLetters);
+return psl->blockCount;
+}
 
 
 int showDnaAlignment(struct psl *psl, struct dnaSeq *rnaSeq, FILE *body, int cdsS, int cdsE)
@@ -3915,6 +4202,8 @@ body = mustOpen(bodyTn.forCgi, "w");
 htmStart(body, psl->qName);
 if (qType == gftRna || qType == gftDna)
     blockCount = showDnaAlignment(psl, oSeq, body, cdsS, cdsE);
+else if (qType == gftProtChes)
+    blockCount = showChesAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 else 
     blockCount = showGfAlignment(psl, oSeq, body, qType, qStart, qEnd, qName);
 fclose(body);
@@ -11782,6 +12071,41 @@ printCustomUrl(ct->tdb, itemName, TRUE);
 bedPrintPos(bed, ct->fieldCount);
 }
 
+void chesProtein(struct trackDb *tdb, char *itemName)
+/* Show protein to translated dna alignment for accession. */
+{
+struct lineFile *lf;
+struct psl *psl;
+enum gfType tt = gftDnaX, qt = gftProt;
+boolean isProt = 1;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+struct dnaSeq *seq;
+char query[256], **row;
+char fullTable[64];
+boolean hasBin;
+int start;
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+printf("<HEAD>\n<TITLE>Protein Sequence vs Genomic</TITLE>\n</HEAD>\n\n");
+
+start = cartInt(cart, "o");
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+sprintf(query, "select * from %s where qName = '%s' and tName = '%s' and tStart=%d",
+	fullTable, itemName, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find alignment for %s", itemName);
+psl = pslLoad(row+hasBin);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+seq = hPepSeq(itemName);
+showSomeAlignment(psl, seq, gftProtChes, 0, seq->size, NULL, 0, 0);
+//showSomeAlignment(psl, seq, gftProt, psl->qStart, psl->qEnd, NULL, 0, 0);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -11885,6 +12209,10 @@ else if (sameWord(track, "rmsk"))
 else if (sameWord(track, "isochores"))
     {
     doHgIsochore(tdb, item);
+    }
+else if (sameWord(track, "chesSimpleRepeat"))
+    {
+    doSimpleRepeat(tdb, item);
     }
 else if (sameWord(track, "simpleRepeat"))
     {
@@ -11999,13 +12327,18 @@ else if (sameWord(track, "htcPseudoGene"))
     {
     htcPseudoGene(track, item);
     }
-else if (sameWord(track, "chesChordataPsl") )
+else if (sameWord(track, "chesChordataBlat"))
     {
-    doBlatCompGeno(tdb, item, "Chordata not Mammal BoneHead chain");
+    chesProtein(tdb, item);
     }
-else if (sameWord(track, "chesMammalPsl") )
+else if ( sameWord(track, "chesMammalBlat") )
     {
-    doBlatCompGeno(tdb, item, "Mammal not Human BoneHead chain");
+    chesProtein(tdb, item);
+    }
+else if (sameWord(track, "chesChordataPsl") || 
+	 sameWord(track, "chesMammalPsl") )
+    {
+    chesProtein(tdb, item);
     }
 else if (sameWord(track, "hg15PepPsl") )
     {
@@ -12348,5 +12681,3 @@ cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
-
-

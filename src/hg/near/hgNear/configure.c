@@ -11,7 +11,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.13 2003/07/08 06:18:04 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.14 2003/07/30 04:00:17 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -50,7 +50,7 @@ for (col = colList; col != NULL; col = col->next)
 
     /* Do on/off dropdown. */
     hPrintf("<TD>");
-    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
+    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
     onOffVal = cartUsualString(cart, varName, onOffString(col->on));
     cgiMakeDropList(varName, onOffMenu, ArraySize(onOffMenu), onOffVal);
     hPrintf("</TD>");
@@ -172,7 +172,7 @@ struct column *col;
 char varPattern[64];
 for (col=colList; col != NULL; col = col->next)
     col->on = col->defaultOn;
-safef(varPattern, sizeof(varPattern), "%s.*", colConfigPrefix);
+safef(varPattern, sizeof(varPattern), "%s*", colConfigPrefix);
 cartRemoveLike(cart, varPattern);
 cartRemove(cart, colOrderVar);
 doConfigure(conn, colList, NULL);
@@ -185,7 +185,7 @@ char varName[64];
 struct column *col;
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
+    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
     cartSetString(cart, varName, "off");
     }
 doConfigure(conn, colList, NULL);

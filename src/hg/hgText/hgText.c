@@ -26,7 +26,7 @@
 #include "portable.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.88 2003/07/01 18:10:50 braney Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.89 2003/07/25 16:34:37 donnak Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -401,14 +401,14 @@ puts(
 "<A HREF=\"http://www.soe.ucsc.edu/~sugnet\">Charles Sugnet</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~booch\">Terry Furey</A>,\n"
 "<A HREF=\"http://www.soe.ucsc.edu/~haussler\">David Haussler</A>,\n"
-"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
 "<A HREF=\"mailto:angie@soe.ucsc.edu\">Angie Hinrichs</A>,\n"
+"<A HREF=\"mailto:matt@soe.ucsc.edu\">Matt Schwartz</A>,\n"
 "<A HREF=\"mailto:fanhsu@soe.ucsc.edu\">Fan Hsu</A>,\n"
 "<A HREF=\"mailto:donnak@soe.ucsc.edu\">Donna Karolchik</A>,\n"
 "<A HREF=\"mailto:heather@soe.ucsc.edu\">Heather Trumbower</A>,\n"
 "and the Genome Bioinformatics Group of UC Santa Cruz.\n"
-"<BR>"
-"Copyright 2001 The Regents of the University of California.\n"
+"<BR>\n"
+"Software Copyright (c) The Regents of the University of California.\n"
 "All rights reserved.\n"
 "</CENTER>\n"
 "</FONT></TD></TR></TABLE></CENTER><P>\n"

@@ -3,6 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "cheapcgi.h"
 #include "jksql.h"
 #include "htmshell.h"
@@ -13,13 +14,13 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.34 2003/07/21 23:10:38 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.37 2003/07/31 06:26:09 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, 
 	defaultConfName, hideAllConfName, 
 	getSeqVarName, getTextVarName, 
-	advSearchVarName, advSearchClearVarName, advSearchSubmitVarName,
-        resetConfName, idVarName, idPosVarName, NULL }; 
+	advSearchVarName, advSearchClearVarName, advSearchBrowseVarName,
+	advSearchListVarName, resetConfName, idVarName, idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. */
 
 /* ---- Global variables. ---- */
@@ -30,6 +31,45 @@ char *groupOn;		/* Current grouping strategy. */
 int displayCount;	/* Number of items to display. */
 
 struct genePos *curGeneId;	  /* Identity of current gene. */
+
+/* ---- General purpose helper routines. ---- */
+
+int genePosCmpName(const void *va, const void *vb)
+/* Sort function to compare two genePos by name. */
+{
+const struct genePos *a = *((struct genePos **)va);
+const struct genePos *b = *((struct genePos **)vb);
+return strcmp(a->name, b->name);
+}
+
+boolean wildMatchAny(char *word, struct slName *wildList)
+/* Return TRUE if word matches any thing in wildList. */
+{
+struct slName *w;
+for (w = wildList; w != NULL; w = w->next)
+    if (wildMatch(w->name, word) )
+        return TRUE;
+return FALSE;
+}
+
+boolean wildMatchAll(char *word, struct slName *wildList)
+/* Return TRUE if word matches all things in wildList. */
+{
+struct slName *w;
+for (w = wildList; w != NULL; w = w->next)
+    if (!wildMatch(w->name, word) )
+        return FALSE;
+return TRUE;
+}
+
+boolean wildMatchList(char *word, struct slName *wildList, boolean orLogic)
+/* Return TRUE if word matches things in wildList. */
+{
+if (orLogic)
+   return wildMatchAny(word, wildList);
+else
+   return wildMatchAll(word, wildList);
+}
 
 /* ---- Some html helper routines. ---- */
 
@@ -74,25 +114,10 @@ return result;
 char *cellLookupVal(struct column *col, struct genePos *gp, struct sqlConnection *conn);
 /* Get a field in a table defined by col->table, col->keyField, col->valField. */
 
-void cellSimplePrint(struct column *col, struct genePos *gp, struct sqlConnection *conn);
-/* This just prints cellSimpleVal. */
-
-void labelSimplePrint(struct column *col);
-/* This just prints cell->shortLabel. */
-
-static void cellSelfLinkPrint(struct column *col, struct genePos *gp,
-	struct sqlConnection *conn);
-/* Print self and hyperlink to make this the search term. */
-
-boolean simpleTableExists(struct column *col, struct sqlConnection *conn);
-/* This returns true if col->table exists. */
-
-void columnDefaultMethods(struct column *col);
-/* Set up default methods. */
-
 char *cellLookupVal(struct column *col, struct genePos *gp, 
 	struct sqlConnection *conn)
-/* Get a field in a table defined by col->table, col->keyField, col->valField. */
+/* Get a field in a table defined by col->table, col->keyField, 
+ * col->valField. */
 {
 char query[512];
 struct sqlResult *sr;
@@ -275,9 +300,73 @@ return resList;
 void lookupSearchControls(struct column *col, struct sqlConnection *conn)
 /* Print out controls for advanced search. */
 {
-hPrintf("%s search (including * and ? wildcards): ", col->shortLabel);
+char *oldFileName = advSearchVal(col, "keys__filename");
+if (oldFileName == NULL) oldFileName = "";
+hPrintf("%s search (including * and ? wildcards):", col->shortLabel);
 advSearchRemakeTextVar(col, "wild", 18);
+hPrintf("<BR>\n");
+hPrintf("Include if ");
+advSearchAnyAllMenu(col, "logic", TRUE);
+hPrintf("words in search term match.");
+#ifdef MAYBE_SOMEDAY
+hPrintf("<BR>\nMust also match a word in file: ");
+// hPrintf("<INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\"><BR>\n", 
+hPrintf("<INPUT TYPE=FILE NAME=\"%s\"><BR>\n", 
+	advSearchName(col, "keys"),
+	oldFileName);
+#endif /* MAYBE_SOMEDAY */
 }
+
+#ifdef MAYBE_SOMEDAY
+static char *skipToLineEnd(char *s)
+/* Return pointing to line end - either '\r', '\n', or 0. */
+{
+char c;
+for (;;)
+    {
+    c = *s;
+    if (c == 0 || c == '\r' || c == '\n')
+        break;
+    s += 1;
+    }
+return s;
+}
+
+static char *findNonSpaceBefore(char *s)
+/* Find first non-space character before s */
+{
+while (isspace(*s))
+    s -= 1;
+return s;
+}
+
+struct hash *hashLines(char *s)
+/* Return hash of all lines in file (trimming leading and
+ * trailing white space). */
+{
+char *e, *trimE;
+struct hash *hash = NULL;
+s = skipLeadingSpaces(s);
+if (s == NULL || s[0] == 0)
+    return NULL;
+hash = hashNew(0);
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s == NULL || s[0] == 0)
+        break;
+    e = skipToLineEnd(s);
+    trimE = findNonSpaceBefore(e);
+    hashAddN(hash, s, trimE-s, NULL);
+        {
+	mustWrite(uglyOut, s, trimE - s);
+	uglyf("\n");
+	}
+    s = e;
+    }
+return hash;
+}
+#endif /* MAYBE_SOMEDAY */
 
 struct genePos *lookupAdvancedSearch(struct column *col, 
 	struct sqlConnection *conn, struct genePos *list)
@@ -286,16 +375,18 @@ struct genePos *lookupAdvancedSearch(struct column *col,
 char *wild = advSearchVal(col, "wild");
 if (wild != NULL)
     {
+    boolean orLogic = advSearchOrLogic(col, "logic", TRUE);
     struct hash *hash = newHash(17);
     char query[256];
     struct sqlResult *sr;
     char **row;
+    struct slName *wildList = stringToSlNames(wild);
     safef(query, sizeof(query), "select %s,%s from %s",
     	col->keyField, col->valField, col->table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	if (wildMatch(wild, row[1]))
+	if (wildMatchList(row[1], wildList, orLogic))
 	    hashAdd(hash, row[0], NULL);
 	}
     list = weedUnlessInHash(list, hash);
@@ -459,7 +550,7 @@ hPrintf("<TR><TD ALIGN=CENTER>");
     char *search = "";
     if (gp != NULL) search = gp->name;
     hPrintf(" search ");
-    cgiMakeTextVar(searchVarName,  search, 25);
+    cgiMakeTextVar(searchVarName,  search, 50);
     }
 
 /* Do go button. */
@@ -809,7 +900,7 @@ struct column *col;
 
 for (col = colList; col != NULL; col = col->next)
     {
-    safef(varName, sizeof(varName), "%s.%s", colConfigPrefix, col->name);
+    safef(varName, sizeof(varName), "%s%s", colConfigPrefix, col->name);
     val = cartOptionalString(cart, varName);
     if (val != NULL)
 	col->on = sameString(val, "on");
@@ -1079,8 +1170,10 @@ else if (cartVarExists(cart, advSearchVarName))
     doAdvancedSearch(conn, colList);
 else if (cartVarExists(cart, advSearchClearVarName))
     doAdvancedSearchClear(conn, colList);
-else if (cartVarExists(cart, advSearchSubmitVarName))
-    doAdvancedSearchSubmit(conn, colList);
+else if (cartVarExists(cart, advSearchBrowseVarName))
+    doAdvancedSearchBrowse(conn, colList);
+else if (cartVarExists(cart, advSearchListVarName))
+    doAdvancedSearchList(conn, colList);
 else if (cartVarExists(cart, idVarName))
     doFixedId(conn, colList);
 else

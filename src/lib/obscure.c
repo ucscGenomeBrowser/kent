@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.16 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.17 2003/07/31 02:50:40 kent Exp $";
 
 long incCounterFile(char *fileName)
 /* Increment a 32 bit value on disk. */
@@ -247,7 +247,7 @@ for (;;)
     if (c == '\'' || c == '"')
         {
 	if (!parseQuotedString(val, val, &s))
-	    errAbort("line %d of custom input: missing closing %c", lineIx, c);
+	    errAbort("line %d of input: missing closing %c", lineIx, c);
 	}
     else
 	{
@@ -257,6 +257,40 @@ for (;;)
     hashAdd(hash, var, cloneString(val));
     }
 return hash;
+}
+
+struct slName *stringToSlNames(char *string)
+/* Convert string to a list of slNames separated by
+ * white space, but allowing multiple words in quotes.
+ * Quotes if any are stripped.  */
+{
+struct slName *list = NULL, *name;
+char *dupe = cloneString(string);
+char c, *s = dupe, *e;
+
+for (;;)
+    {
+    if ((s = skipLeadingSpaces(s)) == NULL)
+        break;
+    if ((c = *s) == 0)
+        break;
+    if (c == '\'' || c == '"')
+        {
+	if (!parseQuotedString(s, s, &e))
+	    errAbort("missing closing %c in %s", c, string);
+	}
+    else
+        {
+	e = skipToSpaces(s);
+	if (e != NULL) *e++ = 0;
+	}
+    name = slNameNew(s);
+    slAddHead(&list, name);
+    s = e;
+    }
+freeMem(dupe);
+slReverse(&list);
+return list;
 }
 
 void sprintLongWithCommas(char *s, long l)

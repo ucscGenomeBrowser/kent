@@ -70,6 +70,14 @@ priority 118.1
 visibility full
 type maf
 
+track multizRn3Mm3 
+shortLabel Latest Human/Rat/Mouse
+longLabel Human/Rat (Jun. 03) /Mouse (Feb. 03) Alignments
+group compGeno
+priority 118.2
+visibility full
+type maf
+
 track axtBestMm3
 shortLabel Human/Mouse
 longLabel Blastz Score Based Mouse/Human Wiggle Track
@@ -291,7 +299,7 @@ spectrum on
 type chain ce1
 
 track chesMammal
-shortLabel MammalNotHuman
+shortLabel MammalNotHuman tblastn
 longLabel tblastn of MammalNotHuman Seeds
 priority 1100
 group x
@@ -299,7 +307,7 @@ visibility hide
 type bed 5
 
 track chesChordata
-shortLabel ChordataNotHuman
+shortLabel ChordataNotHuman tblastn
 longLabel tblastn of ChordataNotHuman Seeds
 priority 1100
 group x
@@ -307,18 +315,42 @@ visibility hide
 type bed 5
 
 track chesMammalPsl
-shortLabel chesMammalPsl
-longLabel Boneheaded chain of MammalNotHuman tblast
+shortLabel Mammal blastToPsl
+longLabel blastToPsl of MammalNotHuman tblast
 group x
 priority 1101
 visibility hide
-type psl xeno
+type psl protein
 
 track chesChordataPsl
-shortLabel chesChordataPsl
-longLabel Boneheaded chain of ChordataNotHuman tblast
+shortLabel Chordata blastToPsl
+longLabel blastToPsl of ChordataNotHuman tblast
 group x
 priority 1101
 visibility hide
-type psl xeno
+type psl protein
+
+track chesMammalBlat
+shortLabel Mammal BLAT
+longLabel Blat of mammalNotHuman
+group x
+priority 1102
+visibility hide
+type psl protein
+
+track chesChordataBlat
+shortLabel Chordata BLAT
+longLabel Blat of chordataNotMammal
+group x
+priority 1102
+visibility hide
+type psl protein
+
+track chesSimpleRepeat
+shortLabel Filtered Simple Repeats
+longLabel Filtered Simple Tandem Repeats (period <= 12)
+group x
+priority 148
+visibility hide
+type bed 4 +
 

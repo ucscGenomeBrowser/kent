@@ -3,7 +3,7 @@
 #include "portable.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: pslOoJobs.c,v 1.2 2003/05/06 07:22:16 kate Exp $";
+static char const rcsid[] = "$Id: pslOoJobs.c,v 1.3 2003/07/28 19:59:54 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -201,7 +201,7 @@ for (chromEl = chromList; chromEl != NULL; chromEl = chromEl->next)
 	    {
 	    /* See if is _random version of previous chromosome, in which
 	     * case we follow the lead of last time. */
-	    printf("%s size %d\n", cfa->name, cfa->size);
+	    printf("%s size %ld\n", cfa->name, cfa->size);
 	    sprintf(chromFile, "%s/%s", chromDir, cfa->name);
 	    if (sameChrom(lastChromName, cfa->name))
 		{

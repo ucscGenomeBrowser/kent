@@ -146,7 +146,7 @@ type bed 4 .
 
 track binomialCons
 shortLabel Binomial
-longLabel Binomial Conservation Scores
+longLabel Binomial Cons Scores
 group compGeno
 priority 17
 altColor 160,0,0
@@ -154,7 +154,7 @@ visibility hide
 type sample 0 500
 
 track binomialCons2
-shortLabel Binomial Conservation Score
+shortLabel Binomial Cons Score
 longLabel Binomial_25 Conservation Scores
 group compGeno
 priority 18
@@ -484,7 +484,7 @@ type sample
 
 
 track intersectingMergedMCS
-shortLabel MCSinterMerged
+shortLabel MCS InterMerged
 longLabel Merged Intersecting MCSs
 group compGeno
 priority 50
@@ -493,7 +493,7 @@ color 0,160,0
 type bed 4 .
 
 track intersectingMCS
-shortLabel MCSinter
+shortLabel MCS Inter
 longLabel Intersecting MCSs
 group compGeno
 priority 50

@@ -2,7 +2,7 @@
  * mySQL database. */
 
 #include "common.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "hash.h"
 #include "dystring.h"
 #include "linefile.h"
@@ -10,9 +10,19 @@
 #include "jksql.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.10 2003/06/09 18:47:58 kent Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.11 2003/07/24 20:11:04 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"exon", OPTION_STRING},
+    {"oldTable", OPTION_BOOLEAN},
+    {"noncoding", OPTION_BOOLEAN},
+    {"nonCoding", OPTION_BOOLEAN},
+    {"gtf", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 {
@@ -23,7 +33,8 @@ errAbort(
     "options:\n"
     "     -exon=type   Sets type field for exons to specific value\n"
     "     -oldTable    Don't overwrite what's already in table\n"
-    "     -noncoding   Forces whole prediction to be UTR\n");
+    "     -noncoding   Forces whole prediction to be UTR\n"
+    "     -gtf         input is GTF, stop codon is not in CDS\n");
 }
 
 char *createString = 
@@ -51,7 +62,7 @@ void loadIntoDatabase(char *database, char *table, char *tabName)
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
 
-if (!cgiVarExists("oldTable"))
+if (!optionExists("oldTable"))
     {
     dyStringPrintf(ds, createString, table);
     sqlMaybeMakeTable(conn, table, ds->string);
@@ -91,7 +102,8 @@ int lineCount;
 struct genePred *gpList = NULL, *gp;
 char *tabName = "genePred.tab";
 FILE *f;
-boolean nonCoding = cgiVarExists("noncoding") || cgiVarExists("nonCoding");
+boolean nonCoding = optionExists("noncoding") || optionExists("nonCoding");
+boolean isGtf = optionExists("gtf");
 
 boolean isSoftberry = sameWord("softberryGene", table);
 boolean isEnsembl = sameWord("ensGene", table);
@@ -119,7 +131,10 @@ for (group = gff->groupList; group != NULL; group = group->next)
         {
 	name = convertSoftberryName(name);
 	}
-    gp = genePredFromGroupedGff(gff, group, name, exonType);
+    if (isGtf)
+        gp = genePredFromGroupedGtf(gff, group, name);
+    else
+        gp = genePredFromGroupedGff(gff, group, name, exonType);
     if (gp != NULL)
 	{
 	if (nonCoding)
@@ -143,10 +158,12 @@ loadIntoDatabase(database, table, tabName);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
-exonType = cgiUsualString("exon", exonType);
+if (optionExists("exon") && optionExists("gtf"))
+    errAbort("can't specify -exon= with -gtf");
+exonType = optionVal("exon", exonType);
 ldHgGene(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }

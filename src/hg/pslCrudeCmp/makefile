@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 
 L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = ../../../src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = pslCrudeCmp.o

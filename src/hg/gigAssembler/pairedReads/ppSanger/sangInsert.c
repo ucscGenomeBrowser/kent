@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "sangInsert.h"
 
-static char const rcsid[] = "$Id: sangInsert.c,v 1.2 2003/05/06 07:22:33 kate Exp $";
+static char const rcsid[] = "$Id: sangInsert.c,v 1.3 2003/07/28 19:05:40 heather Exp $";
 
 void sangInsertStaticLoad(char **row, struct sangInsert *ret)
 /* Load a row from sangInsert table into ret.  The contents of ret will
@@ -77,11 +77,11 @@ void sangInsertOutput(struct sangInsert *el, FILE *f, char sep, char lastSep)
 {
 int i;
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->id, sep);
+fprintf(f, "%s%c", el->id, sep);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name, lastSep);
+fprintf(f, "%s%c", el->name, lastSep);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

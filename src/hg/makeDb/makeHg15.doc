@@ -2799,7 +2799,15 @@ SEQ2_LEN=$BASE/S2.len
     # 10 minutes total 
 
     # convert lav files to axt and sort
-    ssh eieio
+    ssh kkstore
+    # create template for gensub2
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+
+    
     cd /cluster/data/hg15/bed/blastz.rn3
     set base="/cluster/bluearc/hg/gs.16/build33/bed/blastz.rn3"
     set seq1_dir="/cluster/data/hg15/nib"
@@ -2826,7 +2834,50 @@ SEQ2_LEN=$BASE/S2.len
     # /cluster/bin/i386/hgLoadPsl hg15 chr*_*.psl
 
 
-# XXX END OF RAT BLASTZ
+# BEST RAT RN3 ALIGNMENTS (IN PROGRESS 2003-07026 kate)
+
+    # Consolidate AXT files to chrom level, sort, pick best
+    ssh eieio
+    cd /cluster/data/hg15/bed/blastz.rn3
+
+    mkdir -p axtBest pslBest
+    mkdir run.2
+    cd run.2
+
+    # create script to filter files 
+    cat << '_EOF_' > doBestAxt
+#!/bin/csh -f
+# usage: doBestAxt chr axt-file best-file psl-file
+/cluster/bin/i386/axtBest $2 $1 $3 -minScore-300
+sleep 1
+/cluster/bin/i386/axtToPsl $3 /cluster/data/hg15/bed/blastz.rn3/S1.len /cluster/data/hg15/bed/blastz.rn3/S2.len $4
+'_EOF_'
+    chmod +x doBestAxt
+    cd axtChrom
+    ls -1S | sed 's/.axt$//' > ../run.2/chrom.list
+    cd ../run.2
+
+    # create template for cluster job
+    cat << '_EOF_' > gsub
+#LOOP
+doBestAxt $(root1) /cluster/bluearc/hg/hg15/bed/blastz.rn3/axtChrom/$(root1).axt {check out line+ /cluster/data/hg15/bed/blastz.rn3/axtBest/$(root1).axt} {check out line+  /cluster/data/hg15/bed/blastz.rn3/pslBest/$(root1)_blastzBestRn3.psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 chrom.list single gsub jobList
+    wc -l jobList
+        # 44 jobs
+    head jobList
+
+    ssh kk
+    cd /cluster/data/hg15/bed/blastz.rn3
+    cd run.2
+    para create jobList
+    para try
+    para check
+    para push
+        # 1 hour ?
+
+
 
 # BEGINNING OF HUMAN BLASTZ
 
@@ -3306,3 +3357,33 @@ cat out/*/*.bed > firstEF.bed
 echo "drop table firstEF;" | hgsql hg15
 hgLoadBed hg15 firstEF firstEF.bed
 rm -rf out
+
+
+# RUN 3-WAY ALIGNMENTS HUMAN/RAT/MOUSE USING MULTIZ
+
+    set multizDir = /cluster/data/hg15/bed/multiz.rn3-mm3.2003-07-26-KRR
+
+    # Edit hg/ratStuff/stageMultiz/stage.csh with correct paths
+    # Saved in $multizDir
+    # Perform steps in stage.csh (still must be done manually)
+    # to set up staging directories and run multiz on cluster.
+
+    # setup up external files for database to reference
+    ssh hgwdev
+    mkdir -p /gbdb/hg15/multizRn3Mm3
+    cd /gbdb/hg15/multizRn3Mm3
+    foreach f ($multizDir/hmr/*.maf)
+        ln -s $f .
+    end
+
+    # load into database
+    /cluster/bin/i386/hgLoadMaf -warn hg15 multizRn3Mm3
+
+    # check with previous run -- note fewer alignments in latest run
+    featureBits hg15 multizRn3Mm3
+        # 1127632252 bases of 2866466359 (39.339%) in intersection
+    featureBits hg15 multizMm3Rn2
+        # 1166321938 bases of 2866466359 (40.688%) in intersection
+
+
+

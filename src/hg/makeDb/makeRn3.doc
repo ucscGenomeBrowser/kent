@@ -903,6 +903,7 @@ SEQ2_LEN=$BASE/S2.len
     set tbl = "blastzMm3"
     foreach f (axtChrom/chr*.axt)
       set c=$f:t:r
+      echo "Processing chr $c"
       /cluster/bin/i386/axtToPsl $f S1.len S2.len pslChrom/${c}_${tbl}.psl
     end
 
@@ -911,7 +912,7 @@ SEQ2_LEN=$BASE/S2.len
     set tbl = "blastzMm3"
     cd /cluster/data/rn3/bed/blastz.mm3
     cd pslChrom
-    /cluster/bin/i386/hgLoadPsl mm3 chr*_${tbl}.psl
+    /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
     # create trackDb/rat/rn3/trackDb.ra entry:
 # track blastzMm3
 # shortLabel BLASTZ Mouse
@@ -925,7 +926,7 @@ SEQ2_LEN=$BASE/S2.len
 # type psl xeno hg15
 
 
-# MAKE BLASTZ BEST MOUSE MM3 (IN PROGRESS 2003-07-22 kate)
+# MAKE BLASTZ BEST MOUSE MM3 (DONE 2003-07-23 kate)
 
     # Consolidate AXT files to chrom level, sort, pick best, make psl.
     ssh kkstore
@@ -968,14 +969,43 @@ doBestAxt $(root1) /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/$(root1).axt 
     para try
     para check
     para push
-        # 10 minutes ?
+        # 1 hour ?
+
+    # chr1 too large for kk nodes -- reran on kkr1u00 (fileserver would do)
+
+    ./doBestAxt chr1 /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/chr1.axt /cluster/data/rn3/bed/blastz.mm3/axtBest/chr1.axt /cluster/data/rn3/bed/blastz.mm3/pslBest/chr1_blastzBestMm3.psl
+        # Read 186121 elements from /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/chr1.axt
+        # Allocated 268113159 elements in array
+        # 118172 elements in after soft filter.
+        # Output 115210 alignments including 0 trimmed from overlaps
+        # Bases in 236687179, bases out 164536193 (69.52%)
 
     # Load tables
      ssh hgwdev
      set base="/cluster/data/rn3/bed/blastz.mm3"
      set tbl="blastzBestMm3"
      cd $base/pslBest
-     hgLoadPsl rn3 chr*_${tbl}.psl
+     /cluster/bin/i386/hgLoadPsl rn3 chr*_${tbl}.psl
+
+     # check results
+     featureBits rn3 blastzBestMm3
+        # 1667035238 bases of 2571104688 (64.837%) in intersection
+     # no mouse alignment on rn2 
+     featureBits rn3 blastzMm3
+        # 1669090687 bases of 2571104688 (64.917%) in intersection
+
+
+    # create trackDb/rat/rn3/trackDb.ra entry:
+# track blastzBestMm3
+# shortLabel BLASTZ Mouse
+# longLabel All BLASTZ Mouse alignments
+# group compGeno
+# priority 111
+# visibility hide
+# color 100,50,0
+# altColor 255,240,200
+# spectrum on
+# type psl xeno hg15
 
     # Make /gbdb links and add them to the axtInfo table:
      mkdir -p /gbdb/rn3/axtBestMm3
@@ -992,8 +1022,104 @@ doBestAxt $(root1) /cluster/bluearc/hg/rn3/bed/blastz.mm3/axtChrom/$(root1).axt 
                 VALUES ('mm3','Blastz Best in Genome','$chr','$f');" \
          >> axtInfoInserts.sql
      end
-     hgsql rn3 < ~/kent/src/hg/lib/axtInfo.sql
+     # already done, above
+     # hgsql rn3 < ~/kent/src/hg/lib/axtInfo.sql
      hgsql rn3 < axtInfoInserts.sql
+
+
+# CHAIN MOUSE BLASTZ (DONE 2003-07-24 kate)
+
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+
+# Run axtChain on little cluster
+    ssh kkr1u00
+    cd /cluster/data/rn3/bed/blastz.mm3
+    mkdir -p axtChain/run1
+    cd /cluster/data/rn3/bed/blastz.mm3/axtChain/run1
+    ls -1S /cluster/data/rn3/bed/blastz.mm3/axtChrom/*.axt > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > doChain
+#!/bin/csh
+    axtFilter -notQ=chrUn_random $1 | axtChain stdin /iscratch/i/rn3/bothMaskedNibs /iscratch/i/mm3.RM030619/mixedNib $2 > $3
+'_EOF_'
+    chmod a+x doChain
+    mkdir out chain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para push # ... etc ...
+
+    # now on the cluster server, sort chains
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    # these steps take ~20 minutes
+    # optionally: rm run1/chain/*.chain
+
+    # Load chains into database
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.mm3/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        hgLoadChain rn3 ${c}_chainMm3 $i
+        echo done $c
+    end
+
+
+# NET MOUSE BLASTZ (IN PROGRESS 2003-07-24 kate)
+
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3/axtChain
+    mkdir preNet
+    cd chain
+    foreach i (*.chain)
+      echo preNetting $i
+      chainPreNet $i /cluster/data/rn3/chrom.sizes \
+                        /cluster/data/mm3/chrom.sizes ../preNet/$i
+    end
+    cd ..
+    # This foreach loop will take about 15 min to execute.
+
+    mkdir n1 
+    cd preNet
+    foreach i (*.chain)
+      set n = $i:r.net
+      echo primary netting $i
+      chainNet $i -minSpace=1 /cluster/data/rn3/chrom.sizes \
+                            /cluster/data/mm3/chrom.sizes ../n1/$n /dev/null
+    end
+    cd ..
+    cat n1/*.net | /cluster/bin/i386/netSyntenic stdin hNoClass.net
+
+    ssh hgwdev
+    cd /cluster/store3/rn3/bed/blastz.mm3/axtChain
+    netClass hNoClass.net rn3 mm3 mouse.net -tNewR=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse -qNewR=/cluster/bluearc/mm3.RM030619/linSpecRep.notInRat
+
+    # If things look good do
+    ssh kkstore
+    cd /cluster/data/rn3/bed/blastz.mm3/axtChain
+    rm -r n1 hNoClass.net
+    # Make a 'syntenic' subset of these with
+    netFilter -syn mouse.net > mouseSyn.net
+
+    # Load the nets into database 
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.mm3/axtChain
+    netFilter -minGap=10 mouse.net |  hgLoadNet rn3 netMm3 stdin
+    netFilter -minGap=10 mouseSyn.net | hgLoadNet rn3 syntenyMm3 stdin
+
+    # Add entries for net and chain to rat/rn3 trackDb
 
 
 # BLASTZ Self (IN PROGRESS 2003-07-18 kate) 
@@ -1334,7 +1460,7 @@ SEQ2_LEN=$BASE/S2.len
 
     # If things look good do
     ssh kkstore
-    cd /cluster/store3/rn3/bed/blastz.hg15/axtChain
+    cd /cluster/data/rn3/bed/blastz.hg15/axtChain
     rm -r n1 hNoClass.net
     Make a 'syntenic' subset of these with
     netFilter -syn human.net > humanSyn.net
@@ -1448,17 +1574,105 @@ SEQ2_LEN=$BASE/S2.len
 # MAKE MULTIPLE ALIGNMENT (MAF) FILES FROM BEST AXT'S (In Progress 2003-07-22 kate)
 
     ssh kkstore
+
+    # rat/human
     cd /cluster/data/rn3/bed/blastz.hg15.2003-07-09
     mkdir maf
     cd axtBest
     foreach i (*.axt)
       set c = $i:r
-      /cluster/bin/i386/axtToMaf $i \
+      echo "Making maf for chr $c"
+      /cluster/bin/i386/axtToMaf -tPrefix=rn3. -qPrefix=hg15. $i \
             /cluster/data/rn3/chrom.sizes /cluster/data/hg15/chrom.sizes  \
-                ../maf/${c}_rh.maf
+                ../maf/${c}.rh.maf
+    end
+    # 30 minutes ?
+
+    # rat/mouse
+    cd /cluster/data/rn3/bed/blastz.mm3
+    mkdir maf
+    cd axtBest
+    foreach i (*.axt)
+      set c = $i:r
+      echo "Making maf for chr $c"
+      /cluster/bin/i386/axtToMaf -tPrefix=rn3. -qPrefix=mm3. $i \
+            /cluster/data/rn3/chrom.sizes /cluster/data/mm3/chrom.sizes  \
+                ../maf/${c}.rm.maf
+    end
+    # 30 minutes ?
+
+    # Run multiple alignment using Webb Miller's multiz
+    # Note: use - for 3rd arg when doing rodent/rodent (close species)
+    # See penn/multiz/README for details 
+    ssh kkstore
+    cd /cluster/data/rn3/bed
+    mkdir -p multiz.hg15-mm3/maf
+    cd  multiz.hg15-mm3
+cat << "EOF" > doMultiz
+#!/bin/csh -f    
+    cd /cluster/data/rn3/bed
+    cd blastz.hg15.2003-07-09/maf
+    foreach f (*.rh.maf)
+        set c = $f:r:r
+        echo "Multiz on $c"
+        nice /cluster/bin/penn/multiz $f ../../blastz.mm3/maf/${c}.rm.maf - \
+                                 > ../../multiz.hg15-mm3/maf/${c}.rmh.maf
+    end
+"EOF"
+    csh doMultiz >&! doMultiz.log &
+    tail -100f doMultiz.log
+    # 3 hours ? 
+
+    # copy files to cluster I/O server
+    mkdir -p /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf
+    cp -r cluster/data/rn3/bed/blastz.hg15.2003-07-09/maf /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09
+    mkdir -p /cluster/bluearc/hg/rn3/bed/blastz.mm3/maf
+    cp -r cluster/data/rn3/bed/blastz.mm3/maf /cluster/bluearc/hg/rn3/bed/blastz.mm3
+
+    set multizDir = /cluster/data/rn3/bed/multiz.hg15-mm3
+    cd $multizDir
+    mkdir run
+    cd run
+cat << "EOF" > doMultiz.kk
+#LOOP
+/cluster/bin/penn/multiz /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf/$1.rh.maf /cluster/bluearc/hg/rn3/bed/blastz.mm3/maf/$1.rm.maf - > /cluster/data/rn3/bed/multiz.hg15-mm3/maf/$1.rmh.maf
+#ENDLOOP
+"EOF"
+    chmod +x doMultiz.kk
+
+cat << "EOF" > gsub
+#LOOP
+doMultiz.kk $(root1) {check out line+ /cluster/data/rn3/bed/multiz.hg15-mm3/maf/$(root1).rmh.maf}
+#ENDLOOP
+"EOF"
+    cd /cluster/bluearc/hg/rn3/bed/blastz.hg15.2003-07-09/maf
+    ls *.maf | awk -F. '{print $1}' > $multizDir/run/chrom.list
+    gensub2 chrom.list single gsub jobList
+    ssh kkr9u01
+    para create jobList
+    para try
+    para check
+    para push
+
+    # setup up external files for database to reference
+    ssh hgwdev
+    mkdir -p /gbdb/rn3/multizHg15Mm3
+    cd /gbdb/rn3/multizHg15Mm3
+    foreach f (/cluster/data/rn3/bed/multiz.hg15-mm3/maf/*.maf)
+        ln -s $f .
     end
 
-AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
+    # load into database
+    /cluster/bin/i386/hgLoadMaf rn3 multizHg15Mm3
+        #Couldn't find rn3. sequence line 819945 of /gbdb/rn3/multizHg15Mm3/chrX.rmh.maf
+        #Indexing and tabulating /gbdb/rn3/multizHg15Mm3/chrX_random.rmh.maf
+        #Couldn't find rn3. sequence line 4341 of /gbdb/rn3/multizHg15Mm3/chrX_random.rmh.maf
+        #Loading multizHg15Mm3 into database
+        #Warning: load of multizHg15Mm3 did not go as planned: 3512170 record(s), 0 row(s) skipped, 27410 warning(s) loading ./multizHg15Mm3.tab
+
+
+
+# AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
 
     ssh eieio
     cd /cluster/store5/genbank
@@ -1832,13 +2046,13 @@ LOAD GENEID GENES (DONE - 2003-07-08 - Hiram)
     ldHgGene rn3 geneid download/*.gtf -exon=CDS
     hgPepPred rn3 generic geneidPep download/*-fixed.prot
 
-SGP GENE PREDICTIONS (TO DO)
+SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     mkdir -p ~/rn3/bed/sgp/download
     cd ~/rn3/bed/sgp/download
     foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
       set chr = $f:t:r
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20021114/$chr.gtf
-      wget http://genome.imim.es/genepredictions/R.norvegicus/rnJan2003/SGP/humangp20021114/$chr.prot
+      wget http://monstre1.imim.es/genepredictions/R.norvegicus/rnJun2003/SGP/humangp20030410/$chr.gtf
+      wget http://monstre1.imim.es/genepredictions/R.norvegicus/rnJun2003/SGP/humangp20030410/$chr.prot
     end
     # Add missing .1 to protein id's
     foreach f (*.prot)
@@ -2095,4 +2309,48 @@ AXTBEST
     hgLoadPsl hg15 chr*_${tbl}.psl
 
                                                                                 
+# LIFTING REPEATMASKER .ALIGN FILES (TODO)
+foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
 
+ssh kkstore
+cd rn3
+foreach c (?{,?})
+  foreach d ($c/chr${c}_?{,?} $c/chr${c}_random_?{,?})
+    pushd . > /dev/null
+    set contig=$d:t
+    cd $d
+    echo $contig to $contig.fa.align
+    /cluster/bin/scripts/liftRMAlign.pl ${contig}.lft > ${contig}.fa.align
+    popd > /dev/null
+    end
+end
+#  There are some FYI warnings from the above script, but they
+#	are for contigs that RepeatMasker said there was nothing
+#	to work with in those contigs so it did not make an align file.
+
+foreach chr (?{,?})
+  cd $chr
+  echo making symbolic links for chr$chr .fa.align files
+  foreach ctg (chr${chr}_?{,?} chr${chr}_random_?{,?})
+    ln -s $ctg/$ctg.fa.align .
+  end
+  cd ..
+  if (-e $chr/lift/ordered.lft) then
+    echo making $chr/chr$chr.fa.align
+    ls -og $chr/lift/ordered.lft
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/ordered.lft \
+      > $chr/chr$chr.fa.align
+  endif
+  if (-e $chr/lift/random.lft) then
+    echo making $chr/chr${chr}_random.fa.align
+    ls -og $chr/lift/random.lft
+    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/random.lft \
+      > $chr/chr${chr}_random.fa.align
+  endif
+  echo removing symbolic links for chr$chr .fa.align files
+  cd $chr
+  foreach ctg (chr${chr}_?{,?} chr${chr}_random_?{,?})
+    echo rm $ctg/$ctg.fa.align
+  end
+  cd ..
+end

@@ -10,7 +10,7 @@
 #include "genePred.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.16 2003/06/15 06:50:58 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.17 2003/07/24 20:10:52 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -272,6 +272,104 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
 	++i;
 	}
     }
+return gp;
+}
+
+
+struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name)
+/* Convert gff->groupList to genePred list, using GTF feature conventions;
+ * including the stop codon in the 3' UTR, not the CDS (grr).  Assumes
+ * gffGroup is sorted in assending coords, with overlaping starts sorted by
+ * end coords, which is true if it was created by gffGroupLines(). */
+{
+struct genePred *gp;
+int stopCodonStart = -1, stopCodonEnd = -1;
+int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
+int exonCount = 0;
+struct gffLine *gl;
+unsigned *eStarts, *eEnds;
+int i;
+boolean anyExon = FALSE;
+
+/* Count up exons and figure out cdsStart and cdsEnd. */
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    char *feat = gl->feature;
+    if (sameWord(feat, "CDS") || sameWord(feat, "exon"))
+        {
+	++exonCount;
+	}
+    if (sameWord(feat, "CDS"))
+	{
+	if (gl->start < cdsStart) cdsStart = gl->start;
+	if (gl->end > cdsEnd) cdsEnd = gl->end;
+	}
+    if (sameWord(feat, "stop_codon"))
+        {
+        stopCodonStart = gl->start;
+        stopCodonEnd = gl->end;
+        }
+    }
+if (exonCount == 0)
+    return NULL;
+if (cdsStart > cdsEnd)
+    {
+    cdsStart = group->start;
+    cdsEnd = group->end;
+    }
+/* adjust CDS to include stop codon */
+if (stopCodonStart >= 0)
+    {
+    if (group->strand == '+')
+        cdsEnd = stopCodonEnd;
+    else
+        cdsStart = stopCodonStart;
+    }
+
+/* Allocate genePred and fill in values. */
+AllocVar(gp);
+gp->name = cloneString(name);
+gp->chrom = cloneString(group->seq);
+gp->strand[0] = group->strand;
+gp->txStart = group->start;
+gp->txEnd = group->end;
+gp->cdsStart = cdsStart;
+gp->cdsEnd = cdsEnd;
+gp->exonStarts = AllocArray(eStarts, exonCount);
+gp->exonEnds = AllocArray(eEnds, exonCount);
+
+/* adjust tx range to include stop codon */
+if ((group->strand == '+') && (gp->txEnd == stopCodonStart))
+     gp->txEnd = stopCodonEnd;
+else if ((group->strand == '-') && (gp->txStart == stopCodonEnd))
+    gp->txStart = stopCodonStart;
+
+i = 0;
+/* fill in exons, merging overlaping and adjacent exons */
+for (gl = group->lineList; gl != NULL; gl = gl->next)
+    {
+    if (sameWord(gl->feature, "CDS") || sameWord(gl->feature, "exon"))
+        {
+        if ((i == 0) || (gl->start > eEnds[i-1]))
+            {
+            eStarts[i] = gl->start;
+            eEnds[i] = gl->end;
+            ++i;
+            }
+        else
+            {
+            /* overlap, extend exon */
+            assert(gl->start >= eStarts[i-1]);
+            eEnds[i-1] = gl->end;
+            }
+        /* extend exon for stop codon if needed */
+        if ((group->strand == '+') && (eEnds[i-1] == stopCodonStart))
+            eEnds[i-1] = stopCodonEnd;
+        else if ((group->strand == '-') && (eStarts[i-1] == stopCodonEnd))
+            eStarts[i-1] = stopCodonStart;
+        }
+    }
+gp->exonCount= i;
 return gp;
 }
 

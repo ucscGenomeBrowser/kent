@@ -76,7 +76,7 @@ VI. Make syntenic and regular subset of axt files, chain files and
   make gap files.
      netSplit human.net humanNet
      netSplit humanSyn.net humanSynNet
-     mkdir ../axtSyn axt
+     mkdir ../axtSyn ../axt
      mkdir humanSynGap humanSynChain humanNetGap humanNetChain
      cd humanSynNet
      foreach i (*.net)

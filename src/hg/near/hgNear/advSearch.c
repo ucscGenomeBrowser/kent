@@ -9,7 +9,23 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advSearch.c,v 1.9 2003/07/08 06:18:04 kent Exp $";
+static char const rcsid[] = "$Id: advSearch.c,v 1.12 2003/07/31 06:26:08 kent Exp $";
+
+struct genePos *advancedSearchResults(struct column *colList, 
+	struct sqlConnection *conn)
+/* First get full list. */
+{
+struct genePos *list = knownPosAll(conn);
+struct column *col;
+
+/* Then go through and filter it down by column. */
+for (col = colList; col != NULL; col = col->next)
+    {
+    if (col->advancedSearch)
+        list = col->advancedSearch(col, conn, list);
+    }
+return list;
+}
 
 static boolean anyRealInCart(struct cart *cart, char *wild)
 /* Return TRUE if advanced search variables are set. */
@@ -39,7 +55,7 @@ boolean gotAdvSearch()
 /* Return TRUE if advanced search variables are set. */
 {
 char wild[64];
-safef(wild, sizeof(wild), "%s.*", advSearchPrefix);
+safef(wild, sizeof(wild), "%s*", advSearchPrefix);
 return anyRealInCart(cart, wild);
 }
 
@@ -48,7 +64,7 @@ boolean advSearchColAnySet(struct column *col)
  * for this col are set. */
 {
 char wild[128];
-safef(wild, sizeof(wild), "%s.%s.*", advSearchPrefix, col->name);
+safef(wild, sizeof(wild), "%s%s*", advSearchPrefix, col->name);
 return anyRealInCart(cart, wild);
 }
 
@@ -56,9 +72,10 @@ char *advSearchName(struct column *col, char *varName)
 /* Return variable name for advanced search. */
 {
 static char name[64];
-safef(name, sizeof(name), "%s.%s.%s", advSearchPrefix, col->name, varName);
+safef(name, sizeof(name), "%s%s.%s", advSearchPrefix, col->name, varName);
 return name;
 }
+
 
 char *advSearchVal(struct column *col, char *varName)
 /* Return value for advanced search variable.  Return NULL if it
@@ -71,6 +88,14 @@ if (val != NULL && val[0] == 0)
 return val;
 }
 
+char *advSearchNameI(struct column *col, char *varName)
+/* Return name for advanced search that doesn't force search. */
+{
+static char name[64];
+safef(name, sizeof(name), "%s%s.%s", advSearchPrefixI, col->name, varName);
+return name;
+}
+
 void advSearchRemakeTextVar(struct column *col, char *varName, int size)
 /* Make a text field of given name and size filling it in with
  * the existing value if any. */
@@ -80,14 +105,37 @@ char *val = cartOptionalString(cart, var);
 cgiMakeTextVar(var, val, 8);
 }
 
+static char *anyAllMenu[] = {"all", "any"};
+
+void advSearchAnyAllMenu(struct column *col, char *varName, 
+	boolean defaultAny)
+/* Make a drop-down menu with value all/any. */
+{
+char *var = advSearchNameI(col, varName);
+char *val = cartUsualString(cart, var, anyAllMenu[defaultAny]);
+cgiMakeDropList(var, anyAllMenu, ArraySize(anyAllMenu), val);
+}
+
+boolean advSearchOrLogic(struct column *col, char *varName, 
+	boolean defaultOr)
+/* Return TRUE if user has selected 'all' from any/all menu
+ * of given name. */
+{
+char *var = advSearchNameI(col, varName);
+char *val = cartUsualString(cart, var, anyAllMenu[defaultOr]);
+return sameWord(val, "any");
+}
+
 static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
 hPrintf("Advanced search form: ");
-cgiMakeButton(advSearchClearVarName, "clear all");
+cgiMakeButton(advSearchClearVarName, "Clear All");
 hPrintf(" ");
-cgiMakeButton(advSearchSubmitVarName, "submit");
+cgiMakeButton(advSearchListVarName, "List Matching IDs");
+hPrintf(" ");
+cgiMakeButton(advSearchBrowseVarName, "Browse Results");
 hPrintf("</TD></TR></TABLE>\n");
 }
 
@@ -122,8 +170,8 @@ for (onOff = 1; onOff >= 0; --onOff)
     {
     if (passPresent[onOff])
 	{
-	if (onOff == FALSE)
-	    hPrintf("<H2>Search Controls for Hidden Tracks</H2>");
+	hPrintf("<H2>Search Controls for %s Tracks:</H2>", 
+		(onOff ? "Displayed" : "Hidden"));
 	hPrintf("<TABLE BORDER=2 CELLSPACING=1 CELLPADDING=1>\n");
 	for (col = colList; col != NULL; col = col->next)
 	    {
@@ -153,13 +201,15 @@ void doAdvancedSearchClear(struct sqlConnection *conn, struct column *colList)
 /* Clear variables in advanced search page. */
 {
 char like[64];
-safef(like, sizeof(like), "%s.*", advSearchPrefix);
+safef(like, sizeof(like), "%s*", advSearchPrefix);
+cartRemoveLike(cart, like);
+safef(like, sizeof(like), "%s*", advSearchPrefixI);
 cartRemoveLike(cart, like);
 doAdvancedSearch(conn, colList);
 }
 
-void doAdvancedSearchSubmit(struct sqlConnection *conn, struct column *colList)
-/* Handle submission in advanced search page. */
+void doAdvancedSearchBrowse(struct sqlConnection *conn, struct column *colList)
+/* List gene names matching advanced search. */
 {
 if (gotAdvSearch())
     {
@@ -167,6 +217,26 @@ if (gotAdvSearch())
     cartSetString(cart, groupVarName, groupOn);
     }
 doSearch(conn, colList);
+}
+
+void doAdvancedSearchList(struct sqlConnection *conn, struct column *colList)
+/* List gene names matching advanced search. */
+{
+struct genePos *gp, *list = NULL;
+struct hash *uniqHash = newHash(16);
+hPrintf("<TT><PRE>");
+if (gotAdvSearch())
+    {
+    list = getSearchNeighbors(colList, conn);
+    }
+else
+    {
+    hPrintf("#No search limits activated. List contains all genes.\n");
+    list = knownPosAll(conn);
+    }
+for (gp = list; gp != NULL; gp = gp->next)
+    hPrintf("%s\n", gp->name);
+hPrintf("</PRE></TT>");
 }
 
 static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
@@ -191,21 +261,13 @@ slReverse(&outList);
 return outList;
 }
 
-struct genePos *getSearchNeighbors(struct column *colList, struct sqlConnection *conn)
+struct genePos *getSearchNeighbors(struct column *colList, 
+	struct sqlConnection *conn)
 /* Get neighbors by search. */
 {
-/* First get full list. */
-struct genePos *list = knownPosAll(conn);
-struct genePos *rejectList = NULL;
-struct column *col;
+struct genePos *list, *rejectList = NULL;
 
-/* Then go through and filter it down by column. */
-for (col = colList; col != NULL; col = col->next)
-    {
-    if (col->advancedSearch)
-        list = col->advancedSearch(col, conn, list);
-    }
-
+list = advancedSearchResults(colList, conn);
 list = firstBitsOfList(list, displayCount, &rejectList);
 return list;
 }
