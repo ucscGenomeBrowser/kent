@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.75 2004/06/03 21:14:34 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.76 2004/06/07 23:09:48 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -571,18 +571,19 @@ printf("%s",
 "\n"
 "</FORM>\n");
 
-printf("<FORM ACTION=\"/cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
-       "<input type=\"hidden\" name=\"db\" value=\"%s\">\n"
-       "<input type=\"hidden\" name=\"org\" value=\"%s\">\n"
+printf("<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" NAME=\"orgForm\">"
+       "<input type=\"hidden\" name=\"db\" value=\"\">\n"
+       "<input type=\"hidden\" name=\"org\" value=\"\">\n"
        "<input type=\"hidden\" name=\"userSeq\" value=\"\">\n"
        "<input type=\"hidden\" name=\"showPage\" value=\"true\">\n"
-       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n", db, organism);
+       "<input type=\"hidden\" name=\"seqFile\" value=\"\">\n");
 cartSaveSession(cart);
 cartSetString(cart, "db", db);
 puts("</FORM>");
 }
 
 void doMiddle(struct cart *theCart)
+/* Write header and body of html page. */
 {
 char *userSeq;
 char *db, *organism;
@@ -615,7 +616,7 @@ cartWebEnd();
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "type", "genome", "userSeq", "seqFile", "showPage", NULL};
+char *excludeVars[] = {"Submit", "submit", "type", "userSeq", "seqFile", "showPage", NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */
