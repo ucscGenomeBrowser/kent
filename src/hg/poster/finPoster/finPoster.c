@@ -28,7 +28,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: finPoster.c,v 1.11 2003/12/13 04:59:46 kent Exp $";
+static char const rcsid[] = "$Id: finPoster.c,v 1.12 2003/12/16 17:20:22 kent Exp $";
 
 /* Which database to use */
 char *database = "hg16";
@@ -439,7 +439,7 @@ struct tickPos
     };
 
 void getPredGenes(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, FILE *f, char *table,
-  int red, int green, int blue)
+  int red, int green, int blue, struct hash *hideHash)
 /* Get predicted genes. */
 {
 char **row;
@@ -451,8 +451,9 @@ printf("  Getting %s predicted genes\n", table);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row + rowOffset);
-    printTab(f, cg, chrom, gp->cdsStart, gp->cdsEnd, 
-	    "genePred", "tick", red, green, blue, ".");
+    if (hideHash == NULL || hashLookup(hideHash, gp->name) == NULL)
+	printTab(f, cg, chrom, gp->cdsStart, gp->cdsEnd, 
+		"genePred", "tick", red, green, blue, ".");
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
@@ -1288,6 +1289,7 @@ lineFileClose(&lf);
 }
 
 
+#ifdef OLD
 void fakeEnsGenes(struct chromGaps *cg, char *chrom, 
 	struct sqlConnection *conn, FILE *f, int red, int green, int blue)
 /* Read Ensembl predictions from file. */
@@ -1306,6 +1308,7 @@ while (lineFileRow(lf, row))
     }
 lineFileClose(&lf);
 }
+#endif /* OLD */
 
 
 void getGaps(struct chromGaps *cg, char *chrom, 
@@ -1330,7 +1333,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void getSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
+#ifdef OLD
+void oldGetSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
 /* Put out SNP density info. */
 {
 int windowSize = 100000;
@@ -1404,6 +1408,41 @@ for (i=0; i<winsPerChrom-smoothSize; ++i)
 printf(" SNP %s minDen %f, maxDen %f\n", chrom, minDen, maxDen);
 freeMem(winBases);
 freeMem(winSnpBases);
+}
+#endif /* OLD */
+
+void getSnpDensity(struct chromGaps *cg, char *chrom, int chromSize, struct sqlConnection *conn, FILE *f)
+/* Put out SNP density info. */
+{
+double minVal = 3.0/10000;
+double maxVal = 18.0/10000;
+double spanVal = maxVal - minVal;
+double scale = 1.0/spanVal;
+char query[512], **row;
+struct sqlResult *sr;
+double p,q,val;
+int start,end;
+
+safef(query, sizeof(query),
+    "select binStart,binEnd,snpCount,NQSbases from snpHet "
+    "where chrom='%s' order by binStart", chrom);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    start = sqlUnsigned(row[0])+450000;
+    end = sqlUnsigned(row[1]);
+    p = atof(row[2]);
+    q = atof(row[3]);
+    if (q > 0)
+       {
+       val = ((p/q) - minVal) * scale;
+       if (val < 0) val = 0;
+       if (val > 1) val = 1;
+       printTabNum(f, cg, chrom, start, start+100000, 
+		    "SNP", "wiggle", 128, 0, 128, val);
+       }
+    }
+sqlFreeResult(&sr);
 }
 
 struct wigglePos
@@ -1570,7 +1609,7 @@ void oneChrom(char *chrom, struct sqlConnection *conn,
 	struct hash *muteHash,
 	struct hash *dupHash, struct hash *resolvedDupHash, 
 	struct hash *diseaseHash, struct hash *orthoHash,
-	struct hash *weedHash,
+	struct hash *weedHash, struct hash *ensKnownHash,
 	FILE *f)
 /* Get info for one chromosome.  */
 {
@@ -1604,9 +1643,8 @@ fakeRnaGenes(cg, chrom, conn, f);
 getCpgIslands(cg, chrom, conn, f);
 getFishBlatHits(cg, chrom, chromSize, conn, f);
 getEstTicks(cg, chrom, conn, f);
-fakeEnsGenes(cg, chrom, conn, f, 160, 10, 0);
-// getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0);
-getPredGenes(cg, chrom, conn, f, "refGene", blueGene.r, blueGene.g, blueGene.b);
+getPredGenes(cg, chrom, conn, f, "ensGene", 160, 10, 0, ensKnownHash);
+getPredGenes(cg, chrom, conn, f, "knownGene", blueGene.r, blueGene.g, blueGene.b, NULL);
 getKnownGenes(cg, chrom, conn, f, dupHash, resolvedDupHash, 
 	diseaseHash, orthoHash, weedHash);
 }
@@ -1643,6 +1681,23 @@ for (ap = apList; ap != NULL; ap = ap->next)
 printf("%d unresolved dupes\n", dupCount);
 }
 
+struct hash *makeEnsKnownHash(struct sqlConnection *conn)
+/* Make hash containing names of all ensemble known genes that
+ * are mapped to knwon genes, using knownToEnsemble table. */
+{
+struct hash *hash = newHash(16);
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, "select value from knownToEnsembl");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(hash, row[0], NULL);
+    }
+sqlFreeResult(&sr);
+return hash;
+}
+
 void finPoster(int chromCount, char *chromNames[])
 /* finPoster - Search database info for making foldout. */
 {
@@ -1655,6 +1710,7 @@ struct hash *diseaseHash = makeSecondColumnHash(diseaseFile);
 struct hash *orthoHash = makeFirstColumnHash(orthoFile);
 struct hash *weedHash = makeFirstColumnHash(weedFile);
 struct hash *muteHash = makeMuteHash(mutFile);
+struct hash *ensKnownHash = makeEnsKnownHash(conn);
 
 dupeFile = mustOpen(dupeFileName, "w");
 hSetDb(database);
@@ -1666,7 +1722,7 @@ for (i=0; i<chromCount; ++i)
     sprintf(fileName, "%s.tab", chromNames[i]);
     f = mustOpen(fileName, "w");
     oneChrom(chromNames[i], conn, muteHash, dupHash, resolvedDupHash, 
-    	diseaseHash, orthoHash, weedHash, f);
+    	diseaseHash, orthoHash, weedHash, ensKnownHash, f);
     fclose(f);
     }
 printDupes(dupHash, dupeFile);
