@@ -70,6 +70,15 @@ scoreFilter 500
 type bed 5 +
 exonArrows off
 
+track transRegCodeProbe
+shortLabel Reg. CHIP/CHIP
+longLabel CHIP/CHIP Results from Harbison Gordon et al.
+group regulation
+priority 92.6
+visibility hide
+type bed 4 +
+exonArrows off
+
 track multizYeast 
 shortLabel Conservation
 longLabel Seven Species of Saccharomyces, Alignments & Conservation
