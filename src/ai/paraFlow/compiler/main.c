@@ -78,7 +78,8 @@ struct pfToken
     enum pfTokType type;	/* Token type. */
     union pfTokVal val;		/* Type-dependent value. */
     struct pfSource *source;	/* Source file this is in. */
-    int line,col;		/* Position of token start within source. */
+    int startLine,startCol;	/* Position of token start within source. */
+    int endLine, endCol;	/* End of token within source. */
     };
 
 struct pfSource *pfSourceNew(char *fileName)
@@ -120,8 +121,8 @@ if (s == NULL)
     return NULL;
 lmAllocVar(pfTkz->lm, tok);
 tok->source = pfTkz->source;
-tok->line = tkz->lf->lineIx;
-tok->col = tkz->linePt - tkz->curLine - strlen(s);
+tok->startLine = tkz->lf->lineIx;
+tok->startCol = tkz->linePt - tkz->curLine - strlen(s);
 c = s[0];
 if (c == '"' || c == '\'')
     {
@@ -162,7 +163,7 @@ slReverse(&tokList);
 for (tok = tokList; tok != NULL; tok = tok->next)
     {
     printf("file %s, line %3d, column %2d, type %3d, value ",
-    	tok->source->name, tok->line, tok->col, tok->type);
+    	tok->source->name, tok->startLine, tok->startCol, tok->type);
     switch (tok->type)
         {
 	case pftName:

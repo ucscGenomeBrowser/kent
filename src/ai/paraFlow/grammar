@@ -1,18 +1,18 @@
 
-structHead: "struct" NAME
+classHead: "class" NAME
 	;
 
-structDef: structHead '{' '}'
+classDef: classHead '{' '}'
 	;
 
-collectionType:  "array" | "list" | "hash" | "tree" | "pointer" | structType
+collectionType:  "array" | "list" | "dir" | "tree" | "pointer" | classType
 	;
 
 compositeType:  collectionType "of" type
 	| collectionType
 	;
 
-type: "var" | "byte" | "short" | "int" | "long" | "float" | "string" | collectionType | definedType
+type: "var" | "byte" | "short" | "int" | "long" | "float" | "double" | "string" | collectionType | definedType
 	;
 
 typeDef: "typedef" type NAME

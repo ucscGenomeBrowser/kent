@@ -8,9 +8,9 @@ an object.
 
 Consider a file named config.pf with the following contents:
 
-public string userName;
-string encryptedPassword;
-public string homePage;
+string userName;
+private string encryptedPassword;
+string homePage;
 
 to checkPassword(string password) into (boolean match)
     return encrypt.md5(password) == encryptedPassword;
@@ -27,7 +27,15 @@ string password = getSecretText();
 if (!config.checkPassword(password))
     abort("Bad password");
 
-However the file could also be treated as an object:
+Since ParaFlow allows executable statements outside of a 
+function declaration, a method is needed to run these
+statements in a file.  This is the run function.
+
+config.run();
+
+Note the file could also be treated as an object:
+
+objectify "config"
 
 config user;
 user.userName = "jim"
@@ -37,11 +45,7 @@ config superuser;
 superuser.userName = "root"
 superuser.setPassword("biggerSecret");
 
-All modules that imported config would share an instance of
-config named config.
+All modules that imported config would in a sense share an
+instance of config.
 
-Since ParaFlow allows executable statements outside of a 
-function declaration, a method is needed to run these
-statements in a file.  This is the execute function.
 
-execute(config)
