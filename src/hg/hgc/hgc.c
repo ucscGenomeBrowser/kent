@@ -4749,16 +4749,15 @@ webEnd();
 void printAffyLinks(char *name)
 /* print out links to affymetrix's netaffx website */
 {
-char *netaffxPre = "https://www.netaffx.com/Portal?anlys=true&srsquery=wgetz?-id+PERM+-e+[HG_U95_Target:'";
-char *netaffxPost = "_HG-U95Av2']";
+char *netaffx = "https://www.netaffx.com/LinkServlet?array=U95&probeset=";
 char *netaffxDisp = "https://www.netaffx.com/svghtml?query=";
 if(name != NULL)
     {
     printf("<p>More information about individual probes and probe sets is available ");
     printf("at Affymetrix's netaffx.com website. [registration required]\n");
     printf("<ul>\n");
-    printf("<li> Information about probe sequences is <a href=\"%s%s%s\">available there</a></li>\n",
-	   netaffxPre, name, netaffxPost);
+    printf("<li> Information about probe sequences is <a href=\"%s%s\">available there</a></li>\n",
+	   netaffx, name);
     printf("<li> A graphical representation is also <a href=\"%s%s\">available</a> ",netaffxDisp, name);
     printf("<basefont size=-2>[svg viewer required]</basefont></li>\n");
     printf("</ul>\n");
