@@ -9,11 +9,11 @@ void usage(char **argv);
 
 void usage(char **argv)
 {
-   if(argv[1] == NULL || argv[2] == NULL || argv[3] == NULL) 
+   if(argv[1] == NULL || argv[2] == NULL) 
         {
         errAbort(
           "makeSeqs - Create *.seq files from *.fa files.\n"
-          "usage:\n   makeSeqs filename.seqs fafilelist path\n"
+          "usage:\n   makeSeqs filename.seqs fafilelist [path]\n"
            );
          }
 }
@@ -24,7 +24,8 @@ FILE *infile, *outfile;
 char *line, *token;
 struct dyString *seqlist = newDyString(128);
 infile = mustOpen(seqdata, "r");
-dyStringAppend(seqlist, path);
+    if(path != NULL)
+        dyStringAppend(seqlist, path);
 dyStringAppend(seqlist, "seqlist");
 outfile = mustOpen(seqlist->string, "w");
      while( (line = readLine(infile)) != NULL )
@@ -51,17 +52,25 @@ faname = newDyString(128);
 seqname = newDyString(128);
 path = newDyString(128);
 usage(argv);
-dyStringAppend(path, argv[3]);
-    if(!endsWith(path->string, "/"))
-        dyStringAppend(path, "/");
+    if(argv[3] != NULL)
+        {
+        dyStringAppend(path, argv[3]);
+            if(!endsWith(path->string, "/"))
+                dyStringAppend(path, "/");
+        }
 seqlist = makeSeqList(argv[1], path->string);
 fafile = mustOpen(argv[2], "r");
 seqfile = mustOpen(seqlist->string, "r");
      while( (temp1 = readLine(fafile)) != NULL && 
             (temp2 = readLine(seqfile)) != NULL )
          {
-         dyStringPrintf(faname, "%s%s", path->string, temp1);
-         dyStringPrintf(seqname, "%s%s", path->string, temp2);
+         if(path->string != NULL)
+             {
+             dyStringPrintf(faname, "%s", path->string);
+             dyStringPrintf(seqname, "%s", path->string);
+             }
+         dyStringPrintf(faname, "%s", temp1);
+         dyStringPrintf(seqname, "%s",  temp2);
          rename(faname->string, seqname->string);
          freeMem(temp1);
          freeMem(temp2);  
