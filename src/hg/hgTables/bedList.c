@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.29 2004/12/03 20:36:07 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.30 2005/02/09 23:26:42 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -37,7 +37,7 @@ void bedSqlFieldsExceptForChrom(struct hTableInfo *hti,
  * of fields (this *including* the chromosome). */
 {
 struct dyString *fields = dyStringNew(128);
-int fieldCount = fieldCount = hTableInfoBedFieldCount(hti);
+int fieldCount = hTableInfoBedFieldCount(hti);
 
 dyStringPrintf(fields, "%s,%s", hti->startField, hti->endField);
 if (fieldCount >= 4)
@@ -197,7 +197,7 @@ if (!isBedWithBlocks)
 return bed;
 }
 
-static struct bed *getRegionAsBed(
+struct bed *getRegionAsBed(
 	char *db, char *table, 	/* Database and table. */
 	struct region *region,  /* Region to get data for. */
 	char *filter, 		/* Filter to add to SQL where clause if any. */
@@ -259,65 +259,24 @@ if (retFieldCount)
 return(bedList);
 }
 
-static struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm, 
-	int *retFieldCount)
-/* getBed - get list of beds from database in region that pass filtering. */
-{
-struct region *region;
-struct bed *bedList = NULL, *bed;
-struct hash *idHash = identifierHash();
-
-for (region = regionList; region != NULL; region = region->next)
-    {
-    struct bed *nextBed;
-    char *filter = filterClause(database, table, region->chrom);
-    struct bed *bedListRegion = getRegionAsBed(database, table, 
-        region, filter, idHash, lm, retFieldCount);
-    for (bed = bedListRegion; bed != NULL; bed = nextBed)
-        {
-	nextBed = bed->next;
-	slAddHead(&bedList, bed);
-	}
-    freez(&filter);
-    }
-slReverse(&bedList);
-
-hashFree(&idHash);
-return bedList;
-}
-
-struct bed *getFilteredBedsOnRegions(struct sqlConnection *conn, 
-	char *table, struct region *regionList, struct lm *lm, 
-	int *retFieldCount)
-/* get list of beds in regionList that pass filtering. */
-{
-if (isCustomTrack(table))
-    return customTrackGetFilteredBeds(table, regionList, 
-    	lm, NULL, NULL, retFieldCount);
-else
-    return dbGetFilteredBedsOnRegions(conn, table, regionList, lm, retFieldCount);
-}
-
 struct bed *getFilteredBeds(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get list of beds on single region that pass filtering. */
 {
+/* region may be part of a list, and the routines we call work on lists of 
+ * regions.  Temporarily force region->next to NULL and restore at end. */
 struct region *oldNext = region->next;
 struct bed *bedList = NULL;
 region->next = NULL;
 
-bedList = getFilteredBedsOnRegions(conn, table, region, lm, retFieldCount);
+if (isCustomTrack(table))
+    bedList = customTrackGetFilteredBeds(table, region, lm, NULL, NULL,
+					 retFieldCount);
+else
+    bedList = dbGetFilteredBedsOnRegions(conn, table, region, lm,
+					 retFieldCount);
 region->next = oldNext;
 return bedList;
-}
-
-struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	char *table, struct lm *lm, int *retFieldCount)
-/* getAllFilteredBeds - get list of beds in selected regions 
- * that pass filtering. */
-{
-return getFilteredBedsOnRegions(conn, table, getRegions(), lm, retFieldCount);
 }
 
 /* Droplist menu for custom track visibility: */

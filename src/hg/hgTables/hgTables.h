@@ -227,11 +227,6 @@ struct bed *getFilteredBeds(struct sqlConnection *conn,
 	int *retFieldCount);
 /* Get list of beds on single region that pass filtering. */
 
-struct bed *getAllFilteredBeds(struct sqlConnection *conn, 
-	char *table, struct lm *lm, int *retFieldCount);
-/* getAllFilteredBeds - get list of beds in selected regions 
- * that pass filtering. */
-
 void bedSqlFieldsExceptForChrom(struct hTableInfo *hti,
 	int *retFieldCount, char **retFields);
 /* Given tableInfo figure out what fields are needed to
@@ -558,6 +553,23 @@ void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
 	char *fields);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
+
+/* -----------  Bed/joining stuff -------------- */
+
+struct bed *getRegionAsBed(
+	char *db, char *table, 	/* Database and table. */
+	struct region *region,  /* Region to get data for. */
+	char *filter, 		/* Filter to add to SQL where clause if any. */
+	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
+	struct lm *lm,		/* Where to allocate memory. */
+	int *retFieldCount);	/* Number of fields. */
+/* Return a bed list of all items in the given range in table.
+ * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+
+struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount);
+/* Get list of beds from database in region that pass filtering. */
 
 /* ----------- Page displayers -------------- */
 

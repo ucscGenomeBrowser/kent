@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.37 2004/12/08 00:03:51 kate Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.38 2005/02/09 23:26:42 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -732,14 +732,13 @@ return ret;
 static struct joinedTables *joinedTablesCreate( struct joiner *joiner, 
 	char *primaryDb, char *primaryTable,
 	struct joinerDtf *fieldList, struct joinerDtf *filterTables,
-	int maxRowCount)
+	int maxRowCount, struct region *regionList)
 /* Create joinedTables structure from fields. */
 {
 struct tableJoiner *tj, *tjList = bundleFieldsIntoTables(fieldList, filterTables);
 struct joinerPair *routeList = NULL, *route;
 struct joinedTables *joined = NULL;
 struct hash *tableHash = newHash(8);
-struct region *regionList = getRegions();
 int totalKeyCount = 0, totalFieldCount = 0;
 int curKeyCount = 0, curFieldCount = 0;
 struct joinerDtf *tableDtfs;
@@ -832,6 +831,33 @@ for (dtf = filterTables; dtf != NULL; dtf = dtf->next)
 return TRUE;
 }
 
+boolean joinRequired(struct slName *fieldList,
+		     struct joinerDtf **pDtfList,
+		     struct joinerDtf **pFilterTables)
+/* Given a list of db.table.field values, determine whether a joining query 
+ * will be required.  Consider not only the tables to be queried but also 
+ * the tables to be filtered (which can be a different set).  
+ * If pDtfList is not null, make it point to the list of joinerDtfs 
+ * derived from fieldList. 
+ * If pFilterTables is not null, make it point to the list of joinerDtfs 
+ * containing the dbs and tables (but not fields) of tables to be filtered. */
+{
+struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
+struct joinerDtf *filterTables = filteringTables();
+boolean ret = (! allSameTable(dtfList, filterTables));
+
+if (pDtfList != NULL)
+    *pDtfList = dtfList;
+else
+    joinerDtfFreeList(&dtfList);
+if (pFilterTables != NULL)
+    *pFilterTables = filterTables;
+else
+    joinerDtfFreeList(&filterTables);
+return ret;
+}
+
+
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
@@ -839,10 +865,11 @@ void tabOutSelectedFields(
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
 {
-struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
-struct joinerDtf *filterTables = filteringTables();
+struct joinerDtf *dtfList = NULL;
+struct joinerDtf *filterTables = NULL;
+boolean doJoin = joinRequired(fieldList, &dtfList, &filterTables);
 
-if (allSameTable(dtfList, filterTables))
+if (! doJoin)
     {
     struct sqlConnection *conn = sqlConnect(dtfList->database);
     struct dyString *dy = dyStringNew(0);
@@ -858,11 +885,178 @@ else
     {
     struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
-    	primaryDb, primaryTable, dtfList, filterTables, 1000000);
+    	primaryDb, primaryTable, dtfList, filterTables, 1000000, getRegions());
     joinedTablesTabOut(joined);
     joinedTablesFree(&joined);
     }
 joinerDtfFreeList(&dtfList);
+joinerDtfFreeList(&filterTables);
 }
 
+
+static struct slName *getBedFieldSlNameList(struct hTableInfo *hti,
+					    char *db, char *table)
+/* Return the bed-compat field list for the given table, as 
+ * slName list of "$db.$table.$field". */
+{
+struct slName *snList = NULL, *sn = NULL;
+int fieldCount = 0;
+char *fields = NULL;
+char *words[16];
+char dtf[256];
+int i;
+bedSqlFieldsExceptForChrom(hti, &fieldCount, &fields);
+chopCommas(fields, words);
+for (i=fieldCount-1;  i >= 0;  i--)
+    {
+    if (sameString(words[i], "0"))
+	continue;
+    safef(dtf, sizeof(dtf), "%s.%s.%s", db, table, words[i]);
+    sn = slNameNew(dtf);
+    slAddHead(&snList, sn);
+    }
+safef(dtf, sizeof(dtf), "%s.%s.%s", db, table, hti->chromField);
+sn = slNameNew(dtf);
+slAddHead(&snList, sn);
+freez(&fields);
+return snList;
+}
+
+
+static int *getBedFieldIndices(struct joinedTables *joined,
+			       struct hTableInfo *hti)
+/* Go through the list of joined fields and determine how they map to bed 
+ * fields. */
+{
+int *indices = needMem(sizeof(int) * 12);
+struct joinerDtf *field = NULL;
+int i;
+for (i=0;  i < 12;  i++)
+    {
+    indices[i] = -1;
+    }
+i = 0;
+for (field = joined->fieldList;  field != NULL;  field = field->next)
+    {
+    if (sameString(field->field, hti->chromField))
+	indices[0] = i;
+    else if (sameString(field->field, hti->startField))
+	indices[1] = i;
+    else if (sameString(field->field, hti->endField))
+	indices[2] = i;
+    else if (sameString(field->field, hti->nameField))
+	indices[3] = i;
+    else if (sameString(field->field, hti->scoreField))
+	indices[4] = i;
+    else if (sameString(field->field, hti->strandField))
+	indices[5] = i;
+    else if (sameString(field->field, hti->cdsStartField))
+	indices[6] = i;
+    else if (sameString(field->field, hti->cdsEndField))
+	indices[7] = i;
+    /* Reserved is skipped!  So indices after this point are 1 smaller. */
+    else if (sameString(field->field, hti->countField))
+	indices[8] = i;
+    else if (sameString(field->field, hti->endsSizesField))
+	indices[9] = i;
+    else if (sameString(field->field, hti->startsField))
+	indices[10] = i;
+    i++;
+    }
+return indices;
+}
+
+static struct bed *joinedTablesToBed(struct joinedTables *joined,
+				     struct hTableInfo *hti, int bedFieldCount,
+				     struct lm *lm)
+/* Make a bedList from the joining query results. */
+{
+struct joinedRow *jr;
+struct bed *bedList = NULL;
+boolean isPsl = sameString("tStarts", hti->startsField);
+boolean isGenePred = sameString("exonEnds", hti->endsSizesField);
+boolean isBedWithBlocks = ((sameString("chromStarts", hti->startsField) ||
+			    sameString("blockStarts", hti->startsField))
+			   && sameString("blockSizes", hti->endsSizesField));
+boolean pslKnowIfProtein, pslIsProtein;
+int *bedFieldIndices = getBedFieldIndices(joined, hti);
+/* The reserved field is skipped, so adjust count for row creation: */
+int adjBedFieldCount = (bedFieldCount > 8) ? bedFieldCount-1 : bedFieldCount;
+char *chrom = NULL;
+
+for (jr = joined->rowList; jr != NULL; jr = jr->next)
+    {
+    if (jr->passedFilter)
+	{
+	int i;
+	struct bed *bed = NULL;
+	char *row[16];
+	for (i=0;  i < adjBedFieldCount;  i++)
+	    {
+	    if (bedFieldIndices[i] < 0)
+		row[i] = "0";
+	    else
+		row[i] = jr->fields[bedFieldIndices[i]]->name;
+	    }
+	if ((chrom == NULL) || (! sameString(chrom, row[0])))
+	    chrom = lmCloneString(lm, row[0]);
+	bed = bedFromRow(chrom, row+1, bedFieldCount,
+			 isPsl, isGenePred, isBedWithBlocks,
+			 &pslKnowIfProtein, &pslIsProtein, lm);
+	slAddHead(&bedList, bed);
+	}
+    }
+freeMem(bedFieldIndices);
+slReverse(&bedList);
+return bedList;
+}
+
+struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount)
+/* Get list of beds from database, in all regions, that pass filtering. */
+{
+/* A joining query may be required if the filter incorporates linked tables. */
+struct hTableInfo *hti = hFindTableInfoDb(database, NULL, table);
+struct slName *fieldList = getBedFieldSlNameList(hti, database, table);
+struct joinerDtf *dtfList = NULL;
+struct joinerDtf *filterTables = NULL;
+boolean doJoin = joinRequired(fieldList, &dtfList, &filterTables);
+struct region *region;
+struct bed *bedList = NULL;
+struct hash *idHash = identifierHash();
+
+if (! doJoin)
+    {
+    for (region = regionList; region != NULL; region = region->next)
+	{
+	char *filter = filterClause(database, table, region->chrom);
+	struct bed *bedListRegion = getRegionAsBed(database, table, region, 
+					filter, idHash, lm, retFieldCount);
+	struct bed *bed, *nextBed;
+	for (bed = bedListRegion; bed != NULL; bed = nextBed)
+	    {
+	    nextBed = bed->next;
+	    slAddHead(&bedList, bed);
+	    }
+	freez(&filter);
+	}
+    slReverse(&bedList);
+    }
+else
+    {
+    struct joiner *joiner = allJoiner;
+    struct joinedTables *joined = joinedTablesCreate(joiner, 
+    	database, table, dtfList, filterTables, 1000000, regionList);
+    int bedFieldCount = hTableInfoBedFieldCount(hti);
+    if (retFieldCount != NULL)
+	*retFieldCount = bedFieldCount;
+    bedList = joinedTablesToBed(joined, hti, bedFieldCount, lm);
+    joinedTablesFree(&joined);
+    }
+joinerDtfFreeList(&dtfList);
+joinerDtfFreeList(&filterTables);
+hashFree(&idHash);
+return bedList;
+}
 
