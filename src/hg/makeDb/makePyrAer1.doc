@@ -180,3 +180,11 @@ NA' > pyrAer1-params-rrna-xra.txt
     echo RENAME TABLE expRecord to llaPaePrintAExps | hgsql hgFixed
     echo LOAD DATA LOCAL INFILE \'Pae-arrays.exps\' INTO TABLE llaPaePrintAExps | hgsql hgFixed
 
+# AORF TRACK
+    # This is another hand-created file, provided originally by Sorel Fitz-Gibbon and massaged to be a bed.
+    ssh hgwdev
+    mkdir /cluster/data/pyrAer1/bed/primAORF
+    cp aorfs.bed /cluster/data/pyrAer1/bed/primAORF
+    cd /cluster/data/pyrAer1/bed/primAORF
+    hgLoadBed pyrAer1 primAORF aorfs.bed
+
