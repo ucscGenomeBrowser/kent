@@ -88,6 +88,9 @@ struct sqlConnection *hAllocConn2();
 void hFreeConn(struct sqlConnection **pConn);
 /* Put back connection for reuse. */
 
+void hFreeConn2(struct sqlConnection **pConn);
+/* Put back secondary db connection for reuse. */
+
 struct sqlConnection *hConnectCentral();
 /* Connect to central database where user info and other info
  * not specific to a particular genome lives.  Free this up
@@ -98,6 +101,9 @@ void hDisconnectCentral(struct sqlConnection **pConn);
 
 boolean hTableExists(char *table);
 /* Return TRUE if a table exists in database. */
+
+boolean hTableExists2(char *table);
+/* Return TRUE if a table exists in secondary database. */
 
 int hChromSize(char *chromName);
 /* Return size of chromosome. */
@@ -181,6 +187,10 @@ boolean hFindChromStartEndFields(char *table,
 	char retChrom[32], char retStart[32], char retEnd[32]);
 /* Given a table return the fields for selecting chromosome, start, and end. */
 
+boolean hFindChromStartEndFieldsDb(char *db, char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32]);
+/* Given a table return the fields for selecting chromosome, start, and end. */
+
 boolean hIsBinned(char *table);
 /* Return TRUE if a table is binned. */
 
@@ -191,6 +201,12 @@ boolean hFindFieldsAndBin(char *table,
  * and whether it's binned . */
 
 boolean hFindMoreFields(char *table, 
+	char retChrom[32], char retStart[32], char retEnd[32],
+	char retName[32], char retStrand[32]);
+/* Given a table return the fields for selecting chromosome, start, end,
+ * name, strand.  Name and strand may be "". */
+
+boolean hFindMoreFieldsDb(char *db, char *table, 
 	char retChrom[32], char retStart[32], char retEnd[32],
 	char retName[32], char retStrand[32]);
 /* Given a table return the fields for selecting chromosome, start, end,
