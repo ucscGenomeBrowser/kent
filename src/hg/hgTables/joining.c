@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.8 2004/07/17 16:03:22 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.9 2004/07/17 17:02:16 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -36,11 +36,12 @@ struct joinedTables
     int rowCount;	/* Number of rows. */
     };
 
-void tabOutJoined(struct joinedTables *joined)
+void joinedTablesTabOut(struct joinedTables *joined)
 /* Write out fields. */
 {
 struct joinedRow *jr;
 struct joinerDtf *field;
+hPrintf("#");
 for (field = joined->fieldList; field != NULL; field = field->next)
     {
     hPrintf("%s.%s.%s", field->database, field->table, field->field);
@@ -126,10 +127,23 @@ if (fieldCount + fieldOffset > joined->fieldCount)
 if (keyCount + keyOffset > joined->keyCount)
     internalErr();
 for (i=0; i<fieldCount; ++i)
-    fields[i] = lmCloneString(lm, row[i]);
+    {
+    if (fields[i] == NULL)
+        fields[i] = lmCloneString(lm, row[i]);
+    else
+        {
+	int oldLen = strlen(fields[i]);
+	int newLen = oldLen + strlen(row[i]) + 2;
+	char *newString = lmAlloc(lm, newLen);
+	strcpy(newString, fields[i]);
+	newString[oldLen] = ',';
+	strcpy(newString+oldLen+1, row[i]);
+	fields[i] = newString;
+	}
+    }
 row += fieldCount;
 for (i=0; i<keyCount; ++i)
-    jr->keys[i] = lmCloneString(lm, row[i]);
+    keys[i] = lmCloneString(lm, row[i]);
 }
 
 char *chopKey(struct slName *prefixList, struct slName *suffixList, char *key)
@@ -157,61 +171,6 @@ for (n=suffixList; n!=NULL; n = n->next)
 return key;
 }
 
-#ifdef OLD
-struct joinedTables *fetchKeyedFields(struct region *regionList,
-	struct sqlConnection *conn, char *table, boolean isPositional, char *fields, 
-	char *keyIn, struct hash *keyInHash, 
-	struct slName *chopBefore, struct slName *chopAfter,
-	struct slName *keyOutList)
-/* This returns a list of keyedRows filtering out those that
- * don't match on keyIn.  */
-{
-struct joinedTables *jt = joinedTablesNew(table, fields, keyOutList);
-struct dyString *fieldSpec = dyStringNew(0);
-struct slName *keyOut;
-struct region *region;
-int keyInField = -1;
-
-uglyf("fetchKeyedFields from %s,  fields %s, keyIn %s\n",
-	table, fields, keyIn);
-dyStringAppend(fieldSpec, fields);
-for (keyOut = keyOutList; keyOut != NULL; keyOut = keyOut->next)
-    dyStringPrintf(fieldSpec, ",%s", keyOut->name);
-if (keyIn != NULL)
-    {
-    dyStringPrintf(fieldSpec, ",%s", keyIn);
-    uglyf("jt->keyCount = %d, jt->fieldCount = %d\n", jt->keyCount, jt->fieldCount);
-    assert(keyInHash != NULL);
-    keyInField = jt->keyCount + jt->fieldCount;
-    }
-uglyf("fieldSpec = %s\n", fieldSpec->string);
-uglyf("keyInField = %d\n", keyInField);
-
-for (region = regionList; region != NULL; region = region->next)
-    {
-    char **row;
-    struct sqlResult *sr = regionQuery(conn, table, 
-    	fieldSpec->string, region, isPositional);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (keyInField < 0)
-	    jrRowAdd(jt, row);
-	else
-	    {
-	    char *key = row[keyInField];
-	    char *e;
-	    if (hashLookup(keyInHash, chopKey(NULL, NULL, key)))
-		jrRowAdd(jt, row);
-	    }
-	}
-    sqlFreeResult(&sr);
-    if (!isPositional)
-        break;
-    }
-slReverse(&jt->rowList);
-return jt;
-}
-#endif /* OLD */
 
 struct joinerDtf *fieldsToDtfs(struct slName *fieldList)
 /* Convert list from dotted triple to dtf format. */
@@ -451,6 +410,7 @@ int idFieldIx = -1;
 boolean isPositional = htiIsPositional(hti);
 struct sqlConnection *conn = sqlConnect(tj->database);
 
+uglyf("tjLoadSome %s.%s keyOffset %d\n", tj->database, tj->table, keyOffset);
 /* Create field spec for sql - first fields user will see, and
  * second keys if any. */
 for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
@@ -566,8 +526,12 @@ if (hashSize > 20)
 hash = newHash(hashSize);
 for (jr = joined->rowList; jr != NULL; jr = jr->next)
     {
-    char *key = chopKey(chopPrefix, chopSuffix, jr->keys[keyIx]);
-    hashAdd(hash, key, jr);
+    char *key = jr->keys[keyIx];
+    if (key != NULL)
+	{
+	key = chopKey(chopPrefix, chopSuffix, jr->keys[keyIx]);
+	hashAdd(hash, key, jr);
+	}
     }
 return hash;
 }
@@ -680,6 +644,7 @@ else
 	    struct hash *keyHash = NULL;
 	    if (keyIx < 0)
 		internalErr();
+	    uglyf("keyIx for %s.%s.%s = %d\n", route->a->database, route->a->table, route->a->field, keyIx);
 	    keyHash = hashKeyField(joined, keyIx, NULL, NULL);
 	    tjLoadSome(regionList, joined, curFieldCount, curKeyCount,
 	        route->b->field, keyHash, tj, hti, FALSE);
@@ -689,7 +654,7 @@ else
 	    hashFree(&keyHash);
 	    }
 	}
-    tabOutJoined(joined);
+    joinedTablesTabOut(joined);
     sqlDisconnect(&conn);
     joinerDtfFreeList(&tableDtfs);
     hashFree(&tableHash);
@@ -701,23 +666,30 @@ void doTest(struct sqlConnection *conn)
 /* Put up a page to see what happens. */
 {
 struct slName *fieldList = NULL, *field;
+#ifdef SOON
 field = slNameNew("hg16.softberryGene.name");
 slAddTail(&fieldList, field);
 field = slNameNew("hg16.softberryHom.description");
 slAddTail(&fieldList, field);
 field = slNameNew("hg16.softberryPep.seq");
 slAddTail(&fieldList, field);
-#ifdef SOON
 field = slNameNew("hg16.knownGene.name");
 slAddTail(&fieldList, field);
 field = slNameNew("hg16.kgXref.geneSymbol");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.bioCycPathway.geneID");
 slAddTail(&fieldList, field);
 field = slNameNew("hg16.bioCycPathway.mapID");
 slAddTail(&fieldList, field);
 #endif
 
+field = slNameNew("hg16.ensGene.name");
+slAddTail(&fieldList, field);
+field = slNameNew("hg16.kgXref.description");
+slAddTail(&fieldList, field);
+
 textOpen();
-tabOutFields("hg16", "softberryGene", fieldList);
+tabOutFields("hg16", "ensGene", fieldList);
 }
 
 
