@@ -14,6 +14,7 @@ set snpBuild  = $3
 set oo        = /cluster/data/$database
 set fileBase  = dbSnpRS${database}Build$snpBuild
 set DETAILDIR = ${HOME}/kent/src/hg/snp/details
+set DBSNPDIR = ${HOME}/bin/${MACHTYPE}
 set nice      = "nice "
 
 # Run from directory $oo/bed/snp/build$snpBuild/details
@@ -71,7 +72,7 @@ end
 echo
 echo `date` Starting dbSnp
 echo
-$nice $DETAILDIR/dbSnp $database $fileBase
+$nice $DBSNPDIR/dbSnp $database $fileBase
 echo
 echo `date` Finished dbSnp
 echo
@@ -84,18 +85,19 @@ $nice gzip $fileBase.err $fileBase.obs
 echo `date` Done.
 echo
 
-echo load data local infile "$fileBase.out" into table $table \
-     | hgsql $database
+echo load data local infile \"$fileBase.out\" into table $table | hgsql hgFixed
 
 # useful data checks
 echo "=================================="
 echo $database $organism $table
 echo wc -l $table.bed
-echo select count\(\*\) from $table | hgsql $database
+echo select count\(\*\) from $table | hgsql hgFixed
 echo
-echo desc $table                    | hgsql $database
+echo desc $table                    | hgsql hgFixed
 echo
-echo show indexes from $table       | hgsql $database
+echo show indexes from $table       | hgsql hgFixed
 echo
-echo select \* from $table limit 5  | hgsql $database
+echo select \* from $table limit 5  | hgsql hgFixed
 echo
+
+echo `date` Finished: processSnpDetails.csh $argv
