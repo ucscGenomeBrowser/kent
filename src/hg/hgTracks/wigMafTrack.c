@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.42 2004/10/20 23:37:46 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.43 2004/10/21 02:16:46 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -396,7 +396,7 @@ for (i=0; i<size; ++i)
     }
 }
 
-static void processOtherSeq(char *text, char *masterText, int textSize,
+static void processSeq(char *text, char *masterText, int textSize,
                             char *outLine, int offset, int outSize)
 /* Add text to outLine, suppressing copy where there are dashes
  * in masterText.  This effectively projects the alignment onto
@@ -445,12 +445,6 @@ if (text[0] == UNALIGNED_SEQ_BEFORE)
                                                 UNALIGNED_SEQ_BOTH :
                                                 UNALIGNED_SEQ_AFTER);
     outLine[outIx] = unalignedChar;
-    if (offset > 0 && outLine[-1] == UNALIGNED_SEQ_AFTER)
-        {
-        /* suppress redundant indicator between two unaligned sections  */
-        outLine[0] = '-';
-        outLine[-1] = '-';
-        }
     }
 }
 
@@ -807,12 +801,12 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                     "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
                                 chainTable, subStart, subEnd);
                 if (sqlQuickNum(conn, query) > 0)
-                    processOtherSeq(noAlignment, mcMaster->text, sub->textSize, 
+                    processSeq(noAlignment, mcMaster->text, sub->textSize, 
                                     lines[mi->ix], lineOffset, subSize);
                 hFreeConn(&conn);
                 }
             else
-                processOtherSeq(mc->text, mcMaster->text, sub->textSize, 
+                processSeq(mc->text, mcMaster->text, sub->textSize, 
                                     lines[mi->ix], lineOffset, subSize);
 	    }
 	}

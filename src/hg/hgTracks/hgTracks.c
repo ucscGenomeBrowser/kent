@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.823 2004/10/20 21:05:19 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.824 2004/10/21 02:16:46 kate Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6538,7 +6538,8 @@ if(motifString != NULL && strlen(motifString) != 0)
 
 for (i=0; i<count; i++, text++, textPos++)
     {
-    x1 = i * width/count - 1;
+    char printChar;
+    x1 = i * width/count;
     x2 = (i+1) * width/count - 1;
     if (match && *text == '|')
         {
@@ -6549,20 +6550,26 @@ for (i=0; i<count; i++, text++, textPos++)
         vgBox(vg, x+x1, y, 1, height, alignInsertsColor());
         continue;
         }
-    if (match && 
-            (*text == UNALIGNED_SEQ_BEFORE || 
-             *text == UNALIGNED_SEQ_AFTER ||
-             *text == UNALIGNED_SEQ_BOTH))
+    printChar = *text;
+    if (match && *text == UNALIGNED_SEQ_BEFORE ||
+                 *text == UNALIGNED_SEQ_AFTER ||
+                 *text == UNALIGNED_SEQ_BOTH)
         {
-        /* indicates sequence present for the region, but not aligned
-         * display gap char and colored vertical bar(s) */
+        /* process unaligned region indicators - display as gaps
+         * delimited by vertical red bars, suppressing redundant ones */
         if (*text == UNALIGNED_SEQ_BEFORE || *text == UNALIGNED_SEQ_BOTH)
-            vgBox(vg, x+x1, y, 1, height, alignBreakColor());
+            if (i==0 || (text[-1] != UNALIGNED_SEQ_AFTER && 
+                         text[-1] != UNALIGNED_SEQ_BOTH))
+                /* vertical bar to the left of the gap */
+                vgBox(vg, x+x1, y, 1, height, alignBreakColor());
         if (*text == UNALIGNED_SEQ_AFTER || *text == UNALIGNED_SEQ_BOTH)
-            vgBox(vg, x+x2, y, 1, height, alignBreakColor());
-        *text = '-';
+            if (i==count-1 || (text[1] != UNALIGNED_SEQ_BEFORE && 
+                               text[1] != UNALIGNED_SEQ_BOTH))
+                /* vertical bar to the right of the gap */
+                vgBox(vg, x+x2, y, 1, height, alignBreakColor());
+        printChar = '-';
         }
-    c[0] = *text;
+    c[0] = printChar;
     clr = color;
     if (dots)
         {
