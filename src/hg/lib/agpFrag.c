@@ -5,6 +5,7 @@
 #include "common.h"
 #include "jksql.h"
 #include "agpFrag.h"
+#include "linefile.h"
 
 void agpFragStaticLoad(char **row, struct agpFrag *ret)
 /* Load a row from agpFrag table into ret.  The contents of ret will
@@ -125,3 +126,63 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+struct agpFrag *agpFragLoadAll(char *fileName) 
+/* Load all agpFrag from a tab-separated file.
+ * Dispose of this with agpFragFreeList(). */
+{
+struct agpFrag *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileRow(lf, row))
+    {
+    el = agpFragLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+/* ---------------------- End autoSql generated code. ---------------------- */
+
+struct agpFrag *agpFragLoadAllNotGaps(char *fileName) 
+/* Load all agpFrag from a tab-separated file.
+ * Dispose of this with agpFragFreeList(). */
+{
+struct agpFrag *list = NULL, *el=NULL;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[32];
+char *words[32];
+char *line = NULL;
+int lineSize = 1024;
+int wordCount = 0;
+int lineWCount = 0;
+int count =0;
+
+/* Check to make sure there is something in the file. */
+wordCount = lineFileChop(lf, words);
+if (wordCount == 0)
+    errAbort("%s appears to be empty", fileName);
+lineFileClose(&lf);
+
+lf = lineFileOpen(fileName, TRUE);
+while ((wordCount = lineFileChop(lf, words)) > 0)
+    {
+    if (wordCount < 5)
+	errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
+    if(sameWord(words[4], "N"))
+	continue;
+    el = agpFragLoad(words);
+/* There is a strange thing about agp files, Jim's load functions subtract 1 off
+   the chromStart and fragStart but if you're loading off of files from the
+   database they have already had 1 subtracted off so I'm going to add it back
+   here. */
+    el->chromStart++;  
+    el->fragStart++;
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
