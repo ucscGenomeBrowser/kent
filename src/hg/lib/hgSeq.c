@@ -211,8 +211,8 @@ int offset, cSize;
 int i;
 boolean isRc     = (strand == '-') || cgiBoolean("hgSeq.revComp");
 boolean maskRep  = cgiBoolean("hgSeq.maskRepeats");
-int padding5     = cgiInt("hgSeq.padding5");
-int padding3     = cgiInt("hgSeq.padding3");
+int padding5     = cgiOptionalInt("hgSeq.padding5", 0);
+int padding3     = cgiOptionalInt("hgSeq.padding3", 0);
 char *casing     = cgiString("hgSeq.casing");
 char *repMasking = cgiString("hgSeq.repMasking");
 
