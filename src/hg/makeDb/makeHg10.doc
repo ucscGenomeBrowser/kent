@@ -837,21 +837,28 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
        set tbl="blastzMm2"
        foreach chrdir (/cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/lav/chr*)
          set chr=$chrdir:t
-         set outdir=lav-psl${sc}/$chr
+         set outdir=${tbl}.psl/$chr
          mkdir -p $outdir
          foreach lav ($chrdir/*.lav${sc})
            lavToPsl -target-strand=+ $lav $outdir/$lav:t:r.psl
          end
        end
 
+    - Make temporary per-contig mouse nib files for use by pslToXa
+      (which doesn't currenty support FASTA)
+        mkdir -p mm.contig.nib
+        foreach fa (/cluster/store2/mm.2002.02/mm2/*/chr*/chr*.fa)
+            set nib=mm.contig.nib/$fa:r:t.nib
+            faToNib $fa $nib
+        end
+
     - Convert to per-chromsome files, sort, and add sequence
-       mkdir -p lav-xa{sc}
-       foreach chrdir (lav-psl${sc}/*)
+       mkdir -p ${tbl}.xa
+       foreach chrdir (${tbl}.psl/*)
          set chr=$chrdir:t
-         pslCat -check -nohead -ext=.psl -dir lav-psl${sc}/$chr \
-          | liftUp -type=.psl -pslQ -nohead stdout /cluster/store2/mm.2002.02/mm2/jkStuff/liftAll.lft warn stdin \
+         pslCat -check -nohead -ext=.psl -dir ${tbl}.psl/$chr \
           | sort -k 15n -k 16n \
-          | pslToXa stdin lav-xa${sc}/${chr}_${tbl}.xa /cluster/store2/mm.2002.02/mm2/nib /cluster/store1/gs.11/build28/nib
+          | pslToXa stdin ${tbl}.xa/${chr}_${tbl}.xa mm.contig.nib /cluster/store1/gs.11/build28/nib
        end
 
     - repeat both loops, this time doing the single-coverage alignment:
@@ -860,14 +867,16 @@ LOADING MOUSE MM2 BLASTZ ALIGNMENTS FROM PENN STATE: (markd)
         <above loops>
 
     - Load tables
-        cd lav-xa
+        cd blastzMm2.xa
         hgLoadPsl -xa hg10 *.xa
-        cd lav-xa.sc
+        cd blastzMm2.xa
         hgLoadPsl -xa hg10 *.xa
-  
 
    - Load aligned ancient repeats, from
        /cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/aar
      Ryan create:
        /cluster/store1/gs.11/build28/bed/blastz.mm2.2002-04-14/aar/xali
-     - Loaded into aarMm2
+     - Loaded into aarMm2, delete repeats with < 50 aligned positions
+     - The original data contained may duplicated alignments, so did a 
+           sort -u | sort -k 15n -k 16n
+       on each PSL before loading.
