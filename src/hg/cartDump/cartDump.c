@@ -6,7 +6,7 @@
 #include "cart.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: cartDump.c,v 1.9 2004/04/19 23:49:12 kate Exp $";
+static char const rcsid[] = "$Id: cartDump.c,v 1.10 2005/02/02 22:17:21 daryl Exp $";
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
@@ -41,8 +41,9 @@ printf("</TT></PRE>");
 printf("<FORM ACTION=\"../cgi-bin/cartDump\" METHOD=GET>\n");
 printf("alter variable named: ");
 cgiMakeTextVar(vName, cartUsualString(cart, vName, ""), 12);
-printf("new value");
+printf(" new value ");
 cgiMakeTextVar(vVal, "", 24);
+printf(" ");
 cgiMakeButton("submit", "submit");
 printf("<BR>\n");
 printf("Put n/a in for the new value to clear a variable.");
