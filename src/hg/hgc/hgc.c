@@ -2383,14 +2383,15 @@ fragCount = sqlQuickNum(conn, query);
 printf("<H2>Information on <A HREF=");
 printEntrezNucleotideUrl(stdout, cloneName);
 printf(" TARGET=_blank>%s</A></H2>\n", cloneName);
+printf("<B>GenBank: <A HREF=");
+printEntrezNucleotideUrl(stdout, cloneName);
+printf(" TARGET=_blank>%s</A></B> <BR>\n", cloneName);
 printf("<B>status:</B> %s<BR>\n", cloneStageName(clone->stage));
 printf("<B>fragments:</B> %d<BR>\n", fragCount);
 printf("<B>size:</B> %d bases<BR>\n", clone->seqSize);
 printf("<B>chromosome:</B> %s<BR>\n", skipChr(clone->chrom));
 printf("<BR>\n");
 
-hgcAnchor("htcCloneSeq", cloneName, "");
-printf("Fasta format sequence</A><BR>\n");
 hFreeConn(&conn);
 printTrackHtml(tdb);
 }
@@ -2401,31 +2402,6 @@ void doHgClone(struct trackDb *tdb, char *fragName)
 char cloneName[128];
 fragToCloneVerName(fragName, cloneName);
 doHgCover(tdb, cloneName);
-}
-
-void htcCloneSeq(char *cloneName)
-/* Fetch sequence as fasta file. */
-{
-struct sqlConnection *conn = hAllocConn();
-char query[256];
-struct sqlResult *sr;
-char **row;
-struct clonePos *clone;
-struct dnaSeq *seqList, *seq;
-
-hgcStart(cloneName);
-sprintf(query, "select * from clonePos where name = '%s'", cloneName);
-selectOneRow(conn, "clonePos", query, &sr, &row);
-clone = clonePosLoad(row);
-sqlFreeResult(&sr);
-
-seqList = faReadAllDna(clone->faFile);
-printf("<PRE><TT>");
-for (seq = seqList; seq != NULL; seq = seq->next)
-    {
-    faWriteNext(stdout, seq->name, seq->dna, seq->size);
-    }
-hFreeConn(&conn);
 }
 
 int showGfAlignment(struct psl *psl, bioSeq *oSeq, FILE *f, enum gfType qType, int qStart, 
@@ -8504,10 +8480,6 @@ else if (sameWord(track, "tigrGeneIndex"))
      doMcnBreakpoints(track, item, tdb);
    }
 #endif /*FUREY_CODE*/
-else if (sameWord(track, "htcCloneSeq"))
-    {
-    htcCloneSeq(item);
-    }
 else if (sameWord(track, "htcCdnaAli"))
    {
    htcCdnaAli(item);
