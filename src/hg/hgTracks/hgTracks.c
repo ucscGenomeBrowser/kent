@@ -213,8 +213,9 @@ struct trackGroup
     Color (*itemColor)(struct trackGroup *tg, void *item, struct memGfx *mg);
     /* Get color of item (optional). */
 
-    void *extraUiData;
-    void (*trackFilter)(struct trackGroup *tg);
+    boolean hasUi;		/* True if has an extended UI page. */
+    void *extraUiData;		/* Pointer for track specific filter etc. data. */
+    void (*trackFilter)(struct trackGroup *tg);	
     /* Stuff to handle user interface parts. */
 
     void *customPt;            /* Misc pointer variable unique to group. */
@@ -382,14 +383,12 @@ else
 }
 
 
-#ifdef OLD
 void mapBoxToggleVis(int x, int y, int width, int height, struct trackGroup *curGroup)
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 {
 mapBoxReinvoke(x, y, width, height, curGroup, NULL, 0, 0, NULL);
 }
-#endif /* OLD */
 
 void mapBoxJumpTo(int x, int y, int width, int height, char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
@@ -5528,6 +5527,7 @@ for (group = groupList; group != NULL; group = group->next)
 if (withLeftLabels)
     {
     int inWid = xOff-gfxBorder*3;
+    int lastY;
     mgDrawBox(mg, xOff-gfxBorder*2, 0, gfxBorder, pixHeight, mgFindColor(mg, 0, 0, 200));
     mgSetClip(mg, gfxBorder, gfxBorder, inWid, pixHeight-2*gfxBorder);
     y = gfxBorder;
@@ -5540,6 +5540,8 @@ if (withLeftLabels)
     for (group = groupList; group != NULL; group = group->next)
         {
 	struct slList *item;
+	int h;
+	lastY = y;
 	switch (group->limitedVis)
 	    {
 	    case tvHide:
@@ -5562,6 +5564,9 @@ if (withLeftLabels)
 		y += group->lineHeight;
 		break;
 	    }
+	h = y - lastY;
+	if (h > 0)
+	    mapBoxTrackUi(0, lastY, inWid, h,  group);
         }
     }
 
@@ -5643,7 +5648,7 @@ if (withCenterLabels)
 	    {
 	    Color color = group->ixColor;
 	    mgTextCentered(mg, xOff, y+1, clWidth, insideHeight, color, font, group->longLabel);
-	    mapBoxTrackUi(0, y+1, pixWidth, insideHeight, group);
+	    mapBoxToggleVis(xOff, y+1, clWidth, insideHeight, group);
 	    y += fontHeight;
 	    y += group->height;
 	    }
@@ -5695,7 +5700,7 @@ for (group = groupList; group != NULL; group = group->next)
 	    case tvDense:
 		if (withCenterLabels)
 		    y += fontHeight;
-		mapBoxTrackUi(0,y,pixWidth,group->lineHeight,group);
+		mapBoxToggleVis(0,y,pixWidth,group->lineHeight,group);
 		y += group->lineHeight;
 		break;
 	    }
@@ -5922,6 +5927,7 @@ group->lineHeight = mgFontLineHeight(tl.font)+1;
 group->heightPer = group->lineHeight - 1;
 group->private = tdb->private;
 group->priority = tdb->priority;
+group->hasUi = TRUE;
 if (tdb->useScore)
     {
     /* Todo: expand spectrum opportunities. */
@@ -6369,11 +6375,13 @@ if (!hideControls)
     for (group = tGroupList; group != NULL; group = group->next)
 	{
 	controlGridStartCell(cg);
-	printf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
-	    cartSessionVarName(), cartSessionId(cart),
-	    chromName, group->mapName);
+	if (group->hasUi)
+	    printf("<A HREF=\"%s?%s=%u&c=%s&g=%s\">", hgTrackUiName(),
+		cartSessionVarName(), cartSessionId(cart),
+		chromName, group->mapName);
 	printf(" %s<BR> ", group->shortLabel);
-	printf("</A>");
+	if (group->hasUi)
+	    printf("</A>");
 	hTvDropDown(group->mapName, group->visibility);
 	controlGridEndCell(cg);
 	}
