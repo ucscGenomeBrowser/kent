@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.822 2004/10/20 19:18:58 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.823 2004/10/20 21:05:19 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -6653,7 +6653,7 @@ for(track = *pTrackList; track != NULL; track = track->next)
 	}
     }
 /* If no ideogram don't draw. */
-if(ideoTrack == NULL)
+if(ideoTrack == NULL || !hTableExists(track->mapName))
     doIdeo = FALSE;
 else
     {
@@ -8801,7 +8801,12 @@ if(hideAll)
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (track->visibility != tvHide)
+    if(!hTrackOnChrom(track->tdb, chromName)) 
+	{
+	track->limitedVis = tvHide;
+	track->limitedVisSet = TRUE;
+	}
+    else if (track->visibility != tvHide)
 	{
 	track->loadItems(track); 
 	}
@@ -9018,9 +9023,15 @@ if (!hideControls)
 	    hPrintf(" %s<BR> ", track->shortLabel);
 	    if (track->hasUi)
 		hPrintf("</A>");
-	    hTvDropDownClass(track->mapName, track->visibility, track->canPack,
+
+	    /* If track is not on this chrom print an informational
+	       message for the user. */
+	    if(hTrackOnChrom(track->tdb, chromName)) 
+		hTvDropDownClass(track->mapName, track->visibility, track->canPack,
                                  (track->visibility == tvHide) ? 
-                                        "hiddenText" : "normalText" );
+				 "hiddenText" : "normalText" );
+	    else 
+		hPrintf("[No data-%s]", chromName);
 	    controlGridEndCell(cg);
 	    }
 	/* now finish out the table */

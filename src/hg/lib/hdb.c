@@ -31,7 +31,7 @@
 #include "grp.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.212 2004/10/19 18:31:49 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.213 2004/10/20 21:05:18 sugnet Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2868,16 +2868,9 @@ boolean hTrackOnChrom(struct trackDb *tdb, char *chrom)
 /* Return TRUE if track exists on this chromosome. */
 {
 boolean chromOk = TRUE;
-char splitTable[64];
 if (tdb->restrictCount > 0 && chrom != NULL)
-    chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount) >= 0);
-return (chromOk && 
-	hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
-#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
-	&&
-	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
-#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
-	);
+    chromOk =  (stringArrayIx(chrom, tdb->restrictList, tdb->restrictCount)) >= 0;
+return chromOk;
 }
 
 static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where)
@@ -2924,8 +2917,14 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
+char splitTable[64];
 hLookupStringsInTdb(tdb, database);
-if ((!tdb->private || privateHost) && hTrackOnChrom(tdb, chrom))
+if ((!tdb->private || privateHost) && hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+	&&
+	!sameString(splitTable, "mrna")	 /* Long ago we reused this name badly. */
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
+    )
     slAddHead(tdbRetList, tdb);
 else
     trackDbFree(&tdb);
