@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.15 2003/06/19 15:45:14 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.16 2004/02/13 21:06:27 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,7 @@ fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 if (doCvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.15 2003/06/19 15:45:14 kent Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.16 2004/02/13 21:06:27 kent Exp $\";\n");
     fprintf(f, "\n");
     }
 fprintf(f, "void usage()\n");
@@ -88,15 +88,18 @@ fprintf(f,
 "include ../../../inc/common.mk\n"
 "\n"
 "L = -lm\n"
-"MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)\n"
-"MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a\n"
+"MYLIBDIR = ../../../lib/${MACHTYPE}\n"
+"MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a\n"
 "\n"
 "O = %s.o\n"
 "\n"
-"%s: $O $(MYLIBS)\n"
-"\tgcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/%s $O $(MYLIBS) $L\n"
-"\tstrip $(HOME)/bin/$(MACHTYPE)/%s\n",
-	progName, progName, progName, progName);
+"%s: $O ${MYLIBS}\n"
+"\t${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/%s $O ${MYLIBS} $L\n"
+"\tstrip ${HOME}/bin/${MACHTYPE}/%s\n"
+"\n"
+"clean:\n"
+"\trm -f $O\n"
+, progName, progName, progName, progName);
 
 
 fclose(f);
