@@ -61,9 +61,13 @@ exit; # don't actually run this like a script :)
 
 # copied chrM.fa, chrM.agp, chrM.gl, chrM.trf.bed, lift directory, NT_999999/NT_999999.fa - not sure which ones we need
 
-# 4) Create lift files (this will create chromosome directory structure) and inserts file
+# 4) Determine the chromosome sizes from agps
 
-    /cluster/bin/scripts/createNcbiLifts seq_contig.md .
+    /cluster/bin/scripts/detChromSizes ../agp
+
+# 4.1) Create lift files (this will create chromosome directory structure) and inserts file
+
+    /cluster/bin/scripts/createNcbiLifts -s chrom_sizes seq_contig.md .
 
 # 5) Create contig agp files (will create contig directory structure)
 	
@@ -1102,28 +1106,35 @@ Locate motifs on all promoters with
 	echo 'load data local infile "stsMap.bed" into table stsMap;' | hgsql hg15
 
 
-# UPDATE BACEND SEQUENCES (TO DO)
+# UPDATE BACEND SEQUENCES (DONE TSF 4/10/2003)
 
 # Download new files. Make new directory based on previous one
 	mkdir /cluster/store1/bacends.4
 	cd /cluster/store1/bacends.4
-	wget ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/BACENDS/BACends.fa.gz
-	wget ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/BACENDS/cl_acc_gi_len_primer.gz
-	gunzip BACends.gz
-	gunzip cl_acc_gi_len_primer.gz
+	wget ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/BACENDS/AllBACends.mfa.gz
+	wget ftp://ftp.ncbi.nih.gov/genomes/H_sapiens/BACENDS/cl_acc_gi_len.gz
+	gunzip AllBACends.mfa.gz
+	gunzip cl_acc_gi_len.gz
+
+# Convert fa file
+	cp /cluster/store1/bacends.3/convert.pl .
+	convert.pl < AllBACends.mfa > BACends.fa
 
 # Create new pairs files
-	convertBacEndPairInfo cl_acc_gi_len_primer
+	convertBacEndPairInfo cl_acc_gi_len
 
 # Split file into pieces and copy to cluster to propagate
 	/cluster/bin/i386/faSplit sequence BACends.fa 100 BACends
         ssh kkstore
         cd /cluster/store1/bacends.4
-        mv /cluster/store1/bacends4/BACends??.fa /scratch/hg/bacEnds/hs/
+	rm /scratch/hg/bacEnds/hs/BACends*.fa
+        mv /cluster/store1/bacends.4/BACends???.fa /scratch/hg/bacEnds/hs/
+	cp /cluster/store1/bacends.4/BACends.fa /scratch/hg/bacEnds/hs/
 
 # Ask for propagation from sysadmin
 
 # Load the sequences (change bacends.# to match correct location)
+	ssh hgwdev
 	mkdir /gbdb/hg15/bacends.4
 	cd /gbdb/hg15/bacends.4
 	ln -s /cluster/store1/bacends.4/BACends.fa ./BACends.fa
@@ -1257,7 +1268,7 @@ Locate motifs on all promoters with
 	cd /gbdb/hg15/fosends.3
 	ln -s /cluster/store1/fosends.3/fosEnds.fa ./fosEnds.fa
 	cd /cluster/store2/tmp
-	hgLoadRna addSeq hg15 /cluster/store1/fosends.3/fosEnds.fa
+	hgLoadRna addSeq hg15 /gbdb/hg15/fosends.3/fosEnds.fa
                 
 
 # UPDATE FISH CLONES INFORMATION (DONE 4/9/2003)
