@@ -7,7 +7,7 @@
 #include "common.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: sqlNum.c,v 1.12 2004/03/22 14:17:09 kent Exp $";
+static char const rcsid[] = "$Id: sqlNum.c,v 1.13 2004/03/23 18:56:20 hiram Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about
@@ -103,6 +103,6 @@ char* end;
 double val = strtod(s, &end);
 
 if ((end == s) || (*end != '\0'))
-    errAbort("invalid float: %s", s);
+    errAbort("invalid double: %s", s);
 return val;
 }
