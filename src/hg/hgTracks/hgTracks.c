@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.886 2005/02/03 18:57:34 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.887 2005/02/04 02:36:16 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8696,6 +8696,15 @@ track->height = height;
 return height;
 }
 
+int trackPriCmp(const void *va, const void *vb)
+/* Compare for sort based on priority */
+{
+const struct track *a = *((struct track **)va);
+const struct track *b = *((struct track **)vb);
+
+return (a->priority - b->priority);
+}
+
 static void makeCompositeTrack(struct track *track, struct trackDb *tdb)
 /* Construct track subtrack list from trackDb entry.
  * Sets up color gradient in subtracks if requested */
@@ -8783,7 +8792,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     subtrack->priority = subTdb->priority;
     slAddHead(&track->subtracks, subtrack);
     }
-slSort(&track->subtracks, trackDbCmp);
+slSort(&track->subtracks, trackPriCmp);
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
