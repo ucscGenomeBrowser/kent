@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.137 2004/04/29 23:41:03 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.138 2004/04/30 01:41:38 sugnet Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -233,7 +233,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
     pos->name = cloneString(geneSymbol);
-    pos->browserName = cloneString(geneSymbol);
+/*    pos->browserName = cloneString(geneSymbol); highlight change */
+    pos->browserName = cloneString(row[3]);
     slAddHead(&table->posList, pos);
     }
 if (table != NULL) 
@@ -1290,8 +1291,9 @@ if (kaList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(kl->alias);
-	    pos->browserName = cloneString(kl->alias);
 
+/* 	    pos->browserName = cloneString(kl->alias); highlight change */
+	    pos->browserName = cloneString(kl->kgID);
 	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
 				 cond_str);
@@ -1377,7 +1379,8 @@ if (kpaList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(kl->alias);
-	    pos->browserName = cloneString(kl->alias);
+/* 	    pos->browserName = cloneString(kl->alias); highlight change */
+	    pos->browserName = cloneString(kl->kgID);
 
 	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
@@ -1505,7 +1508,8 @@ if (rlList != NULL)
 	    AllocVar(pos);
 	    slAddHead(&table->posList, pos);
 	    pos->name = cloneString(rl->name);
-	    pos->browserName = cloneString(rl->name);
+/* 	    pos->browserName = cloneString(rl->name); highlight change */
+	    pos->browserName = cloneString(rl->mrnaAcc);
 	    dyStringClear(ds);
 	    dyStringPrintf(ds, "(%s) %s", rl->mrnaAcc, rl->product);
 	    pos->description = cloneString(ds->string);
@@ -1877,7 +1881,8 @@ for (table = hgp->tableList; table != NULL; table = table->next)
     {
     if (table->posList != NULL)
 	{
-	boolean excludeTable = (stringIn(table->name, excludeTables) != NULL);
+/* 	boolean excludeTable = (stringIn(table->name, excludeTables) != NULL); highlight change */
+	boolean excludeTable = FALSE;
 	if (table->htmlStart) 
 	    table->htmlStart(table, f);
 	else
@@ -2392,8 +2397,8 @@ else
 	for(hpTable = hgpItem->tableList; hpTable != NULL; hpTable = hpTable->next)
 	    {
 	    struct hgPos *pos = NULL;
-	    if(stringIn(hpTable->name, excludeTables))
-		continue;
+/* 	    if(stringIn(hpTable->name, excludeTables)) */
+/* 		continue; */
 	    for(pos = hpTable->posList; pos != NULL; pos = pos->next)
 		{
 		dyStringPrintf(hgpMatchNames, "%s,", pos->browserName);

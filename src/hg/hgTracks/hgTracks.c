@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.719 2004/04/29 17:00:48 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.720 2004/04/30 01:41:38 sugnet Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -1397,6 +1397,23 @@ char *hgGene = trackDbSetting(tg->tdb, "hgGene");
 return hgGene != NULL && sameString(hgGene, "on");
 }
 
+boolean highlightItem(struct track *tg, void *item)
+/* Should this item be highlighted? */
+{
+char *mapName = NULL;
+char *name = NULL;
+boolean highlight = FALSE;
+mapName = tg->mapItemName(tg, item);
+name = tg->mapItemName(tg, item);
+/* Only highlight if names are in the hgFindMatches hash with
+   a 1. */
+highlight = (hgFindMatches != NULL &&
+	     ( hashIntValDefault(hgFindMatches, name, 0) == 1 ||
+	       hashIntValDefault(hgFindMatches, mapName, 0) == 1));
+return highlight;
+}
+
+
 void genericDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -1433,8 +1450,7 @@ if (vis == tvPack || vis == tvSquish)
 
 	y = yOff + lineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	drawNameInverted = (hgFindMatches != NULL && 
-			    hashIntValDefault(hgFindMatches, name, 0) == 1);
+	drawNameInverted = highlightItem(tg, item);
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
