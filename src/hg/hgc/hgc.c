@@ -6582,11 +6582,11 @@ else if (sameWord(track, "blatMouse") || sameWord(track, "bestMouse")
     {
     doBlatMus(tdb, item);
     }
-else if (startsWith("blastzMm2", track))
+else if (sameWord("blastzMm2", track) || sameWord("blastzMm2Sc", track))
     {
-    genericHeader(tdb, item);
+    doBlatMus(tdb, item);
     }
-else if (startsWith("aarMm2", track))
+else if (sameWord("aarMm2", track))
     {
     doBlatMus( tdb, item );
     }
