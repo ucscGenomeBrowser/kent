@@ -64,6 +64,7 @@ struct hash *tHash, *notTHash;	/* Target chromosomes. */
 struct hash *qHash, *notQHash;	/* Query chromosomes. */
 double minScore, maxScore;	/* Min/max score. */
 boolean doSyn;		/* Do synteny based filtering. */
+double minTopScore = 200000;    /* Minimum score for top level alignments. */
 double minSynScore = 200000;  /* Minimum score for block to be syntenic 
                                * regardless.  On average in the human/mouse
 			       * net a score of 200,000 will cover 27000 
@@ -86,7 +87,9 @@ if (fill->type == NULL)
     errAbort("No type field, please run input net through netSyntenic");
 if (fill->score >= minSynScore && fill->tSize >= minSynSize && fill->ali >= minSynAli)
     return TRUE;
-if (sameString(fill->type, "top") || sameString(fill->type, "nonSyn"))
+if (sameString(fill->type, "top"))
+    return fill->score >= minTopScore;
+if (sameString(fill->type, "nonSyn"))
     return FALSE;
 if (fill->qFar > maxFar)
     return FALSE;
