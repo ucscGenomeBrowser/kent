@@ -1808,9 +1808,9 @@ cat > split.csh << 'EOF'
     cd /cluster/data/ncbi/sts.9
     cp ~booch/tracks/update/stsInfo2.bed .
     # reuse hg16's fasta file
-    cp /cluster/data/ncbi/sts.8/all.STS.fa.new all.STS.fa
+    cp /cluster/data/ncbi/sts.8/all.STS.fa.new all.STS.fa.old
     checkStsIds stsInfo2.bed dbSTS.aliases dbSTS.sts \
-                        dbSTS.FASTA.dailydump all.STS.fa
+                        dbSTS.FASTA.dailydump all.STS.fa.old
 
     # primers
     ssh eieio
@@ -1828,8 +1828,9 @@ a
     ls -1S /cluster/bluearc/sts.9/split/primers*.fa > primers.lst
 cat > template << 'EOF'
 #LOOP
-blat -extendThroughN -tileSize=10 -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=1 -minIdentity=75 $(path1) $(path2) {check out line+ /cluster/data/hg17/bed/primers/out/$(root1).$(root2).psl}
-blat -extendThroughN -tileSize=10 -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScore=1 -minIdentity=75 -fine $(path1) $(path2) {check out line+ /cluster/data/hg17/primers/out/$(root1).$(root2).fine.psl}
+/cluster/bin/i386/blat.2 -tileSize=10 -oneOff -ooc=/scratch/hg/h/10.ooc -m
+inMatch=1 -minScore=0 -minIdentity=80 $(path1) $(path2) {check out line+ /cluster/data/hg1
+7/bed/primers/out/$(root1).$(root2).psl}
 #ENDLOOP
 'EOF'
     gensub2 contigs.lst primers.lst template jobList
@@ -1841,7 +1842,7 @@ blat -extendThroughN -tileSize=10 -ooc=/scratch/hg/h/10.ooc -minMatch=1 -minScor
 
     # GOT HERE
     
-    # run alignment
+    # run full sequence alignment
     ssh kk
     cd /cluster/data/hg17
     mkdir -p bed/sts
@@ -1862,9 +1863,8 @@ cat > gsub << 'EOF'
     foreach f (`cat sts.lst`)
         set d = $f:r:t
         echo $d
-        mkdir -p /cluster/data/hg17/bed/bacends/out/$d
+        mkdir -p /cluster/data/hg17/bed/sts/out/$d
     end
-
 
 # LOAD AFFYRATIO (WORKING - 2004-06-09 - Hiram)
 #	Copied from Hg16 doc
