@@ -7,7 +7,7 @@
 #include	"linefile.h"
 #include	"gemfont.h"
 
-static char const rcsid[] = "$Id: bdfToGem.c,v 1.8 2005/02/22 18:49:39 hiram Exp $";
+static char const rcsid[] = "$Id: bdfToGem.c,v 1.9 2005/02/22 19:37:55 hiram Exp $";
 
 static char *name = (char *)NULL;	/* to name the font in the .c file */
 static boolean noHeader = FALSE;  /* do not output the C header, data only */
@@ -113,6 +113,35 @@ const struct bdfGlyph *b = *((struct bdfGlyph **)vb);
 return (a->encoding - b->encoding);
 }
 
+static int bitsCopy(unsigned char **bitmap, int offset, int maxYextent,
+    int startRow, struct bdfGlyph *glyph)
+/*	a cheap blit of a single glyph, returns pixel columns copied */
+{
+int columnsCopied = 0;
+int bitmapColumn = offset >> 3;
+int row = startRow;
+int byteWidth = BYTEWIDTH(glyph->dWidth);
+int col = 0;
+
+bitmapColumn = BYTEWIDTH(offset);
+for (col = 0; col < byteWidth; ++col)
+    {
+    int j;
+    row = startRow;
+    for (j = 0; j < glyph->h && (row<maxYextent); ++j)
+	{
+	bitmap[row][bitmapColumn] = glyph->bitmap[j][col];
+	++row;
+	}
+    bitmapColumn += 1;
+    columnsCopied++;
+    }
+if (columnsCopied != byteWidth)
+    errAbort("columnsCopied %d != %d byteWidth", columnsCopied, byteWidth);
+
+return (columnsCopied * 8);
+}
+
 static void outputGem(char *out, struct font_hdr *font,
     struct bdfGlyph *glyphs, char *inputFileName)
 /*	all input is done, now do the output file	*/
@@ -129,14 +158,13 @@ int missing = 0;
 int offset = 0;
 int minXoff = BIGNUM;
 int maxXoff = -BIGNUM;
-int minYoff = BIGNUM;
-int maxYoff = -BIGNUM;
+int minYoff = BIGNUM;	/* lowest y coordinate found in incoming glyphs */
+int maxYoff = -BIGNUM;	/* highest y coordinate found in incoming glyphs */
 int maxYextent = 0;
 int maxXextent = 0;
 int maxDwidth = 0;
 int bytesOut = 0;
 int row;
-int col;
 int combinedWidth = 0;
 int *offsets = (int *)NULL;
 int widthSpace = 0;
@@ -210,6 +238,9 @@ if ((glyphCount + missing) > maxGlyphCount)
 if (font->frm_hgt != maxYextent)
     errAbort("do not find the same maximum height during scan ? %d != %d",
 	font->frm_hgt, maxYextent);
+if (minYoff > -1)
+    errAbort("Expected the lowest y coordinate to be negative ? minYoff = %d",
+	minYoff);
 
 combinedWidth += BYTEWIDTH(missing * widthSpace)*8;
 font->frm_wdt = BYTEWIDTH(combinedWidth);
@@ -236,6 +267,32 @@ verbose(2,"#\tallocated bitmap: %d x %d pixels = %d x %d bytes\n",
  *	The loop goes through all possible encodings from lo to hi
  *	Checking the codings in the glyphs as moving along, when missing
  *	glyphs are found, substitute blank.
+ *
+ *	Coordinate systems involved here:
+ *	In the destination bitmap:
+ *	Y coord range is from row 0 (top) to row (maxYextent-1) (bottom)
+ *	and the baseline y=0 coordinate is row: (maxYextent-1)+minYoff
+ *	Where minYoff was confirmed above to be negative.
+ *	This business would not work properly if it wasn't negative.
+ *	This is most likely the descender distance in the gemfonts.
+ *
+ *	In the source bitmap:
+ *	Y coord range is from row 0 (top) to row (glyph->h - 1) (bottom)
+ *	All these glyph bitmaps are upper left justified.
+ *	Their pixel width is glyph->dWidth which includes any necessary
+ *	spacing for the next character.  It is the distance from this
+ *	glyph's (0,0) origin to the next glyph's (0,0) origin.
+ *	This will be the glyph's entire width in the destination bitmap.
+ *	The bottom of these glyphs at row (glyph->h-1) is referenced to
+ *	the origin y=0 coordinate by glyph->yOff which does not
+ *	have to be negative.  An apostrophy, for example, would have a
+ *	positive yOff specifying the distance from y=0 to the bottom of
+ *	the glyph's bitmap, which would proceed from there upward by
+ *	glyph->h pixels.
+ *
+ *	The calculation below to determine startRow takes these various Y
+ *	coordinates into account to get the glyph properly copied in
+ *	it's vertical position.
  */
 
 offset = 0;		/*  offset=bit (pixel) position in global bitmap */
@@ -244,7 +301,6 @@ glyphCount = 0;
 glyph = glyphs;		/*	the first one is (LO_LMT)	*/
 for (encoding = glyphs->encoding; encoding <= lastEncoding ; ++encoding)
     {
-    int byteWidth;
     struct bdfGlyph *glyphToUse = glyph;
     int startRow;
 
@@ -263,25 +319,12 @@ verbose(2,"#\tmissing glyph at encoding %d '%c'\n", encoding,
     else
 	glyph = glyph->next;	/*	not missing, OK to go to next */
 
-    byteWidth = BYTEWIDTH(glyphToUse->dWidth);
     startRow = maxYextent -
 		(((glyphToUse->h + glyphToUse->yOff) - 1) - minYoff) - 1;
-verbose(4,"#\tchar %d '%c' w,h bytes: %d, %d, h,yOff: %d, %d, startRow: %d\n",
-	encoding, (char)encoding, byteWidth, glyphToUse->h, glyphToUse->h,
+verbose(4,"#\tchar %d '%c' h bytes: %d, h,yOff: %d, %d, startRow: %d\n",
+	encoding, (char)encoding, glyphToUse->h, glyphToUse->h,
 		glyphToUse->yOff, startRow);
-    /* adjust starting row here by yOff and minYoff	TBD */
-    for (col = 0; col < byteWidth; ++col)
-	{
-	int j;
-	row = startRow;
-	for (j = 0; j < glyphToUse->h && (row<maxYextent); ++j)
-	    {
-	    bitmap[row][bitmapColumn] = glyphToUse->bitmap[j][col];
-	    ++row;
-	    }
-	bitmapColumn += 1;
-	}
-    offset += (byteWidth * 8);	/* next glyph x position in global bitmap */
+    offset += bitsCopy(bitmap, offset, maxYextent, startRow, glyphToUse);
     ++glyphCount;
     }
 
