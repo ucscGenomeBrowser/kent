@@ -1,7 +1,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>Human Genome Working Draft</TITLE>
+	<TITLE>Human Genome Working Draft - v29</TITLE>
 	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#6600FF">
@@ -53,9 +53,9 @@ can help you to create a mirror site on Linux system automatically.
 <p> To set up a full mirror browser, we recommend at a MINIMUM the following
 disk partitions and sizes:
 <ul>
-<li>MySQL Table spaces: ~ 50GB
-<li>Apache web pages area: ~ 40GB
-<li>"/gbdb" area for the browser: ~ 98GB
+<li>MySQL Table spaces: ~ 128 GB
+<li>Apache web pages area: ~ 1 GB
+<li>"/gbdb" area for the browser: ~ 165 GB
 </ul>
 
 <H3>WARNING! This is a major change from the previous /cluster and
@@ -83,10 +83,10 @@ It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
 </font>
 <UL>
 <LI><a href="#step1">Install Apache server and MySQL server</a>
-<LI><a href="#step2">Get all the html files and most of the text files</a> (0.5 GB)
-<LI><a href="#step3">Get the data for each individual genome assembly and installing databases </a>(35.1 GB)&nbsp;<B>NEW ITEMS!</B>
-<LI><a href="#step4">Set up database</a>&nbsp;<B>NEW ITEMS!</B>
-<LI><a href="#step5">Obtain the /gbdb data file area</a>&nbsp;<B>NEW ITEMS!</B>
+<LI><a href="#step2">Get all the html files and most of the text files</a> (1 GB)
+<LI><a href="#step3">Get the data for each individual genome assembly and installing databases </a>(70 GB)&nbsp;<B>NEW ITEMS!</B>
+<LI><a href="#step4">Obtain the /gbdb data file area</a>(165 GB)&nbsp;<B>NEW ITEMS!</B>
+<LI><a href="#step5">Set up database</a>&nbsp;<B>NEW ITEMS!</B>
 <LI><a href="#step6">Get executable files</a>
 <li><a href="#step7">Setup Hgcentral session preference table</a>&nbsp;<B>NEW ITEMS!</B>
 <li><a href="#step8">Create a $WEBROOT/trash apache user writable directory for temp files.</a>
@@ -124,7 +124,7 @@ It has only been tested on Redhat Linux 7.2 systems, but you may find it useful.
 <br></ol>
 
 <p><a NAME="step2"></a><b>2. Get all the html files and most of the
-text files (0.5 GB)</b>
+text files (1.0 GB)</b>
 <ol type="a">
 <li> Obtain the software package rsync, which if it isn't already installed on 
 	your system, obtain from <a href="http://rsync.samba.org">http://rsync.samba.org</a>
@@ -139,9 +139,8 @@ rsync -navz --progress rsync://genome-rsync.cse.ucsc.edu
 </PRE>
 This should respond with:
 <PRE>
-genome          UCSC Human Genome Web Site (40 GB)
-cgiscripts      UCSC Human Genome CGI Scripts (128K)
-gbdb            UCSC Human Genome Browser New Config Files (68 GB)
+genome          UCSC Human Genome Web Site (85 GB)
+gbdb            UCSC Human Genome Browser New Config Files (161 GB)
 </PRE>
 <br>
 <li>Determine the destination of the copy and fire off the production copy:<br>
@@ -153,12 +152,19 @@ rsync --progress -avz \
  --exclude='goldenPath/*/database/*' \
  --exclude='goldenPath/*/contigs/*' \
  --exclude='goldenPath/*/pieces/*' \ 
+ --exclude='goldenPath/*/waba/*' \ 
+ --exclude='goldenPath/*/alignments/*' \ 
+ --exclude='goldenPath/*/sanger/*' \ 
+ --exclude='goldenPath/*/vsMm3/*' \ 
+ --exclude='goldenPath/*/vsMm2/*' \ 
+ --exclude='goldenPath/chromReports/' \ 
+ --exclude='goldenPath/mapPlots/' \ 
  rsync://genome-rsync.cse.ucsc.edu/genome/ $WEBROOT/
 </PRE>
 </ol>
 
 <p><a NAME="step3"></a><b>3. Get the data for each individual
-genome assembly and installing databases ( 35.1 GB )</b>
+genome assembly and installing databases ( 70 GB )</b>
 <ul>
 <p><a NAME="table"></a> Use the following table to identify the freeze 
 date ($FREEZEDATE) and the database version ($DBVERSION) for each genome 
@@ -167,6 +173,10 @@ assembly:
 <TABLE CELLPADDING=0 CELLSPACING=0 MARGINS=0>
 <TR><TD> $FREEZEDATE </TD><TD WIDTH=10></TD><TD> $DBVERSION </TD></TR>
 <TR><TD> --------------- </TD><TD></TD><TD> ---------------  </TD></TR>
+<TR><TD> cbJul2002   </TD><TD></TD><TD> cb1         </TD></TR>
+<TR><TD> ceMay2003   </TD><TD></TD><TD> ce1         </TD></TR>
+<TR><TD> scApr2003   </TD><TD></TD><TD> sc1         </TD></TR>
+<TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
 <TR><TD> rnNov2002   </TD><TD></TD><TD> rn1         </TD></TR>
 <TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
@@ -174,12 +184,43 @@ assembly:
 <TR><TD> 10april2003 </TD><TD></TD><TD> hg15         </TD></TR>
 <TR><TD> 14nov2002   </TD><TD></TD><TD> hg13         </TD></TR>
 <TR><TD> 28jun2002   </TD><TD></TD><TD> hg12         </TD></TR>
-<TR><TD> 05apr2002   </TD><TD></TD><TD> hg11         </TD></TR>
 </TABLE>
 </ul>
 <ol type="a">
 
-<li>Get Rat January, 2003 full data set (3.5 GB) by doing:
+<li>Get C. briggsae July 2002 full data set (315 Mb) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/cbJul2002/ \
+  $WEBROOT/goldenPath/cbJul2002/
+</PRE>
+
+<li>Get C. elegans May, 2003 full data set (2.0 GB) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/ceMay2003/ \
+  $WEBROOT/goldenPath/ceMay2003/
+</PRE>
+
+<li>Get SARS coronavirus April, 2003 full data set (106 Mb) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/scApr2003/ \
+  $WEBROOT/goldenPath/scApr2003/
+</PRE>
+
+<li>Get Rat June, 2003 full data set (5.5 GB) by doing:
+<p> 
+<PRE>
+rsync --progress -avz \
+  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/rnJun2003/ \
+  $WEBROOT/goldenPath/rnJun2003/
+</PRE>
+
+<li>Get Rat January, 2003 full data set (4.1 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -193,7 +234,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/rnJan2003/database/
 </PRE>
 
-<li>Get Rat Novemeber, 2002 full data set (3.7 GB) by doing:
+<li>Get Rat Novemeber, 2002 full data set (4.4 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -207,7 +248,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/rnNov2002/database/
 </PRE>
 
-<li>Get Mouse February, 2003 full data set (3.6 GB) by doing:
+<li>Get Mouse February, 2003 full data set (12 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -221,7 +262,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/mmFeb2003/database/
 </PRE>
 
-<li>Get Mouse February, 2002 full data set (5.5 GB) by doing:
+<li>Get Mouse February, 2002 full data set (6.2 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -236,7 +277,7 @@ rsync --progress -avz  \
 </PRE>
 
 
-<li>Get Human April 10, 2003 full data set (4.3 GB) by doing:
+<li>Get Human April 10, 2003 full data set (6.5 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -250,7 +291,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/10april2003/database/
 </PRE>
 
-<li>Get Human November 14, 2002 full data set (8.0 GB) by doing:
+<li>Get Human November 14, 2002 full data set (12.0 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -264,7 +305,7 @@ rsync --progress -avz  \
   $WEBROOT/goldenPath/14nov2002/database/
 </PRE>
 
-<li>Get Human June 28, 2002 full data set (7.4 GB) by doing:
+<li>Get Human June 28, 2002 full data set (11 GB) by doing:
 <p> 
 <PRE>
 rsync --progress -avz \
@@ -277,22 +318,22 @@ rsync --progress -avz  \
   rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/28jun2002/database/ \
   $WEBROOT/goldenPath/28jun2002/database/
 </PRE>
+</ol>
 
-<li>Get Human April 5, 2002 full data set (4.1 GB) by doing:
-<p> 
+<h4><a NAME="step4"></a>4. Obtain the /gbdb data file area</h4>
+
+<ol type="a">
+<li>You will need the portions of /gbdb used by the browser (160 GB):
+<br>
 <PRE>
 rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/bigZips/ \
-  $WEBROOT/goldenPath/05apr2002/bigZips/
-rsync --progress -avz \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/chromosomes/ \
-  $WEBROOT/goldenPath/05apr2002/chromosomes/
-rsync --progress -avz  \
-  rsync://genome-rsync.cse.ucsc.edu/genome/goldenPath/05apr2002/database/ \
-  $WEBROOT/goldenPath/05apr2002/database/
+   rsync://genome-rsync.cse.ucsc.edu/gbdb/ \
+   /gbdb/
 </PRE>
+<br>
+</ol>
 
-<h4><a NAME="step4"></a>4. Set up database</h4>
+<h4><a NAME="step5"></a>5. Set up database</h4>
 <B>Existing Mirror Sites. There are numerous changes to tables
 and data within these tables to support the /gbdb file storage method.
 You are advised to consider dropping and rebuilding the databases.
@@ -336,27 +377,17 @@ mysql> grant select on $DBVERSION.* to $USERNAME@$HOSTNAME identified by "$PASSW
 To make this command work, you need to set up $USERNAME,$HOSTNAME and 
 $PASSWORD properly. In this example, public access to the "$DBVERSION" 
 database is restricted to read-only.
-
-</ul>
-
-<h4><a NAME="step5"></a>5. Obtain the /gbdb data file area</h4>
-
-<li>You will need the portions of /gbdb used by the browser (98 GB):
-<br>
-<PRE>
-rsync --progress -avz \
-   rsync://genome-rsync.cse.ucsc.edu/gbdb/ \
-   /gbdb/
-</PRE>
-<br>
 </ol>
 
 <h4><a NAME="step6"></a>6. Get executable files</h4>
 <ol type="a">
-<li>Go to the CGIBIN directory, then do the following:
+
+<li>The cgi-bin binaries are available via:
+<br>
 <PRE>
-rsync -av rsync://genome-rsync.cse.ucsc.edu/cgiscripts/ $CGIBIN/
+rsync --progress -avz rsync://genome-rsync.cse.ucsc.edu/cgi-bin/ $CGIBIN/
 </PRE>
+<br>
 
 <li>In the CGIBIN directory, make a <a href="sample.html">hg.conf</a> file, in which, $USERNAME,$HOSTNAME and $PASSWORD used for the "$DBVERSION" database should be specified. Remember, variables should not be used in this file. 
 <br>
@@ -479,7 +510,7 @@ mysql> create database proteins0405
 <hr WIDTH="100%">
 <br><i>Should you have any comments, inquires or questions, please contact
 <a href="mailto:genome-mirror@cse.ucsc.edu">genome-mirror@cse.ucsc.edu</a></i>.
-<br><i>Last Modified: May 2, 2003</i>
+<br><i>Last Modified: July 24, 2003</i>
 <br>
 	
 	</TD><TD WIDTH=15></TD></TR></TABLE>
