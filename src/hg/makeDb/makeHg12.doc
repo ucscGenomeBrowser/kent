@@ -2350,3 +2350,9 @@ LOAD SLAM GENES
      rm hsCNS.bed.2.size.sort
      expand.pl < hsCNS.bed.2 > hsCNS.bed.2.expand
      hgLoadBed -tab hg12 slamNonCoding hsCDS.bed.2.expand
+
+
+CREATING THE humMusL SAMPLE TRACK (a.k.a WIGGLE TRACK)
+------------------------------------------------------
+o - refer to the script at src/hg/sampleTracks/makeHg12Mm2.doc
+
