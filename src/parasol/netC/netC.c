@@ -3,12 +3,12 @@
 #include <net/if.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <arpa/inet.h>
 #include <sys/ioctl.h>
 #include "common.h"
 #include "options.h"
 #include "obscure.h"
 
-char signature[] = "0d2f";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,10 +17,12 @@ errAbort("netC - net client.\n"
          "usage:\n"
 	 "    netC messages(s)\n"
 	 "options:\n"
+	 "    -ip=NNN.NNN.NNN.NNN IP address to send to\n"
 	 "    -file - parameters are files to send, not text to send\n");
 
 }
 
+char *ipAddress = "10.1.255.255";
 
 void netC(boolean isFile, int argc, char *argv[])
 /* netC - a net client. */
@@ -41,7 +43,7 @@ int optLen = sizeof(optVal);
 /* Set up broadcast connection. */
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
-sai.sin_addr.s_addr = htonl(INADDR_BROADCAST);
+sai.sin_addr.s_addr = inet_addr(ipAddress);
 sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, (char *)&optVal, optLen) != 0)
     {
@@ -81,6 +83,7 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc < 2)
     usage();
+ipAddress = optionVal("ip", ipAddress);
 netC(optionExists("file"), argc-1, argv+1);
 return 0;
 }

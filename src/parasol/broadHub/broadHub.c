@@ -1,9 +1,10 @@
 /* broadHub - Hub for file broadcast system. */
 #include <sys/types.h>
 #include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <sys/time.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -12,6 +13,9 @@
 #include "net.h"
 #include "obscure.h"
 #include "broadData.h"
+
+char *broadIp = "10.1.255.255";
+bits32 broadAddr;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,11 +27,19 @@ errAbort(
   "options:\n"
   "   -hubInPort=N (default %d)\n"
   "   -nodeInPort=N (default %d)\n"
-  , bdHubInPort, bdNodeInPort
+  "   -broadIp - network broadcast address, %s by default\n"
+  , bdHubInPort, bdNodeInPort, broadIp
   );
 }
 
 int hubInPort, nodeInPort;
+
+int broadcast(int sd, struct bdMessage *m)
+/* Send broadcast message. */
+{
+return bdSendTo(sd, m, broadAddr, nodeInPort);
+}
+
 
 int setReceiveTimeOut(int socket, int timeOut)
 /* Set timeout value for socket. */
@@ -56,7 +68,7 @@ ZeroVar(&sai);
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
 sai.sin_addr.s_addr = INADDR_ANY;
-sd = socket(AF_INET, SOCK_DGRAM, 0);
+sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (bind(sd, (struct sockaddr *)&sai, sizeof(sai)) < 0)
     errAbort("Couldn't bind socket");
 
@@ -68,57 +80,32 @@ if (setReceiveTimeOut(sd, timeOut) < 0)
 return sd;
 }
 
+void setBroadcast(int sd, boolean on)
+/* Turn on/off broadcast on socket. */
+{
+/* Set socket to enable broadcast. */
+if (setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on)) != 0)
+    {
+    errAbort("Can't set broadcast option on socket %s", strerror(errno));
+    }
+}
+
 int openBroadcastSocket(int port)
 /* Open up a datagram socket that can broadcast. */
 {
-struct sockaddr_in sai;
 int sd, err;
 int boolVal = 1;
 int boolLen = sizeof(boolVal);
-int size;
-int sizeSize = sizeof(size);
 
 /* Make sure header shortcuts don't trip us up. */
 assert(sizeof(struct bdMessage) == bdHeaderSize + bdMaxDataSize);
 
-/* Open datagram socket on broadcast address. */
-ZeroVar(&sai);
-sai.sin_family = AF_INET;
-sai.sin_port = htons(port);
-sai.sin_addr.s_addr = htonl(INADDR_BROADCAST);
-sd = socket(AF_INET, SOCK_DGRAM, 0);
+/* Open datagram socket to broadcast . */
+sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (sd < 0)
     errAbort("Can't open broadcast socket %s", strerror(sd));
+setBroadcast(sd, TRUE);
 
-/* Set socket to enable broadcast. */
-if ((err = setsockopt(sd, SOL_SOCKET, SO_BROADCAST, &boolVal, boolLen)) != 0)
-    {
-    close(sd);
-    errAbort("Can't set broadcast option on socket %s", strerror(errno));
-    return err;
-    }
-#ifdef OLD
-if ((err = getsockopt(sd, SOL_SOCKET, SO_SNDBUF, &size, &sizeSize)) != 0)
-    {
-    close(sd);
-    errAbort("Cant get sock size");
-    }
-if (size < 32 * 1024)
-    {
-    size = 64 * 1024;
-    if ((err = setsockopt(sd, SOL_SOCKET, SO_SNDBUF, &size, sizeof(size))) != 0)
-	{
-	close(sd);
-	errAbort("Can't set socket send buffer to a reasonable size", strerror(errno));
-	}
-    if ((err = getsockopt(sd, SOL_SOCKET, SO_SNDBUF, &size, &sizeSize)) != 0)
-	{
-	close(sd);
-	errAbort("Cant get sock size");
-	}
-    uglyf("sock size %d\n", size);
-    }
-#endif /* OLD */
 return sd;
 }
 
@@ -153,25 +140,9 @@ while (lineFileRow(lf, row))
     machine->name = cloneString(name);
     if (isdigit(name[0]) && countChars(name, '.') == 3  && strlen(name) < 16)
 	{
-	/* If it's a dotted quad extract the ip address ourselves
-	 * without involving system. */
-	char dup[16];
-	char *parts[4], *part;
-	int i, quad;
-	bits32 ip = 0;
-	strncpy(dup, name, sizeof(dup));
-	chopString(dup, ".", parts, 4);
-	for (i=0; i<4; ++i)
-	    {
-	    part = parts[i];
-	    quad = atoi(part);
-	    if (!isdigit(part[0]) || quad > 255)
-		errAbort("Can't handle IP address '%s' line %d of %s", 
-			name, lf->lineIx, lf->fileName);
-	    ip <<= 8;
-	    ip += quad;
-	    }
-	machine->ip = ip;
+	/* If it's a dotted quad extract the ip address 
+	 * without involving DNS. */
+	machine->ip = ntohl(inet_addr(name));
 	}
     else
 	{
@@ -236,7 +207,7 @@ void sendFile(struct dlList *machineList, struct dlList *deadList, struct bdMess
 {
 struct dlNode *mNode, *nextNode;
 struct machine *machine;
-int tryIx, maxTry = 3;
+int tryIx, maxTry = 3, maxBroadTry = maxTry*10;
 int fileIx = 0;
 int messageIx = 0, lastReceivedMessageIx = 0;
 int firstOpenMessage = messageIx + 1;
@@ -248,6 +219,7 @@ int readSize;
 int sectionIx, blockIx, blockCount, lastBlockSize;
 int fd, err;
 boolean allDone;
+int statBlocks = 0, statResent = 0;
 
 /* Open up file. */
 fd = open(fileName, O_RDONLY);
@@ -264,7 +236,7 @@ for (tryIx = 0; tryIx < maxTry; ++tryIx)
 	    {
 	    int err;
 	    bdMakeFileOpenMessage(m, machine->ip, ++messageIx, fileIx, fileName);
-	    bdSendTo(outSd, m, machine->ip, nodeInPort);
+	    err = bdSendTo(outSd, m, machine->ip, nodeInPort);
 	    if ((err = bdReceive(inSd, m, &ip)) >= 0)
 		{
 		if (m->id >= firstOpenMessage)
@@ -290,7 +262,6 @@ for (tryIx = 0; tryIx < maxTry; ++tryIx)
 			}
 		    }
 		}
-	    uglyf("err = %d, errno %d %s\n", err, errno, strerror(errno));
 	    }
 	}
     }
@@ -302,7 +273,6 @@ for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
     machine = mNode->val;
     if (machine->didOpen && !machine->isDead)
 	 {
-	 uglyf("%s lives\n", machine->name);
 	 }
      else
 	 {
@@ -314,66 +284,146 @@ for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
     }
 
 if (dlCount(machineList) <=  0)
-    errAbort("All machines seem to be dead\n");
-
-/* Do each section. */
-allDone = FALSE;
-for (sectionIx = 0; !allDone;  ++sectionIx)
     {
-    /* Seek to section start (error recovery might have moved us) */
-    off_t offset = bdBlockOffset(sectionIx, 0);
-    if (lseek(fd, offset, SEEK_SET) == -1)
-	errnoAbort("Couldn't seek in %s", fileName);
-
-    /* Do primary broadcast for section. */
-    uglyf("Section %d\n", sectionIx);
-    blockCount = bdSectionBlocks;
-    for (blockIx = 0; blockIx < bdSectionBlocks; ++blockIx)
+    warn("All machines seem to be dead\n");
+    }
+else
+    {
+    /* Do each section. */
+    allDone = FALSE;
+    for (sectionIx = 0; !allDone;  ++sectionIx)
 	{
-	machine = nextLivingMachine(machineList, deadList);
-	if (machine == NULL)
-	   errAbort("All machines seem to be dead now.");
-	readSize = netReadAll(fd, fileDataArea, bdBlockSize);
-	if (readSize < 0)
-	    errAbort("Read error on %s", fileName);
-	bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
-	    blockIx, readSize, fileDataArea);
-	err = bdBroadcast(outSd, m, nodeInPort);
-	bdReceive(inSd, m, &ip);	/* This recieve is just to control flow. */
-	if (readSize < bdBlockSize)
+	/* Seek to section start (error recovery might have moved us) */
+	off_t offset = bdBlockOffset(sectionIx, 0);
+	if (lseek(fd, offset, SEEK_SET) == -1)
+	    errnoAbort("Couldn't seek in %s", fileName);
+
+	/* Do primary broadcast for section. */
+	uglyf("Section %d\n", sectionIx);
+	blockCount = bdSectionBlocks;
+	for (blockIx = 0; blockIx < bdSectionBlocks; ++blockIx)
 	    {
-	    blockCount = blockIx + 1;
-	    allDone = TRUE;
-	    uglyf("ALL DONE!\n");
-	    break;
+	    machine = nextLivingMachine(machineList, deadList);
+	    if (machine == NULL)
+	       errAbort("All machines seem to be dead now.");
+	    readSize = netReadAll(fd, fileDataArea, bdBlockSize);
+	    ++statBlocks;
+	    if (readSize < 0)
+		errAbort("Read error on %s", fileName);
+	    bdMakeBlockMessage(m, machine->ip, ++messageIx, fileIx, sectionIx, 
+		blockIx, readSize, fileDataArea);
+	    err = broadcast(outSd, m);
+	    bdReceive(inSd, m, &ip);	/* This recieve is just to control flow. */
+	    if (readSize < bdBlockSize)
+		{
+		blockCount = blockIx + 1;
+		allDone = TRUE;
+		uglyf("ALL DONE!\n");
+		break;
+		}
+	    }
+
+	/* Check nodes one at a time for this section. */
+	for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
+	    {
+	    machine = mNode->val;
+	    machine->gotCleanStatus = FALSE;
+	    }
+	firstStatusMessage = messageIx+1;
+	// setReceiveTimeOut(inSd, 1000000);
+	for (tryIx = 0; tryIx < maxBroadTry; ++tryIx)
+	    {
+	    for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
+		{
+		machine = mNode->val;
+		if (!machine->gotCleanStatus)
+		    {
+		    boolean gotReply = FALSE;
+		    bdMakeSectionQueryMessage(m, machine->ip, ++messageIx, fileIx, 
+			sectionIx, blockCount);
+		    bdSendTo(outSd, m, machine->ip, nodeInPort);
+		    /* Try to find reply to us, skipping any previous messages. */
+		    for (;;)
+			{
+			if (bdReceive(inSd, m, &ip) < 0)
+			    break;
+			if (m->id == messageIx)
+			    {
+			    gotReply = TRUE;
+			    break;
+			    }
+			}
+		    if (gotReply)
+			{
+			bits32 fileIx, missingCount, *missingList;
+			bdParseMissingBlocksMessage(m, &fileIx, &missingCount, &missingList);
+			if (missingCount == 0)
+			    machine->gotCleanStatus = TRUE;
+			else
+			    {
+			    int i;
+			    struct bdMessage *m2;  /* Need 2nd message cause still using first. */
+			    char *dataArea2;
+			    AllocVar(m2);
+			    dataArea2 = m2->data + 3 * sizeof(bits32);
+			    uglyf("%d missing blocks\n", missingCount);
+			    for (i=0; i<missingCount; ++i)
+				{
+				bits32 blockIx = missingList[i];
+				off_t offset = bdBlockOffset(sectionIx, blockIx);
+				if (lseek(fd, offset, SEEK_SET) == -1)
+				    errnoAbort("Couldn't seek in %s", fileName);
+				readSize = netReadAll(fd, dataArea2, bdBlockSize);
+				bdMakeBlockMessage(m2, ip, ++messageIx, fileIx, sectionIx, 
+					blockIx, readSize, dataArea2);
+				broadcast(outSd, m2);
+				bdReceive(inSd, m2, &ip);
+				++statResent;
+				}
+			    freez(&m2);
+			    }
+			}
+		    }
+		}
+	    }
+	// setReceiveTimeOut(inSd, 100000);
+
+	/* Mark nodes that did not come through clean as dead. */
+	for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
+	    {
+	    nextNode = mNode->next;
+	    machine = mNode->val;
+	    if (machine->gotCleanStatus)
+		 {
+		 }
+	     else
+		 {
+		 uglyf("%s is unclean\n", machine->name);
+		 machine->isDead = TRUE;
+		 dlRemove(mNode);
+		 dlAddTail(deadList, mNode);
+		 }
 	    }
 	}
 
-    /* Check nodes one at a time for this section. */
-    for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
-	{
-	machine = mNode->val;
-	machine->gotCleanStatus = FALSE;
-	}
-    firstStatusMessage = messageIx+1;
-    // setReceiveTimeOut(inSd, 1000000);
-    for (tryIx = 0; tryIx < 10*maxTry; ++tryIx)
+    /* Go through each node closing files. */
+    firstCloseMessage = messageIx + 1;
+    for (tryIx = 0; tryIx < maxTry; ++tryIx)
 	{
 	for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
 	    {
 	    machine = mNode->val;
-	    if (!machine->gotCleanStatus)
+	    if (!machine->didClose && !machine->isDead)
 		{
 		boolean gotReply = FALSE;
-		bdMakeSectionQueryMessage(m, machine->ip, ++messageIx, fileIx, 
-		    sectionIx, blockCount);
+		bdMakeFileCloseMessage(m, machine->ip, ++messageIx, fileIx, fileName);
 		bdSendTo(outSd, m, machine->ip, nodeInPort);
-		/* Try to find reply to us, skipping any previous messages. */
+		/* Get message, skipping over non-closing ones. */
 		for (;;)
 		    {
 		    if (bdReceive(inSd, m, &ip) < 0)
 			break;
-		    if (m->id == messageIx)
+		    if (m->id >= firstCloseMessage)
 			{
 			gotReply = TRUE;
 			break;
@@ -381,117 +431,43 @@ for (sectionIx = 0; !allDone;  ++sectionIx)
 		    }
 		if (gotReply)
 		    {
-		    bits32 fileIx, missingCount, *missingList;
-		    bdParseMissingBlocksMessage(m, &fileIx, &missingCount, &missingList);
-		    if (missingCount == 0)
-			machine->gotCleanStatus = TRUE;
-		    else
+		    machine = findMachine(machineList, ip);
+		    if (machine != NULL)
 			{
-			int i;
-			struct bdMessage *m2;  /* Need 2nd message cause still using first. */
-			char *dataArea2;
-			AllocVar(m2);
-			dataArea2 = m2->data + 3 * sizeof(bits32);
-			uglyf("%d missing blocks\n", missingCount);
-			for (i=0; i<missingCount; ++i)
+			signed32 err;
+			bdParseAckMessage(m, &err);
+			if (err < 0)
 			    {
-			    bits32 blockIx = missingList[i];
-			    off_t offset = bdBlockOffset(sectionIx, blockIx);
-			    if (lseek(fd, offset, SEEK_SET) == -1)
-				errnoAbort("Couldn't seek in %s", fileName);
-			    readSize = netReadAll(fd, dataArea2, bdBlockSize);
-			    bdMakeBlockMessage(m2, ip, ++messageIx, fileIx, sectionIx, 
-				    blockIx, readSize, dataArea2);
-			    bdBroadcast(outSd, m2, nodeInPort);
-			    bdReceive(inSd, m2, &ip);
+			    warn("%s: %s %s", machine->name, fileName, strerror(err));
+			    machine->isDead = TRUE;
 			    }
-			freez(&m2);
+			else
+			    {
+			    machine->didClose = TRUE;
+			    }
 			}
 		    }
 		}
 	    }
 	}
-    // setReceiveTimeOut(inSd, 100000);
 
-    /* Mark nodes that did not come through clean as dead. */
+    /* Mark as dead machines that did not close successfully. */
     for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
 	{
 	nextNode = mNode->next;
 	machine = mNode->val;
-	if (machine->gotCleanStatus)
-	     {
-	     }
-	 else
-	     {
-	     uglyf("%s is unclean\n", machine->name);
-	     machine->isDead = TRUE;
-	     dlRemove(mNode);
-	     dlAddTail(deadList, mNode);
-	     }
-	}
-    }
-
-/* Go through each node closing files. */
-firstCloseMessage = messageIx + 1;
-for (tryIx = 0; tryIx < maxTry; ++tryIx)
-    {
-    for (mNode = machineList->head; !dlEnd(mNode); mNode = mNode->next)
-	{
-	machine = mNode->val;
-	if (!machine->didClose && !machine->isDead)
+	if (machine->didClose && !machine->isDead)
 	    {
-	    boolean gotReply = FALSE;
-	    bdMakeFileCloseMessage(m, machine->ip, ++messageIx, fileIx, fileName);
-	    bdSendTo(outSd, m, machine->ip, nodeInPort);
-	    /* Get message, skipping over non-closing ones. */
-	    for (;;)
-		{
-		if (bdReceive(inSd, m, &ip) < 0)
-		    break;
-		if (m->id >= firstCloseMessage)
-		    {
-		    gotReply = TRUE;
-		    break;
-		    }
-		}
-	    if (gotReply)
-		{
-		machine = findMachine(machineList, ip);
-		if (machine != NULL)
-		    {
-		    signed32 err;
-		    bdParseAckMessage(m, &err);
-		    if (err < 0)
-			{
-			warn("%s: %s %s", machine->name, fileName, strerror(err));
-			machine->isDead = TRUE;
-			}
-		    else
-			{
-			machine->didClose = TRUE;
-			}
-		    }
-		}
+	    }
+	else
+	    {
+	    uglyf("%s is dead on close\n", machine->name);
+	    machine->isDead = TRUE;
+	    dlRemove(mNode);
+	    dlAddTail(deadList, mNode);
 	    }
 	}
-    }
-
-/* Mark as dead machines that did not close successfully. */
-for (mNode = machineList->head; !dlEnd(mNode); mNode = nextNode)
-    {
-    nextNode = mNode->next;
-    machine = mNode->val;
-    if (machine->didClose && !machine->isDead)
-	{
-	uglyf("%s closed well\n", machine->name);
-	}
-    else
-	{
-	uglyf("%s is dead on close\n", machine->name);
-	machine->isDead = TRUE;
-	dlRemove(mNode);
-	dlAddTail(deadList, mNode);
-	}
+    uglyf("%d blocks, %d (%4.2f%%) resent\n", statBlocks, statResent, 100.0 * statResent/statBlocks);
     }
 }
 
@@ -539,7 +515,7 @@ struct bdMessage *m = NULL;
 struct dlList *machineList = getMachines(machineFile);
 struct dlList *deadList = newDlList();
 struct machine *machine;
-inSd = openHubInSocket(hubInPort, 1000000);
+inSd = openHubInSocket(hubInPort, 500000);
 outSd = openBroadcastSocket(nodeInPort);
 AllocVar(m);
 for (i=0; i<10; ++i)
@@ -547,15 +523,15 @@ for (i=0; i<10; ++i)
     machine = nextLivingMachine(machineList, deadList);
     printf("%d to %s\n", i, machine->name);
     strcpy(m->data, "ding-dong");
-    if ((i%3) == 0)
+//    if ((i%3) == 0)
 	{
 	uglyf(" pinging %x message %u\n", machine->ip, i);
 	bdInitMessage(m, machine->ip, i, bdmPing, strlen(m->data) + 1);
-	if ((err = bdBroadcast(outSd, m, nodeInPort)) < 0)
+	if ((err = broadcast(outSd, m)) < 0)
 	    printf(" err on broadcast %d\n", err);
 	}
     err = bdReceive(inSd, m, &ip);
-    printf(" err %d, errno %d, id %u, ip %x\n", err, errno, m->id, m->machine);
+    printf(" err %d, errno %d (%s), id %u, ip %x\n", err, errno, strerror(errno), m->id, m->machine);
     }
 }
 
@@ -590,8 +566,8 @@ if (dlCount(deadList) != 0)
     }
 
 bdInitMessage(m, 0, -1, bdmQuit, 0);	/* Send quit for the moment. */
-bdBroadcast(outSd, m, nodeInPort);
-bdBroadcast(outSd, m, nodeInPort);
+broadcast(outSd, m);
+broadcast(outSd, m);
 
 close(outSd);
 close(inSd);
@@ -603,6 +579,8 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 nodeInPort = optionInt("nodeInPort", bdNodeInPort);
 hubInPort = optionInt("hubInPort", bdHubInPort);
+broadIp = optionVal("broadIp", broadIp);
+broadAddr = ntohl(inet_addr(broadIp));
 if (argc != 3)
     usage();
 if (optionExists("test"))

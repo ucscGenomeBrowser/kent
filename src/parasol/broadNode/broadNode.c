@@ -1,15 +1,18 @@
 /* broadNode - Daemon that runs on cluster nodes in broadcast data system. */
+#include <sys/time.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include <netdb.h>
-#include <sys/time.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "paraLib.h"
 #include "broadData.h"
+
+char *broadIp = "10.1.255.255";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,7 +27,8 @@ errAbort(
   "   -log=fileName - where to write log messages\n"
   "   -drop=N - Drop every Nth packet\n"
   "   -ip=NNN.NNN.NNN.NNN ip address of current machine, usually needed.\n"
-  , bdHubInPort, bdNodeInPort
+  "   -broadIp - network broadcast address, %s by default\n"
+  , bdHubInPort, bdNodeInPort, broadIp
   );
 }
 
@@ -42,25 +46,20 @@ ZeroVar(&sai);
 sai.sin_family = AF_INET;
 sai.sin_port = htons(port);
 sai.sin_addr.s_addr = INADDR_ANY;
-sd = socket(AF_INET, SOCK_DGRAM, 0);
+sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
 if (sd < 0)
     errAbort("Couldn't open datagram socket");
 if (bind(sd, (struct sockaddr *)&sai, sizeof(sai)) < 0)
     errAbort("Couldn't bind socket");
 if ((err = getsockopt(sd, SOL_SOCKET, SO_RCVBUF, &size, &sizeSize)) != 0)
     errAbort("Couldn't get socket size");
-if (size < 32000)
-    {
-    size = 64*1024;
-    if ((err = setsockopt(sd, SOL_SOCKET, SO_RCVBUF, &size, sizeof(size))) != 0)
-	errAbort("Couldn't set socket buffer to %d", size);
-    }
 return sd;
 }
 
-int openOutputSocket()
+int openOutputSocket(int port)
 {
-int sd = socket(AF_INET, SOCK_DGRAM, 0);
+int sd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+struct sockaddr_in sai;
 if (sd < 0)
     errAbort("Couldn't open datagram socket");
 return sd;
@@ -101,7 +100,8 @@ static bits32 id = 0;
 if (id == 0)
     {
     char *machName = optionVal("ip", NULL);
-    if (machName == NULL) machName = getMachine();
+    if (machName == NULL) 
+       errAbort("Need to specify ip address with -ip");
     id = ipForName(machName);
     }
 return id;
@@ -322,7 +322,7 @@ struct fileTracker *ftList = NULL;
 int drop = 0;
 
 inSd = openInputSocket(nodeInPort);
-outSd = openOutputSocket();
+outSd = openOutputSocket(hubInPort);
 AllocVar(m);
 while (alive)
     {
@@ -355,7 +355,8 @@ while (alive)
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, err);
 		break;
 	    case bdmFileClose:
-		err = pFileClose(m, &ftList);
+		if (m->machine == ownIp)
+		    err = pFileClose(m, &ftList);
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, err);
 		break;
 	    case bdmPing:
@@ -363,8 +364,11 @@ while (alive)
 		personallyAck(outSd, m, ownIp, sourceIp, hubInPort, 0);
 		break;
 	    case bdmSectionQuery:
-		pSectionQuery(m, ftList, ownIp);
-		bdSendTo(outSd, m, sourceIp, hubInPort);
+		if (m->machine == ownIp)
+		    {
+		    pSectionQuery(m, ftList, ownIp);
+		    bdSendTo(outSd, m, sourceIp, hubInPort);
+		    }
 		break;
 	    case bdmMissingBlocks:
 		break;
@@ -410,6 +414,7 @@ if (argc != 2)
     usage();
 nodeInPort = optionInt("nodeInPort", bdNodeInPort);
 hubInPort = optionInt("hubInPort", bdHubInPort);
+broadIp = optionVal("broadIp", broadIp);
 dropTest = optionInt("drop", 0);
 forkDaemon();
 return 0;

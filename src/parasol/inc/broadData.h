@@ -53,9 +53,6 @@ struct bdMessage
 int bdSendTo(int sd, struct bdMessage *m, bits32 dest, int port);
 /* Send message out socket.  Returns error code if any or 0 for success. */
 
-int bdBroadcast(int sd, struct bdMessage *m, int port);
-/* Broadcast message out socket.  Returns error code if any or 0 for success. */
-
 int bdReceive(int sd, struct bdMessage *m, bits32 *retSource);
 /* Get message from socket.  Data should be maxDataSize long. 
  * Returns error code if any or 0 (bdGood) for success. */

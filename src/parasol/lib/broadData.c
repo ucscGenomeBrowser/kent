@@ -46,12 +46,6 @@ m->size = size;
 return err;
 }
 
-int bdBroadcast(int sd, struct bdMessage *m, int port)
-/* Broadcast message out socket.  Returns error code if any or 0 for success. */
-{
-return bdSendTo(sd, m, INADDR_BROADCAST, port);
-}
-
 int bdReceive(int sd, struct bdMessage *m, bits32 *retSource)
 /* Get message from socket.  Data should be maxDataSize long. 
  * Returns error code if any or 0 (bdGood) for success. */
@@ -59,6 +53,7 @@ int bdReceive(int sd, struct bdMessage *m, bits32 *retSource)
 struct sockaddr_in sai;
 int saiSize = sizeof(sai);
 int err;
+ZeroVar(&sai);
 sai.sin_family = AF_INET;
 err = recvfrom(sd, m, sizeof(*m), 0, (struct sockaddr *)&sai, &saiSize);
 if (err >= 0)
