@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.35 2004/09/02 18:40:41 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.36 2004/09/03 16:53:52 hiram Exp $";
 
 /*	PRIVATE	METHODS	************************************************/
 static void addConstraint(struct wiggleDataStream *wDS, char *left, char *right)
@@ -272,12 +272,27 @@ freeMem(wDS->tblName);		/*	potentially previously existing */
 wDS->tblName = cloneString(table);
 }
 
+static char *dateTimeStamp()
+{
+time_t now = time(NULL);
+char *dateTime;
+
+dateTime = sqlUnixTimeToDate(&now,TRUE);	/* TRUE == gmTime */
+return dateTime;
+}
+
 static void outputIdentification(struct wiggleDataStream *wDS, FILE *fh)
 {
+char *dateStamp = dateTimeStamp();
+
 if (wDS->db)
-    fprintf (fh, "#\tdb: '%s', track: '%s'\n", wDS->db, wDS->tblName);
+    fprintf (fh, "#\tdb: '%s', track: '%s', output date: %s UTC\n",
+	wDS->db, wDS->tblName, dateStamp);
 if (wDS->isFile)
-    fprintf (fh, "#\tfrom file input, track: '%s'\n", wDS->tblName);
+    fprintf (fh, "#\tfrom file input, track: '%s', output date: %s UTC\n",
+	wDS->tblName, dateStamp);
+
+freeMem(dateStamp);
 }
 
 static void showConstraints(struct wiggleDataStream *wDS, FILE *fh)
@@ -959,9 +974,12 @@ for ( ; (!maxReached) && nextRow(wDS, row, WIGGLE_NUM_COLS);
 		    {
 		    /*	previous results to this fetch are
 		     *	wDS->totalBedElements, this result is currently
-		     *	at bedElCount
+		     *	at bedElCount.  The -1 is because there is
+		     *	one more bed element to go upon exit from
+		     *	this loop.
 		     */
-		    if (wDS->maxOutput <= (wDS->totalBedElements + bedElCount))
+		    if ( (wDS->totalBedElements + bedElCount) >=
+				(wDS->maxOutput - 1) )
 			{
 			maxReached = TRUE;
 			break;
@@ -1534,8 +1552,8 @@ if (bedList && *bedList)
 			 *	one more bed element to go upon exit from
 			 *	this loop.
 			 */
-			if (wDS->maxOutput <=
-				((wDS->totalBedElements + bedElCount) - 1))
+			if ( (wDS->totalBedElements + bedElCount) >=
+				    (wDS->maxOutput - 1) )
 			    {
 			    maxReached = TRUE;
 			    break;
@@ -1694,9 +1712,11 @@ if (wDS->array)
     slSort(&wDS->array, arrayDataCmp);
 }
 
-static void bedOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
+static int bedOut(struct wiggleDataStream *wDS, char *fileName, boolean sort)
 /*	print to fileName the bed list */
 {
+int linesOut = 0;
+
 FILE * fh;
 fh = mustOpen(fileName, "w");
 if (wDS->bed)
@@ -1714,14 +1734,16 @@ if (wDS->bed)
 	fprintf(fh,"%s\t%u\t%u\t%s\n", bedEl->chrom, bedEl->chromStart,
 	    bedEl->chromEnd, bedEl->name);
 	next = bedEl->next;
+	++linesOut;
 	}
     }
 else
     {
     showConstraints(wDS, fh);
-    fprintf(fh, "#\tbed: no data points found for bed format output\n");
+    fprintf(fh, "#\tbed: no data points found for bed format output (maxOutput: %llu\n", wDS->maxOutput);
     }
 carefulClose(&fh);
+return (linesOut);
 }	/*	static void bedOut()	*/
 
 static void statsOut(struct wiggleDataStream *wDS, char *fileName,
@@ -1844,10 +1866,13 @@ else
 carefulClose(&fh);
 }	/*	static void statsOut()	*/
 
-static void asciiOut(struct wiggleDataStream *wDS, char *fileName, boolean sort,
+static int asciiOut(struct wiggleDataStream *wDS, char *fileName, boolean sort,
 	boolean rawDataOut)
 /*	print to fileName the ascii data values	*/
 {
+boolean firstLine = TRUE;
+int linesOut = 0;
+
 FILE * fh;
 fh = mustOpen(fileName, "w");
 if (wDS->ascii)
@@ -1875,6 +1900,13 @@ if (wDS->ascii)
 		span = asciiData->span;
 		if (!rawDataOut)
 		    {
+		    if (firstLine)
+			{
+			char *dateStamp = dateTimeStamp();
+			fprintf (fh, "#\toutput date: %s UTC\n", dateStamp);
+			firstLine = FALSE;
+			freeMem(dateStamp);
+			}
 		    showConstraints(wDS, fh);
 		    fprintf (fh, "variableStep chrom=%s span=%u\n",
 			chrom, span);
@@ -1889,6 +1921,7 @@ if (wDS->ascii)
 		else
 		    fprintf (fh, "%u\t%g\n", data->chromStart + 1, data->value);
 		++data;
+		++linesOut;
 		}
 	    }
 	}
@@ -1902,6 +1935,8 @@ else
 	}
     }
 carefulClose(&fh);
+
+return (linesOut);
 }	/*	static void asciiOut()	*/
 
 void destroyWigDataStream(struct wiggleDataStream **wDS)
@@ -1957,6 +1992,7 @@ wds->sortResults = sortResults;
 wds->asciiToDataArray = asciiToDataArray;
 wds->getDataViaBed = getDataViaBed;
 wds->getData = getData;
+wds->maxOutput = 0;
 return wds;
 }
 
