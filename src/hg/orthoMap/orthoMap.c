@@ -14,7 +14,7 @@
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.6 2003/08/10 06:37:55 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.7 2003/08/10 22:31:38 sugnet Exp $";
 static boolean doHappyDots;   /* output activity dots? */
 static struct rbTree *netTree = NULL;
 static struct optionSpec optionSpecs[] = 
@@ -425,7 +425,17 @@ bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 AllocArray(bed->chromStarts, psl->blockCount);
 AllocArray(bed->blockSizes, psl->blockCount);
 if (bed->score < 0) bed->score = 0;
-strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+if(chain->qStrand == '+')
+    strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+else
+    {
+    if(psl->strand[0] == '+')
+	strncpy(bed->strand,  "-", sizeof(bed->strand));
+    else if(psl->strand[0] == '-')
+	strncpy(bed->strand,  "+", sizeof(bed->strand));
+    else
+	errAbort("Don't recognize strand %s from psl %s", psl->strand, psl->qName);
+    }
 chainFree(&toFree);
 *pBed = bed;
 }
