@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.34 2004/09/01 00:17:30 sugnet Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.35 2004/10/18 19:33:17 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -399,8 +399,11 @@ for (i=0; i<size; ++i)
        c = ' ';
     else if (b <= 9)
        c = b + '0';
-    else
+    else if (b % 3)
+        /* multiple of 3 gap */
        c = '+';
+    else
+       c = '*';
     insertLine[i] = c;
     }
 }

@@ -22,7 +22,7 @@
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.141 2004/09/26 07:59:12 kent Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.142 2004/10/18 19:33:17 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -771,6 +771,7 @@ char *species[100];
 int speciesCt = chopLine(speciesOrder, species);
 int i;
 char option[64];
+
 //#define CODON_HIGHLIGHT
 #ifdef CODON_HIGHLIGHT
 char *currentCodonMode;
@@ -784,13 +785,15 @@ for (i = 0; i < speciesCt; i++)
     puts("<TD>");
     safef(option, sizeof(option), "%s.%s", tdb->tableName, species[i]);
     cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
-    printf ("%s<br>", species[i]);
+    printf ("%s<BR>", species[i]);
     puts("</TD>");
     }
 puts("</TR></TABLE><BR>");
 
+puts("<B>Display dot for bases identical to reference:</B>" );
+cgiMakeCheckBox(MAF_DOT_VAR, cartCgiUsualBoolean(cart, MAF_DOT_VAR, FALSE));
 
-puts("<p><b>Base-level codon highlighting:</b></p>" );
+puts("<P><B>Base-level codon highlighting:</B></P>" );
 
 #ifdef CODON_HIGHLIGHT
 
@@ -813,15 +816,16 @@ genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
 puts ("&nbsp; Alternate colors every");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases<br>");
+puts ("bases<BR>");
 snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
                         BASE_COLORS_OFFSET_VAR);
 puts ("&nbsp; Offset alternate colors by");
 cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases<br>");
+puts ("bases<BR>");
 #endif
 
-puts("<p><b>Multiple alignment:</b>" );
+
+puts("<P><B>Multiple alignment:</B>" );
 wigUi(tdb);
 }
 
