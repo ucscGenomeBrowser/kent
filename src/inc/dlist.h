@@ -106,11 +106,11 @@ int dlCount(struct dlList *list);
 boolean dlEmpty(struct dlList *list);
 /* Return TRUE if list is empty. */
 
-struct dlNode *dlGetStart(struct dlList *list);
-/* The the node before the start of the list */
+struct dlNode *dlGetBeforeHead(struct dlList *list);
+/* Get the node before the head of the list */
 
-struct dlNode *dlGetEnd(struct dlList *list);
-/* The the node after the end of the list */
+struct dlNode *dlGetAfterTail(struct dlList *list);
+/* Get the node after the tail of the list */
 
 void dlSort(struct dlList *list, int (*compare )(const void *elem1,  const void *elem2));
 /* Sort a doubly linked list with Qsort and a temporary array. 
