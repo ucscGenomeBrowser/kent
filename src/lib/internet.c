@@ -12,7 +12,7 @@ bits32 ret;
 hostent = gethostbyname(hostName);
 if (hostent == NULL)
     {
-    warn("Couldn't find host %s. h_errno %d (%s)", hostName, h_errno, hstrerror(h_errno));
+    warn("Couldn't find host %s. h_errno %d", hostName, h_errno);
     return 0;
     }
 memcpy(&ret, hostent->h_addr_list[0], sizeof(ret));
