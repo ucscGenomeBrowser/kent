@@ -596,11 +596,11 @@ SEQ2_LEN=$BASE/S2.len
 
   ssh kolossus
   cd /cluster/data/bosTau1/bed/blastz/axtChain
-  /cluster/bin/i386/netClass -noAr noClass.net hg17 bosTau1 hg17.new.net
+  /cluster/bin/i386/netClass -noAr noClass.net hg17 bosTau1 bosTau1.new.net
 
   ssh hgwdev
   cd /cluster/data/bosTau1/bed/blastz/axtChain
-  /cluster/bin/i386/netFilter -minGap=10 hg17.net | /cluster/bin/i386/hgLoadNet hg17 netBosTau1 stdin
+  /cluster/bin/i386/netFilter -minGap=10 bosTau1.new.net | /cluster/bin/i386/hgLoadNet hg17 netBosTau1 stdin
 
 
 # SWAP and REMAKE NET 
@@ -623,9 +623,9 @@ SEQ2_LEN=$BASE/S2.len
 
     ssh hgwdev
     cd /cluster/data/bosTau1/bed/blastz.swap/axtChain
-    /cluster/bin/i386/netClass -noAr noClass.net bosTau1 hg17 bosTau1.net (WORKING HERE)
-    rm noClass.net
-    /cluster/bin/i386/netFilter -minGap=10 bosTau1.net | /cluster/bin/i386/hgLoadNet bosTau1 netHg17 stdin
+    /cluster/bin/i386/netClass -noAr noClass.net bosTau1 hg17 hg17.net 
+    rm noClass.net (need to do this)
+    /cluster/bin/i386/netFilter -minGap=10 hg17.net | /cluster/bin/i386/hgLoadNet bosTau1 netHg17 stdin 
     /cluster/bin/i386/hgLoadChain -tIndex bosTau1 chainHg17 all.chain
     rm chain.tab link.tab
 
@@ -752,4 +752,20 @@ SEQ2_LEN=$BASE/S2.len
   hgsql bosTau1 -e 'drop index tName_2 on all_mrna'
   hgsql bosTau1 -e 'drop index tname_3 on all_mrna'
   hgsql bosTau1 -e 'create index tName on all_mrna(tName(16))'
+
+# MAKE VSHG17 DOWNLOADABLES (DONE Dec. 15, 2004 Heather)
+    ssh kksilo
+    cd /cluster/data/bosTau1/bed/blastz.swap/axtChain
+    nice gzip all.chain
+    nice gzip hg17.net
+    cd ../axtNet
+    nice gzip all.axt
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17
+    cd /usr/local/apache/htdocs/goldenPath/bosTau1/vsHg17
+    cp -p /cluster/data/bosTau1/bed/blastz.swap/axtChain/all.chain.gz  human.chain.gz
+    cp -p /cluster/data/bosTau1/bed/blastz.swap/axtChain/hg17.net.gz human.net.gz
+    cp -p /cluster/data/bosTau1/bed/blastz.swap/axtNet/all.axt.gz human.axt.gz
+    # Make a README.txt which explains the files & formats.
+    md5sum *.gz */*.gz > md5sum.txt
 
