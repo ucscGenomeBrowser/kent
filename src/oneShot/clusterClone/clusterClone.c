@@ -7,13 +7,11 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: clusterClone.c,v 1.2 2004/06/16 23:59:05 hiram Exp $";
+static char const rcsid[] = "$Id: clusterClone.c,v 1.3 2004/06/17 21:40:33 hiram Exp $";
 
-char *chr = (char *)NULL;	/*	process the one chromosome listed */
 float minCover = 50.0;		/*	percent coverage to count hit */
 
 static struct optionSpec options[] = {
-   {"chr", OPTION_STRING},
    {"minCover", OPTION_FLOAT},
    {NULL, 0},
 };
@@ -26,9 +24,8 @@ errAbort(
   "usage:\n"
   "   clusterClone [options] <file.psl>\n"
   "options:\n"
-  "   -chr=<chrN> - process only this one chrN from the file\n"
-  "   -minCover=P - minimum P percent coverage to count an alignment\n"
-  "   -verbose=N - set verbose level N"
+  "   -minCover=P - minimum P percent coverage to count an alignment (default 50.0)\n"
+  "   -verbose=N - set verbose level N (3: everything, 2: important stuff)"
   );
 }
 
@@ -36,13 +33,15 @@ struct coordEl
 /* a pair of coordinates in a list */
     {
     struct coordEl *next;
+    char * name;
     unsigned start;
     unsigned end;
     unsigned qSize;
+    int strand;	/* 1 = +   0 = -	*/
     };
 
 static void processResult(struct hash *chrHash, struct hash *coordHash,
-	char *accName)
+	char *accName, unsigned querySize)
 {
 struct hashCookie cookie;
 struct hashEl *hashEl;
@@ -66,14 +65,14 @@ double variance;
 double stddev;
 unsigned median;
 unsigned mean;
-unsigned querySize = 0;
+int strandSum;
 
 /*	find highest count chrom name */
 cookie=hashFirst(chrHash);
 while ((hashEl = hashNext(&cookie)) != NULL)
     {
     int count = ptToInt(hashEl->val);
-verbose(1,"# chr%s %d\n", hashEl->name, count);
+verbose(2,"# chr%s %d\n", hashEl->name, count);
     if (count >= highCount)
 	{
 	secondHighest = highCount;
@@ -88,30 +87,27 @@ verbose(1,"# chr%s %d\n", hashEl->name, count);
 	highName = cloneString(hashEl->name);
 	}
     }
-verbose(1,"# chr%s %d highest count, next: %s %d\n", highName, highCount, secondHighestName, secondHighest);
+verbose(2,"# chr%s %d highest count, next: %s %d\n", highName, highCount, secondHighestName, secondHighest);
 if (highCount == secondHighest)
     {
-verbose(1,"# chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
+verbose(2,"# chr%s %d highest count, next: %s %d  TIE *\n", highName, highCount, secondHighestName, secondHighest);
     }
 
 /*	for that highest count chrom, examine its coordinates, find high
  *	and low */
 coords = hashLookup(coordHash, highName);
 
-if (coords)
-    coordListPt = coords->val;
-else
-    coordListPt = NULL;
+if (coords) coordListPt = coords->val;
+else coordListPt = NULL;
 
-if (coordListPt)
-    coord = *coordListPt;
-else
-    coord = NULL;
+if (coordListPt) coord = *coordListPt;
+else coord = NULL;
 
 coordCount = 0;
 sum = 0.0;
 sumData = 0.0;
 sumSquares = 0.0;
+strandSum = 0;
 while (coord != NULL)
     {
     double midPoint;
@@ -120,10 +116,10 @@ while (coord != NULL)
     midPoint = (double) coord->start +
 	(double)(coord->end - coord->start) / 2.0;
     sum += midPoint;
+    strandSum += coord->strand;
     sumData += midPoint;
     sumSquares += midPoint * midPoint;
-    querySize = coord->qSize;
-    verbose(1,"# %d %u - %u %u\n", ++coordCount, coord->start, coord->end, coord->qSize);
+    verbose(2,"# %d %s %u - %u %u %c\n", ++coordCount, coord->name, coord->start, coord->end, coord->qSize, (coord->strand == 1) ? '+' : '-');
     coord = coord->next;
     }
 range = highMark - lowMark;
@@ -143,7 +139,7 @@ if (coordCount > 0)
 	    stddev = sqrt(variance);
 	}
     usStdDev = (unsigned) stddev;
-    verbose(1,"# range: %u:%u = %u,   Mean: %u, stddev: %u\n", lowMark, highMark, range, mean, usStdDev);
+    verbose(2,"# range: %u:%u = %u,   Mean: %u, stddev: %u\n", lowMark, highMark, range, mean, usStdDev);
     midPoints = (double *) needMem(coordCount * sizeof(double));
 
     coordListPt = coords->val;
@@ -156,12 +152,16 @@ if (coordCount > 0)
 	coord = coord->next;
 	}
     median = (unsigned) doubleMedian(coordCount, midPoints);
-    verbose(1,"# Median: %u implies %u-%u\n", median,
-	median - (querySize/2), median+(querySize/2));
-    printf("chr%s\t%u\t%u\t%s\n", highName,
+    verbose(2,"# qSize: %u, Median: %u implies %u-%u %s\n", querySize, median,
 	median - (querySize/2), median+(querySize/2), accName);
-    } else {
-    verbose(1,"# ERROR - no coordinates found ?\n");
+    printf("chr%s\t%u\t%u\t%s\t%c\n", highName,
+	median - (querySize/2), median+(querySize/2), accName,
+	strandSum > (coordCount/2) ? '+' : '-');
+    freeMem(midPoints);
+    }
+else
+    {
+    printf("# ERROR - no coordinates found ? %s\n", highName);
     }
 
 /*	free the chrom coordinates lists	*/
@@ -169,12 +169,21 @@ cookie=hashFirst(chrHash);
 while ((hashEl = hashNext(&cookie)) != NULL)
     {
     coords = hashLookup(coordHash, hashEl->name);
-    if (coords)
+
+    if (coords) coordListPt = coords->val;
+    else coordListPt = NULL;
+
+    if (coordListPt) coord = *coordListPt;
+    else coord = NULL;
+
+    while (coord != NULL)
 	{
-	coordListPt = coords->val;
-	if (coordListPt)
-	    slFreeList(coordListPt);
+	freeMem(coord->name);
+	coord = coord->next;
     	}
+
+    if (coordListPt)
+	slFreeList(coordListPt);
     }
 freeMem(highName);
 }
@@ -188,12 +197,15 @@ for (i=1; i < argc; ++i)
     struct lineFile *lf;
     struct psl *psl;
     unsigned tSize;
+    char *prevAccPart = (char *)NULL;
     char *prevAccName = (char *)NULL;
     struct hashEl *el;
     struct hash *chrHash = newHash(0);
     struct hash *coordHash = newHash(0);
     struct coordEl *coord;
     struct coordEl **coordListPt = (struct coordEl **) NULL;
+    unsigned querySize = 0;
+    int partCount = 0;
 
     verbose(2,"#\tprocess: %s\n", argv[i]);
     lf=pslFileOpen(argv[i]);
@@ -205,6 +217,11 @@ for (i=1; i < argc; ++i)
 	double percentCoverage;
 
 	accName = cloneString(psl->qName);
+	if ((char *)NULL == prevAccPart)
+	    {
+	    prevAccPart = cloneString(psl->qName);  /* first time */
+	    querySize = psl->qSize;
+	    }
 	chopSuffixAt(accName,'_');
 
 	if ((char *)NULL == prevAccName)
@@ -215,18 +232,28 @@ for (i=1; i < argc; ++i)
 	 */
 	if (differentWord(accName, prevAccName))
 	    {
-	    processResult(chrHash, coordHash, prevAccName);
+	    if (partCount > 0)
+		processResult(chrHash, coordHash, prevAccName, querySize);
+	    else
+		printf("# ERROR - no coordinates found ? %s\n", prevAccName);
 	    freeMem(prevAccName);
 	    prevAccName = cloneString(accName);
 	    freeHash(&chrHash);
 	    freeHash(&coordHash);
 	    chrHash = newHash(0);
 	    coordHash = newHash(0);
+	    querySize = 0;
+	    partCount = 0;
 	    }
 
 	tSize = psl->tEnd - psl->tStart;
 	percentCoverage = 100.0*((double)(tSize+1)/(psl->qSize + 1));
-
+	if (differentWord(psl->qName, prevAccPart))
+	    {
+	    querySize += psl->qSize;
+	    freeMem(prevAccPart);
+	    prevAccPart = cloneString(psl->qName);
+	    }
 
 	chrName = cloneString(psl->tName);
 	stripString(chrName, "chr");
@@ -243,17 +270,16 @@ for (i=1; i < argc; ++i)
 	    el->val=intToPt(chrCount);
 	    }
 
-	verbose(1,"# %s\t%u\t%u\t%u\t%.4f\t%d %s:%d-%d\n",
-	    psl->qName, psl->qSize, tSize, tSize - psl->qSize,
-	    percentCoverage, chrCount, psl->tName, psl->tStart, psl->tEnd);
-
 	AllocVar(coord);
 	coord->start = psl->tStart;
 	coord->end = psl->tEnd;
 	coord->qSize = psl->qSize;
+	coord->strand = sameWord(psl->strand,"+") ? 1 : 0;
 	/*	when coverage is sufficient	*/
 	if (percentCoverage > minCover)
 	    {
+	    ++partCount;
+	    coord->name = cloneString(psl->qName);
 	    /*	for each chrom name, accumulate a list of coordinates */
 	    el = hashLookup(coordHash, chrName);
 	    if (el == NULL)
@@ -266,12 +292,25 @@ for (i=1; i < argc; ++i)
 		coordListPt = el->val;
 		}
 	    slAddHead(coordListPt,coord);
+	verbose(2,"# %s\t%u\t%u\t%u\t%.4f\t%d %s:%d-%d %s\n",
+	    psl->qName, psl->qSize, tSize, tSize - psl->qSize,
+	    percentCoverage, chrCount, psl->tName, psl->tStart, psl->tEnd,
+	    psl->strand);
 	    }
+	else
+	    {
+	verbose(3,"# %s\t%u\t%u\t%u\t%.4f\t%d %s:%d-%d %s\n",
+	    psl->qName, psl->qSize, tSize, tSize - psl->qSize,
+	    percentCoverage, chrCount, psl->tName, psl->tStart, psl->tEnd,
+	    psl->strand);
+	    }
+
 
 	freeMem(accName);
 	freeMem(chrName);
 	pslFree(&psl);
 	}
+	processResult(chrHash, coordHash, prevAccName, querySize);
     lineFileClose(&lf);
     }
 }
@@ -284,11 +323,9 @@ optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
 
-chr = optionVal("chr", NULL);
 minCover = optionFloat("minCover", 50.0);
 
-if (chr)
-    verbose(1,"#\tprocess chrom: %s\n", chr);
+verbose(2,"#\tminCover: %% %g\n", minCover);
 
 clusterClone(argc, argv);
 
