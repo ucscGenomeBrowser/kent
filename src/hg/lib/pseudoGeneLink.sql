@@ -12,12 +12,6 @@ CREATE TABLE pseudoGeneLink (
     name varchar(255) not null,	# Name of pseudogene
     score int unsigned not null,	# score of pseudogene with gene
     strand varchar(255) not null,	# strand of pseudoegene
-    thickStart int unsigned not null,	# Start of where display should be thick (start codon)
-    thickEnd int unsigned not null,	# End of where display should be thick (stop codon)
-    reserved int unsigned not null,	# Always zero for now
-    blockCount int not null,	# Number of blocks
-    blockSizes longblob not null,	# Comma separated list of block sizes
-    chromStarts longblob not null,	# Start positions relative to chromStart
     assembly varchar(255) not null,	# assembly for gene
     geneTable varchar(255) not null,	# mysql table of gene
     gene varchar(255) not null,	# Name of gene
@@ -39,7 +33,19 @@ CREATE TABLE pseudoGeneLink (
     qReps int unsigned not null,	# repeats in pseudogene
     overlapDiag int unsigned not null,	# bases on the diagonal to mouse
     coverage int unsigned not null,	# bases on the diagonal to mouse
+    label int unsigned not null,	# 1=pseudogene,-1 not pseudogene
+    milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome
     chainId int unsigned not null,	# chain id of gene/pseudogene alignment
+    refSeq varchar(255) not null,	# Name of closest regSeq to gene
+    rStart int unsigned not null,	# refSeq alignment start position
+    rEnd int unsigned not null,	# refSeq alignment end position
+    mgc varchar(255) not null,	# Name of closest mgc to gene
+    mStart int unsigned not null,	# mgc alignment start position
+    mEnd int unsigned not null,	# mgc alignment end position
+    kgName varchar(255) not null,	# Name of closest knownGene to gene
+    kStart int unsigned not null,	# kg alignment start position
+    kEnd int unsigned not null,	# kg alignment end position
+    kgId int unsigned not null,	# kg id
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
     INDEX (name(8))
