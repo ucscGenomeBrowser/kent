@@ -87,6 +87,7 @@ static struct optionSpec optionSpecs[] =
     {"exonStats", OPTION_STRING},
     {"spreadSheet", OPTION_STRING},
     {"doSjRatios", OPTION_BOOLEAN},
+    {"log2Ratio", OPTION_BOOLEAN},
     {"ratioFile", OPTION_STRING},
     {NULL, 0}
 };
@@ -109,6 +110,7 @@ static char *optionDescripts[] =
     "File to output confirming exon stats to.",
     "File to output spreadsheet format picks to.",
     "[optional] Calculate ratios of sj to other sj in same junction set.",
+    "[optional] Transform ratios with log base 2.",
     "[optional] File to store sjRatios in."
 };
 
@@ -969,22 +971,43 @@ for(junctIx = 0; junctIx < js->junctDupCount; junctIx++)
 return bestJunct;
 }
 
+double identity(double d) 
+/* Return d. Seems dumb but avoids a lot of if/else blocks... */
+{
+return d;
+}
+
+double log2(double d)
+/* Return log base 2 of d. */
+{
+double ld = 0;
+assert(d != 0);
+ld = log(d)/log(2);
+return ld;
+}
+
 void calcJunctSetRatios(struct junctSet *jsList, struct resultM *intenM)
 /* Caluclate the ratio of junction to every other junction in 
    the set. */
 {
 char *outFile = optionVal("ratioFile", NULL);
+boolean doLog = optionExists("log2Ratio");
 struct junctSet *js = NULL;
 int i = 0, j = 0, expIx = 0;
 int numIx = 0, denomIx = 0;
 FILE *out = NULL;
 double **mat = intenM->matrix;
 int colCount = intenM->colCount;
-
+double (*transform)(double d) = NULL;
 struct hash *nIndex = intenM->nameIndex;
 
 if(outFile == NULL)
     errAbort("Must specify a ratioFile to print ratios to.");
+
+if(doLog)
+    transform = log2;
+else
+    transform = identity;
 
 out = mustOpen(outFile, "w");
 /* Print the header. */
@@ -1014,9 +1037,9 @@ for(js = jsList; js != NULL; js = js->next)
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
 		assert(pow(2,mat[denomIx][expIx]) != 0);
-		fprintf(out, "%f\t", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
+		fprintf(out, "%f\t", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 		}
-	    fprintf(out, "%f\n", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
+	    fprintf(out, "%f\n", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 	    }
 	/* Calc ratios for the dup probe sets. */
 	for(j = 0; j < dCount; j++)
@@ -1028,9 +1051,9 @@ for(js = jsList; js != NULL; js = js->next)
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
 		assert(pow(2,mat[denomIx][expIx]) != 0);
-		fprintf(out, "%f\t", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
+		fprintf(out, "%f\t", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 		}
-		fprintf(out, "%f\n", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
+		fprintf(out, "%f\n", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 	    }
 	}
     
@@ -1051,9 +1074,9 @@ for(js = jsList; js != NULL; js = js->next)
 	    for(expIx = 0; expIx < colCount - 1; expIx++)
 		{
 		assert(pow(2,mat[denomIx][expIx]) != 0);
-		fprintf(out, "%f\t", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
+		fprintf(out, "%f\t", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 		}
-	    fprintf(out, "%f\n", pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx]));
+	    fprintf(out, "%f\n", transform(pow(2,mat[numIx][expIx]) / pow(2,mat[denomIx][expIx])) );
 	    }
 	}
     }
