@@ -103,6 +103,18 @@ format description of their fields.</P>
   <LI><A 
   href="#GpInfo">chrN_gold</A> 
   - Instructions on creating golden path from fragments 
+<LI><A 
+  href="#wiggleTrack">chrN_humMusL</A> 
+  - Human/Mouse Evolutionary Conservation Scores 
+<LI><A 
+  href="#wiggleTrack">chrN_zoom2500_humMusL</A> 
+  - Human/Mouse Evolutionary Conservation Scores (medium scale)
+<LI><A 
+  href="#wiggleTrack">chrN_zoom50_humMusL</A> 
+  - Human/Mouse Evolutionary Conservation Scores (large scale)
+<LI><A 
+  href="#wiggleTrack">chrN_zoom1_humMusL</A> 
+  - Human/Mouse Evolutionary Conservation Scores (very large scale)
   <LI><A 
   href="#PslInfo">chrN_mrna</A> 
   - mRNA alignments 
@@ -1014,6 +1026,36 @@ Last used Apr. 2001.
     ubyte   isPsuedo;     "TRUE(1) if psuedo, FALSE(0) otherwise"
     )                                                                           
 </PRE>
+
+<H3><A name=wiggleTrack></A>Sample tracks for plotting real-valued data</H3>
+The following definition is used for: chrN_humMusL, chrN_zoom2500_humMusL, 
+chrN_zoom50_humMusL, chrN_zoom1_humMusL
+<PRE>table sample9
+"Describes (x,y) pairs of samples"
+    ushort bin;           "A field to speed indexing added to many
+                           tables August 2001"
+    string  chrom;        "Chromosome alignment is on."
+    uint    chromStart;   "Start position in chromosome"
+    uint    chromEnd;     "End position in chromosome"
+    string  name;         "Unique index given to each block of samples"
+    uint    score;        "Overall block score from 0 to 1000 (chrN_humMusL only)"
+    char[1] strand;       "Strand: + or -"
+    uint    sampleCount   "Number of samples in this block"
+    uint[sampleCount]   samplePosition  "Base position of each sample in this
+                                         block, relative to chromStart"
+    uint[sampleCount]   sampleHeight    "Score for each sample (y-value) from 0 to 1000"
+</PRE>
+
+Each table entry in the chrN_humMusL is displayed as a "mountain range" on
+the browser and corresponds to one blastz alignment. The zoom tables
+chrN_zoom2500_humMusL, chrN_zoom50_humMusL, and chrN_zoom1_humMusL are
+summarized versions  (taking the MAXIMUM value in each bin) of the chrN_humMusL table. 
+The zoom1 table is best for looking at the genome on very large scales and the zoom2500 table
+is better when zoomed in further but not close enough for the actual
+data. The sampleHeights can be converted into floating point valued 
+L-scores with the formula: L = 8.0 * X / 1000.0 for sampleHeight X.
+
+    
 
 <H3><A name=SangerExtra></A>Additional information about a Sanger 20 or 22 gene</H3>
 <PRE>table sanger22extra
