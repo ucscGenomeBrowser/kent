@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.781 2004/08/24 19:32:43 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.782 2004/08/24 21:05:59 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -137,7 +137,7 @@ static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 static char *ctFileName = NULL;	/* Custom track file. */
 
-int gfxBorder = 1;		/* Width of graphics border. */
+int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
 int leftLabelX;			/* Start of area to draw left labels on. */
@@ -304,7 +304,7 @@ font = tl.font = mgSmallFont();
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "N");
 tl.fontHeight = mgFontLineHeight(font);
-tl.leftLabelWidth = 120;
+tl.leftLabelWidth = hgDefaultLeftLabelWidth;
 tl.picWidth = hgDefaultPixWidth;
 setPicWidth(cartOptionalString(cart, "pix"));
 }
