@@ -30,6 +30,8 @@ struct junctionSet
     int maxJunctDupCount;       /* Maximum size of bedDupArray. */
     struct bed **bedDupArray;   /* Redundant beds in the cluster. */
     boolean merged;             /* Has this set been merged? */
+    boolean cassette;           /* Is this junctionSet a cassette exon. */
+    char *exonPsName;           /* Name of exon probe set if available for cassette. */
 };
 
 static struct optionSpec optionSpecs[] = 
@@ -41,6 +43,7 @@ static struct optionSpec optionSpecs[] =
     {"exonFile", OPTION_STRING},
     {"genePSet", OPTION_STRING},
     {"geneMap", OPTION_STRING},
+    {"altExonFile", OPTION_STRING},
     {"db", OPTION_STRING},
     {"ctFile", OPTION_STRING},
     {"ctName", OPTION_STRING},
@@ -58,6 +61,7 @@ static char *optionDescripts[] =
     "File containing beds with exons that can't be used (i.e. transcription start or end).",
     "File containing list of gene probe sets.",
     "File containing a map of affy ids to human names for genes.",
+    "Map of junctions to exon probesets that overlap, cassette exon probe sets.",
     "File database that coordinates correspond to.",
     "File that custom track will end up in.",
     "Name of custom track.",
@@ -197,9 +201,13 @@ for(i = 0; i < js->junctDupCount - 1; i++)
     fprintf(out, "%s,", js->bedDupArray[i]->name);
     }
 if(js->junctDupCount == 0)
-    fprintf(out, "NA\n");
+    fprintf(out, "NA\t");
 else
-    fprintf(out, "%s\n", js->bedDupArray[i]->name);
+    fprintf(out, "%s\t", js->bedDupArray[i]->name);
+if(js->cassette)
+    fprintf(out, "%d\t%s\n", js->cassette, js->exonPsName);
+else
+    fprintf(out, "0\tNA\n");
 }
 
 struct junctionSet *findEndSets(struct bed *bedList)
@@ -450,7 +458,50 @@ for(i = 0; i < end->junctCount; i++)
 return set;
 }
 
-struct junctionSet* mergeSetLists(struct junctionSet *starts, struct junctionSet *ends)
+char *nameOfCassExonPs(struct junctionSet *set, struct hash *altExons)
+/* Find the name of the appropriate cassette exon probe set or 'NA' if 
+   not available. */
+{
+char **names = NULL;
+int nameCount = 0;
+int junctIx = 0, i = 0, j = 0;
+int count = 0;
+char *exonPs = NULL;
+nameCount = set->junctCount+set->junctDupCount;
+AllocArray(names, nameCount);
+/* Loop through the junctions and get the names for 
+   any associated exon probe sets. */
+for(junctIx = 0; junctIx < set->junctCount; junctIx++)
+    names[junctIx] = hashFindVal(altExons, set->bedArray[junctIx]->name);
+count = junctIx; /* remember our offset in the names array. */
+for(junctIx = 0; junctIx < set->junctDupCount; junctIx++)
+    names[junctIx+count] = hashFindVal(altExons, set->bedDupArray[junctIx]->name);
+
+/* Now make sure that the names are all the same. */
+for(i = 0; i < nameCount; i++)
+    {
+    if(names[i] == NULL)
+	continue;
+    exonPs = names[i];
+    for(j = i+1; j < nameCount; j++)
+	{
+	if(names[j] != NULL && differentString(names[i], names[j]))
+	    {
+	    i = nameCount;
+	    exonPs = NULL;
+	    break;
+	    }
+	}
+    }
+if(exonPs == NULL)
+    exonPs = cloneString("NA");
+else
+    exonPs = cloneString(exonPs);
+freez(&names);
+return exonPs;
+}
+
+struct junctionSet* mergeSetLists(struct junctionSet *starts, struct junctionSet *ends, struct hash *altExons)
 /* Try to merge sets that have the same probes in both junctions.
    Don't want to count cassette exons twice for example (as they will
    have a set in both the starts and the ends). Also want to keep track
@@ -476,6 +527,8 @@ for(jsStart = starts; jsStart != NULL; jsStart = jsNext)
 	    if(formCassetteExon(jsStart, jsEnd))
 		{
 		merged = mergeSets(jsStart, jsEnd);
+		merged->cassette = TRUE;
+		merged->exonPsName = nameOfCassExonPs(merged, altExons);
 		slAddHead(&mergedList, merged);
 		jsStart->merged = TRUE;
 		jsEnd->merged = TRUE;
@@ -552,6 +605,20 @@ while(lineFileNextReal(lf, &string))
 lineFileClose(&lf);
 }
 
+void populateSjAltExonMapHash(struct hash *hash, char *altExonMapFile)
+/* Create a hash that maps splice juction probe sets to the
+   cassette exons they overlap. */
+{
+struct lineFile *lf = NULL;
+char *row[2]; 
+lf = lineFileOpen(altExonMapFile, TRUE);
+while(lineFileNextRowTab(lf, row, 2))
+    {
+    hashAdd(hash, row[0], cloneString(row[1]));
+    }
+lineFileClose(&lf);
+}
+
 void populateGeneMapHash(struct hash *hash, char *geneMapFile)
 /* Create a hash that contains gene probeMap names indexed by their
    GXXXXXX identifier. */
@@ -616,13 +683,17 @@ struct bed *bed = NULL, *bedList = NULL;
 struct junctionSet *starts = NULL, *ends = NULL, *merged = NULL, *js = NULL;
 FILE *out = mustOpen(setFile, "w");
 char *exonFile = optionVal("exonFile", NULL);
+char *altExonMapFile = optionVal("altExonFile", NULL);
 int totalCount = 0;
 struct hash *geneSetHash = newHash(12);
 struct hash *geneMapHash = newHash(12);
+struct hash *sjToAltExHash = newHash(12);
 warn("Reading beds.");
 bedList = bedLoadAll(bedFile);
 populateGeneSetHash(geneSetHash, geneSetFile);
 populateGeneMapHash(geneMapHash, geneMapFile);
+if(altExonMapFile != NULL)
+    populateSjAltExonMapHash(sjToAltExHash, altExonMapFile);
 if(exonFile != NULL)
     loadSoftExons(exonFile);
 warn("Clustering starts.");
@@ -630,7 +701,7 @@ starts = findStartSets(bedList);
 warn("Clustering ends.");
 ends = findEndSets(bedList); 
 warn("Merging clusters.");
-merged = mergeSetLists(starts, ends); 
+merged = mergeSetLists(starts, ends, sjToAltExHash); 
 for(js = merged; js != NULL; js = js->next)
     {
     int i;
