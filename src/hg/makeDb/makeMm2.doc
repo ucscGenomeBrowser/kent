@@ -1025,11 +1025,11 @@ SGP GENE PREDICTIONS (done)
      hgPepPred mm2 generic sgpPep download/*.prot
 
 
-TIGR GENE INDEX (done 7/1/02)
+TIGR GENE INDEX (DONE 7/1/02; reloaded with new data 12/18/02)
     mkdir -p ~/mm2/bed/tigr
     cd ~/mm2/bed/tigr
-    wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_MouseGenome_Feb2002.tgz
-    gunzip -c TGI_track_MouseGenome_Feb2002.tgz | tar xvf -
+    wget ftp://ftp.tigr.org/private/NHGI_mgi_jiashu/TGI_track_MouseGenome_Nov2002.tgz
+    gunzip -c TGI*.tgz | tar xvf -
     foreach f (*cattle*)
       set f1 = `echo $f | sed -e 's/cattle/cow/g'`
       mv $f $f1
