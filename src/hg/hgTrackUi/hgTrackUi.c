@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.62 2003/06/19 12:38:24 weber Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.63 2003/06/21 00:00:09 baertsch Exp $";
 
 struct cart *cart;	/* Cookie cart with UI settings */
 char *database;		/* Current database. */
@@ -395,7 +395,7 @@ void specificUi(struct trackDb *tdb)
 		 sameString( track, "hg15Mm3L" ))
 		humMusUi(tdb,7);
 else if (startsWith("blastz", track))
-    colorCrossSpeciesUi(tdb, FALSE);
+    colorCrossSpeciesUi(tdb, TRUE);
 else if (sameString(track, "aarMm2"))
     colorCrossSpeciesUi(tdb, FALSE);
 else if (sameString(track, "orthoTop4"))
