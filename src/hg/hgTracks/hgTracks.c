@@ -2235,7 +2235,7 @@ if (nameGetsPos)
     snprintf(buf, sizeof(buf), "%s:%d-%d %s:%d-%d", psl->qName, psl->qStart, psl->qEnd,
     	psl->tName, psl->tStart, psl->tEnd);
     lf->extra = cloneString(buf);
-    snprintf(lf->name, sizeof(lf->name), "%s %dk", psl->qName, psl->qStart/1000);
+    snprintf(lf->name, sizeof(lf->name), "%s %s %dk", psl->qName, psl->strand, psl->qStart/1000);
     snprintf(lf->popUp, sizeof(lf->popUp), "%s:%d-%d score %9.0f", psl->qName, psl->qStart, psl->qEnd, lf->score);
     }
 else
