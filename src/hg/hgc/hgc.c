@@ -138,7 +138,7 @@
 #include "zdobnovSynt.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.633 2004/05/19 15:04:22 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.634 2004/05/19 21:36:33 sugnet Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13498,7 +13498,8 @@ if(differentString(tdb->tableName, "altGraphXPsb2004"))
     {
     struct altGraphX *copy = altGraphXClone(ag);
     altGraphXEnlargeExons(copy);
-    printf("Alt-Splicing drawn with exons enlarged.<br>");
+    printf("<br>Alt-Splicing drawn with exons enlarged.<br>\n");
+    printf("(scaled by the ratio of the biggest intron to smallest exon).<br>");
     image = altGraphXMakeImage(tdb,copy);
     freez(&image);
     altGraphXFree(&copy);
