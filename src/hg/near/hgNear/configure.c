@@ -12,7 +12,7 @@
 #include "web.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.24 2003/09/11 05:31:19 kent Exp $";
+static char const rcsid[] = "$Id: configure.c,v 1.25 2003/09/12 08:06:15 kent Exp $";
 
 static char *onOffString(boolean on)
 /* Return "on" or "off". */
@@ -178,7 +178,7 @@ struct userSettings *colUserSettings()
 /* Return userSettings object for columns. */
 {
 struct userSettings *us = userSettingsNew(cart, 
-	"Save Current Column Configuration",
+	"Current Column Configuration",
 	savedCurrentConfName, colSaveSettingsPrefix);
 userSettingsCapturePrefix(us, colConfigPrefix);
 userSettingsCaptureVar(us, colOrderVar);
@@ -229,6 +229,9 @@ hPrintf("</TD><TD>");
 hPrintf("&nbsp;");
 hPrintf("</TD><TD>");
 cgiMakeButton(defaultConfName, "Default Settings");
+hPrintf("</TD><TD>");
+cgiMakeButton("submit", "Submit");
+hPrintf("</TD></TR></TABLE>");
 hPrintf("</TD></TR></TABLE>");
 configTable(colList, conn);
 hPrintf("</FORM>");

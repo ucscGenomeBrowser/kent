@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.3 2003/09/07 19:28:31 kent Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.4 2003/09/12 08:06:15 kent Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -155,13 +155,13 @@ struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
 /* Start form/save session/print title. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
 cartSaveSession(us->cart);
-hPrintf("<H2>%s</H2>\n", us->formTitle);
+hPrintf("<H2>Save %s</H2>\n", us->formTitle);
 
 /* Put up controls that are always there. */
 hPrintf("Please name this setup:\n");
 cartMakeTextVar(us->cart, us->nameVar, "", 16);
 hPrintf(" ");
-cgiMakeButton(us->formVar, "Submit");
+cgiMakeButton(us->formVar, "Save");
 hPrintf(" ");
 cgiMakeButton(us->formVar, "Cancel");
 
@@ -189,6 +189,34 @@ if (list != NULL)
 hPrintf("</FORM>\n");
 slFreeList(&list);
 }
+
+void userSettingsLoadForm(struct userSettings *us)
+/* Put up controls that let user name and save the current
+ * set. */
+{
+struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
+
+/* Start form/save session/print title. */
+hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
+cartSaveSession(us->cart);
+hPrintf("<H2>Load %s</H2>\n", us->formTitle);
+
+hPrintf("<TABLE><TR><TD>\n");
+hPrintf("<SELECT NAME=\"%s\" SIZE=%d>",
+    us->nameVar, slCount(list));
+printLabelList(us, list);
+hPrintf("</SELECT>");
+hPrintf("</TD><TD>");
+cgiMakeButton(us->formVar, "Load");
+hPrintf("<BR>");
+cgiMakeButton(us->formVar, "Cancel");
+hPrintf("</TD></TR></TABLE>");
+
+/* Cleanup. */
+hPrintf("</FORM>\n");
+slFreeList(&list);
+}
+
 
 static void dyStringAppendQuoted(struct dyString *dy, char *s)
 /* Append s to dyString, surrounding with quotes and escaping
@@ -236,11 +264,16 @@ char *command = cartString(cart, us->formVar);
 boolean retVal = TRUE;
 char *name = cartNonemptyString(cart, us->nameVar);
 
-if (sameWord(command, "submit") && name != NULL)
+command = trimSpaces(command);
+if (sameWord(command, "Save") && name != NULL)
     {
     char *varName = settingsVarName(us->savePrefix, name);
     saveSettings(us, varName);
     freez(&varName);
+    }
+else if (startsWith(command, "Load") && name != NULL)
+    {
+    userSettingsUseSelected(us);
     }
 else if (startsWith("Delete", command))
     {

@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.5 2003/09/09 07:33:46 kent Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.6 2003/09/12 08:06:15 kent Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -248,27 +248,45 @@ char *val = cartUsualString(cart, var, anyAllMenu[defaultOr]);
 return sameWord(val, "any");
 }
 
+struct userSettings *filUserSettings()
+/* Return userSettings object for columns. */
+{
+struct userSettings *us = userSettingsNew(cart, 
+	"Current Filter Settings", 
+	filSavedCurrentVarName, filSaveSettingsPrefix);
+userSettingsCapturePrefix(us, advFilterPrefix);
+userSettingsCapturePrefix(us, advFilterPrefixI);
+return us;
+}
+
 static void bigButtons()
 /* Put up the big clear/submit buttons. */
 {
 hPrintf("<TABLE><TR><TD>");
 cgiMakeButton(advFilterClearVarName, "Clear Filter");
-hPrintf(" ");
+hPrintf("</TD><TD>");
+cgiMakeButton(filSaveCurrentVarName, "Save Filter");
+hPrintf("</TD><TD>");
+hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", filUseSavedVarName, 
+	"Load Filter");
+if (!userSettingsAnySaved(filUserSettings()))
+    hPrintf(" DISABLED");
+hPrintf(">");
+hPrintf("</TD><TD>");
+cgiMakeButton(advFilterBrowseVarName, "Submit");
+hPrintf("</TD></TR><TR><TD COLSPAN=4>");
+hPrintf(
+"Hint: you can combine filters by copying the results of 'List Names'<BR>\n"
+"and then doing a 'Paste List' in the Name controls.<BR>");
+hPrintf("</TD></TR><TR><TD>");
 cgiMakeButton(advFilterListVarName, "List Names");
-hPrintf(" ");
-cgiMakeButton(advFilterBrowseVarName, "Browse Results");
+hPrintf("</TD><TD>");
+cgiMakeButton(advFilterListVarName, "List Proteins");
+hPrintf("</TD><TD>");
+cgiMakeButton(advFilterListVarName, "List Accessions");
+hPrintf("</TD><TD>");
+cgiMakeButton(advFilterListVarName, "List Exp ID");
 hPrintf("</TD></TR></TABLE>\n");
-}
-
-struct userSettings *filUserSettings()
-/* Return userSettings object for columns. */
-{
-struct userSettings *us = userSettingsNew(cart, 
-	"Save Current Filter Settings", 
-	filSavedCurrentVarName, filSaveSettingsPrefix);
-userSettingsCapturePrefix(us, advFilterPrefix);
-userSettingsCapturePrefix(us, advFilterPrefixI);
-return us;
 }
 
 void doAdvFilter(struct sqlConnection *conn, struct column *colList)
@@ -286,21 +304,6 @@ cartSaveSession(cart);
 
 /* Put up little table with clear all/submit */
 bigButtons();
-hPrintf("Hint: you can combine filters by copying the results of 'List Matching Names'<BR>\n"
-        "and then doing a 'Paste List' in the Name controls.<BR>");
-if (userSettingsAnySaved(us))
-    {
-    cgiMakeButton(filSaveCurrentVarName, "Save Filter");
-    hPrintf(" ");
-    userSettingsDropDown(us);
-    hPrintf(" ");
-    cgiMakeButton(filUseSavedVarName, "Use Saved Filter");
-    }
-else
-    {
-    hPrintf("It's possible to ");
-    cgiMakeButton(filSaveCurrentVarName, "Save Filter");
-    }
 
 /* See if have any to do in either first (displayed columns)
  * or second (hidden columns) pass. */
@@ -437,7 +440,6 @@ if (userSettingsProcessForm(filUserSettings()))
 void doUseSavedFilters(struct sqlConnection *conn, struct column *colList)
 /* Use indicated filter settings. */
 {
-userSettingsUseSelected(filUserSettings());
-doAdvFilter(conn, colList);
+userSettingsLoadForm(filUserSettings());
 }
 

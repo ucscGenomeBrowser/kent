@@ -613,6 +613,10 @@ void userSettingsSaveForm(struct userSettings *us);
 /* Put up controls that let user name and save the current
  * set. */
 
+void userSettingsLoadForm(struct userSettings *us);
+/* Put up controls that let user name and save the current
+ * set. */
+
 boolean userSettingsProcessForm(struct userSettings *us);
 /* Handle button press in userSettings form. 
  * If this returns TRUE then form is finished processing
