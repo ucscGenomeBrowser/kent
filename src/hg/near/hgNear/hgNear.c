@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.81 2003/09/21 04:45:45 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.82 2003/09/21 06:42:19 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -1070,15 +1070,113 @@ else
 freez(&dupe);
 }
 
+static boolean foldInOne(struct lineFile *lf, struct hash *hashOfHash)
+/* Fold in one record from ra file into hashOfHash. */
+{
+char *word, *line, *name;
+struct hash *ra;
+struct hashEl *hel;
+
+/* Get first nonempty non-comment line and make sure
+ * it contains name. */
+if (!lineFileNextReal(lf, &line))
+    return FALSE;
+word = nextWord(&line);
+if (!sameString(word, "name"))
+    errAbort("Expecting 'name' line %d of %s, got %s", 
+    	lf->lineIx, lf->fileName, word);
+name = nextWord(&line);
+if (name == NULL)
+    errAbort("Short name field line %d of %s", lf->lineIx, lf->fileName);
+
+/* Find ra hash associated with name, making up a new
+ * one if need be. */
+if ((ra = hashFindVal(hashOfHash, name)) == NULL)
+    {
+    ra = newHash(7);
+    hashAdd(hashOfHash, name, ra);
+    hashAdd(ra, "name", name);
+    }
+
+/* Fill in fields of ra hash with data up to next
+ * blank line or end of file. */
+for (;;)
+    {
+    if (!lineFileNext(lf, &line, NULL))
+        break;
+    line = skipLeadingSpaces(line);
+    if (line[0] == 0)
+        break;
+    if (line[0] == '#')
+        continue;
+    word = nextWord(&line);
+    line = skipLeadingSpaces(line);
+    if (line == NULL)
+        line = "";
+    hel = hashLookup(ra, word);
+    if (hel == NULL)
+        hel = hashAdd(ra, word, lmCloneString(ra->lm, line));
+    else
+        hel->val = lmCloneString(ra->lm, line);
+    }
+return TRUE;
+}
+
+static void foldInRa(char *fileName, struct hash *hashOfHash)
+/* Read ra's in file name and fold them into hashOfHash. */
+{
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+if (lf != NULL)
+    {
+    while (foldInOne(lf, hashOfHash))
+        ;
+    lineFileClose(&lf);
+    }
+}
+
+static struct hash *readRas(char *rootName)
+/* Read in ra in root, root/org, and root/org/database. */
+{
+char *rootDir = "hgNearData";
+struct hash *hashOfHash = newHash(10);
+char *org = cloneString(organism);
+char fileName[512];
+struct hashEl *helList, *hel;
+struct hash *raList = NULL, *ra;
+
+/* Create hash of hash. */
+subChar(org, ' ', '_');
+safef(fileName, sizeof(fileName), "%s/%s", rootDir, rootName);
+foldInRa(fileName, hashOfHash);
+safef(fileName, sizeof(fileName), "%s/%s/%s", rootDir, org, rootName);
+foldInRa(fileName, hashOfHash);
+safef(fileName, sizeof(fileName), "%s/%s/%s/%s", rootDir, org, database, rootName);
+foldInRa(fileName, hashOfHash);
+freez(&org);
+
+/* Create list of hashes. */
+helList = hashElListHash(hashOfHash);
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    ra = hel->val;
+    slAddHead(&raList, ra);
+    }
+slFreeList(&helList);
+hashFree(&hashOfHash);
+return raList;
+}
+
 struct column *getColumns(struct sqlConnection *conn)
 /* Return list of columns for big table. */
 {
 char *raName = "hgNearData/columnDb.ra";
 struct lineFile *lf = lineFileOpen(raName, TRUE);
 struct column *col, *colList = NULL;
-struct hash *raHash;
+struct hash *raList = readRas("columnDb.ra"), *raHash;
 
-while ((raHash = raNextRecord(lf)) != NULL)
+if (raList == NULL)
+    errAbort("Couldn't find anything from columnDb.ra");
+for (raHash = raList; raHash != NULL; raHash = raHash->next)
     {
     AllocVar(col);
     col->name = mustFindInRaHash(lf, raHash, "name");
