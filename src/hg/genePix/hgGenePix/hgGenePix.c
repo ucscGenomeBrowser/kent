@@ -69,11 +69,9 @@ for (image = imageList; image != NULL; image = image->next)
     int id = image->val;
     char *imageFile = genePixThumbSizePath(conn, image->val);
     printf("<TR>");
-    if (id == imageId)
-	printf("<TD BGCOLOR=\"#FFE0E0\">");
-    else
-	printf("<TD>");
-    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_PARENT>", hgGenePixCgiName(), sidUrl, hgpId, image->val);
+    printf("<TD>");
+    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\">", hgGenePixCgiName(), 
+    	sidUrl, hgpId, image->val, hgpDoImage);
     printf("<IMG SRC=\"/%s\"></A><BR>\n", imageFile);
     
     nameList = genePixGeneName(conn, id);
@@ -158,6 +156,7 @@ if (setUrl != NULL || itemUrl != NULL)
 }
 
 void doImage(struct sqlConnection *conn)
+/* Put up image page. */
 {
 int imageId = cartInt(cart, hgpId);
 struct slName *geneList = genePixGeneName(conn, imageId);
@@ -165,7 +164,7 @@ htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 printf("<A HREF=\"");
 printf("../cgi-bin/%s?%s=%d&%s=on", hgGenePixCgiName(), hgpId, imageId, hgpDoFullSized);
-printf("\">");
+printf("\" target=_PARENT>");
 printf("<IMG SRC=\"/%s\"></A><BR>\n", genePixScreenSizePath(conn, imageId));
 printf("\n");
 printCaption(conn, imageId, geneList);
@@ -173,19 +172,33 @@ htmlEnd();
 }
 
 void doControls(struct sqlConnection *conn)
+/* Put up controls pane. */
 {
 int imageId = cartInt(cart, hgpId);
 htmlSetBgColor(0xD0FFE0);
-htmStart(stdout, "do image");
-printf("database for image: %s ", genomeDbForImage(conn, imageId));
-printf("Do controls");
+htmStart(stdout, "do controls");
+printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_PARENT\" METHOD=GET>\n",
+	hgGenePixCgiName());
+printf("Image ID (1-5978): ");
+cgiMakeIntVar(hgpId,  imageId, 4);
+printf(" database: %s ", genomeDbForImage(conn, imageId));
+cgiMakeButton("submit", "submit");
+printf("</FORM>\n");
 htmlEnd();
 }
 
 void doFullSized(struct sqlConnection *conn)
+/* Put up full sized image. */
 {
+int imageId = cartInt(cart, hgpId);
+struct slName *geneList = genePixGeneName(conn, imageId);
 htmStart(stdout, "do image");
-printf("Do full sized");
+printf("<A HREF=\"");
+printf("../cgi-bin/%s?%s=%d", hgGenePixCgiName(), hgpId, imageId);
+printf("\" target=_PARENT>");
+printf("<IMG SRC=\"/%s\"></A><BR>\n", genePixFullSizePath(conn, imageId));
+printf("</A><BR>\n");
+printCaption(conn, imageId, geneList);
 htmlEnd();
 }
 
@@ -218,12 +231,12 @@ printf("</TITLE>\n");
 printf("</HEAD>\n");
 
 printf("<frameset cols=\"230,*\"> \n");
-printf("  <frame src=\"../cgi-bin/%s?%s=go&%s/\" noresize frameborder=\"0\" name=\"thumbList\">\n",
+printf("  <frame src=\"../cgi-bin/%s?%s=go&%s/\" noresize frameborder=\"0\" name=\"list\">\n",
     hgGenePixCgiName(), hgpDoThumbnails, sidUrl);
 printf("  <frameset rows=\"30,*\">\n");
 printf("    <frame name=\"controls\" src=\"../cgi-bin/%s?%s=go&%s\" noresize marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\">\n",
     hgGenePixCgiName(), hgpDoControls, sidUrl);
-printf("    <frame src=\"../cgi-bin/%s?%s=go&%s/\" name=\"fullImage\" noresize frameborder=\"0\">\n",
+printf("    <frame src=\"../cgi-bin/%s?%s=go&%s/\" name=\"image\" noresize frameborder=\"0\">\n",
     hgGenePixCgiName(), hgpDoImage, sidUrl);
 printf("  </frameset>\n");
 printf("  <noframes>\n");
