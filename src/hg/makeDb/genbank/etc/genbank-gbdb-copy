@@ -6,6 +6,9 @@
 
 set -e  # errors terminate
 
+# databases to copy:
+databases="hg15 mm3 rn2"
+
 # initialize
 gbRoot=/scratch/genbank
 cd $gbRoot
@@ -23,4 +26,4 @@ gbBuildRoot=/cluster/store5/genbank
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/copy/run/copy.lock
 
-exec gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot
+exec gbCopyStep -rsyncPort=$rsyncPort -gbdb=$gbdb $gbBuildServer $gbBuildRoot $databases
