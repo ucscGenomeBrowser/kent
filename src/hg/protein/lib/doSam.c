@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doSam.c,v 1.4 2005/01/07 17:38:47 fanhsu Exp $";
+static char const rcsid[] = "$Id: doSam.c,v 1.5 2005/01/11 00:03:06 fanhsu Exp $";
 
 char *getSgdId(char *protId, char *database)
 /* Get SGD gene ID from a Swiss-Prot ID */
@@ -30,7 +30,8 @@ char condStr[256];
 char *chp;
 
 char *samSubDir;
-char *samHttpStr = NULL;
+char *samHttpStr0 = NULL; /* SAM server*/
+char *samHttpStr  = NULL; /* UCSC GB site */
 int  homologCount;
 
 char *homologID;
@@ -59,7 +60,8 @@ if (!sameWord(database, "sacCer1"))
 itemName = proteinId;    
 if (sameWord(database, "sacCer1"))
     {
-    samHttpStr = strdup("http://www.soe.ucsc.edu/research/compbio/yeast-protein-predictions");
+    samHttpStr0 = strdup("http://www.soe.ucsc.edu/research/compbio/yeast-protein-predictions");
+    samHttpStr  = strdup("../goldenPath/sacCer1/sam");
     
     /* SAM analysis of SGD proteins uses SGD ID, not Swiss-Prot AC */
     itemName = getSgdId(proteinId, database);
@@ -161,7 +163,7 @@ if (homologCount == 0)
     }
 
 hPrintf("<BR>&nbsp;&nbsp;&nbsp;&nbsp;<B>More Details:</B> \n");
-hPrintf("<A HREF=\"%s/%s/%s/summary.html\"", samHttpStr, samSubDir, itemName);
+hPrintf("<A HREF=\"%s/%s/%s/summary.html\"", samHttpStr0, samSubDir, itemName);
 hPrintf("\" TARGET=_blank>%s</A><BR>\n", itemName);
 
 if (homologCount > 0)
