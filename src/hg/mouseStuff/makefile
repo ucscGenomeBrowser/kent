@@ -32,6 +32,7 @@ DIRS = \
 	axtSplitByTarget \
 	axtSwap \
 	axtToBed \
+	axtToChain \
 	axtToMaf \
 	axtToPsl \
 	bedCoverage \
