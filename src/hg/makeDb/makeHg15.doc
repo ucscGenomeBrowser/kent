@@ -4064,3 +4064,27 @@ hgsql \
  -e 'update gdbPdb set proteomeDb = "proteins040115" where genomeDb = "hg15";' \
         -h genome-testdb hgcentraltest
 
+#
+# Load tfbsCons track DONE 2004-03-19 braney
+#
+
+set humordir=/gbdb/hg15/humor25
+set transfacdir=/projects/compbio/data/transfac
+set outdir=hg15_tfbsCons
+
+ssh hgwdev
+mkdir /cluster/data/hg15/bed/tfbsCons
+cd /cluster/data/hg15/bed/tfbsCons
+# Get tfbsConsUtils.tar.gz from Matt Weirauch with Perl scripts  weirauch@soe.ucsc.edu
+set tarfile=/cluster/data/hg15/bed/tfbsCons/tfbsConsUtils.tar.gz
+tar zxf $tarfile
+# the following takes days (says Matt)
+nice getTfbsConsData.pl `pwd` $humordir $transfacdir ./IDS.txt $outdir -over &
+cd $outdir
+rm chr*.bed
+hgLoadBed -noSort hg15 tfbsCons -sqlTable=$HOME/kent/src/hg/lib/tfbsCons.sql tfbs.bed -tab
+
+# Get mapping of ID's from Matt so we can link into the TRANSFAC database
+set idmap=/cluster/data/hg15/bed/tfbsCons/tfbsConsMap
+hgsql hg15 < ~/kent/src/hg/lib/tfbsConsMap.sql
+echo "load data local infile '$idmap' into table tfbsConsMap;" | hgsql hg15
