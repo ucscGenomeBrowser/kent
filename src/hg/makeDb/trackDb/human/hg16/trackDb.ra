@@ -231,7 +231,7 @@ type netAlign rn3 chainRn3
 otherDb rn3
 
 track chainPanTro1
-shortLabel Chimp Chain
+shortLabel Chimp All Chain
 longLabel Chimp (Nov 03 - panTro1) Chained Alignments
 group compGeno
 priority 145.4
@@ -255,7 +255,7 @@ type chain panTro1
 otherDb panTro1
 
 track chainPt0
-shortLabel Chimp Scaffold Chains
+shortLabel Chimp Chain
 longLabel Chimp (Nov 03) Scaffold Chained Alignments
 group compGeno
 priority 145.6
