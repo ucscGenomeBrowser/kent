@@ -87,7 +87,7 @@
 #include "versionInfo.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.887 2005/02/04 02:36:16 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.888 2005/02/04 16:25:21 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8442,9 +8442,9 @@ char query[256];
 char **row = NULL;
 struct sqlResult *sr;
 char *classTable = NULL;
-classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 /* default is true then for no filtering */
 boolean sameClass = TRUE;
+classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 
 AllocVar(classString);
 if (classTable != NULL && hTableExists(classTable))
