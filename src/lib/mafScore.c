@@ -4,7 +4,7 @@
 #include "common.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafScore.c,v 1.5 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: mafScore.c,v 1.6 2003/11/15 21:14:09 kent Exp $";
 
 
 typedef struct gap_scores {
@@ -106,7 +106,7 @@ if (ss['A']['A'] != HOXD70_sym[0][0]) {
 	for (i = 0; i < 128; ++i)
 		ss[i][DASH] = ss[DASH][i] = -ds.E;
 	ss[DASH][DASH] = 0;
-	gap_costs(gop, gtype, ds.O);   // quasi-natural gap costs
+	gap_costs(gop, gtype, ds.O);   /* quasi-natural gap costs */
 }
 score = 0.0;
 for (i = start; i < start+size; ++i) {

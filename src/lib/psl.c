@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.31 2003/10/06 23:12:40 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.32 2003/11/15 21:14:09 kent Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -337,8 +337,6 @@ fprintf(f, "%u", el->qStart);
 fputc(sep,f);
 fprintf(f, "%u", abs(el->qEnd - el->qStart));
 fputc(sep,f);
-//fprintf(f, "%u", el->qEnd);
-//fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tName);
 if (sep == ',') fputc('"',f);
@@ -350,28 +348,6 @@ fputc(sep,f);
 fprintf(f, "%u", el->blockCount);
 fputc(sep,f);
 if (sep == ',') fputc('{',f);
-//for (i=0; i<el->blockCount; ++i)
-//    {
-//    fprintf(f, "%u", el->blockSizes[i]);
-    //fputc(',', f);
-//    }
-//if (sep == ',') fputc('}',f);
-//fputc(sep,f);
-//if (sep == ',') fputc('{',f);
-//for (i=0; i<el->blockCount; ++i)
-    //{
-    //fprintf(f, "%u", el->qStarts[i]);
-    //fputc(',', f);
-    //}
-//if (sep == ',') fputc('}',f);
-//fputc(sep,f);
-//if (sep == ',') fputc('{',f);
-//for (i=0; i<el->blockCount; ++i)
-    //{
-    //fprintf(f, "%u", el->tStarts[i]);
-    //fputc(',', f);
-    //}
-//if (sep == ',') fputc('}',f);
 fputc(lastSep,f);
 if (ferror(f))
     {
@@ -379,6 +355,7 @@ if (ferror(f))
     errAbort("\n");
     }
 }
+
 struct psl *pslLoadAll(char *fileName)
 /* Load all psl's in file. */
 {
