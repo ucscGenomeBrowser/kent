@@ -31,7 +31,7 @@ void drawCdsColoredBox(struct track *tg,  struct linkedFeatures *lf,
         double scale, MgFont *font, int s, int e, int heightPer,
         boolean zoomedToCodonLevel, struct dnaSeq *mrnaSeq, struct psl
         *psl, int drawOptionNum, boolean errorColor, 
-        boolean *foundStart, int maxPixels);
+        boolean *foundStart, int maxPixels, int winStart);
  int cdsColorSetup(struct vGfx *vg, struct track *tg, Color *cdsColor,
          struct dnaSeq *mrnaSeq, struct psl *psl, boolean *errorColor,
          struct linkedFeatures *lf, boolean cdsColorsMade);
