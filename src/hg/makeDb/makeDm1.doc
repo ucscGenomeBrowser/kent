@@ -492,20 +492,19 @@ exit; # don't actually run this like a script :)
     hgFlyBase dm1 genes.txt.040617
 
 
-# BDGP GENE DISRUPTION PROJECT/PSCREEN (DONE 5/18/04 angie)
+# BDGP GENE DISRUPTION PROJECT/PSCREEN (DONE 7/29/04 angie)
     ssh hgwdev
     mkdir /cluster/data/dm1/bed/pscreen
     cd /cluster/data/dm1/bed/pscreen
-    wget http://flypush.imgen.bcm.tmc.edu/pscreen/primarycollection1.xls.gz
-    gunzip primarycollection1.xls.gz
-    # Use ooffice  or similar tool to translate MS Excel format to 
-    # tab-separated text file.
-    ssh yall
-    ooffice /cluster/data/dm1/bed/pscreen/primarycollection1.xls
-    # save as CSV -- select tab as delimiter, no quotes.
-    # one-shot Perl script!  Also output rows with strange chrom values.
+    # Robin Hiesinger sent a table dump by email that is a subset of the 
+    # original primarycollection1 columns.  Saved attachment to 
+    # genetag_gdp.dump
+    # It doesn't have the stock number, but it looks like the bloomington 
+    # stock numbers can be associated with P insertions using this file:
+    wget http://flybase.bio.indiana.edu/stocks/stock-centers/bloomington/lk/bloomington.csv
+    # one-shot Perl script:
     chmod a+x mkPscreen.pl
-    (mkPscreen.pl primarycollection1.csv > pscreen.bed) >& no-chroms.txt
+    mkPscreen.pl genetag_gdp.dump  bloomington.csv > pscreen.bed
     hgLoadBed dm1 pscreen -sqlTable=$HOME/kent/src/hg/lib/pscreen.sql -tab \
       pscreen.bed
 
