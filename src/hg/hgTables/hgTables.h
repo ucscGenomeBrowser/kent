@@ -15,6 +15,10 @@
 #include "dystring.h"
 #endif
 
+#ifndef HDB_H
+#include "hdb.h"
+#endif
+
 #ifndef GRP_H
 #include "grp.h"
 #endif
