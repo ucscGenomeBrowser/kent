@@ -211,6 +211,7 @@ queryFull select swissDisplayID,description from proteins072003.pfamXref,protein
 queryOne select description from proteins072003.pfamXref,proteins072003.pfamDesc where swissDisplayID = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC order by description
 invQueryOne select swissDisplayID from proteins072003.pfamXref,proteins072003.pfamDesc where description = '%s' and pfamXref.pfamAC = pfamDesc.pfamAC
 protKey on
+itemUrl http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s
 
 name go
 shortLabel Gene Ontology

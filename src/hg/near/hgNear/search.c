@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.7 2003/09/08 09:04:21 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.8 2003/09/16 19:14:52 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -130,7 +130,10 @@ for (col = colList; col != NULL; col = col->next)
 	 }
     }
 if (totalCount == 0)
-    errAbort("Sorry, couldn't find '%s'", search);
+    {
+    displayData(conn, colList, NULL);
+    warn("Sorry, couldn't find '%s'", search);
+    }
 else if (totalCount == 1)
     displayData(conn, colList, &srOne->gp);
 else

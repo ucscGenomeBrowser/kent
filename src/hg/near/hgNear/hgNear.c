@@ -16,7 +16,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.75 2003/09/15 05:42:08 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.76 2003/09/16 19:14:51 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -838,7 +838,7 @@ struct genePos *newList = NULL, *gp, *next;
 for (gp = *pList; gp != NULL; gp = next)
     {
     next = gp->next;
-    if (gp->distance < genePosTooFar)
+    if (gp->distance < genePosTooFar || sameString(gp->name, curGeneId->name))
         {
 	slAddHead(&newList, gp);
 	}
@@ -1060,7 +1060,13 @@ struct column *col;
 struct genePos *gene;
 
 if (geneList == NULL)
+    {
+    if (gotAdvFilter())
+        {
+	warn("No genes passed filter.");
+	}
     return;
+    }
 hPrintf("<TABLE BORDER=1 CELLSPACING=1 CELLPADDING=1 COLS=%d>\n", 
 	totalHtmlColumns(colList));
 
@@ -1252,7 +1258,7 @@ htmlHorizontalLine();
 hPrintf("%s",
  "<P>This program displays a table of genes that are related to "
  "each other.  The relationship can be of several types including "
- "protein level homology, similarity of gene expression profiles, or "
+ "protein-level homology, similarity of gene expression profiles, or "
  "genomic proximity.  The 'group by' drop-down controls "
  "which type of relationship is used.</P>"
  "<P>To use this tool please type something into the search column and "
