@@ -302,7 +302,7 @@ for (i=0; i<psl->blockCount; ++i)
     {
     tStart = psl->tStarts[i];
     tEnd = tStart + psl->blockSizes[i];
-    if (exon == NULL || tStart - exon->end > 8)
+    if (exon == NULL || tStart - exon->end > genePredStdInsertMergeSize)
         {
 	AllocVar(exon);
 	slAddHead(&exonList, exon);
@@ -497,7 +497,7 @@ while ((psl = pslNext(lf)) != NULL)
 	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     	rsi = hashMustFindVal(rsiHash, psl->qName);
 
-        gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, 0);
+        gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, genePredStdInsertMergeSize);
         if (!gp)
             errAbort("Cannot convert psl (%s) to genePred.\n", psl->qName);
 

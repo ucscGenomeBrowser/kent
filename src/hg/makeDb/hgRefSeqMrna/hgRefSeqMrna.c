@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.22 2004/09/04 17:36:54 kent Exp $";
+static char const rcsid[] = "$Id: hgRefSeqMrna.c,v 1.23 2004/09/06 16:59:40 kent Exp $";
 
 
 /* Variables that can be set from command line. */
@@ -325,7 +325,7 @@ for (i=0; i<psl->blockCount; ++i)
     {
     tStart = psl->tStarts[i];
     tEnd = tStart + psl->blockSizes[i];
-    if (exon == NULL || tStart - exon->end > 8)
+    if (exon == NULL || tStart - exon->end > genePredStdInsertMergeSize)
         {
 	AllocVar(exon);
 	slAddHead(&exonList, exon);
@@ -499,7 +499,7 @@ while ((psl = pslNext(lf)) != NULL)
     exonList = pslToExonList(psl);
     rsi = hashMustFindVal(rsiHash, psl->qName);
 
-    gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, 0);
+    gp = genePredFromPsl(psl, rsi->cdsStart, rsi->cdsEnd, genePredStdInsertMergeSize);
     if(!gp) 
         errAbort("Cannot convert psl (%s) to genePred.\n", psl->qName);
 
