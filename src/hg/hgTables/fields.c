@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "dlist.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "cart.h"
@@ -53,19 +54,52 @@ for (jp = jpList; jp != NULL; jp = jp->next)
 return FALSE;
 }
 
-void fieldSelectorTable(struct joiner *joiner, char *db, char *rootTable)
-/* Put up table that lets user select fields. */
+struct dbTable
+/* database/table pair. */
+    {
+    struct dbTable *next;
+    char *db;	/* Database name. */
+    char *table; /* Table name. */
+    };
+
+struct dbTable *dbTableNew(char *db, char *table)
+/* Return new dbTable struct. */
 {
-struct sqlConnection *conn = sqlConnect(db);
-char *table = chromTable(conn, rootTable);
+struct dbTable *dt;
+AllocVar(dt);
+dt->db = cloneString(db);
+dt->table = cloneString(table);
+return dt;
+}
+
+void dbTableFree(struct dbTable **pDt)
+/* Free up dbTable struct. */
+{
+struct dbTable *dt = *pDt;
+if (dt != NULL)
+    {
+    freeMem(dt->db);
+    freeMem(dt->table);
+    freez(pDt);
+    }
+}
+
+void showTableSection(struct joiner *joiner, struct dbTable *dt, 
+	struct dlList *tableList)
+/* Put up a section of web page with check boxes and links
+ * for each field of table.  If there are open links 
+ * add them to the tail of the table list. */
+{
+struct sqlConnection *conn = sqlConnect(dt->db);
+char *table = chromTable(conn, dt->table);
 char query[256];
 struct sqlResult *sr;
 char **row;
-struct asObject *asObj = asForTable(conn, rootTable);
+struct asObject *asObj = asForTable(conn, dt->table);
 struct joinerPair *jpList;
 
-
-jpList = joinerRelate(joiner, db, rootTable);
+webNewSection("Fields in %s.%s", dt->db, dt->table);
+jpList = joinerRelate(joiner, dt->db, dt->table);
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 
@@ -73,7 +107,7 @@ hTableStart();
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *field = row[0];
-    char *var = checkVarName(rootTable, field);
+    char *var = checkVarName(dt->table, field);
     struct asColumn *asCol;
     hPrintf("<TR>");
     hPrintf("<TD>");
@@ -91,7 +125,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hPrintf("&%s=%d", var, !opened);
 	hPrintf("\">&nbsp;");
 	if (opened)
+	    {
+	    struct joinerPair *jp;
 	    hPrintf("-");
+	    /* Go add stuff to list. */
+	    for (jp = jpList; jp != NULL; jp = jp->next)
+	        {
+		if (sameString(jp->a->field, field))
+		    {
+		    dlAddValTail(tableList, 
+		    	dbTableNew(jp->b->database, jp->b->table));
+		    }
+		}
+	    }
 	else
 	    hPrintf("+");
 	hPrintf("&nbsp;</A>");
@@ -119,25 +165,59 @@ hTableEnd();
 joinerPairFreeList(&jpList);
 freez(&table);
 sqlDisconnect(&conn);
+hPrintf("<BR>\n");
+cgiMakeButton(hgtaDoSelectedFields, "Submit");
+hPrintf(" ");
+cgiMakeButton(hgtaDoMainPage, "Cancel");
+}
+
+
+void fieldSelectorTable(struct joiner *joiner, struct dlList *tableList)
+/* Put up table that lets user select fields.  As a side effect this
+ * will empty out tableList. */
+{
+struct dbTable *dt;
+struct dlNode *node;
+struct hash *seenHash = hashNew(0);
+char tableName[256];
+
+/* Keep processing as long as there are tables on list,
+ * filtering out tables we've seen already. */
+while ((node = dlPopHead(tableList)) != NULL)
+    {
+    dt = node->val;
+    safef(tableName, sizeof(tableName), "%s.%s", dt->db, dt->table);
+    if (!hashLookup(seenHash, tableName))
+        {
+	hashAdd(seenHash, tableName, NULL);
+	showTableSection(joiner, dt, tableList);
+	}
+
+    /* Free up this node, we are done. */
+    dbTableFree(&dt);
+    freez(&node);
+    }
+hashFree(&seenHash);
 }
 
 void doBigSelectPage(char *db, char *table)
 /* Put up big field selection page. Assumes html page open already*/
 {
 struct joiner *joiner = joinerRead("all.joiner");
-struct hash *tableHash = newHash(0);
+struct dlList *tableList = newDlList();
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, database);
 cgiMakeHiddenVar(hgtaTable, table);
-fieldSelectorTable(joiner, database, table);
-hPrintf("<BR>\n");
-cgiMakeButton(hgtaDoSelectedFields, "Submit");
-hPrintf(" ");
-cgiMakeButton(hgtaDoMainPage, "Cancel");
+
+dlAddValTail(tableList, dbTableNew(database, table));
+fieldSelectorTable(joiner, tableList);
+
+/* clean up. */
 hPrintf("</FORM>");
 joinerFree(&joiner);
+freeDlList(&tableList);
 }
 
 
@@ -145,8 +225,12 @@ void doOutSelectedFields(struct trackDb *track, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
 char *table = connectingTableForTrack(track);
-htmlOpen("Select Fields from %s (%s.%s)", 
-	track->shortLabel, database, table);
+htmlOpen("Select Fields from %s And Related Tables", track->shortLabel);
+hPrintf(
+   "Use the check boxes to select the fields you want to include. "
+   "In some cases a field links to other tables.  Click on the '+' "
+   "by the field name to view and select from these tables as well. "
+   "(They will appear under the primary table.)" );
 doBigSelectPage(database, table);
 htmlClose();
 }
