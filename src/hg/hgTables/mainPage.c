@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.51 2004/10/01 03:47:04 kent Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.52 2004/10/01 19:27:45 kent Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -89,10 +89,10 @@ jsMakeTrackingRadioButton(hgtaRegionType, "regionType", val, selVal);
 }
 
 struct grp *showGroupField(char *groupVar, char *groupScript,
-    struct sqlConnection *conn)
+    struct sqlConnection *conn, boolean allTablesOk)
 /* Show group control. Returns selected group. */
 {
-struct grp *group, *groupList = makeGroupList(conn, fullTrackList);
+struct grp *group, *groupList = makeGroupList(conn, fullTrackList, allTablesOk);
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
@@ -106,14 +106,23 @@ hPrintf("</SELECT>\n");
 return selGroup;
 }
 
+static void addIfExists(struct hash *hash, struct slName **pList, char *name)
+/* Add name to tail of list if it exists in hash. */
+{
+if (hashLookup(hash, name))
+    slNameAddTail(pList, name);
+}
+
 struct slName *getDbListForGenome()
 /* Get list of selectable databases. */
 {
+struct hash *hash = sqlHashOfDatabases();
 struct slName *dbList = NULL;
-slNameAddTail(&dbList, "swissProt");
-slNameAddTail(&dbList, "proteins");
-slNameAddTail(&dbList, "hgFixed");
-slNameAddTail(&dbList, database);
+addIfExists(hash, &dbList, "ultra");
+addIfExists(hash, &dbList, "swissProt");
+addIfExists(hash, &dbList, "proteins");
+addIfExists(hash, &dbList, "hgFixed");
+addIfExists(hash, &dbList, database);
 return dbList;
 }
 
@@ -174,19 +183,6 @@ else
     }
 hPrintf("\n");
 return selTrack;
-}
-
-struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
-    char *trackVar, char *trackScript, struct sqlConnection *conn)
-/* Show group & track row of controls.  Returns selected track */
-{
-struct trackDb *track;
-struct grp *selGroup;
-hPrintf("<TR><TD>");
-selGroup = showGroupField(groupVar, groupScript, conn);
-track = showTrackField(selGroup, trackVar, trackScript);
-hPrintf("</TD></TR>\n");
-return track;
 }
 
 char *unsplitTableName(char *table)
@@ -404,7 +400,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
     {
     hPrintf("<TR><TD>");
-    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn);
+    selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, TRUE);
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");

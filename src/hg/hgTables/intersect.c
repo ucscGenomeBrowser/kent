@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.13 2004/09/14 23:17:16 donnak Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.14 2004/10/01 19:27:45 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -69,6 +69,20 @@ void makeOpButton(char *val, char *selVal)
 {
 jsMakeTrackingRadioButton(hgtaNextIntersectOp, "op", val, selVal);
 }
+
+struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
+    char *trackVar, char *trackScript, struct sqlConnection *conn)
+/* Show group & track row of controls.  Returns selected track */
+{
+struct trackDb *track;
+struct grp *selGroup;
+hPrintf("<TR><TD>");
+selGroup = showGroupField(groupVar, groupScript, conn, FALSE);
+track = showTrackField(selGroup, trackVar, trackScript);
+hPrintf("</TD></TR>\n");
+return track;
+}
+
 
 void doIntersectMore(struct sqlConnection *conn)
 /* Continue working in intersect page. */

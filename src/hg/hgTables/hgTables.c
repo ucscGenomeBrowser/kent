@@ -22,7 +22,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.74 2004/09/27 18:19:19 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.75 2004/10/01 19:27:44 kent Exp $";
 
 
 void usage()
@@ -603,7 +603,7 @@ return track;
 }
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
-	struct trackDb *trackList)
+	struct trackDb *trackList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
 struct sqlResult *sr;
@@ -652,10 +652,13 @@ group->label = cloneString("All Tracks");
 slAddTail(&groupList, group);
 
 /* Create another dummy group for all tables. */
-AllocVar(group);
-group->name = cloneString("allTables");
-group->label = cloneString("All Tables");
-slAddTail(&groupList, group);
+if (allTablesOk)
+    {
+    AllocVar(group);
+    group->name = cloneString("allTables");
+    group->label = cloneString("All Tables");
+    slAddTail(&groupList, group);
+    }
 
 hashFree(&groupsInTrackList);
 hashFree(&groupsInDatabase);
@@ -1147,7 +1150,7 @@ lookupPosition();
 /* Get list of groups that actually have something in them. */
 fullTrackList = getFullTrackList();
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(conn, fullTrackList);
+fullGroupList = makeGroupList(conn, fullTrackList, TRUE);
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;

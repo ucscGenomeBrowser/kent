@@ -123,9 +123,13 @@ boolean varOn(char *var);
 void printMainHelp();
 /* Put up main page help info. */
 
-struct trackDb *showGroupTrackRow(char *groupVar, char *groupScript,
-    char *trackVar, char *trackScript, struct sqlConnection *conn);
-/* Show group & track row of controls.  Returns selected track */
+struct grp *showGroupField(char *groupVar, char *groupScript,
+    struct sqlConnection *conn, boolean allTablesOk);
+/* Show group control. Returns selected group. */
+
+struct trackDb *showTrackField(struct grp *selGroup,
+	char *trackVar, char *trackScript);
+/* Show track control. Returns selected track. */
 
 /* --------- Utility functions --------------------- */
 
@@ -155,7 +159,7 @@ void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
  * buf to hold string. */
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
-	struct trackDb *trackList);
+	struct trackDb *trackList, boolean allTablesOk);
 /* Get list of groups that actually have something in them. */
 
 struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
