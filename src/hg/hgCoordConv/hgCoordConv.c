@@ -519,9 +519,9 @@ else
     {
 /* do our thing  */
     if(calledSelf)
-	cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars);
+	cartEmptyShell(doConvertCoordinates, hUserCookie(), excludeVars, NULL);
     else
-	cartEmptyShell(doForm, hUserCookie(), excludeVars);
+	cartEmptyShell(doForm, hUserCookie(), excludeVars, NULL);
     }
 return 0;
 }

@@ -583,7 +583,7 @@ int main(int argc, char *argv[])
 cgiSpoof(&argc, argv);
 defaultDatabase = hGetDb();
 htmlSetBackground("../images/floret.jpg");
-cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars);
+cartHtmlShell("BLAT Search", doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }
 
