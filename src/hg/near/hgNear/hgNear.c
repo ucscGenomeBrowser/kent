@@ -17,7 +17,7 @@
 #include "ra.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.85 2003/09/24 11:21:32 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.86 2003/09/25 00:29:13 kent Exp $";
 
 char *excludeVars[] = { "submit", "Submit", confVarName, colInfoVarName,
 	defaultConfName, hideAllConfName, showAllConfName,
@@ -563,6 +563,7 @@ col->cellPrint = cellSelfLinkPrint;
 
 /* ---- Simple table lookup type columns ---- */
 
+
 struct searchResult *lookupTypeSimpleSearch(struct column *col, 
     struct sqlConnection *conn, char *search)
 /* Search lookup type column. */
@@ -585,7 +586,8 @@ else
 sr = sqlGetResult(searchConn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    res = knownGeneSearchResult(conn, row[0], NULL);
+    AllocVar(res);
+    res->gp.name = cloneString(row[0]);
     slAddHead(&resList, res);
     }
 

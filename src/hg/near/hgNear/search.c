@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.11 2003/09/24 11:21:33 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.12 2003/09/25 00:29:13 kent Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -107,6 +107,38 @@ slReverse(&newList);
 return newList;
 }
 
+static void fillInMissingLabels(struct sqlConnection *conn,
+	struct column *colList, struct searchResult *srList)
+/* Fill in missing columns by looking up name and description
+ * if possible. */
+{
+struct column *nameColumn = findNamedColumn(colList, "name");
+struct column *desColumn = findNamedColumn(colList, "description");
+struct searchResult *sr;
+
+for (sr = srList; sr != NULL; sr = sr->next)
+    {
+    if (sr->shortLabel == NULL)
+        {
+	if (nameColumn != NULL)
+	    {
+	    sr->shortLabel = nameColumn->cellVal(nameColumn, &sr->gp, conn);
+	    }
+	else
+	    sr->shortLabel = cloneString(sr->gp.name);
+	}
+    if (sr->longLabel == NULL)
+        {
+	if (desColumn != NULL)
+	    {
+	    sr->longLabel = desColumn->cellVal(desColumn, &sr->gp, conn);
+	    }
+	else
+	    sr->longLabel = cloneString("");
+	}
+    }
+}
+
 static void searchAllColumns(struct sqlConnection *conn, 
 	struct column *colList, char *search)
 /* Call search on each column. */
@@ -130,6 +162,7 @@ for (col = colList; col != NULL; col = col->next)
 	 if (srList != NULL)
 	     {
 	     srOne = srList;
+	     fillInMissingLabels(conn, colList, srList);
 	     AllocVar(csr);
 	     csr->label = columnSetting(col, "searchLabel", col->longLabel);
 	     csr->results = srList;
