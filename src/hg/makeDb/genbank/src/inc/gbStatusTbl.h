@@ -60,6 +60,9 @@ struct gbStatusTbl
     char tmpDir[PATH_LEN];  /* tmp directory for db loads */
     boolean verbose;
     unsigned numEntries;    /* number of entries */
+    unsigned maxExtFileChg; /* If external file changes are to be updated,
+                             * this is the maximum number to change.
+                             * set to BIGNUM to do all that need it. */
 
     /* Lists that are built of entries in particular states.  Note that
      * more that one state maybe indciated in stateChg field, but it's
@@ -98,7 +101,7 @@ struct gbStatusTbl* gbStatusTblSelectLoad(struct sqlConnection *conn,
                                           unsigned select, char* accPrefix,
                                           gbStatusLoadSelect* selectFunc,
                                           void* clientData, char* tmpDir,
-                                          boolean verbose);
+                                          unsigned maxExtFileChg, boolean verbose);
 /* Selectively load the status table file table from the database, creating
  * table if it doesn't exist.  This calls selectFunc on each entry that is
  * found.  See gbStatusLoadSelect for details.
@@ -111,7 +114,8 @@ struct gbStatus* gbStatusStore(struct gbStatusTbl* statusTbl,
 
 struct gbStatusTbl *gbStatusTblLoad(struct sqlConnection *conn,
                                     unsigned select, char* accPrefix,
-                                    char* tmpDir, boolean verbose);
+                                    char* tmpDir, unsigned maxExtFileChg, 
+                                    boolean verbose);
 /* Load the file table from the database, creating table if it doesn't exist.
  * The select flags are some combination of GB_MRNA,GB_EST,GB_GENBANK,
  * GB_REFSEQ.  If accPrefix is not null, it is the first two characters of the

@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.2 2003/06/15 07:11:25 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.3 2004/02/07 17:39:09 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -179,7 +179,6 @@ static void chkGenePred(struct genePred* gene, char *geneName, unsigned iRow,
 char geneDesc[128];
 unsigned chromSize = getChromSize(gene->chrom);
 unsigned iExon;
-boolean foundCdsStart = FALSE, foundCdsEnd = FALSE;
 struct metaData* md = metaDataTblsFind(metaDataTbls, gene->name);
 
 if (verbose >= 3)
@@ -219,11 +218,12 @@ if (gene->txStart >= gene->txEnd)
 /* no CDS is indicated by cdsStart == cdsEnd == txEnd */
 if (gene->cdsStart == gene->cdsEnd)
     {
-    if (gene->cdsStart != gene->txEnd)
+    /* warn if cdsStart is not txEnd or 0 */
+    if ((gene->cdsStart != gene->txEnd) && (gene->cdsStart != 0))
 #if WARN_BLAT_BUGS
-        fprintf(stderr, "Warning: %s: cdsStart == cdsEnd, but cdsStart != txEnd\n", geneDesc);
+        fprintf(stderr, "Warning: %s: cdsStart == cdsEnd, but cdsStart != txEnd and cdsStart != 0 \n", geneDesc);
 #else
-        gbError("%s: cdsStart == cdsEnd, but cdsStart != txEnd", geneDesc);
+        gbError("%s: cdsStart == cdsEnd, but cdsStart != txEnd and cdsStart != 0", geneDesc);
 #endif
     }
 else
@@ -273,19 +273,6 @@ for (iExon = 0; iExon < gene->exonCount; iExon++)
             gbError("%s: %s exon %u follows zero length intron", geneDesc,
                     gene->name, iExon);
         }
-    if ((exonStart <= gene->cdsStart) && (gene->cdsStart < exonEnd))
-        foundCdsStart = TRUE;
-    if ((exonStart <= gene->cdsEnd-1) && (gene->cdsEnd-1 < exonEnd))
-        foundCdsEnd = TRUE;
-    }
-if (gene->cdsStart  < gene->cdsEnd)
-    {
-    if (!foundCdsStart)
-        gbError("%s: %s cdsStart %u not in an exon", geneDesc,
-                gene->name, gene->cdsStart);
-    if (!foundCdsEnd)
-        gbError("%s: %s cdsEnd %u not in an exon", geneDesc,
-                gene->name, gene->cdsEnd);
     }
 if ((md != NULL) && (geneName != NULL))
     {

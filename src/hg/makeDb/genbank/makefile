@@ -27,4 +27,5 @@ install: check-etc all
 	(cd ${PREFIX}/etc && cvs update -d)
 
 check-etc:
-	(cvs stat etc | fgrep Locally) || exit 0 && (echo "Error: etc/ files need committed" && exit 1)
+	@echo check if etc/ is committed
+	@(cvs stat etc | fgrep Locally) || exit 0 && (echo "Error: etc/ files need committed" && exit 1)

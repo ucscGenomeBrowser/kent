@@ -29,7 +29,10 @@ struct dbLoadOptions
     char* relRestrict;                         /* release restriction */
     char* accPrefixRestrict;                   /* acc prefix restriction */
     unsigned flags;                            /* above flags */
-    dbLoadAttrArray loadAttr;               ;  /* should these be loaded? */
+    unsigned maxExtFileUpdate;                 /* maximum number of entries
+                                                * to update gbSeq/gbExtFile 
+                                                * data for */
+    dbLoadAttrArray loadAttr;                  /* should these be loaded? */
 };
 
 struct dbLoadOptions dbLoadOptionsParse(char* db);

@@ -18,7 +18,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.8 2003/10/01 14:58:20 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.9 2004/02/07 17:39:09 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -270,6 +270,7 @@ else
         markMetaChanged(ssData->select, statusTbl, tmpStatus, processed,
                         aligned);
     else if ((gOptions->flags & DBLOAD_EXT_FILE_UPDATE)
+             && (statusTbl->numExtChg < statusTbl->maxExtFileChg)
              && !sameString(tmpStatus->extRelease,
                             ssData->select->release->version))
         markExtChanged(statusTbl, tmpStatus, processed, aligned);
@@ -509,6 +510,7 @@ struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
                                  float maxShrinkage,
                                  char* tmpDir,
                                  int verboseLevel,
+                                 unsigned maxExtFileChg,
                                  boolean* maxShrinkageExceeded)
 /* Load status table and find of state of all genbank entries in the release
  * compared to the database. */
@@ -531,7 +533,7 @@ ssData.seqHash = seqTblLoadAcc(conn, select);
 gbVerbMsg(1, "reading gbStatus");
 statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
                                   selectStatus, &ssData,
-                                  tmpDir, (verbose >= 2));
+                                  tmpDir, maxExtFileChg, (verbose >= 2));
 findNewEntries(select, statusTbl);
 
 /* Don't allow deletes when select criteria has changed */
@@ -546,7 +548,7 @@ if ((gOptions->flags & DBLOAD_LARGE_DELETES) == 0)
         *maxShrinkageExceeded = TRUE;
     }
 
-/* don't do other setup if we are going to sop on maxShrinkageExceeded */
+/* don't do other setup if we are going to stop on maxShrinkageExceeded */
 if (!*maxShrinkageExceeded)
     {
     gbVerbMsg(1, "checking for orphans");

@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.16 2004/02/02 01:32:30 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.17 2004/02/07 17:39:09 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -53,6 +53,7 @@ static struct optionSpec optionSpecs[] = {
     {"gbdbGenBank", OPTION_STRING},
     {"reloadList", OPTION_STRING},
     {"extFileUpdate", OPTION_BOOLEAN},
+    {"maxExtFileUpdate", OPTION_INT},
     {"verbose", OPTION_INT},
     {"conf", OPTION_STRING},
     {NULL, 0}
@@ -69,9 +70,11 @@ static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 /* other globals */
 static int gTotalExtChgCnt = 0;  /* total number of extChg seqs processed */
 static boolean gStopSignaled = FALSE;  /* stop at the end of the current
-                                       * partition */
+                                        * partition */
 static boolean gMaxShrinkageError = FALSE;  /* exceeded maxShrinkage 
                                              * in some partation */
+static unsigned gExtFileChged = 0;      /* total number of extFile changes
+                                         * done */
 
 /* in initialLoad mode, pending updates */
 static struct sqlUpdater* gPendingStatusUpdates = NULL;
@@ -404,6 +407,7 @@ struct sqlConnection *conn = hAllocConn();
 struct gbStatusTbl* statusTbl;
 boolean maxShrinkageExceeded;
 char typePrefix[32], tmpDir[PATH_LEN];
+unsigned maxExtFileChg = 0;;
 
 gbVerbEnter(1, "update %s", gbSelectDesc(select));
 
@@ -421,11 +425,19 @@ safef(tmpDir, sizeof(tmpDir), "%s/%s/%s/%s",
 if ((gOptions.flags & DBLOAD_DRY_RUN) == 0)
     gbMakeDirs(tmpDir);
 
+/* limit number of ext files references to change if requested.  This
+* is global for all loads. */
+if (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
+    {
+    maxExtFileChg = (gExtFileChged < gOptions.maxExtFileUpdate)
+        ? (gOptions.maxExtFileUpdate - gExtFileChged) : 0;
+    }
+
 /* Build list of entries that need processed.  This also flags updates that
  * have the change and new entries so we can limit the per-update processing.
  */
 statusTbl = gbBuildState(conn, select, &gOptions, gMaxShrinkage, tmpDir,
-                         verbose, &maxShrinkageExceeded);
+                         verbose, maxExtFileChg, &maxShrinkageExceeded);
 if (maxShrinkageExceeded)
     {
     fprintf(stderr, "Warning: switching to dryRun mode due to maxShrinkage being exceeded\n");
@@ -441,6 +453,9 @@ if (gOptions.flags & DBLOAD_DRY_RUN)
     }
 
 checkForStop(); /* last safe place */
+
+/* count global number of extFileChgs */
+gExtFileChged += statusTbl->numExtChg;
 
 /* first clean out old and changed */
 deleteOutdated(conn, select, statusTbl, tmpDir);
@@ -620,7 +635,6 @@ void copyTable(struct sqlConnection *conn, char* destDb, char* srcTable,
                char* destTable)
 /* copy a table from one database to another */
 {
-// FIXME: when on mysql 4.0, use alter table disable keys while copying
 char destDbTable[512], sqlCmd[512];
 safef(destDbTable, sizeof(destDbTable), "%s.%s", destDb, destTable);
 
@@ -754,6 +768,11 @@ errAbort(
   "     -extFileUpdate - update the gbSeq table to link each sequence to\n"
   "      the latest release.  This allows removing fasta files for older\n"
   "      releases, but is very time consuming.\n"
+  "\n"
+  "     -maxExtFileUpdate=n - update the gbSeq data for up to this many\n"
+  "      entries. This allows some entries to be changed on each update,\n"
+  "      while avoiding very long loads in a given day.  Implies\n"
+  "      -extFileUpdate\n"
   "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity:\n"

@@ -17,11 +17,11 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.4 2003/07/29 17:02:59 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.5 2004/02/07 17:39:09 markd Exp $";
 
 
 static char* validRefSeqStatus[] = {
-    "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", NULL
+    "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
 };
 
 /* hash tables used to avoid repeating error messages */

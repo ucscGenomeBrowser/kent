@@ -152,7 +152,15 @@ if (optionExists("initialLoad"))
 if (optionExists("allowLargeDeletes"))
     options.flags |= DBLOAD_LARGE_DELETES;
 if (optionExists("extFileUpdate"))
+    {
     options.flags |= DBLOAD_EXT_FILE_UPDATE;
+    options.maxExtFileUpdate = BIGNUM;      /* no limit */
+    }
+if (optionExists("maxExtFileUpdate"))
+    {
+    options.flags |= DBLOAD_EXT_FILE_UPDATE;
+    options.maxExtFileUpdate = optionInt("maxExtFileUpdate", 0);
+    }
 
 /* Get restrictions on what to select from the command line, and combine
  * with conf file. */

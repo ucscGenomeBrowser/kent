@@ -38,12 +38,11 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.5 2004/02/02 01:32:30 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.6 2004/02/07 17:39:09 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"gbdbCurrent", OPTION_STRING},
-    {"release", OPTION_STRING},
     {"srcDb", OPTION_STRING},
     {"type", OPTION_STRING},
     {"accPrefix", OPTION_STRING},
@@ -277,7 +276,7 @@ errAbort(
   "      verbosity (max is 3)\n"
   "     -test - enable test mode, certain errors, such as empty tables,\n"
   "      become warnings\n"
-  "     -release=rel - only validate this release (e.g. refseq.132.0)\n"
+  "     -srcDb=src - refseq or genebank)\n"
   "     -type=type - only validate this type.\n"
   "     -accPrefix=aa - only validate this acc prefix.\n"
   "     -noPerChrom - don't check the per-chromosome tables.\n"

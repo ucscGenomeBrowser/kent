@@ -10,10 +10,12 @@
 #include "errabort.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbStatusTbl.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbStatusTbl.c,v 1.2 2004/02/07 17:39:10 markd Exp $";
 
 // FIXME: the stateChg flags vs the list is a little confusing; maybe
 // have simpler lists (new, deleted, change, orphaned)
+// FIXME: use the select record in here
+
 
 /* name of status table */
 char* GB_STATUS_TBL = "gbStatus";
@@ -140,7 +142,7 @@ struct gbStatusTbl *gbStatusTblSelectLoad(struct sqlConnection *conn,
                                           unsigned select, char* accPrefix,
                                           gbStatusLoadSelect* selectFunc,
                                           void* clientData, char* tmpDir,
-                                          boolean verbose)
+                                          unsigned maxExtFileChg, boolean verbose)
 /* Selectively load the status table file table from the database, creating
  * table if it doesn't exist.  This calls selectFunc on each entry that is
  * found.  See gbStatusLoadSelect for details. */
@@ -151,6 +153,7 @@ AllocVar(statusTbl);
 statusTbl->accHash = newHash(20);
 statusTbl->strPool = newHash(18);
 strcpy(statusTbl->tmpDir, tmpDir);
+statusTbl->maxExtFileChg = maxExtFileChg;
 statusTbl->verbose = verbose;
 
 if (!sqlTableExists(conn, GB_STATUS_TBL))
@@ -193,14 +196,15 @@ gbStatusStore(statusTbl, tmpStatus);
 
 struct gbStatusTbl *gbStatusTblLoad(struct sqlConnection *conn,
                                     unsigned select, char* accPrefix,
-                                    char* tmpDir, boolean verbose)
+                                    char* tmpDir, unsigned maxExtFileChg, 
+                                    boolean verbose)
 /* Load the file table from the database, creating table if it doesn't exist.
  * The select flags are some combination of GB_MRNA,GB_EST,GB_GENBANK,
  * GB_REFSEQ.  If accPrefix is not null, it is the first two characters of the
  * accessions to select. */
 {
 return gbStatusTblSelectLoad(conn, select, accPrefix, loadSelectAll, NULL,
-                             tmpDir, verbose);
+                             tmpDir, maxExtFileChg, verbose);
 }
 
 struct gbStatus *gbStatusTblAdd(struct gbStatusTbl *statusTbl, char* acc,
