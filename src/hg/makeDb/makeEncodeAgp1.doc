@@ -1,6 +1,8 @@
 #!/bin/csh -f
-# Creates AGP files for ENCODE ortholog regions based on
+# "Make doc" for creating AGP files for ENCODE ortholog regions based on
 #  coordinates in bed files in the "edited" directory
+
+# TODO: contigAcc files should go in $outDir (neater this way)
 
 cd /cluster/data/encode/synteny/agp
 
@@ -57,12 +59,12 @@ cd ..
 
 # CHICKEN
 
-# Get contig to accession mapping (doced in makeGalGal2.doc) 
-hgsql galGal2 -s -e "select * from contigAcc" > chicken.contig.tab
-
 # Create AGP's
 csh genomeAgps.csh galGal2 chicken galGal2.new
 mv galGal2.new galGal2
+
+# Get contig to accession mapping (doced in makeGalGal2.doc) 
+hgsql galGal2 -s -e "select * from contigAcc" > chicken.contig.tab
 
 # Create packing list
 /cluster/data/encode/bin/scripts/encodeRegionPackingList ../edited/galGal2.bed galGal2  chicken "Gallus gallus" 9031 N/A FEB-2004 galGal2 "CGSC Feb. 2004" > galGal2/galGal2.packing.list
@@ -109,11 +111,12 @@ cd /cluster/data/encode/synteny/agp
 hgsql panTro1 -s -e "select * from contigAcc" > chimp.contig.tab
 
 # Create AGP's
+# NOTE: next time, put chimpChromContigs.agp into $outDir
 cat /cluster/data/panTro1/?{,?}/*.agp | \
-   chimpChromContigAgp stdin /cluster/data/panTro1/assembly.agp chromContigs.agp
+   chimpChromContigAgp stdin /cluster/data/panTro1/assembly.agp chimpChromContigs.agp
 mkdir -p panTro1.new
 regionAgp -contigFile=chimp.contig.tab \
-      -namePrefix=chimp_ ../edited/panTro1.bed chromContigs.agp -dir panTro1.new
+      -namePrefix=chimp_ ../edited/panTro1.bed chimpChromContigs.agp -dir panTro1.new
 mv panTro1.new panTro1
 
 # Create packing list
