@@ -1186,6 +1186,60 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findFosEndPairsBad(char *spec, struct hgPositions *hgp)
+/* Look for position in fosEndPairsBad table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query = NULL;
+char **row;
+boolean ok = FALSE;
+struct lfs *fe;
+char *chrom;
+char buf[64];
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+
+if (hTableExists("fosEndPairsBad"))
+    {
+    conn = hAllocConn();
+    query = newDyString(256);
+    dyStringPrintf(query, "select * from fosEndPairsBad where name = '%s'", spec);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (ok == FALSE)
+	    {
+	    ok = TRUE;
+	    AllocVar(table);
+	    dyStringClear(query);
+	    slAddHead(&hgp->tableList, table);
+	    }
+	AllocVar(fe);
+	fe = lfsLoad(row+1);
+	if ((chrom = hgOfficialChromName(fe->chrom)) == NULL)
+	    errAbort("Internal Database error: Odd chromosome name '%s' in fosEndPairsBad",
+		     fe->chrom); 
+	AllocVar(pos);
+	pos->chrom = chrom;
+	pos->chromStart = fe->chromStart;
+	pos->chromEnd = fe->chromEnd;
+	pos->name = cloneString(spec);
+	dyStringPrintf(query, "%s Positions found using fosmid end sequences", spec);
+	table->description = cloneString(query->string);
+	table->name = cloneString("fosEndPairsBad");
+	slAddHead(&table->posList, pos);
+	lfsFree(&fe);
+	}
+    if (table != NULL)
+        slReverse(&table->posList);
+    }
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
+
 static boolean findGenePred(char *spec, struct hgPositions *hgp, char *tableName)
 /* Look for position in gene prediction table. */
 {
@@ -2088,6 +2142,7 @@ else
     findFishClones(query, hgp);
     findBacEndPairs(query, hgp);
     findFosEndPairs(query, hgp);
+    findFosEndPairsBad(query, hgp);
     findStsPos(query, hgp);
     findMrnaKeys(query, hgp, hgAppName, cart);
     findZooGenes(query, hgp);
