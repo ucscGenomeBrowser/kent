@@ -102,12 +102,15 @@ int threshold = round(milliScore * (1.0+nearTop));
 int i, blockIx;
 int start, size, end;
 int topCount = 0;
+char strand = psl->strand[0];
 
 for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     {
     start = psl->qStarts[blockIx];
     size = psl->blockSizes[blockIx];
     end = start+size;
+    if (strand == '-')
+	reverseIntRange(&start, &end, psl->qSize);
     for (i=start; i<end; ++i)
 	{
 	if (scoreTrack[i] <= threshold)
@@ -143,6 +146,7 @@ AllocArray(scoreTrack, qSize+1);
 for (psl = pslList; psl != NULL; psl = psl->next)
     {
     int blockIx;
+    char strand = psl->strand[0];
     milliScore = calcMilliScore(psl);
     if (milliScore >= milliMin)
 	{
@@ -154,6 +158,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	    int size = psl->blockSizes[blockIx];
 	    int end = start+size;
 	    int i;
+	    if (strand == '-')
+	        reverseIntRange(&start, &end, psl->qSize);
 	    if (start < 0 || end > qSize)
 		{
 		warn("Odd: qName %s tName %s qSize %d psl->qSize %d start %d end %d",
