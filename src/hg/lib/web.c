@@ -8,7 +8,7 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.36 2003/06/18 01:31:23 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.37 2003/06/21 02:19:59 braney Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -568,7 +568,7 @@ else
     {
     *retDb = cartOptionalString(cart, dbCgiName);
     /* If there was a db found in the session that determines everything. */
-    if (*retDb) 
+    if (*retDb && hDbExists(*retDb))
         {
         *retGenome = hGenome(*retDb);
         }
