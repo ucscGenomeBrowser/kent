@@ -13,7 +13,7 @@
 #include "chainBlock.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.17 2003/07/08 05:59:02 baertsch Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.18 2003/08/12 20:47:15 kent Exp $";
 
 int minScore = 1000;
 char *detailsName = NULL;
@@ -55,6 +55,20 @@ struct seqPair
     struct boxIn *blockList; /* List of alignments. */
     int axtCount;		/* Count of axt's that make this up (just for stats) */
     };
+
+int seqPairCmp(const void *va, const void *vb)
+/* Compare to sort based on tName,qName. */
+{
+const struct seqPair *a = *((struct seqPair **)va);
+const struct seqPair *b = *((struct seqPair **)vb);
+int dif;
+dif = strcmp(a->tName, b->tName);
+if (dif == 0)
+    dif = strcmp(a->qName, b->qName);
+if (dif == 0)
+    dif = (int)a->qStrand - (int)b->qStrand;
+return dif;
+}
 
 void addAxtBlocks(struct boxIn **pList, struct axt *axt)
 /* Add blocks (gapless subalignments) from axt to block list. */
@@ -773,6 +787,7 @@ while ((axt = axtRead(lf)) != NULL)
     }
 lineFileClose(&lf);
 dyStringFree(&dy);
+slSort(&spList, seqPairCmp);
 return spList;
 }
 
