@@ -3313,6 +3313,73 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     # remove temp files
     # rm dbSnpRs*
 
+#  KNOWN GENE UPDATE (DONE - 2004-02-19 - Hiram
+#	using proteins and swissProt as created for Hg16 recently
+    ssh hgwdev
+    mkdir /cluster/data/kgDB/bed/kgMm4
+    cd /cluster/data/kgDB/bed/kgMm4
+    ~/kent/src/hg/protein/KGprocess.sh kgMm4 mm4 040115
+#	that runs to the first cluster run, then on kk
+    ssh kk
+    cd /cluster/data/kgDB/bed/kgMm4/kgBestMrna
+    para create jobList
+    para try
+    para push ... etc ...
+# Completed: 43352 of 43352 jobs
+# CPU time in finished jobs:     118572s    1976.21m    32.94h    1.37d  0.004 y
+# IO & Wait Time:                119951s    1999.18m    33.32h    1.39d  0.004 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest job:                       25s       0.42m     0.01h    0.00d
+# Submission to last job:           307s       5.12m     0.09h    0.00d
+
+#  Continuing back on hgwdev
+    ssh hgwdev
+    cd /cluster/data/kgDB/bed/kgMm4
+    ~/kent/src/hg/protein/KGprocess.sh kgMm4 mm4 040115
+#	that runs until it prepares the second cluster run, then
+    ssh kk
+    cd /cluster/data/kgDB/bed/kgMm4/kgProtMap
+    para create jobList
+    para try
+    para push ... etc
+# Completed: 4944 of 4944 jobs
+# CPU time in finished jobs:    1113456s   18557.60m   309.29h   12.89d  0.035 y
+# IO & Wait Time:                192756s    3212.60m    53.54h    2.23d  0.006 y
+# Average job time:                 264s       4.40m     0.07h    0.00d
+# Longest job:                     1269s      21.15m     0.35h    0.01d
+# Submission to last job:          1777s      29.62m     0.49h    0.02d
+
+#  Continuing back on hgwdev
+    ssh hgwdev
+    cd /cluster/data/kgDB/bed/kgMm4
+    ~/kent/src/hg/protein/KGprocess.sh kgMm4 mm4 040115
+#  That runs to completion
+#	existing tables were backed up into kgMm4_2003_11:
+# affyGnfU74ADistance     affyGnfU74BDistance     affyGnfU74CDistance
+# ceBlastTab      cgapAlias       cgapBiocDesc    cgapBiocPathway dmBlastTab
+# drBlastTab      dupSpMrna       hgBlastTab      keggMapDesc     keggPathway
+# kgAliaskgProtAlias      kgXref  knownBlastTab   knownCanonical  knownGene
+# knownGeneLink   knownGeneMrna   knownGenePep    knownIsoforms   knownToCdsSnp
+# knownToRefSeq   knownToU74      mrnaRefseq      scBlastTab      spMrna
+# until QA authorizes this build, then delete this table
+
+#	rename the new tables into the mm4 database:
+	cat << '_EOF_' > rename.sh
+#!/bin/sh
+for T in cgapAlias cgapBiocDesc cgapBiocPathway \
+    dupSpMrna keggMapDesc keggPathway kgAlias kgProtAlias \
+    kgProtMap kgXref knownGene knownGeneLink knownGeneMrna \
+    knownGenePep mrnaRefseq spMrna
+do
+    hgsql -e "drop table ${T};" mm4
+    hgsql -e "rename table kgMm4.${T} to mm4.${T};" mysql
+    echo $T
+done
+'_EOF_'
+    chmod +s rename.sh
+    ./rename.sh
+#	continue with the FAMILY BROWSER UPDATE to complete this process
+
 ######## FAMILY BROWSER UPDATE #######  (DONE - 2004-02-19 - Hiram)
 # These are instructions for building the
 # neighborhood browser.  Don't start these until
@@ -3774,3 +3841,8 @@ ssh hgwdev
 zcat /cluster/store1/superFamily/genomes/ass_11-Jan-2004.tab.gz | \
 	hgKnownToSuper mm4 mm stdin
 #	creates 27319 rows
+
+    # Update the proteins link into gdbPdb.hgcentraltest:
+hgsql \
+ -e 'update gdbPdb set proteomeDb = "proteins040115" where genomeDb = "mm4";' \
+        -h genome-testdb hgcentraltest

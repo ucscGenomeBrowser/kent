@@ -3547,13 +3547,102 @@ Submission to last job:          1817s      30.28m     0.50h    0.02d
     drop table ensGtp_old;  
     drop table ensPep_old;  
 
-XXXX wait to confirm if this is OK to do
     # Create knownToEnsembl column and knownToSuperfamily column
-    hgMapToGene -noLoad hg15 ensGene knownGene knownToEnsembl
+    hgMapToGene hg15 ensGene knownGene knownToEnsembl
     zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg15 hs stdin
 
 
-#	FAMILY BROWSER UPDATE	(WORKING - 2004-02-23 - Hiram)
+#  KNOWN GENE UPDATE (DONE - 2004-02-24 - Hiram
+#	using proteins and swissProt as created for Hg16 recently
+    ssh hgwdev
+    mkdir /cluster/data/kgDB/bed/kgHg15
+    cd /cluster/data/kgDB/bed/kgHg15
+    ~/kent/src/hg/protein/KGprocess.sh kgHg15 hg15 040115
+#	that runs to the first cluster run, then on kk
+    ssh kk
+    cd /cluster/data/kgDB/bed/kgHg15/kgBestMrna
+    para create jobList
+    para try
+    para push ... etc ...
+# Completed: 37972 of 37972 jobs
+# CPU time in finished jobs:     106405s    1773.41m    29.56h    1.23d  0.003 y
+# IO & Wait Time:                104497s    1741.62m    29.03h    1.21d  0.003 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest job:                       12s       0.20m     0.00h    0.00d
+# Submission to last job:           238s       3.97m     0.07h    0.00d
+
+#  Continuing back on hgwdev
+    ssh hgwdev
+    cd /cluster/data/kgDB/bed/kgHg15
+    ~/kent/src/hg/protein/KGprocess.sh kgHg15 hg15 040115
+#	that runs until it prepares the second cluster run, then
+    ssh kk
+    cd /cluster/data/kgDB/bed/kgHg15/kgProtMap
+    para create jobList
+    para try
+    para push ... etc
+# Completed: 4953 of 4953 jobs
+# CPU time in finished jobs:    1612079s   26867.98m   447.80h   18.66d  0.051 y
+# IO & Wait Time:                218411s    3640.18m    60.67h    2.53d  0.007 y
+# Average job time:                 370s       6.16m     0.10h    0.00d
+# Longest job:                     1939s      32.32m     0.54h    0.02d
+# Submission to last job:          4682s      78.03m     1.30h    0.05d
+
+#  Continuing back on hgwdev
+    ssh hgwdev
+    cd /cluster/data/kgDB/bed/kgHg15
+    ~/kent/src/hg/protein/KGprocess.sh kgHg15 hg15 040115
+#  That runs to completion
+#  Being more than thorough, record status of all tables currently in
+#	hg15 before loading tables, then backup all existing tables from
+#	hg15 to kgHg15_2003_06 via a dump since a rename does not work
+#	because hg15 is on a different filesystem than kgHg15_2003_06
+mkdir /cluster/data/hg15/bed/famBro.2004-02-23
+ln -l /cluster/data/hg15/bed/famBro.2004-02-23 /cluster/data/hg15/bed/famBro
+cd /cluster/data/hg15/bed/famBro
+    ~hiram/bin/tblData.pl -verbose hg15 > tblData.before
+    cat << '_EOF_' > loadNew.sh
+#!/bin/sh
+#
+#
+OldDB=hg15
+NewDB=kgHg15
+mkdir -p newKg
+#
+for T in cgapAlias cgapBiocDesc cgapBiocPathway dupSpMrna keggMapDesc \
+        keggPathway kgAlias kgProtMap kgProtAlias kgXref knownGene \
+        knownGeneLink knownGeneMrna knownGenePep mrnaRefseq spMrna
+do
+        echo "copy table data from ${NewDB}.${T} to ${OldDB}.${T};"
+        rm -f newKg/${T}.sql newKg/${T}.txt newKg/${T}.txt.gz
+        hgsqldump --all -T newKg ${NewDB} ${T}
+        hgsql -e "drop table ${T};" ${OldDB}
+        cd newKg
+        hgsql ${OldDB} < ${T}.sql
+        mysqlimport --user=hgcat --password="Man-0-W4r" ${OldDB} ${T}.txt
+        gzip ${T}.txt &
+        cd ..
+done
+'_EOF_'
+
+#	Eventually ended saving all of the following tables during the
+#	family browser update process below:  (~400 Mb of data)
+#	affyUcla             kgProtAlias           knownToCdsSnp    
+#	ceBlastTab           kgXref                knownToEnsembl    
+#	cgapAlias            knownBlastTab         knownToPfam    
+#	cgapBiocDesc         knownCanonical        knownToRefSeq    
+#	cgapBiocPathway      knownExpDistance      knownToU133    
+#	dmBlastTab           knownGeneLink         knownToU95    
+#	drBlastTab           knownGeneMrna         mmBlastTab    
+#	dupSpMrna            knownGenePep          mrnaRefseq    
+#	keggMapDesc          knownGene             scBlastTab    
+#	keggPathway          knownGnfDistance      spMrna    
+#	kgAlias              knownIsoforms    
+
+
+#	continue with the FAMILY BROWSER UPDATE to complete this process
+
+#	FAMILY BROWSER UPDATE	(DONE - 2004-02-24 - Hiram)
 #	to be done after knownGene tables are complete from known gene
 #	process.
 #
@@ -3564,7 +3653,7 @@ mkdir /cluster/data/hg15/bed/famBro.2004-02-23
 ln -l /cluster/data/hg15/bed/famBro.2004-02-23 /cluster/data/hg15/bed/famBro
 cd /cluster/data/hg15/bed/famBro
 hgClusterGenes hg15 knownGene knownIsoforms knownCanonical
-# Got 19693 clusters, from 35932 genes in 44 chromosomes
+# Got 19654 clusters, from 36011 genes in 44 chromosomes
 
 # Extract peptides from knownGenes into fasta file
 # and create a blast database out of them.
@@ -3623,44 +3712,44 @@ para try
 para push
 # This should finish in ~10 minutes if the cluster is free.
 
-# Completed: 7752 of 7752 jobs
-# CPU time in finished jobs:     116468s    1941.14m    32.35h    1.35d  0.004 y
-# IO & Wait Time:                 73296s    1221.60m    20.36h    0.85d  0.002 y
-# Average job time:                  24s       0.41m     0.01h    0.00d
-# Longest job:                      258s       4.30m     0.07h    0.00d
-# Submission to last job:           465s       7.75m     0.13h    0.01d
+# Completed: 7753 of 7753 jobs
+# CPU time in finished jobs:     118480s    1974.67m    32.91h    1.37d  0.004 y
+# IO & Wait Time:                 72240s    1203.99m    20.07h    0.84d  0.002 y
+# Average job time:                  25s       0.41m     0.01h    0.00d
+# Longest job:                      271s       4.52m     0.08h    0.00d
+# Submission to last job:           470s       7.83m     0.13h    0.01d
 
-# Load into database.  This takes about an hour.
+# Load into database.  This takes about 20 minutes
 ssh hgwdev
 cd /cluster/data/hg15/bed/famBro/blastp/self/run/out
 time hgLoadBlastTab hg15 knownBlastTab *.tab
-# Scanning through 7752 files
-# Loading database with 8586857 rows
+# Scanning through 7753 files
+# Loading database with 8832851 rows
 #	previously had  7103098 rows
-#	real    20m53.643s
-#	user    4m1.680s
-#	sys     0m32.570s
+#	real    19m53.778s
+#	user    3m38.460s
+#	sys     0m24.020s
 
 cd /cluster/data/hg15/bed/famBro
 # Create table that maps between known genes and RefSeq
 hgMapToGene hg15 refGene knownGene knownToRefSeq
 #	may need to build this command in src/hg/near/hgMapToGene
-#	row count unchanged ? from 29278 to 29278
+#	row count changed from 29278 to 29296
 
 # Create table that maps between known genes and LocusLink
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg15 \
 	> refToLl.txt
 hgMapToGene hg15 refGene knownGene knownToLocusLink -lookup=refToLl.txt
-#	this table did not exist in previous version, rows now: 29278
+#	this table did not exist in previous version, rows now: 29296
 
 # Create table that maps between known genes and Pfam domains
 hgMapViaSwissProt hg15 knownGene name proteinID Pfam knownToPfam
-#	row count went from 30689 to 31478
+#	row count went from 30689 to 31337
 
 # Create a table that maps between known genes and 
 # the nice affy expression data.
 hgMapToGene "-type=bed 12" hg15 affyUcla knownGene knownToU133
-#	row count unchanged from 32009 ?
+#	row count changed from 32009 to 32067
 
 # Create expression distance table.  This will take about an hour.
 #	run this in /tmp as it makes a huge (~800Mb) temp file
@@ -3671,23 +3760,25 @@ cd /tmp
 time hgExpDistance hg15 affyUcla affyUclaExp knownExpDistance \
 	-weights=affyUcla.weight -lookup=knownToU133
 # Have 43344 elements in affyUcla
-# Got 32009 unique elements in affyUcla
-# real    66m22.938s
-# user    51m18.420s
-# sys     1m13.410s
-#	row count went from 31504000 to 32009000
+# Got 32067 unique elements in affyUcla
+# real    65m16.947s
+# user    50m47.980s
+# sys     0m48.870s
+#	row count went from 31504000 to 32067000
 
 cd /cluster/data/hg15/bed/famBro
 # Create table that maps between known genes and 
 # the GNF data.
-XXXX last thing to do 13:24 - THERE IS NO affyU95 ?
-hgMapToGene hg15 affyU95 knownGene knownToU95
+hgMapToGene hg15 affyRatio knownGene knownToU95
+#	row count changed from 13403 to 10949
 cd /tmp
 #	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
-hgExpDistance hg15 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95Exps knownGnfDistance  -lookup=knownToU95
-#	row count went from 11718000 to 17330000
-#  original makeNear.doc had this as:
-# hgExpDistance hg15 affyGnfU95 affyGnfU95Exps knownGnfDistance -lookup=knownToU95
+time hgExpDistance hg15 hgFixed.gnfHumanU95MedianRatio hgFixed.gnfHumanU95Exps knownGnfDistance  -lookup=knownToU95
+#	row count went from 11718000 to 10333000
+# Got 10333 unique elements in hgFixed.gnfHumanU95MedianRatio
+#	real    10m42.446s
+#	user    6m0.980s
+#	sys     0m12.430s
 
 # Make sure that GO database is up to date.
 See README in /cluster/store1/geneOntology.
@@ -3700,10 +3791,13 @@ See README in /cluster/store1/geneOntology.
 #	/cluster/store1/geneOntology/20040217
 
 cd /cluster/data/hg15/bed/famBro
+#	create knownToSuper table
+zcat /cluster/store1/superFamily/genomes/ass_26-Oct-2003.tab.gz | hgKnownToSuper hg15 hs stdin
+#	row count changed from 34558 to 34334
 
 # Create knownToEnsembl column
 hgMapToGene hg15 ensGene knownGene knownToEnsembl
-#	table row count unchanged at 33465 ?
+#	row count changed from 33465 to 33561
 
 # Make knownToCdsSnp column.  This is a little complicated by
 # having to merge data form the snpTsc and the snpNih tracks.
@@ -3715,12 +3809,13 @@ rm snp1.tab snp2.tab
 hgsql \
     -e 'load data local infile "knownToCdsSnp.tab" into table knownToCdsSnp;' \
 	hg15
-#	row unchanged at 82592 ?
+#	row count changed from 82592 to 83425
 
 #
 #	The five organisms below can be run through quickly.  Get one kluster
 #	run started and go on to the next.  Takes about 7 minutes to get
 #	them all running and by then one of them is already done.
+#	Keep track of where you are at during this.
 #
 # Make C. elegans ortholog column using blastp on wormpep.
 # First make C. elegans protein database and copy it to cluster/bluearc
@@ -3755,25 +3850,20 @@ blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
 # Create parasol batch
 echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub jobList
-para create jobList
-para try
+para make jobList
 
-# Wait a couple of minutes, and do a para check,  if all is good
-# then do a
-para push
-
-# Completed: 7752 of 7752 jobs
-# CPU time in finished jobs:      53478s     891.31m    14.86h    0.62d  0.002 y
-# IO & Wait Time:                 64662s    1077.69m    17.96h    0.75d  0.002 y
-# Average job time:                  15s       0.25m     0.00h    0.00d
-# Longest job:                      142s       2.37m     0.04h    0.00d
-# Submission to last job:           341s       5.68m     0.09h    0.00d
+# Completed: 7753 of 7753 jobs
+# CPU time in finished jobs:      53399s     889.99m    14.83h    0.62d  0.002 y
+# IO & Wait Time:                 20094s     334.90m     5.58h    0.23d  0.001 y
+# Average job time:                   9s       0.16m     0.00h    0.00d
+# Longest job:                      140s       2.33m     0.04h    0.00d
+# Submission to last job:           247s       4.12m     0.07h    0.00d
 
 # Load into database.  
 ssh hgwdev
 cd /cluster/data/hg15/bed/famBro/blastp/ce1/run/out
 hgLoadBlastTab hg15 ceBlastTab -maxPer=1 *.tab
-#	row count went from 23504 to 23506
+#	row count went from 23504 to 23714
 
 # Make mouse ortholog column using blastp on mouse known genes.
 # First make mouse protein database and copy it to cluster/bluearc
@@ -3811,25 +3901,20 @@ blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
 
 echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub jobList
-para create jobList
-para try
+para make jobList
 
-# Wait a couple of minutes, and do a para check,  if all is good
-# then do a
-para push
-
-# Completed: 7752 of 7752 jobs
-# CPU time in finished jobs:     101527s    1692.11m    28.20h    1.18d  0.003 y
-# IO & Wait Time:                 40859s     680.99m    11.35h    0.47d  0.001 y
-# Average job time:                  18s       0.31m     0.01h    0.00d
-# Longest job:                      215s       3.58m     0.06h    0.00d
-# Submission to last job:           649s      10.82m     0.18h    0.01d
+# Completed: 7753 of 7753 jobs
+# CPU time in finished jobs:     102603s    1710.06m    28.50h    1.19d  0.003 y
+# IO & Wait Time:                 45327s     755.44m    12.59h    0.52d  0.001 y
+# Average job time:                  19s       0.32m     0.01h    0.00d
+# Longest job:                      213s       3.55m     0.06h    0.00d
+# Submission to last job:           530s       8.83m     0.15h    0.01d
 
 # Load into database.  
 ssh hgwdev
 cd /cluster/data/hg15/bed/famBro/blastp/mm4/run/out
 hgLoadBlastTab hg15 mmBlastTab -maxPer=1 *.tab
-#	row count went from 30536 to 30845
+#	row count went from 30536 to 31071
 
 # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
 # First make protein database and copy it to cluster/bluearc
@@ -3864,25 +3949,20 @@ blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
 # Create parasol batch
 echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub jobList
-para create jobList
-para try
+para make jobList
 
-# Wait a couple of minutes, and do a para check,  if all is good
-# then do a
-para push
-
-# Completed: 7752 of 7752 jobs
-# CPU time in finished jobs:      61951s    1032.51m    17.21h    0.72d  0.002 y
-# IO & Wait Time:                 23518s     391.97m     6.53h    0.27d  0.001 y
-# Average job time:                  11s       0.18m     0.00h    0.00d
-# Longest job:                      151s       2.52m     0.04h    0.00d
-# Submission to last job:           429s       7.15m     0.12h    0.00d
+# Completed: 7753 of 7753 jobs
+# CPU time in finished jobs:      76565s    1276.09m    21.27h    0.89d  0.002 y
+# IO & Wait Time:                 35019s     583.64m     9.73h    0.41d  0.001 y
+# Average job time:                  14s       0.24m     0.00h    0.00d
+# Longest job:                      208s       3.47m     0.06h    0.00d
+# Submission to last job:           508s       8.47m     0.14h    0.01d
 
 # Load into database.  
 ssh hgwdev
 cd /cluster/data/hg15/bed/famBro/blastp/dr1/run/out
 hgLoadBlastTab hg15 drBlastTab -maxPer=1 *.tab
-#	row count went from 27914 to 27915
+#	row count went from 27914 to 28141
 
 # Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on RefSeq.
 # First make protein database and copy it to cluster/bluearc
@@ -3917,24 +3997,19 @@ blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
 # Create parasol batch
 echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub jobList
-para create jobList
-para try
+para make jobList
 
-# Wait a couple of minutes, and do a para check,  if all is good
-# then do a
-para push
-
-# Completed: 7752 of 7752 jobs
-# CPU time in finished jobs:      15761s     262.69m     4.38h    0.18d  0.000 y
-# IO & Wait Time:                 22246s     370.76m     6.18h    0.26d  0.001 y
+# Completed: 7753 of 7753 jobs
+# CPU time in finished jobs:      15864s     264.39m     4.41h    0.18d  0.001 y
+# IO & Wait Time:                 22424s     373.74m     6.23h    0.26d  0.001 y
 # Average job time:                   5s       0.08m     0.00h    0.00d
-# Longest job:                       36s       0.60m     0.01h    0.00d
-# Submission to last job:           184s       3.07m     0.05h    0.00d
+# Longest job:                       31s       0.52m     0.01h    0.00d
+# Submission to last job:           172s       2.87m     0.05h    0.00d
 
 ssh hgwdev
 cd /cluster/data/hg15/bed/famBro/blastp/sc1/run/out
 hgLoadBlastTab hg15 scBlastTab -maxPer=1 *.tab
-#	row count went from 15686 to 15687
+#	row count went from 15686 to 15840
 
 # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
 # First make SwissProt protein database and copy it to cluster/bluearc
@@ -3969,22 +4044,23 @@ blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
 # Create parasol batch
 echo ../../split/*.fa | wordLine stdin > split.lst
 gensub2 split.lst single gsub jobList
-para create jobList
-para try
+para make jobList
 
-# Wait a couple of minutes, and do a para check,  if all is good
-# then do a
-para push
-
-# Completed: 7752 of 7752 jobs
-# CPU time in finished jobs:      61951s    1032.51m    17.21h    0.72d  0.002 y
-# IO & Wait Time:                 23518s     391.97m     6.53h    0.27d  0.001 y
-# Average job time:                  11s       0.18m     0.00h    0.00d
-# Longest job:                      151s       2.52m     0.04h    0.00d
-# Submission to last job:           429s       7.15m     0.12h    0.00d
+# Completed: 7753 of 7753 jobs
+# CPU time in finished jobs:      62430s    1040.51m    17.34h    0.72d  0.002 y
+# IO & Wait Time:                 23718s     395.29m     6.59h    0.27d  0.001 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest job:                      153s       2.55m     0.04h    0.00d
+# Submission to last job:           386s       6.43m     0.11h    0.00d
 
 # Load into database.  
 ssh hgwdev
 cd /cluster/data/hg15/bed/famBro/blastp/dm1/run/out
 hgLoadBlastTab hg15 dmBlastTab -maxPer=1 *.tab
-#	row count went from 24969 to 24967
+#	row count went from 24969 to 25152
+
+    # Update the proteins link into gdbPdb.hgcentraltest:
+hgsql \
+ -e 'update gdbPdb set proteomeDb = "proteins040115" where genomeDb = "hg15";' \
+        -h genome-testdb hgcentraltest
+
