@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.6 2004/03/24 03:18:23 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.7 2004/03/24 04:12:56 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft.userData"     /* typed/pasted in data */
@@ -36,7 +36,8 @@ struct hash *oldCart = NULL;
 
 char *formatList[] = 
         //{"Position", "BED*", "MAF*", "Wiggle*", "GFF", 0};
-        {"Position", "BED", 0};
+        //{"Position", "BED", 0};
+        {"BED", 0};
 
 char *genomeList[] = {"Human", 0};
 //char *origAssemblyList[] = {"June 2002", "Nov. 2002", "April 2003", 0};
@@ -101,7 +102,7 @@ cgiSimpleTableStart();
 cgiSimpleTableRowStart();
 cgiTableField("Data Format: ");
 cgiSimpleTableFieldStart();
-cgiMakeDropList(HGLFT_DATAFORMAT_VAR, formatList, 2, "BED");
+cgiMakeDropList(HGLFT_DATAFORMAT_VAR, formatList, 1, "BED");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
@@ -155,8 +156,10 @@ void webDataFormats()
 {
 webNewSection("Data Formats");
 printf("<UL>");
+/*
 printf("<LI>");
 printf("For <B>Position</B> format, enter the <I>chromosome</I>, <I>start</I>, and <I>end</I> positions, in the format <B>chrN:S-E</B>\n");
+*/
 printf("<LI>");
 printf(
     "<A HREF=\"/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
@@ -242,7 +245,7 @@ else
         /* some records not converted */
         cgiParagraph("");
         printf("Conversion failed on %d record", errCt);
-        printf("%s: ", errCt > 1 ? "s" : "");
+        printf("%s: &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
         printf("<A HREF=%s TARGET=_blank>View File</A>\n",
                          unmappedTn.forCgi);
         fclose(unmapped);
