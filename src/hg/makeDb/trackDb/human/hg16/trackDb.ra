@@ -565,6 +565,14 @@ priority 147.5
 visibility hide
 type bed 4 +
 
+track vntr
+shortLabel Microsatellites
+longLabel Perfect Microsatellites - VNTR
+priority 148
+group varRep
+visibility dense
+type bed 4 +
+
 track blastzSelfUnmasked
 shortLabel Self Unmasked
 longLabel Blastz Self Join without Repeats Masked (tandem repeats masked)
