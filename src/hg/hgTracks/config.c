@@ -199,7 +199,7 @@ hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("leftLabels", cartUsualBoolean(cart, "leftLabels", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Display labels to the left of items tracks.");
+hPrintf("Display labels to the left of items in tracks.");
 hPrintf("</TD></TR>");
 hPrintf("<TR><TD>");
 hCheckBox("centerLabels", cartUsualBoolean(cart, "centerLabels", TRUE));
