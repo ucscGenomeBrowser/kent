@@ -528,6 +528,9 @@ boolean isCustomTrack(char *table);
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
 
+void flushCustomTracks();
+/* Flush custom track list. */
+
 struct slName *getBedFields(int fieldCount);
 /* Get list of fields for bed of given size. */
 
