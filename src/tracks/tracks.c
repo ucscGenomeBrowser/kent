@@ -1240,10 +1240,10 @@ if (!ti.withCenterLabels)
     labelCount = 0;
 if (ti.withLeftLabels)
     {
-    leftLabelWidth = 80;
+    leftLabelWidth = 98;
     xOff += leftLabelWidth + border;
     }    
-pixWidth = 598;
+pixWidth = 616;
 insideWidth = pixWidth-border-xOff;
 if (compactDisplay)
     {
