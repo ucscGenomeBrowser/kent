@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.21 2004/07/19 07:22:39 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.22 2004/07/20 00:27:24 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -227,32 +227,13 @@ slReverse(&dtfList);
 return dtfList;
 }
 
-static struct dyString *makeSimpleCommaFieldList(struct joinerDtf *dtfList)
-/* Make comma-separated list from field components of dtfList. */
-{
-struct dyString *dy = dyStringNew(0);
-struct joinerDtf *dtf;
-boolean needsComma = FALSE;
-for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
-    {
-    if (needsComma)
-        dyStringAppendC(dy, ',');
-    else
-        needsComma = TRUE;
-    dyStringAppend(dy, dtf->field);
-    }
-return dy;
-}
-
-static struct dyString *makeOrderedCommaFieldList(struct sqlConnection *conn, 
-	char *table, struct joinerDtf *dtfList)
-/* Assumes that dtfList all points to same table.  This will return 
- * a comma-separated field list in the same order as the fields are 
- * in database. */
+static struct dyString *makeOrderedCommaFieldList(
+	struct slName *orderList, struct joinerDtf *dtfList)
+/* Given list in order, and a subset of fields to use, make
+ * a comma separated list of that subset in order. */
 {
 struct joinerDtf *dtf;
-char *split = chromTable(conn, table);
-struct slName *dbField, *dbFieldList = sqlListFields(conn, split);
+struct slName *order;
 boolean first = TRUE;
 struct dyString *dy = dyStringNew(0);
 struct hash *dtfHash = newHash(8);
@@ -260,20 +241,42 @@ struct hash *dtfHash = newHash(8);
 /* Build up hash of field names. */
 for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
     hashAdd(dtfHash, dtf->field, NULL);
-for (dbField = dbFieldList; dbField != NULL; dbField = dbField->next)
+for (order = orderList; order != NULL; order = order->next)
     {
-    if (hashLookup(dtfHash, dbField->name))
+    if (hashLookup(dtfHash, order->name))
         {
 	if (first)
 	    first = FALSE;
 	else
 	    dyStringAppendC(dy, ',');
-	dyStringAppend(dy, dbField->name);
+	dyStringAppend(dy, order->name);
 	}
     }
 hashFree(&dtfHash);
-slFreeList(&dbFieldList);
+return dy;
+}
+
+static struct dyString *makeDbOrderedCommaFieldList(struct sqlConnection *conn, 
+	char *table, struct joinerDtf *dtfList)
+/* Assumes that dtfList all points to same table.  This will return 
+ * a comma-separated field list in the same order as the fields are 
+ * in database. */
+{
+char *split = chromTable(conn, table);
+struct slName *fieldList = sqlListFields(conn, split);
+struct dyString *dy = makeOrderedCommaFieldList(fieldList, dtfList);
+slFreeList(&fieldList);
 freez(&split);
+return dy;
+}
+
+static struct dyString *makeCtOrderedCommaFieldList(struct joinerDtf *dtfList)
+/* Make comma-separated field list in same order as fields are in
+ * custom track. */
+{
+struct slName *fieldList = getBedFields(12);
+struct dyString *dy = makeOrderedCommaFieldList(fieldList, dtfList);
+slFreeList(&fieldList);
 return dy;
 }
 
@@ -750,9 +753,9 @@ if (joinerDtfAllSameTable(dtfList))
     struct dyString *dy;
     
     if (isCustomTrack(dtfList->table))
-        dy = makeSimpleCommaFieldList(dtfList);
+        dy = makeCtOrderedCommaFieldList(dtfList);
     else
-	dy = makeOrderedCommaFieldList(conn, dtfList->table, dtfList);
+	dy = makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList);
     doTabOutTable(dtfList->database, dtfList->table, conn, dy->string);
     sqlDisconnect(&conn);
     }
