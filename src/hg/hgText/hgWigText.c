@@ -283,7 +283,7 @@ wigStats->chromEnd = end;
 wigStats->span = span;
 wigStats->count = count;
 wigStats->lowerLimit = wigLowerLimit;
-wigStats->dataRange = wigUpperLimit = wigLowerLimit;
+wigStats->dataRange = wigUpperLimit - wigLowerLimit;
 wigStats->mean = mean;
 wigStats->variance = variance;
 wigStats->stddev = stddev;
