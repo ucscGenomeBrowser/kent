@@ -765,6 +765,15 @@ AUTO UPDATE GENBANK MRNA RUN  (DONE - 2003-07-07 - Hiram)
     # load genbank and refseq mRNAs into database
     nice ./bin/gbDbLoadStep -type=mrna -verbose=1 rn3
 
+    # refseq protein ids included version, which caused searches to fail.
+    # clean our refseq sequences and reload:
+      drop table refFlat,refGene,refLink,refSeqAli,refSeqStatus;
+      delete from gbSeq where acc like 'NM_%' or acc like 'NP_%';
+      delete from gbStatus where acc like 'NM_%' or acc like 'NP_%';
+      delete from mrna where acc like 'NM_%';
+      delete from gbLoaded where srcDb='RefSeq';
+     nice ./bin/gbDbLoadStep -verbose=1 rn3
+
 CREATE RNACLUSTER TABLE (TO DO)
     # Make sure that refSeqAli, estOrientInfo and mrnaOrientInfo tables are 
     # made already (see above).
