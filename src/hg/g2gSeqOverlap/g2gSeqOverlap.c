@@ -9,7 +9,7 @@
 #include "fa.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: g2gSeqOverlap.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
+static char const rcsid[] = "$Id: g2gSeqOverlap.c,v 1.4 2003/10/17 14:29:43 kent Exp $";
 
 char *faDirs[] = 
     {
@@ -137,6 +137,7 @@ for (i=0; i<faDirCount; ++i)
 	}
     }
 errAbort("Couldn't find clone %s", cloneName);
+return NULL;
 }
 
 void writeOverlaps(FILE *f, struct seqOver *so)
