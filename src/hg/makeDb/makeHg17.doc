@@ -8897,9 +8897,9 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ln -s `pwd`/*.wib /gbdb/hg17/wib/regPotential2X
     time hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/regPotential2X \
 	hg17 regPotential2X chr*.wig
-    #	real    1m40.961s
-    #	user    0m30.880s
-    #	sys     0m5.890s
+    #	real    2m29.668s
+    #	user    0m33.380s
+    #	sys     0m8.200s
 
 # regulatory potential 3X track (WORKING - 2004-09-14 - Hiram)
     #	Expects groundwork done above in the 2X track
@@ -8936,8 +8936,17 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
 	    wigAsciiToBinary -chrom=$C -dataSpan=1 \
 		-wibFile=wigData/$C stdin 2> dataLimits/$C.limits
     done
-XXX - running 2004-09-16 09:20
 
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/regPotential3X/wigData
+    mkdir /gbdb/hg17/wib/regPotential3X
+    ln -s `pwd`/*.wib /gbdb/hg17/wib/regPotential3X
+    time hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/regPotential3X \
+	hg17 regPotential3X chr*.wig
+    #	real    1m45.568s
+    #	user    0m32.740s
+    #	sys     0m6.140s
 
 # SGP GENES (DONE 9/17/04 angie)
     ssh eieio
