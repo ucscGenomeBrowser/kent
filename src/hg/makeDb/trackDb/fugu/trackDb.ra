@@ -177,3 +177,15 @@ priority 1101
 visibility hide
 type psl protein
 
+track blastzDanRer1
+shortLabel Zebrafish Blastz
+longLabel Blastz Zebrafish (danRer1-Nov 03) Alignments
+group compGeno
+priority 125.1
+visibility hide
+color 0,0,0
+altColor 50,128,50
+spectrum on
+type psl xeno danRer1
+otherDb danRer1
+
