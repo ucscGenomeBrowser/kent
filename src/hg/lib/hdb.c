@@ -984,6 +984,15 @@ else
     conn = hAllocConn2();
     }
 
+if (! sqlTableExists(conn, table))
+    {
+    if (sameString(db, hGetDb()))
+	hFreeConn(&conn);
+    else
+	hFreeConn2(&conn);
+    return FALSE;
+    }
+
 /* Read table description into hash. */
 sprintf(query, "describe %s", table);
 sr = sqlGetResult(conn, query);
