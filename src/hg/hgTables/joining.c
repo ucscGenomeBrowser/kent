@@ -14,7 +14,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: joining.c,v 1.24 2004/08/28 20:07:38 kent Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.25 2004/09/06 16:53:51 kent Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -227,15 +227,14 @@ slReverse(&dtfList);
 return dtfList;
 }
 
-static struct dyString *makeOrderedCommaFieldList(
-	struct slName *orderList, struct joinerDtf *dtfList)
+static void makeOrderedCommaFieldList(struct slName *orderList, 
+	struct joinerDtf *dtfList, struct dyString *dy)
 /* Given list in order, and a subset of fields to use, make
  * a comma separated list of that subset in order. */
 {
 struct joinerDtf *dtf;
 struct slName *order;
 boolean first = TRUE;
-struct dyString *dy = dyStringNew(0);
 struct hash *dtfHash = newHash(8);
 
 /* Build up hash of field names. */
@@ -253,31 +252,29 @@ for (order = orderList; order != NULL; order = order->next)
 	}
     }
 hashFree(&dtfHash);
-return dy;
 }
 
-static struct dyString *makeDbOrderedCommaFieldList(struct sqlConnection *conn, 
-	char *table, struct joinerDtf *dtfList)
+void makeDbOrderedCommaFieldList(struct sqlConnection *conn, 
+	char *table, struct joinerDtf *dtfList, struct dyString *dy)
 /* Assumes that dtfList all points to same table.  This will return 
  * a comma-separated field list in the same order as the fields are 
  * in database. */
 {
 char *split = chromTable(conn, table);
 struct slName *fieldList = sqlListFields(conn, split);
-struct dyString *dy = makeOrderedCommaFieldList(fieldList, dtfList);
+makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
 freez(&split);
-return dy;
 }
 
-static struct dyString *makeCtOrderedCommaFieldList(struct joinerDtf *dtfList)
+static void makeCtOrderedCommaFieldList(struct joinerDtf *dtfList, 
+	struct dyString *dy)
 /* Make comma-separated field list in same order as fields are in
  * custom track. */
 {
 struct slName *fieldList = getBedFields(12);
-struct dyString *dy = makeOrderedCommaFieldList(fieldList, dtfList);
+makeOrderedCommaFieldList(fieldList, dtfList, dy);
 slFreeList(&fieldList);
-return dy;
 }
 
 struct tableJoiner
@@ -317,6 +314,34 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+static void orderFieldsInTable(struct tableJoiner *tj)
+/* Rearrange order of fields in tj->fieldList so that 
+ * they are the same as the order in the database. */
+{
+struct sqlConnection *conn = sqlConnect(tj->database);
+struct hash *fieldHash = hashNew(0);
+struct slName *field, *fieldList = sqlListFields(conn, tj->table);
+struct joinerDtf *dtf, *newList = NULL;
+
+/* Build up hash of field names. */
+for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
+    hashAdd(fieldHash, dtf->field, dtf);
+sqlDisconnect(&conn);
+
+/* Build up new list in correct order. */
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    dtf = hashFindVal(fieldHash, field->name);
+    if (dtf != NULL)
+        {
+	slAddHead(&newList, dtf);
+	}
+    }
+slFreeList(&fieldList);
+slReverse(&newList);
+tj->fieldList = newList;
+}
+
 
 struct tableJoiner *bundleFieldsIntoTables(struct joinerDtf *dtfList)
 /* Convert list of fields to list of tables.  */
@@ -342,6 +367,10 @@ for (dtf = dtfList; dtf != NULL; dtf = dtf->next)
     slAddTail(&tj->fieldList, dupe);
     }
 slReverse(&tjList);
+for (tj = tjList; tj != NULL; tj = tj->next)
+    {
+    orderFieldsInTable(tj);
+    }
 return tjList;
 }
 
@@ -748,12 +777,12 @@ struct joinerDtf *dtfList = fieldsToDtfs(fieldList);
 if (joinerDtfAllSameTable(dtfList))
     {
     struct sqlConnection *conn = sqlConnect(dtfList->database);
-    struct dyString *dy;
+    struct dyString *dy = dyStringNew(0);
     
     if (isCustomTrack(dtfList->table))
-        dy = makeCtOrderedCommaFieldList(dtfList);
+        makeCtOrderedCommaFieldList(dtfList, dy);
     else
-	dy = makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList);
+	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);
     doTabOutTable(dtfList->database, dtfList->table, conn, dy->string);
     sqlDisconnect(&conn);
     }
