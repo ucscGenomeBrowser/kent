@@ -59,6 +59,10 @@ char *hgChromNames[] =
     "chrUn",
     "chrM",
     "target1",
+    "target2",
+    "target3",
+    "target4",
+    "target5",
     };
 int hgChromCount = ArraySize(hgChromNames);
 
