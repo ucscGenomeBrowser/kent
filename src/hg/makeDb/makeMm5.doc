@@ -2702,6 +2702,10 @@ hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm5 \
 hgMapToGene mm5 refGene knownGene knownToLocusLink -lookup=refToLl.txt
 #       row count is 30303
 
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
+# row count is 29069
+
 # ENABLE GENE SORTER FOR mm5 IN HGCENTRALTEST (DONE 7/20/04 Fan)
     echo "update dbDb set hgNearOk = 1 where name = 'mm5';" \
       | hgsql -h genome-testdb hgcentraltest
