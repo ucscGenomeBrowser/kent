@@ -2494,7 +2494,7 @@ struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr2;
 char **row2;
 char *alias;
-boolean doAlias = sqlTableExists(conn, "stsAlias");
+/*boolean doAlias = sqlTableExists(conn, "stsAlias");*/
 struct stsMap el;
 int rowOffset;
 
@@ -2513,7 +2513,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (firstTime)
 	{
 	boolean firstAlias = TRUE;
-	if (doAlias)
+	/* if (doAlias)
 	    {
 	    printf("<B>name:</B> %s<BR>\n", item);
 	    sprintf(query, "select alias from stsAlias where trueName = '%s'", 
@@ -2540,7 +2540,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    struct stsMarker oldEl;
 	    stsMarkerStaticLoad(row+rowOffset, &oldEl);
 	    stsMapFromStsMarker(&oldEl, &el);
-	    }
+	    } */
 	printf("<B>STS id:</B> %d<BR>\n", el.identNo);
 	if (!sameString(el.ctgAcc, "-"))
 	    printf("<B>clone hit:</B> %s<BR>\n", el.ctgAcc);
