@@ -7,6 +7,7 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "hui.h"
+#include "hdb.h"
 #include "hgColors.h"
 #include "bioImage.h"
 #include "hgGenePix.h"
@@ -31,6 +32,25 @@ char *hgGenePixCgiName()
  * of program */
 {
 return "hgGenePix";
+}
+
+char *genomeDbForImage(struct sqlConnection *conn, int imageId)
+/* Return the genome database to associate with image or NULL if none. */
+{
+char *scientificName = bioImageOrganism(conn, imageId);
+struct sqlConnection *cConn = hConnectCentral();
+char query[256];
+char *db;
+
+safef(query, sizeof(query), 
+	"select defaultDb.name from defaultDb,dbDb where "
+	"defaultDb.genome = dbDb.organism and "
+	"dbDb.active = 1 and "
+	"dbDb.scientificName = '%s'" 
+	, scientificName);
+db = sqlQuickString(cConn, query);
+hDisconnectCentral(&cConn);
+return db;
 }
 
 void doThumbnails(struct sqlConnection *conn)
@@ -130,8 +150,10 @@ htmlEnd();
 
 void doControls(struct sqlConnection *conn)
 {
+int imageId = cartInt(cart, hgpId);
 htmlSetBgColor(0xD0FFE0);
 htmStart(stdout, "do image");
+printf("database for image: %s ", genomeDbForImage(conn, imageId));
 printf("Do controls");
 htmlEnd();
 }
@@ -156,10 +178,10 @@ puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");
-printf("UCSC %s on %s %s %s",  hgGenePixShortName(),  
+printf("%s %s %s %s",  hgGenePixShortName(),  
 	bioImageGeneName(conn, imageId),
-	bioImageOrganism(conn, imageId),
-	bioImageStage(conn, imageId, FALSE) );
+	bioImageStage(conn, imageId, FALSE),
+	bioImageOrganism(conn, imageId) );
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
