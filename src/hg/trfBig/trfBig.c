@@ -10,6 +10,7 @@
 char *trfExe = "trf";	/* trf executable name. */
 boolean doBed = FALSE;	/* Output .bed file. */
 char *tempDir = ".";	/* By default use current dir. */
+int maxPeriod = 500;    /* Maximum size of repeat. */
 
 void usage()
 /* Explain usage and exit. */
@@ -25,7 +26,9 @@ errAbort(
   "   -bed creates a bed file in current dir\n"
   "   -bedAt=path.bed - create a bed file at explicit location\n"
   "   -tempDir=dir Where to put temp files.\n"
-  "   -trf=trfExe explicitly specifies trf executable name\n");
+  "   -trf=trfExe explicitly specifies trf executable name\n"
+  "   -maxPeriod=N  Maximum period size of repeat (default %d)\n",
+  maxPeriod);
 }
 
 void writeSomeDatToBed(char *inName, FILE *out, char *chromName, int chromOffset, 
@@ -89,15 +92,15 @@ slFreeList(&list);
 void makeTrfRootName(char trfRootName[512], char *faFile)
 /* Make root name of files trf produces from faFile. */
 {
-sprintf(trfRootName, "%s.2.7.7.80.10.50.500", faFile);
+sprintf(trfRootName, "%s.2.7.7.80.10.50.%d", faFile, maxPeriod);
 }
 
 void trfSysCall(char *faFile)
 /* Invoke trf program on file. */
 {
 char command[1024];
-sprintf(command, "cd %s; %s %s 2 7 7 80 10 50 500 -m %s", 
-	tempDir, trfExe, faFile, doBed ? "-d" : "");
+sprintf(command, "cd %s; %s %s 2 7 7 80 10 50 %d -m %s", 
+	tempDir, trfExe, faFile, maxPeriod, doBed ? "-d" : "");
 uglyf("faFile %s, command %s\n", faFile, command);
 system(command);
 }
@@ -233,6 +236,7 @@ if (argc != 3)
 trfExe = cgiUsualString("trf", trfExe);
 doBed = cgiBoolean("bed") || cgiVarExists("bedAt");
 tempDir = cgiUsualString("tempDir", tempDir);
+maxPeriod = cgiUsualInt("maxPeriod", 500);
 trfBig(argv[1], argv[2]);
 return 0;
 }
