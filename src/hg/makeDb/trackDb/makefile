@@ -52,6 +52,7 @@ alpha:
 	hgTrackDb mouse mm2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb mouse mm3 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -visibility=mouse/mm4/visibility.ra mouse mm4 trackDb ../../lib/trackDb.sql .
+	cp mouse/mm4/description.html /gbdb/mm4/html
 	hgTrackDb rat rn1 trackDb ../../lib/trackDb.sql .
 	hgTrackDb rat rn2 trackDb ../../lib/trackDb.sql .
 	hgTrackDb -visibility=rat/visibility.ra rat rn3 trackDb ../../lib/trackDb.sql .
