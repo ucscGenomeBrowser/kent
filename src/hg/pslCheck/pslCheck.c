@@ -4,7 +4,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.2 2003/05/06 07:22:34 kate Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.3 2003/11/19 18:20:07 markd Exp $";
 
 /* global count of errors */
 int errCount = 0;
@@ -25,14 +25,12 @@ void checkPslFile(char *fileName)
 {
 char pslDesc[PATH_LEN+64];
 struct lineFile *lf = pslFileOpen(fileName);
-unsigned lineNum = lf->lineIx;
 struct psl *psl;
 
 while ((psl = pslNext(lf)) != NULL)
     {
-    safef(pslDesc, sizeof(pslDesc), "%s:%u", fileName, lineNum);
+    safef(pslDesc, sizeof(pslDesc), "%s:%u", fileName, lf->lineIx);
     errCount += pslCheck(pslDesc, stderr, psl);
-    lineNum = lf->lineIx;
     pslFree(&psl);
     }
 lineFileClose(&lf);
