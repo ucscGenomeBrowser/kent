@@ -987,6 +987,7 @@ Locate motifs on all promoters with
 #     /gs.16/build33/cytoPlots
 #     /gs.16/build33/fish
 #     /gs.16/build33/fosends
+#     /gs.16/build33/g2g
 #     /gs.16/build33/geneticPlots
 #     /gs.16/build33/primers
 #     /gs.16/build33/recombrate
@@ -1363,10 +1364,7 @@ DONE TO HERE - RUNNING...
 	echo 'load data local infile "cytobands.bed" into table cytoBand;' | hgsql hg15
 
 
-CREATE CHROMOSOME REPORTS (TO DO)
-
-
-# CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (TO DO)
+# CREATE STS MAP COMPARISON PLOTS AND GENETIC PLOTS (DONE 4/28/2003)
 # (Must wait until after the STS Map track has been finished for STS and genetic plots)
 # (Must wait until after the CytoBand, FISH tracks have been finished for cytogenetic plots)
 
@@ -1401,7 +1399,53 @@ CREATE CHROMOSOME REPORTS (TO DO)
 # Update the index.html to include links to these new plots, and delete oldest set
 # Update the arch.html with the oldest set just removed from index.html
 # Check changes to index.html and arch.html into CVS
-# Ask for plots to be pushed to hgwbeta (and RR eventually)
+# Ask for plots to be pushed to hgwbeta (and RR eventually) - push with Chromosome Reports!!!
+
+
+# CREATE CHROMOSOME REPORTS (DONE 04/29/2003)
+
+# Create bacends file
+	cd /projects/hg2/booch/psl/gs.16/build33/bacends
+	make bacends.pairs.rdb
+
+# Create overlap file
+	cd /projects/hg2/booch/psl/gs.16/build33/g2g
+	make g2g.rdb
+
+# Set up directory 
+	cd /projects/hg2/booch/psl/chromReports
+	cp -r template/ 10Apr2003/
+
+# Change index.html files in all directories to update date of assembly
+	# index.html
+	# assembly/index.html
+	# assembly/bacends/index.html
+	# assembly/genetic/index.html
+	# assembly/overlap/index.html
+	# assembly/rh/index.html
+	# assembly/summary/index.html
+	# assembly/yac/index.html
+
+# Create files
+	cd /projects/hg2/booch/psl/chromReports
+	make all.assem
+
+# Move to correct location
+	ssh hgwdev
+	cd /usr/local/apache/htdocs/goldenPath/chromReports/
+	mv /projects/hg2/booch/psl/chromReports/10Apr2003 .
+
+# Set up link to plots (must have been previously made - see above)
+	cd /usr/local/apache/htdocs/goldenPath/chromReports/10Apr2003/assembly
+	ln -s /usr/local/apache/htdocs/goldenPath/mapPlots/Apr10/RHgenetic ./plots
+
+# Update index.html
+	cd /usr/local/apache/htdocs/goldenPath/chromReports/10Apr2003/
+	# add link to new directory in index.html
+	cvs commit -m "added new assembly 10Apr2003" index.html
+
+# Ask for reports to be pushed to hgwbeta (and RR eventually) - push with Map Plots!!!
+
 
 
 # PRODUCING CROSS_SPECIES mRNA ALIGNMENTS (DONE 4/12/03 JK)
