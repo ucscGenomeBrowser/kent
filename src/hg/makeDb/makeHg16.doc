@@ -5344,5 +5344,5 @@ EOF
     drop table ensGtp_old;  
     drop table ensPep_old;  
 
-
-
+    # Create knownToEnsembl column
+   hgMapToGene hg16 ensGene knownGene knownToEnsembl
