@@ -135,7 +135,7 @@
 #include "bgiGeneSnp.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.608 2004/04/13 01:50:29 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.609 2004/04/13 07:01:36 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3340,6 +3340,21 @@ if (statusDesc != NULL)
 hFreeConn(&conn);
 }
 
+void htcDisplayMrna(char *acc)
+/* Display mRNA available from genback or seq table.. */
+{
+struct dnaSeq *seq = hGenBankGetMrna(acc, NULL);
+if (seq == NULL)
+    errAbort("mRNA sequence %s not found", acc);
+
+hgcStart("mRNA sequence");
+printf("<PRE><TT>");
+faWriteNext(stdout, seq->name, seq->dna, seq->size);
+printf("</TT></PRE>");
+dnaSeqFree(&seq);
+}
+
+
 void printRnaSpecs(struct trackDb *tdb, char *acc)
 /* Print auxiliarry info on RNA. */
 {
@@ -3469,6 +3484,12 @@ if (row != NULL)
 	{
 	printStanSource(acc, type);
 	}
+    if (hGenBankHaveSeq(acc, NULL))
+        {
+        printf("<B>%s sequence:</B> ", type); 
+        hgcAnchorSomewhere("htcDisplayMrna", acc, tdb->tableName, seqName);
+        printf("%s</A><BR>\n", acc); 
+        }
     }
 else
     {
@@ -3479,7 +3500,6 @@ sqlFreeResult(&sr);
 freeDyString(&dy);
 hgFreeConn(&conn);
 }
-
 
 void printAlignments(struct psl *pslList, 
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn)
@@ -14160,6 +14180,10 @@ else if (sameWord(track, "htcGeneMrna"))
 else if (sameWord(track, "htcRefMrna"))
     {
     htcRefMrna(item);
+    }
+else if (sameWord(track, "htcDisplayMrna"))
+    {
+    htcDisplayMrna(item);
     }
 else if (sameWord(track, "htcKnownGeneMrna"))
     {
