@@ -29,7 +29,7 @@ O = affyAtlas.o affyGenoDetails.o affyOffset.o affyPairs.o agpFrag.o \
     kgAlias.o kgProtAlias.o knownInfo.o knownMore.o knownToSuper.o \
     lfs.o liftUp.o llaInfo.o mapSts.o mcnBreakpoints.o minGeneInfo.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o netAlign.o ooUtils.o \
-    pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
+    pbStamp.o pepPred.o plasEndPairs.o pseudoGeneLink.o pslWScore.o qaSeq.o \
     recombRate.o refLink.o refSeqStatus.o riken.o rikenBest.o \
     rikenCluster.o rmskOut.o rnaFold.o rnaGene.o rnaGroup.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o \
