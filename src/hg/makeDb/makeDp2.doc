@@ -670,10 +670,10 @@ dp2.perChromTables = no
 #twinscan coord differences.  
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 8/?/04 angie)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 8/26/04 angie)
     ssh hgwdev
-    echo 'insert into blatServers values("dp2", "blat?", "17780", 1, 0); \
-          insert into blatServers values("dp2", "blat?", "17781", 0, 1);' \
+    echo 'insert into blatServers values("dp2", "blat3", "17778", 1, 0); \
+          insert into blatServers values("dp2", "blat3", "17779", 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
 
 
