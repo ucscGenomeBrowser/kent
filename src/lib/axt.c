@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.27 2003/09/08 23:45:58 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.28 2003/10/09 00:17:29 kent Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -116,7 +116,7 @@ fputc('\n', f);
 fputc('\n', f);
 if ((strlen(axt->tSym) != strlen(axt->qSym)) || (axt->symCount > strlen(axt->tSym)))
     fprintf(stderr,"Symbol count %d != %d inconsistent in %s in record %d.\n",
-    	strlen(axt->qSym),strlen(axt->tSym), axt->qName, ix);
+    	(int)strlen(axt->qSym),(int)strlen(axt->tSym), axt->qName, ix);
 }
 
 int axtCmpQuery(const void *va, const void *vb)
