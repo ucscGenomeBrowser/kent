@@ -993,3 +993,87 @@ group compGeno
 priority 145.98
 visibility hide
 type psl xeno
+
+track phyloHMMcons_CFTR
+shortLabel phyloHMMcons CFTR
+longLabel phylo-HMM-based conservation, CFTR (post. prob. of slowest of 10 rates)
+group compGeno
+priority 151
+visibility hide
+color 175,150,128
+altColor 255,128,0
+type wig 0.0 1.0
+autoScaleDefault Off
+
+track phyloHMMcons_HMR
+shortLabel phyloHMMcons HMR
+longLabel phylo-HMM-based conservation, human-mouse-rat (post. prob. of slowest of 10 rates)
+group compGeno
+priority 150
+visibility hide
+color 175,150,128
+altColor 255,128,0
+type wig 0.0 1.0
+autoScaleDefault Off
+
+track transcriptomeJurkat
+shortLabel Jurkat
+longLabel Expression in the Jurkat Cell Line
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+type wig -600 2000
+
+track transcriptomePC3
+shortLabel PC3
+longLabel Expression in the PC3 Cell Line
+group regulation
+priority 92
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+type wig -600 2000
+
+track hetChimp
+shortLabel Chimp Heterozygosity
+longLabel Chimp/Human single nucleotide mutation rate %, 10Kb bins
+group compGeno
+priority 145.8
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+type wig 0.0 7.3
+
+track regPotential3X
+shortLabel 3x Reg Potential
+longLabel 3-Way Regulatory Potential - Human (hg16), Mouse (mm3), Rat (rn3)
+group compGeno
+priority 146.2
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.0732 0.153
+
+track regPotential2X
+shortLabel 2x Reg Potential
+longLabel 2-Way Regulatory Potential - Human (hg16), Mouse (mm4)
+group compGeno
+priority 146.25
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.0732 0.153
