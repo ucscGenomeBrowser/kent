@@ -16,7 +16,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.28 2004/05/19 23:23:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.29 2004/06/01 20:05:41 angie Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -271,6 +271,7 @@ void printDescription(char *id, struct sqlConnection *conn)
 {
 char *description = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
+char *protAcc = getSwissProtAcc(conn, spConn, id);
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
@@ -282,15 +283,18 @@ freez(&description);
 hPrintf("<B>Representative mRNA: </B> <A HREF=\"");
 printEntrezNucleotideUrl(stdout, id);
 hPrintf("\" TARGET=_blank>%s</A>\n", id);
-hPrintf("&nbsp&nbsp&nbsp");
-hPrintf("<B>Protein: ");
-hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>%s</A></B>\n",
-       getSwissProtAcc(conn, spConn, id), getSwissProtAcc(conn, spConn, id));
-
-/* show SWISS-PROT display ID if it is different than the accession ID */
-if (!sameWord(getSwissProtAcc(conn, spConn, id), spAccToId(spConn, getSwissProtAcc(conn, spConn, id)) ) )
+if (protAcc != NULL)
     {
-    hPrintf(" (%s)\n", spAccToId(spConn, getSwissProtAcc(conn, spConn, id)) );
+    hPrintf("&nbsp&nbsp&nbsp");
+    hPrintf("<B>Protein: ");
+    hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
+	    "TARGET=_blank>%s</A></B>\n",
+	    protAcc, protAcc);
+    /* show SWISS-PROT display ID if it is different than the accession ID */
+    if (!sameWord(protAcc, spAccToId(spConn, protAcc)))
+	{
+	hPrintf(" (%s)\n", spAccToId(spConn, protAcc) );
+	}
     }
 
 if (summaryTables != NULL)
