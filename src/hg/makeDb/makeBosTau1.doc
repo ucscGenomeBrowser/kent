@@ -561,8 +561,19 @@ SEQ2_LEN=$BASE/S2.len
     end
 
 # NET 
+# run in stages to avoid memory problems
+  ssh kolossus
+  cd /cluster/data/bosTau1/bed/blastz/axtChain
+  /cluster/bin/x86_64/chainPreNet all.chain ../S1.len ../S2.len chainPreNet.out
+  /cluster/home/heather/bin/x86_64/chainNet chainPreNet.out \
+    -minSpace=1 ../S1.len ../S2.len hg17.net bosTau1.net
+  /cluster/home/heather/bin/x86_64/netSyntenic hg17.net noClass.net
+  # memory usage 7955406848, utime 16854 s/100, stime 1375
+
   ssh kksilo
-  cd /cluster/data/bosTau1/bed/blastz
+  cd /cluster/data/bosTau1/bed/blastz/axtChain
+  /cluster/bin/i386/netSplit noClass.net noClass
+
 
 
 
