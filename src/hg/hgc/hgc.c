@@ -137,7 +137,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.618 2004/04/28 20:09:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.619 2004/04/28 20:48:23 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3152,7 +3152,7 @@ void printGeneLynxAcc(char *search)
 /* Print link to GeneLynx search using accession (X07876, BC001451 etc) */
 {
 printf("<B>GeneLynx</B> ");
-printf("<A HREF=\"http://www.genelynx.org/cgi-bin/linklist?tableitem=GLYNX_INDEX.word&IDlist=%s&dir=1\" TARGET=_blank>", search);
+printf("<A HREF=\"http://human.genelynx.org/cgi-bin/fullsearch?fullquery=%s&submit=submit\" TARGET=_blank>", search);
 printf("%s</A><BR>\n", search);
 }
 
