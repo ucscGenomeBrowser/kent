@@ -73,6 +73,7 @@
                 <LI><A HREF="#download20">Minus strand coordinates - axtBest files</A>
                 <LI><A HREF="#download21">Mapping UCSC STS marker IDS to those of other groups</A>
                 <LI><A HREF="#download22">deCODE map data</A>
+                <LI><A HREF="#download29">Direct MySQL access to data</A>
 		</UL>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
 		<BR>
@@ -1511,6 +1512,86 @@
 	</TABLE>
 	</TD></TR>
     </TABLE>
+    <BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download29"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Direct MySQL access to data</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Is it possible to run SQL queries directly on the
+			database rather than using the Table Browser interface?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			In response to requests from Genome Browser users, we have set up a MySQL
+			database for public access at genome-mysql.cse.ucsc.edu.  This new server
+			allows MySQL access to the same set of data currently available on our
+			public Genome Browser site. The data are synchronized daily with the main
+			databases on <A HREF="http://genome.ucsc.edu">http://genome.ucsc.edu</A>.
+			<P>
+			To connect to the database, you must use a computer on which the MySQL
+			client libraries have been installed. The UCSC server is running MySQL
+			4.0.20; for best results, we recommend you use clients of the same revision.
+			The latest MySQL clients may be downloaded from
+			<A HREF="http://dev.mysql.com/downloads/mysql/4.0.html" 
+		   	TARGET=_blank>http://dev.mysql.com/downloads/mysql/4.0.html</A>. 
+			Connect to the MySql server
+			using the command: 
+			<BR>
+			<PRE>
+    <TT>mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A</TT>.
+			</PRE>
+			The <em>-A</em> flag is optional but is recommended for speed.
+			<P>
+			Once connected to the database, you may use a wide range of MySQL commands
+			to query the database. As a courtesy to others, please observe the following
+			guidelines when using the database:
+			<UL>
+			<LI>
+			Avoid excessive or heavy queries that may impact the server performance.
+			Inappropriate query use will result in a restriction of access. If you plan
+			to execute a query that you think may be excessive, contact UCSC first to
+			avoid the possibility of having your access blocked.
+			<LI>
+			Bot access and excessive program-driven use are not permitted.
+			<LI>
+			Attachments by local mirror sites are prohibited.
+			</UL>
+			If you prefer a more structured graphical interface to the UCSC database
+			tables, use the 
+			<A HREF="http://genome.ucsc.edu/cgi-bin/hgTables">Table Browser</A>.
+			<P>
+			System problems should be reported to 
+			<A HREF="mailto:genome-www@soe.ucsc.edu">genome-www@soe.ucsc.edu</A>.  
+			Send questions regarding the database contents or queries to 
+			<A HREF="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</A>.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+
 
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
