@@ -1,0 +1,63 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# DOWNLOAD SEQUENCE (DONE 10/15/04 Fan)
+    ssh kksilo
+    mkdir /cluster/store8/xenTro1
+    cd /cluster/data
+    ln -s /cluster/store8/xenTro1 xenTro1
+    cd /cluster/data/xenTro1
+    mkdir downloads
+    cd downloads
+
+    wget --timestamp ftp://ftp.jgi-psf.org/pub/JGI_data/Frog/v3.0/xenopus.041015.fasta.gz
+    wget --timestamp ftp://ftp.jgi-psf.org/pub/JGI_data/Frog/v3.0/xenopus.041015.allmasked.gz
+    wget --timestamp ftp://ftp.jgi-psf.org/pub/JGI_data/Frog/v3.0/repeats_lib/xt3.lib1.fasta.gz
+
+    gzip -d *.gz
+
+    cd ..
+
+# SPLIT SCAFFOLDS (DONE 10/17/04, Fan)
+
+  ssh kksilo
+  cd /cluster/data/xenTro1
+  mkdir scaffolds
+
+# /cluster/bin/i386/faSplit byname downloads/xenopus.041015.fasta scaffolds -outDirDepth=3
+# Tried above and as noted by Heather before, not sure why these didn't get put under scaffolds 
+# directory, removed 1, 2, 3, ....  Tried it differently.
+
+  cd scaffolds
+  /cluster/bin/i386/faSplit byname ../downloads/xenopus.041015.fasta scaffolds -outDirDepth=3
+  cd ..
+
+  # generate list
+  find scaffolds -print > scaffolds.list.0
+  grep fa scaffolds.list.0 > scaffolds.list
+
+# MAKE 2BIT NIB FILE (DONE 10/18/04, Fan)
+
+  ssh kksilo
+  cd /cluster/data/xenTro1/downloads
+  /cluster/bin/i386/faToTwoBit xenopus.041015.fasta xenTro1.2bit
+# The xenopus.041015.fasta file has 70 bases each line instead of 50.
+# Created a specialized twoBitToFa70 program to generate 70 bases fa file.
+  /cluster/bin/i386/twoBitToFa70 xenTro1.2bit check70.fa
+# diff got memory exhausted error on kksilo
+# went to kolossus and did diff between check70.fa and xenopus.041015.fasta.
+# they are identical except xenopus.041015.fasta has some empty lines at end of
+# some records
+  mv xenTro1.2bit ..
+  ssh hgwdev
+  mkdir /gbdb/xenTro1
+  mkdir /gbdb/xenTro1/nib
+  ln -s /cluster/data/xenTro1/xenTro1.2bit /gbdb/xenTro1/nib
+
+# CREATE DATABASE
+
+  ssh hgwdev
+  hgsql hg17
+  create database xenTro1;
+  use xenTro1;
+  create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;
