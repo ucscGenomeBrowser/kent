@@ -5,7 +5,14 @@
 #include "obscure.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: ffScore.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: ffScore.c,v 1.4 2003/09/09 00:05:45 kent Exp $";
+
+int ffIntronMax = ffIntronMaxDefault;
+
+void setFfIntronMax(int value)
+{
+    ffIntronMax = value;
+}
 
 int ffScoreMatch(DNA *a, DNA *b, int size)
 /* Compare two pieces of DNA base by base. Total mismatches are

@@ -1135,12 +1135,12 @@ else
     return 0;
 }
 
-static int trimGapPenalty(int nGap, int hGap)
+static int trimGapPenalty(int hGap, int nGap)
 /* Calculate gap penalty for routine below. */
 {
-int penalty = log(hGap);
-if (nGap > 0)
-    penalty += 3;
+int penalty =  ffCalcGapPenalty(hGap, nGap, ffCdna) + 2;
+if (nGap > 0 && hGap > 2)
+     penalty += 3;
 return penalty;
 }
 
@@ -1171,7 +1171,7 @@ while (right != NULL)
     iStart = left->hEnd;
     iEnd = right->hStart;
     gapPenalty = trimGapPenalty(iEnd-iStart, 
-    	right->nStart - left->nEnd) + 4;
+    	right->nStart - left->nEnd);
     gapPenalty -= ffScoreIntron(iStart[0], iStart[1], 
     	iEnd[-2], iEnd[-1], orientation);
     if (gapPenalty >= blockScore)

@@ -71,13 +71,6 @@
  */
 
 /* settable parameter, defaults to constant value */
-int ffIntronMax = ffIntronMaxDefault;
-
-void setFfIntronMax(int value)
-{
-    ffIntronMax = value;
-}
-
 static jmp_buf ffRecover;
 
 static void ffAbort()
