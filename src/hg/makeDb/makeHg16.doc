@@ -4743,7 +4743,7 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check
     # Save file as ensGtp.txt.gz
     gunzip ensGtp.txt.gz
     hgsql hg16 < ~/kent/src/hg/lib/ensGtp.sql
-    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql hg16
+    echo "load data local infile 'ensGtp.txt' into table ensGtp" | hgsql -N hg16
 
     # Load Ensembl peptides:
     # Get them from ensembl as above in the gene section except for

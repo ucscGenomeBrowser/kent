@@ -1988,7 +1988,7 @@ LOAD ENSEMBL GENES (Finished 2003-09-26 braney)
      # geneId/transcriptId/protienId and put it in
      # ensGtp.txt.  Then load it into database as so:
      hgsql hg15 < ~/kent/src/hg/lib/ensGtp.sql
-     hgsql hg15 <<end
+     hgsql -N hg15 <<end
      load data local infile 'ensGtp.txt' into table ensGtp
 end
 
