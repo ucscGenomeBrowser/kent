@@ -64,7 +64,7 @@ for (i=0 ; i<size ; i++)
     if (toupper(s[i]) == toupper(c) )
         score[i] = prevScore+1;
     else
-        score[i] = prevScore-1;
+        score[i] = prevScore-2;
     if (score[i] >= max)
         {
         max = score[i];
