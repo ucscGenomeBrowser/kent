@@ -334,7 +334,7 @@ void altGraphXFree(struct altGraphX **pEl)
  * with altGraphXLoad(). */
 {
 struct altGraphX *el;
-
+int i;
 if ((el = *pEl) == NULL) return;
 freeMem(el->tName);
 freeMem(el->name);
@@ -344,10 +344,10 @@ freeMem(el->edgeStarts);
 freeMem(el->edgeEnds);
 evidenceFreeList(&el->evidence);
 freeMem(el->edgeTypes);
-/* All strings in mrnaRefs are allocated at once, so only need to free first. */
-if (el->mrnaRefs != NULL)
-    freeMem(el->mrnaRefs[0]);
-freeMem(el->mrnaRefs);
+/* it appears that the mrnaRefs are really one big string from loadAll function, so they can be free'd all at once */
+/* for(i=0;i<el->mrnaRefCount; i++) */
+/*     freez(&el->mrnaRefs[i]); */
+freez(&el->mrnaRefs);
 freeMem(el->mrnaTissues);
 freeMem(el->mrnaLibs);
 freez(pEl);
