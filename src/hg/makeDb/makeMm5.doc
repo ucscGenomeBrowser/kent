@@ -4960,6 +4960,10 @@ CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
 
 #  BLASTZ RAT RN3 (RE-DONE - 2004-08-30 - Fan)
 
+#  !!! PLEASE NOTE AS OF 9/2/04, THE 8/30/04-8/31/04 REBUILD OF BLASTZ, CHAIN, AND NET 
+#  FOR MM5-RN3 IS NO LONG USED FOR MM5.  THE OLD MM5-RN3 CHAIN AND NET BUILD OF 7/14/04
+#  IS REVERSE PUSHED FROM RR BACK TO HGWDEV.
+
 # Reason for rebuild is to use more stringent blastz parameters to reduce size
 # of output files.
 
