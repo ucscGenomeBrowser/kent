@@ -126,6 +126,8 @@ void warn(char *format, ...);
 void zeroBytes(void *vpt, int count);     
 /* fill a specified area of memory with zeroes */
 
+#define ZeroVar(v) zeroBytes(v, sizeof(*v))
+
 void reverseBytes(char *bytes, long length);
 /* Reverse the order of the bytes. */
 
@@ -297,6 +299,10 @@ int differentWord(char *s1, char *s2);
 
 boolean startsWith(char *start,char *string);
 /* Returns TRUE if string begins with start. */
+
+#define stringIn(needle, haystack) strstr(haystack, needle)
+/* Returns position of needle in haystack or NULL if it's not there. */
+/*        char *stringIn(char *needle, char *haystack);      */
 
 boolean endsWith(char *string, char *end);
 /* Returns TRUE if string ends with end. */
