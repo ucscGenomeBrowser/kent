@@ -1,5 +1,15 @@
-18 - Fixed bug where you had to do -oneOff=1 rather than -oneOff
-     in command line of blat.  Clarified makeOoc usage message.
+18 - a) Fixed bug where you had to do -oneOff=1 rather than -oneOff
+     in command line of blat.  
+     b) Clarified makeOoc usage message.
+     c) Made it handle fasta files with more than 64k of sequence
+     in a single line.  
+     d) Replaced super-stitcher dynamic program that generates 
+     a table of size N*N times the number of blocks
+     with a kdTree based program one that is much more space efficient 
+     and a bit faster, especially in the worse cases.  This eliminates
+     the 'warning trimming xxxx blocks to 7000' messages and
+     fixes a crash bug manifesting specifically on the alpha
+     archetecture as well. 
 17 - Added -minScore -minIdentity and -prot command line options
      to gfClient.  gfClient uses same protein default minScore as 
      blat does. Made -mask=lower work with nib files in blat, 

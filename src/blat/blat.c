@@ -19,7 +19,7 @@
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
-int version = 17;		/* Blat version number. */
+int version = 18;		/* Blat version number. */
 char *databaseName;		/* File name of database. */
 int databaseSeqCount = 0;	/* Number of sequences in database. */
 unsigned long databaseLetters = 0;	/* Number of bases in database. */
