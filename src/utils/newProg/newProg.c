@@ -72,8 +72,7 @@ FILE *f = mustOpen(makeName, "w");
 
 fprintf(f, 
 
-".c.o:\n"
-"\tgcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c\n"
+"include ../../../inc/common.mk\n"
 "\n"
 "L = -lm\n"
 "MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)\n"
@@ -85,7 +84,6 @@ fprintf(f,
 "\tgcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/%s $O $(MYLIBS) $L\n"
 "\tstrip $(HOME)/bin/$(MACHTYPE)/%s\n",
 	progName, progName, progName, progName);
-
 
 
 fclose(f);
