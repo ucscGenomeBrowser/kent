@@ -276,11 +276,11 @@ if (-e /tmp/droYak1/$2/$2.cat) /bin/cp /tmp/droYak1/$2/$2.cat ./
       -e 'INSERT INTO dbDb \
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
-                htmlPath, hgNearOk) values \
+                htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droYak1", "Apr. 2004", "/gbdb/droYak1/nib", "D.yakuba", \
                "chr2L:827700-845800", 1, 57, "D.yakuba", \
                 "Drosophila yakuba", "/gbdb/droYak1/html/description.html", \
-                0);'
+                0, 0, "WUSTL version 1.0");'
     hgsql -h genome-testdb hgcentraltest \
       -e 'INSERT INTO defaultDb (genome, name) values ("D.yakuba", "droYak1");'
 
@@ -647,11 +647,14 @@ axtFilter -notQ=chrUn_random $1 \
     zip /cluster/data/droYak1/zip/melanogaster.chain.zip melanogaster.chain
     rm melanogaster.chain
     zip /cluster/data/droYak1/zip/melanogaster.net.zip melanogaster.net
+    cd /cluster/data/droYak1/bed/blastz.dm1.swap.2004-05-22
+    zip /cluster/data/droYak1/zip/axtChrom.zip axtChrom/chr*.axt
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/droYak1/vsDm1
     cd /usr/local/apache/htdocs/goldenPath/droYak1/vsDm1
     mv /cluster/data/droYak1/zip/melanogaster*.zip .
+    mv /cluster/data/droYak1/zip/axtChrom.zip .
     md5sum *.zip > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
@@ -670,6 +673,8 @@ axtFilter -notQ=chrUn_random $1 \
 droYak1.genome = /iscratch/i/droYak1/nib/chr*.nib
 droYak1.lift = /cluster/data/droYak1/jkStuff/liftAll.lft
 droYak1.refseq.mrna.native.load = no
+droYak1.refseq.mrna.xeno.load = yes
+droYak1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 droYak1.genbank.mrna.xeno.load = yes
 droYak1.genbank.est.xeno.load = no
 droYak1.downloadDir = droYak1
@@ -686,6 +691,18 @@ droYak1.downloadDir = droYak1
 
     ssh eieio
     cd /cluster/data/genbank
+    # This is an -initial run, (xeno) RefSeq only:
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial droYak1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droYak1
+    featureBits droYak1 xenoRefGene
+#26062889 bases of 169423277 (15.383%) in intersection
+    # Clean up:
+    rm -rf work/initial.droYak1
+
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droYak1 &
     tail -f [its logfile]
@@ -701,7 +718,7 @@ droYak1.downloadDir = droYak1
     rm -rf work/initial.droYak1
 
     ssh eieio
-    # -initial for ESTs (now with /cluster/store7 and iservers):
+    # -initial for ESTs
     nice bin/gbAlignStep -srcDb=genbank -type=est -initial droYak1 &
     tail -f [its logfile]
     # Load results:
@@ -726,7 +743,7 @@ droYak1.downloadDir = droYak1
     hgGcPercent droYak1 ../../nib
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (DONE 7/21/04 angie)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 7/21/04 angie)
     ssh hgwdev
     echo 'insert into blatServers values("droYak1", "blat7", "17780", 1, 0); \
           insert into blatServers values("droYak1", "blat7", "17781", 0, 1);' \
