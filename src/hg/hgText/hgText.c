@@ -35,7 +35,7 @@
 #include "hgText.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgText.c,v 1.156 2004/08/23 20:16:07 angie Exp $";
+static char const rcsid[] = "$Id: hgText.c,v 1.157 2004/09/17 03:17:20 kent Exp $";
 
 /* sources of tracks, other than the current database: */
 static char *hgFixed = "hgFixed";
@@ -2979,12 +2979,15 @@ int count = 0;
 int numberColumns = 0;
 int i = 0;
 
+#define NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 if (sameString(table, "mrna"))
     {
     struct slName *slNew = newSlName(table);
     slFreeList(&tableList);
     tableList = slNew;
     }
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 
 for (tPtr=tableList;  tPtr != NULL;  tPtr=tPtr->next)
     {

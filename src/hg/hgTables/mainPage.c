@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.37 2004/09/13 23:58:37 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.38 2004/09/17 03:17:20 kent Exp $";
 
 
 struct grp *makeGroupList(struct sqlConnection *conn, 
@@ -271,7 +271,7 @@ static char *usualTypes[] =
      outHyperlinks};
 static char *usualLabels[] =
     {"all fields from primary table", 
-     "selected fields from related tables", 
+     "selected fields from primary and related tables", 
      "sequence", 
      "GTF - gene transfer format", 
      "BED - browser extensible data", 
@@ -306,6 +306,13 @@ else
     showOutDropDown(tracklessTypes, tracklessLabels, ArraySize(tracklessTypes));
 }
 
+void nbSpaces(int count)
+/* Print some non-breaking spaces. */
+{
+int i;
+for (i=0; i<count; ++i)
+    hPrintf("&nbsp;");
+}
 
 void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
@@ -318,22 +325,24 @@ hPrintf("<TABLE BORDER=0>\n");
     {
     hPrintf("<TR><TD><B>genome:</B>\n");
     printGenomeListHtml(database, onChangeOrg());
+    nbSpaces(3);
     hPrintf("<B>assembly:</B>\n");
     printAssemblyListHtml(database, onChangeDb());
     hPrintf("</TD></TR>\n");
     }
 
-/* Print group line. */
+/* Print group and track line. */
     {
     hPrintf("<TR><TD>");
     selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn);
+    nbSpaces(3);
+    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");
     }
 
-/* Print track and table line. */
+/* Print table line. */
     {
     hPrintf("<TR><TD>");
-    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     curTable = showTableField(curTrack);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
@@ -343,14 +352,18 @@ hPrintf("<TABLE BORDER=0>\n");
     isWig = isWiggle(database, curTable);
     if (isWig)
 	isPositional = TRUE;
+    nbSpaces(1);
+    cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
     hPrintf("</TD></TR>\n");
     }
 
 /* Region line */
+{
+char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
+char *range = cartUsualString(cart, hgtaRange, "");
+if (isPositional)
     {
-    char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
     boolean doEncode = sqlTableExists(conn, "encodeRegions");
-    char *range = cartUsualString(cart, hgtaRange, "");
 
     hPrintf("<TR><TD><B>region:</B>\n");
 
@@ -378,9 +391,15 @@ hPrintf("<TABLE BORDER=0>\n");
 #endif /* OLD */
     hPrintf("</TD></TR>\n");
     }
+else
+    {
+    /* Need to put at least stubs of cgi variables in for JavaScript to work. */
+    cgiMakeHiddenVar(hgtaRange, range);
+    cgiMakeHiddenVar(hgtaRegionType, regionType);
+    }
 
 /* Select identifiers line. */
-if (!isWig)
+if (!isWig && sameString(curTrack->tableName, curTable))
     {
     hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "Paste List");
@@ -393,6 +412,7 @@ if (!isWig)
 	}
     hPrintf("</TD></TR>\n");
     }
+}
 
 /* Filter line. */
 {
@@ -432,8 +452,10 @@ showOutputTypeRow(isWig, isPositional);
 
 hPrintf("</TABLE>\n");
 
+
 /* Submit buttons. */
     {
+    hPrintf("<BR>\n");
     if (isWig)
 	{
 	char *name;
@@ -463,7 +485,6 @@ hPrintf("</TABLE>\n");
 	cgiMakeButton(hgtaDoSummaryStats, "Summary/Statistics");
 	hPrintf(" ");
 	}
-    cgiMakeButton(hgtaDoSchema, "Describe Table Schema");
 
 #ifdef SOMETIMES
     hPrintf(" ");

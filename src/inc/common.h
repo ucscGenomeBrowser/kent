@@ -9,6 +9,8 @@
 #ifndef COMMON_H	/* Wrapper to avoid including this twice. */
 #define COMMON_H
 
+#define NEEDED_UNTIL_GB_CDNA_INFO_CHANGE	/* Cut out code surrounded by this shortly */
+
 /* Some stuff to support large files in Linux. */
 #ifndef _LARGEFILE_SOURCE
 #define _LARGEFILE_SOURCE 1

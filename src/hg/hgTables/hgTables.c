@@ -20,7 +20,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.62 2004/09/14 03:57:24 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.63 2004/09/17 03:17:19 kent Exp $";
 
 
 void usage()
@@ -155,8 +155,19 @@ pushAbortHandler(textAbortHandler);
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(NULL);
+struct trackDb *list = hTrackDb(NULL), *tdb;
 struct customTrack *ctList, *ct;
+
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+/* Change the mrna track to all_mrna to avoid confusion elsewhere. */
+for (tdb = list; tdb != NULL; tdb = tdb->next)
+    {
+    if (sameString(tdb->tableName, "mrna"))
+        {
+	tdb->tableName = cloneString("all_mrna");
+	}
+    }
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -330,9 +341,11 @@ char *trackTable(char *rawTable)
  * for mRNA if need be. */
 {
 char *table = rawTable;
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 if (sameString(table, "mrna"))
     return "all_mrna";
 else
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
     return table;
 }
 
@@ -355,9 +368,12 @@ char *chromTable(struct sqlConnection *conn, char *table)
  * You can freeMem this when done. */
 {
 char *chrom = hDefaultChrom();
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 if (sameString("mrna", table))
     return cloneString(table);
-else if (sqlTableExists(conn, table))
+else 
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
+if (sqlTableExists(conn, table))
     return cloneString(table);
 else
     {
@@ -432,7 +448,9 @@ boolean isPositional(char *db, char *table)
 {
 boolean result = FALSE;
 struct sqlConnection *conn = sqlConnect(db);
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 if (!sameString(table, "mrna"))
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
     {
     if (sqlTableExists(conn, "chromInfo"))
 	{
@@ -558,9 +576,14 @@ struct slName *tablesForTrack(struct trackDb *track)
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
 struct joinerPair *jpList, *jp;
+char *trackTable = track->tableName;
 
-hashAdd(uniqHash, track->tableName, NULL);
-jpList = joinerRelate(allJoiner, database, track->tableName);
+#ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
+if (sameString(trackTable, "mrna"))
+     trackTable = "all_mrna";
+#endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
+hashAdd(uniqHash, trackTable, NULL);
+jpList = joinerRelate(allJoiner, database, trackTable);
 for (jp = jpList; jp != NULL; jp = jp->next)
     {
     struct joinerDtf *dtf = jp->b;
@@ -581,7 +604,7 @@ for (jp = jpList; jp != NULL; jp = jp->next)
 	}
     }
 slNameSort(&nameList);
-name = slNameNew(track->tableName);
+name = slNameNew(trackTable);
 slAddHead(&nameList, name);
 addTablesAccordingToTrackType(&nameList, uniqHash, track);
 hashFree(&uniqHash);
@@ -749,12 +772,12 @@ else
     }
 }
 
-void doOutPrimaryTable(char *table, 
+void doOutPrimaryTable(char *trackName, char *table, 
 	struct sqlConnection *conn)
 /* Dump out primary table. */
 {
 textOpen();
-doTabOutTable(database, trackTable(table), conn, NULL);
+doTabOutTable(database, table, conn, NULL);
 }
 
 void doOutHyperlinks(char *table, struct sqlConnection *conn)
@@ -810,7 +833,7 @@ char *trackName = cartString(cart, hgtaTrack);
 char *table = cartString(cart, hgtaTable);
 struct trackDb *track = mustFindTrack(trackName, fullTrackList);
 if (sameString(output, outPrimaryTable))
-    doOutPrimaryTable(table, conn);
+    doOutPrimaryTable(trackName, table, conn);
 else if (sameString(output, outSelectedFields))
     doOutSelectedFields(table, conn);
 else if (sameString(output, outSequence))

@@ -316,11 +316,11 @@ struct sqlResult *sr;
 char **row;
 
 conn = hAllocConn();
-sprintf(query, "select cds from mrna where acc = '%s'", acc);
+sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
 if((row = sqlNextRow(sr)) == NULL)
     errAbort(
-    "cds.c: getMrnaCds() - Cannot get cds for %s from table \"mrna\"\n", acc);
+    "cds.c: getMrnaCds() - Cannot get cds for %s from table \"gbCdnaInfo\"\n", acc);
 sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
 sqlFreeResult(&sr);
 sr = sqlGetResult(conn, query);

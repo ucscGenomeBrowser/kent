@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: getRna.c,v 1.2 2003/05/06 07:22:19 kate Exp $";
+static char const rcsid[] = "$Id: getRna.c,v 1.3 2004/09/17 03:17:19 kent Exp $";
 
 /* command line options */
 boolean cdsUpper = FALSE;
@@ -37,7 +37,7 @@ char **row;
 char query[256];
 
 safef(query, sizeof(query),
-      "SELECT cds.name FROM mrna,cds WHERE (mrna.acc = '%s') AND (mrna.cds != 0) AND (mrna.cds = cds.id)",
+      "SELECT cds.name FROM gbCdnaInfo,cds WHERE (gbCdnaInfo.acc = '%s') AND (gbCdnaInfo.cds != 0) AND (gbCdnaInfo.cds = cds.id)",
       acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)

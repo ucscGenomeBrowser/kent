@@ -3,6 +3,7 @@
 #ifndef HGTABLES_H
 #define HGTABLES_H
 
+
 #ifndef JKSQL_H
 #include "jksql.h"
 #endif

@@ -85,7 +85,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
     if (fil->pattern[0] != 0)
 	{
 	fil->hash = newHash(10);
-	if ((fil->mrnaTableIx = sqlFieldIndex(conn, "mrna", fil->table)) < 0)
+	if ((fil->mrnaTableIx = sqlFieldIndex(conn, "gbCdnaInfo", fil->table)) < 0)
 	    internalErr();
 	}
     }
@@ -141,7 +141,7 @@ for (lf = *pLfList; lf != NULL; lf = next)
     {
     boolean passed = andLogic;
     next = lf->next;
-    sprintf(query, "select * from mrna where acc = '%s'", lf->name);
+    sprintf(query, "select * from gbCdnaInfo where acc = '%s'", lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{

@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: assessLibs.c,v 1.4 2003/06/14 16:49:37 kent Exp $";
+static char const rcsid[] = "$Id: assessLibs.c,v 1.5 2004/09/17 03:17:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -167,7 +167,7 @@ sqlFreeResult(&sr);
 uglyf("Got %d libraries\n", slCount(libList));
 
 /* Read all ESTs and lump them into libraries. */
-sprintf(query, "select acc,direction,library from mrna where type = 'EST'");
+sprintf(query, "select acc,direction,library from gbCdnaInfo where type = 'EST'");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -176,7 +176,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     lib = hashFindVal(libHash, library);
     if (lib == NULL)
         {
-	warn("Lib ID %s is in mrna table for %s but not in library table", library, acc);
+	warn("Lib ID %s is in gbCdnaInfo table for %s but not in library table", library, acc);
 	continue;
 	}
     if (lib->estHash == NULL)

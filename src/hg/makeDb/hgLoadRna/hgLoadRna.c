@@ -25,7 +25,7 @@
 #include "fa.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.30 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/hgLoadRna/Attic/hgLoadRna.c,v 1.31 2004/09/17 03:17:22 kent Exp $";
 
 /* Command line options and defaults. */
 char *abbr = NULL;
@@ -73,7 +73,7 @@ char seqTable[] =
 
 char mrnaTable[] =
 /* This keeps track of mRNA. */
-"create table mrna ("
+"create table gbCdnaInfo ("
   "id int unsigned not null primary key,"          /* Id, same as seq ID. */
   "acc char(12) not null,"		  /* Genbank accession. */
   "version char(12) not null,"		  /* Genbank version. */
@@ -375,7 +375,7 @@ errAbort(
   "This creates freshly the RNA part of the database\n"
   "   hgLoadRna add [-type=type] [-mrnaType=type] [-noDbLoad] database /full/path/mrna.fa mrna.ra [-ignore]\n"
   "      type can be mRNA, EST, xenoRNA or whatever goes into extFile.name\n"
-  "      The type for the mrna table (mRNA or EST) will be guessed from type.\n"
+  "      The type for the gbCdnaInfo table (mRNA or EST) will be guessed from type.\n"
   "      If it can't be guessed, it must be specified with -mrnaType=\n"
   "This adds mrna info to the database\n"
   "   hgLoadRna drop database\n"
@@ -415,7 +415,7 @@ int mod = maxMod;
 int lineMaxMod = 50;
 int lineMod = lineMaxMod;
 int count = 0;
-FILE *mrnaTab = hgCreateTabFile(".", "mrna");
+FILE *mrnaTab = hgCreateTabFile(".", "gbCdnaInfo");
 FILE *seqTab = hgCreateTabFile(".", "seq");
 struct uniqueTable *uniSrc, *uniOrg, *uniLib, *uniClo, *uniSex,
                    *uniTis, *uniDev, *uniCel, *uniCds, *uniGen,
@@ -589,8 +589,8 @@ lineFileClose(&faLf);
 lineFileClose(&raLf);
 fclose(mrnaTab);
 fclose(seqTab);
-verbose(1, "Updating mrna table\n");
-hgLoadTabFile(conn, ".", "mrna", NULL);
+verbose(1, "Updating gbCdnaInfo table\n");
+hgLoadTabFile(conn, ".", "gbCdnaInfo", NULL);
 verbose(1, "Updating seq table\n");
 hgLoadTabFile(conn, ".", "seq", NULL);
 hgEndUpdate(&conn, "Add mRNA from %s,%s", faName, raName);
@@ -784,7 +784,7 @@ checkForGenBankIncr(database, "Use the GenBank incremental load tools.");
 sqlUpdate(conn, "drop table history");
 sqlUpdate(conn, "drop table extFile");
 sqlUpdate(conn, "drop table seq");
-sqlUpdate(conn, "drop table mrna");
+sqlUpdate(conn, "drop table gbCdnaInfo");
 for (i=0; i<ArraySize(uniqueTableNames); ++i)
     {
     char query[256];
