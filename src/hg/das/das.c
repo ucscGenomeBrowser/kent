@@ -613,7 +613,7 @@ for (i=0; i<psl->blockCount; ++i)
     printf(" <GROUP id=\"%s.%s.%d\">\n", psl->qName, psl->tName, psl->tStart);
     printf("  <LINK href=\"http://genome.ucsc.edu/cgi-bin/hgTracks?position=%s:%d-%d&amp;db=%s\">Link to UCSC Browser</LINK>\n", 
 	psl->tName, psl->tStart, psl->tEnd, database);
-    printf("  <TARGET id=\"%s\" start=\"%d\" end=\"%d\">%s</TARGET>\n",
+    printf("  <TARGET id=\"%s\" start=\"%d\" stop=\"%d\">%s</TARGET>\n",
         psl->qName, qStart+1, qEnd, psl->qName);
     printf(" </GROUP>\n");
     printf("</FEATURE>\n");
@@ -827,8 +827,15 @@ void dispatch(char *dataSource, char *command)
 /* Dispatch a dase command. */
 {
 struct slName *dbList = hDbList();
+    {
+    struct slName *db;
+    for (db = dbList; db != NULL; db = db->next)
+        uglyf("%s\n", db->name);
+    }
 if (sameString(dataSource, "dsn"))
+    {
     doDsn(dbList);
+    }
 else if (slNameFind(dbList, dataSource) != NULL)
     {
     database = dataSource;
