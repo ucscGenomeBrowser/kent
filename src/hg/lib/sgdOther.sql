@@ -14,5 +14,6 @@ CREATE TABLE sgdOther (
     strand char(1) not null,	# Strand: +, - or .
     type varchar(255) not null,	# Feature type
               #Indices
-    INDEX(chrom(8),bin)
+    INDEX(chrom(8),bin),
+    INDEX(name(12))
 );
