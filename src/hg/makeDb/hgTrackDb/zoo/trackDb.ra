@@ -776,3 +776,11 @@ visible hide
 color 0,60,120
 altColor 0,128,0
 type sample 9
+
+track parsPValHMM
+shortLabel Parsimony P-Values HMM
+longlabel Parsimony P-Values HMM
+priority 1430
+altColor 0,0,160
+visibility full
+type sample 9
