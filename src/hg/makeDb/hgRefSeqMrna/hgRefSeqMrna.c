@@ -190,62 +190,61 @@ void findCdsStartEndInGenome(struct refSeqInfo *rsi, struct psl *psl,
 	int *retCdsStart, int *retCdsEnd)
 /* Convert cdsStart/End from mrna to genomic coordinates. */
 {
-int strandStart, strandEnd;
 int startOffset, endOffset;
-int cdsStart, cdsEnd;
+int cdsStart = -1, cdsEnd = -1;
 int i;
 
 if (psl->strand[0] == '-')
     {
-    strandStart = psl->qSize - rsi->cdsEnd;
-    strandEnd = psl->qSize - rsi->cdsStart;
+    endOffset = rsi->cdsStart - psl->qStart;
+    startOffset =  psl->qEnd - rsi->cdsEnd;
     }
 else
     {
-    strandStart = rsi->cdsStart;
-    strandEnd = rsi->cdsEnd;
+    startOffset = rsi->cdsStart - psl->qStart;
+    endOffset =  psl->qEnd - rsi->cdsEnd;
     }
-startOffset = strandStart - psl->qStart;
-if (startOffset < 0) startOffset = 0;
-endOffset = psl->qEnd - strandEnd;
-if (endOffset < 0) endOffset = 0;
-#ifdef DEBUG
-uglyf("strand %c, size %d, cdsStart %d, strandStart %d, startOffset %d, qStart %d\n",
-    psl->strand[0], psl->qSize, rsi->cdsStart, strandStart, startOffset, psl->qStart);
-uglyf("    cdsEnd %d, strandEnd %d, endOffset %d, qEnd %d\n",
-    rsi->cdsEnd, strandEnd, endOffset, psl->qEnd);
-#endif /* DEBUG */
 
 /* Adjust starting pos. */
-cdsStart = -1;
 for (i=0; i<psl->blockCount; ++i)
     {
     int blockSize = psl->blockSizes[i];
+    if (startOffset < 0) startOffset = 0;
     if (startOffset < blockSize)
 	{
         cdsStart = psl->tStarts[i] + startOffset;
 	break;
 	}
+    /* Adjust start offset for this block.  Also adjust for
+     * query sequence between blocks that doesn't align. */
     startOffset -= blockSize;
+    if (i != psl->blockCount - 1)
+	{
+	int skip =  psl->qStarts[i+1] - psl->qStarts[i] + blockSize;
+	startOffset -= skip;
+	}
     }
 
 /* Adjust end pos. */
-cdsEnd = -1;
 for (i=psl->blockCount-1; i >= 0; --i)
     {
     int blockSize = psl->blockSizes[i];
+    if (endOffset < 0) endOffset = 0;
     if (endOffset < blockSize)
         {
 	cdsEnd = psl->tStarts[i] + blockSize - endOffset;
 	break;
 	}
+    /* Adjust start offset for this block.  Also adjust for
+     * query sequence between blocks that doesn't align. */
     endOffset -= blockSize;
+    if (i != 0)
+        {
+	int skip =  psl->qStarts[i] - (psl->qStarts[i-1] + psl->blockSizes[i-1]);
+	endOffset -= skip;
+	}
     }
 
-#ifdef DEBUG
-uglyf("   final cdsStart %d, cdsEnd %d, tStart %d, tEnd %d\n",
-	cdsStart, cdsEnd, psl->tStart, psl->tEnd);
-#endif /* DEBUG */
 if (cdsStart == -1 || cdsEnd == -1)
     {
     cdsEnd = cdsStart = psl->tEnd;
@@ -298,6 +297,36 @@ if (s == NULL) s = "";
 return s;
 }
 
+struct exon
+/* Keep track of an exon. */
+    {
+    struct exon *next;
+    int start, end;
+    };
+
+struct exon *pslToExonList(struct psl *psl)
+/* Convert psl to exon list, merging together blocks
+ * separated by small inserts as necessary. */
+{
+struct exon *exonList = NULL, *exon = NULL;
+int i, tStart, tEnd, temp;
+for (i=0; i<psl->blockCount; ++i)
+    {
+    tStart = psl->tStarts[i];
+    tEnd = tStart + psl->blockSizes[i];
+    if (exon == NULL || tStart - exon->end > 5)
+        {
+	AllocVar(exon);
+	slAddHead(&exonList, exon);
+	exon->start = tStart;
+	}
+    exon->end = tEnd;
+    }
+slReverse(&exonList);
+return exonList;
+}
+
+
 void processRefSeq(char *faFile, char *raFile, char *pslFile, char *loc2refFile, 
 	char *pepFile, char *mim2locFile)
 /* hgRefSeqMrna - Load refSeq mRNA alignments and other info into 
@@ -326,6 +355,7 @@ FILE *refLinkTab = hgCreateTabFile("refLink");
 FILE *refPepTab = hgCreateTabFile("refPep");
 FILE *refMrnaTab = hgCreateTabFile("refMrna");
 int productNameId, geneNameId;
+struct exon *exonList = NULL, *exon;
 
 /* Make refLink and other tables table if they don't exist already. */
 sqlMaybeMakeTable(conn, "refLink", refLinkTableDef);
@@ -439,18 +469,20 @@ while ((psl = pslNext(lf)) != NULL)
 	dotMod = 0;
 	dotOut();
 	}
+    exonList = pslToExonList(psl);
     fprintf(kgTab, "%s\t%s\t%c\t%d\t%d\t",
 	psl->qName, psl->tName, psl->strand[0], psl->tStart, psl->tEnd);
     rsi = hashMustFindVal(rsiHash, psl->qName);
     findCdsStartEndInGenome(rsi, psl, &cdsStart, &cdsEnd);
     fprintf(kgTab, "%d\t%d\t", cdsStart, cdsEnd);
-    fprintf(kgTab, "%d\t", psl->blockCount);
-    for (i=0; i<psl->blockCount; ++i)
-	fprintf(kgTab, "%d,", psl->tStarts[i]);
+    fprintf(kgTab, "%d\t", slCount(exonList));
+    for (exon = exonList; exon != NULL; exon = exon->next)
+        fprintf(kgTab, "%d,", exon->start);
     fprintf(kgTab, "\t");
-    for (i=0; i<psl->blockCount; ++i)
-	fprintf(kgTab, "%d,", psl->tStarts[i] + psl->blockSizes[i]);
+    for (exon = exonList; exon != NULL; exon = exon->next)
+        fprintf(kgTab, "%d,", exon->end);
     fprintf(kgTab, "\n");
+    slFreeList(&exonList);
     }
 if (clDots) printf("\n");
 
