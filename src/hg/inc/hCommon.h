@@ -58,6 +58,7 @@ boolean hIsMgcServer();
  * mgc.server=yes */
 
 #define hgDefaultPixWidth 620
+#define DEFAULT_PIX_WIDTH "620"
 #define	hgDefaultLeftLabelWidth	120
 #define	hgDefaultGfxBorder	1
 
