@@ -68,7 +68,7 @@
 #include "web.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.579 2003/08/12 20:05:32 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.580 2003/08/13 19:14:26 kent Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROMOSOME_SHADES 4
@@ -3256,6 +3256,19 @@ tg->itemName = genomicDupsName;
 tg->itemColor = genomicDupsColor;
 }
 
+Color jkDupliconColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of duplicon track item. */
+{
+struct bed *el = item;
+int grayLevel = grayInRange(el->score, 600, 1000);
+return shadesOfGray[grayLevel];
+}
+
+void jkDupliconMethods(struct track *tg)
+/* Load up custom methods for duplicon. */
+{
+tg->itemColor = jkDupliconColor;
+}
 
 char *simpleRepeatName(struct track *tg, void *item)
 /* Return name of simpleRepeats track item. */
@@ -6487,6 +6500,7 @@ registerTrackHandler("affyTranscriptome", affyTranscriptomeMethods);
 registerTrackHandler("genomicSuperDups", genomicSuperDupsMethods);
 registerTrackHandler("celeraDupPositive", celeraDupPositiveMethods);
 registerTrackHandler("celeraCoverage", celeraCoverageMethods);
+registerTrackHandler("jkDuplicon", jkDupliconMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
