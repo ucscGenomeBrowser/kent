@@ -592,7 +592,7 @@ identifier refSeqId typeOf=mrnaAccession
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
 "Other Species RefSeq mRNA accession"
-    $panTro.xenoRefGene.name
+    $panTro.xenoRefGene.name dupeOk
     $panTro.xenoRefSeqAli.qName full
     $panTro.xenoRefFlat.name full
 
@@ -905,7 +905,7 @@ identifier bdgpTranscriptId external=BDGP dependency
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
-    $dm.bdgpNonCoding.name chopAfter=-
+    $dm.bdgpNonCoding.name chopAfter=- dupeOk
     $dm.bdgpNonCodingInfo.bdgpName
 
 identifier sgdIsoformCluster
