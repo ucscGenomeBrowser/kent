@@ -84,7 +84,7 @@
 #include "estOrientInfo.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.762 2004/07/14 05:51:33 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.763 2004/07/14 21:34:12 hiram Exp $";
 
 #define MAX_CONTROL_COLUMNS 5
 #define CHROM_COLORS 26
@@ -8074,6 +8074,10 @@ registerTrackHandler("chr18deletions", chr18deletionsMethods);
 registerTrackHandler("mouseSyn", mouseSynMethods);
 registerTrackHandler("mouseSynWhd", mouseSynWhdMethods);
 registerTrackHandler("ensRatMusHom", ensPhusionBlastMethods);
+registerTrackHandler("ensRatMm4Hom", ensPhusionBlastMethods);
+registerTrackHandler("ensRatMm5Hom", ensPhusionBlastMethods);
+registerTrackHandler("ensRatMusHg17", ensPhusionBlastMethods);
+registerTrackHandler("ensRn3MusHom", ensPhusionBlastMethods);
 registerTrackHandler("syntenyMm4", syntenyMethods);
 registerTrackHandler("syntenyMm3", syntenyMethods);
 registerTrackHandler("syntenyRn3", syntenyMethods);
