@@ -6,6 +6,13 @@ table fbGene
     string geneName;	"Gene name - up to a couple of words"
     )
 
+table fbTranscript
+"Links FlyBase gene IDs and BDGP transcript IDs"
+    (
+    string geneId;	"FlyBase Gene ID"
+    string transcriptId; "BDGP Transcript ID"
+    )
+
 table fbSynonym
 "Links all the names we call a gene to it's flybase ID"
     (

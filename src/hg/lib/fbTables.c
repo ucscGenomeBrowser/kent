@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "fbTables.h"
 
-static char const rcsid[] = "$Id: fbTables.c,v 1.2 2003/10/27 09:48:11 kent Exp $";
+static char const rcsid[] = "$Id: fbTables.c,v 1.3 2003/10/29 06:38:47 kent Exp $";
 
 void fbGeneStaticLoad(char **row, struct fbGene *ret)
 /* Load a row from fbGene table into ret.  The contents of ret will
@@ -130,6 +130,122 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneName);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void fbTranscriptStaticLoad(char **row, struct fbTranscript *ret)
+/* Load a row from fbTranscript table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+int sizeOne,i;
+char *s;
+
+ret->geneId = row[0];
+ret->transcriptId = row[1];
+}
+
+struct fbTranscript *fbTranscriptLoad(char **row)
+/* Load a fbTranscript from row fetched with select * from fbTranscript
+ * from database.  Dispose of this with fbTranscriptFree(). */
+{
+struct fbTranscript *ret;
+int sizeOne,i;
+char *s;
+
+AllocVar(ret);
+ret->geneId = cloneString(row[0]);
+ret->transcriptId = cloneString(row[1]);
+return ret;
+}
+
+struct fbTranscript *fbTranscriptLoadAll(char *fileName) 
+/* Load all fbTranscript from a whitespace-separated file.
+ * Dispose of this with fbTranscriptFreeList(). */
+{
+struct fbTranscript *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = fbTranscriptLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct fbTranscript *fbTranscriptLoadAllByChar(char *fileName, char chopper) 
+/* Load all fbTranscript from a chopper separated file.
+ * Dispose of this with fbTranscriptFreeList(). */
+{
+struct fbTranscript *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = fbTranscriptLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct fbTranscript *fbTranscriptCommaIn(char **pS, struct fbTranscript *ret)
+/* Create a fbTranscript out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new fbTranscript */
+{
+char *s = *pS;
+int i;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->geneId = sqlStringComma(&s);
+ret->transcriptId = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void fbTranscriptFree(struct fbTranscript **pEl)
+/* Free a single dynamically allocated fbTranscript such as created
+ * with fbTranscriptLoad(). */
+{
+struct fbTranscript *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->geneId);
+freeMem(el->transcriptId);
+freez(pEl);
+}
+
+void fbTranscriptFreeList(struct fbTranscript **pList)
+/* Free a list of dynamically allocated fbTranscript's */
+{
+struct fbTranscript *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    fbTranscriptFree(&el);
+    }
+*pList = NULL;
+}
+
+void fbTranscriptOutput(struct fbTranscript *el, FILE *f, char sep, char lastSep) 
+/* Print out fbTranscript.  Separate fields with sep. Follow last field with lastSep. */
+{
+int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->geneId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

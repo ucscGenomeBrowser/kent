@@ -9,9 +9,18 @@ CREATE TABLE fbGene (
     geneSym varchar(255) not null,	# Short gene symbol
     geneName varchar(255) not null,	# Gene name - up to a couple of words
               #Indices
-    PRIMARY KEY(geneId(11)),
+    INDEX(geneId(11)),
     INDEX(geneSym(8)),
     INDEX(geneName(12))
+);
+
+#Links FlyBase gene IDs and BDGP transcripts
+CREATE TABLE fbGene (
+    geneId varchar(255) not null,	# FlyBase ID
+    transcriptId varchar(255) not null,	# BDGP Transcript ID
+              #Indices
+    INDEX(geneId(11)),
+    PRIMARY KEY(transcriptId(11))
 );
 
 #Links all the names we call a gene to it's flybase ID

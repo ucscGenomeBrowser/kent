@@ -57,14 +57,65 @@ void fbGeneOutput(struct fbGene *el, FILE *f, char sep, char lastSep);
 #define fbGeneCommaOut(el,f) fbGeneOutput(el,f,',',',');
 /* Print out fbGene as a comma separated list including final comma. */
 
-#define FGSYNONYM_NUM_COLS 2
+#define FBTRANSCRIPT_NUM_COLS 2
+
+struct fbTranscript
+/* Links FlyBase gene IDs and BDGP transcript IDs */
+    {
+    struct fbTranscript *next;  /* Next in singly linked list. */
+    char *geneId;	/* FlyBase Gene ID */
+    char *transcriptId;	/* BDGP Transcript ID */
+    };
+
+void fbTranscriptStaticLoad(char **row, struct fbTranscript *ret);
+/* Load a row from fbTranscript table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct fbTranscript *fbTranscriptLoad(char **row);
+/* Load a fbTranscript from row fetched with select * from fbTranscript
+ * from database.  Dispose of this with fbTranscriptFree(). */
+
+struct fbTranscript *fbTranscriptLoadAll(char *fileName);
+/* Load all fbTranscript from whitespace-separated file.
+ * Dispose of this with fbTranscriptFreeList(). */
+
+struct fbTranscript *fbTranscriptLoadAllByChar(char *fileName, char chopper);
+/* Load all fbTranscript from chopper separated file.
+ * Dispose of this with fbTranscriptFreeList(). */
+
+#define fbTranscriptLoadAllByTab(a) fbTranscriptLoadAllByChar(a, '\t');
+/* Load all fbTranscript from tab separated file.
+ * Dispose of this with fbTranscriptFreeList(). */
+
+struct fbTranscript *fbTranscriptCommaIn(char **pS, struct fbTranscript *ret);
+/* Create a fbTranscript out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new fbTranscript */
+
+void fbTranscriptFree(struct fbTranscript **pEl);
+/* Free a single dynamically allocated fbTranscript such as created
+ * with fbTranscriptLoad(). */
+
+void fbTranscriptFreeList(struct fbTranscript **pList);
+/* Free a list of dynamically allocated fbTranscript's */
+
+void fbTranscriptOutput(struct fbTranscript *el, FILE *f, char sep, char lastSep);
+/* Print out fbTranscript.  Separate fields with sep. Follow last field with lastSep. */
+
+#define fbTranscriptTabOut(el,f) fbTranscriptOutput(el,f,'\t','\n');
+/* Print out fbTranscript as a line in a tab-separated file. */
+
+#define fbTranscriptCommaOut(el,f) fbTranscriptOutput(el,f,',',',');
+/* Print out fbTranscript as a comma separated list including final comma. */
+
+#define FBSYNONYM_NUM_COLS 2
 
 struct fbSynonym
 /* Links all the names we call a gene to it's flybase ID */
     {
     struct fbSynonym *next;  /* Next in singly linked list. */
     char *geneId;	/* FlyBase ID */
-    char *name;	/* A name (synonym or real */
+    char *name;	/* A name (synonym or real) */
     };
 
 void fbSynonymStaticLoad(char **row, struct fbSynonym *ret);
