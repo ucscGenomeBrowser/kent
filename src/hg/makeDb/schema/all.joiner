@@ -989,6 +989,29 @@ identifier sgdNoncodingId typeOf=sgdId
     $sacCer.sgdOther.name
     $sacCer.sgdOtherDescription.name
 
+# RGD Family Identifiers
+
+identifier rgdGeneId external=RGD
+"RGD gene ID"
+    $rn.rgdGeneLink.refSeq
+    $rn.rgdGene.name
+
+identifier rgdEstId external=RGD
+"RGD EST ID"
+    $rn.rgdEstLink.name
+    $rn.rgdEst.qName
+
+identifier rgdQtlId external=RGD
+"RGD QTL ID"
+    $rn.rgdQtl.name
+    $rn.rgdQtlLink.name
+
+identifier rgdSslpId external=RGD
+"RGD SSLP ID"
+    $rn.rgdSslp.name
+    $rn.rgdSslpLink.name
+
+
 # The Ensembl Gmish
 
 identifier ensemblGeneId external=Ensembl
