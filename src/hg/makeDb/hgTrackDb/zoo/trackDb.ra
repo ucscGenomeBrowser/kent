@@ -1,0 +1,325 @@
+track pGC
+shortLabel GC Samples 
+longLabel GC Percent Sample Track
+priority 10
+visible full
+type sample 9
+
+track ctgPos
+shortLabel Map Contigs
+longLabel Physical Map Contigs
+priority 20
+visibility hide
+color 150,0,0
+ 
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+priority 30
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
+track gap
+priority 40
+shortLabel Gap
+longLabel Gap Locations
+visibility hide
+type bed 3 +
+
+track clonePos
+priority 50
+shortLabel Coverage
+longLabel Clone Coverage/Fragment Position
+visibility hide
+altColor 180,180,180 
+
+track refGene
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+priority 60
+visibility full
+color 12,12,120
+type genePred refPep refMrna
+
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from Genbank 
+priority 70
+visibility hide
+spectrum on
+type psl .
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+priority 80
+visibility dense
+spectrum on
+type psl est
+
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+priority 90
+visibility hide
+spectrum on
+type psl est
+
+track xenoMrna
+shortLabel Non$organism mRNA
+longLabel Non$organism mRNAs from Genbank
+priority 100
+visibility hide
+spectrum on
+type psl xeno
+
+track xenoEst
+shortLabel Non$organism EST
+longLabel Non$organism ESTs from Genbank 
+priority 110
+visibility hide
+spectrum on
+type psl xeno
+url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+
+track blatFish
+shortLabel Tetraodon Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
+priority 120
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track blatTetra
+shortLabel Tetra Blat
+longLabel Tetraodon nigriviridis Translated Blat Alignments
+priority 120
+visibility dense
+color 0,60,120
+altColor 200,220,255
+spectrum on
+type psl xeno
+
+track rmsk
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+priority 370
+visibility hide
+spectrum on
+type rmsk
+
+track simpleRepeat
+shortLabel Simple Repeats
+longLabel Simple Tandem Repeats by TRF
+priority 380
+visibility hide
+type bed 4 +
+
+track zooCons
+shortLabel Empirical
+longlabel Empirical Conservation L-Scores
+priority 390
+color 100,100,100
+altColor 0,0,160
+visibility hide
+type sample 9
+
+track binomialCons
+shortLabel Binomial
+longlabel Binomial Conservation Scores
+priority 400
+altColor 160,0,0
+visibility hide
+type sample 9
+
+track binomialCons2
+shortLabel Conservation Score
+longlabel Binomial_25 Conservation Scores
+priority 410
+altColor 160,0,0
+visibility hide
+type sample 9
+
+track footPrinter
+shortLabel FootPrinter
+longlabel FootPrinter Conservation Score
+priority 420
+altColor 0,160,0
+visibility hide
+type sample 9
+
+track parsPValues
+shortLabel parsPValues
+longlabel PValues of parsimony scores
+priority 430
+altColor 0,160,0
+visibility full
+type sample 9
+
+track transfac
+shortLabel Transfac Hits
+longLabel Transfac Hits
+priority 440
+visibility hide
+color 12,12,120
+type genePred refPep refMrna
+
+track transfacRatios
+shortLabel Transfac LikeRatios
+longLabel Transfac Likelihood Ratios
+priority 450
+visibility hide
+color 12,12,120
+type bed 6
+
+track footPrinterHMR
+shortLabel FootPrinterHMR
+longlabel FootPrinter Conservation Score, Human/Mouse/Rat
+priority 460
+altColor 0,160,0
+visibility hide
+type sample 9
+
+track zoo
+shortLabel ZooSeq
+longLabel Blastz Alignments
+priority 470
+visible hide
+chromosomes target1,chr7,
+color 0,60,120
+altColor 0,128,0
+type sample 9
+
+track blastzStrictChainHuman
+shortLabel Blastz Human
+longLabel Strict Chain Blastz Human Alignments
+priority 240
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainChimp
+shortLabel Blastz Chimp
+longLabel Strict Chain Blastz Chimp Alignments
+priority 250
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainBaboon
+shortLabel Blastz Baboon
+longLabel Strict Chain Blastz Baboon Alignments
+priority 260 
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainCat
+shortLabel Blastz Cat
+longLabel Strict Chain Blastz Cat Alignments
+priority 270
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainDog
+shortLabel Blastz Dog
+longLabel Strict Chain Blastz Dog Alignments
+priority 280
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainCow
+shortLabel Blastz Cow
+longLabel Strict Chain Blastz Cow Alignments
+priority 290
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainPig
+shortLabel Blastz Pig
+longLabel Strict Chain Blastz Pig Alignments
+priority 300
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainRat
+shortLabel Blastz Rat
+longLabel Strict Chain Blastz Rat Alignments
+priority 310
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainMouse
+shortLabel Blastz Mouse
+longLabel Strict Chain Blastz Mouse Alignments
+priority 320
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainChicken
+shortLabel Blastz Chicken
+longLabel Strict Chain Blastz Chicken Alignments
+priority 330
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainFugu
+shortLabel Blastz Fugu
+longLabel Strict Chain Blastz Fugu Alignments
+priority 340
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainTetra
+shortLabel Blastz Tetra
+longLabel Strict Chain Blastz Tetra Alignments
+priority 350
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
+
+track blastzStrictChainZebrafish
+shortLabel Blastz Zebrafish
+longLabel Strict Chain Blastz Zebrafish Alignments
+priority 360
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno
