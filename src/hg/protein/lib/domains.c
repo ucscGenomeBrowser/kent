@@ -6,9 +6,29 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "spDb.h"
+#include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.1 2004/10/13 22:09:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.2 2005/01/05 02:19:11 fanhsu Exp $";
+
+char *samGenomeDb(char *proteinId)
+/* Determin if a protein belongs to a genome DB that has SAM results */
+/* This function will be updated as SAM applies to more genomes */
+{
+char condStr[128];
+char *taxon;
+
+safef(condStr, sizeof(condStr), "name='%s'", proteinId);
+taxon = sqlGetField(NULL, "swissProt", "accToTaxon", "taxon", condStr);
+if (sameWord(taxon, "4932")) 
+    {
+    return(strdup("sacCer1"));
+    }
+else
+    {
+    return(NULL);
+    }
+}
 
 void modBaseAnchor(char *swissProtAcc)
 /* Print out anchor to modBase. */
@@ -20,6 +40,9 @@ void domainsPrint(struct sqlConnection *spConn, char *swissProtAcc)
 /* Print out protein domains. */
 {
 struct slName *el, *list;
+char condStr[128];
+char *taxon, *samDb;
+
 list = spExtDbAcc1List(spConn, swissProtAcc, "Interpro");
 if (list != NULL)
     {
@@ -105,6 +128,13 @@ if (list != NULL)
     slFreeList(&list);
     }
 
+/* if this protein belongs to a genome having SAM-T02 results, show the sub-section */
+samDb = samGenomeDb(swissProtAcc);
+if (samDb != NULL)
+    {
+    doSamT02(swissProtAcc, samDb);
+    }
+    
 /* Do modBase link. */
     {
     hPrintf("<B>ModBase Predicted Comparative 3D Structure on ");
