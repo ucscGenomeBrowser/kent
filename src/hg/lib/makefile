@@ -4,7 +4,7 @@ include ../../inc/common.mk
 L = -lm $(MYSQLLIBS)
 
 O = affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o affyPairs.o \
-    agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
+    agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o  axtInfo.o \
     axtLib.o bactigPos.o bbRepMask.o bdgpExprLink.o bdgpGeneInfo.o bed.o \
     bed6FloatScore.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o \
