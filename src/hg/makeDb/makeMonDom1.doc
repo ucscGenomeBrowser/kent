@@ -1718,15 +1718,16 @@ bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
     exit		#	exit bash if you are csh normally
 
     #	Compare to some other organisms
-XXXX - TBD - 2004-12-16 22:10
     featureBits mm5 chainMonDom1
-    #	782212657 bases of 1054197620 (74.200%) in intersection
+    #	2121448151 bases of 2615483787 (81.111%) in intersection
+    featureBits -countGaps mm5 chainRn3
+    #	2646682349 bases of 3164952073 (83.625%) in intersection
+    featureBits mm5 chainRn3
+    #	2646682349 bases of 2615483787 (101.193%) in intersection
     featureBits mm5 chainHg17
-    #	921410328 bases of 1054197620 (87.404%) in intersection
+    #	2507720521 bases of 2615483787 (95.880%) in intersection
     featureBits mm5 chainXenTro1
-    #	691628520 bases of 1054197620 (65.607%) in intersection
-    featureBits mm5 chainMm5
-    #	846905330 bases of 1054197620 (80.336%) in intersection
+    #	1078618413 bases of 2615483787 (41.240%) in intersection
 
 # NET OPOSSUM TO MOUSE BLASTZ (TBD)
     ssh eieio
@@ -1767,13 +1768,25 @@ XXXX - TBD - 2004-12-16 22:10
     netFilter -minGap=10 mouse.net |  hgLoadNet mm5 netMonDom1 stdin
     #	3 minutes
     #	compare featureBits with some other assemblies
-XXXX - TBD - 2004-12-16 22:55
     featureBits mm5 netMonDom1
-    #	771045333 bases of 1054197620 (73.140%) in intersection
-    featureBits mm5 netBosTau1
-    #	2261085097 bases of 2866216770 (78.887%) in intersection
+    #	2094316044 bases of 2615483787 (80.074%) in intersection
     featureBits mm5 netRn3
-    #	2817656275 bases of 2866216770 (98.306%) in intersection
+    #	2638255333 bases of 2615483787 (100.871%) in intersection
+    featureBits -countgaps mm5 netRn3
+    #	2638255333 bases of 3164952073 (83.358%) in intersection
+    featureBits mm5 netHg17
+    #	2504056038 bases of 2615483787 (95.740%) in intersection
+    featureBits mm5 netCanFam1
+    #	2456773441 bases of 2615483787 (93.932%) in intersection
+    featureBits mm5 netGalGal2
+    #	1958796258 bases of 2615483787 (74.892%) in intersection
+    featureBits mm5 netXenTro1
+    #	1042210258 bases of 2615483787 (39.848%) in intersection
+    featureBits mm5 netTetNig1
+    #	618111072 bases of 2615483787 (23.633%) in intersection
+    featureBits mm5 netDanRer2
+    #	560950601 bases of 2615483787 (21.447%) in intersection
+
 
 # SWAP EVERYTHING AND REMAKE NET FROM OPOSSUM REFERENCE
 #	Create MOUSE TO OPOSSUM chain, net
@@ -1812,14 +1825,12 @@ XXXX - TBD - 2004-12-16 22:55
     hgsql monDom1 -e "analyze table chainMm5;"
     hgsql monDom1 -e "analyze table chainMm5Link;"
 
-XXX - TBD - 2004-12-17 13:40
     featureBits monDom1 chainMm5Link
-    #	110933245 bases of 3492108230 (3.177%) in intersection
-
+    #	249594220 bases of 3492108230 (7.147%) in intersection
     featureBits monDom1 chainMm5
-    #	3246158618 bases of 3492108230 (92.957%) in intersection
+    #	2913812625 bases of 3492108230 (83.440%) in intersection
     featureBits monDom1 netMm5
-    #	3223616544 bases of 3492108230 (92.311%) in intersection
+    #	2889580530 bases of 3492108230 (82.746%) in intersection
 
 # BLASTZ MOUSE CLEAN UP (TBD)
     rm chain.tab link.tab
@@ -1953,3 +1964,144 @@ chainSome $(path1)
     # back to eieio
     rm -rf blastOut
 # End tblastn
+
+
+# ALIGN TO ZEBRAFISH (WORKING - 2004-12-17 - Hiram)
+#	NAMING CONVENTION: the zb.danRer2 directory will be the Opossum
+#	aligned to the Zebrafish blastz result.
+#	The bz.danRer2 directory will the swapped result, Zebrafish aligned
+#	to Opossum 
+  ssh kk
+  mkdir -p /cluster/data/monDom1/bed/zb.danRer2
+  cd /cluster/data/monDom1/bed/zb.danRer2
+
+  # Create DEF file for run of scaffolds vs. zebrafish chromosomes
+  cat << '_EOF_' > DEF
+# zebrafish vs. M.domestica
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+# Set up blastz parameters using parameters between (chicken and fish ?)
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: zebrafish
+SEQ1_DIR=/iscratch/i/danRer2/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum
+SEQ2_DIR=/iscratch/i/monDom1/chunks
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom1/bed/zb.danRer2
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+  # << this line keeps emacs coloring happy
+
+    cp -p /cluster/data/danRer2/chrom.sizes S1.len
+    cp -p /cluster/data/monDom1/chrom.sizes S2.len
+    # script copied over from /cluster/data/danRer2/jkStuff/BlastZ_run0.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run0.sh
+
+    cd run.0
+    para try, push check, para push, para check....
+XXX - RUNNING - 2004-12-17
+# Completed: 112871 of 112871 jobs
+# CPU time in finished jobs:   36169619s  602826.99m 10047.12h  418.63d  1.147 y
+# IO & Wait Time:                452242s    7537.36m   125.62h    5.23d  0.014 y
+# Average job time:                 324s       5.41m     0.09h    0.00d
+# Longest job:                     2755s      45.92m     0.77h    0.03d
+# Submission to last job:        153519s    2558.65m    42.64h    1.78d
+    #	extra delay in this run due to disk problems in the middle and
+    #	thus being interrupted
+
+    #	Second cluster run to convert the .out's to .lav's
+    #	You do NOT want to run this on the big cluster.  It brings
+    #	the file server to its knees.  Run this on the small cluster.
+    ssh kki
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    # script copied over from /cluster/data/danRer2/jkStuff/BlastZ_run1.sh
+    /cluster/data/monDom1/jkStuff/BlastZ_run1.sh
+    cd run.1
+    para try, check, push, etc ...
+# Completed: 341 of 341 jobs
+# CPU time in finished jobs:       3131s      52.19m     0.87h    0.04d  0.000 y
+# IO & Wait Time:                  9815s     163.58m     2.73h    0.11d  0.000 y
+# Average job time:                  38s       0.63m     0.01h    0.00d
+# Longest job:                      223s       3.72m     0.06h    0.00d
+# Submission to last job:          1267s      21.12m     0.35h    0.01d
+
+    # third run: lav -> axt (an I/O bound process, run only on fileserver)
+    #	Use the chunks.2bit so lavToAxt will work. Then lift the resulting axt
+
+    ssh eieio
+    cd /cluster/data/monDom1/bed/zb.danRer2
+    mkdir axtChrom pslChrom
+
+    cat << '_EOF_' > lav2axt.sh
+#!/bin/sh
+for L in lav/chr*
+do
+    chr=${L/lav\//}
+    cd ${L}
+    echo -n "${L} -> ${chr}.axt working ... "
+    cat `ls -1 *.lav | sort -g` \
+	| lavToAxt stdin \
+	/scratch/mus/danRer2/softNib \
+	/iscratch/i/monDom1/chunks.2bit stdout \
+	| axtSort stdin stdout | liftUp -axtQ ../../axtChrom/${chr}.axt \
+	    /iscratch/i/monDom1/chunkedScaffolds.lft warn stdin
+    cd ../..
+    echo -n "${chr}.axt -> ${chr}.psl working ..."
+    axtToPsl axtChrom/${chr}.axt S1.len S2.len pslChrom/${chr}.psl
+    echo "DONE"
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    chmod +x lav2axt.sh
+    ./lav2axt.sh
+    #	38 minutes
+
+    #	load this blast result just to see how it looks
+    #	It is not needed in the browser after the chains and nets are
+    #	made, drop it later.
+    ssh hgwdev
+    cd /cluster/data/monDom1/bed/zb.danRer2/pslChrom
+    hgLoadPsl -table=blastzMonDom1 -noTNameIx danRer2 chrM.psl
+    bash		#	if you are csh normally
+    for I in `ls *.psl | grep -v chrM.psl`
+    do
+        /cluster/bin/i386/hgLoadPsl -table=blastzMonDom1 -append \
+		-noTNameIx danRer2 ${I}
+        echo "done: ${I}"
+    done
+    #	12 minutes
+    exit		#	back to csh if you are csh normally
+    #	Let's see what featureBits has to say about this data
+    featureBits danRer2 blastzMonDom1
+    263272041 bases of 2615483787 (10.066%) in intersection
+
