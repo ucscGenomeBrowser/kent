@@ -187,11 +187,13 @@ for (t3 = t3List; t3 != NULL; t3 = t3->next)
 internalErr();
 }
 
-static struct ffAli *ffMergeExactly(struct ffAli *aliList)
+static struct ffAli *ffMergeClose(struct ffAli *aliList)
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
- * ascending nStart field. Also merge perfectly abutting neighbors.*/
+ * ascending nStart field. Also merge perfectly abutting neighbors or
+ * ones that could be merged at the expense of just a few mismatches.*/
 {
 struct ffAli *mid, *ali;
+int closeEnough = -3;
 
 for (mid = aliList->right; mid != NULL; mid = mid->right)
     {
@@ -204,7 +206,7 @@ for (mid = aliList->right; mid != NULL; mid = mid->right)
 	nOverlap = nEnd - nStart;
 	/* Overlap or perfectly abut in needle, and needle/hay
 	 * offset the same. */
-	if (nOverlap >= 0)
+	if (nOverlap >= closeEnough)
 	    {
 	    int diag = ali->nStart - ali->hStart;
 	    if (diag == mid->nStart - mid->hStart)
@@ -742,7 +744,7 @@ for (ffl = bundle->ffList; ffl != NULL; ffl = ffl->next)
 slFreeList(&bundle->ffList);
 
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
-ffList = ffMergeExactly(ffList);
+ffList = ffMergeClose(ffList);
 
 while (ffList != NULL)
     {
