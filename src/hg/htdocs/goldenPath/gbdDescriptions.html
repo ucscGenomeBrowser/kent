@@ -1,86 +1,154 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
 <HTML>
 <HEAD>
-	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: Annotation Database</TITLE>
-	<LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+  <TITLE>UCSC Genome Browser: Annotation Database</TITLE>
+  <LINK REL="STYLESHEET" HREF="/style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+
 <A NAME="TOP"></A>
-
-
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%"><TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+  <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="/images/title.jpg"></TH></TR>
 
 <!--HOTLINKS BAR-->
-<TR><TD COLSPAN=2 HEIGHT=40>
-	<table bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27"><tr bgcolor="2636D1"><td valign="middle">
-	<table BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
-			<TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp;&nbsp;
-			<A HREF="/index.html" class="topbar">
-				Home</A> &nbsp; - &nbsp;
-			<A HREF="/cgi-bin/hgGateway" class="topbar">
-				Genome Browser</A> &nbsp; - &nbsp; 
-			<A HREF="/cgi-bin/hgNear" class="topbar">
-				Gene Sorter</A> &nbsp; - &nbsp; 
-			<A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
-				Blat </A> &nbsp; - &nbsp; 
-			<A HREF="/cgi-bin/hgText?command=start" class="topbar">
-				Table Browser</A> &nbsp; - &nbsp; 
-			<A HREF="/FAQ/" class="topbar">
-				FAQ</A> &nbsp; - &nbsp; 
-			<A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">
-				Help</A> &nbsp;</font></TD>
+  <TR><TD COLSPAN=2 HEIGHT=40>
+    <TABLE bgcolor="000000" cellpadding="1" cellspacing="1" width="100%" height="27">
+      <TR bgcolor="2636D1"><td valign="middle">
+	<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 bgcolor="2636D1" height="24">
+	  <TR><TD VALIGN="middle"><font color="#89A1DE">&nbsp;&nbsp;
+	    <A HREF="/index.html" class="topbar">
+		Home</A> &nbsp; - &nbsp;
+	    <A HREF="/cgi-bin/hgGateway" class="topbar">
+		Genome Browser</A> &nbsp; - &nbsp; 
+	    <A HREF="/cgi-bin/hgNear" class="topbar">
+		Gene Sorter</A> &nbsp; - &nbsp; 
+	    <A HREF="/cgi-bin/hgBlat?command=start" class="topbar">
+		Blat </A> &nbsp; - &nbsp; 
+	    <A HREF="/cgi-bin/hgText?command=start" class="topbar">
+		Table Browser</A> &nbsp; - &nbsp; 
+	    <A HREF="/FAQ/" class="topbar">
+		FAQ</A> &nbsp; - &nbsp; 
+	    <A HREF="/goldenPath/help/hgTracksHelp.html" class="topbar">
+		Help</A> &nbsp;</font></TD>
 	</TR></TABLE>
-	</TD></TR></TABLE>
-</TD></TR>
+    </TD></TR></TABLE>
+  </TD></TR>
 
-<!--Content Tables------------------------------------------------------->
-<TR><TD COLSPAN=2 CELLPADDING=10>	
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1><TR><TD>
-	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
-	<FONT SIZE="4"><B> &nbsp;The Genome Browser Database </B></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
-		This page describes the format of the genome annotation databases that underlie the 
-		UCSC Genome Browser. 
-		This data was contributed by many researchers, as described in 
-		<A href="credits.html">Credits</A>. 
-		Please acknowledge the contributor(s) of the data you use. All
-		of the tables for an assembly are 
-		freely usable for any purpose except as indicated in the README.txt file in the 
-		downloadable <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html">annotation database
-		directory</A> for that release. 
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<BR></TD></TR></TABLE>
-
+<!--Intro---------------------------------------------------------------->
+  <TR><TD COLSPAN=2 CELLPADDING=10>	
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%">
+	  <TR><TD>
+	    <FONT SIZE="4"><B> &nbsp;The Genome Browser Database </B></FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	    <TD>
+	      <P>
+	      This page describes the format of the genome annotation databases 
+	      that underlie the UCSC Genome Browser.  These data were contributed 
+	      by many researchers, as described on the Genome Browser 
+	      <A HREF="credits.html">Credits</A> page. Please acknowledge the 
+	      contributor(s) of the data you use. All tables for an assembly 
+	      are freely usable for any purpose except as indicated in the 
+	      README.txt file in the downloadable 
+	      <A HREF="http://hgdownload.cse.ucsc.edu/downloads.html">annotation 
+	      database directory</A> for that release. 
+	    </TD><TD WIDTH=15></TD>
+	  </TR>
+	</TABLE>
 	<BR>
+      </TD></TR>
+    </TABLE>
+    <BR>
+
+<!--Table Descriptions--------------------------------------------------->
 	
-	<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1><TR><TD>
-	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%><TR><TD>
-	<FONT SIZE="4"><b>&nbsp; Table Descriptions</FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10></TD><TD>
-<P>The data displayed in the Genome Browser is stored in a 
-<A href="http://www.mysql.com/" TARGET=_blank>MySQL</A> database. The tables in 
-the database can be grouped into three categories. The first are ones for which 
-the data has been split into separate tables for each chromosome. The second 
-group has tables that contain information for all chromosomes. The third group 
-has tables that contain information specifically related to mRNA sequences.</P>
-<P>All of the coordinates in these tables are of "half-open zero based." This 
-means that the first 100 bases of a chromosome are represented as [0,100). The 
-second 100 bases are represented as [100,200), and so forth. An advantage of
-half open coordinate ranges is that the length can be obtained by simply
-subtracting the start from the end.</P>
-<P>The database currently includes the following tables for each chromosome 
-(chrN_[table] where N is replaced by the chromosome name). In many cases there 
-is an additional table for the unordered part (random) of the chromosome 
-(chrN_random_[table]). Finally, in addition to the standard chromosome names 1, 
-..., 22, X, and Y, there are two special chromosome names, UL and NA, 
-representing fingerprint clone contigs that could not be placed confidently on a 
-chromosome, and individual clones that could not be placed, respectively. The 
-table names are hyperlinked to an <a href="http://www.linuxjournal.com/article.php?sid=5949" TARGET=_blank>autoSql</a>    
-format description of their fields.</P>
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	  <TR><TD>
+	    <FONT SIZE="4"><b>&nbsp; Table Descriptions</FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	  <TD>
+	    <P>
+	    The data displayed in the Genome Browser are stored in a 
+            <A href="http://www.mysql.com/" TARGET=_blank>MySQL</A> database. 
+	    The tables in the database can be grouped into four categories: 
+	    <UL>
+	    <LI>tables in which the data has been split into a separate table
+	    for each chromosome
+	    <LI>tables that contain information for all chromosomes
+	    <LI>tables that contain information specifically related to mRNA 
+ 	    sequences
+	    <LI>tables intended primarily for internal use
+	    </UL>
+            <P>
+	    All coordinates in these tables are <em>half-open zero-based</em>.
+	    This means that the first 100 bases of a chromosome are represented 
+	    as [0,100). The second 100 bases are represented as [100,200), and 
+	    so forth. An advantage of half-open coordinate ranges is that the 
+	    length can be obtained by simply subtracting the start from the end.
+	    </P>
+            <P>
+	    Data that have been split into a separate table for each chromosome
+	    have the naming convention <em>chrN_[table]</em>, where <em>N</em> 
+	    is replaced by the chromosome name. 
+	    In many cases a table has been added that contains the unordered part 
+	    (random) of the chromosome, <em>chrN_random_[table]</em>. Finally, in 
+	    addition to the standard chromosome names, some assemblies have
+	    two special chromosome names, <em>UL</em> and <em>NA</em>, representing 
+	    fingerprint clone contigs that could not be placed confidently on a 
+            chromosome, and individual clones that could not be placed, 
+	    respectively. The table names are hyperlinked to an 
+	    <A HREF="http://www.linuxjournal.com/article.php?sid=5949" 
+	    TARGET=_blank>autoSql</A> format description of their fields.</P>
+	   </TD><TD WIDTH=15></TD>
+  	  </TR>
+	</TABLE>
+	<BR>
+      </TD></TR>
+    </TABLE>
+    <BR>
+
+<!--Chromomome-based tables---------------------------------------------->
+
+    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	  <TR><TD>
+	    <FONT SIZE="4"><b>&nbsp; Tables Split by Chromosome </FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	  <TD>
+	    <P>
+	    This section shows data that has been split into a separate table
+	    for each chromosome.
+	    <P>
+	      <CENTER>
+	      <A HREF="#CHR6_GBD">[chr6]</A> 
+	      <A HREF="#CHRN_b_GBD">[chrN_B]</A> 
+	      <A HREF="#CHRN_c_GBD">[chrN_C]</A> 
+	      <A HREF="#CHRN_e_GBD">[chrN_E]</A> 
+	      <A HREF="#CHRN_g_GBD">[chrN_G]</A> 
+	      <A HREF="#CHRN_h_GBD">[chrN_H]</A> 
+	      <A HREF="#CHRN_i_GBD">[chrN_I]</A> 
+	      <A HREF="#CHRN_m_GBD">[chrN_M]</A>
+	      <A HREF="#CHRN_r_GBD">[chrN_R]</A> 
+	      <A HREF="#CHRN_v_GBD">[chrN_V]</A> 
+	      <A HREF="#CHRN_w_GBD">[chrN_W]</A> 
+	      <A HREF="#CHRN_z_GBD">[chrN_Z]</A>
+	      </CENTER>
 <UL>
+<A NAME="CHR6_GBD"></A>
   <LI><A 
   href="#Chain">chr6_hla_hap1_chainCanFam1</A>
   - Summary info about chain of dog (canFam1) alignments on human chr6_hla_hap1</LI>
@@ -132,6 +200,7 @@ format description of their fields.</P>
   <LI><A 
   href="#RepeatInfo">chr6_hla_hap1_rmsk</A> 
   - Repeating elements created using RepeatMasker <on human chr6_hla_hap1</LI>
+
   <LI><A 
   href="#Chain">chr6_hla_hap2_chainCanFam1</A>
   - Summary info about chain of dog (canFam1) alignments on human chr6_hla_hap2</LI>
@@ -183,6 +252,8 @@ format description of their fields.</P>
   <LI><A 
   href="#RepeatInfo">chr6_hla_hap2_rmsk</A> 
   - Repeating elements created using RepeatMasker <on human chr6_hla_hap2</LI>
+
+<A NAME="CHRN_B_GBD"></A>
   <LI><A 
   href="#PslInfo">chrN_blastzBestMouse</A> 
   - <A HREF="http://bio.cse.psu.edu/" TARGET=_BLANK>Blastz</A> alignments 
@@ -244,6 +315,8 @@ format description of their fields.</P>
   <LI><A 
   href="#PslInfo">chrN_blatMus</A> 
   - Translated BLAT mouse alignments.  (Dec 2001 and later)
+
+<A NAME="CHRN_C_GBD"></A>
   <LI><A 
   href="#Chain">chrN_cb1Chain</A> 
   - Summary info about chain of <em>C. briggsae</em> (cb1) alignments </LI>
@@ -364,9 +437,13 @@ format description of their fields.</P>
   <LI><A 
   href="#GpInfo">chrN_contigs_gold</A> 
   - Instructions on creating goldenPath from fragments
+
+<A NAME="CHRN_E_GBD"></A>
   <LI><A 
   href="#PslInfo">chrN_est</A> 
   - EST alignments 
+
+<A NAME="CHRN_G_GBD"></A>
   <LI><A 
   href="#GapInfo">chrN_gap</A> 
   - Gap locations and types 
@@ -376,30 +453,44 @@ format description of their fields.</P>
   <LI><A 
   href="#GpInfo">chrN_gold</A> 
   - Instructions on creating golden path from fragments 
+
+<A NAME="CHRN_H_GBD"></A>
   <LI><A 
   href="#WiggleTrack">chrN_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores 
+
+<A NAME="CHRN_I_GBD"></I>
   <LI><A 
   href="#PslInfo">chrN_intronEst</A> 
   - EST alignments in introns 
+
+<A NAME="CHRN_M_GBD"></A>
   <LI><A 
   href="#PslInfo">chrN_mrna</A> 
   - mRNA alignments 
   <LI><A 
   href="#WiggleTrack">chrN_musHumL</A> 
   - Mouse/Human Evolutionary Conservation Scores 
+
+<A NAME="CHRN_R_GBD"></A>
   <LI><A 
   href="#Chain">chrN_rBestChainPanTro1</A> 
   - Reciprocal best chain alignments of the panTro1 chimp assembly to the human genome</LI>
   <LI><A 
-  href="#PslInfo">chrN_viralProt</A> 
-  - Alignments between SwissProt viral proteins and the SARS assembly </LI>
-  <LI><A 
   href="#RepeatInfo">chrN_rmsk</A> 
   - Repeating elements created using RepeatMasker </LI>
+
+<A NAME="CHRN_V_GBD"></A>
+  <LI><A 
+  href="#PslInfo">chrN_viralProt</A> 
+  - Alignments between SwissProt viral proteins and the SARS assembly </LI>
+
+<A NAME="CHRN_W_GBD"></A>
   <LI><A 
   href="#WabaChromCreate">chrN_wabaCbr</A> 
   - <em>C. briggsae</em> WABA alignments - abbreviated description
+
+<A NAME="CHRN_Z_GBD"></A>
   <LI><A 
   href="#WiggleTrack">chrN_zoom1_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores (very large scale)
@@ -419,10 +510,58 @@ format description of their fields.</P>
   href="#WiggleTrack">chrN_zoom50_humMusL</A> 
   - Human/Mouse Evolutionary Conservation Scores (large scale)
 </UL>
+	   </TD><TD WIDTH=15></TD>
+  	  </TR>
+	</TABLE>
+	<BR>
+      </TD></TR>
+    </TABLE>
+    <BR>
 
-<P>The following tables contain data that is placed on the golden path, but is 
-stored in a single table rather than one table per chromosome:</P>
+<!--Individual Tables---------------------------------------------------->
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%">
+	  <TR><TD>
+	    <FONT SIZE="4"><B> &nbsp;Data Stored in a Single Table</B></FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	    <TD>
+	      <P>
+	      The tables in this section contain data stored in a single table 
+	      rather than in one table per chromosome.</P>
+	      <CENTER>
+	      <A HREF="#A_GBD">[A]</A>&nbsp;
+	      <A HREF="#B_GBD">[B]</A>&nbsp;
+	      <A HREF="#C_GBD">[C]</A>&nbsp;
+	      <A HREF="#D_GBD">[D]</A>&nbsp;
+	      <A HREF="#E_GBD">[E]</A>&nbsp;
+	      <A HREF="#F_GBD">[F]</A>&nbsp;
+	      <A HREF="#G_GBD">[G]</A>&nbsp;
+	      <A HREF="#H_GBD">[H]</A>&nbsp;
+	      <A HREF="#I_GBD">[I]</A>&nbsp;
+	      <A HREF="#J_GBD">[J]</A>&nbsp;
+	      <A HREF="#K_GBD">[K]</A>&nbsp;
+	      <A HREF="#M_GBD">[M]</A>&nbsp;
+	      <A HREF="#N_GBD">[N]</A>&nbsp;
+	      <A HREF="#O_GBD">[O]</A>&nbsp;
+	      <A HREF="#P_GBD">[P]</A>&nbsp;
+	      <A HREF="#Q_GBD">[Q]</A>&nbsp;
+	      <A HREF="#R_GBD">[R]</A>&nbsp;
+	      <A HREF="#S_GBD">[S]</A>&nbsp;
+	      <A HREF="#T_GBD">[T]</A>&nbsp;
+	      <A HREF="#U_GBD">[U]</A>&nbsp;
+	      <A HREF="#V_GBD">[V]</A>&nbsp;
+	      <A HREF="#W_GBD">[W]</A>&nbsp;
+	      <A HREF="#X_GBD">[X]</A>&nbsp;
+	      <A HREF="#Y_GBD">[Y]</A>&nbsp;
+	      <A HREF="#Z_GBD">[Z]</A>&nbsp;
+	      </CENTER>
+
 <UL>
+<A NAME="A_GBD"></A>
   <LI><A 
   href="#GenePredictions">acembly</A> 
   - Acembly Gene Predictions With Alt-splicing </LI>
@@ -548,6 +687,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#ScoredRef">axtNetHg16</A> 
   - Scored reference file for human/chimp alignments
+
+<A NAME="B_GBD"></A>
   <LI><A 
   href="#LFS">bacEndPairs</A> 
   - Locations of BAC clones using placements of its 5' and 3' 
@@ -611,6 +752,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#PslInfo">blatFr1</A> 
   - Translated BLAT alignments of <em>Takifugu rubripes</em> assembly fr1 against the current genome</LI>
+
+<A NAME="C_GBD"></A>
   <LI><A 
   href="#BlastTab">ceBlastTab</A> 
   - Blastp results of known genes vs. one another (<em>C. elegans</em>)
@@ -684,8 +827,13 @@ stored in a single table rather than one table per chromosome:</P>
   - 800 chromosome bands mapped to golden path by Terry Furey using
   fish data from BAC Resource Consortium
   <LI><A 
+  href="#GenePredictions">cytokines</A> 
+  - Cytokine gene annotations (Tetraodon)
+  fish data from BAC Resource Consortium
+  <LI><A 
   href="#BED">cytoBandIdeo</A> 
   - Information for mapping ideogram
+<A NAME="D_GBD"></A>
   <LI><A 
   href="#DbSnp">dbSnpRS</A> 
   - Information from dbSNP at the reference SNP level </LI>
@@ -716,6 +864,7 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#DupSpMrna">dupSpMrna</A> 
   - Duplicate mRNA/Protein entries that have identical CDS structures</LI>
+<A NAME="E_GBD"></A>
   <LI><A 
   href="#GenePredictions">ECgene</A> 
   - ECGene gene predictions </LI>
@@ -786,6 +935,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#ExoMouse">exoMouse</A> 
   - Exonerate mouse/human evolutionarily conserved regions (Last used Apr. 2001) </LI>
+
+<A NAME="F_GBD"></A>
   <LI><A 
   href="#BED">firstEF</A> 
   - First Exon Finder (FirstEF) exon and promoter predictions</LI>
@@ -801,6 +952,11 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#FosEndPairs">fosEndPairs</A> 
   - Positions of end pairs for fosmids
+
+<A NAME="G_GBD"></A>
+  <LI><A 
+  href="#GenePredictions">gaze</A> 
+  - Genoscope GAZE gene annotations (Tetraodon)
   <LI><A 
   href="#GbProtAnn">gbProtAnn</A> 
   - GenBank protein annotations
@@ -986,6 +1142,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#ExpDistance">gnfU95Distance</A> 
   - Describes the distance between genes in the expression space (GNF U95)
+
+<A NAME="H_GBD"></A>
   <LI><A 
   href="#HInv">HInv</A> 
   - Full-length cDNAs from the H-Invitational Human Gene Annotation Database</LI>
@@ -1016,6 +1174,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#ScoredRef">humorMm3Rn3</A> 
   - Human, Mouse, and Rat multiz alignments for hg16, mm3, and rn3 (human only) </LI>
+
+<A NAME="I_GBD"></A>
   <LI><A 
   href="#ImageClone">imageClone</A> 
   - Used with image consortium's cumulative_plate files at: ftp://image.llnl.gov/image/outgoing"</LI>
@@ -1028,6 +1188,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#BED">intersectingMergedMCS</A> 
   - Same as intersectingMCS, but with regions less than 10 bp apart merged (Zoo)</LI>
+
+<A NAME="J_GBD"></A>
   <LI><A 
   href="#JaxOrtholog">jaxOrtholog</A> 
   - Jackson Labs Mouse Orthologs </LI>
@@ -1037,6 +1199,8 @@ stored in a single table rather than one table per chromosome:</P>
   <LI><A 
   href="#GenePredExt">jgiGene</A> 
   - Alignments of JGI predicted transcripts to the current genome 
+
+<A NAME="K_GBD"></A>
   <LI><A 
   href="#KeggMapDesc">keggMapDesc</A> 
   - Description of KEGG pathway map
@@ -1138,6 +1302,8 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#KnownTo">knownToU95</A> 
   - Associates known gene and Affy U95 chip ID
+
+<A NAME="M_GBD"></A>
   <LI><A 
   href="#BED">mcs_b</A> 
   - Binomial-based Multi-Species Conserved Sequences (MCSs) (Zoo)
@@ -1244,6 +1410,8 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   href="#WiggleTrack2">mzPt1Mm3Rn3Gg2_pHMM_wig</A> 
   - "Wiggle track" display of evolutionary conservation in current species, human, and mouse
   based on a phylogentiec hidden Markov model, using multiz alignments 
+
+<A NAME="N_GBD"></A>
   <LI><A 
   href="#BED">nci60</A> 
   - Microarray Experiments for NCI 60 Cell Lines </LI>
@@ -1307,9 +1475,13 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#NetAlign">netSyntenyHg16</A> 
   - Database representation of a net of alignments with human assembly hg16 </LI>
+
+<A NAME="O_GBD"></A>
   <LI><A 
   href="#PslInfo">otherSARS</A> 
   - Other SARS sequences from NCBI aligned to the SARS assembly
+
+<A NAME="P_GBD"></A>
   <LI><A 
   href="#PbAaDistX">pbAaDistX</A> 
   - Proteome Browser distribution for a specific amino acid X
@@ -1386,9 +1558,13 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#PslInfo">pseudoMrna</A> 
   - Predicted pseudogene alignment information</LI>
+
+<A NAME="Q_GBD"></A>
   <LI><A 
   href="#WiggleTrack2">quality</A> 
   - Genome quality scores</LI>
+
+<A NAME="R_GBD"></A>
   <LI><A 
   href="#ScoredRef">rat_hmrg</A> 
   - Rat scored reference file for human/chimp/mouse/rat/chicken alignments
@@ -1489,6 +1665,8 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   <LI><A 
   href="#Sage">sage</A> 
   - Stores SAGE data in terms of UniGene identifiers</LI>
+
+<A NAME="S_GBD"></A>
   <LI><A 
   href="#SageExp">sageExp</A> 
   - Data related to SAGE experiments, tissue descriptions, etc.
@@ -1688,6 +1866,8 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#SyntenyRat">syntenyRat</A> 
   - Synteny between rat and human chromosomes (First used in hg13) </LI>
+
+<A NAME="T_GBD"></A>
   <LI><A 
   href="#tfbsCons">tfbsCons</A> 
   - Transcription factor binding sites conserved in a multiple species alignment</LI>
@@ -1706,6 +1886,8 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#PepPredictions">twinscanPep</A> 
   - Translations of Twinscan gene predictions into corresponding amino acid sequences </LI>
+
+<A NAME="U_GBD"></A>
   <LI><A 
   href="#PslInfo">uniGene</A> 
   - UniGene alignments and SAGE Info (Last used Apr. 2001)  </LI>
@@ -1715,6 +1897,8 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#PslInfo">uniGene_gg</A> 
   - Chicken UniGene alignments </LI>
+
+<A NAME="V_GBD"></A>
   <LI><A 
   href="#GenePredictions">vegaGene</A> 
   - Annotated genes from the <A HREF="http://vega.sanger.ac.uk/">Vertebrate Genome Annotation (VEGA) database</A> (Human chr14, 20, 22 only) </LI>
@@ -1730,12 +1914,16 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#Vntr">vntr</A> 
   - Microsatellites from Gerome Breen's VNTR program
+
+<A NAME="W_GBD"></A>
   <LI><A 
   href="#WabaFullCreate">wabaCbr</A> 
   - <em>C. briggsae</em> WABA alignments - full description
   <LI><A 
   href="#PslInfo">wz_ests</A> 
   - Alignments of WZ ESTs from WUSTL to the zebrafish assembly 
+
+<A NAME="X_GBD"></A>
   <LI><A 
   href="#PslInfo">xenoEst</A> 
   - Nonhuman ESTs from GenBank </LI>
@@ -1752,6 +1940,8 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#PslInfo">xenoRefSeqAli</A> 
   - RefSeq translated proteins for species other than current species
+
+<A NAME="Y_GBD"></A>
   <LI><A 
   href="#ExpData">yeastChoCellCycle</A> 
   - Expression data </LI>
@@ -1764,6 +1954,8 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   <LI><A 
   href="#ScoredRef">zebrafish_netBlastz</A> 
   - Scored reference file for zebrafish alignments
+
+<A NAME="Z_GBD"></A>
   <LI><A 
   href="#WiggleTrack">zoo</A> 
   - Zoo conservation scores for each zoo species based on blastz pair-wise alignments </LI>
@@ -1777,8 +1969,28 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   href="#WiggleTrack">zoom2_affyTranscriptome</A> 
   - Affymetrix Transcriptome scores (medium scale)</LI>
 </UL>
+	   </TD><TD WIDTH=15></TD>
+  	  </TR>
+	</TABLE>
+	<BR>
+      </TD></TR>
+    </TABLE>
+    <BR>
 
-<P>The following tables contain additional information about mRNA sequences: 
+<!--mRNA Tables---------------------------------------------------------->
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%">
+	  <TR><TD>
+	    <FONT SIZE="4"><B> &nbsp;mRNA Sequence Tables</B></FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	    <TD>
+	      <P>
+	      The tables in this section contain additional information about 
+	      mRNA sequences.
 <UL>
   <LI><A 
   href="#MrnaChar">author</A> 
@@ -1841,8 +2053,29 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   - Source field in GenBank, often fairly redundant with other fields 
   <LI><A 
   href="#MrnaChar">tissue</A> 
-  - Tissue isolated from </LI></UL>
-<P>The last set of tables are primarily for internal use:</P>
+  - Tissue isolated from </LI>
+  </UL>
+	   </TD><TD WIDTH=15></TD>
+  	  </TR>
+	</TABLE>
+	<BR>
+      </TD></TR>
+    </TABLE>
+    <BR>
+
+
+<!--mRNA Tables---------------------------------------------------------->
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%">
+	  <TR><TD>
+	    <FONT SIZE="4"><B> &nbsp;Internal Use Tables</B></FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	    <TD>
+<P>The tables in this section are intended primarily for internal use.</P>
 <UL>
   <LI><A 
   href="#AxtInfo">axtInfo</A> 
@@ -1872,21 +2105,29 @@ cover the same region (replaced by snpMap starting with hg13) </LI>
   href="#TrackDB">trackDb</A> 
   - Describes an annotation track </LI>
 </UL>
-	</TD><TD WIDTH=15></TD></TR></TABLE>
-	<BR></TD></TR></TABLE>
-
+	   </TD><TD WIDTH=15></TD>
+  	  </TR>
+	</TABLE>
 	<BR>
+      </TD></TR>
+    </TABLE>
+    <BR>
 
-	<TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1><TR><TD>
-	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
-	<FONT SIZE="4"><B> &nbsp;<A name=TableFormats></A>Table Formats </B></FONT>
-	</TD></TR></TABLE>
-	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH><TR><TD WIDTH=10>&nbsp;</TD><TD>
+<!--Description Section---------------------------------------->
 
-<!--START DESCRIPTION SECTION-->
-
-This section describes the format of each table field by field in 
-autoSql format.
+    <TABLE BGCOLOR="fffee8" WIDTH="100%" BORDERCOLOR="888888" BORDER=1>
+      <TR><TD>
+	<TABLE BGCOLOR="D9E4F8"  BACKGROUND="../images/hr.gif" WIDTH="100%">
+	  <TR><TD>
+	    <FONT SIZE="4"><A name=TableFormats></A><B> &nbsp;autoSql Descriptions of Tables</B></FONT>
+	  </TD></TR>
+	</TABLE>
+	<TABLE BGCOLOR="fffee8" WIDTH=100% CELLPADDING=0><TH HEIGHT=10></TH>
+	  <TR><TD WIDTH=10></TD>
+	    <TD>
+	      <P>
+	      This section describes the format of each table in 
+	      autoSql format.
 
 <H4><A name=Affy10KDetails></A>Affymetrix 10K SNP Details</H4>
 <PRE>table affy10KDetails
