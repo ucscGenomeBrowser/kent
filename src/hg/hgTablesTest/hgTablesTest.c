@@ -14,7 +14,7 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.3 2004/11/07 18:32:41 kent Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.4 2004/11/07 19:04:30 kent Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -118,6 +118,8 @@ if (basePage != NULL)
         htmlPageSetVar(basePage, NULL, hgtaGroup, group);
     if (track != NULL)
         htmlPageSetVar(basePage, NULL, hgtaTrack, track);
+    if (table != NULL)
+        htmlPageSetVar(basePage, NULL, hgtaTable, table);
     qs = qaPageFromForm(basePage, basePage->forms, 
 	    button, buttonVal, &page);
     test = tablesTestNew(qs, testName, org, db, group, track, table);
@@ -219,6 +221,15 @@ for (var = list; var != NULL; var = var->next)
 return NULL;
 }
 
+void checkExpectedSimpleRows(struct htmlPage *outPage, int expectedRows)
+/* Make sure we got the number of rows we expect. */
+{
+int rowCount = countNoncommentLines(outPage->htmlText);
+if (rowCount != expectedRows)
+    qaStatusSoftError(tablesTestList->status, 
+	    "Got %d rows, expected %d", rowCount, expectedRows);
+}
+
 void testOneField(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table, 
      int expectedRows)
@@ -242,11 +253,39 @@ if (outPage != NULL)
     htmlPageSetVar(outPage, NULL, var->name, "on");
     serialSubmit(&outPage, org, db, group, track, table, "oneField",
     	hgtaDoPrintSelectedFields, "submit");
-    rowCount = countNoncommentLines(outPage->htmlText);
-    if (rowCount != expectedRows)
-	qaStatusSoftError(tablesTestList->status, 
-		"Got %d rows, expected %d", rowCount, expectedRows);
+    checkExpectedSimpleRows(outPage, expectedRows);
     }
+htmlPageFree(&outPage);
+}
+	
+void testOutBed(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table, 
+     int expectedRows)
+/* Get as bed and make sure count agrees with expected. */
+{
+struct htmlPage *outPage;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "bed");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "bedUiPage", hgtaDoTopSubmit, "submit");
+if (outPage != NULL)
+    {
+    serialSubmit(&outPage, org, db, group, track, table, "outBed",
+    	hgtaDoGetBed, "submit");
+    checkExpectedSimpleRows(outPage, expectedRows);
+    }
+htmlPageFree(&outPage);
+}
+
+void testOutGff(struct htmlPage *tablePage, struct htmlForm *mainForm,
+     char *org, char *db, char *group, char *track, char *table)
+/* Get as GFF and make sure no crash. */
+{
+struct htmlPage *outPage;
+
+htmlPageSetVar(tablePage, NULL, hgtaOutputType, "gff");
+outPage = quickSubmit(tablePage, org, db, group, track, table,
+    "outGff", hgtaDoTopSubmit, "submit");
 htmlPageFree(&outPage);
 }
 	
@@ -259,7 +298,7 @@ struct htmlPage *tablePage = quickSubmit(trackPage, org, db, group,
 	track, table, "selectTable", hgtaTable, table);
 struct htmlForm *mainForm;
 
-if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
+if ((mainForm = htmlFormGet(tablePage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on tablePage");
 testSchema(tablePage, mainForm, org, db, group, track, table);
 testSummaryStats(tablePage, mainForm, org, db, group, track, table);
@@ -268,6 +307,11 @@ if (outTypeAvailable(mainForm, "primaryTable"))
     int rowCount;
     rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
     testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+    if (outTypeAvailable(mainForm, "bed"))
+        {
+	testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+	testOutGff(tablePage, mainForm, org, db, group, track, table);
+	}
     }
 verbose(1, "Tested %s %s %s %s %s\n", org, db, group, track, table);
 htmlPageFree(&tablePage);
