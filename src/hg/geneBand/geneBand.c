@@ -45,8 +45,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         dyStringPrintf(bands, "n/a,");
     }
 if (count > 0)
-    fprintf(f, "%s\t%s\t%d\t%s\n", rl->name, rl->mrnaAcc, count, 
-    	bands->string, pos->string);
+    fprintf(f, "%s\t%s\t%d\t%s\n", rl->name, rl->mrnaAcc, count, bands->string);
 
 dyStringFree(&bands);
 sqlFreeResult(&sr);
