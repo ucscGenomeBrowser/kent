@@ -254,7 +254,7 @@ struct cdi *cdi = NULL;
 boolean isStratagene = FALSE;  /* Stratagene EST? */
 boolean isUaWuEst = FALSE;     /* Univ. of Arizona/Washington U. EST? */
 char *section;
-int baseCount;
+int baseCount = 0;
 DNA *dna = NULL;
 int dnaAllocated = 0;
 int lineSize;

@@ -54,7 +54,7 @@ struct textLine *lineList = NULL;
 struct textLine *tl;
 int textSize;
 struct hitBag *hitList = NULL;
-struct hitBag *hb;
+struct hitBag *hb = NULL;
 char *words[4];
 int wordCount;
 int lastIx, ix;
