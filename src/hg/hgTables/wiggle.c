@@ -21,7 +21,7 @@
 #include "botDelay.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.38 2004/11/24 20:30:48 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.39 2004/12/21 23:06:17 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -56,7 +56,9 @@ wds = wiggleDataStreamNew(); \
 \
 if (anyIntersection()) \
     { \
-    table2 = cartString(cart, hgtaIntersectTrack); \
+    char *t2 = cartString(cart, hgtaIntersectTrack); \
+    if (table && t2 && differentWord(t2,table)) \
+	table2 = t2; \
     } \
 \
 if (hasConstraint)\
