@@ -243,8 +243,8 @@ o - Download the assembled mouse genome in lower-case
 o - Set up the jabba job to do the alignment as so:
        ssh kkstore
        cd /cluster/store1/gs.8/oo.33
-       mkdir blatMouse
-       cd blatMouse
+       mkdir blatMouse.phusion
+       cd blatMouse.phusion
        ls -1S /scratch/hg/gs.3/oo.33/contigTrf/* > human.lst
        ls -1 /cluster/store1/arachne.3/parts/* > mouse.lst
     Make a file 'gsub' with the following three lines in it
@@ -267,11 +267,11 @@ o - Sort alignments as so
        cd /cluster/store1/gs.8/oo.33/blatMouse
        pslCat -dir -check psl | liftUp -type=.psl stdout ../liftAll.lft warn stdin | pslSortAcc nohead chrom /cluster/store2/temp stdin
 o - Get rid of big pile-ups due to contamination as so:
-       cd blatMouse
+       cd chrom
        foreach i (*.psl)
            echo $i
            mv $i xxx
-           pslUnpile -maxPile=175 xxx $i
+           pslUnpile -maxPile=600 xxx $i
        rm xxx
        end
 o - Remove long redundant bits from read names by making a file
@@ -279,18 +279,18 @@ o - Remove long redundant bits from read names by making a file
         gnl|ti^ti
         contig_^tig_
     and running the commands
-        cd ~/mouse/vsOo33/blatMouse/chrom
+        cd ~/mouse/vsOo33/blatMouse.phusion/chrom
 	subs -e -c ^ *.psl > /dev/null
 o - Copy over to network where database is:
         ssh kks00
 	cd ~/oo/bed
 	mkdir blatMouse
-	mkdir blatMouse/chrom
+	mkdir blatMouse/ph.chrom600
 	cd !$
-        cp /cluster/store1/gs.8/oo.33/blatMouse/chrom/*.psl .
+        cp /cluster/store1/gs.8/oo.33/blatMouse.phusion/chrom/*.psl .
 o - Rename to correspond with tables as so and load into database:
        ssh cc94
-       cd ~/oo/bed/blatMouse/chrom
+       cd ~/oo/bed/blatMouse/ph.chrom600
        foreach i (*.psl)
 	   set r = $i:r
            mv $i ${r}_blatMouse.psl
