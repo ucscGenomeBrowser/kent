@@ -277,6 +277,17 @@ spectrum on
 chromosomes chr22,
 type bed 5 +
 
+track phMouseAli
+shortLabel PH Mouse Align
+longLabel Pattern Hunter Human/Mouse Alignments
+priority 25.3
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+chromosomes chr22,
+type bed 5 +
+
 track exoMouse
 shortLabel Exonerate Mouse
 longLabel Mouse/Human Evolutionarily Conserved Regions (Exonerate)
