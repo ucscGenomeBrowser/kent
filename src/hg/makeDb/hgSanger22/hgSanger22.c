@@ -288,7 +288,7 @@ struct sanger22extra *extraList, *extra;
 
 extraList = makeFixedGffAndReadExtra(txGff, cdsGff, fixedGff, extraHash);
 saveExtras(extraBed, extraList);
-loadIntoDatabase(database, createExtra, "sanger22extra", extraBed);
+loadIntoDatabase(database, sanger22extraCreate, "sanger22extra", extraBed);
 gffIntoDatabase(database, fixedGff, "sanger22", shortArmSize);
 }
 
