@@ -3,6 +3,10 @@
 #ifndef NET_H
 #define NET_H
 
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif /* LINEFILE_H */
+
 #ifndef DYSTRING_H
 #include "dystring.h"
 #endif /* DYSTRING_H */
@@ -44,6 +48,15 @@ void netParseUrl(char *url, struct netParsedUrl *parsed);
  *   http://hostName:port/file
  * This is set up so that the http:// and the port are optional. 
  */
+
+int netUrlOpen(char *url);
+/* Return unix low-level file handle for url. 
+ * Just close(result) when done. */
+
+struct lineFile *netLineFileOpen(char *url);
+/* Return a lineFile attatched to url.  This one
+ * will skip any headers.   Free this with
+ * lineFileClose(). */
 
 struct dyString *netSlurpUrl(char *url);
 /* Go grab all of URL and return it as dynamic string. */

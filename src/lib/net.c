@@ -7,6 +7,7 @@
 #include "common.h"
 #include "errabort.h"
 #include "net.h"
+#include "linefile.h"
 
 static struct sockaddr_in sai;		/* Some system socket info. */
 
@@ -183,14 +184,13 @@ else
 strncpy(parsed->host, s, sizeof(parsed->host));
 }
 
-struct dyString *netSlurpUrl(char *url)
-/* Go grab all of URL and return it as dynamic string. */
+static int netGetOpenHttp(char *url)
+/* Return a file handle that will read the url.  This
+ * skips past any header. */
 {
 struct netParsedUrl npu;
-struct dyString *dy = newDyString(4*1024);
+struct dyString *dy = newDyString(512);
 int sd;
-char buf[4*1024];
-int readSize;
 
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
@@ -202,11 +202,60 @@ sd = netMustConnect(npu.host, npu.port);
 dyStringPrintf(dy, "GET %s HTTP/1.0\r\n\r\n", npu.file);
 write(sd, dy->string, dy->stringSize);
 
+/* Clean up and return handle. */
+dyStringFree(&dy);
+return sd;
+}
+
+int netUrlOpen(char *url)
+/* Return unix low-level file handle for url. 
+ * Just close(result) when done. */
+{
+return netGetOpenHttp(url);
+}
+
+struct dyString *netSlurpUrl(char *url)
+/* Go grab all of URL and return it as dynamic string. */
+{
+char buf[4*1024];
+int readSize;
+struct dyString *dy = newDyString(4*1024);
+int sd = netUrlOpen(url);
+
 /* Slurp file into dy and return. */
-dyStringClear(dy);
 while ((readSize = read(sd, buf, sizeof(buf))) > 0)
     dyStringAppendN(dy, buf, readSize);
 close(sd);
 return dy;
+}
+
+static void netSkipHttpHeaderLines(struct lineFile *lf)
+/* Skip http header lines. */
+{
+char *line;
+if (lineFileNext(lf, &line, NULL))
+    {
+    if (startsWith("HTTP/", line))
+        {
+	while (lineFileNext(lf, &line, NULL))
+	    {
+	    if ((line[0] == '\r' && line[1] == 0) || line[0] == 0)
+	        break;
+	    }
+	}
+    else
+        lineFileReuse(lf);
+    }
+}
+
+struct lineFile *netLineFileOpen(char *url)
+/* Return a lineFile attatched to url.  This one
+ * will skip any headers.   Free this with
+ * lineFileClose(). */
+{
+int sd = netUrlOpen(url);
+struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
+netSkipHttpHeaderLines(lf);
+return lf;
 }
 
