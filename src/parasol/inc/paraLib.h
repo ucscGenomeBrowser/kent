@@ -46,7 +46,6 @@ void logClose();
 struct runJobMessage
 /* Parsed out runJob message as paraNode sees it. */
     {
-    char *managingHost;	   /* Hub's machine. */
     char *jobIdString;	   /* Unique ID - ascii number */
     char *reserved;	   /* Reserved for future expansion, always "0" */
     char *user;		   /* User associated with job. */
