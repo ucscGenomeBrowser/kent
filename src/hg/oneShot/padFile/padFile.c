@@ -10,23 +10,27 @@ void usage()
 errAbort(
   "padFile - Add a bunch of zeroes to end of file\n"
   "usage:\n"
-  "   padFile XXX\n"
+  "   padFile file count\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
 }
 
-void padFile(char *XXX)
+void padFile(char *file, int count)
 /* padFile - Add a bunch of zeroes to end of file. */
 {
+int i;
+FILE *f = mustOpen(file, "a");
+for (i=0; i<count; ++i)
+    fputc(0, f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-if (argc != 2)
+if (argc != 3)
     usage();
-padFile(argv[1]);
+padFile(argv[1], atoi(argv[2]));
 return 0;
 }
