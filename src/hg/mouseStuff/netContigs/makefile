@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = netContigs.o
 
 netContigs: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netContigs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/netContigs $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/netContigs${EXE}

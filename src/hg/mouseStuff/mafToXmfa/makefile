@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mafToXmfa.o
 
 mafToXmfa: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafToXmfa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafToXmfa $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToXmfa${EXE}
 
 tags:  

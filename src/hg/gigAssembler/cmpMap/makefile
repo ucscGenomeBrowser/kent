@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = cmpMap.o 
 
 cmpMap: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/cmpMap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/cmpMap $O $(MYLIBS) $L
 
 
 lib:

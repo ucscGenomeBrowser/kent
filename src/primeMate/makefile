@@ -3,7 +3,7 @@ include ../inc/common.mk
 O = primeMate.o
 
 primeMate.exe: $(O) 
-	gcc $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
 	mv a.out primeMate.exe
 	chmod a+rx primeMate.exe
 	chmod g-w primeMate.exe

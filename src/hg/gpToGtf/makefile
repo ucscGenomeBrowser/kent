@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = gpToGtf.o
 
 gpToGtf: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gpToGtf $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/gpToGtf $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/gpToGtf${EXE}

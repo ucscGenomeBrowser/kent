@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtSort.o
 
 axtSort: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtSort $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtSort $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtSort${EXE}

@@ -10,7 +10,7 @@ O = liftUp.o
 all: liftUp
 
 liftUp: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/liftUp $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/liftUp $O $(MYLIBS) $L
 
 test: force
 	cd test && ${MAKE}

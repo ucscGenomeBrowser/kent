@@ -4,7 +4,7 @@ include ../../inc/common.mk
 O = makepgo.o 
 
 makepgo: $(O) 
-	gcc $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
 	mv a.out $(HOME)/bin/$(MACHTYPE)/makepgo
 
 lib:

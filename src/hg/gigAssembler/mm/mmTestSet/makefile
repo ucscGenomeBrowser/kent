@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mmTestSet.o
 
 mmTestSet: $O 
-	gcc -o mmTestSet $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o mmTestSet $O $(MYLIBS) $L
 

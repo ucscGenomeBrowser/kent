@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgMedianMicroarray.o
 
 hgMedianMicroarray: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgMedianMicroarray${EXE}
 
 test:

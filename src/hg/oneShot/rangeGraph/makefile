@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rangeGraph.o rgi.o
 
 rangeGraph: $O 
-	gcc -o rangeGraph $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o rangeGraph $O $(MYLIBS) $L
 

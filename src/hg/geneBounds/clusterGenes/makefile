@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = clusterGenes.o
 
 clusterGenes: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/clusterGenes $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/clusterGenes $O $(MYLIBS) $L
 	#${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterGenes${EXE}
 
 test::

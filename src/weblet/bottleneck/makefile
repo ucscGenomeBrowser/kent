@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bottleneck.o
 
 bottleneck: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bottleneck $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bottleneck $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/bottleneck${EXE}

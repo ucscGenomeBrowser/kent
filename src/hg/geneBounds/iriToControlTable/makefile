@@ -8,5 +8,5 @@ O = iriToControlTable.o ../lib/improbRunInfo.o
 
 iriToControlTable: $O $(MYLIBS)
 	cd ../lib && ${MAKE}
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/iriToControlTable $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/iriToControlTable $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/iriToControlTable${EXE}

@@ -10,5 +10,5 @@ hgFindSpec: compile
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgFindSpec${EXE}
 
 compile: $O 
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgFindSpec $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgFindSpec $O $(MYLIBS) $L
 

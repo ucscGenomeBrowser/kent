@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainFilter.o
 
 chainFilter: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainFilter $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainFilter $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainFilter${EXE}

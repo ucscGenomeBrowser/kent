@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = netFilter.o
 
 netFilter: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netFilter $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/netFilter $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/netFilter${EXE}

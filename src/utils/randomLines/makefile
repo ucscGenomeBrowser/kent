@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = randomLines.o
 
 randomLines: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/randomLines $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/randomLines $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/randomLines${EXE}

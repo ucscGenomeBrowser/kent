@@ -10,4 +10,4 @@ axtRescore: compile
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtRescore${EXE}
 
 compile: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtRescore $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtRescore $O $(MYLIBS) $L

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = gsBig.o
 
 gsBig: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gsBig $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/gsBig $O $(MYLIBS) $L
 #${STRIP} $(HOME)/bin/$(MACHTYPE)/gsBig${EXE}

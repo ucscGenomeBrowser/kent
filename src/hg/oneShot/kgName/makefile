@@ -9,7 +9,7 @@ CFLAGS= -g
 all : kgName fbName 
 
 kgName: $(MYLIBS) kgName.o
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/kgName kgName.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/kgName kgName.o $(MYLIBS) $L
 fbName: $(MYLIBS) fbName.o
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/fbName fbName.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/fbName fbName.o $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/kgName${EXE}

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = somePsls.o
 
 somePsls: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/somePsls $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/somePsls $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/somePsls${EXE}

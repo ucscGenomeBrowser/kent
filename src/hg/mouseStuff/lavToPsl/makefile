@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = lavToPsl.o
 
 lavToPsl: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/lavToPsl $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/lavToPsl $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/lavToPsl${EXE}

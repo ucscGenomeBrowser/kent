@@ -4,5 +4,5 @@ HG_WARN = ${HG_WARN_ERR}
 O = netS.o
 
 netS: $(O)
-	gcc -o netS $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o netS $O ../../lib/$(MACHTYPE)/jkweb.a
 

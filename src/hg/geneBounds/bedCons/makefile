@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bedCons.o
 
 bedCons: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedCons $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bedCons $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedCons${EXE}

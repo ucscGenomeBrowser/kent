@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadOut.o
 
 hgLoadOut: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadOut $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadOut $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadOut${EXE}
 
 lib:

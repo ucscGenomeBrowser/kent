@@ -12,5 +12,5 @@ clean:
 
 ${TESTBINARCH}/gbGetTestSubset: gbGetTestSubset.o ${LIBGENBANK}
 	@${MKDIR} ${TESTBINARCH}
-	gcc ${CFLAGS} -o ${TESTBINARCH}/gbGetTestSubset gbGetTestSubset.o $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o ${TESTBINARCH}/gbGetTestSubset gbGetTestSubset.o $(LIBS)
 

@@ -11,10 +11,10 @@ O =  altGraph.o
 TESTO = test.o
 
 altGraph: $(O)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/altGraph $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/altGraph $O $(MYLIBS) $L
 
 test: $(TESTO)
-	gcc -o test $(TESTO) $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o test $(TESTO) $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

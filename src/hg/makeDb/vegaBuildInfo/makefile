@@ -10,5 +10,5 @@ O = vegaBuildInfo.o
 all: ${BIN}/vegaBuildInfo 
 
 ${BIN}/vegaBuildInfo: $O ${MYLIBS}
-	gcc -ggdb -o ${BIN}/vegaBuildInfo $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BIN}/vegaBuildInfo $O $(MYLIBS) $L
 

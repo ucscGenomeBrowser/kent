@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faFilterN.o
 
 faFilterN: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faFilterN $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faFilterN $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/faFilterN${EXE}

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = burstClient.o
 
 burstClient: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/burstClient $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/burstClient $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/burstClient${EXE}

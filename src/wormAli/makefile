@@ -3,7 +3,7 @@ include ../inc/common.mk
 O = wormAli.o 
 
 wormAli.exe: $(O)
-	gcc $O ../lib/$(MACHTYPE)/jkOwnLib.a ../lib/$(MACHTYPE)/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkOwnLib.a ../lib/$(MACHTYPE)/jkweb.a -lm
 	mv a.out wormAli.exe
 	chmod g-w wormAli.exe
 	chmod a+rx wormAli.exe

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslCut.o
 
 pslCut: $O 
-	gcc -o pslCut $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o pslCut $O $(MYLIBS) $L
 

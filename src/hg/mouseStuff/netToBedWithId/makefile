@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = netToBedWithId.o
 
 netToBedWithId: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netToBedWithId $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/netToBedWithId $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/netToBedWithId${EXE}

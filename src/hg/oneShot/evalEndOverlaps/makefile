@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = evalEndOverlaps.o ocp.o
 
 evalEndOverlaps: $O 
-	gcc -o evalEndOverlaps $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o evalEndOverlaps $O $(MYLIBS) $L
 

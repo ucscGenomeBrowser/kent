@@ -10,7 +10,7 @@ LIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ./${MACHTYPE}/libSpliceGraph.a
 
 #For debugging
 #.c.o:
-#	${CC} -ggdb -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${HG_WARN}  -I../inc -I../../inc -I${MYSQLINC} -c $*.c
+#	${CC} -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE ${HG_WARN}  -I../inc -I../../inc -I${MYSQLINC} -c $*.c
 
 L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}

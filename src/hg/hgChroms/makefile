@@ -8,7 +8,7 @@ O = hgChroms.o
 BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 hgChroms: $O $(MYLIBS)
-	gcc -ggdb -o hgChroms $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o hgChroms $O $(MYLIBS) $L
 	${MKDIR} ${BINDIR}
 	cp -f hgChroms ${BINDIR}
 	${STRIP} ${BINDIR}/hgChroms${EXE}

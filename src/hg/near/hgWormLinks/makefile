@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgWormLinks.o
 
 hgWormLinks: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgWormLinks $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgWormLinks $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgWormLinks${EXE}
 
 test:

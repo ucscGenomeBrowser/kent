@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = rcvs.o
 
 rcvs: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/rcvs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/rcvs $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/rcvs${EXE}

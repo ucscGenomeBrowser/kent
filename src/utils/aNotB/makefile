@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = aNotB.o
 
 aNotB: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/aNotB $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/aNotB $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/aNotB${EXE}

@@ -9,7 +9,7 @@ O = para.o jobDb.o jobResult.o
 
 ../bin/para: $O $(MYLIBS)
 	@${MKDIR} ../bin
-	gcc -o ../bin/para $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ../bin/para $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} ../bin/para${EXE}
 
 clean::

@@ -4,4 +4,4 @@ include ../../inc/common.mk
 O = fsg.o 
 
 $(HOME)/bin/$(MACHTYPE)/fsg: $(O)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/fsg $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/fsg $O ../../lib/$(MACHTYPE)/jkweb.a

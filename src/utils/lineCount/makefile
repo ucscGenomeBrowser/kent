@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = lineCount.o
 
 lineCount: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/lineCount $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/lineCount $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/lineCount${EXE}

@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkDupe.o
 
 checkDupe: $O $(MYLIBS)
-	gcc -ggdb -o checkDupe $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o checkDupe $O $(MYLIBS) $L
 
 lib:
 	cd ../lib; make

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = oo21Nts.o
 
 oo21Nts: $O 
-	gcc -o oo21Nts $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o oo21Nts $O $(MYLIBS) $L
 

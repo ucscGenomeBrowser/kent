@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = tfbsConsSort.o
 
 tfbsConsSort: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/tfbsConsSort $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/tfbsConsSort $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/tfbsConsSort${EXE}

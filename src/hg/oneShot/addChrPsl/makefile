@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = addChrPsl.o
 
 addChrPsl: $O 
-	gcc -o addChrPsl $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o addChrPsl $O $(MYLIBS) $L
 

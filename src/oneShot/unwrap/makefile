@@ -4,6 +4,6 @@ include ../../inc/common.mk
 O = unwrap.o 
 
 unwrap: $(O)
-	gcc -o unwrap $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o unwrap $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

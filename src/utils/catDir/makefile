@@ -8,4 +8,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = catDir.o
 
 catDir: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/catDir $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/catDir $O $(MYLIBS) $L

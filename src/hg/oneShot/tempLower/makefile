@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = tempLower.o
 
 tempLower: $O 
-	gcc -o tempLower $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o tempLower $O $(MYLIBS) $L
 

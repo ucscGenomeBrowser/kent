@@ -4,6 +4,6 @@ include ../../inc/common.mk
 O = fixInfo.o 
 
 fixInfo: $(O)
-	gcc -o fixInfo $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o fixInfo $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = raPriority.o
 
 raPriority: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/raPriority $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/raPriority $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/raPriority${EXE}

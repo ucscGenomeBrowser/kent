@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = clusterRna.o
 
 clusterRna: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/clusterRna $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/clusterRna $O $(MYLIBS) $L
 #${STRIP} $(HOME)/bin/$(MACHTYPE)/clusterRna${EXE}
 
 tags:

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = motifLogo.o
 
 motifLogo: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/motifLogo $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/motifLogo $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/motifLogo${EXE}

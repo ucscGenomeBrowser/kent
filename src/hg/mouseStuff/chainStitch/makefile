@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainStitch.o
 
 chainStitch: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chainStitch $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chainStitch $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainStitch${EXE}

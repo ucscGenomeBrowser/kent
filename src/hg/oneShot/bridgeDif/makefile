@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bridgeDif.o
 
 bridgeDif: $O 
-	gcc -o bridgeDif $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o bridgeDif $O $(MYLIBS) $L
 

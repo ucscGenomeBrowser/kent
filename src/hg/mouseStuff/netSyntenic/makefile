@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = netSyntenic.o
 
 netSyntenic: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netSyntenic $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/netSyntenic $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/netSyntenic${EXE}

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtToPsl.o
 
 axtToPsl: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtToPsl $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtToPsl $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtToPsl${EXE}

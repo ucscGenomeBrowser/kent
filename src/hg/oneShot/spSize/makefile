@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = spSize.o
 
 spSize: $O 
-	gcc -o spSize $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o spSize $O $(MYLIBS) $L
 

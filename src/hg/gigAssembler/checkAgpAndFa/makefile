@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkAgpAndFa.o
 
 checkAgpAndFa: $O 
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa $O $(MYLIBS) $L
 	cp $(HOME)/bin/$(MACHTYPE)/checkAgpAndFa .
 
 clean:

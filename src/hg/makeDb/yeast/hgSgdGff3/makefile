@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgSgdGff3.o
 
 hgSgdGff3: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgSgdGff3 $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgSgdGff3 $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgSgdGff3${EXE}

@@ -9,7 +9,7 @@ A = alignToPsl
 O = $A.o
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv a.out $A
 	chmod a+rx $A
 	mv $A $(HOME)/bin/$(MACHTYPE)/alignToPsl

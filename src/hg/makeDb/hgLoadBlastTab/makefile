@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgLoadBlastTab.o
 
 hgLoadBlastTab: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgLoadBlastTab $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgLoadBlastTab $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgLoadBlastTab${EXE}

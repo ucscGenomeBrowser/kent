@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = axtSwap.o
 
 axtSwap: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/axtSwap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtSwap $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtSwap${EXE}

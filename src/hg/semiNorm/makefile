@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = semiNorm.o
 
 semiNorm: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/semiNorm $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/semiNorm $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/semiNorm${EXE}

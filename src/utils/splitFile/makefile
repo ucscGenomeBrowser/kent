@@ -8,4 +8,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = splitFile.o
 
 splitFile: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/splitFile $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/splitFile $O $(MYLIBS) $L

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkEnds.o
 
 checkEnds: $O 
-	gcc -o checkEnds $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o checkEnds $O $(MYLIBS) $L
 

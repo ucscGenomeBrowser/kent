@@ -8,6 +8,6 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = paraNodeStatus.o
 
 paraNodeStatus: $O $(MYLIBS)
-	gcc -o ../bin/paraNodeStatus $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNodeStatus $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} ../bin/paraNodeStatus${EXE}
 

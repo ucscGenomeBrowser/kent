@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslDropOverlap.o 
 
 pslDropOverlap: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslDropOverlap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslDropOverlap $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

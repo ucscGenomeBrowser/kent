@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = sampleToWig.o
 
 sampleToWig: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sampleToWig $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/sampleToWig $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/sampleToWig${EXE}

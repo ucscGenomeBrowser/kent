@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = sanger22gtf.o
 
 sanger22gtf: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sanger22gtf $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/sanger22gtf $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/sanger22gtf${EXE}

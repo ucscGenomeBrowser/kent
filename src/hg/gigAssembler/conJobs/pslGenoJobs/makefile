@@ -7,12 +7,12 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslGenoJobs.o
 
 pslGenoJobs: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslGenoJobs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslGenoJobs $O $(MYLIBS) $L
 
 
 fix: makeFix.o
-	gcc -o makeFix makeFix.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o makeFix makeFix.o $(MYLIBS) $L
 
 test: test.o
-	gcc -o test test.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o test test.o $(MYLIBS) $L
 

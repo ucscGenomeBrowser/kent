@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = emblMatrixToMotif.o
 
 emblMatrixToMotif: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/emblMatrixToMotif $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/emblMatrixToMotif $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/emblMatrixToMotif${EXE}

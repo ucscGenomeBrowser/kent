@@ -1,11 +1,11 @@
 
 # For performance
 #.c.o:
-#	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+#	${CC} ${COPT} ${CFLAGS} -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 #For debugging:
 .c.o:
-	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
+	${CC} ${COPT} ${CFLAGS} -Wformat -Wimplicit  -Wreturn-type -I../inc -I../../inc -I../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
@@ -19,7 +19,7 @@ my: compile
 	mv $A /cluster/home/$(USER)/bin/$(MACHTYPE)
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv a.out $A
 #	${STRIP} $A${EXE}
 	chmod a+rx $A

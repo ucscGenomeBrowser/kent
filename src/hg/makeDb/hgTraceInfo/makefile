@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgTraceInfo.o
 
 hgTraceInfo: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgTraceInfo $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgTraceInfo $O $(MYLIBS) $L
 
 clean:
 	rm -f ${O}

@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = finPoster.o
 
 finPoster: $O $(MYLIBS)
-	gcc -ggdb -o finPoster $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o finPoster $O $(MYLIBS) $L
 	${STRIP} finPoster${EXE}
 
 poster:

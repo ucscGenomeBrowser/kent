@@ -8,4 +8,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faToNib.o
 
 faToNib: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faToNib $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faToNib $O $(MYLIBS) $L

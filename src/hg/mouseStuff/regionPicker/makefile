@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = regionPicker.o
 
 regionPicker: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/regionPicker $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/regionPicker $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/regionPicker${EXE}
 
 tags:

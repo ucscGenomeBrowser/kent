@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = dupedInTable.o
 
 dupedInTable: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/dupedInTable $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/dupedInTable $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/dupedInTable${EXE}

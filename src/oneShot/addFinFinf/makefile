@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = addFinFinf.o
 
 addFinFinf: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/addFinFinf $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/addFinFinf $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/addFinFinf${EXE}

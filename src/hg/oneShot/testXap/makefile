@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = testXap.o
 
 testXap: $O $(MYLIBS)
-	gcc -ggdb -o testXap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o testXap $O $(MYLIBS) $L
 	${STRIP} testXap${EXE}

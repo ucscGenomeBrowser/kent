@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = blastzScripts.o
 
 blastzScripts: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blastzScripts $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/blastzScripts $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/blastzScripts${EXE}

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = assessLibs.o 
 
 assessLibs: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/assessLibs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/assessLibs $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/assessLibs${EXE}

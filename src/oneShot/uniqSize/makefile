@@ -4,6 +4,6 @@ include ../../inc/common.mk
 O = uniqSize.o 
 
 uniqSize: $(O)
-	gcc -o uniqSize $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o uniqSize $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

@@ -12,7 +12,7 @@ BIN = $(HOME)/bin/$(MACHTYPE)
 PROG = ${BIN}/$A
 
 ${PROG}: $O $(MYLIBS)
-	gcc ${COPT} -o ${PROG} $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${PROG} $O $(MYLIBS) $L
 
 $O: makefile $A.c
 

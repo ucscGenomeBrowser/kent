@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = dataSim.o
 
 dataSim: $O $(MYLIBS)
-	gcc -ggdb -o ../bin/dataSim $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ../bin/dataSim $O $(MYLIBS) $L
 #	${STRIP} ../bin/dataSim${EXE}

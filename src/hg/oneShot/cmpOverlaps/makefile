@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = cmpOverlaps.o
 
 cmpOverlaps: $O 
-	gcc -o cmpOverlaps $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o cmpOverlaps $O $(MYLIBS) $L
 

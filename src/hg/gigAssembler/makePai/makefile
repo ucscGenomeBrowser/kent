@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = makePai.o 
 
 makePai: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/makePai $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/makePai $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib; make

@@ -2,7 +2,7 @@ JKSRCDIR = /projects/compbiousr/kent/src
 JKLIBDIR = $(JKSRCDIR)/lib/$(MACHTYPE)
 
 .c.o:
-	gcc -ggdb -Wimplicit -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
+	${CC} ${COPT} ${CFLAGS} -Wimplicit -I$(JKSRCDIR)/inc -I$(JKSRCDIR)/hg/inc -c $*.c
 
 L = $(MYSQLLIBS) -lm 
 MYLIBS =  $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a
@@ -10,7 +10,7 @@ MYLIBS =  $(JKLIBDIR)/jkhgap.a $(JKLIBDIR)/jkweb.a
 O = cgiExample.o
 
 cgiExample: $O 
-	gcc $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $L
 	mv a.out cgiExample
 	${STRIP} cgiExample${EXE}
 	chmod a+rx cgiExample

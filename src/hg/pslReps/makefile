@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = pslReps.o 
 
 pslReps: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslReps $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslReps $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslReps${EXE}
 
 lib:

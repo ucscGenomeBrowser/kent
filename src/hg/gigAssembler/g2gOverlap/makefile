@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = g2gOverlap.o 
 
 g2gOverlap: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/g2gOverlap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/g2gOverlap $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/g2gOverlap${EXE}
 
 lib:

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = calc.o
 
 calc: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/calc $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/calc $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/calc${EXE}

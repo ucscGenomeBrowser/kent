@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = relPairs.o 
 
 relPairs: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/relPairs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/relPairs $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

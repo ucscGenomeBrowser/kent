@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = paraTestJob.o
 
 paraTestJob: $O $(MYLIBS)
-	gcc -ggdb -o ../bin/paraTestJob $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ../bin/paraTestJob $O $(MYLIBS) $L
 	${STRIP} ../bin/paraTestJob${EXE}

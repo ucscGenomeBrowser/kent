@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = newStitch3.o
 
 newStitch3: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/newStitch3 $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/newStitch3 $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/newStitch3${EXE}

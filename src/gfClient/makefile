@@ -8,5 +8,5 @@ O = gfClient.o
 X = gfClient
 
 gfClient: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/$X${EXE}

@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ppAnalyse.o 
 
 ppAnalyse: $O $(MYLIBS)
-	gcc -ggdb -o ppAnalyse $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ppAnalyse $O $(MYLIBS) $L
 	mv ppAnalyse $(HOME)/bin/$(MACHTYPE)
 
 

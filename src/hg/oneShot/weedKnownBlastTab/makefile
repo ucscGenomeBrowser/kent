@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = weedKnownBlastTab.o
 
 weedKnownBlastTab: $O $(MYLIBS)
-	gcc -ggdb -o weedKnownBlastTab $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o weedKnownBlastTab $O $(MYLIBS) $L
 	${STRIP} weedKnownBlastTab${EXE}

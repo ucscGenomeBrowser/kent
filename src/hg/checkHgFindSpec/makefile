@@ -12,7 +12,7 @@ all: compile install
 compile: $A
 
 $A: $O $(MYLIBS)
-	gcc -ggdb -o $A $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $A $O $(MYLIBS) $L
 
 install:
 	mv $A $(HOME)/bin/$(MACHTYPE)/$A

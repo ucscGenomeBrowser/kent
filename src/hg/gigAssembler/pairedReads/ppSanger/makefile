@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ppSanger.o sangInsert.o sangRange.o sangRead.o
 
 ppSanger: $O $(MYLIBS)
-	gcc -ggdb -o ppSanger $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ppSanger $O $(MYLIBS) $L
 	mv ppSanger $(HOME)/bin/$(MACHTYPE)
 
 

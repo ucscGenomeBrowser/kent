@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = pslSort.o
 
 pslSort: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslSort $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslSort $O $(MYLIBS) $L
 
 
 lib:

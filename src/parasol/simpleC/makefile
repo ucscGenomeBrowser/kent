@@ -4,5 +4,5 @@ HG_WARN = ${HG_WARN_ERR}
 O = simpleC.o
 
 simpleC: $(O)
-	gcc -o simpleC $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o simpleC $O ../../lib/$(MACHTYPE)/jkweb.a
 

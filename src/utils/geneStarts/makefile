@@ -9,5 +9,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 
 geneStarts: $(O)
-	gcc -o geneStarts $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o geneStarts $O $(MYLIBS) $L
 

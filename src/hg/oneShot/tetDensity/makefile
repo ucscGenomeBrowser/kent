@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = tetDensity.o
 
 tetDensity: $O 
-	gcc -o tetDensity $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o tetDensity $O $(MYLIBS) $L
 

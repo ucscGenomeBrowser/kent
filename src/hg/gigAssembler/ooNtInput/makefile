@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooNtInput.o
 
 ooNtInput: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ooNtInput $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooNtInput $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/ooNtInput${EXE}
 
 

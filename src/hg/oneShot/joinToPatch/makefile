@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = joinToPatch.o
 
 joinToPatch: $O 
-	gcc -o joinToPatch $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o joinToPatch $O $(MYLIBS) $L
 

@@ -9,9 +9,9 @@ O = whyConserved.o
 all: whyConserved trackOverlap
 
 whyConserved: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/whyConserved $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/whyConserved $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/whyConserved${EXE}
 
 trackOverlap: trackOverlap.o
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/trackOverlap trackOverlap.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/trackOverlap trackOverlap.o $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/trackOverlap${EXE}

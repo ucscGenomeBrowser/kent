@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = intronEnds.o
 
 intronEnds: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/intronEnds $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/intronEnds $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/intronEnds${EXE}

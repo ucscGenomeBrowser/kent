@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = wikiPlot.o
 
 wikiPlot: $O $(MYLIBS)
-	gcc $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $L
 	mv a.out wikiPlot
 	${STRIP} wikiPlot${EXE}
 	chmod a+rx wikiPlot

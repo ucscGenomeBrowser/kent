@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = gbOneAcc.o 
 
 gbOneAcc: $O ../../lib/$(MACHTYPE)/jkweb.a
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gbOneAcc $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/gbOneAcc $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

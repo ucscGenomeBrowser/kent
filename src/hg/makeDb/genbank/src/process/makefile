@@ -11,7 +11,7 @@ ${BINARCH}/gbProcess: ${O}
 
 ${BINARCH}/gbProcessedCheck: gbProcessedCheck.c makefile ${LIBGENBANK}
 	@${MKDIR} ${BINARCH}
-	gcc ${CFLAGS} -o $@ gbProcessedCheck.c $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o $@ gbProcessedCheck.c $(LIBS)
 
 clean:
 	rm -f $(PROGS) ${O}

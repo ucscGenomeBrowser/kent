@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = fixGdup.o
 
 fixGdup: $O 
-	gcc -o fixGdup $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o fixGdup $O $(MYLIBS) $L
 

@@ -8,7 +8,7 @@ CFLAGS= -ggdb
 O = simpleGap.o
 
 simpleGap: $O ${MYLIBS}
-	${CC} -ggdb ${COPT} -o ${HOME}/bin/${MACHTYPE}/simpleGap $O ${MYLIBS} $L
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/simpleGap $O ${MYLIBS} $L
 #	${STRIP} ${HOME}/bin/${MACHTYPE}/simpleGap${EXE}
 
 clean:

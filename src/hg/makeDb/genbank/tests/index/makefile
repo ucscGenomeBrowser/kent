@@ -12,5 +12,5 @@ clean:
 
 ${TESTBINARCH}/gbIndexTest: gbIndexTest.o ${LIBGENBANK}
 	@${MKDIR} ${TESTBINARCH}
-	gcc ${CFLAGS} -o ${TESTBINARCH}/gbIndexTest gbIndexTest.o $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o ${TESTBINARCH}/gbIndexTest gbIndexTest.o $(LIBS)
 

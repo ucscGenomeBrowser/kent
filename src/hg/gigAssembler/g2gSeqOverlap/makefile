@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = g2gSeqOverlap.o 
 
 g2gSeqOverlap: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/g2gSeqOverlap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/g2gSeqOverlap $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib; make

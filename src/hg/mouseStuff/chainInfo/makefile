@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chainInfo.o
 
 chainInfo: $O $(MYLIBS)
-	gcc -ggdb -O -o $(HOME)/bin/$(MACHTYPE)/chainInfo $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -O -o $(HOME)/bin/$(MACHTYPE)/chainInfo $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/chainInfo${EXE}
 test: 22 7 
 %:	input/chr%.chain

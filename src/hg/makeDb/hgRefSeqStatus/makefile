@@ -8,7 +8,7 @@ A = hgRefSeqStatus
 O = $A.o
 
 $A: $O ../../../lib/$(MACHTYPE)/jkweb.a
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/$A $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/$A $O $(MYLIBS) $L
 
 lib:
 	cd ../../../lib; make

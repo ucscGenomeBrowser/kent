@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = correctEst.o
 
 correctEst: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/correctEst $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/correctEst $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/correctEst${EXE}

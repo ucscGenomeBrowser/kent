@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = splitFaIntoContigs.o
 
 splitFaIntoContigs: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/splitFaIntoContigs $O ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/splitFaIntoContigs $O ${MYLIBS} ${L}
 
 clean:
 	rm -f *.o $(HOME)/bin/$(MACHTYPE)/splitFaIntoContigs ./splitFaIntoContigs

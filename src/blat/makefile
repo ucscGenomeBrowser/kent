@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
 O = blat.o
 
 blat: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/blat $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/blat${EXE}
 
 all:

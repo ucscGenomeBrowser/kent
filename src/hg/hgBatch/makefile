@@ -20,7 +20,7 @@ beta: compile
 
 
 compile: $O $(MYLIBS)
-	gcc -ggdb -o $A $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $A $O $(MYLIBS) $L
 	${STRIP} $A${EXE}
 	chmod a+rx $A
 

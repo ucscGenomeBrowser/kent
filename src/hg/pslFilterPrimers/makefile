@@ -10,14 +10,14 @@ A = pslFilterPrimers
 O = $A.o
 
 compile: $O 
-	gcc $O ${MYLIBS} ${L} 
+	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
 	mv a.out $A
 	chmod a+rx $A
 	cp -f $A $$HOME/bin/${MACHTYPE}/$A
 	${STRIP} $$HOME/bin/${MACHTYPE}/$A${EXE}
 
 debug: $O
-	gcc $O ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
 	mv a.out $A
 
 lib:

@@ -11,7 +11,7 @@ myown:pslToBed
 	mv pslToBed $(HOME)/bin/$(MACHTYPE)/
 
 pslToBed:
-	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
+	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
 lib:
 	cd ../../lib; make

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = clonesInAgp.o
 
 clonesInAgp: $O 
-	gcc -o clonesInAgp $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o clonesInAgp $O $(MYLIBS) $L
 

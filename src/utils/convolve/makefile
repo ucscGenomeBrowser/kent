@@ -11,7 +11,7 @@ O = convolve.o
 A = convolve
 
 $A: $O ${MYLIBS}
-	gcc -ggdb -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
+	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/${A}${EXE}
 
 test:

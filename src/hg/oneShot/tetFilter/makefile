@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = tetFilter.o
 
 tetFilter: $O 
-	gcc -o tetFilter $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o tetFilter $O $(MYLIBS) $L
 

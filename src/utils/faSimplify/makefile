@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faSimplify.o
 
 faSimplify: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faSimplify $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faSimplify $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/faSimplify${EXE}

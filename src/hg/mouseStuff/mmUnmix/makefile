@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mmUnmix.o
 
 mmUnmix: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mmUnmix $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mmUnmix $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/mmUnmix${EXE}

@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ooGreedy.o
 
 ooGreedy.84:
-	gcc -ggdb -Wimplicit -I../../inc -I../../../inc -c ooGreedy.c
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/ooGreedy.84 ooGreedy.o $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -Wimplicit -I../../inc -I../../../inc -c ooGreedy.c
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/ooGreedy.84 ooGreedy.o $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = borfBig.o
 
 borfBig: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/borfBig $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/borfBig $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/borfBig${EXE}

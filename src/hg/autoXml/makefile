@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = autoXml.o
 
 autoXml: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/autoXml $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/autoXml $O $(MYLIBS)
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/autoXml${EXE}

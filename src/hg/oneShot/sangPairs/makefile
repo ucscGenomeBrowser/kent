@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = sangPairs.o
 
 sangPairs: $O 
-	gcc -o sangPairs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o sangPairs $O $(MYLIBS) $L
 

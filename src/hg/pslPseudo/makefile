@@ -22,7 +22,7 @@ GENES = $(PSEUDO)/refGene.tab $(PSEUDO)/mgcGene.tab $(PSEUDO)/sortedKnownGene.ta
 O = pslPseudo.o 
 
 pslPseudo: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPseudo $O $(MARKDEBUG) $(MYLIBS) $L 
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslPseudo $O $(MARKDEBUG) $(MYLIBS) $L 
 	#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslPseudo${EXE}
 
 lib:

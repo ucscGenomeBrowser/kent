@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = orfStats.o
 
 orfStats: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/orfStats $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/orfStats $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/orfStats${EXE}

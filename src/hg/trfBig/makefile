@@ -8,4 +8,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = trfBig.o
 
 trfBig: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/trfBig $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/trfBig $O $(MYLIBS) $L

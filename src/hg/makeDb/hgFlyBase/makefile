@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = hgFlyBase.o
 
 hgFlyBase: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgFlyBase $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgFlyBase $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgFlyBase${EXE}

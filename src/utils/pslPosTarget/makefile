@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = pslPosTarget.o
 
 pslPosTarget: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslPosTarget $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslPosTarget $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslPosTarget${EXE}

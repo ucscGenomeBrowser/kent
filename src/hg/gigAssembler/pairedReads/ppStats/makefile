@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ppStats.o pPair.o
 
 ppStats: $O $(MYLIBS)
-	gcc -ggdb -o ppStats $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ppStats $O $(MYLIBS) $L
 	mv ppStats $(HOME)/bin/$(MACHTYPE)
 
 

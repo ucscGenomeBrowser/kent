@@ -10,7 +10,7 @@ O = ldHgGene.o
 all: ${BIN}/ldHgGene ${BIN}/sanger22-gff-doctor
 
 ${BIN}/ldHgGene: $O ${MYLIBS} makefile
-	gcc -ggdb -o ${BIN}/ldHgGene $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BIN}/ldHgGene $O $(MYLIBS) $L
 
 ${BIN}/sanger22-gff-doctor: sanger22-gff-doctor
 	cp -f $< $@

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faFlyBaseToUcsc.o
 
 faFlyBaseToUcsc: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faFlyBaseToUcsc $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faFlyBaseToUcsc $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/faFlyBaseToUcsc${EXE}

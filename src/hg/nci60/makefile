@@ -7,13 +7,13 @@ O = findStanAlignments  stanToBedAndExpRecs
 
 
 %: %.c 
-	gcc  -ggdb -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS}  -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
 	cp $@ $(HOME)/bin/$(MACHTYPE)/
 
 all : $(O)
 
 #$(O) : %: %.c ../lib/$(ARCHTYPE)/libsugnet.a 
-#	gcc -Wimplicit -ggdb  -I../inc -I$(KENT_DIR)/inc -I$(KENT_DIR)/hg/inc -o $@ $(addsuffix .c,$@)  $(SUGNET_LIBS) $(KENT_LIBS)
+#	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I$(KENT_DIR)/inc -I$(KENT_DIR)/hg/inc -o $@ $(addsuffix .c,$@)  $(SUGNET_LIBS) $(KENT_LIBS)
 
 clean :
 	rm -f $(O)

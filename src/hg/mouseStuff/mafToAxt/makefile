@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mafToAxt.o
 
 mafToAxt: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafToAxt $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafToAxt $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafToAxt${EXE}

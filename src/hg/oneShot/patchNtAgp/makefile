@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = patchNtAgp.o
 
 patchNtAgp: $O 
-	gcc -o patchNtAgp $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o patchNtAgp $O $(MYLIBS) $L
 

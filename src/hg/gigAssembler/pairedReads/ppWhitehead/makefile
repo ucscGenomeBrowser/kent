@@ -7,6 +7,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = ppWhitehead.o 
 
 ppWhitehead: $O $(MYLIBS)
-	gcc -ggdb -o ppWhitehead $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ppWhitehead $O $(MYLIBS) $L
 	mv ppWhitehead $(HOME)/bin/$(MACHTYPE)
 

@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = sortFilt.o
 
 sortFilt: $O ../../lib/$(MACHTYPE)/jkweb.a
-	gcc -O -o $(HOME)/bin/$(MACHTYPE)/sortFilt $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -O -o $(HOME)/bin/$(MACHTYPE)/sortFilt $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

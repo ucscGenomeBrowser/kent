@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = gpStats.o
 
 gpStats: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/gpStats $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/gpStats $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/gpStats${EXE}
 
 

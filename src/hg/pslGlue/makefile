@@ -9,7 +9,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslGlue.o 
 
 pslGlue: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslGlue $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslGlue $O $(MYLIBS) $L
 
 lib:
 	cd ../../lib; make

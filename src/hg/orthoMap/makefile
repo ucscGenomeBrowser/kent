@@ -10,7 +10,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 	cp $@ $(HOME)/bin/$(MACHTYPE)
 
 %Test: %Test.c 
-	gcc -Wimplicit -ggdb  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
+	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS) $(L)
 
 E = mgcFastaForBed agxToIntronBeds bedToFrames orthoMap orthoEvaluate orthoPickIntron # spliceStats spliceVis
 

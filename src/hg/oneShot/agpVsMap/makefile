@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = agpVsMap.o
 
 agpVsMap: $O 
-	gcc -o $(HOME)/bin/$(MACHTYPE)/agpVsMap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/agpVsMap $O $(MYLIBS) $L
 

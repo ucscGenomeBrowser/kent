@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslSelfJobs.o
 
 pslSelfJobs: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslSelfJobs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslSelfJobs $O $(MYLIBS) $L
 
 
 lib:

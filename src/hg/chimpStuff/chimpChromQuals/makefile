@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = chimpChromQuals.o
 
 chimpChromQuals: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/chimpChromQuals $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chimpChromQuals $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/chimpChromQuals${EXE}

@@ -19,7 +19,7 @@ beta: compile
 	mv $A /usr/local/apache/cgi-bin-beta/$A
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv a.out $A
 #	${STRIP} $A${EXE}
 	chmod a+rx $A

@@ -15,9 +15,9 @@ clean:
 
 ${BINARCH}/mgcImport:  mgcImport.o ${O} ${LIBGENBANK}
 	@${MKDIR} ${BINARCH}
-	gcc ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mgcImport mgcImport.o ${O} $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mgcImport mgcImport.o ${O} $(LIBS)
 
 ${BINARCH}/mgcDbLoad:  mgcDbLoad.o ${O} ${LIBGENBANK}
 	@${MKDIR} ${BINARCH}
-	gcc ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mgcDbLoad mgcDbLoad.o ${O} $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mgcDbLoad mgcDbLoad.o ${O} $(LIBS)
 

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = callGraph.o
 
 callGraph: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/callGraph $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/callGraph $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/callGraph${EXE}

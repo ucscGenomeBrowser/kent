@@ -8,6 +8,6 @@ O = hgTrackDb.o
 
 
 hgTrackDb: $O 
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/hgTrackDb $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgTrackDb $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgTrackDb${EXE}
 

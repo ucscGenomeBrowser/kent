@@ -10,7 +10,7 @@ PROG = regionAgp
 O = ${PROG}.o
 
 regionAgp: $O $(MYLIBS)
-	gcc -ggdb -o $(INSTALLDIR)/${PROG} $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(INSTALLDIR)/${PROG} $O $(MYLIBS) $L
 #strip $(HOME)/bin/$(MACHTYPE)/${PROG}
 
 test: $(INSTALLDIR)/$(PROG)

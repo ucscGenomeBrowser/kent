@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bedOverlap.o
 
 bedOverlap: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/bedOverlap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bedOverlap $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedOverlap${EXE}
 
 test:	test2 test4

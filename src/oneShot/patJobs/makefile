@@ -4,6 +4,6 @@ include ../../inc/common.mk
 O = patJobs.o 
 
 patJobs: $(O)
-	gcc -o patJobs $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o patJobs $O ../../lib/$(MACHTYPE)/jkweb.a
 
 

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = netChainSubset.o
 
 netChainSubset: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/netChainSubset $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/netChainSubset $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/netChainSubset${EXE}

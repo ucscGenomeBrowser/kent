@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = randomEst.o
 
 randomEst: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/randomEst $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/randomEst $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/randomEst${EXE}

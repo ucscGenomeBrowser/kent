@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslMrnaCover.o
 
 pslMrnaCover: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslMrnaCover $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslMrnaCover $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslMrnaCover${EXE}

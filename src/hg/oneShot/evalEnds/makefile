@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = evalEnds.o
 
 evalEnds: $O 
-	gcc -o evalEnds $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o evalEnds $O $(MYLIBS) $L
 

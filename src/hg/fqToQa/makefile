@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = fqToQa.o
 
 fqToQa: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/fqToQa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/fqToQa $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/fqToQa${EXE}
 
 

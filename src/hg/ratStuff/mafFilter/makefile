@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = mafFilter.o
 
 mafFilter: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/mafFilter $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/mafFilter $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/mafFilter${EXE}

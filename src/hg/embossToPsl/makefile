@@ -8,7 +8,7 @@ O = embossToPsl.o
 BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 embossToPsl: $O $(MYLIBS)
-	${CC} -ggdb -o embossToPsl $O $(MYLIBS) $L
+	${CC} -o embossToPsl $O $(MYLIBS) $L
 	${MKDIR} ${BINDIR}
 	cp -f embossToPsl ${BINDIR}
 	${STRIP} ${BINDIR}/embossToPsl${EXE}

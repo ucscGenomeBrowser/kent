@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = bargeVsMap.o
 
 bargeVsMap: $O 
-	gcc -o $(HOME)/bin/$(MACHTYPE)/bargeVsMap $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bargeVsMap $O $(MYLIBS) $L
 

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = fixEnsGtf.o
 
 fixEnsGtf: $O 
-	gcc -o fixEnsGtf $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o fixEnsGtf $O $(MYLIBS) $L
 

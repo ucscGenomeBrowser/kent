@@ -8,5 +8,5 @@ MYLIBS =  ../lib/$(MACHTYPE)/paralib.a $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = broadNode.o
 
 broadNode: $O $(MYLIBS)
-	gcc -ggdb -o ../bin/broadNode $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ../bin/broadNode $O $(MYLIBS) $L
 	${STRIP} ../bin/broadNode${EXE}

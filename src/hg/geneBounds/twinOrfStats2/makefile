@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = twinOrfStats2.o
 
 twinOrfStats2: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/twinOrfStats2 $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/twinOrfStats2 $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/twinOrfStats2${EXE}

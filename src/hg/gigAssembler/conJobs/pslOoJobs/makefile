@@ -7,6 +7,6 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = pslOoJobs.o
 
 pslOoJobs: $O $(MYLIBS)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/pslOoJobs $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/pslOoJobs $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/pslOoJobs${EXE}
 

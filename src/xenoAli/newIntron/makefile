@@ -4,4 +4,4 @@ include ../../inc/common.mk
 O = newIntron.o 
 
 newIntron: $(O)
-	gcc -o newIntron $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o newIntron $O ../../lib/$(MACHTYPE)/jkweb.a

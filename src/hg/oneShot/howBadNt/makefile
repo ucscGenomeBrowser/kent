@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = howBadNt.o
 
 howBadNt: $O 
-	gcc -o howBadNt $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o howBadNt $O $(MYLIBS) $L
 

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = sim4big.o
 
 sim4big: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/sim4big $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/sim4big $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/sim4big${EXE}

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkSeed.o
 
 checkSeed: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkSeed $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/checkSeed $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/checkSeed${EXE}

@@ -2,11 +2,11 @@ include ../../../inc/common.mk
 
 # For performance
 #.c.o:
-#	gcc -ggdb -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
+#	${CC} ${COPT} ${CFLAGS} -O -Wformat -Wimplicit -Wuninitialized -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
 
 #For debugging:
 .c.o:
-	gcc -ggdb -Wformat -Wimplicit  -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
+	${CC} ${COPT} ${CFLAGS} -Wformat -Wimplicit  -Wreturn-type -I../../inc -I../../../inc -I../../../../inc -c $*.c
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
@@ -21,7 +21,7 @@ all: compile
 	mv $A ${HOME}/bin/$(MACHTYPE)/$A
 
 compile: $O 
-	gcc $O $(MYLIBS) $(L) 
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv a.out $A
 	chmod a+rx $A
 

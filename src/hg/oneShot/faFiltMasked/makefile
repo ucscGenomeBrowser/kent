@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = faFiltMasked.o
 
 faFiltMasked: $O 
-	gcc -o faFiltMasked $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o faFiltMasked $O $(MYLIBS) $L
 

@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = foldDb.o
 
 foldDb: $O $(MYLIBS)
-	gcc -ggdb -o foldDb $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o foldDb $O $(MYLIBS) $L
 
 lib:
 	cd ../lib; make

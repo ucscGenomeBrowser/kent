@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = splitFa.o 
 
 splitFa: $(O)
-	gcc -o $(HOME)/bin/$(MACHTYPE)/splitFa $O ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/splitFa $O ../../lib/$(MACHTYPE)/jkweb.a
 

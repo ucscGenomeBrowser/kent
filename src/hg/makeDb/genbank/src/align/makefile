@@ -21,10 +21,10 @@ clean:
 
 ${BINARCH}/gbAlignGet: gbAlignGet.o gbAlignCommon.o  ${LIBGENBANK}
 	@${MKDIR} ${BINARCH}
-	gcc ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/gbAlignGet gbAlignCommon.o gbAlignGet.o $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/gbAlignGet gbAlignCommon.o gbAlignGet.o $(LIBS)
 ${BINARCH}/gbAlignInstall: $O gbAlignInstall.o gbAlignCommon.o ${MYLIBS}
 	@${MKDIR} ${BINARCH}
-	gcc ${CFLAGS} -o ${BINARCH}/gbAlignInstall gbAlignCommon.o gbAlignInstall.o $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} -o ${BINARCH}/gbAlignInstall gbAlignCommon.o gbAlignInstall.o $(LIBS)
 
 
 DEP =   ../inc/gbAligned.h ../inc/gbEntry.h ../inc/gbUpdate.h \

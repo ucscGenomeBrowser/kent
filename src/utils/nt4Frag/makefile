@@ -8,4 +8,4 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = nt4Frag.o
 
 nt4Frag: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/nt4Frag $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/nt4Frag $O $(MYLIBS) $L

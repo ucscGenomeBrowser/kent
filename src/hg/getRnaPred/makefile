@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = getRnaPred.o
 
 getRnaPred: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/getRnaPred $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/getRnaPred $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/getRnaPred${EXE}

@@ -8,7 +8,7 @@ O = spideyToPsl.o
 BINDIR = $(HOME)/bin/$(MACHTYPE)
 
 spideyToPsl: $O $(MYLIBS)
-	gcc -ggdb -o spideyToPsl $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o spideyToPsl $O $(MYLIBS) $L
 	${MKDIR} ${BINDIR}
 	cp -f spideyToPsl ${BINDIR}
 	${STRIP} ${BINDIR}/spideyToPsl${EXE}

@@ -14,5 +14,5 @@ strip: ${BINDIR}/${A}
 compile: ${BINDIR}/${A}
 
 ${BINDIR}/${A}: $O ${MYLIBS}
-	gcc -ggdb -o ${BINDIR}/${A} $O ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} ${L}
 

@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = checkQa.o 
 
 checkQa: $O $(MYLIBS)
-	gcc -ggdb -o checkQa $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o checkQa $O $(MYLIBS) $L
 
 
 lib:

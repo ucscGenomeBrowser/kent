@@ -11,7 +11,7 @@ PROG = scaffoldFaToAgp
 O = ${PROG}.o 
 
 ${PROG}: $(O)
-	gcc -o $(INSTALLDIR)/${PROG} $O ../../lib/$(MACHTYPE)/jkhgap.a ../../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} -o $(INSTALLDIR)/${PROG} $O ../../lib/$(MACHTYPE)/jkhgap.a ../../lib/$(MACHTYPE)/jkweb.a
 
 test: $(INSTALLDIR)/$(PROG)
 	cd test && csh runtest

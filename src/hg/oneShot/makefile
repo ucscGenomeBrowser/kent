@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = oneShot.o
 
 oneShot: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/oneShot $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/oneShot $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/oneShot${EXE}

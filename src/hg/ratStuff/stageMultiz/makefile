@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = stageMultiz.o
 
 stageMultiz: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/stageMultiz $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/stageMultiz $O $(MYLIBS) $L
 #	${STRIP} $(HOME)/bin/$(MACHTYPE)/stageMultiz${EXE}
 
 tags: 

@@ -8,7 +8,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = textHistogram.o
 
 textHistogram: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/textHistogram $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/textHistogram $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/textHistogram${EXE}
 
 clean:

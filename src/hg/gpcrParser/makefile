@@ -9,7 +9,7 @@ MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 # MYLIBS =  ${JKLIBDIR}/jkhgap.a ${JKLIBDIR}/jkweb.a
 
 #.c.o:
-#	gcc -ggdb -Wimplicit -I${JKSRCDIR}/inc -I${JKSRCDIR}/hg/inc -c $*.c
+#	${CC} ${COPT} ${CFLAGS} -Wimplicit -I${JKSRCDIR}/inc -I${JKSRCDIR}/hg/inc -c $*.c
 
 
 O = gpcrParser.o

@@ -7,5 +7,5 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = faSomeRecords.o
 
 faSomeRecords: $O $(MYLIBS)
-	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/faSomeRecords $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/faSomeRecords $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/faSomeRecords${EXE}

@@ -8,5 +8,5 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = liftFrags.o
 
 liftFrags: $O ../../lib/$(MACHTYPE)/jkweb.a 
-	gcc -o $(HOME)/bin/$(MACHTYPE)/liftFrags $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/liftFrags $O $(MYLIBS) $L
 
