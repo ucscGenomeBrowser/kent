@@ -236,7 +236,7 @@ return sd;
 
 void spokePing(struct spoke *spoke)
 /* Send ping message to spoke.  It should eventually respond
- * with recycleSpoke message to hub socked.  */
+ * with recycleSpoke message to hub socket.  */
 {
 int sd = spokeGetSocket(spoke);
 if (sd > 0)

@@ -1896,7 +1896,7 @@ startSpokes();
 startHeartbeat();
 
 /* Set up socket. */
-socketHandle = netAcceptingSocket(paraPort, 2000);
+socketHandle = netAcceptingSocket(paraPort, 3000);
 if (socketHandle < 0)
     errAbort("Can't set up socket.  Urk!  I'm dead.");
 
