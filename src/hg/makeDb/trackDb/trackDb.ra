@@ -1401,10 +1401,10 @@ termRegex [a-z][a-z0-9][0-9]+
 searchPriority 10
 
 searchTable encodeRegions
-searchMethod exact
+searchMethod prefix
 searchType bed
 shortCircuit 1
-termRegex EN[rm][0-9]+
+termRegex EN[rm][0-9]+(_[0-9]+)?
 searchPriority 11
 
 searchName snpMapShort
