@@ -18,6 +18,8 @@
 
 #define COLOR_TRACKS   /* undef this for black and white version. */
 
+static char titleBuf[80];
+
 char **chromNames;
 int chromCount;
 char *organism = "celegans";
@@ -29,6 +31,7 @@ struct trackInput
     char *hilite;
     char *dynFa;
     char *dynCda;
+    char *whereHid;
     int mouseX, mouseY;
     char *locus;
     char *chrom;
@@ -1470,19 +1473,19 @@ chmod(gifTn.forCgi, 0666);
 void makeNumText(char *name, int num, int digits)
 /* Make a text control filled with a number. */
 {
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", name, digits, num);
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>\n", name, digits, num);
 }
 
 void makeText(char *name, char *initialVal, int chars)
 /* Make a text control filled with initial value. */
 {
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%s>", name, chars, initialVal);
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%s>\n", name, chars, initialVal);
 }
 
 void makeSubmitButton(char *name, char *value)
 /* Make a submit button. */
 {
-printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">", name, value);
+printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\">\n", name, value);
 }
 
 void makeDropList(char *name, char *menu[], int menuSize, char *checked)
@@ -1491,29 +1494,29 @@ void makeDropList(char *name, char *menu[], int menuSize, char *checked)
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT ALIGN=CENTER NAME=\"%s\">", name);
+printf("<SELECT ALIGN=CENTER NAME=\"%s\">\n", name);
 for (i=0; i<menuSize; ++i)
     {
     if (!differentWord(menu[i], checked))
         selString = " SELECTED";
     else
         selString = "";
-    printf("<OPTION%s>%s</OPTION>", selString, menu[i]);
+    printf("<OPTION%s>%s</OPTION>\n", selString, menu[i]);
     }
-printf("</SELECT>");
+printf("</SELECT>\n");
 }
 
 void makeCheckBox(char *name, boolean isChecked)
 /* Create a checkbox with the given name in the given state. */
 {
-printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
+printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>\n", name,
     (isChecked ? " CHECKED" : "") );
 }
 
 void makeHiddenString(char *varName, char *string)
 /* Store string in hidden input for next time around. */
 {
-printf("<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">", varName, string);
+printf("<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">\n", varName, string);
 }
 
 void continueHiddenVar(char *varName)
@@ -1528,13 +1531,14 @@ char *strandMenu[] = {"+", "-"};
 void checkTitle()
 /* If title doesn't exist, make it up from locus. */
 {
-static char titleBuf[80];
 if (ti.title == NULL)
     {
-    if (ti.locus)
-        sprintf(titleBuf, "Region Near %s", ti.locus);
+    if( cgiVarExists("jump_to"))
+        snprintf(titleBuf, 80, "position: %s:%d-%d size %d strand %c", ti.chrom, ti.chromStart, ti.chromEnd, ti.chromEnd - ti.chromStart, ti.strand );
+    else if (ti.locus && 0 < strlen(ti.locus))
+        snprintf(titleBuf, 80, "Region Near: %s", ti.locus );
     else
-        sprintf(titleBuf, "Tracks Display");
+        snprintf(titleBuf, 80, "Tracks Display");
     ti.title = titleBuf;
     }
 }
@@ -1547,6 +1551,7 @@ int baseWidth;
 boolean doCompact;
 char strandString[2];
 boolean gotGenie = genieExists();
+char * browserChr;
 
 wormChromNames(&chromNames, &chromCount);
 
@@ -1559,6 +1564,7 @@ ti.withGenie = cgiBoolean("genie");
 ti.withBriggsae = cgiBoolean("briggsae");
 ti.withLeftLabels = cgiBoolean("leftLabels");
 ti.withCenterLabels = cgiBoolean("centerLabels");
+ti.whereHid = cgiOptionalString("whereHid");
 ti.dynFa = cgiOptionalString("dynFa");
 ti.dynCda = cgiOptionalString("dynCda");
 
@@ -1585,8 +1591,11 @@ if (!gotMap)
         }
 
     /* Figure out bases covered by track. */
-    if (!wormGeneRange(ti.locus, &ti.chrom, &ti.strand, &ti.chromStart, &ti.chromEnd))
-        errAbort("Couldn't find locus %s", ti.locus);
+    if (!wormGeneRange(ti.locus, &ti.chrom, &ti.strand, &ti.chromStart, &ti.chromEnd)) {
+	char * wh;
+	wh = trimSpaces(cgiString("where"));
+	errAbort("Couldn't find locus '%s' ('%s', '%s')", ti.locus, ti.whereHid, wh);
+    }
 
     if (!wormIsChromRange(ti.locus))
         {
@@ -1655,6 +1664,10 @@ if (!gotMap)
 printf("<FORM ACTION=\"%stracks.exe\">\n\n", cgiDir());
 
 /* Perpetuate some hidden variables. */
+ti.whereHid = trimSpaces(cgiString("where"));
+if( (char *) NULL != ti.whereHid  && 0 < strlen(ti.whereHid)) {
+printf("<INPUT TYPE=HIDDEN NAME=\"whereHid\" VALUE=\"%s\">\n", ti.whereHid);
+}
 continueHiddenVar("dynFa");
 continueHiddenVar("dynCda");
 
@@ -1663,7 +1676,7 @@ printf("<CENTER>\n");
 
 
 /* Show title . */
-printf("<H2>%s</H2>", ti.title);
+printf("<H2>%s</H2>\n", ti.title);
 
 /* Put up scroll and zoom controls. */
 fputs("move ", stdout);
@@ -1690,7 +1703,7 @@ if (ti.hilite)
     fputs("Unusual region is hilighted light blue.<BR>\n", stdout);
 
 /* Put up control panel */
-fputs("<HR ALIGN=CENTER>",stdout);
+fputs("<HR ALIGN=CENTER>\n",stdout);
 
 fputs("Chromosome ", stdout);
 makeDropList("chrom", chromNames, chromCount, ti.chrom);
@@ -1703,7 +1716,7 @@ strandString[0] = ti.strand;
 strandString[1] = 0;
 makeDropList("strand", strandMenu, 2, strandString);
 fputs(" ", stdout);
-makeSubmitButton("explicit", "jump");
+makeSubmitButton("jump_to", "jump");
 fputs("<BR>\n", stdout);
 
 fputs("<B>View:</B>", stdout);
@@ -1718,24 +1731,28 @@ if (gotGenie)
     }
 fputs(" cDNA ", stdout);
 makeCheckBox("cDNA", ti.withCdna);
-fputs(" separate embryonic cDNA ", stdout);
+fputs("<BR>\nseparate embryonic cDNA ", stdout);
 makeCheckBox("embryoCdna", ti.withEmbryoCdna);
 fputs(" <I>C. briggsae</I> homologies ", stdout);
 makeCheckBox("briggsae", ti.withBriggsae);
-fputs(" Left Labels ", stdout);
+fputs("<BR>\nLeft Labels ", stdout);
 makeCheckBox("leftLabels", ti.withLeftLabels);
 fputs(" Center Labels", stdout);
 makeCheckBox("centerLabels", ti.withCenterLabels);
-makeSubmitButton("explicit", "refresh");
+makeSubmitButton("refresh", "refresh");
 fputs("<BR>\n", stdout);
 
 fputs("Jump to named ORF or gene of known sequence: ",stdout);
 makeText("where", "", 16);
 fputs(" ", stdout);
-makeSubmitButton("explicit", "jump");
+makeSubmitButton("go_to_where", "jump");
 fputs("</P>\n", stdout);
 
-fputs("<P>Return to <A HREF=\"../intronerator/index.html\">Intronerator</A></P>\n", stdout);
+fputs("<P>Return to <A HREF=\"../Intronerator/index.html\">Intronerator Gateway</A></P>\n", stdout);
+browserChr = strndup(ti.chrom,5);
+touppers(browserChr);
+printf("<P>Link to Genome Browser <A HREF=\"http://genome.ucsc.edu/cgi-bin/hgTracks?db=ce1&org=C.+elegans&position=chr%s:%d-%d\" target=_blank> chr%s:%d-%d </A><BR>\n", browserChr, ti.chromStart, ti.chromEnd, browserChr, ti.chromStart, ti.chromEnd);
+free(browserChr);
 
 for (group = groupList; group != NULL; group = group->next)
     group->freeItems(group, doCompact);
@@ -1785,6 +1802,7 @@ char *boxName;
 char boxStrand;
 bits32 pixWidth, pixHeight;
 boolean gotMap = FALSE;
+boolean resetTitle = FALSE;
 
 if (cgiVarExists("map"))
     {
@@ -1794,50 +1812,94 @@ if (cgiVarExists("map"))
     mapReadHead(f, &ti.title, &pixWidth, &pixHeight, 
         &ti.locus, &ti.chrom, &ti.chromStart, &ti.chromEnd, &ti.strand,
         &ti.hilite, &ti.relStart);
-    if (cgiVarExists("explicit"))
-        {
+    if (cgiVarExists("refresh"))
+	{
+		char * prevLocus = (char *) NULL;
+    		if (cgiVarExists("whereHid"))
+		    {
+        prevLocus = trimSpaces(cgiString("whereHid"));
+		    }
+		else if (cgiVarExists("where"))
+		    {
+        prevLocus = trimSpaces(cgiString("where"));
+		    }
+		if( prevLocus == NULL || 0 == strlen(prevLocus) )
+		    {
+			ti.chrom = cgiString("chrom");
+			ti.chromStart = atoi(cgiString("start"));
+			ti.chromEnd = atoi(cgiString("end"));
+			ti.strand = cgiString("strand")[0];
+			ti.relStart = ti.chromStart;
+			resetTitle = TRUE;
+		    }
+		else
+		    {
+			gotMap = FALSE;     /* Disregard map, go for gene. */
+			ti.locus = prevLocus;
+			ti.title = NULL;
+		    }
+	}
+    else if (cgiVarExists("go_to_where"))
+	{
         char *newLocus = trimSpaces(cgiString("where"));
-        if (newLocus == NULL)
-            {
+	if( newLocus == NULL || 0 == strlen(newLocus) )
+	    {
+    		if (cgiVarExists("whereHid"))
+		    {
+        newLocus = trimSpaces(cgiString("whereHid"));
+		    }
+	    }
+	if( newLocus == NULL || 0 == strlen(newLocus) )
+	    {
             ti.chrom = cgiString("chrom");
             ti.chromStart = atoi(cgiString("start"));
             ti.chromEnd = atoi(cgiString("end"));
             ti.strand = cgiString("strand")[0];
             ti.relStart = ti.chromStart;
-            }
-        else
-            {
-            gotMap = FALSE;     /* Disregard map, go for gene. */
-            ti.locus = newLocus;
-            ti.title = NULL;
-            }
-        }
+	    resetTitle = TRUE;
+	    }
+	else
+	    {
+        gotMap = FALSE;     /* Disregard map, go for gene. */
+        ti.locus = newLocus;
+        ti.title = NULL;
+	    }
+	}
+    else if( cgiVarExists("jump_to"))
+        {
+            ti.chrom = cgiString("chrom");
+            ti.chromStart = atoi(cgiString("start"));
+            ti.chromEnd = atoi(cgiString("end"));
+            ti.strand = cgiString("strand")[0];
+            ti.relStart = ti.chromStart;
+	    resetTitle = TRUE;
+	}
 
     else if (cgiVarExists("left3"))
-        relativeScroll(-0.95);
+	{ relativeScroll(-0.95); resetTitle = TRUE; }
     else if (cgiVarExists("left2"))
-        relativeScroll(-0.475);
+	{ relativeScroll(-0.475); resetTitle = TRUE; }
     else if (cgiVarExists("left1"))
-        relativeScroll(-0.1);
+	{ relativeScroll(-0.1); resetTitle = TRUE; }
     else if (cgiVarExists("right1"))
-        relativeScroll(0.1);
+	{ relativeScroll(0.1); resetTitle = TRUE; }
     else if (cgiVarExists("right2"))
-        relativeScroll(0.475);
+	{ relativeScroll(0.475); resetTitle = TRUE; }
     else if (cgiVarExists("right3"))
-        relativeScroll(0.95);
+	{ relativeScroll(0.95); resetTitle = TRUE; }
 
     else if (cgiVarExists("in3"))
-        zoomAroundCenter(1.0/10.0);
+	{ zoomAroundCenter(1.0/10.0); resetTitle = TRUE; }
     else if (cgiVarExists("in2"))
-        zoomAroundCenter(1.0/3.0);
+	{ zoomAroundCenter(1.0/3.0); resetTitle = TRUE; }
     else if (cgiVarExists("in1"))
-        zoomAroundCenter(1.0/1.5);
+	{ zoomAroundCenter(1.0/1.5); resetTitle = TRUE; }
     else if (cgiVarExists("out1"))
-        zoomAroundCenter(1.5);
+	{ zoomAroundCenter(1.5); resetTitle = TRUE; }
     else if (cgiVarExists("out2"))
-        zoomAroundCenter(3.0);
+	{ zoomAroundCenter(3.0); resetTitle = TRUE; }
     else if (cgiVarExists("out3"))
-        zoomAroundCenter(10.0);
+	{ zoomAroundCenter(10.0); resetTitle = TRUE; }
     else
         {
         ti.mouseX = cgiInt("mouse.x");
@@ -1919,6 +1981,16 @@ if (cgiVarExists("map"))
             }
         }
     fclose(f);
+    }
+
+if( resetTitle )
+    {
+        snprintf(titleBuf, 80, "position: %s:%d-%d size %d strand %c", ti.chrom, ti.chromStart, ti.chromEnd, ti.chromEnd - ti.chromStart, ti.strand );
+	ti.title = titleBuf;
+    }
+else
+    {
+	ti.title = (char *) NULL;
     }
 checkTitle();
 
