@@ -177,7 +177,7 @@ type sample 0 8
 track regpotent
 shortLabel Reg. Potential
 longLabel Human/Mouse Regulatory Potential Score
-group compGeno
+group regulation
 color 100,50,0
 altColor 50,150,128
 priority 119
