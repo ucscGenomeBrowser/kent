@@ -44,9 +44,9 @@ void wholeMountRa(char *fileName)
 FILE *f = mustOpen(fileName, "w");
 
 fprintf(f, "%s",
-"fullDir /gbdb/genePix/full/inSitu/Mouse/mahoney/wholeMount\n"
-"screenDir /gbdb/genePix/700/inSitu/Mouse/mahoney/wholeMount\n"
-"thumbDir /gbdb/genePix/200/inSitu/Mouse/mahoney/wholeMount\n"
+"fullDir ../genePix/full/inSitu/Mouse/mahoney/wholeMount\n"
+"screenDir ../genePix/700/inSitu/Mouse/mahoney/wholeMount\n"
+"thumbDir ../genePix/200/inSitu/Mouse/mahoney/wholeMount\n"
 "priority 10\n"
 "isEmbryo 1\n"
 "age 10.5\n"
@@ -64,9 +64,9 @@ void slicesRa(char *fileName)
 FILE *f = mustOpen(fileName, "w");
 
 fprintf(f, "%s",
-"fullDir /gbdb/genePix/full/inSitu/Mouse/mahoney/slices\n"
-"screenDir /gbdb/genePix/700/inSitu/Mouse/mahoney/slices\n"
-"thumbDir /gbdb/genePix/200/inSitu/Mouse/mahoney/slices\n"
+"fullDir ../genePix/full/inSitu/Mouse/mahoney/slices\n"
+"screenDir ../genePix/700/inSitu/Mouse/mahoney/slices\n"
+"thumbDir ../genePix/200/inSitu/Mouse/mahoney/slices\n"
 "priority 100\n"
 "bodyPart brain\n"
 "sliceType transverse\n"
