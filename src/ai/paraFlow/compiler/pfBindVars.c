@@ -143,10 +143,14 @@ static void bindVars(struct pfParse *pp)
 {
 struct pfParse *p;
 
-for (p = pp->children; p != NULL; p = p->next)
-    bindVars(p);
 switch (pp->type)
     {
+    case pptDot:
+        {
+	for (p = pp->children->next; p != NULL; p = p->next)
+	    p->type = pptFieldUse;
+	break;
+	}
     case pptNameUse:
 	{
 	struct pfVar *var = pfScopeFindVar(pp->scope, pp->name);
@@ -158,6 +162,8 @@ switch (pp->type)
         break;
 	}
     }
+for (p = pp->children; p != NULL; p = p->next)
+    bindVars(p);
 }
 
 

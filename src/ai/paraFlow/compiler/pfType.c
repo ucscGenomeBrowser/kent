@@ -710,6 +710,39 @@ else if (tok->type == pftFloat)
     pp->ty = pfTypeNew(pfc->doubleType);
 }
 
+static struct pfType *findField(struct pfType *class, char *name)
+/* Find named field in class or return NULL */
+{
+struct pfType *field;
+for (field = class->base->fields; field != NULL; field = field->next)
+    {
+    if (sameString(name, field->fieldName))
+        return field;
+    }
+return NULL;
+}
+
+static void typeDot(struct pfCompile *pfc, struct pfParse *pp)
+/* Create type for dotted set of symbols. */
+{
+struct pfParse *varUse = pp->children;
+struct pfParse *fieldUse;
+struct pfVar *var = varUse->var;
+struct pfType *type = var->ty;
+if (!type->base->isClass)
+    errAt(pp->tok, "dot after non-class variable");
+    
+for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
+    {
+    struct pfType *fieldType = findField(type, fieldUse->name);
+    if (fieldType == NULL)
+        errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
+		type->base->name);
+    type = fieldType;
+    }
+pp->ty = CloneVar(type);
+}
+
 void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -773,6 +806,9 @@ switch (pp->type)
     case pptConstUse:
         typeConstant(pfc, pp);
 	break;
+    case pptDot:
+	typeDot(pfc,pp);
+        break;
     case pptClass:
         blessClass(pfc, pp);
 	break;

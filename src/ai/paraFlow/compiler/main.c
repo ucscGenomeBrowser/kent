@@ -158,7 +158,9 @@ struct pfParse *program = pfParseProgram(fileName, pfc);
 
 pfBindVars(pfc, program);
 if (!parseOnly)
+    {
     pfTypeCheck(pfc, program);
+    }
 
 pfParseDump(program, 0, stdout);
 
