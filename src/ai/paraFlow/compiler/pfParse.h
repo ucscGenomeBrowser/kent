@@ -140,6 +140,7 @@ enum pfParseType
     pptCastStringToBit,
     pptCastTypedToVar,		
     pptCastVarToTyped,
+    pptCastTupleToTuple,
     pptUniformTuple,
 
     pptConstBit,

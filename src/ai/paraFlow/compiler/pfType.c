@@ -128,8 +128,8 @@ else
 }
 
 
-static void insertCast(enum pfParseType castType, struct pfType *newType,
-	struct pfParse **pPp)
+static struct pfParse *insertCast(enum pfParseType castType, 
+	struct pfType *newType, struct pfParse **pPp)
 /* Insert a cast operation on top of *pPp */
 {
 struct pfParse *pp = *pPp;
@@ -140,6 +140,7 @@ cast->ty = newType;
 pp->parent = cast;
 pp->next = NULL;
 *pPp = cast;
+return cast;
 }
 
 static void numericCast(struct pfCompile *pfc,
@@ -243,6 +244,7 @@ if (outputType->children != NULL && outputType->children->next == NULL)
     pp->ty = CloneVar(outputType->children);
 else
     pp->ty = CloneVar(outputType);
+pp->name = function->name;
 }
 
 static void coerceTupleToCollection(struct pfCompile *pfc, 
@@ -273,6 +275,65 @@ for (pos = &tuple->children; *pos != NULL; pos = &(*pos)->next)
      }
 pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
+}
+
+boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
+/* Return TRUE if all elements of aList and bList have the same
+ * type, and aList and bList have same number of elements. */
+{
+struct pfType *a = aList, *b = bList;
+
+for (;;)
+    {
+    if (a == NULL)
+        return b == NULL;
+    else if (b == NULL)
+        return FALSE;
+    else if (!pfTypeSame(a, b))
+        return FALSE;
+    a = a->next;
+    b = b->next;
+    }
+}
+
+static void coerceCallToClass(struct pfCompile *pfc, 
+	struct pfParse **pPp, struct pfType *type)
+/* Given a type that is a class, and a parse tree that
+ * is a tuple, do any casting required inside the tuple
+ * to get the members of the tuple to be of the same type
+ * as the corresponding members of the class. */
+{
+struct pfParse *call = *pPp;
+struct pfType *retTypes = call->ty->children;
+struct pfType *fieldTypes = type->base->fields;
+int retCount = slCount(retTypes);
+int fieldCount = slCount(fieldTypes);
+int i;
+
+if (retCount != fieldCount)
+    errAt(call->tok, "%s returns %d values, %s has %d fields",
+    	  call->name, retCount, type->base->name, fieldCount);
+if (!pfTypesAllSame(retTypes, fieldTypes))
+    {
+    struct pfType *ty = CloneVar(type->base->fieldTuple);
+    struct pfParse *castAll = insertCast(pptCastTupleToTuple, ty, pPp);
+    struct pfType *retType = retTypes, *fieldType = fieldTypes;
+    struct pfParse *castList = NULL, *fake;
+
+    for (i=0; i<fieldCount; ++i)
+        {
+	AllocVar(fake);
+	fake->type = pptVarInit;
+	fake->name = "returnValue";
+	fake->ty = retType;
+	coerceOne(pfc, &fake, fieldType);
+	slAddHead(&castList, fake);
+	retType = retType->next;
+	fieldType = fieldType->next;
+	}
+    slReverse(&castList);
+    castAll->children->next = castList;
+    }
 }
 
 static void coerceTupleToClass(struct pfCompile *pfc, 
@@ -425,7 +486,10 @@ else if (pt->base != base)
 	    insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
 	    pfTypeOnTuple(pfc, *pPp);
 	    }
-	coerceTupleToClass(pfc, pPp, type);
+	if (pp->type == pptCall)
+	    coerceCallToClass(pfc, pPp, type);
+	else
+	    coerceTupleToClass(pfc, pPp, type);
 	ok = TRUE;
 	}
     else if (pt->isTuple)
