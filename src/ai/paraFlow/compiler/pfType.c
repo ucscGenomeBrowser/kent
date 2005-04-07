@@ -559,6 +559,63 @@ if (!stringOk)
     }
 }
 
+static void putChildrenInPlaceOfSelf(struct pfParse **pPp)
+/* Replace self with children. */
+{
+struct pfParse *pp = *pPp;
+if (pp->children == NULL)
+    *pPp = pp->next;
+else
+    {
+    struct pfParse *lastChild = slLastEl(pp->children);
+    lastChild->next = pp->next;
+    *pPp = pp->children;
+    }
+}
+
+static void ensureDeclarationTuple(struct pfParse *tuple)
+/* Given tuple, ensure every child is type pptVarInit. */
+{
+struct pfParse *pp;
+for (pp = tuple->children; pp != NULL; pp = pp->next)
+    {
+    if (pp->type != pptVarInit)
+	expectingGot("variable declaration", pp->tok);
+    }
+}
+
+static void restrictClassStatements(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that there are only variable , class declarations and
+ * function declarations in class. */
+{
+struct pfParse *compound = pp->children->next;
+struct pfParse *p, **p2p;
+
+p2p = &compound->children;
+for (p = compound->children; p != NULL; p = p->next)
+    {
+    switch (p->type)
+        {
+	case pptNop:
+	case pptClass:
+	case pptVarInit:
+	case pptToDec:
+	case pptParaDec:
+	case pptFlowDec:
+	    break;
+	case pptTuple:
+	    if (p->children == NULL || p->children->type != pptVarInit)
+	        errAt(p->tok, "non-declaration tuple inside of class");
+	    ensureDeclarationTuple(p);
+	    putChildrenInPlaceOfSelf(p2p);
+	    break;
+	default:
+	    errAt(p->tok, "non-declaration statement inside of class");
+	}
+    p2p = &p->next;
+    }
+}
+
 static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
 /* Create type for constant. */
 {
@@ -633,6 +690,9 @@ switch (pp->type)
 	 break;
     case pptConstUse:
         typeConstant(pfc, pp);
+	break;
+    case pptClass:
+        restrictClassStatements(pfc, pp);
 	break;
     }
 }
