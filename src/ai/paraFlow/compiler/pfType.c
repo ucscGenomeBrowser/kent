@@ -254,10 +254,8 @@ static void coerceTupleToCollection(struct pfCompile *pfc,
 struct pfParse *tuple = *pPp;
 struct pfType *elType  = type->children;
 struct pfParse **pos;
-uglyf("coerceTupleToCollection of %s\n", elType->base->name);
-if (type->base->isKeyed)
+if (type->base->keyedBy)
      {
-     uglyf("isKeyed\n");
      struct pfType *ty = pfTypeNew(pfc->keyValType);
      struct pfType *key = pfTypeNew(pfc->floatType);	// FIXME
      struct pfType *val = CloneVar(elType);
@@ -403,7 +401,8 @@ else
 	}
     else if (type->base == pfc->keyValType)
 	{
-	uglyf("Theoretically corecing keyVal pair");
+	coerceOne(pfc, &pp->children, type->children);
+	coerceOne(pfc, &pp->children->next, type->children->next);
 	}
     else if (type->isTuple)
         {

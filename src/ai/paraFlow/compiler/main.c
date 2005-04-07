@@ -155,9 +155,9 @@ pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType);
 pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType);
 pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType);
 pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType);
-pfc->treeType->isKeyed = TRUE;
+pfc->treeType->keyedBy = pfc->doubleType;
 pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType);
-pfc->dirType->isKeyed = TRUE;
+pfc->dirType->keyedBy = pfc->stringType;
 }
 
 struct pfCompile *pfCompileNew(char *fileName)

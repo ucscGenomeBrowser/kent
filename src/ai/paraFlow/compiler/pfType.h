@@ -15,10 +15,10 @@ struct pfBaseType
     struct pfBaseType *next;		/* Sibling in class heirarchy */
     struct pfBaseType *children;	/* Derived classes. */
     struct pfBaseType *parent;		/* Pointer to parent class if any */
+    struct pfBaseType *keyedBy;	/* Pointer to class of index if any */
     char *name;			/* Type name.  Allocated in hash. */
     struct pfScope *scope;	/* The scope this class lives in */
     bool isCollection;		/* TRUE if it's a collection type */
-    bool isKeyed;		/* TRUE if it's a keyed collection type. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
