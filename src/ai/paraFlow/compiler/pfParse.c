@@ -1590,6 +1590,7 @@ if (pp->type == pptVarInit)
     struct pfParse *name = type->next;
     pfParseTypeSub(type, pptNameUse, pptTypeName);
     name->type = pptSymName;
+    pp->name = name->name;
     }
 /* Note in this case we *don't* want depth first, which
  * effectively is why this has to be done in a second pass. */
