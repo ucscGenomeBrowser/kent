@@ -177,16 +177,6 @@ altColor 255,240,200
 type bed 4 +
 otherDb rn3
 
-track syntenyNetRn3
-shortLabel Rat Syntenic Net
-longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
-group compGeno
-priority 145
-visibility hide
-spectrum on
-type netAlign rn3 chainRn3
-otherDb rn3
-
 track rmsk
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
