@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.19 2005/04/06 22:43:24 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.20 2005/04/07 23:57:04 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -2144,6 +2144,8 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
 # Submission to last job:           365s       6.08m     0.10h    0.00d
 
     #	measurements:
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     time ../../jkStuff/netChainCheck.sh mm6 mm5 bosTau1 >measurements.out 2>&1 &
     featureBits mm6 netBosTau1
     #   1483158691 bases of 2597150411 (57.107%) in intersection
@@ -2171,6 +2173,24 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     #	finiChains.csh and run it:
     time ./finiChains.csh
     #	STARTED - 2005-04-06
+    #	13h 50m
+    #	continuing
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
+	-swap -continue load `pwd`/DEF > load.run.out 2>&1 &
+    #	5h 6min load time
+    #	checking measurements:
+    featureBits bosTau1 netMm6
+    #	1317934269 bases of 2261116798 (58.287%) in intersection
+    featureBits bosTau1 netMm5
+    #   1317539731 bases of 2261116798 (58.269%) in intersection
+    featureBits bosTau1 chainMm6
+    featureBits bosTau1 chainMm5
+    #   1325445280 bases of 2261116798 (58.619%) in intersection
+    featureBits bosTau1 chainMm6Link
+    featureBits bosTau1 chainMm5Link
+    #   588460684 bases of 2261116798 (26.025%) in intersection
 
 # BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
     # The procedure for lineage spec business with self is to simply
@@ -2300,6 +2320,8 @@ SEQ2_LEN=$BASE/S2.len
     #	the chainLink measurements need kolossus:
     ssh kolossus
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainSelfLink
+    #	417927047 bases of 2597150411 (16.092%) in intersection
+    #	244 minutes
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm3 mouseChainLink
     #	383345536 bases of 2505900260 (15.298%) in intersection
 
@@ -2324,7 +2346,9 @@ SEQ2_LEN=$BASE/S2.len
 	echo "done: ${I}"
     done
     #	STARTED - 2005-04-06 15:24
-    #	This is an 80 minute job
+    #	4h 24m load time - chrUn_random failed to load
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 blastzSelf
 
 # BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
 
@@ -2534,6 +2558,8 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
 	-continue download -fileServer eieio `pwd`/DEF > download.run.out 2>&1 &
 
     #	And measurments:
+    ssh hgwdev
+    cd  /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
     ../../jkStuff/netChainCheck.sh mm6 mm5 monDom1 > measurements.out 2>&1 &
     
     featureBits mm6 netMonDom1
@@ -2554,6 +2580,16 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
     cd  /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
     time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
 	-swap -fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
+    #
+    #	measurements:
+     featureBits monDom1 netMm6
+    # 2884735370 bases of 3492108230 (82.607%) in intersection
+    featureBits monDom1 netMm5
+    #   2889580530 bases of 3492108230 (82.746%) in intersection
+    featureBits monDom1 chainMm5
+    #   2913812625 bases of 3492108230 (83.440%) in intersection
+    featureBits monDom1 chainMm5Link
+    #   249594220 bases of 3492108230 (7.147%) in intersection
 
 # BLASTZ FROG Xenopus tropicalis (WORKING - 2005-04-05 - Hiram)
     ssh eieio
@@ -2621,6 +2657,26 @@ SEQ2_LEN=$BASE/S2.len
     para create recoverJobList
     para try
     para push ... check ... etc ...
+    #	with that successfully completed:
+    para time > run.time
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
+    #	measurements
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
+    time ../../jkStuff/netChainCheck.sh mm6 mm5 xenTro1 > measures.out 2>&1 &
+    featureBits mm6 netXenTro1
+    #   1033071781 bases of 2597150411 (39.777%) in intersection
+    featureBits mm5 netXenTro1
+    #   1042210258 bases of 2615483787 (39.848%) in intersection
+    featureBits mm6 chainXenTro1
+    #   1063392793 bases of 2597150411 (40.945%) in intersection
+    featureBits mm5 chainXenTro1
+    #   1078618413 bases of 2615483787 (41.240%) in intersection
+    featureBits mm6 chainXenTro1Link
+    #   67119684 bases of 2597150411 (2.584%) in intersection
 
 # BLASTZ CHIMP PanTro1 (WORKING - 2005-04-05 - Hiram)
     ssh eieio
@@ -2716,6 +2772,22 @@ SEQ2_LEN=$BASE/S2.len
 	-continue load -fileServer eieio `pwd`/DEF > load.run.out 2>&1 &
     #	STARTED 2005-04-06 09:23
     #	20 minutes
+    #	measurements:
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+    time ../../jkStuff/netChainCheck.sh mm6 mm5 panTro1 > measures.out 2>&1 &
+    featureBits mm6 netPanTro1
+    #   2441757915 bases of 2597150411 (94.017%) in intersection
+    time featureBits mm6 netHg17
+    #	2579747741 bases of 2597150411 (99.330%) in intersection
+    featureBits mm6 chainPanTro1
+    #   2450933009 bases of 2597150411 (94.370%) in intersection
+    time featureBits mm6 chainHg17
+    #	2596946329 bases of 2597150411 (99.992%) in intersection
+    featureBits mm6 chainPanTro1Link
+    #   199041568 bases of 2597150411 (7.664%) in intersection
+    featureBits mm6 chainHg17Link (on kolossus)
+    #	966916309 bases of 2597150411 (37.230%) in intersection
 
 # STS MARKERS DATA DOWNLOAD (WORKING - 2005-04-06 - Hiram)
     ssh eieio
@@ -2779,6 +2851,14 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 
     cp -p /cluster/data/mm5/bed/STSmarkers/downloads/*.sh .
     cp -p /cluster/data/mm5/bed/STSmarkers/downloads/*.pl .
+    #	There is a line in the fetchAllAliases.sh script that needs to
+    #	be updated, it must point to the previous bed file:
+    #   BEDFile=/cluster/data/mm5/bed/STSmarkers/stsInfoMouse.bed
+    #	Next time, this should read:
+    #   BEDFile=/cluster/data/mm6/bed/STSmarkers/stsInfoMouse.bed
+
+    #	The perl scripts were reworked, updated, cleaned up, and fixed
+    #	to handle a new type of format found in the UniSTS.aliases file.
 
     #	This process has been captured in the script:
     #	/cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
@@ -2796,13 +2876,14 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     /cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
 
     # with that, we can create a new stsInfoMouse.bed file:
-    bash
-    cd /cluster/data/mm5/bed/STSmarkers
+    cd /cluster/data/mm6/bed/STSmarkers
     /cluster/store5/mouseMarker/code/updateBed.pl \
-	/cluster/store5/mouseMarker/stsInfoMouse.bed \
+	/cluster/data/mm5/bed/STSmarkers/stsInfoMouse.bed \
 	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
 	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
 	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
+
+XXXX - RUNNING - 2005-04-06 16:40
 
     # Yontao updated /cluster/store5/mouseMarker/code/cleanInfo.pl 8/10/04
     /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
