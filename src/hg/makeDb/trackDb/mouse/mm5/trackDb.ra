@@ -75,7 +75,7 @@ track blastzTetNig1
 shortLabel Tetraodon Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
-priority 173.0
+priority 149.9
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -87,7 +87,7 @@ track blastzDanRer2
 shortLabel Zebrafish Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
-priority 175.0
+priority 159.9
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -99,7 +99,7 @@ track blastzDanRer1
 shortLabel $o_db Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
-priority 175.3
+priority 159.9
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -111,7 +111,7 @@ track chainDanRer1
 shortLabel $o_db Chain
 longLabel $O_Organism ($o_date/$o_db) Chained Blastz Alignments
 group compGeno
-priority 175.4
+priority 160.01
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -123,7 +123,7 @@ track netDanRer1
 shortLabel $o_db Net
 longLabel Zebrafish ($o_date/$o_db) Alignment Net
 group compGeno
-priority 175.5
+priority 160.11
 visibility hide
 spectrum on
 type netAlign danRer1 chainDanRer1
@@ -143,7 +143,7 @@ track syntenyNetCanFam1
 shortLabel Dog Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
-priority 189.2
+priority 230.15
 visibility hide
 spectrum on
 type netAlign canFam1 chainCanFam1
@@ -153,7 +153,7 @@ track blastzHg17
 shortLabel Human Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
-priority 191.0
+priority 258.9
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -165,7 +165,7 @@ track blastzBestHg17
 shortLabel Human Best
 longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
 group compGeno
-priority 191.1
+priority 258.95
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -177,7 +177,7 @@ track blastzTightHg17
 shortLabel Human Tight
 longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
 group compGeno
-priority 191.2
+priority 258.96
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -188,7 +188,7 @@ otherDb hg17
 track ensRatMusHg17
 shortLabel Human Synteny
 longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
-priority 191.5
+priority 259.15
 group compGeno
 visibility hide
 color 0,100,0
