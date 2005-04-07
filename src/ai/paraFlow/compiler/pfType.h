@@ -8,6 +8,8 @@
 #include "pfScope.h"
 #endif
 
+struct pfType;
+
 struct pfBaseType
 /* A type, may have parents in object heirarchy, and
  * be composed of multiple elements. */
@@ -19,6 +21,8 @@ struct pfBaseType
     char *name;			/* Type name.  Allocated in hash. */
     struct pfScope *scope;	/* The scope this class lives in */
     bool isCollection;		/* TRUE if it's a collection type */
+    struct pfType *fields;	/* List of (data) fields. */
+    struct pfType *methods;	/* List of associated functions. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -31,7 +35,7 @@ struct pfType
     {
     struct pfType *next;	/* Next sibling. */
     struct pfType *children;	/* Children. */
-    struct pfBaseType *base;	/* Collected type of this node in type tree. */
+    struct pfBaseType *base;	/* Type of this node in type tree. */
     char *fieldName;		/* Field name associated with this node. */
     struct pfParse *init;	/* Initialization if any. */
     bool isTuple;		/* True if it's a tuple. */

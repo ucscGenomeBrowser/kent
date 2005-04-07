@@ -1122,6 +1122,7 @@ pp = pfParseNew(pptClass, tok, parent, scope);
 tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
+pp->name = name->name;
 body = parseCompound(pp, &tok, scope);
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, name);

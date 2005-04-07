@@ -285,7 +285,7 @@ struct pfBaseType *base;
 if (pt == NULL)
     internalErrAt(pp->tok);
 base = type->base;
-// uglyf("coerceOne to %s\n", type->base->name);
+uglyf("coerceOne to %s\n", type->base->name);
 if (pp->type == pptConstUse)
     {
     if (base == pfc->bitType)
@@ -357,7 +357,7 @@ if (pp->type == pptConstUse)
 else if (pt->base != base)
     {
     boolean ok = FALSE;
-    // uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
+    uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->varType);
@@ -584,13 +584,38 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
     }
 }
 
-static void restrictClassStatements(struct pfCompile *pfc, struct pfParse *pp)
+static void addVarToClass(struct pfBaseType *class, struct pfParse *varPp)
+/* Add variable to class. */
+{
+struct pfParse *typePp = varPp->children;
+struct pfParse *namePp = typePp->next;
+struct pfParse *initPp = namePp->next;
+struct pfType *type = CloneVar(varPp->ty);
+type->fieldName = varPp->name;
+type->init = initPp;
+slAddHead(&class->fields, type);
+}
+
+static void addFunctionToClass(struct pfBaseType *class, struct pfParse *funcPp)
+/* Add variable to class. */
+{
+struct pfType *type = CloneVar(funcPp->ty);
+type->fieldName = funcPp->name;
+slAddHead(&class->methods, type);
+}
+
+
+static void blessClass(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that there are only variable , class declarations and
- * function declarations in class. */
+ * function declarations in class.  Flatten out nested declarative
+ * tuples. */
 {
 struct pfParse *compound = pp->children->next;
 struct pfParse *p, **p2p;
+struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
 
+if (base == NULL)
+    internalErrAt(pp->tok);
 p2p = &compound->children;
 for (p = compound->children; p != NULL; p = p->next)
     {
@@ -599,21 +624,32 @@ for (p = compound->children; p != NULL; p = p->next)
 	case pptNop:
 	case pptClass:
 	case pptVarInit:
+	    addVarToClass(base, p);
+	    break;
 	case pptToDec:
 	case pptParaDec:
 	case pptFlowDec:
+	    addFunctionToClass(base, p);
 	    break;
 	case pptTuple:
-	    if (p->children == NULL || p->children->type != pptVarInit)
+	    {
+	    struct pfParse *child = p->children;
+	    if (child == NULL || child->type != pptVarInit)
 	        errAt(p->tok, "non-declaration tuple inside of class");
 	    ensureDeclarationTuple(p);
+	    for ( ; child != NULL; child = child->next)
+	        addVarToClass(base, child);
 	    putChildrenInPlaceOfSelf(p2p);
 	    break;
+	    }
 	default:
 	    errAt(p->tok, "non-declaration statement inside of class");
 	}
     p2p = &p->next;
     }
+slReverse(&base->methods);
+slReverse(&base->fields);
+uglyf("Got %d methods, %d fields in %s\n", slCount(base->methods), slCount(base->fields), base->name);
 }
 
 static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
@@ -692,7 +728,7 @@ switch (pp->type)
         typeConstant(pfc, pp);
 	break;
     case pptClass:
-        restrictClassStatements(pfc, pp);
+        blessClass(pfc, pp);
 	break;
     }
 }

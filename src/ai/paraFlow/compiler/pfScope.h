@@ -33,6 +33,9 @@ struct pfScope *pfScopeNew(struct pfScope *parent, int size);
  * of what to make the size of the symbol table as a power of
  * two.  Pass in 0 if you don't care. */
 
+void pfScopeDump(struct pfScope *scope, FILE *f);
+/* Write out line of info about scope. */
+
 struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parentType);
 /* Add new base type to scope. */

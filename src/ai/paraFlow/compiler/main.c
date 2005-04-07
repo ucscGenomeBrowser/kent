@@ -71,30 +71,6 @@ rParseCount(&parseCount, pp);
 return parseCount;
 }
 
-static void dumpScope(FILE *f, struct pfScope *scope)
-/* Write out line of info about scope. */
-{
-if (scope->types->elCount > 0)
-    {
-    struct hashCookie hc = hashFirst(scope->types);
-    struct pfBaseType *bt;
-    fprintf(f, " types: ");
-    while ((bt = hashNextVal(&hc)) != NULL)
-        fprintf(f, "%s, ", bt->name);
-    }
-if (scope->vars->elCount > 0)
-    {
-    struct hashCookie hc = hashFirst(scope->vars);
-    struct pfVar *var;
-    fprintf(f, " vars: ");
-    while ((var = hashNextVal(&hc)) != NULL)
-	{
-	pfTypeDump(var->ty, f);
-        fprintf(f, " %s,", var->name);
-	}
-    }
-}
-
 static void printScopeInfo(int level, struct pfParse *pp)
 /* Print out info on each new scope. */
 {
@@ -114,7 +90,7 @@ switch (pp->type)
         spaceOut(stdout, 2*level);
 	printf("scope %s %s: ", 
 		pfParseTypeAsString(pp->type), name);
-	dumpScope(stdout, pp->scope);
+	pfScopeDump(pp->scope, stdout);
 	printf("\n");
 	break;
 	}

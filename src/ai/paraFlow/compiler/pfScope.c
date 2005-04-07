@@ -27,6 +27,31 @@ scope->parent = parent;
 return scope;
 }
 
+void pfScopeDump(struct pfScope *scope, FILE *f)
+/* Write out line of info about scope. */
+{
+if (scope->types->elCount > 0)
+    {
+    struct hashCookie hc = hashFirst(scope->types);
+    struct pfBaseType *bt;
+    fprintf(f, " types: ");
+    while ((bt = hashNextVal(&hc)) != NULL)
+        fprintf(f, "%s, ", bt->name);
+    }
+if (scope->vars->elCount > 0)
+    {
+    struct hashCookie hc = hashFirst(scope->vars);
+    struct pfVar *var;
+    fprintf(f, " vars: ");
+    while ((var = hashNextVal(&hc)) != NULL)
+	{
+	pfTypeDump(var->ty, f);
+        fprintf(f, " %s,", var->name);
+	}
+    }
+}
+
+
 struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parentType)
 /* Add new base type to scope. */
