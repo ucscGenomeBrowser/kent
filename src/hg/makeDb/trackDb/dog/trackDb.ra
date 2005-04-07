@@ -12,7 +12,7 @@ otherDb mm6
 
 track netMm6
 shortLabel Mm6 Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.09
 visibility dense
@@ -34,7 +34,7 @@ otherDb mm5
 
 track netMm5
 shortLabel Mouse Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.1
 visibility dense

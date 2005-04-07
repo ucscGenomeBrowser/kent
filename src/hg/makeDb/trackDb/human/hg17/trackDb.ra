@@ -378,7 +378,7 @@ otherDb fr1
 
 track netFr1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 150.2
 visibility hide
@@ -412,7 +412,7 @@ otherDb danRer2
 
 track netDanRer2
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 154.3
 visibility hide
@@ -446,7 +446,7 @@ otherDb danRer1
 
 track netDanRer1
 shortLabel $o_db Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 155.3
 visibility hide
@@ -941,7 +941,7 @@ otherDb rheMac1
 
 track netRheMac1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 189.7
 visibility hide
@@ -1010,7 +1010,7 @@ otherDb panTro1
 
 track netPanTro1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 190.5
 visibility hide
@@ -1073,7 +1073,7 @@ otherDb tetNig1
 
 track netTetNig1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 152.3
 visibility hide
@@ -1095,7 +1095,7 @@ otherDb bosTau1
 
 track netBosTau1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 152.5
 visibility hide

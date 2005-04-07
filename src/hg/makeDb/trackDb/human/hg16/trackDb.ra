@@ -1230,7 +1230,7 @@ otherDb fr1
 
 track netFr1
 shortLabel Fugu Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 150.2
 visibility hide

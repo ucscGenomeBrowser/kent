@@ -10,7 +10,7 @@ type bed 5 .
 
 track netHg17
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.2
 visibility hide
@@ -32,7 +32,7 @@ otherDb mm6
 
 track netMm6
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.35
 visibility hide
@@ -42,7 +42,7 @@ otherDb mm6
 
 track netMm5
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.4
 visibility hide
@@ -52,7 +52,7 @@ otherDb mm5
 
 track netGalGal2
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.6
 visibility hide
@@ -62,7 +62,7 @@ otherDb galGal2
 
 track netDanRer2
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.8
 visibility hide

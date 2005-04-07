@@ -241,7 +241,7 @@ otherDb bosTau1
 
 track netBosTau1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 188.6
 visibility hide

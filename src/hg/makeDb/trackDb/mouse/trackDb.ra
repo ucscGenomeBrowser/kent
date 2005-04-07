@@ -276,7 +276,7 @@ otherDb monDom1
 
 track netBosTau1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 220.1
 visibility hide
@@ -296,7 +296,7 @@ otherDb canFam1
 
 track netPanTro1
 shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Blastz Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 240.1
 visibility hide
