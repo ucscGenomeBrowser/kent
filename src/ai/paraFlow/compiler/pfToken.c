@@ -60,6 +60,15 @@ noWarnAbort();
 va_end(args);
 }
 
+static char *tokAsString(struct pfToken *tok)
+/* Return string representation of token. */
+{
+if (tok->type == pftEnd)
+    return "end of file";
+else
+    return cloneStringZ(tok->text, tok->textSize);
+}
+
 void errAt(struct pfToken *tok, char *format, ...)
 /* Warn about error at given token. */
 {
@@ -68,7 +77,7 @@ char *fileName;
 va_list args;
 va_start(args, format);
 pfTokenFileLineCol(tok, &fileName, &line, &col);
-warn("Line %d col %d of %s", line+1, col+1, fileName);
+warn("Line %d col %d of %s near '%s'", line+1, col+1, fileName, tokAsString(tok));
 vaErrAbort(format, args);
 noWarnAbort();
 va_end(args);
@@ -78,13 +87,7 @@ va_end(args);
 void expectingGot(char *expecting, struct pfToken *got)
 /* Complain about unexpected stuff and quit. */
 {
-char *s;
-
-if (got->type == pftEnd)
-    s = "end of file";
-else
-    s = cloneStringZ(got->text, got->textSize);
-errAt(got, "Expecting %s got %s", expecting, s);
+errAt(got, "Expecting %s got %s", expecting, tokAsString(got));
 }
 
 

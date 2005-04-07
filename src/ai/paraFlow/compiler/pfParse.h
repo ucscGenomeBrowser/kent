@@ -181,6 +181,10 @@ void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
 	enum pfParseType newType);
 /* Convert type of pp and any children that are of oldType to newType */
 
+struct pfParse *pfSingleTuple(struct pfParse *parent, struct pfToken *tok, 
+	struct pfParse *single);
+/* Wrap tuple around single and return it.  . */
+
 void pfParseDump(struct pfParse *pp, int level, FILE *f);
 /* Write out pp (and it's children) to file at given level of indent */
 

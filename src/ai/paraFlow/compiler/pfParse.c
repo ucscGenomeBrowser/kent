@@ -385,11 +385,13 @@ struct pfParse *emptyStatement(struct pfParse *parent, struct pfToken *tok,
 return pfParseNew(pptNop, tok, parent, scope);
 }
 
-struct pfParse *singleTuple(struct pfParse *parent, struct pfToken *tok, struct pfParse *single)
-/* Wrap tuple around single. */
+struct pfParse *pfSingleTuple(struct pfParse *parent, struct pfToken *tok, 
+	struct pfParse *single)
+/* Wrap tuple around single and return it.  . */
 {
 struct pfParse *tuple = pfParseNew(pptTuple, tok, parent, parent->scope);
 tuple->children = single;
+tuple->next = single->next;
 single->parent = tuple;
 single->next = NULL;
 return tuple;
@@ -595,9 +597,16 @@ switch (tok->type)
         {
 	struct pfToken *startTok = tok;
 	tok = tok->next;
-	pp = pfParseExpression(parent, &tok, scope);
-	if (tok->type != ')')
-	    errAt(tok, "Unclosed parenthesis.");
+	if (tok->type == ')')
+	    {
+	    pp = emptyTuple(parent, tok, scope);
+	    }
+	else
+	    {
+	    pp = pfParseExpression(parent, &tok, scope);
+	    if (tok->type != ')')
+		errAt(tok, "Unclosed parenthesis.");
+	    }
 	tok = tok->next;
 	break;
 	}
@@ -628,7 +637,7 @@ if (tok->type == '(')
 	parameters = pfParseExpression(pp, &tok, scope);
 	if (parameters->type != pptTuple)
 	    {
-	    struct pfParse *tuple = singleTuple(pp, tok, parameters);
+	    struct pfParse *tuple = pfSingleTuple(pp, tok, parameters);
 	    parameters->parent = tuple;
 	    parameters = tuple;
 	    }
@@ -1052,7 +1061,7 @@ else
     {
     input = pfParseExpression(pp, &tok, scope);
     if (input->type != pptTuple)
-	input = singleTuple(pp, tok, input);
+	input = pfSingleTuple(pp, tok, input);
     if (tok->type != ')')
 	expectingGot(")", tok);
     tok = tok->next;
@@ -1062,7 +1071,7 @@ if (tok->type == pftInto)
     tok = tok->next;
     output = pfParseExpression(pp, &tok, scope);
     if (output->type != pptTuple)
-	output = singleTuple(pp, tok, output);
+	output = pfSingleTuple(pp, tok, output);
     }
 else
     output = emptyTuple(pp, tok, scope);
