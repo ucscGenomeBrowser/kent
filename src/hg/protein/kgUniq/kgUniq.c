@@ -9,7 +9,7 @@ char line[500];
 char line2[500];
 char newInfo[500], oldInfo[500];
 char *oldMrnaStr, *oldProteinStr, *oldAlignStr;
-char *mrnaStr, *proteinStr, *alignStr;
+char *mrnaStr, *proteinStr;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,25 +17,30 @@ void usage()
 errAbort(
   "kgUniq - Pick a unique protein among multiple candidates with identical CDS structure\n"
   "usage:\n"
-  "   kgUniq tempDb infile outfile\n"
+  "	kgUniq tempDb infile outfile\n"
   "      tempDb  is the temp DB name for KG build\n"
   "      infile  is the input  file name\n"
   "      outfile is the output file name\n"
+  "      dupOutfile is the output file name for duplicates\n"
   "example:\n"
-  "   kgUniq kgMm6ATemp kgSorted.tab kg.gp\n");
+  "   kgUniq kgMm6ATemp sp050315 kgSorted.tab knownGene.gp dupSpMrna.tab\n");
 }
     
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn2;
+struct sqlConnection *conn, *conn2;
 struct sqlResult *sr2;
 char query2[256];
 char **row2;
-    
-char *proteinID;
+char condStr[255];
+
+char *uniProtDb;
 char *score;
 FILE *outf;
-char *name, *chrom, *cdsStart, *cdsEnd;
+FILE *dupOutf;
+char *chrom, *cdsStart, *cdsEnd;
+char *displayID;
+char *oldDisplayID;
 
 char *chp0, *chp, *chp1;
 int  i;
@@ -43,16 +48,20 @@ int  i;
 int  isDuplicate;
     
 char *kgTempDb;
-char *infileName, *outfileName;
+char *infileName, *outfileName, *dupOutfileName;
 
-if (argc != 4) usage();
+if (argc != 6) usage();
     
 kgTempDb    = argv[1];
-infileName  = argv[2];
-outfileName = argv[3];
+uniProtDb  = argv[2];
+infileName  = argv[3];
+outfileName = argv[4];
+dupOutfileName = argv[5];
   
-inf  = mustOpen(infileName, "r");
-outf = mustOpen(outfileName, "w");
+inf     = mustOpen(infileName, "r");
+outf    = mustOpen(outfileName, "w");
+dupOutf = mustOpen(dupOutfileName, "w");
+conn    = hAllocConn();
 conn2= hAllocConn();
 
 strcpy(oldInfo, "");
@@ -61,10 +70,10 @@ isDuplicate   = 0;
 oldMrnaStr    = cloneString("");
 oldAlignStr   = cloneString("");
 oldProteinStr = cloneString("");
+oldDisplayID  = cloneString("");
 
 mrnaStr       = cloneString("");
 proteinStr    = cloneString("");
-alignStr      = cloneString("");
 
 while (fgets(line_in, 500, inf) != NULL)
     {
@@ -73,7 +82,7 @@ while (fgets(line_in, 500, inf) != NULL)
 
     chp = strstr(line, "\t");	
     *chp = '\0';
-    name = strdup(line);
+    mrnaStr = strdup(line);
     
     chp ++;
     chp1 = chp;
@@ -105,12 +114,26 @@ while (fgets(line_in, 500, inf) != NULL)
     chp1 = chp;
     chp  = strstr(chp, "\n");	
     *chp = '\0';
-    proteinID = strdup(chp1);
+    proteinStr= strdup(chp1);
     
     strcpy(newInfo, line2);
     if (sameString(oldInfo, newInfo))
 	{
 	isDuplicate = 1;
+ 	safef(condStr, sizeof(condStr), "acc='%s'", proteinStr);
+        displayID = sqlGetField(conn, uniProtDb, "displayId", "val", condStr);	
+	if (displayID == NULL) 
+	    {
+	    printf("!!! %s not found\n", proteinStr);fflush(stdout);
+	    }
+ 	safef(condStr, sizeof(condStr), "acc='%s'", oldProteinStr);
+        oldDisplayID = sqlGetField(conn, uniProtDb, "displayId", "val", condStr);	
+	if (oldDisplayID == NULL) 
+	    {
+	    printf("!!! %s not found\n", oldProteinStr);fflush(stdout);
+	    }
+	fprintf(dupOutf, 
+		"%s\t%s\t%s\t%s\n", oldMrnaStr, oldDisplayID, mrnaStr, displayID);fflush(stdout);
 	}
     else
 	{
@@ -119,20 +142,31 @@ while (fgets(line_in, 500, inf) != NULL)
 	    {
 	    oldMrnaStr 	  = mrnaStr;
 	    oldProteinStr = proteinStr;
-	    oldAlignStr	  = alignStr;
 	    }
 	strcpy(oldInfo, newInfo);
 	isDuplicate = 0;
 
 	safef(query2, sizeof(query2), 
-	      "select * from %s.kgTemp2 where name='%s' and proteinID='%s' and chrom='%s' and cdsStart='%s' and cdsEnd='%s'", 
-	      kgTempDb, name, proteinID, chrom, cdsStart, cdsEnd);
+	      "select * from %s.kgCandidate2 where name='%s' and proteinID='%s' and chrom='%s' and cdsStart='%s' and cdsEnd='%s'", 
+	      kgTempDb, mrnaStr, proteinStr, chrom, cdsStart, cdsEnd);
 	sr2 = sqlMustGetResult(conn2, query2);
     	row2 = sqlNextRow(sr2);
     	while (row2 != NULL)
 	    {
-	    for (i=0; i<11; i++) fprintf(outf, "%s\t", row2[i]);
-	    fprintf(outf, "%s\n", row2[11]);fflush(stdout);
+	    for (i=0; i<10; i++) fprintf(outf, "%s\t", row2[i]);
+	    if (!sameWord(proteinStr, row2[10]))
+	    	{
+		printf("\n??? %s\t%s\n", proteinStr, row2[10]);fflush(stdout);
+		}
+		
+ 	    safef(condStr, sizeof(condStr), "acc='%s'", proteinStr);
+            displayID = sqlGetField(conn, uniProtDb, "displayId", "val", condStr);	
+	    if (displayID == NULL) 
+	    	{
+		printf("!!! %s not found\n", proteinStr);fflush(stdout);
+		}
+	    fprintf(outf, "%s\t", displayID);
+	    fprintf(outf, "%s\n", row2[11]);
 	    row2 = sqlNextRow(sr2);
 	    }
 	sqlFreeResult(&sr2);
@@ -140,6 +174,7 @@ while (fgets(line_in, 500, inf) != NULL)
     }
 fclose(inf);
 fclose(outf);
+fclose(dupOutf);
 return(0);
 }
 
