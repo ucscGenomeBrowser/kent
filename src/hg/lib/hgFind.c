@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.161 2005/04/04 23:53:56 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.162 2005/04/07 16:20:29 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2033,6 +2033,30 @@ return(xrefList);
 }
 
 
+int vatruncatef(char *buf, int size, char *format, va_list args)
+/* Like vasafef, but truncates the formatted string instead of barfing on 
+ * overflow. */
+{
+char *truncStr = " [truncated]";
+int sz = vsnprintf(buf, size, format, args);
+/* note that some version return -1 if too small */
+if ((sz < 0) || (sz >= size))
+    strncpy(buf + size - 1 - strlen(truncStr), truncStr, strlen(truncStr));
+buf[size-1] = 0;
+return sz;
+}
+
+void truncatef(char *buf, int size, char *format, ...)
+/* Like safef, but truncates the formatted string instead of barfing on 
+ * overflow. */
+{
+int sz;
+va_list args;
+va_start(args, format);
+sz = vatruncatef(buf, size, format, args);
+va_end(args);
+}
+
 static boolean doQuery(struct hgFindSpec *hfs, char *xrefTerm, char *term,
 		       struct hgPositions *hgp,
 		       boolean relativeFlag, int relStart, int relEnd,
@@ -2060,7 +2084,7 @@ if (isEmpty(term))
     return(FALSE);
 
 if (isNotEmpty(hfs->searchDescription))
-    safef(buf, sizeof(buf), "%s", hfs->searchDescription);
+    truncatef(buf, sizeof(buf), hfs->searchDescription);
 else
     safef(buf, sizeof(buf), "%s", hfs->searchTable);
 description = cloneString(buf);
@@ -2089,7 +2113,7 @@ for (tPtr = tableList;  tPtr != NULL;  tPtr = tPtr->next)
 	pos->chromStart = atoi(row[1]);
 	pos->chromEnd = atoi(row[2]);
 	if (isNotEmpty(xrefTerm))
-	    safef(buf, sizeof(buf), "%s", xrefTerm);
+	    truncatef(buf, sizeof(buf), xrefTerm);
 	else
 	    safef(buf, sizeof(buf), "%s%s",
 		  termPrefix ? termPrefix : "", row[3]);
