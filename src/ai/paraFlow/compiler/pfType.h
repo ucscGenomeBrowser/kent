@@ -21,8 +21,10 @@ struct pfBaseType
     char *name;			/* Type name.  Allocated in hash. */
     struct pfScope *scope;	/* The scope this class lives in */
     bool isCollection;		/* TRUE if it's a collection type */
+    bool isClass;		/* TRUE if it's a class */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
+    struct pfType *fieldTuple;	/* Tuple that contains fields. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 

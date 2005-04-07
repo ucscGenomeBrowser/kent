@@ -1420,10 +1420,12 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
 	}
     if (tok->type == pftClass)
 	{
+	struct pfBaseType *base;
 	tok = tok->next;
 	if (tok->type != pftName)
 	    expectingGot("class name", tok);
-	pfScopeAddType(scope, tok->val.s, FALSE, NULL);
+	base = pfScopeAddType(scope, tok->val.s, FALSE, NULL);
+	base->isClass = TRUE;
 	}
     }
 }

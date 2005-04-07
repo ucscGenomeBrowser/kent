@@ -248,8 +248,7 @@ static void coerceTupleToCollection(struct pfCompile *pfc,
 /* Given a type that is a collection, and a parse tree that
  * is a tuple, do any casting required inside the tuple
  * to get the members of the tuple to be of the same type
- * as the collection elements.  Then put in a castTupleToCollection
- * node in the tree. */
+ * as the collection elements.  */
 {
 struct pfParse *tuple = *pPp;
 struct pfType *elType;
@@ -274,6 +273,28 @@ pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
 }
 
+static void coerceTupleToClass(struct pfCompile *pfc, 
+	struct pfParse **pPp, struct pfType *type)
+/* Given a type that is a class, and a parse tree that
+ * is a tuple, do any casting required inside the tuple
+ * to get the members of the tuple to be of the same type
+ * as the corresponding members of the class. */
+{
+struct pfParse *tuple = *pPp;
+struct pfType *field;
+struct pfParse **pos;
+
+pos = &tuple->children;
+for (field = type->base->fields; field != NULL; field = field->next)
+    {
+    if (*pos == NULL)
+	break;
+    coerceOne(pfc, pos, field);
+    pos = &(*pos)->next;
+    }
+pfTypeOnTuple(pfc, tuple);
+}
+
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type)
 /* Make sure that a single variable is of the required type.  
@@ -285,7 +306,7 @@ struct pfBaseType *base;
 if (pt == NULL)
     internalErrAt(pp->tok);
 base = type->base;
-uglyf("coerceOne to %s\n", type->base->name);
+// uglyf("coerceOne to %s\n", type->base->name);
 if (pp->type == pptConstUse)
     {
     if (base == pfc->bitType)
@@ -324,14 +345,23 @@ if (pp->type == pptConstUse)
 	}
     else if (base->isCollection)
 	{
-	struct pfParse *tuple;
 	coerceOne(pfc, pPp, type->children);
 	insertCast(pptUniformTuple, NULL, pPp);
 	pfTypeOnTuple(pfc, *pPp);
 	return;
 	}
+    else if (base->isClass )
+        {
+	if (slCount(base->fields) != 1)
+	    errAt(pp->tok, "Missing fields in object initialization");
+	coerceOne(pfc, pPp, base->fields);
+	insertCast(pptTuple, NULL, pPp);
+	pfTypeOnTuple(pfc, *pPp);
+	}
     else
-	internalErrAt(pp->tok);
+	{
+	errAt(pp->tok, "Misplaced constant");
+	}
     if (pp->type == pptConstString)
 	{
 	if (pp->tok->type != pftString)
@@ -357,7 +387,7 @@ if (pp->type == pptConstUse)
 else if (pt->base != base)
     {
     boolean ok = FALSE;
-    uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
+    // uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->varType);
@@ -384,6 +414,16 @@ else if (pt->base != base)
 	    pfTypeOnTuple(pfc, *pPp);
 	    }
 	coerceTupleToCollection(pfc, pPp, type);
+	ok = TRUE;
+	}
+    else if (base->isClass)
+        {
+	if (!pt->isTuple)
+	    {
+	    insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
+	    pfTypeOnTuple(pfc, *pPp);
+	    }
+	coerceTupleToClass(pfc, pPp, type);
 	ok = TRUE;
 	}
     else if (pt->isTuple)
@@ -613,6 +653,7 @@ static void blessClass(struct pfCompile *pfc, struct pfParse *pp)
 struct pfParse *compound = pp->children->next;
 struct pfParse *p, **p2p;
 struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
+struct pfType *ty;
 
 if (base == NULL)
     internalErrAt(pp->tok);
@@ -649,7 +690,9 @@ for (p = compound->children; p != NULL; p = p->next)
     }
 slReverse(&base->methods);
 slReverse(&base->fields);
-uglyf("Got %d methods, %d fields in %s\n", slCount(base->methods), slCount(base->fields), base->name);
+base->fieldTuple = pfTypeNew(pfc->tupleType);
+base->fieldTuple->children = base->fields;
+// uglyf("Got %d methods, %d fields in %s\n", slCount(base->methods), slCount(base->fields), base->name);
 }
 
 static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
