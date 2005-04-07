@@ -335,6 +335,16 @@ pred dm1.blastFBPep00
 blastRef dm1.blastFBRef00
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
+track rmsk
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 149.1
+visibility dense
+spectrum on
+type rmsk
+canPack off
+
 searchTable bdgpGene
 searchMethod exact
 termRegex CG[0-9]+-R.
