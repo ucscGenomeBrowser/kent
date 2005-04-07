@@ -554,15 +554,6 @@ pred dm1.blastFBPep00
 blastRef dm1.blastFBRef00
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
-track encodeSangerGencode
-shortLabel Gene/Havana
-longLabel Gencode annotations - Sanger Havana group predictions
-group encode
-priority 113
-visibility hide
-color 170,100,0
-type genePred
-
 searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
