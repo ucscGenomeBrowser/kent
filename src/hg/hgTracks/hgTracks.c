@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.942 2005/04/06 21:44:51 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.943 2005/04/07 21:39:29 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2444,11 +2444,13 @@ slReverse(&sfList);
 return sfList;
 }
         
-struct linkedFeatures *connectedLfFromGenePredInRange(
+
+struct linkedFeatures *connectedLfFromGenePredInRangeExtra(
         struct track *tg, struct sqlConnection *conn, char *table, 
-	char *chrom, int start, int end)
+	char *chrom, int start, int end, boolean extra)
 /* Return linked features from range of a gene prediction table after 
- * we have already connected to database. */
+ * we have already connected to database. Optinally Set lf extra to 
+ * gene pred name2, to display gene name instead of transcript ID.*/
 {
 struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
@@ -2468,6 +2470,8 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     AllocVar(lf);
     lf->grayIx = grayIx;
     strncpy(lf->name, gp->name, sizeof(lf->name));
+    if (extra && gp->name2)
+        lf->extra = cloneString(gp->name2);
     lf->orientation = orientFromChar(gp->strand[0]);
 
     if (drawOptionNum>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
@@ -2499,6 +2503,16 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
 slReverse(&lfList);
 genePredReaderFree(&gpr);
 return lfList;
+}
+
+struct linkedFeatures *connectedLfFromGenePredInRange(
+        struct track *tg, struct sqlConnection *conn, char *table, 
+	char *chrom, int start, int end)
+/* Return linked features from range of a gene prediction table after 
+ * we have already connected to database. */
+{
+return connectedLfFromGenePredInRangeExtra(tg, conn, table, chrom, 
+                                                start, end, FALSE);
 }
 
 struct linkedFeatures *lfFromGenePredInRange(struct track *tg, char *table, 
@@ -3075,6 +3089,16 @@ if (hTableExists("refLink"))
         name = NULL;
     }
 return name;
+}
+
+char *gencodeGeneName(struct track *tg, void *item)
+/* Get name to use for Gencode gene item. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL) 
+    return lf->extra;
+else 
+    return lf->name;
 }
 
 char *refGeneName(struct track *tg, void *item)
@@ -8573,6 +8597,18 @@ tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 filterItems(tg, genePredClassFilter, "include");
 }
 
+void loadGenePredWithName2(struct track *tg)
+/* Convert bed info in window to linked feature. Include alternate name
+ * in "extra" field (usually gene name)*/
+{
+struct sqlConnection *conn = hAllocConn();
+tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->mapName,
+                                        chromName, winStart, winEnd, TRUE);
+hFreeConn(&conn);
+/* filter items on selected criteria if filter is available */
+filterItems(tg, genePredClassFilter, "include");
+}
+
 Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a genePred in based on looking it up in a itemAttr
  * table. */
@@ -8671,7 +8707,7 @@ linkedFeaturesMethods(tg);
 tg->loadItems = loadGenePred;
 }
 
-Color colorGencodeIntron(struct track *tg, void *item, struct vGfx *vg)
+Color gencodeIntronColorItem(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of ENCODE gencode intron track item.
  * Use recommended color palette pantone colors (level 4) for red, green, blue*/
 {
@@ -8690,8 +8726,8 @@ if (sameString(intron->status, "RT_submitted"))
 return vgFindColorIx(vg, 214,214,216);       /* light grey */
 }
 
-static void loadGencodeIntron(struct track *tg)
-/* Load up simple diffs from database table to track items. */
+static void gencodeIntronLoadItems(struct track *tg)
+/* Load up track items. */
 {
 bedLoadItem(tg, tg->mapName, (ItemLoader)gencodeIntronLoad);
 }
@@ -8699,8 +8735,15 @@ bedLoadItem(tg, tg->mapName, (ItemLoader)gencodeIntronLoad);
 static void gencodeIntronMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode intron validation track */
 {
-tg->loadItems = loadGencodeIntron;
-tg->itemColor = colorGencodeIntron;
+tg->loadItems = gencodeIntronLoadItems;
+tg->itemColor = gencodeIntronColorItem;
+}
+
+static void gencodeGeneMethods(struct track *tg)
+/* Load up custom methods for ENCODE Gencode gene track */
+{
+tg->loadItems = loadGenePredWithName2;
+tg->itemName = gencodeGeneName;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
@@ -9664,6 +9707,7 @@ registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
