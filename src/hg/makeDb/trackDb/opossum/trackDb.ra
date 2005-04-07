@@ -31,7 +31,7 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel $o_Organism Net
+shortLabel Mm6 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.35
