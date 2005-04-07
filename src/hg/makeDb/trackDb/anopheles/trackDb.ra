@@ -63,3 +63,13 @@ altColor 255,240,200
 spectrum on
 type chain dm1
 otherDb dm1
+
+track rmsk
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 149.1
+visibility dense
+spectrum on
+type rmsk
+canPack off

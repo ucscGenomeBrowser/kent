@@ -1,3 +1,13 @@
+track rmsk
+shortLabel RepeatMasker
+longLabel Repeating Elements by RepeatMasker
+group varRep
+priority 149.1
+visibility dense
+spectrum on
+type rmsk
+canPack off
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
