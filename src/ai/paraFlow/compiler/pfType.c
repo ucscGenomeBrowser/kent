@@ -94,10 +94,13 @@ else
     }
 }
 
-static void typeMismatch(struct pfParse *pp)
+static void typeMismatch(struct pfParse *pp, struct pfType *type)
 /* Complain about type mismatch at node. */
 {
-errAt(pp->tok, "type mismatch");
+if (pp->name)
+    errAt(pp->tok, "Type mismatch:  %s not %s.", pp->name, type->base->name);
+else
+    errAt(pp->tok, "Type mismatch: expecting %s.", type->base->name);
 }
 
 static int baseTypeLogicalSize(struct pfCompile *pfc, struct pfBaseType *base)
@@ -444,7 +447,7 @@ else if (pt->base != base)
 	}
     if (!ok)
 	{
-	typeMismatch(pp);
+	typeMismatch(pp, type);
 	}
     }
 else if (base == pfc->keyValType)
