@@ -235,8 +235,7 @@ static void coerceCall(struct pfCompile *pfc, struct pfParse *pp)
 {
 struct pfParse *function = pp->children;
 struct pfParse *paramTuple = function->next;
-struct pfVar *functionVar = function->var;
-struct pfType *functionType = functionVar->ty;
+struct pfType *functionType = function->ty;
 struct pfType *inputType = functionType->children;
 struct pfType *outputType = inputType->next;
 coerceTuple(pfc, paramTuple, inputType);
@@ -487,6 +486,7 @@ switch (pp->type)
     {
     case pptVarInit:
     case pptVarUse:
+    case pptDot:
         return pp->ty;
     case pptTuple:
 	{
@@ -714,6 +714,11 @@ static struct pfType *findField(struct pfType *class, char *name)
 /* Find named field in class or return NULL */
 {
 struct pfType *field;
+for (field = class->base->methods; field != NULL; field = field->next)
+    {
+    if (sameString(name, field->fieldName))
+        return field;
+    }
 for (field = class->base->fields; field != NULL; field = field->next)
     {
     if (sameString(name, field->fieldName))
@@ -729,6 +734,7 @@ struct pfParse *varUse = pp->children;
 struct pfParse *fieldUse;
 struct pfVar *var = varUse->var;
 struct pfType *type = var->ty;
+
 if (!type->base->isClass)
     errAt(pp->tok, "dot after non-class variable");
     
