@@ -476,6 +476,64 @@ exit; # don't actually run this like a script :)
     # Rebuild indices with "analyze table".
     hgsql bosTau1 -e 'analyze table gold; analyze table gap;'
 
+# QUALITY TRACK (DONE April 2005 Heather)
+# The challenge was a sorting problem.
+# The quality file from Baylor was ordered by contig.
+# We need quality data by scaffold.
+# Solution was to load quality data into database,
+# then extract it by scaffold.
+    ssh kolossus
+    cd /cluster/data/bosTau1/bed
+    mkdir quality
+    cd quality
+
+    # load quality data into database table
+    hgsql mysql -e 'create database bosTau1;'
+    hgsql bosTau1 < contigQuality.sql
+    source javaenv
+    # took about 2 hours to load
+    /usr/java/jdk1.5.0_01/bin/java LoadQuality ../../downloads/contigs/Btau20040927-freeze-contigs.fa.qual \
+      > LoadQuality.log.mar9
+
+    # transfer gold table from hgwdev to kolossus
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/quality
+    hgsqldump bosTau1 gold > gold.dump
+    ssh kolossus
+    hgsql bosTau1 < gold.dump
+
+    # read 
+    # run a test case
+    hgsql bosTaul < goldClean.dump
+    /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 goldClean > goldClean.run
+
+    # run for real; took about 7 hours (3pm - 10pm)
+    /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 gold > gold.run
+
+    # check
+    grep fixedStep gold.run > fixedStep.out
+
+    # wigEncode (actually copied data to eieio; no logins to kksilo; copied back to kksilo)
+    # took about 20 minutes
+    wigEncode gold.run quality.wig quality.wib
+
+    # load
+    # took about 10 minutes
+    ssh hgwdev
+    ln -s /cluster/data/bosTau1/bed/quality/quality.wib /gbdb/bosTau1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 quality quality.wig
+
+    # Connected to database bosTau1 for track quality
+    # Creating table definition with 13 columns in bosTau1.quality
+    # Saving wiggle.tab
+    # WARNING: Exceeded SCAFFOLD195025 size 51200 > 50221. dropping 980 data point(s)
+    # WARNING: Exceeded SCAFFOLD195025 size 51416 > 50221. dropping 1196 data point(s)
+    # WARNING: Exceeded SCAFFOLD215637 size 11264 > 10768. dropping 497 data point(s)
+    # WARNING: Exceeded SCAFFOLD215637 size 12288 > 10768. dropping 1521 data point(s)
+    # WARNING: Exceeded SCAFFOLD215637 size 13159 > 10768. dropping 2392 data point(s)
+    # Loading bosTau1
+
+
 
 # GENSCAN (DONE Nov. 17, 2004 Heather)
   # uses hard-masked sequence files
