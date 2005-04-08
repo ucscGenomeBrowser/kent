@@ -7,7 +7,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.2 2005/04/06 18:47:10 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.3 2005/04/08 21:18:26 braney Exp $";
 
 int redCount;
 int blackCount;
@@ -77,7 +77,6 @@ while((maf = mafNext(mf)) != NULL)
 	    blockStatus->strand = '+';
 	    blockStatus->species = species;
 	    blockStatus->masterStart = masterMc->start;
-	//    blockStatus->chrom = cloneString(chrom);
 	    hashAdd(statusHash, species, blockStatus);
 	    }
 	}
@@ -89,11 +88,13 @@ while((maf = mafNext(mf)) != NULL)
 	
 	if ((mc = mafMayFindCompPrefix(maf, species,NULL)) == NULL)
 	    {
-	    //printf("not found %s\n",species);
 	    continue;
 	    }
+	species = cloneString(mc->src);
 
-	//printf("species %s \n",species);
+	if (chrom = strchr(species, '.'))
+	    *chrom++ = 0;
+
 	if ((blockStatus->chrom == NULL) || !sameString(chrom, blockStatus->chrom))
 	    {
 	    if (blockStatus->mc)
@@ -103,29 +104,30 @@ while((maf = mafNext(mf)) != NULL)
 		}
 	    mc->leftStatus = MAF_NEW_STATUS;
 	    mc->leftLen = mc->start;
-	    //printf("newBefore %s\n",chrom);
 	    }
 	else
 	    {
 
-	    if (blockStatus->end > mc->start)
+	    if (blockStatus->strand != mc->strand)
+		{
+		blockStatus->mc->rightStatus = mc->leftStatus = MAF_INVERSE_STATUS;
+		blockStatus->mc->rightLen = mc->leftLen = blockStatus->end - mc->start;
+		}
+	    else if (blockStatus->end > mc->start)
 		{
 		blockStatus->mc->rightStatus = mc->leftStatus = MAF_DUP_STATUS;
 		blockStatus->mc->rightLen = mc->leftLen = blockStatus->end - mc->start;
-		//printf("sameStrand %d ",blockStatus->end - mc->start);
 		}
 	    else if (blockStatus->end < mc->start)
 		{
 		blockStatus->mc->rightStatus = mc->leftStatus = MAF_INSERT_STATUS;
 		blockStatus->mc->rightLen = mc->leftLen = -blockStatus->end + mc->start;
-		//printf("insert %s %d ",mc->src,-blockStatus->end + mc->start);
 		}
 	    else 
 		{
 		blockStatus->mc->rightStatus = mc->leftStatus = MAF_CONTIG_STATUS;
 		}
 	    }
-	///printf("|\n");
 	    
 	blockStatus->mc = mc;
 	blockStatus->start = mc->start;
@@ -133,7 +135,7 @@ while((maf = mafNext(mf)) != NULL)
 	blockStatus->chrom = chrom;
 	blockStatus->strand = mc->strand;
 	if (masterMc->start + masterMc->size <= blockStatus->masterEnd)
-	    printf("bad %d %d\n", masterMc->start + masterMc->size , blockStatus->masterEnd);
+	    ;//printf("bad %d %d\n", masterMc->start + masterMc->size , blockStatus->masterEnd);
 	blockStatus->masterEnd = masterMc->start + masterMc->size ;
 	}
     }
@@ -174,15 +176,16 @@ for(maf = mafList; maf ; maf = maf->next)
 		    {
 		    case MAF_CONTIG_STATUS:
 		    case MAF_INSERT_STATUS:
+		    case MAF_INVERSE_STATUS:
 		    case MAF_DUP_STATUS:
-		    default:
-			//printf("insert i rwo black %c %d\n",blockStatus->mc->rightStatus,blockStatus->mc->rightLen);
 			AllocVar(mc);
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
 			mc->src = blockStatus->mc->src;
 			lastMc->next = mc;
 			lastMc = mc;
+			break;
+		    default:
 			break;
 		    }
 		}
