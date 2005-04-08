@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.162 2005/04/07 16:20:29 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.163 2005/04/08 19:25:07 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -125,6 +125,74 @@ if (range == NULL)
     range = buf;
 sprintf(range, "%s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
 return range;
+}
+
+
+static char *getGrepIndexFile(struct hgFindSpec *hfs)
+/* Return grepIndex setting (may be relative to /gbdb/$db), or 
+ * NULL if the file doesn't exist. */
+{
+char *indexFile = hgFindSpecSetting(hfs, "grepIndex");
+if (indexFile == NULL)
+    return NULL;
+else if (fileExists(indexFile))
+    return cloneString(indexFile);
+else if (! startsWith("/", indexFile))
+    {
+    char absPath[1024];
+    safef(absPath, sizeof(absPath), "/gbdb/%s/%s", hGetDb(), indexFile);
+    if (fileExists(absPath))
+	return cloneString(absPath);
+    }
+return NULL;
+}
+
+static struct slName *doGrepQuery(char *indexFile, char *table, char *key,
+				  char *extraOptions)
+/* grep -i key indexFile, return a list of ids (first word of each line). */
+{
+struct dyString *cmd = newDyString(1024);
+struct slName *idList = NULL;
+struct lineFile *lf = NULL;
+struct tempName tn;
+char *words[2];
+char *keyWords[16];
+/* No need to escape special chars here, it's already been done: */
+/*#*** but might also be a good idea to escape . for grep... ? */
+char *escapedKey = cloneString(key);
+int keyCount = chopLine(escapedKey, keyWords);
+int ret, i;
+
+makeTempName(&tn, "hgFind_grepOut", ".idName");
+if (extraOptions == NULL)
+    extraOptions = "";
+dyStringPrintf(cmd, "grep -i %s %s %s ",
+	       extraOptions, keyWords[0], indexFile);
+for (i=1;  i < keyCount;  i++)
+    dyStringPrintf(cmd, "| grep -i %s %s ", extraOptions, keyWords[i]);
+dyStringPrintf(cmd, "> %s", tn.forCgi);
+verbose(3, "\n***Running this grep command:\n*** %s\n\n", cmd->string);
+ret = system(cmd->string);
+/* grep will return 1 if no results are found, which is fine, but somehow 
+ * system seems to return 256 in that case.  Since I'm not confident that 
+ * I can check the same return codes on all systems, I'll ignore ret and 
+ * leave existence-checking to lineFile: */
+lf = lineFileOpen(tn.forCgi, TRUE);
+while (lineFileRow(lf, words))
+    {
+    struct slName *idEl = slNameNew(words[0]);
+    slAddHead(&idList, idEl);
+    }
+lineFileClose(&lf);
+unlink(tn.forCgi);
+if (verboseLevel() >= 3)
+    {
+    int count = slCount(idList);
+    verbose(3, "*** Got %d results from %s\n\n", count, indexFile);
+    }
+freeMem(escapedKey);
+dyStringFree(&cmd);
+return idList;
 }
 
 
@@ -697,7 +765,7 @@ return ret;
 boolean isRefSeqAcc(char *acc)
 /* Return TRUE if acc looks like a RefSeq acc. */
 {
-return matchRegex(acc, "^(N|X)M_[0-9]{6}$");
+return matchRegex(acc, "^(N|X)M_[0-9]{6}[0-9]*$");
 }
 
 static char *mrnaType(char *acc)
@@ -899,8 +967,75 @@ else
     }
 }
 
-static void findHitsToTables(char *key, char *tables[], int tableCount, 
-                            struct hash **retHash, struct slName **retList)
+static char *getGenbankGrepIndex(struct hgFindSpec *hfs, char *table)
+/* If hfs has a grepIndex setting and we can access the index file for 
+ * table, then return the filename; else return NULL. */
+{
+char *fileName = NULL;
+char *indexPath = hgFindSpecSetting(hfs, "grepIndex");
+
+if (indexPath != NULL)
+    {
+    char buf[1024];
+    safef(buf, sizeof(buf), "%s/%s.idName", indexPath, table);
+    if (fileExists(buf))
+	fileName = cloneString(buf);
+    else if (! startsWith("/", indexPath))
+	{
+	safef(buf, sizeof(buf), "/gbdb/%s/%s/%s.idName", hGetDb(),
+	      indexPath, table);
+	if (fileExists(buf))
+	    return cloneString(buf);
+	}
+    }
+
+return fileName;
+}
+
+static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
+/* grep -i key indexFile, return a list of ids (first word of each line). */
+{
+char *extraOptions = "";
+if (sameString(table, "author"))
+    extraOptions = "-w";
+return doGrepQuery(indexFile, table, key, extraOptions);
+}
+
+static struct slName *genbankSqlFuzzyQuery(struct sqlConnection *conn,
+					   char *table, char *key)
+/* Perform a fuzzy sql search for %key% in table.name; return list of 
+ * corresponding table.id's.  */
+{
+struct slName *idList = NULL, *idEl = NULL;
+struct sqlResult *sr;
+char **row;
+char query[256];
+safef(query, sizeof(query),
+      "select id from %s where name like '%%%s%%'", table, key);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    idEl = newSlName(row[0]);
+    slAddHead(&idList, idEl);
+    }
+sqlFreeResult(&sr);
+return idList;
+}
+
+static boolean gotAllGenbankGrepIndexFiles(struct hgFindSpec *hfs,
+					   char *tables[], int tableCount)
+/* Return TRUE if all tables have a readable genbank index file. */
+{
+int i;
+for (i=0;  i < tableCount;  i++)
+    if (! getGenbankGrepIndex(hfs, tables[i]))
+	return FALSE;
+return TRUE;;
+}
+
+static void findHitsToTables(struct hgFindSpec *hfs,
+			     char *key, char *tables[], int tableCount, 
+			     struct hash **retHash, struct slName **retList)
 /* Return all unique accessions that match any table. */
 {
 struct slName *list = NULL, *el;
@@ -915,6 +1050,7 @@ int i;
 for (i = 0; i<tableCount; ++i)
     {
     struct slName *idList = NULL, *idEl;
+    char *grepIndexFile = NULL;
     
     /* I'm doing this query in two steps in C rather than
      * in one step in SQL just because it somehow is much
@@ -922,20 +1058,17 @@ for (i = 0; i<tableCount; ++i)
     field = tables[i];
     if (!hTableExists(field))
 	continue;
-    sprintf(query, "select id from %s where name like '%%%s%%'", field, key);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	idEl = newSlName(row[0]);
-	slAddHead(&idList, idEl);
-	}
-    sqlFreeResult(&sr);
+    if ((grepIndexFile = getGenbankGrepIndex(hfs, field)) != NULL)
+	idList = genbankGrepQuery(grepIndexFile, field, key);
+    else
+	idList = genbankSqlFuzzyQuery(conn, field, key);
     for (idEl = idList; idEl != NULL; idEl = idEl->next)
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
-	sprintf(query, 
-            "select acc, organism from gbCdnaInfo where %s = %s and type = 'mRNA'",
-                        field, idEl->name);
+	safef(query, sizeof(query),
+	      "select acc, organism from gbCdnaInfo where %s = %s "
+	      " and type = 'mRNA'",
+	      field, idEl->name);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -946,7 +1079,7 @@ for (i = 0; i<tableCount; ++i)
 		{
 		el = newSlName(acc);
                 slAddHead(&list, el);
-                hashAdd(hash, acc, NULL);
+                hashAddInt(hash, acc, organismID);
 		}
 	    }
 	sqlFreeResult(&sr);
@@ -987,55 +1120,42 @@ static void mrnaKeysHtmlOnePos(struct hgPosTable *table, struct hgPos *pos,
 fprintf(f, "%s", pos->description);
 }
 
-static boolean mrnaAligns(struct sqlConnection *conn, char *acc,
-                                char *type, boolean isXeno)
-/* Return TRUE if accession is in the designated alignment table */
+static boolean mrnaAligns(struct sqlConnection *conn, char *table, char *acc)
+/* Return TRUE if accession is in the designated alignment table (for speed,
+ * this assumes that we've already checked that the table exists) */
 {
-char *table;
-char query[256], buf[64];
-
-if (sameWord(type, "EST"))
-    table = isXeno ? "xenoEst" : "all_est";
-else 
-    /* use mrna tables if we can't determine type */
-    table = isXeno ? "xenoMrna" : "all_mrna";
-
+char query[256];
 safef(query, sizeof(query), 
-    "select qName from %s where qName = '%s'", table, acc);
-if (sqlTableExists(conn, table) &&
-    sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-    {
-    return TRUE;
-    }
-return FALSE;
+      "select count(*) from %s where qName = '%s'", table, acc);
+return (sqlQuickNum(conn, query) > 0);
 }
 
 static int addMrnaPositionTable(struct hgPositions *hgp, 
-                                struct slName **pAccList, struct cart *cart,
+                                struct slName **pAccList,
+				struct hash *accOrgHash, struct cart *cart,
                                 struct sqlConnection *conn, char *hgAppName,
                                 boolean aligns, boolean isXeno)
 /* Generate table of positions that match criteria.
  * Add to hgp if any found. Return number found */
 {
-char title[256];
-struct hgPosTable *table;
-struct hgPos *pos;
-struct slName *el;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+struct slName *el = NULL;
 struct slName *elToFree = NULL;
 struct dyString *dy = newDyString(256);
-char **row;
+char **row = NULL;
 char query[256];
 char description[512];
 char product[256];
 char organism[128];
 char *ui = getUiUrl(cart);
 char *acc = NULL;
-boolean isXenoItem;
-char *mrnaType;
 int itemOrganismID;
 int organismID = hOrganismID(hgp->database);   /* id from mrna organism table */
 int alignCount = 0;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
+char *mrnaTable = isXeno ? "xenoMrna" : "all_mrna";
+boolean mrnaTableExists = hTableExistsDb(hgp->database, mrnaTable);
 
 AllocVar(table);
 
@@ -1046,22 +1166,15 @@ for (el = *pAccList; el != NULL; el = el->next)
     {
     freez(&elToFree);
     acc = el->name;
-    if (!mrnaInfo(acc, conn, &mrnaType, &itemOrganismID))
-        {
-        /* bad element -- remove from list */
-        slRemoveEl(pAccList, el);
-        elToFree = el;
-        continue;
-        }
+    itemOrganismID = hashIntVal(accOrgHash, acc);
+
     /* check if item matches xeno criterion */
     if (isXeno == (itemOrganismID == organismID))
         continue;
 
     /* check if item matches alignment criterion */
-    if (aligns != mrnaAligns(conn, acc, mrnaType, isXeno))
-            /* this accession doesn't fit table criteria -- leave it alone */
-            continue;
-
+    if (aligns != (mrnaTableExists && mrnaAligns(conn, mrnaTable, acc)))
+	continue;
 
     /* item fits criteria, so enter in table */
     AllocVar(pos);
@@ -1136,6 +1249,7 @@ alignCount = slCount(table->posList);
 if (alignCount > 0)
     {
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
+    char title[256];
     slReverse(&table->posList);
     safef(title, sizeof(title), "%s%s %sligned mRNA Search Results",
 			isXeno ? "Non-" : "", organism, 
@@ -1150,55 +1264,67 @@ freeDyString(&dy);
 return alignCount;
 }
 
-static boolean findMrnaKeys(char *keys, struct hgPositions *hgp)
-/* Find mRNA that has keyword in one of it's fields. */
+static boolean findMrnaKeys(struct hgFindSpec *hfs,
+			    char *keys, struct hgPositions *hgp)
+/* Find mRNA that has keyword in one of its fields. */
 {
-char *words[32];
-char buf[512];
-int wordCount;
 int alignCount;
 static char *tables[] = {
 	"productName", "geneName",
 	"author", "tissue", "cell", "description", "development", 
 	};
-struct hash *oneKeyHash = NULL;
-struct slName *oneKeyList = NULL;
 struct hash *allKeysHash = NULL;
 struct slName *allKeysList = NULL;
-struct hash *andedHash = NULL;
-struct slName *andedList = NULL;
 struct sqlConnection *conn = hAllocConn();
-int i;
 boolean found = FALSE;
 
-strncpy(buf, keys, sizeof(buf));
-wordCount = chopLine(buf, words);
-if (wordCount == 0)
-    return FALSE;
-found = TRUE;
-for (i=0; i<wordCount; ++i)
+/* If we can use grep to search all tables, then use piped grep to 
+ * implement implicit "AND" of multiple keys. */
+if (gotAllGenbankGrepIndexFiles(hfs, tables, ArraySize(tables)))
     {
-    findHitsToTables(words[i], tables, ArraySize(tables),
-		     &oneKeyHash, &oneKeyList);
-    if (allKeysHash == NULL)
-        {
-	allKeysHash = oneKeyHash;
-	oneKeyHash = NULL;
-	allKeysList = oneKeyList;
-	oneKeyList = NULL;
-	}
-    else
-        {
-	andHits(oneKeyHash, oneKeyList, allKeysHash, allKeysList,
-		&andedHash, &andedList);
-	freeHash(&oneKeyHash);
-	slFreeList(&oneKeyList);
-	freeHash(&allKeysHash);
-	slFreeList(&allKeysList);
-	allKeysHash = andedHash;
-	andedHash = NULL;
-	allKeysList = andedList;
-	andedList = NULL;
+    findHitsToTables(hfs, keys, tables, ArraySize(tables),
+		     &allKeysHash, &allKeysList);
+    }
+else
+    {
+    struct hash *oneKeyHash = NULL;
+    struct slName *oneKeyList = NULL;
+    struct hash *andedHash = NULL;
+    struct slName *andedList = NULL;
+    char *words[32];
+    char buf[512];
+    int wordCount;
+    int i;
+    strncpy(buf, keys, sizeof(buf));
+    buf[sizeof(buf)-1] = 0;
+    wordCount = chopLine(buf, words);
+    if (wordCount == 0)
+	return FALSE;
+    found = TRUE;
+    for (i=0; i<wordCount; ++i)
+	{
+	findHitsToTables(hfs, words[i], tables, ArraySize(tables),
+			 &oneKeyHash, &oneKeyList);
+	if (allKeysHash == NULL)
+	    {
+	    allKeysHash = oneKeyHash;
+	    oneKeyHash = NULL;
+	    allKeysList = oneKeyList;
+	    oneKeyList = NULL;
+	    }
+	else
+	    {
+	    andHits(oneKeyHash, oneKeyList, allKeysHash, allKeysList,
+		    &andedHash, &andedList);
+	    freeHash(&oneKeyHash);
+	    slFreeList(&oneKeyList);
+	    freeHash(&allKeysHash);
+	    slFreeList(&allKeysList);
+	    allKeysHash = andedHash;
+	    andedHash = NULL;
+	    allKeysList = andedList;
+	    andedList = NULL;
+	    }
 	}
     }
 if (allKeysList == NULL)
@@ -1206,17 +1332,20 @@ if (allKeysList == NULL)
 
 /* generate position lists and add to hgp */
 /* organism aligning */
-alignCount = addMrnaPositionTable(hgp, &allKeysList, cart, conn, hgAppName,
-				  TRUE, FALSE);
+alignCount = addMrnaPositionTable(hgp, &allKeysList, allKeysHash, cart, conn,
+				  hgAppName, TRUE, FALSE);
 /* organism non-aligning */
-addMrnaPositionTable(hgp, &allKeysList, cart, conn, hgAppName, FALSE, FALSE);
+addMrnaPositionTable(hgp, &allKeysList, allKeysHash, cart, conn,
+		     hgAppName, FALSE, FALSE);
 /* xeno aligning */
 /* NOTE: to suppress display of xeno mrna's in non-model organisms
  * (RT 801 and 687), uncommented the following...
 /* add to display list only if there is a scarcity of items
  * already listed as aligning (low number of own mRna's for this organism) */
 if (alignCount < 20)
-    addMrnaPositionTable(hgp, &allKeysList, cart, conn, hgAppName, TRUE, TRUE);
+    addMrnaPositionTable(hgp, &allKeysList, allKeysHash, cart, conn,
+			 hgAppName, TRUE, TRUE);
+hashFree(&allKeysHash);
 hFreeConn(&conn);
 return(found);
 }
@@ -1429,7 +1558,31 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-static boolean findRefGenes(char *refGene, char *spec, struct hgPositions *hgp)
+static void addRefLinkAccs(struct sqlConnection *conn, struct slName *accList,
+			   struct refLink **pList)
+/* Query database and add returned refLinks to head of list. */
+{
+struct slName *accEl = NULL;
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char query[256];
+
+for (accEl = accList;  accEl != NULL;  accEl = accEl->next)
+    {
+    safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'",
+	  accEl->name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct refLink *rl = refLinkLoad(row);
+	slAddHead(pList, rl);
+	}
+    sqlFreeResult(&sr);
+    }
+}
+
+static boolean findRefGenes(struct hgFindSpec *hfs, char *spec,
+			    struct hgPositions *hgp)
 /* Look up refSeq genes in table. */
 {
 struct sqlConnection *conn = hAllocConn();
@@ -1438,7 +1591,7 @@ struct dyString *ds = newDyString(256);
 char **row;
 boolean gotOne = FALSE;
 struct refLink *rlList = NULL, *rl;
-boolean gotRefLink = sqlTableExists(conn, "refLink");
+boolean gotRefLink = hTableExists("refLink");
 boolean found = FALSE;
 
 if (gotRefLink)
@@ -1464,13 +1617,23 @@ if (gotRefLink)
 	}
     else 
 	{
+	char *indexFile = getGrepIndexFile(hfs);
 	dyStringPrintf(ds, "select * from refLink where name like '%s%%'",
 		       spec);
 	addRefLinks(conn, ds, &rlList);
-	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
-		       spec);
-	addRefLinks(conn, ds, &rlList);
+	if (indexFile != NULL)
+	    {
+	    struct slName *accList = doGrepQuery(indexFile, "refLink", spec,
+						 NULL);
+	    addRefLinkAccs(conn, accList, &rlList);
+	    }
+	else
+	    {
+	    dyStringClear(ds);
+	    dyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
+			   spec);
+	    addRefLinks(conn, ds, &rlList);
+	    }
 	}
     }
 if (rlList != NULL)
@@ -1489,7 +1652,7 @@ if (rlList != NULL)
         hashAdd(hash, rl->mrnaAcc, rl);
 	dyStringClear(ds);
 	dyStringPrintf(ds, "select * from %s where name = '%s'",
-		       refGene, rl->mrnaAcc);
+		       hfs->searchTable, rl->mrnaAcc);
 	sr = sqlGetResult(conn, ds->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
@@ -1500,8 +1663,8 @@ if (rlList != NULL)
 		{
 		char desc[256];
 		AllocVar(table);
-		table->name = cloneString(refGene);
-		if (startsWith("xeno", refGene))
+		table->name = cloneString(hfs->searchTable);
+		if (startsWith("xeno", hfs->searchTable))
 		    safef(desc, sizeof(desc), "Non-%s RefSeq Genes",
 			  hOrganism(hGetDb()));
 		else
@@ -1793,6 +1956,7 @@ if (useWeb)
 
 for (table = hgp->tableList; table != NULL; table = table->next)
     {
+    char *vis = hTrackOpenVis(table->name);
     if (table->posList != NULL)
 	{
 	boolean excludeTable = FALSE;
@@ -1813,7 +1977,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
 		fprintf(f, "%s&%s=%s&hgFind.matches=%s,\">%s at %s</A>",
-			extraCgi, table->name, hTrackOpenVis(table->name),
+			extraCgi, table->name, vis,
 			matches, pos->name, range);
 		desc = pos->description;
 		if (desc)
@@ -1960,7 +2124,7 @@ if (sameString(hfs->searchType, "knownGene"))
     }
 else if (sameString(hfs->searchType, "refGene"))
     {
-    found = findRefGenes(hfs->searchTable, term, hgp);
+    found = findRefGenes(hfs, term, hgp);
     }
 else if (sameString(hfs->searchType, "cytoBand"))
     {
@@ -1993,7 +2157,7 @@ else if (sameString(hfs->searchType, "mrnaAcc"))
     }
 else if (sameString(hfs->searchType, "mrnaKeyword"))
     {
-    found = findMrnaKeys(term, hgp);
+    found = findMrnaKeys(hfs, term, hgp);
     }
 else if (sameString(hfs->searchType, "sgdGene"))
     {
