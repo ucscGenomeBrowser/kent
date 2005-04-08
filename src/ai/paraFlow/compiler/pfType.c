@@ -583,6 +583,7 @@ switch (pp->type)
     case pptVarInit:
     case pptVarUse:
     case pptDot:
+    case pptIndex:
         return pp->ty;
     case pptTuple:
 	{
