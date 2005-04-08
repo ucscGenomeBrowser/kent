@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.20 2005/04/07 23:57:04 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.21 2005/04/08 19:24:18 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -2094,7 +2094,7 @@ SEQ2_LEN=$BASE/S2.len
 
 
 #########################################################################
-# BLASTZ Cow bosTau1 (WORKING - 2005-03-18 - Hiram)
+# BLASTZ Cow bosTau1 (DONE - 2005-03-18 - 2005-04-08 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     cd /cluster/data/mm6/bed/blastzBosTau1.2005_03_18
@@ -2186,11 +2186,15 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
     featureBits bosTau1 netMm5
     #   1317539731 bases of 2261116798 (58.269%) in intersection
     featureBits bosTau1 chainMm6
+    # 1325743373 bases of 2261116798 (58.632%) in intersection
     featureBits bosTau1 chainMm5
     #   1325445280 bases of 2261116798 (58.619%) in intersection
     featureBits bosTau1 chainMm6Link
+    # 589779558 bases of 2261116798 (26.084%) in intersection
     featureBits bosTau1 chainMm5Link
     #   588460684 bases of 2261116798 (26.025%) in intersection
+
+    #	looks good, done.
 
 # BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
     # The procedure for lineage spec business with self is to simply
@@ -2349,6 +2353,8 @@ SEQ2_LEN=$BASE/S2.len
     #	4h 24m load time - chrUn_random failed to load
     ssh kolossus
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 blastzSelf
+    #	8h 34m job
+    #	471978757 bases of 2597150411 (18.173%) in intersection
 
 # BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
 
@@ -2462,7 +2468,7 @@ SEQ2_LEN=$BASE/S2.len
     #   70542788 bases of 1054197620 (6.692%) in intersection
 
 
-# BLASTZ OPOSSUM (WORKING - 2005-04-01 - Hiram)
+# BLASTZ OPOSSUM (DONE - 2005-04-01 - 2005-04-08 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
     cd /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
@@ -2586,10 +2592,16 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
     # 2884735370 bases of 3492108230 (82.607%) in intersection
     featureBits monDom1 netMm5
     #   2889580530 bases of 3492108230 (82.746%) in intersection
+    featureBits monDom1 chainMm6
+    # 2908045004 bases of 3492108230 (83.275%) in intersection
     featureBits monDom1 chainMm5
     #   2913812625 bases of 3492108230 (83.440%) in intersection
+    featureBits monDom1 chainMm6Link
+    # 253105698 bases of 3492108230 (7.248%) in intersection
     featureBits monDom1 chainMm5Link
     #   249594220 bases of 3492108230 (7.147%) in intersection
+
+    #	looks OK, done
 
 # BLASTZ FROG Xenopus tropicalis (WORKING - 2005-04-05 - Hiram)
     ssh eieio
@@ -2677,33 +2689,50 @@ SEQ2_LEN=$BASE/S2.len
     #   1078618413 bases of 2615483787 (41.240%) in intersection
     featureBits mm6 chainXenTro1Link
     #   67119684 bases of 2597150411 (2.584%) in intersection
+    featureBits mm5 chainXenTro1Link
+    #   73115446 bases of 2615483787 (2.795%) in intersection
+
+    #	Those are looking good, now to the swap:
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
+    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
+	-swap -fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
+    #	70 minutes
+    #	Measurements:
+
+    featureBits xenTro1 netMm6
+    #   683225633 bases of 1381238994 (49.465%) in intersection
+    featureBits xenTro1 netMm5
+    #   697384254 bases of 1381238994 (50.490%) in intersection
+    featureBits xenTro1 chainMm6
+    #   700638086 bases of 1381238994 (50.725%) in intersection
+    featureBits xenTro1 chainMm5
+    #   721494705 bases of 1381238994 (52.235%) in intersection
+    featureBits xenTro1 chainMm6Link
+    #   64584213 bases of 1381238994 (4.676%) in intersectio
+    featureBits xenTro1 chainMm5Link
+    #   76415718 bases of 1381238994 (5.532%) in intersection
 
 # BLASTZ CHIMP PanTro1 (WORKING - 2005-04-05 - Hiram)
     ssh eieio
-    mkdir /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
-    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+    mkdir /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
+    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
 
-    #	Kate's note about chimp->human alignment:
-    # NOTE: Ran with abridge repeats=0, although SMSK was set
-    # Looked better than running with abridge=1, which had very
-    # chopped-up alignments
+    #	same parameters as Human alignment, except for the use of the
+    #	SMSK linSpecRepeats - in this case, using none.  Should be an
+    #	interesting comparison if the lineage specific repeats make much
+    #	difference in the result.
     cat << '_EOF_' > DEF
-# mouse vs. chimp
+# mouse vs. human
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
 
 ALIGN=blastz-run
 BLASTZ=blastz
 BLASTZ_H=2000
 BLASTZ_ABRIDGE_REPEATS=0
-# Specific settings for chimp
-BLASTZ_Y=3400
-BLASTZ_T=2
-BLASTZ_K=4500
-BLASTZ_Q=/cluster/data/penn/human_chimp.q
 
-# TARGET: Mouse mm5
+# TARGET: Mouse mm6
 SEQ1_DIR=/panasas/store/mm6/nib
-SEQ1_RMSK=/panasas/store/mm6/rmsk
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
@@ -2714,7 +2743,7 @@ SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm6/bed/blastzPanTro1.2005_04_05
+BASE=/cluster/data/mm6/bed/blastzPanTro1.2005_04_08
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -2728,8 +2757,9 @@ SEQ2_LEN=$BASE/S2.len
     sort -rn +1 /cluster/data/panTro1/chrom.sizes > S2.len
     #	establish a screen to control this job
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
+XXX - STARTED 2005-04-06 10:40
     #	392 minutes = 3h 32m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
