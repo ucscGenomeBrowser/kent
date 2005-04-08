@@ -75,7 +75,7 @@ enum pfParseType
     pptUser,
     pptSysOrUser,
     pptVarInit,
-    pptRetPlaceholder,
+    pptPlaceholder,
     pptSymName,
     pptTypeName,
     pptTypeTuple,

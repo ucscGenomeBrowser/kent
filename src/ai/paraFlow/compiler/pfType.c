@@ -203,10 +203,91 @@ if (pp->type == pptConstUse || pp->ty->base != pfc->bitType)
     }
 }
 
-static void coerceTuple(struct pfCompile *pfc, struct pfParse *tuple,
+boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
+/* Return TRUE if all elements of aList and bList have the same
+ * type, and aList and bList have same number of elements. */
+{
+struct pfType *a = aList, *b = bList;
+
+for (;;)
+    {
+    if (a == NULL)
+        return b == NULL;
+    else if (b == NULL)
+        return FALSE;
+    else if (!pfTypeSame(a, b))
+        return FALSE;
+    a = a->next;
+    b = b->next;
+    }
+}
+
+struct pfType *wrapTupleType(struct pfCompile *pfc, struct pfType *typeList)
+/* Wrap tuple around a list of types. */
+{
+struct pfType *ty  = pfTypeNew(pfc->tupleType);
+ty->children = typeList;
+return ty;
+}
+
+static void coerceCallToTupleOfTypes(struct pfCompile *pfc,
+	struct pfParse **pCall, struct pfType *fieldTypes)
+/* Given a function call return tuple and some types
+ * that it is supposed to be decide whether
+ *      1) The types match
+ *      2) Types mismatch but can be fixed  by
+ *         inserting a  pptCastTupleToTuple
+ *      3) Types mismatch in a way that can't be fixed
+ * and act appropriately. */
+{
+struct pfParse *call = *pCall;
+struct pfType *retTypes = call->ty->children;
+int retCount = slCount(retTypes);
+int fieldCount = slCount(fieldTypes);
+int i;
+
+if (retCount != fieldCount)
+    errAt(call->tok, "%s returns %d values, but need %d values here",
+    	  call->name, retCount, fieldCount);
+if (!pfTypesAllSame(retTypes, fieldTypes))
+    {
+    struct pfType *ty = wrapTupleType(pfc, fieldTypes);
+    struct pfParse *castAll = insertCast(pptCastTupleToTuple, ty, pCall);
+    struct pfType *retType = retTypes, *fieldType = fieldTypes;
+    struct pfParse *castList = NULL, *fake;
+
+    for (i=0; i<fieldCount; ++i)
+        {
+	AllocVar(fake);
+	fake->type = pptPlaceholder;
+	fake->name = "placeholder";
+	fake->ty = retType;
+	coerceOne(pfc, &fake, fieldType);
+	slAddHead(&castList, fake);
+	retType = retType->next;
+	fieldType = fieldType->next;
+	}
+    slReverse(&castList);
+    castAll->children->next = castList;
+    }
+}
+
+static void coerceCallToClass(struct pfCompile *pfc, 
+	struct pfParse **pPp, struct pfType *type)
+/* Given a type that is a class, and a parse tree that
+ * is a tuple, do any casting required inside the tuple
+ * to get the members of the tuple to be of the same type
+ * as the corresponding members of the class. */
+{
+coerceCallToTupleOfTypes(pfc, pPp, type->base->fields);
+}
+
+
+static void coerceTuple(struct pfCompile *pfc, struct pfParse **pTuple,
 	struct pfType *types)
 /* Make sure that tuple is of correct type. */
 {
+struct pfParse *tuple = *pTuple;
 int tupSize = slCount(tuple->children);
 int typeSize = slCount(types->children);
 struct pfParse **pos;
@@ -218,28 +299,37 @@ if (tupSize != typeSize)
     }
 if (tupSize == 0)
     return;
-pos = &tuple->children;
-type = types->children;
-for (;;)
-     {
-     coerceOne(pfc, pos, type);
-     pos = &(*pos)->next;
-     type = type->next;
-     if (type == NULL)
-         break;
-     }
-tuple->ty = types;
+if (tuple->type == pptCall)
+    {
+    coerceCallToTupleOfTypes(pfc, pTuple, types->children);
+    }
+else
+    {
+    pos = &tuple->children;
+    type = types->children;
+    for (;;)
+	 {
+	 coerceOne(pfc, pos, type);
+	 pos = &(*pos)->next;
+	 type = type->next;
+	 if (type == NULL)
+	     break;
+	 }
+    tuple->ty = types;
+    }
 }
 
-static void coerceCall(struct pfCompile *pfc, struct pfParse *pp)
+static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 /* Make sure that parameters to call are right.  Then
  * set pp->type to call's return type. */
 {
+struct pfParse *pp = *pPp;
 struct pfParse *function = pp->children;
-struct pfParse *paramTuple = function->next;
+struct pfParse **paramTuple = &function->next;
 struct pfType *functionType = function->ty;
 struct pfType *inputType = functionType->children;
 struct pfType *outputType = inputType->next;
+
 coerceTuple(pfc, paramTuple, inputType);
 if (outputType->children != NULL && outputType->children->next == NULL)
     pp->ty = CloneVar(outputType->children);
@@ -278,65 +368,6 @@ pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
 }
 
-boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
-/* Return TRUE if all elements of aList and bList have the same
- * type, and aList and bList have same number of elements. */
-{
-struct pfType *a = aList, *b = bList;
-
-for (;;)
-    {
-    if (a == NULL)
-        return b == NULL;
-    else if (b == NULL)
-        return FALSE;
-    else if (!pfTypeSame(a, b))
-        return FALSE;
-    a = a->next;
-    b = b->next;
-    }
-}
-
-static void coerceCallToClass(struct pfCompile *pfc, 
-	struct pfParse **pPp, struct pfType *type)
-/* Given a type that is a class, and a parse tree that
- * is a tuple, do any casting required inside the tuple
- * to get the members of the tuple to be of the same type
- * as the corresponding members of the class. */
-{
-struct pfParse *call = *pPp;
-struct pfType *retTypes = call->ty->children;
-struct pfType *fieldTypes = type->base->fields;
-int retCount = slCount(retTypes);
-int fieldCount = slCount(fieldTypes);
-int i;
-
-if (retCount != fieldCount)
-    errAt(call->tok, "%s returns %d values, %s has %d fields",
-    	  call->name, retCount, type->base->name, fieldCount);
-if (!pfTypesAllSame(retTypes, fieldTypes))
-    {
-    struct pfType *ty = CloneVar(type->base->fieldTuple);
-    struct pfParse *castAll = insertCast(pptCastTupleToTuple, ty, pPp);
-    struct pfType *retType = retTypes, *fieldType = fieldTypes;
-    struct pfParse *castList = NULL, *fake;
-
-    for (i=0; i<fieldCount; ++i)
-        {
-	AllocVar(fake);
-	fake->type = pptRetPlaceholder;
-	fake->name = "placeholder";
-	fake->ty = retType;
-	coerceOne(pfc, &fake, fieldType);
-	slAddHead(&castList, fake);
-	retType = retType->next;
-	fieldType = fieldType->next;
-	}
-    slReverse(&castList);
-    castAll->children->next = castList;
-    }
-}
-
 static void coerceTupleToClass(struct pfCompile *pfc, 
 	struct pfParse **pPp, struct pfType *type)
 /* Given a type that is a class, and a parse tree that
@@ -370,7 +401,7 @@ struct pfBaseType *base;
 if (pt == NULL)
     internalErrAt(pp->tok);
 base = type->base;
-// uglyf("coerceOne to %s\n", type->base->name);
+// uglyf("coercingOne %s (isFunction=%d) to %s\n", pt->base->name, pt->isFunction, base->name);
 if (pp->type == pptConstUse)
     {
     if (base == pfc->bitType)
@@ -522,7 +553,7 @@ else if (base == pfc->keyValType)
 else if (type->isTuple)
     {
     assert(pt->isTuple);
-    coerceTuple(pfc, pp, type);
+    coerceTuple(pfc, pPp, type);
     }
 }
 
@@ -764,8 +795,6 @@ for (p = compound->children; p != NULL; p = p->next)
     }
 slReverse(&base->methods);
 slReverse(&base->fields);
-base->fieldTuple = pfTypeNew(pfc->tupleType);
-base->fieldTuple->children = base->fields;
 // uglyf("Got %d methods, %d fields in %s\n", slCount(base->methods), slCount(base->fields), base->name);
 }
 
@@ -898,19 +927,20 @@ while ((hel = hashNext(&hc)) != NULL)
 hashFree(&outputHash);
 }
 
-void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
+void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 {
-struct pfParse *p;
+struct pfParse *pp = *pPp;
+struct pfParse **pos;
 
-for (p = pp->children; p != NULL; p = p->next)
-    pfTypeCheck(pfc, p);
+for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
+    pfTypeCheck(pfc, pos);
 
 switch (pp->type)
     {
     case pptCall:
-	coerceCall(pfc, pp);
+	coerceCall(pfc, pPp);
         break;
     case pptWhile:
         coerceWhile(pfc, pp);

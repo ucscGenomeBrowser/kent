@@ -160,7 +160,7 @@ struct pfParse *program = pfParseProgram(fileName, pfc);
 pfBindVars(pfc, program);
 if (!parseOnly)
     {
-    pfTypeCheck(pfc, program);
+    pfTypeCheck(pfc, &program);
     pfCheckParaFlow(pfc, program);
     }
 

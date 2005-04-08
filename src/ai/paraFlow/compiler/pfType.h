@@ -24,7 +24,6 @@ struct pfBaseType
     bool isClass;		/* TRUE if it's a class */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
-    struct pfType *fieldTuple;	/* Tuple that contains fields. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -58,7 +57,7 @@ struct pfParse;
 void pfTypeOnTuple(struct pfCompile *compile, struct pfParse *pp);
 /* Create tuple type and link in types of all children. */
 
-void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp);
+void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp);
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 
