@@ -231,13 +231,6 @@ type psl xeno ci1
 otherDb ci1
 
 
-searchTable blastHg17KG
-searchType bed
-searchMethod fuzzy
-shortCircuit 1
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
-searchPriority 1
-
 searchTable blatCioSav1
 termRegex paired_scaffold_[0-9]+?
 query select tName,tStart,tEnd,qName from %s where qName like '%s'
