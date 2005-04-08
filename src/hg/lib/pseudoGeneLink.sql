@@ -64,5 +64,6 @@ CREATE TABLE pseudoGeneLink (
     polyAlen int unsigned not null,	# length of polyA
               #Indices
     PRIMARY KEY(chrom(8),bin, name(10), chromStart),
-    INDEX (name(8))
+    INDEX (name(8)),
+    INDEX (refSeq(12))
 );
