@@ -2022,13 +2022,15 @@ searchName refLink
 searchTable refGene
 searchType refGene
 searchPriority 2
+grepIndex refLinkGrep/refLink.mrnaAccProduct
 
 searchTable xenoRefGene
 searchType refGene
 searchPriority 2.1
+grepIndex refLinkGrep/refLink.mrnaAccProduct
 
 searchTable pseudoGeneLink
-query select chrom, chromStart,chromEnd, refSeq from %s where refSeq like '%s'
+query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
 xrefTable refLink
 xrefQuery select mrnaAcc, name from %s where name like '%s%%'
 searchPriority 2.5
@@ -2081,6 +2083,7 @@ searchName mrnaKeyword
 searchTable all_mrna
 searchType mrnaKeyword
 searchPriority 15
+grepIndex genbankGrep
 
 searchName snpMapLong
 searchTable snpMap
@@ -2198,70 +2201,77 @@ termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
 
 searchTable blastDm1FB
-searchType bed
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
+searchMethod prefix
+searchType psl
 searchPriority 25
 
 searchTable blastSacCer1SG
+searchMethod prefix
 searchType psl
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
 
 searchTable blastHg16KG
+searchMethod prefix
 searchType psl
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
 
 searchName blastSacCer1SGSprot
 searchTable blastSacCer1SG
+searchMethod prefix
 searchType psl
 xrefTable sacCer1.blastSGRef00
-xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
 searchPriority 25
 
 searchName blastSacCer1SGGene
 searchTable blastSacCer1SG
+searchMethod prefix
 searchType psl
 xrefTable sacCer1.blastSGRef00
-xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
 
 searchName blastHg16KGSprot
 searchTable blastHg16KG
+searchMethod prefix
 searchType psl
 xrefTable hg16.blastKGRef00
-xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
 searchPriority 25
 
 searchName blastHg16KGGene
 searchTable blastHg16KG
+searchMethod prefix
 searchType psl
 xrefTable hg16.blastKGRef00
-xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
 
 searchName blastHg17KGSprot
 searchTable blastHg17KG
+searchMethod prefix
 searchType psl
 xrefTable hg17.blastKGRef01
-xrefQuery select acc,extra1 from %s where extra1 like '%%%s%%'
+xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
 searchPriority 25
 
 searchName blastHg17KGGene
 searchTable blastHg17KG
+searchMethod prefix
 searchType psl
 xrefTable hg17.blastKGRef01
-xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
 searchPriority 25
 
 searchTable blastHg17KG
+searchMethod prefix
 searchType psl
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 25
 
 searchName blastDm1FBGene
 searchTable blastDm1FB
+searchMethod prefix
 searchType psl
 xrefTable dm1.blastFBRef00
-xrefQuery select acc,geneId from %s where geneId like '%%%s%%'
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
 searchPriority 25
 
 searchTable ECgene
