@@ -46,7 +46,6 @@ enum pfParseType
     pptMinusEquals,
     pptMulEquals,
     pptDivEquals,
-    pptModEquals,
     pptIndex,
     pptPlus,
     pptMinus,

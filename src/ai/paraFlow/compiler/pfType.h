@@ -1,4 +1,4 @@
-/* pfType - ParaFlow type heirarchy */
+/* pfType - ParaFlow type heirarchy and type checking. */
 /* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #ifndef PFTYPE_H

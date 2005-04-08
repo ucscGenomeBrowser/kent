@@ -84,8 +84,6 @@ switch (type)
 	return "pptMulEquals";
     case pptDivEquals:
 	return "pptDivEquals";
-    case pptModEquals:
-	return "pptModEquals";
     case pptIndex:
 	return "pptIndex";
     case pptPlus:
@@ -880,9 +878,6 @@ switch (tok->type)
 	break;
     case pftDivEquals:
 	type = pptDivEquals;
-	break;
-    case pftModEquals:
-	type = pptModEquals;
 	break;
     case ':':
         type = pptKeyVal;

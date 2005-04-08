@@ -109,7 +109,6 @@ switch (type)
     case pftMinusEquals:     return "-=";
     case pftDivEquals:       return "/=";
     case pftMulEquals:       return "*=";
-    case pftModEquals:       return "%=";
     case pftEqualsEquals:    return "==";
     case pftNotEquals:       return "!=";
     case pftGreaterOrEquals: return ">=";
@@ -652,9 +651,7 @@ switch (c)
 	    tokSingleChar(tkz, tok, c);
 	break;
     case '%':
-	if (c2 == '=')
-	    tokTwoChar(tkz, tok, pftModEquals);
-	else if (c2 == '.')
+	if (c2 == '.')
 	    tokTwoChar(tkz, tok, pftSys);
 	else
 	    tokSingleChar(tkz, tok, c);

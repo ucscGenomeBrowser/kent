@@ -27,7 +27,6 @@ enum pfTokType
     pftMinusEquals,     /* -= */
     pftDivEquals,       /* /= */
     pftMulEquals,       /* *= */
-    pftModEquals,       /* %= */
     pftEqualsEquals,    /* == */
     pftNotEquals,       /* != */
     pftGreaterOrEquals, /* >= */

@@ -1,4 +1,4 @@
-/* pfType - ParaFlow type heirarchy */
+/* pfType - ParaFlow type heirarchy and type checking. */
 /* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
@@ -565,13 +565,19 @@ switch (pp->type)
     }
 }
 
-static void coerceAssign(struct pfCompile *pfc, struct pfParse *pp)
+static void coerceAssign(struct pfCompile *pfc, struct pfParse *pp, 
+	boolean numOnly)
 /* Make sure that left half of assigment is a valid l-value,
  * and that right half of assignment can be coerced into a
  * compatible type.  Set pp->type to l-value type. */
 {
 struct pfParse *lval = pp->children;
 struct pfType *destType = coerceLval(pfc, lval);
+if (numOnly)
+    {
+    if (destType->base->parent != pfc->numType)
+        expectingGot("numerical variable to left of assignment", lval->tok);
+    }
 coerceOne(pfc, &lval->next, destType);
 pp->ty = destType;
 }
@@ -813,6 +819,105 @@ for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
 pp->ty = CloneVar(type);
 }
 
+static void avoidFunctions(struct pfCompile *pfc, struct pfParse *pp)
+/* Avoid functions declared in functions */
+{
+switch (pp->type)
+    {
+    case pptToDec:
+    case pptParaDec:
+    case pptFlowDec:
+        errAt(pp->tok, "sorry, can't declare functions inside of functions");
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    avoidFunctions(pfc, pp);
+}
+
+static void avoidFunctionInFunction(struct pfCompile *pfc, struct pfParse *pp)
+/* Check that there are no functions among the children. */
+{
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    avoidFunctions(pfc, pp);
+}
+
+static boolean enclosedScope(struct pfScope *outer, struct pfScope *inner)
+/* Return true if inner is the same or is inside of outer. */
+{
+for ( ; inner != NULL; inner = inner->next)
+    if (inner == outer)
+       return TRUE;
+return FALSE;
+}
+
+static void checkLocal(struct hash *outsideOk, struct pfScope *localScope,
+	struct pfParse *pp)
+/* Make sure that any pptVarUse's are local or function calls */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+	{
+	if (!enclosedScope(localScope, pp->var->scope))
+	    {
+	    if (!hashLookup(outsideOk, pp->name))
+	        errAt(pp->tok, "write to non-local variable illegal in this context");
+	    }
+        break;
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    checkLocal(outsideOk, localScope, pp);
+}
+
+static void checkReadOnlyOutsideLocals(struct hash *outsideWriteOk,
+	struct pfScope *localScope, struct pfParse *pp)
+/* Check that anything on left hand side of an assignment
+ * is local or in the outsideWriteOk hash. */
+{
+switch (pp->type)
+    {
+    case pptAssignment:
+    case pptPlusEquals:
+    case pptMinusEquals:
+    case pptMulEquals:
+    case pptDivEquals:
+         {
+	 checkLocal(outsideWriteOk, localScope, pp->children);
+	 break;
+	 }
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    checkReadOnlyOutsideLocals(outsideWriteOk, localScope, pp);
+}
+
+static void blessPara(struct pfCompile *pfc, struct pfParse *paraDec)
+/* Make sure that paraDec does not write to anything but
+ *   1) It's output.
+ *   2) Local variables.
+ *   3) It's first input parameter. */
+{
+struct pfParse *input = paraDec->children->next;
+struct pfParse *output = input->next;
+struct pfParse *body = output->next;
+struct pfParse *pp;
+struct hash *outerWriteOk = hashNew(6);
+
+/* Check that have at least one input parameter. */
+if ((pp = input->children) == NULL)
+    errAt(input->tok, "Para declarations need at least one parameter");
+
+/* Build up hash of variables that it's ok to write to. */
+hashAdd(outerWriteOk, pp->name, NULL);
+for (pp = output->children; pp != NULL; pp = pp->next)
+    hashAdd(outerWriteOk, pp->name, NULL);
+
+checkReadOnlyOutsideLocals(outerWriteOk, body->scope, body);
+
+/* Clean up */
+hashFree(&outerWriteOk);
+}
+
 void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -850,9 +955,11 @@ switch (pp->type)
 	break;
     case pptMul:
     case pptDiv:
-    case pptMod:
     case pptMinus:
         coerceBinaryOp(pfc, pp, TRUE, FALSE);
+	break;
+    case pptMod:
+        coerceBinaryOp(pfc, pp, FALSE, FALSE);
 	break;
     case pptBitAnd:
     case pptBitOr:
@@ -862,7 +969,13 @@ switch (pp->type)
         coerceBinaryOp(pfc, pp, FALSE, FALSE);
 	break;
     case pptAssignment:
-        coerceAssign(pfc, pp);
+        coerceAssign(pfc, pp, FALSE);
+	break;
+    case pptPlusEquals:
+    case pptMinusEquals:
+    case pptMulEquals:
+    case pptDivEquals:
+        coerceAssign(pfc, pp, TRUE);
 	break;
     case pptVarInit:
         coerceVarInit(pfc, pp);
@@ -881,6 +994,14 @@ switch (pp->type)
         break;
     case pptClass:
         blessClass(pfc, pp);
+	break;
+    case pptParaDec:
+        avoidFunctionInFunction(pfc, pp);
+	blessPara(pfc, pp);
+	break;
+    case pptToDec:
+    case pptFlowDec:
+        avoidFunctionInFunction(pfc, pp);
 	break;
     }
 }
