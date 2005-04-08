@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.5 2005/03/25 00:24:34 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.6 2005/04/08 07:06:51 baertsch Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg)
 /* Return a linked feature from a retroGene. */
@@ -17,7 +17,15 @@ assert(starts != NULL && sizes != NULL && blockCount > 0);
 
 AllocVar(lf);
 lf->grayIx = grayIx;
-strncpy(lf->name, pg->name, sizeof(lf->name));
+if (sameString(pg->kgName, "noKg"))
+    {
+    if (sameString(pg->refSeq, "noRefSeq"))
+        strncpy(lf->name, pg->name, sizeof(lf->name));
+    else
+        strncpy(lf->name, pg->refSeq, sizeof(lf->name));
+    }
+else
+    strncpy(lf->name, pg->kgName, sizeof(lf->name));
 lf->orientation = orientFromChar(pg->strand[0]);
 for (i=0; i<blockCount; ++i)
     {
@@ -159,6 +167,8 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
             if (useAcc)
                 dyStringAppendC(name, '/');
             }
+        else
+            dyStringAppend(name, lf->name);
         }
     if (useAcc)
         dyStringAppend(name, lf->name);
