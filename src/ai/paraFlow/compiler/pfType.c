@@ -104,6 +104,23 @@ else
     errAt(pp->tok, "Type mismatch: expecting %s.", type->base->name);
 }
 
+static void enforceNumber(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure type of pp is numberic. */
+{
+if (pp->ty->base != pfc->varType)
+    if (pp->ty->base->parent != pfc->numType)
+	expectingGot("number", pp->tok);
+}
+
+static void enforceInt(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure type of pp is integer. */
+{
+struct pfBaseType *base = pp->ty->base;
+enforceNumber(pfc, pp);
+if (base == pfc->floatType || base == pfc->doubleType)
+     expectingGot("integer", pp->tok);
+}
+
 static int baseTypeLogicalSize(struct pfCompile *pfc, struct pfBaseType *base)
 /* Return logical size of type - 0 for smallest, 1 for next smallest, etc. */
 {
@@ -485,7 +502,7 @@ else if (pt->base != base)
     // uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
-	struct pfType *tt = pfTypeNew(pfc->varType);
+	struct pfType *tt = pfTypeNew(pfc->bitType);
 	insertCast(pptCastStringToBit, tt, pPp);
 	ok = TRUE;
 	}
@@ -740,6 +757,15 @@ if (!stringOk)
     if (base == pfc->stringType)
 	 errAt(pp->tok, "Strings not allowed here");
     }
+}
+
+static void coerceBinaryLogicOp(struct pfCompile *pfc, struct pfParse *pp)
+/* Coerce both sides of binary logic operation to bit, and make
+ * output bit as well. */
+{
+coerceToBit(pfc, &pp->children);
+coerceToBit(pfc, &pp->children->next);
+pp->ty = pp->children->ty;
 }
 
 static void putChildrenInPlaceOfSelf(struct pfParse **pPp)
@@ -1053,6 +1079,22 @@ switch (pp->type)
     case pptShiftRight:
         coerceBinaryOp(pfc, pp, FALSE, FALSE);
 	break;
+    case pptLogAnd:
+    case pptLogOr:
+        coerceBinaryLogicOp(pfc, pp);
+	break;
+    case pptNegate:
+	enforceNumber(pfc, pp->children);
+	pp->ty = pp->children->ty;
+	break;
+    case pptNot:
+        coerceToBit(pfc, &pp->children);
+	pp->ty = pp->children->ty;
+	break;
+    case pptFlipBits:
+	enforceInt(pfc, pp->children);
+	pp->ty = pp->children->ty;
+        break;
     case pptAssignment:
         coerceAssign(pfc, pp, FALSE);
 	break;

@@ -138,6 +138,20 @@ pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType);
 pfc->dirType->keyedBy = pfc->stringType;
 }
 
+static void addBuiltInFunctions(struct pfCompile *pfc)
+/* Add built in functions */
+{
+struct pfScope *scope = pfc->scope;
+struct pfType *toType = pfTypeNew(pfc->toType);
+struct pfType *inTuple = pfTypeNew(pfc->tupleType);
+struct pfType *outTuple = pfTypeNew(pfc->tupleType);
+struct pfType *varType = pfTypeNew(pfc->varType);
+toType->children = inTuple;
+inTuple->next = outTuple;
+inTuple->children = varType;
+pfScopeAddVar(scope, "print", toType);
+}
+
 struct pfCompile *pfCompileNew(char *fileName)
 /* Make new compiler object. */
 {
@@ -148,6 +162,7 @@ pfc->modules = hashNew(0);
 pfc->reservedWords = createReservedWords();
 pfc->scope = pfScopeNew(NULL, 8);
 addBuiltInTypes(pfc);
+addBuiltInFunctions(pfc);
 pfc->tkz = pfTokenizerNew(fileName, pfc->reservedWords);
 return pfc;
 }
