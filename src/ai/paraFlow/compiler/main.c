@@ -119,8 +119,6 @@ pfc->toType = pfScopeAddType(scope, "to", TRUE, pfc->functionType);
 pfc->paraType = pfScopeAddType(scope, "para", TRUE, pfc->functionType);
 pfc->flowType = pfScopeAddType(scope, "flow", TRUE, pfc->functionType);
 
-pfc->stringType = pfScopeAddType(scope, "string", FALSE, pfc->streamType);
-
 pfc->bitType = pfScopeAddType(scope, "bit", FALSE, pfc->numType);
 pfc->byteType = pfScopeAddType(scope, "byte", FALSE, pfc->numType);
 pfc->shortType = pfScopeAddType(scope, "short", FALSE, pfc->numType);
@@ -128,6 +126,8 @@ pfc->intType = pfScopeAddType(scope, "int", FALSE, pfc->numType);
 pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType);
 pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType);
 pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType);
+
+pfc->stringType = pfScopeAddType(scope, "string", FALSE, pfc->streamType);
 
 pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType);
 pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType);

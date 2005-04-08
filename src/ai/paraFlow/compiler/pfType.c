@@ -626,6 +626,32 @@ if (init != NULL)
     coerceOne(pfc, &symbol->next, type->ty);
 }
 
+static void coerceIndex(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that [] is after a collection type, and that
+ * what's inside the [] agrees with the key type of the collection. */
+{
+struct pfParse *collectionPp = pp->children;
+struct pfParse *indexPp = collectionPp->next;
+struct pfType *collectionType = collectionPp->ty;
+struct pfBaseType *collectionBase = collectionType->base;
+struct pfBaseType *keyBase;
+
+if (collectionBase == pfc->arrayType)
+    keyBase = pfc->intType;
+else
+    {
+    keyBase = collectionBase->keyedBy;
+    if (keyBase == NULL)
+	errAt(pp->tok, "trying to index a %s", collectionBase->name);
+    }
+if (indexPp->ty->base != keyBase)
+    {
+    struct pfType *ty = pfTypeNew(keyBase);
+    coerceOne(pfc, &collectionPp->children, ty);
+    }
+pp->ty = collectionType->children;
+}
+
 static struct pfType *largerNumType(struct pfCompile *pfc,
 	struct pfType *a, struct pfType *b)
 /* Return a or b, whichever can hold the larger range. */
@@ -989,6 +1015,9 @@ switch (pp->type)
 	break;
     case pptVarInit:
         coerceVarInit(pfc, pp);
+	break;
+    case pptIndex:
+        coerceIndex(pfc, pp);
 	break;
     case pptTuple:
 	pfTypeOnTuple(pfc, pp);
