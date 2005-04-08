@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.22 2005/04/08 22:20:36 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.23 2005/04/08 23:38:51 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -856,7 +856,8 @@ mm6.mgcTables.mgc = all
     time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm6
     #	many tables are loaded by this load:
     #	refFlat, refGene, refLink, refSeqAli, refSeqStatus, refSeqSummary
-    #	mgcGenes mgcFullMrna mgcFullStatus
+    #	mgcGenes mgcFullMrna mgcFullStatus intronEst all_est chr*est
+    #	estOrientInfo xenoEst
     #	var/dbload/hgwdev/logs/2005.03.28-13:38:13.dbload.log
     #	LOADING - 2005-03-28 - 13:35
     #	FINISHED - 2005-03-29 - 00:43
@@ -985,7 +986,7 @@ mm6.mgcTables.mgc = all
 #	determined at run-time.  The typical run-times listed here will
 #	be a factor in your choice of kluster to operate on.
 #########################################################################
-# BLASTZ HUMAN Hg17 (WORKING - 2005-03-14 - Hiram)
+# BLASTZ HUMAN Hg17 (DONE - 2005-03-14 - 2005-03-18 - Hiram)
     ssh kk
     mkdir /cluster/data/mm6/bed/blastzHg17.2005_03_14
     cd /cluster/data/mm6/bed/blastzHg17.2005_03_14
@@ -1517,7 +1518,7 @@ SEQ2_LEN=$BASE/S2.len
     #	2778454647 bases of 2571104688 (108.065%) in intersection
 
 #########################################################################
-# BLASTZ Zebrafish danRer2 (WORKING - 2005-03-17 - Hiram)
+# BLASTZ Zebrafish danRer2 (DONE - 2005-03-17 - 2005-03-18 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzDanRer2.2005_03_17
     cd /cluster/data/mm6/bed/blastzDanRer2.2005_03_17
@@ -1664,7 +1665,7 @@ doOne danRer2 chainMm5Link
     #   68003819 bases of 1560497282 (4.358%) in intersection
 
 #########################################################################
-# BLASTZ FUGU fr1 (WORKING - 2005-03-17 - Hiram)
+# BLASTZ FUGU fr1 (DONE - 2005-03-17 - 2005-03-19 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzFr1.2005_04_01
     cd /cluster/data/mm6/bed/blastzFr1.2005_04_01
@@ -2014,7 +2015,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	10102968 bases of 2505900260 (0.403%) in intersection
 
 #########################################################################
-# BLASTZ Dog canFam1 (WORKING - 2005-03-18 - Hiram)
+# BLASTZ Dog canFam1 (DONE - 2005-03-18 - 2005-04-03 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/bed/blastzCanFam1.2005_03_18
     cd /cluster/data/mm6/bed/blastzCanFam1.2005_03_18
@@ -2846,12 +2847,18 @@ XXX - STARTED 2005-04-06 10:40
     mkdir -p /cluster/data/mm6/bed/STSmarkers/downloads
     cd /cluster/data/mm6/bed/STSmarkers/downloads
     # these files appear to be new almost every day
+    #	AND, they were incorrect when I fetched them on April 6th,
+    #	they were corrected on April 8th
+    #	HOWEVER, they still appear to be incorrect.  There are IDs in
+    #	the UniSTS_mouse.sts file that do not appear in the aliases file
+XXXX - awaiting clarification. 2005-04-08 15:40
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_mouse.sts
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
 
-    # these map files appear to be old, 2002 Data
+    # these map files used to be static for some years, now they appear
+    # to be new
     wget --timestamping \
 ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     #	These files used to be unchanging.  This time they seem to be
@@ -2870,31 +2877,6 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     wget --timestamping \
 	ftp://ftp.informatics.jax.org/pub/reports/PRB_PrimerSeq.rpt
 
-    # compare these with previous version, just to see what is changing
-    # these newly picked up files:
-    sum -r 10090*.txt
-# 47574   388 10090.MGI.txt
-# 04660   170 10090.WI-Genetic.txt
-# 20137   236 10090.WI-YAC.txt
-# 62100   381 10090.WI_MRC_RH.txt
-    #	the previous ones:
-    sum -r /cluster/data/mm5/bed/STSmarkers/downloads/10090.*
-# 48882   338 10090.MGD.txt
-# 62367   170 10090.WI_Mouse_Genetic.txt
-# 50616   235 10090.WI_Mouse_YAC.txt
-# 24176   381 10090.Whitehead-MRC_RH.txt
-    sum -r *.rpt UniSTS*
-# 20859  4415 MRK_Dump2.rpt
-# 14078  3719 MRK_Sequence.rpt
-# 64976  2421 PRB_PrimerSeq.rpt
-# 16053 13278 UniSTS.aliases
-# 00014  3913 UniSTS_mouse.sts
-    # previous copies:
-# 21267  4442 /cluster/data/mm5/bed/STSmarkers/downloads/MRK_Dump2.rpt
-# 51274  3743 /cluster/data/mm5/bed/STSmarkers/downloads/MRK_Sequence.rpt
-# 35293  2315 /cluster/data/mm5/bed/STSmarkers/downloads/PRB_PrimerSeq.rpt
-# 40884 10502 /cluster/data/mm5/bed/STSmarkers/downloads/UniSTS.aliases
-# 14407  2931 /cluster/data/mm5/bed/STSmarkers/downloads/UniSTS_mouse.sts
 
     # back to our work area, update the bed file
     #	to do this we need a new UniSTS_mouse.alias file
@@ -2911,6 +2893,24 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 
     #	The perl scripts were reworked, updated, cleaned up, and fixed
     #	to handle a new type of format found in the UniSTS.aliases file.
+    #	*!*! ACTUALLY there was an error in the UniSTS.aliases file
+    #	format, it was not correct.  Upon submitting a query to Deanna
+    #	Church, I got the following answer:
+    #	Dear Hiram,
+
+    #	Thanks for reporting formatting problems in UniSTS.aliases file.
+
+    #	It was fixed in the program and correct file was put to ftp site.
+
+    #	-Wonhee Jang
+    #	---------------------------------------------------
+    #	Wonhee Jang, Ph.D
+    #	National Center for Biotechnology Information/NIH
+    #	Building 45, Room 5AS43D-49, Bethesda, MD 20894
+    #	jang@ncbi.nlm.nih.gov  phone)301-402-9307
+    #	fax) 301-480-2484
+    #	---------------------------------------------------
+
 
     #	This process has been captured in the script:
     #	/cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
@@ -2925,7 +2925,7 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     # cat UniSTS_mouse_alias.0 MGI.aliases stsInfo.aliases | sort -u \
     #    | sort -n > UniSTS_mouse.alias
 
-    /cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
+    time ./fetchAllAliases.sh
 
     # with that, we can create a new stsInfoMouse.bed file:
     cd /cluster/data/mm6/bed/STSmarkers
@@ -2977,3 +2977,224 @@ XXXX - RUNNING - 2005-04-06 16:40
     ssh hgwdev
     hgsql hgcentraltest \
 	-e 'update defaultDb set name="mm6" where genome="Mouse";'
+
+#############################################################################
+# 10-WAY VAR_MULTIZ - ALIGNMENTS (WORKING - 2005-04-08 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/mm6/bed/multiz10way
+    cd /cluster/data/mm6/bed/multiz10way
+    mkdir mafLinks
+    
+    
+    mkdir mafLinks/rn3
+    mkdir mafLinks/hg17
+    mkdir mafLinks/canFam1
+    mkdir mafLinks/bosTau1
+    mkdir mafLinks/monDom1
+    mkdir mafLinks/galGal2
+    mkdir mafLinks/xenTro1
+    mkdir mafLinks/danRer2
+    mkdir mafLinks/tetNig1
+
+    export H=/cluster/data/mm6/bed
+    ln -s ${H}/blastzRn3.2005_03_22/mafNet/*.maf.gz ./mafLinks/rn3
+    ln -s ${H}/blastzHg17.2005_03_14/mafNet/*.maf.gz ./mafLinks/hg17
+    ln -s ${H}/blastzCanFam1.2005_03_18/mafNet/*.maf.gz ./mafLinks/canFam1
+    ln -s ${H}/blastzBosTau1.2005_03_18/mafNet/*.maf.gz ./mafLinks/bosTau1
+    ln -s ${H}/blastzMonDom1.2005_04_01/mafNet/*.maf.gz ./mafLinks/monDom1
+    ln -s ${H}/blastzGalGal2.2005_03_31/mafNet/*.maf.gz ./mafLinks/galGal2
+    ln -s ${H}/blastzXenTro1.2005_04_05/mafNet/*.maf.gz ./mafLinks/xenTro1
+    ln -s ${H}/blastzDanRer2.2005_03_17/mafNet/*.maf.gz ./mafLinks/danRer2
+    ln -s ${H}/blastzTetNig1.2005_03_17/mafNet/*.maf.gz ./mafLinks/tetNig1
+
+    #	Copy MAFs to Iservers for kluster run
+    ssh kkr1u00
+    mkdir /iscratch/i/mm6/multiz10way
+    cd /iscratch/i/mm6/multiz10way
+    rsync -a --copy-links --progress \
+	/cluster/data/mm6/bed/multiz10way/mafLinks/ .
+XXXX - WORKING 2005-04-08 16:20
+    mkdir penn
+    cp -p /cluster/bin/penn/psuCVS/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/maf_project penn
+    /cluster/bin/iSync
+
+#       Progressive alignment up the tree w/o stager, 
+#       using multiz.v10 (var_multiz)
+#       Method: align internal subtrees (using 0 flag to var_multiz)
+#               Then, align these to human (using 1 flag to var_multiz)
+#       NOTE: must use maf_project after each multiz run, in order
+#       to order output.  Single-cov guaranteed by use of net MAF's,
+#       so it is not necessary to run single_cov2.
+
+    ssh eieio
+    cd /cluster/data/monDom1/bed/multiz
+
+    #	Not sure what this is used for.  Appears to be from something
+    #	that is no longer used.  Can find no reference to it in the
+    #	procedures.  Below in the parameter estimation for phastCons
+    #	there is a tree specified:
+    #	((((hg17,mm5),galGal2),monDom1),danRer2)
+    cat << '_EOF_' > tree.nh
+(((hg17,mm5),galGal2),danRer2)
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/monDom1/bed/multiz
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run var_multiz on cluster
+
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/monDom1/multiz5way.$c
+    set pairs = /iscratch/i/monDom1/multiz
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    # special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif
+        
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2 $flag"
+	/iscratch/i/monDom1/multiz/penn/multiz.v10 $f1 $f2 $flag $out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
+        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
+                $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        /iscratch/i/monDom1/multiz/penn/maf_project $out/$c.tmp.maf monDom1.$c > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << keep emacs coloring happy
+chmod +x oneMultiz.csh
+
+    #	Copy this script to iscratch
+    ssh kkr1u00
+    cd /iscratch/i/monDom1/multiz/penn
+    cp -p /cluster/data/monDom1/bed/multiz/run/oneMultiz.csh .
+    /cluster/bin/iSync
+
+    #	back to run the job
+    ssh kki
+    cd /cluster/data/monDom1/bed/multiz/run
+
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    # multiple alignment steps:
+    # multiz.v10 human.maf mouse.maf 1
+    # multiz.v10 human-mouse.maf chicken.maf 1
+    # multiz.v10 human-mouse-chicken.maf zfish.maf 1
+set c = $1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c hg17 mm5  1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c galGal2 hg17mm5 1
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2 galGal2hg17mm5 1
+# get final alignment file
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2galGal2hg17mm5 /cluster/data/monDom1/bed/multiz/maf/$c.maf
+#cleanup
+/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c
+'EOF'
+# << keep emacs coloring happy
+chmod +x allMultiz.csh
+
+cat  << 'EOF' > template
+#LOOP
+./allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    #	make a list of scaffolds that successfully had actual alignments
+    #	at least once somewhere.  Not every scaffold has an alignment.
+    cd /iscratch/i/monDom1/multiz
+    for D in danRer2 galGal2 hg17 mm5
+    do
+        cd $D
+        ls | sed -e "s/.maf//"
+        cd ..
+    done | sort -u >  /cluster/data/monDom1/bed/multiz/run/chrom.lst
+
+    cd /cluster/data/monDom1/bed/multiz/run
+
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try; para check
+    para push
+# Completed: 5517 of 5517 jobs
+# CPU time in finished jobs:       8337s     138.95m     2.32h    0.10d  0.000 y
+# IO & Wait Time:                 15166s     252.77m     4.21h    0.18d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest job:                       65s       1.08m     0.02h    0.00d
+# Submission to last job:          1495s      24.92m     0.42h    0.02d
+
+    #	combine results into a single file for loading
+    ssh eieio
+    cd /cluster/data/monDom1/bed/multiz
+    catDir maf | mafFilter stdin -minScore=500 > multiz5way.maf
+
+# Load into database  (DONE - 2005-01-04 - Hiram)
+  ssh hgwdev
+  cd /cluster/data/monDom1/bed/multiz
+  mkdir -p /gbdb/monDom1/multiz5way
+  ln -s /cluster/data/monDom1/bed/multiz/multiz5way.maf /gbdb/monDom1/multiz5way
+  hgLoadMaf monDom1 multiz5way
+    #	Loaded 988922 mafs in 1 files from /gbdb/monDom1/multiz5way
+    #	4 minutes to load
+
+# Create pairwise maf files (no longer split across scaffolds)
+   ssh eieio
+   cd /cluster/data/monDom1/bed/multiz
+   mkdir -p pairwise
+   catDir galGal2 > pairwise/galGal2.maf
+   catDir hg17 > pairwise/hg17.maf
+   catDir mm5 > pairwise/mm5.maf
+   catDir danRer2 > pairwise/danRer2.maf
+
+# Load pairwise mafs into database  (DONE - 2005-01-04 - Hiram)
+   ssh  hgwdev
+   set h = /cluster/data/monDom1/bed/multiz/pairwise
+   cd $h
+   foreach i (*.maf)
+      set o = $i:r
+      set t = ${o}_netBlastz
+      mkdir -p /gbdb/monDom1/multiz5way/$t
+      ln -s $h/$i /gbdb/monDom1/multiz5way/$t
+      hgLoadMaf monDom1 $t -pathPrefix=/gbdb/monDom1/multiz5way/$t
+   end
+
