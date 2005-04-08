@@ -2,7 +2,6 @@
 
 include ../inc/common.mk
 
-BIN_DIR = $(HOME)/bin
 all:    
 	@for D in $(USE_DIRS) x; do \
 	  if test "$$D" != "x" ; then \
