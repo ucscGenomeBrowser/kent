@@ -1,21 +1,53 @@
 /* faTrimPolyA - trim Poly-A tail*/
 #include "common.h"
+#include "options.h"
 #include "linefile.h"
-#include "hash.h"
-#include "cheapcgi.h"
 #include "fa.h"
+#include "dnautil.h"
 
-static char const rcsid[] = "$Id: faTrimPolyA.c,v 1.1 2003/07/20 18:33:22 baertsch Exp $";
+static char const rcsid[] = "$Id: faTrimPolyA.c,v 1.2 2005/04/08 18:42:33 markd Exp $";
+
+/* Command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"polyA", OPTION_BOOLEAN},
+    {"polyT", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+boolean trimPolyA = FALSE;
+boolean trimPolyT = FALSE;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "faTrimPolyA - trim Poly A tail\n"
+  "faTrimPolyA - trim poly-A tails\n"
   "usage:\n"
   "   faTrimPolyA in.fa out.fa \n"
-  "options:\n"
+  "Options:\n"
+  "  -polyA - trim poly-As at the end of the sequence.  This is the\n"
+  "   default if no trim option is specified.\n" 
+  "  -polyT - trim poly-Ts at the beginning of the sequence.  To trim both,\n"
+  "   specify both options.\n"
   );
+}
+
+void polyTrimSeq(struct dnaSeq *seq, FILE *fh)
+/*  trim a sequence */
+{
+if (trimPolyA)
+    {
+    int sz = maskTailPolyA(seq->dna, seq->size);
+    seq->size -= sz;
+    seq->dna[seq->size] = '\0';
+    }
+if (trimPolyT)
+    {
+    int sz = maskHeadPolyT(seq->dna, seq->size);
+    seq->size -= sz;
+    seq->dna += sz;
+    }
+
+faWriteNext(fh, seq->name, seq->dna, seq->size);
 }
 
 void faTrimPolyA(char *inFile, char *outFile)
@@ -23,39 +55,27 @@ void faTrimPolyA(char *inFile, char *outFile)
 {
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
-FILE *f = mustOpen(outFile, "w");
-int seqCount = 0, passCount = 0;
-int nCount;
+FILE *fh = mustOpen(outFile, "w");
 ZeroVar(&seq);
 
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
-    {
-    int i, aSize = 0;
-    seqCount += 1;
-    for (i=seq.size-1; i>=0; --i)
-        {
-        DNA b = seq.dna[i];
-        if (b == 'a' || b == 'A')
-            ++aSize;
-        else
-            break;
-        }
-    if (aSize >= 4)
-        {
-        memset(seq.dna + seq.size - aSize, 'n', aSize);
-        seq.size -= aSize;
-        seq.dna[seq.size-aSize] = 0;
-        }
-    faWriteNext(f, seq.name, seq.dna, seq.size);
-    }
+    polyTrimSeq(&seq, fh);
+carefulClose(&fh);
+lineFileClose(&lf);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+dnaUtilOpen();
+optionInit(&argc, argv, optionSpecs);
 if (argc != 3 )
     usage();
+trimPolyA = optionExists("polyA");
+trimPolyT = optionExists("polyT");
+if (!(trimPolyA || trimPolyT))
+    trimPolyA = TRUE;
+
 faTrimPolyA(argv[1], argv[2]);
 return 0;
 }
