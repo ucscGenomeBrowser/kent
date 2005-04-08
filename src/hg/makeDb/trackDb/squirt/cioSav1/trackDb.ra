@@ -134,10 +134,9 @@ type chain hg16
 otherDb hg16
 
 searchTable blastHg16KG
-searchType bed
-searchMethod fuzzy
+searchMethod prefix
+searchType psl
 shortCircuit 1
-query select tName,tStart,tEnd,qName from %s where qName like '%%%s%%'
 searchPriority 1
 
 searchTable blatCioSav1
