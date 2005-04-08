@@ -68,6 +68,7 @@ DIRS = \
 	vegaBuildInfo \
 	hgBioCyc \
 	hgKegg \
+	hgKegg2 \
 	hgMrnaRefseq \
 	hgCGAP \
 	schema \
