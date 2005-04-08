@@ -41,6 +41,14 @@ void mafAliFree(struct mafAli **pObj);
 void mafAliFreeList(struct mafAli **pList);
 /* Free up a list of maf alignmentx. */
 
+/* the set of syntenic relationships that the previous and
+ * following alignments have with the current one */
+#define	MAF_INVERSE_STATUS	'V'
+#define	MAF_INSERT_STATUS	'I'
+#define	MAF_DUP_STATUS		'D'
+#define	MAF_NEW_STATUS		'N'
+#define	MAF_CONTIG_STATUS	'C'
+
 struct mafComp
 /* A component of a multiple alignment. */
     {
@@ -51,6 +59,10 @@ struct mafComp
     int start;	 /* Start within sequence. Zero based. If strand is - is relative to src end. */
     int size;	 /* Size in sequence (does not include dashes).  */
     char *text;  /* The sequence including dashes. */
+    char leftStatus; /* the syntenic status of the alignment before us vis a vis ourselves */
+    int leftLen;     /* length related information for the previous alignment for the species */
+    char rightStatus; /* the syntenic status of the alignment after us vis a vis ourselves */
+    int rightLen;     /* length related information for the following alignment for the species */
     };
 
 void mafCompFree(struct mafComp **pObj);

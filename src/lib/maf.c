@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.18 2005/03/10 16:52:11 kate Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.19 2005/04/08 21:24:30 braney Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -166,6 +166,31 @@ for (;;)
 		/* Add component to head of list. */
 		slAddHead(&ali->components, comp);
 		}
+	    if (sameString(word, "i"))
+		{
+		struct mafComp *comp;
+		int wordCount;
+		char *row[6];
+		int textSize;
+
+		/* Chop line up by white space.  This involves a few +-1's because
+		 * have already chopped out first word. */
+		row[0] = word;
+		wordCount = chopByWhite(line, row+1, ArraySize(row)-1) + 1; /* +-1 because of "s" */
+		lineFileExpectWords(lf, ArraySize(row), wordCount);
+		if (!sameString(row[1],ali->components->src))
+		    {
+		    AllocVar(comp);
+		    comp->src = cloneString(row[1]);
+		    slAddHead(&ali->components, comp);
+		    }
+
+		comp = ali->components;
+		comp->leftStatus = *row[2];
+		comp->leftLen = atoi(row[3]);
+		comp->rightStatus = *row[4];
+		comp->rightLen = atoi(row[5]);
+		}
 	    }
 	slReverse(&ali->components);
 	return ali;
@@ -243,10 +268,18 @@ for (comp = ali->components; comp != NULL; comp = comp->next)
 /* Write out each component. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
     {
-    fprintf(f, "s %-*s %*d %*d %c %*d %s\n", 
-    	srcChars, comp->src, startChars, comp->start, 
-	sizeChars, comp->size, comp->strand, 
-	srcSizeChars, comp->srcSize, comp->text);
+    if (comp->srcSize)
+	{
+	fprintf(f, "s %-*s %*d %*d %c %*d %s\n", 
+	    srcChars, comp->src, startChars, comp->start, 
+	    sizeChars, comp->size, comp->strand, 
+	    srcSizeChars, comp->srcSize, comp->text);
+	}
+    if (comp->leftStatus)
+	{
+	fprintf(f,"i %-*s %c %d %c %d\n",srcChars,comp->src,
+	    comp->leftStatus,comp->leftLen,comp->rightStatus,comp->rightLen);
+	}
     }
 
 /* Write out blank separator line. */
@@ -472,6 +505,8 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     AllocVar(subMc);
     subMc->src = cloneString(mc->src);
+    if (mc->srcSize == 0)
+	continue;
     subMc->srcSize = mc->srcSize;
     subMc->strand = mc->strand;
     subMc->start = mc->start + countNonDash(mc->text, textStart);
