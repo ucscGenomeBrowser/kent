@@ -927,6 +927,40 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
     }
 }
 
+void checkInLoop(struct pfCompile *pfc, struct pfParse *pp)
+/* Check that break/continue lies inside of loop */
+{
+struct pfParse *p;
+for (p = pp->parent; p != NULL; p = p->parent)
+    {
+    switch (p->type)
+        {
+	case pptWhile:
+	case pptFor:
+	case pptForeach:
+	    return;	/* We're good. */
+	}
+    }
+errAt(pp->tok, "break or continue outside of loop");
+}
+
+void checkInFunction(struct pfCompile *pfc, struct pfParse *pp)
+/* Check that return lies inside of function */
+{
+struct pfParse *p;
+for (p = pp->parent; p != NULL; p = p->parent)
+    {
+    switch (p->type)
+        {
+	case pptToDec:
+	case pptParaDec:
+	case pptFlowDec:
+	    return;	/* We're good. */
+	}
+    }
+errAt(pp->tok, "return outside of function");
+}
+
 static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
 /* Make sure that function looks kosher - that all inputs are
  * covered, and that there are no functions inside functions. */
@@ -1039,6 +1073,13 @@ switch (pp->type)
     case pptToDec:
     case pptFlowDec:
         blessFunction(pfc, pp);
+	break;
+    case pptBreak:
+    case pptContinue:
+        checkInLoop(pfc, pp);
+	break;
+    case pptReturn:
+        checkInFunction(pfc, pp);
 	break;
     }
 }
