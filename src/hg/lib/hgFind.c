@@ -27,7 +27,7 @@
 #include "minGeneInfo.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.163 2005/04/08 19:25:07 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.164 2005/04/08 20:01:26 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1103,11 +1103,12 @@ struct hash *hash = newHash(0);
 for (el = aList; el != NULL; el = el->next)
     {
     char *name = el->name;
-    if (hashLookup(bHash, name) && !hashLookup(hash, name))
+    int organismID = hashIntValDefault(bHash, name, -1);
+    if (organismID >= 0 && !hashLookup(hash, name))
         {
 	newEl = newSlName(name);
 	slAddHead(&list, newEl);
-	hashAdd(hash, name, NULL);
+	hashAddInt(hash, name, organismID);
 	}
     }
 *retHash = hash;
