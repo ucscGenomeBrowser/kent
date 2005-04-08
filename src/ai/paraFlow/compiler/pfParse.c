@@ -622,7 +622,7 @@ switch (tok->type)
 return pp;
 }
 
-struct pfParse *parseCall(struct pfParse *parent,
+struct pfParse *parseCallOrIndex(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse out function call. */
 {
@@ -656,6 +656,21 @@ if (tok->type == '(')
     tok = tok->next;
     *pTokList = tok;
     }
+else if (tok->type == '[')
+    {
+    while (tok->type == '[')
+	{
+	struct pfParse *collection = pp;
+	pp = pfParseNew(pptIndex, tok, parent, scope);
+	pp->children = collection;
+	tok = tok->next;
+	collection->next = pfParseExpression(pp, &tok, scope);
+	if (tok->type != ']')
+	    expectingGot("]", tok);
+	tok = tok->next;
+	}
+    *pTokList = tok;
+    }
 return pp;
 }
 
@@ -685,7 +700,7 @@ else if (tok->type == '~')
     }
 else
     {
-    pp = parseCall(parent, &tok, scope);
+    pp = parseCallOrIndex(parent, &tok, scope);
     }
 *pTokList = tok;
 return pp;
