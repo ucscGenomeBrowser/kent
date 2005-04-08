@@ -1298,8 +1298,9 @@ static struct pfParse *parseWordStatement(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(type, tok, parent, scope);
+tok = tok->next;
 eatSemi(&tok);
-*pTokList = tok->next;
+*pTokList = tok;
 return pp;
 }
 
