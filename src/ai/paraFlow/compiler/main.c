@@ -12,6 +12,7 @@
 #include "pfCompile.h"
 #include "pfParse.h"
 #include "pfBindVars.h"
+#include "pfCheck.h"
 
 boolean parseOnly = FALSE;
 
@@ -160,6 +161,7 @@ pfBindVars(pfc, program);
 if (!parseOnly)
     {
     pfTypeCheck(pfc, program);
+    pfCheckParaFlow(pfc, program);
     }
 
 pfParseDump(program, 0, stdout);

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "obscure.h"
 #include "pfParse.h"
 #include "pfCompile.h"
 #include "pfType.h"
@@ -819,8 +820,30 @@ for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
 pp->ty = CloneVar(type);
 }
 
-static void avoidFunctions(struct pfCompile *pfc, struct pfParse *pp)
-/* Avoid functions declared in functions */
+static void markUsedVars(struct pfScope *scope, 
+	struct hash *hash, struct pfParse *pp)
+/* Mark any pptVarUse inside scope as 1's in hash */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+	{
+	if (pp->var->scope == scope)
+	    {
+	    struct hashEl *hel = hashLookup(hash, pp->name);
+	    if (hel != NULL)
+		 hel->val = intToPt(1);
+	    }
+        break;
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    markUsedVars(scope, hash, pp);
+}
+
+static void rBlessFunction(struct pfScope *outputScope,
+	struct hash *outputHash, struct pfCompile *pfc, struct pfParse *pp)
+/* Avoid functions declared in functions, and mark outputs as used.  */
 {
 switch (pp->type)
     {
@@ -829,93 +852,37 @@ switch (pp->type)
     case pptFlowDec:
         errAt(pp->tok, "sorry, can't declare functions inside of functions");
 	break;
-    }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    avoidFunctions(pfc, pp);
-}
-
-static void avoidFunctionInFunction(struct pfCompile *pfc, struct pfParse *pp)
-/* Check that there are no functions among the children. */
-{
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    avoidFunctions(pfc, pp);
-}
-
-static boolean enclosedScope(struct pfScope *outer, struct pfScope *inner)
-/* Return true if inner is the same or is inside of outer. */
-{
-for ( ; inner != NULL; inner = inner->next)
-    if (inner == outer)
-       return TRUE;
-return FALSE;
-}
-
-static void checkLocal(struct hash *outsideOk, struct pfScope *localScope,
-	struct pfParse *pp)
-/* Make sure that any pptVarUse's are local or function calls */
-{
-switch (pp->type)
-    {
-    case pptVarUse:
-	{
-	if (!enclosedScope(localScope, pp->var->scope))
-	    {
-	    if (!hashLookup(outsideOk, pp->name))
-	        errAt(pp->tok, "write to non-local variable illegal in this context");
-	    }
-        break;
-	}
-    }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkLocal(outsideOk, localScope, pp);
-}
-
-static void checkReadOnlyOutsideLocals(struct hash *outsideWriteOk,
-	struct pfScope *localScope, struct pfParse *pp)
-/* Check that anything on left hand side of an assignment
- * is local or in the outsideWriteOk hash. */
-{
-switch (pp->type)
-    {
     case pptAssignment:
-    case pptPlusEquals:
-    case pptMinusEquals:
-    case pptMulEquals:
-    case pptDivEquals:
-         {
-	 checkLocal(outsideWriteOk, localScope, pp->children);
-	 break;
-	 }
+        markUsedVars(outputScope, outputHash, pp);
+	break;
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkReadOnlyOutsideLocals(outsideWriteOk, localScope, pp);
+    rBlessFunction(outputScope, outputHash, pfc, pp);
 }
 
-static void blessPara(struct pfCompile *pfc, struct pfParse *paraDec)
-/* Make sure that paraDec does not write to anything but
- *   1) It's output.
- *   2) Local variables.
- *   3) It's first input parameter. */
+static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
+/* Make sure that function looks kosher - that all inputs are
+ * covered, and that there are no functions inside functions. */
 {
-struct pfParse *input = paraDec->children->next;
+struct hash *outputHash = hashNew(4);
+struct pfParse *input = funcDec->children->next;
 struct pfParse *output = input->next;
-struct pfParse *body = output->next;
 struct pfParse *pp;
-struct hash *outerWriteOk = hashNew(6);
+struct hashCookie hc;
+struct hashEl *hel;
 
-/* Check that have at least one input parameter. */
-if ((pp = input->children) == NULL)
-    errAt(input->tok, "Para declarations need at least one parameter");
-
-/* Build up hash of variables that it's ok to write to. */
-hashAdd(outerWriteOk, pp->name, NULL);
 for (pp = output->children; pp != NULL; pp = pp->next)
-    hashAdd(outerWriteOk, pp->name, NULL);
-
-checkReadOnlyOutsideLocals(outerWriteOk, body->scope, body);
-
-/* Clean up */
-hashFree(&outerWriteOk);
+    hashAddInt(outputHash, pp->name, 0);
+for (pp = funcDec->children; pp != NULL; pp = pp->next)
+    rBlessFunction(funcDec->scope, outputHash, pfc, pp);
+hc = hashFirst(outputHash);
+while ((hel = hashNext(&hc)) != NULL)
+    {
+    if (hel->val == intToPt(0))
+        errAt(funcDec->tok, "Output variable %s not set in %s", 
+		hel->name, funcDec->name);
+    }
+hashFree(&outputHash);
 }
 
 void pfTypeCheck(struct pfCompile *pfc, struct pfParse *pp)
@@ -996,12 +963,9 @@ switch (pp->type)
         blessClass(pfc, pp);
 	break;
     case pptParaDec:
-        avoidFunctionInFunction(pfc, pp);
-	blessPara(pfc, pp);
-	break;
     case pptToDec:
     case pptFlowDec:
-        avoidFunctionInFunction(pfc, pp);
+        blessFunction(pfc, pp);
 	break;
     }
 }
