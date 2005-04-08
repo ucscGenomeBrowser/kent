@@ -52,9 +52,26 @@ UL	{}
 
 TABLE{	border: 0;	}
 
-
 LI {		line-height: 1.5;
 	}
 
 
-
+/* used by CCDS details page in hgc */ 
+TABLE.hgcCcds, TABLE.hgcCcds TH, TABLE.hgcCcds TD {
+    border: 3px lightgrey ridge;
+    border-collapse: collapse;
+    text-align: left;
+    vertical-align: top;
+}
+TABLE.hgcCcds THEAD {
+    background-color: #2636D1;
+    color: #ffffff;
+}
+TABLE.hgcCcds TBODY {
+    background-color: #D0FFD0;
+}
+TABLE.hgcCcds CAPTION {
+    caption-side: top; 
+    text-align: left;
+    font: large, bold;
+}
