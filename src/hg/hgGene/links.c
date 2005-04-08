@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.19 2005/03/21 23:43:15 angie Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.20 2005/04/08 09:02:39 markd Exp $";
 
 struct link
 /* A link to another web site. */
@@ -140,7 +140,7 @@ if (sameString(link->name, "protBrowser"))
     }
 if (sameString(link->name, "tbSchema"))
     {
-    struct trackDb *tdb = hTrackDbForTrack(curGeneType);
+    struct trackDb *tdb = hTrackDbForTrack("knownGene");
     struct dyString *dy = NULL;
     if (tdb == NULL)
 	return NULL;

@@ -239,7 +239,6 @@ extern struct hash *oldCart;	/* Old cart hash. */
 extern char *database;		/* Name of genome database - hg15, mm3, or the like. */
 extern char *genome;		/* Name of genome - mouse, human, etc. */
 extern char *curGeneId;		/* Current Gene Id. */
-extern char *curGeneItem;	/* Current Gene Item. */
 extern char *curGeneType;	/* gene track type */
 extern char *curGeneName;		/* Biological name of gene. */
 extern char *curGeneChrom;	/* Chromosome current gene is on. */

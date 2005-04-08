@@ -7,6 +7,8 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "ccdsInfo.h"
+#include "genbank.h"
+#include "ccdsKgMap.h"
 
 /* FIXME: database should really have an enum column */
 
@@ -40,7 +42,7 @@ switch (srcDb)
 return "?";
 }
 
-static char const rcsid[] = "$Id: ccdsInfo.c,v 1.2 2005/04/04 23:57:28 markd Exp $";
+static char const rcsid[] = "$Id: ccdsInfo.c,v 1.3 2005/04/08 09:02:40 markd Exp $";
 
 void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 /* Load a row from ccdsInfo table into ret.  The contents of ret will
@@ -168,6 +170,25 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+static char *createSql =
+    /* SQL to create ccdsInfo format table */
+    "CREATE TABLE %s (\n"
+    "    ccds char(12) not null,     # CCDS id\n"
+    "    srcDb char(1) not null,     # source database: N=NCBI, H=Hinxton\n"
+    "    mrnaAcc char(18) not null,  # mRNA accession (NCBI or Hinxton)\n"
+    "    protAcc char(18) not null,  # protein accession (NCBI or Hinxton)\n"
+    "              #Indices\n"
+    "    INDEX(ccds),\n"
+    "    INDEX(mrnaAcc)\n"
+    ");\n";
+
+char *ccdsInfoGetCreateSql(char *table)
+/* Get sql command to create ccdsInfo table. Result should be freed. */
+{
+char sql[1024];
+safef(sql, sizeof(sql), createSql, table);
+return cloneString(sql);
+}
 
 static int cmpMRna(const void *va, const void *vb)
 /* Compare to sort based mrnaAcc. */
@@ -183,16 +204,10 @@ void ccdsInfoMRnaSort(struct ccdsInfo **ccdsInfos)
 slSort(ccdsInfos, cmpMRna);
 }
 
-struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
-                                      enum ccdsInfoSrcDb srcDb)
-/* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is
- * ccdsInfoNull, return both.  Return NULL if ccdsId it's not valid */
+static char *getSrcDbWhere(enum ccdsInfoSrcDb srcDb)
+/* generate where expression for CCDS srcDb.  Note: static return!! */
 {
-char query[256], extraWhere[64];
-struct sqlResult *sr;
-char **row;
-struct ccdsInfo *ccdsInfos = NULL;
-
+static char extraWhere[64];
 switch (srcDb) {
 case ccdsInfoNull:
     extraWhere[0] = '\0';
@@ -207,9 +222,48 @@ case ccdsInfoEnsembl:
     safef(extraWhere, sizeof(extraWhere), " and srcDb = 'H' and mrnaAcc not like 'OTT%%'");
     break;
 }
+return extraWhere;
+}
+
+struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
+                                      enum ccdsInfoSrcDb srcDb)
+/* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is
+ * ccdsInfoNull, return all srcDbs.  Return NULL if ccdsId it's not valid */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+struct ccdsInfo *ccdsInfos = NULL;
 
 safef(query, sizeof(query), "select * from ccdsInfo where ccds = \"%s\"%s",
-      ccdsId, extraWhere);
+      ccdsId, getSrcDbWhere(srcDb));
+sr = sqlGetResult(conn, query);
+
+while ((row = sqlNextRow(sr)) != NULL)
+    slSafeAddHead(&ccdsInfos, ccdsInfoLoad(row));
+sqlFreeResult(&sr);
+
+return ccdsInfos;
+}
+
+struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc,
+                                      enum ccdsInfoSrcDb srcDb)
+/* Obtain list of ccdsInfo object for the specified mRNA and srcDb.  If srcDb
+ * is ccdsInfoNull, return all srcDbs.  If mrnaAcc is a RefSeq id and doesn't contain
+ * a version, a like query is generated.  Return NULL if ccdsId it's not
+ * valid. */
+{
+char query[256], where[64];
+struct sqlResult *sr;
+char **row;
+struct ccdsInfo *ccdsInfos = NULL;
+
+if (genbankIsRefSeqAcc(mrnaAcc) && (strchr(mrnaAcc, '.') == NULL))
+    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like \"%s.%%\"%s",
+          mrnaAcc, getSrcDbWhere(srcDb));
+else
+    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = \"%s\"%s",
+          mrnaAcc, getSrcDbWhere(srcDb));
 sr = sqlGetResult(conn, query);
 
 while ((row = sqlNextRow(sr)) != NULL)

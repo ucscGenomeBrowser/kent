@@ -163,9 +163,11 @@
 #include "flyreg.h"
 #include "putaInfo.h"
 #include "gencodeIntron.h"
+#include "ccdsInfo.h"
+#include "ccdsKgMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.867 2005/04/05 06:58:35 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.868 2005/04/08 09:02:40 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6908,71 +6910,295 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doCcdsGene(struct trackDb *tdb, char *ccds)
+char *getCcdsGeneSymbol(struct sqlConnection *conn, struct ccdsInfo *rsCcds)
+/* get the gene name for a CCDS */
+{
+struct ccdsInfo *ci;
+char accBuf[GENBANK_ACC_BUFSZ], query[256];
+char *geneSym = NULL;
+
+for (ci = rsCcds; ci != NULL; ci = ci->next)
+    {
+    safef(query, sizeof(query), "select name from refLink where mrnaAcc='%s'",
+          genbankDropVer(accBuf, ci->mrnaAcc));
+    geneSym = sqlQuickString(conn, query);
+    if (geneSym != NULL)
+        return geneSym;
+    }
+return NULL;
+}
+
+char *getCcdsRefSeqSummary(struct sqlConnection *conn, struct ccdsInfo *rsCcds)
+/* get the refseq summary for a CCDS */
+{
+struct ccdsInfo *ci;
+char accBuf[GENBANK_ACC_BUFSZ], query[256];
+char *summary = NULL;
+
+for (ci = rsCcds; ci != NULL; ci = ci->next)
+    {
+    safef(query, sizeof(query), "select summary from refSeqSummary where mrnaAcc='%s'",
+          genbankDropVer(accBuf, ci->mrnaAcc));
+    summary = sqlQuickString(conn, query);
+    if (summary != NULL)
+        return summary;
+    }
+return NULL;
+}
+
+struct ccdsKgMap *ccdsGetKgs(struct sqlConnection *conn, char *ccdsId)
+/* Get ccdsKgMap objects for a ccdsId.  Returns only
+ * the best overlapping ones (ones with the same cdsSimilariy as
+ * the highest cdsSimilariy. */
+{
+struct ccdsKgMap *ccdsKgs = NULL, *bestCcdsKgs = NULL, *ccdsKg;
+
+ccdsKgs = ccdsKgMapSelectByCcds(conn, ccdsId, 0.95);
+if (ccdsKgs == NULL)
+    return NULL;
+
+bestCcdsKgs = slPopHead(&ccdsKgs);  /* seed with first */
+while ((ccdsKg = slPopHead(&ccdsKgs)) != NULL)
+    {
+    if (ccdsKg->cdsSimilarity == bestCcdsKgs->cdsSimilarity)
+        {
+        /* same as best, keep */
+        slAddHead(&bestCcdsKgs, ccdsKg);
+        }
+    else if (ccdsKg->cdsSimilarity > bestCcdsKgs->cdsSimilarity)
+        {
+        /* new best, replace list */
+        ccdsKgMapFreeList(&bestCcdsKgs);
+        bestCcdsKgs = ccdsKg;
+        }
+    else
+        {
+        /* worse, drop */
+        ccdsKgMapFree(&ccdsKg);
+        }
+    }
+
+/* only keep one of each kg */
+slUniqify(&bestCcdsKgs, ccdsKgMapKgIdCmp, ccdsKgMapFree);
+
+return bestCcdsKgs;
+}
+
+void printCcdsHgGeneUrl(struct sqlConnection *conn, char *ccdsId, char* kgId)
+/* output a URL to hgGene for a ccds */
+{
+char where[128];
+struct genePredReader *gpr;
+struct genePred *ccdsGene = NULL, *kgGene = NULL;
+
+/* get ccds genePred to get location */
+safef(where, sizeof(where), "chrom = '%s' and name = '%s'", seqName, ccdsId);
+gpr = genePredReaderQuery(conn, "ccdsGene", where);
+ccdsGene = genePredReaderAll(gpr);
+genePredReaderFree(&gpr);
+if (ccdsGene == NULL)
+    errAbort("%s not found in ccdsGene table for chrom %s", ccdsId, seqName);
+else if (ccdsGene->next != NULL)
+    errAbort("multiple %s rows found in ccdsGene table for chrom %s", ccdsId, seqName);
+
+/* get KG genePred, as need exact location for link */
+safef(where, sizeof(where), "name = '%s' and strand = '%s'", kgId,
+      ccdsGene->strand);
+gpr = genePredReaderRangeQuery(conn, "knownGene", seqName,
+                               ccdsGene->txStart, ccdsGene->txEnd, where);
+kgGene = genePredReaderAll(gpr);
+genePredReaderFree(&gpr);
+if (kgGene == NULL)
+    errAbort("%s not found in knownGene table for chrom %s", kgId, seqName);
+else if (kgGene->next != NULL)
+    errAbort("multiple %s rows found in knownGene table for chrom %s", kgId, seqName);
+
+printf("../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d",
+       cartSidUrlString(cart),
+       "db", database,
+       "hgg_gene", kgId,
+       "hgg_chrom", seqName,
+       "hgg_start", kgGene->txStart,
+       "hgg_end", kgGene->txEnd);
+genePredFree(&ccdsGene);
+genePredFree(&kgGene);
+}
+
+char *kgIdToSpId(struct sqlConnection *conn, char* kgId)
+/* get the swissprot id for a known genes id; resulting string should be
+ * freed */
+{
+char query[64];
+safef(query, sizeof(query), "select spID from kgXref where kgID='%s'", kgId);
+return sqlNeedQuickString(conn, query);
+}
+
+void ccdsNcbiRows(char *ccdsId, struct ccdsInfo *rsCcds)
+/* output RefSeq CCDS entries */
+{
+struct ccdsInfo *ci;
+for (ci = rsCcds; ci != NULL; ci = ci->next)
+    {
+    printf("<TR>");
+    if (ci == rsCcds)
+        printf("<TH ROWSPAN=%d>RefSeq", slCount(rsCcds));
+    printf("<TD><A HREF=\"");
+    printEntrezNucleotideUrl(stdout, ci->mrnaAcc);
+    printf("\" TARGET=_blank>%s</A>&nbsp;", ci->mrnaAcc);
+    printf("<TD><A HREF=\"");
+    printEntrezProteinUrl(stdout, ci->protAcc);
+    printf("\" TARGET=_blank>%s</A>", ci->protAcc);
+    printf("</TR>\n");
+    }
+}
+
+void ccdsHinxtonRows(char *ccdsId, bool isVega,struct ccdsInfo *hinCcds)
+/* output Ensembl or vega CCDS entries */
+{
+struct ccdsInfo *ci;
+char *dbArg = isVega ? "&db=vega" : "";
+char *ensGenome = ensOrgNameFromScientificName(scientificName);
+if (ensGenome == NULL)
+    errAbort("%s: ensOrgNameFromScientificName failed", ccdsId);
+
+for (ci = hinCcds; ci != NULL; ci = ci->next)
+    {
+    printf("<TR>");
+    if (ci == hinCcds)
+        printf("<TH ROWSPAN=%d>%s", slCount(hinCcds),
+               (isVega ? "Vega" : "Ensembl"));
+    printf("<TD><A HREF=\"http://www.ensembl.org/%s/geneview?transcript=%s%s\""
+           " TARGET=_blank>%s</A>&nbsp;",
+           ensGenome, ci->mrnaAcc, dbArg, ci->mrnaAcc);
+    printf("<TD><A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s%s\""
+           " TARGET=_blank>%s</A>",
+           ensGenome, ci->protAcc, dbArg, ci->protAcc);
+    printf("</TR>\n");
+    }
+}
+
+void ccdsKnownGenesRows(struct sqlConnection *conn, char *ccdsId)
+/* output KnownGenes mapped to CCDS */
+{
+struct ccdsKgMap *ccdsKgs = ccdsGetKgs(conn, ccdsId);
+struct ccdsKgMap *ccdsKg;
+boolean havePb = hgPbOk(database);
+for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
+    {
+    char *spId = kgIdToSpId(conn, ccdsKg->kgId);
+    printf("<TR>");
+    if (ccdsKg == ccdsKgs)
+        printf("<TH ROWSPAN=%d>%s", slCount(ccdsKgs),
+               (havePb ? "UCSC Known Genes/<br>Proteome Browser"
+                : "UCSC Known Genes"));
+    printf("<TD><A HREF=\"");
+    printCcdsHgGeneUrl(conn, ccdsId, ccdsKg->kgId);
+    printf("\" TARGET=_blank>%s</A>", ccdsKg->kgId);
+
+    if (havePb)
+        printf("<TD><A HREF=\"../cgi-bin/pbTracks?proteinID=%s&db=%s\""
+               " TARGET=_blank>%s</A>", spId, database, spId);
+    else
+        printf("<TD>&nbsp;");
+    freez(&spId);
+
+    printf("</TR>\n");
+    }
+}
+
+void doCcdsGene(struct trackDb *tdb, char *ccdsId)
 /* Process click on a CCDS gene. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlConnection *conn2 = hAllocConn();
-struct sqlResult *sr, *sr2;
-char **row, **row2;
-char query[256], query2[256];
-char *mrnaAcc;
-char *chp;
-char *refseqDesc;
+struct ccdsInfo *rsCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoNcbi);
+struct ccdsInfo *vegaCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoVega);
+struct ccdsInfo *ensCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoEnsembl);
+char *geneSym, *desc, *summary;
+
+if (rsCcds == NULL)
+    errAbort("database inconsistency: no NCBI ccdsInfo entries found for %s", ccdsId);
+if ((vegaCcds == NULL) && (ensCcds == NULL))
+    errAbort("database inconsistency: no Hinxton ccdsInfo entries found for %s", ccdsId);
+
+ccdsInfoMRnaSort(&rsCcds);
+ccdsInfoMRnaSort(&vegaCcds);
+ccdsInfoMRnaSort(&ensCcds);
 
 cartWebStart(cart, "CCDS Gene");
 
-printf("<H2>Concensus CDS Gene %s</H2>\n", ccds);
+printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
 
-/* get RefSeq CCDS entries */
-safef(query, sizeof(query), "select mrnaAcc from ccdsInfo where ccds = '%s' and srcDb='N'", ccds);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s in ccdsInfo table - database inconsistency.", ccds);
-while (row != NULL)
+/* table with basic information about the CCDS (2 columns) */
+printf("<TABLE class=\"hgcCcds\"><TBODY>\n");
+
+/* gene symbol */
+geneSym = getCcdsGeneSymbol(conn, rsCcds);
+if (geneSym != NULL)
+    printf("<TR><TH>Gene<TD>%s</TR>\n", geneSym);
+freez(&geneSym);
+
+/* description */
+desc = hGenBankGetDesc(rsCcds->mrnaAcc, TRUE);
+if (desc != NULL)
+    printf("<TR><TH>Description<TD>%s</TR>\n", desc);
+freez(&desc);
+
+/* CCDS sequence links */
+printf("<TR>\n");
+printf("<TH>Sequences");
+printf("<TD>");
+hgcAnchorSomewhere("htcGeneMrna", ccdsId, "ccdsGene", seqName);
+printf("CDS</A>, &nbsp;");
+hgcAnchorSomewhere("htcTranslatedPredMRna", ccdsId, "translate", seqName);
+printf("protein</A>, &nbsp;");
+hgcAnchorSomewhere( "htcGeneInGenome", ccdsId, "ccdsGene", seqName);
+printf("genomic</A>");
+printf("</TR>\n");
+
+/* CCDS databases */
+printf("<TR>\n");
+printf("<TH>CCDS database");
+printf("<TD> <A HREF=\"http://www.ncbi.nlm.nih.gov/CCDS/CcdsBrowse.cgi?REQUEST=CCDS&DATA=%s\" TARGET=_blank>%s</A>",
+       ccdsId, ccdsId);
+printf("</TR>\n");
+
+printf("</TBODY></TABLE>\n");
+printf("<BR>\n");
+
+/* table with links to other browser apps or external databases (3 columns) */
+printf("<TABLE class=\"hgcCcds\">\n");
+printf("<CAPTION>Associated Sequences</CAPTION>\n");
+printf("<THEAD>\n");
+printf("<TR><TH>&nbsp;<TH>mRNA<TH>Protein</TR>\n");
+printf("</THEAD><TBODY>\n");
+if (hTableExists("ccdsKgMap"))
+    ccdsKnownGenesRows(conn, ccdsId);
+ccdsNcbiRows(ccdsId, rsCcds);
+if (vegaCcds != NULL)
+    ccdsHinxtonRows(ccdsId, TRUE, vegaCcds);
+if (ensCcds != NULL)
+    ccdsHinxtonRows(ccdsId, FALSE, ensCcds);
+printf("</TBODY></TABLE>\n");
+
+printf("<P><EM>Note: mRNA and protein sequences in other gene collections "
+       "may differ from the CCDS sequences.</EM>\n");
+
+summary = getCcdsRefSeqSummary(conn, rsCcds);
+if (summary != NULL)
     {
-    mrnaAcc = row[0];
-    chp = strstr(mrnaAcc, ".");
-    if (chp != NULL) *chp = '\0';
-    
-    safef(query2, sizeof(query2), "select product from refLink where mrnaAcc = '%s'", mrnaAcc);
-    sr2  = sqlGetResult(conn2, query2);
-    row2 = sqlNextRow(sr2);
-    refseqDesc = row2[0];
-    
-    printf("<B>RefSeq:</B> <A HREF=\"../cgi-bin/hgc?g=refGene&i=%s&db=%s\"", mrnaAcc, database);
-    printf(" TARGET=_blank> %s</A> %s<BR>\n", mrnaAcc, refseqDesc);fflush(stdout); 
-    sqlFreeResult(&sr2);
-    row = sqlNextRow(sr);
+    htmlHorizontalLine();
+    printf("<H3>RefSeq summary of %s</H3>\n", ccdsId);
+    printf("<P>%s</P>\n", summary);
+    freez(&summary);
     }
-sqlFreeResult(&sr);
-
-/* get Hinxton CCDS entries */
-printf("<BR>");
-safef(query, sizeof(query), "select mrnaAcc from ccdsInfo where ccds = '%s' and srcDb='H'", ccds);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s in ccdsInfo table - database inconsistency.", ccds);
-while (row != NULL)
-    {
-    mrnaAcc = row[0];
-    if (strstr(mrnaAcc, "OTT") != NULL)
-    	{
-    	printf("<B>Hinxton:</B> <A HREF=\"http://www.ensembl.org/Homo_sapiens/geneview?gene=%s&db=vega\"", mrnaAcc);
-    	}
-    else
-    	{
-        printf("<B>Hinxton:</B> <A HREF=\"../cgi-bin/hgc?g=ensGene&i=%s&db=%s\"", mrnaAcc, database);
-    	}
-    printf(" TARGET=_blank> %s</A><BR>\n",mrnaAcc);fflush(stdout); 
-    row = sqlNextRow(sr);
-    }
-
-sqlFreeResult(&sr);
 
 printTrackHtml(tdb);
+ccdsInfoFreeList(&rsCcds);
+ccdsInfoFreeList(&vegaCcds);
+ccdsInfoFreeList(&ensCcds);
 hFreeConn(&conn);
 }
+
 void doMgcGenes(struct trackDb *tdb, char *acc)
 /* Process click on a mgcGenes track. */
 {
@@ -12022,15 +12248,15 @@ sqlFreeResult(&sr);
 
 /* Find the relevant tissues type records in the range */ 
 fillCghTable(3, tissue, FALSE);
-printf("<TR><TD>&nbsp</TD></TR>\n");
+printf("<TR><TD>&nbsp;</TD></TR>\n");
 
 /* Find the relevant tissue average records in the range */
 fillCghTable(2, tissue, TRUE);
-printf("<TR><TD>&nbsp</TD></TR>\n");
+printf("<TR><TD>&nbsp;</TD></TR>\n");
 
 /* Find the all tissue average records in the range */
 fillCghTable(1, NULL, TRUE);
-printf("<TR><TD>&nbsp</TD></TR>\n");
+printf("<TR><TD>&nbsp;</TD></TR>\n");
 
 printf("</TR>\n</TABLE>\n");
 hgFreeConn(&conn);

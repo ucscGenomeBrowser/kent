@@ -15,8 +15,9 @@
 #include "genePred.h"
 #include "hgColors.h"
 #include "hgGene.h"
+#include "ccdsKgMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.48 2005/04/06 22:25:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.49 2005/04/08 09:02:39 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -29,7 +30,6 @@ char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
 int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 char *curGeneType;		/* Type of gene track */
-char *curGeneItem;		/* gene item (CCDS Gene ID) */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 
@@ -275,14 +275,6 @@ fprintf(f, "../cgi-bin/hgc?%s&g=refGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
     curGeneEnd, database);
 }
 
-static void printOurCcdsGeneUrl(FILE *f, char *accession)
-/* Print URL for Entrez browser on a nucleotide. */
-{
-fprintf(f, "../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s",
-    cartSidUrlString(cart), accession, curGeneChrom, curGeneStart, curGeneStart,
-    curGeneEnd, database);
-}
-
 boolean idInAllMrna(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in allMrna table */
 {
@@ -357,6 +349,28 @@ if (totalCount > 0)
     }
 }
 
+void printCcds(char *kgId, struct sqlConnection *conn)
+/* Print out CCDS ids most closely matching the kg. */
+{
+struct ccdsKgMap *ccdsKgs = NULL;
+if (sqlTablesExist(conn, "ccdsKgMap"))
+    ccdsKgs = ccdsKgMapSelectByKG(conn, kgId, 0.95);
+if (ccdsKgs != NULL)
+    {
+    struct ccdsKgMap *ccdsKg;
+    hPrintf("<B>CCDS:</B> ");
+    for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
+        {
+        if (ccdsKg != ccdsKgs)
+            hPrintf(", ");
+        hPrintf("<A href=\"../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s\">%s</A>",
+                cartSidUrlString(cart), ccdsKg->ccdsId, curGeneChrom, curGeneStart, curGeneStart,
+                curGeneEnd, database, ccdsKg->ccdsId);
+        }
+    hPrintf("<BR>");   
+    }
+}
+
 void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
@@ -367,15 +381,6 @@ char *spDisplayId;
 boolean gotRnaAli = idInAllMrna(id, conn);
 boolean gotRefseqAli = idInRefseq(id, conn);
 char *oldDisplayId;
-
-if (sameWord(curGeneType, "ccdsGene"))
-    {
-    hPrintf("<B>");
-    hPrintf("Consensus CDS Gene");
-    hPrintf(": </B> <A HREF=\"");
-    printOurCcdsGeneUrl(stdout, curGeneItem);
-    hPrintf("\" TARGET=_blank>%s</A><BR>\n", curGeneItem);
-    }
 
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
@@ -388,6 +393,7 @@ if (sqlTablesExist(conn, "kgAlias"))
     {
     printAlias(id, conn);
     }
+printCcds(id, conn);
     
 if (gotRefseqAli)
     {
@@ -736,11 +742,6 @@ curGeneType = cgiOptionalString(hggType);
 if (curGeneType == NULL) 
     {
     curGeneType = cloneString("knownGene");
-    curGeneItem = NULL;
-    }
-else
-    {
-    curGeneItem = cgiOptionalString("hgg_item");
     }
 getGenomeSettings();
 getGenePosition(conn);

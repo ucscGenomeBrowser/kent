@@ -67,15 +67,32 @@ void ccdsInfoOutput(struct ccdsInfo *el, FILE *f, char sep, char lastSep);
 #define ccdsInfoCommaOut(el,f) ccdsInfoOutput(el,f,',',',');
 /* Print out ccdsInfo as a comma separated list including final comma. */
 
+/* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+char *ccdsInfoGetCreateSql(char *table);
+/* Get sql command to create ccdsInfo table. Result should be freed. */
+
 void ccdsInfoMRnaSort(struct ccdsInfo **ccdsInfos);
 /* Sort list by mrnaAcc */
 
 struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
                                       enum ccdsInfoSrcDb srcDb);
 /* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is
- * ccdsInfoNull, return all.  Return NULL if ccdsId it's not valid */
+ * ccdsInfoNull, return all srcDbs.  Return NULL if ccdsId it's not valid */
 
-/* -------------------------------- End autoSql Generated Code -------------------------------- */
+struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc,
+                                      enum ccdsInfoSrcDb srcDb);
+/* Obtain list of ccdsInfo object for the specified mRNA and srcDb.  If srcDb
+ * is ccdsInfoNull, return all srcDbs.  If mrnaAcc is a RefSeq id and doesn't contain
+ * a version, a like query is generated.  Return NULL if ccdsId it's not
+ * valid. */
+
+struct ccdsInfo *ccdsInfoByKd(struct sqlConnection *conn, char *kgId,
+                              float minOver);
+/* select ccdsInfo records by known genes ids and minimum CDS overlap.
+ * This goes throught the refSeqKg table, and will return null if that
+ * table doesn't exist.
+ */
 
 #endif /* CCDSINFO_H */
 

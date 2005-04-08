@@ -4,14 +4,14 @@
 #include "options.h"
 #include "genePred.h"
 #include "jksql.h"
-#include "hgRelate.h"
 #include "hdb.h"
 #include "ccdsInfo.h"
 #include "linefile.h"
 #include "verbose.h"
 #include "ccdsLocationsJoin.h"
+#include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.3 2005/04/06 22:00:26 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.4 2005/04/08 09:02:41 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -39,7 +39,7 @@ errAbort(
   "\n"
   "Options:\n"
   "  -loadDb - load tables into hgdb\n"
-  "  -keep - keep tmp tab file used to load database\n"
+  "  -keep - keep tab file used to load database\n"
   "  -verbose=n\n"
   );
 }
@@ -311,20 +311,6 @@ ccdsLocationsJoinFreeList(&locs);
 return gp;
 }
 
-
-/* SQL to create ccdsInfo format table */
-static char *ccdsInfoCreateSql =
-    "CREATE TABLE %s (\n"
-    "    ccds char(12) not null,     # CCDS id\n"
-    "    srcDb char(1) not null,     # source database: N=NCBI, H=Hinxton\n"
-    "    mrnaAcc char(18) not null,  # mRNA accession (NCBI or Hinxton)\n"
-    "    protAcc char(18) not null,  # protein accession (NCBI or Hinxton)\n"
-    "              #Indices\n"
-    "    INDEX(ccds),\n"
-    "    INDEX(mrnaAcc)\n"
-    ");\n";
-
-
 void createCcdsGene(struct sqlConnection *conn, char *ccdsGeneFile,
                     struct genomeInfo *genomeInfo)
 /* create the ccdsGene tab file from the ccds database */
@@ -345,45 +331,36 @@ carefulClose(&genesFh);
 genePredFreeList(&genes);
 }
 
-void renameTable(struct sqlConnection *conn, char *oldTable, char *newTable)
-/* rename a database table */
-{
-char query[2048];
-sqlDropTable(conn, newTable);
-safef(query, sizeof(query), "RENAME TABLE %s TO %s", oldTable, newTable);
-sqlUpdate(conn, query);
-}
-
 void loadTables(char *hgDb, char *ccdsInfoTbl, char *ccdsInfoFile,
                 char *ccdsGeneTbl, char *ccdsGeneFile)
 /* load tables into database */
 {
 struct sqlConnection *conn = sqlConnect(hgDb);
 char ccdsInfoTmpTbl[512], ccdsGeneTmpTbl[512];
-char ccdsInfoSql[1024], *ccdsGeneSql;
+char *ccdsInfoSql, *ccdsGeneSql;
 
 /* create tables with _tmp extension, then rename after both are loaded */
 safef (ccdsInfoTmpTbl, sizeof(ccdsInfoTmpTbl), "%s_tmp", ccdsInfoTbl);
-safef(ccdsInfoSql, sizeof(ccdsInfoSql), ccdsInfoCreateSql, ccdsInfoTmpTbl);
+ccdsInfoSql = ccdsInfoGetCreateSql(ccdsInfoTmpTbl);
 sqlRemakeTable(conn, ccdsInfoTmpTbl, ccdsInfoSql);
-hgLoadTabFileOpts(conn, ".", ccdsInfoTmpTbl, SQL_TAB_FILE_ON_SERVER, NULL);
+sqlLoadTabFile(conn, ccdsInfoFile, ccdsInfoTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
 safef(ccdsGeneTmpTbl, sizeof(ccdsGeneTmpTbl), "%s_tmp", ccdsGeneTbl);
 ccdsGeneSql = genePredGetCreateSql(ccdsGeneTmpTbl, genePredAllFlds,
                                    genePredBasicSql, hGetMinIndexLength());
 sqlRemakeTable(conn, ccdsGeneTmpTbl, ccdsGeneSql);
+freeMem(ccdsInfoSql);
 freeMem(ccdsGeneSql);
-hgLoadTabFileOpts(conn, ".", ccdsGeneTmpTbl, SQL_TAB_FILE_ON_SERVER, NULL);
+sqlLoadTabFile(conn, ccdsGeneFile, ccdsGeneTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
-renameTable(conn, ccdsInfoTmpTbl, ccdsInfoTbl);
-renameTable(conn, ccdsGeneTmpTbl, ccdsGeneTbl);
+ccdsRenameTable(conn, ccdsInfoTmpTbl, ccdsInfoTbl);
+ccdsRenameTable(conn, ccdsGeneTmpTbl, ccdsGeneTbl);
 
 if (!keep)
     {
     unlink(ccdsInfoFile);
     unlink(ccdsGeneFile);
     }
-
 sqlDisconnect(&conn);
 }
 
@@ -391,29 +368,20 @@ void ccdsMkTables(char *ccdsDb, char *hgDb, char *ccdsInfoOut, char *ccdsGeneOut
 /* create tables for hg db from imported CCDS database */
 {
 struct sqlConnection *conn = sqlConnect(ccdsDb);
-char ccdsInfoFile[PATH_LEN], ccdsGeneFile[PATH_LEN];
+char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
+char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
 struct genomeInfo genomeInfo = getBuildTaxon(hgDb);
+hSetDb(hgDb);
 
-if (loadDb)
-    {
-    /* loading to database, name must match tmp table name */
-    strcpy(ccdsInfoFile, "ccdsInfo_tmp.tab");
-    strcpy(ccdsGeneFile, "ccdsGene_tmp.tab");
-    }
-else
-    {
-    /* saving to file */
-    safef(ccdsInfoFile, sizeof(ccdsInfoFile), "%s", ccdsInfoOut);
-    safef(ccdsGeneFile, sizeof(ccdsGeneFile), "%s", ccdsGeneOut);
-    }
+ccdsGetTblFileNames(ccdsInfoOut, ccdsInfoTbl, ccdsInfoFile);
+ccdsGetTblFileNames(ccdsGeneOut, ccdsGeneTbl, ccdsGeneFile);
 
 createCcdsInfo(conn, ccdsInfoFile, &genomeInfo);
 createCcdsGene(conn, ccdsGeneFile, &genomeInfo);
 sqlDisconnect(&conn);
 
 if (loadDb)
-    loadTables(hgDb, ccdsInfoOut, ccdsInfoFile, ccdsGeneOut, ccdsGeneFile);
-
+    loadTables(hgDb, ccdsInfoTbl, ccdsInfoFile, ccdsGeneTbl, ccdsGeneFile);
 }
 
 int main(int argc, char *argv[])
@@ -424,7 +392,6 @@ if (argc != 5)
     usage();
 keep = optionExists("keep");
 loadDb = optionExists("loadDb");
-hSetDb(argv[1]);
 ccdsMkTables(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
