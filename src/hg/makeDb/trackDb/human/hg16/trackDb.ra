@@ -1947,7 +1947,7 @@ priority 10
 
 track encodeGencodeGene
 shortLabel Gencode Genes
-longLabel Gencode Gene Transcripts in ENCODE Regions
+longLabel Gencode Gene Annotations in ENCODE Regions
 group encode
 color 73,76,73
 priority 22.1
