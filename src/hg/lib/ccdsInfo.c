@@ -8,7 +8,6 @@
 #include "jksql.h"
 #include "ccdsInfo.h"
 #include "genbank.h"
-#include "ccdsKgMap.h"
 
 /* FIXME: database should really have an enum column */
 
@@ -42,7 +41,7 @@ switch (srcDb)
 return "?";
 }
 
-static char const rcsid[] = "$Id: ccdsInfo.c,v 1.3 2005/04/08 09:02:40 markd Exp $";
+static char const rcsid[] = "$Id: ccdsInfo.c,v 1.4 2005/04/08 23:01:47 markd Exp $";
 
 void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 /* Load a row from ccdsInfo table into ret.  The contents of ret will
@@ -246,29 +245,30 @@ sqlFreeResult(&sr);
 return ccdsInfos;
 }
 
-struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc,
-                                      enum ccdsInfoSrcDb srcDb)
-/* Obtain list of ccdsInfo object for the specified mRNA and srcDb.  If srcDb
- * is ccdsInfoNull, return all srcDbs.  If mrnaAcc is a RefSeq id and doesn't contain
- * a version, a like query is generated.  Return NULL if ccdsId it's not
- * valid. */
+struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc)
+/* Obtain of ccdsInfo object for the specified mRNA or NULL if mrna is not
+ * associated with a CCDS.  Version number is optional for RefSeq mrnaAcc */
 {
 char query[256], where[64];
 struct sqlResult *sr;
 char **row;
-struct ccdsInfo *ccdsInfos = NULL;
+struct ccdsInfo *ccdsInfo = NULL;
 
 if (genbankIsRefSeqAcc(mrnaAcc) && (strchr(mrnaAcc, '.') == NULL))
-    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like \"%s.%%\"%s",
-          mrnaAcc, getSrcDbWhere(srcDb));
+    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc like \"%s.%%\"",
+          mrnaAcc);
 else
-    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = \"%s\"%s",
-          mrnaAcc, getSrcDbWhere(srcDb));
+    safef(query, sizeof(query), "select * from ccdsInfo where mrnaAcc = \"%s\"",
+          mrnaAcc);
 sr = sqlGetResult(conn, query);
 
+/* should only get one, but this is easier to code */
 while ((row = sqlNextRow(sr)) != NULL)
-    slSafeAddHead(&ccdsInfos, ccdsInfoLoad(row));
+    slSafeAddHead(&ccdsInfo, ccdsInfoLoad(row));
 sqlFreeResult(&sr);
 
-return ccdsInfos;
+ if ((ccdsInfo != NULL) && (ccdsInfo->next != NULL))
+     errAbort("obtained multiple CCDSs for mRNA %s", mrnaAcc);
+
+return ccdsInfo;
 }

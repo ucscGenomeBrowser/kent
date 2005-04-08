@@ -6,7 +6,8 @@ struct sqlConnection;
 void ccdsGetTblFileNames(char *tblFile, char *table, char *tabFile);
 /* Get table and tab file name from a single input name.  If specified names
  * looks like a file name, use it as-is, otherwise generate a file name.
- * Output buffers should be PATH_LEN bytes long. */
+ * Output buffers should be PATH_LEN bytes long.  Either output argument maybe
+ * be NULL. */
 
 void ccdsRenameTable(struct sqlConnection *conn, char *oldTable, char *newTable);
 /* rename a database table */

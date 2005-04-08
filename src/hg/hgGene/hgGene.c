@@ -15,9 +15,9 @@
 #include "genePred.h"
 #include "hgColors.h"
 #include "hgGene.h"
-#include "ccdsKgMap.h"
+#include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.49 2005/04/08 09:02:39 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.50 2005/04/08 23:01:46 markd Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -352,20 +352,23 @@ if (totalCount > 0)
 void printCcds(char *kgId, struct sqlConnection *conn)
 /* Print out CCDS ids most closely matching the kg. */
 {
-struct ccdsKgMap *ccdsKgs = NULL;
+struct ccdsGeneMap *ccdsKgs = NULL;
 if (sqlTablesExist(conn, "ccdsKgMap"))
-    ccdsKgs = ccdsKgMapSelectByKG(conn, kgId, 0.95);
+    ccdsKgs = ccdsGeneMapSelectByGene(conn, "ccdsKgMap", kgId, 0.0);
 if (ccdsKgs != NULL)
     {
-    struct ccdsKgMap *ccdsKg;
+    struct ccdsGeneMap *ccdsKg;
     hPrintf("<B>CCDS:</B> ");
+    /* since kg is not by location (even though we have a
+     * curGeneStart/curGeneEnd), we need to use the location in the 
+     * ccdsGeneMap */
     for (ccdsKg = ccdsKgs; ccdsKg != NULL; ccdsKg = ccdsKg->next)
         {
         if (ccdsKg != ccdsKgs)
             hPrintf(", ");
         hPrintf("<A href=\"../cgi-bin/hgc?%s&g=ccdsGene&i=%s&c=%s&o=%d&l=%d&r=%d&db=%s\">%s</A>",
-                cartSidUrlString(cart), ccdsKg->ccdsId, curGeneChrom, curGeneStart, curGeneStart,
-                curGeneEnd, database, ccdsKg->ccdsId);
+                cartSidUrlString(cart), ccdsKg->ccdsId, ccdsKg->chrom, ccdsKg->chromStart, ccdsKg->chromStart,
+                ccdsKg->chromEnd, database, ccdsKg->ccdsId);
         }
     hPrintf("<BR>");   
     }

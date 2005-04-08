@@ -3,14 +3,14 @@ include ${GBROOT}/common.mk
 
 PROGS = ${BINARCH}/ccdsImport \
 	${BINARCH}/ccdsMkTables \
-	${BINARCH}/mkCcdsKgMap
+	${BINARCH}/mkCcdsGeneMap
 
 O = ccdsLocationsJoin.o ccdsCommon.o
 
 all: ${PROGS}
 
 clean:
-	rm -f ${O} ${PROGS} ccdsImport.o ccdsMkTables.o mkCcdsKgMap.o
+	rm -f ${O} ${PROGS} ccdsImport.o ccdsMkTables.o mkCcdsGeneMap.o
 
 ${BINARCH}/ccdsImport:  ccdsImport.o ${LIBGENBANK} ${JKLIBS}
 	@${MKDIR} ${BINARCH}
@@ -20,6 +20,6 @@ ${BINARCH}/ccdsMkTables:  ccdsMkTables.o ${O} ${LIBGENBANK} ${JKLIBS}
 	@${MKDIR} ${BINARCH}
 	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/ccdsMkTables ccdsMkTables.o ${O} $(LIBS)
 
-${BINARCH}/mkCcdsKgMap:  mkCcdsKgMap.o ${O} ${LIBGENBANK} ${JKLIBS}
+${BINARCH}/mkCcdsGeneMap:  mkCcdsGeneMap.o ${O} ${LIBGENBANK} ${JKLIBS}
 	@${MKDIR} ${BINARCH}
-	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mkCcdsKgMap mkCcdsKgMap.o ${O} $(LIBS)
+	${CC} ${COPT} ${CFLAGS} ${CFLAGS} ${LDFLAGS} -o ${BINARCH}/mkCcdsGeneMap mkCcdsGeneMap.o ${O} $(LIBS)

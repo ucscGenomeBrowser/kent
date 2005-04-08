@@ -80,12 +80,9 @@ struct ccdsInfo *ccdsInfoSelectByCcds(struct sqlConnection *conn, char *ccdsId,
 /* Obtain list of ccdsInfo object for the specified id and srcDb.  If srcDb is
  * ccdsInfoNull, return all srcDbs.  Return NULL if ccdsId it's not valid */
 
-struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc,
-                                      enum ccdsInfoSrcDb srcDb);
-/* Obtain list of ccdsInfo object for the specified mRNA and srcDb.  If srcDb
- * is ccdsInfoNull, return all srcDbs.  If mrnaAcc is a RefSeq id and doesn't contain
- * a version, a like query is generated.  Return NULL if ccdsId it's not
- * valid. */
+struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc);
+/* Obtain of ccdsInfo object for the specified mRNA or NULL if mrna is not
+ * associated with a CCDS.  Version number is optional for RefSeq mrnaAcc. */
 
 struct ccdsInfo *ccdsInfoByKd(struct sqlConnection *conn, char *kgId,
                               float minOver);
