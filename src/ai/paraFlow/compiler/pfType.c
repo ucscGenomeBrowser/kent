@@ -647,7 +647,7 @@ else
 if (indexPp->ty->base != keyBase)
     {
     struct pfType *ty = pfTypeNew(keyBase);
-    coerceOne(pfc, &collectionPp->children, ty);
+    coerceOne(pfc, &collectionPp->next, ty);
     }
 pp->ty = collectionType->children;
 }
