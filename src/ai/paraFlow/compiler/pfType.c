@@ -324,8 +324,8 @@ if (!pfTypesAllSame(retTypes, fieldTypes))
     for (i=0; i<fieldCount; ++i)
         {
 	AllocVar(fake);
-	fake->type = pptVarInit;
-	fake->name = "returnValue";
+	fake->type = pptRetPlaceholder;
+	fake->name = "placeholder";
 	fake->ty = retType;
 	coerceOne(pfc, &fake, fieldType);
 	slAddHead(&castList, fake);

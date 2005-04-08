@@ -142,6 +142,8 @@ switch (type)
 	return "pptSysOrUser";
     case pptVarInit:
         return "pptVarInit";
+    case pptRetPlaceholder:
+        return "pptRetPlaceholder";
     case pptSymName:
 	return "pptSymName";
     case pptTypeName:
