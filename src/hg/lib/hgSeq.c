@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.24 2004/11/20 16:04:15 kent Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.25 2005/04/08 01:23:25 angie Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -485,6 +485,8 @@ hgSeqRegionsDb(hGetDb(), chrom, strand, name, concatRegions,
 }
 
 
+int maxStartsOffset = 0;
+
 void addFeature(int *count, unsigned *starts, unsigned *sizes,
 		boolean *exonFlags, boolean *cdsFlags,
 		int start, int size, boolean eFlag, boolean cFlag)
@@ -495,6 +497,8 @@ if (size > 0)
 	start = 0;
     if (start + size > chromSize)
 	size = chromSize - start;
+    if (*count > maxStartsOffset)
+	errAbort("addFeature: overflow (%d > %d)", *count, maxStartsOffset);
     starts[*count]    = start;
     sizes[*count]     = size;
     exonFlags[*count] = eFlag;
@@ -515,6 +519,7 @@ boolean exonFlags[1];
 boolean cdsFlags[1];
 
 chromSize = hChromSize(chrom);
+maxStartsOffset = 0;
 addFeature(&count, starts, sizes, exonFlags, cdsFlags,
 	   chromStart, chromEnd - chromStart, FALSE, FALSE);
 hgSeqRegions(chrom, strand, name, FALSE, count, starts, sizes, exonFlags,
@@ -580,9 +585,10 @@ for (bedItem = bedList;  bedItem != NULL;  bedItem = bedItem->next)
     isRc = (bedItem->strand[0] == '-');
     // here's the max # of feature regions:
     if (canDoIntrons)
-	count = 2 + (2 * bedItem->blockCount);
+	count = 4 + (2 * bedItem->blockCount);
     else
 	count = 5;
+    maxStartsOffset = count-1;
     starts    = needMem(sizeof(unsigned) * count);
     sizes     = needMem(sizeof(unsigned) * count);
     exonFlags = needMem(sizeof(boolean) * count);
