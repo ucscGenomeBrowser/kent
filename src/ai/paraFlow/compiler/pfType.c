@@ -575,6 +575,17 @@ static void coerceIf(struct pfCompile *pfc, struct pfParse *pp)
 coerceToBit(pfc, &pp->children);
 }
 
+static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure have agreement between element and collection vars */
+{
+struct pfParse *el = pp->children;
+struct pfParse *collection = el->next;
+if (!collection->ty->base->isCollection)
+    expectingGot("collection", collection->tok);
+if (!pfTypeSame(el->ty, collection->ty->children))
+    errAt(pp->tok, "type mismatch between element and collection in foreach");
+}
+
 struct pfType *coerceLval(struct pfCompile *pfc, struct pfParse *pp)
 /* Ensure that pp can be assigned.  Return it's type */
 {
@@ -1008,6 +1019,9 @@ switch (pp->type)
 	break;
     case pptFor:
         coerceFor(pfc, pp);
+	break;
+    case pptForeach:
+        checkForeach(pfc, pp);
 	break;
     case pptIf:
         coerceIf(pfc, pp);

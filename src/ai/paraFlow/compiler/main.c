@@ -80,6 +80,7 @@ switch (pp->type)
     case pptProgram:
     case pptModule:
     case pptFor:
+    case pptForeach:
     case pptToDec:
     case pptFlowDec:
     case pptParaDec:
@@ -157,9 +158,9 @@ void paraFlow(char *fileName)
 struct pfCompile *pfc = pfCompileNew(fileName);
 struct pfParse *program = pfParseProgram(fileName, pfc);
 
-pfBindVars(pfc, program);
 if (!parseOnly)
     {
+    pfBindVars(pfc, program);
     pfTypeCheck(pfc, &program);
     pfCheckParaFlow(pfc, program);
     }

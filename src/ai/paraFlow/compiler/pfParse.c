@@ -1217,13 +1217,15 @@ static struct pfParse *parseForeach(struct pfParse *parent,
 /* Parse foreach statement */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptForeach, tok, parent, scope);
+struct pfParse *pp;
 struct pfParse *element;
 struct pfParse *collection;
 struct pfParse *statement;
 
+scope = pfScopeNew(scope, 1);
+pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
-element = parseDottedNames(pp, &tok, scope);
+element = varUseOrDeclare(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = parseDottedNames(pp, &tok, scope);
 statement = pfParseStatement(pp, &tok, scope);
@@ -1260,7 +1262,7 @@ struct pfParse *check;
 struct pfParse *advance;
 struct pfParse *statement;
 
-scope = pfScopeNew(scope, 2);
+scope = pfScopeNew(scope, 1);
 pp = pfParseNew(pptFor, tok, parent, scope);
 tok = tok->next;	/* Skip over 'for' */
 if (tok->type != '(')
