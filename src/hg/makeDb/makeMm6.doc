@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.21 2005/04/08 19:24:18 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.22 2005/04/08 22:20:36 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -101,6 +101,7 @@
 	faCounts/contigfasta.headers 2>&1 &
     #	about 2 minutes each for the above two zcat/greps
 
+#############################################################################
 #  BREAK UP SEQUENCE INTO 5 MB CHUNKS at NON-BRIDGED CONTIGS
 #			(DONE - 2005-03-09 - Hiram)
     ssh kksilo
@@ -120,6 +121,7 @@
     done
     #	The above loop takes about 5 minutes
 
+#############################################################################
 # CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2005-03-09 - Hiram)
     ssh kksilo
     mkdir /cluster/data/mm6/jkStuff
@@ -161,6 +163,7 @@
     rm ?/*_random.ctg.agp ??/*_random.ctg.agp
     gzip seq_contig.md allrefcontig.chr.ordered.agp
 
+#############################################################################
 # BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS
 #					(DONE 2005-03-09 - Hiram)
     ssh kksilo
@@ -185,11 +188,13 @@
     #	the above loop takes less than a minute
     #	scan the tmp/split.out file for possible errors
 
+#############################################################################
 # MAKE LIFTALL.LFT (DONE - 2005-03-10 - Hiram)
     ssh kksilo
     cd /cluster/data/mm6
     cat ?/lift/*.lft ??/lift/*.lft > jkStuff/liftAll.lft
 
+#############################################################################
 # CREATING DATABASE (DONE - 2005-03-10 - Hiram)
     ssh kksilo
     cd /cluster/data/mm6
@@ -246,6 +251,7 @@
     cp -p mouse/mm6/description.html /gbdb/mm6/html
     make DBS=mm6 ZOO_DBS=""
 
+#############################################################################
 #  GOLD GAP tracks (DONE - 2005-03-10 - Hiram)
     ssh hgwdev
     cd /cluster/data/mm6
@@ -269,6 +275,7 @@
     featureBits mm4 gap
     #	325167539 bases of 2627444668 (12.376%) in intersection
 
+#############################################################################
 #  DISTRIBUTE SEQUENCE TO INTERMEDIATE SERVERS FOR KLUSTER RUNS
     ssh kksilo
     mkdir /cluster/bluearc/mm6
@@ -320,6 +327,7 @@ done > contig500K.lst
     find /panasas/store/mm6/contigs -type f | wc
     #	6678    6678  443885
 
+#############################################################################
 # SIMPLE REPEAT TRACK (DONE - 2005-03-10 Hiram)
     # TRF can be run in parallel with RepeatMasker on the file server
     #   since it doesn't require masked input sequence.
@@ -399,6 +407,7 @@ Submission to last job:          1934s      32.23m     0.54h    0.02d
     featureBits mm3 simpleRepeat
     # 75457193 bases of 2505900260 (3.011%) in intersection
 
+#############################################################################
 # PROCESS SIMPLE REPEATS INTO MASK (DONE - 2005-03-14 - DONE)
 
     # After the simpleRepeats track has been built, make a filtered version
@@ -413,6 +422,7 @@ Submission to last job:          1934s      32.23m     0.54h    0.02d
     done
 
 
+#############################################################################
 # REPEATMASKER RUN (after contigs have been distributed to panasas FS)
 #	(DONE - 2005-03-10 - 2005-03-14 - Hiram)
 #  RM Version: RepBase Update 9.11, RM database version 20050112
@@ -540,6 +550,7 @@ note: 394 records dropped due to repStart > repEnd
     #	1080265553 bases of 2708220133 (39.888%) in intersection
 
 
+#############################################################################
 # GC5BASE (DONE - 2005-03-10 - Hiram)
     ssh hgwdev
     mkdir -p /cluster/data/mm6/bed/gc5Base
@@ -562,6 +573,7 @@ note: 394 records dropped due to repStart > repEnd
     #	should see good numbers in Cardinality column, NULL:
     hgsql mm6 -e "analyze table gc5Base;"
 
+#############################################################################
 # PROCESS REPEAT MASKER AND SIMPLE REPEATS INTO MASKED SEQUENCE
 #		(DONE - 2005-03-14 - Hiram)
     ssh kksilo
@@ -606,6 +618,7 @@ note: 394 records dropped due to repStart > repEnd
     mkdir /panasas/store/mm6/fasta
     time cp -p */*.fa */*.fa.masked /panasas/store/mm6/fasta
 
+#############################################################################
 # PREPARE "bigZips" files for public release
 #		(DONE through mrna.fa - 2005-03-15 - Hiram)
     ssh hgwdev
@@ -635,6 +648,7 @@ note: 394 records dropped due to repStart > repEnd
     
     md5sum *.gz > md5sum.txt
 
+#############################################################################
 # PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2005-03-14 - Hiram)
 
     ssh kksilo
@@ -674,6 +688,7 @@ note: 394 records dropped due to repStart > repEnd
     done
     #	the notInHuman, notInDog, and notInCow ended up being identical
 
+#############################################################################
 # NIBS for BLASTZ (DONE - 2005-03-15 - Hiram)
     #	turns out not all the details are worked out with the blastz
     #	script to allow it to use a 2bit file for target.  So, we will
@@ -704,6 +719,7 @@ note: 394 records dropped due to repStart > repEnd
     #	Going to try an faSplit in a 10 Mb basis (this used to be 5
     #	Mb in the past, split on contigs) and see how that goes.
 
+#############################################################################
 # BREAK UP SEQUENCE INTO 10 MB CHUNKS AT GAPS OF AT LEAST 100
     ssh kksilo
     cd /cluster/data/mm6
@@ -1102,6 +1118,12 @@ SEQ2_LEN=$BASE/S2.len
     #	user    0m2.270s
     #	sys     0m0.870s
 
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainMm6Link
+    #	969459954 bases of 2866216770 (33.824%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainMm5Link
+    #	1020106336 bases of 2866216770 (35.591%) in intersection
+
     #	A measurement script to do all featureBits combinations:
     cd /cluster/data/mm6/jkStuff
     cat << '_EOF_' >  netChainCheck.sh
@@ -1348,6 +1370,11 @@ netFilter -minGap=10 mm6.rn3.net.gz | hgLoadNet -verbose=0 mm6 netRn3 stdin
     #	user    0m2.200s
     #	sys     0m1.150s
 
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm6Link
+    #	1812992492 bases of 2571104688 (70.514%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm5Link
+    #	1673171206 bases of 2571104688 (65.076%) in intersection
 
 
 #########################################################################
@@ -1489,7 +1516,6 @@ SEQ2_LEN=$BASE/S2.len
     featureBits rn3 netMm5
     #	2778454647 bases of 2571104688 (108.065%) in intersection
 
-
 #########################################################################
 # BLASTZ Zebrafish danRer2 (WORKING - 2005-03-17 - Hiram)
     ssh kksilo
@@ -1612,6 +1638,31 @@ doOne danRer2 chainMm5Link
     chmod +x measurements.sh
     time ./measurements.sh > measures.out 2>&1 &
 
+    featureBits mm6 netDanRer2
+    #   686375730 bases of 2597150411 (26.428%) in intersection
+    featureBits mm5 netDanRer2
+    #   553450442 bases of 2615483787 (21.161%) in intersection
+    featureBits mm6 chainDanRer2
+    #   782392894 bases of 2597150411 (30.125%) in intersection
+    featureBits mm5 chainDanRer2
+    #   598864029 bases of 2615483787 (22.897%) in intersection
+    featureBits mm6 chainDanRer2Link
+    #   162226493 bases of 2597150411 (6.246%) in intersection
+    featureBits mm5 chainDanRer2Link
+    #   59978861 bases of 2615483787 (2.293%) in intersection
+    featureBits danRer2 netMm6
+    #   576283947 bases of 1560497282 (36.930%) in intersection
+    featureBits danRer2 netMm5
+    #   476966014 bases of 1560497282 (30.565%) in intersection
+    featureBits danRer2 chainMm6
+    #   641696461 bases of 1560497282 (41.121%) in intersection
+    featureBits danRer2 chainMm5
+    #   505097651 bases of 1560497282 (32.368%) in intersection
+    featureBits danRer2 chainMm6Link
+    #   176391894 bases of 1560497282 (11.304%) in intersection
+    featureBits danRer2 chainMm5Link
+    #   68003819 bases of 1560497282 (4.358%) in intersection
+
 #########################################################################
 # BLASTZ FUGU fr1 (WORKING - 2005-03-17 - Hiram)
     ssh kksilo
@@ -1675,38 +1726,21 @@ SEQ2_LEN=$BASE/S2.len
     #	FINISHED - 2005-03-19 00:14
     time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
 	-chainMinScore 5000 -swap `pwd`/DEF > swap.run.out 2>&1 &
-    cat << '_EOF_' > measurements.sh
-#!/bin/sh
 
-doOne()
-{
-db=$1
-tbl=$2
-echo "    featureBits $db $tbl"
-echo -en "    #\t"
-time featureBits $db $tbl
-}
+    #	measurements
+    featureBits mm6 netFr1
+    #   618129802 bases of 2597150411 (23.800%) in intersection
+    featureBits mm6 chainFr1
+    #   666835089 bases of 2597150411 (25.676%) in intersection
+     featureBits mm6 chainFr1Link
+    #   55355465 bases of 2597150411 (2.131%) in intersection
 
-DB=Fr1
-dB=fr1
-export DB dB
-doOne mm6 net${DB}
-doOne mm5 net${DB}
-doOne mm6 chain${DB}
-doOne mm5 chain${DB}
-doOne mm6 chain${DB}Link
-doOne mm5 chain${DB}Link
-doOne ${dB} netMm6
-doOne ${dB} netMm5
-doOne ${dB} chainMm6
-doOne ${dB} chainMm5
-doOne ${dB} chainMm6Link
-doOne ${dB} chainMm5Link
-'_EOF_'
-    # << keep emacs happy
-    chmod +x measurements.sh
-    time ./measurements.sh > measures.out 2>&1 &
-
+    featureBits fr1 netMm6
+    #   146828640 bases of 315518167 (46.536%) in intersection
+    featureBits fr1 chainMm6
+    #   160874127 bases of 315518167 (50.987%) in intersection
+    featureBits fr1 chainMm6Link
+    #   46266090 bases of 315518167 (14.664%) in intersection
 
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (TBD - 2005-03-17 - Hiram)
@@ -1796,24 +1830,6 @@ SEQ2_LEN=$BASE/S2.len
 # Average job time:                  21s       0.36m     0.01h    0.00d
 # Longest job:                       55s       0.92m     0.02h    0.00d
 # Submission to last job:           212s       3.53m     0.06h    0.00d
-
-    #	Measurements:
-    ssh hgwdev
-    featureBits mm6 netFr1
-    #	618904129 bases of 2597150411 (23.830%) in intersection
-    featureBits mm6 chainFr1
-    #	667593517 bases of 2597150411 (25.705%) in intersection
-    featureBits mm6 chainFr1Link
-    #	56381015 bases of 2597150411 (2.171%) in intersection
-    featureBits -enrichment mm6 refGene:cds chainFr1Link
-    # refGene:cds 0.972%, chainFr1Link 2.171%, both 0.670%, cover 68.90%,
-    #	enrich 31.74x
-    featureBits -enrichment mm6 refGene:cds netFr1
-    # refGene:cds 0.972%, netFr1 23.830%, both 0.770%, cover 79.18%,
-    #	enrich 3.32x
-    featureBits -enrichment mm6 refGene:cds chainFr1
-    # refGene:cds 0.972%, chainFr1 25.705%, both 0.783%, cover 80.52%,
-    #	enrich 3.13x
 
     #	Re-do the chains with different scoring matrix
     ssh kki
@@ -2090,8 +2106,9 @@ SEQ2_LEN=$BASE/S2.len
     featureBits canFam1 chainMm5
     #   2257403477 bases of 2359845093 (95.659%) in intersection
     featureBits canFam1 chainMm6Link
-
-
+    #   783631188 bases of 2359845093 (33.207%) in intersection
+    featureBits canFam1 chainMm5Link
+    #   837236252 bases of 2359845093 (35.478%) in intersection
 
 #########################################################################
 # BLASTZ Cow bosTau1 (DONE - 2005-03-18 - 2005-04-08 - Hiram)
@@ -2196,7 +2213,8 @@ BASE=/cluster/data/mm6/bed/blastzBosTau1.2005_03_18
 
     #	looks good, done.
 
-# BLASTZ SELF (WORKING - 2005-03-31 - Hiram)
+#############################################################################
+# BLASTZ SELF (DONE - 2005-03-31 - 2005-04-08 - Hiram)
     # The procedure for lineage spec business with self is to simply
     # use the actual repeat masker output for this mouse assembly as
     # the lineage specific repeats for itself.  Thus, merely make
@@ -2356,7 +2374,8 @@ SEQ2_LEN=$BASE/S2.len
     #	8h 34m job
     #	471978757 bases of 2597150411 (18.173%) in intersection
 
-# BLASTZ CHICKEN - (WORKING - 2005-03-21 - Hiram)
+#############################################################################
+# BLASTZ CHICKEN - (DONE - 2005-03-21 - 2005-04-08 - Hiram)
 
     # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN
     # In an email 2/13/04, Arian said we could treat all human repeats as 
@@ -2467,7 +2486,7 @@ SEQ2_LEN=$BASE/S2.len
     featureBits galGal2 chainMm5Link
     #   70542788 bases of 1054197620 (6.692%) in intersection
 
-
+#############################################################################
 # BLASTZ OPOSSUM (DONE - 2005-04-01 - 2005-04-08 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/blastzMonDom1.2005_04_01
@@ -2603,7 +2622,8 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
 
     #	looks OK, done
 
-# BLASTZ FROG Xenopus tropicalis (WORKING - 2005-04-05 - Hiram)
+##############################################################################
+# BLASTZ FROG Xenopus tropicalis (DONE - 2005-04-05 - 2005-04-08 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
     cd /cluster/data/mm6/bed/blastzXenTro1.2005_04_05
@@ -2713,6 +2733,7 @@ SEQ2_LEN=$BASE/S2.len
     featureBits xenTro1 chainMm5Link
     #   76415718 bases of 1381238994 (5.532%) in intersection
 
+#############################################################################
 # BLASTZ CHIMP PanTro1 (WORKING - 2005-04-05 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
@@ -2819,6 +2840,7 @@ XXX - STARTED 2005-04-06 10:40
     featureBits mm6 chainHg17Link (on kolossus)
     #	966916309 bases of 2597150411 (37.230%) in intersection
 
+#############################################################################
 # STS MARKERS DATA DOWNLOAD (WORKING - 2005-04-06 - Hiram)
     ssh eieio
     mkdir -p /cluster/data/mm6/bed/STSmarkers/downloads
@@ -2949,3 +2971,9 @@ XXXX - RUNNING - 2005-04-06 16:40
     cp -p mouseP.fa /cluster/bluearc/scratch/mus/mm5
     cp -p mouseP.info /cluster/bluearc/scratch/mus/mm5
 
+#############################################################################
+# HGCENTRAL DEFAULTDB UPDATE (DONE - 2005-04-08 - Hiram)
+    #	May as well make this assembly be the default on hgwdev
+    ssh hgwdev
+    hgsql hgcentraltest \
+	-e 'update defaultDb set name="mm6" where genome="Mouse";'
