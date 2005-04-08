@@ -860,6 +860,17 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rBlessFunction(outputScope, outputHash, pfc, pp);
 }
 
+static void checkIsSimpleDecTuple(struct pfParse *tuple)
+/* Make sure tuple contains only pptVarInits. */
+{
+struct pfParse *pp;
+for (pp = tuple->children; pp != NULL; pp = pp->next)
+    {
+    if (pp->type != pptVarInit)
+        errAt(pp->tok, "only variable declarations allowed in input/output lists");
+    }
+}
+
 static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
 /* Make sure that function looks kosher - that all inputs are
  * covered, and that there are no functions inside functions. */
@@ -871,6 +882,8 @@ struct pfParse *pp;
 struct hashCookie hc;
 struct hashEl *hel;
 
+checkIsSimpleDecTuple(input);
+checkIsSimpleDecTuple(output);
 for (pp = output->children; pp != NULL; pp = pp->next)
     hashAddInt(outputHash, pp->name, 0);
 for (pp = funcDec->children; pp != NULL; pp = pp->next)
