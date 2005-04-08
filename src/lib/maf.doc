@@ -113,3 +113,24 @@ position rather than name=value pairs.
          as well.
 
 
+'i' Lines
+
+The i lines are optional.  They are used by the browser to display synteny
+breaks. An i line must immediately follow the s line that it describes
+(unless there is no s line for that species in the current block).
+The i lines have the following fields which are defined by 
+position rather than name=value pairs. 
+    src - The name of one of the source sequences for the alignment.
+	    This should match the s line immediately above the i line.
+    leftStatus - the syntenic status of the alignment before us vis a vis ourselves.  
+	    Possible Values:
+	    MAF_INVERSE_STATUS	'V'
+	    MAF_INSERT_STATUS	'I'
+	    MAF_DUP_STATUS		'D'
+	    MAF_NEW_STATUS		'N'
+	    MAF_CONTIG_STATUS	'C'
+            
+    leftLen - length related information for the previous alignment for the species
+    rightStatus - the syntenic status of the alignment after us vis a vis ourselves 
+	     Possible values are same as leftStatus.
+    rightLen - length related information for the following alignment for the species 
