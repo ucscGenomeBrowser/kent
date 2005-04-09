@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.23 2005/04/08 23:38:51 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.24 2005/04/09 00:06:50 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3013,11 +3013,13 @@ XXXX - RUNNING - 2005-04-06 16:40
     cd /iscratch/i/mm6/multiz10way
     rsync -a --copy-links --progress \
 	/cluster/data/mm6/bed/multiz10way/mafLinks/ .
-XXXX - WORKING 2005-04-08 16:20
+    #	We have about 3.2 Gb of data here, takes ~ 15-20 minutes to copy over
+    #	At least it does today, something is fishy with the connection.
     mkdir penn
     cp -p /cluster/bin/penn/psuCVS/multiz-tba/multiz penn
     cp -p /cluster/bin/penn/maf_project penn
     /cluster/bin/iSync
+XXXX - WORKING 2005-04-08 16:20
 
 #       Progressive alignment up the tree w/o stager, 
 #       using multiz.v10 (var_multiz)
