@@ -172,8 +172,7 @@ if (outCount > 1)
 	if (needComma)
 	    fprintf(f, ", ");
 	needComma = TRUE;
-	printType(pfc, f, out->base);
-	fprintf(f, " &%s", out->fieldName);
+	fprintf(f, "&%s", out->fieldName);
 	}
     fprintf(f, "); ");
     fprintf(f, "}");
@@ -228,6 +227,77 @@ for (out = tuple->children; out != NULL; out = out->next)
 fprintf(f, ");\n");
 }
 
+static void printCastCallToTuple(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *tuple, struct pfParse *castCall)
+/* Deal with things like (int x, float y) = unitCircle(10),
+ * that is a call into a tuple with the tuple not being the
+ * same type as the call. */
+{
+struct pfParse *call = castCall->children;
+struct pfParse *castList = call->next;
+struct pfParse *cast;
+struct pfParse *out;
+int outIx;
+boolean needComma;
+
+fprintf(f, "{");
+outIx = 1;
+for (cast = castList; cast != NULL; cast = cast->next)
+    {
+    if (cast->type != pptPlaceholder)
+        {
+	printType(pfc, f, cast->ty->base);
+	fprintf(f, " out%d; ", outIx);
+	}
+    ++outIx;
+    }
+needComma = printCallStart(pfc, call, f);
+outIx = 1;
+for (out=tuple->children, cast = castList; cast != NULL; 
+     out = out->next, cast = cast->next)
+    {
+    if (needComma)
+	fprintf(f, ", ");
+    needComma = TRUE;
+    if (cast->type == pptPlaceholder)
+        {
+	printLvalAddress(pfc, f, out);
+	}
+    else
+        {
+	fprintf(f, "&out%d", outIx);
+	}
+    ++outIx;
+    }
+fprintf(f, ");");
+outIx = 1;
+for (out=tuple->children, cast = castList; cast != NULL; 
+     out = out->next, cast = cast->next)
+     {
+     if (cast->type != pptPlaceholder)
+         {
+	 switch(cast->type)
+	     {
+	     case pptCastByteToBit:
+	     case pptCastShortToBit:
+	     case pptCastIntToBit:
+	     case pptCastLongToBit:
+	     case pptCastFloatToBit:
+	     case pptCastDoubleToBit:
+	     case pptCastStringToBit:
+	         fprintf(f, " %s = (out%d != 0);", out->name, outIx);
+		 break;
+	     default:
+	         fprintf(f, " %s = out%d;", out->name, outIx);
+		 break;
+	     }
+	 }
+    ++outIx;
+     }
+fprintf(f, "}\n");
+}
+
+
 static void printTupleAssignment(struct pfCompile *pfc, FILE *f,
 	struct pfParse *left, struct pfParse *right)
 /* Handle assignment where left side is a tuple. */
@@ -250,7 +320,7 @@ switch (right->type)
 	}
     case pptCastCallToTuple:
         {
-	fprintf(f, "/* Someday will handle pptCastTupleToTuple; */\n");
+	printCastCallToTuple(pfc, f, left, right);
 	break;
 	}
     default:
