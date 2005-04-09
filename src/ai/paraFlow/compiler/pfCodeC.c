@@ -109,6 +109,75 @@ if (outCount > 1)
 fprintf(f, ")");
 }
 
+static void printExpression(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *exp);
+/* Generate code for a expression */
+
+static void printCallStatement(struct pfCompile *pfc, 
+	FILE *f, struct pfParse *call)
+/* Generate code for a function call that throws away it's return 
+ * values. */
+{
+struct pfParse *funcVarPp = call->children;
+struct pfParse *inTuple = funcVarPp->next;
+struct pfVar *funcVar = funcVarPp->var;
+struct pfType *funcType = funcVar->ty;
+struct pfType *outTuple = funcType->children->next;
+struct pfParse *in;
+int outCount = slCount(outTuple->children);
+boolean needComma;
+
+if (outCount > 1)
+    {
+    struct pfType *out;
+    needComma = FALSE;
+    fprintf(f, "{");
+    for (out = outTuple->children; out != NULL; out = out->next)
+        {
+	if (needComma)
+	    fprintf(f, ", ");
+	needComma = TRUE;
+	printType(pfc, f, out->base);
+	fprintf(f, " %s", out->fieldName);
+	}
+    fprintf(f, "; ");
+    }
+
+needComma = FALSE;
+fprintf(f, "%s(", funcVar->name);
+for (in = inTuple->children; in != NULL; in = in->next)
+    {
+    if (needComma)
+	fprintf(f, ", ");
+    needComma = TRUE;
+    printExpression(pfc, f, in);
+    }
+if (outCount > 1)
+    {
+    struct pfType *out;
+    if (needComma)
+	{
+	fprintf(f, ", ");
+	needComma = FALSE;
+	}
+    for (out = outTuple->children; out != NULL; out = out->next)
+        {
+	if (needComma)
+	    fprintf(f, ", ");
+	needComma = TRUE;
+	printType(pfc, f, out->base);
+	fprintf(f, " &%s", out->fieldName);
+	}
+    fprintf(f, "); ");
+    fprintf(f, "}");
+    }
+else
+    {
+    fprintf(f, "); ");
+    }
+
+}
+
 static void printExpression(struct pfCompile *pfc, FILE *f, struct pfParse *exp)
 /* Generate code for a expression */
 {
@@ -166,6 +235,12 @@ switch (statement->type)
 	struct pfParse *body = statement->children->next->next->next;
 	printFunctionPrototype(pfc, f, funcVar);
 	printStatement(level+1, pfc, f, body);
+	fprintf(f, "\n");
+	break;
+	}
+    case pptCall:
+    	{
+	printCallStatement(pfc, f, statement);
 	fprintf(f, "\n");
 	break;
 	}
