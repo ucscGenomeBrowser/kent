@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.33 2004/09/22 15:55:58 markd Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.34 2005/04/09 06:34:55 markd Exp $";
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -281,7 +281,10 @@ struct lineFile *lf;
 if ((lf = *pLf) != NULL)
     {
     if (lf->pl != NULL)
-        pipelineWait(&lf->pl);
+        {
+        pipelineWait(lf->pl);
+        pipelineFree(&lf->pl);
+        }
     else if (lf->fd > 0 && lf->fd != fileno(stdin))
 	close(lf->fd);
     freeMem(lf->fileName);

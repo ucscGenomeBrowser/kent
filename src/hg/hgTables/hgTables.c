@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.104 2005/04/05 18:17:17 kent Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.105 2005/04/09 06:34:55 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1427,7 +1427,8 @@ if (compressPipeline)
     {
     fflush(stdout);
     fclose(stdout);
-    pipelineWait(&compressPipeline);
+    pipelineWait(compressPipeline);
+    pipelineFree(&compressPipeline);
     }
 
 return 0;

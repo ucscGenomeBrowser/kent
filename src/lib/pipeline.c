@@ -12,11 +12,11 @@
 /* FIXME: add close-on-exec startup hack */
 
 enum pipelineFlags
-/* internal option bitset */
+/* internal flats bitset, high order part of options  */
     {
-    pipelineRead    = 0x01, /* read from pipeline */
-    pipelineWrite   = 0x02, /* write to pipeline */
-    pipelineAppend  = 0x04, /* write to pipeline, appends to output file */
+    pipelineRead    = 0x01 << 16, /* read from pipeline */
+    pipelineWrite   = 0x02 << 16, /* write to pipeline */
+    pipelineAppend  = 0x04 << 16, /* write to pipeline, appends to output file */
     };
 
 struct plProc
@@ -25,7 +25,8 @@ struct plProc
     struct plProc *next;   /* order list of processes */
     struct pipeline *pl;   /* pipeline we are associated with */
     char **cmd;            /* null-terminated command for this process */
-    pid_t  pid;            /* pid for process */
+    pid_t  pid;            /* pid for process, -1 if not running */
+    int status;            /* status from wait */
 };
 
 struct pipeline
@@ -135,56 +136,63 @@ freeMem(proc->cmd);
 freeMem(proc);
 }
 
+static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
+/* child part of process startup */
+{
+int fd;
+/* child, first setup stdio files */
+if (stdinFd != STDIN_FILENO)
+    {
+    if (dup2(stdinFd, STDIN_FILENO) < 0)
+        errnoAbort("can't dup2 to stdin");
+    }
+    
+if (stdoutFd != STDOUT_FILENO)
+    {
+    if (dup2(stdoutFd, STDOUT_FILENO) < 0)
+        errnoAbort("can't dup2 to stdout");
+    }
+    
+if (stderrFd != STDERR_FILENO)
+    {
+    if (dup2(stderrFd, STDERR_FILENO) < 0)
+        errnoAbort("can't dup2 to stderr");
+    }
+
+/* close other file descriptors */
+for (fd = STDERR_FILENO+1; fd < 64; fd++)
+    close(fd);
+execvp(proc->cmd[0], proc->cmd);
+/* don't go through errAbort, we don't want an handler being invoked */
+fprintf(stderr, "exec failed: %s: %s\n", strerror(errno), proc->cmd[0]);
+exit(100);
+}
+
 static void plProcExec(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
 /* Start one process in a pipeline with the supplied stdio files.  Setting
  * stderrFh to STDERR_FILENO cause stderr to be passed through the pipeline
  * along with stdout */
 {
-int fd;
 if ((proc->pid = fork()) < 0)
     errnoAbort("can't fork");
 if (proc->pid == 0)
-    {
-    /* child, first setup stdio files */
-    if (stdinFd != STDIN_FILENO)
-        {
-        if (dup2(stdinFd, STDIN_FILENO) < 0)
-            errnoAbort("can't dup2 to stdin");
-        }
-    
-    if (stdoutFd != STDOUT_FILENO)
-        {
-        if (dup2(stdoutFd, STDOUT_FILENO) < 0)
-            errnoAbort("can't dup2 to stdout");
-        }
-    
-    if (stderrFd != STDERR_FILENO)
-        {
-        if (dup2(stderrFd, STDERR_FILENO) < 0)
-            errnoAbort("can't dup2 to stderr");
-        }
-    
-    /* close other file descriptors */
-    for (fd = STDERR_FILENO+1; fd < 64; fd++)
-        close(fd);
-    execvp(proc->cmd[0], proc->cmd);
-    errnoAbort("exec failed: %s", proc->cmd[0]);
-    }
+    plProcExecChild(proc, stdinFd, stdoutFd, stderrFd);
 }
 
 static void plProcWait(struct plProc* proc)
 /* wait for a process in a pipeline */
 {
-int status;
-if (waitpid(proc->pid, &status, 0) < 0)
-    errnoAbort("process lost for: %s in %s", joinCmd(proc->cmd),
+if (waitpid(proc->pid, &proc->status, 0) < 0)
+    errnoAbort("process lost for: \"%s\" in pipeline \"%s\"", joinCmd(proc->cmd),
                proc->pl->procName);
-if (WIFSIGNALED(status))
-    errAbort("process terminated on signal %d: %s in %s",
-             WTERMSIG(status), joinCmd(proc->cmd), proc->pl->procName);
-if (WEXITSTATUS(status) != 0)
-    errAbort("process exited with %d: %s in %s",
-             WEXITSTATUS(status), joinCmd(proc->cmd), proc->pl->procName);
+if (WIFSIGNALED(proc->status))
+    errAbort("process terminated on signal %d: \"%s\" in pipeline \"%s\"",
+             WTERMSIG(proc->status), joinCmd(proc->cmd), proc->pl->procName);
+assert(WIFEXITED(proc->status));
+
+if ((WEXITSTATUS(proc->status) != 0) && !(proc->pl->options & pipelineNoAbort))
+    errAbort("process exited with %d: \"%s\" in pipeline \"%s\"",
+             WEXITSTATUS(proc->status), joinCmd(proc->cmd), proc->pl->procName);
 proc->pid = -1;
 }
 
@@ -199,8 +207,8 @@ pl->procName = joinCmds(cmds);
 return pl;
 }
 
-static void pipelineFree(struct pipeline **plPtr)
-/* free a pipeline object, removing from open list */
+void pipelineFree(struct pipeline **plPtr)
+/* free a pipeline object */
 {
 struct pipeline *pl = *plPtr;
 if (pl != NULL)
@@ -277,7 +285,7 @@ struct pipeline *pipelineCreateRead(char ***cmds, unsigned opts,
  * otherwise pipelineOpts is used to determine the input file.
  */
 {
-struct pipeline *pl = pipelineNew(cmds, pipelineRead);
+struct pipeline *pl = pipelineNew(cmds, opts|pipelineRead);
 int stdinFd = -1, pipeWrFd;
 checkOpts(opts, stdinFile);
 if (stdinFile != NULL)
@@ -317,7 +325,7 @@ struct pipeline *pipelineCreateWrite(char ***cmds, unsigned opts,
  * otherwise pipelineOpts is used to determine the output file.
  */
 {
-struct pipeline *pl = pipelineNew(cmds, pipelineWrite);
+struct pipeline *pl = pipelineNew(cmds, opts|pipelineWrite);
 int stdoutFd = -1, pipeRdFd;
 checkOpts(opts, stdoutFile);
 if (stdoutFile != NULL)
@@ -404,26 +412,31 @@ else
 pl->pipeFd = -1;
 }
 
-void pipelineWait(struct pipeline **plPtr)
-/* Wait for processes in a pl to complete and free object */
+int pipelineWait(struct pipeline *pl)
+/* Wait for processes in a pipeline to complete; normally aborts if any
+ * process exists non-zero.  If pipelineNoAbort was specified, return the exit
+ * code of the first process exit non-zero, or zero if none failed. */
 {
-struct pipeline *pl = *plPtr;
-if (pl != NULL)
+struct plProc *proc;
+int exitCode = 0;
+
+/* must close before waits for output pipeline */
+if (pl->options & pipelineWrite)
+    closePipeline(pl);
+
+/* wait on each process in order */
+for (proc = pl->procs; proc != NULL; proc = proc->next)
     {
-    struct plProc *proc;
-    /* must close before waits for output pipeline */
-    if (pl->options & pipelineWrite)
-        closePipeline(pl);
-
-    /* wait on each process in order */
-    for (proc = pl->procs; proc != NULL; proc = proc->next)
-        plProcWait(proc);
-
-    /* must close after waits for input pipeline */
-    if (pl->options & pipelineRead)
-        closePipeline(pl);
-    pipelineFree(plPtr);
+    plProcWait(proc);
+    if ((WEXITSTATUS(proc->status) != 0) && (exitCode == 0))
+        exitCode = WEXITSTATUS(proc->status);
     }
+
+/* must close after waits for input pipeline */
+if (pl->options & pipelineRead)
+    closePipeline(pl);
+
+return exitCode;
 }
 
 /*

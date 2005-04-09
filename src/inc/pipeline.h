@@ -11,6 +11,9 @@ enum pipelineOpts
     pipelineInheritFd = 0x01, /* use current stdin as input of read pipeline
                                * or stdout as output of write pipeline.  */
     pipelineDevNull =   0x02, /* use /dev/null input or output file */
+    pipelineNoAbort =   0x04, /* don't abort if a process exits non-zero,
+                               * wait will return exit code instead.
+                               * Still aborts if process signals. */
     };
 
 struct pipeline *pipelineCreateRead(char ***cmds, unsigned opts,
@@ -46,8 +49,13 @@ int pipelineFd(struct pipeline *pl);
 FILE *pipelineFile(struct pipeline *pl);
 /* Get a FILE object wrapped around the pipeline */
 
-void pipelineWait(struct pipeline **plPtr);
-/* Wait for processes in a pipeline to complete and free object */
+int pipelineWait(struct pipeline *pl);
+/* Wait for processes in a pipeline to complete; normally aborts if any
+ * process exists non-zero.  If pipelineNoAbort was specified, return the exit
+ * code of the first process exit non-zero, or zero if none failed. */
+
+void pipelineFree(struct pipeline **plPtr);
+/* free a pipeline object */
 
 #endif
 /*
