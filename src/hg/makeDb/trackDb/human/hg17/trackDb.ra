@@ -518,6 +518,16 @@ priority 165
 visibility hide
 type maf
 
+track brMaf
+shortLabel brMaf
+longLabel brMaf
+group x
+priority 165
+visibility hide
+type wigMaf
+speciesOrder mm5 rn3
+summary brMafSummary
+
 track rabbitMaf
 shortLabel Rabbit NISC/2X
 longLabel Rabbit NISC and 2X sequence blastz reciprocal best
