@@ -768,20 +768,6 @@ coerceToBit(pfc, &pp->children->next);
 pp->ty = pp->children->ty;
 }
 
-static void putChildrenInPlaceOfSelf(struct pfParse **pPp)
-/* Replace self with children. */
-{
-struct pfParse *pp = *pPp;
-if (pp->children == NULL)
-    *pPp = pp->next;
-else
-    {
-    struct pfParse *lastChild = slLastEl(pp->children);
-    lastChild->next = pp->next;
-    *pPp = pp->children;
-    }
-}
-
 static void ensureDeclarationTuple(struct pfParse *tuple)
 /* Given tuple, ensure every child is type pptVarInit. */
 {
@@ -849,7 +835,7 @@ for (p = compound->children; p != NULL; p = p->next)
 	    ensureDeclarationTuple(p);
 	    for ( ; child != NULL; child = child->next)
 	        addVarToClass(base, child);
-	    putChildrenInPlaceOfSelf(p2p);
+	    pfParsePutChildrenInPlaceOfSelf(p2p);
 	    break;
 	    }
 	default:
@@ -961,6 +947,7 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
     {
     if (pp->type != pptVarInit)
         errAt(pp->tok, "only variable declarations allowed in input/output lists");
+    pp->ty->fieldName = pp->name;
     }
 }
 

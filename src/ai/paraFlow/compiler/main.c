@@ -13,6 +13,7 @@
 #include "pfParse.h"
 #include "pfBindVars.h"
 #include "pfCheck.h"
+#include "pfCodeC.h"
 
 boolean parseOnly = FALSE;
 
@@ -72,7 +73,7 @@ rParseCount(&parseCount, pp);
 return parseCount;
 }
 
-static void printScopeInfo(int level, struct pfParse *pp)
+static void printScopeInfo(FILE *f, int level, struct pfParse *pp)
 /* Print out info on each new scope. */
 {
 switch (pp->type)
@@ -89,16 +90,16 @@ switch (pp->type)
 	char *name = pp->name;
 	if (name == NULL)
 	    name = "";
-        spaceOut(stdout, 2*level);
-	printf("scope %s %s: ", 
+        spaceOut(f, 2*level);
+	fprintf(f, "scope %s %s: ", 
 		pfParseTypeAsString(pp->type), name);
-	pfScopeDump(pp->scope, stdout);
-	printf("\n");
+	pfScopeDump(pp->scope, f);
+	fprintf(f, "\n");
 	break;
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    printScopeInfo(level+1, pp);
+    printScopeInfo(f, level+1, pp);
 }
 
 static void addBuiltInTypes(struct pfCompile *pfc)
@@ -172,19 +173,26 @@ void paraFlow(char *fileName)
 {
 struct pfCompile *pfc = pfCompileNew(fileName);
 struct pfParse *program = pfParseProgram(fileName, pfc);
+char *parseFile = "out.parse";
+char *typeFile = "out.typed";
+char *scopeFile = "out.scope";
+char *codeFile = "out.code";
+FILE *parseF = mustOpen(parseFile, "w");
+FILE *typeF = mustOpen(typeFile, "w");
+FILE *scopeF = mustOpen(scopeFile, "w");
 
+pfParseDump(program, 0, parseF);
 if (!parseOnly)
     {
     pfBindVars(pfc, program);
     pfTypeCheck(pfc, &program);
     pfCheckParaFlow(pfc, program);
     }
-
-pfParseDump(program, 0, stdout);
-
+pfParseDump(program, 0, typeF);
+printScopeInfo(scopeF, 0, program);
+pfCodeC(pfc, program, codeFile);
 printf("%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
-printScopeInfo(0, program);
 }
 
 int main(int argc, char *argv[])

@@ -175,6 +175,9 @@ struct pfParse *pfParseNew(enum pfParseType type,
 /* Return new parse node.  It's up to caller to fill in
  * children later. */
 
+void pfParsePutChildrenInPlaceOfSelf(struct pfParse **pPp);
+/* Replace self with children. */
+
 struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc, 
 	struct pfParse *parent);
 /* Convert file to parse tree using tkz. */

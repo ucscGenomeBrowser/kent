@@ -375,6 +375,20 @@ pp->scope = scope;
 return pp;
 }
 
+void pfParsePutChildrenInPlaceOfSelf(struct pfParse **pPp)
+/* Replace self with children. */
+{
+struct pfParse *pp = *pPp;
+if (pp->children == NULL)
+    *pPp = pp->next;
+else
+    {
+    struct pfParse *lastChild = slLastEl(pp->children);
+    lastChild->next = pp->next;
+    *pPp = pp->children;
+    }
+}
+
 struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok,
 	struct pfScope *scope)
 /* Return empty tuple. */
