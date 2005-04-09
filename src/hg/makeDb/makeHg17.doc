@@ -13856,3 +13856,7 @@ cd bacendsCow
   # 53403 warnings
  
 # add to kent/src/hg/makeDb/trackDb/human/hg17/trackDb.ra
+
+# make map between ccds and known genes (markd 2005/03/08)
+# this should be run whenever either known genes or ccds is updated
+/cluster/data/genbank/bin/i386/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
