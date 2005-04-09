@@ -113,6 +113,25 @@ static void printExpression(struct pfCompile *pfc, FILE *f,
 	struct pfParse *exp);
 /* Generate code for a expression */
 
+static boolean printCallStart(struct pfCompile *pfc, 
+	struct pfParse *call, FILE *f)
+/* Print the func(in1, in2 ...  part of a function call.
+ * Don't print the output or the last , or the closing ) */
+{
+struct pfParse *inTuple = call->children->next;
+struct pfParse *in;
+boolean needComma = FALSE;
+fprintf(f, "%s(", call->name);
+for (in = inTuple->children; in != NULL; in = in->next)
+    {
+    if (needComma)
+	fprintf(f, ", ");
+    needComma = TRUE;
+    printExpression(pfc, f, in);
+    }
+return needComma;
+}
+
 static void printCallStatement(struct pfCompile *pfc, 
 	FILE *f, struct pfParse *call)
 /* Generate code for a function call that throws away it's return 
@@ -130,28 +149,16 @@ boolean needComma;
 if (outCount > 1)
     {
     struct pfType *out;
-    needComma = FALSE;
     fprintf(f, "{");
     for (out = outTuple->children; out != NULL; out = out->next)
         {
-	if (needComma)
-	    fprintf(f, ", ");
 	needComma = TRUE;
 	printType(pfc, f, out->base);
-	fprintf(f, " %s", out->fieldName);
+	fprintf(f, " %s; ", out->fieldName);
 	}
-    fprintf(f, "; ");
     }
 
-needComma = FALSE;
-fprintf(f, "%s(", funcVar->name);
-for (in = inTuple->children; in != NULL; in = in->next)
-    {
-    if (needComma)
-	fprintf(f, ", ");
-    needComma = TRUE;
-    printExpression(pfc, f, in);
-    }
+needComma = printCallStart(pfc, call, f);
 if (outCount > 1)
     {
     struct pfType *out;
@@ -182,6 +189,99 @@ static void printExpression(struct pfCompile *pfc, FILE *f, struct pfParse *exp)
 /* Generate code for a expression */
 {
 fprintf(f, "expression...");
+}
+
+static void printAssignment(struct pfCompile *pfc, FILE *f,
+	struct pfParse *left, struct pfParse *right);
+/* Handle assignment where left side is not a tuple. */
+
+static void printLvalAddress(struct pfCompile *pfc, FILE *f,
+	struct pfParse *lval)
+/* Print &lval */
+{
+switch (lval->type)
+    {
+    case pptVarUse:
+    case pptVarInit:
+        fprintf(f, "&%s", lval->name);
+	break;
+    default:
+        internalErrAt(lval->tok);
+	break;
+    }
+}
+
+static void printCallIntoTuple(struct pfCompile *pfc, FILE *f,
+	struct pfParse *tuple, struct pfParse *call)
+/* Deal with things like (x, y) = unitCircle(10) */
+{
+struct pfParse *out;
+boolean needComma;
+needComma = printCallStart(pfc, call, f);
+for (out = tuple->children; out != NULL; out = out->next)
+    {
+    if (needComma)
+	fprintf(f, ", ");
+    needComma = TRUE;
+    printLvalAddress(pfc, f, out);
+    }
+fprintf(f, ");\n");
+}
+
+static void printTupleAssignment(struct pfCompile *pfc, FILE *f,
+	struct pfParse *left, struct pfParse *right)
+/* Handle assignment where left side is a tuple. */
+{
+switch (right->type)
+    {
+    case pptTuple:
+        {
+	for (left = left->children, right = right->children;
+	     left != NULL; left = left->next, right = right->next)
+	    {
+	    printAssignment(pfc, f, left, right);
+	    }
+	break;
+	}
+    case pptCall:
+        {
+	printCallIntoTuple(pfc, f, left, right);
+	break;
+	}
+    case pptCastCallToTuple:
+        {
+	fprintf(f, "/* Someday will handle pptCastTupleToTuple; */\n");
+	break;
+	}
+    default:
+        internalErrAt(left->tok);
+	break;
+    }
+}
+
+static void printAssignment(struct pfCompile *pfc, FILE *f,
+	struct pfParse *left, struct pfParse *right)
+/* Handle assignment where left side is not a tuple. */
+{
+fprintf(f, "/* %s = %s; */\n", left->name, right->name);
+}
+
+
+static void printAssignStatement(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *statement)
+/* Print assignment statement. */
+{
+struct pfParse *left = statement->children;
+struct pfParse *right = left->next;
+
+if (left->ty->isTuple)
+    {
+    printTupleAssignment(pfc, f, left, right);
+    }
+else
+    {
+    printAssignment(pfc, f, left, right);
+    }
 }
 
 static void printScope(int level,
@@ -242,6 +342,11 @@ switch (statement->type)
     	{
 	printCallStatement(pfc, f, statement);
 	fprintf(f, "\n");
+	break;
+	}
+    case pptAssignment:
+    	{
+	printAssignStatement(pfc, f, statement);
 	break;
 	}
     case pptClass:

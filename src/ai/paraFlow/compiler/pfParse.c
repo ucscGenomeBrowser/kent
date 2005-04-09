@@ -246,8 +246,8 @@ switch (type)
         return "pptCastTypedToVar";
     case pptCastVarToTyped:
         return "pptCastVarToTyped";
-    case pptCastTupleToTuple:
-	return "pptCastTupleToTuple";
+    case pptCastCallToTuple:
+	return "pptCastCallToTuple";
     case pptUniformTuple:
         return "pptUniformTuple";
     case pptConstBit:

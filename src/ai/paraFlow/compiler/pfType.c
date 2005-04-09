@@ -253,7 +253,7 @@ static void coerceCallToTupleOfTypes(struct pfCompile *pfc,
  * that it is supposed to be decide whether
  *      1) The types match
  *      2) Types mismatch but can be fixed  by
- *         inserting a  pptCastTupleToTuple
+ *         inserting a  pptCastCallToTuple
  *      3) Types mismatch in a way that can't be fixed
  * and act appropriately. */
 {
@@ -269,7 +269,7 @@ if (retCount != fieldCount)
 if (!pfTypesAllSame(retTypes, fieldTypes))
     {
     struct pfType *ty = wrapTupleType(pfc, fieldTypes);
-    struct pfParse *castAll = insertCast(pptCastTupleToTuple, ty, pCall);
+    struct pfParse *castAll = insertCast(pptCastCallToTuple, ty, pCall);
     struct pfType *retType = retTypes, *fieldType = fieldTypes;
     struct pfParse *castList = NULL, *fake;
 
