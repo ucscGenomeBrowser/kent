@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.105 2005/04/09 06:34:55 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.106 2005/04/09 20:59:03 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -199,8 +199,8 @@ else
 	    fflush(stdout);
 
 	    compressPipeline =
-		pipelineCreateWrite1(getCompressor(compressFileName->string),
-		    pipelineInheritFd, (char *)NULL);
+		pipelineOpen1(getCompressor(compressFileName->string),
+		    pipelineWrite, (char *)NULL);
 
 	    if (-1 == dup2(pipelineFd(compressPipeline),STDOUT_FILENO))
 		errnoAbort(

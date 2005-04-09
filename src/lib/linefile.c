@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.34 2005/04/09 06:34:55 markd Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.35 2005/04/09 20:59:02 markd Exp $";
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -38,7 +38,7 @@ struct pipeline *pl;
 struct lineFile *lf;
 if (access(fileName, R_OK) != 0)
     return NULL;  /* avoid error from pipeline */
-pl = pipelineCreateRead1(getDecompressor(fileName), 0, fileName);
+pl = pipelineOpen1(getDecompressor(fileName), pipelineRead, fileName);
 lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;

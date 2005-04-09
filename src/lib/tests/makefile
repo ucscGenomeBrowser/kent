@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest
+test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests
 	rm -r output
 	echo tested all
 
@@ -32,6 +32,34 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	${STRIP} ${BIN_DIR}/htmlPageTest${EXE}
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
+
+pipelineTests: 	pipelineWrite pipelineWriteMult \
+		pipelineRead pipelineReadMult \
+		pipelineExitCode
+
+pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
+	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
+	zcat output/$@.out.gz > output/$@.out
+	diff input/simple1.txt output/$@.out
+
+pipelineWriteMult: ${BIN_DIR}/pipelineTester mkdirs
+	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.wc "gzip -1" "gzip -dc" "wc"
+	diff expected/simple1.wc output/$@.wc
+
+pipelineRead: ${BIN_DIR}/pipelineTester mkdirs
+	gzip -1c input/simple1.txt >output/$@.in.gz
+	${BIN_DIR}/pipelineTester -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
+	diff input/simple1.txt output/$@.out
+
+pipelineReadMult: ${BIN_DIR}/pipelineTester mkdirs
+	${BIN_DIR}/pipelineTester -pipeData=output/$@.wc -otherEnd=input/simple1.txt "gzip -1" "gzip -dc" "wc"
+	diff expected/simple1.wc output/$@.wc
+
+pipelineExitCode: ${BIN_DIR}/pipelineTester
+	${BIN_DIR}/pipelineTester -exitCode=1 false
+
+${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} $L
 
 clean:
 	rm -rf *.o bin output *.tmp
