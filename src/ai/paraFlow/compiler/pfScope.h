@@ -24,6 +24,7 @@ struct pfVar
      char *name;			/* Name (not allocated here) */
      struct pfScope *scope;		/* Scope we're declared in. */
      struct pfType *ty;			/* Variable type. */
+     boolean isOut;			/* Is output for a function */
      };
 
 struct pfTokenizer;

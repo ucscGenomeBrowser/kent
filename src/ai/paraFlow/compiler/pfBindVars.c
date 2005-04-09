@@ -106,7 +106,7 @@ switch (pp->type)
 	struct pfParse *name = type->next;
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
-	pfScopeAddVar(pp->scope, name->name, pp->ty);
+	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty);
 	break;
 	}
     case pptToDec:

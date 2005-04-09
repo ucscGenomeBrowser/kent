@@ -999,7 +999,10 @@ struct hashEl *hel;
 checkIsSimpleDecTuple(input);
 checkIsSimpleDecTuple(output);
 for (pp = output->children; pp != NULL; pp = pp->next)
+    {
     hashAddInt(outputHash, pp->name, 0);
+    pp->var->isOut = TRUE;
+    }
 for (pp = funcDec->children; pp != NULL; pp = pp->next)
     rBlessFunction(funcDec->scope, outputHash, pfc, pp);
 hc = hashFirst(outputHash);

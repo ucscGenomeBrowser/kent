@@ -202,8 +202,13 @@ switch (lval->type)
     {
     case pptVarUse:
     case pptVarInit:
-        fprintf(f, "&%s", lval->name);
+	{
+	struct pfVar *var = lval->var;
+	if (!var->isOut)
+	    fprintf(f, "&");
+        fprintf(f, "%s", lval->name);
 	break;
+	}
     default:
         internalErrAt(lval->tok);
 	break;
@@ -285,9 +290,13 @@ for (out=tuple->children, cast = castList; cast != NULL;
 	     case pptCastFloatToBit:
 	     case pptCastDoubleToBit:
 	     case pptCastStringToBit:
+		 if (out->var->isOut)
+		     fprintf(f, "*");
 	         fprintf(f, " %s = (out%d != 0);", out->name, outIx);
 		 break;
 	     default:
+		 if (out->var->isOut)
+		     fprintf(f, "*");
 	         fprintf(f, " %s = out%d;", out->name, outIx);
 		 break;
 	     }
