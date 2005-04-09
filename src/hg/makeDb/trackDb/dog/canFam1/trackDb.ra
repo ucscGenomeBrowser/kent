@@ -21,6 +21,28 @@ autoScaleDefault Off
 pairwise chm
 speciesOrder hg17 mm5
 
+track blastzBestLoxAfr0
+shortLabel Elephant Best
+longLabel Elephant Blastz Reciprocal Best
+group compGeno
+priority 123
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track blastzBestDasNov0
+shortLabel Armadillo Best
+longLabel Armadillo Blastz Reciprocal Best
+group compGeno
+priority 124
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+ 
 track netSyntenyMm5
 shortLabel Mouse Synteny
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
@@ -64,6 +86,17 @@ color 0,100,0
 altColor 255,240,200
 type netAlign hg17 chainHg17
 otherDb hg17
+
+track blastzBestOryCun0
+shortLabel Rabbit Best
+longLabel Rabbit Blastz Reciprocal Best
+group compGeno
+priority 188.70
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
 
 track gold
 shortLabel Assembly 
