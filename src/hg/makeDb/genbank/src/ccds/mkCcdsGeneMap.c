@@ -1,4 +1,5 @@
-/* mkCcdsKgMap - create mappings between ccds and known genes */
+
+/* mkCcdsGeneMap - create mappings between ccds and other gene tables */
 
 #include "common.h"
 #include "options.h"
@@ -6,7 +7,7 @@
 #include "genePredReader.h"
 #include "jksql.h"
 #include "ccdsInfo.h"
-#include "ccdsKgMap.h"
+#include "ccdsGeneMap.h"
 #include "linefile.h"
 #include "verbose.h"
 #include "chromBins.h"
@@ -14,7 +15,7 @@
 #include "bits.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: mkCcdsKgMap.c,v 1.1 2005/04/08 09:02:41 markd Exp $";
+static char const rcsid[] = "$Id: mkCcdsGeneMap.c,v 1.1 2005/04/09 03:49:25 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -23,25 +24,27 @@ static struct optionSpec optionSpecs[] =
     {"loadDb", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {"similarity", OPTION_FLOAT},
+    {"noopNoCcdsTbl", OPTION_BOOLEAN},
     {NULL, 0}
 };
 boolean keep = FALSE;    /* keep tab files after load */
 boolean loadDb = FALSE;  /* load database */
+boolean noopNoCcdsTbl = FALSE; /* skip if no CCDS table */
 float similarity = 0.95; /* fraction similarity */
 
 void usage(char *msg)
 /* Explain usage and exit. */
 {
 errAbort("Error: %s\n"
-    "mkCcdsKgMap - create with mappings between ccds and known genes\n"
+    "mkCcdsGeneMap - create with mappings between ccds and other gene tables\n"
     "\n"
     "Usage:\n"
-    "   mkCcdsKgMap [options] ccdsTblFile knownGeneTblFile ccdsKgMapOut\n"
+    "   mkCcdsGeneMap [options] ccdsTblFile geneTblFile ccdsGeneMapOut\n"
     "\n"
-    "Create a mapping between CCDS and Known Genes based on similarity\n"
-    "of the genomic location of the CDS.  The ccdsTbl, and knownGeneTbl\n"
-    "arguments are genePreds and can be tables or files. The ccdsKgMapOut\n"
-    "the name of the tab file to create to load the database, it's base name\n"
+    "Create a mapping between CCDS and other gene tables based on similarity\n"
+    "of the genomic location of the CDS.  The ccdsTblFile, and geneTblFile\n"
+    "arguments are genePreds and can be tables or files. The ccdsGeneMapOut\n"
+    "specifes the table and tab file to create to load the database, it's base name\n"
     "is also the table name.  If a simple table name is supplied, a .tab extenions is\n"
     "added.  The table is first loaded with an _tmp extension and then renamed\n"
     "if the load succeeds.\n"
@@ -50,16 +53,21 @@ errAbort("Error: %s\n"
     "  -db=db - database if tables are being read or loaded\n"
     "  -similarity=0.95 - require at least this level of similar\n"
     "  -loadDb - load table into db\n"
+    "  -noopNoCcdsTbl - if specified, it's the program will exit without\n"
+    "   error if there is no CCDS table. Requires -db.\n"
     "  -keep - keep tmp tab file used to load database\n"
     "  -verbose=n\n",
     msg);
 }
 
 struct genePredReader *openGenePred(struct sqlConnection *conn,
-                                     char *gpTblFile)
-/* create a genePredReader, determiniong if a file or table is used for
+                                    char *gpTblFile)
+/* create a genePredReader, determining if a file or table is used for
  * input. */
 {
+char gpTbl[PATH_LEN], gpFile[PATH_LEN];
+
+ccdsGetTblFileNames(gpTblFile, gpTbl, gpFile);
 if (fileExists(gpTblFile))
     return genePredReaderFile(gpTblFile, NULL);
 else
@@ -74,9 +82,13 @@ struct chromBins* loadGenePreds(struct sqlConnection *conn, char *gpTblFile)
 /* load genePreds from table or file into chromBins.  conn maybe null if a
  * file is supplied */
 {
+char gpTbl[PATH_LEN], gpFile[PATH_LEN];
 struct chromBins *bins = chromBinsNew(genePredFree);
 struct genePredReader *gpr = openGenePred(conn, gpTblFile);
 struct genePred *gp;
+
+ccdsGetTblFileNames(gpTblFile, gpTbl, gpFile);
+
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
     if (gp->cdsStart < gp->cdsEnd)
@@ -129,85 +141,104 @@ else
     return over21;
 }
 
-void processPair(struct genePred* ccdsGp, struct genePred *kgGp,
+void processPair(struct genePred* ccdsGp, struct genePred *geneGp,
                  FILE *tabFh)
-/* process an overlapping known gene/ccds gene pair, determining if they
+/* process an overlapping gene/ccds gene pair, determining if they
  * are sufficiently similar to save. */
 {
-float sim = calcCdsSimilarity(ccdsGp, kgGp);
+float sim = calcCdsSimilarity(ccdsGp, geneGp);
 if (sim >= similarity)
     {
-    struct ccdsKgMap rec;
+    struct ccdsGeneMap rec;
     ZeroVar(&rec);
     rec.ccdsId = ccdsGp->name;
-    rec.kgId = kgGp->name;
+    rec.geneId = geneGp->name;
+    rec.chrom = geneGp->chrom;
+    rec.chromStart = geneGp->txStart; 
+    rec.chromEnd = geneGp->txEnd;
     rec.cdsSimilarity = sim;
-    ccdsKgMapTabOut(&rec, tabFh);
+    ccdsGeneMapTabOut(&rec, tabFh);
     }
 }
 
-void processCcds(struct chromBins* kgGenes, struct genePred *ccdsGp,
+void processCcds(struct chromBins* genes, struct genePred *ccdsGp,
                  FILE *tabFh)
-/* process CCDS, pairing it with one or more known genes */
+/* process CCDS, pairing it with one or more genes */
 {
-struct binElement *overKgList = chromBinsFind(kgGenes, ccdsGp->chrom,
-                                              ccdsGp->cdsStart, ccdsGp->cdsEnd);
-struct binElement *overKg;
+struct binElement *overGeneList = chromBinsFind(genes, ccdsGp->chrom,
+                                                ccdsGp->cdsStart, ccdsGp->cdsEnd);
+struct binElement *overGene;
 
-for (overKg = overKgList; overKg != NULL; overKg = overKg->next)
+for (overGene = overGeneList; overGene != NULL; overGene = overGene->next)
     {
-    struct genePred *kgGp = overKg->val;
-    if (kgGp->strand[0] == ccdsGp->strand[0])
-        processPair(ccdsGp, kgGp, tabFh);
+    struct genePred *geneGp = overGene->val;
+    if (geneGp->strand[0] == ccdsGp->strand[0])
+        processPair(ccdsGp, geneGp, tabFh);
     }
 }
 
-void loadTable(struct sqlConnection *conn, char *ccdsKgMapTbl,
-               char *ccdsKgMapFile)
+void loadTable(struct sqlConnection *conn, char *ccdsGeneMapTbl,
+               char *ccdsGeneMapFile)
 /* load table into database */
 {
-char ccdsKgMapTblTmp[PATH_LEN], *ccdsKgMapSql;
+char ccdsGeneMapTblTmp[PATH_LEN], *ccdsGeneMapSql;
 
 /* create table with _tmp extension, then rename after loaded */
-safef(ccdsKgMapTblTmp, sizeof(ccdsKgMapTblTmp), "%s_tmp", ccdsKgMapTbl);
-ccdsKgMapSql = ccdsKgMapGetCreateSql(ccdsKgMapTblTmp);
+safef(ccdsGeneMapTblTmp, sizeof(ccdsGeneMapTblTmp), "%s_tmp", ccdsGeneMapTbl);
+ccdsGeneMapSql = ccdsGeneMapGetCreateSql(ccdsGeneMapTblTmp);
 
-sqlRemakeTable(conn, ccdsKgMapTblTmp, ccdsKgMapSql);
-sqlLoadTabFile(conn, ccdsKgMapFile, ccdsKgMapTblTmp, SQL_TAB_FILE_ON_SERVER);
-ccdsRenameTable(conn, ccdsKgMapTblTmp, ccdsKgMapTbl);
+sqlRemakeTable(conn, ccdsGeneMapTblTmp, ccdsGeneMapSql);
+sqlLoadTabFile(conn, ccdsGeneMapFile, ccdsGeneMapTblTmp, SQL_TAB_FILE_ON_SERVER);
+ccdsRenameTable(conn, ccdsGeneMapTblTmp, ccdsGeneMapTbl);
 
 if (!keep)
-    unlink(ccdsKgMapFile);
-freeMem(ccdsKgMapSql);
+    unlink(ccdsGeneMapFile);
+freeMem(ccdsGeneMapSql);
 }
 
-void mkCcdsKgMap(char *db, char *ccdsTblFile, char *knownGeneTblFile,
-                 char *ccdsKgMapTblFile)
+void noopNoCcdsTblCheck(struct sqlConnection *conn, char *ccdsTblFile)
+/* check for ccds table and exit if it doesn't exist */
+{
+char ccdsTbl[PATH_LEN];
+ccdsGetTblFileNames(ccdsTblFile, ccdsTbl, NULL);
+if (!sqlTableExists(conn, ccdsTbl))
+    {
+    fprintf(stderr, "Note: no %s.%s table, ignoring load request\n",
+            sqlGetDatabase(conn), ccdsTbl);
+    exit(0);
+    }
+} 
+
+void mkCcdsGeneMap(char *db, char *ccdsTblFile, char *geneTblFile,
+                   char *ccdsGeneMapTblFile)
 /* create mappings between ccds and known genes */
 {
 struct sqlConnection *conn = NULL;
-struct chromBins* kgGenes;
+struct chromBins* genes;
 struct genePredReader *ccdsGpr;
 struct genePred *ccdsGp;
 FILE *tabFh;
-char ccdsKgMapTbl[PATH_LEN], ccdsKgMapFile[PATH_LEN];
+char ccdsGeneMapTbl[PATH_LEN], ccdsGeneMapFile[PATH_LEN];
 
-ccdsGetTblFileNames(ccdsKgMapTblFile, ccdsKgMapTbl, ccdsKgMapFile);
+ccdsGetTblFileNames(ccdsGeneMapTblFile, ccdsGeneMapTbl, ccdsGeneMapFile);
+
 if (db != NULL)
     conn = sqlConnect(db);
+if (noopNoCcdsTbl)
+    noopNoCcdsTblCheck(conn, ccdsTblFile);
 
 /* build table file */
-kgGenes = loadGenePreds(conn, knownGeneTblFile);
+genes = loadGenePreds(conn, geneTblFile);
 ccdsGpr = openGenePred(conn, ccdsTblFile);
-tabFh = mustOpen(ccdsKgMapFile, "w");
+tabFh = mustOpen(ccdsGeneMapFile, "w");
 
 while ((ccdsGp = genePredReaderNext(ccdsGpr)) != NULL)
-    processCcds(kgGenes, ccdsGp, tabFh);
+    processCcds(genes, ccdsGp, tabFh);
 carefulClose(&tabFh);
 genePredReaderFree(&ccdsGpr);
 
 if (loadDb)
-    loadTable(conn, ccdsKgMapTbl, ccdsKgMapFile);
+    loadTable(conn, ccdsGeneMapTbl, ccdsGeneMapFile);
 
 sqlDisconnect(&conn);
 }
@@ -222,10 +253,13 @@ if (argc != 4)
 db = optionVal("db", NULL);
 keep = optionExists("keep");
 loadDb = optionExists("loadDb");
+noopNoCcdsTbl = optionExists("noopNoCcdsTbl");
 similarity = optionFloat("similarity", similarity);
 if (loadDb && (db == NULL))
     errAbort("-loadDb requires -db");
-mkCcdsKgMap(db, argv[1], argv[2], argv[3]);
+if (noopNoCcdsTbl && (db == NULL))
+    errAbort("-noopNoCcdsTbl requires -db");
+mkCcdsGeneMap(db, argv[1], argv[2], argv[3]);
 return 0;
 }
 /*
