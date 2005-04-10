@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.945 2005/04/10 17:38:37 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.946 2005/04/10 20:59:23 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3221,66 +3221,10 @@ if ((blastRef != NULL) && (hTableExists(blastRef)))
 	sqlFreeResult(&sr);
 	}
     hFreeConn(&conn);
-    return ;
     }
-
-for (lf = tg->items; lf != NULL; lf = lf->next)
-    {
-    char *acc, *prot = NULL;
-    char *gene = NULL, *pos = NULL;
-    char *buffer;
-    boolean added = FALSE;
-
-    lf->extra = needMem(strlen(lf->name));
-    acc = buffer = cloneString(lf->name);
-    if ((pos = strchr(acc, '.')) != NULL)
-	{
-	*pos++ = 0;
-	if ((gene = strchr(pos, '.')) != NULL)
-	    {
-	    *gene++ = 0;
-	    if ((prot = strchr(gene, '.')) != NULL)
-		*prot++ = 0;
-	    }
-	}
-
-    if (useGene && (gene != NULL))
-	{
-	added = TRUE;
-	strcat(lf->extra, gene);
-	}
-    if (useAcc && (acc != NULL))
-	{
-	if (added)
-	    strcat(lf->extra, "/");
-	added = TRUE;
-	strcat(lf->extra, acc);
-	}
-    if (useSprot && (prot != NULL))
-	{
-	if (added)
-	    strcat(lf->extra, "/");
-	strcat(lf->extra, prot);
-	}
-    if (usePos && (pos != NULL))
-	{
-	char *startPos = strchr(pos, ':');
-	char *dash = strchr(pos, '-');
-
-	if ((startPos != NULL) && (dash != NULL))
-	    {
-	    *startPos++ = 0;
-	    dash -= 3; /* divide by 1000 */
-	    *dash = 0;
-	    if (added)
-		strcat(lf->extra, "/");
-	    strcat(lf->extra, pos);
-	    strcat(lf->extra, " ");
-	    strcat(lf->extra, startPos);
-	    strcat(lf->extra, "k");
-	    }
-	}
-    }
+else
+    for (lf = tg->items; lf != NULL; lf = lf->next)
+	lf->extra = cloneString(lf->name);
 }
 
 
@@ -9383,7 +9327,7 @@ hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
 
-void groupTracks(struct track **pTrackList, struct group **pGroupList)
+static void groupTracks(struct track **pTrackList, struct group **pGroupList)
 /* Make up groups and assign tracks to groups. */
 {
 struct group *unknown = NULL;
@@ -9476,7 +9420,7 @@ else
 hButton(var, paddedLabel);
 }
 
-struct track *getTrackList()
+struct track *getTrackList( struct group **pGroupList)
 /* Return list of all tracks. */
 {
 struct track *track, *trackList = NULL;
@@ -9698,10 +9642,16 @@ if (restrictionEnzymesOk())
     slSafeAddHead(&trackList, cuttersTg());
 loadCustomTracks(&trackList);
 
+groupTracks(&trackList, pGroupList);
+if (cgiOptionalString( "hideTracks"))
+    changeTrackVis(groupList, NULL, tvHide);
+
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
+    if (cgiOptionalString( "hideTracks"))
+	s = cgiOptionalString( track->mapName);
     if (s != NULL)
 	{
 	track->visibility = hTvFromString(s);
@@ -9760,9 +9710,7 @@ if (userSeqString && !ssFilesExist(userSeqString))
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 
-trackList = getTrackList();
-
-groupTracks(&trackList, &groupList);
+trackList = getTrackList(&groupList);
 
 /* If hideAll flag set, make all tracks hidden */
 if(hideAll || defaultTracks)
