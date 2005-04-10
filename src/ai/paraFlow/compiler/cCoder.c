@@ -38,7 +38,7 @@ static char *typeKey(struct pfCompile *pfc, struct pfBaseType *base)
 /* Return key for type if available, or NULL */
 {
 if (base == pfc->bitType)
-    return "Char";
+    return "Bit";
 else if (base == pfc->byteType)
     return "Byte";
 else if (base == pfc->shortType)
@@ -544,8 +544,6 @@ codeStatement(pfc, f, body);
     struct pfType *out;
     for (out = outTuple->children; out != NULL; out = out->next)
         {
-	printType(pfc, f, out->base);
-	fprintf(f, " ");
 	codeParamAccess(pfc, f, out->base, outIx);
 	fprintf(f, " = %s;\n", out->fieldName);
 	outIx += 1;
@@ -673,6 +671,19 @@ if (isModule)
     fprintf(f, "}\n");
 }
 
+static void printConclusion(struct pfCompile *pfc, FILE *f)
+/* Print out C code for end of program. */
+{
+fputs(
+"\n"
+"int main(int argv, char *argc[])\n"
+"{\n"
+"static PfStack stack[4*1024];\n"
+"__init__(stack);\n"
+"return 0;\n"
+"}\n", f);
+}
+
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
 /* Generate C code for program. */
@@ -686,5 +697,6 @@ for (module = program->children; module != NULL; module = module->next)
     fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
     codeScope(pfc, f, module, TRUE, FALSE);
     }
+printConclusion(pfc, f);
 }
 

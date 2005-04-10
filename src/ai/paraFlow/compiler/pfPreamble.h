@@ -7,12 +7,13 @@ struct list;
 struct tree;
 struct dir;
 struct var;
+struct pfType;
 
-typedef struct string String;
-typedef struct array Array;
-typedef struct list List;
-typedef struct tree Tree;
-typedef struct dir Dir;
+typedef struct string *String;
+typedef struct array *Array;
+typedef struct list *List;
+typedef struct tree *Tree;
+typedef struct dir *Dir;
 typedef struct var Var;
 
 typedef char Bit;
@@ -23,7 +24,7 @@ typedef long long Long;
 typedef float Float;
 typedef double Double;
 
-union pfStack
+union pfVarless
     {
     Bit Bit;
     Byte Byte;
@@ -37,9 +38,32 @@ union pfStack
     List List;
     Tree Tree;
     Dir Dir;
-    Var Var;
     void *v;
     };
 
-typedef pfStack PfStack;
+struct var
+    {
+    union pfVarless val;
+    struct pfType *type;
+    };
+
+union pfStack
+    {
+    Bit Bit;
+    Byte Byte;
+    Short Short;
+    Int Int;
+    Long Long;
+    Float Float;
+    Double Double;
+    String *String;
+    Array *Array;
+    List *List;
+    Tree *Tree;
+    Dir *Dir;
+    void *v;
+    Var Var;
+    };
+
+typedef union pfStack PfStack;
 
