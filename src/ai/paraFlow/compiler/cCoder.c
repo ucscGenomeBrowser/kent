@@ -79,7 +79,7 @@ else
 
 static char *stackName = "_pfStack_";
 
-static void printParamAccess(struct pfCompile *pfc, FILE *f, 
+static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base, int offset)
 /* Print out code to access paramater of given type at offset. */
 {
@@ -143,7 +143,7 @@ switch (pp->type)
     case pptVarUse:
     case pptVarInit:
 	fprintf(f, "%s = ", pp->name);
-	printParamAccess(pfc, f, pp->ty->base, stack);
+	codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, ";\n");
 	return 1;
     case pptTuple:
@@ -189,11 +189,11 @@ struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
 codeExpression(pfc, f, lval, stack);
 codeExpression(pfc, f, rval, stack+1);
-printParamAccess(pfc, f, pp->ty->base, stack);
+codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " = ");
-printParamAccess(pfc, f, pp->ty->base, stack);
+codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " %s ", op);
-printParamAccess(pfc, f, pp->ty->base, stack+1);
+codeParamAccess(pfc, f, pp->ty->base, stack+1);
 fprintf(f, ";\n");
 return 1;
 }
@@ -222,7 +222,7 @@ switch (pp->type)
     	codeVarInit(pfc, f, pp, stack);
 	return 0;
     case pptVarUse:
-	printParamAccess(pfc, f, pp->ty->base, stack);
+	codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = %s;\n", pp->name);
 	return 1;
     case pptPlus:
@@ -236,47 +236,92 @@ switch (pp->type)
     case pptMod:
         return codeBinaryOp(pfc, f, pp, stack, "%");
     case pptConstBit:
-        {
-	printParamAccess(pfc, f, pfc->bitType, stack);
-	fprintf(f, " = %lld;\n", pp->tok->val.i);
-	return 1;
-	}
     case pptConstByte:
-        {
-	printParamAccess(pfc, f, pfc->byteType, stack);
-	fprintf(f, " = %lld;\n", pp->tok->val.i);
-	return 1;
-	}
     case pptConstShort:
-        {
-	printParamAccess(pfc, f, pfc->shortType, stack);
-	fprintf(f, " = %lld;\n", pp->tok->val.i);
-	return 1;
-	}
     case pptConstInt:
-        {
-	printParamAccess(pfc, f, pfc->intType, stack);
-	fprintf(f, " = %lld;\n", pp->tok->val.i);
-	return 1;
-	}
     case pptConstLong:
-        {
-	printParamAccess(pfc, f, pfc->longType, stack);
-	fprintf(f, " = %lld;\n", pp->tok->val.i);
-	return 1;
-	}
     case pptConstFloat:
-        {
-	printParamAccess(pfc, f, pfc->floatType, stack);
-	fprintf(f, " = %f;\n", pp->tok->val.x);
-	return 1;
-	}
     case pptConstDouble:
         {
-	printParamAccess(pfc, f, pfc->doubleType, stack);
-	fprintf(f, " = %f;\n", pp->tok->val.x);
+	struct pfToken *tok = pp->tok;
+	codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+	switch (tok->type)
+	    {
+	    case pftString:
+		assert(pp->type == pptConstBit);
+	        fprintf(f, "1;\n");
+		break;
+	    case pftFloat:
+	        fprintf(f, "%1.0f;\n", pp->tok->val.x);
+		break;
+	    case pftInt:
+		fprintf(f, "%lld;\n", pp->tok->val.i);
+		break;
+	    }
 	return 1;
 	}
+    case pptCastBitToBit:
+    case pptCastBitToByte:
+    case pptCastBitToShort:
+    case pptCastBitToInt:
+    case pptCastBitToLong:
+    case pptCastBitToFloat:
+    case pptCastBitToDouble:
+    case pptCastByteToBit:
+    case pptCastByteToByte:
+    case pptCastByteToShort:
+    case pptCastByteToInt:
+    case pptCastByteToLong:
+    case pptCastByteToFloat:
+    case pptCastByteToDouble:
+    case pptCastShortToBit:
+    case pptCastShortToByte:
+    case pptCastShortToShort:
+    case pptCastShortToInt:
+    case pptCastShortToLong:
+    case pptCastShortToFloat:
+    case pptCastShortToDouble:
+    case pptCastIntToBit:
+    case pptCastIntToByte:
+    case pptCastIntToShort:
+    case pptCastIntToInt:
+    case pptCastIntToLong:
+    case pptCastIntToFloat:
+    case pptCastIntToDouble:
+    case pptCastLongToBit:
+    case pptCastLongToByte:
+    case pptCastLongToShort:
+    case pptCastLongToInt:
+    case pptCastLongToLong:
+    case pptCastLongToFloat:
+    case pptCastLongToDouble:
+    case pptCastFloatToBit:
+    case pptCastFloatToByte:
+    case pptCastFloatToShort:
+    case pptCastFloatToInt:
+    case pptCastFloatToLong:
+    case pptCastFloatToFloat:
+    case pptCastFloatToDouble:
+    case pptCastDoubleToBit:
+    case pptCastDoubleToByte:
+    case pptCastDoubleToShort:
+    case pptCastDoubleToInt:
+    case pptCastDoubleToLong:
+    case pptCastDoubleToFloat:
+    case pptCastDoubleToDouble:
+	codeExpression(pfc, f, pp->children, stack);
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ";\n");
+	return 0;
+    case pptCastStringToBit:
+	codeExpression(pfc, f, pp->children, stack);
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = (0 != ");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ");");
     default:
 	{
 	fprintf(f, "(%s expression)\n", pfParseTypeAsString(pp->type));
@@ -345,7 +390,7 @@ fprintf(f, "void %s()\n{\n", funcVar->name);
         {
 	printType(pfc, f, in->base);
 	fprintf(f, " %s = ", in->fieldName);
-	printParamAccess(pfc, f, in->base, inIx);
+	codeParamAccess(pfc, f, in->base, inIx);
 	fprintf(f, ";\n");
 	inIx += 1;
 	}
@@ -372,7 +417,7 @@ codeStatement(pfc, f, body);
         {
 	printType(pfc, f, out->base);
 	fprintf(f, " ");
-	printParamAccess(pfc, f, out->base, outIx);
+	codeParamAccess(pfc, f, out->base, outIx);
 	fprintf(f, " = %s;\n", out->fieldName);
 	outIx += 1;
 	}
