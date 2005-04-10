@@ -10,7 +10,7 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtToPsl.c,v 1.10 2004/10/15 00:20:43 braney Exp $";
+static char const rcsid[] = "$Id: axtToPsl.c,v 1.11 2005/04/10 17:41:30 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -77,8 +77,11 @@ while ((axt = axtRead(lf)) != NULL)
                        axt->tName, findSize(tSizeHash, axt->tName),
                        axt->tStart, axt->tEnd, axt->tSym, strand,
                        PSL_IS_SOFTMASK);
-    pslTabOut(psl, f);
-    pslFree(&psl);
+    if (psl != NULL)
+	{
+	pslTabOut(psl, f);
+	pslFree(&psl);
+	}
     axtFree(&axt);
     }
 lineFileClose(&lf);
