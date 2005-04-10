@@ -77,7 +77,8 @@ else
     fprintf(f, "%s", s);
 }
 
-static char *stackName = "_pfStack_";
+static char *stackName = "pfStack";
+static char *stackType = "PfStack";
 
 static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base, int offset)
@@ -126,23 +127,22 @@ int outCount = slCount(outTuple->children);;
 
 /* Add parameters to stack. */
 codeExpression(pfc, f, inTuple, stack);
-if (stack != 0)
-    fprintf(f, "%s += %d;\n", stackName, stack);
-fprintf(f, "%s();\n", pp->name);
-if (stack != 0)
-    fprintf(f, "%s -= %d;\n", stackName, stack);
+if (stack == 0)
+    fprintf(f, "%s(%s);\n", pp->name, stackName);
+else
+    fprintf(f, "%s(%s+%d);\n", pp->name, stackName, stack);
 return outCount;
 }
 
 static int lvalOffStack(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
+	struct pfParse *pp, int stack, char *op)
 /* Take an lval off of stack. */
 {
 switch (pp->type)
     {
     case pptVarUse:
     case pptVarInit:
-	fprintf(f, "%s = ", pp->name);
+	fprintf(f, "%s %s ", pp->name , op);
 	codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, ";\n");
 	return 1;
@@ -151,7 +151,7 @@ switch (pp->type)
 	int total = 0;
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
-	    total += lvalOffStack(pfc, f, p, stack+total);
+	    total += lvalOffStack(pfc, f, p, stack+total, op);
 	return total;
 	}
     default:
@@ -160,14 +160,54 @@ switch (pp->type)
     }
 }
 
-static void codeAssignment(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
+static int codeAssignment(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, char *op)
 /* Generate code for an assignment. */
 {
 struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
 codeExpression(pfc, f, rval, stack);
-lvalOffStack(pfc, f, lval, stack);
+lvalOffStack(pfc, f, lval, stack, op);
+return 0;
+}
+
+static void codeTupleIntoSomething(struct pfCompile *pfc, FILE *f,
+	struct pfType *type, int stack, int tupleSize)
+/* Code a tuple into array of given type. */
+{
+struct pfBaseType *base = type->children->base;
+char *name;
+if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
+    || base == pfc->intType || base == pfc->longType || base == pfc->floatType
+    || base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
+    {
+    name = base->name;
+    }
+else
+    {
+    name = "class";
+    }
+fprintf(f, "pf_%s_%s_FromTuple(%s+%d, %d);\n", name, type->base->name,
+	stackName, stack, tupleSize);
+}
+
+static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
+	struct pfType *type, int stack, int tupleSize)
+/* Shovel tuple into array, list, dir, tree. */
+{
+struct pfBaseType *base = type->base;
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, " = ");
+if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
+	|| base == pfc->dirType)
+    {
+    codeTupleIntoSomething(pfc, f, type, stack, tupleSize);
+    }
+else
+    {
+    internalErr();
+    }
+fprintf(f, ";\n");
 }
 
 static void codeVarInit(struct pfCompile *pfc, FILE *f,
@@ -176,8 +216,16 @@ static void codeVarInit(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *lval = pp;
 struct pfParse *rval = pp->children->next->next;
-codeExpression(pfc, f, rval, stack);
-lvalOffStack(pfc, f, lval, stack);
+int count = codeExpression(pfc, f, rval, stack);
+switch (rval->type)
+    {
+    case pptUniformTuple:
+	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
+        break;
+    default:
+	lvalOffStack(pfc, f, lval, stack, "=");
+	break;
+    }
 }
 	
 	
@@ -191,11 +239,58 @@ codeExpression(pfc, f, lval, stack);
 codeExpression(pfc, f, rval, stack+1);
 codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " = ");
-codeParamAccess(pfc, f, pp->ty->base, stack);
+codeParamAccess(pfc, f, lval->ty->base, stack);
 fprintf(f, " %s ", op);
-codeParamAccess(pfc, f, pp->ty->base, stack+1);
+codeParamAccess(pfc, f, rval->ty->base, stack+1);
 fprintf(f, ";\n");
 return 1;
+}
+
+static void printEscapedString(FILE *f, char *s)
+/* Print string in such a way that C can use it. */
+{
+char c;
+fputc('"', f);
+while ((c = *s++) != 0)
+    {
+    switch (c)
+        {
+	case '\a':
+	    fputs("\\a", f);
+	    break;
+	case '\b':
+	    fputs("\\b", f);
+	    break;
+	case '\f':
+	    fputs("\\f", f);
+	    break;
+	case '\n':
+	    fputs("\\n", f);
+	    break;
+	case '\r':
+	    fputs("\\r", f);
+	    break;
+	case '\t':
+	    fputs("\\t", f);
+	    break;
+	case '\v':
+	    fputs("\\t", f);
+	    break;
+	case '\?':
+	    fputs("\\?", f);
+	    break;
+	case '\\':
+	    fputs("\\\\", f);
+	    break;
+	case '"':
+	    fputs("\\\"", f);
+	    break;
+	default:
+	    fputc(c, f);
+	    break;
+	}
+    }
+fputc('"', f);
 }
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
@@ -206,6 +301,8 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
 switch (pp->type)
     {
     case pptTuple:
+    case pptUniformTuple:
+    case pptKeyVal:
         {
 	int total = 0;
 	struct pfParse *p;
@@ -216,8 +313,15 @@ switch (pp->type)
     case pptCall:
 	return codeCall(pfc, f, pp, stack);
     case pptAssignment:
-	codeAssignment(pfc, f, pp, stack);
-	return 0;
+	return codeAssignment(pfc, f, pp, stack, "=");
+    case pptPlusEquals:
+	return codeAssignment(pfc, f, pp, stack, "+=");
+    case pptMinusEquals:
+	return codeAssignment(pfc, f, pp, stack, "-=");
+    case pptMulEquals:
+	return codeAssignment(pfc, f, pp, stack, "*=");
+    case pptDivEquals:
+	return codeAssignment(pfc, f, pp, stack, "/=");
     case pptVarInit:
     	codeVarInit(pfc, f, pp, stack);
 	return 0;
@@ -235,6 +339,18 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "/");
     case pptMod:
         return codeBinaryOp(pfc, f, pp, stack, "%");
+    case pptGreater:
+        return codeBinaryOp(pfc, f, pp, stack, ">");
+    case pptGreaterOrEquals:
+        return codeBinaryOp(pfc, f, pp, stack, ">=");
+    case pptSame:
+        return codeBinaryOp(pfc, f, pp, stack, "==");
+    case pptNotSame:
+        return codeBinaryOp(pfc, f, pp, stack, "!=");
+    case pptLess:
+        return codeBinaryOp(pfc, f, pp, stack, "<");
+    case pptLessOrEquals:
+        return codeBinaryOp(pfc, f, pp, stack, "<=");
     case pptConstBit:
     case pptConstByte:
     case pptConstShort:
@@ -259,6 +375,15 @@ switch (pp->type)
 		fprintf(f, "%lld;\n", pp->tok->val.i);
 		break;
 	    }
+	return 1;
+	}
+    case pptConstString:
+        {
+	assert(pp->tok->type == pftString);
+	codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+	printEscapedString(f, pp->tok->val.s);
+	fprintf(f, ";\n");
 	return 1;
 	}
     case pptCastBitToBit:
@@ -345,6 +470,10 @@ switch (pp->type)
 	}
     case pptCall:
     case pptAssignment:
+    case pptPlusEquals:
+    case pptMinusEquals:
+    case pptMulEquals:
+    case pptDivEquals:
         codeExpression(pfc, f, pp, 0);
 	break;
     case pptTuple:
@@ -380,7 +509,7 @@ struct pfType *outTuple = inTuple->next;
 struct pfParse *body = funcDec->children->next->next->next;
 
 /* Put out function prototype and opening brace. */
-fprintf(f, "void %s()\n{\n", funcVar->name);
+fprintf(f, "void %s(%s *%s)\n{\n", funcVar->name, stackType, stackName);
 
 /* Print out input parameters. */
     {
@@ -524,7 +653,7 @@ for (p = pp->children; p != NULL; p = p->next)
 
 /* Print out other statements */
 if (isModule)
-    fprintf(f, "void _pfInit_%s()\n{\n", pp->name);
+    fprintf(f, "void __init__(%s *%s)\n{\n", stackType, stackName);
 for (p = pp->children; p != NULL; p = p->next)
     {
     switch (p->type)
