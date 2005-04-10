@@ -342,17 +342,22 @@ static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 {
 struct pfParse *pp = *pPp;
 struct pfParse *function = pp->children;
-struct pfParse **paramTuple = &function->next;
-struct pfType *functionType = function->ty;
-struct pfType *inputType = functionType->children;
-struct pfType *outputType = inputType->next;
+if (function->ty->isFunction)
+    {
+    struct pfParse **paramTuple = &function->next;
+    struct pfType *functionType = function->ty;
+    struct pfType *inputType = functionType->children;
+    struct pfType *outputType = inputType->next;
 
-coerceTuple(pfc, paramTuple, inputType);
-if (outputType->children != NULL && outputType->children->next == NULL)
-    pp->ty = CloneVar(outputType->children);
+    coerceTuple(pfc, paramTuple, inputType);
+    if (outputType->children != NULL && outputType->children->next == NULL)
+	pp->ty = CloneVar(outputType->children);
+    else
+	pp->ty = CloneVar(outputType);
+    pp->name = function->name;
+    }
 else
-    pp->ty = CloneVar(outputType);
-pp->name = function->name;
+    errAt(function->tok, "Call to non-function");
 }
 
 static void coerceTupleToCollection(struct pfCompile *pfc, 
@@ -1003,6 +1008,8 @@ for (pp = output->children; pp != NULL; pp = pp->next)
     hashAddInt(outputHash, pp->name, 0);
     pp->var->isOut = TRUE;
     }
+if (output->children != NULL && output->children->next == NULL)
+    output->children->var->isSingleOut = TRUE;
 for (pp = funcDec->children; pp != NULL; pp = pp->next)
     rBlessFunction(funcDec->scope, outputHash, pfc, pp);
 hc = hashFirst(outputHash);

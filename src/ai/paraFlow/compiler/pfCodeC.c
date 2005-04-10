@@ -69,8 +69,9 @@ for (type = base->fields; type != NULL; type = type->next)
     }
 }
 
-static void printFunctionPrototype(struct pfCompile *pfc, FILE *f,
+static int printFunctionPrototype(struct pfCompile *pfc, FILE *f,
 	struct pfVar *funcVar)
+/* Print out function prototype.  Returns number of outputs of function. */
 {
 char *name = funcVar->name;
 struct pfType *type = funcVar->ty;
@@ -107,6 +108,7 @@ if (outCount > 1)
 	}
     }
 fprintf(f, ")");
+return outCount;
 }
 
 static void printExpression(struct pfCompile *pfc, FILE *f, 
@@ -204,7 +206,7 @@ switch (lval->type)
     case pptVarInit:
 	{
 	struct pfVar *var = lval->var;
-	if (!var->isOut)
+	if (var->isSingleOut || !var->isOut)
 	    fprintf(f, "&");
         fprintf(f, "%s", lval->name);
 	break;
@@ -290,12 +292,12 @@ for (out=tuple->children, cast = castList; cast != NULL;
 	     case pptCastFloatToBit:
 	     case pptCastDoubleToBit:
 	     case pptCastStringToBit:
-		 if (out->var->isOut)
+		 if (out->var->isOut && !out->var->isSingleOut)
 		     fprintf(f, "*");
 	         fprintf(f, " %s = (out%d != 0);", out->name, outIx);
 		 break;
 	     default:
-		 if (out->var->isOut)
+		 if (out->var->isOut && !out->var->isSingleOut)
 		     fprintf(f, "*");
 	         fprintf(f, " %s = out%d;", out->name, outIx);
 		 break;
@@ -371,7 +373,25 @@ static void printStatement(int level, struct pfCompile *pfc, FILE *f,
 	struct pfParse *statement)
 /* Generate code for a statement. */
 {
+
+/* Do indentation if we are going to actually do anything. */
+switch (statement->type)
+    {
+    case pptClass:
+    case pptNop:
+        return; /* All done already */
+    case pptVarInit:
+	{
+	struct pfParse *init = statement->children->next->next;
+	if (init == NULL)
+	    return;
+	break;
+	}
+    }
+// fprintf(f, "/* ugly %s */", pfParseTypeAsString(statement->type));
 spaceOut(f, level);
+
+/* Process statement proper. */
 switch (statement->type)
     {
     case pptCompound:
@@ -412,8 +432,22 @@ switch (statement->type)
 	struct pfVar *funcVar = pfScopeFindVar(statement->parent->scope,
 		statement->name);
 	struct pfParse *body = statement->children->next->next->next;
-	printFunctionPrototype(pfc, f, funcVar);
+	int outCount = printFunctionPrototype(pfc, f, funcVar);
+	struct pfType *out = NULL;
+	fprintf(f, "\n");
+	if (outCount == 1)
+	     {
+	     out = funcVar->ty->children->next->children;
+	     fprintf(f, "{\n");
+	     printType(pfc, f, out->base);
+	     fprintf(f, " %s = 0;\n", out->fieldName);
+	     }
 	printStatement(level+1, pfc, f, body);
+	if (outCount == 1)
+	     {
+	     fprintf(f, "return %s;\n", out->fieldName);
+	     fprintf(f, "}\n");
+	     }
 	fprintf(f, "\n");
 	break;
 	}
@@ -485,7 +519,6 @@ if (gotFunc)
 /* Print out variables. */
 for (hel = helList; hel != NULL; hel = hel->next)
     {
-    char *ugly = 0;
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
     if (!var->ty->isFunction)
