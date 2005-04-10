@@ -4,7 +4,7 @@
 #
 # create download sequences
 #
-# $Id: gbMakeDownload,v 1.1 2005/04/10 15:56:21 markd Exp $
+# $Id: gbMakeDownload,v 1.2 2005/04/10 16:03:48 genbank Exp $
 #
 use strict;
 use warnings;
@@ -79,9 +79,7 @@ sub createSeqFaGz($$$$$) {
 # make sequence zip files
 sub makeDownloadSeqs($) {
     my($db) = @_;
-    if ($gbCommon::verbose >= 1) {
-        prMsg("making download sequences for $db");
-    }
+    prMsg("making download sequences for $db");
     createSeqFaGz($db, "genbank", "mrna", "native", "mrna");
     createSeqFaGz($db, "genbank", "mrna", "xeno", "xenoMrna");
     createSeqFaGz($db, "genbank", "est", "native", "est");
