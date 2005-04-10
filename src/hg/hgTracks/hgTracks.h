@@ -284,11 +284,8 @@ void makeRedGreenShades(struct vGfx *vg);
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
 
-struct track *getTrackList();
+struct track *getTrackList(struct group **pGroupList);
 /* Return list of all tracks. */
-
-void groupTracks(struct track **pTrackList, struct group **pGroupList);
-/* Make up groups and assign tracks to groups. */
 
 void removeTrackFromGroup(struct track *track);
 /* Remove track from group it is part of. */
