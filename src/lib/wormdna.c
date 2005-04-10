@@ -17,7 +17,7 @@
 #include "sig.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: wormdna.c,v 1.9 2004/05/19 23:14:23 hiram Exp $";
+static char const rcsid[] = "$Id: wormdna.c,v 1.10 2005/04/10 14:41:26 markd Exp $";
 
 static char *jkwebDir = NULL;
 
@@ -1103,11 +1103,13 @@ if (cache->snof == NULL)
     }
 }
 
+#if 0 /* unused */
 static void wormCacheGdf()
 /* Set up for fast access to GDF file entries. */
 {
 wormCacheSomeGdf(defaultGdfCache);
 }
+#endif
 
 void wormUncacheSomeGdf(struct wormGdfCache *cache)
 /* Uncache some gene prediction set. */

@@ -14,8 +14,8 @@ int i, qVal, tVal;
 count[0] = count[1] = count[2] = count[3] = 0;
 for (i=0; i<baseCount; ++i)
     {
-    qVal = ntVal[query[i]];
-    tVal = ntVal[target[i]];
+    qVal = ntVal[(int)query[i]];
+    tVal = ntVal[(int)target[i]];
     if (qVal == tVal && qVal >= 0)
 	count[qVal] += 1;
     }

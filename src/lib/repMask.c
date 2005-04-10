@@ -7,14 +7,13 @@
 #include "sqlNum.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: repMask.c,v 1.5 2003/06/26 20:14:23 hiram Exp $";
+static char const rcsid[] = "$Id: repMask.c,v 1.6 2005/04/10 14:41:25 markd Exp $";
 
 void repeatMaskOutStaticLoad(char **row, struct repeatMaskOut *ret)
 /* Load a row from repeatMaskOut table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
+int i;
 
 ret->score = sqlUnsigned(row[0]);
 ret->percDiv = atof(row[1]);
@@ -50,8 +49,6 @@ struct repeatMaskOut *repeatMaskOutLoad(char **row)
  * from database.  Dispose of this with repeatMaskOutFree(). */
 {
 struct repeatMaskOut *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->score = sqlUnsigned(row[0]);
@@ -76,7 +73,6 @@ struct repeatMaskOut *repeatMaskOutCommaIn(char **pS)
 {
 struct repeatMaskOut *ret;
 char *s = *pS;
-int i;
 
 AllocVar(ret);
 ret->score = sqlUnsignedComma(&s);
@@ -129,7 +125,6 @@ for (el = *pList; el != NULL; el = next)
 void repeatMaskOutOutput(struct repeatMaskOut *el, FILE *f, char sep, char lastSep) 
 /* Print out repeatMaskOut.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->score);
 fputc(sep,f);
 fprintf(f, "%f", el->percDiv);

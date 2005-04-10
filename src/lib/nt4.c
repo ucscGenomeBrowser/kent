@@ -10,7 +10,7 @@
 #include "nt4.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nt4.c,v 1.4 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: nt4.c,v 1.5 2005/04/10 14:41:24 markd Exp $";
 
 static size_t bits32PaddedSize(size_t size)
 {
@@ -190,7 +190,7 @@ if (startTile == endTile)
 tiles = startTile;
 
 /* See if just have one tile to 
-/* Unpack the right hand side of the first tile. */
+ * Unpack the right hand side of the first tile. */
 firstBases = (16 - (start&0xf));
 unpackRightSide(*tiles, firstBases, pt);
 pt += firstBases;

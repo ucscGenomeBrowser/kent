@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.67 2004/09/23 15:53:33 giardine Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.68 2005/04/10 14:41:21 markd Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -613,7 +613,6 @@ return x;
 double cgiOptionalDouble(char *varName, double defaultVal)
 /* Returns double value. */
 {
-char *s;
 if (!cgiVarExists(varName))
     return defaultVal;
 return cgiDouble(varName);
@@ -1017,7 +1016,7 @@ q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
     {
     name = argv[i];
-    if (startDash = (name[0] == '-'))
+    if ((startDash = (name[0] == '-')))
        ++name;
     gotEq = (strchr(name, '=') != NULL);
     if (gotEq || startDash)
@@ -1071,7 +1070,7 @@ int argc = 0;
 int maxArgc = 10;
 int i;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *word;
+char *line;
 boolean spoof= FALSE;
 AllocArray(argv, maxArgc);
 /* Remember that first arg is program name.

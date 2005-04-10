@@ -7,7 +7,7 @@
 #include "slog.h"
 #include "dnaMarkov.h"
 
-static char const rcsid[] = "$Id: dnaMarkov.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: dnaMarkov.c,v 1.4 2005/04/10 14:41:22 markd Exp $";
 
 void dnaMark0(struct dnaSeq *seqList, double mark0[5], int slogMark0[5])
 /* Figure out frequency of bases in input.  Results go into
@@ -62,8 +62,8 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     endDna = dna + seq->size-1;
     for (;dna < endDna; ++dna)
         {
-        i = ntVal[dna[0]];
-        j = ntVal[dna[1]];
+        i = ntVal[(int)dna[0]];
+        j = ntVal[(int)dna[1]];
         hist1[i+1] += 1;
         histo[i+1][j+1] += 1;
         }
@@ -116,9 +116,9 @@ for (seq = seqList; seq != NULL; seq = seq->next)
     dna += offset;
     for (;dna < endDna; dna += advance)
         {
-        i = ntVal[dna[0]];
-        j = ntVal[dna[1]];
-        k = ntVal[dna[2]];
+        i = ntVal[(int)dna[0]];
+        j = ntVal[(int)dna[1]];
+        k = ntVal[(int)dna[2]];
         hist2[i+1][j+1] += 1;
         histo[i+1][j+1][k+1] += 1;
         total += 1;

@@ -6,7 +6,7 @@
 #include "pthreadWrap.h"
 #include "synQueue.h"
 
-static char const rcsid[] = "$Id: synQueue.c,v 1.3 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: synQueue.c,v 1.4 2005/04/10 14:41:26 markd Exp $";
 
 struct synQueue
 /* A synchronized queue for messages between threads. */
@@ -20,7 +20,6 @@ struct synQueue
 struct synQueue *synQueueNew()
 /* Make a new, empty, synQueue. */
 {
-int err;
 struct synQueue *sq;
 AllocVar(sq);
 pthreadMutexInit(&sq->mutex);

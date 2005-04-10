@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.15 2004/08/12 22:18:11 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.16 2005/04/10 14:41:22 markd Exp $";
 
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
@@ -112,7 +112,7 @@ if (showNeedle)
 	}
     for (i=0; i<needleSize; ++i)
 	{
-	cfmOut(cfm, n[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, n[i], seqOutColorLookup[(int)colorFlags[i]]);
 	}
     cfmFree(&cfm);
     freeMem(n);
@@ -174,7 +174,7 @@ if (showHaystack)
 	    lastAli = ali;
 	    ali = ali->right;
 	    }
-	cfmOut(cfm, h[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, h[i], seqOutColorLookup[(int)colorFlags[i]]);
 	}
     cfmFree(&cfm);
     freeMem(h);
@@ -264,7 +264,7 @@ void ffShowAli(struct ffAli *aliList, char *needleName, DNA *needle, int needleN
 ffShAli(stdout, aliList, needleName, needle, strlen(needle), needleNumOffset,
     haystackName, haystack, strlen(haystack), hayNumOffset, 8, rcNeedle);
 }
-
+#if 0 /* not used */
 static struct cdaAli *makeBlocks(struct ffAli *aliList, 
     DNA *needle, int needleSize, DNA *hay, int haySize, boolean isRc)
 /* Merge together blocks separated only by noise, and evaluate
@@ -275,4 +275,4 @@ struct cdaAli *ca = cdaAliFromFfAli(aliList,
 cdaCoalesceBlocks(ca);
 return ca;
 }
-
+#endif

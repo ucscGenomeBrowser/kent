@@ -7,7 +7,7 @@
 #include "gfxPoly.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: psGfx.c,v 1.16 2005/03/08 21:56:47 jsp Exp $";
+static char const rcsid[] = "$Id: psGfx.c,v 1.17 2005/04/10 14:41:24 markd Exp $";
 
 static void psFloatOut(FILE *f, double x)
 /* Write out a floating point number, but not in too much
@@ -239,7 +239,6 @@ fprintf(ps->f, ") showMiddle\n");
 void psTextDown(struct psGfx *ps, double x, double y, char *text)
 /* Output text going downwards rather than across at position. */
 {
-FILE *f = ps->f;
 psMoveTo(ps, x, y);
 fprintf(ps->f, "gsave\n");
 fprintf(ps->f, "-90 rotate\n");

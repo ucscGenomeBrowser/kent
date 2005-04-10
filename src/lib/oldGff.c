@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: oldGff.c,v 1.5 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: oldGff.c,v 1.6 2005/04/10 14:41:24 markd Exp $";
 
 #define errfile stdout
 
@@ -97,13 +97,15 @@ gff->lineNumber += 1;
 return TRUE;
 }
 
+#if 0 /* unused */
 static boolean _gffAtEof(struct gff *gff)
 /* Returns TRUE if at the end of gff file. */
 {
 return gff->file == NULL;
 }
-	
+#endif	
 
+#if 0 /* unused */
 static char _getGffChar(struct gff *gff)
 /* Return next byte (not next base) in gff file. Return zero
  * if at end of file. */
@@ -114,6 +116,7 @@ if (gff->readIx >= gff->bytesInBuf)
 	}
 return gff->buf[gff->readIx++];
 }
+#endif
 
 static boolean _gffSeekDoubleSharpLine(struct gff *gff)
 /* Go find next line that begins with ## */
@@ -189,7 +192,7 @@ for (;;)
     while (--lineCount >= 0)
         {
         b = *line++;
-        if ((b = ntChars[b]) != 0)
+        if ((b = ntChars[(int)b]) != 0)
             {
             *dna++ = b;
             dnaSize += 1;

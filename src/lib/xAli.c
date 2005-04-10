@@ -9,15 +9,14 @@
 #include "sqlList.h"
 #include "xAli.h"
 
-static char const rcsid[] = "$Id: xAli.c,v 1.5 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: xAli.c,v 1.6 2005/04/10 14:41:26 markd Exp $";
 
 struct xAli *xAliLoad(char **row)
 /* Load a xAli from row fetched with select * from xAli
  * from database.  Dispose of this with xAliFree(). */
 {
 struct xAli *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[17]);

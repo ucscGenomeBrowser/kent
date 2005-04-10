@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.11 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.12 2005/04/10 14:41:25 markd Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -189,8 +189,8 @@ if (microDiff < 0)
      * hardware/software.  However in general it _could_ happen very
      * rarely on normal machines when the clock is reset by the
      * network time protocol thingie. */
-    warn("t1 %u.%u, t2 %u.%u.  t1 > t2 but later?!", t1->tv_sec, t1->tv_usec,
-    	t2->tv_sec, t2->tv_usec);
+    warn("t1 %u.%u, t2 %u.%u.  t1 > t2 but later?!", (unsigned)t1->tv_sec,
+         (unsigned)t1->tv_usec, (unsigned)t2->tv_sec, (unsigned)t2->tv_usec);
     microDiff = 0;
     }
 return microDiff;
@@ -234,14 +234,12 @@ static boolean getOurAck(struct rudp *ru, struct timeval *startTv)
  * if there's a problem.   */
 {
 struct rudpHeader head;
-int readyCount, readSize;
+int readSize;
 int timeOut = ru->timeOut;
 
 for (;;)
     {
     /* Set up select with our time out. */
-    struct sockaddr_in sai;
-    int saiSize = sizeof(sai);
     int dt;
     struct timeval tv;
 

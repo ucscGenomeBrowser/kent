@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.31 2005/01/10 00:20:10 kent Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.32 2005/04/10 14:41:22 markd Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -38,8 +38,7 @@ char *words[1];
 int c;
 off_t offset = ftello(f);
 size_t dnaSize = 0;
-DNA *dna, *sequence, b;
-int bogusChars = 0;
+DNA *dna, *sequence;
 char *name = defaultName;
 
 if (name == NULL)
@@ -180,7 +179,7 @@ if (s != NULL)
 	++s;
 	if (!isalpha(c))
 	    continue;
-	if ((c = filter[c]) != 0) 
+	if ((c = filter[(int)c]) != 0) 
 	    d[size++] = c;
 	else
 	    {
@@ -234,10 +233,8 @@ struct dnaSeq *faReadSeq(char *fileName, boolean isDna)
 /* Open fa file and read a single sequence from it. */
 {
 int maxSize = fileSize(fileName);
-int size = 0;
 int fd;
 DNA *s;
-struct dnaSeq *seq;
 
 if (maxSize < 0)
     errAbort("can't open %s", fileName);
@@ -396,8 +393,6 @@ boolean faMixedSpeedReadNext(struct lineFile *lf, DNA **retDna, int *retSize, ch
 char c;
 int bufIx = 0;
 static char name[512];
-int nameIx = 0;
-boolean gotSpace = FALSE;
 int lineSize, i;
 char *line;
 
@@ -462,7 +457,7 @@ char c;
 dnaUtilOpen();
 for (i=0; i<size; ++i)
     {
-    if ((c = aaChars[poly[i]]) == 0)
+    if ((c = aaChars[(int)poly[i]]) == 0)
 	c = 'X';
     poly[i] = c;
     }
@@ -478,7 +473,7 @@ char c;
 dnaUtilOpen();
 for (i=0; i<size; ++i)
     {
-    if ((c = ntChars[poly[i]]) == 0)
+    if ((c = ntChars[(int)poly[i]]) == 0)
 	c = 'n';
     poly[i] = c;
     }

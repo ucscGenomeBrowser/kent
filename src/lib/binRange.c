@@ -13,7 +13,7 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.13 2003/09/09 19:01:16 markd Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.14 2005/04/10 14:41:20 markd Exp $";
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */
@@ -161,7 +161,7 @@ void binKeeperReplaceVal(struct binKeeper *bk, int start, int end,
 	void *oldVal, void *newVal)
 /* Replace occurences of old val in range from start->end with newVal */
 {
-struct binElement *list = NULL, *el;
+struct binElement *el;
 int startBin, endBin;
 int i,j;
 

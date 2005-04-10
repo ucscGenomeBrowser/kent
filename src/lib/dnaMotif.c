@@ -9,7 +9,7 @@
 #include "dnaMotif.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: dnaMotif.c,v 1.2 2005/01/27 22:33:48 baertsch Exp $";
+static char const rcsid[] = "$Id: dnaMotif.c,v 1.3 2005/04/10 14:41:22 markd Exp $";
 
 struct dnaMotif *dnaMotifCommaIn(char **pS, struct dnaMotif *ret)
 /* Create a dnaMotif out of a comma separated string. 
@@ -343,7 +343,7 @@ if (prob > 0)
 static struct letterProb *letterProbFromMotifColumn(struct dnaMotif *motif, int pos)
 /* Return letterProb list corresponding to column of motif. */
 {
-struct letterProb *lpList = NULL, *lp;
+struct letterProb *lpList = NULL;
 addBaseProb(&lpList, 'A', motif->aProb[pos]);
 addBaseProb(&lpList, 'C', motif->cProb[pos]);
 addBaseProb(&lpList, 'G', motif->gProb[pos]);

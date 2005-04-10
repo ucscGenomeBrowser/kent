@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.19 2005/01/14 09:58:40 kent Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.20 2005/04/10 14:41:24 markd Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -238,7 +238,6 @@ static void nibOutput(int options, struct dnaSeq *seq, char *fileName)
 /* Write out file in format of four bits per nucleotide, with control over
  * handling of masked positions. */
 {
-int i;
 UBYTE byte;
 DNA *dna = seq->dna;
 int dVal1, dVal2;
@@ -258,8 +257,8 @@ writeOne(f, seq->size);
 printf("Writing %d bases in %d bytes\n", seq->size, ((seq->size+1)/2) + 8);
 while (--byteCount >= 0)
     {
-    dVal1 = ntValTbl[dna[0]];
-    dVal2 = ntValTbl[dna[1]];
+    dVal1 = ntValTbl[(int)dna[0]];
+    dVal2 = ntValTbl[(int)dna[1]];
     /* Set from mask, remember bit in character is opposite sense of bit
      * in mask. */
     if (mask != NULL)
@@ -280,7 +279,7 @@ while (--byteCount >= 0)
     }
 if (size & 1)
     {
-    dVal1 = ntValTbl[dna[0]];
+    dVal1 = ntValTbl[(int)dna[0]];
     if ((mask != NULL) && !bitReadOne(mask, maskIdx))
         dVal1 |= MASKED_BASE_BIT;
     byte = (dVal1<<4);
@@ -419,7 +418,7 @@ freez(pNs);
 void nibStreamOne(struct nibStream *ns, DNA base)
 /* Write out one base to nibStream. */
 {
-UBYTE ub = ntVal5[base];
+UBYTE ub = ntVal5[(int)base];
 
 if ((++ns->size&1) == 0)
     {

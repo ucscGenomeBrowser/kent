@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.19 2005/01/14 09:58:39 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.20 2005/04/10 14:41:21 markd Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -152,7 +152,6 @@ chain->id = nextId++;
 void chainWriteHead(struct chain *chain, FILE *f)
 /* Write chain before block/insert list. */
 {
-static int id = 1;
 if (chain->id == 0)
     chainIdNext(chain);
 fprintf(f, "chain %1.0f %s %d + %d %d %s %d %c %d %d %d\n", chain->score,
@@ -215,8 +214,6 @@ char *row[13];
 int wordCount;
 struct chain *chain;
 int q,t;
-static int id = 0;
-
 
 wordCount = lineFileChop(lf, row);
 if (wordCount == 0)

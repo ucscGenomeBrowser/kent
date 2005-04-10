@@ -6,7 +6,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: gemfont.c,v 1.7 2005/02/02 07:09:24 kent Exp $";
+static char const rcsid[] = "$Id: gemfont.c,v 1.8 2005/04/10 14:41:22 markd Exp $";
 
 typedef union
     {
@@ -159,11 +159,12 @@ while (--n >= 0)
 return(acc);
 }
 
+#if 0 /* unused */
 static long fstring_width(struct font_hdr *f, unsigned char *s)
 {
 return(fnstring_width(f, s, strlen((char *)s)));
 }
-
+#endif
 
 
 int fwidest_char(struct font_hdr *f)

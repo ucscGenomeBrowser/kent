@@ -12,7 +12,7 @@
 #include "htmshell.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.24 2004/11/22 16:56:21 kent Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.25 2005/04/10 14:41:25 markd Exp $";
 
 struct cfm *cfmNew(int wordLen, int lineLen, 
 	boolean lineNumbers, boolean countDown, FILE *out, int numOff)
@@ -249,7 +249,7 @@ for (i=0; i<count; ++i)
 
 		if (c == 0) 
 		    c = 'X';
-		if (ss->matrix[toupper(n)][c] > 0)
+		if (ss->matrix[(int)toupper(n)][(int)c] > 0)
 		    color = 5;
 		else
 		    color = 6;

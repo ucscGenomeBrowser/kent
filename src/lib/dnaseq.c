@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.16 2005/01/12 17:50:05 kent Exp $";
+static char const rcsid[] = "$Id: dnaseq.c,v 1.17 2005/04/10 14:41:22 markd Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -85,7 +85,7 @@ char *poly = seq->dna;
 dnaUtilOpen();
 for (i=0; i<size; ++i)
     {
-    if (ntChars[poly[i]]) 
+    if (ntChars[(int)poly[i]]) 
 	dnaCount += 1;
     }
 return (dnaCount >= round(0.9 * size));
@@ -101,7 +101,6 @@ DNA *dna = inSeq->dna;
 AA *pep, aa;
 int i, lastCodon;
 int actualSize = 0;
-char buf[256];
 
 assert(offset <= inSeq->size);
 if ((inSize == 0) || (inSize > (inSeq->size - offset)))

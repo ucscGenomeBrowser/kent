@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.42 2005/02/02 07:09:24 kent Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.43 2005/04/10 14:41:23 markd Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -57,7 +57,6 @@ struct memGfx *mgNew(int width, int height)
 /* Return new memGfx. */
 {
 struct memGfx *mg;
-int i;
 
 mg = needMem(sizeof(*mg));
 mg->pixels = needLargeMem(width*height);
@@ -128,7 +127,6 @@ Color mgAddColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned c
 int colIx = mg->colorsUsed;
 if (colIx < 256)
     {
-    struct rgbColor *mapPos;
     struct rgbColor *c = mg->colorMap + mg->colorsUsed;
     c->r = r;
     c->g = g;
@@ -175,7 +173,7 @@ static void mgPutSegMaybeZeroClear(struct memGfx *mg, int x, int y, int width, C
 /* Put a series of dots starting at x, y and going to right width pixels.
  * Possibly don't put zero dots though. */
 {
-int x1, x2;
+int x2;
 Color *pt;
 if (y < mg->clipMinY || y > mg->clipMaxY)
     return;
@@ -424,8 +422,6 @@ boolean mgClipForBlit(int *w, int *h, int *sx, int *sy,
 {
 /* Make sure we don't overwrite destination. */
 int over;
-int x2 = *dx+*w;
-int y2 = *dy+*h;
 
 if ((over = dest->clipMinX - *dx) > 0)
     {

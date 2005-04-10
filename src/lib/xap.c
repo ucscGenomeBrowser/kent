@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xap.c,v 1.7 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: xap.c,v 1.8 2005/04/10 14:41:26 markd Exp $";
 
 void xapError(struct xap *xap, char *format, ...)
 /* Issue an error message and abort*/
@@ -26,7 +26,6 @@ static void xapStartTag(void *userData, char *name, char **atts)
 /* Handle beginning of a tag. */
 {
 struct xap *xap = userData;
-void *object;
 struct xapStack *stack;
 
 stack = --xap->stack;

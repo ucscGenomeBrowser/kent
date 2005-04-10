@@ -38,15 +38,6 @@ struct pipeline
 /* file buffer size */
 #define FILE_BUF_SIZE 64*1024
 
-static int devNullOpen(int flags)
-/* open /dev/null with the specified flags */
-{
-int fd = open("/dev/null", flags);
-if (fd < 0)
-    errnoAbort("can't open /dev/null");
-return fd;
-}
-
 static int pipeCreate(int *writeFd)
 /* create a pipe of die, return readFd */
 {

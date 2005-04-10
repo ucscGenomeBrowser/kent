@@ -153,7 +153,7 @@ tolowers(qLetters);
 	}
     cfm = cfmNew(10, 60, TRUE, qIsRc, f, qcfmStart);
     for (i=0; i<qSize; ++i)
-	cfmOut(cfm, qLetters[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, qLetters[i], seqOutColorLookup[(int)colorFlags[i]]);
     cfmFree(&cfm);
     freez(&colorFlags);
     htmHorizontalLine(f);
@@ -169,7 +169,6 @@ fprintf(f, "<PRE><TT>");
     char *colorFlags = needMem(tSeq->size);
     int i,j;
     int curBlock = 0;
-    int anchorCount = 0;
 
     for (i=0; i<psl->blockCount; ++i)
 	{
@@ -222,7 +221,7 @@ fprintf(f, "<PRE><TT>");
 		   psl->tStarts[curBlock] <= tStart + i)
 		curBlock++;
 	    }
-	cfmOut(cfm, dna[i], seqOutColorLookup[colorFlags[i]]);
+	cfmOut(cfm, dna[i], seqOutColorLookup[(int)colorFlags[i]]);
 	}
     cfmFree(&cfm);
     freez(&colorFlags);

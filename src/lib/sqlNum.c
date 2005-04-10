@@ -7,7 +7,7 @@
 #include "common.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: sqlNum.c,v 1.13 2004/03/23 18:56:20 hiram Exp $";
+static char const rcsid[] = "$Id: sqlNum.c,v 1.14 2005/04/10 14:41:26 markd Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about
@@ -59,7 +59,6 @@ long long sqlLongLong(char *s)
 {
 long long res = 0;
 char *p, *p0 = s;
-char c;
 
 if (*p0 == '-')
     p0++;

@@ -3,7 +3,7 @@
 #include "common.h"
 #include "internet.h"
 
-static char const rcsid[] = "$Id: internet.c,v 1.9 2004/08/09 21:03:09 angie Exp $";
+static char const rcsid[] = "$Id: internet.c,v 1.10 2005/04/10 14:41:23 markd Exp $";
 
 boolean internetIsDottedQuad(char *s)
 /* Returns TRUE if it looks like s is a dotted quad. */
@@ -75,8 +75,8 @@ ZeroVar(&ia);
 ia.s_addr = htonl(ip);
 if (inet_ntop(AF_INET, &ia, dottedQuad, 16) == NULL)
     {
-    warn("conversion problem on %x in internetIpToDottedQuad: %s", 
-    	strerror(errno));
+    warn("conversion problem on 0x%x in internetIpToDottedQuad: %s", 
+    	ip, strerror(errno));
     return FALSE;
     }
 return TRUE;
@@ -95,7 +95,7 @@ boolean internetDottedQuadToIp(char *dottedQuad, bits32 *retIp)
 struct in_addr ia;
 if (inet_pton(AF_INET, dottedQuad, &ia) < 0)
     {
-    warn("internetDottedQuadToIp problem on %s: %s", strerror(errno));
+    warn("internetDottedQuadToIp problem on %s: %s", dottedQuad, strerror(errno));
     return FALSE;
     }
 *retIp = ntohl(ia.s_addr);

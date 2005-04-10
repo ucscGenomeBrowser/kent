@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.19 2005/04/08 21:24:30 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.20 2005/04/10 14:41:23 markd Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -171,7 +171,6 @@ for (;;)
 		struct mafComp *comp;
 		int wordCount;
 		char *row[6];
-		int textSize;
 
 		/* Chop line up by white space.  This involves a few +-1's because
 		 * have already chopped out first word. */

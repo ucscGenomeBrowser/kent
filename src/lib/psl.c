@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.53 2004/09/12 13:12:01 baertsch Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.54 2005/04/10 14:41:24 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -70,8 +70,7 @@ struct psl *pslLoad(char **row)
  * from database.  Dispose of this with pslFree(). */
 {
 struct psl *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[17]);
@@ -309,7 +308,6 @@ if (ferror(f))
 void pslOutputShort(struct psl *el, FILE *f, char sep, char lastSep) 
 /* Print out psl.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->match);
 fputc(sep,f);
 fprintf(f, "%u", el->misMatch);
@@ -591,7 +589,6 @@ char *line;
 int lineSize;
 char *words[32];
 int wordCount;
-struct psl *psl;
 static int lineAlloc = 0;
 static char *chopBuf = NULL;
 
@@ -636,8 +633,6 @@ struct psl *pslLoadLm(char **row, struct lm *lm)
 /* Load row into local memory psl. */
 {
 struct psl *ret;
-int sizeOne,i;
-char *s;
 
 ret = lmAlloc(lm, sizeof(*ret));
 ret->blockCount = sqlUnsigned(row[17]);
@@ -1062,9 +1057,8 @@ struct psl *pslTrimToTargetRange(struct psl *oldPsl, int tMin, int tMax)
 int newSize;
 int oldBlockCount = oldPsl->blockCount;
 boolean tIsRc = (oldPsl->strand[1] == '-');
-boolean qIsRc = (oldPsl->strand[0] == '-');
 int newBlockCount = 0, completeBlockCount = 0;
-int i, newI = 0;
+int i;
 struct psl *newPsl = NULL;
 int tMn = tMin, tMx = tMax;   /* tMin/tMax adjusted for strand. */
 
@@ -1332,7 +1326,6 @@ struct hash *readPslToBinKeeper(char *sizeFileName, char *pslFileName)
 /* read a list of psls and return results in hash of binKeeper structure for fast query*/
 {
 struct binKeeper *bk; 
-int size;
 struct psl *psl;
 struct lineFile *sf = lineFileOpen(sizeFileName, TRUE);
 struct lineFile *pf = lineFileOpen(pslFileName , TRUE);
@@ -1482,11 +1475,8 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
 {
 struct psl* psl = NULL;
 int aliSize = strlen(qString);
-boolean qInInsert = FALSE; /* True if in insert state on query. */
-boolean tInInsert = FALSE; /* True if in insert state on target. */
 boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int blockIx=0;
-boolean qIsRc = FALSE;
 int i, qs,qe,ts,te;
 AllocVar(psl);
 

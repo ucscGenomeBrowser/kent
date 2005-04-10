@@ -7,7 +7,7 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.3 2005/01/10 00:15:13 kent Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.4 2005/04/10 14:41:21 markd Exp $";
 
 static struct axt *axtFromBlocks(
 	struct chain *chain,
@@ -97,7 +97,7 @@ struct axt *chainToAxt(struct chain *chain,
  * where there is a chain longer than maxChain.
  */
 {
-struct cBlock *startB = chain->blockList, *endB, *a = NULL, *b;
+struct cBlock *startB = chain->blockList, *a = NULL, *b;
 struct axt *axtList = NULL, *axt;
 
 for (b = chain->blockList; b != NULL; b = b->next)

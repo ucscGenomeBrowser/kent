@@ -8,7 +8,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests
 	rm -r output
-	echo tested all
+	@echo tested all
 
 mkdirs:
 	${MKDIR} output ${BIN_DIR}

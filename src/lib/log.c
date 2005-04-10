@@ -105,7 +105,7 @@ for (i = 0; facilityNameTbl[i].name != NULL; i++)
     dyStringAppend(msg, facilityNameTbl[i].name);
     }
 
-errAbort("invalid log facility: %s, expected one of: ", facility, msg->string);
+errAbort("invalid log facility: %s, expected one of: %s", facility, msg->string);
 return 0; /* never reached */
 }
 #endif

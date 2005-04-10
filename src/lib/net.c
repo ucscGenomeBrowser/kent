@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.36 2005/01/10 00:23:21 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.37 2005/04/10 14:41:24 markd Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -121,7 +121,6 @@ int netAcceptFrom(int acceptor, unsigned char subnet[4])
  * Subnet may be NULL. */
 {
 struct sockaddr_in sai;		/* Some system socket info. */
-int len;
 ZeroVar(&sai);
 sai.sin_family = AF_INET;
 for (;;)
@@ -135,7 +134,6 @@ for (;;)
 	else
 	    {
 	    unsigned char unpacked[4]; 
-	    bits32 ip =  ntohl(sai.sin_addr.s_addr);
 	    internetUnpackIp(ntohl(sai.sin_addr.s_addr), unpacked);
 	    if (internetIpInSubnet(unpacked, subnet))
 		{
@@ -742,7 +740,6 @@ int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
   struct dyString *dyQ    = newDyString(512);
   struct dyString *body;
   char *base;
-  char *req;
   char *hdr;
   int qCount;
   int qTotal;

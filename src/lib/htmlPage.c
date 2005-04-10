@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.18 2005/02/12 00:36:39 angie Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.19 2005/04/10 14:41:23 markd Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -320,10 +320,7 @@ if (val == NULL)
 static struct htmlCookie *parseCookie(char *s)
 /* Parse out cookie line to the right of Set-Cookie. */
 {
-char *cookiePairs = s;
 char *e, *name, *val;
-char *domain = NULL, *path = NULL, *expires = NULL;
-boolean secure = FALSE;
 struct htmlCookie *cookie;
 
 /* Grab up to semicolon, which is the cookie name/value pair. */
@@ -440,7 +437,6 @@ static struct htmlTag *htmlTagScan(char *html, char *dupe)
  * parsing.*/
 {
 char *s = dupe, c, *e, *tagName;
-struct slName *list = NULL, *link;
 struct htmlTag *tagList = NULL, *tag;
 struct htmlAttribute *att;
 int pos;
@@ -865,7 +861,6 @@ else
 void htmlFormVarPrint(struct htmlFormVar *var, FILE *f, char *prefix)
 /* Print out variable to file, prepending prefix. */
 {
-struct htmlTag *tag = var->tags->val;
 struct slName *val;
 fprintf(f, "%s%s\t%s\t%s\t%s\n", prefix, var->name, var->tagName, 
 	naForNull(var->type), 
@@ -1090,10 +1085,10 @@ for (var = form->vars; var != NULL; var = var->next)
     {
     if (sameWord(var->tagName, "SELECT") || 
         sameWord(var->tagName, "TEXTAREA") || 
-	var->type != NULL &&
-    	( sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
+	(var->type != NULL &&
+    	((sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
 	|| sameWord(var->type, "PASSWORD") || sameWord(var->type, "HIDDEN")
-	|| sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))
+        || sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))))
         {
 	char *val = var->curVal;
 	if (val == NULL)

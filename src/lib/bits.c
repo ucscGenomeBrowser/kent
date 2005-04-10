@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.16 2004/12/30 20:16:22 braney Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.17 2005/04/10 14:41:21 markd Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -191,7 +191,10 @@ void bitAnd(Bits *a, Bits *b, int bitCount)
 {
 int byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
-    *a++ = (*a & *b++);
+    {
+    *a = (*a & *b++);
+    a++;
+    }
 }
 
 void bitOr(Bits *a, Bits *b, int bitCount)
@@ -199,14 +202,20 @@ void bitOr(Bits *a, Bits *b, int bitCount)
 {
 int byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
-    *a++ = (*a | *b++);
+    {
+    *a = (*a | *b++);
+    a++;
+    }
 }
 
 void bitXor(Bits *a, Bits *b, int bitCount)
 {
 int byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
-    *a++ = (*a ^ *b++);
+    {
+    *a = (*a ^ *b++);
+    a++;
+    }
 }
 
 void bitNot(Bits *a, int bitCount)
@@ -215,7 +224,8 @@ void bitNot(Bits *a, int bitCount)
 int byteCount = ((bitCount+7)>>3);
 while (--byteCount >= 0)
     {
-    *a++ = ~*a;
+    *a = ~*a;
+    a++;
     }
 }
 

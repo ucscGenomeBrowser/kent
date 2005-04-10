@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.11 2005/01/23 00:15:13 kent Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.12 2005/04/10 14:41:24 markd Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -73,7 +73,6 @@ static Color pscmAddColor(struct pscmGfx *pscm,
 /* Adds color to end of color map if there's room. */
 {
 int colIx = pscm->colorsUsed;
-struct rgbColor *mapPos;
 struct rgbColor *c = pscm->colorMap + pscm->colorsUsed;
 c->r = r;
 c->g = g;
@@ -119,7 +118,6 @@ struct pscmGfx *pscmOpen(int width, int height, char *file)
 /* Return new pscmGfx. */
 {
 struct pscmGfx *pscm;
-int i;
 
 AllocVar(pscm);
 pscm->ps = psOpen(file, width, height, 72.0 * 7.5, 0, 0);
@@ -198,7 +196,6 @@ static void pscmVerticalSmear(struct pscmGfx *pscm,
 {
 int x, i;
 struct psGfx *ps = pscm->ps;
-struct rgbColor *col;
 Color c;
 for (i=0; i<width; ++i)
     {

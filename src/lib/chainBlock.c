@@ -9,7 +9,7 @@
 #include "dlist.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainBlock.c,v 1.16 2005/02/11 16:17:38 angie Exp $";
+static char const rcsid[] = "$Id: chainBlock.c,v 1.17 2005/04/10 14:41:21 markd Exp $";
 
 struct kdBranch
 /* A kd-tree. That is a binary tree which partitions the children
@@ -134,7 +134,7 @@ if (nodeCount == 1)
     }
 else
     {
-    int cutCoord, newCount;
+    int newCount;
     struct dlList *newLists[2];
     struct dlList newQ, newT;
     int nextDim = 1-dim;

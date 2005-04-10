@@ -4,7 +4,7 @@
 #include "dlist.h"
 #include "diGraph.h"
 
-static char const rcsid[] = "$Id: diGraph.c,v 1.5 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: diGraph.c,v 1.6 2005/04/10 14:41:22 markd Exp $";
 
 struct diGraph *dgNew()
 /* Return a new directed graph object. */
@@ -64,7 +64,6 @@ struct dgNode *node;
 struct hashEl *hel;
 struct hash *hash = dg->nodeHash;
 char nbuf[17];
-static int nameIx = 0;
 
 if (name == NULL)
     {
@@ -77,8 +76,8 @@ if (hel != NULL)
     node = hel->val;
     if (node->val != val)
 	{
-	errAbort("Trying to add node %s with a new value (old %x new %x)",
-	    name, node->val, val);
+	errAbort("Trying to add node %s with a new value (old 0x%x new 0x%x)",
+	    name, (int)node->val, (int)val);
 	}
     return node;
     }
@@ -654,7 +653,6 @@ struct hash *hash = newHash(0);
 struct dgNodeRef *nr;
 struct dgConnection *con;
 struct dgEdgeRef *erList = NULL, *er;
-struct dgEdge *edge;
 struct dgNode *node;
 
 /* Build up hash of nodes in subGraph. */

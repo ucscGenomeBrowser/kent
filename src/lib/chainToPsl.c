@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.4 2005/01/10 00:14:37 kent Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.5 2005/04/10 14:41:21 markd Exp $";
 
 
 struct psl *chainToPsl(struct chain *chain)
@@ -86,8 +86,8 @@ for (block = chain->blockList; block != NULL; block = block->next)
 	int qv, tv;
 	q = qDna[i];
 	t = tDna[i];
-	qv = ntVal[q];
-	tv = ntVal[t];
+	qv = ntVal[(int)q];
+	tv = ntVal[(int)t];
 	if (qv < 0 || tv < 0)
 	    ++nCount;
 	else if (qv == tv)

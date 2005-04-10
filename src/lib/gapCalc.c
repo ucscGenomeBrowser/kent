@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "gapCalc.h"
 
-static char const rcsid[] = "$Id: gapCalc.c,v 1.1 2005/01/10 00:03:54 kent Exp $";
+static char const rcsid[] = "$Id: gapCalc.c,v 1.2 2005/04/10 14:41:22 markd Exp $";
 
 struct gapCalc
 /* A structure that bundles together stuff to help us
@@ -144,9 +144,8 @@ if (word != NULL)
 struct gapCalc *gapCalcRead(struct lineFile *lf)
 /* Create gapCalc from open file. */
 {
-int i, tableSize, smallSize, startLong = -1;
+int i, tableSize, startLong = -1;
 struct gapCalc *gapCalc;
-int count;
 int *gapInitPos;  
 double *gapInitQGap;  
 double *gapInitTGap;  

@@ -8,7 +8,7 @@
 #include "hmmstats.h"
 #include "codebias.h"
 
-static char const rcsid[] = "$Id: codebias.c,v 1.5 2003/05/06 07:33:41 kate Exp $";
+static char const rcsid[] = "$Id: codebias.c,v 1.6 2005/04/10 14:41:21 markd Exp $";
 
 
 struct codonBias *codonLoadBias(char *fileName)
@@ -92,7 +92,7 @@ int i;
 int val;
 for (i=0; i<dnaSize; ++i)
     {
-    if ((val = ntVal[dna[i]]) < 0)
+    if ((val = ntVal[(int)dna[i]]) < 0)
         dna[i] = 't';
     }
 }
@@ -107,7 +107,6 @@ int frame;
 int dnaIx;
 double logP;
 double bestLogP = -0x6fffffff;
-double nextBestLogP = bestLogP;
 int bestFrame = -1;
 int lastDnaStart = dnaSize-3;
 DNA *d;
@@ -122,7 +121,7 @@ for (frame=0; frame<3; ++frame)
     if (frame <= lastDnaStart)
         {
         d = dna+frame;
-        codon = (ntVal[d[0]]<<4) + (ntVal[d[1]]<<2) + ntVal[d[2]];
+        codon = (ntVal[(int)d[0]]<<4) + (ntVal[(int)d[1]]<<2) + ntVal[(int)d[2]];
         logP += forBias->mark0[codon];
         }
     /* 2nd order model on subsequent full codons. */
@@ -130,7 +129,7 @@ for (frame=0; frame<3; ++frame)
         {
         lastCodon = codon;
         d = dna+dnaIx;
-        codon = (ntVal[d[0]]<<4) + (ntVal[d[1]]<<2) + ntVal[d[2]];
+        codon = (ntVal[(int)d[0]]<<4) + (ntVal[(int)d[1]]<<2) + ntVal[(int)d[2]];
         logP += forBias->mark1[lastCodon][codon];
         }
     /* Partial last codon gets even background score. */

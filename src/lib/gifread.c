@@ -5,7 +5,7 @@
 #include "gifcodes.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: gifread.c,v 1.3 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: gifread.c,v 1.4 2005/04/10 14:41:23 markd Exp $";
 
 static struct gif_header gif;
 static struct gif_image gim;
@@ -79,9 +79,7 @@ struct memGfx *mgLoadGif(char *name)
  * least.  This version of gif was always
  * color mapped. */
 {
-int i,j;
 int c;
-char buf[80];
 char type[7];
 int gif_colors = 0;
 

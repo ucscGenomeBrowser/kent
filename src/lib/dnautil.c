@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.35 2005/02/10 20:00:20 hiram Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.36 2005/04/10 14:41:22 markd Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -208,7 +208,7 @@ if (!inittedNtVal)
 ix = 0;
 for (i=0; i<3; ++i)
     {
-    int bv = ntVal[dna[i]];
+    int bv = ntVal[(int)dna[i]];
     if (bv<0)
 	return 'X';
     ix = (ix<<2) + bv;
@@ -232,7 +232,7 @@ if (!inittedNtVal)
 ix = 0;
 for (i=0; i<3; ++i)
     {
-    int bv = ntVal[dna[i]];
+    int bv = ntVal[(int)dna[i]];
     if (bv<0)
 	return 'X';
     ix = (ix<<2) + bv;
@@ -248,11 +248,11 @@ Codon codonVal(DNA *start)
 {
 int v1,v2,v3;
 
-if ((v1 = ntVal[start[0]]) < 0)
+if ((v1 = ntVal[(int)start[0]]) < 0)
     return -1;
-if ((v2 = ntVal[start[1]]) < 0)
+if ((v2 = ntVal[(int)start[1]]) < 0)
     return -1;
-if ((v3 = ntVal[start[2]]) < 0)
+if ((v3 = ntVal[(int)start[2]]) < 0)
     return -1;
 return ((v1<<4) + (v2<<2) + v3);
 }
@@ -388,7 +388,7 @@ int i;
 if (!inittedCompTable) initNtCompTable();
 for (i=0; i<length; ++i)
     {
-    *dna = ntCompTable[*dna];
+    *dna = ntCompTable[(int)*dna];
     ++dna;
     }
 }
@@ -495,7 +495,7 @@ long count = 0;
 dnaUtilOpen();
 while ((c = *raw++) != 0)
     {
-    if (filter[c]) ++count;
+    if (filter[(int)c]) ++count;
     }
 return count;
 }
@@ -507,7 +507,7 @@ char c;
 dnaUtilOpen();
 while ((c = *in++) != 0)
     {
-    if ((c = filter[c]) != 0) *out++ = c;
+    if ((c = filter[(int)c]) != 0) *out++ = c;
     }
 *out++ = 0;
 }
@@ -531,7 +531,7 @@ DNA c;
 initNtChars();
 while ((c = *in++) != 0)
     {
-    if ((c = ntChars[c]) != 0) *out++ = c;
+    if ((c = ntChars[(int)c]) != 0) *out++ = c;
     else *out++ = 'n';
     }
 *out++ = 0;
@@ -590,7 +590,7 @@ int val;
 zeroBytes(histogram, 4*sizeof(int));
 while (--dnaSize >= 0)
     {
-    if ((val = ntVal[*dna++]) >= 0)
+    if ((val = ntVal[(int)*dna++]) >= 0)
         ++histogram[val];
     }
 }
@@ -603,7 +603,7 @@ int count = 16;
 int bVal;
 while (--count >= 0)
     {
-    bVal = ntValNoN[*in++];
+    bVal = ntValNoN[(int)*in++];
     out <<= 2;
     out += bVal;
     }
@@ -618,7 +618,7 @@ int count = 8;
 int bVal;
 while (--count >= 0)
     {
-    bVal = ntValNoN[*in++];
+    bVal = ntValNoN[(int)*in++];
     out <<= 2;
     out += bVal;
     }
@@ -633,7 +633,7 @@ int count = 4;
 int bVal;
 while (--count >= 0)
     {
-    bVal = ntValNoN[*in++];
+    bVal = ntValNoN[(int)*in++];
     out <<= 2;
     out += bVal;
     }
@@ -929,8 +929,8 @@ for (i=0; i<ArraySize(aminoAcidTable); ++i)
     {
     c = aminoAcidTable[i].letter;
     lowc = tolower(c);
-    aaVal[c] = aaVal[lowc] = i;
-    aaChars[c] = aaChars[lowc] = c;
+    aaVal[(int)c] = aaVal[(int)lowc] = i;
+    aaChars[(int)c] = aaChars[(int)lowc] = c;
     valToAa[i] = c;
     }
 aaChars['x'] = aaChars['X'] = 'X';

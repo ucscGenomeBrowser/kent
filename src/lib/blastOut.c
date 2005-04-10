@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.12 2004/10/30 02:04:04 kent Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.13 2005/04/10 14:41:21 markd Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -187,7 +187,7 @@ int i;
 struct axtScoreScheme *ss = axtScoreSchemeProteinDefault();
 for (i=0; i<size; ++i)
     {
-    if (ss->matrix[a[i]][b[i]] > 0)
+    if (ss->matrix[(int)a[i]][(int)b[i]] > 0)
         ++count;
     }
 return count;
@@ -260,7 +260,7 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
 	    {
 	    if (q == t)
 	        c = q;
-	    else if (ss->matrix[q][t] > 0)
+	    else if (ss->matrix[(int)q][(int)t] > 0)
 	        c = '+';
 	    else
 	        c = ' ';
@@ -355,7 +355,6 @@ static void wuBlastOut(struct axtBundle *abList, int queryIx, boolean isProt,
 {
 char asciiNum[32];
 struct targetHits *targetList = NULL, *target;
-struct axtBundle *ab;
 char *queryName;
 int isRc;
 int querySize = abList->qSize;
@@ -488,7 +487,6 @@ static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt,
 char asciiNum[32];
 struct targetHits *targetList = NULL, *target;
 char *queryName;
-int isRc;
 int querySize = abList->qSize;
 
 /* Print out stuff that doesn't depend on query or database. */
@@ -633,7 +631,6 @@ for (target = targetList; target != NULL; target = target->next)
     for (ref = target->axtList; ref != NULL; ref = ref->next)
         {
 	struct axt *axt = ref->axt;
-	int matches, gaps;
 	int hspIx = 0;
 	fprintf(f, "        <Hsp>\n");
 	fprintf(f, "          <Hsp_num>%d</Hsp_num>\n", ++hspIx);
@@ -672,7 +669,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2004/10/30 02:04:04 $";
+    char * rcsDate = "$Date: 2005/04/10 14:41:21 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;

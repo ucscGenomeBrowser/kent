@@ -7,7 +7,7 @@
 #include "pairHmm.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtAffine.c,v 1.6 2005/01/10 00:09:54 kent Exp $";
+static char const rcsid[] = "$Id: axtAffine.c,v 1.7 2005/04/10 14:41:20 markd Exp $";
 
 
 boolean axtAffineSmallEnough(double querySize, double targetSize)
@@ -30,7 +30,6 @@ int qIx, tIx, sIx;  /* Query, target, and state indices */
 int rowOffset, newCellOffset;
 int bestScore = -0x4fffffff;
 struct phmmMommy *bestCell = NULL;
-int badScore = -0x3fffffff;
 int matchPair;
 int gapStart, gapExt;
 
@@ -134,7 +133,7 @@ for (tIx = 1; tIx < a->tDim; tIx += 1)
         newCellOffset = rowOffset + qIx;
         
         /* Figure the cost or bonus for pairing target and query residue here. */
-        matchPair = ss->matrix[a->query[qIx-1]][a->target[tIx-1]];
+        matchPair = ss->matrix[(int)a->query[qIx-1]][(int)a->target[tIx-1]];
 
         /* Update hiFi space. */
             {

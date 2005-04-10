@@ -88,7 +88,6 @@ return line;
 static char *bfSearchForLine(struct blastFile *bf, char *start)
 /* scan for a line starting with the specified string */
 {
-int i;
 for (;;)
     {
     char *line = bfNextLine(bf);
@@ -227,10 +226,7 @@ struct blastQuery *blastFileNextQuery(struct blastFile *bf)
 /* Read all alignments associated with next query.  Return NULL at EOF. */
 {
 char *line;
-char *words[16];
-int wordCount;
 struct blastQuery *bq;
-char *s, *e;
 struct blastGappedAli *bga;
 AllocVar(bq);
 

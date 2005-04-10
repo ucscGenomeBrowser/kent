@@ -76,7 +76,6 @@ static void y_xor_line(int bpr, int x1, int y1, int x2, int y2)
 /* Xor in a line onto on_off_buf, only plotting when we hit a new y-value. */
 {
 UBYTE *imagept = on_off_buf;
-WORD height;
 UBYTE rot;
 int   duty_cycle;
 int   delta_x, delta_y;
@@ -183,9 +182,6 @@ int i;
 int bpr;	/* Bytes per row */
 int width, height;
 long size;
-int opw;
-int ocolor;
-
 
 find_pminmax(poly);
 if (pymin==pymax)  /*Complex code can't cope with trivial case*/

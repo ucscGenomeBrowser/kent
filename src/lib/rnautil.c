@@ -94,14 +94,14 @@ for (i = 0, index = 0; i < size; i++)
 	{
 	if (pairList[i] < i)
 	    {
-	    index = --index;
+            --index;
 	    if (index<0)
 		index = symbolMax-1;
 	    }
 	pairSymbols[i] = symbols[index];
 	if (pairList[i] > i)
 	    {
-	    index = ++index;
+            ++index;
 	    if (index>=symbolMax)
 		index=0;
 	    }

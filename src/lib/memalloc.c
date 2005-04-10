@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.19 2005/01/10 00:22:39 kent Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.20 2005/04/10 14:41:23 markd Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -277,7 +277,7 @@ size_t newAlloced = size + carefulAlloced;
 size_t aliSize;
 
 if (newAlloced > carefulMaxToAlloc)
-    errAbort("Allocated too much memory - more than %ld bytes (%ld)", carefulMaxToAlloc, newAlloced);
+    errAbort("Allocated too much memory - more than %lld bytes (%lld)", (long long)carefulMaxToAlloc, (long long)newAlloced);
 carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
 cmb = carefulParent->alloc(aliSize);
@@ -300,10 +300,10 @@ char *pEndCookie;
 carefulAlloced -= size;
 pEndCookie = (((char *)(cmb+1)) + size);
 if (cmb->startCookie != cmbStartCookie)
-    errAbort("Bad start cookie %x freeing %x\n", cmb->startCookie, vpt);
+    errAbort("Bad start cookie %x freeing %x\n", cmb->startCookie, (int)vpt);
 if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
     errAbort("Bad end cookie %x%x%x%x freeing %x\n", 
-        pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3], vpt);
+        pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3], (int)vpt);
 dlRemove((struct dlNode *)cmb);
 carefulParent->free(cmb);
 }
@@ -340,11 +340,11 @@ for (cmb = (struct carefulMemBlock *)(cmbAllocedList->head); cmb->next != NULL; 
     size = cmb->size;
     pEndCookie = (((char *)(cmb+1)) + size);
     if (cmb->startCookie != cmbStartCookie)
-        errAbort("Bad start cookie %x checking %x\n", cmb->startCookie, cmb+1);
+        errAbort("Bad start cookie %x checking %x\n", cmb->startCookie, (int)cmb+1);
     if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
         {
         errAbort("Bad end cookie %x%x%x%x checking %x\n", 
-            pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3], cmb+1);
+            pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3], (int)cmb+1);
         }
     if (--maxPieces == 0)
         errAbort("Loop or more than 10000000 pieces in memory list");
@@ -379,9 +379,6 @@ void pushCarefulMemHandler(size_t maxAlloc)
 carefulMemInit(maxAlloc);
 carefulParent = pushMemHandler(&carefulMemHandler);
 }
-
-static boolean memTrackerOn;
-/* A memory tracker. */
 
 struct memTracker
 /* A structure to keep track of memory. */

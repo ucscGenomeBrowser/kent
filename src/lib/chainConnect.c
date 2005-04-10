@@ -7,7 +7,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: chainConnect.c,v 1.1 2005/01/10 00:03:55 kent Exp $";
+static char const rcsid[] = "$Id: chainConnect.c,v 1.2 2005/04/10 14:41:21 markd Exp $";
 
 double chainScoreBlock(char *q, char *t, int size, int matrix[256][256])
 /* Score block through matrix. */
@@ -15,7 +15,7 @@ double chainScoreBlock(char *q, char *t, int size, int matrix[256][256])
 double score = 0;
 int i;
 for (i=0; i<size; ++i)
-    score += matrix[q[i]][t[i]];
+    score += matrix[(int)q[i]][(int)t[i]];
 return score;
 }
 
@@ -71,8 +71,8 @@ score = bestScore = rScore = chainScoreBlock(rqStart, rtStart, overlap, matrix);
 lScore = chainScoreBlock(lqStart, ltStart, overlap, matrix);
 for (i=0; i<overlap; ++i)
     {
-    score += matrix[lqStart[i]][ltStart[i]];
-    score -= matrix[rqStart[i]][rtStart[i]];
+    score += matrix[(int)lqStart[i]][(int)ltStart[i]];
+    score -= matrix[(int)rqStart[i]][(int)rtStart[i]];
     if (score > bestScore)
 	{
 	bestScore = score;

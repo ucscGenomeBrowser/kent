@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.13 2005/03/24 13:34:44 baertsch Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.14 2005/04/10 14:41:26 markd Exp $";
 #define MAXSEQ 2048
 
 static int countBlocksOfN(char *s, int size)
@@ -35,7 +35,6 @@ static int countBlocksOfLower(char *s, int size)
 {
 int i;
 boolean isLower, lastIsLower = FALSE;
-char b;
 int blockCount = 0;
 
 for (i=0; i<size; ++i)
@@ -613,7 +612,6 @@ struct dnaSeq *twoBitLoadAll(char *spec)
 {
 struct dnaSeq *list = NULL, *seq;
 struct twoBitFile *tbf = NULL;
-FILE *f = NULL;
 char *seqArray[MAXSEQ];
 if (twoBitIsRange(spec))
     {

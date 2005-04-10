@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.19 2005/01/10 00:23:53 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.20 2005/04/10 14:41:24 markd Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -251,7 +251,6 @@ return host;
 char *rTempName(char *dir, char *base, char *suffix)
 /* Make a temp name that's almost certainly unique. */
 {
-char midder[256];
 int pid = getpid();
 int num = time(NULL);
 static char fileName[512];

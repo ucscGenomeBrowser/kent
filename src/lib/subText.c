@@ -6,7 +6,7 @@
 #include "common.h"
 #include "subText.h"
 
-static char const rcsid[] = "$Id: subText.c,v 1.10 2004/02/05 23:31:43 braney Exp $";
+static char const rcsid[] = "$Id: subText.c,v 1.11 2005/04/10 14:41:26 markd Exp $";
 
 struct subText *subTextNew(char *in, char *out)
 /* Make new substitution structure. */
@@ -45,7 +45,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-
+#if 0 /* unused */
 static boolean firstSame(char *s, char *t, int len)
 /* Return TRUE if  the  first len characters of the strings s and t
  * are the same. */
@@ -57,6 +57,7 @@ while (--len >= 0)
     }
 return TRUE;
 }
+#endif
 
 static struct subText *firstInList(struct subText *l, char *name)
 /* Return first element in Sub list who's in string matches the

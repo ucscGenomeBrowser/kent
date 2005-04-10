@@ -8,7 +8,7 @@
 #include "keys.h"
 #include "kxTok.h"
 
-static char const rcsid[] = "$Id: keys.c,v 1.9 2003/05/06 07:33:43 kate Exp $";
+static char const rcsid[] = "$Id: keys.c,v 1.10 2005/04/10 14:41:23 markd Exp $";
 
 struct kvt
 /* Key/value table. */
@@ -167,6 +167,7 @@ else
     *retRight = atoi(rightString);
 }
 
+#if 0 /* unused */
 static void dumpExp(struct kvt *kvt, struct exp *exp)
 /* Print out expression. */
 {
@@ -239,6 +240,7 @@ switch (exp->type)
         }
     }
 }
+#endif
 
 static boolean rkeyEval(struct kvt *kvt, struct exp *exp)
 /* Recursively evaluate expression. */

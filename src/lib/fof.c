@@ -7,7 +7,7 @@
 #include "sig.h"
 #include "fof.h"
 
-static char const rcsid[] = "$Id: fof.c,v 1.5 2003/05/06 07:33:42 kate Exp $";
+static char const rcsid[] = "$Id: fof.c,v 1.6 2005/04/10 14:41:22 markd Exp $";
 
 struct fofRecord
 /* This holds a record of an index file. */
@@ -161,7 +161,6 @@ static void fofRecToPos(struct fof *fof, int ix, struct fofRecord *rec, struct f
 /* Convert from record to position, opening file for entry if necessary. */
 {
 int fileIx = rec->fileIx;
-FILE *ff = fof->f;
 FILE *f;
 
 pos->indexIx = ix;

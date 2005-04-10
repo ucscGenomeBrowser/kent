@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.40 2005/01/10 00:08:38 kent Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.41 2005/04/10 14:41:20 markd Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -188,7 +188,7 @@ int axtScoreUngapped(struct axtScoreScheme *ss, char *q, char *t, int size)
 int score = 0;
 int i;
 for (i=0; i<size; ++i)
-    score += ss->matrix[q[i]][t[i]];
+    score += ss->matrix[(int)q[i]][(int)t[i]];
 return score;
 }
 
@@ -220,7 +220,7 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[q][t];
+	score += ss->matrix[(int)q][(int)t];
 	lastGap = FALSE;
 	}
     }
@@ -268,7 +268,7 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[q][t];
+	score += ss->matrix[(int)q][(int)t];
 	lastGap = FALSE;
 	}
     }
@@ -565,10 +565,10 @@ for (line = text; line != NULL; line = nextLine)
 	    otherLetter = columns[i-1];
 	    lcOtherLetter = tolower(otherLetter);
 	    val = atoi(row[i]);
-	    ss->matrix[letter][otherLetter] = val;
-	    ss->matrix[lcLetter][otherLetter] = val;
-	    ss->matrix[letter][lcOtherLetter] = val;
-	    ss->matrix[lcLetter][lcOtherLetter] = val;
+	    ss->matrix[(int)letter][(int)otherLetter] = val;
+	    ss->matrix[(int)lcLetter][(int)otherLetter] = val;
+	    ss->matrix[(int)letter][(int)lcOtherLetter] = val;
+	    ss->matrix[(int)lcLetter][(int)lcOtherLetter] = val;
 	    }
 	}
     }
@@ -777,7 +777,6 @@ for (i=0; i<=axt->symCount; ++i)
 void axtPrintTraditional(struct axt *axt, int maxLine, struct axtScoreScheme *ss, FILE *f)
 /* Print out an alignment with line-breaks. */
 {
-int lineStart;
 int qPos = axt->qStart;
 int tPos = axt->tStart;
 int symPos;
@@ -814,7 +813,7 @@ for (symPos = 0; symPos < axt->symCount; symPos += maxLine)
 	char out = ' ';
 	if (q == t)
 	    out = '|';
-	else if (ss != NULL && ss->matrix[q][t] > 0)
+	else if (ss != NULL && ss->matrix[(int)q][(int)t] > 0)
 	    out = '+';
 	fputc(out, f);
 	}
