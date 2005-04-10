@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.944 2005/04/08 18:46:59 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.945 2005/04/10 17:38:37 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3368,10 +3368,13 @@ tg->ixAltColor = col;
 return(col);
 }
 
-Color refGeneColor(struct track *tg, void *item, struct vGfx *vg)
-/* Return color to draw refseq gene in. */
+Color refGeneColorByStatus(struct track *tg, char *name, struct vGfx *vg)
+/* Get refseq gene color from refSeqStatus.
+ * Reviewed, Validated -> normal, Provisional -> lighter, 
+ * Predicted, Inferred(other) -> lightest 
+ * If no refSeqStatus, color it normally. 
+ */
 {
-struct linkedFeatures *lf = item;
 int col = tg->ixColor;
 struct rgbColor *normal = &(tg->color);
 struct rgbColor lighter, lightest;
@@ -3379,6 +3382,39 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
+        name);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
+        {
+        /* Use the usual color */
+        }
+    else if (startsWith("Provisional", row[0]))
+        {
+        lighter.r = (6*normal->r + 4*255) / 10;
+        lighter.g = (6*normal->g + 4*255) / 10;
+        lighter.b = (6*normal->b + 4*255) / 10;
+        col = vgFindRgb(vg, &lighter);
+        }
+    else
+        {
+        lightest.r = (1*normal->r + 2*255) / 3;
+        lightest.g = (1*normal->g + 2*255) / 3;
+        lightest.b = (1*normal->b + 2*255) / 3;
+        col = vgFindRgb(vg, &lightest);
+        }
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return col;
+}
+
+Color refGeneColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw refseq gene in. */
+{
+struct linkedFeatures *lf = item;
 
 /* allow itemAttr to override coloring */
 if (lf->itemAttr != NULL)
@@ -3390,35 +3426,9 @@ if (lf->itemAttr != NULL)
  * If no refSeqStatus, color it normally. 
  */
 if (hTableExists("refSeqStatus"))
-    {
-    sprintf(query, "select status from refSeqStatus where mrnaAcc = '%s'",
-	    lf->name);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
-        {
-	if (startsWith("Reviewed", row[0]) || startsWith("Validated", row[0]))
-	    {
-	    /* Use the usual color */
-	    }
-	else if (startsWith("Provisional", row[0]))
-	    {
-	    lighter.r = (6*normal->r + 4*255) / 10;
-	    lighter.g = (6*normal->g + 4*255) / 10;
-	    lighter.b = (6*normal->b + 4*255) / 10;
-	    col = vgFindRgb(vg, &lighter);
-	    }
-	else
-	    {
-	    lightest.r = (1*normal->r + 2*255) / 3;
-	    lightest.g = (1*normal->g + 2*255) / 3;
-	    lightest.b = (1*normal->b + 2*255) / 3;
-	    col = vgFindRgb(vg, &lightest);
-	    }
-	}
-    sqlFreeResult(&sr);
-    }
-hFreeConn(&conn);
-return(col);
+    return refGeneColorByStatus(tg, lf->name, vg);
+else
+    return(tg->ixColor);
 }
 
 
