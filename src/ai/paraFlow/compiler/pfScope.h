@@ -24,8 +24,7 @@ struct pfVar
      char *name;			/* Name (not allocated here) */
      struct pfScope *scope;		/* Scope we're declared in. */
      struct pfType *ty;			/* Variable type. */
-     bool isOut;			/* Is output for a function */
-     bool isSingleOut;			/* Is only output variable */
+     struct pfParse *parse;		/* Declaration spot in parse tree. */
      };
 
 struct pfTokenizer;
@@ -42,17 +41,15 @@ struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name,
 	boolean isCollection, struct pfBaseType *parentType);
 /* Add new base type to scope. */
 
-struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfType *ty);
-/* Add type to scope. */
+struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, 
+	struct pfType *ty, struct pfParse *pp);
+/* Add variable to scope. */
 
 struct pfBaseType *pfScopeFindType(struct pfScope *scope, char *name);
 /* Find type associated with name in scope and it's parents. */
 
 struct pfVar *pfScopeFindVar(struct pfScope *scope, char *name);
 /* Find variable associated with name in scope and it's parents. */
-
-struct pfVar *pfScopeFindOrCreateVar(struct pfScope *scope, char *name);
-/* Find variable.  If it doesn't exist create it in innermost scope. */
 
 #endif /* PFSCOPE_H */
 

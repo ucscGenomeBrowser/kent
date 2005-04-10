@@ -1474,7 +1474,8 @@ struct pfScope *scope = pfScopeNew(pfc->scope, 16);
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, fileName);
 
-modParse->name = module;
+modParse->name = cloneString(module);
+chopSuffix(modParse->name);
 
 /* Read tokens, add scoping info, and add to list. */
 while ((tok = pfTokenizerNext(tkz)) != NULL)

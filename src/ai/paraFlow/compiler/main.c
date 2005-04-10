@@ -150,7 +150,7 @@ struct pfType *varType = pfTypeNew(pfc->varType);
 toType->children = inTuple;
 inTuple->next = outTuple;
 inTuple->children = varType;
-pfScopeAddVar(scope, "print", toType);
+pfScopeAddVar(scope, "print", toType, NULL);
 }
 
 struct pfCompile *pfCompileNew(char *fileName)

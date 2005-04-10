@@ -1,4 +1,12 @@
 /* pfCodeC - C code generator for paraFlow. */
+/* This is an experiment in code generation that quickly
+ * grew too complex.  The paraFlow code can return 
+ * multiple values, while C returns zero or one.  
+ * In this experiment I tried to map this to C functions
+ * where functions with one or less variables look like
+ * "normal" C functions, and functions with two or more
+ * variables pass return variable pointers after the input
+ * parameters. */
 
 #include "common.h"
 #include "linefile.h"

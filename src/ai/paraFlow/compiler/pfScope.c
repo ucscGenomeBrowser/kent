@@ -61,13 +61,15 @@ hashAdd(scope->types, name, bt);
 return bt;
 }
 
-struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, struct pfType *ty)
-/* Add type to scope. */
+struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, 
+	struct pfType *ty, struct pfParse *pp)
+/* Add variable to scope. */
 {
 struct pfVar *var;
 AllocVar(var);
 var->scope = scope;
 var->ty = ty;
+var->parse = pp;
 hashAddSaveName(scope->vars, name, var, &var->name);
 return var;
 }
@@ -96,14 +98,5 @@ while (scope != NULL)
     scope = scope->parent;
     }
 return NULL;
-}
-
-struct pfVar *pfScopeFindOrCreateVar(struct pfScope *scope, char *name)
-/* Find variable.  If it doesn't exist create it in innermost scope. */
-{
-struct pfVar *var = pfScopeFindVar(scope, name);
-if (var == NULL)
-    var = pfScopeAddVar(scope, name, NULL);
-return var;
 }
 

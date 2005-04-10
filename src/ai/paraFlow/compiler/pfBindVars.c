@@ -106,7 +106,7 @@ switch (pp->type)
 	struct pfParse *name = type->next;
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
-	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty);
+	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
 	break;
 	}
     case pptToDec:
@@ -120,7 +120,7 @@ switch (pp->type)
 	name->type = pptSymName;
 	if (hashLookup(pp->scope->parent->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
-	pfScopeAddVar(pp->scope->parent, name->name, pp->ty);
+	pp->var = pfScopeAddVar(pp->scope->parent, name->name, pp->ty, pp);
 	break;
 	}
     case pptInto:
@@ -129,7 +129,7 @@ switch (pp->type)
 	name->type = pptSymName;
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
-	pfScopeAddVar(pp->scope, name->name, pp->ty);
+	pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
 	break;
 	}
     }
@@ -137,7 +137,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     addDeclaredVarsToScopes(pp);
 }
 
-static void bindVars(struct pfParse *pp)
+static void checkVarsDefined(struct pfParse *pp)
 /* Attach variable name to pfVar in appropriate scope.
  * Complain and die if not found. */
 {
@@ -163,7 +163,7 @@ switch (pp->type)
 	}
     }
 for (p = pp->children; p != NULL; p = p->next)
-    bindVars(p);
+    checkVarsDefined(p);
 }
 
 
@@ -176,5 +176,5 @@ void pfBindVars(struct pfCompile *pfc, struct pfParse *pp)
 {
 evalDeclarationTypes(pfc, pp);
 addDeclaredVarsToScopes(pp);
-bindVars(pp);
+checkVarsDefined(pp);
 }
