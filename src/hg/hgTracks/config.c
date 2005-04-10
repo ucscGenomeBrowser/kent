@@ -142,8 +142,7 @@ struct group *groupList = NULL;
 
 /* Get track list and group them. */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
-trackList = getTrackList();
-groupTracks(&trackList, &groupList);
+trackList = getTrackList(&groupList);
 
 /* The ideogram for some reason is considered a track.
  * We don't really want to process it as one though, so
