@@ -14,9 +14,10 @@ static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
 /* Emit code for one statement. */
 
-static void codeExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp);
-/* Emit code for one expression. */
+static int codeExpression(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack);
+/* Emit code for one expression.  Returns how many items added
+ * to stack. */
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
@@ -76,6 +77,8 @@ else
     fprintf(f, "%s", s);
 }
 
+static char *stackName = "_pfStack_";
+
 static void printParamAccess(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base, int offset)
 /* Print out code to access paramater of given type at offset. */
@@ -83,7 +86,7 @@ static void printParamAccess(struct pfCompile *pfc, FILE *f,
 char *s = typeKey(pfc, base);
 if (s == NULL)
     s = "Val";
-fprintf(f, "_pfStack_[%d].%s", offset, s);
+fprintf(f, "%s[%d].%s", stackName, offset, s);
 }
 
 static void rPrintFields(struct pfCompile *pfc, 
@@ -110,11 +113,176 @@ if (pp->type != pptVarInit)
 return pp->children->next->next != NULL;
 }
 
-static void codeExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp)
-/* Emit code for one expression. */
+static int codeCall(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for a function call. */
 {
-fprintf(f, "(expression)");
+struct pfParse *varUse = pp->children;
+struct pfVar *var = varUse->var;
+struct pfParse *inTuple = varUse->next;
+struct pfParse *in;
+struct pfType *outTuple = var->ty->children->next;
+int outCount = slCount(outTuple->children);;
+
+/* Add parameters to stack. */
+codeExpression(pfc, f, inTuple, stack);
+if (stack != 0)
+    fprintf(f, "%s += %d;\n", stackName, stack);
+fprintf(f, "%s();\n", pp->name);
+if (stack != 0)
+    fprintf(f, "%s -= %d;\n", stackName, stack);
+return outCount;
+}
+
+static int lvalOffStack(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Take an lval off of stack. */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+    case pptVarInit:
+	fprintf(f, "%s = ", pp->name);
+	printParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, ";\n");
+	return 1;
+    case pptTuple:
+        {
+	int total = 0;
+	struct pfParse *p;
+	for (p = pp->children; p != NULL; p = p->next)
+	    total += lvalOffStack(pfc, f, p, stack+total);
+	return total;
+	}
+    default:
+        fprintf(f, "using %s %s as an lval\n", pp->name, pfParseTypeAsString(pp->type));
+	return 0;
+    }
+}
+
+static void codeAssignment(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for an assignment. */
+{
+struct pfParse *lval = pp->children;
+struct pfParse *rval = lval->next;
+codeExpression(pfc, f, rval, stack);
+lvalOffStack(pfc, f, lval, stack);
+}
+
+static void codeVarInit(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for an assignment. */
+{
+struct pfParse *lval = pp;
+struct pfParse *rval = pp->children->next->next;
+codeExpression(pfc, f, rval, stack);
+lvalOffStack(pfc, f, lval, stack);
+}
+	
+	
+static int codeBinaryOp(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, char *op)
+/* Emit code for some sort of binary op. */
+{
+struct pfParse *lval = pp->children;
+struct pfParse *rval = lval->next;
+codeExpression(pfc, f, lval, stack);
+codeExpression(pfc, f, rval, stack+1);
+printParamAccess(pfc, f, pp->ty->base, stack);
+fprintf(f, " = ");
+printParamAccess(pfc, f, pp->ty->base, stack);
+fprintf(f, " %s ", op);
+printParamAccess(pfc, f, pp->ty->base, stack+1);
+fprintf(f, ";\n");
+return 1;
+}
+
+static int codeExpression(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Emit code for one expression.  Returns how many items added
+ * to stack. */
+{
+switch (pp->type)
+    {
+    case pptTuple:
+        {
+	int total = 0;
+	struct pfParse *p;
+	for (p = pp->children; p != NULL; p = p->next)
+	    total += codeExpression(pfc, f, p, stack+total);
+	return total;
+	}
+    case pptCall:
+	return codeCall(pfc, f, pp, stack);
+    case pptAssignment:
+	codeAssignment(pfc, f, pp, stack);
+	return 0;
+    case pptVarInit:
+    	codeVarInit(pfc, f, pp, stack);
+	return 0;
+    case pptVarUse:
+	printParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = %s;\n", pp->name);
+	return 1;
+    case pptPlus:
+        return codeBinaryOp(pfc, f, pp, stack, "+");
+    case pptMinus:
+        return codeBinaryOp(pfc, f, pp, stack, "-");
+    case pptMul:
+        return codeBinaryOp(pfc, f, pp, stack, "*");
+    case pptDiv:
+        return codeBinaryOp(pfc, f, pp, stack, "/");
+    case pptMod:
+        return codeBinaryOp(pfc, f, pp, stack, "%");
+    case pptConstBit:
+        {
+	printParamAccess(pfc, f, pfc->bitType, stack);
+	fprintf(f, " = %lld;\n", pp->tok->val.i);
+	return 1;
+	}
+    case pptConstByte:
+        {
+	printParamAccess(pfc, f, pfc->byteType, stack);
+	fprintf(f, " = %lld;\n", pp->tok->val.i);
+	return 1;
+	}
+    case pptConstShort:
+        {
+	printParamAccess(pfc, f, pfc->shortType, stack);
+	fprintf(f, " = %lld;\n", pp->tok->val.i);
+	return 1;
+	}
+    case pptConstInt:
+        {
+	printParamAccess(pfc, f, pfc->intType, stack);
+	fprintf(f, " = %lld;\n", pp->tok->val.i);
+	return 1;
+	}
+    case pptConstLong:
+        {
+	printParamAccess(pfc, f, pfc->longType, stack);
+	fprintf(f, " = %lld;\n", pp->tok->val.i);
+	return 1;
+	}
+    case pptConstFloat:
+        {
+	printParamAccess(pfc, f, pfc->floatType, stack);
+	fprintf(f, " = %f;\n", pp->tok->val.x);
+	return 1;
+	}
+    case pptConstDouble:
+        {
+	printParamAccess(pfc, f, pfc->doubleType, stack);
+	fprintf(f, " = %f;\n", pp->tok->val.x);
+	return 1;
+	}
+    default:
+	{
+	fprintf(f, "(%s expression)\n", pfParseTypeAsString(pp->type));
+	return 0;
+	}
+    }
 }
 
 static void codeStatement(struct pfCompile *pfc, FILE *f,
@@ -129,6 +297,26 @@ switch (pp->type)
 	codeScope(pfc, f, pp, FALSE, FALSE);
 	fprintf(f, "}\n");
 	break;
+	}
+    case pptCall:
+    case pptAssignment:
+        codeExpression(pfc, f, pp, 0);
+	break;
+    case pptTuple:
+        {
+	struct pfParse *p;
+	for (p = pp->children; p != NULL; p = p->next)
+	    codeStatement(pfc, f, p);
+	break;
+	}
+    case pptVarInit:
+	{
+	struct pfParse *init = pp->children->next->next;
+	if (init != 0)
+	    {
+	    codeExpression(pfc, f, pp, 0);
+	    }
+        break;
 	}
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
