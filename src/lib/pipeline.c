@@ -369,9 +369,9 @@ FILE *pipelineFile(struct pipeline *pl)
 if (pl->pipeFh == NULL)
     {
     /* create FILE* on first acess */
+    char *mode = (pl->options & pipelineRead) ? "r" : "w";
     if (pl->pipeLf != NULL)
         errAbort("can't call pipelineFile after having associated a lineFile with a pipeline");
-    char *mode = (pl->options & pipelineRead) ? "r" : "w";
     pl->pipeFh = fdopen(pl->pipeFd, mode);
     if (pl->pipeFh == NULL)
         errnoAbort("fdopen failed for: %s", pl->procName);
