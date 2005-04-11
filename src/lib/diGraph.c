@@ -4,7 +4,7 @@
 #include "dlist.h"
 #include "diGraph.h"
 
-static char const rcsid[] = "$Id: diGraph.c,v 1.6 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: diGraph.c,v 1.7 2005/04/11 07:20:03 markd Exp $";
 
 struct diGraph *dgNew()
 /* Return a new directed graph object. */
@@ -76,8 +76,8 @@ if (hel != NULL)
     node = hel->val;
     if (node->val != val)
 	{
-	errAbort("Trying to add node %s with a new value (old 0x%x new 0x%x)",
-	    name, (int)node->val, (int)val);
+	errAbort("Trying to add node %s with a new value (old 0x%llx new 0x%llx)",
+	    name, (long long)node->val, (long long)val);
 	}
     return node;
     }

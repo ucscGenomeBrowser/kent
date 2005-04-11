@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.41 2005/04/10 14:41:20 markd Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.42 2005/04/11 07:20:03 markd Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -86,7 +86,7 @@ axt->tSym = cloneMem(line, symCount+1);
 lineFileNeedNext(lf, &line, NULL);
 if (strlen(line) != symCount)
     errAbort("Symbol count %d != %d inconsistent between sequences line %d and prev line of %s",
-    	symCount, strlen(line), lf->lineIx, lf->fileName);
+    	symCount, (int)strlen(line), lf->lineIx, lf->fileName);
 axt->qSym = cloneMem(line, symCount+1);
 lineFileNext(lf, &line, NULL);	/* Skip blank line */
 return axt;

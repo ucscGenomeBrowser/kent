@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.79 2005/04/02 17:54:53 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.80 2005/04/11 07:20:03 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1358,7 +1358,7 @@ void mustWrite(FILE *file, void *buf, size_t size)
 {
 if (size != 0 && fwrite(buf, size, 1, file) != 1)
     {
-    errAbort("Error writing %d bytes: %s\n", size, strerror(ferror(file)));
+    errAbort("Error writing %lld bytes: %s\n", (long long)size, strerror(ferror(file)));
     }
 }
 
@@ -1367,7 +1367,7 @@ void mustRead(FILE *file, void *buf, size_t size)
 /* Read from a file or squawk and die. */
 {
 if (size != 0 && fread(buf, size, 1, file) != 1)
-    errAbort("Error reading %d bytes: %s", size, strerror(ferror(file)));
+    errAbort("Error reading %lld bytes: %s", (long long)size, strerror(ferror(file)));
 }
 
 void writeString(FILE *f, char *s)

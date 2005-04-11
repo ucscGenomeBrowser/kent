@@ -11,7 +11,7 @@
 #include "common.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: localmem.c,v 1.9 2005/01/10 00:20:58 kent Exp $";
+static char const rcsid[] = "$Id: localmem.c,v 1.10 2005/04/11 07:20:03 markd Exp $";
 
 struct lm
     {
@@ -36,7 +36,7 @@ size_t size = (reqSize > lm->blockSize ? reqSize : lm->blockSize);
 size_t fullSize = size + sizeof(struct lmBlock);
 struct lmBlock *mb = needLargeZeroedMem(fullSize);
 if (mb == NULL)
-    errAbort("Couldn't allocate %d bytes", fullSize);
+    errAbort("Couldn't allocate %lld bytes", (long long)fullSize);
 mb->free = (char *)(mb+1);
 mb->end = ((char *)mb) + fullSize;
 mb->next = lm->blocks;
