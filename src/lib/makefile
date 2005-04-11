@@ -1,5 +1,5 @@
 include ../inc/common.mk
-HG_WARN = -DJK_WARN -Wall
+HG_WARN = ${HG_WARN_ERR}
 
 O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     blastOut.o blastParse.o boxClump.o browserGfx.o \
