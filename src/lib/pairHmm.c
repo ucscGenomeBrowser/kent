@@ -8,7 +8,7 @@
 #include "axt.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: pairHmm.c,v 1.4 2004/08/26 21:21:27 markd Exp $";
+static char const rcsid[] = "$Id: pairHmm.c,v 1.5 2005/04/11 06:43:58 kent Exp $";
 
 UBYTE phmmNullMommy = 0; /* mommy value for orphans.... */
 
@@ -152,7 +152,7 @@ for (;;)
         break;
     phmmFindMatrixIx(am, parent, &parentSix, &parentQix, &parentTix);
     
-    cell->mommy != phmmMommyTraceBit;
+    cell->mommy |= phmmMommyTraceBit;
 
     AllocVar(pair);
     pair->hiddenIx = (UBYTE)sIx;
