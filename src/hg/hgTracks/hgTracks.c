@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.947 2005/04/11 16:52:39 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.948 2005/04/11 17:16:08 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3278,27 +3278,37 @@ switch(colorMode)
     case 1: /* human position */
 	acc = buffer = cloneString(lf->name);
 	blastRef = trackDbSettingOrDefault(tg->tdb, "blastRef", NULL);
-	if ((blastRef != NULL) && hTableExists(blastRef))
+	if (blastRef != NULL) 
 	    {
-	    char query[256];
-	    struct sqlResult *sr;
-	    char **row;
-	    struct sqlConnection *conn = hAllocConn();
+	    char *thisDb = cloneString(blastRef);
+	    char *table;
 
-	    if ((pos = strchr(acc, '.')) != NULL)
-		*pos = 0;
-	    safef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
-	    sr = sqlGetResult(conn, query);
-	    if ((row = sqlNextRow(sr)) != NULL)
+	    if ((table = strchr(thisDb, '.')) != NULL)
 		{
-		if (startsWith("chr", row[0]) && ((colon = strchr(row[0], ':')) != NULL))
+		*table++ = 0;
+		if (hTableExistsDb(thisDb, table))
 		    {
-		    *colon = 0;
-		    col = getChromColor(row[0]+3, vg);
+		    char query[256];
+		    struct sqlResult *sr;
+		    char **row;
+		    struct sqlConnection *conn = hAllocConn();
+
+		    if ((pos = strchr(acc, '.')) != NULL)
+			*pos = 0;
+		    safef(query, sizeof(query), "select refPos from %s where acc = '%s'", blastRef, buffer);
+		    sr = sqlGetResult(conn, query);
+		    if ((row = sqlNextRow(sr)) != NULL)
+			{
+			if (startsWith("chr", row[0]) && ((colon = strchr(row[0], ':')) != NULL))
+			    {
+			    *colon = 0;
+			    col = getChromColor(row[0]+3, vg);
+			    }
+			}
+		    sqlFreeResult(&sr);
+		    hFreeConn(&conn);
 		    }
 		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
 	    }
 	else
 	    {
