@@ -187,7 +187,7 @@ else
     {
     name = "class";
     }
-fprintf(f, "pf_%s_%s_FromTuple(%s+%d, %d);\n", name, type->base->name,
+fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d);\n", name, type->base->name,
 	stackName, stack, tupleSize);
 }
 
@@ -455,6 +455,49 @@ switch (pp->type)
     }
 }
 
+
+static void codeForeach(struct pfCompile *pfc, FILE *f,
+	struct pfParse *foreach)
+/* Emit C code for foreach statement. */
+{
+struct pfParse *elPp = foreach->children;
+struct pfParse *collectionPp = elPp->next;
+struct pfBaseType *base = collectionPp->ty->base;
+struct pfBaseType *elBase = collectionPp->ty->children->base;
+struct pfParse *body = collectionPp->next;
+char *elName = elPp->name;
+char *collectionName = collectionPp->name;
+boolean isArray = (base == pfc->arrayType);
+
+/* Print element variable in a new scope. */
+fprintf(f, "{\n");
+printType(pfc, f, elPp->ty->base);
+fprintf(f, " %s;\n", elName);
+
+/* Also print some iteration stuff. */
+if (isArray)
+    {
+    fprintf(f, "int _pf_offset;\n");
+    fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
+    fprintf(f, "int _pf_endOffset = %s->count * _pf_elSize;\n", collectionName);
+    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+    fprintf(f, "{\n");
+    fprintf(f, "%s = *((", elName);
+    printType(pfc, f, elBase);
+    fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
+    codeStatement(pfc, f, body);
+    fprintf(f, "}\n");
+    }
+else
+    {
+    fprintf(f, "Pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
+    	base->name, collectionName);
+    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName);
+    codeStatement(pfc, f, body);
+    }
+fprintf(f, "}\n");
+}
+
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp)
 /* Emit C code for one statement. */
@@ -491,6 +534,11 @@ switch (pp->type)
 	    codeExpression(pfc, f, pp, 0);
 	    }
         break;
+	}
+    case pptForeach:
+        {
+	codeForeach(pfc, f, pp);
+	break;
 	}
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
