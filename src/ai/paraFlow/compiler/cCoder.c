@@ -24,6 +24,10 @@ static void codeScope(
 	boolean isModule, boolean isClass);
 /* Print types and then variables from scope. */
 
+static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
+	struct pfScope *scope);
+/* Print out variable declarations associated with scope. */
+
 static void printPreamble(struct pfCompile *pfc, FILE *f)
 /* Print out C code for preamble. */
 {
@@ -559,8 +563,7 @@ boolean isArray = (base == pfc->arrayType);
 
 /* Print element variable in a new scope. */
 fprintf(f, "{\n");
-printType(pfc, f, elPp->ty->base);
-fprintf(f, " %s;\n", elName);
+codeScopeVars(pfc, f, foreach);
 
 /* Also print some iteration stuff. */
 if (isArray)
@@ -583,6 +586,30 @@ else
     fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName);
     codeStatement(pfc, f, body);
     }
+fprintf(f, "}\n");
+}
+
+static void codeFor(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp)
+/* Emit C code for for statement. */
+{
+struct pfParse *init = pp->children;
+struct pfParse *end = init->next;
+struct pfParse *next = end->next;
+struct pfParse *body = next->next;
+
+fprintf(f, "{\n");
+codeScopeVars(pfc, f, pp->scope);
+codeStatement(pfc, f, init);
+fprintf(f, "for(;;)\n");
+fprintf(f, "{\n");
+codeExpression(pfc, f, end, 0);
+fprintf(f, "if (!");
+codeParamAccess(pfc, f, pfc->bitType, 0);
+fprintf(f, ") break;\n");
+codeStatement(pfc, f, body);
+codeStatement(pfc, f, next);
+fprintf(f, "}\n");
 fprintf(f, "}\n");
 }
 
@@ -624,10 +651,11 @@ switch (pp->type)
         break;
 	}
     case pptForeach:
-        {
 	codeForeach(pfc, f, pp);
 	break;
-	}
+    case pptFor:
+	codeFor(pfc, f, pp);
+	break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
 	break;
@@ -709,6 +737,39 @@ for (statement = classCompound->children; statement != NULL;
     }
 }
 
+static void codeVarsInHelList(struct pfCompile *pfc, FILE *f,
+	struct hashEl *helList)
+/* Print out variable declarations in helList. */
+{
+struct hashEl *hel;
+boolean gotVar = FALSE;
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct pfVar *var = hel->val;
+    struct pfType *type = var->ty;
+    if (!var->ty->isFunction)
+        {
+	printType(pfc, f, type->base);
+	fprintf(f, " %s", var->name);
+	if (!isInitialized(var))
+	    fprintf(f, "=0");
+	fprintf(f, ";\n");
+	gotVar = TRUE;
+	}
+    }
+if (gotVar)
+    fprintf(f, "\n");
+}
+
+static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope)
+/* Print out variable declarations associated with scope. */
+{
+struct hashEl *helList = hashElListHash(scope->vars);
+slSort(&helList, hashElCmp);
+codeVarsInHelList(pfc, f, helList);
+hashElFreeList(&helList);
+}
+
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
 	boolean isModule, boolean isClass)
@@ -750,23 +811,7 @@ if (gotFunc)
     fprintf(f, "\n");
 
 /* Print out variables. */
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    struct pfVar *var = hel->val;
-    struct pfType *type = var->ty;
-    if (!var->ty->isFunction)
-        {
-	printType(pfc, f, type->base);
-	fprintf(f, " %s", var->name);
-	if (!isInitialized(var))
-	    fprintf(f, "=0");
-	fprintf(f, ";\n");
-	gotVar = TRUE;
-	}
-    }
-if (gotVar)
-    fprintf(f, "\n");
-
+codeVarsInHelList(pfc, f, helList);
 hashElFreeList(&helList);
 
 /* Print out function declarations */
