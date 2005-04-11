@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.21 2005/04/11 07:20:03 markd Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.22 2005/04/11 08:00:56 markd Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -308,11 +308,11 @@ carefulAlloced -= size;
 pEndCookie = (((char *)(cmb+1)) + size);
 if (cmb->startCookie != cmbStartCookie)
     errAbort("Bad start cookie %x freeing %llx\n", cmb->startCookie,
-             (long long)vpt);
+             ptrToLL(vpt));
 if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
     errAbort("Bad end cookie %x%x%x%x freeing %llx\n", 
         pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3],
-             (long long)vpt);
+             ptrToLL(vpt));
 dlRemove((struct dlNode *)cmb);
 carefulParent->free(cmb);
 }
@@ -350,12 +350,12 @@ for (cmb = (struct carefulMemBlock *)(cmbAllocedList->head); cmb->next != NULL; 
     pEndCookie = (((char *)(cmb+1)) + size);
     if (cmb->startCookie != cmbStartCookie)
         errAbort("Bad start cookie %x checking %llx\n", cmb->startCookie,
-                 (long long)cmb+1);
+                 ptrToLL(cmb+1));
     if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
         {
         errAbort("Bad end cookie %x%x%x%x checking %llx\n", 
                  pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3],
-                 (long long)cmb+1);
+                 ptrToLL(cmb+1));
         }
     if (--maxPieces == 0)
         errAbort("Loop or more than 10000000 pieces in memory list");
