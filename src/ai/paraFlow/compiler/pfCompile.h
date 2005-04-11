@@ -30,6 +30,7 @@ struct pfCompile
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
     struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
     struct pfScope *scopeList;	/* List of all scopes. */
+    struct hash *runTypeHash;	/* Hash of run time types for code generator */
 
     /* Some called out types parser needs to know about. */
     struct pfBaseType *varType;		/* Base tyhpe for all variables/functions */

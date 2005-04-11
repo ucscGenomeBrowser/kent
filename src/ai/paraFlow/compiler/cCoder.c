@@ -114,6 +114,78 @@ if (pp->type != pptVarInit)
 return pp->children->next->next != NULL;
 }
 
+struct compOutType
+/* Composite output type. */
+    {
+    struct compOutType *next;	/* Next in list. */
+    char *code;		/* number:name and parenthesis code. */
+    int id;		/* Unique id. */
+    struct pfType *type;	/* Unpacked version of type */
+    };
+
+static int cotId = 0;
+
+static void encodeType(struct pfType *type, struct dyString *dy)
+/* Encode type recursively into dy. */
+{
+// dyStringPrintf(dy, "%d:", type->base->scope->id);
+// dyStringAppend(dy, type->base->name);
+dyStringPrintf(dy, "%d", type->base->id);
+if (type->children != NULL)
+    {
+    dyStringAppendC(dy, '(');
+    for (type = type->children; type != NULL; type = type->next)
+        {
+	encodeType(type, dy);
+	if (type->next != NULL)
+	    dyStringAppendC(dy, ',');
+	}
+    dyStringAppendC(dy, ')');
+    }
+}
+
+struct compOutType *compTypeLookup(struct hash *hash, struct dyString *dy,
+	struct pfType *type)
+/* Find compOutTYpe that corresponds to type in hash */
+{
+dyStringClear(dy);
+encodeType(type, dy);
+return hashMustFindVal(hash, dy->string);
+}
+
+static void rFillCompHash(FILE *f,
+	struct hash *hash, struct dyString *dy, struct pfParse *pp)
+/* Fill in hash with uniq types. */
+{
+struct pfParse *p;
+for (p = pp->children; p != NULL; p = p->next)
+    rFillCompHash(f, hash, dy, p);
+if (pp->ty)
+    {
+    dyStringClear(dy);
+    encodeType(pp->ty, dy);
+    if (!hashLookup(hash, dy->string))
+        {
+	struct compOutType *cot;
+	AllocVar(cot);
+	hashAddSaveName(hash, dy->string, cot, &cot->code);
+	cot->id = ++cotId;
+	cot->type = pp->ty;
+	fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
+	}
+    }
+}
+
+struct hash *hashCompTypes(struct pfParse *program, 
+	struct dyString *dy, FILE *f)
+/* Create a hash full of compOutTypes. */
+{
+struct hash *hash = hashNew(0);
+rFillCompHash(f, hash, dy, program);
+return hash;
+}
+
+
 static int codeCall(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for a function call. */
@@ -449,15 +521,20 @@ switch (pp->type)
 	fprintf(f, ");");
 	return 0;
     case pptCastTypedToVar:
+	{
+	struct dyString *dy = dyStringNew(0);
+	struct compOutType *cot = compTypeLookup(pfc->runTypeHash, dy,
+	     pp->children->ty);
+	codeExpression(pfc, f, pp->children, stack);
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".val.%s = ", typeKey(pfc, pp->children->ty->base));
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
         codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".type = ");
-	fprintf(f, "???now what do I do???");
-	fprintf(f, ";\n");
+	fprintf(f, ".typeId = %d;\n", cot->id);
+	dyStringFree(&dy);
 	return 0;
+	}
     default:
 	{
 	fprintf(f, "(%s expression)\n", pfParseTypeAsString(pp->type));
@@ -738,9 +815,9 @@ fputs(
 "int main(int argv, char *argc[])\n"
 "{\n"
 "static PfStack stack[4*1024];\n"
-"_pf_type_list = _pf_init_types(_pf_base_info, _pf_base_info_count,\n"
-"                               _pf_type_info, _pf_type_info_count,\n"
-"                               _pf_field_info, _pf_field_info_count);\n"
+"_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
+"               _pf_type_info, _pf_type_info_count,\n"
+"               _pf_field_info, _pf_field_info_count);\n"
 "_pf_init(stack);\n"
 "return 0;\n"
 "}\n", f);
@@ -761,80 +838,9 @@ while ((c = *s++) != 0)
     }
 }
 
-struct compOutType
-/* Composite output type. */
-    {
-    struct compOutType *next;	/* Next in list. */
-    char *code;		/* number:name and parenthesis code. */
-    int id;		/* Unique id. */
-    struct pfType *type;	/* Unpacked version of type */
-    };
-
-static int cotId = 0;
-
-static void encodeType(struct pfType *type, struct dyString *dy)
-/* Encode type recursively into dy. */
-{
-// dyStringPrintf(dy, "%d:", type->base->scope->id);
-// dyStringAppend(dy, type->base->name);
-dyStringPrintf(dy, "%d", type->base->id);
-if (type->children != NULL)
-    {
-    dyStringAppendC(dy, '(');
-    for (type = type->children; type != NULL; type = type->next)
-        {
-	encodeType(type, dy);
-	if (type->next != NULL)
-	    dyStringAppendC(dy, ',');
-	}
-    dyStringAppendC(dy, ')');
-    }
-}
-
-struct compOutType *compTypeLookup(struct hash *hash, struct dyString *dy,
-	struct pfType *type)
-/* Find compOutTYpe that corresponds to type in hash */
-{
-dyStringClear(dy);
-encodeType(type, dy);
-return hashMustFindVal(hash, dy->string);
-}
-
-static void rFillCompHash(FILE *f,
-	struct hash *hash, struct dyString *dy, struct pfParse *pp)
-/* Fill in hash with uniq types. */
-{
-struct pfParse *p;
-for (p = pp->children; p != NULL; p = p->next)
-    rFillCompHash(f, hash, dy, p);
-if (pp->ty)
-    {
-    dyStringClear(dy);
-    encodeType(pp->ty, dy);
-    if (!hashLookup(hash, dy->string))
-        {
-	struct compOutType *cot;
-	AllocVar(cot);
-	hashAddSaveName(hash, dy->string, cot, &cot->code);
-	cot->id = ++cotId;
-	cot->type = pp->ty;
-	fprintf(f, "  %d, \"%s\"\n", cot->id, cot->code);
-	}
-    }
-}
-
-struct hash *hashCompTypes(struct pfParse *program, 
-	struct dyString *dy, FILE *f)
-/* Create a hash full of compOutTypes. */
-{
-struct hash *hash = hashNew(0);
-rFillCompHash(f, hash, dy, program);
-return hash;
-}
-
-static void printTypeInfo(struct pfCompile *pfc, struct pfParse *program, 	
-	FILE *f)
-/* Print out info on types. */
+static struct hash *printTypeInfo(struct pfCompile *pfc, 
+	struct pfParse *program, FILE *f)
+/* Print out info on types. Return hash of compOutType. */
 {
 struct pfScope *scope;
 struct hash *compTypeHash;
@@ -905,7 +911,7 @@ fprintf(f, "int _pf_field_info_count = sizeof(_pf_field_info)/sizeof(_pf_field_i
 fprintf(f, "\n");
 
 dyStringFree(&dy);
-
+return compTypeHash;
 }
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
@@ -914,9 +920,10 @@ void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
 FILE *f = mustOpen(fileName, "w");
 struct pfParse *module;
 struct pfScope *scope;
+struct hash *compTypeHash;
 
 printPreamble(pfc, f);
-printTypeInfo(pfc, program, f);
+pfc->runTypeHash = printTypeInfo(pfc, program, f);
 
 for (module = program->children; module != NULL; module = module->next)
     {

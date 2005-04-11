@@ -1,6 +1,8 @@
 /* pfPreamble - this gets included at the start of
  * paraFlow-generated C code. */
 
+#include "../runtime/runType.h"
+
 struct string;
 struct array;
 struct list;
@@ -9,7 +11,8 @@ struct dir;
 struct var;
 struct pfType;
 
-typedef struct string *String;
+// typedef struct string *String;
+typedef char *String;
 typedef struct array *Array;
 typedef struct list *List;
 typedef struct tree *Tree;
@@ -43,8 +46,8 @@ union pfVarless
 
 struct var
     {
-    union pfVarless val;
-    struct pfType *type;
+    union pfVarless val;	/* Typeless value. */
+    int typeId;			/* Index in run time type table. */
     };
 
 struct array
@@ -78,7 +81,7 @@ typedef union pfStack PfStack;
 struct _pf_iterator
 /* Something to iterate over a collection */
     {
-    boolean (*next)(struct _pf_iterator *it, void *pItem);
+    int (*next)(struct _pf_iterator *it, void *pItem);
     	/* Get next item into *pItem.  Return FALSE if no more items.  */
     int i;	/* Iterator specific integer data. */
     void *pt;	/* Iterator specific pointer data. */

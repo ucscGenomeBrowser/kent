@@ -502,13 +502,13 @@ if (pp->type == pptConstUse)
 	if (pp->tok->type != pftInt && pp->tok->type != pftFloat)
 	    expectingGot("number", pp->tok);
 	}
-    pp->ty = pfTypeNew(base);
     if (base == pfc->varType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->varType);
 	insertCast(pptCastTypedToVar, tt, pPp);
 	pp = *pPp;
 	}
+    pp->ty = pfTypeNew(base);
     }
 else if (pt->base != base)
     {
