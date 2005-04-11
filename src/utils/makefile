@@ -33,6 +33,7 @@ clean:
 SCRIPT_FILES = \
 	blastz-make-joblist \
 	doBlastzChainNet.pl \
+	dumpGenbankGrepIndex \
         iSync \
         lodToBedScore \
 	partitionSequence.pl
