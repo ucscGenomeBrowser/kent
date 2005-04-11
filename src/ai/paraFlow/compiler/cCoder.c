@@ -447,6 +447,17 @@ switch (pp->type)
 	fprintf(f, " = (0 != ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ");");
+	return 0;
+    case pptCastTypedToVar:
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".val.%s = ", typeKey(pfc, pp->children->ty->base));
+	codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ";\n");
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".type = ");
+	fprintf(f, "???now what do I do???");
+	fprintf(f, ";\n");
+	return 0;
     default:
 	{
 	fprintf(f, "(%s expression)\n", pfParseTypeAsString(pp->type));
@@ -699,7 +710,7 @@ for (p = pp->children; p != NULL; p = p->next)
 
 /* Print out other statements */
 if (isModule)
-    fprintf(f, "void __init__(%s *%s)\n{\n", stackType, stackName);
+    fprintf(f, "void _pf_init(%s *%s)\n{\n", stackType, stackName);
 for (p = pp->children; p != NULL; p = p->next)
     {
     switch (p->type)
@@ -727,19 +738,51 @@ fputs(
 "int main(int argv, char *argc[])\n"
 "{\n"
 "static PfStack stack[4*1024];\n"
-"__init__(stack);\n"
+"_pf_init_types();\n"
+"_pf_init(stack);\n"
 "return 0;\n"
 "}\n", f);
 }
 
+static void printBaseVar(FILE *f, struct pfBaseType *base)
+/* Print out name of variable where we store base type. */
+{
+char *s, c;
+fprintf(f, "_pf_base_s%d_", base->scope->id);
+s = base->name;
+while ((c = *s++) != 0)
+    {
+    if (isalnum(c))
+        fputc(c, f);
+    else
+        fputc('_', f);
+    }
+}
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
 /* Generate C code for program. */
 {
 FILE *f = mustOpen(fileName, "w");
 struct pfParse *module;
+struct pfScope *scope;
 
 printPreamble(pfc, f);
+fprintf(f, "/* All base types */\n");
+for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
+    {
+    struct hashEl *hel, *helList = hashElListHash(scope->types);
+    slSort(&helList, hashElCmp);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	struct pfBaseType *base = hel->val;
+	fprintf(f, "Pf_base_type ");
+	printBaseVar(f, base);
+	fprintf(f, ";\n");
+	}
+    hashElFreeList(&helList);
+    }
+fprintf(f, "\n");
+
 for (module = program->children; module != NULL; module = module->next)
     {
     fprintf(f, "/* ParaFlow module %s */\n\n", module->name);

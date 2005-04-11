@@ -5,8 +5,11 @@
 #include "hash.h"
 #include "pfScope.h"
 #include "pfType.h"
+#include "pfCompile.h"
 
-struct pfScope *pfScopeNew(struct pfScope *parent, int size)
+
+struct pfScope *pfScopeNew(struct pfCompile *pfc, 
+	struct pfScope *parent, int size)
 /* Create new scope with given parent.  Size is just a hint
  * of what to make the size of the symbol table as a power of
  * two.  Pass in 0 if you don't care. */
@@ -14,6 +17,7 @@ struct pfScope *pfScopeNew(struct pfScope *parent, int size)
 struct pfScope *scope;
 int varSize = size;
 int typeSize;
+static int id;
 
 if (varSize <= 0)
     varSize = 5;
@@ -24,6 +28,8 @@ AllocVar(scope);
 scope->types = hashNew(typeSize);
 scope->vars = hashNew(varSize);
 scope->parent = parent;
+scope->id = ++id;
+slAddHead(&pfc->scopeList, scope);
 return scope;
 }
 

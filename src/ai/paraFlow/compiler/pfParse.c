@@ -339,7 +339,7 @@ for (child = pp->children; child != NULL; child = child->next)
 
 
 
-struct pfParse *pfParseStatement(struct pfParse *parent, 
+struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
 
 struct pfParse *pfParseExpression(struct pfParse *parent, 
@@ -1033,8 +1033,9 @@ struct pfParse *pfParseExpression(struct pfParse *parent,
 return parseTuple(parent, pTokList, scope);
 }
 
-static struct pfParse *parseCompound(struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseCompound(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse a compound statement (statement list surrounded
  * by brackets */
 {
@@ -1058,7 +1059,7 @@ for (;;)
 	tok = tok->next;
 	break;
 	}
-    statement = pfParseStatement(pp, &tok, scope);
+    statement = pfParseStatement(pfc, pp, &tok, scope);
     slAddHead(&pp->children, statement);
     }
 *pTokList = tok;
@@ -1066,14 +1067,15 @@ slReverse(&pp->children);
 return pp;
 }
 
-static struct pfParse *parseFunction(struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope, enum pfParseType type)
+static struct pfParse *parseFunction(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope, enum pfParseType type)
 /* Parse something (...) [into (...)] */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body;
-scope = pfScopeNew(scope, 0);
+scope = pfScopeNew(pfc, scope, 0);
 pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
@@ -1105,7 +1107,7 @@ if (tok->type == pftInto)
     }
 else
     output = emptyTuple(pp, tok, scope);
-body = parseCompound(pp, &tok, scope);
+body = parseCompound(pfc, pp, &tok, scope);
 
 input->type  = pptTypeTuple;
 output->type  = pptTypeTuple;
@@ -1118,31 +1120,31 @@ slAddHead(&pp->children, name);
 return pp;
 }
 
-static struct pfParse *parseTo(struct pfParse *parent,
+static struct pfParse *parseTo(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse to (...) [into (...)] */
 {
-return parseFunction(parent, pTokList, scope, pptToDec);
+return parseFunction(pfc, parent, pTokList, scope, pptToDec);
 }
 
-static struct pfParse *parsePara(struct pfParse *parent,
+static struct pfParse *parsePara(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse para (...) [into (...)] */
 {
-return parseFunction(parent, pTokList, scope, pptParaDec);
+return parseFunction(pfc, parent, pTokList, scope, pptParaDec);
 }
 
 
-static struct pfParse *parseFlow(struct pfParse *parent,
+static struct pfParse *parseFlow(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse flow (...) [into (...)] */
 {
-return parseFunction(parent, pTokList, scope, pptFlowDec);
+return parseFunction(pfc, parent, pTokList, scope, pptFlowDec);
 }
 
 
-static struct pfParse *parseClass(struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseClass(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Parse class declaration statement. */
 {
 struct pfToken *tok = *pTokList;
@@ -1153,7 +1155,7 @@ tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
 pp->name = name->name;
-body = parseCompound(pp, &tok, scope);
+body = parseCompound(pfc, pp, &tok, scope);
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, name);
 *pTokList = tok;
@@ -1161,7 +1163,7 @@ return pp;
 }
 
 
-static struct pfParse *parseIf(struct pfParse *parent,
+static struct pfParse *parseIf(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse if statement (which may include else) */
 {
@@ -1180,13 +1182,13 @@ if (tok->type != ')')
 tok = tok->next;
 
 /* Body */
-trueBody = pfParseStatement(pp, &tok, scope);
+trueBody = pfParseStatement(pfc, pp, &tok, scope);
 
 /* Else clause. */
 if (tok->type == pftElse)
     {
     tok = tok->next;
-    falseBody = pfParseStatement(pp, &tok, scope);
+    falseBody = pfParseStatement(pfc, pp, &tok, scope);
     }
 *pTokList = tok;
 
@@ -1196,7 +1198,7 @@ trueBody->next = falseBody;
 return pp;
 }
 
-static struct pfParse *parseWhile(struct pfParse *parent,
+static struct pfParse *parseWhile(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse if statement (which may include else) */
 {
@@ -1216,7 +1218,7 @@ if (tok->type != ')')
 tok = tok->next;
 
 /* Body */
-body = pfParseStatement(pp, &tok, scope);
+body = pfParseStatement(pfc, pp, &tok, scope);
 
 *pTokList = tok;
 
@@ -1226,8 +1228,8 @@ return pp;
 }
 
 
-static struct pfParse *parseForeach(struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseForeach(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Parse foreach statement */
 {
 struct pfToken *tok = *pTokList;
@@ -1236,13 +1238,13 @@ struct pfParse *element;
 struct pfParse *collection;
 struct pfParse *statement;
 
-scope = pfScopeNew(scope, 1);
+scope = pfScopeNew(pfc, scope, 1);
 pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 element = varUseOrDeclare(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = parseDottedNames(pp, &tok, scope);
-statement = pfParseStatement(pp, &tok, scope);
+statement = pfParseStatement(pfc, pp, &tok, scope);
 slAddHead(&pp->children, statement);
 slAddHead(&pp->children, collection);
 slAddHead(&pp->children, element);
@@ -1265,7 +1267,7 @@ eatSemi(&tok);
 return pp;
 }
 
-static struct pfParse *parseFor(struct pfParse *parent,
+static struct pfParse *parseFor(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse for statement */
 {
@@ -1276,7 +1278,7 @@ struct pfParse *check;
 struct pfParse *advance;
 struct pfParse *statement;
 
-scope = pfScopeNew(scope, 1);
+scope = pfScopeNew(pfc, scope, 1);
 pp = pfParseNew(pptFor, tok, parent, scope);
 tok = tok->next;	/* Skip over 'for' */
 if (tok->type != '(')
@@ -1296,7 +1298,7 @@ if (tok->type != ')')
 tok = tok->next;
 
 /* Get body of loop. */
-statement = pfParseStatement(pp, &tok, scope);
+statement = pfParseStatement(pfc, pp, &tok, scope);
 
 /* Hang various subparts of for statement onto children list. */
 slAddHead(&pp->children, statement);
@@ -1341,7 +1343,7 @@ static struct pfParse *parseReturn(struct pfParse *parent,
 return parseWordStatement(parent, pTokList, scope, pptReturn);
 }
 
-static struct pfParse *parseInto(struct pfParse *parent,
+static struct pfParse *parseInto(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse into statement */
 {
@@ -1355,7 +1357,7 @@ pp->children = parseDottedNames(pp, &tok, scope);
 return pp;
 }
 
-struct pfParse *pfParseStatement(struct pfParse *parent, 
+struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a single statement up to but not including semicolon,
  * and add results to (head) of
@@ -1367,26 +1369,26 @@ struct pfParse *statement;
 switch (tok->type)
     {
     case pftInto:
-        statement = parseInto(parent, &tok, scope);
+        statement = parseInto(pfc, parent, &tok, scope);
 	break;
     case ';':
 	statement = emptyStatement(parent, tok, scope);
 	tok = tok->next;
 	break;
     case '{':
-	statement = parseCompound(parent, &tok, scope);
+	statement = parseCompound(pfc, parent, &tok, scope);
 	break;
     case pftIf:
-        statement = parseIf(parent, &tok, scope);
+        statement = parseIf(pfc, parent, &tok, scope);
 	break;
     case pftWhile:
-        statement = parseWhile(parent, &tok, scope);
+        statement = parseWhile(pfc, parent, &tok, scope);
 	break;
     case pftForeach:
-	statement = parseForeach(parent, &tok, scope);
+	statement = parseForeach(pfc, parent, &tok, scope);
 	break;
     case pftFor:
-	statement = parseFor(parent, &tok, scope);
+	statement = parseFor(pfc, parent, &tok, scope);
 	break;
     case pftBreak:
     	statement = parseBreak(parent, &tok, scope);
@@ -1398,16 +1400,16 @@ switch (tok->type)
     	statement = parseReturn(parent, &tok, scope);
 	break;
     case pftClass:
-	statement = parseClass(parent, &tok, scope);
+	statement = parseClass(pfc, parent, &tok, scope);
 	break;
     case pftTo:
-	statement = parseTo(parent, &tok, scope);
+	statement = parseTo(pfc, parent, &tok, scope);
 	break;
     case pftPara:
-	statement = parsePara(parent, &tok, scope);
+	statement = parsePara(pfc, parent, &tok, scope);
 	break;
     case pftFlow:
-	statement = parseFlow(parent, &tok, scope);
+	statement = parseFlow(pfc, parent, &tok, scope);
 	break;
     case pftName:
     case '(':
@@ -1424,7 +1426,8 @@ return statement;
 }
 
 
-static struct pfParse *pfParseTokens(struct pfToken *tokList, struct pfScope *scope,
+static struct pfParse *pfParseTokens(struct pfCompile *pfc,
+	struct pfToken *tokList, struct pfScope *scope,
 	struct pfParse *program)
 /* Convert token list to parsed program. */
 {
@@ -1432,7 +1435,7 @@ struct pfToken *tok = tokList;
 
 while (tok->type != pftEnd)
     {
-    struct pfParse *statement = pfParseStatement(program, &tok, scope);
+    struct pfParse *statement = pfParseStatement(pfc, program, &tok, scope);
     slAddHead(&program->children, statement);
     }
 slReverse(&program->children);
@@ -1470,7 +1473,7 @@ struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc,
 struct pfTokenizer *tkz = pfc->tkz;
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfScope *scope = pfScopeNew(pfc->scope, 16);
+struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16);
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, fileName);
 
@@ -1483,7 +1486,7 @@ while ((tok = pfTokenizerNext(tkz)) != NULL)
     slAddHead(&tokList, tok);
     if (tok->type == '{')
         {
-	scope = pfScopeNew(scope, 0);
+	scope = pfScopeNew(pfc, scope, 0);
 	tok->val.scope = scope;
 	}
     else if (tok->type == '}')
@@ -1506,7 +1509,7 @@ while (--endCount >= 0)
 slReverse(&tokList);
 
 addClasses(tokList, scope);
-pfParseTokens(tokList, scope, modParse);
+pfParseTokens(pfc, tokList, scope, modParse);
 return modParse;
 }
 
@@ -1644,6 +1647,9 @@ struct pfParse *pp = pfParseFile(fileName, pfc, program);
 expandInto(program, pfc, pp);
 slAddHead(&program->children, pp);
 slReverse(&program->children);
+
+/* Restore order of scopes. */
+slReverse(&pfc->scopeList);
 
 /* Tidy up the parse tree a bit. */
 varDecAndAssignToVarInit(program);

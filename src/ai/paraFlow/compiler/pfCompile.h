@@ -29,6 +29,7 @@ struct pfCompile
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
     struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
+    struct pfScope *scopeList;	/* List of all scopes. */
 
     /* Some called out types parser needs to know about. */
     struct pfBaseType *varType;		/* Base tyhpe for all variables/functions */

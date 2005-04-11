@@ -91,7 +91,7 @@ switch (pp->type)
 	if (name == NULL)
 	    name = "";
         spaceOut(f, 2*level);
-	fprintf(f, "scope %s %s: ", 
+	fprintf(f, "scope %d %s %s: ", pp->scope->id,
 		pfParseTypeAsString(pp->type), name);
 	pfScopeDump(pp->scope, f);
 	fprintf(f, "\n");
@@ -162,7 +162,7 @@ AllocVar(pfc);
 pfc->baseFile = cloneString(fileName);
 pfc->modules = hashNew(0);
 pfc->reservedWords = createReservedWords();
-pfc->scope = pfScopeNew(NULL, 8);
+pfc->scope = pfScopeNew(pfc, NULL, 8);
 addBuiltInTypes(pfc);
 addBuiltInFunctions(pfc);
 pfc->tkz = pfTokenizerNew(fileName, pfc->reservedWords);
