@@ -288,7 +288,7 @@ switch (tok->type)
 	memcpy(buf, s, len);
 	buf[len] = 0;
 	strcpy(buf+MAXLEN, "...");
-	fprintf(f, "\"%s\"", buf);
+	printEscapedString(f, buf);
 	break;
 	#undef MAXLEN
 	}

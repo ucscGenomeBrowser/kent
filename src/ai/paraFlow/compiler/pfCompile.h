@@ -63,6 +63,9 @@ struct pfCompile
 struct pfCompile *pfCompileNew(char *fileName);
 /* Create new pfCompile.  */
 
+/* --- utility functions --- */
+void printEscapedString(FILE *f, char *s);
+/* Print string in such a way that C can use it. */
 
 #endif /* PFCOMPILE_H */
 

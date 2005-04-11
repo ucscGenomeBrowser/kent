@@ -113,12 +113,31 @@ else
     errAt(pp->tok, "Type mismatch: expecting %s.", type->base->name);
 }
 
+static enum pfParseType pftFromTokType(struct pfToken *tok)
+/* Return pptConstXXX corresponding to tok->type */
+{
+switch (tok->type)
+    {
+    case pftInt:
+	return pptConstInt;
+    case pftFloat:
+	return pptConstDouble;
+    case pftString:
+	return pptConstString;
+    default:
+	internalErrAt(tok);
+	return 0;
+    }
+}
+
 static void enforceNumber(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure type of pp is numberic. */
 {
 if (pp->ty->base != pfc->varType)
     if (pp->ty->base->parent != pfc->numType)
 	expectingGot("number", pp->tok);
+if (pp->type == pptConstUse)
+    pp->type = pftFromTokType(pp->tok);
 }
 
 static void enforceInt(struct pfCompile *pfc, struct pfParse *pp)
@@ -453,21 +472,7 @@ if (pp->type == pptConstUse)
 	pp->type = pptConstString;
     else if (base == pfc->varType)
 	{
-	switch (pp->tok->type)
-	    {
-	    case pftInt:
-		pp->type = pptConstInt;
-		break;
-	    case pftFloat:
-		pp->type = pptConstDouble;
-		break;
-	    case pftString:
-		pp->type = pptConstString;
-		break;
-	    default:
-		internalErrAt(pp->tok);
-		break;
-	    }
+	pp->type = pftFromTokType(pp->tok);
 	}
     else if (base->isCollection)
 	{

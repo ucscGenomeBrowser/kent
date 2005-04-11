@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-O = cCoder.o main.o pfBindVars.o pfCheck.o pfParse.o pfScope.o pfToken.o pfType.o
+O = cCoder.o main.o pfBindVars.o pfCheck.o pfParse.o pfScope.o pfToken.o pfType.o util.o
 
 paraFlow: $(O)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/paraFlow $O ../../../lib/$(MACHTYPE)/jkweb.a -lm

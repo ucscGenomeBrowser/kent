@@ -322,51 +322,19 @@ fprintf(f, ";\n");
 return 1;
 }
 
-static void printEscapedString(FILE *f, char *s)
-/* Print string in such a way that C can use it. */
+static int codeUnaryOp(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, char *op)
+/* Emit code for some sort of unary op. */
 {
-char c;
-fputc('"', f);
-while ((c = *s++) != 0)
-    {
-    switch (c)
-        {
-	case '\a':
-	    fputs("\\a", f);
-	    break;
-	case '\b':
-	    fputs("\\b", f);
-	    break;
-	case '\f':
-	    fputs("\\f", f);
-	    break;
-	case '\n':
-	    fputs("\\n", f);
-	    break;
-	case '\r':
-	    fputs("\\r", f);
-	    break;
-	case '\t':
-	    fputs("\\t", f);
-	    break;
-	case '\v':
-	    fputs("\\t", f);
-	    break;
-	case '\?':
-	    fputs("\\?", f);
-	    break;
-	case '\\':
-	    fputs("\\\\", f);
-	    break;
-	case '"':
-	    fputs("\\\"", f);
-	    break;
-	default:
-	    fputc(c, f);
-	    break;
-	}
-    }
-fputc('"', f);
+struct pfParse *child = pp->children;
+struct pfBaseType *base = child->ty->base;
+codeExpression(pfc, f, child, stack);
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, " = ");
+fprintf(f, "%s", op);
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, ";\n");
+return 1;
 }
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
@@ -431,6 +399,12 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "&");
     case pptBitOr:
         return codeBinaryOp(pfc, f, pp, stack, "|");
+    case pptNegate:
+         return codeUnaryOp(pfc, f, pp, stack, "-");
+    case pptFlipBits:
+         return codeUnaryOp(pfc, f, pp, stack, "~");
+    case pptNot:
+         return codeUnaryOp(pfc, f, pp, stack, "!");
     case pptConstBit:
     case pptConstByte:
     case pptConstShort:
