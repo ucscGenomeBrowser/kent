@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "axtInfo.h"
 
-static char const rcsid[] = "$Id: axtInfo.c,v 1.4 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: axtInfo.c,v 1.5 2005/04/11 08:13:43 markd Exp $";
 
 void axtInfoStaticLoad(char **row, struct axtInfo *ret)
 /* Load a row from axtInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 strcpy(ret->species, row[0]);
 strcpy(ret->alignment, row[1]);
@@ -28,8 +26,6 @@ struct axtInfo *axtInfoLoad(char **row)
  * from database.  Dispose of this with axtInfoFree(). */
 {
 struct axtInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 strcpy(ret->species, row[0]);
@@ -88,7 +84,6 @@ struct axtInfo *axtInfoCommaIn(char **pS, struct axtInfo *ret)
  * return a new axtInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -128,7 +123,6 @@ for (el = *pList; el != NULL; el = next)
 void axtInfoOutput(struct axtInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out axtInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->species);
 if (sep == ',') fputc('"',f);

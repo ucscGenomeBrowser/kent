@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "bdgpGeneInfo.h"
 
-static char const rcsid[] = "$Id: bdgpGeneInfo.c,v 1.1 2003/10/09 01:28:06 angie Exp $";
+static char const rcsid[] = "$Id: bdgpGeneInfo.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void bdgpGeneInfoStaticLoad(char **row, struct bdgpGeneInfo *ret)
 /* Load a row from bdgpGeneInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->bdgpName = row[0];
 ret->flyBaseId = row[1];
@@ -30,8 +28,6 @@ struct bdgpGeneInfo *bdgpGeneInfoLoad(char **row)
  * from database.  Dispose of this with bdgpGeneInfoFree(). */
 {
 struct bdgpGeneInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->bdgpName = cloneString(row[0]);
@@ -85,7 +81,6 @@ struct bdgpGeneInfo *bdgpGeneInfoCommaIn(char **pS, struct bdgpGeneInfo *ret)
  * return a new bdgpGeneInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -131,7 +126,6 @@ for (el = *pList; el != NULL; el = next)
 void bdgpGeneInfoOutput(struct bdgpGeneInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out bdgpGeneInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->bdgpName);
 if (sep == ',') fputc('"',f);

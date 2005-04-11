@@ -7,14 +7,12 @@
 #include "jksql.h"
 #include "ancientRref.h"
 
-static char const rcsid[] = "$Id: ancientRref.c,v 1.3 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: ancientRref.c,v 1.4 2005/04/11 08:13:43 markd Exp $";
 
 void ancientRrefStaticLoad(char **row, struct ancientRref *ret)
 /* Load a row from ancientRref table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->id = row[0];
 ret->name = row[1];
@@ -29,8 +27,6 @@ struct ancientRref *ancientRrefLoad(char **row)
  * from database.  Dispose of this with ancientRrefFree(). */
 {
 struct ancientRref *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->id = cloneString(row[0]);
@@ -66,7 +62,6 @@ struct ancientRref *ancientRrefCommaIn(char **pS, struct ancientRref *ret)
  * return a new ancientRref */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -112,7 +107,6 @@ for (el = *pList; el != NULL; el = next)
 void ancientRrefOutput(struct ancientRref *el, FILE *f, char sep, char lastSep) 
 /* Print out ancientRref.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);

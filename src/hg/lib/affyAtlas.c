@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "affyAtlas.h"
 
-static char const rcsid[] = "$Id: affyAtlas.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: affyAtlas.c,v 1.3 2005/04/11 08:13:42 markd Exp $";
 
 void affyAtlasStaticLoad(char **row, struct affyAtlas *ret)
 /* Load a row from affyAtlas table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->annName = row[0];
 ret->probeSet = row[1];
 ret->signal = atof(row[2]);
@@ -30,8 +27,6 @@ struct affyAtlas *affyAtlasLoad(char **row)
  * from database.  Dispose of this with affyAtlasFree(). */
 {
 struct affyAtlas *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->annName = cloneString(row[0]);
@@ -131,7 +126,6 @@ struct affyAtlas *affyAtlasCommaIn(char **pS, struct affyAtlas *ret)
  * return a new affyAtlas */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -174,7 +168,6 @@ for (el = *pList; el != NULL; el = next)
 void affyAtlasOutput(struct affyAtlas *el, FILE *f, char sep, char lastSep) 
 /* Print out affyAtlas.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->annName);
 if (sep == ',') fputc('"',f);

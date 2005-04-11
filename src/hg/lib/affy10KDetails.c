@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "affy10KDetails.h"
 
-static char const rcsid[] = "$Id: affy10KDetails.c,v 1.1 2003/12/06 16:16:27 daryl Exp $";
+static char const rcsid[] = "$Id: affy10KDetails.c,v 1.2 2005/04/11 08:13:42 markd Exp $";
 
 void affy10KDetailsStaticLoad(char **row, struct affy10KDetails *ret)
 /* Load a row from affy10KDetails table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->affyId = row[0];
 ret->rsId = row[1];
 ret->tscId = row[2];
@@ -32,8 +29,6 @@ struct affy10KDetails *affy10KDetailsLoad(char **row)
  * from database.  Dispose of this with affy10KDetailsFree(). */
 {
 struct affy10KDetails *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->affyId = cloneString(row[0]);
@@ -161,7 +156,6 @@ struct affy10KDetails *affy10KDetailsCommaIn(char **pS, struct affy10KDetails *r
  * return a new affy10KDetails */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -206,7 +200,6 @@ for (el = *pList; el != NULL; el = next)
 void affy10KDetailsOutput(struct affy10KDetails *el, FILE *f, char sep, char lastSep) 
 /* Print out affy10KDetails.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->affyId);
 if (sep == ',') fputc('"',f);

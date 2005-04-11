@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "affyOffset.h"
 
-static char const rcsid[] = "$Id: affyOffset.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: affyOffset.c,v 1.3 2005/04/11 08:13:42 markd Exp $";
 
 void affyOffsetStaticLoad(char **row, struct affyOffset *ret)
 /* Load a row from affyOffset table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->piece = row[0];
 ret->tStart = sqlUnsigned(row[1]);
 }
@@ -26,8 +23,6 @@ struct affyOffset *affyOffsetLoad(char **row)
  * from database.  Dispose of this with affyOffsetFree(). */
 {
 struct affyOffset *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->piece = cloneString(row[0]);
@@ -59,7 +54,6 @@ struct affyOffset *affyOffsetCommaIn(char **pS, struct affyOffset *ret)
  * return a new affyOffset */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -96,7 +90,6 @@ for (el = *pList; el != NULL; el = next)
 void affyOffsetOutput(struct affyOffset *el, FILE *f, char sep, char lastSep) 
 /* Print out affyOffset.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->piece);
 if (sep == ',') fputc('"',f);

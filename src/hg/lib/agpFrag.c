@@ -7,15 +7,12 @@
 #include "agpFrag.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: agpFrag.c,v 1.7 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: agpFrag.c,v 1.8 2005/04/11 08:13:43 markd Exp $";
 
 void agpFragStaticLoad(char **row, struct agpFrag *ret)
 /* Load a row from agpFrag table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -32,8 +29,6 @@ struct agpFrag *agpFragLoad(char **row)
  * from database.  Dispose of this with agpFragFree(). */
 {
 struct agpFrag *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -54,7 +49,6 @@ struct agpFrag *agpFragCommaIn(char **pS, struct agpFrag *ret)
  * return a new agpFrag */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -99,7 +93,6 @@ for (el = *pList; el != NULL; el = next)
 void agpFragOutput(struct agpFrag *el, FILE *f, char sep, char lastSep) 
 /* Print out agpFrag.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
@@ -154,13 +147,8 @@ struct agpFrag *agpFragLoadAllNotGaps(char *fileName)
 {
 struct agpFrag *list = NULL, *el=NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[32];
 char *words[32];
-char *line = NULL;
-int lineSize = 1024;
 int wordCount = 0;
-int lineWCount = 0;
-int count =0;
 
 /* Check to make sure there is something in the file. */
 wordCount = lineFileChop(lf, words);

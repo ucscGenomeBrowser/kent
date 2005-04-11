@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: agp.c,v 1.1 2004/09/07 17:42:54 kate Exp $";
+static char const rcsid[] = "$Id: agp.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void agpAddAll(char *agpFile, struct hash *agpHash)
 /* add AGP entries from a file into a hash of AGP lists */
@@ -76,11 +76,11 @@ struct hash *agpHash = newHash(0);
 struct lineFile *lf = lineFileOpen(agpFile, TRUE);
 char *words[9];
 int lastPos = 0;
-int wordCount, lineSize;
+int wordCount;
 struct agpFrag *agpFrag;
 struct agpGap *agpGap;
 char *chrom;
-struct agp *agpList, *agp;
+struct agp *agp;
 struct hashEl *hel;
 
 while ((wordCount = lineFileChopNext(lf, words, ArraySize(words))) != 0)
@@ -131,7 +131,7 @@ struct hashEl *hel;
 cookie = hashFirst(agpHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    struct agp *agpList, *agp;
+    struct agp *agpList;
     agpList = (struct agp *)hel->val;
     /*
     for (agp = agpList; agp != NULL; agp = agp->next)
@@ -149,7 +149,7 @@ struct hashEl *hel;
 cookie = hashFirst(agpHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    struct agp *agpList, *agp;
+    struct agp *agpList;
     slReverse(&hel->val);
     agpList = hel->val;
     /*

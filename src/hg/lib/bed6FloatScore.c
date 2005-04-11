@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "bed6FloatScore.h"
 
-static char const rcsid[] = "$Id: bed6FloatScore.c,v 1.1 2004/05/26 22:36:32 angie Exp $";
+static char const rcsid[] = "$Id: bed6FloatScore.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void bed6FloatScoreStaticLoad(char **row, struct bed6FloatScore *ret)
 /* Load a row from bed6FloatScore table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct bed6FloatScore *bed6FloatScoreLoad(char **row)
  * from database.  Dispose of this with bed6FloatScoreFree(). */
 {
 struct bed6FloatScore *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -85,7 +81,6 @@ struct bed6FloatScore *bed6FloatScoreCommaIn(char **pS, struct bed6FloatScore *r
  * return a new bed6FloatScore */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -127,7 +122,6 @@ for (el = *pList; el != NULL; el = next)
 void bed6FloatScoreOutput(struct bed6FloatScore *el, FILE *f, char sep, char lastSep) 
 /* Print out bed6FloatScore.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

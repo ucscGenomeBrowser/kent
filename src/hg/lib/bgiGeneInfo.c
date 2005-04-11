@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "bgiGeneInfo.h"
 
-static char const rcsid[] = "$Id: bgiGeneInfo.c,v 1.2 2004/03/19 03:35:39 angie Exp $";
+static char const rcsid[] = "$Id: bgiGeneInfo.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
 
 void bgiGeneInfoStaticLoad(char **row, struct bgiGeneInfo *ret)
 /* Load a row from bgiGeneInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->name = row[0];
 ret->source = row[1];
 ret->go = row[2];
@@ -28,8 +25,6 @@ struct bgiGeneInfo *bgiGeneInfoLoad(char **row)
  * from database.  Dispose of this with bgiGeneInfoFree(). */
 {
 struct bgiGeneInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -81,7 +76,6 @@ struct bgiGeneInfo *bgiGeneInfoCommaIn(char **pS, struct bgiGeneInfo *ret)
  * return a new bgiGeneInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -123,7 +117,6 @@ for (el = *pList; el != NULL; el = next)
 void bgiGeneInfoOutput(struct bgiGeneInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out bgiGeneInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

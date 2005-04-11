@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: bdgpExprLink.c,v 1.1 2003/11/27 00:08:29 angie Exp $";
+static char const rcsid[] = "$Id: bdgpExprLink.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void bdgpExprLinkStaticLoad(char **row, struct bdgpExprLink *ret)
 /* Load a row from bdgpExprLink table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->symbol = row[0];
 ret->bdgpName = row[1];
 ret->flyBaseId = row[2];
@@ -33,8 +30,6 @@ struct bdgpExprLink *bdgpExprLinkLoad(char **row)
  * from database.  Dispose of this with bdgpExprLinkFree(). */
 {
 struct bdgpExprLink *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->symbol = cloneString(row[0]);
@@ -91,7 +86,6 @@ struct bdgpExprLink *bdgpExprLinkCommaIn(char **pS, struct bdgpExprLink *ret)
  * return a new bdgpExprLink */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -139,7 +133,6 @@ for (el = *pList; el != NULL; el = next)
 void bdgpExprLinkOutput(struct bdgpExprLink *el, FILE *f, char sep, char lastSep) 
 /* Print out bdgpExprLink.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->symbol);
 if (sep == ',') fputc('"',f);

@@ -9,15 +9,14 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: altGraph.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: altGraph.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
 
 struct altGraph *altGraphLoad(char **row)
 /* Load a altGraph from row fetched with select * from altGraph
  * from database.  Dispose of this with altGraphFree(). */
 {
 struct altGraph *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->vertexCount = sqlUnsigned(row[5]);
@@ -342,14 +341,13 @@ else
 int altGraphNumAltSplices(struct altGraph *ag)
 /* Count number of times that exons have more than one edge through them */
 {
-int count=0; 
 int pathCount=0;
 int i=0;
 int vertexCount = ag->vertexCount;
 bool **em;
 
 /* construct the edge matrix */
-em = AllocArray(em, vertexCount);
+AllocArray(em, vertexCount);
 for (i=0; i<vertexCount; ++i)
     {
     AllocArray(em[i], vertexCount);

@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "affyPairs.h"
 
-static char const rcsid[] = "$Id: affyPairs.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: affyPairs.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
 
 void affyPairsStaticLoad(char **row, struct affyPairs *ret)
 /* Load a row from affyPairs table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->x = sqlUnsigned(row[0]);
 ret->y = sqlUnsigned(row[1]);
 ret->probeSet = row[2];
@@ -36,8 +33,6 @@ struct affyPairs *affyPairsLoad(char **row)
  * from database.  Dispose of this with affyPairsFree(). */
 {
 struct affyPairs *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->x = sqlUnsigned(row[0]);
@@ -80,7 +75,6 @@ struct affyPairs *affyPairsCommaIn(char **pS, struct affyPairs *ret)
  * return a new affyPairs */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -128,7 +122,6 @@ for (el = *pList; el != NULL; el = next)
 void affyPairsOutput(struct affyPairs *el, FILE *f, char sep, char lastSep) 
 /* Print out affyPairs.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->x);
 fputc(sep,f);
 fprintf(f, "%u", el->y);

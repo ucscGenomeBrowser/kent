@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "bgiGeneSnp.h"
 
-static char const rcsid[] = "$Id: bgiGeneSnp.c,v 1.1 2004/03/19 03:35:39 angie Exp $";
+static char const rcsid[] = "$Id: bgiGeneSnp.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
 
 void bgiGeneSnpStaticLoad(char **row, struct bgiGeneSnp *ret)
 /* Load a row from bgiGeneSnp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->geneName = row[0];
 ret->snpName = row[1];
 ret->geneAssoc = row[2];
@@ -30,8 +27,6 @@ struct bgiGeneSnp *bgiGeneSnpLoad(char **row)
  * from database.  Dispose of this with bgiGeneSnpFree(). */
 {
 struct bgiGeneSnp *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneName = cloneString(row[0]);
@@ -85,7 +80,6 @@ struct bgiGeneSnp *bgiGeneSnpCommaIn(char **pS, struct bgiGeneSnp *ret)
  * return a new bgiGeneSnp */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -130,7 +124,6 @@ for (el = *pList; el != NULL; el = next)
 void bgiGeneSnpOutput(struct bgiGeneSnp *el, FILE *f, char sep, char lastSep) 
 /* Print out bgiGeneSnp.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneName);
 if (sep == ',') fputc('"',f);

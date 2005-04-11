@@ -8,15 +8,12 @@
 #include "jksql.h"
 #include "bactigPos.h"
 
-static char const rcsid[] = "$Id: bactigPos.c,v 1.2 2003/05/06 07:22:20 kate Exp $";
+static char const rcsid[] = "$Id: bactigPos.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
 
 void bactigPosStaticLoad(char **row, struct bactigPos *ret)
 /* Load a row from bactigPos table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -30,8 +27,6 @@ struct bactigPos *bactigPosLoad(char **row)
  * from database.  Dispose of this with bactigPosFree(). */
 {
 struct bactigPos *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -67,7 +62,6 @@ struct bactigPos *bactigPosCommaIn(char **pS, struct bactigPos *ret)
  * return a new bactigPos */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -111,7 +105,6 @@ for (el = *pList; el != NULL; el = next)
 void bactigPosOutput(struct bactigPos *el, FILE *f, char sep, char lastSep) 
 /* Print out bactigPos.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

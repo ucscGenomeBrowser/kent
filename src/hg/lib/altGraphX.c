@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.28 2005/03/12 01:20:24 sugnet Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.29 2005/04/11 08:13:43 markd Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -343,7 +343,7 @@ void altGraphXFree(struct altGraphX **pEl)
  * with altGraphXLoad(). */
 {
 struct altGraphX *el;
-int i;
+
 if ((el = *pEl) == NULL) return;
 freeMem(el->tName);
 freeMem(el->name);
@@ -579,15 +579,14 @@ else
 int altGraphXNumAltSplices(struct altGraphX *ag)
 /* Count number of times that exons have more than one edge through them */
 {
-int count=0; 
 int pathCount=0;
 int i=0;
 int vertexCount = ag->vertexCount;
 bool **em;    /* edge matrix */
 bool *seen;  /* has this edge been seen? */
 /* construct the edge matrix */
-em = AllocArray(em, vertexCount);
-seen = AllocArray(seen, vertexCount);
+AllocArray(em, vertexCount);
+AllocArray(seen, vertexCount);
 for (i=0; i<vertexCount; ++i)
     {
     em[i] = AllocArray(em[i], vertexCount);
@@ -659,7 +658,7 @@ static void agDfsTopo(bool **em, int vertex, int *colors, int *topo,
 	int numVert, int *topoNum)
 /* recursive depth first search routine for topological sort */
 {
-int i,j;
+int i;
 colors[vertex] = agGray;
 for(i =0; i<numVert; i++)
     if(em[vertex][i] && colors[i] == agWhite)
@@ -709,7 +708,6 @@ void altGraphXArrangeVertsByOrder(struct altGraphX *ag, int *translator)
  * edges */
 {
 struct evidence ***agEv = NULL;
-struct evidence *ev = NULL, *evNext = NULL;
 int *sEdgeStarts = NULL;
 int *sEdgeEnds = NULL;
 unsigned char *sVTypes = NULL;
@@ -806,7 +804,7 @@ void altGraphXVertPosSort(struct altGraphX *ag)
 {
 struct agVertSortable **pAvg = NULL;
 struct agVertSortable *avg = NULL;
-int i,j;
+int i;
 int *translator = NULL;
 int vertCount = ag->vertexCount;
 assert(vertCount > 0);
@@ -846,7 +844,7 @@ int *topo = NULL;
 int topoNum = 0;
 int vertCount = ag->vertexCount;
 bool **em = NULL;
-int i,j;
+int i;
 /* allocate memeory and initialize */
 assert(vertCount > 0);
 AllocArray(colors, vertCount);
@@ -1060,9 +1058,8 @@ struct bed *altGraphXToBed(struct altGraphX *ag)
 int *bases = NULL;
 int baseCount =  ag->tEnd - ag->tStart +1;
 struct bed *bed = NULL;
-int i=0, j=0, k=0;
+int i=0, k=0;
 int offSet = ag->tStart;
-int vCount = ag->vertexCount;
 int *vPos = ag->vPositions;
 int start = 0;
 int width = 0;
@@ -1149,7 +1146,6 @@ int eStart =0, eEnd = 0;
 int *intStartEdges = NULL, *intEndEdges =NULL, *altEdges = NULL;
 int intStartCount = 0, intEndCount =0, altCount =0;
 int i,j,k;
-int conf = 0;
 int eCount = ag->edgeCount;
 struct bed *bedList = NULL;
 AllocArray(intStartEdges, ag->edgeCount);
@@ -1475,7 +1471,6 @@ static int findBestMidPoint(int s, int e, struct spaceSaver *ss, struct spliceEd
 {
 int midWay = (s+e)/2;
 int currentPos = midWay;
-int i=0,offSet=0;
 boolean found = FALSE;
 struct spaceNode *sn = NULL;
 int step = max(1,(e - s)/10);
@@ -1558,11 +1553,10 @@ void altGraphXLayoutEdges(struct spliceEdge *egList, struct altGraphX *ag, int s
 /* Layout a list of edges to minimize overlap.  */
 {
 struct spliceEdge *eg = NULL, *egNext = NULL;
-struct spaceNode *sn = NULL;
 struct spaceSaver *ss = NULL;
 int width = round((seqEnd - seqStart)*scale);
 char keyBuff[1024];
-int start, end, height;
+int start, end;
 bool *vSeen = NULL; /* Have we seen a given vertex yet? */
 int maxCells = 0;
 AllocArray(vSeen, ag->vertexCount);
@@ -1636,11 +1630,7 @@ void altGraphXLayout(struct altGraphX *agList, int seqStart, int seqEnd,
     required to layout. */
 {
 struct altGraphX *ag = NULL;
-struct spaceSaver *ss = NULL;
-struct spliceEdge *egList = NULL, *eg = NULL, *egNext = NULL;
-struct spaceNode *sn = NULL;
-char keyBuff[1024];
-int start, end, height;
+struct spliceEdge *egList = NULL;
 int agCount = 0;
 *heightHash = newHash(8);
 /* For every item */
@@ -1664,9 +1654,7 @@ void altGraphXDrawPack(struct altGraphX *agList, struct spaceSaver *ssList,
     exons don't overlap as they have been laid out in the spaceSaver
     list. */
 {
-char key[128];
 struct altGraphX *ag = NULL;
-struct spliceEdge *eg = NULL, *egList = NULL, *egNext = NULL;
 struct spaceSaver *ss = NULL;
 int count =0;
 int i=0,j=0, minRow=0;
@@ -1691,10 +1679,6 @@ for(ss = ssList, ag=agList; ss != NULL && ag != NULL; ss=ss->next, ag=ag->next)
 	struct spliceEdge *se = sn->val;
 	if(se->type == ggExon)
 	    {
-	    int s = se->start;
-	    int e = se->end;
-	    int x1 = round((s - seqStart)*scale) + xOff;
-	    int x2 = round((e - seqStart)*scale) + xOff;	
 	    y = yOff + (lineHeight * sn->row) + (lineHeight/2);
 	    drawExonAt(se, heightPer, seqStart, seqEnd,
 		       vg, xOff, y, scale, font, color, shades);
@@ -1785,7 +1769,6 @@ void altGraphXEnlargeExons(struct altGraphX *ag)
 bool **em = altGraphXCreateEdgeMatrix(ag);
 int i,j,k;
 int maxIntron=0;
-char *vTypes = ag->vTypes;
 int *vPos = ag->vPositions;
 int minExon = BIGNUM;
 int increment = 0;
@@ -2050,12 +2033,7 @@ boolean agxIsCassette(struct altGraphX *ag, bool **em,  int vs, int ve1, int ve2
 {
 unsigned char *vTypes = ag->vTypes;
 int i=0;
-struct altGraphX *subAg = NULL;
-int vCount = ag->vertexCount;
 int numAltVerts = 4;
-int *vPos = ag->vPositions;
-int *starts = ag->edgeStarts;
-int *ends = ag->edgeEnds;
 /* Quick check. */
 if(vTypes[vs] != ggHardEnd || vTypes[ve1] != ggHardStart || vTypes[ve2] != ggHardStart)
     return FALSE;
@@ -2250,7 +2228,6 @@ static struct altGraphX *agxCopyIndividualComponents(struct altGraphX *agx, int 
    may be mrnaRefs, tissues and libs that aren't used as all of them
    are copied for each graph. */
 {
-int vertIx = 0;
 int i = 0;
 struct altGraphX *agxNew = NULL, *agxList = NULL;
 int compIx = 0;
@@ -2382,7 +2359,6 @@ int **adjList = NULL;   /* Adjacency list. */
 int *adjCounts = NULL;  /* Number of vertices in the adj list. */
 int *vColors = NULL;     /* Colors of vertices. */
 int *vComponents = NULL; /* Component each vertice is in. */
-unsigned char *vTypes = agx->vTypes;  /* Convenience variable. */
 int *vPos = agx->vPositions; /* Convenience variable. */
 int *starts = agx->edgeStarts;
 int *ends = agx->edgeEnds;
