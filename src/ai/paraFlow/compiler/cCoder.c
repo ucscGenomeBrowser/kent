@@ -427,6 +427,10 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "<");
     case pptLessOrEquals:
         return codeBinaryOp(pfc, f, pp, stack, "<=");
+    case pptBitAnd:
+        return codeBinaryOp(pfc, f, pp, stack, "&");
+    case pptBitOr:
+        return codeBinaryOp(pfc, f, pp, stack, "|");
     case pptConstBit:
     case pptConstByte:
     case pptConstShort:
@@ -563,7 +567,7 @@ boolean isArray = (base == pfc->arrayType);
 
 /* Print element variable in a new scope. */
 fprintf(f, "{\n");
-codeScopeVars(pfc, f, foreach);
+codeScopeVars(pfc, f, foreach->scope);
 
 /* Also print some iteration stuff. */
 if (isArray)
@@ -589,8 +593,7 @@ else
 fprintf(f, "}\n");
 }
 
-static void codeFor(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp)
+static void codeFor(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Emit C code for for statement. */
 {
 struct pfParse *init = pp->children;
@@ -611,6 +614,43 @@ codeStatement(pfc, f, body);
 codeStatement(pfc, f, next);
 fprintf(f, "}\n");
 fprintf(f, "}\n");
+}
+
+static void codeWhile(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Emit C code for while statement. */
+{
+struct pfParse *end = pp->children;
+struct pfParse *body = end->next;
+fprintf(f, "for(;;)\n");
+fprintf(f, "{\n");
+codeExpression(pfc, f, end, 0);
+fprintf(f, "if (!");
+codeParamAccess(pfc, f, pfc->bitType, 0);
+fprintf(f, ") break;\n");
+codeStatement(pfc, f, body);
+fprintf(f, "}\n");
+}
+
+static void codeIf(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Emit C code for for statement. */
+{
+struct pfParse *cond = pp->children;
+struct pfParse *trueBody = cond->next;
+struct pfParse *falseBody = trueBody->next;
+codeExpression(pfc, f, cond, 0);
+fprintf(f, "if (");
+codeParamAccess(pfc, f, pfc->bitType, 0);
+fprintf(f, ")\n");
+fprintf(f, "{\n");
+codeStatement(pfc, f, trueBody);
+fprintf(f, "}\n");
+if (falseBody != NULL)
+    {
+    fprintf(f, "else\n");
+    fprintf(f, "{\n");
+    codeStatement(pfc, f, falseBody);
+    fprintf(f, "}\n");
+    }
 }
 
 static void codeStatement(struct pfCompile *pfc, FILE *f,
@@ -655,6 +695,12 @@ switch (pp->type)
 	break;
     case pptFor:
 	codeFor(pfc, f, pp);
+	break;
+    case pptWhile:
+        codeWhile(pfc, f, pp);
+	break;
+    case pptIf:
+        codeIf(pfc, f, pp);
 	break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
