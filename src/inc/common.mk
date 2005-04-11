@@ -1,6 +1,5 @@
 CC=gcc
-COPT=-g
-#COPT=-O3
+COPT=-O
 CFLAGS=
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
 HG_WARN=-Wformat -Wimplicit -Wuninitialized -Wreturn-type
@@ -13,7 +12,7 @@ HG_WARN_ERR = -DJK_WARN -Wall -Werror
 SCRIPTS=/cluster/bin/scripts
 CGI_BIN=/usr/local/apache/cgi-bin
 MKDIR=mkdir -p
-STRIP=true
+STRIP=strip
 CVS=cvs
 
 # portable naming of compiled executables: add ".exe" if compiled on 
