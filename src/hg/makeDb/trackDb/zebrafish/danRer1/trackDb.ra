@@ -99,15 +99,6 @@ priority 80
 visibility hide
 type psl .
 
-track wz_ests
-shortLabel Zfish WZ EST Clusters
-longLabel $Organism WZ EST Clusters from Washington University
-group rna
-priority 58
-visibility hide
-spectrum on
-type psl est
-
 track uniGene_dr
 shortLabel UniGene
 longLabel $Organism UniGene Alignments
