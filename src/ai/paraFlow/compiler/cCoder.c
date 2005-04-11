@@ -788,6 +788,15 @@ if (type->children != NULL)
     }
 }
 
+struct compOutType *compTypeLookup(struct hash *hash, struct dyString *dy,
+	struct pfType *type)
+/* Find compOutTYpe that corresponds to type in hash */
+{
+dyStringClear(dy);
+encodeType(type, dy);
+return hashMustFindVal(hash, dy->string);
+}
+
 static void rFillCompHash(FILE *f,
 	struct hash *hash, struct dyString *dy, struct pfParse *pp)
 /* Fill in hash with uniq types. */
@@ -811,13 +820,12 @@ if (pp->ty)
     }
 }
 
-struct hash *hashCompTypes(struct pfParse *program, FILE *f)
+struct hash *hashCompTypes(struct pfParse *program, 
+	struct dyString *dy, FILE *f)
 /* Create a hash full of compOutTypes. */
 {
 struct hash *hash = hashNew(0);
-struct dyString *dy = dyStringNew(0);
 rFillCompHash(f, hash, dy, program);
-dyStringFree(&dy);
 return hash;
 }
 
@@ -827,6 +835,7 @@ static void printTypeInfo(struct pfCompile *pfc, struct pfParse *program,
 {
 struct pfScope *scope;
 struct hash *compTypeHash;
+struct dyString *dy = dyStringNew(0);
 
 
 fprintf(f, "/* All base types */\n");
@@ -841,8 +850,8 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
         {
 	struct pfBaseType *base = hel->val;
 	fprintf(f, "%d, ", base->id);
-	fprintf(f, "%d, ", scopeId);
-	fprintf(f, "\"%s\", ", base->name);
+	fprintf(f, "\"%d:", scopeId);
+	fprintf(f, "%s\", ", base->name);
 	if (base->parent == NULL)
 	    fprintf(f, "0, ");
 	else
@@ -854,7 +863,40 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 fprintf(f, "\n");
 
 fprintf(f, "/* All composed types */\n");
-compTypeHash = hashCompTypes(program, f);
+compTypeHash = hashCompTypes(program, dy, f);
+fprintf(f, "\n");
+
+fprintf(f, "/* All field lists. */\n");
+for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
+    {
+    struct hashEl *hel, *helList = hashElListHash(scope->types);
+    int scopeId = scope->id;
+    slSort(&helList, hashElCmp);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	struct pfBaseType *base = hel->val;
+	if (base->isClass)
+	    {
+	    struct pfType *field;
+	    fprintf(f, "%d, ", base->id);
+	    fprintf(f, "\"");
+	    for (field = base->fields; field != NULL; field = field->next)
+	        {
+		struct compOutType *cot = compTypeLookup(compTypeHash, dy, field);
+		fprintf(f, "%d:%s", cot->id, field->fieldName);
+		if (field->next != NULL)
+		    fprintf(f, ",");
+		}
+	    fprintf(f, "\"");
+	    fprintf(f, "\n");
+	    }
+	}
+    hashElFreeList(&helList);
+    }
+fprintf(f, "\n");
+
+dyStringFree(&dy);
+
 }
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
