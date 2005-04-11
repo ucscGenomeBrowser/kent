@@ -28,7 +28,7 @@ array->elType = elTypeId;
 return array;
 }
 
-_pf_Array _pf_bit_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -44,7 +44,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_byte_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_byte_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -60,7 +60,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_short_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_short_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -76,7 +76,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_int_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_int_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -92,7 +92,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_long_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_long_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -108,7 +108,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_float_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_float_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -124,7 +124,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_double_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_double_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -140,7 +140,7 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_string_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_string_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
@@ -157,7 +157,7 @@ return array;
 }
 
 #ifdef TEMPLATE
-_pf_Array _pf_xyz_array_from_tuple(PfStack *stack, int count, 
+_pf_Array _pf_xyz_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {

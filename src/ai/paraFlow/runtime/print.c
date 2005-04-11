@@ -3,7 +3,7 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
-void print(PfStack *stack)
+void print(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];

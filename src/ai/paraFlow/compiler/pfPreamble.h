@@ -52,7 +52,7 @@ struct _pf_var
     int typeId;			/* Index in run time type table. */
     };
 
-union pfStack
+union _pf_stack
 /* All the types a variable can take including the
  * typeless 'var' type. */
     {
@@ -71,7 +71,7 @@ union pfStack
     void *v;
     _pf_Var Var;
     };
-typedef union pfStack PfStack;
+typedef union _pf_stack _pf_Stack;
 
 struct _pf_iterator
 /* Something to iterate over a collection */
@@ -89,4 +89,4 @@ Pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
 #include "../runtime/initVar.h"
 
-void print(PfStack *stack);
+void print(_pf_Stack *stack);

@@ -81,8 +81,8 @@ else
     fprintf(f, "_pf_%s", s);
 }
 
-static char *stackName = "pfStack";
-static char *stackType = "PfStack";
+static char *stackName = "_pf_stack";
+static char *stackType = "_pf_Stack";
 
 static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base, int offset)
@@ -887,7 +887,7 @@ fputs(
 "\n"
 "int main(int argv, char *argc[])\n"
 "{\n"
-"static PfStack stack[4*1024];\n"
+"static _pf_Stack stack[4*1024];\n"
 "_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
 "               _pf_type_info, _pf_type_info_count,\n"
 "               _pf_field_info, _pf_field_info_count);\n"
