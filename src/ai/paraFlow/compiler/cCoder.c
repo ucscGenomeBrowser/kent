@@ -738,7 +738,9 @@ fputs(
 "int main(int argv, char *argc[])\n"
 "{\n"
 "static PfStack stack[4*1024];\n"
-"_pf_init_types();\n"
+"_pf_type_list = _pf_init_types(_pf_base_info, _pf_base_info_count,\n"
+"                               _pf_type_info, _pf_type_info_count,\n"
+"                               _pf_field_info, _pf_field_info_count);\n"
 "_pf_init(stack);\n"
 "return 0;\n"
 "}\n", f);
@@ -773,8 +775,9 @@ static int cotId = 0;
 static void encodeType(struct pfType *type, struct dyString *dy)
 /* Encode type recursively into dy. */
 {
-dyStringPrintf(dy, "%d:", type->base->scope->id);
-dyStringAppend(dy, type->base->name);
+// dyStringPrintf(dy, "%d:", type->base->scope->id);
+// dyStringAppend(dy, type->base->name);
+dyStringPrintf(dy, "%d", type->base->id);
 if (type->children != NULL)
     {
     dyStringAppendC(dy, '(');
@@ -815,7 +818,7 @@ if (pp->ty)
 	hashAddSaveName(hash, dy->string, cot, &cot->code);
 	cot->id = ++cotId;
 	cot->type = pp->ty;
-	fprintf(f, "%d, \"%s\"\n", cot->id, cot->code);
+	fprintf(f, "  %d, \"%s\"\n", cot->id, cot->code);
 	}
     }
 }
@@ -840,7 +843,7 @@ struct dyString *dy = dyStringNew(0);
 
 fprintf(f, "/* All base types */\n");
 
-fprintf(f, "int _pf_base_type_count = %d;\n", pfBaseTypeCount());
+fprintf(f, "struct _pf_base_info _pf_base_info[] = {\n");
 for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
     {
     struct hashEl *hel, *helList = hashElListHash(scope->types);
@@ -849,24 +852,28 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
     for (hel = helList; hel != NULL; hel = hel->next)
         {
 	struct pfBaseType *base = hel->val;
-	fprintf(f, "%d, ", base->id);
+	fprintf(f, "  {%d, ", base->id);
 	fprintf(f, "\"%d:", scopeId);
 	fprintf(f, "%s\", ", base->name);
 	if (base->parent == NULL)
 	    fprintf(f, "0, ");
 	else
 	    fprintf(f, "%d, ", base->parent->id);
-	fprintf(f, "\n");
+	fprintf(f, "},\n");
 	}
     hashElFreeList(&helList);
     }
-fprintf(f, "\n");
+fprintf(f, "};\n");
+fprintf(f, "int _pf_base_info_count = %d;\n\n", pfBaseTypeCount());
 
 fprintf(f, "/* All composed types */\n");
+fprintf(f, "struct _pf_type_info _pf_type_info[] = {\n");
 compTypeHash = hashCompTypes(program, dy, f);
-fprintf(f, "\n");
+fprintf(f, "};\n");
+fprintf(f, "int _pf_type_info_count = sizeof(_pf_type_info)/sizeof(_pf_type_info[0]);\n\n");
 
 fprintf(f, "/* All field lists. */\n");
+fprintf(f, "struct _pf_field_info _pf_field_info[] = {\n");
 for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
     {
     struct hashEl *hel, *helList = hashElListHash(scope->types);
@@ -878,7 +885,7 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 	if (base->isClass)
 	    {
 	    struct pfType *field;
-	    fprintf(f, "%d, ", base->id);
+	    fprintf(f, "  %d, ", base->id);
 	    fprintf(f, "\"");
 	    for (field = base->fields; field != NULL; field = field->next)
 	        {
@@ -893,6 +900,8 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 	}
     hashElFreeList(&helList);
     }
+fprintf(f, "};\n");
+fprintf(f, "int _pf_field_info_count = sizeof(_pf_field_info)/sizeof(_pf_field_info[0]);\n\n");
 fprintf(f, "\n");
 
 dyStringFree(&dy);
