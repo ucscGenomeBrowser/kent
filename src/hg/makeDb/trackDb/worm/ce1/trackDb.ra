@@ -50,15 +50,6 @@ spectrum on
 type psl xeno
 otherDb cb1
 
-track refGene
-shortLabel RefSeq Genes
-longLabel RefSeq Genes
-group genes
-priority 35
-visibility pack
-color 12,12,120
-type genePred refPep refMrna
-
 track blastzCb1
 shortLabel Briggsae Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz 
