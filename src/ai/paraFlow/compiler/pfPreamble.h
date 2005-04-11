@@ -14,10 +14,10 @@ struct _pf_var;
 // typedef struct string *String;
 typedef char *_pf_String;
 typedef struct _pf_array *_pf_Array;
-typedef struct list *_pf_List;
-typedef struct tree *_pf_Tree;
-typedef struct dir *_pf_Dir;
-typedef struct var _pf_Var;
+typedef struct _pf_list *_pf_List;
+typedef struct _pf_tree *_pf_Tree;
+typedef struct _pf_dir *_pf_Dir;
+typedef struct _pf_var _pf_Var;
 
 typedef char _pf_Bit;
 typedef unsigned char _pf_Byte;
@@ -27,7 +27,7 @@ typedef long long _pf_Long;
 typedef float _pf_Float;
 typedef double _pf_Double;
 
-union pfVarless
+union _pf_varless
 /* All the types a variable can take except the
  * typeless 'var' type. */
     {
@@ -46,9 +46,9 @@ union pfVarless
     void *v;
     };
 
-struct var
+struct _pf_var
     {
-    union pfVarless val;	/* Typeless value. */
+    union _pf_varless val;	/* Typeless value. */
     int typeId;			/* Index in run time type table. */
     };
 

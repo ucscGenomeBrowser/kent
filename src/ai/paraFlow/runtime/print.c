@@ -8,7 +8,7 @@ void print(PfStack *stack)
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];
 struct _pf_base *base = type->base;
-union pfVarless val = stack->Var.val;
+union _pf_varless val = stack->Var.val;
 FILE *f = stdout;
 switch (base->singleType)
     {
