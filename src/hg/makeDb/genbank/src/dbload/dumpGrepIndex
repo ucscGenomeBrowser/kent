@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/dumpGenbankGrepIndex instead.
 
-# $Id: dumpGrepIndex,v 1.1 2005/04/11 22:03:19 angie Exp $
+# $Id: dumpGrepIndex,v 1.2 2005/04/11 22:14:44 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -48,5 +48,8 @@ foreach my $db ( @dbs ) {
 	       "| hgsql -N $db  > $rawDir/$table.idName");
     &run($cmd);
   }
+  my $cmd = ("echo select mrnaAcc,product from refLink " .
+	     "| hgsql -N $db  > $rawDir/refLink.mrnaAccProduct");
+  &run($cmd);
 }
 
