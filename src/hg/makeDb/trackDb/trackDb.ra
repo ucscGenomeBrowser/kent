@@ -2022,7 +2022,7 @@ searchName refLink
 searchTable refGene
 searchType refGene
 searchPriority 2
-grepIndex refLinkGrep/refLink.mrnaAccProduct
+grepIndex genbankGrep/refLink.mrnaAccProduct
 
 searchTable xenoRefGene
 searchType refGene
