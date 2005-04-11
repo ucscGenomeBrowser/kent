@@ -129,4 +129,4 @@ Dir _pf_double_dir_from_tuple(PfStack *stack, int count);
 Dir _pf_string_dir_from_tuple(PfStack *stack, int count);
 Dir _pf_class_dir_from_tuple(PfStack *stack, int count);
 
-void print(Var v);
+void print(PfStack *stack);

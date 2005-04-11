@@ -148,6 +148,7 @@ struct pfType *inTuple = pfTypeNew(pfc->tupleType);
 struct pfType *outTuple = pfTypeNew(pfc->tupleType);
 struct pfType *varType = pfTypeNew(pfc->varType);
 toType->children = inTuple;
+toType->isFunction = TRUE;
 inTuple->next = outTuple;
 inTuple->children = varType;
 pfScopeAddVar(scope, "print", toType, NULL);
