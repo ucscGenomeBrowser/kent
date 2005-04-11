@@ -1,4 +1,4 @@
-table ccdsGeneMap
+table ccdsMgcMap
 "mapping between CCDS ids and MGC genes by similarity"
     (
     string ccdsId;        "CCDS id with version "
