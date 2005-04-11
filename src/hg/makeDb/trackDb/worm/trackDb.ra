@@ -8,6 +8,16 @@ spectrum on
 type rmsk
 canPack off
 
+track refGene
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+group genes
+priority 35
+visibility pack
+color 12,12,120
+type genePred refPep refMrna
+
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
