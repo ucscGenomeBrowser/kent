@@ -1,5 +1,5 @@
 
-object person
+class person
 // Various ways to refer to a person
     {
     string firstName;

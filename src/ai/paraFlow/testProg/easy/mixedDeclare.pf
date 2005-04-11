@@ -1,2 +1,2 @@
-string a,b="hi",c,int n,m
+string a,b="hi",c,int n,m;
 

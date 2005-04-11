@@ -9,7 +9,7 @@ class creature
         {
 	array of string names = latinName.split();
 	int upToGenus = names.size() - 1;
-	for (int i=0; i<upToGenus; ++i)
+	for (int i=0; i<upToGenus; i += 1)
 	    {
 	    if (i != 0)
 	        cladeToGenus += " ";

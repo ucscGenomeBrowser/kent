@@ -7,7 +7,7 @@ float x,y,z;
 float k;
 short i,j;
 short index;
-byte b,c;
+byte bb,cc;
 byte flags;
 long longA, longB;
 var v;

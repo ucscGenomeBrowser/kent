@@ -11,5 +11,5 @@ tree of string bt;
 
 int px;
 
-tree of float tracker, wacker
+tree of float tracker, wacker;
 

@@ -8,7 +8,7 @@ float x = 1, y = 1.0, z = -2.04879;
 float k = -5.0e3;
 short i = 1, j = -200;
 short index = 100000;
-byte b = 9, c = 'a';
+byte bb = 9, cc = 8;
 byte flags = 1;
 long longA = 123456123456, longB = -0xABCDEF1234;
 var vString = "Hiya";

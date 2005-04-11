@@ -1,4 +1,4 @@
-
-foreach el in list
+list of var list;
+foreach var el in list
     {
     }

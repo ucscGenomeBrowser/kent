@@ -2,16 +2,16 @@ int a,b=1;
 string s;
 
 if (b >= 0)
-    s = '+'
+    s = '+';
 else
-    s = '-'
+    s = '-';
 
 if (b > 0)
-    s = '+'
+    s = '+';
 else if (b < 0)
-    s = '-'
+    s = '-';
 else
-    s = '?'
+    s = '?';
 
 if (b != 0)
     {
