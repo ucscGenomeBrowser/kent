@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.870 2005/04/10 17:44:59 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.871 2005/04/11 17:17:06 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14343,18 +14343,28 @@ if (sameString("blastDm1FB", tdb->tableName))
 buffer = needMem(strlen(itemName)+ 1);
 strcpy(buffer, itemName);
 acc = buffer;
-if ((blastRef != NULL) && (hTableExists(blastRef)))
+if (blastRef != NULL) 
     {
-    if ((ptr = strchr(acc, '.')))
-	*ptr = 0;
-    safef(query, sizeof(query), "select geneId, extra1, refPos from %s where acc = '%s'", blastRef, acc);
-    sr = sqlGetResult(conn, query);
-    if ((row = sqlNextRow(sr)) != NULL)
+    char *thisDb = cloneString(blastRef);
+    char *table;
+
+    if ((table = strchr(thisDb, '.')) != NULL)
 	{
-	useName = row[0];
-	prot = row[1];
-	pos = row[2];
-	}
+	*table++ = 0;
+	if (hTableExistsDb(thisDb, table))
+	    {
+	    if ((ptr = strchr(acc, '.')))
+		*ptr = 0;
+	    safef(query, sizeof(query), "select geneId, extra1, refPos from %s where acc = '%s'", blastRef, acc);
+	    sr = sqlGetResult(conn, query);
+	    if ((row = sqlNextRow(sr)) != NULL)
+		{
+		useName = row[0];
+		prot = row[1];
+		pos = row[2];
+		}
+	    }
+    	}
     }
 else if ((pos = strchr(acc, '.')) != NULL)
     {
