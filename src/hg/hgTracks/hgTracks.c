@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.946 2005/04/10 20:59:23 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.947 2005/04/11 16:52:39 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3139,6 +3139,7 @@ char sprotName[64];
 char posName[64];
 char *blastRef;
 char *buffer;
+char *table = NULL;
 
 safef(geneName, sizeof(geneName), "%s.geneLabel", tg->tdb->tableName);
 safef(accName, sizeof(accName), "%s.accLabel", tg->tdb->tableName);
@@ -3150,77 +3151,86 @@ useSprot= cartUsualBoolean(cart, sprotName, FALSE);
 usePos= cartUsualBoolean(cart, posName, FALSE);
 blastRef = trackDbSettingOrDefault(tg->tdb, "blastRef", NULL);
 
-if ((blastRef != NULL) && (hTableExists(blastRef)))
+if (blastRef != NULL) 
     {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    struct sqlConnection *conn = hAllocConn();
-    boolean added = FALSE;
-    char *ptr;
-	
-    for (lf = tg->items; lf != NULL; lf = lf->next)
+    char *thisDb = cloneString(blastRef);
+
+    if ((table = strchr(thisDb, '.')) != NULL)
 	{
-	added = FALSE;
-	
-	buffer = needMem(strlen(lf->name) + 1);
-	strcpy(buffer, lf->name);
-	if ((char *)NULL != (ptr = strchr(buffer, '.')))
-	    *ptr = 0;
-	if (!sameString("blastDm1FB", tg->tdb->tableName))
-	    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
-	else
-	    safef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
-	sr = sqlGetResult(conn, query);
-	if ((row = sqlNextRow(sr)) != NULL)
+	*table++ = 0;
+	if (hTableExistsDb(thisDb, table))
 	    {
-	    lf->extra = needMem(strlen(lf->name) + strlen(row[0])+ strlen(row[1])+ strlen(row[2]) + 1);
-	    if (useGene)
+	    char query[256];
+	    struct sqlResult *sr;
+	    char **row;
+	    struct sqlConnection *conn = hAllocConn();
+	    boolean added = FALSE;
+	    char *ptr;
+		
+	    for (lf = tg->items; lf != NULL; lf = lf->next)
 		{
-		added = TRUE;
-		strcat(lf->extra, row[0]);
-		}
-	    if (useAcc )
-		{
-		if (added)
-		    strcat(lf->extra, "/");
-		added = TRUE;
-		strcat(lf->extra, lf->name);
-		}
-	    if (useSprot)
-		{
-		char *alias = uniProtFindPrimAcc(row[2]);
-
-		if (added)
-		    strcat(lf->extra, "/");
-		added = TRUE;
-		if (alias != NULL)
-		    strcat(lf->extra, alias);
+		added = FALSE;
+		
+		buffer = needMem(strlen(lf->name) + 1);
+		strcpy(buffer, lf->name);
+		if ((char *)NULL != (ptr = strchr(buffer, '.')))
+		    *ptr = 0;
+		if (!sameString("blastDm1FB", tg->tdb->tableName))
+		    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
 		else
-		    strcat(lf->extra, row[2]);
-		}
-	    if (usePos)
-		{
-		char *startPos = strchr(row[1], ':');
-		char *dash = strchr(row[1], '-');
-
-		if ((startPos != NULL) && (dash != NULL))
+		    safef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
+		sr = sqlGetResult(conn, query);
+		if ((row = sqlNextRow(sr)) != NULL)
 		    {
-		    *startPos++ = 0;
-		    dash -= 3; /* divide by 1000 */
-		    *dash = 0;
-		    if (added)
-			strcat(lf->extra, "/");
-		    strcat(lf->extra, row[1]);
-		    strcat(lf->extra, " ");
-		    strcat(lf->extra, startPos);
-		    strcat(lf->extra, "k");
+		    lf->extra = needMem(strlen(lf->name) + strlen(row[0])+ strlen(row[1])+ strlen(row[2]) + 1);
+		    if (useGene)
+			{
+			added = TRUE;
+			strcat(lf->extra, row[0]);
+			}
+		    if (useAcc )
+			{
+			if (added)
+			    strcat(lf->extra, "/");
+			added = TRUE;
+			strcat(lf->extra, lf->name);
+			}
+		    if (useSprot)
+			{
+			char *alias = uniProtFindPrimAcc(row[2]);
+
+			if (added)
+			    strcat(lf->extra, "/");
+			added = TRUE;
+			if (alias != NULL)
+			    strcat(lf->extra, alias);
+			else
+			    strcat(lf->extra, row[2]);
+			}
+		    if (usePos)
+			{
+			char *startPos = strchr(row[1], ':');
+			char *dash = strchr(row[1], '-');
+
+			if ((startPos != NULL) && (dash != NULL))
+			    {
+			    *startPos++ = 0;
+			    dash -= 3; /* divide by 1000 */
+			    *dash = 0;
+			    if (added)
+				strcat(lf->extra, "/");
+			    strcat(lf->extra, row[1]);
+			    strcat(lf->extra, " ");
+			    strcat(lf->extra, startPos);
+			    strcat(lf->extra, "k");
+			    }
+			}
 		    }
+		sqlFreeResult(&sr);
 		}
+	    hFreeConn(&conn);
 	    }
-	sqlFreeResult(&sr);
 	}
-    hFreeConn(&conn);
     }
 else
     for (lf = tg->items; lf != NULL; lf = lf->next)
