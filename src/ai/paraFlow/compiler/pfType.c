@@ -8,6 +8,14 @@
 #include "pfCompile.h"
 #include "pfType.h"
 
+static int baseTypeCount = 0;
+
+int pfBaseTypeCount()
+/* Return base type count. */
+{
+return baseTypeCount;
+}
+
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parent)
 /* Create new base type. */
@@ -22,6 +30,7 @@ if (parent != NULL)
 base->name = cloneString(name);
 base->scope = scope;
 base->isCollection = isCollection;
+base->id = ++baseTypeCount;
 return base;
 }
 

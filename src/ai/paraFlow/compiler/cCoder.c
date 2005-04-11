@@ -759,6 +759,104 @@ while ((c = *s++) != 0)
     }
 }
 
+struct compOutType
+/* Composite output type. */
+    {
+    struct compOutType *next;	/* Next in list. */
+    char *code;		/* number:name and parenthesis code. */
+    int id;		/* Unique id. */
+    struct pfType *type;	/* Unpacked version of type */
+    };
+
+static int cotId = 0;
+
+static void encodeType(struct pfType *type, struct dyString *dy)
+/* Encode type recursively into dy. */
+{
+dyStringPrintf(dy, "%d:", type->base->scope->id);
+dyStringAppend(dy, type->base->name);
+if (type->children != NULL)
+    {
+    dyStringAppendC(dy, '(');
+    for (type = type->children; type != NULL; type = type->next)
+        {
+	encodeType(type, dy);
+	if (type->next != NULL)
+	    dyStringAppendC(dy, ',');
+	}
+    dyStringAppendC(dy, ')');
+    }
+}
+
+static void rFillCompHash(FILE *f,
+	struct hash *hash, struct dyString *dy, struct pfParse *pp)
+/* Fill in hash with uniq types. */
+{
+struct pfParse *p;
+for (p = pp->children; p != NULL; p = p->next)
+    rFillCompHash(f, hash, dy, p);
+if (pp->ty)
+    {
+    dyStringClear(dy);
+    encodeType(pp->ty, dy);
+    if (!hashLookup(hash, dy->string))
+        {
+	struct compOutType *cot;
+	AllocVar(cot);
+	hashAddSaveName(hash, dy->string, cot, &cot->code);
+	cot->id = ++cotId;
+	cot->type = pp->ty;
+	fprintf(f, "%d, \"%s\"\n", cot->id, cot->code);
+	}
+    }
+}
+
+struct hash *hashCompTypes(struct pfParse *program, FILE *f)
+/* Create a hash full of compOutTypes. */
+{
+struct hash *hash = hashNew(0);
+struct dyString *dy = dyStringNew(0);
+rFillCompHash(f, hash, dy, program);
+dyStringFree(&dy);
+return hash;
+}
+
+static void printTypeInfo(struct pfCompile *pfc, struct pfParse *program, 	
+	FILE *f)
+/* Print out info on types. */
+{
+struct pfScope *scope;
+struct hash *compTypeHash;
+
+
+fprintf(f, "/* All base types */\n");
+
+fprintf(f, "int _pf_base_type_count = %d;\n", pfBaseTypeCount());
+for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
+    {
+    struct hashEl *hel, *helList = hashElListHash(scope->types);
+    int scopeId = scope->id;
+    slSort(&helList, hashElCmp);
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	struct pfBaseType *base = hel->val;
+	fprintf(f, "%d, ", base->id);
+	fprintf(f, "%d, ", scopeId);
+	fprintf(f, "\"%s\", ", base->name);
+	if (base->parent == NULL)
+	    fprintf(f, "0, ");
+	else
+	    fprintf(f, "%d, ", base->parent->id);
+	fprintf(f, "\n");
+	}
+    hashElFreeList(&helList);
+    }
+fprintf(f, "\n");
+
+fprintf(f, "/* All composed types */\n");
+compTypeHash = hashCompTypes(program, f);
+}
+
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
 /* Generate C code for program. */
 {
@@ -767,21 +865,7 @@ struct pfParse *module;
 struct pfScope *scope;
 
 printPreamble(pfc, f);
-fprintf(f, "/* All base types */\n");
-for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
-    {
-    struct hashEl *hel, *helList = hashElListHash(scope->types);
-    slSort(&helList, hashElCmp);
-    for (hel = helList; hel != NULL; hel = hel->next)
-        {
-	struct pfBaseType *base = hel->val;
-	fprintf(f, "Pf_base_type ");
-	printBaseVar(f, base);
-	fprintf(f, ";\n");
-	}
-    hashElFreeList(&helList);
-    }
-fprintf(f, "\n");
+printTypeInfo(pfc, program, f);
 
 for (module = program->children; module != NULL; module = module->next)
     {

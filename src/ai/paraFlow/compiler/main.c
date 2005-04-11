@@ -110,13 +110,13 @@ struct pfScope *scope = pfc->scope;
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
 pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL);
-pfc->keyValType = pfScopeAddType(scope, "(keyVal)", FALSE, pfc->varType);
-pfc->streamType = pfScopeAddType(scope, "(stream)", FALSE, pfc->varType);
-pfc->numType = pfScopeAddType(scope, "(number)", FALSE, pfc->varType);
-pfc->collectionType = pfScopeAddType(scope, "(collection)", TRUE, pfc->varType);
-pfc->tupleType = pfScopeAddType(scope, "(tuple)", TRUE, pfc->collectionType);
-pfc->classType = pfScopeAddType(scope, "(class)", TRUE, pfc->collectionType);
-pfc->functionType = pfScopeAddType(scope, "(function)", TRUE, pfc->varType);
+pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType);
+pfc->streamType = pfScopeAddType(scope, "<stream>", FALSE, pfc->varType);
+pfc->numType = pfScopeAddType(scope, "<number>", FALSE, pfc->varType);
+pfc->collectionType = pfScopeAddType(scope, "<collection>", TRUE, pfc->varType);
+pfc->tupleType = pfScopeAddType(scope, "<tuple>", TRUE, pfc->collectionType);
+pfc->classType = pfScopeAddType(scope, "<class>", TRUE, pfc->collectionType);
+pfc->functionType = pfScopeAddType(scope, "<function>", TRUE, pfc->varType);
 pfc->toType = pfScopeAddType(scope, "to", TRUE, pfc->functionType);
 pfc->paraType = pfScopeAddType(scope, "para", TRUE, pfc->functionType);
 pfc->flowType = pfScopeAddType(scope, "flow", TRUE, pfc->functionType);

@@ -1443,7 +1443,8 @@ return program;
 }
 
 
-void addClasses(struct pfToken *tokList, struct pfScope *scope)
+static void addClasses(struct pfCompile *pfc, struct pfToken *tokList, 
+	struct pfScope *scope)
 /* Add types in classes to appropriate scope.  We do this as
  * a first pass to help disambiguate the grammar. */
 {
@@ -1460,7 +1461,7 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
 	tok = tok->next;
 	if (tok->type != pftName)
 	    expectingGot("class name", tok);
-	base = pfScopeAddType(scope, tok->val.s, FALSE, NULL);
+	base = pfScopeAddType(scope, tok->val.s, FALSE, pfc->classType);
 	base->isClass = TRUE;
 	}
     }
@@ -1508,7 +1509,7 @@ while (--endCount >= 0)
 
 slReverse(&tokList);
 
-addClasses(tokList, scope);
+addClasses(pfc, tokList, scope);
 pfParseTokens(pfc, tokList, scope, modParse);
 return modParse;
 }
