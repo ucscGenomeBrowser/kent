@@ -78,7 +78,7 @@ char *s = typeKey(pfc, base);
 if (s == NULL)
     fprintf(f, "struct %s*", base->name);
 else
-    fprintf(f, "%s", s);
+    fprintf(f, "_pf_%s", s);
 }
 
 static char *stackName = "pfStack";
@@ -155,6 +155,16 @@ struct compOutType *compTypeLookup(struct hash *hash, struct dyString *dy,
 dyStringClear(dy);
 encodeType(type, dy);
 return hashMustFindVal(hash, dy->string);
+}
+
+static int typeId(struct pfCompile *pfc, struct pfType *type)
+/* Return run time type ID associated with type */
+{
+struct dyString *dy = dyStringNew(256);
+struct compOutType *cot = compTypeLookup(pfc->runTypeHash, dy, type);
+int id = cot->id;
+dyStringFree(&dy);
+return id;
 }
 
 static void rFillCompHash(FILE *f,
@@ -263,8 +273,9 @@ else
     {
     name = "class";
     }
-fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d);\n", name, type->base->name,
-	stackName, stack, tupleSize);
+fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", name, type->base->name,
+	stackName, stack, tupleSize, typeId(pfc, type), 
+	typeId(pfc, type->children));
 }
 
 static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
@@ -297,6 +308,7 @@ switch (rval->type)
     {
     case pptUniformTuple:
 	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
+	lvalOffStack(pfc, f, lval, stack, "=");
         break;
     default:
 	lvalOffStack(pfc, f, lval, stack, "=");
@@ -504,17 +516,13 @@ switch (pp->type)
 	return 0;
     case pptCastTypedToVar:
 	{
-	struct dyString *dy = dyStringNew(0);
-	struct compOutType *cot = compTypeLookup(pfc->runTypeHash, dy,
-	     pp->children->ty);
 	codeExpression(pfc, f, pp->children, stack);
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".val.%s = ", typeKey(pfc, pp->children->ty->base));
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
         codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".typeId = %d;\n", cot->id);
-	dyStringFree(&dy);
+	fprintf(f, ".typeId = %d;\n", typeId(pfc, pp->children->ty));
 	return 0;
 	}
     default:
