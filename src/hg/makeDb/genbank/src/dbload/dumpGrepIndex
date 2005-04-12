@@ -1,9 +1,6 @@
 #!/usr/bin/env perl
 
-# DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/dumpGenbankGrepIndex instead.
-
-# $Id: dumpGrepIndex,v 1.4 2005/04/12 06:23:26 angie Exp $
+# $Id: dumpGrepIndex,v 1.5 2005/04/12 20:45:52 markd Exp $
 
 use Getopt::Long;
 use warnings;

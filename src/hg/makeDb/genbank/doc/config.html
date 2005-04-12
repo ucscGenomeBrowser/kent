@@ -24,6 +24,12 @@
     <LI> <CODE>cluster.rootDir</CODE> - root directory on cluster filesystems,
          either iserver or local file systems.
     <LI> <CODE>cluster.paraHub</CODE> - Host where parasol hub is running.
+    <LI> <CODE>grepIndex.genbank.default</CODE> - Create <EM>grepIndex</EM> files
+         for databases in the specified directory.  This value should
+         correspond to the value <CODE>grepIndex.genbank</CODE> in the
+         browser <CODE>hg.conf</CODE> file.  The <CODE>default</CODE> in this name
+         leaves open the possibility of per-server overrides of this
+         value, however this is not currently implemented.
     </UL>
     <H3>per-database configuration parameters</H3>
     Per-database configuration parameters start with the database name,
