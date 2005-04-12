@@ -12,10 +12,10 @@ CREATE TABLE knownGene (
   exonEnds longblob NOT NULL,			# Exon end positions
   proteinID varchar(40) NOT NULL default '',	# SWISS-PROT protein ID
   alignID varchar(8) NOT NULL default '',	# Unique identifier for each alignment	
-  KEY name (name(10)),
-  KEY chrom (chrom(12),txStart),
-  KEY chrom_2 (chrom(12),txEnd),
-  KEY protein (proteinID(12)),
+  KEY name (name(16)),
+  KEY chrom (chrom(16),txStart),
+  KEY chrom_2 (chrom(16),txEnd),
+  KEY protein (proteinID(16)),
   KEY align (alignID)
 ) TYPE=MyISAM;
 
