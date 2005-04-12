@@ -220,8 +220,104 @@ else
 return outCount;
 }
 
+static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
+	struct pfToken *tok, char *message)
+/* Print code for a run time error message. */
+{
+char *file;
+int line, col;
+pfSourcePos(tok->source, tok->text, &file, &line, &col);
+fprintf(f, "errAbort(\"\\nRun time error line %d col %d of %s: %s\");\n", 
+	line+1, col+1, file, message);
+}
+
+static int pushArrayIndexAndBoundsCheck(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Put collection and index on stack.  Check index is in range. 
+ * Return offset to index. */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *collection = pp->children;
+struct pfBaseType *colBase = collection->ty->base;
+struct pfParse *index = collection->next;
+
+/* Push array and index onto expression stack */
+int offset = codeExpression(pfc, f, collection, stack);
+codeExpression(pfc, f, index, stack+offset);
+
+/* Do bounds checking */
+fprintf(f, "if (");
+codeParamAccess(pfc, f, pfc->intType, stack+offset);
+fprintf(f, "< 0 || ");
+codeParamAccess(pfc, f, pfc->intType, stack+offset);
+fprintf(f, " >= ");
+codeParamAccess(pfc, f, pfc->arrayType, stack);
+fprintf(f, "->count)\n  ");
+codeRunTimeError(pfc, f, pp->tok, "array access out of bounds");
+return offset;
+}
+
+static void codeArrayAccess(struct pfCompile *pfc, FILE *f,
+	struct pfBaseType *base, int stack, int indexOffset)
+/* Print out code to access array (on either left or right
+ * side */
+{
+fprintf(f, "((");
+printType(pfc, f, base);
+fprintf(f, "*)(");
+codeParamAccess(pfc, f, pfc->arrayType, stack);
+fprintf(f, "->elements + %d * ",  base->size);
+codeParamAccess(pfc, f, pfc->intType, stack+indexOffset);
+fprintf(f, "))[0]");
+}
+
+static int codeIndexExpression(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for index expression (not on left side of
+ * assignment */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *collection = pp->children;
+struct pfBaseType *colBase = collection->ty->base;
+if (colBase == pfc->arrayType)
+    {
+    int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, stack);
+    codeParamAccess(pfc, f, outType->base, stack);
+    fprintf(f, " = ");
+    codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
+    fprintf(f, ";\n");
+    }
+else
+    {
+    fprintf(f, "(ugly coding index for something other than array)");
+    }
+return 1;
+}
+
+static void codeIndexLval(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, char *op, int expSize)
+/* Generate code for index expression  on left side of expression */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *collection = pp->children;
+struct pfBaseType *colBase = collection->ty->base;
+if (colBase == pfc->arrayType)
+    {
+    int emptyStack = stack + expSize;
+    int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
+    codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
+    fprintf(f, " %s ", op);
+    codeParamAccess(pfc, f, outType->base, stack);
+    fprintf(f, ";\n");
+    }
+else
+    {
+    fprintf(f, "(ugly coding index for something other than array)");
+    }
+}
+
 static int lvalOffStack(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack, char *op)
+	struct pfParse *pp, int stack, char *op, int expSize)
 /* Take an lval off of stack. */
 {
 switch (pp->type)
@@ -237,8 +333,13 @@ switch (pp->type)
 	int total = 0;
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
-	    total += lvalOffStack(pfc, f, p, stack+total, op);
+	    total += lvalOffStack(pfc, f, p, stack+total, op, expSize-total);
 	return total;
+	}
+    case pptIndex:
+        {
+	codeIndexLval(pfc, f, pp, stack, op, expSize);
+	return 1;
 	}
     default:
         fprintf(f, "using %s %s as an lval\n", pp->name, pfParseTypeAsString(pp->type));
@@ -252,8 +353,9 @@ static int codeAssignment(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
-codeExpression(pfc, f, rval, stack);
-lvalOffStack(pfc, f, lval, stack, op);
+int eStart = stack, eEnd;
+int expSize = codeExpression(pfc, f, rval, stack);
+lvalOffStack(pfc, f, lval, stack, op, expSize);
 return 0;
 }
 
@@ -308,66 +410,12 @@ switch (rval->type)
     {
     case pptUniformTuple:
 	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
-	lvalOffStack(pfc, f, lval, stack, "=");
+	lvalOffStack(pfc, f, lval, stack, "=", 1);
         break;
     default:
-	lvalOffStack(pfc, f, lval, stack, "=");
+	lvalOffStack(pfc, f, lval, stack, "=", 1);
 	break;
     }
-}
-
-static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
-	struct pfToken *tok, char *message)
-/* Print code for a run time error message. */
-{
-char *file;
-int line, col;
-pfSourcePos(tok->source, tok->text, &file, &line, &col);
-fprintf(f, "errAbort(\"\\nRun time error line %d col %d of %s: %s\");\n", 
-	line+1, col+1, file, message);
-}
-	
-static int codeIndexExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
-/* Generate code for index expression (not on left side of
- * assignment */
-{
-struct pfType *outType = pp->ty;
-struct pfParse *collection = pp->children;
-struct pfBaseType *colBase = collection->ty->base;
-struct pfParse *index = collection->next;
-
-if (colBase == pfc->arrayType)
-    {
-    int offset = codeExpression(pfc, f, collection, stack);
-    codeExpression(pfc, f, index, stack+offset);
-    fprintf(f, "if (");
-    codeParamAccess(pfc, f, pfc->intType, stack+offset);
-    fprintf(f, "< 0 || ");
-    codeParamAccess(pfc, f, pfc->intType, stack+offset);
-    fprintf(f, " >= ");
-    codeParamAccess(pfc, f, pfc->arrayType, stack);
-    fprintf(f, "->count) ");
-    codeRunTimeError(pfc, f, pp->tok, "array access out of bounds");
-
-    fprintf(f, "{");
-    printType(pfc, f, outType->base);
-    fprintf(f, "*_pf_ix_help = (");
-    printType(pfc, f, outType->base);
-    fprintf(f, "*)(");
-    codeParamAccess(pfc, f, pfc->arrayType, stack);
-    fprintf(f, "->elements + %d * ",  outType->base->size);
-    codeParamAccess(pfc, f, pfc->intType, stack+offset);
-    fprintf(f, "); ");
-    codeParamAccess(pfc, f, outType->base, stack);
-    fprintf(f, " = _pf_ix_help[0];");
-    fprintf(f, "}\n");
-    }
-else
-    {
-    fprintf(f, "(ugly coding index for something other than array)");
-    }
-return 1;
 }
 
 	
