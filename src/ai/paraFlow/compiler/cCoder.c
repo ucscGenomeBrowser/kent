@@ -86,6 +86,19 @@ else
 static char *stackName = "_pf_stack";
 static char *stackType = "_pf_Stack";
 
+static void codeStackAccess(FILE *f, int offset)
+/* Print out code to access stack at offset. */
+{
+fprintf(f, "%s[%d]", stackName, offset);
+}
+
+static void codeStackFieldAccess(FILE *f, char *field, int offset)
+/* Code access to field on stack at offset. */
+{
+codeStackAccess(f, offset);
+fprintf(f, ".%s", field);
+}
+
 static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base, int offset)
 /* Print out code to access paramater of given type at offset. */
@@ -93,7 +106,7 @@ static void codeParamAccess(struct pfCompile *pfc, FILE *f,
 char *s = typeKey(pfc, base);
 if (s == NULL)
     s = "Val";
-fprintf(f, "%s[%d].%s", stackName, offset, s);
+codeStackFieldAccess(f, s, offset);
 }
 
 static void rPrintFields(struct pfCompile *pfc, 
@@ -301,6 +314,11 @@ if (colBase == pfc->arrayType)
     fprintf(f, " = ");
     codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
+    if (colBase->needsCleanup)
+        {
+	codeStackAccess(f, stack);
+	fprintf(f, ".Obj->_pf_refCount += 1;\n");
+	}
     }
 else
     {
@@ -310,7 +328,8 @@ return 1;
 }
 
 static void codeIndexLval(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack, char *op, int expSize)
+	struct pfParse *pp, int stack, char *op, int expSize, 
+	boolean cleanupOldVal)
 /* Generate code for index expression  on left side of expression */
 {
 struct pfType *outType = pp->ty;
@@ -320,6 +339,15 @@ if (colBase == pfc->arrayType)
     {
     int emptyStack = stack + expSize;
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
+    if (colBase->needsCleanup)
+        {
+	fprintf(f, " {\n struct _pf_object *_pf_tmp = (struct _pf_object *)\n  ");
+	codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
+	fprintf(f, ";\n");
+	fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
+	fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp);\n");
+	fprintf(f, " }\n");
+	}
     codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
     fprintf(f, " %s ", op);
     codeParamAccess(pfc, f, outType->base, stack);
@@ -331,29 +359,56 @@ else
     }
 }
 
+static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfBaseType *base, char *name)
+/* Emit cleanup code for variable of given type and name. */
+{
+if (base->needsCleanup)
+    {
+    if (base == pfc->varType)
+	fprintf(f, "_pf_var_cleanup(%s);\n", name);
+    else
+	{
+	fprintf(f, "if (%s != 0 && (%s->_pf_refCount-=1) <= 0)\n", name, name);
+	fprintf(f, "   %s->_pf_cleanup(%s);\n", name, name);
+	}
+    }
+}
+
+
 static int lvalOffStack(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack, char *op, int expSize)
+	struct pfParse *pp, int stack, char *op, int expSize,
+	boolean cleanupOldVal)
 /* Take an lval off of stack. */
 {
 switch (pp->type)
     {
     case pptVarUse:
     case pptVarInit:
+	{
+	struct pfBaseType *base = pp->ty->base;
+	if (cleanupOldVal && base->needsCleanup)
+	    {
+	    char buf[64];
+	    safef(buf, sizeof(buf), "%s[%d].Obj", stackName, stack);
+	    codeCleanupVar(pfc, f, base, buf);
+	    }
 	fprintf(f, "%s %s ", pp->name , op);
-	codeParamAccess(pfc, f, pp->ty->base, stack);
+	codeParamAccess(pfc, f, base, stack);
 	fprintf(f, ";\n");
 	return 1;
+	}
     case pptTuple:
         {
 	int total = 0;
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
-	    total += lvalOffStack(pfc, f, p, stack+total, op, expSize-total);
+	    total += lvalOffStack(pfc, f, p, stack+total, op, expSize-total,
+	    	cleanupOldVal);
 	return total;
 	}
     case pptIndex:
         {
-	codeIndexLval(pfc, f, pp, stack, op, expSize);
+	codeIndexLval(pfc, f, pp, stack, op, expSize, cleanupOldVal);
 	return 1;
 	}
     default:
@@ -370,7 +425,7 @@ struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
 int eStart = stack, eEnd;
 int expSize = codeExpression(pfc, f, rval, stack);
-lvalOffStack(pfc, f, lval, stack, op, expSize);
+lvalOffStack(pfc, f, lval, stack, op, expSize, TRUE);
 return 0;
 }
 
@@ -426,10 +481,10 @@ switch (rval->type)
     {
     case pptUniformTuple:
 	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
-	lvalOffStack(pfc, f, lval, stack, "=", 1);
+	lvalOffStack(pfc, f, lval, stack, "=", 1, FALSE);
         break;
     default:
-	lvalOffStack(pfc, f, lval, stack, "=", 1);
+	lvalOffStack(pfc, f, lval, stack, "=", 1, FALSE);
 	break;
     }
 }
@@ -821,21 +876,6 @@ switch (pp->type)
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
 	break;
-    }
-}
-
-static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfBaseType *base, char *name)
-/* Emit cleanup code for variable of given type and name. */
-{
-if (base->needsCleanup)
-    {
-    if (base == pfc->varType)
-	fprintf(f, "_pf_var_cleanup(%s);\n", name);
-    else
-	{
-	fprintf(f, "if (%s != 0 && (%s->_pf_refCount-=1) <= 0)\n", name, name);
-	fprintf(f, "   %s->_pf_cleanup(%s);\n", name, name);
-	}
     }
 }
 
