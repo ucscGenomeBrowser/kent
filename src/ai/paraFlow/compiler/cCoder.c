@@ -15,7 +15,7 @@ static void codeStatement(struct pfCompile *pfc, FILE *f,
 /* Emit code for one statement. */
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack);
+	struct pfParse *pp, int stack, boolean isRight);
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
 
@@ -240,7 +240,7 @@ struct pfType *outTuple = var->ty->children->next;
 int outCount = slCount(outTuple->children);;
 
 /* Add parameters to stack. */
-codeExpression(pfc, f, inTuple, stack);
+codeExpression(pfc, f, inTuple, stack, TRUE);
 if (stack == 0)
     fprintf(f, "%s(%s);\n", pp->name, stackName);
 else
@@ -270,8 +270,8 @@ struct pfBaseType *colBase = collection->ty->base;
 struct pfParse *index = collection->next;
 
 /* Push array and index onto expression stack */
-int offset = codeExpression(pfc, f, collection, stack);
-codeExpression(pfc, f, index, stack+offset);
+int offset = codeExpression(pfc, f, collection, stack, FALSE);
+codeExpression(pfc, f, index, stack+offset, FALSE);
 
 /* Do bounds checking */
 fprintf(f, "if (");
@@ -424,7 +424,7 @@ static int codeAssignment(struct pfCompile *pfc, FILE *f,
 struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
 int eStart = stack, eEnd;
-int expSize = codeExpression(pfc, f, rval, stack);
+int expSize = codeExpression(pfc, f, rval, stack, TRUE);
 lvalOffStack(pfc, f, lval, stack, op, expSize, TRUE);
 return 0;
 }
@@ -475,7 +475,7 @@ static void codeVarInit(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *lval = pp;
 struct pfParse *rval = pp->children->next->next;
-int count = codeExpression(pfc, f, rval, stack);
+int count = codeExpression(pfc, f, rval, stack, TRUE);
 uglyf("codeVarInit count %d, rval->type %s\n", count, pfParseTypeAsString(rval->type));
 switch (rval->type)
     {
@@ -490,11 +490,11 @@ switch (rval->type)
 }
 
 static int codeVarUse(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
+	struct pfParse *pp, int stack, boolean addRef)
 /* Generate code for moving a variable onto stack. */
 {
 struct pfBaseType *base = pp->ty->base;
-if (base->needsCleanup)
+if (addRef && base->needsCleanup)
     {
     if (base == pfc->varType)
 	fprintf(f, "_pf_var_link(%s);\n", pp->name);
@@ -512,8 +512,8 @@ static int codeBinaryOp(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *lval = pp->children;
 struct pfParse *rval = lval->next;
-codeExpression(pfc, f, lval, stack);
-codeExpression(pfc, f, rval, stack+1);
+codeExpression(pfc, f, lval, stack, TRUE);
+codeExpression(pfc, f, rval, stack+1, TRUE);
 codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " = ");
 codeParamAccess(pfc, f, lval->ty->base, stack);
@@ -529,7 +529,7 @@ static int codeUnaryOp(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *child = pp->children;
 struct pfBaseType *base = child->ty->base;
-codeExpression(pfc, f, child, stack);
+codeExpression(pfc, f, child, stack, TRUE);
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
 fprintf(f, "%s", op);
@@ -539,7 +539,7 @@ return 1;
 }
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
+	struct pfParse *pp, int stack, boolean isRight)
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
 {
@@ -552,7 +552,7 @@ switch (pp->type)
 	int total = 0;
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
-	    total += codeExpression(pfc, f, p, stack+total);
+	    total += codeExpression(pfc, f, p, stack+total, isRight);
 	return total;
 	}
     case pptCall:
@@ -571,7 +571,7 @@ switch (pp->type)
     	codeVarInit(pfc, f, pp, stack);
 	return 0;
     case pptVarUse:
-	return codeVarUse(pfc, f, pp, stack);
+	return codeVarUse(pfc, f, pp, stack, isRight);
     case pptIndex:
          return codeIndexExpression(pfc, f, pp, stack);
     case pptPlus:
@@ -690,14 +690,14 @@ switch (pp->type)
     case pptCastDoubleToLong:
     case pptCastDoubleToFloat:
     case pptCastDoubleToDouble:
-	codeExpression(pfc, f, pp->children, stack);
+	codeExpression(pfc, f, pp->children, stack, isRight);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
 	return 1;
     case pptCastStringToBit:
-	codeExpression(pfc, f, pp->children, stack);
+	codeExpression(pfc, f, pp->children, stack, isRight);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = (0 != ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
@@ -705,7 +705,7 @@ switch (pp->type)
 	return 1;
     case pptCastTypedToVar:
 	{
-	codeExpression(pfc, f, pp->children, stack);
+	codeExpression(pfc, f, pp->children, stack, isRight);
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".val.%s = ", typeKey(pfc, pp->children->ty->base));
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
@@ -777,7 +777,7 @@ codeScopeVars(pfc, f, pp->scope, FALSE);
 codeStatement(pfc, f, init);
 fprintf(f, "for(;;)\n");
 fprintf(f, "{\n");
-codeExpression(pfc, f, end, 0);
+codeExpression(pfc, f, end, 0, TRUE);
 fprintf(f, "if (!");
 codeParamAccess(pfc, f, pfc->bitType, 0);
 fprintf(f, ") break;\n");
@@ -794,7 +794,7 @@ struct pfParse *end = pp->children;
 struct pfParse *body = end->next;
 fprintf(f, "for(;;)\n");
 fprintf(f, "{\n");
-codeExpression(pfc, f, end, 0);
+codeExpression(pfc, f, end, 0, TRUE);
 fprintf(f, "if (!");
 codeParamAccess(pfc, f, pfc->bitType, 0);
 fprintf(f, ") break;\n");
@@ -808,7 +808,7 @@ static void codeIf(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 struct pfParse *cond = pp->children;
 struct pfParse *trueBody = cond->next;
 struct pfParse *falseBody = trueBody->next;
-codeExpression(pfc, f, cond, 0);
+codeExpression(pfc, f, cond, 0, TRUE);
 fprintf(f, "if (");
 codeParamAccess(pfc, f, pfc->bitType, 0);
 fprintf(f, ")\n");
@@ -843,7 +843,7 @@ switch (pp->type)
     case pptMinusEquals:
     case pptMulEquals:
     case pptDivEquals:
-        codeExpression(pfc, f, pp, 0);
+        codeExpression(pfc, f, pp, 0, TRUE);
 	break;
     case pptTuple:
         {
@@ -857,7 +857,7 @@ switch (pp->type)
 	struct pfParse *init = pp->children->next->next;
 	if (init != 0)
 	    {
-	    codeExpression(pfc, f, pp, 0);
+	    codeExpression(pfc, f, pp, 0, TRUE);
 	    }
         break;
 	}
