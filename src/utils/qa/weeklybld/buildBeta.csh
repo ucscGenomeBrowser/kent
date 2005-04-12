@@ -27,6 +27,8 @@ pwd
 echo "Make libs."
 cd src
 make libs >& make.log
+sed -i -e "s/-DJK_WARN//" make.log
+sed -i -e "s/-Werror//" make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.log`
@@ -40,6 +42,8 @@ endif
 echo "Make alpha."
 cd hg
 make alpha >& make.alpha.log
+sed -i -e "s/-DJK_WARN//" make.alpha.log
+sed -i -e "s/-Werror//" make.alpha.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
 set res = `/bin/egrep -i "error|warn" make.alpha.log`
