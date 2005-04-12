@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/dumpGenbankGrepIndex instead.
 
-# $Id: dumpGrepIndex,v 1.3 2005/04/12 06:18:49 angie Exp $
+# $Id: dumpGrepIndex,v 1.4 2005/04/12 06:23:26 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -50,12 +50,19 @@ foreach my $db ( @dbs ) {
   &run("mkdir -p $rawDir");
   foreach my $table (qw/productName geneName author tissue cell description
 		        development/) {
-    my $cmd = ("echo select id,name from $table " .
-	       "| hgsql -N $db  > $rawDir/$table.idName");
-    &run($cmd) if (&tableExists($db, $table));
+      if (&tableExists($db, $table)) {
+	  my $cmd = ("echo select id,name from $table " .
+		     "| hgsql -N $db  > $rawDir/$table.idName.tmp");
+	  &run($cmd);
+	  &run("mv -f $rawDir/$table.idName.tmp $rawDir/$table.idName");
+      }
   }
-  my $cmd = ("echo select mrnaAcc,product from refLink " .
-	     "| hgsql -N $db  > $rawDir/refLink.mrnaAccProduct");
-  &run($cmd) if (&tableExists($db, 'refLink'));
+  if (&tableExists($db, 'refLink')) {
+      my $cmd = ("echo select mrnaAcc,product from refLink " .
+		 "| hgsql -N $db  > $rawDir/refLink.mrnaAccProduct.tmp");
+      &run($cmd);
+      &run("mv -f $rawDir/refLink.mrnaAccProduct.tmp " .
+	   "$rawDir/refLink.mrnaAccProduct");
+  }
 }
 
