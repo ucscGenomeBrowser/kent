@@ -694,7 +694,7 @@ else
     if (keyBase == NULL)
 	errAt(pp->tok, "trying to index a %s", collectionBase->name);
     }
-if (indexPp->ty->base != keyBase)
+if (indexPp->ty->base != keyBase || indexPp->type == pptConstUse)
     {
     struct pfType *ty = pfTypeNew(keyBase);
     coerceOne(pfc, &collectionPp->next, ty);
