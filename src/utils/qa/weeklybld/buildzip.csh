@@ -11,7 +11,7 @@ cd src
 make libs >& make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.log`
+set res = `/bin/egrep -i "error|warn" make.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "errs found:"
@@ -24,7 +24,7 @@ cd hg
 make compile >& make.compile.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.compile.log`
+set res = `/bin/egrep -i "error|warn" make.compile.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "errs found:"

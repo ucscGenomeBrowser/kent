@@ -29,7 +29,7 @@ cd src
 make libs >& make.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.log`
+set res = `/bin/egrep -i "error|warn" make.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "libs errs found:"
@@ -42,7 +42,7 @@ cd hg
 make alpha >& make.alpha.log
 #-- report any compiler warnings, fix any errors (shouldn't be any)
 #-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.alpha.log`
+set res = `/bin/egrep -i "error|warn" make.alpha.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "alpha errs found:"

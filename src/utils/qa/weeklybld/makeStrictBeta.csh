@@ -16,14 +16,14 @@ pwd
 echo "trackDb Make strict."
 cd $BUILDDIR/$dir/kent/src/hg/makeDb/trackDb
 make strict >& make.strict.log
-set res = `/bin/egrep -y "error|warn" make.strict.log`
+set res = `/bin/egrep -i "error|warn" make.strict.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "trackDb strict errs found:"
  echo "$res"
  exit 1
 endif
-set res = `/bin/egrep -y "html missing" make.strict.log`
+set res = `/bin/egrep -i "html missing" make.strict.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "trackDb strict html errs found:"

@@ -58,7 +58,7 @@ make blatSuite >>& make.utils.log
 sed -i -e "s/-DJK_WARN//" make.utils.log
 sed -i -e "s/-Werror//" make.utils.log
 #-- to check for errors: 
-set res = `/bin/egrep -y "error|warn" make.utils.log`
+set res = `/bin/egrep -i "error|warn" make.utils.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
  echo "errs found:"

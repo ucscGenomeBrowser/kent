@@ -12,7 +12,7 @@ build
 cd src/edu/ucsc/genome/qa/cgiCheck
 nohup TrackCheck full.props >& $WEEKLYBLD/logs/$log 
 # tail -f $WEELYBLD/logs/$log
-# egrep -y "not|warn|err" $WEEKLYBLD/logs/$log
+# egrep -i "not|warn|err" $WEEKLYBLD/logs/$log
 
 echo "TrackCheck robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."
 
