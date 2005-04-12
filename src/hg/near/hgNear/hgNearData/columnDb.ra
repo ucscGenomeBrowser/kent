@@ -26,8 +26,8 @@ searchLabel Known Gene Names
 # Custom column priority is 2.01
 
 name proteinName
-shortLabel Swiss-Prot
-longLabel Swiss-Prot/TrEMBL Protein Display ID
+shortLabel UniProt
+longLabel UniProt(SwissProt/TrEMBL) Protein Display ID
 priority 2.1
 visibility off
 type association kgXref
@@ -38,8 +38,8 @@ search fuzzy
 itemUrl http://us.expasy.org/cgi-bin/niceprot.pl?%s
 
 name proteinAcc
-shortLabel SP Acc
-longLabel Swiss-Prot/TrEMBL Protein Accession
+shortLabel UniProt Acc
+longLabel UniProt(SwissProt/TrEMBL) Protein Accession
 priority 2.15
 visibility off
 type lookup kgXref kgID spID
