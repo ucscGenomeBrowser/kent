@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.25 2005/04/08 01:23:25 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.26 2005/04/12 18:21:48 angie Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -494,7 +494,10 @@ void addFeature(int *count, unsigned *starts, unsigned *sizes,
 if (size > 0)
     {
     if (start < 0)
+	{
+	size += start;
 	start = 0;
+	}
     if (start + size > chromSize)
 	size = chromSize - start;
     if (*count > maxStartsOffset)
