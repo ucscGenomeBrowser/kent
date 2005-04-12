@@ -25,9 +25,11 @@
 #include "findKGProtAlias.h"
 #include "tigrCmrGene.h"
 #include "minGeneInfo.h"
+#include "pipeline.h"
+#include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.164 2005/04/08 20:01:26 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.165 2005/04/12 23:07:56 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -129,8 +131,8 @@ return range;
 
 
 static char *getGrepIndexFile(struct hgFindSpec *hfs)
-/* Return grepIndex setting (may be relative to /gbdb/$db), or 
- * NULL if the file doesn't exist. */
+/* Return grepIndex setting (may be relative to hg.conf grepIndex.default),
+ * or NULL if the file doesn't exist. */
 {
 char *indexFile = hgFindSpecSetting(hfs, "grepIndex");
 if (indexFile == NULL)
@@ -139,59 +141,90 @@ else if (fileExists(indexFile))
     return cloneString(indexFile);
 else if (! startsWith("/", indexFile))
     {
-    char absPath[1024];
-    safef(absPath, sizeof(absPath), "/gbdb/%s/%s", hGetDb(), indexFile);
-    if (fileExists(absPath))
-	return cloneString(absPath);
+    char *grepIndexRoot = cfgOption("grepIndex.default");
+    if (grepIndexRoot != NULL)
+	{
+	char absPath[1024];
+	safef(absPath, sizeof(absPath), "%s/%s/%s",
+	      grepIndexRoot, hGetDb(), indexFile);
+	if (fileExists(absPath))
+	    return cloneString(absPath);
+	}
     }
 return NULL;
+}
+
+#define HGFIND_MAX_KEYWORDS 16
+#define HGFIND_MAX_CMDWORDS 6
+
+static void makeCmds(char **cmds[HGFIND_MAX_KEYWORDS+1],
+		     char **keyWords, int keyCount, char *extraOptions)
+/* Fill in cmds, an array of command word arrays. */
+{
+int i;
+for (i=0;  i < keyCount;  i++)
+    {
+    char **cmd = NULL;
+    int j = 0;
+    AllocArray(cmd, HGFIND_MAX_CMDWORDS);
+    cmd[j++] = "fgrep";
+    cmd[j++] = "-i";
+    if (isNotEmpty(extraOptions))
+	cmd[j++] = extraOptions;
+    cmd[j++] = keyWords[i];
+    cmd[j++] = NULL;
+    if (j > HGFIND_MAX_CMDWORDS)
+	errAbort("overflow error -- increase HGFIND_MAX_CMDWORDS.");
+    cmds[i] = cmd;
+    }
+cmds[i] = NULL;
+}
+
+static void freeCmds(char **cmds[], int keyCount)
+/* Free each element of cmds. */
+{
+int i;
+for (i=0;  i < keyCount;  i++)
+    {
+    freez(&(cmds[i]));
+    }
 }
 
 static struct slName *doGrepQuery(char *indexFile, char *table, char *key,
 				  char *extraOptions)
 /* grep -i key indexFile, return a list of ids (first word of each line). */
 {
-struct dyString *cmd = newDyString(1024);
+struct pipeline *pl = NULL;
 struct slName *idList = NULL;
 struct lineFile *lf = NULL;
-struct tempName tn;
 char *words[2];
-char *keyWords[16];
+char *keyWords[HGFIND_MAX_KEYWORDS];
+char **cmds[HGFIND_MAX_KEYWORDS+1];
 /* No need to escape special chars here, it's already been done: */
-/*#*** but might also be a good idea to escape . for grep... ? */
 char *escapedKey = cloneString(key);
 int keyCount = chopLine(escapedKey, keyWords);
-int ret, i;
 
-makeTempName(&tn, "hgFind_grepOut", ".idName");
 if (extraOptions == NULL)
     extraOptions = "";
-dyStringPrintf(cmd, "grep -i %s %s %s ",
-	       extraOptions, keyWords[0], indexFile);
-for (i=1;  i < keyCount;  i++)
-    dyStringPrintf(cmd, "| grep -i %s %s ", extraOptions, keyWords[i]);
-dyStringPrintf(cmd, "> %s", tn.forCgi);
-verbose(3, "\n***Running this grep command:\n*** %s\n\n", cmd->string);
-ret = system(cmd->string);
-/* grep will return 1 if no results are found, which is fine, but somehow 
- * system seems to return 256 in that case.  Since I'm not confident that 
- * I can check the same return codes on all systems, I'll ignore ret and 
- * leave existence-checking to lineFile: */
-lf = lineFileOpen(tn.forCgi, TRUE);
+makeCmds(cmds, keyWords, keyCount, extraOptions);
+
+pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile);
+lf = pipelineLineFile(pl);
+verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
+	indexFile, pipelineDesc(pl));
 while (lineFileRow(lf, words))
     {
     struct slName *idEl = slNameNew(words[0]);
     slAddHead(&idList, idEl);
     }
-lineFileClose(&lf);
-unlink(tn.forCgi);
+pipelineFree(&pl);  /* Takes care of lf too. */
+freeMem(escapedKey);
+freeCmds(cmds, keyCount);
 if (verboseLevel() >= 3)
     {
     int count = slCount(idList);
     verbose(3, "*** Got %d results from %s\n\n", count, indexFile);
     }
-freeMem(escapedKey);
-dyStringFree(&cmd);
 return idList;
 }
 
@@ -967,29 +1000,30 @@ else
     }
 }
 
-static char *getGenbankGrepIndex(struct hgFindSpec *hfs, char *table)
-/* If hfs has a grepIndex setting and we can access the index file for 
- * table, then return the filename; else return NULL. */
+static char *getGenbankGrepIndex(struct hgFindSpec *hfs, char *table,
+				 char *suffix)
+/* If hg.conf has a grepIndex.genbank setting, hfs has a (placeholder)
+ * grepIndex setting, and we can access the index file for table, then
+ * return the filename; else return NULL. */
+/* Special case for genbank: Mark completely specifies the root in
+ * hg.conf, so hfs's grepIndex setting value is ignored -- it is used
+ * only to enable grep indexing.  So we have multiple ways to turn this 
+ * off if necessary: remove hg.conf setting (takes out all dbs), 
+ * remove hgFindSpec setting (takes out one db at a time), or remove 
+ * a file (takes out one table at a time). */
 {
-char *fileName = NULL;
-char *indexPath = hgFindSpecSetting(hfs, "grepIndex");
+char *grepIndexRoot = cfgOption("grepIndex.genbank");
+char *hfsSetting = hgFindSpecSetting(hfs, "grepIndex");
 
-if (indexPath != NULL)
+if (grepIndexRoot != NULL && hfsSetting != NULL)
     {
     char buf[1024];
-    safef(buf, sizeof(buf), "%s/%s.idName", indexPath, table);
+    safef(buf, sizeof(buf), "%s/%s/%s.%s",
+	  grepIndexRoot, hGetDb(), table, suffix);
     if (fileExists(buf))
-	fileName = cloneString(buf);
-    else if (! startsWith("/", indexPath))
-	{
-	safef(buf, sizeof(buf), "/gbdb/%s/%s/%s.idName", hGetDb(),
-	      indexPath, table);
-	if (fileExists(buf))
-	    return cloneString(buf);
-	}
+	return cloneString(buf);
     }
-
-return fileName;
+return NULL;
 }
 
 static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
@@ -1028,7 +1062,7 @@ static boolean gotAllGenbankGrepIndexFiles(struct hgFindSpec *hfs,
 {
 int i;
 for (i=0;  i < tableCount;  i++)
-    if (! getGenbankGrepIndex(hfs, tables[i]))
+    if (! getGenbankGrepIndex(hfs, tables[i], "idName"))
 	return FALSE;
 return TRUE;;
 }
@@ -1058,7 +1092,7 @@ for (i = 0; i<tableCount; ++i)
     field = tables[i];
     if (!hTableExists(field))
 	continue;
-    if ((grepIndexFile = getGenbankGrepIndex(hfs, field)) != NULL)
+    if ((grepIndexFile = getGenbankGrepIndex(hfs, field, "idName")) != NULL)
 	idList = genbankGrepQuery(grepIndexFile, field, key);
     else
 	idList = genbankSqlFuzzyQuery(conn, field, key);
@@ -1618,7 +1652,7 @@ if (gotRefLink)
 	}
     else 
 	{
-	char *indexFile = getGrepIndexFile(hfs);
+	char *indexFile = getGenbankGrepIndex(hfs, "refLink", "mrnaAccProduct");
 	dyStringPrintf(ds, "select * from refLink where name like '%s%%'",
 		       spec);
 	addRefLinks(conn, ds, &rlList);
