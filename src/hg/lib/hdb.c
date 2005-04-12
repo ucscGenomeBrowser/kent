@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.244 2005/04/06 20:06:37 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.245 2005/04/12 22:28:18 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -732,10 +732,33 @@ for (tbl = tableNames;  tbl != NULL;  tbl = tbl->next)
 return FALSE;
 }
 
+static void parseDbTable(char *dbTable, char retDb[HDB_MAX_TABLE_STRING],
+			 char retTable[HDB_MAX_TABLE_STRING])
+/* If dbTable has a '.', split around the . into retDb and retTable.  
+ * Otherwise copy hGetDb() into retDb and copy dbTable into retTable. */
+{
+char *ptr = strchr(dbTable, '.');
+if (ptr != NULL)
+    {
+    snprintf(retDb, min(HDB_MAX_TABLE_STRING, (ptr - dbTable + 1)),
+	     dbTable);
+    retDb[HDB_MAX_TABLE_STRING-1] = 0;
+    safef(retTable, HDB_MAX_TABLE_STRING, ptr+1);
+    }
+else
+    {
+    safef(retDb, HDB_MAX_TABLE_STRING, hGetDb());
+    safef(retTable, HDB_MAX_TABLE_STRING, dbTable);
+    }
+}
+
 boolean hTableExists(char *table)
 /* Return TRUE if a table exists in database. */
 {
-return(hTableExistsDb(hGetDb(), table));
+char db[HDB_MAX_TABLE_STRING];
+char justTable[HDB_MAX_TABLE_STRING];
+parseDbTable(table, db, justTable);
+return hTableExistsDb(db, justTable);
 }
 
 boolean hTableExists2(char *table)
@@ -754,8 +777,10 @@ return (hashLookup(hash, track) != NULL);
 boolean hTableOrSplitExists(char *track)
 /* Return TRUE if table (or a chrN_table) exists in database. */
 {
-return hTableOrSplitExistsDb(hGetDb(), track);
-
+char db[HDB_MAX_TABLE_STRING];
+char justTable[HDB_MAX_TABLE_STRING];
+parseDbTable(track, db, justTable);
+return hTableOrSplitExistsDb(db, justTable);
 }
 
 void hParseTableName(char *table, char trackName[HDB_MAX_TABLE_STRING],
@@ -2705,8 +2730,14 @@ struct slName *hSplitTableNames(char *rootName)
 /* Return a list of all split tables for rootName, or of just rootName if not 
  * split, or NULL if no such tables exist. */
 {
-struct hash *hash = tableListHash(hGetDb());
-struct hashEl *hel = hashLookup(hash, rootName);
+struct hash *hash = NULL;
+struct hashEl *hel = NULL;
+char db[HDB_MAX_TABLE_STRING];
+char justTable[HDB_MAX_TABLE_STRING];
+
+parseDbTable(rootName, db, justTable);
+hash = tableListHash(db);
+hel = hashLookup(hash, justTable);
 if (hel == NULL)
     return NULL;
 else
