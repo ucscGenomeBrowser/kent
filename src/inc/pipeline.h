@@ -1,5 +1,7 @@
 /* pipeline.h - create a process pipeline that can be used for reading or
- * writing  */
+ * writing.  These pipeline objects don't go through the shell, so they
+ * avoid many of the obscure problems associated with system() and popen().
+ */
 #ifndef PIPELINE_H
 #define PIPELINE_H
 #include <stdio.h>
@@ -23,9 +25,12 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
  * writable from the pipeline object.  If otherEndFile is not NULL, it will be
- * opened as the other end of the pipeline.  Specify "/dev/null" for no input
- * or to discard output.  If otherEndFile is NULL, then either stdin or stdout
- * are inherited from the current process.
+ * opened as the other end of the pipeline.  That is, for a read pipeline,
+ * this is the input to the pipeline.  For a write pipeline, this is the
+ * output of the pipeline.  Specify "/dev/null" for no input or no output (or
+ * to discard output). If otherEndFile is NULL, then either stdin or stdout
+ * are inherited from the current process.  I/O to the pipeline is done by
+ * using the result of pipelineFd(), pipelineFile(), or pipelineLineFile().
  */
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
