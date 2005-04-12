@@ -1,6 +1,63 @@
 /* pipeline.h - create a process pipeline that can be used for reading or
  * writing.  These pipeline objects don't go through the shell, so they
  * avoid many of the obscure problems associated with system() and popen().
+ *
+ * Read pipelines are pipelines where a program reads output written by the
+ * pipeline, and write pipelines are where the program writes data to the
+ * pipeline.  The type of pipeline is specified in the set of option flags
+ * passed to pipelineOpen().  The file at the other end of the pipeline is
+ * specified in the otherEndFile argument of pipelineOpen(), as shown here:
+ *
+ * pipelineRead:
+ *
+ *   otherEndFile --> cmd[0] --> ... --> cmd[n] --> pipelineLf() etc.
+ *
+ * pipelineWrite:
+ *
+ *   pipeLineFile() --> cmd[0] --> ... --> cmd[n] --> otherEndFile
+ *
+ * Specify otherEndFile as "/dev/null" for no input or no output (or to
+ * discard output).  If otherEndFile is NULL, then either stdin or stdout are
+ * inherited from the current process.
+ * 
+ * I/O to the pipeline is done by using the result of pipelineFd(),
+ * pipelineFile(), or pipelineLineFile().
+ *
+ * An example that reads a compressed file, sorting it numerically by the 
+ * first column:
+ *    
+ *    static char *cmd1[] = {"gzip", "-dc", NULL};
+ *    static char *cmd2[] = {"sort", "-k", "1,1n", NULL};
+ *    static char **cmds[] = {cmd1, cmd2, NULL};
+ *    
+ *    struct pipeline *pl = pipelineOpen(cmds, pipelineRead, inFilePath);
+ *    struct lineFile *lf = pipelineLineFile(pl);
+ *    char *line;
+ *    
+ *    while (lineFileNext(lf, &line, NULL))
+ *        {
+ *        ...
+ *        }
+ *    pipelineWait(pl);
+ *    pipelineFree(&pl);
+ *
+ * A similar example that generates data and writes a compressed file, sorting
+ * it numerically by the first column:
+ *    
+ *    
+ *    static char *cmd1[] = {"sort", "-k", "1,1n", NULL};
+ *    static char *cmd2[] = {"gzip", "-c3", NULL};
+ *    static char **cmds[] = {cmd1, cmd2, NULL};
+ *    
+ *    struct pipeline *pl = pipelineOpen(cmds, pipelineWrite, outFilePath);
+ *    char *line;
+ *    
+ *    while ((line = makeNextRow()) != NULL)
+ *        fprintf(fh, "%s\n", line);
+ *    
+ *    pipelineWait(pl);
+ *    pipelineFree(&pl);
+ *
  */
 #ifndef PIPELINE_H
 #define PIPELINE_H
@@ -24,14 +81,7 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * arguments.  Shell expansion is not done on the arguments.  If pipelineRead
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
- * writable from the pipeline object.  If otherEndFile is not NULL, it will be
- * opened as the other end of the pipeline.  That is, for a read pipeline,
- * this is the input to the pipeline.  For a write pipeline, this is the
- * output of the pipeline.  Specify "/dev/null" for no input or no output (or
- * to discard output). If otherEndFile is NULL, then either stdin or stdout
- * are inherited from the current process.  I/O to the pipeline is done by
- * using the result of pipelineFd(), pipelineFile(), or pipelineLineFile().
- */
+ * writable from the pipeline object. */
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
                                char *otherEndFile);
