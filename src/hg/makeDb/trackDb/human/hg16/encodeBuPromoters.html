@@ -8,39 +8,27 @@
 <body>
 <h2>Description</h2>
 <P>
-
-This track displays expression levels of <B>[WORDING?] first and a constitutive</B> exons of
-genes in ENCODE regions, based on a real competitive Polymerase Chain
+This track displays expression levels of computationally identified
+first and constitutive exons of genes in ENCODE regions,
+as assayed by the real competitive Polymerase Chain
 Reaction (rcPCR) technique described in <a href="#References">Ding
-et al. 2003</a>. Expression levels
+et al. 2003</a>. 
+Expression levels
 are indicated by color, ranging from black (no expression) to red (high
-expression). Experiments were performed on total RNA samples of ten
-normal human tissues, purchased from Clontech (Palo Alto, CA). The
-tissues
-are cerebral cortex, colon, heart, kidney, liver, lung,
-skeletal muscle, spleen, stomach, and testis.<br>
-
-<h2>Methods</h2>
+expression). 
 <P>
-The rcPCR technique combines competitive PCR and Matrix-assisted laser
-desorption/ionization time-of-flight mass spectrometry (MALDI-TOF MS)
-for gene expression analysis. To measure the expression level of a
-gene, an oligonucleotide standard (60-80 bases; its concentration is
-known) complementary to the target sequence, with for a single base
-mismatch in the middle, is added as the competitor for PCR. The gene of
-interest and the oligonucleotide standard resemble two alleles of a
-heterozygous locus in an allele frequency analysis experiment, and thus
-can be quantified by the high-throughput MALDI-TOF MS
-based MassARRAY system (Sequenom Inc.). After PCR, a base extension
-reaction is carried out with an extension primer, a ThermoSequenase and
-a mixture of <B> [CHECK THIS] ddNTPs/dNTP</B>. The extension primer anneals to the immediate
-5&#8217;-upstream sequence of the mismatch position. Depending on the nature
-of the mismatch and the mixture composition of ddNTPs/dNTP, <B>[??] one or two</B>
-bases are added to the extension primer, producing two extension
-products with one base-length difference. These two extension products
-are then detected and quantified by the high-throughput MALDI-TOF MS
-based MassARRAY system (Sequenom Inc.).<br>
-</p>
+Experiments were performed on total RNA samples of ten
+normal human tissues, purchased from Clontech (Palo Alto, CA). 
+The tissues are cerebral cortex, colon, heart, kidney, liver, lung,
+skeletal muscle, spleen, stomach, and testis.<br>
+<P>
+The name for each alternative transcript starts with the gene name
+and is followed by an identifier for the alternative first exon or the
+constitutive exon. For example, for gene CAV1, there are three
+alternative first exons (CAV1-E1A, CAV1-E1B, and CAV1-E1C) and the
+third exon is chosen as the constitutively expressed exon (CAV1-E3).
+</P>
+<h2>Methods</h2>
 <p>
 Alternative transcription start sites (TSS) for 20 ENCODE genes were predicted
 using PromoSer (<a
@@ -49,50 +37,63 @@ PromoSer computationally identifies the TSS by considering alignments
 of a large number of partial and full-length mRNA sequences and ESTs to
 genomic DNA, with provision for alternative promoters. In PromoSer, the
 treatment of alternative first exons (or the resulting TSSs) is as
-follows. All transcripts (mRNA, full length mRNA and EST) from
-the same gene cluster are examined. Individual ESTs were not
+follows; all transcripts (mRNA, full length mRNA and EST) from
+the same gene cluster are examined. Individual ESTs are not
 considered for alternative TSSs and only the 5' most position from all
-ESTs in the cluster was considered a potential TSS. If multiple 5'-end
-positions were more than 20 bp apart, they were reported as alternative
+ESTs in the cluster are considered a potential TSS. If multiple 5'-end
+positions are more than 20 bp apart, they are reported as alternative
 TSSs.</p>
 <p>
-For each gene, we identified all alternative first exons based on <B> [??]manual
-selection </B> of PromoSer predictions.  We also selected an exon that is
+For each gene, we identified all alternative first exons based on manual
+selection of PromoSer predictions.  We also selected an exon that is
 shared by all transcripts (called the constitutive exon).  
-The amplicons are designed according to transcript sequences
+The absolute expression levels of all exons were individually quantified
+by rcPCR by designing four assays with PCR amplicons corresponding to
+each exon. 
+Amplicons were designed according to transcript sequences
 and can span a large distance on the genomic sequence. In addition,
-some amplicons are designed across the junctions between first exons
+some amplicons were designed across the junctions between first exons
 and the constitutive second exons, and thus these amplicons may overlap
 with the amplicons that correspond to the constitutive second exons. <br>
 </p>
+<P>
+The rcPCR technique combines competitive PCR and matrix-assisted laser
+desorption/ionization time-of-flight mass spectrometry (MALDI-TOF MS)
+for gene expression analysis. To measure the expression level of a
+gene, an oligonucleotide standard (60-80 bases) of known concentration,
+complementary to the target sequence with a single base
+mismatch in the middle, is added as the competitor for PCR. The gene of
+interest and the oligonucleotide standard resemble two alleles of a
+heterozygous locus in an allele frequency analysis experiment, and thus
+can be quantified by the high-throughput MALDI-TOF MS
+based MassARRAY system (Sequenom Inc.). 
+</p>
+<P>
+After PCR, a base extension
+reaction is carried out with an extension primer, a ThermoSequenase and
+a mixture of ddNTPs/dNTP. The extension primer anneals to the immediate
+5&#8217;-upstream sequence of the mismatch position. Depending on the nature
+of the mismatch and the mixture composition of ddNTPs/dNTP, one or two
+bases are added to the extension primer, producing two extension
+products with one base-length difference. These two extension products
+are then detected and quantified by MALDI-TOF MS.
+</p>
 <p>
-The name for each alternative transcript starts with the gene name
-and is followed by an identifier for the alternative first exon or the
-constitutive exon. For example, for gene CAV1, there are three
-alternative first exons (CAV1-E1A, CAV1-E1B, and CAV1-E1C) and the
-third exon is chosen as the constitutively expressed exon (CAV1-E3).
-The absolute expression levels of all exons are individually quantified
-by rcPCR by designing four assays with PCR amplicons corresponding to
-each exon. Their expression ratios (CAV1-E1A/CAV1-E3, CAV1-E1B/CAV1-E3,
-CAV1-E1C/CAV1-E3) indicate the relative abundance of the three
-alternative first exons. In each of the 10 different tissue types are used for the
-expression analysis, we used 18S rRNA for exon absolute expression
+Expression ratios (e.g. CAV1-E1A/CAV1-E3, CAV1-E1B/CAV1-E3,
+CAV1-E1C/CAV1-E3) indicate the relative abundance of 
+alternative first exons. 
+We used 18S rRNA for exon absolute expression
 normalization among different tissues.<br>
-</p>
-<p>
-<B> [Is CAV1-E1C the same as CAV-E3 ?]
-</p>
-<p>
 Values shown on this track represent the relative abundance of the
 alternative first exons with respect to the 18S rRNA. The values have
 been scaled to show graded colors on the browser.
 </p>
 <h2>Verification</h2>
 <p>
-One biological replicate has been performed for all the genes. Two to four
-competitor concentrations have been used to detect the expression level
-of each exon. Two to six technical replicates have been performed for
-each competitor concentration. We plan to do one more biological
+One biological replicate was performed for each gene. Two to four
+competitor concentrations were used to detect the expression level
+of each exon. Two to six technical replicates were performed for
+each competitor concentration. We plan to perform one more biological
 replicate in the future.<br>
 </p>
 <h2>Credits</h2>
