@@ -691,6 +691,9 @@ chainSome $(path1)
 # End tblastn
 
 # MAKE SCAFFOLDS TRACK (DONE 2/23/2005 Andy)
+    # NOTE: all intermediate files from this run were immediately cleaned up.
+    # To see more details about the alignments, see the scaffolds2 directory 
+    # (RE-ALIGN SCAFFOLDS below).
     ssh kksilo
     cd /cluster/data/apiMel2/bed
     mkdir scaffolds
@@ -855,3 +858,200 @@ chainSome $(path1)
     # back to kolossus
     rm -rf blastOut
 # End tblastn
+
+
+# RE-ALIGN SCAFFOLDS (DONE 3/30/05 angie)
+    # Andy cleaned up so well after his scaffold alignment that all of the 
+    # strand info is gone, but I need that to make the liftUp file below...
+    # would be good to include it in the track as well, if there are both 
+    # + and - alignments.  
+    ssh kolossus
+    mkdir /cluster/data/apiMel2/bed/scaffolds2
+    cd /cluster/data/apiMel2/bed/scaffolds2
+    foreach g (`seq 1 16` Un)
+      wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050120-freeze/linearScaffolds/Group${g}_20050120.fa.gz
+    end
+    faSize *.fa.gz
+#228567597 bases (3817074 N's 224750523 real 224750523 upper 0 lower) in 15293 sequences in 17 files
+#Total size: mean 14945.9 sd 83937.6 min 0 (?35000) max 2209875 (gnl|Amel_2.0|Group12.11) median 771
+    # Have to uncompress for blat.
+    gunzip *.gz
+    ssh kki
+    cd /cluster/data/apiMel2/bed/scaffolds2
+    mkdir psl
+    ls -1S *.fa | sed -e 's/_20050120.fa//' > group.lst
+    cat > gsub <<EOF
+#LOOP
+/cluster/bin/x86_64/blat -fastMap -maxIntron=0 /iscratch/i/apiMel2/apiMel2.2bit:\$(root1) -ooc=/iscratch/i/apiMel2/11.ooc {check in line+ \$(root1)_20050120.fa} {check out line+ psl/\$(root1).psl}
+#ENDLOOP
+EOF
+    gensub2 group.lst single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 17 of 17 jobs
+#Average job time:                  86s       1.44m     0.02h    0.00d
+#Longest job:                      248s       4.13m     0.07h    0.00d
+#Submission to last job:           248s       4.13m     0.07h    0.00d
+    # EXPERIMENT: try psLayout since it was recommended for this purpose:
+    mkdir psLayoutIn
+    ln -s /cluster/data/apiMel2/maskedFa/*.fa psLayoutIn
+    foreach f (/cluster/data/apiMel2/RMOut/*.out)
+      ln -s $f psLayoutIn/$f:t:r.fa.out
+    end
+    mkdir psLayout
+    cat > gsub <<EOF
+#LOOP
+psLayout {check in line+ psLayoutIn/\$(root1).fa} {check in line+ \$(root1)_20050120.fa} g2g /iscratch/i/apiMel2/11.ooc {check out line+ psLayout/\$(root1).psl}
+#ENDLOOP
+EOF
+    gensub2 group.lst single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 16 of 17 jobs
+#Crashed: 1 jobs
+#Average job time:                  41s       0.68m     0.01h    0.00d
+#Longest job:                      145s       2.42m     0.04h    0.00d
+#Submission to last job:           145s       2.42m     0.04h    0.00d
+    # It wasn't happy with GroupUn:
+    para problems
+#[host kkr2u00 ] Too many blocks, can only handle 471039
+    # Compare pslReps-filtered Group1 results:
+    # back on kolossus:
+    pslReps -nohead psl/Group1.psl Group1.reps.psl /dev/null
+    pslReps -nohead psLayout/Group1.psl Group1.reps.psL /dev/null
+    grep Group Group1_20050120.fa | wc -l
+#     64
+    wc -l Group1.reps.*
+#     68 Group1.reps.psL
+#     64 Group1.reps.psl
+    less Group1.reps.psl Group1.reps.psL
+    # 64 scaffold sequences in Group1_20050120.fa, and 64 gapless alignments 
+    # (1 per sequence) in the filtered blat -fastMap output (.psl) which is 
+    # exactly what we need.  The filtered psLayout output (.psL) has gaps 
+    # and a few cases of multiple alignments per scaffold... not as easy to 
+    # translate into a scaffolds track / liftUp file.  
+    # So use the blat -fastMap results.
+    # END EXPERIMENT
+
+    # Use pslReps to pick the best alignment for each scaffold.  
+    mkdir pslReps
+    foreach f (psl/*.psl)
+      pslReps -nohead -noIntrons -ignoreNs -minCover=0.99 -singleHit $f \
+        pslReps/$f:t /dev/null
+    end
+    # Get counts of scaffolds per group:
+    foreach f ( *.fa )
+     echo -n $f " "
+     grep Group $f | wc -l
+    end
+    # Compare with alignment counts:
+    wc -l pslReps/*.psl
+    # The only one that ended up with too many is GroupUn:
+#  7202 pslReps/GroupUn.psl
+    # Get a list of scaffolds with multiple alignments that passed pslReps 
+    # and examine some:
+    awk '{print $10;}' pslReps/GroupUn.psl | sort | uniq -c \
+    | awk '$1 != 1 {print;}' | sort -nr
+#      2 gnl|Amel_2.0|GroupUn.5526
+#      2 gnl|Amel_2.0|GroupUn.1699
+#      2 gnl|Amel_2.0|GroupUn.1669
+    egrep 'GroupUn.(5526|1699|1669)' pslReps/GroupUn.psl 
+    # Wow, GroupUn.1669 has two perfect mappings, one to 
+    # GroupUn:26535330-26536289 and one to GroupUn:108268474-108269435
+    # The former is completely contained in GroupUn.191 (Contig7152).
+    # The latter fits perfectly between two gaps ==> edit out the former.
+    # GroupUn.5526 and .1699 have imperfect mappings that slipped in 
+    # under the pslReps wire -- edit out the ones with multiple blocks.
+
+    # Having whittled down the psl to one perfect alignment per scaffold,
+    # make bed 6 to preserve the strand info.  
+    awk '{printf "%s\t%d\t%d\t%s\t0\t%s\n", $14, $16, $17, $10, $9;}' \
+      pslReps/*.psl \
+    | sed 's/gnl|Amel_2.0|//' > scaffolds.bed
+    # Compare coordinates to Andy's bed4 from previous run:
+    sort ../scaffolds/scaffolds.bed > /tmp/1
+    awk '{print $1 "\t" $2 "\t" $3 "\t" $4;}' scaffolds.bed | sort > /tmp/2
+    diff /tmp/1 /tmp/2 | wc -l
+#0
+    # OK, now after all that fuss, are there any - strand alignments?
+    awk '{print $6;}' scaffolds.bed | sort | uniq
+#+
+    # No!  So no need to reload the scaffolds track.  However, we can 
+    # proceed with confidence to make a strandless liftUp file.  
+    # (liftUp doesn't support all formats when there are - strand items)
+    # Cleanup:
+    gzip *.fa psl/*.psl
+    rm *.tab
+
+
+# MAKE SCAFFOLDS -> GROUPS LIFTUP FILE (DONE 3/30/05 angie)
+    ssh kolossus
+    cd /cluster/data/apiMel2/bed/scaffolds2
+    cp /dev/null ../../jkStuff/scaffolds.lft
+    foreach g (`awk '{print $1;}' ../../chrom.sizes`)
+      set size = `awk '$1 == "'$g'" {print $2;}' ../../chrom.sizes`
+      echo $g $size
+      awk '$1 == "'$g'" {printf "%d\t%s\t%d\t%s\t%d\n", $2, $4, ($3 - $2), $1, '$size';}' \
+        scaffolds.bed >> ../../jkStuff/scaffolds.lft
+    end
+    wc -l scaffolds.bed ../../jkStuff/scaffolds.lft
+#  7655 scaffolds.bed
+#  7655 ../../jkStuff/scaffolds.lft
+
+
+# HOMOLOGY GENE PREDICTIONS FROM ZDOBNOV (DONE 3/30/05 angie)
+    ssh kksilo
+    mkdir /cluster/data/apiMel2/bed/brhInparalog
+    cd /cluster/data/apiMel2/bed/brhInparalog
+    wget http://azra.embl-heidelberg.de/~zdobnov/Bee2/Amel-BRHinparalogs-ann.GFF.txt
+    # I edited Amel*.txt to remove these lines which were missing the scaffold:
+#Amel_23918      -Amel::9973-11618:1             735432  735743  +       exon    1 score=236.68 ORF=735432-735743 HOMOLOGY=
+#Amel_23918      -Amel::9973-11618:1             735892  736173  +       exon    2 score=271.32 ORF=735892-736173 HOMOLOGY=
+#Amel_23918      -Amel::9973-11618:1             736493  736834  +       exon    3 score=320.97 ORF=736493-736834 HOMOLOGY=
+#Amel_23918      -Amel::9973-11618:1             736892  737077  +       exon    4 score=67.88 ORF=736892-737077 HOMOLOGY=
+#Amel_23918      -Amel::9973-11618:1             9973    11618   +       gene    score=896.85, 374 aa, chain +, HOMOLOGY=
+#Amel_11118      -Amel::1008-1781:1              6807    6901    +       exon    1 score=77.72 ORF=6807-6899 HOMOLOGY=
+#Amel_11118      -Amel::1008-1781:1              7026    7302    +       exon    2 score=288.12 ORF=7027-7302 HOMOLOGY=
+#Amel_11118      -Amel::1008-1781:1              7380    7580    +       exon    3 score=157.50 ORF=7380-7580 HOMOLOGY=
+#Amel_11118      -Amel::1008-1781:1              1008    1781    +       gene    score=523.34, 191 aa, chain +, HOMOLOGY=
+#Amel_770        -Amel::26-17357:-1              189044  189236  -       exon    1 score=175.11 ORF=189044-189235 HOMOLOGY=
+#Amel_770        -Amel::26-17357:-1              199770  199957  -       exon    2 score=224.76 ORF=199772-199957 HOMOLOGY=
+#Amel_770        -Amel::26-17357:-1              201091  201194  -       exon    3 score=127.17 ORF=201091-201192 HOMOLOGY=
+#Amel_770        -Amel::26-17357:-1              206217  206375  -       exon    4 score=132.42 ORF=206218-206373 HOMOLOGY=
+#Amel_770        -Amel::26-17357:-1              26      17357   -       gene    score=659.46, 214 aa, chain -, HOMOLOGY=
+#Amel_18221      -Amel::2096-2860:1              3909    4006    +       exon    1 score=74.71 ORF=3909-4004 HOMOLOGY=
+#Amel_18221      -Amel::2096-2860:1              4234    4449    +       exon    2 score=215.20 ORF=4235-4447 HOMOLOGY=
+#Amel_18221      -Amel::2096-2860:1              4512    4673    +       exon    3 score=23.37 ORF=4513-4671 HOMOLOGY=
+#Amel_18221      -Amel::2096-2860:1              2096    2860    +       gene    score=313.28, 158 aa, chain +, HOMOLOGY=
+#Amel_4915       -Amel::9982-18148:1             189217  189354  +       exon    1 score=119.94 ORF=189217-189354 HOMOLOGY=
+#Amel_4915       -Amel::9982-18148:1             194255  194437  +       exon    2 score=216.00 ORF=194255-194437 HOMOLOGY=
+#Amel_4915       -Amel::9982-18148:1             194764  195004  +       exon    3 score=277.01 ORF=194764-195003 HOMOLOGY=
+#Amel_4915       -Amel::9982-18148:1             195397  195662  +       exon    4 score=282.28 ORF=195399-195662 HOMOLOGY=
+#Amel_4915       -Amel::9982-18148:1             197063  197383  +       exon    5 score=370.54 ORF=197063-197383 HOMOLOGY=
+#Amel_4915       -Amel::9982-18148:1             9982    18148   +       gene    score=1265.77, 383 aa, chain +, HOMOLOGY=
+    # I sent that list to Zdobnov -- waiting for new data.  Meanwhile:
+    perl -wpe 's/^(\S+)\s+\S+\s+(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\w+)(\s+\d+)?\s+score=(-?[\d\.]+),? .* HOMOLOGY=(\S+)$/$2\t.\t$6\t$3\t$4\t$8\t$5\t.\t$1.$9/ || die "parse $.\n$_"; s/exon/CDS/;' \
+      Amel-BRHinparalogs-ann.GFF.txt > brhInparalog.scaf.gff
+
+    # Lift up set from scaffolds to group coords:
+    liftUp brhInparalog.gff ../../jkStuff/scaffolds.lft warn \
+      brhInparalog.scaf.gff
+    ssh hgwdev
+    cd /cluster/data/apiMel2/bed/brhInparalog
+    ldHgGene apiMel2 brhInparalog brhInparalog.gff
+
+
+# ENSEMBL GENES (DONE 4/12/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/apiMel2/bed/ensGene
+    cd /cluster/data/apiMel2/bed/ensGene
+    wget ftp://ftp.ensembl.org/pub/misc/vvi/ensembl_genes_8Apr05.tar.gz
+    wget ftp://ftp.ensembl.org/pub/misc/vvi/ensembl_translations8Apr05.fa.gz
+    tar xvzf ensembl_genes_8Apr05.tar.gz
+    zcat ensembl_translations8Apr05.fa.gz \
+    | perl -wpe 's/^>\S+ Translation id (ENSAPMT\d+) .*/>$1/' \
+    > ensPep.fa
+    ldHgGene -gtf -genePredExt apiMel2 ensGene gtf_dump*
+    hgPepPred apiMel2 generic ensPep ensPep.fa
+
+
