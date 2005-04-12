@@ -17,6 +17,7 @@
 #include "pfPreamble.h"
 
 boolean parseOnly = FALSE;
+boolean noCode = FALSE;
 
 void usage()
 /* Explain command line and exit. */
@@ -28,12 +29,14 @@ errAbort(
 "    paraFlow input.pf\n"
 "options:\n"
 "    -parseOnly  - Just parse, don't do type checking or anything\n"
+"    -noCode - Don't produce code\n"
 );
 
 }
 
 static struct optionSpec options[] = {
    {"parseOnly", OPTION_BOOLEAN},
+   {"noCode", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -192,7 +195,8 @@ if (!parseOnly)
     }
 pfParseDump(program, 0, typeF);
 printScopeInfo(scopeF, 0, program);
-pfCodeC(pfc, program, codeFile);
+if (!noCode && !parseOnly)
+    pfCodeC(pfc, program, codeFile);
 printf("%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 }
@@ -204,6 +208,7 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 parseOnly = optionExists("parseOnly");
+noCode = optionExists("noCode");
 paraFlow(argv[1]);
 return 0;
 }

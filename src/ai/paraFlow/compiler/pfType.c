@@ -362,7 +362,7 @@ else
 	 if (type == NULL)
 	     break;
 	 }
-    tuple->ty = types;
+    tuple->ty = CloneVar(types);
     }
 }
 
@@ -661,7 +661,7 @@ if (numOnly)
         expectingGot("numerical variable to left of assignment", lval->tok);
     }
 coerceOne(pfc, &lval->next, destType);
-pp->ty = destType;
+pp->ty = CloneVar(destType);
 }
 
 static void coerceVarInit(struct pfCompile *pfc, struct pfParse *pp)
@@ -699,7 +699,7 @@ if (indexPp->ty->base != keyBase || indexPp->type == pptConstUse)
     struct pfType *ty = pfTypeNew(keyBase);
     coerceOne(pfc, &collectionPp->next, ty);
     }
-pp->ty = collectionType->children;
+pp->ty = CloneVar(collectionType->children);
 }
 
 static struct pfType *largerNumType(struct pfCompile *pfc,
