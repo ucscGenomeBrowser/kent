@@ -404,9 +404,16 @@ display conventions:<BR>
 	mode, the degree of darkness corresponds to the number of features aligning to 
 	the region or the degree of quality of the match. In full display mode, the aligning regions are connected by lines 
 	representing gaps in the alignment (typically spliced-out introns), with arrowheads indicating 
-	the direction of transcription. In situations where no gap lines are 
-	visible, the arrowheads are displayed on the block itself. Display 
-	limitations similar to the PSL alignment tracks apply to this track.</TD></TR>
+	the direction of transcription, which is determined by looking at the
+	splice sites. In situations where no gap lines are 
+	visible, the arrowheads are displayed on the block itself. 
+	To prevent display problems, the Genome Browser imposes an upper 
+	limit on the number of alignments that can be viewed simultaneously 
+	within the tracks image. When this limit is exceeded, the Browser 
+	displays the best several hundred alignments in a condensed display
+	mode, then lists the number of undisplayed alignments in the last 
+	row of the track. In this situation, try zooming in to display 
+	more entries or to return the track to full display mode. </TD></TR>
 
 <A NAME="ChainDisplay"></A>
 	<TR><TD WIDTH="20" VALIGN="top">--</TD><TD><B>&quot;Chain&quot; tracks 
