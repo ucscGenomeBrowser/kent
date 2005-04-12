@@ -25,10 +25,11 @@ struct pfBaseType
     int id;			/* Unique id. */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
+    int size;			/* Type size. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
-	boolean isCollection, struct pfBaseType *parent);
+	boolean isCollection, struct pfBaseType *parent, int size);
 /* Create new base type. */
 
 int pfBaseTypeCount();

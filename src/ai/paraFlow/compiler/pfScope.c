@@ -59,10 +59,11 @@ if (scope->vars->elCount > 0)
 
 
 struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
-	boolean isCollection, struct pfBaseType *parentType)
+	boolean isCollection, struct pfBaseType *parentType, int size)
 /* Add new base type to scope. */
 {
-struct pfBaseType *bt = pfBaseTypeNew(scope, name, isCollection, parentType);
+struct pfBaseType *bt = pfBaseTypeNew(scope, name, isCollection, 
+	parentType, size);
 hashAdd(scope->types, name, bt);
 return bt;
 }

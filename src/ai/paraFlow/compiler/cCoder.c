@@ -1,4 +1,4 @@
-/* ccoder - produce C code from type-checked parse tree. */
+/* cCoder - produce C code from type-checked parse tree. */
 
 #include "common.h"
 #include "linefile.h"
@@ -315,7 +315,61 @@ switch (rval->type)
 	break;
     }
 }
+
+static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
+	struct pfToken *tok, char *message)
+/* Print code for a run time error message. */
+{
+char *file;
+int line, col;
+pfSourcePos(tok->source, tok->text, &file, &line, &col);
+fprintf(f, "errAbort(\"\\nRun time error line %d col %d of %s: %s\");\n", 
+	line+1, col+1, file, message);
+}
 	
+static int codeIndexExpression(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for index expression (not on left side of
+ * assignment */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *collection = pp->children;
+struct pfBaseType *colBase = collection->ty->base;
+struct pfParse *index = collection->next;
+
+if (colBase == pfc->arrayType)
+    {
+    int offset = codeExpression(pfc, f, collection, stack);
+    codeExpression(pfc, f, index, stack+offset);
+    fprintf(f, "if (");
+    codeParamAccess(pfc, f, pfc->intType, stack+offset);
+    fprintf(f, "< 0 || ");
+    codeParamAccess(pfc, f, pfc->intType, stack+offset);
+    fprintf(f, " >= ");
+    codeParamAccess(pfc, f, pfc->arrayType, stack);
+    fprintf(f, "->count) ");
+    codeRunTimeError(pfc, f, pp->tok, "array access out of bounds");
+
+    fprintf(f, "{");
+    printType(pfc, f, outType->base);
+    fprintf(f, "*_pf_ix_help = (");
+    printType(pfc, f, outType->base);
+    fprintf(f, "*)(");
+    codeParamAccess(pfc, f, pfc->arrayType, stack);
+    fprintf(f, "->elements + %d * ",  outType->base->size);
+    codeParamAccess(pfc, f, pfc->intType, stack+offset);
+    fprintf(f, "); ");
+    codeParamAccess(pfc, f, outType->base, stack);
+    fprintf(f, " = _pf_ix_help[0];");
+    fprintf(f, "}\n");
+    }
+else
+    {
+    fprintf(f, "(ugly coding index for something other than array)");
+    }
+return 1;
+}
+
 	
 static int codeBinaryOp(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, char *op)
@@ -385,6 +439,8 @@ switch (pp->type)
 	codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = %s;\n", pp->name);
 	return 1;
+    case pptIndex:
+         return codeIndexExpression(pfc, f, pp, stack);
     case pptPlus:
         return codeBinaryOp(pfc, f, pp, stack, "+");
     case pptMinus:

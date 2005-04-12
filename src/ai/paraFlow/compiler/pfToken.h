@@ -124,6 +124,10 @@ struct pfToken *pfTokenizerNext(struct pfTokenizer *tkz);
 void pfTokenDump(struct pfToken *tok, FILE *f, boolean doLong);
 /* Print info on token to file. */
 
+void pfSourcePos(struct pfSource *source, char *pos, 
+    char **retFileName, int *retLine, int *retCol);
+
+/* Return file name, line, and column (zero based) of pos. */
 void errAt(struct pfToken *tok, char *format, ...);
 /* Warn about error at given token. */
 

@@ -14,6 +14,7 @@
 #include "pfBindVars.h"
 #include "pfCheck.h"
 #include "pfCodeC.h"
+#include "pfPreamble.h"
 
 boolean parseOnly = FALSE;
 
@@ -109,33 +110,33 @@ struct pfScope *scope = pfc->scope;
 
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
-pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL);
-pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType);
-pfc->streamType = pfScopeAddType(scope, "<stream>", FALSE, pfc->varType);
-pfc->numType = pfScopeAddType(scope, "<number>", FALSE, pfc->varType);
-pfc->collectionType = pfScopeAddType(scope, "<collection>", TRUE, pfc->varType);
-pfc->tupleType = pfScopeAddType(scope, "<tuple>", TRUE, pfc->collectionType);
-pfc->classType = pfScopeAddType(scope, "<class>", TRUE, pfc->collectionType);
-pfc->functionType = pfScopeAddType(scope, "<function>", TRUE, pfc->varType);
-pfc->toType = pfScopeAddType(scope, "to", TRUE, pfc->functionType);
-pfc->paraType = pfScopeAddType(scope, "para", TRUE, pfc->functionType);
-pfc->flowType = pfScopeAddType(scope, "flow", TRUE, pfc->functionType);
+pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL, sizeof(_pf_Var));
+pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType, 0);
+pfc->streamType = pfScopeAddType(scope, "<stream>", FALSE, pfc->varType, 0);
+pfc->numType = pfScopeAddType(scope, "<number>", FALSE, pfc->varType, 0);
+pfc->collectionType = pfScopeAddType(scope, "<collection>", TRUE, pfc->varType, 0);
+pfc->tupleType = pfScopeAddType(scope, "<tuple>", TRUE, pfc->collectionType, 0);
+pfc->classType = pfScopeAddType(scope, "<class>", TRUE, pfc->collectionType, 0);
+pfc->functionType = pfScopeAddType(scope, "<function>", TRUE, pfc->varType, 0);
+pfc->toType = pfScopeAddType(scope, "to", TRUE, pfc->functionType, 0);
+pfc->paraType = pfScopeAddType(scope, "para", TRUE, pfc->functionType, 0);
+pfc->flowType = pfScopeAddType(scope, "flow", TRUE, pfc->functionType, 0);
 
-pfc->bitType = pfScopeAddType(scope, "bit", FALSE, pfc->numType);
-pfc->byteType = pfScopeAddType(scope, "byte", FALSE, pfc->numType);
-pfc->shortType = pfScopeAddType(scope, "short", FALSE, pfc->numType);
-pfc->intType = pfScopeAddType(scope, "int", FALSE, pfc->numType);
-pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType);
-pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType);
-pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType);
+pfc->bitType = pfScopeAddType(scope, "bit", FALSE, pfc->numType, sizeof(_pf_Bit));
+pfc->byteType = pfScopeAddType(scope, "byte", FALSE, pfc->numType, sizeof(_pf_Byte));
+pfc->shortType = pfScopeAddType(scope, "short", FALSE, pfc->numType, sizeof(_pf_Short));
+pfc->intType = pfScopeAddType(scope, "int", FALSE, pfc->numType, sizeof(_pf_Int));
+pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType, sizeof(_pf_Long));
+pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType, sizeof(_pf_Float));
+pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType, sizeof(_pf_Double));
 
-pfc->stringType = pfScopeAddType(scope, "string", FALSE, pfc->streamType);
+pfc->stringType = pfScopeAddType(scope, "string", FALSE, pfc->streamType, sizeof(_pf_String));
 
-pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType);
-pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType);
-pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType);
+pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType, sizeof(_pf_Array));
+pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List));
+pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType, sizeof(_pf_Tree));
 pfc->treeType->keyedBy = pfc->doubleType;
-pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType);
+pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType, sizeof(_pf_Dir));
 pfc->dirType->keyedBy = pfc->stringType;
 }
 
