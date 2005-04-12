@@ -9,6 +9,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <signal.h>
 
 /* FIXME: add close-on-exec startup hack */
 
@@ -131,10 +132,17 @@ static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int 
 /* child part of process startup */
 {
 int fd;
+struct sigaction sigAct;
 
 /* make sure abort handler exits */
 pushWarnAbort();
 pushAbortHandler(childAbortHandler);
+
+/* treat a closed pipe as an EOF rather than getting SIGPIPE */
+ZeroVar(&sigAct);
+sigAct.sa_handler = SIG_IGN;
+if (sigaction(SIGPIPE, &sigAct, NULL) != 0)
+    errnoAbort("failed to set SIGPIPE to SIG_IGN");
 
 /* child, first setup stdio files */
 if (stdinFd != STDIN_FILENO)
