@@ -8,9 +8,9 @@
 struct _pf_object
 /* Common heading for all objects. */
     {
-    int _pf_refCount;			     	/* Number of references. */
-    void (*_pf_cleanup)(struct _pf_array *obj); /* Called when refCount <= 0 */
-    int _pf_typeId; 		     	        /* Index of type in _pf_type_table. */
+    int _pf_refCount;			     	    /* Number of references. */
+    void (*_pf_cleanup)(struct _pf_object *obj); /* Called when refCount <= 0 */
+    int _pf_typeId; 		         /* Index of type in _pf_type_table. */
     };
 
 struct _pf_array
@@ -18,7 +18,7 @@ struct _pf_array
     {
     int _pf_refCount;			     	/* Number of references. */
     void (*_pf_cleanup)(struct _pf_array *obj); /* Called when refCount <= 0 */
-    int _pf_typeId; 		     	        /* Index of type in _pf_type_table. */
+    int _pf_typeId; 		/* Index of type in _pf_type_table. */
     char *elements;		/* Pointer to elements. */
     int count;			/* Count of elements used. */
     int allocated;		/* Count of elements allocated. */
@@ -26,6 +26,12 @@ struct _pf_array
     int	elType;			/* Type of each element. */
     };
 
+void _pf_var_link(_pf_Var var);
+/* Increment _pf_refCount if variable needs cleanup. */
+
+void _pf_var_cleanup(_pf_Var var);
+/* If variable needs cleanup decrement _pf_refCount and if necessary 
+ * call _pf_cleanup */
 
 #endif /* OBJECT_H */
 

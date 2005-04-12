@@ -6,6 +6,7 @@
 
 static void _pf_array_cleanup(struct _pf_array *array)
 {
+uglyf("_pf_array_cleanup of %d elements\n", array->count);
 freeMem(array->elements);
 free(array);
 }
@@ -156,13 +157,29 @@ for (i=0; i<count; ++i)
 return array;
 }
 
+_pf_Array _pf_var_array_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Create an array of string initialized from tuple on stack. */
+{
+struct _pf_array *array;
+_pf_Var *elements;
+int i;
+
+AllocArray(elements, count);
+array = array_of_type(count, count, typeId, elTypeId, sizeof(elements[0]), elements);
+
+for (i=0; i<count; ++i)
+    elements[i] = stack[i].Var;
+return array;
+}
+
 #ifdef TEMPLATE
 _pf_Array _pf_xyz_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
 {
 struct _pf_array *array;
-_pf_Double *elements;
+_pf_Xyz *elements;
 int i;
 
 AllocArray(elements, count);

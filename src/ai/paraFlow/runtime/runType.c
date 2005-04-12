@@ -97,6 +97,7 @@ for (i=0; i<baseCount; ++i)
     assert(s != NULL);
     s += 1;
     base->name = s;
+    base->needsCleanup = info->needsCleanup;
     if (s[0] != '<')
 	{
 	base->singleType = hashIntValDefault(singleIds, s, 0);

@@ -58,6 +58,7 @@ struct _pf_base
     char *name;			/* Type name */
     int singleType;		/* class? int? */
     struct _pf_type *fields;	/* Elements of class. */
+    char needsCleanup;	/* Does this type need cleanup? */
     };
 
 struct _pf_base_info
@@ -66,6 +67,7 @@ struct _pf_base_info
     int id;		/* Unique id */
     char *name;		/* Name in scope:class format. */
     int parentId;	/* Id of parent class. */
+    char needsCleanup;	/* Does this type need cleanup? */
     };
 
 struct _pf_type_info
