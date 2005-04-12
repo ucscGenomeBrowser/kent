@@ -166,7 +166,7 @@ AllocVar(pfc);
 pfc->baseFile = cloneString(fileName);
 pfc->modules = hashNew(0);
 pfc->reservedWords = createReservedWords();
-pfc->scope = pfScopeNew(pfc, NULL, 8);
+pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
 addBuiltInTypes(pfc);
 addBuiltInFunctions(pfc);
 pfc->tkz = pfTokenizerNew(fileName, pfc->reservedWords);

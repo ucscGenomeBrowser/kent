@@ -25,7 +25,7 @@ static void codeScope(
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
-	struct pfScope *scope);
+	struct pfScope *scope, boolean zeroUnitialized);
 /* Print out variable declarations associated with scope. */
 
 static void printPreamble(struct pfCompile *pfc, FILE *f)
@@ -35,6 +35,8 @@ fprintf(f, "/* This file is a translation of %s by paraFlow. */\n",
 	pfc->baseFile);
 fprintf(f, "\n");
 fprintf(f, "#include \"pfPreamble.h\"\n");
+fprintf(f, "\n");
+fprintf(f, "_pf_Var _pf_var_zero;\n");
 fprintf(f, "\n");
 }
 
@@ -190,11 +192,24 @@ if (pp->ty)
     }
 }
 
-struct hash *hashCompTypes(struct pfParse *program, 
+struct hash *hashCompTypes(struct pfCompile *pfc, struct pfParse *program, 
 	struct dyString *dy, FILE *f)
 /* Create a hash full of compOutTypes. */
 {
 struct hash *hash = hashNew(0);
+
+/* Make up simple int type. This needs to always come
+ * first. */
+    {
+    dyStringClear(dy);
+    struct compOutType *cot;
+    dyStringPrintf(dy, "%d", pfc->intType->id);
+    AllocVar(cot);
+    hashAddSaveName(hash, dy->string, cot, &cot->code);
+    cot->type = pfTypeNew(pfc->intType);
+    fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
+    }
+
 rFillCompHash(f, hash, dy, program);
 return hash;
 }
@@ -406,6 +421,7 @@ static void codeVarInit(struct pfCompile *pfc, FILE *f,
 struct pfParse *lval = pp;
 struct pfParse *rval = pp->children->next->next;
 int count = codeExpression(pfc, f, rval, stack);
+uglyf("codeVarInit count %d, rval->type %s\n", count, pfParseTypeAsString(rval->type));
 switch (rval->type)
     {
     case pptUniformTuple:
@@ -610,14 +626,14 @@ switch (pp->type)
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
-	return 0;
+	return 1;
     case pptCastStringToBit:
 	codeExpression(pfc, f, pp->children, stack);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = (0 != ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ");");
-	return 0;
+	return 1;
     case pptCastTypedToVar:
 	{
 	codeExpression(pfc, f, pp->children, stack);
@@ -627,7 +643,7 @@ switch (pp->type)
 	fprintf(f, ";\n");
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".typeId = %d;\n", typeId(pfc, pp->children->ty));
-	return 0;
+	return 1;
 	}
     default:
 	{
@@ -653,7 +669,7 @@ boolean isArray = (base == pfc->arrayType);
 
 /* Print element variable in a new scope. */
 fprintf(f, "{\n");
-codeScopeVars(pfc, f, foreach->scope);
+codeScopeVars(pfc, f, foreach->scope, FALSE);
 
 /* Also print some iteration stuff. */
 if (isArray)
@@ -688,7 +704,7 @@ struct pfParse *next = end->next;
 struct pfParse *body = next->next;
 
 fprintf(f, "{\n");
-codeScopeVars(pfc, f, pp->scope);
+codeScopeVars(pfc, f, pp->scope, FALSE);
 codeStatement(pfc, f, init);
 fprintf(f, "for(;;)\n");
 fprintf(f, "{\n");
@@ -870,7 +886,7 @@ for (statement = classCompound->children; statement != NULL;
 }
 
 static void codeVarsInHelList(struct pfCompile *pfc, FILE *f,
-	struct hashEl *helList)
+	struct hashEl *helList, boolean zeroUninit)
 /* Print out variable declarations in helList. */
 {
 struct hashEl *hel;
@@ -879,12 +895,17 @@ for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
-    if (!var->ty->isFunction)
+    if (!type->isFunction)
         {
 	printType(pfc, f, type->base);
 	fprintf(f, " %s", var->name);
-	if (!isInitialized(var))
-	    fprintf(f, "=0");
+	if (zeroUninit && !isInitialized(var))
+	    {
+	    if (type->base == pfc->varType)
+		fprintf(f, "=_pf_var_zero");
+	    else
+		fprintf(f, "=0");
+	    }
 	fprintf(f, ";\n");
 	gotVar = TRUE;
 	}
@@ -893,12 +914,13 @@ if (gotVar)
     fprintf(f, "\n");
 }
 
-static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope)
+static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
+	boolean zeroUninitialized)
 /* Print out variable declarations associated with scope. */
 {
 struct hashEl *helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
-codeVarsInHelList(pfc, f, helList);
+codeVarsInHelList(pfc, f, helList, zeroUninitialized);
 hashElFreeList(&helList);
 }
 
@@ -943,7 +965,7 @@ if (gotFunc)
     fprintf(f, "\n");
 
 /* Print out variables. */
-codeVarsInHelList(pfc, f, helList);
+codeVarsInHelList(pfc, f, helList, !scope->isModule);
 hashElFreeList(&helList);
 
 /* Print out function declarations */
@@ -1051,7 +1073,7 @@ fprintf(f, "int _pf_base_info_count = %d;\n\n", pfBaseTypeCount());
 
 fprintf(f, "/* All composed types */\n");
 fprintf(f, "struct _pf_type_info _pf_type_info[] = {\n");
-compTypeHash = hashCompTypes(program, dy, f);
+compTypeHash = hashCompTypes(pfc, program, dy, f);
 fprintf(f, "};\n");
 fprintf(f, "int _pf_type_info_count = sizeof(_pf_type_info)/sizeof(_pf_type_info[0]);\n\n");
 

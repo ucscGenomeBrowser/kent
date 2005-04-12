@@ -1075,7 +1075,7 @@ static struct pfParse *parseFunction(struct pfCompile *pfc,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body;
-scope = pfScopeNew(pfc, scope, 0);
+scope = pfScopeNew(pfc, scope, 0, FALSE);
 pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
@@ -1238,7 +1238,7 @@ struct pfParse *element;
 struct pfParse *collection;
 struct pfParse *statement;
 
-scope = pfScopeNew(pfc, scope, 1);
+scope = pfScopeNew(pfc, scope, 1, FALSE);
 pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 element = varUseOrDeclare(pp, &tok, scope);
@@ -1278,7 +1278,7 @@ struct pfParse *check;
 struct pfParse *advance;
 struct pfParse *statement;
 
-scope = pfScopeNew(pfc, scope, 1);
+scope = pfScopeNew(pfc, scope, 1, FALSE);
 pp = pfParseNew(pptFor, tok, parent, scope);
 tok = tok->next;	/* Skip over 'for' */
 if (tok->type != '(')
@@ -1474,7 +1474,7 @@ struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc,
 struct pfTokenizer *tkz = pfc->tkz;
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16);
+struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, fileName);
 
@@ -1487,7 +1487,7 @@ while ((tok = pfTokenizerNext(tkz)) != NULL)
     slAddHead(&tokList, tok);
     if (tok->type == '{')
         {
-	scope = pfScopeNew(pfc, scope, 0);
+	scope = pfScopeNew(pfc, scope, 0, FALSE);
 	tok->val.scope = scope;
 	}
     else if (tok->type == '}')

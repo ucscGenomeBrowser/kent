@@ -17,6 +17,7 @@ struct pfScope
      struct hash *types;	/* Types defined in this scope. */
      struct hash *vars;		/* Variables defined in this scope (including functions) */
      int id;			/* Unique ID for this scope. */
+     boolean isModule;		/* True if it's a module scope. */
      };
 
 struct pfVar
@@ -32,7 +33,7 @@ struct pfTokenizer;
 struct pfCompile;
 
 struct pfScope *pfScopeNew(struct pfCompile *pfc, 
-	struct pfScope *parent, int size);
+	struct pfScope *parent, int size, boolean isModule);
 /* Create new scope with given parent.  Size is just a hint
  * of what to make the size of the symbol table as a power of
  * two.  Pass in 0 if you don't care. */
