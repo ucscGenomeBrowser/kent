@@ -434,6 +434,22 @@ switch (rval->type)
     }
 }
 
+static int codeVarUse(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for moving a variable onto stack. */
+{
+struct pfBaseType *base = pp->ty->base;
+if (base->needsCleanup)
+    {
+    if (base == pfc->varType)
+	fprintf(f, "_pf_var_link(%s);\n", pp->name);
+    else
+	fprintf(f, "%s->_pf_refCount += 1;\n", pp->name);
+    }
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, " = %s;\n", pp->name);
+return 1;
+}
 	
 static int codeBinaryOp(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, char *op)
@@ -500,9 +516,7 @@ switch (pp->type)
     	codeVarInit(pfc, f, pp, stack);
 	return 0;
     case pptVarUse:
-	codeParamAccess(pfc, f, pp->ty->base, stack);
-	fprintf(f, " = %s;\n", pp->name);
-	return 1;
+	return codeVarUse(pfc, f, pp, stack);
     case pptIndex:
          return codeIndexExpression(pfc, f, pp, stack);
     case pptPlus:
@@ -810,6 +824,22 @@ switch (pp->type)
     }
 }
 
+static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfBaseType *base, char *name)
+/* Emit cleanup code for variable of given type and name. */
+{
+if (base->needsCleanup)
+    {
+    if (base == pfc->varType)
+	fprintf(f, "_pf_var_cleanup(%s);\n", name);
+    else
+	{
+	fprintf(f, "if (%s != 0 && (%s->_pf_refCount-=1) <= 0)\n", name, name);
+	fprintf(f, "   %s->_pf_cleanup(%s);\n", name, name);
+	}
+    }
+}
+
+
 static void codeFunction(struct pfCompile *pfc, FILE *f, 
 	struct pfParse *funcDec)
 /* Emit C code for function. */
@@ -849,6 +879,13 @@ fprintf(f, "void %s(%s *%s)\n{\n", funcVar->name, stackType, stackName);
 
 /* Print out body (which is a compound statement) */
 codeStatement(pfc, f, body);
+
+/* Decrement ref counts on input variables. */
+    {
+    struct pfType *in;
+    for (in = inTuple->children; in != NULL; in = in->next)
+	codeCleanupVar(pfc, f, in->base, in->fieldName);
+    }
 
 /* Save the output. */
     {
@@ -914,6 +951,19 @@ if (gotVar)
     fprintf(f, "\n");
 }
 
+static void codeCleanupVarsInHelList(struct pfCompile *pfc, FILE *f,
+	struct hashEl *helList)
+/* Print out variable cleanups for helList. */
+{
+struct hashEl *hel;
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct pfVar *var = hel->val;
+    struct pfBaseType *base = var->ty->base;
+    codeCleanupVar(pfc, f, base, var->name);
+    }
+}
+
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
 	boolean zeroUninitialized)
 /* Print out variable declarations associated with scope. */
@@ -966,7 +1016,6 @@ if (gotFunc)
 
 /* Print out variables. */
 codeVarsInHelList(pfc, f, helList, !scope->isModule);
-hashElFreeList(&helList);
 
 /* Print out function declarations */
 for (p = pp->children; p != NULL; p = p->next)
@@ -1002,8 +1051,13 @@ for (p = pp->children; p != NULL; p = p->next)
 	    break;
 	}
     }
+/* Print out any needed cleanups. */
+codeCleanupVarsInHelList(pfc, f, helList);
+
 if (isModule)
     fprintf(f, "}\n");
+
+hashElFreeList(&helList);
 }
 
 static void printConclusion(struct pfCompile *pfc, FILE *f)
@@ -1064,6 +1118,7 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 	    fprintf(f, "0, ");
 	else
 	    fprintf(f, "%d, ", base->parent->id);
+	fprintf(f, "%d, ", base->needsCleanup);
 	fprintf(f, "},\n");
 	}
     hashElFreeList(&helList);

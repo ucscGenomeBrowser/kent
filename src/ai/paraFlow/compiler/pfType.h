@@ -22,6 +22,7 @@ struct pfBaseType
     struct pfScope *scope;	/* The scope this class lives in */
     bool isCollection;		/* TRUE if it's a collection type */
     bool isClass;		/* TRUE if it's a class */
+    bool needsCleanup;		/* TRUE if it needs refCount/cleanup */
     int id;			/* Unique id. */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
@@ -29,7 +30,8 @@ struct pfBaseType
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
-	boolean isCollection, struct pfBaseType *parent, int size);
+	boolean isCollection, struct pfBaseType *parent, int size, 
+	boolean needsCleanup);
 /* Create new base type. */
 
 int pfBaseTypeCount();

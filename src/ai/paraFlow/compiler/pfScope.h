@@ -42,7 +42,8 @@ void pfScopeDump(struct pfScope *scope, FILE *f);
 /* Write out line of info about scope. */
 
 struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
-	boolean isCollection, struct pfBaseType *parentType, int size);
+	boolean isCollection, struct pfBaseType *parentType, int size, 
+	boolean needsCleanup);
 /* Add new base type to scope. */
 
 struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, 

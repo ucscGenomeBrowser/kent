@@ -17,8 +17,8 @@ return baseTypeCount;
 }
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
-	boolean isCollection, struct pfBaseType *parent, int size)
-/* Create new base type. */
+	boolean isCollection, struct pfBaseType *parent, int size,
+	boolean needsCleanup)
 /* Create new base type. */
 {
 struct pfBaseType *base;
@@ -33,6 +33,7 @@ base->scope = scope;
 base->isCollection = isCollection;
 base->id = ++baseTypeCount;
 base->size = size;
+base->needsCleanup = needsCleanup;
 return base;
 }
 

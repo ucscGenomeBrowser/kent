@@ -2,8 +2,8 @@
  * paraFlow-generated C code. */
 
 #include "../runtime/runType.h"
-#include "../runtime/object.h"
 
+struct _pf_object;
 struct _pf_string;
 struct _pf_array;
 struct _pf_list;
@@ -12,6 +12,7 @@ struct _pf_dir;
 struct _pf_var;
 
 // typedef struct string *String;
+typedef struct _pf_object *_pf_Object;
 typedef char *_pf_String;
 typedef struct _pf_array *_pf_Array;
 typedef struct _pf_list *_pf_List;
@@ -38,6 +39,7 @@ union _pf_varless
     _pf_Long Long;
     _pf_Float Float;
     _pf_Double Double;
+    _pf_Object Obj;
     _pf_String String;
     _pf_Array Array;
     _pf_List List;
@@ -63,6 +65,7 @@ union _pf_stack
     _pf_Long Long;
     _pf_Float Float;
     _pf_Double Double;
+    _pf_Object Obj;
     _pf_String String;
     _pf_Array Array;
     _pf_List List;
@@ -87,6 +90,8 @@ Pf_iterator _pf_list_iterator_init(_pf_List list);
 Pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
 Pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
+#include "../runtime/object.h"
 #include "../runtime/initVar.h"
+
 
 void print(_pf_Stack *stack);

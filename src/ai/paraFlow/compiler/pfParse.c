@@ -1461,7 +1461,8 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
 	tok = tok->next;
 	if (tok->type != pftName)
 	    expectingGot("class name", tok);
-	base = pfScopeAddType(scope, tok->val.s, FALSE, pfc->classType, sizeof(void *));
+	base = pfScopeAddType(scope, tok->val.s, FALSE, pfc->classType, sizeof(void *),
+		TRUE);
 	base->isClass = TRUE;
 	}
     }
