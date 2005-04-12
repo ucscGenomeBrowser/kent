@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.51 2005/04/12 16:49:26 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.52 2005/04/12 23:30:17 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -436,9 +436,10 @@ if (protAcc != NULL)
  	oldDisplayId = oldSpDisplayId(spDisplayId);
 	if (oldDisplayId != NULL)
  	    {
-            if (!sameWord(spDisplayId, oldDisplayId))
+            if (!sameWord(spDisplayId, oldDisplayId)
+                && !sameWord(protAcc, oldDisplayId))
 	    	{
-	    	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	    	hPrintf(" or %s", oldSpDisplayId);
 	    	}
 	    }
 	hPrintf(")\n");
