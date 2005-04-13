@@ -105,7 +105,7 @@ static void codeParamAccess(struct pfCompile *pfc, FILE *f,
 {
 char *s = typeKey(pfc, base);
 if (s == NULL)
-    s = "Val";
+    s = "v";
 codeStackFieldAccess(f, s, offset);
 }
 
@@ -120,6 +120,20 @@ for (type = base->fields; type != NULL; type = type->next)
     {
     printType(pfc, f, type->base);
     fprintf(f, " %s;\n", type->fieldName);
+    }
+}
+
+static void rPrintOffsets(struct pfCompile *pfc, 
+	FILE *f, char *exampleName, struct pfBaseType *base)
+/* Print out offsets of fields within structure - parents first */
+{
+struct pfType *type;
+if (base->parent != NULL)
+    rPrintOffsets(pfc, f, exampleName, base->parent);
+for (type = base->fields; type != NULL; type = type->next)
+    {
+    fprintf(f, " (char *)&%s.%s - (char *)&%s,\n",
+    	exampleName, type->fieldName, exampleName);
     }
 }
 
@@ -387,9 +401,7 @@ switch (pp->type)
 	{
 	struct pfBaseType *base = pp->ty->base;
 	if (cleanupOldVal && base->needsCleanup)
-	    {
 	    codeCleanupVar(pfc, f, base, pp->name);
-	    }
 	fprintf(f, "%s %s ", pp->name , op);
 	codeParamAccess(pfc, f, base, stack);
 	fprintf(f, ";\n");
@@ -460,6 +472,17 @@ else
 fprintf(f, ";\n");
 }
 
+static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
+	struct pfParse *lval, int stack, int tupleSize)
+/* Shovel tuple into class. */
+{
+struct pfBaseType *base = lval->ty->base;
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, " = ");
+fprintf(f, "_pf_class_from_tuple(%s+%d, %d, %d, sizeof(struct %s), _pf_fi_%s);\n",
+	stackName, stack, tupleSize, typeId(pfc, lval->ty), base->name, base->name);
+}
+
 static void codeVarInit(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for an assignment. */
@@ -468,16 +491,17 @@ struct pfParse *lval = pp;
 struct pfParse *rval = pp->children->next->next;
 int count = codeExpression(pfc, f, rval, stack, TRUE);
 uglyf("codeVarInit count %d, rval->type %s\n", count, pfParseTypeAsString(rval->type));
-switch (rval->type)
+if (lval->ty->base->isClass)
     {
-    case pptUniformTuple:
-	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
-	lvalOffStack(pfc, f, lval, stack, "=", 1, FALSE);
-        break;
-    default:
-	lvalOffStack(pfc, f, lval, stack, "=", 1, FALSE);
-	break;
+    assert(rval->type == pptTuple);
+    codeTupleIntoClass(pfc, f, lval, stack, count);
     }
+else
+    {
+    if (rval->type == pptUniformTuple)
+	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
+    }
+lvalOffStack(pfc, f, lval, stack, "=", 1, FALSE);
 }
 
 static int codeVarUse(struct pfCompile *pfc, FILE *f,
@@ -1021,8 +1045,15 @@ slSort(&helList, hashElCmp);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfBaseType *base = hel->val;
+    char exampleName[256];
+    safef(exampleName, sizeof(exampleName), "_pf_ci_%s", base->name);
     fprintf(f, "struct %s {\n", base->name);
+    fprintf(f, "int _pf_refCount;\n");
+    fprintf(f, "void (*_pf_cleanup)(struct %s *obj);\n", base->name);
     rPrintFields(pfc, f, base); 
+    fprintf(f, "} %s;\n", exampleName);
+    fprintf(f, "int _pf_fi_%s[] = {\n", base->name);
+    rPrintOffsets(pfc, f, exampleName, base);
     fprintf(f, "};\n\n");
     }
 hashElFreeList(&helList);
@@ -1150,6 +1181,7 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 	else
 	    fprintf(f, "%d, ", base->parent->id);
 	fprintf(f, "%d, ", base->needsCleanup);
+	fprintf(f, "%d, ", base->size);
 	fprintf(f, "},\n");
 	}
     hashElFreeList(&helList);
@@ -1176,7 +1208,7 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 	if (base->isClass)
 	    {
 	    struct pfType *field;
-	    fprintf(f, "  %d, ", base->id);
+	    fprintf(f, "  {%d, ", base->id);
 	    fprintf(f, "\"");
 	    for (field = base->fields; field != NULL; field = field->next)
 	        {
@@ -1186,7 +1218,7 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 		    fprintf(f, ",");
 		}
 	    fprintf(f, "\"");
-	    fprintf(f, "\n");
+	    fprintf(f, "},\n");
 	    }
 	}
     hashElFreeList(&helList);
