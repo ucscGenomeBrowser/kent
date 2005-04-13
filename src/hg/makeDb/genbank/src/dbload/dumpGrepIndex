@@ -1,10 +1,13 @@
 #!/usr/bin/env perl
 
-# $Id: dumpGrepIndex,v 1.5 2005/04/12 20:45:52 markd Exp $
+# $Id: dumpGrepIndex,v 1.6 2005/04/13 00:39:06 genbank Exp $
 
 use Getopt::Long;
 use warnings;
 use strict;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use gbCommon;
 
 # Option variable names:
 use vars qw/
@@ -23,43 +26,36 @@ tables to be searched by hgFind.
   exit $status;
 }
 
-sub run {
-  my ($cmd) = @_;
-  print "# $cmd\n" if ($opt_debug);
-  system($cmd) == 0 || die "Command failed:\n$cmd\n";
-}
-
 sub tableExists {
   my ($db, $table) = @_;
-  my $cmd = 'show tables like \"' . $table . '\"';
-  return `echo $cmd | hgsql $db -N | wc -l` > 0;
+  my $cmd = 'show tables like "' . $table . '"';
+  my $out =  callMysql("-N -e '$cmd' $db");
+  return length($out) > 0;
 }
 
 my $ok = GetOptions("help", "debug");
 &usage(1) if (! $ok);
 &usage(0) if ($opt_help);
 &usage(1) if (scalar(@ARGV) < 2);
+$gbCommon::verbose = $opt_debug;
 
 my ($baseDir, @dbs) = @ARGV;
 
 foreach my $db ( @dbs ) {
   my $rawDir = "$baseDir/$db";
-  &run("mkdir -p $rawDir");
+  makeDir($rawDir);
   foreach my $table (qw/productName geneName author tissue cell description
 		        development/) {
       if (&tableExists($db, $table)) {
-	  my $cmd = ("echo select id,name from $table " .
-		     "| hgsql -N $db  > $rawDir/$table.idName.tmp");
-	  &run($cmd);
-	  &run("mv -f $rawDir/$table.idName.tmp $rawDir/$table.idName");
+	  my $cmd = ("-N -e 'select id,name from $table' $db > $rawDir/$table.idName.tmp");
+	  runMysql($cmd);
+	  renameFile("$rawDir/$table.idName.tmp", "$rawDir/$table.idName");
       }
   }
   if (&tableExists($db, 'refLink')) {
-      my $cmd = ("echo select mrnaAcc,product from refLink " .
-		 "| hgsql -N $db  > $rawDir/refLink.mrnaAccProduct.tmp");
-      &run($cmd);
-      &run("mv -f $rawDir/refLink.mrnaAccProduct.tmp " .
-	   "$rawDir/refLink.mrnaAccProduct");
+      my $cmd = ("-N -e 'select mrnaAcc,product from refLink' $db > $rawDir/refLink.mrnaAccProduct.tmp");
+      runMysql($cmd);
+      renameFile("$rawDir/refLink.mrnaAccProduct.tmp", "$rawDir/refLink.mrnaAccProduct");
   }
 }
 
