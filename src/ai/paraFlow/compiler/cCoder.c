@@ -99,13 +99,21 @@ codeStackAccess(f, offset);
 fprintf(f, ".%s", field);
 }
 
-static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
-	struct pfBaseType *base, int offset)
-/* Print out code to access paramater of given type at offset. */
+static char *vTypeKey(struct pfCompile *pfc, struct pfBaseType *base)
+/* Return typeKey, or "v" is that would be NULL.  The v is used
+ * to access void pointer on stack. */
 {
 char *s = typeKey(pfc, base);
 if (s == NULL)
     s = "v";
+return s;
+}
+
+static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
+	struct pfBaseType *base, int offset)
+/* Print out code to access paramater of given type at offset. */
+{
+char *s = vTypeKey(pfc, base);
 codeStackFieldAccess(f, s, offset);
 }
 
@@ -722,7 +730,7 @@ switch (pp->type)
 	{
 	codeExpression(pfc, f, pp->children, stack, addRef);
         codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".val.%s = ", typeKey(pfc, pp->children->ty->base));
+	fprintf(f, ".val.%s = ", vTypeKey(pfc, pp->children->ty->base));
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
         codeParamAccess(pfc, f, pfc->varType, stack);
