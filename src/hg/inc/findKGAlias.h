@@ -2,7 +2,7 @@
 #ifndef FINDKGALIAS_H
 #define FINDKGALIAS_H
 
-static void addKgAlias(struct sqlConnection *conn, struct dyString *query,
+void addKgAlias(struct sqlConnection *conn, struct dyString *query,
        struct kgAlias **pList);
 /* Query database and add returned kgAlias to head of list. */
 

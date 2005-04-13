@@ -2,7 +2,7 @@
 #ifndef FINDKGPROTALIAS_H
 #define FINDKGPROTALIAS_H
 
-static void addKGProtAlias(struct sqlConnection *conn, struct dyString *query,
+void addKGProtAlias(struct sqlConnection *conn, struct dyString *query,
        struct kgProtAlias **pList);
 /* Query database and add returned kgAlias to head of list. */
 
