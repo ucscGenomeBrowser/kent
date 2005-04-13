@@ -20,6 +20,26 @@ for (field = base->fields; field != NULL; field = field->next)
 fprintf(f, ")");
 }
 
+void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base)
+/* Print out each field of class. */
+{
+struct _pf_type *elType = _pf_type_table[array->elType];
+int i;
+boolean needsComma = FALSE;
+char *s = array->elements;
+fprintf(f, "(");
+for (i=0; i<array->size; ++i)
+    {
+    if (needsComma)
+         fprintf(f, ",");
+    needsComma = TRUE;
+    printField(f, s, elType->base);
+    s += array->elSize;
+    }
+fprintf(f, ")");
+}
+
+
 void printField(FILE *f, void *data, struct _pf_base *base)
 /* Print out a data from a single field of given type. */
 {
@@ -76,8 +96,13 @@ switch (base->singleType)
     case pf_stClass:
 	{
 	struct _pf_object **p = data;
-	struct _pf_object *obj = *p;
-        printClass(f, obj, base);
+        printClass(f, *p, base);
+	break;
+	}
+    case pf_stArray:
+        {
+	struct _pf_array **p = data;
+        printArray(f, *p, base);
 	break;
 	}
     default:
@@ -122,6 +147,11 @@ switch (base->singleType)
 	break;
     case pf_stClass:
         printClass(f, val.Obj, base);
+	if (--val.Obj->_pf_refCount <= 0)
+	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
+	break;
+    case pf_stArray:
+        printArray(f, val.Array, base);
 	if (--val.Obj->_pf_refCount <= 0)
 	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
 	break;

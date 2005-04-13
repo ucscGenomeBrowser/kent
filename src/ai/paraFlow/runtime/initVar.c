@@ -33,11 +33,10 @@ struct _pf_object *obj = needMem(base->objSize);
 char *s = (char *)(obj);
 _pf_Stack *field;
 
-uglyf("_pf_class_from_tuple(%p %d %p)\n", stack, typeId, retStack);
+// uglyf("_pf_class_from_tuple(%p %d %p)\n", stack, typeId, retStack);
 for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
     int offset = fieldType->offset;
-    uglyf("  offset %d, singleType %d, sizeof(*stack) %d\n", offset, fieldType->base->singleType, (int)sizeof(*stack));
     switch (fieldType->base->singleType)
 	{
 	case pf_stBit:
@@ -100,12 +99,12 @@ static void _pf_array_cleanup(struct _pf_array *array, int id)
 /* Clean up all elements of array, and then array itself. */
 {
 struct _pf_type *elType = _pf_type_table[array->elType];
-uglyf("_pf_array_cleanup of %d elements\n", array->count);
+uglyf("_pf_array_cleanup of %d elements\n", array->size);
 if (elType->base->needsCleanup)
     {
     struct _pf_object **objs = (struct _pf_object **)(array->elements);
     int i;
-    for (i=0; i<array->count; ++i)
+    for (i=0; i<array->size; ++i)
 	{
 	struct _pf_object *obj = objs[i];
 	if (obj != NULL && --obj->_pf_refCount <= 0)
@@ -125,9 +124,9 @@ struct _pf_array *array;
 AllocVar(array);
 array->_pf_refCount = 1;
 array->_pf_cleanup = _pf_array_cleanup;
-array->_pf_typeId = arrayTypeId;
+// array->_pf_typeId = arrayTypeId;
 array->elements = elements;
-array->count = count;
+array->size = count;
 array->allocated = count;
 array->elSize = elSize;
 array->elType = elTypeId;

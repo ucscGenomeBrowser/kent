@@ -18,9 +18,9 @@ struct _pf_array
     {
     int _pf_refCount;			     	/* Number of references. */
     void (*_pf_cleanup)(struct _pf_array *obj, int id); /* Called when refCount <= 0 */
-    int _pf_typeId; 		/* Index of type in _pf_type_table. */
+//    int _pf_typeId; 		/* Index of type in _pf_type_table. */
     char *elements;		/* Pointer to elements. */
-    int count;			/* Count of elements used. */
+    int size;			/* Count of elements used. */
     int allocated;		/* Count of elements allocated. */
     int elSize;			/* Size of each element. */
     int	elType;			/* Type of each element. */
