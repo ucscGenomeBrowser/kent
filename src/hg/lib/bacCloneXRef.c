@@ -8,18 +8,19 @@
 #include "jksql.h"
 #include "bacCloneXRef.h"
 
-static char const rcsid[] = "$Id: bacCloneXRef.c,v 1.1 2004/07/26 21:14:19 hartera Exp $";
+static char const rcsid[] = "$Id: bacCloneXRef.c,v 1.2 2005/04/13 19:21:46 hartera Exp $";
 
 void bacCloneXRefStaticLoad(char **row, struct bacCloneXRef *ret)
 /* Load a row from bacCloneXRef table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
-ret->extName = row[0];
-ret->intName = row[1];
-ret->acc = row[2];
+ret->altName = row[0];
+ret->extName = row[1];
+ret->intName = row[2];
+ret->uniStsId = row[3];
+ret->acc = row[4];
+ret->fpcCtg = row[5];
 }
 
 struct bacCloneXRef *bacCloneXRefLoad(char **row)
@@ -27,13 +28,14 @@ struct bacCloneXRef *bacCloneXRefLoad(char **row)
  * from database.  Dispose of this with bacCloneXRefFree(). */
 {
 struct bacCloneXRef *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
-ret->extName = cloneString(row[0]);
-ret->intName = cloneString(row[1]);
-ret->acc = cloneString(row[2]);
+ret->altName = cloneString(row[0]);
+ret->extName = cloneString(row[1]);
+ret->intName = cloneString(row[2]);
+ret->uniStsId = cloneString(row[3]);
+ret->acc = cloneString(row[4]);
+ret->fpcCtg = cloneString(row[5]);
 return ret;
 }
 
@@ -43,7 +45,7 @@ struct bacCloneXRef *bacCloneXRefLoadAll(char *fileName)
 {
 struct bacCloneXRef *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +63,7 @@ struct bacCloneXRef *bacCloneXRefLoadAllByChar(char *fileName, char chopper)
 {
 struct bacCloneXRef *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[6];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -79,13 +81,15 @@ struct bacCloneXRef *bacCloneXRefCommaIn(char **pS, struct bacCloneXRef *ret)
  * return a new bacCloneXRef */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->altName = sqlStringComma(&s);
 ret->extName = sqlStringComma(&s);
 ret->intName = sqlStringComma(&s);
+ret->uniStsId = sqlStringComma(&s);
 ret->acc = sqlStringComma(&s);
+ret->fpcCtg = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -97,9 +101,12 @@ void bacCloneXRefFree(struct bacCloneXRef **pEl)
 struct bacCloneXRef *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->altName);
 freeMem(el->extName);
 freeMem(el->intName);
+freeMem(el->uniStsId);
 freeMem(el->acc);
+freeMem(el->fpcCtg);
 freez(pEl);
 }
 
@@ -119,7 +126,10 @@ for (el = *pList; el != NULL; el = next)
 void bacCloneXRefOutput(struct bacCloneXRef *el, FILE *f, char sep, char lastSep) 
 /* Print out bacCloneXRef.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->altName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->extName);
 if (sep == ',') fputc('"',f);
@@ -129,7 +139,15 @@ fprintf(f, "%s", el->intName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->uniStsId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->acc);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->fpcCtg);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

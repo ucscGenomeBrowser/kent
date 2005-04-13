@@ -3,12 +3,17 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#BAC clones external names, internal sequence names and Genbank accessions
+#BAC clones alternate names from UniSTS, external names, internal sequence 
+# names, UniSTS ID, Genbank accessions and FPC contig for BAC clone
 CREATE TABLE bacCloneXRef (
-    extName varchar(255) not null,	# External name for BAC clone
-    intName varchar(255) not null,	# Internal sequncing name for BAC clone
-    acc varchar(255) not null,	# Genbank accession for the BAC End
+    altName varchar(255) not null,	# Alternate name (alias) for BAC clone from UniSTS
+    extName varchar(255) not null,	# External name for BAC clone - International ID
+    intName varchar(255) not null,	# Internal Sanger sequencing name for BAC clone
+    uniStsId varchar(255) not null,	# UniSTS ID for BAC clone
+    acc varchar(255),                   # Genbank accession for the BAC Clone
+    fpcCtg varchar(255) not null,	# FPC Contig for BAC clone
               #Indices
-    PRIMARY KEY(extName),
+    PRIMARY KEY(altName)
+    INDEX(altName)
     INDEX(extName)
 );

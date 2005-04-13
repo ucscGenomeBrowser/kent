@@ -5,15 +5,18 @@
 #ifndef BACCLONEXREF_H
 #define BACCLONEXREF_H
 
-#define BACCLONEXREF_NUM_COLS 3
+#define BACCLONEXREF_NUM_COLS 6
 
 struct bacCloneXRef
 /* BAC clones external names, internal sequence names and Genbank accessions */
     {
     struct bacCloneXRef *next;  /* Next in singly linked list. */
-    char *extName;	/* External name for BAC clone */
-    char *intName;	/* Internal sequncing name for BAC clone */
-    char *acc;	/* Genbank accession for the BAC End */
+    char *altName;	/* Alternate name (alias) for BAC clone from UniSTS */
+    char *extName;	/* External name for BAC clone - International ID */
+    char *intName;	/* Internal Sanger sequencing name for BAC clone */
+    char *uniStsId;	/* UniSTS ID for BAC clone */
+    char *acc;	/* Genbank accession for the BAC Clone */
+    char *fpcCtg;	/* FPC Contig for BAC clone */
     };
 
 void bacCloneXRefStaticLoad(char **row, struct bacCloneXRef *ret);
