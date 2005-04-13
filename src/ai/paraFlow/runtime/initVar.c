@@ -8,7 +8,19 @@
 static void _pf_class_cleanup(struct _pf_object *obj, int typeId)
 /* Clean up all class fields, and then class itself. */
 {
-uglyf("_pf_class_cleanup (%d) - still needs work\n", typeId);
+struct _pf_type *type = _pf_type_table[typeId], *fieldType;
+struct _pf_base *base = type->base;
+char *s = (char *)(obj);
+uglyf("_pf_class_cleanup (%s)\n", base->name);
+for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
+    {
+    if (fieldType->base->needsCleanup)
+        {
+	struct _pf_object *subObj = *((_pf_Object *)(s + fieldType->offset));
+	if (subObj != NULL && --subObj->_pf_refCount <= 0)
+	    subObj->_pf_cleanup(subObj, fieldType->typeId);
+	}
+    }
 free(obj);
 }
 
