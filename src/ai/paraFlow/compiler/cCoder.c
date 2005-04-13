@@ -489,8 +489,8 @@ static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,
 int count = codeExpression(pfc, f, rval, stack, TRUE);
 if (lval->ty->base->isClass)
     {
-    assert(rval->type == pptTuple);
-    codeTupleIntoClass(pfc, f, lval, stack, count);
+    if (rval->type == pptTuple)
+	codeTupleIntoClass(pfc, f, lval, stack, count);
     }
 else
     {
