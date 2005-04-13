@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.14 2005/03/31 01:18:21 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.15 2005/04/13 18:35:09 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -44,6 +44,7 @@ my @clusterNAS = ('/cluster/bluearc', '/panasas');
 my $clusterNAS = join('/... or ', @clusterNAS) . '/...';
 my @clusterNoNo = ('/cluster/home', '/projects');
 my @fileServerNoNo = ('kkhome', 'kks00');
+my @fileServerNoLogin = ('kkstore01');
 my $splitThreshold = 100;
 
 # Option variable names:
@@ -367,6 +368,18 @@ sub fileBase {
   $path =~ s/^(.*\/)?(\S+)\.\w+(\.gz)?/$2/;
   return $path;
 }
+
+sub nfsNoodge {
+  # sometimes localhost can't see the newly created file immediately,
+  # so insert some artificial delay in order to prevent the next step
+  # from dieing on lack of file:
+  my ($file) = @_;
+  for (my $i=0;  $i < 5;  $i++) {
+    last if (system("ls $file >& /dev/null") == 0);
+    sleep(2);
+  }
+}
+
 
 # end shared stuff from blastz-run-ucsc
 #########################################################################
@@ -791,6 +804,7 @@ sub swapChains {
     &run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$swappedChain");
   }
+  &nfsNoodge("$runDir/$swappedChain");
 }
 
 
@@ -915,14 +929,14 @@ sub loadUp {
   my $runDir = "$buildDir/axtChain";
   # First, make sure we're starting clean.
   if (-e "$runDir/$tDb.$qDb.net" || -e "$runDir/$tDb.$qDb.net.gz") {
-    die "netChains: looks like this was run successfully already " .
+    die "loadUp: looks like this was run successfully already " .
       "($tDb.$qDb.net[.gz] exists).  Either run with -continue download, " .
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
   }
   # Make sure previous stage was successful.
   my $successDir = "$buildDir/mafNet/";
   if (! -d $successDir && ! $opt_debug) {
-    die "netChains: looks like previous stage was not successful " .
+    die "loadUp: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
   }
   my $bossScript = "$buildDir/axtChain/loadUp.csh";
@@ -1265,6 +1279,7 @@ sub installDownloads {
 # and copies the liftOver chains (if applicable) to the liftOver download dir.
 # This script will fail if any of its commands fail.
 
+mkdir -p $goldenPath/$tDb
 mkdir $goldenPath/$tDb/vs$QDb
 cd $goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
@@ -1397,6 +1412,11 @@ my $fileServer = $opt_fileServer ? $opt_fileServer :
                  $opt_swap ? `$getFileServer $swapDir/` :
                              `$getFileServer $buildDir/`;
 chomp $fileServer;
+if (scalar(grep /^$fileServer$/, @fileServerNoLogin)) {
+  print STDERR "Logins are not allowed on fileServer $fileServer; will use " .
+    "workhorse $workhorse instead of fileServer for I/O-intensive steps.\n";
+  $fileServer = $workhorse;
+}
 
 my $step = 0;
 if ($startStep <= $step && $step <= $stopStep) {
