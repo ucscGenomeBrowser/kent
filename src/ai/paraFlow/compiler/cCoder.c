@@ -498,7 +498,6 @@ static void codeVarInit(struct pfCompile *pfc, FILE *f,
 struct pfParse *lval = pp;
 struct pfParse *rval = pp->children->next->next;
 int count = codeExpression(pfc, f, rval, stack, TRUE);
-uglyf("codeVarInit count %d, rval->type %s\n", count, pfParseTypeAsString(rval->type));
 if (lval->ty->base->isClass)
     {
     assert(rval->type == pptTuple);
