@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "exoFish.h"
 
-static char const rcsid[] = "$Id: exoFish.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: exoFish.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 void exoFishStaticLoad(char **row, struct exoFish *ret)
 /* Load a row from exoFish table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -27,8 +25,6 @@ struct exoFish *exoFishLoad(char **row)
  * from database.  Dispose of this with exoFishFree(). */
 {
 struct exoFish *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -45,7 +41,6 @@ struct exoFish *exoFishCommaIn(char **pS, struct exoFish *ret)
  * return a new exoFish */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -86,7 +81,6 @@ for (el = *pList; el != NULL; el = next)
 void exoFishOutput(struct exoFish *el, FILE *f, char sep, char lastSep) 
 /* Print out exoFish.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

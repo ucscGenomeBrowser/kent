@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "fbTables.h"
 
-static char const rcsid[] = "$Id: fbTables.c,v 1.4 2004/06/29 17:41:36 angie Exp $";
+static char const rcsid[] = "$Id: fbTables.c,v 1.5 2005/04/13 06:25:52 markd Exp $";
 
 void fbGeneStaticLoad(char **row, struct fbGene *ret)
 /* Load a row from fbGene table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->geneSym = row[1];
@@ -27,8 +25,6 @@ struct fbGene *fbGeneLoad(char **row)
  * from database.  Dispose of this with fbGeneFree(). */
 {
 struct fbGene *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -79,7 +75,6 @@ struct fbGene *fbGeneCommaIn(char **pS, struct fbGene *ret)
  * return a new fbGene */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -119,7 +114,6 @@ for (el = *pList; el != NULL; el = next)
 void fbGeneOutput(struct fbGene *el, FILE *f, char sep, char lastSep) 
 /* Print out fbGene.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
@@ -138,8 +132,6 @@ void fbTranscriptStaticLoad(char **row, struct fbTranscript *ret)
 /* Load a row from fbTranscript table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->transcriptId = row[1];
@@ -150,8 +142,6 @@ struct fbTranscript *fbTranscriptLoad(char **row)
  * from database.  Dispose of this with fbTranscriptFree(). */
 {
 struct fbTranscript *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -201,7 +191,6 @@ struct fbTranscript *fbTranscriptCommaIn(char **pS, struct fbTranscript *ret)
  * return a new fbTranscript */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -239,7 +228,6 @@ for (el = *pList; el != NULL; el = next)
 void fbTranscriptOutput(struct fbTranscript *el, FILE *f, char sep, char lastSep) 
 /* Print out fbTranscript.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
@@ -254,8 +242,6 @@ void fbSynonymStaticLoad(char **row, struct fbSynonym *ret)
 /* Load a row from fbSynonym table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->name = row[1];
@@ -266,8 +252,6 @@ struct fbSynonym *fbSynonymLoad(char **row)
  * from database.  Dispose of this with fbSynonymFree(). */
 {
 struct fbSynonym *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -317,7 +301,6 @@ struct fbSynonym *fbSynonymCommaIn(char **pS, struct fbSynonym *ret)
  * return a new fbSynonym */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -355,7 +338,6 @@ for (el = *pList; el != NULL; el = next)
 void fbSynonymOutput(struct fbSynonym *el, FILE *f, char sep, char lastSep) 
 /* Print out fbSynonym.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
@@ -370,8 +352,6 @@ void fbAlleleStaticLoad(char **row, struct fbAllele *ret)
 /* Load a row from fbAllele table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->id = sqlSigned(row[0]);
 ret->geneId = row[1];
@@ -383,8 +363,6 @@ struct fbAllele *fbAlleleLoad(char **row)
  * from database.  Dispose of this with fbAlleleFree(). */
 {
 struct fbAllele *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->id = sqlSigned(row[0]);
@@ -435,7 +413,6 @@ struct fbAllele *fbAlleleCommaIn(char **pS, struct fbAllele *ret)
  * return a new fbAllele */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -474,7 +451,6 @@ for (el = *pList; el != NULL; el = next)
 void fbAlleleOutput(struct fbAllele *el, FILE *f, char sep, char lastSep) 
 /* Print out fbAllele.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -491,8 +467,6 @@ void fbRefStaticLoad(char **row, struct fbRef *ret)
 /* Load a row from fbRef table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->id = sqlSigned(row[0]);
 ret->text = row[1];
@@ -503,8 +477,6 @@ struct fbRef *fbRefLoad(char **row)
  * from database.  Dispose of this with fbRefFree(). */
 {
 struct fbRef *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->id = sqlSigned(row[0]);
@@ -554,7 +526,6 @@ struct fbRef *fbRefCommaIn(char **pS, struct fbRef *ret)
  * return a new fbRef */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -591,7 +562,6 @@ for (el = *pList; el != NULL; el = next)
 void fbRefOutput(struct fbRef *el, FILE *f, char sep, char lastSep) 
 /* Print out fbRef.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -604,8 +574,6 @@ void fbRoleStaticLoad(char **row, struct fbRole *ret)
 /* Load a row from fbRole table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->fbAllele = sqlSigned(row[1]);
@@ -618,8 +586,6 @@ struct fbRole *fbRoleLoad(char **row)
  * from database.  Dispose of this with fbRoleFree(). */
 {
 struct fbRole *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -671,7 +637,6 @@ struct fbRole *fbRoleCommaIn(char **pS, struct fbRole *ret)
  * return a new fbRole */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -711,7 +676,6 @@ for (el = *pList; el != NULL; el = next)
 void fbRoleOutput(struct fbRole *el, FILE *f, char sep, char lastSep) 
 /* Print out fbRole.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
@@ -730,8 +694,6 @@ void fbPhenotypeStaticLoad(char **row, struct fbPhenotype *ret)
 /* Load a row from fbPhenotype table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->fbAllele = sqlSigned(row[1]);
@@ -744,8 +706,6 @@ struct fbPhenotype *fbPhenotypeLoad(char **row)
  * from database.  Dispose of this with fbPhenotypeFree(). */
 {
 struct fbPhenotype *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -797,7 +757,6 @@ struct fbPhenotype *fbPhenotypeCommaIn(char **pS, struct fbPhenotype *ret)
  * return a new fbPhenotype */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -837,7 +796,6 @@ for (el = *pList; el != NULL; el = next)
 void fbPhenotypeOutput(struct fbPhenotype *el, FILE *f, char sep, char lastSep) 
 /* Print out fbPhenotype.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
@@ -856,8 +814,6 @@ void fbGoStaticLoad(char **row, struct fbGo *ret)
 /* Load a row from fbGo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->goId = row[1];
@@ -869,8 +825,6 @@ struct fbGo *fbGoLoad(char **row)
  * from database.  Dispose of this with fbGoFree(). */
 {
 struct fbGo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -921,7 +875,6 @@ struct fbGo *fbGoCommaIn(char **pS, struct fbGo *ret)
  * return a new fbGo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -961,7 +914,6 @@ for (el = *pList; el != NULL; el = next)
 void fbGoOutput(struct fbGo *el, FILE *f, char sep, char lastSep) 
 /* Print out fbGo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);

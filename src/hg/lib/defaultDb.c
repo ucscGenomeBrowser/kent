@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "defaultDb.h"
 
-static char const rcsid[] = "$Id: defaultDb.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: defaultDb.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 void defaultDbStaticLoad(char **row, struct defaultDb *ret)
 /* Load a row from defaultDb table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->genome = row[0];
 ret->name = row[1];
@@ -26,8 +24,6 @@ struct defaultDb *defaultDbLoad(char **row)
  * from database.  Dispose of this with defaultDbFree(). */
 {
 struct defaultDb *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->genome = cloneString(row[0]);
@@ -59,7 +55,6 @@ struct defaultDb *defaultDbCommaIn(char **pS, struct defaultDb *ret)
  * return a new defaultDb */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -97,7 +92,6 @@ for (el = *pList; el != NULL; el = next)
 void defaultDbOutput(struct defaultDb *el, FILE *f, char sep, char lastSep) 
 /* Print out defaultDb.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->genome);
 if (sep == ',') fputc('"',f);

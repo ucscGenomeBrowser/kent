@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "dnaProbe.h"
 
-static char const rcsid[] = "$Id: dnaProbe.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: dnaProbe.c,v 1.3 2005/04/13 06:25:52 markd Exp $";
 
 void dnaProbeStaticLoad(char **row, struct dnaProbe *ret)
 /* Load a row from dnaProbe table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->dna = row[1];
@@ -38,8 +36,6 @@ struct dnaProbe *dnaProbeLoad(char **row)
  * from database.  Dispose of this with dnaProbeFree(). */
 {
 struct dnaProbe *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -147,7 +143,6 @@ struct dnaProbe *dnaProbeCommaIn(char **pS, struct dnaProbe *ret)
  * return a new dnaProbe */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -198,7 +193,6 @@ for (el = *pList; el != NULL; el = next)
 void dnaProbeOutput(struct dnaProbe *el, FILE *f, char sep, char lastSep) 
 /* Print out dnaProbe.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

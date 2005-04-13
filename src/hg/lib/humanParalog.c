@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "humanParalog.h"
 
-static char const rcsid[] = "$Id: humanParalog.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: humanParalog.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 void humanParalogStaticLoad(char **row, struct humanParalog *ret)
 /* Load a row from humanParalog table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -32,8 +30,6 @@ struct humanParalog *humanParalogLoad(char **row)
  * from database.  Dispose of this with humanParalogFree(). */
 {
 struct humanParalog *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -96,7 +92,6 @@ struct humanParalog *humanParalogCommaIn(char **pS, struct humanParalog *ret)
  * return a new humanParalog */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -141,7 +136,6 @@ for (el = *pList; el != NULL; el = next)
 void humanParalogOutput(struct humanParalog *el, FILE *f, char sep, char lastSep) 
 /* Print out humanParalog.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

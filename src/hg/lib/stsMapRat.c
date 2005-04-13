@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "stsMapRat.h"
 
-static char const rcsid[] = "$Id: stsMapRat.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsMapRat.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void stsMapRatStaticLoad(char **row, struct stsMapRat *ret)
 /* Load a row from stsMapRat table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlSigned(row[1]);
@@ -39,8 +37,6 @@ struct stsMapRat *stsMapRatLoad(char **row)
  * from database.  Dispose of this with stsMapRatFree(). */
 {
 struct stsMapRat *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -85,7 +81,6 @@ struct stsMapRat *stsMapRatCommaIn(char **pS, struct stsMapRat *ret)
  * return a new stsMapRat */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -141,7 +136,6 @@ for (el = *pList; el != NULL; el = next)
 void stsMapRatOutput(struct stsMapRat *el, FILE *f, char sep, char lastSep) 
 /* Print out stsMapRat.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

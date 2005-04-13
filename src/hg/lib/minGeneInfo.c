@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "minGeneInfo.h"
 
-static char const rcsid[] = "$Id: minGeneInfo.c,v 1.1 2003/06/30 21:49:52 aamp Exp $";
+static char const rcsid[] = "$Id: minGeneInfo.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 /* Load a row from minGeneInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->product = row[1];
@@ -27,8 +25,6 @@ struct minGeneInfo *minGeneInfoLoad(char **row)
  * from database.  Dispose of this with minGeneInfoFree(). */
 {
 struct minGeneInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -141,7 +137,6 @@ struct minGeneInfo *minGeneInfoCommaIn(char **pS, struct minGeneInfo *ret)
  * return a new minGeneInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -181,7 +176,6 @@ for (el = *pList; el != NULL; el = next)
 void minGeneInfoOutput(struct minGeneInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out minGeneInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

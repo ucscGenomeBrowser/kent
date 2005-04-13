@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "sgdAbundance.h"
 
-static char const rcsid[] = "$Id: sgdAbundance.c,v 1.1 2003/12/03 03:41:40 kent Exp $";
+static char const rcsid[] = "$Id: sgdAbundance.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void sgdAbundanceStaticLoad(char **row, struct sgdAbundance *ret)
 /* Load a row from sgdAbundance table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->abundance = atof(row[1]);
@@ -27,8 +25,6 @@ struct sgdAbundance *sgdAbundanceLoad(char **row)
  * from database.  Dispose of this with sgdAbundanceFree(). */
 {
 struct sgdAbundance *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -79,7 +75,6 @@ struct sgdAbundance *sgdAbundanceCommaIn(char **pS, struct sgdAbundance *ret)
  * return a new sgdAbundance */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -118,7 +113,6 @@ for (el = *pList; el != NULL; el = next)
 void sgdAbundanceOutput(struct sgdAbundance *el, FILE *f, char sep, char lastSep) 
 /* Print out sgdAbundance.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

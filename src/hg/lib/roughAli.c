@@ -7,14 +7,12 @@
 #include "jksql.h"
 #include "roughAli.h"
 
-static char const rcsid[] = "$Id: roughAli.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: roughAli.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void roughAliStaticLoad(char **row, struct roughAli *ret)
 /* Load a row from roughAli table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -31,8 +29,6 @@ struct roughAli *roughAliLoad(char **row)
  * from database.  Dispose of this with roughAliFree(). */
 {
 struct roughAli *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -70,7 +66,6 @@ struct roughAli *roughAliCommaIn(char **pS, struct roughAli *ret)
  * return a new roughAli */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -114,7 +109,6 @@ for (el = *pList; el != NULL; el = next)
 void roughAliOutput(struct roughAli *el, FILE *f, char sep, char lastSep) 
 /* Print out roughAli.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

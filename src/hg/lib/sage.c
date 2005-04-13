@@ -7,15 +7,14 @@
 #include "jksql.h"
 #include "sage.h"
 
-static char const rcsid[] = "$Id: sage.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: sage.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 struct sage *sageLoad(char **row)
 /* Load a sage from row fetched with select * from sage
  * from database.  Dispose of this with sageFree(). */
 {
 struct sage *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->numTags = sqlSigned(row[4]);

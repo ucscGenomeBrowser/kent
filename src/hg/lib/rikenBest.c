@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "rikenBest.h"
 
-static char const rcsid[] = "$Id: rikenBest.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: rikenBest.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 void rikenBestStaticLoad(char **row, struct rikenBest *ret)
 /* Load a row from rikenBest table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->orfScore = atof(row[1]);
@@ -33,8 +31,6 @@ struct rikenBest *rikenBestLoad(char **row)
  * from database.  Dispose of this with rikenBestFree(). */
 {
 struct rikenBest *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -98,7 +94,6 @@ struct rikenBest *rikenBestCommaIn(char **pS, struct rikenBest *ret)
  * return a new rikenBest */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -144,7 +139,6 @@ for (el = *pList; el != NULL; el = next)
 void rikenBestOutput(struct rikenBest *el, FILE *f, char sep, char lastSep) 
 /* Print out rikenBest.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

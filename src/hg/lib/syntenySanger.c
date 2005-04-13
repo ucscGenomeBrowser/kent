@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "syntenySanger.h"
 
-static char const rcsid[] = "$Id: syntenySanger.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: syntenySanger.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void syntenySangerStaticLoad(char **row, struct syntenySanger *ret)
 /* Load a row from syntenySanger table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct syntenySanger *syntenySangerLoad(char **row)
  * from database.  Dispose of this with syntenySangerFree(). */
 {
 struct syntenySanger *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -92,7 +88,6 @@ struct syntenySanger *syntenySangerCommaIn(char **pS, struct syntenySanger *ret)
  * return a new syntenySanger */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -134,7 +129,6 @@ for (el = *pList; el != NULL; el = next)
 void syntenySangerOutput(struct syntenySanger *el, FILE *f, char sep, char lastSep) 
 /* Print out syntenySanger.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

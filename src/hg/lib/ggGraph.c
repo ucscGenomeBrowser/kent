@@ -13,7 +13,7 @@
 #include "ggPrivate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: ggGraph.c,v 1.15 2005/01/27 02:21:06 sugnet Exp $";
+static char const rcsid[] = "$Id: ggGraph.c,v 1.16 2005/04/13 06:25:53 markd Exp $";
 
 static int maxEvidence = 500;
 
@@ -128,7 +128,6 @@ struct geneGraph *gg = NULL;
 bool **em;
 int totalWithDupes = 0;
 struct maRef *ref;
-char **mrnaRefs = NULL;
 int mrnaRefCount;
 struct ggEvidence ***evM = NULL;
 AllocArray(vAll, vAlloc);
@@ -277,7 +276,6 @@ bool *edgesOut = em[softIx];
 int endIx;
 boolean anyTrim = FALSE;
 boolean anyLeft = FALSE;
-struct ggEvidence ***evid = gg->evidence;
 for (endIx=0; endIx < vCount; ++endIx)
     {
     if (edgesOut[endIx])
@@ -338,7 +336,6 @@ bool **em = gg->edgeMatrix;
 int startIx;
 boolean anyTrim = FALSE;
 boolean anyLeft = FALSE;
-struct ggEvidence ***evid = gg->evidence;
 for (startIx=0; startIx < vCount; ++startIx)
     {
     if (em[startIx][softIx])
@@ -399,8 +396,6 @@ int sIx, eIx;
 bool **em = gg->edgeMatrix;
 struct ggVertex *vertices = gg->vertices;
 int softStartPos = vertices[softStartIx].position;
-int hardEndPos = vertices[endIx].position;
-struct ggEvidence  ***evid = gg->evidence;
 /* for each vertice */
 for (eIx = 0; eIx < vCount; ++eIx)
     {
@@ -645,10 +640,8 @@ static boolean softStartOverlapConsensusArcs(struct geneGraph *gg, struct hash *
     and extend original edge to it. Only allow replacement of a softStart with a shorter
     exon when allowSmaller is TRUE. */
 {
-struct ggVertex *overlapping = NULL; /* Array of vertexes that could replace softStartIx. */
 int *oIndex = NULL;                  /* Index into gg->vertexes array for overlapping. */
 int oCount = 0;                      /* Number of items in oIndex and overlapping arrays. */
-int bestEdge = -1;
 bool **em = gg->edgeMatrix;
 int vCount = gg->vertexCount;
 int i;
@@ -663,7 +656,6 @@ for (i=0; i<vCount; ++i)
 	bestStart = consensusSoftStartVertex(gg, softStartIx, i, oIndex, oCount, allowSmaller);
 	if(bestStart >= 0 && bestStart != softStartIx)
 	    {
-	    struct ggEvidence *ge = NULL;
 	    em[softStartIx][i] = FALSE;
 	    moveEvidenceIfUnique(&gg->evidence[bestStart][i], &gg->evidence[softStartIx][i]);
 	    em[bestStart][i] = TRUE; 
@@ -682,10 +674,8 @@ static boolean softEndOverlapConsensusArcs(struct geneGraph *gg, struct hash *al
     edges that have a hard end. If there are, find the consensus hard start
     and extend original edge to it. */
 {
-struct ggVertex *overlapping = NULL; /* Array of vertexes that could replace softEndIx. */
 int *oIndex = NULL;                  /* Index into gg->vertexes array for overlapping. */
 int oCount = 0;                      /* Number of items in oIndex and overlapping arrays. */
-int bestEdge = -1;
 bool **em = gg->edgeMatrix;
 int vCount = gg->vertexCount;
 int i;
@@ -700,7 +690,6 @@ for (i=0; i<vCount; ++i)
 	bestEnd = consensusSoftEndVertex(gg, i, softEndIx, oIndex, oCount, allowSmaller);
 	if(bestEnd >= 0 && bestEnd != softEndIx)
 	    {
-	    struct ggEvidence *ge = NULL;
 	    em[i][softEndIx] = FALSE;
 	    moveEvidenceIfUnique(&gg->evidence[i][bestEnd], &gg->evidence[i][softEndIx]);
 	    em[i][bestEnd] = TRUE; 
@@ -717,13 +706,11 @@ static boolean softStartArcs(struct geneGraph *gg, int softStartIx)
 /* Replace a soft start with all hard starts of overlapping,
  * but not conflicting exons. */
 {
-int myEndIx;
 int vCount = gg->vertexCount;
 bool **em = gg->edgeMatrix;
 boolean result = FALSE;
 boolean anyLeft = FALSE;
 int i;
-struct ggEvidence ***evid = gg->evidence;
 for (i=0; i<vCount; ++i)
     {
     if (em[softStartIx][i])
@@ -758,9 +745,7 @@ int vCount = gg->vertexCount;
 int sIx, eIx;
 bool **em = gg->edgeMatrix;
 struct ggVertex *vertices = gg->vertices;
-int startPos = vertices[startIx].position;
 int softEndPos = vertices[softEndIx].position;
-struct ggEvidence ***evid = gg->evidence;
 for (sIx = 0; sIx < vCount; ++sIx)
     {
     struct ggVertex *sv = vertices+sIx;
@@ -797,13 +782,11 @@ static boolean softEndArcs(struct geneGraph *gg, int softEndIx)
 /* Replace a soft end with all hard ends of overlapping,
  * but not conflicting gexons. */
 {
-int myStartIx;
 int vCount = gg->vertexCount;
 bool **em = gg->edgeMatrix;
 boolean result = FALSE;
 boolean anyLeft = FALSE;
 int i;
-struct ggEvidence ***evid = gg->evidence;
 for (i=0; i<vCount; ++i)
     {
     if (em[i][softEndIx])
@@ -845,12 +828,12 @@ for (i=0; i<vCount; ++i)
 	case ggSoftStart:
 	    result |= softStartArcs(gg, i);
 	    if(!matricesInSync(gg)) 
-		errAbort("matrices are out of synch on vertex %d with ggSoftStart"); 	    
+		errAbort("matrices are out of synch on vertex %d with ggSoftStart", i);
 	    break;
 	case ggSoftEnd:
 	    result |= softEndArcs(gg, i);
 	    if(!matricesInSync(gg)) 
-		errAbort("matrices are out of synch on vertex %d with ggSoftEnd"); 	    
+		errAbort("matrices are out of synch on vertex %d with ggSoftEnd", i);
 	    break;
 	}
     }
@@ -864,9 +847,7 @@ int i,j;
 int vCount = gg->vertexCount;
 struct ggVertex *vertices = gg->vertices;
 bool **em = gg->edgeMatrix;
-boolean result = FALSE;
 int eStart = vertices[startIx].position;
-int eEnd = vertices[endIx].position;
 
 for (i=0; i<vCount; ++i)
     {
@@ -880,7 +861,7 @@ for (i=0; i<vCount; ++i)
 		{
 		struct ggVertex *dv = vertices+j;
 		type = dv->type;
-		if (type == ggSoftEnd || type == ggHardEnd && dv->position >= endIx)
+		if ((type == ggSoftEnd) || ((type == ggHardEnd) && (dv->position >= endIx)))
 		    return TRUE;
 		}
 	    }
@@ -899,7 +880,6 @@ int vCount = gg->vertexCount;
 struct ggVertex *vertices = gg->vertices;
 bool **em = gg->edgeMatrix;
 boolean result = FALSE;
-struct ggEvidence ***evid = gg->evidence;
 for (i=0; i<vCount; ++i)
     {
     if (vertices[i].type == ggSoftStart)

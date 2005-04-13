@@ -82,7 +82,6 @@ void hgBotDelay()
 {
 char *host = cfgOption("bottleneck.host");
 char *port = cfgOption("bottleneck.port");
-int delay;
 if (host != NULL && port != NULL)
     botDelayCgi(host, atoi(port));
 }

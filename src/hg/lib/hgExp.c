@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.6 2005/03/07 04:30:13 kent Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.7 2005/04/13 06:25:54 markd Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -295,7 +295,6 @@ void hgExpCellPrint(char *colName, char *geneId,
 	boolean useBlue, boolean useGrays, float scale)
 /* Print out html for expression cell in table. */
 {
-int i;
 int valCount;
 float *vals = NULL;
 

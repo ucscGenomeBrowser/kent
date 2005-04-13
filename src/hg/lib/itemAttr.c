@@ -9,7 +9,7 @@
 #include "itemAttr.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: itemAttr.c,v 1.2 2004/10/04 19:56:50 markd Exp $";
+static char const rcsid[] = "$Id: itemAttr.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 void itemAttrStaticLoad(char **row, struct itemAttr *ret)
 /* Load a row from itemAttr table into ret.  The contents of ret will
@@ -175,7 +175,6 @@ void itemAttrTblLoad(struct itemAttrTbl *iat,
 int rowOffset;
 struct sqlResult *result;
 char **row;
-char idBuf[64];
 
 if (iat->nameMap == NULL)
     iat->nameMap = hashNew(18);

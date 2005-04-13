@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "stsMapMouse.h"
 
-static char const rcsid[] = "$Id: stsMapMouse.c,v 1.4 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsMapMouse.c,v 1.5 2005/04/13 06:25:57 markd Exp $";
 
 void stsMapMouseStaticLoad(char **row, struct stsMapMouse *ret)
 /* Load a row from stsMapMouse table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlSigned(row[1]);
@@ -32,8 +30,6 @@ struct stsMapMouse *stsMapMouseLoad(char **row)
  * from database.  Dispose of this with stsMapMouseFree(). */
 {
 struct stsMapMouse *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -96,7 +92,6 @@ struct stsMapMouse *stsMapMouseCommaIn(char **pS, struct stsMapMouse *ret)
  * return a new stsMapMouse */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -140,7 +135,6 @@ for (el = *pList; el != NULL; el = next)
 void stsMapMouseOutput(struct stsMapMouse *el, FILE *f, char sep, char lastSep) 
 /* Print out stsMapMouse.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

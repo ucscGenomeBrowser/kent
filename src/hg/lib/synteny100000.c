@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "synteny100000.h"
 
-static char const rcsid[] = "$Id: synteny100000.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: synteny100000.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void synteny100000StaticLoad(char **row, struct synteny100000 *ret)
 /* Load a row from synteny100000 table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct synteny100000 *synteny100000Load(char **row)
  * from database.  Dispose of this with synteny100000Free(). */
 {
 struct synteny100000 *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -92,7 +88,6 @@ struct synteny100000 *synteny100000CommaIn(char **pS, struct synteny100000 *ret)
  * return a new synteny100000 */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -134,7 +129,6 @@ for (el = *pList; el != NULL; el = next)
 void synteny100000Output(struct synteny100000 *el, FILE *f, char sep, char lastSep) 
 /* Print out synteny100000.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

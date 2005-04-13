@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "encodeRegionInfo.h"
 
-static char const rcsid[] = "$Id: encodeRegionInfo.c,v 1.1 2003/10/14 07:13:04 kate Exp $";
+static char const rcsid[] = "$Id: encodeRegionInfo.c,v 1.2 2005/04/13 06:25:52 markd Exp $";
 
 void encodeRegionInfoStaticLoad(char **row, struct encodeRegionInfo *ret)
 /* Load a row from encodeRegionInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->descr = row[1];
@@ -26,8 +24,6 @@ struct encodeRegionInfo *encodeRegionInfoLoad(char **row)
  * from database.  Dispose of this with encodeRegionInfoFree(). */
 {
 struct encodeRegionInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -77,7 +73,6 @@ struct encodeRegionInfo *encodeRegionInfoCommaIn(char **pS, struct encodeRegionI
  * return a new encodeRegionInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -115,7 +110,6 @@ for (el = *pList; el != NULL; el = next)
 void encodeRegionInfoOutput(struct encodeRegionInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out encodeRegionInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "zdobnovSynt.h"
 
-static char const rcsid[] = "$Id: zdobnovSynt.c,v 1.1 2004/04/21 20:34:52 angie Exp $";
+static char const rcsid[] = "$Id: zdobnovSynt.c,v 1.2 2005/04/13 06:25:59 markd Exp $";
 
 struct zdobnovSynt *zdobnovSyntLoad(char **row)
 /* Load a zdobnovSynt from row fetched with select * from zdobnovSynt
  * from database.  Dispose of this with zdobnovSyntFree(). */
 {
 struct zdobnovSynt *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlSigned(row[9]);

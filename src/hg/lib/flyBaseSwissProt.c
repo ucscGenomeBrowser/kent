@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "flyBaseSwissProt.h"
 
-static char const rcsid[] = "$Id: flyBaseSwissProt.c,v 1.1 2003/10/09 01:28:06 angie Exp $";
+static char const rcsid[] = "$Id: flyBaseSwissProt.c,v 1.2 2005/04/13 06:25:53 markd Exp $";
 
 void flyBaseSwissProtStaticLoad(char **row, struct flyBaseSwissProt *ret)
 /* Load a row from flyBaseSwissProt table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->flyBaseId = row[0];
 ret->swissProtId = row[1];
@@ -28,8 +26,6 @@ struct flyBaseSwissProt *flyBaseSwissProtLoad(char **row)
  * from database.  Dispose of this with flyBaseSwissProtFree(). */
 {
 struct flyBaseSwissProt *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->flyBaseId = cloneString(row[0]);
@@ -81,7 +77,6 @@ struct flyBaseSwissProt *flyBaseSwissProtCommaIn(char **pS, struct flyBaseSwissP
  * return a new flyBaseSwissProt */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -123,7 +118,6 @@ for (el = *pList; el != NULL; el = next)
 void flyBaseSwissProtOutput(struct flyBaseSwissProt *el, FILE *f, char sep, char lastSep) 
 /* Print out flyBaseSwissProt.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->flyBaseId);
 if (sep == ',') fputc('"',f);

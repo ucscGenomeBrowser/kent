@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "vegaInfo.h"
 
-static char const rcsid[] = "$Id: vegaInfo.c,v 1.2 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: vegaInfo.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void vegaInfoStaticLoad(char **row, struct vegaInfo *ret)
 /* Load a row from vegaInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->transcriptId = row[0];
 ret->otterId = row[1];
@@ -29,8 +27,6 @@ struct vegaInfo *vegaInfoLoad(char **row)
  * from database.  Dispose of this with vegaInfoFree(). */
 {
 struct vegaInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->transcriptId = cloneString(row[0]);
@@ -65,7 +61,6 @@ struct vegaInfo *vegaInfoCommaIn(char **pS, struct vegaInfo *ret)
  * return a new vegaInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -109,7 +104,6 @@ for (el = *pList; el != NULL; el = next)
 void vegaInfoOutput(struct vegaInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out vegaInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->transcriptId);
 if (sep == ',') fputc('"',f);

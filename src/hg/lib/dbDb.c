@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: dbDb.c,v 1.12 2004/05/26 00:31:34 galt Exp $";
+static char const rcsid[] = "$Id: dbDb.c,v 1.13 2005/04/13 06:25:51 markd Exp $";
 
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->description = row[1];
@@ -37,8 +35,6 @@ struct dbDb *dbDbLoad(char **row)
  * from database.  Dispose of this with dbDbFree(). */
 {
 struct dbDb *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -99,7 +95,6 @@ struct dbDb *dbDbCommaIn(char **pS, struct dbDb *ret)
  * return a new dbDb */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -155,7 +150,6 @@ for (el = *pList; el != NULL; el = next)
 void dbDbOutput(struct dbDb *el, FILE *f, char sep, char lastSep) 
 /* Print out dbDb.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

@@ -97,7 +97,6 @@ void chromKeeperRemove(char *chrom, int chromStart, int chromEnd, void *val)
 /* Remove the item from the proper chromKeeper. */
 {
 int i=0;
-boolean added = FALSE;
 for(i=0; i<chromCount; i++)
     {
     if(sameString(chrom,chromNames[i])) 

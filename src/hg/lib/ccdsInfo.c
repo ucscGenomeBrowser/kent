@@ -37,11 +37,13 @@ switch (srcDb)
     case ccdsInfoVega:
     case ccdsInfoEnsembl:
         return "H";
+    case ccdsInfoNull:
+        assert(FALSE);
     }
-return "?";
+ return "?";
 }
 
-static char const rcsid[] = "$Id: ccdsInfo.c,v 1.4 2005/04/08 23:01:47 markd Exp $";
+static char const rcsid[] = "$Id: ccdsInfo.c,v 1.5 2005/04/13 06:25:50 markd Exp $";
 
 void ccdsInfoStaticLoad(char **row, struct ccdsInfo *ret)
 /* Load a row from ccdsInfo table into ret.  The contents of ret will
@@ -249,7 +251,7 @@ struct ccdsInfo *ccdsInfoSelectByMrna(struct sqlConnection *conn, char *mrnaAcc)
 /* Obtain of ccdsInfo object for the specified mRNA or NULL if mrna is not
  * associated with a CCDS.  Version number is optional for RefSeq mrnaAcc */
 {
-char query[256], where[64];
+char query[256];
 struct sqlResult *sr;
 char **row;
 struct ccdsInfo *ccdsInfo = NULL;

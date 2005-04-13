@@ -8,7 +8,7 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: ggDbIo.c,v 1.4 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: ggDbIo.c,v 1.5 2005/04/13 06:25:53 markd Exp $";
 
 
 
@@ -30,7 +30,7 @@ struct geneGraph *gg;
 struct ggVertex *v;
 int vertexCount = ag->vertexCount;
 bool **em;
-int i,j;
+int i;
 
 AllocVar(gg);
 gg->vertices = AllocArray(v, vertexCount);

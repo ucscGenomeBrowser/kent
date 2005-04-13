@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "tigrCmrGene.h"
 
-static char const rcsid[] = "$Id: tigrCmrGene.c,v 1.2 2004/03/01 22:58:37 aamp Exp $";
+static char const rcsid[] = "$Id: tigrCmrGene.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void tigrCmrGeneStaticLoad(char **row, struct tigrCmrGene *ret)
 /* Load a row from tigrCmrGene table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->bin = sqlSigned(row[0]);
 ret->chrom = row[1];
@@ -45,8 +43,6 @@ struct tigrCmrGene *tigrCmrGeneLoad(char **row)
  * from database.  Dispose of this with tigrCmrGeneFree(). */
 {
 struct tigrCmrGene *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->bin = sqlSigned(row[0]);
@@ -195,7 +191,6 @@ struct tigrCmrGene *tigrCmrGeneCommaIn(char **pS, struct tigrCmrGene *ret)
  * return a new tigrCmrGene */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -261,7 +256,6 @@ for (el = *pList; el != NULL; el = next)
 void tigrCmrGeneOutput(struct tigrCmrGene *el, FILE *f, char sep, char lastSep) 
 /* Print out tigrCmrGene.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->bin);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

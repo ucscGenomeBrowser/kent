@@ -30,9 +30,8 @@ struct kgProtAlias *findKGProtAlias(char *dataBase, char *spec, char *mode)
    it returns a link list of kgProtAlias nodes, which contain kgID, displayID, and alias 
 */
 struct sqlConnection *conn  = hAllocConn();
-struct sqlResult     *sr    = NULL;
 struct dyString      *ds    = newDyString(256);
-struct kgProtAlias *kapList = NULL, *kl;
+struct kgProtAlias *kapList = NULL;
 char   fullTableName[256];
 
 snprintf(fullTableName, 250, "%s.%s", dataBase, "kgProtAlias");

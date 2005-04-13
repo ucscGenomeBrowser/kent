@@ -7,14 +7,12 @@
 #include "jksql.h"
 #include "mcnBreakpoints.h"
 
-static char const rcsid[] = "$Id: mcnBreakpoints.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: mcnBreakpoints.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 void mcnBreakpointsStaticLoad(char **row, struct mcnBreakpoints *ret)
 /* Load a row from mcnBreakpoints table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -34,8 +32,6 @@ struct mcnBreakpoints *mcnBreakpointsLoad(char **row)
  * from database.  Dispose of this with mcnBreakpointsFree(). */
 {
 struct mcnBreakpoints *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -76,7 +72,6 @@ struct mcnBreakpoints *mcnBreakpointsCommaIn(char **pS, struct mcnBreakpoints *r
  * return a new mcnBreakpoints */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -129,7 +124,6 @@ for (el = *pList; el != NULL; el = next)
 void mcnBreakpointsOutput(struct mcnBreakpoints *el, FILE *f, char sep, char lastSep) 
 /* Print out mcnBreakpoints.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

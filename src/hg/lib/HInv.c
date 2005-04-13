@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "HInv.h"
 
-static char const rcsid[] = "$Id: HInv.c,v 1.1 2004/05/05 23:10:26 kate Exp $";
+static char const rcsid[] = "$Id: HInv.c,v 1.2 2005/04/13 06:25:50 markd Exp $";
 
 void HInvStaticLoad(char **row, struct HInv *ret)
 /* Load a row from HInv table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->geneId = row[0];
 ret->clusterId = row[1];
@@ -27,8 +25,6 @@ struct HInv *HInvLoad(char **row)
  * from database.  Dispose of this with HInvFree(). */
 {
 struct HInv *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->geneId = cloneString(row[0]);
@@ -79,7 +75,6 @@ struct HInv *HInvCommaIn(char **pS, struct HInv *ret)
  * return a new HInv */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -119,7 +114,6 @@ for (el = *pList; el != NULL; el = next)
 void HInvOutput(struct HInv *el, FILE *f, char sep, char lastSep) 
 /* Print out HInv.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);

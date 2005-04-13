@@ -13,7 +13,7 @@
 #include "geneGraph.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggCluster.c,v 1.8 2004/01/29 01:27:33 sugnet Exp $";
+static char const rcsid[] = "$Id: ggCluster.c,v 1.9 2005/04/13 06:25:53 markd Exp $";
 
 
 
@@ -106,14 +106,9 @@ int vCount = 0;
 
 struct ggMrnaBlock *blocks = ma->blocks;
 int blockCount = ma->blockCount;
-int endBlockIx = blockCount-1;
 int isRev = ma->orientation < 0;
-int startGood = 0, endGood = 0;
 int i;
 struct ggVertex *v;
-struct ggMrnaCluster *mc;
-struct maRef *ref;
-struct ggAliInfo *da;
 
 for(i=0; i<blockCount; i++) 
     {
@@ -390,7 +385,6 @@ static struct ggMrnaCluster *clustersFromMas(struct ggMrnaAli *maList, struct dn
 {
 struct ggMrnaCluster *activeClusters = NULL;	/* List that can still add to. */
 struct ggMrnaCluster *finishedClusters = NULL;    /* List that's all done. */
-struct ggMrnaCluster *mc = NULL;
 struct ggMrnaAli *ma;
 
 for (ma = maList; ma != NULL; ma = ma->next)

@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "tableDescriptions.h"
 
-static char const rcsid[] = "$Id: tableDescriptions.c,v 1.1 2003/11/05 22:43:11 angie Exp $";
+static char const rcsid[] = "$Id: tableDescriptions.c,v 1.2 2005/04/13 06:25:58 markd Exp $";
 
 void tableDescriptionsStaticLoad(char **row, struct tableDescriptions *ret)
 /* Load a row from tableDescriptions table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->tableName = row[0];
 ret->autoSqlDef = row[1];
@@ -27,8 +25,6 @@ struct tableDescriptions *tableDescriptionsLoad(char **row)
  * from database.  Dispose of this with tableDescriptionsFree(). */
 {
 struct tableDescriptions *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->tableName = cloneString(row[0]);
@@ -79,7 +75,6 @@ struct tableDescriptions *tableDescriptionsCommaIn(char **pS, struct tableDescri
  * return a new tableDescriptions */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -119,7 +114,6 @@ for (el = *pList; el != NULL; el = next)
 void tableDescriptionsOutput(struct tableDescriptions *el, FILE *f, char sep, char lastSep) 
 /* Print out tableDescriptions.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->tableName);
 if (sep == ',') fputc('"',f);

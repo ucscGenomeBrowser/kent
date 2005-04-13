@@ -9,14 +9,12 @@
 #include "rmskOut.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: rmskOut.c,v 1.6 2003/07/01 22:42:43 baertsch Exp $";
+static char const rcsid[] = "$Id: rmskOut.c,v 1.7 2005/04/13 06:25:56 markd Exp $";
 
 void rmskOutStaticLoad(char **row, struct rmskOut *ret)
 /* Load a row from rmskOut table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->swScore = sqlUnsigned(row[0]);
 ret->milliDiv = sqlUnsigned(row[1]);
@@ -41,8 +39,6 @@ struct rmskOut *rmskOutLoad(char **row)
  * from database.  Dispose of this with rmskOutFree(). */
 {
 struct rmskOut *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->swScore = sqlUnsigned(row[0]);
@@ -70,7 +66,6 @@ struct rmskOut *rmskOutCommaIn(char **pS, struct rmskOut *ret)
  * return a new rmskOut */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -124,7 +119,6 @@ for (el = *pList; el != NULL; el = next)
 void rmskOutOutput(struct rmskOut *el, FILE *f, char sep, char lastSep) 
 /* Print out rmskOut.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->swScore);
 fputc(sep,f);
 fprintf(f, "%u", el->milliDiv);
@@ -367,7 +361,6 @@ struct hash *readRepeatsAll(char *sizeFileName, char *rmskDir)
 {
 boolean rmskRet;
 struct binKeeper *bk; 
-int size;
 struct lineFile *rmskF = NULL;
 struct rmskOut *rmsk;
 struct lineFile *lf = lineFileOpen(sizeFileName, TRUE);

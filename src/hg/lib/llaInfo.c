@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "llaInfo.h"
 
-static char const rcsid[] = "$Id: llaInfo.c,v 1.1 2003/06/30 21:49:52 aamp Exp $";
+static char const rcsid[] = "$Id: llaInfo.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 struct llaInfo *llaInfoLoad(char **row)
 /* Load a llaInfo from row fetched with select * from llaInfo
  * from database.  Dispose of this with llaInfoFree(). */
 {
 struct llaInfo *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->numCorrs = sqlUnsigned(row[17]);

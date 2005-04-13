@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "blatServers.h"
 
-static char const rcsid[] = "$Id: blatServers.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: blatServers.c,v 1.3 2005/04/13 06:25:50 markd Exp $";
 
 void blatServersStaticLoad(char **row, struct blatServers *ret)
 /* Load a row from blatServers table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->db = row[0];
 ret->host = row[1];
@@ -28,8 +26,6 @@ struct blatServers *blatServersLoad(char **row)
  * from database.  Dispose of this with blatServersFree(). */
 {
 struct blatServers *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->db = cloneString(row[0]);
@@ -88,7 +84,6 @@ struct blatServers *blatServersCommaIn(char **pS, struct blatServers *ret)
  * return a new blatServers */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -128,7 +123,6 @@ for (el = *pList; el != NULL; el = next)
 void blatServersOutput(struct blatServers *el, FILE *f, char sep, char lastSep) 
 /* Print out blatServers.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->db);
 if (sep == ',') fputc('"',f);

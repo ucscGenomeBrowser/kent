@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "sangerGene.h"
 
-static char const rcsid[] = "$Id: sangerGene.c,v 1.1 2004/05/28 16:48:07 hartera Exp $";
+static char const rcsid[] = "$Id: sangerGene.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 struct sangerGene *sangerGeneLoad(char **row)
 /* Load a sangerGene from row fetched with select * from sangerGene
  * from database.  Dispose of this with sangerGeneFree(). */
 {
 struct sangerGene *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->exonCount = sqlUnsigned(row[7]);

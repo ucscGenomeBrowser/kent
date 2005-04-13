@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.46 2005/03/24 21:18:53 braney Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.47 2005/04/13 06:25:50 markd Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -75,8 +75,6 @@ struct cartDb *loadDbOverHash(struct sqlConnection *conn, char *table, int id, s
 /* Load bits from database and save in hash. */
 {
 struct cartDb *cdb;
-char **row;
-struct sqlResult *sr = NULL;
 char query[256];
 
 if ((cdb = cartDbLoadFromId(conn, table, id)) != NULL)
@@ -156,7 +154,7 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
 
 if (exclude != NULL)
     {
-    while (ex = *exclude++)
+    while ((ex = *exclude++))
 	cartExclude(cart, ex);
     }
 
@@ -827,7 +825,6 @@ void cartHtmlShellPB(char *title, void (*doMiddle)(struct cart *cart),
  * invocations of the cgi-script. */
 {
 struct cart *cart;
-int status;
 char *db, *org;
 char titlePlus[128];
 char *proteinID;
@@ -853,8 +850,6 @@ void cartHtmlShellPbGlobal(char *title, void (*doMiddle)(struct cart *cart),
 /* cartHtmlShellPbGloabl differs from cartHtmlShellPB that it does not call getDbAndGenome */
 {
 struct cart *cart;
-int status;
-char *db, *org;
 char titlePlus[128];
 char *proteinID;
 pushWarnHandler(cartEarlyWarningHandler);
@@ -877,7 +872,6 @@ void cartHtmlShell(char *title, void (*doMiddle)(struct cart *cart),
  * invocations of the cgi-script. */
 {
 struct cart *cart;
-int status;
 char *db, *org, *pos, *clade=NULL;
 char titlePlus[128];
 char extra[128];

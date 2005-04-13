@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "goaPart.h"
 
-static char const rcsid[] = "$Id: goaPart.c,v 1.1 2003/10/02 06:00:19 kent Exp $";
+static char const rcsid[] = "$Id: goaPart.c,v 1.2 2005/04/13 06:25:54 markd Exp $";
 
 void goaPartStaticLoad(char **row, struct goaPart *ret)
 /* Load a row from goaPart table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->dbObjectId = row[0];
 ret->dbObjectSymbol = row[1];
@@ -29,8 +27,6 @@ struct goaPart *goaPartLoad(char **row)
  * from database.  Dispose of this with goaPartFree(). */
 {
 struct goaPart *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->dbObjectId = cloneString(row[0]);
@@ -83,7 +79,6 @@ struct goaPart *goaPartCommaIn(char **pS, struct goaPart *ret)
  * return a new goaPart */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -127,7 +122,6 @@ for (el = *pList; el != NULL; el = next)
 void goaPartOutput(struct goaPart *el, FILE *f, char sep, char lastSep) 
 /* Print out goaPart.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->dbObjectId);
 if (sep == ',') fputc('"',f);

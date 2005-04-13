@@ -7,14 +7,12 @@
 #include "jksql.h"
 #include "stsAlias.h"
 
-static char const rcsid[] = "$Id: stsAlias.c,v 1.5 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsAlias.c,v 1.6 2005/04/13 06:25:57 markd Exp $";
 
 void stsAliasStaticLoad(char **row, struct stsAlias *ret)
 /* Load a row from stsAlias table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->alias = row[0];
 ret->identNo = sqlUnsigned(row[1]);
@@ -26,8 +24,6 @@ struct stsAlias *stsAliasLoad(char **row)
  * from database.  Dispose of this with stsAliasFree(). */
 {
 struct stsAlias *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->alias = cloneString(row[0]);
@@ -60,7 +56,6 @@ struct stsAlias *stsAliasCommaIn(char **pS, struct stsAlias *ret)
  * return a new stsAlias */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -99,7 +94,6 @@ for (el = *pList; el != NULL; el = next)
 void stsAliasOutput(struct stsAlias *el, FILE *f, char sep, char lastSep) 
 /* Print out stsAlias.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->alias);
 if (sep == ',') fputc('"',f);

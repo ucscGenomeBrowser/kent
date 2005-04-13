@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "recombRateMouse.h"
 
-static char const rcsid[] = "$Id: recombRateMouse.c,v 1.1 2003/12/05 19:03:49 booch Exp $";
+static char const rcsid[] = "$Id: recombRateMouse.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void recombRateMouseStaticLoad(char **row, struct recombRateMouse *ret)
 /* Load a row from recombRateMouse table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct recombRateMouse *recombRateMouseLoad(char **row)
  * from database.  Dispose of this with recombRateMouseFree(). */
 {
 struct recombRateMouse *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -85,7 +81,6 @@ struct recombRateMouse *recombRateMouseCommaIn(char **pS, struct recombRateMouse
  * return a new recombRateMouse */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -127,7 +122,6 @@ for (el = *pList; el != NULL; el = next)
 void recombRateMouseOutput(struct recombRateMouse *el, FILE *f, char sep, char lastSep) 
 /* Print out recombRateMouse.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

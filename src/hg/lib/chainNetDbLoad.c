@@ -14,7 +14,7 @@
 #include "netAlign.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.8 2005/01/10 00:27:16 kent Exp $";
+static char const rcsid[] = "$Id: chainNetDbLoad.c,v 1.9 2005/04/13 06:25:51 markd Exp $";
 
 struct cnFill *cnFillFromNetAlign(struct netAlign *na, struct hash *nameHash)
 /* Convert netAlign to cnFill. Name hash is a place to store
@@ -123,7 +123,6 @@ struct cnFill *fill;
 struct cnlHelper *helpList = NULL, *help, *nextHelp;
 struct chainNet *netList = NULL, *net;
 struct hash *helpHash = hashNew(0);
-int depth;
 
 /* Convert database rows to cnFills, and store
  * them in help->levels. */
@@ -222,7 +221,6 @@ static struct chain *chainLoadIdSome(char *database, char *track, char *chrom,
 	int start, int end, int id, boolean loadAll)
 /* Load some or all of chain. */
 {
-int rowOffset;
 struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;

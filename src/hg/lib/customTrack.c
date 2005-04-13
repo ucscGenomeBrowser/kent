@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.56 2005/01/19 19:29:35 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.57 2005/04/13 06:25:51 markd Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -380,7 +380,7 @@ if (wordCount > 10)
     {
     sqlSignedDynamicArray(row[10], &bed->blockSizes, &count);
     if (count != bed->blockCount)
-	errAbort("line %d of custom input: expecting %d elements in array", lineIx);
+	errAbort("line %d of custom input: expecting %d elements in array", lineIx, bed->blockCount);
     }
 if (wordCount > 11)
     {
@@ -389,7 +389,7 @@ if (wordCount > 11)
     sqlSignedDynamicArray(row[11], &bed->chromStarts, &count);
     if (count != bed->blockCount)
 	errAbort("line %d of custom input: expecting %d elements in array",
-		 lineIx);
+		 lineIx, bed->blockCount);
     // tell the user if they appear to be using absolute starts rather than 
     // relative... easy to forget!  Also check block order, coord ranges...
     lastStart = -1;

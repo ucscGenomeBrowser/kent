@@ -7,15 +7,14 @@
 #include "jksql.h"
 #include "pslWScore.h"
 
-static char const rcsid[] = "$Id: pslWScore.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: pslWScore.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 struct pslWScore *pslWScoreLoad(char **row)
 /* Load a pslWScore from row fetched with select * from pslWScore
  * from database.  Dispose of this with pslWScoreFree(). */
 {
 struct pslWScore *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[17]);

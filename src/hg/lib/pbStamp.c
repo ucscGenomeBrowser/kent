@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "pbStamp.h"
 
-//static char const rcsid[] = "$Id: pbStamp.c,v 1.1 2003/11/27 01:35:26 fanhsu Exp $";
+//static char const rcsid[] = "$Id: pbStamp.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void pbStampStaticLoad(char **row, struct pbStamp *ret)
 /* Load a row from pbStamp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 strcpy(ret->stampName, row[0]);
 strcpy(ret->stampTable, row[1]);
@@ -33,8 +31,6 @@ struct pbStamp *pbStampLoad(char **row)
  * from database.  Dispose of this with pbStampFree(). */
 {
 struct pbStamp *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 strcpy(ret->stampName, row[0]);
@@ -91,7 +87,6 @@ struct pbStamp *pbStampCommaIn(char **pS, struct pbStamp *ret)
  * return a new pbStamp */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -135,7 +130,6 @@ for (el = *pList; el != NULL; el = next)
 void pbStampOutput(struct pbStamp *el, FILE *f, char sep, char lastSep) 
 /* Print out pbStamp.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->stampName);
 if (sep == ',') fputc('"',f);

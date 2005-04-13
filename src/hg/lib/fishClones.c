@@ -7,15 +7,14 @@
 #include "jksql.h"
 #include "fishClones.h"
 
-static char const rcsid[] = "$Id: fishClones.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: fishClones.c,v 1.4 2005/04/13 06:25:52 markd Exp $";
 
 struct fishClones *fishClonesLoad(char **row)
 /* Load a fishClones from row fetched with select * from fishClones
  * from database.  Dispose of this with fishClonesFree(). */
 {
 struct fishClones *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->placeCount = sqlUnsigned(row[5]);

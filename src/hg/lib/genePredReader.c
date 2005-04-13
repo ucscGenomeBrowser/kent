@@ -180,7 +180,6 @@ struct genePredReader *genePredReaderRangeQuery(struct sqlConnection* conn,
  * extraWhere is not null, it is added as an additional where condition. It
  * will determine if extended genePred columns are in the table. */
 {
-char query[1024];
 struct genePredReader* gpr;
 int rowOffset;
 AllocVar(gpr);
@@ -203,7 +202,6 @@ struct genePredReader *genePredReaderFile(char* gpFile, char* chrom)
  * may not be omitted. */
 {
 struct genePredReader* gpr;
-int rowOffset;
 AllocVar(gpr);
 gpr->table = cloneString(gpFile);
 if (chrom != NULL)

@@ -10,7 +10,7 @@
 #include "qaSeq.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: qaSeq.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: qaSeq.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 void qaSeqFree(struct qaSeq **pQa)
 /* Free up qaSeq. */
@@ -125,9 +125,9 @@ static int readShortNum(char *s, struct lineFile *lf)
 /* Read in a number between 0 and 99 quickly. */
 {
 if (s[1] == 0)
-    return snOnes[s[0]];
+    return snOnes[(int)s[0]];
 if (s[2] == 0)
-    return snTens[s[0]] + snOnes[s[1]];
+    return snTens[(int)s[0]] + snOnes[(int)s[1]];
 else
     {
     warn("Expecting small number got %s line %d of %s", 
@@ -511,7 +511,7 @@ if (dir[len-1] == '/')
     dir[len-1] = 0;
 s = strrchr(dir, '/');
 
-/* Case where convert dir/name to ../
+/* Case where convert dir/name to ..*/
 if (s == NULL)
     {
     strcpy(dir, "../");

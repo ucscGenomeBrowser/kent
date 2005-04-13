@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "encodeErgeHssCellLines.h"
 
-static char const rcsid[] = "$Id: encodeErgeHssCellLines.c,v 1.2 2003/12/16 13:36:20 daryl Exp $";
+static char const rcsid[] = "$Id: encodeErgeHssCellLines.c,v 1.3 2005/04/13 06:25:52 markd Exp $";
 
 struct encodeErgeHssCellLines *encodeErgeHssCellLinesLoad(char **row)
 /* Load a encodeErgeHssCellLines from row fetched with select * from encodeErgeHssCellLines
  * from database.  Dispose of this with encodeErgeHssCellLinesFree(). */
 {
 struct encodeErgeHssCellLines *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[9]);

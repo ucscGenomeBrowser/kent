@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "snpMap.h"
 
-static char const rcsid[] = "$Id: snpMap.c,v 1.2 2004/02/19 01:52:33 daryl Exp $";
+static char const rcsid[] = "$Id: snpMap.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void snpMapStaticLoad(char **row, struct snpMap *ret)
 /* Load a row from snpMap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct snpMap *snpMapLoad(char **row)
  * from database.  Dispose of this with snpMapFree(). */
 {
 struct snpMap *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -149,7 +145,6 @@ struct snpMap *snpMapCommaIn(char **pS, struct snpMap *ret)
  * return a new snpMap */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -193,7 +188,6 @@ for (el = *pList; el != NULL; el = next)
 void snpMapOutput(struct snpMap *el, FILE *f, char sep, char lastSep) 
 /* Print out snpMap.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

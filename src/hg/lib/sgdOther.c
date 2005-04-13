@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "sgdOther.h"
 
-static char const rcsid[] = "$Id: sgdOther.c,v 1.2 2003/12/10 00:44:28 kent Exp $";
+static char const rcsid[] = "$Id: sgdOther.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void sgdOtherStaticLoad(char **row, struct sgdOther *ret)
 /* Load a row from sgdOther table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlSigned(row[1]);
@@ -31,8 +29,6 @@ struct sgdOther *sgdOtherLoad(char **row)
  * from database.  Dispose of this with sgdOtherFree(). */
 {
 struct sgdOther *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -87,7 +83,6 @@ struct sgdOther *sgdOtherCommaIn(char **pS, struct sgdOther *ret)
  * return a new sgdOther */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -131,7 +126,6 @@ for (el = *pList; el != NULL; el = next)
 void sgdOtherOutput(struct sgdOther *el, FILE *f, char sep, char lastSep) 
 /* Print out sgdOther.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

@@ -12,8 +12,6 @@ void blastTabStaticLoad(char **row, struct blastTab *ret)
 /* Load a row from blastTab table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->query = row[0];
 ret->target = row[1];
@@ -34,8 +32,6 @@ struct blastTab *blastTabLoad(char **row)
  * from database.  Dispose of this with blastTabFree(). */
 {
 struct blastTab *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->query = cloneString(row[0]);
@@ -89,7 +85,6 @@ struct blastTab *blastTabCommaIn(char **pS, struct blastTab *ret)
  * return a new blastTab */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -137,7 +132,6 @@ for (el = *pList; el != NULL; el = next)
 void blastTabOutput(struct blastTab *el, FILE *f, char sep, char lastSep) 
 /* Print out blastTab.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->query);
 if (sep == ',') fputc('"',f);

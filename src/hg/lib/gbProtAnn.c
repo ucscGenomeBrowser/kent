@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "gbProtAnn.h"
 
-static char const rcsid[] = "$Id: gbProtAnn.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: gbProtAnn.c,v 1.3 2005/04/13 06:25:53 markd Exp $";
 
 void gbProtAnnStaticLoad(char **row, struct gbProtAnn *ret)
 /* Load a row from gbProtAnn table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -32,8 +30,6 @@ struct gbProtAnn *gbProtAnnLoad(char **row)
  * from database.  Dispose of this with gbProtAnnFree(). */
 {
 struct gbProtAnn *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -71,7 +67,6 @@ struct gbProtAnn *gbProtAnnCommaIn(char **pS, struct gbProtAnn *ret)
  * return a new gbProtAnn */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -118,7 +113,6 @@ for (el = *pList; el != NULL; el = next)
 void gbProtAnnOutput(struct gbProtAnn *el, FILE *f, char sep, char lastSep) 
 /* Print out gbProtAnn.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

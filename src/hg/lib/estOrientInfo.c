@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: estOrientInfo.c,v 1.4 2005/04/06 23:29:51 markd Exp $";
+static char const rcsid[] = "$Id: estOrientInfo.c,v 1.5 2005/04/13 06:25:52 markd Exp $";
 
 static char *createString = 
     "CREATE TABLE %s (\n"
@@ -33,8 +33,6 @@ void estOrientInfoStaticLoad(char **row, struct estOrientInfo *ret)
 /* Load a row from estOrientInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -52,8 +50,6 @@ struct estOrientInfo *estOrientInfoLoad(char **row)
  * from database.  Dispose of this with estOrientInfoFree(). */
 {
 struct estOrientInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -117,7 +113,6 @@ struct estOrientInfo *estOrientInfoCommaIn(char **pS, struct estOrientInfo *ret)
  * return a new estOrientInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -162,7 +157,6 @@ for (el = *pList; el != NULL; el = next)
 void estOrientInfoOutput(struct estOrientInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out estOrientInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

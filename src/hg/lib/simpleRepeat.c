@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "simpleRepeat.h"
 
-static char const rcsid[] = "$Id: simpleRepeat.c,v 1.4 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: simpleRepeat.c,v 1.5 2005/04/13 06:25:57 markd Exp $";
 
 void simpleRepeatStaticLoad(char **row, struct simpleRepeat *ret)
 /* Load a row from simpleRepeat table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -40,8 +38,6 @@ struct simpleRepeat *simpleRepeatLoad(char **row)
  * from database.  Dispose of this with simpleRepeatFree(). */
 {
 struct simpleRepeat *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -112,7 +108,6 @@ struct simpleRepeat *simpleRepeatCommaIn(char **pS, struct simpleRepeat *ret)
  * return a new simpleRepeat */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -165,7 +160,6 @@ for (el = *pList; el != NULL; el = next)
 void simpleRepeatOutput(struct simpleRepeat *el, FILE *f, char sep, char lastSep) 
 /* Print out simpleRepeat.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

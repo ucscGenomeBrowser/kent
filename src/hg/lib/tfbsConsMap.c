@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "tfbsConsMap.h"
 
-static char const rcsid[] = "$Id: tfbsConsMap.c,v 1.1 2004/03/19 22:19:02 braney Exp $";
+static char const rcsid[] = "$Id: tfbsConsMap.c,v 1.2 2005/04/13 06:25:58 markd Exp $";
 
 void tfbsConsMapStaticLoad(char **row, struct tfbsConsMap *ret)
 /* Load a row from tfbsConsMap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->id = row[0];
 ret->ac = row[1];
@@ -26,8 +24,6 @@ struct tfbsConsMap *tfbsConsMapLoad(char **row)
  * from database.  Dispose of this with tfbsConsMapFree(). */
 {
 struct tfbsConsMap *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->id = cloneString(row[0]);
@@ -137,7 +133,6 @@ struct tfbsConsMap *tfbsConsMapCommaIn(char **pS, struct tfbsConsMap *ret)
  * return a new tfbsConsMap */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -175,7 +170,6 @@ for (el = *pList; el != NULL; el = next)
 void tfbsConsMapOutput(struct tfbsConsMap *el, FILE *f, char sep, char lastSep) 
 /* Print out tfbsConsMap.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->id);
 if (sep == ',') fputc('"',f);

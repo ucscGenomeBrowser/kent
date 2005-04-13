@@ -12,7 +12,7 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.26 2004/07/23 21:51:02 kent Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.27 2005/04/13 06:25:52 markd Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -358,8 +358,7 @@ struct featureBits *fbFromBed(char *trackQualifier, struct hTableInfo *hti,
 /* Translate a list of bed items into featureBits. */
 {
 struct bed *bed;
-struct featureBits *fbList = NULL, *fbItem;
-char itemName[128];
+struct featureBits *fbList = NULL;
 char nameBuf[512];
 char *fName;
 char *track, *qualifier, *extra;

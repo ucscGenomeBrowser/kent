@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "wabAli.h"
 
-static char const rcsid[] = "$Id: wabAli.c,v 1.3 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: wabAli.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void wabAliStaticLoad(char **row, struct wabAli *ret)
 /* Load a row from wabAli table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->query = row[0];
 ret->qStart = sqlUnsigned(row[1]);
@@ -34,8 +32,6 @@ struct wabAli *wabAliLoad(char **row)
  * from database.  Dispose of this with wabAliFree(). */
 {
 struct wabAli *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->query = cloneString(row[0]);
@@ -59,7 +55,6 @@ struct wabAli *wabAliCommaIn(char **pS, struct wabAli *ret)
  * return a new wabAli */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -110,7 +105,6 @@ for (el = *pList; el != NULL; el = next)
 void wabAliOutput(struct wabAli *el, FILE *f, char sep, char lastSep) 
 /* Print out wabAli.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->query);
 if (sep == ',') fputc('"',f);

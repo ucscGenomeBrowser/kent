@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "synMap.h"
 
-static char const rcsid[] = "$Id: synMap.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: synMap.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void synMapStaticLoad(char **row, struct synMap *ret)
 /* Load a row from synMap table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chromA = row[0];
 ret->chromStartA = sqlUnsigned(row[1]);
@@ -31,8 +29,6 @@ struct synMap *synMapLoad(char **row)
  * from database.  Dispose of this with synMapFree(). */
 {
 struct synMap *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chromA = cloneString(row[0]);
@@ -50,8 +46,6 @@ struct synMap *synMapNoStrandLoad(char **row)
  * from database.  Dispose of this with synMapFree(). */
 {
 struct synMap *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chromA = cloneString(row[0]);
@@ -113,7 +107,6 @@ struct synMap *synMapCommaIn(char **pS, struct synMap *ret)
  * return a new synMap */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -157,7 +150,6 @@ for (el = *pList; el != NULL; el = next)
 void synMapOutput(struct synMap *el, FILE *f, char sep, char lastSep) 
 /* Print out synMap.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chromA);
 if (sep == ',') fputc('"',f);

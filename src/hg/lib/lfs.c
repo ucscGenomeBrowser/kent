@@ -7,15 +7,14 @@
 #include "jksql.h"
 #include "lfs.h"
 
-static char const rcsid[] = "$Id: lfs.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: lfs.c,v 1.3 2005/04/13 06:25:55 markd Exp $";
 
 struct lfs *lfsLoad(char **row)
 /* Load a lfs from row fetched with select * from lfs
  * from database.  Dispose of this with lfsFree(). */
 {
 struct lfs *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->lfCount = sqlUnsigned(row[7]);

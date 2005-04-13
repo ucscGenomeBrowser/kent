@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "rikenCluster.h"
 
-static char const rcsid[] = "$Id: rikenCluster.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: rikenCluster.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 struct rikenUcscCluster *rikenUcscClusterLoad(char **row)
 /* Load a rikenUcscCluster from row fetched with select * from rikenUcscCluster
  * from database.  Dispose of this with rikenUcscClusterFree(). */
 {
 struct rikenUcscCluster *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->refSeqCount = sqlUnsigned(row[6]);

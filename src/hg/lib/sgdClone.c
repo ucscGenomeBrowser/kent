@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "sgdClone.h"
 
-static char const rcsid[] = "$Id: sgdClone.c,v 1.3 2004/01/23 16:48:04 braney Exp $";
+static char const rcsid[] = "$Id: sgdClone.c,v 1.4 2005/04/13 06:25:56 markd Exp $";
 
 void sgdCloneStaticLoad(char **row, struct sgdClone *ret)
 /* Load a row from sgdClone table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -29,8 +27,6 @@ struct sgdClone *sgdCloneLoad(char **row)
  * from database.  Dispose of this with sgdCloneFree(). */
 {
 struct sgdClone *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -83,7 +79,6 @@ struct sgdClone *sgdCloneCommaIn(char **pS, struct sgdClone *ret)
  * return a new sgdClone */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -125,7 +120,6 @@ for (el = *pList; el != NULL; el = next)
 void sgdCloneOutput(struct sgdClone *el, FILE *f, char sep, char lastSep) 
 /* Print out sgdClone.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

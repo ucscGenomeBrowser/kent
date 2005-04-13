@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "geneBands.h"
 
-static char const rcsid[] = "$Id: geneBands.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: geneBands.c,v 1.3 2005/04/13 06:25:53 markd Exp $";
 
 struct geneBands *geneBandsLoad(char **row)
 /* Load a geneBands from row fetched with select * from geneBands
  * from database.  Dispose of this with geneBandsFree(). */
 {
 struct geneBands *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->count = sqlSigned(row[2]);

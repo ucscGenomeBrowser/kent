@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "kgXref.h"
 
-static char const rcsid[] = "$Id: kgXref.c,v 1.1 2003/10/07 18:30:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: kgXref.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void kgXrefStaticLoad(char **row, struct kgXref *ret)
 /* Load a row from kgXref table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->kgID = row[0];
 ret->mRNA = row[1];
@@ -32,8 +30,6 @@ struct kgXref *kgXrefLoad(char **row)
  * from database.  Dispose of this with kgXrefFree(). */
 {
 struct kgXref *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->kgID = cloneString(row[0]);
@@ -89,7 +85,6 @@ struct kgXref *kgXrefCommaIn(char **pS, struct kgXref *ret)
  * return a new kgXref */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -139,7 +134,6 @@ for (el = *pList; el != NULL; el = next)
 void kgXrefOutput(struct kgXref *el, FILE *f, char sep, char lastSep) 
 /* Print out kgXref.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->kgID);
 if (sep == ',') fputc('"',f);

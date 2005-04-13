@@ -7,14 +7,12 @@
 #include "jksql.h"
 #include "refLink.h"
 
-static char const rcsid[] = "$Id: refLink.c,v 1.4 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: refLink.c,v 1.5 2005/04/13 06:25:56 markd Exp $";
 
 void refLinkStaticLoad(char **row, struct refLink *ret)
 /* Load a row from refLink table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->product = row[1];
@@ -31,8 +29,6 @@ struct refLink *refLinkLoad(char **row)
  * from database.  Dispose of this with refLinkFree(). */
 {
 struct refLink *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -70,7 +66,6 @@ struct refLink *refLinkCommaIn(char **pS, struct refLink *ret)
  * return a new refLink */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -116,7 +111,6 @@ for (el = *pList; el != NULL; el = next)
 void refLinkOutput(struct refLink *el, FILE *f, char sep, char lastSep) 
 /* Print out refLink.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

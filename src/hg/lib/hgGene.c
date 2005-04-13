@@ -10,14 +10,12 @@
 #include "jksql.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.4 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.5 2005/04/13 06:25:54 markd Exp $";
 
 void geneFinderStaticLoad(char **row, struct geneFinder *ret)
 /* Load a row from geneFinder table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->id = sqlUnsigned(row[0]);
 ret->name = row[1];
@@ -28,8 +26,6 @@ struct geneFinder *geneFinderLoad(char **row)
  * from database.  Dispose of this with geneFinderFree(). */
 {
 struct geneFinder *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->id = sqlUnsigned(row[0]);
@@ -42,7 +38,6 @@ struct geneFinder *geneFinderCommaIn(char **pS)
 {
 struct geneFinder *ret;
 char *s = *pS;
-int i;
 
 AllocVar(ret);
 ret->id = sqlUnsignedComma(&s);
@@ -78,7 +73,6 @@ for (el = *pList; el != NULL; el = next)
 void geneFinderOutput(struct geneFinder *el, FILE *f, char sep, char lastSep) 
 /* Print out geneFinder.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->id);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -92,8 +86,7 @@ struct hgGene *hgGeneLoad(char **row)
  * from database.  Dispose of this with hgGeneFree(). */
 {
 struct hgGene *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->transcriptCount = sqlUnsigned(row[8]);
@@ -203,8 +196,7 @@ struct hgTranscript *hgTranscriptLoad(char **row)
  * from database.  Dispose of this with hgTranscriptFree(). */
 {
 struct hgTranscript *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->exonCount = sqlUnsigned(row[12]);

@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "ctgPos2.h"
 
-static char const rcsid[] = "$Id: ctgPos2.c,v 1.1 2004/07/01 21:34:00 hartera Exp $";
+static char const rcsid[] = "$Id: ctgPos2.c,v 1.2 2005/04/13 06:25:51 markd Exp $";
 
 void ctgPos2StaticLoad(char **row, struct ctgPos2 *ret)
 /* Load a row from ctgPos2 table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->contig = row[0];
 ret->size = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct ctgPos2 *ctgPos2Load(char **row)
  * from database.  Dispose of this with ctgPos2Free(). */
 {
 struct ctgPos2 *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->contig = cloneString(row[0]);
@@ -85,7 +81,6 @@ struct ctgPos2 *ctgPos2CommaIn(char **pS, struct ctgPos2 *ret)
  * return a new ctgPos2 */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -127,7 +122,6 @@ for (el = *pList; el != NULL; el = next)
 void ctgPos2Output(struct ctgPos2 *el, FILE *f, char sep, char lastSep) 
 /* Print out ctgPos2.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->contig);
 if (sep == ',') fputc('"',f);

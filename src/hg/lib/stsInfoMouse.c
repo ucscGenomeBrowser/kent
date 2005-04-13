@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "stsInfoMouse.h"
 
-static char const rcsid[] = "$Id: stsInfoMouse.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsInfoMouse.c,v 1.4 2005/04/13 06:25:57 markd Exp $";
 
 void stsInfoMouseStaticLoad(char **row, struct stsInfoMouse *ret)
 /* Load a row from stsInfoMouse table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->identNo = sqlUnsigned(row[0]);
 ret->name = row[1];
@@ -39,8 +37,6 @@ struct stsInfoMouse *stsInfoMouseLoad(char **row)
  * from database.  Dispose of this with stsInfoMouseFree(). */
 {
 struct stsInfoMouse *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->identNo = sqlUnsigned(row[0]);
@@ -110,7 +106,6 @@ struct stsInfoMouse *stsInfoMouseCommaIn(char **pS, struct stsInfoMouse *ret)
  * return a new stsInfoMouse */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -168,7 +163,6 @@ for (el = *pList; el != NULL; el = next)
 void stsInfoMouseOutput(struct stsInfoMouse *el, FILE *f, char sep, char lastSep) 
 /* Print out stsInfoMouse.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->identNo);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

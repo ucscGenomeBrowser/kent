@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "netAlign.h"
 
-static char const rcsid[] = "$Id: netAlign.c,v 1.4 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: netAlign.c,v 1.5 2005/04/13 06:25:55 markd Exp $";
 
 void netAlignStaticLoad(char **row, struct netAlign *ret)
 /* Load a row from netAlign table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->level = sqlUnsigned(row[0]);
 ret->tName = row[1];
@@ -49,8 +47,6 @@ struct netAlign *netAlignLoad(char **row)
  * from database.  Dispose of this with netAlignFree(). */
 {
 struct netAlign *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->level = sqlUnsigned(row[0]);
@@ -105,7 +101,6 @@ struct netAlign *netAlignCommaIn(char **pS, struct netAlign *ret)
  * return a new netAlign */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -167,7 +162,6 @@ for (el = *pList; el != NULL; el = next)
 void netAlignOutput(struct netAlign *el, FILE *f, char sep, char lastSep) 
 /* Print out netAlign.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->level);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

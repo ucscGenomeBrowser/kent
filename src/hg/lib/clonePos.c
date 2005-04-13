@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "clonePos.h"
 
-static char const rcsid[] = "$Id: clonePos.c,v 1.3 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: clonePos.c,v 1.4 2005/04/13 06:25:51 markd Exp $";
 
 void clonePosStaticLoad(char **row, struct clonePos *ret)
 /* Load a row from clonePos table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->seqSize = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct clonePos *clonePosLoad(char **row)
  * from database.  Dispose of this with clonePosFree(). */
 {
 struct clonePos *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -51,7 +47,6 @@ struct clonePos *clonePosCommaIn(char **pS, struct clonePos *ret)
  * return a new clonePos */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -96,7 +91,6 @@ for (el = *pList; el != NULL; el = next)
 void clonePosOutput(struct clonePos *el, FILE *f, char sep, char lastSep) 
 /* Print out clonePos.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

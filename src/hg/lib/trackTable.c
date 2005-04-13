@@ -8,14 +8,12 @@
 #include "trackTable.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: trackTable.c,v 1.4 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: trackTable.c,v 1.5 2005/04/13 06:25:58 markd Exp $";
 
 void trackTableStaticLoad(char **row, struct trackTable *ret)
 /* Load a row from trackTable table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->mapName = row[0];
 ret->tableName = row[1];
@@ -38,8 +36,6 @@ struct trackTable *trackTableLoad(char **row)
  * from database.  Dispose of this with trackTableFree(). */
 {
 struct trackTable *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->mapName = cloneString(row[0]);
@@ -83,7 +79,6 @@ struct trackTable *trackTableCommaIn(char **pS, struct trackTable *ret)
  * return a new trackTable */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -135,7 +130,6 @@ for (el = *pList; el != NULL; el = next)
 void trackTableOutput(struct trackTable *el, FILE *f, char sep, char lastSep) 
 /* Print out trackTable.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mapName);
 if (sep == ',') fputc('"',f);

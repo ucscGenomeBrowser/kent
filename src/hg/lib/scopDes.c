@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "scopDes.h"
 
-static char const rcsid[] = "$Id: scopDes.c,v 1.1 2003/11/08 21:58:23 kent Exp $";
+static char const rcsid[] = "$Id: scopDes.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void scopDesStaticLoad(char **row, struct scopDes *ret)
 /* Load a row from scopDes table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->sunid = sqlSigned(row[0]);
 strcpy(ret->type, row[1]);
@@ -29,8 +27,6 @@ struct scopDes *scopDesLoad(char **row)
  * from database.  Dispose of this with scopDesFree(). */
 {
 struct scopDes *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->sunid = sqlSigned(row[0]);
@@ -83,7 +79,6 @@ struct scopDes *scopDesCommaIn(char **pS, struct scopDes *ret)
  * return a new scopDes */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -125,7 +120,6 @@ for (el = *pList; el != NULL; el = next)
 void scopDesOutput(struct scopDes *el, FILE *f, char sep, char lastSep) 
 /* Print out scopDes.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->sunid);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

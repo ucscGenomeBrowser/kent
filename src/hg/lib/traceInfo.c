@@ -7,14 +7,12 @@
 #include "jksql.h"
 #include "traceInfo.h"
 
-static char const rcsid[] = "$Id: traceInfo.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: traceInfo.c,v 1.3 2005/04/13 06:25:58 markd Exp $";
 
 void traceInfoStaticLoad(char **row, struct traceInfo *ret)
 /* Load a row from traceInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->ti = row[0];
 ret->templateId = row[1];
@@ -26,8 +24,6 @@ struct traceInfo *traceInfoLoad(char **row)
  * from database.  Dispose of this with traceInfoFree(). */
 {
 struct traceInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->ti = cloneString(row[0]);
@@ -60,7 +56,6 @@ struct traceInfo *traceInfoCommaIn(char **pS, struct traceInfo *ret)
  * return a new traceInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -99,7 +94,6 @@ for (el = *pList; el != NULL; el = next)
 void traceInfoOutput(struct traceInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out traceInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->ti);
 if (sep == ',') fputc('"',f);

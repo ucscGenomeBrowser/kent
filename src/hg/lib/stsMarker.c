@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "stsMarker.h"
 
-static char const rcsid[] = "$Id: stsMarker.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsMarker.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void stsMarkerStaticLoad(char **row, struct stsMarker *ret)
 /* Load a row from stsMarker table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlSigned(row[1]);
@@ -45,8 +43,6 @@ struct stsMarker *stsMarkerLoad(char **row)
  * from database.  Dispose of this with stsMarkerFree(). */
 {
 struct stsMarker *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -81,7 +77,6 @@ struct stsMarker *stsMarkerCommaIn(char **pS, struct stsMarker *ret)
  * return a new stsMarker */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -151,7 +146,6 @@ for (el = *pList; el != NULL; el = next)
 void stsMarkerOutput(struct stsMarker *el, FILE *f, char sep, char lastSep) 
 /* Print out stsMarker.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "borkPseudoHom.h"
 
-static char const rcsid[] = "$Id: borkPseudoHom.c,v 1.2 2003/05/06 07:22:21 kate Exp $";
+static char const rcsid[] = "$Id: borkPseudoHom.c,v 1.3 2005/04/13 06:25:50 markd Exp $";
 
 void borkPseudoHomStaticLoad(char **row, struct borkPseudoHom *ret)
 /* Load a row from borkPseudoHom table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->protRef = row[1];
@@ -27,8 +25,6 @@ struct borkPseudoHom *borkPseudoHomLoad(char **row)
  * from database.  Dispose of this with borkPseudoHomFree(). */
 {
 struct borkPseudoHom *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -86,7 +82,6 @@ struct borkPseudoHom *borkPseudoHomCommaIn(char **pS, struct borkPseudoHom *ret)
  * return a new borkPseudoHom */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -126,7 +121,6 @@ for (el = *pList; el != NULL; el = next)
 void borkPseudoHomOutput(struct borkPseudoHom *el, FILE *f, char sep, char lastSep) 
 /* Print out borkPseudoHom.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

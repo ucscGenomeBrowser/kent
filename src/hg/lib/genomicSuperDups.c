@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "genomicSuperDups.h"
 
-static char const rcsid[] = "$Id: genomicSuperDups.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: genomicSuperDups.c,v 1.3 2005/04/13 06:25:53 markd Exp $";
 
 void genomicSuperDupsStaticLoad(char **row, struct genomicSuperDups *ret)
 /* Load a row from genomicSuperDups table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -53,8 +51,6 @@ struct genomicSuperDups *genomicSuperDupsLoad(char **row)
  * from database.  Dispose of this with genomicSuperDupsFree(). */
 {
 struct genomicSuperDups *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -138,7 +134,6 @@ struct genomicSuperDups *genomicSuperDupsCommaIn(char **pS, struct genomicSuperD
  * return a new genomicSuperDups */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -209,7 +204,6 @@ for (el = *pList; el != NULL; el = next)
 void genomicSuperDupsOutput(struct genomicSuperDups *el, FILE *f, char sep, char lastSep) 
 /* Print out genomicSuperDups.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

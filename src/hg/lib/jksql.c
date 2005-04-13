@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.72 2005/04/04 23:42:46 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.73 2005/04/13 06:25:54 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -102,11 +102,14 @@ if (monitorFlags)
 return deltaTime;
 }
 
+#if defined(__GNUC__) && defined(JK_WARN)
 static void monitorPrint(struct sqlConnection *sc, char *name,
                          char *format, ...)
-#if defined(__GNUC__) && defined(JK_WARN)
-__attribute__((format(printf, 3, 4)))
+__attribute__((format(printf, 3, 4)));
 #endif
+
+static void monitorPrint(struct sqlConnection *sc, char *name,
+                         char *format, ...)
 /* print a monitor message, with connection id and databases.  Handle
  * indentation.   Format maybe NULL. */
 {

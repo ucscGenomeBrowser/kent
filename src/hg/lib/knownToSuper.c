@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "knownToSuper.h"
 
-static char const rcsid[] = "$Id: knownToSuper.c,v 1.1 2003/10/26 08:12:17 kent Exp $";
+static char const rcsid[] = "$Id: knownToSuper.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void knownToSuperStaticLoad(char **row, struct knownToSuper *ret)
 /* Load a row from knownToSuper table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->gene = row[0];
 ret->superfamily = sqlSigned(row[1]);
@@ -29,8 +27,6 @@ struct knownToSuper *knownToSuperLoad(char **row)
  * from database.  Dispose of this with knownToSuperFree(). */
 {
 struct knownToSuper *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->gene = cloneString(row[0]);
@@ -83,7 +79,6 @@ struct knownToSuper *knownToSuperCommaIn(char **pS, struct knownToSuper *ret)
  * return a new knownToSuper */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -123,7 +118,6 @@ for (el = *pList; el != NULL; el = next)
 void knownToSuperOutput(struct knownToSuper *el, FILE *f, char sep, char lastSep) 
 /* Print out knownToSuper.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->gene);
 if (sep == ',') fputc('"',f);

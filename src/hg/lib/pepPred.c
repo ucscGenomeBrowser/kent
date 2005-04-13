@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: pepPred.c,v 1.3 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: pepPred.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void pepPredStaticLoad(char **row, struct pepPred *ret)
 /* Load a row from pepPred table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->seq = row[1];
@@ -24,8 +22,6 @@ struct pepPred *pepPredLoad(char **row)
  * from database.  Dispose of this with pepPredFree(). */
 {
 struct pepPred *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -39,7 +35,6 @@ struct pepPred *pepPredCommaIn(char **pS, struct pepPred *ret)
  * return a new pepPred */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -77,7 +72,6 @@ for (el = *pList; el != NULL; el = next)
 void pepPredOutput(struct pepPred *el, FILE *f, char sep, char lastSep) 
 /* Print out pepPred.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

@@ -12,7 +12,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: borf.c,v 1.4 2004/09/01 14:14:24 baertsch Exp $";
+static char const rcsid[] = "$Id: borf.c,v 1.5 2005/04/13 06:25:50 markd Exp $";
 static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
 static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
 
@@ -20,8 +20,6 @@ void borfStaticLoad(char **row, struct borf *ret)
 /* Load a row from borf table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->size = sqlSigned(row[1]);
@@ -42,8 +40,6 @@ struct borf *borfLoad(char **row)
  * from database.  Dispose of this with borfFree(). */
 {
 struct borf *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -110,7 +106,6 @@ struct borf *borfCommaIn(char **pS, struct borf *ret)
  * return a new borf */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -159,7 +154,6 @@ for (el = *pList; el != NULL; el = next)
 void borfOutput(struct borf *el, FILE *f, char sep, char lastSep) 
 /* Print out borf.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
@@ -237,9 +231,7 @@ char *line = borfMustFindLine(lf, "BESTORF");
 char *word=NULL;
 char *row[13];
 struct borf *borf = NULL;
-int i=0;
 struct dnaSeq seq;
-int seqSize = 0;
 AllocVar(borf);
 ZeroVar(&seq);
 

@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: expData.c,v 1.2 2003/10/07 05:47:21 kent Exp $";
+static char const rcsid[] = "$Id: expData.c,v 1.3 2005/04/13 06:25:52 markd Exp $";
 
 struct expData *expDataLoad(char **row)
 /* Load a expData from row fetched with select * from expData
  * from database.  Dispose of this with expDataFree(). */
 {
 struct expData *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->expCount = sqlUnsigned(row[1]);

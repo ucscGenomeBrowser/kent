@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "cpgIslandExt.h"
 
-static char const rcsid[] = "$Id: cpgIslandExt.c,v 1.1 2004/03/24 18:54:28 angie Exp $";
+static char const rcsid[] = "$Id: cpgIslandExt.c,v 1.2 2005/04/13 06:25:51 markd Exp $";
 
 void cpgIslandExtStaticLoad(char **row, struct cpgIslandExt *ret)
 /* Load a row from cpgIslandExt table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -34,8 +32,6 @@ struct cpgIslandExt *cpgIslandExtLoad(char **row)
  * from database.  Dispose of this with cpgIslandExtFree(). */
 {
 struct cpgIslandExt *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -93,7 +89,6 @@ struct cpgIslandExt *cpgIslandExtCommaIn(char **pS, struct cpgIslandExt *ret)
  * return a new cpgIslandExt */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -139,7 +134,6 @@ for (el = *pList; el != NULL; el = next)
 void cpgIslandExtOutput(struct cpgIslandExt *el, FILE *f, char sep, char lastSep) 
 /* Print out cpgIslandExt.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

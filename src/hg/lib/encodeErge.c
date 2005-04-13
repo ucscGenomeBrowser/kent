@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "encodeErge.h"
 
-static char const rcsid[] = "$Id: encodeErge.c,v 1.1 2003/12/11 21:49:32 daryl Exp $";
+static char const rcsid[] = "$Id: encodeErge.c,v 1.2 2005/04/13 06:25:52 markd Exp $";
 
 struct encodeErge *encodeErgeLoad(char **row)
 /* Load a encodeErge from row fetched with select * from encodeErge
  * from database.  Dispose of this with encodeErgeFree(). */
 {
 struct encodeErge *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->blockCount = sqlUnsigned(row[9]);

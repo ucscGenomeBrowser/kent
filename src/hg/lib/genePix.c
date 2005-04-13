@@ -154,7 +154,7 @@ static struct slName *extNamesForId(struct sqlConnection *conn, int id,
 struct slName *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
-char query[256], buf[256];
+char query[256];
 safef(query, sizeof(query),
       "select gene.%s from imageProbe,probe,gene"
       " where imageProbe.image = %d"
@@ -311,7 +311,7 @@ struct hash *uniqHash = newHash(0);
 struct slName *geneList = NULL, *geneEl;
 struct slInt *imageList = NULL, *imageEl;
 struct dyString *dy = dyStringNew(0);
-char query[256], **row;
+char **row;
 struct sqlResult *sr;
 
 dyStringPrintf(dy, "select id from gene where name ");

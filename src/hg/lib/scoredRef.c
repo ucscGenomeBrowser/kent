@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: scoredRef.c,v 1.6 2004/11/09 17:41:58 kent Exp $";
+static char const rcsid[] = "$Id: scoredRef.c,v 1.7 2005/04/13 06:25:56 markd Exp $";
 
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct scoredRef *scoredRefLoad(char **row)
  * from database.  Dispose of this with scoredRefFree(). */
 {
 struct scoredRef *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -67,7 +63,6 @@ struct scoredRef *scoredRefCommaIn(char **pS, struct scoredRef *ret)
  * return a new scoredRef */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -108,7 +103,6 @@ for (el = *pList; el != NULL; el = next)
 void scoredRefOutput(struct scoredRef *el, FILE *f, char sep, char lastSep) 
 /* Print out scoredRef.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

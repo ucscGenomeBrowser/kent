@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "jaxOrtholog.h"
 
-static char const rcsid[] = "$Id: jaxOrtholog.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: jaxOrtholog.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 void jaxOrthologStaticLoad(char **row, struct jaxOrtholog *ret)
 /* Load a row from jaxOrtholog table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->humanSymbol = row[0];
 ret->humanBand = row[1];
@@ -31,8 +29,6 @@ struct jaxOrtholog *jaxOrthologLoad(char **row)
  * from database.  Dispose of this with jaxOrthologFree(). */
 {
 struct jaxOrtholog *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->humanSymbol = cloneString(row[0]);
@@ -94,7 +90,6 @@ struct jaxOrtholog *jaxOrthologCommaIn(char **pS, struct jaxOrtholog *ret)
  * return a new jaxOrtholog */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -142,7 +137,6 @@ for (el = *pList; el != NULL; el = next)
 void jaxOrthologOutput(struct jaxOrtholog *el, FILE *f, char sep, char lastSep) 
 /* Print out jaxOrtholog.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->humanSymbol);
 if (sep == ',') fputc('"',f);

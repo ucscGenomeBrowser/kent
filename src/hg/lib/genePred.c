@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.65 2005/04/09 02:41:45 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.66 2005/04/13 06:25:53 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -56,8 +56,7 @@ struct genePred *genePredLoad(char **row)
  * from database.  Dispose of this with genePredFree(). */
 {
 struct genePred *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->exonCount = sqlUnsigned(row[7]);
@@ -1047,12 +1046,10 @@ char query[256];
 struct genePred *gene;
 struct sqlConnection *conn;
 struct sqlResult *sr;
-boolean hasBin = 0;
 char **row;
 struct genePred *el = NULL, *bestMatch = NULL, *gp = NULL;
 int overlap = 0 , bestOverlap = 0, i;
 struct psl *psl;
-int selfHit = 0;
 unsigned *eFrames;
 
 

@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "vntr.h"
 
-static char const rcsid[] = "$Id: vntr.c,v 1.1 2004/04/28 16:38:25 angie Exp $";
+static char const rcsid[] = "$Id: vntr.c,v 1.2 2005/04/13 06:25:58 markd Exp $";
 
 void vntrStaticLoad(char **row, struct vntr *ret)
 /* Load a row from vntr table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -34,8 +32,6 @@ struct vntr *vntrLoad(char **row)
  * from database.  Dispose of this with vntrFree(). */
 {
 struct vntr *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -93,7 +89,6 @@ struct vntr *vntrCommaIn(char **pS, struct vntr *ret)
  * return a new vntr */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -142,7 +137,6 @@ for (el = *pList; el != NULL; el = next)
 void vntrOutput(struct vntr *el, FILE *f, char sep, char lastSep) 
 /* Print out vntr.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

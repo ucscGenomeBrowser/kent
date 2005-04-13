@@ -18,7 +18,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: geneGraph.c,v 1.15 2004/09/17 03:17:21 kent Exp $";
+static char const rcsid[] = "$Id: geneGraph.c,v 1.16 2005/04/13 06:25:53 markd Exp $";
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -214,13 +214,11 @@ bool **em = gg->edgeMatrix;
 int edgeCount = 0;
 int totalVertexCount = gg->vertexCount;
 int usedVertexCount;
-int usedCount;
 int *translator;	/* Translates away unused vertices. */
 struct ggVertex *vertices = gg->vertices;
 int i,j;
 UBYTE *vTypes;
-unsigned *vBacs, *vPositions, *edgeStarts, *edgeEnds, *mrnaRefs;
-struct maRef *ref;
+unsigned *vPositions, *edgeStarts, *edgeEnds;
 
 AllocArray(translator, totalVertexCount);
 usedVertexCount = countUsed(gg, totalVertexCount, translator);
@@ -300,7 +298,6 @@ printf("\n");
 void ggPrintStart(int count)
 /* print a number plus bar, i.e. ' 0|'. Used for debugging output. */
 {
-int i;
 if(count % 10 == 0 && count != 0)
     printf("%d", count/10);
 else
@@ -528,16 +525,13 @@ bool **em = gg->edgeMatrix;
 int edgeCount = 0;
 int totalVertexCount = gg->vertexCount;
 int usedVertexCount;
-int usedCount;
 struct dyString *accessionList = NULL;
 int *translator;	/* Translates away unused vertices. */
 struct ggVertex *vertices = gg->vertices;
 struct ggEvidence *ev = NULL;
 int i,j;
 UBYTE *vTypes;
-unsigned *vBacs, *vPositions, *edgeStarts, *edgeEnds, *mrnaRefs;
-struct evidence **evidence = NULL;
-struct maRef *ref;
+unsigned *vPositions;
 
 AllocArray(translator, totalVertexCount);
 usedVertexCount = countUsed(gg, totalVertexCount, translator);

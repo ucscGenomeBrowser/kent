@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.4 2005/03/29 01:20:53 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.5 2005/04/13 06:25:51 markd Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -413,7 +413,7 @@ char *line = "whatever", *words[10], numWords;
 /* Skip to the right line. */
 while (lineFileNext(lf,&line,NULL) && !startsWith("..",line));
 /* */
-while (numWords=lineFileChop(lf,words))
+while ((numWords=lineFileChop(lf,words)))
     {
     struct cutter *newone = NULL;
     int comIx = (numWords==7) ? 5 : 6;
@@ -587,7 +587,7 @@ if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3])
 		add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
 		slAddHead(&bedList, add);
 		/* Just in case there's another one with the same sequence. */
-		while (el = hashLookupNext(el))
+		while ((el = hashLookupNext(el)) != NULL)
 		    {
 		    enz = el->val;
 		    add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
@@ -629,7 +629,7 @@ struct hash *sixers = newHash(8), *palinSixers = newHash(8);
 struct cutter *enz;
 struct cutter *ACGTo[5], *palinACGTo[5];
 struct bed *bedList = NULL, *tmp;
-int seqPos = 0, i;
+int i;
 
 if (!cutters)
     return NULL;
@@ -643,7 +643,7 @@ enz = cutters;
 while (enz != NULL)
     {
     int acgtCount = 0;
-    struct cutter *next = enz->next, *garb = NULL;
+    struct cutter *next = enz->next;
     acgtCount = countChars(enz->seq,'A') + countChars(enz->seq,'C') + 
                 countChars(enz->seq,'G') + countChars(enz->seq,'T');
     /* Super dumb coding here but it's quick. */

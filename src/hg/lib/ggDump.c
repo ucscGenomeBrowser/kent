@@ -8,7 +8,7 @@
 #include "ggMrnaAli.h"
 #include "ggPrivate.h"
 
-static char const rcsid[] = "$Id: ggDump.c,v 1.5 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: ggDump.c,v 1.6 2005/04/13 06:25:53 markd Exp $";
 
 static char charForType(int type)
 /* Return character corresponding to edge. */
@@ -65,7 +65,6 @@ void dumpGgAliInfo(struct ggAliInfo *da, int start, int end)
 /* Display list of dense Alis. */
 {
 struct ggVertex *v;
-int pos;
 int i;
 
 v = da->vertices;

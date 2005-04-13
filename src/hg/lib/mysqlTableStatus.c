@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "mysqlTableStatus.h"
 
-static char const rcsid[] = "$Id: mysqlTableStatus.c,v 1.1 2004/03/17 02:16:44 kent Exp $";
+static char const rcsid[] = "$Id: mysqlTableStatus.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void mysqlTableStatusStaticLoad(char **row, struct mysqlTableStatus *ret)
 /* Load a row from mysqlTableStatus table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->type = row[1];
@@ -37,8 +35,6 @@ struct mysqlTableStatus *mysqlTableStatusLoad(char **row)
  * from database.  Dispose of this with mysqlTableStatusFree(). */
 {
 struct mysqlTableStatus *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -90,7 +86,6 @@ for (el = *pList; el != NULL; el = next)
 void mysqlTableStatusOutput(struct mysqlTableStatus *el, FILE *f, char sep, char lastSep) 
 /* Print out mysqlTableStatus.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

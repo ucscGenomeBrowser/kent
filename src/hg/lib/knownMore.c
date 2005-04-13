@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "knownMore.h"
 
-static char const rcsid[] = "$Id: knownMore.c,v 1.3 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: knownMore.c,v 1.4 2005/04/13 06:25:55 markd Exp $";
 
 void knownMoreStaticLoad(char **row, struct knownMore *ret)
 /* Load a row from knownMore table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->transId = row[1];
@@ -42,8 +40,6 @@ struct knownMore *knownMoreLoad(char **row)
  * from database.  Dispose of this with knownMoreFree(). */
 {
 struct knownMore *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -75,7 +71,6 @@ struct knownMore *knownMoreCommaIn(char **pS, struct knownMore *ret)
  * return a new knownMore */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -142,7 +137,6 @@ for (el = *pList; el != NULL; el = next)
 void knownMoreOutput(struct knownMore *el, FILE *f, char sep, char lastSep) 
 /* Print out knownMore.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

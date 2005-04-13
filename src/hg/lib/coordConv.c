@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.12 2004/07/23 13:51:57 braney Exp $";
+static char const rcsid[] = "$Id: coordConv.c,v 1.13 2005/04/13 06:25:51 markd Exp $";
 
 /* #define DEBUG */
 
@@ -31,8 +31,6 @@ struct possibleCoord
  * be replaced at the next call to this function. */
 void coordConvStaticLoad(char **row, struct coordConv *ret)
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -48,8 +46,6 @@ ret->optional = row[6];
 struct coordConv *coordConvLoad(char **row)
 {
 struct coordConv *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -86,7 +82,6 @@ return list;
 struct coordConv *coordConvCommaIn(char **pS, struct coordConv *ret)
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -132,7 +127,6 @@ for (el = *pList; el != NULL; el = next)
 /** Print out coordConv.  Separate fields with sep. Follow last field with lastSep. */
 void coordConvOutput(struct coordConv *el, FILE *f, char sep, char lastSep) 
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
@@ -180,8 +174,7 @@ char nibFileName[512];
 struct sqlConnection *conn = sqlConnect(ccr->from->version);
 FILE *nib = NULL;
 int chromSize;
-int querySize=0,midPos=0,upStream=0,downStream=0;
-struct dnaSeq *seqList=NULL,*seq=NULL;
+int querySize=0,midPos=0;
 int chromStart,chromEnd,nibStart=0;
 nibFileName[0] = '\0';
 sprintf(query, "select fileName from chromInfo where chrom='%s'", ccr->from->chrom);
@@ -251,7 +244,7 @@ struct psl* doDnaAlignment(struct dnaSeq *seq, char *db, char *blatHost,
 /* get the alignment from the blat host for this sequence */
 {
 struct psl *pslList = NULL;
-int conn =0, count =0;
+int conn =0;
 struct tempName pslTn;
 FILE *f = NULL;
 struct gfOutput *gvo;
@@ -347,7 +340,7 @@ return bestPc;
 void fillInNewCoord(struct coordConvRep *ccr, struct possibleCoord *pc) 
 /* fill in coordinates of the report given possible coordinates */
 {
-unsigned s, midPos, e;
+unsigned midPos;
 midPos = pc->midPsl->tStart - pc->midPsl->qStarts[0] + (ccr->seqSize/2);
 ccr->to->chrom = cloneString(pc->midPsl->tName);
 ccr->to->chromStart = midPos - (ccr->from->chromEnd - ccr->from->chromStart)/2;
@@ -509,7 +502,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 if(slCount(dbList) != 1)
-    errAbort("coordConv.c::loadDbInformation() - expecting 1 dbDb record for %s got %d", db, slCount(dbList));
+    errAbort("coordConv.c::loadDbInformation() - expecting 1 dbDb record for %s got %d", db->name, slCount(dbList));
 return dbList;
 }
 

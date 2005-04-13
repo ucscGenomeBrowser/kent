@@ -14,8 +14,7 @@ struct dnaMotif *dnaMotifLoad(char **row)
  * from database.  Dispose of this with dnaMotifFree(). */
 {
 struct dnaMotif *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->columnCount = sqlSigned(row[1]);

@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.245 2005/04/12 22:28:18 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.246 2005/04/13 06:25:54 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1095,7 +1095,6 @@ hFreeOrDisconnect(&conn);
 return list;
 }
 
-
 static char *hExtFileNameC(struct sqlConnection *conn, char *extFileTable, unsigned extFileId)
 /* Get external file name from table and ID.  Typically
  * extFile table will be 'extFile' or 'gbExtFile'
@@ -1113,7 +1112,7 @@ safef(query, sizeof(query),
 	"select path,size from %s where id = %u", extFileTable, extFileId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Database inconsistency - no external file with id %lu", extFileId);
+    errAbort("Database inconsistency - no external file with id %u", extFileId);
 path = cloneString(row[0]);
 dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);
@@ -1200,9 +1199,9 @@ static void *readOpenFileSection(int fd, off_t offset, size_t size, char *fileNa
 void *buf;
 buf = needMem(size+1);
 if (lseek(fd, offset, SEEK_SET) < 0)
-        errAbort("Couldn't seek to %ld in %s", offset, fileName);
+        errAbort("Couldn't seek to %lld in %s", (long long)offset, fileName);
 if (read(fd, buf, size) < size)
-        errAbort("Couldn't read %u bytes at %ld in %s", size, offset, fileName);
+        errAbort("Couldn't read %lld bytes at %lld in %s", (long long)size, (long long)offset, fileName);
 return buf;
 }
 

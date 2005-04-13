@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: grp.c,v 1.3 2004/04/01 03:22:37 markd Exp $";
+static char const rcsid[] = "$Id: grp.c,v 1.4 2005/04/13 06:25:54 markd Exp $";
 
 void grpStaticLoad(char **row, struct grp *ret)
 /* Load a row from grp table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->label = row[1];
@@ -27,8 +25,6 @@ struct grp *grpLoad(char **row)
  * from database.  Dispose of this with grpFree(). */
 {
 struct grp *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -61,7 +57,6 @@ struct grp *grpCommaIn(char **pS, struct grp *ret)
  * return a new grp */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -122,7 +117,6 @@ for (el = *pList; el != NULL; el = next)
 void grpOutput(struct grp *el, FILE *f, char sep, char lastSep) 
 /* Print out grp.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.19 2005/01/10 00:27:16 kent Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.20 2005/04/13 06:25:55 markd Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -135,7 +135,7 @@ struct chain *chainsHit = NULL,
                 *chainsPartial = NULL, 
                 *chainsMissed = NULL, *chain;
 struct bed *bedList = NULL, *unmappedBedList = NULL;
-struct bed *bed = NULL, *prevBed = NULL;
+struct bed *bed = NULL;
 /* initialize for single region case */
 int start = s, end = e;
 double minMatchSize = minMatch * (end - start);
@@ -148,7 +148,7 @@ int minSizeQ = minChainSizeQ;
 
 
 verbose(2, "%s:%d-%d", chrom, s, e);
-verbose(2, multiple ? "\t%d\n": "\n", regionName);
+verbose(2, multiple ? "\t%s\n": "\n", regionName);
 for (el = list; el != NULL; el = el->next)
     {
     chain = el->val;
@@ -307,7 +307,6 @@ char strand = '.', strandString[2];
 char *error;
 int ct = 0;
 int errs = 0;
-int bedCount;
 struct bed *bedList = NULL, *unmappedBedList = NULL;
 int totalUnmapped = 0;
 double unmappedRatio;
@@ -388,7 +387,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
                         size, bed->name);
             }
         unmappedRatio = (double)(totalUnmapped * 100) / (e - s);
-        verbose(2, "Unmapped total: %s\t%5.1f\%\t%7d\n", 
+        verbose(2, "Unmapped total: %s\t%5.1f%%\t%7d\n", 
                             region, unmappedRatio, totalUnmapped);
         totalUnmappedAll += totalUnmapped;
         totalBases += (e - s);
@@ -411,7 +410,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
 if (errCt)
     *errCt = errs;
 mappedRatio = (totalBases - totalUnmappedAll)*100.0 / totalBases;
-verbose(2, "Mapped bases: \t%5.0f%\n", mappedRatio);
+verbose(2, "Mapped bases: \t%5.0f%%\n", mappedRatio);
 return ct;
 }
 
@@ -442,9 +441,8 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char c, *s, *line, *word;
 char *seq, *source, *feature;
 int start, end;
-char *score, *strand, *frame;
+char *score, *strand;
 FILE *f;
-struct bed *bed;
 
 while (lineFileNext(lf, &line, NULL))
     {
@@ -519,7 +517,6 @@ static struct range *tPslToRangeList(struct psl *psl)
 /* Convert target blocks in psl to a range list. */
 {
 struct range *range, *rangeList = NULL;
-int pslStart = psl->tStart;
 int i, count = psl->blockCount, start;
 for (i=0; i<count; ++i)
     {
@@ -533,6 +530,7 @@ slReverse(&rangeList);
 return rangeList;
 }
 
+#if 0 /* not used */
 static struct range *qPslToRangeList(struct psl *psl)
 /* Convert query blocks in psl to a range list. */
 {
@@ -550,6 +548,7 @@ for (i=0; i<count; ++i)
 slReverse(&rangeList);
 return rangeList;
 }
+#endif
 
 static int chainRangeIntersection(struct chain *chain, struct range *rangeList)
 /* Return chain/rangeList intersection size. */
@@ -818,7 +817,7 @@ static char *remapBlockedBed(struct hash *chainHash, struct bed *bed,
 /* Remap blocks in bed, and also chromStart/chromEnd.  
  * Return NULL on success, an error string on failure. */
 {
-struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
+struct chain *chainList = NULL,  *chain;
 int bedSize = sumBedBlocks(bed);
 struct binElement *binList;
 struct binElement *el;
@@ -900,11 +899,9 @@ static int bedOverBig(struct lineFile *lf, int refCount,
                     bool fudgeThick, FILE *mapped, FILE *unmapped, int *errCt)
 /* Do a bed with block-list. */
 {
-int i, wordCount, s, e;
-char *line, *words[20], *chrom;
-char strand = '.', strandString[2];
+int wordCount;
+char *line, *words[20];
 char *whyNot = NULL;
-boolean gotThick;
 int ct = 0;
 int errs = 0;
 
@@ -1061,7 +1058,7 @@ static char *remapBlockedPsl(struct hash *chainHash, struct psl *psl,
 /* Remap blocks in psl, and also chromStart/chromEnd.  
  * Return NULL on success, an error string on failure. */
 {
-struct chain *chainList = NULL,  *chain, *subChain, *freeChain;
+struct chain *chainList = NULL,  *chain;
 int pslSize = sumPslBlocks(psl);
 struct binElement *binList;
 struct binElement *el;
@@ -1143,11 +1140,7 @@ static void pslOver(struct lineFile *lf, struct hash *chainHash,
                     FILE *mapped, FILE *unmapped)
 /* Do a psl with block-list. */
 {
-int i, wordCount, s, e;
-char *line, *words[20], *chrom;
-char strand = '.', strandString[2];
 char *whyNot = NULL;
-boolean gotThick;
 struct psl *psl;
 
 while ((psl = pslNext(lf)) != NULL)
@@ -1172,9 +1165,6 @@ void liftOverPsl(char *fileName, struct hash *chainHash,
 /* Open up file, and lift it. */
 {
 struct lineFile *lf = pslFileOpen(fileName);
-int wordCount;
-char *line;
-char *words[16];
 
 pslOver(lf, chainHash, minMatch, minBlocks, fudgeThick, f, unmapped);
 lineFileClose(&lf);
@@ -1398,7 +1388,7 @@ static void remapSample(struct hash *chainHash, struct sample *sample,
 /* Remap a single sample and output it. */
 {
 struct binElement *binList, *el;
-struct range *rangeList, *goodList = NULL, *range;
+struct range *rangeList, *goodList = NULL;
 struct chain *chain;
 struct sample *ns;
 char *error = NULL;

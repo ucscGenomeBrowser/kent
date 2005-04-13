@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "goa.h"
 
-static char const rcsid[] = "$Id: goa.c,v 1.1 2003/09/08 09:01:30 kent Exp $";
+static char const rcsid[] = "$Id: goa.c,v 1.2 2005/04/13 06:25:53 markd Exp $";
 
 void goaStaticLoad(char **row, struct goa *ret)
 /* Load a row from goa table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->db = row[0];
 ret->dbObjectId = row[1];
@@ -39,8 +37,6 @@ struct goa *goaLoad(char **row)
  * from database.  Dispose of this with goaFree(). */
 {
 struct goa *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->db = cloneString(row[0]);
@@ -103,7 +99,6 @@ struct goa *goaCommaIn(char **pS, struct goa *ret)
  * return a new goa */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -167,7 +162,6 @@ for (el = *pList; el != NULL; el = next)
 void goaOutput(struct goa *el, FILE *f, char sep, char lastSep) 
 /* Print out goa.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->db);
 if (sep == ',') fputc('"',f);

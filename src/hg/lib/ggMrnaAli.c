@@ -9,14 +9,12 @@
 #include "ggMrnaAli.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: ggMrnaAli.c,v 1.7 2004/04/29 20:50:20 sugnet Exp $";
+static char const rcsid[] = "$Id: ggMrnaAli.c,v 1.8 2005/04/13 06:25:53 markd Exp $";
 
 void ggMrnaBlockStaticLoad(char **row, struct ggMrnaBlock *ret)
 /* Load a row from ggMrnaBlock table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->qStart = sqlSigned(row[0]);
 ret->qEnd = sqlSigned(row[1]);
@@ -29,8 +27,6 @@ struct ggMrnaBlock *ggMrnaBlockLoad(char **row)
  * from database.  Dispose of this with ggMrnaBlockFree(). */
 {
 struct ggMrnaBlock *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->qStart = sqlSigned(row[0]);
@@ -118,7 +114,6 @@ struct ggMrnaBlock *ggMrnaBlockCommaIn(char **pS, struct ggMrnaBlock *ret)
  * return a new ggMrnaBlock */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -156,7 +151,6 @@ for (el = *pList; el != NULL; el = next)
 void ggMrnaBlockOutput(struct ggMrnaBlock *el, FILE *f, char sep, char lastSep) 
 /* Print out ggMrnaBlock.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->qStart);
 fputc(sep,f);
 fprintf(f, "%d", el->qEnd);
@@ -172,7 +166,7 @@ struct ggMrnaAli *ggMrnaAliLoad(char **row)
  * from database.  Dispose of this with ggMrnaAliFree(). */
 {
 struct ggMrnaAli *ret;
-int sizeOne,i;
+int i;
 char *s;
 
 AllocVar(ret);
@@ -404,7 +398,6 @@ struct ggMrnaAli *pslToGgMrnaAli(struct psl *psl, char *chrom, unsigned int chro
  * NULL if no introns in psl. */
 {
 struct ggMrnaAli *ma;
-int localIx;
 int i;
 int blockCount;
 struct ggMrnaBlock *blocks, *block;
@@ -456,7 +449,7 @@ boolean ggMrnaAliMergeBlocks(struct ggMrnaAli *ma, int maxGap)
 /* Merge blocks that looks to be separated by small amounts
  * of sequencing noise only. 2 is a good value for maxGap */
 {
-struct ggMrnaBlock *readBlock, *writeBlock, *nextBlock;
+struct ggMrnaBlock *readBlock, *writeBlock;
 int mergedCount = 1;
 int i;
 boolean mergedSome = FALSE;

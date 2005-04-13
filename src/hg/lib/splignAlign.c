@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "splignAlign.h"
 
-static char const rcsid[] = "$Id: splignAlign.c,v 1.1 2004/02/24 19:52:48 ytlu Exp $";
+static char const rcsid[] = "$Id: splignAlign.c,v 1.2 2005/04/13 06:25:57 markd Exp $";
 
 void splignAlignStaticLoad(char **row, struct splignAlign *ret)
 /* Load a row from splignAlign table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->query = row[0];
 ret->target = row[1];
@@ -34,8 +32,6 @@ struct splignAlign *splignAlignLoad(char **row)
  * from database.  Dispose of this with splignAlignFree(). */
 {
 struct splignAlign *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->query = cloneString(row[0]);
@@ -93,7 +89,6 @@ struct splignAlign *splignAlignCommaIn(char **pS, struct splignAlign *ret)
  * return a new splignAlign */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -141,7 +136,6 @@ for (el = *pList; el != NULL; el = next)
 void splignAlignOutput(struct splignAlign *el, FILE *f, char sep, char lastSep) 
 /* Print out splignAlign.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->query);
 if (sep == ',') fputc('"',f);

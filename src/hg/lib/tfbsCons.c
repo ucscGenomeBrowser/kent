@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "tfbsCons.h"
 
-static char const rcsid[] = "$Id: tfbsCons.c,v 1.3 2004/01/23 16:47:26 braney Exp $";
+static char const rcsid[] = "$Id: tfbsCons.c,v 1.4 2005/04/13 06:25:58 markd Exp $";
 
 void tfbsConsStaticLoad(char **row, struct tfbsCons *ret)
 /* Load a row from tfbsCons table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -33,8 +31,6 @@ struct tfbsCons *tfbsConsLoad(char **row)
  * from database.  Dispose of this with tfbsConsFree(). */
 {
 struct tfbsCons *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -159,7 +155,6 @@ struct tfbsCons *tfbsConsCommaIn(char **pS, struct tfbsCons *ret)
  * return a new tfbsCons */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -204,7 +199,6 @@ for (el = *pList; el != NULL; el = next)
 void tfbsConsOutput(struct tfbsCons *el, FILE *f, char sep, char lastSep) 
 /* Print out tfbsCons.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

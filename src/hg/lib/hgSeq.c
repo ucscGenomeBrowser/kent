@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.26 2005/04/12 18:21:48 angie Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.27 2005/04/13 06:25:54 markd Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -248,7 +248,7 @@ static void maskRepeats(char *chrom, int chromStart, int chromEnd,
 			DNA *dna, boolean soft)
 /* Lower case bits corresponding to repeats. */
 {
-int rowOffset, i;
+int rowOffset;
 struct bed *bedItem, *bedList;
 struct sqlConnection *conn;
 struct sqlResult *sr;
@@ -373,11 +373,12 @@ cSeq->dna = needLargeMem(cSize+1);
 cSeq->size = cSize;
 
 if (maskRep)
+    {
     if (sameString(repMasking, "lower"))
 	maskRepeats(chrom, seqStart, seqEnd, rSeq->dna, TRUE);
     else
 	maskRepeats(chrom, seqStart, seqEnd, rSeq->dna, FALSE);
-
+    }
 offset = 0;
 for (i=0;  i < rCount;  i++)
     {
@@ -560,7 +561,6 @@ boolean concatRegions = granularity && sameString("gene", granularity);
 boolean concatAdjacent = (cgiBooleanDefined("hgSeq.splitCDSUTR") &&
 			  (! cgiBoolean("hgSeq.splitCDSUTR")));
 boolean isCDS, doIntron;
-boolean foundFields;
 boolean canDoUTR, canDoIntrons;
 
 /* catch a special case: introns selected, but no exons -> include all introns

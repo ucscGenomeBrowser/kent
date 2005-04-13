@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "imageClone.h"
 
-static char const rcsid[] = "$Id: imageClone.c,v 1.2 2003/05/06 07:22:22 kate Exp $";
+static char const rcsid[] = "$Id: imageClone.c,v 1.3 2005/04/13 06:25:54 markd Exp $";
 
 struct imageClone *imageCloneLoad(char **row)
 /* Load a imageClone from row fetched with select * from imageClone
  * from database.  Dispose of this with imageCloneFree(). */
 {
 struct imageClone *ret;
-int sizeOne=0,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->numGenbank = sqlSigned(row[7]);

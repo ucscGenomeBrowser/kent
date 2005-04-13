@@ -374,9 +374,7 @@ static struct joinerSet *parseIdentifierSet(struct lineFile *lf,
 {
 struct joinerSet *js;
 struct joinerField *jf;
-struct slName *dbName;
 char *word, *e;
-struct hash *varHash;
 char *parts[3];
 int partCount;
 
@@ -745,7 +743,7 @@ for (js=joiner->jsList; js != NULL; js = nextJs)
 	struct dyString *dy = dyStringNew(0);
 	endBracket = strchr(startBracket, ']');
 	if (endBracket == NULL)
-	    errAbort("[ without ] line %s of %s", js->lineIx, joiner->fileName);
+	    errAbort("[ without ] line %d of %s", js->lineIx, joiner->fileName);
 	dbCommaList = cloneStringZ(startBracket+1, endBracket - startBracket - 1);
 	dbStart = dbCommaList;
 	while (dbStart != NULL)
@@ -943,7 +941,6 @@ for (js = joiner->jsList; js != NULL; js = js->next)
 struct joiner *joinerRead(char *fileName)
 /* Read in a .joiner file. */
 {
-struct hash *jeList = NULL;
 struct joiner *joiner = joinerParsePassOne(fileName);
 joinerExpand(joiner);
 joinerLinkParents(joiner);
@@ -1099,9 +1096,8 @@ struct slRef *joinerSetInheritanceChain(struct joinerSet *js)
 /* Return list of self, children, and parents (but not siblings).
  * slFreeList result when done. */
 {
-struct slRef *list = NULL, *el;
+struct slRef *list = NULL;
 struct joinerSet *parent;
-struct slRef *child;
 
 /* Add self and parents. */
 for (parent = js; parent != NULL; parent = parent->parent)
@@ -1236,7 +1232,6 @@ static struct joinerPair *rFindRoute(struct joiner *joiner,
 {
 struct joinerPair *jpList, *jp;
 struct joinerPair *path = NULL;
-char buf[256];
 jpList = joinerRelate(joiner, a->database, a->table);
 for (jp = jpList; jp != NULL; jp = jp->next)
     {
@@ -1341,7 +1336,7 @@ struct joinerPair *joinerFindRouteThroughAll(struct joiner *joiner,
 /* Return route that gets to all tables in fieldList.  Note that
  * the field element of the items in tableList can be NULL. */
 {
-struct joinerPair *fullRoute = NULL, *pairRoute = NULL, *routeLink;
+struct joinerPair *fullRoute = NULL, *pairRoute = NULL;
 struct joinerDtf *first = tableList, *dtf;
 
 if (first->next == NULL)

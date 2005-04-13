@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: trackDb.c,v 1.7 2003/08/01 23:57:52 kent Exp $";
+static char const rcsid[] = "$Id: trackDb.c,v 1.8 2005/04/13 06:25:58 markd Exp $";
 
 struct trackDb *trackDbLoad(char **row)
 /* Load a trackDb from row fetched with select * from trackDb
  * from database.  Dispose of this with trackDbFree(). */
 {
 struct trackDb *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->restrictCount = sqlSigned(row[14]);

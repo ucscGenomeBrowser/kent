@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.1 2004/03/31 07:29:54 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.2 2005/04/13 06:25:54 markd Exp $";
 
 void hgFindSpecStaticLoad(char **row, struct hgFindSpec *ret)
 /* Load a row from hgFindSpec table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->searchName = row[0];
 ret->searchTable = row[1];
@@ -36,8 +34,6 @@ struct hgFindSpec *hgFindSpecLoad(char **row)
  * from database.  Dispose of this with hgFindSpecFree(). */
 {
 struct hgFindSpec *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->searchName = cloneString(row[0]);
@@ -97,7 +93,6 @@ struct hgFindSpec *hgFindSpecCommaIn(char **pS, struct hgFindSpec *ret)
  * return a new hgFindSpec */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -153,7 +148,6 @@ for (el = *pList; el != NULL; el = next)
 void hgFindSpecOutput(struct hgFindSpec *el, FILE *f, char sep, char lastSep) 
 /* Print out hgFindSpec.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->searchName);
 if (sep == ',') fputc('"',f);

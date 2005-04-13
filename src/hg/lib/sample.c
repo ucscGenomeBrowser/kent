@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "sample.h"
 
-static char const rcsid[] = "$Id: sample.c,v 1.6 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: sample.c,v 1.7 2005/04/13 06:25:56 markd Exp $";
 
 struct sample *sampleLoad(char **row)
 /* Load a sample from row fetched with select * from sample
  * from database.  Dispose of this with sampleFree(). */
 {
 struct sample *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->sampleCount = sqlUnsigned(row[6]);

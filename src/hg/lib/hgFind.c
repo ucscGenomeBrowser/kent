@@ -29,7 +29,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.165 2005/04/12 23:07:56 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.166 2005/04/13 06:25:54 markd Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -104,6 +104,7 @@ if ((el = *pEl) != NULL)
     }
 }
 
+#if 0 /* not used */
 static void hgPositionsFreeList(struct hgPositions **pList)
 /* Free a list of dynamically allocated hgPos's */
 {
@@ -116,6 +117,7 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
+#endif
 
 static char *hgPosBrowserRange(struct hgPos *pos, char range[64])
 /* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
@@ -130,6 +132,7 @@ return range;
 }
 
 
+#if 0 /* not used */
 static char *getGrepIndexFile(struct hgFindSpec *hfs)
 /* Return grepIndex setting (may be relative to hg.conf grepIndex.default),
  * or NULL if the file doesn't exist. */
@@ -153,6 +156,7 @@ else if (! startsWith("/", indexFile))
     }
 return NULL;
 }
+#endif
 
 #define HGFIND_MAX_KEYWORDS 16
 #define HGFIND_MAX_CMDWORDS 6
@@ -236,7 +240,6 @@ struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
 char query[256];
 char **row;
-boolean ok = FALSE;
 char *result = NULL;
 
 conn = hAllocConn();
@@ -267,7 +270,6 @@ struct sqlConnection *conn;
 struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
-boolean ok = FALSE;
 char * result;
 
 conn = hAllocConn();
@@ -299,9 +301,6 @@ struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
 boolean ok = FALSE;
-char *chrom;
-struct snp snp;
-char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 int rowOffset;
@@ -355,9 +354,6 @@ struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
 boolean ok = FALSE;
-char *chrom;
-struct snp snp;
-char buf[64];
 struct hgPosTable *table = NULL;
 struct hgPos *pos = NULL;
 int rowOffset;
@@ -406,18 +402,6 @@ static boolean findKnownGene(char *spec, struct hgPositions *hgp,
 			     char *tableName)
 /* Look for position in gene prediction table. */
 {
-struct sqlConnection *conn;
-struct sqlResult *sr = NULL;
-struct dyString *query;
-char **row;
-boolean ok = FALSE;
-char *chrom;
-struct snp snp;
-char buf[64];
-struct hgPosTable *table = NULL;
-struct hgPos *pos = NULL;
-int rowOffset;
-char *localName;
 char *mrnaID;
 
 if (! hTableExists("knownGene"))
@@ -753,6 +737,7 @@ hFreeConn(&conn);
 return foundIt;
 }
 
+#if 0 /* not used */
 static boolean isAccForm(char *s)
 /* Returns TRUE if s is of format to be a genbank accession. */
 {
@@ -765,6 +750,7 @@ if (!isdigit(s[len-1]))
     return FALSE;
 return TRUE;
 }
+#endif
 
 static boolean mrnaInfo(char *acc, struct sqlConnection *conn, 
                                 char **mrnaType, int *organismID)
@@ -773,7 +759,6 @@ static boolean mrnaInfo(char *acc, struct sqlConnection *conn,
 /* Return TRUE if search succeeded, else FALSE */
 /* NOTE: caller must free mrnaType */
 {
-static char typeBuf[16];
 char query[256];
 struct sqlResult *sr;
 char **row;
@@ -1178,7 +1163,6 @@ struct hgPos *pos = NULL;
 struct slName *el = NULL;
 struct slName *elToFree = NULL;
 struct dyString *dy = newDyString(256);
-char **row = NULL;
 char query[256];
 char description[512];
 char product[256];
@@ -1375,7 +1359,7 @@ addMrnaPositionTable(hgp, &allKeysList, allKeysHash, cart, conn,
 /* xeno aligning */
 /* NOTE: to suppress display of xeno mrna's in non-model organisms
  * (RT 801 and 687), uncommented the following...
-/* add to display list only if there is a scarcity of items
+ * add to display list only if there is a scarcity of items
  * already listed as aligning (low number of own mRna's for this organism) */
 if (alignCount < 20)
     addMrnaPositionTable(hgp, &allKeysList, allKeysHash, cart, conn,
@@ -1398,10 +1382,12 @@ while ((c = *s++) != 0)
 return TRUE;
 }
 
+#if 0 /* not used */
 static void findAffyProbe(char *spec, struct hgPositions *hgp)
 /* Look up affy probes. */
 {
 }
+#endif
 
 int findKgGenesByAlias(char *spec, struct hgPositions *hgp)
 /* Look up Known Genes using the gene Alias table, kgAlias. */
@@ -1411,7 +1397,6 @@ struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr 	    = NULL;
 struct dyString *ds 	    = newDyString(256);
 char **row;
-boolean gotOne 		    = FALSE;
 struct hgPosTable *table    = NULL;
 struct hgPos *pos;
 struct genePred *gp;
@@ -1499,7 +1484,6 @@ struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr 	    = NULL;
 struct dyString *ds 	    = newDyString(256);
 char **row;
-boolean gotOne 		    = FALSE;
 struct hgPosTable *table    = NULL;
 struct hgPos *pos;
 struct genePred *gp;
@@ -1624,7 +1608,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct dyString *ds = newDyString(256);
 char **row;
-boolean gotOne = FALSE;
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = hTableExists("refLink");
 boolean found = FALSE;
@@ -1752,10 +1735,9 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 struct dyString *ds = newDyString(256);
 char **row;
-boolean gotOne = FALSE;
 struct hgPosTable *table = NULL;
 struct hgPos *pos;
-struct bed *bed, *TRNAgbList = NULL;
+struct bed *bed;
 struct tigrCmrGene *tigrList = NULL, *tigr;
 /* struct minGeneInfo *gbList = NULL, *gb; */
 boolean gotTIGRkeys = sqlTableExists(conn, "tigrCmrORFsInfo");
@@ -1826,9 +1808,6 @@ struct sqlResult *sr = NULL;
 struct dyString *query;
 char **row;
 boolean ok = FALSE;
-char *chrom;
-struct snp snp;
-char buf[64];
 struct hgPos *pos = NULL;
 int rowOffset;
 char *localName;
@@ -2130,7 +2109,7 @@ if (useWeb)
 return hgp;
 }
 
-
+#if 0 /* not used */
 static void noRelative(boolean relativeFlag, int relStart, int relEnd,
 		       char *table)
 {
@@ -2139,6 +2118,7 @@ if (relativeFlag)
 	     relStart+1, relEnd, table);
 
 }
+#endif
 
 static boolean searchSpecial(struct hgFindSpec *hfs, char *term,
 			     struct hgPositions *hgp, boolean relativeFlag,

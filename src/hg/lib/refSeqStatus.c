@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "refSeqStatus.h"
 
-static char const rcsid[] = "$Id: refSeqStatus.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: refSeqStatus.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
 
 void refSeqStatusStaticLoad(char **row, struct refSeqStatus *ret)
 /* Load a row from refSeqStatus table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->mrnaAcc = row[0];
 ret->status = row[1];
@@ -26,8 +24,6 @@ struct refSeqStatus *refSeqStatusLoad(char **row)
  * from database.  Dispose of this with refSeqStatusFree(). */
 {
 struct refSeqStatus *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->mrnaAcc = cloneString(row[0]);
@@ -84,7 +80,6 @@ struct refSeqStatus *refSeqStatusCommaIn(char **pS, struct refSeqStatus *ret)
  * return a new refSeqStatus */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -122,7 +117,6 @@ for (el = *pList; el != NULL; el = next)
 void refSeqStatusOutput(struct refSeqStatus *el, FILE *f, char sep, char lastSep) 
 /* Print out refSeqStatus.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mrnaAcc);
 if (sep == ',') fputc('"',f);

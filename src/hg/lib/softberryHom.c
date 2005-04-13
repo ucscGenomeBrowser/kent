@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "softberryHom.h"
 
-static char const rcsid[] = "$Id: softberryHom.c,v 1.3 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: softberryHom.c,v 1.4 2005/04/13 06:25:57 markd Exp $";
 
 void softberryHomStaticLoad(char **row, struct softberryHom *ret)
 /* Load a row from softberryHom table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->giString = row[1];
@@ -25,8 +23,6 @@ struct softberryHom *softberryHomLoad(char **row)
  * from database.  Dispose of this with softberryHomFree(). */
 {
 struct softberryHom *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -41,7 +37,6 @@ struct softberryHom *softberryHomCommaIn(char **pS, struct softberryHom *ret)
  * return a new softberryHom */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -81,7 +76,6 @@ for (el = *pList; el != NULL; el = next)
 void softberryHomOutput(struct softberryHom *el, FILE *f, char sep, char lastSep) 
 /* Print out softberryHom.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

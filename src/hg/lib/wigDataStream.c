@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.73 2005/03/22 22:15:07 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.74 2005/04/13 06:25:58 markd Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -880,10 +880,10 @@ if (doDataArray && wds->winEnd && wds->chrName)
 	{
 	long et = clock1000() - startTime;
 	verbose(VERBOSE_CHR_LEVEL,
-	    "#\tgetData: created data array for %d values (%u b) in %ld ms\n",
-		winSize, size, et);
+	    "#\tgetData: created data array for %lld values (%llu b) in %ld ms\n",
+		(unsigned long long)winSize, (unsigned long long)size, et);
 	verbose(VERBOSE_CHR_LEVEL,
-	    "#\tdata array begins at %#x, last at %#x, size: %#x\n",
+	    "#\tdata array begins at %#lx, last at %#lx, size: %#lx\n",
 		(unsigned long) dataArrayPtr,
 			(unsigned long) (((unsigned long) dataArrayPtr) +
 				((unsigned long) size)), (unsigned long) size);
@@ -1101,8 +1101,8 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 
 	if (bytesToRead != bytesRead)
 	    {
-	    errAbort("wig_getData: failed to read %u bytes from %s\n",
-		bytesToRead, wiggle->file);
+	    errAbort("wig_getData: failed to read %llu bytes from %s\n",
+		(unsigned long long)bytesToRead, wiggle->file);
 	    }
 
 	verbose(VERBOSE_PER_VALUE_LEVEL,
@@ -1219,7 +1219,7 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 			    {
 			    if (chromPosition < dataArrayPosition)
 				verbose(VERBOSE_CHR_LEVEL,
-		"#\tWARNING: coordinates out of order %s %lu < %lu\n",
+		"#\tWARNING: coordinates out of order %s %u < %u\n",
 			wiggle->chrom, chromPosition, dataArrayPosition);
 			    }
 
@@ -1536,7 +1536,7 @@ if (bedList && *bedList)
 	if (NULL == filteredBed)
 	    {
 	    verbose(VERBOSE_CHR_LEVEL,
-		"#\tfilter found nothing in bed file: %s:%u-%u\n",
+		"#\tfilter found nothing in bed file: %s:%lu-%lu\n",
 		wds->chrName, winStart, winEnd);
 	    continue;	/*	next chrom */
 	    }
@@ -1574,7 +1574,7 @@ if (bedList && *bedList)
 	bedArray = (char *)needLargeMem(bedArraySize);
 
 	verbose(VERBOSE_CHR_LEVEL,
-	    "#\tbed array begins at %#x, last at %#x, size: %#x\n",
+	    "#\tbed array begins at %#lx, last at %#lx, size: %#lx\n",
 		(unsigned long) bedArray,
 		(unsigned long) (((unsigned long) bedArray) +
 			((unsigned long) bedArraySize)),
@@ -1586,7 +1586,7 @@ if (bedList && *bedList)
 	    {
 	    long et = clock1000() - startTime;
 	    verbose(VERBOSE_CHR_LEVEL,
-    "#\tgetDataViaBed: created data array for %u bed indicators in %ld ms\n",
+    "#\tgetDataViaBed: created data array for %lu bed indicators in %ld ms\n",
 		bedArraySize, et);
 	    }
 
@@ -1608,9 +1608,9 @@ if (bedList && *bedList)
 	bedEnd = bedPosition + bedStart;
 	bedExtent = bedEnd - bedStart;
 	verbose(VERBOSE_CHR_LEVEL,
-		"#\tbed range %u = %u - %u, allocated %u bytes\n",
+		"#\tbed range %lu = %lu - %lu, allocated %lu bytes\n",
 		bedExtent, bedEnd, bedStart, bedArraySize);
-	verbose(VERBOSE_CHR_LEVEL, "#\tbed marked %u bases, winSize %u\n",
+	verbose(VERBOSE_CHR_LEVEL, "#\tbed marked %lu bases, winSize %lu\n",
 		bedMarked, winExtent);
 	/*	worst case ascii limit: bedMarked */
 	asciiDataSizeLimit = bedMarked;
@@ -1691,9 +1691,10 @@ if (bedList && *bedList)
                  *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
                  */
 		verbose(VERBOSE_CHR_LEVEL,
-		    "#\tworst case ascii array needLargeMem (%u * %u = %u)\n",
-			sizeof(struct asciiDatum), asciiDataSizeLimit,
-			    (sizeof(struct asciiDatum) * asciiDataSizeLimit));
+		    "#\tworst case ascii array needLargeMem (%llu * %llu = %llu)\n",
+			(unsigned long long)sizeof(struct asciiDatum), 
+                        (unsigned long long)asciiDataSizeLimit,
+                        (unsigned long long)(sizeof(struct asciiDatum) * asciiDataSizeLimit));
 		wigAscii->data = (struct asciiDatum *) needLargeMem((size_t)
 		    (sizeof(struct asciiDatum) * asciiDataSizeLimit));
 			/*	maximum area needed, may use less 	*/
@@ -1832,9 +1833,10 @@ if (bedList && *bedList)
 		     *      size_t is 8 = 16800000000 ~= 2^34 = 16 Gb
 		     */
 		    verbose(VERBOSE_CHR_LEVEL,
-	    "#\tmoving to smaller ascii array needLargeMem( %u * %u = %u)\n",
-			sizeof(struct asciiDatum), wigAscii->count,
-			(sizeof(struct asciiDatum) * wigAscii->count));
+	    "#\tmoving to smaller ascii array needLargeMem( %llu * %llu = %llu)\n",
+			(unsigned long long)sizeof(struct asciiDatum),
+                        (unsigned long long)wigAscii->count,
+			(unsigned long long)(sizeof(struct asciiDatum) * wigAscii->count));
 		    smallerDataArea=(struct asciiDatum *)needLargeMem(newSize);
 		    memcpy(smallerDataArea, wigAscii->data, newSize);
 		    freeMem(wigAscii->data);

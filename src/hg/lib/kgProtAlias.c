@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "kgProtAlias.h"
 
-static char const rcsid[] = "$Id: kgProtAlias.c,v 1.1 2003/06/25 22:23:58 fanhsu Exp $";
+static char const rcsid[] = "$Id: kgProtAlias.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
 
 void kgProtAliasStaticLoad(char **row, struct kgProtAlias *ret)
 /* Load a row from kgProtAlias table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->kgID = row[0];
 ret->displayID = row[1];
@@ -27,8 +25,6 @@ struct kgProtAlias *kgProtAliasLoad(char **row)
  * from database.  Dispose of this with kgProtAliasFree(). */
 {
 struct kgProtAlias *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->kgID = cloneString(row[0]);
@@ -79,7 +75,6 @@ struct kgProtAlias *kgProtAliasCommaIn(char **pS, struct kgProtAlias *ret)
  * return a new kgProtAlias */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -119,7 +114,6 @@ for (el = *pList; el != NULL; el = next)
 void kgProtAliasOutput(struct kgProtAlias *el, FILE *f, char sep, char lastSep) 
 /* Print out kgProtAlias.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->kgID);
 if (sep == ',') fputc('"',f);

@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.8 2005/02/07 21:57:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.9 2005/04/13 06:25:57 markd Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -67,7 +67,7 @@ char *spLookupPrimaryAcc(struct sqlConnection *conn,
 /* This will return the primary accession.  It's ok to pass in
  * either a primary or secondary accession. */
 {
-char query[256], *pri;
+char query[256];
 if (spIsPrimaryAcc(conn, anyAcc))
      return cloneString(anyAcc);
 else
@@ -421,7 +421,7 @@ struct spFeature *spFeatures(struct sqlConnection *conn, char *acc,
 {
 struct dyString *dy = dyStringNew(0);
 struct spFeature *list = NULL, *el;
-char query[256], **row;
+char **row;
 struct sqlResult *sr;
 
 dyStringAppend(dy, 

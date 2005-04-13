@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "stsInfoRat.h"
 
-static char const rcsid[] = "$Id: stsInfoRat.c,v 1.2 2003/05/06 07:22:23 kate Exp $";
+static char const rcsid[] = "$Id: stsInfoRat.c,v 1.3 2005/04/13 06:25:57 markd Exp $";
 
 void stsInfoRatStaticLoad(char **row, struct stsInfoRat *ret)
 /* Load a row from stsInfoRat table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->identNo = sqlUnsigned(row[0]);
 ret->name = row[1];
@@ -49,8 +47,6 @@ struct stsInfoRat *stsInfoRatLoad(char **row)
  * from database.  Dispose of this with stsInfoRatFree(). */
 {
 struct stsInfoRat *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->identNo = sqlUnsigned(row[0]);
@@ -105,7 +101,6 @@ struct stsInfoRat *stsInfoRatCommaIn(char **pS, struct stsInfoRat *ret)
  * return a new stsInfoRat */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -180,7 +175,6 @@ for (el = *pList; el != NULL; el = next)
 void stsInfoRatOutput(struct stsInfoRat *el, FILE *f, char sep, char lastSep) 
 /* Print out stsInfoRat.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->identNo);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

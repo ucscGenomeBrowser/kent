@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "recombRateRat.h"
 
-static char const rcsid[] = "$Id: recombRateRat.c,v 1.1 2003/12/05 19:04:13 booch Exp $";
+static char const rcsid[] = "$Id: recombRateRat.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void recombRateRatStaticLoad(char **row, struct recombRateRat *ret)
 /* Load a row from recombRateRat table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -30,8 +28,6 @@ struct recombRateRat *recombRateRatLoad(char **row)
  * from database.  Dispose of this with recombRateRatFree(). */
 {
 struct recombRateRat *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -85,7 +81,6 @@ struct recombRateRat *recombRateRatCommaIn(char **pS, struct recombRateRat *ret)
  * return a new recombRateRat */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -127,7 +122,6 @@ for (el = *pList; el != NULL; el = next)
 void recombRateRatOutput(struct recombRateRat *el, FILE *f, char sep, char lastSep) 
 /* Print out recombRateRat.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);

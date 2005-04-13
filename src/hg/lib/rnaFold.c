@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "rnaFold.h"
 
-static char const rcsid[] = "$Id: rnaFold.c,v 1.1 2003/10/15 04:34:33 kent Exp $";
+static char const rcsid[] = "$Id: rnaFold.c,v 1.2 2005/04/13 06:25:56 markd Exp $";
 
 void rnaFoldStaticLoad(char **row, struct rnaFold *ret)
 /* Load a row from rnaFold table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->name = row[0];
 ret->seq = row[1];
@@ -28,8 +26,6 @@ struct rnaFold *rnaFoldLoad(char **row)
  * from database.  Dispose of this with rnaFoldFree(). */
 {
 struct rnaFold *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
@@ -81,7 +77,6 @@ struct rnaFold *rnaFoldCommaIn(char **pS, struct rnaFold *ret)
  * return a new rnaFold */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -122,7 +117,6 @@ for (el = *pList; el != NULL; el = next)
 void rnaFoldOutput(struct rnaFold *el, FILE *f, char sep, char lastSep) 
 /* Print out rnaFold.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

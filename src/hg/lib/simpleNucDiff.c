@@ -8,14 +8,12 @@
 #include "jksql.h"
 #include "simpleNucDiff.h"
 
-static char const rcsid[] = "$Id: simpleNucDiff.c,v 1.1 2003/12/13 18:28:58 kent Exp $";
+static char const rcsid[] = "$Id: simpleNucDiff.c,v 1.2 2005/04/13 06:25:57 markd Exp $";
 
 void simpleNucDiffStaticLoad(char **row, struct simpleNucDiff *ret)
 /* Load a row from simpleNucDiff table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
@@ -29,8 +27,6 @@ struct simpleNucDiff *simpleNucDiffLoad(char **row)
  * from database.  Dispose of this with simpleNucDiffFree(). */
 {
 struct simpleNucDiff *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
@@ -83,7 +79,6 @@ struct simpleNucDiff *simpleNucDiffCommaIn(char **pS, struct simpleNucDiff *ret)
  * return a new simpleNucDiff */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -125,7 +120,6 @@ for (el = *pList; el != NULL; el = next)
 void simpleNucDiffOutput(struct simpleNucDiff *el, FILE *f, char sep, char lastSep) 
 /* Print out simpleNucDiff.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
