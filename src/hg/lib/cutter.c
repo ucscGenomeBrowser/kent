@@ -11,7 +11,7 @@
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.6 2005/04/13 07:00:13 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.7 2005/04/13 07:09:58 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -361,7 +361,7 @@ boolean sameStickyEnd(struct cutter *enz1, struct cutter *enz2)
 boolean ret = FALSE;
 struct dnaSeq *sticky1 = stickyEnd(enz1);
 struct dnaSeq *sticky2 = stickyEnd(enz2);
-int count1, count2;
+
 if (sticky1 && sticky2)
 /*     printf("enz 1: %s, enz 2: %s, sticky 1: %s, sticky 2: %s, acgt 1: %d, acgt 2: %d\n", enz1->name, enz2->name, sticky1->dna, sticky2->dna, acgtCount(sticky1->dna), acgtCount(sticky2->dna)); */
 if (sticky1 && sticky2 && (sticky1->size == sticky2->size) &&
@@ -502,7 +502,7 @@ char *line = "whatever", *words[10], numWords;
 /* Skip to the right line. */
 while (lineFileNext(lf,&line,NULL) && !startsWith("..",line));
 /* */
-while (numWords=lineFileChop(lf,words))
+while ((numWords=lineFileChop(lf,words)))
     {
     struct cutter *newone = NULL;
     int comIx = (numWords==7) ? 5 : 6;
@@ -677,7 +677,7 @@ if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3] || (sixers->elCount > 0))
 		add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
 		slAddHead(&bedList, add);
 		/* Just in case there's another one with the same sequence. */
-		while (el = hashLookupNext(el))
+		while ((el = hashLookupNext(el)))
 		    {
 		    enz = el->val;
 		    add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
@@ -721,7 +721,7 @@ struct hash *sixers = newHash(8), *palinSixers = newHash(8);
 struct cutter *enz;
 struct cutter *ACGTo[5], *palinACGTo[5];
 struct bed *bedList = NULL, *tmp;
-int seqPos = 0, i;
+int i;
 
 if (!cutters)
     return NULL;
