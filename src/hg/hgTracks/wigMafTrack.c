@@ -15,7 +15,7 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.62 2005/03/15 04:33:47 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.63 2005/04/13 00:00:54 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -804,10 +804,29 @@ for (mi = miList; mi != NULL; mi = mi->next)
 
     /* using maf sequences from file */
     /* create pairwise maf list from the multiple maf */
+#ifdef ANNOT_DEBUG
+{
+struct mafComp *mc;
+struct mafAli *mafList = (struct mafAli *)track->customPt;
+
+for(maf=mafList; maf; maf=maf->next)
+    {
+    mc = maf->components;
+    printf("<BR> maf %d %d - ",mc->start,mc->size);
+    for (mc=maf->components->next; mc ; mc=mc->next)
+	{
+	printf("%s %c %c ",mc->src,mc->leftStatus,mc->rightStatus);
+	}
+    }
+printf("end ||");
+fflush(stdout);
+}
+#endif
     for (maf = (struct mafAli *)track->customPt; maf != NULL; maf = maf->next)
         {
         if ((mcThis = mafMayFindCompPrefix(maf, mi->db, "")) == NULL)
             continue;
+	//if (mcPair->srcSize != 0)
         AllocVar(mcPair);
         mcPair->src = cloneString(mcThis->src);
         mcPair->srcSize = mcThis->srcSize;
@@ -956,6 +975,8 @@ boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 bool dots, chainBreaks;         /* configuration options */
 /* this line must be longer than the longest base-level display */
 char noAlignment[2000];
+int count = 0;
+int offset = 0;
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
@@ -1001,6 +1022,22 @@ for (mi = miList; mi != NULL; mi = mi->next)
 mafList = track->customPt;
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 
+#ifdef ANNOT_DEBUG
+{
+struct mafComp *mc;
+
+for(maf=mafList; maf; maf=maf->next)
+    {
+    mc = maf->components;
+    printf("<BR>maf %d %d ",mc->start,mc->size);
+    for (mc=maf->components->next; mc ; mc=mc->next)
+	{
+	printf("%s %c %c |",mc->src,mc->leftStatus,mc->rightStatus);
+	}
+    }
+fflush(stdout);
+}
+#endif
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
     /* get info about sequences from full alignment,
@@ -1092,8 +1129,28 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 #endif
                 }
             else
+		{
+		/*
+		if (mc->status & INSERT_BEFORE)
+		    printf("insert before %s |",mc->src);
+		if (mc->status & INSERT_AFTER)
+		    printf("insert adter %s |",mc->src);
+		if (mc->status & NEW_BEFORE)
+		    printf("new before %s |",mc->src);
+		if (mc->status & NEW_AFTER)
+		    printf("new adter %s |",mc->src);
+		if (mc->status & DUP_BEFORE)
+		    printf("dup before %s |",mc->src);
+		if (mc->status & DUP_AFTER)
+		    printf("dup adter %s |",mc->src);
+		    */
+
+		//vgBox(vg, x+offset, y+count*mi->height, 1, mi->height, alignInsertsColor());
+		count++;
+		offset += sub->textSize;
                 processSeq(mc->text, mcMaster->text, sub->textSize, 
                                     lines[mi->ix], lineOffset, subSize);
+		}
 	    }
 	}
     mafAliFree(&sub);
