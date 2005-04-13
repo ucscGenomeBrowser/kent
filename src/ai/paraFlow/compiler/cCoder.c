@@ -351,6 +351,23 @@ else
 return 1;
 }
 
+static int codeDotExpression(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for . expression (not on left side of
+ * assignment */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *class = pp->children;
+struct pfParse *field = class->next;
+codeExpression(pfc, f, class, stack, FALSE);
+codeParamAccess(pfc, f, outType->base, stack);
+fprintf(f, " = ");
+fprintf(f, "((struct %s *)", class->ty->base->name);
+codeParamAccess(pfc, f, class->ty->base, stack);
+fprintf(f, ")->%s;\n", field->name);
+return 1;
+}
+
 static void codeIndexLval(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, char *op, int expSize, 
 	boolean cleanupOldVal)
@@ -619,6 +636,8 @@ switch (pp->type)
 	return codeVarUse(pfc, f, pp, stack, addRef);
     case pptIndex:
          return codeIndexExpression(pfc, f, pp, stack);
+    case pptDot:
+         return codeDotExpression(pfc, f, pp, stack);
     case pptPlus:
         return codeBinaryOp(pfc, f, pp, stack, "+");
     case pptMinus:
