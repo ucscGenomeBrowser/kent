@@ -1,7 +1,7 @@
 /* initVar - handle variable initialization from tuples */
 
 struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int count, 
-	int typeId, int memSize, int *offsets);
+	int typeId, int memSize);
 /* Convert tuple on stack to class. */
 
 _pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);

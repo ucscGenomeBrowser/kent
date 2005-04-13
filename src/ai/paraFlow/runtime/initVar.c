@@ -8,12 +8,12 @@
 static void _pf_class_cleanup(struct _pf_object *obj)
 /* Clean up all class fields, and then class itself. */
 {
-uglyf("_pf_class_cleanup\n");
+uglyf("_pf_class_cleanup - still needs work\n");
 free(obj);
 }
 
 struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int count, 
-	int typeId, int memSize, int *offsets)
+	int typeId, int memSize)
 /* Convert tuple on stack to class. */
 {
 struct _pf_object *obj = needMem(memSize);
@@ -23,53 +23,55 @@ char *s = (char *)(obj);
 _pf_Stack *field;
 int i;
 
-for (i=0, fieldType = type->children; fieldType != NULL; ++i, fieldType = fieldType->next)
+for (i=0, fieldType = base->fields; fieldType != NULL; ++i, fieldType = fieldType->next)
     {
+    int offset = fieldType->offset;
     switch (fieldType->base->singleType)
 	{
 	case pf_stBit:
-	    *((_pf_Bit *)(s + offsets[i])) = stack->Bit;
+	    *((_pf_Bit *)(s + offset)) = stack->Bit;
 	    break;
 	case pf_stByte:
-	    *((_pf_Byte *)(s + offsets[i])) = stack->Byte;
+	    *((_pf_Byte *)(s + offset)) = stack->Byte;
 	    break;
 	case pf_stShort:
-	    *((_pf_Short *)(s + offsets[i])) = stack->Short;
+	    *((_pf_Short *)(s + offset)) = stack->Short;
 	    break;
 	case pf_stInt:
-	    *((_pf_Int *)(s + offsets[i])) = stack->Int;
+	    *((_pf_Int *)(s + offset)) = stack->Int;
 	    break;
 	case pf_stLong:
-	    *((_pf_Long *)(s + offsets[i])) = stack->Long;
+	    *((_pf_Long *)(s + offset)) = stack->Long;
 	    break;
 	case pf_stFloat:
-	    *((_pf_Float *)(s + offsets[i])) = stack->Float;
+	    *((_pf_Float *)(s + offset)) = stack->Float;
 	    break;
 	case pf_stDouble:
-	    *((_pf_Double *)(s + offsets[i])) = stack->Double;
+	    *((_pf_Double *)(s + offset)) = stack->Double;
 	    break;
 	case pf_stString:
-	    *((_pf_String *)(s + offsets[i])) = stack->String;
+	    *((_pf_String *)(s + offset)) = stack->String;
 	    break;
 	case pf_stArray:
-	    *((_pf_Array *)(s + offsets[i])) = stack->Array;
+	    *((_pf_Array *)(s + offset)) = stack->Array;
 	    break;
 	case pf_stList:
-	    *((_pf_List *)(s + offsets[i])) = stack->List;
+	    *((_pf_List *)(s + offset)) = stack->List;
 	    break;
 	case pf_stDir:
-	    *((_pf_Dir *)(s + offsets[i])) = stack->Dir;
+	    *((_pf_Dir *)(s + offset)) = stack->Dir;
 	    break;
 	case pf_stTree:
-	    *((_pf_Tree *)(s + offsets[i])) = stack->Tree;
+	    *((_pf_Tree *)(s + offset)) = stack->Tree;
 	    break;
 	case pf_stVar:
-	    *((_pf_Var *)(s + offsets[i])) = stack->Var;
+	    *((_pf_Var *)(s + offset)) = stack->Var;
 	    break;
 	case pf_stClass:
-	    *((_pf_Object *)(s + offsets[i])) = stack->Obj;
+	    *((_pf_Object *)(s + offset)) = stack->Obj;
 	    break;
 	}
+    stack += 1;
     }
 obj->_pf_refCount = 1;
 obj->_pf_cleanup = _pf_class_cleanup;

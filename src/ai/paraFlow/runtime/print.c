@@ -3,19 +3,88 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
+void printField(FILE *f, void *data, struct _pf_base *base);
+
 void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base)
 /* Print out each field of class. */
 {
 struct _pf_type *field;
-fprintf(f, "%s(", base->name);
+char *s = (char *)obj;
+fprintf(f, "(");
 for (field = base->fields; field != NULL; field = field->next)
     {
-    fprintf(f, "%s", field->name);
+    printField(f, s+field->offset, field->base);
     if (field->next != NULL)
          fprintf(f, ",");
     }
 fprintf(f, ")");
 }
+
+void printField(FILE *f, void *data, struct _pf_base *base)
+/* Print out a data from a single field of given type. */
+{
+switch (base->singleType)
+    {
+    case pf_stBit:
+	{
+	_pf_Bit *p = data;
+        fprintf(f, "%d", *p);
+	break;
+	}
+    case pf_stByte:
+	{
+        _pf_Byte *p = data;
+	fprintf(f, "%d", *p);
+	break;
+	}
+    case pf_stShort:
+	{
+        _pf_Short *p = data;
+	fprintf(f, "%d", *p);
+	break;
+	}
+    case pf_stInt:
+	{
+        _pf_Int *p = data;
+	fprintf(f, "%d", *p);
+	break;
+	}
+    case pf_stLong:
+	{
+        _pf_Long *p = data;
+	fprintf(f, "%lld", *p);
+	break;
+	}
+    case pf_stFloat:
+	{
+        _pf_Float *p = data;
+	fprintf(f, "%f", *p);
+	break;
+	}
+    case pf_stDouble:
+	{
+        _pf_Double *p = data;
+	fprintf(f, "%f", *p);
+	break;
+	}
+    case pf_stString:
+	{
+        _pf_String *p = data;
+	fprintf(f, "%s", *p);
+	break;
+	}
+    case pf_stClass:
+	{
+	struct _pf_object **p = data;
+        printClass(f, *p, base);
+	break;
+	}
+    default:
+	internalErr();
+	break;
+    }
+}
+
 
 void print(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */

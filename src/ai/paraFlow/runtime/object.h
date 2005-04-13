@@ -10,7 +10,7 @@ struct _pf_object
     {
     int _pf_refCount;			     	    /* Number of references. */
     void (*_pf_cleanup)(struct _pf_object *obj); /* Called when refCount <= 0 */
-    int _pf_typeId; 		         /* Index of type in _pf_type_table. */
+//     int _pf_typeId; 		         /* Index of type in _pf_type_table. */
     };
 
 struct _pf_array
