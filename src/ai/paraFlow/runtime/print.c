@@ -76,7 +76,8 @@ switch (base->singleType)
     case pf_stClass:
 	{
 	struct _pf_object **p = data;
-        printClass(f, *p, base);
+	struct _pf_object *obj = *p;
+        printClass(f, obj, base);
 	break;
 	}
     default:
@@ -121,6 +122,8 @@ switch (base->singleType)
 	break;
     case pf_stClass:
         printClass(f, val.Obj, base);
+	if (--val.Obj->_pf_refCount <= 0)
+	    val.Obj->_pf_cleanup(val.Obj);
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);

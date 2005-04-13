@@ -5,10 +5,10 @@
 #include "object.h"
 #include "initVar.h"
 
-static void _pf_class_cleanup(struct _pf_object *obj)
+static void _pf_class_cleanup(struct _pf_object *obj, int typeId)
 /* Clean up all class fields, and then class itself. */
 {
-uglyf("_pf_class_cleanup - still needs work\n");
+uglyf("_pf_class_cleanup (%d) - still needs work\n", typeId);
 free(obj);
 }
 
@@ -78,7 +78,7 @@ obj->_pf_cleanup = _pf_class_cleanup;
 return obj;
 }
 
-static void _pf_array_cleanup(struct _pf_array *array)
+static void _pf_array_cleanup(struct _pf_array *array, int id)
 /* Clean up all elements of array, and then array itself. */
 {
 struct _pf_type *elType = _pf_type_table[array->elType];
@@ -91,7 +91,7 @@ if (elType->base->needsCleanup)
 	{
 	struct _pf_object *obj = objs[i];
 	if (obj != NULL && --obj->_pf_refCount <= 0)
-	    obj->_pf_cleanup(obj);
+	    obj->_pf_cleanup(obj, array->elType);
 	}
     }
 freeMem(array->elements);

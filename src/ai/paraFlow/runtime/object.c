@@ -20,6 +20,6 @@ void _pf_var_cleanup(_pf_Var var)
 struct _pf_type *type = _pf_type_table[var.typeId];
 if (type->base->needsCleanup && var.val.Obj != NULL)
     if ((var.val.Obj->_pf_refCount -= 1) <= 0)
-         var.val.Obj->_pf_cleanup(var.val.Obj);
+         var.val.Obj->_pf_cleanup(var.val.Obj, var.typeId);
 }
 

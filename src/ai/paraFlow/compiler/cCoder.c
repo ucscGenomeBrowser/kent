@@ -369,7 +369,7 @@ if (colBase == pfc->arrayType)
 	codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
 	fprintf(f, ";\n");
 	fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
-	fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp);\n");
+	fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", typeId(pfc, collection->ty));
 	fprintf(f, " }\n");
 	}
     codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
@@ -383,17 +383,17 @@ else
     }
 }
 
-static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfBaseType *base, char *name)
+static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfType *type, char *name)
 /* Emit cleanup code for variable of given type and name. */
 {
-if (base->needsCleanup)
+if (type->base->needsCleanup)
     {
-    if (base == pfc->varType)
+    if (type->base == pfc->varType)
 	fprintf(f, "_pf_var_cleanup(%s);\n", name);
     else
 	{
 	fprintf(f, "if (%s != 0 && (%s->_pf_refCount-=1) <= 0)\n", name, name);
-	fprintf(f, "   %s->_pf_cleanup(%s);\n", name, name);
+	fprintf(f, "   %s->_pf_cleanup(%s, %d);\n", name, name, typeId(pfc, type));
 	}
     }
 }
@@ -411,7 +411,7 @@ switch (pp->type)
 	{
 	struct pfBaseType *base = pp->ty->base;
 	if (cleanupOldVal && base->needsCleanup)
-	    codeCleanupVar(pfc, f, base, pp->name);
+	    codeCleanupVar(pfc, f, pp->ty, pp->name);
 	fprintf(f, "%s %s ", pp->name , op);
 	codeParamAccess(pfc, f, base, stack);
 	fprintf(f, ";\n");
@@ -969,7 +969,7 @@ codeStatement(pfc, f, body);
     {
     struct pfType *in;
     for (in = inTuple->children; in != NULL; in = in->next)
-	codeCleanupVar(pfc, f, in->base, in->fieldName);
+	codeCleanupVar(pfc, f, in, in->fieldName);
     }
 
 /* Save the output. */
@@ -1044,8 +1044,7 @@ struct hashEl *hel;
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
-    struct pfBaseType *base = var->ty->base;
-    codeCleanupVar(pfc, f, base, var->name);
+    codeCleanupVar(pfc, f, var->ty, var->name);
     }
 }
 
@@ -1079,7 +1078,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     safef(exampleName, sizeof(exampleName), "_pf_ci_%s", base->name);
     fprintf(f, "struct %s {\n", base->name);
     fprintf(f, "int _pf_refCount;\n");
-    fprintf(f, "void (*_pf_cleanup)(struct %s *obj);\n", base->name);
+    fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
     rPrintFields(pfc, f, base); 
     fprintf(f, "};\n\n");
     }
