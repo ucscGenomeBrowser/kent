@@ -16,8 +16,7 @@
 #include "pfCodeC.h"
 #include "pfPreamble.h"
 
-boolean parseOnly = FALSE;
-boolean noCode = FALSE;
+int endPhase = 10;
 
 void usage()
 /* Explain command line and exit. */
@@ -28,15 +27,13 @@ errAbort(
 "Usage:\n"
 "    paraFlow input.pf\n"
 "options:\n"
-"    -parseOnly  - Just parse, don't do type checking or anything\n"
-"    -noCode - Don't produce code\n"
+"    -endPhase=N - Break after such-and-such a phase of compiler\n"
 );
 
 }
 
 static struct optionSpec options[] = {
-   {"parseOnly", OPTION_BOOLEAN},
-   {"noCode", OPTION_BOOLEAN},
+   {"endPhase", OPTION_INT},
    {NULL, 0},
 };
 
@@ -176,8 +173,8 @@ return pfc;
 void paraFlow(char *fileName)
 /* parse and dump. */
 {
-struct pfCompile *pfc = pfCompileNew(fileName);
-struct pfParse *program = pfParseProgram(fileName, pfc);
+struct pfCompile *pfc;
+struct pfParse *program;
 char *parseFile = "out.parse";
 char *typeFile = "out.typed";
 char *scopeFile = "out.scope";
@@ -186,17 +183,30 @@ FILE *parseF = mustOpen(parseFile, "w");
 FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
 
+verbose(2, "Phase 1\n");
+pfc = pfCompileNew(fileName);
+if (endPhase <= 1)
+    return;
+verbose(2, "Phase 2\n");
+program = pfParseProgram(fileName, pfc);
 pfParseDump(program, 0, parseF);
-if (!parseOnly)
-    {
-    pfBindVars(pfc, program);
-    pfTypeCheck(pfc, &program);
-    pfCheckParaFlow(pfc, program);
-    }
+if (endPhase <= 2)
+    return;
+verbose(2, "Phase 3\n");
+pfBindVars(pfc, program);
+if (endPhase <= 3)
+    return;
+verbose(2, "Phase 4\n");
+pfTypeCheck(pfc, &program);
+if (endPhase <= 4)
+    return;
+pfCheckParaFlow(pfc, program);
+verbose(2, "Phase 5\n");
+if (endPhase <= 5)
+    return;
 pfParseDump(program, 0, typeF);
 printScopeInfo(scopeF, 0, program);
-if (!noCode && !parseOnly)
-    pfCodeC(pfc, program, codeFile);
+pfCodeC(pfc, program, codeFile);
 printf("%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 }
@@ -207,8 +217,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-parseOnly = optionExists("parseOnly");
-noCode = optionExists("noCode");
+endPhase = optionInt("endPhase", endPhase);
 paraFlow(argv[1]);
 return 0;
 }
