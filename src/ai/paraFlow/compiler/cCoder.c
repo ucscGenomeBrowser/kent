@@ -131,6 +131,7 @@ for (type = base->fields; type != NULL; type = type->next)
     }
 }
 
+#ifdef OLD
 static void rPrintOffsets(struct pfCompile *pfc, 
 	FILE *f, char *exampleName, struct pfBaseType *base)
 /* Print out offsets of fields within structure - parents first */
@@ -144,6 +145,7 @@ for (type = base->fields; type != NULL; type = type->next)
     	exampleName, type->fieldName, exampleName);
     }
 }
+#endif /* OLD */
 
 static boolean isInitialized(struct pfVar *var)
 /* Return TRUE if variable is initialized on declaration in  parse tree. */
@@ -487,8 +489,8 @@ static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = lval->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
-fprintf(f, "_pf_class_from_tuple(%s+%d, %d, %d, sizeof(struct %s), _pf_fi_%s);\n",
-	stackName, stack, tupleSize, typeId(pfc, lval->ty), base->name, base->name);
+fprintf(f, "_pf_class_from_tuple(%s+%d, %d, %d, sizeof(struct %s));\n",
+	stackName, stack, tupleSize, typeId(pfc, lval->ty), base->name);
 }
 
 static void codeVarInit(struct pfCompile *pfc, FILE *f,
@@ -1058,9 +1060,6 @@ for (hel = helList; hel != NULL; hel = hel->next)
     fprintf(f, "int _pf_refCount;\n");
     fprintf(f, "void (*_pf_cleanup)(struct %s *obj);\n", base->name);
     rPrintFields(pfc, f, base); 
-    fprintf(f, "} %s;\n", exampleName);
-    fprintf(f, "int _pf_fi_%s[] = {\n", base->name);
-    rPrintOffsets(pfc, f, exampleName, base);
     fprintf(f, "};\n\n");
     }
 hashElFreeList(&helList);
