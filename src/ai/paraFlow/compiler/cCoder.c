@@ -409,7 +409,12 @@ struct pfParse *class = pp->children;
 struct pfParse *field = class->next;
 fprintf(f, "((struct %s *)", class->ty->base->name);
 codeParamAccess(pfc, f, class->ty->base, stack);
-fprintf(f, ")->%s", field->name);
+fprintf(f, ")");
+while (field != NULL)
+    {
+    fprintf(f, "->%s", field->name);
+    field = field->next;
+    }
 }
 	
 
