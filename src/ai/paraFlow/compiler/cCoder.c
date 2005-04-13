@@ -15,7 +15,7 @@ static void codeStatement(struct pfCompile *pfc, FILE *f,
 /* Emit code for one statement. */
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack, boolean isRight);
+	struct pfParse *pp, int stack, boolean addRef);
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
 
@@ -388,9 +388,7 @@ switch (pp->type)
 	struct pfBaseType *base = pp->ty->base;
 	if (cleanupOldVal && base->needsCleanup)
 	    {
-	    char buf[64];
-	    safef(buf, sizeof(buf), "%s[%d].Obj", stackName, stack);
-	    codeCleanupVar(pfc, f, base, buf);
+	    codeCleanupVar(pfc, f, base, pp->name);
 	    }
 	fprintf(f, "%s %s ", pp->name , op);
 	codeParamAccess(pfc, f, base, stack);
@@ -539,7 +537,7 @@ return 1;
 }
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack, boolean isRight)
+	struct pfParse *pp, int stack, boolean addRef)
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
 {
@@ -552,7 +550,7 @@ switch (pp->type)
 	int total = 0;
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
-	    total += codeExpression(pfc, f, p, stack+total, isRight);
+	    total += codeExpression(pfc, f, p, stack+total, addRef);
 	return total;
 	}
     case pptCall:
@@ -571,7 +569,7 @@ switch (pp->type)
     	codeVarInit(pfc, f, pp, stack);
 	return 0;
     case pptVarUse:
-	return codeVarUse(pfc, f, pp, stack, isRight);
+	return codeVarUse(pfc, f, pp, stack, addRef);
     case pptIndex:
          return codeIndexExpression(pfc, f, pp, stack);
     case pptPlus:
@@ -690,14 +688,14 @@ switch (pp->type)
     case pptCastDoubleToLong:
     case pptCastDoubleToFloat:
     case pptCastDoubleToDouble:
-	codeExpression(pfc, f, pp->children, stack, isRight);
+	codeExpression(pfc, f, pp->children, stack, addRef);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
 	return 1;
     case pptCastStringToBit:
-	codeExpression(pfc, f, pp->children, stack, isRight);
+	codeExpression(pfc, f, pp->children, stack, addRef);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = (0 != ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
@@ -705,7 +703,7 @@ switch (pp->type)
 	return 1;
     case pptCastTypedToVar:
 	{
-	codeExpression(pfc, f, pp->children, stack, isRight);
+	codeExpression(pfc, f, pp->children, stack, addRef);
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".val.%s = ", typeKey(pfc, pp->children->ty->base));
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
