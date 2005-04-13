@@ -283,6 +283,20 @@ fprintf(f, "errAbort(\"\\nRun time error line %d col %d of %s: %s\");\n",
 	line+1, col+1, file, message);
 }
 
+static void startCleanTemp(FILE *f)
+/* Declare a temp variable to assist in cleanup */
+{
+fprintf(f, " {\n struct _pf_object *_pf_tmp = (struct _pf_object *)\n  ");
+}
+
+static void endCleanTemp(struct pfCompile *pfc, FILE *f, struct pfType *type)
+{
+fprintf(f, ";\n");
+fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
+fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", typeId(pfc, type));
+fprintf(f, " }\n");
+}
+
 static int pushArrayIndexAndBoundsCheck(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Put collection and index on stack.  Check index is in range. 
@@ -323,7 +337,7 @@ codeParamAccess(pfc, f, pfc->intType, stack+indexOffset);
 fprintf(f, "))[0]");
 }
 
-static int codeIndexExpression(struct pfCompile *pfc, FILE *f,
+static int codeIndexRval(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for index expression (not on left side of
  * assignment */
@@ -351,43 +365,23 @@ else
 return 1;
 }
 
-static int codeDotExpression(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
-/* Generate code for . expression (not on left side of
- * assignment */
-{
-struct pfType *outType = pp->ty;
-struct pfParse *class = pp->children;
-struct pfParse *field = class->next;
-codeExpression(pfc, f, class, stack, FALSE);
-codeParamAccess(pfc, f, outType->base, stack);
-fprintf(f, " = ");
-fprintf(f, "((struct %s *)", class->ty->base->name);
-codeParamAccess(pfc, f, class->ty->base, stack);
-fprintf(f, ")->%s;\n", field->name);
-return 1;
-}
-
 static void codeIndexLval(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, char *op, int expSize, 
 	boolean cleanupOldVal)
-/* Generate code for index expression  on left side of expression */
+/* Generate code for index expression  on left side of assignment */
 {
 struct pfType *outType = pp->ty;
 struct pfParse *collection = pp->children;
 struct pfBaseType *colBase = collection->ty->base;
+int emptyStack = stack + expSize;
 if (colBase == pfc->arrayType)
     {
-    int emptyStack = stack + expSize;
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
     if (colBase->needsCleanup)
         {
-	fprintf(f, " {\n struct _pf_object *_pf_tmp = (struct _pf_object *)\n  ");
+	startCleanTemp(f);
 	codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
-	fprintf(f, ";\n");
-	fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
-	fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", typeId(pfc, collection->ty));
-	fprintf(f, " }\n");
+	endCleanTemp(pfc, f, outType);
 	}
     codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
     fprintf(f, " %s ", op);
@@ -399,6 +393,57 @@ else
     fprintf(f, "(ugly coding index for something other than array)");
     }
 }
+
+static void codeDotAccess(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *pp, int stack)
+/* Print out code to access field (on either left or right
+ * side */
+{
+struct pfParse *class = pp->children;
+struct pfParse *field = class->next;
+fprintf(f, "((struct %s *)", class->ty->base->name);
+codeParamAccess(pfc, f, class->ty->base, stack);
+fprintf(f, ")->%s", field->name);
+}
+	
+
+static int codeDotRval(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for . expression (not on left side of
+ * assignment */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *class = pp->children;
+codeExpression(pfc, f, class, stack, FALSE);
+codeParamAccess(pfc, f, outType->base, stack);
+fprintf(f, " = ");
+codeDotAccess(pfc, f, pp, stack);
+fprintf(f, ";\n");
+return 1;
+}
+
+static void codeDotLval(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, char *op, int expSize, 
+	boolean cleanupOldVal)
+/* Generate code for dot expression  on left side of assignment */
+{
+struct pfType *outType = pp->ty;
+struct pfParse *class = pp->children;
+struct pfParse *field = class->next;
+int emptyStack = stack + expSize;
+codeExpression(pfc, f, class, emptyStack, FALSE);
+if (outType->base->needsCleanup)
+    {
+    startCleanTemp(f);
+    codeDotAccess(pfc, f, pp, emptyStack);
+    endCleanTemp(pfc, f, outType);
+    }
+codeDotAccess(pfc, f, pp, emptyStack);
+fprintf(f, " %s ", op);
+codeParamAccess(pfc, f, outType->base, stack);
+fprintf(f, ";\n");
+}
+
 
 static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfType *type, char *name)
 /* Emit cleanup code for variable of given type and name. */
@@ -446,6 +491,11 @@ switch (pp->type)
     case pptIndex:
         {
 	codeIndexLval(pfc, f, pp, stack, op, expSize, cleanupOldVal);
+	return 1;
+	}
+    case pptDot:
+        {
+	codeDotLval(pfc, f, pp, stack, op, expSize, cleanupOldVal);
 	return 1;
 	}
     default:
@@ -635,9 +685,9 @@ switch (pp->type)
     case pptVarUse:
 	return codeVarUse(pfc, f, pp, stack, addRef);
     case pptIndex:
-         return codeIndexExpression(pfc, f, pp, stack);
+         return codeIndexRval(pfc, f, pp, stack);
     case pptDot:
-         return codeDotExpression(pfc, f, pp, stack);
+         return codeDotRval(pfc, f, pp, stack);
     case pptPlus:
         return codeBinaryOp(pfc, f, pp, stack, "+");
     case pptMinus:
