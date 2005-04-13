@@ -314,7 +314,7 @@ if (colBase == pfc->arrayType)
     fprintf(f, " = ");
     codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
-    if (colBase->needsCleanup)
+    if (outType->base->needsCleanup)
         {
 	codeStackAccess(f, stack);
 	fprintf(f, ".Obj->_pf_refCount += 1;\n");
@@ -427,27 +427,6 @@ lvalOffStack(pfc, f, lval, stack, op, expSize, TRUE);
 return 0;
 }
 
-static void codeTupleIntoSomething(struct pfCompile *pfc, FILE *f,
-	struct pfType *type, int stack, int tupleSize)
-/* Code a tuple into array of given type. */
-{
-struct pfBaseType *base = type->children->base;
-char *name;
-if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
-    || base == pfc->intType || base == pfc->longType || base == pfc->floatType
-    || base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
-    {
-    name = base->name;
-    }
-else
-    {
-    name = "class";
-    }
-fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", name, type->base->name,
-	stackName, stack, tupleSize, typeId(pfc, type), 
-	typeId(pfc, type->children));
-}
-
 static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
 	struct pfType *type, int stack, int tupleSize)
 /* Shovel tuple into array, list, dir, tree. */
@@ -458,7 +437,21 @@ fprintf(f, " = ");
 if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
 	|| base == pfc->dirType)
     {
-    codeTupleIntoSomething(pfc, f, type, stack, tupleSize);
+    struct pfBaseType *base = type->children->base;
+    char *name;
+    if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
+	|| base == pfc->intType || base == pfc->longType || base == pfc->floatType
+	|| base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
+	{
+	name = base->name;
+	}
+    else
+	{
+	name = "class";
+	}
+    fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", name, type->base->name,
+	    stackName, stack, tupleSize, typeId(pfc, type), 
+	    typeId(pfc, type->children));
     }
 else
     {
