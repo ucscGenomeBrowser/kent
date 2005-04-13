@@ -3,6 +3,20 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
+void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base)
+/* Print out each field of class. */
+{
+struct _pf_type *field;
+fprintf(f, "%s(", base->name);
+for (field = base->fields; field != NULL; field = field->next)
+    {
+    fprintf(f, "%s", field->name);
+    if (field->next != NULL)
+         fprintf(f, ",");
+    }
+fprintf(f, ")");
+}
+
 void print(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
@@ -35,6 +49,9 @@ switch (base->singleType)
 	break;
     case pf_stString:
         fprintf(f, "%s", val.String);
+	break;
+    case pf_stClass:
+        printClass(f, val.Obj, base);
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);
