@@ -437,17 +437,6 @@ switch (pp->type)
     }
 }
 
-static int codeAssignment(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack, char *op)
-/* Generate code for an assignment. */
-{
-struct pfParse *lval = pp->children;
-struct pfParse *rval = lval->next;
-int eStart = stack, eEnd;
-int expSize = codeExpression(pfc, f, rval, stack, TRUE);
-lvalOffStack(pfc, f, lval, stack, op, expSize, TRUE);
-return 0;
-}
 
 static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
 	struct pfType *type, int stack, int tupleSize)
@@ -493,12 +482,10 @@ fprintf(f, "_pf_class_from_tuple(%s+%d, %d, %d, sizeof(struct %s));\n",
 	stackName, stack, tupleSize, typeId(pfc, lval->ty), base->name);
 }
 
-static void codeVarInit(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
-/* Generate code for an assignment. */
+static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,
+	struct pfParse *lval, struct pfParse *rval,
+	int stack)
 {
-struct pfParse *lval = pp;
-struct pfParse *rval = pp->children->next->next;
 int count = codeExpression(pfc, f, rval, stack, TRUE);
 if (lval->ty->base->isClass)
     {
@@ -510,7 +497,41 @@ else
     if (rval->type == pptUniformTuple)
 	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
     }
-lvalOffStack(pfc, f, lval, stack, "=", 1, FALSE);
+return count;
+}
+
+static void codeVarInit(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for an assignment. */
+{
+struct pfParse *lval = pp;
+struct pfParse *rval = pp->children->next->next;
+int count = codeInitOrAssign(pfc, f, lval, rval, stack);
+lvalOffStack(pfc, f, lval, stack, "=", count, FALSE);
+}
+
+static int codeAssignment(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, char *op)
+/* Generate code for an assignment. */
+{
+struct pfParse *lval = pp->children;
+struct pfParse *rval = lval->next;
+
+if (lval->type == pptTuple && rval->type == pptTuple)
+    {
+    for (lval = lval->children, rval = rval->children; 
+    	lval != NULL; lval = lval->next, rval = rval->next)
+        {
+	int count = codeInitOrAssign(pfc, f, lval, rval, stack);
+	lvalOffStack(pfc, f, lval, stack, op, count, TRUE);
+	}
+    }
+else
+    {
+    int count = codeInitOrAssign(pfc, f, lval, rval, stack);
+    lvalOffStack(pfc, f, lval, stack, op, count, TRUE);
+    }
+return 0;
 }
 
 static int codeVarUse(struct pfCompile *pfc, FILE *f,
