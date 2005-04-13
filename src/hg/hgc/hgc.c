@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.871 2005/04/11 17:17:06 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.872 2005/04/13 07:00:07 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14902,6 +14902,36 @@ readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 }
 
+struct slName *cutterIsoligamers(struct cutter *myEnzyme)
+/* Find enzymes with same cut site. */
+{
+struct sqlConnection *conn;
+struct cutter *cutters = NULL;
+struct slName *ret = NULL;
+
+conn = hAllocOrConnect("hgFixed");
+cutters = cutterLoadByQuery(conn, "select * from cutters");
+ret = findIsoligamers(myEnzyme, cutters);
+hFreeOrDisconnect(&conn);
+cutterFreeList(&cutters);
+return ret;
+}
+
+void cutterPrintSite(struct cutter *enz)
+/* Print out the enzyme REBASE style. */
+{
+int i;
+for (i = 0; i < enz->size+1; i++)
+    {
+    if (i == enz->cut)
+	printf("^");
+    else if (i == enz->cut + enz->overhang)
+	printf("v");
+    if (i < enz->size)
+	printf("%c", enz->seq[i]);
+    }
+}
+
 static void doCutters(char *item)
 /* Print info about a restriction enzyme. */
 {
@@ -14910,16 +14940,18 @@ struct cutter *cut = NULL;
 char query[100];
 char helpName[PATH_LEN], *helpBuf;
 
-hSetDb2("hgFixed");
-conn = hAllocConn2();
+conn = hAllocOrConnect("hgFixed");
 safef(query, sizeof(query), "select * from cutters where name=\'%s\'", item);
 cut = cutterLoadByQuery(conn, query);  
 cartWebStart(cart, "Restriction Enzymes from REBASE");
 if (cut)
     {
+    struct slName *isoligs = cutterIsoligamers(cut);
     printf("<B>Enzyme Name:</B> %s<BR>\n", cut->name);
-    printf("<B>Recognition Sequence: </B>%s<BR>\n", cut->seq);
-    printf("<B>Palindromic: </B>%s<BR>\n", (cut->palindromic) ? "YES" : "NO");
+    printf("<B>Recognition Sequence: </B>");
+    cutterPrintSite(cut);
+    printf("<BR>\n");
+    printf("<B>Palindromic: </B>%s<BR>\n", (cut->palindromic) ? "YES" : "NO");    
     if (cut->numSciz > 0)
 	{
 	int i;
@@ -14927,6 +14959,15 @@ if (cut)
 	for (i = 0; i < cut->numSciz-1; i++)
 	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
 	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
+	}
+    if (isoligs)
+	{
+	struct slName *cur;
+	printf("<B>Isoligamers: </B>");
+	for (cur = isoligs; cur->next != NULL; cur = cur->next)
+	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
+	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A> *<BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
+	slFreeList(&isoligs);
 	}
     if (cut->numRefs > 0)
 	{
@@ -14953,7 +14994,7 @@ safef(helpName, 256, "%s/%s.html", HELP_DIR, CUTTERS_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 cutterFree(&cut);
-hFreeConn2(&conn);
+hFreeOrDisconnect(&conn);
 }
 
 void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qStart, 

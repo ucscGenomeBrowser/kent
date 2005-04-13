@@ -37,7 +37,7 @@ else
     y += (heightPer >> 1) - 1;
     if (color)
 	{
-	struct sqlConnection *conn = hAllocConn2();
+	struct sqlConnection *conn = hAllocOrConnect("hgFixed");
 	struct cutter *cut;
 	char query[80];
 	char strand = bed->strand[0];
@@ -59,13 +59,6 @@ else
 		cuts[i] = x1;
 	    else if (cuts[i] >= x2)
 		cuts[i] = x2 - tickWidth;
-	    }
-	if (cartUsualBoolean(cart,"complement",FALSE))
-	    {
-	    if (strand == '+') 
-		strand = '-';
-	    else if (strand == '-')
-		strand = '+';
 	    }
 	if (cut->palindromic)
 	    {
@@ -95,7 +88,7 @@ else
 	    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 		     tg->mapName, tg->mapItemName(tg, bed), NULL);
 	    }
-	hFreeConn2(&conn);
+	hFreeOrDisconnect(&conn);
 	cutterFree(&cut);
 	}
     }
@@ -109,26 +102,48 @@ struct dnaSeq *windowDna = NULL;
 struct bed *bedList = NULL;
 int winSize = winEnd - winStart;
 
-hSetDb2("hgFixed");
-conn = hAllocConn2();
+conn = hAllocOrConnect("hgFixed");
 cutters = cutterLoadByQuery(conn, "select * from cutters");
 windowDna = hDnaFromSeq(chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */
 
-if (winSize < 200000)
+if (winSize < 250000)
     {
-    if (zoomedToBaseLevel)
-	cullCutters(cutters, FALSE, NULL, NULL, 0);
-    else if (winSize >= 20000 && winSize < 200000)
-	cullCutters(cutters, FALSE, NULL, NULL, 7);
+    char *enz = cartUsualString(cart, cutterVar, cutterDefault);
+    struct slName *cartCutters = NULL;
+
+    if (enz && (strlen(enz) > 0))
+	{
+	eraseWhiteSpace(enz);
+	cartCutters = slNameListFromComma(enz);
+	}
+
+    if (cartCutters)
+	cullCutters(&cutters, TRUE, cartCutters, 0);
     else
-	cullCutters(cutters, FALSE, NULL, NULL, 6);
- /*    printf("<-- %d -->\n", slCount(cutters)); */
+	{
+	if (zoomedToBaseLevel)
+	    cullCutters(&cutters, FALSE, NULL, 0);
+	else if (winSize >= 20000 && winSize < 250000)
+	    {	
+	    struct slName *popularCutters = slNameListFromComma(CUTTERS_POPULAR);
+	    cullCutters(&cutters, TRUE, popularCutters, 0);
+	    }
+	else if (winSize < 3000)
+	    {
+	    cullCutters(&cutters, FALSE, NULL, 5);
+	    }
+	else 
+	    cullCutters(&cutters, FALSE, NULL, 6);
+	}
     bedList = matchEnzymes(cutters, windowDna, winStart);
-    tg->items = bedList;
+    if (bedList)
+	tg->items = bedList;
     }
-hFreeConn2(&conn);
+cutterFreeList(&cutters);
+freeDnaSeq(&windowDna);
+hFreeOrDisconnect(&conn);
 }
 
 struct track *cuttersTg()
@@ -142,7 +157,7 @@ AllocVar(tdb);
 tg->mapName = CUTTERS_TRACK_NAME;
 tg->canPack = TRUE;
 tg->visibility = tvHide;
-tg->hasUi = FALSE;
+tg->hasUi = TRUE;
 tg->shortLabel = cloneString(CUTTERS_TRACK_LABEL);
 tg->longLabel = cloneString(CUTTERS_TRACK_LONGLABEL);			    
 tg->loadItems = cuttersLoad;

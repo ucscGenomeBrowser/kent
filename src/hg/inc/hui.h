@@ -20,6 +20,9 @@ char *wrapWhiteFont(char *s);
 #define RULER_TRACK_LONGLABEL   "Genome Base Position"
 
 /* Definitions for restriction enzyme track. */
+#define cutterVar "hgt.cutters"
+#define cutterDefault ""
+#define CUTTERS_POPULAR "ClaI,BamHI,BglII,DraI,EcoRI,EcoRV,HindIII,PstI,SalI,SmaI,XmaI"
 #define CUTTERS_TRACK_NAME "cutters"
 #define CUTTERS_TRACK_LABEL "Restriction Enzymes"
 #define CUTTERS_TRACK_LONGLABEL "Restriction Enzymes from REBASE"

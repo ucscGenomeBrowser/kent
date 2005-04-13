@@ -95,13 +95,16 @@ void cutterOutput(struct cutter *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct slName *findIsoligamers(struct cutter *enz, struct cutter *enzList);
+/* Find isoligamers to an enzyme in a list of enzymes.  */
+
 struct cutter *readGcg(char *gcgFile);
 /* Parse a GCG file and load it into cutters format. */
 
 struct bed *matchEnzymes(struct cutter *cutters, struct dnaSeq *seq, int startOffset);
 /* Match the enzymes to sequence and return a bed list in all cases. */
 
-void cullCutters(struct cutter *enzList, boolean semicolon, struct slName *includes, struct slName *excludes, int matchSize);
+void cullCutters(struct cutter **enzList, boolean semicolon, struct slName *justThese, int matchSize);
 /* Reduce the list of enzymes based on different options. */
 
 #endif /* CUTTER_H */

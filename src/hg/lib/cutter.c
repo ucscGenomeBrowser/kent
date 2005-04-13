@@ -7,10 +7,11 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "dnaseq.h"
+#include "dnautil.h"
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.5 2005/04/13 06:25:51 markd Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.6 2005/04/13 07:00:13 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -315,6 +316,94 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+boolean isIsosciz(struct cutter *mainEnz, struct cutter *possibleScizEnz)
+/* Is possibleScizEnz an isoscizomer of mainEnz? */
+{
+int i;
+for (i = 0; i < mainEnz->numSciz; i++)
+    if (sameString(possibleScizEnz->name, mainEnz->scizs[i]))
+	return TRUE;
+return FALSE;
+}
+
+struct dnaSeq *stickyEnd(struct cutter *enz)
+/* Return the sticky end sequence of an enzyme. Strand is unspecified.  Free this. */
+{
+struct dnaSeq *ret = NULL;
+if (!enz)
+    return NULL;
+if (enz->overhang > 0)
+    {
+    char *seq = cloneStringZ(enz->seq + enz->cut, enz->overhang);
+    ret = newDnaSeq(seq, enz->overhang, "sticky");
+    }
+else if (enz->overhang < 0)
+    {
+    int size = intAbs(enz->overhang);
+    char *seq = cloneStringZ(enz->seq + enz->cut - size, size);
+    complement(seq, strlen(seq));
+    ret = newDnaSeq(seq, strlen(seq), "sticky");
+    }
+return ret;
+}
+
+int acgtCount(char *seq)
+/* Return the count of canonical bases in a sequence. */
+{
+return countChars(seq,'A') + countChars(seq,'C') +
+    countChars(seq,'G') + countChars(seq,'T');
+}
+
+boolean sameStickyEnd(struct cutter *enz1, struct cutter *enz2)
+/* Check to see if two enzymes make the same sticky ends.  If either of the
+   enzymes have sticky ends that isn't all ACGT, then this returns false. */
+{
+boolean ret = FALSE;
+struct dnaSeq *sticky1 = stickyEnd(enz1);
+struct dnaSeq *sticky2 = stickyEnd(enz2);
+int count1, count2;
+if (sticky1 && sticky2)
+/*     printf("enz 1: %s, enz 2: %s, sticky 1: %s, sticky 2: %s, acgt 1: %d, acgt 2: %d\n", enz1->name, enz2->name, sticky1->dna, sticky2->dna, acgtCount(sticky1->dna), acgtCount(sticky2->dna)); */
+if (sticky1 && sticky2 && (sticky1->size == sticky2->size) &&
+    (acgtCount(sticky1->dna) == sticky1->size) && (acgtCount(sticky2->dna) == sticky2->size) &&
+    !isIsosciz(enz1, enz2))
+    {
+    if (sameString(sticky1->dna, sticky2->dna))
+	{
+/* 	printf("BAM %s %s\n", enz1->name, enz2->name); */
+	ret = TRUE;
+	}
+    else
+	{
+	reverseComplement(sticky2->dna, sticky2->size);
+	if (sameString(sticky1->dna, sticky2->dna))
+	    ret = TRUE;
+	}
+    }
+freeDnaSeq(&sticky1);
+freeDnaSeq(&sticky2);
+return ret;
+}
+
+struct slName *findIsoligamers(struct cutter *enz, struct cutter *enzList)
+/* Find isoligamers to an enzyme in a list of enzymes.  */
+{
+struct slName *list = NULL;
+struct cutter *cur;
+if (!enz || !enzList)
+    return NULL;
+for (cur = enzList; cur != NULL; cur = cur->next)
+    {
+    if (!sameString(cur->name, enz->name) && (sameStickyEnd(enz, cur)))
+	{
+	struct slName *newname = newSlName(cur->name);
+	slAddHead(&list, newname);
+	}
+    }
+slReverse(&list);
+return list;
+}
+
 boolean isPalindrome(char *seq)
 /* Determine if a sequence is palindromic. */
 {
@@ -413,7 +502,7 @@ char *line = "whatever", *words[10], numWords;
 /* Skip to the right line. */
 while (lineFileNext(lf,&line,NULL) && !startsWith("..",line));
 /* */
-while ((numWords=lineFileChop(lf,words)))
+while (numWords=lineFileChop(lf,words))
     {
     struct cutter *newone = NULL;
     int comIx = (numWords==7) ? 5 : 6;
@@ -568,7 +657,8 @@ struct cutter *enz;
 struct bed *bedList = NULL;
 int seqPos;
 
-if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3]) 
+if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3] || (sixers->elCount > 0)) 
+    {
     for (seqPos = 0; seqPos < seq->size; seqPos++)
 	{
 	struct cutter *enzList = NULL;
@@ -587,7 +677,7 @@ if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3])
 		add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
 		slAddHead(&bedList, add);
 		/* Just in case there's another one with the same sequence. */
-		while ((el = hashLookupNext(el)) != NULL)
+		while (el = hashLookupNext(el))
 		    {
 		    enz = el->val;
 		    add = allocBedEnz(enz, seq->name, bedPos + startOffset, strand);
@@ -611,6 +701,7 @@ if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3])
 	    while (enzPos < enz->size && seqCurPos < seq->size && matchingBase(enz->seq[enzPos],seq->dna[seqCurPos]))
 		{
 		enzPos++; seqCurPos++;
+/* 		printf("%d %d<br>\n",enzPos,seqCurPos); */
 		}
 	    if (enzPos == enz->size)
 		{
@@ -619,6 +710,7 @@ if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3])
 		}
 	    }
 	}
+    }
 return bedList;
 }
 
@@ -629,7 +721,7 @@ struct hash *sixers = newHash(8), *palinSixers = newHash(8);
 struct cutter *enz;
 struct cutter *ACGTo[5], *palinACGTo[5];
 struct bed *bedList = NULL, *tmp;
-int i;
+int seqPos = 0, i;
 
 if (!cutters)
     return NULL;
@@ -647,7 +739,7 @@ while (enz != NULL)
     acgtCount = countChars(enz->seq,'A') + countChars(enz->seq,'C') + 
                 countChars(enz->seq,'G') + countChars(enz->seq,'T');
     /* Super dumb coding here but it's quick. */
-    if (enz->palindromic)
+     if (enz->palindromic)
 	{
 	if (enz->size==6 && acgtCount==6)
 	    hashAdd(palinSixers, enz->seq, enz);
@@ -662,7 +754,9 @@ while (enz != NULL)
 	    else if (enz->seq[0] == 'T')
 		slAddHead(&palinACGTo[3], enz);
 	    else 
+		{
 		slAddHead(&palinACGTo[4], enz);
+		}
 	    }
 	}
     else
@@ -692,19 +786,20 @@ while (enz != NULL)
 
 if (ACGTo[4])
     {
-    slCat(ACGTo[0], ACGTo[4]);
-    slCat(ACGTo[1], ACGTo[4]);
-    slCat(ACGTo[2], ACGTo[4]);
-    slCat(ACGTo[3], ACGTo[4]);
+    ACGTo[0] = slCat(ACGTo[0], ACGTo[4]);
+    ACGTo[1] = slCat(ACGTo[1], ACGTo[4]);
+    ACGTo[2] = slCat(ACGTo[2], ACGTo[4]);
+    ACGTo[3] = slCat(ACGTo[3], ACGTo[4]);
     }
 
 if (palinACGTo[4])
     {
-    slCat(palinACGTo[0], palinACGTo[4]);
-    slCat(palinACGTo[1], palinACGTo[4]);
-    slCat(palinACGTo[2], palinACGTo[4]);
-    slCat(palinACGTo[3], palinACGTo[4]);
+    palinACGTo[0] = slCat(palinACGTo[0], palinACGTo[4]);
+    palinACGTo[1] = slCat(palinACGTo[1], palinACGTo[4]);
+    palinACGTo[2] = slCat(palinACGTo[2], palinACGTo[4]);
+    palinACGTo[3] = slCat(palinACGTo[3], palinACGTo[4]);
     }
+
 /* Search the DNA in three ways: on the plus strand for both palindromes and nonpalindromes, and then
    just nonpalindromes on the minus strand. */
 bedList = searchStrand(palinSixers, palinACGTo, seq, startOffset, '+');
@@ -718,23 +813,19 @@ if (bedList)
 return bedList;
 }
 
-void cullCutters(struct cutter *enzList, boolean semicolon, struct slName *includes, struct slName *excludes, int matchSize)
+void cullCutters(struct cutter **enzList, boolean semicolon, struct slName *justThese, int matchSize)
 /* Reduce the list of enzymes based on different options. */
 {
-struct cutter *enz = enzList, *next, *prev = NULL;
+struct cutter *enz = *enzList, *next;
 while (enz != NULL)
     {
     next = enz->next;
-    if ((slNameInList(excludes, enz->name)) || 
-       ((enz->matchSize < matchSize) && (!slNameInList(includes, enz->name))) || 
-       (!semicolon && enz->semicolon && !slNameInList(includes, enz->name)))
-	{
-	if (prev)
-	    prev->next = next;
+    if ((justThese && !slNameInList(justThese, enz->name)) ||  
+	(enz->matchSize < matchSize) || (!semicolon && enz->semicolon))
+	{	
+	slRemoveEl(enzList, enz);
 	cutterFree(&enz);
 	}
-    else 
-	prev = enz;
     enz = next;
     }
 }

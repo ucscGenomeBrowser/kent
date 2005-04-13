@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.188 2005/04/06 20:31:50 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.189 2005/04/13 06:59:59 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -949,6 +949,14 @@ puts("<P><B>Short (2-30 base) sequence:</B>");
 cgiMakeTextVar(oligoMatchVar, oligo, 45);
 }
 
+void cutterUi(struct trackDb *tdb)
+/* UI for restriction enzyme track */
+{
+char *enz = cartUsualString(cart, cutterVar, cutterDefault);
+puts("<P><B>Enzymes (separate with commas):</B>");
+cgiMakeTextVar(cutterVar, enz, 100);
+}
+
 void compositeUi(struct trackDb *tdb)
 /* UI for composite tracks -- has checkboxes for all subtracks.
  * Calls UI for the subtracks */
@@ -1389,6 +1397,8 @@ else if (sameString(track, RULER_TRACK_NAME))
     rulerUi(tdb);
 else if (sameString(track, OLIGO_MATCH_TRACK_NAME))
     oligoMatchUi(tdb);
+else if (sameString(track, CUTTERS_TRACK_NAME))
+    cutterUi(tdb);
 else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
 else if (sameString(track, "transRegCode"))
@@ -1516,6 +1526,8 @@ if (sameWord(track, RULER_TRACK_NAME))
     tdb = trackDbForRuler();
 else if (sameWord(track, OLIGO_MATCH_TRACK_NAME))
     tdb = trackDbForOligoMatch();
+else if (sameWord(track, CUTTERS_TRACK_NAME))
+    tdb = trackDbForPseudoTrack(CUTTERS_TRACK_NAME, CUTTERS_TRACK_LABEL, CUTTERS_TRACK_LONGLABEL, tvHide, TRUE);
 else
     tdb = hTrackDbForTrack(track);
 if (tdb == NULL)
