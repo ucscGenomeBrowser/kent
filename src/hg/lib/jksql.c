@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.73 2005/04/13 06:25:54 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.74 2005/04/13 20:12:34 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -102,7 +102,9 @@ if (monitorFlags)
 return deltaTime;
 }
 
-#if defined(__GNUC__) && defined(JK_WARN)
+/* NULL or empty formats generate a warning in gcc 3.2.2, so only check
+ * format on in 3.4 on */
+#if defined(__GNUC__) && defined(JK_WARN) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >=4)))
 static void monitorPrint(struct sqlConnection *sc, char *name,
                          char *format, ...)
 __attribute__((format(printf, 3, 4)));
