@@ -59,6 +59,7 @@ struct _pf_base
     int singleType;		/* class? int? */
     struct _pf_type *fields;	/* Elements of class. */
     char needsCleanup;	/* Does this type need cleanup? */
+    int size;		/* Type size - just size of pointer for objects. */
     };
 
 struct _pf_base_info
@@ -68,6 +69,7 @@ struct _pf_base_info
     char *name;		/* Name in scope:class format. */
     int parentId;	/* Id of parent class. */
     char needsCleanup;	/* Does this type need cleanup? */
+    int size;		/* Type size. */
     };
 
 struct _pf_type_info

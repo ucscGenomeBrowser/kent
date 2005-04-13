@@ -76,7 +76,7 @@ return type;
 
 void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
-		     struct _pf_field_info *fieldInfo, int fieldCount)
+		     struct _pf_field_info *structInfo, int structCount)
 /* Build up run-time type information from initialization. */
 {
 struct hash *singleIds = singleTypeHash();
@@ -98,6 +98,7 @@ for (i=0; i<baseCount; ++i)
     s += 1;
     base->name = s;
     base->needsCleanup = info->needsCleanup;
+    base->size = info->size;
     if (s[0] != '<')
 	{
 	base->singleType = hashIntValDefault(singleIds, s, 0);
@@ -118,13 +119,33 @@ for (i=0; i<typeCount; ++i)
     }
 
 /* Process fieldInfo into fields. */
-for (i=0; i<fieldCount; ++i)
     {
-    struct _pf_field_info *info = &fieldInfo[i];
-    base = &bases[info->classId];
-    assert(base->singleType == pf_stClass);
-    /* todo - parse info->typeVal */
+    for (i=0; i<structCount; ++i)
+	{
+	struct _pf_field_info *info = &structInfo[i];
+	int j, fieldCount;
+	char **fields;
+	char *typeValList = cloneString(info->typeValList);
+	base = &bases[info->classId];
+	assert(base->singleType == pf_stClass);
+	fieldCount = countChars(typeValList, ',') + 1;
+	AllocArray(fields, fieldCount);
+	chopByChar(typeValList, ',', fields, fieldCount);
+	for (j=0; j<fieldCount; ++j)
+	    {
+	    char *spec = fields[j];
+	    int typeId = atoi(spec);
+	    char *name = strchr(spec, ':') + 1;
+	    struct _pf_type *type = CloneVar(types[typeId]);
+	    type->name = name;
+	    slAddHead(&base->fields, type);
+	    }
+	slReverse(&base->fields);
+	}
     }
+
+
+/* Clean up and go home. */
 hashFree(&singleIds);
 _pf_type_table = types;
 }
