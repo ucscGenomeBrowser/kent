@@ -328,7 +328,7 @@ fprintf(f, "< 0 || ");
 codeParamAccess(pfc, f, pfc->intType, stack+offset);
 fprintf(f, " >= ");
 codeParamAccess(pfc, f, pfc->arrayType, stack);
-fprintf(f, "->count)\n  ");
+fprintf(f, "->size)\n  ");
 codeRunTimeError(pfc, f, pp->tok, "array access out of bounds");
 return offset;
 }
@@ -871,7 +871,7 @@ if (isArray)
     {
     fprintf(f, "int _pf_offset;\n");
     fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
-    fprintf(f, "int _pf_endOffset = %s->count * _pf_elSize;\n", collectionName);
+    fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
     fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
     fprintf(f, "{\n");
     fprintf(f, "%s = *((", elName);
