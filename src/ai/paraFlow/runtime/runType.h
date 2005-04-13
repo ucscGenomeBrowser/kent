@@ -48,6 +48,7 @@ struct _pf_type
     struct _pf_base *base;	/* Base type of this node in type tree. */
     char *name;			/* Parameter or field name. May be NULL. */
     int offset;			/* Offset of field from start of structure. */
+    int typeId;			/* Id of this type (index in type table). */
     };
 
 struct _pf_base
@@ -61,6 +62,7 @@ struct _pf_base
     struct _pf_type *fields;	/* Elements of class. */
     char needsCleanup;	/* Does this type need cleanup? */
     int size;		/* Type size - just size of pointer for objects. */
+    int objSize;	/* Object size for objects. */
     int alignment;	/* This type likes to be aligned on an even multiple of this in structures. */
     int aliAdd;		/* Computational aid for alignment.  alignedStart = ((start+aliAdd)&aliMask)*/
     int aliMask;	/* Computational aid for alignment. */

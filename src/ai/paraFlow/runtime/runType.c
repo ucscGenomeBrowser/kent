@@ -75,32 +75,6 @@ if (c == '(')
 return type;
 }
 
-#ifdef OLD
-static void figureAlignments()
-/* Figure out what sort of alignments built in types like. */
-{
-static struct Bit_1 {char b1; _pf_Bit var; char b2; _pf_Bit var2;} bit1;
-static struct Byte_1 {char b1; _pf_Byte var; char b2; _pf_Byte var2;} byte1;
-static struct Short_1  {char b1; _pf_Short var; char b2; _pf_Short var2;} short1;
-static struct Int_1  {char b1; _pf_Int var; char b2; _pf_Int var2;} int1;
-static struct Long_1  {char b1; _pf_Long var; char b2; _pf_Long var2;} long1;
-static struct Float_1  {char b1; _pf_Float var; char b2; _pf_Float var2;} float1;
-static struct Double_1  {char b1; _pf_Double var; char b2; _pf_Double var2;} double1;
-static struct Var_1  {char b1; _pf_Var var; char b2; _pf_Var var2;} var1;
-static struct Pt_1  {char b1; void *var; char b2; void *var2;} pt1;
-
-uglyf("bit = %d,%d,%d\n", (char*)&bit1.var - (char*)&bit1, (int)sizeof(_pf_Bit), (char*)&bit1.var2 - (char*)&bit1);
-uglyf("byte = %d,%d,%d\n", (char*)&byte1.var - (char*)&byte1, (int)sizeof(_pf_Byte), (char*)&byte1.var2 - (char*)&byte1);
-uglyf("short = %d,%d,%d\n", (char*)&short1.var - (char*)&short1, (int)sizeof(_pf_Short), (char*)&short1.var2 - (char*)&short1);
-uglyf("int = %d,%d,%d\n", (char*)&int1.var - (char*)&int1, (int)sizeof(_pf_Int), (char*)&int1.var2 - (char*)&int1);
-uglyf("long = %d,%d,%d\n", (char*)&long1.var - (char*)&long1, (int)sizeof(_pf_Long), (char*)&long1.var2 - (char*)&long1);
-uglyf("float = %d,%d,%d\n", (char*)&float1.var - (char*)&float1, (int)sizeof(_pf_Float), (char*)&float1.var2 - (char*)&float1);
-uglyf("double = %d,%d,%d\n", (char*)&double1.var - (char*)&double1, (int)sizeof(_pf_Double), (char*)&double1.var2 - (char*)&double1);
-uglyf("var = %d,%d,%d\n", (char*)&var1.var - (char*)&var1, (int)sizeof(_pf_Var), (char*)&var1.var2 - (char*)&var1);
-uglyf("pt1 = %d,%d,%d\n", (char*)&pt1.var - (char*)&pt1, (int)sizeof(void *), (char*)&pt1.var2 - (char*)&pt1);
-}
-#endif /* OLD */
-
 void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
 		     struct _pf_field_info *structInfo, int structCount)
@@ -250,7 +224,9 @@ AllocArray(types, typeCount+1);
 for (i=0; i<typeCount; ++i)
     {
     struct _pf_type_info *info = &typeInfo[i];
-    types[info->id] = _pf_type_from_paren_code(&info->parenCode, bases);
+    struct _pf_type *type = _pf_type_from_paren_code(&info->parenCode, bases);
+    type->typeId = info->id;
+    types[info->id] = type;
     }
 
 /* Process fieldInfo into fields. */
@@ -281,6 +257,7 @@ for (i=0; i<typeCount; ++i)
 	    slAddHead(&base->fields, type);
 	    }
 	slReverse(&base->fields);
+	base->objSize = offset;
 	}
     }
 

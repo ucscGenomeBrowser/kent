@@ -12,20 +12,20 @@ uglyf("_pf_class_cleanup (%d) - still needs work\n", typeId);
 free(obj);
 }
 
-struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int count, 
-	int typeId, int memSize)
+struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, _pf_Stack **retStack)
 /* Convert tuple on stack to class. */
 {
-struct _pf_object *obj = needMem(memSize);
 struct _pf_type *type = _pf_type_table[typeId], *fieldType;
 struct _pf_base *base = type->base;
+struct _pf_object *obj = needMem(base->objSize);
 char *s = (char *)(obj);
 _pf_Stack *field;
-int i;
 
-for (i=0, fieldType = base->fields; fieldType != NULL; ++i, fieldType = fieldType->next)
+uglyf("_pf_class_from_tuple(%p %d %p)\n", stack, typeId, retStack);
+for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
     int offset = fieldType->offset;
+    uglyf("  offset %d, singleType %d, sizeof(*stack) %d\n", offset, fieldType->base->singleType, (int)sizeof(*stack));
     switch (fieldType->base->singleType)
 	{
 	case pf_stBit:
@@ -68,13 +68,19 @@ for (i=0, fieldType = base->fields; fieldType != NULL; ++i, fieldType = fieldTyp
 	    *((_pf_Var *)(s + offset)) = stack->Var;
 	    break;
 	case pf_stClass:
-	    *((_pf_Object *)(s + offset)) = stack->Obj;
+	    {
+	    int typeId = fieldType->typeId;
+	    *((_pf_Object *)(s + offset)) = _pf_class_from_tuple(stack, typeId, &stack);
+	    stack -= 1;	/* Since += it at end of loop. */
 	    break;
+	    }
 	}
     stack += 1;
     }
 obj->_pf_refCount = 1;
 obj->_pf_cleanup = _pf_class_cleanup;
+if (retStack != NULL)
+    *retStack = stack;
 return obj;
 }
 

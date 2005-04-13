@@ -297,6 +297,16 @@ fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", typeId(pfc, type));
 fprintf(f, " }\n");
 }
 
+static void bumpStackRefCount(FILE *f, struct pfType *type, int stack)
+/* If type is reference counted, bump up refCount of top of stack. */
+{
+if (type->base->needsCleanup)
+    {
+    codeStackAccess(f, stack);
+    fprintf(f, ".Obj->_pf_refCount += 1;\n");
+    }
+}
+
 static int pushArrayIndexAndBoundsCheck(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Put collection and index on stack.  Check index is in range. 
@@ -352,11 +362,7 @@ if (colBase == pfc->arrayType)
     fprintf(f, " = ");
     codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
-    if (outType->base->needsCleanup)
-        {
-	codeStackAccess(f, stack);
-	fprintf(f, ".Obj->_pf_refCount += 1;\n");
-	}
+    bumpStackRefCount(f, outType, stack);
     }
 else
     {
@@ -419,6 +425,7 @@ codeParamAccess(pfc, f, outType->base, stack);
 fprintf(f, " = ");
 codeDotAccess(pfc, f, pp, stack);
 fprintf(f, ";\n");
+bumpStackRefCount(f, outType, stack);
 return 1;
 }
 
@@ -545,8 +552,8 @@ static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = lval->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
-fprintf(f, "_pf_class_from_tuple(%s+%d, %d, %d, sizeof(struct %s));\n",
-	stackName, stack, tupleSize, typeId(pfc, lval->ty), base->name);
+fprintf(f, "_pf_class_from_tuple(%s+%d, %d, 0);\n",
+	stackName, stack, typeId(pfc, lval->ty));
 }
 
 static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,

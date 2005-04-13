@@ -123,7 +123,7 @@ switch (base->singleType)
     case pf_stClass:
         printClass(f, val.Obj, base);
 	if (--val.Obj->_pf_refCount <= 0)
-	    val.Obj->_pf_cleanup(val.Obj);
+	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);
