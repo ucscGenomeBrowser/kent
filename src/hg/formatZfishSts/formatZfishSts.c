@@ -92,7 +92,7 @@ return hashAdd(hash, name, val);
 }
 
 void readStsMarkers(struct lineFile *stf)
-/* Read in STS markers file from UniSTS markers file */
+/* Read in STS markers information from UniSTS markers file */
 {
 struct sts *s = NULL, *s2 = NULL;
 char *words[52], *id = NULL, *name = NULL;
@@ -352,9 +352,6 @@ while (lineFileChopTab(zaf, words))
                 }
             }
         }
-    fprintf(stderr, "11.3\n");
-    fflush(stderr);
-    fflush(stdout);
     }
 }
 
@@ -458,8 +455,9 @@ for (p = 0; p < NUMPANELS; p++)
         fprintf(sto, "\t");        
         for (j = 0; j < NUMPOS && (zf->panelArray[p]->pos[j] != -1); j++)
             {
-            fprintf(sto, "%.2lf,\t", zf->panelArray[p]->pos[j]);
+            fprintf(sto, "%.2lf,", zf->panelArray[p]->pos[j]);
             }
+        fprintf(sto, "\t");
         fprintf(sto, "%s\n", zf->panelArray[p]->units);
         
         fflush(sto);
@@ -513,7 +511,6 @@ if (mapList != NULL)
         /* check stsHash for name with extension or remove extension from zfin name */
         else if (!found)
             {
-            fflush(stdout);
             sts = (struct sts *)addExtensionAndSearch(mapEl->name, stsHash, FALSE);
             if (sts != NULL)
                found = TRUE;
@@ -548,7 +545,6 @@ if (mapList != NULL)
                    /* get sts and alias names */
                    sts = hashFindVal(stsIdHash, aliasId->ids[j]);
                    aliases = hashFindVal(aliasHash, aliasId->ids[j]); 
-                   fflush(stdout);
                    printMarkers(sto, sts, zfEl, aliases->names);
                    }
                }
@@ -576,7 +572,6 @@ if (argc < 7)
 fprintf(stdout, "USAGE: formatZfishSts [-verbose=<level>] <UniSTS file> <genbank.txt> <UniSTS aliases> <ZFIN aliases> <ZFIN mappings.txt> <dbSTS map panels>\n");
     return 1;
     }
-fprintf(stdout, "argc is %d\n", argc);
 verb = optionInt("verbose", 0);
 verboseSetLevel(verb);
 
@@ -611,7 +606,6 @@ readZfinAliases(zaf);
 
 /* Print out the STS marker information to a file */
 verbose(1, "Creating output file\n");
-fflush(stderr);
 writeOut(sto);
 
 lineFileClose(&stf);
