@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.50 2005/04/08 23:01:46 markd Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.51 2005/04/12 16:49:26 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -288,6 +288,11 @@ boolean idInRefseq(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in refGene table */
 {
 char query[256];
+if (!sqlTablesExist(conn, "refGene"))
+    {
+    return(FALSE);
+    }
+
 safef(query, sizeof(query), 
 	"select count(*) from refGene where name = '%s'", id);
 return sqlQuickNum(conn, query) > 0;

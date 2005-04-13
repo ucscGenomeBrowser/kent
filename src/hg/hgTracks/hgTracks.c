@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.948 2005/04/11 17:16:08 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.949 2005/04/12 22:16:49 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9240,8 +9240,9 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
 {
-hSetDb2("hgFixed");
-return hTableExists2("cutters") && hTableExists2("rebaseRefs") && hTableExists2("rebaseCompanies");
+return (hTableExistsDb("hgFixed", "cutters") &&
+	hTableExistsDb("hgFixed", "rebaseRefs") &&
+	hTableExistsDb("hgFixed", "rebaseCompanies"));
 }
 
 #ifdef UNUSED
