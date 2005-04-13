@@ -9,5 +9,7 @@ CREATE TABLE kgProtAlias (
     displayID varchar(255) not null,	# protein display ID
     alias varchar(255) not null,	# a protein alias
               #Indices
-    PRIMARY KEY(kgID)
-);
+    KEY(kgID),
+    KEY(displayID),
+    KEY(alias)
+)TYPE=MyISAM;;
