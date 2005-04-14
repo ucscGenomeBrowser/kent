@@ -650,9 +650,20 @@ static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
 {
 struct pfParse *el = pp->children;
 struct pfParse *collection = el->next;
+boolean ok = TRUE;
 if (!collection->ty->base->isCollection)
     expectingGot("collection", collection->tok);
-if (!pfTypeSame(el->ty, collection->ty->children))
+if (collection->ty->base == pfc->stringType)
+    {
+    if (el->ty->base != pfc->byteType)
+	ok = FALSE;
+    }
+else
+    {
+    if (!pfTypeSame(el->ty, collection->ty->children))
+	ok = FALSE;
+    }
+if (!ok)
     errAt(pp->tok, "type mismatch between element and collection in foreach");
 }
 
@@ -718,7 +729,7 @@ struct pfType *collectionType = collectionPp->ty;
 struct pfBaseType *collectionBase = collectionType->base;
 struct pfBaseType *keyBase;
 
-if (collectionBase == pfc->arrayType)
+if (collectionBase == pfc->arrayType || collectionBase == pfc->stringType)
     keyBase = pfc->intType;
 else
     {
@@ -731,7 +742,10 @@ if (indexPp->ty->base != keyBase || indexPp->type == pptConstUse)
     struct pfType *ty = pfTypeNew(keyBase);
     coerceOne(pfc, &collectionPp->next, ty, FALSE);
     }
-pp->ty = CloneVar(collectionType->children);
+if (collectionBase == pfc->stringType)
+    pp->ty = pfTypeNew(pfc->byteType);
+else
+    pp->ty = CloneVar(collectionType->children);
 }
 
 static struct pfType *largerNumType(struct pfCompile *pfc,

@@ -351,7 +351,7 @@ codeParamAccess(pfc, f, pfc->intType, stack+offset);
 fprintf(f, "< 0 || ");
 codeParamAccess(pfc, f, pfc->intType, stack+offset);
 fprintf(f, " >= ");
-codeParamAccess(pfc, f, pfc->arrayType, stack);
+codeParamAccess(pfc, f, colBase, stack);
 fprintf(f, "->size)\n  ");
 codeRunTimeError(pfc, f, pp->tok, "array access out of bounds");
 return offset;
@@ -371,6 +371,17 @@ codeParamAccess(pfc, f, pfc->intType, stack+indexOffset);
 fprintf(f, "))[0]");
 }
 
+static void codeAccessToByteInString(struct pfCompile *pfc, FILE *f,
+	struct pfBaseType *base, int stack, int indexOffset)
+/* Print out code to a byte in string. */
+{
+codeParamAccess(pfc, f, pfc->stringType, stack);
+fprintf(f, "->s[");
+codeParamAccess(pfc, f, pfc->intType, stack+indexOffset);
+fprintf(f, "]");
+}
+
+
 static int codeIndexRval(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for index expression (not on left side of
@@ -387,6 +398,14 @@ if (colBase == pfc->arrayType)
     codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
     bumpStackRefCount(f, outType, stack);
+    }
+else if (colBase == pfc->stringType)
+    {
+    int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, stack);
+    codeParamAccess(pfc, f, outType->base, stack);
+    fprintf(f, " = ");
+    codeAccessToByteInString(pfc, f, outType->base, stack, indexOffset);
+    fprintf(f, ";\n");
     }
 else
     {
@@ -414,6 +433,14 @@ if (colBase == pfc->arrayType)
 	endCleanTemp(pfc, f, outType);
 	}
     codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
+    fprintf(f, " %s ", op);
+    codeParamAccess(pfc, f, outType->base, stack);
+    fprintf(f, ";\n");
+    }
+else if (colBase == pfc->stringType)
+    {
+    int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
+    codeAccessToByteInString(pfc, f, outType->base, emptyStack, indexOffset);
     fprintf(f, " %s ", op);
     codeParamAccess(pfc, f, outType->base, stack);
     fprintf(f, ";\n");
@@ -922,19 +949,18 @@ static void codeForeach(struct pfCompile *pfc, FILE *f,
 struct pfParse *elPp = foreach->children;
 struct pfParse *collectionPp = elPp->next;
 struct pfBaseType *base = collectionPp->ty->base;
-struct pfBaseType *elBase = collectionPp->ty->children->base;
 struct pfParse *body = collectionPp->next;
 char *elName = elPp->name;
 char *collectionName = collectionPp->name;
-boolean isArray = (base == pfc->arrayType);
 
 /* Print element variable in a new scope. */
 fprintf(f, "{\n");
 codeScopeVars(pfc, f, foreach->scope, FALSE);
 
 /* Also print some iteration stuff. */
-if (isArray)
+if (base == pfc->arrayType)
     {
+    struct pfBaseType *elBase = collectionPp->ty->children->base;
     fprintf(f, "int _pf_offset;\n");
     fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
     fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
@@ -943,6 +969,16 @@ if (isArray)
     fprintf(f, "%s = *((", elName);
     printType(pfc, f, elBase);
     fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
+    codeStatement(pfc, f, body);
+    fprintf(f, "}\n");
+    }
+else if (base == pfc->stringType)
+    {
+    fprintf(f, "int _pf_offset;\n");
+    fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
+    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
+    fprintf(f, "{\n");
+    fprintf(f, "%s = %s->s[_pf_offset];\n", elName, collectionName);
     codeStatement(pfc, f, body);
     fprintf(f, "}\n");
     }
