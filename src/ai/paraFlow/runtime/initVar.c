@@ -30,8 +30,7 @@ return string;
 struct _pf_string *_pf_string_from_const(char *s)
 /* Wrap string around constant. */
 {
-struct _pf_string *string = _pf_string_init(s);
-string->allocated = 0;
+struct _pf_string *string = _pf_string_init(cloneString(s));
 return string;
 }
 
