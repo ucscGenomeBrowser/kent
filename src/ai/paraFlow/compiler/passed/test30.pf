@@ -1,0 +1,9 @@
+print(1);
+print(-1);
+print(~1);
+print(!1);
+int one = 1;
+print(one);
+print(-one);
+print(~one);
+print(!one);
