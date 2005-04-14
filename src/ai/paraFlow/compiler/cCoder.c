@@ -1136,6 +1136,9 @@ struct pfType *inTuple = funcType->children;
 struct pfType *outTuple = inTuple->next;
 struct pfParse *body = funcDec->children->next->next->next;
 
+if (body == NULL)
+    return;
+
 /* Put out function prototype and opening brace.  If class add self to
  * function symbol table. */
 if (class)

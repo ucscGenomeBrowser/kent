@@ -1117,6 +1117,7 @@ static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
 struct hash *outputHash = hashNew(4);
 struct pfParse *input = funcDec->children->next;
 struct pfParse *output = input->next;
+struct pfParse *body = output->next;
 struct pfParse *pp;
 struct hashCookie hc;
 struct hashEl *hel;
@@ -1127,14 +1128,16 @@ for (pp = output->children; pp != NULL; pp = pp->next)
     {
     hashAddInt(outputHash, pp->name, 0);
     }
-for (pp = funcDec->children; pp != NULL; pp = pp->next)
-    rBlessFunction(funcDec->scope, outputHash, pfc, pp);
-hc = hashFirst(outputHash);
-while ((hel = hashNext(&hc)) != NULL)
+if (body != NULL)
     {
-    if (hel->val == intToPt(0))
-        errAt(funcDec->tok, "Output variable %s not set in %s", 
-		hel->name, funcDec->name);
+    rBlessFunction(funcDec->scope, outputHash, pfc, body);
+    hc = hashFirst(outputHash);
+    while ((hel = hashNext(&hc)) != NULL)
+	{
+	if (hel->val == intToPt(0))
+	    errAt(funcDec->tok, "Output variable %s not set in %s", 
+		    hel->name, funcDec->name);
+	}
     }
 hashFree(&outputHash);
 }

@@ -1092,7 +1092,7 @@ static struct pfParse *parseFunction(struct pfCompile *pfc,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
-struct pfParse *name, *input, *output = NULL, *body;
+struct pfParse *name, *input, *output = NULL, *body = NULL;
 scope = pfScopeNew(pfc, scope, 0, FALSE);
 pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip something (implicit in type) */
@@ -1125,12 +1125,20 @@ if (tok->type == pftInto)
     }
 else
     output = emptyTuple(pp, tok, scope);
-body = parseCompound(pfc, pp, &tok, scope);
+
+if (tok->type == ';')
+    {
+    tok = tok->next;
+    }
+else
+    {
+    body = parseCompound(pfc, pp, &tok, scope);
+    slAddHead(&pp->children, body);
+    }
 
 input->type  = pptTypeTuple;
 output->type  = pptTypeTuple;
 
-slAddHead(&pp->children, body);
 slAddHead(&pp->children, output);
 slAddHead(&pp->children, input);
 slAddHead(&pp->children, name);
