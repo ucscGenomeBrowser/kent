@@ -1115,6 +1115,15 @@ switch (pp->type)
     }
 }
 
+static void codeInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)
+/* Print out default initialization of type. */
+{
+if (type->base == pfc->varType)
+    fprintf(f, "=_pf_var_zero");
+else
+    fprintf(f, "=0");
+}
+
 
 static void codeFunction(struct pfCompile *pfc, FILE *f, 
 	struct pfParse *funcDec, struct pfParse *class)
@@ -1165,7 +1174,9 @@ else
     for (out = outTuple->children; out != NULL; out = out->next)
         {
 	printType(pfc, f, out->base);
-	fprintf(f, " %s;\n", out->fieldName);
+	fprintf(f, " %s", out->fieldName);
+	codeInitOfType(pfc, f, out);
+	fprintf(f, ";\n");
 	}
     }
 
@@ -1230,10 +1241,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 	fprintf(f, " %s", var->name);
 	if (zeroUninit && !isInitialized(var))
 	    {
-	    if (type->base == pfc->varType)
-		fprintf(f, "=_pf_var_zero");
-	    else
-		fprintf(f, "=0");
+	    codeInitOfType(pfc, f, type);
 	    }
 	fprintf(f, ";\n");
 	gotVar = TRUE;
