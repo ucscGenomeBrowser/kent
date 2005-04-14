@@ -14,7 +14,9 @@
 #include "qa.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.33 2005/02/17 21:39:04 angie Exp $";
+#define MAX_ATTEMPTS 10
+
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.34 2005/04/14 22:07:32 heather Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -128,6 +130,10 @@ struct htmlPage *quickSubmit(struct htmlPage *basePage,
 struct tablesTest *test;
 struct qaStatus *qs;
 struct htmlPage *page;
+
+// don't get ahead of the botDelay
+sleep1000(5000);
+
 verbose(2, "quickSubmit(%p, %s, %s, %s, %s, %s, %s, %s, %s)\n",
 	basePage, naForNull(org), naForNull(db), naForNull(group), 
 	naForNull(track), naForNull(table), naForNull(testName), 
@@ -146,6 +152,10 @@ if (basePage != NULL)
         htmlPageSetVar(basePage, NULL, hgtaTable, table);
     qs = qaPageFromForm(basePage, basePage->forms, 
 	    button, buttonVal, &page);
+    /* 
+    if (page->forms != NULL)
+        htmlFormPrint(page->forms, stdout);
+    */
     test = tablesTestNew(qs, testName, org, db, group, track, table);
     }
 return page;
@@ -185,6 +195,7 @@ if (test->status->errMessage != NULL)
 void testSchema(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table)
 /* Make sure schema page comes up. */
+/* mainForm not used */
 {
 struct htmlPage *schemaPage = quickSubmit(tablePage, org, db, group,
         track, table, "schema", hgtaDoSchema, "submit");
@@ -236,6 +247,7 @@ return count;
 int testAllFields(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table)
 /* Get all fields and return count of rows. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
 int rowCount = 0;
@@ -243,6 +255,9 @@ int rowCount = 0;
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "primaryTable");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "allFields", hgtaDoTopSubmit, "submit");
+/* check for NULL outPage */
+if (outPage == NULL)
+    errAbort("Null page in testAllFields");
 rowCount = countNoncommentLines(outPage->htmlText);
 htmlPageFree(&outPage);
 return rowCount;
@@ -276,27 +291,54 @@ void testOneField(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table, 
      int expectedRows)
 /* Get one field and make sure the count agrees with expected. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
+struct htmlForm *form;
+struct htmlFormVar *var;
+int attempts = 0;
+int rowCount = 0;
+
+if (tablePage->forms == NULL) 
+     errAbort("testOneField: Missing form (tablePage)");
 
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "selectedFields");
+
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "selFieldsPage", hgtaDoTopSubmit, "submit");
-if (outPage != NULL)
+while (outPage == NULL && attempts < MAX_ATTEMPTS)
     {
-    struct htmlForm *form = outPage->forms;
-    struct htmlFormVar *var;
-    int rowCount = 0;
-    if (form == NULL)
-        errAbort("No forms in select fields page");
-    var = findPrefixedVar(form->vars, "hgta_fs.check.");
-    if (var == NULL)
-        errAbort("No hgta_fs.check. vars in form");
-    htmlPageSetVar(outPage, NULL, var->name, "on");
-    serialSubmit(&outPage, org, db, group, track, table, "oneField",
-    	hgtaDoPrintSelectedFields, "submit");
-    checkExpectedSimpleRows(outPage, expectedRows);
+    printf("testOneField: trying again to get selFieldsPage\n");
+    outPage = quickSubmit(tablePage, org, db, group, track, table,
+        "selFieldsPage", hgtaDoTopSubmit, "submit");
+    attempts++;
     }
+
+if (outPage == NULL) 
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOneField - couldn't get outPage.");
+    return;
+    }
+
+if (outPage->forms == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOneField - missing form.");
+    htmlPageFree(&outPage);
+    return;
+}
+
+form = outPage->forms;
+rowCount = 0;
+var = findPrefixedVar(form->vars, "hgta_fs.check.");
+if (var == NULL)
+    errAbort("No hgta_fs.check. vars in form");
+htmlPageSetVar(outPage, NULL, var->name, "on");
+serialSubmit(&outPage, org, db, group, track, table, "oneField",
+    hgtaDoPrintSelectedFields, "submit");
+// check that outPage != NULL
+checkExpectedSimpleRows(outPage, expectedRows);
 htmlPageFree(&outPage);
 }
 	
@@ -304,31 +346,60 @@ void testOutBed(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table, 
      int expectedRows)
 /* Get as bed and make sure count agrees with expected. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
+int attempts = 0;
+
+if (tablePage->forms == NULL) 
+     errAbort("testOutBed: Missing form (tablePage)");
 
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "bed");
+
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "bedUiPage", hgtaDoTopSubmit, "submit");
-if (outPage != NULL)
+while (outPage == NULL && attempts < MAX_ATTEMPTS)
     {
-    serialSubmit(&outPage, org, db, group, track, table, "outBed",
-    	hgtaDoGetBed, "submit");
-    checkExpectedSimpleRows(outPage, expectedRows);
+    printf("testOutBed: trying again to get bedUiPage\n");
+    outPage = quickSubmit(tablePage, org, db, group, track, table,
+       "bedUiPage", hgtaDoTopSubmit, "submit");
+    attempts++;
     }
+if (outPage == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOneBed - couldn't get outPage.");
+    return;
+    }
+if (outPage->forms == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOneBed - missing form.");
+    htmlPageFree(&outPage);
+    return;
+    }
+
+serialSubmit(&outPage, org, db, group, track, table, "outBed", hgtaDoGetBed, "submit");
+// check that outPage != NULL
+checkExpectedSimpleRows(outPage, expectedRows);
 htmlPageFree(&outPage);
 }
 
 void testOutGff(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table)
 /* Get as GFF and make sure no crash. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
 
+if (tablePage->forms == NULL) 
+     errAbort("testOutGff: Missing form (tablePage)");
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "gff");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "outGff", hgtaDoTopSubmit, "submit");
-htmlPageFree(&outPage);
+/* no checking here */
+if (outPage != NULL)
+    htmlPageFree(&outPage);
 }
 
 int countTagsBetween(struct htmlPage *page, char *start, char *end, char *type)
@@ -356,56 +427,89 @@ void testOutHyperlink(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table, 
      int expectedRows)
 /* Get as hyperlink and make sure count agrees with expected. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
+int attempts = 0;
+char *s;
+int rowCount;
 
+if (tablePage->forms == NULL) 
+     errAbort("testOutHyperlink: Missing form (tablePage)");
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "hyperlinks");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "outHyperlinks", hgtaDoTopSubmit, "submit");
-if (outPage != NULL)
+while (outPage == NULL && attempts < MAX_ATTEMPTS)
     {
-    char *s = stringIn("<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->", outPage->htmlText);
-    int rowCount;
-    if (s == NULL) errAbort("Can't find <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->");
-    rowCount = countTagsBetween(outPage, s, NULL, "A");
-    if (rowCount != expectedRows)
-	qaStatusSoftError(tablesTestList->status, 
-		"Got %d rows, expected %d", rowCount, expectedRows);
+    printf("testOutHyperLink: trying again to get outHyperLinks\n");
+    outPage = quickSubmit(tablePage, org, db, group, track, table,
+        "outHyperlinks", hgtaDoTopSubmit, "submit");
+    attempts++;
     }
+
+if (outPage == NULL) 
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOutHyperLink - couldn't get outPage.");
+    return;
+    }
+
+s = stringIn("<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->", outPage->htmlText);
+if (s == NULL) errAbort("Can't find <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->");
+rowCount = countTagsBetween(outPage, s, NULL, "A");
+if (rowCount != expectedRows)
+    qaStatusSoftError(tablesTestList->status, "Got %d rows, expected %d", rowCount, expectedRows);
 htmlPageFree(&outPage);
 }
 
 void testOutCustomTrack(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table)
 /* Get as customTrack and make sure nothing explodes. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
+int attempts = 0;
+struct htmlFormVar *groupVar;
+
+if (tablePage->forms == NULL) 
+    errAbort("testOutCustomTrack: Missing form (tablePage)");
 
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "customTrack");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "customTrackUi", hgtaDoTopSubmit, "submit");
-if (outPage != NULL)
+while (outPage == NULL && attempts < MAX_ATTEMPTS)
     {
-    struct htmlFormVar *groupVar;
-    serialSubmit(&outPage, org, db, group, track, table, "outCustom",
-    	hgtaDoGetCustomTrackTb, "submit");
-    if (outPage != NULL)
-	{
-	if (outPage->forms != NULL)
-	    {
-	    groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
-	    if (!slNameInList(groupVar->values, "user"))
-		{
-		qaStatusSoftError(tablesTestList->status, 
-			"No custom track group after custom track submission");
-		}
-	    }
-	else
-	    {
-	    qaStatusSoftError(tablesTestList->status,
-	           "Error in custom track - no form produced.");
-	    }
-	}
+    printf("testOutCustomTrack: trying again to get customTrackUi\n");
+    outPage = quickSubmit(tablePage, org, db, group, track, table,
+        "customTrackUi", hgtaDoTopSubmit, "submit");
+    attempts++;
+    }
+if (outPage == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOutCustomTrack - couldn't get outPage.");
+    return;
+    }
+
+serialSubmit(&outPage, org, db, group, track, table, "outCustom", hgtaDoGetCustomTrackTb, "submit");
+if (outPage == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in testOutCustomTrack - serialSubmit returned null page.");
+    return;
+    }
+if (outPage->forms == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+           "Error in custom track - no form produced.");
+    htmlPageFree(&outPage);
+    return;
+    }
+groupVar = htmlFormVarGet(outPage->forms, hgtaGroup);
+if (!slNameInList(groupVar->values, "user"))
+    {
+    qaStatusSoftError(tablesTestList->status, 
+	"No custom track group after custom track submission");
     }
 htmlPageFree(&outPage);
 }
@@ -432,54 +536,75 @@ void testOutSequence(struct htmlPage *tablePage, struct htmlForm *mainForm,
      char *org, char *db, char *group, char *track, char *table, 
      int expectedRows)
 /* Get as sequence and make sure count agrees with expected. */
+/* mainForm not used */
 {
 struct htmlPage *outPage;
+int attempts = 0;
+struct htmlFormVar *typeVar;
+
+if (tablePage->forms == NULL) 
+    errAbort("testOutSequence: Missing form (tablePage)");
 
 htmlPageSetVar(tablePage, NULL, hgtaOutputType, "sequence");
 outPage = quickSubmit(tablePage, org, db, group, track, table,
     "seqUi1", hgtaDoTopSubmit, "submit");
-if (outPage != NULL)
-     {
-     struct htmlFormVar *typeVar;
+while (outPage == NULL && attempts < MAX_ATTEMPTS) 
+    {
+    printf("testOutSequence: trying again to get seqUi1\n");
+    outPage = quickSubmit(tablePage, org, db, group, track, table,
+        "seqUi1", hgtaDoTopSubmit, "submit");
+    attempts++;
+    }
+if (outPage == NULL) 
+    {
+    qaStatusSoftError(tablesTestList->status,
+        "Error in testOutSequence - couldn't get outPage");
+    return;
+    }
+if (outPage->forms == NULL)
+    {
+    qaStatusSoftError(tablesTestList->status,
+        "Error in testOutSequence - missing form");
+    htmlPageFree(&outPage);
+    return;
+    }
 
-     /* Since some genomic sequence things are huge, this will
-      * only test in case where it's a gene prediction. */
-     typeVar = htmlFormVarGet(outPage->forms, hgtaGeneSeqType);
-     if (typeVar != NULL)
-         {
-	 struct htmlPage *seqPage;
-	 static char *types[] = {"protein", "mRNA"};
-	 int i;
-	 for (i=0; i<ArraySize(types); ++i)
-	     {
-	     char *type = types[i];
-	     if (slNameInList(typeVar->values, type))
-	         {
-		 struct htmlPage *page;
-		 char testName[128];
-		 htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, type);
-		 safef(testName, sizeof(testName), "%sSeq", type);
-		 page = quickSubmit(outPage, org, db, group, track, table,
-		    testName, hgtaDoGenePredSequence, "submit");
-		 checkFaOutput(page, expectedRows, TRUE);
-		 htmlPageFree(&page);
-		 }
+/* Since some genomic sequence things are huge, this will
+ * only test in case where it's a gene prediction. */
+typeVar = htmlFormVarGet(outPage->forms, hgtaGeneSeqType);
+if (typeVar != NULL)
+    {
+    struct htmlPage *seqPage;
+    static char *types[] = {"protein", "mRNA"};
+    int i;
+    for (i=0; i<ArraySize(types); ++i)
+        {
+        char *type = types[i];
+        if (slNameInList(typeVar->values, type))
+             {
+	     struct htmlPage *page;
+	     char testName[128];
+	     htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, type);
+	     safef(testName, sizeof(testName), "%sSeq", type);
+	     page = quickSubmit(outPage, org, db, group, track, table,
+	        testName, hgtaDoGenePredSequence, "submit");
+	     checkFaOutput(page, expectedRows, TRUE);
+	     htmlPageFree(&page);
 	     }
-	 htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, "genomic");
-	 serialSubmit(&outPage, org, db, group, track, table, "seqUi2",
-	    hgtaDoGenePredSequence, "submit");
+         }
+    htmlPageSetVar(outPage, NULL, hgtaGeneSeqType, "genomic");
+    serialSubmit(&outPage, org, db, group, track, table, "seqUi2", hgtaDoGenePredSequence, "submit");
+    // check that outPage != NULL
 
-	 /* On genomic page uncheck intron if it's there, then get results
-	  * and count them. */
-	 if (htmlFormVarGet(outPage->forms, "hgSeq.intron") != NULL)
-	     htmlPageSetVar(outPage, NULL, "hgSeq.intron", NULL);
-	 seqPage = quickSubmit(outPage, org, db, group, track, table,
-	      "genomicSeq", hgtaDoGenomicDna, "submit");
-	 checkFaOutput(seqPage, expectedRows, FALSE);
-	 htmlPageFree(&seqPage);
-	 }
+    /* On genomic page uncheck intron if it's there, then get results * and count them. */
+    if (htmlFormVarGet(outPage->forms, "hgSeq.intron") != NULL)
+         htmlPageSetVar(outPage, NULL, "hgSeq.intron", NULL);
+    seqPage = quickSubmit(outPage, org, db, group, track, table, "genomicSeq", hgtaDoGenomicDna, "submit");
+    // check that seqPage != NULL
+    checkFaOutput(seqPage, expectedRows, FALSE);
+    htmlPageFree(&seqPage);
+    }
 
-     }
 htmlPageFree(&outPage);
 }
 	
@@ -498,6 +623,7 @@ void testOneTable(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
 /* Test stuff on one table if we haven't already tested this table. */
 {
+/* Why declared here and not globally? */
 static struct hash *uniqHash = NULL;
 char fullName[256];
 if (uniqHash == NULL)
