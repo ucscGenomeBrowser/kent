@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.26 2005/04/14 17:53:00 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.27 2005/04/14 22:49:52 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -2782,64 +2782,55 @@ SEQ2_LEN=$BASE/S2.len
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
 XXX - STARTED 2005-04-06 10:40
-    #	392 minutes = 3h 32m
+    #	489 minutes = 8h 09m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kksilo
     screen -d -r
-    #	STARTED - 2005-04-05 11:08
-# Completed: 155570 of 155570 jobs
-# CPU time in finished jobs:    1477020s   24617.00m   410.28h   17.10d  0.047 y
-# IO & Wait Time:                432887s    7214.78m   120.25h    5.01d  0.014 y
-# Average job time:                  12s       0.20m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              46s       0.77m     0.01h    0.00d
-# Submission to last job:         22433s     373.88m     6.23h    0.26d
+Completed: 155570 of 155570 jobs
+CPU time in finished jobs:   14707939s  245132.32m  4085.54h  170.23d  0.466 y
+IO & Wait Time:                609798s   10163.29m   169.39h    7.06d  0.019 y
+Average job time:                  98s       1.64m     0.03h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            5146s      85.77m     1.43h    0.06d
+Submission to last job:         20972s     349.53m     5.83h    0.24d
 
-# Completed: 331 of 331 jobs
-# CPU time in finished jobs:         49s       0.81m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                  1062s      17.71m     0.30h    0.01d  0.000 y
-# Average job time:                   3s       0.06m     0.00h    0.00d
-# Longest job:                        7s       0.12m     0.00h    0.00d
-# Submission to last job:            82s       1.37m     0.02h    0.00d
+Completed: 331 of 331 jobs
+CPU time in finished jobs:        260s       4.33m     0.07h    0.00d  0.000 y
+IO & Wait Time:                  1135s      18.92m     0.32h    0.01d  0.000 y
+Average job time:                   4s       0.07m     0.00h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:              16s       0.27m     0.00h    0.00d
+Submission to last job:           234s       3.90m     0.07h    0.00d
 
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:       4959s      82.65m     1.38h    0.06d  0.000 y
-# IO & Wait Time:                  1101s      18.35m     0.31h    0.01d  0.000 y
-# Average job time:                 152s       2.52m     0.04h    0.00d
-# Longest job:                      359s       5.98m     0.10h    0.00d
-# Submission to last job:           496s       8.27m     0.14h    0.01d
+Completed: 40 of 40 jobs
+CPU time in finished jobs:       7229s     120.48m     2.01h    0.08d  0.000 y
+IO & Wait Time:                   207s       3.46m     0.06h    0.00d  0.000 y
+Average job time:                 186s       3.10m     0.05h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             597s       9.95m     0.17h    0.01d
+Submission to last job:          1287s      21.45m     0.36h    0.01d
 
-    #	the netChains.csh script failed on kolossus due to missing
-    #	symlinks in /scratch - go to kolossus and make /scratch/chimp be
-    #	a symlink to /iscratch/chimp/, then extract the part of the
-    #	netChains.csh script that failed into its own script and finish
-    #	that process:
-    #	/cluster/data/mm6/bed/blastzPanTro1.2005_04_05/axtChain/finiChains.csh
-    #	7 minutes to finish
-    #	to continue:
-    ssh eieio
-    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	-continue load -fileServer eieio `pwd`/DEF > load.run.out 2>&1 &
-    #	STARTED 2005-04-06 09:23
-    #	20 minutes
-    #	measurements:
     ssh hgwdev
-    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_05
-    time ../../jkStuff/netChainCheck.sh mm6 mm5 panTro1 > measures.out 2>&1 &
+    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
     featureBits mm6 netPanTro1
-    #   2441757915 bases of 2597150411 (94.017%) in intersection
+    #   2569701404 bases of 2597150411 (98.943%) in intersection
     time featureBits mm6 netHg17
     #	2579747741 bases of 2597150411 (99.330%) in intersection
     featureBits mm6 chainPanTro1
-    #   2450933009 bases of 2597150411 (94.370%) in intersection
+    #   2585896564 bases of 2597150411 (99.567%) in intersection
     time featureBits mm6 chainHg17
     #	2596946329 bases of 2597150411 (99.992%) in intersection
     featureBits mm6 chainPanTro1Link
-    #   199041568 bases of 2597150411 (7.664%) in intersection
+    #   924893452 bases of 2597150411 (35.612%) in intersection
     featureBits mm6 chainHg17Link (on kolossus)
     #	966916309 bases of 2597150411 (37.230%) in intersection
+
+    # Looks about correct, now for the swap
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-swap -fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
 
 #############################################################################
 # STS MARKERS DATA DOWNLOAD (WORKING - 2005-04-06 - Hiram)
@@ -2851,7 +2842,8 @@ XXX - STARTED 2005-04-06 10:40
     #	they were corrected on April 8th
     #	HOWEVER, they still appear to be incorrect.  There are IDs in
     #	the UniSTS_mouse.sts file that do not appear in the aliases file
-XXXX - awaiting clarification. 2005-04-08 15:40
+    #	2005-04-14 Further information on this says that some IDs do not
+    #	have aliases, thus need no entries in the alises file.
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_mouse.sts
     wget --timestamping \
@@ -2935,41 +2927,85 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
 	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
 
-XXXX - RUNNING - 2005-04-06 16:40
-
     # Yontao updated /cluster/store5/mouseMarker/code/cleanInfo.pl 8/10/04
     /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
 	
     # copy the stsInfoMouse.bed file from working dir to the marker info storage fold.
     # added 2 new steps by Yontao	
-	mv /cluster/store5/mouseMarker/stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed_mm3
-	cp -p stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed
+    mv /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
+    cp -p stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed
 
-    # comparing to Mm4, this file was used there:
-    # /cluster/store6/mm4/bed/STSmarkers
-    # a wc of it shows:
-    # 56406  786036 6425721 stsInfoMouse.bed
-    # Now we have:
-    # 58488  790056 6602318 stsInfoMouse.bed
+    # comparing to Mm5
+    #	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
+    #	/cluster/store5/mouseMarker/stsInfoMouse.bed
+    58493   778055  6524821 stsInfoMouse.bed_mm5
+    58980   784786  6690105 stsInfoMouse.bed
 
     # and from that, create new primer fa, epcr, etc:
     /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
 	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
     # the mouseC.fa file will be empty
     wc mouse?.*
-    #      0       0       0 mouseC.fa
-    # 286740  286686 6474893 mouseP.fa
-    # 32232  161234 2044810 mouseP.info
-    # 318972  447920 8519703 total
+    #	     0       0       0 mouseC.fa
+    #	293305  293251 6624638 mouseP.fa
+    #	 32890  164528 2087271 mouseP.info
+    #	326195  457779 8711909 total
+    #	the equivalent Mm5 files:
+    #	     0       0       0 mouseC.fa
+    #	286740  286686 6474893 mouseP.fa
+    #	 32232  161234 2044810 mouseP.info
+    #	318972  447920 8519703 total
 
-    # the equivalent Mm4 versions:
-    #      0       0       0 mouseC.fa
-    # 258307  258245 5815248 mouseP.fa
-    # 29906  149545 1890926 mouseP.info
+    #	copy the primers over to the panasas for the kluster run
+    mkdir /panasas/store/mm6/STSmarkers
+    cp -p mouseP.fa /panasas/store/mm6/STSmarkers
+    cp -p mouseP.info /panasas/store/mm6/STSmarkers
 
-    #	copy the primers over to the bluearc for the kluster run
-    cp -p mouseP.fa /cluster/bluearc/scratch/mus/mm5
-    cp -p mouseP.info /cluster/bluearc/scratch/mus/mm5
+    #  CLUSTER RUN FOR THE STS PRIMERS
+
+    ssh kk9
+    mkdir -p /cluster/data/mm6/bed/STSmarkers/primer
+    mkdir -p /cluster/data/mm6/bed/STSmarkers/ePCR
+    cd /cluster/data/mm6/bed/STSmarkers/primer
+
+    # the mouseP.fa comes from above
+
+    # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE. 
+
+cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat.2 $(path1) /panasas/store/mm6/STSmarkers/mouseP.fa -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    mkdir primers.out
+
+    ls -1S /panasas/store/mm6/fasta/chr*.fa > contig.lst
+    gensub2 contig.lst single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+XXXX - STARTED - 2005-04-14 15:40 
+    ... etc ...
+# Completed: 639 of 639 jobs
+# CPU time in finished jobs:     334066s    5567.76m    92.80h    3.87d  0.011 y
+# IO & Wait Time:                 72565s    1209.42m    20.16h    0.84d  0.002 y
+# Average job time:                 636s      10.61m     0.18h    0.01d
+# Longest job:                      800s      13.33m     0.22h    0.01d
+# Submission to last job:          1090s      18.17m     0.30h    0.01d
+
+    # on the file server
+    ssh kksilo
+    cd /cluster/data/mm6/bed/STSmarkers/primer
+    /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
+    rmdir temp
+
+    # comparing results to Mm4:
+    wc primers.psl
+    # 5719969 120119288 590806241 primers.psl
+    # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
+    # 5745617 120657896 592135728 primers.psl
 
 #############################################################################
 # HGCENTRAL DEFAULTDB UPDATE (DONE - 2005-04-08 - Hiram)
@@ -3030,21 +3066,11 @@ XXXX - WORKING 2005-04-08 16:20
 #       so it is not necessary to run single_cov2.
 
     ssh eieio
-    cd /cluster/data/monDom1/bed/multiz
-
-    #	Not sure what this is used for.  Appears to be from something
-    #	that is no longer used.  Can find no reference to it in the
-    #	procedures.  Below in the parameter estimation for phastCons
-    #	there is a tree specified:
-    #	((((hg17,mm5),galGal2),monDom1),danRer2)
-    cat << '_EOF_' > tree.nh
-(((hg17,mm5),galGal2),danRer2)
-'_EOF_'
-    # << this line keeps emacs coloring happy
+    cd /cluster/data/mm6/bed/multiz
 
     # make output dir and run dir
     ssh kk9
-    cd /cluster/data/monDom1/bed/multiz
+    cd /cluster/data/mm6/bed/multiz10way
     mkdir -p maf
     mkdir -p run
     cd run
@@ -3054,8 +3080,8 @@ XXXX - WORKING 2005-04-08 16:20
 cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
-    set multi = /scratch/monDom1/multiz5way.$c
-    set pairs = /iscratch/i/monDom1/multiz
+    set multi = /scratch/mm6/multiz10way.$c
+    set pairs = /iscratch/i/mm6/multiz10way
 
     # special mode --
     # with 1 arg, cleanup
@@ -3069,95 +3095,108 @@ cat > oneMultiz.csh << 'EOF'
     if ($#argv == 3) then
         cp $multi/$2/$c.maf $3
         exit
-    endif
+    endif 
         
     set s1 = $2
     set s2 = $3
     set flag = $4
-
+    
     # locate input files -- in pairwise dir, or multiple dir
     set d1 = $multi
-    set d2 = $multi
+    set d2 = $multi 
     if (-d $pairs/$s1) then
         set d1 = $pairs
+	set f1 = $d1/$s1/$c.maf.gz
+	set t1 = /tmp/$s1.$c.maf
+	zcat $f1 > $t1
+    else
+	set f1 = $d1/$s1/$c.maf
+	set t1 = /tmp/$s1.$c.maf
+	cp -p $f1 $t1
     endif
     if (-d $pairs/$s2) then
         set d2 = $pairs
+	set f2 = $d2/$s2/$c.maf.gz
+	set t2 = /tmp/$s2.$c.maf
+	zcat $f2 > $t2
+    else
+	set f2 = $d2/$s2/$c.maf
+	set t2 = /tmp/$s2.$c.maf
+	cp -p $f2 $t2
     endif
-    set f1 = $d1/$s1/$c.maf
-    set f2 = $d2/$s2/$c.maf
     # write to output dir
     set out = $multi/${s1}${s2}
     mkdir -p $out
 
     # check for empty input file
-    if (-s $f1 && -s $f2) then
+    if (-s $t1 && -s $t2) then
         echo "Aligning $f1 $f2 $flag"
-	/iscratch/i/monDom1/multiz/penn/multiz.v10 $f1 $f2 $flag $out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
+        /iscratch/i/mm6/multiz10way/penn/multiz $t1 $t2 $flag $out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
         cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
                 $out/$c.tmp.maf
         echo "Ordering $c.maf"
-        /iscratch/i/monDom1/multiz/penn/maf_project $out/$c.tmp.maf monDom1.$c > $out/$c.maf
-    else if (-s $f1) then
-        cp $f1 $out
-    else if (-s $f2) then
-        cp $f2 $out
+        /iscratch/i/mm6/multiz10way/penn/maf_project $out/$c.tmp.maf mm6.$c > $out/$c.maf
+    else if (-s $t1) then
+        cp -p $t1 $out/$c.maf
+    else if (-s $t2) then
+        cp -p $t2 $out/$c.maf
     endif
 'EOF'
 # << keep emacs coloring happy
-chmod +x oneMultiz.csh
+    chmod +x oneMultiz.csh
 
     #	Copy this script to iscratch
     ssh kkr1u00
-    cd /iscratch/i/monDom1/multiz/penn
-    cp -p /cluster/data/monDom1/bed/multiz/run/oneMultiz.csh .
+    cd /iscratch/i/mm6/multiz10way/penn
+    cp -p /cluster/data/mm6/bed/multiz10way/run/oneMultiz.csh .
     /cluster/bin/iSync
 
     #	back to run the job
-    ssh kki
-    cd /cluster/data/monDom1/bed/multiz/run
+    ssh kk9
+    cd /cluster/data/mm6/bed/multiz10way/run
 
+    #	Not sure what this is used for.  Appears to be from something
+    #	that is no longer used.  Can find no reference to it in the
+    #	procedures.
+    cat << '_EOF_' > tree.nh
+((((((((hg17,(mm6,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))
+'_EOF_'
+    # << this line keeps emacs coloring happy
 
 cat > allMultiz.csh << 'EOF'
 #!/bin/csh -fe
     # multiple alignment steps:
-    # multiz.v10 human.maf mouse.maf 1
-    # multiz.v10 human-mouse.maf chicken.maf 1
-    # multiz.v10 human-mouse-chicken.maf zfish.maf 1
 set c = $1
-/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c hg17 mm5  1
-/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c galGal2 hg17mm5 1
-/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2 galGal2hg17mm5 1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c hg17 rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c canFam1 hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c bosTau1 canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c monDom1 bosTau1canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c galGal2 monDom1bosTau1canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c xenTro1 galGal2monDom1bosTau1canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c tetNig1 xenTro1galGal2monDom1bosTau1canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c danRer2 tetNig1xenTro1galGal2monDom1bosTau1canFam1hg17rn3  1
 # get final alignment file
-/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c danRer2galGal2hg17mm5 /cluster/data/monDom1/bed/multiz/maf/$c.maf
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c danRer2tetNig1xenTro1galGal2monDom1bosTau1canFam1hg17rn3 /cluster/data/mm6/bed/multiz10way/maf/$c.maf
 #cleanup
-/iscratch/i/monDom1/multiz/penn/oneMultiz.csh $c
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c
 'EOF'
 # << keep emacs coloring happy
-chmod +x allMultiz.csh
+    chmod +x allMultiz.csh
 
 cat  << 'EOF' > template
 #LOOP
-./allMultiz.csh $(root1) {check out line+ /cluster/data/monDom1/bed/multiz/maf/$(root1).maf}
+./allMultiz.csh $(root1) {check out line+ /cluster/data/mm6/bed/multiz10way/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
 
-    #	make a list of scaffolds that successfully had actual alignments
-    #	at least once somewhere.  Not every scaffold has an alignment.
-    cd /iscratch/i/monDom1/multiz
-    for D in danRer2 galGal2 hg17 mm5
-    do
-        cd $D
-        ls | sed -e "s/.maf//"
-        cd ..
-    done | sort -u >  /cluster/data/monDom1/bed/multiz/run/chrom.lst
-
-    cd /cluster/data/monDom1/bed/multiz/run
+    cd /cluster/data/mm6/bed/multiz10way/run
+    awk '{print $1}' ../../../chrom.sizes > chrom.lst
 
     gensub2 chrom.lst single template jobList
     para create jobList
     para try; para check
     para push
+XXX - RUNNING - 2005-04-14
 # Completed: 5517 of 5517 jobs
 # CPU time in finished jobs:       8337s     138.95m     2.32h    0.10d  0.000 y
 # IO & Wait Time:                 15166s     252.77m     4.21h    0.18d  0.000 y
@@ -3167,21 +3206,21 @@ cat  << 'EOF' > template
 
     #	combine results into a single file for loading
     ssh eieio
-    cd /cluster/data/monDom1/bed/multiz
-    catDir maf | mafFilter stdin -minScore=500 > multiz5way.maf
+    cd /cluster/data/mm6/bed/multiz10way
+    catDir maf | mafFilter stdin -minScore=500 > multiz10way.maf
 
 # Load into database  (DONE - 2005-01-04 - Hiram)
   ssh hgwdev
-  cd /cluster/data/monDom1/bed/multiz
-  mkdir -p /gbdb/monDom1/multiz5way
-  ln -s /cluster/data/monDom1/bed/multiz/multiz5way.maf /gbdb/monDom1/multiz5way
-  hgLoadMaf monDom1 multiz5way
-    #	Loaded 988922 mafs in 1 files from /gbdb/monDom1/multiz5way
+  cd /cluster/data/mm6/bed/multiz10way
+  mkdir -p /gbdb/mm6/multiz10way
+  ln -s /cluster/data/mm6/bed/multiz10way/multiz10way.maf /gbdb/mm6/multiz10way
+  hgLoadMaf mm6 multiz10way
+    #	Loaded 988922 mafs in 1 files from /gbdb/mm6/multiz10way
     #	4 minutes to load
 
 # Create pairwise maf files (no longer split across scaffolds)
    ssh eieio
-   cd /cluster/data/monDom1/bed/multiz
+   cd /cluster/data/mm6/bed/multiz10way
    mkdir -p pairwise
    catDir galGal2 > pairwise/galGal2.maf
    catDir hg17 > pairwise/hg17.maf
@@ -3190,14 +3229,14 @@ cat  << 'EOF' > template
 
 # Load pairwise mafs into database  (DONE - 2005-01-04 - Hiram)
    ssh  hgwdev
-   set h = /cluster/data/monDom1/bed/multiz/pairwise
+   set h = /cluster/data/mm6/bed/multiz10way/pairwise
    cd $h
    foreach i (*.maf)
       set o = $i:r
       set t = ${o}_netBlastz
-      mkdir -p /gbdb/monDom1/multiz5way/$t
-      ln -s $h/$i /gbdb/monDom1/multiz5way/$t
-      hgLoadMaf monDom1 $t -pathPrefix=/gbdb/monDom1/multiz5way/$t
+      mkdir -p /gbdb/mm6/multiz10way/$t
+      ln -s $h/$i /gbdb/mm6/multiz10way/$t
+      hgLoadMaf mm6 $t -pathPrefix=/gbdb/mm6/multiz10way/$t
    end
 
 # BUILD KNOWN GENES TABLES (Started 3/19/05, done 4/13/05. Fan)
@@ -3695,3 +3734,17 @@ cat out/$1/*.out >>protRefRaw.psl
     # Make cytoBandIdeo track for ideogram gif on hgTracks page.
     # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
     hgsql mm6 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
+
+#  BLATSERVERS ENTRY (DONE - 2005-04-11 - Ali)
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm6", "blat6", "17778", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm6", "blat7", "17782", "0", "0");' \
+	    hgcentraltest
+
+    #	the untrans server is running with -stepSize=5, so:
+    hgsql hgcentraltest \
+	-e 'update blatServers set canPcr=1 where db="mm6" and port=17782;'
+
