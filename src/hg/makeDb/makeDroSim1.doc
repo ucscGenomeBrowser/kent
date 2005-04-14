@@ -1,0 +1,670 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Drosophila simulans -- 
+# 
+# WUSTL's 
+# http://www.genome.wustl.edu/???
+#
+
+
+# DOWNLOAD SEQUENCE (DONE 4/11/05 angie)
+    ssh kolossus
+    mkdir /cluster/store8/droSim1
+    cd /cluster/data
+    ln -s /cluster/store8/droSim1 droSim1
+    cd /cluster/data/droSim1
+    mkdir downloads
+    cd downloads
+    wget ftp://genome.wustl.edu/private/lhillier/old/simulans_050411.tar.gz
+    tar xzvf simulans_050411.tar.gz
+    foreach c (2L 2R 2h 3L 3R 3h 4 U X Xh Yh)
+      mkdir /cluster/data/droSim1/$c
+      mv chr$c{,_random}.{fa,agp} /cluster/data/droSim1/$c/
+    end
+    # Some warnings from mv about chroms that are _random-only or _random-less,
+    # no problem.
+
+    # download mitochondrion sequence
+    mkdir /cluster/data/droSim1/M
+    cd /cluster/data/droSim1/M
+    # go to http://www.ncbi.nih.gov/ and search Genome for 
+    # "simulans mitochondrion complete".  That shows the gi number:
+    # 45332829
+    # Use that number in the entrez linking interface to get fasta:
+    wget -O chrM.fa \
+      'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=45332829&dopt=FASTA'
+    # Edit chrM.fa: make sure the long fancy header line says it's the 
+    # Drosophila simulans mitochondrion complete genome, and then replace the 
+    # header line with just ">chrM".
+    cd ..
+    # checkAgpAndFa prints out way too much info -- keep the end/stderr only:
+    foreach c (?{,?})
+      foreach agp ($c/chr$c{,_random}.agp)
+        if (-e $agp) then
+          set fa = $agp:r.fa
+          echo checking consistency of $agp and $fa
+          checkAgpAndFa $agp $fa | tail -1
+        endif
+      end
+    end
+    faSize */chr*.fa
+#142420719 bases (15167212 N's 127253507 real 127253507 upper 0 lower) in 18 sequences in 18 files
+#Total size: mean 7912262.2 sd 9722195.0 min 14972 (chrM) max 27517382 (chr3R) median 2996586
+#N count: mean 842622.9 sd 861219.0
+#U count: mean 7069639.3 sd 9068950.6
+#L count: mean 0.0 sd 0.0
+    # see what kind of gap types we have:
+    awk '$5 == "N" {print $7;}' */chr*.agp | uniq | sort | uniq
+#contig
+#fragment
+    # biggest gap size is 3000:
+    awk '$5 == "N" {print $6;}' */chr*.agp | sort -nr | head -1
+    # rough hist of gap sizes from AGP:
+    awk '$5 == "N" {print $6;}' */chr*.agp | textHistogram stdin -binSize=100
+    # fancy hist of gap size from FASTA:
+    cat */chr*.fa | faGapSizes -niceSizes=10,50,100,200,300,700,1000,3000 stdin
+
+
+
+# BREAK UP SEQUENCE INTO 5 MB CHUNKS AT CONTIGS/GAPS (DONE 4/11/05 angie)
+    ssh kolossus
+    cd /cluster/data/droSim1
+    foreach c (?{,?})
+      foreach agp ($c/chr$c{,_random}.agp)
+        if (-e $agp) then
+          set fa = $agp:r.fa
+          echo splitting $agp and $fa
+          cp -p $agp $agp.bak
+          cp -p $fa $fa.bak
+          splitFaIntoContigs $agp $fa . -nSize=5000000
+        endif
+      end
+    end
+    # splitFaIntoContigs makes new dirs for _randoms.  Move their contents 
+    # back into the main chrom dirs and get rid of the _random dirs.
+    foreach d (*_random)
+      set base = `echo $d | sed -e 's/_random$//'`
+      mkdir -p $base/lift
+      mv $d/lift/oOut.lst $base/lift/rOut.lst
+      mv $d/lift/ordered.lft $base/lift/random.lft
+      mv $d/lift/ordered.lst $base/lift/random.lst
+      rmdir $d/lift
+      mv $d/* $base
+      rmdir $d
+    end
+    # Make a "pseudo-contig" for processing chrM too:
+    mkdir M/chrM_1
+    sed -e 's/chrM/chrM_1/' M/chrM.fa > M/chrM_1/chrM_1.fa
+    mkdir M/lift
+    echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
+    echo "chrM_1" > M/lift/ordered.lst
+    set msize = `faSize M/chrM.fa | awk '{print $1;}'`
+    echo "0\tM/chrM_1\t$msize\tchrM\t$msize" > M/lift/ordered.lft
+
+
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE 4/11/05 angie)
+    # This used to hold scripts -- better to keep them inline here so 
+    # they're in CVS.  Now it should just hold lift file(s) and 
+    # temporary scripts made by copy-paste from this file.  
+    mkdir /cluster/data/droSim1/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/droSim1/bed
+
+
+# CREATING DATABASE (DONE 4/11/05 angie)
+    # Create the database.
+    ssh hgwdev
+    # Make sure there is at least 5 gig free for the database
+    df -h /var/lib/mysql
+#/dev/sdc1             1.8T  881G  779G  54% /var/lib/mysql
+    hgsql -e 'create database droSim1'
+
+
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE 4/11/05 angie)
+    ssh hgwdev
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" \
+      | hgsql droSim1
+
+
+# REPEATMASKER (DONE 4/11/05 angie)
+    #- Split contigs into 500kb chunks, at gaps if possible:
+    ssh kolossus
+    cd /cluster/data/droSim1
+    foreach c (?{,?})
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+          -minGapSize=100
+        cd ../..
+      end
+    end
+
+    #- Make the run directory and job list:
+    cd /cluster/data/droSim1
+    cat << '_EOF_' > jkStuff/RMDrosophila
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/droSim1/$2
+/bin/cp $2 /tmp/droSim1/$2/
+cd /tmp/droSim1/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -spec drosophila $2
+popd
+/bin/cp /tmp/droSim1/$2/$2.out ./
+if (-e /tmp/droSim1/$2/$2.align) /bin/cp /tmp/droSim1/$2/$2.align ./
+if (-e /tmp/droSim1/$2/$2.tbl) /bin/cp /tmp/droSim1/$2/$2.tbl ./
+if (-e /tmp/droSim1/$2/$2.cat) /bin/cp /tmp/droSim1/$2/$2.cat ./
+/bin/rm -fr /tmp/droSim1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/droSim1/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/droSim1
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x jkStuff/RMDrosophila
+    mkdir RMRun
+    cp /dev/null RMRun/RMJobs
+    foreach c (?{,?})
+      foreach d ($c/chr${c}{,_random}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/droSim1/jkStuff/RMDrosophila \
+                 /cluster/data/droSim1/$d $f \
+               '{'check out line+ /cluster/data/droSim1/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+
+    #- Do the run
+    ssh kk
+    cd /cluster/data/droSim1/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+#Completed: 320 of 320 jobs
+#Average job time:                5548s      92.47m     1.54h    0.06d
+#Longest finished job:            6926s     115.43m     1.92h    0.08d
+#Submission to last job:          7331s     122.18m     2.04h    0.08d
+
+    #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+    ssh kolossus
+    cd /cluster/data/droSim1
+    foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+    end
+
+    #- Lift pseudo-contigs to chromosome level
+    foreach c (?{,?})
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      if (-e lift/random.lft && ! -z lift/random.lft) then
+        liftUp chr${c}_random.fa.out lift/random.lft warn `cat lift/rOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+    end
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/droSim1
+    hgLoadOut droSim1 */chr*.fa.out
+
+
+# VERIFY REPEATMASKER RESULTS (DONE 4/11/05 angie)
+    # Eyeball some repeat annotations in the browser, compare to lib seqs.
+    # Run featureBits on droSim1 and on a comparable genome build, and compare:
+    ssh hgwdev
+    featureBits droSim1 rmsk
+#15094026 bases of 127256433 (11.861%) in intersection
+    # compare to dm2:
+    featureBits dm2 rmsk
+#16178239 bases of 131698467 (12.284%) in intersection
+    # comparable...
+
+
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS (DONE 4/11/05 angie)
+    # Make nib/, unmasked until RepeatMasker and TRF steps are done.
+    # Do this now so we can load up RepeatMasker and run featureBits; 
+    # can also load up other tables that don't depend on masking.  
+    # NOTE: next time, should make .2bit -- smoother to replace later on.
+    ssh kolossus
+    cd /cluster/data/droSim1
+    mkdir nib
+    foreach c (?{,?})
+      foreach f ($c/chr${c}{,_random}.fa)
+        if (-e $f) then
+          echo "nibbing $f"
+          faToNib $f nib/$f:t:r.nib
+        endif
+      end
+    end
+
+    # Make symbolic links from /gbdb/droSim1/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/droSim1/nib
+    foreach f (/cluster/data/droSim1/nib/chr*.nib)
+      ln -s $f /gbdb/droSim1/nib
+    end
+    # Load /gbdb/droSim1/nib paths into database and save size info.
+    cd /cluster/data/droSim1
+    hgsql droSim1  < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgNibSeq -preMadeNib droSim1 /gbdb/droSim1/nib */chr*.fa
+    echo "select chrom,size from chromInfo" | hgsql -N droSim1 > chrom.sizes
+    # take a look at chrom.sizes, should be 18 lines
+    wc chrom.sizes
+#     18      36     314 chrom.sizes
+
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 4/11/05 angie)
+    # Warning: genome and organism fields must correspond
+    # with defaultDb values
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+                defaultPos, active, orderKey, genome, scientificName, \
+                htmlPath, hgNearOk, hgPbOk, sourceName) values \
+        ("droSim1", "Apr. 2005", "/gbdb/droSim1/nib", "D. simulans", \
+               "chr2L:827101-841600", 1, 52, "D. simulans", \
+                "Drosophila simulans", "/gbdb/droSim1/html/description.html", \
+                0, 0, "WUSTL version 1.0");'
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'INSERT INTO defaultDb (genome, name) values ("D. simulans", "droSim1");'
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'INSERT INTO genomeClade (genome, clade, priority) \
+            values ("D. simulans", "insect", 15);'
+
+    # Make trackDb table so browser knows what tracks to expect:
+    ssh hgwdev
+    cd ~/src/hg/makeDb/trackDb
+    cvs up -d -P
+
+    # Edit that makefile to add droSim1 and do
+    mkdir drosophila/droSim1
+    make update DBS=droSim1
+
+    # go public on genome-test
+    mkdir /gbdb/droSim1/html
+    cvs commit makefile
+    cvs add drosophila/droSim1
+    cvs commit drosophila/droSim1
+    # make alpha in a clean tree's trackDb/
+
+    # Also add a first-cut trackDb/drosophila/droSim1/description.html, 
+    # check it in and "make alpha" in clean tree again.
+
+
+# MAKE LIFTALL.LFT (DONE 4/11/05 angie)
+    # Redone 7/13/04: chrM/lift/ordered.lft was regenerated w/correct size.
+    ssh kolossus
+    cd /cluster/data/droSim1
+    cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
+
+
+# SIMPLE REPEATS (TRF) (DONE 4/11/05 angie)
+    ssh kolossus
+    mkdir /cluster/data/droSim1/bed/simpleRepeat
+    cd /cluster/data/droSim1/bed/simpleRepeat
+    mkdir trf
+    cp /dev/null jobs.csh
+    foreach d (/cluster/data/droSim1/?{,?}/chr*_?{,?})
+      set ctg = $d:t
+      foreach f ($d/${ctg}.fa)
+        set fout = $f:t:r.bed
+        echo $fout
+        echo "/cluster/bin/$MACHTYPE/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
+        >> jobs.csh
+      end
+    end
+    csh -ef jobs.csh >&! jobs.log &
+    # check on this with
+    tail -f jobs.log
+    wc -l jobs.csh
+    ls -1 trf | wc -l
+    liftUp simpleRepeat.bed ../../jkStuff/liftAll.lft warn \
+      trf/*.bed > /dev/null
+
+    # Load this into the database as so
+    ssh hgwdev
+    hgLoadBed droSim1 simpleRepeat \
+      /cluster/data/droSim1/bed/simpleRepeat/simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    featureBits droSim1 simpleRepeat
+#2608862 bases of 127256433 (2.050%) in intersection
+    featureBits dm2 simpleRepeat
+#1597029 bases of 131698467 (1.213%) in intersection
+
+
+# FILTER SIMPLE REPEATS (TRF) INTO MASK (DONE 4/11/05 angie)
+    # make a filtered version of the trf output: 
+    # keep trf's with period <= 12:
+    ssh kolossus
+    cd /cluster/data/droSim1/bed/simpleRepeat
+    mkdir trfMask
+    foreach f (trf/*.bed)
+      echo -n "filtering $f... "
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+    # Lift up filtered trf output to chrom coords:
+    mkdir trfMaskChrom
+    foreach f (../../?{,?}/chr*.fa)
+      set c = $f:t:r
+      echo $c
+      liftUp trfMaskChrom/$c.bed ../../jkStuff/liftAll.lft warn \
+        trfMask/${c}_[0-9]*.bed > /dev/null
+    end
+    # No simpleRepeats in chrM --> liftUp warning, but it's OK:
+#chrM
+#No lines lifted!
+
+
+# MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE 4/11/05 angie)
+    ssh kolossus
+    cd /cluster/data/droSim1
+    # Soft-mask (lower-case) the contig and chr .fa's, 
+    # then make hard-masked versions from the soft-masked.  
+    set trfCtg=bed/simpleRepeat/trfMask
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    foreach f (*/chr*.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+    foreach c (?{,?})
+      echo "repeat- and trf-masking contigs of chr$c, chr${c}_random"
+      foreach d ($c/chr*_?{,?})
+        set ctg=$d:t
+        set f=$d/$ctg.fa
+        maskOutFa -soft $f $f.out $f
+        maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        maskOutFa $f hard $f.masked
+      end
+    end
+    # Make one big masked 2bit file, and make a link to it from /gbdb/droSim1/
+    faToTwoBit */chr*.fa droSim1.2bit
+    twoBitInfo droSim1.2bit stdout \
+    | awk '{printf "%s\t%s\t/gbdb/droSim1/droSim1.2bit\n", $1, $2}' \
+      > chromInfo.tab
+    ssh hgwdev
+    cd /cluster/data/droSim1
+    ln -s /cluster/data/droSim1/droSim1.2bit /gbdb/droSim1/
+    # Clean up unmasked nib and update dbDb and chromInfo to point at .2bit:
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'update dbDb set nibPath = "/gbdb/droSim1" where name = "droSim1"'
+    hgsql droSim1 -e 'drop table chromInfo'
+    hgsql droSim1 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql droSim1 \
+      -e 'load data local infile "chromInfo.tab" into table chromInfo;'
+    rm -r /gbdb/droSim1/nib
+    rm -r /cluster/data/droSim1/nib/
+
+
+# GOLD AND GAP TRACKS (DONE 4/11/05 angie)
+    ssh hgwdev
+    cd /cluster/data/droSim1
+    cp /dev/null chrom.lst
+    foreach f (?{,?}/chr*.agp chrM)
+      echo $f:t:r >> chrom.lst
+    end
+    hgGoldGapGl -noGl -chromLst=chrom.lst droSim1 /cluster/data/droSim1 .
+    # featureBits fails if there's no chrM_gap, so make one:
+    # echo "create table chrM_gap like chr1_gap" | hgsql droSim1
+    # oops, that won't work until v4.1, so do this for the time being:
+    hgsql droSim1 -e 'create table chrM_gap select * from chr2L_gap where 0=1'
+
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE 4/13/05 angie)
+    ssh kolossus
+    cd /cluster/data/droSim1
+    #- Build the .tar.gz files -- no genbank for now.
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf zip zipTmp
+mkdir zip
+mkdir zipTmp
+cd zipTmp
+ln -s ../?{,?}/chr*.agp .
+tar chvzf ../zip/chromAgp.tar.gz *.agp
+rm -f ./*; ln -s ../?{,?}/chr*.fa.out .
+tar chvzf ../zip/chromOut.tar.gz *.fa.out
+rm -f ./*; ln -s ../?{,?}/chr*.fa .
+tar chvzf ../zip/chromFa.tar.gz *.fa
+rm -f ./*; ln -s ../?{,?}/chr*.fa.masked .
+tar chvzf ../zip/chromFaMasked.tar.gz *.fa.masked
+cd ../bed/simpleRepeat
+tar cvzf ../../zip/chromTrf.tar.gz trfMaskChrom/chr*.bed
+cd ../..
+rm -rf zipTmp
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh -efx ./jkStuff/zipAll.csh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Check .tar.gz file integrity:
+    foreach f (zip/*.tar.gz)
+      tar tvzf $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l zip/*.tar.gz.test
+
+    #- Copy the compressed files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    set gp = /usr/local/apache/htdocs/goldenPath/droSim1
+    mkdir -p $gp/bigZips
+    ln -s /cluster/data/droSim1/zip/*.gz $gp/bigZips
+    mkdir -p $gp/chromosomes
+    foreach f ( /cluster/data/droSim1/*/chr*.fa )
+      echo $f
+      nice gzip -c $f > $gp/chromosomes/$f:t.gz
+    end
+
+    cd $gp/bigZips
+    nice md5sum *.gz > md5sum.txt
+    cd $gp/chromosomes
+    nice md5sum *.gz > md5sum.txt
+    # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+    # Can't make refGene upstream sequence files - no refSeq for simulans.
+
+
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 4/11/05 angie)
+    ssh kkr1u00
+    # .2bit of chroms that have been repeat- and trf-masked:
+    mkdir -p /iscratch/i/droSim1
+    cp -p /cluster/data/droSim1/droSim1.2bit /iscratch/i/droSim1/
+    iSync
+
+
+# PRODUCING GENSCAN PREDICTIONS (DONE 4/11/05 angie)
+    # Run on small cluster -- genscan needs big mem.
+    ssh hgwdev
+    mkdir /cluster/data/droSim1/bed/genscan
+    cd /cluster/data/droSim1/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Run on small cluster (more mem than big cluster).
+    ssh kolossus
+    cd /cluster/data/droSim1/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    cp /dev/null genome.list
+    foreach f ( `ls -1S /cluster/data/droSim1/*/chr*_*/chr*_?{,?}.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+    wc -l genome.list
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    ssh kki
+    cd /cluster/data/droSim1/bed/genscan
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 41 of 41 jobs
+#Average job time:                 103s       1.71m     0.03h    0.00d
+#Longest finished job:             158s       2.63m     0.04h    0.00d
+#Submission to last job:           710s      11.83m     0.20h    0.01d
+    # If there were crashes, we would diagnose with "para problems".  
+    # If a job had crashed due to genscan running out of memory, we would 
+    # re-run it manually with "-window=1200000" instead of "-window=2400000".
+
+    # Convert these to chromosome level files as so:
+    ssh kolossus
+    cd /cluster/data/droSim1/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/droSim1/bed/genscan
+    ldHgGene -gtf droSim1 genscan genscan.gtf
+    hgPepPred droSim1 generic genscanPep genscan.pep
+    hgLoadBed droSim1 genscanSubopt genscanSubopt.bed
+
+
+# MAKE 11.OOC FILE FOR BLAT (DONE 4/11/05 angie)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # fly size is ~4.4% of human judging by gapless dm1 genome size from 
+    # featureBits -- we would use 45, but bump that up a bit to be more 
+    # conservative).
+    ssh kolossus
+    mkdir /cluster/bluearc/droSim1
+    blat /iscratch/i/droSim1/droSim1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/droSim1/11.ooc -repMatch=100
+#Wrote 4617 overused 11-mers to /cluster/bluearc/droSim1/11.ooc
+    ssh kkr1u00
+    cp -p /cluster/bluearc/droSim1/*.ooc /iscratch/i/droSim1/
+    iSync
+
+
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 4/13/05 angie)
+    # get some idea of whether this species is represented in refSeq or 
+    # has a significant number of native mRNAs.  version numbers will 
+    # change:
+    ssh eieio
+    cd /cluster/data/genbank/data/processed/refseq.10/full
+    awk '{print $4 " " $5}' mrna.gbidx | sort | uniq -c | sort -nr
+    cd /cluster/data/genbank/data/processed/genbank.146.0/full
+    awk '$4 == "Drosophila" {print $4 " " $5}' mrna.gbidx \
+    | sort | uniq -c | sort -nr
+#     27 Drosophila simulans
+    # Wow... with that few native mRNAs, it's questionable whether we 
+    # should even bother with a native mRNA track.  But we're doing an 
+    # mrna run to get xenoMrna, so what the heck, 27 > limit for single 
+    # hgBlat query.
+    grep 'Drosophila simulans' est.*.gbidx | wc -l
+#4105
+
+    ssh hgwdev
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup .
+
+    # Edit etc/genbank.conf and add these lines:
+# droSim1 (D. simulans)
+droSim1.genome = /iscratch/i/droSim1/nib/chr*.nib
+droSim1.lift = /cluster/data/droSim1/jkStuff/liftAll.lft
+droSim1.refseq.mrna.native.load = no
+droSim1.refseq.mrna.xeno.load = yes
+droSim1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
+droSim1.genbank.mrna.xeno.load = yes
+droSim1.genbank.est.xeno.load = no
+droSim1.downloadDir = droSim1
+
+    cvs ci etc/genbank.conf
+    # Since D. simulans is a new species for us, edit src/lib/gbGenome.c.  
+    # Pick some other browser species, & monkey-see monkey-do.  
+    # Edit src/align/gbBlat to add /iscratch/i/droSim1/11.ooc
+    cvs diff |& grep -v Diffing
+    make
+    cvs ci -m "Added droSim1 (D. simulans)."
+
+    # Install to /cluster/data/genbank:
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, (xeno) RefSeq only:
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial droSim1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droSim1
+    featureBits droSim1 xenoRefGene
+#25294349 bases of 127256433 (19.877%) in intersection
+    # Clean up:
+    rm -rf work/initial.droSim1
+
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droSim1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droSim1
+    featureBits droSim1 mrna
+#17381 bases of 127256433 (0.014%) in intersection
+    featureBits droSim1 xenoMrna
+#22557993 bases of 127256433 (17.726%) in intersection
+    # Clean up:
+    rm -rf work/initial.droSim1
+
+    ssh eieio
+    # -initial for ESTs
+    nice bin/gbAlignStep -srcDb=genbank -type=est -initial droSim1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 droSim1 &
+    featureBits droSim1 intronEst
+#514738 bases of 127256433 (0.404%) in intersection
+    featureBits droSim1 est
+#1193700 bases of 127256433 (0.938%) in intersection
+    # Clean up:
+    rm -rf work/initial.droSim1
+
+
+# MAKE GCPERCENT (DONE 4/11/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droSim1/bed/gcPercent
+    cd /cluster/data/droSim1/bed/gcPercent
+    # create and load gcPercent table
+    hgsql droSim1  < ~/src/hg/lib/gcPercent.sql
+    hgGcPercent droSim1 ../../nib
+
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 4/??/05 angie)
+    ssh hgwdev
+    echo 'insert into blatServers values("droSim1", "blat?", "177??", 1, 0); \
+          insert into blatServers values("droSim1", "blat?", "177??", 0, 1);' \
+      | hgsql -h genome-testdb hgcentraltest
+
+
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 4/13/05 angie)
+    mkdir /cluster/data/droSim1/bed/blastz.dm2.swap
+    cd /cluster/data/droSim1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droSim1/DEF \
+      -fileServer kolossus >& do.log &
+    tail -f do.log
+    # Add {chain,net}Dm2 to trackDb.ra if necessary.
+
+
