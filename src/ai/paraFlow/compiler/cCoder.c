@@ -750,6 +750,10 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "&");
     case pptBitOr:
         return codeBinaryOp(pfc, f, pp, stack, "|");
+    case pptShiftLeft:
+        return codeBinaryOp(pfc, f, pp, stack, "<<");
+    case pptShiftRight:
+        return codeBinaryOp(pfc, f, pp, stack, ">>");
     case pptNegate:
          return codeUnaryOp(pfc, f, pp, stack, "-");
     case pptFlipBits:
@@ -1023,6 +1027,8 @@ switch (pp->type)
     case pptIf:
         codeIf(pfc, f, pp);
 	break;
+    case pptNop:
+        break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
 	break;
