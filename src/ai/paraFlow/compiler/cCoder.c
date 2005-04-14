@@ -792,7 +792,7 @@ switch (pp->type)
 	        fprintf(f, "1;\n");
 		break;
 	    case pftFloat:
-	        fprintf(f, "%1.0f;\n", pp->tok->val.x);
+	        fprintf(f, "%f;\n", pp->tok->val.x);
 		break;
 	    case pftInt:
 		fprintf(f, "%lld;\n", pp->tok->val.i);
@@ -875,6 +875,27 @@ switch (pp->type)
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ");");
 	return 1;
+    case pptCastBitToString:
+    case pptCastByteToString:
+    case pptCastShortToString:
+    case pptCastIntToString:
+    case pptCastLongToString:
+    case pptCastFloatToString:
+    case pptCastDoubleToString:
+	{
+	char *dest;
+	if (pp->type == pptCastFloatToString || pp->type == pptCastDoubleToString)
+	    dest = "double";
+	else
+	    dest = "long";
+        codeExpression(pfc, f, pp->children, stack, addRef);
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = _pf_string_from_%s(", dest);
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ");\n");
+	return 1;
+	}
+
     case pptCastTypedToVar:
 	{
 	codeExpression(pfc, f, pp->children, stack, addRef);

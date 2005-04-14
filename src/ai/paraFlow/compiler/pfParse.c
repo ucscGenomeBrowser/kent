@@ -168,6 +168,8 @@ switch (type)
 	return "pptCastBitToFloat";
     case pptCastBitToDouble:
 	return "pptCastBitToDouble";
+    case pptCastBitToString:
+        return "pptCastBitToString";
     case pptCastByteToBit:
         return "pptCastByteToBit";
     case pptCastByteToByte:
@@ -182,6 +184,8 @@ switch (type)
 	return "pptCastByteToFloat";
     case pptCastByteToDouble:
 	return "pptCastByteToDouble";
+    case pptCastByteToString:
+        return "pptCastByteToString";
     case pptCastShortToBit:
         return "pptCastShortToBit";
     case pptCastShortToByte:
@@ -194,6 +198,8 @@ switch (type)
 	return "pptCastShortToFloat";
     case pptCastShortToDouble:
 	return "pptCastShortToDouble";
+    case pptCastShortToString:
+        return "pptCastShortToString";
     case pptCastIntToBit:
         return "pptCastIntToBit";
     case pptCastIntToByte:
@@ -206,6 +212,8 @@ switch (type)
 	return "pptCastIntToFloat";
     case pptCastIntToDouble:
 	return "pptCastIntToDouble";
+    case pptCastIntToString:
+        return "pptCastIntToString";
     case pptCastLongToBit:
         return "pptCastLongToBit";
     case pptCastLongToByte:
@@ -218,6 +226,8 @@ switch (type)
 	return "pptCastLongToFloat";
     case pptCastLongToDouble:
 	return "pptCastLongToDouble";
+    case pptCastLongToString:
+        return "pptCastLongToString";
     case pptCastFloatToBit:
         return "pptCastFloatToBit";
     case pptCastFloatToByte:
@@ -230,6 +240,8 @@ switch (type)
 	return "pptCastFloatToLong";
     case pptCastFloatToDouble:
 	return "pptCastFloatToDouble";
+    case pptCastFloatToString:
+        return "pptCastFloatToString";
     case pptCastDoubleToBit:
         return "pptCastDoubleToBit";
     case pptCastDoubleToByte:
@@ -244,6 +256,8 @@ switch (type)
 	return "pptCastDoubleToFloat";
     case pptCastDoubleToDouble:
 	return "pptCastDoubleToDouble";
+    case pptCastDoubleToString:
+        return "pptCastDoubleToString";
     case pptCastStringToBit:
         return "pptCastStringToBit";
     case pptCastTypedToVar:

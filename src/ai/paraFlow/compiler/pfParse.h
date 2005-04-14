@@ -90,6 +90,7 @@ enum pfParseType
     pptCastBitToLong,
     pptCastBitToFloat,
     pptCastBitToDouble,
+    pptCastBitToString,
 
     pptCastByteToBit,
     pptCastByteToByte,	/* Never emitted. */
@@ -98,6 +99,7 @@ enum pfParseType
     pptCastByteToLong,
     pptCastByteToFloat,
     pptCastByteToDouble,
+    pptCastByteToString,
 
     pptCastShortToBit,
     pptCastShortToByte,
@@ -106,6 +108,7 @@ enum pfParseType
     pptCastShortToLong,
     pptCastShortToFloat,
     pptCastShortToDouble,
+    pptCastShortToString,
 
     pptCastIntToBit,
     pptCastIntToByte,
@@ -114,6 +117,7 @@ enum pfParseType
     pptCastIntToLong,
     pptCastIntToFloat,
     pptCastIntToDouble,
+    pptCastIntToString,
 
     pptCastLongToBit,
     pptCastLongToByte,
@@ -122,6 +126,7 @@ enum pfParseType
     pptCastLongToLong,		/* Never emitted. */
     pptCastLongToFloat,
     pptCastLongToDouble,
+    pptCastLongToString,
 
     pptCastFloatToBit,
     pptCastFloatToByte,
@@ -130,6 +135,7 @@ enum pfParseType
     pptCastFloatToLong,
     pptCastFloatToFloat,	/* Never emitted. */
     pptCastFloatToDouble,
+    pptCastFloatToString,
 
     pptCastDoubleToBit,
     pptCastDoubleToByte,
@@ -138,6 +144,7 @@ enum pfParseType
     pptCastDoubleToLong,
     pptCastDoubleToFloat,
     pptCastDoubleToDouble,	/* Never emitted. */
+    pptCastDoubleToString,
 
     pptCastStringToBit,
     pptCastTypedToVar,		

@@ -15,7 +15,7 @@ if (string->allocated != 0)
 freeMem(string);
 }
 
-struct _pf_string *_pf_string_from_const(char *s)
+static struct _pf_string *_pf_string_init(char *s)
 /* Wrap string around constant. */
 {
 struct _pf_string *string;
@@ -23,10 +23,47 @@ AllocVar(string);
 string->_pf_refCount = 1;
 string->_pf_cleanup = _pf_string_cleanup;
 string->s = s;
-string->allocated = 0;
-string->size = strlen(s);
+string->size = string->allocated = strlen(s);
 return string;
 }
+
+struct _pf_string *_pf_string_from_const(char *s)
+/* Wrap string around constant. */
+{
+struct _pf_string *string = _pf_string_init(s);
+string->allocated = 0;
+return string;
+}
+
+struct _pf_string *_pf_string_from_long(_pf_Long ll)
+/* Wrap string around Long. */
+{
+char buf[32];
+safef(buf, sizeof(buf), "%lld", ll);
+return _pf_string_init(cloneString(buf));
+}
+
+struct _pf_string *_pf_string_from_double(_pf_Double d)
+/* Wrap string around Double. */
+{
+char buf[32];
+safef(buf, sizeof(buf), "%0.2f", d);
+return _pf_string_init(cloneString(buf));
+}
+
+
+struct _pf_string *_pf_string_from_Int(_pf_Int i)
+/* Wrap string around Int. */
+{
+return _pf_string_from_long(i);
+}
+
+struct _pf_string *_pf_string_from_Float(_pf_Stack *stack)
+/* Wrap string around Float. */
+{
+return _pf_string_from_long(stack->Float);
+}
+
 
 struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count)
 /* Create new string that's a concatenation of the above strings. */

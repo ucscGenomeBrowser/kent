@@ -180,10 +180,12 @@ char baseDir[256], baseName[128], baseSuffix[64];
 char codeFile[PATH_LEN];
 char *parseFile = "out.parse";
 char *typeFile = "out.typed";
+char *boundFile = "out.bound";
 char *scopeFile = "out.scope";
 FILE *parseF = mustOpen(parseFile, "w");
 FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
+FILE *boundF = mustOpen(boundFile, "w");
 
 verbose(2, "Phase 1\n");
 splitPath(fileName, baseDir, baseName, baseSuffix);
@@ -194,10 +196,13 @@ if (endPhase <= 1)
 verbose(2, "Phase 2\n");
 program = pfParseProgram(fileName, pfc);
 pfParseDump(program, 0, parseF);
+carefulClose(&parseF);
 if (endPhase <= 2)
     return;
 verbose(2, "Phase 3\n");
 pfBindVars(pfc, program);
+pfParseDump(program, 0, boundF);
+carefulClose(&boundF);
 if (endPhase <= 3)
     return;
 verbose(2, "Phase 4\n");
@@ -206,7 +211,9 @@ if (endPhase <= 4)
     return;
 pfCheckParaFlow(pfc, program);
 pfParseDump(program, 0, typeF);
+carefulClose(&typeF);
 printScopeInfo(scopeF, 0, program);
+carefulClose(&scopeF);
 verbose(2, "Phase 5\n");
 if (endPhase <= 5)
     return;
@@ -225,7 +232,7 @@ if (endPhase <= 6)
     dyStringPrintf(dy, "%s ", codeFile);
     dyStringAppend(dy, "~/src/ai/paraFlow/runtime/runtime.a ~/src/lib/powerpc/jkweb.a");
     err = system(dy->string);
-    if (err < 0)
+    if (err != 0)
 	errnoAbort("problem compiling %s", codeFile);
     dyStringFree(&dy);
     }

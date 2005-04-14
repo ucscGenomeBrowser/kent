@@ -169,6 +169,8 @@ else if (base == pfc->floatType)
     return 5;
 else if (base == pfc->doubleType)
     return 6;
+else if (base == pfc->stringType)
+    return 7;
 else
     {
     internalErr();
@@ -199,7 +201,7 @@ static void numericCast(struct pfCompile *pfc,
 struct pfBaseType *newBase = newType->base;
 struct pfParse *pp = *pPp;
 struct pfBaseType *oldBase = pp->ty->base;
-int numTypeCount = 7;
+int numTypeCount = 8;
 enum pfParseType castType = pptCastBitToBit;
 castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase);
 castType += baseTypeLogicalSize(pfc, newBase);
@@ -713,8 +715,20 @@ else
     return b;
 }
 
+static void castNumToStringOrDie(struct pfCompile *pfc, struct pfParse *pp, 
+	struct pfType *stringType, struct pfParse **retPp)
+/* Make sure that pp is numeric.  Then cast it to a string. */
+{
+struct pfType *type = pp->ty;
+if (type->base->parent != pfc->numType)
+    errAt(pp->tok, "Adding string and something strange.");
+if (pp->type == pptConstUse)
+    pp->type = pftFromTokType(pp->tok);
+numericCast(pfc, stringType, retPp);
+}
+
 static void coerceBinaryOp(struct pfCompile *pfc, struct pfParse *pp,
-	boolean floatOk, boolean stringOk)
+	boolean floatOk, boolean stringOk, boolean numToString)
 /* Make sure that both sides of a math operation agree. */
 {
 struct pfParse *lval = pp->children;
@@ -725,10 +739,30 @@ if (lval->type == pptConstUse && rval->type == pptConstUse)
     struct pfBaseType *base = NULL;
     boolean lIsString = (lval->tok->type == pftString);
     boolean rIsString = (rval->tok->type == pftString);
-    if (lIsString ^ rIsString)
-	errAt(pp->tok, "Mixing string and other variables in expression");
-    else if (lIsString || rIsString)
+    if (lIsString)
+        {
+	if (rIsString)
+	    {
+	    }
+	else 
+	    {
+	    if (numToString)
+	        {
+		castNumToStringOrDie(pfc, rval, lval->ty, &lval->next);
+		rval = lval->next;
+		}
+	    }
 	base = pfc->stringType;
+	}
+    else if (rIsString)
+        {
+	if (numToString)
+	    {
+	    castNumToStringOrDie(pfc, lval, rval->ty, &pp->children);
+	    lval = pp->children;
+	    }
+	base = pfc->stringType;
+	}
     else if (lval->tok->type == pftFloat || rval->tok->type == pftFloat)
 	base = pfc->doubleType;
     else if (lval->tok->val.i > 0x7FFFFFFFLL || rval->tok->val.i > 0x7FFFffffLL
@@ -1093,7 +1127,7 @@ switch (pp->type)
         coerceIf(pfc, pp);
 	break;
     case pptPlus:
-        coerceBinaryOp(pfc, pp, TRUE, TRUE);
+        coerceBinaryOp(pfc, pp, TRUE, TRUE, TRUE);
 	coerceStringCat(pfc, pp);
 	break;
     case pptSame:
@@ -1102,23 +1136,23 @@ switch (pp->type)
     case pptLess:
     case pptGreaterOrEquals:
     case pptLessOrEquals:
-	coerceBinaryOp(pfc, pp, TRUE, TRUE);
+	coerceBinaryOp(pfc, pp, TRUE, TRUE, FALSE);
 	pp->ty = pfTypeNew(pfc->bitType);
 	break;
     case pptMul:
     case pptDiv:
     case pptMinus:
-        coerceBinaryOp(pfc, pp, TRUE, FALSE);
+        coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE);
 	break;
     case pptMod:
-        coerceBinaryOp(pfc, pp, FALSE, FALSE);
+        coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE);
 	break;
     case pptBitAnd:
     case pptBitOr:
     case pptBitXor:
     case pptShiftLeft:
     case pptShiftRight:
-        coerceBinaryOp(pfc, pp, FALSE, FALSE);
+        coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE);
 	break;
     case pptLogAnd:
     case pptLogOr:

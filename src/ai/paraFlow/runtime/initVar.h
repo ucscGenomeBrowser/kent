@@ -6,6 +6,12 @@ struct _pf_string *_pf_string_from_const(char *s);
 struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count);
 /* Create new string that's a concatenation of the above strings. */
 
+struct _pf_string *_pf_string_from_long(_pf_Long ll);
+/* Wrap string around Long. */
+
+struct _pf_string *_pf_string_from_double(_pf_Double d);
+/* Wrap string around Double. */
+
 struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, _pf_Stack **retStack);
 /* Convert tuple on stack to class. */
 
