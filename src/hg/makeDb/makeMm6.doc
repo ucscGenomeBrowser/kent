@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.25 2005/04/13 23:15:28 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.26 2005/04/14 17:53:00 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3673,3 +3673,25 @@ cat out/$1/*.out >>protRefRaw.psl
 # mrnaRefseq
 # spMrna
 
+# CYTOBAND TRACK (DONE - 2005-04-14 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm6/cytoBand
+    cd /cluster/data/mm6/cytoBand
+    # Get file from NCBI
+    #	This one was a special delivery before it reached the usual
+    #	location in mapviewer
+    WGETRC=/cluster/data/mm6/ncbi/.wgetrc
+    export WGETRC
+    wget --timestamping ftp://ftp-private.ncbi.nih.gov/mouse_34/ideogram.gz
+    #	I'm guessing when the mapview is done, this file would be here:
+    # wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.34/ideogram.gz
+    gunzip ideogram
+    # Create bed file
+    /cluster/bin/scripts/createNcbiCytoBand ideogram
+    # Load the bed file
+    hgLoadBed -noBin \
+	-sqlTable=/cluster/home/kent/src/hg/lib/cytoBand.sql mm6 \
+	cytoBand cytoBand.bed
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql mm6 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
