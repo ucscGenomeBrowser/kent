@@ -11,7 +11,7 @@ static void _pf_class_cleanup(struct _pf_object *obj, int typeId)
 struct _pf_type *type = _pf_type_table[typeId], *fieldType;
 struct _pf_base *base = type->base;
 char *s = (char *)(obj);
-uglyf("_pf_class_cleanup (%s)\n", base->name);
+verbose(2, "_pf_class_cleanup (%s)\n", base->name);
 for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
     if (fieldType->base->needsCleanup)
@@ -99,7 +99,7 @@ static void _pf_array_cleanup(struct _pf_array *array, int id)
 /* Clean up all elements of array, and then array itself. */
 {
 struct _pf_type *elType = _pf_type_table[array->elType];
-uglyf("_pf_array_cleanup of %d elements\n", array->size);
+verbose(2, "_pf_array_cleanup of %d elements\n", array->size);
 if (elType->base->needsCleanup)
     {
     struct _pf_object **objs = (struct _pf_object **)(array->elements);

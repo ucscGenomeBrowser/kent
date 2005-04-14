@@ -7,9 +7,6 @@ paraFlow: $(O)
 
 t:
 	paraFlow test.pf
-	gcc -c test.c 
-	gcc -O -o test test.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
-	test
 
 retest:
 	gcc -c test.c 

@@ -112,7 +112,7 @@ switch (base->singleType)
 }
 
 
-void print(_pf_Stack *stack)
+void prin(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];
@@ -159,4 +159,12 @@ switch (base->singleType)
         fprintf(f, "<type %d>\n", base->singleType);
 	break;
     }
+}
+
+void print(_pf_Stack *stack)
+/* Print out single variable where type is determined at run time. 
+ * Add newline. */
+{
+prin(stack);
+fputc('\n', stdout);
 }

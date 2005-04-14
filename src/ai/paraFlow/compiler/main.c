@@ -153,6 +153,7 @@ toType->isFunction = TRUE;
 inTuple->next = outTuple;
 inTuple->children = varType;
 pfScopeAddVar(scope, "print", toType, NULL);
+pfScopeAddVar(scope, "prin", toType, NULL);
 }
 
 struct pfCompile *pfCompileNew(char *fileName)
