@@ -571,7 +571,6 @@ else
     {
     internalErr();
     }
-fprintf(f, ";\n");
 }
 
 static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
