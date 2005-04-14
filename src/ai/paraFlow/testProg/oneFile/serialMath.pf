@@ -22,17 +22,17 @@ for (i=1; i<=n; i = i+1)
     f *= i;
 }
 
-print( "N   N^2  N! fib(N)\n");
+print( "N   N^2  N! fib(N)");
 int i;
 for (i=1; i<=16; i += 1)
     {
-    print(i);
-    print(" ");
-    print(i*i);
-    print(" ");
-    print(factorial(i));
-    print(" ");
-    print(fibonacci(i));
-    print("\n");
+    prin(i);
+    prin(" ");
+    prin(i*i);
+    prin(" ");
+    prin(factorial(i));
+    prin(" ");
+    prin(fibonacci(i));
+    print("");
     }
 
