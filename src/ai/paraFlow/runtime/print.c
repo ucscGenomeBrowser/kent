@@ -54,7 +54,11 @@ switch (base->singleType)
     case pf_stByte:
 	{
         _pf_Byte *p = data;
-	fprintf(f, "%d", *p);
+	_pf_Byte b = *p;
+	if (isascii(b))
+	    fprintf(f, "%c", b);
+	else
+	    fprintf(f, "0x%x", b);
 	break;
 	}
     case pf_stShort:
@@ -125,8 +129,14 @@ switch (base->singleType)
         fprintf(f, "%d", val.Bit);
 	break;
     case pf_stByte:
-        fprintf(f, "%d", val.Byte);
+	{
+	_pf_Byte b = val.Byte;
+	if (isascii(b))
+	    fprintf(f, "%c", b);
+	else
+	    fprintf(f, "0x%x", b);
 	break;
+	}
     case pf_stShort:
         fprintf(f, "%d", val.Short);
 	break;
