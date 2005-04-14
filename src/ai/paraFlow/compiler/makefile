@@ -7,11 +7,11 @@ paraFlow: $(O)
 
 t:
 	paraFlow test.pf
-	gcc -c out.c 
-	gcc -O -o test out.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
+	gcc -c test.c 
+	gcc -O -o test test.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
 	test
 
 retest:
-	gcc -c out.c 
-	gcc -O -o test out.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
+	gcc -c test.c 
+	gcc -O -o test test.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
 	test

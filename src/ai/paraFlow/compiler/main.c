@@ -175,15 +175,18 @@ void paraFlow(char *fileName)
 {
 struct pfCompile *pfc;
 struct pfParse *program;
+char baseDir[256], baseName[128], baseSuffix[64];
+char codeFile[PATH_LEN];
 char *parseFile = "out.parse";
 char *typeFile = "out.typed";
 char *scopeFile = "out.scope";
-char *codeFile = "out.c";
 FILE *parseF = mustOpen(parseFile, "w");
 FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
 
 verbose(2, "Phase 1\n");
+splitPath(fileName, baseDir, baseName, baseSuffix);
+safef(codeFile, sizeof(codeFile), "%s%s.c", baseDir, baseName);
 pfc = pfCompileNew(fileName);
 if (endPhase <= 1)
     return;
@@ -207,8 +210,37 @@ verbose(2, "Phase 5\n");
 if (endPhase <= 5)
     return;
 pfCodeC(pfc, program, codeFile);
-printf("%d modules, %d tokens, %d parseNodes\n",
+verbose(2, "%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
+if (endPhase <= 6)
+    return;
+/* Now run gcc on it. */
+    {
+    struct dyString *dy = dyStringNew(0);
+    int err;
+    dyStringAppend(dy, "gcc ");
+    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
+    dyStringPrintf(dy, "-o %s ", baseName);
+    dyStringPrintf(dy, "%s ", codeFile);
+    dyStringAppend(dy, "~/src/ai/paraFlow/runtime/runtime.a ~/src/lib/powerpc/jkweb.a");
+    err = system(dy->string);
+    if (err < 0)
+	errnoAbort("problem compiling %s", codeFile);
+    dyStringFree(&dy);
+    }
+
+if (endPhase <= 7)
+    return;
+
+/* Now go run program itself. */
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringPrintf(dy, "./%s", baseName);
+    int err = system(dy->string);
+    if (err < 0)
+	errnoAbort("problem running %s", baseName);
+    dyStringFree(&dy);
+    }
 }
 
 int main(int argc, char *argv[])

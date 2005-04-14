@@ -1395,5 +1395,6 @@ for (module = program->children; module != NULL; module = module->next)
     codeScope(pfc, f, module, TRUE, FALSE);
     }
 printConclusion(pfc, f);
+carefulClose(&f);
 }
 
