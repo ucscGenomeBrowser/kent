@@ -790,9 +790,9 @@ switch (pp->type)
         {
 	assert(pp->tok->type == pftString);
 	codeParamAccess(pfc, f, pp->ty->base, stack);
-	fprintf(f, " = ");
+	fprintf(f, " = _pf_string_from_const(");
 	printEscapedString(f, pp->tok->val.s);
-	fprintf(f, ";\n");
+	fprintf(f, ");\n");
 	return 1;
 	}
     case pptCastBitToBit:

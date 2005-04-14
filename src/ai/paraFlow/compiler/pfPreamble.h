@@ -13,7 +13,7 @@ struct _pf_var;
 
 // typedef struct string *String;
 typedef struct _pf_object *_pf_Object;
-typedef char *_pf_String;
+typedef struct _pf_string *_pf_String;
 typedef struct _pf_array *_pf_Array;
 typedef struct _pf_list *_pf_List;
 typedef struct _pf_tree *_pf_Tree;

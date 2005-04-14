@@ -90,7 +90,7 @@ switch (base->singleType)
     case pf_stString:
 	{
         _pf_String *p = data;
-	fprintf(f, "%s", *p);
+	fprintf(f, "%s", (*p)->s);
 	break;
 	}
     case pf_stClass:
@@ -143,7 +143,7 @@ switch (base->singleType)
         fprintf(f, "%f", val.Double);
 	break;
     case pf_stString:
-        fprintf(f, "%s", val.String);
+        fprintf(f, "%s", val.String->s);
 	break;
     case pf_stClass:
         printClass(f, val.Obj, base);

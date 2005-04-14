@@ -130,7 +130,7 @@ pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType, sizeof(_pf_Lo
 pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType, sizeof(_pf_Float), FALSE);
 pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType, sizeof(_pf_Double), FALSE);
 
-pfc->stringType = pfScopeAddType(scope, "string", FALSE, pfc->streamType, sizeof(_pf_String), FALSE);
+pfc->stringType = pfScopeAddType(scope, "string", FALSE, pfc->streamType, sizeof(_pf_String), TRUE);
 
 pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType, sizeof(_pf_Array), TRUE);
 pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List), TRUE);

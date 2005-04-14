@@ -5,6 +5,28 @@
 #include "object.h"
 #include "initVar.h"
 
+static void _pf_string_cleanup(struct _pf_string *string, int typeId)
+/* Clean up string->s and string itself. */
+{
+verbose(2, "_pf_string_cleanup %s\n", string->s);
+if (string->allocated != 0)
+    freeMem(string->s);
+freeMem(string);
+}
+
+struct _pf_string *_pf_string_from_const(char *s)
+/* Wrap string around constant. */
+{
+struct _pf_string *string;
+AllocVar(string);
+string->_pf_refCount = 1;
+string->_pf_cleanup = _pf_string_cleanup;
+string->s = s;
+string->allocated = 0;
+string->size = strlen(s);
+return string;
+}
+
 static void _pf_class_cleanup(struct _pf_object *obj, int typeId)
 /* Clean up all class fields, and then class itself. */
 {

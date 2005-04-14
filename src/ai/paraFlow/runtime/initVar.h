@@ -1,5 +1,8 @@
 /* initVar - handle variable initialization from tuples */
 
+struct _pf_string *_pf_string_from_const(char *s);
+/* Wrap string around constant. */
+
 struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, _pf_Stack **retStack);
 /* Convert tuple on stack to class. */
 
