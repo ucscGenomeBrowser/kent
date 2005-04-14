@@ -918,6 +918,7 @@ for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     if (fieldType == NULL)
         errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
 		type->base->name);
+    fieldUse->ty = fieldType;
     type = fieldType;
     }
 pp->ty = CloneVar(type);

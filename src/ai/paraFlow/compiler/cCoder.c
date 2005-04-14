@@ -254,22 +254,35 @@ struct pfParse *in;
 if (function->type == pptDot)
     {
     struct pfParse *dotList = function->children;
+    struct pfParse *class = NULL, *method = NULL;
     int dotCount = slCount(dotList);
     assert(dotCount >= 2);
+
+    /* Push object pointer on stack. */
     if (dotCount == 2)
         {
-	struct pfParse *class = dotList;
-	struct pfParse *method = dotList->next;
+	/* Slightly optimize simple case. */
+	class = dotList;
+	method = dotList->next;
 	codeExpression(pfc, f, class, stack, FALSE);
-	codeExpression(pfc, f, inTuple, stack+1, TRUE);
-	fprintf(f, "_pf_cm_%s_%s(%s+%d);\n", class->ty->base->name, method->name, stackName, stack);
 	}
     else
         {
-	errAbort("Currently can't handle this.that.method()");
+	/* More general case here. */
+	struct pfParse *p;
+	for (p = dotList->next; p->next != NULL; p = p->next)
+	    class = p;
+	method = class->next;
+
+	/* Swap out method for null in dot-chain so that codeExpression
+	 * will end up pushing class on stack. */
+	class->next = NULL;
+	codeExpression(pfc, f, function, stack, FALSE);
+	class->next = method;
 	}
-#ifdef SOON
-#endif /* SOON  */
+    /* Put rest of input on the stack, and print call with mangled function name. */
+    codeExpression(pfc, f, inTuple, stack+1, TRUE);
+    fprintf(f, "_pf_cm_%s_%s(%s+%d);\n", class->ty->base->name, method->name, stackName, stack);
     }
 else
     {
