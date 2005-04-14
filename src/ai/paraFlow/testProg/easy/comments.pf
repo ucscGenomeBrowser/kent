@@ -19,3 +19,4 @@ symbol-*/
  *  /*-symbols, but the nesting is not checked inside of
  * a comment so inner-*/ and symbols-*/ works just fine outer-*/
 
+prin("Looks like parsed comments ok\n");
