@@ -1270,8 +1270,13 @@ spectrum on
 type chain mm5
 otherDb mm5
 
-
-
+track cowNetBest
+shortLabel Cow Not Best
+longLabel Cow in Net but not in Best
+priority 11
+group x
+visibility hide
+type bed 3 +
 
 searchTable uc16
 searchMethod exact
