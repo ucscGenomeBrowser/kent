@@ -11,5 +11,7 @@ CREATE TABLE blastRef (
     extra1 varchar(255) ,	# other link 1 (e.g. SwissProt name)
     extra2 varchar(255) ,	# other link 2
               #Indices
-    PRIMARY KEY(acc)
+    PRIMARY KEY(acc),
+    INDEX(geneId(16)),
+    INDEX(extra1(16))
 );
