@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.19 2005/04/10 14:41:23 markd Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.20 2005/04/14 20:24:11 heather Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -892,6 +892,8 @@ struct htmlFormVar *htmlFormVarGet(struct htmlForm *form, char *name)
 /* Get named variable. */
 {
 struct htmlFormVar *var;
+if (form == NULL)
+    errAbort("Null form passed to htmlFormVarGet");
 for (var = form->vars; var != NULL; var = var->next)
     if (sameWord(var->name, name))
 	break;
@@ -933,6 +935,8 @@ if (page == NULL)
     errAbort("Null page passed to htmlPageSetVar");
 if (form == NULL)
     form = page->forms;
+if (form == NULL)
+    errAbort("Null form in htmlPageSetVar");
 htmlFormVarSet(form, name, val);
 }
 
@@ -1521,6 +1525,15 @@ if (count != 1)
     errAbort("Expecting exactly 1 <%s>, got %d", type, count);
 }
 
+
+void htmlPageFormOrAbort(struct htmlPage *page)
+/* Aborts if no FORM found */
+{
+if (page == NULL)
+    errAbort("Can't validate NULL page");
+if (page->forms == NULL)
+    errAbort("No form found");
+}
 
 void htmlPageValidateOrAbort(struct htmlPage *page)
 /* Do some basic validations.  Aborts if there is a problem. */
