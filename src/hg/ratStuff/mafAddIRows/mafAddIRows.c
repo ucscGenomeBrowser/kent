@@ -6,8 +6,9 @@
 #include "options.h"
 #include "maf.h"
 #include "bed.h"
+#include "twoBit.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.3 2005/04/08 21:18:26 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.4 2005/04/14 02:40:21 braney Exp $";
 
 int redCount;
 int blackCount;
@@ -17,9 +18,9 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "mafAddIRows - convert maf to valBed\n"
+  "mafAddIRows - add 'i' rows to a maf\n"
   "usage:\n"
-  "   mafAddIRows file(s).maf\n"
+  "   mafAddIRows mafIn twoBitFile mafOut\n"
   "options:\n"
   );
 }
@@ -41,21 +42,25 @@ struct blockStatus
 
 int minBlockOut = 1;
 
-void mafAddIRows(char *mafIn, char *mafOut)
+void mafAddIRows(char *mafIn, char *twoBitIn, char *mafOut)
 /* mafAddIRows - Filter out maf files. */
 {
+struct dnaSeq *seq;
 FILE *f = mustOpen(mafOut, "w");
 FILE *rf = NULL;
 int i;
 int status;
 int rejects = 0;
 struct mafFile *mf = mafOpen(mafIn);
-struct mafAli *maf = NULL;
+struct mafAli *maf = NULL, *prevMaf;
 struct hash *statusHash = newHash(10);
 struct mafAli *mafList = NULL;
+struct mafAli *nextMaf = NULL;
 struct hashEl *hashEl;
 struct blockStatus *blockStatus;
 struct hashCookie cookie;
+int lastEnd = 0;
+struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 
 while((maf = mafNext(mf)) != NULL)
     {
@@ -148,17 +153,76 @@ while((maf = mafNext(mf)) != NULL)
 mafFileFree(&mf);
 slReverse(&mafList);
 
-for(maf = mafList; maf ; maf = maf->next)
+lastEnd = 100000000;
+prevMaf = NULL;
+for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
     {
-    struct mafComp *mc = NULL, *masterMc, *lastMc;
-    /*
-    char *chrom = NULL, *species = cloneString(mc->src);
+    struct mafComp *mc = NULL, *masterMc, *lastMc = NULL;
+    struct mafAli *newMaf = NULL;
 
-    if (chrom = strchr(species, '.'))
-	*chrom++ = 0;
-	*/
+    nextMaf = maf->next;
 
     masterMc=maf->components;
+    if (masterMc->start > lastEnd)
+	{
+
+	for(cookie = hashFirst(statusHash),  hashEl = hashNext(&cookie); hashEl; hashEl = hashNext(&cookie))
+	    {
+	    blockStatus = hashEl->val;
+	    if (blockStatus->mc)
+		{
+		switch (blockStatus->mc->rightStatus)
+		    {
+		    case MAF_CONTIG_STATUS:
+		    case MAF_INSERT_STATUS:
+		    case MAF_INVERSE_STATUS:
+		    case MAF_DUP_STATUS:
+			AllocVar(mc);
+			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
+			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
+			mc->src = blockStatus->mc->src;
+			if (lastMc == NULL)
+			    {
+			    struct mafComp *miniMasterMc = NULL;
+			    int ii;
+			    char *text, *src;
+			    int fullSize;
+			    char *seqName;
+
+			    AllocVar(miniMasterMc);
+			    miniMasterMc->next = mc;
+			    miniMasterMc->strand = '+';
+			    miniMasterMc->srcSize = masterMc->srcSize;
+			    miniMasterMc->src = masterMc->src;
+			    miniMasterMc->start = lastEnd;
+			    miniMasterMc->size =  masterMc->start - lastEnd;
+
+			    if (seqName = strchr(miniMasterMc->src, '.'))
+				seqName++;
+			    else 
+			    	seqName = miniMasterMc->src;
+
+			    seq = twoBitReadSeqFrag(twoBit, seqName, lastEnd, masterMc->start);
+			    miniMasterMc->text = seq->dna;
+
+			    AllocVar(newMaf);
+			    newMaf->textSize = maf->textSize;
+			    newMaf->components = miniMasterMc;
+			    newMaf->next = maf;
+			    if (prevMaf)
+				prevMaf->next = newMaf;
+			    else
+				mafList = newMaf;
+			    }
+			else
+			    lastMc->next = mc;
+			lastMc = mc;
+			break;
+		    }
+		}
+	    }
+	}
+    lastEnd = masterMc->start + masterMc->size;
     for(lastMc = masterMc; lastMc->next; lastMc = lastMc->next)
 	;
 
@@ -194,6 +258,8 @@ for(maf = mafList; maf ; maf = maf->next)
 	    blockStatus->mc = mc;
 	}
     }
+fprintf(f, "##maf version=1 scoring=mafAddIRows\n");
+
 for(maf = mafList; maf ; maf = maf->next)
     mafWrite(f, maf);
 }
@@ -203,9 +269,9 @@ int main(int argc, char *argv[])
 {
 int totalCount;
 optionInit(&argc, argv, options);
-if (argc < 3)
+if (argc < 4)
     usage();
 
-mafAddIRows(argv[1], argv[2]);
+mafAddIRows(argv[1], argv[2], argv[3]);
 return 0;
 }
