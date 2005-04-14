@@ -201,11 +201,11 @@ pfTypeCheck(pfc, &program);
 if (endPhase <= 4)
     return;
 pfCheckParaFlow(pfc, program);
+pfParseDump(program, 0, typeF);
+printScopeInfo(scopeF, 0, program);
 verbose(2, "Phase 5\n");
 if (endPhase <= 5)
     return;
-pfParseDump(program, 0, typeF);
-printScopeInfo(scopeF, 0, program);
 pfCodeC(pfc, program, codeFile);
 printf("%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));

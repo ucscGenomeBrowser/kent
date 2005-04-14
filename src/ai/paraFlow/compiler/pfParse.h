@@ -34,6 +34,7 @@ enum pfParseType
     pptVarDec,
     pptNameUse,
     pptVarUse,
+    pptSelfUse,
     pptFieldUse,
     pptConstUse,
     pptToDec,

@@ -827,13 +827,15 @@ static void blessClass(struct pfCompile *pfc, struct pfParse *pp)
  * function declarations in class.  Flatten out nested declarative
  * tuples. */
 {
-struct pfParse *compound = pp->children->next;
+struct pfParse *type = pp->children;
+struct pfParse *compound = type->next;
 struct pfParse *p, **p2p;
 struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
 struct pfType *ty;
 
 if (base == NULL)
     internalErrAt(pp->tok);
+pp->ty = type->ty;
 p2p = &compound->children;
 for (p = compound->children; p != NULL; p = p->next)
     {
@@ -1036,7 +1038,7 @@ while ((hel = hashNext(&hc)) != NULL)
 hashFree(&outputHash);
 }
 
-void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
+void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 {
@@ -1044,7 +1046,7 @@ struct pfParse *pp = *pPp;
 struct pfParse **pos;
 
 for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
-    pfTypeCheck(pfc, pos);
+    rTypeCheck(pfc, pos);
 
 switch (pp->type)
     {
@@ -1133,9 +1135,6 @@ switch (pp->type)
     case pptDot:
 	typeDot(pfc,pp);
         break;
-    case pptClass:
-        blessClass(pfc, pp);
-	break;
     case pptParaDec:
     case pptToDec:
     case pptFlowDec:
@@ -1149,4 +1148,29 @@ switch (pp->type)
         checkInFunction(pfc, pp);
 	break;
     }
+}
+
+void rClassBless(struct pfCompile *pfc, struct pfParse *pp)
+/* Check types (adding conversions where needed) on tree,
+ * which should have variables bound already. */
+{
+struct pfParse *p;
+
+for (p = pp->children; p != NULL; p = p->next)
+    rClassBless(pfc, p);
+
+switch (pp->type)
+    {
+    case pptClass:
+        blessClass(pfc, pp);
+	break;
+    }
+}
+
+void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
+/* Check types (adding conversions where needed) on tree,
+ * which should have variables bound already. */
+{
+rClassBless(pfc, *pPp);
+rTypeCheck(pfc, pPp);
 }

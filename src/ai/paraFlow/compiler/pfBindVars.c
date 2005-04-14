@@ -90,6 +90,18 @@ switch (pp->type)
     }
 }
 
+static struct pfParse *enclosingClass(struct pfParse *pp)
+/* Find enclosing class if any. */
+{
+for (pp = pp->parent; pp != NULL; pp = pp->parent)
+    {
+    if (pp->type == pptClass)
+	{
+        return pp;
+	}
+    }
+return NULL;
+}
 
 static void addDeclaredVarsToScopes(struct pfParse *pp)
 /* Go through and put declared variables into symbol table
@@ -117,10 +129,15 @@ switch (pp->type)
 	struct pfParse *input = name->next;
 	struct pfParse *output = input->next;
 	struct pfParse *body = output->next;
+	struct pfParse *class = enclosingClass(pp);
 	name->type = pptSymName;
 	if (hashLookup(pp->scope->parent->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
 	pp->var = pfScopeAddVar(pp->scope->parent, name->name, pp->ty, pp);
+	if (class != NULL)
+	    {
+	    pfScopeAddVar(pp->scope, "self", class->children->ty, class);
+	    }
 	break;
 	}
     case pptInto:
@@ -154,11 +171,12 @@ switch (pp->type)
     case pptNameUse:
 	{
 	struct pfVar *var = pfScopeFindVar(pp->scope, pp->name);
-	if (var == NULL)
-	    errAt(pp->tok, "Use of undefined variable %s", pp->name);
-	pp->var = var;
-	pp->type = pptVarUse;
-	pp->ty = CloneVar(var->ty);
+	if (var != NULL)
+	    {
+	    pp->var = var;
+	    pp->type = pptVarUse;
+	    pp->ty = CloneVar(var->ty);
+	    }
         break;
 	}
     }

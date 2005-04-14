@@ -131,21 +131,6 @@ for (type = base->fields; type != NULL; type = type->next)
     }
 }
 
-#ifdef OLD
-static void rPrintOffsets(struct pfCompile *pfc, 
-	FILE *f, char *exampleName, struct pfBaseType *base)
-/* Print out offsets of fields within structure - parents first */
-{
-struct pfType *type;
-if (base->parent != NULL)
-    rPrintOffsets(pfc, f, exampleName, base->parent);
-for (type = base->fields; type != NULL; type = type->next)
-    {
-    fprintf(f, " (char *)&%s.%s - (char *)&%s,\n",
-    	exampleName, type->fieldName, exampleName);
-    }
-}
-#endif /* OLD */
 
 static boolean isInitialized(struct pfVar *var)
 /* Return TRUE if variable is initialized on declaration in  parse tree. */
@@ -208,7 +193,8 @@ return id;
 
 static void rFillCompHash(FILE *f,
 	struct hash *hash, struct dyString *dy, struct pfParse *pp)
-/* Fill in hash with uniq types. */
+/* Fill in hash with uniq types.  Print encodings of unique
+ * types as we find them to file. */
 {
 struct pfParse *p;
 for (p = pp->children; p != NULL; p = p->next)
@@ -231,7 +217,8 @@ if (pp->ty)
 
 struct hash *hashCompTypes(struct pfCompile *pfc, struct pfParse *program, 
 	struct dyString *dy, FILE *f)
-/* Create a hash full of compOutTypes. */
+/* Create a hash full of compOutTypes.  Also print out type 
+ * encodings. */
 {
 struct hash *hash = hashNew(0);
 
@@ -256,19 +243,43 @@ static int codeCall(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for a function call. */
 {
-struct pfParse *varUse = pp->children;
-struct pfVar *var = varUse->var;
-struct pfParse *inTuple = varUse->next;
+struct pfParse *function = pp->children;
+struct pfParse *inTuple = function->next;
+struct pfType *outTuple = function->ty->children->next;
+int outCount = slCount(outTuple->children);
 struct pfParse *in;
-struct pfType *outTuple = var->ty->children->next;
-int outCount = slCount(outTuple->children);;
 
-/* Add parameters to stack. */
-codeExpression(pfc, f, inTuple, stack, TRUE);
-if (stack == 0)
-    fprintf(f, "%s(%s);\n", pp->name, stackName);
+
+
+if (function->type == pptDot)
+    {
+    struct pfParse *dotList = function->children;
+    int dotCount = slCount(dotList);
+    assert(dotCount >= 2);
+    if (dotCount == 2)
+        {
+	struct pfParse *class = dotList;
+	struct pfParse *method = dotList->next;
+	codeExpression(pfc, f, class, stack, FALSE);
+	codeExpression(pfc, f, inTuple, stack+1, TRUE);
+	fprintf(f, "_pf_cm_%s_%s(%s+%d);\n", class->ty->base->name, method->name, stackName, stack);
+	}
+    else
+        {
+	errAbort("Currently can't handle this.that.method()");
+	}
+#ifdef SOON
+#endif /* SOON  */
+    }
 else
-    fprintf(f, "%s(%s+%d);\n", pp->name, stackName, stack);
+    {
+    codeExpression(pfc, f, inTuple, stack, TRUE);
+    assert(function->type == pptVarUse);
+    if (stack == 0)
+	fprintf(f, "%s(%s);\n", pp->name, stackName);
+    else
+	fprintf(f, "%s(%s+%d);\n", pp->name, stackName, stack);
+    }
 return outCount;
 }
 
@@ -1007,8 +1018,9 @@ switch (pp->type)
 
 
 static void codeFunction(struct pfCompile *pfc, FILE *f, 
-	struct pfParse *funcDec)
-/* Emit C code for function. */
+	struct pfParse *funcDec, struct pfParse *class)
+/* Emit C code for function.  If class is non-null
+ * then decorate it with 'self' so as to be a method. */
 {
 struct pfVar *funcVar = funcDec->var;
 struct pfType *funcType = funcVar->ty;
@@ -1016,13 +1028,28 @@ struct pfType *inTuple = funcType->children;
 struct pfType *outTuple = inTuple->next;
 struct pfParse *body = funcDec->children->next->next->next;
 
-/* Put out function prototype and opening brace. */
-fprintf(f, "void %s(%s *%s)\n{\n", funcVar->name, stackType, stackName);
+/* Put out function prototype and opening brace.  If class add self to
+ * function symbol table. */
+if (class)
+    {
+    fprintf(f, "void _pf_cm_%s_%s(", class->name, funcVar->name);
+    fprintf(f," %s *%s)\n{\n",  stackType, stackName);
+    pfScopeAddVar(funcDec->scope, "self", class->ty, NULL);
+    }
+else
+    fprintf(f, "void %s(%s *%s)\n{\n", funcVar->name, stackType, stackName);
 
 /* Print out input parameters. */
     {
     struct pfType *in;
     int inIx = 0;
+    if (class)
+        {
+	fprintf(f, "struct %s *self = ", class->name);
+	codeParamAccess(pfc, f, class->ty->base, 0);
+	fprintf(f, ";\n");
+	inIx += 1;
+	}
     for (in = inTuple->children; in != NULL; in = in->next)
         {
 	printType(pfc, f, in->base);
@@ -1082,7 +1109,7 @@ for (statement = classCompound->children; statement != NULL;
 	case pptToDec:
 	case pptParaDec:
 	case pptFlowDec:
-	    fprintf(f, "[code method %s.%s]\n", class->name, statement->name);
+	    codeFunction(pfc, f, statement, class);
 	    break;
 	}
     }
@@ -1194,7 +1221,7 @@ for (p = pp->children; p != NULL; p = p->next)
 	case pptToDec:
 	case pptParaDec:
 	case pptFlowDec:
-	    codeFunction(pfc, f, p);
+	    codeFunction(pfc, f, p, NULL);
 	    break;
 	case pptClass:
 	    codeMethods(pfc, f, p);

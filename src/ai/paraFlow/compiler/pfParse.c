@@ -60,6 +60,8 @@ switch (type)
 	return "pptNameUse";
     case pptFieldUse:
 	return "pptFieldUse";
+    case pptSelfUse:
+	return "pptSelfUse";
     case pptVarUse:
 	return "pptVarUse";
     case pptConstUse:
