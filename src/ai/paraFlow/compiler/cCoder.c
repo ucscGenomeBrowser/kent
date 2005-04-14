@@ -1029,6 +1029,12 @@ switch (pp->type)
 	break;
     case pptNop:
         break;
+    case pptBreak:
+        fprintf(f, "break;\n");
+        break;
+    case pptContinue:
+        fprintf(f, "continue;\n");
+        break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
 	break;
