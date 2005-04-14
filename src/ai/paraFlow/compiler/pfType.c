@@ -201,7 +201,6 @@ static void numericCast(struct pfCompile *pfc,
 struct pfBaseType *newBase = newType->base;
 struct pfParse *pp = *pPp;
 struct pfBaseType *oldBase = pp->ty->base;
-uglyf("numericCast from %s to %s\n", oldBase->name, newBase->name);
 int numTypeCount = 8;
 enum pfParseType castType = pptCastBitToBit;
 castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase);
@@ -450,7 +449,6 @@ static void castNumToString(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *stringType)
 /* Make sure that pp is numeric.  Then cast it to a string. */
 {
-uglyf("castNumToString: stringType %s\n", stringType->base->name);
 struct pfParse *pp = *pPp;
 struct pfType *type = pp->ty;
 if (type->base->parent != pfc->numType)
@@ -549,7 +547,7 @@ if (pp->type == pptConstUse)
 else if (pt->base != base)
     {
     boolean ok = FALSE;
-    uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
+    // uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
@@ -778,8 +776,6 @@ if (lval->type == pptConstUse && rval->type == pptConstUse)
     pp->ty = pfTypeNew(base);
     coerceOne(pfc, &lval, pp->ty, numToString);
     coerceOne(pfc, &rval, pp->ty, numToString);
-    pp->children = lval;
-    lval->next = rval;
     }
 else
     {
@@ -790,7 +786,6 @@ else
 	    pp->ty = lval->ty = pfTypeNew(pfc->stringType);
 	    lval->type = pptConstString;
 	    coerceOne(pfc, &rval, pp->ty, numToString);
-	    lval->next = rval;
 	    }
 	else
 	    {
@@ -824,12 +819,14 @@ else
 	    struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
 	    coerceOne(pfc, &lval, ty, numToString);
 	    coerceOne(pfc, &rval, ty, numToString);
-	    pp->children = lval;
-	    lval->next = rval;
 	    }
 	pp->ty = lval->ty;
 	}
     }
+/* Put lval,rval (which may have changed) back as the two children
+ * of pp. */
+pp->children = lval;
+lval->next = rval;
 if (!floatOk)
     {
     struct pfBaseType *base = pp->ty->base;
