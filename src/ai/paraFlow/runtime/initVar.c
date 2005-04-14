@@ -8,6 +8,7 @@
 static void _pf_string_cleanup(struct _pf_string *string, int typeId)
 /* Clean up string->s and string itself. */
 {
+// uglyf("_pf_string_cleanup %s\n", string->s);
 verbose(2, "_pf_string_cleanup %s\n", string->s);
 if (string->allocated != 0)
     freeMem(string->s);
@@ -26,6 +27,35 @@ string->allocated = 0;
 string->size = strlen(s);
 return string;
 }
+
+struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count)
+/* Create new string that's a concatenation of the above strings. */
+{
+int i;
+size_t total=0;
+size_t pos = 0;
+_pf_String string;
+char *s;
+AllocVar(string);
+string->_pf_refCount = 1;
+string->_pf_cleanup = _pf_string_cleanup;
+for (i=0; i<count; ++i)
+    total += stack[i].String->size;
+string->s = s = needLargeMem(total+1);
+for (i=0; i<count; ++i)
+    {
+    _pf_String ss = stack[i].String;
+    memcpy(s, ss->s, ss->size);
+    s += ss->size;
+    if (--ss->_pf_refCount <= 0)
+        ss->_pf_cleanup(ss, 0);
+    }
+*s = 0;
+string->size = string->allocated = total;
+return string;
+}
+
+
 
 static void _pf_class_cleanup(struct _pf_object *obj, int typeId)
 /* Clean up all class fields, and then class itself. */

@@ -790,6 +790,32 @@ coerceToBit(pfc, &pp->children->next);
 pp->ty = pp->children->ty;
 }
 
+static void coerceStringCat(struct pfCompile *pfc, struct pfParse *plusOp)
+/* If the type of plusOp is string, then flip it to pptStringCat, 
+ * merging together any children that are also pptStringCat.  In
+ * the right situation the tree:
+ *   pptPlus string
+ *     pptPlus string
+ *       pptVarUse string
+ *       pptVarUse string
+ *     pptVarUse string
+ * gets transformed to
+ *   pptStringCat string
+ *      pptVarUse string
+ *      pptVarUse string
+ *      pptVarUse string
+ * though this will happen over two calls to this routine. */
+{
+if (plusOp->ty->base == pfc->stringType)
+    {
+    struct pfParse *left = plusOp->children;
+    struct pfParse *right = left->next;
+    if (left->type == pptStringCat)
+	plusOp->children = slCat(left->children, right);
+    plusOp->type = pptStringCat;
+    }
+}
+
 static void ensureDeclarationTuple(struct pfParse *tuple)
 /* Given tuple, ensure every child is type pptVarInit. */
 {
@@ -1068,6 +1094,7 @@ switch (pp->type)
 	break;
     case pptPlus:
         coerceBinaryOp(pfc, pp, TRUE, TRUE);
+	coerceStringCat(pfc, pp);
 	break;
     case pptSame:
     case pptNotSame:

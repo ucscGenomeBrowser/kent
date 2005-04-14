@@ -686,6 +686,20 @@ fprintf(f, ";\n");
 return 1;
 }
 
+static int codeStringCat(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, boolean addRef)
+/* Generate code for a string concatenation. */
+{
+int total = 0;
+struct pfParse *p;
+for (p = pp->children; p != NULL; p = p->next)
+    total += codeExpression(pfc, f, p, stack+total, addRef);
+codeParamAccess(pfc, f, pp->ty->base, stack);
+fprintf(f, " = ");
+fprintf(f, "_pf_string_cat(%s+%d, %d);\n", stackName, stack, total);
+return 1;
+}
+
 static int codeExpression(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, boolean addRef)
 /* Emit code for one expression.  Returns how many items added
@@ -794,6 +808,10 @@ switch (pp->type)
 	printEscapedString(f, pp->tok->val.s);
 	fprintf(f, ");\n");
 	return 1;
+	}
+    case pptStringCat:
+        {
+	return codeStringCat(pfc, f, pp, stack, addRef);
 	}
     case pptCastBitToBit:
     case pptCastBitToByte:

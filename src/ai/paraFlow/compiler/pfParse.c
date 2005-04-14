@@ -152,6 +152,8 @@ switch (type)
 	return "pptTypeName";
     case pptTypeTuple:
 	return "pptTypeTuple";
+    case pptStringCat:
+	return "pptStringCat";
     case pptCastBitToBit:
         return "pptCastBitToBit";
     case pptCastBitToByte:

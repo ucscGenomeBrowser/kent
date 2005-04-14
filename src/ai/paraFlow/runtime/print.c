@@ -144,6 +144,8 @@ switch (base->singleType)
 	break;
     case pf_stString:
         fprintf(f, "%s", val.String->s);
+	if (--val.Obj->_pf_refCount <= 0)
+	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
 	break;
     case pf_stClass:
         printClass(f, val.Obj, base);
