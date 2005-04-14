@@ -245,7 +245,7 @@ if (endPhase <= 7)
     struct dyString *dy = dyStringNew(0);
     dyStringPrintf(dy, "./%s", baseName);
     int err = system(dy->string);
-    if (err < 0)
+    if (err != 0)
 	errnoAbort("problem running %s", baseName);
     dyStringFree(&dy);
     }

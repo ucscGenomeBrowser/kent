@@ -201,6 +201,7 @@ static void numericCast(struct pfCompile *pfc,
 struct pfBaseType *newBase = newType->base;
 struct pfParse *pp = *pPp;
 struct pfBaseType *oldBase = pp->ty->base;
+uglyf("numericCast from %s to %s\n", oldBase->name, newBase->name);
 int numTypeCount = 8;
 enum pfParseType castType = pptCastBitToBit;
 castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase);
@@ -236,7 +237,7 @@ pp->ty->isTuple = TRUE;
 }
 
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
-	struct pfType *type);
+	struct pfType *type, boolean numToString);
 /* Make sure that a single variable is of the required type. 
  * Add casts if necessary */
 
@@ -249,7 +250,7 @@ if (pp->ty == NULL && pp->type != pptConstUse)
 if (pp->type == pptConstUse || pp->ty->base != pfc->bitType)
     {
     struct pfType *type = pfTypeNew(pfc->bitType);
-    coerceOne(pfc, pPp, type);
+    coerceOne(pfc, pPp, type, FALSE);
     }
 }
 
@@ -312,7 +313,7 @@ if (!pfTypesAllSame(retTypes, fieldTypes))
 	fake->type = pptPlaceholder;
 	fake->name = "placeholder";
 	fake->ty = retType;
-	coerceOne(pfc, &fake, fieldType);
+	coerceOne(pfc, &fake, fieldType, FALSE);
 	slAddHead(&castList, fake);
 	retType = retType->next;
 	fieldType = fieldType->next;
@@ -359,7 +360,7 @@ else
     type = types->children;
     for (;;)
 	 {
-	 coerceOne(pfc, pos, type);
+	 coerceOne(pfc, pos, type, FALSE);
 	 pos = &(*pos)->next;
 	 type = type->next;
 	 if (type == NULL)
@@ -417,7 +418,7 @@ else
      }
 for (pos = &tuple->children; *pos != NULL; pos = &(*pos)->next)
      {
-     coerceOne(pfc, pos, elType);
+     coerceOne(pfc, pos, elType, FALSE);
      }
 pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
@@ -439,14 +440,29 @@ for (field = type->base->fields; field != NULL; field = field->next)
     {
     if (*pos == NULL)
 	break;
-    coerceOne(pfc, pos, field);
+    coerceOne(pfc, pos, field, FALSE);
     pos = &(*pos)->next;
     }
 pfTypeOnTuple(pfc, tuple);
 }
 
+static void castNumToString(struct pfCompile *pfc, struct pfParse **pPp, 
+	struct pfType *stringType)
+/* Make sure that pp is numeric.  Then cast it to a string. */
+{
+uglyf("castNumToString: stringType %s\n", stringType->base->name);
+struct pfParse *pp = *pPp;
+struct pfType *type = pp->ty;
+if (type->base->parent != pfc->numType)
+    errAt(pp->tok, "Adding string and something strange.");
+if (pp->type == pptConstUse)
+    pp->type = pftFromTokType(pp->tok);
+numericCast(pfc, stringType, pPp);
+}
+
+
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
-	struct pfType *type)
+	struct pfType *type, boolean numToString)
 /* Make sure that a single variable is of the required type.  
  * Add casts if necessary */
 {
@@ -481,7 +497,7 @@ if (pp->type == pptConstUse)
 	}
     else if (base->isCollection)
 	{
-	coerceOne(pfc, pPp, type->children);
+	coerceOne(pfc, pPp, type->children, FALSE);
 	insertCast(pptUniformTuple, NULL, pPp);
 	pfTypeOnTuple(pfc, *pPp);
 	return;
@@ -490,9 +506,10 @@ if (pp->type == pptConstUse)
         {
 	if (slCount(base->fields) != 1)
 	    errAt(pp->tok, "Missing fields in object initialization");
-	coerceOne(pfc, pPp, base->fields);
+	coerceOne(pfc, pPp, base->fields, FALSE);
 	insertCast(pptTuple, NULL, pPp);
 	pfTypeOnTuple(pfc, *pPp);
+	return;
 	}
     else
 	{
@@ -501,7 +518,16 @@ if (pp->type == pptConstUse)
     if (pp->type == pptConstString)
 	{
 	if (pp->tok->type != pftString)
-	    expectingGot("string", pp->tok);
+	    {
+	    if (numToString)
+	        {
+		pp->type = pptConstUse;
+		castNumToString(pfc, pPp, type);
+		pp = *pPp;
+		}
+	    else
+		expectingGot("string", pp->tok);
+	    }
 	}
     else if (pp->type == pptConstBit)
 	{
@@ -523,11 +549,16 @@ if (pp->type == pptConstUse)
 else if (pt->base != base)
     {
     boolean ok = FALSE;
-    // uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
+    uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
 	insertCast(pptCastStringToBit, tt, pPp);
+	ok = TRUE;
+	}
+    else if (numToString && base == pfc->stringType && pt->base->parent == pfc->numType)
+        {
+	castNumToString(pfc, pPp, type);
 	ok = TRUE;
 	}
     else if (base == pfc->varType)
@@ -588,8 +619,8 @@ else if (pt->base != base)
     }
 else if (base == pfc->keyValType)
     {
-    coerceOne(pfc, &pp->children, type->children);
-    coerceOne(pfc, &pp->children->next, type->children->next);
+    coerceOne(pfc, &pp->children, type->children, FALSE);
+    coerceOne(pfc, &pp->children->next, type->children->next, FALSE);
     }
 else if (type->isTuple)
     {
@@ -663,7 +694,7 @@ if (numOnly)
     if (destType->base->parent != pfc->numType)
         expectingGot("numerical variable to left of assignment", lval->tok);
     }
-coerceOne(pfc, &lval->next, destType);
+coerceOne(pfc, &lval->next, destType, FALSE);
 pp->ty = CloneVar(destType);
 }
 
@@ -676,7 +707,7 @@ struct pfParse *symbol = type->next;
 struct pfParse *init = symbol->next;
 
 if (init != NULL)
-    coerceOne(pfc, &symbol->next, type->ty);
+    coerceOne(pfc, &symbol->next, type->ty, FALSE);
 }
 
 static void coerceIndex(struct pfCompile *pfc, struct pfParse *pp)
@@ -700,7 +731,7 @@ else
 if (indexPp->ty->base != keyBase || indexPp->type == pptConstUse)
     {
     struct pfType *ty = pfTypeNew(keyBase);
-    coerceOne(pfc, &collectionPp->next, ty);
+    coerceOne(pfc, &collectionPp->next, ty, FALSE);
     }
 pp->ty = CloneVar(collectionType->children);
 }
@@ -715,54 +746,28 @@ else
     return b;
 }
 
-static void castNumToStringOrDie(struct pfCompile *pfc, struct pfParse *pp, 
-	struct pfType *stringType, struct pfParse **retPp)
-/* Make sure that pp is numeric.  Then cast it to a string. */
-{
-struct pfType *type = pp->ty;
-if (type->base->parent != pfc->numType)
-    errAt(pp->tok, "Adding string and something strange.");
-if (pp->type == pptConstUse)
-    pp->type = pftFromTokType(pp->tok);
-numericCast(pfc, stringType, retPp);
-}
-
 static void coerceBinaryOp(struct pfCompile *pfc, struct pfParse *pp,
 	boolean floatOk, boolean stringOk, boolean numToString)
 /* Make sure that both sides of a math operation agree. */
 {
-struct pfParse *lval = pp->children;
-struct pfParse *rval = lval->next;
+struct pfParse **pLval = &pp->children;
+struct pfParse *lval = *pLval;
+struct pfParse **pRval = &lval->next;
+struct pfParse *rval = *pRval;
 
+/* Many complications arise from us not wanting to figure out
+ * the type of constants until relatively late.  I'm really
+ * tempted just set constants to either double, long, or string
+ * based on token type early on, and eliminate this logic.
+ * The optimizer may be able to achieve the same result
+ * more elegantly later.... */
 if (lval->type == pptConstUse && rval->type == pptConstUse)
     {
     struct pfBaseType *base = NULL;
     boolean lIsString = (lval->tok->type == pftString);
     boolean rIsString = (rval->tok->type == pftString);
-    if (lIsString)
-        {
-	if (rIsString)
-	    {
-	    }
-	else 
-	    {
-	    if (numToString)
-	        {
-		castNumToStringOrDie(pfc, rval, lval->ty, &lval->next);
-		rval = lval->next;
-		}
-	    }
+    if (lIsString || rIsString)
 	base = pfc->stringType;
-	}
-    else if (rIsString)
-        {
-	if (numToString)
-	    {
-	    castNumToStringOrDie(pfc, lval, rval->ty, &pp->children);
-	    lval = pp->children;
-	    }
-	base = pfc->stringType;
-	}
     else if (lval->tok->type == pftFloat || rval->tok->type == pftFloat)
 	base = pfc->doubleType;
     else if (lval->tok->val.i > 0x7FFFFFFFLL || rval->tok->val.i > 0x7FFFffffLL
@@ -771,35 +776,59 @@ if (lval->type == pptConstUse && rval->type == pptConstUse)
     else 
         base = pfc->intType;
     pp->ty = pfTypeNew(base);
-    coerceOne(pfc, &lval, pp->ty);
-    coerceOne(pfc, &rval, pp->ty);
+    coerceOne(pfc, &lval, pp->ty, numToString);
+    coerceOne(pfc, &rval, pp->ty, numToString);
+    pp->children = lval;
+    lval->next = rval;
     }
 else
     {
     if (lval->type == pptConstUse)
 	{
-	if (rval->ty != NULL)
-	     coerceOne(pfc, &lval, rval->ty);
-
+	if (numToString && rval->ty->base != pfc->stringType && lval->tok->type == pftString)
+	    {
+	    pp->ty = lval->ty = pfTypeNew(pfc->stringType);
+	    lval->type = pptConstString;
+	    coerceOne(pfc, &rval, pp->ty, numToString);
+	    lval->next = rval;
+	    }
+	else
+	    {
+	    coerceOne(pfc, &lval, rval->ty, numToString);
+	    pp->ty = rval->ty;
+	    }
 	}
     if (rval->type == pptConstUse)
 	{
-	if (lval->ty != NULL)
-	    coerceOne(pfc, &rval, lval->ty);
+	if (numToString && lval->ty->base != pfc->stringType && rval->tok->type == pftString)
+	    {
+	    pp->ty = rval->ty = pfTypeNew(pfc->stringType);
+	    rval->type = pptConstString;
+	    coerceOne(pfc, &lval, pp->ty, numToString);
+	    pp->children = lval;
+	    }
+	else
+	    {
+	    coerceOne(pfc, &rval, lval->ty, numToString);
+	    pp->ty = lval->ty;
+	    }
 	}
-    if (lval->ty == NULL)
-	expectingGot("number", lval->tok);
-    if (rval->ty == NULL)
-	expectingGot("number", rval->tok);
-    if (!pfTypeSame(lval->ty, rval->ty))
+    else
 	{
-	struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
-	coerceOne(pfc, &lval, ty);
-	coerceOne(pfc, &rval, ty);
-	pp->children = lval;
-	lval->next = rval;
+	if (lval->ty == NULL)
+	    expectingGot("number", lval->tok);
+	if (rval->ty == NULL)
+	    expectingGot("number", rval->tok);
+	if (!pfTypeSame(lval->ty, rval->ty))
+	    {
+	    struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
+	    coerceOne(pfc, &lval, ty, numToString);
+	    coerceOne(pfc, &rval, ty, numToString);
+	    pp->children = lval;
+	    lval->next = rval;
+	    }
+	pp->ty = lval->ty;
 	}
-    pp->ty = lval->ty;
     }
 if (!floatOk)
     {
