@@ -177,6 +177,8 @@ switch (pp->type)
 	    pp->type = pptVarUse;
 	    pp->ty = CloneVar(var->ty);
 	    }
+	else
+	    errAt(pp->tok, "%s used but not defined", pp->name);
         break;
 	}
     }

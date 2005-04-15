@@ -1320,11 +1320,14 @@ slSort(&helList, hashElCmp);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfBaseType *base = hel->val;
-    fprintf(f, "struct %s {\n", base->name);
-    fprintf(f, "int _pf_refCount;\n");
-    fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
-    rPrintFields(pfc, f, base); 
-    fprintf(f, "};\n\n");
+    if (base->isClass)
+	{
+	fprintf(f, "struct %s {\n", base->name);
+	fprintf(f, "int _pf_refCount;\n");
+	fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
+	rPrintFields(pfc, f, base); 
+	fprintf(f, "};\n\n");
+	}
     }
 hashElFreeList(&helList);
 
@@ -1504,7 +1507,7 @@ for (module = program->children; module != NULL; module = module->next)
     fprintf(f, "\n");
     rPrintPrototypes(f, module, NULL);
     fprintf(f, "\n");
-    codeScope(pfc, f, module, TRUE);
+    codeScope(pfc, f, module, differentString(module->name, "<builtin>"));
     }
 printConclusion(pfc, f);
 carefulClose(&f);

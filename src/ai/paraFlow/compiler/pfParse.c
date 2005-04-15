@@ -1495,17 +1495,15 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
     }
 }
 
-struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc, 
-	struct pfParse *parent)
-/* Convert file to parse tree using tkz. */
+struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
+	struct pfParse *parent, struct pfScope *scope)
+/* Tokenize and parse given source. */
 {
 struct pfTokenizer *tkz = pfc->tkz;
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
-char *module = hashStoreName(pfc->modules, fileName);
-struct pfSource *source = pfSourceOnFile(fileName);
+char *module = hashStoreName(pfc->modules, source->name);
 
 modParse->name = cloneString(module);
 chopSuffix(modParse->name);
@@ -1544,10 +1542,18 @@ for (tok = tokList; tok != NULL; tok = tok->next)
 	}
     }
 
-
 addClasses(pfc, tokList, scope);
 pfParseTokens(pfc, tokList, scope, modParse);
 return modParse;
+}
+
+static struct pfParse *pfParseFile(struct pfCompile *pfc, char *fileName, 
+	struct pfParse *parent)
+/* Convert file to parse tree using tkz. */
+{
+struct pfSource *source = pfSourceOnFile(fileName);
+struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
+return pfParseSource(pfc, source, parent, scope);
 }
 
 void collectDots(struct dyString *dy, struct pfParse *pp)
@@ -1613,7 +1619,7 @@ if (pp->type == pptInto)
 	tkz->source = pfSourceOnFile(dy->string);
 	tkz->pos = tkz->source->contents;
 	tkz->endPos = tkz->pos + tkz->source->contentSize;
-	mod = pfParseFile(dy->string, pfc, program);
+	mod = pfParseFile(pfc, dy->string, program);
 	expandInto(program, pfc, mod);
 	tkz->source = oldSource;
 	tkz->pos = oldPos;
@@ -1666,8 +1672,9 @@ if (pp->type == pptVarInit)
     name->type = pptSymName;
     pp->name = name->name;
     }
-/* Note in this case we *don't* want depth first, which
- * effectively is why this has to be done in a second pass. */
+/* Note in this case we can't process children before self.
+ * This is one of the reasons this is done in a separate
+ * pass actually. */
 for (pp = pp->children; pp != NULL; pp = pp->next)
     varDecAndAssignToVarInit(pp);
 }
@@ -1678,11 +1685,14 @@ struct pfParse *pfParseProgram(struct pfCompile *pfc, char *builtinCode, char *f
  * not bound yet. */
 {
 struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
-struct pfParse *pp = pfParseFile(fileName, pfc, program);
+struct pfSource *builtinSource = pfSourceNew("<builtin>", builtinCode);
+struct pfParse *builtinModule = pfParseSource(pfc, builtinSource, program, pfc->scope);
+struct pfParse *mainModule = pfParseFile(pfc, fileName, program);
 
 /* Go into other modules, and put initial module at end of list. */
-expandInto(program, pfc, pp);
-slAddHead(&program->children, pp);
+slAddHead(&program->children, builtinModule);
+slAddHead(&program->children, mainModule);
+expandInto(program, pfc, mainModule);
 slReverse(&program->children);
 
 /* Restore order of scopes. */

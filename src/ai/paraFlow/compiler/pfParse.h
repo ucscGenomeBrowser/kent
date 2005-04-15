@@ -187,10 +187,6 @@ struct pfParse *pfParseNew(enum pfParseType type,
 void pfParsePutChildrenInPlaceOfSelf(struct pfParse **pPp);
 /* Replace self with children. */
 
-struct pfParse *pfParseFile(char *fileName, struct pfCompile *pfc, 
-	struct pfParse *parent);
-/* Convert file to parse tree using tkz. */
-
 void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
 	enum pfParseType newType);
 /* Convert type of pp and any children that are of oldType to newType */

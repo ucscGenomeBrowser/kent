@@ -187,25 +187,25 @@ FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
 FILE *boundF = mustOpen(boundFile, "w");
 
-verbose(2, "Phase 1\n");
+verbose(2, "Phase 1 - initialization\n");
 splitPath(fileName, baseDir, baseName, baseSuffix);
 safef(codeFile, sizeof(codeFile), "%s%s.c", baseDir, baseName);
 pfc = pfCompileNew();
 if (endPhase <= 1)
     return;
-verbose(2, "Phase 2\n");
+verbose(2, "Phase 2 - parsing\n");
 program = pfParseProgram(pfc, fetchBuiltinCode(), fileName);
 pfParseDump(program, 0, parseF);
 carefulClose(&parseF);
 if (endPhase <= 2)
     return;
-verbose(2, "Phase 3\n");
+verbose(2, "Phase 3 - binding names\n");
 pfBindVars(pfc, program);
 pfParseDump(program, 0, boundF);
 carefulClose(&boundF);
 if (endPhase <= 3)
     return;
-verbose(2, "Phase 4\n");
+verbose(2, "Phase 4 - type checking\n");
 pfTypeCheck(pfc, &program);
 if (endPhase <= 4)
     return;
@@ -214,7 +214,7 @@ pfParseDump(program, 0, typeF);
 carefulClose(&typeF);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
-verbose(2, "Phase 5\n");
+verbose(2, "Phase 5 - C code generation\n");
 if (endPhase <= 5)
     return;
 pfCodeC(pfc, program, codeFile);
@@ -222,6 +222,7 @@ verbose(2, "%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 if (endPhase <= 6)
     return;
+verbose(2, "Phase 6 - compiling C code\n");
 /* Now run gcc on it. */
     {
     struct dyString *dy = dyStringNew(0);
@@ -240,6 +241,7 @@ if (endPhase <= 6)
 if (endPhase <= 7)
     return;
 
+verbose(2, "Phase 7 - execution\n");
 /* Now go run program itself. */
     {
     struct dyString *dy = dyStringNew(0);
