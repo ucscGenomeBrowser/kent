@@ -24,7 +24,7 @@ static void fileCleanup(struct file *file, int typeId)
 {
 carefulClose(&file->f);
 dyStringFree(&file->dy);
-freeMem(file);
+_pf_class_cleanup((struct _pf_object *)file, typeId);
 }
 
 void fileOpen(_pf_Stack *stack)
@@ -64,6 +64,12 @@ if (--file->_pf_refCount <= 0)
     file->_pf_cleanup(file, 0);
 }
 
+void _pf_cm_file_writeString(_pf_Stack *stack)
+{
+stack[0].Obj->_pf_refCount += 1;
+fileWriteString(stack);
+}
+
 void fileReadLine(_pf_Stack *stack)
 /* Read next line from file. */
 {
@@ -88,3 +94,10 @@ if (--file->_pf_refCount <= 0)
     file->_pf_cleanup(file, 0);
 stack[0].String = _pf_string_from_const(dy->string);
 }
+
+void _pf_cm_file_readLine(_pf_Stack *stack)
+{
+stack[0].Obj->_pf_refCount += 1;
+fileReadLine(stack);
+}
+

@@ -93,7 +93,7 @@ return string;
 
 
 
-static void _pf_class_cleanup(struct _pf_object *obj, int typeId)
+void _pf_class_cleanup(struct _pf_object *obj, int typeId)
 /* Clean up all class fields, and then class itself. */
 {
 struct _pf_type *type = _pf_type_table[typeId], *fieldType;
