@@ -28,7 +28,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	eutPri1 \
 	galGal2 \
 	xenTro1 \
-        tetNig1 \
+	tetNig1 \
 	fr1 \
 	cioSav1 \
 	danRer1 danRer2 \
@@ -44,6 +44,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	apiMel1 \
 	apiMel2	\
 	ci1 \
+	strPur1 \
 	ce1 ce2 \
 	cb1 \
 	caeRem1 \
