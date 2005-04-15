@@ -1,10 +1,11 @@
 /* Score mafs and subsets of maf. 
- * This module is from Webb Miller at PSU. */
+ * This module is from Webb Miller at PSU. 
+ * Some description of maf scoring is included in hgLoadMaf.c comments*/
 
 #include "common.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafScore.c,v 1.7 2005/04/08 20:47:20 braney Exp $";
+static char const rcsid[] = "$Id: mafScore.c,v 1.8 2005/04/15 00:20:28 kate Exp $";
 
 
 typedef struct gap_scores {
@@ -94,10 +95,8 @@ struct mafComp *c1, *c2;
 
 if (start < 0 || size <= 0 || 
     start+size > maf->textSize) {
-	fprintf(stderr,
-		"mafScoreRange: start = %d, size = %d, textSize = %d\n",
+	errAbort( "mafScoreRange: start = %d, size = %d, textSize = %d\n",
 		start, size, maf->textSize);
-	exit(1);
 }
 if (ss['A']['A'] != HOXD70_sym[0][0]) {
 	DNA_scores(ss);
