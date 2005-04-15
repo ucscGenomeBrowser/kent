@@ -238,6 +238,25 @@ rFillCompHash(f, hash, dy, program);
 return hash;
 }
 
+static void codeMethodName(struct pfToken *tok, FILE *f, struct pfBaseType *base, char *name)
+/* Find method in current class or one of it's parents, and print
+ * call to it */
+{
+while (base != NULL)
+    {
+    struct pfType *t;
+    for (t = base->methods; t != NULL; t = t->next)
+	{
+        if (sameString(t->fieldName, name))
+	    {
+	    fprintf(f, "_pf_cm_%s_%s", base->name, name);
+	    return;
+	    }
+	}
+    base = base->parent;
+    }
+internalErrAt(tok);
+}
 
 static int codeCall(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
@@ -248,8 +267,6 @@ struct pfParse *inTuple = function->next;
 struct pfType *outTuple = function->ty->children->next;
 int outCount = slCount(outTuple->children);
 struct pfParse *in;
-
-
 
 if (function->type == pptDot)
     {
@@ -282,7 +299,8 @@ if (function->type == pptDot)
 	}
     /* Put rest of input on the stack, and print call with mangled function name. */
     codeExpression(pfc, f, inTuple, stack+1, TRUE);
-    fprintf(f, "_pf_cm_%s_%s(%s+%d);\n", class->ty->base->name, method->name, stackName, stack);
+    codeMethodName(pp->tok, f, class->ty->base, method->name);
+    fprintf(f, "(%s+%d);\n", stackName, stack);
     }
 else
     {
@@ -1175,7 +1193,7 @@ else
 }
 
 static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
-/* Print prototype for functin call. */
+/* Print prototype for function call. */
 {
 /* Put out function prototype and opening brace.  If class add self to
  * function symbol table. */

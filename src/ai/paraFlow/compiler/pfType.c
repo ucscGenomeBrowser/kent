@@ -1015,19 +1015,23 @@ else if (tok->type == pftFloat)
     pp->ty = pfTypeNew(pfc->doubleType);
 }
 
-static struct pfType *findField(struct pfType *class, char *name)
+static struct pfType *findField(struct pfBaseType *base, char *name)
 /* Find named field in class or return NULL */
 {
 struct pfType *field;
-for (field = class->base->methods; field != NULL; field = field->next)
+while (base != NULL)
     {
-    if (sameString(name, field->fieldName))
-        return field;
-    }
-for (field = class->base->fields; field != NULL; field = field->next)
-    {
-    if (sameString(name, field->fieldName))
-        return field;
+    for (field = base->methods; field != NULL; field = field->next)
+	{
+	if (sameString(name, field->fieldName))
+	    return field;
+	}
+    for (field = base->fields; field != NULL; field = field->next)
+	{
+	if (sameString(name, field->fieldName))
+	    return field;
+	}
+    base = base->parent;
     }
 return NULL;
 }
@@ -1047,7 +1051,7 @@ if (!type->base->isClass)
     errAt(pp->tok, "dot after non-class variable");
 for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     {
-    struct pfType *fieldType = findField(type, fieldUse->name);
+    struct pfType *fieldType = findField(type->base, fieldUse->name);
     if (fieldType == NULL)
 	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
 		type->base->name);
