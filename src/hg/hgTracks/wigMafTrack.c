@@ -15,7 +15,9 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.63 2005/04/13 00:00:54 kate Exp $";
+//#define ANNOT_DEBUG
+
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.64 2005/04/15 00:22:42 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -271,7 +273,7 @@ return pairwiseSuffix(track) || summarySetting(track);
 static boolean displayZoomedIn(struct track *track)
 /* determine if mafs are loaded -- zoomed in display */
 {
-return track->customPt != NULL;
+return track->customPt != (char *)-1;
 }
 
 static void markNotPairwiseItem(struct wigMafItem *mi)
@@ -329,6 +331,8 @@ static struct wigMafItem *loadWigMafItems(struct track *track,
 /* Load up items */
 {
 struct wigMafItem *miList = NULL;
+
+track->customPt = (char *)-1;   /* no maf's loaded or attempted to load */
 
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
@@ -398,7 +402,7 @@ return mi->height;
 static void wigMafFree(struct track *track)
 /* Free up maf items. */
 {
-if (track->customPt != NULL)
+if (track->customPt != NULL && track->customPt != (char *)-1)
     mafAliFreeList((struct mafAli **)&track->customPt);
 if (track->items != NULL)
     wigMafItemFreeList((struct wigMafItem **)&track->items);
@@ -432,6 +436,9 @@ for (i=0; i < maf->textSize && baseIx < baseCount; i++)
             char buf[64];
             mafSrcDb(mc->src, buf, sizeof buf);
             if (hashLookup(itemHash, buf) == NULL)
+                continue;
+            if (mc->size == 0)
+                /* empty row annotation */
                 continue;
             if (mc->text[i] != '-')
                 {
@@ -477,16 +484,24 @@ static void processSeq(char *text, char *masterText, int textSize,
 {
 int i, outIx = 0, outPositions = 0;
 int insertSize = 0, previousInserts = 0;
+int previousBreaks = 0;
 
 /* count up insert counts in the existing line -- need to 
    add these to determine where to start this sequence in the line */
 for (i=0; outLine[i]; i++)
+    {
     if (outLine[i] == '|')
         {
         previousInserts++;
         i++;    /* skip count after escape char */
         }
-outLine = outLine + offset + previousInserts * 2;
+    if (outLine[i] == MAF_FULL_BREAK_BEFORE ||
+        outLine[i] == MAF_FULL_BREAK_AFTER ||
+        outLine[i] == MAF_PART_BREAK_BEFORE ||
+        outLine[i] == MAF_PART_BREAK_AFTER)
+            previousBreaks++;
+    }
+outLine = outLine + offset + previousBreaks + (previousInserts * 2);
 for (i=0; i < textSize && outPositions < outSize;  i++)
     {
     if (masterText[i] != '-')
@@ -815,7 +830,7 @@ for(maf=mafList; maf; maf=maf->next)
     printf("<BR> maf %d %d - ",mc->start,mc->size);
     for (mc=maf->components->next; mc ; mc=mc->next)
 	{
-	printf("%s %c %c ",mc->src,mc->leftStatus,mc->rightStatus);
+	printf("%s %d %c %c ",mc->src,mc->size, mc->leftStatus,mc->rightStatus);
 	}
     }
 printf("end ||");
@@ -969,14 +984,12 @@ struct hash *srcHash = newHash(0);
 char dbChrom[64];
 char buf[1024];
 char option[64];
-int alignLineLength = winBaseCount*2 * 1;
+int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 bool dots, chainBreaks;         /* configuration options */
 /* this line must be longer than the longest base-level display */
 char noAlignment[2000];
-int count = 0;
-int offset = 0;
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
@@ -1032,7 +1045,7 @@ for(maf=mafList; maf; maf=maf->next)
     printf("<BR>maf %d %d ",mc->start,mc->size);
     for (mc=maf->components->next; mc ; mc=mc->next)
 	{
-	printf("%s %c %c |",mc->src,mc->leftStatus,mc->rightStatus);
+	printf("%s %d %c %c |",mc->src,mc->size,mc->leftStatus,mc->rightStatus);
 	}
     }
 fflush(stdout);
@@ -1069,6 +1082,9 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         /* fill in bases for each species */
         for (mi = miList; mi != NULL; mi = mi->next)
             {
+            if (mi->ix == 1)
+                /* reference */
+                continue;
             if (mi->db == NULL)
                 /* not a species line -- it's the gaps line, or... */
                 continue;
@@ -1100,56 +1116,74 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                         continue;
                         }
                     }
-                /* try extending coordinates from another part of alignment */
-#ifdef BIGEXTEND
-                if ((infoMaf = 
-                        (struct mafAli *)hashFindVal(srcHash, mi->db)) != NULL)
-                    {
-                    struct mafComp *master, *src;
-                    int masterOffset, srcStart;
-                    char extendAlignment[2000] = {'^'};
-                    int i;
-                    master = mafFindComponent(infoMaf, dbChrom);
-                    src = mafFindComponent(infoMaf, mi->db);
-                    if (master->strand == '-')
-                        mafFlipStrand(infoMaf);
-                    masterOffset = mcMaster->start - master->start;
-                    srcStart = src->start + masterOffset;
-                    if (srcStart < src->srcSize)
-                        {
-                        /* can extend */
-                        for (i = 1; i < subSize && srcStart+i < src->srcSize;
-                                                 i++)
-                            extendAlignment[i] = '-';
-                        processSeq(extendAlignment, mcMaster->text, 
-                                        sub->textSize, lines[mi->ix],
-                                        lineOffset, subSize);
-                        }
-                    }
-#endif
                 }
             else
 		{
-		/*
-		if (mc->status & INSERT_BEFORE)
-		    printf("insert before %s |",mc->src);
-		if (mc->status & INSERT_AFTER)
-		    printf("insert adter %s |",mc->src);
-		if (mc->status & NEW_BEFORE)
-		    printf("new before %s |",mc->src);
-		if (mc->status & NEW_AFTER)
-		    printf("new adter %s |",mc->src);
-		if (mc->status & DUP_BEFORE)
-		    printf("dup before %s |",mc->src);
-		if (mc->status & DUP_AFTER)
-		    printf("dup adter %s |",mc->src);
-		    */
+                char *seq = mc->text;
+                bool needToFree = FALSE;
+                int size = sub->textSize;
 
-		//vgBox(vg, x+offset, y+count*mi->height, 1, mi->height, alignInsertsColor());
-		count++;
-		offset += sub->textSize;
-                processSeq(mc->text, mcMaster->text, sub->textSize, 
+                /* if no alignment here, but MAF annotation indicates continuity
+                 * of flanking alignments, fill with dashes or little o's*/
+                if (mc->size == 0)
+                    {
+                    if ((mc->leftStatus == MAF_CONTIG_STATUS &&
+                        mc->rightStatus == MAF_CONTIG_STATUS) ||
+                        (mc->leftStatus == MAF_INSERT_STATUS &&
+                        mc->rightStatus == MAF_INSERT_STATUS))
+                        {
+                        char fill = (mc->leftStatus == MAF_CONTIG_STATUS ? 
+                                                 '-' : 'o');
+                        seq = needMem(size+1);
+                        needToFree = TRUE;
+                        memset(seq, fill, size);
+                        /*
+                        for (p = seq, i = 0; i < size; p++, i++)
+                            *p = fill;
+                            */
+                        }
+                    else
+                        continue;
+                    }
+                if (mc->leftStatus == MAF_NEW_STATUS ||
+                    mc->rightStatus == MAF_NEW_STATUS)
+                    {
+                    int i;
+                    char *p;
+                    if (mc->leftStatus == MAF_NEW_STATUS)
+                        size++;
+                    if (mc->rightStatus == MAF_NEW_STATUS)
+                        size++;
+                    seq = needMem(size+1);
+                    needToFree = TRUE;
+                    for (p = seq, i = 0; i < size; p++, i++)
+                        *p = ' ';
+                    p = seq;
+                    if (mc->leftStatus == MAF_NEW_STATUS)
+                        {
+                        /* determine if alignment ends on chrom/contig
+                         * boundary */
+                        *seq = ((mc->start == 0 || 
+                                    mc->start + mc->size == mc->srcSize) ?
+                                MAF_FULL_BREAK_BEFORE: MAF_PART_BREAK_BEFORE);
+                        subSize++;
+                        p++;
+                        }
+                    if (mc->size != 0)
+                        strcpy(p, mc->text);
+                    if (mc->rightStatus == MAF_NEW_STATUS)
+                        {
+                        *(seq+size-1) = 
+                            ((mc->start == 0 || 
+                              mc->start + mc->size == mc->srcSize) ?
+                                MAF_FULL_BREAK_AFTER: MAF_PART_BREAK_AFTER);
+                        subSize++;
+                        }
+                    }
+                processSeq(seq, mcMaster->text, size,
                                     lines[mi->ix], lineOffset, subSize);
+                if (needToFree)
+                    freeMem(seq);
 		}
 	    }
 	}
@@ -1159,7 +1193,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 charifyInserts(insertLine, insertCounts, winBaseCount);
 mi = miList;
 spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
-                alignInsertsColor(), font, insertLine, winBaseCount);
+                getOrangeColor(), font, insertLine, winBaseCount);
 y += mi->height;
 
 /* draw alternating colors behind base-level alignments */
@@ -1180,7 +1214,7 @@ y += mi->height;
     }
 
 /* draw base-level alignments */
-for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, ++i)
+for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     {
     char *line;
     line  = lines[i];

@@ -284,6 +284,18 @@ void makeRedGreenShades(struct vGfx *vg);
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
 
+/* used for internal representation of synteny breaks
+ * in multiple alignments. "Full break" indicates that
+ * flanking alignment is on a different chromosome/contig, and
+ * that the alignment ended at a chrom/contig end.
+ * "Partial break" indicates there is additional unaligned sequence
+ * following on the chrom/contig */
+
+#define MAF_FULL_BREAK_BEFORE '^'
+#define MAF_FULL_BREAK_AFTER 'V'
+#define MAF_PART_BREAK_BEFORE 'X'
+#define MAF_PART_BREAK_AFTER 'Z'
+
 struct track *getTrackList(struct group **pGroupList);
 /* Return list of all tracks. */
 
@@ -768,8 +780,11 @@ void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height,
 
 int spreadStringCharWidth(int width, int count);
 
-Color alignInsertsColor();
+Color getOrangeColor();
 /* Return color used for insert indicators in multiple alignments */
+
+Color getBrickColor();
+/* Return color used for break indicators in multiple alignments */
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
 				 struct vGfx *vg, int xOff, int y, double scale, 

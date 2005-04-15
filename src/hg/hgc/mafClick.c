@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.23 2005/01/25 19:58:51 jill Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.24 2005/04/15 00:22:41 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -305,7 +305,24 @@ else
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
-	struct mafAli *subset = mafSubset(maf, dbChrom, winStart, winEnd);
+        int mcCount = 0;
+        struct mafComp *mc;
+        struct mafAli *subset;
+        struct mafComp *nextMc;
+        /* remove all empty components from MAF, and ignore
+         * the entire MAF if all components are empty 
+         * (solely for gap annotation) */
+        for (mc = maf->components->next; mc != NULL; mc = nextMc)
+            {
+            nextMc = mc->next;
+            if (mc->size == 0)
+                slRemoveEl(&maf->components, mc);
+            else
+                mcCount++;
+            }
+        if (mcCount == 0)
+            continue;
+	subset = mafSubset(maf, dbChrom, winStart, winEnd);
 	if (subset != NULL)
 	    {
 	    /* Reformat MAF if needed so that sequence from current

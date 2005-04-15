@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.949 2005/04/12 22:16:49 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.950 2005/04/15 00:22:41 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1113,14 +1113,24 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
-Color  makeOrangeColor(struct vGfx *vg)
+Color makeOrangeColor(struct vGfx *vg)
 {
 return vgFindColorIx(vg, 230, 130, 0);
 }
 
-Color  makeBrickColor(struct vGfx *vg)
+Color makeBrickColor(struct vGfx *vg)
 {
 return vgFindColorIx(vg, 230, 50, 110);
+}
+
+Color getOrangeColor()
+{
+return orangeColor;
+}
+
+Color getBrickColor()
+{
+return brickColor;
 }
 
 /*	See inc/chromColors.h for color defines	*/
@@ -6590,12 +6600,6 @@ rgbColor.b = (rgbColor.b+255)/2;
 return vgFindColorIx(vg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
-Color alignInsertsColor()
-/* Return color used for insert indicators in multiple alignments */
-{
-    return orangeColor;
-}
-
 int spreadStringCharWidth(int width, int count)
 {
     return width/count;
@@ -6615,7 +6619,7 @@ void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
  * The count param is the number of bases to print, not length of
  * the input line (text) */
 {
-char c[2] = "";
+char cBuf[2] = "";
 int i,j,textPos=0;
 int x1, x2;
 char *motifString = cartOptionalString(cart,BASE_MOTIFS);
@@ -6669,7 +6673,6 @@ if(motifString != NULL && strlen(motifString) != 0)
 
 for (i=0; i<count; i++, text++, textPos++)
     {
-    char printChar;
     x1 = i * width/count;
     x2 = (i+1) * width/count - 1;
     if (match != NULL && *text == '|')
@@ -6678,11 +6681,50 @@ for (i=0; i<count; i++, text++, textPos++)
         text++;
 	textPos++;
         i--;
-        vgBox(vg, x+x1, y, 1, height, alignInsertsColor());
+        vgBox(vg, x+x1, y, 1, height, getOrangeColor());
         continue;
         }
-    printChar = *text;
-    c[0] = printChar;
+    if (match != NULL && i < count-1 && *text == ' ' &&
+            text[1] == MAF_PART_BREAK_BEFORE)
+        /* synteny break w/ unaligned sequence at contig/chrom boundary
+         * before alignment.
+         * display as vertical red bar followed by 'o' */
+        {
+        vgBox(vg, x+x1, y, 1, height, getBrickColor());
+        /* print "little o" */
+        text[1] = UNALIGNED_SEQ;
+        i--;
+        }
+    if (match != NULL && *text == MAF_PART_BREAK_BEFORE)
+        {
+        /* ignore if we lack room at window start to display this */
+        i--;
+        continue;
+        }
+    if (match != NULL && i < count && text[1] == ' ' &&
+            *text == MAF_PART_BREAK_AFTER)
+        /* synteny break w/ unaligned sequence at contig/chrom boundary
+         * after alignment.
+         * display as 'o' followed by vertical red bar */
+        {
+        vgBox(vg, x+x2, y, 1, height, getBrickColor());
+        /* print "little o" */
+        text[1] = UNALIGNED_SEQ;
+        text++;
+        textPos++;
+        i--;
+        }
+    if (match != NULL && 
+            (*text == MAF_FULL_BREAK_BEFORE ||
+             *text == MAF_FULL_BREAK_AFTER))
+        /* synteny break at chrom/contig boundary.
+         * display as vertical red bar */
+        {
+        vgBox(vg, x+x1, y, 1, height, getBrickColor());
+        i--;
+        continue;
+        }
+    cBuf[0] = *text;
     clr = color;
     if (dots)
         {
@@ -6690,7 +6732,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* suppress for first line (self line) */
         if (!selfLine && match != NULL && match[i])
             if (*text == match[i])
-                c[0] = '.';
+                cBuf[0] = '.';
         }
     else
         {
@@ -6703,14 +6745,15 @@ for (i=0; i<count; i++, text++, textPos++)
     if(inMotif != NULL && textPos < textLength && inMotif[textPos])
 	{
 	vgBox(vg, x1+x, y, x2-x1, height, clr);
-	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, c);
+	vgTextCentered(vg, x1+x, y, x2-x1, height, MG_WHITE, font, cBuf);
 	}
     else
         {
         /* restore char for unaligned sequence to lower case */
-        if (tolower(c[0]) == tolower(UNALIGNED_SEQ))
-            c[0] = UNALIGNED_SEQ;
-        vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, c);
+        if (tolower(cBuf[0]) == tolower(UNALIGNED_SEQ))
+            cBuf[0] = UNALIGNED_SEQ;
+        /* display bases */
+        vgTextCentered(vg, x1+x, y, x2-x1, height, clr, font, cBuf);
         }
     }
 freez(&inMotif);
@@ -9244,30 +9287,6 @@ return (hTableExistsDb("hgFixed", "cutters") &&
 	hTableExistsDb("hgFixed", "rebaseRefs") &&
 	hTableExistsDb("hgFixed", "rebaseCompanies"));
 }
-
-#ifdef UNUSED
-void hideAllTracks(struct track *trackList)
-/* hide all the tracks (and any in trackDb too) */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char *trackDb = hTrackDbName();
-char query[256];
-assert(trackDb);
-safef(query, sizeof(query), "select tableName from %s", trackDb);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    assert(row[0]);
-    cartSetString(cart, row[0], "hide");
-    }
-freez(&trackDb);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-}
-#endif /* UNUSED */
-
 
 void hotLinks()
 /* Put up the hot links bar. */
