@@ -1006,17 +1006,17 @@ static void typeDot(struct pfCompile *pfc, struct pfParse *pp)
 {
 struct pfParse *varUse = pp->children;
 struct pfParse *fieldUse;
-struct pfVar *var = varUse->var;
-struct pfType *type = var->ty;
+struct pfType *type = varUse->var->ty;
 
+if (type->base == pfc->stringType)
+    type = pfc->stringFullType;
 if (!type->base->isClass)
     errAt(pp->tok, "dot after non-class variable");
-    
 for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     {
     struct pfType *fieldType = findField(type, fieldUse->name);
     if (fieldType == NULL)
-        errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
+	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
 		type->base->name);
     fieldUse->ty = fieldType;
     type = fieldType;

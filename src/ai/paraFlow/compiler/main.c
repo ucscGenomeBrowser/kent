@@ -144,6 +144,7 @@ pfc->dirType->keyedBy = pfc->stringType;
 static void addBuiltInFunctions(struct pfCompile *pfc)
 /* Add built in functions */
 {
+#ifdef OLD
 struct pfScope *scope = pfc->scope;
 struct pfType *toType = pfTypeNew(pfc->toType);
 struct pfType *inTuple = pfTypeNew(pfc->tupleType);
@@ -155,6 +156,7 @@ inTuple->next = outTuple;
 inTuple->children = varType;
 pfScopeAddVar(scope, "print", toType, NULL);
 pfScopeAddVar(scope, "prin", toType, NULL);
+#endif /* OLD */
 }
 
 struct pfCompile *pfCompileNew()

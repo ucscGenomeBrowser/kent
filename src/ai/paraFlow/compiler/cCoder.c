@@ -458,7 +458,10 @@ static void codeDotAccess(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *class = pp->children;
 struct pfParse *field = class->next;
-fprintf(f, "((struct %s *)", class->ty->base->name);
+if (class->ty->base == pfc->stringType)
+    fprintf(f, "(");
+else
+    fprintf(f, "((struct %s *)", class->ty->base->name);
 codeParamAccess(pfc, f, class->ty->base, stack);
 fprintf(f, ")");
 while (field != NULL)

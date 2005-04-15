@@ -57,6 +57,8 @@ struct pfCompile
     struct pfBaseType *listType;
     struct pfBaseType *treeType;
     struct pfBaseType *dirType;
+
+    struct pfType *stringFullType;	/* String type info including .size, .append() etc. */
     };
 
 struct pfCompile *pfCompileNew();
@@ -64,6 +66,9 @@ struct pfCompile *pfCompileNew();
 
 char *fetchBuiltinCode();
 /* Return a string with the built in stuff. */
+
+char *fetchStringDef();
+/* Return a string with definition of string. */
 
 /* --- utility functions --- */
 void printEscapedString(FILE *f, char *s);

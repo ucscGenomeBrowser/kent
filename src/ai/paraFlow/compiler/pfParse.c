@@ -10,6 +10,7 @@
 #include "pfToken.h"
 #include "pfCompile.h"
 #include "pfParse.h"
+#include "pfBindVars.h"
 
 char *pfParseTypeAsString(enum pfParseType type)
 /* Return string corresponding to pfParseType */
@@ -1679,15 +1680,34 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     varDecAndAssignToVarInit(pp);
 }
 
+static void attachStringsAndThings(struct pfCompile *pfc, struct pfParse *stringModule)
+/* Finish parsing, binding and type checking the string module.  Rummage around for 
+ * string class in it and attach it to pfc->stringFullType. */
+{
+struct pfBaseType *base;
+varDecAndAssignToVarInit(stringModule);
+pfBindVars(pfc, stringModule);
+pfTypeCheck(pfc, &stringModule);
+base = pfScopeFindType(stringModule->scope, "_pf_string");
+if (base == NULL)
+    errAbort("Can't find class _pf_string in attachStringsAndThings");
+pfc->stringFullType = pfTypeNew(base);
+}
+
 
 struct pfParse *pfParseProgram(struct pfCompile *pfc, char *builtinCode, char *fileName)
 /* Return parse tree of file and any files gone into. Variables are
  * not bound yet. */
 {
 struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
+struct pfSource *stringSource = pfSourceNew("<string>", fetchStringDef());
+struct pfScope *stringScope = pfScopeNew(pfc, pfc->scope, 3, TRUE);
+struct pfParse *stringModule = pfParseSource(pfc, stringSource, program, stringScope);
 struct pfSource *builtinSource = pfSourceNew("<builtin>", builtinCode);
 struct pfParse *builtinModule = pfParseSource(pfc, builtinSource, program, pfc->scope);
 struct pfParse *mainModule = pfParseFile(pfc, fileName, program);
+
+attachStringsAndThings(pfc, stringModule);
 
 /* Go into other modules, and put initial module at end of list. */
 slAddHead(&program->children, builtinModule);
