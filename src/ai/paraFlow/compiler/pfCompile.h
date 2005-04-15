@@ -24,7 +24,6 @@ struct pfCompile
 /* Paraflow compiler */
     {
     struct pfCompile *next;
-    char *baseFile;		/* First file to compile. */
     struct hash *modules;	/* Full path to all modules. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
@@ -60,8 +59,11 @@ struct pfCompile
     struct pfBaseType *dirType;
     };
 
-struct pfCompile *pfCompileNew(char *fileName);
+struct pfCompile *pfCompileNew();
 /* Create new pfCompile.  */
+
+char *fetchBuiltinCode();
+/* Return a string with the built in stuff. */
 
 /* --- utility functions --- */
 void printEscapedString(FILE *f, char *s);

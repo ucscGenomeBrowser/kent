@@ -70,7 +70,10 @@ struct pfSource
     size_t contentSize;		/* Size of contents. */
     };
 
-struct pfSource *pfSourceNew(char *fileName);
+struct pfSource *pfSourceNew(char *name, char *contents);
+/* Create new pfSource. */
+
+struct pfSource *pfSourceOnFile(char *fileName);
 /* Create new pfSource based around file */
 
 struct pfTokenizer
@@ -112,9 +115,12 @@ struct pfToken
     };
 
 
-struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords);
-/* Create tokenizing structure on file.  Reserved words is an int valued hash
- * that may be NULL. */
+struct pfTokenizer *pfTokenizerNew(struct hash *reservedWords);
+/* Create tokenizer with given reserved words.  You'll need to
+ * do a pfTokenizerNewSource() before using it much. */
+
+void pfTokenizerNewSource(struct pfTokenizer *tkz, struct pfSource *source);
+/*  Attatch new source to tokenizer. */
 
 struct pfToken *pfTokenizerNext(struct pfTokenizer *tkz);
 /* Puts next token in token.  Returns token type. For single

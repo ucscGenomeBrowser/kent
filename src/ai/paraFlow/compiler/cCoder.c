@@ -28,11 +28,11 @@ static void codeScopeVars(struct pfCompile *pfc, FILE *f,
 	struct pfScope *scope, boolean zeroUnitialized);
 /* Print out variable declarations associated with scope. */
 
-static void printPreamble(struct pfCompile *pfc, FILE *f)
+static void printPreamble(struct pfCompile *pfc, FILE *f, char *fileName)
 /* Print out C code for preamble. */
 {
 fprintf(f, "/* This file is a translation of %s by paraFlow. */\n", 
-	pfc->baseFile);
+	fileName);
 fprintf(f, "\n");
 fprintf(f, "#include \"pfPreamble.h\"\n");
 fprintf(f, "\n");
@@ -1495,7 +1495,7 @@ struct pfParse *module;
 struct pfScope *scope;
 struct hash *compTypeHash;
 
-printPreamble(pfc, f);
+printPreamble(pfc, f, fileName);
 pfc->runTypeHash = printTypeInfo(pfc, program, f);
 
 for (module = program->children; module != NULL; module = module->next)

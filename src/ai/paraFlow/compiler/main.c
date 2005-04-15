@@ -16,6 +16,7 @@
 #include "pfCodeC.h"
 #include "pfPreamble.h"
 
+
 int endPhase = 10;
 
 void usage()
@@ -156,18 +157,17 @@ pfScopeAddVar(scope, "print", toType, NULL);
 pfScopeAddVar(scope, "prin", toType, NULL);
 }
 
-struct pfCompile *pfCompileNew(char *fileName)
+struct pfCompile *pfCompileNew()
 /* Make new compiler object. */
 {
 struct pfCompile *pfc;
 AllocVar(pfc);
-pfc->baseFile = cloneString(fileName);
 pfc->modules = hashNew(0);
 pfc->reservedWords = createReservedWords();
 pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
 addBuiltInTypes(pfc);
 addBuiltInFunctions(pfc);
-pfc->tkz = pfTokenizerNew(fileName, pfc->reservedWords);
+pfc->tkz = pfTokenizerNew(pfc->reservedWords);
 return pfc;
 }
 
@@ -190,11 +190,11 @@ FILE *boundF = mustOpen(boundFile, "w");
 verbose(2, "Phase 1\n");
 splitPath(fileName, baseDir, baseName, baseSuffix);
 safef(codeFile, sizeof(codeFile), "%s%s.c", baseDir, baseName);
-pfc = pfCompileNew(fileName);
+pfc = pfCompileNew();
 if (endPhase <= 1)
     return;
 verbose(2, "Phase 2\n");
-program = pfParseProgram(fileName, pfc);
+program = pfParseProgram(pfc, fetchBuiltinCode(), fileName);
 pfParseDump(program, 0, parseF);
 carefulClose(&parseF);
 if (endPhase <= 2)

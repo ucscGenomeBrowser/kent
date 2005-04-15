@@ -128,26 +128,32 @@ switch (type)
     }
 }
 
-struct pfSource *pfSourceNew(char *fileName)
-/* Create new pfSource based around file */
+struct pfSource *pfSourceNew(char *name, char *contents)
+/* Create new pfSource. */
 {
 struct pfSource *source;
 AllocVar(source);
-source->name = cloneString(fileName);
-readInGulp(fileName, &source->contents, &source->contentSize);
+source->name = cloneString(name);
+source->contents = contents;
+source->contentSize = strlen(contents);
 return source;
 }
 
-struct pfTokenizer *pfTokenizerNew(char *fileName, struct hash *reservedWords)
-/* Create tokenizing structure on file.  Reserved words is an int valued hash
- * that may be NULL. */
+struct pfSource *pfSourceOnFile(char *fileName)
+/* Create new pfSource based around file */
+{
+char *contents;
+readInGulp(fileName, &contents, NULL);
+return pfSourceNew(fileName, contents);
+}
+
+struct pfTokenizer *pfTokenizerNew(struct hash *reservedWords)
+/* Create tokenizer with given reserved words.  You'll need to
+ * do a pfTokenizerNewSource() before using it much. */
 {
 struct pfTokenizer *tkz;
 AllocVar(tkz);
 tkz->lm = lmInit(0);
-tkz->source = pfSourceNew(fileName);
-tkz->pos = tkz->source->contents;
-tkz->endPos = tkz->pos + tkz->source->contentSize;
 tkz->symbols = hashNew(16);
 tkz->strings = hashNew(16);
 tkz->dy = dyStringNew(0);
@@ -155,6 +161,15 @@ if (reservedWords == NULL)
     reservedWords = hashNew(1);
 tkz->reserved = reservedWords;
 return tkz;
+}
+
+
+void pfTokenizerNewSource(struct pfTokenizer *tkz, struct pfSource *source)
+/*  Attatch new source to tokenizer. */
+{
+tkz->source = source;
+tkz->pos = source->contents;
+tkz->endPos = tkz->pos + source->contentSize;
 }
 
 static void tokSingleChar(struct pfTokenizer *tkz, struct pfToken *tok,

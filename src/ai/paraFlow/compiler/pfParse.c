@@ -1505,24 +1505,16 @@ int endCount = 3;
 struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, fileName);
+struct pfSource *source = pfSourceOnFile(fileName);
 
 modParse->name = cloneString(module);
 chopSuffix(modParse->name);
 
-/* Read tokens, add scoping info, and add to list. */
+/* Read tokens from file. */
+pfTokenizerNewSource(tkz, source);
 while ((tok = pfTokenizerNext(tkz)) != NULL)
     {
     slAddHead(&tokList, tok);
-    if (tok->type == '{')
-        {
-	scope = pfScopeNew(pfc, scope, 0, FALSE);
-	tok->val.scope = scope;
-	}
-    else if (tok->type == '}')
-        {
-	scope = scope->parent;
-	tok->val.scope = scope;
-	}
     }
 
 /* Add enough ends to satisfy all look-aheads */
@@ -1536,6 +1528,22 @@ while (--endCount >= 0)
     }
 
 slReverse(&tokList);
+
+/* Add scoping info to token list */
+for (tok = tokList; tok != NULL; tok = tok->next)
+    {
+    if (tok->type == '{')
+        {
+	scope = pfScopeNew(pfc, scope, 0, FALSE);
+	tok->val.scope = scope;
+	}
+    else if (tok->type == '}')
+        {
+	scope = scope->parent;
+	tok->val.scope = scope;
+	}
+    }
+
 
 addClasses(pfc, tokList, scope);
 pfParseTokens(pfc, tokList, scope, modParse);
@@ -1602,7 +1610,7 @@ if (pp->type == pptInto)
 	char *oldPos = tkz->pos;
 	char *oldEndPos = tkz->endPos;
 	struct pfParse *mod;
-	tkz->source = pfSourceNew(dy->string);
+	tkz->source = pfSourceOnFile(dy->string);
 	tkz->pos = tkz->source->contents;
 	tkz->endPos = tkz->pos + tkz->source->contentSize;
 	mod = pfParseFile(dy->string, pfc, program);
@@ -1665,7 +1673,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 }
 
 
-struct pfParse *pfParseProgram(char *fileName, struct pfCompile *pfc)
+struct pfParse *pfParseProgram(struct pfCompile *pfc, char *builtinCode, char *fileName)
 /* Return parse tree of file and any files gone into. Variables are
  * not bound yet. */
 {
