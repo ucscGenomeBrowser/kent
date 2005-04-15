@@ -1,0 +1,41 @@
+
+I'm starting this doc about 2-3 weeks into the serious development of
+ParaFlow.  Currently the compiler has the following major phases:
+    Tokenizer - Strips comments.  Recognizes boundaries of numbers,
+    	names, strings, and punctuation.  Turns free text into tokens.
+    Parser - Converts token stream to a parse tree.
+    Name binding - associates a particular scope with each name, and
+        complains about names used but never defined.
+    Type checking - assigns a type (string, float, object, etc) to
+        nodes in the parse tree.  Inserts cast nodes where necessary
+	to get types to agree in binary operations and to get
+	the input parameters of function calls to agree with the
+	types in the function declaration.  Does some other small
+	rearrangements of the parse tree.
+    Code generation - generate C code.  The expression evaluation and
+        function i/o is all done through a stack that's type as a big
+	union.   
+    Run time - reads type tables.  Allocates and frees objects.
+	Prints things in a type-aware manner.  Implements string
+	operations.
+The program will call gcc on the C code and try to execute the result
+if gcc manages to compile it.  
+
+ParaFlow does bounds checking on arrays and automatically cleans
+up objects that fall out of scope using a reference counting
+mechanism.
+
+Currently quite a bit of this is working.  There's about 50 test programs
+that it handles ok.  There's about 20 more that it doesn't.  Some things
+that still need doing are
+  - Making it convenient to add library functions and classes.
+  - Enriching strings and arrays.
+  - Implementing trees and dirs.
+  - Doing parallel checking for para and flow statements.
+  - Implement "para into" statement.
+  - Working on multiple modules.
+  - Making it so can allocate an array separate from initializing it.
+  - Implementing the rest of inheritance.
+The parser itself is written fairly permissively.  Currently a lot
+of syntax errors will just crash the compiler.  Still enough is working
+you can get a bit of an idea of the potential of the system.
