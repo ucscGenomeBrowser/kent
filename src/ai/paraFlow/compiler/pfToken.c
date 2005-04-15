@@ -94,7 +94,7 @@ errAt(got, "Expecting %s got %s", expecting, tokAsString(got));
 char *pfTokTypeAsString(enum pfTokType type)
 /* Return string corresponding to pfTokType */
 {
-static char buf[2];
+static char buf[16];
 switch (type)
     {
     case pftWhitespace: return "pftWhitespace";
@@ -122,9 +122,32 @@ switch (type)
     case pftSys:             return "%.";
     case pftUser:            return "+.";
     case pftSysOrUser:       return "*.";
+    case pftClass: 	     return "pftClass";
+    case pftTo: 	     return "pftTo";
+    case pftPara: 	     return "pftPara";
+    case pftFlow: 	     return "pftFlow";
+    case pftInto: 	     return "pftInto";
+    case pftFor: 	     return "pftFor";
+    case pftForeach: 	     return "pftForeach";
+    case pftWhile: 	     return "pftWhile";
+    case pftOf: 	     return "pftOf";
+    case pftIf: 	     return "pftIf";
+    case pftElse: 	     return "pftElse";
+    case pftBreak: 	     return "pftBreak";
+    case pftContinue: 	     return "pftContinue";
+    case pftReturn: 	     return "pftReturn";
     default:
-        buf[0] = type;
-	return buf;
+	if (type < 256)
+	    {
+	    buf[0] = type;
+	    buf[1] = 0;
+	    return buf;
+	    }
+	else
+	    {
+	    safef(buf, sizeof(buf), "tok#%d", type);
+	    return buf;
+	    }
     }
 }
 
