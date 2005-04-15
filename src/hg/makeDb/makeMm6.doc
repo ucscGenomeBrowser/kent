@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.28 2005/04/15 02:14:51 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.29 2005/04/15 23:36:22 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -2735,7 +2735,7 @@ SEQ2_LEN=$BASE/S2.len
     #   76415718 bases of 1381238994 (5.532%) in intersection
 
 #############################################################################
-# BLASTZ CHIMP PanTro1 (WORKING - 2005-04-05 - Hiram)
+# BLASTZ CHIMP PanTro1 (DONE - 2005-04-05 - 2005-04-15 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
     cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
@@ -2831,6 +2831,30 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
     cd /cluster/data/mm6/bed/blastzPanTro1.2005_04_08
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-swap -fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
+    #	107 minutes
+    featureBits panTro1 netMm6
+    #	3306360710 bases of 2733948177 (120.937%) in intersection
+    featureBits panTro1 chainMm6
+    #	3363239156 bases of 2733948177 (123.018%) in intersection
+    featureBits panTro1 chainMm6Link
+    #	922583825 bases of 2733948177 (33.745%) in intersection
+    featureBits -countGaps panTro1 netMm6
+    #	3306360710 bases of 4420375440 (74.798%) in intersection
+    featureBits -countGaps panTro1 netHg16
+    #	4015411490 bases of 4420375440 (90.839%) in intersection
+    featureBits -countGaps panTro1 chainMm6
+    #	3363239156 bases of 4420375440 (76.085%) in intersection
+    featureBits -countGaps panTro1 chainHg16
+    #	4056193816 bases of 4420375440 (91.761%) in intersection
+    #	on kolossus:
+    HGDB_CONF=~/.hg.conf.read-only featureBits -countGaps panTro1 chainHg16Link
+    #	2611490291 bases of 4420375440 (59.078%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only featureBits -countGaps panTro1 chainMm6Link
+    #	922583825 bases of 4420375440 (20.871%) in intersection
+
+    #	Appears to be reasonable, check the genome-test browser on both
+    #	the Mm6 assembly and the PanTro1 assembly to see if the net and
+    #	chain tracks appear and are in the proper order.
 
 #############################################################################
 # STS MARKERS DATA DOWNLOAD (WORKING - 2005-04-06 - Hiram)
@@ -2987,13 +3011,13 @@ cat << '_EOF_' > template
     para check
     para push
 XXXX - STARTED - 2005-04-14 15:40 
-    ... etc ...
-# Completed: 639 of 639 jobs
-# CPU time in finished jobs:     334066s    5567.76m    92.80h    3.87d  0.011 y
-# IO & Wait Time:                 72565s    1209.42m    20.16h    0.84d  0.002 y
-# Average job time:                 636s      10.61m     0.18h    0.01d
-# Longest job:                      800s      13.33m     0.22h    0.01d
-# Submission to last job:          1090s      18.17m     0.30h    0.01d
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:     445070s    7417.83m   123.63h    5.15d  0.014 y
+# IO & Wait Time:                   463s       7.72m     0.13h    0.01d  0.000 y
+# Average job time:               11138s     185.64m     3.09h    0.13d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           53053s     884.22m    14.74h    0.61d
+# Submission to last job:         53053s     884.22m    14.74h    0.61d
 
     # on the file server
     ssh kksilo
@@ -3001,11 +3025,220 @@ XXXX - STARTED - 2005-04-14 15:40
     /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
     rmdir temp
 
-    # comparing results to Mm4:
+    # a rough comparison with previous results:
     wc primers.psl
-    # 5719969 120119288 590806241 primers.psl
-    # Mm4 wc primers.psl /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
-    # 5745617 120657896 592135728 primers.psl
+    #	5724127 120206606 615248041 primers.psl
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl
+    #	5719969 120119288 590806241
+    wc /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
+    #	5745617 120657896 592135728 
+
+    # another kluster run for the ePCR
+    ssh kk9
+    cd /cluster/data/mm6/bed/STSmarkers/ePCR
+    ls -1S /panasas/store/mm6/fasta/chr*.fa > contig.lst
+    mkdir epcr.out
+    cat << '_EOF_' > runPCR.csh
+#!/bin/csh -fe
+/cluster/bin/i386/e-PCR $1 $2 N=1 M=50 W=5 > $3
+'_EOF_'
+    # emacs happy ?
+    chmod +x runPCR.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./runPCR.csh /panasas/store/mm6/STSmarkers/mouseP.info $(path1) {check out line+ epcr.out/$(num1).epcr}
+#ENDLOOP
+'_EOF_'
+    # the mouseP.info was created above
+    gensub2 contig.lst single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:      77676s    1294.60m    21.58h    0.90d  0.002 y
+# IO & Wait Time:                   370s       6.17m     0.10h    0.00d  0.000 y
+# Average job time:                1951s      32.52m     0.54h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6173s     102.88m     1.71h    0.07d
+# Submission to last job:          6173s     102.88m     1.71h    0.07d
+
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/STSmarkers/ePCR
+    # all those results become all.epcr
+    cat epcr.out/*.epcr > all.epcr
+
+    # comparing to previous results:
+    wc all.epcr
+    #	55871  223484 3086148 all.epcr
+    wc /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
+    #	55677  222708 2945623 /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
+    wc /cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
+    #	74705  298820 3971712 /cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
+    #	Mm4 seems to be out of whack
+
+    cd /cluster/data/mm6/bed/STSmarkers/primer
+
+    /cluster/bin/scripts/filterSTSPrimers \
+    -mouse ../stsInfoMouse.bed primers.psl \
+        ../mouseP.info ../ePCR/all.epcr > primers.psl.filter.blat
+
+    #  The output should show an increasing count:
+    #	Reading name info
+    #	Reading primer info
+    #	Processing file
+    #	100000
+    #	200000
+    #	300000
+    #	...
+    #	5700000
+    #	Determining ePCR not found
+    #
+    wc primers.psl.filter.blat
+    #	33662  706902 3605847 primers.psl.filter.blat
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.blat
+    #	33476  702996 3442402 
+    wc /cluster/data/mm4/bed/STSmarkers/primer/primers.psl.filter.blat
+    #	32729  687309 3331894
+    #	It appears Mm4 became sane after the filter
+
+    # create accession_info.rdb
+    touch empty_sequence.inf
+    /cluster/bin/scripts/compileAccInfo -mouse \
+	/cluster/data/mm6 empty_sequence.inf
+    # works with errors on missing randoms, etc...:
+    # cat: /cluster/data/mm5/11/chr11_random.agp: No such file or directory
+    # cat: /cluster/data/mm5/M/chrM_random.agp: No such file or directory
+    mv accession_info.rdb accession_info.rdb.tmp
+    /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp > \
+	accession_info.rdb
+    rm accession_info.rdb.tmp
+    # comparing results to previous
+    wc accession_info.rdb
+    #	93052 1023576 6824900 accession_info.rdb
+    wc /cluster/data/mm5/bed/STSmarkers/primer/accession_info.rdb
+    #	131845 1450299 9681940
+    wc /cluster/data/mm4/bed/STSmarkers/primer/accession_info.rdb
+    #	86935  956289 6374930 
+
+    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    /cluster/bin/scripts/epcrToPsl -mouse \
+	epcr.not.found ../mouseP.info \
+	accession_info.rdb /cluster/data/mm6
+XXXX - this is broken 2005-04-15 16:15 - it is looking for contigs
+Getting chromosome info
+Reading primer info
+Creating psl file
+Couldn't open /cluster/data/mm6//chr7/chr7.fa , No such file or directory
+out.fa does not exist - /cluster/data/mm6//chr7/chr7.fa
+
+    # Comparing results to previous:
+    wc epcr*
+    #	 467    1868   17135 epcr.not.found
+    #	  63     756    6041 epcr.not.found.nomatch
+    #	 404    8484   40254 epcr.not.found.psl
+    #	 158     535    4308 epcrToPsl
+    #	1092   11643   67738 total
+
+    # Mm5 wc epcr*
+    wc /cluster/data/mm5/bed/STSmarkers/primer/epcr*
+    #	 463    1852   17080 epcr.not.found
+    #	  61     732    5845 epcr.not.found.nomatch
+    #	 398    8358   38591 epcr.not.found.psl
+    #	 402    8442   39011 epcr.not.found.psl.orig
+    #	1324   19384  100527 total
+
+    # Mm4 wc epcr*
+    wc /cluster/data/mm4/bed/STSmarkers/primer/epcr*
+    #	328    1312   12011 epcr.not.found
+    #	 57     684    5474 epcr.not.found.nomatch
+    #	266    5586   25711 epcr.not.found.psl
+    #	163     552    4370 epcrToPsl
+    #	814    8134   47566 total
+
+XXXX this seems to be in stsInfoMouse.bed but not in epcr.not.found.psl
+XXXX - 2005-04-15
+    # there is a single error being propagated here from the file
+    # /cluster/store5/mouseMarker/stsInfoMouse.bed which has an error
+    # at line 53958:
+62943   D2J3    91947   D2J3                            CAACCAGCTCAC    
+CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
+    # The value '1825,' is incorrect.  Should be a small integer here.
+    # to work around this problem, I'm manually eliminating this problem
+    # from the epcr.not.found.psl file where it has now become four bad
+    # lines:
+# 24    0       0       0       1       1801    1       1789    +       27119   
+1825    0       1825chr11_16 0       1115413 1117226 2       12,12,  0,1813, 
+1115413,1117214,
+# 24    0       0       0       1       1801    1       1789    +       27119   
+1825    0       1825chr11_16 0       1115413 1117226 2       12,12,  0,1813, 
+1115413,1117214,
+216a219,220
+# 24    0       0       0       1       1801    1       1789    +       62943   
+1825,   0       1825,chr11_16        0       1115413 1117226 2       12,12,  
+0,1813, 1115413,1117214,
+# 24    0       0       0       1       1801    1       1789    +       62943   
+1825,   0       1825,chr11_16        0       1115413 1117226 2       12,12,  
+0,1813, 1115413,1117214,
+    # taking those four lines out. 
+    
+    cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+
+    # lift those primers  (added chrM to this lifter script for mouse)
+    # creates primers.psl.filter.lifted
+    /cluster/bin/scripts/lifter -mouse -psl \
+	/cluster/data/mm6 primers.psl.filter
+    # wc primers.psl.filter.lifted
+    # 33691  707511 3601164 primers.psl.filter.lifted
+
+    # create primers.psl.filter.lifted.initial
+      bash
+	PATH=/cluster/bin/scripts:$PATH 
+	/cluster/bin/scripts/extractPslInfo primers.psl.filter.lifted
+    #	wc primers.psl.filter.lifted.initial
+    # 33689  202134 1799016 primers.psl.filter.lifted.initial
+
+    # create primers.psl.filter.lifted.initial.acc
+    /cluster/bin/scripts/findAccession -agp \
+	-mouse primers.psl.filter.lifted.initial /cluster/data/mm6
+    # wc primers.psl.filter.lifted.initial.acc
+    # 33689  235823 2158029 primers.psl.filter.lifted.initial.acc
+
+    # this needs to be -rat as that specifies how to scan the
+    # stsInfoMouse.bed file and it does not work if you use -mouse
+    /cluster/bin/scripts/getStsId -rat \
+	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
+	> primers.initial.acc.trans
+    # wc primers.initial.acc.trans
+    # 33689  235823 1834889 primers.initial.acc.trans
+
+    sort -k 4n primers.initial.acc.trans > primers.final
+    rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
+    # comparing results to Mm4:
+    # Mm5 wc primers.final
+    # 33689  235823 1834889 primers.final
+    # Mm4 wc primers.final
+    # 32983  230881 1771293 primers.final
+
+    cd /cluster/data/mm6/bed/STSmarkers
+    # stsMarkers.final is empty for mouse
+    touch stsMarkers.final dummy
+    bash
+    PATH=/cluster/bin/scripts:$PATH \
+    /cluster/bin/scripts/combineSeqPrimerPos \
+	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
+    # Comparing results to Mm4
+    # Mm5 wc stsMarkers_pos.rdb
+    # 32085  224595 1862816 stsMarkers_pos.rdb
+    # Mm4 wc stsMarkers_pos.rdb
+    # 31270  218890 1869417 stsMarkers_pos.rdb
+
+    /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
+	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
+    # wc stsMapMouse.bed
+    # 29069  301535 2123622 stsMapMouse.bed
 
 #############################################################################
 # HGCENTRAL DEFAULTDB UPDATE (DONE - 2005-04-08 - Hiram)
@@ -3069,7 +3302,7 @@ XXXX - WORKING 2005-04-08 16:20
     cd /cluster/data/mm6/bed/multiz
 
     # make output dir and run dir
-    ssh kk9
+    ssh kki
     cd /cluster/data/mm6/bed/multiz10way
     mkdir -p maf
     mkdir -p run
@@ -3136,10 +3369,13 @@ cat > oneMultiz.csh << 'EOF'
                 $out/$c.tmp.maf
         echo "Ordering $c.maf"
         /iscratch/i/mm6/multiz10way/penn/maf_project $out/$c.tmp.maf mm6.$c > $out/$c.maf
+	rm -f $t1 $t2
     else if (-s $t1) then
         cp -p $t1 $out/$c.maf
+	rm -f $t1
     else if (-s $t2) then
         cp -p $t2 $out/$c.maf
+	rm -f $t2
     endif
 'EOF'
 # << keep emacs coloring happy
@@ -3152,12 +3388,12 @@ cat > oneMultiz.csh << 'EOF'
     /cluster/bin/iSync
 
     #	back to run the job
-    ssh kk9
+    ssh kki
     cd /cluster/data/mm6/bed/multiz10way/run
 
-    #	Not sure what this is used for.  Appears to be from something
-    #	that is no longer used.  Can find no reference to it in the
-    #	procedures.
+    #	This tree.nh was used in the distant past for early versions
+    #	of phastCons.  Now, this is merely a convenient reference to the
+    #	tree under construction.
     cat << '_EOF_' > tree.nh
 ((((((((hg17,(mm6,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))
 '_EOF_'
@@ -3168,13 +3404,13 @@ cat > allMultiz.csh << 'EOF'
     # multiple alignment steps:
 set c = $1
 /iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c hg17 rn3  1
-/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c canFam1 hg17rn3  1
-/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c bosTau1 canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c bosTau1 canFam1 0
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c bosTau1canFam1 hg17rn3  1
 /iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c monDom1 bosTau1canFam1hg17rn3  1
 /iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c galGal2 monDom1bosTau1canFam1hg17rn3  1
 /iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c xenTro1 galGal2monDom1bosTau1canFam1hg17rn3  1
-/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c tetNig1 xenTro1galGal2monDom1bosTau1canFam1hg17rn3  1
-/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c danRer2 tetNig1xenTro1galGal2monDom1bosTau1canFam1hg17rn3  1
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c danRer2 tetNig1 0
+/iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c danRer2tetNig1 xenTro1galGal2monDom1bosTau1canFam1hg17rn3  1
 # get final alignment file
 /iscratch/i/mm6/multiz10way/penn/oneMultiz.csh $c danRer2tetNig1xenTro1galGal2monDom1bosTau1canFam1hg17rn3 /cluster/data/mm6/bed/multiz10way/maf/$c.maf
 #cleanup
@@ -3196,7 +3432,26 @@ cat  << 'EOF' > template
     para create jobList
     para try; para check
     para push
-XXX - RUNNING - 2005-04-14
+# Completed: 20 of 40 jobs
+# Crashed: 20 jobs
+# CPU time in finished jobs:       1783s      29.72m     0.50h    0.02d  0.000 y
+# IO & Wait Time:                   102s       1.70m     0.03h    0.00d  0.000 y
+# Average job time:                  94s       1.57m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             710s      11.83m     0.20h    0.01d
+# Submission to last job:          6771s     112.85m     1.88h    0.08d
+    #	the full chrom runs are failing, I suspect lack of memory,
+    #	So, recover this batch and run the rest on kki
+    ssh kk9
+    cd /cluster/data/mm6/bed/multiz10way/run
+    para recover jobList recoverJobList
+    ssh kki
+    cd /cluster/data/mm6/bed/multiz10way/run
+    rm -fr err batch
+    para create recoverJobList
+    para try; check; push; ... etc ...
+XXX - RUNNING - 2005-04-14 16:00
+XXX - FAILED - evidently these jobs are too big even for these machines
 # Completed: 5517 of 5517 jobs
 # CPU time in finished jobs:       8337s     138.95m     2.32h    0.10d  0.000 y
 # IO & Wait Time:                 15166s     252.77m     4.21h    0.18d  0.000 y
