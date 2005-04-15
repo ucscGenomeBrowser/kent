@@ -134,6 +134,15 @@ array->elType = elTypeId;
 return array;
 }
 
+_pf_Array _pf_dim_array(int size, int arrayTypeId, int elTypeId)
+/* Return array of given type and size, initialized to zeroes. */
+{
+struct _pf_type *elType = _pf_type_table[elTypeId];
+int elSize = elType->base->size;
+char *elements = needLargeZeroedMem(elSize*size);
+return array_of_type(size, size, arrayTypeId, elTypeId, elSize, elements);
+}
+
 _pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */

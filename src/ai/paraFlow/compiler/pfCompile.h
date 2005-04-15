@@ -58,7 +58,9 @@ struct pfCompile
     struct pfBaseType *treeType;
     struct pfBaseType *dirType;
 
-    struct pfType *stringFullType;	/* String type info including .size, .append() etc. */
+    struct pfType *stringFullType;	/* String type info including .size etc. */
+    struct pfType *arrayFullType;	/* Array type info including .size etc. */
+    struct pfType *intFullType;		/* This is handy to have around. */
     };
 
 struct pfCompile *pfCompileNew();

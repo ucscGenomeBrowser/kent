@@ -542,12 +542,30 @@ slReverse(&dots->children);
 return dots;
 }
 
+struct pfParse *parseTypeDotsAndBraces(struct pfParse *parent, 
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse this.that.the.other[expression] */
+{
+struct pfParse *dotted = parseDottedNames(parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
+if (tok->type == '[')
+    {
+    tok = tok->next;
+    dotted->children = pfParseExpression(dotted, &tok, scope);
+    if (tok->type != ']')
+        expectingGot("]", tok);
+    else
+        tok = tok->next;
+    *pTokList = tok;
+    }
+return dotted;
+}
 
 struct pfParse *parseOfs(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse of separated expression. */
 {
-struct pfParse *pp = parseDottedNames(parent, pTokList, scope);
+struct pfParse *pp = parseTypeDotsAndBraces(parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 struct pfParse *ofs = NULL;
 if (tok->type == pftOf)
@@ -558,7 +576,7 @@ if (tok->type == pftOf)
     while (tok->type == pftOf)
 	{
 	tok = tok->next;
-	pp = parseDottedNames(ofs, &tok, scope);
+	pp = parseTypeDotsAndBraces(ofs, &tok, scope);
 	slAddHead(&ofs->children, pp);
 	}
     }
@@ -570,6 +588,16 @@ if (ofs != NULL)
     }
 else
     return pp;
+}
+
+struct pfToken *nextMatchingTok(struct pfToken *tokList, enum pfTokType type)
+/* Return next token of type,  NULL if not found. */
+{
+struct pfToken *tok;
+for (tok = tokList; tok != NULL; tok = tok->next)
+    if (tok->type == type)
+        break;
+return tok;
 }
 
 struct pfParse *varUseOrDeclare(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
@@ -584,6 +612,11 @@ if (tok->type == pftName)
 if (baseType != NULL)
     {
     struct pfToken *nextTok = tok->next;
+    if (nextTok->type == '[')
+        {
+	struct pfToken *matchTok = nextMatchingTok(nextTok->next, ']');
+	nextTok = matchTok->next;
+	}
     if (nextTok->type == pftName || nextTok->type == pftOf)
 	{
 	struct pfParse *name, *type;
@@ -1169,6 +1202,17 @@ static struct pfParse *parseFlow(struct pfCompile *pfc, struct pfParse *parent,
 return parseFunction(pfc, parent, pTokList, scope, pptFlowDec);
 }
 
+static void checkForCircularity(struct pfBaseType *parent, struct pfBaseType *newBase,
+	struct pfToken *tok)
+/* Make sure that newBase is not parent, grandparent, etc of itself. */
+{
+while (parent != NULL)
+    {
+    if (parent == newBase)
+        errAt(tok, "loop in inheritance tree");
+    parent = parent->parent;
+    }
+}
 
 static struct pfParse *parseClass(struct pfCompile *pfc,
 	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
@@ -1176,12 +1220,32 @@ static struct pfParse *parseClass(struct pfCompile *pfc,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
-struct pfParse *name, *body;
+struct pfParse *name, *body, *extends = NULL;
 pp = pfParseNew(pptClass, tok, parent, scope);
 tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
 pp->name = name->name;
+if (tok->type == pftOf)
+    {
+    struct pfBaseType *parentBase, *myBase;
+    tok = tok->next;
+    if (tok->type != pftName)
+        expectingGot("class name", tok);
+    parentBase = pfScopeFindType(scope, tok->val.s);
+    if (parentBase == NULL)
+	errAt(tok, "undefined parent class %s", tok->val.s);
+    extends = pfParseNew(pptTypeName, tok, pp, scope);
+    extends->ty = pfTypeNew(parentBase);
+    extends->name = tok->val.s;
+    myBase = pfScopeFindType(scope, name->name);
+    if (myBase == NULL)
+        internalErr();
+    checkForCircularity(parentBase, myBase, tok);
+    myBase->parent = parentBase;
+    slAddHead(&pp->children, extends);
+    tok = tok->next;
+    }
 body = parseCompound(pfc, pp, &tok, scope);
 body->scope->isClass = TRUE;
 slAddHead(&pp->children, body);
@@ -1636,13 +1700,27 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 }
 
 void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
-	enum pfParseType newType)
+        enum pfParseType newType)
 /* Convert type of pp and any children that are of oldType to newType */
 {
 if (pp->type == oldType)
     pp->type = newType;
 for (pp = pp->children; pp != NULL; pp = pp->next)
     pfParseTypeSub(pp, oldType, newType);
+}
+
+static void subTypeForName(struct pfParse *pp)
+/* Substititute pptTypeName for pptName use where appropriate. */
+{
+if (pp->type == pptNameUse)
+    pp->type = pptTypeName;
+else if (pp->type == pptOf)
+    {
+    for (pp = pp->children; pp != NULL; pp = pp->next)
+	{
+	subTypeForName(pp);
+	}
+    }
 }
 
 void varDecAndAssignToVarInit(struct pfParse *pp)
@@ -1669,7 +1747,8 @@ if (pp->type == pptVarInit)
     {
     struct pfParse *type = pp->children;
     struct pfParse *name = type->next;
-    pfParseTypeSub(type, pptNameUse, pptTypeName);
+    // pfParseTypeSub(type, pptNameUse, pptTypeName);
+    subTypeForName(type);
     name->type = pptSymName;
     pp->name = name->name;
     }
@@ -1680,18 +1759,24 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     varDecAndAssignToVarInit(pp);
 }
 
+static struct pfType *findTypeInModule(struct pfParse *module, char *typeName)
+/* Return base type in module or die. */
+{
+struct pfBaseType *base = pfScopeFindType(module->scope, typeName);
+if (base == NULL)
+    errAbort("Can't find class %s in %s", typeName, module->name);
+return pfTypeNew(base);
+}
+
 static void attachStringsAndThings(struct pfCompile *pfc, struct pfParse *stringModule)
 /* Finish parsing, binding and type checking the string module.  Rummage around for 
  * string class in it and attach it to pfc->stringFullType. */
 {
-struct pfBaseType *base;
 varDecAndAssignToVarInit(stringModule);
 pfBindVars(pfc, stringModule);
 pfTypeCheck(pfc, &stringModule);
-base = pfScopeFindType(stringModule->scope, "_pf_string");
-if (base == NULL)
-    errAbort("Can't find class _pf_string in attachStringsAndThings");
-pfc->stringFullType = pfTypeNew(base);
+pfc->stringFullType = findTypeInModule(stringModule, "_pf_string");
+pfc->arrayFullType = findTypeInModule(stringModule, "_pf_array");
 }
 
 

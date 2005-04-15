@@ -423,25 +423,33 @@ pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
 }
 
-static void coerceTupleToClass(struct pfCompile *pfc, 
-	struct pfParse **pPp, struct pfType *type)
-/* Given a type that is a class, and a parse tree that
- * is a tuple, do any casting required inside the tuple
- * to get the members of the tuple to be of the same type
- * as the corresponding members of the class. */
+static struct pfParse **rCoerceTupleToClass(struct pfCompile *pfc,
+	struct pfParse **pos, struct pfBaseType *base)
+/* Recursively coerce tuple - first on parent class and
+ * then on self. */
 {
-struct pfParse *tuple = *pPp;
 struct pfType *field;
-struct pfParse **pos;
-
-pos = &tuple->children;
-for (field = type->base->fields; field != NULL; field = field->next)
+if (base->parent != NULL)
+    pos = rCoerceTupleToClass(pfc, pos, base->parent);
+for (field = base->fields; field != NULL; field = field->next)
     {
     if (*pos == NULL)
 	break;
     coerceOne(pfc, pos, field, FALSE);
     pos = &(*pos)->next;
     }
+return pos;
+}
+
+static void coerceTupleToClass(struct pfCompile *pfc, 
+	struct pfParse **pPp, struct pfBaseType *base)
+/* Given a type that is a class, and a parse tree that
+ * is a tuple, do any casting required inside the tuple
+ * to get the members of the tuple to be of the same type
+ * as the corresponding members of the class. */
+{
+struct pfParse *tuple = *pPp;
+rCoerceTupleToClass(pfc, &tuple->children, base);
 pfTypeOnTuple(pfc, tuple);
 }
 
@@ -578,7 +586,7 @@ else if (pt->base != base)
 	    insertCast(pptTuple, NULL, pPp);  /* In this case not just a cast. */
 	    pfTypeOnTuple(pfc, *pPp);
 	    }
-	coerceTupleToCollection(pfc, pPp, type);
+	coerceTupleToCollection(pfc, &pp->children, type);
 	ok = TRUE;
 	}
     else if (base->isClass)
@@ -591,7 +599,7 @@ else if (pt->base != base)
 	if (pp->type == pptCall)
 	    coerceCallToClass(pfc, pPp, type);
 	else
-	    coerceTupleToClass(pfc, pPp, type);
+	    coerceTupleToClass(pfc, pPp, type->base);
 	ok = TRUE;
 	}
     else if (pt->isTuple)
@@ -709,6 +717,26 @@ coerceOne(pfc, &lval->next, destType, FALSE);
 pp->ty = CloneVar(destType);
 }
 
+static void rCheckTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
+/* Make sure that if pptTypeNames have children that they are arrays. */
+{
+switch (type->type)
+    {
+    case pptTypeName:
+	if (type->children != NULL)
+	    {
+	    if (type->ty->base != pfc->arrayType)
+	        errAt(type->children->tok, "[ illegal here except for arrays");
+	    coerceOne(pfc, &type->children, pfc->intFullType, FALSE);
+	    }
+        break;
+    default:
+        break;
+    }
+for (type = type->children; type != NULL; type = type->next)
+    rCheckTypeWellFormed(pfc, type);
+}
+
 static void coerceVarInit(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that variable initialization can be coerced to variable
  * type. */
@@ -719,6 +747,7 @@ struct pfParse *init = symbol->next;
 
 if (init != NULL)
     coerceOne(pfc, &symbol->next, type->ty, FALSE);
+rCheckTypeWellFormed(pfc, type);
 }
 
 static void coerceIndex(struct pfCompile *pfc, struct pfParse *pp)
@@ -1012,6 +1041,8 @@ struct pfType *type = varUse->var->ty;
 
 if (type->base == pfc->stringType)
     type = pfc->stringFullType;
+else if (type->base == pfc->arrayType)
+    type = pfc->arrayFullType;
 if (!type->base->isClass)
     errAt(pp->tok, "dot after non-class variable");
 for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)

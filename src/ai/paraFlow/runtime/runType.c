@@ -107,7 +107,6 @@ for (i=0; i<baseCount; ++i)
 	if (base->singleType == 0)
 	    {
 	    base->singleType = pf_stClass;
-	    assert(sameString(base->parent->name, "<class>"));
 	    }
 	switch (base->singleType)
 	    {

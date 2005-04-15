@@ -6,6 +6,9 @@ struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, _pf_Stack 
 void _pf_class_cleanup(struct _pf_object *obj, int typeId);
 /* Clean up all class fields, and then class itself. */
 
+_pf_Array _pf_dim_array(int size, int arrayTypeId, int elTypeId);
+/* Return array of given type and size, initialized to zeroes. */
+
 _pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Array _pf_byte_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Array _pf_short_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);

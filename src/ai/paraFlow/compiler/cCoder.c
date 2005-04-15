@@ -461,11 +461,12 @@ static void codeDotAccess(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *class = pp->children;
 struct pfParse *field = class->next;
-if (class->ty->base == pfc->stringType)
+struct pfBaseType *base = class->ty->base;
+if (base == pfc->stringType || base == pfc->arrayType)
     fprintf(f, "(");
 else
-    fprintf(f, "((struct %s *)", class->ty->base->name);
-codeParamAccess(pfc, f, class->ty->base, stack);
+    fprintf(f, "((struct %s *)", base->name);
+codeParamAccess(pfc, f, base, stack);
 fprintf(f, ")");
 while (field != NULL)
     {
@@ -573,7 +574,6 @@ switch (pp->type)
     }
 }
 
-
 static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
 	struct pfType *type, int stack, int tupleSize)
 /* Shovel tuple into array, list, dir, tree. */
@@ -635,14 +635,58 @@ else
 return count;
 }
 
+static void cantCopeParamType(struct pfParse *pp, int code)
+/* Explain that can't deal with parameterized type complications.
+ * Hopefully this is temporary. */
+{
+errAt(pp->tok, "Don't know how to deal with this parameterized type (code %d)", 
+	code);
+}
+
+static void codeParameterizedType(struct pfCompile *pfc, FILE *f, struct pfParse *varInit,
+	struct pfParse *type, boolean isInitialized, int stack)
+/* Deal with things like array[10] of ... */
+{
+boolean gotOne = FALSE;
+if (isInitialized)
+    errAt(type->tok, "Sorry right now you can't both dimension an array and initialize it.");
+if (type->type != pptOf)
+    cantCopeParamType(type, 1);
+for (type = type->children; type != NULL; type = type->next)
+    {
+    if (type->children != NULL)
+	{
+	if (type->type != pptTypeName)
+	    cantCopeParamType(type, 2);
+	if (type->ty->base != pfc->arrayType)
+	    cantCopeParamType(type, 3);
+	if (gotOne)
+	    errAt(type->tok, "Sorry right now you can only parameterize simple arrays");
+	gotOne = TRUE;
+	codeExpression(pfc, f, type->children, stack, FALSE);
+	fprintf(f, "%s[%d].Array = ", stackName, stack);
+	fprintf(f, "_pf_dim_array(%s[%d].Int, %d, %d);\n", stackName, stack, 
+		typeId(pfc, type->ty), typeId(pfc, type->next->ty));
+	lvalOffStack(pfc, f, varInit, stack, "=", 1, FALSE);
+	}
+    }
+}
+
 static void codeVarInit(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for an assignment. */
 {
 struct pfParse *lval = pp;
-struct pfParse *rval = pp->children->next->next;
-int count = codeInitOrAssign(pfc, f, lval, rval, stack);
-lvalOffStack(pfc, f, lval, stack, "=", count, FALSE);
+struct pfParse *type = pp->children;
+struct pfParse *name = type->next;
+struct pfParse *rval = name->next;
+if (type->children != NULL)
+    codeParameterizedType(pfc, f, lval, type, rval != NULL, stack);
+if (rval != NULL)
+    {
+    int count = codeInitOrAssign(pfc, f, lval, rval, stack);
+    lvalOffStack(pfc, f, lval, stack, "=", count, FALSE);
+    }
 }
 
 static int codeAssignment(struct pfCompile *pfc, FILE *f,
@@ -1093,14 +1137,8 @@ switch (pp->type)
 	break;
 	}
     case pptVarInit:
-	{
-	struct pfParse *init = pp->children->next->next;
-	if (init != 0)
-	    {
-	    codeExpression(pfc, f, pp, 0, TRUE);
-	    }
+	codeVarInit(pfc, f, pp, 0);
         break;
-	}
     case pptForeach:
 	codeForeach(pfc, f, pp);
 	break;
@@ -1424,6 +1462,24 @@ while ((c = *s++) != 0)
     }
 }
 
+static boolean rPrintTypedFields(FILE *f, struct hash *compTypeHash, struct dyString *dy, 
+	struct pfBaseType *base, boolean needComma)
+/* Recursively print fields. */
+{
+struct pfType *field;
+if (base->parent != NULL)
+    needComma = rPrintTypedFields(f, compTypeHash, dy, base->parent, needComma);
+for (field = base->fields; field != NULL; field = field->next)
+    {
+    struct compOutType *cot = compTypeLookup(compTypeHash, dy, field);
+    if (needComma)
+	fprintf(f, ",");
+    needComma = TRUE;
+    fprintf(f, "%d:%s", cot->id, field->fieldName);
+    }
+return needComma;
+}
+
 static struct hash *printTypeInfo(struct pfCompile *pfc, 
 	struct pfParse *program, FILE *f)
 /* Print out info on types. Return hash of compOutType. */
@@ -1478,16 +1534,9 @@ for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
 	struct pfBaseType *base = hel->val;
 	if (base->isClass)
 	    {
-	    struct pfType *field;
 	    fprintf(f, "  {%d, ", base->id);
 	    fprintf(f, "\"");
-	    for (field = base->fields; field != NULL; field = field->next)
-	        {
-		struct compOutType *cot = compTypeLookup(compTypeHash, dy, field);
-		fprintf(f, "%d:%s", cot->id, field->fieldName);
-		if (field->next != NULL)
-		    fprintf(f, ",");
-		}
+	    rPrintTypedFields(f, compTypeHash, dy, base, FALSE);
 	    fprintf(f, "\"");
 	    fprintf(f, "},\n");
 	    }
