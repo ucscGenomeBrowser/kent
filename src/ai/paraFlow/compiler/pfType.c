@@ -1046,7 +1046,8 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 }
 
 static void rBlessFunction(struct pfScope *outputScope,
-	struct hash *outputHash, struct pfCompile *pfc, struct pfParse *pp)
+	struct hash *outputHash, struct pfCompile *pfc, struct pfParse *pp,
+	struct pfScope *classScope)
 /* Avoid functions declared in functions, and mark outputs as used.  */
 {
 switch (pp->type)
@@ -1056,12 +1057,16 @@ switch (pp->type)
     case pptFlowDec:
         errAt(pp->tok, "sorry, can't declare functions inside of functions");
 	break;
+    case pptVarUse:
+	if (pp->var->scope == classScope && pp->parent->type != pptDot)
+	    errAt(pp->tok, "Must prefix references to this variable with .self");
+        break;
     case pptAssignment:
         markUsedVars(outputScope, outputHash, pp);
 	break;
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    rBlessFunction(outputScope, outputHash, pfc, pp);
+    rBlessFunction(outputScope, outputHash, pfc, pp, classScope);
 }
 
 static void checkIsSimpleDecTuple(struct pfParse *tuple)
@@ -1130,7 +1135,10 @@ for (pp = output->children; pp != NULL; pp = pp->next)
     }
 if (body != NULL)
     {
-    rBlessFunction(funcDec->scope, outputHash, pfc, body);
+    struct pfScope *classScope = funcDec->scope->parent;
+    if (!classScope->isClass)
+        classScope = NULL;
+    rBlessFunction(funcDec->scope, outputHash, pfc, body, classScope);
     hc = hashFirst(outputHash);
     while ((hel = hashNext(&hc)) != NULL)
 	{

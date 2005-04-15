@@ -21,7 +21,7 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean isModule, boolean isClass);
+	boolean isModule);
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
@@ -1061,7 +1061,7 @@ switch (pp->type)
     case pptCompound:
         {
 	fprintf(f, "{\n");
-	codeScope(pfc, f, pp, FALSE, FALSE);
+	codeScope(pfc, f, pp, FALSE);
 	fprintf(f, "}\n");
 	break;
 	}
@@ -1124,6 +1124,39 @@ else
     fprintf(f, "=0");
 }
 
+static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
+/* Print prototype for functin call. */
+{
+/* Put out function prototype and opening brace.  If class add self to
+ * function symbol table. */
+if (class)
+    {
+    fprintf(f, "void _pf_cm_%s_%s(", class->name, funcDec->name);
+    fprintf(f, "%s *%s)",  stackType, stackName);
+    }
+else
+    fprintf(f, "void %s(%s *%s)", funcDec->name, stackType, stackName);
+}
+
+static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class)
+/* Recursively print out function prototypes in C. */
+{
+switch (pp->type)
+    {
+    case pptClass:
+        class = pp;
+	break;
+    case pptToDec:
+    case pptParaDec:
+    case pptFlowDec:
+	printPrototype(f, pp, class);
+	fprintf(f, ";\n");
+        break;
+    }
+for (pp=pp->children; pp != NULL; pp = pp->next)
+    rPrintPrototypes(f, pp, class);
+}
+
 
 static void codeFunction(struct pfCompile *pfc, FILE *f, 
 	struct pfParse *funcDec, struct pfParse *class)
@@ -1139,16 +1172,11 @@ struct pfParse *body = funcDec->children->next->next->next;
 if (body == NULL)
     return;
 
-/* Put out function prototype and opening brace.  If class add self to
- * function symbol table. */
+printPrototype(f, funcDec, class);
 if (class)
-    {
-    fprintf(f, "void _pf_cm_%s_%s(", class->name, funcVar->name);
-    fprintf(f," %s *%s)\n{\n",  stackType, stackName);
     pfScopeAddVar(funcDec->scope, "self", class->ty, NULL);
-    }
-else
-    fprintf(f, "void %s(%s *%s)\n{\n", funcVar->name, stackType, stackName);
+fprintf(f, "\n{\n");
+
 
 /* Print out input parameters. */
     {
@@ -1278,7 +1306,7 @@ hashElFreeList(&helList);
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean isModule, boolean isClass)
+	boolean isModule)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -1292,8 +1320,6 @@ slSort(&helList, hashElCmp);
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfBaseType *base = hel->val;
-    char exampleName[256];
-    safef(exampleName, sizeof(exampleName), "_pf_ci_%s", base->name);
     fprintf(f, "struct %s {\n", base->name);
     fprintf(f, "int _pf_refCount;\n");
     fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
@@ -1305,20 +1331,6 @@ hashElFreeList(&helList);
 /* Get declaration list and sort it. */
 helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
-
-/* Print out function prototypes. */
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    struct pfVar *var = hel->val;
-    struct pfType *type = var->ty;
-    if (var->ty->isFunction)
-        {
-	fprintf(f, "void %s();\n", var->name);
-	gotFunc = TRUE;
-	}
-    }
-if (gotFunc)
-    fprintf(f, "\n");
 
 /* Print out variables. */
 codeVarsInHelList(pfc, f, helList, !scope->isModule);
@@ -1489,7 +1501,10 @@ pfc->runTypeHash = printTypeInfo(pfc, program, f);
 for (module = program->children; module != NULL; module = module->next)
     {
     fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
-    codeScope(pfc, f, module, TRUE, FALSE);
+    fprintf(f, "\n");
+    rPrintPrototypes(f, module, NULL);
+    fprintf(f, "\n");
+    codeScope(pfc, f, module, TRUE);
     }
 printConclusion(pfc, f);
 carefulClose(&f);

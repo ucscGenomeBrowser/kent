@@ -1182,6 +1182,7 @@ name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
 pp->name = name->name;
 body = parseCompound(pfc, pp, &tok, scope);
+body->scope->isClass = TRUE;
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, name);
 *pTokList = tok;
