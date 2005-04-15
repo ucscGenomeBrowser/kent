@@ -29,12 +29,13 @@ return
 "    int size;\n"
 "    to dupe() into string dupe;\n"
 "    to start(int size) into string start;\n"
+"    to rest(int start) into string rest;\n"
 "    to middle(int start, int size) into string part;\n"
 "    to end(int size) into string end;\n"
-"    to append(string s);\n"
 "    to upper();\n"
 "    to lower();\n"
-"    to find(string s, int start) into int found;\n"
+"    to append(string s);\n"
+"    to find(string s) into int found;\n"
 "    }\n"
 ;
 }

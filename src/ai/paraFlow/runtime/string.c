@@ -119,4 +119,90 @@ _pf_String string = stack[0].String;
 stack[0].String = _pf_string_new(string->s, string->size);
 }
 
+void _pf_cm_string_start(_pf_Stack *stack)
+/* Return start of string */
+{
+_pf_String string = stack[0].String;
+int size = stack[1].Int;
+if (size < 0)
+    size = 0;
+if (size > string->size)
+    size = string->size;
+stack[0].String = _pf_string_new(string->s, size);
+}
 
+void _pf_cm_string_end(_pf_Stack *stack)
+/* Return end of string */
+{
+_pf_String string = stack[0].String;
+int size = stack[1].Int;
+if (size < 0)
+    size = 0;
+if (size > string->size)
+    size = string->size;
+stack[0].String = _pf_string_new(string->s + string->size - size, size);
+}
+
+void _pf_cm_string_middle(_pf_Stack *stack)
+/* Return middle of string */
+{
+_pf_String string = stack[0].String;
+int start = stack[1].Int;
+int size = stack[2].Int;
+int end = start + size;
+if (start < 0) start = 0;
+if (end > string->size) end = string->size;
+stack[0].String = _pf_string_new(string->s + start, end - start);
+}
+
+void _pf_cm_string_rest(_pf_Stack *stack)
+/* Return rest of string (skipping up to start) */
+{
+_pf_String string = stack[0].String;
+int start = stack[1].Int;
+if (start < 0) start = 0;
+if (start > string->size) start = string->size;
+stack[0].String = _pf_string_new(string->s + start, string->size - start);
+}
+
+
+void _pf_cm_string_append(_pf_Stack *stack)
+/* Put something on end of string. */
+{
+_pf_String start = stack[0].String;
+_pf_String end = stack[1].String;
+int newSize = start->size + end->size;
+if (newSize > start->allocated)
+    {
+    char *s;
+    if (newSize <= 64*1024)
+	start->allocated = 2*newSize;
+    else
+        start->allocated = newSize + 64*1024;
+    start->s = needLargeMemResize(start->s, start->allocated);
+    }
+memcpy(start->s + start->size, end->s, end->size);
+start->s[newSize] = 0;
+start->size = newSize;
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--end->_pf_refCount <= 0)
+    end->_pf_cleanup(end, 0);
+}
+
+void _pf_cm_string_find(_pf_Stack *stack)
+/* Find occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+_pf_String string = stack[0].String;
+_pf_String sub = stack[1].String;
+char *loc = stringIn(sub->s, string->s);
+if (loc == NULL)
+    stack[0].Int = -1;
+else
+    stack[0].Int = loc - string->s;
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--sub->_pf_refCount <= 0)
+    sub->_pf_cleanup(sub, 0);
+}
