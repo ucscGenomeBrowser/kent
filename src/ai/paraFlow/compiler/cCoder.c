@@ -326,8 +326,11 @@ static void bumpStackRefCount(FILE *f, struct pfType *type, int stack)
 {
 if (type->base->needsCleanup)
     {
+    fprintf(f, "if (0 != ");
     codeStackAccess(f, stack);
-    fprintf(f, ".Obj->_pf_refCount += 1;\n");
+    fprintf(f, ".Obj) ");
+    codeStackAccess(f, stack);
+    fprintf(f, ".Obj->_pf_refCount+=1;\n");
     }
 }
 
@@ -520,7 +523,7 @@ if (type->base->needsCleanup)
 	fprintf(f, "_pf_var_cleanup(%s);\n", name);
     else
 	{
-	fprintf(f, "if (%s != 0 && (%s->_pf_refCount-=1) <= 0)\n", name, name);
+	fprintf(f, "if (0!=%s && (%s->_pf_refCount-=1) <= 0)\n", name, name);
 	fprintf(f, "   %s->_pf_cleanup(%s, %d);\n", name, name, typeId(pfc, type));
 	}
     }
@@ -676,7 +679,10 @@ if (addRef && base->needsCleanup)
     if (base == pfc->varType)
 	fprintf(f, "_pf_var_link(%s);\n", pp->name);
     else
-	fprintf(f, "%s->_pf_refCount += 1;\n", pp->name);
+	{
+	fprintf(f, "if (0 != %s) ", pp->name);
+	fprintf(f, "%s->_pf_refCount+=1;\n", pp->name);
+	}
     }
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = %s;\n", pp->name);
@@ -898,11 +904,11 @@ switch (pp->type)
 	fprintf(f, ";\n");
 	return 1;
     case pptCastStringToBit:
-	codeExpression(pfc, f, pp->children, stack, addRef);
+	codeExpression(pfc, f, pp->children, stack, FALSE);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = (0 != ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
-	fprintf(f, ");");
+	fprintf(f, ");\n");
 	return 1;
     case pptCastBitToString:
     case pptCastByteToString:
@@ -1008,10 +1014,13 @@ codeScopeVars(pfc, f, pp->scope, FALSE);
 codeStatement(pfc, f, init);
 fprintf(f, "for(;;)\n");
 fprintf(f, "{\n");
-codeExpression(pfc, f, end, 0, TRUE);
-fprintf(f, "if (!");
-codeParamAccess(pfc, f, pfc->bitType, 0);
-fprintf(f, ") break;\n");
+if (next->type != pptNop)
+    {
+    codeExpression(pfc, f, end, 0, TRUE);
+    fprintf(f, "if (!");
+    codeParamAccess(pfc, f, pfc->bitType, 0);
+    fprintf(f, ") break;\n");
+    }
 codeStatement(pfc, f, body);
 codeStatement(pfc, f, next);
 fprintf(f, "}\n");

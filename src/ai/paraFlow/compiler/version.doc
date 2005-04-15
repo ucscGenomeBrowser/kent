@@ -1,4 +1,4 @@
-
+--------------------------------------------------------------------
 I'm starting this doc about 2-3 weeks into the serious development of
 ParaFlow.  Currently the compiler has the following major phases:
     Tokenizer - Strips comments.  Recognizes boundaries of numbers,

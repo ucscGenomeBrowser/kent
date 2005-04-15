@@ -36,6 +36,7 @@ return
 "    to lower();\n"
 "    to append(string s);\n"
 "    to find(string s) into int found;\n"
+"    to nextWord(int pos) into (int newPos, string s);\n"
 "    }\n"
 ;
 }

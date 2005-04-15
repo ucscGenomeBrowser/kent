@@ -636,7 +636,9 @@ coerceToBit(pfc, &pp->children);
 static void coerceFor(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure have a good conditional in for. */
 {
-coerceToBit(pfc, &pp->children->next);
+struct pfParse *cond = pp->children->next;
+if (cond->type != pptNop)
+    coerceToBit(pfc, &pp->children->next);
 }
 
 static void coerceIf(struct pfCompile *pfc, struct pfParse *pp)
