@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.29 2005/03/10 00:15:51 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.30 2005/04/15 04:04:23 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -519,8 +519,8 @@ safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
     {
     int mafPixelStart, mafPixelEnd, mafPixelWidth;
-    int i;
     double *pixelScores = NULL;
+    int i;
     if (mafNeedSubset(full, dbChrom, seqStart, seqEnd))
         sub = maf = mafSubset(full, dbChrom, seqStart, seqEnd);
     else
@@ -538,6 +538,8 @@ for (full = mafList; full != NULL; full = full->next)
 	if (mafPixelWidth < 1) mafPixelWidth = 1;
 	AllocArray(pixelScores, mafPixelWidth);
 	mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
+        if (maf->components->next->leftStatus == MAF_NEW_STATUS)
+           vgBox(vg, mafPixelStart+xOff-2, yOff, 1, height, getBrickColor());
 	for (i=0; i<mafPixelWidth; ++i)
 	    {
 	    if (vis == tvFull)
@@ -554,6 +556,8 @@ for (full = mafList; full != NULL; full = full->next)
 		    1, height-1, c);
 		}
 	    }
+        if (maf->components->next->rightStatus == MAF_NEW_STATUS)
+           vgBox(vg, i+mafPixelStart+xOff+1, yOff, 1, height, getBrickColor());
 	freez(&pixelScores);
 	}
     mafAliFree(&sub);

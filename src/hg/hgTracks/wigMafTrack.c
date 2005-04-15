@@ -17,7 +17,7 @@
 
 //#define ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.64 2005/04/15 00:22:42 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.65 2005/04/15 04:04:23 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -842,6 +842,7 @@ fflush(stdout);
         if ((mcThis = mafMayFindCompPrefix(maf, mi->db, "")) == NULL)
             continue;
 	//if (mcPair->srcSize != 0)
+        // TODO: replace with a cloneMafComp()
         AllocVar(mcPair);
         mcPair->src = cloneString(mcThis->src);
         mcPair->srcSize = mcThis->srcSize;
@@ -849,6 +850,10 @@ fflush(stdout);
         mcPair->start = mcThis->start;
         mcPair->size = mcThis->size;
         mcPair->text = cloneString(mcThis->text);
+        mcPair->leftStatus = mcThis->leftStatus;
+        mcPair->leftLen = mcThis->leftLen;
+        mcPair->rightStatus = mcThis->rightStatus;
+        mcPair->rightLen = mcThis->rightLen;
 
         mcThis = mafFindCompPrefix(maf, database, "");
         AllocVar(mcMaster);
@@ -858,7 +863,6 @@ fflush(stdout);
         mcMaster->start = mcThis->start;
         mcMaster->size = mcThis->size;
         mcMaster->text = cloneString(mcThis->text);
-
         mcMaster->next = mcPair;
 
         AllocVar(pairMaf);
