@@ -1569,6 +1569,7 @@ struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
 struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, source->name);
+int braceDepth = 0;
 
 modParse->name = cloneString(module);
 chopSuffix(modParse->name);
@@ -1597,15 +1598,19 @@ for (tok = tokList; tok != NULL; tok = tok->next)
     {
     if (tok->type == '{')
         {
+	++braceDepth;
 	scope = pfScopeNew(pfc, scope, 0, FALSE);
 	tok->val.scope = scope;
 	}
     else if (tok->type == '}')
         {
+	--braceDepth;
 	scope = scope->parent;
 	tok->val.scope = scope;
 	}
     }
+if (braceDepth != 0)
+    errAbort("Unclosed brace in %s", source->name);
 
 addClasses(pfc, tokList, scope);
 pfParseTokens(pfc, tokList, scope, modParse);
