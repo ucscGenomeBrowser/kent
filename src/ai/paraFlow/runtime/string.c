@@ -206,3 +206,56 @@ else
 if (--sub->_pf_refCount <= 0)
     sub->_pf_cleanup(sub, 0);
 }
+
+#ifdef OLD
+static int countWords(char *s)
+/* Count how many white-space-separated words in string */
+{
+int count = 0;
+char c;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    if (s[0] == 0)
+        break;
+    count += 1;
+    s = skipToSpaces(s);
+    if (s == NULL)
+        break;
+    }
+return count;
+}
+#endif /* OLD */
+
+
+void _pf_cm_string_nextWord(_pf_Stack *stack)
+/* Find occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+_pf_String string = stack[0].String;
+int pos = stack[1].Int;
+char *s;
+
+if (string == NULL)
+    {
+    stack[0].Int = 0;
+    stack[1].String = NULL;
+    return;
+    }
+if (pos > string->size) pos = string->size;
+s = skipLeadingSpaces(string->s + pos);
+if (s[0] == 0)
+    {
+    stack[0].Int = string->size;
+    stack[1].String = NULL;
+    }
+else
+    {
+    char *e = skipToSpaces(s);
+    if (e == NULL)
+        e = string->s + string->size;
+    stack[0].Int = e - string->s;
+    stack[1].String = _pf_string_new(s, e - s);
+    }
+}
+
