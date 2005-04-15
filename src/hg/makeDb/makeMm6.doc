@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.27 2005/04/14 22:49:52 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.28 2005/04/15 02:14:51 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3748,3 +3748,247 @@ cat out/$1/*.out >>protRefRaw.psl
     hgsql hgcentraltest \
 	-e 'update blatServers set canPcr=1 where db="mm6" and port=17782;'
 
+### MAKE THE affyU74 TRACK - needed for the Gene Sorter 
+#                              (DONE - 2005-04-14 - Fan)
+# MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
+# target sequences. Recalculate alignments and load data
+----------------------------------
+# Load up semi-local disk with target sequences for Affy mouse U74 chips.
+# ssh kkr1u00
+# mkdir -p /iscratch/i/affy
+#	This /projects filesystem is not available on kkr1u00
+#	but it is on kk
+# ssh kk
+# cp /projects/compbio/data/microarray/affyGnfMouse/sequences/U74*consensus.fa /iscratch/i/affy
+
+ssh kkr1u00
+iSync
+
+# Run cluster job to do alignments
+ssh kk
+mkdir /cluster/data/mm6/bed/affyU74.2005-04-14
+cd /cluster/data/mm6/bed/affyU74.2005-04-14
+mkdir run
+cd run
+mkdir psl
+#echo /scratch/mus/mm6/maskedContigs/*.fa | wordLine stdin > genome.lst
+echo /panasas/store/mm6/nib/*.nib | wordLine stdin > genome.lst
+ls -1 /iscratch/i/affy/U74*consensus.fa > affy.lst
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+gensub2 genome.lst affy.lst gsub jobList
+para create jobList
+para try
+# do usual para check/para push etc. until the job is done. 
+# Completed: 120 of 120 jobs
+# CPU time in finished jobs:       7197s     119.94m     2.00h    0.08d  0.000 y
+# IO & Wait Time:                  1047s      17.46m     0.29h    0.01d  0.000 y
+# Average job time:                  69s       1.15m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             208s       3.47m     0.06h    0.00d
+# Submission to last job:           751s      12.52m     0.21h    0.01d
+
+# Do sort, best in genome filter, and convert to chromosome coordinates
+# to create affyU74.psl.
+ssh kk
+cd /cluster/data/mm6/bed/affyU74.2005-04-14/run
+pslSort dirs raw.psl tmp psl
+
+# change filter parameters for these sequences. only use alignments that
+# cover 30% of sequence and have at least minAli = 0.95.
+# minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+#pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl ../all_affyU74.psl /dev/null
+
+# Sort by chromosome and load into database.
+ssh hgwdev
+cd /cluster/data/mm6/bed/affyU74.2005-04-14
+pslSortAcc nohead chrom temp all_affyU74.psl
+cat chrom/*.psl > affyU74.psl
+# shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
+hgLoadPsl mm6 affyU74.psl
+# rm -fr chrom temp run
+
+##   MAKE THE affyGnfU74 TRACKs (DONE - 2005-04-14 - Fan)
+# Make bed files and load consensus sequences for Affy U74 chip set.
+----------------------------------
+#This needs to be done after affyU74 is already made.
+ssh hgwdev
+mkdir -p /cluster/data/mm6/bed/affyGnf.2005-04-14
+cd /cluster/data/mm6/bed/affyGnf.2005-04-14
+#	may need to build this command in src/hg/affyGnf
+affyPslAndAtlasToBed ../affyU74.2005-04-14/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 \
+	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=U74Av2
+affyPslAndAtlasToBed ../affyU74.2005-04-14/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt \
+	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=U74Bv2
+affyPslAndAtlasToBed ../affyU74.2005-04-14/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
+	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
+
+# edit 3 .bed files to shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+mkdir sav
+cp *.bed sav -p
+cat sav/affyGnfU74A.bed|sed -e "s/U74Av2://" >affyGnfU74A.bed
+cat sav/affyGnfU74B.bed|sed -e "s/U74Bv2://" >affyGnfU74B.bed
+cat sav/affyGnfU74C.bed|sed -e "s/U74Cv2://" >affyGnfU74C.bed
+
+# and reload data into table
+hgLoadBed mm6 affyGnfU74A affyGnfU74A.bed
+hgLoadBed mm6 affyGnfU74B affyGnfU74B.bed
+hgLoadBed mm6 affyGnfU74C affyGnfU74C.bed
+
+# Add in sequence data for U74 tracks.
+# Copy consensus sequence to /gbdb if it isn't already
+# [THE SYM LINKS WERE ALREADY DONE.]
+#    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+    
+    # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
+    # reload sequences with prefix removed so acc matches name used in
+    # other dependent tables
+                                                    
+    hgLoadSeq -abbr=U74Av2: mm6 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    hgLoadSeq -abbr=U74Bv2: mm6 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    hgLoadSeq -abbr=U74Cv2: mm6 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+
+### GNF ATLAS 2  [DONE Fan 2005-04-14]
+    # Align probes from GNF1M chip.
+    ssh kk
+    cd /cluster/data/mm6/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    #mkdir -p /cluster/bluearc/geneAtlas2
+    #cp /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /cluster/bluearc/geneAtlas2
+    #ls -1 /scratch/mus/mm6/maskedContigs/ > genome.lst
+    echo /panasas/store/mm6/nib/*.nib | wordLine stdin > genome.lst
+
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1m.fa > mrna.lst
+    echo '#LOOP\nblat -fine -ooc=/scratch/hg/h/mouse11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > gsub
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para time
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:      56570s     942.84m    15.71h    0.65d  0.002 y
+# IO & Wait Time:                   392s       6.53m     0.11h    0.00d  0.000 y
+# Average job time:                1424s      23.73m     0.40h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3979s      66.32m     1.11h    0.05d
+# Submission to last job:          3993s      66.55m     1.11h    0.05d
+
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyGnf1m.psl /dev/null
+
+    #rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/geneAtlas2
+#    ln -s /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /gbdb/hgFixed/affyProbes
+    hgLoadPsl mm6 affyGnf1m.psl
+    hgLoadSeq mm6 /gbdb/hgFixed/affyProbes/gnf1m.fa
+
+    # Load up track
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfMouseAtlas2MedianRatio \
+    	affyGnf1m.psl
+    # Note that the unmapped 5000 records are from all-N sequences.
+    hgLoadBed mm6 gnfAtlas2 gnfAtlas2.bed
+
+# MOUSE AFFYMETRIX MOE430 TRACK (DONE, 2005-04-14, Fan)
+#    mkdir -p /projects/compbio/data/microarray/affyMouse
+    # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
+    # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
+#    unzip MOE430*_consensus.zip
+
+    # check for duplicate probes: there are none, all have unique names
+    # check for duplicate probes: 100 from 136745_at to 1367551_a_at
+    # remove "consensus:" and ";" from FASTA headers to shorten probeset
+    # names for database
+
+#    sed -e 's/consensus://' MOE430A_consensus | sed -e 's/;/ /' > MOE430_all.fa
+#    sed -e 's/consensus://' MOE430B_consensus | sed -e 's/;/ /' >> MOE430_all.fa
+ 
+#    cp /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \
+#       /cluster/bluearc/affy/
+
+    # THE ABOVE WAS ALREADY DONE BY RACHEL 4/16/04.
+
+    # Set up cluster job to align MOE430 consensus sequences to mm6
+    ssh kkr1u00
+    cd /cluster/data/mm6/bed
+    mkdir -p affyMOE430
+    cd affyMOE430
+#    mkdir -p /iscratch/i/affy
+#    cp /cluster/bluearc/affy/MOE430_all.fa /iscratch/i/affy
+#    iSync
+
+    ssh kk
+    cd /cluster/data/mm6/bed/affyMOE430
+    ls -1 /iscratch/i/affy/MOE430_all.fa > affy.lst
+    echo /panasas/store/mm6/nib/*.nib | wordLine stdin > genome.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/mouse11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    # Actually do the job with usual para try/check/push/time etc.
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       9414s     156.90m     2.61h    0.11d  0.000 y
+# IO & Wait Time:                   281s       4.69m     0.08h    0.00d  0.000 y
+# Average job time:                 242s       4.04m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             597s       9.95m     0.17h    0.01d
+# Submission to last job:           657s      10.95m     0.18h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl affyMOE430.psl /dev/null
+
+    # Load alignments and sequences into database
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/affyMOE430
+    # shorten names in psl file
+    sed -e 's/MOE430//' affyMOE430.psl > affyMOE430.psl.bak
+    mv affyMOE430.psl.bak affyMOE430.psl
+
+    # load track into database
+
+    hgLoadPsl mm6 affyMOE430.psl
+ 
+    # Add consensus sequences for MOE430
+    # Copy sequences to gbdb is they are not there already
+#    mkdir -p /gbdb/hgFixed/affyProbes
+#    ln -s /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \ 
+#       /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=MOE430 mm6 /gbdb/hgFixed/affyProbes/MOE430_all.fa
+    
+    # Clean up
+#    rm batch.bak contig.psl raw.psl 
+    
+    # BELOW TWO THINGS WERE DONE BY RACHEL ALREDAY FOR MM4
+    # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/mouse/
+    # add affyMOE430.html file and then do make alpha to add to trackDb table
