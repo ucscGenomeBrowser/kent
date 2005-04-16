@@ -591,16 +591,35 @@ else if (pt->base != base)
 	}
     else if (base->isClass)
         {
-	if (!pt->isTuple)
+	if (pt->base->isClass)
 	    {
-	    insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
-	    pfTypeOnTuple(pfc, *pPp);
+	    struct pfBaseType *b;
+	    for (b = pt->base->parent; b != NULL; b = b->parent)
+	        {
+		if (b == base)
+		    {
+		    ok = TRUE;
+		    break;
+		    }
+		}
+	    if (!ok)
+	        {
+		typeMismatch(pp, type);
+		}
 	    }
-	if (pp->type == pptCall)
-	    coerceCallToClass(pfc, pPp, type);
 	else
-	    coerceTupleToClass(pfc, pPp, type->base);
-	ok = TRUE;
+	    {
+	    if (!pt->isTuple)
+		{
+		insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
+		pfTypeOnTuple(pfc, *pPp);
+		}
+	    if (pp->type == pptCall)
+		coerceCallToClass(pfc, pPp, type);
+	    else
+		coerceTupleToClass(pfc, pPp, type->base);
+	    ok = TRUE;
+	    }
 	}
     else if (pt->isTuple)
 	{
