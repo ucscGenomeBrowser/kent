@@ -23,8 +23,7 @@ for (i=1; i<=n; i = i+1)
 }
 
 print( "N   N^2  N! fib(N)");
-int i;
-for (i=1; i<=16; i += 1)
+for (int i=1; i<=16; i += 1)
     {
     prin(i);
     prin(" ");
@@ -35,4 +34,3 @@ for (i=1; i<=16; i += 1)
     prin(fibonacci(i));
     print("");
     }
-
