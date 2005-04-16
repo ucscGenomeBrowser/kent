@@ -3,23 +3,31 @@ include ../../../inc/common.mk
 PSLFILT = ../pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
-test: overlapTest maxAlignTest minQSizeTest nonCompareTest
+test: noopTest overlapTest maxAlignTest minQSizeTest nonCompareTest  repMatchTest
+
+# nothing should be filtered with no arguments
+noopTest:
+	${MAKE} doFilterSave name=$@ inPsl=overlap.psl filtArgs=''
 
 overlapTest:
 	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
-	    filtArgs='-minCover=0.15 -minId=0.96 -idNearTop=0.001'
+	    filtArgs='-bestOverlap -minCover=0.15 -minId=0.96 -idNearTop=0.001'
 
 maxAlignTest:
 	${MAKE} doFilter name=$@ inPsl=NM_004038.3.psl inSizes=NM_004038.3.sizes \
-	    filtArgs='-maxAligns=2 -minCover=0 -minId=0'
+	    filtArgs='-maxAligns=2'
 
 minQSizeTest:
 	${MAKE} doFilter name=$@ inPsl=misc.psl \
-	    filtArgs='-minQSize=30 -minCover=0 -minId=0'
+	    filtArgs='-minQSize=30'
 
 nonCompareTest:
-	${MAKE} doFilter name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
+	${MAKE} doFilter name=$@ inPsl=NM_004038.3.psl inSizes=NM_004038.3.sizes \
 	    filtArgs='-nonComparative -minCover=0.15 -minId=0.96'
+
+repMatchTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl \
+	    filtArgs='-maxRepMatch=0.2'
 
 
 # Recursive targets:
@@ -28,7 +36,7 @@ nonCompareTest:
 #  o inPsl - input psl, relative to input dir
 #  o inSize - polyA sizes file, relative to input dir (optional)
 ifneq (${inSizes},)
-	sizesOpt= -polyASizes=input/${inSizes}
+	sizesOpt=-polyASizes=input/${inSizes}
 endif
 outDir=output/${name}
 doFilter:

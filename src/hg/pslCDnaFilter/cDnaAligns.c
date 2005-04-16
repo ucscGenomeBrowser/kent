@@ -236,22 +236,22 @@ cdAlns->nextCDnaPsl = psl;  /* save for next time (or NULL) */
 return TRUE;
 }
 
-static int scoreCmp(const void *va, const void *vb)
-/* Compare two alignments by score */
+static int scoreRevCmp(const void *va, const void *vb)
+/* Compare two alignments by cover+ident score */
 {
 const struct cDnaAlign *a = *((struct cDnaAlign **)va);
 const struct cDnaAlign *b = *((struct cDnaAlign **)vb);
 if (a->score < b->score)
-    return -1;
-if (a->score > b->score)
     return 1;
+if (a->score > b->score)
+    return -1;
 return 0;
 }
 
-void cDnaAlignsSort(struct cDnaAligns *cdAlns)
-/* sort the alignments for this query by score */
+void cDnaAlignsRevScoreSort(struct cDnaAligns *cdAlns)
+/* sort the alignments for this query by reverse cover+ident score */
 {
-slSort(&cdAlns->alns, scoreCmp);
+slSort(&cdAlns->alns, scoreRevCmp);
 }
 
 void cDnaAlignsWriteKept(struct cDnaAligns *cdAlns,

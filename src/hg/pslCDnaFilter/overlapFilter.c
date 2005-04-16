@@ -108,10 +108,10 @@ assert(tStart1 == (psl1->tStarts[iBlk1]+psl1->blockSizes[iBlk1]));
 static boolean similarAligns(struct cDnaAligns *cdAlns,
                              struct cDnaAlign *aln1,
                              struct cDnaAlign *aln2)
-/* Test if two genes have similar alignments.  Similar means that that bases
- * that are aligned one both cDNAs more or less align to the same location.
- * The idea is to not to discard some kind of weird, shifted alignment to the
- * same region. */
+/* Test if two genes have similar alignments.  Similar means that two
+ * alignments of the same cDNA align to the same location, allowing for a
+ * small amount of disagreement.  The idea is to not to discard some kind of
+ * weird, shifted alignment to the same region. */
 {
 static float dissimFrac = 0.98;
 struct alignSimilarities alnSim;

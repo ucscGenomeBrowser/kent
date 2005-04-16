@@ -61,8 +61,8 @@ void cDnaAlignsFree(struct cDnaAligns **cdAlnsPtr);
 boolean cDnaAlignsNext(struct cDnaAligns *cdAlns);
 /* load the next set of cDNA alignments, return FALSE if no more */
 
-void cDnaAlignsSort(struct cDnaAligns *cdAlns);
-/* sort the alignments for this query by score */
+void cDnaAlignsRevScoreSort(struct cDnaAligns *cdAlns);
+/* sort the alignments for this query by reverse cover+ident score */
 
 void cDnaAlignsWriteKept(struct cDnaAligns *cdAlns,
                          FILE *outFh);

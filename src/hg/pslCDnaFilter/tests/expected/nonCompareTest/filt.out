@@ -1,6 +1,5 @@
 query/alignment counts:
-             total:	5	15
-              kept:	5	12
-        weird over:	2	7
-        kept weird:	2	7
-      drop overlap:	2	3
+             total:	1	12
+              kept:	1	6
+     drop minIdent:	1	5
+     drop minCover:	1	1
