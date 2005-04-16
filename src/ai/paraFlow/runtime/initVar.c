@@ -35,7 +35,7 @@ struct _pf_object *obj = needMem(base->objSize);
 char *s = (char *)(obj);
 _pf_Stack *field;
 
-// uglyf("_pf_class_from_tuple(%p %d %p %s)\n", stack, typeId, retStack, encoding);
+uglyf("_pf_class_from_tuple(%p %d %p %s)\n", stack, typeId, retStack, encoding);
 if (encoding[0] != '(')
     errAbort("Expecting ( in tuple encoding, got %c", encoding[0]);
 encoding += 1;
@@ -303,22 +303,43 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array _pf_class_array_from_tuple(_pf_Stack *stack, int count, 
-	int typeId, int elTypeId)
+_pf_Array _pf_class_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId,
+	char *encoding, _pf_Stack **retStack, char **retEncoding)
 /* Create an array of string initialized from tuple on stack. */
 {
 struct _pf_array *array;
 struct _pf_object **elements = NULL;
 int i;
 
+uglyf("_pf_array_from_tuple(stack=%p count=%d %s)\n", stack, count, encoding);
 if (count > 0) AllocArray(elements, count);
 array = array_of_type(count, count, typeId, elTypeId, sizeof(elements[0]), elements);
 
+if (encoding[0] != '(')
+    errAbort("Expecting ( in array encoding, got %c", encoding[0]);
+encoding += 1;
 for (i=0; i<count; ++i)
     {
-    struct _pf_object *obj = stack[i].Obj;
-    elements[i] = obj;
+    char code = *encoding;
+    if (code == '(')
+        {
+	elements[i] = _pf_class_from_tuple(stack, elTypeId, encoding,
+		&stack, &encoding);
+	}
+    else
+        {
+	elements[i] = stack->Obj;
+	stack += 1;
+	encoding += 1;
+	}
     }
+if (encoding[0] != ')')
+    errAbort("Expecting ) in array encoding, got %c", encoding[0]);
+encoding += 1;
+if (retStack != NULL)
+    *retStack = stack;
+if (retEncoding != NULL)
+    *retEncoding = encoding;
 return array;
 }
 

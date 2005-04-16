@@ -18,7 +18,8 @@ _pf_Array _pf_long_array_from_tuple(_pf_Stack *stack, int count, int typeId, int
 _pf_Array _pf_float_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Array _pf_double_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Array _pf_string_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
-_pf_Array _pf_class_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
+_pf_Array _pf_class_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId,
+	char *encoding, _pf_Stack **retStack, char **retEncoding);
 _pf_Array _pf_var_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 
 _pf_List _pf_bit_list_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);

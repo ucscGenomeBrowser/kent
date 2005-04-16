@@ -614,7 +614,7 @@ fprintf(f, ")");
 }
 
 static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
-	struct pfType *type, int stack, int tupleSize)
+	struct pfType *type, struct pfParse *rval, int stack, int tupleSize)
 /* Shovel tuple into array, list, dir, tree. */
 {
 struct pfBaseType *base = type->base;
@@ -624,20 +624,22 @@ if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
 	|| base == pfc->dirType)
     {
     struct pfBaseType *base = type->children->base;
-    char *name;
     if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
 	|| base == pfc->intType || base == pfc->longType || base == pfc->floatType
 	|| base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
 	{
-	name = base->name;
+	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", base->name, 
+		type->base->name, stackName, stack, tupleSize, typeId(pfc, type), 
+		typeId(pfc, type->children));
 	}
     else
 	{
-	name = "class";
+	fprintf(f, "_pf_class_%s_from_tuple(%s+%d, %d, %d, %d, \"", type->base->name,
+		stackName, stack, slCount(rval->children), typeId(pfc, type), 
+		typeId(pfc, type->children));
+	rCodeTupleType(f, rval->ty);
+	fprintf(f, "\", 0, 0);\n");
 	}
-    fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", name, type->base->name,
-	    stackName, stack, tupleSize, typeId(pfc, type), 
-	    typeId(pfc, type->children));
     }
 else
     {
@@ -671,7 +673,7 @@ if (lval->ty->base->isClass)
 else
     {
     if (rval->type == pptUniformTuple)
-	codeTupleIntoCollection(pfc, f, lval->ty, stack, count);
+	codeTupleIntoCollection(pfc, f, lval->ty, rval, stack, count);
     }
 return count;
 }
