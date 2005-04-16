@@ -238,24 +238,28 @@ rFillCompHash(f, hash, dy, program);
 return hash;
 }
 
-static void codeMethodName(struct pfToken *tok, FILE *f, struct pfBaseType *base, char *name)
+static void codeMethodName(struct pfCompile *pfc, struct pfToken *tok, 
+	FILE *f, struct pfBaseType *base, char *name)
 /* Find method in current class or one of it's parents, and print
  * call to it */
 {
-while (base != NULL)
+if (base != pfc->stringType)
     {
-    struct pfType *t;
-    for (t = base->methods; t != NULL; t = t->next)
+    while (base != NULL)
 	{
-        if (sameString(t->fieldName, name))
+	struct pfType *t;
+	for (t = base->methods; t != NULL; t = t->next)
 	    {
-	    fprintf(f, "_pf_cm_%s_%s", base->name, name);
-	    return;
+	    if (sameString(t->fieldName, name))
+		break;
 	    }
+	base = base->parent;
 	}
-    base = base->parent;
     }
-internalErrAt(tok);
+if (base != NULL)
+    fprintf(f, "_pf_cm_%s_%s", base->name, name);
+else
+    internalErrAt(tok);
 }
 
 static int codeCall(struct pfCompile *pfc, FILE *f,
@@ -299,7 +303,7 @@ if (function->type == pptDot)
 	}
     /* Put rest of input on the stack, and print call with mangled function name. */
     codeExpression(pfc, f, inTuple, stack+1, TRUE);
-    codeMethodName(pp->tok, f, class->ty->base, method->name);
+    codeMethodName(pfc, pp->tok, f, class->ty->base, method->name);
     fprintf(f, "(%s+%d);\n", stackName, stack);
     }
 else
