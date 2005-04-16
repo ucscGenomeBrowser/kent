@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.21 2004/08/10 19:27:07 hartera Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.22 2005/04/16 06:04:59 markd Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -184,6 +184,7 @@ for (i=1; i<origArgc; ++i)
     if (sameString(*rdPt, "--"))
         {
         rdPt++;
+        i++;
         break;
         }
     if (!parseAnOption(hash, *rdPt, optionSpecs))
