@@ -97,3 +97,27 @@ string.nextWord(int pos) into (int nextPos, string word)
     which should be used in the next call to nextWord.  The pos
     initially should be 0.
 
+
+IV. String Plans
+
+Here are some plans for other methods:
+
+floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
+            bit leadingZeroes, bit forceScientific, bit noScientific) into string s
+    This returns a floating point number formatted just how you like it.
+    The forceScientific bit will override the noScientific bit,
+    and control whether you'll get 0.00034 or 3.40e-4.
+
+string.split(string s) into array of string words
+    Create an array containing white-space separated words
+
+string.tokenize(string s) into array of string tokens
+    Create an array containing an entry for each token
+    according to some rules similar to what the paraFlow
+    compiler uses.  White space is ignored.
+
+string.splitWith(string s, string splitter) into array of string fields
+    Separate string based on any of the characters in splitter.  These
+    characters will not be included in the fields output.  If two of
+    the splitter chars are next to each other it will create an empty
+    string for that slot.

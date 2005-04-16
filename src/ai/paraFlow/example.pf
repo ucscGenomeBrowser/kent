@@ -5,14 +5,19 @@
  * express parallelism.
  */
 
-to printHello
+to printHello()
 // Simple no parameter or return result declaration
-    print("Hello world")
+    {
+    print("Hello world");
+    }
 
 to printWordLots(string word, int count)
 // Declaration with a couple of parameters, no return value.
+    {
     for (int i=0; i<count; i += 1)
-       print(word + " ")
+       prin(word + " ");	// prin does not print a line break.
+    print("");
+    }
 
 
 to factorial(int n) into (float result)
@@ -20,26 +25,25 @@ to factorial(int n) into (float result)
     {
     result = 1
     for (int i=2; i<=n; i += 1)
-	result *= i    
+	result *= i;    
     }
 
 to stats3(float a, float b, float c) into (float sum, float average)
 // Declaration with three float inputs and two float outputs.
     {
-    sum = a + b + c
-    average = sum/3
+    sum = a + b + c;
+    average = sum/3;
     }
 
-to swap(a,b) into (c,d)
+to swap(var a,var b) into (var c,var d)
 // Declaration with two unspecifed parameters that returns two unspecified
-// results.  System should be smart enough to somehow generate code on
-// demand for different types of parameters.
+// results.  System does type checking at run time when vars are used.
     {
-    c = b
-    d = a
+    c = b;
+    d = a;
     }
 
-flow reverseRange(oldStart,oldEnd,seqSize) into (newStart,newEnd)
+flow reverseRange(int oldStart,int oldEnd,int seqSize) into (int newStart,int newEnd)
 // Flow declarations can be implemented in hardware without latches.
 // Effectively therefore all statements in the function execute in parallel.
 // The rule is that there can only be one assignment to each variable
@@ -47,73 +51,84 @@ flow reverseRange(oldStart,oldEnd,seqSize) into (newStart,newEnd)
 // exclude access to global variables too.  Functions can be called,
 // but only if they are also flow functions.  No loops.
     {
-    newStart = seqSize - oldEnd
-    newEnd = seqSize - oldStart
+    newStart = seqSize - oldEnd;
+    newEnd = seqSize - oldStart;
     }
 
-para reverseAll(list range, int seqSize)
-// Para declarations contain a collection of some sort as their first parameter.
-// The code gets executed on each item in the collection simultaniously.
-// These may read but not write to global variables.
+para reverseAll(class range, int seqSize)
+// Para functions are parallelizable.  They can be invoked on all elements
+// of a collection simultaniously.  The element is passed in as the first
+// parameter.  Para functions can read from anywhere, but can only write
+// to local variables, their output, and the first input parameter.
     {
-    (range.start, range.end) = reverseRange(range.start, range.end, seqSize)
-    range.midPoint = (range.start + range.end)/2
+    (range.start, range.end) = reverseRange(range.start, range.end, seqSize);
+    range.midPoint = (range.start + range.end)/2;
     }
 
 /* ParaFlow is object oriented, but not in your face about it.
  * It does not support multiple inheritance.  It does support
  * interfaces.  Built in types include: byte (8 bits), short (16 bits),
  * int (32 bits), long (64 bits), float (double-precision IEEE), 
- * string (arbitrarily long), files, array, list (internally a doubly-linked list)
- * and catalogs (red-black self-balancing trees internally).
+ * string (arbitrarily long), files, array, list (internally a doubly-linked list),
+ * dir (internally a hash table), and tree (internally a self-balancing red-black tree).
  * Arrays, lists, and catalogs all implement the collection interface.
  * Anything that implements this interface can be used in para functions,
  * and for statements. */
 
-object color
-// Simple objects are much like C structures.  There is no
+class color
+// Simple classes are much like C structures.  There is no
 // data hiding.  If you want to hide data you access the object
 // through an interface, or anonymously.
-   byte r,g,b
-
-object usaAddress
    {
-   string street	// May include more than one line and apartment number
-   string city,state
-   float zipCode	// The extended zip code is stored to the right of decimal
+   byte r,g,b;
    }
 
-object point
-/* A point in 2-D space. */
-   double x,y
+class usaAddress
+   {
+   string street;	// May include more than one line and apartment number
+   string city,state;
+   float zipCode;	// The extended zip code is stored to the right of decimal
+   }
 
-object circle
+class point
+/* A point in 2-D space. */
+   {
+   double x,y;
+   }
+
+class circle
 /* A circle. */
     {
-    point center
-    double radius
+    point center;
+    double radius;
 
-    to area into (result)
-        result = 3.14 * radius * radius
+    to diameter() into (result)
+	{
+        result = 2 * 3.14 * self.radius;  // Instance variables are accessed via "self"
+	}
 
-    to diameter into (result)
-    // Instance variables can be used either with or without self
-    // keyword.  Good style in larger methods to use self.
-        result = 2 * 3.14 * self.radius
+    to area() into (result)
+	{
+        result = 3.14 * radius * radius;
+	}
+
     }
  
-object hash implements collection
+class hash implements collection
 // Here we implement a hash table, which can be used as a collection.
+// (NB currently interfaces are not implemented, and only built-in
+// collections are available.)
    {
-   object element
+   class element
    // This is an element in our hash list
    // Note that objects can have objects defined inside of themselves.
        {
-       string name
-       object value	// A generic object for a value.
+       string name;
+       var value;	// Variable type
        }
        
-   list buckets[1024]	// Just a fixed size array of lists.  This will contain elements.
+   // Just a fixed size array of lists.  This will contain elements.
+   array[1024] of list of element buckets;
 
    to func(string name) into (int result)
    // We use a simple but effective hash function, since 5 is coprime to 1024
@@ -124,40 +139,41 @@ object hash implements collection
            result *= 5;
 	   result += c;
 	   }
-       result %= buckets.size
+       result %= buckets.size;
        }
 
-   to add(string name, object val)
+   to add(string name, class val)
    // Create new element based on name and val, and add to hash.
        {
-       el = element.create
-       el.name = name
-       el.value = val
-       buckets[func(name)].add(el)
+       el = element.create;
+       el.name = name;
+       el.value = val;
+       buckets[func(name)].add(el);
        }
 
-  to find(string name) into (object val)
+  to find(string name) into (class val)
   // Find element
       {
       foreach el in buckets[func(name)]
 	  {
           if (el.name == name)
 	      {
-	      val = el.value
-	      break
+	      val = el.value;
+	      break;
 	      }
 	  }
       }
 
-   to mustFind(string name) into (object val) throws errNotFound
+   to mustFind(string name) into (class val) throws errNotFound
    // Find element or throw exception
+   // (NB currently exceptions and throws are not implemented)
        {
-       val = find(name)
+       val = find(name);
        if (!val)
-           throw errNotFound(name)
+           throw errNotFound(name);
        }
   
-   object hashIterator implements iterator
+   class hashIterator implements iterator
    // The iterator object for a hash has to maintain a little 
    // internal state.
        {
@@ -168,25 +184,27 @@ object hash implements collection
        to create(hash h)
        // We need a more complex initialization than all zeroes,
        // so we have to have a create method
+       // (NB create vs. new, vs just having a factory function of
+       // your own choosing not decided yet.)
 	   {
 	   self.h=h
            self.bucketIx=0
 	   self.listIterator = buckets[bucketIx]
 	   }
 
-       to advance into (object)
+       to advance() into (var object)
        // The advance method is all that's required to be
        // an iterator.  It just returns the next object,
        // or nil when nothing is left.
 	   {
 	   loop
 	       {
-	       object = self.listIterator.advance
+	       object = self.listIterator.advance();
 	       if (object)
 	           break
-	       self.bucketIx += 1
+	       self.bucketIx += 1;
 	       if (self.bucketIx >= self.h.buckets.size)
-	           break
+	           break;
 	       }
            }
 	}
@@ -195,17 +213,17 @@ object hash implements collection
     // The iterate method is all that's required to be a collection.
     // This just returns an object with an iterator interface.
         {
-	iterator = hashIterator.create(self)
+	iterator = hashIterator.create(self);
 	}
     }  // End of hash object
 
-object countingHash extends hash
+class countingHash extends hash
 // Here we extend the hash by keeping track of how many elements
 // are in it.
     {
     int count;
 
-    to add(string name, object val)
+    to add(string name, class val)
         {
 	self.count += 1;
 	parent.add(name, val);
