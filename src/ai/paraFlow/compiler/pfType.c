@@ -478,7 +478,7 @@ struct pfBaseType *base;
 if (pt == NULL)
     internalErrAt(pp->tok);
 base = type->base;
-// uglyf("coercingOne %s (isFunction=%d) to %s\n", pt->base->name, pt->isFunction, base->name);
+verbose(3, "coercingOne %s (isFunction=%d) to %s\n", pt->base->name, pt->isFunction, base->name);
 if (pp->type == pptConstUse)
     {
     if (base == pfc->bitType)
@@ -555,7 +555,7 @@ if (pp->type == pptConstUse)
 else if (pt->base != base)
     {
     boolean ok = FALSE;
-    // uglyf("coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
+    verbose(3, "coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
@@ -579,14 +579,17 @@ else if (pt->base != base)
 	insertCast(pptCastVarToTyped, tt, pPp);
 	ok = TRUE;
 	}
+    else if (base->isCollection && base != pfc->stringType)
+#ifdef WANDERING_AROUND_IN_THE_DARK
     else if (base->isCollection)
+#endif 
 	{
 	if (!pt->isTuple)
 	    {
 	    insertCast(pptTuple, NULL, pPp);  /* In this case not just a cast. */
 	    pfTypeOnTuple(pfc, *pPp);
 	    }
-	coerceTupleToCollection(pfc, &pp->children, type);
+	coerceTupleToCollection(pfc, pPp, type);
 	ok = TRUE;
 	}
     else if (base->isClass)
@@ -1195,6 +1198,7 @@ if (body != NULL)
     if (!classScope->isClass)
         classScope = NULL;
     rBlessFunction(funcDec->scope, outputHash, pfc, body, classScope);
+#ifdef USELESS
     hc = hashFirst(outputHash);
     while ((hel = hashNext(&hc)) != NULL)
 	{
@@ -1202,11 +1206,12 @@ if (body != NULL)
 	    errAt(funcDec->tok, "Output variable %s not set in %s", 
 		    hel->name, funcDec->name);
 	}
+#endif /* USELESS */
     }
 hashFree(&outputHash);
 }
 
-void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
+static void rTypeCheck(struct pfCompile *pfc, int level, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 {
@@ -1214,8 +1219,10 @@ struct pfParse *pp = *pPp;
 struct pfParse **pos;
 
 for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
-    rTypeCheck(pfc, pos);
+    rTypeCheck(pfc, level+1, pos);
 
+if (verboseLevel() >= 3)
+    pfParseDumpOne(pp, level, stderr);
 switch (pp->type)
     {
     case pptCall:
@@ -1319,7 +1326,7 @@ switch (pp->type)
     }
 }
 
-void rClassBless(struct pfCompile *pfc, struct pfParse *pp)
+static void rClassBless(struct pfCompile *pfc, struct pfParse *pp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 {
@@ -1341,5 +1348,5 @@ void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
  * which should have variables bound already. */
 {
 rClassBless(pfc, *pPp);
-rTypeCheck(pfc, pPp);
+rTypeCheck(pfc, 0, pPp);
 }

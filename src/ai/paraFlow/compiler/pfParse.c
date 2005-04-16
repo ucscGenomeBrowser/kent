@@ -323,10 +323,9 @@ switch (tok->type)
     }
 }
 
-void pfParseDump(struct pfParse *pp, int level, FILE *f)
-/* Write out pp (and it's children) to file at given level of indent */
+void pfParseDumpOne(struct pfParse *pp, int level, FILE *f)
+/* Dump out single pfParse record at given level of indent. */
 {
-struct pfParse *child;
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
 if (pp->ty != NULL)
@@ -352,11 +351,16 @@ switch (pp->type)
 	break;
     }
 fprintf(f, "\n");
-for (child = pp->children; child != NULL; child = child->next)
-    pfParseDump(child, level+1, f);
 }
 
-
+void pfParseDump(struct pfParse *pp, int level, FILE *f)
+/* Write out pp (and it's children) to file at given level of indent */
+{
+pfParseDumpOne(pp, level, f);
+level += 1;
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    pfParseDump(pp, level, f);
+}
 
 struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);

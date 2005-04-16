@@ -198,6 +198,9 @@ struct pfParse *pfSingleTuple(struct pfParse *parent, struct pfToken *tok,
 void pfParseDump(struct pfParse *pp, int level, FILE *f);
 /* Write out pp (and it's children) to file at given level of indent */
 
+void pfParseDumpOne(struct pfParse *pp, int level, FILE *f);
+/* Dump out single pfParse record at given level of indent. */
+
 struct pfParse *pfParseProgram(struct pfCompile *pfc, char *builtinCode, char *fileName);
 /* Return parse tree of file and any files gone into. */
 

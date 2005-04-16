@@ -672,14 +672,14 @@ static void codeParameterizedType(struct pfCompile *pfc, FILE *f, struct pfParse
 /* Deal with things like array[10] of ... */
 {
 boolean gotOne = FALSE;
-if (isInitialized)
-    errAt(type->tok, "Sorry right now you can't both dimension an array and initialize it.");
 if (type->type != pptOf)
     cantCopeParamType(type, 1);
 for (type = type->children; type != NULL; type = type->next)
     {
     if (type->children != NULL)
 	{
+	if (isInitialized)
+	    errAt(type->tok, "Sorry right now you can't both dimension an array and initialize it.");
 	if (type->type != pptTypeName)
 	    cantCopeParamType(type, 2);
 	if (type->ty->base != pfc->arrayType)
