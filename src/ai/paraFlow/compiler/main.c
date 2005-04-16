@@ -23,14 +23,17 @@ void usage()
 /* Explain command line and exit. */
 {
 errAbort(
-"This program compiles paraFlow code.  ParaFlow is a parallel programming\n"
-"language designed by Jim Kent.\n"
+"This program compiles and executes paraFlow code.  ParaFlow is \n"
+"a parallel programming language designed by Jim Kent.\n"
 "Usage:\n"
 "    paraFlow input.pf\n"
+"This will create the files 'input.c' and 'input' (which is just\n"
+"input.c compiled by gcc\n"
 "options:\n"
+"    -verbose=2 - Display info on the progress of things.\n"
 "    -endPhase=N - Break after such-and-such a phase of compiler\n"
+"                  Run it with verbose=2 to see phases defined.\n"
 );
-
 }
 
 static struct optionSpec options[] = {

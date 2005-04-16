@@ -858,7 +858,7 @@ struct pfParse *parseCmp(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseSum(parent, &tok, scope);
-while (tok->type == pftEqualsEquals || tok->type == pftNotEquals 
+if (tok->type == pftEqualsEquals || tok->type == pftNotEquals 
 	|| tok->type == pftGreaterOrEquals || tok->type == pftLessOrEquals
 	|| tok->type == '<' || tok->type == '>')
     {
