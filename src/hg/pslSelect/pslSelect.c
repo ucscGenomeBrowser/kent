@@ -7,7 +7,7 @@
 #include "localmem.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSelect.c,v 1.5 2004/07/29 00:10:54 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSelect.c,v 1.6 2005/04/16 20:25:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -41,10 +41,11 @@ errAbort(
   "Must specify a selection option\n"
   "\n"
   "Options:\n"
-  "   -qtPairs=file - file is tab-separated query and query to select\n"
-  "   -query=file - file is list of query to select\n"
-  "   -queryPairs=file - file is list of queries, with substitution value\n"
-  "   -qtStart=file - file is list of qName,tName, tStart\n"
+  "   -qtPairs=file - file is tab-separated qName and tName pairs to select\n"
+  "   -queries=file - file has qNames to select\n"
+  "   -queryPairs=file - file is tab-separated paris of qNames to select\n"
+  "    with new qName to substitute in output file\n"
+  "   -qtStart=file - file is tab-seperate rows of qName,tName,tStart\n"
   );
 }
 
