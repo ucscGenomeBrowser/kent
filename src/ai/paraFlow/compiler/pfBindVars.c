@@ -74,6 +74,8 @@ switch (pp->type)
 	    struct pfType *ty = pfTypeNew(base);
 	    pp->ty = ty;
 	    }
+	else
+	    errAt(pp->tok, "Undefined class %s", pp->name);
 	break;
 	}
     case pptTypeTuple:
