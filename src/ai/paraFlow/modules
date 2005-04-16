@@ -1,3 +1,6 @@
+NB - Paraflow currently does not really implement modules yet.
+NB - The desciption here is subject to much change.
+
 ParaFlow has an interesting relationship between files, modules, and objects.
 
 A file parses out as a series of declarations.  Unless a declaration is

@@ -1,0 +1,99 @@
+The ParaFlow strings are carefully crafter.  The modern
+programmer tends to spend at least as much time working with
+strings as they do with numbers.  
+
+I. String Constants
+A simple string constant is enclosed in single or double quotes with
+no line breaks.  Examples are 'Linus Pauling' and "Linus Pauling's Mother".
+The traditional C escapes including \n, \t, \\, and \n are used.
+
+String constants can also be line oriented.  In this case the quotation
+is immediately followed by a line break.   Everything up until a line
+that starts with the quotation mark is included.  Some examples are:
+
+"
+This is a poem
+that wishes it were
+a haiku.
+"
+
+'
+If I keep getting spammed about the
+lumberjacks, I swear one of these days
+I'm going to crack!
+'
+
+Sometimes you have a block of text you want to use as a string, and
+even the line quotes won't work.  For those occasions use the 'quote to marker'
+construct.  This includes everything from the marker to the next
+occurence of the marker.   The marker can be any symbols not including white space.
+Here's an example
+
+quote to @#*(!!YOUBLUTO I may not look like a sailor.
+I may not sail like a sailor.  But I can curse like
+a sailor!!@#*(!!YOUBLUTO
+
+(NB: the current implementation of the quote to marker style is flaky.)
+
+II. String Operations.
+The only operations allowed on strings are:
+	=	Assignment
+	+	Concatenation.  If used with a number converts number to ascii.
+	==	Equality
+	!=	Inequality
+	< <= >= >	Alphabetical comparison (ascii)
+You can also index an array to get a byte.  The indexes are zero based.
+
+III. String Methods and Attributes.
+These are applied by adding a dot after the string variable.
+
+string.size	- The number of characters in string.
+
+string.dupe() into string s	
+    Produce a duplicate of this string.
+
+string.start(int size) into string s
+    Return a new string that contains just the first size letters of this string.
+    For instance "Cat in the hat".start(3) = "Cat"
+
+string.rest(int start) into string s
+    Returns a new string that contains all but the first start number of letters.
+    For instance "Cat in the hat".start(3) = " in the hat"
+
+string.middle(int start, int size) into string s
+    Returns a new string that is the same as the size letters starting at start
+    (which is zero based).  For instance "0123456789".middle(3,5) is "34567".
+
+string.end(int size) into string s
+    Returns a new string that contains the last size letters of this string.
+    For instance "Catin the hat".end(3) = "hat"
+
+string.upper()
+    Converts this string to upper case.
+
+string.lower()
+    Coverts this string to lower case.
+
+string.append(string s)
+    Appends s to end of this string.  This tries to achieve a balance between
+    memory usage and speed.  The first call will allocate additional memory
+    for the string,  generally enough for several more operations.  When the
+    size of the buffer holding the string is increased it is increased to twice
+    what is needed for the current append until the buffer gets quite large.
+    At that point it just allocates 64k more than needed for the current operation.
+
+string.find(string s) into int pos
+    Returns the position of the first occurence of s in string.  This position
+    is zero based.  If s is not contained in string then it returns -1.
+
+string.findNext(string s, int startingPos) into int pos
+    Returns the next occurence of s in string that occurs at the starting pos
+    or later.
+    [NB not yet implemented]
+
+string.nextWord(int pos) into (int nextPos, string word)
+    Returns next white-space-delimited word starting at pos or later.
+    Does not return any of the white space.  Also returns nextPos,
+    which should be used in the next call to nextWord.  The pos
+    initially should be 0.
+
