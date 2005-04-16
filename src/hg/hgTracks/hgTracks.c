@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.950 2005/04/15 00:22:41 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.951 2005/04/16 00:15:52 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -115,6 +115,8 @@ Color shadesOfRed[EXPR_DATA_SHADES];
 Color shadesOfBlue[EXPR_DATA_SHADES];
 Color orangeColor = 0;
 Color brickColor = 0;
+Color blueColor = 0;
+Color greenColor = 0;
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
@@ -1131,6 +1133,27 @@ return orangeColor;
 Color getBrickColor()
 {
 return brickColor;
+}
+
+Color makeBlueColor(struct vGfx *vg)
+{
+//return vgFindColorIx(vg, 0,163,221);
+return vgFindColorIx(vg, 0,142,214);
+}
+
+Color getBlueColor()
+{
+return blueColor;
+
+}
+Color makeGreenColor(struct vGfx *vg)
+{
+return vgFindColorIx(vg, 28,206,40);
+}
+
+Color getGreenColor()
+{
+return greenColor;
 }
 
 /*	See inc/chromColors.h for color defines	*/
@@ -6688,11 +6711,10 @@ for (i=0; i<count; i++, text++, textPos++)
             text[1] == MAF_PART_BREAK_BEFORE)
         /* synteny break w/ unaligned sequence at contig/chrom boundary
          * before alignment.
-         * display as vertical red bar followed by 'o' */
+         * display as vertical red bar followed by '=' */
         {
-        vgBox(vg, x+x1, y, 1, height, getBrickColor());
-        /* print "little o" */
-        text[1] = UNALIGNED_SEQ;
+        vgBox(vg, x+x1, y, 1, height, getBlueColor());
+        text[1] = MAF_DOUBLE_GAP;
         i--;
         }
     if (match != NULL && *text == MAF_PART_BREAK_BEFORE)
@@ -6705,11 +6727,10 @@ for (i=0; i<count; i++, text++, textPos++)
             *text == MAF_PART_BREAK_AFTER)
         /* synteny break w/ unaligned sequence at contig/chrom boundary
          * after alignment.
-         * display as 'o' followed by vertical red bar */
+         * display as '=' followed by vertical red bar */
         {
-        vgBox(vg, x+x2, y, 1, height, getBrickColor());
-        /* print "little o" */
-        text[1] = UNALIGNED_SEQ;
+        vgBox(vg, x+x2, y, 1, height, getBlueColor());
+        text[1] = MAF_DOUBLE_GAP;
         text++;
         textPos++;
         i--;
@@ -6720,7 +6741,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* synteny break at chrom/contig boundary.
          * display as vertical red bar */
         {
-        vgBox(vg, x+x1, y, 1, height, getBrickColor());
+        vgBox(vg, x+x1, y, 1, height, getBlueColor());
         i--;
         continue;
         }
@@ -7480,6 +7501,8 @@ makeBrownShades(vg);
 makeSeaShades(vg);
 orangeColor = makeOrangeColor(vg);
 brickColor = makeBrickColor(vg);
+blueColor = makeBlueColor(vg);
+greenColor = makeGreenColor(vg);
 
 if (rulerMode == tvFull &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)

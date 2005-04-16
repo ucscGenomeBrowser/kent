@@ -17,7 +17,7 @@
 
 //#define ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.65 2005/04/15 04:04:23 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.66 2005/04/16 00:15:52 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -304,8 +304,6 @@ if (winEnd - winStart < 1000000)
                                         chromName, winStart, winEnd);
     hFreeConn(&conn);
     }
-else
-    track->customPt = NULL;
 if (wigTrack != NULL)
     {
     mi = scoreItem(wigTotalHeight(wigTrack, tvFull));
@@ -1137,14 +1135,10 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                         mc->rightStatus == MAF_INSERT_STATUS))
                         {
                         char fill = (mc->leftStatus == MAF_CONTIG_STATUS ? 
-                                                 '-' : 'o');
+                                                 '-' : MAF_DOUBLE_GAP);
                         seq = needMem(size+1);
                         needToFree = TRUE;
                         memset(seq, fill, size);
-                        /*
-                        for (p = seq, i = 0; i < size; p++, i++)
-                            *p = fill;
-                            */
                         }
                     else
                         continue;

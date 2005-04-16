@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.30 2005/04/15 04:04:23 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.31 2005/04/16 00:15:52 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -510,10 +510,16 @@ void drawMafRegionDetails(struct mafAli *mafList, int height,
 /* Draw wiggle/density plot based on scoring things on the fly. */
 {
 struct mafAli *full, *sub = NULL, *maf = NULL;
-struct mafComp *mcMaster;
+struct mafComp *mcMaster, *mc;
 char dbChrom[64];
 int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
+int x;
+int midY = yOff + (height>>1);
+//int midY1 = midY - (height>>2);
+//int midY2 = midY + (height>>2);
+int midY1 = midY - (height>>2);
+int midY2 = midY + (height>>2) - 1;
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
@@ -529,36 +535,58 @@ for (full = mafList; full != NULL; full = full->next)
 	{
         ixMafAli++;
 	mcMaster = mafFindComponent(maf, dbChrom);
+        mc = mcMaster->next;
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
 	mafPixelStart = (mcMaster->start - seqStart) * width/winBaseCount;
 	mafPixelEnd = (mcMaster->start + mcMaster->size - seqStart) 
 	    * width/winBaseCount;
 	mafPixelWidth = mafPixelEnd-mafPixelStart;
+        x = mafPixelStart+xOff;
 	if (mafPixelWidth < 1) mafPixelWidth = 1;
-	AllocArray(pixelScores, mafPixelWidth);
-	mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
-        if (maf->components->next->leftStatus == MAF_NEW_STATUS)
-           vgBox(vg, mafPixelStart+xOff-2, yOff, 1, height, getBrickColor());
-	for (i=0; i<mafPixelWidth; ++i)
-	    {
-	    if (vis == tvFull)
-		{
-		int y = pixelScores[i] * height1;
-		vgBox(vg, i+mafPixelStart+xOff, yOff + height1 - y, 
-		    1, y+1, (ixMafAli % 2) ? color : altColor);
-		}
-	    else
-	        {
-		int shade = pixelScores[i] * maxShade;
-		Color c = shadesOfGray[shade];
-		vgBox(vg, i+mafPixelStart+xOff, yOff, 
-		    1, height-1, c);
-		}
-	    }
-        if (maf->components->next->rightStatus == MAF_NEW_STATUS)
-           vgBox(vg, i+mafPixelStart+xOff+1, yOff, 1, height, getBrickColor());
-	freez(&pixelScores);
+        if (mc->size == 0)
+            {
+            /* no alignment here -- just a gap/break annotation */
+            if (mc->leftStatus == MAF_INSERT_STATUS &&
+                mc->rightStatus == MAF_INSERT_STATUS)
+                    {
+                    /* double gap -> display double line ala chain tracks */
+                    innerLine(vg, x, midY1, mafPixelWidth, color);
+                    innerLine(vg, x, midY2, mafPixelWidth, color);
+                    }
+            if (mc->leftStatus == MAF_CONTIG_STATUS &&
+                mc->rightStatus == MAF_CONTIG_STATUS)
+                    {
+                    /* single gap -> display single line ala chain tracks */
+                    innerLine(vg, x, midY, mafPixelWidth, color);
+                    }
+            }
+        else
+            {
+            AllocArray(pixelScores, mafPixelWidth);
+            mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
+            if (mc->leftStatus == MAF_NEW_STATUS)
+               vgBox(vg, x-2, yOff, 1, height, getBlueColor());
+            for (i=0; i<mafPixelWidth; ++i)
+                {
+                if (vis == tvFull)
+                    {
+                    int y = pixelScores[i] * height1;
+                    vgBox(vg, i+x, yOff + height1 - y, 
+                        1, y+1, (ixMafAli % 2) ? color : altColor);
+                    }
+                else
+                    {
+                    int shade = pixelScores[i] * maxShade;
+                    Color c = shadesOfGray[shade];
+                    vgBox(vg, i+mafPixelStart+xOff, yOff, 
+                        1, height-1, c);
+                    }
+                }
+            if (mc->rightStatus == MAF_NEW_STATUS)
+               vgBox(vg, i+mafPixelStart+xOff+1, yOff, 1, height, getBlueColor());
+            freez(&pixelScores);
+            }
 	}
     mafAliFree(&sub);
     }

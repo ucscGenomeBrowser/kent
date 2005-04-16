@@ -283,6 +283,7 @@ void makeRedGreenShades(struct vGfx *vg);
 
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
+#define MAF_DOUBLE_GAP '='
 
 /* used for internal representation of synteny breaks
  * in multiple alignments. "Full break" indicates that
@@ -784,7 +785,8 @@ Color getOrangeColor();
 /* Return color used for insert indicators in multiple alignments */
 
 Color getBrickColor();
-/* Return color used for break indicators in multiple alignments */
+Color getBlueColor();
+Color getGreenColor();
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
 				 struct vGfx *vg, int xOff, int y, double scale, 
