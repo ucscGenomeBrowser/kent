@@ -1,6 +1,7 @@
 /* initVar - handle variable initialization from tuples */
 
-struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, _pf_Stack **retStack);
+struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, char *encoding, 
+	_pf_Stack **retStack, char **retEncoding);
 /* Convert tuple on stack to class. */
 
 void _pf_class_cleanup(struct _pf_object *obj, int typeId);

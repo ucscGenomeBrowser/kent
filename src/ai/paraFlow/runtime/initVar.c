@@ -25,7 +25,8 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 free(obj);
 }
 
-struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, _pf_Stack **retStack)
+struct _pf_object *_pf_class_from_tuple(_pf_Stack *stack, int typeId, char *encoding, 
+	_pf_Stack **retStack, char **retEncoding)
 /* Convert tuple on stack to class. */
 {
 struct _pf_type *type = _pf_type_table[typeId], *fieldType;
@@ -34,10 +35,14 @@ struct _pf_object *obj = needMem(base->objSize);
 char *s = (char *)(obj);
 _pf_Stack *field;
 
-// uglyf("_pf_class_from_tuple(%p %d %p)\n", stack, typeId, retStack);
+// uglyf("_pf_class_from_tuple(%p %d %p %s)\n", stack, typeId, retStack, encoding);
+if (encoding[0] != '(')
+    errAbort("Expecting ( in tuple encoding, got %c", encoding[0]);
+encoding += 1;
 for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
     int offset = fieldType->offset;
+    int code = *encoding++;
     switch (fieldType->base->singleType)
 	{
 	case pf_stBit:
@@ -82,20 +87,28 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 	case pf_stClass:
 	    {
 	    int typeId = fieldType->typeId;
-#ifdef OLD
-	    *((_pf_Object *)(s + offset)) = _pf_class_from_tuple(stack, typeId, &stack);
-	    stack -= 1;	/* Since += it at end of loop. */
-#endif /* OLD */
-	    *((_pf_Object *)(s + offset)) = stack->Obj;
+	    if (code == '(')
+	        {
+		*((_pf_Object *)(s + offset)) = _pf_class_from_tuple(stack, typeId, 
+			encoding-1, &stack, &encoding);
+		stack -= 1;	/* Since += it at end of loop. */
+		}
+	    else
+		*((_pf_Object *)(s + offset)) = stack->Obj;
 	    break;
 	    }
 	}
     stack += 1;
     }
+if (encoding[0] != ')')
+    errAbort("Expecting ) in tuple encoding, got %c", encoding[0]);
+encoding += 1;
 obj->_pf_refCount = 1;
 obj->_pf_cleanup = _pf_class_cleanup;
 if (retStack != NULL)
     *retStack = stack;
+if (retEncoding != NULL)
+    *retEncoding = encoding;
 return obj;
 }
 

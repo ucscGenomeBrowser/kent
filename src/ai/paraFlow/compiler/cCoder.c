@@ -598,6 +598,21 @@ switch (pp->type)
     }
 }
 
+static void rCodeTupleType(FILE *f, struct pfType *type)
+/* Recursively encode tuple type to output. */
+{
+struct pfType *t;
+fprintf(f, "(");
+for (t = type->children; t != NULL; t = t->next)
+    {
+    if (t->isTuple)
+        rCodeTupleType(f,t);
+    else
+        fprintf(f, "x");
+    }
+fprintf(f, ")");
+}
+
 static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
 	struct pfType *type, int stack, int tupleSize)
 /* Shovel tuple into array, list, dir, tree. */
@@ -631,14 +646,16 @@ else
 }
 
 static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
-	struct pfParse *lval, int stack, int tupleSize)
+	struct pfParse *lval, struct pfParse *rval, int stack, int tupleSize)
 /* Shovel tuple into class. */
 {
 struct pfBaseType *base = lval->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
-fprintf(f, "_pf_class_from_tuple(%s+%d, %d, 0);\n",
+fprintf(f, "_pf_class_from_tuple(%s+%d, %d, \"",
 	stackName, stack, typeId(pfc, lval->ty));
+rCodeTupleType(f, rval->ty);
+fprintf(f, "\", 0, 0);\n");
 }
 
 static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,
@@ -649,7 +666,7 @@ int count = codeExpression(pfc, f, rval, stack, TRUE);
 if (lval->ty->base->isClass)
     {
     if (rval->type == pptTuple)
-	codeTupleIntoClass(pfc, f, lval, stack, count);
+	codeTupleIntoClass(pfc, f, lval, rval, stack, count);
     }
 else
     {
