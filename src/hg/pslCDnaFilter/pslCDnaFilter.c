@@ -132,11 +132,33 @@ struct outFiles
     FILE *alignStatsFh;        /* alignment stats, or NULL; */
 };
 
+static boolean validPsl(struct psl *psl)
+/* check if a psl is internally consistent */
+{
+static FILE *devNull = NULL;
+if (devNull == NULL)
+    devNull = mustOpen("/dev/null", "w");
+return (pslCheck("", devNull, psl) == 0);
+}
+
+void invalidPslFilter(struct cDnaAligns *cdAlns)
+/* filter for invalid PSL */
+{
+struct cDnaAlign *aln;
+for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
+    if ((!aln->drop) && !validPsl(aln->psl))
+        {
+        aln->drop = TRUE;
+        cdAlns->badCnts.aligns++;
+        cDnaAlignVerb(2, aln->psl, "drop: invalid psl");
+        }
+}
+
 void minQSizeFilter(struct cDnaAligns *cdAlns)
 /* filter by minimum query size */
 {
 struct cDnaAlign *aln;
-/* note that qSize is actually the same for a alignments */
+/* note that qSize is actually the same for all alignments */
 for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && (aln->psl->qSize < gMinQSize))
         {
@@ -294,6 +316,7 @@ void filterQuery(struct cDnaAligns *cdAlns,
 /* filter the current query set of alignments in cdAlns */
 {
 /* n.b. order should agree with doc */
+invalidPslFilter(cdAlns);
 if (gMinQSize > 0)
     minQSizeFilter(cdAlns);
 if (gBestOverlap)

@@ -64,15 +64,6 @@ if (cdAlns->polyASizes != NULL)
 return size;
 }
 
-static boolean validPsl(struct psl *psl)
-/* check if a psl is internally consistent */
-{
-static FILE *devNull = NULL;
-if (devNull == NULL)
-    devNull = mustOpen("/dev/null", "w");
-return (pslCheck("", devNull, psl) == 0);
-}
-
 static float calcIdent(struct psl *psl)
 /* get fraction ident for a psl */
 {
@@ -159,7 +150,6 @@ static struct psl* readNextPsl(struct cDnaAligns *cdAlns)
  * read the next one.  Discard invalid psls and try again */
 {
 struct psl* psl = NULL;
-struct psl* badPsls = NULL;  /* save till end for stat collection */
 if (cdAlns->nextCDnaPsl != NULL)
     {
     psl = cdAlns->nextCDnaPsl;
@@ -171,18 +161,7 @@ while (psl == NULL)
     if (!lineFileNextRowTab(cdAlns->pslLf, row, ArraySize(row)))
         break; /* EOF */
     psl = pslLoad(row);
-    cdAlns->totalCnts.aligns++;
-    if (!validPsl(psl))
-        {
-        cDnaAlignVerb(2, psl, "drop: invalid psl");
-        cdAlns->badCnts.aligns++;
-        if ((badPsls == NULL) || !sameString(badPsls->qName, psl->qName))
-            cdAlns->badCnts.queries++;
-        slAddHead(&badPsls, psl);
-        psl = NULL;
-        }
     }
-pslFreeList(&badPsls);
 return psl;
 }
 
@@ -197,8 +176,8 @@ cnts->prevAligns = cnts->aligns;
 static void updateCounters(struct cDnaAligns *cdAlns)
 /* update counters after processing a batch of queries */
 {
-/* N.B. badCnts is handled by readNextPsl */
 updateCounter(&cdAlns->totalCnts);
+updateCounter(&cdAlns->badCnts);
 updateCounter(&cdAlns->keptCnts);
 updateCounter(&cdAlns->weirdOverCnts);
 updateCounter(&cdAlns->weirdKeptCnts);
@@ -226,11 +205,15 @@ if (psl == NULL)
     return FALSE;
 cdAlns->id = psl->qName;
 cdAlns->alns = cDnaAlignNew(cdAlns, psl);
+cdAlns->totalCnts.aligns++;
 
 /* remaining alignments for same sequence */
 while (((psl = readNextPsl(cdAlns)) != NULL)
        && sameString(psl->qName, cdAlns->id))
+    {
     slSafeAddHead(&cdAlns->alns, cDnaAlignNew(cdAlns, psl));
+    cdAlns->totalCnts.aligns++;
+    }
 
 cdAlns->nextCDnaPsl = psl;  /* save for next time (or NULL) */
 return TRUE;
