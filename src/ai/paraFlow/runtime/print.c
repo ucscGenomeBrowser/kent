@@ -9,15 +9,20 @@ void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base)
 /* Print out each field of class. */
 {
 struct _pf_type *field;
-char *s = (char *)obj;
-fprintf(f, "(");
-for (field = base->fields; field != NULL; field = field->next)
+if (obj == NULL)
+    fprintf(f, "()");
+else
     {
-    printField(f, s+field->offset, field->base);
-    if (field->next != NULL)
-         fprintf(f, ",");
+    char *s = (char *)obj;
+    fprintf(f, "(");
+    for (field = base->fields; field != NULL; field = field->next)
+	{
+	printField(f, s+field->offset, field->base);
+	if (field->next != NULL)
+	     fprintf(f, ",");
+	}
+    fprintf(f, ")");
     }
-fprintf(f, ")");
 }
 
 void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base)
