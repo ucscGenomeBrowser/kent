@@ -56,6 +56,7 @@ enum pfTokType
     pftBreak,
     pftContinue,
     pftReturn,
+    pftExtends,
     };
 
 char *pfTokTypeAsString(enum pfTokType type);

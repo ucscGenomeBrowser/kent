@@ -253,6 +253,8 @@ if (base != pfc->stringType)
 	    if (sameString(t->fieldName, name))
 		break;
 	    }
+	if (t != NULL)
+	     break;
 	base = base->parent;
 	}
     }

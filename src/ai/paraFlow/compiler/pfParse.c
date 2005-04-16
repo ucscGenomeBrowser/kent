@@ -1226,7 +1226,7 @@ tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
 pp->name = name->name;
-if (tok->type == pftOf)
+if (tok->type == pftExtends)
     {
     struct pfBaseType *parentBase, *myBase;
     tok = tok->next;

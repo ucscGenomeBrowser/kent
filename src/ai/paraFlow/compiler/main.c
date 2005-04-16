@@ -54,8 +54,9 @@ hashAddInt(hash, "of", pftOf);
 hashAddInt(hash, "if", pftIf);
 hashAddInt(hash, "else", pftElse);
 hashAddInt(hash, "break", pftBreak);
-hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "continue", pftContinue);
+hashAddInt(hash, "return", pftReturn);
+hashAddInt(hash, "extends", pftExtends);
 return hash;
 }
 
