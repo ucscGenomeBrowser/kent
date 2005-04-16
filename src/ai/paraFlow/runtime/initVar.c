@@ -82,8 +82,11 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 	case pf_stClass:
 	    {
 	    int typeId = fieldType->typeId;
+#ifdef OLD
 	    *((_pf_Object *)(s + offset)) = _pf_class_from_tuple(stack, typeId, &stack);
 	    stack -= 1;	/* Since += it at end of loop. */
+#endif /* OLD */
+	    *((_pf_Object *)(s + offset)) = stack->Obj;
 	    break;
 	    }
 	}
