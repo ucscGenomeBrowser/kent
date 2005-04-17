@@ -163,6 +163,8 @@ beta: checkbeta strict
 # This target adds trackDbLocal to the mgc-specific server.  Also
 # loads the grpMgc table.
 mgc:
+	ln -sf  human/hg17/exoniphy.html exoniphy.html
+	ln -sf  human/hg17/exoniphyGene.html exoniphyGene.html
 	@for DB in $(MGC_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \

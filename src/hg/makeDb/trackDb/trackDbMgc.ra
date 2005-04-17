@@ -68,10 +68,10 @@ cdsDrawDefault genomic\ codons
 url http://genome.cs.wustl.edu/cgi-bin/mgc.cgi?action=cloneRpt&acc=$$
 
 track mgcAListGene
-shortLabel MGC A-List
+shortLabel A-List
 longLabel MGC A-List Genes
 group mgc
-priority 15
+priority 100
 visibility pack
 color 200,0,50
 type genePred
@@ -79,10 +79,10 @@ exonArrows on
 cdsDrawDefault genomic\ codons
 
 track mgcBListGene
-shortLabel MGC B-List
+shortLabel B-List
 longLabel MGC B-List Genes
 group mgc
-priority 15.1
+priority 101
 visibility pack
 color 200,50,0
 type genePred
@@ -93,7 +93,7 @@ track baylorRtPcrGeneA
 shortLabel Baylor GeneA
 longLabel Baylor RT-PCR GeneA for MGC
 group mgc
-priority 16
+priority 102
 visibility hide
 color 10,100,15
 type psl .
@@ -103,7 +103,7 @@ track baylorRtPcr
 shortLabel Baylor RT-PCR
 longLabel Baylor RT-PCR for MGC
 group mgc
-priority 17
+priority 103
 visibility hide
 color 10,100,150
 type psl .
@@ -115,10 +115,39 @@ track gscMgcClones
 shortLabel GSC MGCs
 longLabel  GSC RT-PCR clones for MGC
 group mgc
-priority 20
+priority 104
 visibility pack
 color 155,0,125
 type psl .
+exonArrows on
+cdsDrawOptions enabled
+
+track exoniphy
+shortLabel Exoniphy 
+longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
+group mgc
+priority 105
+visibility dense
+color 173,17,162
+type genePred
+
+track exoniphyGene
+shortLabel Exoniphy Genes
+longLabel Predicted Genes and Gene Fragments from Exoniphy Exons (Human/Mouse/Rat)
+group mgc
+priority 106
+visibility hide
+color 173,17,162
+type genePred
+
+track mgcExoniphyPcr
+shortLabel Exoniphy predicted amplicons 
+longLabel MGC Exoniphy predicted amplicons - PCR in progress
+group mgc
+priority 107
+visibility pack
+type psl
+color 12,100,120
 exonArrows on
 cdsDrawOptions enabled
 
@@ -126,21 +155,10 @@ track mgcTwinscanPcr
 shortLabel TWINSCAN predicted amplicons
 longLabel MGC TWINSCAN predicted amplicons - PCR in progress
 group mgc
-priority 22
+priority 110
 visibility pack
 type psl
 color 120,12,12
-exonArrows on
-cdsDrawOptions enabled
-
-track mgcExoniphyPcr
-shortLabel Exoniphy predicted amplicons 
-longLabel MGC Exoniphy predicted amplicons - PCR in progress
-group mgc
-priority 23
-visibility pack
-type psl
-color 12,100,120
 exonArrows on
 cdsDrawOptions enabled
 
@@ -148,7 +166,7 @@ track nscanPcr
 shortLabel N-SCAN
 longLabel WUSTL N-SCAN PCR Targets
 group mgc
-priority 23.5
+priority 111
 visibility pack
 type genePred
 color 12,12,120
@@ -159,7 +177,7 @@ track mgcBTransPcr
 shortLabel WUSTL test
 longLabel WUSTL Test Targets
 group mgc
-priority 24
+priority 112
 visibility hide
 type psl
 color 10,100,150
@@ -167,10 +185,10 @@ exonArrows on
 cdsDrawOptions enabled
 
 track mgcWUPcrHit
-shortLabel RT-PCR Success
-longLabel WUSTL Sucessful RT-PCR for MGC
+shortLabel C-List Success
+longLabel  MGC C-List sucessful RT-PCR
 group mgc
-priority 25
+priority 113
 visibility pack
 type psl
 color 10,100,150
@@ -178,10 +196,10 @@ exonArrows on
 #pslSequenceBases all
 
 track mgcWUPcrFail
-shortLabel RT-PCR Fail
-longLabel WUSTL Failed RT-PCR for MGC
+shortLabel C-List Fail
+longLabel MGC C-List Failed RT-PCR for MGC
 group mgc
-priority 25.1
+priority 114
 visibility pack
 type psl
 color 10,150,100
@@ -189,10 +207,10 @@ exonArrows on
 #pslSequenceBases all
 
 track mgcWUPcrInProgress
-shortLabel RT-PCR Pending
-longLabel WUSTL In-progress RT-PCR for MGC
+shortLabel C-List Pending
+longLabel MGC C-List In-progress RT-PCR
 group mgc
-priority 25.2
+priority 115
 visibility pack
 type psl
 color 10,100,150
