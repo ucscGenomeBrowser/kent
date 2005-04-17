@@ -785,10 +785,17 @@ codeExpression(pfc, f, lval, stack, TRUE);
 codeExpression(pfc, f, rval, stack+1, TRUE);
 codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " = ");
-codeParamAccess(pfc, f, lval->ty->base, stack);
-fprintf(f, " %s ", op);
-codeParamAccess(pfc, f, rval->ty->base, stack+1);
-fprintf(f, ";\n");
+if (lval->ty->base == pfc->stringType)
+    {
+    fprintf(f, " (_pf_strcmp(%s+%d) %s 0);\n", stackName, stack, op);
+    }
+else
+    {
+    codeParamAccess(pfc, f, lval->ty->base, stack);
+    fprintf(f, " %s ", op);
+    codeParamAccess(pfc, f, rval->ty->base, stack+1);
+    fprintf(f, ";\n");
+    }
 return 1;
 }
 

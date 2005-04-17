@@ -28,6 +28,32 @@ string->size = string->allocated = size;
 return string;
 }
 
+int _pf_strcmp(_pf_Stack *stack)
+/* Return comparison between strings.  Cleans them off
+ * of stack.  Does not put result on stack because
+ * the code generator may use it in different ways. */
+{
+_pf_String a = stack[0].String;
+_pf_String b = stack[1].String;
+int ret = 0;
+
+if (a != b)
+    {
+    if (a == NULL)
+        ret = -1;
+    else if (b == NULL)
+        ret = 1;
+    else
+        ret = strcmp(a->s, b->s);
+    }
+
+if (NULL != a && --a->_pf_refCount <= 0)
+    a->_pf_cleanup(a, 0);
+if (NULL != b && --b->_pf_refCount <= 0)
+    b->_pf_cleanup(b, 0);
+return ret;
+}
+
 static struct _pf_string *_pf_string_init(char *s)
 /* Wrap string around constant. */
 {
