@@ -25,23 +25,38 @@ else
     }
 }
 
+void printString(FILE *f, struct _pf_string *string)
+/* Print out string. */
+{
+if (string == NULL)
+    fprintf(f, "\"\"");
+else
+    fprintf(f, "%s", string->s);
+}
+
+
 void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base)
 /* Print out each field of class. */
 {
-struct _pf_type *elType = array->elType;
-int i;
-boolean needsComma = FALSE;
-char *s = array->elements;
-fprintf(f, "(");
-for (i=0; i<array->size; ++i)
+if (array == NULL)
+    fprintf(f, "()");
+else
     {
-    if (needsComma)
-         fprintf(f, ",");
-    needsComma = TRUE;
-    printField(f, s, elType->base);
-    s += array->elSize;
+    struct _pf_type *elType = array->elType;
+    int i;
+    boolean needsComma = FALSE;
+    char *s = array->elements;
+    fprintf(f, "(");
+    for (i=0; i<array->size; ++i)
+	{
+	if (needsComma)
+	     fprintf(f, ",");
+	needsComma = TRUE;
+	printField(f, s, elType->base);
+	s += array->elSize;
+	}
+    fprintf(f, ")");
     }
-fprintf(f, ")");
 }
 
 
@@ -99,7 +114,7 @@ switch (base->singleType)
     case pf_stString:
 	{
         _pf_String *p = data;
-	fprintf(f, "%s", (*p)->s);
+	printString(f, *p);
 	break;
 	}
     case pf_stClass:
@@ -158,23 +173,22 @@ switch (base->singleType)
         fprintf(f, "%f", val.Double);
 	break;
     case pf_stString:
-        fprintf(f, "%s", val.String->s);
-	if (--val.Obj->_pf_refCount <= 0)
-	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
+	printString(f, val.String);
 	break;
     case pf_stClass:
-        printClass(f, val.Obj, base);
-	if (--val.Obj->_pf_refCount <= 0)
-	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
+	printClass(f, val.Obj, base);
 	break;
     case pf_stArray:
-        printArray(f, val.Array, base);
-	if (--val.Obj->_pf_refCount <= 0)
-	    val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
+	printArray(f, val.Array, base);
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);
 	break;
+    }
+if (base->needsCleanup)
+    {
+    if (val.Obj != NULL && --val.Obj->_pf_refCount <= 0)
+	val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
     }
 }
 
