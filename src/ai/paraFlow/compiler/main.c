@@ -238,7 +238,8 @@ verbose(2, "Phase 6 - compiling C code\n");
     dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
     dyStringPrintf(dy, "-o %s ", baseName);
     dyStringPrintf(dy, "%s ", codeFile);
-    dyStringAppend(dy, "~/src/ai/paraFlow/runtime/runtime.a ~/src/lib/powerpc/jkweb.a");
+    dyStringAppend(dy, "~/kent/src/ai/paraFlow/runtime/runtime.a ");
+    dyStringPrintf(dy, "~/kent/src/lib/%s/jkweb.a", getenv("MACHTYPE"));
     err = system(dy->string);
     if (err != 0)
 	errnoAbort("problem compiling %s", codeFile);
