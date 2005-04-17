@@ -437,15 +437,20 @@ else if (colBase == pfc->stringType)
     }
 else if (colBase == pfc->dirType)
     {
-// static int typeId(struct pfCompile *pfc, struct pfType *type)
     int offset = codeExpression(pfc, f, collection, stack, FALSE);
     codeExpression(pfc, f, index, stack+offset, FALSE);
-    fprintf(f, "%s[%d].Obj", stackName, stack);
-    fprintf(f, " = ");
     if (outType->base->needsCleanup)
+	{
+	fprintf(f, "%s[%d].Obj", stackName, stack);
+	fprintf(f, " = ");
         fprintf(f, "_pf_dir_lookup_object(%s+%d);\n", stackName, stack);
+	}
     else 
+	{
+	codeParamAccess(pfc, f, outType->base, stack);
+	fprintf(f, " = ");
 	fprintf(f, "_pf_dir_lookup_%s(%s+%d);\n",  outType->base->name, stackName, stack);
+	}
     }
 else
     {
@@ -461,6 +466,7 @@ static void codeIndexLval(struct pfCompile *pfc, FILE *f,
 {
 struct pfType *outType = pp->ty;
 struct pfParse *collection = pp->children;
+struct pfParse *index = collection->next;
 struct pfBaseType *colBase = collection->ty->base;
 int emptyStack = stack + expSize;
 if (colBase == pfc->arrayType)
@@ -485,9 +491,22 @@ else if (colBase == pfc->stringType)
     codeParamAccess(pfc, f, outType->base, stack);
     fprintf(f, ";\n");
     }
+else if (colBase == pfc->dirType)
+    {
+    int offset = codeExpression(pfc, f, collection, emptyStack, FALSE);
+    codeExpression(pfc, f, index, emptyStack+offset, FALSE);
+    if (outType->base->needsCleanup)
+	{
+        fprintf(f, "_pf_dir_add_object(%s+%d);\n", stackName, stack);
+	}
+    else 
+	{
+	fprintf(f, "_pf_dir_add_%s(%s+%d);\n",  outType->base->name, stackName, stack);
+	}
+    }
 else
     {
-    fprintf(f, "(ugly coding index for something other than array)");
+    fprintf(f, "(ugly coding index as lval for something other than array)");
     }
 }
 

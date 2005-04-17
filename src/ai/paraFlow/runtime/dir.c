@@ -112,3 +112,28 @@ if (obj != NULL)
     obj->_pf_refCount += 1;
 return obj;
 }
+
+void _pf_dir_add_object(_pf_Stack *stack)
+/* Stack contains object, directory, keyword.  Add object to
+ * directory. */
+{
+struct _pf_object *obj = stack[0].Obj;
+struct _pf_dir *dir = stack[1].Dir;
+struct _pf_string *string = stack[2].String;
+struct hash *hash = dir->hash;
+struct hashEl *hel;
+struct _pf_object *oldObj;
+
+hel = hashLookup(hash, string->s);
+if (hel != NULL)
+    {
+    oldObj = hel->val;
+    if (--oldObj->_pf_refCount <= 0)
+        oldObj->_pf_cleanup(oldObj, dir->elType->typeId);
+    hel->val = obj;
+    }
+else
+    {
+    hashAdd(hash, string->s, obj);
+    }
+}
