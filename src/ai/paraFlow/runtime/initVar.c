@@ -221,7 +221,9 @@ _pf_Array _pf_dim_array(int size, int arrayTypeId, int elTypeId)
 {
 struct _pf_type *elType = _pf_type_table[elTypeId];
 int elSize = elType->base->size;
-char *elements = needLargeZeroedMem(elSize*size);
+char *elements = NULL;
+if (size > 0)
+    elements = needLargeZeroedMem(elSize*size);
 return array_of_type(size, size, elType, elSize, elements);
 }
 
