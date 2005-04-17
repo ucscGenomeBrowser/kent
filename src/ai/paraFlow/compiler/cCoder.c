@@ -628,15 +628,18 @@ switch (pp->type)
     }
 }
 
-static void rCodeTupleType(FILE *f, struct pfType *type)
+static void rCodeTupleType(struct pfCompile *pfc, FILE *f, struct pfType *type)
 /* Recursively encode tuple type to output. */
 {
 struct pfType *t;
 fprintf(f, "(");
 for (t = type->children; t != NULL; t = t->next)
     {
-    if (t->isTuple)
-        rCodeTupleType(f,t);
+    struct pfType *tk = t;
+    if (t->base == pfc->keyValType)
+        tk = t->children->next;
+    if (tk->isTuple) 
+        rCodeTupleType(pfc, f, tk);
     else
         fprintf(f, "x");
     }
@@ -665,8 +668,8 @@ if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
     else
 	{
 	fprintf(f, "_pf_tuple_to_%s(%s+%d, %d, \"", type->base->name,
-		stackName, stack, typeId(pfc, type));
-	rCodeTupleType(f, rval->ty);
+		stackName, stack, typeId(pfc, type->children));
+	rCodeTupleType(pfc, f, rval->ty);
 	fprintf(f, "\");\n");
 	}
     }
@@ -685,7 +688,7 @@ codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
 fprintf(f, "_pf_tuple_to_class(%s+%d, %d, \"",
 	stackName, stack, typeId(pfc, lval->ty));
-rCodeTupleType(f, rval->ty);
+rCodeTupleType(pfc, f, rval->ty);
 fprintf(f, "\");\n");
 }
 

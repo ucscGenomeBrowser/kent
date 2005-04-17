@@ -9,6 +9,11 @@
 #include "object.h"
 #include "string.h"
 
+void suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
+	struct _pf_type *fieldType, void *output);
+
+int countOurLevel(char *encoding);
+
 static void dirCleanup(struct _pf_dir *dir, int typeId)
 /* Clean up resources associated with dir. */
 {
@@ -34,7 +39,7 @@ freeMem(dir);
 }
 
 
-struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId)
+struct _pf_dir *_pf_dir_new(int estimatedSize, struct _pf_type *type)
 /* Create a dir.  The estimatedSize is just a guideline.
  * Generally you want this to be about the same as the
  * number of things going into the dir for optimal
@@ -43,12 +48,11 @@ struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId)
  * Still, it's fine to be pretty approximate with it. */
 {
 int sizeLog2 = digitsBaseTwo(estimatedSize + (estimatedSize>>1));
-struct _pf_type *type = _pf_type_table[elTypeId];
 struct _pf_dir *dir;
 AllocVar(dir);
 dir->_pf_refCount = 1;
 dir->_pf_cleanup = dirCleanup;
-dir->elType = _pf_type_table[elTypeId];
+dir->elType = type;
 dir->hash = hashNew(sizeLog2);
 return dir;
 }
@@ -59,7 +63,7 @@ struct _pf_dir *_pf_int_dir_from_tuple(_pf_Stack *stack, int count, int typeId,
  * is twice the number of elements.  (It represents the number of items put
  * on the stack, and we have one each for key and value. */
 {
-struct _pf_dir *dir = _pf_dir_new(0, elTypeId);
+struct _pf_dir *dir = _pf_dir_new(0, _pf_type_table[elTypeId]);
 int i, elCount = (count>>1);
 struct hash *hash = dir->hash;
 
@@ -81,7 +85,7 @@ struct _pf_dir *_pf_string_dir_from_tuple(_pf_Stack *stack, int count, int typeI
  * is twice the number of elements.  (It represents the number of items put
  * on the stack, and we have one each for key and value. */
 {
-struct _pf_dir *dir = _pf_dir_new(0, elTypeId);
+struct _pf_dir *dir = _pf_dir_new(0, _pf_type_table[elTypeId]);
 int i, elCount = (count>>1);
 struct hash *hash = dir->hash;
 
@@ -225,3 +229,99 @@ if (hel != NULL)
 else
     hashAdd(hash, string->s, clonedNum);
 }
+
+_pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *elType, 
+	char *encoding, _pf_Stack **retStack, char **retEncoding)
+/* Convert tuple to dir. */
+{
+// struct _pf_type *elType = type->children;
+struct _pf_base *base = elType->base;
+int elSize = elType->base->size;
+int i, count = countOurLevel(encoding);
+struct _pf_dir *dir = _pf_dir_new(count, elType);
+
+if (encoding[0] != '(')
+    errAbort("Expecting ( in array tuple encoding, got %c", encoding[0]);
+encoding += 1;
+for (i=0; i<count; ++i)
+    {
+    _pf_String key = stack[0].String;
+    stack += 1;
+    if (base->needsCleanup)
+        {
+	struct _pf_object *obj;
+	suckItemOffStack(&stack, &encoding, elType, &obj);
+	hashAdd(dir->hash, key->s, obj);
+	}
+    else
+        {
+	switch (base->singleType)
+	    {
+	    case pf_stBit:
+		{
+	        _pf_Bit x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    case pf_stByte:
+		{
+	        _pf_Byte x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    case pf_stShort:
+		{
+	        _pf_Short x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    case pf_stInt:
+		{
+	        _pf_Int x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    case pf_stLong:
+		{
+	        _pf_Long x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    case pf_stFloat:
+		{
+	        _pf_Float x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    case pf_stDouble:
+		{
+	        _pf_Double x;
+		suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
+	    default:
+		internalErr();
+	    }
+	}
+    }
+if (encoding[0] != ')')
+    errAbort("Expecting ) in array tuple encoding, got %c", encoding[0]);
+encoding += 1;
+*retStack = stack;
+*retEncoding = encoding;
+return dir;
+}
+
+_pf_Dir _pf_tuple_to_dir(_pf_Stack *stack, int typeId, char *encoding)
+/* Convert tuple to dir. */
+{
+return _pf_r_tuple_to_dir(stack, _pf_type_table[typeId], encoding, &stack, &encoding);
+}
+

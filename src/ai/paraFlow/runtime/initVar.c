@@ -4,14 +4,18 @@
 #include "../compiler/pfPreamble.h"
 #include "object.h"
 #include "initVar.h"
-
-static _pf_Array tuple_to_array(_pf_Stack *stack, struct _pf_type *type, 
-	char *encoding, _pf_Stack **retStack, char **retEncoding);
+#include "dir.h"
 
 static _pf_Object tuple_to_class(_pf_Stack *stack, struct _pf_type *type, 
 	char *encoding, _pf_Stack **retStack, char **retEncoding);
 
-static void suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
+_pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *type, 
+	char *encoding, _pf_Stack **retStack, char **retEncoding);
+
+static _pf_Array tuple_to_array(_pf_Stack *stack, struct _pf_type *type, 
+	char *encoding, _pf_Stack **retStack, char **retEncoding);
+
+void suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
 	struct _pf_type *fieldType, void *output)
 /* Suck data off of stack and puts it in output. 
  * Parameters:
@@ -58,6 +62,7 @@ switch (st)
 	break;
     case pf_stArray:
     case pf_stClass:
+    case pf_stDir:
 	{
 	char *encoding = *pEncoding;
 	boolean goDeep = (*encoding == '(');
@@ -73,6 +78,9 @@ switch (st)
 		    *((_pf_Object *)output) = 
 		    	tuple_to_class(stack, fieldType, encoding, pStack, pEncoding);
 		    break;
+		case pf_stDir:
+		     *((_pf_Dir *)output) = 
+		    	_pf_r_tuple_to_dir(stack, fieldType, encoding, pStack, pEncoding);
 		default:
 		    internalErr();
 		    break;

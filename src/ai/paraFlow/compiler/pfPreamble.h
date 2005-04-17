@@ -11,7 +11,6 @@ struct _pf_tree;
 struct _pf_dir;
 struct _pf_var;
 
-// typedef struct string *String;
 typedef struct _pf_object *_pf_Object;
 typedef struct _pf_string *_pf_String;
 typedef struct _pf_array *_pf_Array;
