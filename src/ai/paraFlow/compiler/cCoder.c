@@ -416,6 +416,7 @@ static int codeIndexRval(struct pfCompile *pfc, FILE *f,
 {
 struct pfType *outType = pp->ty;
 struct pfParse *collection = pp->children;
+struct pfParse *index = collection->next;
 struct pfBaseType *colBase = collection->ty->base;
 if (colBase == pfc->arrayType)
     {
@@ -433,6 +434,18 @@ else if (colBase == pfc->stringType)
     fprintf(f, " = ");
     codeAccessToByteInString(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
+    }
+else if (colBase == pfc->dirType)
+    {
+// static int typeId(struct pfCompile *pfc, struct pfType *type)
+    int offset = codeExpression(pfc, f, collection, stack, FALSE);
+    codeExpression(pfc, f, index, stack+offset, FALSE);
+    fprintf(f, "%s[%d].Obj", stackName, stack);
+    fprintf(f, " = ");
+    if (outType->base->needsCleanup)
+        fprintf(f, "_pf_dir_lookup_object(%s+%d);\n", stackName, stack);
+    else 
+	fprintf(f, "_pf_dir_lookup_%s(%s+%d);\n",  outType->base->name, stackName, stack);
     }
 else
     {

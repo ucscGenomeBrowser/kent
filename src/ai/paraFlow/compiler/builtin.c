@@ -15,7 +15,6 @@ return
 "    string name;\n"
 "    to writeString(string s);\n"
 "    to readLine() into (string s);\n"
-"    to printMe() {print(self.name);}\n"
 "    }\n"
 ;
 }

@@ -17,7 +17,6 @@ struct _pf_type *elType = dir->elType;
 struct _pf_base *base = elType->base;
 if (base->needsCleanup)
     {
-    uglyf("dirCleanup deep\n");
     struct hashCookie it = hashFirst(hash);
     struct hashEl *hel;
     while ((hel = hashNext(&it)) != NULL)
@@ -29,7 +28,6 @@ if (base->needsCleanup)
     }
 else
     {
-    uglyf("dirCleanup shallow\n");
     freeHashAndVals(&hash);
     }
 freeMem(dir);
@@ -100,3 +98,17 @@ return dir;
 }
 
  
+struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack)
+/* Stack contains directory, keyword.  Return value associated
+ * with keyword on top of stack.  Neither one of the inputs is
+ * pushed with a reference, so you don't need to deal with 
+ * decrementing the ref counts on the input side.  The output
+ * does get an extra refcount though. */
+{
+struct _pf_dir *dir = stack[0].Dir;
+struct _pf_string *string = stack[1].String;
+struct _pf_object *obj = hashFindVal(dir->hash, string->s);
+if (obj != NULL)
+    obj->_pf_refCount += 1;
+return obj;
+}
