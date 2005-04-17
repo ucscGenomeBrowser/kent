@@ -97,8 +97,12 @@ void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_field_info *fieldInfo, int fieldCount);
 /* Build up run-time type information from initialization. */
 
-struct _pf_type **_pf_type_table;	
+extern struct _pf_type **_pf_type_table;	
 /* Table of all types we'll see during run time. Created by _pf_init_types. */
+
+int _pf_find_simple_type(char *simpleType);
+/* When passed in something like "int" or "string" return
+ * corresponding typeId */
 
 #endif /* RUNTYPE_H */
 

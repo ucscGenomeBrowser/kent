@@ -224,7 +224,7 @@ array->elType = elType;
 return array;
 }
 
-_pf_Array _pf_dim_array(int size, int arrayTypeId, int elTypeId)
+_pf_Array _pf_dim_array(int size, int elTypeId)
 /* Return array of given type and size, initialized to zeroes. */
 {
 struct _pf_type *elType = _pf_type_table[elTypeId];

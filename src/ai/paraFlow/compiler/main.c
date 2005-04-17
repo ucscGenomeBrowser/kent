@@ -26,7 +26,7 @@ errAbort(
 "This program compiles and executes paraFlow code.  ParaFlow is \n"
 "a parallel programming language designed by Jim Kent.\n"
 "Usage:\n"
-"    paraFlow input.pf\n"
+"    paraFlow input.pf [command line arguments to input.pf]\n"
 "This will create the files 'input.c' and 'input' (which is just\n"
 "input.c compiled by gcc\n"
 "options:\n"
@@ -178,7 +178,7 @@ pfc->tkz = pfTokenizerNew(pfc->reservedWords);
 return pfc;
 }
 
-void paraFlow(char *fileName)
+void paraFlow(char *fileName, int pfArgc, char **pfArgv)
 /* parse and dump. */
 {
 struct pfCompile *pfc;
@@ -252,8 +252,15 @@ verbose(2, "Phase 7 - execution\n");
 /* Now go run program itself. */
     {
     struct dyString *dy = dyStringNew(0);
+    int err;
+    int i;
     dyStringPrintf(dy, "./%s", baseName);
-    int err = system(dy->string);
+    for (i=0; i<pfArgc; ++i)
+        {
+	dyStringAppendC(dy, ' ');
+	dyStringAppend(dy, pfArgv[i]);
+	}
+    err = system(dy->string);
     if (err != 0)
 	errnoAbort("problem running %s", baseName);
     dyStringFree(&dy);
@@ -264,10 +271,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc < 2)
     usage();
 endPhase = optionInt("endPhase", endPhase);
-paraFlow(argv[1]);
+paraFlow(argv[1], argc-2, argv+2);
 return 0;
 }
 

@@ -21,7 +21,7 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean isModule);
+	boolean isModule, boolean isBuiltin);
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
@@ -36,7 +36,11 @@ fprintf(f, "/* This file is a translation of %s by paraFlow. */\n",
 fprintf(f, "\n");
 fprintf(f, "#include \"pfPreamble.h\"\n");
 fprintf(f, "\n");
-fprintf(f, "_pf_Var _pf_var_zero;\n");
+fprintf(f, 
+"void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs);\n");
+fprintf(f, "_pf_Var _pf_var_zero;   /* Helps initialize vars to zero. */\n");
+fprintf(f, "_pf_Array args;	    /* Command line arguments go here. */\n");
+fprintf(f, "_pf_String programName; /* Name of program (argv[0]) */\n");
 fprintf(f, "\n");
 }
 
@@ -740,8 +744,8 @@ for (type = type->children; type != NULL; type = type->next)
 	gotOne = TRUE;
 	codeExpression(pfc, f, type->children, stack, FALSE);
 	fprintf(f, "%s[%d].Array = ", stackName, stack);
-	fprintf(f, "_pf_dim_array(%s[%d].Int, %d, %d);\n", stackName, stack, 
-		typeId(pfc, type->ty), typeId(pfc, type->next->ty));
+	fprintf(f, "_pf_dim_array(%s[%d].Int, %d);\n", stackName, stack, 
+		typeId(pfc, type->next->ty));
 	lvalOffStack(pfc, f, varInit, stack, "=", 1, FALSE);
 	}
     }
@@ -1210,7 +1214,7 @@ switch (pp->type)
     case pptCompound:
         {
 	fprintf(f, "{\n");
-	codeScope(pfc, f, pp, FALSE);
+	codeScope(pfc, f, pp, FALSE, FALSE);
 	fprintf(f, "}\n");
 	break;
 	}
@@ -1455,7 +1459,7 @@ hashElFreeList(&helList);
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean isModule)
+	boolean isModule, boolean isBuiltin)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -1522,7 +1526,8 @@ for (p = pp->children; p != NULL; p = p->next)
 	}
     }
 /* Print out any needed cleanups. */
-codeCleanupVarsInHelList(pfc, f, helList);
+if (!isBuiltin)
+    codeCleanupVarsInHelList(pfc, f, helList);
 
 if (isModule)
     fprintf(f, "}\n");
@@ -1535,12 +1540,13 @@ static void printConclusion(struct pfCompile *pfc, FILE *f)
 {
 fputs(
 "\n"
-"int main(int argv, char *argc[])\n"
+"int main(int argc, char *argv[])\n"
 "{\n"
-"static _pf_Stack stack[4*1024];\n"
+"static _pf_Stack stack[16*1024];\n"
 "_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
 "               _pf_type_info, _pf_type_info_count,\n"
 "               _pf_field_info, _pf_field_info_count);\n"
+"_pf_init_args(argc, argv, &programName, &args);\n"
 "_pf_init(stack);\n"
 "return 0;\n"
 "}\n", f);
@@ -1667,7 +1673,7 @@ for (module = program->children; module != NULL; module = module->next)
     fprintf(f, "\n");
     rPrintPrototypes(f, module, NULL);
     fprintf(f, "\n");
-    codeScope(pfc, f, module, differentString(module->name, "<builtin>"));
+    codeScope(pfc, f, module, differentString(module->name, "<builtin>"), TRUE);
     }
 printConclusion(pfc, f);
 carefulClose(&f);

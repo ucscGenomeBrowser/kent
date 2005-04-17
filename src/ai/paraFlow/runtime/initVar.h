@@ -12,7 +12,7 @@ _pf_Dir _pf_tuple_to_dir(_pf_Stack *stack, int typeId, char *encoding);
 void _pf_class_cleanup(struct _pf_object *obj, int typeId);
 /* Clean up all class fields, and then class itself. */
 
-_pf_Array _pf_dim_array(int size, int arrayTypeId, int elTypeId);
+_pf_Array _pf_dim_array(int size, int elTypeId);
 /* Return array of given type and size, initialized to zeroes. */
 
 _pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);

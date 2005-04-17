@@ -6,6 +6,11 @@
 #include "runType.h"
 #include "../compiler/pfPreamble.h"
 
+struct _pf_type **_pf_type_table;	
+static int _pf_type_table_size;
+static struct _pf_base *_pf_base_table;
+static int _pf_base_table_size;
+
 struct hash *singleTypeHash()
 /* Create hash keyed by name with singleType as value */
 {
@@ -264,4 +269,40 @@ for (i=0; i<typeCount; ++i)
 /* Clean up and go home. */
 hashFree(&singleIds);
 _pf_type_table = types;
+_pf_type_table_size = typeCount;
+_pf_base_table = bases;
+_pf_base_table_size = baseCount;
 }
+
+int _pf_find_simple_type(char *simpleType)
+/* When passed in something like "int" or "string" return 
+ * associated typeId. */
+{
+int i;
+struct _pf_base *base = NULL;
+struct _pf_type *type = NULL;
+for (i=0; i<_pf_base_table_size; ++i)
+    {
+    struct _pf_base *b = &_pf_base_table[i];
+    if (b->scope == 1 && sameString(b->name, simpleType))
+	{
+        base = b;
+	break;
+	}
+    }
+if (base == NULL)
+    errAbort("Can't _pf_find_simple_type base type '%s'", simpleType);
+for (i=0; i<_pf_type_table_size; ++i)
+    {
+    struct _pf_type *t = _pf_type_table[i];
+    if (t->base == base)
+        {
+	type = t;
+	break;
+	}
+    }
+if (type == NULL)
+    errAbort("Can't _pf_find_simpe_type '%s'", simpleType);
+return type->typeId;
+}
+

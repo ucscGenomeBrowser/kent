@@ -3,10 +3,11 @@ char *fetchBuiltinCode()
 /* Return a string with the built in stuff. */
 {
 return
+"string programName;\n"
+"array of string args;\n"
 "to print(var v);\n"
 "to prin(var v);\n"
 "to fileOpen(string name, string mode) into file f;\n"
-"to fileClose(file f);\n"
 "to fileWriteString(file f, string s);\n"
 "to fileReadLine(file f) into (string s);\n"
 "\n"
