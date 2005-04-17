@@ -447,9 +447,7 @@ else if (colBase == pfc->dirType)
 	}
     else 
 	{
-	codeParamAccess(pfc, f, outType->base, stack);
-	fprintf(f, " = ");
-	fprintf(f, "_pf_dir_lookup_%s(%s+%d);\n",  outType->base->name, stackName, stack);
+	fprintf(f, "_pf_dir_lookup_number(%s+%d);\n",  stackName, stack);
 	}
     }
 else
@@ -501,7 +499,7 @@ else if (colBase == pfc->dirType)
 	}
     else 
 	{
-	fprintf(f, "_pf_dir_add_%s(%s+%d);\n",  outType->base->name, stackName, stack);
+	fprintf(f, "_pf_dir_add_number(%s+%d);\n",  stackName, stack);
 	}
     }
 else

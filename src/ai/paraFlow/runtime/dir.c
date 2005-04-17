@@ -113,6 +113,48 @@ if (obj != NULL)
 return obj;
 }
 
+void _pf_dir_lookup_number(_pf_Stack *stack)
+/* Stack contains directory, keyword.  Return number of
+ * some sort back on the stack. */
+{
+struct _pf_dir *dir = stack[0].Dir;
+struct _pf_string *string = stack[1].String;
+void *v = hashFindVal(dir->hash, string->s);
+struct _pf_base *base = dir->elType->base;
+uglyf("dir_lookup_number type %s\n", base->name);
+switch (base->singleType)
+    {
+    case pf_stBit:
+	if (v == NULL) stack[0].Bit = 0;
+	else stack[0].Bit = *((_pf_Bit *)v);
+        break;
+    case pf_stByte:
+	if (v == NULL) stack[0].Byte = 0;
+	else stack[0].Byte = *((_pf_Byte *)v);
+        break;
+    case pf_stShort:
+	if (v == NULL) stack[0].Short = 0;
+	else stack[0].Short = *((_pf_Short *)v);
+        break;
+    case pf_stInt:
+	if (v == NULL) stack[0].Int = 0;
+	else stack[0].Int = *((_pf_Int *)v);
+        break;
+    case pf_stLong:
+	if (v == NULL) stack[0].Long = 0;
+	else stack[0].Long = *((_pf_Long *)v);
+        break;
+    case pf_stFloat:
+	if (v == NULL) stack[0].Float = 0;
+	else stack[0].Float = *((_pf_Float *)v);
+        break;
+    case pf_stDouble:
+	if (v == NULL) stack[0].Double = 0;
+	else stack[0].Double = *((_pf_Double *)v);
+        break;
+    }
+}
+
 void _pf_dir_add_object(_pf_Stack *stack)
 /* Stack contains object, directory, keyword.  Add object to
  * directory. */
@@ -136,4 +178,50 @@ else
     {
     hashAdd(hash, string->s, obj);
     }
+}
+
+void *cloneStackNum(_pf_Stack *stack, struct _pf_type *type)
+/* Return clone of number. */
+{
+switch (type->base->singleType)
+    {
+    case pf_stBit:
+	return CloneVar(&stack[0].Bit);
+    case pf_stByte:
+	return CloneVar(&stack[0].Byte);
+    case pf_stShort:
+	return CloneVar(&stack[0].Short);
+    case pf_stInt:
+	return CloneVar(&stack[0].Int);
+    case pf_stLong:
+	return CloneVar(&stack[0].Long);
+    case pf_stFloat:
+	return CloneVar(&stack[0].Float);
+    case pf_stDouble:
+	return CloneVar(&stack[0].Double);
+    default:
+    	internalErr();
+	return NULL;
+    }
+}
+
+void _pf_dir_add_number(_pf_Stack *stack)
+/* Stack contains number, directory, keyword.  Add number to
+ * directory. */
+{
+struct _pf_dir *dir = stack[1].Dir;
+struct _pf_string *string = stack[2].String;
+struct hash *hash = dir->hash;
+struct hashEl *hel;
+struct _pf_object *oldObj;
+void *clonedNum = cloneStackNum(&stack[0], dir->elType);
+
+hel = hashLookup(hash, string->s);
+if (hel != NULL)
+    {
+    freeMem(hel->val);
+    hel->val = clonedNum;
+    }
+else
+    hashAdd(hash, string->s, clonedNum);
 }
