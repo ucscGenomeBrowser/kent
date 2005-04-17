@@ -1,4 +1,4 @@
-The ParaFlow strings are carefully crafter.  The modern
+The ParaFlow strings are carefully crafted.  The modern
 programmer tends to spend at least as much time working with
 strings as they do with numbers.  
 
@@ -29,16 +29,16 @@ construct.  This includes everything from the marker to the next
 occurence of the marker.   The marker can be any symbols not including white space.
 Here's an example
 
-quote to @#*(!!YOUBLUTO I may not look like a sailor.
+quote to CUSTOMQUOTEMARKER I may not look like a sailor.
 I may not sail like a sailor.  But I can curse like
-a sailor!!@#*(!!YOUBLUTO
+a sailor!!CUSTOMQUOTEMARKER
 
 (NB: the current implementation of the quote to marker style is flaky.)
 
 II. String Operations.
 The only operations allowed on strings are:
 	=	Assignment
-	+	Concatenation.  If used with a number converts number to ascii.
+	+	Concatenation.  If used with a number converts the number to a string.
 	==	Equality
 	!=	Inequality
 	< <= >= >	Alphabetical comparison (ascii)
@@ -58,7 +58,7 @@ string.start(int size) into string s
 
 string.rest(int start) into string s
     Returns a new string that contains all but the first start number of letters.
-    For instance "Cat in the hat".start(3) = " in the hat"
+    For instance "Cat in the hat".rest(3) = " in the hat"
 
 string.middle(int start, int size) into string s
     Returns a new string that is the same as the size letters starting at start
