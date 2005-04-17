@@ -28,7 +28,7 @@ else
 void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base)
 /* Print out each field of class. */
 {
-struct _pf_type *elType = _pf_type_table[array->elType];
+struct _pf_type *elType = array->elType;
 int i;
 boolean needsComma = FALSE;
 char *s = array->elements;

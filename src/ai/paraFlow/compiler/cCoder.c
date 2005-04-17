@@ -634,11 +634,10 @@ if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
 	}
     else
 	{
-	fprintf(f, "_pf_class_%s_from_tuple(%s+%d, %d, %d, %d, \"", type->base->name,
-		stackName, stack, slCount(rval->children), typeId(pfc, type), 
-		typeId(pfc, type->children));
+	fprintf(f, "_pf_tuple_to_%s(%s+%d, %d, \"", type->base->name,
+		stackName, stack, typeId(pfc, type));
 	rCodeTupleType(f, rval->ty);
-	fprintf(f, "\", 0, 0);\n");
+	fprintf(f, "\");\n");
 	}
     }
 else
@@ -654,10 +653,10 @@ static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = lval->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
-fprintf(f, "_pf_class_from_tuple(%s+%d, %d, \"",
+fprintf(f, "_pf_tuple_to_class(%s+%d, %d, \"",
 	stackName, stack, typeId(pfc, lval->ty));
 rCodeTupleType(f, rval->ty);
-fprintf(f, "\", 0, 0);\n");
+fprintf(f, "\");\n");
 }
 
 static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,

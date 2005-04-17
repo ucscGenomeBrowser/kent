@@ -21,7 +21,7 @@ struct _pf_array
     int size;			/* Count of elements used. */
     int allocated;		/* Count of elements allocated. */
     int elSize;			/* Size of each element. */
-    int	elType;			/* Type of each element. */
+    struct _pf_type *elType;	/* Type of each element. */
     };
 
 struct _pf_string
