@@ -32,7 +32,7 @@ void printString(FILE *f, struct _pf_string *string)
 if (string == NULL)
     fprintf(f, "\"\"");
 else
-    fprintf(f, "%s", string->s);
+    fprintf(f, "\"%s\"", string->s);
 }
 
 

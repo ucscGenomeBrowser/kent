@@ -234,7 +234,6 @@ _pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *elType,
 	char *encoding, _pf_Stack **retStack, char **retEncoding)
 /* Convert tuple to dir. */
 {
-// struct _pf_type *elType = type->children;
 struct _pf_base *base = elType->base;
 int elSize = elType->base->size;
 int i, count = countOurLevel(encoding);

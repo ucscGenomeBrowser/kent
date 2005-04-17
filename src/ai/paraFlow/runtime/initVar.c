@@ -72,7 +72,7 @@ switch (st)
 	        {
 		case pf_stArray:
 		    *((_pf_Array *)output) = 
-		    	tuple_to_array(stack, fieldType, encoding, pStack, pEncoding);
+		    	tuple_to_array(stack, fieldType->children, encoding, pStack, pEncoding);
 		    break;
 		case pf_stClass:
 		    *((_pf_Object *)output) = 
@@ -80,7 +80,7 @@ switch (st)
 		    break;
 		case pf_stDir:
 		     *((_pf_Dir *)output) = 
-		    	_pf_r_tuple_to_dir(stack, fieldType, encoding, pStack, pEncoding);
+		    	_pf_r_tuple_to_dir(stack, fieldType->children, encoding, pStack, pEncoding);
 		default:
 		    internalErr();
 		    break;
@@ -388,11 +388,10 @@ for (i=0; i<count; ++i)
 return array;
 }
 
-_pf_Array tuple_to_array(_pf_Stack *stack, struct _pf_type *type, 
+_pf_Array tuple_to_array(_pf_Stack *stack, struct _pf_type *elType, 
 	char *encoding, _pf_Stack **retStack, char **retEncoding)
 /* Convert tuple to array. */
 {
-struct _pf_type *elType = type->children;
 int elSize = elType->base->size;
 int count = countOurLevel(encoding);
 char *buf = NULL;
