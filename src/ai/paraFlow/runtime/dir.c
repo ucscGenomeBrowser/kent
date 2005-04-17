@@ -125,7 +125,6 @@ struct _pf_dir *dir = stack[0].Dir;
 struct _pf_string *string = stack[1].String;
 void *v = hashFindVal(dir->hash, string->s);
 struct _pf_base *base = dir->elType->base;
-uglyf("dir_lookup_number type %s\n", base->name);
 switch (base->singleType)
     {
     case pf_stBit:
@@ -324,3 +323,75 @@ _pf_Dir _pf_tuple_to_dir(_pf_Stack *stack, int typeId, char *encoding)
 return _pf_r_tuple_to_dir(stack, _pf_type_table[typeId], encoding, &stack, &encoding);
 }
 
+
+static void dir_iterator_cleanup(struct _pf_iterator *it)
+/* Clean up iterator.  Unlike object cleanups this does not free
+ * iterator itself. */
+{
+freeMem(it->data);
+}
+
+struct dir_iterator
+    {
+    struct hashCookie cookie;
+    struct _pf_base *base;
+    };
+
+static int dir_iterator_next(struct _pf_iterator *it, void *output)
+/* Fetch next value. */
+{
+struct dir_iterator *dit = it->data;
+void *val = hashNextVal(&dit->cookie);
+if (val == NULL)
+    return FALSE;
+if (dit->base->needsCleanup)
+    {
+    struct _pf_object **pObj = output;
+    *pObj = val;
+    }
+else
+    {
+    switch (dit->base->singleType)
+	{
+	case pf_stBit:
+	    memcpy(output, val, sizeof(_pf_Bit));
+	    break;
+	case pf_stByte:
+	    memcpy(output, val, sizeof(_pf_Byte));
+	    break;
+	case pf_stShort:
+	    memcpy(output, val, sizeof(_pf_Short));
+	    break;
+	case pf_stInt:
+	    memcpy(output, val, sizeof(_pf_Int));
+	    break;
+	case pf_stLong:
+	    memcpy(output, val, sizeof(_pf_Long));
+	    break;
+	case pf_stFloat:
+	    memcpy(output, val, sizeof(_pf_Float));
+	    break;
+	case pf_stDouble:
+	    memcpy(output, val, sizeof(_pf_Double));
+	    break;
+	default:
+	    internalErr();
+	    return NULL;
+	}
+    }
+return TRUE;
+}
+
+struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir)
+/* Create an iterator object for dir */
+{
+struct dir_iterator *dit;
+struct _pf_iterator it;
+AllocVar(dit);
+dit->cookie = hashFirst(dir->hash);
+dit->base = dir->elType->base;
+it.next = dir_iterator_next;
+it.cleanup = dir_iterator_cleanup;
+it.data = dit;
+return it;
+}

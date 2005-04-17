@@ -1127,10 +1127,13 @@ else if (base == pfc->stringType)
     }
 else
     {
-    fprintf(f, "Pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
+    fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
     	base->name, collectionName);
     fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName);
+    fprintf(f, "{\n");
     codeStatement(pfc, f, body);
+    fprintf(f, "}\n");
+    fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
 fprintf(f, "}\n");
 }
@@ -1250,7 +1253,7 @@ switch (pp->type)
         fprintf(f, "continue;\n");
         break;
     case pptReturn:
-        fprintf(f, "return;\n");
+        fprintf(f, "goto _pf_cleanup;\n");
         break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
@@ -1356,6 +1359,9 @@ fprintf(f, "\n{\n");
 
 /* Print out body (which is a compound statement) */
 codeStatement(pfc, f, body);
+
+/* Print exit label for returns. */
+fprintf(f, "_pf_cleanup:\n");
 
 /* Decrement ref counts on input variables. */
     {

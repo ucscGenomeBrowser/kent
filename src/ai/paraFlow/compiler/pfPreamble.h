@@ -78,16 +78,16 @@ typedef union _pf_stack _pf_Stack;
 struct _pf_iterator
 /* Something to iterate over a collection */
     {
-    int (*next)(struct _pf_iterator *it, void *pItem);
     	/* Get next item into *pItem.  Return FALSE if no more items.  */
-    int i;	/* Iterator specific integer data. */
-    void *pt;	/* Iterator specific pointer data. */
+    int (*next)(struct _pf_iterator *it, void *pItem);
+    	/* Clean up iterator. */
+    void (*cleanup)(struct _pf_iterator *it);
+    void *data;	/* Iterator specific pointer data. */
     };
-typedef struct _pf_iterator Pf_iterator;
 
-Pf_iterator _pf_list_iterator_init(_pf_List list);
-Pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
-Pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
+struct _pf_iterator _pf_list_iterator_init(_pf_List list);
+struct _pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
+struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
 #include "../runtime/object.h"
 #include "../runtime/string.h"

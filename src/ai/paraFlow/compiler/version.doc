@@ -1,5 +1,5 @@
 --------------------------------------------------------------------
-I'm starting this doc about 2-3 weeks into the serious development of
+I'm writing this doc about 3 weeks into the serious development of
 ParaFlow.  Currently the compiler has the following major phases:
     Tokenizer - Strips comments.  Recognizes boundaries of numbers,
     	names, strings, and punctuation.  Turns free text into tokens.
@@ -25,17 +25,15 @@ ParaFlow does bounds checking on arrays and automatically cleans
 up objects that fall out of scope using a reference counting
 mechanism.
 
-Currently quite a bit of this is working.  There's about 50 test programs
+Currently quite a bit of this is working.  There's about 70 test programs
 that it handles ok.  There's about 20 more that it doesn't.  Some things
 that still need doing are
-  - Making it convenient to add library functions and classes.
-  - Enriching strings and arrays.
-  - Implementing trees and dirs.
+  - Implementing polymorphic functions.
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
+  - Enriching strings and arrays and files.
   - Working on multiple modules.
-  - Making it so can allocate an array separate from initializing it.
-  - Implementing the rest of inheritance.
+  - Implementing red-blue trees as a collection type.
 The parser itself is written fairly permissively.  Currently a lot
 of syntax errors will just crash the compiler.  Still enough is working
-you can get a bit of an idea of the potential of the system.
+you can get an idea of the potential of the system.
