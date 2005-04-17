@@ -120,8 +120,12 @@ struct _pf_object *obj = needMem(base->objSize);
 char *s = (char *)(obj);
 _pf_Stack *field;
 
+obj->_pf_refCount = 1;
+obj->_pf_cleanup = _pf_class_cleanup;
 if (encoding[0] != '(')
     errAbort("Expecting ( in class tuple encoding, got %c", encoding[0]);
+if (encoding[1] == ')')	/* Empty tuple are just requests for all zero. */
+    return obj;
 encoding += 1;
 for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
