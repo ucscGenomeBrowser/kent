@@ -989,13 +989,21 @@ switch (pp->type)
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
 	return 1;
-    case pptCastStringToBit:
+    case pptCastObjectToBit:
 	codeExpression(pfc, f, pp->children, stack, FALSE);
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = (0 != ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ");\n");
 	return 1;
+    case pptCastStringToBit:
+        {
+	codeExpression(pfc, f, pp->children, stack, FALSE);
+	fprintf(f, "{_pf_String _pf_tmp = %s[%d].String; ", stackName, stack);
+	fprintf(f, "%s[%d].Bit = (_pf_tmp != 0 && _pf_tmp->size != 0);", stackName, stack);
+	fprintf(f, "}\n");
+	return 1;
+	}
     case pptCastBitToString:
     case pptCastByteToString:
     case pptCastShortToString:
@@ -1200,6 +1208,9 @@ switch (pp->type)
         break;
     case pptContinue:
         fprintf(f, "continue;\n");
+        break;
+    case pptReturn:
+        fprintf(f, "return;\n");
         break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));

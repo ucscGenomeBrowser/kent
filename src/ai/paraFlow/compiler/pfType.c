@@ -429,6 +429,7 @@ static struct pfParse **rCoerceTupleToClass(struct pfCompile *pfc,
  * then on self. */
 {
 struct pfType *field;
+struct pfToken *firstTok = (*pos)->tok;
 if (base->parent != NULL)
     pos = rCoerceTupleToClass(pfc, pos, base->parent);
 for (field = base->fields; field != NULL; field = field->next)
@@ -438,6 +439,8 @@ for (field = base->fields; field != NULL; field = field->next)
     coerceOne(pfc, pos, field, FALSE);
     pos = &(*pos)->next;
     }
+if (field != NULL)
+    errAt(firstTok, "Not enough fields in initialization");
 return pos;
 }
 
@@ -471,6 +474,11 @@ static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type, boolean numToString)
 /* Make sure that a single variable is of the required type.  
  * Add casts if necessary */
+/* NB: this is a horrid routine.  The logic is such that it's
+ * hard to tell what cases may be falling through the cracks.
+ * At some point I'll probably cut the delayed-constant type
+ * definition which complicates things a lot, and try to
+ * give it more straightforward, robust logic. -jk */
 {
 struct pfParse *pp = *pPp;
 struct pfType *pt = pp->ty;
@@ -562,6 +570,12 @@ else if (pt->base != base)
 	insertCast(pptCastStringToBit, tt, pPp);
 	ok = TRUE;
 	}
+    else if (base == pfc->bitType && pt->base->needsCleanup)
+	{
+	struct pfType *tt = pfTypeNew(pfc->bitType);
+	insertCast(pptCastObjectToBit, tt, pPp);
+	ok = TRUE;
+	}
     else if (numToString && base == pfc->stringType && pt->base->parent == pfc->numType)
         {
 	castNumToString(pfc, pPp, type);
@@ -580,9 +594,6 @@ else if (pt->base != base)
 	ok = TRUE;
 	}
     else if (base->isCollection && base != pfc->stringType)
-#ifdef WANDERING_AROUND_IN_THE_DARK
-    else if (base->isCollection)
-#endif 
 	{
 	if (!pt->isTuple)
 	    {
