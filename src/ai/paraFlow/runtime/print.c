@@ -1,5 +1,6 @@
 /* print - Implements print function for variable types. */
 #include "common.h"
+#include "hash.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
@@ -36,7 +37,7 @@ else
 
 
 void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base)
-/* Print out each field of class. */
+/* Print out each element of Array. */
 {
 if (array == NULL)
     fprintf(f, "()");
@@ -55,6 +56,33 @@ else
 	printField(f, s, elType->base);
 	s += array->elSize;
 	}
+    fprintf(f, ")");
+    }
+}
+
+void printDir(FILE *f, struct _pf_dir *dir, struct _pf_base *base)
+/* Print out each key/val pair in dir. */
+{
+if (dir == NULL)
+    fprintf(f, "()");
+else
+    {
+    struct hash *hash = dir->hash;
+    struct hashEl *hel, *helList = hashElListHash(hash);
+    struct _pf_base *base = dir->elType->base;
+    slSort(&helList, hashElCmp);
+    fprintf(f, "(");
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	fprintf(f, "\"%s\" to ", hel->name);
+	if (base->needsCleanup)
+	    printField(f, &hel->val, base);
+	else
+	    printField(f, hel->val, base);
+	if (hel->next != NULL)
+	     fprintf(f, ",");
+	}
+    // hashElFreeList(&helList);
     fprintf(f, ")");
     }
 }
@@ -129,6 +157,12 @@ switch (base->singleType)
         printArray(f, *p, base);
 	break;
 	}
+    case pf_stDir:
+        {
+	struct _pf_dir **p = data;
+        printDir(f, *p, base);
+	break;
+	}
     default:
 	internalErr();
 	break;
@@ -180,6 +214,9 @@ switch (base->singleType)
 	break;
     case pf_stArray:
 	printArray(f, val.Array, base);
+	break;
+    case pf_stDir:
+        printDir(f, val.Dir, base);
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);

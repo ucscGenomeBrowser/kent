@@ -17,11 +17,11 @@ struct _pf_array
     {
     int _pf_refCount;			     	/* Number of references. */
     void (*_pf_cleanup)(struct _pf_array *obj, int id); /* Called when refCount <= 0 */
+    struct _pf_type *elType;	/* Type of each element. */
     char *elements;		/* Pointer to elements. */
     int size;			/* Count of elements used. */
     int allocated;		/* Count of elements allocated. */
     int elSize;			/* Size of each element. */
-    struct _pf_type *elType;	/* Type of each element. */
     };
 
 struct _pf_string

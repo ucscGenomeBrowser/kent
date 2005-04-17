@@ -92,6 +92,7 @@ Pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
 #include "../runtime/object.h"
 #include "../runtime/string.h"
+#include "../runtime/dir.h"
 #include "../runtime/initVar.h"
 
 

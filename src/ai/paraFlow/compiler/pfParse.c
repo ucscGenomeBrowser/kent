@@ -968,7 +968,7 @@ switch (tok->type)
     case pftDivEquals:
 	type = pptDivEquals;
 	break;
-    case ':':
+    case pftTo:
         type = pptKeyVal;
 	break;
     }
