@@ -376,7 +376,7 @@ else
 	    break;
 	default:
 	    internalErr();
-	    return NULL;
+	    return FALSE;
 	}
     }
 return TRUE;
