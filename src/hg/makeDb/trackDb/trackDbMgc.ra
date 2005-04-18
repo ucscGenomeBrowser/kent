@@ -111,6 +111,28 @@ color 10,150,100
 exonArrows on
 #pslSequenceBases all
 
+track mgcNovelPcr
+shortLabel C-List Novel PCR
+longLabel Novel RT-PCR hits (excludes Refseq, MGC genes, A-list, B-list)
+group mgc
+priority 104.5
+visibility pack
+type bed
+color 120,12,12
+exonArrows on
+cdsDrawOptions enabled
+
+track mgcNovelPcrStrict
+shortLabel C-List Novel PCR Strict
+longLabel Novel RT-PCR strict hits (excludes Refseq, MGC genes, A-list, B-list, spliced ESTs)
+group mgc
+priority 104.6
+visibility pack
+type bed
+color 12,120,12
+exonArrows on
+cdsDrawOptions enabled
+
 track mgcWUPcrInProgress
 shortLabel C-List Pending
 longLabel MGC C-List In-progress RT-PCR
@@ -126,7 +148,7 @@ track baylorRtPcrGeneA
 shortLabel Baylor GeneA
 longLabel Baylor RT-PCR GeneA for MGC
 group mgc
-priority 102
+priority 2105
 visibility hide
 color 10,100,15
 type psl .
@@ -136,7 +158,7 @@ track baylorRtPcr
 shortLabel Baylor RT-PCR
 longLabel Baylor RT-PCR for MGC
 group mgc
-priority 103
+priority 2105.1
 visibility hide
 color 10,100,150
 type psl .
@@ -148,7 +170,7 @@ track gscMgcClones
 shortLabel GSC MGCs
 longLabel  GSC RT-PCR clones for MGC
 group mgc
-priority 104
+priority 2105.2
 visibility pack
 color 155,0,125
 type psl .
@@ -197,7 +219,7 @@ cdsDrawOptions enabled
 
 track mgcTwinscanPcr
 shortLabel TWINSCAN
-longLabel WUSTL TWINSCAN PCR Targets
+longLabel WUSTL TWINSCAN
 group mgc
 priority 110
 visibility dense
@@ -208,7 +230,7 @@ cdsDrawOptions enabled
 
 track mgcTwinscanEstPcr
 shortLabel TWINSCAN EST
-longLabel WUSTL TWINSCAN EST PCR Targets
+longLabel WUSTL TWINSCAN EST
 group mgc
 priority 110.1
 visibility dense
@@ -219,7 +241,7 @@ cdsDrawOptions enabled
 
 track nscanPcr
 shortLabel N-SCAN
-longLabel WUSTL N-SCAN PCR Targets
+longLabel WUSTL N-SCAN
 group mgc
 priority 111
 visibility dense
@@ -230,7 +252,7 @@ cdsDrawOptions enabled
 
 track nscanEstPcr
 shortLabel N-SCAN EST
-longLabel WUSTL N-SCAN EST PCR Targets
+longLabel WUSTL N-SCAN EST
 group mgc
 priority 111.1
 visibility dense
