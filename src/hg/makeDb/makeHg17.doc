@@ -13860,3 +13860,15 @@ cd bacendsCow
 # make map between ccds and known genes (markd 2005/03/08)
 # this should be run whenever either known genes or ccds is updated
 /cluster/data/genbank/bin/i386/mkCcdsGeneMap  -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+
+# UPDATE WGRNA TRACK (DONE, 2004-12-13, Fan)
+
+# Received updated data file, wg_track_april2005.txt, from Michel Weber by email.
+
+   cut -f 2-10  wg_track_april2005.txt |tail +2 >wg_track_april2005.tab
+
+# Use editor to remove the last blank line.
+
+   hgLoadBed -sqlTable=/cluster/home/fanhsu/hg/lib/wgRna.sql hg17 wgRna wg_track_april2005.tab
+
+# Asked Donna to update Reference section according to Michel's email.  
