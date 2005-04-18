@@ -39,6 +39,7 @@ return
 "    to append(string s);\n"
 "    to find(string s) into int found;\n"
 "    to findNext(string s, int startPos) into int found;\n"
+"    to nextSpaced(int pos) into (int newPos, string s);\n"
 "    to nextWord(int pos) into (int newPos, string s);\n"
 "    }\n"
 "class _pf_array\n"

@@ -109,15 +109,22 @@ AllocVar(string);
 string->_pf_refCount = 1;
 string->_pf_cleanup = _pf_string_cleanup;
 for (i=0; i<count; ++i)
-    total += stack[i].String->size;
+    {
+    _pf_String ss = stack[i].String;
+    if (ss)
+	total += ss->size;
+    }
 string->s = s = needLargeMem(total+1);
 for (i=0; i<count; ++i)
     {
     _pf_String ss = stack[i].String;
-    memcpy(s, ss->s, ss->size);
-    s += ss->size;
-    if (--ss->_pf_refCount <= 0)
-        ss->_pf_cleanup(ss, 0);
+    if (ss)
+	{
+	memcpy(s, ss->s, ss->size);
+	s += ss->size;
+	if (--ss->_pf_refCount <= 0)
+	    ss->_pf_cleanup(ss, 0);
+	}
     }
 *s = 0;
 string->size = string->allocated = total;
@@ -279,9 +286,8 @@ return count;
 #endif /* OLD */
 
 
-void _pf_cm_string_nextWord(_pf_Stack *stack)
-/* Find occurence of substring within string.  Return -1 if
- * not found, otherwise start location within string. */
+void _pf_cm_string_nextSpaced(_pf_Stack *stack)
+/* Return next white-space separated word. */
 {
 _pf_String string = stack[0].String;
 int pos = stack[1].Int;
@@ -309,4 +315,47 @@ else
     stack[1].String = _pf_string_new(s, e - s);
     }
 }
+
+void _pf_cm_string_nextWord(_pf_Stack *stack)
+/* Return next white space or punctuation separated word. */
+{
+_pf_String string = stack[0].String;
+int pos = stack[1].Int;
+char *s, c;
+
+if (string == NULL || pos < 0)
+    {
+    stack[0].Int = -1;
+    stack[1].String = NULL;
+    return;
+    }
+if (pos > string->size) pos = string->size;
+s = skipLeadingSpaces(string->s + pos);
+c = s[0];
+if (c == 0)
+    {
+    stack[0].Int = string->size;
+    stack[1].String = NULL;
+    }
+else
+    {
+    char *e;
+    if (isalnum(c) || c == '_')
+        {
+	e = s + 1;
+	for (;;)
+	   {
+	   c = *e;
+	   if (!isalnum(c) && c != '_')
+	       break;
+	   e += 1;
+	   }
+	}
+    else
+        e = s + 1;
+    stack[0].Int = e - string->s;
+    stack[1].String = _pf_string_new(s, e - s);
+    }
+}
+
 
