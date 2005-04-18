@@ -8,13 +8,12 @@ print(var v)
 prin(var v)
     Like print but with no line feed at end.
 
+die(string message)
+    Abort program after printing message to error output.
+
 fileOpen(string fileName, string mode) into (file f)
     Return an open file handle.  Mode is like C:
     "w" for write, "r" for write, "a" for append.
-
-fileClose(file f)
-    Closes file.  Generally not necessary since it will close
-    automatically when file object falls out of scope.
 
 Once a file is open the following methods can be applied:
 
@@ -25,6 +24,16 @@ f.readLine() into string s
     Read a line into string.  This includes the newline.
     At EOF will return empty string, which is treated
     as false inside of a conditional.
+
+f.readBytes(int count) into string s
+    Read in count number of bytes and put them in string s.
+    At EOF will return enpty string.  Near EOF may return a
+    string shorter than count bytes.
+
+f.close()
+    Closes file.  Generally not necessary since file will close
+    automatically when file object falls out of scope.
+
 
 Definitely need to add more i/o functions.  I want to think about
 it a bit, and hopefully end up with something nice.  Some stuff I'm

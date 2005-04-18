@@ -18,9 +18,8 @@ a haiku.
 "
 
 '
-If I keep getting spammed about the
-lumberjacks, I swear one of these days
-I'm going to crack!
+If I keep getting spammed about ways to improve
+my mental health, I swear I'm going to crack!
 '
 
 Sometimes you have a block of text you want to use as a string, and
@@ -29,9 +28,13 @@ construct.  This includes everything from the marker to the next
 occurence of the marker.   The marker can be any symbols not including white space.
 Here's an example
 
-quote to CUSTOMQUOTEMARKER I may not look like a sailor.
-I may not sail like a sailor.  But I can curse like
-a sailor!!CUSTOMQUOTEMARKER
+quote to CUSTOMQUOTEMARKER "What are you doing?" I asked.
+
+"I'm trying to write a program." responded Bill.  "It's full of
+'if' and 'else' and 'while' and 'to' and lots of other words
+that look normal enough, but really aren't."
+
+"Ah, well good luck with that!"CUSTOMQUOTEMARKER
 
 (NB: the current implementation of the quote to marker style is flaky.)
 
