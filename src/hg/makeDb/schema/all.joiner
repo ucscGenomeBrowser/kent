@@ -725,9 +725,10 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     $dm.bdgpToRefSeq.value minCheck=0.99
+    mm6.mrnaRefseq.mrna minCheck=0.60
     mm6.spMrna.mrnaID minCheck=0.60
-    mm6.dupSpMrna.mrnaID minCheck=0.80
-    mm6.dupSpMrna.dupMrnaID minCheck=0.80
+    mm6.dupSpMrna.mrnaID minCheck=0.60
+    mm6.dupSpMrna.dupMrnaID minCheck=0.60
     hg15.geneBands.mrnaAcc
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
