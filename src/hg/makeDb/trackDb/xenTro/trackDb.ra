@@ -8,6 +8,15 @@ color 12,120,12
 type genePred
 url http://genome.jgi-psf.org/cgi-bin/dispGeneModel.v4?db=Xentr3&id=$$
 
+track mgcGenes
+shortLabel MGC Genes
+longLabel Mammalian Gene Collection Full ORF mRNAs
+group genes
+priority 36
+visibility hide
+color 34,139,34
+type genePred
+
 track nibbPics
 shortLabel NIBB In Situs
 longLabel Japanese Nat. Inst. of Basic Biology X. Laevis mRNA in situs
