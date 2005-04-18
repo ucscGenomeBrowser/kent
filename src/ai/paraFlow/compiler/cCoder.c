@@ -1365,7 +1365,7 @@ fprintf(f, "\n{\n");
 codeStatement(pfc, f, body);
 
 /* Print exit label for returns. */
-fprintf(f, "_pf_cleanup:\n");
+fprintf(f, "_pf_cleanup: ;\n");
 
 /* Decrement ref counts on input variables. */
     {
