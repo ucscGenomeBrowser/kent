@@ -33,3 +33,25 @@ spectrum on
 type psl xeno mm6
 otherDb mm6
 
+track multiz10way
+shortLabel 10-Way Conservation
+longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
+group compGeno
+priority 109.11
+visibility hide
+#color 0, 10, 100
+#altColor 50,50,50
+#altColor 255,128,0
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons10way
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz10waySummary
+#pairwise netBlastz
+speciesGroups mammal vertebrate
+sGroup_mammal hg17 rn3 canFam1 bosTau1
+sGroup_vertebrate monDom1 galGal2 xenTro1 tetNig1 danRer2
+treeImage phylo/Mm6_10way.jpg
