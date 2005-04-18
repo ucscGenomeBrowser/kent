@@ -34,7 +34,7 @@ if (base->needsCleanup)
     }
 else
     {
-    uglyf("shallow cleaning dir\n");
+    // uglyf("shallow cleaning dir\n");
     freeHashAndVals(&hash);
     }
 freeMem(dir);
