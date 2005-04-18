@@ -89,6 +89,39 @@ type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
 
+track mgcWUPcrHit
+shortLabel C-List Success
+longLabel  MGC C-List sucessful RT-PCR
+group mgc
+priority 101.1
+visibility pack
+type psl
+color 10,100,150
+exonArrows on
+#pslSequenceBases all
+
+track mgcWUPcrFail
+shortLabel C-List Fail
+longLabel MGC C-List Failed RT-PCR for MGC
+group mgc
+priority 101.2
+visibility pack
+type psl
+color 10,150,100
+exonArrows on
+#pslSequenceBases all
+
+track mgcWUPcrInProgress
+shortLabel C-List Pending
+longLabel MGC C-List In-progress RT-PCR
+group mgc
+priority 101.3
+visibility pack
+type psl
+color 10,100,150
+exonArrows on
+#pslSequenceBases all
+
 track baylorRtPcrGeneA
 shortLabel Baylor GeneA
 longLabel Baylor RT-PCR GeneA for MGC
@@ -136,7 +169,7 @@ shortLabel Exoniphy Genes
 longLabel Predicted Genes and Gene Fragments from Exoniphy Exons (Human/Mouse/Rat)
 group mgc
 priority 106
-visibility hide
+visibility dense
 color 173,17,162
 type genePred
 
@@ -145,20 +178,42 @@ shortLabel Exoniphy predicted amplicons
 longLabel MGC Exoniphy predicted amplicons - PCR in progress
 group mgc
 priority 107
-visibility pack
+visibility dense
 type psl
 color 12,100,120
 exonArrows on
 cdsDrawOptions enabled
 
+track mgcExoniphyWashuHits
+shortLabel Exoniphy WashU Hits
+longLabel Exoniphy Washington Univ RT-PCR Hits
+group mgc
+priority 107.5
+visibility dense
+type psl
+color 100,12,120
+exonArrows on
+cdsDrawOptions enabled
+
 track mgcTwinscanPcr
-shortLabel TWINSCAN predicted amplicons
-longLabel MGC TWINSCAN predicted amplicons - PCR in progress
+shortLabel TWINSCAN
+longLabel WUSTL TWINSCAN PCR Targets
 group mgc
 priority 110
-visibility pack
-type psl
+visibility dense
+type bed
 color 120,12,12
+exonArrows on
+cdsDrawOptions enabled
+
+track mgcTwinscanEstPcr
+shortLabel TWINSCAN EST
+longLabel WUSTL TWINSCAN EST PCR Targets
+group mgc
+priority 110.1
+visibility dense
+type bed
+color 12,120,12
 exonArrows on
 cdsDrawOptions enabled
 
@@ -167,55 +222,22 @@ shortLabel N-SCAN
 longLabel WUSTL N-SCAN PCR Targets
 group mgc
 priority 111
-visibility pack
-type genePred
+visibility dense
+type bed
 color 12,12,120
 exonArrows on
 cdsDrawOptions enabled
 
-track mgcBTransPcr
-shortLabel WUSTL test
-longLabel WUSTL Test Targets
+track nscanEstPcr
+shortLabel N-SCAN EST
+longLabel WUSTL N-SCAN EST PCR Targets
 group mgc
-priority 112
-visibility hide
-type psl
-color 10,100,150
+priority 111.1
+visibility dense
+type bed
+color 12,120,12
 exonArrows on
 cdsDrawOptions enabled
-
-track mgcWUPcrHit
-shortLabel C-List Success
-longLabel  MGC C-List sucessful RT-PCR
-group mgc
-priority 113
-visibility pack
-type psl
-color 10,100,150
-exonArrows on
-#pslSequenceBases all
-
-track mgcWUPcrFail
-shortLabel C-List Fail
-longLabel MGC C-List Failed RT-PCR for MGC
-group mgc
-priority 114
-visibility pack
-type psl
-color 10,150,100
-exonArrows on
-#pslSequenceBases all
-
-track mgcWUPcrInProgress
-shortLabel C-List Pending
-longLabel MGC C-List In-progress RT-PCR
-group mgc
-priority 115
-visibility pack
-type psl
-color 10,100,150
-exonArrows on
-#pslSequenceBases all
 
 track refGene
 shortLabel RefSeq Genes
