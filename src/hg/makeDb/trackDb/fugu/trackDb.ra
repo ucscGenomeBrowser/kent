@@ -46,6 +46,38 @@ visibility dense
 color 170,100,0
 type genePred genscanPep
 
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
 track xenoMrna
 shortLabel Non-$Organism mRNA
 longLabel Non-$Organism mRNAs from GenBank
