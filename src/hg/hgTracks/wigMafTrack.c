@@ -17,7 +17,7 @@
 
 //#define ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.66 2005/04/16 00:15:52 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.67 2005/04/18 20:56:04 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -530,11 +530,15 @@ static void drawScore(double score, int chromStart, int chromEnd, int seqStart,
 {
 int x1,x2,y,w;
 int height1 = height - 2;
+int midY = yOff + (height>>1);
+int midY1 = midY - (height>>2);
+int midY2 = midY + (height>>2) - 1;
 
 x1 = round((chromStart - seqStart)*scale);
 x2 = round((chromEnd - seqStart)*scale);
 w = x2-x1;
 if (w < 1) w = 1;
+//innerLine(vg, xOff+x1, midY, x1, color);
 if (vis == tvFull)
     {
     y = score * height1;

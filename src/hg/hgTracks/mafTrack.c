@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.31 2005/04/16 00:15:52 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.32 2005/04/18 20:56:04 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -516,8 +516,6 @@ int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
 int x;
 int midY = yOff + (height>>1);
-//int midY1 = midY - (height>>2);
-//int midY2 = midY + (height>>2);
 int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
 
@@ -546,27 +544,28 @@ for (full = mafList; full != NULL; full = full->next)
 	if (mafPixelWidth < 1) mafPixelWidth = 1;
         if (mc->size == 0)
             {
+            int w = mafPixelWidth+1;
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
                     {
                     /* double gap -> display double line ala chain tracks */
-                    innerLine(vg, x, midY1, mafPixelWidth, color);
-                    innerLine(vg, x, midY2, mafPixelWidth, color);
+                    innerLine(vg, x, midY1, w, color);
+                    innerLine(vg, x, midY2, w, color);
                     }
             if (mc->leftStatus == MAF_CONTIG_STATUS &&
                 mc->rightStatus == MAF_CONTIG_STATUS)
                     {
                     /* single gap -> display single line ala chain tracks */
-                    innerLine(vg, x, midY, mafPixelWidth, color);
+                    innerLine(vg, x, midY, w, color);
                     }
             }
         else
             {
             AllocArray(pixelScores, mafPixelWidth);
             mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
-            if (mc->leftStatus == MAF_NEW_STATUS)
-               vgBox(vg, x-2, yOff, 1, height, getBlueColor());
+            if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS)
+                vgBox(vg, x-2, yOff, 1, height-1, getBlueColor());
             for (i=0; i<mafPixelWidth; ++i)
                 {
                 if (vis == tvFull)
@@ -583,8 +582,9 @@ for (full = mafList; full != NULL; full = full->next)
                         1, height-1, c);
                     }
                 }
-            if (mc->rightStatus == MAF_NEW_STATUS)
-               vgBox(vg, i+mafPixelStart+xOff+1, yOff, 1, height, getBlueColor());
+            if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS)
+                vgBox(vg, i+mafPixelStart+xOff+1, yOff, 
+                       1, height-1, getBlueColor());
             freez(&pixelScores);
             }
 	}
