@@ -17,6 +17,7 @@ return
 "    string name;\n"
 "    to writeString(string s);\n"
 "    to readLine() into (string s);\n"
+"    to readBytes(int count) into (string s);\n"
 "    }\n"
 ;
 }

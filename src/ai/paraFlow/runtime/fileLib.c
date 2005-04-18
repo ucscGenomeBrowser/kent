@@ -101,3 +101,21 @@ stack[0].Obj->_pf_refCount += 1;
 fileReadLine(stack);
 }
 
+void _pf_cm_file_readBytes(_pf_Stack *stack)
+/* Read in a fixed number of bytes to string.
+ * This will return a string of length zero at
+ * EOF, and a string smaller than what is asked
+ * for near EOF. */
+{
+struct file *file = stack[0].v;
+_pf_Int count = stack[1].Int;
+_pf_Int bytesRead;
+struct _pf_string *string = _pf_string_new(needLargeMem(count+1), count);
+bytesRead = fread(string->s, 1, count, file->f);
+if (bytesRead <= 0)
+    bytesRead = 0;
+string->size = bytesRead;
+string->s[bytesRead] = 0;
+stack[0].String = string;
+}
+

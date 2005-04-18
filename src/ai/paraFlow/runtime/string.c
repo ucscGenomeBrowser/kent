@@ -16,7 +16,7 @@ if (string->allocated != 0)
 freeMem(string);
 }
 
-static struct _pf_string *_pf_string_new(char *s, int size)
+struct _pf_string *_pf_string_new(char *s, int size)
 /* Wrap string buffer of given size. */
 {
 struct _pf_string *string;

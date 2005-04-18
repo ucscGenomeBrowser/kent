@@ -2,6 +2,9 @@
 
 #ifndef STRING_H
 
+struct _pf_string *_pf_string_new(char *s, int size);
+/* Wrap string buffer of given size. */
+
 struct _pf_string *_pf_string_from_const(char *s);
 /* Wrap string around constant. */
 
