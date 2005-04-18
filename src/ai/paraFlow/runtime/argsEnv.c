@@ -23,3 +23,10 @@ for (i=1; i<argc; ++i)
     a[i-1] = _pf_string_from_const(argv[i]);
 *retArgs = args;
 }
+
+void die(_pf_Stack *stack)
+/* Print  message and die. */
+{
+_pf_String string = stack[0].String;
+errAbort(string->s);
+}

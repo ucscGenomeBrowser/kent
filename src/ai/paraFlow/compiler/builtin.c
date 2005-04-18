@@ -5,6 +5,7 @@ char *fetchBuiltinCode()
 return
 "string programName;\n"
 "array of string args;\n"
+"to die(string message);\n"
 "to print(var v);\n"
 "to prin(var v);\n"
 "to fileOpen(string name, string mode) into file f;\n"
@@ -36,6 +37,7 @@ return
 "    to lower();\n"
 "    to append(string s);\n"
 "    to find(string s) into int found;\n"
+"    to findNext(string s, int startPos) into int found;\n"
 "    to nextWord(int pos) into (int newPos, string s);\n"
 "    }\n"
 "class _pf_array\n"

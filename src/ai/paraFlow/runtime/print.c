@@ -29,10 +29,8 @@ else
 void printString(FILE *f, struct _pf_string *string)
 /* Print out string. */
 {
-if (string == NULL)
-    fprintf(f, "\"\"");
-else
-    fprintf(f, "\"%s\"", string->s);
+if (string != NULL)
+    fprintf(f, "%s", string->s);
 }
 
 
@@ -142,7 +140,9 @@ switch (base->singleType)
     case pf_stString:
 	{
         _pf_String *p = data;
+	fputc('"', f);
 	printString(f, *p);
+	fputc('"', f);
 	break;
 	}
     case pf_stClass:

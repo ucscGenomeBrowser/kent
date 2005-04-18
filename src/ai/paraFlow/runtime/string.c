@@ -233,6 +233,31 @@ if (--sub->_pf_refCount <= 0)
     sub->_pf_cleanup(sub, 0);
 }
 
+void _pf_cm_string_findNext(_pf_Stack *stack)
+/* Find occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+/* Get input off of stack. */
+_pf_String string = stack[0].String;
+_pf_String sub = stack[1].String;
+_pf_Int start = stack[2].Int;
+
+/* Calculate where match is.  Don't bother looking is
+ * start coordinate outside of string. */
+char *loc = NULL;
+if (start >= 0 && start < string->size)
+    loc = stringIn(sub->s, string->s + start);
+if (loc == NULL)
+    stack[0].Int = -1;
+else
+    stack[0].Int = loc - string->s;
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--sub->_pf_refCount <= 0)
+    sub->_pf_cleanup(sub, 0);
+}
+
+
 #ifdef OLD
 static int countWords(char *s)
 /* Count how many white-space-separated words in string */
