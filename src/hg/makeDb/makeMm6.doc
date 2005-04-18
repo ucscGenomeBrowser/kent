@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.29 2005/04/15 23:36:22 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.30 2005/04/18 21:51:06 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4247,3 +4247,439 @@ hgLoadBed mm6 affyGnfU74C affyGnfU74C.bed
     # BELOW TWO THINGS WERE DONE BY RACHEL ALREDAY FOR MM4
     # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/mouse/
     # add affyMOE430.html file and then do make alpha to add to trackDb table
+
+######## MAKING GENE SORTER TABLES #######  (STARTED - 2005-04-15, DONE 4/18/05 - Fan)
+# These are instructions for building the
+# Gene Sorter.  Don't start these until
+# there is a knownGene track and the affy tracks
+
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+cd /tmp
+hgClusterGenes mm6 knownGene knownIsoforms knownCanonical
+#	You may need to build this binary in src/hg/near/hgClusterGenes
+#	Got 24603 clusters, from 41208 genes in 43 chromosomes
+#	featureBits mm6 knownCanonical
+# 	686054706 bases of 2597150411 (26.416%) in intersection
+#	featureBits mm5 knownCanonical
+#	853516995 bases of 2615483787 (32.633%) in intersection
+#	featureBits mm4 knownCanonical
+#	840021165 bases of 2627444668 (31.971%) in intersection
+#	featureBits mm3 knownCanonical
+#	825943052 bases of 2505900260 (32.960%) in intersection
+#	! ! ! Can not do featureBits on knownIsoforms
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+ssh hgwdev
+mkdir -p  /cluster/data/mm6/bed/geneSorter/blastp
+cd /cluster/data/mm6/bed/geneSorter/blastp
+pepPredToFa mm6 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/cluster/bluearc/blast229/formatdb -i known.faa -t known -n known
+
+# Copy over database to bluearc scratch
+mkdir /cluster/panasas/home/store/mm6/blastp
+cp -p /cluster/data/mm6/bed/geneSorter/blastp/known.* \
+/cluster/panasas/home/store/mm6/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/mm6/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/mm6/bed/geneSorter/blastp/self
+cd /cluster/data/mm6/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+	-p blastp -d /cluster/panasas/home/store/mm6/blastp/known \
+	-i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:      31525s     525.42m     8.76h    0.36d  0.001 y
+# IO & Wait Time:                 34031s     567.18m     9.45h    0.39d  0.001 y
+# Average job time:                   8s       0.14m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              61s       1.02m     0.02h    0.00d
+# Submission to last job:           142s       2.37m     0.04h    0.00d
+
+# Load into database.  This takes about an hour.
+ssh hgwdev
+cd /cluster/data/mm6/bed/geneSorter/blastp/self/run/out
+hgLoadBlastTab mm6 knownBlastTab *.tab
+Scanning through 7715 files
+Loading database with 1972005 rows
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes an hour.)
+# DONE (05-04-15 Fan)
+
+hgMapToGene mm6 affyGnf1m knownGene knownToGnf1m
+hgExpDistance mm6 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+
+# Create table that maps between known genes and RefSeq
+hgMapToGene mm6 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene mm6 affyU74  knownGene knownToU74
+hgMapToGene mm6 affyMOE430 knownGene knownToMOE430
+hgMapToGene mm6 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+# Format and load Rinn et al sex expression data
+mkdir /cluster/data/mm6/bed/rinnSex
+cd !$
+hgMapMicroarray rinnSex.bed hgFixed.mouseRinnSexMedianRatio \
+    ../affyMOE430/affyMOE430.psl
+hgLoadBed mm6 rinnSex rinnSex.bed
+
+# Format and load the GNF data
+mkdir /cluster/data/mm6/bed/affyGnf95
+cd /cluster/data/mm6/bed/affyGnf95
+affyPslAndAtlasToBed -newType ../affyU95.psl \
+	/projects/compbio/data/microarray/affyGnfHuman/data_public_U95 \
+	affyGnfU95.tab affyGnfU95Exps.tab -shortOut
+
+#	this .sql load was in preceeding instructions, but this .sql file
+#	appears to not exist and it doesn't seem to be needed anyway.
+#	Everything below this seems to create tables OK.
+#  hgsql mm6 < ~/kent/src/hg/affyGnf/affyGnfU95.sql
+
+# Create table that gives distance in expression space between 
+# GNF genes.  These commands take about 15 minutes each
+#	The affyGnfU74?Exps arguments appear to be unused in 
+# hgExpDistance
+hgExpDistance mm6 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
+# Got 7720 unique elements in affyGnfU74A
+hgExpDistance mm6 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
+# Got 4619 unique elements in affyGnfU74B
+hgExpDistance mm6 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
+# Got 1406 unique elements in affyGnfU74C
+
+# C.ELEGANS BLASTP FOR GENE SORTER (DONE 4/15/05 Fan)
+    # Make C. elegans ortholog column using blastp on wormpep.
+    # First make C. elegans protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    ssh eieio
+    mkdir /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+    # to find out the latest version.  Then use that in place of 142 below.
+    wget -O wormPep142.faa ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep142/wormpep142
+    formatdb -i wormPep142.faa -t wormPep142 -n wormPep142
+    ssh kkr1u00
+    if (-e /iscratch/i/ce2/blastp) then
+      rm -r /iscratch/i/ce2/blastp
+    endif
+    mkdir -p /iscratch/i/ce2/blastp
+    cp /cluster/data/ce2/bed/blastp/wormPep142.p?? /iscratch/i/ce2/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastp/ce2/run/out
+    cd /cluster/data/mm6/bed/blastp/ce2/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce2/blastp/wormPep142 -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:      29337s     488.96m     8.15h    0.34d  0.001 y
+# IO & Wait Time:                 24651s     410.84m     6.85h    0.29d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              40s       0.67m     0.01h    0.00d
+# Submission to last job:           206s       3.43m     0.06h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastp/ce2/run/out
+    hgLoadBlastTab mm6 ceBlastTab -maxPer=1 *.tab
+
+# HUMAN BLASTP FOR GENE SORTER (DONE 4/18/05 Fan)
+    # Make human ortholog column using blastp on human known genes.
+    # First make human protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    mkdir /cluster/data/hg17/bed/blastp
+    cd /cluster/data/hg17/bed/blastp
+    pepPredToFa hg17 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+# PLEASE NOTE, hg17B IS USED INSTEAD OF hg17 for /iscratch/i,
+# TO GO AROUND A SUBDIRECTORY ACCESS RIGHT PROBLEM.
+
+    ssh kkr1u00
+    if (-e /iscratch/i/hg17B/blastp) then
+      rm -r /iscratch/i/hg17B/blastp
+    endif
+    mkdir -p /iscratch/i/hg17B/blastp
+    cp /cluster/data/hg17/bed/blastp/known.p?? /iscratch/i/hg17B/blastp
+    iSync
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastp/hg17/run/out
+    cd /cluster/data/mm6/bed/blastp/hg17/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg17B/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:      67090s    1118.17m    18.64h    0.78d  0.002 y
+# IO & Wait Time:                 22543s     375.72m     6.26h    0.26d  0.001 y
+# Average job time:                  12s       0.19m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              83s       1.38m     0.02h    0.00d
+# Submission to last job:           213s       3.55m     0.06h    0.00d
+ 
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastp/hg17/run/out
+    hgLoadBlastTab mm6 hgBlastTab -maxPer=1 *.tab
+
+# ZEBRAFISH BLASTP FOR GENE SORTER (DONE 4/15/05 Fan)
+    # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+    # First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    ssh kkstore
+    mkdir /cluster/data/danRer1/bed/blastp
+    cd /cluster/data/danRer1/bed/blastp
+    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH4.apr.pep.fa.gz
+    
+    zcat Dan*.pep.fa.gz > ensembl.faa
+    formatdb -i ensembl.faa -t ensembl -n ensembl
+    ssh kkr1u00
+    if (-e /iscratch/i/danRer1/blastp) then
+      rm -r /iscratch/i/danRer1/blastp
+    endif
+    mkdir -p /iscratch/i/danRer1/blastp
+    cp /cluster/data/danRer1/bed/blastp/ensembl.p?? /iscratch/i/danRer1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastp/danRer1/run/out
+    cd /cluster/data/mm6/bed/blastp/danRer1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/danRer1/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:      53430s     890.51m    14.84h    0.62d  0.002 y
+# IO & Wait Time:                 24688s     411.46m     6.86h    0.29d  0.001 y
+# Average job time:                  10s       0.17m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              76s       1.27m     0.02h    0.00d
+# Submission to last job:           202s       3.37m     0.06h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastp/danRer1/run/out
+    hgLoadBlastTab mm6 drBlastTab -maxPer=1 *.tab
+
+# YEAST BLASTP FOR GENE SORTER (DONE 4/15/05 Fan)
+    # Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on 
+    # RefSeq.  First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    mkdir /cluster/data/sacCer1/bed/blastp
+    cd /cluster/data/sacCer1/bed/blastp
+    wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+    zcat orf_trans.fasta.gz > sgdPep.faa
+    formatdb -i sgdPep.faa -t sgdPep -n sgdPep
+
+    ssh kkr1u00
+    # Note: sacCer1 is a name conflict with SARS coronavirus... oh well, 
+    # fortunately we won't be looking for homologs there.  :)
+    if (-e /iscratch/i/sacCer1/blastp) then
+      rm -r /iscratch/i/sacCer1/blastp
+    endif
+    mkdir -p /iscratch/i/sacCer1/blastp
+    cp /cluster/data/sacCer1/bed/blastp/sgdPep.p?? /iscratch/i/sacCer1/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastp/sacCer1/run/out
+    cd /cluster/data/mm6/bed/blastp/sacCer1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sacCer1/blastp/sgdPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:       8741s     145.68m     2.43h    0.10d  0.000 y
+# IO & Wait Time:                 20376s     339.60m     5.66h    0.24d  0.001 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              17s       0.28m     0.00h    0.00d
+# Submission to last job:           199s       3.32m     0.06h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastp/sacCer1/run/out
+    hgLoadBlastTab mm6 scBlastTab -maxPer=1 *.tab
+
+# DM1 BLASTP FOR GENE SORTER (DONE 4/18/05, Fan)
+    # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+    # First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    # This is already done, see makeMm3.doc for procedure
+    # the directory: /cluster/bluearc/dm1/blastp should have data
+
+    # ssh kkr1u00
+    # if (-e /iscratch/i/dm1/blastp) then
+    #   rm -r /iscratch/i/dm1/blastp
+    # endif
+    # mkdir -p /iscratch/i/dm1/blastp
+    # cp /cluster/data/dm1/bed/blastp/bdgp.p?? /iscratch/i/dm1/blastp
+    # iSync
+    # THE ABOVE IS ALREADY DONE BY ANGIE
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastp/dm1/run/out
+    cd /cluster/data/mm6/bed/blastp/dm1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/bdgp -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:      33260s     554.33m     9.24h    0.38d  0.001 y
+# IO & Wait Time:                 24452s     407.54m     6.79h    0.28d  0.001 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              45s       0.75m     0.01h    0.00d
+# Submission to last job:           121s       2.02m     0.03h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastp/dm1/run/out
+    hgLoadBlastTab mm6 dmBlastTab -maxPer=1 *.tab
+
+# Create table that maps between known genes and LocusLink (DONE 4/18/05 Fan)
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm6 \
+        > refToLl.txt
+hgMapToGene mm6 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#       row count is 17480 
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm6 knownGene name proteinID Pfam knownToPfam
+# row count is 17132
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm6 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
+# Create table that maps between known genes and genePix database 
+    knownToGenePix mm6
+
+# ENABLE GENE SORTER FOR mm6 IN HGCENTRALTEST (DONE 7/20/04 Fan)
+    echo "update dbDb set hgNearOk = 1 where name = 'mm6';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# END OF GENE SORTER STUFF
+#############################################################################
