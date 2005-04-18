@@ -1,4 +1,3 @@
-  - Sort the _pf_base_info table before writing it.
   - Make it so that during runtime the typeId's of subparts
     of collected ID's are filled in.  Currently they are often
     zero, which results in memory leakage when freeing arrays
@@ -27,6 +26,7 @@ Check system:
 
 -----------
 DONE
+  - Sort the _pf_base_info table before writing it.
   - Put command line arguments into an array of strings the
     user can access.  Maybe commandLine[] or args[]?
   - Make foreach work on dirs.

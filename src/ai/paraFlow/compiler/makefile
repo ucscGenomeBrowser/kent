@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-O = builtin.o cCoder.o main.o pfBindVars.o pfCheck.o \
+O = builtin.o cCoder.o codedType.o main.o pfBindVars.o pfCheck.o \
     pfParse.o pfScope.o pfToken.o pfType.o util.o
 
 paraFlow: $(O)

@@ -9,6 +9,7 @@
 #include "pfToken.h"
 #include "pfCompile.h"
 #include "pfParse.h"
+#include "codedType.h"
 
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
@@ -146,102 +147,6 @@ if (pp->type != pptVarInit)
 return pp->children->next->next != NULL;
 }
 
-struct compOutType
-/* Composite output type. */
-    {
-    struct compOutType *next;	/* Next in list. */
-    char *code;		/* number:name and parenthesis code. */
-    int id;		/* Unique id. */
-    struct pfType *type;	/* Unpacked version of type */
-    };
-
-static int cotId = 0;
-
-static void encodeType(struct pfType *type, struct dyString *dy)
-/* Encode type recursively into dy. */
-{
-// dyStringPrintf(dy, "%d:", type->base->scope->id);
-// dyStringAppend(dy, type->base->name);
-dyStringPrintf(dy, "%d", type->base->id);
-if (type->children != NULL)
-    {
-    dyStringAppendC(dy, '(');
-    for (type = type->children; type != NULL; type = type->next)
-        {
-	encodeType(type, dy);
-	if (type->next != NULL)
-	    dyStringAppendC(dy, ',');
-	}
-    dyStringAppendC(dy, ')');
-    }
-}
-
-struct compOutType *compTypeLookup(struct hash *hash, struct dyString *dy,
-	struct pfType *type)
-/* Find compOutTYpe that corresponds to type in hash */
-{
-dyStringClear(dy);
-encodeType(type, dy);
-return hashMustFindVal(hash, dy->string);
-}
-
-static int typeId(struct pfCompile *pfc, struct pfType *type)
-/* Return run time type ID associated with type */
-{
-struct dyString *dy = dyStringNew(256);
-struct compOutType *cot = compTypeLookup(pfc->runTypeHash, dy, type);
-int id = cot->id;
-dyStringFree(&dy);
-return id;
-}
-
-static void rFillCompHash(FILE *f,
-	struct hash *hash, struct dyString *dy, struct pfParse *pp)
-/* Fill in hash with uniq types.  Print encodings of unique
- * types as we find them to file. */
-{
-struct pfParse *p;
-for (p = pp->children; p != NULL; p = p->next)
-    rFillCompHash(f, hash, dy, p);
-if (pp->ty)
-    {
-    dyStringClear(dy);
-    encodeType(pp->ty, dy);
-    if (!hashLookup(hash, dy->string))
-        {
-	struct compOutType *cot;
-	AllocVar(cot);
-	hashAddSaveName(hash, dy->string, cot, &cot->code);
-	cot->id = ++cotId;
-	cot->type = pp->ty;
-	fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
-	}
-    }
-}
-
-struct hash *hashCompTypes(struct pfCompile *pfc, struct pfParse *program, 
-	struct dyString *dy, FILE *f)
-/* Create a hash full of compOutTypes.  Also print out type 
- * encodings. */
-{
-struct hash *hash = hashNew(0);
-
-/* Make up simple int type. This needs to always come
- * first. */
-    {
-    dyStringClear(dy);
-    struct compOutType *cot;
-    dyStringPrintf(dy, "%d", pfc->intType->id);
-    AllocVar(cot);
-    hashAddSaveName(hash, dy->string, cot, &cot->code);
-    cot->type = pfTypeNew(pfc->intType);
-    fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
-    }
-
-rFillCompHash(f, hash, dy, program);
-return hash;
-}
-
 static void codeMethodName(struct pfCompile *pfc, struct pfToken *tok, 
 	FILE *f, struct pfBaseType *base, char *name)
 /* Find method in current class or one of it's parents, and print
@@ -345,7 +250,7 @@ static void endCleanTemp(struct pfCompile *pfc, FILE *f, struct pfType *type)
 {
 fprintf(f, ";\n");
 fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
-fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", typeId(pfc, type));
+fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", codedTypeId(pfc, type));
 fprintf(f, " }\n");
 }
 
@@ -583,7 +488,7 @@ if (type->base->needsCleanup)
     else
 	{
 	fprintf(f, "if (0!=%s && (%s->_pf_refCount-=1) <= 0)\n", name, name);
-	fprintf(f, "   %s->_pf_cleanup(%s, %d);\n", name, name, typeId(pfc, type));
+	fprintf(f, "   %s->_pf_cleanup(%s, %d);\n", name, name, codedTypeId(pfc, type));
 	}
     }
 }
@@ -666,13 +571,13 @@ if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
 	|| base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
 	{
 	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", base->name, 
-		type->base->name, stackName, stack, tupleSize, typeId(pfc, type), 
-		typeId(pfc, type->children));
+		type->base->name, stackName, stack, tupleSize, codedTypeId(pfc, type), 
+		codedTypeId(pfc, type->children));
 	}
     else
 	{
 	fprintf(f, "_pf_tuple_to_%s(%s+%d, %d, \"", type->base->name,
-		stackName, stack, typeId(pfc, type->children));
+		stackName, stack, codedTypeId(pfc, type->children));
 	rCodeTupleType(pfc, f, rval->ty);
 	fprintf(f, "\");\n");
 	}
@@ -691,7 +596,7 @@ struct pfBaseType *base = lval->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
 fprintf(f, "_pf_tuple_to_class(%s+%d, %d, \"",
-	stackName, stack, typeId(pfc, lval->ty));
+	stackName, stack, codedTypeId(pfc, lval->ty));
 rCodeTupleType(pfc, f, rval->ty);
 fprintf(f, "\");\n");
 }
@@ -745,7 +650,7 @@ for (type = type->children; type != NULL; type = type->next)
 	codeExpression(pfc, f, type->children, stack, FALSE);
 	fprintf(f, "%s[%d].Array = ", stackName, stack);
 	fprintf(f, "_pf_dim_array(%s[%d].Int, %d);\n", stackName, stack, 
-		typeId(pfc, type->next->ty));
+		codedTypeId(pfc, type->next->ty));
 	lvalOffStack(pfc, f, varInit, stack, "=", 1, FALSE);
 	}
     }
@@ -1077,7 +982,7 @@ switch (pp->type)
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
         codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".typeId = %d;\n", typeId(pfc, pp->children->ty));
+	fprintf(f, ".typeId = %d;\n", codedTypeId(pfc, pp->children->ty));
 	return 1;
 	}
     default:
@@ -1540,7 +1445,7 @@ static void printConclusion(struct pfCompile *pfc, FILE *f)
 {
 fputs(
 "\n"
-"int main(int argc, char *argv[])\n"
+"int main(int argc, char *argv[], char *environ[])\n"
 "{\n"
 "static _pf_Stack stack[16*1024];\n"
 "_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
@@ -1552,110 +1457,6 @@ fputs(
 "}\n", f);
 }
 
-static void printBaseVar(FILE *f, struct pfBaseType *base)
-/* Print out name of variable where we store base type. */
-{
-char *s, c;
-fprintf(f, "_pf_base_s%d_", base->scope->id);
-s = base->name;
-while ((c = *s++) != 0)
-    {
-    if (isalnum(c))
-        fputc(c, f);
-    else
-        fputc('_', f);
-    }
-}
-
-static boolean rPrintTypedFields(FILE *f, struct hash *compTypeHash, struct dyString *dy, 
-	struct pfBaseType *base, boolean needComma)
-/* Recursively print fields. */
-{
-struct pfType *field;
-if (base->parent != NULL)
-    needComma = rPrintTypedFields(f, compTypeHash, dy, base->parent, needComma);
-for (field = base->fields; field != NULL; field = field->next)
-    {
-    struct compOutType *cot = compTypeLookup(compTypeHash, dy, field);
-    if (needComma)
-	fprintf(f, ",");
-    needComma = TRUE;
-    fprintf(f, "%d:%s", cot->id, field->fieldName);
-    }
-return needComma;
-}
-
-static struct hash *printTypeInfo(struct pfCompile *pfc, 
-	struct pfParse *program, FILE *f)
-/* Print out info on types. Return hash of compOutType. */
-{
-struct pfScope *scope;
-struct hash *compTypeHash;
-struct dyString *dy = dyStringNew(0);
-
-
-fprintf(f, "/* All base types */\n");
-
-fprintf(f, "struct _pf_base_info _pf_base_info[] = {\n");
-for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
-    {
-    struct hashEl *hel, *helList = hashElListHash(scope->types);
-    int scopeId = scope->id;
-    slSort(&helList, hashElCmp);
-    for (hel = helList; hel != NULL; hel = hel->next)
-        {
-	struct pfBaseType *base = hel->val;
-	fprintf(f, "  {%d, ", base->id);
-	fprintf(f, "\"%d:", scopeId);
-	fprintf(f, "%s\", ", base->name);
-	if (base->parent == NULL)
-	    fprintf(f, "0, ");
-	else
-	    fprintf(f, "%d, ", base->parent->id);
-	fprintf(f, "%d, ", base->needsCleanup);
-	fprintf(f, "%d, ", base->size);
-	fprintf(f, "},\n");
-	}
-    hashElFreeList(&helList);
-    }
-fprintf(f, "};\n");
-fprintf(f, "int _pf_base_info_count = %d;\n\n", pfBaseTypeCount());
-
-fprintf(f, "/* All composed types */\n");
-fprintf(f, "struct _pf_type_info _pf_type_info[] = {\n");
-compTypeHash = hashCompTypes(pfc, program, dy, f);
-fprintf(f, "};\n");
-fprintf(f, "int _pf_type_info_count = sizeof(_pf_type_info)/sizeof(_pf_type_info[0]);\n\n");
-
-fprintf(f, "/* All field lists. */\n");
-fprintf(f, "struct _pf_field_info _pf_field_info[] = {\n");
-for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
-    {
-    struct hashEl *hel, *helList = hashElListHash(scope->types);
-    int scopeId = scope->id;
-    slSort(&helList, hashElCmp);
-    for (hel = helList; hel != NULL; hel = hel->next)
-        {
-	struct pfBaseType *base = hel->val;
-	if (base->isClass)
-	    {
-	    fprintf(f, "  {%d, ", base->id);
-	    fprintf(f, "\"");
-	    rPrintTypedFields(f, compTypeHash, dy, base, FALSE);
-	    fprintf(f, "\"");
-	    fprintf(f, "},\n");
-	    }
-	}
-    hashElFreeList(&helList);
-    }
-fprintf(f, "};\n");
-fprintf(f, "int _pf_field_info_count = sizeof(_pf_field_info)/sizeof(_pf_field_info[0]);\n\n");
-fprintf(f, "\n");
-
-dyStringFree(&dy);
-return compTypeHash;
-}
-
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
 /* Generate C code for program. */
 {
@@ -1665,7 +1466,7 @@ struct pfScope *scope;
 struct hash *compTypeHash;
 
 printPreamble(pfc, f, fileName);
-pfc->runTypeHash = printTypeInfo(pfc, program, f);
+pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
 
 for (module = program->children; module != NULL; module = module->next)
     {
