@@ -100,9 +100,11 @@ void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 extern struct _pf_type **_pf_type_table;	
 /* Table of all types we'll see during run time. Created by _pf_init_types. */
 
-int _pf_find_simple_type(char *simpleType);
-/* When passed in something like "int" or "string" return
- * corresponding typeId */
+int _pf_find_int_type_id();
+/* Return int type ID. */
+
+int _pf_find_string_type_id();
+/* Return string type ID. */
 
 #endif /* RUNTYPE_H */
 

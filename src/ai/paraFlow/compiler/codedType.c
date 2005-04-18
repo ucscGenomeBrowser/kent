@@ -71,6 +71,21 @@ dyStringFree(&dy);
 return id;
 }
 
+static void addTypesAndChildTypes(FILE *f, struct hash *hash,
+	struct dyString *dy, struct pfType *ty)
+{
+struct pfType *t;
+for (t = ty->children; t != NULL; t = t->next)
+    addTypesAndChildTypes(f, hash, dy, t);
+encodeType(ty, dy);
+if (!hashLookup(hash, dy->string))
+    {
+    struct codedType *cot = codedTypeNew(dy->string, ty);
+    hashAddSaveName(hash, dy->string, cot, &cot->code);
+    fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
+    }
+}
+
 static void rFillCompHash(FILE *f,
 	struct hash *hash, struct dyString *dy, struct pfParse *pp)
 /* Fill in hash with uniq types.  Print encodings of unique
@@ -83,11 +98,7 @@ if (pp->ty)
     {
     encodeType(pp->ty, dy);
     if (!hashLookup(hash, dy->string))
-        {
-	struct codedType *cot = codedTypeNew(dy->string, pp->ty);
-	hashAddSaveName(hash, dy->string, cot, &cot->code);
-	fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
-	}
+	addTypesAndChildTypes(f, hash, dy, pp->ty);
     }
 }
 
@@ -112,27 +123,14 @@ hashAddSaveName(hash, encoding, cot, &cot->code);
 fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
 }
 
-static void saveSimpleArrayAndDirTypes(FILE *f, struct hash *hash,
-	struct dyString *dy, struct codedBaseType *cbt,
-	struct codedBaseType *dirCbt, struct codedBaseType *arrayCbt)
+static void saveSimpleTypes(FILE *f, struct hash *hash,
+	struct dyString *dy, struct codedBaseType *cbt)
 /* Make a type out of base type, and print and save it.
  * Also do this for arrays and dirs of that type. */
 {
 struct pfType *type = pfTypeNew(cbt->base), *dirType, *arrayType;
 encodeType(type, dy);
 printAndSaveCompType(f, hash, type, dy->string);
-
-#ifdef UNNEEDED
-dirType = pfTypeNew(dirCbt->base);
-dirType->children = type;
-encodeType(dirType, dy);
-printAndSaveCompType(f, hash, dirType, dy->string);
-
-arrayType = pfTypeNew(arrayCbt->base);
-arrayType->children = type;
-encodeType(arrayType, dy);
-printAndSaveCompType(f, hash, arrayType, dy->string);
-#endif /* UNNEEDED */
 }
 
 static struct hash *hashCompTypes(struct pfCompile *pfc, 
@@ -144,19 +142,12 @@ static struct hash *hashCompTypes(struct pfCompile *pfc,
 struct hash *hash = hashNew(0);
 struct codedBaseType *cbt;
 struct codedBaseType *intCbt = cbtFind(cbtList, 1, "int");
-struct codedBaseType *dirCbt = cbtFind(cbtList, 1, "dir");
-struct codedBaseType *arrayCbt = cbtFind(cbtList, 1, "array");
+struct codedBaseType *stringCbt = cbtFind(cbtList, 1, "string");
 
-/* Make up int type. This needs to always come first. */
-saveSimpleArrayAndDirTypes(f, hash, dy, intCbt, dirCbt, arrayCbt);
-
-/* Make up other simple types.  This is for the benefit
- * of the run-time system. */
-for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
-    {
-    if (cbt != intCbt)
-	saveSimpleArrayAndDirTypes(f, hash, dy, cbt, dirCbt, arrayCbt);
-    }
+/* Make up int and string types. The runtime depends on these
+ * being first and second in the type array. */
+saveSimpleTypes(f, hash, dy, intCbt);
+saveSimpleTypes(f, hash, dy, stringCbt);
 
 rFillCompHash(f, hash, dy, program);
 return hash;

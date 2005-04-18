@@ -35,14 +35,53 @@ hashAddInt(hash, "flow", pf_stFlow);
 return hash;
 }
 
-struct _pf_type *_pf_type_from_paren_code(char **parenCode, struct _pf_base *bases)
+static struct _pf_type *findChildTypeInHash(struct hash *typeHash, char **parenCode)
+/* Find type in hash */
+{
+char *start = *parenCode;
+char *end = start, c;
+int level = 0;
+char *childCode;
+struct _pf_type *type;
+
+/* Find end: either a ',', or a ')' at right nesting level. */
+for (;;)
+    {
+    c = *end;
+    if (c == 0)
+	internalErr();
+    else if (c == '(')
+        ++level;
+    else if (c == ',' || c == ')')
+        {
+	if (level == 0)
+	    break;
+	if (c == ')')
+	    --level;
+	}
+    end += 1;
+    }
+*parenCode = end;
+
+/* Look up just child code in hash.  If can't find it die,
+ * else return it. */
+childCode = cloneStringZ(start, end-start);
+type = hashFindVal(typeHash, childCode);
+freeMem(childCode);
+if (type == NULL)
+    internalErr();
+return type;
+}
+
+struct _pf_type *_pf_type_from_paren_code(struct hash *typeHash, 
+	char *parenCode, struct _pf_base *bases)
 /* Create a little tree of type from parenCode.  Here's an example of the paren code:
  *      6(19,17,17,17)
  * The numbers are indexes into the bases array.  Parenthesis indicate children,
  * commas siblings. */
 {
 struct _pf_type *type;
-char *s = *parenCode, c;
+char *s = parenCode, c;
 int val = 0;
 AllocVar(type);
 while ((c = *s) != NULL)
@@ -63,7 +102,7 @@ if (c == '(')
     s += 1;
     for (;;)
 	{
-	child = _pf_type_from_paren_code(&s, bases);
+	child = findChildTypeInHash(typeHash, &s);
 	slAddHead(&type->children, child);
 	if (*s == ',')
 	    s += 1;
@@ -76,7 +115,6 @@ if (c == '(')
         errAbort("Problem in paren code '%s'", *parenCode);
     slReverse(&type->children);
     }
-*parenCode = s;
 return type;
 }
 
@@ -86,6 +124,7 @@ void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 /* Build up run-time type information from initialization. */
 {
 struct hash *singleIds = singleTypeHash();
+struct hash *typeHash = hashNew(0);
 struct _pf_base *bases, *base;
 struct _pf_type **types, *type;
 int i;
@@ -228,9 +267,11 @@ AllocArray(types, typeCount+1);
 for (i=0; i<typeCount; ++i)
     {
     struct _pf_type_info *info = &typeInfo[i];
-    struct _pf_type *type = _pf_type_from_paren_code(&info->parenCode, bases);
+    char *s = info->parenCode;
+    struct _pf_type *type = _pf_type_from_paren_code(typeHash, info->parenCode, bases);
     type->typeId = info->id;
     types[info->id] = type;
+    hashAdd(typeHash, info->parenCode, type);
     }
 
 /* Process fieldInfo into fields. */
@@ -268,41 +309,22 @@ for (i=0; i<typeCount; ++i)
 
 /* Clean up and go home. */
 hashFree(&singleIds);
+hashFree(&typeHash);
 _pf_type_table = types;
 _pf_type_table_size = typeCount;
 _pf_base_table = bases;
 _pf_base_table_size = baseCount;
 }
 
-int _pf_find_simple_type(char *simpleType)
-/* When passed in something like "int" or "string" return 
- * associated typeId. */
+int _pf_find_int_type_id()
+/* Return int type ID. */
 {
-int i;
-struct _pf_base *base = NULL;
-struct _pf_type *type = NULL;
-for (i=0; i<_pf_base_table_size; ++i)
-    {
-    struct _pf_base *b = &_pf_base_table[i];
-    if (b->scope == 1 && sameString(b->name, simpleType))
-	{
-        base = b;
-	break;
-	}
-    }
-if (base == NULL)
-    errAbort("Can't _pf_find_simple_type base type '%s'", simpleType);
-for (i=0; i<_pf_type_table_size; ++i)
-    {
-    struct _pf_type *t = _pf_type_table[i];
-    if (t->base == base)
-        {
-	type = t;
-	break;
-	}
-    }
-if (type == NULL)
-    errAbort("Can't _pf_find_simpe_type '%s'", simpleType);
-return type->typeId;
+return 0;
+}
+
+int _pf_find_string_type_id()
+/* Return string type ID. */
+{
+return 1;
 }
 

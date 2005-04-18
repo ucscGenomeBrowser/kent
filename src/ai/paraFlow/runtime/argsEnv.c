@@ -13,7 +13,7 @@ void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArg
 /* Set up command line arguments. */
 {
 _pf_Array args;
-int stringTypeId = _pf_find_simple_type("string");
+int stringTypeId = _pf_find_string_type_id();
 int i;
 *retProg = _pf_string_from_const(argv[0]);
 struct _pf_string **a;
