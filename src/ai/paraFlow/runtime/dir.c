@@ -22,6 +22,7 @@ struct _pf_type *elType = dir->elType;
 struct _pf_base *base = elType->base;
 if (base->needsCleanup)
     {
+    // uglyf("deep cleaning dir\n");
     struct hashCookie it = hashFirst(hash);
     struct hashEl *hel;
     while ((hel = hashNext(&it)) != NULL)
@@ -33,6 +34,7 @@ if (base->needsCleanup)
     }
 else
     {
+    uglyf("shallow cleaning dir\n");
     freeHashAndVals(&hash);
     }
 freeMem(dir);
@@ -308,6 +310,8 @@ for (i=0; i<count; ++i)
 		internalErr();
 	    }
 	}
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
     }
 if (encoding[0] != ')')
     errAbort("Expecting ) in array tuple encoding, got %c", encoding[0]);

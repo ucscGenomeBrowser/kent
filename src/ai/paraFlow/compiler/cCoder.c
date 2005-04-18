@@ -20,9 +20,8 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
 
-static void codeScope(
-	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean isModule, boolean isBuiltin);
+static void codeScope( struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
+	boolean printPfInit, boolean isBuiltIn);
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
@@ -361,7 +360,7 @@ else if (colBase == pfc->dirType)
     }
 else
     {
-    fprintf(f, "(ugly coding index for something other than array)");
+    internalErr();
     }
 return 1;
 }
@@ -413,7 +412,7 @@ else if (colBase == pfc->dirType)
     }
 else
     {
-    fprintf(f, "(ugly coding index as lval for something other than array)");
+    internalErr();
     }
 }
 
@@ -1364,7 +1363,7 @@ hashElFreeList(&helList);
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean isModule, boolean isBuiltin)
+	boolean printPfInit, boolean isBuiltIn)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -1394,7 +1393,8 @@ helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
 
 /* Print out variables. */
-codeVarsInHelList(pfc, f, helList, !scope->isModule);
+if (!isBuiltIn)
+    codeVarsInHelList(pfc, f, helList, !scope->isModule);
 
 /* Print out function declarations */
 for (p = pp->children; p != NULL; p = p->next)
@@ -1413,7 +1413,7 @@ for (p = pp->children; p != NULL; p = p->next)
     }
 
 /* Print out other statements */
-if (isModule)
+if (printPfInit)
     fprintf(f, "void _pf_init(%s *%s)\n{\n", stackType, stackName);
 for (p = pp->children; p != NULL; p = p->next)
     {
@@ -1431,10 +1431,10 @@ for (p = pp->children; p != NULL; p = p->next)
 	}
     }
 /* Print out any needed cleanups. */
-if (!isBuiltin)
+if (!isBuiltIn)
     codeCleanupVarsInHelList(pfc, f, helList);
 
-if (isModule)
+if (printPfInit)
     fprintf(f, "}\n");
 
 hashElFreeList(&helList);
@@ -1470,11 +1470,12 @@ pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
 
 for (module = program->children; module != NULL; module = module->next)
     {
+    boolean isBuiltIn = sameString(module->name, "<builtin>");
     fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
     fprintf(f, "\n");
     rPrintPrototypes(f, module, NULL);
     fprintf(f, "\n");
-    codeScope(pfc, f, module, differentString(module->name, "<builtin>"), TRUE);
+    codeScope(pfc, f, module, !isBuiltIn, isBuiltIn);
     }
 printConclusion(pfc, f);
 carefulClose(&f);
