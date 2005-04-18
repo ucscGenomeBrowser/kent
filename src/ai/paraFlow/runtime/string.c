@@ -358,4 +358,63 @@ else
     }
 }
 
+void floatString(_pf_Stack *stack)
+/* floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
+ *         bit forceScientific) into string s
+ * This returns a floating point number formatted just how you like it. */
+{
+_pf_Double f = stack[0].Double;
+_pf_Int digitsBeforeDecimal = stack[1].Int;
+_pf_Int digitsAfterDecimal = stack[2].Int;
+_pf_Bit forceScientific = stack[3].Bit;
+char buf[32];
+char format[16];
+char *sci = (forceScientific ? "e" : "f");
 
+safef(format, sizeof(format), "%%%d.%d%s", 
+	digitsBeforeDecimal+digitsAfterDecimal+1,
+	digitsAfterDecimal, sci);
+safef(buf, sizeof(buf), format, f);
+stack[0].String = _pf_string_new(buf, strlen(buf));
+}
+
+void intString(_pf_Stack *stack)
+/* Format an integer just how you like it. *?
+ * intString(long l, int minWidth, bit zeroPad, bit commas) into String s
+ */
+{
+_pf_Long l = stack[0].Long;
+_pf_Int minWidth = stack[1].Int;
+_pf_Bit zeroPad = stack[2].Bit;
+_pf_Bit commas = stack[3].Bit;
+char buf[32];
+char format[16];
+safef(format, sizeof(format), "%%%s%dlld", 
+	(zeroPad ? "0" : ""), minWidth);
+safef(buf, sizeof(buf), format, l);
+if (commas)
+    {
+    int len = strlen(buf);
+    char commaBuf[48];
+    int sourcePos = 0, destPos = 0;
+    int size = len%3;
+    if (size == 0) size = 3;
+    for (;;)
+        {
+	memcpy(commaBuf+destPos, buf+sourcePos, size);
+	destPos += size;
+	sourcePos += size;
+	if (sourcePos >= len)
+	    break;
+	if (commaBuf[destPos-1] != ' ')
+	    {
+	    commaBuf[destPos] = ',';
+	    destPos += 1;
+	    }
+	size = 3;
+	}
+    stack[0].String = _pf_string_new(commaBuf, destPos);
+    }
+else
+    stack[0].String = _pf_string_new(buf, strlen(buf));
+}

@@ -49,7 +49,7 @@ if (--mode->_pf_refCount <= 0)
 stack[0].v = file;
 }
 
-void fileWriteString(_pf_Stack *stack)
+void _pf_cm_file_writeString(_pf_Stack *stack)
 /* paraFlow run time support routine to write string to file. */
 {
 struct file *file = stack[0].v;
@@ -60,17 +60,9 @@ mustWrite(file->f, string->s, string->size);
 /* Clean up references on stack. */
 if (--string->_pf_refCount <= 0)
     string->_pf_cleanup(string, 0);
-if (--file->_pf_refCount <= 0)
-    file->_pf_cleanup(file, 0);
 }
 
-void _pf_cm_file_writeString(_pf_Stack *stack)
-{
-stack[0].Obj->_pf_refCount += 1;
-fileWriteString(stack);
-}
-
-void fileReadLine(_pf_Stack *stack)
+void _pf_cm_file_readLine(_pf_Stack *stack)
 /* Read next line from file. */
 {
 struct file *file = stack[0].v;
@@ -88,17 +80,7 @@ for (;;)
     if (c == '\n')
         break;
     }
-
-/* Clean up references on stack. */
-if (--file->_pf_refCount <= 0)
-    file->_pf_cleanup(file, 0);
 stack[0].String = _pf_string_from_const(dy->string);
-}
-
-void _pf_cm_file_readLine(_pf_Stack *stack)
-{
-stack[0].Obj->_pf_refCount += 1;
-fileReadLine(stack);
 }
 
 void _pf_cm_file_readBytes(_pf_Stack *stack)

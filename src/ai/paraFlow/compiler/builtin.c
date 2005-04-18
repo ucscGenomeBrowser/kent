@@ -5,12 +5,13 @@ char *fetchBuiltinCode()
 return
 "string programName;\n"
 "array of string args;\n"
+"\n"
 "to die(string message);\n"
 "to print(var v);\n"
 "to prin(var v);\n"
-"to fileOpen(string name, string mode) into file f;\n"
-"to fileWriteString(file f, string s);\n"
-"to fileReadLine(file f) into (string s);\n"
+"to floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal,\n"
+"               int scientificNotation) into (string s);\n"
+"to intString(long l, int minWidth, bit zeroPad, bit commas) into (string s);\n"
 "\n"
 "class file\n"
 "    {\n"
@@ -19,6 +20,8 @@ return
 "    to readLine() into (string s);\n"
 "    to readBytes(int count) into (string s);\n"
 "    }\n"
+"\n"
+"to fileOpen(string name, string mode) into file f;\n"
 ;
 }
 

@@ -1,4 +1,3 @@
-  - Making virtual functions happen.
   - Sort the _pf_base_info table before writing it.
   - Make it so that during runtime the typeId's of subparts
     of collected ID's are filled in.  Currently they are often
@@ -7,6 +6,7 @@
     sort of transitive closure either when the compiler
     writes out the type table, or when the runtime reads it
     in.
+  - Making virtual functions happen.
   - Make sure that assigning a typed variable from a var variable
     does the right thing.
   - More file i/o.
