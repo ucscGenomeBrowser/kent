@@ -49,6 +49,13 @@ if (--mode->_pf_refCount <= 0)
 stack[0].v = file;
 }
 
+void _pf_cm_file_close(_pf_Stack *stack)
+/* Close file explicitly. */
+{
+struct file *file = stack[0].v;
+carefulClose(&file->f);
+}
+
 void _pf_cm_file_writeString(_pf_Stack *stack)
 /* paraFlow run time support routine to write string to file. */
 {
