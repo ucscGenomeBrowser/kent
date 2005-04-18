@@ -17,6 +17,17 @@ visibility hide
 color 34,139,34
 type genePred
 
+track intronEst
+shortLabel Spliced ESTs
+longLabel $Organism ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
 track nibbPics
 shortLabel NIBB In Situs
 longLabel Japanese Nat. Inst. of Basic Biology X. Laevis mRNA in situs
