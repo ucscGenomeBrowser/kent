@@ -160,9 +160,6 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table);
 boolean sqlTableExistsDb(char *database, char *table);
 /* Return TRUE if a table in a database exists. */
 
-int sqlTableSizeIfExists(struct sqlConnection *sc, char *table);
-/* Return row count if a table exists, -1 if it doesn't. */
-
 boolean sqlTablesExist(struct sqlConnection *conn, char *tables);
 /* Check all tables in space delimited string exist. */
 
