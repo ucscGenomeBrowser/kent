@@ -37,6 +37,7 @@ enum pfParseType
     pptSelfUse,
     pptFieldUse,
     pptConstUse,
+    pptPolymorphic,
     pptToDec,
     pptFlowDec,
     pptParaDec,
@@ -184,6 +185,9 @@ struct pfParse *pfParseNew(enum pfParseType type,
 	struct pfToken *tok, struct pfParse *parent, struct pfScope *scope);
 /* Return new parse node.  It's up to caller to fill in
  * children later. */
+
+struct pfParse *pfParseEnclosingClass(struct pfParse *pp);
+/* Find enclosing class if any. */
 
 void pfParsePutChildrenInPlaceOfSelf(struct pfParse **pPp);
 /* Replace self with children. */

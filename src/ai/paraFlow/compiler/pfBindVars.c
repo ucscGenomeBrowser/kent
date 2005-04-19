@@ -92,19 +92,6 @@ switch (pp->type)
     }
 }
 
-static struct pfParse *enclosingClass(struct pfParse *pp)
-/* Find enclosing class if any. */
-{
-for (pp = pp->parent; pp != NULL; pp = pp->parent)
-    {
-    if (pp->type == pptClass)
-	{
-        return pp;
-	}
-    }
-return NULL;
-}
-
 static void addDeclaredVarsToScopes(struct pfParse *pp)
 /* Go through and put declared variables into symbol table
  * for scope. */
@@ -131,7 +118,7 @@ switch (pp->type)
 	struct pfParse *input = name->next;
 	struct pfParse *output = input->next;
 	struct pfParse *body = output->next;
-	struct pfParse *class = enclosingClass(pp);
+	struct pfParse *class = pfParseEnclosingClass(pp);
 	name->type = pptSymName;
 	if (hashLookup(pp->scope->parent->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);

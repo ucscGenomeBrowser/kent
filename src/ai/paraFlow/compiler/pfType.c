@@ -770,6 +770,26 @@ for (type = type->children; type != NULL; type = type->next)
     rCheckTypeWellFormed(pfc, type);
 }
 
+static void checkRedefinitionInParent(struct pfCompile *pfc, struct pfParse *varInit)
+/* Make sure that variable is not defined as a public member of parent class. */
+{
+struct pfBaseType *base;
+char *name = varInit->name;
+struct pfParse *classDef = pfParseEnclosingClass(varInit);
+if (classDef != NULL)
+    {
+    for (base = classDef->ty->base->parent; base != NULL; base = base->parent)
+	{
+	struct pfType *field;
+	for (field = base->fields; field != NULL; field = field->next)
+	    {
+	    if (sameString(name, field->fieldName))
+		errAt(varInit->tok, "%s already defined in parent class %s", name, base->name);
+	    }
+	}
+    }
+}
+
 static void coerceVarInit(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that variable initialization can be coerced to variable
  * type. */
@@ -781,6 +801,7 @@ struct pfParse *init = symbol->next;
 if (init != NULL)
     coerceOne(pfc, &symbol->next, type->ty, FALSE);
 rCheckTypeWellFormed(pfc, type);
+checkRedefinitionInParent(pfc, pp);
 }
 
 static void coerceIndex(struct pfCompile *pfc, struct pfParse *pp)

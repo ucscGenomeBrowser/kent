@@ -67,6 +67,8 @@ switch (type)
 	return "pptVarUse";
     case pptConstUse:
 	return "pptConstUse";
+    case pptPolymorphic:
+        return "pptPolymorphic";
     case pptToDec:
 	return "pptToDec";
     case pptFlowDec:
@@ -413,6 +415,20 @@ else
     *pPp = pp->children;
     }
 }
+
+struct pfParse *pfParseEnclosingClass(struct pfParse *pp)
+/* Find enclosing class if any. */
+{
+for (pp = pp->parent; pp != NULL; pp = pp->parent)
+    {
+    if (pp->type == pptClass)
+	{
+        return pp;
+	}
+    }
+return NULL;
+}
+
 
 struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok,
 	struct pfScope *scope)
@@ -1208,6 +1224,30 @@ static struct pfParse *parseFlow(struct pfCompile *pfc, struct pfParse *parent,
 return parseFunction(pfc, parent, pTokList, scope, pptFlowDec);
 }
 
+static struct pfParse *parsePolymorphic(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse flow (...) [into (...)] */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = pfParseNew(pptPolymorphic, tok, parent, scope);
+tok = tok->next;
+switch (tok->type)
+    {
+    case pftTo:
+    case pftPara:
+    case pftFlow:
+        pp->children = pfParseStatement(pfc, pp, &tok, scope);
+	break;
+    default:
+        expectingGot("Expecting function declaration after polymorphic", tok);
+	break;
+    }
+*pTokList = tok;
+return pp;
+}
+
+
+
 static void checkForCircularity(struct pfBaseType *parent, struct pfBaseType *newBase,
 	struct pfToken *tok)
 /* Make sure that newBase is not parent, grandparent, etc of itself. */
@@ -1508,6 +1548,9 @@ switch (tok->type)
 	break;
     case pftFlow:
 	statement = parseFlow(pfc, parent, &tok, scope);
+	break;
+    case pftPolymorphic:
+    	statement = parsePolymorphic(pfc, parent, &tok, scope);
 	break;
     case pftName:
     case '(':
