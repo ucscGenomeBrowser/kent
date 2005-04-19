@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.246 2005/04/13 06:25:54 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.247 2005/04/19 20:12:08 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -722,7 +722,10 @@ struct hash *hash = tableListHash(db);
 struct slName *tableNames = NULL, *tbl = NULL;
 char trackName[HDB_MAX_TABLE_STRING];
 char chrom[HDB_MAX_CHROM_STRING];
-hParseTableName(table, trackName, chrom);
+if (hashFindVal(hash, "chromInfo"))
+    hParseTableName(table, trackName, chrom);
+else
+    safef(trackName, sizeof(trackName), table);
 tableNames = (struct slName *)hashFindVal(hash, trackName);
 for (tbl = tableNames;  tbl != NULL;  tbl = tbl->next)
     {
