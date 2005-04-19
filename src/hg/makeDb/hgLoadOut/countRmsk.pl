@@ -4,7 +4,7 @@
 #	RepeatMasker elements.  Give it a <db> argument.
 #	Output in plain text or optionally html
 #
-#	 $Id: countRmsk.pl,v 1.2 2005/04/19 17:15:47 hiram Exp $
+#	 $Id: countRmsk.pl,v 1.3 2005/04/19 17:25:49 hiram Exp $
 #
 use warnings;
 use strict;
@@ -158,7 +158,7 @@ my $rmskTableCount = 0; # and a count of them
 my %tableToChrom;	# to relate rmsk table to its corresponding chrom name
 	# key is rmskTable, value is chromNames[] index
 
-$sth = $dbh->prepare(q{show tables like "%rmsk%";});
+$sth = $dbh->prepare(q{show tables like "%rmsk";});
 $rc = $sth->execute() or die "show tables like rmsk failed";
 
 my $rmskTable="";
