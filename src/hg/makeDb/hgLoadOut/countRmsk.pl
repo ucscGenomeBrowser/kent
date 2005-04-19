@@ -4,7 +4,7 @@
 #	RepeatMasker elements.  Give it a <db> argument.
 #	Output in plain text or optionally html
 #
-#	 $Id: countRmsk.pl,v 1.5 2005/04/19 17:31:26 hiram Exp $
+#	 $Id: countRmsk.pl,v 1.6 2005/04/19 17:37:03 hiram Exp $
 #
 use warnings;
 use strict;
@@ -22,11 +22,13 @@ print "\tper-chrom stats will be done when the assembly has less than\n";
 print "\t   100 chrom names.  Scaffold based assemblies will only have\n";
 print "\t   a single overall summary.\n";
 print "\n";
+print "\tExample usage: countRmsk -verbose -html ce2 > ce2.html\n";
+print "\n";
 print "\twill look for /usr/local/apache/cgi-bin/hg.conf\n";
 print "\tto find connection information.  This can be overridden by\n";
 print "\tthe environment variable: HGDB_CONF\n";
 print "\te.g.: HGDB_CONF=~/.hg.conf.read-only $0 <db>\n";
-print "\t(this script last updated: ", '$Date: 2005/04/19 17:31:26 $', ")\n";
+print "\t(this script last updated: ", '$Date: 2005/04/19 17:37:03 $', ")\n";
 exit 255;
 }
 
