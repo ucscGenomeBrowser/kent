@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.75 2005/04/19 18:09:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.76 2005/04/19 20:35:41 fanhsu Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -622,37 +622,6 @@ if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
 sqlNextRow(sr);	/* Just discard. */
 sqlFreeResult(&sr);
 return TRUE;
-}
-
-boolean sqlTableExistsDb(char *database, char *table)
-/* Return TRUE if a table in a database exists. */
-{
-char query[256];
-struct sqlResult *sr;
-struct sqlConnection *conn = sqlMayConnect(database);
-boolean exists;
-
-if (conn == NULL)
-    {
-    exists = FALSE;
-    }
-else
-    {
-    sprintf(query, "select count(*) from %s", table);
-    if ((sr = sqlUseOrStore(conn, query, mysql_use_result, FALSE)) == NULL)
-       {
-       exists = FALSE;
-       }
-    else
-       {
-       exists = TRUE;
-       sqlNextRow(sr);	/* Just discard. */
-       sqlFreeResult(&sr);
-       }
-   }
-   
-sqlDisconnect(&conn);
-return exists;
 }
 
 int sqlTableSizeIfExists(struct sqlConnection *sc, char *table)
