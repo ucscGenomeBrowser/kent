@@ -417,7 +417,7 @@ else
 }
 
 struct pfParse *pfParseEnclosingClass(struct pfParse *pp)
-/* Find enclosing class if any. */
+/* Find enclosing class if any.  It treats self as enclosing self.  */
 {
 for (pp = pp->parent; pp != NULL; pp = pp->parent)
     {
@@ -1230,6 +1230,8 @@ static struct pfParse *parsePolymorphic(struct pfCompile *pfc, struct pfParse *p
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptPolymorphic, tok, parent, scope);
+if (pfParseEnclosingClass(parent) == NULL)
+    errAt(tok, "polymorphic keyword outside of class");
 tok = tok->next;
 switch (tok->type)
     {
@@ -1504,6 +1506,7 @@ struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *statement;
 
+// pfTokenDump(tok, uglyOut, TRUE);
 switch (tok->type)
     {
     case pftInto:
@@ -1550,6 +1553,7 @@ switch (tok->type)
 	statement = parseFlow(pfc, parent, &tok, scope);
 	break;
     case pftPolymorphic:
+	uglyf("Parsing polymorphic\n");
     	statement = parsePolymorphic(pfc, parent, &tok, scope);
 	break;
     case pftName:

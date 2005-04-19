@@ -775,7 +775,7 @@ static void checkRedefinitionInParent(struct pfCompile *pfc, struct pfParse *var
 {
 struct pfBaseType *base;
 char *name = varInit->name;
-struct pfParse *classDef = pfParseEnclosingClass(varInit);
+struct pfParse *classDef = pfParseEnclosingClass(varInit->parent);
 if (classDef != NULL)
     {
     for (base = classDef->ty->base->parent; base != NULL; base = base->parent)
@@ -1010,7 +1010,7 @@ slAddHead(&class->methods, type);
 static void blessClass(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that there are only variable , class declarations and
  * function declarations in class.  Flatten out nested declarative
- * tuples. */
+ * tuples.  Add definitions to class symbol table. */
 {
 struct pfParse *type = pp->children;
 struct pfParse *compound = type->next;
@@ -1047,6 +1047,13 @@ for (p = compound->children; p != NULL; p = p->next)
 	    pfParsePutChildrenInPlaceOfSelf(p2p);
 	    break;
 	    }
+	case pptPolymorphic:
+	    uglyf("polymorphic in blessClass\n");
+	    addFunctionToClass(base, p->children);
+#ifdef SOON
+#endif /* SOON */
+	    uglyf("passed polymorphic in blessClass\n");
+	    break;
 	default:
 	    errAt(p->tok, "non-declaration statement inside of class");
 	}

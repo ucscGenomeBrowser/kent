@@ -118,7 +118,7 @@ switch (pp->type)
 	struct pfParse *input = name->next;
 	struct pfParse *output = input->next;
 	struct pfParse *body = output->next;
-	struct pfParse *class = pfParseEnclosingClass(pp);
+	struct pfParse *class = pfParseEnclosingClass(pp->parent);
 	name->type = pptSymName;
 	if (hashLookup(pp->scope->parent->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
