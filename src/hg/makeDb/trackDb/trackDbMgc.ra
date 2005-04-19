@@ -272,6 +272,17 @@ type genePred refPep refMrna
 exonArrows on
 cdsDrawDefault genomic\ codons
 
+track xmGene
+shortLabel XM Genes
+longLabel RefSeq XM Gene predictions
+group genes
+priority 35.01
+visibility dense
+color 12,12,120
+type genePred . xmMrnaAli
+exonArrows on
+cdsDrawDefault genomic\ codons
+
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
