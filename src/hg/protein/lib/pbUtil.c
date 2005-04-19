@@ -96,7 +96,7 @@ aa_hydro['V'] =  4.200;
 
 /* get average frequency distribution for each AA residue */
 conn= hAllocConn();
-if (!hTableExists("pbResAvgStd"))
+if (!sqlTableExistsDb(database, "pbResAvgStd"))
     {
     *hasResFreq = 0;
     return;
@@ -588,7 +588,7 @@ char *geneSymbol;
 char *cgapID, *biocMapID, *biocMapDesc, *biocMapName;
 boolean hasPathway;
 
-if (hTableExists("kgXref"))
+if (sqlTableExistsDb(database, "kgXref"))
     {
     safef(cond_str, sizeof(cond_str), "kgID='%s'", mrnaName);
     geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);

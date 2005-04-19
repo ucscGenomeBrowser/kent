@@ -264,7 +264,7 @@ fflush(stdout);
 
 iypos = 15; 
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
-if (!hTableExists("pbStamp")) goto histDone; 
+if (!sqlTableExistsDb(database, "pbStamp")) goto histDone; 
 
 pbScale = 3;
 pixWidth = 765;

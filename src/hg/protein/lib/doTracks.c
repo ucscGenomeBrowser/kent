@@ -908,8 +908,8 @@ int  i,l;
 int  sfCnt;
 int  int_start, int_end;
    
-if (!hTableExistsDb(protDbName, "sfAssign")) return(0);
-if (!hTableExistsDb(protDbName, "ensemblXref3")) return(0);
+if (!sqlTableExistsDb(protDbName, "sfAssign")) return(0);
+if (!sqlTableExistsDb(protDbName, "ensemblXref3")) return(0);
 
 conn  = hAllocConn();
 conn2 = hAllocConn();
@@ -1035,12 +1035,12 @@ int  ii = 0;
 int  int_start, int_end;
 
    
-if (!hTableExists("sfAssign")) return(0);
+if (!sqlTableExistsDb(database, "sfAssign")) return(0);
  
 conn  = hAllocConn();
 conn2 = hAllocConn();
 
-if (hTableExists("ensemblXref3")) 
+if (sqlTableExistsDb(database, "ensemblXref3")) 
     {	
     /* use ensemblXref3 for Ensembl data release after ensembl34d */
     safef(cond_str, sizeof(cond_str), "tremblAcc='%s'", proteinID);
