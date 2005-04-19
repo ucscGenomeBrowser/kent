@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.30 2005/04/18 21:51:06 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.31 2005/04/19 00:00:54 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -2857,7 +2857,7 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
     #	chain tracks appear and are in the proper order.
 
 #############################################################################
-# STS MARKERS DATA DOWNLOAD (WORKING - 2005-04-06 - Hiram)
+# STS MARKERS DATA DOWNLOAD (DONE - 2005-04-06 - 2005-04-18 - Hiram)
     ssh eieio
     mkdir -p /cluster/data/mm6/bed/STSmarkers/downloads
     cd /cluster/data/mm6/bed/STSmarkers/downloads
@@ -3124,15 +3124,12 @@ XXXX - STARTED - 2005-04-14 15:40
     #	86935  956289 6374930 
 
     # creates epcr.not.found.nomatch and epcr.not.found.psl
-    /cluster/bin/scripts/epcrToPsl -mouse \
+    #	/cluster/bin/scripts/epcrToPsl
+    #	Fixed this script to make it not look for contigs in the usual
+    #	manner, we don't have those for this assembly	
+    ./epcrToPsl -mouse \
 	epcr.not.found ../mouseP.info \
 	accession_info.rdb /cluster/data/mm6
-XXXX - this is broken 2005-04-15 16:15 - it is looking for contigs
-Getting chromosome info
-Reading primer info
-Creating psl file
-Couldn't open /cluster/data/mm6//chr7/chr7.fa , No such file or directory
-out.fa does not exist - /cluster/data/mm6//chr7/chr7.fa
 
     # Comparing results to previous:
     wc epcr*
@@ -3158,87 +3155,135 @@ out.fa does not exist - /cluster/data/mm6//chr7/chr7.fa
     #	163     552    4370 epcrToPsl
     #	814    8134   47566 total
 
-XXXX this seems to be in stsInfoMouse.bed but not in epcr.not.found.psl
-XXXX - 2005-04-15
-    # there is a single error being propagated here from the file
-    # /cluster/store5/mouseMarker/stsInfoMouse.bed which has an error
-    # at line 53958:
-62943   D2J3    91947   D2J3                            CAACCAGCTCAC    
-CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
-    # The value '1825,' is incorrect.  Should be a small integer here.
-    # to work around this problem, I'm manually eliminating this problem
-    # from the epcr.not.found.psl file where it has now become four bad
-    # lines:
-# 24    0       0       0       1       1801    1       1789    +       27119   
-1825    0       1825chr11_16 0       1115413 1117226 2       12,12,  0,1813, 
-1115413,1117214,
-# 24    0       0       0       1       1801    1       1789    +       27119   
-1825    0       1825chr11_16 0       1115413 1117226 2       12,12,  0,1813, 
-1115413,1117214,
-216a219,220
-# 24    0       0       0       1       1801    1       1789    +       62943   
-1825,   0       1825,chr11_16        0       1115413 1117226 2       12,12,  
-0,1813, 1115413,1117214,
-# 24    0       0       0       1       1801    1       1789    +       62943   
-1825,   0       1825,chr11_16        0       1115413 1117226 2       12,12,  
-0,1813, 1115413,1117214,
-    # taking those four lines out. 
-    
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+    wc primers.psl.filter
+    #	34066  715386 3646101 primers.psl.filter
 
-    # lift those primers  (added chrM to this lifter script for mouse)
-    # creates primers.psl.filter.lifted
-    /cluster/bin/scripts/lifter -mouse -psl \
-	/cluster/data/mm6 primers.psl.filter
-    # wc primers.psl.filter.lifted
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted
     # 33691  707511 3601164 primers.psl.filter.lifted
 
     # create primers.psl.filter.lifted.initial
-      bash
-	PATH=/cluster/bin/scripts:$PATH 
-	/cluster/bin/scripts/extractPslInfo primers.psl.filter.lifted
-    #	wc primers.psl.filter.lifted.initial
+    PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/extractPslInfo \
+	primers.psl.filter
+    wc primers.psl.filter.initial
+    #	34048  204288 1815222 primers.psl.filter.initial
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted.initial
     # 33689  202134 1799016 primers.psl.filter.lifted.initial
 
     # create primers.psl.filter.lifted.initial.acc
     /cluster/bin/scripts/findAccession -agp \
-	-mouse primers.psl.filter.lifted.initial /cluster/data/mm6
-    # wc primers.psl.filter.lifted.initial.acc
+	-mouse primers.psl.filter.initial /cluster/data/mm6
+    #	it complains about missing _random items, it is OK
+    wc primers.psl.filter.initial.acc
+    #	34048  238336 2154798 primers.psl.filter.initial.acc
+
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted.initial.acc
     # 33689  235823 2158029 primers.psl.filter.lifted.initial.acc
 
     # this needs to be -rat as that specifies how to scan the
     # stsInfoMouse.bed file and it does not work if you use -mouse
     /cluster/bin/scripts/getStsId -rat \
-	../stsInfoMouse.bed  primers.psl.filter.lifted.initial.acc \
+	../stsInfoMouse.bed  primers.psl.filter.initial.acc \
 	> primers.initial.acc.trans
-    # wc primers.initial.acc.trans
-    # 33689  235823 1834889 primers.initial.acc.trans
+    wc primers.initial.acc.trans
+    #	34041  238287 1829724 primers.initial.acc.trans
+    #	No id for 61645_RH126840
+    #	No id for 4187_D10MIT171.2
+    #	No id for 63449_RH125771
+    #	No id for 67188_PMC99911P4
+    #	No id for 8839_D6MIT360.1
+    #	No id for 62732_RH126829
+    #	No id for 63746_RH127126
 
     sort -k 4n primers.initial.acc.trans > primers.final
+    wc primers.final
+    #	34041  238287 1829724 primers.final
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.final 
+    #	33689  235823 1834889 /cluster/data/mm5/bed/STSmarkers/primer/primers.final
+
     rm primers.psl.filter.lifted.initial.acc primers.initial.acc.trans
-    # comparing results to Mm4:
-    # Mm5 wc primers.final
-    # 33689  235823 1834889 primers.final
-    # Mm4 wc primers.final
-    # 32983  230881 1771293 primers.final
 
     cd /cluster/data/mm6/bed/STSmarkers
     # stsMarkers.final is empty for mouse
     touch stsMarkers.final dummy
-    bash
-    PATH=/cluster/bin/scripts:$PATH \
-    /cluster/bin/scripts/combineSeqPrimerPos \
+    PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/combineSeqPrimerPos \
 	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
-    # Comparing results to Mm4
-    # Mm5 wc stsMarkers_pos.rdb
-    # 32085  224595 1862816 stsMarkers_pos.rdb
-    # Mm4 wc stsMarkers_pos.rdb
-    # 31270  218890 1869417 stsMarkers_pos.rdb
+    wc stsMarkers_pos.rdb
+    #	32350  226450 1909506 stsMarkers_pos.rdb
+    wc /cluster/data/mm5/bed/STSmarkers/stsMarkers_pos.rdb
+    # 32085  224595 1862816 /cluster/data/mm5/bed/STSmarkers/stsMarkers_pos.rdb
+    wc /cluster/data/mm4/bed/STSmarkers/stsMarkers_pos.rdb
+    # 31270  218890 1869417 /cluster/data/mm4/bed/STSmarkers/stsMarkers_pos.rdb
 
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
-    # wc stsMapMouse.bed
-    # 29069  301535 2123622 stsMapMouse.bed
+     wc stsMapMouse.bed
+    #	29079  301678 2097544 stsMapMouse.bed
+
+    wc /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
+    #	29069  301535 2123622 /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
+
+    #  loading STS markers tables
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/STSmarkers
+    cp -p /cluster/store6/mm5/bed/STSmarkers/ucscAlias.pl .
+    ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
+    #	this does leave messages in ucscStsAlias.warnings but the seem
+    #	to be the same as they were in Mm5
+     
+    wc ucscStsAlias.tab
+    #	141585  424725 3284106 ucscStsAlias.tab
+
+    wc /cluster/store6/mm5/bed/STSmarkers/ucscStsAlias.tab
+    # 126624  379859 3037850 /cluster/store6/mm5/bed/STSmarkers/ucscStsAlias.tab
+     
+    hgsql -e "drop table stsAlias;" mm6
+    hgsql mm6 < ~/kent/src/hg/lib/stsAlias.sql
+    hgsql -e \
+	'load data local infile "ucscStsAlias.tab" into table stsAlias;' mm6
+    hgsql -e "drop table stsMapMouseNew;" mm6
+    hgsql mm6 < ~/kent/src/hg/lib/stsMapMouseNew.sql
+    hgsql -e \
+'load data local infile "stsMapMouse.bed" into table stsMapMouseNew;' mm6
+    hgsql -e "drop table stsInfoMouseNew;" mm6
+    hgsql mm6 < ~/kent/src/hg/lib/stsInfoMouseNew.sql
+    hgsql -e \
+     'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm6
+
+    hgLoadPsl -nobin -table=all_sts_primer mm6 primer/primers.psl.filter
+    #	load of all_sts_primer did not go as planned: 34066 record(s),
+    #	    0 row(s) skipped, 14 warning(s) loading primer/primers.psl.filter
+
+    # load primer sequences	
+    mkdir /gbdb/mm6/stsMarker
+    ln -s /cluster/data/mm6/bed/STSmarkers/mouseP.fa \
+	/gbdb/mm6/stsMarker/mouseP.fa
+    # PLEASE NOTE THAT THE If you are going to reload this business, use the
+    #	-replace option on this hgLoadSeq
+    #	hgLoadSeq -replace mm6 /gbdb/mm6/stsMarker/mouseP.fa
+    # otherwise there will be a problem that the seq and extFile tables 
+    # will be out of sync. 
+    hgLoadSeq mm6 /gbdb/mm6/stsMarker/mouseP.fa
+    #  Adding /gbdb/mm6/stsMarker/mouseP.fa
+    #  32890 sequences
+
+    featureBits mm6 all_sts_primer
+    #	3735649 bases of 2597150411 (0.144%) in intersection
+    featureBits mm5 all_sts_primer
+    #	3727268 bases of 2615483787 (0.143%) in intersection
+    featureBits mm6 stsMapMouseNew
+    #	4736039 bases of 2597150411 (0.182%) in intersection
+    featureBits mm5 stsMapMouseNew
+    #	4719679 bases of 2615483787 (0.180%) in intersection
+
+    hgsql -N mm6 -e "select count(*) from stsAlias;"
+    #	137738
+    hgsql -N mm5 -e "select count(*) from stsAlias;"
+    #	122944
+    hgsql -N mm6 -e "select count(*) from stsInfoMouseNew;"
+    #	58980
+    hgsql -N mm5 -e "select count(*) from stsInfoMouseNew;"
+    #	58493
 
 #############################################################################
 # HGCENTRAL DEFAULTDB UPDATE (DONE - 2005-04-08 - Hiram)
@@ -3248,7 +3293,7 @@ CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
 	-e 'update defaultDb set name="mm6" where genome="Mouse";'
 
 #############################################################################
-# 10-WAY VAR_MULTIZ - ALIGNMENTS (WORKING - 2005-04-08 - Hiram)
+# 10-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2005-04-08 - 2005-04-18 - Hiram)
     ssh eieio
     mkdir /cluster/data/mm6/bed/multiz10way
     cd /cluster/data/mm6/bed/multiz10way
@@ -3288,7 +3333,6 @@ CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
     cp -p /cluster/bin/penn/psuCVS/multiz-tba/multiz penn
     cp -p /cluster/bin/penn/maf_project penn
     /cluster/bin/iSync
-XXXX - WORKING 2005-04-08 16:20
 
 #       Progressive alignment up the tree w/o stager, 
 #       using multiz.v10 (var_multiz)
@@ -3393,9 +3437,10 @@ cat > oneMultiz.csh << 'EOF'
 
     #	This tree.nh was used in the distant past for early versions
     #	of phastCons.  Now, this is merely a convenient reference to the
-    #	tree under construction.
+    #	tree under construction.  This is also used to draw a graphic
+    #	tree as species.nh, see below.
     cat << '_EOF_' > tree.nh
-((((((((hg17,(mm6,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))
+((((((hg17,(mm6,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))
 '_EOF_'
     # << this line keeps emacs coloring happy
 
@@ -3432,67 +3477,120 @@ cat  << 'EOF' > template
     para create jobList
     para try; para check
     para push
-# Completed: 20 of 40 jobs
-# Crashed: 20 jobs
-# CPU time in finished jobs:       1783s      29.72m     0.50h    0.02d  0.000 y
-# IO & Wait Time:                   102s       1.70m     0.03h    0.00d  0.000 y
-# Average job time:                  94s       1.57m     0.03h    0.00d
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:     151565s    2526.08m    42.10h    1.75d  0.005 y
+# IO & Wait Time:                 25097s     418.29m     6.97h    0.29d  0.001 y
+# Average job time:                4417s      73.61m     1.23h    0.05d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             710s      11.83m     0.20h    0.01d
-# Submission to last job:          6771s     112.85m     1.88h    0.08d
-    #	the full chrom runs are failing, I suspect lack of memory,
-    #	So, recover this batch and run the rest on kki
-    ssh kk9
-    cd /cluster/data/mm6/bed/multiz10way/run
-    para recover jobList recoverJobList
-    ssh kki
-    cd /cluster/data/mm6/bed/multiz10way/run
-    rm -fr err batch
-    para create recoverJobList
-    para try; check; push; ... etc ...
-XXX - RUNNING - 2005-04-14 16:00
-XXX - FAILED - evidently these jobs are too big even for these machines
-# Completed: 5517 of 5517 jobs
-# CPU time in finished jobs:       8337s     138.95m     2.32h    0.10d  0.000 y
-# IO & Wait Time:                 15166s     252.77m     4.21h    0.18d  0.000 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest job:                       65s       1.08m     0.02h    0.00d
-# Submission to last job:          1495s      24.92m     0.42h    0.02d
+# Longest finished job:           18222s     303.70m     5.06h    0.21d
+# Submission to last job:         18592s     309.87m     5.16h    0.22d
 
     #	combine results into a single file for loading
-    ssh eieio
+    #	it is too large for kksilo, use kolossus
+    ssh kolossus
     cd /cluster/data/mm6/bed/multiz10way
     catDir maf | mafFilter stdin -minScore=500 > multiz10way.maf
+    #	rejected 1548566 blocks
+    #	7m 22s
+    #	makes an 8 Gb file:
+    #	-rw-rw-r--   1 8443473465 Apr 18 09:57 multiz10way.maf
 
-# Load into database  (DONE - 2005-01-04 - Hiram)
-  ssh hgwdev
-  cd /cluster/data/mm6/bed/multiz10way
-  mkdir -p /gbdb/mm6/multiz10way
-  ln -s /cluster/data/mm6/bed/multiz10way/multiz10way.maf /gbdb/mm6/multiz10way
-  hgLoadMaf mm6 multiz10way
-    #	Loaded 988922 mafs in 1 files from /gbdb/mm6/multiz10way
-    #	4 minutes to load
 
-# Create pairwise maf files (no longer split across scaffolds)
-   ssh eieio
-   cd /cluster/data/mm6/bed/multiz10way
-   mkdir -p pairwise
-   catDir galGal2 > pairwise/galGal2.maf
-   catDir hg17 > pairwise/hg17.maf
-   catDir mm5 > pairwise/mm5.maf
-   catDir danRer2 > pairwise/danRer2.maf
+    # Load into database  (DONE - 2005-01-04 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way
+    mkdir /gbdb/mm6/multiz10way
+    ln -s /cluster/data/mm6/bed/multiz10way/multiz10way.maf \
+	/gbdb/mm6/multiz10way
+    hgLoadMaf mm6 multiz10way
+    #	Loaded 6284892 mafs in 1 files from /gbdb/mm6/multiz10way
+    #	14 minutes to load
+    hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 mm6 \
+	multiz10waySummary multiz10way.maf
+    # Processed 18067226 components in 6284892 mafs from multiz10way.maf
+    #	19m 15s
 
-# Load pairwise mafs into database  (DONE - 2005-01-04 - Hiram)
-   ssh  hgwdev
-   set h = /cluster/data/mm6/bed/multiz10way/pairwise
-   cd $h
-   foreach i (*.maf)
-      set o = $i:r
-      set t = ${o}_netBlastz
-      mkdir -p /gbdb/mm6/multiz10way/$t
-      ln -s $h/$i /gbdb/mm6/multiz10way/$t
-      hgLoadMaf mm6 $t -pathPrefix=/gbdb/mm6/multiz10way/$t
-   end
+
+    # create tree image:
+    cat << '_EOF_' > species.nh
+((((((human,(mouse,rat)),(dog,cow)),opossum),chicken),frog),(tetraodon,zebrafish))
+'_EOF_'
+    /cluster/bin/phast/draw_tree -b -s species.nh > species10.ps
+    # photoshop to enhance, reduce the amount of whitespace to make it
+    # smaller, then save as jpg
+    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm6_10way.jpg
+
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS (WORKING - 2005-04-18 - Hiram)
+
+# Estimate phastCons parameters
+    ssh kksilo
+    mkdir /cluster/data/mm6/bed/multiz10way/cons
+    cd /cluster/data/mm6/bed/multiz10way/cons
+
+    # Create a starting-tree.mod based on chr1 (the largest one)
+    /cluster/bin/phast/msa_split ../maf/chr1.maf \
+	--refseq ../../../1/chr1.fa --in-format MAF \
+	--windows 100000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	5 minutes
+
+    /cluster/bin/phast/phyloFit -i SS s1.*.ss \
+	--tree "((((((hg17,(mm6,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))" \
+    --out-root starting-tree
+    rm s1.*.ss
+
+    # Create directory full of sequence in individual scaffold files on bluearc.
+    ssh kksilo
+    mkdir -p /cluster/bluearc/mm6/scaffoldFa
+    cd /cluster/bluearc/mm6/scaffoldFa
+    twoBitToFa /cluster/data/mm6/mm6.2bit stdout | faSplit byname stdin foo
+
+    # Create big bad bloated SS files in bluearc (takes ~45 minutes)
+    mkdir -p /cluster/bluearc/mm6/cons/ss
+    cd /cluster/bluearc/mm6/cons/ss
+    foreach i (`awk '{print $1}' /cluster/data/mm6/chrom.sizes`)
+      if (-e /cluster/data/mm6/bed/multiz10way/maf/$i.maf) then
+	  echo msa_split $i
+	  /cluster/bin/phast/msa_split /cluster/data/mm6/bed/multiz10way/maf/$i.maf \
+	     --refseq /cluster/bluearc/mm6/scaffoldFa/$i.fa \
+	     --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+	     --out-format SS --out-root $i
+      endif
+  end
+
+    # Create a random list of 50 1 mb regions 
+    ls -l | awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh kki
+    mkdir /cluster/bluearc/mm6/cons/treeRun1
+    cd /cluster/bluearc/mm6/cons/treeRun1
+    mkdir tree log
+
+    # Create little script that calls phastCons with right arguments
+    #	I wonder if target-coverage here has to go along with the
+    #	readjusted target-coverage below as it is tuned up ?
+    #	In that case, this would be 0.50 here.
+    cat > makeTree << '_EOF_'
+    /cluster/bin/phast/phastCons ../ss/$1.ss \
+      /cluster/data/mm6/bed/multiz10way/cons/starting-tree.mod \
+      --gc 0.410 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.35 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    chmod a+x makeTree
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+makeTree $(root1)
+#ENDLOOP
+'_EOF_'
+
+    # Make cluster job and run it
+    gensub2 ../randomSs single template jobList
+    para create jobList
+    para try/push/check/etc
 
 # BUILD KNOWN GENES TABLES (Started 3/19/05, done 4/13/05. Fan)
 
