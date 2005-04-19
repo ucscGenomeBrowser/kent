@@ -358,6 +358,28 @@ else
     }
 }
 
+void _pf_cm_string_fitLeft(_pf_Stack *stack)
+/* Expand string to size, keeping string on left, and adding spaces as
+ * needed. */
+{
+_pf_String string = stack[0].String;
+_pf_Int size = stack[1].Int;
+_pf_String out;
+AllocVar(out);
+out->_pf_refCount = 1;
+out->_pf_cleanup = _pf_string_cleanup;
+out->s = needMem(size+1);
+string->size = string->allocated = size;
+if (string->size >= size)
+     memcpy(out->s, string->s, size);
+else
+     {
+     memcpy(out->s, string->s, string->size);
+     memset(out->s + string->size, ' ', size - string->size);
+     }
+stack[0].String = out;
+}
+
 void floatString(_pf_Stack *stack)
 /* floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
  *         bit forceScientific) into string s
