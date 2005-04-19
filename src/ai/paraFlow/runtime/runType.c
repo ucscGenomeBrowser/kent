@@ -84,7 +84,7 @@ struct _pf_type *type;
 char *s = parenCode, c;
 int val = 0;
 AllocVar(type);
-while ((c = *s) != NULL)
+while ((c = *s) != 0)
     {
     if (isdigit(c))
         {
