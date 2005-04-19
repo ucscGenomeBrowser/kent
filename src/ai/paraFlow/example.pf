@@ -23,7 +23,7 @@ to printWordLots(string word, int count)
 to factorial(int n) into (float result)
 // Declaration with an integer parameter that returns floating point result
     {
-    result = 1
+    result = 1;
     for (int i=2; i<=n; i += 1)
 	result *= i;    
     }
@@ -38,6 +38,7 @@ to stats3(float a, float b, float c) into (float sum, float average)
 to swap(var a,var b) into (var c,var d)
 // Declaration with two unspecifed parameters that returns two unspecified
 // results.  System does type checking at run time when vars are used.
+// NB: currently var only partially implemented - mostly for print statement. 
     {
     c = b;
     d = a;
@@ -50,16 +51,18 @@ flow reverseRange(int oldStart,int oldEnd,int seqSize) into (int newStart,int ne
 // (and no assignments to the input parameters).  Possibly this can
 // exclude access to global variables too.  Functions can be called,
 // but only if they are also flow functions.  No loops.
+// NB: currently flows are not checked for all this, just are synonyms for 'to'
     {
     newStart = seqSize - oldEnd;
     newEnd = seqSize - oldStart;
     }
 
-para reverseAll(class range, int seqSize)
+para reverseAll(rangeClass range, int seqSize)
 // Para functions are parallelizable.  They can be invoked on all elements
 // of a collection simultaniously.  The element is passed in as the first
 // parameter.  Para functions can read from anywhere, but can only write
 // to local variables, their output, and the first input parameter.
+// NB: currently flows are not checked for all this, just are synonyms for 'to'
     {
     (range.start, range.end) = reverseRange(range.start, range.end, seqSize);
     range.midPoint = (range.start + range.end)/2;
@@ -102,14 +105,14 @@ class circle
     point center;
     double radius;
 
-    to diameter() into (result)
+    to diameter() into (double result)
 	{
         result = 2 * 3.14 * self.radius;  // Instance variables are accessed via "self"
 	}
 
-    to area() into (result)
+    to area() into (double result)
 	{
-        result = 3.14 * radius * radius;
+        result = 3.14 * self.radius * self.radius;
 	}
 
     }
@@ -129,6 +132,7 @@ class hash implements collection
        
    // Just a fixed size array of lists.  This will contain elements.
    array[1024] of list of element buckets;
+   // NB list isn't working at the moment either.
 
    to func(string name) into (int result)
    // We use a simple but effective hash function, since 5 is coprime to 1024
