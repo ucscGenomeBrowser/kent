@@ -4,7 +4,7 @@
 #	RepeatMasker elements.  Give it a <db> argument.
 #	Output in plain text or optionally html
 #
-#	 $Id: countRmsk.pl,v 1.3 2005/04/19 17:25:49 hiram Exp $
+#	 $Id: countRmsk.pl,v 1.4 2005/04/19 17:28:43 hiram Exp $
 #
 use warnings;
 use strict;
@@ -17,6 +17,10 @@ print "usage: $0 [options] <db>\n";
 print "\toptions:\n";
 print "\t-verbose - extra information during processing to STDERR\n";
 print "\t-html - output in html format (plain text is default)\n";
+print "\n";
+print "\tper-chrom stats will be done when the assembly has less than\n";
+print "\t   100 chrom names.  Scaffold based assemblies will only have\n";
+print "\t   a single overall summary.\n";
 print "\n";
 print "\twill look for /usr/local/apache/cgi-bin/hg.conf\n";
 print "\tto find connection information.  This can be overridden by\n";
