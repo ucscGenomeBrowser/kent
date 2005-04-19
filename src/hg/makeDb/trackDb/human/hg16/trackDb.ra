@@ -1877,7 +1877,7 @@ type bed 3 .
 track encodeBuPromoters
 compositeTrack on
 shortLabel Promoter/BU
-longLabel Boston University Promoters in ENCODE Regions
+longLabel Boston University Promoter Activity in ENCODE Regions
 group encode
 itemRgb on
 priority 20.2
@@ -1888,60 +1888,60 @@ type bed 12 +
 track encodeBuPromCerebrum
 subTrack encodeBuPromoters
 shortLabel Cerebral Cortex
-longLabel Boston University Promoters in Cerebral Cortex
+longLabel Boston University Promoter Activity in Cerebral Cortex
 priority 1
 
 track encodeBuPromColon
 subTrack encodeBuPromoters
-longLabel Boston University Promoters in Colon
+longLabel Boston University Promoter Activity in Colon
 shortLabel Colon
 priority 2
 
 track encodeBuPromHeart
 subTrack encodeBuPromoters
 shortLabel Heart
-longLabel Boston University Promoters in Heart
+longLabel Boston University Promoter Activity in Heart
 priority 3
 
 track encodeBuPromKidney
 subTrack encodeBuPromoters
-longLabel Boston University Promoters in Kidney
+longLabel Boston University Promoter Activity in Kidney
 shortLabel Kidney
 priority 4
 
 track encodeBuPromLiver
 subTrack encodeBuPromoters
 shortLabel Liver
-longLabel Boston University Promoters in Liver
+longLabel Boston University Promoter Activity in Liver
 priority 5
 
 track encodeBuPromLung
 subTrack encodeBuPromoters
-longLabel Boston University Promoters in Lung
+longLabel Boston University Promoter Activity in Lung
 shortLabel Lung
 priority 6
 
 track encodeBuPromSkMuscle
 subTrack encodeBuPromoters
 shortLabel Skeletal Muscle
-longLabel Boston University Promoters in Skeletal Muscle
+longLabel Boston University Promoter Activity in Skeletal Muscle
 priority 7
 
 track encodeBuPromSpleen
 subTrack encodeBuPromoters
-longLabel Boston University Promoters in Spleen
+longLabel Boston University Promoter Activity  in Spleen
 shortLabel Spleen
 priority 8
 
 track encodeBuPromStomach
 subTrack encodeBuPromoters
 shortLabel Stomach
-longLabel Boston University Promoters in Stomach
+longLabel Boston University Promoter Activity in Stomach
 priority 9
 
 track encodeBuPromTestis
 subTrack encodeBuPromoters
-longLabel Boston University Promoters in Testis
+longLabel Boston University Promoter Activity in Testis
 shortLabel Testis
 priority 10
 
