@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.38 2005/04/19 18:14:19 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.39 2005/04/19 20:32:16 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -235,7 +235,7 @@ protSeqLen = strlen(protSeq);
 
 iypos = 15; 
 doTracks(proteinID, mrnaID, protSeq, &iypos, psOutput);
-if (!sqlTableExistsDb(database, "pbStamp")) goto histDone; 
+if (!hTableExistsDb(database, "pbStamp")) goto histDone; 
 
 pbScale = 3;
 pixWidth = 765;
