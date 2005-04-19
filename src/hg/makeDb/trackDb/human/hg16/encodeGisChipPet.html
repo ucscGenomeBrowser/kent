@@ -1,39 +1,54 @@
-<html><head></head><body><h2>Description</h2>
-<p>
-A ChIP-PET based sequencing approach that combines chromatin
-immunoprecipitation (ChIP) with the paired-end di-tag (PET) sequencing
-strategy was adopted to survey p53 TFBS on human genome. This track
-shows PET sequences derived from 65,572 individual p53 ChIP fragments
-of 5FU stimulated HCT116 cells. The actual PET sequences were
-represented by blocks and each ChIP fragment was defined by two
-boundary blocks connected by arrowed thin line. The PET singletons from
-non-specific ChIP fragments were discretely located along the genome as
-background. The overlapping PET clusters (PET fragment overlaps with
-each other) that originated from ChIP enrichment process therefore
-define the genomic loci which are potential p53 binding sites. </p><h2>Methods</h2>
-<p> The ChIP enriched DNA fragments were cloned into a plasmid vector
-which were then converted into paired-end ditags (PET) for
-concatenation, cloning, and sequencing. The PET sequences containing
-18bp from 5' end and 18bp from 3' end of original ChIP fragments were
-extracted from raw sequence reads and mapped to the genome
-independently for demarcating the ChIP DNA fragments. The specific
-mapping criteria are that both the 5' and 3' signatures must be present
-on the same chromosome, correct orientation, minimal 17bp match and
-within 4 Kb of genomic distance. </p><h2>Verification</h2>
-<p>
-40 genomic locations identified by PET-3+ clusters were randomly
-selected and subjected for quantitative real-time PCR analyses. The
-relative enrichment of candidate regions compared to control GST ChIP
-DNA was determined and all 40 regions (100%) were confirmed significant
-enrichment of p53 ChIP, indicating that all these regions are true p53
-bound targets. </p><h2>Credits</h2>
-<p>
-The p53 ChIP-PET library and sequence data were produced at Genome
-Institute of Singapore. The data was mapped and analyzed by scientists
-from Genome Institute and Bioinformatics Institute of Singapore, and
-Boston University.
-</p><h2>References</h2>
-<p>
-P. Ng et al., Nature Methods 2, 105 (2005).
+<H2>Description</H2>
+<P>
+Human genome p53 transcription factor binding sites (TFBS) were surveyed by 
+adopting a ChIP-PET based sequencing approach that combines chromatin 
+immunoprecipitation (ChIP) with paired-end di-tag (PET) sequencing. This 
+track shows PET sequences derived from 65,572 individual p53 ChIP fragments 
+of 5FU-stimulated HCT116 cells. </P>
+<P>
+In the display, the actual PET sequences are represented by blocks. Each 
+ChIP fragment is defined by two boundary blocks connected by a thin arrowed 
+line. The PET singletons from non-specific ChIP fragments are discretely 
+located along the genome as background. Overlapping PET clusters (PET 
+fragments that overlap one another) originating from the ChIP enrichment 
+process define the genomic loci that are potential p53 binding sites. </P>
 
-</p></body></html>
+<H2>Methods</H2>
+<P>
+The ChIP-enriched DNA fragments were cloned into a plasmid vector,
+and then converted into paired-end ditags (PET) for
+concatenation, cloning, and sequencing. PET sequences containing
+18 bp from the 5' end and 18 bp from the 3' end of the original ChIP 
+fragments were extracted from raw sequence reads and mapped to the genome
+independently for demarcating the ChIP DNA fragments. The following specific
+mapping criteria were used: 
+<UL>
+<LI>both 5' and 3' signatures must be present on the same chromosome
+<LI>orientation must be correct
+<LI>a minimal 17 bp match must exist
+<LI>the genomic distance between ends must be within 4 Kb 
+</UL></P>
+
+<H2>Verification</H2>
+<P>
+40 genomic locations identified by PET-3+ clusters were randomly
+selected and subjected to quantitative real-time PCR analyses. The
+relative enrichment of candidate regions compared to control GST ChIP
+DNA was determined and all 40 regions (100%) were confirmed to have 
+significant enrichment of p53 ChIP, indicating that all these regions are 
+true p53-bound targets. </P>
+
+<H2>Credits</H2>
+<P>
+The p53 ChIP-PET library and sequence data were produced at Genome
+Institute of Singapore. The data were mapped and analyzed by scientists
+from Genome Institute and Bioinformatics Institute of Singapore, and
+Boston University. </P>
+
+<H2>References</H2>
+<P>
+Ng, P. <em>et al</em>. 
+<A HREF="http://www.nature.com/nmeth/journal/v2/n2/abs/nmeth733.html"
+TARGET=_blank>Gene identification signature (GIS) analysis for transcriptome 
+characterization and genome annotation</A>.
+<em>Nature Methods</em> <B>2</B>, 105-111 (2005). </P>
