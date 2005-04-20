@@ -60,6 +60,15 @@ visibility dense
 color 0,150,100
 type genePred .
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl Gene Predictions
+group genes
+priority 40
+visibility dense
+color 150,0,0
+type genePred ensPep
+
 
 
 searchTable scaffolds
