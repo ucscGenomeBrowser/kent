@@ -15,9 +15,13 @@
 #include "mafTrack.h"
 #include "mafSummary.h"
 
-//#define ANNOT_DEBUG
+#define ANNOT_DEBUG 1
+#undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.69 2005/04/20 01:17:14 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.70 2005/04/20 04:27:15 kate Exp $";
+
+static boolean useSpanningChains = FALSE;
+static boolean useIrowChains = FALSE;
 
 struct wigMafItem
 /* A maf track item -- 
@@ -880,7 +884,7 @@ fflush(stdout);
     /* compute a graph or density on-the-fly from mafs */
     vgSetClip(vg, xOff, yOff, width, mi->height);
     drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
-                         width, font, pairColor, pairColor, vis, FALSE);
+                         width, font, pairColor, pairColor, vis, FALSE, useIrowChains);
     vgUnclip(vg);
 
     /* need to add extra space between graphs ?? (for now) */
@@ -996,7 +1000,7 @@ char option[64];
 int alignLineLength = winBaseCount * 2;
         /* doubled to allow space for insert counts */
 boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
-bool dots, chainBreaks;         /* configuration options */
+bool dots;         /* configuration option */
 /* this line must be longer than the longest base-level display */
 char noAlignment[2000];
 
@@ -1006,8 +1010,6 @@ for (i = 0; i < sizeof noAlignment - 1; i++)
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
-safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
-chainBreaks = cartCgiUsualBoolean(cart, option, FALSE);
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -1074,8 +1076,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         {
 	int subStart,subEnd;
 	int lineOffset, subSize;
-        struct sqlConnection *conn;
-        char query[128];
 
         /* process alignment for reference ("master") species */
 	mcMaster = mafFindComponent(sub, dbChrom);
@@ -1099,97 +1099,98 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 continue;
             if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
                 {
+                /* no alignment for this species */
                 char chainTable[64];
                 char *dbUpper;
 
-                /* no alignment for this species */
-                if (chainBreaks)
+                if (!useSpanningChains)
+                    continue;
+                 /* no irows annotation and user has requested chaining, so see if a 
+                  * chain spans this region; use it to "extend" alignment */
+                 dbUpper = cloneString(mi->db);
+                 dbUpper[0] = toupper(dbUpper[0]);
+                 safef(chainTable, sizeof chainTable, "%s_chain%s", 
+                                             chromName, dbUpper);
+                 if (hTableExistsDb(database, chainTable))
                     {
-                    /* if user has requested this option, see if a 
-                     * chain spans this region; use it to "extend" alignment */
-                    dbUpper = cloneString(mi->db);
-                    dbUpper[0] = toupper(dbUpper[0]);
-                    safef(chainTable, sizeof chainTable, "%s_chain%s", 
-                                                chromName, dbUpper);
-                    if (hTableExistsDb(database, chainTable))
-                        {
-                        conn = hAllocConn();
-                        safef(query, sizeof query,
-                            "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
-                                        chainTable, subStart, subEnd);
-                        if (sqlQuickNum(conn, query) > 0)
-                            processSeq(noAlignment, noAlignment,
-                                        sub->textSize, lines[mi->ix],
-                                        lineOffset, subSize);
-                        hFreeConn(&conn);
-                        continue;
-                        }
-                    }
-                }
-            else
-		{
-                char *seq = mc->text;
-                bool needToFree = FALSE;
-                int size = sub->textSize;
+                    struct sqlConnection *conn;
+                    char query[128];
 
-                /* if no alignment here, but MAF annotation indicates continuity
-                 * of flanking alignments, fill with dashes or little o's*/
-                if (mc->size == 0)
+                     conn = hAllocConn();
+                     safef(query, sizeof query,
+                         "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
+                                     chainTable, subStart, subEnd);
+                     if (sqlQuickNum(conn, query) > 0)
+                         processSeq(noAlignment, noAlignment,
+                                     sub->textSize, lines[mi->ix],
+                                     lineOffset, subSize);
+                     hFreeConn(&conn);
+                     continue;
+                     }
+                }
+            char *seq = mc->text;
+            bool needToFree = FALSE;
+            int size = sub->textSize;
+
+            /* if no alignment here, but MAF annotation indicates continuity
+             * of flanking alignments, fill with dashes or ='s */
+            if (mc->size == 0)
+                {
+               if (!useIrowChains)
+                   continue;
+                if ((mc->leftStatus == MAF_CONTIG_STATUS &&
+                    mc->rightStatus == MAF_CONTIG_STATUS) ||
+                    (mc->leftStatus == MAF_INSERT_STATUS &&
+                    mc->rightStatus == MAF_INSERT_STATUS))
                     {
-                    if ((mc->leftStatus == MAF_CONTIG_STATUS &&
-                        mc->rightStatus == MAF_CONTIG_STATUS) ||
-                        (mc->leftStatus == MAF_INSERT_STATUS &&
-                        mc->rightStatus == MAF_INSERT_STATUS))
-                        {
-                        char fill = (mc->leftStatus == MAF_CONTIG_STATUS ? 
-                                                 '-' : MAF_DOUBLE_GAP);
-                        seq = needMem(size+1);
-                        needToFree = TRUE;
-                        memset(seq, fill, size);
-                        }
-                    else
-                        continue;
-                    }
-                if (mc->leftStatus == MAF_NEW_STATUS ||
-                    mc->rightStatus == MAF_NEW_STATUS)
-                    {
-                    int i;
-                    char *p;
-                    if (mc->leftStatus == MAF_NEW_STATUS)
-                        size++;
-                    if (mc->rightStatus == MAF_NEW_STATUS)
-                        size++;
+                    char fill = (mc->leftStatus == MAF_CONTIG_STATUS ? 
+                                             '-' : MAF_DOUBLE_GAP);
                     seq = needMem(size+1);
                     needToFree = TRUE;
-                    for (p = seq, i = 0; i < size; p++, i++)
-                        *p = ' ';
-                    p = seq;
-                    if (mc->leftStatus == MAF_NEW_STATUS)
-                        {
-                        /* determine if alignment ends on chrom/contig
-                         * boundary */
-                        *seq = ((mc->start == 0 || 
-                                    mc->start + mc->size == mc->srcSize) ?
-                                MAF_FULL_BREAK_BEFORE: MAF_PART_BREAK_BEFORE);
-                        subSize++;
-                        p++;
-                        }
-                    if (mc->size != 0)
-                        strcpy(p, mc->text);
-                    if (mc->rightStatus == MAF_NEW_STATUS)
-                        {
-                        *(seq+size-1) = 
-                            ((mc->start == 0 || 
-                              mc->start + mc->size == mc->srcSize) ?
-                                MAF_FULL_BREAK_AFTER: MAF_PART_BREAK_AFTER);
-                        subSize++;
-                        }
+                    memset(seq, fill, size);
                     }
-                processSeq(seq, mcMaster->text, size,
-                                    lines[mi->ix], lineOffset, subSize);
-                if (needToFree)
-                    freeMem(seq);
-		}
+                else
+                    continue;
+                }
+            if (mc->leftStatus == MAF_NEW_STATUS ||
+                mc->rightStatus == MAF_NEW_STATUS)
+                {
+                int i;
+                char *p;
+                if (mc->leftStatus == MAF_NEW_STATUS)
+                    size++;
+                if (mc->rightStatus == MAF_NEW_STATUS)
+                    size++;
+                seq = needMem(size+1);
+                needToFree = TRUE;
+                for (p = seq, i = 0; i < size; p++, i++)
+                    *p = ' ';
+                p = seq;
+                if (mc->leftStatus == MAF_NEW_STATUS)
+                    {
+                    /* determine if alignment ends on chrom/contig
+                     * boundary */
+                    *seq = ((mc->start == 0 || 
+                                mc->start + mc->size == mc->srcSize) ?
+                            MAF_FULL_BREAK_BEFORE: MAF_PART_BREAK_BEFORE);
+                    subSize++;
+                    p++;
+                    }
+                if (mc->size != 0)
+                    strcpy(p, mc->text);
+                if (mc->rightStatus == MAF_NEW_STATUS)
+                    {
+                    *(seq+size-1) = 
+                        ((mc->start == 0 || 
+                          mc->start + mc->size == mc->srcSize) ?
+                            MAF_FULL_BREAK_AFTER: MAF_PART_BREAK_AFTER);
+                    subSize++;
+                    }
+                }
+            processSeq(seq, mcMaster->text, size,
+                                lines[mi->ix], lineOffset, subSize);
+            if (needToFree)
+                freeMem(seq);
 	    }
 	}
     mafAliFree(&sub);
@@ -1307,6 +1308,8 @@ char *wigTable;
 struct track *wigTrack;
 int i;
 char *savedType;
+char option[64];
+boolean useChains = FALSE;
 struct dyString *wigType = newDyString(64);
 track->loadItems = wigMafLoad;
 track->freeItems = wigMafFree;
@@ -1320,6 +1323,16 @@ track->itemEnd = tgItemNoEnd;
 track->itemLabelColor = wigMafItemLabelColor;
 track->mapsSelf = TRUE;
 //track->canPack = TRUE;
+
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+useChains = cartCgiUsualBoolean(cart, option, FALSE);
+if (useChains)
+    {
+    if (trackDbSetting(tdb, "irows") != NULL)
+        useIrowChains = TRUE;
+    else
+        useSpanningChains = TRUE;
+    }
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
     if (hTableExists(wigTable))
