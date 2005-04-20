@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.951 2005/04/16 00:15:52 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.952 2005/04/20 15:27:36 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1115,16 +1115,6 @@ vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
 
-Color makeOrangeColor(struct vGfx *vg)
-{
-return vgFindColorIx(vg, 230, 130, 0);
-}
-
-Color makeBrickColor(struct vGfx *vg)
-{
-return vgFindColorIx(vg, 230, 50, 110);
-}
-
 Color getOrangeColor()
 {
 return orangeColor;
@@ -1135,20 +1125,9 @@ Color getBrickColor()
 return brickColor;
 }
 
-Color makeBlueColor(struct vGfx *vg)
-{
-//return vgFindColorIx(vg, 0,163,221);
-return vgFindColorIx(vg, 0,142,214);
-}
-
 Color getBlueColor()
 {
 return blueColor;
-
-}
-Color makeGreenColor(struct vGfx *vg)
-{
-return vgFindColorIx(vg, 28,206,40);
 }
 
 Color getGreenColor()
@@ -7499,10 +7478,10 @@ else
 makeGrayShades(vg);
 makeBrownShades(vg);
 makeSeaShades(vg);
-orangeColor = makeOrangeColor(vg);
-brickColor = makeBrickColor(vg);
-blueColor = makeBlueColor(vg);
-greenColor = makeGreenColor(vg);
+orangeColor = vgFindColorIx(vg, 230, 130, 0);
+brickColor = vgFindColorIx(vg, 230, 50, 110);
+blueColor = vgFindColorIx(vg, 0,114,198);
+greenColor = vgFindColorIx(vg, 28,206,40);
 
 if (rulerMode == tvFull &&
         (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
@@ -8730,7 +8709,7 @@ if (sameString(intron->status, "RT_negative"))
 if (sameString(intron->status, "RT_positive"))
     return vgFindColorIx(vg, 61,142,51);       /* green */
 if (sameString(intron->status, "RT_wrong_junction"))
-    return makeOrangeColor(vg);                 /* orange */
+    return getOrangeColor(vg);                 /* orange */
 if (sameString(intron->status, "RT_submitted"))
     return vgFindColorIx(vg, 102,109,112);       /* grey */
 return vgFindColorIx(vg, 214,214,216);       /* light grey */

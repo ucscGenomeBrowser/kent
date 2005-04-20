@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.34 2005/04/20 14:53:37 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.35 2005/04/20 15:27:36 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -568,7 +568,7 @@ for (full = mafList; full != NULL; full = full->next)
             mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
             if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS &&
                 winEnd - winStart <= 30000)
-                    vgBox(vg, x-2, yOff, 1, height-1, getBlueColor());
+                    vgBox(vg, x-2, yOff, 2, height-1, getBlueColor());
             for (i=0; i<mafPixelWidth; ++i)
                 {
                 if (vis == tvFull)
@@ -587,7 +587,7 @@ for (full = mafList; full != NULL; full = full->next)
                 }
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS &&
                 winEnd - winStart <= 30000)
-                    vgBox(vg, i+mafPixelStart+xOff+1, yOff, 1, 
+                    vgBox(vg, i+mafPixelStart+xOff+1, yOff, 2, 
                             height-1, getBlueColor());
             freez(&pixelScores);
             }
