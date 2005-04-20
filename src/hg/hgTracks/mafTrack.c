@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.32 2005/04/18 20:56:04 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.33 2005/04/20 04:26:18 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -506,7 +506,7 @@ hFreeConn(&conn);
 void drawMafRegionDetails(struct mafAli *mafList, int height,
         int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff,
         int width, MgFont *font, Color color, Color altColor,
-        enum trackVisibility vis, boolean isAxt)
+        enum trackVisibility vis, boolean isAxt, boolean chainBreaks)
 /* Draw wiggle/density plot based on scoring things on the fly. */
 {
 struct mafAli *full, *sub = NULL, *maf = NULL;
@@ -539,11 +539,13 @@ for (full = mafList; full != NULL; full = full->next)
 	mafPixelStart = (mcMaster->start - seqStart) * width/winBaseCount;
 	mafPixelEnd = (mcMaster->start + mcMaster->size - seqStart) 
 	    * width/winBaseCount;
-	mafPixelWidth = mafPixelEnd-mafPixelStart;
-        x = mafPixelStart+xOff;
+	mafPixelWidth = mafPixelEnd-mafPixelStart+1;
+        x = mafPixelStart+xOff-1;
 	if (mafPixelWidth < 1) mafPixelWidth = 1;
         if (mc->size == 0)
             {
+            if (!chainBreaks)
+                continue;
             int w = mafPixelWidth+1;
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
@@ -564,8 +566,9 @@ for (full = mafList; full != NULL; full = full->next)
             {
             AllocArray(pixelScores, mafPixelWidth);
             mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
-            if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS)
-                vgBox(vg, x-2, yOff, 1, height-1, getBlueColor());
+            if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS &&
+                winEnd - winStart <= 30000)
+                    vgBox(vg, x-2, yOff, 1, height-1, getBlueColor());
             for (i=0; i<mafPixelWidth; ++i)
                 {
                 if (vis == tvFull)
@@ -582,9 +585,10 @@ for (full = mafList; full != NULL; full = full->next)
                         1, height-1, c);
                     }
                 }
-            if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS)
-                vgBox(vg, i+mafPixelStart+xOff+1, yOff, 
-                       1, height-1, getBlueColor());
+            if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS &&
+                winEnd - winStart <= 30000)
+                    vgBox(vg, i+mafPixelStart+xOff+1, yOff, 1, 
+                            height-1, getBlueColor());
             freez(&pixelScores);
             }
 	}
@@ -609,7 +613,7 @@ if (mafList == NULL)
 
 /* display the multiple alignment in this region */
 drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
-                             width, font, color, tg->ixAltColor,  vis, isAxt);
+                         width, font, color, tg->ixAltColor,  vis, isAxt, FALSE);
 mafAliFreeList(&mafList);
 
 yOff += mi->height + 1;
@@ -631,7 +635,7 @@ if (vis == tvFull)
         /* display pairwise alignments in this region in dense format */
         drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, 
                                  vg, xOff, yOff, width, font,
-                                 color, tg->ixAltColor, tvDense, isAxt);
+                                 color, tg->ixAltColor, tvDense, isAxt, FALSE);
         yOff += mi->height + 1;
         mafAliFreeList(&mafList);
         }
