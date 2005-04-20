@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.189 2005/04/13 06:59:59 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.190 2005/04/20 04:28:01 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1084,7 +1084,10 @@ cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 puts("Display bases identical to reference as dots<BR>" );
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
-puts("Display unaligned bases with spanning chain as o's" );
+if (trackDbSetting(tdb, "irows") != NULL)
+    puts("Display chains between alignments");
+else
+    puts("Display unaligned bases with spanning chain as 'o's");
 
 puts("<P><B>Codon highlighting:</B><BR>" );
 
