@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes how we made the browser database on 
 # NCBI build 35 (May 2004 freeze)
 
-# HOW TO BUILD A ASSEMBLY FROM NCBI FILES 
+# HOW TO BUILD AN ASSEMBLY FROM NCBI FILES 
 # ---------------------------------------
 
     # Make gs.18 directory, gs.18/build35 directory, and gs.18/ffa directory.
@@ -9246,6 +9246,12 @@ hgLoadSeq -prefix=bz hg17 /gbdb/hg17/mrnaBlastz/hg17Mrna.fa
 ## end of blastz Mrna track
 
 #### BUILD RETROGENE TRACK (done Robert 8/26/2004)
+#### REBUILD RETROGENE TRACK (done Robert 12/24/2004 - but no notes - kuhn)
+# diffs before push to beta:
+#  1640 hg17.pseudoGeneLink.devOnly
+#  9639 hg17.pseudoGeneLink.betaOnly
+# 15091 hg17.pseudoGeneLink.common
+
 
 mkdir /cluster/data/hg17/bed/pseudo
 cd /cluster/data/hg17/bed/pseudo
