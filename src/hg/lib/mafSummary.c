@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: mafSummary.c,v 1.1 2005/03/07 22:41:27 kate Exp $";
+static char const rcsid[] = "$Id: mafSummary.c,v 1.2 2005/04/20 01:15:06 kate Exp $";
 
 void mafSummaryStaticLoad(char **row, struct mafSummary *ret)
 /* Load a row from mafSummary table into ret.  The contents of ret will
@@ -20,6 +20,8 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->src = row[3];
 ret->score = atof(row[4]);
+strcpy(ret->leftStatus, row[5]);
+strcpy(ret->rightStatus, row[6]);
 }
 
 struct mafSummary *mafSummaryLoad(char **row)
@@ -34,6 +36,8 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->src = cloneString(row[3]);
 ret->score = atof(row[4]);
+strcpy(ret->leftStatus, row[5]);
+strcpy(ret->rightStatus, row[6]);
 return ret;
 }
 
@@ -43,7 +47,7 @@ struct mafSummary *mafSummaryLoadAll(char *fileName)
 {
 struct mafSummary *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +65,7 @@ struct mafSummary *mafSummaryLoadAllByChar(char *fileName, char chopper)
 {
 struct mafSummary *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -105,8 +109,8 @@ void mafSummarySaveToDb(struct sqlConnection *conn, struct mafSummary *el, char 
  * If worried about this use mafSummarySaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%g)", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->src,  el->score);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%g,'%s','%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->src,  el->score,  el->leftStatus,  el->rightStatus);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -121,16 +125,20 @@ void mafSummarySaveToDbEscaped(struct sqlConnection *conn, struct mafSummary *el
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *src;
+char  *chrom, *src, *leftStatus, *rightStatus;
 chrom = sqlEscapeString(el->chrom);
 src = sqlEscapeString(el->src);
+leftStatus = sqlEscapeString(el->leftStatus);
+rightStatus = sqlEscapeString(el->rightStatus);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%g)", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  src, el->score );
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%g,'%s','%s')", 
+	tableName,  chrom, el->chromStart , el->chromEnd ,  src, el->score ,  leftStatus,  rightStatus);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&src);
+freez(&leftStatus);
+freez(&rightStatus);
 }
 
 struct mafSummary *mafSummaryCommaIn(char **pS, struct mafSummary *ret)
@@ -147,6 +155,8 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->src = sqlStringComma(&s);
 ret->score = sqlFloatComma(&s);
+sqlFixedStringComma(&s, ret->leftStatus, sizeof(ret->leftStatus));
+sqlFixedStringComma(&s, ret->rightStatus, sizeof(ret->rightStatus));
 *pS = s;
 return ret;
 }
@@ -192,6 +202,14 @@ fprintf(f, "%s", el->src);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%g", el->score);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->leftStatus);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->rightStatus);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -211,6 +229,8 @@ char *createString =
 "       src varchar(255) not null,	# Sequence name or database of alignment\n"
 "       score float not null,	# Floating point score (0.0 to 1.0).\n"
 "          #Indices\n"
+"       leftStatus char(1),     # Status WRT preceding block\n"
+"       rightStatus char(1),    # Status WRT following block\n"
 "    INDEX(chrom(%d),bin),\n"
 "    INDEX(chrom(%d),chromStart),\n"
 "    INDEX(chrom(%d),chromEnd)\n"
@@ -221,3 +241,19 @@ sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
+struct mafSummary *mafSummaryMiniLoad(char **row)
+/* Load a mafSummary from row fetched with select * from mafSummary
+ * from database, except dummy in the {left,right}Status fields.
+ * For use on earlier version of mafSummary tables.
+ * Dispose of this with mafSummaryFree(). */
+{
+struct mafSummary *ret;
+
+AllocVar(ret);
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->src = cloneString(row[3]);
+ret->score = atof(row[4]);
+return ret;
+}

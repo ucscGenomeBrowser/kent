@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define MAFSUMMARY_NUM_COLS 5
+#define MAFSUMMARY_NUM_COLS 7
 
 struct mafSummary
 /* Positions and scores for alignment blocks */
@@ -20,6 +20,8 @@ struct mafSummary
     unsigned chromEnd;	/* End position in chromosome */
     char *src;	/* Sequence name or database of alignment */
     float score;	/* Floating point score. */
+    char leftStatus[2];	/* Gap/break annotation for preceding block */
+    char rightStatus[2];	/* Gap/break annotation for following block */
     };
 
 void mafSummaryStaticLoad(char **row, struct mafSummary *ret);
@@ -90,7 +92,13 @@ void mafSummaryOutput(struct mafSummary *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#endif /* MAFSUMMARY_H */
-
 void mafSummaryTableCreate(struct sqlConnection *conn, char *tableName, int indexSize);
-/* Create a scored-ref table with the given name. */
+/* Create a summary table with the given name. */
+
+struct mafSummary *mafSummaryMiniLoad(char **row);
+/* Load a mafSummary from row fetched with select * from mafSummary
+ * from database, except dummy in the {left,right}Status fields.
+ * For use on earlier version of mafSummary tables.
+ * Dispose of this with mafSummaryFree(). */
+
+#endif /* MAFSUMMARY_H */

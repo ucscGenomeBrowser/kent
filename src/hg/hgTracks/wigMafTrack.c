@@ -17,7 +17,7 @@
 
 //#define ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.67 2005/04/18 20:56:04 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.68 2005/04/20 01:15:06 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -530,15 +530,14 @@ static void drawScore(double score, int chromStart, int chromEnd, int seqStart,
 {
 int x1,x2,y,w;
 int height1 = height - 2;
-int midY = yOff + (height>>1);
-int midY1 = midY - (height>>2);
-int midY2 = midY + (height>>2) - 1;
+//int midY = yOff + (height>>1);
+//int midY1 = midY - (height>>2);
+//int midY2 = midY + (height>>2) - 1;
 
 x1 = round((chromStart - seqStart)*scale);
 x2 = round((chromEnd - seqStart)*scale);
 w = x2-x1;
 if (w < 1) w = 1;
-//innerLine(vg, xOff+x1, midY, x1, color);
 if (vis == tvFull)
     {
     y = score * height1;
@@ -551,6 +550,9 @@ else
     if ((shade < 0) || (shade >= maxShade))
         shade = 0;
     c = shadesOfGray[shade];
+    if (chromStart > 30998474 && chromStart < 31003940)
+        printf("<BR>chromStart=%d, chromEnd=%d width=%d shade=%d\n", 
+                        chromStart, chromEnd, chromEnd-chromStart, shade);
     vgBox(vg, x1 + xOff, yOff, w, height-1, c);
     }
 }
@@ -566,9 +568,15 @@ static void drawScoreSummary(struct mafSummary *summaryList, int height,
 struct mafSummary *ms;
 double scale = scaleForPixels(width);
 
+printf("<BR>summary count = %d\n", slCount(summaryList));
 for (ms = summaryList; ms != NULL; ms = ms->next)
+    {
+    if (ms->chromStart > 30998474 && ms->chromStart < 31003940)
+        printf("<BR>ms.chromStart=%d, ms.chromEnd=%d\n", ms->chromStart,
+                                                        ms->chromEnd);
     drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart, scale,
                 vg, xOff, yOff, height, color, vis);
+    }
 }
 
 static void drawScoreOverview(char *tableName, int height,
@@ -647,7 +655,11 @@ sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
  * The hash is keyed by species. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    ms = mafSummaryLoad(row + rowOffset);
+    if (hHasField(summary, "leftStatus"))
+        ms = mafSummaryLoad(row + rowOffset);
+    else
+        /* previous table schema didn't have status fields */
+        ms = mafSummaryMiniLoad(row + rowOffset);
     if ((hel = hashLookup(componentHash, ms->src)) == NULL)
         hashAdd(componentHash, ms->src, ms);
     else
