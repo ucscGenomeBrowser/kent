@@ -18,10 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.71 2005/04/20 14:53:37 kate Exp $";
-
-static boolean useSpanningChains = FALSE;
-static boolean useIrowChains = FALSE;
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.72 2005/04/20 17:48:39 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -810,9 +807,16 @@ static boolean drawPairsFromMultipleMaf(struct track *track,
 struct wigMafItem *miList = track->items, *mi = miList;
 int graphHeight = 0;
 Color pairColor = (vis == tvFull ? track->ixAltColor : color);
+boolean useIrowChains = FALSE;
+char option[64];
 
 if (miList == NULL || track->customPt == NULL)
     return FALSE;
+
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+if (cartCgiUsualBoolean(cart, option, FALSE) && 
+    trackDbSetting(track->tdb, "irows") != NULL)
+        useIrowChains = TRUE;
 
 if (vis == tvFull)
     graphHeight = pairwiseWigHeight(track);
@@ -885,7 +889,8 @@ fflush(stdout);
     /* compute a graph or density on-the-fly from mafs */
     vgSetClip(vg, xOff, yOff, width, mi->height);
     drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
-                         width, font, pairColor, pairColor, vis, FALSE, useIrowChains);
+                         width, font, pairColor, pairColor, vis, FALSE, 
+                         useIrowChains);
     vgUnclip(vg);
 
     /* need to add extra space between graphs ?? (for now) */
@@ -1004,6 +1009,8 @@ boolean complementBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 bool dots;         /* configuration option */
 /* this line must be longer than the longest base-level display */
 char noAlignment[2000];
+boolean useIrowChains = FALSE;
+boolean useSpanningChains = FALSE;
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
@@ -1011,6 +1018,15 @@ for (i = 0; i < sizeof noAlignment - 1; i++)
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
+
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+if (cartCgiUsualBoolean(cart, option, FALSE))
+    {
+    if (trackDbSetting(track->tdb, "irows") != NULL)
+        useIrowChains = TRUE;
+    else
+        useSpanningChains = TRUE;
+    }
 
 /* Allocate a line of characters for each item. */
 AllocArray(lines, lineCount);
@@ -1109,8 +1125,9 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 
                 if (!useSpanningChains)
                     continue;
-                 /* no irows annotation and user has requested chaining, so see if a 
-                  * chain spans this region; use it to "extend" alignment */
+                 /* no irows annotation and user has requested chaining, 
+                  * so see if a * chain spans this region; 
+                  * use it to "extend" alignment */
                  dbUpper = cloneString(mi->db);
                  dbUpper[0] = toupper(dbUpper[0]);
                  safef(chainTable, sizeof chainTable, "%s_chain%s", 
@@ -1122,7 +1139,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 
                      conn = hAllocConn();
                      safef(query, sizeof query,
-                         "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
+                        "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
                                      chainTable, subStart, subEnd);
                      if (sqlQuickNum(conn, query) > 0)
                          processSeq(noAlignment, noAlignment,
@@ -1133,7 +1150,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                      }
                 }
             seq = mc->text;
-
             if (mc->size == 0)
                 {
                 /* if no alignment here, but MAF annotation indicates continuity
@@ -1311,7 +1327,6 @@ struct track *wigTrack;
 int i;
 char *savedType;
 char option[64];
-boolean useChains = FALSE;
 struct dyString *wigType = newDyString(64);
 track->loadItems = wigMafLoad;
 track->freeItems = wigMafFree;
@@ -1327,14 +1342,6 @@ track->mapsSelf = TRUE;
 //track->canPack = TRUE;
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
-useChains = cartCgiUsualBoolean(cart, option, FALSE);
-if (useChains)
-    {
-    if (trackDbSetting(tdb, "irows") != NULL)
-        useIrowChains = TRUE;
-    else
-        useSpanningChains = TRUE;
-    }
 
 if ((wigTable = trackDbSetting(tdb, "wiggle")) != NULL)
     if (hTableExists(wigTable))
