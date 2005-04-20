@@ -162,6 +162,8 @@ enum pfParseType
     pptConstFloat,
     pptConstDouble,
     pptConstString,
+
+    pptTypeCount,
     };
 
 char *pfParseTypeAsString(enum pfParseType type);
@@ -171,7 +173,10 @@ struct pfParse
 /* The para parse tree. */
     {
     struct pfParse *next;	/* Next in list */
-    enum pfParseType type;	/* Node type */
+    UBYTE type;			/* Node type */
+    UBYTE isConst;		/* Is this all constant? */
+    UBYTE reserved1;		/* For expansion 1. */
+    UBYTE reserved2;		/* For expansion 2. */
     char *name;			/* Node name - not allocated here */
     struct pfToken *tok;	/* Token associated with node. */
     struct pfScope *scope;	/* Associated scope. */

@@ -546,7 +546,7 @@ for (t = type->children; t != NULL; t = t->next)
     struct pfType *tk = t;
     if (t->base == pfc->keyValType)
         tk = t->children->next;
-    if (tk->isTuple) 
+    if (tk->tyty == tytyTuple)
         rCodeTupleType(pfc, f, tk);
     else
         fprintf(f, "x");
@@ -1323,7 +1323,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
-    if (!type->isFunction)
+    if (type->tyty == tytyVariable)
         {
 	printType(pfc, f, type->base);
 	fprintf(f, " %s", var->name);

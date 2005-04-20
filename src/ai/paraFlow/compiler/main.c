@@ -276,6 +276,7 @@ optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
 endPhase = optionInt("endPhase", endPhase);
+assert(pptTypeCount <= 256);
 paraFlow(argv[1], argc-2, argv+2);
 return 0;
 }

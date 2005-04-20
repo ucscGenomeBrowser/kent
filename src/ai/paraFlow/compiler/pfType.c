@@ -68,7 +68,7 @@ void pfTypeDump(struct pfType *ty, FILE *f)
 {
 if (ty == NULL)
     fprintf(f, "void");
-else if (ty->isTuple)
+else if (ty->tyty == tytyTuple)
     {
     fprintf(f, "(");
     for (ty = ty->children; ty != NULL; ty = ty->next)
@@ -79,14 +79,14 @@ else if (ty->isTuple)
 	}
     fprintf(f, ")");
     }
-else if (ty->isFunction)
+else if (ty->tyty == tytyFunction)
     {
     fprintf(f, "%s ", ty->base->name);
     pfTypeDump(ty->children, f);
     fprintf(f, " into ");
     pfTypeDump(ty->children->next, f);
     }
-else if (ty->isModule)
+else if (ty->tyty == tytyModule)
     {
     fprintf(f, ".module.");
     }
@@ -116,7 +116,7 @@ else
     errAt(pp->tok, "Type mismatch: expecting %s.", type->base->name);
 }
 
-static enum pfParseType pftFromTokType(struct pfToken *tok)
+static enum pfParseType pptFromTokType(struct pfToken *tok)
 /* Return pptConstXXX corresponding to tok->type */
 {
 switch (tok->type)
@@ -139,8 +139,6 @@ static void enforceNumber(struct pfCompile *pfc, struct pfParse *pp)
 if (pp->ty->base != pfc->varType)
     if (pp->ty->base->parent != pfc->numType)
 	expectingGot("number", pp->tok);
-if (pp->type == pptConstUse)
-    pp->type = pftFromTokType(pp->tok);
 }
 
 static void enforceInt(struct pfCompile *pfc, struct pfParse *pp)
@@ -232,7 +230,7 @@ void pfTypeOnTuple(struct pfCompile *pfc, struct pfParse *pp)
 /* Create tuple type and link in types of all children. */
 {
 pp->ty = typeFromChildren(pfc, pp, pfc->tupleType);
-pp->ty->isTuple = TRUE;
+pp->ty->tyty = tytyTuple;
 }
 
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
@@ -244,9 +242,11 @@ static void coerceToBit(struct pfCompile *pfc, struct pfParse **pPp)
 /* Make sure that pPp is a bit. */
 {
 struct pfParse *pp = *pPp;
-if (pp->ty == NULL && pp->type != pptConstUse)
+#ifdef OLD
+if (pp->ty == NULL)
     expectingGot("logical value", pp->tok);
-if (pp->type == pptConstUse || pp->ty->base != pfc->bitType)
+#endif /* OLD */
+if (pp->ty->base != pfc->bitType)
     {
     struct pfType *type = pfTypeNew(pfc->bitType);
     coerceOne(pfc, pPp, type, FALSE);
@@ -375,22 +375,28 @@ static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 {
 struct pfParse *pp = *pPp;
 struct pfParse *function = pp->children;
-if (function->ty->isFunction)
+switch(function->ty->tyty)
     {
-    struct pfParse **paramTuple = &function->next;
-    struct pfType *functionType = function->ty;
-    struct pfType *inputType = functionType->children;
-    struct pfType *outputType = inputType->next;
+    case tytyFunction:
+    case tytyVirtualFunction:
+	{
+	struct pfParse **paramTuple = &function->next;
+	struct pfType *functionType = function->ty;
+	struct pfType *inputType = functionType->children;
+	struct pfType *outputType = inputType->next;
 
-    coerceTuple(pfc, paramTuple, inputType);
-    if (outputType->children != NULL && outputType->children->next == NULL)
-	pp->ty = CloneVar(outputType->children);
-    else
-	pp->ty = CloneVar(outputType);
-    pp->name = function->name;
+	coerceTuple(pfc, paramTuple, inputType);
+	if (outputType->children != NULL && outputType->children->next == NULL)
+	    pp->ty = CloneVar(outputType->children);
+	else
+	    pp->ty = CloneVar(outputType);
+	pp->name = function->name;
+	break;
+	}
+    default:
+	errAt(function->tok, "Call to non-function");
+	break;
     }
-else
-    errAt(function->tok, "Call to non-function");
 }
 
 static void coerceTupleToCollection(struct pfCompile *pfc, 
@@ -464,8 +470,6 @@ struct pfParse *pp = *pPp;
 struct pfType *type = pp->ty;
 if (type->base->parent != pfc->numType)
     errAt(pp->tok, "Adding string and something strange.");
-if (pp->type == pptConstUse)
-    pp->type = pftFromTokType(pp->tok);
 numericCast(pfc, stringType, pPp);
 }
 
@@ -486,81 +490,8 @@ struct pfBaseType *base;
 if (pt == NULL)
     internalErrAt(pp->tok);
 base = type->base;
-verbose(3, "coercingOne %s (isFunction=%d) to %s\n", pt->base->name, pt->isFunction, base->name);
-if (pp->type == pptConstUse)
-    {
-    if (base == pfc->bitType)
-	pp->type = pptConstBit;
-    else if (base == pfc->byteType)
-	pp->type = pptConstByte;
-    else if (base == pfc->shortType)
-	pp->type = pptConstShort;
-    else if (base == pfc->intType)
-	pp->type = pptConstInt;
-    else if (base == pfc->longType)
-	pp->type = pptConstLong;
-    else if (base == pfc->floatType)
-	pp->type = pptConstFloat;
-    else if (base == pfc->doubleType)
-	pp->type = pptConstDouble;
-    else if (base == pfc->stringType)
-	pp->type = pptConstString;
-    else if (base == pfc->varType)
-	{
-	pp->type = pftFromTokType(pp->tok);
-	}
-    else if (base->isCollection)
-	{
-	coerceOne(pfc, pPp, type->children, FALSE);
-	insertCast(pptUniformTuple, NULL, pPp);
-	pfTypeOnTuple(pfc, *pPp);
-	return;
-	}
-    else if (base->isClass )
-        {
-	if (slCount(base->fields) != 1)
-	    errAt(pp->tok, "Missing fields in object initialization");
-	coerceOne(pfc, pPp, base->fields, FALSE);
-	insertCast(pptTuple, NULL, pPp);
-	pfTypeOnTuple(pfc, *pPp);
-	return;
-	}
-    else
-	{
-	errAt(pp->tok, "Misplaced constant");
-	}
-    if (pp->type == pptConstString)
-	{
-	if (pp->tok->type != pftString)
-	    {
-	    if (numToString)
-	        {
-		pp->type = pptConstUse;
-		castNumToString(pfc, pPp, type);
-		pp = *pPp;
-		}
-	    else
-		expectingGot("string", pp->tok);
-	    }
-	}
-    else if (pp->type == pptConstBit)
-	{
-	/* Anything can be converted to a bit. */
-	}
-    else
-	{
-	if (pp->tok->type != pftInt && pp->tok->type != pftFloat)
-	    expectingGot("number", pp->tok);
-	}
-    if (base == pfc->varType)
-	{
-	struct pfType *tt = pfTypeNew(pfc->varType);
-	insertCast(pptCastTypedToVar, tt, pPp);
-	pp = *pPp;
-	}
-    pp->ty = pfTypeNew(base);
-    }
-else if (pt->base != base)
+verbose(3, "coercingOne %s (tyty=%d) to %s\n", pt->base->name, pt->tyty, base->name);
+if (pt->base != base)
     {
     boolean ok = FALSE;
     verbose(3, "coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
@@ -595,7 +526,7 @@ else if (pt->base != base)
 	}
     else if (base->isCollection && base != pfc->stringType)
 	{
-	if (!pt->isTuple)
+	if (pt->tyty != tytyTuple)
 	    {
 	    insertCast(pptTuple, NULL, pPp);  /* In this case not just a cast. */
 	    pfTypeOnTuple(pfc, *pPp);
@@ -623,7 +554,7 @@ else if (pt->base != base)
 	    }
 	else
 	    {
-	    if (!pt->isTuple)
+	    if (pt->tyty != tytyTuple)
 		{
 		insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
 		pfTypeOnTuple(pfc, *pPp);
@@ -635,7 +566,7 @@ else if (pt->base != base)
 	    ok = TRUE;
 	    }
 	}
-    else if (pt->isTuple)
+    if (pt->tyty == tytyTuple)
 	{
 	if (pt->children == NULL)
 	    errAt(pp->tok, "using void value");
@@ -661,9 +592,9 @@ else if (base == pfc->keyValType)
     coerceOne(pfc, &pp->children, type->children, FALSE);
     coerceOne(pfc, &pp->children->next, type->children->next, FALSE);
     }
-else if (type->isTuple)
+else if (type->tyty == tytyTuple)
     {
-    assert(pt->isTuple);
+    assert(pt->tyty == tytyTuple);
     coerceTuple(pfc, pPp, type);
     }
 }
@@ -822,7 +753,7 @@ else
     if (keyBase == NULL)
 	errAt(pp->tok, "trying to index a %s", collectionBase->name);
     }
-if (indexPp->ty->base != keyBase || indexPp->type == pptConstUse)
+if (indexPp->ty->base != keyBase)
     {
     struct pfType *ty = pfTypeNew(keyBase);
     coerceOne(pfc, &collectionPp->next, ty, FALSE);
@@ -852,76 +783,20 @@ struct pfParse *lval = *pLval;
 struct pfParse **pRval = &lval->next;
 struct pfParse *rval = *pRval;
 
-/* Many complications arise from us not wanting to figure out
- * the type of constants until relatively late.  I'm really
- * tempted just set constants to either double, long, or string
- * based on token type early on, and eliminate this logic.
- * The optimizer may be able to achieve the same result
- * more elegantly later.... */
-if (lval->type == pptConstUse && rval->type == pptConstUse)
+#ifdef OLD
+if (lval->ty == NULL)
+    expectingGot("number", lval->tok);
+if (rval->ty == NULL)
+    expectingGot("number", rval->tok);
+#endif /* OLD */
+if (!pfTypeSame(lval->ty, rval->ty))
     {
-    struct pfBaseType *base = NULL;
-    boolean lIsString = (lval->tok->type == pftString);
-    boolean rIsString = (rval->tok->type == pftString);
-    if (lIsString || rIsString)
-	base = pfc->stringType;
-    else if (lval->tok->type == pftFloat || rval->tok->type == pftFloat)
-	base = pfc->doubleType;
-    else if (lval->tok->val.i > 0x7FFFFFFFLL || rval->tok->val.i > 0x7FFFffffLL
-	|| lval->tok->val.i < -0x7FFFFFFFLL || rval->tok->val.i < -0x7FFFffffLL)
-        base = pfc->longType;
-    else 
-        base = pfc->intType;
-    pp->ty = pfTypeNew(base);
-    coerceOne(pfc, &lval, pp->ty, numToString);
-    coerceOne(pfc, &rval, pp->ty, numToString);
+    struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
+    coerceOne(pfc, &lval, ty, numToString);
+    coerceOne(pfc, &rval, ty, numToString);
     }
-else
-    {
-    if (lval->type == pptConstUse)
-	{
-	if (numToString && rval->ty->base != pfc->stringType && lval->tok->type == pftString)
-	    {
-	    pp->ty = lval->ty = pfTypeNew(pfc->stringType);
-	    lval->type = pptConstString;
-	    coerceOne(pfc, &rval, pp->ty, numToString);
-	    }
-	else
-	    {
-	    coerceOne(pfc, &lval, rval->ty, numToString);
-	    pp->ty = rval->ty;
-	    }
-	}
-    if (rval->type == pptConstUse)
-	{
-	if (numToString && lval->ty->base != pfc->stringType && rval->tok->type == pftString)
-	    {
-	    pp->ty = rval->ty = pfTypeNew(pfc->stringType);
-	    rval->type = pptConstString;
-	    coerceOne(pfc, &lval, pp->ty, numToString);
-	    pp->children = lval;
-	    }
-	else
-	    {
-	    coerceOne(pfc, &rval, lval->ty, numToString);
-	    pp->ty = lval->ty;
-	    }
-	}
-    else
-	{
-	if (lval->ty == NULL)
-	    expectingGot("number", lval->tok);
-	if (rval->ty == NULL)
-	    expectingGot("number", rval->tok);
-	if (!pfTypeSame(lval->ty, rval->ty))
-	    {
-	    struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
-	    coerceOne(pfc, &lval, ty, numToString);
-	    coerceOne(pfc, &rval, ty, numToString);
-	    }
-	pp->ty = lval->ty;
-	}
-    }
+pp->ty = lval->ty;
+
 /* Put lval,rval (which may have changed) back as the two children
  * of pp. */
 pp->children = lval;
@@ -1016,7 +891,6 @@ struct pfParse *type = pp->children;
 struct pfParse *compound = type->next;
 struct pfParse *p, **p2p;
 struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
-struct pfType *ty;
 
 if (base == NULL)
     internalErrAt(pp->tok);
@@ -1048,20 +922,30 @@ for (p = compound->children; p != NULL; p = p->next)
 	    break;
 	    }
 	case pptPolymorphic:
+	    {
+	    struct pfType *funcType = p->children->ty;
+	    struct pfBaseType *b = base;
+	    funcType->tyty = tytyVirtualFunction;
 	    uglyf("polymorphic in blessClass\n");
+	    p->ty = funcType;
+	    while (b != NULL && base->name[0] != '<')
+	        {
+		b->isPolymorphic = TRUE;
+		b = b->parent;
+		}
 	    addFunctionToClass(base, p->children);
 #ifdef SOON
 #endif /* SOON */
 	    uglyf("passed polymorphic in blessClass\n");
 	    break;
+	    }
 	default:
 	    errAt(p->tok, "non-declaration statement inside of class");
 	}
     p2p = &p->next;
     }
-slReverse(&base->methods);
 slReverse(&base->fields);
-// uglyf("Got %d methods, %d fields in %s\n", slCount(base->methods), slCount(base->fields), base->name);
+slReverse(&base->methods);
 }
 
 static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
@@ -1074,6 +958,7 @@ else if (tok->type == pftInt)
     pp->ty = pfTypeNew(pfc->intType);
 else if (tok->type == pftFloat)
     pp->ty = pfTypeNew(pfc->doubleType);
+pp->type = pptFromTokType(pp->tok);
 }
 
 static struct pfType *findField(struct pfBaseType *base, char *name)
@@ -1350,6 +1235,9 @@ switch (pp->type)
     case pptDot:
 	typeDot(pfc,pp);
         break;
+    case pptPolymorphic:
+        pfParsePutChildrenInPlaceOfSelf(pPp);
+	break;
     case pptParaDec:
     case pptToDec:
     case pptFlowDec:

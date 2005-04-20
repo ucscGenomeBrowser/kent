@@ -15,7 +15,7 @@ struct pfParse *name = pp->children;
 struct pfParse *input = name->next;
 struct pfParse *output = input->next;
 struct pfType *ty = pfTypeNew(base);
-ty->isFunction = TRUE;
+ty->tyty = tytyFunction;
 pp->ty = ty;
 ty->children = input->ty;
 ty->children->next = output->ty;
@@ -86,7 +86,7 @@ switch (pp->type)
     case pptInto:
         {
 	pp->ty = pfTypeNew(NULL);
-	pp->ty->isModule = TRUE;
+	pp->ty->tyty = tytyModule;
 	break;
 	}
     }

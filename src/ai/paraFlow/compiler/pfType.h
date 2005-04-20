@@ -23,6 +23,7 @@ struct pfBaseType
     bool isCollection;		/* TRUE if it's a collection type */
     bool isClass;		/* TRUE if it's a class */
     bool needsCleanup;		/* TRUE if it needs refCount/cleanup */
+    bool isPolymorphic;		/* TRUE if it has polymorphic functions. */
     int id;			/* Unique id. */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
@@ -37,6 +38,16 @@ struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name,
 int pfBaseTypeCount();
 /* Return base type count. */
 
+enum pfTyty
+/* The overall type of a specific type. */
+    {
+    tytyVariable,
+    tytyTuple,
+    tytyFunction,
+    tytyVirtualFunction,
+    tytyModule,
+    };
+
 struct pfType
 /* A type tree that represents typed tuples and collections. 
  * The class heirarchy is not here, but instead in pfBaseType. */
@@ -46,9 +57,7 @@ struct pfType
     struct pfBaseType *base;	/* Type of this node in type tree. */
     char *fieldName;		/* Field name associated with this node. */
     struct pfParse *init;	/* Initialization if any. */
-    bool isTuple;		/* True if it's a tuple. */
-    bool isFunction;		/* True if it's a function. */
-    bool isModule;		/* True if it's a module. */
+    enum pfTyty tyty;		/* Subtype. */
     };
 
 struct pfType *pfTypeNew(struct pfBaseType *base);

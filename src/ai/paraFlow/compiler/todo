@@ -1,14 +1,18 @@
   - Making virtual functions happen.
+  - Make it ok to have extra trailing comma in an initialization
+    before a ).
+  - Go ahead and let assignments return a value.  
   - Make sure that assigning a typed variable from a var variable
     does the right thing.
-  - More file i/o.
   - Implement += for strings and arrays.
   - Adding default parameters.  These could be applied during
     class initialization too.
+  - Adding named parameters.
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
   - Working on multiple modules.
   - Implement ++ and maybe --.
+  - More file i/o.
   - Implementing trees.
 
 Check system:
@@ -19,6 +23,8 @@ Check system:
 
 -----------
 DONE
+  - Yank out constant type optimization in pfType, particularly
+    in coerceType routine.
   - Sort the _pf_base_info table before writing it.
   - Make it so that during runtime the typeId's of subparts
     of collected ID's are filled in.  Currently they are often
