@@ -6,10 +6,12 @@ O = builtin.o cCoder.o codedType.o main.o pfBindVars.o pfCheck.o \
 paraFlow: $(O)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/paraFlow $O ../../../lib/$(MACHTYPE)/jkweb.a -lm
 
-t:
-	paraFlow test.pf
 
-retest:
-	gcc -c test.c 
-	gcc -O -o test test.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
-	test
+test:
+	cd ../testProg/oneFile; make
+	cd ../testProg/easy; make
+
+ret:
+	gcc -c t.c 
+	gcc -O -o t t.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
+	t
