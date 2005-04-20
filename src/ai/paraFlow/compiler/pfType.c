@@ -566,7 +566,7 @@ if (pt->base != base)
 	    ok = TRUE;
 	    }
 	}
-    if (pt->tyty == tytyTuple)
+    else if (pt->tyty == tytyTuple)
 	{
 	if (pt->children == NULL)
 	    errAt(pp->tok, "using void value");
@@ -926,17 +926,9 @@ for (p = compound->children; p != NULL; p = p->next)
 	    struct pfType *funcType = p->children->ty;
 	    struct pfBaseType *b = base;
 	    funcType->tyty = tytyVirtualFunction;
-	    uglyf("polymorphic in blessClass\n");
 	    p->ty = funcType;
-	    while (b != NULL && base->name[0] != '<')
-	        {
-		b->isPolymorphic = TRUE;
-		b = b->parent;
-		}
 	    addFunctionToClass(base, p->children);
-#ifdef SOON
-#endif /* SOON */
-	    uglyf("passed polymorphic in blessClass\n");
+	    base->polyCount += 1;
 	    break;
 	    }
 	default:
