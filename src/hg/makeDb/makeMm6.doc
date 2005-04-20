@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.31 2005/04/19 00:00:54 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.32 2005/04/20 22:49:07 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4779,5 +4779,58 @@ hgMapViaSwissProt mm6 knownGene name proteinID Pfam knownToPfam
     echo "update dbDb set hgNearOk = 1 where name = 'mm6';" \
       | hgsql -h genome-testdb hgcentraltest
 
+# RAT BLASTP FOR GENE SORTER (DONE 4/20/05 Fan)
+    # Make RAT ortholog column using blastp on RAT known genes.
+    # First make RAT protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    mkdir /cluster/data/rn3/bed/blastp
+    cd /cluster/data/rn3/bed/blastp
+    pepPredToFa rn3 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+
+    ssh kkr1u00
+    if (-e /iscratch/i/rn3/blastp) then
+      rm -r /iscratch/i/rn3/blastp
+    endif
+    mkdir -p /iscratch/i/rn3/blastp
+    cp /cluster/data/rn3/bed/blastp/known.p?? /iscratch/i/rn3/blastp
+    iSync
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastp/rn3/run/out
+    cd /cluster/data/mm6/bed/blastp/rn3/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/rn3/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 7715 of 7715 jobs
+# CPU time in finished jobs:      12896s     214.93m     3.58h    0.15d  0.000 y
+# IO & Wait Time:                 21725s     362.08m     6.03h    0.25d  0.001 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              22s       0.37m     0.01h    0.00d
+# Submission to last job:           246s       4.10m     0.07h    0.00d
+ 
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastp/rn3/run/out
+    hgLoadBlastTab mm6 rnBlastTab -maxPer=1 *.tab
+
 # END OF GENE SORTER STUFF
 #############################################################################
+
