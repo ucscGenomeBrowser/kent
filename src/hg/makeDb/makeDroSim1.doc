@@ -667,4 +667,131 @@ droSim1.downloadDir = droSim1
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
+# MAKE Drosophila Proteins track  (DONE braney 2005-04-20)
+    ssh kolossus
+    mkdir -p /cluster/data/droSim1/blastDb
+    cd /cluster/data/droSim1/blastDb
+    awk "{print \$2}" ../*/chr*/*.lft > subChr.lst
+    for i in `cat subChr.lst`; do ln -s ../*/*/$i.fa; done
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
+    cd ..
+    cat */chr*/*.lft > jkStuff/subChr.lft   
 
+    ssh kkr1u00
+    mkdir -p /iscratch/i/droSim1/blastDb
+    cp /cluster/data/droSim1/blastDb/* /iscratch/i/droSim1/blastDb
+    iSync > sync.out
+    
+    mkdir -p /cluster/data/droSim1/bed/tblastn.dm1FB
+    cd /cluster/data/droSim1/bed/tblastn.dm1FB
+    ls -1S /iscratch/i/droSim1/blastDb/*.nsq | sed "s/\.nsq//" > bug.lst
+    exit
+
+    # back to kolossus
+    cd /cluster/data/droSim1/bed/tblastn.dm1FB
+    mkdir fbfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl | awk "{print \\\$1}"`/\(150000/`wc bug.lst | awk "{print \\\$1}"`\)
+    # 18735/(150000/320) = 39.968000
+    split -l 40 /cluster/data/dm1/bed/blat.dm1FB/dm1FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir blastOut
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+	liftUp -nosort -type=".psl" -pslQ -nohead $f.3 /cluster/data/dm1/bed/blat.dm1FB/protein.lft carry $f.2
+	liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/droSim1/jkStuff/subChr.lft carry $f.3
+	liftUp -nosort -type=".psl" -nohead $3.tmp /cluster/data/droSim1/jkStuff/liftAll.lft carry $f.4
+
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp 
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 bug.lst fb.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/droSim1/bed/tblastn.dm1FB
+    para create blastSpec
+    para try, push
+# Completed: 150080 of 150080 jobs
+# CPU time in finished jobs:    2042525s   34042.08m   567.37h   23.64d  0.065 y
+# IO & Wait Time:                631624s   10527.07m   175.45h    7.31d  0.020 y
+# Average job time:                  18s       0.30m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             239s       3.98m     0.07h    0.00d
+# Submission to last job:          3533s      58.88m     0.98h    0.04d
+
+    ssh kki
+    cd /cluster/data/droSim1/bed/tblastn.dm1FB
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    para create chainSpec
+
+    para try, push...
+# Completed: 469 of 469 jobs
+# CPU time in finished jobs:       3454s      57.57m     0.96h    0.04d  0.000 y
+# IO & Wait Time:                  3742s      62.37m     1.04h    0.04d  0.000 y
+# Average job time:                  15s       0.26m     0.00h    0.00d
+# Longest finished job:             329s       5.48m     0.09h    0.00d
+# Submission to last job:           649s      10.82m     0.18h    0.01d
+
+    exit
+    # back to kolossus
+    cd /cluster/data/droSim1/bed/tblastn.dm1FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/droSim1/bed/tblastn.dm1FB/blastDm1FB.psl
+
+    ssh hgwdev
+    cd /cluster/data/droSim1/bed/tblastn.dm1FB
+
+    hgLoadPsl droSim1 blastDm1FB.psl
+
+# End tblastn
