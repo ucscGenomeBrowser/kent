@@ -3,7 +3,7 @@ shortLabel Presentness
 longLabel Presentness
 group varRep
 priority 25
-visibility hide
+visibility dense
 type wig 5 9
 
 track correct
@@ -11,7 +11,7 @@ shortLabel Correctness
 longLabel Correctness
 group varRep
 priority 25
-visibility hide
+visibility dense
 type wig 2 9
 
 track xenoRefGene
