@@ -23,11 +23,12 @@ struct pfBaseType
     bool isCollection;		/* TRUE if it's a collection type */
     bool isClass;		/* TRUE if it's a class */
     bool needsCleanup;		/* TRUE if it needs refCount/cleanup */
-    bool isPolymorphic;		/* TRUE if it has polymorphic functions. */
+    bool reserved;		/* Currently zero. */
     int id;			/* Unique id. */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
     int size;			/* Type size. */
+    short polyCount;		/* Count of polymorphic functions. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -57,7 +58,9 @@ struct pfType
     struct pfBaseType *base;	/* Type of this node in type tree. */
     char *fieldName;		/* Field name associated with this node. */
     struct pfParse *init;	/* Initialization if any. */
-    enum pfTyty tyty;		/* Subtype. */
+    UBYTE tyty;			/* Some PfTyty value. */
+    UBYTE reserved;		/* Reserved for future expansion. */
+    short polyOffset;		/* Offset in polymorphic function table. */
     };
 
 struct pfType *pfTypeNew(struct pfBaseType *base);

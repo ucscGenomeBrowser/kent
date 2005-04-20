@@ -75,6 +75,8 @@ union _pf_stack
     };
 typedef union _pf_stack _pf_Stack;
 
+typedef void (*_pf_polyFunType)(_pf_Stack *stack);
+
 struct _pf_iterator
 /* Something to iterate over a collection */
     {

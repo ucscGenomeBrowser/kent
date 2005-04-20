@@ -1382,6 +1382,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 	fprintf(f, "struct %s {\n", base->name);
 	fprintf(f, "int _pf_refCount;\n");
 	fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
+	fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
 	rPrintFields(pfc, f, base); 
 	fprintf(f, "};\n\n");
 	}
