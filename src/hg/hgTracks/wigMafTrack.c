@@ -17,7 +17,7 @@
 
 //#define ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.68 2005/04/20 01:15:06 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.69 2005/04/20 01:17:14 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -550,9 +550,6 @@ else
     if ((shade < 0) || (shade >= maxShade))
         shade = 0;
     c = shadesOfGray[shade];
-    if (chromStart > 30998474 && chromStart < 31003940)
-        printf("<BR>chromStart=%d, chromEnd=%d width=%d shade=%d\n", 
-                        chromStart, chromEnd, chromEnd-chromStart, shade);
     vgBox(vg, x1 + xOff, yOff, w, height-1, c);
     }
 }
@@ -568,15 +565,9 @@ static void drawScoreSummary(struct mafSummary *summaryList, int height,
 struct mafSummary *ms;
 double scale = scaleForPixels(width);
 
-printf("<BR>summary count = %d\n", slCount(summaryList));
 for (ms = summaryList; ms != NULL; ms = ms->next)
-    {
-    if (ms->chromStart > 30998474 && ms->chromStart < 31003940)
-        printf("<BR>ms.chromStart=%d, ms.chromEnd=%d\n", ms->chromStart,
-                                                        ms->chromEnd);
     drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart, scale,
                 vg, xOff, yOff, height, color, vis);
-    }
 }
 
 static void drawScoreOverview(char *tableName, int height,
