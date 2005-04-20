@@ -1,0 +1,48 @@
+O = output
+
+test:
+	mkdir -p output
+	paraFlow assign.pf > $O/assign
+	diff expected/assign $O/assign
+	paraFlow cmp.pf > $O/cmp
+	diff expected/cmp $O/cmp
+	paraFlow comments.pf > $O/comments
+	diff expected/comments $O/comments
+	paraFlow compound.pf > $O/compound
+	diff expected/compound $O/compound
+	paraFlow emptyFlow.pf > $O/emptyFlow
+	diff expected/emptyFlow $O/emptyFlow
+	paraFlow emptyFunc.pf > $O/emptyFunc
+	diff expected/emptyFunc $O/emptyFunc
+	paraFlow genericSwap.pf > $O/genericSwap
+	diff expected/genericSwap $O/genericSwap
+	paraFlow hello.pf > $O/hello
+	diff expected/hello $O/hello
+	paraFlow if.pf > $O/if
+	diff expected/if $O/if
+#	paraFlow initVars.pf > $O/initVars
+#	diff expected/initVars $O/initVars
+	paraFlow mixedDeclare.pf > $O/mixedDeclare
+	diff expected/mixedDeclare $O/mixedDeclare
+	paraFlow neg.pf > $O/neg
+	diff expected/neg $O/neg
+	paraFlow numExp.pf > $O/numExp
+	diff expected/numExp $O/numExp
+	paraFlow oneObj.pf > $O/oneObj
+	diff expected/oneObj $O/oneObj
+	paraFlow oneParam.pf > $O/oneParam
+	diff expected/oneParam $O/oneParam
+	paraFlow oneVar.pf > $O/oneVar
+	diff expected/oneVar $O/oneVar
+	paraFlow parenAndMinus.pf > $O/parenAndMinus
+	diff expected/parenAndMinus $O/parenAndMinus
+	paraFlow shift.pf > $O/shift
+	diff expected/shift $O/shift
+	paraFlow toInOut.pf > $O/toInOut
+	diff expected/toInOut $O/toInOut
+	paraFlow twoParam.pf > $O/twoParam
+	diff expected/twoParam $O/twoParam
+#	paraFlow unitCircle.pf > $O/unitCircle
+#	diff expected/unitCircle $O/unitCircle
+	paraFlow while.pf > $O/while
+	diff expected/while $O/while
