@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.32 2005/04/20 22:49:07 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.33 2005/04/20 23:42:40 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4833,4 +4833,110 @@ end
 
 # END OF GENE SORTER STUFF
 #############################################################################
+
+### MM6 PROTEOME BROWSER TABLES BUILD ####  (DONE - 2005-04-20 - Fan)
+# These are instructions for building tables 
+# needed for the Proteome Browser to be used with mm6.  
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 050315.
+
+# Create the working directory
+
+   ssh hgwdev
+   mkdir /cluster/data/mm6/bed/pb.2005-04-20
+   cd /cluster/data/mm6/bed
+   ln -s /cluster/data/mm6/bed/pb.2005-04-20 pb
+   cd pb
+
+# Define pep* tables in mm6 DB
+
+   cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+# First edit out pepPred table definition, then
+
+   hgsql mm6 < pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins050315 -e "select info.acc, molWeight, aaSize from sp050315.info, sp050315.accToTaxon where 
+accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql mm6 -e 'load data local infile "pepMwAa.tab" into table mm6.pepMwAa ignore 1 lines;'
+
+o Build the pepPi table
+
+  hgsql proteins050315 -e "select info.acc from sp050315.info, sp050315.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.lis
+
+  pbCalPi protAcc.lis sp050315 pepPi.tab
+
+hgsql mm6 -e 'load data local infile "pepPi.tab" into table mm6.pepPi;'
+
+
+# Calculate and load pep distributions
+
+  pbCalDist sp050315 proteins050315 10090 mm6 >pbCalDist.out
+
+    cat pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql mm6
+
+    load data local infile "pepExonCntDist.tab" into table mm6.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table mm6.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table mm6.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table mm6.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table mm6.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table mm6.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table mm6.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd 050315 10090 mm6
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql mm6 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql mm6 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql mm6 -e 'load data local infile "pbResAvgStd.tab" into table mm6.pbResAvgStd;'
+   hgsql mm6 -e 'load data local infile "pbAnomLimit.tab" into table mm6.pbAnomLimit;'
+
+# UPDATE kgSpAlias TABLE TO BE USED BY PB (Done 4/20/05)
+
+    cd /cluster/data/mm6/bed/pb
+    hgsql mm6 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm6 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm6.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm6 -e 'drop table kgSpAlias';
+    hgsql mm6 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm6 -e 'load data local infile "mm6.kgSpAlias.tab" into table kgSpAlias'
+    gzip mm6.kgSpAlias.tab
+
+# Create pbStamp table for PB
+   
+  hgsql mm6 < ~/src/hg/lib/pbStamp.sql
+  hgsql mm5 -e 'select * from pbStamp' > pbStamp.tab
+
+  hgsql mm6 -e 'delete from pbStamp'
+  hgsql mm6 -e 'load data local infile "pbStamp.tab" into table mm6.pbStamp ignore 1 lines;'
+
+# ENABLE PROTEOME BROWSER FOR mm6 IN HGCENTRALTEST 
+    echo "update dbDb set hgPbOk = 1 where name = 'mm6';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+# Perform preliminary review of Proteome Browser for mm6, then
+  notify QA for formal review.
 
