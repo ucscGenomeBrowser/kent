@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.8 2005/04/04 18:20:32 galt Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.9 2005/04/20 21:32:12 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -81,6 +81,8 @@ return score;
 void outputSummary(FILE *f, struct mafSummary *ms)
 /* output to .tab file */
 {
+verbose(3, "OUTPUT src=%s, chromStart=%d, chromEnd=%d\n",
+                ms->src, ms->chromStart, ms->chromEnd);
 fprintf(f, "%u\t", hFindBin(ms->chromStart, ms->chromEnd));
 mafSummaryTabOut(ms, f);
 }
@@ -123,12 +125,13 @@ struct mafComp *oldMasterNext = mcMaster->next;
 char *e, *chrom;
 char src[256];
 
+verbose(3, "processMaf %d\n", maf->textSize);
 strcpy(src, mcMaster->src);
 chrom = chopPrefix(src);
 for (mc = maf->components; mc != NULL; mc = nextMc)
     {
     nextMc = mc->next;
-    if (sameString(mcMaster->src, mc->src))
+    if (sameString(mcMaster->src, mc->src) || mc->size == 0)
         continue;
 
     /* create maf summary for this alignment component */
@@ -158,9 +161,13 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     /* output to .tab file, or save for merging with another block 
      * if this one is too small */
 
+    verbose(3, "src=%s, chromStart=%d, chromEnd=%d\n",
+                ms->src, ms->chromStart, ms->chromEnd);
+
     /* handle pending alignment block for this species, if any  */
-    if ( ( msPending = (struct mafSummary *) hashFindVal(componentHash, ms->src)) != NULL)
+    if ((msPending = (struct mafSummary *) hashFindVal(componentHash, ms->src)) != NULL)
         {
+        verbose(3, "pending %s %d %d\n", ms->src, ms->chromStart, ms->chromEnd);
         /* there is a pending alignment block */
         /* either merge it with the current block, or output it */
         if (sameString(ms->chrom, msPending->chrom) &&
@@ -196,7 +203,10 @@ struct mafSummary *ms;
 struct hashCookie hc = hashFirst(componentHash);
 
 while (((struct mafSummary *)ms = hashNextVal(&hc)) != NULL)
+    {
+    verbose(3, "flushing %s %d %d\n", ms->src, ms->chromStart, ms->chromEnd);
     outputSummary(f, ms);
+    }
 }
 
 void hgLoadMafSummary(char *table, char *fileName)
