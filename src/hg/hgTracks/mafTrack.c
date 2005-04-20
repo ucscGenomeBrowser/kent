@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.33 2005/04/20 04:26:18 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.34 2005/04/20 14:53:37 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -544,9 +544,9 @@ for (full = mafList; full != NULL; full = full->next)
 	if (mafPixelWidth < 1) mafPixelWidth = 1;
         if (mc->size == 0)
             {
+            int w = mafPixelWidth+1;
             if (!chainBreaks)
                 continue;
-            int w = mafPixelWidth+1;
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)

@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.70 2005/04/20 04:27:15 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.71 2005/04/20 14:53:37 kate Exp $";
 
 static boolean useSpanningChains = FALSE;
 static boolean useIrowChains = FALSE;
@@ -526,7 +526,6 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
     }
 }
 
-
 static void drawScore(double score, int chromStart, int chromEnd, int seqStart,
                         double scale, struct vGfx *vg, int xOff, int yOff,
                         int height, Color color, enum trackVisibility vis)
@@ -570,8 +569,10 @@ struct mafSummary *ms;
 double scale = scaleForPixels(width);
 
 for (ms = summaryList; ms != NULL; ms = ms->next)
+    {
     drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart, scale,
                 vg, xOff, yOff, height, color, vis);
+    }
 }
 
 static void drawScoreOverview(char *tableName, int height,
@@ -1091,6 +1092,9 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         /* fill in bases for each species */
         for (mi = miList; mi != NULL; mi = mi->next)
             {
+            char *seq;
+            bool needToFree = FALSE;
+            int size = sub->textSize;
             if (mi->ix == 1)
                 /* reference */
                 continue;
@@ -1128,14 +1132,12 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                      continue;
                      }
                 }
-            char *seq = mc->text;
-            bool needToFree = FALSE;
-            int size = sub->textSize;
+            seq = mc->text;
 
-            /* if no alignment here, but MAF annotation indicates continuity
-             * of flanking alignments, fill with dashes or ='s */
             if (mc->size == 0)
                 {
+                /* if no alignment here, but MAF annotation indicates continuity
+                 * of flanking alignments, fill with dashes or ='s */
                if (!useIrowChains)
                    continue;
                 if ((mc->leftStatus == MAF_CONTIG_STATUS &&
