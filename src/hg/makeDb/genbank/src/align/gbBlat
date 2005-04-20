@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.54 2005/04/11 19:39:57 angie Exp $
+# $Id: gbBlat,v 1.55 2005/04/20 10:16:00 aamp Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -97,6 +97,7 @@ proc getOoc {database} {
         fr*       {return ""}
         sacCer*   {return ""}
         ci*       {return ""}
+	strPur*   {return /panasas/store/strPur1/11.ooc}
         borEut*   {return /iscratch/i/borEut1/11.ooc}
         default   {
             error "no blat OOC defined for $database, edit gbBlat function getOoc to add"
