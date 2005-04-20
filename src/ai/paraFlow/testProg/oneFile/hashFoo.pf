@@ -98,7 +98,10 @@ to createHash(int size) into (hash hash)
 
 
 hash hash = createHash(50000);
-file f = fileOpen("foo", "r");
+string fileName = "foo";
+if (args.size > 0)
+    fileName = args[0];
+file f = fileOpen(fileName, "r");
 string line;
 for (;;)
    {
