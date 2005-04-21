@@ -747,6 +747,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.dmBlastTab.query
     $kgDb.drBlastTab.query
     $kgDb.mmBlastTab.query
+    $kgDb.rnBlastTab.query
     $kgDb.scBlastTab.query
     $kgDb.dupSpMrna.mrnaID
     $kgDb.foldUtr3.name
@@ -999,6 +1000,7 @@ identifier wormBaseId external=WormBase dependency
     #$ce.drBlastTab.query
     #$ce.hgBlastTab.query
     #$ce.mmBlastTab.query
+    #$ce.rnBlastTab.query
     #$ce.scBlastTab.query
     #$ce.hgBlastTab.query
 
@@ -1056,6 +1058,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     $dm.drBlastTab.query
     $dm.hgBlastTab.query
     $dm.mmBlastTab.query
+    $dm.rnBlastTab.query
     $dm.scBlastTab.query
     $dm.fbTranscript.transcriptId minCheck=0.95
     $dm.hgBlastTab.query
@@ -1094,6 +1097,7 @@ identifier sgdCodingId typeOf=sgdId dependency
     $sacCer.drBlastTab.query
     $sacCer.hgBlastTab.query
     $sacCer.mmBlastTab.query
+    $sacCer.rnBlastTab.query
     $sacCer.choExpDistance.target minCheck=0.60
     $sacCer.choExpDistance.query minCheck=0.60
     $sacCer.sgdCanonical.transcript
@@ -1635,6 +1639,7 @@ type blastTab
     $gbd.dmBlastTab
     $gbd.drBlastTab
     $gbd.mmBlastTab
+    $gbd.rnBlastTab
     $gbd.scBlastTab
     $gbd.knownBlastTab
     $ce.sangerBlastTab
