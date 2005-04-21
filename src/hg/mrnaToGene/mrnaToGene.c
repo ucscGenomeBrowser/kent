@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.14 2005/04/21 04:21:49 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.15 2005/04/21 18:49:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -116,10 +116,8 @@ else
     }
 }
 
-char *getCds(struct sqlConnection *conn, char *acc, char *cdsBuf, int cdsBufSize)
-/* lookup the CDS, either in the database or hash.  If not found and looks
- * like a it has a genbank version, try without the version.  conn maybe null
- * if gCdsTable exists. */
+char *getCdsForAcc(struct sqlConnection *conn, char *acc, char *cdsBuf, int cdsBufSize)
+/* look up a cds, trying with and without version */
 {
 char *cdsStr = cdsQuery(conn, acc, cdsBuf, cdsBufSize);
 if (cdsStr == NULL)
@@ -135,69 +133,91 @@ if (cdsStr == NULL)
 return cdsStr;
 }
 
-struct genePred* pslToGenePred(struct psl *psl, char *cdsStr)
-/* Convert a psl to genePred with specified CDS string; return NULL
- * if should be skipped.  cdsStr maybe NULL if not available. */
+struct genbankCds getCds(struct sqlConnection *conn, struct psl *psl)
+/* Lookup the CDS, either in the database or hash, or generate for query.  If
+ * not found and looks like a it has a genbank version, try without the
+ * version.  If allCds is true, generate a cds that covers the query.  Conn
+ * maybe null if gCdsTable exists or gAllCds is true.  If CDS can't be
+ * obtained, start and end are both set to -1.  If there is an error parsing
+ * it, start and end are both set to 0. */
 {
 struct genbankCds cds;
-struct genePred *gp;
-unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
-
-if (cdsStr == NULL)
+ZeroVar(&cds);
+if (gAllCds)
     {
-    if (!gQuiet && !gAllCds)
-        fprintf(stderr, "Warning: no CDS for %s\n", psl->qName);
-    if (!gKeepInvalid &&  !gAllCds)
-        return NULL;
+    cds.start = psl->qStart;
+    cds.end = psl->qEnd;
+    if (psl->strand[0] == '-')
+        reverseIntRange(&cds.start, &cds.end, psl->qSize);
+    cds.startComplete = TRUE;
+    cds.endComplete = TRUE;
     }
 else
     {
-    if (!genbankCdsParse(cdsStr, &cds))
+    char cdsBuf[4096];
+    char *cdsStr = getCdsForAcc(conn, psl->qName, cdsBuf, sizeof(cdsBuf));
+    if (cdsStr == NULL)
         {
         if (!gQuiet)
-            fprintf(stderr, "Warning: invalid CDS for %s: %s\n",
-                    psl->qName, cdsStr);
-        if (!gKeepInvalid)
-            return NULL;
+            fprintf(stderr, "Warning: no CDS for %s\n", psl->qName);
+        cds.start = cds.end = -1;
         }
     else
         {
-        if ((cds.end-cds.start) > psl->qSize)
+        if (!genbankCdsParse(cdsStr, &cds))
+            {
+            if (!gQuiet)
+                fprintf(stderr, "Warning: invalid CDS for %s: %s\n",
+                        psl->qName, cdsStr);
+            }
+        else if ((cds.end-cds.start) > psl->qSize)
             {
             if (!gQuiet)
                 fprintf(stderr, "Warning: CDS for %s (%u..%u) longer than qSize (%u)\n",
                         psl->qName, cds.start, cds.end, psl->qSize);
-            if (!gKeepInvalid)
-                return NULL;
-            cds.start = -1;
-            cds.end = -1;
-            }
-        if (gRequireUtr && ((cds.start == 0) || (cds.end == psl->qSize)))
-            {
-            fprintf(stderr, "Warning: no 5' or 3' UTR for %s\n", psl->qName);
-            return NULL;
+            cds.start = cds.end = -1;
             }
         }
     }
-gp = genePredFromPsl2(psl, optFields, &cds, gSmallInsertSize);
-if (gAllCds)
-    {
-    gp->cdsStart = gp->txStart;
-    gp->cdsEnd = gp->txEnd;
-    }
-return gp;
+return cds;
 }
 
-void convertPslRow(char* cdsStr, char **row, FILE *genePredFh)
-/* convert a row from the query of cds and psl */
+struct genePred* pslToGenePred(struct psl *psl, struct genbankCds *cds)
+/* Convert a psl to genePred with specified CDS string; return NULL
+ * if should be skipped.  cdsStr maybe NULL if not available. */
 {
-struct psl *psl = pslLoad(row);
-struct genePred *genePred = pslToGenePred(psl, cdsStr);
+struct genePred *gp;
+unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
+
+if ((cds->start == cds->end) && !gKeepInvalid)
+    return NULL;
+if (gRequireUtr && ((cds->start == 0) || (cds->end == psl->qSize)))
+    {
+    if (!gQuiet)
+        fprintf(stderr, "Warning: no 5' or 3' UTR for %s\n", psl->qName);
+    return NULL;
+    }
+return genePredFromPsl2(psl, optFields, cds, gSmallInsertSize);
+}
+
+void convertPsl(struct psl *psl, struct genbankCds *cds, FILE *genePredFh)
+/* convert a cds and psl and output */
+{
+struct genePred *genePred = pslToGenePred(psl, cds);
 if (genePred != NULL)
     {
     genePredTabOut(genePred, genePredFh);
     genePredFree(&genePred);
     }
+}
+
+void convertPslTableRow(char **row, FILE *genePredFh)
+/* A row from the PSL query that includes CDS */
+{
+struct psl *psl = pslLoad(row+1);
+struct  genbankCds cds;
+genbankCdsParse(row[0], &cds);
+convertPsl(psl, &cds, genePredFh);
 pslFree(&psl);
 }
 
@@ -214,27 +234,24 @@ safef(query, sizeof(query),
       pslTable, pslTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-    convertPslRow(row[0], row+1, genePredFh);
+    convertPslTableRow(row, genePredFh);
 sqlFreeResult(&sr);
 }
 
 void convertPslFileRow(struct sqlConnection *conn, char **row, FILE *genePredFh)
-/* convert a psl record from a file to a genePred object */
+/* A row from the PSL file, getting CDS */
 {
-char *qName = row[9];
-char cdsBuf[4096];
-char *cdsStr = NULL;
-if (!gAllCds)
-    cdsStr = getCds(conn, qName, cdsBuf, sizeof(cdsBuf));
-
-convertPslRow(cdsStr, row, genePredFh);
+struct psl *psl = pslLoad(row);
+struct  genbankCds cds = getCds(conn, psl);
+convertPsl(psl, &cds, genePredFh);
+pslFree(&psl);
 }
 
 void convertPslFile(struct sqlConnection *conn, char *pslFile, FILE *genePredFh)
 /* convert mrnas in a psl file to genePred objects */
 {
 struct lineFile *lf = lineFileOpen(pslFile, TRUE);
-char *row[PSL_NUM_COLS];
+char *row[PSL_NUM_COLS], cdsBuf[4096];
 
 while (lineFileNextRowTab(lf, row, PSL_NUM_COLS))
     convertPslFileRow(conn, row, genePredFh);
