@@ -1,6 +1,5 @@
-  - Making virtual functions happen.
-  - Make it ok to have extra trailing comma in an initialization
-    before a ).
+  - Revisit tokenizer to make L work in numerical constants,
+    and to get the quote to markers to work.
   - Go ahead and let assignments return a value.  
   - Make sure that assigning a typed variable from a var variable
     does the right thing.
@@ -23,6 +22,9 @@ Check system:
 
 -----------
 DONE
+  - Make it ok to have extra trailing comma in an initialization
+    before a ).
+  - Making virtual functions happen.
   - Yank out constant type optimization in pfType, particularly
     in coerceType routine.
   - Sort the _pf_base_info table before writing it.

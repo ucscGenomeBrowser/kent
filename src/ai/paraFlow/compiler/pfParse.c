@@ -1085,6 +1085,8 @@ if (tok->type == ',')
     while (tok->type == ',')
 	{
 	tok = tok->next;
+	if (tok->type == ')')
+	    break;
 	pp = parseAssign(tuple, &tok, scope);
 	slAddHead(&tuple->children, pp);
 	}
