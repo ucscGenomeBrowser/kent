@@ -44,6 +44,8 @@ test:
 	diff expected/printFile $O/printFile
 	paraFlow shift.pf > $O/shift
 	diff expected/shift $O/shift
+	paraFlow stringInit.pf > $O/stringInit
+	diff expected/stringInit $O/stringInit
 	paraFlow toInOut.pf > $O/toInOut
 	diff expected/toInOut $O/toInOut
 	paraFlow twoParam.pf > $O/twoParam
