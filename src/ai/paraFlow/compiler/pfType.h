@@ -70,6 +70,9 @@ struct pfType *pfTypeNew(struct pfBaseType *base);
 void pfTypeDump(struct pfType *ty, FILE *f);
 /* Write out info on ty to file.  (No newlines written) */
 
+boolean pfTypeSame(struct pfType *a, struct pfType *b);
+/* Return TRUE if a and b are same type logically */
+
 struct pfCompile;
 struct pfParse;
 

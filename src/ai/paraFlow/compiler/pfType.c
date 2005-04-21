@@ -1111,18 +1111,9 @@ for (pp = output->children; pp != NULL; pp = pp->next)
 if (body != NULL)
     {
     struct pfScope *classScope = funcDec->scope->parent;
-    if (!classScope->isClass)
+    if (classScope->class == NULL)
         classScope = NULL;
     rBlessFunction(funcDec->scope, outputHash, pfc, body, classScope);
-#ifdef USELESS
-    hc = hashFirst(outputHash);
-    while ((hel = hashNext(&hc)) != NULL)
-	{
-	if (hel->val == intToPt(0))
-	    errAt(funcDec->tok, "Output variable %s not set in %s", 
-		    hel->name, funcDec->name);
-	}
-#endif /* USELESS */
     }
 hashFree(&outputHash);
 }

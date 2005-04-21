@@ -101,3 +101,89 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     pfCheckParaFlow(pfc, pp);
 }
 
+static void checkNotInAncestor(struct pfBaseType *class,
+	struct pfBaseType *parent, struct pfType *method)
+/* Make sure method is not declared in ancestors. */
+{
+while (parent != NULL && parent->name[0] != '<')
+    {
+    struct pfType *m;
+    for (m = parent->methods; m != NULL; m = m->next)
+        {
+	if (sameString(m->fieldName, method->fieldName))
+	    {
+	    errAbort("%s defined in class %s and ancestor %s, but %s isn't polymorphic",
+	    	method->fieldName, class->name, parent->name, method->fieldName);
+	    }
+	}
+    parent = parent->parent;
+    }
+}
+
+static void checkPolyAndSameType(struct pfBaseType *class,
+	struct pfBaseType *parent, struct pfType *method)
+/* Make sure that method is polymorphic in ancestors, and
+ * that it also agrees in type in ancestors. */
+{
+while (parent != NULL && parent->name[0] != '<')
+    {
+    struct pfType *m;
+    for (m = parent->methods; m != NULL; m = m->next)
+        {
+	if (sameString(m->fieldName, method->fieldName))
+	    {
+	    if (m->tyty != tytyVirtualFunction)
+	        {
+		errAbort("%s is polymorphic in %s, but not in ancestor %s",
+			method->fieldName, class->name, parent->name);
+		}
+	    if (!pfTypeSame(m, method))
+	        {
+		errAbort("%s is defined differently in %s and ancestor %s",
+			method->fieldName, class->name, parent->name);
+		}
+	    return; /* It suffices to check nearest ancestor defining this */	
+	    }
+	}
+    parent = parent->parent;
+    }
+}
+
+static void checkPolymorphicMatch(struct pfBaseType *class)
+/* Make sure that methods agree between self and ancestors
+ * on polymorphism. */
+{
+struct pfType *method;
+struct pfBaseType *parent = class->parent;
+if (parent != NULL && parent->name[0] != '<')
+    {
+    for (method = class->methods; method != NULL; method = method->next)
+	{
+	if (method->tyty == tytyVirtualFunction)
+	    {
+	    uglyf("Checking virtual %s.%s\n", class->name, method->fieldName);
+	    checkPolyAndSameType(class, parent, method);
+	    }
+	else
+	    {
+	    uglyf("Checking method %s.%s\n", class->name, method->fieldName);
+	    checkNotInAncestor(class, parent, method);
+	    }
+	}
+    }
+}
+
+void pfCheckScopes(struct pfCompile *pfc, struct pfScope *scopeList)
+/* Check scopes - currently mostly for polymorphism consistency */
+{
+uglyf("Checking %d scopes\n", slCount(scopeList));
+struct pfScope *scope;
+for (scope = scopeList; scope != NULL; scope = scope->next)
+    {
+    struct pfBaseType *class = scope->class;
+    if (class != NULL)
+        {
+	checkPolymorphicMatch(class);
+	}
+    }
+}

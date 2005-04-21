@@ -1269,14 +1269,18 @@ static struct pfParse *parseClass(struct pfCompile *pfc,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *body, *extends = NULL;
+struct pfBaseType *myBase;
 pp = pfParseNew(pptClass, tok, parent, scope);
 tok = tok->next;	/* Skip 'class' token */
 name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
 pp->name = name->name;
+myBase = pfScopeFindType(scope, name->name);
+if (myBase == NULL)
+    internalErr();
 if (tok->type == pftExtends)
     {
-    struct pfBaseType *parentBase, *myBase;
+    struct pfBaseType *parentBase;
     tok = tok->next;
     if (tok->type != pftName)
         expectingGot("class name", tok);
@@ -1286,16 +1290,13 @@ if (tok->type == pftExtends)
     extends = pfParseNew(pptTypeName, tok, pp, scope);
     extends->ty = pfTypeNew(parentBase);
     extends->name = tok->val.s;
-    myBase = pfScopeFindType(scope, name->name);
-    if (myBase == NULL)
-        internalErr();
     checkForCircularity(parentBase, myBase, tok);
     myBase->parent = parentBase;
     slAddHead(&pp->children, extends);
     tok = tok->next;
     }
 body = parseCompound(pfc, pp, &tok, scope);
-body->scope->isClass = TRUE;
+body->scope->class = myBase;
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, name);
 *pTokList = tok;

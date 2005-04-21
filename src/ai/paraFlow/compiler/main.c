@@ -220,6 +220,7 @@ pfTypeCheck(pfc, &program);
 if (endPhase < 5)
     return;
 verbose(2, "Phase 5 - polymorphic, para, and flow checks\n");
+pfCheckScopes(pfc, pfc->scopeList);
 pfCheckParaFlow(pfc, program);
 pfParseDump(program, 0, typeF);
 carefulClose(&typeF);

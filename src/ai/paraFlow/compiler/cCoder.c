@@ -167,7 +167,7 @@ if (base != pfc->stringType)
 	}
     }
 if (base != NULL)
-    fprintf(f, "_pf_cm_%s_%s", base->name, name);
+    fprintf(f, "_pf_cm%d_%s_%s", base->scope->id, base->name, name);
 else
     internalErrAt(tok);
 }
@@ -1181,11 +1181,11 @@ else
 static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
 /* Print prototype for function call. */
 {
-/* Put out function prototype and opening brace.  If class add self to
- * function symbol table. */
+/* Put out function prototype and opening brace.  */
 if (class)
     {
-    fprintf(f, "void _pf_cm_%s_%s(", class->name, funcDec->name);
+    fprintf(f, "void _pf_cm%d_%s_%s(", class->scope->id, 
+    	class->name, funcDec->name);
     fprintf(f, "%s *%s)",  stackType, stackName);
     }
 else
@@ -1361,6 +1361,72 @@ codeVarsInHelList(pfc, f, helList, zeroUninitialized);
 hashElFreeList(&helList);
 }
 
+struct polyFunRef
+/* A reference to a polymorphic function.  This helps
+ * us sort out whether to use functions from the base
+ * class or from the current class. */
+    {
+    struct polyFunRef *next;
+    struct pfBaseType *class;	/* Class defined in. */
+    struct pfType *method;	/* Method field. */
+    };
+
+static void rMakePolyFunList(struct pfBaseType *base,
+	struct polyFunRef **pList, struct hash *hash)
+/* Recursively add polymorphic functions in parents and self to list. */
+{
+if (base != NULL)
+    {
+    struct pfType *method;
+    rMakePolyFunList(base->parent, pList, hash);
+    for (method = base->methods; method != NULL; method = method->next)
+        {
+	if (method->tyty == tytyVirtualFunction)
+	    {
+	    struct polyFunRef *ref = hashFindVal(hash, method->fieldName);
+	    if (ref == NULL)
+		{
+		AllocVar(ref);
+		ref->method = method;
+		slAddHead(pList, ref);
+		hashAdd(hash, method->fieldName, ref);
+		}
+	    ref->class = base;
+	    }
+	}
+    }
+}
+
+static void printPolyFunTable(struct pfCompile *pfc, FILE *f, 
+	struct pfBaseType *base)
+/* Print polymorphic function table. */
+{
+int polyCount = 0;
+struct pfBaseType *b;
+for (b = base; b != NULL; b = b->parent)
+    polyCount += b->polyCount;
+if (polyCount > 0)
+    {
+    struct polyFunRef *pfrList = NULL, *pfr;
+    struct hash *hash = newHash(8);
+    int offset = 0;
+    rMakePolyFunList(base, &pfrList, hash);
+    slReverse(&pfrList);
+    fprintf(f, "_pf_polyFunType _pf_pf%d_%s[] = {\n", base->scope->id, base->name);
+    for (pfr = pfrList; pfr != NULL; pfr = pfr->next)
+        {
+	b = pfr->class;
+	fprintf(f, "  _pf_cm%d_%s_%s,\n", b->scope->id, b->name, 
+		pfr->method->fieldName);
+	pfr->method->polyOffset = offset;
+	offset += 1;
+	}
+    fprintf(f, "};\n");
+    hashFree(&hash);
+    slFreeList(&pfrList);
+    }
+}
+
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
 	boolean printPfInit, boolean isBuiltIn)
@@ -1384,7 +1450,9 @@ for (hel = helList; hel != NULL; hel = hel->next)
 	fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
 	fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
 	rPrintFields(pfc, f, base); 
-	fprintf(f, "};\n\n");
+	fprintf(f, "};\n");
+	printPolyFunTable(pfc, f, base);
+	fprintf(f, "\n");
 	}
     }
 hashElFreeList(&helList);

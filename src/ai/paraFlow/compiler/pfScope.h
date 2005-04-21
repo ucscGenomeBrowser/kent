@@ -18,7 +18,7 @@ struct pfScope
      struct hash *vars;		/* Variables defined in this scope (including functions) */
      int id;			/* Unique ID for this scope. */
      boolean isModule;		/* True if it's a module scope. */
-     boolean isClass;		/* True if it's a class scope. */
+     struct pfBaseType *class;	/* If it's a class scope this is set. */
      };
 
 struct pfVar
