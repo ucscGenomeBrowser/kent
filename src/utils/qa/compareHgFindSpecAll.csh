@@ -68,7 +68,7 @@ endif
 
 
 foreach field ( $fields )
-  if ( $mode2 == "fast" || $field = "searchSettings" ) then
+  if ( $mode2 == "fast" || $field == "searchSettings" ) then
     compareHgFindSpecFast.csh $machine1 $machine2 $db $field
     if ( $status ) then
       exit 1
