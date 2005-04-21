@@ -1,7 +1,7 @@
 /* Built in string handling. */
 #include "common.h"
-#include "runType.h"
 #include "../compiler/pfPreamble.h"
+#include "runType.h"
 #include "object.h"
 #include "string.h"
 

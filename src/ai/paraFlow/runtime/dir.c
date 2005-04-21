@@ -4,8 +4,8 @@
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
-#include "runType.h"
 #include "../compiler/pfPreamble.h"
+#include "runType.h"
 #include "object.h"
 #include "string.h"
 

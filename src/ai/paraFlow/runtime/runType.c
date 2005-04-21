@@ -286,23 +286,26 @@ for (i=0; i<typeCount; ++i)
 	char *typeValList = cloneString(info->typeValList);
 	base = &bases[info->classId];
 	assert(base->singleType == pf_stClass);
-	fieldCount = countChars(typeValList, ',') + 1;
-	AllocArray(fields, fieldCount);
-	chopByChar(typeValList, ',', fields, fieldCount);
-	for (j=0; j<fieldCount; ++j)
+	if (typeValList[0] != 0)
 	    {
-	    char *spec = fields[j];
-	    int typeId = atoi(spec);
-	    char *name = strchr(spec, ':') + 1;
-	    struct _pf_type *type = CloneVar(types[typeId]);
-	    struct _pf_base *b = type->base;
-	    type->name = name;
-	    offset = ((offset + b->aliAdd) & b->aliMask);
-	    type->offset = offset;
-	    offset += b->size;
-	    slAddHead(&base->fields, type);
+	    fieldCount = countChars(typeValList, ',') + 1;
+	    AllocArray(fields, fieldCount);
+	    chopByChar(typeValList, ',', fields, fieldCount);
+	    for (j=0; j<fieldCount; ++j)
+		{
+		char *spec = fields[j];
+		int typeId = atoi(spec);
+		char *name = strchr(spec, ':') + 1;
+		struct _pf_type *type = CloneVar(types[typeId]);
+		struct _pf_base *b = type->base;
+		type->name = name;
+		offset = ((offset + b->aliAdd) & b->aliMask);
+		type->offset = offset;
+		offset += b->size;
+		slAddHead(&base->fields, type);
+		}
+	    slReverse(&base->fields);
 	    }
-	slReverse(&base->fields);
 	base->objSize = offset;
 	}
     }

@@ -2,8 +2,8 @@
  * environment dir. */
 
 #include "common.h"
-#include "runType.h"
 #include "../compiler/pfPreamble.h"
+#include "runType.h"
 #include "object.h"
 #include "string.h"
 #include "initVar.h"
