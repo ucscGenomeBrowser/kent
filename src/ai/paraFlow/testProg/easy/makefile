@@ -46,3 +46,5 @@ test:
 #	diff expected/unitCircle $O/unitCircle
 	paraFlow while.pf > $O/while
 	diff expected/while $O/while
+	paraFlow polymorphic.pf > $O/polymorphic
+	diff expected/polymorphic $O/polymorphic
