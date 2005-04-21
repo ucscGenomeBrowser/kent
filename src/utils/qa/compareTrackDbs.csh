@@ -53,25 +53,11 @@ foreach machine ( $machine1 $machine2 )
   
 end
 
-checkMachineName.csh $machine1
-if ( $status ) then
-  echo ${0}:
-  $0
-  exit 1
-endif
-
-checkMachineName.csh $machine2
-if ( $status ) then
-  echo ${0}:
-  $0
-  exit 1
-endif
-
 set table = "trackDb"
 set field = "tableName"
 
 if ( $#argv == 4 ) then
-  # check if valid field -- checks on dev"
+  # check if valid field -- checks on localhost (usually hgwdev)
   set field = $argv[4]
   hgsql -t -e "DESC $table" $db | grep -w $field | wc -l > /dev/null
   if ( $status ) then
