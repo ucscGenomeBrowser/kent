@@ -338,7 +338,6 @@ int endSymSize = strlen(endSym);
 char *pos = stringIn(endSym, tkz->pos);
 char *e;
 
-uglyf("tok multiLineQuote endSym = %s, pos = %p\n", endSym, pos);
 if (pos != NULL)
     {
     dyStringAppendN(tkz->dy, tkz->pos,  pos - tkz->pos);
@@ -360,11 +359,9 @@ static void tokString(struct pfTokenizer *tkz, struct pfToken *tok,
 char *pos = tkz->pos+1;
 char *nextLine = allWhiteToEol(pos);
 dyStringClear(tkz->dy);
-uglyf("tokString quoteC = %c\n", quoteC);
 if (nextLine != NULL)
     {
     char endSym[3];
-    uglyf("multiLine quote, start %c %c\n", nextLine[0], nextLine[1]);
     endSym[0] = '\n';
     endSym[1] = quoteC;
     endSym[2] = 0;
