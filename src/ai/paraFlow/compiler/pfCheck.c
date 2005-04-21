@@ -171,6 +171,78 @@ if (parent != NULL && parent->name[0] != '<')
     }
 }
 
+static void rMakePolyFunList(struct pfBaseType *base,
+	struct pfPolyFunRef **pList, struct hash *hash,
+	int *pOffset)
+/* Recursively add polymorphic functions in parents and self to list. */
+{
+if (base != NULL)
+    {
+    struct pfType *method;
+    rMakePolyFunList(base->parent, pList, hash, pOffset);
+    for (method = base->methods; method != NULL; method = method->next)
+        {
+	if (method->tyty == tytyVirtualFunction)
+	    {
+	    struct pfPolyFunRef *ref = hashFindVal(hash, method->fieldName);
+	    if (ref == NULL)
+		{
+		AllocVar(ref);
+		ref->method = method;
+		method->polyOffset = *pOffset;
+		*pOffset += 1;
+		slAddHead(pList, ref);
+		hashAdd(hash, method->fieldName, ref);
+		}
+	    else
+	        {
+		method->polyOffset = ref->method->polyOffset;
+		ref->method = method;
+		}
+	    ref->class = base;
+	    }
+	}
+    }
+}
+
+static void calcPolyFunOffsets(struct pfCompile *pfc, struct pfBaseType *base)
+/* Calculate offsets into virtual function table. */
+{
+int polyCount = 0;
+struct pfBaseType *b;
+for (b = base; b != NULL; b = b->parent)
+    polyCount += b->selfPolyCount;
+if (polyCount > 0)
+    {
+    int offset = 0;
+    struct pfPolyFunRef *pfrList = NULL, *pfr;
+    struct hash *hash = newHash(8);
+    rMakePolyFunList(base, &pfrList, hash, &offset);
+    slReverse(&pfrList);
+    base->polyList = pfrList;
+    hashFree(&hash);
+    }
+}
+
+#ifdef NEVER
+static void calcAllPolyFunOffsets(struct pfCompile *pfc, 
+	struct pfScope *scopeList)
+/* Calculate info on all polymorphic functions 
+ * FIXME - move this from code generator to pfCheck maybe? */
+{
+struct pfScope *scope;
+for (scope = scopeList; scope != NULL; scope = scope->next)
+    {
+    struct pfBaseType *class = scope->class;
+    if (class != NULL)
+        {
+	calcPolyFunOffsets(pfc, class);
+	}
+    }
+}
+#endif /* NEVER */
+
+
 void pfCheckScopes(struct pfCompile *pfc, struct pfScope *scopeList)
 /* Check scopes - currently mostly for polymorphism consistency */
 {
@@ -181,6 +253,7 @@ for (scope = scopeList; scope != NULL; scope = scope->next)
     if (class != NULL)
         {
 	checkPolymorphicMatch(class);
+	calcPolyFunOffsets(pfc, class);
 	}
     }
 }

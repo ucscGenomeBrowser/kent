@@ -1,8 +1,7 @@
-  - Revisit tokenizer to make L work in numerical constants,
-    and to get the quote to markers to work.
-  - Go ahead and let assignments return a value.  
+  - Get the quote to markers to work.
   - Make sure that assigning a typed variable from a var variable
     does the right thing.
+  - Go ahead and let assignments return a value.  
   - Implement += for strings and arrays.
   - Adding default parameters.  These could be applied during
     class initialization too.
@@ -22,6 +21,7 @@ Check system:
 
 -----------
 DONE
+  - make L work in numerical constants,
   - Make it ok to have extra trailing comma in an initialization
     before a ).
   - Making virtual functions happen.
