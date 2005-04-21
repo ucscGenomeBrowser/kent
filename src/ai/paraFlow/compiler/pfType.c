@@ -810,6 +810,8 @@ struct pfParse *rval = *pRval;
 
 if (!pfTypeSame(lval->ty, rval->ty))
     {
+    if (lval->ty->base == pfc->varType || rval->ty->base == pfc->varType)
+        errAt(pp->tok, "Sorry, you can't use a var with this operation");
     struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
     coerceOne(pfc, &lval, ty, numToString);
     coerceOne(pfc, &rval, ty, numToString);
