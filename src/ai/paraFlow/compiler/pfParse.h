@@ -28,6 +28,7 @@ enum pfParseType
     pptWhile,
     pptFor,
     pptForeach,
+    pptForEachCall,
     pptBreak,
     pptContinue,
     pptClass,

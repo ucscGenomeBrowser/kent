@@ -89,6 +89,7 @@ switch (pp->type)
     case pptModule:
     case pptFor:
     case pptForeach:
+    case pptForEachCall:
     case pptToDec:
     case pptFlowDec:
     case pptParaDec:

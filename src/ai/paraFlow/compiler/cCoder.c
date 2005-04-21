@@ -504,6 +504,75 @@ if (type->base->needsCleanup)
     }
 }
 
+static void codeInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)
+/* Print out default initialization of type. */
+{
+if (type->base == pfc->varType)
+    fprintf(f, "=_pf_var_zero");
+else
+    fprintf(f, "=0");
+}
+
+static void codeVarsInHelList(struct pfCompile *pfc, FILE *f,
+	struct hashEl *helList, boolean zeroUninit)
+/* Print out variable declarations in helList. */
+{
+struct hashEl *hel;
+boolean gotVar = FALSE;
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct pfVar *var = hel->val;
+    struct pfType *type = var->ty;
+    if (type->tyty == tytyVariable)
+        {
+	printType(pfc, f, type->base);
+	fprintf(f, " %s", var->name);
+	if (zeroUninit && !isInitialized(var))
+	    {
+	    codeInitOfType(pfc, f, type);
+	    }
+	fprintf(f, ";\n");
+	gotVar = TRUE;
+	}
+    }
+if (gotVar)
+    fprintf(f, "\n");
+}
+
+static void codeCleanupVarsInHelList(struct pfCompile *pfc, FILE *f,
+	struct hashEl *helList)
+/* Print out variable cleanups for helList. */
+{
+struct hashEl *hel;
+for (hel = helList; hel != NULL; hel = hel->next)
+    {
+    struct pfVar *var = hel->val;
+    codeCleanupVar(pfc, f, var->ty, var->name);
+    }
+}
+
+static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
+	boolean zeroUninitialized)
+/* Print out variable declarations associated with scope. */
+{
+struct hashEl *helList = hashElListHash(scope->vars);
+slSort(&helList, hashElCmp);
+codeVarsInHelList(pfc, f, helList, zeroUninitialized);
+hashElFreeList(&helList);
+}
+
+static void cleanupScopeVars(struct pfCompile *pfc, FILE *f, 
+	struct pfScope *scope)
+/* Print out variable declarations associated with scope. */
+{
+struct hashEl *helList = hashElListHash(scope->vars);
+slSort(&helList, hashElCmp);
+slReverse(&helList);
+codeCleanupVarsInHelList(pfc, f, helList);
+hashElFreeList(&helList);
+}
+
+
 
 static int lvalOffStack(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, char *op, int expSize,
@@ -781,6 +850,116 @@ fprintf(f, "_pf_string_cat(%s+%d, %d);\n", stackName, stack, total);
 return 1;
 }
 
+static void castStack(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
+	int stack)
+/* Cast stack location. */
+{
+switch(pp->type)
+    {
+    case pptCastBitToBit:
+    case pptCastBitToByte:
+    case pptCastBitToShort:
+    case pptCastBitToInt:
+    case pptCastBitToLong:
+    case pptCastBitToFloat:
+    case pptCastBitToDouble:
+    case pptCastByteToBit:
+    case pptCastByteToByte:
+    case pptCastByteToShort:
+    case pptCastByteToInt:
+    case pptCastByteToLong:
+    case pptCastByteToFloat:
+    case pptCastByteToDouble:
+    case pptCastShortToBit:
+    case pptCastShortToByte:
+    case pptCastShortToShort:
+    case pptCastShortToInt:
+    case pptCastShortToLong:
+    case pptCastShortToFloat:
+    case pptCastShortToDouble:
+    case pptCastIntToBit:
+    case pptCastIntToByte:
+    case pptCastIntToShort:
+    case pptCastIntToInt:
+    case pptCastIntToLong:
+    case pptCastIntToFloat:
+    case pptCastIntToDouble:
+    case pptCastLongToBit:
+    case pptCastLongToByte:
+    case pptCastLongToShort:
+    case pptCastLongToInt:
+    case pptCastLongToLong:
+    case pptCastLongToFloat:
+    case pptCastLongToDouble:
+    case pptCastFloatToBit:
+    case pptCastFloatToByte:
+    case pptCastFloatToShort:
+    case pptCastFloatToInt:
+    case pptCastFloatToLong:
+    case pptCastFloatToFloat:
+    case pptCastFloatToDouble:
+    case pptCastDoubleToBit:
+    case pptCastDoubleToByte:
+    case pptCastDoubleToShort:
+    case pptCastDoubleToInt:
+    case pptCastDoubleToLong:
+    case pptCastDoubleToFloat:
+    case pptCastDoubleToDouble:
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ";\n");
+	break;
+    case pptCastObjectToBit:
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = (0 != ");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ");\n");
+	break;
+    case pptCastStringToBit:
+        {
+	fprintf(f, "{_pf_String _pf_tmp = %s[%d].String; ", stackName, stack);
+	fprintf(f, "%s[%d].Bit = (_pf_tmp != 0 && _pf_tmp->size != 0);", stackName, stack);
+	fprintf(f, "}\n");
+	break;
+	}
+    case pptCastBitToString:
+    case pptCastByteToString:
+    case pptCastShortToString:
+    case pptCastIntToString:
+    case pptCastLongToString:
+    case pptCastFloatToString:
+    case pptCastDoubleToString:
+	{
+	char *dest;
+	if (pp->type == pptCastFloatToString || pp->type == pptCastDoubleToString)
+	    dest = "double";
+	else
+	    dest = "long";
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = _pf_string_from_%s(", dest);
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ");\n");
+	break;
+	}
+    case pptCastTypedToVar:
+	{
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".val.%s = ", vTypeKey(pfc, pp->children->ty->base));
+	codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ";\n");
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".typeId = %d;\n", codedTypeId(pfc, pp->children->ty));
+	break;
+	}
+    default:
+	{
+	internalErr();
+	break;
+	}
+    }
+}
+
 static int codeExpression(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, boolean addRef)
 /* Emit code for one expression.  Returns how many items added
@@ -946,27 +1125,8 @@ switch (pp->type)
     case pptCastDoubleToLong:
     case pptCastDoubleToFloat:
     case pptCastDoubleToDouble:
-	codeExpression(pfc, f, pp->children, stack, addRef);
-        codeParamAccess(pfc, f, pp->ty->base, stack);
-	fprintf(f, " = ");
-        codeParamAccess(pfc, f, pp->children->ty->base, stack);
-	fprintf(f, ";\n");
-	return 1;
     case pptCastObjectToBit:
-	codeExpression(pfc, f, pp->children, stack, FALSE);
-        codeParamAccess(pfc, f, pp->ty->base, stack);
-	fprintf(f, " = (0 != ");
-        codeParamAccess(pfc, f, pp->children->ty->base, stack);
-	fprintf(f, ");\n");
-	return 1;
     case pptCastStringToBit:
-        {
-	codeExpression(pfc, f, pp->children, stack, FALSE);
-	fprintf(f, "{_pf_String _pf_tmp = %s[%d].String; ", stackName, stack);
-	fprintf(f, "%s[%d].Bit = (_pf_tmp != 0 && _pf_tmp->size != 0);", stackName, stack);
-	fprintf(f, "}\n");
-	return 1;
-	}
     case pptCastBitToString:
     case pptCastByteToString:
     case pptCastShortToString:
@@ -974,29 +1134,10 @@ switch (pp->type)
     case pptCastLongToString:
     case pptCastFloatToString:
     case pptCastDoubleToString:
-	{
-	char *dest;
-	if (pp->type == pptCastFloatToString || pp->type == pptCastDoubleToString)
-	    dest = "double";
-	else
-	    dest = "long";
-        codeExpression(pfc, f, pp->children, stack, addRef);
-        codeParamAccess(pfc, f, pp->ty->base, stack);
-	fprintf(f, " = _pf_string_from_%s(", dest);
-        codeParamAccess(pfc, f, pp->children->ty->base, stack);
-	fprintf(f, ");\n");
-	return 1;
-	}
-
     case pptCastTypedToVar:
 	{
 	codeExpression(pfc, f, pp->children, stack, addRef);
-        codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".val.%s = ", vTypeKey(pfc, pp->children->ty->base));
-	codeParamAccess(pfc, f, pp->children->ty->base, stack);
-	fprintf(f, ";\n");
-        codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".typeId = %d;\n", codedTypeId(pfc, pp->children->ty));
+	castStack(pfc, f, pp, stack);
 	return 1;
 	}
     default:
@@ -1058,6 +1199,7 @@ else
     fprintf(f, "}\n");
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
+cleanupScopeVars(pfc, f, foreach->scope);
 fprintf(f, "}\n");
 }
 
@@ -1086,6 +1228,35 @@ codeStatement(pfc, f, next);
 fprintf(f, "}\n");
 fprintf(f, "}\n");
 }
+
+static void codeForEachCall(struct pfCompile *pfc, FILE *f, struct pfParse *foreach)
+/* Emit C code for foreach call statement. */
+{
+struct pfParse *elPp = foreach->children;
+struct pfParse *callPp = elPp->next;
+struct pfBaseType *base = callPp->ty->base;
+struct pfParse *body = callPp->next;
+struct pfParse *cast = body->next;
+char *elName = elPp->name;
+int expSize;
+
+/* Print element variable in a new scope. */
+fprintf(f, "{\n");
+codeScopeVars(pfc, f, foreach->scope, TRUE);
+fprintf(f, "for(;;)\n");
+fprintf(f, "{\n");
+expSize = codeInitOrAssign(pfc, f, elPp, callPp, 0);
+lvalOffStack(pfc, f, elPp, 0, "=", expSize, TRUE);
+if (cast != NULL)
+    castStack(pfc, f, cast, 0);
+fprintf(f, "if (%s[0].Bit == 0)", stackName);
+fprintf(f, "   break;\n");
+codeStatement(pfc, f, body);
+fprintf(f, "}\n");
+cleanupScopeVars(pfc, f, foreach->scope);
+fprintf(f, "}\n");
+}
+
 
 static void codeWhile(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Emit C code for while statement. */
@@ -1158,6 +1329,9 @@ switch (pp->type)
     case pptForeach:
 	codeForeach(pfc, f, pp);
 	break;
+    case pptForEachCall:
+        codeForEachCall(pfc, f, pp);
+	break;
     case pptFor:
 	codeFor(pfc, f, pp);
 	break;
@@ -1182,15 +1356,6 @@ switch (pp->type)
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
 	break;
     }
-}
-
-static void codeInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)
-/* Print out default initialization of type. */
-{
-if (type->base == pfc->varType)
-    fprintf(f, "=_pf_var_zero");
-else
-    fprintf(f, "=0");
 }
 
 static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
@@ -1326,54 +1491,6 @@ for (statement = classCompound->children; statement != NULL;
 	    break;
 	}
     }
-}
-
-static void codeVarsInHelList(struct pfCompile *pfc, FILE *f,
-	struct hashEl *helList, boolean zeroUninit)
-/* Print out variable declarations in helList. */
-{
-struct hashEl *hel;
-boolean gotVar = FALSE;
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    struct pfVar *var = hel->val;
-    struct pfType *type = var->ty;
-    if (type->tyty == tytyVariable)
-        {
-	printType(pfc, f, type->base);
-	fprintf(f, " %s", var->name);
-	if (zeroUninit && !isInitialized(var))
-	    {
-	    codeInitOfType(pfc, f, type);
-	    }
-	fprintf(f, ";\n");
-	gotVar = TRUE;
-	}
-    }
-if (gotVar)
-    fprintf(f, "\n");
-}
-
-static void codeCleanupVarsInHelList(struct pfCompile *pfc, FILE *f,
-	struct hashEl *helList)
-/* Print out variable cleanups for helList. */
-{
-struct hashEl *hel;
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    struct pfVar *var = hel->val;
-    codeCleanupVar(pfc, f, var->ty, var->name);
-    }
-}
-
-static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
-	boolean zeroUninitialized)
-/* Print out variable declarations associated with scope. */
-{
-struct hashEl *helList = hashElListHash(scope->vars);
-slSort(&helList, hashElCmp);
-codeVarsInHelList(pfc, f, helList, zeroUninitialized);
-hashElFreeList(&helList);
 }
 
 

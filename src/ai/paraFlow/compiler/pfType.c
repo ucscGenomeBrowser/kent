@@ -244,10 +244,6 @@ static void coerceToBit(struct pfCompile *pfc, struct pfParse **pPp)
 /* Make sure that pPp is a bit. */
 {
 struct pfParse *pp = *pPp;
-#ifdef OLD
-if (pp->ty == NULL)
-    expectingGot("logical value", pp->tok);
-#endif /* OLD */
 if (pp->ty->base != pfc->bitType)
     {
     struct pfType *type = pfTypeNew(pfc->bitType);
@@ -622,25 +618,52 @@ coerceToBit(pfc, &pp->children);
 }
 
 static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
-/* Make sure have agreement between element and collection vars */
+/* Figure out if looping through a collection, or over
+ * repeated uses of function, and type check accordingly. */
 {
+/* Make sure have agreement between element and collection vars */
 struct pfParse *el = pp->children;
-struct pfParse *collection = el->next;
+struct pfParse *source = el->next;
+struct pfParse *body = source->next;
+struct pfParse *cast = el;
 boolean ok = TRUE;
-if (!collection->ty->base->isCollection)
-    expectingGot("collection", collection->tok);
-if (collection->ty->base == pfc->stringType)
+if (source->type == pptCall)
     {
-    if (el->ty->base != pfc->byteType)
-	ok = FALSE;
+    /* Coerce call to be same type as element. */
+    pp->type = pptForEachCall;
+    coerceOne(pfc, &source, el->ty, FALSE);
+    el->next = source;
+
+    /* Coerce element to bit, and save cast node if
+     * any after body. */
+    coerceToBit(pfc, &cast);
+    if (cast != el)
+        {
+	cast->children = CloneVar(el);
+	el->next = cast->next;
+	el->parent = cast->parent;
+	cast->next = NULL;
+	cast->parent = pp;
+	body->next = cast;
+	}
     }
 else
     {
-    if (!pfTypeSame(el->ty, collection->ty->children))
-	ok = FALSE;
+    if (!source->ty->base->isCollection)
+	expectingGot("collection", source->tok);
+    if (source->ty->base == pfc->stringType)
+	{
+	if (el->ty->base != pfc->byteType)
+	    ok = FALSE;
+	}
+    else
+	{
+	if (!pfTypeSame(el->ty, source->ty->children))
+	    ok = FALSE;
+	}
+    if (!ok)
+	errAt(pp->tok, "type mismatch between element and collection in foreach");
     }
-if (!ok)
-    errAt(pp->tok, "type mismatch between element and collection in foreach");
 }
 
 struct pfType *coerceLval(struct pfCompile *pfc, struct pfParse *pp)

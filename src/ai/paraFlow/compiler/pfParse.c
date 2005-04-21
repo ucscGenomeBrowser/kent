@@ -49,6 +49,8 @@ switch (type)
 	return "pptFor";
     case pptForeach:
 	return "pptForeach";
+    case pptForEachCall:
+	return "pptForEachCall";
     case pptBreak:
     	return "pptBreak";
     case pptContinue:
@@ -1390,7 +1392,10 @@ pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 element = varUseOrDeclare(pp, &tok, scope);
 skipRequiredName("in", &tok);
+#ifdef OLD
 collection = parseDottedNames(pp, &tok, scope);
+#endif /* OLD */
+collection = pfParseExpression(pp, &tok, scope);
 statement = pfParseStatement(pfc, pp, &tok, scope);
 slAddHead(&pp->children, statement);
 slAddHead(&pp->children, collection);
