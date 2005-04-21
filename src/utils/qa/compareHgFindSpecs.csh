@@ -15,9 +15,9 @@ endif
 #set machine1 = "hgwbeta"
 #set machine2 = "hgw1"
 
-set machine1 = $1
-set machine2 = $2
-set db = $3
+set machine1 = $argv[1]
+set machine2 = $argv[2]
+set db = $argv[3]
 set cent=""
 set host=""
 
