@@ -163,6 +163,13 @@ switch (base->singleType)
         printDir(f, *p, base);
 	break;
 	}
+    case pf_stVar:
+        {
+	struct _pf_var *var = data;
+	struct _pf_type *type = _pf_type_table[var->typeId];
+	printField(f, &var->val, type->base);
+	break;
+	}
     default:
 	internalErr();
 	break;
