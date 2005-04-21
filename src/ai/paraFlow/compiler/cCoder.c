@@ -875,8 +875,11 @@ switch (pp->type)
 	    case pftFloat:
 	        fprintf(f, "%f;\n", pp->tok->val.x);
 		break;
+	    case pftLong:
+		fprintf(f, "%lld;\n", pp->tok->val.l);
+		break;
 	    case pftInt:
-		fprintf(f, "%lld;\n", pp->tok->val.i);
+		fprintf(f, "%d;\n", pp->tok->val.i);
 		break;
 	    }
 	return 1;

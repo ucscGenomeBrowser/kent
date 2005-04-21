@@ -315,8 +315,11 @@ switch (tok->type)
 	break;
 	#undef MAXLEN
 	}
+    case pftLong:
+        fprintf(f, "%lld", tok->val.l);
+	break;
     case pftInt:
-        fprintf(f, "%lld", tok->val.i);
+        fprintf(f, "%d", tok->val.i);
 	break;
     case pftFloat:
         fprintf(f, "%g", tok->val.x);

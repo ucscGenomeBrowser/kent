@@ -948,6 +948,8 @@ if (tok->type == pftString)
     pp->ty = pfTypeNew(pfc->stringType);
 else if (tok->type == pftInt)
     pp->ty = pfTypeNew(pfc->intType);
+else if (tok->type == pftLong)
+    pp->ty = pfTypeNew(pfc->longType);
 else if (tok->type == pftFloat)
     pp->ty = pfTypeNew(pfc->doubleType);
 pp->type = pptFromTokType(pp->tok);

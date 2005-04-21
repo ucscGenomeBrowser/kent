@@ -536,8 +536,17 @@ if (isFloat)
     }
 else
     {
-    tok->val.i = atoll(tkz->pos);
-    tok->type = pftInt;
+    if (c == 'L')
+	{
+	tok->val.l = atoll(tkz->pos);
+	tok->type = pftLong;
+	pos += 1;
+	}
+    else
+	{
+	tok->val.i = atoi(tkz->pos);
+	tok->type = pftInt;
+	}
     }
 tok->textSize = pos - tkz->pos;
 tkz->pos = pos;
@@ -853,8 +862,11 @@ switch (tok->type)
     case pftString:
 	fprintf(f, "\"%s\"", tok->val.s);
 	break;
+    case pftLong:
+	fprintf(f, "%lld", tok->val.l);
+	break;
     case pftInt:
-	fprintf(f, "%lld", tok->val.i);
+	fprintf(f, "%d", tok->val.i);
 	break;
     case pftFloat:
 	fprintf(f, "%f", tok->val.x);

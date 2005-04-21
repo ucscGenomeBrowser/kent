@@ -20,6 +20,7 @@ enum pfTokType
     pftName,
     pftString,
     pftInt,
+    pftLong,
     pftFloat,
     pftPlusPlus,        /* ++ */
     pftMinusMinus,      /* -- */
@@ -99,7 +100,8 @@ union pfTokVal
     {
     char *s;		/* A string (allocated in string table) 
                          * This covers strings, names, and glyphs. */
-    long long i;	/* An integer type */
+    long long l;	/* A 64-bit integer type */
+    int i;		/* 32-bit integer type. */
     double x;		/* Floating point */
     char c;		/* A single character symbol. */
     struct pfScope *scope;	/* Scope start for {'s  */
