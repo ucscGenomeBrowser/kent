@@ -38,7 +38,7 @@ shortLabel 10-Way Conservation
 longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
 group compGeno
 priority 109.11
-visibility hide
+visibility full
 #color 0, 10, 100
 #altColor 50,50,50
 #altColor 255,128,0
