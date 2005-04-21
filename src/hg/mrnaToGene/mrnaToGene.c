@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.13 2005/04/04 23:55:01 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.14 2005/04/21 04:21:49 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -19,6 +19,7 @@ static struct optionSpec optionSpecs[] = {
     {"requireUtr", OPTION_BOOLEAN},
     {"smallInsertSize", OPTION_INT},
     {"genePredExt", OPTION_BOOLEAN},
+    {"allCds", OPTION_BOOLEAN},
     {"keepInvalid", OPTION_BOOLEAN},
     {"quiet", OPTION_BOOLEAN},
     {NULL, 0}
@@ -28,6 +29,7 @@ static struct optionSpec optionSpecs[] = {
 static int gSmallInsertSize = 0;
 static boolean gRequireUtr = FALSE;
 static boolean gKeepInvalid = FALSE;
+static boolean gAllCds = FALSE;
 static boolean gGenePredExt = FALSE;
 static boolean gQuiet = FALSE;
 
@@ -60,6 +62,7 @@ errAbort(
   "  -smallInsertSize=%d - Merge inserts smaller than this many bases (default %d)\n"
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
   "  -genePredExt - create a extended genePred, including frame information.\n"
+  "  -allCds - consider PSL to be all CDS.\n"
   "  -keepInvalid - Keep sequences with invalid CDS.\n"
   "  -quiet - Don't print print info about dropped sequences.\n"
   "\n", genePredStdInsertMergeSize, genePredStdInsertMergeSize);
@@ -137,13 +140,14 @@ struct genePred* pslToGenePred(struct psl *psl, char *cdsStr)
  * if should be skipped.  cdsStr maybe NULL if not available. */
 {
 struct genbankCds cds;
+struct genePred *gp;
 unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
 
 if (cdsStr == NULL)
     {
-    if (!gQuiet)
+    if (!gQuiet && !gAllCds)
         fprintf(stderr, "Warning: no CDS for %s\n", psl->qName);
-    if (!gKeepInvalid)
+    if (!gKeepInvalid &&  !gAllCds)
         return NULL;
     }
 else
@@ -175,7 +179,13 @@ else
             }
         }
     }
-return genePredFromPsl2(psl, optFields, &cds, gSmallInsertSize);
+gp = genePredFromPsl2(psl, optFields, &cds, gSmallInsertSize);
+if (gAllCds)
+    {
+    gp->cdsStart = gp->txStart;
+    gp->cdsEnd = gp->txEnd;
+    }
+return gp;
 }
 
 void convertPslRow(char* cdsStr, char **row, FILE *genePredFh)
@@ -213,7 +223,9 @@ void convertPslFileRow(struct sqlConnection *conn, char **row, FILE *genePredFh)
 {
 char *qName = row[9];
 char cdsBuf[4096];
-char *cdsStr = getCds(conn, qName, cdsBuf, sizeof(cdsBuf));
+char *cdsStr = NULL;
+if (!gAllCds)
+    cdsStr = getCds(conn, qName, cdsBuf, sizeof(cdsBuf));
 
 convertPslRow(cdsStr, row, genePredFh);
 }
@@ -275,7 +287,16 @@ gRequireUtr = optionExists("requireUtr");
 gSmallInsertSize = optionInt("smallInsertSize", genePredStdInsertMergeSize);
 gGenePredExt = optionExists("genePredExt");
 gKeepInvalid = optionExists("keepInvalid");
+gAllCds = optionExists("allCds");
 gQuiet = optionExists("quiet");
+
+if (gAllCds && ((cdsDb != NULL) || (cdsFile != NULL)))
+    errAbort("can't specify -allCds with -cdsDb or -cdsFile");
+if (gAllCds && gRequireUtr)
+    errAbort("can't specify -allCds with -requireUtr");
+/* this is a bit of work to implement */
+if (gAllCds && (db != NULL))
+    errAbort("can't specify -allCds with -db");
 
 optCnt = 0;
 if (db != NULL)
@@ -284,9 +305,11 @@ if (cdsDb == NULL)
     optCnt++;
 if (cdsFile != NULL)
     optCnt++;
+if (gAllCds)
+    optCnt++;
 
 if (optCnt == 1)
-    errAbort("must specify one and only one of -db, -cdsDb, or -cdsFile");
+    errAbort("must specify one and only one of -db, -cdsDb, -cdsFile, or -allCds");
 
 mrnaToGene(db, cdsDb, cdsFile, pslSpec, genePredFile);
 return 0;
