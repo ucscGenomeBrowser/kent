@@ -106,6 +106,7 @@ UTIL_DIRS = \
 	autoXml \
 	bedIntersect \
 	bedSort \
+	bedToGenePred \
 	blastToPsl \
 	borfBig \
 	checkHgFindSpec \
