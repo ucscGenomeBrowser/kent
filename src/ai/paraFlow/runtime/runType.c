@@ -344,3 +344,38 @@ int _pf_find_string_type_id()
 return 1;
 }
 
+_pf_Bit _pf_check_types(int destType, int sourceType)
+/* Check that sourceType can be converted to destType. */
+{
+struct _pf_type *tDest = _pf_type_table[destType];
+struct _pf_type *tSource = _pf_type_table[sourceType];
+for (;;)
+    {
+    struct _pf_base *bDest = tDest->base;
+    struct _pf_base *bSource = tSource->base;
+    if (bDest->singleType != bSource->singleType)
+        return FALSE;
+    if (bSource->singleType == pf_stClass)
+        {
+	boolean gotMatch = FALSE;
+	while (bSource != NULL)
+	    {
+	    if (bSource == bDest)
+	        {
+		gotMatch = TRUE;
+		break;
+	    	}
+	    bSource = bSource->parent;
+	    }
+	if (!gotMatch)
+	    return FALSE;
+	}
+    tDest = tDest->children;
+    tSource = tSource->children;
+    if (tDest == NULL && tSource == NULL)
+        return TRUE;
+    if (tDest == NULL || tSource == NULL)
+        return FALSE;
+    }
+}
+

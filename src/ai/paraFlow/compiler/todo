@@ -1,6 +1,4 @@
-  - Get the quote to markers to work.
-  - Make sure that assigning a typed variable from a var variable
-    does the right thing.
+  - Make array of var work.
   - Implement += for strings and arrays.
   - Adding default parameters.  These could be applied during
     class initialization too.
@@ -21,6 +19,9 @@ Check system:
 
 -----------
 DONE
+  - Make sure that assigning a typed variable from a var variable
+    does the right thing.
+  - Get the quote to markers to work.
   - Make foreach where the collection is a member variable work.
   - Decided against letting assignments return a value, since
     the foreach var in funcCall() removes most of the need.  

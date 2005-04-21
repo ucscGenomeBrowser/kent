@@ -390,7 +390,13 @@ int emptyStack = stack + expSize;
 if (colBase == pfc->arrayType)
     {
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
-    if (colBase->needsCleanup)
+    if (outType->base == pfc->varType)
+        {
+	fprintf(f, "_pf_var_cleanup(");
+	codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
+	fprintf(f, ");\n");
+	}
+    else if (outType->base->needsCleanup)
         {
 	startCleanTemp(f);
 	codeArrayAccess(pfc, f, outType->base, emptyStack, indexOffset);
@@ -952,6 +958,24 @@ switch(pp->type)
 	fprintf(f, ".typeId = %d;\n", codedTypeId(pfc, pp->children->ty));
 	break;
 	}
+    case pptCastVarToTyped:
+        {
+	int destType = codedTypeId(pfc, pp->ty);
+	fprintf(f, "/* ugly - pptCastVarToTyped start */\n");
+	fprintf(f, "if (%d != ", destType);
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".typeId)\n");
+	fprintf(f, "if (!_pf_check_types(%d, ", destType);
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".typeId))\n");
+	codeRunTimeError(pfc, f, pp->tok, "run-time type mismatch");
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+        codeParamAccess(pfc, f, pfc->varType, stack);
+	fprintf(f, ".val.%s;\n", vTypeKey(pfc, pp->ty->base));
+	fprintf(f, "/* ugly - pptCastVarToTyped end */\n");
+	break;
+	}
     default:
 	{
 	internalErr();
@@ -1135,6 +1159,7 @@ switch (pp->type)
     case pptCastFloatToString:
     case pptCastDoubleToString:
     case pptCastTypedToVar:
+    case pptCastVarToTyped:
 	{
 	codeExpression(pfc, f, pp->children, stack, addRef);
 	castStack(pfc, f, pp, stack);
@@ -1605,7 +1630,7 @@ for (p = pp->children; p != NULL; p = p->next)
 
 /* Print out other statements */
 if (printPfInit)
-    fprintf(f, "void _pf_init(%s *%s)\n{\n", stackType, stackName);
+    fprintf(f, "void _pf_main(%s *%s)\n{\n", stackType, stackName);
 for (p = pp->children; p != NULL; p = p->next)
     {
     switch (p->type)
@@ -1664,7 +1689,7 @@ fputs(
 "               _pf_field_info, _pf_field_info_count,\n"
 "               _pf_poly_info, _pf_poly_info_count);\n"
 "_pf_init_args(argc, argv, &programName, &args);\n"
-"_pf_init(stack);\n"
+"_pf_main(stack);\n"
 "return 0;\n"
 "}\n", f);
 }

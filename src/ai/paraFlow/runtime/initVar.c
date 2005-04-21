@@ -189,8 +189,16 @@ static void _pf_array_cleanup(struct _pf_array *array, int id)
 /* Clean up all elements of array, and then array itself. */
 {
 struct _pf_type *elType = array->elType;
+struct _pf_base *elBase = elType->base;
 verbose(2, "_pf_array_cleanup of %d elements\n", array->size);
-if (elType->base->needsCleanup)
+if (elBase->singleType == pf_stVar)
+    {
+    struct _pf_var *vars = (struct _pf_var *)(array->elements);;
+    int i;
+    for (i=0; i<array->size; ++i)
+        _pf_var_cleanup(vars[i]);
+    }
+else if (elType->base->needsCleanup)
     {
     struct _pf_object **objs = (struct _pf_object **)(array->elements);
     int i;
@@ -199,9 +207,6 @@ if (elType->base->needsCleanup)
 	struct _pf_object *obj = objs[i];
 	if (obj != NULL && --obj->_pf_refCount <= 0)
 	    obj->_pf_cleanup(obj, array->elType->typeId);
-	    /* FIXME - in some cases id is 0 here when it shouldn't be
-	     * for arrays...  I think the fix is in setting up the
-	     * type tables. */
 	}
     }
 freeMem(array->elements);
