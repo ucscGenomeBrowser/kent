@@ -1554,7 +1554,6 @@ switch (tok->type)
 	statement = parseFlow(pfc, parent, &tok, scope);
 	break;
     case pftPolymorphic:
-	uglyf("Parsing polymorphic\n");
     	statement = parsePolymorphic(pfc, parent, &tok, scope);
 	break;
     case pftName:

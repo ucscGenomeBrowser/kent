@@ -173,7 +173,6 @@ else
 	{
 	if (method->tyty == tytyVirtualFunction)
 	    {
-	    uglyf("using %s.%s polyOffset = %d\n", base->name, method->fieldName, method->polyOffset);
 	    fprintf(f, "%s[%d].Obj->_pf_polyTable[%d]",
 	    	stackName, stack, method->polyOffset);
 	    }
@@ -1423,14 +1422,6 @@ if (polyCount > 0)
     rMakePolyFunList(base, &pfrList, hash, &offset);
     slReverse(&pfrList);
     base->polyList = pfrList;
-#ifdef WHOCARES
-    for (pfr = pfrList; pfr != NULL; pfr = pfr->next)
-	{
-	pfr->method->polyOffset = offset;
-	uglyf("defining %s.%s offset %d\n", base->name, pfr->method->fieldName, pfr->method->polyOffset);
-	offset += 1;
-	}
-#endif
     hashFree(&hash);
     }
 }

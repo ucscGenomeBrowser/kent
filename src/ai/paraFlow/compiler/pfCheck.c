@@ -161,12 +161,10 @@ if (parent != NULL && parent->name[0] != '<')
 	{
 	if (method->tyty == tytyVirtualFunction)
 	    {
-	    uglyf("Checking virtual %s.%s\n", class->name, method->fieldName);
 	    checkPolyAndSameType(class, parent, method);
 	    }
 	else
 	    {
-	    uglyf("Checking method %s.%s\n", class->name, method->fieldName);
 	    checkNotInAncestor(class, parent, method);
 	    }
 	}
@@ -176,7 +174,6 @@ if (parent != NULL && parent->name[0] != '<')
 void pfCheckScopes(struct pfCompile *pfc, struct pfScope *scopeList)
 /* Check scopes - currently mostly for polymorphism consistency */
 {
-uglyf("Checking %d scopes\n", slCount(scopeList));
 struct pfScope *scope;
 for (scope = scopeList; scope != NULL; scope = scope->next)
     {
