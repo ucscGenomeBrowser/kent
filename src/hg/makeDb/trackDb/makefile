@@ -165,6 +165,8 @@ beta: checkbeta strict
 mgc:
 	ln -sf  human/hg17/exoniphy.html exoniphy.html
 	ln -sf  human/hg17/exoniphyGene.html exoniphyGene.html
+	ln -sf  mgcTwinscan.html mgcTwinscanEst.html
+	ln -sf  mgcNScan.html mgcNScanEst.html
 	@for DB in $(MGC_DBS) x; do \
 	    if test "$$DB" != "x" ; then \
 		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
