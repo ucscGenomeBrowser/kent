@@ -49,14 +49,14 @@ if (--mode->_pf_refCount <= 0)
 stack[0].v = file;
 }
 
-void _pf_cm_file_close(_pf_Stack *stack)
+void _pf_cm1_file_close(_pf_Stack *stack)
 /* Close file explicitly. */
 {
 struct file *file = stack[0].v;
 carefulClose(&file->f);
 }
 
-void _pf_cm_file_writeString(_pf_Stack *stack)
+void _pf_cm1_file_writeString(_pf_Stack *stack)
 /* paraFlow run time support routine to write string to file. */
 {
 struct file *file = stack[0].v;
@@ -69,7 +69,7 @@ if (--string->_pf_refCount <= 0)
     string->_pf_cleanup(string, 0);
 }
 
-void _pf_cm_file_readLine(_pf_Stack *stack)
+void _pf_cm1_file_readLine(_pf_Stack *stack)
 /* Read next line from file. */
 {
 struct file *file = stack[0].v;
@@ -90,7 +90,7 @@ for (;;)
 stack[0].String = _pf_string_from_const(dy->string);
 }
 
-void _pf_cm_file_readBytes(_pf_Stack *stack)
+void _pf_cm1_file_readBytes(_pf_Stack *stack)
 /* Read in a fixed number of bytes to string.
  * This will return a string of length zero at
  * EOF, and a string smaller than what is asked
