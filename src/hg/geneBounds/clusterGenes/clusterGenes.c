@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.20 2005/02/08 17:14:00 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.21 2005/04/21 04:51:44 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -94,9 +94,15 @@ if (name == NULL)
     {
     if (!track->isDb)
         {
-        /* will load from file */
+        /* will load from file, strip directories and trailing extensions */
         char trackName[256];
         splitPath(table, NULL, trackName, NULL);
+        if (endsWith(table, ".gz"))
+            {
+            char *ext2 = strrchr(trackName, '.');
+            if (ext2 != NULL)
+                *ext2 = '\0';
+            }
         track->name = cloneString(trackName);
         }
     else
