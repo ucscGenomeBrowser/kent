@@ -20,8 +20,10 @@ test:
 	diff expected/hello $O/hello
 	paraFlow if.pf > $O/if
 	diff expected/if $O/if
-#	paraFlow initVars.pf > $O/initVars
-#	diff expected/initVars $O/initVars
+	paraFlow initVars.pf > $O/initVars
+	diff expected/initVars $O/initVars
+	paraFlow memberForeach.pf > $O/memberForeach
+	diff expected/memberForeach $O/memberForeach
 	paraFlow mixedDeclare.pf > $O/mixedDeclare
 	diff expected/mixedDeclare $O/mixedDeclare
 	paraFlow neg.pf > $O/neg
@@ -36,6 +38,10 @@ test:
 	diff expected/oneVar $O/oneVar
 	paraFlow parenAndMinus.pf > $O/parenAndMinus
 	diff expected/parenAndMinus $O/parenAndMinus
+	paraFlow polymorphic.pf > $O/polymorphic
+	diff expected/polymorphic $O/polymorphic
+	paraFlow printFile.pf printFile.pf > $O/printFile
+	diff expected/printFile $O/printFile
 	paraFlow shift.pf > $O/shift
 	diff expected/shift $O/shift
 	paraFlow toInOut.pf > $O/toInOut
@@ -46,5 +52,3 @@ test:
 	diff expected/unitCircle $O/unitCircle
 	paraFlow while.pf > $O/while
 	diff expected/while $O/while
-	paraFlow polymorphic.pf > $O/polymorphic
-	diff expected/polymorphic $O/polymorphic
