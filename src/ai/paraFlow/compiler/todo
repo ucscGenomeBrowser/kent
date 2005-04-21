@@ -11,6 +11,7 @@
   - Implement ++ and maybe --.
   - More file i/o.
   - Implementing trees.
+  - Implement lists.
 
 Check system:
 	blessPara - Also makes sure that there are no writes

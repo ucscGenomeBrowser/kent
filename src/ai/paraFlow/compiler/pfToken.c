@@ -225,17 +225,18 @@ while (isspace(pos[0]))
 tkz->pos = pos;
 }
 
-static boolean allWhiteToEol(char *s)
-/* Return TRUE if next count chars in s are whitespace */
+static char *allWhiteToEol(char *s)
+/* If rest of line is white space, return start of next
+ * line, otherwise return NULL. */
 {
 char c;
 for (;;)
     {
     c = *s++;
-    if (!isspace(s[0]))
-        return FALSE;
+    if (!isspace(c))
+        return NULL;
     if (c == '\n')
-        return TRUE;
+        return s;
     }
 }
 
@@ -330,30 +331,24 @@ tok->textSize = tkz->pos - tok->text;
 }
 
 static void tokMultiLineQuote(struct pfTokenizer *tkz, struct pfToken *tok,
-	char *endSym)
+	char *endSym, boolean addLf)
 /* Do multiple line quote.  There is no escaping in these. */
 {
 int endSymSize = strlen(endSym);
-char *pos = strchr(tkz->pos, '\n');
+char *pos = stringIn(endSym, tkz->pos);
 char *e;
 
+uglyf("tok multiLineQuote endSym = %s, pos = %p\n", endSym, pos);
 if (pos != NULL)
     {
-    pos += 1;
-    while ((e = strchr(pos, '\n')) != NULL)
-	{
-	e += 1;
-	if (memcmp(e, endSym, endSymSize) == 0)
-	    {
-	    tkz->pos = e + endSymSize;
-	    finishQuote(tkz, tok);
-	    return;
-	    }
-	dyStringAppendN(tkz->dy, pos, e - pos);
-	pos = e;
-	}
+    dyStringAppendN(tkz->dy, tkz->pos,  pos - tkz->pos);
+    if (addLf)
+        dyStringAppendC(tkz->dy, '\n');
+    tkz->pos = pos + endSymSize;
+    finishQuote(tkz, tok);
     }
-errAt(tok, "Unterminated line quote.");
+else
+    errAt(tok, "Unterminated line quote.");
 }
 
 static void tokString(struct pfTokenizer *tkz, struct pfToken *tok,
@@ -363,14 +358,18 @@ static void tokString(struct pfTokenizer *tkz, struct pfToken *tok,
  * treat quote as line oriented. */
 {
 char *pos = tkz->pos+1;
+char *nextLine = allWhiteToEol(pos);
 dyStringClear(tkz->dy);
-if (allWhiteToEol(pos))
+uglyf("tokString quoteC = %c\n", quoteC);
+if (nextLine != NULL)
     {
-    char endSym[2];
-    endSym[0] = quoteC;
-    endSym[1] = 0;
-    tkz->pos = pos;
-    tokMultiLineQuote(tkz, tok, endSym);
+    char endSym[3];
+    uglyf("multiLine quote, start %c %c\n", nextLine[0], nextLine[1]);
+    endSym[0] = '\n';
+    endSym[1] = quoteC;
+    endSym[2] = 0;
+    tkz->pos = nextLine;
+    tokMultiLineQuote(tkz, tok, endSym, TRUE);
     }
 else
     {
@@ -428,17 +427,16 @@ if (sameString(tkz->dy->string, "quote"))
     dyStringClear(dy);
     for (;;)
         {
-	c = *pos;
+	c = *pos++;
 	if (isspace(c))
 	    break;
 	dyStringAppendC(dy, c);
-	pos += 1;
 	}
     tkz->pos = pos;
     if (dy->stringSize < 1)
 	errAt(tok, "quote without delimator string");
     dyStringClear(tkz->dy);
-    tokMultiLineQuote(tkz, tok, dy->string);
+    tokMultiLineQuote(tkz, tok, dy->string, FALSE);
     dyStringFree(&dy);
     }
 else
