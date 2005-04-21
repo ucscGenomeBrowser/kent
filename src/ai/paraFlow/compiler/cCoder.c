@@ -1148,6 +1148,42 @@ switch (pp->type)
     }
 }
 
+static void expandDottedName(char *fullName, int maxSize, struct pfParse *pp)
+/* Fill in fullName with this.that.whatever. */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+        safef(fullName, maxSize, "%s", pp->name);
+	break;
+    case pptDot:
+        {
+	int curSize = 0, itemSize;
+	boolean needArrow = FALSE;
+	for (pp = pp->children; pp != NULL; pp = pp->next)
+	    {
+	    if (needArrow)
+	        {
+		fullName[curSize] = '-';
+		fullName[curSize+1] = '>';
+		curSize += 2;
+		}
+	    needArrow = TRUE;
+	    itemSize = strlen(pp->name);
+	    if (itemSize + curSize + 2 >= maxSize)
+	        errAt(pp->tok, "Dotted name too long");
+	    strcpy(fullName + curSize, pp->name);
+	    curSize += itemSize;
+	    }
+	fullName[curSize] = 0;
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
+}
+
 
 static void codeForeach(struct pfCompile *pfc, FILE *f,
 	struct pfParse *foreach)
@@ -1158,9 +1194,10 @@ struct pfParse *collectionPp = elPp->next;
 struct pfBaseType *base = collectionPp->ty->base;
 struct pfParse *body = collectionPp->next;
 char *elName = elPp->name;
-char *collectionName = collectionPp->name;
+char collectionName[512];
 
 /* Print element variable in a new scope. */
+expandDottedName(collectionName, sizeof(collectionName), collectionPp);
 fprintf(f, "{\n");
 codeScopeVars(pfc, f, foreach->scope, FALSE);
 

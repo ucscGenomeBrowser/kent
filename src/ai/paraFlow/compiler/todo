@@ -1,8 +1,6 @@
-  - Make foreach result in funcCall work.
   - Get the quote to markers to work.
   - Make sure that assigning a typed variable from a var variable
     does the right thing.
-  - Go ahead and let assignments return a value.  
   - Implement += for strings and arrays.
   - Adding default parameters.  These could be applied during
     class initialization too.
@@ -22,6 +20,10 @@ Check system:
 
 -----------
 DONE
+  - Make foreach where the collection is a member variable work.
+  - Decided against letting assignments return a value, since
+    the foreach var in funcCall() removes most of the need.  
+  - Make foreach result in funcCall work.
   - make L work in numerical constants,
   - Make it ok to have extra trailing comma in an initialization
     before a ).
