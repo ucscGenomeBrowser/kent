@@ -685,6 +685,7 @@ switch (tok->type)
 	break;
     case pftString:
     case pftInt:
+    case pftLong:
     case pftFloat:
         pp = constUse(parent, &tok, scope);
 	break;

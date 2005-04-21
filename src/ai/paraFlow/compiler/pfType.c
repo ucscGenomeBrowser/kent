@@ -123,6 +123,8 @@ switch (tok->type)
     {
     case pftInt:
 	return pptConstInt;
+    case pftLong:
+	return pptConstLong;
     case pftFloat:
 	return pptConstDouble;
     case pftString:
