@@ -2754,6 +2754,59 @@ hgMapViaSwissProt mm5 knownGene name proteinID Pfam knownToPfam
       | hgsql -h genome-testdb hgcentraltest
 
 
+# RAT BLASTP FOR GENE SORTER (DONE 4/20/05 Fan)
+    # Make RAT ortholog column using blastp on RAT known genes.
+    # First make RAT protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    mkdir /cluster/data/rn3/bed/blastp
+    cd /cluster/data/rn3/bed/blastp
+    pepPredToFa rn3 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+
+    ssh kkr1u00
+    if (-e /iscratch/i/rn3/blastp) then
+      rm -r /iscratch/i/rn3/blastp
+    endif
+    mkdir -p /iscratch/i/rn3/blastp
+    cp /cluster/data/rn3/bed/blastp/known.p?? /iscratch/i/rn3/blastp
+    iSync
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm5/bed/blastp/rn3/run/out
+    cd /cluster/data/mm5/bed/blastp/rn3/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/rn3/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/mm5/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+
+Completed: 7739 of 7739 jobs
+CPU time in finished jobs:      24369s     406.14m     6.77h    0.28d  0.001 y
+IO & Wait Time:                 21867s     364.46m     6.07h    0.25d  0.001 y
+Average job time:                   6s       0.10m     0.00h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:              25s       0.42m     0.01h    0.00d
+Submission to last job:           276s       4.60m     0.08h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/mm5/bed/blastp/rn3/run/out
+    hgLoadBlastTab mm5 rnBlastTab -maxPer=1 *.tab
+
 # END OF GENE SORTER STUFF
 #############################################################################
 
