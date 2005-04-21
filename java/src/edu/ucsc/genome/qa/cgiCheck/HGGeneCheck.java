@@ -74,7 +74,7 @@ public class HGGeneCheck {
     // get read access to database
     HGDBInfo metadbinfo; 
     try {
-      metadbinfo = new HGDBInfo("hgwbeta", "hgcentraltest");
+      metadbinfo = new HGDBInfo("hgwdev", "hgcentraltest");
     } catch (Exception e) {
       System.out.println(e.toString());
       return;
