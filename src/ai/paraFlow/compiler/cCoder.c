@@ -147,29 +147,42 @@ return pp->children->next->next != NULL;
 }
 
 static void codeMethodName(struct pfCompile *pfc, struct pfToken *tok, 
-	FILE *f, struct pfBaseType *base, char *name)
+	FILE *f, struct pfBaseType *base, char *name, int stack)
 /* Find method in current class or one of it's parents, and print
  * call to it */
 {
-if (base != pfc->stringType)
+if (base == pfc->stringType)
     {
+    fprintf(f, "_pf_cm_string_%s", name);
+    }
+else
+    {
+    struct pfType *method = NULL;
     while (base != NULL)
 	{
-	struct pfType *t;
-	for (t = base->methods; t != NULL; t = t->next)
+	for (method = base->methods; method != NULL; method = method->next)
 	    {
-	    if (sameString(t->fieldName, name))
+	    if (sameString(method->fieldName, name))
 		break;
 	    }
-	if (t != NULL)
+	if (method != NULL)
 	     break;
 	base = base->parent;
 	}
+    if (base != NULL)
+	{
+	if (method->tyty == tytyVirtualFunction)
+	    {
+	    uglyf("using %s.%s polyOffset = %d\n", base->name, method->fieldName, method->polyOffset);
+	    fprintf(f, "%s[%d].Obj->_pf_polyTable[%d]",
+	    	stackName, stack, method->polyOffset);
+	    }
+	else
+	    fprintf(f, "_pf_cm%d_%s_%s", base->scope->id, base->name, name);
+	}
+    else
+	internalErrAt(tok);
     }
-if (base != NULL)
-    fprintf(f, "_pf_cm%d_%s_%s", base->scope->id, base->name, name);
-else
-    internalErrAt(tok);
 }
 
 static int codeCall(struct pfCompile *pfc, FILE *f,
@@ -213,7 +226,7 @@ if (function->type == pptDot)
 	}
     /* Put rest of input on the stack, and print call with mangled function name. */
     codeExpression(pfc, f, inTuple, stack+1, TRUE);
-    codeMethodName(pfc, pp->tok, f, class->ty->base, method->name);
+    codeMethodName(pfc, pp->tok, f, class->ty->base, method->name, stack);
     fprintf(f, "(%s+%d);\n", stackName, stack);
     }
 else
@@ -1361,35 +1374,33 @@ codeVarsInHelList(pfc, f, helList, zeroUninitialized);
 hashElFreeList(&helList);
 }
 
-struct polyFunRef
-/* A reference to a polymorphic function.  This helps
- * us sort out whether to use functions from the base
- * class or from the current class. */
-    {
-    struct polyFunRef *next;
-    struct pfBaseType *class;	/* Class defined in. */
-    struct pfType *method;	/* Method field. */
-    };
-
 static void rMakePolyFunList(struct pfBaseType *base,
-	struct polyFunRef **pList, struct hash *hash)
+	struct pfPolyFunRef **pList, struct hash *hash,
+	int *pOffset)
 /* Recursively add polymorphic functions in parents and self to list. */
 {
 if (base != NULL)
     {
     struct pfType *method;
-    rMakePolyFunList(base->parent, pList, hash);
+    rMakePolyFunList(base->parent, pList, hash, pOffset);
     for (method = base->methods; method != NULL; method = method->next)
         {
 	if (method->tyty == tytyVirtualFunction)
 	    {
-	    struct polyFunRef *ref = hashFindVal(hash, method->fieldName);
+	    struct pfPolyFunRef *ref = hashFindVal(hash, method->fieldName);
 	    if (ref == NULL)
 		{
 		AllocVar(ref);
 		ref->method = method;
+		method->polyOffset = *pOffset;
+		*pOffset += 1;
 		slAddHead(pList, ref);
 		hashAdd(hash, method->fieldName, ref);
+		}
+	    else
+	        {
+		method->polyOffset = ref->method->polyOffset;
+		ref->method = method;
 		}
 	    ref->class = base;
 	    }
@@ -1397,33 +1408,65 @@ if (base != NULL)
     }
 }
 
-static void printPolyFunTable(struct pfCompile *pfc, FILE *f, 
-	struct pfBaseType *base)
-/* Print polymorphic function table. */
+static void calcPolyFunOffsets(struct pfCompile *pfc, struct pfBaseType *base)
+/* Calculate offsets into virtual function table. */
 {
 int polyCount = 0;
 struct pfBaseType *b;
 for (b = base; b != NULL; b = b->parent)
-    polyCount += b->polyCount;
+    polyCount += b->selfPolyCount;
 if (polyCount > 0)
     {
-    struct polyFunRef *pfrList = NULL, *pfr;
-    struct hash *hash = newHash(8);
     int offset = 0;
-    rMakePolyFunList(base, &pfrList, hash);
+    struct pfPolyFunRef *pfrList = NULL, *pfr;
+    struct hash *hash = newHash(8);
+    rMakePolyFunList(base, &pfrList, hash, &offset);
     slReverse(&pfrList);
-    fprintf(f, "_pf_polyFunType _pf_pf%d_%s[] = {\n", base->scope->id, base->name);
+    base->polyList = pfrList;
+#ifdef WHOCARES
     for (pfr = pfrList; pfr != NULL; pfr = pfr->next)
-        {
-	b = pfr->class;
-	fprintf(f, "  _pf_cm%d_%s_%s,\n", b->scope->id, b->name, 
-		pfr->method->fieldName);
+	{
 	pfr->method->polyOffset = offset;
+	uglyf("defining %s.%s offset %d\n", base->name, pfr->method->fieldName, pfr->method->polyOffset);
 	offset += 1;
 	}
-    fprintf(f, "};\n");
+#endif
     hashFree(&hash);
-    slFreeList(&pfrList);
+    }
+}
+
+static void calcAllPolyFunOffsets(struct pfCompile *pfc, 
+	struct pfScope *scopeList)
+/* Calculate info on all polymorphic functions 
+ * FIXME - move this from code generator to pfCheck maybe? */
+{
+struct pfScope *scope;
+for (scope = scopeList; scope != NULL; scope = scope->next)
+    {
+    struct pfBaseType *class = scope->class;
+    if (class != NULL)
+        {
+	calcPolyFunOffsets(pfc, class);
+	}
+    }
+}
+
+
+static void printPolyFunTable(struct pfCompile *pfc, FILE *f, 
+	struct pfBaseType *base)
+/* Print polymorphic function table. */
+{
+if (base->polyList != NULL)
+    {
+    struct pfPolyFunRef *pfr;
+    fprintf(f, "_pf_polyFunType _pf_pf%d_%s[] = {\n", base->scope->id, base->name);
+    for (pfr = base->polyList; pfr != NULL; pfr = pfr->next)
+        {
+	struct pfBaseType *b = pfr->class;
+	fprintf(f, "  _pf_cm%d_%s_%s,\n", b->scope->id, b->name, 
+		pfr->method->fieldName);
+	}
+    fprintf(f, "};\n");
     }
 }
 
@@ -1509,6 +1552,26 @@ if (printPfInit)
 hashElFreeList(&helList);
 }
 
+static void printPolyFuncConnections(struct pfCompile *pfc,
+	struct pfScope *scopeList, FILE *f)
+/* Print out poly_info table that connects polymorphic function
+ * tables to the classes they belong to. */
+{
+struct pfScope *scope;
+fprintf(f, "struct _pf_poly_info _pf_poly_info[] = {\n");
+for (scope = scopeList; scope != NULL; scope = scope->next)
+    {
+    struct pfBaseType *class = scope->class;
+    if (class != NULL && class->polyList != NULL)
+        {
+	fprintf(f, "  {%d, _pf_pf%d_%s},\n", class->id, class->scope->id, class->name);
+	}
+    }
+fprintf(f, "  {0, 0},\n");  /* Make sure have at least one. */
+fprintf(f, "};\n");
+fprintf(f, "int _pf_poly_info_count = sizeof(_pf_poly_info)/sizeof(_pf_poly_info[0]) - 1;\n\n");
+}
+
 static void printConclusion(struct pfCompile *pfc, FILE *f)
 /* Print out C code for end of program. */
 {
@@ -1519,7 +1582,8 @@ fputs(
 "static _pf_Stack stack[16*1024];\n"
 "_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
 "               _pf_type_info, _pf_type_info_count,\n"
-"               _pf_field_info, _pf_field_info_count);\n"
+"               _pf_field_info, _pf_field_info_count,\n"
+"               _pf_poly_info, _pf_poly_info_count);\n"
 "_pf_init_args(argc, argv, &programName, &args);\n"
 "_pf_init(stack);\n"
 "return 0;\n"
@@ -1537,6 +1601,7 @@ struct hash *compTypeHash;
 printPreamble(pfc, f, fileName);
 pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
 
+calcAllPolyFunOffsets(pfc, pfc->scopeList);
 for (module = program->children; module != NULL; module = module->next)
     {
     boolean isBuiltIn = sameString(module->name, "<builtin>");
@@ -1545,7 +1610,9 @@ for (module = program->children; module != NULL; module = module->next)
     rPrintPrototypes(f, module, NULL);
     fprintf(f, "\n");
     codeScope(pfc, f, module, !isBuiltIn, isBuiltIn);
+    fprintf(f, "\n");
     }
+printPolyFuncConnections(pfc, pfc->scopeList, f);
 printConclusion(pfc, f);
 carefulClose(&f);
 }

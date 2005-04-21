@@ -10,6 +10,7 @@ struct _pf_object
     {
     int _pf_refCount;			     	    /* Number of references. */
     void (*_pf_cleanup)(struct _pf_object *obj, int id); /* Called when refCount <= 0 */
+    _pf_polyFunType *_pf_polyTable;
     };
 
 struct _pf_array

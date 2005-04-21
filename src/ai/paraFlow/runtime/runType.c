@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "hash.h"
-#include "runType.h"
 #include "../compiler/pfPreamble.h"
+#include "runType.h"
 
 struct _pf_type **_pf_type_table;	
 static int _pf_type_table_size;
@@ -120,7 +120,8 @@ return type;
 
 void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
-		     struct _pf_field_info *structInfo, int structCount)
+		     struct _pf_field_info *fieldInfo, int fieldCount,
+		     struct _pf_poly_info *polyInfo, int polyCount)
 /* Build up run-time type information from initialization. */
 {
 struct hash *singleIds = singleTypeHash();
@@ -276,9 +277,9 @@ for (i=0; i<typeCount; ++i)
 
 /* Process fieldInfo into fields. */
     {
-    for (i=0; i<structCount; ++i)
+    for (i=0; i<fieldCount; ++i)
 	{
-	struct _pf_field_info *info = &structInfo[i];
+	struct _pf_field_info *info = &fieldInfo[i];
 	int offset = sizeof(struct _pf_object);
 	int j, fieldCount;
 	char **fields;
@@ -305,6 +306,18 @@ for (i=0; i<typeCount; ++i)
 	base->objSize = offset;
 	}
     }
+
+/* Process polyInfo into base types. */
+    {
+    struct _pf_poly_info *info;
+    for (i=0; i<polyCount; ++i)
+        {
+	info = &polyInfo[i];
+	base = &bases[info->classId];
+	base->polyTable = info->polyTable;
+	}
+    }
+
 
 
 /* Clean up and go home. */

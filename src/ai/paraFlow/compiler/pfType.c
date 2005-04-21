@@ -928,7 +928,7 @@ for (p = compound->children; p != NULL; p = p->next)
 	    funcType->tyty = tytyVirtualFunction;
 	    p->ty = funcType;
 	    addFunctionToClass(base, p->children);
-	    base->polyCount += 1;
+	    base->selfPolyCount += 1;
 	    break;
 	    }
 	default:

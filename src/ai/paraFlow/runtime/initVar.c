@@ -1,7 +1,7 @@
 /* initVar - handle variable initialization from tuples */
 #include "common.h"
-#include "runType.h"
 #include "../compiler/pfPreamble.h"
+#include "runType.h"
 #include "object.h"
 #include "initVar.h"
 #include "dir.h"
@@ -130,6 +130,7 @@ _pf_Stack *field;
 
 obj->_pf_refCount = 1;
 obj->_pf_cleanup = _pf_class_cleanup;
+obj->_pf_polyTable = base->polyTable;
 if (encoding[0] != '(')
     errAbort("Expecting ( in class tuple encoding, got %c", encoding[0]);
 if (encoding[1] == ')')	/* Empty tuple are just requests for all zero. */

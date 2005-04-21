@@ -28,7 +28,9 @@ struct pfBaseType
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
     int size;			/* Type size. */
-    short polyCount;		/* Count of polymorphic functions. */
+    short selfPolyCount;	/* Count of polymorphic functions. */
+    struct pfPolyFunRef *polyList;	/* List of polymorphic functions
+                                           (Including in parents) */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -38,6 +40,16 @@ struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name,
 
 int pfBaseTypeCount();
 /* Return base type count. */
+
+struct pfPolyFunRef
+/* A reference to a polymorphic function.  This helps
+ * us sort out whether to use functions from the base
+ * class or from the current class. */
+    {
+    struct pfPolyFunRef *next;
+    struct pfBaseType *class;	/* Class defined in. */
+    struct pfType *method;	/* Method field. */
+    };
 
 enum pfTyty
 /* The overall type of a specific type. */

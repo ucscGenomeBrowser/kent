@@ -1,7 +1,6 @@
 /* pfPreamble - this gets included at the start of
  * paraFlow-generated C code. */
 
-#include "../runtime/runType.h"
 
 struct _pf_object;
 struct _pf_string;
@@ -91,6 +90,7 @@ struct _pf_iterator _pf_list_iterator_init(_pf_List list);
 struct _pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
 struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
+#include "../runtime/runType.h"
 #include "../runtime/object.h"
 #include "../runtime/string.h"
 #include "../runtime/dir.h"

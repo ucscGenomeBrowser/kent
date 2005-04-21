@@ -66,6 +66,7 @@ struct _pf_base
     int alignment;	/* This type likes to be aligned on an even multiple of this in structures. */
     int aliAdd;		/* Computational aid for alignment.  alignedStart = ((start+aliAdd)&aliMask)*/
     int aliMask;	/* Computational aid for alignment. */
+    _pf_polyFunType *polyTable;	/* Polymorphic function table. */
     };
 
 struct _pf_base_info
@@ -92,9 +93,17 @@ struct _pf_field_info
     char *typeValList;  /* comma sep. list of type:val (type is pf_type_info.id) */
     };
 
+struct _pf_poly_info
+/* Information on polymorphic functions. */
+    {
+    int classId;			/* Points to _pf_base_info.id. */
+    _pf_polyFunType *polyTable;	/* Polymorphic function table. */
+    };
+
 void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
-		     struct _pf_field_info *fieldInfo, int fieldCount);
+		     struct _pf_field_info *fieldInfo, int fieldCount,
+		     struct _pf_poly_info *polyInfo, int polyCount);
 /* Build up run-time type information from initialization. */
 
 extern struct _pf_type **_pf_type_table;	
