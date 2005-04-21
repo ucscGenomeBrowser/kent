@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.33 2005/04/20 23:42:40 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.34 2005/04/21 00:20:09 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -282,6 +282,7 @@
     cd /cluster/data/mm6
     mkdir /cluster/bluearc/mm6/chrom
     cp -p */*.fa /cluster/bluearc/mm6/chrom
+    #	(these were removed later)
 
     # break up into 500,000 sized chunks for repeat masker runs
 TOP=`pwd`
@@ -3520,7 +3521,9 @@ cat  << 'EOF' > template
     # smaller, then save as jpg
     cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm6_10way.jpg
 
-# CREATE CONSERVATION WIGGLE WITH PHASTCONS (WORKING - 2005-04-18 - Hiram)
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS
+#		(DONE - 2005-04-18 - 2004-04-20- Hiram)
 
 # Estimate phastCons parameters
     ssh kksilo
@@ -3537,6 +3540,7 @@ cat  << 'EOF' > template
     /cluster/bin/phast/phyloFit -i SS s1.*.ss \
 	--tree "((((((hg17,(mm6,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))" \
     --out-root starting-tree
+    #	more than 1h 30m
     rm s1.*.ss
 
     # Create directory full of sequence in individual scaffold files on bluearc.
@@ -3546,23 +3550,31 @@ cat  << 'EOF' > template
     twoBitToFa /cluster/data/mm6/mm6.2bit stdout | faSplit byname stdin foo
 
     # Create big bad bloated SS files in bluearc (takes ~45 minutes)
+    ssh kksilo
     mkdir -p /cluster/bluearc/mm6/cons/ss
     cd /cluster/bluearc/mm6/cons/ss
-    foreach i (`awk '{print $1}' /cluster/data/mm6/chrom.sizes`)
-      if (-e /cluster/data/mm6/bed/multiz10way/maf/$i.maf) then
-	  echo msa_split $i
-	  /cluster/bin/phast/msa_split /cluster/data/mm6/bed/multiz10way/maf/$i.maf \
-	     --refseq /cluster/bluearc/mm6/scaffoldFa/$i.fa \
-	     --in-format MAF --windows 1000000,0 --between-blocks 5000 \
-	     --out-format SS --out-root $i
-      endif
-  end
+    #	this is making over 3000 files in one directory, might be better
+    #	to put them into per-chrom hierarchies
+    for C in `awk '{print $1}' /cluster/data/mm6/chrom.sizes`
+    do
+      if [ -s /cluster/data/mm6/bed/multiz10way/maf/${C}.maf ]; then
+	echo msa_split $C
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/msa_split \
+	    /cluster/data/mm6/bed/multiz10way/maf/${C}.maf \
+	    --refseq /cluster/data/mm6/${chrN}/${C}.fa \
+	    --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}
+      fi
+    done
 
-    # Create a random list of 50 1 mb regions 
-    ls -l | awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    ls -l | grep -v random | awk '$5 > 4000000 {print $9;}' | \
+	randomLines stdin 50 ../randomSs
 
     # Set up parasol directory to calculate trees on these 50 regions
-    ssh kki
+    ssh kk9
     mkdir /cluster/bluearc/mm6/cons/treeRun1
     cd /cluster/bluearc/mm6/cons/treeRun1
     mkdir tree log
@@ -3578,6 +3590,7 @@ cat  << 'EOF' > template
       --expected-lengths 12 --target-coverage 0.35 \
       --quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
+    #	emacs happy
     chmod a+x makeTree
 
     # Create gensub file
@@ -3591,7 +3604,159 @@ makeTree $(root1)
     gensub2 ../randomSs single template jobList
     para create jobList
     para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:      83332s    1388.87m    23.15h    0.96d  0.003 y
+# IO & Wait Time:                   429s       7.15m     0.12h    0.00d  0.000 y
+# Average job time:                1675s      27.92m     0.47h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3533s      58.88m     0.98h    0.04d
+# Submission to last job:          3543s      59.05m     0.98h    0.04d
 
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ls tree/*.cons.mod > cons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' \
+	--output-average ../ave.cons.mod > cons_summary.txt
+    ls tree/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' \
+	--output-average ../ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/mm6/bed/multiz10way/cons
+
+    ssh kk9
+    # Create cluster dir to do main phastCons run
+    mkdir  /cluster/bluearc/mm6/cons/consRun1
+    cd  /cluster/bluearc/mm6/cons/consRun1
+    mkdir ppRaw bed
+
+    # Create script to run phastCons with right parameters
+    #	This job is I/O intensive in its output files.  To make this
+    #	cluster safe, it would be better to do this work somewhere over
+    #	in /tmp/... and copy the final result back.  kk9 can do this
+    #	run, but kk cannot.
+    cat > doPhast << '_EOF_'
+mkdir -p ppRaw/$2
+/cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
+   --expected-lengths 12 --target-coverage 0.52 --quiet --seqname $2 \
+   --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
+   ppRaw/$2/$1.pp
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast
+
+    # Create gsub file
+cat > template << '_EOF_'
+#LOOP
+doPhast $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+
+    # Create parasol batch and run it
+    ls -1 ../ss | sed 's/.ss//' > in.lst
+    gensub2 in.lst single template jobList
+    para create jobList
+    para try/check/push/etc.
+# Completed: 3098 of 3098 jobs
+# CPU time in finished jobs:      28179s     469.65m     7.83h    0.33d  0.001 y
+# IO & Wait Time:                204688s    3411.47m    56.86h    2.37d  0.006 y
+# Average job time:                  75s       1.25m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             150s       2.50m     0.04h    0.00d
+# Submission to last job:          2569s      42.82m     0.71h    0.03d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /cluster/bluearc/mm6/cons/consRun1
+    catDir bed | awk '
+    	{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+        /cluster/bin/scripts/lodToBedScore /dev/stdin > \
+	/cluster/data/mm6/bed/multiz10way/mostConserved.bed
+
+    # Figure out how much is actually covered by the bed files as so:
+    awk '{sum+=$3-$2}END{printf "%d\n",sum}' \
+	/cluster/data/mm6/bed/multiz10way/mostConserved.bed
+    awk '{print $3 - $2;}' \
+	/cluster/data/mm6/bed/multiz10way/mostConserved.bed | addCols stdin
+    -target-coverage 0.50: 554319262/2597150151 = 0.214 - no complaints
+    -target-coverage 0.52: 619851159/2597150151 = 0.239 - no complaints
+    -target-coverage 0.53: 655016636/2597150151 = 0.252 - seven complaints
+    -target-coverage 0.55: 729540911/2597150151 = 0.281 - many negative scores
+    -target-coverage 0.60: 928959674/2597150151 = 0.358 - many negative scores
+    #	the non-n genome size, from faSize on all chroms: 2597150151
+
+    #	Given the above measurements, we are using the 0.52 target
+    #	coverage run.
+
+    # If the results of the this divided by the non-n genome size (1.5G) aren't
+    # around 4%, then do it again, adjusting the target-coverage phastCons
+    # parameter.  Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way
+    hgLoadBed mm6 phastConsElements mostConserved.bed
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kksilo
+    cd /cluster/bluearc/mm6/cons/consRun1
+    # interesting sort here on the chr name and position.
+    # first convert all . and - characters to special strings x/ and x_/
+    #	to get a consistent delimiter of / for all fields to be sorted.
+    #	Then do the sort on the chrom name and the start position, after
+    #	the sort convert the special stringx x_/ and x/ back to - and .
+    #	respectively.  This gets everything in order by chrom name and
+    #	chrom start.
+    find ./ppRaw -type f | sed -e "s#\.#x/#g; s#-#x_/#g" | \
+	sort -t"/" -k4,4 -k6,6n | sed -e "s#x_/#-#g; s#x/#.#g" | xargs cat | \
+	    wigEncode stdin phastCons10.wig phastCons10.wib
+    # about 2h 20 minutes for above
+
+    ssh kkstore01
+    cd /cluster/bluearc/mm6/cons/consRun1
+    cp -p phastCons10.wi? /cluster/data/mm6/bed/multiz10way/cons
+    # 3 minute copy on kkstore01
+    
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way/cons
+    ln -s `pwd`/phastCons10.wib /gbdb/mm6/wib/phastCons10.wib
+    hgLoadWiggle mm6 phastCons10 phastCons10.wig
+    #  ~ 3 minute load
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way/cons
+    time hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=mm6 phastCons10 > histogram.data 2>&1
+    #	about 15 minutes scan all data
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 xff0000 xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Mm6 Histogram phastCons5 track"
+set xlabel " phastCons10 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    display histo.png &
+
+############################################################################
 # BUILD KNOWN GENES TABLES (Started 3/19/05, done 4/13/05. Fan)
 
 # First build protein databases, sp050315 and proteins050315
