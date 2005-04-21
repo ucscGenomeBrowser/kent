@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.34 2005/04/21 00:20:09 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.35 2005/04/21 19:47:43 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3638,7 +3638,7 @@ makeTree $(root1)
     cat > doPhast << '_EOF_'
 mkdir -p ppRaw/$2
 /cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
-   --expected-lengths 12 --target-coverage 0.52 --quiet --seqname $2 \
+   --expected-lengths 12 --target-coverage 0.20 --quiet --seqname $2 \
    --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
    ppRaw/$2/$1.pp
 '_EOF_'
@@ -3675,10 +3675,13 @@ doPhast $(file1) $(root1)
 	/cluster/data/mm6/bed/multiz10way/mostConserved.bed
 
     # Figure out how much is actually covered by the bed files as so:
-    awk '{sum+=$3-$2}END{printf "%d\n",sum}' \
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
 	/cluster/data/mm6/bed/multiz10way/mostConserved.bed
-    awk '{print $3 - $2;}' \
-	/cluster/data/mm6/bed/multiz10way/mostConserved.bed | addCols stdin
+    -target-coverage 0.50: % 7.86  (204262705)
+    #	I was mistakenly reading these results as, for example %2.14
+    #	when in reality it was %21.4 - way way much too high.
     -target-coverage 0.50: 554319262/2597150151 = 0.214 - no complaints
     -target-coverage 0.52: 619851159/2597150151 = 0.239 - no complaints
     -target-coverage 0.53: 655016636/2597150151 = 0.252 - seven complaints
@@ -3698,6 +3701,7 @@ doPhast $(file1) $(root1)
     ssh hgwdev
     cd /cluster/data/mm6/bed/multiz10way
     hgLoadBed mm6 phastConsElements mostConserved.bed
+    #	24 minute load time
 
     # Create merged posterier probability file and wiggle track data files
     ssh kksilo
@@ -3743,7 +3747,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Mm6 Histogram phastCons5 track"
+set title " Mouse Mm6 Histogram phastCons10 track"
 set xlabel " phastCons10 score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
@@ -5105,3 +5109,68 @@ hgsql mm6 -e 'load data local infile "pepPi.tab" into table mm6.pepPi;'
 # Perform preliminary review of Proteome Browser for mm6, then
   notify QA for formal review.
 
+#####################################################################
+# MAP CONTIGS TRACK (DONE - 2005-04-21 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/mm6/bed/ctgPos
+    cd /cluster/data/mm6/bed/ctgPos
+    # hgCtgPos uses the lift files... but mouse lift files are for the
+    # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs
+    # from the assembly.  (In the future, we should go with the NT's!)
+    # So... just for this release, go straight from the seq_contig.md
+    # to the table def'n: contig, size, chrom, chromStart, chromEnd
+    #	This script is an improvement from before, this is now doing the
+    #	randoms properly.
+    cat << '_EOF_' > seqContigToCtgPos.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $prevRandom="";
+my $randomPosition=0;
+
+while(my $line=<>)
+{
+chomp($line);
+my @a = split('\s+',$line);
+if ($a[1] =~ m/\|/)
+    {
+    my @b = split('\|',$a[1]);
+    if ($b[0] ne $prevRandom)
+	{
+	$randomPosition=0;
+	$prevRandom=$b[0];
+	}
+    my $size = $a[3]-$a[2]+1;
+    my $start = $randomPosition;
+    my $end = $randomPosition + $size;
+    printf "%s\t%d\tchr%s_random\t%d\t%d\n", $a[5],$size,$b[0],$start,$end;
+    if ($b[0] ne "Un") { $randomPosition += 50000; }
+	else { $randomPosition += 1000; }
+    $randomPosition += $size;
+    }
+elsif ($a[5] =~ m/^N[TC]_\d+$/)
+    {
+    my $start = $a[2]-1;
+    my $end = $a[3];
+    my $size = $end-$start;
+    printf "%s\t%d\tchr%s\t%d\t%d\n", $a[5],$size,$a[1],$start,$end;
+    }
+}
+'_EOF_'
+    #	emacs happy
+    chmod +x seqContigToCtgPos.pl
+
+    # /cluster/data/mm6/ncbi/seq_contig.md contains more than just C57BL/6J.
+    # Filter those out with the grep.
+    zcat ../../seq_contig.md.gz | grep C57BL | \
+	./seqContigToCtgPos.pl > ctgPos.tab
+
+    hgsql mm6 < ~/kent/src/hg/lib/ctgPos.sql
+    hgsql mm6 -e 'load data local infile "ctgPos.tab" into table ctgPos;'
+
+    featureBits -countGaps mm6 ctgPos
+    #	2638893452 bases of 3079633452 (85.689%) in intersection
+    featureBits -countGaps mm5 ctgPos
+    #	2557081173 bases of 3164952073 (80.794%) in intersection
