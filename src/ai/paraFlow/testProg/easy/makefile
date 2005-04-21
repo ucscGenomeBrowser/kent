@@ -42,8 +42,8 @@ test:
 	diff expected/toInOut $O/toInOut
 	paraFlow twoParam.pf > $O/twoParam
 	diff expected/twoParam $O/twoParam
-#	paraFlow unitCircle.pf > $O/unitCircle
-#	diff expected/unitCircle $O/unitCircle
+	paraFlow unitCircle.pf > $O/unitCircle
+	diff expected/unitCircle $O/unitCircle
 	paraFlow while.pf > $O/while
 	diff expected/while $O/while
 	paraFlow polymorphic.pf > $O/polymorphic
