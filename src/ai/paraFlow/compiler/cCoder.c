@@ -265,10 +265,20 @@ fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", codedTypeId(pfc, type));
 fprintf(f, " }\n");
 }
 
-static void bumpStackRefCount(FILE *f, struct pfType *type, int stack)
+static void bumpStackRefCount(struct pfCompile *pfc,
+	FILE *f, struct pfType *type, int stack)
 /* If type is reference counted, bump up refCount of top of stack. */
 {
-if (type->base->needsCleanup)
+struct pfBaseType *base = type->base;
+
+if (base == pfc->varType)
+    {
+    fprintf(f, "_pf_var_link(");
+    codeStackAccess(f, stack);
+    fprintf(f, ".Var");
+    fprintf(f, ");\n");
+    }
+else if (base->needsCleanup)
     {
     fprintf(f, "if (0 != ");
     codeStackAccess(f, stack);
@@ -345,7 +355,7 @@ if (colBase == pfc->arrayType)
     fprintf(f, " = ");
     codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
-    bumpStackRefCount(f, outType, stack);
+    bumpStackRefCount(pfc, f, outType, stack);
     }
 else if (colBase == pfc->stringType)
     {
@@ -468,7 +478,7 @@ codeParamAccess(pfc, f, outType->base, stack);
 fprintf(f, " = ");
 codeDotAccess(pfc, f, pp, stack);
 fprintf(f, ";\n");
-bumpStackRefCount(f, outType, stack);
+bumpStackRefCount(pfc, f, outType, stack);
 return 1;
 }
 
@@ -788,6 +798,10 @@ static int codeVarUse(struct pfCompile *pfc, FILE *f,
 /* Generate code for moving a variable onto stack. */
 {
 struct pfBaseType *base = pp->ty->base;
+#ifdef UNTESTED
+if (addRef)
+    bumpStackRefCount(pfc, f, pp->ty, stack);
+#endif /* UNTESTED */
 if (addRef && base->needsCleanup)
     {
     if (base == pfc->varType)

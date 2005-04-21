@@ -808,17 +808,16 @@ struct pfParse *lval = *pLval;
 struct pfParse **pRval = &lval->next;
 struct pfParse *rval = *pRval;
 
-#ifdef OLD
-if (lval->ty == NULL)
-    expectingGot("number", lval->tok);
-if (rval->ty == NULL)
-    expectingGot("number", rval->tok);
-#endif /* OLD */
 if (!pfTypeSame(lval->ty, rval->ty))
     {
     struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
     coerceOne(pfc, &lval, ty, numToString);
     coerceOne(pfc, &rval, ty, numToString);
+    }
+else 
+    {
+    if (lval->ty->base == pfc->varType)
+        errAt(pp->tok, "Sorry, you can't have var's on both side of this operation");
     }
 pp->ty = lval->ty;
 
