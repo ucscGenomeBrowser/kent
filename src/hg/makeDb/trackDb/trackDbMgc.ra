@@ -5,7 +5,7 @@ group mgc
 priority 10
 visibility pack
 color 34,139,34
-type genePred
+type genePred . mgcFullMrna
 exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
