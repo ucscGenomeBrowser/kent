@@ -1,4 +1,3 @@
-  - Implement += for strings and arrays.
   - Adding default parameters.  These could be applied during
     class initialization too.
   - Adding named parameters.
@@ -18,6 +17,19 @@ Check system:
 
 -----------
 DONE
+  - Fix bug where this construct doesn't work:
+	    class keyVal
+	       {
+	       int key;
+	       string val;
+	       }
+	    keyVal kv = (1, "one");
+	    kv.val.upper();
+    but
+    	    string s = "hello";
+	    s.upper()
+    does work.
+  - Implement += for strings and arrays.
   - Make array of var work.
   - Make sure that assigning a typed variable from a var variable
     does the right thing.

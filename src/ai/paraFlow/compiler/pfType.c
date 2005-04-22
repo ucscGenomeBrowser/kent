@@ -1016,14 +1016,14 @@ struct pfParse *varUse = pp->children;
 struct pfParse *fieldUse;
 struct pfType *type = varUse->var->ty;
 
-if (type->base == pfc->stringType)
-    type = pfc->stringFullType;
-else if (type->base == pfc->arrayType)
-    type = pfc->arrayFullType;
-if (!type->base->isClass)
-    errAt(pp->tok, "dot after non-class variable");
 for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     {
+    if (type->base == pfc->stringType)
+	type = pfc->stringFullType;
+    else if (type->base == pfc->arrayType)
+	type = pfc->arrayFullType;
+    if (!type->base->isClass)
+	errAt(pp->tok, "dot after non-class variable");
     struct pfType *fieldType = findField(type->base, fieldUse->name);
     if (fieldType == NULL)
 	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
