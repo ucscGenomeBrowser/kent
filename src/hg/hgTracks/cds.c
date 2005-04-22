@@ -86,8 +86,11 @@ if (psl == NULL)
 	     psl->qName);
 
 if (s < psl->tStart || s >= psl->tEnd)
-    errAbort("Position %d is outside of this psl entry (%d-%d).<br>\n",
-	     s,psl->qStart,psl->qEnd);
+    {
+    warn("Position %d is outside of this psl entry q(%d-%d), t(%d-%d).<br>\n",
+	     s,psl->qStart,psl->qEnd, psl->tStart, psl->tEnd);
+    return(-1);
+    }
 
 for ( i=0; i<psl->blockCount; i++ )
     {
@@ -482,12 +485,28 @@ static struct psl *genePredLookupPsl(char *db, char *chrom,
     struct psl *psl = NULL;
     struct sqlResult *sr = NULL;
     struct sqlConnection *conn2 = sqlConnect(db);
+    boolean foundPsl = FALSE;
 
     safef(rest, 64, "qName='%s'", lf->name );
     sr = hRangeQuery(conn2, pslTable, chromName, lf->start, lf->end, 
             rest, &rowOffset);
-    if ((row = sqlNextRow(sr)) != NULL)
+    /*	fixing RT 1177 - the range query matches several items in some
+     *	cases, the old code here merely took the first one.  It was
+     *	sometimes out of the view window.  Now examine the results and
+     *	select the first one that is in the window of view.
+     */
+    while (!foundPsl && ((row = sqlNextRow(sr)) != NULL))
+	{
         psl = pslLoad(row+rowOffset);
+	if ((psl->tStart < winEnd) && (psl->tEnd > winStart))
+	    {
+	    foundPsl = TRUE;
+	    }
+	else
+	    {
+	    pslFree(&psl);
+	    }
+	}
     sqlFreeResult(&sr);
     sqlDisconnect(&conn2);
 
