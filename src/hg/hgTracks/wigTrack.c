@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.66 2005/03/04 19:27:24 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.67 2005/04/22 22:28:25 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -156,9 +156,12 @@ for (el = *pList; el != NULL; el = next)
 }
 #endif
 
-/*	trackSpans - hash of hashes, first hash is via trackName
- *	the element for trackName is a hash itself where each element
+/*	trackSpans - hash of hashes, first hash is keyed via trackName
+ *	the value for key trackName is a hash itself where each element
  *	is a Span found in the data (==zoom level indication)
+ *	The key for the second hash is the ascii string for the span
+ *	value, and the value at that key is the binary equivalent for
+ *	that number.
  */
 static struct hash *trackSpans = NULL;	/* hash of hashes */
 
@@ -374,24 +377,58 @@ char *previousFileName;
 struct hash *spans = NULL;	/* Spans encountered during load */
 /*	Check our scale from the global variables that exist in
  *	hgTracks.c - This can give us a guide about which rows to load.
- *	If the scale is more than 1K bases per pixel, we can try loading
- *	only those rows with Span == 1024 to see if an appropriate zoom
+ *	If the scale is more than 1000 bases per pixel, we can try loading
+ *	only those rows with Span >= 1000 to see if an appropriate zoom
  *	level exists.
  */
 int basesPerPixel = (int)((double)(winEnd - winStart)/(double)insideWidth);
 char *span1K = "Span >= 1000 limit 1";
 char *spanOver1K = "Span >= 1000";
+char whereSpan[64];
+int spanMinimum = 1;
 
 /*	Verify this is NOT a custom track	*/
 if (tg->customPt != (void *)NULL)
     errAbort("wigLoadItems: encountered a custom wiggle track: %s in the wrong place", tg->mapName);
 
-if (basesPerPixel >= 1024) {
+/*	Allocate trackSpans one time only	*/
+if (! trackSpans)
+    trackSpans = newHash(0);
+
+/*	find the minimum span to see if there are actually any data
+ *	points in this area at that span.  If there are not, then there
+ *	is no data here even if a zoomed view covers this section.
+ *	protect against less than 1 with the max(1,minSpan());
+ *	This business will fix the problem mentioned in RT #1186
+ */
+spanMinimum = max(1,
+	minSpan(conn, tg->mapName, chromName, winStart, winEnd, cart, tg->tdb));
+
+itemsLoaded = 0;
+safef(whereSpan, ArraySize(whereSpan), "span=%d limit 1", spanMinimum);
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-	span1K, &rowOffset);
+	whereSpan, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
-	++itemsLoaded;
-}
+    ++itemsLoaded;
+sqlFreeResult(&sr);
+
+/*	if nothing here, bail out	*/
+if (itemsLoaded < 1)
+    {
+    tg->items = (struct wigItem *)NULL;
+    hFreeConn(&conn);
+    return;
+    }
+
+itemsLoaded = 0;
+if (basesPerPixel >= 1000)
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+	    span1K, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	    ++itemsLoaded;
+    sqlFreeResult(&sr);
+    }
 /*	If that worked, excellent, then we have at least another zoom level
  *	So, for our actual load, use spanOver1K to fetch not only the 1K
  *	zooms, but potentially others that may be useful.  This will
@@ -412,9 +449,6 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
     }
 
 
-/*	Allocate trackSpans one time only	*/
-if (! trackSpans)
-    trackSpans = newHash(0);
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
