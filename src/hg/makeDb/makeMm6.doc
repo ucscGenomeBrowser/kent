@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.35 2005/04/21 19:47:43 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.36 2005/04/22 14:19:44 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4212,6 +4212,73 @@ cat out/$1/*.out >>protRefRaw.psl
     hgsql mm6 -e "drop table kgProtAlias;"
     hgsql mm6 <~/src/hg/lib/kgProtAlias.sql; 
     hgsql mm6 -e 'LOAD DATA local INFILE "kgProtAliasBoth.tab" into table kgProtAlias;'  
+
+
+# MAKING FOLDUTR TABLES (DONE 2005-04-21, Fan)
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    mkdir -p /cluster/data/mm6/bed/rnaStruct
+    cd /cluster/data/mm6/bed/rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa mm6 knownGene utr3 utr3/utr.fa
+    utrFa mm6 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh kk
+    cd /cluster/data/mm6/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+
+Completed: 19325 of 19325 jobs
+CPU time in finished jobs:     421619s    7026.99m   117.12h    4.88d  0.013 y
+IO & Wait Time:                 87355s    1455.91m    24.27h    1.01d  0.003 y
+Average job time:                  26s       0.44m     0.01h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            7988s     133.13m     2.22h    0.09d
+Submission to last job:          8644s     144.07m     2.40h    0.10d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+
+Completed: 18053 of 18053 jobs
+CPU time in finished jobs:      25309s     421.82m     7.03h    0.29d  0.001 y
+IO & Wait Time:                 53547s     892.45m    14.87h    0.62d  0.002 y
+Average job time:                   4s       0.07m     0.00h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             314s       5.23m     0.09h    0.00d
+Submission to last job:           565s       9.42m     0.16h    0.01d
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/rnaStruct/utr5
+    hgLoadRnaFold mm6 foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold mm6 foldUtr3 fold
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
+
 
 # Update default Browser position
 # bring up mySQL on genome-testdb and use hgcentraltest DB:
