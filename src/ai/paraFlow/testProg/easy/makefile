@@ -46,11 +46,17 @@ test:
 	diff expected/shift $O/shift
 	paraFlow stringInit.pf > $O/stringInit
 	diff expected/stringInit $O/stringInit
+	paraFlow stringAppend.pf > $O/stringAppend
+	diff expected/stringAppend $O/stringAppend
 	paraFlow toInOut.pf > $O/toInOut
 	diff expected/toInOut $O/toInOut
 	paraFlow twoParam.pf > $O/twoParam
 	diff expected/twoParam $O/twoParam
 	paraFlow unitCircle.pf > $O/unitCircle
 	diff expected/unitCircle $O/unitCircle
+	paraFlow varType1.pf > $O/varType1
+	diff expected/varType1 $O/varType1
+	paraFlow varType2.pf > $O/varType2
+	diff expected/varType2 $O/varType2
 	paraFlow while.pf > $O/while
 	diff expected/while $O/while
