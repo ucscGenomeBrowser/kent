@@ -10,6 +10,7 @@ paraFlow: $(O)
 test:
 	cd ../testProg/oneFile; make
 	cd ../testProg/easy; make
+	cd ../testProg/fixes; make
 
 ret:
 	gcc -c t.c 

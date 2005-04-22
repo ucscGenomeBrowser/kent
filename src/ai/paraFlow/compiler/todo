@@ -1,12 +1,12 @@
-  - Adding named parameters.
   - Allowing static variables inside of a function.
+  - Working on multiple modules.
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
-  - Working on multiple modules.
   - Implement ++ and maybe --.
   - More file i/o.
-  - Implementing trees.
+  - Adding named parameters.
   - Implement lists.
+  - Implementing trees.
 
 Check system:
 	blessPara - Also makes sure that there are no writes

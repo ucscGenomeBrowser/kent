@@ -71,7 +71,7 @@ struct pfType
     char *fieldName;		/* Field name associated with this node. */
     struct pfParse *init;	/* Initialization if any. */
     UBYTE tyty;			/* Some PfTyty value. */
-    UBYTE reserved;		/* Reserved for future expansion. */
+    bool isStatic;		/* True if it's a static variable. */
     short polyOffset;		/* Offset in polymorphic function table. */
     };
 

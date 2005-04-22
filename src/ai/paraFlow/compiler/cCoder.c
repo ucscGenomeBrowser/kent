@@ -103,6 +103,42 @@ codeStackAccess(f, offset);
 fprintf(f, ".%s", field);
 }
 
+struct dyString *varName(struct pfCompile *pfc, struct pfVar *var)
+/* Return  variable name from C point of view.  (Easy unless it's static). */
+{
+struct dyString *name = dyStringNew(256);
+struct pfType *type = var->ty;
+if (type->isStatic)
+    {
+    /* Find enclosing function. */
+    struct pfParse *toDec, *classDec;
+    char *className = "";
+    for (toDec = var->parse; toDec != NULL; toDec = toDec->parent)
+	if (toDec->type == pptToDec)
+	    break;
+    if (toDec == NULL)
+        internalErr();
+    for (classDec = toDec->parent; classDec!=NULL; classDec = classDec->parent)
+	if (toDec->type == pptClass)
+	    break;
+    if (classDec != NULL)
+        className = classDec->name;
+    dyStringPrintf(name, " _pf_sta_%d_%s_%s_%s", 
+		var->scope->id, className, toDec->name, var->name);
+    }
+else
+    dyStringAppend(name, var->name);
+return name;
+}
+
+static void printVarName(struct pfCompile *pfc, FILE *f, struct pfVar *var)
+/* Print variable name from C point of view.  (Easy unless it's static). */
+{
+struct dyString *name = varName(pfc, var);
+fprintf(f, "%s", name->string);
+dyStringFree(&name);
+}
+
 static char *vTypeKey(struct pfCompile *pfc, struct pfBaseType *base)
 /* Return typeKey, or "v" is that would be NULL.  The v is used
  * to access void pointer on stack. */
@@ -507,7 +543,8 @@ fprintf(f, ";\n");
 }
 
 
-static void codeCleanupVar(struct pfCompile *pfc, FILE *f, struct pfType *type, char *name)
+static void codeCleanupVarNamed(struct pfCompile *pfc, FILE *f, 
+	struct pfType *type, char *name)
 /* Emit cleanup code for variable of given type and name. */
 {
 if (type->base->needsCleanup)
@@ -520,6 +557,15 @@ if (type->base->needsCleanup)
 	fprintf(f, "   %s->_pf_cleanup(%s, %d);\n", name, name, codedTypeId(pfc, type));
 	}
     }
+}
+
+static void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
+        struct pfVar *var)
+/* Emit cleanup code for variable of given type and name. */
+{
+struct dyString *name = varName(pfc, var);
+codeCleanupVarNamed(pfc, f, var->ty, name->string);
+dyStringFree(&name);
 }
 
 static void codeInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)
@@ -541,10 +587,10 @@ for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
-    if (type->tyty == tytyVariable)
+    if (type->tyty == tytyVariable && !type->isStatic)
         {
 	printType(pfc, f, type->base);
-	fprintf(f, " %s", var->name);
+	printVarName(pfc, f, var);
 	if (zeroUninit && !isInitialized(var))
 	    {
 	    codeInitOfType(pfc, f, type);
@@ -565,7 +611,8 @@ struct hashEl *hel;
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
-    codeCleanupVar(pfc, f, var->ty, var->name);
+    if (!var->ty->isStatic)
+	codeCleanupVar(pfc, f, var);
     }
 }
 
@@ -604,8 +651,9 @@ switch (pp->type)
 	{
 	struct pfBaseType *base = pp->ty->base;
 	if (cleanupOldVal && base->needsCleanup)
-	    codeCleanupVar(pfc, f, pp->ty, pp->name);
-	fprintf(f, "%s %s ", pp->name , op);
+	    codeCleanupVar(pfc, f, pp->var);
+	printVarName(pfc, f, pp->var);
+	fprintf(f, " %s ", op);
 	codeParamAccess(pfc, f, base, stack);
 	fprintf(f, ";\n");
 	return 1;
@@ -631,6 +679,7 @@ switch (pp->type)
 	}
     default:
         fprintf(f, "using %s %s as an lval\n", pp->name, pfParseTypeAsString(pp->type));
+	internalErr();
 	return 0;
     }
 }
@@ -800,22 +849,20 @@ static int codeVarUse(struct pfCompile *pfc, FILE *f,
 /* Generate code for moving a variable onto stack. */
 {
 struct pfBaseType *base = pp->ty->base;
-#ifdef UNTESTED
-if (addRef)
-    bumpStackRefCount(pfc, f, pp->ty, stack);
-#endif /* UNTESTED */
+struct dyString *name = varName(pfc, pp->var);
 if (addRef && base->needsCleanup)
     {
     if (base == pfc->varType)
-	fprintf(f, "_pf_var_link(%s);\n", pp->name);
+	fprintf(f, "_pf_var_link(%s);\n", name->string);
     else
 	{
-	fprintf(f, "if (0 != %s) ", pp->name);
-	fprintf(f, "%s->_pf_refCount+=1;\n", pp->name);
+	fprintf(f, "if (0 != %s) ", name->string);
+	fprintf(f, "%s->_pf_refCount+=1;\n", name->string);
 	}
     }
 codeParamAccess(pfc, f, base, stack);
-fprintf(f, " = %s;\n", pp->name);
+fprintf(f, " = %s;\n", name->string);
+dyStringFree(&name);
 return 1;
 }
 	
@@ -1219,32 +1266,47 @@ switch (pp->type)
     }
 }
 
-static void expandDottedName(char *fullName, int maxSize, struct pfParse *pp)
+static void expandDottedName(struct pfCompile *pfc,
+	char *fullName, int maxSize, struct pfParse *pp)
 /* Fill in fullName with this.that.whatever. */
 {
 switch (pp->type)
     {
     case pptVarUse:
-        safef(fullName, maxSize, "%s", pp->name);
+	{
+	struct dyString *name = varName(pfc, pp->var);
+        safef(fullName, maxSize, "%s", name->string);
+	dyStringFree(&name);
 	break;
+	}
     case pptDot:
         {
 	int curSize = 0, itemSize;
-	boolean needArrow = FALSE;
+	boolean isFirst = TRUE;
 	for (pp = pp->children; pp != NULL; pp = pp->next)
 	    {
-	    if (needArrow)
+	    if (isFirst)
 	        {
+		struct dyString *name = varName(pfc, pp->var);
+		safef(fullName, maxSize, "%s", name->string);
+		curSize = name->stringSize;
+		if (curSize >= maxSize)
+		    errAt(pp->tok, "Dotted name too long");
+		strcpy(fullName, name->string);
+		dyStringFree(&name);
+		isFirst = FALSE;
+		}
+	    else
+		{
+		itemSize = strlen(pp->name);
+		if (itemSize + curSize + 2 >= maxSize)
+		    errAt(pp->tok, "Dotted name too long");
 		fullName[curSize] = '-';
 		fullName[curSize+1] = '>';
 		curSize += 2;
+		strcpy(fullName + curSize, pp->name);
+		curSize += itemSize;
 		}
-	    needArrow = TRUE;
-	    itemSize = strlen(pp->name);
-	    if (itemSize + curSize + 2 >= maxSize)
-	        errAt(pp->tok, "Dotted name too long");
-	    strcpy(fullName + curSize, pp->name);
-	    curSize += itemSize;
 	    }
 	fullName[curSize] = 0;
 	break;
@@ -1268,7 +1330,7 @@ char *elName = elPp->name;
 char collectionName[512];
 
 /* Print element variable in a new scope. */
-expandDottedName(collectionName, sizeof(collectionName), collectionPp);
+expandDottedName(pfc, collectionName, sizeof(collectionName), collectionPp);
 fprintf(f, "{\n");
 codeScopeVars(pfc, f, foreach->scope, FALSE);
 
@@ -1499,6 +1561,26 @@ for (pp=pp->children; pp != NULL; pp = pp->next)
     rPrintPrototypes(f, pp, class);
 }
 
+static void declareStaticVars(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *funcDec, struct pfParse *pp,
+	struct pfParse *class)
+/* Declare static variables inside of function */
+{
+if (pp->type == pptVarInit)
+    {
+    struct pfType *type = pp->ty;
+    if (type->isStatic)
+        {
+	fprintf(f, "static ");
+	printType(pfc, f, type->base);
+	fprintf(f, " ");
+	printVarName(pfc, f, pp->var);
+	fprintf(f, ";\n");
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    declareStaticVars(pfc, f, funcDec, pp, class);
+}
 
 static void codeFunction(struct pfCompile *pfc, FILE *f, 
 	struct pfParse *funcDec, struct pfParse *class)
@@ -1514,6 +1596,7 @@ struct pfParse *body = funcDec->children->next->next->next;
 if (body == NULL)
     return;
 
+declareStaticVars(pfc, f, funcDec, body, class);
 printPrototype(f, funcDec, class);
 if (class)
     pfScopeAddVar(funcDec->scope, "self", class->ty, NULL);
@@ -1563,7 +1646,7 @@ fprintf(f, "_pf_cleanup: ;\n");
     {
     struct pfType *in;
     for (in = inTuple->children; in != NULL; in = in->next)
-	codeCleanupVar(pfc, f, in, in->fieldName);
+	codeCleanupVarNamed(pfc, f, in, in->fieldName);
     }
 
 /* Save the output. */
@@ -1620,9 +1703,18 @@ if (base->polyList != NULL)
     }
 }
 
+static void codeStaticAssignments(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Print out any static assignments in parse tree. */
+{
+if (pp->type == pptAssignment && pp->ty->isStatic)
+    codeStatement(pfc, f, pp);
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    codeStaticAssignments(pfc, f, pp);
+}
+
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printPfInit, boolean isBuiltIn)
+	boolean printMain, boolean isBuiltIn)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -1675,8 +1767,11 @@ for (p = pp->children; p != NULL; p = p->next)
     }
 
 /* Print out other statements */
-if (printPfInit)
+if (printMain)
+    {
     fprintf(f, "void _pf_main(%s *%s)\n{\n", stackType, stackName);
+    codeStaticAssignments(pfc, f, pp);
+    }
 for (p = pp->children; p != NULL; p = p->next)
     {
     switch (p->type)
@@ -1687,6 +1782,10 @@ for (p = pp->children; p != NULL; p = p->next)
 	case pptNop:
 	case pptClass:
 	    break;
+	case pptAssignment:
+	    if (!p->ty->isStatic)
+		codeStatement(pfc, f, p);
+	    break;
 	default:
 	    codeStatement(pfc, f, p);
 	    break;
@@ -1696,7 +1795,7 @@ for (p = pp->children; p != NULL; p = p->next)
 if (!isBuiltIn)
     codeCleanupVarsInHelList(pfc, f, helList);
 
-if (printPfInit)
+if (printMain)
     fprintf(f, "}\n");
 
 hashElFreeList(&helList);
@@ -1751,9 +1850,6 @@ struct hash *compTypeHash;
 printPreamble(pfc, f, fileName);
 pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
 
-#ifdef OLD
-calcAllPolyFunOffsets(pfc, pfc->scopeList);
-#endif /* OLD */
 for (module = program->children; module != NULL; module = module->next)
     {
     boolean isBuiltIn = sameString(module->name, "<builtin>");

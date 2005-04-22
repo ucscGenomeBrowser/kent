@@ -138,6 +138,7 @@ switch (type)
     case pftReturn: 	     return "pftReturn";
     case pftExtends: 	     return "pftExtends";
     case pftPolymorphic:     return "pftPolymorphic";
+    case pftStatic:          return "pftStatic";
     default:
 	if (type < 256)
 	    {
@@ -826,6 +827,7 @@ if (tok->type == pftName)
         tok->type = x;
     }
 tkz->tokenCount += 1;
+// pfTokenDump(tok, uglyOut, TRUE);
 return tok;
 }
 

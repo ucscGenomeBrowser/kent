@@ -61,6 +61,7 @@ hashAddInt(hash, "continue", pftContinue);
 hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "extends", pftExtends);
 hashAddInt(hash, "polymorphic", pftPolymorphic);
+hashAddInt(hash, "static", pftStatic);
 return hash;
 }
 

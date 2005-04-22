@@ -294,6 +294,9 @@ switch (type)
     case pptConstZero:
 	return "pptConstZero";
 
+    case pptStatic:
+	return "pptStatic";
+
     default:
         internalErr();
 	return NULL;
@@ -629,7 +632,8 @@ for (tok = tokList; tok != NULL; tok = tok->next)
 return tok;
 }
 
-struct pfParse *varUseOrDeclare(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+struct pfParse *varUseOrDeclare(struct pfParse *parent, 
+	struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
  * based on it. */
 {
@@ -661,6 +665,38 @@ if (baseType != NULL)
 return parseDottedNames(parent, pTokList, scope);
 }
 
+boolean inFunction(struct pfParse *pp)
+/* Return TRUE if pp or one of it's parents is a function. */
+{
+while (pp != NULL)
+    {
+    if (pp->type == pptToDec)
+	return TRUE;
+    pp = pp->parent;
+    }
+return FALSE;
+}
+
+struct pfParse *varStorageOrUse(struct pfParse *parent, 
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse out storage class if any, and then rest of function. */
+{
+struct pfToken *tok = *pTokList;
+
+if (tok->type == pftStatic)
+    {
+    struct pfParse *pp = pfParseNew(pptStatic, tok, parent, scope);
+    if (!inFunction(parent))
+        errAt(tok, "'static' outside of 'to'");
+    tok = tok->next;
+    pp->children = varUseOrDeclare(parent, &tok, scope);
+    *pTokList = tok;
+    return pp;
+    }
+else
+    return varUseOrDeclare(parent, pTokList, scope);
+}
+
 struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Create constant use */
 {
@@ -685,7 +721,8 @@ switch (tok->type)
     case pftSys:
     case pftUser:
     case pftSysOrUser:
-	pp = varUseOrDeclare(parent, &tok, scope);
+    case pftStatic:
+	pp = varStorageOrUse(parent, &tok, scope);
 	break;
     case pftString:
     case pftInt:
@@ -1394,9 +1431,6 @@ pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 element = varUseOrDeclare(pp, &tok, scope);
 skipRequiredName("in", &tok);
-#ifdef OLD
-collection = parseDottedNames(pp, &tok, scope);
-#endif /* OLD */
 collection = pfParseExpression(pp, &tok, scope);
 statement = pfParseStatement(pfc, pp, &tok, scope);
 slAddHead(&pp->children, statement);
@@ -1569,6 +1603,7 @@ switch (tok->type)
     case pftPolymorphic:
     	statement = parsePolymorphic(pfc, parent, &tok, scope);
 	break;
+    case pftStatic:
     case pftName:
     case '(':
 	statement = pfParseExpression(parent, &tok, scope);

@@ -165,6 +165,8 @@ enum pfParseType
     pptConstString,
     pptConstZero,
 
+    pptStatic,
+
     pptTypeCount,
     };
 
