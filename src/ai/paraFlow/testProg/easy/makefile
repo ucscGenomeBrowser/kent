@@ -46,6 +46,8 @@ test:
 	diff expected/polymorphic $O/polymorphic
 	paraFlow printFile.pf printFile.pf > $O/printFile
 	diff expected/printFile $O/printFile
+	paraFlow static.pf > $O/static
+	diff expected/static $O/static
 	paraFlow shift.pf > $O/shift
 	diff expected/shift $O/shift
 	paraFlow stringInit.pf > $O/stringInit
