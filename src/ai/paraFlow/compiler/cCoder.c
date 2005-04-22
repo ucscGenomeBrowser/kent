@@ -590,6 +590,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     if (type->tyty == tytyVariable && !type->isStatic)
         {
 	printType(pfc, f, type->base);
+	fprintf(f, " ");
 	printVarName(pfc, f, var);
 	if (zeroUninit && !isInitialized(var))
 	    {
@@ -1706,7 +1707,7 @@ if (base->polyList != NULL)
 static void codeStaticAssignments(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Print out any static assignments in parse tree. */
 {
-if (pp->type == pptAssignment && pp->ty->isStatic)
+if (pp->type == pptVarInit && pp->ty->isStatic)
     codeStatement(pfc, f, pp);
 for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticAssignments(pfc, f, pp);
@@ -1782,8 +1783,9 @@ for (p = pp->children; p != NULL; p = p->next)
 	case pptNop:
 	case pptClass:
 	    break;
-	case pptAssignment:
-	    if (!p->ty->isStatic)
+	case pptTuple:
+	case pptVarInit:
+	    if (!p->isStatic)
 		codeStatement(pfc, f, p);
 	    break;
 	default:

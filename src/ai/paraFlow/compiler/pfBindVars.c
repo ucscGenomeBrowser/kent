@@ -111,6 +111,8 @@ switch (pp->type)
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
 	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
+	uglyf("Adding %s to scope, isStatic = %d\n", name->name, pp->isStatic);
+	pp->ty->isStatic = pp->isStatic;
 	break;
 	}
     case pptToDec:

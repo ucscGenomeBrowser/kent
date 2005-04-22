@@ -165,7 +165,9 @@ enum pfParseType
     pptConstString,
     pptConstZero,
 
+#ifdef OLD
     pptStatic,
+#endif /* OLD */
 
     pptTypeCount,
     };
@@ -179,7 +181,7 @@ struct pfParse
     struct pfParse *next;	/* Next in list */
     UBYTE type;			/* Node type */
     UBYTE isConst;		/* Is this all constant? */
-    UBYTE reserved1;		/* For expansion 1. */
+    UBYTE isStatic;		/* Is this a static declaration?. */
     UBYTE reserved2;		/* For expansion 2. */
     char *name;			/* Node name - not allocated here */
     struct pfToken *tok;	/* Token associated with node. */

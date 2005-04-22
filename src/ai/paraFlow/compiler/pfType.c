@@ -1290,11 +1290,13 @@ switch (pp->type)
     case pptPolymorphic:
         pfParsePutChildrenInPlaceOfSelf(pPp);
 	break;
+#ifdef OLD
     case pptStatic:
 	pp->children->ty->isStatic = TRUE;
 	pp->children->var->ty->isStatic = TRUE;
 	pfParsePutChildrenInPlaceOfSelf(pPp);
         break;
+#endif /* OLD */
     case pptParaDec:
     case pptToDec:
     case pptFlowDec:

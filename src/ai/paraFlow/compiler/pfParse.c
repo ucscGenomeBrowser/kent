@@ -294,8 +294,10 @@ switch (type)
     case pptConstZero:
 	return "pptConstZero";
 
+#ifdef OLD
     case pptStatic:
 	return "pptStatic";
+#endif /* OLD */
 
     default:
         internalErr();
@@ -342,6 +344,8 @@ void pfParseDumpOne(struct pfParse *pp, int level, FILE *f)
 {
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
+if (pp->isStatic)
+    fprintf(f, " s");
 if (pp->ty != NULL)
     {
     fprintf(f, " ");
@@ -657,6 +661,7 @@ if (baseType != NULL)
 	type = parseOfs(pp, &tok, scope);
 	name = parseDottedNames(pp, &tok, scope);
 	pp->children = type;
+	pp->name = name->name;
 	type->next = name;
 	*pTokList = tok;
 	return pp;
@@ -677,7 +682,7 @@ while (pp != NULL)
 return FALSE;
 }
 
-struct pfParse *varStorageOrUse(struct pfParse *parent, 
+static struct pfParse *varStorageOrUse(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse out storage class if any, and then rest of function. */
 {
@@ -685,11 +690,17 @@ struct pfToken *tok = *pTokList;
 
 if (tok->type == pftStatic)
     {
-    struct pfParse *pp = pfParseNew(pptStatic, tok, parent, scope);
+    struct pfToken *staticTok = tok;
+    struct pfParse *pp;
     if (!inFunction(parent))
         errAt(tok, "'static' outside of 'to'");
     tok = tok->next;
-    pp->children = varUseOrDeclare(parent, &tok, scope);
+    pp = varUseOrDeclare(parent, &tok, scope);
+    if (pp->type != pptVarDec)
+        errAt(staticTok, 
+		"'static' only allowed in front of a variable declaration");
+    pp->isStatic = TRUE;
+    uglyf("varStorageOrUse setting %s to static\n", pp->name);
     *pTokList = tok;
     return pp;
     }
@@ -1037,6 +1048,7 @@ if (type != pptNone)
     {
     assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
+    assign->isStatic = pp->isStatic;
     pp->parent = assign;
     for (;;)
 	{
@@ -1061,7 +1073,6 @@ static void flipNameUseToVarDec(struct pfParse *pp, struct pfParse *type, struct
 {
 struct pfParse *dupeType, *dupeName;
 
-
 AllocVar(dupeName);
 *dupeName = *pp;
 
@@ -1085,16 +1096,21 @@ if (vars != NULL)
 	{
 	struct pfParse *type = NULL;
 	struct pfParse *pp;
+	boolean isStatic = vars->isStatic;
+	uglyf("addingMissingTypesInDeclareTuple, isStatic %d\n", isStatic);
 	for (pp = vars; pp != NULL; pp = pp->next)
 	    {
+	    uglyf("   %s %s\n", pp->name, pfParseTypeAsString(pp->type));
 	    if (pp->type == pptVarDec)
 		{
 	        type = pp->children;
 		pp->name = type->next->name;
+		pp->isStatic = isStatic;
 		}
 	    else if (pp->type == pptNameUse)
 	        {
 		flipNameUseToVarDec(pp, type, tuple);
+		pp->isStatic = isStatic;
 		}
 	    else if (pp->type == pptAssignment)
 	        {
@@ -1108,8 +1124,10 @@ if (vars != NULL)
 		    {
 		    flipNameUseToVarDec(sub, type, pp);
 		    }
+		sub->isStatic = pp->isStatic = isStatic;
 		}
 	    }
+	tuple->isStatic = isStatic;
 	}
     }
 }
@@ -1830,7 +1848,7 @@ else if (pp->type == pptOf)
 }
 
 void varDecAndAssignToVarInit(struct pfParse *pp)
-/* Convert pptVarDec to pptVarInit. */
+/* Convert pptVarDec and when appropriate pptAssignment to pptVarInit. */
 {
 if (pp->type == pptVarDec)
     {
@@ -1844,6 +1862,7 @@ else if (pp->type == pptAssignment)
         {
 	struct pfParse *right = left->next;
 	pp->type = pptVarInit;
+	pp->isStatic = left->isStatic;
 	pp->children = left->children;
 	pp->name = left->name;
 	slAddTail(&pp->children, right);
@@ -1853,7 +1872,6 @@ if (pp->type == pptVarInit)
     {
     struct pfParse *type = pp->children;
     struct pfParse *name = type->next;
-    // pfParseTypeSub(type, pptNameUse, pptTypeName);
     subTypeForName(type);
     name->type = pptSymName;
     pp->name = name->name;
