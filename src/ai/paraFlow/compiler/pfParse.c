@@ -291,6 +291,8 @@ switch (type)
 	return "pptConstDouble";
     case pptConstString:
 	return "pptConstString";
+    case pptConstZero:
+	return "pptConstZero";
 
     default:
         internalErr();

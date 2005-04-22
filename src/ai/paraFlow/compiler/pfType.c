@@ -187,7 +187,8 @@ struct pfParse *pp = *pPp;
 struct pfParse *cast = pfParseNew(castType, pp->tok, pp->parent, pp->scope);
 cast->next = pp->next;
 cast->children = pp;
-cast->ty = newType;
+if (newType != NULL)
+    cast->ty = CloneVar(newType);
 pp->parent = cast;
 pp->next = NULL;
 *pPp = cast;
@@ -443,23 +444,36 @@ tuple->type = pptUniformTuple;
 }
 
 static struct pfParse **rCoerceTupleToClass(struct pfCompile *pfc,
-	struct pfParse **pos, struct pfBaseType *base)
+	struct pfParse *parent, struct pfParse **pos, 
+	struct pfBaseType *base, boolean fillMissingWithZero)
 /* Recursively coerce tuple - first on parent class and
  * then on self. */
 {
 struct pfType *field;
-struct pfToken *firstTok = (*pos)->tok;
+struct pfToken *firstTok = parent->tok;
 if (base->parent != NULL)
-    pos = rCoerceTupleToClass(pfc, pos, base->parent);
+    pos = rCoerceTupleToClass(pfc, parent, pos, base->parent, 
+    			      fillMissingWithZero);
 for (field = base->fields; field != NULL; field = field->next)
     {
     if (*pos == NULL)
-	break;
-    coerceOne(pfc, pos, field, FALSE);
+	{
+	if (field->init != NULL)
+	    *pos = CloneVar(field->init);
+	else if (fillMissingWithZero)
+	    {
+	    struct pfParse *fill = pfParseNew(pptConstZero, firstTok, 
+	    		      parent, parent->scope);
+	    fill->ty = CloneVar(field);
+	    *pos = fill;
+	    }
+	else
+	    errAt(firstTok, "Not enough fields in initialization");
+	}
+    else
+	coerceOne(pfc, pos, field, FALSE);
     pos = &(*pos)->next;
     }
-if (field != NULL)
-    errAt(firstTok, "Not enough fields in initialization");
 return pos;
 }
 
@@ -471,7 +485,9 @@ static void coerceTupleToClass(struct pfCompile *pfc,
  * as the corresponding members of the class. */
 {
 struct pfParse *tuple = *pPp;
-rCoerceTupleToClass(pfc, &tuple->children, base);
+boolean fillMissingWithZero = (tuple->children == NULL);
+rCoerceTupleToClass(pfc, tuple, &tuple->children, 
+	base, fillMissingWithZero);
 pfTypeOnTuple(pfc, tuple);
 }
 
@@ -491,11 +507,6 @@ static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type, boolean numToString)
 /* Make sure that a single variable is of the required type.  
  * Add casts if necessary */
-/* NB: this is a horrid routine.  The logic is such that it's
- * hard to tell what cases may be falling through the cracks.
- * At some point I'll probably cut the delayed-constant type
- * definition which complicates things a lot, and try to
- * give it more straightforward, robust logic. -jk */
 {
 struct pfParse *pp = *pPp;
 struct pfType *pt = pp->ty;

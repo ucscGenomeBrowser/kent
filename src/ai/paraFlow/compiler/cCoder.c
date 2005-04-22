@@ -1128,6 +1128,20 @@ switch (pp->type)
 	fprintf(f, ");\n");
 	return 1;
 	}
+    case pptConstZero:
+        {
+	if (pp->ty->base == pfc->varType)
+	    {
+	    fprintf(f, "%s[%d].Var.typeId = 0;\n", stackName, stack);
+	    fprintf(f, "%s[%d].Var.val.Int = 0;\n", stackName, stack);
+	    }
+	else
+	    {
+	    codeParamAccess(pfc, f, pp->ty->base, stack);
+	    fprintf(f, " = 0;\n");
+	    }
+	return 1;
+	}
     case pptStringCat:
         {
 	return codeStringCat(pfc, f, pp, stack, addRef);
