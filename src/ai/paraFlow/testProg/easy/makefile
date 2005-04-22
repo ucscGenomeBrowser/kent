@@ -10,6 +10,8 @@ test:
 	diff expected/comments $O/comments
 	paraFlow compound.pf > $O/compound
 	diff expected/compound $O/compound
+	paraFlow defaultParam.pf > $O/defaultParam
+	diff expected/defaultParam $O/defaultParam
 	paraFlow emptyFlow.pf > $O/emptyFlow
 	diff expected/emptyFlow $O/emptyFlow
 	paraFlow emptyFunc.pf > $O/emptyFunc
