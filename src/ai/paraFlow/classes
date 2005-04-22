@@ -40,9 +40,25 @@ first and initialize later.
 
 You can also initialize an object as so:
       location loc = ();
-This will create an object with zeroes in all the
-numerical elements, and nil in all of the string and
-object elements.  
+This will create an object with members that are initialized
+to default values.  You can specify default values in the
+class declaration.  If no values are specified the default
+values are zero for numerical elements, and nil in all of the 
+string and object elements.   Here is an example of a class
+with default values for it's members:
+      class location
+          {
+	  string name = "off-center";
+	  int x=1,y=2;
+	  }
+Note that the "=0" for x and y don't actually do anything,
+size 0 is assumed in the absense of any initialization.
+You could create instances of this class any of the following
+ways:
+	location loc = ()   [equivalent to ("off-center", 1, 2)]
+	location loc = ("here") [equivalent to ("here", 1, 2)]
+	location loc = ("there",3) [equivalent to ("there",3,2)]
+	location loc = ("center",0,0)  [fully specified]
 
 Classes can contain functions as well as data.  A
 class function, which is called a "method" for short,
@@ -101,7 +117,7 @@ date.  You could code this as so:
 	  string expirationDate;
 	  }
 This would work, but would have two disadvantages.  First you'd
-have to type twice.  More importantly any
+have to type int the first two members twice.  More importantly any
 functions that worked on items would not work on perishable items.
 It'd be better to code the perishables as so:
       class perishableItem extends item
@@ -129,7 +145,7 @@ introduces dependencies between code at various levels of
 the hierarchy.  It can be frustrating to have useful code
 buried in a member function that you can't reuse without
 having to reuse the whole heirarchy.  In real life our
-tax function would be better coded as so:
+tax function might be better coded as so:
      to tax(float untaxed) into tax
      {
      tax = untaxed * 0.075;
