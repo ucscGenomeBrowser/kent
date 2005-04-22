@@ -340,7 +340,7 @@ fprintf(f, "]");
 
 
 static int codeIndexRval(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
+	struct pfParse *pp, int stack, boolean addRef)
 /* Generate code for index expression (not on left side of
  * assignment */
 {
@@ -355,7 +355,8 @@ if (colBase == pfc->arrayType)
     fprintf(f, " = ");
     codeArrayAccess(pfc, f, outType->base, stack, indexOffset);
     fprintf(f, ";\n");
-    bumpStackRefCount(pfc, f, outType, stack);
+    if (addRef) 
+    	bumpStackRefCount(pfc, f, outType, stack);
     }
 else if (colBase == pfc->stringType)
     {
@@ -373,7 +374,8 @@ else if (colBase == pfc->dirType)
 	{
 	fprintf(f, "%s[%d].Obj", stackName, stack);
 	fprintf(f, " = ");
-        fprintf(f, "_pf_dir_lookup_object(%s+%d);\n", stackName, stack);
+        fprintf(f, "_pf_dir_lookup_object(%s+%d, %d);\n", stackName, stack,
+		addRef);
 	}
     else 
 	{
@@ -975,7 +977,6 @@ switch(pp->type)
     case pptCastVarToTyped:
         {
 	int destType = codedTypeId(pfc, pp->ty);
-	fprintf(f, "/* ugly - pptCastVarToTyped start */\n");
 	fprintf(f, "if (%d != ", destType);
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".typeId)\n");
@@ -987,7 +988,6 @@ switch(pp->type)
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".val.%s;\n", vTypeKey(pfc, pp->ty->base));
-	fprintf(f, "/* ugly - pptCastVarToTyped end */\n");
 	break;
 	}
     default:
@@ -996,6 +996,21 @@ switch(pp->type)
 	break;
 	}
     }
+}
+
+static int codeStringAppend(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Emit code to append to a string. */
+{
+struct pfParse *lval = pp->children;
+struct pfParse *rval = lval->next;
+
+codeExpression(pfc, f, lval, stack, FALSE);
+fprintf(f, "if (%s[%d].String == 0)\n", stackName, stack);
+codeRunTimeError(pfc, f, lval->tok, "string is nil");
+codeExpression(pfc, f, rval, stack+1, TRUE);
+fprintf(f, "_pf_cm_string_append(%s+%d);\n", stackName, stack);
+return 0;
 }
 
 static int codeExpression(struct pfCompile *pfc, FILE *f,
@@ -1020,7 +1035,10 @@ switch (pp->type)
     case pptAssignment:
 	return codeAssignment(pfc, f, pp, stack, "=");
     case pptPlusEquals:
-	return codeAssignment(pfc, f, pp, stack, "+=");
+	if (pp->ty->base == pfc->stringType)
+	    return codeStringAppend(pfc, f, pp, stack);
+	else
+	    return codeAssignment(pfc, f, pp, stack, "+=");
     case pptMinusEquals:
 	return codeAssignment(pfc, f, pp, stack, "-=");
     case pptMulEquals:
@@ -1033,7 +1051,7 @@ switch (pp->type)
     case pptVarUse:
 	return codeVarUse(pfc, f, pp, stack, addRef);
     case pptIndex:
-         return codeIndexRval(pfc, f, pp, stack);
+         return codeIndexRval(pfc, f, pp, stack, addRef);
     case pptDot:
          return codeDotRval(pfc, f, pp, stack);
     case pptPlus:

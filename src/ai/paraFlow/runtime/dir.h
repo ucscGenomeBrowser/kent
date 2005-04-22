@@ -21,7 +21,7 @@ struct _pf_dir *_pf_dir_new(int estimatedSize, struct _pf_type *type);
  * If it's too big it will use up more memory.
  * Still, it's fine to be pretty approximate with it. */
 
-struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack);
+struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack, _pf_Bit addRef);
 /* Stack contains directory, keyword.  Return value associated
  * with keyword on top of stack.  Neither one of the inputs is
  * pushed with a reference, so you don't need to deal with 

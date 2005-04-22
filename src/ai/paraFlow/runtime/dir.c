@@ -104,7 +104,7 @@ return dir;
 }
 
  
-struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack)
+struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack, _pf_Bit addRef)
 /* Stack contains directory, keyword.  Return value associated
  * with keyword on top of stack.  Neither one of the inputs is
  * pushed with a reference, so you don't need to deal with 
@@ -114,7 +114,7 @@ struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack)
 struct _pf_dir *dir = stack[0].Dir;
 struct _pf_string *string = stack[1].String;
 struct _pf_object *obj = hashFindVal(dir->hash, string->s);
-if (obj != NULL)
+if (addRef && obj != NULL)
     obj->_pf_refCount += 1;
 return obj;
 }

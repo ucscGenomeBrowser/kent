@@ -690,17 +690,24 @@ switch (pp->type)
 }
 
 static void coerceAssign(struct pfCompile *pfc, struct pfParse *pp, 
-	boolean numOnly)
+	boolean numOrStringOnly, boolean numOnly)
 /* Make sure that left half of assigment is a valid l-value,
  * and that right half of assignment can be coerced into a
  * compatible type.  Set pp->type to l-value type. */
 {
 struct pfParse *lval = pp->children;
 struct pfType *destType = coerceLval(pfc, lval);
-if (numOnly)
+if (numOrStringOnly)
     {
-    if (destType->base->parent != pfc->numType)
-        expectingGot("numerical variable to left of assignment", lval->tok);
+    boolean isNum = (destType->base->parent == pfc->numType);
+    boolean isString = (destType->base == pfc->stringType);
+    if (!isNum && !isString)
+	expectingGot("number or string to left of assignment", lval->tok);
+    if (numOnly)
+	{
+	if (!isNum)
+	    expectingGot("numerical variable to left of assignment", lval->tok);
+	}
     }
 coerceOne(pfc, &lval->next, destType, FALSE);
 pp->ty = CloneVar(destType);
@@ -1220,13 +1227,15 @@ switch (pp->type)
 	pp->ty = pp->children->ty;
         break;
     case pptAssignment:
-        coerceAssign(pfc, pp, FALSE);
+        coerceAssign(pfc, pp, FALSE, FALSE);
 	break;
     case pptPlusEquals:
+        coerceAssign(pfc, pp, TRUE, FALSE);
+	break;
     case pptMinusEquals:
     case pptMulEquals:
     case pptDivEquals:
-        coerceAssign(pfc, pp, TRUE);
+        coerceAssign(pfc, pp, TRUE, TRUE);
 	break;
     case pptVarInit:
         coerceVarInit(pfc, pp);

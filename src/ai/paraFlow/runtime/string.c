@@ -204,23 +204,26 @@ void _pf_cm_string_append(_pf_Stack *stack)
 {
 _pf_String start = stack[0].String;
 _pf_String end = stack[1].String;
-int newSize = start->size + end->size;
-if (newSize > start->allocated)
+if (end != NULL)
     {
-    char *s;
-    if (newSize <= 64*1024)
-	start->allocated = 2*newSize;
-    else
-        start->allocated = newSize + 64*1024;
-    start->s = needLargeMemResize(start->s, start->allocated);
-    }
-memcpy(start->s + start->size, end->s, end->size);
-start->s[newSize] = 0;
-start->size = newSize;
+    int newSize = start->size + end->size;
+    if (newSize > start->allocated)
+	{
+	char *s;
+	if (newSize <= 64*1024)
+	    start->allocated = 2*newSize;
+	else
+	    start->allocated = newSize + 64*1024;
+	start->s = needLargeMemResize(start->s, start->allocated);
+	}
+    memcpy(start->s + start->size, end->s, end->size);
+    start->s[newSize] = 0;
+    start->size = newSize;
 
-/* Clean up references on stack.  (Not first param since it's a method). */
-if (--end->_pf_refCount <= 0)
-    end->_pf_cleanup(end, 0);
+    /* Clean up references on stack.  (Not first param since it's a method). */
+    if (--end->_pf_refCount <= 0)
+	end->_pf_cleanup(end, 0);
+    }
 }
 
 void _pf_cm_string_find(_pf_Stack *stack)
