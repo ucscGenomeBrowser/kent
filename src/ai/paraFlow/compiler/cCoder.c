@@ -123,7 +123,7 @@ if (type->isStatic)
 	    break;
     if (classDec != NULL)
         className = classDec->name;
-    dyStringPrintf(name, " _pf_sta_%d_%s_%s_%s", 
+    dyStringPrintf(name, "_pf_sta_%d_%s_%s_%s", 
 		var->scope->id, className, toDec->name, var->name);
     }
 else
@@ -1704,6 +1704,15 @@ if (base->polyList != NULL)
     }
 }
 
+static void codeStaticCleanups(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Print out any static assignments in parse tree. */
+{
+if (pp->type == pptVarInit && pp->ty->isStatic)
+    codeCleanupVar(pfc, f, pp->var);
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    codeStaticCleanups(pfc, f, pp);
+}
+
 static void codeStaticAssignments(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Print out any static assignments in parse tree. */
 {
@@ -1795,7 +1804,11 @@ for (p = pp->children; p != NULL; p = p->next)
     }
 /* Print out any needed cleanups. */
 if (!isBuiltIn)
+    {
     codeCleanupVarsInHelList(pfc, f, helList);
+    if (printMain)
+	codeStaticCleanups(pfc, f, pp);
+    }
 
 if (printMain)
     fprintf(f, "}\n");
