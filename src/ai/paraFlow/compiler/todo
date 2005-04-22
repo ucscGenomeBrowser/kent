@@ -1,5 +1,4 @@
-  - Adding default parameters.  These could be applied during
-    class initialization too.
+  - Adding default parameters to class initialization.
   - Adding named parameters.
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
@@ -17,6 +16,7 @@ Check system:
 
 -----------
 DONE
+  - Adding default parameters to function calls.  
   - Fix bug where this construct doesn't work:
 	    class keyVal
 	       {

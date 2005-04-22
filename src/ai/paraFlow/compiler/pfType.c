@@ -340,15 +340,20 @@ int tupSize = slCount(tuple->children);
 int typeSize = slCount(types->children);
 struct pfParse **pos;
 struct pfType *type;
-if (tupSize != typeSize)
+if (tupSize > typeSize)
     {
-    errAt(tuple->tok, "Expecting tuple of %d, got tuple of %d", 
+    errAt(tuple->tok, "Parenthesized list too long: expecting %d got %d",
     	typeSize, tupSize);
     }
-if (tupSize == 0)
+if (typeSize == 0)
     return;
 if (tuple->type == pptCall)
     {
+    if (tupSize != typeSize)
+	{
+	errAt(tuple->tok, "Expecting tuple of %d, got tuple of %d", 
+	    typeSize, tupSize);
+	}
     coerceCallToTupleOfTypes(pfc, pTuple, types->children);
     }
 else
@@ -357,7 +362,17 @@ else
     type = types->children;
     for (;;)
 	 {
-	 coerceOne(pfc, pos, type, FALSE);
+	 if ( *pos == NULL)
+	     {
+	     if (type->init == NULL)
+	         errAt(tuple->tok, "Need additional elements in list");
+	     else
+	         {
+		 *pos = CloneVar(type->init);
+		 }
+	     }
+	 else
+	     coerceOne(pfc, pos, type, FALSE);
 	 pos = &(*pos)->next;
 	 type = type->next;
 	 if (type == NULL)

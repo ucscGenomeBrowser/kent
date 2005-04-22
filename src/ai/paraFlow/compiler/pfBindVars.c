@@ -36,7 +36,10 @@ switch (pp->type)
     case pptVarInit:
 	{
 	struct pfParse *type = pp->children;
-	pp->ty = type->ty;
+	struct pfParse *name = type->next;
+	struct pfParse *init = name->next;
+	pp->ty = CloneVar(type->ty);
+	pp->ty->init = init;
 	break;
 	}
     case pptToDec:

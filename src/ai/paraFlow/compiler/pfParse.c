@@ -1518,7 +1518,7 @@ struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *statement;
 
-// pfTokenDump(tok, uglyOut, TRUE);
+//  pfTokenDump(tok, uglyOut, TRUE);
 switch (tok->type)
     {
     case pftInto:
