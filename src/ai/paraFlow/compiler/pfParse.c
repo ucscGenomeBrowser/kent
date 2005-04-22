@@ -700,7 +700,6 @@ if (tok->type == pftStatic)
         errAt(staticTok, 
 		"'static' only allowed in front of a variable declaration");
     pp->isStatic = TRUE;
-    uglyf("varStorageOrUse setting %s to static\n", pp->name);
     *pTokList = tok;
     return pp;
     }
@@ -1097,10 +1096,8 @@ if (vars != NULL)
 	struct pfParse *type = NULL;
 	struct pfParse *pp;
 	boolean isStatic = vars->isStatic;
-	uglyf("addingMissingTypesInDeclareTuple, isStatic %d\n", isStatic);
 	for (pp = vars; pp != NULL; pp = pp->next)
 	    {
-	    uglyf("   %s %s\n", pp->name, pfParseTypeAsString(pp->type));
 	    if (pp->type == pptVarDec)
 		{
 	        type = pp->children;
