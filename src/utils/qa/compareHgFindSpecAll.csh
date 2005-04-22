@@ -35,7 +35,7 @@ if ( $#argv == 4 ) then
   set inputMode = $argv[4]
 endif
 
-if (! ( $inputMode == "fast" || $inputMode == "" )) then
+if (! ( $inputMode == "fast" || $inputMode == "realTime" || $inputMode == "" )) then
     echo
     echo "  mode ($inputMode) not acceptable.\n"
     echo "${0}:"
