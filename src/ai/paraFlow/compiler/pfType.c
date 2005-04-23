@@ -264,7 +264,6 @@ boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
  * type, and aList and bList have same number of elements. */
 {
 struct pfType *a = aList, *b = bList;
-
 for (;;)
     {
     if (a == NULL)
@@ -402,12 +401,21 @@ switch(function->ty->tyty)
     case tytyFunction:
     case tytyVirtualFunction:
 	{
-	struct pfParse **paramTuple = &function->next;
 	struct pfType *functionType = function->ty;
 	struct pfType *inputType = functionType->children;
 	struct pfType *outputType = inputType->next;
+	struct pfParse *paramTuple = function->next;
+	struct pfParse *firstParam = paramTuple->children;
 
-	coerceTuple(pfc, paramTuple, inputType);
+	if (firstParam != NULL && firstParam->type == pptCall && firstParam->next == NULL && slCount(inputType->children) != 1)
+	    {
+	    coerceCallToTupleOfTypes(pfc, &paramTuple->children, inputType->children);
+	    }
+	else
+	    {
+	    struct pfParse **pParamTuple = &function->next;
+	    coerceTuple(pfc, pParamTuple, inputType);
+	    }
 	if (outputType->children != NULL && outputType->children->next == NULL)
 	    pp->ty = CloneVar(outputType->children);
 	else
@@ -526,7 +534,8 @@ verbose(3, "coercingOne %s (tyty=%d) to %s\n", pt->base->name, pt->tyty, base->n
 if (pt->base != base)
     {
     boolean ok = FALSE;
-    verbose(3, "coercing from %s (%s)  to %s\n", pt->base->name, (pt->base->isCollection ? "collection" : "single"), base->name);
+    verbose(3, "coercing from %s (%s)  to %s\n", pt->base->name, 
+    	(pt->base->isCollection ? "collection" : "single"), base->name);
     if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);

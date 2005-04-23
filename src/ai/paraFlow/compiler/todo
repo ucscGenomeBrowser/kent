@@ -1,3 +1,7 @@
+  - Allow nil as a value for initializing and objects.
+  - Adding scan (to go with print).
+  - Allowing print to go to file.
+  - Getting raw keyboard input.
   - Working on multiple modules.
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
@@ -6,6 +10,8 @@
   - Adding named parameters.
   - Implement lists.
   - Implementing trees.
+  - Prevent memory leakage in expressions that don't get assigned to anything
+    (including function calls).
 
 Check system:
 	blessPara - Also makes sure that there are no writes
@@ -15,6 +21,7 @@ Check system:
 
 -----------
 DONE
+  - Making print not die on circular links.
   - Allowing static variables inside of a function.
   - Adding default parameters to class initialization.
   - Adding default parameters to function calls.  
