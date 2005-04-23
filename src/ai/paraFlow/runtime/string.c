@@ -306,16 +306,16 @@ if (pos > string->size) pos = string->size;
 s = skipLeadingSpaces(string->s + pos);
 if (s[0] == 0)
     {
-    stack[0].Int = string->size;
-    stack[1].String = NULL;
+    stack[0].String = NULL;
+    stack[1].Int = string->size;
     }
 else
     {
     char *e = skipToSpaces(s);
     if (e == NULL)
         e = string->s + string->size;
-    stack[0].Int = e - string->s;
-    stack[1].String = _pf_string_new(s, e - s);
+    stack[0].String = _pf_string_new(s, e - s);
+    stack[1].Int = e - string->s;
     }
 }
 
@@ -337,8 +337,8 @@ s = skipLeadingSpaces(string->s + pos);
 c = s[0];
 if (c == 0)
     {
-    stack[0].Int = string->size;
-    stack[1].String = NULL;
+    stack[0].String = NULL;
+    stack[1].Int = string->size;
     }
 else
     {
@@ -356,8 +356,8 @@ else
 	}
     else
         e = s + 1;
-    stack[0].Int = e - string->s;
-    stack[1].String = _pf_string_new(s, e - s);
+    stack[0].String = _pf_string_new(s, e - s);
+    stack[1].Int = e - string->s;
     }
 }
 

@@ -13,7 +13,7 @@ bit	- 1 bit either 0 or 1 in theory.  Takes up 8 bits of storage though.
 
 string	- Text string up to 4 gig long.  May contain zeroes. 
 array   - Array of something.  You can have arrays of arrays.
-dir	- A directory.  Associates a string with something else. [not implemented]
+dir	- A directory.  Associates a string with something else.
 tree	- A binary tree.  Associates a string or number with something else. [not implemented]
 file	- A file handle.
 
