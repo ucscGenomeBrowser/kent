@@ -5,5 +5,7 @@ test:
 	diff expected/dotStringDotMethod output/dotStringDotMethod
 	paraFlow castMultiReturn.pf > output/castMultiReturn
 	diff expected/castMultiReturn output/castMultiReturn
+	paraFlow func2func2.pf > output/func2func2
+	diff expected/func2func2 output/func2func2
 	paraFlow func2in2class.pf > output/func2in2class
 	diff expected/func2in2class output/func2in2class

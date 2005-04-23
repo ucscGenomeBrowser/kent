@@ -4,6 +4,8 @@ test:
 	mkdir -p output
 	paraFlow assign.pf > $O/assign
 	diff expected/assign $O/assign
+	paraFlow classOfOne.pf > $O/classOfOne
+	diff expected/classOfOne $O/classOfOne
 	paraFlow cmp.pf > $O/cmp
 	diff expected/cmp $O/cmp
 	paraFlow comments.pf > $O/comments
