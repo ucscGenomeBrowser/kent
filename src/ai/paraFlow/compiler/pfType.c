@@ -209,6 +209,8 @@ struct pfParse *pp = *pPp;
 struct pfBaseType *oldBase = pp->ty->base;
 int numTypeCount = 8;
 enum pfParseType castType = pptCastBitToBit;
+if (oldBase == pfc->stringType && newBase != pfc->stringType)
+    expectingGot("string", pp->tok);
 castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase);
 castType += baseTypeLogicalSize(pfc, newBase);
 insertCast(castType, newType, pPp);
@@ -314,8 +316,9 @@ if (!pfTypesAllSame(retTypes, fieldTypes))
         {
 	AllocVar(fake);
 	fake->type = pptPlaceholder;
-	fake->name = "placeholder";
-	fake->ty = retType;
+	fake->name = "result";
+	fake->ty = CloneVar(retType);
+	fake->tok = call->tok;
 	coerceOne(pfc, &fake, fieldType, FALSE);
 	slAddHead(&castList, fake);
 	retType = retType->next;
@@ -666,7 +669,8 @@ if (source->type == pptCall)
     el->next = source;
 
     /* Coerce element to bit, and save cast node if
-     * any after body. */
+     * any after body.  Handle tuples here as a special case,
+     * generating cast for first element. */
     if (el->type == pptTuple)
 	cast = castStart = el->children;
     else
