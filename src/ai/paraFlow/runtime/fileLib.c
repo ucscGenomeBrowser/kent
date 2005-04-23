@@ -4,11 +4,11 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
-void extFunc(_pf_Stack *stack)
-/* Just sum two numbers. */
-{
-stack[0].Int = stack[0].Int + stack[1].Int;
-}
+void _pf_prin(FILE *f, _pf_Stack *stack);
+/* Print out single variable where type is determined at run time. */
+
+void _pf_sca(FILE *f, _pf_Stack *stack);
+/* Read in variable from file. */
 
 struct file
     {
@@ -68,6 +68,42 @@ mustWrite(file->f, string->s, string->size);
 if (--string->_pf_refCount <= 0)
     string->_pf_cleanup(string, 0);
 }
+
+void _pf_cm1_file_prin(_pf_Stack *stack)
+/* Print variable to file with no line feed. */
+{
+struct file *file = stack[0].v;
+_pf_prin(file->f, stack+1);
+}
+
+void _pf_cm1_file_print(_pf_Stack *stack)
+/* Print to file with line feed. */
+{
+struct file *file = stack[0].v;
+FILE *f = file->f;
+_pf_prin(f, stack+1);
+fputc('\n', f);
+}
+
+void _pf_cm1_file_sca(_pf_Stack *stack)
+/* Read in variable from file. */
+{
+struct file *file = stack[0].v;
+_pf_sca(file->f, stack);
+}
+
+void _pf_cm1_file_scan(_pf_Stack *stack)
+/* Read in variable from file, and then make sure have
+ * a newline. */
+{
+int c;
+struct file *file = stack[0].v;
+_pf_sca(file->f, stack);
+c = getc(file->f);
+if (c != '\n')
+    warn("expecting newline, got %c", c);
+}
+
 
 void _pf_cm1_file_readLine(_pf_Stack *stack)
 /* Read next line from file. */

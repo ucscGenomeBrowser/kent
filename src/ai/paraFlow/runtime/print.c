@@ -227,13 +227,12 @@ switch (base->singleType)
     }
 }
 
-void prin(_pf_Stack *stack)
+void _pf_prin(FILE *f, _pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];
 struct _pf_base *base = type->base;
 union _pf_varless val = stack->Var.val;
-FILE *f = stdout;
 struct hash *idHash = NULL;
 curObjId = 0;
 switch (base->singleType)
@@ -290,6 +289,12 @@ if (base->needsCleanup)
 	val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
     }
 freeHash(&idHash);
+}
+
+void prin(_pf_Stack *stack)
+/* Print out single variable where type is determined at run time. */
+{
+_pf_prin(stdout, stack);
 }
 
 void print(_pf_Stack *stack)
