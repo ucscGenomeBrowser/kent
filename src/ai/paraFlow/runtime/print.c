@@ -4,9 +4,49 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
-void printField(FILE *f, void *data, struct _pf_base *base);
 
-void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base)
+/* Stuff to keep track of object IDs. */
+static int curObjId = 0;
+
+static int idLookup(struct hash *hash, void *obj)
+/* Look up object in hash.  Return 0 if can't find it.
+ * Otherwise return object id. */
+{
+char buf[17];
+safef(buf, sizeof(buf), "%p", obj);
+return hashIntValDefault(hash, buf, 0);
+}
+
+static void idAdd(struct hash *hash, void *obj)
+/* Add to object hash */
+{
+char buf[17];
+safef(buf, sizeof(buf), "%p", obj);
+hashAddInt(hash, buf, ++curObjId);
+}
+
+static boolean reuseObject(FILE *f, struct hash *idHash, void *obj)
+/* Print code for reuse of object if possible.  Otherwise
+ * print nothing, save object id and return FALSE. */
+{
+int id = idLookup(idHash, obj);
+if (id != 0)
+    {
+    fprintf(f, "$%d", id);
+    return TRUE;
+    }
+else
+    {
+    idAdd(idHash, obj);
+    return FALSE;
+    }
+}
+
+void printField(FILE *f, void *data, struct _pf_base *base, 
+	struct hash *idHash);
+
+void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base,
+	struct hash *idHash)
 /* Print out each field of class. */
 {
 struct _pf_type *field;
@@ -14,15 +54,18 @@ if (obj == NULL)
     fprintf(f, "()");
 else
     {
-    char *s = (char *)obj;
-    fprintf(f, "(");
-    for (field = base->fields; field != NULL; field = field->next)
+    if (!reuseObject(f, idHash, obj))
 	{
-	printField(f, s+field->offset, field->base);
-	if (field->next != NULL)
-	     fprintf(f, ",");
+	char *s = (char *)obj;
+	fprintf(f, "(");
+	for (field = base->fields; field != NULL; field = field->next)
+	    {
+	    printField(f, s+field->offset, field->base, idHash);
+	    if (field->next != NULL)
+		 fprintf(f, ",");
+	    }
+	fprintf(f, ")");
 	}
-    fprintf(f, ")");
     }
 }
 
@@ -34,59 +77,67 @@ if (string != NULL)
 }
 
 
-void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base)
+void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base,
+	struct hash *idHash)
 /* Print out each element of Array. */
 {
 if (array == NULL)
     fprintf(f, "()");
 else
     {
-    struct _pf_type *elType = array->elType;
-    int i;
-    boolean needsComma = FALSE;
-    char *s = array->elements;
-    fprintf(f, "(");
-    for (i=0; i<array->size; ++i)
+    if (!reuseObject(f, idHash, array))
 	{
-	if (needsComma)
-	     fprintf(f, ",");
-	needsComma = TRUE;
-	printField(f, s, elType->base);
-	s += array->elSize;
+	struct _pf_type *elType = array->elType;
+	int i;
+	boolean needsComma = FALSE;
+	char *s = array->elements;
+	fprintf(f, "(");
+	for (i=0; i<array->size; ++i)
+	    {
+	    if (needsComma)
+		 fprintf(f, ",");
+	    needsComma = TRUE;
+	    printField(f, s, elType->base, idHash);
+	    s += array->elSize;
+	    }
+	fprintf(f, ")");
 	}
-    fprintf(f, ")");
     }
 }
 
-void printDir(FILE *f, struct _pf_dir *dir, struct _pf_base *base)
+void printDir(FILE *f, struct _pf_dir *dir, struct _pf_base *base,
+	struct hash *idHash)
 /* Print out each key/val pair in dir. */
 {
 if (dir == NULL)
     fprintf(f, "()");
 else
     {
-    struct hash *hash = dir->hash;
-    struct hashEl *hel, *helList = hashElListHash(hash);
-    struct _pf_base *base = dir->elType->base;
-    slSort(&helList, hashElCmp);
-    fprintf(f, "(");
-    for (hel = helList; hel != NULL; hel = hel->next)
-        {
-	fprintf(f, "\"%s\" to ", hel->name);
-	if (base->needsCleanup)
-	    printField(f, &hel->val, base);
-	else
-	    printField(f, hel->val, base);
-	if (hel->next != NULL)
-	     fprintf(f, ",");
+    if (!reuseObject(f, idHash, dir))
+	{
+	struct hash *hash = dir->hash;
+	struct hashEl *hel, *helList = hashElListHash(hash);
+	struct _pf_base *base = dir->elType->base;
+	slSort(&helList, hashElCmp);
+	fprintf(f, "(");
+	for (hel = helList; hel != NULL; hel = hel->next)
+	    {
+	    fprintf(f, "\"%s\" to ", hel->name);
+	    if (base->needsCleanup)
+		printField(f, &hel->val, base, idHash);
+	    else
+		printField(f, hel->val, base, idHash);
+	    if (hel->next != NULL)
+		 fprintf(f, ",");
+	    }
+	hashElFreeList(&helList);
+	fprintf(f, ")");
 	}
-    // hashElFreeList(&helList);
-    fprintf(f, ")");
     }
 }
 
 
-void printField(FILE *f, void *data, struct _pf_base *base)
+void printField(FILE *f, void *data, struct _pf_base *base, struct hash *idHash)
 /* Print out a data from a single field of given type. */
 {
 switch (base->singleType)
@@ -148,26 +199,26 @@ switch (base->singleType)
     case pf_stClass:
 	{
 	struct _pf_object **p = data;
-        printClass(f, *p, base);
+        printClass(f, *p, base, idHash);
 	break;
 	}
     case pf_stArray:
         {
 	struct _pf_array **p = data;
-        printArray(f, *p, base);
+        printArray(f, *p, base, idHash);
 	break;
 	}
     case pf_stDir:
         {
 	struct _pf_dir **p = data;
-        printDir(f, *p, base);
+        printDir(f, *p, base, idHash);
 	break;
 	}
     case pf_stVar:
         {
 	struct _pf_var *var = data;
 	struct _pf_type *type = _pf_type_table[var->typeId];
-	printField(f, &var->val, type->base);
+	printField(f, &var->val, type->base, idHash);
 	break;
 	}
     default:
@@ -176,7 +227,6 @@ switch (base->singleType)
     }
 }
 
-
 void prin(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
@@ -184,6 +234,8 @@ struct _pf_type *type = _pf_type_table[stack->Var.typeId];
 struct _pf_base *base = type->base;
 union _pf_varless val = stack->Var.val;
 FILE *f = stdout;
+struct hash *idHash = NULL;
+curObjId = 0;
 switch (base->singleType)
     {
     case pf_stBit:
@@ -217,13 +269,16 @@ switch (base->singleType)
 	printString(f, val.String);
 	break;
     case pf_stClass:
-	printClass(f, val.Obj, base);
+	idHash = newHash(18);
+	printClass(f, val.Obj, base, idHash);
 	break;
     case pf_stArray:
-	printArray(f, val.Array, base);
+	idHash = newHash(18);
+	printArray(f, val.Array, base, idHash);
 	break;
     case pf_stDir:
-        printDir(f, val.Dir, base);
+	idHash = newHash(18);
+        printDir(f, val.Dir, base, idHash);
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);
@@ -234,6 +289,7 @@ if (base->needsCleanup)
     if (val.Obj != NULL && --val.Obj->_pf_refCount <= 0)
 	val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
     }
+freeHash(&idHash);
 }
 
 void print(_pf_Stack *stack)
