@@ -656,7 +656,7 @@ static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
 struct pfParse *el = pp->children;
 struct pfParse *source = el->next;
 struct pfParse *body = source->next;
-struct pfParse *cast = el;
+struct pfParse *cast, *castStart;
 boolean ok = TRUE;
 if (source->type == pptCall)
     {
@@ -667,12 +667,16 @@ if (source->type == pptCall)
 
     /* Coerce element to bit, and save cast node if
      * any after body. */
+    if (el->type == pptTuple)
+	cast = castStart = el->children;
+    else
+        cast = castStart = el;
     coerceToBit(pfc, &cast);
-    if (cast != el)
+    if (cast != castStart)
         {
-	cast->children = CloneVar(el);
-	el->next = cast->next;
-	el->parent = cast->parent;
+	cast->children = CloneVar(castStart);
+	castStart->next = cast->next;
+	castStart->parent = cast->parent;
 	cast->next = NULL;
 	cast->parent = pp;
 	body->next = cast;

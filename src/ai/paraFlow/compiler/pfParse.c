@@ -1444,7 +1444,7 @@ struct pfParse *statement;
 scope = pfScopeNew(pfc, scope, 1, FALSE);
 pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
-element = varUseOrDeclare(pp, &tok, scope);
+element = pfParseExpression(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = pfParseExpression(pp, &tok, scope);
 statement = pfParseStatement(pfc, pp, &tok, scope);
