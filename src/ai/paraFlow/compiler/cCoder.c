@@ -921,6 +921,27 @@ return 1;
 }
 
 static void castStack(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
+	int stack);
+/* Cast stack location. */
+
+
+static void castCallToTuple(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
+	int stack)
+/* Cast function call results, which are on stack, to types specified by
+ * cast list. */
+{
+struct pfParse *call = pp->children;
+struct pfParse *castList = call->next;
+struct pfParse *cast;
+for (cast = castList; cast != NULL; cast = cast->next)
+    {
+    if (cast->type != pptPlaceholder)
+	castStack(pfc, f, cast, stack);
+    stack += 1;
+    }
+}
+
+static void castStack(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
 	int stack)
 /* Cast stack location. */
 {
@@ -1038,6 +1059,9 @@ switch(pp->type)
 	fprintf(f, ".val.%s;\n", vTypeKey(pfc, pp->ty->base));
 	break;
 	}
+    case pptCastCallToTuple:
+        castCallToTuple(pfc, f, pp, stack);
+	break;
     default:
 	{
 	internalErr();
@@ -1254,6 +1278,7 @@ switch (pp->type)
     case pptCastDoubleToString:
     case pptCastTypedToVar:
     case pptCastVarToTyped:
+    case pptCastCallToTuple:
 	{
 	codeExpression(pfc, f, pp->children, stack, addRef);
 	castStack(pfc, f, pp, stack);
