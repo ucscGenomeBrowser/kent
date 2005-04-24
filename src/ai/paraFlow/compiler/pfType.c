@@ -134,6 +134,8 @@ switch (tok->type)
 	return pptConstDouble;
     case pftString:
 	return pptConstString;
+    case pftNil:
+        return pptConstZero;
     default:
 	internalErrAt(tok);
 	return 0;
@@ -475,7 +477,10 @@ for (field = base->fields; field != NULL; field = field->next)
     if (*pos == NULL)
 	{
 	if (field->init != NULL)
+	    {
 	    *pos = CloneVar(field->init);
+	    coerceOne(pfc, pos, field, FALSE);
+	    }
 	else if (fillMissingWithZero)
 	    {
 	    struct pfParse *fill = pfParseNew(pptConstZero, firstTok, 
@@ -536,7 +541,12 @@ if (pt->base != base)
     boolean ok = FALSE;
     verbose(3, "coercing from %s (%s)  to %s\n", pt->base->name, 
     	(pt->base->isCollection ? "collection" : "single"), base->name);
-    if (base == pfc->bitType && pt->base == pfc->stringType)
+    if (pt->base == pfc->nilType)
+        {
+	pp->ty = CloneVar(type);
+	ok = TRUE;
+	}
+    else if (base == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
 	insertCast(pptCastStringToBit, tt, pPp);
@@ -545,7 +555,10 @@ if (pt->base != base)
     else if (base == pfc->bitType && pt->base->needsCleanup)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
-	insertCast(pptCastObjectToBit, tt, pPp);
+	if (pt->base == pfc->varType)
+	    insertCast(pptCastVarToTyped, tt, pPp);
+	else
+	    insertCast(pptCastObjectToBit, tt, pPp);
 	ok = TRUE;
 	}
     else if (numToString && base == pfc->stringType && pt->base->parent == pfc->numType)
@@ -855,25 +868,41 @@ else
 }
 
 static void coerceBinaryOp(struct pfCompile *pfc, struct pfParse *pp,
-	boolean floatOk, boolean stringOk, boolean numToString)
+	boolean floatOk, boolean stringOk, boolean numToString, boolean objOk)
 /* Make sure that both sides of a math operation agree. */
 {
 struct pfParse **pLval = &pp->children;
 struct pfParse *lval = *pLval;
 struct pfParse **pRval = &lval->next;
 struct pfParse *rval = *pRval;
+struct pfType *lTy = lval->ty, *rTy = rval->ty;
+struct pfBaseType *lBase = lTy->base, *rBase = rTy->base;
 
-if (!pfTypeSame(lval->ty, rval->ty))
+if (!pfTypeSame(lTy, rTy))
     {
-    if (lval->ty->base == pfc->varType || rval->ty->base == pfc->varType)
+    if (lBase == pfc->varType || rBase == pfc->varType)
         errAt(pp->tok, "Sorry, you can't use a var with this operation");
-    struct pfType *ty = largerNumType(pfc, lval->ty, rval->ty);
-    coerceOne(pfc, &lval, ty, numToString);
-    coerceOne(pfc, &rval, ty, numToString);
+    if (lBase == pfc->nilType || rBase == pfc->nilType)
+        {
+	if (!objOk)
+	    errAt(pp->tok, "No nil allowed with this operation");
+	if (lBase == pfc->nilType && rBase == pfc->nilType)
+	    lval->ty = rval->ty = pfTypeNew(pfc->intType);
+	else if (lBase == pfc->nilType)
+	    lval->ty = rval->ty;
+	else
+	    rval->ty = lval->ty;
+	}
+    else
+	{
+	struct pfType *ty = largerNumType(pfc, lTy, rTy);
+	coerceOne(pfc, &lval, ty, numToString);
+	coerceOne(pfc, &rval, ty, numToString);
+	}
     }
 else 
     {
-    if (lval->ty->base == pfc->varType)
+    if (lBase == pfc->varType)
         errAt(pp->tok, "Sorry, you can't have var's on both side of this operation");
     }
 pp->ty = lval->ty;
@@ -1034,6 +1063,8 @@ else if (tok->type == pftLong)
     pp->ty = pfTypeNew(pfc->longType);
 else if (tok->type == pftFloat)
     pp->ty = pfTypeNew(pfc->doubleType);
+else if (tok->type == pftNil)
+    pp->ty = pfTypeNew(pfc->nilType);
 pp->type = pptFromTokType(pp->tok);
 }
 
@@ -1232,32 +1263,35 @@ switch (pp->type)
         coerceIf(pfc, pp);
 	break;
     case pptPlus:
-        coerceBinaryOp(pfc, pp, TRUE, TRUE, TRUE);
+        coerceBinaryOp(pfc, pp, TRUE, TRUE, TRUE, FALSE);
 	coerceStringCat(pfc, pp);
 	break;
     case pptSame:
     case pptNotSame:
+	coerceBinaryOp(pfc, pp, TRUE, TRUE, FALSE, TRUE);
+	pp->ty = pfTypeNew(pfc->bitType);
+	break;
     case pptGreater:
     case pptLess:
     case pptGreaterOrEquals:
     case pptLessOrEquals:
-	coerceBinaryOp(pfc, pp, TRUE, TRUE, FALSE);
+	coerceBinaryOp(pfc, pp, TRUE, TRUE, FALSE, FALSE);
 	pp->ty = pfTypeNew(pfc->bitType);
 	break;
     case pptMul:
     case pptDiv:
     case pptMinus:
-        coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE);
+        coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE, FALSE);
 	break;
     case pptMod:
-        coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE);
+        coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE, FALSE);
 	break;
     case pptBitAnd:
     case pptBitOr:
     case pptBitXor:
     case pptShiftLeft:
     case pptShiftRight:
-        coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE);
+        coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE, FALSE);
 	break;
     case pptLogAnd:
     case pptLogOr:

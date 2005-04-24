@@ -14,29 +14,8 @@ while ((c = *s++) != 0)
     {
     switch (c)
         {
-	case '\a':
-	    fputs("\\a", f);
-	    break;
-	case '\b':
-	    fputs("\\b", f);
-	    break;
-	case '\f':
-	    fputs("\\f", f);
-	    break;
 	case '\n':
 	    fputs("\\n", f);
-	    break;
-	case '\r':
-	    fputs("\\r", f);
-	    break;
-	case '\t':
-	    fputs("\\t", f);
-	    break;
-	case '\v':
-	    fputs("\\t", f);
-	    break;
-	case '\?':
-	    fputs("\\?", f);
 	    break;
 	case '\\':
 	    fputs("\\\\", f);

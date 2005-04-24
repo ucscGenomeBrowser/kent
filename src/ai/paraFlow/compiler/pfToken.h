@@ -60,6 +60,7 @@ enum pfTokType
     pftExtends,
     pftPolymorphic,
     pftStatic,
+    pftNil,
     };
 
 char *pfTokTypeAsString(enum pfTokType type);

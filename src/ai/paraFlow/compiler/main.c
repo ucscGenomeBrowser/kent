@@ -62,6 +62,7 @@ hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "extends", pftExtends);
 hashAddInt(hash, "polymorphic", pftPolymorphic);
 hashAddInt(hash, "static", pftStatic);
+hashAddInt(hash, "nil", pftNil);
 return hash;
 }
 
@@ -119,6 +120,7 @@ struct pfScope *scope = pfc->scope;
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
 pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL, sizeof(_pf_Var), TRUE);
+pfc->nilType = pfScopeAddType(scope, "nil", FALSE, NULL, sizeof(_pf_String), FALSE);
 pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType, 0, FALSE);
 pfc->streamType = pfScopeAddType(scope, "<stream>", FALSE, pfc->varType, 0, FALSE);
 pfc->numType = pfScopeAddType(scope, "<number>", FALSE, pfc->varType, 0, FALSE);

@@ -33,6 +33,7 @@ struct pfCompile
 
     /* Some called out types parser needs to know about. */
     struct pfBaseType *varType;		/* Base tyhpe for all variables/functions */
+    struct pfBaseType *nilType;		/* Object/string with no value. */
     struct pfBaseType *keyValType;	/* Used for tree/dir initializations */
     struct pfBaseType *streamType;	/* Ancestor for string, maybe file */
     struct pfBaseType *numType;		/* Ancestor for float/int etc. */

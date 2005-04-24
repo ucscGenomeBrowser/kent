@@ -1,3 +1,48 @@
+v03 - Adding nil as a constant that can be used to initialize
+      anything (numbers to 0, objects to nil object).
+--------------------------------------------------------------------
+version 02 - April 23, 2005.   It's about a month into ParaFlow
+development now.  (I started the tokenizer on the plane to Penn State U
+on March 22, and worked on it a little bit while at PSU.)  
+
+The system has gotten a bit more robust now, though some syntax errors
+and stuff involving 'var' data may still crash it.  The tests are now
+run automatically with 'make test'.  
+
+Along with a lot of debugging, the following new features are in
+  - Allowing print to go to file.
+  - Adding scan (to go with print).
+  - Making print not die on circular links.
+  - Allowing static variables inside of a function.
+  - Adding default parameters to class initialization.
+  - Adding default parameters to function calls.  
+  - Implement += for strings and arrays.
+  - Make array of var work.
+  - Make sure that assigning a typed variable from a var variable
+    does the right thing.
+  - Get the quote to markers to work.
+  - Make foreach where the collection is a member variable work.
+  - Decided against letting assignments return a value, since
+    the foreach var in funcCall() removes most of the need.  
+  - Make foreach result in funcCall work.
+  - make L work in numerical constants,
+  - Make it ok to have extra trailing comma in an initialization
+    before a ).
+  - Making virtual functions happen.
+  - Yank out constant type optimization in pfType, particularly
+    in coerceType routine.
+  - Sort the _pf_base_info table before writing it.
+  - Make it so that during runtime the typeId's of subparts
+    of collected ID's are filled in.  Currently they are often
+    zero, which results in memory leakage when freeing arrays
+    of objects.  This might be best accomplished by some
+    sort of transitive closure either when the compiler
+    writes out the type table, or when the runtime reads it
+    in.
+  - Put command line arguments into an array of strings the
+    user can access.  Call it args[]?
+  - Make foreach work on dirs.
+  - Implementing dir objects.  (Collection keyed by strings.) 
 --------------------------------------------------------------------
 I'm writing this doc about 3 weeks into the serious development of
 ParaFlow.  Currently the compiler has the following major phases:

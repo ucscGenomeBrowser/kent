@@ -139,6 +139,7 @@ switch (type)
     case pftExtends: 	     return "pftExtends";
     case pftPolymorphic:     return "pftPolymorphic";
     case pftStatic:          return "pftStatic";
+    case pftNil:             return "pftNil";
     default:
 	if (type < 256)
 	    {

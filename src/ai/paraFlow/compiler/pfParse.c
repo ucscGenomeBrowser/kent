@@ -294,11 +294,6 @@ switch (type)
     case pptConstZero:
 	return "pptConstZero";
 
-#ifdef OLD
-    case pptStatic:
-	return "pptStatic";
-#endif /* OLD */
-
     default:
         internalErr();
 	return NULL;
@@ -333,6 +328,9 @@ switch (tok->type)
     case pftFloat:
         fprintf(f, "%g", tok->val.x);
 	break;
+    case pftNil:
+        fprintf(f, "nil");
+	break;
     default:
         fprintf(f, "unknownType");
 	break;
@@ -364,6 +362,7 @@ switch (pp->type)
     case pptConstFloat:
     case pptConstDouble:
     case pptConstString:
+    case pptConstZero:
 	fprintf(f, " ");
 	pfDumpConst(pp->tok, f);
 	break;
@@ -738,6 +737,7 @@ switch (tok->type)
     case pftInt:
     case pftLong:
     case pftFloat:
+    case pftNil:
         pp = constUse(parent, &tok, scope);
 	break;
     case '(':
