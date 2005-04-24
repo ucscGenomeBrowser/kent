@@ -23,9 +23,6 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	bosTau1 \
 	monDom1 \
 	cftRab0 \
-	borEut1 borEut2 \
-	eutGli1 \
-	eutPri1 \
 	galGal2 \
 	xenTro1 \
 	tetNig1 \
@@ -53,6 +50,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	pyrAer1 \
 	pyrFur2 \
 	sc1 \
+	canHg4 mmHg4 panHg4 \
 	vibCho1
 
 MGC_DBS = \
