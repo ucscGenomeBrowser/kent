@@ -265,6 +265,17 @@ exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
 
+track intronEstNoWustl
+shortLabel Spliced ESTs w/o PCR
+longLabel $Organism ESTs That Have Been Spliced, excluding MGC C-List PCR
+group mgc
+priority 200
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
 track refGene
 shortLabel RefSeq Genes
 longLabel RefSeq Genes
@@ -323,4 +334,10 @@ searchName mgcWUPcrFail
 searchTable mgcWUPcrFail
 searchMethod exact
 searchType psl
+searchPriority 10
+
+searchName xmGene
+searchTable xmGene
+searchMethod exact
+searchType genePred
 searchPriority 10
