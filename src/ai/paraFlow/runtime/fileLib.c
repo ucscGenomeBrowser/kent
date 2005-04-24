@@ -4,7 +4,7 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
-void _pf_prin(FILE *f, _pf_Stack *stack);
+void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString);
 /* Print out single variable where type is determined at run time. */
 
 void _pf_sca(FILE *f, _pf_Stack *stack);
@@ -73,7 +73,7 @@ void _pf_cm1_file_prin(_pf_Stack *stack)
 /* Print variable to file with no line feed. */
 {
 struct file *file = stack[0].v;
-_pf_prin(file->f, stack+1);
+_pf_prin(file->f, stack+1, TRUE);
 }
 
 void _pf_cm1_file_print(_pf_Stack *stack)
@@ -81,7 +81,7 @@ void _pf_cm1_file_print(_pf_Stack *stack)
 {
 struct file *file = stack[0].v;
 FILE *f = file->f;
-_pf_prin(f, stack+1);
+_pf_prin(f, stack+1, TRUE);
 fputc('\n', f);
 }
 

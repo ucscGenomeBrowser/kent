@@ -185,7 +185,7 @@ for (;;)
     }
 }
 
-static void _pf_array_cleanup(struct _pf_array *array, int id)
+void _pf_array_cleanup(struct _pf_array *array, int id)
 /* Clean up all elements of array, and then array itself. */
 {
 struct _pf_type *elType = array->elType;

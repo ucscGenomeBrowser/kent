@@ -4,9 +4,8 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
-
-/* Stuff to keep track of object IDs. */
-static int curObjId = 0;
+void printEscapedString(FILE *f, char *s);
+/* Print string in such a way that C can use it. */
 
 static int idLookup(struct hash *hash, void *obj)
 /* Look up object in hash.  Return 0 if can't find it.
@@ -22,8 +21,9 @@ static void idAdd(struct hash *hash, void *obj)
 {
 char buf[17];
 safef(buf, sizeof(buf), "%p", obj);
-hashAddInt(hash, buf, ++curObjId);
+hashAddInt(hash, buf, hash->elCount+1);
 }
+
 
 static boolean reuseObject(FILE *f, struct hash *idHash, void *obj)
 /* Print code for reuse of object if possible.  Otherwise
@@ -42,7 +42,7 @@ else
     }
 }
 
-void printField(FILE *f, void *data, struct _pf_base *base, 
+static void printField(FILE *f, void *data, struct _pf_base *base, 
 	struct hash *idHash);
 
 void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base,
@@ -51,7 +51,7 @@ void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base,
 {
 struct _pf_type *field;
 if (obj == NULL)
-    fprintf(f, "()");
+    fprintf(f, "nil");
 else
     {
     if (!reuseObject(f, idHash, obj))
@@ -73,7 +73,9 @@ void printString(FILE *f, struct _pf_string *string)
 /* Print out string. */
 {
 if (string != NULL)
-    fprintf(f, "%s", string->s);
+    printEscapedString(f, string->s);
+else
+    fprintf(f, "nil");
 }
 
 
@@ -82,7 +84,7 @@ void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base,
 /* Print out each element of Array. */
 {
 if (array == NULL)
-    fprintf(f, "()");
+    fprintf(f, "nil");
 else
     {
     if (!reuseObject(f, idHash, array))
@@ -137,7 +139,8 @@ else
 }
 
 
-void printField(FILE *f, void *data, struct _pf_base *base, struct hash *idHash)
+static void printField(FILE *f, void *data, struct _pf_base *base, 
+	struct hash *idHash)
 /* Print out a data from a single field of given type. */
 {
 switch (base->singleType)
@@ -152,10 +155,7 @@ switch (base->singleType)
 	{
         _pf_Byte *p = data;
 	_pf_Byte b = *p;
-	if (isascii(b))
-	    fprintf(f, "%c", b);
-	else
-	    fprintf(f, "0x%x", b);
+	fprintf(f, "%d", b);
 	break;
 	}
     case pf_stShort:
@@ -191,9 +191,7 @@ switch (base->singleType)
     case pf_stString:
 	{
         _pf_String *p = data;
-	fputc('"', f);
 	printString(f, *p);
-	fputc('"', f);
 	break;
 	}
     case pf_stClass:
@@ -227,28 +225,21 @@ switch (base->singleType)
     }
 }
 
-void _pf_prin(FILE *f, _pf_Stack *stack)
+void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString)
 /* Print out single variable where type is determined at run time. */
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];
 struct _pf_base *base = type->base;
 union _pf_varless val = stack->Var.val;
 struct hash *idHash = NULL;
-curObjId = 0;
 switch (base->singleType)
     {
     case pf_stBit:
         fprintf(f, "%d", val.Bit);
 	break;
     case pf_stByte:
-	{
-	_pf_Byte b = val.Byte;
-	if (isascii(b))
-	    fprintf(f, "%c", b);
-	else
-	    fprintf(f, "0x%x", b);
+	fprintf(f, "%d", val.Byte);
 	break;
-	}
     case pf_stShort:
         fprintf(f, "%d", val.Short);
 	break;
@@ -265,7 +256,10 @@ switch (base->singleType)
         fprintf(f, "%f", val.Double);
 	break;
     case pf_stString:
-	printString(f, val.String);
+	if (quoteString || val.String == NULL)
+	    printString(f, val.String);
+	else
+	    fprintf(f, "%s", val.String->s);
 	break;
     case pf_stClass:
 	idHash = newHash(18);
@@ -281,6 +275,7 @@ switch (base->singleType)
 	break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);
+	internalErr();
 	break;
     }
 if (base->needsCleanup)
@@ -294,7 +289,7 @@ freeHash(&idHash);
 void prin(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
-_pf_prin(stdout, stack);
+_pf_prin(stdout, stack, FALSE);
 }
 
 void print(_pf_Stack *stack)
