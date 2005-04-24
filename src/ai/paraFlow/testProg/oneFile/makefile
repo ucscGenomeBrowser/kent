@@ -7,6 +7,8 @@ test:
 	diff expected/houses output/houses
 	paraFlow printRef.pf > output/printRef
 	diff expected/printRef output/printRef
+	paraFlow printScan.pf foo > output/printScan
+	diff expected/printScan output/printScan
 	paraFlow wordCount.pf wordCount.pf serialMath > output/wordCount
 	diff expected/wordCount output/wordCount
 	paraFlow wordUse.pf serialMath.pf > output/wordUse
