@@ -83,7 +83,7 @@ member as illustrated in this fragment of code:
       loc.move(-20, -30);
 
 It's possible for multiple variables to refer to the same object.
-This saves memory, make linked lists and other advanced data
+This saves memory, makes binary trees and other advanced data
 structures possible, and is generally a good thing.  In some
 cases it can have surprising results though.  Consider this
 snippet of code:
@@ -101,8 +101,8 @@ If you didn't want this behavior instead you would code it as
 
 Sometimes it is convenient to define a class largely in terms
 of another class.  This is done with the 'extends' keyword.
-Imagine you were creating a program to describe things in a store.
-A basic class might be
+Imagine you were creating a program to describe items for sale
+in a store.  A basic class might be
       class item
          {
 	 string name;
@@ -220,5 +220,7 @@ While this redefinition (called overloading in the object-oriented
 literature) is convenient in some cases, it can be difficult to
 tell just by reading the code which function is being called in
 an overloaded system,  particularly since class heirarchies
-can be spread out across many modules.  
+can be spread out across large sections of the source code.  
 
+NB: In the future paraFlow might let you give separate initialization
+values for members of extending classes.
