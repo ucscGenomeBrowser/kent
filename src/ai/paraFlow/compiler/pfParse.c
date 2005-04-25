@@ -1209,6 +1209,7 @@ static struct pfParse *parseFunction(struct pfCompile *pfc,
 /* Parse something (...) [into (...)] */
 {
 struct pfToken *tok = *pTokList;
+struct pfToken *outToken;
 struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body = NULL;
 scope = pfScopeNew(pfc, scope, 0, FALSE);
@@ -1223,6 +1224,7 @@ tok = tok->next;
 if (tok->type == ')')
     {
     input = emptyTuple(pp, tok, scope);
+    outToken = tok;
     tok = tok->next;
     }
 else
@@ -1232,17 +1234,19 @@ else
 	input = pfSingleTuple(pp, tok, input);
     if (tok->type != ')')
 	expectingGot(")", tok);
+    outToken = tok;
     tok = tok->next;
     }
 if (tok->type == pftInto)
     {
     tok = tok->next;
+    outToken = tok;
     output = pfParseExpression(pp, &tok, scope);
     if (output->type != pptTuple)
-	output = pfSingleTuple(pp, tok, output);
+	output = pfSingleTuple(pp, outToken, output);
     }
 else
-    output = emptyTuple(pp, tok, scope);
+    output = emptyTuple(pp, outToken, scope);
 
 if (tok->type == ';')
     {

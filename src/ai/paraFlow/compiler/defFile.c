@@ -16,13 +16,11 @@ static void findSpanningTokens(struct pfParse *pp, struct pfToken **pStart, stru
 /* Recursively find tokens that span parse tree. */
 {
 struct pfToken *tok = pp->tok;
-uglyf("Finding spanning tokens %s\n", pp->name);
 if (*pStart == NULL)
     *pStart = *pEnd = tok;
 else
     {
     char *text = tok->text;
-    uglyf(" text %p, pStart->text %p, pEnd->text %p)\n", text, (*pStart)->text, (*pEnd)->text);
     if (text < (*pStart)->text)
          *pStart = tok;
     if (text > (*pEnd)->text)
@@ -57,7 +55,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintIntos(f, pp);
 }
 
-static void rPrintDefs(FILE *f, struct pfParse *parent);
+static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit);
 /* Print definitions. */
 
 static void printVarDef(FILE *f, struct pfParse *pp, boolean printInit)
@@ -70,32 +68,59 @@ struct pfParse *init = name->next;
 
 findSpanningTokens(type, &start, &end);
 findSpanningTokens(name, &start, &end);
-if (printInit)
+if (printInit && init != NULL)
     findSpanningTokens(init, &start, &end);
 printTokenRange(f, start, end);
 fprintf(f, ";\n");
 }
 
-static void printFuncDef(FILE *f, struct pfParse *parent)
+static void printFuncDef(FILE *f, struct pfParse *funcDef)
 /* Print function definition - just name and parameters */
 {
+struct pfToken *start, *end;
+struct pfParse *name = funcDef->children;
+struct pfParse *input = name->next;
+struct pfParse *output = input->next;
+struct pfParse *body = output->next;
+start = end = funcDef->tok;
+findSpanningTokens(name, &start, &end);
+findSpanningTokens(input, &start, &end);
+findSpanningTokens(output, &start, &end);
+printTokenRange(f, start, end);
+fprintf(f, ";\n");
 }
 
-static void printClassDef(FILE *f, struct pfParse *parent)
+static void printClassDef(FILE *f, struct pfParse *class)
 /* Print class definition - everything but method bodies. */
 {
+struct pfToken *start, *end;
+struct pfParse *name = class->children;
+struct pfParse *body = name->next;
+struct pfParse *extends = body->next;
+
+start = end = class->tok;
+findSpanningTokens(name, &start, &end);
+if (extends != NULL)
+    findSpanningTokens(extends, &start, &end);
+printTokenRange(f, start, end);
+fprintf(f, "\n{\n");
+uglyf("Printing class body\n");
+rPrintDefs(f, body, TRUE);
+fprintf(f, "}\n");
 }
 
-static void rPrintDefs(FILE *f, struct pfParse *parent)
+static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit)
 /* Print definitions . */
 {
 struct pfParse *pp;
+uglyf("rPrintDefs %s\n", pfParseTypeAsString(parent->type));
 for (pp = parent->children; pp != NULL; pp = pp->next)
     {
+    uglyf(" printing %s\n", pfParseTypeAsString(pp->type));
     switch (pp->type)
         {
 	case pptVarInit:
-	    printVarDef(f, pp, FALSE);
+	    printVarDef(f, pp, printInit);
 	    break;
 	case pptToDec:
 	case pptParaDec:
@@ -116,6 +141,6 @@ void pfMakeDefFile(struct pfCompile *pfc, struct pfParse *module,
 FILE *f = mustOpen(defFile, "w");
 fprintf(f, "// Paraflow def file for %s module\n", module->name);
 rPrintIntos(f, module);
-rPrintDefs(f, module);
+rPrintDefs(f, module, FALSE);
 }
 
