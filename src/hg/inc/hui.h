@@ -22,9 +22,9 @@ char *wrapWhiteFont(char *s);
 /* Definitions for restriction enzyme track. */
 #define cutterVar "hgt.cutters"
 #define cutterDefault ""
-#define CUTTERS_POPULAR "ClaI,BamHI,BglII,DraI,EcoRI,EcoRV,HindIII,PstI,SalI,SmaI,XmaI"
+#define CUTTERS_POPULAR "ClaI,BamHI,BglII,EcoRI,EcoRV,HindIII,PstI,SalI,SmaI,XbaI,KpnI,SacI,SphI"
 #define CUTTERS_TRACK_NAME "cutters"
-#define CUTTERS_TRACK_LABEL "Restriction Enzymes"
+#define CUTTERS_TRACK_LABEL "Restr. enzymes"
 #define CUTTERS_TRACK_LONGLABEL "Restriction Enzymes from REBASE"
 
 /* Definition for oligo match track. */
