@@ -72,7 +72,7 @@ type chain mm5
 otherDb mm5
 
 track blastzTetNig1
-shortLabel Tetraodon Blastz
+shortLabel $o_Organism Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 149.9
@@ -84,7 +84,7 @@ type psl xeno tetNig1
 otherDb tetNig1
 
 track blastzDanRer2
-shortLabel Zebrafish Blastz
+shortLabel $o_Organism Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 159.9
@@ -130,7 +130,7 @@ type netAlign danRer1 chainDanRer1
 otherDb danRer1
 
 track syntenyNetGalGal2
-shortLabel Chicken Syntenic Net
+shortLabel $o_Organism Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 188.2
