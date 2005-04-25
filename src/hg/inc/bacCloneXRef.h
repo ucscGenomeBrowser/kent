@@ -5,18 +5,21 @@
 #ifndef BACCLONEXREF_H
 #define BACCLONEXREF_H
 
-#define BACCLONEXREF_NUM_COLS 6
+#define BACCLONEXREF_NUM_COLS 9
 
 struct bacCloneXRef
-/* BAC clones external names, internal sequence names and Genbank accessions */
+/* BAC clones and corresponding STS information */
     {
     struct bacCloneXRef *next;  /* Next in singly linked list. */
-    char *altName;	/* Alternate name (alias) for BAC clone from UniSTS */
-    char *extName;	/* External name for BAC clone - International ID */
-    char *intName;	/* Internal Sanger sequencing name for BAC clone */
-    char *uniStsId;	/* UniSTS ID for BAC clone */
-    char *acc;	/* Genbank accession for the BAC Clone */
-    char *fpcCtg;	/* FPC Contig for BAC clone */
+    char *name;	/* External name for BAC clone */
+    char *intName;	/* Internal Sanger FPC name */
+    char *chroms;	/* Chromosome(s) to which BAC is mapped by BLAT */
+    char *genbank;	/* Genbank accession for the BAC Clone */
+    char *sangerName;	/* Sanger STS name */
+    unsigned relationship;	/* Relationship type - method of finding STS */
+    char *uniStsId;	/* UniSTS ID(s) for STS */
+    char *leftPrimer;	/* STS 5' primer sequence */
+    char *rightPrimer;	/* STS 3' primer sequence */
     };
 
 void bacCloneXRefStaticLoad(char **row, struct bacCloneXRef *ret);
