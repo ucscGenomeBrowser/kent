@@ -1,3 +1,27 @@
+track multiz4way
+shortLabel Conservation
+longLabel D. sim./mel./yak./pseud. Multiz Alignments & phastCons Scores
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons4way
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder dm2 droYak1 dp3
+
+track phastConsElements4way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements (D. sim./mel./yak./pseud.)
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track chainDm2
 shortLabel D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
