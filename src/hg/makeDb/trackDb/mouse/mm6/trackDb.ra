@@ -1,3 +1,14 @@
+track knownGene
+shortLabel Known Genes
+longLabel Known Genes Based on UniProt, RefSeq, and mRNA
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+hgGene on
+cdsDrawDefault genomic\ codons
+
 track chainSelf
 shortLabel Self Chain 
 longLabel Self Chained Alignments
