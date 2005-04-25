@@ -3883,3 +3883,42 @@ BASE=/cluster/data/dm2/bed/blastz.dm2.2005-02-23
     # Add /usr/local/apache/htdocs/goldenPath/dm2/vsSelf/README.txt
 
 
+# BLASTZ/CHAIN/NET DROSIM1 (DONE 4/13/05 angie)
+    mkdir /cluster/data/dm2/bed/blastz.droSim1.2005-04-13
+    cd /cluster/data/dm2/bed/blastz.droSim1.2005-04-13
+    # Since they're ~5MYA, I think the default blastz params should be OK:
+    cat << '_EOF_' > DEF
+# D.melanogaster vs. D.simulans
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm2/chrom.sizes
+
+# QUERY - D. simulans
+SEQ2_DIR=/iscratch/i/droSim1/droSim1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droSim1/chrom.sizes
+
+BASE=/cluster/data/dm2/bed/blastz.droSim1.2005-04-13
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF -bigClusterHub kk9 -fileServer kolossus \
+      -blastzOutRoot /cluster/bluearc/dm2droSim1 >& do.log &
+    tail -f do.log
+    # Pretty good coverage, but I wonder if it would be possible to do even 
+    # better...?  
+    featureBits dm2 chainDroSim1Link
+#108586694 bases of 131698467 (82.451%) in intersection
+    # Even with default params, yakuba (~13MYA) got slightly more cov!!
+    featureBits dm2 chainDroYak1Link
+#109036381 bases of 131698467 (82.792%) in intersection
+    # Assembly size may explain some of that...? droYak1 has 169M non-gap bases
+    # while droSim1 has only 127M.  
+    rmdir /cluster/bluearc/dm2droSim1
+    ln -s blastz.droSim1.2005-04-13 /cluster/data/dm2/bed/blastz.droSim1
+    # Add {chain,net}DroSim1 to trackDb.ra if necessary.
+
+
