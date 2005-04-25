@@ -92,5 +92,8 @@ void envUpdate(char *name, char *value);
 int mustFork();
 /* Fork or abort. */
 
+int rawKeyIn();
+/* Read in an unbuffered, unechoed character from keyboard. */
+
 #endif /* PORTABLE_H */
 
