@@ -971,8 +971,8 @@ altColor 255,240,200
 type bed 4 +
 
 track ratChain
-shortLabel Rat Chain 
-longLabel Chained Blastz Rat/$Organism Alignments
+shortLabel $o_Organism Chain 
+longLabel Chained Rat/$Organism Alignments
 group compGeno
 priority 133
 visibility hide
@@ -1316,7 +1316,7 @@ blastRef hg16.blastKGRef00
 
 track chainDm1
 shortLabel D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide
@@ -1338,7 +1338,7 @@ otherDb dm1
 
 track chainDm2
 shortLabel (dm2) D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide
@@ -1360,7 +1360,7 @@ otherDb dm2
 
 track chainFr1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 140
 visibility hide
@@ -1382,7 +1382,7 @@ otherDb fr1
 
 track chainTetNig1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 150
 visibility hide
@@ -1404,7 +1404,7 @@ otherDb tetNig1
 
 track chainDanRer2
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 160
 visibility hide
@@ -1426,7 +1426,7 @@ otherDb danRer2
 
 track chainDanRer1
 shortLabel $o_db Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 160
 visibility hide
@@ -1471,7 +1471,7 @@ type chain galGal2
 otherDb galGal2
 
 track netGalGal2
-shortLabel Chicken Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 180.1
@@ -1503,8 +1503,8 @@ type netAlign monDom1 chainMonDom1
 otherDb monDom1
 
 track chainRn3
-shortLabel Rat Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 200
 visibility hide
@@ -1525,8 +1525,8 @@ type netAlign rn3 chainRn3
 otherDb rn3
 
 track chainMm3
-shortLabel Mm3 Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_db Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -1537,8 +1537,8 @@ type chain mm3
 otherDb mm3
 
 track chainMm4
-shortLabel Mm4 Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -1549,8 +1549,8 @@ type chain mm4
 otherDb mm4
 
 track chainMm5
-shortLabel Mouse Chain
-longLabel Mouse ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -1571,8 +1571,8 @@ type netAlign mm5 chainMm5
 otherDb mm5
 
 track chainMm6
-shortLabel Mm6 Chain
-longLabel Mouse ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -1594,7 +1594,7 @@ otherDb mm6
 
 track chainBosTau1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 220
 visibility hide
@@ -1616,7 +1616,7 @@ otherDb bosTau1
 
 track chainCanFam1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 230
 visibility hide
@@ -1638,7 +1638,7 @@ otherDb canFam1
 
 track chainPanTro1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 240
 visibility hide
@@ -1659,8 +1659,8 @@ type netAlign panTro1 chainPanTro1
 otherDb panTro1
 
 track chainHg15
-shortLabel Human Chain Hg15
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_Organism Chain Hg15
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 250
 visibility dense
@@ -1671,8 +1671,8 @@ type chain hg15
 otherDb hg15
 
 track chainHg16
-shortLabel Human Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 250
 visibility hide
@@ -1683,8 +1683,8 @@ type chain hg16
 otherDb hg16
 
 track chainHg17
-shortLabel Human Chain 
-longLabel Human ($o_date/$o_db) Chained Blastz Alignments
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 250
 visibility hide
