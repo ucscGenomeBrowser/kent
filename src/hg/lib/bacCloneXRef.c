@@ -8,19 +8,22 @@
 #include "jksql.h"
 #include "bacCloneXRef.h"
 
-static char const rcsid[] = "$Id: bacCloneXRef.c,v 1.2 2005/04/13 19:21:46 hartera Exp $";
+static char const rcsid[] = "$Id: bacCloneXRef.c,v 1.3 2005/04/25 21:28:07 hartera Exp $";
 
 void bacCloneXRefStaticLoad(char **row, struct bacCloneXRef *ret)
 /* Load a row from bacCloneXRef table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->altName = row[0];
-ret->extName = row[1];
-ret->intName = row[2];
-ret->uniStsId = row[3];
-ret->acc = row[4];
-ret->fpcCtg = row[5];
+ret->name = row[0];
+ret->intName = row[1];
+ret->chroms = row[2];
+ret->genbank = row[3];
+ret->sangerName = row[4];
+ret->relationship = sqlUnsigned(row[5]);
+ret->uniStsId = row[6];
+ret->leftPrimer = row[7];
+ret->rightPrimer = row[8];
 }
 
 struct bacCloneXRef *bacCloneXRefLoad(char **row)
@@ -30,12 +33,15 @@ struct bacCloneXRef *bacCloneXRefLoad(char **row)
 struct bacCloneXRef *ret;
 
 AllocVar(ret);
-ret->altName = cloneString(row[0]);
-ret->extName = cloneString(row[1]);
-ret->intName = cloneString(row[2]);
-ret->uniStsId = cloneString(row[3]);
-ret->acc = cloneString(row[4]);
-ret->fpcCtg = cloneString(row[5]);
+ret->name = cloneString(row[0]);
+ret->intName = cloneString(row[1]);
+ret->chroms = cloneString(row[2]);
+ret->genbank = cloneString(row[3]);
+ret->sangerName = cloneString(row[4]);
+ret->relationship = sqlUnsigned(row[5]);
+ret->uniStsId = cloneString(row[6]);
+ret->leftPrimer = cloneString(row[7]);
+ret->rightPrimer = cloneString(row[8]);
 return ret;
 }
 
@@ -45,7 +51,7 @@ struct bacCloneXRef *bacCloneXRefLoadAll(char *fileName)
 {
 struct bacCloneXRef *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -63,7 +69,7 @@ struct bacCloneXRef *bacCloneXRefLoadAllByChar(char *fileName, char chopper)
 {
 struct bacCloneXRef *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -84,12 +90,15 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->altName = sqlStringComma(&s);
-ret->extName = sqlStringComma(&s);
+ret->name = sqlStringComma(&s);
 ret->intName = sqlStringComma(&s);
+ret->chroms = sqlStringComma(&s);
+ret->genbank = sqlStringComma(&s);
+ret->sangerName = sqlStringComma(&s);
+ret->relationship = sqlUnsignedComma(&s);
 ret->uniStsId = sqlStringComma(&s);
-ret->acc = sqlStringComma(&s);
-ret->fpcCtg = sqlStringComma(&s);
+ret->leftPrimer = sqlStringComma(&s);
+ret->rightPrimer = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -101,12 +110,14 @@ void bacCloneXRefFree(struct bacCloneXRef **pEl)
 struct bacCloneXRef *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->altName);
-freeMem(el->extName);
+freeMem(el->name);
 freeMem(el->intName);
+freeMem(el->chroms);
+freeMem(el->genbank);
+freeMem(el->sangerName);
 freeMem(el->uniStsId);
-freeMem(el->acc);
-freeMem(el->fpcCtg);
+freeMem(el->leftPrimer);
+freeMem(el->rightPrimer);
 freez(pEl);
 }
 
@@ -127,11 +138,7 @@ void bacCloneXRefOutput(struct bacCloneXRef *el, FILE *f, char sep, char lastSep
 /* Print out bacCloneXRef.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->altName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->extName);
+fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -139,15 +146,29 @@ fprintf(f, "%s", el->intName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chroms);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->genbank);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->sangerName);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->relationship);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->uniStsId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->acc);
+fprintf(f, "%s", el->leftPrimer);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->fpcCtg);
+fprintf(f, "%s", el->rightPrimer);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
