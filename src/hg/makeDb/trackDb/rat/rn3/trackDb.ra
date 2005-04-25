@@ -89,7 +89,7 @@ otherDb hg15
 
 track chainHg15
 shortLabel Human Chain Hg15
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 115
 visibility dense
@@ -365,7 +365,7 @@ otherDb hg17
 
 track chainHg17
 shortLabel Human Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide

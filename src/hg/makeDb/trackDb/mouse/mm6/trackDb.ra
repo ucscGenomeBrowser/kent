@@ -1,6 +1,6 @@
 track chainSelf
 shortLabel Self Chain 
-longLabel Self Chained Blastz Alignments
+longLabel Self Chained Alignments
 group varRep
 priority 163
 visibility hide

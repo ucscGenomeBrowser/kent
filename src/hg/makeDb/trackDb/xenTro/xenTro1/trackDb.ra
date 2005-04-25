@@ -163,7 +163,7 @@ otherDb galGal2
 
 track chainMm5
 shortLabel Mouse Chain
-longLabel Mouse ($o_date/$o_db) Chained Blastz Alignments
+longLabel Mouse ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -175,7 +175,7 @@ otherDb mm5
 
 track chainMm6
 shortLabel Mm6 Chain
-longLabel Mouse ($o_date/$o_db) Chained Blastz Alignments
+longLabel Mouse ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide

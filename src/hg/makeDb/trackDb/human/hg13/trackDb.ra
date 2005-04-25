@@ -172,7 +172,7 @@ otherDb mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 186
 visibility hide
@@ -230,7 +230,7 @@ otherDb rn1
 
 track humanChain
 shortLabel Human Chain 
-longLabel $Organism Chained Blastz Self Alignments
+longLabel $Organism Chained Self Alignments
 group varRep
 priority 145.1
 visibility hide
@@ -242,7 +242,7 @@ otherDb hg13
 
 track humanChainNew
 shortLabel Human Chain 2
-longLabel $Organism Chained Blastz New Self Alignments
+longLabel $Organism Chained New Self Alignments
 group varRep
 priority 145.11
 visibility hide
@@ -336,7 +336,7 @@ url http://www.cs.uni-duesseldorf.de/~ebersber/annotation_track_chimp/gp_F14Nov0
 
 track humanChain
 shortLabel Human Chain 
-longLabel Human/$Organism Chained Blastz Alignments
+longLabel Human/$Organism Chained Alignments
 group varRep
 priority 146
 visibility hide

@@ -60,7 +60,7 @@ type genePred
 
 track chainSelf
 shortLabel Self Chain 
-longLabel Self Chained Blastz Alignments
+longLabel Self Chained Alignments
 group varRep
 priority 163
 visibility hide
@@ -109,7 +109,7 @@ otherDb danRer1
 
 track chainDanRer1
 shortLabel $o_db Chain
-longLabel $O_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $O_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 160.01
 visibility hide

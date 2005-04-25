@@ -198,7 +198,7 @@ otherDb mm3
 
 track mouseChain
 shortLabel Mouse Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 186
 visibility hide
@@ -210,7 +210,7 @@ otherDb mm3
 
 track mouseChain2
 shortLabel Mouse Chain2 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments to fix broken chains 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments to fix broken chains 
 group compGeno
 priority 186.1
 visibility hide
@@ -341,7 +341,7 @@ otherDb hg15
 
 track selfChain
 shortLabel Self Chain 
-longLabel $Organism Chained Blastz Self Alignments
+longLabel $Organism Chained Self Alignments
 group varRep
 priority 147.3
 visibility hide
@@ -353,7 +353,7 @@ otherDb hg15
 
 track selfChain2
 shortLabel Self Chain 2 
-longLabel $Organism Chained Blastz Self Alignments Smaller Gap Score
+longLabel $Organism Chained Self Alignments Smaller Gap Score
 group varRep
 priority 147.4
 visibility hide
@@ -396,7 +396,7 @@ otherDb ce1
 
 track wormChain
 shortLabel Worm Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 119.5
 visibility hide

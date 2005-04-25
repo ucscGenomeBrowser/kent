@@ -17,7 +17,7 @@ type bed 6 +
 
 track chainMm6
 shortLabel Mouse Chain
-longLabel Mouse ($o_date/$o_db) Chained Blastz Alignments
+longLabel Mouse ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 144
 visibility hide

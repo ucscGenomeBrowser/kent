@@ -246,7 +246,7 @@ type psl .
 
 track chainHg17
 shortLabel Human Chain 
-longLabel Human ($o_date/$o_db) Chained Blastz Alignments
+longLabel Human ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 259
 visibility hide
@@ -278,7 +278,7 @@ otherDb hg17
 
 track chainRn3
 shortLabel Rat Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 260
 visibility hide

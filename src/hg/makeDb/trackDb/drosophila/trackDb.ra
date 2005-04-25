@@ -80,7 +80,7 @@ type bed 5 .
 
 track chainDm1
 shortLabel D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide
@@ -92,7 +92,7 @@ otherDb dm1
 
 track chainDm2
 shortLabel (dm2) D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide
@@ -104,7 +104,7 @@ otherDb dm2
 
 track chainDp2
 shortLabel D. pseudo. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 138
 visibility hide
@@ -126,7 +126,7 @@ otherDb dp2
 
 track chainDp3
 shortLabel (dp3) D. pseudo. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 138
 visibility hide
@@ -148,7 +148,7 @@ otherDb dp3
 
 track chainDroSim1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 142
 visibility hide
@@ -170,7 +170,7 @@ otherDb droSim1
 
 track chainDroYak1
 shortLabel D. yakuba Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 141
 visibility hide
@@ -192,7 +192,7 @@ otherDb droYak1
 
 track chainDroEre1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 140
 visibility hide
@@ -214,7 +214,7 @@ otherDb droEre1
 
 track chainDroAna1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 139
 visibility hide
@@ -236,7 +236,7 @@ otherDb droAna1
 
 track chainDroMoj1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 135
 visibility hide
@@ -258,7 +258,7 @@ otherDb droMoj1
 
 track chainDroVir1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 134
 visibility hide
@@ -280,7 +280,7 @@ otherDb droVir1
 
 track chainApiMel1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 131
 visibility hide
@@ -302,7 +302,7 @@ otherDb apiMel1
 
 track chainAnoGam1
 shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 132.1
 visibility hide

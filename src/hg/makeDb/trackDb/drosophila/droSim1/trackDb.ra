@@ -1,6 +1,6 @@
 track chainDm2
 shortLabel D. mel. Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide

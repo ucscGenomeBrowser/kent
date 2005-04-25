@@ -35,7 +35,7 @@ type genePred sgpPep
 
 track mouseChain
 shortLabel Self Chain 
-longLabel $Organism Chained Blastz Self Alignments
+longLabel $Organism Chained Self Alignments
 group varRep
 priority 132
 visibility hide
@@ -47,7 +47,7 @@ otherDb mm3
 
 track ratChain
 shortLabel Rat Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Blastz Alignments
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 133
 visibility hide
