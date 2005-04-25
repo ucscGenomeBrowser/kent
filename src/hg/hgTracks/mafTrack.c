@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.37 2005/04/25 22:15:18 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.38 2005/04/25 22:51:05 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -554,19 +554,20 @@ for (full = mafList; full != NULL; full = full->next)
             int w = mafPixelWidth+1;
             if (!chainBreaks)
                 continue;
+            Color chainColor = lighterColor(vg, color);
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
                     {
                     /* double gap -> display double line ala chain tracks */
-                    innerLine(vg, x, midY1, w, color);
-                    innerLine(vg, x, midY2, w, color);
+                    innerLine(vg, x, midY1, w, chainColor);
+                    innerLine(vg, x, midY2, w, chainColor);
                     }
             if (mc->leftStatus == MAF_CONTIG_STATUS &&
                 mc->rightStatus == MAF_CONTIG_STATUS)
                     {
                     /* single gap -> display single line ala chain tracks */
-                    innerLine(vg, x, midY, w, color);
+                    innerLine(vg, x, midY, w, chainColor);
                     }
             }
         else
