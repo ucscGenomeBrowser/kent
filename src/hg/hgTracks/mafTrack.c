@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.36 2005/04/25 21:52:40 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.37 2005/04/25 22:15:18 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -535,6 +535,12 @@ for (full = mafList; full != NULL; full = full->next)
         ixMafAli++;
 	mcMaster = mafFindComponent(maf, dbChrom);
         mc = mcMaster->next;
+        if (mc == NULL)
+            {
+            if (sub != NULL)
+                mafAliFree(&sub);
+            continue;
+            }
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
 	mafPixelStart = (mcMaster->start - seqStart) * width/winBaseCount;
