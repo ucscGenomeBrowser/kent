@@ -245,8 +245,8 @@ visibility hide
 type psl .
 
 track chainHg17
-shortLabel Human Chain 
-longLabel Human ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 259
 visibility hide
@@ -257,7 +257,7 @@ type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel Human Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 259.1
@@ -267,7 +267,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track syntenyNetHg17
-shortLabel Human Syntenic Net
+shortLabel $o_Organism Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 259.2
@@ -277,7 +277,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track chainRn3
-shortLabel Rat Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 260
@@ -289,7 +289,7 @@ type chain rn3
 otherDb rn3
 
 track netRn3
-shortLabel Rat Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 260.1
@@ -299,7 +299,7 @@ type netAlign rn3 chainRn3
 otherDb rn3
 
 track syntenyNetRn3
-shortLabel Rat Syntenic Net
+shortLabel $o_Organism Syntenic Net
 longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
 group compGeno
 priority 260.2
