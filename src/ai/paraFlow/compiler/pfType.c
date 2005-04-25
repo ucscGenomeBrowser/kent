@@ -90,10 +90,6 @@ else
 	fprintf(f, " into ");
 	pfTypeDump(ty->children->next, f);
 	}
-    else if (ty->tyty == tytyModule)
-	{
-	fprintf(f, ".module.");
-	}
     else
 	{
 	fprintf(f, "%s", ty->base->name);

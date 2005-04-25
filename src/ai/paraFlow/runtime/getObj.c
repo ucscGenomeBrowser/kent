@@ -1,5 +1,8 @@
-/* scan - read back a variable of a given type in the same
- * format that it was printed in. */
+/* getObj - get an object out of a file in the same format
+ * it was put into the file with (parents, commas, quotes etc.).
+ * This was first called 'scan' and most of the local names
+ * are still that way.  The other side of this lives in the
+ * print module. */
 
 #include "common.h"
 #include "hash.h"
@@ -10,7 +13,7 @@ static void scanField(FILE *f, void *data, struct _pf_type *type,
 	struct hash *idHash);
 /* Print out a data from a single field of given type. */
 
-_pf_Int  scanInt(FILE *f);
+static _pf_Int  scanInt(FILE *f);
 /* Read integer or die trying */
 
 static void runErr(char *message)
@@ -437,7 +440,7 @@ switch (type->base->singleType)
 }
 
 
-void _pf_sca(FILE *f, _pf_Stack *stack)
+void _pf_getObj(FILE *f, _pf_Stack *stack)
 /* Read in variable from file. */
 {
 int typeId = stack[1].Var.typeId;

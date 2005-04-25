@@ -88,7 +88,7 @@ switch (pp->type)
 	}
     case pptInto:
         {
-	pp->ty = pfTypeNew(NULL);
+	pp->ty = pfTypeNew(pfc->moduleType);
 	pp->ty->tyty = tytyModule;
 	break;
 	}

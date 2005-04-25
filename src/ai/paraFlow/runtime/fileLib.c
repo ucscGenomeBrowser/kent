@@ -7,7 +7,7 @@
 void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString);
 /* Print out single variable where type is determined at run time. */
 
-void _pf_sca(FILE *f, _pf_Stack *stack);
+void _pf_getObj(FILE *f, _pf_Stack *stack);
 /* Read in variable from file. */
 
 struct file
@@ -84,7 +84,7 @@ void _pf_cm1_file_get(_pf_Stack *stack)
 {
 int c;
 struct file *file = stack[0].v;
-_pf_sca(file->f, stack);
+_pf_getObj(file->f, stack);
 c = getc(file->f);
 if (c != '\n')
     warn("expecting newline, got %c", c);

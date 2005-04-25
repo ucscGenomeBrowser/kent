@@ -32,7 +32,8 @@ struct pfCompile
     struct hash *runTypeHash;	/* Hash of run time types for code generator */
 
     /* Some called out types parser needs to know about. */
-    struct pfBaseType *varType;		/* Base tyhpe for all variables/functions */
+    struct pfBaseType *moduleType;	/* Base type for separate compilation units. */
+    struct pfBaseType *varType;		/* Base type for all variables/functions */
     struct pfBaseType *nilType;		/* Object/string with no value. */
     struct pfBaseType *keyValType;	/* Used for tree/dir initializations */
     struct pfBaseType *streamType;	/* Ancestor for string, maybe file */

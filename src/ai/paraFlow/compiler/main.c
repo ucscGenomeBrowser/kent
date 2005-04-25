@@ -13,8 +13,9 @@
 #include "pfParse.h"
 #include "pfBindVars.h"
 #include "pfCheck.h"
-#include "pfCodeC.h"
+#include "cCoder.h"
 #include "pfPreamble.h"
+#include "defFile.h"
 
 
 int endPhase = 10;
@@ -119,6 +120,7 @@ struct pfScope *scope = pfc->scope;
 
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
+pfc->moduleType = pfScopeAddType(scope, "<module>", FALSE, NULL, 0, FALSE);
 pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL, sizeof(_pf_Var), TRUE);
 pfc->nilType = pfScopeAddType(scope, "nil", FALSE, NULL, sizeof(_pf_String), FALSE);
 pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType, 0, FALSE);
@@ -151,24 +153,6 @@ pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType, sizeof(_p
 pfc->dirType->keyedBy = pfc->stringType;
 }
 
-static void addBuiltInFunctions(struct pfCompile *pfc)
-/* Add built in functions */
-{
-#ifdef OLD
-struct pfScope *scope = pfc->scope;
-struct pfType *toType = pfTypeNew(pfc->toType);
-struct pfType *inTuple = pfTypeNew(pfc->tupleType);
-struct pfType *outTuple = pfTypeNew(pfc->tupleType);
-struct pfType *varType = pfTypeNew(pfc->varType);
-toType->children = inTuple;
-toType->isFunction = TRUE;
-inTuple->next = outTuple;
-inTuple->children = varType;
-pfScopeAddVar(scope, "print", toType, NULL);
-pfScopeAddVar(scope, "prin", toType, NULL);
-#endif /* OLD */
-}
-
 struct pfCompile *pfCompileNew()
 /* Make new compiler object. */
 {
@@ -178,7 +162,6 @@ pfc->modules = hashNew(0);
 pfc->reservedWords = createReservedWords();
 pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
 addBuiltInTypes(pfc);
-addBuiltInFunctions(pfc);
 pfc->tkz = pfTokenizerNew(pfc->reservedWords);
 return pfc;
 }
@@ -189,7 +172,7 @@ void paraFlow(char *fileName, int pfArgc, char **pfArgv)
 struct pfCompile *pfc;
 struct pfParse *program;
 char baseDir[256], baseName[128], baseSuffix[64];
-char codeFile[PATH_LEN];
+char codeFile[PATH_LEN], defFile[PATH_LEN];
 char *parseFile = "out.parse";
 char *typeFile = "out.typed";
 char *boundFile = "out.bound";
@@ -204,6 +187,7 @@ if (endPhase < 1)
 verbose(2, "Phase 1 - initialization\n");
 splitPath(fileName, baseDir, baseName, baseSuffix);
 safef(codeFile, sizeof(codeFile), "%s%s.c", baseDir, baseName);
+safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
 pfc = pfCompileNew();
 if (endPhase < 2)
     return;
@@ -232,13 +216,17 @@ printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
 if (endPhase < 6)
     return;
-verbose(2, "Phase 6 - C code generation\n");
+verbose(2, "Phase 6 - generating def file\n");
+pfMakeDefFile(pfc, program->children->next, defFile);
+if (endPhase < 7)
+    return;
+verbose(2, "Phase 7 - C code generation\n");
 pfCodeC(pfc, program, codeFile);
 verbose(2, "%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
-if (endPhase < 7)
+if (endPhase < 8)
     return;
-verbose(2, "Phase 7 - compiling C code\n");
+verbose(2, "Phase 8 - compiling C code\n");
 /* Now run gcc on it. */
     {
     struct dyString *dy = dyStringNew(0);
@@ -256,10 +244,10 @@ verbose(2, "Phase 7 - compiling C code\n");
     dyStringFree(&dy);
     }
 
-if (endPhase < 8)
+if (endPhase < 9)
     return;
 
-verbose(2, "Phase 8 - execution\n");
+verbose(2, "Phase 9 - execution\n");
 /* Now go run program itself. */
     {
     struct dyString *dy = dyStringNew(0);

@@ -10,6 +10,7 @@
 #include "pfCompile.h"
 #include "pfParse.h"
 #include "codedType.h"
+#include "cCoder.h"
 
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
@@ -1893,6 +1894,7 @@ pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
 for (module = program->children; module != NULL; module = module->next)
     {
     boolean isBuiltIn = sameString(module->name, "<builtin>");
+    verbose(3, "Coding %s\n", module->name);
     fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
     fprintf(f, "\n");
     rPrintPrototypes(f, module, NULL);
