@@ -9,5 +9,5 @@ CREATE TABLE bacCloneAlias (
     name varchar(255) not null,	# External name for BAC clone
               #Indices
     INDEX(alias),
-    INDEX "name"
+    INDEX(name)
 );
