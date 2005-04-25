@@ -139,5 +139,6 @@ FILE *f = mustOpen(defFile, "w");
 fprintf(f, "// Paraflow def file for %s module\n", module->name);
 rPrintIntos(f, module);
 rPrintDefs(f, module, FALSE);
+carefulClose(&f);
 }
 
