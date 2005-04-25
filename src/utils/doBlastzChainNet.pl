@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.15 2005/04/13 18:35:09 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.16 2005/04/25 22:22:57 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -40,7 +40,7 @@ my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
 my $downloadPath = "$dbHost:$goldenPath";
 my $clusterLocal = '/scratch/hg';
 my $clusterSortaLocal = '/iscratch/i';
-my @clusterNAS = ('/cluster/bluearc', '/panasas');
+my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/santest/scratch');
 my $clusterNAS = join('/... or ', @clusterNAS) . '/...';
 my @clusterNoNo = ('/cluster/home', '/projects');
 my @fileServerNoNo = ('kkhome', 'kks00');
@@ -165,8 +165,9 @@ Assumptions:
    in the first column, and corresponding sizes in the second column.
    Normally this will be $clusterData/\$tDb/chrom.sizes, but for a 
    scaffold-based assembly, it is a good idea to put it in $clusterSortaLocal 
-   or $clusterNAS because it will be a large file 
-   and it is read by blastz-run-ucsc (big cluster script).
+   or $clusterNAS
+   because it will be a large file and it is read by blastz-run-ucsc 
+   (big cluster script).
    SEQ2_LEN: ditto for query.
 5. DEF's SEQ1_CHUNK and SEQ1_LAP determine the step size and overlap size 
    of chunks into which large target sequences are to be split before 
@@ -757,6 +758,7 @@ sub postProcessChains {
     &run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$chain");
   }
+  &nfsNoodge("$runDir/$chain");
 }
 
 
