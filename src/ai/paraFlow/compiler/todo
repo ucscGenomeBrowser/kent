@@ -1,5 +1,3 @@
-  - Rename f.print and f.scan to something else.  read/write?  
-    readVar/writeVar? put/get?   
   - Getting raw keyboard input.
   - Working on multiple modules.
   - Doing parallel checking for para and flow statements.
@@ -22,6 +20,8 @@ Check system:
 
 -----------
 DONE
+  - Rename f.print and f.scan to something else.  read/write?  
+    readVar/writeVar? put/get?   
   - Allow nil as a value for initializing and objects.
   - Allowing print to go to file.
   - Adding scan (to go with print).

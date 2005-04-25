@@ -2,6 +2,7 @@
  * environment dir. */
 
 #include "common.h"
+#include "portable.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 #include "object.h"
@@ -29,4 +30,13 @@ void die(_pf_Stack *stack)
 {
 _pf_String string = stack[0].String;
 errAbort(string->s);
+}
+
+void keyIn(_pf_Stack *stack)
+/* Get next key press. */
+{
+char buf[2];
+buf[0] = rawKeyIn();
+buf[1] = 0;
+stack[0].String = _pf_string_from_const(buf);
 }

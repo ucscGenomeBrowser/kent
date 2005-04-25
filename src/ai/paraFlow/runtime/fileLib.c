@@ -69,14 +69,7 @@ if (--string->_pf_refCount <= 0)
     string->_pf_cleanup(string, 0);
 }
 
-void _pf_cm1_file_prin(_pf_Stack *stack)
-/* Print variable to file with no line feed. */
-{
-struct file *file = stack[0].v;
-_pf_prin(file->f, stack+1, TRUE);
-}
-
-void _pf_cm1_file_print(_pf_Stack *stack)
+void _pf_cm1_file_put(_pf_Stack *stack)
 /* Print to file with line feed. */
 {
 struct file *file = stack[0].v;
@@ -85,14 +78,7 @@ _pf_prin(f, stack+1, TRUE);
 fputc('\n', f);
 }
 
-void _pf_cm1_file_sca(_pf_Stack *stack)
-/* Read in variable from file. */
-{
-struct file *file = stack[0].v;
-_pf_sca(file->f, stack);
-}
-
-void _pf_cm1_file_scan(_pf_Stack *stack)
+void _pf_cm1_file_get(_pf_Stack *stack)
 /* Read in variable from file, and then make sure have
  * a newline. */
 {
