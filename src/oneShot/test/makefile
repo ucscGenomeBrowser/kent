@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
 
-O = test.o
+O = test.o test2.o
 
 test: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o test $O $(MYLIBS) $L

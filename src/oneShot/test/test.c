@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
+#include "memgfx.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -11,28 +12,46 @@ void usage()
 errAbort(
   "test - Test something\n"
   "usage:\n"
-  "   test a b\n"
+  "   test in \n"
   "options:\n"
   );
 }
 
+#include <termios.h>
 
-void test(char *a, char *b)
+
+
+void test(char *in)
 /* test - Test something. */
 {
-char *match = memMatch(a, strlen(a), b, strlen(b));
-if (match == NULL)
-    printf("No match\n");
-else
-    printf("Match at char %d\n", match - b);
+struct termios attr;
+char buf[1];
+
+if (tcgetattr(STDIN_FILENO, &attr) != 0)
+    errAbort("Couldn't do tcgetattr");
+attr.c_lflag &= ~ICANON;
+if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
+    errAbort("Couldn't do tcsetattr");
+for (;;)
+   {
+   int c;
+   printf("Please hit the letter c\n");
+   if ((c = read(0,buf,1)) < 0)
+       errnoAbort("I/O error");
+   if (buf[0] == 'c')
+      {
+      printf("Yay! got it.  Bye now\n");
+      break;
+      }
+    printf("Hmm, I got %c.\n", buf[0]);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 3)
+if (argc != 2)
    usage();
-dnaUtilOpen();
-test(argv[1], argv[2]);
+test(argv[1]);
 return 0;
 }
