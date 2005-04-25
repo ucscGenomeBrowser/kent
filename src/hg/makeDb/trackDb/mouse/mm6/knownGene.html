@@ -1,59 +1,77 @@
-        <h2>Description</h2>
-        <p>The UCSC Known Genes track shows known protein coding genes based on
-        protein data from UniProt (SWISS-PROT and TrEMBL) and mRNA data from
-        NCBI Refseq and GenBank.<span style="mso-spacerun: yes">&nbsp; </span>Coding
-        exons are displayed as thicker blocks than 5' and 3' untranslated
-        regions (UTR). Connecting introns are one-pixel lines with hatch marks
-        indicating direction of transcription. Entries which have corresponding
-        entries in PDB are colored black. Entries which either have
-        corresponding proteins in SWISS-PROT or mRNAs that are NCBI Reference
-        Sequences with a &quot;Reviewed&quot; status are colored dark blue.
-        Entries which have mRNAs that are NCBI Reference Sequences with a
-        &quot;Provisional&quot; status are colored lighter blue. Everything
-        else is colored with lightest blue.</p>
-        <h2>Methods</h2>
-        <p>mRNA sequences from RefSeq and GenBank of a species are aligned
-        against the genome using the BLAT program. When a single mRNA aligns in
-        multiple places, only the best alignments are kept. The alignments must
-        also have at least 98% sequence identity to be kept. The protein
-        sequences of the species are also aligned to the genome.<span
-        style="mso-spacerun: yes">&nbsp; </span></p>
-        <p>The genomic mRNA and protein alignments are compared and
-        protein-mRNA pairings are determined if there is significant overlap
-        between their <span style="mso-spacerun: yes">&nbsp;</span><span
-        style="mso-spacerun: yes">&nbsp;</span>alignments.<span
-        style="mso-spacerun: yes">&nbsp; </span>CDS data of mRNAs are obtained
-        from RefSeq and GenBank data and also from UCSC protein-mRNA BLAT alignments.
-        <span style="mso-spacerun: yes">&nbsp;</span></p>
-        <p>The mRNAs alignments with their CDS data constitute the initial set
-        of UCSC Known Genes candidates.<span style="mso-spacerun: yes">&nbsp;
-        </span>This set is then analyzed by a gene check program to remove questionable
-        candidates, such as those with in-frame stop codon, missing start or
-        stop codon, etc.</p>
-        <p>Among multiple mRNAs referenced by a single protein, the best mRNA
-        is chosen based on a quality score, which depends on its length, how
-        good its translation matches the protein sequence, and its release
-        date. The resulting mRNA and protein pairs are further consolidated by removing
-        <span style="mso-spacerun: yes">&nbsp;</span><span style="mso-spacerun:
-        yes">&nbsp;</span><span style="mso-spacerun: yes">&nbsp;</span>duplicated
-        entries with identical CDS region.</p>
-        <h2>Credits</h2>
-        <p>The UCSC Known Genes track is produced using <span
-        style="mso-spacerun: yes">&nbsp;</span>protein data from UniProt and
-        mRNA data from NCBI RefSeq and GenBank.</p>
-        <h2>Data Use Restrictions</h2>
-        <p>The UniProt entries in this annotation track are copyrighted. They
-        are produced through a collaboration between the Swiss Institute of
-        Bioinformatics and the EMBL Outstation - the European Bioinformatics
-        Institute. There are no restrictions on their use by non-profit
-        institutions as long as their content is in no way modified and this
-        statement is not removed. Usage by and for commercial entities requires
-        a license agreement (see <a href="http://www.isb-sib.ch/announce/"
-        target="_blank">http://www.isb-sib.ch/announce/</a> or send an email to
-        <a href="mailto:license@isb-sib.ch">license@isb-sib.ch</a>).</p>
-        <h2>References</h2>
-        <p>Benson DA, Karsch-Mizrachi I, Lipman DJ, Ostell J, Wheeler DL.
-        (2004) <a
-        href="http://nar.oupjournals.org/cgi/content/full/32/suppl_1/D23"
-        target="_blank">GenBank: update</a>. <em>Nucleic Acids Res.</em> 32
-        Database issue:D23-6. </p>
+<H2>Description</H2>
+<P>
+The UCSC Known Genes track shows known protein-coding genes based on
+protein data from UniProt (SWISS-PROT and TrEMBL) and mRNA data from
+the NCBI reference sequences collection (RefSeq) and GenBank. 
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track follows the display conventions for 
+<A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction 
+tracks</A>. Black coloring indicates features that have corresponding entries 
+in the Protein Databank (PDB). Blue indicates features associated with
+mRNAs from NCBI RefSeq or (dark blue) items having associated proteins in 
+the SWISS-PROT database. The variation in blue shading of RefSeq items
+corresponds to the level of review the RefSeq record has undergone: 
+predicted (light), provisional (medium), or reviewed (dark). </P>
+<P>
+This track contains an optional codon coloring 
+feature that allows users to quickly validate and compare gene predictions.
+To display codon colors, select the <em>genomic codons</em> option from the
+<em>Color track by codons</em> pull-down menu. Click 
+<A HREF="../goldenPath/help/hgCodonColoring.html">here</A> for more 
+information about this feature. </P>
+
+<H2>Methods</H2>
+<P>
+mRNA sequences from RefSeq and GenBank were aligned
+against the $organism genome using blat. When a single mRNA aligned in
+multiple places, only alignments having at least 98% base identity with the 
+genomic sequence were kept. The mouse protein sequences were also aligned.</P>
+<P>
+The genomic mRNA and protein alignments were compared, and
+protein-mRNA pairings were determined from alignments with significant 
+overlap. CDS data for the mRNAs were obtained from RefSeq, 
+GenBank and UCSC protein-mRNA blat alignments.
+The initial set of UCSC Known Genes candidates, comprised of the mRNA 
+alignments with their CDS data, was then analyzed by a gene 
+check program to remove questionable candidates, such as those with in-frame 
+stop codons, missing start or stop codons, <em>etc</em>.</P>
+<P>
+Among multiple mRNAs referenced by a single protein, the best mRNA
+was chosen, based on a quality score derived from its length, the level
+of the match between its translation and the protein sequence, and its release
+date. The resulting mRNA and protein pairs were further consolidated by 
+removing duplicated entries with identical CDS regions to produce the final
+data set shown in this track.</P>
+
+<H2>Credits</H2>
+<P>
+The UCSC Known Genes track was produced using protein data from UniProt and
+mRNA data from NCBI RefSeq and GenBank.</P>
+
+<H2>Data Use Restrictions</H2>
+<P>
+The UniProt entries in this annotation track are copyrighted. They
+are produced through a collaboration between the Swiss Institute of
+Bioinformatics and the EMBL Outstation - the European Bioinformatics
+Institute. There are no restrictions on their use by non-profit
+institutions as long as their content is in no way modified and this
+statement is not removed. Usage by and for commercial entities requires
+a license agreement (see <A HREF="http://www.isb-sib.ch/announce/"
+TARGET="_blank">http://www.isb-sib.ch/announce/</A> or send an email to
+<A HREF="mailto:license@isb-sib.ch">license@isb-sib.ch</A>).  </P>
+
+<H2>References</H2>
+<P>
+Benson, D.A., Karsch-Mizrachi, I., Lipman, D.J., Ostell, J., and 
+Wheeler, D.L. 
+<A HREF="http://nar.oupjournals.org/cgi/content/full/32/suppl_1/D23" 
+TARGET=_blank>GenBank: update</A>. <em>Nucleic Acids Res.</em> <B>32</B>,
+D23-6 (2004).</P>
+<P>
+Kent, W.J.
+<A HREF="http://www.genome.org/cgi/content/abstract/12/4/656" 
+TARGET=_blank>BLAT - the BLAST-like alignment tool</A>.
+<em>Genome Res.</em> <B>12</B>(4), 656-664 (2002).</P>
+
