@@ -217,7 +217,8 @@ void pfParseDump(struct pfParse *pp, int level, FILE *f);
 void pfParseDumpOne(struct pfParse *pp, int level, FILE *f);
 /* Dump out single pfParse record at given level of indent. */
 
-struct pfParse *pfParseProgram(struct pfCompile *pfc, char *builtinCode, char *fileName);
-/* Return parse tree of file and any files gone into. */
+struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
+	struct pfParse *parent, struct pfScope *scope);
+/* Tokenize and parse given source. */
 
 #endif /* PFPARSE_H */

@@ -16,6 +16,7 @@
 #include "cCoder.h"
 #include "pfPreamble.h"
 #include "defFile.h"
+#include "parseInto.h"
 
 
 int endPhase = 10;
@@ -192,32 +193,32 @@ pfc = pfCompileNew();
 if (endPhase < 2)
     return;
 verbose(2, "Phase 2 - parsing\n");
-program = pfParseProgram(pfc, fetchBuiltinCode(), fileName);
+program = pfParseInto(pfc, fetchBuiltinCode(), fileName);
 pfParseDump(program, 0, parseF);
 carefulClose(&parseF);
 if (endPhase < 3)
     return;
-verbose(2, "Phase 3 - binding names\n");
+verbose(2, "Phase 3 - generating def file\n");
+pfMakeDefFile(pfc, program->children->next, defFile);
+if (endPhase < 4)
+    return;
+verbose(2, "Phase 4 - binding names\n");
 pfBindVars(pfc, program);
 pfParseDump(program, 0, boundF);
 carefulClose(&boundF);
-if (endPhase < 4)
-    return;
-verbose(2, "Phase 4 - type checking\n");
-pfTypeCheck(pfc, &program);
 if (endPhase < 5)
     return;
-verbose(2, "Phase 5 - polymorphic, para, and flow checks\n");
+verbose(2, "Phase 5 - type checking\n");
+pfTypeCheck(pfc, &program);
+if (endPhase < 6)
+    return;
+verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
 pfCheckScopes(pfc, pfc->scopeList);
 pfCheckParaFlow(pfc, program);
 pfParseDump(program, 0, typeF);
 carefulClose(&typeF);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
-if (endPhase < 6)
-    return;
-verbose(2, "Phase 6 - generating def file\n");
-pfMakeDefFile(pfc, program->children->next, defFile);
 if (endPhase < 7)
     return;
 verbose(2, "Phase 7 - C code generation\n");

@@ -104,7 +104,6 @@ if (extends != NULL)
     findSpanningTokens(extends, &start, &end);
 printTokenRange(f, start, end);
 fprintf(f, "\n{\n");
-uglyf("Printing class body\n");
 rPrintDefs(f, body, TRUE);
 fprintf(f, "}\n");
 }
@@ -113,10 +112,8 @@ static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit)
 /* Print definitions . */
 {
 struct pfParse *pp;
-uglyf("rPrintDefs %s\n", pfParseTypeAsString(parent->type));
 for (pp = parent->children; pp != NULL; pp = pp->next)
     {
-    uglyf(" printing %s\n", pfParseTypeAsString(pp->type));
     switch (pp->type)
         {
 	case pptVarInit:
