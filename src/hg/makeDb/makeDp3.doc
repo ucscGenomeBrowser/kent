@@ -612,7 +612,20 @@ dp3.downloadDir = dp3
     # Clean up:
     rm -rf work/initial.dp3
 
-    # no ESTs.
+# ADDED 4/22/05
+    # This is an -initial run, EST only:
+    nice bin/gbAlignStep -srcDb=genbank -type=est -initial dp3 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad dp3
+    featureBits dp3 intronEst
+#154814 bases of 134584124 (0.115%) in intersection
+    featureBits dp3 est
+#235099 bases of 134584124 (0.175%) in intersection
+    # Clean up:
+    rm -rf work/initial.dp3
 
 
 # MAKE GCPERCENT (DONE 11/15/04 angie)
