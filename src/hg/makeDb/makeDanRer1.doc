@@ -22,6 +22,10 @@ exit; # don't actually run this like a script :)
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-05-24, hartera)
 # CREATE ChrM.agp (DONE, 2004-05-27, hartera)
 # Add "chr" prefix to chrM.agp (DONE, 2004-07-06, hartera)
+# Error reported by a user for danRer2, also a problem in danRer1: 
+# chrM.agp is space delimited rather than tab delimited so correct this. NCBI 
+# defines the agp format as being tab delimited. (DONE, 2005-04-25, hartera)
+    ssh kksilo
     mkdir /cluster/data/danRer1/M
     cd /cluster/data/danRer1/M
     # go to http://www.ncbi.nih.gov/ and search Nucleotide for
@@ -52,6 +56,13 @@ M       1       16596	1       F	AC024175.3      1       16596	+
     perl -pi.bak -e 's/M/chrM/' ./M/chrM.agp
     # check file then remove backup
     rm ./M/chrM.agp.bak
+    # chrM.agp is space delimited instead of tab delimited
+    # so correct this (hartera, 2005-04-25)
+    cd /cluster/data/danRer1/M
+    # edit chrM.agp and change field delimiters from spaces to tabs.
+    # add this new file to zipped files of agp and get it pushed to the
+    # downloads area - see "MAKE DOWNLOADABLE SEQUENCE FILES" section of     
+    # this make doc.
 
 # SPLIT AGP FILES BY CHROMOSOME (DONE, 2004-05-26, hartera)
     ssh kksilo
@@ -1885,6 +1896,8 @@ table ctgPos2
 
 # BACENDS (DONE, 2004-07-28, hartera)
 # Added bacEndPairsBad table (DONE, 2004-08-02, hartera)
+# EXTENDED bacCloneXRef TABLE TO INCLUDE MORE ALIASES, UNISTS ID AND CONTIG
+# (DONE, 2005-04-25, hartera)
 # provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
@@ -2107,7 +2120,8 @@ table ctgPos2
     # 203683 singles.txt
     # 179170 singles.txt.uniq
     perl removeReplicates.pl singles.txt.uniq bacEndSingles \
-                             > singlesNoReps.bed                                   hgsql -N -e "select chrom, chromStart, chromEnd, name, strand from \
+                             > singlesNoReps.bed                                   
+    hgsql -N -e "select chrom, chromStart, chromEnd, name, strand from \
           bacEndPairsBad order by name, chrom, chromStart;" bacs_rah \
           > badPairs.txt
     sort badPairs.txt | uniq -c > badPairs.txt.uniq
@@ -2229,7 +2243,7 @@ table bacCloneXRef
 "BAC clones external names, internal sequence names and Genbank accessions"
     (
     string extName;       "External name for BAC clone"
-    string intName;       "Internal sequncing name for BAC clone"
+    string intName;       "Internal sequencing name for BAC clone"
     string acc;         "Genbank accession for the BAC End"
     )
 '_EOF_'
@@ -2237,7 +2251,6 @@ table bacCloneXRef
     cd $HOME/kent/src/hg/lib
     autoSql bacCloneXRef.as bacCloneXRef
     cp bacCloneXRef.h ../inc
-    # edit bacCloneXRef.sql to add INDEX(extName) to indices
     # edit bacCloneXRef.sql to add INDEX(extName) to indices
     # add and commit to cvs bacCloneXRef.as, .sql, .c and .h
     cd /cluster/data/danRer1/bed/ZonLab/bacends
@@ -2325,7 +2338,234 @@ end
     mv raw.psl clusterBacEnds.psl
     awk '{print $10, $14, $9;}' clusterBacEnds.psl > clusterBacEnds.out
     # look at blast results for e-value threshold of 0
-    # 
+# ADD ALIASES FOR BAC ENDS (DONE, 2005-04-25, hartera)
+# 2005-04-25 (hartera) add more aliases for BAC ends and the UniSTS ID
+# add this to the bacCloneXRef table.
+    # download the files of aliases from Sanger. URL for ftp site from
+    # Sean Humphray (sjh@sanger.ac.uk)  
+    ssh kksilo
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    wget --timestamp \
+      ftp://ftp.sanger.ac.uk/pub/human/zebrafish/ZFIN/README
+    wget --timestamp \
+      ftp://ftp.sanger.ac.uk/pub/human/zebrafish/ZFIN/clonemarkers.02.12.04.txt
+    wget --timestamp \
+      ftp://ftp.sanger.ac.uk/pub/human/zebrafish/ZFIN/ctgnames.02.12.04.txt
+    wget --timestamp \
+         ftp://ftp.sanger.ac.uk/pub/human/zebrafish/ZFIN/markers.02.12.04.txt
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    hgsql -N -e 'select name from bacEndPairs;' danRer1 > bacEnds.names
+    hgsql -N -e 'select name from bacEndSingles;' danRer1 >> bacEnds.names
+    hgsql -N -e 'select name from bacEndPairsBad;' danRer1 >> bacEnds.names
+    sort bacEnds.names | uniq > bacEnds.names.uniq
+    # 172990 unique names 
+    # 594614 bacEnd sequences to start with 
+    # some of the bacEnd sequences are replicates so count lfNames from table
+    hgsql -N -e 'select lfNames from bacEndPairs;' danRer1 > bacEnds.lfNames
+    hgsql -N -e 'select lfNames from bacEndSingles;' danRer1 >> bacEnds.lfNames
+    hgsql -N -e 'select lfNames from bacEndPairsBad;' danRer1 >> bacEnds.lfNames
+    # need to remove "," and put one name per line
+    perl -pi.bak -e 's/,/\n/g' bacEnds.lfNames
+    sort bacEnds.lfNames | uniq > bacEnds.lfNames.uniq
+    # 337751 bacEnds.lfNames.uniq 
+    # pslCheck has 2736 bad alignments
+    # from psl file
+    awk '{print $10;}' bacEnds.psl > bacEndsPsl.names
+    # remove first few lines with no names
+    sort bacEndsPsl.names | uniq > bacEndsPsl.names.uniq
+    # 457560 bacEndsPsl.names.uniq
+    # about 77% align - this is after filtering
+   # Add an alias table for BAC clones 
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/bacCloneAlias.as
+table bacCloneAlias
+"BAC clones aliases and associated STS aliases and external BAC clone names"
+    (
+    string alias;      "BAC clone alias (internal name) and STS aliases"
+    string name;       "External name for BAC clone"
+)
+'_EOF_'
+    # << this line makes emacs coloring happy
+    cd $HOME/kent/src/hg/lib
+    autoSql bacCloneAlias.as bacCloneAlias
+    cp bacCloneAlias.h ../inc
+    # edit bacCloneAlias.sql to add INDEX(alias) to indices
+    # edit bacCloneAlias.sql to add INDEX(name) to indices
+    # remove primary key, can not make a compound primary key by
+    # adding sangerName column since not all the BAC clones have this
+    # and it is not unique, more than one BAC clone can have the same 
+    # Sanger STS name. 
+    # Add a xref table to give external clone registry names, internal names
+    # sanger name, relationship between STS and BAC clone (method of finding
+    # STS), UniSTS ID, chromosomes(s) to which BAC clone is mapped by BLAT, 
+    # Genbank accession and STS primer sequences
+
+    cat << '_EOF_' > $HOME/kent/src/hg/lib/bacCloneXRef.as
+table bacCloneXRef
+"BAC clones and corresponding STS information"
+    (
+    string name;       	 	"External name for BAC clone"
+    string intName;       	"Internal Sanger FPC name"
+    string chroms;	  	"Chromosome(s) to which BAC is mapped by BLAT"
+    string genbank;           	"Genbank accession for the BAC Clone"
+    string sangerName;    	"Sanger STS name"
+    uint relationship;	  	"Relationship type - method of finding STS"
+    string uniStsId;      	"UniSTS ID(s) for STS"
+    string leftPrimer;	  	"STS 5' primer sequence"
+    string rightPrimer;   	"STS 3' primer sequence"
+    )
+'_EOF_'
+    # << this line makes emacs coloring happy
+    cd $HOME/kent/src/hg/lib
+    autoSql bacCloneXRef.as bacCloneXRef
+    cp bacCloneXRef.h ../inc
+    # edit bacCloneXRef.sql to add INDEX(name) to indices
+    # and remove primary key
+    # edit so that all fields except the relationship field can be null
+    # add and commit to cvs bacCloneXRef.as, .sql, .c and .h
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    wc -l *.02.12.04.txt
+    28305 clonemarkers.02.12.04.txt
+    167441 ctgnames.02.12.04.txt
+    12008 markers.02.12.04.txt
+    cp ../getBACInfo.pl  getBACInfo2.pl
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+ 
+    # create list of BAC clones in the tables with chromosome aligned to
+    hgsql -N -e 'select name, chrom from bacEndPairs;' danRer1 \
+          > bacClones.namesandchrom
+    hgsql -N -e 'select name, chrom from bacEndSingles;' danRer1 \
+          >> bacClones.namesandchrom
+    sort bacClones.namesandchrom | uniq > bacClones.namesandchrom.uniq
+    # use zfish_accs.txt provided by the Sanger Centre to create a list
+    # of BAC clone names, internal names and Genbank accessions
+    # extend getBACInfo.pl to add extended information 
+    perl getBACInfo.pl zfish_accs.txt > bacCloneXRef.txt
+    # write program to create bacCloneAlias.tab and bacCloneXRef.tab files
+    # to load into tables - zfishBacEndsandSts.c
+    # in $HOME/kent/src/hg/zfishBacEndsandSts
+
+    ssh kksilo
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    # get list of UniSTS IDs using aliases to search alias file
+    # print Sanger name, alias and UniSTS ID, use print_markers2.pl
+    # modified version of program written by Tony DiBiase (Boston 
+    # Children's Hospital)
+    cat << '_EOF_' > find_markers2.pl
+    # example:
+# cat markers.02.12.04.txt | perl find_markers.pl
+use strict;
+my $verbose = 0;
+my ($a, $b, $f, $l, $m, $s, $t, $aliases, @alias, @rest);
+while (<>) {
+    ($f, $l, $t, $m) = 0;
+    chomp; ($a, $b, $aliases, @rest) = split /\|/;
+    if ($verbose > 3) { printf "aliases $aliases \n"; }
+    @alias = split /;/, $aliases;
+    ALIAS: foreach $s (@alias) {
+        $_ = $s;
+        if (/[\D]+/) {
+            if ($verbose > 5) { printf "this $s \n"; }
+            $m = `grep $s /cluster/data/ncbi/UniSTS.2005-04-12/danRer/UniSTS_Danio_rerio.alias`;
+            if ($m) {
+                $f = 1; $t = $s; $l = $m;
+                if ($verbose) { printf "this $s found $m \n"; }
+                last ALIAS;
+            }
+        }
+    }
+    if ($f) { printf "$b\t$t\t$l"; }
+}
+'_EOF_'
+    chmod +x find_markers2.pl
+    cat markers.02.12.04.txt | perl find_markers2.pl > out
+    awk 'BEGIN {OFS = "\t"} {print $1, $3}' out > sangerandUniSTSId.txt
+    # then reformat output as some sanger names are semicolon separated
+    # and sometimes a UniSTS ID appears on another line but is another ID 
+    # for the last line with a sanger name on it
+    cat << '_EOF_' > formatUniSTS.pl
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+my @ids;
+while (<STDIN>)
+{
+my $l = $_;
+my @fields = split(/\t/, $l);
+                                                                                
+# if the first field is a sanger STS name
+if ($fields[0] =~ /^((et|st)ID[0-9]{1,}\.?[0-9]{1,})/)
+   {
+   # first field may have more than one ID in it separated by semicolons
+   @ids = split(/;/, $fields[0]);
+   foreach my $i (@ids)
+      {
+      print "$i\t$fields[1]";
+      }
+   }
+if ($fields[0] =~ /^[0-9]+/)
+   {
+   foreach my $s (@ids)
+      {
+      print "$s\t$fields[0]\n";
+      }
+   }
+}
+'_EOF_'
+    chmod +x formatUniSTS.pl 
+    perl formatUniSTS.pl < sangerandUniSTSId.txt > sangerandUniSTSId.format
+ 
+    # FPC contig information (i.e. FPC contig number) from ctgnames file is 
+    # not included in the tables as these are dynamic and constantly 
+    # changing with the assembly.
+    nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.02.12.04.txt \
+      clonemarkers.02.12.04.txt markers.02.12.04.txt \
+      bacClones.namesandchrom.uniq zfish_accs.txt \
+      sangerandUniSTSId.format > zfishBacs.out
+    # output is in /cluster/bluearc/danRer1/bacends/out so copy over
+    # sort and uniq alias tab file
+    sort -k2 /cluster/bluearc/danRer1/bacEnds/out/bacAlias.tab \
+         | uniq > bacAlias.uniq.tab
+    cp /cluster/bluearc/danRer1/bacEnds/out/bacAlias.uniq.tab \
+       /cluster/bluearc/danRer1/bacEnds/out/bacXRef.tab .
+
+    ssh hgwdev
+    cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    hgsql danRer1 -e 'drop table bacCloneXRef'
+    hgsql danRer1 -e 'drop table bacCloneAlias'
+    hgsql danRer1 < $HOME/kent/src/hg/lib/bacCloneAlias.sql
+    hgsql danRer1 < $HOME/kent/src/hg/lib/bacCloneXRef.sql
+    nice hgsql danRer1 -e \
+          'load data local infile "bacAlias.uniq.tab" into table bacCloneAlias'
+    nice hgsql danRer1 -e \
+          'load data local infile "bacXRef.tab" into table bacCloneXRef'
+    cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
+    # edit trackDb.ra to add searches for the alias table
+# searchName bacPairsAliases
+# searchTable bacEndPairs
+# searchMethod exact
+# searchType bed
+# searchBoth 1
+# xrefTable bacCloneAlias
+# xrefQuery select name, alias from %s where alias like '%s'
+# searchPriority 9
+
+# searchName bacSinglesAliases
+# searchTable bacEndSingles
+# searchMethod exact
+# searchType bed
+# searchBoth 1
+# xrefTable bacCloneAlias
+# xrefQuery select name, alias from %s where alias like '%s'
+# searchPriority 9
+
+# commit trackDb.ra to CVS
+# make code changes to $HOME/kent/src/hg/hgc/hgc.c to display some of the 
+# alias and STS information from bacCloneXRef and bacCloneAlias tables on the
+# BAC ends tracks details pages.
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER1
 # (DONE, 2004-07-13, hartera)
@@ -2343,6 +2583,9 @@ end
     | hgsql -h genome-testdb hgcentraltest
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-07-20, hartera)
+# CORRECTION MADE TO chrM.agp FILE - MADE TAB DELIMITED INSTEAD OF
+# SPACE DELIMITED SO REPLACE OLD AGP FILE IN DOWNLOADS
+# (DONE, 2005-04-25, hartera)
     ssh kksilo
     cd /cluster/data/danRer1
     #- Build the .zip files
@@ -2414,6 +2657,28 @@ zip -j est.zip est.fa
     cd $gp/chromosomes
     md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+    # Remake just the chromAgp.zip with correct chrM.agp (2005-04-25,hartera)
+    ssh kksilo
+    cd /cluster/data/danRer1
+    rm /cluster/data/danRer1/zip/chromAgp.zip
+# chrom AGP's
+zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
+    ssh hgwdev
+    cd /cluster/data/danRer1/zip
+    #- Check zip file integrity:
+    foreach f (chromAgp.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l chromAgp.zip.test
+    # looks good
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer1
+    rm $gp/bigZips/chromAgp.zip
+    rm $gp/bigZips/md5sum.txt
+    cp -p chromAgp.zip $gp/bigZips
+    # go to directory with zip files and remake the md5sum.txt file
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
 
 # MAKE VSHG17 DOWNLOADABLES (DONE, 2004-07-20, hartera)
     ssh hgwdev
@@ -3560,6 +3825,214 @@ $6, $7, $8, $9, $10, "DrRW", $11, $12, $13, $14;} else {print;}}' chr1.fa.out > 
     hgLoadPsl -fastLoad -table=uniGene_dr danRer1 uniGene.lifted.pslReps.psl
 
 # STS Markers (in progress, 2004-08-09, hartera)
+# download new files (2005-04-12, hartera)
+
+   # Check NCBI for latest update for STS makers in dbSTS.
+   # Our latest version is in store5 for space
+    ssh eieio
+    mkdir -p /cluster/store5/sts.2005-04-12
+    ln -s /cluster/store5/sts.2005-04-12 /cluster/data/ncbi
+    cd /cluster/data/ncbi/sts.2005-04-12
+    # The dbSTS.sts does not have as many ids as in the version 
+    # on the NCBI ftp site so get new version.
+    # update from NCBI
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+    wget ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+    wget ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
+    gunzip sts.gz
+    mv sts dbSTS.fa
+    # check against sts.9 and a number of new Danio rerio markers added
+    mkdir -p /cluster/store5/UniSTS.2005-04-12
+    ln -s /cluster/store5/UniSTS.2005-04-12 /cluster/data/ncbi
+    cd /cluster/data/ncbi/UniSTS.2005-04-12
+    # sts and aliases files were last updated on 04/12/05 by NCBI
+    wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+    wget --timestamp ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+    # these mapping panels files were last updated 03/16/05 by NCBI
+    wget --timestamp -r l1 \
+ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
+    mkdir danRer
+    mv ./ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/* \
+       ./danRer
+    rm -r ftp.ncbi.nih.gov
+    # No difference between UniSTS and sts files so move dbSTS.fa to UniSTS dir
+    # convert dbSTS.fa file to easier reading format, and get accessions
+    cd /cluster/data/ncbi/UniSTS.2005-04-12
+    mv /cluster/data/ncbi/sts.2005-04-12/dbSTS.fa .
+    perl /cluster/bin/scripts/convertGbFaFile dbSTS.fa > dbSTS.convert.fa
+    grep ">" dbSTS.convert.fa | cut -f 2 -d ">" > dbSTS.acc
+    
+    ssh kksilo
+    mkdir -p /cluster/store8/danRer1/STSmarkers
+    ln -s /cluster/store8/danRer1/STSmarkers \
+          /cluster/data/danRer1/bed/STSmarkers
+    mkdir /cluster/data/danRer1/bed/STSmarkers/downloads
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads
+    # use UniSTSParse.pl to get alias names
+    cp /cluster/data/mm5/bed/STSmarkers/downloads/UniSTSParse.pl .
+    cp /cluster/data/ncbi/UniSTS.2005-04-12/UniSTS.sts .
+    cp /cluster/data/ncbi/UniSTS.2005-04-12/UniSTS.aliases .
+    # create a UniSTS_zebrafish.sts by grepping for lines with "Danio"
+    grep "Danio" UniSTS.sts > UniSTS_Danio_rerio.sts
+    perl ./UniSTSParse.pl UniSTS_Danio_rerio.sts UniSTS.aliases \
+         > UniSTS_Danio_rerio_alias.0
+    cat UniSTS_Danio_rerio_alias.0 | sort -u | sort -n \
+        > UniSTS_Danio_rerio.alias
+    # some UniSTS markers for zebrafish have only primers but no name and no accession
+    # Download ZFIN data for all markers for the six mapping panels
+    wget --timestamp http://zfin.org/data_transfer/Downloads/mappings.txt
+    # Download ZFIN marker mappings to Genbank accessions
+    wget --timestamp http://zfin.org/data_transfer/Downloads/genbank.txt
+    # Download file of old and new names for STS markers from ZFIN
+    wget --timestamp http://zfin.org/data_transfer/Downloads/marker_alias.txt 
+    grep "STS" genetic_markers.txt > zfinIDSTS.txt
+    # make file of mapping data
+    foreach f (/cluster/data/ncbi/UniSTS.2004-10-06/danRer1/*.txt)
+       cat $f >> danRer1STSMaps.txt
+    end
+    mv /cluster/data/ncbi/UniSTS.2004-10-06/danRer1/danRer1STSMaps.txt \
+       /cluster/data/danRer1/bed/STSmarkers/downloads
+    
+    # Need to download zebrafish ZFIN IDs mapped to GenBank
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads
+    wget --timestamp http://zfin.org/data_transfer/Downloads/genbank.txt 
+    # Download ZFIN IDs and mapping panels
+    wget --timestamp http://zfin.org/data_transfer/Downloads/mappings.txt
+    # Create new tables for STS so there are less columns in Info table
+    # Download file of old and new names for STS markers
+    wget --timestamp http://zfin.org/data_transfer/Downloads/marker_alias.txt 
+    # sort and uniq mappings.txt as there are duplicate lines
+    sort mappings.txt | uniq > mappings.uniq.txt 
+    # make a .as file for stsMarkers which is similar to the hg17 stsInfo2 table
+
+    # align primer sequences
+    # create a file of UniSTS IDs and the primer sequences
+    
+    ssh eieio
+    cd /cluster/data/ncbi/UniSTS.2005-04-12/danRer
+    cp /cluster/data/danRer1/bed/STSmarkers/downloads/UniSTS_Danio_rerio* .
+    awk 'BEGIN {OFS="\t"} {print $1, $2, $3}' UniSTS_Danio_rerio.sts > zfish.primers
+    # strip out N's and wobbles (KS) as isPcr can't handle them
+    # only 1 K, no Ns and no S. K is T or G so just switch for T and if it is a
+    # G in that position will just get a mismatch, UniSTS ID 204670
+    sed -e 's/K/T/' zfish.primers > zfish.primers.isPcr
+    # keep getting error where    
+    # bad char in reverse seq: aacckgagcgggtcagct
+    # this is the complement of one of the reverse primers, M->K
+    # use findChars.pl to find primers with characters other than ACTG
+cat > findChars.pl >> 'EOF'
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+my @a = </cluster/bluearc/danRer1/stsMarkers/primers/primers_*>;
+@a = glob("/cluster/bluearc/danRer1/stsMarkers/primers/primers_*");
+while (defined(my $nextName = </cluster/bluearc/danRer1/stsMarkers/primers/primers_*>))
+{
+print "Processing $nextName ...\n";
+my $file = open(FILE, $nextName) || die "Can not open $nextName: $!\n";
+while (<FILE>)
+   {
+   my $l = $_;
+   chomp $l;
+   if ($l =~ /[^ACTG0-9\t]/)
+      {
+      print "$l\n";
+      }
+   }
+}
+'EOF'
+# << for emacs
+    chmod +x findChars.pl
+    perl findChars.pl
+    # output is:
+    # Processing /cluster/bluearc/danRer1/stsMarkers/primers/primers_al ...
+    # 204670  TGCTGTCGRCATTTACTGGAAC  TGCTTTATCACGTACAGCTGA
+    # Processing /cluster/bluearc/danRer1/stsMarkers/primers/primers_an ...
+    # 238222  GTATAGTAGTGTGTATGAGCATCTGG      AGCTGACCCGCTCMGGTT
+    # since R is A or G and M is C or A
+    # so change R -> A and M -> C
+    perl -pi.bak -e 's/R/A/' zfish.primers.isPcr
+    perl -pi.bak -e 's/M/C/' zfish.primers.isPcr
+                                                            
+    # only one primer with length < 10, so keep. looks like isPcr can now handle
+    # shorter primers
+    mkdir -p /cluster/bluearc/danRer1/stsMarkers/primers
+    cd /cluster/bluearc/danRer1/stsMarkers/primers
+    split -l 2000 \
+       /cluster/data/ncbi/UniSTS.2005-04-12/danRer/zfish.primers.isPcr primers_
+    # keep getting error where    
+    # bad char in reverse seq: aacckgagcgggtcagct
+    # this is the complement of one of the reverse primers, M->K
+    # use findChars.pl to find primers with characters other than ACTG
+cat > findChars.pl >> 'EOF'
+#!/usr/bin/perl -w
+use strict;
+                                                                                
+my @a = </cluster/bluearc/danRer1/stsMarkers/primers/primers_*>;
+@a = glob("/cluster/bluearc/danRer1/stsMarkers/primers/primers_*");
+while (defined(my $nextName = </cluster/bluearc/danRer1/stsMarkers/primers/primers_*>))
+{
+print "Processing $nextName ...\n";
+my $file = open(FILE, $nextName) || die "Can not open $nextName: $!\n";
+while (<FILE>)
+   {
+   my $l = $_;
+   chomp $l;
+   if ($l =~ /[^ACTG0-9\t]/)
+      {
+      print "$l\n";
+      }
+   }
+}
+'EOF'
+# << for emacs
+    chmod +x findChars.pl
+    perl findChars.pl
+    # output is:
+    # Processing /cluster/bluearc/danRer1/stsMarkers/primers/primers_al ...
+    # 204670  TGCTGTCGRCATTTACTGGAAC  TGCTTTATCACGTACAGCTGA
+    # Processing /cluster/bluearc/danRer1/stsMarkers/primers/primers_an ...
+    # 238222  GTATAGTAGTGTGTATGAGCATCTGG      AGCTGACCCGCTCMGGTT
+    # since R is A or G and M is C or A
+    # so change R -> A and M -> C
+    perl -pi.bak -e 's/R/A/' \
+         /cluster/bluearc/danRer1/stsMarkers/primers/primers_al
+    perl -pi.bak -e 's/M/C/' \
+         /cluster/bluearc/danRer1/stsMarkers/primers/primers_an
+    rm /cluster/bluearc/danRer1/stsMarkers/primers/*.bak                                                      
+    ssh kk
+    cd /cluster/data/danRer1/bed/STSmarkers/
+    mkdir primers
+    cd primers
+    mkdir run
+    cd run
+    ls -1S /iscratch/i/danRer1/trfFa/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/danRer1/stsMarkers/primers/primers_* > primers.lst
+cat > template << 'EOF'
+#LOOP
+/cluster/home/hartera/bin/i386/isPcr -out=psl -minPerfect=5 -maxSize=5000 -tileSize=10 -ooc=/iscratch/i/danRer1/10.ooc -stepSize=5 $(path1) $(path2) {check out line /cluster/bluearc/danRer1/stsMarkers/primers/out/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+# << for emacs
+    # may need to add -mask=lower option
+
+    mkdir -p /cluster/bluearc/danRer1/stsMarkers/primers/out
+    gensub2 contigs.lst primers.lst template jobList
+    para create jobList
+    # 4340 jobs 
+    para try, para check, para push, para check etc.
+# Completed: 4340 of 4340 jobs
+# CPU time in finished jobs:       6296s     104.93m     1.75h    0.07d  0.000 y
+# IO & Wait Time:                 14235s     237.26m     3.95h    0.16d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:            95s       1.58m     0.03h    0.00d
+
+    # may need to add -mask=lower option
+    
+
+
    # Check NCBI for latest update for STS makers in dbSTS.
    # Our latest version is in store5 for space
     ssh eieio
@@ -3638,7 +4111,8 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Danio_rerio/
     # Download ZFIN IDs and mapping panels
     wget --timestamp http://zfin.org/data_transfer/Downloads/mappings.txt
     # Create new tables for STS so there are less columns in Info table
- 
+    # Download file of old and new names for STS markers
+    wget --timestamp http://zfin.org/data_transfer/Downloads/marker_alias.txt 
     # make a .as file for stsMarkers which is similar to the hg17 stsInfo2 table
 
     cat << '_EOF_' > $HOME/kent/src/hg/lib/stsMarkers.as
@@ -3821,6 +4295,16 @@ cat > template << 'EOF'
     cut -f 4 stsMarkers2.final | sort -n | uniq > stsMarkers2.found
     wc -l stsMarkers2.found
     # 16310 stsMarkers2.found out of 17311 
+
+    # get mappings.txt from ZFIN
+    ssh kksilo
+    mkdir /cluster/data/danRer1/bed/STSmarkers/downloads/panels
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads/panels
+    foreach m (GAT HS T51 LN54 MGH MOP)
+        echo "# Map Name: ${m}" >> $m.txt
+        grep $m ../mappings.txt >> $m.txt
+    end
+    cat *.txt >> zfin.maps
 
 # ENABLE AUTO BUILD MGC GENES TRACK (DONE markd)
    - add the following lines to danRer1 entry in /cluster/data/genbank/etc/genbank.conf
