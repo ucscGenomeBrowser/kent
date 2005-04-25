@@ -41,6 +41,9 @@ exit; # don't actually run this like a script :)
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2004-10-18, hartera)
 # DOWNLOAD SEQUENCE AND CREATE FILES AGAIN (hartera, 2004-11-30)
 # ADD chrM.chunks.agp (DONE, 2004-12-06, hartera)
+# Error reported by a user: chrM.agp is space delimited rather
+# than tab delimited so correct this. NCBI defines the agp format as 
+# being tab delimited. (DONE, 2005-04-25, hartera)
      ssh kksilo
      mkdir -p /cluster/data/danRer2/M
      cd /cluster/data/danRer2/M
@@ -72,6 +75,13 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
      awk 'BEGIN {OFS="\t"} \
         {print $1, $2, $3, $4, $5, $6, $7, $8, $1, $7, $8}' ../chrM.agp \
          > chrM.chunks.agp
+     # chrM.agp is space delimited instead of tab delimited 
+     # so correct this (hartera, 2005-04-25)
+     cd /cluster/data/danRer2/M
+     # edit chrM.agp and change field delimiters from spaces to tabs.
+     # add this new file to zipped files of agp and get it pushed to the
+     # downloads area - see "MAKE DOWNLOADABLE SEQUENCE FILES" section of 
+     # this make doc. 
 
 # Create list of chromsosomes (DONE, 2004-10-18, hartera)
 # Add "M" for mitochondrion chromosome (2004-10-25, hartera)
@@ -1689,6 +1699,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # refGene:cds 0.468%, netMm5 30.565%, both 0.405%, cover 86.40%, enrich 2.83x  
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-12-14, hartera)
+# CORRECTION MADE TO chrM.agp FILE - MADE TAB DELIMITED INSTEAD OF
+# SPACE DELIMITED SO REPLACE OLD AGP FILE IN DOWNLOADS 
+# (DONE, 2005-04-25, hartera)
     ssh kksilo
     cd /cluster/data/danRer2
     #- Build the .zip files
@@ -1731,6 +1744,13 @@ zip -j est.zip est.fa
     # << this line makes emacs coloring happy
     csh ./jkStuff/zipAll.csh |& tee ./jkStuff/zipAll.log
     cd zip
+    # remake just the agp files zip with correcte chrM.agp (2005-04-25,hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2
+    rm /cluster/data/danRer2/zip/chromAgp.zip
+# chrom AGP's
+zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
+    
     #- Look at zipAll.log to make sure all file lists look reasonable.
     # Make upstream files and Copy the .zip files to
     # hgwdev:/usr/local/apache/...
@@ -1759,6 +1779,28 @@ zip -j est.zip est.fa
     cd $gp/chromosomes
     md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+    # Remake just the chromAgp.zip with correct chrM.agp (2005-04-25,hartera)
+    ssh kksilo
+    cd /cluster/data/danRer2
+    rm /cluster/data/danRer2/zip/chromAgp.zip
+# chrom AGP's
+zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
+    ssh hgwdev
+    cd /cluster/data/danRer2/zip
+    #- Check zip file integrity:
+    foreach f (chromAgp.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l chromAgp.zip.test
+    # looks good
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer2
+    rm $gp/bigZips/chromAgp.zip
+    rm $gp/bigZips/md5sum.txt
+    cp -p chromAgp.zip $gp/bigZips
+    # go to directory with zip files and remake the md5sum.txt file
+    cd $gp/bigZips
+    md5sum *.zip > md5sum.txt
 
 # MAKE VSHG17 DOWNLOADABLES (DONE, 2004-12-14, hartera)
 # REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat 
@@ -2492,17 +2534,21 @@ axtChain $1 /iscratch/i/danRer2/nib \
     # copy BAC ends sequence from previous assembly
     cp /cluster/data/danRer1/bed/ZonLab/bacends/bacends.fa .
     faSize bacends.fa
-    # 486978153 bases (39070196 N's 447907957 real) in 594614 sequences in
-    # 1 files Total size: mean 819.0 sd 230.3 min 0 (zKp108-H09.za)
-    # max 5403 (zC259G13.zb) median 796
+    # 486978153 bases (39070196 N's 447907957 real 447907957 upper 0 lower) 
+    # in 594614 sequences in 1 files
+    # Total size: mean 819.0 sd 230.3 min 0 (zKp108-H09.za) max 5403 (zC259G13.zb) median 796
     # N count: mean 65.7 sd 154.7
-    mkdir -p /iscratch/i/danRer2/bacends
+    # U count: mean 753.3 sd 302.6
+    # L count: mean 0.0 sd 0.0
 
+    ssh kkr1u00
+    cd /cluster/data/danRer2/bed/ZonLab/bacends
+    mkdir -p /iscratch/i/danRer2/bacends
     # if not split alreday, split up sequence for cluster runs
     faSplit sequence bacends.fa 20 /iscratch/i/danRer2/bacends/bacends
-    ssh kkr1u00
     # iSync bacends to kilokluster
-    iSync
+    /cluster/bin/iSync
+
     ssh kk
     cd /cluster/data/danRer2/bed/ZonLab/bacends
     ls -1S /iscratch/i/danRer1/bacends/*.fa > bacends.lst
@@ -2515,35 +2561,52 @@ axtChain $1 /iscratch/i/danRer2/nib \
    # << this line keeps emacs coloring happy
     mkdir psl
     gensub2 genome.lst bacends.lst template jobList
-    cd /cluster/data/danRer2/bed/ZonLab/bacends
     para create jobList
     para try, check, push, check, ...
 # para time
 # Completed: 5980 of 5980 jobs
-# CPU time in finished jobs:    5427997s   90466.61m  1507.78h   62.82d  0.172 y
-# IO & Wait Time:                516171s    8602.85m   143.38h    5.97d  0.016 y
-# Average job time:                 994s      16.57m     0.28h    0.01d
-# Longest job:                    10284s     171.40m     2.86h    0.12d
-# Submission to last job:         12422s     207.03m     3.45h    0.14d
+# CPU time in finished jobs:    5317533s   88625.55m  1477.09h   61.55d  0.169 y
+# IO & Wait Time:                 34446s     574.10m     9.57h    0.40d  0.001 y
+# Average job time:                 895s      14.92m     0.25h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            9892s     164.87m     2.75h    0.11d
+# Submission to last job:         12309s     205.15m     3.42h    0.14d
   
     # back on kksilo, filter and lift results:
     ssh kksilo
     cd /cluster/data/danRer2/bed/ZonLab/bacends
-    # pslSort in progress
     pslSort dirs raw.psl temp psl
+    # took 9 hours
     # tried minCover=0.6 but only 55% of sequences were aligned
     # but with minCover=0.4, 77% of seqeunces are aligned
     # No minCover, aligns 90% of sequences but with a large number
     # of extra alignments - noise
     pslReps -nearTop=0.02 -minCover=0.40 -minAli=0.85 -noIntrons raw.psl \
       bacEnds.psl /dev/null
-    liftUp bacEnds.lifted.psl /cluster/data/danRer1/jkStuff/liftAll.lft \
+    liftUp bacEnds.lifted.psl /cluster/data/danRer2/jkStuff/liftAll.lft \
            warn bacEnds.psl
+    # Got 299 lifts in /cluster/data/danRer2/jkStuff/liftAll.lft
     wc -l bacEnds.lifted.psl
-
+    # 3806457 bacEnds.lifted.psl
     pslCheck bacEnds.lifted.psl >& pslCheck.log
-    # 7344 problems with overlapping exons reported by pslCheck
-
+    # 536 problems with overlapping exons reported by pslCheck
+    awk '{print $10;}' bacEnds.lifted.psl | sort | uniq > bacEnds.names.uniq
+    # remove header lines    
+    wc -l bacEnds.names.uniq
+    # 464067 bacEnds.names.uniq
+    grep '>' bacends.fa | wc -l
+    # 594614 bacends.fa
+    # 78% of BAC ends have aligned
+    wc -l raw.psl
+    # try no min cover
+    # get 535465 names, 90% of markers aligned
+    # 13969951 bacEndsNoMinCover.psl
+    # 3806457 bacEnds.psl
+    # so a lot of extra alignments
+    # try minCover=0.2 
+    # 501415 aligned, 84%, not too many extra alignments
+    # 4515874 bacEndsMinCover20.psl
+    # try minCover=0.1 
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
     cd /tmp
@@ -3048,3 +3111,73 @@ chainSome $(path1)
         hgsql danRer2
     hgsql danRer2 -e "SELECT COUNT(*) FROM contigAcc"
         # 21333
+
+# KNOWN GENES TRACK (in progress, 2005-02-14, hartera)
+# Found number of loci for Ensembl and mRNA by clustering
+    cd $HOME/kent/src/hg/near/hgClusterGenes
+    hgClusterGenes -noProt danRer2 ensGene ensCluster ensCanonical 
+    # creates 23675 clusters, there are 32062 entries in ensGene
+    # remove extra tables created by this program
+    echo 'drop table ensCluster;' | hgsql danRer2
+    echo 'drop table ensCanonical;' | hgsql danRer2
+    cd ./kent/src/hg/geneBounds/clusterRna
+    clusterRna danRer2 rna.bed est.bed -noEst
+    wc -l rna.bed
+    # 10,383 clusters, RefGene has 8397 accessions so that is about right
+    rm *.bed
+    # Therefore Ensembl should be the basis for the Known Genes tracks
+    # since it represents the most loci.
+    # move Ensembl to be the first track on the browser display and 
+    # with default visibility of pack 
+    # edit zebrafish/danRer2/trackDb.ra
+    # track ensGene
+    # shortLabel Ensembl Genes
+    # longLabel Ensembl Gene Predictions
+    # group genes
+    # priority 32.8
+    # visibility pack
+    # color 150,0,0
+    # type genePred ensPep
+    # url http://www.ensembl.org/perl/transview?transcript=$$
+    # hgGene on
+    
+    cd kent/src/hg/hgGene
+    # edit hgGene.c to add special case of ensGene table for Zebrafish 
+    # from kent/src/hg/near/makeNear.doc
+    ssh hgwdev
+    cd kent/src/hg/near/hgNear/hgNearData
+    mkdir Zebrafish
+    cvs add Zebrafish
+    cd Zebrafish
+    cp ../C_elegans/genome.ra .
+    # edit this to be specific for zebrafish and commit to CVS
+    cvs add genome.ra
+    cvs commit genome.ra
+    cd $HOME/kent/src/hg/near/hgClusterGenes
+    # Cluster together various alt splice forms
+    hgClusterGenes -noProt danRer2 ensGene ensIsoforms ensCanonical
+    # Got 23675 clusters, from 32062 genes in 28 chromosomes
+    # need to add genome.ra in hgGeneData
+    cd $HOME/kent/src/hg/hgGene/hgGeneData
+    mkdir Zebrafish
+    cp ../C_elegans/genome.ra .
+    # edit genome.ra and commit to CVS
+    cp ../C_elegans/links.ra .
+    # edit links.ra and commit to CVS
+    # download protein accessions from Ensembl
+    # go to http://www.ensembl.org/Multi/martview
+    # select Ensembl 29 and Danio rerio genes (ZFISH 4)
+    # go to Features and select Ensembl Gene ID from Ensembl Attributes, 
+    # then from External References, select UniProt/Swiss-ProtAC, 
+    # and UniProt AC and RefSeq DNA accession 
+    # copy to this directory and unizip
+    gunzip dr2EnsemblUniProt.gz
+    wc -l dr2EnsemblUniProt
+    # 34115 dr2EnsemblUniProt
+    awk 'BEGIN{FS="\t"} {print $3;}' dr2EnsemblUniProt > ensembl.uniprot
+    sort ensembl.uniprot | uniq > ensembl.uniprot.uniq
+    # 4361 
+    # download uniProt AC, UniProt/SPTREMBL ID, UniProt/Swiss-Prot ID
+    # remove blank lines from ensembl.uniprot
+    sed -e '/^$/d' ensembl.uniprot > ensembl.uniprot.accsonly
+    # there are 6171 UniProt accessions so some Ensembl IDs share accessions
