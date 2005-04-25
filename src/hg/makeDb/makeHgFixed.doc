@@ -16,7 +16,7 @@
 hgGnfMicroarray gnfHumanU95AllExps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95
 # Convert these to ratios using the median of medians of non-cancerous
 # cell types as the denominator as so:
-cd ~/src/hg/makeDb/hgRatioMicroarray
+cd ~/src/hg/makDb/hgRatioMicroarray
 hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra
 # Take the median value over multiple replicants and put in this table:
 cd ../hgMedianMicroarray
@@ -158,7 +158,7 @@ hgMedianMicroarray hgFixed mouseRinnSexRatio mouseRinnSexExps mouseRinnSex.ra mo
 
 # D. melanogaster full euchromatic expression profile (FEEP) -- 
 # Stolc et al. 2004.  
-# Loaded up absolute tables directly from files downloaded from 
+1# Loaded up absolute tables directly from files downloaded from 
 # http://genome.med.yale.edu/FEEP/FEEP.html --
 # see /projects/compbio/data/microarray/flyFEEP/README .
 # Extract ratio from absolute:
@@ -175,3 +175,41 @@ hgMedianMicroarray hgFixed flyFeepAllRatio flyFeepAllExps flyFeepMed.ra \
   flyFeepMedianRatio flyFeepMedianExps
 # cvs add and check in flyFeepMed.ra
 
+# Human data from Shyamsundar R, et al. (2005) Genome Biol 6(3):R22
+mkdir -p /projects/compbio/data/microarray/shyamsundarEtAl
+cd /projects/compbio/data/microarray/shyamsundarEtAl
+wget ftp://smd-ftp.stanford.edu/smd/publications/426/3130/exptsetno_3130.tar.gz
+wget ftp://smd-ftp.stanford.edu/smd/publications/426/3130/exptset_3130.meta
+tar xfz exptsetno_3130.tar.gz
+rm exptsetno_3130.tar.gz
+mkdir spots
+cat << _EOF_ > cleanXls.awk
+{ 
+  if (/^!/) 
+     {
+     line = \$0
+     gsub(/\"|,/, "", line)
+     print line
+     }
+   else
+     print
+}
+_EOF_
+for file in *.xls; do
+   awk -f cleanXls.awk $file > spots/$file
+done
+cd ~/kent/src/hg/makeDb/hgMedianMicroarray
+# The hgFixed.history doesn't have the errata column
+echo alter table history add column errata varchar(255) | hgsql hgFixed
+hgStanfordMicroarray -dataField="Normalized Ch2 Intensity (Median)" \
+  hgFixed humanNormal humanNormalExps /projects/compbio/data/microarray/shyamsundarEtAl/spots
+hgStanfordMicroarray -dataField="Log(base2) of R/G Normalized Ratio (Mean)" \
+  hgFixed humanNormalRatio humanNormalExps /projects/compbio/data/microarray/shyamsundarEtAl/spots
+echo "select name from humanNormalExps" | hgsql -N hgFixed | awk "{print \"\'\"\$0\"\'\"}" > col1
+echo "select id from humanNormalExps" | hgsql -N hgFixed > col2
+paste col1 col2 | sort > humanNormal.ra
+# EDIT humanNormal.ra by hand and make a category (middle column) for each experiment
+hgMedianMicroarray hgFixed humanNormal humanNormalExps humanNormal.ra \
+  humanNormalMedian humanNormalMedianExps
+hgMedianMicroarray hgFixed humanNormalRatio humanNormalExps humanNormal.ra \
+  humanNormalMedianRatio humanNormalMedianExps
