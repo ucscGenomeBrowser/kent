@@ -999,46 +999,22 @@ EOF
 #  7655 ../../jkStuff/scaffolds.lft
 
 
-# HOMOLOGY GENE PREDICTIONS FROM ZDOBNOV (DONE 3/30/05 angie)
-    ssh kksilo
+# HOMOLOGY GENE PREDICTIONS FROM ZDOBNOV (DONE 4/22/05 angie)
+    # Updated data -- GFF loads cleanly now, and is split into high-
+    # and low-confidence sets.
+    ssh hgwdev
     mkdir /cluster/data/apiMel2/bed/brhInparalog
     cd /cluster/data/apiMel2/bed/brhInparalog
-    wget http://azra.embl-heidelberg.de/~zdobnov/Bee2/Amel-BRHinparalogs-ann.GFF.txt
-    # I edited Amel*.txt to remove these lines which were missing the scaffold:
-#Amel_23918      -Amel::9973-11618:1             735432  735743  +       exon    1 score=236.68 ORF=735432-735743 HOMOLOGY=
-#Amel_23918      -Amel::9973-11618:1             735892  736173  +       exon    2 score=271.32 ORF=735892-736173 HOMOLOGY=
-#Amel_23918      -Amel::9973-11618:1             736493  736834  +       exon    3 score=320.97 ORF=736493-736834 HOMOLOGY=
-#Amel_23918      -Amel::9973-11618:1             736892  737077  +       exon    4 score=67.88 ORF=736892-737077 HOMOLOGY=
-#Amel_23918      -Amel::9973-11618:1             9973    11618   +       gene    score=896.85, 374 aa, chain +, HOMOLOGY=
-#Amel_11118      -Amel::1008-1781:1              6807    6901    +       exon    1 score=77.72 ORF=6807-6899 HOMOLOGY=
-#Amel_11118      -Amel::1008-1781:1              7026    7302    +       exon    2 score=288.12 ORF=7027-7302 HOMOLOGY=
-#Amel_11118      -Amel::1008-1781:1              7380    7580    +       exon    3 score=157.50 ORF=7380-7580 HOMOLOGY=
-#Amel_11118      -Amel::1008-1781:1              1008    1781    +       gene    score=523.34, 191 aa, chain +, HOMOLOGY=
-#Amel_770        -Amel::26-17357:-1              189044  189236  -       exon    1 score=175.11 ORF=189044-189235 HOMOLOGY=
-#Amel_770        -Amel::26-17357:-1              199770  199957  -       exon    2 score=224.76 ORF=199772-199957 HOMOLOGY=
-#Amel_770        -Amel::26-17357:-1              201091  201194  -       exon    3 score=127.17 ORF=201091-201192 HOMOLOGY=
-#Amel_770        -Amel::26-17357:-1              206217  206375  -       exon    4 score=132.42 ORF=206218-206373 HOMOLOGY=
-#Amel_770        -Amel::26-17357:-1              26      17357   -       gene    score=659.46, 214 aa, chain -, HOMOLOGY=
-#Amel_18221      -Amel::2096-2860:1              3909    4006    +       exon    1 score=74.71 ORF=3909-4004 HOMOLOGY=
-#Amel_18221      -Amel::2096-2860:1              4234    4449    +       exon    2 score=215.20 ORF=4235-4447 HOMOLOGY=
-#Amel_18221      -Amel::2096-2860:1              4512    4673    +       exon    3 score=23.37 ORF=4513-4671 HOMOLOGY=
-#Amel_18221      -Amel::2096-2860:1              2096    2860    +       gene    score=313.28, 158 aa, chain +, HOMOLOGY=
-#Amel_4915       -Amel::9982-18148:1             189217  189354  +       exon    1 score=119.94 ORF=189217-189354 HOMOLOGY=
-#Amel_4915       -Amel::9982-18148:1             194255  194437  +       exon    2 score=216.00 ORF=194255-194437 HOMOLOGY=
-#Amel_4915       -Amel::9982-18148:1             194764  195004  +       exon    3 score=277.01 ORF=194764-195003 HOMOLOGY=
-#Amel_4915       -Amel::9982-18148:1             195397  195662  +       exon    4 score=282.28 ORF=195399-195662 HOMOLOGY=
-#Amel_4915       -Amel::9982-18148:1             197063  197383  +       exon    5 score=370.54 ORF=197063-197383 HOMOLOGY=
-#Amel_4915       -Amel::9982-18148:1             9982    18148   +       gene    score=1265.77, 383 aa, chain +, HOMOLOGY=
-    # I sent that list to Zdobnov -- waiting for new data.  Meanwhile:
-    perl -wpe 's/^(\S+)\s+\S+\s+(\S+)\s+(\d+)\s+(\d+)\s+(\S+)\s+(\w+)(\s+\d+)?\s+score=(-?[\d\.]+),? .* HOMOLOGY=(\S+)$/$2\t.\t$6\t$3\t$4\t$8\t$5\t.\t$1.$9/ || die "parse $.\n$_"; s/exon/CDS/;' \
-      Amel-BRHinparalogs-ann.GFF.txt > brhInparalog.scaf.gff
-
-    # Lift up set from scaffolds to group coords:
-    liftUp brhInparalog.gff ../../jkStuff/scaffolds.lft warn \
-      brhInparalog.scaf.gff
-    ssh hgwdev
-    cd /cluster/data/apiMel2/bed/brhInparalog
+    wget http://azra.embl-heidelberg.de/~zdobnov/Bee2/amel_set1.gff.txt
+    wget http://azra.embl-heidelberg.de/~zdobnov/Bee2/amel_set2.gff.txt
+    # Discard header line, change "exon" to "CDS", and lift up from 
+    # scaffolds to group coords:
+    tail +2 amel_set1.gff.txt | sed -e 's/exon/CDS/' \
+    | liftUp brhInparalog.gff ../../jkStuff/scaffolds.lft warn stdin
+    tail +2 amel_set2.gff.txt | sed -e 's/exon/CDS/' \
+    | liftUp brhInparalogLow.gff ../../jkStuff/scaffolds.lft warn stdin
     ldHgGene apiMel2 brhInparalog brhInparalog.gff
+    ldHgGene apiMel2 brhInparalogLow brhInparalogLow.gff
 
 
 # ENSEMBL GENES (DONE 4/12/05 angie)
