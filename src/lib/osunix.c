@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.21 2005/04/25 07:12:12 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.22 2005/04/25 23:25:09 kent Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -198,6 +198,17 @@ while ((de = readdir(d)) != NULL)
 closedir(d);
 slSort(&list, cmpFileInfo);
 return list;
+}
+
+unsigned long fileModTime(char *pathName)
+/* Return file last modification time.  The units of
+ * these may vary from OS to OS, but you can depend on
+ * later files having a larger time. */
+{
+struct stat st;
+if (stat(pathName, &st) < 0)
+    errAbort("stat failed in fileModTime");
+return st.st_mtime;
 }
 
 char *getHost()
