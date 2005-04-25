@@ -12,13 +12,12 @@ void usage()
 errAbort(
   "test - Test something\n"
   "usage:\n"
-  "   test in \n"
+  "   test a \n"
   "options:\n"
   );
 }
 
 #include <termios.h>
-
 
 
 void test(char *in)
@@ -30,6 +29,7 @@ char buf[1];
 if (tcgetattr(STDIN_FILENO, &attr) != 0)
     errAbort("Couldn't do tcgetattr");
 attr.c_lflag &= ~ICANON;
+attr.c_lflag &= ~ECHO;
 if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
     errAbort("Couldn't do tcsetattr");
 for (;;)
@@ -47,9 +47,10 @@ for (;;)
     }
 }
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *env[])
 /* Process command line. */
 {
+int i;
 if (argc != 2)
    usage();
 test(argv[1]);
