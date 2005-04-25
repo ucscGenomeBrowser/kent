@@ -257,6 +257,24 @@ searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
+searchName bacPairsAliases
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+searchBoth 1
+xrefTable bacCloneAlias
+xrefQuery select name, alias from %s where alias like '%s' 
+searchPriority 9
+
+searchName bacSinglesAliases
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+searchBoth 1
+xrefTable bacCloneAlias
+xrefQuery select name, alias from %s where alias like '%s' 
+searchPriority 9
+
 searchTable rhMap
 searchMethod prefix
 searchType psl
