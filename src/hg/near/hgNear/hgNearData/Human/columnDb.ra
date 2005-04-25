@@ -122,3 +122,22 @@ queryFull select name,value from knownToHInv
 queryOne select value,name from knownToHInv where name = '%s'
 invQueryOne select name from knownToHInv where value = '%s'
 itemUrl http://www.jbirc.aist.go.jp/hinv/soup/pub_Detail.pl?acc_id=%s
+
+name humanNormal
+shortLabel Normal Tissue
+longLabel Normal Human Tissue cDNA Microarrays 
+priority 3.0
+visibility off
+type expMulti knownToLocusLink
+selected humanNormalMedianExps humanNormalMedianRatio humanNormalMedian 2,19,10,47,46,21,23,25,
+median humanNormalMedianExps humanNormalMedianRatio humanNormalMedian 2,3,4,-1,15,30,38,45,-1,0,32,37,47,-1,26,27,41,46,48,52,-1,19,20,28,29,33,49,50,51,-1,10,11,12,14,16,17,18,1,21,22,23,24,25,34,35,36,39,40,42,43,44,5,6,7,8,9,31,13,
+all humanNormalExps humanNormalRatio humanNormal 49,77,71,50,74,72,82,70,-1,101,68,17,19,65,54,109,108,99,0,58,84,-1,16,12,55,52,107,103,97,67,33,31,51,11,116,22,117,118,112,-1,110,100,78,98,89,6,21,30,92,105,111,96,102,104,-1,23,113,24,119,121,122,45,8,27,20,38,61,57,79,1,64,-1,39,59,48,26,75,76,106,95,40,93,37,94,32,25,4,18,5,2,120,114,115,9,87,69,88,81,46,29,10,13,90,91,44,62,3,60,53,80,34,35,36,28,56,47,63,73,85,7,14,66,86,15,83,41,42,43,
+ratioMax 5.0
+absoluteMax 30000 
+
+name humanNormalDistance
+shortLabel Norm Hum Dist
+longLabel Normalized Difference in Human Normal Tissue Expression from Selected Gene
+priority 3.2
+visibility off
+type distance humanNormalDistance query target distance
