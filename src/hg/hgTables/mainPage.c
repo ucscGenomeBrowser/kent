@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.70 2005/03/03 06:47:19 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.70.10.1 2005/04/26 19:21:55 giardine Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -342,6 +342,9 @@ struct outputType otBed = { NULL,
 struct outputType otGala = { NULL, 
     outGala,
     "query results to GALA", };
+struct outputType otGalaxy = { NULL,
+    outGalaxy,
+    "query results to Galaxy", };
 struct outputType otCustomTrack = { NULL, 
     outCustomTrack,
     "custom track", };
@@ -373,6 +376,8 @@ if (isWig)
     slAddTail(&otList, &otWigBed);
     if (galaAvail(database))
         slAddTail(&otList, &otGala);
+    if (cgiServerName() == NULL || startsWith("hgwdev-giardine", cgiServerName()))
+        slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     }
 else if (isMaf)
@@ -389,6 +394,8 @@ else if (isPositional)
     slAddTail(&otList, &otBed);
     if (galaAvail(database))
 	slAddTail(&otList, &otGala);
+    if (cgiServerName() == NULL || startsWith("hgwdev-giardine", cgiServerName()))
+    slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
     }
@@ -627,7 +634,7 @@ hPrintf("</TABLE>\n");
 hPrintf("<P>"
 	"To reset <B>all</B> user cart settings (including custom tracks), \n"
 	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
-	hgTablesName());
+	getScriptName());
 
 }
 
@@ -644,7 +651,7 @@ hPrintf("%s",
   "for a limited period.");
 
 /* Main form. */
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=POST>\n", getScriptName());
 cartSaveSession(cart);
 jsWriteFunctions();
 showMainControlTable(conn);

@@ -16,7 +16,7 @@
 #include "hgSeq.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: seqOut.c,v 1.15 2005/03/03 06:47:19 donnak Exp $";
+static char const rcsid[] = "$Id: seqOut.c,v 1.15.10.1 2005/04/26 19:21:55 giardine Exp $";
 
 static char *genePredMenu[] = 
     {
@@ -55,7 +55,7 @@ typeIx = stringArrayIx(predType, genePredMenu, typeWordCount);
 if (typeIx < 0)
     predType = genePredMenu[0];
 htmlOpen("Select sequence type for %s", track->shortLabel);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 
 if (isRefGeneTrack(track->tableName))
@@ -216,7 +216,7 @@ void genomicFormatPage(struct sqlConnection *conn)
 {
 struct hTableInfo *hti = getHti(database, curTable);
 htmlOpen("%s Genomic Sequence", curTableLabel());
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 hgSeqOptionsHtiCart(hti, cart);
 hPrintf("<BR>\n");

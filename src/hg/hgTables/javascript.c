@@ -124,8 +124,8 @@ void jsCreateHiddenForm(char **vars, int varCount)
 {
 int i;
 hPrintf(
-    "<FORM ACTION=\"../cgi-bin/hgTables\" "
-    "METHOD=\"GET\" NAME=\"hiddenForm\">\n");
+    "<FORM ACTION=\"..%s\" "
+    "METHOD=\"GET\" NAME=\"hiddenForm\">\n", getScriptName());
 cartSaveSession(cart);
 for (i=0; i<varCount; ++i)
     hPrintf("<input type=\"hidden\" name=\"%s\" value=\"\">\n", vars[i]);

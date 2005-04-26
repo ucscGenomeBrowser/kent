@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.38 2005/03/30 19:00:11 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.38.8.1 2005/04/26 19:21:54 giardine Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -366,7 +366,7 @@ if (strchr(table, '.'))
     htmlOpen("Select Fields from %s", table);
 else
     htmlOpen("Select Fields from %s.%s", db, table);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=POST>\n", getScriptName);
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
@@ -918,7 +918,7 @@ if (strchr(table, '.'))
     htmlOpen("Filter on Fields from %s", table);
 else
     htmlOpen("Filter on Fields from %s.%s", db, table);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=POST>\n", cgiScriptName());
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);

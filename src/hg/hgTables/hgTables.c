@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.106 2005/04/09 20:59:03 markd Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.106.6.1 2005/04/26 19:21:54 giardine Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -127,6 +127,16 @@ if (curTrack != NULL && sameString(curTrack->tableName, curTable))
     return curTrack->shortLabel;
 else
     return curTable;
+}
+
+char *getScriptName()
+/* returns script name from environment or hardcoded for command line */
+{
+char *script = cgiScriptName();
+if (script != NULL)
+    return script;
+else
+    return hgTablesName();
 }
 
 /* --------------- Text Mode Helpers ----------------- */
@@ -371,7 +381,7 @@ boolean searchPosition(char *range, struct region *region)
 struct hgPositions *hgp = NULL;
 char retAddr[512];
 char position[512];
-safef(retAddr, sizeof(retAddr), "%s", "../cgi-bin/hgTables");
+safef(retAddr, sizeof(retAddr), "..%s", getScriptName());
 hgp = findGenomePosWeb(range, &region->chrom, &region->start, &region->end,
 	cart, TRUE, retAddr);
 if (hgp != NULL && hgp->singlePos != NULL)
@@ -1257,7 +1267,9 @@ else if (sameString(output, outWigData))
 else if (sameString(output, outWigBed))
     doOutWigBed(track, table, conn);
 else if (sameString(output, outGala))
-    doOutGalaQuery(track, table, conn);
+    doOutGalaQuery(track, table);
+else if (sameString(output, outGalaxy))
+    doOutGalaxyQuery(track, table, cartUserId(cart));
 else if (sameString(output, outMaf))
     doOutMaf(track, table, conn);
 else
@@ -1337,10 +1349,14 @@ else if (cartVarExists(cart, hgtaDoRemoveCustomTrack))
     doRemoveCustomTrack(conn);
 else if (cartVarExists(cart, hgtaDoMainPage))
     doMainPage(conn);
-else if (cartVarExists(cart, hgtaDoAllGalaQuery))
-    doAllGalaQuery(conn);
+else if (cartVarExists(cart, hgtaDoGalaxyQuery))
+    doGalaxyQuery(conn);
 else if (cartVarExists(cart, hgtaDoGetGalaQuery))
-    doGetGalaQuery(conn);
+    doGetGalaQuery(conn, FALSE);
+else if (cartVarExists(cart, hgtaDoGalaxyPrintGenomes))
+    doGalaxyPrintGenomes();
+else if (cartVarExists(cart, hgtaDoGalaxyPrintPairwiseAligns))
+    doGalaxyPrintPairwiseAligns(conn);
 else if (cartVarExists(cart, hgtaDoLookupPosition))
     doLookupPosition(conn);
 else	/* Default - put up initial page. */
