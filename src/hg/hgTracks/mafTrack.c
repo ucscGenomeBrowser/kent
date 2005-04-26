@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.39 2005/04/26 01:26:42 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.40 2005/04/26 18:19:12 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -509,6 +509,7 @@ void drawMafChain(struct vGfx *vg, int xOff, int yOff, int width, int height,
 int midY = yOff + (height>>1);
 int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
+midY--;
 
 if (isDouble)
     {
@@ -567,9 +568,10 @@ for (full = mafList; full != NULL; full = full->next)
         if (vis != tvFull && mc->size == 0)
             {
             int w = mafPixelWidth+1;
+            Color chainColor;
             if (!chainBreaks)
                 continue;
-            Color chainColor = lighterColor(vg, color);
+            chainColor = lighterColor(vg, color);
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
@@ -598,9 +600,10 @@ for (full = mafList; full != NULL; full = full->next)
                 else
                     {
                     int shade = (pixelScores[i] * maxShade) + 1;
+                    Color c;
                     if (shade > maxShade)
                         shade = maxShade;
-                    Color c = shadesOfGray[shade];
+                    c = shadesOfGray[shade];
                     vgBox(vg, i + x+1, yOff, 
                         1, height-1, c);
                     }
@@ -633,6 +636,10 @@ if (mafList == NULL)
                                                 seqStart, seqEnd, isAxt);
 
 /* display the multiple alignment in this region */
+#define DEBUG
+#ifdef DEBUG
+slSort(&mafList, mafCmp);
+#endif
 drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, tg->ixAltColor,  vis, isAxt, FALSE);
 mafAliFreeList(&mafList);
