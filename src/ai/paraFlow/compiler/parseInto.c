@@ -51,6 +51,7 @@ else
     expectingGot("name", pp->tok);
 }
 
+#ifdef OLD
 static struct pfParse *pfParseFile(struct pfCompile *pfc, char *fileName, 
 	struct pfParse *parent)
 /* Convert file to parse tree using tkz. */
@@ -59,11 +60,12 @@ struct pfSource *source = pfSourceOnFile(fileName);
 struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
 return pfParseSource(pfc, source, parent, scope);
 }
+#endif /* OLD */
 
-static struct pfParse *createAndParseDef(struct pfCompile *pfc, struct pfToken *tok,
-	char *module)
-/* Check to see if def (.pfh) file exists and is newer than .pf file.
- * If need be then compile .pf to .pfh.  Then parse .pfh file. */
+static struct pfParse *createAndParseDef(struct pfCompile *pfc, 
+	struct pfToken *tok, char *module, struct pfScope *scope)
+/* If .pfh file exists and is more recent than .pf then parse it.  
+ * Otherwise parse .pf file and save .pfh for next time. */
 {
 /* Get tokenizer and save it's current state. */
 struct pfTokenizer *tkz = pfc->tkz;
@@ -71,45 +73,43 @@ struct pfSource *oldSource = tkz->source;
 char *oldPos = tkz->pos;
 char *oldEndPos = tkz->endPos;
 struct pfSource *source;
-struct pfScope *scope;
 struct pfParse *mod;
 char pfName[PATH_LEN], pfhName[PATH_LEN];
 boolean needRemake = TRUE;
+char *modName;
+enum pfParseType modType;
 
 safef(pfName, sizeof(pfName), "%s.pf", module);
 safef(pfhName, sizeof(pfhName), "%s.pfh", module);
-uglyf("%s %d, %s %d\n", pfName, fileExists(pfName), pfhName, fileExists(pfhName));
 if (!fileExists(pfName))
     errAt(tok, "%s doesn't exist", pfName);
 if (fileExists(pfhName))
     {
     unsigned long pfTime = fileModTime(pfName);
     unsigned long pfhTime = fileModTime(pfhName);
-    uglyf("pfTime %lu, pfhTime %lu\n", pfTime, pfhTime);
     needRemake = (pfTime >= pfhTime);
     }
 
 if (needRemake)
     {
-    uglyf("Making %s\n", pfhName);
-    struct pfParse *fullParse;
-    source = tkz->source = pfSourceOnFile(pfName);
-    tkz->pos = source->contents;
-    tkz->endPos = tkz->pos + source->contentSize;
-    scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
-    fullParse = pfParseSource(pfc, source, NULL, scope);
-    	// TODO - make sure scope doesn't end up on pfcList.
-	// Free up some of the memory this takes.
-    pfMakeDefFile(pfc, fullParse, pfhName);
+    modName = pfName;
+    modType = pptModule;
     }
-
-uglyf("Parsing def file %s\n", pfhName);
-source = tkz->source = pfSourceOnFile(pfhName);
+else
+    {
+    modName = pfhName;
+    modType = pptModuleRef;
+    }
+    
+source = tkz->source = pfSourceOnFile(modName);
 tkz->pos = source->contents;
 tkz->endPos = tkz->pos + source->contentSize;
-scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
-mod = pfParseSource(pfc, source, NULL, scope);
-       // TODO - make sure that scope ends up on pfc->scopeList
+mod = pfParseSource(pfc, source, NULL, scope, modType);
+
+if (needRemake)
+    pfMakeDefFile(pfc, mod, pfhName);
+else
+    mod->type = pptModuleRef;
 
 /* Restore tokenizer state. */
 tkz->source = oldSource;
@@ -119,7 +119,7 @@ return mod;
 }
 
 void expandInto(struct pfParse *program, 
-	struct pfCompile *pfc, struct pfParse *pp)
+	struct pfCompile *pfc, struct pfParse *pp, struct pfScope *scope)
 /* Go through program walking into modules. */
 {
 if (pp->type == pptInto)
@@ -135,9 +135,10 @@ if (pp->type == pptInto)
 
     if (module == NULL)
         {
-	struct pfParse *mod = createAndParseDef(pfc, pp->children->tok, dy->string);
+	struct pfParse *mod = createAndParseDef(pfc, 
+		pp->children->tok, dy->string, scope);
 	mod->parent = program;
-	expandInto(program, pfc, mod);
+	expandInto(program, pfc, mod, scope);
 	slAddHead(&program->children, mod);
 	module = hashStoreName(pfc->modules, dy->string);
 	}
@@ -145,7 +146,7 @@ if (pp->type == pptInto)
     dyStringFree(&dy);
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    expandInto(program, pfc, pp);
+    expandInto(program, pfc, pp, scope);
 }
 
 void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
@@ -187,17 +188,22 @@ struct pfParse *pfParseInto(struct pfCompile *pfc, char *builtinCode,
 struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
 struct pfSource *stringSource = pfSourceNew("<string>", fetchStringDef());
 struct pfScope *stringScope = pfScopeNew(pfc, pfc->scope, 3, TRUE);
-struct pfParse *stringModule = pfParseSource(pfc, stringSource, program, stringScope);
+struct pfParse *stringModule = pfParseSource(pfc, stringSource, 
+	program, stringScope, pptModuleRef);
 struct pfSource *builtinSource = pfSourceNew("<builtin>", builtinCode);
-struct pfParse *builtinModule = pfParseSource(pfc, builtinSource, program, pfc->scope);
-struct pfParse *mainModule = pfParseFile(pfc, fileName, program);
+struct pfParse *builtinModule = pfParseSource(pfc, builtinSource, 
+	program, pfc->scope, pptModuleRef);
+struct pfSource *mainSource = pfSourceOnFile(fileName);
+struct pfScope *userScope  = pfScopeNew(pfc, pfc->scope, 16, TRUE);
+struct pfParse *mainModule = pfParseSource(pfc, mainSource, 
+	program, userScope, pptMainModule);
 
 attachStringsAndThings(pfc, stringModule);
 
 /* Go into other modules, and put initial module at end of list. */
-slAddHead(&program->children, builtinModule);
 slAddHead(&program->children, mainModule);
-expandInto(program, pfc, mainModule);
+expandInto(program, pfc, mainModule, userScope);
+slAddHead(&program->children, builtinModule);
 slReverse(&program->children);
 
 /* Restore order of scopes. */

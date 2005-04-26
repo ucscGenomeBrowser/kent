@@ -90,7 +90,7 @@ static void printScopeInfo(FILE *f, int level, struct pfParse *pp)
 switch (pp->type)
     {
     case pptProgram:
-    case pptModule:
+    case pptMainModule:
     case pptFor:
     case pptForeach:
     case pptForEachCall:

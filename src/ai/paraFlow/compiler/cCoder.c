@@ -22,7 +22,7 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
  * to stack. */
 
 static void codeScope( struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printPfInit, boolean isBuiltIn);
+	boolean printPfInit, boolean checkForExterns);
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
@@ -590,10 +590,12 @@ for (hel = helList; hel != NULL; hel = hel->next)
     struct pfType *type = var->ty;
     if (type->tyty == tytyVariable && !type->isStatic)
         {
+	if (var->isExternal)
+	    fprintf(f, "extern ");
 	printType(pfc, f, type->base);
 	fprintf(f, " ");
 	printVarName(pfc, f, var);
-	if (zeroUninit && !isInitialized(var))
+	if (zeroUninit && !var->isExternal && !isInitialized(var))
 	    {
 	    codeInitOfType(pfc, f, type);
 	    }
@@ -613,7 +615,7 @@ struct hashEl *hel;
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
-    if (!var->ty->isStatic)
+    if (!var->isExternal && !var->ty->isStatic)
 	codeCleanupVar(pfc, f, var);
     }
 }
@@ -1748,9 +1750,41 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticAssignments(pfc, f, pp);
 }
 
+static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Print out class definitions. */
+{
+if (pp->type == pptClass)
+    {
+    struct pfBaseType *base = pp->ty->base;
+    fprintf(f, "struct %s {\n", base->name);
+    fprintf(f, "int _pf_refCount;\n");
+    fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
+    fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
+    rPrintFields(pfc, f, base); 
+    fprintf(f, "};\n");
+    printPolyFunTable(pfc, f, base);
+    fprintf(f, "\n");
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rPrintClasses(pfc, f, pp);
+}
+
+static boolean isInside(struct pfParse *outside, struct pfParse *inside)
+/* Return TRUE if inside is a child of outside. */
+{
+while (inside != NULL)
+    {
+    if (inside == outside)
+	return TRUE;
+    inside = inside->parent;
+    }
+return FALSE;
+}
+
+
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printMain, boolean isBuiltIn)
+	boolean printMain, boolean checkForExterns)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -1758,33 +1792,21 @@ struct hashEl *hel, *helList;
 struct pfParse *p;
 boolean gotFunc = FALSE, gotVar = FALSE;
 
-/* Print out classes declared in this scope. */
-helList = hashElListHash(scope->types);
-slSort(&helList, hashElCmp);
-for (hel = helList; hel != NULL; hel = hel->next)
-    {
-    struct pfBaseType *base = hel->val;
-    if (base->isClass)
-	{
-	fprintf(f, "struct %s {\n", base->name);
-	fprintf(f, "int _pf_refCount;\n");
-	fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
-	fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
-	rPrintFields(pfc, f, base); 
-	fprintf(f, "};\n");
-	printPolyFunTable(pfc, f, base);
-	fprintf(f, "\n");
-	}
-    }
-hashElFreeList(&helList);
 
 /* Get declaration list and sort it. */
 helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
 
 /* Print out variables. */
-if (!isBuiltIn)
-    codeVarsInHelList(pfc, f, helList, !scope->isModule);
+if (checkForExterns)
+    {
+    for (hel = helList; hel != NULL; hel = hel->next)
+        {
+	struct pfVar *var = hel->val;
+	var->isExternal = !isInside(pp, var->parse);
+	}
+    }
+codeVarsInHelList(pfc, f, helList, !scope->isModule);
 
 /* Print out function declarations */
 for (p = pp->children; p != NULL; p = p->next)
@@ -1829,12 +1851,9 @@ for (p = pp->children; p != NULL; p = p->next)
 	}
     }
 /* Print out any needed cleanups. */
-if (!isBuiltIn)
-    {
-    codeCleanupVarsInHelList(pfc, f, helList);
-    if (printMain)
-	codeStaticCleanups(pfc, f, pp);
-    }
+codeCleanupVarsInHelList(pfc, f, helList);
+if (printMain)
+    codeStaticCleanups(pfc, f, pp);
 
 if (printMain)
     fprintf(f, "}\n");
@@ -1880,6 +1899,7 @@ fputs(
 "}\n", f);
 }
 
+
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
 /* Generate C code for program. */
 {
@@ -1891,17 +1911,29 @@ struct hash *compTypeHash;
 printPreamble(pfc, f, fileName);
 pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
 
+/* Print function prototypes and class definitions for all modules */
 for (module = program->children; module != NULL; module = module->next)
     {
-    boolean isBuiltIn = sameString(module->name, "<builtin>");
+    fprintf(f, "/* Prototypes in ParaFlow module %s */\n\n", module->name);
+    rPrintPrototypes(f, module, NULL);
+    fprintf(f, "\n");
+    fprintf(f, "/* Class definitionsin ParaFlow module %s */\n\n", module->name);
+    rPrintClasses(pfc, f, module);
+    fprintf(f, "\n");
+    }
+
+for (module = program->children; module != NULL; module = module->next)
+    {
     verbose(3, "Coding %s\n", module->name);
     fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
     fprintf(f, "\n");
-    rPrintPrototypes(f, module, NULL);
-    fprintf(f, "\n");
-    codeScope(pfc, f, module, !isBuiltIn, isBuiltIn);
-    fprintf(f, "\n");
+    if (module->type == pptMainModule)
+	{
+	codeScope(pfc, f, module, TRUE, TRUE);
+	fprintf(f, "\n");
+	}
     }
+
 printPolyFuncConnections(pfc, pfc->scopeList, f);
 printConclusion(pfc, f);
 carefulClose(&f);

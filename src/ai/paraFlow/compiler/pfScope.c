@@ -8,7 +8,7 @@
 #include "pfCompile.h"
 
 
-struct pfScope *pfScopeNew(struct pfCompile *pfc, 
+struct pfScope *pfScopeNew(struct pfCompile *pfc,
 	struct pfScope *parent, int size, boolean isModule)
 /* Create new scope with given parent.  Size is just a hint
  * of what to make the size of the symbol table as a power of

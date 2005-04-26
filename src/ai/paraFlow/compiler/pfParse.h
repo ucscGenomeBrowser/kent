@@ -16,6 +16,7 @@ enum pfParseType
     pptScope,
     pptInto,
     pptModule,
+    pptMainModule,
     pptModuleRef,
     pptNop,
     pptCompound,
@@ -218,7 +219,7 @@ void pfParseDumpOne(struct pfParse *pp, int level, FILE *f);
 /* Dump out single pfParse record at given level of indent. */
 
 struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
-	struct pfParse *parent, struct pfScope *scope);
+	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType);
 /* Tokenize and parse given source. */
 
 #endif /* PFPARSE_H */

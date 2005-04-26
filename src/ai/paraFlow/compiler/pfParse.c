@@ -26,6 +26,8 @@ switch (type)
         return "pptModule";
     case pptModuleRef:
         return "pptModuleRef";
+    case pptMainModule:
+        return "pptMainModule";
     case pptNop:
     	return "pptNop";
     case pptCompound:
@@ -1731,13 +1733,13 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 
 
 struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
-	struct pfParse *parent, struct pfScope *scope)
+	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType)
 /* Tokenize and parse given source. */
 {
 struct pfTokenizer *tkz = pfc->tkz;
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
-struct pfParse *modParse = pfParseNew(pptModule, NULL, parent, scope);
+struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, source->name);
 int braceDepth = 0;
 
