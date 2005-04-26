@@ -2,9 +2,9 @@
  * in this file. */
 
 #include "common.h"
-//#include "linefile.h"
-//#include "hash.h"
-//#include "dystring.h"
+// #include "linefile.h"
+#include "hash.h"
+#include "dystring.h"
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfToken.h"
@@ -131,13 +131,65 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
     }
 }
 
+void rPrintTypesUsed(FILE *f, struct pfParse *pp, 
+	struct dyString *dy, struct hash *hash)
+/* Make up a dummy variable for each type that is used. */
+{
+if (pp->type == pptVarInit)
+    {
+    struct pfParse *p = pp->children;
+    dyStringClear(dy);
+    if (p->type == pptTypeName)
+	dyStringAppend(dy, p->name);
+    else if (p->type == pptOf)
+        {
+	p = p->children;
+	dyStringAppend(dy, p->name);
+	while ((p = p->next) != NULL)
+	    {
+	    dyStringAppend(dy, " of ");
+	    dyStringAppend(dy, p->name);
+	    }
+	}
+    else
+        {
+	internalErr();
+	}
+    if (!hashLookup(hash, dy->string))
+        {
+	hashAdd(hash, dy->string, NULL);
+	fprintf(f, "%s t%d;\n", dy->string, hash->elCount);
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rPrintTypesUsed(f, pp, dy, hash);
+}
+
+void printTypesUsed(FILE *f, struct pfParse *module)
+/* Print a variable for each type used. */
+{
+struct dyString *dy = dyStringNew(0);
+struct hash *hash = hashNew(0);
+
+rPrintTypesUsed(f, module, dy, hash);
+
+hashFree(&hash);
+dyStringFree(&dy);
+}
+
 void pfMakeDefFile(struct pfCompile *pfc, struct pfParse *module, 
 	char *defFile)
 /* Write out definition file. */
 {
 FILE *f = mustOpen(defFile, "w");
-fprintf(f, "// Paraflow def file for %s module\n", module->name);
+fprintf(f, "   // Types used\n");
+fprintf(f, "{\n");
+printTypesUsed(f, module);
+fprintf(f, "}\n");
+fprintf(f, "// ParaFlow definition and type file  for %s module\n", module->name);
+fprintf(f, "   // Modules referenced\n");
 rPrintIntos(f, module);
+fprintf(f, "   // Symbols defined\n");
 rPrintDefs(f, module, FALSE);
 carefulClose(&f);
 }

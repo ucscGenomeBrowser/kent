@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "dyString.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
@@ -74,9 +75,9 @@ return type;
 }
 
 struct _pf_type *_pf_type_from_paren_code(struct hash *typeHash, 
-	char *parenCode, struct _pf_base *bases)
+	char *parenCode, struct hash *baseHash, struct dyString *dy)
 /* Create a little tree of type from parenCode.  Here's an example of the paren code:
- *      6(19,17,17,17)
+ *      6(string,int,int,int)
  * The numbers are indexes into the bases array.  Parenthesis indicate children,
  * commas siblings. */
 {
@@ -84,18 +85,17 @@ struct _pf_type *type;
 char *s = parenCode, c;
 int val = 0;
 AllocVar(type);
+dyStringClear(dy);
 while ((c = *s) != 0)
     {
-    if (isdigit(c))
-        {
-	val *= 10;
-	val += (c - '0');
-	}
-    else
+    if (c == ',' || c == '(' || c == ')')
         break;
+    dyStringAppendC(dy, c);
     s += 1;
     }
-type->base = &bases[val];
+type->base = hashFindVal(baseHash, dy->string);
+if (type->base == NULL)
+    internalErr();
 if (c == '(')
     {
     struct _pf_type *child;
@@ -118,16 +118,47 @@ if (c == '(')
 return type;
 }
 
+static void fillInLocalTypeInfo(struct _pf_local_type_info *lti, struct hash *typeHash)
+/* Fill in local type info's ID field. */
+{
+char *parenCode;
+while ((parenCode = lti->parenCode) != NULL)
+    {
+    struct _pf_type *type = hashFindVal(typeHash, parenCode);
+    if (type == NULL)
+        internalErr();
+    lti->id = type->typeId;
+    lti += 1;
+    }
+}
+
+static void fillInPolyInfo(struct _pf_poly_info *polyInfo, struct hash *baseHash)
+/* Fill in polymorphic function tables. */
+{
+char *className;
+while ((className = polyInfo->className) != NULL)
+    {
+    struct _pf_base *base = hashFindVal(baseHash, className);
+    if (base == NULL)
+        internalErr();
+    base->polyTable = polyInfo->polyTable;
+    polyInfo += 1;
+    }
+}
+
+
 void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
 		     struct _pf_field_info *fieldInfo, int fieldCount,
-		     struct _pf_poly_info *polyInfo, int polyCount)
+		     struct _pf_module_info *moduleInfo, int moduleCount)
 /* Build up run-time type information from initialization. */
 {
 struct hash *singleIds = singleTypeHash();
+struct hash *baseHash = hashNew(10);
 struct hash *typeHash = hashNew(0);
 struct _pf_base *bases, *base;
 struct _pf_type **types, *type;
+struct dyString *dy = dyStringNew(0);
 int i;
 char *s;
 
@@ -146,6 +177,7 @@ for (i=0; i<baseCount; ++i)
     base->name = s;
     base->needsCleanup = info->needsCleanup;
     base->size = info->size;
+    hashAdd(baseHash, base->name, base);
     if (s[0] != '<')
 	{
 	base->singleType = hashIntValDefault(singleIds, s, 0);
@@ -269,7 +301,8 @@ for (i=0; i<typeCount; ++i)
     {
     struct _pf_type_info *info = &typeInfo[i];
     char *s = info->parenCode;
-    struct _pf_type *type = _pf_type_from_paren_code(typeHash, info->parenCode, bases);
+    struct _pf_type *type = _pf_type_from_paren_code(typeHash, 
+    		info->parenCode, baseHash, dy);
     type->typeId = info->id;
     types[info->id] = type;
     hashAdd(typeHash, info->parenCode, type);
@@ -310,6 +343,18 @@ for (i=0; i<typeCount; ++i)
 	}
     }
 
+/* Process moduleInfo . */
+    {
+    struct _pf_module_info *info;
+    for (i=0; i<moduleCount; ++i)
+        {
+	info = &moduleInfo[i];
+	fillInLocalTypeInfo(info->lti, typeHash);
+	fillInPolyInfo(info->polyInfo, baseHash);
+	}
+    }
+
+#ifdef OLD
 /* Process polyInfo into base types. */
     {
     struct _pf_poly_info *info;
@@ -320,10 +365,11 @@ for (i=0; i<typeCount; ++i)
 	base->polyTable = info->polyTable;
 	}
     }
-
+#endif /* OLD */
 
 
 /* Clean up and go home. */
+dyStringFree(&dy);
 hashFree(&singleIds);
 hashFree(&typeHash);
 _pf_type_table = types;

@@ -51,17 +51,6 @@ else
     expectingGot("name", pp->tok);
 }
 
-#ifdef OLD
-static struct pfParse *pfParseFile(struct pfCompile *pfc, char *fileName, 
-	struct pfParse *parent)
-/* Convert file to parse tree using tkz. */
-{
-struct pfSource *source = pfSourceOnFile(fileName);
-struct pfScope *scope = pfScopeNew(pfc, pfc->scope, 16, TRUE);
-return pfParseSource(pfc, source, parent, scope);
-}
-#endif /* OLD */
-
 static struct pfParse *createAndParseDef(struct pfCompile *pfc, 
 	struct pfToken *tok, char *module, struct pfScope *scope)
 /* If .pfh file exists and is more recent than .pf then parse it.  
