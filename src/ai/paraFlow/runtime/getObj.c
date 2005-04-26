@@ -6,7 +6,7 @@
 
 #include "common.h"
 #include "hash.h"
-#include "dyString.h"
+#include "dystring.h"
 #include "../compiler/pfPreamble.h"
 
 static void scanField(FILE *f, void *data, struct _pf_type *type, 

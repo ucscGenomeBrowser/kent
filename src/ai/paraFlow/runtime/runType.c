@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "hash.h"
-#include "dyString.h"
+#include "dystring.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 
