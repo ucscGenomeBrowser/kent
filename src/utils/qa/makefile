@@ -20,6 +20,7 @@ install:
 	cp -p --remove-destination countRows.csh           ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
+	cp -p --remove-destination findTableSize.csh       ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS}
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
