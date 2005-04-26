@@ -162,8 +162,8 @@ type netAlign galGal2 chainGalGal2
 otherDb galGal2
 
 track chainMm5
-shortLabel Mouse Chain
-longLabel Mouse ($o_date/$o_db) Chained Alignments
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -174,8 +174,8 @@ type chain mm5
 otherDb mm5
 
 track chainMm6
-shortLabel Mm6 Chain
-longLabel Mouse ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
