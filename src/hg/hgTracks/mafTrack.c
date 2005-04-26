@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.38 2005/04/25 22:51:05 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.39 2005/04/26 01:26:42 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -502,12 +502,29 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
+void drawMafChain(struct vGfx *vg, int xOff, int yOff, int width, int height,
+                        Color color, boolean isDouble)
+/* draw single or double chain line between alignments in MAF display */
+{
+int midY = yOff + (height>>1);
+int midY1 = midY - (height>>2);
+int midY2 = midY + (height>>2) - 1;
+
+if (isDouble)
+    {
+    innerLine(vg, xOff, midY1, width, color);
+    innerLine(vg, xOff, midY2, width, color);
+    }
+else
+    innerLine(vg, xOff, midY, width, color);
+}
 
 void drawMafRegionDetails(struct mafAli *mafList, int height,
         int seqStart, int seqEnd, struct vGfx *vg, int xOff, int yOff,
         int width, MgFont *font, Color color, Color altColor,
         enum trackVisibility vis, boolean isAxt, boolean chainBreaks)
-/* Draw wiggle/density plot based on scoring things on the fly. */
+/* Draw wiggle/density plot based on scoring things on the fly
+ * from list of MAF */
 {
 struct mafAli *full, *sub = NULL, *maf = NULL;
 struct mafComp *mcMaster, *mc;
@@ -515,9 +532,6 @@ char dbChrom[64];
 int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
 int x;
-int midY = yOff + (height>>1);
-int midY1 = midY - (height>>2);
-int midY2 = midY + (height>>2) - 1;
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
@@ -543,13 +557,14 @@ for (full = mafList; full != NULL; full = full->next)
             }
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
-	mafPixelStart = (mcMaster->start - seqStart) * width/winBaseCount;
+        /* NOTE - +1/-1 tweaks to match existing chain/net tracks display */
+	mafPixelStart = (mcMaster->start - seqStart) * (width+1)/winBaseCount;
 	mafPixelEnd = (mcMaster->start + mcMaster->size - seqStart) 
-	    * width/winBaseCount;
-	mafPixelWidth = mafPixelEnd-mafPixelStart+1;
+	    * (width+1)/winBaseCount;
+	mafPixelWidth = mafPixelEnd-mafPixelStart;
         x = mafPixelStart+xOff-1;
 	if (mafPixelWidth < 1) mafPixelWidth = 1;
-        if (mc->size == 0)
+        if (vis != tvFull && mc->size == 0)
             {
             int w = mafPixelWidth+1;
             if (!chainBreaks)
@@ -558,17 +573,12 @@ for (full = mafList; full != NULL; full = full->next)
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
-                    {
                     /* double gap -> display double line ala chain tracks */
-                    innerLine(vg, x, midY1, w, chainColor);
-                    innerLine(vg, x, midY2, w, chainColor);
-                    }
+                    drawMafChain(vg, x, yOff, w, height, chainColor, TRUE);
             if (mc->leftStatus == MAF_CONTIG_STATUS &&
                 mc->rightStatus == MAF_CONTIG_STATUS)
-                    {
                     /* single gap -> display single line ala chain tracks */
-                    innerLine(vg, x, midY, w, chainColor);
-                    }
+                    drawMafChain(vg, x, yOff, w, height, chainColor, FALSE);
             }
         else
             {
@@ -587,15 +597,17 @@ for (full = mafList; full != NULL; full = full->next)
                     }
                 else
                     {
-                    int shade = pixelScores[i] * maxShade;
+                    int shade = (pixelScores[i] * maxShade) + 1;
+                    if (shade > maxShade)
+                        shade = maxShade;
                     Color c = shadesOfGray[shade];
-                    vgBox(vg, i+mafPixelStart+xOff, yOff, 
+                    vgBox(vg, i + x+1, yOff, 
                         1, height-1, c);
                     }
                 }
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS &&
                 winEnd - winStart <= 30000)
-                    vgBox(vg, i+mafPixelStart+xOff+1, yOff, 2, 
+                    vgBox(vg, i + x+1, yOff, 2, 
                             height-1, getBlueColor());
             freez(&pixelScores);
             }
