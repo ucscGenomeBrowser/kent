@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.107 2005/04/26 18:45:33 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.106 2005/04/09 20:59:03 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -421,17 +421,14 @@ if (sameString(regionType, "genome"))
 else if (sameString(regionType, "range"))
     {
     char *range = cartString(cart, hgtaRange);
-    boolean parseOk = FALSE;
     regionList = AllocVar(region);
-    if (! strchr(range, ':'))
-	parseOk = ((region->chrom = hgOfficialChromName(range)) != NULL);
-    else
-	parseOk = hgParseChromRange(range, &region->chrom, &region->start,
-				    &region->end);
-    if (! parseOk)
+    if ((region->chrom = hgOfficialChromName(range)) == NULL)
 	{
-	errAbort("Bad position %s, please enter something else in position box",
-		 range);
+	if (!hgParseChromRange(range, &region->chrom, &region->start, &region->end))
+	    {
+	    errAbort("Bad position %s, please enter something else in position box",
+	    	range);
+	    }
 	}
     }
 else if (sameString(regionType, "encode"))

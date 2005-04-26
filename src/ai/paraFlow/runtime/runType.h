@@ -86,6 +86,13 @@ struct _pf_type_info
     char *parenCode;	/* type tree encoded as numbers,commas,parens */
     };
 
+struct _pf_local_type_info
+/* Information on just the local types */
+    {
+    int id;		/* ID - just unique in this module. */
+    char *parenCode;	/* Type tree encoded as className,commas,parents. */
+    };
+
 struct _pf_field_info
 /* Information on class fields. */
     {
@@ -96,14 +103,23 @@ struct _pf_field_info
 struct _pf_poly_info
 /* Information on polymorphic functions. */
     {
-    int classId;			/* Points to _pf_base_info.id. */
+    char *className;		/* Name of class. */
     _pf_polyFunType *polyTable;	/* Polymorphic function table. */
+    };
+
+struct _pf_module_info
+/* Information on a module. */
+    {
+    char *name;		/* Module name. */
+    struct _pf_local_type_info *lti;	/* Information on types pushed on stack. */
+    struct _pf_poly_info *polyInfo;	/* Information on polymorphic methods. */
+    void (*entry)(_pf_Stack *_pf_stack);/* Where execution starts for this module. */
     };
 
 void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
 		     struct _pf_field_info *fieldInfo, int fieldCount,
-		     struct _pf_poly_info *polyInfo, int polyCount);
+		     struct _pf_module_info *moduleInfo, int moduleCount);
 /* Build up run-time type information from initialization. */
 
 extern struct _pf_type **_pf_type_table;	

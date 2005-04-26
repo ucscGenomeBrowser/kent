@@ -30,6 +30,7 @@ struct pfCompile
     struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
     struct pfScope *scopeList;	/* List of all scopes. */
     struct hash *runTypeHash;	/* Hash of run time types for code generator */
+    struct hash *moduleTypeHash;/* Hash of run time types for just one module. */
 
     /* Some called out types parser needs to know about. */
     struct pfBaseType *moduleType;	/* Base type for separate compilation units. */

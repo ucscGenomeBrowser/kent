@@ -171,13 +171,14 @@ void paraFlow(char *fileName, int pfArgc, char **pfArgv)
 /* parse and dump. */
 {
 struct pfCompile *pfc;
-struct pfParse *program;
+struct pfParse *program, *module;
 char baseDir[256], baseName[128], baseSuffix[64];
-char codeFile[PATH_LEN], defFile[PATH_LEN];
+char defFile[PATH_LEN];
 char *parseFile = "out.parse";
 char *typeFile = "out.typed";
 char *boundFile = "out.bound";
 char *scopeFile = "out.scope";
+char *cFile = "out.c";
 FILE *parseF = mustOpen(parseFile, "w");
 FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
@@ -187,7 +188,6 @@ if (endPhase < 1)
     return;
 verbose(2, "Phase 1 - initialization\n");
 splitPath(fileName, baseDir, baseName, baseSuffix);
-safef(codeFile, sizeof(codeFile), "%s%s.c", baseDir, baseName);
 safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
 pfc = pfCompileNew();
 if (endPhase < 2)
@@ -199,7 +199,7 @@ carefulClose(&parseF);
 if (endPhase < 3)
     return;
 verbose(2, "Phase 3 - generating def file\n");
-pfMakeDefFile(pfc, program->children->next, defFile);
+pfMakeDefFile(pfc, program->children, defFile);
 if (endPhase < 4)
     return;
 verbose(2, "Phase 4 - binding names\n");
@@ -222,7 +222,7 @@ carefulClose(&scopeF);
 if (endPhase < 7)
     return;
 verbose(2, "Phase 7 - C code generation\n");
-pfCodeC(pfc, program, codeFile);
+pfCodeC(pfc, program, baseDir, cFile);
 verbose(2, "%d modules, %d tokens, %d parseNodes\n",
 	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 if (endPhase < 8)
@@ -232,16 +232,45 @@ verbose(2, "Phase 8 - compiling C code\n");
     {
     struct dyString *dy = dyStringNew(0);
     int err;
+    for (module = program->children; module != NULL; module = module->next)
+	{
+	if (module->name[0] != '<' && module->type != pptModuleRef)
+	    {
+	    dyStringClear(dy);
+	    dyStringAppend(dy, "gcc ");
+	    dyStringAppend(dy, "-O3 ");
+	    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
+	    dyStringAppend(dy, "-c ");
+	    if (baseDir[0] != 0)
+		dyStringPrintf(dy, "%s/", baseDir);
+	    dyStringAppend(dy, module->name);
+	    dyStringAppend(dy, ".c");
+	    err = system(dy->string);
+	    if (err != 0)
+		errAbort("Couldn't compile %s.c", module->name);
+	    }
+	}
+    dyStringClear(dy);
     dyStringAppend(dy, "gcc ");
     dyStringAppend(dy, "-O3 ");
     dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
     dyStringPrintf(dy, "-o %s ", baseName);
-    dyStringPrintf(dy, "%s ", codeFile);
+    dyStringPrintf(dy, "%s ", cFile);
+    for (module = program->children; module != NULL; module = module->next)
+        {
+	if (module->name[0] != '<')
+	    {
+	    if (baseDir[0] != 0)
+		dyStringPrintf(dy, "%s/", baseDir);
+	    dyStringPrintf(dy, "%s", module->name);
+	    dyStringPrintf(dy, ".o ");
+	    }
+	}
     dyStringAppend(dy, "~/kent/src/ai/paraFlow/runtime/runtime.a ");
     dyStringPrintf(dy, "~/kent/src/lib/%s/jkweb.a", getenv("MACHTYPE"));
     err = system(dy->string);
     if (err != 0)
-	errnoAbort("problem compiling %s", codeFile);
+	errnoAbort("problem compiling:\n", dy->string);
     dyStringFree(&dy);
     }
 

@@ -1,3 +1,12 @@
+v06 - Runtime system is working with multiple modules.
+      Passing all test cases.  Yay!
+v05 - Got it generating compilable C code again.  Need
+      to adjust run-time to deal with module_info table.
+      (Currently generated executable crashes in _pf_init_types.)
+v04 - keyIn gets keyboard input without line buffering.
+    - f.print and f.scan got renamed to f.put and f.get.
+    - Reworking many things to get it to work on multiple
+      modules.  Currently does not produce working code.
 v03 - Adding nil as a constant that can be used to initialize
       anything (numbers to 0, objects to nil object).
 --------------------------------------------------------------------

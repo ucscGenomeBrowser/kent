@@ -32,7 +32,7 @@ return cot;
 static void rEncodeType(struct pfType *type, struct dyString *dy)
 /* Encode type recursively into dy. */
 {
-dyStringPrintf(dy, "%d", type->base->id);
+dyStringPrintf(dy, "%s", type->base->name);
 if (type->children != NULL)
     {
     dyStringAppendC(dy, '(');

@@ -1345,6 +1345,7 @@ pp->name = name->name;
 myBase = pfScopeFindType(scope, name->name);
 if (myBase == NULL)
     internalErr();
+myBase->def = pp;
 if (tok->type == pftExtends)
     {
     struct pfBaseType *parentBase;
