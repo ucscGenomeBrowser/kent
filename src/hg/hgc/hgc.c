@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.872 2005/04/13 07:00:07 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.873 2005/04/26 23:45:25 galt Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11587,21 +11587,21 @@ if ((row = sqlNextRow(sr)) != NULL)
     if (sameWord(wgRna->type, "HAcaBox"))
     	{
 	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie MolÅÈculaire Eucaryote: ", 
+			"Laboratoire de Biologie MolÈculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> H/ACA Box snoRNA\n");
 	}
     if (sameWord(wgRna->type, "CDBox"))
     	{
 	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie MolÅÈculaire Eucaryote: ", 
+			"Laboratoire de Biologie MolÈculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> CD Box snoRNA\n");
 	}
     if (sameWord(wgRna->type, "scaRna"))
     	{
 	printCustomUrlWithLabel(tdb, item, 
-			"Laboratoire de Biologie MolÅÈculaire Eucaryote: ", 
+			"Laboratoire de Biologie MolÈculaire Eucaryote: ", 
 			"http://www-snorna.biotoul.fr/plus.php?id=$$", TRUE);
     	printf("<B>RNA Type:</B> small Cajal body-specific RNA\n");
 	}
