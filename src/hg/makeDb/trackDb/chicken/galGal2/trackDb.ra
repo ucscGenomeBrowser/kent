@@ -67,7 +67,7 @@ pairwise ghm
 speciesOrder hg17 mm5
 
 track blatFr1
-shortLabel Fugu Blat
+shortLabel $o_Organism Blat
 longLabel $o_Organism ($o_date/$o_db) Translated Blat Alignments
 group compGeno
 priority 110
@@ -101,7 +101,7 @@ type netAlign xenTro1 chainXenTro1
 otherDb xenTro1
 
 track chainHg17
-shortLabel Human Chain 
+shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 125
@@ -113,7 +113,7 @@ type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel Human Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 125.1
@@ -123,8 +123,8 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track netSyntenyHg17
-shortLabel Human Synteny
-longLabel Human (July 2003/hg17) Synteny Using Chained/Netted Blastz
+shortLabel $o_Organism Synteny
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 125.2
 visibility hide
@@ -133,7 +133,7 @@ altColor 255,240,200
 type netAlign hg17 chainHg17
 
 track chainHg16
-shortLabel Hg16 Chain 
+shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 126.0
@@ -145,7 +145,7 @@ type chain hg16
 otherDb hg16
 
 track netHg16
-shortLabel Hg16 Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 126.1
@@ -155,8 +155,8 @@ type netAlign hg16 chainHg16
 otherDb hg16
 
 track netSyntenyHg16
-shortLabel Hg16 Synteny
-longLabel Human (July 2003/hg16) Synteny Using Chained/Netted Blastz
+shortLabel $o_db Synteny
+longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
 group compGeno
 priority 126.2
 visibility hide
@@ -165,8 +165,8 @@ altColor 255,240,200
 type netAlign hg16 chainHg16
 
 track blastzBestHg16
-shortLabel Hg16 AxtBest
-longLabel Human (July 2003/hg16) Blastz AxtBest
+shortLabel $o_db AxtBest
+longLabel $o_Organism ($o_date/$o_db) Blastz AxtBest
 group compGeno
 priority 126.3
 visibility hide

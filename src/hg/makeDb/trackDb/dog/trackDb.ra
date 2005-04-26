@@ -1,5 +1,5 @@
 track chainMm6
-shortLabel Mm6 Chain 
+shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 123.99
@@ -11,7 +11,7 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel Mm6 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.09
@@ -21,7 +21,7 @@ type netAlign mm6 chainMm6
 otherDb mm6
 
 track chainMm5
-shortLabel Mouse Chain 
+shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 124.0
@@ -33,7 +33,7 @@ type chain mm5
 otherDb mm5
 
 track netMm5
-shortLabel Mouse Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.1

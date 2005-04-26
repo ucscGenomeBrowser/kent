@@ -19,8 +19,8 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track chainMm6
-shortLabel Mm6 Chain
-longLabel Mouse ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 153.34
 visibility hide
@@ -31,7 +31,7 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel Mm6 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.35
@@ -41,7 +41,7 @@ type netAlign mm6 chainMm6
 otherDb mm6
 
 track netMm5
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.4

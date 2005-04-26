@@ -1371,7 +1371,7 @@ type chain fr1
 otherDb fr1
 
 track netFr1
-shortLabel Fugu Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 140.1
@@ -1393,7 +1393,7 @@ type chain tetNig1
 otherDb tetNig1
 
 track netTetNig1
-shortLabel Tetraodon Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 150.1
@@ -1416,7 +1416,7 @@ otherDb danRer2
 
 track netDanRer2
 shortLabel $o_Organism Net
-longLabel Zebrafish ($o_date/$o_db) Alignment Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 160.1
 visibility hide
@@ -1515,7 +1515,7 @@ type chain rn3
 otherDb rn3
 
 track netRn3
-shortLabel Rat Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 200.1
@@ -1549,7 +1549,7 @@ type chain mm4
 otherDb mm4
 
 track chainMm5
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
@@ -1561,8 +1561,8 @@ type chain mm5
 otherDb mm5
 
 track netMm5
-shortLabel Mouse Net
-longLabel Mouse ($o_date/$o_db) Alignment Net
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 210.1
 visibility hide
@@ -1571,7 +1571,7 @@ type netAlign mm5 chainMm5
 otherDb mm5
 
 track chainMm6
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
@@ -1583,8 +1583,8 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel Mm6 Net
-longLabel Mouse ($o_date/$o_db) Alignment Net
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 210.1
 visibility hide
@@ -1627,7 +1627,7 @@ type chain canFam1
 otherDb canFam1
 
 track netCanFam1
-shortLabel Dog Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 230.1

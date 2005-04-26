@@ -41,7 +41,7 @@ type psl xeno
 cdsDrawOptions enabled
 
 track ecoresHg17
-shortLabel Human Ecores
+shortLabel $o_Organism Ecores
 longLabel Tetraodon($db)/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
 priority 120.1
@@ -51,7 +51,7 @@ type genePred
 otherDb hg17
 
 track blastzHg17
-shortLabel Human Blastz
+shortLabel $o_Organism Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 124.1
@@ -63,7 +63,7 @@ type psl xeno hg17
 otherDb hg17
 
 track chainHg17
-shortLabel Human Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 124.2
@@ -75,7 +75,7 @@ type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel Human Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.3
@@ -85,7 +85,7 @@ type netAlign hg17 chainHg17
 otherDb hg17
 
 track blastzFr1
-shortLabel Fugu Blastz
+shortLabel $o_Organism Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 130.1
@@ -97,7 +97,7 @@ type psl xeno fr1
 otherDb fr1
 
 track chainFr1
-shortLabel Fugu Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 130.2
@@ -109,7 +109,7 @@ type chain fr1
 otherDb fr1
 
 track netFr1
-shortLabel Fugu Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 130.3
@@ -119,7 +119,7 @@ type netAlign fr1 chainFr1
 otherDb fr1
 
 track blastzMm5
-shortLabel Mouse Blastz
+shortLabel $o_db Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
 priority 127.1
@@ -131,7 +131,7 @@ type psl xeno mm5
 otherDb mm5
 
 track chainMm5
-shortLabel Mouse Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 127.2
@@ -143,7 +143,7 @@ type chain mm5
 otherDb mm5
 
 track netMm5
-shortLabel Mouse Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 127.3
