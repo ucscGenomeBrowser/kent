@@ -87,13 +87,23 @@ return UNKNOWN_FMT;
 unsigned getFileFormat(char *path)
 /* determine the file format from the specified file extension */
 {
-if (endsWith(path, ".psl"))
+char *filePath = path;
+char filePathBuf[PATH_LEN];
+
+if (endsWith(filePath, ".gz"))
+    {
+    /* strip .gz extension */
+    splitPath(path, NULL, filePathBuf, NULL);
+    filePath = filePathBuf;
+    }
+
+if (endsWith(filePath, ".psl"))
     return PSL_FMT;
-if (endsWith(path, ".genePred") || endsWith(path, ".gp"))
+if (endsWith(filePath, ".genePred") || endsWith(filePath, ".gp"))
     return GENEPRED_FMT;
-if (endsWith(path, ".bed"))
+if (endsWith(filePath, ".bed"))
     return BED_FMT;
-errAbort("can't determine file format of %s", path);
+errAbort("can't determine file format of %s", filePath);
 return UNKNOWN_FMT;
 }
 
