@@ -46,13 +46,13 @@ for (;;)
     }
 }
 
-static void rPrintIntos(FILE *f, struct pfParse *pp)
+static void rPrintIncludes(FILE *f, struct pfParse *pp)
 /* Print into statements. */
 {
-if (pp->type == pptInto)
-    fprintf(f, "into %s;\n", pp->children->name);
+if (pp->type == pptInclude)
+    fprintf(f, "include %s;\n", pp->children->name);
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    rPrintIntos(f, pp);
+    rPrintIncludes(f, pp);
 }
 
 static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit);
@@ -232,7 +232,7 @@ fprintf(f, "{\n");
 printTypesUsed(f, module);
 fprintf(f, "}\n");
 fprintf(f, "   // Modules referenced\n");
-rPrintIntos(f, module);
+rPrintIncludes(f, module);
 fprintf(f, "   // Symbols defined\n");
 rPrintDefs(f, module, FALSE);
 carefulClose(&f);

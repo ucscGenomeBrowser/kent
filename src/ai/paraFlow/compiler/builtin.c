@@ -1,5 +1,5 @@
 
-char *fetchBuiltinCode()
+char *fetchBuiltInCode()
 /* Return a string with the built in stuff. */
 {
 return

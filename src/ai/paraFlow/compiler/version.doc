@@ -1,3 +1,5 @@
+v07 - Making it work with classes declared in another module.
+      A couple of bug fixes.
 v06 - Runtime system is working with multiple modules.
       Passing all test cases.  Yay!
 v05 - Got it generating compilable C code again.  Need

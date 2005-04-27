@@ -17,6 +17,7 @@
 #include "pfPreamble.h"
 #include "defFile.h"
 #include "parseInto.h"
+#include "tokInto.h"
 
 
 int endPhase = 10;
@@ -65,6 +66,7 @@ hashAddInt(hash, "extends", pftExtends);
 hashAddInt(hash, "polymorphic", pftPolymorphic);
 hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "nil", pftNil);
+hashAddInt(hash, "include", pftInclude);
 return hash;
 }
 
@@ -159,7 +161,7 @@ struct pfCompile *pfCompileNew()
 {
 struct pfCompile *pfc;
 AllocVar(pfc);
-pfc->modules = hashNew(0);
+pfc->moduleHash = hashNew(0);
 pfc->reservedWords = createReservedWords();
 pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
 addBuiltInTypes(pfc);
@@ -184,20 +186,26 @@ FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
 FILE *boundF = mustOpen(boundFile, "w");
 
-if (endPhase < 1)
+if (endPhase < 0)
     return;
-verbose(2, "Phase 1 - initialization\n");
+verbose(2, "Phase 0 - initialization\n");
 pfc = pfCompileNew();
 splitPath(fileName, baseDir, baseName, baseSuffix);
 pfc->baseDir = cloneString(baseDir);
-    
 safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
+
+if (endPhase < 1)
+   return ;
+verbose(2, "Phase 1 - tokenizing\n");
+pfTokenizeInto(pfc, baseDir, baseName);
+
 if (endPhase < 2)
     return;
 verbose(2, "Phase 2 - parsing\n");
-program = pfParseInto(pfc, fetchBuiltinCode(), fileName);
+program = pfParseInto(pfc);
 pfParseDump(program, 0, parseF);
 carefulClose(&parseF);
+
 if (endPhase < 3)
     return;
 verbose(2, "Phase 3 - generating def file\n");
@@ -226,7 +234,7 @@ if (endPhase < 7)
 verbose(2, "Phase 7 - C code generation\n");
 pfCodeC(pfc, program, baseDir, cFile);
 verbose(2, "%d modules, %d tokens, %d parseNodes\n",
-	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
+	pfc->moduleHash->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 if (endPhase < 8)
     return;
 verbose(2, "Phase 8 - compiling C code\n");

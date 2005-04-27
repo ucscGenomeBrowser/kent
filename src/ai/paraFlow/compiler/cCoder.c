@@ -1606,7 +1606,7 @@ switch (pp->type)
     case pptReturn:
         fprintf(f, "goto _pf_cleanup;\n");
         break;
-    case pptInto:
+    case pptInclude:
         fprintf(f, "_pf_entry_%s(%s);\n", pp->name, stackName);
 	break;
     default:

@@ -46,12 +46,13 @@ if (type->children != NULL)
     }
 }
 
-static void encodeType(struct pfType *type, struct dyString *dy)
+void encodeType(struct pfType *type, struct dyString *dy)
 /* Encode type into dy. */
 {
 dyStringClear(dy);
 rEncodeType(type, dy);
 }
+
 
 static struct codedType *codedTypeLookup(struct hash *hash, 
 	struct dyString *dy, struct pfType *type)

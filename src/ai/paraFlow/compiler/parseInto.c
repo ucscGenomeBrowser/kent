@@ -14,6 +14,7 @@
 #include "defFile.h"
 #include "parseInto.h"
 
+#ifdef OLD_BUT_KEEP_FOR_REFERENCE
 static void collectDots(struct dyString *dy, struct pfParse *pp)
 /* Make sure that pp is really a pptDots or a pptName. 
  * Output name plus any necessary dots into dy. */
@@ -50,7 +51,9 @@ else if (pp->type == pptDot)
 else
     expectingGot("name", pp->tok);
 }
+#endif /* OLD_BUT_KEEP_FOR_REFERENCE */
 
+#ifdef OLD_BUT_KEEP_FOR_REFERENCE
 static struct pfParse *createAndParseDef(struct pfCompile *pfc, 
 	struct pfToken *tok, char *module, struct pfScope *scope)
 /* If .pfh file exists and is more recent than .pf then parse it.  
@@ -106,19 +109,21 @@ tkz->pos = oldPos;
 tkz->endPos = oldEndPos;
 return mod;
 }
+#endif /* OLD_BUT_KEEP_FOR_REFERENCE */
 
-void expandInto(struct pfParse *program, 
+#ifdef OLD
+static void expandInclude(struct pfParse *program, 
 	struct pfCompile *pfc, struct pfParse *pp, struct pfScope *scope)
 /* Go through program walking into modules. */
 {
-if (pp->type == pptInto)
+if (pp->type == pptInclude)
     {
     struct dyString *dy = dyStringNew(0);
     struct hashEl *hel;
     char *module = NULL;
     collectDots(dy, pp->children);
 
-    hel = hashLookup(pfc->modules, dy->string);
+    hel = hashLookup(pfc->moduleHash, dy->string);
     if (hel != NULL)
         module = hel->name;
 
@@ -127,15 +132,15 @@ if (pp->type == pptInto)
 	struct pfParse *mod = createAndParseDef(pfc, 
 		pp->children->tok, dy->string, scope);
 	mod->parent = program;
-	module = hashStoreName(pfc->modules, dy->string);
-	expandInto(program, pfc, mod, scope);
+	module = hashStoreName(pfc->moduleHash, dy->string);
+	expandInclude(program, pfc, mod, scope);
 	slAddHead(&program->children, mod);
 	}
     pp->name = module;
     dyStringFree(&dy);
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    expandInto(program, pfc, pp, scope);
+    expandInclude(program, pfc, pp, scope);
 }
 
 void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
@@ -147,6 +152,7 @@ if (pp->type == oldType)
 for (pp = pp->children; pp != NULL; pp = pp->next)
     pfParseTypeSub(pp, oldType, newType);
 }
+#endif /* OLD */
 
 static struct pfType *findTypeInModule(struct pfParse *module, char *typeName)
 /* Return base type in module or die. */
@@ -157,7 +163,8 @@ if (base == NULL)
 return pfTypeNew(base);
 }
 
-static void attachStringsAndThings(struct pfCompile *pfc, struct pfParse *stringModule)
+static void attachStringsAndThings(struct pfCompile *pfc, 
+	struct pfParse *stringModule)
 /* Finish parsing, binding and type checking the string module.  Rummage around for 
  * string class in it and attach it to pfc->stringFullType. */
 {
@@ -167,34 +174,93 @@ pfc->stringFullType = findTypeInModule(stringModule, "_pf_string");
 pfc->arrayFullType = findTypeInModule(stringModule, "_pf_array");
 }
 
+static void addCompoundScopes(struct pfCompile *pfc, struct pfToken *tokList,
+	struct pfScope *scope)
+/* Add scoping info to opening braces in token list */
+{
+int braceDepth = 0;
+struct pfToken *tok;
+for (tok = tokList; tok != NULL; tok = tok->next)
+    {
+    if (tok->type == '{')
+        {
+	++braceDepth;
+	scope = pfScopeNew(pfc, scope, 0, FALSE);
+	tok->val.scope = scope;
+	}
+    else if (tok->type == '}')
+        {
+	if (braceDepth == 0)
+	    errAt(tok, "} without preceding {");
+	--braceDepth;
+	scope = scope->parent;
+	tok->val.scope = scope;
+	}
+    }
+if (braceDepth != 0)
+    errAbort("Unclosed brace in %s", tokList->source->name);
+}
 
-struct pfParse *pfParseInto(struct pfCompile *pfc, char *builtinCode, 
-	char *fileName)
+static void addClasses(struct pfCompile *pfc, struct pfToken *tokList, 
+	struct pfScope *scope)
+/* Add types in classes to appropriate scope.  We do this as
+ * a first pass to help disambiguate the grammar. */
+{
+struct pfToken *tok;
+for (tok = tokList; tok->type != pftEnd; tok = tok->next)
+    {
+    if (tok->type == '{' || tok->type == '}')
+	{
+        scope = tok->val.scope;
+	}
+    if (tok->type == pftClass)
+	{
+	struct pfBaseType *base;
+	tok = tok->next;
+	if (tok->type != pftName)
+	    expectingGot("class name", tok);
+	base = pfScopeAddType(scope, tok->val.s, FALSE, 
+		pfc->classType, sizeof(void *), TRUE);
+	base->isClass = TRUE;
+	}
+    }
+}
+
+struct pfParse *pfParseInto(struct pfCompile *pfc)
 /* Parse file.  Also parse .pfh files for any modules the main file goes into.
  * If the .pfh files don't exist then create them.  Returns parse tree
  * of file and associated .pfh files.  Variables are not yet bound. */
 {
 struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
-struct pfSource *stringSource = pfSourceNew("<string>", fetchStringDef());
-struct pfScope *stringScope = pfScopeNew(pfc, pfc->scope, 3, TRUE);
-struct pfParse *stringModule = pfParseSource(pfc, stringSource, 
-	program, stringScope, pptModuleRef);
-struct pfSource *builtinSource = pfSourceNew("<builtin>", builtinCode);
-struct pfParse *builtinModule = pfParseSource(pfc, builtinSource, 
-	program, pfc->scope, pptModuleRef);
-struct pfSource *mainSource = pfSourceOnFile(fileName);
+struct pfModule *stringModule = hashMustFindVal(pfc->moduleHash, "<string>");
+struct pfModule *builtInModule = hashMustFindVal(pfc->moduleHash, "<builtIn>");
+struct pfScope *sysScope = pfc->scope;
 struct pfScope *userScope  = pfScopeNew(pfc, pfc->scope, 16, TRUE);
-struct pfParse *mainModule = pfParseSource(pfc, mainSource, 
-	program, userScope, pptMainModule);
+struct pfModule *mod;
 
-hashStoreName(pfc->modules, mainModule->name);
-attachStringsAndThings(pfc, stringModule);
+/* Loop through assigning scopes and recording classes. */
+for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
+    {
+    struct pfScope *scope = (mod->name[0] == '<' ? sysScope : userScope);
+    addCompoundScopes(pfc, mod->tokList, scope);
+    addClasses(pfc, mod->tokList, scope);
+    }
 
-/* Go into other modules, and put initial module at end of list. */
-slAddHead(&program->children, mainModule);
-expandInto(program, pfc, mainModule, userScope);
-slAddHead(&program->children, builtinModule);
+/* Compile everything. */
+for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
+    {
+    struct pfParse *modPp;
+    struct pfScope *scope = (mod->name[0] == '<' ? sysScope : userScope);
+    enum pfParseType type = pptMainModule;
+    if (mod != pfc->moduleList)
+	type = (mod->isPfh ? pptModuleRef : pptModule);
+    modPp = pfParseModule(pfc, mod, program, scope, type);
+    modPp->name = mod->name;
+    if (mod != stringModule)
+	slAddHead(&program->children, modPp);
+    }
 slReverse(&program->children);
+attachStringsAndThings(pfc, stringModule->pp);
 
 /* Restore order of scopes. */
 slReverse(&pfc->scopeList);

@@ -20,12 +20,24 @@
 #include "pfType.h"
 #endif
 
+struct pfModule
+/* Info on a module. */
+    {
+    struct pfModule *next;	/* Next module in list. */
+    char *name;			/* Module symbolic name. */
+    struct pfToken *tokList;	/* All modules's tokens. */
+    struct pfParse *pp;		/* Parse tree for module. */
+    struct pfSource *source;	/* Source file associated with module. */
+    boolean isPfh;		/* True if it's just a .pfh rather than .pf */
+    };
+
 struct pfCompile
 /* Paraflow compiler */
     {
     struct pfCompile *next;
     char *baseDir;		/* Base directory. */
-    struct hash *modules;	/* Full path to all modules. */
+    struct hash *moduleHash;	/* Module hash.  pfModule valued, name keyed. */
+    struct pfModule *moduleList;/* List of all modules. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
     struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
@@ -70,7 +82,7 @@ struct pfCompile
 struct pfCompile *pfCompileNew();
 /* Create new pfCompile.  */
 
-char *fetchBuiltinCode();
+char *fetchBuiltInCode();
 /* Return a string with the built in stuff. */
 
 char *fetchStringDef();

@@ -86,7 +86,7 @@ switch (pp->type)
 	pfTypeOnTuple(pfc, pp);
 	break;
 	}
-    case pptInto:
+    case pptInclude:
         {
 	pp->ty = pfTypeNew(pfc->moduleType);
 	pp->ty->tyty = tytyModule;
@@ -133,13 +133,16 @@ switch (pp->type)
 	    }
 	break;
 	}
-    case pptInto:
+    case pptInclude:
         {
+	// TODO - probably want to just eliminate this.
 	struct pfParse *name = pp->children;
 	name->type = pptSymName;
+#ifdef BAD
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
 	pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
+#endif /* BAD */
 	break;
 	}
     }

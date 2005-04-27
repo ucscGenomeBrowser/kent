@@ -523,7 +523,7 @@ numericCast(pfc, stringType, pPp);
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type, boolean numToString)
 /* Make sure that a single variable is of the required type.  
- * Add casts if necessary */
+ * Add casts if necessary.  This is a gnarly function! */
 {
 struct pfParse *pp = *pPp;
 struct pfType *pt = pp->ty;
@@ -597,12 +597,8 @@ if (pt->base != base)
 		    break;
 		    }
 		}
-	    if (!ok)
-	        {
-		typeMismatch(pp, type);
-		}
 	    }
-	else
+	if (!ok)
 	    {
 	    if (pt->tyty != tytyTuple)
 		{

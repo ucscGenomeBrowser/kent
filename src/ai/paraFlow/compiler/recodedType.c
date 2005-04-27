@@ -3,6 +3,7 @@
 #include "pfType.h"
 #include "pfParse.h"
 #include "pfCompile.h"
+#include "codedType.h"
 #include "recodedType.h"
 
 struct recodedType
@@ -18,30 +19,6 @@ int recodedTypeCmp(const void *va, const void *vb)
 const struct recodedType *a = *((struct recodedType **)va);
 const struct recodedType *b = *((struct recodedType **)vb);
 return a->localTypeId - b->localTypeId;
-}
-
-static void rEncodeType(struct pfType *type, struct dyString *dy)
-/* Encode type recursively into dy. */
-{
-dyStringPrintf(dy, "%s", type->base->name);
-if (type->children != NULL)
-    {
-    dyStringAppendC(dy, '(');
-    for (type = type->children; type != NULL; type = type->next)
-        {
-	rEncodeType(type, dy);
-	if (type->next != NULL)
-	    dyStringAppendC(dy, ',');
-	}
-    dyStringAppendC(dy, ')');
-    }
-}
-
-void encodeType(struct pfType *type, struct dyString *dy)
-/* Encode type into dy. */
-{
-dyStringClear(dy);
-rEncodeType(type, dy);
 }
 
 int recodedTypeId(struct pfCompile *pfc, struct pfType *type)

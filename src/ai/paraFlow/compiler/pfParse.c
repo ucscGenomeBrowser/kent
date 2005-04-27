@@ -20,8 +20,8 @@ switch (type)
     	return "pptProgram";
     case pptScope:
         return "pptScope";
-    case pptInto:
-        return "pptInto";
+    case pptInclude:
+        return "pptInclude";
     case pptModule:
         return "pptModule";
     case pptModuleRef:
@@ -754,7 +754,6 @@ switch (tok->type)
 	    pp = pfParseExpression(parent, &tok, scope);
 	    if (tok->type != ')')
 		errAt(tok, "Unclosed parenthesis.");
-	    pp->tok = tok;
 	    }
 	tok = tok->next;
 	break;
@@ -1553,15 +1552,17 @@ static struct pfParse *parseReturn(struct pfParse *parent,
 return parseWordStatement(parent, pTokList, scope, pptReturn);
 }
 
-static struct pfParse *parseInto(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseInclude(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse into statement */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptInto, tok, parent, scope);
+struct pfParse *pp = pfParseNew(pptInclude, tok, parent, scope);
 
 tok = tok->next;	/* Have covered 'into' */
 pp->children = parseDottedNames(pp, &tok, scope);
+pp->name = pp->children->name;	/* Need to make this cope with dots FIXME */
 
 *pTokList = tok;
 return pp;
@@ -1579,8 +1580,8 @@ struct pfParse *statement;
 //  pfTokenDump(tok, uglyOut, TRUE);
 switch (tok->type)
     {
-    case pftInto:
-        statement = parseInto(pfc, parent, &tok, scope);
+    case pftInclude:
+        statement = parseInclude(pfc, parent, &tok, scope);
 	break;
     case ';':
 	statement = emptyStatement(parent, tok, scope);
@@ -1658,31 +1659,6 @@ return program;
 }
 
 
-static void addClasses(struct pfCompile *pfc, struct pfToken *tokList, 
-	struct pfScope *scope)
-/* Add types in classes to appropriate scope.  We do this as
- * a first pass to help disambiguate the grammar. */
-{
-struct pfToken *tok;
-for (tok = tokList; tok->type != pftEnd; tok = tok->next)
-    {
-    if (tok->type == '{' || tok->type == '}')
-	{
-        scope = tok->val.scope;
-	}
-    if (tok->type == pftClass)
-	{
-	struct pfBaseType *base;
-	tok = tok->next;
-	if (tok->type != pftName)
-	    expectingGot("class name", tok);
-	base = pfScopeAddType(scope, tok->val.s, FALSE, pfc->classType, sizeof(void *),
-		TRUE);
-	base->isClass = TRUE;
-	}
-    }
-}
-
 static void subTypeForName(struct pfParse *pp)
 /* Substititute pptTypeName for pptName use where appropriate. */
 {
@@ -1733,7 +1709,19 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     varDecAndAssignToVarInit(pp);
 }
 
+struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
+	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType)
+/* Parse a module and return parse tree associated with it. */
+{
+struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
+pfParseTokens(pfc, module->tokList, scope, modParse);
+varDecAndAssignToVarInit(modParse);
+module->pp = modParse;
+return modParse;
+}
 
+
+#ifdef OLD
 struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
 	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType)
 /* Tokenize and parse given source. */
@@ -1742,7 +1730,7 @@ struct pfTokenizer *tkz = pfc->tkz;
 struct pfToken *tokList = NULL, *tok;
 int endCount = 3;
 struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
-char *module = hashStoreName(pfc->modules, source->name);
+char *module = hashStoreName(pfc->moduleHash, source->name);
 int braceDepth = 0;
 char baseDir[256], baseName[128], baseSuffix[64];
 
@@ -1792,4 +1780,5 @@ pfParseTokens(pfc, tokList, scope, modParse);
 varDecAndAssignToVarInit(modParse);
 return modParse;
 }
+#endif /* OLD */
 
