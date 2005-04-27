@@ -1202,6 +1202,10 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "<");
     case pptLessOrEquals:
         return codeBinaryOp(pfc, f, pp, stack, "<=");
+    case pptLogAnd:
+        return codeBinaryOp(pfc, f, pp, stack, "&&");
+    case pptLogOr:
+        return codeBinaryOp(pfc, f, pp, stack, "||");
     case pptBitAnd:
         return codeBinaryOp(pfc, f, pp, stack, "&");
     case pptBitOr:
@@ -2018,7 +2022,6 @@ struct pfParse *toCode, *module;
 struct pfScope *scope;
 struct pfParse *mainModule = NULL;
 
-uglyf("pfCodeC: baseDir %s, mainName %s\n", baseDir, mainName);
 pfc->runTypeHash = hashNew(0);
 
 /* Generate code for each module that is not already compiled. */

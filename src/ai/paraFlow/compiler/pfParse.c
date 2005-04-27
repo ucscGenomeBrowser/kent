@@ -754,6 +754,7 @@ switch (tok->type)
 	    pp = pfParseExpression(parent, &tok, scope);
 	    if (tok->type != ')')
 		errAt(tok, "Unclosed parenthesis.");
+	    pp->tok = tok;
 	    }
 	tok = tok->next;
 	break;
@@ -980,7 +981,7 @@ struct pfParse *parseLogAnd(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseCmp(parent, &tok, scope);
-if (tok->type == pftLogAnd)
+while (tok->type == pftLogAnd)
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogAnd, tok, parent, scope);
@@ -1000,7 +1001,7 @@ struct pfParse *parseLogOr(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseLogAnd(parent, &tok, scope);
-if (tok->type == pftLogOr)
+while (tok->type == pftLogOr)
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogOr, tok, parent, scope);
