@@ -74,6 +74,33 @@ printTokenRange(f, start, end);
 fprintf(f, ";\n");
 }
 
+static struct pfToken *addClosingParens(struct pfToken *start, 
+	struct pfToken *end)
+/* If the output type tuple is parenthesized we end up missing
+ * the closing end paren.  This fixes that. */
+{
+int parenBalance = 0;
+struct pfToken *tok = start;
+for (;;)
+    {
+    if (tok->type == '(')
+        ++parenBalance;
+    else if (tok->type == ')')
+        --parenBalance;
+    if (tok == end)
+        break;
+    tok = tok->next;
+    }
+while (parenBalance > 0)
+    {
+    tok = tok->next;
+    if (tok == NULL || tok->type != ')')
+        internalErr();
+    --parenBalance;
+    }
+return tok;
+}
+
 static void printFuncDef(FILE *f, struct pfParse *funcDef)
 /* Print function definition - just name and parameters */
 {
@@ -86,6 +113,7 @@ start = end = funcDef->tok;
 findSpanningTokens(name, &start, &end);
 findSpanningTokens(input, &start, &end);
 findSpanningTokens(output, &start, &end);
+end = addClosingParens(start, end);
 printTokenRange(f, start, end);
 fprintf(f, ";\n");
 }
@@ -108,6 +136,19 @@ rPrintDefs(f, body, TRUE);
 fprintf(f, "}\n");
 }
 
+static void printDefTuple(FILE *f, struct pfParse *pp, boolean printInit)
+/* See if tuple is a definition, and if so print it. */
+{
+if (pp->children != NULL && pp->children->type == pptVarInit)
+    {
+    struct pfToken *start, *end;
+    start = end = pp->tok;
+    findSpanningTokens(pp, &start, &end);
+    printTokenRange(f, start, end);
+    fprintf(f, ";\n");
+    }
+}
+
 static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit)
 /* Print definitions . */
 {
@@ -126,6 +167,9 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	    break;
 	case pptClass:
 	    printClassDef(f, pp);
+	    break;
+	case pptTuple:
+	    printDefTuple(f, pp, printInit);
 	    break;
 	}
     }
