@@ -14,6 +14,7 @@ struct file
     {
     int _pf_refCount;			     	/* Number of references. */
     void (*_pf_cleanup)(struct file *obj, int id); /* Called when refCount <= 0 */
+    _pf_polyFunType *_pf_polyFun;	/* Polymorphic functions. */
     struct _pf_string *name;		/* The only exported field. */
     FILE *f;				/* File handle. */
     struct dyString *dy;			/* Buffer for reading strings. */
@@ -37,7 +38,7 @@ struct file *file;
 AllocVar(file);
 file->_pf_refCount = 1;
 file->_pf_cleanup = fileCleanup;
-file->name = stack[0].String;
+file->name = name;
 file->f = mustOpen(name->s, mode->s);
 file->dy = dyStringNew(0);
 
