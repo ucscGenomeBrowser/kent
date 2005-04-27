@@ -127,9 +127,9 @@ if (pp->type == pptInto)
 	struct pfParse *mod = createAndParseDef(pfc, 
 		pp->children->tok, dy->string, scope);
 	mod->parent = program;
+	module = hashStoreName(pfc->modules, dy->string);
 	expandInto(program, pfc, mod, scope);
 	slAddHead(&program->children, mod);
-	module = hashStoreName(pfc->modules, dy->string);
 	}
     pp->name = module;
     dyStringFree(&dy);
@@ -187,6 +187,7 @@ struct pfScope *userScope  = pfScopeNew(pfc, pfc->scope, 16, TRUE);
 struct pfParse *mainModule = pfParseSource(pfc, mainSource, 
 	program, userScope, pptMainModule);
 
+hashStoreName(pfc->modules, mainModule->name);
 attachStringsAndThings(pfc, stringModule);
 
 /* Go into other modules, and put initial module at end of list. */
