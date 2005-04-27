@@ -1,4 +1,4 @@
-into b
+include b
 
 to printA()
 {
