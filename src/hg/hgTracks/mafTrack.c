@@ -12,8 +12,9 @@
 #include "maf.h"
 #include "scoredRef.h"
 #include "hgMaf.h"
+#include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.41 2005/04/27 17:07:57 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.42 2005/04/27 18:52:15 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -221,7 +222,7 @@ if (zoomedToBaseLevel)
     }
 else
     {
-    if (tg->visibility == tvFull && winEnd - winStart < 1000000)
+    if (tg->visibility == tvFull && winBaseCount < MAF_SUMMARY_VIEW)
         {
         /* currently implemented only for medium zoom out */
         miList = mafItems(tg, scoreHeight, FALSE, isAxt);
@@ -511,6 +512,13 @@ int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
 midY--;
 
+/* tweaking end pixels, as done in chainTrack.c */
+xOff--; /* this causes some lines to overwrite one
+         * pixel of the previous box */
+if (width == 1)
+    /* width=1 lines won't draw via innerline, so widen them */
+    width++;
+width++;
 if (isDouble)
     {
     innerLine(vg, xOff, midY1, width, color);
@@ -532,14 +540,16 @@ struct mafComp *mcMaster, *mc;
 char dbChrom[64];
 int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
-int x;
+int x1, x2;
+int lastAlignX2 = -1;
+double scale = scaleForPixels(width);
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
     {
-    int mafPixelStart, mafPixelEnd, mafPixelWidth;
     double *pixelScores = NULL;
     int i;
+    int w;
     sub = NULL;
     if (mafNeedSubset(full, dbChrom, seqStart, seqEnd))
         sub = maf = mafSubset(full, dbChrom, seqStart, seqEnd);
@@ -558,17 +568,15 @@ for (full = mafList; full != NULL; full = full->next)
             }
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
-        /* NOTE - +1/-1 tweaks to match existing chain/net tracks display */
-	mafPixelStart = (mcMaster->start - seqStart) * (width+1)/winBaseCount;
-	mafPixelEnd = (mcMaster->start + mcMaster->size - seqStart) 
-	    * (width+1)/winBaseCount;
-	mafPixelWidth = mafPixelEnd-mafPixelStart;
-        x = mafPixelStart+xOff-1;
-	if (mafPixelWidth < 1) mafPixelWidth = 1;
+        x1 = round((double)((int)mcMaster->start-seqStart)*scale) + xOff;
+        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
+	w = x2 - x1;
+	if (w < 1) w = 1;
         if (vis != tvFull && mc->size == 0)
             {
-            int w = mafPixelWidth+1;
             Color chainColor;
+            if (w == 1 && x1 == lastAlignX2)
+                continue;
             if (!chainBreaks)
                 continue;
             chainColor = lighterColor(vg, color);
@@ -576,25 +584,26 @@ for (full = mafList; full != NULL; full = full->next)
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
                     /* double gap -> display double line ala chain tracks */
-                    drawMafChain(vg, x, yOff, w, height, chainColor, TRUE);
+                    drawMafChain(vg, x1, yOff, w, height, chainColor, TRUE);
             if (mc->leftStatus == MAF_CONTIG_STATUS &&
                 mc->rightStatus == MAF_CONTIG_STATUS)
                     /* single gap -> display single line ala chain tracks */
-                    drawMafChain(vg, x, yOff, w, height, chainColor, FALSE);
+                    drawMafChain(vg, x1, yOff, w, height, chainColor, FALSE);
             }
         else
             {
-            AllocArray(pixelScores, mafPixelWidth);
-            mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
+            lastAlignX2 = x2;
+            AllocArray(pixelScores, w);
+            mafFillInPixelScores(maf, mcMaster, pixelScores, w);
             if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS &&
-                winEnd - winStart <= 30000)
-                    vgBox(vg, x-2, yOff, 2, height-1, getBlueColor());
-            for (i=0; i<mafPixelWidth; ++i)
+                winEnd - winStart <= MAF_DETAIL_VIEW)
+                    vgBox(vg, x1-3, yOff, 2, height-1, getBlueColor());
+            for (i=0; i<w; ++i)
                 {
                 if (vis == tvFull)
                     {
                     int y = pixelScores[i] * height1;
-                    vgBox(vg, i+x, yOff + height1 - y, 
+                    vgBox(vg, i+x1, yOff + height1 - y, 
                         1, y+1, (ixMafAli % 2) ? color : altColor);
                     }
                 else
@@ -604,13 +613,13 @@ for (full = mafList; full != NULL; full = full->next)
                     if (shade > maxShade)
                         shade = maxShade;
                     c = shadesOfGray[shade];
-                    vgBox(vg, i + x+1, yOff, 
+                    vgBox(vg, i+x1, yOff, 
                         1, height-1, c);
                     }
                 }
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS &&
-                winEnd - winStart <= 30000)
-                    vgBox(vg, i + x+1, yOff, 2, 
+                winEnd - winStart <= MAF_DETAIL_VIEW)
+                    vgBox(vg, i+x1+1, yOff, 2, 
                             height-1, getBlueColor());
             freez(&pixelScores);
             }
@@ -673,7 +682,7 @@ static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
 /* Draw wiggle or density plot, not base-by-base. */
 {
 int seqSize = seqEnd - seqStart;
-if (seqSize >= 1000000)
+if (seqSize >= MAF_SUMMARY_VIEW)
     {
     mafDrawOverview(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
             color, vis);

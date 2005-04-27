@@ -36,3 +36,5 @@ struct mafAli *hgMafFrag(
  * the sources just indicate the species.  You can mafFree this
  * as normal. */
 
+int mafCmp(const void *va, const void *vb);
+/* Compare to sort based on start of first component. */

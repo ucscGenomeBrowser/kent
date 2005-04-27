@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.2 2004/02/02 23:46:08 kent Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.3 2005/04/27 18:52:15 kate Exp $";
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end)
@@ -88,7 +88,7 @@ slReverse(&mafList);
 return mafList;
 }
 
-static int mafCmp(const void *va, const void *vb)
+int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
 {
 const struct mafAli *a = *((struct mafAli **)va);

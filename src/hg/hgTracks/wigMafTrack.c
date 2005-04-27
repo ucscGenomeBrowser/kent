@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.72 2005/04/20 17:48:39 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.73 2005/04/27 18:52:15 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -297,12 +297,15 @@ static struct wigMafItem *loadPairwiseItems(struct track *track)
 struct wigMafItem *miList = NULL, *speciesItems = NULL, *mi;
 struct track *wigTrack = track->subtracks;
 
-if (winEnd - winStart < 1000000)
+if (winBaseCount < MAF_SUMMARY_VIEW)
     {
     /* "close in" display uses actual alignments from file */
     struct sqlConnection *conn = hAllocConn();
     track->customPt = wigMafLoadInRegion(conn, track->mapName, 
                                         chromName, winStart, winEnd);
+#ifdef DEBUG
+    slSort(&track->customPt, mafCmp);
+#endif
     hFreeConn(&conn);
     }
 if (wigTrack != NULL)
@@ -523,21 +526,17 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
     }
 }
 
-static void drawScore(double score, int chromStart, int chromEnd, int seqStart,
+static int drawScore(float score, int chromStart, int chromEnd, int seqStart,
                         double scale, struct vGfx *vg, int xOff, int yOff,
                         int height, Color color, enum trackVisibility vis)
-/* Draw density plot or graph based on score */
+/* Draw density plot or graph based on score. Return last X drawn  */
 {
 int x1,x2,y,w;
-int height1 = height - 2;
-//int midY = yOff + (height>>1);
-//int midY1 = midY - (height>>2);
-//int midY2 = midY + (height>>2) - 1;
+int height1 = height-1;
 
 x1 = round((chromStart - seqStart)*scale);
 x2 = round((chromEnd - seqStart)*scale);
-w = x2-x1;
-if (w < 1) w = 1;
+w = x2-x1+1;
 if (vis == tvFull)
     {
     y = score * height1;
@@ -546,12 +545,15 @@ if (vis == tvFull)
 else
     {
     Color c;
-    int shade = score * maxShade;
-    if ((shade < 0) || (shade >= maxShade))
+    int shade = (score * maxShade) + 1;
+    if (shade < 0)
         shade = 0;
+    else if (shade > maxShade)
+        shade = maxShade;
     c = shadesOfGray[shade];
-    vgBox(vg, x1 + xOff, yOff, w, height-1, c);
+    vgBox(vg, x1 + xOff, yOff, w, height1, c);
     }
+return xOff + x1 + w - 1;
 }
 
 static void drawScoreSummary(struct mafSummary *summaryList, int height,
@@ -559,16 +561,52 @@ static void drawScoreSummary(struct mafSummary *summaryList, int height,
                             struct vGfx *vg, int xOff, int yOff,
                             int width, MgFont *font, 
                             Color color, Color altColor,
-                            enum trackVisibility vis)
+                            enum trackVisibility vis, boolean chainBreaks)
 /* Draw density plot or graph for summary maf scores */
 {
 struct mafSummary *ms;
 double scale = scaleForPixels(width);
+boolean isDouble = FALSE;
+int x1, x2;
+int w = 0;
+int chromStart = seqStart;
+int lastX;
 
+Color chainColor = lighterColor(vg, color);
+
+/* draw chain before first alignment */
+ms = summaryList;
+if (chainBreaks && ms->chromStart > chromStart && 
+    (ms->leftStatus[0] == MAF_CONTIG_STATUS || 
+     ms->leftStatus[0] == MAF_INSERT_STATUS))
+    {
+    isDouble = (ms->leftStatus[0] == MAF_INSERT_STATUS);
+    x1 = xOff;
+    x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
+    w = x2 - x1;
+    if (w > 0)
+        drawMafChain(vg, x1, yOff, w, height, chainColor, isDouble);
+    }
 for (ms = summaryList; ms != NULL; ms = ms->next)
     {
-    drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart, scale,
-                vg, xOff, yOff, height, color, vis);
+    lastX = drawScore(ms->score, ms->chromStart, ms->chromEnd, seqStart,
+                        scale, vg, xOff, yOff, height, color, vis);
+
+    /* draw chain after alignment */
+    if (chainBreaks && ms->chromEnd < seqEnd && ms->next != NULL &&
+        (ms->rightStatus[0] == MAF_CONTIG_STATUS || 
+         ms->rightStatus[0] == MAF_INSERT_STATUS))
+        {
+        isDouble = (ms->rightStatus[0] == MAF_INSERT_STATUS);
+        x1 = round((double)((int)ms->chromEnd+1 - seqStart) * scale) + xOff;
+        x2 = round((double)((int)ms->next->chromStart-1 - seqStart) * scale) 
+                + xOff;
+        w = x2 - x1;
+        if (w == 1 && x1 == lastX)
+            continue;
+        if (w > 0);
+            drawMafChain(vg, x1, yOff, w, height, color, isDouble);
+        }
     }
 }
 
@@ -619,6 +657,8 @@ struct hash *componentHash = newHash(6);
 struct hashEl *hel;
 struct hashCookie cookie;
 struct dyString *where = dyStringNew(256);
+boolean useIrowChains = FALSE;
+char option[64];
 
 if (miList == NULL)
     return FALSE;
@@ -626,6 +666,11 @@ if (miList == NULL)
 /* get summary table name from trackDb */
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
+
+safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
+if (cartCgiUsualBoolean(cart, option, FALSE) && 
+    trackDbSetting(track->tdb, "irows") != NULL)
+        useIrowChains = TRUE;
 
 /* Create SQL where clause that will load up just the
  * summaries for the species that we are including. */ 
@@ -653,6 +698,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         /* previous table schema didn't have status fields */
         ms = mafSummaryMiniLoad(row + rowOffset);
+    /* prune to fit in window bounds */
+    if (ms->chromStart < seqStart)
+        ms->chromStart = seqStart;
+    if (ms->chromEnd > seqEnd)
+        ms->chromEnd = seqEnd;
     if ((hel = hashLookup(componentHash, ms->src)) == NULL)
         hashAdd(componentHash, ms->src, ms);
     else
@@ -681,7 +731,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
         vgSetClip(vg, xOff, yOff, width, 16);
         drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
                                 xOff, yOff, width, font, track->ixAltColor,
-                                track->ixAltColor, tvFull);
+                                track->ixAltColor, tvFull, FALSE);
         vgUnclip(vg);
         }
     else 
@@ -691,7 +741,8 @@ for (mi = miList; mi != NULL; mi = mi->next)
         /* display pairwise alignments in this region in dense format */
         vgSetClip(vg, xOff, yOff, width, mi->height);
         drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
-                                xOff, yOff, width, font, color, color, tvDense);
+                            xOff, yOff, width, font, color, color, tvDense,
+                            useIrowChains);
         vgUnclip(vg);
         }
     yOff += mi->height;
