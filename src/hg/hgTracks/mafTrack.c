@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.40 2005/04/26 18:19:12 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.41 2005/04/27 17:07:57 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -636,10 +636,6 @@ if (mafList == NULL)
                                                 seqStart, seqEnd, isAxt);
 
 /* display the multiple alignment in this region */
-#define DEBUG
-#ifdef DEBUG
-slSort(&mafList, mafCmp);
-#endif
 drawMafRegionDetails(mafList, mi->height, seqStart, seqEnd, vg, xOff, yOff,
                          width, font, color, tg->ixAltColor,  vis, isAxt, FALSE);
 mafAliFreeList(&mafList);
