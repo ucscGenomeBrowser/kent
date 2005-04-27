@@ -233,3 +233,29 @@ class countingHash extends hash
 	parent.add(name, val);
 	}
     }
+
+
+// Instead of the problematic C/Java switch statement there is a case
+// statement that is as so:
+
+string message;
+case (errCode)
+    {
+    0: ;	// leave message nil
+    1: message = "File not found";
+    2: message = "Write protected";
+    3,4: message = "Privacy violation";
+    18: {message = "Hull breech"; alarm("evacuation")}
+    default: message = "Error code #" + errCode;
+    }
+if (message)
+    die(message);
+
+Only a single statement is allowed after each label.
+A comma-separated list of labels can share the same
+statement.  Multiple statements enclosed in braces are
+considered a single statment.
+
+A simple case would be:
+
+case
