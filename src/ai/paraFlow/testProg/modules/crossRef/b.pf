@@ -1,0 +1,8 @@
+into a
+
+to printB()
+{
+print("Hello from module B");
+}
+
+printA();
