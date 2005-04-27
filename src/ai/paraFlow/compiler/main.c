@@ -187,9 +187,11 @@ FILE *boundF = mustOpen(boundFile, "w");
 if (endPhase < 1)
     return;
 verbose(2, "Phase 1 - initialization\n");
-splitPath(fileName, baseDir, baseName, baseSuffix);
-safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
 pfc = pfCompileNew();
+splitPath(fileName, baseDir, baseName, baseSuffix);
+pfc->baseDir = cloneString(baseDir);
+    
+safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
 if (endPhase < 2)
     return;
 verbose(2, "Phase 2 - parsing\n");
@@ -241,10 +243,14 @@ verbose(2, "Phase 8 - compiling C code\n");
 	    dyStringAppend(dy, "-O3 ");
 	    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
 	    dyStringAppend(dy, "-c ");
-	    if (baseDir[0] != 0)
-		dyStringPrintf(dy, "%s/", baseDir);
+	    dyStringAppend(dy, "-o ");
+	    dyStringAppend(dy, baseDir);
+	    dyStringAppend(dy, module->name);
+	    dyStringAppend(dy, ".o ");
+	    dyStringAppend(dy, baseDir);
 	    dyStringAppend(dy, module->name);
 	    dyStringAppend(dy, ".c");
+	    verbose(3, "%s\n", dy->string);
 	    err = system(dy->string);
 	    if (err != 0)
 		errAbort("Couldn't compile %s.c", module->name);
@@ -254,20 +260,19 @@ verbose(2, "Phase 8 - compiling C code\n");
     dyStringAppend(dy, "gcc ");
     dyStringAppend(dy, "-O3 ");
     dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
-    dyStringPrintf(dy, "-o %s ", baseName);
+    dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
     dyStringPrintf(dy, "%s ", cFile);
     for (module = program->children; module != NULL; module = module->next)
         {
 	if (module->name[0] != '<')
 	    {
-	    if (baseDir[0] != 0)
-		dyStringPrintf(dy, "%s/", baseDir);
-	    dyStringPrintf(dy, "%s", module->name);
+	    dyStringPrintf(dy, "%s%s", baseDir, module->name);
 	    dyStringPrintf(dy, ".o ");
 	    }
 	}
     dyStringAppend(dy, "~/kent/src/ai/paraFlow/runtime/runtime.a ");
     dyStringPrintf(dy, "~/kent/src/lib/%s/jkweb.a", getenv("MACHTYPE"));
+    verbose(3, "%s\n", dy->string);
     err = system(dy->string);
     if (err != 0)
 	errnoAbort("problem compiling:\n", dy->string);
@@ -283,7 +288,10 @@ verbose(2, "Phase 9 - execution\n");
     struct dyString *dy = dyStringNew(0);
     int err;
     int i;
-    dyStringPrintf(dy, "./%s", baseName);
+    if (baseDir[0] == 0)
+	dyStringPrintf(dy, "./%s", baseName);
+    else
+        dyStringPrintf(dy, "%s%s", baseDir, baseName);
     for (i=0; i<pfArgc; ++i)
         {
 	dyStringAppendC(dy, ' ');

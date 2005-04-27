@@ -24,6 +24,7 @@ struct pfCompile
 /* Paraflow compiler */
     {
     struct pfCompile *next;
+    char *baseDir;		/* Base directory. */
     struct hash *modules;	/* Full path to all modules. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */

@@ -1743,9 +1743,10 @@ int endCount = 3;
 struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
 char *module = hashStoreName(pfc->modules, source->name);
 int braceDepth = 0;
+char baseDir[256], baseName[128], baseSuffix[64];
 
-modParse->name = cloneString(module);
-chopSuffix(modParse->name);
+splitPath(module, NULL, baseName, NULL);
+modParse->name = cloneString(baseName);
 
 /* Read tokens from file. */
 pfTokenizerNewSource(tkz, source);

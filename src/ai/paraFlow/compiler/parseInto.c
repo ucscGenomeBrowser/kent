@@ -68,8 +68,8 @@ boolean needRemake = TRUE;
 char *modName;
 enum pfParseType modType;
 
-safef(pfName, sizeof(pfName), "%s.pf", module);
-safef(pfhName, sizeof(pfhName), "%s.pfh", module);
+safef(pfName, sizeof(pfName), "%s%s.pf", pfc->baseDir, module);
+safef(pfhName, sizeof(pfhName), "%s%s.pfh", pfc->baseDir, module);
 if (!fileExists(pfName))
     errAt(tok, "%s doesn't exist", pfName);
 if (fileExists(pfhName))

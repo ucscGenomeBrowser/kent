@@ -2018,6 +2018,7 @@ struct pfParse *toCode, *module;
 struct pfScope *scope;
 struct pfParse *mainModule = NULL;
 
+uglyf("pfCodeC: baseDir %s, mainName %s\n", baseDir, mainName);
 pfc->runTypeHash = hashNew(0);
 
 /* Generate code for each module that is not already compiled. */
@@ -2028,10 +2029,7 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	char fileName[PATH_LEN];
 	if (toCode->type == pptMainModule)
 	    mainModule = toCode;
-	if (baseDir[0] != 0)
-	    safef(fileName, sizeof(fileName), "%s/%s.c", baseDir, toCode->name);
-	else
-	    safef(fileName, sizeof(fileName), "%s.c", toCode->name);
+	safef(fileName, sizeof(fileName), "%s%s.c", baseDir, toCode->name);
 	f = mustOpen(fileName, "w");
 
 	pfc->moduleTypeHash = hashNew(0);
