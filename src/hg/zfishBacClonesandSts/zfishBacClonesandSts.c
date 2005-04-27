@@ -156,7 +156,7 @@ while (lineFileChopCharNext(cgf, sep, words, 5))
         /* add BAC info to struct */
         b->intName = cloneString(name);
         b->extName = cloneString(extName);
-        b->chrom = needMem(sizeof(char *) * NUMCHROMS);
+        AllocArray(b->chrom, (sizeof(char *) * NUMCHROMS));
         for (i = 0; i < NUMCHROMS; i++)
             {
             b->chrom[i] = NULL;
@@ -206,11 +206,11 @@ while (lineFileChopCharNext(clf, sep, words, 5))
         AllocVar(a); 
         /* allocate memory for UniSTS IDs, aliases, internal and external names and relations */
         /* and initialize the arrays */
-        a->uniStsId = needMem(sizeof(char *) * NUMSANGER);
-        a->aliases = needMem(sizeof(char *) * NUMALIASES);
-        a->extName = needMem(sizeof(char *) * NUMALIASES);
-        a->intName = needMem(sizeof(char *) * NUMALIASES);
-        a->relation = needMem(sizeof(int) * NUMALIASES);
+        AllocArray(a->uniStsId, (sizeof(char *) * NUMSANGER));
+        AllocArray(a->aliases, (sizeof(char *) * NUMALIASES));
+        AllocArray(a->extName, (sizeof(char *) * NUMALIASES));
+        AllocArray(a->intName, (sizeof(char *) * NUMALIASES));
+        AllocArray(a->relation, (sizeof(int) * NUMALIASES));
 
         for (i = 0; i < NUMSANGER; i++)
             {
@@ -348,7 +348,7 @@ while (lineFileChopTab(nmf, words))
             b->intName = cloneString(intName);
         else
             b->intName = NULL;
-        b->chrom = needMem(sizeof(char *) * NUMCHROMS);
+        AllocArray(b->chrom, (sizeof(char *) * NUMCHROMS));
         for (i = 0; i < NUMCHROMS; i++)
             {
             b->chrom[i] = NULL;
@@ -700,14 +700,14 @@ lineFileClose(&clf);
 lineFileClose(&mkf);
 lineFileClose(&acf);
 lineFileClose(&usf);
-fclose(bacXRef);
-fclose(bacAlias);
-fclose(stderr);
+carefulClose(&bacXRef);
+carefulClose(&bacAlias);
+carefulClose(&stderr);
 
-freeHash(&bacHash);
-freeHash(&extNameHash);
-freeHash(&aliasHash);
-freeHash(&sangerByExtNameHash);
+freeHashAndVals(&bacHash);
+freeHashAndVals(&extNameHash);
+freeHashAndVals(&aliasHash);
+freeHashAndVals(&sangerByExtNameHash);
 
 return(0);
 }
