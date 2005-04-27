@@ -182,11 +182,11 @@ void pfMakeDefFile(struct pfCompile *pfc, struct pfParse *module,
 /* Write out definition file. */
 {
 FILE *f = mustOpen(defFile, "w");
+fprintf(f, "// ParaFlow definition and type file  for %s module\n", module->name);
 fprintf(f, "   // Types used\n");
 fprintf(f, "{\n");
 printTypesUsed(f, module);
 fprintf(f, "}\n");
-fprintf(f, "// ParaFlow definition and type file  for %s module\n", module->name);
 fprintf(f, "   // Modules referenced\n");
 rPrintIntos(f, module);
 fprintf(f, "   // Symbols defined\n");
