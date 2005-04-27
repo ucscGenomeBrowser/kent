@@ -100,7 +100,6 @@ exit
     end
 
     # consists of 8 custom track wiggle BED files
-
     ssh hgwdev
     mkdir /gbdb/hg16/encode/UCSD_ChIP/wib
     cd /cluster/data/encode/UCSD/project1
@@ -141,6 +140,70 @@ exit
          # TAF1 THP1 (darkish blue)
          # TAF1 IMR90 (darkish red)
          # TAF1 HCT116 (darkish green)
+
+    # UCSD/Ludwig Institute Histone Methylation (2005-04-21 kate)
+    # NOTE: this data was submitted 12/14/04, but somehow fell thru
+    # the cracks (it was the week before CSHL).
+    # Files received from email:  ave_AcH3_imr90.wig ave_MeH3K4_imr90.wig
+# Provided by Chunxu Qu [mailto:qchunxu@ucsd.edu]
+
+    cd /cluster/data/encode/UCSD
+    cd project1
+    mv ave_AcH3_imr90.wig ave_AcH3_imr90_p.wig.bed
+    mv ave_MeH3K4_imr90.wig ave_MeH3K4_imr90_p.wig.bed
+    mkdir -p /gbdb/hg16/encode/UcsdChip/wib
+    mkdir wig.2005-04-21
+    cd latest
+    # edit makeWig.csh to use wigEncode and standard table naming
+    cat > makeWig.csh << 'EOF'
+    foreach f (../*.bed)
+        # get base name
+        set b = $f:t:r:r
+        # convert to standard format (initial caps) "AntibodyCell"
+        set n = `echo $b | perl -wpe 's/ave_(.*)_(.*)_p/\u\L$1\E\u\L$2\E/'`
+        echo $n
+        # create wiggle data files from BED
+        sed -e '/^browser/d' -e '/^track/d' $f | \
+            wigEncode stdin $n.wig $n.wib
+        ln -s `pwd`/$n.wib /gbdb/hg16/encode/UcsdChip/wib
+        # load into database
+        hgLoadWiggle hg16 encodeUcsdChip$n $n.wig \
+                    -pathPrefix=/gbdb/hg16/encode/UcsdChip/wib
+    end
+'EOF'
+    # << for emacs
+    csh makeWig.csh >&! makeWig.log &
+
+    # cleanup TODO: remove old /gbdb files, doc files, tables 
+    # on hgwdev, beta & RR
+
+    # try as bedGraph type 
+    cd /cluster/data/encode/UCSD
+    cd project1
+    mkdir bed.2005-04-21
+    ln -s bed.2005-04-21 latest
+    cd latest 
+    cat > makeBed.csh << 'EOF'
+    foreach f (../*.bed)
+        # get base name
+        set b = $f:t:r:r
+        # convert to standard format (initial caps) "AntibodyCell"
+        set n = `echo $b | perl -wpe 's/ave_(.*)_(.*)_p/\u\L$1\E\u\L$2\E/'`
+        echo $n
+        # create wiggle data files from BED
+        sed -e '/^browser/d' -e '/^track/d' $f > $n.bed
+        # load into database
+        hgLoadBed hg16 encodeUcsdChip$n $n.bed
+    end
+'EOF'
+    # << for emacs
+    csh makeBed.csh >&! makeBed.log &
+    # set up 4 composite tracks (per antibody), 4 cell lines each
+    # using colors to highlight cell types:
+         # Hela (black)
+         # THP1 (darkish blue)
+         # IMR90 (darkish red)
+         # HCT116 (darkish green)
 
 
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
@@ -304,22 +367,71 @@ cat > load.csh << 'EOF'
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyChIpRnapHl60Sites.html
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyChIpRnapHl60Pval.html
 
-# TODO: Remove Nov08 data
 
-# BOSTON UNIVERSITY / ZHIPING WENG LAB  PROMOTER DATA (WORKING 2005-01-27 kate)
+# BOSTON UNIVERSITY / ZHIPING WENG LAB FIRST EXON DATA (WORKING 2005-01-27 kate)
 
     ssh kksilo
     cd /cluster/data/encode
     mkdir -p BU
     cd BU
-    mkdir -p 2005-01-06
-    ln -s 2005-01-06/latest
-    cd latest
+    #mkdir -p 2005-01-06
+    #ln -s 2005-01-06/latest
+    #cd latest
     # copy file from email:  BED.tar.gz
-    tar xvfz BED.tar.gz
+    #tar xvfz BED.tar.gz
 
+    mkdir -p 2005-04-20
+    ln -s 2005-04-20/latest
+    cd latest
+    # save file from email:  BED.BUApr20.tar.gz
+    tar xvfz BED.BUApr20.tar.gz
 
-# TODO: Remove Nov08 data
+    cd BED
+    cp rcPCREncodeDataDescription.html ~/kent/src/hg/makeDb/trackDb/human/hg16/encodeBuFirstExon.html
+    # checkin description file and edit
+    cd ..
+
+    # rearrange data colums to be BED 13, add RGB values to "reserved" field
+    # based on score
+    makeColoredBed < BED/cerebralcortex.bed > encodeBuFirstExonCerebrum.bed
+    makeColoredBed < BED/colon.bed > encodeBuFirstExonColon.bed
+    makeColoredBed < BED/heart.bed > encodeBuFirstExonHeart.bed
+    makeColoredBed < BED/kidney.bed > encodeBuFirstExonKidney.bed
+    makeColoredBed < BED/liver.bed > encodeBuFirstExonLiver.bed
+    makeColoredBed < BED/lung.bed > encodeBuFirstExonLung.bed
+    makeColoredBed < BED/skeletalmuscle.bed > encodeBuFirstExonSkMuscle.bed
+    makeColoredBed < BED/spleen.bed > encodeBuFirstExonSpleen.bed
+    makeColoredBed < BED/stomach.bed > encodeBuFirstExonStomach.bed
+    makeColoredBed < BED/testis.bed > encodeBuFirstExonTestis.bed
+
+    # take a look at data distribution (previous was skewed toward 0)
+    awk '{print $5}' *.bed | sort -n > scores.txt
+    textHistogram scores.txt -binSize=100 -maxBinCount=11
+    # 0       107.000000
+    # 100     8.000000
+    # 200     32.000000
+    # 300     53.000000
+    # 400     91.000000
+    # 500     130.000000
+    # 600     186.000000
+    # 700     118.000000
+    # 800     33.000000
+    # 900     1.000000
+    # 1000    1.000000
+    ## cluster at 0, followed by a nice bell curve
+
+    cat > load.csh << 'EOF'
+    foreach f (Cerebrum Colon Heart Kidney Liver Lung SkMuscle Spleen Stomach Testis)
+        hgLoadBed hg16 -noBin encodeBuFirstExon encodeBuFirstExon$f.bed -sqlTable=${HOME}/kent/src/hg/lib/encodeBuFirstExon.sql
+        hgsql hg16 -e "DROP TABLE IF EXISTS encodeBuFirstExon$f"
+        hgsql hg16 -e "ALTER TABLE encodeBuFirstExon RENAME TO encodeBuFirstExon$f"
+    end
+    rm $sqlFile
+'EOF'
+
+    csh load.csh >&! load.log
+    #NOTE: 1 warning loading Spleen file -- check this out
+
 
 # GENCODE Sanger Havana annotations (hiram)
 #               (IN PROGRESS 2005-03-21 kate)
