@@ -96,7 +96,9 @@ foreach mach ( $machine1 $machine2 )
   wget -q -O $mach.$db.$table "$url"
 end
 
-diff $machine1.$db.$table $machine2.$db.$table
+sort $machine1.$db.$table > $machine1.$db.$table.sort 
+sort $machine2.$db.$table > $machine2.$db.$table.sort 
+diff $machine1.$db.$table.sort $machine2.$db.$table.sort
 if ( $status ) then
   echo "\nThe differences above are found in $table.$field"
   echo "between $machine1 and $machine2\n"
@@ -107,4 +109,6 @@ endif
 
 # clean up
 rm -f $machine1.$db.$table 
+rm -f $machine1.$db.$table.sort 
 rm -f $machine2.$db.$table 
+rm -f $machine2.$db.$table.sort
