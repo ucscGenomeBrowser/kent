@@ -1,7 +1,16 @@
+  - Make testProg/broken/oneIntoClass.pf work.
+  - Make classes declared in another module work.
   - Doing parallel checking for para and flow statements.
+  - Make single quotes mean literal ascii character values.
+  - Make it so don't need 'self' to reference class members and 
+    methods inside a method of same class.
   - Implement "para into" statement.
   - Implement ++ and maybe --.
   - Read-only and private variables.
+        Make it so that class.new() is only legal way to
+	make something with private or read-only var.
+  - Create 'serial' function - that is gauranteed only to be 
+    executed by one thread at a time.  Can be called from a para.
   - Exceptions.
   - Prevent memory leakage in expressions that don't get assigned to anything
     (including function calls).
@@ -18,6 +27,9 @@ Check system:
 
 -----------
 DONE
+  - make pfh file include closing paren in :
+	to fibonacci ( int iterations ) into ( long f;
+	to factorial ( int n ) into ( float f;
   - Working on multiple modules.
   - Getting raw keyboard input.
   - Rename f.print and f.scan to something else.  read/write?  
