@@ -1898,6 +1898,8 @@ table ctgPos2
 # Added bacEndPairsBad table (DONE, 2004-08-02, hartera)
 # EXTENDED bacCloneXRef TABLE TO INCLUDE MORE ALIASES, UNISTS ID AND CONTIG
 # (DONE, 2005-04-25, hartera)
+# RELOADED bacCloneXRef TABLE AFTER CORRECTING PROGRAM TO USE NULL
+# IN ALL PLACES WHERE THERE IS NO UniSTS ID (DONE, 2005-04-27, hartera)
 # provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
@@ -2521,6 +2523,9 @@ if ($fields[0] =~ /^[0-9]+/)
     # FPC contig information (i.e. FPC contig number) from ctgnames file is 
     # not included in the tables as these are dynamic and constantly 
     # changing with the assembly.
+    # made code changes so that zfishBacClonesandSts always uses NULL
+    # in the bacCloneXRef table if there is no UniSTS ID and then
+    # reloaded the bacCloneXRef table witht the resulting tab file (hartera, 2005-04-27)
     nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.02.12.04.txt \
       clonemarkers.02.12.04.txt markers.02.12.04.txt \
       bacClones.namesandchrom.uniq zfish_accs.txt \
