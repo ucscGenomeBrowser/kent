@@ -96,18 +96,15 @@ foreach field ( $fields )
   endif
 end
 
+echo "----------------------------------------------------"
 set field="html"
 if ( $mode == "terse" ) then
   set modeDiff=`compareTrackDbFast.csh $machine1 $machine2 $db $field | grep "difference"`
   echo $modeDiff | grep "are found" > /dev/null 
   if (! $status ) then
-    echo
-    echo "  Differences exist in $field field"
-    echo
+    echo "\n$db.$table.$field : Differences exist between $machine1 and $machine2 \n"
   else
-    echo
-    echo $modeDiff
-    echo
+    echo "\n$db.$table.$field : No differences between $machine1 and $machine2 \n"
   endif
 else
   echo
