@@ -252,7 +252,7 @@ verbose(2, "Phase 8 - compiling C code\n");
 	    {
 	    dyStringClear(dy);
 	    dyStringAppend(dy, "gcc ");
-	    dyStringAppend(dy, "-O3 ");
+	    dyStringAppend(dy, "-O ");
 	    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
 	    dyStringAppend(dy, "-c ");
 	    dyStringAppend(dy, "-o ");
@@ -270,7 +270,7 @@ verbose(2, "Phase 8 - compiling C code\n");
 	}
     dyStringClear(dy);
     dyStringAppend(dy, "gcc ");
-    dyStringAppend(dy, "-O3 ");
+    dyStringAppend(dy, "-O ");
     dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
     dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
     dyStringPrintf(dy, "%s ", cFile);
