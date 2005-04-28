@@ -52,12 +52,26 @@ visibility hide
 type psl . 
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=unigene&term=$$[ClusterID]
 
-track multizHg17Mm5
+track multiz7way
 shortLabel Conservation
-longLabel Chicken/Human/Mouse Multiz Alignments & Conservation 
+longLabel Chicken/Human/Mouse/Opossum/Frog/Zebrafish/Tetraodon Multiz Alignments & Cons.
 group compGeno
 priority 100
 visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7way
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder hg17 mm5 monDom1 xenTro1 danRer2 tetNig1
+
+track multizHg17Mm5
+shortLabel Conservation (3-way)
+longLabel Chicken/Human/Mouse Multiz Alignments & Conservation 
+group compGeno
+priority 100.1
+visibility hide
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle mzHg17Mm5_phast_wig
@@ -65,6 +79,27 @@ yLineOnOff Off
 autoScaleDefault Off
 pairwise ghm
 speciesOrder hg17 mm5
+
+track mzHg17Mm5_phast2_wig
+shortLabel Conservation (3-way take 2)
+longLabel New Chicken/Human/Mouse phastCons Scores
+group compGeno
+priority 105.1
+visibility hide
+type wig 0.0 1.0
+maxHeightPixels 100:40:11
+yLineOnOff Off
+autoScaleDefault Off
+
+track phastConsElements7way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105.1
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track blatFr1
 shortLabel $o_Organism Blat
@@ -78,24 +113,12 @@ spectrum on
 type psl xeno
 otherDb fr1
 
-track chainXenTro1
-shortLabel $o_Organism Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 120.0
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain xenTro1
-otherDb xenTro1
-
 track netXenTro1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 120.1
-visibility dense
+priority 170.1
+visibility hide
 spectrum on
 type netAlign xenTro1 chainXenTro1
 otherDb xenTro1
@@ -104,7 +127,7 @@ track chainHg17
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 125
+priority 212
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -116,7 +139,7 @@ track netHg17
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 125.1
+priority 212.1
 visibility dense
 spectrum on
 type netAlign hg17 chainHg17
@@ -126,17 +149,18 @@ track netSyntenyHg17
 shortLabel $o_Organism Synteny
 longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
 group compGeno
-priority 125.2
+priority 212.2
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type netAlign hg17 chainHg17
+otherDb hg17
 
 track chainHg16
 shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 126.0
+priority 212.0
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -148,8 +172,8 @@ track netHg16
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 126.1
-visibility dense
+priority 212.1
+visibility hide
 spectrum on
 type netAlign hg16 chainHg16
 otherDb hg16
@@ -158,22 +182,24 @@ track netSyntenyHg16
 shortLabel $o_db Synteny
 longLabel $o_Organism ($o_date/$o_db) Synteny Using Chained/Netted Blastz
 group compGeno
-priority 126.2
+priority 212.2
 visibility hide
 color 0,100,0
 altColor 255,240,200
 type netAlign hg16 chainHg16
+otherDb hg16
 
 track blastzBestHg16
 shortLabel $o_db AxtBest
 longLabel $o_Organism ($o_date/$o_db) Blastz AxtBest
 group compGeno
-priority 126.3
+priority 212.3
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
 type psl xeno hg16
+otherDb hg16
 
 track pileups
 shortLabel Self Pileups
@@ -214,26 +240,6 @@ altColor 255,240,200
 spectrum on
 type chain galGal2
 otherDb galGal2
-
-track netSelf
-shortLabel Self Net
-longLabel $Organism Chained Self Alignment Net
-group varRep
-priority 126
-visibility dense
-spectrum on
-type netAlign galGal2 chainSelf
-otherDb galGal2
-
-track netSyntenySelf
-shortLabel Self Synteny
-longLabel $Organism Self-Alignment Net, Synteny-filtered
-group varRep
-priority 127
-visibility hide
-color 0,100,0
-altColor 255,240,200
-type netAlign galGal2 chainSelf
 
 track webbNonExonic
 shortLabel Non-Exonic
@@ -365,7 +371,7 @@ track ecoresTetraodon
 shortLabel Tetraodon Ecores
 longLabel Tetraodon Evolutionary Conserved Regions
 group compGeno
-priority 112
+priority 151
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -393,11 +399,32 @@ color 0,100,0
 altColor 128,228,128
 type bed 4 +
 
+track cpgIslandGgfAndyMasked
+shortLabel CpG Islands (AL, masked sequence)
+longLabel CpG Islands - Andy Law (masked sequence)
+group regulation
+priority 90.02
+visibility dense
+color 0,100,0
+altColor 128,228,128
+type bed 4 +
+
+track blastHg16KG
+shortLabel hg16 Proteins
+longLabel Human (hg16) proteins mapped by chained tBLASTn
+group compGeno
+priority 212.9
+visibility hide
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
+
 track blastHg17KG
 shortLabel Human Proteins
-longLabel Human(hg17) proteins mapped by chained tBLASTn
+longLabel Human proteins mapped by chained tBLASTn
 group compGeno
-priority 142
+priority 213
 visibility pack
 colorChromDefault off
 type psl protein
