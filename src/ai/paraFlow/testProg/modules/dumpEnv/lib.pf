@@ -45,8 +45,11 @@ class lib
 	dir of string env = lib.getEnv();
 	string path = env["PATH"];
 	int startPos, endPos = 0;
-	int colonCount = self.countChars(path, ':');
+	int colonCount = lib.countChars(path, ':');
 	array[colonCount+1] of string results;
+	// Might be nice to express this instead as
+	//    paths = [colonCount+1] 
+	// and dispense with the results variable.
 	for (int i=0; i<colonCount; i += 1)
 	    {
 	    endPos = path.findNext(":", startPos);
@@ -58,6 +61,47 @@ class lib
 	results[colonCount] = path.rest(startPos);
 	paths = results;
 	}
+
+    to countSpacedWords(string s) into int count
+        {
+	string w, int pos;
+	foreach (w,pos) in s.nextSpaced(pos)
+	    count += 1;
+	}
+
+    to countWords(string s) into int count
+        {
+	string w, int pos;
+	foreach (w,pos) in s.nextWord(pos)
+	    count += 1;
+	}
+
+
+    to splitSpaced(string s) into array of string result
+        {
+	array[lib.countSpacedWords(s)] of string a;
+	int wordIx;
+	string w, int pos;
+	foreach (string w,int pos) in s.nextSpaced(pos)
+	    {
+	    a[wordIx] = w;
+	    wordIx += 1;
+	    }
+	result = a;
+	}
+
+    to splitWords(string s) into array of string result
+        {
+	array[lib.countWords(s)] of string a;
+	int wordIx;
+	foreach (string w,int pos) in s.nextWord(pos)
+	    {
+	    a[wordIx] = w;
+	    wordIx += 1;
+	    }
+	result = a;
+	}
+
     }
 
 lib lib = ();
