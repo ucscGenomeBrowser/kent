@@ -216,10 +216,12 @@ verbose(2, "Phase 4 - binding names\n");
 pfBindVars(pfc, program);
 pfParseDump(program, 0, boundF);
 carefulClose(&boundF);
+
 if (endPhase < 5)
     return;
 verbose(2, "Phase 5 - type checking\n");
 pfTypeCheck(pfc, &program);
+
 if (endPhase < 6)
     return;
 verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
@@ -229,12 +231,14 @@ pfParseDump(program, 0, typeF);
 carefulClose(&typeF);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
+
 if (endPhase < 7)
     return;
 verbose(2, "Phase 7 - C code generation\n");
 pfCodeC(pfc, program, baseDir, cFile);
 verbose(2, "%d modules, %d tokens, %d parseNodes\n",
 	pfc->moduleHash->elCount, pfc->tkz->tokenCount, pfParseCount(program));
+
 if (endPhase < 8)
     return;
 verbose(2, "Phase 8 - compiling C code\n");

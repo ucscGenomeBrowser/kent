@@ -219,9 +219,14 @@ static struct pfType *typeFromChildren(struct pfCompile *pfc,
 struct pfType *ty = pfTypeNew(base);
 for (pp = pp->children; pp != NULL; pp = pp->next)
     {
-    struct pfType *subType = CloneVar(pp->ty);
-    subType->fieldName = pp->name;
-    slAddHead(&ty->children, subType);
+    if (pp->ty == NULL)
+        errAt(pp->tok, "Expecting type");
+    else
+	{
+	struct pfType *subType = CloneVar(pp->ty);
+	subType->fieldName = pp->name;
+	slAddHead(&ty->children, subType);
+	}
     }
 slReverse(&ty->children);
 return ty;
