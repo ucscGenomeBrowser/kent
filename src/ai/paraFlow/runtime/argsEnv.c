@@ -40,3 +40,28 @@ buf[0] = rawKeyIn();
 buf[1] = 0;
 stack[0].String = _pf_string_from_const(buf);
 }
+
+void milliTicks(_pf_Stack *stack)
+/* Return a long value that counts up pretty
+ * quickly.  Units are milliseconds.   It may
+ * either be starting since program startup or
+ * relative to some other absolute number depending
+ * on the system it is running on. */
+{
+stack[0].Long = clock1000();
+}
+
+void randInit(_pf_Stack *stack)
+/* Change random number stream by initializing it with the current time. */
+{
+srand(clock1000());
+rand();
+}
+
+void randNum(_pf_Stack *stack)
+/* Return random number between 0 and 1 */
+{
+static double scale = 1.0/RAND_MAX;
+stack[0].Double = rand()*scale;
+}
+
