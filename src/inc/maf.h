@@ -47,6 +47,7 @@ void mafAliFreeList(struct mafAli **pList);
 #define	MAF_INSERT_STATUS	'I'
 #define	MAF_DUP_STATUS		'D'
 #define	MAF_NEW_STATUS		'N'
+#define	MAF_MAYBE_NEW_STATUS	'M'
 #define	MAF_CONTIG_STATUS	'C'
 
 struct mafComp
