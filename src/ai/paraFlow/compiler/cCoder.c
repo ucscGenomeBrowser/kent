@@ -1973,10 +1973,6 @@ codeLocalTypeTableName(f, moduleName);
 fprintf(f, "[] = {\n");
 printModuleTypeTable(pfc, f);
 fprintf(f, "};\n");
-#ifdef OLD
-fprintf(f, "struct %s *%s = %s_%s;\n",
-	localTypeTableType, localTypeTableName, localTypeTableName, moduleName);
-#endif /* OLD */
 fprintf(f, "\n");
 }
 
@@ -2041,8 +2037,6 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 		toCode->name);
 	fprintf(f, "static struct %s *%s = %s_%s;\n\n",
 		localTypeTableType, localTypeTableName, localTypeTableName, toCode->name);
-#ifdef OLD
-#endif /* OLD */
 
 	/* Print function prototypes and class definitions for all modules */
 	for (module = program->children; module != NULL; module = module->next)
