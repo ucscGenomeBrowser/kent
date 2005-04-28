@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.952 2005/04/20 15:27:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.953 2005/04/28 00:16:37 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9577,6 +9577,8 @@ registerTrackHandler("tightMrna", mrnaMethods);
 registerTrackHandler("tightEst", mrnaMethods);
 registerTrackHandler("cpgIsland", cpgIslandMethods);
 registerTrackHandler("cpgIslandExt", cpgIslandMethods);
+registerTrackHandler("cpgIslandGgfAndy", cpgIslandMethods);
+registerTrackHandler("cpgIslandGgfAndyMasked", cpgIslandMethods);
 registerTrackHandler("exoMouse", exoMouseMethods);
 registerTrackHandler("pseudoMrna", xenoMrnaMethods);
 registerTrackHandler("pseudoMrna2", xenoMrnaMethods);
