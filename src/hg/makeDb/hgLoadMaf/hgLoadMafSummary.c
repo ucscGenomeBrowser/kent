@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.11 2005/04/28 18:11:29 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.12 2005/04/28 18:13:39 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -23,9 +23,9 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 boolean test = FALSE;
-int mergeGap = 10;
-int minSize = 1000;
-int maxSize = 1000;
+int mergeGap = 500;
+int minSize = 10000;
+int maxSize = 50000;
 char *database = NULL;
 
 void usage()
