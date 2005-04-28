@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.73 2005/04/27 18:52:15 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.74 2005/04/28 01:13:48 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -519,8 +519,8 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
 	}
     else
         {
-        /* gap in master (reference) sequence */
-        if (text[i] != '-')
+        /* gap in master (reference) sequence but not in this species */
+        if (text[i] != '-' && text[i] != '=')
             insertSize++;
         }
     }
