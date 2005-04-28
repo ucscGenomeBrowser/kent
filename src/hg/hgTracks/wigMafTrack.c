@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.75 2005/04/28 01:29:37 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.76 2005/04/28 23:41:32 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -102,14 +102,19 @@ struct wigMafItem *newSpeciesItems(struct track *track, int height)
 char option[64];
 char *species[100];
 char *groups[20];
+char *defaultOff[100];
 char sGroup[24];
 struct wigMafItem *mi = NULL, *miList = NULL;
 int group;
 int i;
 int speciesCt = 0, groupCt = 1;
+int speciesOffCt = 0;
+struct hash *speciesOffHash = newHash(0);
+
 /* either speciesOrder or speciesGroup is specified in trackDb */
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(track->tdb, SPECIES_GROUP_VAR);
+char *speciesOff = trackDbSetting(track->tdb, SPECIES_DEFAULT_OFF_VAR);
 
 if (speciesOrder == NULL && speciesGroup == NULL)
     errAbort(
@@ -117,6 +122,14 @@ if (speciesOrder == NULL && speciesGroup == NULL)
                 track->mapName);
 if (speciesGroup)
     groupCt = chopLine(cloneString(speciesGroup), groups);
+
+/* keep track of species configured off initially for track */
+if (speciesOff)
+    {
+    speciesOffCt = chopLine(cloneString(speciesOff), defaultOff);
+    for (i = 0; i < speciesOffCt; i++)
+        hashAdd(speciesOffHash, defaultOff[i], NULL);
+    }
 
 /* Make up items for other organisms by scanning through group & species 
    track settings */
@@ -133,6 +146,9 @@ for (group = 0; group < groupCt; group++)
         {
         /* skip this species if UI checkbox was unchecked */
         safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
+        if (!cartVarExists(cart, option))
+            if (hashLookup(speciesOffHash, species[i]))
+                cartSetBoolean(cart, option, FALSE);
         if (!cartUsualBoolean(cart, option, TRUE))
             continue;
         mi = newMafItem(species[i], group);
@@ -499,8 +515,12 @@ for (i=0; outLine[i]; i++)
         }
     if (outLine[i] == MAF_FULL_BREAK_BEFORE ||
         outLine[i] == MAF_FULL_BREAK_AFTER ||
-        outLine[i] == MAF_PART_BREAK_BEFORE ||
-        outLine[i] == MAF_PART_BREAK_AFTER)
+        outLine[i] == MAF_PARTIAL_BREAK_BEFORE ||
+        outLine[i] == MAF_PARTIAL_BREAK_AFTER ||
+        outLine[i] == MAF_FULL_MAYBE_BREAK_BEFORE ||
+        outLine[i] == MAF_FULL_MAYBE_BREAK_AFTER ||
+        outLine[i] == MAF_PARTIAL_MAYBE_BREAK_BEFORE ||
+        outLine[i] == MAF_PARTIAL_MAYBE_BREAK_AFTER)
             previousBreaks++;
     }
 outLine = outLine + offset + previousBreaks + (previousInserts * 2);
@@ -1220,37 +1240,52 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                     continue;
                 }
             if (mc->leftStatus == MAF_NEW_STATUS ||
-                mc->rightStatus == MAF_NEW_STATUS)
+                    mc->rightStatus == MAF_NEW_STATUS ||
+                    mc->leftStatus == MAF_MAYBE_NEW_STATUS ||
+                    mc->rightStatus == MAF_MAYBE_NEW_STATUS)
                 {
                 int i;
                 char *p;
-                if (mc->leftStatus == MAF_NEW_STATUS)
-                    size++;
-                if (mc->rightStatus == MAF_NEW_STATUS)
-                    size++;
+                boolean maybe = (mc->leftStatus == MAF_MAYBE_NEW_STATUS ||
+                                 mc->rightStatus == MAF_MAYBE_NEW_STATUS);
+                /* determine if alignment ends on chrom/contig
+                 * boundary */
+                boolean full = (mc->start == 0 || 
+                            (mc->start + mc->size == mc->srcSize));
+                if (mc->leftStatus == MAF_NEW_STATUS ||
+                    mc->leftStatus == MAF_MAYBE_NEW_STATUS)
+                        size++;
+                if (mc->rightStatus == MAF_NEW_STATUS ||
+                    mc->rightStatus == MAF_MAYBE_NEW_STATUS)
+                        size++;
                 seq = needMem(size+1);
                 needToFree = TRUE;
                 for (p = seq, i = 0; i < size; p++, i++)
                     *p = ' ';
                 p = seq;
-                if (mc->leftStatus == MAF_NEW_STATUS)
+                if (mc->leftStatus == MAF_NEW_STATUS ||
+                    mc->leftStatus == MAF_MAYBE_NEW_STATUS)
                     {
-                    /* determine if alignment ends on chrom/contig
-                     * boundary */
-                    *seq = ((mc->start == 0 || 
-                                mc->start + mc->size == mc->srcSize) ?
-                            MAF_FULL_BREAK_BEFORE: MAF_PART_BREAK_BEFORE);
+                    if (full)
+                        *seq = (maybe ? MAF_FULL_MAYBE_BREAK_BEFORE :
+                                        MAF_FULL_BREAK_BEFORE);
+                    else
+                        *seq = (maybe ? MAF_PARTIAL_MAYBE_BREAK_BEFORE :
+                                        MAF_PARTIAL_BREAK_BEFORE);
                     subSize++;
                     p++;
                     }
                 if (mc->size != 0)
                     strcpy(p, mc->text);
-                if (mc->rightStatus == MAF_NEW_STATUS)
+                if (mc->rightStatus == MAF_NEW_STATUS ||
+                    mc->rightStatus == MAF_MAYBE_NEW_STATUS)
                     {
-                    *(seq+size-1) = 
-                        ((mc->start == 0 || 
-                          mc->start + mc->size == mc->srcSize) ?
-                            MAF_FULL_BREAK_AFTER: MAF_PART_BREAK_AFTER);
+                    if (full)
+                        *(seq+size-1) = (maybe ? MAF_FULL_MAYBE_BREAK_AFTER :
+                                                  MAF_FULL_BREAK_AFTER);
+                    else
+                        *(seq+size-1) = (maybe ? MAF_PARTIAL_MAYBE_BREAK_AFTER: 
+                                                  MAF_PARTIAL_BREAK_AFTER);
                     subSize++;
                     }
                 }

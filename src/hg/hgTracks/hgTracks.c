@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.953 2005/04/28 00:16:37 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.954 2005/04/28 23:41:32 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6687,40 +6687,49 @@ for (i=0; i<count; i++, text++, textPos++)
         continue;
         }
     if (match != NULL && i < count-1 && *text == ' ' &&
-            text[1] == MAF_PART_BREAK_BEFORE)
+            (text[1] == MAF_PARTIAL_BREAK_BEFORE ||
+             text[1] == MAF_PARTIAL_MAYBE_BREAK_BEFORE))
         /* synteny break w/ unaligned sequence at contig/chrom boundary
          * before alignment.
-         * display as vertical red bar followed by '=' */
+         * display as vertical bar followed by '=' */
         {
-        vgBox(vg, x+x1, y, 1, height, getBlueColor());
+        vgBox(vg, x+x1, y, 1, height, text[1] == MAF_PARTIAL_BREAK_BEFORE ?
+                                        getBlueColor() : getGreenColor());
         text[1] = MAF_DOUBLE_GAP;
         i--;
         }
-    if (match != NULL && *text == MAF_PART_BREAK_BEFORE)
+    if (match != NULL && 
+            (*text == MAF_PARTIAL_BREAK_BEFORE || 
+             *text == MAF_PARTIAL_MAYBE_BREAK_BEFORE))
         {
         /* ignore if we lack room at window start to display this */
         i--;
         continue;
         }
     if (match != NULL && i < count && text[1] == ' ' &&
-            *text == MAF_PART_BREAK_AFTER)
+            (*text == MAF_PARTIAL_BREAK_AFTER || 
+             *text == MAF_PARTIAL_MAYBE_BREAK_AFTER))
         /* synteny break w/ unaligned sequence at contig/chrom boundary
          * after alignment.
-         * display as '=' followed by vertical red bar */
+         * display as '=' followed by vertical bar */
         {
-        vgBox(vg, x+x2, y, 1, height, getBlueColor());
+        vgBox(vg, x+x2, y, 1, height, *text == MAF_PARTIAL_BREAK_AFTER ?
+                                        getBlueColor() : getGreenColor());
         text[1] = MAF_DOUBLE_GAP;
         text++;
         textPos++;
         i--;
         }
     if (match != NULL && 
-            (*text == MAF_FULL_BREAK_BEFORE ||
-             *text == MAF_FULL_BREAK_AFTER))
+        (*text == MAF_FULL_BREAK_BEFORE || *text == MAF_FULL_BREAK_AFTER ||
+         *text == MAF_FULL_MAYBE_BREAK_BEFORE || 
+         *text == MAF_FULL_MAYBE_BREAK_AFTER))
         /* synteny break at chrom/contig boundary.
-         * display as vertical red bar */
+         * display as vertical bar */
         {
-        vgBox(vg, x+x1, y, 1, height, getBlueColor());
+        vgBox(vg, x+x1, y, 1, height, (*text == MAF_FULL_BREAK_BEFORE ||
+                                       *text == MAF_FULL_BREAK_AFTER) ?
+                                        getBlueColor() : getGreenColor());
         i--;
         continue;
         }
