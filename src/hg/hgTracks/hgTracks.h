@@ -290,12 +290,19 @@ void makeRedGreenShades(struct vGfx *vg);
  * flanking alignment is on a different chromosome/contig, and
  * that the alignment ended at a chrom/contig end.
  * "Partial break" indicates there is additional unaligned sequence
- * following on the chrom/contig */
+ * following on the chrom/contig. "Maybe break" is used for contigs,
+ * indicate that there may be a break, but we can't guarantee it.
+ * This is displayed in an alternate color */
 
 #define MAF_FULL_BREAK_BEFORE '^'
 #define MAF_FULL_BREAK_AFTER 'V'
-#define MAF_PART_BREAK_BEFORE 'X'
-#define MAF_PART_BREAK_AFTER 'Z'
+#define MAF_PARTIAL_BREAK_BEFORE 'X'
+#define MAF_PARTIAL_BREAK_AFTER 'Z'
+
+#define MAF_FULL_MAYBE_BREAK_BEFORE 'u'
+#define MAF_FULL_MAYBE_BREAK_AFTER 'v'
+#define MAF_PARTIAL_MAYBE_BREAK_BEFORE 'x'
+#define MAF_PARTIAL_MAYBE_BREAK_AFTER 'z'
 
 struct track *getTrackList(struct group **pGroupList);
 /* Return list of all tracks. */
