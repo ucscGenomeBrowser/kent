@@ -212,23 +212,18 @@ castType += baseTypeLogicalSize(pfc, newBase);
 insertCast(castType, newType, pPp);
 }
 
-static struct pfType *typeFromChildren(struct pfCompile *pfc, struct pfParse *pp,
-     struct pfBaseType *base)
+static struct pfType *typeFromChildren(struct pfCompile *pfc, 
+	struct pfParse *pp, struct pfBaseType *base)
 /* Create a type that is just a wrapper around children's type. */
 {
 struct pfType *ty = pfTypeNew(base);
-if (pp->children != NULL)
+for (pp = pp->children; pp != NULL; pp = pp->next)
     {
-    ty->children = pp->children->ty;
-    pp = pp->children;
-    while (pp->next != NULL)
-	{
-	if (pp->ty == NULL)
-	    errAt(pp->tok, "void value in tuple");
-	pp->ty->next = pp->next->ty;
-	pp = pp->next;
-	}
+    struct pfType *subType = CloneVar(pp->ty);
+    subType->fieldName = pp->name;
+    slAddHead(&ty->children, subType);
     }
+slReverse(&ty->children);
 return ty;
 }
 
@@ -1104,6 +1099,7 @@ for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     type = fieldType;
     }
 pp->ty = CloneVar(type);
+pp->ty->next = NULL;
 }
 
 static void markUsedVars(struct pfScope *scope, 
