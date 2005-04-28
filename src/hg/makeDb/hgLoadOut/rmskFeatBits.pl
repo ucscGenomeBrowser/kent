@@ -9,7 +9,7 @@
 #	chr_name/repClass/file.bed
 #	to allow sorting out repClass bed files by chrom and repClass type
 #
-#	 $Id: rmskFeatBits.pl,v 1.1 2005/04/27 23:26:25 hiram Exp $
+#	 $Id: rmskFeatBits.pl,v 1.2 2005/04/28 23:12:01 hiram Exp $
 #
 
 use warnings;
@@ -19,11 +19,17 @@ use Math::BigFloat;
 
 sub usage()
 {
-printf "usage: $0 [options] <bed files>\n";
-printf "options:\n";
-printf "\t-verbose=N - level of verbose output, N = 1, 2, 3, ...\n";
-printf "\t-db=<name> - use specified db to find chromInfo\n";
-printf "\t-html - output html table format (default is plain ascii\n";
+my $progName=`basename $0`;
+chomp $progName;
+print "usage: $0 [options] <bed files>\n";
+print "options:\n";
+print "\t-verbose=N - level of verbose output, N = 1, 2, 3, ...\n";
+print "\t-db=<name> - use specified db to find chromInfo\n";
+print "\t-html - output html table format (default is plain ascii\n";
+print "\t-tabFile=<fileName> - output tab delimited format suitable\n";
+print "\t\tfor table loading\n";
+print "example: $progName -verbose=1 -db=hg17 -html -tabFile=hg17.tab \\\n";
+print "\tchr*/*/file.bed > hg17.summary.html 2> hg17.stderr &\n";
 exit 255;
 }
 
@@ -92,6 +98,7 @@ my $htmlOut = 0;	#	command line option to output an HTML table
 my $dataBase = "";	#	database command line option
 my $fileCount = 0;	#	a count of files from command line
 my @fileList;		#	list of file names from command line
+my $tabFile = "";	# output tab-delimited format suitable for table load
 #	chrArray is going to be a multiple (3) dimensioned array.
 #	Given a chrom name: $chr, find the cIx from $chrNames{$chr}
 #	Then refer to $chrArray[$cIx] whose value is an array reference.
@@ -126,6 +133,11 @@ if ($ARGV[$i] =~ m/^-/)
 	{
 	my ($junk, $db) = split('=',$ARGV[$i]);
 	$dataBase = $db;
+	}
+    elsif ($ARGV[$i] =~ m/^-tabFile=/)
+	{
+	my ($junk, $file) = split('=',$ARGV[$i]);
+	$tabFile = $file;
 	}
     }
 else
@@ -219,6 +231,13 @@ if (length($dataBase)>0)
 my $totalLen =  Math::BigInt->new($fbTotalLen);
 my $totalClassCount = 0;
 
+if (length($tabFile)>0)
+    {
+    open (TF,">$tabFile") or die "Can not open for writing to $tabFile";
+    }
+
+##########################################################################
+#	primary processing loop
 #	for each file on the command line, process them
 for (my $i = 0; $i < $fileCount; ++$i)
     {
@@ -261,7 +280,7 @@ for (my $i = 0; $i < $fileCount; ++$i)
 	    $chrSize = $chromInfo{$chr} if ($chromCount > 0);
 	    }
 	if ($chromStart == -1) { $chromStart = $start; $chromEnd = $end; }
-	#	encountered gap or next chrom, done with element
+	#	encountered gap or next chrom, done with bed element
 	if (($start > $chromEnd) || ($chrName ne $prevChrName))
 	    {
 	    my $len = $chromEnd - $chromStart;
@@ -354,12 +373,16 @@ for (my $i = 0; $i < $fileCount; ++$i)
     if (length($repClass) > 0)
 	{
 	$chrRepClass = "$chrName:$repClass";
+	printf TF "%s\t%s\t%d\t%d\n", $chrName,$repClass,$itemCount,$chrLen
+		if (length($tabFile)>0);
 	}
     printf STDERR "%s\t%d\t%d\t%d\t%d\t%s\t%.2f\t\t%.2f%s\n",
 	    $chrRepClass,$chromStart,$chromEnd,$len,$chrLen,$totalLen->bstr(),
 		    $chrCovered,$chrCoveredNoGaps,$genomeCovered if ($verbose > 1);
     printf STDERR "%s\t%d\t%d\t%s\t%.6f\t%.6f\t%s\n", $chrRepClass,$itemCount,
 	$chrLen,$totalLen->bstr(), $chrCovered,$chrCoveredNoGaps,$genomeCovered;
+
+
     if (length($repClass) > 0)
 	{
 	#	The two indexes into chrArray
@@ -369,16 +392,13 @@ for (my $i = 0; $i < $fileCount; ++$i)
 	    {
 	    my @repA = ();
 	    $chrArray[$cIx] = \@repA;
-printf STDERR "starting chrArray[%d]\n", $cIx if ($verbose>1);
 	    }
 	my $repArray = $chrArray[$cIx];
 	if (!defined(@$repArray[$rcIx]))
 	    {
 	    my @repB = ();
 	    @$repArray[$rcIx] = \@repB;
-printf STDERR "starting repArray[%d]\n", $rcIx if ($verbose>1);
 	    }
-printf STDERR "setting chrArray[%d][%d]\n", $cIx, $rcIx if ($verbose>1);
 	my $countsArray = @$repArray[$rcIx];
 	@$countsArray[0] = $itemCount;
 	@$countsArray[1] = $chrLen;
@@ -387,6 +407,17 @@ printf STDERR "setting chrArray[%d][%d]\n", $cIx, $rcIx if ($verbose>1);
 	}
     }	#	for each file
 
+#########################################################################
+#	Primary processing complete
+#	Now for summary outputs
+
+#	Close tabFile if it was in use
+if (length($tabFile)>0)
+    {
+    close (TF);
+    }
+
+#	HTML page starts
 if ($htmlOut)
     {
     print "<HTML><HEAD><TITLE>DB: $dataBase Repeat Masker ",
@@ -420,6 +451,7 @@ else
     print "chrom\tsums\t";
     }
 
+#	top row column labels
 for my $repClass (sort {$repClassCounts{$b} <=> $repClassCounts{$a} } keys(%repClassCounts))
     {
     if ($htmlOut)
@@ -434,6 +466,9 @@ for my $repClass (sort {$repClassCounts{$b} <=> $repClassCounts{$a} } keys(%repC
 print "</TR>" if ($htmlOut);
 printf "\n";
 
+#########################################################################
+#	For each chromosome, output a row of data information
+#
 for my $chr (sort chrSort keys(%chrNames))
     {
     if (exists($chrNames{$chr}))
@@ -546,6 +581,7 @@ for my $chr (sort chrSort keys(%chrNames))
 	}
     }	#	for each chrom name
 
+########################################################################
 #	last row is an overall summary count, if we know the genome size
 if (! $genomeSize->is_zero())
     {
