@@ -91,6 +91,10 @@ void printTableHeaderName(char *name, char *clickName, char *url);
 /* creates a table to display a name vertically,
  * basically creates a column of letters */
 
+void printBacStsXRef(char *clone);
+/* Print out associated STS XRef information for BAC clone on BAC ends */
+/* tracks details pages. */
+
 /* ----Routines in other modules in the same directory---- */
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start);
