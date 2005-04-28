@@ -1,0 +1,63 @@
+
+class lib
+    {
+    int version = 1;	// Library version number.  Should change very slowly.
+
+    to randomIx(int size) into int ix
+    /* Return a random number in range 0 <= num < size */
+        {
+	ix = randNum() * size;
+	if (ix == size)
+	    ix = 0;
+	}
+
+    to getEnv() into dir of string env
+    /* Get a dir containing the environment strings passed
+     * into program. */
+        {
+	static dir of string cached;
+	if (!cached)
+	    {
+	    array of string envArray = getEnvArray();
+	    env = ();
+	    foreach string s in envArray
+		{
+		int eqPos = s.find("=");
+		string key = s.start(eqPos);
+		string val = s.rest(eqPos+1);
+		env[key] = val;
+		}
+	    cached = env;
+	    }
+	env = cached;
+	}
+
+    to countChars(string s, byte c) into int count
+    /* Count the number of times c is in s. */
+        {
+	foreach byte b in s
+	    if (c == b)
+	        count += 1;
+	}
+
+    to getPathArray() into array of string paths
+        {
+	dir of string env = lib.getEnv();
+	string path = env["PATH"];
+	int startPos, endPos = 0;
+	int colonCount = self.countChars(path, ':');
+	array[colonCount+1] of string results;
+	for (int i=0; i<colonCount; i += 1)
+	    {
+	    endPos = path.findNext(":", startPos);
+	    if (endPos < 0)
+	        break;
+	    results[i] = path.middle(startPos, endPos-startPos);
+	    startPos = endPos + 1;
+	    }
+	results[colonCount] = path.rest(startPos);
+	paths = results;
+	}
+    }
+
+lib lib = ();

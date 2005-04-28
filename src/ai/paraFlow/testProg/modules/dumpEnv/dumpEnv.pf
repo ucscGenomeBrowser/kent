@@ -1,0 +1,7 @@
+include lib
+
+print("I'm going to dump the environment, and it's not going to be pretty");
+print(lib.getEnv());
+print("");
+print("Here's the path");
+print(lib.getPathArray());

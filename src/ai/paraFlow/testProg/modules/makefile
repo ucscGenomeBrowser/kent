@@ -15,3 +15,4 @@ test:
 	diff expected/myExp output/myExp
 	paraFlow basic/basic.pf basic/in.basic > output/basic
 	diff expected/basic expected/basic
+	paraFlow dumpEnv/dumpEnv.pf > /dev/null
