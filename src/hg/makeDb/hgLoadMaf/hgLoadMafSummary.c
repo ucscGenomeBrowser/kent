@@ -12,20 +12,18 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.9 2005/04/20 21:32:12 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.10 2005/04/28 17:45:34 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"mergeGap", OPTION_INT},
     {"minSize", OPTION_INT},
-    {"maxSize", OPTION_INT},
     {"test", OPTION_BOOLEAN},
     {NULL, 0}
 };
 boolean test = FALSE;
-int mergeGap = 10;
-int minSize = 1000;
-int maxSize = 1000;
+int mergeGap = 500;
+int minSize = 10000;
 char *database = NULL;
 
 void usage()
@@ -38,10 +36,9 @@ errAbort(
   "options:\n"
     "   -mergeGap=N   max size of gap to merge regions (default %d)\n"
     "   -minSize=N         merge blocks smaller than N (default %d)\n"
-    "   -maxSize=N         break up blocks larger than N (default %d)\n"
     "   -test         suppress loading the database. Just create .tab file(s)\n"
     "                     in current dir.\n",
-                                mergeGap, minSize, maxSize 
+                                mergeGap, minSize
   );
 }
 
@@ -81,8 +78,6 @@ return score;
 void outputSummary(FILE *f, struct mafSummary *ms)
 /* output to .tab file */
 {
-verbose(3, "OUTPUT src=%s, chromStart=%d, chromEnd=%d\n",
-                ms->src, ms->chromStart, ms->chromEnd);
 fprintf(f, "%u\t", hFindBin(ms->chromStart, ms->chromEnd));
 mafSummaryTabOut(ms, f);
 }
@@ -125,7 +120,6 @@ struct mafComp *oldMasterNext = mcMaster->next;
 char *e, *chrom;
 char src[256];
 
-verbose(3, "processMaf %d\n", maf->textSize);
 strcpy(src, mcMaster->src);
 chrom = chopPrefix(src);
 for (mc = maf->components; mc != NULL; mc = nextMc)
@@ -153,6 +147,8 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     mcMaster->next = mc;
     mc->next = NULL;
     ms->score = scorePairwise(&pairMaf);
+    ms->leftStatus[0] = mc->leftStatus;
+    ms->rightStatus[0] = mc->rightStatus;
 
     /* restore component links to allow memory recovery */
     mcMaster->next = oldMasterNext; 
@@ -161,13 +157,9 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     /* output to .tab file, or save for merging with another block 
      * if this one is too small */
 
-    verbose(3, "src=%s, chromStart=%d, chromEnd=%d\n",
-                ms->src, ms->chromStart, ms->chromEnd);
-
     /* handle pending alignment block for this species, if any  */
-    if ((msPending = (struct mafSummary *) hashFindVal(componentHash, ms->src)) != NULL)
+    if ( ( msPending = (struct mafSummary *) hashFindVal(componentHash, ms->src)) != NULL)
         {
-        verbose(3, "pending %s %d %d\n", ms->src, ms->chromStart, ms->chromEnd);
         /* there is a pending alignment block */
         /* either merge it with the current block, or output it */
         if (sameString(ms->chrom, msPending->chrom) &&
@@ -176,6 +168,8 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
             /* merge pending block with current */
             ms->score = mergeScores(msPending, ms);
             ms->chromStart = msPending->chromStart;
+            ms->leftStatus[0] = msPending->leftStatus[0];
+            ms->rightStatus[0] = ms->rightStatus[0];
             }
         else
             outputSummary(f, msPending);
@@ -203,10 +197,7 @@ struct mafSummary *ms;
 struct hashCookie hc = hashFirst(componentHash);
 
 while (((struct mafSummary *)ms = hashNextVal(&hc)) != NULL)
-    {
-    verbose(3, "flushing %s %d %d\n", ms->src, ms->chromStart, ms->chromEnd);
     outputSummary(f, ms);
-    }
 }
 
 void hgLoadMafSummary(char *table, char *fileName)
@@ -230,30 +221,7 @@ verbose(1, "Indexing and tabulating %s\n", fileName);
 /* process mafs */
 while ((maf = mafNext(mf)) != NULL)
     {
-    mcMaster = mafMaster(maf, mf, fileName);
-    while (mcMaster->size > maxSize)
-        {
-        /* break maf into maxSize pieces */
-        int end = mcMaster->start + maxSize;
-        struct mafAli *subMaf = 
-                mafSubset(maf, mcMaster->src, mcMaster->start, end);
-        verbose(3, "Splitting maf %s:%d len %d\n", mcMaster->src,
-                                        mcMaster->start, mcMaster->size);
-        componentCount += 
-            processMaf(subMaf, componentHash, f, mf, fileName);
-        mafAliFree(&subMaf);
-        subMaf = mafSubset(maf, mcMaster->src, 
-                                end, end + (mcMaster->size - maxSize));
-        mafAliFree(&maf);
-        maf = subMaf;
-        mcMaster = mafMaster(maf, mf, fileName);
-        }
-    if (mcMaster->size != 0)
-        {
-        /* remainder of maf after splitting off maxSize submafs */
-        componentCount += 
-            processMaf(maf, componentHash, f, mf, fileName);
-        }
+    componentCount += processMaf(maf, componentHash, f, mf, fileName);
     mafAliFree(&maf);
     mafCount++;
     }
@@ -275,7 +243,6 @@ optionInit(&argc, argv, optionSpecs);
 test = optionExists("test");
 mergeGap = optionInt("mergeGap", mergeGap);
 minSize = optionInt("minSize", minSize);
-maxSize = optionInt("maxSize", maxSize);
 if (argc != 4)
     usage();
 database = argv[1];
