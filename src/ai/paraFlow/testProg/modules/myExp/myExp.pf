@@ -86,7 +86,7 @@ to evalFactors(tokenizer tkz) into int val
 to evalUnary(tokenizer tkz) into int val
     {
     string s = tkz.get();
-    if (s == '-')
+    if (s == "-")
         val = -evalUnary(tkz);
     else
         {

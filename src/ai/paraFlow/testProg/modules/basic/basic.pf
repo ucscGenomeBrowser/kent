@@ -35,6 +35,14 @@ class codeLine
     string statement;	// some sort of statement, we'll interpret on the fly
     }
 
+class retStack
+// Return addresss stack
+    {
+    retStack next;
+    codeLine returnTo;
+    }
+retStack retStack;
+
 dir of codeLine program = ();
 codeLine startLine, endLine;
 
@@ -102,6 +110,24 @@ while (ip)
 	    ip = ip.next;
 	    }
 	}
+    else if (first == "return")
+        {
+	if (retStack)
+	   {
+	   ip = retStack.returnTo;
+	   retStack = retStack.next;
+	   }
+	else
+	   die("Return without call");
+	}
+    else if (first == "gosub")
+        {
+	retStack = (retStack, ip.next);
+	(string label, int newPos) = ip.statement.nextWord(pos);
+	ip = program[label];
+	if (!ip)
+	    die("Can't find label " + label);
+	}
     else if (isalpha(first[0]))
         {
 	(string eq, int newPos) = ip.statement.nextWord(pos);
@@ -120,36 +146,64 @@ while (ip)
 
 to evalExp(string s, int pos) into int newPos,val
     {
-    (newPos,val) = evalFactor(s, pos);
+    (newPos,val) = evalTerm(s, pos);
     }
+
+to evalTerm(string s, int pos) into int newPos,val
+    {
+    (newPos,val) = evalFactor(s, pos);
+    for (;;)
+	{
+	(string w, int np) = s.nextWord(newPos);
+	if (w == "+")
+	    {
+	    int v2;
+	    (newPos, v2) = evalFactor(s, np);
+	    val += v2;
+	    }
+	else if (w == "-")
+	    {
+	    int v2;
+	    (newPos, v2) = evalFactor(s, np);
+	    val -= v2;
+	    }
+	else
+	    break;
+	}
+    }
+
 
 to evalFactor(string s, int pos) into int newPos,val
     {
     (newPos,val) = evalAtom(s, pos);
-    (string w, int np) = s.nextWord(newPos);
-    if (w == "*")
-        {
-	int v2;
-	(newPos, v2) = evalAtom(s, np);
-	val *= v2;
-	}
-    else if (w == '/')
-        {
-	int v2;
-	(newPos, v2) = evalAtom(s, np);
-	val /= v2;
+    for (;;)
+	{
+	(string w, int np) = s.nextWord(newPos);
+	if (w == "*")
+	    {
+	    int v2;
+	    (newPos, v2) = evalAtom(s, np);
+	    val *= v2;
+	    }
+	else if (w == "/")
+	    {
+	    int v2;
+	    (newPos, v2) = evalAtom(s, np);
+	    val /= v2;
+	    }
+	else 
+	    break;
 	}
     }
 
 to evalAtom(string s, int pos) into int newPos,val
     {
-    (string w, int np) = s.nextWord(pos);
-    newPos = np;		// Why have to do this?
+    string w;
+    (w, newPos) = s.nextWord(pos);
     if (w == "(")
         {
 	(newPos,val) = evalExp(s, newPos);
-	(string w, int np) = s.nextWord(newPos);
-	newPos = np;
+	(w, newPos) = s.nextWord(newPos);
 	if (w != ")")
 	    die("Unclosed parenthesis");
 	}
