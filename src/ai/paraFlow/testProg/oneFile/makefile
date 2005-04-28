@@ -9,7 +9,7 @@ test:
 	diff expected/printRef output/printRef
 	paraFlow printScan.pf foo > output/printScan
 	diff expected/printScan output/printScan
-	paraFlow wordCount.pf wordCount.pf serialMath > output/wordCount
+	paraFlow wordCount.pf wordCount.pf serialMath.pf > output/wordCount
 	diff expected/wordCount output/wordCount
 	paraFlow wordUse.pf serialMath.pf > output/wordUse
 	diff expected/wordUse output/wordUse
