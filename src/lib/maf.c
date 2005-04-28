@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.20 2005/04/10 14:41:23 markd Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.21 2005/04/28 19:56:42 kate Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -504,13 +504,21 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     AllocVar(subMc);
     subMc->src = cloneString(mc->src);
-    if (mc->srcSize == 0)
-	continue;
-    subMc->srcSize = mc->srcSize;
-    subMc->strand = mc->strand;
-    subMc->start = mc->start + countNonDash(mc->text, textStart);
-    subMc->size = countNonDash(mc->text+textStart, textSize);
-    subMc->text = cloneStringZ(mc->text + textStart, textSize);
+    if (mc->srcSize != 0)
+        {
+        subMc->srcSize = mc->srcSize;
+        subMc->strand = mc->strand;
+        subMc->start = mc->start + countNonDash(mc->text, textStart);
+        subMc->size = countNonDash(mc->text+textStart, textSize);
+        subMc->text = cloneStringZ(mc->text + textStart, textSize);
+        }
+    else
+        /* empty row annotation */
+        subMc->size = 0;
+    subMc->leftStatus = mc->leftStatus;
+    subMc->leftLen = mc->leftLen;
+    subMc->rightStatus = mc->rightStatus;
+    subMc->rightLen = mc->rightLen;
     slAddHead(&subset->components, subMc);
     }
 slReverse(&subset->components);
