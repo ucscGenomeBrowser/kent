@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.24 2005/04/15 00:22:41 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.25 2005/04/28 23:02:13 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -120,16 +120,21 @@ int srcChars = 0;
 struct mafComp *mc;
 int lineStart, lineEnd;
 char *summaryLine = needMem(lineSize+1);
-char *referenceText = maf->components->text;
-        /* first sequence in the alignment */
+char *referenceText;
 
-/* Figure out length of source (species) field. */
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
+    /* Figure out length of source (species) field. */
     int len = strlen(mc->src);
     if (srcChars < len)
         srcChars = len;
+    /* complement bases if hgTracks is on reverse strand */
+    if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+        complement(mc->text, maf->textSize);
     }
+/* first sequence in the alignment */
+referenceText = maf->components->text;
+
 for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     {
     int size;
@@ -376,6 +381,10 @@ else
 	printf("<BR>\n");
 	printf("</FORM>\n");
 	printf("<TT><PRE>");
+
+        /* notify if bases are complemented (hgTracks is on reverse strand) */
+        if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+            puts("<EM>Viewing on reverse strand</EM><BR>");
 	for (maf = subList; maf != NULL; maf = maf->next)
 	    {
 	    mafLowerCase(maf);
