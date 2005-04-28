@@ -12,6 +12,7 @@ paraFlow: $(O)
 test:
 	cd ../testProg/oneFile; make
 	cd ../testProg/easy; make
+	cd ../testProg/modules; make
 	cd ../testProg/fixes; make
 
 ret:

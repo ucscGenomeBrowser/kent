@@ -66,7 +66,11 @@ struct pfParse *type = pp->children;
 struct pfParse *name = type->next;
 struct pfParse *init = name->next;
 
+start = end = type->tok;
 findSpanningTokens(type, &start, &end);
+printTokenRange(f, start, end);
+fprintf(f, " ");
+start = end = name->tok;
 findSpanningTokens(name, &start, &end);
 if (printInit && init != NULL)
     findSpanningTokens(init, &start, &end);
@@ -136,19 +140,6 @@ rPrintDefs(f, body, TRUE);
 fprintf(f, "}\n");
 }
 
-static void printDefTuple(FILE *f, struct pfParse *pp, boolean printInit)
-/* See if tuple is a definition, and if so print it. */
-{
-if (pp->children != NULL && pp->children->type == pptVarInit)
-    {
-    struct pfToken *start, *end;
-    start = end = pp->tok;
-    findSpanningTokens(pp, &start, &end);
-    printTokenRange(f, start, end);
-    fprintf(f, ";\n");
-    }
-}
-
 static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit)
 /* Print definitions . */
 {
@@ -169,7 +160,7 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	    printClassDef(f, pp);
 	    break;
 	case pptTuple:
-	    printDefTuple(f, pp, printInit);
+	    rPrintDefs(f, pp, printInit);
 	    break;
 	}
     }

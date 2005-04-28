@@ -208,8 +208,8 @@ carefulClose(&parseF);
 
 if (endPhase < 3)
     return;
-verbose(2, "Phase 3 - generating def file\n");
-pfMakeDefFile(pfc, program->children, defFile);
+verbose(2, "Phase 3 - nothing\n");
+
 if (endPhase < 4)
     return;
 verbose(2, "Phase 4 - binding names\n");
