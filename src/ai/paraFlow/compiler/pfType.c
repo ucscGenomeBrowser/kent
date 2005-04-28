@@ -8,13 +8,11 @@
 #include "pfCompile.h"
 #include "pfType.h"
 
-static int baseTypeCount = 0;
+void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp);
+/* Check types (adding conversions where needed) on tree,
+ * which should have variables bound already. */
 
-int pfBaseTypeCount()
-/* Return base type count. */
-{
-return baseTypeCount;
-}
+static int baseTypeCount = 0;
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parent, int size,
@@ -474,6 +472,8 @@ for (field = base->fields; field != NULL; field = field->next)
 	{
 	if (field->init != NULL)
 	    {
+	    if (field->init->ty == NULL)	/* Handle forward use */
+		rTypeCheck(pfc, &field->init);
 	    *pos = CloneVar(field->init);
 	    coerceOne(pfc, pos, field, FALSE);
 	    }
@@ -1225,7 +1225,7 @@ if (body != NULL)
 hashFree(&outputHash);
 }
 
-static void rTypeCheck(struct pfCompile *pfc, int level, struct pfParse **pPp)
+void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 {
@@ -1233,10 +1233,10 @@ struct pfParse *pp = *pPp;
 struct pfParse **pos;
 
 for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
-    rTypeCheck(pfc, level+1, pos);
+    rTypeCheck(pfc, pos);
 
 if (verboseLevel() >= 3)
-    pfParseDumpOne(pp, level, stderr);
+    pfParseDumpOne(pp, 0, stderr);
 switch (pp->type)
     {
     case pptCall:
@@ -1333,13 +1333,6 @@ switch (pp->type)
     case pptPolymorphic:
         pfParsePutChildrenInPlaceOfSelf(pPp);
 	break;
-#ifdef OLD
-    case pptStatic:
-	pp->children->ty->isStatic = TRUE;
-	pp->children->var->ty->isStatic = TRUE;
-	pfParsePutChildrenInPlaceOfSelf(pPp);
-        break;
-#endif /* OLD */
     case pptParaDec:
     case pptToDec:
     case pptFlowDec:
@@ -1377,5 +1370,5 @@ void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
  * which should have variables bound already. */
 {
 rClassBless(pfc, *pPp);
-rTypeCheck(pfc, 0, pPp);
+rTypeCheck(pfc, pPp);
 }
