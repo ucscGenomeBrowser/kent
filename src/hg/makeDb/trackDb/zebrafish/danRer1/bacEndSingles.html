@@ -1,11 +1,14 @@
 <H2>Description</H2>
 <P>Bacterial artificial chromosomes (BACs) are a key part of many large
 scale sequencing projects and for $organism, they were used for both the FPC 
-and the RH maps.  A BAC typically consists of 50 - 300 kb of DNA. For $organism, the BAC clones are in the range of 2 - 650 kb with the average size
-being approximately 170 kb. During the early phase of a sequencing project, it 
-is common to sequence a single read (approximately 500 bases) off each end of
-a large number of BACs.  Later on in the project, these BAC end reads
-can be mapped to the genome sequence.  
+and the RH maps.  A BAC typically consists of 50 - 300 kb of DNA and for the 
+$organism assembly, they are around 150-200kb. During the early phase of a 
+sequencing project, it is common to sequence a single read (approximately 
+500 bases) off each end of a large number of BACs.  Later on in the project, 
+these BAC end reads can be mapped to the genome sequence. After alignment of 
+$organism BAC end sequences to this genome, the distances between pairs of BAC
+ ends range from about 2 - 650 kb with the average distance being 
+approximately 170 kb.
 </P>
 <P>This track shows these mappings
 in cases where only one end is mapped. These are BACs for which there was only
@@ -23,7 +26,26 @@ names and the BAC clone name is the same in each case. If reads for the same BAC
 sequences only aligned to one location in the genome (after filtering).  For    
 multiple alignments to the genome, a BAC end scores 1500/Number of alignments.
 </P>
-
+<P>
+Information about STS markers associated with the BAC clone is displayed if it 
+is available. Aliases include those for the BAC clone and those for associated 
+STS markers and the BAC ends tracks may be searched using the clone name, the 
+internal name or any of these aliases. The UniSTS ID(s) shown are those 
+associated with each Sanger STS names. 
+NOTE: The primer sequences shown may be different than those in UniSTS for the 
+UniSTS IDs shown. Where there is more than one UniSTS ID, primer sequences may 
+be the same as those in UniSTS for one of the UniSTS IDs.
+The relationship field represents the method of finding the STS markers associated with this BAC clone.
+</P>
+<P>Relationship:
+<UL>
+<LI><B>1</B> - STS is designed from the end sequence of this BAC clone.
+<LI><B>2</B> - STS is found by e-PCR in the genomic sequence of this BAC clone.
+<LI><B>3</B> - STS is found in the WGS contig by e-PCR which has been aligned to this region (approximately +/- 150kb). There is no direct relationship with the clone and this data is covered by all the same caveats as the WGS contigs.
+</UL>
+If the relationship field shows 0, there is no information for this STS or 
+there is no STS marker for this BAC clone.
+</P>
 <H2>Methods</H2>
 <P>BAC end sequences are placed on the assembled sequence using
 Jim Kent's 
@@ -57,5 +79,6 @@ Developmental Biology, Germany and the
 Developmental Biology</A> (Hubrecht Laboratory). The track was produced in 
 collaboration with the <A HREF="http://zon.tchlab.org"
 TARGET=_blank>Zebrafish Genome Initiative</A> at Childrens Hospital, Boston.
-GenBank accessions for BAC clones were obtained from The Wellcome Trust Sanger
-Institute, Cambridge, United Kingdom.</P>
+GenBank accessions for BAC clones and the STS marker data were obtained from 
+The Wellcome Trust Sanger Institute, Cambridge, United Kingdom. UniSTS IDs were
+obtained from the NCBI UniSTS database.</P>

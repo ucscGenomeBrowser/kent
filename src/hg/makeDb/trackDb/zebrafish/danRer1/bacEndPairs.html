@@ -1,19 +1,20 @@
 <H2>Description</H2>
 <P>Bacterial artificial chromosomes (BACs) are a key part of many large
 scale sequencing projects and for $organism, they were used for both the FPC 
-and the RH maps.  A BAC typically consists of 50 - 300 kb of DNA.  For 
-$organism, the BAC clones are in the range of 2 - 650 kb with the average size 
-being approximately 170 kb. During the early phase of a sequencing project, it 
-is common to sequence a single read (approximately 500 bases) off each end of
-a large number of BACs.  Later on in the project, these BAC end reads
-can be mapped to the genome sequence.  
+and the RH maps.  A BAC typically consists of 50 - 300 kb of DNA and for the 
+$organism assembly, they are around 150-200kb. During the early phase of a 
+sequencing project, it is common to sequence a single read (approximately 
+500 bases) off each end of a large number of BACs.  Later on in the project, 
+these BAC end reads can be mapped to the genome sequence. After alignment of 
+$organism BAC end sequences to this genome, the distances between pairs of BAC
+ ends range from about 2 - 650 kb with the average distance being 
+approximately 170 kb. 
 </P>
-<P>This track shows these mappings
-in cases where both ends could be mapped.  These BAC end pairs can
-be useful for validating the assembly over relatively long ranges.  In some
-cases, the BACs are useful biological reagents.  This track can also be
-used for determining which BAC contains a given gene, useful information
-for certain wet lab experiments.
+<P>This track shows these mappings in cases where both ends could be mapped.  
+These BAC end pairs can be useful for validating the assembly over relatively 
+long ranges.  In some cases, the BACs are useful biological reagents.  This 
+track can also be used for determining which BAC contains a given gene, useful 
+information for certain wet lab experiments.
 
 <P>A valid pair of BAC end sequences must be
 at least 2 kb but no more than 800 kb away from each other. 
@@ -52,6 +53,27 @@ clones have been submitted to NCBI Clone Registry as of July 2004; therefore,
 some of the clone links to NCBI may not yet be active.
 </P>
 <P>
+Information about STS markers associated with the BAC clone is displayed if it 
+is available. Aliases include those for the BAC clone and those for associated 
+STS markers and the BAC ends tracks may be searched using the clone name, the 
+internal name or any of these aliases. The UniSTS ID(s) shown are those 
+associated with each Sanger STS names. 
+NOTE: The primer sequences shown may be different than those in UniSTS for the 
+UniSTS IDs shown. Where there is more than one UniSTS ID, primer sequences may 
+be the same as those in UniSTS for one of the UniSTS IDs.
+The relationship field represents the method of finding the STS markers 
+associated with this BAC clone.
+</P>
+<P><B>RElationship</B>
+<UL>
+<LI><B>1</B> - STS is designed from the end sequence of this BAC clone.
+<LI><B>2</B> - STS is found by e-PCR in the genomic sequence of this BAC clone.
+<LI><B>3</B> - STS is found in the WGS contig by e-PCR which has been aligned to this region (approximately +/- 150kb). There is no direct relationship with the clone and this data is covered by all the same caveats as the WGS contigs.
+</UL>
+If the relationship field shows 0, there is no information for this STS or 
+there is no STS marker for this BAC clone.
+</P>
+<P>
 The $Organism BAC End Pairs track was produced at UCSC from BAC End Pairs 
 sequence data obtained from 
 <A HREF="http://www.eb.tuebingen.mpg.de/dept3/geisler/home.html" 
@@ -61,5 +83,6 @@ Developmental Biology, Germany and the
 Developmental Biology</A> (Hubrecht Laboratory). The track was produced in 
 collaboration with the <A HREF="http://zon.tchlab.org"
 TARGET=_blank>Zebrafish Genome Initiative</A> at Childrens Hospital, Boston.
-GenBank accessions for BAC clones were obtained from The Wellcome Trust Sanger
-Institute, Cambridge, United Kingdom.</P>
+GenBank accessions for BAC clones and the STS marker data were obtained from 
+The Wellcome Trust Sanger Institute, Cambridge, United Kingdom. UniSTS IDs were
+obtained from NCBI UniSTS database.</P>
