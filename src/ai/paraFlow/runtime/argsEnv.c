@@ -9,8 +9,10 @@
 #include "string.h"
 #include "initVar.h"
 
+static char **cl_env;
 
-void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs)
+void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, 
+	char *environ[])
 /* Set up command line arguments. */
 {
 _pf_Array args;
@@ -23,6 +25,32 @@ a = (struct _pf_string **)(args->elements);
 for (i=1; i<argc; ++i)
     a[i-1] = _pf_string_from_const(argv[i]);
 *retArgs = args;
+cl_env = environ;
+}
+
+void getEnvArray(_pf_Stack *stack)
+/* Return an array of string containing the environment
+ * int var=val format.   We'll leave it to paraFlow 
+ * library to turn this into a hash. */
+{
+int stringTypeId = _pf_find_string_type_id();
+int envSize = 0;
+int i;
+struct _pf_string **a;
+_pf_Array envArray;
+for (i=0; ; ++i)
+    {
+    if (cl_env[i] == NULL)
+        break;
+    envSize += 1;
+    }
+envArray = _pf_dim_array(envSize, stringTypeId);
+a = (struct _pf_string **)(envArray->elements);
+
+for (i=0; i<envSize; ++i)
+    a[i] = _pf_string_from_const(cl_env[i]);
+
+stack[0].Array = envArray;
 }
 
 void die(_pf_Stack *stack)

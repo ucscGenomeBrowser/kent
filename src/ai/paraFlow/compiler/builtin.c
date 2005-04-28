@@ -12,6 +12,7 @@ return
 "to keyIn() into string s;\n"
 "to randNum() into double zeroToOne;\n"
 "to randInit();\n"
+"to getEnvArray() into array of string envArray;\n"
 "to milliTicks() into long milliseconds;\n"
 "to floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal,\n"
 "               bit scientificNotation) into (string s);\n"

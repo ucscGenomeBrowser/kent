@@ -54,7 +54,7 @@ static void printSysVarsAndPrototypes(FILE *f)
 /* Print stuff needed for main() */
 {
 fprintf(f, 
-"void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs);\n");
+"void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, char *environ[]);\n");
 fprintf(f, "\n");
 }
 
@@ -1966,7 +1966,7 @@ fprintf(f,
 "               _pf_type_info, _pf_type_info_count,\n"
 "               _pf_field_info, _pf_field_info_count,\n"
 "               _pf_module_info, _pf_module_info_count);\n"
-"_pf_init_args(argc, argv, &programName, &args);\n"
+"_pf_init_args(argc, argv, &programName, &args, environ);\n"
 "_pf_entry_%s(stack);\n"
 "return 0;\n"
 "}\n", mainModule->name);
