@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.873 2005/04/26 23:45:25 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.874 2005/04/28 01:12:07 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11867,20 +11867,98 @@ sqlFreeResult(&sr);
 hgFreeConn(&conn);
 }
 
+void printBacStsXRef(char *clone)
+/* Print out associated STS XRef information for BAC clone on BAC ends */
+/* tracks details pages. */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
+struct sqlResult *sr = NULL, *sr1 = NULL;
+char **row, **row1;
+char *sName, *uniStsId;
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+
+/* get aliases from bacCloneAlias */
+sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);         
+sr = sqlMustGetResult(conn, query);
+printf("<TR><TH ALIGN=left>BAC Clone and STS Aliases:</TH><TD WIDTH=75%%>"); 
+while ((row = sqlNextRow(sr)))
+    {
+    printf("%s, ", row[0]); 
+    }
+printf("</TD></TR>\n");
+printBand(seqName, start, end, TRUE);
+printf("</TABLE>\n");
+/* query db to find the sanger STS name, relationship, uniSTSId and primers and print out */  
+sprintf(query, "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
+sr1 = sqlMustGetResult(conn1, query);
+
+/* print table as some BACs have up to 17 Sanger STS names associated */
+printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE CELLSPACING=\"5\">\n");
+printf("<TR><TH>Sanger <BR>STS Name</TH><TH>Relationship</TH><TH>UniSTS ID</TH><TH>Left STS Primer</TH><TH>Right STS Primer</TH></TR>\n");
+while ((row1 = sqlNextRow(sr1)))
+    {
+    uniStsId = cloneString(row1[2]);
+    sName = cloneString(row1[0]);
+fflush(stdout);
+    printf("<TR><TD>");
+fflush(stdout);
+    if (row1[0] != NULL)
+        printf("%s</TD>", row1[0]);
+    else
+        printf("n/a</TD>");
+fflush(stdout);
+    printf("<TD ALIGN=center>"); 
+fflush(stdout);
+    if (!sameString(row1[1], "0"))
+        printf("%s</TD>", row1[1]); 
+    else         
+        printf("n/a</TD>");
+fflush(stdout);
+    printf("<TD>"); 
+fflush(stdout);
+    if (row1[2] != NULL)
+        printf("%s</TD>", row1[2]); 
+    else
+        printf("n/a</TD>");
+fflush(stdout);
+    printf("<TD>"); 
+fflush(stdout);
+    if (row1[3] != NULL)
+        printf("%s</TD>", row1[3]); 
+    else
+        printf("n/a</TD>");
+fflush(stdout);
+    printf("<TD>"); 
+fflush(stdout);
+    if (row1[4] != NULL)
+        printf("%s</TD></TR>\n", row1[4]); 
+    else
+        printf("n/a</TD></TR>\n");
+fflush(stdout);
+    }
+fflush(stdout);
+printf("</TABLE>\n");
+fflush(stdout);
+printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+}
+
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
 /* Create detail page for linked features series tracks */ 
 {
 char query[256];
 char title[256];
 struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
-struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL, *srb = NULL;
-char **row, **row1, **row2, **rowb;
+struct sqlResult *sr = NULL, *sr2 = NULL, *srb = NULL;
+char **row, **row1, **row2, **rowb; 
 char *lfLabel = NULL;
 char *table = NULL;
+char *intName = NULL;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 int length = end - start;
-int i;
+int i; 
 struct lfs *lfs;
 struct psl *pslList = NULL, *psl;
 boolean hasBin = hOffsetPastBin(seqName, track);
@@ -11931,7 +12009,7 @@ if (sameString("fosEndPairsLong", track))
 if (sameString("earlyRep", track)) 
     {
     sprintf(title, "Location of %s using cosmid end sequences", clone);
-    lfLabel = "Early Replciation Cosmid Ends";
+    lfLabel = "Early Replication Cosmid Ends";
     table = track;
     }
 if (sameString("earlyRepBad", track)) 
@@ -11954,14 +12032,13 @@ row = sqlNextRow(sr);
 if (row != NULL)
     {
     lfs = lfsLoad(row+hasBin);
-    if (sameString("bacEndPairs", track)) 
+    if (sameString("bacEndPairs", track) || sameString("bacEndSingles", track)) 
 	{
         if (sameString("Zebrafish", organism) )
             {
             /* query to bacCloneXRef table to get Genbank accession */
-            /* and external name for clones in the NCBI Clone Registry */      
-            sprintf(query, "SELECT acc FROM bacCloneXRef WHERE extName = '%s'"
-                   , clone);  
+            /* and internal Sanger name for clones */      
+            sprintf(query, "SELECT genbank, intName FROM bacCloneXRef WHERE name = '%s'", clone);  
             srb = sqlMustGetResult(conn1, query);
             rowb = sqlNextRow(srb);
             if (rowb != NULL)
@@ -11972,11 +12049,10 @@ if (row != NULL)
                 printf("<H3>Genbank Accession: <A HREF=");
                 printEntrezNucleotideUrl(stdout, rowb[0]);
                 printf(" TARGET=_BLANK>%s</A></H3>\n", rowb[0]);
+                intName = cloneString(rowb[1]);
                 }
             else
-                {
                 printf("<H2>%s</H2>\n", clone);
-                }
             }
         else 
             {
@@ -11997,9 +12073,23 @@ if (row != NULL)
     printf("<TR><TH ALIGN=left>Length:</TH><TD>%d</TD></TR>\n",length);
     printf("<TR><TH ALIGN=left>Strand:</TH><TD>%s</TD></TR>\n", lfs->strand);
     printf("<TR><TH ALIGN=left>Score:</TH><TD>%d</TD></TR>\n", lfs->score);
-    printBand(seqName, start, end, TRUE);
-    printf("</TABLE>\n");
-    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+    if ((sameString("Zebrafish", organism)) && ((sameString("bacEndPairs", track)) || (sameString("bacEndSingles", track))) )
+        {
+        /* print Sanger FPC name (internal name) */
+        printf("<TR><TH ALIGN=left>Sanger FPC Name:</TH><TD>");
+        if (intName != NULL)
+            printf("%s</TD></TR>\n", intName);
+        else 
+            printf("n/a</TD></TR>\n");
+        /* print associated STS information for this BAC clone */
+        printBacStsXRef(clone);  
+        }
+    else
+        {
+        printBand(seqName, start, end, TRUE);
+        printf("</TABLE>\n");
+        printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+        }
     if (lfs->score == 1000)
         {
 	printf("<H4>This is the only location found for %s</H4>\n",clone);
@@ -12071,7 +12161,6 @@ else
     warn("Couldn't find %s in %s table", clone, table);
     }
 sqlFreeResult(&sr);
-sqlFreeResult(&sr1);
 sqlFreeResult(&sr2);
 sqlFreeResult(&srb);
 webNewSection("Notes:");
