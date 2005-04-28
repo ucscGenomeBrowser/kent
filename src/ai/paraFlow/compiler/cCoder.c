@@ -1003,42 +1003,36 @@ switch(pp->type)
     case pptCastBitToLong:
     case pptCastBitToFloat:
     case pptCastBitToDouble:
-    case pptCastByteToBit:
     case pptCastByteToByte:
     case pptCastByteToShort:
     case pptCastByteToInt:
     case pptCastByteToLong:
     case pptCastByteToFloat:
     case pptCastByteToDouble:
-    case pptCastShortToBit:
     case pptCastShortToByte:
     case pptCastShortToShort:
     case pptCastShortToInt:
     case pptCastShortToLong:
     case pptCastShortToFloat:
     case pptCastShortToDouble:
-    case pptCastIntToBit:
     case pptCastIntToByte:
     case pptCastIntToShort:
     case pptCastIntToInt:
     case pptCastIntToLong:
     case pptCastIntToFloat:
     case pptCastIntToDouble:
-    case pptCastLongToBit:
     case pptCastLongToByte:
     case pptCastLongToShort:
     case pptCastLongToInt:
     case pptCastLongToLong:
     case pptCastLongToFloat:
     case pptCastLongToDouble:
-    case pptCastFloatToBit:
     case pptCastFloatToByte:
     case pptCastFloatToShort:
     case pptCastFloatToInt:
     case pptCastFloatToLong:
     case pptCastFloatToFloat:
     case pptCastFloatToDouble:
-    case pptCastDoubleToBit:
     case pptCastDoubleToByte:
     case pptCastDoubleToShort:
     case pptCastDoubleToInt:
@@ -1048,6 +1042,18 @@ switch(pp->type)
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ";\n");
+	break;
+    case pptCastByteToBit:
+    case pptCastShortToBit:
+    case pptCastIntToBit:
+    case pptCastLongToBit:
+    case pptCastFloatToBit:
+    case pptCastDoubleToBit:
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, " != 0");
 	fprintf(f, ";\n");
 	break;
     case pptCastObjectToBit:
