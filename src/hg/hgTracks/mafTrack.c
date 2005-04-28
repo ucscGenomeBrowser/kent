@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.42 2005/04/27 18:52:15 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.43 2005/04/28 01:29:37 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -504,12 +504,13 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 void drawMafChain(struct vGfx *vg, int xOff, int yOff, int width, int height,
-                        Color color, boolean isDouble)
+                        boolean isDouble)
 /* draw single or double chain line between alignments in MAF display */
 {
 int midY = yOff + (height>>1);
 int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
+Color gray = shadesOfGray[5];
 midY--;
 
 /* tweaking end pixels, as done in chainTrack.c */
@@ -521,11 +522,11 @@ if (width == 1)
 width++;
 if (isDouble)
     {
-    innerLine(vg, xOff, midY1, width, color);
-    innerLine(vg, xOff, midY2, width, color);
+    innerLine(vg, xOff, midY1, width, gray);
+    innerLine(vg, xOff, midY2, width, gray);
     }
 else
-    innerLine(vg, xOff, midY, width, color);
+    innerLine(vg, xOff, midY, width, gray);
 }
 
 void drawMafRegionDetails(struct mafAli *mafList, int height,
@@ -574,21 +575,19 @@ for (full = mafList; full != NULL; full = full->next)
 	if (w < 1) w = 1;
         if (vis != tvFull && mc->size == 0)
             {
-            Color chainColor;
             if (w == 1 && x1 == lastAlignX2)
                 continue;
             if (!chainBreaks)
                 continue;
-            chainColor = lighterColor(vg, color);
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
                     /* double gap -> display double line ala chain tracks */
-                    drawMafChain(vg, x1, yOff, w, height, chainColor, TRUE);
+                    drawMafChain(vg, x1, yOff, w, height, TRUE);
             if (mc->leftStatus == MAF_CONTIG_STATUS &&
                 mc->rightStatus == MAF_CONTIG_STATUS)
                     /* single gap -> display single line ala chain tracks */
-                    drawMafChain(vg, x1, yOff, w, height, chainColor, FALSE);
+                    drawMafChain(vg, x1, yOff, w, height, FALSE);
             }
         else
             {

@@ -16,7 +16,7 @@ void drawMafRegionDetails(struct mafAli *mafList, int height,
 /* Draw wiggle/density plot based on scoring things on the fly. */
 
 void drawMafChain(struct vGfx *vg, int xOff, int yOff, int width, int height,
-                        Color color, boolean isDouble);
+                        boolean isDouble);
 /* draw single or double chain line between alignments in MAF display */
 
 #endif

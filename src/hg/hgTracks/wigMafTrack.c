@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.74 2005/04/28 01:13:48 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.75 2005/04/28 01:29:37 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -572,8 +572,6 @@ int w = 0;
 int chromStart = seqStart;
 int lastX;
 
-Color chainColor = lighterColor(vg, color);
-
 /* draw chain before first alignment */
 ms = summaryList;
 if (chainBreaks && ms->chromStart > chromStart && 
@@ -585,7 +583,7 @@ if (chainBreaks && ms->chromStart > chromStart &&
     x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
     w = x2 - x1;
     if (w > 0)
-        drawMafChain(vg, x1, yOff, w, height, chainColor, isDouble);
+        drawMafChain(vg, x1, yOff, w, height, isDouble);
     }
 for (ms = summaryList; ms != NULL; ms = ms->next)
     {
@@ -605,7 +603,7 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
         if (w == 1 && x1 == lastX)
             continue;
         if (w > 0);
-            drawMafChain(vg, x1, yOff, w, height, color, isDouble);
+            drawMafChain(vg, x1, yOff, w, height, isDouble);
         }
     }
 }
