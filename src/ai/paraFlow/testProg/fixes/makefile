@@ -3,6 +3,8 @@ test:
 	mkdir -p output
 	paraFlow badDefault.pf > output/badDefault
 	diff expected/badDefault output/badDefault
+	paraFlow defaultAhead.pf > output/defaultAhead
+	diff expected/defaultAhead output/defaultAhead
 	paraFlow dotStringDotMethod.pf > output/dotStringDotMethod
 	diff expected/dotStringDotMethod output/dotStringDotMethod
 	paraFlow castMultiReturn.pf > output/castMultiReturn
