@@ -340,7 +340,7 @@ static void coerceTuple(struct pfCompile *pfc, struct pfParse **pTuple,
 /* Make sure that tuple is of correct type. */
 {
 struct pfParse *tuple = *pTuple;
-int tupSize = slCount(tuple->children);
+int tupSize = slCount(tuple->ty->children);
 int typeSize = slCount(types->children);
 struct pfParse **pos;
 struct pfType *type;
