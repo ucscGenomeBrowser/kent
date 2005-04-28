@@ -4,6 +4,7 @@
 #include "common.h"
 #include "hash.h"
 #include "dystring.h"
+#include "portable.h"
 #include "pfToken.h"
 #include "pfParse.h"
 #include "pfCompile.h"
@@ -55,32 +56,38 @@ void rTokInto(struct pfCompile *pfc, char *baseDir, char *modName,
     boolean lookForPfh)
 /* Tokenize module, and recursively any thing it goes into. */
 {
-struct dyString *path = dyStringNew(0);
+struct dyString *pfPath = dyStringNew(0);
+struct dyString *pfhPath = dyStringNew(0);
 char *fileName = NULL;
 struct pfModule *module;
 boolean isPfh = FALSE;
 struct pfToken *tok;
 
-/* Look for just module header if possible. */
+/* Create path names, and make sure .pf file exists. */
+dyStringAppend(pfPath, baseDir);
+dyStringAppend(pfPath, modName);
+dyStringAppend(pfPath, ".pf");
+dyStringAppend(pfhPath, baseDir);
+dyStringAppend(pfhPath, modName);
+dyStringAppend(pfhPath, ".pfh");
+if (!fileExists(pfPath->string))
+    errAbort("Can't find %s", pfPath->string);
+
+/* Look too see if can use just module header.
+ * We can if it exists and is newer than module. */
 if (lookForPfh)
     {
-    dyStringAppend(path, baseDir);
-    dyStringAppend(path, modName);
-    dyStringAppend(path, ".pfh");
-    if (fileExists(path->string))
+    if (fileExists(pfhPath->string))
 	{
-        fileName = path->string;
-	isPfh = TRUE;
+	if (fileModTime(pfhPath->string) > fileModTime(pfPath->string))
+	    {
+	    fileName = pfhPath->string;
+	    isPfh = TRUE;
+	    }
 	}
     }
 if (fileName == NULL)
-    {
-    dyStringClear(path);
-    dyStringAppend(path, baseDir);
-    dyStringAppend(path, modName);
-    dyStringAppend(path, ".pf");
-    fileName = path->string;
-    }
+    fileName = pfPath->string;
 
 /* Tokenize file and add module to hash. */
 module = tokenizeFile(pfc->tkz, fileName, modName);
@@ -104,7 +111,8 @@ for (tok = module->tokList; tok != NULL; tok = tok->next)
 slAddHead(&pfc->moduleList, module);
 
 /* Clean up and go home. */
-dyStringFree(&path);
+dyStringFree(&pfPath);
+dyStringFree(&pfhPath);
 }
 
 static void addBuiltIn(struct pfCompile *pfc, char *code, char *modName)

@@ -258,6 +258,12 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
     modPp->name = mod->name;
     if (mod != stringModule)
 	slAddHead(&program->children, modPp);
+    if (type != pptModuleRef)
+        {
+	char defFile[PATH_LEN];
+	safef(defFile, sizeof(defFile), "%s%s.pfh", pfc->baseDir, mod->name);
+	pfMakeDefFile(pfc, modPp, defFile);
+	}
     }
 slReverse(&program->children);
 attachStringsAndThings(pfc, stringModule->pp);

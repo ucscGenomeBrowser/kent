@@ -1,4 +1,4 @@
-  - Test default initializations across modules.
+  - make tuple.pfh work right (variables not right).
   - Doing parallel checking for para and flow statements.
   - Make single quotes mean literal ascii character values.
   - Make it so don't need 'self' to reference class members and 
@@ -27,6 +27,7 @@ Check system:
 
 -----------
 DONE
+  - Test default initializations across modules.
   - Make classes declared in another module work.
   - make pfh file include closing paren in :
 	to fibonacci ( int iterations ) into ( long f;
