@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.44.4.3 2005/04/04 16:59:24 markd Exp $
+# $Id: gbBlat,v 1.44.4.4 2005/04/29 03:48:06 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -325,17 +325,36 @@ proc makeLift {subInfos} {
     return $liftFile
 }
 
+
+##
+# compute a checksum on a file, return md5 sum without file name.
+proc cksum {file} {
+    return [lindex [split [exec md5sum $file]] 0]
+}
+
 ##
 # copy or lift a file.  It is copied to it's output location with a .tmp
 # extension and then renamed to it's final name
 proc liftOrCp {type inFile outFile liftFile} {
     if {$liftFile == ""} {
-        doExec cp $inFile $outFile.tmp
+        set inFileSrc $inFile
     } else {
         # FIXME wanted to specify "error", however blat doesn't include
         # subrange if it covers the whole sequence
-        doExec liftUp -nohead -nosort -type=.$type $outFile.tmp $liftFile carry $inFile
+        # lift to local file first and checksum before copying to global
+        # storage
+        set inFileSrc $inFile.lifted
+        doExec liftUp -nohead -nosort -type=.$type $inFileSrc $liftFile carry $inFile
     }
+    
+    # copy to global storage and verify checksum
+    set inCksum [cksum $inFileSrc]
+    doExec cp $inFileSrc $outFile.tmp
+    set cpCksum [cksum $outFile.tmp]
+    if {$inCksum != $cpCksum} {
+        error "check mismatch after copy to global storage: $inFileSrc ($inCksum) != $outFile.tmp ($cpCksum)"
+    }
+    # atomic rename
     file rename -force $outFile.tmp $outFile
 }
 

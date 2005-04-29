@@ -17,7 +17,7 @@
 #include "estOrientInfo.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.9 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: gbAlignInstall.c,v 1.9.84.1 2005/04/29 03:48:06 markd Exp $";
 
 /*
  * Notes:
@@ -383,9 +383,15 @@ char acc[GB_ACC_BUFSZ];
 int version = gbSplitAccVer(psl->qName, acc);
 struct gbAligned* aligned;
 struct gbEntry* entry = getEntry(select, acc, inPsl);
+#if 0
+/* FIXME: this could happen if an ignore entry was added during alignment */
 if (entry == NULL)
     errAbort("no entry for %s %s in %s", gPslFileExt[pslFileType],
              psl->qName, inPsl);
+#else
+if (entry == NULL)
+    return;
+#endif
 aligned = gbEntryGetAligned(entry, select->update, version);
 pslTabOut(psl, outPslFh);
 if (pslFileType == MAIN_PSL_FILE)
