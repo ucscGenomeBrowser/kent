@@ -225,7 +225,7 @@ switch (base->singleType)
     }
 }
 
-void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString)
+void _pf_prin(FILE *f, _pf_Stack *stack, boolean formal)
 /* Print out single variable where type is determined at run time. */
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];
@@ -250,13 +250,19 @@ switch (base->singleType)
         fprintf(f, "%lld", val.Long);
 	break;
     case pf_stFloat:
-        fprintf(f, "%f", val.Float);
+	if (formal)
+	    fprintf(f, "%f", val.Float);
+	else
+	    fprintf(f, "%0.2f", val.Float);
 	break;
     case pf_stDouble:
-        fprintf(f, "%f", val.Double);
+	if (formal)
+	    fprintf(f, "%f", val.Double);
+	else
+	    fprintf(f, "%0.2f", val.Double);
 	break;
     case pf_stString:
-	if (quoteString || val.String == NULL)
+	if (formal || val.String == NULL)
 	    printString(f, val.String);
 	else
 	    fprintf(f, "%s", val.String->s);
