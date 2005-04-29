@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.874 2005/04/28 01:12:07 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.875 2005/04/29 21:01:54 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10938,37 +10938,41 @@ return rsId;
 void doSnpEntrezGeneLink(struct trackDb *tdb, char *name)
 /* print link to EntrezGene for this SNP */
 {
-char *group = tdb->tableName;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[512];
-int rowOffset;
-
-safef(query, sizeof(query),
-      "select distinct        "
-      "       rl.locusLinkID, "
-      "       rl.name         "
-      "from   knownGene  kg,  "
-      "       refLink    rl,  "
-      "       %s         snp, "
-      "       mrnaRefseq mrs  "
-      "where  snp.chrom  = kg.chrom       "
-      "  and  kg.name    = mrs.mrna       "
-      "  and  mrs.refSeq = rl.mrnaAcc     "
-      "  and  kg.txStart < snp.chromStart "
-      "  and  kg.txEnd   > snp.chromEnd   "
-      "  and  snp.name   = '%s'", group, name);
-rowOffset = hOffsetPastBin(seqName, group);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+char *table = tdb->tableName;
+if (hTableExists("knownGene") && hTableExists("refLink") &&
+    hTableExists("mrnaRefseq") && hTableExists(table))
     {
-    printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-    printf("geneId=%s\" TARGET=_blank>Entrez Gene for ", row[0]);
-    printf("%s</A>\n", row[1]);
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr;
+    char **row;
+    char query[512];
+    int rowOffset;
+
+    safef(query, sizeof(query),
+	  "select distinct        "
+	  "       rl.locusLinkID, "
+	  "       rl.name         "
+	  "from   knownGene  kg,  "
+	  "       refLink    rl,  "
+	  "       %s         snp, "
+	  "       mrnaRefseq mrs  "
+	  "where  snp.chrom  = kg.chrom       "
+	  "  and  kg.name    = mrs.mrna       "
+	  "  and  mrs.refSeq = rl.mrnaAcc     "
+	  "  and  kg.txStart < snp.chromStart "
+	  "  and  kg.txEnd   > snp.chromEnd   "
+	  "  and  snp.name   = '%s'", table, name);
+    rowOffset = hOffsetPastBin(seqName, table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	printf("<BR><A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+	printf("geneId=%s\" TARGET=_blank>Entrez Gene for ", row[0]);
+	printf("%s</A>\n", row[1]);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 }
 
 void doSnpOld(struct trackDb *tdb, char *itemName)
