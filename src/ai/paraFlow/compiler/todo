@@ -1,6 +1,4 @@
-  - Changing it so that a pf_ is prepended to all global
-    symbols created by paraFlow to avoid name conflicts
-    with the C libraries.
+  - Do a sort function (need function pointer?)
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
   - Read-only and private variables.
@@ -26,6 +24,9 @@ Check system:
 
 -----------
 DONE
+  - Changing it so that a pf_ is prepended to all global
+    symbols created by paraFlow to avoid name conflicts
+    with the C libraries.
   - Make it so don't need 'self' to reference class members and 
     methods inside a method of same class.
   - Make single quotes mean literal ascii character values.

@@ -5,8 +5,11 @@
 struct _pf_string *_pf_string_new(char *s, int size);
 /* Wrap string buffer of given size. */
 
+struct _pf_string *_pf_string_dupe(char *s, int size);
+/* Clone string of given size and wrap string around it. */
+
 struct _pf_string *_pf_string_from_const(char *s);
-/* Wrap string around constant. */
+/* Wrap string around zero-terminated string. */
 
 struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count);
 /* Create new string that's a concatenation of the above strings. */

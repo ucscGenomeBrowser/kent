@@ -25,7 +25,7 @@ for ParaFlow mostly.  Usage:
 ";
 
 if (args.size != 1)
-    die(usage);
+    punt(usage);
 
 class codeLine
 // A single line of basic code.
@@ -90,7 +90,7 @@ while (ip)
 	(string where, int newPos) = ip.statement.nextWord(pos);
 	ip = program[where];
 	if (!ip)
-	    die("Can't find label " + where);
+	    punt("Can't find label " + where);
 	}
     else if (first == "if")
         {
@@ -99,11 +99,11 @@ while (ip)
 	    {
 	    (string gt, int newPos) = ip.statement.nextWord(pos);
 	    if (gt != "goto")
-	        die("Expecting goto after if");
+	        punt("Expecting goto after if");
 	    (string label, int np) = ip.statement.nextWord(newPos);
 	    ip = program[label];
 	    if (!ip)
-		die("Can't find label " + label);
+		punt("Can't find label " + label);
 	    }
 	else
 	    {
@@ -118,7 +118,7 @@ while (ip)
 	   retStack = retStack.next;
 	   }
 	else
-	   die("Return without call");
+	   punt("Return without call");
 	}
     else if (first == "gosub")
         {
@@ -126,13 +126,13 @@ while (ip)
 	(string label, int newPos) = ip.statement.nextWord(pos);
 	ip = program[label];
 	if (!ip)
-	    die("Can't find label " + label);
+	    punt("Can't find label " + label);
 	}
     else if (isalpha(first[0]))
         {
 	(string eq, int newPos) = ip.statement.nextWord(pos);
 	if (eq != "=")
-	    die("Expecting equals at " + ip.label + " " + ip.statement);
+	    punt("Expecting equals at " + ip.label + " " + ip.statement);
 	int val;
 	(newPos, val) =  evalExp(ip.statement, newPos);
 	vars[first] = val;
@@ -140,7 +140,7 @@ while (ip)
 	}
     else
         {
-	die("I don't understand: " + ip.label + " " + ip.statement);
+	punt("I don't understand: " + ip.label + " " + ip.statement);
 	}
     }
 
@@ -205,7 +205,7 @@ to evalAtom(string s, int pos) into int newPos,val
 	(newPos,val) = evalExp(s, newPos);
 	(w, newPos) = s.nextWord(newPos);
 	if (w != ")")
-	    die("Unclosed parenthesis");
+	    punt("Unclosed parenthesis");
 	}
     else if (isnum(w[0]))
 	{

@@ -63,7 +63,7 @@ class tokenizer
 	}
     to errAt(string message)
         {
-	die("Line " + self.line + " " + self.f.name + ". " + message);
+	punt("Line " + self.line + " " + self.f.name + ". " + message);
 	}
     }
 

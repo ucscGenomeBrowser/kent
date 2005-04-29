@@ -28,6 +28,13 @@ string->size = string->allocated = size;
 return string;
 }
 
+struct _pf_string *_pf_string_dupe(char *s, int size)
+/* Clone string of given size and wrap string around it. */
+{
+s = cloneMem(s, size);
+return _pf_string_new(s, size);
+}
+
 int _pf_strcmp(_pf_Stack *stack)
 /* Return comparison between strings.  Cleans them off
  * of stack.  Does not put result on stack because

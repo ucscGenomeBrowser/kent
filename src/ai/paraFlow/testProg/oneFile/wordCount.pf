@@ -4,7 +4,7 @@
 to usage()
 /* Print usage summary and exit. */
      {
-     die("
+     punt("
 wordCount - count characters, words, and lines in files.
 usage:
 	wordCount file(s)

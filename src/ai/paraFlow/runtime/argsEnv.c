@@ -2,6 +2,7 @@
  * environment dir. */
 
 #include "common.h"
+#include "dystring.h"
 #include "portable.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
@@ -53,7 +54,7 @@ for (i=0; i<envSize; ++i)
 stack[0].Array = envArray;
 }
 
-void pf_die(_pf_Stack *stack)
+void pf_punt(_pf_Stack *stack)
 /* Print  message and die. */
 {
 _pf_String string = stack[0].String;
@@ -67,6 +68,59 @@ char buf[2];
 buf[0] = rawKeyIn();
 buf[1] = 0;
 stack[0].String = _pf_string_from_const(buf);
+}
+
+void pf_lineIn(_pf_Stack *stack)
+/* Get next line of input from stdin.  In general
+ * you do not want to mix calls to keyIn and lineIn,
+ * since keyIn is unbuffered and lineIn is buffered. 
+ * Returns nil at EOF. */
+{
+char buf[256];
+int i, c;
+FILE *f = stdin;
+for (i=0; i<sizeof(buf)-1;  ++i)
+    {
+    c = fgetc(f);
+    if (c < 0)
+	{
+	if (i == 0)
+	    stack[0].String = NULL;
+	else
+	    {
+	    buf[i] = 0;
+	    stack[0].String = _pf_string_from_const(buf);
+	    }
+	return;
+	}
+    buf[i] = c;
+    if (c == '\n')
+	{
+	buf[i] = 0;
+	_pf_string_dupe(buf, i);
+	return;
+	}
+    }
+/* Well, looks like it's a pretty long string! 
+ * Let's convert to dyString based capture rather
+ * than using the fixed size buffer on stack. */
+    {
+    struct dyString *dy = dyStringNew(512);
+    struct _pf_string *string;
+    dyStringAppendN(dy, buf, i);
+    for (;;)
+        {
+	c = fgetc(f);
+	if (c < 0)
+	    break;
+	dyStringAppendC(dy, c);
+	if (c == '\n')
+	    break;
+	}
+    string = _pf_string_new(dy->string, dy->bufSize);
+    string->size = dy->stringSize;
+    dyStringCannibalize(&dy);
+    }
 }
 
 void pf_milliTicks(_pf_Stack *stack)

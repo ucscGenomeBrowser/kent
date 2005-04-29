@@ -16,7 +16,7 @@ parenthesis.
 ";
 
 if (args.size != 1)
-    die(usage);
+    punt(usage);
 
 tokenizer tkz = tokenizerNew(args[0]);
 while (evalStatement(tkz))
