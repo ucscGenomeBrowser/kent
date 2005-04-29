@@ -66,31 +66,6 @@ autoScaleDefault Off
 pairwise netBlastz
 speciesOrder hg17 mm5 monDom1 xenTro1 danRer2 tetNig1
 
-track multizHg17Mm5
-shortLabel Conservation (3-way)
-longLabel Chicken/Human/Mouse Multiz Alignments & Conservation 
-group compGeno
-priority 100.1
-visibility hide
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle mzHg17Mm5_phast_wig
-yLineOnOff Off
-autoScaleDefault Off
-pairwise ghm
-speciesOrder hg17 mm5
-
-track mzHg17Mm5_phast2_wig
-shortLabel Conservation (3-way take 2)
-longLabel New Chicken/Human/Mouse phastCons Scores
-group compGeno
-priority 105.1
-visibility hide
-type wig 0.0 1.0
-maxHeightPixels 100:40:11
-yLineOnOff Off
-autoScaleDefault Off
-
 track phastConsElements7way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements
@@ -233,7 +208,7 @@ track chainSelf
 shortLabel Self Chain 
 longLabel $Organism Chained Self Alignments
 group varRep
-priority 125
+priority 145
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -371,7 +346,7 @@ track ecoresTetraodon
 shortLabel Tetraodon Ecores
 longLabel Tetraodon Evolutionary Conserved Regions
 group compGeno
-priority 151
+priority 149.9
 visibility hide
 color 0,60,120
 altColor 200,220,255
