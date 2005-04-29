@@ -4122,3 +4122,135 @@ zcat `ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS/$chr.*.pp.gz \
     rm -r /santest/scratch/galGal2/chrom
 
 
+# MAKE AN NCBI LIFT FILE FOR CHICKEN (DONE 4/29/05 angie)
+    # In order to import dbSNP data, must lift NCBI-named contigs to 
+    # chromosomes.  I don't see an agp file in the chicken ftp dir, 
+    # so seq_contig.md will have to do:
+    cd /cluster/data/galGal2/jkStuff
+    wget ftp://ftp.ncbi.nih.gov/genomes/Gallus_gallus/seq_contig.md.gz
+    # Wow, *lots* of differences between NCBI and our AGP on chrUn,
+    # and some on chr{W,Z}_random as well.  Resolved them by making 
+    # small edits to jkStuff/chr{Un,W_random,Z_random}.ncbiAlike.agp 
+    # and writing a galGal2-tailored script to attempt to line up seq_contig 
+    # and AGP by size/order of sequence.. icch, but that's the best 
+    # I can do without an AGP from NCBI!  Also, seq_contig shows 
+    # everything as + strand... I hope that means that NCBI reverse-
+    # complemented the sequences that appear - in the AGP, but have not 
+    # verified.  
+    zcat seq_contig.md.gz \
+    | ./seq_contig_to_lift.pl \
+      > liftNcbi.lft
+    awk '{print $4 " " $5;}' liftNcbi.lft | uniq | sort > /tmp/1
+    awk '{print $1 " " $2;}' ../chrom.sizes | sort > /tmp/2
+    diff /tmp/1 /tmp/2
+#43c43
+#< chr8_random 5783
+#---
+#> chr8_random 15783
+    # chr8_random diff is NBD: the agp has an exta gap at the end.
+
+
+# LOAD DBSNP (DONE 4/29/05 angie)
+    # Using Daryl's method from makeHg17.doc...
+    ssh kolossus
+    set db    = galGal2
+    set org   = chicken
+    set build = 124
+    set dir   = /santest/scratch/snp/$db/build$build
+    mkdir -p $dir $dir/ds_ch.xml $dir/det $dir/str $dir/loc $dir/seq
+    cd $dir
+
+    # started 8:10pm - finished in ~10min, not nearly as much for chicken 
+    # as human!
+    # Check to make sure the chrMT file is included
+    screen
+      ftp ftp.ncbi.nih.gov
+        cd snp/$org/XML
+        prompt
+        mget ds_ch*.xml.gz
+      exit # screen
+    exit # machine
+
+    # Don't know what Daryl means by this: check chromStart for each locType
+
+    cp -f {$HOME}/kent/src/hg/snp/parseDbSnpXML /cluster/bin/scripts
+    chmod 775 /cluster/bin/scripts/parseDbSnpXML
+
+    ssh kk9
+    set db    = galGal2
+    set org   = chicken
+    set build = 124
+    set dir   = /santest/scratch/snp/$db/build$build
+    cd $dir
+    touch jobList
+    foreach file ( $dir/ds_ch*.xml.gz )
+      set out = $file:t:r
+      echo /cluster/bin/scripts/parseDbSnpXML $file $dir $out.contig >> jobList
+    end
+
+    # I removed these from the job list:
+    # ds_chMulti.xml.gz
+    # ds_chNotOn.xml.gz
+    # ds_chLG.xml.gz
+    # ds_chMasked.xml.gz
+    para create jobList
+    para push; para check ... 
+#Completed: 35 of 35 jobs
+#Average job time:                 117s       1.95m     0.03h    0.00d
+#Longest finished job:             777s      12.95m     0.22h    0.01d
+#Submission to last job:           777s      12.95m     0.22h    0.01d
+    # exit kk
+
+    # back on kolossus:
+    cd $dir
+    # some of the NT contigs are not in the liftSpec - this is
+    # expected as snps that map to alternate assemblies (Celera) are
+    # in the original files, but we disregard their mappings.
+    time liftUp $db.build$build.bed /cluster/data/$db/jkStuff/liftNcbi.lft \
+       warn det/ds_ch*.xml.contig.det.gz |& grep liftSpec \
+    | awk '{print $1;}' | sort -u > notLifted.log
+#19.722u 3.497s 0:27.95 83.0%    0+0k 0+0io 0pf+0w
+    time gzip $db.build$build.bed
+#13.034u 0.318s 0:14.07 94.8%    0+0k 0+0io 0pf+0w
+    du -sh .
+#558M    .
+
+    mkdir -p /cluster/data/$db/bed/snp
+    rsync -av $dir /cluster/data/$db/bed/snp
+    set dir = /cluster/data/$db/bed/snp/build$build
+
+    ssh hgwdev
+    set db    = galGal2
+    set org   = chicken
+    set build = 124
+    set dir = /cluster/data/$db/bed/snp/build$build
+    cd $dir
+    # hgLoadBed is the important step - check to make sure there are no warnings
+    time nice hgLoadBed $db snp $db.build$build.bed.gz \
+      -sqlTable=${HOME}/kent/src/hg/lib/snp.sql
+#Loaded 2863139 elements of size 16
+#82.270u 14.920s 15:07.24 10.7%  0+0k 0+0io 17803pf+0w
+    # If there are warnings, do this to analyze what didn't get loaded right:
+    #zcat $db.build$build.bed.gz | sort > /tmp/1
+    #echo select \* from snp | hgsql -N galGal2 \
+    #| perl -wpe 's/^[0-9]+\t//' | sort > /tmp/2
+    #diff /tmp/1 /tmp/2 | less
+    # Copy over snpExceptions table from hg17:
+    hgsql galGal2 -e \
+      'create table snpExceptions select * from hg17.snpExceptions'
+
+    # basic snp table is now loaded, but exception column needs to be updated
+
+    # run queries from snpException.query against snp table
+    umask 002
+    mkdir -p /usr/local/apache/htdocs/qa/test-results/snpException/$db/build$build
+    cd       /usr/local/apache/htdocs/qa/test-results/snpException/$db/build$build
+    time nice snpException $db 0 ${db}snpException > ${db}snpException.log
+#0.690u 1.300s 13:37.00 0.2%     0+0k 0+0io 206pf+0w
+
+    # check alignment of flanking sequences
+    time nice snpValid $db /cluster/data/$db/bed/snp/build$build/seq \
+      > ${db}snpValid.log
+#1110.730u 40.640s 21:22.09 89.8%        0+0k 0+0io 2942pf+0w
+
+
