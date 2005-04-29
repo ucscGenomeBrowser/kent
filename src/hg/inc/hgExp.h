@@ -41,7 +41,7 @@ void hgExpCellPrint(char *colName, char *geneId,
 	struct sqlConnection *lookupConn, char *lookupTable,
 	struct sqlConnection *dataConn, char *dataTable,
 	int representativeCount, int *representatives,
-	boolean useBlue, boolean useGrays, float scale);
+	boolean useBlue, boolean useGrays, boolean logGrays, float scale);
 /* Print out html for expression cell in table. */
 
 #endif /* HGEXP_H */

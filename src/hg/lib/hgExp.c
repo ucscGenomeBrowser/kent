@@ -8,7 +8,7 @@
 #include "cheapcgi.h"
 #include "hgExp.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.7 2005/04/13 06:25:54 markd Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.8 2005/04/29 08:26:34 aamp Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -160,7 +160,7 @@ if (hex > 0xFF) hex = 0xFF;
 printf("%02X", hex);
 }
 
-static void colorVal(double val, double scale, boolean useBlue, boolean useGrays)
+static void colorVal(double val, double scale, boolean useBlue, boolean useGrays, boolean logGrays)
 /* Val is -1.0 to 1.0.  Print color in form #FF0000, normally
  * using green for minus values, red for plus values, but
  * optionally using blue for minus values and yellow for plus values. */
@@ -171,7 +171,7 @@ if (useGrays)
         printf("000000");
     else
 	{
-	val = log(val) * scale;
+	val = (logGrays) ? log(val) * scale : val * scale;
 	hexOne(val);
 	hexOne(val);
 	hexOne(val);
@@ -239,7 +239,7 @@ startExpCell();
 static void printRatioShades(char *colName, int repCount, 
 	int *reps, int valCount, float *vals, 
 	boolean colorBlindColors,
-	boolean useGrays, float scale)
+	boolean useGrays, boolean logGrays, float scale)
 /* Print out representatives in shades of color in table background. */
 {
 int i;
@@ -262,7 +262,7 @@ for (i=0; i<repCount; ++i)
 	else
 	    {
 	    printf("<TD WIDTH=%d BGCOLOR=\"#", expSubcellWidth);
-	    colorVal(val, scale, colorBlindColors, useGrays);
+	    colorVal(val, scale, colorBlindColors, useGrays, logGrays);
 	    printf("\">&nbsp;</TD>");
 	    }
 	}
@@ -292,7 +292,7 @@ void hgExpCellPrint(char *colName, char *geneId,
 	struct sqlConnection *lookupConn, char *lookupTable,
 	struct sqlConnection *dataConn, char *dataTable,
 	int representativeCount, int *representatives,
-	boolean useBlue, boolean useGrays, float scale)
+	boolean useBlue, boolean useGrays, boolean logGrays, float scale)
 /* Print out html for expression cell in table. */
 {
 int valCount;
@@ -302,7 +302,7 @@ if (hgExpLoadVals(lookupConn, dataConn, lookupTable, geneId, dataTable,
 	&valCount, &vals))
     {
     printRatioShades(colName, representativeCount, representatives, 
-    	valCount, vals, useBlue, useGrays, scale);
+    	valCount, vals, useBlue, useGrays, logGrays, scale);
     freez(&vals);
     }
 else
