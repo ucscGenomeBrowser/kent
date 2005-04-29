@@ -127,6 +127,7 @@ struct column
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
    boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
+   boolean forceGrayscale;      /* Use grayscale no matter what and don't provide coloring option. */
 
        /* The expMulti (absolute and ratio) columns use these fields. */
    struct expMultiData *emdList;	/* List of all experiment display types. */
