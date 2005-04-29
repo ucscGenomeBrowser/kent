@@ -205,6 +205,7 @@ UTIL_DIRS = \
 	semiNorm \
 	sim4big \
 	snpException \
+	snp/snpValid \
 	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
