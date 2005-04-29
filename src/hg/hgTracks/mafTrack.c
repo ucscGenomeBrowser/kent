@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.43 2005/04/28 01:29:37 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.44 2005/04/29 21:59:28 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -511,7 +511,10 @@ int midY = yOff + (height>>1);
 int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
 Color gray = shadesOfGray[5];
+//Color fuzz1 = shadesOfGray[2];
+Color fuzz = shadesOfGray[3];
 midY--;
+int x;
 
 /* tweaking end pixels, as done in chainTrack.c */
 xOff--; /* this causes some lines to overwrite one
@@ -526,7 +529,24 @@ if (isDouble)
     innerLine(vg, xOff, midY2, width, gray);
     }
 else
+#ifdef MISSING_DATA
+    {
+        /*
+    vgBox(vg, xOff, yOff+height-5, width, 3, fuzz1);
+        /*
+    for (x = xOff+1; x < xOff+width; x += 2)
+        {
+        vgBox(vg, x, yOff+height-5, 1, 3, fuzz1);
+        }
+        */
+    for (x = xOff+1; x < xOff+width; x += 3)
+        {
+        vgBox(vg, x, yOff+height-5, 2, 3, fuzz);
+        }
+    }
+#else
     innerLine(vg, xOff, midY, width, gray);
+#endif
 }
 
 void drawMafRegionDetails(struct mafAli *mafList, int height,
