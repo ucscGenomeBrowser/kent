@@ -1,7 +1,7 @@
+  - Changing it so that a pf_ is prepended to all global
+    symbols created by paraFlow to avoid name conflicts
+    with the C libraries.
   - Doing parallel checking for para and flow statements.
-  - Make single quotes mean literal ascii character values.
-  - Make it so don't need 'self' to reference class members and 
-    methods inside a method of same class.
   - Implement "para into" statement.
   - Read-only and private variables.
         Make it so that class.new() is only legal way to
@@ -26,6 +26,9 @@ Check system:
 
 -----------
 DONE
+  - Make it so don't need 'self' to reference class members and 
+    methods inside a method of same class.
+  - Make single quotes mean literal ascii character values.
   - make tuple.pfh work right (variables not right).
   - Test default initializations across modules.
   - Make classes declared in another module work.

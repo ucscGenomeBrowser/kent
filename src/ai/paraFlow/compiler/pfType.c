@@ -1128,11 +1128,36 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     markUsedVars(scope, hash, pp);
 }
 
+static void addDotSelf(struct pfParse **pPp, struct pfBaseType *class)
+/* Add self. in front of a method or member access. */
+{
+struct pfParse *old = *pPp;
+struct pfParse *dot = pfParseNew(pptDot, old->tok, old->parent, old->scope);
+struct pfParse *newVarUse = pfParseNew(pptVarUse, old->tok, dot, old->scope);
+
+dot->ty = CloneVar(old->ty);
+dot->next = old->next;
+dot->children = newVarUse;
+
+newVarUse->ty = pfTypeNew(class);
+newVarUse->name = "self";
+newVarUse->var = pfScopeFindVar(old->scope, "self");
+newVarUse->next = old;
+
+old->parent = dot;
+old->type = pptFieldUse;
+old->next = NULL;
+*pPp = dot;
+}
+
 static void rBlessFunction(struct pfScope *outputScope,
-	struct hash *outputHash, struct pfCompile *pfc, struct pfParse *pp,
+	struct hash *outputHash, struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfScope *classScope)
 /* Avoid functions declared in functions, and mark outputs as used.  */
 {
+struct pfParse *pp = *pPp;
+struct pfParse **pos;
+
 switch (pp->type)
     {
     case pptToDec:
@@ -1142,14 +1167,17 @@ switch (pp->type)
 	break;
     case pptVarUse:
 	if (pp->var->scope == classScope && pp->parent->type != pptDot)
-	    errAt(pp->tok, "Must prefix references to this variable with .self");
+	    {
+	    addDotSelf(pPp, classScope->class);
+	    pp = *pPp;
+	    }
         break;
     case pptAssignment:
         markUsedVars(outputScope, outputHash, pp);
 	break;
     }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    rBlessFunction(outputScope, outputHash, pfc, pp, classScope);
+for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
+    rBlessFunction(outputScope, outputHash, pfc, pos, classScope);
 }
 
 static void checkIsSimpleDecTuple(struct pfParse *tuple)
@@ -1205,7 +1233,7 @@ static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
 struct hash *outputHash = hashNew(4);
 struct pfParse *input = funcDec->children->next;
 struct pfParse *output = input->next;
-struct pfParse *body = output->next;
+struct pfParse **pBody = &output->next;
 struct pfParse *pp;
 struct hashCookie hc;
 struct hashEl *hel;
@@ -1216,12 +1244,12 @@ for (pp = output->children; pp != NULL; pp = pp->next)
     {
     hashAddInt(outputHash, pp->name, 0);
     }
-if (body != NULL)
+if (*pBody != NULL)
     {
     struct pfScope *classScope = funcDec->scope->parent;
     if (classScope->class == NULL)
         classScope = NULL;
-    rBlessFunction(funcDec->scope, outputHash, pfc, body, classScope);
+    rBlessFunction(funcDec->scope, outputHash, pfc, pBody, classScope);
     }
 hashFree(&outputHash);
 }
