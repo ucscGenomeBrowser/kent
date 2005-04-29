@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.13 2005/04/10 14:41:21 markd Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.14 2005/04/29 02:41:27 kent Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -226,10 +226,11 @@ return max(tDig, qDig);
 }
 
 static void blastiodAxtOutput(FILE *f, struct axt *axt, int tSize, int qSize, 
-	int lineSize, boolean isProt)
+	int lineSize, boolean isProt, boolean isTranslated)
 /* Output base-by-base part of alignment in blast-like fashion. */
 {
 int tOff = axt->tStart;
+int dt = (isTranslated ? 3 : 1);
 int qOff = axt->qStart;
 int lineStart, lineEnd, i;
 int digits = calcDigitCount(axt, tSize, qSize);
@@ -277,7 +278,7 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
 	char c = axt->tSym[i];
 	fputc(c, f);
 	if (c != '-')
-	    ++tOff;
+	    tOff += dt;
 	}
     fprintf(f, " %-d\n", plusStrandPos(tOff, tSize, axt->tStrand, TRUE));
     fprintf(f, "\n");
@@ -358,6 +359,7 @@ struct targetHits *targetList = NULL, *target;
 char *queryName;
 int isRc;
 int querySize = abList->qSize;
+boolean isTranslated = (abList->axtList->frame != 0);
 
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
@@ -447,7 +449,7 @@ for (target = targetList; target != NULL; target = target->next)
 		else
 		    fprintf(f, ", Strand = %s / Plus\n", strandName);
 		fprintf(f, "\n");
-		blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
+		blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt, isTranslated);
 		}
 	    }
 	}
@@ -488,6 +490,7 @@ char asciiNum[32];
 struct targetHits *targetList = NULL, *target;
 char *queryName;
 int querySize = abList->qSize;
+boolean isTranslated = (abList->axtList->frame != 0);
 
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
@@ -565,7 +568,7 @@ for (target = targetList; target != NULL; target = target->next)
 		nameForStrand(axt->tStrand));
 	    }
 	fprintf(f, "\n");
-	blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt);
+	blastiodAxtOutput(f, axt, target->size, querySize, 60, isProt, isTranslated);
 	}
     }
 
@@ -669,7 +672,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/04/10 14:41:21 $";
+    char * rcsDate = "$Date: 2005/04/29 02:41:27 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
