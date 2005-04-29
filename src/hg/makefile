@@ -204,6 +204,7 @@ UTIL_DIRS = \
 	scanRa \
 	semiNorm \
 	sim4big \
+	snpException \
 	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
