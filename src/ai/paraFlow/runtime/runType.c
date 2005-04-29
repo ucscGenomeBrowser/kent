@@ -12,7 +12,7 @@ static int _pf_type_table_size;
 static struct _pf_base *_pf_base_table;
 static int _pf_base_table_size;
 
-struct hash *singleTypeHash()
+static struct hash *singleTypeHash()
 /* Create hash keyed by name with singleType as value */
 {
 struct hash *hash = hashNew(6);
@@ -353,20 +353,6 @@ for (i=0; i<typeCount; ++i)
 	fillInPolyInfo(info->polyInfo, baseHash);
 	}
     }
-
-#ifdef OLD
-/* Process polyInfo into base types. */
-    {
-    struct _pf_poly_info *info;
-    for (i=0; i<polyCount; ++i)
-        {
-	info = &polyInfo[i];
-	base = &bases[info->classId];
-	base->polyTable = info->polyTable;
-	}
-    }
-#endif /* OLD */
-
 
 /* Clean up and go home. */
 dyStringFree(&dy);

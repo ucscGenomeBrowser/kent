@@ -1,5 +1,19 @@
 /* initVar - handle variable initialization from tuples */
 
+void _pf_suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
+	struct _pf_type *fieldType, void *output);
+/* Suck data off of stack and puts it in output. 
+ * Parameters:
+ *   pStack - Pointer to stack.  Updated to point to next item to
+ *            consume.
+ *   pEncoding - points to something that looks like ((xx)x(xxx)x)
+ *            where the x's indicate that a single data item is to be
+ *            read, and the parens indicate that an array or object
+ *            containing that many fields is to be read.  This is
+ *            updated by call to point to info on next item.
+ *   fieldType - Describes type of this field.
+ *   output - Where to put result. */
+
 _pf_Object  _pf_tuple_to_class(_pf_Stack *stack, int typeId, char *encoding);
 /* Convert tuple on stack to class. */
 
@@ -60,3 +74,6 @@ _pf_Dir _pf_double_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int e
 _pf_Dir _pf_string_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Dir _pf_class_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 
+int _pf_countOurLevel(char *encoding);
+/* Count up items in our level of encoding.  For
+ * (x(xxx)) for instance would count two items: x and (xxx) */

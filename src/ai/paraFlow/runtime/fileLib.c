@@ -28,7 +28,7 @@ dyStringFree(&file->dy);
 _pf_class_cleanup((struct _pf_object *)file, typeId);
 }
 
-void fileOpen(_pf_Stack *stack)
+void pf_fileOpen(_pf_Stack *stack)
 /* paraFlow run time support routine to open file. */
 {
 struct _pf_string *name = stack[0].String;

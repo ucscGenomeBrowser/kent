@@ -9,10 +9,7 @@
 #include "object.h"
 #include "string.h"
 
-void suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
-	struct _pf_type *fieldType, void *output);
-
-int countOurLevel(char *encoding);
+int _pf_countOurLevel(char *encoding);
 
 static void dirCleanup(struct _pf_dir *dir, int typeId)
 /* Clean up resources associated with dir. */
@@ -185,7 +182,7 @@ else
     }
 }
 
-void *cloneStackNum(_pf_Stack *stack, struct _pf_type *type)
+static void *cloneStackNum(_pf_Stack *stack, struct _pf_type *type)
 /* Return clone of number. */
 {
 switch (type->base->singleType)
@@ -237,7 +234,7 @@ _pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *elType,
 {
 struct _pf_base *base = elType->base;
 int elSize = elType->base->size;
-int i, count = countOurLevel(encoding);
+int i, count = _pf_countOurLevel(encoding);
 struct _pf_dir *dir = _pf_dir_new(count, elType);
 
 if (encoding[0] != '(')
@@ -250,7 +247,7 @@ for (i=0; i<count; ++i)
     if (base->needsCleanup)
         {
 	struct _pf_object *obj;
-	suckItemOffStack(&stack, &encoding, elType, &obj);
+	_pf_suckItemOffStack(&stack, &encoding, elType, &obj);
 	hashAdd(dir->hash, key->s, obj);
 	}
     else
@@ -260,49 +257,49 @@ for (i=0; i<count; ++i)
 	    case pf_stBit:
 		{
 	        _pf_Bit x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
 	    case pf_stByte:
 		{
 	        _pf_Byte x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
 	    case pf_stShort:
 		{
 	        _pf_Short x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
 	    case pf_stInt:
 		{
 	        _pf_Int x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
 	    case pf_stLong:
 		{
 	        _pf_Long x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
 	    case pf_stFloat:
 		{
 	        _pf_Float x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
 	    case pf_stDouble:
 		{
 	        _pf_Double x;
-		suckItemOffStack(&stack, &encoding, elType, &x);
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}

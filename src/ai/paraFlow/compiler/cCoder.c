@@ -13,6 +13,8 @@
 #include "codedType.h"
 #include "cCoder.h"
 
+#define prefix "pf_"
+
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
 /* Emit code for one statement. */
@@ -43,10 +45,12 @@ if (doExtern)
 fprintf(f, "_pf_Var _pf_var_zero;   /* Helps initialize vars to zero. */\n");
 if (doExtern)
    fprintf(f, "extern ");
-fprintf(f, "_pf_Array args;	    /* Command line arguments go here. */\n");
+fprintf(f, "_pf_Array %sargs;	    /* Command line arguments go here. */\n",
+	prefix);
 if (doExtern)
    fprintf(f, "extern ");
-fprintf(f, "_pf_String programName; /* Name of program (argv[0]) */\n");
+fprintf(f, "_pf_String %sprogramName; /* Name of program (argv[0]) */\n",
+	prefix);
 fprintf(f, "\n");
 }
 
@@ -156,7 +160,10 @@ if (type->isStatic)
 		var->scope->id, className, toDec->name, var->name);
     }
 else
+    {
+    dyStringAppend(name, prefix);
     dyStringAppend(name, var->name);
+    }
 return name;
 }
 
@@ -298,9 +305,9 @@ else
     codeExpression(pfc, f, inTuple, stack, TRUE);
     assert(function->type == pptVarUse);
     if (stack == 0)
-	fprintf(f, "%s(%s);\n", pp->name, stackName);
+	fprintf(f, "%s%s(%s);\n", prefix, pp->name, stackName);
     else
-	fprintf(f, "%s(%s+%d);\n", pp->name, stackName, stack);
+	fprintf(f, "%s%s(%s+%d);\n", prefix, pp->name, stackName, stack);
     }
 return outCount;
 }
@@ -1416,7 +1423,7 @@ struct pfParse *elPp = foreach->children;
 struct pfParse *collectionPp = elPp->next;
 struct pfBaseType *base = collectionPp->ty->base;
 struct pfParse *body = collectionPp->next;
-char *elName = elPp->name;
+struct dyString *elName = varName(pfc, elPp->var);
 char collectionName[512];
 
 /* Print element variable in a new scope. */
@@ -1433,7 +1440,7 @@ if (base == pfc->arrayType)
     fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
     fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
     fprintf(f, "{\n");
-    fprintf(f, "%s = *((", elName);
+    fprintf(f, "%s = *((", elName->string);
     printType(pfc, f, elBase);
     fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
     codeStatement(pfc, f, body);
@@ -1445,7 +1452,7 @@ else if (base == pfc->stringType)
     fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
     fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
     fprintf(f, "{\n");
-    fprintf(f, "%s = %s->s[_pf_offset];\n", elName, collectionName);
+    fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
     codeStatement(pfc, f, body);
     fprintf(f, "}\n");
     }
@@ -1453,7 +1460,7 @@ else
     {
     fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
     	base->name, collectionName);
-    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName);
+    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName->string);
     fprintf(f, "{\n");
     codeStatement(pfc, f, body);
     fprintf(f, "}\n");
@@ -1461,6 +1468,7 @@ else
     }
 cleanupScopeVars(pfc, f, foreach->scope);
 fprintf(f, "}\n");
+dyStringFree(&elName);
 }
 
 static void codeFor(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
@@ -1497,7 +1505,6 @@ struct pfParse *callPp = elPp->next;
 struct pfBaseType *base = callPp->ty->base;
 struct pfParse *body = callPp->next;
 struct pfParse *cast = body->next;
-char *elName = elPp->name;
 int expSize;
 
 /* Print element variable in a new scope. */
@@ -1632,7 +1639,8 @@ if (class)
     fprintf(f, "%s *%s)",  stackType, stackName);
     }
 else
-    fprintf(f, "void %s(%s *%s)", funcDec->name, stackType, stackName);
+    fprintf(f, "void %s%s(%s *%s)", prefix, funcDec->name, 
+    	stackType, stackName);
 }
 
 static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class)
@@ -1702,7 +1710,7 @@ fprintf(f, "\n{\n");
     int inIx = 0;
     if (class)
         {
-	fprintf(f, "struct %s *self = ", class->name);
+	fprintf(f, "struct %s *%sself = ", class->name, prefix);
 	codeParamAccess(pfc, f, class->ty->base, 0);
 	fprintf(f, ";\n");
 	inIx += 1;
@@ -1710,7 +1718,7 @@ fprintf(f, "\n{\n");
     for (in = inTuple->children; in != NULL; in = in->next)
         {
 	printType(pfc, f, in->base);
-	fprintf(f, " %s = ", in->fieldName);
+	fprintf(f, " %s%s = ", prefix, in->fieldName);
 	codeParamAccess(pfc, f, in->base, inIx);
 	fprintf(f, ";\n");
 	inIx += 1;
@@ -1723,7 +1731,7 @@ fprintf(f, "\n{\n");
     for (out = outTuple->children; out != NULL; out = out->next)
         {
 	printType(pfc, f, out->base);
-	fprintf(f, " %s", out->fieldName);
+	fprintf(f, " %s%s", prefix, out->fieldName);
 	codeInitOfType(pfc, f, out);
 	fprintf(f, ";\n");
 	}
@@ -1738,8 +1746,14 @@ fprintf(f, "_pf_cleanup: ;\n");
 /* Decrement ref counts on input variables. */
     {
     struct pfType *in;
+    struct dyString *name = dyStringNew(0);
     for (in = inTuple->children; in != NULL; in = in->next)
-	codeCleanupVarNamed(pfc, f, in, in->fieldName);
+	{
+	dyStringClear(name);
+	dyStringPrintf(name, "%s%s", prefix, in->fieldName);
+	codeCleanupVarNamed(pfc, f, in, name->string);
+	}
+    dyStringFree(&name);
     }
 
 /* Save the output. */
@@ -1749,7 +1763,7 @@ fprintf(f, "_pf_cleanup: ;\n");
     for (out = outTuple->children; out != NULL; out = out->next)
         {
 	codeParamAccess(pfc, f, out->base, outIx);
-	fprintf(f, " = %s;\n", out->fieldName);
+	fprintf(f, " = %s%s;\n", prefix, out->fieldName);
 	outIx += 1;
 	}
     }
@@ -1966,10 +1980,10 @@ fprintf(f,
 "               _pf_type_info, _pf_type_info_count,\n"
 "               _pf_field_info, _pf_field_info_count,\n"
 "               _pf_module_info, _pf_module_info_count);\n"
-"_pf_init_args(argc, argv, &programName, &args, environ);\n"
+"_pf_init_args(argc, argv, &%sprogramName, &%sargs, environ);\n"
 "_pf_entry_%s(stack);\n"
 "return 0;\n"
-"}\n", mainModule->name);
+"}\n", prefix, prefix, mainModule->name);
 }
 
 static void printLocalTypeInfo(struct pfCompile *pfc, char *moduleName, FILE *f)

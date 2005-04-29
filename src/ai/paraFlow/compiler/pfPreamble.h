@@ -97,9 +97,3 @@ struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 #include "../runtime/initVar.h"
 
 
-void print(_pf_Stack *stack);
-/* Print to stdout, including a newline. */
-
-void prin(_pf_Stack *stack);
-/* Print to stdout, not including a newline. */
-

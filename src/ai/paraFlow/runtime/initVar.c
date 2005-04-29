@@ -15,7 +15,7 @@ _pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *type,
 static _pf_Array tuple_to_array(_pf_Stack *stack, struct _pf_type *type, 
 	char *encoding, _pf_Stack **retStack, char **retEncoding);
 
-void suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
+void _pf_suckItemOffStack(_pf_Stack **pStack, char **pEncoding, 
 	struct _pf_type *fieldType, void *output)
 /* Suck data off of stack and puts it in output. 
  * Parameters:
@@ -139,7 +139,7 @@ encoding += 1;
 for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
     int offset = fieldType->offset;
-    suckItemOffStack(&stack, &encoding, fieldType, s + offset);
+    _pf_suckItemOffStack(&stack, &encoding, fieldType, s + offset);
     }
 if (encoding[0] != ')')
     errAbort("Expecting ) in class tuple encoding, got %c", encoding[0]);
@@ -157,7 +157,7 @@ _pf_Object _pf_tuple_to_class(_pf_Stack *stack, int typeId, char *encoding)
 return tuple_to_class(stack, _pf_type_table[typeId], encoding, &stack, &encoding);
 }
 
-int countOurLevel(char *encoding)
+int _pf_countOurLevel(char *encoding)
 /* Count up items in our level of encoding.  For
  * (x(xxx)) for instance would count two items: x and (xxx) */
 {
@@ -399,7 +399,7 @@ _pf_Array tuple_to_array(_pf_Stack *stack, struct _pf_type *elType,
 /* Convert tuple to array. */
 {
 int elSize = elType->base->size;
-int count = countOurLevel(encoding);
+int count = _pf_countOurLevel(encoding);
 char *buf = NULL;
 _pf_Array array;
 int i;
@@ -413,7 +413,7 @@ if (encoding[0] != '(')
 encoding += 1;
 for (i=0; i<count; ++i)
     {
-    suckItemOffStack(&stack, &encoding, elType, buf);
+    _pf_suckItemOffStack(&stack, &encoding, elType, buf);
     buf += elSize;
     }
 if (encoding[0] != ')')
