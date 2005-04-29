@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.37 2005/04/28 23:35:31 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.38 2005/04/29 20:09:25 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -1983,6 +1983,10 @@ doOne tetNig1 chainMm5Link
     #	-rw-rw-r--  1     0 Mar 17 12:18 chrY_random.cpg
 # XXX - this is interesting that chrY, either one, have nothing.
 #	the previous mm5 release did have some on chrY
+#	Evidently the new chrY is too short - this chrY is being
+#	reconstructed and only a small part of it is known in this
+#	assembly.  The bulk of chrY from previous assemblies is now in
+#	chrY_random
 
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
@@ -2782,7 +2786,7 @@ SEQ2_LEN=$BASE/S2.len
     screen
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
-XXX - STARTED 2005-04-06 10:40
+    #	STARTED 2005-04-06 10:40
     #	489 minutes = 8h 09m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
@@ -3011,7 +3015,7 @@ cat << '_EOF_' > template
     para try
     para check
     para push
-XXXX - STARTED - 2005-04-14 15:40 
+    #	STARTED - 2005-04-14 15:40 
 # Completed: 40 of 40 jobs
 # CPU time in finished jobs:     445070s    7417.83m   123.63h    5.15d  0.014 y
 # IO & Wait Time:                   463s       7.72m     0.13h    0.01d  0.000 y
@@ -3577,6 +3581,7 @@ cat  << 'EOF' > template
     cd /cluster/bluearc/mm6/cons/treeRun1
     mkdir tree log
 
+    #	Tuning this loop should come back to here to recalculate 
     # Create little script that calls phastCons with right arguments
     #	--target-coverage of 0.20 is about right for mouse, will be
     #	tuned exactly below
@@ -3584,7 +3589,7 @@ cat  << 'EOF' > template
     /cluster/bin/phast/phastCons ../ss/$1.ss \
       /cluster/data/mm6/bed/multiz10way/cons/starting-tree.mod \
       --gc 0.403 --nrates 1,1 --no-post-probs --ignore-missing \
-      --expected-lengths 12 --target-coverage 0.10 \
+      --expected-lengths 12 --target-coverage 0.17 \
       --quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
     #	emacs happy
@@ -3602,7 +3607,6 @@ makeTree $(root1)
     gensub2 ../randomSs single template jobList
     para create jobList
     para try/push/check/etc
-XXXX - working 2005-04-21 15:07
 # Completed: 50 of 50 jobs
 # CPU time in finished jobs:      83332s    1388.87m    23.15h    0.96d  0.003 y
 # IO & Wait Time:                   429s       7.15m     0.12h    0.00d  0.000 y
@@ -3652,6 +3656,7 @@ XXXX - working 2005-04-21 15:07
 # Required length: N=5.146793 sites
 # Total entropy: NH=8.517313 bits
 
+### !!! ***  This one with .17 and 12 is the one that was finally used
 # consEntropy .17 12 ave.cons.mod.4 ave.noncons.mod.4
 # Transition params: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
 # Relative entropy: H=1.478838 bits/site
@@ -3661,8 +3666,8 @@ XXXX - working 2005-04-21 15:07
 
     ssh kk9
     # Create cluster dir to do main phastCons run
-    mkdir  /cluster/bluearc/mm6/cons/consRun1
-    cd  /cluster/bluearc/mm6/cons/consRun1
+    mkdir  /cluster/bluearc/mm6/cons/consRun4
+    cd  /cluster/bluearc/mm6/cons/consRun4
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
@@ -3673,7 +3678,7 @@ XXXX - working 2005-04-21 15:07
     cat > doPhast << '_EOF_'
 mkdir -p ppRaw/$2
 /cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
-   --expected-lengths 12 --target-coverage 0.10 --quiet --seqname $2 \
+   --expected-lengths 12 --target-coverage 0.17 --quiet --seqname $2 \
    --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
    ppRaw/$2/$1.pp
 '_EOF_'
@@ -3704,7 +3709,7 @@ doPhast $(file1) $(root1)
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
     ssh kolossus
-    cd /cluster/bluearc/mm6/cons/consRun1
+    cd /cluster/bluearc/mm6/cons/consRun4
     catDir bed | awk '
     	{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
         /cluster/bin/scripts/lodToBedScore /dev/stdin > \
@@ -3754,7 +3759,7 @@ refGene:cds 0.980%, mostConserved.bed 5.404%, both 0.679%, cover 69.24%, enrich 
 
     # Create merged posterier probability file and wiggle track data files
     ssh kksilo
-    cd /cluster/bluearc/mm6/cons/consRun1
+    cd /cluster/bluearc/mm6/cons/consRun4
     # interesting sort here on the chr name and position.
     # first convert all . and - characters to special strings x/ and x_/
     #	to get a consistent delimiter of / for all fields to be sorted.
@@ -3768,10 +3773,47 @@ refGene:cds 0.980%, mostConserved.bed 5.404%, both 0.679%, cover 69.24%, enrich 
     # about 45 minutes for above
 
     ssh kkstore01
-    cd /cluster/bluearc/mm6/cons/consRun1
+    cd /cluster/bluearc/mm6/cons/consRun4
     cp -p phastCons10.wi? /cluster/data/mm6/bed/multiz10way/cons
     # 2m 30s copy on kkstore01
-    
+
+    #	prepare compressed copy of ascii data values for downloads
+    cd /cluster/bluearc/mm6/cons/consRun4
+    zcat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons10Scores
+
+ls ppRaw | while read D
+do
+    out=${TOP}/phastCons10Scores/${D}.gz
+    echo -n "$out ... "
+    cd ${TOP}/ppRaw/${D}
+    gzip -c `ls *.pp  | sed -e "s#-#.x-x.#g;" | \
+        sort -t"." -k1,1 -k2,2n | sed -e "s#.x-x.#-#g;"` > ${out}
+    echo "done"
+exit 255
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x gzipAscii.sh
+    time ./gzipAscii.sh
+    #	takes about 40 minutes, makes 2.8 Gb of data
+    #	copy them for downloads
+    ssh kkstore01
+    mkdir /cluster/data/mm6/bed/multiz10way/phastCons10Scores
+    cd /cluster/data/mm6/bed/multiz10way/phastCons10Scores
+    rsync -a --progress /cluster/bluearc/mm6/cons/consRun4/phastCons10Scores/ .
+    #	3 minute copy
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm6/phastCons10Scores
+    cd /usr/local/apache/htdocs/goldenPath/mm6/phastCons10Scores
+    ln -s /cluster/data/mm6/bed/multiz10way/phastCons10Scores/*.gz .
+
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/mm6/bed/multiz10way/cons
@@ -5294,7 +5336,7 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
     #	2557081173 bases of 3164952073 (80.794%) in intersection
 
 #########################################################################
-# BLASTZ HUMAN Hg16 (WORKING - 2005-04-27 - Hiram)
+# BLASTZ HUMAN Hg16 (DONE - 2005-04-27 - 2005-04-29 - Hiram)
 #	to replace the Mm4 chains and links on Hg16 since Mm4 is being
 #	retired with this Mm6 release
     ssh eieio
