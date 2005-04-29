@@ -1,0 +1,196 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes how to make the browser database for the
+# worm C. elegans
+
+###########################################################################
+# DOWNLOAD SEQUENCE (DONE, 2005-04-29, hiram)
+    ssh eieio
+    mkdir /cluster/store5/worm/ce3
+    cd /cluster/store5/worm/ce3
+    mkdir WS140
+    cd WS140
+for F in composition.all masked totals
+do
+    FTP="ftp://ftp.wormbase.org/pub/wormbase/elegans/WS140/CHROMOSOMES/"
+    wget "${FTP}/${F}" -O ${F}
+done
+
+    #	while fetching chrM, rename it from CHROMOSOME_MtDNA to
+    #	CHROMOSOME_M to match the pattern of the others
+    FTP="ftp://ftp.wormbase.org/pub/wormbase/elegans/WS140/CHROMOSOMES/"
+    wget "${FTP}/CHROMOSOME_MtDNA.dna.gz" -O /dev/stdout | zcat | \
+	sed -e "s/MtDNA/M/" | gzip > chrM.fa.gz
+    wget "${FTP}/CHROMOSOME_MtDNA.gff.gz" -O /dev/stdout | zcat | \
+	sed -e "s/CHROMOSOME_MtDNA/CHROMOSOME_M/g" | gzip > chrM.gff.gz
+
+    #	create agp file for chrM
+    echo "M 1 13794 1 F X54252.1 1 13794 +" | sed -e "s/  */\t/g" > \
+	chrM.agp
+
+for C in I II III IV V X
+do
+    FTP="ftp://ftp.wormbase.org/pub/wormbase/elegans/WS140/CHROMOSOMES/"
+    wget --timestamping "${FTP}/CHROMOSOME_${C}.dna.gz" -O chr${C}.fa.gz
+    wget --timestamping "${FTP}/CHROMOSOME_${C}.gff.gz" -O chr${C}.gff.gz
+    wget --timestamping "${FTP}/CHROMOSOME_${C}.agp" -O chr${C}.agp
+    echo "done: chr${C}"
+done
+
+    faCount *.fa.gz
+# #seq                len        A        C        G         T N       cpg
+# CHROMOSOME_I   15080552  4838583  2697189  2693560   4851220 0       503702
+# CHROMOSOME_II  15279311  4878196  2769211  2762192   4869712 0       492145
+# CHROMOSOME_III 13783317  4444530  2449080  2466259   4423448 0       459652
+# CHROMOSOME_IV  17493785  5711040  3034769  3017007   5730969 0       522372
+# CHROMOSOME_V   20922231  6749806  3711722  3700960   6759743 0       638852
+# CHROMOSOME_X   17718850  5746417  3119281  3118287   5734865 0       514715
+# chrM              13794     4335     1225     2055     6179  0       110
+# total         100291840 32372907 17782477 17760320 323761360        3131548
+
+    cd /cluster/store5/worm/ce3
+    # translate to unzipped .fa, all upper case, and
+    # rename the agp files so hgGoldGap can find them
+    mkdir sangerFa
+for C in I II III IV V X M
+do
+    echo -n "${C} "
+    zcat WS140/chr${C}.fa.gz | tr '[a-z]' '[A-Z]' | \
+	    sed -e "s/CHROMOSOME_/chr/" > sangerFa/chr${C}.fa
+    mkdir -p sangerFa/${C}
+    ln -s `pwd`/WS140/chr${C}.agp sangerFa/${C}/chr${C}.agp
+done
+
+    #	verify faCount still has the same amount of sequence as listed above
+    cd sangerFa
+    faCount *.fa
+    #	you should see the same numbers
+    #	the assembly has no N's:
+    grep N *.fa
+    #	shows nothing
+
+    #	set cluster data symlink for future reference:
+    ssh hgwdev
+    ln -s /cluster/store5/worm/ce3 /cluster/data/ce3
+
+###########################################################################
+# PREPARE Split contigs into 100,000 bp chunks for cluster runs
+# (DONE, 2004-04-29, Hiram)
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce3
+    rm -fr ./split
+    mkdir split
+for C in I II III IV V X M
+do
+    mkdir split/${C}
+    faSplit size sangerFa/chr${C}.fa 100000 split/${C}/c -lift=split/chr${C}.lft
+done
+151 pieces of 151 written
+153 pieces of 153 written
+138 pieces of 138 written
+175 pieces of 175 written
+210 pieces of 210 written
+178 pieces of 178 written
+1 pieces of 1 written
+
+   cat split/*.lft > liftAll.lft
+   # copy them to /iscratch/i for cluster rsync
+   # next machine
+   ssh kkr1u00
+   cd /cluster/data/ce3/split
+for C in I II III IV V X M
+do
+    echo -n "${C} "
+    mkdir -p /iscratch/i/worms/Celegans3/unmaskedSplit/${C}
+    cp -p ${C}/c*.fa /iscratch/i/worms/Celegans3/unmaskedSplit/${C}
+done
+    #	this iSync takes forever these days because iscratch is so large
+    /cluster/bin/iSync
+    #	instead, a simple rsync of just this business will get it done
+    #	rapidly
+for i in 2 3 4 5 6 7 8
+do
+    rsync --delete -a --progress /iscratch/i/worms/ kkr${i}u00:/iscratch/i/worms
+done
+
+############################################################################
+# Run RepeatMasker on the chromosomes (DONE, 2005-04-29 - Hiram)
+    # next machine
+    ssh kk
+    cd /cluster/data/ce3
+    mkdir jkStuff
+    # make run directory and job list, create the script to use 
+    # for the RepeatMasker run
+    cat << '_EOF_' > jkStuff/RMWorm
+#!/bin/csh -fe
+#
+#       This is a slight rearrangement of the
+#       RMChicken script used in makeGalGal2.doc
+#       The results here need to go to a different location
+#       $1 == chrom name: I II III IV V X M
+#       $2 == directory where split contig .fa is found
+#       $3 == name of contig .fa file
+cd $1
+pushd .
+cd $2
+/bin/mkdir -p /tmp/ce3/$3/$1
+/bin/cp $3 /tmp/ce3/$3/$1
+cd /tmp/ce3/$3/$1
+/cluster/bluearc/RepeatMasker050112/RepeatMasker -alignments -s -species elegans $3
+popd
+/bin/cp /tmp/ce3/$3/$1/$3.out ./
+if( -e /tmp/ce3/$3/$1/$3.align ) /bin/cp /tmp/ce3/$3/$1/$3.align ./
+if (-e /tmp/ce3/$3/$1/$3.tbl) /bin/cp /tmp/ce3/$3/$1/$3.tbl ./
+if (-e /tmp/ce3/$3/$1/$3.cat) /bin/cp /tmp/ce3/$3/$1/$3.cat ./
+/bin/rm -r /tmp/ce3/$3/$1
+/bin/rmdir --ignore-fail-on-non-empty /tmp/ce3/$3
+/bin/rmdir --ignore-fail-on-non-empty /tmp/ce3
+'_EOF_'
+    # emacs happy
+    chmod +x jkStuff/RMWorm
+    # create job list
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+for C in I II III IV V X M
+do
+    mkdir /cluster/data/ce3/RMRun/${C}
+    for T in /iscratch/i/worms/Celegans2/unmaskedSplit/$C/c*.fa
+    do
+	D=`dirname $T`
+	F=`basename $T`
+	echo /cluster/data/ce3/jkStuff/RMWorm ${C} ${D} ${F} \
+'{'check out line+ /cluster/data/ce3/RMRun/$C/${F}.out'}'
+    done >> RMRun/jobList
+done
+    # Do the run
+    cd /cluster/data/ce3/RMRun
+    para create jobList
+    para try, para check, para check, para push, para check, ...
+XXXX
+    #  STARTED 2005-04-29 14:28
+# Completed: 1006 of 1006 jobs
+# CPU time in finished jobs:     821747s   13695.78m   228.26h    9.51d  0.026 y
+# IO & Wait Time:                 13643s     227.39m     3.79h    0.16d  0.000 y
+# Average job time:                 830s      13.84m     0.23h    0.01d
+# Longest job:                      935s      15.58m     0.26h    0.01d
+# Submission to last job:          5837s      97.28m     1.62h    0.07d
+  
+    # when they are finished, liftUp and load the .out files into the database:
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce3/RMRun
+    foreach c (I II III IV V X M)
+        liftUp chr${c}.fa.out /cluster/data/ce3/split/chr${c}.lft warn ${c}/*.fa.out
+    end
+
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce3/RMRun
+    hgLoadOut ce3 chr*.fa.out
+
+    # Noticed one error in this load (reported to Robert Hubley):
+    # Processing chrV.fa.out
+    # Strange perc. field -0.1 line 2196 of chrV.fa.out
+
