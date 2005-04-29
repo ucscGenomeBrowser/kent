@@ -1,4 +1,5 @@
 /* codedType - Types in form that can be used at run time. */
+
 #include "common.h"
 #include "pfType.h"
 #include "pfParse.h"

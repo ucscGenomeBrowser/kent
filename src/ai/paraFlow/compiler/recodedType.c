@@ -1,4 +1,7 @@
-/* recodedType - Types in form that can be used at run time. */
+/* recodedType - Types in form that can be used at run time. 
+ * This deals with the local type table inside of each 
+ * paraflow module, as opposed to the global type table
+ * that applies to all modules. */
 #include "common.h"
 #include "pfType.h"
 #include "pfParse.h"
