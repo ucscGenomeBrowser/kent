@@ -20,17 +20,13 @@ encode_UVA_DNARep_%.html: encode_UVA_DNARep.html
 	ln -s $< $@
 
 UCSD_LINKS = \
-	encode_UCSD_ChIP_RNAP_HCT116.html \
-	encode_UCSD_ChIP_RNAP_HELA.html \
-	encode_UCSD_ChIP_RNAP_IMR90.html \
-	encode_UCSD_ChIP_RNAP_THP1.html \
-	encode_UCSD_ChIP_TAF250_HCT116.html \
-	encode_UCSD_ChIP_TAF250_HELA.html \
-	encode_UCSD_ChIP_TAF250_IMR90.html \
-	encode_UCSD_ChIP_TAF250_THP1.html\
+	encodeUcsdChipRnap.html \
+	encodeUcsdChipTaf250.html \
+	encodeUcsdChipAch3.html \
+	encodeUcsdChipMeh3k.html \
 
 UCSD:    ${UCSD_LINKS}
 
-encode_UCSD_ChIP_%.html: encode_UCSD_ChIP.html
+encodeUcsdChip%.html: encodeUcsdChip.html
 	rm -f $@
 	ln -s $< $@
