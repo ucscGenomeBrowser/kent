@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.876 2005/04/30 01:11:25 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.877 2005/04/30 03:47:06 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -5104,10 +5104,15 @@ psl = pslLoad(row+hasBin);
 sqlFreeResult(&sr);
 
 /* get bz rna snapshot for blastz alignments */
-if (sameString("mrnaBlastz", type))
+if (sameString("mrnaBlastz", type) || sameString("pseudoMrna", type))
     {
+    struct sqlConnection *conn = hAllocConn();
+    int retId = 0;
+    char *gbdate = NULL;
     sprintf(accTmp,"bz-%s",acc);
-    rnaSeq = hRnaSeq(accTmp);
+    if (hRnaSeqAndIdx(accTmp, &rnaSeq, &retId, gbdate, conn) == -1)
+        rnaSeq = hRnaSeq(acc);
+    hFreeConn(&conn);
     }
 else if (sameString("HInvGeneMrna", type))
     {
