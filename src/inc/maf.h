@@ -43,11 +43,12 @@ void mafAliFreeList(struct mafAli **pList);
 
 /* the set of syntenic relationships that the previous and
  * following alignments have with the current one */
-#define	MAF_INVERSE_STATUS	'V'
-#define	MAF_INSERT_STATUS	'I'
-#define	MAF_DUP_STATUS		'D'
-#define	MAF_NEW_STATUS		'N'
-#define	MAF_MAYBE_NEW_STATUS	'M'
+#define	MAF_INSERT_STATUS		'I'
+#define	MAF_NEW_STATUS			'p'
+#define	MAF_NEW_NESTED_STATUS		'P'
+#define	MAF_MAYBE_NEW_STATUS		'm'
+#define	MAF_MAYBE_NEW_NESTED_STATUS	'M'
+#define	MAF_MISSING_STATUS		'U'
 #define	MAF_CONTIG_STATUS	'C'
 
 struct mafComp
