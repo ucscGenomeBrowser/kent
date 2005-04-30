@@ -3,16 +3,19 @@
 #include "errabort.h"
 #include "linefile.h"
 #include "hash.h"
+#include "chain.h"
 #include "options.h"
 #include "maf.h"
 #include "bed.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.4 2005/04/14 02:40:21 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.5 2005/04/30 14:38:22 braney Exp $";
 
-int redCount;
-int blackCount;
-int greyCount;
+char *masterSpecies;
+char *masterChrom;
+struct hash *speciesHash;
+struct subSpecies *speciesList;
+struct strandHead *strandHeads;
 
 void usage()
 /* Explain usage and exit. */
@@ -35,148 +38,239 @@ struct blockStatus
     int start, end;
     char strand;
     struct mafComp *mc;
-    char *species;
     int masterStart, masterEnd;
 };
 
-
-int minBlockOut = 1;
-
-void mafAddIRows(char *mafIn, char *twoBitIn, char *mafOut)
-/* mafAddIRows - Filter out maf files. */
+struct subSpecies
 {
-struct dnaSeq *seq;
-FILE *f = mustOpen(mafOut, "w");
-FILE *rf = NULL;
-int i;
-int status;
-int rejects = 0;
+    struct subSpecies *next;
+    char *name;
+    struct hash *hash;
+    struct blockStatus blockStatus;
+};
+
+struct linkBlock
+{
+    struct linkBlock *next;
+    struct cBlock cb;
+    struct mafComp *mc;
+};
+
+struct strandHead
+{
+    struct strandHead *next;
+    char *name;
+    char *species;
+    struct linkBlock *links;
+};
+
+struct mafAli *readMafs(char *mafIn)
+{
 struct mafFile *mf = mafOpen(mafIn);
-struct mafAli *maf = NULL, *prevMaf;
-struct hash *statusHash = newHash(10);
+struct mafAli *maf;
+char buffer[2048];
+char buffer2[2048];
+struct strandHead *strandHead;
 struct mafAli *mafList = NULL;
-struct mafAli *nextMaf = NULL;
-struct hashEl *hashEl;
-struct blockStatus *blockStatus;
-struct hashCookie cookie;
-int lastEnd = 0;
-struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 
 while((maf = mafNext(mf)) != NULL)
     {
-    struct mafComp *mc, *prevMc, *masterMc;
+    struct mafComp *mc, *masterMc = maf->components;
+    char *species = buffer;
+    char *chrom;
 
+    strcpy(species, masterMc->src);
+    chrom = strchr(species,'.');
+    *chrom++ = 0;
+    if (masterSpecies == NULL)
+	{
+	masterSpecies = cloneString(species);
+	masterChrom = cloneString(chrom);
+	printf("master %s %s\n",masterSpecies,masterChrom);
+	}
+    else
+	{
+	if (!sameString(masterSpecies, species))
+	    errAbort("first species (%s) not master species (%s)\n",species,masterSpecies);
+	}
+
+    for(mc= masterMc->next; mc; mc = mc->next)
+	{
+	struct hash *strandHash;
+	struct linkBlock *linkBlock;
+	struct subSpecies *subSpecies = NULL;
+
+	strcpy(species, mc->src);
+	chrom = strchr(species,'.');
+	*chrom++ = 0;
+
+	if ((subSpecies = hashFindVal(speciesHash, species)) == NULL)
+	    {
+	//    printf("new species %s\n",species);
+	    AllocVar(subSpecies);
+	    subSpecies->name = cloneString(species);
+	    subSpecies->hash = newHash(0);
+	    subSpecies->blockStatus.strand = '+';
+	    subSpecies->blockStatus.masterStart = masterMc->start;
+	    slAddHead(&speciesList, subSpecies);
+	    hashAdd(speciesHash, species, subSpecies);
+	    }
+	subSpecies->blockStatus.masterEnd = masterMc->start + masterMc->size ;
+	sprintf(buffer2, "%s%c%s", masterChrom,mc->strand,chrom);
+	if ((strandHead = hashFindVal(subSpecies->hash, buffer2)) == NULL)
+	    {
+	 //   printf("new strand %s for species %s\n",buffer2, species);
+	    AllocVar(strandHead);
+	    hashAdd(subSpecies->hash, buffer2, strandHead);
+	    strandHead->name = cloneString(buffer2);
+	    strandHead->species = cloneString(species);
+	    slAddHead(&strandHeads, strandHead);
+	    }
+	AllocVar(linkBlock);
+	linkBlock->mc = mc;
+	linkBlock->cb.qStart = mc->start;
+	linkBlock->cb.qEnd = mc->start + mc->size;
+	linkBlock->cb.tStart = masterMc->start;
+	linkBlock->cb.tEnd = masterMc->start + masterMc->size;
+
+
+	slAddHead(&strandHead->links, linkBlock);
+	}
     slAddHead(&mafList, maf);
-    prevMc = NULL;
-    masterMc=maf->components;
-    for(mc = maf->components->next; mc; prevMc = mc, mc = mc->next)
-	{
-	char *chrom = NULL, *species = cloneString(mc->src);
-
-	if (chrom = strchr(species, '.'))
-	    *chrom++ = 0;
-
-	if ((blockStatus = hashFindVal(statusHash, species)) == NULL)
-	    {
-	    AllocVar(blockStatus);
-	    blockStatus->strand = '+';
-	    blockStatus->species = species;
-	    blockStatus->masterStart = masterMc->start;
-	    hashAdd(statusHash, species, blockStatus);
-	    }
-	}
-    for(cookie = hashFirst(statusHash),  hashEl = hashNext(&cookie); hashEl; hashEl = hashNext(&cookie))
-	{
-	char *chrom = NULL, *species;
-	blockStatus = hashEl->val;
-	species = blockStatus->species;
-	
-	if ((mc = mafMayFindCompPrefix(maf, species,NULL)) == NULL)
-	    {
-	    continue;
-	    }
-	species = cloneString(mc->src);
-
-	if (chrom = strchr(species, '.'))
-	    *chrom++ = 0;
-
-	if ((blockStatus->chrom == NULL) || !sameString(chrom, blockStatus->chrom))
-	    {
-	    if (blockStatus->mc)
-		{
-		blockStatus->mc->rightStatus =  MAF_NEW_STATUS;
-		blockStatus->mc->rightLen = blockStatus->mc->srcSize - blockStatus->end;
-		}
-	    mc->leftStatus = MAF_NEW_STATUS;
-	    mc->leftLen = mc->start;
-	    }
-	else
-	    {
-
-	    if (blockStatus->strand != mc->strand)
-		{
-		blockStatus->mc->rightStatus = mc->leftStatus = MAF_INVERSE_STATUS;
-		blockStatus->mc->rightLen = mc->leftLen = blockStatus->end - mc->start;
-		}
-	    else if (blockStatus->end > mc->start)
-		{
-		blockStatus->mc->rightStatus = mc->leftStatus = MAF_DUP_STATUS;
-		blockStatus->mc->rightLen = mc->leftLen = blockStatus->end - mc->start;
-		}
-	    else if (blockStatus->end < mc->start)
-		{
-		blockStatus->mc->rightStatus = mc->leftStatus = MAF_INSERT_STATUS;
-		blockStatus->mc->rightLen = mc->leftLen = -blockStatus->end + mc->start;
-		}
-	    else 
-		{
-		blockStatus->mc->rightStatus = mc->leftStatus = MAF_CONTIG_STATUS;
-		}
-	    }
-	    
-	blockStatus->mc = mc;
-	blockStatus->start = mc->start;
-	blockStatus->end = mc->start + mc->size;
-	blockStatus->chrom = chrom;
-	blockStatus->strand = mc->strand;
-	if (masterMc->start + masterMc->size <= blockStatus->masterEnd)
-	    ;//printf("bad %d %d\n", masterMc->start + masterMc->size , blockStatus->masterEnd);
-	blockStatus->masterEnd = masterMc->start + masterMc->size ;
-	}
     }
-    for(cookie = hashFirst(statusHash),  hashEl = hashNext(&cookie); hashEl; hashEl = hashNext(&cookie))
-	{
-	blockStatus = hashEl->val;
-	blockStatus->mc->rightStatus = MAF_NEW_STATUS;
-	blockStatus->mc->rightLen = 0;
-	}
 mafFileFree(&mf);
 slReverse(&mafList);
 
-lastEnd = 100000000;
-prevMaf = NULL;
+return mafList;
+}
+
+void chainStrands(struct strandHead *strandHead)
+{
+for(; strandHead ; strandHead = strandHead->next)
+    {
+    struct linkBlock *link, *prevLink;
+    int lastEnd;
+
+    printf("chaining %s %s\n",strandHead->name, strandHead->species);
+    slReverse(&strandHead->links);
+
+    prevLink = strandHead->links;
+    prevLink->mc->leftStatus = MAF_NEW_STATUS;
+    //printf("new %d %d %d %d\n",prevLink->cb.tStart,prevLink->cb.tEnd,prevLink->cb.qStart,prevLink->cb.qEnd);
+    for(link = prevLink->next; link; prevLink = link, link = link->next)
+	{
+	int lastEnd = prevLink->mc->start + prevLink->mc->size;
+	int diff = link->mc->start - lastEnd;
+
+
+	if ((diff < -1000) || (diff > 100000))
+	    {
+	//printf("new %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
+	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
+	    prevLink->mc->rightLen = link->mc->leftLen = 0;
+	    }
+	else
+	    {
+	    //printf("cont %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
+	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_INSERT_STATUS;
+	    prevLink->mc->rightLen = link->mc->leftLen = diff;
+	    }
+	}
+    prevLink->mc->rightStatus = MAF_NEW_STATUS;
+    }
+}
+
+void bridgeSpecies(struct mafAli *mafList, struct subSpecies *subSpecies)
+{
+struct mafAli *maf;
+int pushState, leftLen;
+struct mafComp *masterMc, *mc;
+
+for(; subSpecies; subSpecies = subSpecies->next)
+    {
+    printf("bridging %s\n",subSpecies->name);
+    pushState = 0;
+    leftLen = 0;
+    for(maf = mafList; maf ;  maf = maf->next)
+	{
+	masterMc = maf->components;
+	if ((mc = mafMayFindCompPrefix(maf, subSpecies->name,NULL)) == NULL)
+	    {
+	    continue;
+	    }
+	if (mc->leftStatus == 0) 
+	    errAbort("zero left status\n");
+	if (mc->leftStatus == MAF_NEW_STATUS)
+	    {
+	    if (pushState)
+		{
+		printf("arched on %s: %s:%d-%d\n",mc->src,"chr22",masterMc->start, masterMc->start + masterMc->size);
+		mc->leftStatus = MAF_NEW_NESTED_STATUS;
+		mc->leftLen = leftLen;
+		}
+	    pushState++;
+	    }
+
+	if (mc->rightStatus == 0)
+	    {
+	    errAbort("zero right status\n");
+	    }
+	else if (mc->rightStatus == MAF_INSERT_STATUS)
+	    leftLen = mc->rightLen;
+	else if (mc->rightStatus == MAF_NEW_STATUS)
+	    {
+	    pushState--;
+	    if (pushState)
+		{
+		printf("arched on %s: %s:%d-%d\n",mc->src,"chr22",masterMc->start, masterMc->start + masterMc->size);
+		mc->rightStatus = MAF_NEW_NESTED_STATUS;
+		mc->rightLen = leftLen;
+		}
+	    }
+	}
+    printf("pushState %d\n",pushState);
+    }
+}
+
+void fillHoles(struct mafAli *mafList, struct subSpecies *speciesList, struct twoBitFile *twoBit)
+{
+int lastEnd = 100000000;
+struct mafAli *prevMaf = NULL, *maf, *nextMaf;
+struct subSpecies *species;
+struct blockStatus *blockStatus;
+
+/*
+for(species = speciesList; species; species = species->next)
+    {
+    blockStatus = &species->blockStatus;
+    blockStatus->mc->rightStatus = MAF_NEW_STATUS;
+    blockStatus->mc->rightLen = 0;
+    }
+    */
+
 for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
     {
     struct mafComp *mc = NULL, *masterMc, *lastMc = NULL;
     struct mafAli *newMaf = NULL;
+    struct blockStatus *blockStatus;
 
     nextMaf = maf->next;
 
     masterMc=maf->components;
     if (masterMc->start > lastEnd)
 	{
+	struct subSpecies *species;
 
-	for(cookie = hashFirst(statusHash),  hashEl = hashNext(&cookie); hashEl; hashEl = hashNext(&cookie))
+	for(species = speciesList; species; species = species->next)
 	    {
-	    blockStatus = hashEl->val;
+	    blockStatus = &species->blockStatus;
 	    if (blockStatus->mc)
 		{
 		switch (blockStatus->mc->rightStatus)
 		    {
-		    case MAF_CONTIG_STATUS:
+		    case MAF_NEW_NESTED_STATUS:
+		    case MAF_MAYBE_NEW_NESTED_STATUS:
 		    case MAF_INSERT_STATUS:
-		    case MAF_INVERSE_STATUS:
-		    case MAF_DUP_STATUS:
 			AllocVar(mc);
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
@@ -184,10 +278,8 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			if (lastMc == NULL)
 			    {
 			    struct mafComp *miniMasterMc = NULL;
-			    int ii;
-			    char *text, *src;
-			    int fullSize;
 			    char *seqName;
+			    struct dnaSeq *seq;
 
 			    AllocVar(miniMasterMc);
 			    miniMasterMc->next = mc;
@@ -202,6 +294,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    else 
 			    	seqName = miniMasterMc->src;
 
+			    printf("hole filled from %d to %d\n",lastEnd, masterMc->start);
 			    seq = twoBitReadSeqFrag(twoBit, seqName, lastEnd, masterMc->start);
 			    miniMasterMc->text = seq->dna;
 
@@ -226,24 +319,27 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
     for(lastMc = masterMc; lastMc->next; lastMc = lastMc->next)
 	;
 
-    for(cookie = hashFirst(statusHash),  hashEl = hashNext(&cookie); hashEl; hashEl = hashNext(&cookie))
+    for(species = speciesList; species; species = species->next)
 	{
-	blockStatus = hashEl->val;
+	blockStatus = &species->blockStatus;
 	
 	if ((blockStatus->masterStart <= masterMc->start) && 
 	    (blockStatus->masterEnd > masterMc->start) && 
-	 ((mc = mafMayFindCompPrefix(maf, blockStatus->species,NULL)) == NULL))
+	 ((mc = mafMayFindCompPrefix(maf, species->name,NULL)) == NULL))
 	    {
 	    if (blockStatus->mc != NULL)
 		{
 		switch (blockStatus->mc->rightStatus)
 		    {
-		    case MAF_CONTIG_STATUS:
 		    case MAF_INSERT_STATUS:
-		    case MAF_INVERSE_STATUS:
-		    case MAF_DUP_STATUS:
+		    case MAF_NEW_NESTED_STATUS:
+		    case MAF_MAYBE_NEW_NESTED_STATUS:
 			AllocVar(mc);
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
+			if (mc->rightStatus == MAF_NEW_NESTED_STATUS)
+			    mc->rightStatus = MAF_INSERT_STATUS;
+			if (mc->leftStatus == MAF_NEW_NESTED_STATUS)
+			    mc->leftStatus = MAF_INSERT_STATUS;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
 			mc->src = blockStatus->mc->src;
 			lastMc->next = mc;
@@ -258,6 +354,21 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	    blockStatus->mc = mc;
 	}
     }
+}
+
+void mafAddIRows(char *mafIn, char *twoBitIn,  char *mafOut)
+/* mafAddIRows - Filter out maf files. */
+{
+FILE *f = mustOpen(mafOut, "w");
+struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
+struct mafAli *mafList, *maf;
+
+speciesHash = newHash(0);
+mafList = readMafs(mafIn);
+chainStrands(strandHeads);
+bridgeSpecies(mafList, speciesList);
+fillHoles(mafList, speciesList, twoBit);
+
 fprintf(f, "##maf version=1 scoring=mafAddIRows\n");
 
 for(maf = mafList; maf ; maf = maf->next)
@@ -269,7 +380,7 @@ int main(int argc, char *argv[])
 {
 int totalCount;
 optionInit(&argc, argv, options);
-if (argc < 4)
+if (argc != 4)
     usage();
 
 mafAddIRows(argv[1], argv[2], argv[3]);
