@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.875 2005/04/29 21:01:54 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.876 2005/04/30 01:11:25 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4972,6 +4972,12 @@ fprintf(body, "<H2>Alignment of %s and %s:%d-%d</H2>\n", psl->qName, psl->tName,
 fprintf(body, "Click on links in the frame to the left to navigate through "
 	"the alignment.\n");
 
+if (rnaSize != psl->qSize)
+    {
+    fprintf(body, "<p><b>Cannot display alignment. Size of rna %s is %d has changed since alignment was performed when it was %d.\n",
+            psl->qName, rnaSize, psl->qSize);
+    return 0;
+    }
 /* Convert psl alignment to ffAli. */
 tRcAdjustedStart = tStart;
 if (psl->strand[0] == '-')
