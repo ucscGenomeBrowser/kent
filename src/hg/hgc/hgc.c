@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.877 2005/04/30 03:47:06 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.878 2005/05/01 17:55:12 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1973,17 +1973,22 @@ else
 pslFreeList(&pslList);
 }
 
-void printTrackHtml(struct trackDb *tdb)
-/* If there's some html associated with track print it out. Also make a link 
- * to the TB table schema page for this table. */
-{
+void printTBSchemaLink(struct trackDb *tdb)
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
+{
 if (hTableOrSplitExists(tdb->tableName))
     printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	   "TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
 	   database, tdb->grp, tdb->tableName, tdb->tableName);
+}
+
+void printTrackHtml(struct trackDb *tdb)
+/* If there's some html associated with track print it out. Also make a link 
+ * to the TB table schema page for this table. */
+{
+printTBSchemaLink(tdb);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
@@ -9528,7 +9533,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     bedPrintPos((struct bed *)&rna, 3);
     htmlHorizontalLine();
     }
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -9852,7 +9857,7 @@ if (row != NULL)
 	}
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn1);
@@ -9976,7 +9981,7 @@ if (row != NULL)
 	}
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn1);
@@ -10156,7 +10161,7 @@ if (row != NULL)
 	    }
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn1);
@@ -10332,7 +10337,7 @@ if (row != NULL)
 	}
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hFreeConn(&conn1);
@@ -10436,7 +10441,7 @@ if (row != NULL)
     }
 printf("</TABLE>\n"); 
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -10484,7 +10489,7 @@ if (row != NULL)
     freeMem(rr);
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -10526,7 +10531,7 @@ if (row != NULL)
     freeMem(rr);
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -10567,7 +10572,7 @@ if (row != NULL)
     freeMem(rr);
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -10648,7 +10653,7 @@ if (row != NULL)
     printf("</TABLE>\n");
     }
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -12179,7 +12184,7 @@ sqlFreeResult(&sr);
 sqlFreeResult(&sr2);
 sqlFreeResult(&srb);
 webNewSection("Notes:");
-puts(tdb->html);
+printTrackHtml(tdb);
 hgFreeConn(&conn);
 hgFreeConn(&conn1);
 } 
@@ -13046,6 +13051,7 @@ printf(" to see the data as a graph.\n");
 void printSageReference(struct sage *sgList, struct trackDb *tdb)
 {
 printf("%s", tdb->html);
+printTBSchemaLink(tdb);
 }
 
 void sagePrintTable(struct bed *bedList, char *itemName, struct trackDb *tdb) 
