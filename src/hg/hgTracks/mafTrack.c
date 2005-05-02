@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.44 2005/04/29 21:59:28 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.45 2005/05/02 01:32:28 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -513,8 +513,8 @@ int midY2 = midY + (height>>2) - 1;
 Color gray = shadesOfGray[5];
 //Color fuzz1 = shadesOfGray[2];
 Color fuzz = shadesOfGray[3];
-midY--;
 int x;
+midY--;
 
 /* tweaking end pixels, as done in chainTrack.c */
 xOff--; /* this causes some lines to overwrite one
