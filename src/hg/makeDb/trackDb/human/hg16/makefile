@@ -22,8 +22,8 @@ encode_UVA_DNARep_%.html: encode_UVA_DNARep.html
 UCSD_LINKS = \
 	encodeUcsdChipRnap.html \
 	encodeUcsdChipTaf250.html \
-	encodeUcsdChipAch3.html \
-	encodeUcsdChipMeh3k.html \
+	encodeUcsdChipAch3Imr90.html \
+	encodeUcsdChipMeh3k4Imr90.html \
 
 UCSD:    ${UCSD_LINKS}
 
