@@ -233,7 +233,7 @@ done
     mkdir ce3
     cvs add ce3
     cd ce3
-    cp ../ce2/description.html .
+    cp ../ce3/description.html .
     vi description.html - fixup text for this assembly
     cvs add description.html
     cvs commit
@@ -523,7 +523,7 @@ done
     hgLoadWiggle ce3 gc5Base gc5Base.wig
 
 #######################################################################
-# MAKE SANGER GENE (WORM BASE GENES) TRACK (DONE, 2005-05-02, Hiram)
+# MAKE SANGER GENE (WORM BASE GENES) TRACK (WORKING, 2005-05-02, Hiram)
    ssh eieio
    mkdir -p /cluster/data/ce3/bed/sangerGene
    cd /cluster/data/ce3/bed/sangerGene
@@ -566,3 +566,90 @@ done
 # Read 23277 transcripts in 431929 lines in 7 files
 #  23277 groups 7 seqs 8 sources 10 feature types
 #23277 gene predictions
+XXXXX Stopped here 2005-05-02 14:30
+    
+    # Add proteinID field to sangerGene table, used by Gene Sorter
+    ssh hgwdev
+    cd /cluster/data/ce3/bed/sangerGene
+    hgsql -e 'alter table sangerGene add proteinID varchar(40) NOT NULL;' ce3
+    # To add index on this column
+    hgsql -e 'alter table sangerGene add index(proteinID);' ce3
+    # Add Swiss-Prot protein IDs to this column
+    # There are 23076 entries in sangerGene and 21780 of the names 
+    # are in sangerLinks as orfName
+    hgsql -N -e 'select count(*) from sangerGene as g,sangerLinks as l \
+           where g.name = l.orfName;' ce3
+    # 21780
+    # get names from sangerGene and sangerLinks tables
+    hgsql -N -e "select name from sangerGene;" ce3 | sort > name.sangerGene
+    hgsql -N -e "select orfName from sangerLinks;" ce3 | sort > orfName.sangerLinks
+    # get list of names in sangerGene not in sangerLinks
+    comm -23 name.sangerGene orfName.sangerLinks > geneNames.notin.sangerLinks
+    # Go to the WS120 WormBase mirror site and check SwissProt IDs
+    # http://http://ws120.wormbase.org/db/searches/info_dump
+    # Some of these genes are non coding RNAs or have no SwissProt ID BUT
+    # others in the geneNames.notin.sangerLinks list do have a Swiss-Prot ID 
+    # Download IDs in using batches of about 400 for gene names from 
+    # geneNames.notin.sangerLinks and add to file, SPIds.wormPep.WS120
+    # Create a perl script to parse out Swiss-Prot IDs for those genes that 
+    # have them and create the sql statements to insert them into sangerLinks
+
+#########################################################################
+# BLASTZ HUMAN Cb1 (WORKING - 2005-05-02 Hiram)
+#	going to try and do this with ce3 chroms vs the cb1 contigs, and
+#	then lift to chrUn
+    ssh eieio
+    mkdir /cluster/data/ce3/bed/blastzCb1.2005_05_02
+    cd /cluster/data/ce3/bed
+    ln -s blastzCb1.2005_05_02 blastz.cb1
+    cd blastzCb1.2005_05_02
+
+    cat << '_EOF_' > DEF
+# briggsae vs. elegans
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: elegans Ce3
+SEQ1_DIR=/iscratch/i/worms/Celegans3/ce3.2bit
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: briggsae cb1
+SEQ2_DIR=/iscratch/i/worms/Cbriggsae/cb1.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/ce3/bed/blastzCb1.2005_05_02
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/ce3/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/cb1/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    cd /cluster/data/ce3/bed/blastzCb1.2005_05_02
+    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
+	blast.run.out 2>&1 &
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh eieio
+    screen -d -r
+    #	STARTED - 2005-03-17 21:25
+
+    #	swap results to place ce3 alignments onto cb1
+    ssh eieio
+    cd /cluster/data/ce3/bed/blastzCb1.2005_05_02
+    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
+	swap.run.out 2>&1 &
