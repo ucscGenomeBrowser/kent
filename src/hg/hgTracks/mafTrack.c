@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.45 2005/05/02 01:32:28 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.46 2005/05/02 01:39:20 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -512,8 +512,6 @@ int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
 Color gray = shadesOfGray[5];
 //Color fuzz1 = shadesOfGray[2];
-Color fuzz = shadesOfGray[3];
-int x;
 midY--;
 
 /* tweaking end pixels, as done in chainTrack.c */
@@ -531,9 +529,10 @@ if (isDouble)
 else
 #ifdef MISSING_DATA
     {
+    int x;
+    Color fuzz = shadesOfGray[3];
         /*
     vgBox(vg, xOff, yOff+height-5, width, 3, fuzz1);
-        /*
     for (x = xOff+1; x < xOff+width; x += 2)
         {
         vgBox(vg, x, yOff+height-5, 1, 3, fuzz1);
