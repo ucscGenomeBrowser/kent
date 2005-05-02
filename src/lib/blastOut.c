@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.14 2005/04/29 02:41:27 kent Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.15 2005/05/02 18:15:37 kent Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -661,6 +661,23 @@ fprintf(f, "  </BlastOutput_iterations>\n");
 fprintf(f, "</BlastOutput>\n");
 }
 
+static void printAxtTargetBlastTab(FILE *f, struct axt *axt, int targetSize)
+/* Print out target in tabular blast-oriented format. */
+{
+if (axt->tStrand == '-')
+    {
+    int s = axt->tStart, e = axt->tEnd;
+    reverseIntRange(&s, &e, targetSize);
+    fprintf(f, "%d\t", e);
+    fprintf(f, "%d\t", s + 1);
+    }
+else
+    {
+    fprintf(f, "%d\t", axt->tEnd);
+    fprintf(f, "%d\t", axt->tStart + 1);
+    }
+}
+
 static void tabBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
 	FILE *f, char *databaseName, int databaseSeqCount, 
 	double databaseLetterCount, char *ourId, boolean withComment)
@@ -672,7 +689,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/04/29 02:41:27 $";
+    char * rcsDate = "$Date: 2005/05/02 18:15:37 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
@@ -708,15 +725,13 @@ for (target = targetList; target != NULL; target = target->next)
 	    reverseIntRange(&s, &e, querySize);
 	    fprintf(f, "%d\t", s+1);
 	    fprintf(f, "%d\t", e);
-	    fprintf(f, "%d\t", axt->tEnd);
-	    fprintf(f, "%d\t", axt->tStart + 1);
+	    printAxtTargetBlastTab(f, axt, target->size);
 	    }
 	else
 	    {
 	    fprintf(f, "%d\t", axt->qStart + 1);
 	    fprintf(f, "%d\t", axt->qEnd);
-	    fprintf(f, "%d\t", axt->tStart + 1);
-	    fprintf(f, "%d\t", axt->tEnd);
+	    printAxtTargetBlastTab(f, axt, target->size);
 	    }
 	fprintf(f, "%3.1e\t", blastzScoreToNcbiExpectation(axt->score));
 	fprintf(f, "%d.0\n", blastzScoreToNcbiBits(axt->score));
