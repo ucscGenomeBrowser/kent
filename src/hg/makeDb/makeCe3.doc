@@ -152,11 +152,11 @@ if (-e /tmp/ce3/$3/$1/$3.cat) /bin/cp /tmp/ce3/$3/$1/$3.cat ./
     chmod +x jkStuff/RMWorm
     # create job list
     mkdir RMRun
-    rm -f RMRun/RMJobs
+    rm -f RMRun/jobList
 for C in I II III IV V X M
 do
     mkdir /cluster/data/ce3/RMRun/${C}
-    for T in /iscratch/i/worms/Celegans2/unmaskedSplit/$C/c*.fa
+    for T in /iscratch/i/worms/Celegans3/unmaskedSplit/$C/c*.fa
     do
 	D=`dirname $T`
 	F=`basename $T`
@@ -171,26 +171,398 @@ done
 XXXX
     #  STARTED 2005-04-29 14:28
 # Completed: 1006 of 1006 jobs
-# CPU time in finished jobs:     821747s   13695.78m   228.26h    9.51d  0.026 y
-# IO & Wait Time:                 13643s     227.39m     3.79h    0.16d  0.000 y
-# Average job time:                 830s      13.84m     0.23h    0.01d
-# Longest job:                      935s      15.58m     0.26h    0.01d
-# Submission to last job:          5837s      97.28m     1.62h    0.07d
-  
+# CPU time in finished jobs:    1129254s   18820.90m   313.68h   13.07d  0.036 y
+# IO & Wait Time:                  4664s      77.73m     1.30h    0.05d  0.000 y
+# Average job time:                1127s      18.79m     0.31h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1290s      21.50m     0.36h    0.01d
+# Submission to last job:          3575s      59.58m     0.99h    0.04d
+
     # when they are finished, liftUp and load the .out files into the database:
     # next machine
     ssh eieio
     cd /cluster/data/ce3/RMRun
-    foreach c (I II III IV V X M)
-        liftUp chr${c}.fa.out /cluster/data/ce3/split/chr${c}.lft warn ${c}/*.fa.out
-    end
+for C in I II III IV V X M
+do
+    liftUp chr${C}.fa.out /cluster/data/ce3/split/chr${C}.lft warn ${C}/*.fa.out
+done
+
+##########################################################################
+# CREATE DATABASE
+    ssh eieio
+    cd /cluster/data/ce3
+    faToTwoBit sangerFa/chr*.fa ce3.2bit
+    twoBitInfo ce3.2bit stdout | sort -rn +1 > chrom.sizes
+    grep -v random chrom.sizes | cut -f1 | sed -e "s/chr//" > chrom.lst
+    twoBitInfo ce3.2bit stdout |
+        awk '{printf "%s\t%s\t/gbdb/ce3/ce3.2bit\n", $1,$2}' > chromInfo.tab
+
+    ssh hgwdev
+    cd /cluster/data/ce3
+    hgsql -e "create database ce3;" mysql
+    #	Make sure we have enough room (eventually ~ 70Gb) for mysql tables:
+    df -h | grep mysql
+    #	/dev/sda1             472G  230G  218G  52% /var/lib/mysql2
+    #	/dev/sdc1             1.8T  904G  756G  55% /var/lib/mysql
+
+    # CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2005-03-10 - Hiram)
+    #   Use any of the newest databases to ensure that the organization
+    #   of the grp table is up to date
+    ssh hgwdev
+    cd /cluster/data/ce3
+    hgsql ce3 -e "create table grp (PRIMARY KEY(NAME)) select * from mm6.grp"
+    hgsql ce3 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql ce3 -e 'load data local infile "chromInfo.tab" into table chromInfo;'
+
+    # Enter ce3 into dbDb and defaultDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+        defaultPos, active, orderKey, genome, scientificName, \
+        htmlPath, hgNearOk, hgPbOk, sourceName) \
+        VALUES("ce3", "March 2005", "/gbdb/ce3", "C. elegans", \
+        "chrII:14642289-146716311", 1, 59, "C. elegans", \
+        "Caenorhabditis elegans", "/gbdb/ce3/html/description.html", 0, 0, \
+        "WormBase v. WS140");' -h localhost hgcentraltest
+    #	do this defaultDb entry later after there is something to see
+    #	on this browser.
+    hgsql -e 'INSERT INTO defaultDb (name, genome) VALUES("ce3", "Mouse")' \
+        -h localhost hgcentraltest
+    # start a new entry in the trackDb hierarchy
+    ssh hgwdev
+    # start a new entry in the trackDb hierarchy
+    cd $HOME/kent/src/hg/makeDb/trackDb/worm
+    mkdir ce3
+    cvs add ce3
+    cd ce3
+    cp ../ce2/description.html .
+    vi description.html - fixup text for this assembly
+    cvs add description.html
+    cvs commit
+    cd ../..
+    vi makefile - add ce3 to the list
+    mkdir /cluster/data/ce3/html
+    mkdir /gbdb/ce3
+    ln -s /cluster/data/ce3/html /gbdb/ce3/html
+    ln -s /cluster/data/ce3/ce3.2bit /gbdb/ce3/ce3.2bit
+    cp -p worm/ce3/description.html /gbdb/ce3/html
+    make DBS=ce3 ZOO_DBS=""
+
+    cd /cluster/data/ce3/RMRun
+    hgLoadOut ce3 chr*.fa.out
+# bad rep range [1023, 233] line 2579 of chrII.fa.out 
+# bad rep range [2914, 2908] line 2791 of chrIII.fa.out 
+#	This result produces: 13238621 bases, 101,554 items, %13.200098
+
+#######################################################################
+#  an experiment to see if more repeat masked elements can be found
+#	do a second repeat masker run, with a different split to help
+#	cover some of the edges that the previous split may have made
+#	that cause RM to not find items next to those edges.
+#
+#	The result of this experiment is that splitting at the 100,000
+#	boundary hardly made much of a difference compared to a
+#	completely unsplit result.  So, we will go with the traditional
+#	split at 100,000 and leave it at that.
+#######################################################################
+
+###########################################################################
+# PREPARE Split contigs into 103,000 bp chunks for a second RM run
+#	This isn't perfect, there are a couple of breaks that are
+#	exactly the same as before (seven) but all others are at least
+#	1000 different
+# (DONE, 2004-04-29, Hiram)
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce3
+    rm -fr ./split103
+    mkdir split103
+for C in I II III IV V X M
+do
+    mkdir split103/${C}
+    faSplit size sangerFa/chr${C}.fa 103000 split103/${C}/c -lift=split103/chr${C}.lft
+done
+147 pieces of 147 written
+149 pieces of 149 written
+134 pieces of 134 written
+170 pieces of 170 written
+204 pieces of 204 written
+173 pieces of 173 written
+1 pieces of 1 written
+
+   cat split103/*.lft > liftAll103.lft
+   # copy them to /iscratch/i for cluster rsync
+   # next machine
+   ssh kkr1u00
+   cd /cluster/data/ce3/split103
+for C in I II III IV V X M
+do
+    echo -n "${C} "
+    mkdir -p /iscratch/i/worms/Celegans3/split103/${C}
+    cp -p ${C}/c*.fa /iscratch/i/worms/Celegans3/split103/${C}
+done
+    #	this iSync takes forever these days because iscratch is so large
+    /cluster/bin/iSync
+    #	instead, a simple rsync of just this business will get it done
+    #	rapidly
+for i in 2 3 4 5 6 7 8
+do
+    rsync --delete -a --progress /iscratch/i/worms/ kkr${i}u00:/iscratch/i/worms
+done
+
+for C in I II III IV V X M
+do
+    mkdir /cluster/data/ce3/RMFull/${C}
+    for T in /iscratch/i/worms/Celegans3/unmaskedFa/chr${C}.fa
+    do
+	D=`dirname $T`
+	F=`basename $T`
+	echo /cluster/data/ce3/jkStuff/RMWorm ${C} ${D} ${F} \
+'{'check out line+ /cluster/data/ce3/RMFull/$C/${F}.out'}'
+    done >> RMFull/jobList
+done
+    # Do the run
+############################################################################
+# Second RepeatMasker on different split size
+    # next machine
+    ssh kk
+    cd /cluster/data/ce3
+    # create job list
+    mkdir RMRun103
+    rm -f RMRun103/jobList
+for C in I II III IV V X M
+do
+    mkdir /cluster/data/ce3/RMRun103/${C}
+    for T in /iscratch/i/worms/Celegans3/split103/$C/c*.fa
+    do
+	D=`dirname $T`
+	F=`basename $T`
+	echo /cluster/data/ce3/jkStuff/RMWorm ${C} ${D} ${F} \
+'{'check out line+ /cluster/data/ce3/RMRun103/$C/${F}.out'}'
+    done >> RMRun103/jobList
+done
+    # Do the run
+    cd /cluster/data/ce3/RMRun103
+    para create jobList
+    para try, para check, para check, para push, para check, ...
+    #  STARTED 2005-04-29 15:43
+# Completed: 978 of 978 jobs
+# CPU time in finished jobs:    1129788s   18829.81m   313.83h   13.08d  0.036 y
+# IO & Wait Time:                  5530s      92.16m     1.54h    0.06d  0.000 y
+# Average job time:                1161s      19.35m     0.32h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1313s      21.88m     0.36h    0.02d
+# Submission to last job:          2737s      45.62m     0.76h    0.03d
+
+    # when they are finished, liftUp and load the .out files into the database:
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce3/RMRun103
+for C in I II III IV V X M
+do
+ liftUp chr${C}.fa.out /cluster/data/ce3/split103/chr${C}.lft warn ${C}/*.fa.out
+done
 
     # next machine
     ssh hgwdev
-    cd /cluster/data/ce3/RMRun
+    cd /cluster/data/ce3/RMRun103
     hgLoadOut ce3 chr*.fa.out
+bad rep range [1023, 233] line 2595 of chrII.fa.out 
+bad rep range [2914, 2908] line 2797 of chrIII.fa.out
+#	This result produces: 13236863 bases, 101,529 items, %13.198345
 
-    # Noticed one error in this load (reported to Robert Hubley):
-    # Processing chrV.fa.out
-    # Strange perc. field -0.1 line 2196 of chrV.fa.out
+#######################################################################
+#	The same RM run was done a third time on whole un-split chrom
+#	files.  This run took 35 hours on the Iservers kluster.
+#	Loading these full chrom results:
+#	Not split:              13,238,684 bases, 101,565 items, %13.200161
+#	Split at 100,000 bases: 13,238,621 bases, 101,554 items, %13.200098
+#	Split at 103,000 bases: 13,236,863 bases, 101,529 items, %13.198345
+#	Even the full chroms had problems with coordinates:
+# bad rep range [1023, 233] line 2586 of chrII.fa.out 
+# bad rep range [2914, 2908] line 2792 of chrIII.fa.out 
+#	Combining the two split results:
+#	                        13,283,266 bases, 103,117 items, %13.244613
+#######################################################################
+#	Most interestingly, the hgLoadOut would *not* load the files
+#	unless they had been lifted.  It said they were not valid .out
+#	files !  So, a fake split at 30,000,000 to create some lft
+#	files:  (30,000,000 is too large to cause anything to split)
+for C in I II III IV V X M
+do
+    mkdir splitFull/${C}
+    faSplit size sangerFa/chr${C}.fa 30000000 splitFull/${C}/c -lift=splitFull/chr${C}.lft
+done
+#
+#######################################################################
+# SIMPLE REPEAT [TRF] TRACK  (DONE - 2005-05-02 - Hiram)
+    ssh kki
+    mkdir -p /cluster/data/ce3/bed/simpleRepeat
+    cd /cluster/data/ce3/bed/simpleRepeat
+    mkdir trf
+    ls -1S /iscratch/i/worms/Celegans3/unmaskedFa/chr*.fa > genome.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf {check in line+ $(path1)}  /dev/null -bedAt={check out line trf/$(root1).bed} -tempDir=/tmp
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+                                                                                
+    gensub2 genome.lst single gsub jobList
+    para create jobList
+    para try    # there are only 7, so this runs them all
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1751s      29.18m     0.49h    0.02d  0.000 y
+# IO & Wait Time:                    28s       0.47m     0.01h    0.00d  0.000 y
+# Average job time:                 254s       4.24m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             545s       9.08m     0.15h    0.01d
+# Submission to last job:           545s       9.08m     0.15h    0.01d
 
+    #  When cluster run is done, combine into one:
+    cat trf/*.bed > simpleRepeat.bed
+
+    # Load into the database:
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce3/bed/simpleRepeat
+    hgLoadBed ce3 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    #	Loaded 28637 elements of size 16
+
+#######################################################################
+# PROCESS SIMPLE REPEATS AND RMSK INTO MASK (DONE,  2005-05-02 - Hiram)
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+    ssh eieio
+    cd /cluster/data/ce3/bed/simpleRepeat
+    mkdir -p trfMask
+for F in trf/*.bed
+do
+    T=${F#trf/}
+    echo "${F} > trfMask/${T}"
+    awk '{if ($5 <= 12) print;}' ${F} > trfMask/${T}
+done
+
+#  create Soft and Hard masks from RepeatMaster and TRF outputs:
+#  and rebuild the 2bit file using the soft masking in the fa.
+#	Might need the nibs for something, so make those too.
+    # next machine
+    ssh eieio
+    cd /cluster/data/ce3
+    mkdir softMask
+    mkdir nib
+    cd /cluster/data/ce3
+for C in I II III IV V X M
+do
+    echo -n "masking chr${C} "
+    maskOutFa sangerFa/chr${C}.fa RMRun/chr${C}.fa.out \
+                softMask/chr${C}.fa -soft
+    maskOutFa softMask/chr${C}.fa \
+                bed/simpleRepeat/trfMask/chr${C}.bed \
+                softMask/chr${C}.fa -softAdd
+    faToNib -softMask softMask/chr${C}.fa nib/chr${C}.nib
+done
+# masking chrI Writing 15080552 bases in 7540284 bytes
+# masking chrII Writing 15279311 bases in 7639664 bytes
+# masking chrIII Writing 13783317 bases in 6891667 bytes
+# masking chrIV Writing 17493785 bases in 8746901 bytes
+# masking chrV Writing 20922231 bases in 10461124 bytes
+# masking chrX Writing 17718850 bases in 8859433 bytes
+# masking chrM Writing 13794 bases in 6905 bytes
+
+    #	re-create the 2bit file
+    rm -f ce3.2bit
+    faToTwoBit softMask/chr*.fa ce3.2bit
+
+    # create hard masks 
+    mkdir hardMask
+for C in I II III IV V X M
+do
+    echo "masking chr${C}"
+    /cluster/bin/i386/maskOutFa softMask/chr${C}.fa hard \
+                hardMask/chr${C}.fa
+done
+
+    #	copy to iscratch for cluster runs
+    ssh kkr1u00
+    cd /cluster/data/ce3/softMask
+    mkdir -p /iscratch/i/worms/Celegans3/bothMasksFa
+    mkdir -p /iscratch/i/worms/Celegans3/nib
+    cp -p *.fa /iscratch/i/worms/Celegans3/bothMasksFa
+    cd /cluster/data/ce3/nib
+    cp -p c*.nib /iscratch/i/worms/Celegans3/nib
+    cd /iscratch/i/worms/Celegans3
+    cp -p /cluster/data/ce3/ce3.2bit .
+    #	no longer need these items
+    rm -fr unmaskedSplit split103 unmaskedFa
+for i in 2 3 4 5 6 7 8
+do
+    rsync --delete -a --progress /iscratch/i/worms/ kkr${i}u00:/iscratch/i/worms
+done
+#######################################################################
+#  GOLD AND GAP TABLES (DONE - 2005-05-02 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/ce3
+    awk '{print $1}' chrom.sizes > chrom.lst
+    hgGoldGapGl -noGl -chromLst=chrom.lst ce3 /cluster/data/ce3 sangerFa
+    #
+    #	There are no gaps in this assembly, the gap tables are all empty
+    #
+
+#######################################################################
+# GC5BASE (DONE - 2004-12-08 - Hiram)
+    ssh eieio
+    mkdir /cluster/data/ce3/bed/gc5Base
+    cd /cluster/data/ce3/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 ce3 \
+        /cluster/data/ce3 | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    ssh hgwdev
+    cd /cluster/data/ce3/bed/gc5Base
+    mkdir /gbdb/ce3/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/ce3/wib
+    hgLoadWiggle ce3 gc5Base gc5Base.wig
+
+#######################################################################
+# MAKE SANGER GENE (WORM BASE GENES) TRACK (DONE, 2005-05-02, Hiram)
+   ssh eieio
+   mkdir -p /cluster/data/ce3/bed/sangerGene
+   cd /cluster/data/ce3/bed/sangerGene
+    # the perl trims these files down to a reasonable size.  As they are
+    #   they cause ldHgGene to hangup due to memory size.
+    # The sed removes CDS before id e.g. from CDS "Y74C9A.2" and the
+    # extra quote ", and finally the comments at the ends of the lines
+    # which start with `blank semi-colon blank'
+for F in I II III IV V X M
+do
+    echo -n "${F} "
+    zcat ../../WS140/chr${F}.gff.gz | \
+    sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
+	-e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
+	-e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
+	-e "s/CHROMOSOME_M/chrM/g" \
+	-e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
+	    perl -ne '@a=split; print if($a[1] =~ m/curated|DNA|RNA/i &&
+$a[2] =~ m/intron|exon|cds|sequence|transcri/i);' | \
+	sed -e "s/CDS \"//; s/\"//; s/ ; .*//;" > chr${F}.gff
+done
+    #  check file sizes, should be reasonable
+    ls -ogrt
+# -rw-rw-r--    1  3524403 May  2 12:47 chrI.gff
+# -rw-rw-r--    1  3732465 May  2 12:48 chrII.gff
+# -rw-rw-r--    1  3295374 May  2 12:49 chrIII.gff
+# -rw-rw-r--    1  3635497 May  2 12:51 chrIV.gff
+# -rw-rw-r--    1  4754926 May  2 12:53 chrV.gff
+# -rw-rw-r--    1  3896221 May  2 12:55 chrX.gff
+# -rw-rw-r--    1     3881 May  2 12:55 chrM.gff
+
+    # now load database with those transformed gff files
+    # next machine
+    ssh hgwdev
+    cd /cluster/data/ce3/bed/sangerGene
+    # 2004-05-10, hartera, Reload sangerGene table using extended GenePred
+    # format. 2004-05-11, hartera. Extended format frame information does not
+    # look correct. Reload without the extended fields.
+    ldHgGene ce3 sangerGene *.gff
+# Read 23277 transcripts in 431929 lines in 7 files
+#  23277 groups 7 seqs 8 sources 10 feature types
+#23277 gene predictions
