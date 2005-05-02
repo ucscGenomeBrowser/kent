@@ -9,7 +9,7 @@
 #	chr_name/repClass/file.bed
 #	to allow sorting out repClass bed files by chrom and repClass type
 #
-#	 $Id: rmskFeatBits.pl,v 1.2 2005/04/28 23:12:01 hiram Exp $
+#	 $Id: rmskFeatBits.pl,v 1.3 2005/05/02 18:00:01 hiram Exp $
 #
 
 use warnings;
@@ -544,6 +544,10 @@ for my $chr (sort chrSort keys(%chrNames))
 #			100.0*$totalBasesThisChr/($chrSize - $gapSize) if ($chrSize - $gapSize > 0);
 		$percentChromNoGaps =
 			100.0*$fbCount/($chrSize - $gapSize) if ($chrSize - $gapSize > 0);
+		}
+	    else
+		{
+		$percentChromNoGaps = $percentChromCovered;
 		}
 	    }
 	if ($htmlOut)
