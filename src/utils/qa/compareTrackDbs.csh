@@ -99,9 +99,14 @@ end
 echo
 echo "---------------------------------------------------------------"
 echo 
-sort $machine1.$db.$table > $machine1.$db.$table.sort 
-sort $machine2.$db.$table > $machine2.$db.$table.sort 
-diff $machine1.$db.$table.sort $machine2.$db.$table.sort >& $db.temp
+# defensive logic to avoid "sort" disrupting blob tracks
+set sort=""
+if ($field != "html" && $field != "settings") then
+  set sort="1"
+  sort $machine1.$db.$table > $machine1.$db.$table$sort 
+  sort $machine2.$db.$table > $machine2.$db.$table$sort 
+endif
+diff $machine1.$db.$table$sort $machine2.$db.$table$sort >& $db.temp
 if ( $status ) then
   echo "\n$db.$table.$field : Differences between $machine1 and $machine2 \n"
   cat $db.temp
@@ -111,8 +116,8 @@ endif
 
 # clean up
 rm -f $machine1.$db.$table 
-rm -f $machine1.$db.$table.sort 
 rm -f $machine2.$db.$table 
-rm -f $machine2.$db.$table.sort
+rm -f $machine1.$db.$table$sort 
+rm -f $machine2.$db.$table$sort
 rm -f $db.temp
 
