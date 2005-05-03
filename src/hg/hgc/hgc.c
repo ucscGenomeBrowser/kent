@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.878 2005/05/01 17:55:12 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.879 2005/05/03 02:04:28 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15056,14 +15056,24 @@ cut = cutterLoadByQuery(conn, query);
 cartWebStart(cart, "Restriction Enzymes from REBASE");
 if (cut)
     {
+    char *c = cgiOptionalString("c");
+    char *o = cgiOptionalString("o");
+    char *t = cgiOptionalString("t");
     struct slName *isoligs = cutterIsoligamers(cut);
     printf("<B>Enzyme Name:</B> %s<BR>\n", cut->name);
+    /* Display position only if click came from hgTracks. */
+    if (c && o && t)
+        {
+	int left = atoi(o);
+	int right = atoi(t);
+	printPosOnChrom(c, left, right, NULL, FALSE, cut->name);
+        }
     printf("<B>Recognition Sequence: </B>");
     cutterPrintSite(cut);
     printf("<BR>\n");
     printf("<B>Palindromic: </B>%s<BR>\n", (cut->palindromic) ? "YES" : "NO");    
     if (cut->numSciz > 0)
-	{
+        {
 	int i;
 	printf("<B>Isoscizomers: </B>");
 	for (i = 0; i < cut->numSciz-1; i++)
@@ -15099,6 +15109,9 @@ if (cut)
 	sqlFreeResult(&sr);
 	}    
     }
+puts("<P>\n"
+"*&quot;Isoligamer&quot; is a made-up term referring to another enzyme (which isn\'t an"
+"isoscizomer) producing the same sticky ends in the digestion.\n");
 htmlHorizontalLine();
 safef(helpName, 256, "%s/%s.html", HELP_DIR, CUTTERS_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
