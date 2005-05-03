@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.39 2004/11/24 22:41:12 hiram Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.40 2005/05/03 01:30:29 sugnet Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -384,13 +384,22 @@ int numFields = 0;
 char *line = NULL;
 /* First peek to see how many columns in the bed file. */
 lineFileNextReal(lf, &line);
-numFields = chopByWhite(line, NULL, 0);
-lineFileClose(&lf);
-if(numFields < 4) /* Minimum number of fields. */
-    errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d",
-	      fileName, numFields);
-/* Now load them up with that number of fields. */
-list = bedLoadNAll(fileName, numFields);
+
+/* If there is something in the file then read it. If file
+   is empty return NULL. */
+if(line != NULL) 
+    {
+    numFields = chopByWhite(line, NULL, 0);
+    lineFileClose(&lf);
+    if(numFields < 4) /* Minimum number of fields. */
+	errAbort("file %s doesn't appear to be in bed format. At least 4 fields required, got %d",
+		 fileName, numFields);
+    /* Now load them up with that number of fields. */
+    list = bedLoadNAll(fileName, numFields);
+    }
+else
+    lineFileClose(&lf);
+
 return list;
 }
 
