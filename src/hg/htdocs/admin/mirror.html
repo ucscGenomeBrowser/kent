@@ -228,6 +228,14 @@ rsync -avzP --delete --max-delete=20 \
   $WEBROOT/goldenPath/bosTau1/database/
 </PRE>
 
+<LI>Get Mouse March, 2005 full data set (mm6: 124 Gb) by doing:
+<P>
+<PRE>
+mkdir -p $WEBROOT/goldenPath/mm6/database/
+rsync -avzP --delete --max-delete=20 \
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm6/database/ \
+  $WEBROOT/goldenPath/mm6/database/
+</PRE>
 
 <LI>Get Mouse May, 2004 full data set (mm5: 8.6 Gb) by doing:
 <P>
@@ -236,24 +244,6 @@ mkdir -p $WEBROOT/goldenPath/mm5/database/
 rsync -avzP --delete --max-delete=20 \
   rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm5/database/ \
   $WEBROOT/goldenPath/mm5/database/
-</PRE>
-
-<LI>Get Mouse October, 2003 full data set (mm4: 8.4 Gb) by doing:
-<P>
-<PRE>
-mkdir -p $WEBROOT/goldenPath/mm4/database/
-rsync -avzP --delete --max-delete=20 \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mm4/database/ \
-  $WEBROOT/goldenPath/mm4/database/
-</PRE>
-
-<LI>Get Mouse February, 2003 full data set (mm3: 5.4 Gb) by doing:
-<P>
-<PRE>
-mkdir -p $WEBROOT/goldenPath/mmFeb2003/database/
-rsync -avzP --delete --max-delete=20 \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/mmFeb2003/database/ \
-  $WEBROOT/goldenPath/mmFeb2003/database/
 </PRE>
 
 <LI>Get Rat June, 2003 full data set (rn3: 3.7 Gb) by doing:
@@ -513,9 +503,12 @@ assembly:
 <TR><TD> panTro1     </TD><TD></TD><TD> panTro1     </TD></TR>
 <TR><TD> canFam1     </TD><TD></TD><TD> canFam1     </TD></TR>
 <TR><TD> bosTau1     </TD><TD></TD><TD> bosTau1     </TD></TR>
+<TR><TD> mm6         </TD><TD></TD><TD> mm6         </TD></TR>
 <TR><TD> mm5         </TD><TD></TD><TD> mm5         </TD></TR>
+<!--
 <TR><TD> mm4         </TD><TD></TD><TD> mm4         </TD></TR>
 <TR><TD> mmFeb2003   </TD><TD></TD><TD> mm3         </TD></TR>
+-->
 <TR><TD> rnJun2003   </TD><TD></TD><TD> rn3         </TD></TR>
 <TR><TD> rnJan2003   </TD><TD></TD><TD> rn2         </TD></TR>
 <TR><TD> monDom1     </TD><TD></TD><TD> monDom1     </TD></TR>
