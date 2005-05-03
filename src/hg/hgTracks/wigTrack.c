@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.67 2005/04/22 22:28:25 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.68 2005/05/03 01:55:22 sugnet Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -37,7 +37,6 @@ struct wigItem
     double graphUpperLimit;	/* filled in by DrawItems	*/
     double graphLowerLimit;	/* filled in by DrawItems	*/
     };
-
 
 static void wigFillInColorLfArray(struct track *wigTrack, Color *colArray, int colSize,
 				  struct track *colorTrack)
@@ -86,8 +85,13 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	x2 = colSize;
     if(x1 == x2)
 	x2++;
-    for(i = x1; i < x2; i++)
-	colArray[i] = colorTrack->itemColor(colorTrack, bed, vg);
+    for(i = x1; i < x2 && i < colSize; i++)
+	{
+	if(colorTrack->itemColor != NULL)
+	    colArray[i] = colorTrack->itemColor(colorTrack, bed, vg);
+	else
+	    colArray[i] = colorTrack->ixColor;
+	}
     }
 }
 
@@ -98,7 +102,7 @@ void wigFillInColorArray(struct track *wigTrack, struct vGfx *vg,
 {
 boolean trackLoaded = FALSE;
 /* If the track is hidden currently, load the items. */
-if(colorTrack->visibility == tvHide)
+if(colorTrack->limitedVis == tvHide)
     {
     trackLoaded = TRUE;
     colorTrack->loadItems(colorTrack);
@@ -250,7 +254,7 @@ struct hashEl *el;
 
 /*	Allocate trackSpans one time only, for all tracks	*/
 if (! trackSpans)
-    trackSpans = newHash(0);
+    trackSpans = newHash(4);
 
 wi->start = wiggle->chromStart;
 wi->end = wiggle->chromEnd;
@@ -295,7 +299,7 @@ void ctWigLoadItems(struct track *tg) {
 struct customTrack *ct;
 char *row[13];
 struct lineFile *lf = NULL;
-struct wiggle *wiggle;
+struct wiggle wiggle; 
 struct wigItem *wiList = NULL;
 int itemsLoaded = 0;
 struct hash *spans = NULL;	/* Spans encountered during load */
@@ -307,7 +311,7 @@ if (tg->customPt == (void *)NULL)
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
-spans = newHash(0);
+spans = newHash(3);
 /*	Each row read will be turned into an instance of a wigItem
  *	A growing list of wigItems will be the items list to return
  */
@@ -321,20 +325,19 @@ while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
     struct wigItem *wi;
 
-    wiggle = wiggleLoad(row);
+    wiggleStaticLoad(row, &wiggle); 
     /*	we have to do hRangeQuery's job here since we are reading a
      *	file.  We need to be on the correct chromosome, and the data
      *	needs to be in the current view.
      */
-    if (sameWord(chromName,wiggle->chrom))
+    if (sameWord(chromName,wiggle.chrom))
 	{
-	if ((winStart < wiggle->chromEnd) && (winEnd > wiggle->chromStart))
+	if ((winStart < wiggle.chromEnd) && (winEnd > wiggle.chromStart))
 	    {
 	    ++itemsLoaded;
 	    AllocVar(wi);
-	    wigSetItemData(tg, wi, wiggle, spans);
+	    wigSetItemData(tg, wi, &wiggle, spans);
 	    slAddHead(&wiList, wi);
-	    wiggleFree(&wiggle);
 	    }	/*	if in viewing window	*/
 	}	/*	if in same chromosome	*/
     }	/*	while reading lines	*/
@@ -369,7 +372,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-struct wiggle *wiggle;
+struct wiggle wiggle;
 struct wigItem *wiList = NULL;
 char *whereNULL = NULL;
 int itemsLoaded = 0;
@@ -439,8 +442,8 @@ if (basesPerPixel >= 1000)
  */
 if (itemsLoaded)
     {
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-	spanOver1K, &rowOffset);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		     spanOver1K, &rowOffset);
     }
 else
     {
@@ -448,11 +451,13 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 	whereNULL, &rowOffset);
     }
 
-
+/*	Allocate trackSpans one time only	*/
+if (! trackSpans)
+    trackSpans = newHash(4);
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
  */
-spans = newHash(0);
+spans = newHash(4);
 /*	Each row read will be turned into an instance of a wigItem
  *	A growing list of wigItems will be the items list to return
  */
@@ -461,13 +466,11 @@ itemsLoaded = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
 	struct wigItem *wi;
-
 	++itemsLoaded;
-	wiggle = wiggleLoad(row + rowOffset);
+ 	wiggleStaticLoad(row + rowOffset, &wiggle);
 	AllocVar(wi);
-	wigSetItemData(tg, wi, wiggle, spans);
+	wigSetItemData(tg, wi, &wiggle, spans);
 	slAddHead(&wiList, wi);
-	wiggleFree(&wiggle);
     }
 
 sqlFreeResult(&sr);
@@ -929,7 +932,7 @@ struct wigItem *wi;
 double pixelsPerBase = scaleForPixels(width);
 double basesPerPixel = 1.0;
 int itemCount = 0;
-char *currentFile = (char *) NULL;	/*	the binary file name */
+char currentFile[PATH_LEN];
 int wibFH = 0;		/*	file handle to binary file */
 struct hashEl *el, *elList;
 struct wigCartOptions *wigCart;
@@ -948,8 +951,11 @@ int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 wigCart = (struct wigCartOptions *) tg->extraUiData;
-if(sameString(tg->mapName, "affyTranscription"))
-    wigCart->colorTrack = "affyTransfrags";
+
+currentFile[0] = '\0';
+
+if(trackDbSetting(tg->tdb, "wigColorBy") != NULL)
+    wigCart->colorTrack = trackDbSetting(tg->tdb, "wigColorBy");
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -1001,7 +1007,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     if (usingDataSpan == wi->span)
 	{
 	/*	Check our data file, see if we need to open a new one */
-	if (currentFile)
+	if (differentString(currentFile,""))
 	    {
 	    if (differentString(currentFile,wi->file))
 		{
@@ -1010,7 +1016,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    close(wibFH);
 		    freeMem(currentFile);
 		    }
-		currentFile = cloneString(wi->file);
+		strncpy(currentFile, wi->file, PATH_LEN);
+		currentFile[PATH_LEN-1] = '\0';
 		wibFH = open(currentFile, O_RDONLY);
 		if (-1 == wibFH)
 		    errAbort("openWibFile: failed to open %s", currentFile);
@@ -1018,7 +1025,8 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    }
 	else
 	    {
-	    currentFile = cloneString(wi->file);
+	    strncpy(currentFile, wi->file, PATH_LEN-1);
+	    currentFile[PATH_LEN-1] = '\0';
 	    wibFH = open(currentFile, O_RDONLY);
 	    if (-1 == wibFH)
 		errAbort("openWibFile: failed to open %s", currentFile);
@@ -1103,15 +1111,11 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	freeMem(readData);
 	}	/*	Draw if span is correct	*/
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
-
 if (wibFH > 0)
     {
     close(wibFH);
     wibFH = 0;
     }
-
-if (currentFile)
-    freeMem(currentFile);
 
 /*	now we are ready to draw.  Each element in the preDraw[] array
  *	cooresponds to a single pixel on the screen
