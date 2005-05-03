@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.46 2005/05/02 01:39:20 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.47 2005/05/03 00:29:33 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -562,6 +562,7 @@ int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
 int x1, x2;
 int lastAlignX2 = -1;
+int lastChainX2 = -1;
 double scale = scaleForPixels(width);
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
@@ -589,15 +590,26 @@ for (full = mafList; full != NULL; full = full->next)
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
         x1 = round((double)((int)mcMaster->start-seqStart)*scale) + xOff;
-        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
-	w = x2 - x1;
-	if (w < 1) w = 1;
+        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size-1)*scale) + xOff;
+	w = x2-x1+1;
         if (vis != tvFull && mc->size == 0)
             {
-            if (w == 1 && x1 == lastAlignX2)
-                continue;
+            /* suppress chain/alignment overlap */
+            if (x1 == lastAlignX2)
+                {
+                x1++; w--; 
+                if (w == 0)
+                    continue;
+                }
+            /* need a pixel overlap at chain/chain boundary for
+             * Postscript */
+            else if (x1 == lastChainX2)
+                {
+                x1--; w++;
+                }
             if (!chainBreaks)
                 continue;
+            lastChainX2 = x2+1;
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
