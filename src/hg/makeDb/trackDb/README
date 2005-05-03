@@ -136,6 +136,13 @@ The format of the type fields:
             be specified as the last word on this line.
             (e.g. pairwise CFTR 20, will have 20 pixel height of
             pairwise wiggle from tables named <species>_CFTR_wig).
+      summary - contains table name of maf summary table (used as 
+            replacement for "pairwise" tables, above.  A summary
+            table is created from a multiple alignment maf file
+            using the utility hgLoadMafSummary.
+      speciesDefaultOff - contains a list of species that are
+            not displayed in the track display unless explicitly
+            configured in from the track config page.
 14. type wig [lower] [upper]
    Continuous value graphing track.
    [lower] - overall lower limit of the data, default 0.0
