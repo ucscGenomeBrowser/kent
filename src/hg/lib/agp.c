@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: agp.c,v 1.2 2005/04/11 08:13:43 markd Exp $";
+static char const rcsid[] = "$Id: agp.c,v 1.3 2005/05/03 02:19:42 aamp Exp $";
 
 void agpAddAll(char *agpFile, struct hash *agpHash)
 /* add AGP entries from a file into a hash of AGP lists */
@@ -67,6 +67,19 @@ if (agp->isFrag)
 else
     freeMem((struct agpGap *)agp->entry);
 freez(pAgp);
+}
+
+void agpFreeList(struct agp **pList)
+/* Free a list of dynamically allocated AGP entries. */
+{
+struct agp *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    agpFree(&el);
+    }
+*pList = NULL;
 }
 
 struct hash *agpLoadAll(char *agpFile)
@@ -166,4 +179,20 @@ while ((hel = hashNext(&cookie)) != NULL)
     }
 #endif
 return agpHash;
+}
+
+void freeAgpHashEl(struct hashEl *agpHashEl)
+/* Free this list up. */
+{
+struct agp *list = agpHashEl->val;
+agpFreeList(&list);
+}
+
+void agpHashFree(struct hash **pAgpHash)
+/* Free up the hash created with agpLoadAll. */
+{
+struct hash *agpHash = *pAgpHash;
+hashTraverseEls(agpHash, freeAgpHashEl);
+freeHash(&agpHash);
+*pAgpHash = NULL;
 }
