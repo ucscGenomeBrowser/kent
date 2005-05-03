@@ -11,7 +11,7 @@
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.7 2005/04/13 07:09:58 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.8 2005/05/03 02:16:02 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -365,8 +365,7 @@ struct dnaSeq *sticky2 = stickyEnd(enz2);
 if (sticky1 && sticky2)
 /*     printf("enz 1: %s, enz 2: %s, sticky 1: %s, sticky 2: %s, acgt 1: %d, acgt 2: %d\n", enz1->name, enz2->name, sticky1->dna, sticky2->dna, acgtCount(sticky1->dna), acgtCount(sticky2->dna)); */
 if (sticky1 && sticky2 && (sticky1->size == sticky2->size) &&
-    (acgtCount(sticky1->dna) == sticky1->size) && (acgtCount(sticky2->dna) == sticky2->size) &&
-    !isIsosciz(enz1, enz2))
+    (acgtCount(sticky1->dna) == sticky1->size) && (acgtCount(sticky2->dna) == sticky2->size))
     {
     if (sameString(sticky1->dna, sticky2->dna))
 	{
