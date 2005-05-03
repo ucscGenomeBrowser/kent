@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.191 2005/05/03 01:34:44 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.192 2005/05/03 02:07:40 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -967,7 +967,7 @@ void cutterUi(struct trackDb *tdb)
 /* UI for restriction enzyme track */
 {
 char *enz = cartUsualString(cart, cutterVar, cutterDefault);
-puts("<P><B>Enzymes (separate with commas):</B>");
+puts("<P><B>Enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
 
