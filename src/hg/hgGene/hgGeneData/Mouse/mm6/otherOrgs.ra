@@ -2,7 +2,7 @@ name human
 db hg17
 
 name zebrafish
-db danRer1
+db danRer2
 
 name drosophila
 db dm1
