@@ -133,6 +133,10 @@ void *hashNextVal(struct hashCookie *cookie);
 /* Return the next value in the hash table, or NULL if no more. Do not modify
  * hash table while this is being used. */
 
+char *hashNextName(struct hashCookie *cookie);
+/* Return the next name in the hash table, or NULL if no more. Do not modify
+ * hash table while this is being used. */
+
 struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */
 #define hashNew(a) newHash(a)	/* Synonym */
