@@ -11,7 +11,7 @@
 #include "hCommon.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.60 2005/03/28 23:23:29 donnak Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.61 2005/05/03 01:31:58 sugnet Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -971,6 +971,7 @@ sprintf(buf, "%sLt", track);
 mud->logicTypeVar = cloneString(buf);
 if (isXeno)
     addMrnaFilter(mud, track, "organism", "org", "organism");
+addMrnaFilter(mud, track, "accession", "acc", "acc");
 addMrnaFilter(mud, track, "author", "aut", "author");
 addMrnaFilter(mud, track, "library", "lib", "library");
 addMrnaFilter(mud, track, "tissue", "tis", "tissue");
