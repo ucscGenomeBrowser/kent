@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.25 2005/04/28 23:02:13 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.26 2005/05/03 03:00:26 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -302,8 +302,10 @@ else
     struct mafAli *mafList, *maf, *subList = NULL;
     int aliIx = 0, realCount = 0;
     char dbChrom[64];
+    char option[128];
     char *capTrack;
     char *wigTable = trackDbSetting(tdb, "wiggle");
+    struct hash *speciesOffHash = NULL;
 
     mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
     	axtOtherDb);
@@ -314,13 +316,23 @@ else
         struct mafComp *mc;
         struct mafAli *subset;
         struct mafComp *nextMc;
-        /* remove all empty components from MAF, and ignore
+        /* remove empty components and configured off components
+         * from MAF, and ignore
          * the entire MAF if all components are empty 
          * (solely for gap annotation) */
         for (mc = maf->components->next; mc != NULL; mc = nextMc)
             {
+            char buf[64];
+            mafSrcDb(mc->src, buf, sizeof buf);
             nextMc = mc->next;
-            if (mc->size == 0)
+            safef(option, sizeof(option), "%s.%s", tdb->tableName, buf);
+            if (!cartUsualBoolean(cart, option, TRUE))
+                {
+                if (speciesOffHash == NULL)
+                    speciesOffHash = newHash(4);
+                hashStoreName(speciesOffHash, buf);
+                }
+            if (mc->size == 0 || !cartUsualBoolean(cart, option, TRUE))
                 slRemoveEl(&maf->components, mc);
             else
                 mcCount++;
@@ -384,7 +396,17 @@ else
 
         /* notify if bases are complemented (hgTracks is on reverse strand) */
         if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
-            puts("<EM>Viewing on reverse strand</EM><BR>");
+            puts("<EM>Alignment displayed on reverse strand</EM><BR>");
+        if (speciesOffHash)
+            {
+            char *species;
+            struct hashCookie hc = hashFirst(speciesOffHash);
+            puts("<B>Components not displayed:</B> ");
+            while ((species = hashNextName(&hc)) != NULL)
+                printf("%s ", species);
+            puts("<BR>");
+            }
+        /* notify if species removed from alignment */
 	for (maf = subList; maf != NULL; maf = maf->next)
 	    {
 	    mafLowerCase(maf);
