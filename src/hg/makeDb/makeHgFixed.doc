@@ -253,6 +253,7 @@ para time
 #Longest running job:                0s       0.00m     0.00h    0.00d
 #Longest finished job:            2955s      49.25m     0.82h    0.03d
 #Submission to last job:          2957s      49.28m     0.82h    0.03d
+cat *.psl > xm.psl
 ssh hgwdev
 cd /cluster/data/microarray/zhangEtAl
 cp /santest/scratch/andy/xm.psl .
