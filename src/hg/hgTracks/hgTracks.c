@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.955 2005/05/03 00:29:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.956 2005/05/03 01:58:52 sugnet Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -196,6 +196,9 @@ struct trackLayout tl;
 boolean suppressHtml = FALSE;	
 	/* If doing PostScript output we'll suppress most
          * of HTML output. */
+
+
+
 
 void hvPrintf(char *format, va_list args)
 /* Suppressable variable args printf. */
@@ -2438,8 +2441,17 @@ struct linkedFeatures *lfList = NULL, *lf;
 int grayIx = maxShade;
 struct genePredReader *gpr = NULL;
 struct genePred *gp = NULL;
-
+boolean nmdTrackFilter = sameString(trackDbSettingOrDefault(tg->tdb, "nmdFilter", "off"), "on");
+boolean doNmd = FALSE;
+char buff[256];
 int drawOptionNum = 0; //off
+safef(buff, sizeof(buff), "hgt.%s.nmdFilter",  tg->mapName);
+
+/* Should we remove items that appear to be targets for nonsense
+ * mediated decay? */
+if(nmdTrackFilter)
+    doNmd = cartUsualBoolean(cart, buff, FALSE);
+
 if (table != NULL)
     drawOptionNum = getCdsDrawOptionNum(tg);
 
@@ -2449,6 +2461,11 @@ if (tg->itemAttrTbl != NULL)
 gpr = genePredReaderRangeQuery(conn, table, chrom, start, end, NULL);
 while ((gp = genePredReaderNext(gpr)) != NULL)
     {
+    if(doNmd && genePredNmdTarget(gp))
+	{
+	genePredFree(&gp);
+	continue;
+	}
     AllocVar(lf);
     lf->grayIx = grayIx;
     strncpy(lf->name, gp->name, sizeof(lf->name));
@@ -7261,6 +7278,8 @@ return y;
 static int limitTrackVis(struct track *track, int pixHeight, int fontHeight)
 {
 int h;
+if(track->limitedVisSet && track->limitedVis == tvHide)
+    return pixHeight;
 if (withCenterLabels)
     pixHeight += fontHeight;
 limitVisibility(track);
@@ -7283,6 +7302,10 @@ if (track->limitedVis == tvPack)
     { /*XXX This needs to be looked at, no example yet*/
     vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
               pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
+    track->drawLeftLabels(track, winStart, winEnd,
+                          vg, leftLabelX, y, leftLabelWidth, tHeight,
+                          withCenterLabels, font, labelColor, 
+                          track->limitedVis);
     }
 else
     {
@@ -7340,11 +7363,12 @@ selected = cartCgiUsualBoolean(cart, option, selected);
 setSubtrackVisible(tdb->tableName, selected);
 }
 
-static bool isSubtrackVisible(char *table)
+bool isSubtrackVisible(struct track *tg)
+/* Should this subtrack be displayed? */
 {
 char option[64];
-safef(option, sizeof(option), "%s_sel", table);
-return cartCgiUsualBoolean(cart, option, TRUE);
+safef(option, sizeof(option), "%s_sel", tg->mapName);
+return  tg->visibility != tvHide && cartCgiUsualBoolean(cart, option, TRUE);
 }
 
 static int subtrackCount(struct track *trackList)
@@ -7352,7 +7376,7 @@ static int subtrackCount(struct track *trackList)
 struct track *subtrack;
 int ct = 0;
 for (subtrack = trackList; subtrack; subtrack = subtrack->next)
-    if (isSubtrackVisible(subtrack->mapName))
+    if (isSubtrackVisible(subtrack))
         ct++;
 return ct;
 }
@@ -7396,6 +7420,32 @@ if (!tg->limitedVisSet)
 return tg->limitedVis;
 }
 
+int doTrackMap(struct track *track, int y, int fontHeight, 
+	       int trackPastTabX, int trackPastTabWidth)
+/* Write out the map for this track. Return the new offset. */
+{
+switch (track->limitedVis)
+    {
+    case tvHide:
+	break;	/* Do nothing; */
+    case tvPack:
+    case tvSquish:
+	if (withCenterLabels)
+	    y += fontHeight;
+	y += track->height;
+	break;
+    case tvFull:
+	y = doMapItems(track, fontHeight, y);
+    case tvDense:
+	if (withCenterLabels)
+	    y += fontHeight;
+	mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,
+			track->lineHeight,track);
+	y += track->height;
+	break;
+    }
+return y;
+}
 
 void makeActiveImage(struct track *trackList, char *psOutput)
 /* Make image and image map. */
@@ -7453,9 +7503,11 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                if (!isSubtrackVisible(subtrack->mapName))
+		hashAddUnique(trackHash, subtrack->mapName, subtrack);
+                if (!isSubtrackVisible(subtrack))
                     continue;
-                subtrack->visibility = track->visibility;
+		if(!subtrack->limitedVisSet)
+		    subtrack->visibility = track->visibility;
                 pixHeight = limitTrackVis(subtrack, pixHeight, fontHeight);
                 }
             }
@@ -7506,7 +7558,7 @@ for (track = trackList; track != NULL; track = track->next)
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
-                if (!isSubtrackVisible(subtrack->mapName))
+                if (!isSubtrackVisible(subtrack))
                     continue;
                 subtrack->ixColor = vgFindRgb(vg, &subtrack->color);
                 subtrack->ixAltColor = vgFindRgb(vg, &subtrack->altColor);
@@ -7598,8 +7650,8 @@ if (withLeftLabels)
         if (isCompositeTrack(track))
             {
             for (subtrack = track->subtracks; subtrack != NULL;
-                         subtrack = subtrack->next)
-                if (isSubtrackVisible(subtrack->mapName))
+		 subtrack = subtrack->next)
+                if (isSubtrackVisible(subtrack))
                     y = doLeftLabels(subtrack, vg, font, y);
             }
         else
@@ -7787,7 +7839,7 @@ if (withCenterLabels)
             {
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (isSubtrackVisible(subtrack->mapName))
+                if (isSubtrackVisible(subtrack))
                     y = doCenterLabels(subtrack, track, vg, font, y);
             }
         else
@@ -7811,7 +7863,7 @@ if (withCenterLabels)
             struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
-                if (isSubtrackVisible(subtrack->mapName))
+                if (isSubtrackVisible(subtrack))
                     y = doDrawItems(subtrack, vg, font, y, &lastTime);
             }
         else
@@ -7838,9 +7890,11 @@ if (withLeftLabels)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL;
                              subtrack = subtrack->next)
-                    if (isSubtrackVisible(subtrack->mapName))
-                        y = doOwnLeftLabels(subtrack, vg, font, y);
-                }
+                    if (isSubtrackVisible(subtrack))
+			{
+			y = doOwnLeftLabels(subtrack, vg, font, y);
+			}
+		}
             else
                 y = doOwnLeftLabels(track, vg, font, y);
             }
@@ -7858,41 +7912,11 @@ if (withLeftLabels)
 y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
-    int labelCt = 1;
-    if (track->limitedVis != tvHide)
-        {
-        if (isCompositeTrack(track))
-            labelCt = subtrackCount(track->subtracks);
-        }
-    switch (track->limitedVis)
+    struct track *sub;
+    y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
+    for(sub = track->subtracks; sub != NULL; sub = sub->next)
 	{
-	case tvHide:
-	    break;	/* Do nothing; */
-	case tvPack:
-	case tvSquish:
-	    if (withCenterLabels)
-		y += (fontHeight * labelCt);
-	    y += track->height;
-	    break;
-	case tvFull:
-            if (isCompositeTrack(track))
-                {
-                struct track *subtrack;
-                for (subtrack = track->subtracks; subtrack != NULL;
-                                subtrack = subtrack->next)
-                    if (isSubtrackVisible(subtrack->mapName))
-                        y = doMapItems(subtrack, fontHeight, y);
-                }
-            else
-                y = doMapItems(track, fontHeight, y);
-	    break;
-	case tvDense:
-	    if (withCenterLabels)
-		y += (fontHeight * labelCt);
-	    mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,
-                    track->lineHeight,track);
-	    y += track->height;
-	    break;
+	y = doTrackMap(sub, y, fontHeight, trackPastTabX, trackPastTabWidth);
 	}
     }
 
@@ -8584,6 +8608,8 @@ void loadGenePred(struct track *tg)
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 /* filter items on selected criteria if filter is available */
 filterItems(tg, genePredClassFilter, "include");
+
+    
 }
 
 void loadGenePredWithName2(struct track *tg)
@@ -8839,9 +8865,26 @@ static void compositeLoad(struct track *track)
 /* Load all subtracks */
 {
 struct track *subtrack;
+long thisTime = 0, lastTime = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (isSubtrackVisible(subtrack->mapName))
+    {
+    if (isSubtrackVisible(subtrack))
+	{
+	lastTime = clock1000();
         subtrack->loadItems(subtrack);
+	if (measureTiming)
+	    {
+	    thisTime = clock1000();
+	    subtrack->loadTime = thisTime - lastTime;
+	    lastTime = thisTime;
+	    }
+	}
+    else
+	{
+	subtrack->limitedVis = tvHide;
+	subtrack->limitedVisSet = TRUE;
+	}
+    }
 }
 
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
@@ -8850,7 +8893,7 @@ static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
 struct track *subtrack;
 int height = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    if (isSubtrackVisible(subtrack->mapName))
+    if (isSubtrackVisible(subtrack))
         height += subtrack->totalHeight(subtrack, vis);
 track->height = height;
 return height;
@@ -8878,6 +8921,8 @@ struct trackDb *subTdb;
 /* number of possible subtracks for this track */
 int subtrackCt = slCount(tdb->subtracks);
 int altColors = subtrackCt - 1;
+struct track *subtrack = NULL;
+
 TrackHandler handler;
 
 /* ignore if no subtracks */
@@ -8897,61 +8942,69 @@ if (altColors && (finalR || finalG || finalB))
     deltaB = (finalB - altB) / altColors;
     }
 
-/* count number of visible subtracks for this track */
-subtrackCt = 0;
-for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    {
-    subtrackVisibleTdb(subTdb);
-    if (isSubtrackVisible(subTdb->tableName))
-        subtrackCt++;
-    }
-/* if no subtracks are selected in cart, turn them all on */
-if (!subtrackCt)
-    for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-        setSubtrackVisible(subTdb->tableName, TRUE);
-
 /* fill in subtracks of composite track */
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
-    struct track *subtrack;
-    if (!isSubtrackVisible(subTdb->tableName))
-        continue;
-
     /* initialize from composite track settings */
-    subtrack = trackFromTrackDb(tdb);
-    /* install parent's track handler */
-    handler = lookupTrackHandler(tdb->tableName);
+    if(trackDbSetting(subTdb, "noInherit"))
+	{
+	subtrack = trackFromTrackDb(subTdb);
+	handler = lookupTrackHandler(subTdb->tableName);
+	}
+    else 
+	{
+	/* install parent's track handler */
+	subtrack = trackFromTrackDb(tdb);
+	handler = lookupTrackHandler(tdb->tableName);
+	}
     if (handler != NULL)
 	handler(subtrack);
 
-    /* add subtrack settings (table, colors, labels, vis & pri) */
-    subtrack->mapName = subTdb->tableName;
-    subtrack->shortLabel = subTdb->shortLabel;
-    subtrack->longLabel = subTdb->longLabel;
-    if (finalR || finalG || finalB)
-        {
-        subtrack->color.r = altR;
-        subtrack->altColor.r = (255+altR)/2;
-        altR += deltaR;
-        subtrack->color.g = altG;
-        subtrack->altColor.g = (255+altG)/2;
-        altG += deltaG;
-        subtrack->color.b = altB;
-        subtrack->altColor.b = (255+altB)/2;
-        altB += deltaB;
-        }
-    else
-        {
-        subtrack->color.r = subTdb->colorR;
-        subtrack->color.g = subTdb->colorG;
-        subtrack->color.b = subTdb->colorB;
-        subtrack->altColor.r = subTdb->altColorR;
-        subtrack->altColor.g = subTdb->altColorG;
-        subtrack->altColor.b = subTdb->altColorB;
-        }
-    subtrack->priority = subTdb->priority;
+    if(trackDbSetting(subTdb, "noInherit")==NULL)
+	{
+	/* add subtrack settings (table, colors, labels, vis & pri) */
+	subtrack->mapName = subTdb->tableName;
+	subtrack->shortLabel = subTdb->shortLabel;
+	subtrack->longLabel = subTdb->longLabel;
+	if (finalR || finalG || finalB)
+	    {
+	    subtrack->color.r = altR;
+	    subtrack->altColor.r = (255+altR)/2;
+	    altR += deltaR;
+	    subtrack->color.g = altG;
+	    subtrack->altColor.g = (255+altG)/2;
+	    altG += deltaG;
+	    subtrack->color.b = altB;
+	    subtrack->altColor.b = (255+altB)/2;
+	    altB += deltaB;
+	    }
+	else
+	    {
+	    subtrack->color.r = subTdb->colorR;
+	    subtrack->color.g = subTdb->colorG;
+	    subtrack->color.b = subTdb->colorB;
+	    subtrack->altColor.r = subTdb->altColorR;
+	    subtrack->altColor.g = subTdb->altColorG;
+	    subtrack->altColor.b = subTdb->altColorB;
+	    }
+	subtrack->priority = subTdb->priority;
+	}
+
     slAddHead(&track->subtracks, subtrack);
     }
+/* count number of visible subtracks for this track */
+subtrackCt = 0;
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    subtrackVisibleTdb(subtrack->tdb);
+    if (isSubtrackVisible(subtrack))
+        subtrackCt++;
+    }
+/* if no subtracks are selected in cart, turn them all on */
+if (subtrackCt == 0)
+    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        setSubtrackVisible(subtrack->tdb->tableName, TRUE);
+
 slSort(&track->subtracks, trackPriCmp);
 }
 
@@ -9021,12 +9074,13 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
-    handler = lookupTrackHandler(tdb->tableName);
-    if (handler != NULL)
-	handler(track);
 
     if (slCount(tdb->subtracks) != 0)
         makeCompositeTrack(track, tdb);
+
+    handler = lookupTrackHandler(tdb->tableName);
+    if (handler != NULL)
+	handler(track);
 
     if (track->loadItems == NULL)
         warn("No load handler for %s", tdb->tableName);
@@ -9462,6 +9516,7 @@ else
 hButton(var, paddedLabel);
 }
 
+
 struct track *getTrackList( struct group **pGroupList)
 /* Return list of all tracks. */
 {
@@ -9676,6 +9731,7 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -9705,7 +9761,8 @@ for (track = trackList; track != NULL; track = track->next)
 	    for (subtrack = track->subtracks; subtrack != NULL;
 		 subtrack = subtrack->next)
 		{
-		subtrack->visibility = track->visibility;
+		if(!subtrack->limitedVisSet)
+		    subtrack->visibility = track->visibility;
 		}
 	    }
 	}
@@ -10034,7 +10091,7 @@ if (showTrackControls)
                 struct track *subtrack;
                 for (subtrack = track->subtracks; subtrack != NULL; 
                                                     subtrack = subtrack->next)
-                    if (isSubtrackVisible(subtrack->mapName))
+                    if (isSubtrackVisible(subtrack))
                         hPrintf("%s, %d, %d<BR>\n", subtrack->shortLabel, 
                                 subtrack->loadTime, subtrack->drawTime);
                 }
@@ -10430,6 +10487,7 @@ else
 if(complementRulerBases && motifString != NULL)
     reverseBytes(motifString, strlen(motifString));
 }
+
 
 
 void customTrackPage()

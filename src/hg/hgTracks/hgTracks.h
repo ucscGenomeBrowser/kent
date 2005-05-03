@@ -825,6 +825,12 @@ struct track *trackNew();
 void bedMethods(struct track *tg);
 /* Fill in methods for (simple) bed tracks. */
 
+bool isSubtrackVisible(struct track *tg);
+/* Should this subtrack be displayed? */
+
+void affyTxnPhase2Methods(struct track *track);
+/* Methods for dealing with a composite transcriptome tracks. */
+
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 
 #endif /* HGTRACKS_H */
