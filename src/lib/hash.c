@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.24 2005/02/05 04:49:45 markd Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.25 2005/05/03 01:57:17 kate Exp $";
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -350,6 +350,17 @@ if (hel == NULL)
     return NULL;
 else
     return hel->val;
+}
+
+char *hashNextName(struct hashCookie *cookie)
+/* Return the next name in the hash table, or NULL if no more. Do not modify
+ * hash table while this is being used. */
+{
+struct hashEl *hel = hashNext(cookie);
+if (hel == NULL)
+    return NULL;
+else
+    return hel->name;
 }
 
 void freeHash(struct hash **pHash)
