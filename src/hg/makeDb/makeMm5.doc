@@ -2237,6 +2237,8 @@ rm -fr chrom temp run
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-07-18 - Fan)
 # Make bed files and load consensus sequences for Affy U74 chip set.
+# Fix broken symlinks to microarray data after directory structure changed
+# (DONE, 2005-05-03, hartera)
 ----------------------------------
 #This needs to be done after affyU74 is already made.
 ssh hgwdev
@@ -2265,10 +2267,14 @@ hgLoadBed mm5 affyGnfU74C affyGnfU74C.bed
 # [THE SYM LINKS WERE ALREADY DONE.]
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
-    
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
     # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
     # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
     # reload sequences with prefix removed so acc matches name used in

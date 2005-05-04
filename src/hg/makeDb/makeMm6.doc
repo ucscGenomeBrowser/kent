@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.38 2005/04/29 20:09:25 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.39 2005/05/04 03:47:52 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4499,6 +4499,8 @@ hgLoadPsl mm6 affyU74.psl
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2005-04-14 - Fan)
 # Make bed files and load consensus sequences for Affy U74 chip set.
+# Fix broken symlinks to microarray data after directory structure changed
+# (DONE, 2005-05-03, hartera)
 ----------------------------------
 #This needs to be done after affyU74 is already made.
 ssh hgwdev
@@ -4532,10 +4534,14 @@ hgLoadBed mm6 affyGnfU74C affyGnfU74C.bed
 # [THE SYM LINKS WERE ALREADY DONE.]
 #    mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
-#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
-#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
-#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
-    
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
     # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
     # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
     # reload sequences with prefix removed so acc matches name used in
