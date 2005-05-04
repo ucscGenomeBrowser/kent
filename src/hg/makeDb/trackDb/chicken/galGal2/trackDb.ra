@@ -315,7 +315,7 @@ type bed 6 +
 
 track isochore
 shortLabel Isochores
-longLabel Isochores from He, Nekrutenko
+longLabel Isochores from PSU
 group map
 priority 23.6
 visibility hide
@@ -379,7 +379,7 @@ shortLabel CpG Islands (AL, masked sequence)
 longLabel CpG Islands - Andy Law (masked sequence)
 group regulation
 priority 90.02
-visibility dense
+visibility hide
 color 0,100,0
 altColor 128,228,128
 type bed 4 +
