@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.879 2005/05/03 02:04:28 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.880 2005/05/04 22:53:15 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15662,7 +15662,7 @@ else if (sameWord(track, "sanger20"))
     {
     doSangerGene(tdb, item, "sanger20pep", "sanger20mrna", "sanger20extra");
     }
-else if (sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene"))
+else if ((sameWord(track, "vegaGene") || sameWord(track, "vegaPseudoGene")) && hTableExists("vegaInfo"))
     {
     doVegaGene(tdb, item);
     }
