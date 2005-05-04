@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.79 2005/05/04 22:11:22 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.80 2005/05/04 22:44:27 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -781,7 +781,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
         vgSetClip(vg, xOff, yOff, width, 16);
         drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
                                 xOff, yOff, width, font, track->ixAltColor,
-                                track->ixAltColor, tvFull, FALSE);
+                                track->ixAltColor, tvFull, useIrowChains);
         vgUnclip(vg);
         }
     else 
