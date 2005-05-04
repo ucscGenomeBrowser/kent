@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.47 2005/05/03 00:29:33 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.48 2005/05/04 01:53:05 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -589,24 +589,28 @@ for (full = mafList; full != NULL; full = full->next)
             }
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
-        x1 = round((double)((int)mcMaster->start-seqStart)*scale) + xOff;
-        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size-1)*scale) + xOff;
+        x1 = round((double)((int)mcMaster->start-seqStart-1)*scale) + xOff;
+        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
 	w = x2-x1+1;
         if (vis != tvFull && mc->size == 0)
             {
             /* suppress chain/alignment overlap */
-            if (x1 == lastAlignX2)
+            if (x1 <= lastAlignX2)
                 {
-                x1++; w--; 
-                if (w == 0)
+                int offset = lastAlignX2 - x1 + 1;
+                x1 += offset;
+                w -= offset;
+                if (w <= 0)
                     continue;
                 }
             /* need a pixel overlap at chain/chain boundary for
              * Postscript */
+            /*
             else if (x1 == lastChainX2)
                 {
                 x1--; w++;
                 }
+                */
             if (!chainBreaks)
                 continue;
             lastChainX2 = x2+1;
