@@ -248,57 +248,6 @@ cat > makeMaf.csh << 'EOF'
     # create description page from lab/index.html
 
 
-# AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING (WORKING 2004-11-18 kate)
-
-    # HL60 cells stimulated with Retinoic Acid
-    # Transcription and PolII ChIP/Chip at 4 timepoints (8 experiments)
-    # wig & bed for each experiment 
-    # filenames: EC_HL60_RA_RNA_00hr_AS.hs.NCBIv34.{bed,wig}
-    #            EC_HL60_RA_RNApol2_00hr_AS_b.hs.NCBIv34.{bed,wig}
-    # Use these to construct 16 tracks:
-    # track encode_Affy_RNA_RA_HL60_{0,2,8,32}
-    # track encode_Affy_ChIP_RNAP_RA_HL60_{0,2,8,32}
-    # RNA/Affy HL60 0hr
-    # ChIP/Affy Pol2 0hr
-
-    cd /cluster/data/encode
-    mkdir -p Affy/Nov08_2004
-    mkdir -p /gbdb/hg16/encode/Affy_Nov04/wib
-    cd Affy/Nov08_2004
-    wget http://transcriptome.affymetrix.com/download/ENCODE/ucsc_formats.tar.bz2
-    bunzip2 ucsc_formats.tar.bz2
-    tar xvf ucsc_formats.tar
-    cd ucsc_formats
-cat > load.csh << 'EOF'
-    foreach f (bed/*.bed)
-        set base = $f:t:r
-        set info = `echo $f:t | sed 's/EC_HL60_RA_\([^_][^_]*\)_\([0-9][0-9]*\)hr.*/\1.\2/'`
-        set hrs = `expr $info:e + 0`
-        set exp = `echo $info:r |  \
-                        sed -e 's/RNApol2/ChIP_RNAP/'`
-        set track = encode_Affy_${exp}_RA_HL60_$hrs
-        sed '1d' $f | \
-            hgLoadBed -noBin hg16 $track stdin
-        set ct = `hgsql -N -s -e "select count(*) from $track" hg16`
-        echo "track $track"
-        echo "$f:t	$ct"
-        sed '/^track/d' wig/$base.wig | wigEncode stdin $track.wig $track.wib
-        ln -s `pwd`/$track.wib /gbdb/hg16/encode/Affy_Nov04/wib
-        # load into database
-        hgLoadWiggle hg16 ${track}_wig $track.wig \
-                    -pathPrefix=/gbdb/hg16/encode/Affy_Nov04/wib
-    end
-'EOF'
-    # << for emacs
-    csh load.csh >&! load.log &
-    grep EC_HL60 | grep -v wig load.log > loaded.txt
-    # email loaded.txt to contributor
-    awk '{print $1}' *.bed | sort | uniq > chroms.txt
-    # use in trackDb chromosomes setting
-    grep encode_Affy load.log > trackDb.ra
-    # use as basis of hg16 trackDb entries
-
-
 # AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING (2004-12-08 kate)
 
     # HL60 cells stimulated with Retinoic Acid
@@ -380,11 +329,11 @@ cat > load.csh << 'EOF'
     # copy file from email:  BED.tar.gz
     #tar xvfz BED.tar.gz
 
-    mkdir -p 2005-04-20
-    ln -s 2005-04-20/latest
+    mkdir -p 2005-04-29
+    ln -s 2005-04-29/latest
     cd latest
-    # save file from email:  BED.BUApr20.tar.gz
-    tar xvfz BED.BUApr20.tar.gz
+    # save file from email:  BED.BUApr29.tar.gz
+    tar xvfz BED.BUApr29.tar.gz
 
     cd BED
     cp rcPCREncodeDataDescription.html ~/kent/src/hg/makeDb/trackDb/human/hg16/encodeBuFirstExon.html
@@ -426,7 +375,6 @@ cat > load.csh << 'EOF'
         hgsql hg16 -e "DROP TABLE IF EXISTS encodeBuFirstExon$f"
         hgsql hg16 -e "ALTER TABLE encodeBuFirstExon RENAME TO encodeBuFirstExon$f"
     end
-    rm $sqlFile
 'EOF'
 
     csh load.csh >&! load.log
@@ -481,6 +429,34 @@ cat > load.csh << 'EOF'
     ldGencodeIntron hg16 encodeGencodeIntron EN????_CHR_coord.gtf
     # 4023 introns in 12 files
 
+    # UPDATE 4/22/05
+
+    cd /cluster/data/encode/Gencode
+    mkdir 2005-04-22
+    ln -s 2005-04-22 latest
+    cd latest
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 \
+	"ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
+    # Downloaded: 96,693,888 bytes in 488 files
+    cat `ls CHR_coord_hg17/global_files/EN*coord.gtf | grep -v ENm006` > \
+        gencode.noENm006
+    liftOver -gff gencode.noENm006 \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                gencode.gtf gencode.unmapped
+     wc -l gencode.gtf
+        # 40857 mapped GTF entries
+     grep -v "in new" *.unmapped | wc -l
+        # 19 unmapped GTF entries 
+     grep -v "in new" *.unmapped | awk '{print $12}' | sort | uniq | wc -l
+        # 8 unmapped gene ID's
+    ldHgGene -gtf -genePredExt hg16 encodeGencodeGeneNew gencode.gtf
+        # Read 2602 transcripts in 40856 lines in 1 files
+    checkTableCoords hg16 encodeGencodeNew
+    grep -v not_tested gencode.gtf | \
+        ldGencodeIntron hg16 encodeGencodeIntronNew stdin
+            # 425 introns in 1 files
 
 # Sanger Chip/chip  (DONE 2005-03-14 kate)
     ssh hgwdev
