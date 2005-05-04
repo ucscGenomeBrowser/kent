@@ -18,7 +18,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.78 2005/05/03 00:29:19 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.79 2005/05/04 22:11:22 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -198,12 +198,9 @@ if (track->subtracks)
     enum trackVisibility wigVis = 
     	(track->visibility == tvDense ? tvDense : tvFull);
     scoreHeight = wigTotalHeight(track->subtracks, wigVis);
+    mi = scoreItem(scoreHeight);
+    slAddHead(&miList, mi);
     }
-else
-    scoreHeight = 
-        (track->visibility == tvDense ? tl.fontHeight : tl.fontHeight * 4);
-mi = scoreItem(scoreHeight);
-slAddHead(&miList, mi);
 
 /* Make up item that will show gaps in this organism. */
 AllocVar(mi);
@@ -342,11 +339,15 @@ if (winBaseCount < MAF_SUMMARY_VIEW)
     hFreeConn(&conn);
     }
 if (wigTrack != NULL)
+    {
+    /* display score graph along with pairs only if a wiggle
+     * is provided */
     scoreHeight = wigTotalHeight(wigTrack, tvFull);
-mi = scoreItem(scoreHeight);
-/* mark this as not a pairwise item */
-markNotPairwiseItem(mi);
-slAddHead(&miList, mi);
+    mi = scoreItem(scoreHeight);
+    /* mark this as not a pairwise item */
+    markNotPairwiseItem(mi);
+    slAddHead(&miList, mi);
+    }
 if (displayPairwise(track))
     /* make up items for other organisms by scanning through
      * all mafs and looking at database prefix to source. */
@@ -384,15 +385,20 @@ else if (track->visibility == tvFull || track->visibility == tvPack)
 else if (track->visibility == tvSquish)
     {
     if (track->subtracks)
+        {
         /* have a wiggle */
         scoreHeight = wigTotalHeight(track->subtracks, tvFull);
+        miList = scoreItem(scoreHeight);
+        }
     else
         {
         scoreHeight = tl.fontHeight * 4;
         if (winBaseCount < MAF_SUMMARY_VIEW)
             loadMafsToTrack(track);
+        miList = scoreItem(scoreHeight);
+        /* not a real meausre of conservation, so don't label it so */
+        miList->name = "";
         }
-    miList = scoreItem(scoreHeight);
     }
 else 
     {
@@ -1385,8 +1391,12 @@ if (wigTrack != NULL)
     }
 else
     {
-    /* draw some kind of graph from multiple alignment */
+    /* no wiggle */
     int height = tl.fontHeight * 4;
+    if (zoomedToBaseLevel || vis == tvFull || vis == tvPack)
+        /* suppress graph if other items displayed (bases or pairs) */
+        return yOff;
+    /* draw some kind of graph from multiple alignment */
     if (track->customPt != (char *)-1 && track->customPt != NULL)
         {
         /* use mafs */
