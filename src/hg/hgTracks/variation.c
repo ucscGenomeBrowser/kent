@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.26 2005/03/17 04:38:34 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.27 2005/05/04 02:33:44 sugnet Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1022,6 +1022,9 @@ vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1,
 void ldMethods(struct track *tg)
 /* setup special methods for Linkage Disequilibrium track */
 {
+
+if(tg->subtracks != 0) /* Only load subtracks, not top level track. */
+    return;
 tg->loadItems      = ldLoadItems;
 tg->totalHeight    = ldTotalHeight;
 tg->drawItems      = ldDrawItems;
