@@ -1,3 +1,10 @@
+33:
+     o Fixed problem with out=blast8 and out=blast9 output using
+       dnax or rnax options where coordinates on the minus strand
+       were given relative to end of sequence rather than beginning.
+     o Made translated blast output of protein vs. DNA give DNA
+       (multiplied by three) coordinates for both start and end
+       of DNA side of match.
 32:
      o Dealing with out of order exons in a more sophisticated way
        so as to fix another problem introduced by last change
