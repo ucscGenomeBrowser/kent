@@ -5051,3 +5051,17 @@ o Perform preliminary review of Proteom Browser for mm4, then
     makeLoChain-net mm4 mm5
     ssh hgwdev
     makeLoChain mm4 mm5
+
+# CREATE kgSpAlias TABLE FOR PB (Done 05/04/05)
+
+    hgsql mm4 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm4 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm4.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm4 -e 'drop table kgSpAlias';
+    hgsql mm4 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm4 -e 'load data local infile "mm4.kgSpAlias.tab" into table kgSpAlias'
