@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.880 2005/05/04 22:53:15 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.881 2005/05/04 23:40:00 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7978,6 +7978,7 @@ void doVegaGene(struct trackDb *tdb, char *geneName)
 {
 struct vegaInfo *vi = NULL;
 
+genericHeader(tdb, geneName);
 if (hTableExists("vegaInfo"))
     {
     char query[256];
@@ -7997,7 +7998,6 @@ if (hTableExists("vegaInfo"))
     hFreeConn(&conn);
     }
 
-genericHeader(tdb, geneName);
 /* printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE); */
 if (vi != NULL)
     {
