@@ -1813,6 +1813,16 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeUcsdChipAch3Imr90
+    encodeUcsdChipMeh3k4Imr90
+    encodeUcsdChipRnapHct116
+    encodeUcsdChipRnapHela
+    encodeUcsdChipRnapImr90
+    encodeUcsdChipRnapThp1
+    encodeUcsdChipTaf250Hct116
+    encodeUcsdChipTaf250Hela
+    encodeUcsdChipTaf250Imr90
+    encodeUcsdChipTaf250Thp1
     pseudoYale
 
 tablesIgnored $mm
