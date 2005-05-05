@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.247 2005/04/19 20:12:08 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.247.4.1 2005/05/05 22:46:05 kuhn Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -354,30 +354,34 @@ return hDefaultDbForGenome(DEFAULT_GENOME);
 }
 
 char *hDefaultChromDb(char *db)
-/* Return some sequence named in chromInfo from the given db. */
+/* Return some sequence named in chromInfo from the given db, or NULL if db 
+ * has no chromInfo. */
 {
 static struct hash *hash = NULL;
+struct hashEl *hel = NULL;
 char *chrom = NULL;
 
 if (hash == NULL)
     hash = hashNew(0);
-chrom = (char *)hashFindVal(hash, db);
-if (chrom == NULL)
+hel = hashLookup(hash, db);
+if (hel == NULL)
     {
     struct sqlConnection *conn = hAllocOrConnect(db);
     char buf[HDB_MAX_CHROM_STRING];
-    chrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
-			  buf, sizeof(buf));
-    if (chrom == NULL)
-	errAbort("hDefaultChromDb: database %s has no chromInfo", db);
+    if (sqlTableExists(conn, "chromInfo"))
+	chrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+			      buf, sizeof(buf));
     hFreeOrDisconnect(&conn);
     hashAdd(hash, db, cloneString(chrom));
     }
+else
+    chrom = (char *)(hel->val);
 return cloneString(chrom);
 }
 
 char *hDefaultChrom()
-/* Return the first chrom in chromInfo from the current db. */
+/* Return some sequence named in chromInfo from the current db, or NULL if db 
+ * has no chromInfo. */
 {
 return hDefaultChromDb(hGetDb());
 }
