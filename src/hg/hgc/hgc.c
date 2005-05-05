@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.881 2005/05/04 23:40:00 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.882 2005/05/05 00:10:27 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7998,12 +7998,14 @@ if (hTableExists("vegaInfo"))
     hFreeConn(&conn);
     }
 
-/* printCustomUrl(tdb, ((vi != NULL) ? vi->otterId : geneName), TRUE); */
+printCustomUrl(tdb, geneName, TRUE); 
 if (vi != NULL)
     {
-    printf("<B>VEGA Gene Name:</B> %s<BR>\n", vi->geneId);
     printf("<B>VEGA Gene Type:</B> %s<BR>\n", vi->method);
-    printf("<B>VEGA Gene Description:</B> %s<BR>\n", vi->geneDesc);
+    printf("<B>VEGA Gene Name:</B> %s<BR>\n", vi->geneId);
+    printf("<B>VEGA Transcript Id:</B> %s<BR>\n", vi->otterId);
+    if (differentString(vi->geneDesc, "NULL"))
+        printf("<B>VEGA Gene Description:</B> %s<BR>\n", vi->geneDesc);
     }
 geneShowCommon(geneName, tdb, "vegaPep");
 printTrackHtml(tdb);
