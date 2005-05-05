@@ -164,7 +164,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         {
         aln->drop = TRUE;
         cdAlns->minQSizeCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: min query size %g", aln->psl->qSize);
+        cDnaAlignVerb(3, aln->psl, "drop: min query size %0.4g", aln->psl->qSize);
         }
 }
 
@@ -177,7 +177,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         {
         aln->drop = TRUE;
         cdAlns->minIdCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: min ident %g", aln->ident);
+        cDnaAlignVerb(3, aln->psl, "drop: min ident %0.4g", aln->ident);
         }
 }
 
@@ -203,7 +203,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         {
         aln->drop = TRUE;
         cdAlns->idTopCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: id near top %g, top=%g, th=%g",
+        cDnaAlignVerb(3, aln->psl, "drop: id near top %0.4g, top=%0.4g, th=%0.4g",
                       aln->ident, maxIdent, thresh);
         }
 }
@@ -216,7 +216,7 @@ if (aln->cover < gMinCover)
     {
     aln->drop = TRUE;
     cdAlns->minCoverCnts.aligns++;
-    cDnaAlignVerb(3, aln->psl, "drop: min cover %g", aln->cover);
+    cDnaAlignVerb(3, aln->psl, "drop: min cover %0.4g", aln->cover);
     }
 }
 
@@ -231,7 +231,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         {
         aln->drop = TRUE;
         cdAlns->minCoverCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: min cover %g", aln->cover);
+        cDnaAlignVerb(3, aln->psl, "drop: min cover %0.4g", aln->cover);
         }
 }
 
@@ -260,7 +260,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         {
         aln->drop = TRUE;
         cdAlns->coverTopCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: cover near top %g, top=%g, th=%g",
+        cDnaAlignVerb(3, aln->psl, "drop: cover near top %0.4g, top=%0.4g, th=%0.4g",
                       aln->cover, maxCover, thresh);
         }
 }
@@ -273,16 +273,14 @@ struct cDnaAlign *aln;
 /* drop those that are over max */
 for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
     {
-    float repMatch = ((float)aln->psl->repMatch)/((float)(aln->psl->match+aln->psl->repMatch));
-    if ((!aln->drop) && (repMatch > gMaxRepMatch))
+    if ((!aln->drop) && (aln->repMatch > gMaxRepMatch))
         {
         aln->drop = TRUE;
         cdAlns->maxRepMatchCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: max repMatch %g", repMatch);
+        cDnaAlignVerb(3, aln->psl, "drop: max repMatch %0.4g", aln->repMatch);
         }
     }
 }
-
 
 struct cDnaAlign *findMaxAlign(struct cDnaAligns *cdAlns)
 /* find first alignment over max size */
@@ -366,7 +364,7 @@ carefulClose(&dropPslFh);
 carefulClose(&weirdOverPslFh);
 carefulClose(&outPslFh);
 
-verbose(1,"query/alignment counts:\n");
+verbose(1,"%18s \tseqs\taligns\n", "");
 verbStats("total", &cdAlns->totalCnts);
 verbStats("kept", &cdAlns->keptCnts);
 verbStats("drop invalid", &cdAlns->badCnts);
