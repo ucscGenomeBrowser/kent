@@ -1333,7 +1333,7 @@ group x
 priority 165
 visibility hide
 type wigMaf 0.0 1.0
-speciesOrder canHg4 mmHg4 panHg4 panTro1 rheMac1 rabbit mm6 rn3 canFam1 bosTau1 armadillo elephant tenrec
+speciesOrder panTro1 panHg4 rheMac1 rabbit rn3 mm6 mmHg4 bosTau1 canFam1 canHg4 armadillo tenrec elephant 
 # irows on
 summary canHg4MafSum
 chromosomes chr13
