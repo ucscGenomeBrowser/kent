@@ -13,6 +13,7 @@
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean noBin = FALSE;		/* Suppress bin field. */
+int verbosity = 1;
 int call;                   /* depth of stack */
 int outCall;                   /* calls to outList */
 struct bedStub *outList;        /* global output list */
@@ -25,7 +26,15 @@ struct bedStub
     char *chrom;                /* Chromosome . */
     int chromStart;             /* Start position. */
     int chromEnd;		/* End position. */
+    char *name;	/* Name of item */
     int score;                  /* score */
+    char strand[2];  /* + or -.  */
+    unsigned thickStart; /* Start of where display should be thick (start codon for genes) */
+    unsigned thickEnd;   /* End of where display should be thick (stop codon for genes) */
+    unsigned itemRgb;    /* RGB 8 bits each */
+    unsigned blockCount; /* Number of blocks. */
+    int *blockSizes;     /* Comma separated list of block sizes.  */
+    int *chromStarts;    /* Start positions inside chromosome.  Relative to chromStart*/
     char *line;                 /* Line. */
     };
 
@@ -93,11 +102,7 @@ while (lineFileNext(lf, &line, NULL))
     else
 	wordCount = chopLine(line, words);
     lineFileExpectWords(lf, bedSize, wordCount);
-    AllocVar(bed);
-    bed->chrom = cloneString(words[0]);
-    bed->chromStart = lineFileNeedNum(lf, words, 1);
-    bed->chromEnd = lineFileNeedNum(lf, words, 2);
-    bed->score = lineFileNeedNum(lf, words, 4);
+    bed = bedLoad12(&words);
     bed->line = dupe;
     if (bed->score > 0)
         slAddHead(pList, bed);
@@ -147,6 +152,25 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 fclose(f);
 }
 
+int bedOverlapBlocks(struct bedStub *bed1, struct bedStub *bed2)
+/* return number of bases overlapping both beds looking at blocks */
+{
+int count = 0 ;  /* count of overlapping bases */
+int i, j;
+if (differentString(bed1->chrom, bed2->chrom))
+    return 0;
+for (i = 0 ; i < bed1->blockCount ; i++)
+    for (j = 0 ; j < bed2->blockCount; j++)
+        {
+        int start1 = bed1->chromStart + bed1->chromStarts[i];
+        int start2 = bed2->chromStart + bed2->chromStarts[j];
+        int end1 = start1 + bed1->blockSizes[i];
+        int end2 = start2 + bed2->blockSizes[j];
+        count += positiveRangeIntersection(start1, end1, start2, end2);
+        }
+return count;
+}
+
 void pareList(struct bedStub **bedList, struct bedStub *match)
 /* remove elements from the list that overlap match */
 {
@@ -158,9 +182,10 @@ for (bed = *bedList; bed != NULL; bed = bed->next)
     int start = bed->chromStart;
     int end = bed->chromEnd;
     int score = bed->score;
-    int overlap = rangeIntersection(start, end, match->chromStart, match->chromEnd);
-    if (sameString(name, match->chrom) && (overlap > 0))
-            {
+    int overlap = bedOverlapBlocks(bed, match);
+    if (overlap > 0)
+        {
+        verbose(4, "remove %s\n",bed->name);
         slRemoveEl(bedList, bed);
         }
     }
@@ -171,7 +196,7 @@ void removeOverlap(int bedSize , struct bedStub *bedList)
  * then remove all overlapping records and call recusively 
  * return list of best scoring records in each cluster */
 {
-struct bedStub *bed, *bestMatch = NULL, *bedList2 = NULL, *prevBed = NULL;
+struct bedStub *bed, *bestMatch = NULL, *prevBed = NULL;
 int i;
 bool first = TRUE;
 //char *prevChrom = cloneString("chr1");
@@ -181,6 +206,7 @@ int bestScore = 0, bestCount = 0;
 if (bedList == NULL)
     return;
 
+verbose(4, "list now %d\n",slCount(bedList));
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
     char *name = bed->chrom;
@@ -188,11 +214,10 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     int end = bed->chromEnd;
     int score = bed->score;
 
-    if (first || start <= prevEnd ) //&&(sameString(name,prevChrom) && ))
+    if (first || start <= prevEnd ) 
         {
         if (first)
             {
-//            prevChrom = cloneString(name);
             prevStart = start;
             prevEnd = end;
             first = FALSE;
@@ -208,25 +233,20 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     else
         break;
     }
-/* split list in two to save time*/
-if (bed != NULL)
-    {
-    bedList2 = bed;
-    if (prevBed != NULL)
-        prevBed->next = NULL;
-    else
-        errAbort("list not split %s:%d-%d\n",bed->chrom,bed->chromStart,bed->chromEnd);
-    }
 if (bestMatch != NULL)
     {
     struct bedStub *lastEl = NULL;
     slRemoveEl(&bedList, bestMatch);
     slAddHead(&outList, bestMatch);
-    verbose(2, "add to outList %d count %d\n",slCount(outList), outCall++);
-    pareList(&bedList, bestMatch);
+    verbose(4, "add to outList %d count %d\n",slCount(outList), outCall++);
+    if (bedList != NULL)
+        {
+        verbose(4, "before pare %d\n",slCount(bedList));
+        pareList(&bedList, bestMatch);
+        verbose(4, "after  pare %d\n",slCount(bedList));
+        }
     }
 removeOverlap(bedSize , bedList);
-removeOverlap(bedSize , bedList2);
 }
 
 void bedOverlap(char *aFile, char *outFile)
@@ -241,8 +261,8 @@ int bedSize = findBedSize(aFile);
 if (hasBin)
     bedSize--;
 printf("Loading Predictions from %s of size %d\n",aFile, bedSize);
-if (bedSize < 5)
-    errAbort("%s must have a score\n", aFile);
+if (bedSize < 12)
+    errAbort("%s must have a at least 12 cols\n", aFile);
 loadOneBed(aFile, bedSize, &bedList);
 verbose(1, "Loaded %d elements of size %d\n", slCount(bedList), bedSize);
 removeOverlap(bedSize, bedList);
@@ -257,7 +277,9 @@ int main(int argc, char *argv[])
 optionHash(&argc, argv);
 if (argc != 3) 
     usage();
+verbosity = optionInt("verbose", verbosity);
 verboseSetLogFile("stdout");
+verboseSetLevel(verbosity);
 hasBin = optionExists("hasBin");
 overlapPercent = optionFloat("minOverlap", overlapPercent);
 noBin = optionExists("noBin") || optionExists("nobin");
