@@ -4,12 +4,10 @@ exit;
 ############################################################
 # make metadata file - not automated yet.  
 # This file was put together in pieces from multiple sources
-#    - hgcentral.dbDb
+#    - hgcentraltest.dbDb
 #    - http://www.nisc.nih.gov/open_page.html?/projects/encode/index.cgi
 #    - http://www.ncbi.nlm.nih.gov/IEB/Research/Schuler/ENCODE/ENCODE_seqids.txt
-
 # /cluster/bluearc/encode/metadata.txt
-
 ############################################################
 # get sequences
 
