@@ -44,14 +44,13 @@ echo "minqid = $minqid"
 @ maxqid = ($maxqid - $minqid) + 1
 echo "adjusted maxqid=$maxqid"
 
-##suppressing for mm6:
-#set sql = "update $1 set releaseLog=''"
-#echo $sql
-#hgsql $hhost qapushq -e '"'$sql'"' 
-#if ( $status ) then
-# echo "unexpected error clearing out releaseLog field for all rows. ${host}:qapushq.$1 "
-# exit 1
-#endif
+set sql = "update $1 set releaseLog='' where dbs='$1'"
+echo $sql
+hgsql $hhost qapushq -e '"'$sql'"' 
+if ( $status ) then
+ echo "unexpected error clearing out releaseLog field for dbs=$1 rows. ${host}:qapushq.$1 "
+ exit 1
+endif
 
 set sql = "update $1 set pushState='D'"
 echo $sql
