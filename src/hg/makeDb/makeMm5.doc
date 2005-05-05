@@ -7349,7 +7349,7 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
   # couldn't find contig-based lift file from mm5
   # generate from ctgPos
   echo "select chromStart, chrom, contig, size, chrom from ctgPos;" > ctgPos.sql
-  hgsql mm5 < ctgPos.out > ctgPos.out
+  hgsql mm5 < ctgPos.sql > ctgPos.out
   # edit ctgPos.out to put in proper format -- next time write script for this
 
   # lift
