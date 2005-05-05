@@ -48,7 +48,7 @@ errAbort(
   "options:\n"
   "   -hasBin         Input bed file starts with a bin field.\n"
   "   -noBin          Suppress bin field\n"
-  "Note: infile.bed must have at least 5 columns and be sorted by chrom, chromStart"
+  "Note: infile.bed must have at least 12 columns and be sorted by chrom, chromStart"
   );
 }
 
