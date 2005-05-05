@@ -96,9 +96,6 @@ foreach mach ( $machine1 $machine2 )
   wget -q -O $mach.$db.$table "$url"
 end
 
-echo
-echo "---------------------------------------------------------------"
-echo 
 # defensive logic to avoid "sort" disrupting blob tracks
 set sort=""
 if ($field != "html" && $field != "settings") then
@@ -106,12 +103,13 @@ if ($field != "html" && $field != "settings") then
   sort $machine1.$db.$table > $machine1.$db.$table$sort 
   sort $machine2.$db.$table > $machine2.$db.$table$sort 
 endif
-diff $machine1.$db.$table$sort $machine2.$db.$table$sort >& $db.temp
+diff $machine1.$db.$table$sort $machine2.$db.$table$sort 
 if ( $status ) then
-  echo "\n$db.$table.$field : Differences between $machine1 and $machine2 \n"
-  cat $db.temp
+  echo "\nThe differences above are found in $table.$field"
+  echo "between $machine1 and $machine2\n"
 else
-  echo "\n$db.$table.$field : No differences  between $machine1 and $machine2 \n"
+  echo "\n  No differences in $db.$table.$field \n  between $machine1 and $machine2 "
+  echo
 endif
 
 # clean up
@@ -120,4 +118,3 @@ rm -f $machine2.$db.$table
 rm -f $machine1.$db.$table$sort 
 rm -f $machine2.$db.$table$sort
 rm -f $db.temp
-
