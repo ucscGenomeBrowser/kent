@@ -24,8 +24,8 @@ struct bedStub
     {
     struct bedStub *next;	/* Next in list. */
     char *chrom;                /* Chromosome . */
-    int chromStart;             /* Start position. */
-    int chromEnd;		/* End position. */
+    unsigned chromStart;             /* Start position. */
+    unsigned chromEnd;		/* End position. */
     char *name;	/* Name of item */
     int score;                  /* score */
     char strand[2];  /* + or -.  */
@@ -102,7 +102,7 @@ while (lineFileNext(lf, &line, NULL))
     else
 	wordCount = chopLine(line, words);
     lineFileExpectWords(lf, bedSize, wordCount);
-    bed = bedLoad12(&words);
+    bed = (struct bedStub *)bedLoad12(words);
     bed->line = dupe;
     if (bed->score > 0)
         slAddHead(pList, bed);
