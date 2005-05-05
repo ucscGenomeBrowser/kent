@@ -9,8 +9,8 @@
 <h2>Description</h2>
 <P>
 This track displays expression levels of computationally identified
-first and constitutive exons of genes in ENCODE regions,
-as assayed by the real competitive Polymerase Chain
+first exons and a constitutive exon of genes in ENCODE regions,
+based on the real competitive Polymerase Chain
 Reaction (rcPCR) technique described in <a href="#References">Ding
 et al. 2003</a>. 
 Expression levels
@@ -47,6 +47,21 @@ TSSs.</p>
 For each gene, we identified all alternative first exons based on manual
 selection of PromoSer predictions.  We also selected an exon that is
 shared by all transcripts (called the constitutive exon).  
+The selection process involves visually
+examining the structure of the cluster, preferably using the latest
+data available on UCSC, to identify distinct first exons that are well
+formed (having multiple supporting sequences) and have no evidence
+(especially from newer sequences) of additional sequence that makes
+them internal exons. After the first exon was identified, we selected a
+subsequence (between 100-300 bases) to be used in the experiment. The
+selection process avoids repeat sequences as much as possible and if
+the two first exons partially overlap, the non-overlapping region is
+selected. If those conditions cause the remaining sequence to be too
+short (or the first exon itself is too short), a junction with the
+second exon is used. We also selected a constitutive exon that was
+included in all (or most) of the alternative transcripts and then
+extracted suitable sequences as above (no exon junctions are used).<br>
+<p>
 The absolute expression levels of all exons were individually quantified
 by rcPCR by designing four assays with PCR amplicons corresponding to
 each exon. 
@@ -71,7 +86,8 @@ based MassARRAY system (Sequenom Inc.).
 <P>
 After PCR, a base extension
 reaction is carried out with an extension primer, a ThermoSequenase and
-a mixture of ddNTPs/dNTP. The extension primer anneals to the immediate
+a mixture of ddNTPs/dNTP (for example, it can be a mixture of
+ddA, ddC, ddT, and dG). The extension primer anneals to the immediate
 5&#8217;-upstream sequence of the mismatch position. Depending on the nature
 of the mismatch and the mixture composition of ddNTPs/dNTP, one or two
 bases are added to the extension primer, producing two extension
@@ -85,8 +101,8 @@ alternative first exons.
 We used 18S rRNA for exon absolute expression
 normalization among different tissues.<br>
 Values shown on this track represent the relative abundance of the
-alternative first exons with respect to the 18S rRNA. The values have
-been scaled to show graded colors on the browser.
+alternative first exons with respect to the 18S rRNA. The raw values have
+been log10 transformed and scaled to show graded colors on the browser.
 </p>
 <h2>Verification</h2>
 <p>
