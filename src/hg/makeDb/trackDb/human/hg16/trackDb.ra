@@ -1906,12 +1906,12 @@ type bed 3 .
 
 track encodeBuFirstExon
 compositeTrack on
-shortLabel BU First Exon 
+shortLabel First Exon/BU
 longLabel Boston University First Exon Activity in ENCODE Regions
 group encode
 itemRgb on
 priority 20.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 visibility hide
 type bed 12 +
 
@@ -2047,25 +2047,6 @@ shortLabel Testis
 priority 10
 
 track encodeGencodeGene
-shortLabel Gencode Genes Old
-longLabel Old Gencode Gene Annotations in ENCODE Regions
-group encode
-color 73,76,73
-priority 22.3
-chromosomes chr1,chr10,chr13,chr20,chr22,chr6,chr9,chrX
-visibility hide
-type genePred
-
-track encodeGencodeIntron
-shortLabel OldGencode Introns
-longLabel Old Gencode Intron Validation in ENCODE Regions
-group encode
-priority 22.4
-chromosomes chr1,chr10,chr13,chr20,chr22,chr6,chr9,chrX
-visibility hide
-type bed 6 +
-
-track encodeGencodeGeneNew
 shortLabel Gencode Genes
 longLabel Gencode Gene Annotations in ENCODE Regions
 group encode
@@ -2075,7 +2056,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 
-track encodeGencodeIntronNew
+track encodeGencodeIntron
 shortLabel Gencode Introns
 longLabel Gencode Intron Validation in ENCODE Regions
 group encode
