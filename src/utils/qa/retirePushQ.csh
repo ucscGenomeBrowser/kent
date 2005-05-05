@@ -44,7 +44,7 @@ echo "minqid = $minqid"
 @ maxqid = ($maxqid - $minqid) + 1
 echo "adjusted maxqid=$maxqid"
 
-set sql = "update $1 set releaseLog='' where dbs='$1'"
+set sql = "update $1 set releaseLog=''"
 echo $sql
 hgsql $hhost qapushq -e '"'$sql'"' 
 if ( $status ) then
