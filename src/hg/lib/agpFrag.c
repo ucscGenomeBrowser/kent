@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: agpFrag.c,v 1.8 2005/04/11 08:13:43 markd Exp $";
+static char const rcsid[] = "$Id: agpFrag.c,v 1.9 2005/05/05 22:58:53 heather Exp $";
 
 void agpFragStaticLoad(char **row, struct agpFrag *ret)
 /* Load a row from agpFrag table into ret.  The contents of ret will
@@ -175,4 +175,12 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 lineFileClose(&lf);
 slReverse(&list);
 return list;
+}
+
+void agpFragValidate(struct agpFrag *af)
+/* Check for weirdness in agpFrag. */
+{
+if (af->chromStart >= af->chromEnd)
+  printf("unexpected coords (%d, %d) for frag %s in chrom %s\n", 
+         af->chromStart, af->chromEnd, af->frag, af->chrom);
 }
