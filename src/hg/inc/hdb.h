@@ -119,10 +119,12 @@ char *hDefaultDb();
 /* Return the default db if all else fails */
 
 char *hDefaultChrom();
-/* Return the first chrom in chromInfo from the current db. */
+/* Return some sequence named in chromInfo from the current db, or NULL if db 
+ * has no chromInfo. */
 
 char *hDefaultChromDb(char *db);
-/* Return the first chrom in chromInfo from the given db. */
+/* Return some sequence named in chromInfo from the given db, or NULL if db 
+ * has no chromInfo. */
 
 int hChromCount();
 /* Return the number of chromosomes (scaffolds etc.) in the current db. */
