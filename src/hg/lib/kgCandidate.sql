@@ -10,6 +10,8 @@ CREATE TABLE kgCandidate (
   exonCount int(10) unsigned NOT NULL default '0',
   exonStarts longblob NOT NULL,
   exonEnds longblob NOT NULL,
+  alignID varchar(255) NOT NULL,
+  ranking float,
   KEY name (name)
 ) TYPE=MyISAM;
 
