@@ -16,6 +16,17 @@ group map
 visibility dense
 type bed 3 +
 
+track blastMm6KG
+shortLabel Mouse Proteins
+longLabel Mouse(mm6) proteins mapped by chained tBLASTn
+group genes
+priority 30
+visibility dense
+colorChromDefault off
+type psl protein
+pred mm6.blastKGPep03
+blastRef mm6.blastKGRef03
+
 track knownGene
 shortLabel Known Genes
 longLabel Known Genes (Nov 22, 04) Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
