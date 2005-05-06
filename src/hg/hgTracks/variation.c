@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.28 2005/05/05 20:54:01 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.29 2005/05/06 15:11:36 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -692,15 +692,21 @@ if (isLod)
     {
     if (lodScore>2)             /* high LOD */
 	{
-	if (score<0.5)          /* high LOD, low D' */
+	if (abs(score)<0.5)          /* high LOD, low D' */
 	    return ldHighLodLowDprime;
 	else                    /* high LOD, high D' -> shades */
 	    {
-	    int blgr = min((int)((255-32)*2*(lodScore-score)),255);
+	    /* lodScore has a minimum value of 2 and score has a maximum magnitude of 0.5,
+	     * so lodScore-abs(score) will have a minimum value of 1.5; subtract 1.5 to 
+	     * get the minimumm of the range.  
+	     * Subtract 32 from 255 to get the starting intensity at ldHighLodLowDprime 
+	     * Multiply by 2.0 to amplify the difference (reduces range also)
+	     * Use min and max to stay within the range [0,255] */
+	    int blgr = 255-max(0,min((int)((255-32)*2.0*(lodScore-abs(score)-1.5)),255));
 	    return vgFindColorIx(vg, 255, blgr, blgr);
 	    }
 	}
-    else if (score>0.99)        /* high D', low LOD -> blue */
+    else if (abs(score)>0.99)        /* high D', low LOD -> blue */
 	return ldHighDprimeLowLod;
     else                        /* no LD */
 	return MG_WHITE;
