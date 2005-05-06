@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.884 2005/05/06 02:38:01 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.885 2005/05/06 03:37:42 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15725,6 +15725,7 @@ else if (sameWord(track, "firstEF"))
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") ||
+        sameWord(track, "blastMm6KG") || 
         sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") )
     {
     blastProtein(tdb, item);
