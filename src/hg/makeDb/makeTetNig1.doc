@@ -2487,3 +2487,11 @@ chainSome $(path1)
         hgsql tetNig1
     hgsql tetNig1 -e "SELECT COUNT(*) FROM contigAcc"
         # 25773
+
+
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

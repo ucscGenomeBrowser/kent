@@ -3075,3 +3075,9 @@ md5sum *.gz > md5sum.txt
         hgsql monDom1
     hgsql monDom1 -e "SELECT COUNT(*) FROM contigAcc"
         # 109065 contigAcc.tab
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

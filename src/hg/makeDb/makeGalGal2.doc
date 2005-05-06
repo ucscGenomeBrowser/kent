@@ -4254,3 +4254,9 @@ zcat `ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS/$chr.*.pp.gz \
 #1110.730u 40.640s 21:22.09 89.8%        0+0k 0+0io 2942pf+0w
 
 
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

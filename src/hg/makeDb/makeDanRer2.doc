@@ -3181,3 +3181,11 @@ chainSome $(path1)
     # remove blank lines from ensembl.uniprot
     sed -e '/^$/d' ensembl.uniprot > ensembl.uniprot.accsonly
     # there are 6171 UniProt accessions so some Ensembl IDs share accessions
+
+
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+
