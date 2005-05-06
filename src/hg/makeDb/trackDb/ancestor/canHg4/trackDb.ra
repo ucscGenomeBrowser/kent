@@ -1,7 +1,7 @@
 track present
 shortLabel Presentness
 longLabel Presentness
-group varRep
+group map
 priority 25
 visibility dense
 type wig 4 9
@@ -9,7 +9,7 @@ type wig 4 9
 track correct
 shortLabel Correctness
 longLabel Correctness
-group varRep
+group map
 priority 25
 visibility dense
 type wig 2 9
