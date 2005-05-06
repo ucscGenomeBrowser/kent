@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.882 2005/05/05 00:10:27 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.883 2005/05/06 01:29:29 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15111,9 +15111,6 @@ if (cut)
 	sqlFreeResult(&sr);
 	}    
     }
-puts("<P>\n"
-"*&quot;Isoligamer&quot; is a made-up term referring to another enzyme (which isn\'t an"
-"isoscizomer) producing the same sticky ends in the digestion.\n");
 htmlHorizontalLine();
 safef(helpName, 256, "%s/%s.html", HELP_DIR, CUTTERS_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
