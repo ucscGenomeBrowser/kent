@@ -385,8 +385,8 @@ altColor 128,228,128
 type bed 4 +
 
 track blastHg16KG
-shortLabel hg16 Proteins
-longLabel Human (hg16) proteins mapped by chained tBLASTn
+shortLabel Human Proteins
+longLabel Human proteins mapped by chained tBLASTn
 group compGeno
 priority 212.9
 visibility hide
@@ -396,8 +396,8 @@ pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
 track blastHg17KG
-shortLabel Human Proteins
-longLabel Human proteins mapped by chained tBLASTn
+shortLabel hg17 Proteins
+longLabel (hg17) Human proteins mapped by chained tBLASTn
 group compGeno
 priority 213
 visibility pack
