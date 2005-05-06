@@ -13926,3 +13926,10 @@ ldHgGene hg16 vegaGene -predTab vegaGeneHg16.gp -gtf
 ldHgGene hg16 vegaPseudoGene -predTab vegaPseudoGeneHg16.gp -gtf 
 echo 'truncate table vegaInfo' | hgsql hg16 -N -B
 echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N -B
+
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

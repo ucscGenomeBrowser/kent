@@ -2929,3 +2929,9 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+
