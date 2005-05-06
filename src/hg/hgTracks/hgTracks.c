@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.956 2005/05/03 01:58:52 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.957 2005/05/06 03:06:36 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3643,12 +3643,6 @@ if (hTableExists("vegaInfo"))
     }
 hFreeConn(&conn);
 return(col);
-}
-
-void vegaMethods(struct track *tg)
-/* Special handling for vegaGene/vegaPseudoGene items. */
-{
-tg->itemColor = vegaColor;
 }
 
 char *bdgpGeneName(struct track *tg, void *item)
@@ -8759,6 +8753,27 @@ static void gencodeGeneMethods(struct track *tg)
 {
 tg->loadItems = loadGenePredWithName2;
 tg->itemName = gencodeGeneName;
+}
+
+char *vegaGeneName(struct track *tg, void *item)
+{
+static char cat[128];
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL) 
+    {
+    sprintf(cat,"%s",(char *)lf->extra);
+    return cat;
+    }
+else 
+    return lf->name;
+}
+
+void vegaMethods(struct track *tg)
+/* Special handling for vegaGene/vegaPseudoGene items. */
+{
+tg->loadItems = loadGenePredWithName2;
+tg->itemColor = vegaColor;
+tg->itemName = vegaGeneName;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
