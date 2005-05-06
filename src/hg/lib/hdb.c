@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.249 2005/05/05 18:51:04 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.250 2005/05/06 18:37:00 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -135,7 +135,11 @@ char *hgOfficialChromName(char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-struct chromInfo *ci = getChromInfo(hGetDb(), name);
+struct chromInfo *ci = NULL;
+char buf[HDB_MAX_CHROM_STRING];
+strncpy(buf, name, HDB_MAX_CHROM_STRING);
+buf[HDB_MAX_CHROM_STRING-1] = 0;
+ci = getChromInfo(hGetDb(), buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 else
