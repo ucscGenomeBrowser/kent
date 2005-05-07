@@ -339,24 +339,20 @@ hgsql hg17 < removeBigRegions.sql
 ###############  Write AGP files from consensus regions  ###############
 ########################################################################
 
-#!/bin/csh -f
-# "Make doc" for creating AGP files for ENCODE ortholog regions based on
-#  coordinates in bed files in the "consensus" directory
-## based on makeAgp2.doc
-
-rm -f *.contig.tab */*.packing.list >& /dev/null
-
 # TODO: contigAcc files should go in $outDir (neater this way)
 
+#ortho is set previously and is a reminder here
+#set ortho=ortho4 
 set orthoDir     = /cluster/data/encode/${ortho}
 set agpDir       = $orthoDir/agp
 set consensusDir = $orthoDir/consensus
 set downloadDir  = /usr/local/apache/htdocs/encode/${ortho}/agp
 set regionAgp    = regionAgp
-mkdir -p $agpDir $downloadDir
+mkdir -p $agpDir $downloadDir $agpDir/tests
 chmod o+rx $downloadDir
 rm -rf $agpDir/* $downloadDir/*
 cd $agpDir
+#rm -f *.contig.tab */*.packing.list >& /dev/null
 
 ###
 ::::::::::::::
@@ -367,38 +363,42 @@ agp/makeBed5.pl
 while (<>) {
     chomp();
     if (/chromStart/) {
-	continue;
+	next;
     }
     if (/^(.*)\s+(\d+)\s+(\d+)\s+(EN[mr]\d\d\d).(\d+)/) {
-        printf("$1\t$2\t$3\t$4_$5\n");
+        printf("$1\t$2\t$3\t$4\t$5\n");
     } else {
         die "Bad input line: $_";
     }
 }
 ###
+chmod ug+x makeBed5.pl
 
 ########################################################################
 # create script to run AGP-maker on an assembly
 rm -rf genomeAgps.csh >& /dev/null
 cat > genomeAgps.csh << 'EOF'
+#!/bin/csh
+
 # create AGP's for a genome assembly
 # NOTE: should have freeze dir (${ortho}) as an arg
 # WARNING: this script uses $consensusDir/*.bed5, but instructions
 # below create a separate version, from the encodeRegionsConsensus table
 # Suggest next time using just the $consensusDir everywhere
 
-if ($#argv != 3) then
-    echo "usage: $0 <db> <org> <outdir>"
+if ($#argv != 4) then
+    echo "usage: $0 <db> <org> <outdir> <ortho>"
     exit 1
 endif
 echo
-echo command line: $0 $1 $2 $3
-echo working dir:  `pwd`
+echo "command line:" $0 $1 $2 $3 $4
+echo "working dir:"  `pwd`
 
-set consensusDir = /cluster/data/encode/${ortho}/consensus
 set db           = $1
 set org          = $2
 set outDir       = $3
+set ortho        = $4
+set consensusDir = /cluster/data/encode/${ortho}/consensus
 set buildDir     = /cluster/data/$db
 set bedFile      = $consensusDir/$db.encodeRegionsConsensus.bed5
 set regionAgp    = regionAgp
@@ -412,12 +412,11 @@ endif
 
 set runRegionAgp = "$regionAgp $contigArg -namePrefix=${org}_ $bedFile stdin -dir $outDir"
 
-if (-f $buildDir/chrom.lst) then
-    cat $buildDir/chrom.lst | \
-    xargs -iX cat $buildDir/X/chr{X,X_random}.agp | $runRegionAgp
-else
+#if (-f $buildDir/chrom.lst) then
+#    cat $buildDir/chrom.lst | xargs -iX cat $buildDir/X/chr{X,X_random}.agp | $runRegionAgp
+#else
     cat $buildDir/?{,?}/*.agp | $runRegionAgp
-endif
+#endif
 'EOF'
 # << this line makes emacs coloring happy
 
@@ -430,11 +429,13 @@ cat > getSeqFromAcc.pl <<EOF
 # download contig sequences from Genbank to $db.contig.fa directory
 $URL = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&id=";
 $db=shift;
+$ortho=shift;
 $dir = "/cluster/data/encode/${ortho}/agp/tests/$db.contig.fa";
 system("mkdir -p $dir");
 while (<>)
 {
     chomp();
+    if (-e "$dir/$_") { next; }
     system("wget -O $dir/$_ \"$URL$_\"");
 }
 EOF
@@ -443,24 +444,25 @@ chmod ug+x getSeqFromAcc.pl
 
 cd /cluster/data/encode/${ortho}/agp/tests
 cat > testFa.csh << 'EOF'
-set db = $1
-set org = $2
-foreach f (../$db/*.agp)
-    set seq = $f:t:r
-    set region = `echo $seq | sed "s/${org}_//"`
+#!/bin/csh
+set db = $1                                                                                 
+set org = $2                                                                                
+set ortho = $3
+ln -s /cluster/data/encode/${ortho}/consensus/$db.encodeRegionsConsensus.bed /cluster/data/encode/${ortho}/consensus/$db.bed
+foreach f (../$db/*.agp)                                                                    
+    set seq = $f:t:r                                                                        
+    set region = `echo $seq | sed "s/${org}_//"`                                            
     set coords = `awk -v REGION=$region '$4 == REGION {printf "%s.%d.%d", $1, $2, $3}' /cluster/data/encode/${ortho}/consensus/$db.bed`
-    set chr = $coords:r:r
-    nibFrag /cluster/data/$db/nib/${chr}.nib \
-        $coords:r:e $coords:e + $db.nibTest/$db.$region.fa
-    faCmp $db.nibTest/$db.$region.fa $db.test/${org}_$region.fa
-end
+    set chr = $coords:r:r                                                                   
+    nibFrag /cluster/data/$db/nib/${chr}.nib $coords:r:e $coords:e + $db.nibTest/$db.$region.fa                                  
+    faCmp $db.nibTest/$db.$region.fa $db.test/${org}_$region.fa                             
+end            
 'EOF'
 # << for emacs
 
 ########################################################################
 
-# MOUSE AGP'S (DONE 2005-03-17 kate)
-#!/bin/csh -fe
+# MOUSE AGP'S
 
 cd /cluster/data/encode/${ortho}/agp
 #set db  = mm5
@@ -469,43 +471,40 @@ set org = mouse
 
 #create consensus list from database, verify it's the same as consensus dir
 mkdir $db
-#hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
-hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsLiftOver" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 sort $db/$db.encodeRegionsConsensus.bed5 > temp
 sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
 # should be empty
 hgsql -e "select count(*) from $db.encodeRegionsConsensus"
-# 56
+# 57
 
 # Create AGP's
-csh genomeAgps.csh $db $org $db
+genomeAgps.csh $db $org $db $ortho
 
 # Test 
 cd tests
 rm -fr $db.test $db.nibTest 
 mkdir $db.test $db.nibTest
-# note: tab required in grep (retype when pasting)
-# watch out for hard-coded freeze names in scripts
+# note: tab required in grep (retype when pasting)  ***** READ THIS ************
 cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
 # download contigs -- not needed if already run
 # NOTE: preferable to extract these from build dir
-./getSeqFromAcc.pl $db < $db.accessions >& $db.log
+getSeqFromAcc.pl $db $ortho < $db.accessions >& $db.log
 awk -F\| '{if (/^>/) printf (">%s\n", $4); else print;}' $db.contig.fa/* > $db.contigfile.fa
 cat ../$db/*.agp > $db.contig.agp
 agpAllToFaFile $db.contig.agp $db.contigfile.fa $db.fa 
 faSplit byname $db.fa $db.test/
-csh testFa.csh $db $org ${ortho} >&! testFa.$org.log &
+testFa.csh $db $org ${ortho} >&! testFa.$org.log &
 head testFa.$org.log
 # verify that all regions are the same
 grep -v same testFa.$org.log
 cd ..
 
 # Create packing list
-/cluster/data/encode/bin/scripts/encodeRegionPackingList \
-    $encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org \
-    "Mus musculus" 10090  C57BL/6J MAY-2004 $db "NCBI Build 33" > $db/$db.packing.list
+set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPackingList
+$encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org "Mus musculus" 10090  C57BL/6J MAY-2004 $db "NCBI Build 33" > $db/$db.packing.list
 grep Region $db/$db.packing.list | wc -l
-# 56
+# 57
 
 # Copy  to downloads area
 set downloadDir = /usr/local/apache/htdocs/encode/${ortho}/agp
@@ -513,7 +512,7 @@ cp -f $db/$db.packing.list $downloadDir
 tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
 chmod o+r $downloadDir/$db.*
 tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
-# 56
+# 57
 
 ######################################################################a
 # RAT AGP'S (DONE 2005-03-16 kate)
