@@ -178,10 +178,10 @@ struct bedStub *bed;
 
 for (bed = *bedList; bed != NULL; bed = bed->next)
     {
-    char *name = bed->chrom;
+    /*char *name = bed->chrom;
     int start = bed->chromStart;
     int end = bed->chromEnd;
-    int score = bed->score;
+    int score = bed->score;*/
     int overlap = bedOverlapBlocks(bed, match);
     if (overlap > 0)
         {
@@ -197,11 +197,10 @@ void removeOverlap(int bedSize , struct bedStub *bedList)
  * return list of best scoring records in each cluster */
 {
 struct bedStub *bed, *bestMatch = NULL, *prevBed = NULL;
-int i;
 bool first = TRUE;
 //char *prevChrom = cloneString("chr1");
 int prevStart = 0, prevEnd = 0;
-int bestScore = 0, bestCount = 0;
+int bestScore = 0;
 
 if (bedList == NULL)
     return;
@@ -209,7 +208,6 @@ if (bedList == NULL)
 verbose(4, "list now %d\n",slCount(bedList));
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    char *name = bed->chrom;
     int start = bed->chromStart;
     int end = bed->chromEnd;
     int score = bed->score;
@@ -235,7 +233,6 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     }
 if (bestMatch != NULL)
     {
-    struct bedStub *lastEl = NULL;
     slRemoveEl(&bedList, bestMatch);
     slAddHead(&outList, bestMatch);
     verbose(4, "add to outList %d count %d\n",slCount(outList), outCall++);
@@ -252,10 +249,7 @@ removeOverlap(bedSize , bedList);
 void bedOverlap(char *aFile, char *outFile)
 /* load all beds and pick highest scoring record from each overlapping cluster */
 {
-struct bedStub *bedList = NULL, *bed;
-int i, wordCount;
-struct binElement *hitList = NULL, *hit;
-struct binKeeper *bk;
+struct bedStub *bedList = NULL;
 int bedSize = findBedSize(aFile);
 
 if (hasBin)
