@@ -513,11 +513,11 @@ else if (colBase == pfc->dirType)
     codeExpression(pfc, f, index, emptyStack+offset, FALSE);
     if (outType->base->needsCleanup)
 	{
-        fprintf(f, "_pf_dir_add_object(%s+%d);\n", stackName, stack);
+        fprintf(f, "_pf_dir_add_object(%s+%d, %d);\n", stackName, stack, expSize);
 	}
     else 
 	{
-	fprintf(f, "_pf_dir_add_number(%s+%d);\n",  stackName, stack);
+	fprintf(f, "_pf_dir_add_number(%s+%d, %d);\n",  stackName, stack, expSize);
 	}
     }
 else

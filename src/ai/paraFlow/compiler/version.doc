@@ -1,3 +1,25 @@
+v12 - Backed out cleanup stack.  Fixed bug with initialization
+      of a directory element with a tuple.
+v11 - Put in code for functions.  Did extensive testing.
+      Decided the cleanup stack method just is not good.
+      It generates a lot of code, and is complex and prone
+      to error, not to mention slow at runtime.
+v10 - A bit further along in the cleanup stack.  Dirs seem
+      to work.  (Some major rework so that dirs actually keyed
+      by paraFlow strings rather than C strings).  Function
+      calls still not cleaning right.
+v09 - Putting in a cleanup stack which will enable automatic
+      cleanup during exceptions eventually.  This version
+      is not stable, broken in many ways due to this change.
+      "Hello world" and some other very basic stuff is working
+      though so I'll save it.
+v08 - Changing it so that a pf_ is prepended to all global
+      symbols created by paraFlow to avoid name conflicts
+      with the C libraries.
+    - Make it so don't need 'self' to reference class members and 
+      methods inside a method of same class.
+    - Make single quotes mean literal ascii character values.
+    - Some debugging of modules.
 v07 - Making it work with classes declared in another module.
       A couple of bug fixes.
 v06 - Runtime system is working with multiple modules.
