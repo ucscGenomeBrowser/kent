@@ -429,3 +429,13 @@ strPur1.perChromTables = no
     featureBits strPur1 xenoMrna
     # Clean up:
     rm -rf work/initial.strPur1
+
+# HGGATEWAY IMAGE (picture used with permission) (DONE 5/7/2005 Andy)
+    ssh hgwdev
+    export CVSROOT=/projects/hg/cvsroot
+    cvs co browser/images
+    cd browser/images
+    wget -O S_purpuratus.jpg http://biology.fullerton.edu/courses/biol_317/Web/murray/Fall01/Stronglyocentrotus%20purpuratus.JPG
+    mogrify -geometry 200x200 S_purpuratus.jpg
+    cvs add S_purpuratus.jpg
+    cvs commit S_purpuratus.jpg
