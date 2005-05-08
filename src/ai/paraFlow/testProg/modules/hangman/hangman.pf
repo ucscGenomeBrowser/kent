@@ -20,6 +20,11 @@ array of string words =
    "computer",
    "picture",
    "astronomy",
+   "charcoal",
+   "springtime",
+   "melody",
+   "underneath",
+   "related",
    );
 
 /* Pick our word randomly from list. */
