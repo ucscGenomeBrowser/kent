@@ -253,7 +253,7 @@ verbose(2, "Phase 8 - compiling C code\n");
 	    dyStringClear(dy);
 	    dyStringAppend(dy, "gcc ");
 	    dyStringAppend(dy, "-O ");
-	    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
+	    dyStringAppend(dy, "-I ~/kent/src/ai/paraFlow/compiler ");
 	    dyStringAppend(dy, "-c ");
 	    dyStringAppend(dy, "-o ");
 	    dyStringAppend(dy, baseDir);
@@ -271,7 +271,7 @@ verbose(2, "Phase 8 - compiling C code\n");
     dyStringClear(dy);
     dyStringAppend(dy, "gcc ");
     dyStringAppend(dy, "-O ");
-    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
+    dyStringAppend(dy, "-I ~/kent/src/ai/paraFlow/compiler ");
     dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
     dyStringPrintf(dy, "%s ", cFile);
     for (module = program->children; module != NULL; module = module->next)
