@@ -158,6 +158,14 @@
            <param name="progPkg" value="edu.ucsc.genome.util"/>
            <param name="progClass" value="GetMaxCoord"/>
         </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.util"/>
+           <param name="progClass" value="LoadQuality"/>
+        </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.util"/>
+           <param name="progClass" value="ScaffoldQuality"/>
+        </antcall>
     </target>
 
     <target name="clean" depends="init">
