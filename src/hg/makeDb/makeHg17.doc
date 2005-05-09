@@ -14243,7 +14243,7 @@ cat out/$1/*.out >>protRefRaw.psl
 
 # Run kgPick to pick the representative a mrna/protein pair for each unique CDS structure.
 
-   kgPick kgHg17ETemp kg2.tmp dupSpMrna.tmp
+   kgPick kgHg17ETemp kg2.tmp proteins050415 dupSpMrna.tmp
    sort -u dupSpMrna.tmp >dupSpMrna.tab
 
 # Sort KG2 genes to make the kg2.gp table file.
