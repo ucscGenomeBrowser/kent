@@ -157,13 +157,13 @@ switch (base->singleType)
     }
 }
 
-void _pf_dir_add_object(_pf_Stack *stack)
+void _pf_dir_add_object(_pf_Stack *stack, int dirOffset)
 /* Stack contains object, directory, keyword.  Add object to
  * directory. */
 {
 struct _pf_object *obj = stack[0].Obj;
-struct _pf_dir *dir = stack[1].Dir;
-struct _pf_string *string = stack[2].String;
+struct _pf_dir *dir = stack[dirOffset].Dir;
+struct _pf_string *string = stack[dirOffset+1].String;
 struct hash *hash = dir->hash;
 struct hashEl *hel;
 struct _pf_object *oldObj;
@@ -207,12 +207,12 @@ switch (type->base->singleType)
     }
 }
 
-void _pf_dir_add_number(_pf_Stack *stack)
+void _pf_dir_add_number(_pf_Stack *stack, int dirOffset)
 /* Stack contains number, directory, keyword.  Add number to
  * directory. */
 {
-struct _pf_dir *dir = stack[1].Dir;
-struct _pf_string *string = stack[2].String;
+struct _pf_dir *dir = stack[dirOffset].Dir;
+struct _pf_string *string = stack[dirOffset+1].String;
 struct hash *hash = dir->hash;
 struct hashEl *hel;
 struct _pf_object *oldObj;

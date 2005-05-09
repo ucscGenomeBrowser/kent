@@ -97,7 +97,7 @@ for (i=0; i<sizeof(buf)-1;  ++i)
     if (c == '\n')
 	{
 	buf[i] = 0;
-	_pf_string_dupe(buf, i);
+	stack[0].String = _pf_string_dupe(buf, i);
 	return;
 	}
     }
@@ -120,6 +120,7 @@ for (i=0; i<sizeof(buf)-1;  ++i)
     string = _pf_string_new(dy->string, dy->bufSize);
     string->size = dy->stringSize;
     dyStringCannibalize(&dy);
+    stack[0].String = string;
     }
 }
 

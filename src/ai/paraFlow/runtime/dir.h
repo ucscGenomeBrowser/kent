@@ -32,8 +32,12 @@ void _pf_dir_lookup_number(_pf_Stack *stack);
 /* Stack contains directory, keyword.  Return number of
  * some sort back on the stack. */
 
-void _pf_dir_add_object(_pf_Stack *stack);
+void _pf_dir_add_object(_pf_Stack *stack, int dirOffset);
 /* Stack contains object, directory, keyword.  Add object to
+ * directory. */
+
+void _pf_dir_add_number(_pf_Stack *stack, int dirOffset);
+/* Stack contains number, directory, keyword.  Add number to
  * directory. */
 
 #endif /* DIR_H */
