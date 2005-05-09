@@ -89,7 +89,7 @@ type wigMaf 0.0 1.0
 # autoScaleDefault Off
 #pairwise fakePairwise
 summary tba14waySummary
-speciesOrder hg17 panTro1 panHg4 rheMac1 rabbit rn3 mm6 mmHg4 bosTau1 canFam1 armadillo tenrec elephant 
+speciesOrder mmHg4 panHg4 hg17 panTro1 rheMac1 rabbit rn3 mm6 bosTau1 canFam1 armadillo tenrec elephant 
 
 track testMaf
 shortLabel testMaf
