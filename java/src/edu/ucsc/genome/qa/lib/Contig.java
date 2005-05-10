@@ -6,14 +6,18 @@ public class Contig {
 
   // data
   public String contigName;
-  public int startPos;
-  public int endPos;
+  public int chromStart;
+  public int chromEnd;
+  public int fragStart;
+  public int fragEnd;
 
   // constructors
-  public Contig(String nameVar, int startVar, int endVar) {
+  public Contig(String nameVar, int chromStartVar, int chromEndVar, int fragStartVar, int fragEndVar) {
     contigName = nameVar;
-    startPos = startVar;
-    endPos = endVar;
+    chromStart= chromStartVar;
+    chromEnd = chromEndVar;
+    fragStart= fragStartVar;
+    fragEnd = fragEndVar;
   }
 
 }
