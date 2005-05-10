@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.14 2005/04/10 14:41:26 markd Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.15 2005/05/10 07:47:01 baertsch Exp $";
 #define MAXSEQ 2048
 
 static int countBlocksOfN(char *s, int size)
@@ -396,10 +396,10 @@ seqSize = readBits32(f, isSwapped);
 if (fragEnd == 0)
     fragEnd = seqSize;
 if (fragEnd > seqSize)
-    errAbort("twoBitReadSeqFrag end (%d) >= seqSize (%d)", fragEnd, seqSize);
+    errAbort("twoBitReadSeqFrag in %s end (%d) >= seqSize (%d)", name, fragEnd, seqSize);
 outSize = fragEnd - fragStart;
 if (outSize < 1)
-    errAbort("twoBitReadSeqFrag start (%d) >= end (%d)", fragStart, fragEnd);
+    errAbort("twoBitReadSeqFrag in %s start (%d) >= end (%d)", name, fragStart, fragEnd);
 
 /* Read in blocks of N. */
 nBlockCount = readBits32(f, isSwapped);
