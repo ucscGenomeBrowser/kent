@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.958 2005/05/06 03:37:04 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.959 2005/05/10 14:47:11 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9767,7 +9767,11 @@ for (track = trackList; track != NULL; track = track->next)
     {
     char *s = cartOptionalString(cart, track->mapName);
     if (cgiOptionalString( "hideTracks"))
+	{
 	s = cgiOptionalString( track->mapName);
+	if (s != NULL)
+	    cartSetString(cart, track->mapName, s);
+	}
     if (s != NULL)
 	{
 	track->visibility = hTvFromString(s);
