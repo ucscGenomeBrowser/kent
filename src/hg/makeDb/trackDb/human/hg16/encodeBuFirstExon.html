@@ -1,67 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
-      <title>Boston University rcPCR ENCODE DATA Description</title>
-  <meta content="Ulas Karaoz" name="author">
-</head>
-<body>
-<h2>Description</h2>
+<H2>Description</H2>
 <P>
 This track displays expression levels of computationally identified
 first exons and a constitutive exon of genes in ENCODE regions,
 based on the real competitive Polymerase Chain
-Reaction (rcPCR) technique described in <a href="#References">Ding
-et al. 2003</a>. 
+Reaction (rcPCR) technique described in <A HREF="#References">Ding
+<em>et al</em>. (2003)</A>. 
 Expression levels
 are indicated by color, ranging from black (no expression) to red (high
-expression). 
+expression). </P>
 <P>
 Experiments were performed on total RNA samples of ten
-normal human tissues, purchased from Clontech (Palo Alto, CA). 
-The tissues are cerebral cortex, colon, heart, kidney, liver, lung,
-skeletal muscle, spleen, stomach, and testis.<br>
+normal human tissues purchased from Clontech (Palo Alto, CA): 
+cerebral cortex, colon, heart, kidney, liver, lung,
+skeletal muscle, spleen, stomach, and testis.</P>
 <P>
-The name for each alternative transcript starts with the gene name
-and is followed by an identifier for the alternative first exon or the
+The name for each alternative transcript starts with the gene name,
+followed by an identifier for the alternative first exon or the
 constitutive exon. For example, for gene CAV1, there are three
 alternative first exons (CAV1-E1A, CAV1-E1B, and CAV1-E1C) and the
-third exon is chosen as the constitutively expressed exon (CAV1-E3).
-</P>
-<h2>Methods</h2>
-<p>
+third exon is chosen as the constitutively expressed exon (CAV1-E3). </P>
+
+<H2>Methods</H2>
+<P>
 Alternative transcription start sites (TSS) for 20 ENCODE genes were predicted
-using PromoSer (<a
- TARGET=_BLANK href="http://biowulf.bu.edu/zlab/Promoser/">http://biowulf.bu.edu/zlab/Promoser/</a>), our in-house computational tool.
+using <A href="http://biowulf.bu.edu/zlab/Promoser/" 
+TARGET=_blank>PromoSer</A>, an in-house computational tool.
 PromoSer computationally identifies the TSS by considering alignments
 of a large number of partial and full-length mRNA sequences and ESTs to
 genomic DNA, with provision for alternative promoters. In PromoSer, the
 treatment of alternative first exons (or the resulting TSSs) is as
-follows; all transcripts (mRNA, full length mRNA and EST) from
-the same gene cluster are examined. Individual ESTs are not
-considered for alternative TSSs and only the 5' most position from all
-ESTs in the cluster are considered a potential TSS. If multiple 5'-end
-positions are more than 20 bp apart, they are reported as alternative
-TSSs.</p>
-<p>
-For each gene, we identified all alternative first exons based on manual
-selection of PromoSer predictions.  We also selected an exon that is
-shared by all transcripts (called the constitutive exon).  
-The selection process involves visually
+follows: 
+<UL>
+<LI>all transcripts (mRNA, full-length mRNA and EST) from
+the same gene cluster are examined
+<LI>individual ESTs are not considered for alternative TSSs; only the 5'-most 
+positions from all ESTs in the cluster are considered a potential TSS  
+<LI>if multiple 5'-end positions are more than 20 bp apart, they are reported 
+as alternative TSSs
+</UL></P>
+<P>
+For each gene, all alternative first exons were identified based on manual
+selection of PromoSer predictions.  An exon that is
+shared by all transcripts (called the constitutive exon) was also selected.  
+The selection process involved visually
 examining the structure of the cluster, preferably using the latest
-data available on UCSC, to identify distinct first exons that are well
-formed (having multiple supporting sequences) and have no evidence
-(especially from newer sequences) of additional sequence that makes
-them internal exons. After the first exon was identified, we selected a
-subsequence (between 100-300 bases) to be used in the experiment. The
-selection process avoids repeat sequences as much as possible and if
-the two first exons partially overlap, the non-overlapping region is
-selected. If those conditions cause the remaining sequence to be too
-short (or the first exon itself is too short), a junction with the
-second exon is used. We also selected a constitutive exon that was
-included in all (or most) of the alternative transcripts and then
-extracted suitable sequences as above (no exon junctions are used).<br>
-<p>
+data available on UCSC, to identify distinct first exons that were well
+formed (having multiple supporting sequences) and had no evidence
+(especially from newer sequences) of additional sequence that made
+them internal exons. After the first exon was identified, a subsequence 
+(between 100-300 bases) was selected for use in the experiment. The
+selection process avoided repeat sequences as much as possible and if
+the two first exons partially overlapped, the non-overlapping region was
+selected. If those conditions caused the remaining sequence to be too
+short (or the first exon itself was too short), a junction with the
+second exon was used. A constitutive exon was also selected that was
+included in all (or most) of the alternative transcripts and 
+suitable sequences were then extracted as above (no exon junctions are used).
+</P>
+<P>
 The absolute expression levels of all exons were individually quantified
 by rcPCR by designing four assays with PCR amplicons corresponding to
 each exon. 
@@ -69,93 +65,75 @@ Amplicons were designed according to transcript sequences
 and can span a large distance on the genomic sequence. In addition,
 some amplicons were designed across the junctions between first exons
 and the constitutive second exons, and thus these amplicons may overlap
-with the amplicons that correspond to the constitutive second exons. <br>
-</p>
+with the amplicons that correspond to the constitutive second exons. 
+</P>
 <P>
-The rcPCR technique combines competitive PCR and matrix-assisted laser
+The rcPCR technique combined competitive PCR and matrix-assisted laser
 desorption/ionization time-of-flight mass spectrometry (MALDI-TOF MS)
 for gene expression analysis. To measure the expression level of a
 gene, an oligonucleotide standard (60-80 bases) of known concentration,
 complementary to the target sequence with a single base
-mismatch in the middle, is added as the competitor for PCR. The gene of
-interest and the oligonucleotide standard resemble two alleles of a
+mismatch in the middle, was added as the competitor for PCR. The gene of
+interest and the oligonucleotide standard resembled two alleles of a
 heterozygous locus in an allele frequency analysis experiment, and thus
-can be quantified by the high-throughput MALDI-TOF MS
-based MassARRAY system (Sequenom Inc.). 
-</p>
+could be quantified by the high-throughput MALDI-TOF MS
+based MassARRAY system (Sequenom Inc.).  </P>
 <P>
 After PCR, a base extension
-reaction is carried out with an extension primer, a ThermoSequenase and
-a mixture of ddNTPs/dNTP (for example, it can be a mixture of
-ddA, ddC, ddT, and dG). The extension primer anneals to the immediate
+reaction was carried out with an extension primer, a ThermoSequenase and
+a mixture of ddNTPs/dNTP (for example, a mixture of
+ddA, ddC, ddT, and dG). The extension primer annealed the immediate
 5&#8217;-upstream sequence of the mismatch position. Depending on the nature
 of the mismatch and the mixture composition of ddNTPs/dNTP, one or two
-bases are added to the extension primer, producing two extension
+bases were added to the extension primer, producing two extension
 products with one base-length difference. These two extension products
-are then detected and quantified by MALDI-TOF MS.
-</p>
-<p>
+were then detected and quantified by MALDI-TOF MS.  </P>
+<P>
 Expression ratios (e.g. CAV1-E1A/CAV1-E3, CAV1-E1B/CAV1-E3,
 CAV1-E1C/CAV1-E3) indicate the relative abundance of 
 alternative first exons. 
-We used 18S rRNA for exon absolute expression
-normalization among different tissues.<br>
+18S rRNA was used for exon absolute expression
+normalization among different tissues.</P>
+<P>
 Values shown on this track represent the relative abundance of the
 alternative first exons with respect to the 18S rRNA. The raw values have
-been log10 transformed and scaled to show graded colors on the browser.
-</p>
-<h2>Verification</h2>
-<p>
+been log10 transformed and scaled to show graded colors on the browser.  </P>
+
+<H2>Verification</H2>
+<P>
 One biological replicate was performed for each gene. Two to four
 competitor concentrations were used to detect the expression level
 of each exon. Two to six technical replicates were performed for
-each competitor concentration. We plan to perform one more biological
-replicate in the future.<br>
-</p>
-<h2>Credits</h2>
-<p>
-Data generation and analysis for this track were performed by <span
- class="msoIns"><ins cite="mailto:Zhiping%20Weng"
- datetime="2005-01-11T19:47"></ins></span><a
- TARGET=_BLANK href="http://zlab.bu.edu/zlab/index.shtml">ZLAB</a>
+each competitor concentration. One more biological replicate will be
+performed in the future. </P>
+
+<H2>Credits</H2>
+<P>
+Data generation and analysis for this track were performed by 
+<A HREF="http://zlab.bu.edu/zlab/index.shtml" TARGET=_blank>ZLAB</A>
 at Boston University. The following people contributed: Shengnan Jin,
 Anason Halees, Heather Burden, Yutao Fu, Ulas Karaoz, Yong Yu, Chunming
-Ding, Charles R. Cantor, and Zhiping Weng.<br>
-</p>
-<h2><a name="References"></a>References</h2>
-<p><a name="Ding_et_al2003"></a>C
-Ding, CR Cantor. <a
- TARGET=_BLANK href="http://www.pnas.org/cgi/content/full/100/6/3059">A
-high-throughput gene
-expression analysis technique using competitive PCR and matrix-assisted
-laser
-desorption ionization time-of-flight MS.</a>
-<i>Proc</i>
-Proc Natl Acad Sci U S A 2003, 100:3059-64.</p>
-<p>C Ding, CR Cantor. <a
- TARGET=_BLANK href="http://www.pnas.org/cgi/content/full/100/13/7449">Direct
-molecular <span class="SpellE">haplotyping</span>
-of long-range genomic DNA with
-M1-PCR.</a> Proc Natl Acad Sci U S A
-2003 Jun 24; 100(13):7449-53.</p>
-Halees A., Leyfer D., Weng Z. PromoSer: <a
- TARGET=_BLANK href="http://nar.oupjournals.org/cgi/content/full/31/13/3554">PromoSer:
-A large-scale mammalian promoter and transcription start site
-identification
-service.</a> Nucleic Acids Res. 2003
-Jul 1; 31(13):3554-9
-<p>Halees A. S.,
-Weng Z. <span dir="ltr"><span class="msoIns"><ins
- cite="mailto:Zhiping%20Weng" datetime="2005-01-11T19:46"><a
- TARGET=_BLANK href="http://nar.oupjournals.org/cgi/content/full/32/suppl_2/W191?maxtoshow=&amp;HITS=10&amp;hits=10&amp;RESULTFORMAT=&amp;author1=Halees&amp;andorexactfulltext=and&amp;searchid=1105490626406_4673&amp;stored_search=&amp;FIRSTINDEX=0&amp;sortspec=relevance&amp;resourcetype=1&amp;journalcode=nar">PromoSer:
-improvements to the algorithm, <span class="GramE">visualization</span>
-and
-accessibility.</a></ins></span><span class="msoIns"><ins
- cite="mailto:Zhiping%20Weng" datetime="2005-01-11T19:45"></ins></span></span>
-Nucleic Acids Res., Jul 2004; 32: W191-W194.<br>
-<span class="msoIns"><ins cite="mailto:Zhiping%20Weng"
- datetime="2005-01-11T19:45"></ins></span><span class="msoIns"><ins
- cite="mailto:Zhiping%20Weng" datetime="2005-01-11T19:44"><o:p></o:p></ins></span></p>
-</div>
-</body>
-</html>
+Ding, Charles R. Cantor, and Zhiping Weng.</P>
+
+<H2><A name="References"></A>References</H2>
+<P>
+<A name="Ding_et_al2003"></A>Ding, C. and Cantor, C.R. 
+<A HREF="http://www.pnas.org/cgi/content/full/100/6/3059" TARGET=_blank>A
+high-throughput gene expression analysis technique using competitive PCR and 
+matrix-assisted laser desorption ionization time-of-flight MS</A>.
+<I>Proc Natl Acad Sci U S A</I> <B>100</B>, 3059-64 (2003).</P>
+<P>Ding, C. and Cantor, C.R. 
+<A HREF="http://www.pnas.org/cgi/content/full/100/13/7449"
+TARGET=_blank>Direct molecular haplotyping of long-range genomic DNA with
+M1-PCR</A>. 
+<em>Proc Natl Acad Sci U S A</em> <B>100</B>(13), 7449-53 (2003).</P>
+<P>Halees, A.S., Leyfer, D. and Weng, Z. 
+<A HREF="http://nar.oupjournals.org/cgi/content/full/31/13/3554"
+TARGET=_blank>PromoSer: A large-scale mammalian promoter and transcription 
+start site identification service</A>. 
+<em>Nucleic Acids Res.</em> <B>31</B>(13), 3554-9 (2003).</P>
+<P>Halees, A.S. and Weng, Z. 
+<A HREF="http://nar.oupjournals.org/cgi/content/full/32/suppl_2/W191"
+TARGET=_blank>PromoSer: improvements to the algorithm, visualization and
+accessibility</A>.
+<em>Nucleic Acids Res.</em>, <B>32</B>, W191-W194 (2004).</P>
