@@ -11,6 +11,7 @@ endif
 
 cd $WEEKLYBLD
 
+echo "REVIEWDAY=$REVIEWDAY   (review day, day2)"
 echo "BRANCHNN=$BRANCHNN"
 echo "TODAY=$TODAY   (last build day)"
 echo "LASTWEEK=$LASTWEEK   (previous build day)"

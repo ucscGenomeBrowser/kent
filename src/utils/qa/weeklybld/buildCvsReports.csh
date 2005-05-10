@@ -65,6 +65,17 @@ if ( "$mode" == "review") then
 else    
     ./cvs-reports-delta $reviewTag $toTag $REVIEWDAY $TODAY branch
 endif    
+cd $WEEKLYBLD
+
+# fix main report page /cvs-reports/index.html to have dates
+if ( "$mode" == "review") then
+    set cmd="s/<\!-- comment1Start -->.*<\!-- comment1End -->/<\!-- comment1Start -->($TODAY to $REVIEWDAY)<\!-- comment1End -->/"
+else    
+    set cmd="s/<\!-- comment2Start -->.*<\!-- comment2End -->/<\!-- comment2Start -->($REVIEWDAY to $TODAY)<\!-- comment2End -->/"
+endif    
+sed -e "$cmd" /usr/local/apache/htdocs/cvs-reports/index.html > index.html
+cp index.html /usr/local/apache/htdocs/cvs-reports/index.html 
+#rm index.html
 
 if ( $status ) then
  echo "cvs-reports-delta failed on $HOST"
