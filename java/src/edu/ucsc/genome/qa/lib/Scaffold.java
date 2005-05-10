@@ -14,6 +14,7 @@ public class Scaffold {
 
   // constructors
   // create with initial contig value
+  // endPos will usually be updated
   public Scaffold(String nameVar, int startPosVar, int endPosVar, Contig contigVar) {
     name = nameVar;
     startPos = startPosVar;
@@ -22,6 +23,10 @@ public class Scaffold {
     contigs.add(contigVar);
   }
 
+  public void updateEndPos(int endPosVar) {
+    endPos = endPosVar;
+  }
+ 
   public void addContig(Contig contigVar) {
     contigs.add(contigVar);
   }
