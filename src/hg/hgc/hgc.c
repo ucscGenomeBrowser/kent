@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.885 2005/05/06 03:37:42 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.886 2005/05/10 18:21:40 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12069,9 +12069,14 @@ if (row != NULL)
 	        printf("<H2><A HREF=");
 	        printCloneRegUrl(stdout, clone);
 	        printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
-                printf("<H3>Genbank Accession: <A HREF=");
-                printEntrezNucleotideUrl(stdout, rowb[0]);
-                printf(" TARGET=_BLANK>%s</A></H3>\n", rowb[0]);
+                if (rowb[0] != NULL)
+                    {
+                    printf("<H3>Genbank Accession: <A HREF=");
+                    printEntrezNucleotideUrl(stdout, rowb[0]);
+                    printf(" TARGET=_BLANK>%s</A></H3>\n", rowb[0]);
+                    }
+                else
+                    printf("<H3>Genbank Accession: n/a");
                 intName = cloneString(rowb[1]);
                 }
             else
