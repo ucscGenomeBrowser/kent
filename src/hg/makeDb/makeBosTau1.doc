@@ -476,6 +476,34 @@ exit; # don't actually run this like a script :)
     # Rebuild indices with "analyze table".
     hgsql bosTau1 -e 'analyze table gold; analyze table gap;'
 
+# FIX AGP FILE
+    # Ali detected some truncated scaffolds
+    # I added agpFragValidate to kent/src/hg/lib/agpFrag.c (revision 1.9)
+    # and added a call to it from kent/src/hg/makeDb/hgGoldGapGl/hgGoldGapGl.c (revision 1.20)
+    ssh hgwdev
+    cd /cluster/data/bosTau1/downloads/contigs
+    cp Btau_v1.0_20040927.agp copy.agp
+    # edit copy.agp:
+    # delete 0 length contig that Angie found (Contig92264 in SCAFFOLD230837)
+    # delete -1 length contigs found by hgGoldGapGl:
+    # SCAFFOLD36273	9126	9125	3	W	Contig55199	1	0	+
+    # SCAFFOLD120295	9153	9152	4	W	Contig64664	1	0	+
+    # SCAFFOLD130877	2412	2411	3	W	Contig89199	1656	1655	-
+    # SCAFFOLD165124	13935	13934	11	W	Contig67469	2691	2690	-
+    # SCAFFOLD195025	37500	37499	17	W	Contig59193	1196	1195	-
+    # SCAFFOLD215637	2564	2563	3	W	Contig24808	1	0	+
+    # SCAFFOLD225287	10250	10249	7	W	Contig88376	998	997	-
+    # SCAFFOLD300287	13363	13362	7	W	Contig44330	1417	1416	-
+    # drop gold and gap tables; rerun
+    /cluster/home/heather/bin/i386/hgGoldGapGl -noGl bosTau1 copy.agp
+    # check
+    cd /cluster/home/heather/jdbc
+    source javaenv
+    ScaffoldGapChain bosTau1 
+    # No anomalies detected
+    # Took about 3 hours to run
+    
+
 # QUALITY TRACK (DONE April 2005 Heather)
 # The challenge was a sorting problem.
 # The quality file from Baylor was ordered by contig.
@@ -492,20 +520,27 @@ exit; # don't actually run this like a script :)
     hgsql bosTau1 < contigQuality.sql
     source javaenv
     # took about 2 hours to load
-    /usr/java/jdk1.5.0_01/bin/java LoadQuality ../../downloads/contigs/Btau20040927-freeze-contigs.fa.qual \
+    /usr/java/jdk1.5.0_01/bin/java LoadQuality ../../downloads/contigs/Btau20040927-freeze-contigs.fa.qual bosTau1 \
       > LoadQuality.log.mar9
+
+    # create test table of quality data
+    hgsql bosTau1 < contigQualityTest.sql
+    source javaenv
+    /usr/java/jdk1.5.0_01/bin/java LoadQualityTest quality.test bosTau1
 
     # transfer gold table from hgwdev to kolossus
     ssh hgwdev
     cd /cluster/data/bosTau1/bed/quality
     hgsqldump bosTau1 gold > gold.dump
     ssh kolossus
+    cd /cluster/data/bosTau1/bed/quality
     hgsql bosTau1 < gold.dump
 
     # read 
     # run a test case
     hgsql bosTaul < goldClean.dump
-    /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 goldClean > goldClean.run
+    source javaenv
+    /usr/java/jdk1.5.0_01/bin/java ScaffoldQualityTest bosTau1 goldClean > goldClean.run
 
     # run for real; took about 7 hours (3pm - 10pm)
     /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 gold > gold.run
@@ -533,6 +568,36 @@ exit; # don't actually run this like a script :)
     # WARNING: Exceeded SCAFFOLD215637 size 13159 > 10768. dropping 2392 data point(s)
     # Loading bosTau1
 
+# Rerun Quality with new gold table
+
+    # transfer gold table from hgwdev to kolossus
+    ssh hgwdev
+    cd /cluster/data/bosTau1/bed/quality
+    hgsqldump bosTau1 gold > gold.dump.2
+    ssh kolossus
+    cd /cluster/data/bosTau1/bed/quality
+    # mysql: rename table gold to goldBackup
+    hgsql bosTau1 < gold.dump.2
+
+    source javaenv
+    /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 gold > gold.run.2
+
+    # check
+    ssh kkstore01
+    cd /cluster/data/bosTau1/bed/quality
+    grep fixedStep gold.run.2 > fixedStep.out.2
+    # fixedStep.out.2 matches fixedStep.out
+
+    # wigEncode 
+    ssh kkstore01
+    cd /cluster/data/bosTau1/bed/quality
+    wigEncode gold.run.2 quality.wig.2 quality.wib.2
+
+    # load
+    ssh hgwdev
+    ln -s /cluster/data/bosTau1/bed/quality/quality.wib.2 /gbdb/bosTau1/wib/quality.wib
+    cd /cluster/data/bosTau1/bed/quality
+    hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 quality quality.wig.2
 
 
 # GENSCAN (DONE Nov. 17, 2004 Heather)
