@@ -548,4 +548,94 @@ public class QADBLibrary {
     }
     return (true);
   }
+
+
+  // read in gold table
+  public static ArrayList readGold(HGDBInfo dbinfo, String tableName) throws Exception {
+
+    ArrayList scaffolds = new ArrayList();
+    boolean firstTime = true;
+
+    String dbURL = QADBLibrary.jdbcURL(dbinfo);
+    Connection con = DriverManager.getConnection(dbURL);
+
+    Statement stmt = con.createStatement();
+    String chromNameOld = "";
+    Contig contig = new Contig("", 0, 0, 0, 0);
+    Scaffold scaffoldNew = new Scaffold("", 0, 0, contig);
+    ResultSet rs = 
+      stmt.executeQuery("select chrom, chromStart, chromEnd, frag, fragStart, fragEnd from " + tableName);
+    while (rs.next()) {
+      String chromName = rs.getString("chrom");
+      String contigName = rs.getString("frag");
+      int chromStart = rs.getInt("chromStart");
+      int chromEnd = rs.getInt("chromEnd");
+      int fragStart = rs.getInt("fragStart");
+      int fragEnd = rs.getInt("fragEnd");
+      contig = new Contig(contigName, chromStart, chromEnd, fragStart, fragEnd);
+      if (!chromName.equals(chromNameOld)) {
+        if (!firstTime) {
+          scaffolds.add(scaffoldNew);
+	} else {
+	  firstTime = false;
+	}
+	scaffoldNew = new Scaffold(chromName, chromStart, chromEnd, contig);
+	chromNameOld = chromName;
+      } else {
+        scaffoldNew.addContig(contig);
+        scaffoldNew.updateEndPos(chromEnd);
+      }
+    }
+    stmt.close();
+    scaffolds.add(scaffoldNew);
+
+    return (scaffolds);
+  }
+
+
+  // get scores for this contig
+  public static ArrayList getScores(Contig contig, String tableName, Statement stmt2) throws Exception {
+
+    ArrayList scoreArray = new ArrayList();
+
+    String query = "select scores from " + tableName + " where name = '" + contig.contigName + "'";
+    ResultSet rs = stmt2.executeQuery(query);
+
+    while (rs.next()) {
+      Blob myblob = rs.getBlob("scores");
+      long blobLen = myblob.length();
+      byte [] data = myblob.getBytes(1, (int)blobLen);
+      String scoreString = "";
+      for (int i = 0; i < blobLen; i++) {
+        char c = (char) data[i];
+        if (c == ' ') {
+          scoreArray.add(scoreString);
+          scoreString = "";
+       } else {
+         Character fullChar = new Character(c);
+	 scoreString = scoreString + fullChar.toString();
+       }
+     }
+     if (!scoreString.equals(""))
+       scoreArray.add(scoreString);
+   }
+
+    // check 
+    int contigMax = contig.chromEnd - contig.chromStart;
+    int scoreCount = scoreArray.size();
+    if (scoreCount < contigMax) {
+      System.out.println("warning: contig " + contig.contigName + " has size " + contigMax);
+      System.out.println("but only " + scoreCount + " scores.  (Padding with zeroes)");
+      for (int j = scoreCount; j < contigMax; j++)
+        scoreArray.add("0");
+    } 
+	  
+    // else if (scoreCount > contigMax) {
+    // System.out.println("warning: extra scores in " + contig.contigName);
+    // System.out.println(scoreCount + " scores but contigMax is only " + contigMax );
+    // }
+
+    return(scoreArray);
+  }
+
 }
