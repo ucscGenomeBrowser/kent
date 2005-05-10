@@ -42,8 +42,7 @@ class ScaffoldQuality {
       // read in gold table
       Statement stmt = con.createStatement();
       chromNameOld = "";
-      contig = new Contig("", 0, 0);
-      scaffoldOld = new Scaffold("", 0, 0, contig);
+      contig = new Contig("", 0, 0, 0, 0);
       scaffoldNew = new Scaffold("", 0, 0, contig);
       ResultSet rs = stmt.executeQuery("select chrom, chromStart, chromEnd, frag, fragStart, fragEnd from " + args[1]);
       while (rs.next()) {
@@ -53,11 +52,10 @@ class ScaffoldQuality {
 	int chromEnd = rs.getInt("chromEnd");
 	int fragStart = rs.getInt("fragStart");
 	int fragEnd = rs.getInt("fragEnd");
-	contig = new Contig(contigName, fragStart, fragEnd);
+	contig = new Contig(contigName, chromStart, chromEnd, fragStart, fragEnd);
 	if (!chromName.equals(chromNameOld)) {
 	  if (!firstTime) {
-	    scaffoldOld = scaffoldNew;
-	    scaffolds.add(scaffoldOld);
+	    scaffolds.add(scaffoldNew);
 	  } else {
 	    firstTime = false;
 	  }
@@ -67,6 +65,7 @@ class ScaffoldQuality {
 	  // System.out.println("chromNameOld = " + chromNameOld);
 	} else {
 	  scaffoldNew.addContig(contig);
+	  scaffoldNew.updateEndPos(chromEnd);
 	}
       }
       stmt.close();
@@ -78,17 +77,15 @@ class ScaffoldQuality {
       while (scaffoldIter.hasNext()) {
         scaffold = (Scaffold) scaffoldIter.next();
 	// scaffold.print();
-        firstTime = true;
+	int expectedPos = 0;
 	System.out.println("fixedStep chrom=" + scaffold.name + " start=1");
 	contigs = scaffold.contigs;
 	// handle starting gaps
-	if (firstTime) {
-	  if (scaffold.startPos > 0) {
-	    for (int i = 0; i < scaffold.startPos; i++) 
-	      System.out.println("0");
-	  }
-	  firstTime = false;   
+	if (scaffold.startPos > expectedPos) {
+	  for (int i = 0; i < expectedPos; i++) 
+	    System.out.println("0");
         }
+	expectedPos = scaffold.startPos;
 
 	// iterate through contigs
 	// store scores in ArrayList
@@ -96,6 +93,13 @@ class ScaffoldQuality {
 	ArrayList scoreArray = new ArrayList();
 	while (contigIter.hasNext()) {
 	  contig = (Contig) contigIter.next();
+	  // handle gaps
+	  if (contig.chromStart > expectedPos) {
+	    for (int j = expectedPos; j <= contig.chromStart; j++)
+	      System.out.println("0");
+	  }
+
+	  expectedPos = contig.chromEnd + 1;
 	  scoreArray.clear();
 	  String query = "select scores from contigQuality where name = '" + contig.contigName + "'";
 	  ResultSet rs2 = stmt2.executeQuery(query);
@@ -120,11 +124,13 @@ class ScaffoldQuality {
 	    if (!scoreString.equals(""))
 	      scoreArray.add(scoreString);
 	  }
+
+
 	  // check 
-	  int contigMax = contig.endPos;
+	  int contigMax = contig.chromEnd - contig.chromStart;
 	  int scoreCount = scoreArray.size();
 	  if (scoreCount < contigMax) {
-	    System.out.println("warning: contig " + contig.contigName + " has endPos " + contigMax);
+	    System.out.println("warning: contig " + contig.contigName + " has size " + contigMax);
 	    System.out.println("but only " + scoreCount + " scores.  (Padding with zeroes)");
 	    for (int j = scoreCount; j < contigMax; j++)
 	      scoreArray.add("0");
@@ -136,9 +142,15 @@ class ScaffoldQuality {
 	  // }
 	  
 	  // print
-	  for (int k = contig.startPos; k < contig.endPos; k++)
+	  for (int k = contig.fragStart; k < contig.fragEnd; k++)
 	    System.out.println(scoreArray.get(k));
+	  expectedPos = contig.chromEnd + 1;
 	}
+	// this is where I would check for ending gaps
+	// to do that, I would need to read gap table
+	// if (expectedPos < scaffold.endPos)
+	  // for (int k = expectedPos; k < scaffold.endPos; k++)
+	    // System.out.println("0");
       }
     } catch (Exception e) { 
       System.out.println(e.toString()); 
