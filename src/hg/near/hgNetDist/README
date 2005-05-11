@@ -1,0 +1,27 @@
+hgNetDist is a loader utility that takes
+interaction or other data and creates a 
+distance for each pair of genes in the set.
+
+Use code from genering to read the data,
+create the network, and then add more
+code to do the breadth-first search
+to calc the dist.  (Can add Dijkstra and 
+Floyd-Warshall later as needed for weights)
+
+May need to create a sgdP2P.as? 
+Or some generic stand-in?
+
+Given the interaction format:
+genex geney numrepetitions
+
+and there is a header of one line
+(probably the code in the genering or its notes
+takes care of this? -  or was it a mysql import?
+
+Of course, I could just read it straight
+and do the deed from the input file directly.
+
+The output would still be a table.
+
+This will be a fun Sunday project.
+
