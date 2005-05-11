@@ -595,7 +595,7 @@ exit; # don't actually run this like a script :)
 
     # load
     ssh hgwdev
-    ln -s /cluster/data/bosTau1/bed/quality/quality.wib.2 /gbdb/bosTau1/wib/quality.wib
+    ln -s /cluster/data/bosTau1/bed/quality/quality.wib.2 /gbdb/bosTau1/wib
     cd /cluster/data/bosTau1/bed/quality
     hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 quality quality.wig.2
 
