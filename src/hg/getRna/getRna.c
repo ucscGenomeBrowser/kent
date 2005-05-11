@@ -7,10 +7,18 @@
 #include "linefile.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: getRna.c,v 1.3 2004/09/17 03:17:19 kent Exp $";
+static char const rcsid[] = "$Id: getRna.c,v 1.4 2005/05/11 16:44:36 markd Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"cdsUpper", OPTION_BOOLEAN},
+    {"inclVer", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 /* command line options */
 boolean cdsUpper = FALSE;
+boolean inclVer = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -25,25 +33,19 @@ errAbort(
   "Options:\n"
   "  -cdsUpper - lookup CDS and output it as upper case. If CDS annotation\n"
   "    can't be obtained, the sequence is skipped with a warning.\n"
+  "  -inclVer - include version with sequence id.\n"
   "\n");
 }
 
 char *getCdsString(struct sqlConnection *conn, char *acc)
 /* get the CDS string for an accession, or null if not found */
 {
-char *cdsStr = NULL;
-struct sqlResult *sr;
-char **row;
 char query[256];
 
 safef(query, sizeof(query),
       "SELECT cds.name FROM gbCdnaInfo,cds WHERE (gbCdnaInfo.acc = '%s') AND (gbCdnaInfo.cds != 0) AND (gbCdnaInfo.cds = cds.id)",
       acc);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    cdsStr = cloneString(row[0]);
-sqlFreeResult(&sr);
-return cdsStr;
+return sqlQuickString(conn, query);
 }
 
 boolean upperCaseCds(struct sqlConnection *conn, char *acc, struct dnaSeq *dna)
@@ -78,6 +80,17 @@ toUpperN(dna->dna+cdsStart, (cdsEnd-cdsStart));
 return TRUE;
 }
 
+int getVersion(struct sqlConnection *conn, char *acc)
+/* get version for acc, or 0 if not found */
+{
+char query[256];
+
+safef(query, sizeof(query),
+      "SELECT version FROM gbCdnaInfo WHERE (gbCdnaInfo.acc = '%s')",
+      acc);
+return  sqlQuickNum(conn, query);
+}
+
 void getAccMrna(char *acc, struct sqlConnection *conn, FILE *outFa)
 /* get mrna for an accession */
 {
@@ -85,6 +98,7 @@ HGID seqId;
 char *faSeq;
 struct dnaSeq *dna;
 boolean isOk = TRUE;
+char accBuf[512];
 
 faSeq = hGetSeqAndId(conn, acc, &seqId);
 if (faSeq == NULL)
@@ -96,6 +110,12 @@ dna = faFromMemText(faSeq);
 
 if (cdsUpper)
     isOk = upperCaseCds(conn, acc, dna);
+if (isOk && inclVer)
+    {
+    int ver = getVersion(conn, acc);
+    safef(accBuf, sizeof(accBuf), "%s.%d", acc, ver);
+    acc = accBuf;
+    }
 
 if (isOk)
     faWriteNext(outFa, acc, dna->dna, dna->size);
@@ -132,13 +152,14 @@ int main(int argc, char *argv[])
 {
 char *database, *accFile, *outFaFile;
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
 database = argv[1];
 accFile = argv[2];
 outFaFile = argv[3];
 cdsUpper = optionExists("cdsUpper");
+inclVer = optionExists("inclVer");
 getRna(database, accFile, outFaFile);
 return 0;
 }
