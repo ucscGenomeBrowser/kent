@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.36 2005/04/22 14:19:44 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.39 2005/05/04 03:47:52 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -1983,6 +1983,10 @@ doOne tetNig1 chainMm5Link
     #	-rw-rw-r--  1     0 Mar 17 12:18 chrY_random.cpg
 # XXX - this is interesting that chrY, either one, have nothing.
 #	the previous mm5 release did have some on chrY
+#	Evidently the new chrY is too short - this chrY is being
+#	reconstructed and only a small part of it is known in this
+#	assembly.  The bulk of chrY from previous assemblies is now in
+#	chrY_random
 
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
@@ -2782,7 +2786,7 @@ SEQ2_LEN=$BASE/S2.len
     screen
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
-XXX - STARTED 2005-04-06 10:40
+    #	STARTED 2005-04-06 10:40
     #	489 minutes = 8h 09m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
@@ -3011,7 +3015,7 @@ cat << '_EOF_' > template
     para try
     para check
     para push
-XXXX - STARTED - 2005-04-14 15:40 
+    #	STARTED - 2005-04-14 15:40 
 # Completed: 40 of 40 jobs
 # CPU time in finished jobs:     445070s    7417.83m   123.63h    5.15d  0.014 y
 # IO & Wait Time:                   463s       7.72m     0.13h    0.01d  0.000 y
@@ -3542,12 +3546,10 @@ cat  << 'EOF' > template
     --out-root starting-tree
     #	more than 1h 30m
     rm s1.*.ss
-
-    # Create directory full of sequence in individual scaffold files on bluearc.
-    ssh kksilo
-    mkdir -p /cluster/bluearc/mm6/scaffoldFa
-    cd /cluster/bluearc/mm6/scaffoldFa
-    twoBitToFa /cluster/data/mm6/mm6.2bit stdout | faSplit byname stdin foo
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.403
+    #	This 0.403 is used in the --gc argument below
 
     # Create big bad bloated SS files in bluearc (takes ~45 minutes)
     ssh kksilo
@@ -3579,15 +3581,15 @@ cat  << 'EOF' > template
     cd /cluster/bluearc/mm6/cons/treeRun1
     mkdir tree log
 
+    #	Tuning this loop should come back to here to recalculate 
     # Create little script that calls phastCons with right arguments
-    #	I wonder if target-coverage here has to go along with the
-    #	readjusted target-coverage below as it is tuned up ?
-    #	In that case, this would be 0.50 here.
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
     cat > makeTree << '_EOF_'
     /cluster/bin/phast/phastCons ../ss/$1.ss \
       /cluster/data/mm6/bed/multiz10way/cons/starting-tree.mod \
-      --gc 0.410 --nrates 1,1 --no-post-probs --ignore-missing \
-      --expected-lengths 12 --target-coverage 0.35 \
+      --gc 0.403 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.17 \
       --quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
     #	emacs happy
@@ -3599,6 +3601,7 @@ cat  << 'EOF' > template
 makeTree $(root1)
 #ENDLOOP
 '_EOF_'
+    #	happy emacs
 
     # Make cluster job and run it
     gensub2 ../randomSs single template jobList
@@ -3624,10 +3627,47 @@ makeTree $(root1)
     cd ..
     cp -p ave.*.mod /cluster/data/mm6/bed/multiz10way/cons
 
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    #	never stops with the --NH argument
+    /cluster/bin/phast/consEntropy .10 12 \
+                        ave.cons.mod ave.noncons.mod
+#Transition parameters:gamma=0.100000, omega=12.000000, mu=0.083333, nu=0.009259
+# Relative entropy: H=1.454874 bits/site
+# Required length: N=7.596943 sites
+# Total entropy: NH=11.052595 bits
+
+# consEntropy .20 12 ave.cons.mod.1 ave.noncons.mod.1
+# Transition params: gamma=0.200000, omega=12.000000, mu=0.083333, nu=0.020833
+# Relative entropy: H=1.454874 bits/site
+# Required length: N=6.629337 sites
+# Total entropy: NH=9.644850 bits
+
+# consEntropy .10 12 ave.cons.mod.2 ave.noncons.mod.2
+# Transition params: gamma=0.100000, omega=12.000000, mu=0.083333, nu=0.009259
+# Relative entropy: H=1.527815 bits/site
+# Required length: N=7.205526 sites
+# Total entropy: NH=11.008713 bits
+
+# consEntropy .20 8 ave.cons.mod.3 ave.noncons.mod.3
+# Transition params: gamma=0.200000, omega=8.000000, mu=0.125000, nu=0.031250
+# Relative entropy: H=1.654878 bits/site
+# Required length: N=5.146793 sites
+# Total entropy: NH=8.517313 bits
+
+### !!! ***  This one with .17 and 12 is the one that was finally used
+# consEntropy .17 12 ave.cons.mod.4 ave.noncons.mod.4
+# Transition params: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=1.478838 bits/site
+# Required length: N=6.753382 sites
+# Total entropy: NH=9.987159 bits
+
+
     ssh kk9
     # Create cluster dir to do main phastCons run
-    mkdir  /cluster/bluearc/mm6/cons/consRun1
-    cd  /cluster/bluearc/mm6/cons/consRun1
+    mkdir  /cluster/bluearc/mm6/cons/consRun4
+    cd  /cluster/bluearc/mm6/cons/consRun4
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
@@ -3638,7 +3678,7 @@ makeTree $(root1)
     cat > doPhast << '_EOF_'
 mkdir -p ppRaw/$2
 /cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
-   --expected-lengths 12 --target-coverage 0.20 --quiet --seqname $2 \
+   --expected-lengths 12 --target-coverage 0.17 --quiet --seqname $2 \
    --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
    ppRaw/$2/$1.pp
 '_EOF_'
@@ -3646,11 +3686,12 @@ mkdir -p ppRaw/$2
     chmod a+x doPhast
 
     # Create gsub file
-cat > template << '_EOF_'
+    cat > template << '_EOF_'
 #LOOP
 doPhast $(file1) $(root1)
 #ENDLOOP
 '_EOF_'
+    #	happy emacs
 
     # Create parasol batch and run it
     ls -1 ../ss | sed 's/.ss//' > in.lst
@@ -3668,19 +3709,25 @@ doPhast $(file1) $(root1)
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
     ssh kolossus
-    cd /cluster/bluearc/mm6/cons/consRun1
+    cd /cluster/bluearc/mm6/cons/consRun4
     catDir bed | awk '
     	{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
         /cluster/bin/scripts/lodToBedScore /dev/stdin > \
 	/cluster/data/mm6/bed/multiz10way/mostConserved.bed
+    #	~ 1 minute
 
     # Figure out how much is actually covered by the bed files as so:
+    ssh kkstore01
+    cd /cluster/data/mm6/bed/multiz10way
     awk '
 {sum+=$3-$2}
 END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
-	/cluster/data/mm6/bed/multiz10way/mostConserved.bed
-    -target-coverage 0.50: % 7.86  (204262705)
-    #	I was mistakenly reading these results as, for example %2.14
+	mostConserved.bed
+    -target-coverage 0.17: % 5.40 = 100.0*140350815/2597150151 length 12
+    -target-coverage 0.10: % 5.26 = 100.0*136494994/2597150151
+    -target-coverage 0.15: % 7.34 = 100.0*190616745/2597150151
+    -target-coverage 0.20: % 7.86 = 100.0*204262705/2597150151
+    #	I was mistakenly reading the results below as, for example %2.14
     #	when in reality it was %21.4 - way way much too high.
     -target-coverage 0.50: 554319262/2597150151 = 0.214 - no complaints
     -target-coverage 0.52: 619851159/2597150151 = 0.239 - no complaints
@@ -3696,16 +3743,23 @@ END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
     # around 4%, then do it again, adjusting the target-coverage phastCons
     # parameter.  Beware of negative scores when too high.  The logToBedScore
     # will output an error on any negative scores.
+    # -target-coverage 0.17 and expected lengths 12:
+    featureBits mm6 -enrichment refGene:cds mostConserved.bed
+refGene:cds 0.980%, mostConserved.bed 5.404%, both 0.679%, cover 69.24%, enrich 12.81x
 
     # Load most conserved track into database
     ssh hgwdev
     cd /cluster/data/mm6/bed/multiz10way
     hgLoadBed mm6 phastConsElements mostConserved.bed
-    #	24 minute load time
+    #	Loaded 2291164 elements of size 5
+    #	5 minute load time
+    featureBits mm6 -enrichment refGene:cds phastConsElements
+# refGene:cds 0.980%, phastConsElements 5.256%, both 0.688%, cover 70.18%,
+#	enrich 13.35x
 
     # Create merged posterier probability file and wiggle track data files
     ssh kksilo
-    cd /cluster/bluearc/mm6/cons/consRun1
+    cd /cluster/bluearc/mm6/cons/consRun4
     # interesting sort here on the chr name and position.
     # first convert all . and - characters to special strings x/ and x_/
     #	to get a consistent delimiter of / for all fields to be sorted.
@@ -3716,13 +3770,50 @@ END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
     find ./ppRaw -type f | sed -e "s#\.#x/#g; s#-#x_/#g" | \
 	sort -t"/" -k4,4 -k6,6n | sed -e "s#x_/#-#g; s#x/#.#g" | xargs cat | \
 	    wigEncode stdin phastCons10.wig phastCons10.wib
-    # about 2h 20 minutes for above
+    # about 45 minutes for above
 
     ssh kkstore01
-    cd /cluster/bluearc/mm6/cons/consRun1
+    cd /cluster/bluearc/mm6/cons/consRun4
     cp -p phastCons10.wi? /cluster/data/mm6/bed/multiz10way/cons
-    # 3 minute copy on kkstore01
-    
+    # 2m 30s copy on kkstore01
+
+    #	prepare compressed copy of ascii data values for downloads
+    cd /cluster/bluearc/mm6/cons/consRun4
+    zcat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons10Scores
+
+ls ppRaw | while read D
+do
+    out=${TOP}/phastCons10Scores/${D}.gz
+    echo -n "$out ... "
+    cd ${TOP}/ppRaw/${D}
+    gzip -c `ls *.pp  | sed -e "s#-#.x-x.#g;" | \
+        sort -t"." -k1,1 -k2,2n | sed -e "s#.x-x.#-#g;"` > ${out}
+    echo "done"
+exit 255
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x gzipAscii.sh
+    time ./gzipAscii.sh
+    #	takes about 40 minutes, makes 2.8 Gb of data
+    #	copy them for downloads
+    ssh kkstore01
+    mkdir /cluster/data/mm6/bed/multiz10way/phastCons10Scores
+    cd /cluster/data/mm6/bed/multiz10way/phastCons10Scores
+    rsync -a --progress /cluster/bluearc/mm6/cons/consRun4/phastCons10Scores/ .
+    #	3 minute copy
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm6/phastCons10Scores
+    cd /usr/local/apache/htdocs/goldenPath/mm6/phastCons10Scores
+    ln -s /cluster/data/mm6/bed/multiz10way/phastCons10Scores/*.gz .
+
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/mm6/bed/multiz10way/cons
@@ -3736,13 +3827,13 @@ END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
     time hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm6 phastCons10 > histogram.data 2>&1
-    #	about 15 minutes scan all data
+    #	about 23 minutes to scan all data
 
     #	create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
 set terminal png small color \
-        x000000 xffffff xc000ff x66ff66 xffff00 xff0000 xff0000
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
 set size 1.4, 0.8
 set key left box
 set grid noxtics
@@ -3753,10 +3844,12 @@ set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
 set y2tics
+set yrange [0:0.02]
 
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
+    #	happy emacs
 
     display histo.png &
 
@@ -4406,6 +4499,8 @@ hgLoadPsl mm6 affyU74.psl
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2005-04-14 - Fan)
 # Make bed files and load consensus sequences for Affy U74 chip set.
+# Fix broken symlinks to microarray data after directory structure changed
+# (DONE, 2005-05-03, hartera)
 ----------------------------------
 #This needs to be done after affyU74 is already made.
 ssh hgwdev
@@ -4439,10 +4534,14 @@ hgLoadBed mm6 affyGnfU74C affyGnfU74C.bed
 # [THE SYM LINKS WERE ALREADY DONE.]
 #    mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
-#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
-#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
-#    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
-    
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
     # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
     # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
     # reload sequences with prefix removed so acc matches name used in
@@ -5241,3 +5340,116 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
     #	2638893452 bases of 3079633452 (85.689%) in intersection
     featureBits -countGaps mm5 ctgPos
     #	2557081173 bases of 3164952073 (80.794%) in intersection
+
+#########################################################################
+# BLASTZ HUMAN Hg16 (DONE - 2005-04-27 - 2005-04-29 - Hiram)
+#	to replace the Mm4 chains and links on Hg16 since Mm4 is being
+#	retired with this Mm6 release
+    ssh eieio
+    mkdir /cluster/data/mm6/bed/blastzHg16.2005_04_27
+    cd /cluster/data/mm6/bed
+    ln -s blastzHg16.2005_04_27 blastz.hg16
+    cd blastzHg16.2005_04_27
+
+    cat << '_EOF_' > DEF
+# mouse vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm6
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_FLAG=-rodent
+SEQ1_SMSK=/panasas/store/mm6/linSpecRep.notInHuman
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Human Hg16
+SEQ2_DIR=/scratch/hg/hg16/bothMaskedNibs
+SEQ2_SMSK=/scratch/hg/hg16/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzHg16.2005_04_27
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/hg16/chrom.sizes > S2.len
+    #	establish a screen to control this job
+    screen
+    cd /cluster/data/mm6/bed/blastzHg16.2005_04_27
+    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
+	blast.run.out 2>&1 &
+    #	STARTED - 2005-04-27 12:20
+    #	FINISHED - 2005-04-28 00:11
+    #	real    712m59.223s
+    #	user    0m0.669s
+    #	sys     0m0.442s
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh eieio
+    screen -d -r
+    #	STARTED - 2005-03-17 21:25
+    #	FINISHED - 2005-03-18 14:00
+# Completed: 44354 of 44354 jobs
+# CPU time in finished jobs:   16945019s  282416.99m  4706.95h  196.12d  0.537 y
+# IO & Wait Time:               2624756s   43745.93m   729.10h   30.38d  0.083 y
+# Average job time:                 441s       7.35m     0.12h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            9471s     157.85m     2.63h    0.11d
+# Submission to last job:         35934s     598.90m     9.98h    0.42d
+
+# Completed: 331 of 331 jobs
+# CPU time in finished jobs:        274s       4.56m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                  1104s      18.40m     0.31h    0.01d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              15s       0.25m     0.00h    0.00d
+# Submission to last job:           101s       1.68m     0.03h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       6328s     105.47m     1.76h    0.07d  0.000 y
+# IO & Wait Time:                   551s       9.18m     0.15h    0.01d  0.000 y
+# Average job time:                 172s       2.87m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             620s      10.33m     0.17h    0.01d
+# Submission to last job:           830s      13.83m     0.23h    0.01d
+
+    #	swap results to place mm6 alignments onto Hg16
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastzHg16.2005_04_27
+    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
+	swap.run.out 2>&1 &
+
+    featureBits mm6 netHg16
+    #   2580637164 bases of 2597150411 (99.364%) in intersection
+    featureBits mm6 netHg17
+    #	2579747741 bases of 2597150411 (99.330%) in intersection
+    featureBits mm6 chainHg16
+    #   2597476551 bases of 2597150411 (100.013%) in intersection
+    featureBits mm6 chainHg17
+    #	2596946329 bases of 2597150411 (99.992%) in intersection
+    featureBits hg16 netMm6
+    #   2890452713 bases of 2865248791 (100.880%) in intersection
+    featureBits hg16 chainMm6
+    #   2913361200 bases of 2865248791 (101.679%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainHg16Link
+    #	966699669 bases of 2597150411 (37.222%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainHg17Link
+    #	966916309 bases of 2597150411 (37.230%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only featureBits hg16 chainMm6Link
+    #	969979195 bases of 2865248791 (33.853%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainMm5Link
+    #	1020106336 bases of 2866216770 (35.591%) in intersection

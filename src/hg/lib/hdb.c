@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.247 2005/04/19 20:12:08 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.250 2005/05/06 18:37:00 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -135,7 +135,11 @@ char *hgOfficialChromName(char *name)
 /* Returns "canonical" name of chromosome or NULL
  * if not a chromosome. (Case-insensitive search w/sameWord()) */
 {
-struct chromInfo *ci = getChromInfo(hGetDb(), name);
+struct chromInfo *ci = NULL;
+char buf[HDB_MAX_CHROM_STRING];
+strncpy(buf, name, HDB_MAX_CHROM_STRING);
+buf[HDB_MAX_CHROM_STRING-1] = 0;
+ci = getChromInfo(hGetDb(), buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 else
@@ -354,30 +358,34 @@ return hDefaultDbForGenome(DEFAULT_GENOME);
 }
 
 char *hDefaultChromDb(char *db)
-/* Return some sequence named in chromInfo from the given db. */
+/* Return some sequence named in chromInfo from the given db, or NULL if db 
+ * has no chromInfo. */
 {
 static struct hash *hash = NULL;
+struct hashEl *hel = NULL;
 char *chrom = NULL;
 
 if (hash == NULL)
     hash = hashNew(0);
-chrom = (char *)hashFindVal(hash, db);
-if (chrom == NULL)
+hel = hashLookup(hash, db);
+if (hel == NULL)
     {
     struct sqlConnection *conn = hAllocOrConnect(db);
     char buf[HDB_MAX_CHROM_STRING];
-    chrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
-			  buf, sizeof(buf));
-    if (chrom == NULL)
-	errAbort("hDefaultChromDb: database %s has no chromInfo", db);
+    if (sqlTableExists(conn, "chromInfo"))
+	chrom = sqlQuickQuery(conn, "select chrom from chromInfo limit 1",
+			      buf, sizeof(buf));
     hFreeOrDisconnect(&conn);
     hashAdd(hash, db, cloneString(chrom));
     }
+else
+    chrom = (char *)(hel->val);
 return cloneString(chrom);
 }
 
 char *hDefaultChrom()
-/* Return the first chrom in chromInfo from the current db. */
+/* Return some sequence named in chromInfo from the current db, or NULL if db 
+ * has no chromInfo. */
 {
 return hDefaultChromDb(hGetDb());
 }
@@ -3121,9 +3129,10 @@ for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
                 (struct trackDb *)hashFindVal(compositeHash, words[0]);
             if (compositeTdb)
                 {
+		if(!trackDbSetting(tdb, "noInherit"))
+		    tdb->type = cloneString(compositeTdb->type); 
                 /* should be a short list -- we can shortcut and add to tail
                  * rather than reversing later */
-                tdb->type = cloneString(compositeTdb->type);
                 slAddTail(&compositeTdb->subtracks, tdb);
                 }
             }

@@ -25,6 +25,18 @@ longLabel Difference in Expression with Selected Gene
 type pair affyGnfU74ADistance query target distance 1
 priority 2
 
+name mouseLandscape
+shortLabel Expression (U. Toronto)
+longLabel Difference in Expression with Selected Gene
+type pair mouseLandscapeDistance query target distance 1
+priority 2.3
+
+name humanNormal
+shortLabel Expression (Stanford)
+longLabel Difference in Expression with Selected Gene
+type pair humanNormalDistance query target distance 1
+priority 2.3
+
 name regulatoryModule
 shortLabel Regulatory Module
 longLabel Eran Segal Regulation Module

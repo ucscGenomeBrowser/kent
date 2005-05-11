@@ -1,9 +1,10 @@
-/* hgMaf.c - Stuff to load up mafs from the browser database. 
+/* hgMaf.h - Stuff to load up mafs from the browser database. 
  *           Also, items for maf track display */
 
 /* Track settings and variables */
 #define SPECIES_ORDER_VAR       "speciesOrder"
 #define SPECIES_GROUP_VAR       "speciesGroups"
+#define SPECIES_DEFAULT_OFF_VAR "speciesDefaultOff"
 #define SPECIES_GROUP_PREFIX    "sGroup_"
 #define PAIRWISE_VAR            "pairwise"
 #define SUMMARY_VAR             "summary"
@@ -36,3 +37,5 @@ struct mafAli *hgMafFrag(
  * the sources just indicate the species.  You can mafFree this
  * as normal. */
 
+int mafCmp(const void *va, const void *vb);
+/* Compare to sort based on start of first component. */

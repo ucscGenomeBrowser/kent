@@ -7,7 +7,7 @@
 CREATE TABLE bacCloneXRef (
     name varchar(255),	# External name for BAC clone
     intName varchar(255),	# Internal Sanger FPC name
-    chroms varchar(255),	# Chromosome(s) to which BAC is mapped by BLAT
+    chroms varchar(255),	# Chromosome(s) to which at one or both BAC ends are mapped by BLAT
     genbank varchar(255),	# Genbank accession for the BAC Clone
     sangerName varchar(255),	# Sanger STS name
     relationship int unsigned not null,	# Relationship type - method of finding STS

@@ -1,0 +1,18 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility hide
+type bed 3 +
+
+track sangerGene
+shortLabel WormBase Genes
+longLabel WormBase Gene Annotations
+group genes
+priority 31.1
+visibility pack
+color 0,0,200
+type genePred sangerPep
+url http://www.wormbase.org/db/gene/gene?name=$$
+hgGene on

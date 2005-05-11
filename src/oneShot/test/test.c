@@ -19,32 +19,23 @@ errAbort(
 
 #include <termios.h>
 
+int testInt(int a, int b, int c, int d)
+{
+return (a + b)*c/d;
+}
+
+double testFloat(double a, double b, double c, double d)
+{
+return (a + b)*c/d;
+}
+
 
 void test(char *in)
 /* test - Test something. */
 {
-struct termios attr;
-char buf[1];
+printf("%d\n", testInt(1,2,3,4));
+printf("%f\n", testFloat(1.0,2.0,3.0,4.0));
 
-if (tcgetattr(STDIN_FILENO, &attr) != 0)
-    errAbort("Couldn't do tcgetattr");
-attr.c_lflag &= ~ICANON;
-attr.c_lflag &= ~ECHO;
-if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
-    errAbort("Couldn't do tcsetattr");
-for (;;)
-   {
-   int c;
-   printf("Please hit the letter c\n");
-   if ((c = read(0,buf,1)) < 0)
-       errnoAbort("I/O error");
-   if (buf[0] == 'c')
-      {
-      printf("Yay! got it.  Bye now\n");
-      break;
-      }
-    printf("Hmm, I got %c.\n", buf[0]);
-    }
 }
 
 int main(int argc, char *argv[], char *env[])

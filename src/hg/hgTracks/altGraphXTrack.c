@@ -183,10 +183,9 @@ for(i= 0; i <  ag->edgeCount; i++)
     Color color2;
     s = ag->vPositions[ag->edgeStarts[i]];
     e = ag->vPositions[ag->edgeEnds[i]];
-    if(sameString(tg->mapName, "altGraphXCon"))
-	color2 = MG_BLACK;
-    else
-	color2 = altGraphXColorForEdge(vg, ag, i);
+    color2 = MG_BLACK;
+/*  If you want to shade by number of transcripts uncomment next line. */
+/* 	color2 = altGraphXColorForEdge(vg, ag, i); */
     if(isExon(ag, i))
 	{
 	if(vis == tvPack)

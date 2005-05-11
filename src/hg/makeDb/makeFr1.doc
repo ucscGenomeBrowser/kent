@@ -1843,3 +1843,10 @@ chainSome $(path1)
     rm -rf blastOut
 # End tblastn
 >>>>>>> 1.16
+
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

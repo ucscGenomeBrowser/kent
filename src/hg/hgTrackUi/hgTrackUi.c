@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.190 2005/04/20 04:28:01 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.192 2005/05/03 02:07:40 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -386,6 +386,19 @@ printf("&nbsp;<b>bases.</b>\n");
 printf("<BR><BR><a href=%s>Help on EST base labeling</a><br>",CDS_BASE_HELP_PAGE);
 }
 
+void nmdFilterOptions(struct trackDb *tdb)
+/* Filter out NMD targets. */
+{
+char buff[256];
+boolean nmdDefault = FALSE;
+/* Skip if this track doesn't implement this filter. */
+if(differentString(trackDbSettingOrDefault(tdb, "nmdFilter", "off"), "on"))
+    return;
+safef(buff, sizeof(buff), "hgt.%s.nmdFilter", tdb->tableName);
+nmdDefault = cartUsualBoolean(cart, buff, FALSE);
+printf("<p><b>Filter out NMD targets.</b>");
+cgiMakeCheckBox(buff, nmdDefault);
+}
 
 void cdsColorOptions(struct trackDb *tdb, int value)
 /*Codon coloring options*/
@@ -394,6 +407,7 @@ void cdsColorOptions(struct trackDb *tdb, int value)
     char *drawOptionsDefault;
     char *cdsDrawDefault;
     char cdsColorVar[128];
+
     boolean isGenePred = (value >= 0);
     
     if (isGenePred)
@@ -953,7 +967,7 @@ void cutterUi(struct trackDb *tdb)
 /* UI for restriction enzyme track */
 {
 char *enz = cartUsualString(cart, cutterVar, cutterDefault);
-puts("<P><B>Enzymes (separate with commas):</B>");
+puts("<P><B>Enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
 
@@ -1292,8 +1306,7 @@ void specificUi(struct trackDb *tdb)
 {
 char *track = tdb->tableName;
 
-if (trackDbSetting(tdb, "compositeTrack"))
-    compositeUi(tdb);
+
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "stsMapMouseNew"))
@@ -1419,8 +1432,11 @@ else if (tdb->type != NULL)
             {
             if (sameString(track, "acembly"))
                 acemblyUi(tdb);
+
+		nmdFilterOptions(tdb);
 	    cdsColorOptions(tdb, 2);
             }
+	
 	/* if bed has score then show optional filter based on score */
 	if (sameWord(words[0], "bed") && wordCount == 3)
 	    {
@@ -1444,6 +1460,8 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
+if (trackDbSetting(tdb, "compositeTrack"))
+    compositeUi(tdb);
 }
 
 void trackUi(struct trackDb *tdb)

@@ -3,6 +3,10 @@ test:
 	mkdir -p output
 	paraFlow badDefault.pf > output/badDefault
 	diff expected/badDefault output/badDefault
+	paraFlow defaultAhead.pf > output/defaultAhead
+	diff expected/defaultAhead output/defaultAhead
+	paraFlow dirAddTuple.pf > output/dirAddTuple
+	diff expected/dirAddTuple output/dirAddTuple
 	paraFlow dotStringDotMethod.pf > output/dotStringDotMethod
 	diff expected/dotStringDotMethod output/dotStringDotMethod
 	paraFlow castMultiReturn.pf > output/castMultiReturn
@@ -13,3 +17,5 @@ test:
 	diff expected/func2in2class output/func2in2class
 	paraFlow nilStuff.pf > output/nilStuff
 	diff expected/nilStuff output/nilStuff
+	paraFlow oneIntoClass.pf oneIntoClass.pf > output/oneIntoClass
+	diff expected/oneIntoClass output/oneIntoClass

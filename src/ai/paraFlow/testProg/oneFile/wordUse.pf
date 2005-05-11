@@ -4,7 +4,7 @@
 to usage()
 /* Print usage summary and exit. */
      {
-     die("
+     punt("
 wordUse - count how many time each word is used in files.
 usage:
 	wordUse file(s)

@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.19 2005/01/05 22:57:18 hiram Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.20 2005/05/09 23:07:45 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -19,6 +19,7 @@ static struct optionSpec optionSpecs[] = {
     {"autoscale", OPTION_INT},
     {"autoScale", OPTION_INT},
     {"pValues", OPTION_BOOLEAN},
+    {"freq", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -35,6 +36,7 @@ int col = 0;
 int aveCol = -1;
 boolean real = FALSE;
 int autoscale = 0;
+boolean freq = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -56,6 +58,7 @@ errAbort(
   "   -real - Data input are real values (default is integer)\n"
   "   -autoScale=N - autoscale to N # of bins\n"
   "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
+  "   -freq - show frequences instead of counts\n"
   );
 }
 
@@ -235,8 +238,6 @@ else
 	}
     maxCt = maxCount;
     }
-if (doLog)
-    maxCt = log(maxCt);
 
 begin = minData;
 end = maxData + 1;
@@ -246,7 +247,7 @@ if (verboseLevel()>1)
     end = maxBinCount;
     }
 
-if (pValues)
+if (pValues || freq)
     {
     totalCounts = 0;
     for (i=begin; i<end; ++i)
@@ -255,6 +256,11 @@ if (pValues)
     if (totalCounts < 1)
 	errAbort("ERROR: No bins with any data ?\n");
     }
+
+if (freq)
+    maxCt = maxCt/(double)totalCounts;
+if (doLog)
+    maxCt = log(maxCt);
 
 if (verboseLevel()>1)
     {
@@ -288,6 +294,10 @@ for (i=begin; i<end; ++i)
 	else
 	    ct = 0;
 	}
+    else if (freq)
+        {
+        ct = count/(double)totalCounts;
+        }
     else
 	{
 	ct = count;
@@ -337,7 +347,7 @@ for (i=begin; i<end; ++i)
 	    printf("%3d ", binStart);
 	for (j=0; j<astCount; ++j)
 	    putchar('*');
-	if (aveCol >= 0)
+	if ((aveCol >= 0) || freq)
 	    printf(" %f\n", ct);
 	else
 	    printf(" %d\n", count);
@@ -366,6 +376,7 @@ real = optionExists("real");
 autoscale = optionInt("autoscale", 0);
 if (autoscale == 0)
     autoscale = optionInt("autoScale", 0);
+freq = optionExists("freq");
 
 /*	pValues turns on noStar too	*/
 if (pValues) noStar = TRUE;

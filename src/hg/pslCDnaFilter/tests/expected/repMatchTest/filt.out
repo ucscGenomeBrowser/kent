@@ -1,4 +1,4 @@
-query/alignment counts:
+                   	seqs	aligns
              total:	1	9
               kept:	1	5
   drop maxRepMatch:	1	4

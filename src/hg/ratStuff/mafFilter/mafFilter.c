@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.7 2005/01/20 00:36:39 kate Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.8 2005/04/30 14:35:03 braney Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -27,7 +27,8 @@ errAbort(
         /* score cutoff recommended by Webb Miller */
   "   -minFactor=N - Factor to use with -minFactor (default %d)\n"
   "   -minScore=N - Minimum allowed score (alternative to -minFactor)\n"
-  "   -reject=filename - Save rejected blocks in filename\n",
+  "   -reject=filename - Save rejected blocks in filename\n"
+  "   -needComp=species - all alignments must have species as one of the component\n",
         DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_FACTOR
   );
 }
@@ -40,6 +41,7 @@ static struct optionSpec options[] = {
    {"factor", OPTION_BOOLEAN},
    {"minFactor", OPTION_INT},
    {"reject", OPTION_STRING},
+   {"needComp", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -50,6 +52,7 @@ double minScore;
 boolean gotMinFactor = FALSE;
 int minFactor = DEFAULT_FACTOR;
 char *rejectFile = NULL;
+char *needComp = NULL;
 
 static jmp_buf recover;    /* Catch errors in load maf the hard way in C. */
 
@@ -71,6 +74,9 @@ int ncol = maf->textSize;
 int nrow = slCount(maf->components);
 double ncol2 = ncol * ncol;
 double fscore = -minFactor * ncol2 * nrow;
+
+if (needComp && (mafMayFindCompPrefix(maf, needComp, "." ) == NULL))
+    return FALSE;
 
 if (nrow < minRow || ncol < minCol ||
     (gotMinScore && maf->score < minScore) ||
@@ -158,6 +164,7 @@ if (optionExists("factor"))
 minCol = optionInt("minCol", DEFAULT_MIN_COL);
 minRow = optionInt("minRow", DEFAULT_MIN_ROW);
 rejectFile = optionVal("reject", NULL);
+needComp = optionVal("needComp", NULL);
 verbose(3, "minCol=%d, minRow=%d, gotMinScore=%d, minScore=%f, gotMinFactor=%d, minFactor=%d\n", 
         minCol, minRow, gotMinScore, minScore, gotMinFactor, minFactor);
 

@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.20 2005/04/13 06:25:55 markd Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.22 2005/05/07 21:36:41 baertsch Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1201,16 +1201,13 @@ void liftOverGenePred(char *fileName, struct hash *chainHash,
                         FILE *mapped, FILE *unmapped)
 /* Lift over file in genePred format. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
 struct bed *bed;
-struct genePred *gp;
+struct genePred *gp = NULL;
 char *error;
 FILE *f;
-
-while (lineFileRow(lf, row))
+struct genePred *gpList = genePredExtLoadAll(fileName);
+for (gp = gpList ; gp != NULL ; gp = gp->next)
     {
-    gp = genePredLoad(row);
     // uglyf("%s %s %d %d %s\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->strand);
     f = mapped;
     bed = genePredToBed(gp);
@@ -1241,7 +1238,7 @@ while (lineFileRow(lf, row))
 	}
     genePredTabOut(gp, f);
     bedFree(&bed);
-    genePredFree(&gp);
+//    genePredFree(&gp);
     }
 }
 

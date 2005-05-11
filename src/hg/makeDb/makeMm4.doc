@@ -2853,11 +2853,17 @@ hgLoadBed mm4 affyGnfU74C affyGnfU74C.bed
 # Add in sequence data for U74 tracks.
 # Copy consensus sequence to /gbdb if it isn't already
 # [DONE, hartera, Feb 6, 2004]
+# Fix broken symlinks to microarray data after directory structure changed
+# (DONE, 2005-05-03, hartera)
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
     
     # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
     # reload sequences with prefix removed so acc matches name used in
@@ -5045,3 +5051,17 @@ o Perform preliminary review of Proteom Browser for mm4, then
     makeLoChain-net mm4 mm5
     ssh hgwdev
     makeLoChain mm4 mm5
+
+# CREATE kgSpAlias TABLE FOR PB (Done 05/04/05)
+
+    hgsql mm4 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm4 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm4.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm4 -e 'drop table kgSpAlias';
+    hgsql mm4 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm4 -e 'load data local infile "mm4.kgSpAlias.tab" into table kgSpAlias'

@@ -20,6 +20,7 @@ struct pfBaseType
     struct pfBaseType *keyedBy;	/* Pointer to class of index if any */
     char *name;			/* Type name.  Allocated in hash. */
     struct pfScope *scope;	/* The scope this class lives in */
+    struct pfParse *def;	/* Parse node for class definition */
     bool isCollection;		/* TRUE if it's a collection type */
     bool isClass;		/* TRUE if it's a class */
     bool needsCleanup;		/* TRUE if it needs refCount/cleanup */

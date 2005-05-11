@@ -7,6 +7,15 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track xenoRefGene
+shortLabel Non-Ciona RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility hide
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
@@ -38,6 +47,15 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+
+track xenoMrna
+shortLabel Non-Ciona mRNAs
+longLabel Non-$Organism mRNAs from GenBank
+group rna
+priority 63
+visibility dense
+spectrum on
+type psl xeno
 
 track rmsk
 shortLabel RepeatMasker

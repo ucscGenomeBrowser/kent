@@ -11,8 +11,9 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "bed.h"
+#include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.1 2004/07/19 21:46:38 sugnet Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.2 2005/05/03 01:58:52 sugnet Exp $";
 
 
 
@@ -101,4 +102,211 @@ void affyTransfragsMethods(struct track *tg)
 {
 tg->itemColor = affyTransfragColor;
 tg->loadItems = affyTransfragsLoad;
+}
+
+static Color affyTxnPhase2ItemColor(struct track *tg, void *item, struct vGfx *vg)
+/* Color for an affyTransfrag item. Different colors are returned depending
+   on name. 
+   0 - Passes all filters
+   1 - Overlaps a pseudogene
+   2 - Overlaps a blat hit
+   3 - Overlaps both a pseudogene and a blat hit.
+*/
+{
+static Color cleanCol = MG_WHITE;
+static Color blatCol = MG_WHITE;
+static Color pseudoCol = MG_WHITE;
+struct bed *bed = item;
+
+/* If first time through make the colors. */
+if(cleanCol == MG_WHITE)
+    {
+    cleanCol = tg->ixColor;
+    blatCol = vgFindColorIx(vg, 100, 100, 160);
+    pseudoCol = vgFindColorIx(vg, 190, 190, 230);
+    }
+
+switch(bed->name[0]) 
+    {
+    case '0' :
+	return cleanCol;
+    case '1' :
+	return pseudoCol;
+    case '2' :
+	return blatCol;
+    case '3' : 
+	return pseudoCol;
+    default:
+	errAbort("Don't recognize score for transfrag %s", bed->name);
+    };
+return tg->ixColor;
+}
+
+static void affyTxnPhase2DrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+				 struct vGfx *vg, int xOff, int yOff, int width, int height, 
+				 boolean withCenterLabels, MgFont *font,
+				 Color color, enum trackVisibility vis)
+{
+/* Don't do anything here, let subtracks draw their own labels. */
+}
+
+static void affyTxnPhase2BedDrawLeftLabels(struct track *track, int seqStart, int seqEnd,
+				    struct vGfx *vg, int xOff, int yOff, int width, int height,
+				    boolean withCenterLabels, MgFont *font, Color color,
+				    enum trackVisibility vis)
+/* Draw the left label. Simple as we draw the name centered in the
+   track height no matter what. */
+{
+int fontHeight = mgFontLineHeight(font);
+int tHeight = track->height;
+int centerLabel = (tHeight/2)-(fontHeight/2); /* vertical center of track. */
+Color labelColor = (track->labelColor ? 
+		    track->labelColor : track->ixColor);
+/* If dense do nothing and return. */
+if(track->limitedVis == tvHide)
+    return;
+
+/* Add the center label if necessary and draw track
+   name on left side centered vertically. */
+if (withCenterLabels)
+    yOff += fontHeight;
+vgSetClip(vg, leftLabelX, yOff, leftLabelWidth, tHeight);
+vgTextRight(vg, leftLabelX, yOff+centerLabel, leftLabelWidth-1, 
+	    track->lineHeight, labelColor, font, 
+	    track->shortLabel);
+vgUnclip(vg);    
+}
+
+static char *affyTxnP2ItemName(struct track *track, void *item)
+/* Don't have names for tese items. */
+{
+return "";
+}
+
+static int affyTxnPhase2TotalHeight(struct track *track, enum trackVisibility vis)
+/* Get the total height for affyTxnPhase 2 data. */
+{
+/* this has all been figured out in affyTxnPhase2Load() */
+return track->height;
+}
+
+static enum trackVisibility subTrackCompatVis(struct track *subTrack, enum trackVisibility vis)
+/* Return a visibility compatible with the subtrack type. */
+{
+enum trackVisibility compatVis = vis;
+if((vis == tvSquish || vis == tvPack) && (!subTrack->canPack))
+    compatVis = tvFull;
+return compatVis;
+}
+
+static void affyTxnPhase2MapItem(struct track *tg, void *item, 
+			  char *itemName, int start, int end, 
+			  int x, int y, int width, int height)
+/* Don't map anything. */
+{
+}
+
+static void affyTxnPhase2Load(struct track *track)
+/* Load up the items for affyTxnPhase2 track and set the visibility
+   for the track. */
+{
+struct track *sub = NULL;
+int totalHeight=0;
+boolean first = TRUE;
+boolean tooBig = (winEnd - winStart) > 1000000;
+
+/* After a megabase, just give the packed view. */
+if(tooBig && track->visibility == tvFull)
+    track->limitedVis = tvPack;
+else
+    track->limitedVis = track->visibility;
+
+/* Override composite default settings. */
+for(sub = track->subtracks; sub != NULL; sub = sub->next)
+    {
+    sub->visibility = subTrackCompatVis(sub, track->limitedVis);
+    if(stringIn("bed", sub->tdb->type) && track->limitedVis == tvFull)
+	sub->visibility = tvPack;
+    if(stringIn("wig", sub->tdb->type))
+	{
+	sub->mapItem = affyTxnPhase2MapItem;
+	sub->mapsSelf = FALSE;
+	sub->extraUiData = CloneVar((struct wigCartOptions *)track->extraUiData);
+	}
+    }
+
+/* If we are in pack, squish, or dense mode just show first wiggle
+   plot. */
+if(track->limitedVis == tvPack || 
+   track->limitedVis == tvDense || 
+   track->limitedVis == tvSquish )
+    {
+    for(sub = track->subtracks; sub != NULL; sub = sub->next)
+	{
+	if(first && stringIn("wig", sub->tdb->type))
+	    {
+	    struct dyString *s = newDyString(128);
+	    /* Display parent track name when we are not in full mode. */
+	    dyStringPrintf(s, "%s (%s)", track->longLabel, sub->shortLabel);
+	    freez(&sub->shortLabel);
+	    sub->shortLabel = cloneString(track->shortLabel);
+	    freez(&sub->longLabel);
+	    sub->longLabel = cloneString(s->string);
+	    dyStringFree(&s);
+	    first = FALSE;
+	    }
+	else 
+	    {
+	    sub->visibility = tvHide;
+	    sub->limitedVis = tvHide;
+	    sub->limitedVisSet = TRUE;
+	    }
+	}
+    }
+
+/* Load up everything appropriate. */
+for(sub = track->subtracks; sub != NULL; sub = sub->next)
+    {
+    /* If sub is visibile load it and set the visibility. */
+    if(sub->visibility != tvHide && 
+       isSubtrackVisible(sub))
+	{
+	enum trackVisibility tmpVis = sub->visibility;
+	sub->loadItems(sub);
+	if(stringIn("bed", sub->tdb->type) && 
+	   slCount(sub->items) > 1000)
+	    sub->visibility = tvDense;
+	limitVisibility(sub);
+	sub->visibility = tmpVis;
+	totalHeight += sub->height;
+	}
+    else 
+	{
+	sub->limitedVis = tvHide;
+	sub->limitedVisSet = TRUE;
+	}
+    }
+track->height = totalHeight;
+track->limitedVisSet = TRUE;
+
+}
+
+void affyTxnPhase2Methods(struct track *track)
+/* Methods for dealing with a composite transcriptome tracks. */
+{
+struct track *sub = NULL;
+track->loadItems = affyTxnPhase2Load;
+track->totalHeight = affyTxnPhase2TotalHeight;
+track->drawLeftLabels = affyTxnPhase2DrawLeftLabels;
+
+/* Initialize the bed version with some special handlers. */
+for(sub = track->subtracks; sub != NULL; sub = sub->next)
+    {
+    if(stringIn("bed", sub->tdb->type)) 
+	{
+	sub->itemName = affyTxnP2ItemName;
+	sub->drawLeftLabels = affyTxnPhase2BedDrawLeftLabels;
+	sub->itemColor = affyTxnPhase2ItemColor;
+	}
+    }
 }

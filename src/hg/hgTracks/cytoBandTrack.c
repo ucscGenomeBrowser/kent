@@ -180,7 +180,8 @@ static void loadCytoBandsIdeo(struct track *tg)
 char query[256];
 safef(query, sizeof(query), 
       "select * from cytoBandIdeo where chrom like '%s'", chromName);
-bedLoadItemByQuery(tg, "cytoBandIdeo", query, (ItemLoader)cytoBandLoad);
+if(hTableExists("cytoBandIdeo"))
+    bedLoadItemByQuery(tg, "cytoBandIdeo", query, (ItemLoader)cytoBandLoad);
 if(slCount(tg->items) == 0)
     {
     tg->limitedVisSet = TRUE;

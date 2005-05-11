@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.19 2004/10/23 20:47:25 kent Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.20 2005/05/05 23:00:27 heather Exp $";
 
 
 void usage()
@@ -133,6 +133,7 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 	{
 	struct agpFrag gold;
 	agpFragStaticLoad(words, &gold);
+	agpFragValidate(&gold);
 	// file is 1-based. agpFragLoad() now assumes 0-based. 
 	// and agpFragTabOut() will assume 1-based, but we will load 
 	// the generated file straight into the database, so 

@@ -13,8 +13,14 @@ struct agp *agpLoad(char **row, int ct);
 void agpFree(struct agp **pAgp);
 /* Free a dynamically allocated AGP entry */
 
+void agpFreeList(struct agp **pList);
+/* Free a list of dynamically allocation AGP entries. */
+
 struct hash *agpLoadAll(char *agpFile);
 /* load AGP entries into a hash of AGP lists, one per chromosome */
 
 void agpAddAll(char *agpFile, struct hash *agpHash);
 /* add AGP entries from a file into a hash of AGP lists */
+
+void agpHashFree(struct hash **pAgpHash);
+/* Free up the hash created with agpLoadAll. */

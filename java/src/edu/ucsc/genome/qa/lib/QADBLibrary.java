@@ -238,92 +238,46 @@ public class QADBLibrary {
     return (td);
   }
 
- /**
-  *  Insert a row in the trackDb table for new track
-  *
-  *  @param  extension  Developer "sandbox" name.
-  *  @param  dbinfo     The machine, database, user and password.
-  *  @param  newTrack   The name of the track to add.
-  *
-  *  @throws  SQLException
-  */
-  public static void insertTrackDb(String extension, HGDBInfo dbinfo, 
-                                  TrackDb newtrack) 
-                        throws Exception {
-
-    String query = "INSERT INTO trackDb";
-    if (!extension.equals("")) {
-      query = query + extension;
-    }
-    query = query + " (tableName, shortLabel, ";
-    query = query + "type, longLabel, visibility, priority, ";
-    query = query + "colorR, colorG, colorB, ";
-    query = query + "altColorR, altColorG, altColorB, ";
-    query = query + "useScore, private, restrictCount, ";
-    query = query + "restrictList, url, html, grp, canPack, settings) ";
-
-    query = query + "values('" + newtrack.tableName + "', ";
-    query = query + "'" + newtrack.shortLabel + "', ";
-    query = query + "'" + newtrack.type + "', ";
-    query = query + "'" + newtrack.longLabel + "', ";
-    query = query + newtrack.visibility + ", ";
-    query = query + newtrack.priority + ", ";
-    query = query + newtrack.colorR + ", ";
-    query = query + newtrack.colorG + ", ";
-    query = query + newtrack.colorB + ", ";
-    query = query + newtrack.altColorR + ", ";
-    query = query + newtrack.altColorG + ", ";
-    query = query + newtrack.altColorB + ", ";
-    query = query + newtrack.useScore + ", ";
-    query = query + newtrack.privateCol + ", ";
-    query = query + newtrack.restrictCount + ", ";
-    // defer BLOB insert
-    query = query + "'', ";
-    query = query + "'', ";
-    query = query + "'', ";
-    query = query + "'" + newtrack.grp + "', ";
-    query = query + newtrack.canPack + ", ";
-    // another BLOB (settings)
-    query = query + "'')";
-
-    System.out.println(query);
-
-    String dbURL = jdbcURL(dbinfo);
-    Connection con = DriverManager.getConnection(dbURL);
-    Statement stmt = con.createStatement();
-
-    stmt.executeUpdate(query);
-
-    // now do the BLOB inserts
-    blobInsert(con, newtrack.restrictList, "restrictList", newtrack.tableName);
-    blobInsert(con, newtrack.url, "url", newtrack.tableName);
-    blobInsert(con, newtrack.html, "html", newtrack.tableName);
-    blobInsert(con, newtrack.settings, "settings", newtrack.tableName);
-
-    stmt.close();
-    con.close();
-  }
 
  /**
-  *  Update a blob column in trackDb
+  *  Update a blob column 
   *
   *  @param  con        Database connection.
-  *  @param  newblob    The new contents of the trackDb blob field.
+  *  @param  newblob    The new contents of the blob field.
   *  @param  blobcolumn The name of the blob column to update.
   *  @param  tablename  The name of the table for which the blob is being updated.
+  *  @param  whereColname       The name of the row for which the blob is being updated.
+  *  @param  whereColval        The value of the row for which the blob is being updated.
   *
   *  @throws  SQLException
   */
-  public static void blobInsert(Connection con, Blob newblob, String blobcolumn,
-                               String tablename) 
+  public static void blobInsert(Connection con, String newblob, String blobcolumn,
+                               String tablename, String whereColname, String whereColval) 
                          throws Exception {
 
-    String query = "UPDATE trackDb SET " + blobcolumn + " = ? ";
-    query = query + "WHERE tableName = '" + tablename + "'";
+    // System.out.println("starting blobInsert");
+    // convert String into blob
+    byte [] data = newblob.getBytes();
+
+    // get BLOB from database?
+    String getBlob = "select " + blobcolumn + " from " + tablename;
+    getBlob = getBlob + " where " + whereColname + " = '" + whereColval + "'";
+    Statement stmt = con.createStatement();
+    ResultSet blobRS = stmt.executeQuery(getBlob);
+    blobRS.next();
+    Blob myblob = blobRS.getBlob(blobcolumn);
+    myblob.setBytes(1, data);
+
+    String query = "UPDATE " + tablename + " SET " + blobcolumn + " = ? ";
+    query = query + "WHERE " + whereColname + " = '" + whereColval + "'";
+
+    // System.out.println(query);
 
     PreparedStatement pstmt = con.prepareStatement(query);
-    pstmt.setBlob(1, newblob);
+    pstmt.setBlob(1, myblob);
     pstmt.executeUpdate();
+    stmt.close();
+    // System.out.println("finished with blobInsert");
   }
 
  /**

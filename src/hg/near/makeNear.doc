@@ -498,3 +498,8 @@ hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
       spLoadRankProp -noKgIdFile=hs.sw+tr/max1k.hg17.nokg.spids hg17 rankProp hs.sw+tr/max1k.rankp.gz >&hs.sw+tr/max1k.hg17.log
       spLoadPsiBlast hg17 spPsiBlast hs.sw+tr.eval.gz
 
+# Human data from Shyamsundar R, et al. (2005) Genome Biol 6(3):R22
+hgExpDistance hg17 hgFixed.humanNormalRatio hgFixed.humanNormalExps humanNormalDistance -lookup=knownToLocusLink
+
+# Mouse landscape data.
+hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandscapeDistance -lookup=knownToXM

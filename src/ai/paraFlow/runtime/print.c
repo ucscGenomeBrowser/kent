@@ -45,7 +45,7 @@ else
 static void printField(FILE *f, void *data, struct _pf_base *base, 
 	struct hash *idHash);
 
-void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base,
+static void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base,
 	struct hash *idHash)
 /* Print out each field of class. */
 {
@@ -69,7 +69,7 @@ else
     }
 }
 
-void printString(FILE *f, struct _pf_string *string)
+static void printString(FILE *f, struct _pf_string *string)
 /* Print out string. */
 {
 if (string != NULL)
@@ -79,7 +79,7 @@ else
 }
 
 
-void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base,
+static void printArray(FILE *f, struct _pf_array *array, struct _pf_base *base,
 	struct hash *idHash)
 /* Print out each element of Array. */
 {
@@ -107,7 +107,7 @@ else
     }
 }
 
-void printDir(FILE *f, struct _pf_dir *dir, struct _pf_base *base,
+static void printDir(FILE *f, struct _pf_dir *dir, struct _pf_base *base,
 	struct hash *idHash)
 /* Print out each key/val pair in dir. */
 {
@@ -225,7 +225,7 @@ switch (base->singleType)
     }
 }
 
-void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString)
+void _pf_prin(FILE *f, _pf_Stack *stack, boolean formal)
 /* Print out single variable where type is determined at run time. */
 {
 struct _pf_type *type = _pf_type_table[stack->Var.typeId];
@@ -250,13 +250,19 @@ switch (base->singleType)
         fprintf(f, "%lld", val.Long);
 	break;
     case pf_stFloat:
-        fprintf(f, "%f", val.Float);
+	if (formal)
+	    fprintf(f, "%f", val.Float);
+	else
+	    fprintf(f, "%0.2f", val.Float);
 	break;
     case pf_stDouble:
-        fprintf(f, "%f", val.Double);
+	if (formal)
+	    fprintf(f, "%f", val.Double);
+	else
+	    fprintf(f, "%0.2f", val.Double);
 	break;
     case pf_stString:
-	if (quoteString || val.String == NULL)
+	if (formal || val.String == NULL)
 	    printString(f, val.String);
 	else
 	    fprintf(f, "%s", val.String->s);
@@ -286,16 +292,16 @@ if (base->needsCleanup)
 freeHash(&idHash);
 }
 
-void prin(_pf_Stack *stack)
+void pf_prin(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. */
 {
 _pf_prin(stdout, stack, FALSE);
 }
 
-void print(_pf_Stack *stack)
+void pf_print(_pf_Stack *stack)
 /* Print out single variable where type is determined at run time. 
  * Add newline. */
 {
-prin(stack);
+pf_prin(stack);
 fputc('\n', stdout);
 }

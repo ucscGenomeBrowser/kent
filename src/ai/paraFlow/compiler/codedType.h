@@ -20,4 +20,7 @@ struct hash *codedTypesCalcAndPrintAsC(struct pfCompile *pfc,
  * Also print out the types in C structures that the runtime
  * system can interpret. */
 
+void encodeType(struct pfType *type, struct dyString *dy);
+/* Encode type into dy. */
+
 #endif /* CODEDTYPE_H */

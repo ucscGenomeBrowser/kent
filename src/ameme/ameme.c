@@ -24,6 +24,7 @@
 
 boolean isFromWeb;          /* True if run as CGI. */
 boolean isMotifMatcher;     /* True if run from motifMatcher.html. */
+boolean outputLogo;	    /* True if want sequence logo output. */
 FILE *htmlOut;		    /* Where to send output. */
 
 
@@ -1852,7 +1853,7 @@ for (i = 0; i<4; ++i)
         }
     fprintf(f, "\n");
     }
-if (f == htmlOut)
+if (f == htmlOut && outputLogo)
     motifHitSection(NULL, motif, f);
 }
 
@@ -3201,7 +3202,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     {
     errAbort("ameme - find common patterns in DNA\n"
              "usage\n"
-             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName] [html=output.html] [gif=output.gif] [rcToo=on] [controlRun=on] [startScanLimit=20]\n"
+             "    ameme good=goodIn.fa [bad=badIn.fa] [numMotifs=2] [background=m1] [maxOcc=2] [motifOutput=fileName] [html=output.html] [gif=output.gif] [rcToo=on] [controlRun=on] [startScanLimit=20] [outputLogo] [constrainer=1]\n"
              "where goodIn.fa is a multi-sequence fa file containing instances\n"
 	     "of the motif you want to find, badIn.fa is a file containing similar\n"
 	     "sequences but lacking the motif, numMotifs is the number of motifs\n"
@@ -3217,6 +3218,7 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
              "Improbizer has found are probably not significant.\n");
     }
 
+outputLogo = cgiVarExists("outputLogo");
 /* Figure out where to put html output. */
 if (cgiVarExists("html"))
     {

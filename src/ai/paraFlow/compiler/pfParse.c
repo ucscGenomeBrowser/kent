@@ -20,8 +20,8 @@ switch (type)
     	return "pptProgram";
     case pptScope:
         return "pptScope";
-    case pptInto:
-        return "pptInto";
+    case pptInclude:
+        return "pptInclude";
     case pptModule:
         return "pptModule";
     case pptModuleRef:
@@ -980,7 +980,7 @@ struct pfParse *parseLogAnd(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseCmp(parent, &tok, scope);
-if (tok->type == pftLogAnd)
+while (tok->type == pftLogAnd)
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogAnd, tok, parent, scope);
@@ -1000,7 +1000,7 @@ struct pfParse *parseLogOr(struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseLogAnd(parent, &tok, scope);
-if (tok->type == pftLogOr)
+while (tok->type == pftLogOr)
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogOr, tok, parent, scope);
@@ -1345,6 +1345,7 @@ pp->name = name->name;
 myBase = pfScopeFindType(scope, name->name);
 if (myBase == NULL)
     internalErr();
+myBase->def = pp;
 if (tok->type == pftExtends)
     {
     struct pfBaseType *parentBase;
@@ -1551,15 +1552,17 @@ static struct pfParse *parseReturn(struct pfParse *parent,
 return parseWordStatement(parent, pTokList, scope, pptReturn);
 }
 
-static struct pfParse *parseInto(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseInclude(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse into statement */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptInto, tok, parent, scope);
+struct pfParse *pp = pfParseNew(pptInclude, tok, parent, scope);
 
 tok = tok->next;	/* Have covered 'into' */
 pp->children = parseDottedNames(pp, &tok, scope);
+pp->name = pp->children->name;	/* Need to make this cope with dots FIXME */
 
 *pTokList = tok;
 return pp;
@@ -1577,8 +1580,8 @@ struct pfParse *statement;
 //  pfTokenDump(tok, uglyOut, TRUE);
 switch (tok->type)
     {
-    case pftInto:
-        statement = parseInto(pfc, parent, &tok, scope);
+    case pftInclude:
+        statement = parseInclude(pfc, parent, &tok, scope);
 	break;
     case ';':
 	statement = emptyStatement(parent, tok, scope);
@@ -1656,31 +1659,6 @@ return program;
 }
 
 
-static void addClasses(struct pfCompile *pfc, struct pfToken *tokList, 
-	struct pfScope *scope)
-/* Add types in classes to appropriate scope.  We do this as
- * a first pass to help disambiguate the grammar. */
-{
-struct pfToken *tok;
-for (tok = tokList; tok->type != pftEnd; tok = tok->next)
-    {
-    if (tok->type == '{' || tok->type == '}')
-	{
-        scope = tok->val.scope;
-	}
-    if (tok->type == pftClass)
-	{
-	struct pfBaseType *base;
-	tok = tok->next;
-	if (tok->type != pftName)
-	    expectingGot("class name", tok);
-	base = pfScopeAddType(scope, tok->val.s, FALSE, pfc->classType, sizeof(void *),
-		TRUE);
-	base->isClass = TRUE;
-	}
-    }
-}
-
 static void subTypeForName(struct pfParse *pp)
 /* Substititute pptTypeName for pptName use where appropriate. */
 {
@@ -1731,62 +1709,14 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     varDecAndAssignToVarInit(pp);
 }
 
-
-struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
+struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
 	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType)
-/* Tokenize and parse given source. */
+/* Parse a module and return parse tree associated with it. */
 {
-struct pfTokenizer *tkz = pfc->tkz;
-struct pfToken *tokList = NULL, *tok;
-int endCount = 3;
 struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
-char *module = hashStoreName(pfc->modules, source->name);
-int braceDepth = 0;
-
-modParse->name = cloneString(module);
-chopSuffix(modParse->name);
-
-/* Read tokens from file. */
-pfTokenizerNewSource(tkz, source);
-while ((tok = pfTokenizerNext(tkz)) != NULL)
-    {
-    slAddHead(&tokList, tok);
-    }
-
-/* Add enough ends to satisfy all look-aheads */
-while (--endCount >= 0)
-    {
-    AllocVar(tok);
-    tok->type = pftEnd;
-    tok->source = tkz->source;
-    tok->text = tkz->endPos-1;
-    slAddHead(&tokList, tok);
-    }
-
-slReverse(&tokList);
-
-/* Add scoping info to token list */
-for (tok = tokList; tok != NULL; tok = tok->next)
-    {
-    if (tok->type == '{')
-        {
-	++braceDepth;
-	scope = pfScopeNew(pfc, scope, 0, FALSE);
-	tok->val.scope = scope;
-	}
-    else if (tok->type == '}')
-        {
-	--braceDepth;
-	scope = scope->parent;
-	tok->val.scope = scope;
-	}
-    }
-if (braceDepth != 0)
-    errAbort("Unclosed brace in %s", source->name);
-
-addClasses(pfc, tokList, scope);
-pfParseTokens(pfc, tokList, scope, modParse);
+pfParseTokens(pfc, module->tokList, scope, modParse);
 varDecAndAssignToVarInit(modParse);
+module->pp = modParse;
 return modParse;
 }
 

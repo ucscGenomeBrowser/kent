@@ -16,6 +16,17 @@ group map
 visibility dense
 type bed 3 +
 
+track blastMm6KG
+shortLabel Mouse Proteins
+longLabel Mouse(mm6) proteins mapped by chained tBLASTn
+group genes
+priority 30
+visibility dense
+colorChromDefault off
+type psl protein
+pred mm6.blastKGPep03
+blastRef mm6.blastKGRef03
+
 track knownGene
 shortLabel Known Genes
 longLabel Known Genes (Nov 22, 04) Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
@@ -192,6 +203,26 @@ yLineOnOff Off
 autoScaleDefault Off
 summary multiz10waySummary
 #pairwise netBlastz
+speciesGroups mammal vertebrate
+sGroup_mammal panTro1 canFam1 mm5 rn3
+sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
+treeImage phylo/10way.jpg
+
+track multiz10wayGap
+shortLabel 10-Way Gap Annot Cons
+longLabel 10-Way Vertebrate Multiz Alignment & Conservation with Gap Annotation
+group compGeno
+priority 109.12
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons10way
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz10wayGapSummary
+irows on
 speciesGroups mammal vertebrate
 sGroup_mammal panTro1 canFam1 mm5 rn3
 sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
@@ -1305,6 +1336,18 @@ otherDb rn3
 #spectrum on
 #type chain hg16
 #otherDb hg16
+
+track canHg4Maf
+shortLabel Ancestor Maf
+longLabel CanHg4 14-way tba alignment with ancestor reconstruction
+group x
+priority 165
+visibility hide
+type wigMaf 0.0 1.0
+speciesOrder panTro1 panHg4 rheMac1 rabbit rn3 mm6 mmHg4 bosTau1 canFam1 canHg4 armadillo tenrec elephant 
+# irows on
+summary canHg4MafSum
+chromosomes chr13
 
 track brMaf
 shortLabel brMaf

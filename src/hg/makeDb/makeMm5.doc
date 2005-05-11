@@ -1261,7 +1261,7 @@ XXX - running 2004-07-13 14;18
     mkdir -p /gbdb/mm5/liftOver
     ln -s /cluster/data/mm5/bed/liftOver/mm5ToCanFam1.chain /gbdb/mm5/liftOver/mm5ToCanFam1.over.chain
     hgAddLiftOverChain -multiple mm5 canFam1
- 
+
 # ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE Sept. 8th, 2004, Heather)
     ssh hgwdev
     cp -p /cluster/data/mm5/bed/blastz.hg17/axtChain/all.chain.gz \
@@ -1272,6 +1272,109 @@ XXX - running 2004-07-13 14;18
     md5sum *.gz */*.gz > md5sum.txt
     # Update the README.txt
 
+# LIFTOVER CHAIN TO MM6 (DONE 4/20/2005 Andy)
+    ssh kkstore
+    cd /cluster/data/mm6
+    mkdir liftSplits/
+    cat << _EOF_ > split.csh
+#!/bin/tcsh
+set liftDir = /cluster/data/mm6/liftSplits
+cd /cluster/data/mm6
+foreach n (\`ls ?{,?}/*.fa\`)
+    set d = \$n:h
+    set c = \$n:t:r
+    echo \$c
+    faSplit -lift=\$liftDir/lift/\$c.lft size /cluster/data/mm6/\$d/\$c.fa -oneFile 3000 \$liftDir/split/\$c
+end
+_EOF_
+    chmod +x split.csh
+    ./split.csh
+    # kkstore not mounting /panasas ... weird.  
+    ssh hgwdev
+    cd /cluster/data/mm6
+    cp -r liftSplits/ /panasas/store/mm6
+    ssh kk 
+    cd /cluster/data/mm5
+    makeLoChain-align mm5 /scratch/mus/mm5/softNib \
+                    mm6 /panasas/store/mm6/liftSplits/split
+        # Created parasol job in bed/blat.mm6.2005-04-20/run
+    cd bed/blat.mm6.2005-04-20/run/
+    para create spec
+    para push
+    # para time was complicated by the fact I redid some hippos (mostly chrUn_random
+    # alignments) on kk9.  Basically, it took about a day.
+    # In the end, the chrUn_random vs. chrUn_random just took wayyyyyy too long.
+    # Later, if a more rigorous chain file is desired, it can be made after rerunning 
+    # that blat.
+
+    # Lifting
+    ssh kksilo
+    cd /cluster/data/mm5/bed/blat.mm6
+    makeLoChain-lift mm5 mm6 /panasas/store/mm6/liftSplits/lift \
+                        > lift.log &
+    tail -f lift.log
+    # OK so I remember this problem with makeLoChain-lift: it always stops with chr1.
+    # I'll just do it manually.
+    cd raw/
+    for nib in `ls /cluster/data/mm6/nib`; do
+       chrom=${nib%.nib}
+       echo $chrom
+       liftUp -pslQ ../psl/${chrom}.psl /panasas/store/mm6/liftSplits/lift/${chrom}.lft warn chr*_${chrom}.psl
+       echo done $chrom
+    done    
+
+    ssh kk9
+    cd /cluster/data/mm5/bed
+    ln -s blat.mm6.2005-04-20 blat.mm6.2005-04-22
+    makeLoChain-chain mm5 /cluster/data/mm5/nib mm6 /cluster/data/mm6/nib
+    cd /cluster/data/mm5/bed/blat.mm5.2005-02-08/chainRun
+    para try
+    para check
+    para push
+    para time
+#Completed: 40 of 40 jobs
+#CPU time in finished jobs:      27315s     455.25m     7.59h    0.32d  0.001 y
+#IO & Wait Time:                 67093s    1118.22m    18.64h    0.78d  0.002 y
+#Average job time:                2360s      39.34m     0.66h    0.03d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:           11656s     194.27m     3.24h    0.13d
+#Submission to last job:         31329s     522.15m     8.70h    0.36d
+    # That looks weird but I think it was because 8 jobs crashed because there was no disk space.
+    # I freed up some space but then there wasn't much room for the netting stage.
+    # It crashed twice when I tried it using the script makeLoChain-net after the 
+    # chainMergeSort/split.  I figured out that it needed more memory.  So I ran it manually on
+    # kolossus
+    ssh kolossus
+    mkdir -p /tmp/andy
+    cd /tmp/andy
+    cp -r /cluster/data/mm5/bed/blat.mm6/chainRaw .
+    rm -rf /cluster/data/mm5/bed/blat.mm6/chainRaw
+    mkdir chain
+    chainMergeSort chainRaw/*.chain | chainSplit chain stdin
+    mkdir net over
+    cd chain
+    for c in *.chain; do
+       echo ${c%.chain}; 
+       chainNet $c /cluster/data/mm5/chrom.sizes \
+        /cluster/data/mm6/chrom.sizes ../net/${c%.chain}.net /dev/null
+       echo done $c
+    done
+    for chain in *; do 
+       c=${chain%.chain}
+       netChainSubset ../net/$c.net $chain ../over/$c.over 
+    done
+    cd ../over/
+    cat * >> ../mm5ToMm6.chain
+    cd ../
+    cp mm5ToMm6.chain /cluster/data/mm5/bed/liftOver/
+    cd /cluster/data/mm5/bed/liftOver
+    mv mm5ToMm6.chain mm5ToMm6.over.chain
+    ssh hgwdev
+    ln -s /cluster/data/mm5/bed/liftOver/mm5ToMm6.over.chain /gbdb/mm5/liftOver/mm5ToMm6.over.chain
+    hgAddLiftOverChain mm5 mm6 /gbdb/mm5/liftOver/mm5ToMm6.over.chain
+    cd /usr/local/apache/htdocs/goldenPath/mm5/liftOver
+    cp /gbdb/mm5/liftOver/mm5ToMm6.over.chain .
+    gzip mm5ToMm6.over.chain
 
 # MAKING HUMAN SYNTENY (DONE - 2004-07-13 - Hiram)
 
@@ -2134,6 +2237,8 @@ rm -fr chrom temp run
 
 ##   MAKE THE affyGnfU74 TRACKs (DONE - 2004-07-18 - Fan)
 # Make bed files and load consensus sequences for Affy U74 chip set.
+# Fix broken symlinks to microarray data after directory structure changed
+# (DONE, 2005-05-03, hartera)
 ----------------------------------
 #This needs to be done after affyU74 is already made.
 ssh hgwdev
@@ -2162,10 +2267,14 @@ hgLoadBed mm5 affyGnfU74C affyGnfU74C.bed
 # [THE SYM LINKS WERE ALREADY DONE.]
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
-    ln -s /projects/compbiodata/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
-    
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
     # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
     # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
     # reload sequences with prefix removed so acc matches name used in
@@ -7240,7 +7349,7 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
   # couldn't find contig-based lift file from mm5
   # generate from ctgPos
   echo "select chromStart, chrom, contig, size, chrom from ctgPos;" > ctgPos.sql
-  hgsql mm5 < ctgPos.out > ctgPos.out
+  hgsql mm5 < ctgPos.sql > ctgPos.out
   # edit ctgPos.out to put in proper format -- next time write script for this
 
   # lift

@@ -1,7 +1,7 @@
 #!/bin/csh -f # set emacs mode
 exit; # don't actually run this like a script :)
 
-# Macaca Mulatta  (rheMac0)
+# Macaca Mulatta  (rheMac1)
 # Mmul_0.1(January 10, 2005)
 # contigs and scaffolds, no chromosomes
 # Mmul_0.1 is a preliminary assembly of the rhesus monkey, Macaca
@@ -12,10 +12,10 @@ exit; # don't actually run this like a script :)
 
 # DOWNLOAD SEQUENCE (DONE March 9, 2005 Robert)
     ssh kksilo
-    mkdir /cluster/store10/rheMac0
+    mkdir /cluster/store10/rheMac1
     cd /cluster/data
-    ln -s /cluster/store10/rheMac0 rheMac0
-    cd /cluster/data/rheMac0
+    ln -s /cluster/store10/rheMac1 rheMac1
+    cd /cluster/data/rheMac1
     mkdir downloads
     cd downloads
    mkdir contigs
@@ -45,7 +45,7 @@ exit; # don't actually run this like a script :)
 # Check that IDs in .fa match IDs in .qual
 
   ssh kksilo
-  cd /cluster/data/rheMac0/downloads
+  cd /cluster/data/rheMac1/downloads
   # foreach Bin0 contigs linearScaffolds repeat-reads
   grep ">" *.fa > id.fa
   grep ">" *.qual > id.qual
@@ -56,7 +56,7 @@ exit; # don't actually run this like a script :)
 # SPLIT SCAFFOLDS 
 
   ssh kksilo
-  cd /cluster/data/rheMac0
+  cd /cluster/data/rheMac1
   mkdir scaffolds
   nice /cluster/bin/i386/faSplit byname downloads/linearScaffolds/Rmac20041001-freeze-assembly.fa scaffolds/ -outDirDepth=3
   # generate list
@@ -66,25 +66,25 @@ exit; # don't actually run this like a script :)
 # MAKE 2BIT NIB FILE 
 
   ssh kksilo
-  cd /cluster/data/rheMac0/downloads/linearScaffolds
-  nice /cluster/bin/i386/faToTwoBit Rmac20041001-freeze-assembly.fa rheMac0.2bit
-  nice /cluster/bin/i386/twoBitToFa rheMac0.2bit check.fa
-  mv rheMac0.2bit ../..
+  cd /cluster/data/rheMac1/downloads/linearScaffolds
+  nice /cluster/bin/i386/faToTwoBit Rmac20041001-freeze-assembly.fa rheMac1.2bit
+  nice /cluster/bin/i386/twoBitToFa rheMac1.2bit check.fa
+  mv rheMac1.2bit ../..
   diff -q Rmac20041001-freeze-assembly.fa check.fa
   # could also use cmp
   # note: size match
   ssh hgwdev
-  mkdir /gbdb/rheMac0
-  mkdir /gbdb/rheMac0/nib
+  mkdir /gbdb/rheMac1
+  mkdir /gbdb/rheMac1/nib
   # could get rid of the nib in this path, 2bit isn't a nib (4bit)
-  ln -s /cluster/data/rheMac0/rheMac0.2bit /gbdb/rheMac0/nib
+  ln -s /cluster/data/rheMac1/rheMac1.2bit /gbdb/rheMac1/nib
 
 # CREATE DATABASE (DONE March 9, 2005 Robert)
 
   ssh hgwdev
   hgsql hg17
-  create database rheMac0;
-  use rheMac0;
+  create database rheMac1;
+  use rheMac1;
   create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;
   # add rows to hgcentraltest on hgwbeta in dbDb and defaultDb
   # set orderKey past dog, before chimp
@@ -94,23 +94,23 @@ exit; # don't actually run this like a script :)
   ssh hgwdev
   cd kent/src/hg/lib
   # remove bin column for now
-  hgsql rheMac0 < gap2.sql
-  cd /cluster/data/rheMac0/downloads/contigs
+  hgsql rheMac1 < gap2.sql
+  cd /cluster/data/rheMac1/downloads/contigs
   grep fragment Mmul20041001.agp > fragment.txt
-  hgsql rheMac0
+  hgsql rheMac1
   load data local infile 'fragment.txt' into table gap
-  # create trackDb/monkey/rheMac0/gap.html
+  # create trackDb/monkey/rheMac1/gap.html
 
 # CREATE CONTIG TABLE 
 
   ssh hgwdev
   cd kent/src/hg/lib
   # this doesn't include strand or contig start/end
-  hgsql rheMac0 < ctgPos2.sql
-  cd /cluster/data/rheMac0/downloads/contigs
+  hgsql rheMac1 < ctgPos2.sql
+  cd /cluster/data/rheMac1/downloads/contigs
   grep Contig Mmul20041001.agp > Contig.out
   ssh kksilo
-  cd /cluster/data/rheMac0/downloads/contigs
+  cd /cluster/data/rheMac1/downloads/contigs
 #where is getContig.pl??
 #  getContig.pl < Contig.out > ctgPos2
 #  ssh hgwdev
@@ -119,25 +119,25 @@ exit; # don't actually run this like a script :)
 # CREATE CHROMINFO TABLE 
 # an improvement here would be to have getMaxCoord output the 2bit file name
   ssh hgwdev
-  cd /cluster/data/rheMac0
+  cd /cluster/data/rheMac1
   # get coordinates from agp and put in database table
   getcoords.pl < downloads/contigs/Mmul20041001.agp > scaffolds.coords
-  hgsql rheMac0 < /cluster/data/bosTau1/coords.sql
+  hgsql rheMac1 < /cluster/data/bosTau1/coords.sql
   load data local infile 'scaffolds.coords' into table scaffoldCoords
   faSize downloads/linearScaffolds/Rmac20041001-freeze-assembly.fa -detailed=on > chrom.sizes
 
   # calculate maximum coords; check that start coord is always 1
-##  /cluster/home/heather/bin/i386/GetMaxCoord > getMaxCoord.rheMac0
+##  /cluster/home/heather/bin/i386/GetMaxCoord > getMaxCoord.rheMac1
 
    edit chromInfo.sql; allow fileName to be null
    cp ~baertsch/kent/src/hg/lib/chromInfo.sql .
-   hgsql rheMac0 < chromInfo.sql
+   hgsql rheMac1 < chromInfo.sql
    load data local infile 'chrom.sizes' into table chromInfo
-   update chromInfo set fileName = "/gbdb/rheMac0/nib/rheMac0.2bit"
+   update chromInfo set fileName = "/gbdb/rheMac1/nib/rheMac1.2bit"
 
 # LOAD GAP & GOLD TABLES FROM AGP 
     ssh hgwdev
-    hgGoldGapGl -noGl rheMac0 /cluster/data/rheMac0/downloads/contigs/Mmul20041001.agp 
+    hgGoldGapGl -noGl rheMac1 /cluster/data/rheMac1/downloads/contigs/Mmul20041001.agp 
 
 # REPEATMASKER 
 # using the split scaffold fa files generated earlier
@@ -148,13 +148,13 @@ exit; # don't actually run this like a script :)
 
 # do a trial run
   ssh hgwdev
-  cd /cluster/data/rheMac0/scaffolds/0/0/0
+  cd /cluster/data/rheMac1/scaffolds/0/0/0
   /cluster/bluearc/RepeatMasker/RepeatMasker -ali -s -spec macaca SCAFFOLD1000.fa
 # configure
-  cd /cluster/data/rheMac0
+  cd /cluster/data/rheMac1
   mkdir jkStuff
   cp /cluster/data/anoGam1/jkStuff/RMAnopheles jkStuff/RMRhesus
-  # change references anoGam1 --> rheMac0
+  # change references anoGam1 --> rheMac1
   mkdir RMRun
 
   # /bin/csh makeJoblist-RM.csh
@@ -167,10 +167,10 @@ exit; # don't actually run this like a script :)
       foreach k (0 1 2 3 4 5 6 7 8 9)
         cd $k
         foreach f (*.fa)
-          echo /cluster/data/rheMac0/jkStuff/RMRhesus \
-	       /cluster/data/rheMac0/scaffolds/$i/$j/$k $f \
-	      '{'check out line+ /cluster/data/rheMac0/scaffolds/$i/$j/$k/$f.out'}' \
-	  >> /cluster/data/rheMac0/RMRun/RMJobs.2
+          echo /cluster/data/rheMac1/jkStuff/RMRhesus \
+	       /cluster/data/rheMac1/scaffolds/$i/$j/$k $f \
+	      '{'check out line+ /cluster/data/rheMac1/scaffolds/$i/$j/$k/$f.out'}' \
+	  >> /cluster/data/rheMac1/RMRun/RMJobs.2
 	end
       cd ..
       end
@@ -181,14 +181,14 @@ exit; # don't actually run this like a script :)
 
   # do the run  (DONE March 11, 2005 Robert)
   ssh kk
-  cd /cluster/data/rheMac0/RMRun
+  cd /cluster/data/rheMac1/RMRun
   para create RMJobs.2
   para try
   para push
 
   # concatenate into one output file; took about 90 minutes
   ssh kksilo
-  cd /cluster/data/rheMac0
+  cd /cluster/data/rheMac1
   mkdir repeats
   /bin/tcsh concatRM.csh
   cd repeats
@@ -200,7 +200,7 @@ exit; # don't actually run this like a script :)
   grep "There were no repetitive sequences found" repeats.final > repeats.notfound
   grep -v "There were no repetitive sequences found" repeats.final > repeats.out
   ssh hgwdev
-  hgLoadOut rheMac0 repeats.out
+  hgLoadOut rheMac1 repeats.out
   # Strange perc. fields:
 Processing repeats.out
 Strange perc. field -0.1 line 647418 of repeats.out
@@ -234,7 +234,7 @@ Strange perc. field -2.4 line 4155697 of repeats.out
 Strange perc. field -3.5 line 4423839 of repeats.out
 Strange perc. field -0.6 line 4781433 of repeats.out
 note: 883 records dropped due to repStart > repEnd
-  hgsql rheMac0
+  hgsql rheMac1
   rename table repeats_rmsk to rmsk
 
   # select count(*) from rmsk;
@@ -244,7 +244,7 @@ note: 883 records dropped due to repStart > repEnd
 # put the results throughout the scaffold 0/0/0 directories,
 # same as RepeatMasker, to avoid too many files in the same directory
   ssh kksilo
-  cd /cluster/data/rheMac0
+  cd /cluster/data/rheMac1
   mkdir bed
   cd bed
   mkdir simpleRepeat
@@ -257,14 +257,14 @@ note: 883 records dropped due to repStart > repEnd
   /bin/tcsh concatTRF.csh
 
   # load
-  /cluster/bin/i386/hgLoadBed rheMac0 simpleRepeat trf.bed \
+  /cluster/bin/i386/hgLoadBed rheMac1 simpleRepeat trf.bed \
     -sqlTable = /cluster/home/heather/kent/src/hg/lib/simpleRepeat.sql
 
 #Reading trf.bed
 #Loaded 628275 elements of size 16
 #Sorted
 #Saving bed.tab
-#Loading rheMac0
+#Loading rheMac1
 
   create index chrom_2 on simpleRepeat (chrom(16), chromStart);
   create index chrom_3 on simpleRepeat (chrom(16), chromEnd);
@@ -273,8 +273,8 @@ note: 883 records dropped due to repStart > repEnd
 # CREATE MASKED FA USING REPEATMASKER AND FILTERED TRF FILES 
 
   ssh kksilo
-  cd /cluster/data/rheMac0
-  /cluster/bin/i386/maskOutFa -soft downloads/linearScaffolds/Rmac20041001-freeze-assembly.fa repeats/repeat.out rheMac0.softmask.fa
+  cd /cluster/data/rheMac1
+  /cluster/bin/i386/maskOutFa -soft downloads/linearScaffolds/Rmac20041001-freeze-assembly.fa repeats/repeat.out rheMac1.softmask.fa
 WARNING: negative rEnd: -364 SCAFFOLD25002:50185-50335 L1MCc
 WARNING: negative rEnd: -17 SCAFFOLD65002:22962-23303 L1MCc
 WARNING: negative rEnd: -168 SCAFFOLD15011:216786-217104 L1MEd
@@ -432,53 +432,53 @@ WARNING: negative rEnd: -491 SCAFFOLD5875:11189-11235 L1MEb
 WARNING: negative rEnd: -321 SCAFFOLD110959:5414-5484 L1MCc
   # matches select count(*) from rmsk where repEnd < 0;
 
-  /cluster/bin/i386/maskOutFa -softAdd rheMac0.softmask.fa bed/simpleRepeat/trf.bed rheMac0.softmask2.fa
+  /cluster/bin/i386/maskOutFa -softAdd rheMac1.softmask.fa bed/simpleRepeat/trf.bed rheMac1.softmask2.fa
 
   # hard masking (Ns instead of lower case) for download files
   # split for use by genscan
-  /cluster/bin/i386/maskOutFa rheMac0.softmask2.fa hard rheMac0.hardmask.fa
+  /cluster/bin/i386/maskOutFa rheMac1.softmask2.fa hard rheMac1.hardmask.fa
   mkdir hardmask-split
-  /cluster/bin/i386/faSplit about rheMac0.hardmask.fa 2000000 hardmask-split
+  /cluster/bin/i386/faSplit about rheMac1.hardmask.fa 2000000 hardmask-split
 
 # DOWNLOAD FILES
 
   ssh hgwdev
-  cd /cluster/data/rheMac0
-  cp rheMac0.softmask.fa /usr/local/apache/htdocs/goldenPath/rheMac0/bigZips
-  cp rheMac0.softmask2.fa /usr/local/apache/htdocs/goldenPath/rheMac0/bigZips
-  cp rheMac0.hardmask.fa /usr/local/apache/htdocs/goldenPath/rheMac0/bigZips
+  cd /cluster/data/rheMac1
+  cp rheMac1.softmask.fa /usr/local/apache/htdocs/goldenPath/rheMac1/bigZips
+  cp rheMac1.softmask2.fa /usr/local/apache/htdocs/goldenPath/rheMac1/bigZips
+  cp rheMac1.hardmask.fa /usr/local/apache/htdocs/goldenPath/rheMac1/bigZips
 
-  cd /usr/local/apache/htdocs/goldenPath/rheMac0/bigZips
-  nice gzip rheMac0.softmask.fa
-  nice gzip rheMac0.softmask2.fa
-  nice gzip rheMac0.hardmask.fa
+  cd /usr/local/apache/htdocs/goldenPath/rheMac1/bigZips
+  nice gzip rheMac1.softmask.fa
+  nice gzip rheMac1.softmask2.fa
+  nice gzip rheMac1.hardmask.fa
 
 # REGENERATE 2BIT NIB 
   ssh kksilo
-  cd /cluster/data/rheMac0
-  /cluster/bin/i386/faToTwoBit rheMac0.softmask2.fa rheMac0.softmask.2bit
-  /cluster/bin/i386/twoBitToFa rheMac0.softmask.2bit check.softmask.fa
-  diff -q rheMac0.softmask2.fa check.softmask.fa
-  mv rheMac0.2bit rheMac0.2bit.unmasked
-  mv rheMac0.softmask.2bit rheMac0.2bit
+  cd /cluster/data/rheMac1
+  /cluster/bin/i386/faToTwoBit rheMac1.softmask2.fa rheMac1.softmask.2bit
+  /cluster/bin/i386/twoBitToFa rheMac1.softmask.2bit check.softmask.fa
+  diff -q rheMac1.softmask2.fa check.softmask.fa
+  mv rheMac1.2bit rheMac1.2bit.unmasked
+  mv rheMac1.softmask.2bit rheMac1.2bit
   # note: size match
 
 # GENERATE split masked fas for blastz 
   ssh kkr1u00
-  mkdir -p /iscratch/i/rheMac0/nib
-  cd /cluster/data/rheMac0
-  cp /cluster/data/rheMac0/rheMac0.2bit /iscratch/i/rheMac0/nib/
+  mkdir -p /iscratch/i/rheMac1/nib
+  cd /cluster/data/rheMac1
+  cp /cluster/data/rheMac1/rheMac1.2bit /iscratch/i/rheMac1/nib/
 
-  #mkdir -p /iscratch/i/rheMac0/splitFas
-  #/cluster/bin/i386/faSplit sequence /cluster/data/rheMac0/rheMac0.softmask2.fa 350 /iscratch/i/rheMac0/splitDir/
-  cd /iscratch/i/rheMac0
+  #mkdir -p /iscratch/i/rheMac1/splitFas
+  #/cluster/bin/i386/faSplit sequence /cluster/data/rheMac1/rheMac1.softmask2.fa 350 /iscratch/i/rheMac1/splitDir/
+  cd /iscratch/i/rheMac1
   # check that I got all scaffolds
   #grep SCAFFOLD *.fa > SCAFFOLD.list
   # sync
   /cluster/bin/scripts/iSync
 
 ssh kksilo
-cd /cluster/data/hg17/bed/blastz.rheMac0
+cd /cluster/data/hg17/bed/blastz.rheMac1
 # alignments (DONE - March 16 - Robert)
 # edit doBlastzChainNet.pl to add lines for hg17 glitch
 # in function getDbFromPath
@@ -488,84 +488,84 @@ cd /cluster/data/hg17/bed/blastz.rheMac0
 doBlastzChainNet.pl DEF -blastzOutRoot /panasas/store/rheMacOut/ >& do.log &
 # make blat ooc (DONE - March 17 - Robert)
   ssh kkr1u00
-  mkdir /cluster/data/rheMac0/bed/ooc
-  cd /cluster/data/rheMac0/bed/ooc
-  ls -1 /cluster/data/rheMac0/rheMac0.2bit > nib.lst
+  mkdir /cluster/data/rheMac1/bed/ooc
+  cd /cluster/data/rheMac1/bed/ooc
+  ls -1 /cluster/data/rheMac1/rheMac1.2bit > nib.lst
   /cluster/bin/i386/blat nib.lst /dev/null /dev/null -tileSize=11 \
     -makeOoc=11.ooc -repMatch=800
 Writing 11.ooc
 Wrote 38031 overused 11-mers to 11.ooc
 Done making 11.ooc
-  cp -p 11.ooc /iscratch/i/rheMac0/
+  cp -p 11.ooc /iscratch/i/rheMac1/
   iSync
 
 # SWAP CHAINS FROM HG17, BUILD NETS ETC.   (DONE  3/31/2005  Robert)
     ssh eieio
-    mkdir /cluster/data/rheMac0/bed/blastz.hg17.swap
-    cd /cluster/data/rheMac0/bed/blastz.hg17.swap
+    mkdir /cluster/data/rheMac1/bed/blastz.hg17.swap
+    cd /cluster/data/rheMac1/bed/blastz.hg17.swap
 # use special version of doBlastzChainNet.pl to handle hg17 hack
 # must run on kolossus , due to memory requirements.
-    nohup /cluster/data/hg17/bed/blastz.rheMac0/doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.rheMac0/DEF   \
+    nohup /cluster/data/hg17/bed/blastz.rheMac1/doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.rheMac1/DEF   \
        -workhorse=kolossus >& do.log &
     tail -f do.log
     # Add {chain,net}hg17 to trackDb.ra if necessary.
-    # Add /usr/local/apache/htdocs/goldenPath/rheMac0/vsHg17/README.txt
+    # Add /usr/local/apache/htdocs/goldenPath/rheMac1/vsHg17/README.txt
 
 # hgLoadChain ran out of memory , split chains
-cd /cluster/data/rheMac0/bed/blastz.hg17.swap/axtChain
+cd /cluster/data/rheMac1/bed/blastz.hg17.swap/axtChain
 mkdir split
-chainSplit split rheMac0.hg17.all.chain.gz -q &
+chainSplit split rheMac1.hg17.all.chain.gz -q &
 # filter chains score < 5000
 mkdir splitFilter
 for i in `ls split` ; do echo $i ;chainFilter split/$i -minScore=5000 > splitFilter/$i ; done
 rm -rf split
 #assumes empty chain tables exist
-for i in `ls splitFilter` ; do echo $i ; hgLoadChain -oldTable -tIndex rheMac0 chainHg17 splitFilter/$i ; done
+for i in `ls splitFilter` ; do echo $i ; hgLoadChain -oldTable -tIndex rheMac1 chainHg17 splitFilter/$i ; done
 # Add gap/repeat stats to the net file using database tables:
-cd /cluster/data/rheMac0/bed/blastz.hg17.swap/axtChain
-netClass -verbose=0 -noAr noClass.net rheMac0 hg17 rheMac0.hg17.net
+cd /cluster/data/rheMac1/bed/blastz.hg17.swap/axtChain
+netClass -verbose=0 -noAr noClass.net rheMac1 hg17 rheMac1.hg17.net
 
 # Load nets:
-netFilter -minGap=10 rheMac0.hg17.net \
-| hgLoadNet -verbose=0 rheMac0 netHg17 stdin
+netFilter -minGap=10 rheMac1.hg17.net \
+| hgLoadNet -verbose=0 rheMac1 netHg17 stdin
 
 
 # make liftOver chains
 ssh eieio
-gunzip /cluster/data/hg17/bed/liftOver/hg17.rheMac0.over.chain.gz
+gunzip /cluster/data/hg17/bed/liftOver/hg17.rheMac1.over.chain.gz
 ssh hgwdev
-ln /cluster/data/hg17/bed/liftOver/hg17.rheMac0.over.chain /gbdb/hg17/liftOver/hg17ToRheMac0.over.chain -s
+ln /cluster/data/hg17/bed/liftOver/hg17.rheMac1.over.chain /gbdb/hg17/liftOver/hg17TorheMac1.over.chain -s
     cd /usr/local/apache/htdocs/goldenPath/bosTau1/liftOver
     cp /cluster/data/bosTau1/bed/bedOver/bosTau1.hg17.over.chain.gz .
 
     # hgsql hgcentraltest
 # insert into liftOverChain 
-#      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("rheMac0", "hg17", "/gbdb/rheMac0/liftOver/rheMac0.hg17.over.chain", 0.95, 0, 0, "Y", 1, "N");
+#      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("rheMac1", "hg17", "/gbdb/rheMac1/liftOver/rheMac1.hg17.over.chain", 0.95, 0, 0, "Y", 1, "N");
 # insert into liftOverChain 
-#      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("hg17", "rheMac0", "/gbdb/hg17/liftOver/hg17ToRheMac0.over.chain", 0.95, 0, 0, "Y", 1, "N");
+#      (fromDb, toDb, path, minMatch, minSizeT, minSizeQ, multiple, minBlocks, fudgeThick) values ("hg17", "rheMac1", "/gbdb/hg17/liftOver/hg17TorheMac1.over.chain", 0.95, 0, 0, "Y", 1, "N");
 
 
 # GC5BASE (DONE - 2005-04-01 - Galt)
     ssh hgwdev
-    mkdir -p /cluster/data/rheMac0/bed/gc5Base
-    cd /cluster/data/rheMac0/bed/gc5Base
-    hgGcPercent -wigOut -doGaps -file=stdout -win=5 rheMac0 \
-        /cluster/data/rheMac0 | wigEncode stdin gc5Base.wig gc5Base.wib
+    mkdir -p /cluster/data/rheMac1/bed/gc5Base
+    cd /cluster/data/rheMac1/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 rheMac1 \
+        /cluster/data/rheMac1 | wigEncode stdin gc5Base.wig gc5Base.wib
     #       Calculating gcPercent with window size 5
-    #       Using twoBit: /cluster/data/rheMac0/rheMac0.2bit
+    #       Using twoBit: /cluster/data/rheMac1/rheMac1.2bit
     #       File stdout created
     #   Converted stdin, upper limit 100.00, lower limit 0.00
                                                                                                             
     #   runs for about 1 hour
                                                                                                             
-    mkdir /gbdb/rheMac0/wib
-    ln -s `pwd`/gc5Base.wib /gbdb/rheMac0/wib
-    hgLoadWiggle -pathPrefix=/gbdb/rheMac0/wib rheMac0 gc5Base gc5Base.wig
+    mkdir /gbdb/rheMac1/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/rheMac1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/rheMac1/wib rheMac1 gc5Base gc5Base.wig
                                                                                                             
     #   analyze table to update the Cardinality column, so it's not NULL:
     #   (Hiram is going to add this to hgLoadWiggle so it is done automatically)
-    hgsql rheMac0 -e "analyze table gc5Base;"
+    hgsql rheMac1 -e "analyze table gc5Base;"
     #   verify index is correct:
     #   should see good numbers in Cardinality column, not NULL:
-    hgsql rheMac0 -e "show index from gc5Base;"
+    hgsql rheMac1 -e "show index from gc5Base;"
 

@@ -6,7 +6,7 @@
 #include "common.h"
 #include "rle.h"
 
-static char const rcsid[] = "$Id: rle.c,v 1.5 2004/06/07 18:23:10 kent Exp $";
+static char const rcsid[] = "$Id: rle.c,v 1.6 2005/05/10 00:50:16 markd Exp $";
 
 static int countSameAsStart(signed char *s, int max)
 /* Count number of signed chars that are the same as first. */
@@ -77,7 +77,9 @@ void rleUncompress(signed char *in, int inSize, void *vOut, int outSize)
 int count;
 signed char *out = vOut;
 signed char *endOut = out + outSize;
+#ifndef NDEBUG
 signed char *endIn = in + inSize;
+#endif
 
 while (out < endOut)
      {
@@ -96,6 +98,6 @@ while (out < endOut)
 	  }
 	  
     }
-assert(out == endOut && in == endIn);     
+assert(out == endOut && in == endIn);
 }
 

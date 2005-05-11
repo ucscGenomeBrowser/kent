@@ -1,4 +1,5 @@
 /* codedType - Types in form that can be used at run time. */
+
 #include "common.h"
 #include "pfType.h"
 #include "pfParse.h"
@@ -32,7 +33,7 @@ return cot;
 static void rEncodeType(struct pfType *type, struct dyString *dy)
 /* Encode type recursively into dy. */
 {
-dyStringPrintf(dy, "%d", type->base->id);
+dyStringPrintf(dy, "%s", type->base->name);
 if (type->children != NULL)
     {
     dyStringAppendC(dy, '(');
@@ -46,12 +47,13 @@ if (type->children != NULL)
     }
 }
 
-static void encodeType(struct pfType *type, struct dyString *dy)
+void encodeType(struct pfType *type, struct dyString *dy)
 /* Encode type into dy. */
 {
 dyStringClear(dy);
 rEncodeType(type, dy);
 }
+
 
 static struct codedType *codedTypeLookup(struct hash *hash, 
 	struct dyString *dy, struct pfType *type)

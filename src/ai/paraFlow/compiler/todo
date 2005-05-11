@@ -1,8 +1,13 @@
-  - Working on multiple modules.
+  - Do a sort function (need function pointer?)
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
-  - Implement ++ and maybe --.
   - Read-only and private variables.
+        Make it so that class.new() is only legal way to
+	make something with private or read-only var.
+  - Implement ++ and maybe --.
+  - Implement case statement.
+  - Create 'serial' function - that is gauranteed only to be 
+    executed by one thread at a time.  Can be called from a para.
   - Exceptions.
   - Prevent memory leakage in expressions that don't get assigned to anything
     (including function calls).
@@ -19,6 +24,20 @@ Check system:
 
 -----------
 DONE
+  - Changing it so that a pf_ is prepended to all global
+    symbols created by paraFlow to avoid name conflicts
+    with the C libraries.
+  - Make it so don't need 'self' to reference class members and 
+    methods inside a method of same class.
+  - Make single quotes mean literal ascii character values.
+  - make tuple.pfh work right (variables not right).
+  - Test default initializations across modules.
+  - Make classes declared in another module work.
+  - make pfh file include closing paren in :
+	to fibonacci ( int iterations ) into ( long f;
+	to factorial ( int n ) into ( float f;
+  - Make testProg/broken/oneIntoClass.pf work.
+  - Working on multiple modules.
   - Getting raw keyboard input.
   - Rename f.print and f.scan to something else.  read/write?  
     readVar/writeVar? put/get?   

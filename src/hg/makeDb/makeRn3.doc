@@ -4941,3 +4941,10 @@ mkdir -p $3:h
 
     hgsql rn3 -e 'load data local infile "rn3.kgProtAlias.tab" into table rn3.kgProtAlias'
 
+
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

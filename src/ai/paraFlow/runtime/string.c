@@ -28,6 +28,13 @@ string->size = string->allocated = size;
 return string;
 }
 
+struct _pf_string *_pf_string_dupe(char *s, int size)
+/* Clone string of given size and wrap string around it. */
+{
+s = cloneMem(s, size);
+return _pf_string_new(s, size);
+}
+
 int _pf_strcmp(_pf_Stack *stack)
 /* Return comparison between strings.  Cleans them off
  * of stack.  Does not put result on stack because
@@ -268,27 +275,6 @@ if (--sub->_pf_refCount <= 0)
 }
 
 
-#ifdef OLD
-static int countWords(char *s)
-/* Count how many white-space-separated words in string */
-{
-int count = 0;
-char c;
-for (;;)
-    {
-    s = skipLeadingSpaces(s);
-    if (s[0] == 0)
-        break;
-    count += 1;
-    s = skipToSpaces(s);
-    if (s == NULL)
-        break;
-    }
-return count;
-}
-#endif /* OLD */
-
-
 void _pf_cm_string_nextSpaced(_pf_Stack *stack)
 /* Return next white-space separated word. */
 {
@@ -407,7 +393,7 @@ void _pf_cm_string_fitRight(_pf_Stack *stack)
 fitString(stack, TRUE);
 }
 
-void floatString(_pf_Stack *stack)
+void pf_floatString(_pf_Stack *stack)
 /* floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
  *         bit forceScientific) into string s
  * This returns a floating point number formatted just how you like it. */
@@ -427,7 +413,7 @@ safef(buf, sizeof(buf), format, f);
 stack[0].String = _pf_string_new(buf, strlen(buf));
 }
 
-void intString(_pf_Stack *stack)
+void pf_intString(_pf_Stack *stack)
 /* Format an integer just how you like it. *?
  * intString(long l, int minWidth, bit zeroPad, bit commas) into String s
  */

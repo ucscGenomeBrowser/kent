@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.37 2005/02/23 00:41:16 aamp Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.38 2005/05/11 23:26:47 aamp Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -339,9 +339,9 @@ if (!choice)
 	toDb = fromDb = toOrg = fromOrg = NULL;
     if (toOrg && !slNameInList(toOrgs, toOrg))
 	toOrg = toDb = NULL;
-    if (fromOrg && fromDb && !sameWord(fromOrg,orgFromDb))
+    if (fromOrg && fromDb && orgFromDb && !sameWord(fromOrg,orgFromDb))
 	fromDb = fromOrg = toOrg = toDb = NULL;
-    if (toOrg && toDb && !sameWord(toOrg,orgToDb))
+    if (toOrg && toDb && orgToDb && !sameWord(toOrg,orgToDb))
 	toDb = toOrg = NULL;
     if (toOrg && !fromDb)
 	fromOrg = fromDb = toOrg = toDb = NULL;

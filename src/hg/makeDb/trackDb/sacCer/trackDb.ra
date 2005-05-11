@@ -30,8 +30,8 @@ type bed 6 +
 exonArrows on
 
 track mrna
-shortLabel $Organism RNAs
-longLabel $Organism RNAs from GenBank 
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54
 visibility pack

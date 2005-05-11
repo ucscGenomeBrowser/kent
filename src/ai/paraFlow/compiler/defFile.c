@@ -2,9 +2,9 @@
  * in this file. */
 
 #include "common.h"
-//#include "linefile.h"
-//#include "hash.h"
-//#include "dystring.h"
+// #include "linefile.h"
+#include "hash.h"
+#include "dystring.h"
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfToken.h"
@@ -46,13 +46,13 @@ for (;;)
     }
 }
 
-static void rPrintIntos(FILE *f, struct pfParse *pp)
+static void rPrintIncludes(FILE *f, struct pfParse *pp)
 /* Print into statements. */
 {
-if (pp->type == pptInto)
-    fprintf(f, "into %s;\n", pp->children->name);
+if (pp->type == pptInclude)
+    fprintf(f, "include %s;\n", pp->children->name);
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    rPrintIntos(f, pp);
+    rPrintIncludes(f, pp);
 }
 
 static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit);
@@ -66,12 +66,43 @@ struct pfParse *type = pp->children;
 struct pfParse *name = type->next;
 struct pfParse *init = name->next;
 
+start = end = type->tok;
 findSpanningTokens(type, &start, &end);
+printTokenRange(f, start, end);
+fprintf(f, " ");
+start = end = name->tok;
 findSpanningTokens(name, &start, &end);
 if (printInit && init != NULL)
     findSpanningTokens(init, &start, &end);
 printTokenRange(f, start, end);
 fprintf(f, ";\n");
+}
+
+static struct pfToken *addClosingParens(struct pfToken *start, 
+	struct pfToken *end)
+/* If the output type tuple is parenthesized we end up missing
+ * the closing end paren.  This fixes that. */
+{
+int parenBalance = 0;
+struct pfToken *tok = start;
+for (;;)
+    {
+    if (tok->type == '(')
+        ++parenBalance;
+    else if (tok->type == ')')
+        --parenBalance;
+    if (tok == end)
+        break;
+    tok = tok->next;
+    }
+while (parenBalance > 0)
+    {
+    tok = tok->next;
+    if (tok == NULL || tok->type != ')')
+        internalErr();
+    --parenBalance;
+    }
+return tok;
 }
 
 static void printFuncDef(FILE *f, struct pfParse *funcDef)
@@ -86,6 +117,7 @@ start = end = funcDef->tok;
 findSpanningTokens(name, &start, &end);
 findSpanningTokens(input, &start, &end);
 findSpanningTokens(output, &start, &end);
+end = addClosingParens(start, end);
 printTokenRange(f, start, end);
 fprintf(f, ";\n");
 }
@@ -127,8 +159,57 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	case pptClass:
 	    printClassDef(f, pp);
 	    break;
+	case pptTuple:
+	    rPrintDefs(f, pp, printInit);
+	    break;
 	}
     }
+}
+
+void rPrintTypesUsed(FILE *f, struct pfParse *pp, 
+	struct dyString *dy, struct hash *hash)
+/* Make up a dummy variable for each type that is used. */
+{
+if (pp->type == pptVarInit)
+    {
+    struct pfParse *p = pp->children;
+    dyStringClear(dy);
+    if (p->type == pptTypeName)
+	dyStringAppend(dy, p->name);
+    else if (p->type == pptOf)
+        {
+	p = p->children;
+	dyStringAppend(dy, p->name);
+	while ((p = p->next) != NULL)
+	    {
+	    dyStringAppend(dy, " of ");
+	    dyStringAppend(dy, p->name);
+	    }
+	}
+    else
+        {
+	internalErr();
+	}
+    if (!hashLookup(hash, dy->string))
+        {
+	hashAdd(hash, dy->string, NULL);
+	fprintf(f, "%s t%d;\n", dy->string, hash->elCount);
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rPrintTypesUsed(f, pp, dy, hash);
+}
+
+void printTypesUsed(FILE *f, struct pfParse *module)
+/* Print a variable for each type used. */
+{
+struct dyString *dy = dyStringNew(0);
+struct hash *hash = hashNew(0);
+
+rPrintTypesUsed(f, module, dy, hash);
+
+hashFree(&hash);
+dyStringFree(&dy);
 }
 
 void pfMakeDefFile(struct pfCompile *pfc, struct pfParse *module, 
@@ -136,8 +217,14 @@ void pfMakeDefFile(struct pfCompile *pfc, struct pfParse *module,
 /* Write out definition file. */
 {
 FILE *f = mustOpen(defFile, "w");
-fprintf(f, "// Paraflow def file for %s module\n", module->name);
-rPrintIntos(f, module);
+fprintf(f, "// ParaFlow definition and type file  for %s module\n", module->name);
+fprintf(f, "   // Types used\n");
+fprintf(f, "{\n");
+printTypesUsed(f, module);
+fprintf(f, "}\n");
+fprintf(f, "   // Modules referenced\n");
+rPrintIncludes(f, module);
+fprintf(f, "   // Symbols defined\n");
 rPrintDefs(f, module, FALSE);
 carefulClose(&f);
 }

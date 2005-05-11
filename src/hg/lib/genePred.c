@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.66 2005/04/13 06:25:53 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.67 2005/05/03 01:31:13 sugnet Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1322,4 +1322,45 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     checkExon(desc, gp, iExon);
 
 return gpErrorCnt;
+}
+
+boolean genePredNmdTarget(struct genePred *gp) 
+/* Return TRUE if cds end is more than 50bp upstream of
+   last intron. */
+{
+int gpSize = 0;
+int i = 0;
+int startDist = 0, endDist = 0;
+int blockSize = 0;
+if(gp->exonCount < 2)
+    return FALSE;
+for(i = 0; i < gp->exonCount; i++)
+    {
+    int blockStart = gp->exonStarts[i];
+    int blockEnd = gp->exonEnds[i];
+    blockSize = blockEnd - blockStart;
+    if( blockStart <= gp->cdsStart && gp->cdsStart <= blockEnd)
+	startDist += blockSize - (blockEnd - gp->cdsStart);
+    else if(blockEnd <= gp->cdsStart)
+	startDist += blockSize;
+    if( blockStart <= gp->cdsEnd && gp->cdsEnd <= blockEnd)
+	endDist += blockSize - (blockEnd - gp->cdsEnd);
+    else if(blockEnd <= gp->cdsEnd)
+	endDist += blockSize;
+    gpSize += blockSize;
+    }
+/*  xxxxxXXX----XXXXXXXXXXXXX--------XXXXXXX----XXXxxxxxxxx-------xxxxxxxxx  */                                           
+if(sameString(gp->strand, "+"))
+    {
+    blockSize = gp->exonEnds[gp->exonCount-1] - gp->exonStarts[gp->exonCount-1];
+    return endDist < (gpSize - blockSize - 50); 
+    }
+else if(sameString(gp->strand, "-"))
+    {
+    blockSize = gp->exonEnds[0] - gp->exonStarts[0];
+    return startDist > (gp->exonEnds[1] + 50);
+    }
+else 
+    errAbort("genePredNmdsTarget() - Don't recognize strand: %s\n", gp->strand);
+return FALSE;
 }

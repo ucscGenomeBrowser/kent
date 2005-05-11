@@ -1,10 +1,13 @@
 table bacCloneXRef
-"BAC clones external names, internal sequence names and Genbank accessions"
+"BAC clones and corresponding STS information"
     (
-    string altName;       "Alternate name (alias) for BAC clone from UniSTS"
-    string extName;       "External name for BAC clone - International ID"
-    string intName;       "Internal Sanger sequencing name for BAC clone"
-    string uniStsId;      "UniSTS ID for BAC clone"
-    string acc;           "Genbank accession for the BAC Clone"
-    string fpcCtg;        "FPC Contig for BAC clone"
+    string name;                "External name for BAC clone"
+    string intName;             "Internal Sanger FPC name"
+    string chroms;              "Chromosome(s) to which at one or both BAC ends are mapped by BLAT"
+    string genbank;             "Genbank accession for the BAC Clone"
+    string sangerName;          "Sanger STS name"
+    uint relationship;          "Relationship type - method of finding STS"
+    string uniStsId;            "UniSTS ID(s) for STS"
+    string leftPrimer;          "STS 5' primer sequence"
+    string rightPrimer;         "STS 3' primer sequence"
     )

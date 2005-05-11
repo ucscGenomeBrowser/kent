@@ -10898,3 +10898,56 @@ cat `ls -1 *.lav | sort -g` \
     ldHgGene hg16 pseudoYale pseudoYale.gtf
     # Note - I'm guessing how this goes.  Robert left no record. -jk
 
+## refresh vega tracks with vega build30        (done 5/4/04 Robert)
+##download vega mysql tables
+cd /cluster/store8/ensembl
+mkdir vega30_35c
+cd vega30_35c
+ln /cluster/store8/ensembl/vega30_35c /cluster/data/hg17/bed/vega30 -s
+
+for i in `cat tables` ; do wget -N ftp://ftp.ensembl.org/pub/human-30.35c/data/mysql/homo_sapiens_vega_30_35c/$i.gz ; done
+wget -N ftp://ftp.ensembl.org/pub/human-30.35c/data/mysql/homo_sapiens_vega_30_35c/homo_sapiens_vega_30_35c_mysql40_compatible..sql.gz 
+gunzip *.gz
+##create mysql database
+mysql 
+create database vega30
+use vega30
+source homo_sapiens_vega_30_35c_mysql40_compatible.sql
+source dropMt.sql
+source load.sql
+exit
+
+
+hgsql vega30 -N -B < vegaGene.sql > vegaGene.tab
+awk -f vegaGene.awk < vegaGene.tab > vegaGene.gp     
+ldHgGene hg17 vegaGene -predTab vegaGene.gp -gtf -genePredExt 
+hgsql vega30 -N -B < vegaPseudo.sql > vegaPseudo.tab
+awk -f vegaPseudo.awk < vegaPseudo.tab > vegaPseudo.gp     
+ldHgGene hg17 vegaPseudoGene -predTab vegaPseudo.gp -gtf -genePredExt 
+
+#load processed pseudogenes
+grep Processed vegaPseudo.tab > vegaProcPseudo.tab
+awk -f vegaPseudo.awk < vegaProcPseudo.tab > vegaProcPseudo.gp
+ldHgGene hg17 vegaProcessedPseudo -predTab vegaProcPseudo.gp -gtf -genePredExt
+
+#load vegaInfo
+hgsql vega30 -N -B < vegaGeneInfo.sql > vegaInfo.tab
+hgsql vega30 -N -B < vegaPseudoInfo.sql >> vegaInfo.tab
+
+hgsql hg17 -N -B < /cluster/home/baertsch/kent/src/hg/lib/vegaInfo.sql
+echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg17 -N -B
+
+#load down to hg16
+liftOver vegaGene.gp /gbdb/hg17/liftOver/hg17ToHg16.over.chain vegaGeneHg16.gp unMapped.gp -genePred
+liftOver vegaPseudo.gp /gbdb/hg17/liftOver/hg17ToHg16.over.chain vegaPseudoGeneHg16.gp unMappedPseudo.gp -genePred
+
+ldHgGene hg16 vegaGene -predTab vegaGeneHg16.gp -gtf 
+ldHgGene hg16 vegaPseudoGene -predTab vegaPseudoGeneHg16.gp -gtf 
+echo 'truncate table vegaInfo' | hgsql hg16 -N -B
+echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N -B
+
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+

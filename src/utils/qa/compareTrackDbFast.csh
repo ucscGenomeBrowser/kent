@@ -131,22 +131,24 @@ else
   end
 endif
   
-diff $machine1.$db.$table $machine2.$db.$table \
-   | sed -e "/^[0123456789]/s/^/\n/"
+echo
+echo "---------------------------------------------------------------"
+echo 
+diff $machine1.$db.$table $machine2.$db.$table | sed -e "/^[0123456789]/s/^/\n/" >& $db.temp
    # if the line begins with a digit, substitute a newline at the beginning
    # | perl -pw -e "s/^(\d)/\nx/"
 if ( $status ) then
-  echo "\nThe differences above are found in $table.$field"
-  echo "between $machine1 and $machine2"
+  echo "\n$db.$table.$field : Differences between $machine1 and $machine2 \n"
   if ( $pubMySqlFlag == 1 ) then
     echo "(RR fields taken from public MySql server, not individual machine)"
   endif
+  cat $db.temp
   echo
 else
-  echo "\n  No differences in $db.$table.$field \n  between $machine1 and $machine2 "
-  echo
+  echo "\n$db.$table.$field : No differences between $machine1 and $machine2 \n"
 endif
 
 # clean up
 rm -f $machine1.$db.$table 
 rm -f $machine2.$db.$table 
+rm -f $db.temp 

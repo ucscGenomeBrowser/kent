@@ -12,8 +12,9 @@
 #include "maf.h"
 #include "scoredRef.h"
 #include "hgMaf.h"
+#include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.39 2005/04/26 01:26:42 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.50 2005/05/04 22:46:13 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -221,7 +222,7 @@ if (zoomedToBaseLevel)
     }
 else
     {
-    if (tg->visibility == tvFull && winEnd - winStart < 1000000)
+    if (tg->visibility == tvFull && winBaseCount < MAF_SUMMARY_VIEW)
         {
         /* currently implemented only for medium zoom out */
         miList = mafItems(tg, scoreHeight, FALSE, isAxt);
@@ -503,20 +504,48 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 void drawMafChain(struct vGfx *vg, int xOff, int yOff, int width, int height,
-                        Color color, boolean isDouble)
+                        boolean isDouble)
 /* draw single or double chain line between alignments in MAF display */
 {
 int midY = yOff + (height>>1);
 int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
+Color gray = shadesOfGray[5];
+//Color fuzz1 = shadesOfGray[2];
+midY--;
 
+/* tweaking end pixels, as done in chainTrack.c */
+xOff--; /* this causes some lines to overwrite one
+         * pixel of the previous box */
+if (width == 1)
+    /* width=1 lines won't draw via innerline, so widen them */
+    width++;
+width++;
 if (isDouble)
     {
-    innerLine(vg, xOff, midY1, width, color);
-    innerLine(vg, xOff, midY2, width, color);
+    innerLine(vg, xOff, midY1, width, gray);
+    innerLine(vg, xOff, midY2, width, gray);
     }
 else
-    innerLine(vg, xOff, midY, width, color);
+#ifdef MISSING_DATA
+    {
+    int x;
+    Color fuzz = shadesOfGray[3];
+        /*
+    vgBox(vg, xOff, yOff+height-5, width, 3, fuzz1);
+    for (x = xOff+1; x < xOff+width; x += 2)
+        {
+        vgBox(vg, x, yOff+height-5, 1, 3, fuzz1);
+        }
+        */
+    for (x = xOff+1; x < xOff+width; x += 3)
+        {
+        vgBox(vg, x, yOff+height-5, 2, 3, fuzz);
+        }
+    }
+#else
+    innerLine(vg, xOff, midY, width, gray);
+#endif
 }
 
 void drawMafRegionDetails(struct mafAli *mafList, int height,
@@ -531,14 +560,17 @@ struct mafComp *mcMaster, *mc;
 char dbChrom[64];
 int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
-int x;
+int x1, x2;
+int lastAlignX2 = -1;
+int lastChainX2 = -1;
+double scale = scaleForPixels(width);
 
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 for (full = mafList; full != NULL; full = full->next)
     {
-    int mafPixelStart, mafPixelEnd, mafPixelWidth;
     double *pixelScores = NULL;
     int i;
+    int w;
     sub = NULL;
     if (mafNeedSubset(full, dbChrom, seqStart, seqEnd))
         sub = maf = mafSubset(full, dbChrom, seqStart, seqEnd);
@@ -557,57 +589,63 @@ for (full = mafList; full != NULL; full = full->next)
             }
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(maf);
-        /* NOTE - +1/-1 tweaks to match existing chain/net tracks display */
-	mafPixelStart = (mcMaster->start - seqStart) * (width+1)/winBaseCount;
-	mafPixelEnd = (mcMaster->start + mcMaster->size - seqStart) 
-	    * (width+1)/winBaseCount;
-	mafPixelWidth = mafPixelEnd-mafPixelStart;
-        x = mafPixelStart+xOff-1;
-	if (mafPixelWidth < 1) mafPixelWidth = 1;
-        if (vis != tvFull && mc->size == 0)
+        x1 = round((double)((int)mcMaster->start-seqStart-1)*scale) + xOff;
+        x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
+	w = x2-x1+1;
+        if (mc->size == 0)
             {
-            int w = mafPixelWidth+1;
+            /* suppress chain/alignment overlap */
+            if (x1 <= lastAlignX2)
+                {
+                int offset = lastAlignX2 - x1 + 1;
+                x1 += offset;
+                w -= offset;
+                if (w <= 0)
+                    continue;
+                }
             if (!chainBreaks)
                 continue;
-            Color chainColor = lighterColor(vg, color);
+            lastChainX2 = x2+1;
             /* no alignment here -- just a gap/break annotation */
             if (mc->leftStatus == MAF_INSERT_STATUS &&
                 mc->rightStatus == MAF_INSERT_STATUS)
                     /* double gap -> display double line ala chain tracks */
-                    drawMafChain(vg, x, yOff, w, height, chainColor, TRUE);
+                    drawMafChain(vg, x1, yOff, w, height, TRUE);
             if (mc->leftStatus == MAF_CONTIG_STATUS &&
                 mc->rightStatus == MAF_CONTIG_STATUS)
                     /* single gap -> display single line ala chain tracks */
-                    drawMafChain(vg, x, yOff, w, height, chainColor, FALSE);
+                    drawMafChain(vg, x1, yOff, w, height, FALSE);
             }
         else
             {
-            AllocArray(pixelScores, mafPixelWidth);
-            mafFillInPixelScores(maf, mcMaster, pixelScores, mafPixelWidth);
+            lastAlignX2 = x2;
+            AllocArray(pixelScores, w);
+            mafFillInPixelScores(maf, mcMaster, pixelScores, w);
             if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS &&
-                winEnd - winStart <= 30000)
-                    vgBox(vg, x-2, yOff, 2, height-1, getBlueColor());
-            for (i=0; i<mafPixelWidth; ++i)
+                winEnd - winStart <= MAF_DETAIL_VIEW)
+                    vgBox(vg, x1-3, yOff, 2, height-1, getBlueColor());
+            for (i=0; i<w; ++i)
                 {
                 if (vis == tvFull)
                     {
                     int y = pixelScores[i] * height1;
-                    vgBox(vg, i+x, yOff + height1 - y, 
+                    vgBox(vg, i+x1, yOff + height1 - y, 
                         1, y+1, (ixMafAli % 2) ? color : altColor);
                     }
                 else
                     {
                     int shade = (pixelScores[i] * maxShade) + 1;
+                    Color c;
                     if (shade > maxShade)
                         shade = maxShade;
-                    Color c = shadesOfGray[shade];
-                    vgBox(vg, i + x+1, yOff, 
+                    c = shadesOfGray[shade];
+                    vgBox(vg, i+x1, yOff, 
                         1, height-1, c);
                     }
                 }
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS &&
-                winEnd - winStart <= 30000)
-                    vgBox(vg, i + x+1, yOff, 2, 
+                winEnd - winStart <= MAF_DETAIL_VIEW)
+                    vgBox(vg, i+x1+1, yOff, 2, 
                             height-1, getBlueColor());
             freez(&pixelScores);
             }
@@ -670,7 +708,7 @@ static void mafDrawGraphic(struct track *tg, int seqStart, int seqEnd,
 /* Draw wiggle or density plot, not base-by-base. */
 {
 int seqSize = seqEnd - seqStart;
-if (seqSize >= 1000000)
+if (seqSize >= MAF_SUMMARY_VIEW)
     {
     mafDrawOverview(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, 
             color, vis);

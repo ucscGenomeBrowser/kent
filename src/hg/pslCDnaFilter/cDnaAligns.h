@@ -15,6 +15,7 @@ struct cDnaAlign
     float cover;         /* fraction of cDNA aligned, excluding polyA if
                           * it is available */
     float score;         /* weighted combination of cover and ident */
+    float repMatch;      /* fraction repeat match */
     boolean drop;         /* drop this psl if set */
     boolean weirdOverlap; /* weird overlap was detected */
 };

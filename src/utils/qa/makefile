@@ -20,6 +20,7 @@ install:
 	cp -p --remove-destination countRows.csh           ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
+	cp -p --remove-destination findTableSize.csh       ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS}
 	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
@@ -33,3 +34,4 @@ install:
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
 	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
+	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}

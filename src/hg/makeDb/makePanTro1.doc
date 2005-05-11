@@ -1943,3 +1943,9 @@ cat > makeAxt.csh << 'EOF'
     nice cp -rp /cluster/data/panTro1/bed/blastz.hg17.swp/axtNet/*.axt.gz axtNet
 
 
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+ 
+
+

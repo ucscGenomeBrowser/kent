@@ -10,7 +10,7 @@
 #include "hgExp.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: microarray.c,v 1.10 2004/04/13 21:01:31 kent Exp $";
+static char const rcsid[] = "$Id: microarray.c,v 1.11 2005/04/29 08:24:20 aamp Exp $";
 
 struct expColumn
 /* An expression column. */
@@ -286,7 +286,7 @@ for (repStart=0; repStart<representativeCount; repStart += repSize+1)
     hPrintf("<TR>");
     hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
 	    conn, ratioTable, repSize, representatives+repStart,
-	    useBlue, FALSE, 1.0/ratioMax);
+	    useBlue, FALSE, TRUE, 1.0/ratioMax);
     hPrintf("<TD>Ratios</TD>\n");
     hPrintf("</TR>\n");
     hPrintf("</TABLE>\n");
@@ -329,13 +329,13 @@ for (repStart = 0; repStart <representativeCount; repStart += repSize+1)
     hPrintf("<TR>");
     hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
 	    fConn, ratioTable, repSize, representatives+repStart,
-	    useBlue, FALSE, ratioScale);
+	    useBlue, FALSE, TRUE, ratioScale);
     hPrintf("<TD>Ratios</TD>\n");
     hPrintf("</TR>\n");
     hPrintf("<TR>");
     hgExpCellPrint(col->name, geneId, conn, col->lookupTable,
 	    fConn, absTable, repSize, representatives+repStart,
-	    useBlue, TRUE, absoluteScale);
+	    useBlue, TRUE, TRUE, absoluteScale);
     hPrintf("<TD>Absolute</TD>\n");
     hPrintf("</TR>");
     hPrintf("</TABLE>\n");

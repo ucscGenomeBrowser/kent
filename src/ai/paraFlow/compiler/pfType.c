@@ -8,13 +8,11 @@
 #include "pfCompile.h"
 #include "pfType.h"
 
-static int baseTypeCount = 0;
+void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp);
+/* Check types (adding conversions where needed) on tree,
+ * which should have variables bound already. */
 
-int pfBaseTypeCount()
-/* Return base type count. */
-{
-return baseTypeCount;
-}
+static int baseTypeCount = 0;
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parent, int size,
@@ -214,23 +212,23 @@ castType += baseTypeLogicalSize(pfc, newBase);
 insertCast(castType, newType, pPp);
 }
 
-static struct pfType *typeFromChildren(struct pfCompile *pfc, struct pfParse *pp,
-     struct pfBaseType *base)
+static struct pfType *typeFromChildren(struct pfCompile *pfc, 
+	struct pfParse *pp, struct pfBaseType *base)
 /* Create a type that is just a wrapper around children's type. */
 {
 struct pfType *ty = pfTypeNew(base);
-if (pp->children != NULL)
+for (pp = pp->children; pp != NULL; pp = pp->next)
     {
-    ty->children = pp->children->ty;
-    pp = pp->children;
-    while (pp->next != NULL)
+    if (pp->ty == NULL)
+        errAt(pp->tok, "Expecting type");
+    else
 	{
-	if (pp->ty == NULL)
-	    errAt(pp->tok, "void value in tuple");
-	pp->ty->next = pp->next->ty;
-	pp = pp->next;
+	struct pfType *subType = CloneVar(pp->ty);
+	subType->fieldName = pp->name;
+	slAddHead(&ty->children, subType);
 	}
     }
+slReverse(&ty->children);
 return ty;
 }
 
@@ -342,7 +340,7 @@ static void coerceTuple(struct pfCompile *pfc, struct pfParse **pTuple,
 /* Make sure that tuple is of correct type. */
 {
 struct pfParse *tuple = *pTuple;
-int tupSize = slCount(tuple->children);
+int tupSize = slCount(tuple->ty->children);
 int typeSize = slCount(types->children);
 struct pfParse **pos;
 struct pfType *type;
@@ -474,6 +472,8 @@ for (field = base->fields; field != NULL; field = field->next)
 	{
 	if (field->init != NULL)
 	    {
+	    if (field->init->ty == NULL)	/* Handle forward use */
+		rTypeCheck(pfc, &field->init);
 	    *pos = CloneVar(field->init);
 	    coerceOne(pfc, pos, field, FALSE);
 	    }
@@ -523,7 +523,7 @@ numericCast(pfc, stringType, pPp);
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfType *type, boolean numToString)
 /* Make sure that a single variable is of the required type.  
- * Add casts if necessary */
+ * Add casts if necessary.  This is a gnarly function! */
 {
 struct pfParse *pp = *pPp;
 struct pfType *pt = pp->ty;
@@ -597,12 +597,8 @@ if (pt->base != base)
 		    break;
 		    }
 		}
-	    if (!ok)
-	        {
-		typeMismatch(pp, type);
-		}
 	    }
-	else
+	if (!ok)
 	    {
 	    if (pt->tyty != tytyTuple)
 		{
@@ -1108,6 +1104,7 @@ for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     type = fieldType;
     }
 pp->ty = CloneVar(type);
+pp->ty->next = NULL;
 }
 
 static void markUsedVars(struct pfScope *scope, 
@@ -1131,11 +1128,36 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     markUsedVars(scope, hash, pp);
 }
 
+static void addDotSelf(struct pfParse **pPp, struct pfBaseType *class)
+/* Add self. in front of a method or member access. */
+{
+struct pfParse *old = *pPp;
+struct pfParse *dot = pfParseNew(pptDot, old->tok, old->parent, old->scope);
+struct pfParse *newVarUse = pfParseNew(pptVarUse, old->tok, dot, old->scope);
+
+dot->ty = CloneVar(old->ty);
+dot->next = old->next;
+dot->children = newVarUse;
+
+newVarUse->ty = pfTypeNew(class);
+newVarUse->name = "self";
+newVarUse->var = pfScopeFindVar(old->scope, "self");
+newVarUse->next = old;
+
+old->parent = dot;
+old->type = pptFieldUse;
+old->next = NULL;
+*pPp = dot;
+}
+
 static void rBlessFunction(struct pfScope *outputScope,
-	struct hash *outputHash, struct pfCompile *pfc, struct pfParse *pp,
+	struct hash *outputHash, struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfScope *classScope)
 /* Avoid functions declared in functions, and mark outputs as used.  */
 {
+struct pfParse *pp = *pPp;
+struct pfParse **pos;
+
 switch (pp->type)
     {
     case pptToDec:
@@ -1145,14 +1167,17 @@ switch (pp->type)
 	break;
     case pptVarUse:
 	if (pp->var->scope == classScope && pp->parent->type != pptDot)
-	    errAt(pp->tok, "Must prefix references to this variable with .self");
+	    {
+	    addDotSelf(pPp, classScope->class);
+	    pp = *pPp;
+	    }
         break;
     case pptAssignment:
         markUsedVars(outputScope, outputHash, pp);
 	break;
     }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    rBlessFunction(outputScope, outputHash, pfc, pp, classScope);
+for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
+    rBlessFunction(outputScope, outputHash, pfc, pos, classScope);
 }
 
 static void checkIsSimpleDecTuple(struct pfParse *tuple)
@@ -1208,7 +1233,7 @@ static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
 struct hash *outputHash = hashNew(4);
 struct pfParse *input = funcDec->children->next;
 struct pfParse *output = input->next;
-struct pfParse *body = output->next;
+struct pfParse **pBody = &output->next;
 struct pfParse *pp;
 struct hashCookie hc;
 struct hashEl *hel;
@@ -1219,17 +1244,17 @@ for (pp = output->children; pp != NULL; pp = pp->next)
     {
     hashAddInt(outputHash, pp->name, 0);
     }
-if (body != NULL)
+if (*pBody != NULL)
     {
     struct pfScope *classScope = funcDec->scope->parent;
     if (classScope->class == NULL)
         classScope = NULL;
-    rBlessFunction(funcDec->scope, outputHash, pfc, body, classScope);
+    rBlessFunction(funcDec->scope, outputHash, pfc, pBody, classScope);
     }
 hashFree(&outputHash);
 }
 
-static void rTypeCheck(struct pfCompile *pfc, int level, struct pfParse **pPp)
+void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 {
@@ -1237,10 +1262,10 @@ struct pfParse *pp = *pPp;
 struct pfParse **pos;
 
 for (pos = &pp->children; *pos != NULL; pos = &(*pos)->next)
-    rTypeCheck(pfc, level+1, pos);
+    rTypeCheck(pfc, pos);
 
 if (verboseLevel() >= 3)
-    pfParseDumpOne(pp, level, stderr);
+    pfParseDumpOne(pp, 0, stderr);
 switch (pp->type)
     {
     case pptCall:
@@ -1337,13 +1362,6 @@ switch (pp->type)
     case pptPolymorphic:
         pfParsePutChildrenInPlaceOfSelf(pPp);
 	break;
-#ifdef OLD
-    case pptStatic:
-	pp->children->ty->isStatic = TRUE;
-	pp->children->var->ty->isStatic = TRUE;
-	pfParsePutChildrenInPlaceOfSelf(pPp);
-        break;
-#endif /* OLD */
     case pptParaDec:
     case pptToDec:
     case pptFlowDec:
@@ -1381,5 +1399,5 @@ void pfTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
  * which should have variables bound already. */
 {
 rClassBless(pfc, *pPp);
-rTypeCheck(pfc, 0, pPp);
+rTypeCheck(pfc, pPp);
 }

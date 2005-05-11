@@ -117,9 +117,11 @@ cdAln->ident = calcIdent(psl);
 cdAln->cover = calcCover(cdAlns, psl);
 cdAln->score = (cdAlns->coverWeight*cdAln->cover)
     + ((1.0-cdAlns->coverWeight)*cdAln->ident);
+cdAln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
 
 if (verboseLevel() >= 5)
-    cDnaAlignVerb(5, psl, "align: id=%g cov=%g", cdAln->ident, cdAln->cover);
+    cDnaAlignVerb(5, psl, "align: id=%0.4g cov=%0.4g rep=%0.4g",
+                  cdAln->ident, cdAln->cover, cdAln->repMatch);
 return cdAln;
 }
 
@@ -251,7 +253,7 @@ for (cdAln = cdAlns->alns; cdAln != NULL; cdAln = cdAln->next)
         if (cdAln->weirdOverlap)
             cdAlns->weirdKeptCnts.aligns++;
         if (verboseLevel() >= 4)
-            cDnaAlignVerb(4, cdAln->psl, "keep: id=%g cov=%g", cdAln->ident, cdAln->cover);
+            cDnaAlignVerb(4, cdAln->psl, "keep: id=%0.4g cov=%0.4g", cdAln->ident, cdAln->cover);
         }
     }
 }

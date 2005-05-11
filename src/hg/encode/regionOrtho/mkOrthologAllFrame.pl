@@ -13,6 +13,7 @@
 sub countBases {
     my ($db, $chr, $start, $end) = @_;
     my $nibDir;
+    $useNib=1;
     if (-d "/cluster/data/$db/mixedNib")     { $nibDir = "mixedNib"; }
     elsif (-d "/cluster/data/$db/softNib")   { $nibDir = "softNib";  }
     elsif (-d "/cluster/data/$db/nib")       { $nibDir = "nib";      }
@@ -21,9 +22,14 @@ sub countBases {
 	$faSize =~ /.* bases .* N's ([0-9]+) real/; # ' 
 	my $bases = $1;
 	return $bases; }
-    else { die "can't find nib dir for $db\n"; }
+    elsif (-e "/cluster/data/$db/$db.2bit") { $useNib=0; $twoBitDir = "/cluster/data/$db/$db.2bit";}
+    else { die "can't find nib or twoBit directories for $db; /cluster/data/$db/$db.2bit\n"; }
 
-    my $faSize = `nibFrag /cluster/data/$db/$nibDir/$chr.nib $start $end + stdout | faSize stdin`;
+    if ($useNib) {
+	$faSize = `nibFrag /cluster/data/$db/$nibDir/$chr.nib $start $end + stdout | faSize stdin`;
+    } else {
+	$faSize = `twoBitToFa ${twoBitDir}:${chr}:${start}-${end} stdout | faSize stdin`;
+    }
     $faSize =~ /.* bases .* N's ([0-9]+) real/; # ' 
     my $bases = $1;
     return $bases;
@@ -164,6 +170,7 @@ foreach $region (sort keys %descriptions) {
 
     # liftOver regions in ortholog browser - region links, size
     printf "<TD>\n";
+    $length = $nonNlength = 0;
     if (defined $LORegionParts{$region})
     {
 	@parts = split (/,/, $LORegionParts{$region});

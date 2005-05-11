@@ -96,6 +96,17 @@ visibility hide
 type bed 4 .
 otherDb hg16
 
+track canHg4Maf
+shortLabel Ancestor Maf
+longLabel CanHg4 14-way tba alignment with ancestor reconstruction
+group x
+priority 165
+visibility hide
+type wigMaf 0.0 1.0
+speciesOrder hg17 panHg4 rheMac1 rabbit rn3 mm6 mmHg4 bosTau1 canFam1 canHg4 armadillo tenrec elephant 
+# irows on
+summary canHg4MafSum
+
 searchTable bacEndPairs
 searchMethod exact
 searchType bed

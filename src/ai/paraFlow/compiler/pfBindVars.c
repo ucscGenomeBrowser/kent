@@ -18,6 +18,8 @@ struct pfType *ty = pfTypeNew(base);
 ty->tyty = tytyFunction;
 pp->ty = ty;
 ty->children = input->ty;
+if (output->ty == NULL)
+    errAt(output->tok, "Expecting type before %s", pp->name);
 ty->children->next = output->ty;
 }
 
@@ -86,7 +88,7 @@ switch (pp->type)
 	pfTypeOnTuple(pfc, pp);
 	break;
 	}
-    case pptInto:
+    case pptInclude:
         {
 	pp->ty = pfTypeNew(pfc->moduleType);
 	pp->ty->tyty = tytyModule;
@@ -133,13 +135,16 @@ switch (pp->type)
 	    }
 	break;
 	}
-    case pptInto:
+    case pptInclude:
         {
 	struct pfParse *name = pp->children;
 	name->type = pptSymName;
+#ifdef BAD
+	// TODO - probably want to just eliminate this.
 	if (hashLookup(pp->scope->vars, name->name))
 	    errAt(pp->tok, "%s redefined", name->name);
 	pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
+#endif /* BAD */
 	break;
 	}
     }

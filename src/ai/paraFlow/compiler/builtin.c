@@ -1,17 +1,23 @@
 
-char *fetchBuiltinCode()
+char *fetchBuiltInCode()
 /* Return a string with the built in stuff. */
 {
 return
 "string programName;\n"
 "array of string args;\n"
 "\n"
-"to die(string message);\n"
+"to punt(string message);\n"
 "to print(var v);\n"
 "to prin(var v);\n"
 "to keyIn() into string s;\n"
-"to floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal,\n"
-"               bit scientificNotation) into (string s);\n"
+"to lineIn() into string s;\n"
+"to randNum() into double zeroToOne;\n"
+"to randInit();\n"
+"to getEnvArray() into array of string envArray;\n"
+"to milliTicks() into long milliseconds;\n"
+"to floatString(double f, int digitsBeforeDecimal=0, \n"
+"		int digitsAfterDecimal=2, bit scientificNotation=0) \n"
+"into (string s);\n"
 "to intString(long l, int minWidth, bit zeroPad, bit commas) into (string s);\n"
 "\n"
 "class file\n"

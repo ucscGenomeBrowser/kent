@@ -103,6 +103,17 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 	for (wordIx=0; wordIx <wordCount; ++wordIx)
 	    {
 	    char *pattern = cloneString(words[wordIx]);
+	    /* Special case for accessions as gbCdnaInfo is very large to 
+	       read into memory. */
+	    if(sameString(fil->table, "acc"))
+		{
+		touppers(pattern);
+		hashAdd(hash, pattern, NULL);
+		freez(&pattern);
+		continue;
+		}
+
+	    /* Load up entire table looking for matches. */
 	    if (lastChar(pattern) != '*')
 		{
 		int len = strlen(pattern)+1;

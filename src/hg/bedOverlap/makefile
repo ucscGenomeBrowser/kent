@@ -9,12 +9,12 @@ O = bedOverlap.o
 
 bedOverlap: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/bedOverlap $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedOverlap${EXE}
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/bedOverlap${EXE}
 
-test:	test2 test4
+test:	test2 test4 test5
 %:	input/%.bed
 	${MKDIR} output
-	bedOverlap -hasBin -verbose=3 input/$@.bed output/$@.bed  
+	bedOverlap -hasBin -verbose=1 input/$@.bed output/$@.bed  
 	diff expected/$@.bed output/$@.bed 
 	rm output/$@.bed
 %:	input/%.noBin

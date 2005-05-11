@@ -2279,3 +2279,9 @@ chainSome $(path1)
     cd /cluster/data/xenTro1/bed/nibPics
     wget -O contigs.fa http://xenopus.nibb.ac.jp/data/contigs
 
+
+#########################################################################
+# MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
+
+
+

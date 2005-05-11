@@ -9,8 +9,11 @@
 #include "pfToken.h"
 #include "pfCompile.h"
 #include "pfParse.h"
+#include "recodedType.h"
 #include "codedType.h"
 #include "cCoder.h"
+
+#define prefix "pf_"
 
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
@@ -29,7 +32,7 @@ static void codeScopeVars(struct pfCompile *pfc, FILE *f,
 	struct pfScope *scope, boolean zeroUnitialized);
 /* Print out variable declarations associated with scope. */
 
-static void printPreamble(struct pfCompile *pfc, FILE *f, char *fileName)
+static void printPreamble(struct pfCompile *pfc, FILE *f, char *fileName, boolean doExtern)
 /* Print out C code for preamble. */
 {
 fprintf(f, "/* This file is a translation of %s by paraFlow. */\n", 
@@ -37,12 +40,41 @@ fprintf(f, "/* This file is a translation of %s by paraFlow. */\n",
 fprintf(f, "\n");
 fprintf(f, "#include \"pfPreamble.h\"\n");
 fprintf(f, "\n");
-fprintf(f, 
-"void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs);\n");
+if (doExtern)
+   fprintf(f, "extern ");
 fprintf(f, "_pf_Var _pf_var_zero;   /* Helps initialize vars to zero. */\n");
-fprintf(f, "_pf_Array args;	    /* Command line arguments go here. */\n");
-fprintf(f, "_pf_String programName; /* Name of program (argv[0]) */\n");
+if (doExtern)
+   fprintf(f, "extern ");
+fprintf(f, "_pf_Array %sargs;	    /* Command line arguments go here. */\n",
+	prefix);
+if (doExtern)
+   fprintf(f, "extern ");
+fprintf(f, "_pf_String %sprogramName; /* Name of program (argv[0]) */\n",
+	prefix);
 fprintf(f, "\n");
+}
+
+static void printSysVarsAndPrototypes(FILE *f)
+/* Print stuff needed for main() */
+{
+fprintf(f, 
+"void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, char *environ[]);\n");
+fprintf(f, "\n");
+}
+
+static char *localTypeTableType = "_pf_local_type_info";
+static char *localTypeTableName = "_pf_lti";
+
+static void codeLocalTypeRef(FILE *f, int ref)
+/* Print out local type reference. */
+{
+fprintf(f, "%s[%d].id", localTypeTableName, ref);
+}
+
+static void codeLocalTypeTableName(FILE *f, char *module)
+/* Print out local type table name. */
+{
+fprintf(f, "struct %s %s_%s", localTypeTableType, localTypeTableName, module);
 }
 
 static char *typeKey(struct pfCompile *pfc, struct pfBaseType *base)
@@ -128,7 +160,10 @@ if (type->isStatic)
 		var->scope->id, className, toDec->name, var->name);
     }
 else
+    {
+    dyStringAppend(name, prefix);
     dyStringAppend(name, var->name);
+    }
 return name;
 }
 
@@ -270,9 +305,9 @@ else
     codeExpression(pfc, f, inTuple, stack, TRUE);
     assert(function->type == pptVarUse);
     if (stack == 0)
-	fprintf(f, "%s(%s);\n", pp->name, stackName);
+	fprintf(f, "%s%s(%s);\n", prefix, pp->name, stackName);
     else
-	fprintf(f, "%s(%s+%d);\n", pp->name, stackName, stack);
+	fprintf(f, "%s%s(%s+%d);\n", prefix, pp->name, stackName, stack);
     }
 return outCount;
 }
@@ -294,11 +329,19 @@ static void startCleanTemp(FILE *f)
 fprintf(f, " {\n struct _pf_object *_pf_tmp = (struct _pf_object *)\n  ");
 }
 
+static void codeForType(struct pfCompile *pfc, FILE *f, struct pfType *type)
+/* Print out code to access type ID */
+{
+codeLocalTypeRef(f, recodedTypeId(pfc, type));
+}
+
 static void endCleanTemp(struct pfCompile *pfc, FILE *f, struct pfType *type)
 {
 fprintf(f, ";\n");
 fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
-fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, %d);\n", codedTypeId(pfc, type));
+fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, ");
+codeForType(pfc, f, type);
+fprintf(f, ");\n");
 fprintf(f, " }\n");
 }
 
@@ -470,11 +513,11 @@ else if (colBase == pfc->dirType)
     codeExpression(pfc, f, index, emptyStack+offset, FALSE);
     if (outType->base->needsCleanup)
 	{
-        fprintf(f, "_pf_dir_add_object(%s+%d);\n", stackName, stack);
+        fprintf(f, "_pf_dir_add_object(%s+%d, %d);\n", stackName, stack, expSize);
 	}
     else 
 	{
-	fprintf(f, "_pf_dir_add_number(%s+%d);\n",  stackName, stack);
+	fprintf(f, "_pf_dir_add_number(%s+%d, %d);\n",  stackName, stack, expSize);
 	}
     }
 else
@@ -555,7 +598,9 @@ if (type->base->needsCleanup)
     else
 	{
 	fprintf(f, "if (0!=%s && (%s->_pf_refCount-=1) <= 0)\n", name, name);
-	fprintf(f, "   %s->_pf_cleanup(%s, %d);\n", name, name, codedTypeId(pfc, type));
+	fprintf(f, "   %s->_pf_cleanup(%s, ", name, name);
+	codeForType(pfc, f, type);
+	fprintf(f, ");\n");
 	}
     }
 }
@@ -721,14 +766,19 @@ if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
 	|| base == pfc->intType || base == pfc->longType || base == pfc->floatType
 	|| base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
 	{
-	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, %d, %d);\n", base->name, 
-		type->base->name, stackName, stack, tupleSize, codedTypeId(pfc, type), 
-		codedTypeId(pfc, type->children));
+	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, ",
+		base->name, type->base->name, stackName, stack, tupleSize);
+	codeForType(pfc, f, type), 
+	fprintf(f, ", ");
+	codeForType(pfc, f, type->children);
+	fprintf(f, ");\n");
 	}
     else
 	{
-	fprintf(f, "_pf_tuple_to_%s(%s+%d, %d, \"", type->base->name,
-		stackName, stack, codedTypeId(pfc, type->children));
+	fprintf(f, "_pf_tuple_to_%s(%s+%d, ", type->base->name,
+		stackName, stack);
+	codeForType(pfc, f, type->children);
+	fprintf(f, ", \"");
 	rCodeTupleType(pfc, f, rval->ty);
 	fprintf(f, "\");\n");
 	}
@@ -746,8 +796,10 @@ static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = lval->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
-fprintf(f, "_pf_tuple_to_class(%s+%d, %d, \"",
-	stackName, stack, codedTypeId(pfc, lval->ty));
+fprintf(f, "_pf_tuple_to_class(%s+%d, ",
+	stackName, stack);
+codeForType(pfc, f, lval->ty);
+fprintf(f, ", \"");
 rCodeTupleType(pfc, f, rval->ty);
 fprintf(f, "\");\n");
 }
@@ -800,8 +852,9 @@ for (type = type->children; type != NULL; type = type->next)
 	gotOne = TRUE;
 	codeExpression(pfc, f, type->children, stack, FALSE);
 	fprintf(f, "%s[%d].Array = ", stackName, stack);
-	fprintf(f, "_pf_dim_array(%s[%d].Int, %d);\n", stackName, stack, 
-		codedTypeId(pfc, type->next->ty));
+	fprintf(f, "_pf_dim_array(%s[%d].Int, ", stackName, stack);
+	codeForType(pfc, f, type->next->ty);
+	fprintf(f, ");\n");
 	lvalOffStack(pfc, f, varInit, stack, "=", 1, FALSE);
 	}
     }
@@ -957,42 +1010,36 @@ switch(pp->type)
     case pptCastBitToLong:
     case pptCastBitToFloat:
     case pptCastBitToDouble:
-    case pptCastByteToBit:
     case pptCastByteToByte:
     case pptCastByteToShort:
     case pptCastByteToInt:
     case pptCastByteToLong:
     case pptCastByteToFloat:
     case pptCastByteToDouble:
-    case pptCastShortToBit:
     case pptCastShortToByte:
     case pptCastShortToShort:
     case pptCastShortToInt:
     case pptCastShortToLong:
     case pptCastShortToFloat:
     case pptCastShortToDouble:
-    case pptCastIntToBit:
     case pptCastIntToByte:
     case pptCastIntToShort:
     case pptCastIntToInt:
     case pptCastIntToLong:
     case pptCastIntToFloat:
     case pptCastIntToDouble:
-    case pptCastLongToBit:
     case pptCastLongToByte:
     case pptCastLongToShort:
     case pptCastLongToInt:
     case pptCastLongToLong:
     case pptCastLongToFloat:
     case pptCastLongToDouble:
-    case pptCastFloatToBit:
     case pptCastFloatToByte:
     case pptCastFloatToShort:
     case pptCastFloatToInt:
     case pptCastFloatToLong:
     case pptCastFloatToFloat:
     case pptCastFloatToDouble:
-    case pptCastDoubleToBit:
     case pptCastDoubleToByte:
     case pptCastDoubleToShort:
     case pptCastDoubleToInt:
@@ -1002,6 +1049,18 @@ switch(pp->type)
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ";\n");
+	break;
+    case pptCastByteToBit:
+    case pptCastShortToBit:
+    case pptCastIntToBit:
+    case pptCastLongToBit:
+    case pptCastFloatToBit:
+    case pptCastDoubleToBit:
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = ");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, " != 0");
 	fprintf(f, ";\n");
 	break;
     case pptCastObjectToBit:
@@ -1043,16 +1102,21 @@ switch(pp->type)
 	codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ";\n");
         codeParamAccess(pfc, f, pfc->varType, stack);
-	fprintf(f, ".typeId = %d;\n", codedTypeId(pfc, pp->children->ty));
+	fprintf(f, ".typeId = ");
+	codeForType(pfc, f, pp->children->ty);
+	fprintf(f, ";\n");
 	break;
 	}
     case pptCastVarToTyped:
         {
-	int destType = codedTypeId(pfc, pp->ty);
-	fprintf(f, "if (%d != ", destType);
+	fprintf(f, "if (");
+	codeForType(pfc, f, pp->ty);
+	fprintf(f, " != ");
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".typeId)\n");
-	fprintf(f, "if (!_pf_check_types(%d, ", destType);
+	fprintf(f, "if (!_pf_check_types(");
+	codeForType(pfc, f, pp->ty);
+	fprintf(f, ", ");
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".typeId))\n");
 	codeRunTimeError(pfc, f, pp->tok, "run-time type mismatch");
@@ -1151,6 +1215,10 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "<");
     case pptLessOrEquals:
         return codeBinaryOp(pfc, f, pp, stack, "<=");
+    case pptLogAnd:
+        return codeBinaryOp(pfc, f, pp, stack, "&&");
+    case pptLogOr:
+        return codeBinaryOp(pfc, f, pp, stack, "||");
     case pptBitAnd:
         return codeBinaryOp(pfc, f, pp, stack, "&");
     case pptBitOr:
@@ -1355,7 +1423,7 @@ struct pfParse *elPp = foreach->children;
 struct pfParse *collectionPp = elPp->next;
 struct pfBaseType *base = collectionPp->ty->base;
 struct pfParse *body = collectionPp->next;
-char *elName = elPp->name;
+struct dyString *elName = varName(pfc, elPp->var);
 char collectionName[512];
 
 /* Print element variable in a new scope. */
@@ -1372,7 +1440,7 @@ if (base == pfc->arrayType)
     fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
     fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
     fprintf(f, "{\n");
-    fprintf(f, "%s = *((", elName);
+    fprintf(f, "%s = *((", elName->string);
     printType(pfc, f, elBase);
     fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
     codeStatement(pfc, f, body);
@@ -1384,7 +1452,7 @@ else if (base == pfc->stringType)
     fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
     fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
     fprintf(f, "{\n");
-    fprintf(f, "%s = %s->s[_pf_offset];\n", elName, collectionName);
+    fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
     codeStatement(pfc, f, body);
     fprintf(f, "}\n");
     }
@@ -1392,7 +1460,7 @@ else
     {
     fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
     	base->name, collectionName);
-    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName);
+    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName->string);
     fprintf(f, "{\n");
     codeStatement(pfc, f, body);
     fprintf(f, "}\n");
@@ -1400,6 +1468,7 @@ else
     }
 cleanupScopeVars(pfc, f, foreach->scope);
 fprintf(f, "}\n");
+dyStringFree(&elName);
 }
 
 static void codeFor(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
@@ -1436,7 +1505,6 @@ struct pfParse *callPp = elPp->next;
 struct pfBaseType *base = callPp->ty->base;
 struct pfParse *body = callPp->next;
 struct pfParse *cast = body->next;
-char *elName = elPp->name;
 int expSize;
 
 /* Print element variable in a new scope. */
@@ -1551,6 +1619,9 @@ switch (pp->type)
     case pptReturn:
         fprintf(f, "goto _pf_cleanup;\n");
         break;
+    case pptInclude:
+        fprintf(f, "_pf_entry_%s(%s);\n", pp->name, stackName);
+	break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
 	break;
@@ -1568,7 +1639,8 @@ if (class)
     fprintf(f, "%s *%s)",  stackType, stackName);
     }
 else
-    fprintf(f, "void %s(%s *%s)", funcDec->name, stackType, stackName);
+    fprintf(f, "void %s%s(%s *%s)", prefix, funcDec->name, 
+    	stackType, stackName);
 }
 
 static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class)
@@ -1638,7 +1710,7 @@ fprintf(f, "\n{\n");
     int inIx = 0;
     if (class)
         {
-	fprintf(f, "struct %s *self = ", class->name);
+	fprintf(f, "struct %s *%sself = ", class->name, prefix);
 	codeParamAccess(pfc, f, class->ty->base, 0);
 	fprintf(f, ";\n");
 	inIx += 1;
@@ -1646,7 +1718,7 @@ fprintf(f, "\n{\n");
     for (in = inTuple->children; in != NULL; in = in->next)
         {
 	printType(pfc, f, in->base);
-	fprintf(f, " %s = ", in->fieldName);
+	fprintf(f, " %s%s = ", prefix, in->fieldName);
 	codeParamAccess(pfc, f, in->base, inIx);
 	fprintf(f, ";\n");
 	inIx += 1;
@@ -1659,7 +1731,7 @@ fprintf(f, "\n{\n");
     for (out = outTuple->children; out != NULL; out = out->next)
         {
 	printType(pfc, f, out->base);
-	fprintf(f, " %s", out->fieldName);
+	fprintf(f, " %s%s", prefix, out->fieldName);
 	codeInitOfType(pfc, f, out);
 	fprintf(f, ";\n");
 	}
@@ -1674,8 +1746,14 @@ fprintf(f, "_pf_cleanup: ;\n");
 /* Decrement ref counts on input variables. */
     {
     struct pfType *in;
+    struct dyString *name = dyStringNew(0);
     for (in = inTuple->children; in != NULL; in = in->next)
-	codeCleanupVarNamed(pfc, f, in, in->fieldName);
+	{
+	dyStringClear(name);
+	dyStringPrintf(name, "%s%s", prefix, in->fieldName);
+	codeCleanupVarNamed(pfc, f, in, name->string);
+	}
+    dyStringFree(&name);
     }
 
 /* Save the output. */
@@ -1685,7 +1763,7 @@ fprintf(f, "_pf_cleanup: ;\n");
     for (out = outTuple->children; out != NULL; out = out->next)
         {
 	codeParamAccess(pfc, f, out->base, outIx);
-	fprintf(f, " = %s;\n", out->fieldName);
+	fprintf(f, " = %s%s;\n", prefix, out->fieldName);
 	outIx += 1;
 	}
     }
@@ -1750,7 +1828,8 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticAssignments(pfc, f, pp);
 }
 
-static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
+	boolean printPolyFun)
 /* Print out class definitions. */
 {
 if (pp->type == pptClass)
@@ -1762,11 +1841,12 @@ if (pp->type == pptClass)
     fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
     rPrintFields(pfc, f, base); 
     fprintf(f, "};\n");
-    printPolyFunTable(pfc, f, base);
+    if (printPolyFun)
+	printPolyFunTable(pfc, f, base);
     fprintf(f, "\n");
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    rPrintClasses(pfc, f, pp);
+    rPrintClasses(pfc, f, pp, printPolyFun);
 }
 
 static boolean isInside(struct pfParse *outside, struct pfParse *inside)
@@ -1827,7 +1907,12 @@ for (p = pp->children; p != NULL; p = p->next)
 /* Print out other statements */
 if (printMain)
     {
-    fprintf(f, "void _pf_main(%s *%s)\n{\n", stackType, stackName);
+    fprintf(f, "void _pf_entry_%s(%s *%s)\n{\n", pp->name, 
+    	stackType, stackName);
+    fprintf(f, "static int firstTime = 1;\n");
+    fprintf(f, "if (firstTime)\n");
+    fprintf(f, "{\n");
+    fprintf(f, "firstTime = 0;\n");
     codeStaticAssignments(pfc, f, pp);
     }
 for (p = pp->children; p != NULL; p = p->next)
@@ -1856,35 +1941,37 @@ if (printMain)
     codeStaticCleanups(pfc, f, pp);
 
 if (printMain)
+    {
     fprintf(f, "}\n");
+    fprintf(f, "}\n");
+    }
 
 hashElFreeList(&helList);
 }
 
 static void printPolyFuncConnections(struct pfCompile *pfc,
-	struct pfScope *scopeList, FILE *f)
+	struct pfScope *scopeList, struct pfParse *module, FILE *f)
 /* Print out poly_info table that connects polymorphic function
  * tables to the classes they belong to. */
 {
 struct pfScope *scope;
-fprintf(f, "struct _pf_poly_info _pf_poly_info[] = {\n");
+fprintf(f, "struct _pf_poly_info _pf_poly_info_%s[] = {\n", module->name);
 for (scope = scopeList; scope != NULL; scope = scope->next)
     {
     struct pfBaseType *class = scope->class;
-    if (class != NULL && class->polyList != NULL)
+    if (class != NULL && class->polyList != NULL && isInside(module, class->def))
         {
-	fprintf(f, "  {%d, _pf_pf%d_%s},\n", class->id, class->scope->id, class->name);
+	fprintf(f, "  {\"%s\", _pf_pf%d_%s},\n", class->name, class->scope->id, class->name);
 	}
     }
 fprintf(f, "  {0, 0},\n");  /* Make sure have at least one. */
 fprintf(f, "};\n");
-fprintf(f, "int _pf_poly_info_count = sizeof(_pf_poly_info)/sizeof(_pf_poly_info[0]) - 1;\n\n");
 }
 
-static void printConclusion(struct pfCompile *pfc, FILE *f)
+static void printConclusion(struct pfCompile *pfc, FILE *f, struct pfParse *mainModule)
 /* Print out C code for end of program. */
 {
-fputs(
+fprintf(f, 
 "\n"
 "int main(int argc, char *argv[], char *environ[])\n"
 "{\n"
@@ -1892,50 +1979,121 @@ fputs(
 "_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
 "               _pf_type_info, _pf_type_info_count,\n"
 "               _pf_field_info, _pf_field_info_count,\n"
-"               _pf_poly_info, _pf_poly_info_count);\n"
-"_pf_init_args(argc, argv, &programName, &args);\n"
-"_pf_main(stack);\n"
+"               _pf_module_info, _pf_module_info_count);\n"
+"_pf_init_args(argc, argv, &%sprogramName, &%sargs, environ);\n"
+"_pf_entry_%s(stack);\n"
 "return 0;\n"
-"}\n", f);
+"}\n", prefix, prefix, mainModule->name);
+}
+
+static void printLocalTypeInfo(struct pfCompile *pfc, char *moduleName, FILE *f)
+/* Print out local type info table. */
+{
+codeLocalTypeTableName(f, moduleName);
+fprintf(f, "[] = {\n");
+printModuleTypeTable(pfc, f);
+fprintf(f, "};\n");
+fprintf(f, "\n");
+}
+
+static void printModuleTable(struct pfCompile *pfc, FILE *f, struct pfParse *program)
+/* Print out table with basic info on each module */
+{
+struct pfParse *module;
+int moduleCount = 0;
+for (module = program->children; module != NULL; module = module->next)
+    {
+    if (module->name[0] != '<')
+        {
+	fprintf(f, "extern struct %s %s_%s[];\n", 
+	    localTypeTableType, localTypeTableName, module->name);
+        fprintf(f, "extern struct _pf_poly_info _pf_poly_info_%s[];\n",
+		module->name);
+	fprintf(f, "void _pf_entry_%s(%s *%s);\n", module->name, 
+	    stackType, stackName);
+	}
+    }
+fprintf(f, "\n");
+fprintf(f, "struct _pf_module_info _pf_module_info[] = {\n");
+for (module = program->children; module != NULL; module = module->next)
+    {
+    if (module->name[0] != '<')
+        {
+	fprintf(f, "  {\"%s\", %s_%s, _pf_poly_info_%s, _pf_entry_%s,},\n",
+	    module->name, localTypeTableName, module->name, module->name,
+	    module->name);
+	++moduleCount;
+	}
+    }
+fprintf(f, "};\n");
+fprintf(f, "int _pf_module_info_count = %d;\n\n", moduleCount);
 }
 
 
-void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *fileName)
+void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *baseDir, char *mainName)
 /* Generate C code for program. */
 {
-FILE *f = mustOpen(fileName, "w");
-struct pfParse *module;
+FILE *f;
+struct pfParse *toCode, *module;
 struct pfScope *scope;
-struct hash *compTypeHash;
+struct pfParse *mainModule = NULL;
 
-printPreamble(pfc, f, fileName);
-pfc->runTypeHash = codedTypesCalcAndPrintAsC(pfc, program, f);
+pfc->runTypeHash = hashNew(0);
 
-/* Print function prototypes and class definitions for all modules */
-for (module = program->children; module != NULL; module = module->next)
+/* Generate code for each module that is not already compiled. */
+for (toCode = program->children; toCode != NULL; toCode = toCode->next)
     {
-    fprintf(f, "/* Prototypes in ParaFlow module %s */\n\n", module->name);
-    rPrintPrototypes(f, module, NULL);
-    fprintf(f, "\n");
-    fprintf(f, "/* Class definitionsin ParaFlow module %s */\n\n", module->name);
-    rPrintClasses(pfc, f, module);
-    fprintf(f, "\n");
-    }
-
-for (module = program->children; module != NULL; module = module->next)
-    {
-    verbose(3, "Coding %s\n", module->name);
-    fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
-    fprintf(f, "\n");
-    if (module->type == pptMainModule)
+    if (toCode->type == pptModule || toCode->type == pptMainModule)
 	{
-	codeScope(pfc, f, module, TRUE, TRUE);
-	fprintf(f, "\n");
+	char fileName[PATH_LEN];
+	if (toCode->type == pptMainModule)
+	    mainModule = toCode;
+	safef(fileName, sizeof(fileName), "%s%s.c", baseDir, toCode->name);
+	f = mustOpen(fileName, "w");
+
+	pfc->moduleTypeHash = hashNew(0);
+	printPreamble(pfc, f, fileName, TRUE);
+	fprintf(f, "extern struct %s %s_%s[];\n", localTypeTableType, localTypeTableName,
+		toCode->name);
+	fprintf(f, "static struct %s *%s = %s_%s;\n\n",
+		localTypeTableType, localTypeTableName, localTypeTableName, toCode->name);
+
+	/* Print function prototypes and class definitions for all modules */
+	for (module = program->children; module != NULL; module = module->next)
+	    {
+	    fprintf(f, "/* Prototypes in ParaFlow module %s */\n\n", module->name);
+	    if (module->name[0] != '<')
+		fprintf(f, "void _pf_entry_%s(%s *stack);\n", module->name, stackType);
+	    rPrintPrototypes(f, module, NULL);
+	    fprintf(f, "\n");
+	    fprintf(f, "/* Class definitions in ParaFlow module %s */\n\n", module->name);
+	    rPrintClasses(pfc, f, module, toCode == module);
+	    fprintf(f, "\n");
+	    }
+
+	for (module = program->children; module != NULL; module = module->next)
+	    {
+	    if (module == toCode)
+		{
+		verbose(3, "Coding %s\n", module->name);
+		fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
+		fprintf(f, "\n");
+		codeScope(pfc, f, module, TRUE, TRUE);
+		fprintf(f, "\n");
+		printPolyFuncConnections(pfc, pfc->scopeList, module, f);
+		}
+	    }
+	printLocalTypeInfo(pfc, toCode->name, f);
+	freeHashAndVals(&pfc->moduleTypeHash);
+	carefulClose(&f);
 	}
     }
-
-printPolyFuncConnections(pfc, pfc->scopeList, f);
-printConclusion(pfc, f);
+f = mustOpen(mainName, "w");
+printPreamble(pfc, f, mainName, FALSE);
+printSysVarsAndPrototypes(f);
+printModuleTable(pfc, f, program);
+codedTypesCalcAndPrintAsC(pfc, program, f);
+printConclusion(pfc, f, mainModule);
 carefulClose(&f);
 }
 

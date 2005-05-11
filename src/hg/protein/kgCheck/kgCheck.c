@@ -43,6 +43,10 @@ char *acc, *stat;
 char *frame, *start, *stop;
 char *causes;
 char *genomeDb;
+char *geneName;
+char srcType;
+int  alignCnt = 0;
+
 char *candTable, *chkTable;
 int  orfStop, cdsGap, cdsSplice, numCdsIntrons;
 boolean passed;
@@ -114,7 +118,7 @@ while (row2 != NULL)
 		    passed = TRUE;
 		    }
 		/* if cdsGap > 0, degrade it ranking by 1.  If cdsGap is not 
-		   a multiple of 3, degrade degrade its ranking further */
+		   a multiple of 3, degrade its ranking further */
 		if (cdsGap > 0)
 		    {
 		    ranking = ranking + 1;
@@ -154,10 +158,36 @@ while (row2 != NULL)
 	/* print out entries, with their rankings, that passed the above criteria */    
 	if (passed) 
 	    {
-	    for (i=0; i<10; i++)
+	    /*for (i=0; i<10; i++)
 	    	{
 		fprintf(outf, "%s\t", row2[i]);
 		}
+	    */
+
+	    geneName = strdup(row2[0]);
+	    chp = strstr(geneName, "_");
+	    if (chp != NULL)
+	    	{
+		if (strstr(geneName, "NM_") != NULL)
+		    {
+		    srcType = 'R';	/* src is RefSeq */
+		    }
+		else
+		    {
+		    chp++;
+		    geneName = chp;
+		    srcType  = 'U';	/* src is UCSC prot/mrna alignment */
+		    }
+		}
+	    else
+	    	{
+		srcType = 'G';		/* src is GenBank */
+		}
+	    alignCnt++;
+	    fprintf(outf, "%s\t", geneName);
+	    for (i= 1; i<10; i++) fprintf(outf, "%s\t", row2[i]);
+	    fprintf(outf, "%c%d\t", srcType, alignCnt);
+
 	    fprintf(outf, "%.2f\n", ranking);
 	    }
 

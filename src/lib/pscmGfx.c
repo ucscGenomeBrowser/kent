@@ -14,7 +14,7 @@
 #include "vGfx.h"
 #include "vGfxPrivate.h"
 
-static char const rcsid[] = "$Id: pscmGfx.c,v 1.12 2005/04/10 14:41:24 markd Exp $";
+static char const rcsid[] = "$Id: pscmGfx.c,v 1.13 2005/05/05 22:20:53 daryl Exp $";
 
 
 static struct pscmGfx *boxPscm;	 /* Used to keep from drawing the same box again
@@ -50,6 +50,7 @@ int closestDist = 0x7fffffff;
 int closestIx = -1;
 int dist, dif;
 int i;
+
 for (i=0; i<pscm->colorsUsed; ++i)
     {
     dif = c->r - r;
@@ -88,6 +89,8 @@ int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b)
  * exact color in map. */
 {
 struct colHashEl *che;
+if (r>255||g>255||b>255) 
+    errAbort("RGB values out of range (0-255).  r:%d g:%d b:%d", r, g, b);
 if ((che = colHashLookup(pscm->colorHash, r, g, b)) != NULL)
     return che->ix;
 if (pscm->colorsUsed < 256)

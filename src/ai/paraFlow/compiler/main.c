@@ -17,6 +17,7 @@
 #include "pfPreamble.h"
 #include "defFile.h"
 #include "parseInto.h"
+#include "tokInto.h"
 
 
 int endPhase = 10;
@@ -65,6 +66,7 @@ hashAddInt(hash, "extends", pftExtends);
 hashAddInt(hash, "polymorphic", pftPolymorphic);
 hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "nil", pftNil);
+hashAddInt(hash, "include", pftInclude);
 return hash;
 }
 
@@ -159,7 +161,7 @@ struct pfCompile *pfCompileNew()
 {
 struct pfCompile *pfc;
 AllocVar(pfc);
-pfc->modules = hashNew(0);
+pfc->moduleHash = hashNew(0);
 pfc->reservedWords = createReservedWords();
 pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
 addBuiltInTypes(pfc);
@@ -171,45 +173,55 @@ void paraFlow(char *fileName, int pfArgc, char **pfArgv)
 /* parse and dump. */
 {
 struct pfCompile *pfc;
-struct pfParse *program;
+struct pfParse *program, *module;
 char baseDir[256], baseName[128], baseSuffix[64];
-char codeFile[PATH_LEN], defFile[PATH_LEN];
+char defFile[PATH_LEN];
 char *parseFile = "out.parse";
 char *typeFile = "out.typed";
 char *boundFile = "out.bound";
 char *scopeFile = "out.scope";
+char *cFile = "out.c";
 FILE *parseF = mustOpen(parseFile, "w");
 FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
 FILE *boundF = mustOpen(boundFile, "w");
 
-if (endPhase < 1)
+if (endPhase < 0)
     return;
-verbose(2, "Phase 1 - initialization\n");
-splitPath(fileName, baseDir, baseName, baseSuffix);
-safef(codeFile, sizeof(codeFile), "%s%s.c", baseDir, baseName);
-safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
+verbose(2, "Phase 0 - initialization\n");
 pfc = pfCompileNew();
+splitPath(fileName, baseDir, baseName, baseSuffix);
+pfc->baseDir = cloneString(baseDir);
+safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
+
+if (endPhase < 1)
+   return ;
+verbose(2, "Phase 1 - tokenizing\n");
+pfTokenizeInto(pfc, baseDir, baseName);
+
 if (endPhase < 2)
     return;
 verbose(2, "Phase 2 - parsing\n");
-program = pfParseInto(pfc, fetchBuiltinCode(), fileName);
+program = pfParseInto(pfc);
 pfParseDump(program, 0, parseF);
 carefulClose(&parseF);
+
 if (endPhase < 3)
     return;
-verbose(2, "Phase 3 - generating def file\n");
-pfMakeDefFile(pfc, program->children->next, defFile);
+verbose(2, "Phase 3 - nothing\n");
+
 if (endPhase < 4)
     return;
 verbose(2, "Phase 4 - binding names\n");
 pfBindVars(pfc, program);
 pfParseDump(program, 0, boundF);
 carefulClose(&boundF);
+
 if (endPhase < 5)
     return;
 verbose(2, "Phase 5 - type checking\n");
 pfTypeCheck(pfc, &program);
+
 if (endPhase < 6)
     return;
 verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
@@ -219,12 +231,14 @@ pfParseDump(program, 0, typeF);
 carefulClose(&typeF);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
+
 if (endPhase < 7)
     return;
 verbose(2, "Phase 7 - C code generation\n");
-pfCodeC(pfc, program, codeFile);
+pfCodeC(pfc, program, baseDir, cFile);
 verbose(2, "%d modules, %d tokens, %d parseNodes\n",
-	pfc->modules->elCount, pfc->tkz->tokenCount, pfParseCount(program));
+	pfc->moduleHash->elCount, pfc->tkz->tokenCount, pfParseCount(program));
+
 if (endPhase < 8)
     return;
 verbose(2, "Phase 8 - compiling C code\n");
@@ -232,16 +246,48 @@ verbose(2, "Phase 8 - compiling C code\n");
     {
     struct dyString *dy = dyStringNew(0);
     int err;
+    for (module = program->children; module != NULL; module = module->next)
+	{
+	if (module->name[0] != '<' && module->type != pptModuleRef)
+	    {
+	    dyStringClear(dy);
+	    dyStringAppend(dy, "gcc ");
+	    dyStringAppend(dy, "-O ");
+	    dyStringAppend(dy, "-I ~/kent/src/ai/paraFlow/compiler ");
+	    dyStringAppend(dy, "-c ");
+	    dyStringAppend(dy, "-o ");
+	    dyStringAppend(dy, baseDir);
+	    dyStringAppend(dy, module->name);
+	    dyStringAppend(dy, ".o ");
+	    dyStringAppend(dy, baseDir);
+	    dyStringAppend(dy, module->name);
+	    dyStringAppend(dy, ".c");
+	    verbose(3, "%s\n", dy->string);
+	    err = system(dy->string);
+	    if (err != 0)
+		errAbort("Couldn't compile %s.c", module->name);
+	    }
+	}
+    dyStringClear(dy);
     dyStringAppend(dy, "gcc ");
-    dyStringAppend(dy, "-O3 ");
-    dyStringAppend(dy, "-I ~/src/ai/paraFlow/compiler ");
-    dyStringPrintf(dy, "-o %s ", baseName);
-    dyStringPrintf(dy, "%s ", codeFile);
+    dyStringAppend(dy, "-O ");
+    dyStringAppend(dy, "-I ~/kent/src/ai/paraFlow/compiler ");
+    dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
+    dyStringPrintf(dy, "%s ", cFile);
+    for (module = program->children; module != NULL; module = module->next)
+        {
+	if (module->name[0] != '<')
+	    {
+	    dyStringPrintf(dy, "%s%s", baseDir, module->name);
+	    dyStringPrintf(dy, ".o ");
+	    }
+	}
     dyStringAppend(dy, "~/kent/src/ai/paraFlow/runtime/runtime.a ");
     dyStringPrintf(dy, "~/kent/src/lib/%s/jkweb.a", getenv("MACHTYPE"));
+    verbose(3, "%s\n", dy->string);
     err = system(dy->string);
     if (err != 0)
-	errnoAbort("problem compiling %s", codeFile);
+	errnoAbort("problem compiling:\n", dy->string);
     dyStringFree(&dy);
     }
 
@@ -254,7 +300,10 @@ verbose(2, "Phase 9 - execution\n");
     struct dyString *dy = dyStringNew(0);
     int err;
     int i;
-    dyStringPrintf(dy, "./%s", baseName);
+    if (baseDir[0] == 0)
+	dyStringPrintf(dy, "./%s", baseName);
+    else
+        dyStringPrintf(dy, "%s%s", baseDir, baseName);
     for (i=0; i<pfArgc; ++i)
         {
 	dyStringAppendC(dy, ' ');
@@ -267,7 +316,8 @@ verbose(2, "Phase 9 - execution\n");
     }
 }
 
-int main(int argc, char *argv[])
+// int main(int argc, char *argv[])
+int main(int argc, char *argv[], char *environ[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);

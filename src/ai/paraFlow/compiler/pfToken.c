@@ -140,6 +140,7 @@ switch (type)
     case pftPolymorphic:     return "pftPolymorphic";
     case pftStatic:          return "pftStatic";
     case pftNil:             return "pftNil";
+    case pftInclude:         return "pftInclude";
     default:
 	if (type < 256)
 	    {
@@ -390,6 +391,24 @@ else
 	}
     errAt(tok, "Unterminated quote.");
     }
+}
+
+static void tokLiteralChar(struct pfTokenizer *tkz, struct pfToken *tok,
+	char quoteC)
+/* Tokenize single-quote bounded character into a small number. */
+{
+char *pos = tkz->pos+1;
+char c;
+c = *pos++;
+if (c == '\\')
+    c = translateEscape(&pos);
+tok->val.i = c;
+tok->type = pftInt;
+c = *pos++;
+if (c != quoteC)
+    errAt(tok, "Missing closing %c", c);
+tok->textSize = pos - tkz->pos;
+tkz->pos = pos;
 }
 
 static void tokNameOrComplexQuote(struct pfTokenizer *tkz, 
@@ -659,6 +678,8 @@ tok->text = tkz->pos;
 switch (c)
     {
     case '\'':
+        tokLiteralChar(tkz, tok, c);
+	break;
     case '"':
 	tokString(tkz, tok, c);
 	break;

@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.100 2005/01/10 00:28:27 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.102 2005/05/04 21:29:36 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -49,6 +49,7 @@ char *ooc = NULL;
 enum gfType qType = gftDna;
 enum gfType tType = gftDna;
 char *mask = NULL;
+char *repeats = NULL;
 char *qMask = NULL;
 double minRepDivergence = 15;
 double minIdentity = 90;
@@ -122,6 +123,9 @@ printf(
   "                 file.out - mask database according to RepeatMasker file.out\n"
   "   -qMask=type Mask out repeats in query sequence.  Similar to -mask above but\n"
   "               for query rather than target sequence.\n"
+  "   -repeats=type Type is same as mask types above.  Repeat bases will not be\n"
+  "               masked in any way, but matches in repeat areas will be reported\n"
+  "               separately from matches in other areas in the psl output.\n"
   "   -minRepDivergence=NN - minimum percent divergence of repeats to allow \n"
   "               them to be unmasked.  Default is 15.  Only relevant for \n"
   "               masking using RepeatMasker .out files.\n"
@@ -169,6 +173,7 @@ struct optionSpec options[] = {
    {"repMatch", OPTION_INT},
    {"mask", OPTION_STRING},
    {"qMask", OPTION_STRING},
+   {"repeats", OPTION_STRING},
    {"minRepDivergence", OPTION_FLOAT},
    {"dots", OPTION_INT},
    {"trimT", OPTION_BOOLEAN},
@@ -259,6 +264,34 @@ if (trimA)
     }
 }
 
+
+Bits *maskQuerySeq(struct dnaSeq *seq, boolean isProt, 
+	boolean maskQuery, boolean lcMask)
+/* Massage query sequence a bit, converting it to correct
+ * case (upper for protein/lower for DNA) and optionally
+ * returning upper/lower case info , and trimming poly A. */
+{
+Bits *qMaskBits = NULL;
+verbose(2, "%s\n", seq->name);
+if (isProt)
+    faToProtein(seq->dna, seq->size);
+else
+    {
+    if (maskQuery)
+	{
+	if (lcMask)
+	    toggleCase(seq->dna, seq->size);
+	qMaskBits = maskFromUpperCaseSeq(seq);
+	}
+    faToDna(seq->dna, seq->size);
+    }
+if (seq->size > qWarnSize)
+    {
+    warn("Query sequence %d has size %d, it might take a while.", seq->name, seq->size);
+    }
+return qMaskBits;
+}
+	    
 void searchOneIndex(int fileCount, char *files[], struct genoFind *gf, char *outName, 
 	boolean isProt, struct hash *maskHash, FILE *outFile, boolean showStatus)
 /* Search all sequences in all files against single genoFind index. */
@@ -288,12 +321,7 @@ for (i=0; i<fileCount; ++i)
 	seq = nibLoadAllMasked(NIB_MASK_MIXED, fileName);
 	freez(&seq->name);
 	seq->name = cloneString(fileName);
-	if (maskQuery)
-	    {
-	    toggleCase(seq->dna, seq->size);
-	    qMaskBits = maskFromUpperCaseSeq(seq);
-	    }
-	faToDna(seq->dna, seq->size);
+	qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
 	trimSeq(seq, &trimmedSeq);
 	carefulClose(&f);
 	searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
@@ -302,30 +330,32 @@ for (i=0; i<fileCount; ++i)
 	count += 1;
 	bitFree(&qMaskBits);
 	}
+    else if (twoBitIsFile(fileName))
+        {
+	struct twoBitFile *tbf = twoBitOpen(fileName);
+	struct twoBitIndex *index;
+	if (isProt)
+	    errAbort("%s is a two bit file , which doesn't work for proteins.", 
+	    	fileName);
+	for (index = tbf->indexList; index != NULL; index = index->next)
+	    {
+	    struct dnaSeq *seq = twoBitReadSeqFrag(tbf, index->name, 0, 0);
+	    Bits *qMaskBits = maskQuerySeq(seq, isProt, maskQuery, lcMask);
+	    trimSeq(seq, &trimmedSeq);
+	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
+	    totalSize += seq->size;
+	    count += 1;
+	    dnaSeqFree(&seq);
+	    bitFree(&qMaskBits);
+	    }
+	}
     else
         {
 	static struct dnaSeq seq;
 	struct lineFile *lf = lineFileOpen(fileName, TRUE);
 	while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	    {
-	    Bits *qMaskBits = NULL;
-	    verbose(2, "%s\n", seq.name);
-	    if (isProt)
-		faToProtein(seq.dna, seq.size);
-	    else
-	        {
-		if (maskQuery)
-		    {
-		    if (lcMask)
-		        toggleCase(seq.dna, seq.size);
-		    qMaskBits = maskFromUpperCaseSeq(&seq);
-		    }
-		faToDna(seq.dna, seq.size);
-		}
-	    if (seq.size > qWarnSize)
-	        {
-		warn("Query sequence %d has size %d, it might take a while.", seq.name, seq.size);
-		}
+	    Bits *qMaskBits = maskQuerySeq(&seq, isProt, maskQuery, lcMask);
 	    trimSeq(&seq, &trimmedSeq);
 	    searchOne(&trimmedSeq, gf, outFile, isProt, maskHash, qMaskBits);
 	    totalSize += seq.size;
@@ -505,6 +535,7 @@ struct genoFind *gf;
 boolean tIsProt = (tType == gftProt);
 boolean qIsProt = (qType == gftProt);
 boolean bothSimpleNuc = (tType == gftDna && (qType == gftDna || qType == gftRna));
+boolean bothSimpleProt = (tIsProt && qIsProt);
 FILE *f = mustOpen(outName, "w");
 boolean showStatus = (f != stdout);
 
@@ -518,7 +549,7 @@ if (makeOoc != NULL)
     exit(0);
     }
 gfClientFileArray(queryFile, &queryFiles, &queryCount);
-dbSeqList = gfClientSeqList(dbCount, dbFiles, tIsProt, tType == gftDnaX, mask, 
+dbSeqList = gfClientSeqList(dbCount, dbFiles, tIsProt, tType == gftDnaX, repeats, 
 	minRepDivergence, showStatus);
 databaseSeqCount = slCount(dbSeqList);
 for (seq = dbSeqList; seq != NULL; seq = seq->next)
@@ -527,22 +558,33 @@ for (seq = dbSeqList; seq != NULL; seq = seq->next)
 gvo = gfOutputAny(outputFormat, minIdentity*10, qIsProt, tIsProt, noHead, 
 	databaseName, databaseSeqCount, databaseLetters, f);
 
-if (bothSimpleNuc || (tIsProt && qIsProt))
+if (bothSimpleNuc || bothSimpleProt)
     {
     struct hash *maskHash = NULL;
-    /* Build index, possibly upper-case masked. */
-    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
-    	tIsProt, oneOff, mask != NULL, stepSize);
-    if (mask != NULL)
+
+    /* Save away masking info for output. */
+    if (repeats != NULL)
 	{
 	int i;
-	struct gfSeqSource *source = gf->sources;
 	maskHash = newHash(0);
-	for (i=0; i<gf->sourceCount; ++i)
-	    if (source[i].maskedBits)
-		hashAdd(maskHash, source[i].seq->name, source[i].maskedBits);
-        gfClientUnmask(dbSeqList);
+	for (seq = dbSeqList; seq != NULL; seq = seq->next)
+	    {
+	    Bits *maskedBits = maskFromUpperCaseSeq(seq);
+	    hashAdd(maskHash, seq->name, maskedBits);
+	    }
 	}
+
+    /* Handle masking and indexing.  If masking is off, we want the indexer
+     * to see unmasked sequence, otherwise we want it to see masked.  However
+     * after indexing we always want it unmasked, because things are always
+     * unmasked for the extension phase. */
+    if (mask == NULL && !bothSimpleProt)
+        gfClientUnmask(dbSeqList);
+    gf = gfIndexSeq(dbSeqList, minMatch, maxGap, tileSize, repMatch, ooc, 
+    	tIsProt, oneOff, FALSE, stepSize);
+    if (mask != NULL)
+        gfClientUnmask(dbSeqList);
+
     searchOneIndex(queryCount, queryFiles, gf, outName, tIsProt, maskHash, f, showStatus);
     freeHash(&maskHash);
     }
@@ -707,6 +749,12 @@ ooc = optionVal("ooc", NULL);
 makeOoc = optionVal("makeOoc", NULL);
 mask = optionVal("mask", NULL);
 qMask = optionVal("qMask", NULL);
+repeats = optionVal("repeats", NULL);
+if (repeats != NULL && mask != NULL && differentString(repeats, mask))
+    errAbort("The -mask and -repeat settings disagree.  "
+             "You can just omit -repeat if -mask is on");
+if (mask != NULL)	/* Mask setting will also set repeats. */
+    repeats = mask;
 outputFormat = optionVal("out", outputFormat);
 dotEvery = optionInt("dots", 0);
 /* set global for fuzzy find functions */

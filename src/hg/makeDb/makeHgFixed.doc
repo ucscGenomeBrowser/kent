@@ -207,9 +207,55 @@ hgStanfordMicroarray -dataField="Log(base2) of R/G Normalized Ratio (Mean)" \
   hgFixed humanNormalRatio humanNormalExps /projects/compbio/data/microarray/shyamsundarEtAl/spots
 echo "select name from humanNormalExps" | hgsql -N hgFixed | awk "{print \"\'\"\$0\"\'\"}" > col1
 echo "select id from humanNormalExps" | hgsql -N hgFixed > col2
-paste col1 col2 | sort > humanNormal.ra
-# EDIT humanNormal.ra by hand and make a category (middle column) for each experiment
-hgMedianMicroarray hgFixed humanNormal humanNormalExps humanNormal.ra \
+n=`wc -l < col1`
+for i in `seq 1 $n`; do echo "n/a" >> col1.5; done
+paste col1 col1.5 col2 | sort | tr '\t' ' ' > humanNormal.ra
+rm col1 col1.5 col2
+# EDIT humanNormal.ra by hand and combine the like tissues
+hgMedianMicroarray -minExps=1 hgFixed humanNormal humanNormalExps humanNormal.ra \
   humanNormalMedian humanNormalMedianExps
-hgMedianMicroarray hgFixed humanNormalRatio humanNormalExps humanNormal.ra \
+hgMedianMicroarray -minExps=1 hgFixed humanNormalRatio humanNormalExps humanNormal.ra \
   humanNormalMedianRatio humanNormalMedianExps
+
+# (copy/paste this into columnDb.ra)
+
+# Mouse data from Zhang, et. al The functional landscape of mouse gene expression" J Biol. 
+# http://hugheslab.med.utoronto.ca/Zhang/
+mkdir -p /cluster/store2/microarray
+ln -s /cluster/store2/microarray /cluster/data/microarray
+mkdir -p /cluster/data/microarray/zhangEtAl
+cd /cluster/data/microarray/zhangEtAl
+wget http://hugheslab.med.utoronto.ca/Zhang/expression_39309_normalized.txt
+sed 's/\(XM_[0-9]\+\)\.1/\1/' expression_39309_normalized.txt > arrays.txt
+hgGenericMicroarray hgFixed mouseLandscape arrays.txt
+wget http://hugheslab.med.utoronto.ca/Zhang/mouse_XM_mRNA_NCBI_2.fa
+sed 's/^>.*|\(XM.*\)\.1|.*$/>\1/' mouse_XM_mRNA_NCBI_2.fa > xm.fa
+ssh kk9
+cd /santest/scratch
+mkdir andy
+cd andy/
+cp /cluster/data/microarray/zhangEtAl/xm.fa .
+ls -1 /panasas/store/mm6/nib/* | grep -v random > chroms.lst
+cat << _EOF_ > gsub
+#LOOP
+blat -ooc=/scratch/hg/h/mouse11.ooc -fine -q=rna -noHead \$(path1) xm.fa xm.\$(root1).psl
+#ENDLOOP
+_EOF_
+gensub2 chroms.lst single gsub spec
+para create spec
+para push
+para time
+#Completed: 22 of 22 jobs
+#CPU time in finished jobs:      36298s     604.96m    10.08h    0.42d  0.001 y
+#IO & Wait Time:                    91s       1.52m     0.03h    0.00d  0.000 y
+#Average job time:                1654s      27.57m     0.46h    0.02d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            2955s      49.25m     0.82h    0.03d
+#Submission to last job:          2957s      49.28m     0.82h    0.03d
+cat *.psl > xm.psl
+ssh hgwdev
+cd /cluster/data/microarray/zhangEtAl
+cp /santest/scratch/andy/xm.psl .
+hgLoadPsl -table=xmMrna mm6 xm.psl
+hgMapToGene -type=psl -cds mm6 xmMrna knownGene knownToXM
+echo drop table xmMrna | hgsql mm6 

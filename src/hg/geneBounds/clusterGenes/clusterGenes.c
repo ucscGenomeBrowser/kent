@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.21 2005/04/21 04:51:44 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.22 2005/05/01 09:09:52 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -30,8 +30,7 @@ errAbort(
   "database or genePred tab seperated files.\n"
   "options:\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
-  "   -chrom=chrN - Just work on one chromosome\n"
-  "   -chromFile=file - Just work on chromosomes listed in this file\n"
+  "   -chrom=chrN - Just work this chromosome, maybe repeated.\n"
   "   -cds - cluster only on CDS exons\n"
   "   -trackNames - If specified, input are pairs of track names and files.\n"
   "    This is useful when the file names don't reflact the desired track\n"
@@ -47,8 +46,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-   {"chrom", OPTION_STRING},
-   {"chromFile", OPTION_STRING},
+   {"chrom", OPTION_STRING|OPTION_MULTI},
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
    {"requiredTracks", OPTION_STRING},
@@ -675,23 +673,6 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
 genePredFreeList(&gpList);
 }
 
-struct slName* readChromFile(char* chromFile)
-/* read chromosomes from a file */
-{
-struct lineFile *lf = lineFileOpen(chromFile, TRUE);
-char *row[1];
-struct slName* chroms = NULL;
-
-while (lineFileNextRow(lf, row, ArraySize(row)))
-    {
-    slSafeAddHead(&chroms, slNameNew(row[0]));
-    }
-
-lineFileClose(&lf);
-slReverse(&chroms);
-return chroms;
-}
-
 struct track *buildTrackList(int specCount, char *specs[])
 /* build list of tracks, consisting of list of tables, files, or
  * pairs of trackNames and files */
@@ -742,11 +723,8 @@ FILE *clBedFh = NULL;
 hSetDb(database);
 gTracks  = buildTrackList(specCount, specs);
 
-if (optionExists("chrom"))
-    chromList = slNameNew(optionVal("chrom", NULL));
-else if (optionExists("chromFile"))
-    chromList = readChromFile(optionVal("chromFile", NULL));
-else
+chromList = optionMultiVal("chrom", NULL);
+if (chromList == NULL)
     chromList = hAllChromNames();
 slNameSort(&chromList);
 conn = hAllocConn();

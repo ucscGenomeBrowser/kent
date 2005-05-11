@@ -609,8 +609,8 @@ identifier stsAccession external=genbank typeOf=genbankAccession
 "Genbank accession of a Sequence Tag Site (STS) sequence."
     $gbd.stsInfo2.genbank dupeOk
 
-identifier bacEndAccession typeOf=genbankAccession
-"Genbank accession of a BAC end read."
+identifier bacEndNames 
+"Names for BAC end reads."
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $danRer.bacEndSingles.lfNames comma
@@ -620,11 +620,16 @@ identifier bacEndAccession typeOf=genbankAccession
 identifier bacExtName
 "External name for BAC clones." 
     $danRer.bacCloneXRef.extName
-    $danRer.bacEndPairs.name
-    $danRer.bacEndSingles.name
-
-identifier bacAccession typeOf=genbankAccession
+    $danRer.bacEndPairs.name minCheck=0.24
+    $danRer.bacEndSingles.name minCheck=0.50
+    
+identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
+    $danRer.bacCloneXRef.genbank dupeOk
+
+identifier bacEndAccession typeOf=genbankAccession external=genbank
+"Genbank accession of a sequenced BAC end"
+    $danRer.bacEndAlias.acc dupeOk
 
 identifier humanBacAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
@@ -1808,6 +1813,16 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeUcsdChipAch3Imr90
+    encodeUcsdChipMeh3k4Imr90
+    encodeUcsdChipRnapHct116
+    encodeUcsdChipRnapHela
+    encodeUcsdChipRnapImr90
+    encodeUcsdChipRnapThp1
+    encodeUcsdChipTaf250Hct116
+    encodeUcsdChipTaf250Hela
+    encodeUcsdChipTaf250Imr90
+    encodeUcsdChipTaf250Thp1
     pseudoYale
 
 tablesIgnored $mm

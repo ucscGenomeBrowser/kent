@@ -15,5 +15,4 @@ DIRS = \
 	mafFilter \
 	mafFrag \
 	mafFrags \
-	mafAddIRows \
 	stageMultiz

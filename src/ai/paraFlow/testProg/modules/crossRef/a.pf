@@ -1,0 +1,8 @@
+include b
+
+to printA()
+{
+print("Hello from module A");
+}
+
+printB();

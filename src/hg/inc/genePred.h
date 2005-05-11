@@ -212,5 +212,9 @@ int genePredCheck(char *desc, FILE* out, int chromSize,
  * size of chromosome, or 0 if chrom is not valid, or -1 to not check
  * chromosome bounds. Returns count of errors. */
 
+boolean genePredNmdTarget(struct genePred *gp);
+/* Return TRUE if cds end is more than 50bp upstream of
+   last intron. */
+
 #endif /* GENEPRED_H */
 

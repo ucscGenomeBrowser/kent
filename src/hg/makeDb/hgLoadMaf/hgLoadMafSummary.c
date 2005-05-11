@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.9 2005/04/20 21:32:12 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.12 2005/04/28 18:13:39 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -23,9 +23,9 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 boolean test = FALSE;
-int mergeGap = 10;
-int minSize = 1000;
-int maxSize = 1000;
+int mergeGap = 500;
+int minSize = 10000;
+int maxSize = 50000;
 char *database = NULL;
 
 void usage()
@@ -81,8 +81,6 @@ return score;
 void outputSummary(FILE *f, struct mafSummary *ms)
 /* output to .tab file */
 {
-verbose(3, "OUTPUT src=%s, chromStart=%d, chromEnd=%d\n",
-                ms->src, ms->chromStart, ms->chromEnd);
 fprintf(f, "%u\t", hFindBin(ms->chromStart, ms->chromEnd));
 mafSummaryTabOut(ms, f);
 }
@@ -125,7 +123,6 @@ struct mafComp *oldMasterNext = mcMaster->next;
 char *e, *chrom;
 char src[256];
 
-verbose(3, "processMaf %d\n", maf->textSize);
 strcpy(src, mcMaster->src);
 chrom = chopPrefix(src);
 for (mc = maf->components; mc != NULL; mc = nextMc)
@@ -153,6 +150,8 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     mcMaster->next = mc;
     mc->next = NULL;
     ms->score = scorePairwise(&pairMaf);
+    ms->leftStatus[0] = mc->leftStatus;
+    ms->rightStatus[0] = mc->rightStatus;
 
     /* restore component links to allow memory recovery */
     mcMaster->next = oldMasterNext; 
@@ -161,13 +160,9 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
     /* output to .tab file, or save for merging with another block 
      * if this one is too small */
 
-    verbose(3, "src=%s, chromStart=%d, chromEnd=%d\n",
-                ms->src, ms->chromStart, ms->chromEnd);
-
     /* handle pending alignment block for this species, if any  */
     if ((msPending = (struct mafSummary *) hashFindVal(componentHash, ms->src)) != NULL)
         {
-        verbose(3, "pending %s %d %d\n", ms->src, ms->chromStart, ms->chromEnd);
         /* there is a pending alignment block */
         /* either merge it with the current block, or output it */
         if (sameString(ms->chrom, msPending->chrom) &&
@@ -176,6 +171,8 @@ for (mc = maf->components; mc != NULL; mc = nextMc)
             /* merge pending block with current */
             ms->score = mergeScores(msPending, ms);
             ms->chromStart = msPending->chromStart;
+            ms->leftStatus[0] = msPending->leftStatus[0];
+            ms->rightStatus[0] = ms->rightStatus[0];
             }
         else
             outputSummary(f, msPending);
@@ -204,7 +201,6 @@ struct hashCookie hc = hashFirst(componentHash);
 
 while (((struct mafSummary *)ms = hashNextVal(&hc)) != NULL)
     {
-    verbose(3, "flushing %s %d %d\n", ms->src, ms->chromStart, ms->chromEnd);
     outputSummary(f, ms);
     }
 }
