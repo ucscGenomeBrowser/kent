@@ -11,7 +11,18 @@
 #include "math.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.1 2005/05/11 17:55:38 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.2 2005/05/11 18:04:33 galt Exp $";
+
+boolean first=FALSE;
+boolean weighted=FALSE;
+float threshold=2.0;
+
+static struct optionSpec options[] = {
+   {"first", OPTION_BOOLEAN},
+   {"weighted", OPTION_BOOLEAN},
+   {"threshold", OPTION_FLOAT},
+   {NULL, 0},
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -30,17 +41,11 @@ errAbort(
   "options:\n"
   "   -first  - include 1st row in input, do not skip.\n"
   "   -weighted  - count the 3rd column value as network edge weight.\n"
+  "   -threshold=9.9  - maximum network distance allowed, default=%f.\n"
+  , threshold
   );
 }
 
-static struct optionSpec options[] = {
-   {"first", OPTION_BOOLEAN},
-   {"weighted", OPTION_BOOLEAN},
-   {NULL, 0},
-};
-
-boolean first=FALSE;
-boolean weighted=FALSE;
 
 int numEdges = 0;
 
@@ -312,7 +317,7 @@ for(i=0;i<numGenes;++i)
     for(j=0;j<numGenes;++j)
 	{
     	dij = d+(i*numGenes)+j;
-	if (*dij >= 0.0) 
+	if ((*dij >= 0.0) && (*dij <= threshold))
 	    {
     	    fprintf(f,"%s\t%s\t%f\n",geneIds[i],geneIds[j],*dij);
 	    }
@@ -354,9 +359,9 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 
-/* debug */
 first = optionExists("first");
 weighted = optionExists("weighted");
+threshold = optionFloat("threshold", threshold);
 
 uglyf("-first=%d\n", first);
 uglyf("-weighted=%d\n", weighted);
