@@ -172,6 +172,8 @@ static void updateCounter(struct cDnaCnts *cnts)
 {
 if (cnts->aligns > cnts->prevAligns)
     cnts->queries++;
+if (cnts->aligns > cnts->prevAligns+1)
+    cnts->multAlnQueries++;
 cnts->prevAligns = cnts->aligns;
 }
 

@@ -342,7 +342,8 @@ void verbStats(char *label, struct cDnaCnts *cnts)
 /* output stats */
 {
 if (cnts->aligns > 0)
-    verbose(1, "%18s:\t%d\t%d\n", label, cnts->queries, cnts->aligns);
+    verbose(1, "%18s:\t%d\t%d\t%d\n", label, cnts->queries, cnts->aligns,
+            cnts->multAlnQueries);
 }
 
 void pslCDnaFilter(char *inPsl, char *outPsl)
@@ -364,7 +365,7 @@ carefulClose(&dropPslFh);
 carefulClose(&weirdOverPslFh);
 carefulClose(&outPslFh);
 
-verbose(1,"%18s \tseqs\taligns\n", "");
+verbose(1,"%18s \tseqs\taligns\tmultAlnSeqs\n", "");
 verbStats("total", &cdAlns->totalCnts);
 verbStats("kept", &cdAlns->keptCnts);
 verbStats("drop invalid", &cdAlns->badCnts);

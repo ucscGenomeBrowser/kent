@@ -23,9 +23,10 @@ struct cDnaAlign
 struct cDnaCnts
 /* counts kept for alignments */
 {
-    unsigned aligns;     /* count of alignments */
-    unsigned queries;    /* count of queries; */
-    unsigned prevAligns; /* previous aligns count, used to update queires */
+    unsigned queries;        /* count of queries; */
+    unsigned aligns;         /* count of alignments */
+    unsigned multAlnQueries; /* count of queries with multiple alignments */
+    unsigned prevAligns;     /* previous aligns count, used to update queires */
 };
 
 struct cDnaAligns
