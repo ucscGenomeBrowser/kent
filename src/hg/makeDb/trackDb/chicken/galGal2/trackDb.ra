@@ -344,7 +344,7 @@ blastRef hg17.blastKGRef01
 
 track ecoresTetraodon
 shortLabel Tetraodon Ecores
-longLabel Tetraodon Evolutionary Conserved Regions
+longLabel $o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
 priority 149.9
 visibility hide
@@ -353,6 +353,7 @@ altColor 200,220,255
 type bed 12 .
 url http://www.genoscope.cns.fr/comparative?premier=Chicken&deuxieme=Tetraodon&position=$$
 urlLabel Exofish Ecotig Display Link:
+otherDb tetNig1
 
 track cpgIslandExt
 shortLabel CpG Islands (WUSTL)
