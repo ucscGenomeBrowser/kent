@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.60 2005/01/14 19:51:25 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.61 2005/05/12 18:22:05 aamp Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -110,6 +110,8 @@ errAbort(
   "   Includes host info.\n"
   "para running\n"
   "   Print info on currently running jobs.\n"
+  "para hippos time\n"
+  "   Print info on currently running jobs taking > 'time' (minutes) to run.\n"
   "para time\n"
   "   List timing information.\n"
   "   with option: -eta also show estimated time to completion.\n"
@@ -1325,25 +1327,33 @@ printf("run time so far: %d sec,  %4.2f min, %4.2f hours,  %4.2f days\n",
 printf("\n");
 }
 
-void paraRunning(char *batch)
+void paraRunning(char *batch, char *minTimeS)
 /*  List jobs that are running.  Includes host and time info */
 {
 struct jobDb *db = readBatch(batch);
 struct job *job;
 struct submission *sub;
 int runCount = 0;
+int minTime = 0;
 
+if (minTimeS)
+    minTime = atoi(minTimeS);
 markQueuedJobs(db);
 markRunJobStatus(db);
 for (job = db->jobList; job != NULL; job = job->next)
     {
     if ((sub = job->submissionList) != NULL && sub->running)
 	{
-	runningReport(job, sub);
-	++runCount;
+	time_t startTime = sub->startTime;
+	int duration = time(NULL) - startTime;
+	if (duration > (minTime * 60))
+	    {
+	    runningReport(job, sub);
+	    ++runCount;
+	    }
 	}
     }
-printf("total jobs running: %d\n", runCount);
+printf("total %s running: %d\n", !minTimeS ? "jobs" : "hippos", runCount);
 }
 
 
@@ -1827,7 +1837,11 @@ else if (sameWord(command, "problems") || sameWord(command, "problem"))
     }
 else if (sameWord(command, "running"))
     {
-    paraRunning(batch);
+    paraRunning(batch, NULL);
+    }
+else if (sameWord(command, "hippos") || sameWord(command, "hippo"))
+    {
+    paraRunning(batch, argv[2]);
     }
 else if (sameWord(command, "time") || sameWord(command, "times"))
     {
