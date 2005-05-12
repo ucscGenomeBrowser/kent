@@ -14,13 +14,14 @@ errAbort(
   "usage:\n"
   "   kgPick tempDb outfile\n"
   "      tempDb is the temp KG DB name\n"
+  "      proteinsDb is the proteinsYYMMDDt DB name\n"
   "      outfile is the output file name\n"
   "      dupOutfile is the duplicate mrna/prot output file name\n"
-  "example: kgPick kgHg17ETemp kg2.tmp dupSpMrna.tmp\n");
+  "example: kgPick kgHg17ETemp proteins050415 kg2.tmp dupSpMrna.tmp\n");
 }
 
 void printKg(struct sqlConnection *conn, struct sqlConnection *conn2, 
-             char *kgTempDb, char *cdsId, char *mrnaID, char *protAcc, 
+             char *kgTempDb, char *proteinsDb, char *cdsId, char *mrnaID, char *protAcc, 
 	     char *alignID, FILE *outf)
 {
 char query[256];
@@ -42,7 +43,7 @@ while (row != NULL)
     
     /* get protein display ID */
     sprintf(condStr, "accession='%s'", protAcc);
-    displayId = sqlGetField(conn2, "proteins050415", "spXref3", "displayID", condStr);
+    displayId = sqlGetField(conn2, proteinsDb, "spXref3", "displayID", condStr);
     
     fprintf(outf, "%s\t%s\t%s\n", displayId, alignID, cdsId);
     safef(printedCds, sizeof(printedCds), cdsId);
@@ -68,13 +69,15 @@ char *protAcc;
 char *ranking;
 char *cdsId, *mrnaID, *alignID;
 char *protDbId;
+char *proteinsDb;
 boolean gotRefseq, gotNonRef;
 boolean isRefseq;
 
-if (argc != 4) usage();
+if (argc != 5) usage();
 kgTempDb       = argv[1];
-outfileName    = argv[2];
-dupOutfileName = argv[3];
+proteinsDb     = argv[2];
+outfileName    = argv[3];
+dupOutfileName = argv[4];
 
 outf    = mustOpen(outfileName, "w");
 dupOutf = mustOpen(dupOutfileName, "w");
@@ -131,7 +134,7 @@ while (row2 != NULL)
 	    /* print one qualified RefSeq */
 	    if (!gotRefseq)
 	    	{
-		printKg(conn4, conn5, kgTempDb, cdsId, mrnaID, protAcc, alignID, outf);
+		printKg(conn4, conn5, kgTempDb, proteinsDb, cdsId, mrnaID, protAcc, alignID, outf);
 		gotRefseq = TRUE;
 		}
 	    }
@@ -140,7 +143,7 @@ while (row2 != NULL)
 	    /* print out only one non-RefSeq entry for this CDS structure */
 	    if (!gotNonRef)
 	    	{
-	        printKg(conn4, conn5, kgTempDb, cdsId, mrnaID, protAcc, alignID, outf);
+	        printKg(conn4, conn5, kgTempDb, proteinsDb, cdsId, mrnaID, protAcc, alignID, outf);
 		gotNonRef = TRUE;
 		}
 	    }
