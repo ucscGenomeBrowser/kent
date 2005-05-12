@@ -420,6 +420,15 @@ exit; # don't actually run this like a script :)
   # add bosTau1 to list of databases to align in
   #  /cluster/data/genbank/etc/align-genbank
 
+# GENBANK: add Non-Cow Refseqs (DONE May 9, 2005, Heather)
+
+  # add to kent/src/hg/makeDb/genbank/etc/genbank.conf and commit:
+  # bosTau1.refseq.mrna.xeno.load = yes
+  cd /cluster/data/genbank/etc
+  cvs update
+  # new tables: xenoRefGene, xenoRefFlat, xenoRefSeqAli, refLink, refSeqStatus
+  # refSeqSummary
+
 # GC PERCENT (DONE Oct. 17, 2004, Heather)
   # use old-style (non-wiggle)
   # run on kolossus (serialized)
