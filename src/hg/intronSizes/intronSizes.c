@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: intronSizes.c,v 1.1 2005/05/12 00:04:06 baertsch Exp $";
+static char const rcsid[] = "$Id: intronSizes.c,v 1.2 2005/05/12 00:24:38 baertsch Exp $";
 
 char *chromName;
 
@@ -25,6 +25,32 @@ errAbort(
   );
 }
 
+void genePredIntrons(struct genePred *gp, struct bed **bedList)
+/* get list of introns (bed format) for a genePred */
+/* append list of introns to bedList */
+{
+int exonIx=1;
+struct bed *bed = NULL;
+
+for (exonIx=1; exonIx < gp->exonCount; ++exonIx)
+    {
+    int intronStart = gp->exonEnds[exonIx-1];
+    int intronEnd = gp->exonStarts[exonIx];
+    if (intronEnd > intronStart)
+        {
+        AllocVar(bed);
+        bed->chrom = cloneString(gp->chrom);
+        bed->chromStart = intronStart;
+        bed->chromEnd = intronEnd;
+        bed->name = cloneString(gp->name);
+        bed->score = intronEnd-intronStart;
+        bed->strand[0] = gp->strand[0];
+        bed->strand[1] = gp->strand[1];
+        slAddHead(bedList, bed);
+        }
+    }
+}
+
 void intronSizes(char *database, char *table)
 /* intronSizes - Output list of intron sizes.. */
 {
@@ -33,9 +59,8 @@ struct sqlConnection *conn;
 struct sqlResult *sr;
 char **row;
 struct genePred *gp;
-int exonIx, txStart;
 int rowOffset;
-char strand;
+struct bed *bedList = NULL, *bed = NULL;
 
 hSetDb(database);
 rowOffset = hOffsetPastBin(NULL, table);
@@ -52,16 +77,11 @@ sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gp = genePredLoad(row+rowOffset);
-    strand = gp->strand[0];
-    txStart = gp->txStart;
-    for (exonIx=1; exonIx < gp->exonCount; ++exonIx)
-        {
-        int intronStart = gp->exonEnds[exonIx-1];
-        int intronEnd = gp->exonStarts[exonIx];
-        printf("%s\t%d\t%d\t%s\t%d\n",
-                gp->chrom, intronStart, intronEnd, 
-                gp->name, intronEnd - intronStart);
-        }
+    genePredIntrons(gp, &bedList);
+    slReverse(&bedList);
+    for (bed = bedList ; bed != NULL ; bed=bed->next)
+        bedTabOutN(bed,6, stdout);
+    bedFreeList(&bedList);
     genePredFree(&gp);
     }
 sqlFreeResult(&sr);
