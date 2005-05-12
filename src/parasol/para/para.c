@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.61 2005/05/12 18:22:05 aamp Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.62 2005/05/12 18:24:20 aamp Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1835,11 +1835,7 @@ else if (sameWord(command, "problems") || sameWord(command, "problem"))
     {
     paraProblems(batch);
     }
-else if (sameWord(command, "running"))
-    {
-    paraRunning(batch, NULL);
-    }
-else if (sameWord(command, "hippos") || sameWord(command, "hippo"))
+else if (sameWord(command, "running") || sameWord(command, "hippos") || sameWord(command, "hippo"))
     {
     paraRunning(batch, argv[2]);
     }
