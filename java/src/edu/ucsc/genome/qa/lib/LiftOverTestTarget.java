@@ -18,7 +18,7 @@ public class LiftOverTestTarget {
   * 
   * @param propFileName    File with properties
   */
-  public TestTarget(String propFileName) {
+  public LiftOverTestTarget(String propFileName) {
     setDefaults();
     if (propFileName.equals("default")) {
       return;
