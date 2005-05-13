@@ -235,11 +235,12 @@ public class HgTracks {
    * Prints to .err, .ok and .msg  files
    *
    * @param dbinfo   The host, assembly, user and password object
-   * @param machine  The machine on which to run the check
+   * @param server   The server on which to run the check
    * @param assembly The genome to check
    * @param table    The table to check
    */
-   public static void pbgene(HGDBInfo dbinfo, String machine, String assembly,                            String table, boolean quickOn) {
+   public static void pbgene(HGDBInfo dbinfo, String server, 
+       String assembly, String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
     Random random = new Random();
@@ -275,7 +276,7 @@ public class HgTracks {
       while (kgiter.hasNext()) {
         // not using all of the elements
         KnownGene kg = (KnownGene) kgiter.next();
-        String url = "http://" + machine + "/cgi-bin/pbTracks?db=" + assembly +
+        String url = "http://" + server + "/cgi-bin/pbTracks?db=" + assembly +
                      "&proteinID="  + kg.proteinID;
         //           "&proteinID=HXA7_HUMAN";
         //           "&proteinID=OMD_HUMAN";
