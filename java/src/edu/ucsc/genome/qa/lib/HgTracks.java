@@ -275,7 +275,7 @@ public class HgTracks {
       while (kgiter.hasNext()) {
         // not using all of the elements
         KnownGene kg = (KnownGene) kgiter.next();
-        String url = "http://" + machine + "/cgi-bin/pbTracks?db=" + assembly +
+        String url = "http://" + server + "/cgi-bin/pbTracks?db=" + assembly +
                      "&proteinID="  + kg.proteinID;
         //           "&proteinID=HXA7_HUMAN";
         //           "&proteinID=OMD_HUMAN";
