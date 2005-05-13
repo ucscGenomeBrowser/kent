@@ -3079,5 +3079,56 @@ md5sum *.gz > md5sum.txt
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
+# EXTRACT AXTs and MAFs FROM OPOSSUM (monDom1) NET FOR ZEBRAFISH (danRer2)
+# zb.danRer2 are the blastz alignments, chains and nets for 
+# danRer2 as target and monDom1 as query.
+# (DONE, 2005-05-13, hartera)
 
+    ssh kkstore01
+    # create axts
+    cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2/axtChain
+    gunzip zfish.net.gz
+    gunzip chain/*.chain.gz
+    netSplit zfish.net zfishNet
+    mkdir -p ../axtNet
+cat > axtNet.csh << 'EOF'
+    foreach f (zfishNet/chr*.net)
+        set c = $f:t:r
+        echo "axtNet on $c"
+        netToAxt zfishNet/$c.net chain/$c.chain \
+                 /cluster/data/danRer2/nib \
+                 /cluster/data/monDom1/monDom1.2bit ../axtNet/$c.axt
+    echo "Complete: $c.net -> $c.axt"
+    end
+'EOF'
+    chmod +x axtNet.csh
+    csh axtNet.csh >&! axtNet.log &
+    tail -100f axtNet.log
+    # sort axts before making mafs - must be sorted for multiz
+    cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2
+    mv axtNet axtNet.unsorted
+    mkdir axtNet
+    foreach f (axtNet.unsorted/*.axt)
+        set c = $f:t:r
+        echo "Sorting $c"
+        axtSort $f axtNet/$c.axt
+    end
+    # create maf
+    ssh kkstore01
+    cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2/axtNet
+    mkdir ../mafNet
+cat > makeMaf.csh << 'EOF'
+    foreach f (chr*.axt)
+      set maf = $f:t:r.monDom1.maf
+      echo translating $f to $maf
+      axtToMaf $f \
+          /cluster/data/danRer2/chrom.sizes /cluster/data/monDom1/chrom.sizes \
+          ../mafNet/$maf -tPrefix=danRer2.  -qPrefix=monDom1.
+    end
+'EOF'
+    chmod +x makeMaf.csh
+    csh makeMaf.csh >&! makeMaf.log &
+    tail -100f makeMaf.log
+    cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2/axtChain
+    nice gzip zfish.net chain/*.chain &
 
