@@ -307,7 +307,7 @@ public class HgTracks {
           // System.out.println(" text = " + text);
           System.out.println(" ----------------------");
           System.out.println(" boolean b = " + b);
-          if (b) System.out.println(" true means 'Sorry not found'");
+          if (b) System.out.println(" means '" + msgString + "'");
           System.out.println(" count = " + count);
           System.out.println("-----------------------------------------------");
         
