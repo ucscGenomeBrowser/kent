@@ -21,7 +21,7 @@ public class LiftOverTestCase {
   public int newEnd;
 
   // constructors
-  LiftOverTestCase(String idVar, String commentVar, 
+  public LiftOverTestCase(String idVar, String commentVar, 
             String origAssemblyVar, String newAssemblyVar,
             String origChromVar, int origStartVar, int origEndVar,
 	    String statusVar, String messageVar, String newChromVar,
