@@ -7,19 +7,19 @@ import java.util.*;
 public class Coords {
 
   // data
-  String chrom;
-  int start;
-  int end;
+  public String chrom;
+  public int start;
+  public int end;
 
   // constructors
-  Coords(String chromVar, int startVar, int endVar) {
+  public Coords(String chromVar, int startVar, int endVar) {
 
     chrom = chromVar;
     start = startVar;
     end = endVar;
   }
 
-  Coords(String filename) {
+  public Coords(String filename) {
     FileReader fin;
     BufferedReader br;
     String thisline = "";
@@ -51,14 +51,14 @@ public class Coords {
     end = myint.intValue();
   }
 
-  boolean match(String newChrom, int newStart, int newEnd) {
+  public boolean match(String newChrom, int newStart, int newEnd) {
     if (!chrom.equals(newChrom)) return (false);
     if (start != newStart) return (false);
     if (end != newEnd) return (false);
     return (true);
   }
 
-  void print() {
+  public void print() {
     System.out.println(chrom + ":" + start + "-" + end);
   }
 
