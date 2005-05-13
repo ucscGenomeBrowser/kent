@@ -7,18 +7,18 @@ import java.util.*;
 public class LiftOverTestCase {
 
   // data
-  String id;
-  String comment;
-  String origAssembly;
-  String newAssembly;
-  String origChrom;
-  int origStart;
-  int origEnd;
-  String status;
-  String message;
-  String newChrom;
-  int newStart;
-  int newEnd;
+  public String id;
+  public String comment;
+  public String origAssembly;
+  public String newAssembly;
+  public String origChrom;
+  public int origStart;
+  public int origEnd;
+  public String status;
+  public String message;
+  public String newChrom;
+  public int newStart;
+  public int newEnd;
 
   // constructors
   LiftOverTestCase(String idVar, String commentVar, 
