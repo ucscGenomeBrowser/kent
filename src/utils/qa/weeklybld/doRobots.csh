@@ -45,7 +45,15 @@ if ( $err ) then
  exit 1
 endif 
 
-echo "Done running robots TrackCheck, hgNearTest, and hgTablesTest."
+./doLiftOverTestRobot.csh
+set err = $status
+if ( $err ) then
+ echo "error running doLiftOverTestRobot.csh: $err" 
+ ./unsymtrick.csh
+ exit 1
+endif 
+
+echo "Done running robots TrackCheck, LiftOverTest, hgNearTest, and hgTablesTest."
 ./unsymtrick.csh
 exit 0
 
