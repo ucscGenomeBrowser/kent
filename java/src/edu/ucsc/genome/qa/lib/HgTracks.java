@@ -235,11 +235,11 @@ public class HgTracks {
    * Prints to .err, .ok and .msg  files
    *
    * @param dbinfo   The host, assembly, user and password object
-   * @param machine  The machine on which to run the check
+   * @param server  The server on which to run the check
    * @param assembly The genome to check
    * @param table    The table to check
    */
-   public static void pbgene(HGDBInfo dbinfo, String machine, String assembly,                            String table, boolean quickOn) {
+   public static void pbgene(HGDBInfo dbinfo, String server, String assembly, String table, boolean quickOn) {
 
     WebConversation wc = new WebConversation();
     Random random = new Random();
