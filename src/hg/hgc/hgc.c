@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.886 2005/05/10 18:21:40 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.887 2005/05/13 19:28:14 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15083,7 +15083,7 @@ if (cut)
     if (cut->numSciz > 0)
         {
 	int i;
-	printf("<B>Isoscizomers: </B>");
+	printf("<B>Isoschizomers: </B>");
 	for (i = 0; i < cut->numSciz-1; i++)
 	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[i], cut->scizs[i]);
 	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cut->scizs[cut->numSciz-1], cut->scizs[cut->numSciz-1]);
