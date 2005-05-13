@@ -134,10 +134,12 @@ public class HgTracks {
   	boolean isPb, boolean isShort) {
     Random random = new Random();
     ArrayList genes = QADBLibrary.getGenes(dbinfo, track, isPb);
+/**
     if (isShort)
        genes = QALibrary.randomSubArray(genes, random, 5, true);
     else
        genes = QALibrary.randomSubArray(genes, random, 1000, true);
+ */
     return genes;
   }
  
@@ -303,10 +305,11 @@ public class HgTracks {
           System.out.println(" URL = " + url);
           // System.out.println(" firstText = " + firstText);
           // System.out.println(" text = " + text);
-          System.out.println(" ----------------------------------------------");
+          System.out.println(" ----------------------");
           System.out.println(" boolean b = " + b);
+          if (b) System.out.println(" true means 'Sorry not found'");
           System.out.println(" count = " + count);
-          System.out.println(" ----------------------------------------------");
+          System.out.println("-----------------------------------------------");
         
 
           if (code != 200) {
@@ -314,7 +317,7 @@ public class HgTracks {
              outErr.println(url + ":\n Unexpected response code " + code);
              outErr.println("------------------------------------");
           } else if (b) {    
-             outMsg.println(url + ":\n found: " + msgString);
+             outMsg.println(url + "\n found: " + msgString);
              outMsg.println("count = " + count);
              outMsg.println("------------------------------------");
              outMsg2.println(kg.proteinID);
