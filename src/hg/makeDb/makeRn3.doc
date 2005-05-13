@@ -4085,6 +4085,19 @@ axtFilter -notQ_random $1 | axtChain stdin \
     #	table axtInfo may already exist, ignore create error.
     hgsql rn3 < axtInfoInserts.sql
 
+# ADD CHAIN AND NET TO VSHG17 DOWNLOAD AREAS (DONE May 13, 2005, Heather)
+
+ssh hgwdev
+cd /cluster/data/rn3/bed/blastz.hg17/axtChain
+gzip all.chain
+cp -p all.chain.gz /usr/local/apache/htdocs/goldenPath/rn3/vsHg17/human.chain.gz
+gzip human.net
+cp -p human.net.gz /usr/local/apache/htdocs/goldenPath/rn3/vsHg17/human.net.gz
+cd /usr/local/apache/htdocs/goldenPath/rn3/vsHg17
+md5sum *.gz */*.gz > md5sum.txt
+# Update the README.txt
+
+
 # MAKING HUMAN SYNTENY (DONE - 2004-06-16 - Hiram)
 
 ssh hgwdev
