@@ -38,7 +38,8 @@ boolean gbFaReadNext(struct gbFa *fa);
  * gbFaGetSeq is called */
 
 char* gbFaGetSeq(struct gbFa *fa);
-/* Get the sequence for the current record, reading it is not buffered */
+/* Get the sequence for the current record, reading it if not already
+ * buffered */
 
 void gbFaWriteSeq(struct gbFa *fa, char *id, char *comment, char *seq, int len);
 /* write a sequence, comment maybe null, len is the length to write, or -1

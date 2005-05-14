@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.22 2005/04/06 22:00:26 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.23 2005/05/14 19:57:13 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -428,7 +428,7 @@ if ((gOptions.flags & DBLOAD_DRY_RUN) == 0)
     gbMakeDirs(tmpDir);
 
 /* limit number of ext files references to change if requested.  This
-* is global for all loads. */
+ * is global for all loads. */
 if (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
     {
     maxExtFileChg = (gExtFileChged < gOptions.maxExtFileUpdate)
