@@ -7,7 +7,7 @@
 #include "extFileTbl.h"
 #include "seqTbl.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.1 2005/05/14 19:57:14 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.2 2005/05/14 20:42:38 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link */
@@ -15,7 +15,7 @@ struct brokenRefPep
     struct brokenRefPep *next;
     unsigned protSeqId;     /* gbSeq id of protein */
     char *protAcc;          /* protein acc (not alloced here) */
-    boolean foundMRna;      /* found the mRNA */
+    char *mrnaAcc;          /* mRNA acc, or NULL if not in db */
     char *protPathNew;      /* new path derived from mrna path, NULL if
                              * mRNA not found (not alloced here) */
     off_t fileOff;          /* new offset in fasta, or -1 if not found in
@@ -74,9 +74,9 @@ static void brokenRefPepGetPath(struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 safef(query, sizeof(query),
-      "select gbExtFile.path "
+      "select refLink.mrnaAcc, gbExtFile.path "
       "from refLink,gbSeq,gbExtFile "
-      "where refLink.protAcc=\"%s\" and gbSeq.acc=mrnaAcc and gbSeq.gbExtFile=gbExtFile.id",
+      "where refLink.protAcc=\"%s\" and gbSeq.acc=refLink.mrnaAcc and gbSeq.gbExtFile=gbExtFile.id",
       brp->protAcc);
 sr= sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -85,12 +85,12 @@ else
     {
     struct hashEl *hel;
     char protPath[PATH_LEN];
-    char *mrnaPath = row[0];
+    char *mrnaPath = row[1];
     chopSuffixAt(mrnaPath, '/');
     safef(protPath, sizeof(protPath), "%s/pep.fa", mrnaPath);
     hel = hashStore(brpTbl->protPathHash, protPath);
     brp->protPathNew = hel->name;
-    brp->foundMRna = TRUE;
+    brp->mrnaAcc = cloneString(row[0]);
     brpTbl->numToRepair++;
     }
 sqlFreeResult(&sr);
@@ -142,7 +142,8 @@ while (gbFaReadNext(fa))
 gbFaClose(&fa);
 }
 
-static void fillInFastaOffsets(struct brokenRefPepTbl *brpTbl)
+static void fillInFastaOffsets(struct sqlConnection *conn,
+                               struct brokenRefPepTbl *brpTbl)
 /* get offsets of proteins in fasta files */
 {
 struct hashCookie cookie = hashFirst(brpTbl->protPathHash);
@@ -152,13 +153,19 @@ struct hashEl *hel;
 while ((hel = hashNext(&cookie)) != NULL)
     getFastaOffsets(brpTbl, hel->name);
 
-/* check if any missed */
+/* check if any missing */
 cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
-    if (brp->foundMRna && (brp->fileOff < 0))
-        errAbort("refPep %s not found in %s", brp->protAcc, brp->protPathNew);
+    if ((brp->mrnaAcc != NULL) && (brp->fileOff < 0))
+        {
+        /* in one case, this was a pseudoGene mistakenly left in as an
+         * mRNA, so make it a warning */
+        fprintf(stderr, "Warning: %s: refPep %s (for %s) not found in %s\n",
+                sqlGetDatabase(conn), brp->protAcc, brp->mrnaAcc,
+                brp->protPathNew);
+        }
     }
 }
 
@@ -188,7 +195,7 @@ cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
-    if (brp->foundMRna)
+    if (brp->fileOff >= 0)
         {
         gbVerbPr(2, "repair %s", brp->protAcc);
         if (!dryRun)
@@ -199,12 +206,13 @@ while ((hel = hashNext(&cookie)) != NULL)
         }
     }
 if (dryRun)
-    gbVerbMsg(1, "would have repaired %d refseq protein gbExtFile entries", repairCnt);
+    gbVerbMsg(1, "%s: would have repaired %d refseq protein gbExtFile entries", 
+              sqlGetDatabase(conn), repairCnt);
 else
     {
-    assert(repairCnt == brpTbl->numToRepair);
     seqTblCommit(seqTbl, conn);
-    gbVerbMsg(1, "repaired %d refseq protein gbExtFile entries", repairCnt);
+    gbVerbMsg(1, "%s: repaired %d refseq protein gbExtFile entries",
+              sqlGetDatabase(conn), repairCnt);
     }
 }
 
@@ -214,7 +222,7 @@ static boolean checkForRefLink(struct sqlConnection *conn)
 {
 if (!sqlTableExists(conn, "refLink"))
     {
-    fprintf(stderr, "Note: %s doesn't have RefSeqs loaded, skipping",
+    fprintf(stderr, "Note: %s: no RefSeqs loaded, skipping",
             sqlGetDatabase(conn));
     return FALSE;
     }
@@ -241,8 +249,8 @@ while ((hel = hashNext(&cookie)) != NULL)
     struct brokenRefPep *brp = hel->val;
     fprintf(outFh, "%s\n", brp->protAcc);
     }
-gbVerbMsg(1, "need to repair %d refseq protein gbExtFile entries",
-          brpTbl->numToRepair);
+gbVerbMsg(1, "%s: need to repair %d refseq protein gbExtFile entries",
+          sqlGetDatabase(conn), brpTbl->numToRepair);
 }
 
 void refPepRepair(struct sqlConnection *conn,
@@ -253,14 +261,15 @@ struct brokenRefPepTbl *brpTbl;
 if (!checkForRefLink(conn))
     return;
 
-gbVerbMsg(1, "repairing refseq protein gbExtFile entries in %s", sqlGetDatabase(conn));
+gbVerbMsg(1, "%s: repairing refseq protein gbExtFile entries%s",
+          sqlGetDatabase(conn), (dryRun? " (dry run)" : ""));
 
 brpTbl = brokenRefPepTblNew(conn);
-fillInFastaOffsets(brpTbl);
+fillInFastaOffsets(conn, brpTbl);
 if (brpTbl->numToRepair > 0)
     makeRepairs(conn, brpTbl, dryRun);
 else
-    gbVerbMsg(1, "no refseq proteins to repair");
+    gbVerbMsg(1, "%s: no refseq proteins to repair", sqlGetDatabase(conn));
 }
 
 /*
