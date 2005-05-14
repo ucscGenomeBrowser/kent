@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.57 2005/04/13 06:25:51 markd Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.58 2005/05/14 01:22:20 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -588,25 +588,31 @@ return isGff;
 
 static boolean getNextFlatLine(struct lineFile **pLf, char **pLine, char **pNextLine)
 /* Helper routine to get next line of input from lf if non-null, or
- * from memory using pLine/pNextLine to aide parsing.  */
+ * from memory using pLine/pNextLine to aide parsing. 
+ * Note: DOS is CRLF, UNIX is LF, MAC is CR
+ */
 {
 struct lineFile *lf = *pLf;
 char *nextLine;
-char *macNewLine;
+char *cr;
 if (lf != NULL)
     return lineFileNext(lf, pLine, NULL);
 if ((*pLine = nextLine = *pNextLine) == NULL)
-    return FALSE;
+    return FALSE;  /* we have our last line in nextLine, nothing left to parse */
 if (nextLine[0] == 0)
     return FALSE;
-/* if a CR is coming up in the input stream, change to NL */
-if ((macNewLine = strchr(nextLine, '\r')) != NULL)
-    *macNewLine = '\n';
-/* now look for the next NL (which maybe isn't the CR
- * we changed) */
+/* if CR, Mac or DOS */
+cr = strchr(nextLine, '\r');
+/* now look for the next NL */
 if ((nextLine = strchr(nextLine, '\n')) != NULL)
     *nextLine++ = 0;
-*pNextLine = nextLine;
+if (cr != NULL)
+    {
+    *cr++ = 0;
+    if (nextLine == NULL)
+      nextLine = cr;
+    }
+*pNextLine = nextLine;  /* note nextLine == 0 when there is no more */
 return TRUE;
 } 
 
