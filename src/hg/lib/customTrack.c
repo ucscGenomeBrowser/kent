@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.58 2005/05/14 01:22:20 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.59 2005/05/14 02:40:46 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -598,7 +598,7 @@ char *cr;
 if (lf != NULL)
     return lineFileNext(lf, pLine, NULL);
 if ((*pLine = nextLine = *pNextLine) == NULL)
-    return FALSE;  /* we have our last line in nextLine, nothing left to parse */
+    return FALSE;  /* we already gave our last line, just return FALSE */
 if (nextLine[0] == 0)
     return FALSE;
 /* if CR, Mac or DOS */
