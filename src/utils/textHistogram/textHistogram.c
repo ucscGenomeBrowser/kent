@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.20 2005/05/09 23:07:45 markd Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.21 2005/05/15 19:34:15 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -89,7 +89,7 @@ lineFileClose(&lf);
 
 range = max - min;
 
-if (range <= 0.0 )
+if (range < 0.0)
         errAbort("range of data invalid: %g = [%g:%g]", range, min, max);
 
 maxBinCount = autoscale;
@@ -104,9 +104,9 @@ if (real)
 else
     {
     minVal = (int) floor(min);
-    binSize = (int)ceil(range) / maxBinCount;
+    binSize = (int)ceil(range / maxBinCount);
     if (binSize < 1) binSize = 1;
-    fprintf(stderr, "#\tautoscale data range: (%d - %d)/%d = %d\n",
+    verbose(1, "#\tautoscale data range: (%d - %d)/%d = %d\n",
 	(int) ceil(max), minVal, maxBinCount, binSize);
     }
 verbose(2, "#\tautoscale number of data values: %lu\n", dataCount);
