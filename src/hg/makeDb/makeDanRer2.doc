@@ -1167,8 +1167,11 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # RH MAP TRACK (DONE, 2004-12-07, hartera)
 # create sym links to RH sequences in /gbdb/danRer2 (2004-12-17, hartera)
+# RE-DO RH MAP TRACK WITH MORE STRINGENT POST-BLAT FILTERING 
+# (DONE, 2005-05-15, hartera)
+
     # Data from Leonard Zon's lab at the Childrens Hospital, Boston
-    # Rh map data consists of 8707 genomic sequences:
+    # Radiation hybrid (RH) map data consists of 8707 genomic sequences:
     #   (1) 2835 BAC clone ends (Max Planck Inst.  Robert
     #   Geisler's lab, Tuebingen, Germany,
     #   (2) 2015 NCBI ESTs (submitted from around the planet,
@@ -1220,19 +1223,34 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     pslSort dirs raw.psl tmp psl
     # only use alignments that have at least 80% identity in aligned region.
     # these are the parameters used for STS markers
-    pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+    # pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+    #        contig.psl /dev/null
+    # Processed 667164 alignments
+    # try more stringent filtering for these:  minAli=0.96 and minCover=0.40
+    # was suggested by Jim (DONE, 2005-05-15, hartera) - these parameters
+    # worked well for danRer1 - see makeDanRer1.doc
+    mv rhMap.psl rhMap.psl.old
+    mv contig.psl contig.psl.old
+    pslReps -nearTop=0.0001 -minAli=0.96 -minCover=0.40 raw.psl \
             contig.psl /dev/null
     # Processed 667164 alignments
     liftUp rhMap.psl /cluster/data/danRer2/jkStuff/liftAll.lft warn contig.psl
     pslCheck rhMap.psl
-    # psl is ok.                                      
+    # psl is ok.                 
+    # for previous parameters, the sequence with the most alignments had 1128.
+    # over 1400 have multiple alignments and 7064 sequences have 1 alignment
+    # now the most is 8. 78 sequences have 3-8 alignments, 820 have 2 and
+    # 6709 have 1 alignment.       
+    # for the new filtered psl there are 8609 alignments, there were 13821 
+    # for the previous parameters (8492 sequences aligned, 98%)                        
     # Load sequence alignments into database.
+    # Reload rhMap alignments - more stringent filtering (hartera, 2005-05-15)
     ssh hgwdev
     cd /cluster/data/danRer2/bed/ZonLab/rhMap
     echo "drop table rhMap;" | hgsql danRer2
     hgLoadPsl danRer2 rhMap.psl
     hgsql -N -e "select qName from rhMap;" danRer2 | sort | uniq | wc
-    # 8492 out of 8690 sequences aligned (98%)
+    # 7607 out of 8690 sequences aligned (88%)
     # Add RH Map sequences
     # Copy sequences to gbdb if they are not there already
     # create sym link in /gbdb/danRer2 directory instead of /gbdb/danRer1
