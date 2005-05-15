@@ -3277,8 +3277,10 @@ blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/
 #end Human Proteins
 
 # RH MAP TRACK (DONE, 2004-07-26, hartera)
+# RE-DO RH MAP TRACK WITH MORE STRINGENT POST-BLAT FILTERING 
+# (DONE, 2005-05-14, hartera)
     # Data from Leonard Zon's lab at the Childrens Hospital, Boston
-    # Rh map data consists of 8707 genomic sequences:
+    # Radiation hybrid (RH) map data consists of 8707 genomic sequences:
     #   (1) 2835 BAC clone ends (Max Planck Inst.  Robert
     #   Geisler's lab, Tuebingen, Germany,
     #   (2) 2015 NCBI ESTs (submitted from around the planet,
@@ -3368,19 +3370,41 @@ while(<>) {
     pslSort dirs raw.psl tmp psl
     # only use alignments that have at least 80% identity in aligned region.
     # these are the parameters used for STS markers
-    pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+    #  pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+    #          contig.psl /dev/null
+    # Processed 646182 alignments
+    # try more stringent filtering for these: minAli=0.96 and minCover=0.40
+    # was suggested by Jim (DONE, 2005-05-14, hartera)
+    mv rhMap.psl rhMap.psl.old
+    mv contig.psl contig.psl.old
+    pslReps -nearTop=0.0001 -minAli=0.96 -minCover=0.40 raw.psl \
             contig.psl /dev/null
     # Processed 646182 alignments
     liftUp rhMap.psl /cluster/data/danRer1/jkStuff/liftAll.lft warn contig.psl
     pslCheck rhMap.psl
-                                                                                
+    # Summary of different alignment filters:
+# nearTop       minAli  minCover        -noIntrons      #alignments #aligned
+# 0.0001        0.8     -               yes               16738         8380
+# -             0.96    0.40            no                8711          7421
+# 0.0001        0.96    0.40            no                7866          7421
+# 0.002         0.96    0.40            no                7924          7421
+# 0.0001        0.96    0.40            yes               7877          7421
+
+# the best parameters seems to be nearTop=0.0001, minAli=0.96 and minCover=0.40
+# previously, the sequence with the most alignments had 1987. Now the sequence
+# with the most alignments has 7, 26 have 3-7 alignments and 7014 have 1
+# For the previous parameters, there were > 900 sequences with many alignments
+# as well as 7382 with 1 alignment.
+                                                
     # Load sequence alignments into database.
+    # Reload rhMap alignments - more stringent filtering (hartera, 2005-05-14)
     ssh hgwdev
     cd /cluster/data/danRer1/bed/ZonLab/rhmap
     echo "drop table rhMap;" | hgsql danRer1
     hgLoadPsl danRer1 rhMap.psl
     hgsql -N -e "select qName from rhMap;" danRer1 | sort | uniq | wc
     # 8380 out of 8690 sequences aligned (96%)
+    # after more stringent filtering - 7421 out of 8690 sequences aligned (85%)
                                                                                 
     # Add RH Map sequences
     # Copy sequences to gbdb if they are not there already
