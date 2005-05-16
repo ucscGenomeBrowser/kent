@@ -13,7 +13,7 @@
 #include "obscure.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.9 2005/03/29 01:05:53 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.10 2005/05/16 23:13:40 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -169,7 +169,7 @@ static char *prefixTermFormatRegex = "['\"]?%s.*%%['\"]?$";
 static void checkQueryFormat(struct hgFindSpec *hfs)
 /* Make sure query looks right and jives with searchMethod. */
 {
-if (isNotEmpty(hfs->query))
+if (isNotEmpty(hfs->query) && !hgFindSpecSetting(hfs, "dontCheckQueryFormat"))
     {
     if (! matchRegex(hfs->query, queryFormatRegex))
 	errAbort("hfsPolish: search %s: query needs to be of the format "
@@ -213,7 +213,8 @@ static char *xrefQueryFormatRegex =
 static void checkXrefQueryFormat(struct hgFindSpec *hfs)
 /* Make sure xrefQuery looks right and jives with searchMethod. */
 {
-if (isNotEmpty(hfs->xrefQuery))
+if (isNotEmpty(hfs->xrefQuery) &&
+    !hgFindSpecSetting(hfs, "dontCheckXrefQueryFormat"))
     {
     if (! matchRegex(hfs->xrefQuery, xrefQueryFormatRegex))
 	errAbort("hfsPolish: search %s: xrefQuery needs to be of the format "
