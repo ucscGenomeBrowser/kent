@@ -1193,7 +1193,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
 
 identifier ensemblTranscriptId3 external=Ensembl dependency
 "Ensembl Transcript ID"
-    $gbd.ensemblXref3.transcript dupeOk
+    $gbd,!rn3.ensemblXref3.transcript dupeOk
     $gbd.superfamily.name
     $gbd.sfDescription.name chopAfter=.
 
