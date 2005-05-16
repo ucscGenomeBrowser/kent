@@ -3081,8 +3081,8 @@ md5sum *.gz > md5sum.txt
 
 # EXTRACT AXTs and MAFs FROM OPOSSUM (monDom1) NET FOR ZEBRAFISH (danRer2)
 # zb.danRer2 are the blastz alignments, chains and nets for 
-# danRer2 as target and monDom1 as query.
-# (DONE, 2005-05-13, hartera)
+# danRer2 as target and monDom1 as query. (DONE, 2005-05-13, hartera)
+# GZIP AXTs AND MAFs (DONE, 2005-05-15, hartera)
 
     ssh kkstore01
     # create axts
@@ -3131,4 +3131,6 @@ cat > makeMaf.csh << 'EOF'
     tail -100f makeMaf.log
     cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2/axtChain
     nice gzip zfish.net chain/*.chain &
+    cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2
+    nice gzip axtNet/*.axt mafNet/*.maf &
 
