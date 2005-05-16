@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.39 2005/05/04 03:47:52 hartera Exp $"
+#	"$Id: makeMm6.doc,v 1.40 2005/05/16 21:43:39 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5453,3 +5453,26 @@ SEQ2_LEN=$BASE/S2.len
     #	969979195 bases of 2865248791 (33.853%) in intersection
     HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainMm5Link
     #	1020106336 bases of 2866216770 (35.591%) in intersection
+
+
+# LOAD GENEID GENES (DONE 5/16/05 angie)
+    mkdir -p /cluster/data/mm6/bed/geneid/download
+    cd /cluster/data/mm6/bed/geneid/download
+    foreach chr (`awk '{print $1;}' ../../../chrom.sizes`)
+      echo $chr
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.gtf
+      wget \
+http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.prot
+    end
+    # Add missing .1 to protein id's
+    foreach f (*.prot)
+      perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
+    end
+    cd ..
+    ldHgGene -genePredExt -gtf mm6 geneid download/*.gtf
+    hgPepPred mm6 generic geneidPep download/*-fixed.prot
+    featureBits mm6 -enrichment refGene geneid
+#refGene 1.623%, geneid 1.561%, both 0.794%, cover 48.91%, enrich 31.34x
+
+
