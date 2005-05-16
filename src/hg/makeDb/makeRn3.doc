@@ -1902,6 +1902,15 @@ doMultiz.kk $(root1) {check out line+ /cluster/data/rn3/bed/multiz.hg15-mm3/maf/
       delete from gbLoaded where srcDb='RefSeq';
      nice ./bin/gbDbLoadStep -verbose=1 rn3
 
+
+# GENBANK: add Non-Rat Refseqs (DONE May 9, 2005, Heather) 
+    # add to kent/src/hg/makeDb/genbank/etc/genbank.conf and commit: 
+    # rn3.refseq.mrna.xeno.load = yes 
+    cd /cluster/data/genbank/etc 
+    cvs update 
+    # new tables: xenoRefGene, xenoRefFlat, xenoRefSeqAli, refLink, refSeqStatus 
+    # refSeqSummary 
+
 CREATE RNACLUSTER TABLE (TO DO)
     # Make sure that refSeqAli, estOrientInfo and mrnaOrientInfo tables are 
     # made already (see above).
