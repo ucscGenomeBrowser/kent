@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.959 2005/05/10 14:47:11 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.960 2005/05/16 20:05:51 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7430,6 +7430,7 @@ switch (track->limitedVis)
 	break;
     case tvFull:
 	y = doMapItems(track, fontHeight, y);
+	break;
     case tvDense:
 	if (withCenterLabels)
 	    y += fontHeight;
