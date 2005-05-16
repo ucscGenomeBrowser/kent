@@ -314,7 +314,7 @@ public class HgTracks {
 
           if (code != 200) {
              // write to errorfile
-             outErr.println(url + ":\n Unexpected response code " + code);
+             outErr.println(url + "\n Unexpected response code " + code);
              outErr.println("------------------------------------");
           } else if (b) {    
              outMsg.println(url + "\n found: " + msgString);
@@ -327,7 +327,7 @@ public class HgTracks {
           }
         } catch (Exception e) {
           System.out.println("Unexpected error getting response code");
-          outErr.println(url + ":\n Unexpected response code " + code);
+          outErr.println(url + "\n Unexpected response code " + code);
           outErr.println(count);
           outErr.println("------------------------------------");
         }
