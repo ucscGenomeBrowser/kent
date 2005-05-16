@@ -22,15 +22,8 @@ else
     x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
     x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
     scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
-    scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
-
-    if (tg->itemColor != NULL)
-	color = tg->itemColor(tg, bed, vg);
-    else
-	{
-	if (tg->colorShades)
-	    color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
-	}
+    scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));    
+    color = vgFindColorIx(vg, 0,0,0);
     w = x2-x1;
     if (w < 1)
 	w = 1;
@@ -44,8 +37,10 @@ else
 	char *s = bed->name;
 	int letterWidth, cuts[4];
 	int tickHeight = (heightPer>>1) - 1, tickWidth = 2;
-	int i;
+	int i, xH;
+	Color baseHighlight = getBlueColor();
 
+	baseHighlight = lighterColor(vg, baseHighlight);
 	safef(query, sizeof(query), "select * from cutters where name=\'%s\'", s);
 	cut = cutterLoadByQuery(conn, query);
 	letterWidth = round(((double)w)/cut->size);
@@ -60,12 +55,13 @@ else
 	    else if (cuts[i] >= x2)
 		cuts[i] = x2 - tickWidth;
 	    }
-	if (cut->palindromic)
-	    {
-	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);
-	    vgBox(vg, cuts[1], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);	    
-	    }
-	else if (strand == '+')
+/* 	if (cut->palindromic) */
+/* 	    { */
+/* 	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight * 2 + 2, color); */
+/* 	    vgBox(vg, cuts[1], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);	     */
+/* 	    } */
+/* 	else */
+	if (strand == '+')
 	    {
 	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight, color);
 	    vgBox(vg, cuts[1], y + 2, tickWidth, tickHeight, color);	    
@@ -76,6 +72,14 @@ else
 	    vgBox(vg, cuts[3], y + 2, tickWidth, tickHeight, color);	    	    
 	    }
 	vgBox(vg, x1, y, w, 2, color);
+	/* Draw highlight of non-N bases. */
+	xH = x1;
+	for (i = 0; i < strlen(cut->seq); i++)
+	    {
+	    if ((cut->seq[i] != 'A') && (cut->seq[i] != 'C') && (cut->seq[i] != 'G') && (cut->seq[i] != 'T'))
+		vgBox(vg, xH, y, letterWidth, 2, baseHighlight);
+	    xH += letterWidth;
+	    }
 	if (tg->drawName && vis != tvSquish)
 	    {
 	    /* Clip here so that text will tend to be more visible... */
