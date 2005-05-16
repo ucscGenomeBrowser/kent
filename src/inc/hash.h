@@ -35,6 +35,9 @@ struct hashCookie
     struct hashEl *nextEl;  /* current element in hash */
     };
 
+bits32 hashString(char *string);
+/* Compute a hash value of a string. */
+
 bits32 hashCrc(char *string);
 /* Returns a CRC value on string. */
 
@@ -151,6 +154,9 @@ void freeHashAndVals(struct hash **pHash);
 
 void hashFreeList(struct hash **pList);
 /* Free up a list of hashes. */
+
+void hashHisto(struct hash *hash, char *fname);
+/* Output bucket usage counts to a file for producing a histogram  */
 
 #endif /* HASH_H */
 

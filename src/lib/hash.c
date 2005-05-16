@@ -8,7 +8,49 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.25 2005/05/03 01:57:17 kate Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.26 2005/05/16 01:28:49 markd Exp $";
+
+/*
+ * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
+ * after discovering a lot of collisions and poor utilization of the table
+ * when hashing accessions.
+ *
+ * This function was compared to Bob Jenkins' lookup2 hash function and
+ * (http://burtleburtle.net/bob/hash/) and Paul Hsieh's SuperFast
+ * hash function (http://www.azillionmonkeys.com/qed/hash.html).
+ * Both of those functions provided better utilization of the table,
+ * but were also more expensive, so the Tcl function was used.
+ * If hashing of binary keys is implemented, SuperFast hash should
+ * be considered.
+ *
+ * for an explanation of this function, see HashStringKey() in the
+ * Tcl source file, generic/tclHash.c, available from
+ * http://tcl.sourceforge.net/.
+ *
+ * The Tcl code is:
+ * Copyright (c) 1991-1993 The Regents of the University of California.
+ * Copyright (c) 1994 Sun Microsystems, Inc.
+ *
+ * See the file "license.terms" (in the Tcl distribution) for complete
+ * license (which is a BSD-style license).
+ *
+ * Since hashCrc() is used elsewhere in the code, it was left alone,
+ * and a new function create for use in hash table.
+ * -- markd
+ */
+bits32 hashString(char *string)
+/* Compute a hash value of a string. */
+{
+char *keyStr = string;
+unsigned int result = 0;
+int c;
+
+while ((c = *keyStr++) != '\0')
+    {
+    result += (result<<3) + c;
+    }
+return result;
+}
 
 bits32 hashCrc(char *string)
 /* Returns a CRC value on string. */
@@ -31,7 +73,7 @@ struct hashEl *hashLookup(struct hash *hash, char *name)
 /* Looks for name in hash table. Returns associated element,
  * if found, or NULL if not. */
 {
-struct hashEl *el = hash->table[hashCrc(name)&hash->mask];
+struct hashEl *el = hash->table[hashString(name)&hash->mask];
 while (el != NULL)
     {
     if (strcmp(el->name, name) == 0)
@@ -70,7 +112,7 @@ struct hashEl *hashAddN(struct hash *hash, char *name, int nameSize, void *val)
 /* Add name of given size to hash (no need to be zero terminated) */
 {
 struct hashEl *el = lmAlloc(hash->lm, sizeof(*el));
-int hashVal = (hashCrc(name)&hash->mask);
+int hashVal = (hashString(name)&hash->mask);
 el->name = lmAlloc(hash->lm, nameSize+1);
 memcpy(el->name, name, nameSize);
 el->val = val;
@@ -92,7 +134,7 @@ void *hashRemove(struct hash *hash, char *name)
 {
 struct hashEl *hel;
 void *ret;
-struct hashEl **pBucket = &hash->table[hashCrc(name)&hash->mask];
+struct hashEl **pBucket = &hash->table[hashString(name)&hash->mask];
 for (hel = *pBucket; hel != NULL; hel = hel->next)
     if (sameString(hel->name, name))
         break;
@@ -397,5 +439,25 @@ for (el = *pList; el != NULL; el = next)
     hashFree(&el);
     }
 *pList = NULL;
+}
+
+static int bucketLen(struct hashEl *hel)
+/* determine how many elements are in a hash bucket */
+{
+int nel = 0;
+for (; hel != NULL; hel = hel->next)
+    nel++;
+return nel;
+}
+
+void hashHisto(struct hash *hash, char *fname)
+/* Output bucket usage counts to a file for producing a histogram  */
+{
+FILE* fh = mustOpen(fname, "w");
+int i;
+
+for (i=0; i<hash->size; ++i)
+    fprintf(fh, "%d\n", bucketLen(hash->table[i]));
+carefulClose(&fh);
 }
 
