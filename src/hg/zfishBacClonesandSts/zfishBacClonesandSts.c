@@ -457,13 +457,12 @@ if (aliasList != NULL)
         name = cloneString(aliasEl->name);
         /* print out row for each internal and external name pair */
         /* and for the sanger STS name and external BAC name */
-        for (j = 0; j < NUMALIASES && (al->extName[j] != NULL); j++) 
+        for (j = 0; j < NUMALIASES && (al->intName[j] != NULL); j++) 
             {
-            fprintf(alias, "%s\t%s\n", al->intName[j], al->extName[j]);
-            fprintf(alias, "%s\t%s\n", al->sangerName, al->extName[j]);
+            fprintf(alias, "%s\t%s\n", al->intName[j], al->sangerName);
             for (i = 0; i < NUMALIASES && (al->aliases[i] != NULL); i++) 
                 {
-                fprintf(alias, "%s\t%s\n", al->aliases[i], al->extName[j]);
+                fprintf(alias, "%s\t%s\n", al->aliases[i], al->sangerName);
                 }
             }
         fflush(alias);
@@ -471,21 +470,8 @@ if (aliasList != NULL)
     }
 else
     errAbort("The hash of BAC clones aliases is empty or there was an error retrieving the list of entries in the hash\n");
-
-/* print out those BAC clones in the BAC hash that have no entry in the alias hash */
-if (bacList != NULL)
-    {
-    /* walk through list of hash elements */
-    for (bacEl = bacList; bacEl != NULL; bacEl = bacEl->next)
-        {
-        bac = (struct bac *)bacEl->val;
-        if (hashFindVal(sangerByExtNameHash, bac->extName) == NULL)
-            fprintf(alias, "%s\t%s\n", bac->intName, bac->extName);
-        fflush(alias);
-        }
-    }
-else
-    errAbort("The hash of BAC clones is empty or there was an error retrieving the list of entries in the hash\n");
+/* those BAC clones without an entry in the alias hash have no sangerName */
+/* so do not print to this table */
 }
 
 void printBacInfo(FILE *xRef, struct bac *bac)
@@ -520,9 +506,10 @@ int i, j;
 boolean printOnce = FALSE;
 
 /* print cross-reference table: */
-/* extName,intName,Sanger STS name, relationship (method of finding STS),*/
-/* UniSTS ID,chromsome mapped to by BLAT, Genbank accession, */
-/* 5' primer, 3' primer */
+/* extName, intName, chromosome(s) mapped to by BLAT, Genbank accession */ 
+/* Sanger STS name, relationship (method of finding STS),*/
+/* UniSTS ID(s), 5' (left) primer, 3' (right) primer */
+
 if (al != NULL)
     {
     /* if nameIndex >= 0 then print information just for the extName and intName */
@@ -562,7 +549,7 @@ else
     {
     fprintf(xRef, "%s\t%s\t", bac->extName, bac->intName);
     printBacInfo(xRef, bac);
-    fprintf(xRef, "\\N\t0\t0\t\\N\t\\N\n");
+    fprintf(xRef, "\\N\t0\t\\N\t\\N\t\\N\n");
     }
 fflush(xRef);
 }
