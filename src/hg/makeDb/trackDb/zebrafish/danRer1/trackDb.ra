@@ -263,7 +263,8 @@ searchMethod exact
 searchType bed
 searchBoth 1
 xrefTable bacCloneAlias
-xrefQuery select name, alias from %s where alias like '%s' 
+dontCheckXrefQueryFormat .
+xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName  
 searchPriority 9
 
 searchName bacSinglesAliases
@@ -272,14 +273,33 @@ searchMethod exact
 searchType bed
 searchBoth 1
 xrefTable bacCloneAlias
-xrefQuery select name, alias from %s where alias like '%s' 
+dontCheckXrefQueryFormat .
+xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName  
 searchPriority 9
+
+searchName bacPairsSangerSts
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,sangerName from %s where sangerName like '%s'  
+termRegex (et|st)ID[0-9]+\.[0-9]+
+searchPriority 10
+
+searchName bacSinglesSangerSts
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,sangerName from %s where sangerName like '%s'  
+termRegex (et|st)ID[0-9]+\.[0-9]+
+searchPriority 10
 
 searchTable rhMap
 searchMethod prefix
 searchType psl
 termRegex [[:alnum:]\._]+
-searchPriority 8
+searchPriority 11
 
 searchTable uniGene_dr
 searchMethod exact
