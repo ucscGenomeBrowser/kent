@@ -51,6 +51,15 @@ type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
+track modelRefGene
+shortLabel NCBI Genes
+longLabel NCBI Gene Models
+group genes
+priority 36
+visibility dense
+color 154,154,187
+type genePred .
+
 track brhInparalog
 shortLabel Homologs (EMBL)
 longLabel Homology-based gene predictions (EMBL)
