@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "bacCloneAlias.h"
 
-static char const rcsid[] = "$Id: bacCloneAlias.c,v 1.1 2005/04/25 21:24:14 hartera Exp $";
+static char const rcsid[] = "$Id: bacCloneAlias.c,v 1.2 2005/05/17 19:26:26 hartera Exp $";
 
 void bacCloneAliasStaticLoad(char **row, struct bacCloneAlias *ret)
 /* Load a row from bacCloneAlias table into ret.  The contents of ret will
@@ -16,7 +16,7 @@ void bacCloneAliasStaticLoad(char **row, struct bacCloneAlias *ret)
 {
 
 ret->alias = row[0];
-ret->name = row[1];
+ret->sangerName = row[1];
 }
 
 struct bacCloneAlias *bacCloneAliasLoad(char **row)
@@ -27,7 +27,7 @@ struct bacCloneAlias *ret;
 
 AllocVar(ret);
 ret->alias = cloneString(row[0]);
-ret->name = cloneString(row[1]);
+ret->sangerName = cloneString(row[1]);
 return ret;
 }
 
@@ -77,7 +77,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->alias = sqlStringComma(&s);
-ret->name = sqlStringComma(&s);
+ret->sangerName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -90,7 +90,7 @@ struct bacCloneAlias *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->alias);
-freeMem(el->name);
+freeMem(el->sangerName);
 freez(pEl);
 }
 
@@ -115,7 +115,7 @@ fprintf(f, "%s", el->alias);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
+fprintf(f, "%s", el->sangerName);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

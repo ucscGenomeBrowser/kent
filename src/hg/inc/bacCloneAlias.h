@@ -11,8 +11,8 @@ struct bacCloneAlias
 /* BAC clones aliases and associated STS aliases and external BAC clone names */
     {
     struct bacCloneAlias *next;  /* Next in singly linked list. */
-    char *alias;	/* BAC clone alias (internal name) and STS aliases */
-    char *name;	/* External name for BAC clone */
+    char *alias;	/* BAC clone alias (internal Sanger FPC name) and STS aliases */
+    char *sangerName;	/* Sanger STS name */
     };
 
 void bacCloneAliasStaticLoad(char **row, struct bacCloneAlias *ret);

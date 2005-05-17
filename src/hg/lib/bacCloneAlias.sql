@@ -3,11 +3,11 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#BAC clones aliases and associated STS aliases and external BAC clone names
+#BAC clones aliases and associated STS aliases and Sanger STS names
 CREATE TABLE bacCloneAlias (
-    alias varchar(255) not null,	# BAC clone alias (internal name) and STS aliases
-    name varchar(255) not null,	# External name for BAC clone
+    alias varchar(255) not null,	# BAC clone alias (internal Sanger FPC name) and STS aliases
+    sangerName varchar(255) not null,	# Sanger STS name
               #Indices
     INDEX(alias),
-    INDEX(name)
+    INDEX(sangerName)
 );
