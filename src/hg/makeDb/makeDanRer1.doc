@@ -2349,6 +2349,7 @@ end
 # ADD ALIASES FOR BAC ENDS (DONE, 2005-04-25, hartera)
 # 2005-04-25 (hartera) add more aliases for BAC ends and the UniSTS ID
 # add this to the bacCloneXRef table.
+# Changes to bacAlias table and alias searches (DONE, 2005-05-17, hartera)
     # download the files of aliases from Sanger. URL for ftp site from
     # Sean Humphray (sjh@sanger.ac.uk)  
     ssh kksilo
