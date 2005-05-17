@@ -1900,6 +1900,9 @@ table ctgPos2
 # (DONE, 2005-04-25, hartera)
 # RELOADED bacCloneXRef TABLE AFTER CORRECTING PROGRAM TO USE NULL
 # IN ALL PLACES WHERE THERE IS NO UniSTS ID (DONE, 2005-04-27, hartera)
+# ADDED SANGER STS NAME FIELD (sangerName) TO bacCloneAlias TABLE AND
+# RELOADED DATA INCLUDING THIS NEW FIELD, ADDED SEARCHES FOR BAC CLONES 
+# ALIASES AND ASSOCIATED STS ALIASES (DONE, 2005-05-17, hartera)
 # provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
@@ -1990,8 +1993,10 @@ table ctgPos2
     # RZPD-71         	RP71-                   bZ
     # BUSM1 (PAC)      	BUSM1-                  dZ
     # e.g. zC001-A03.za becomes CH211-1A03
-    perl getBacEndInfo.pl bacEnds.names BACEnd_accessions.txt zfish_accs.txt
-    
+    perl getBacEndInfo.pl bacEnds.names BACEnd_accessions.txt > bacs.log
+    # script not working so fix and zip again (2005-04-29, hartera)    
+    gzip getBacEndInfo.pl
+
     # 180280 bacEndPairs.txt  - 571985 sequences
     # 16020  bacEndSingles.txt - 22629 sequences
     # 47048  bacEndAccs.aliases
@@ -1999,6 +2004,7 @@ table ctgPos2
     # Genbank accessions.  
     
     # First process BAC end alignments
+    mkdir -p /cluster/data/danRer1/bed/ZonLab/bacends/pairs
     cd /cluster/data/danRer1/bed/ZonLab/bacends/pairs
     set bacDir = /cluster/data/danRer1/bed/ZonLab/bacends/bacends.1
     # these bacEnds vary in size from around 2800 bp to 626,000 bp
@@ -2019,7 +2025,7 @@ table ctgPos2
           > ../header
     echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> ../header
     # make pairs bed file
-    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+    cat ../header bacEnds.pairs | row score ge 300 | sorttbl chr start \
                | headchg -del > bacEndPairs.bed
     # also need to process bacEndSingles.txt into a database table
     # for singles in bacEndSingles.txt, create a dummy file where they
@@ -2058,13 +2064,13 @@ table ctgPos2
     cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
         bacEnds.orphan | row score ge 300 | sorttbl chr start \
         | headchg -del > bacEndPairsBad.bed
-    # add bacEndsSingle.bed to bacEnds.load.psl - must not add pair orphans 
+    # add bacEndSingles.bed to bacEnds.load.psl - must not add pair orphans 
     # twice so create a bed file of bacEndPairsBadNoOrphans.bed without orphans
  
-    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+    cat ../header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
         | row score ge 300 | sorttbl chr start \
         | headchg -del > bacEndPairsBadNoOrphans.bed
-    extractPslLoad -noBin bacEnds.lifted.psl bacEndPairs.bed \
+    extractPslLoad -noBin ../bacEnds.lifted.psl bacEndPairs.bed \
                 bacEndPairsBadNoOrphans.bed  bacEndSingles.bed | \
                         sorttbl tname tstart | headchg -del > bacEnds.load.psl
    
@@ -2089,10 +2095,10 @@ table ctgPos2
                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
     # Loaded 72272 elements of size 11
     # create a bacEndSingles table like bacEndPairs
-    cp $HOME/kent/src/hg/lib/bacEndPairs.sql ./singles/bacEndSingles.sql
+    cp $HOME/kent/src/hg/lib/bacEndPairs.sql ../singles/bacEndSingles.sql
     # edit to give correct table name
     hgLoadBed bacs_rah bacEndSingles bacEndSingles.bed \
-                 -sqlTable=singles/bacEndSingles.sql
+                 -sqlTable=../singles/bacEndSingles.sql
     # Loaded 203683 elements of size 11
     # load all_bacends later
 
@@ -2100,7 +2106,6 @@ table ctgPos2
     hgLoadBed bacs_rah bacEndPairsBad bacEndPairsBad.bed \
                  -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
     # Loaded 203709 elements of size 11
-    # RECREATE BED FILES AND RELOAD TABLES
     # Need to consolidate similar rows for bacEndPairs and bacEndSingles - same
     # name, different lfNames and same alignments.
     mkdir -p /cluster/data/danRer1/bed/ZonLab/bacends/duplicates
@@ -2113,7 +2118,7 @@ table ctgPos2
     # 53992 pairs.txt.uniq
     # for replicate rows, find all the unique lfNames and put these
     # in one row with the relevant lfStarts, lfSizes and correct lfCount
-    perl removeReplicates2.pl pairs.txt.uniq bacEndPairs > pairsNoReps.bed
+    perl removeReplicates.pl pairs.txt.uniq bacEndPairs > pairsNoReps.bed
     # repeat for singles
     hgsql -N -e "select chrom, chromStart, chromEnd, name, strand from \
        bacEndSingles order by name, chrom, chromStart;" bacs_rah > singles.txt
@@ -2157,7 +2162,7 @@ table ctgPos2
     hgLoadPsl danRer1 -table=all_bacends bacEnds.load.psl
     # 2835212 record(s), 0 row(s) skipped, 706 warning(s) loading psl.tab
     # after merging rows with the same BAC name, the scoring is now
-    # wrong in bacEndPairs, bacEndSingles and bacEndSingles.
+    # wrong in bacEndPairs, bacEndSingles and bacEndBadPairs.
     # Scores should be 1000 if there is 1 row for that name, else
     # 1500/number of rows for that sequence name - calculated by pslPairs.
     # Correct the scores.
@@ -2170,7 +2175,7 @@ table ctgPos2
     # download bacEndPairs table
     hgsql -N -e "select * from bacEndPairs;" danRer1 > bacEndPairs.out
     # use perl script to change scores from this file and write to new file
-        perl correctScores.pl bacEndPairs.out pairs.hits \
+    perl correctScores.pl bacEndPairs.out pairs.hits \
                           > bacEndPairsGoodScores.bed
     # same for singles
     hgsql -N -e "select name from bacEndSingles;" danRer1 \
@@ -2239,7 +2244,8 @@ table bacEndAlias
     echo "load data local infile 'bacEndAccs.aliases' into table bacEndAlias"\
          | hgsql danRer1
    # Add a xref table to give external clone registry names, internal names
-   # and Genbank accessions
+   # and Genbank accessions - this table is expanded later, see further down
+   # in documentation.
     cat << '_EOF_' > $HOME/kent/src/hg/lib/bacCloneXRef.as
 table bacCloneXRef
 "BAC clones external names, internal sequence names and Genbank accessions"
@@ -2379,13 +2385,16 @@ end
     sort bacEndsPsl.names | uniq > bacEndsPsl.names.uniq
     # 457560 bacEndsPsl.names.uniq
     # about 77% align - this is after filtering
-   # Add an alias table for BAC clones 
+    # Add an alias table for BAC clones 
+    # Replaced the name field with a Sanger Name field so that aliases for 
+    # that STS may be printed out in a table on the BAC Ends tracks 
+    # description pages (2005-05-04, hartera)
     cat << '_EOF_' > $HOME/kent/src/hg/lib/bacCloneAlias.as
 table bacCloneAlias
-"BAC clones aliases and associated STS aliases and external BAC clone names"
+"BAC clones aliases and associated STS aliases and Sanger STS names"
     (
-    string alias;      "BAC clone alias (internal name) and STS aliases"
-    string name;       "External name for BAC clone"
+    string alias;      "BAC clone alias (internal Sanger FPC name) and STS aliases"
+    string sangerName; "Sanger STS name"
 )
 '_EOF_'
     # << this line makes emacs coloring happy
@@ -2393,7 +2402,8 @@ table bacCloneAlias
     autoSql bacCloneAlias.as bacCloneAlias
     cp bacCloneAlias.h ../inc
     # edit bacCloneAlias.sql to add INDEX(alias) to indices
-    # edit bacCloneAlias.sql to add INDEX(name) to indices
+    # edit bacCloneAlias.sql to add INDEX(sangerName) to indices
+    # edit so that sangerName can be NULL
     # remove primary key, can not make a compound primary key by
     # adding sangerName column since not all the BAC clones have this
     # and it is not unique, more than one BAC clone can have the same 
@@ -2409,7 +2419,7 @@ table bacCloneXRef
     (
     string name;       	 	"External name for BAC clone"
     string intName;       	"Internal Sanger FPC name"
-    string chroms;	  	"Chromosome(s) to which BAC is mapped by BLAT"
+    string chroms;	  	"Chromosome(s) to which at one or both BAC ends are mapped by BLAT"
     string genbank;           	"Genbank accession for the BAC Clone"
     string sangerName;    	"Sanger STS name"
     uint relationship;	  	"Relationship type - method of finding STS"
@@ -2451,6 +2461,7 @@ table bacCloneXRef
     # in $HOME/kent/src/hg/zfishBacEndsandSts
 
     ssh kksilo
+    # use ssh kkstore01 to replace kksilo (2005-05-04)
     cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
     # get list of UniSTS IDs using aliases to search alias file
     # print Sanger name, alias and UniSTS ID, use print_markers2.pl
@@ -2525,7 +2536,15 @@ if ($fields[0] =~ /^[0-9]+/)
     # changing with the assembly.
     # made code changes so that zfishBacClonesandSts always uses NULL
     # in the bacCloneXRef table if there is no UniSTS ID and then
-    # reloaded the bacCloneXRef table witht the resulting tab file (hartera, 2005-04-27)
+    # reloaded the bacCloneXRef table with the resulting tab file 
+    # (hartera, 2005-04-27)
+    # edit zfishBacClonesandSts to have aliases and Sanger STS name
+    # in the bacCloneXRef.tab output file and re-run program 
+    # this means that aliases may be listed by sangerName on the
+    # details page and searches for aliases can still be made using
+    # a join to the XRef table to get the external name to find the
+    # position in the relevant bacEnds table.
+    # (hartera, 2005-05-12)
     nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.02.12.04.txt \
       clonemarkers.02.12.04.txt markers.02.12.04.txt \
       bacClones.namesandchrom.uniq zfish_accs.txt \
@@ -2534,11 +2553,14 @@ if ($fields[0] =~ /^[0-9]+/)
     # sort and uniq alias tab file
     sort -k2 /cluster/bluearc/danRer1/bacEnds/out/bacAlias.tab \
          | uniq > bacAlias.uniq.tab
-    cp /cluster/bluearc/danRer1/bacEnds/out/bacAlias.uniq.tab \
-       /cluster/bluearc/danRer1/bacEnds/out/bacXRef.tab .
-
+    cp /cluster/bluearc/danRer1/bacEnds/out/bacXRef.tab .
+    
     ssh hgwdev
     cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    # Remove bacCloneAlias table and add new table with sangerName field 
+    # instead of the external name field
+    # Re-load data including sanger STS name for the associated STS markers.
+    # (2005-05-05, hartera)
     hgsql danRer1 -e 'drop table bacCloneXRef'
     hgsql danRer1 -e 'drop table bacCloneAlias'
     hgsql danRer1 < $HOME/kent/src/hg/lib/bacCloneAlias.sql
@@ -2549,13 +2571,16 @@ if ($fields[0] =~ /^[0-9]+/)
           'load data local infile "bacXRef.tab" into table bacCloneXRef'
     cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
     # edit trackDb.ra to add searches for the alias table
+    # added dontCheckXrefQueryFormat so now a table join can be performed
+    # (2005-05-17, hartera)
 # searchName bacPairsAliases
 # searchTable bacEndPairs
 # searchMethod exact
 # searchType bed
 # searchBoth 1
 # xrefTable bacCloneAlias
-# xrefQuery select name, alias from %s where alias like '%s'
+# dontCheckXrefQueryFormat .
+# xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName
 # searchPriority 9
 
 # searchName bacSinglesAliases
@@ -2564,13 +2589,36 @@ if ($fields[0] =~ /^[0-9]+/)
 # searchType bed
 # searchBoth 1
 # xrefTable bacCloneAlias
-# xrefQuery select name, alias from %s where alias like '%s'
+# dontCheckXrefQueryFormat .
+# xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName
+# searchPriority 9
+
+    # add new searches to search added sangerName field of bacCloneXRef table
+    # (2005-05-17, hartera)
+# searchName bacPairsSangerSts
+# searchTable bacEndPairs
+# searchMethod exact
+# searchType bed
+# xrefTable bacCloneXRef
+# xrefQuery select name, sangerName from %s where sangerName like '%s'
+# termRegex (et|st)ID[0-9]+\.[0-9]+
+# searchPriority 10
+                                                                                
+# searchName bacSinglesSangerSts
+# searchTable bacEndSingles
+# searchMethod exact
+# searchType bed
+# xrefTable bacCloneXRef
+# xrefQuery select name, sangerName from %s where sangerName like '%s'
+# termRegex (et|st)ID[0-9]+\.[0-9]+
 # searchPriority 9
 
 # commit trackDb.ra to CVS
 # make code changes to $HOME/kent/src/hg/hgc/hgc.c to display some of the 
 # alias and STS information from bacCloneXRef and bacCloneAlias tables on the
-# BAC ends tracks details pages.
+# BAC ends tracks details pages. Update hgc.c to show the aliases associated
+# with each Sanger STS name listed for a BAC clones rather than just a list of 
+# all aliases associated with that BAC clone (2005-05-17, hartera).
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER1
 # (DONE, 2004-07-13, hartera)
@@ -3370,11 +3418,11 @@ while(<>) {
     pslSort dirs raw.psl tmp psl
     # only use alignments that have at least 80% identity in aligned region.
     # these are the parameters used for STS markers
-    #  pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
-    #          contig.psl /dev/null
-    # Processed 646182 alignments
-    # try more stringent filtering for these: minAli=0.96 and minCover=0.40
+    # try more stringent filtering for these:  minAli=0.96 and minCover=0.40
     # was suggested by Jim (DONE, 2005-05-14, hartera)
+    # pslReps -nearTop=0.0001 -minAli=0.8 -noIntrons raw.psl \
+    #            contig.psl /dev/null
+    # Processed 646182 alignments
     mv rhMap.psl rhMap.psl.old
     mv contig.psl contig.psl.old
     pslReps -nearTop=0.0001 -minAli=0.96 -minCover=0.40 raw.psl \
@@ -3383,19 +3431,18 @@ while(<>) {
     liftUp rhMap.psl /cluster/data/danRer1/jkStuff/liftAll.lft warn contig.psl
     pslCheck rhMap.psl
     # Summary of different alignment filters:
-# nearTop       minAli  minCover        -noIntrons      #alignments #aligned
-# 0.0001        0.8     -               yes               16738         8380
-# -             0.96    0.40            no                8711          7421
-# 0.0001        0.96    0.40            no                7866          7421
-# 0.002         0.96    0.40            no                7924          7421
-# 0.0001        0.96    0.40            yes               7877          7421
+# nearTop	minAli	minCover	-noIntrons	#alignments #aligned
+# 0.0001	0.8	-		yes		  16738		8380
+# -		0.96	0.40		no		  8711		7421
+# 0.0001	0.96	0.40		no		  7866		7421
+# 0.002		0.96	0.40		no		  7924		7421
+# 0.0001	0.96	0.40		yes		  7877		7421
 
-# the best parameters seems to be nearTop=0.0001, minAli=0.96 and minCover=0.40
-# previously, the sequence with the most alignments had 1987. Now the sequence
+# the best parameters seems to be nearTop=0.0001, minAli=0.96 and minCover=0.40 # previously, the sequence with the most alignments had 1987. Now the sequence
 # with the most alignments has 7, 26 have 3-7 alignments and 7014 have 1
 # For the previous parameters, there were > 900 sequences with many alignments
 # as well as 7382 with 1 alignment.
-                                                
+          
     # Load sequence alignments into database.
     # Reload rhMap alignments - more stringent filtering (hartera, 2005-05-14)
     ssh hgwdev
@@ -4341,3 +4388,30 @@ cat > template << 'EOF'
       danRer1.mgcTables.mgc = all
    - wait one day for nightly build to align and load them into the db
    - rebuild trackDb
+
+# LIFTOVER CHAINS TO DANRER2 (in progress, 2005-05-13, hartera)
+    # run alignment
+    # NOTE: split danRer2 to /iscratch/i is doc'ed in makeDanRer2.doc
+    # make a nibDir with no chrUn and chrNA
+    ssh kkr1u00
+    mkdir /iscratch/i/danRer1/nibNoUnandNA
+    cp /iscratch/i/danRer1/nib/* /iscratch/i/danRer1/nibNoUnandNA/
+    cd /iscratch/i/danRer1/nibNoUnandNA/
+    rm chrUn.nib chrNA.nib
+    iSync
+
+    ssh kk
+    cd /cluster/data/danRer1
+    makeLoChain-align danRer1 /iscratch/i/danRer1/nibNoUnandNA \
+                    danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split
+    ssh kkusr01
+    /cluster/bin/scripts/makeLoChain-lift.csh danRer1 danRer2 <lift-dir>
+
+    # Created parasol job in bed/blat.danRer1.2005-05-13/run
+    cd bed
+    rm blat.danRer2
+    ln -s blat.danRer2.2005-05-16 blat.danRer2
+    cd blat.danRer2/run
+    para try, check, push, check etc..
+    
+
