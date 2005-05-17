@@ -167,7 +167,7 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.887 2005/05/13 19:28:14 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.888 2005/05/17 20:19:33 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11896,75 +11896,113 @@ void printBacStsXRef(char *clone)
 {
 char query[256];
 struct sqlConnection *conn = hAllocConn(), *conn1 = hAllocConn();
-struct sqlResult *sr = NULL, *sr1 = NULL;
-char **row, **row1;
+struct sqlResult *sr = NULL, *sr1 = NULL, *sr2 = NULL;
+char **row, **row1, **row2;
 char *sName, *uniStsId;
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
+int count = 0;
+boolean foundStsResult = FALSE;
 
-/* get aliases from bacCloneAlias */
-sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);         
-sr = sqlMustGetResult(conn, query);
-printf("<TR><TH ALIGN=left>BAC Clone and STS Aliases:</TH><TD WIDTH=75%%>"); 
-while ((row = sqlNextRow(sr)))
-    {
-    printf("%s, ", row[0]); 
-    }
-printf("</TD></TR>\n");
-printBand(seqName, start, end, TRUE);
-printf("</TABLE>\n");
 /* query db to find the sanger STS name, relationship, uniSTSId and primers and print out */  
 sprintf(query, "SELECT sangerName, relationship, uniStsId, leftPrimer, rightPrimer FROM bacCloneXRef WHERE name = '%s'", clone);         
 sr1 = sqlMustGetResult(conn1, query);
 
-/* print table as some BACs have up to 17 Sanger STS names associated */
-printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE CELLSPACING=\"5\">\n");
-printf("<TR><TH>Sanger <BR>STS Name</TH><TH>Relationship</TH><TH>UniSTS ID</TH><TH>Left STS Primer</TH><TH>Right STS Primer</TH></TR>\n");
-while ((row1 = sqlNextRow(sr1)))
+/* if no Sanger STS names for BAC clone, just print aliases */
+if (sr1 == NULL)
     {
-    uniStsId = cloneString(row1[2]);
-    sName = cloneString(row1[0]);
-fflush(stdout);
-    printf("<TR><TD>");
-fflush(stdout);
-    if (row1[0] != NULL)
-        printf("%s</TD>", row1[0]);
-    else
-        printf("n/a</TD>");
-fflush(stdout);
-    printf("<TD ALIGN=center>"); 
-fflush(stdout);
-    if (!sameString(row1[1], "0"))
-        printf("%s</TD>", row1[1]); 
-    else         
-        printf("n/a</TD>");
-fflush(stdout);
-    printf("<TD>"); 
-fflush(stdout);
-    if (row1[2] != NULL)
-        printf("%s</TD>", row1[2]); 
-    else
-        printf("n/a</TD>");
-fflush(stdout);
-    printf("<TD>"); 
-fflush(stdout);
-    if (row1[3] != NULL)
-        printf("%s</TD>", row1[3]); 
-    else
-        printf("n/a</TD>");
-fflush(stdout);
-    printf("<TD>"); 
-fflush(stdout);
-    if (row1[4] != NULL)
-        printf("%s</TD></TR>\n", row1[4]); 
-    else
-        printf("n/a</TD></TR>\n");
-fflush(stdout);
+    /* get aliases from bacCloneAlias and print */
+    sprintf(query, "SELECT alias from bacCloneAlias WHERE name = '%s'", clone);     sr = sqlMustGetResult(conn, query);
+    printf("<TR><TH ALIGN=left>BAC Clone Aliases:</TH><TD WIDTH=75%%>"); 
+    while ((row = sqlNextRow(sr)))
+      {
+      printf("%s, ", row[0]); 
+      }
     }
-fflush(stdout);
+printBand(seqName, start, end, TRUE);
 printf("</TABLE>\n");
-fflush(stdout);
-printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+
+/* if there are Sanger STS names associated with BAC then print info */
+if (sr1 != NULL)
+    {
+    while ((row1 = sqlNextRow(sr1)))
+        {
+        count++;
+        if (count == 1)
+            {
+         /* print table - some BACs have up to 17 Sanger STS names associated */
+            printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE CELLSPACING=\"5\">\n");
+            printf("<TR><TH>Sanger <BR>STS Name</TH><TH>Relationship</TH><TH>UniSTS ID</TH><TH>Left STS Primer</TH><TH>Right STS Primer</TH>");
+            printf("<TH>BAC Clone and <BR>STS Aliases</TH></TR>\n");
+            foundStsResult = TRUE;
+        }
+        sName = cloneString(row1[0]);
+        uniStsId = cloneString(row1[2]);
+        printf("<TR><TD>");
+        if (sName != NULL)
+            printf("%s</TD>", sName);
+        else
+            printf("n/a</TD>");
+        printf("<TD ALIGN=center>"); 
+    fflush(stdout);
+        if (sameString(row1[1], "1"))
+            printf("BAC end</TD>"); 
+        else if (sameString(row1[1], "2"))
+            printf("e-PCR genomic"); 
+        else if (sameString(row1[1], "3"))
+            printf("e-PCR WGS"); 
+        else 
+            printf("n/a</TD>");
+            
+    fflush(stdout);
+        printf("<TD>"); 
+    fflush(stdout);
+        if (uniStsId != NULL)
+            {
+            /* remove last comma from string before printing */
+            uniStsId[strlen(uniStsId)-1] = '\0';
+            printf("%s</TD>", uniStsId); 
+            }
+        else
+            printf("n/a</TD>");
+    fflush(stdout);
+        printf("<TD>"); 
+    fflush(stdout);
+        if (row1[3] != NULL)
+            printf("%s</TD>", row1[3]); 
+        else
+            printf("n/a</TD>");
+    fflush(stdout);
+        printf("<TD>"); 
+    fflush(stdout);
+        if (row1[4] != NULL)
+            printf("%s</TD>", row1[4]); 
+        else
+            printf("n/a</TD>");
+        /* get BAC clone and STS aliases for this Sanger Name */
+        sprintf(query, "SELECT alias FROM bacCloneAlias WHERE sangerName = '%s'", sName);
+        sr2 = sqlMustGetResult(conn, query);
+        if (sr2 != NULL)
+            printf("<TD>"); 
+        count = 0;
+        while ((row2 = sqlNextRow(sr2)))
+            {
+            count++;
+            if (count != 1)
+                printf(",");
+            printf("%s", row2[0]);
+            }
+        printf("</TD></TR>\n");
+        fflush(stdout);
+        }
+    }
+    fflush(stdout);
+if (foundStsResult)
+    {
+    printf("</TABLE>\n");
+    fflush(stdout);
+    printf("<P><HR ALIGN=\"CENTER\"></P>\n");
+    }
 }
 
 void doLinkedFeaturesSeries(char *track, char *clone, struct trackDb *tdb)
