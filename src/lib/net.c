@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.37 2005/04/10 14:41:24 markd Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.38 2005/05/17 23:40:08 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -446,6 +446,7 @@ if (lineFileNext(lf, &line, NULL))
     else
         lineFileReuse(lf);
     }
+lf->nlType = nlt_undet;  /* reset it so the body of the response can figure it out independent of header */    
 return TRUE;
 }
 

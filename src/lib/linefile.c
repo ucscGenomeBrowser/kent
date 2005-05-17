@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.35 2005/04/09 20:59:02 markd Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.36 2005/05/17 23:40:08 galt Exp $";
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -156,12 +156,36 @@ while (size > 0)
 return totalRead;
 }
 
+static void determineNlType(struct lineFile *lf, char *buf, int bufSize)
+/* determine type of newline used for the file, assumes buffer not empty */
+{
+char *c = buf;
+if (bufSize==0) return;
+if (lf->nlType != nlt_undet) return;  /* if already determined just exit */
+lf->nlType = nlt_unix;  /* start with default of unix lf type */
+while (c < buf+bufSize)
+    {
+    if (*c=='\r')
+	{
+    	lf->nlType = nlt_mac;
+	if (++c < buf+bufSize) 
+    	    if (*c == '\n') 
+    		lf->nlType = nlt_dos;
+	return;
+	}
+    if (*(c++) == '\n')
+	{
+	return;
+	}
+    }
+}
+
 boolean lineFileNext(struct lineFile *lf, char **retStart, int *retSize)
 /* Fetch next line from file. */
 {
 char *buf = lf->buf;
 int bytesInBuf = lf->bytesInBuf;
-int endIx;
+int endIx = lf->lineEnd;
 boolean gotLf = FALSE;
 int newStart;
 
@@ -173,15 +197,37 @@ if (lf->reuse)
     *retStart = buf + lf->lineStart;
     return TRUE;
     }
+
+determineNlType(lf, buf+endIx, bytesInBuf);
+
 /* Find next end of line in buffer. */
-for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
+switch(lf->nlType)
     {
-    if (buf[endIx] == '\n')
-	{
-	gotLf = TRUE;
-	endIx += 1;
+    case nlt_unix:
+    case nlt_dos:
+	for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
+	    {
+	    if (buf[endIx] == '\n')
+		{
+		gotLf = TRUE;
+		endIx += 1;
+		break;
+		}
+	    }
 	break;
-	}
+    case nlt_mac:
+	for (endIx = lf->lineEnd; endIx < bytesInBuf; ++endIx)
+	    {
+	    if (buf[endIx] == '\r')
+		{
+		gotLf = TRUE;
+		endIx += 1;
+		break;
+		}
+	    }
+	break;
+    case nlt_undet:
+	break;
     }
 
 /* If not in buffer read in a new buffer's worth. */
@@ -199,6 +245,7 @@ while (!gotLf)
 	readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
     else
         readSize = 0;
+
     if ((readSize == 0) && (endIx > oldEnd))
 	{
 	/* If there is no newline at end of file, we will end up here. */
@@ -223,15 +270,36 @@ while (!gotLf)
     bytesInBuf = lf->bytesInBuf = readSize + sizeLeft;
     lf->lineEnd = 0;
 
+    determineNlType(lf, buf+endIx, bytesInBuf);
+	
     /* Look for next end of line.  */
-    for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
+    switch(lf->nlType)
 	{
-	if (buf[endIx] == '\n')
-	    {
-	    endIx += 1;
-	    gotLf = TRUE;
+    	case nlt_unix:
+	case nlt_dos:
+	    for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
+		{
+		if (buf[endIx] == '\n')
+		    {
+		    endIx += 1;
+		    gotLf = TRUE;
+		    break;
+		    }
+		}
 	    break;
-	    }
+	case nlt_mac:
+	    for (endIx = sizeLeft; endIx <bytesInBuf; ++endIx)
+		{
+		if (buf[endIx] == '\r')
+		    {
+		    endIx += 1;
+		    gotLf = TRUE;
+		    break;
+		    }
+		}
+	    break;
+	case nlt_undet:
+	    break;
 	}
     if (!gotLf && bytesInBuf == lf->bufSize)
         {
@@ -251,6 +319,10 @@ while (!gotLf)
 if (lf->zTerm)
     {
     buf[endIx-1] = 0;
+    if ((lf->nlType == nlt_dos) && (buf[endIx-2]=='\r'))
+	{
+	buf[endIx-2] = 0;
+	}
     }
 lf->lineStart = newStart = lf->lineEnd;
 lf->lineEnd = endIx;

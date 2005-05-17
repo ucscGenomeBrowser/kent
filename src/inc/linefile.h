@@ -7,6 +7,13 @@
 #ifndef LINEFILE_H
 #define LINEFILE_H
 
+enum nlType {
+ nlt_undet, /* undetermined */
+ nlt_unix,  /* lf   */
+ nlt_dos,   /* crlf */
+ nlt_mac,   /* cr   */
+};
+
 struct lineFile
 /* Structure to handle fast, line oriented
  * fileIo. */
@@ -22,6 +29,7 @@ struct lineFile
     int lineStart;		/* Offset of line in buffer. */
     int lineEnd;		/* End of line in buffer. */
     bool zTerm;			/* Replace '\n' with zero? */
+    enum nlType nlType;         /* type of line endings: dos, unix, mac or undet */  
     bool reuse;			/* Set if reusing input. */
     char *buf;			/* Buffer. */
     struct pipeline *pl;        /* pipeline if reading compressed */
