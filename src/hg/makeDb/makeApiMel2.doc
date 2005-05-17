@@ -999,7 +999,7 @@ EOF
 #  7655 ../../jkStuff/scaffolds.lft
 
 
-# HOMOLOGY GENE PREDICTIONS FROM ZDOBNOV (DONE 4/22/05 angie)
+# HOMOLOGY GENE PREDICTIONS FROM ZDOBNOV (DONE 5/13/05 angie)
     # Updated data -- GFF loads cleanly now, and is split into high-
     # and low-confidence sets.
     ssh hgwdev
@@ -1029,5 +1029,47 @@ EOF
     > ensPep.fa
     ldHgGene -gtf -genePredExt apiMel2 ensGene gtf_dump*
     hgPepPred apiMel2 generic ensPep ensPep.fa
+
+
+# NCBI ANNOTATIONS (XM_* PREDICTED REFSEQS) (DONE 5/17/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/apiMel2/bed/ncbi
+    cd /cluster/data/apiMel2/bed/ncbi
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Apis_mellifera/special_requests/Amel2.0_Scaffolds_NCBI_BCM.map
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Apis_mellifera/special_requests/NCBI.gff.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Apis_mellifera/special_requests/NCBI-mrna.fa.gz
+    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Apis_mellifera/special_requests/NCBI-prot.fa.gz
+    # NCBI has their own scaffold IDs... make a liftUp spec file from 
+    # scaffolds.lft and their mapping.
+    perl -e 'open(MAP, "Amel2.0_Scaffolds_NCBI_BCM.map") || die doh; \
+             %b2n = (); \
+             while (<MAP>) { \
+               chomp;  my ($ncbi, undef, $baylor) = split; \
+               $b2n{$baylor} = $ncbi; \
+             } \
+             while (<>) { \
+               my @words = split; \
+               next if (! exists $b2n{$words[1]}); \
+               $words[1] = $b2n{$words[1]}; \
+               print join("\t", @words) . "\n"; \
+             }' ../../jkStuff/scaffolds.lft > ../../jkStuff/ncbiScaffolds.lft
+    # Also, looks like their frames are backwards relative to the spec 
+    # http://genes.cs.wustl.edu/GTF2.html, so complement them mod 3.
+    liftUp -type=.gff stdout ../../jkStuff/ncbiScaffolds.lft warn \
+      NCBI.gff.gz \
+    | awk -F"\t" '$8 == 1 || $8 == 2 {OFS="\t"; $8 = 3 - $8;} {print;}' \
+      > apiMel2.RefSeq.gff
+    # Some warnings about NC_001566.1, the mitochondrion, which wasn't 
+    # included in apiMel2 -- OK.  
+    # At first I wasn't sure if we wanted to load this up, so I made it 
+    # available as a custom track file
+    # http://genome-test.cse.ucsc.edu/angie/apiMel2.RefSeq.gff
+    ln -s /cluster/data/apiMel2/bed/ncbi/apiMel2.RefSeq.gff \
+      /usr/local/apache/htdocs/angie/
+    # But Jim said that we should show these, so load it up:
+    ldHgGene -gtf -genePredExt apiMel2 modelRefGene apiMel2.RefSeq.gff
+    # The proteins XP_* don't seem to correspond to the XM_* genes with 
+    # the same numbers, so don't load them up -- the predicted proteins 
+    # are straight from genomic sequence anyway.  
 
 
