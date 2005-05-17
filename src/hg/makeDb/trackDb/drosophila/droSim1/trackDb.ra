@@ -1,3 +1,13 @@
+track mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
 track multiz4way
 shortLabel Conservation
 longLabel D. sim./mel./yak./pseud. Multiz Alignments & phastCons Scores
