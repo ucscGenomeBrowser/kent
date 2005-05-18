@@ -2,6 +2,8 @@
 #include "common.h"
 #include "jksql.h"
 #include "hdb.h"
+// for clock1000()
+#include "portable.h"
 
 static char const rcsid[] = "";
 
@@ -24,8 +26,12 @@ char *empty = NULL;
 int rowOffset = 0;
 char **row;
 int count = 0;
+long startTime = 0;
+long deltaTime = 0;
 
 conn = sqlConnect(database);
+startTime = clock1000();
+
 // hSetDb(database);
 sr = hRangeQuery(conn, table, chrom, start, end, empty, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -33,7 +39,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     count++;
 }
 printf("got %d rows\n", count);
+deltaTime = clock1000() - startTime;
+printf("time = %0.3fs\n", ((double)deltaTime)/1000.0);
 
+sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 }
 
