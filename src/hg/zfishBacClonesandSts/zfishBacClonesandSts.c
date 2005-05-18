@@ -628,12 +628,13 @@ int main(int argc, char *argv[])
 struct lineFile *cgf, *clf, *mkf, *nmf, *acf, *usf;
 FILE *bacAlias, *bacXRef; 
 int verb = 0;
+char *dir, errorFile[256], aliasFile[256], xRefFile[256];
 
 verboseSetLevel(0);
 optionInit(&argc, argv, optionSpecs);
-if (argc != 7)
+if (argc != 8)
     {
-fprintf(stdout, "USAGE: formatZfishSts [-verbose=<level>] <contig file> <clone file> <marker file> <list of BACs and chroms> <accessions> <UniSTS IDs file>\n");
+fprintf(stdout, "USAGE: formatZfishSts [-verbose=<level>] <contig file> <clone file> <marker file> <list of BACs and chroms> <accessions> <UniSTS IDs file><output directory>\n");
     return 1;
     }
 verb = optionInt("verbose", 0);
@@ -646,10 +647,16 @@ mkf = lineFileOpen(argv[3], TRUE);
 nmf = lineFileOpen(argv[4], TRUE);
 acf = lineFileOpen(argv[5], TRUE);
 usf = lineFileOpen(argv[6], TRUE);
+dir = cloneString(argv[7]); 
 
-stderr = mustOpen("/cluster/bluearc/danRer1/bacEnds/out/error.log", "w");
-bacXRef = mustOpen("/cluster/bluearc/danRer1/bacEnds/out/bacXRef.tab", "w");
-bacAlias = mustOpen("/cluster/bluearc/danRer1/bacEnds/out/bacAlias.tab", "w");
+sprintf(errorFile, "%s/error.log", dir);
+sprintf(aliasFile, "%s/bacAlias.tab", dir);
+sprintf(xRefFile, "%s/bacXRef.tab", dir);
+
+fprintf(stdout, "files are error: %s, alias: %s and xRef: %s \n", errorFile, aliasFile, xRefFile);
+stderr = mustOpen(errorFile, "w");
+bacAlias = mustOpen(aliasFile, "w");
+bacXRef = mustOpen(xRefFile, "w");
 
 /* Read in contigs file with internal name, external name and FPC contig */
 verbose(1, "Reading contig names file\n");
