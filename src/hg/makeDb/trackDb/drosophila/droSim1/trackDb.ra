@@ -8,6 +8,17 @@ spectrum on
 type psl .
 cdsDrawOptions enabled
 
+track est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
 track multiz4way
 shortLabel Conservation
 longLabel D. sim./mel./yak./pseud. Multiz Alignments & phastCons Scores
