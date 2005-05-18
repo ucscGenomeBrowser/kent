@@ -259,3 +259,19 @@ cp /santest/scratch/andy/xm.psl .
 hgLoadPsl -table=xmMrna mm6 xm.psl
 hgMapToGene -type=psl -cds mm6 xmMrna knownGene knownToXM
 echo drop table xmMrna | hgsql mm6 
+
+# REBASE 505 (4-28-2005)  (Done 5/18/2005 Andy)
+   ssh hgwdev
+   # download files
+   curl -A "Mozilla/4.0" http://rebase.neb.com/rebase/link_gcgenz > rebase.gcg
+   curl -A "Mozilla/4.0" http://rebase.neb.com/rebase/link_gcgref > rebaseRefs.txt
+   # References file
+   tail +15 rebaseRefs.txt | sed 's/ \+/ /g; s/^ //; /^$/d' | cut -f2- -d' ' > c2
+   tail +15 rebaseRefs.txt | sed 's/ \+/ /g; s/^ //; /^$/d' | cut -f1 -d' ' | sed 's/\.//' > c1
+   paste c1 c2 | sed '/^$/d' > rebaseRefs.txt
+   rm c1 c2
+   # Load
+   hgCutters hgFixed rebase.gcg
+   echo delete from rebaseRefs | hgsql hgFixed
+   echo "load data local infile 'rebaseRefs.txt' into table rebaseRefs" | hgsql hgFixed
+
