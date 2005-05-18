@@ -25,24 +25,30 @@ struct sqlResult *sr = NULL;
 char *empty = NULL;
 int rowOffset = 0;
 char **row;
-int count = 0;
+// int count = 0;
 long startTime = 0;
 long deltaTime = 0;
 
 conn = sqlConnect(database);
+
 startTime = clock1000();
 
 // hSetDb(database);
 sr = hRangeQuery(conn, table, chrom, start, end, empty, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-{
-    count++;
-}
-printf("got %d rows\n", count);
 deltaTime = clock1000() - startTime;
-printf("time = %0.3fs\n", ((double)deltaTime)/1000.0);
+printf("time for hRangeQuery = %0.3fs\n", ((double)deltaTime)/1000.0);
+
+startTime = clock1000();
+
+// while ((row = sqlNextRow(sr)) != NULL)
+// {
+    // count++;
+// }
+// printf("got %d rows\n", count);
 
 sqlFreeResult(&sr);
+deltaTime = clock1000() - startTime;
+printf("time for sqlFreeResult = %0.3fs\n", ((double)deltaTime)/1000.0);
 sqlDisconnect(&conn);
 }
 
