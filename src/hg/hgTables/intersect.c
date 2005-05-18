@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.23 2005/03/03 06:47:19 donnak Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.24 2005/05/18 18:56:54 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -445,7 +445,7 @@ else
 struct bed *cookedBedList(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm, int *retFieldCount)
 /* Get data for track in region after all processing steps (filtering
- * intersecting etc.) in BED format.  The pFields variable will be
+ * intersecting etc.) in BED format.  The retFieldCount variable will be
  * updated if the cooking process takes us down to bed 4 (which happens)
  * with bitwise intersections. */
 {
