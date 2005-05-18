@@ -14374,7 +14374,7 @@ cat out/$1/*.out >>protRefRaw.psl
 # Update and clean up kgResultBestMrna2.c and then check it in.
 
 #####################################
-# Build alias tables.		DONE 5/17/05 Fan.
+# Build alias tables.		DONE 5/18/05 Fan.
 
 #	kgAliasM reads from proteins050415.hugo.symbol, proteins050415.hugo.aliases
 #	proteins050415.hugo.withdraws, hg17.kgXref.kgID
@@ -14390,6 +14390,7 @@ cat out/$1/*.out >>protRefRaw.psl
 
    kgAliasKgXref hg17
 
+
 #	kgAliasRefseq reads from hg17.knownGene.name,
 #	hg17.knownGene.proteinID, hg17.kgXref.refseq
 #	to create kgAliasRefseq.tab
@@ -14398,8 +14399,11 @@ cat out/$1/*.out >>protRefRaw.psl
 
    hgsql sp050415 -N -e 'select name,gene.val from hg17.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
    | sort -u  > kgAliasP.tab
+
+   hgsql hg17 -N -e 'select name, name from knownGene' >kgAliasDup.tab
+   hgsql hg17 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >>kgAliasDup.tab
    
-   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab | \
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab kgAliasDup.tab| \
    sort |uniq > kgAlias.tab
 
    hgsql -e "drop table kgAlias;" hg17 
@@ -14418,13 +14422,26 @@ cat out/$1/*.out >>protRefRaw.psl
    'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
    | sort -u >kgProtAliasNCBI.tab
 
-    cat kgProtAliasNCBI.tab kgProtAlias.tab | sort | uniq > kgProtAliasBoth.tab
-# rm kgProtAliasNCBI.tab kgProtAlias.tab
+# include variant splice protein IDs
+   
+   hgsql hg17 -N -e \
+   'select name, proteinID, parAcc from knownGene,sp050415.varAcc where varAcc=proteinID'\
+   |sort -u >kgProtAliasDup.tab
+# include duplicate protein IDs from dupSpMrna table
+   hgsql hg17 -N -e \
+   'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna where name=mrnaID'\
+   |sort -u >>kgProtAliasDup.tab
+
+# catch parent acc from dupProteinID too
+   hgsql hg17 -N -e\
+   'select name, knownGene.proteinID, parAcc from knownGene,dupSpMrna,sp050415.varAcc where name=mrnaID and dupProteinID=varAcc.varAcc'\
+   |sort -u >>kgProtAliasDup.tab
+    cat kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab | sort -u > kgProtAliasAll.tab
 
     echo "`date` creating table kgProtAlias"
     hgsql hg17 -e "drop table kgProtAlias;"
     hgsql hg17 <~/src/hg/lib/kgProtAlias.sql; 
-    hgsql hg17 -e 'LOAD DATA local INFILE "kgProtAliasBoth.tab" into table kgProtAlias;'  
+    hgsql hg17 -e 'LOAD DATA local INFILE "kgProtAliasAll.tab" into table kgProtAlias;'  
 
 # Build kgSpAlias table
 
