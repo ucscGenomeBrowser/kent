@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.70 2005/03/03 06:47:19 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.71 2005/05/18 22:42:10 angie Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -609,7 +609,7 @@ hPrintf("</TABLE>\n");
     else
 	{
 	if (anyIntersection())
-	    hPrintf("<I>Note: Intersection doesn't work with all fields, selected fields or maf output.</I><BR>");
+	    hPrintf("<I>Note: Intersection doesn't work with all fields or selected fields output.</I><BR>");
         }
     cgiMakeButton(hgtaDoTopSubmit, "get output");
     hPrintf(" ");

@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.6 2004/12/08 00:03:51 kate Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.7 2005/05/18 22:42:10 angie Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -36,32 +36,47 @@ else
 }
 
 void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn)
-/* Output regions as MAF. */
+/* Output regions as MAF.  maf tables look bed-like enough for 
+ * cookedBedsOnRegions to handle intersections. */
 {
-struct region *region, *regionList = getRegions();
+struct region *region = NULL, *regionList = getRegions();
+struct lm *lm = lmInit(64*1024);
 textOpen();
-if (anyIntersection())
-    errAbort("Can't do maf output when intersection is on, sorry. ");
 mafWriteStart(stdout, NULL);
 for (region = regionList; region != NULL; region = region->next)
     {
-    struct mafAli *mafList, *maf;
-    char dbChrom[64];
-    safef(dbChrom, sizeof(dbChrom), "%s.%s", database, region->chrom);
-    mafList = mafLoadInRegion(conn, table, region->chrom, 
-    	region->start, region->end);
-    for (maf = mafList; maf != NULL; maf = maf->next)
-        {
-	struct mafAli *subset = mafSubset(maf, dbChrom, 
-	    region->start, region->end);
-	if (subset != NULL)
+    struct bed *bedList = cookedBedList(conn, table, region, lm, NULL);
+    struct bed *bed = NULL;
+    for (bed = bedList;  bed != NULL;  bed = bed->next)
+	{
+	struct mafAli *mafList = NULL, *maf = NULL;
+	char dbChrom[64];
+	safef(dbChrom, sizeof(dbChrom), "%s.%s", database, bed->chrom);
+	/* For MAF, we clip to viewing window (region) instead of showing 
+	 * entire items that happen to overlap the window/region, which is 
+	 * what we get from cookedBedList. */
+	if (bed->chromStart < region->start)
+	    bed->chromStart = region->start;
+	if (bed->chromEnd > region->end)
+	    bed->chromEnd = region->end;
+	if (bed->chromStart >= bed->chromEnd)
+	    continue;
+	mafList = mafLoadInRegion(conn, table, bed->chrom, 
+				  bed->chromStart, bed->chromEnd);
+	for (maf = mafList; maf != NULL; maf = maf->next)
 	    {
-	    subset->score = mafScoreMultiz(subset);
-	    mafWrite(stdout, subset);
-	    mafAliFree(&subset);
+	    struct mafAli *subset = mafSubset(maf, dbChrom, 
+					      bed->chromStart, bed->chromEnd);
+	    if (subset != NULL)
+		{
+		subset->score = mafScoreMultiz(subset);
+		mafWrite(stdout, subset);
+		mafAliFree(&subset);
+		}
 	    }
+	mafAliFreeList(&mafList);
 	}
-    mafAliFreeList(&maf);
     }
 mafWriteEnd(stdout);
+lmCleanup(&lm);
 }
