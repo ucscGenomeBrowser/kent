@@ -14372,3 +14372,71 @@ cat out/$1/*.out >>protRefRaw.psl
     ~/src/hg/protein/kgProtMap2.sh kgHg17F hg17 050415
 
 # Update and clean up kgResultBestMrna2.c and then check it in.
+
+#####################################
+# Build alias tables.		DONE 5/17/05 Fan.
+
+#	kgAliasM reads from proteins050415.hugo.symbol, proteins050415.hugo.aliases
+#	proteins050415.hugo.withdraws, hg17.kgXref.kgID
+#	to create kgAliasM.tab and geneAlias.tab
+#	by picking out those kgID items from kgXref where
+#	kgXref.geneSymbol == hugo.symbol
+
+   kgAliasM hg17 proteins050415
+
+#	kgAliasKgXref reads from hg17.knownGene.proteinID,
+#	hg17.knownGene.name, hg17.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
+
+   kgAliasKgXref hg17
+
+#	kgAliasRefseq reads from hg17.knownGene.name,
+#	hg17.knownGene.proteinID, hg17.kgXref.refseq
+#	to create kgAliasRefseq.tab
+
+   kgAliasRefseq hg17
+
+   hgsql sp050415 -N -e 'select name,gene.val from hg17.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
+   | sort -u  > kgAliasP.tab
+   
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab | \
+   sort |uniq > kgAlias.tab
+
+   hgsql -e "drop table kgAlias;" hg17 
+   hgsql hg17 < ~/kent/src/hg/lib/kgAlias.sql
+   hgsql hg17 -e 'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias' 
+
+#	kgProtAlias reads from hg17.knownGene.name,
+#	hg17.knownGene.proteinID, hg17.knownGene.alignID,
+#	proteins050415.spXref3.accession, proteins050415.spSecondaryID, proteins050415.pdbSP.pdb
+#	to create kgProtAlias.tab
+#
+
+   kgProtAlias hg17 050415
+
+   hgsql hg17 -N -e \
+   'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
+   | sort -u >kgProtAliasNCBI.tab
+
+    cat kgProtAliasNCBI.tab kgProtAlias.tab | sort | uniq > kgProtAliasBoth.tab
+# rm kgProtAliasNCBI.tab kgProtAlias.tab
+
+    echo "`date` creating table kgProtAlias"
+    hgsql hg17 -e "drop table kgProtAlias;"
+    hgsql hg17 <~/src/hg/lib/kgProtAlias.sql; 
+    hgsql hg17 -e 'LOAD DATA local INFILE "kgProtAliasBoth.tab" into table kgProtAlias;'  
+
+# Build kgSpAlias table
+
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg17.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg17 -e 'drop table kgSpAlias';
+    hgsql hg17 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
+
