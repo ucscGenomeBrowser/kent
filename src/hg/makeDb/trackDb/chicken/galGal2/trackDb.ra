@@ -385,6 +385,14 @@ color 0,100,0
 altColor 128,228,128
 type bed 4 +
 
+track chicken13k
+shortLabel 13k Probes
+longLabel Probes for 13k Microarray
+group regulation
+priority 91.0
+visibility hide
+type bed 4 .
+
 track blastHg16KG
 shortLabel Human Proteins
 longLabel Human proteins mapped by chained tBLASTn
@@ -470,3 +478,8 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSGALP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
+searchName chicken13k
+searchTable chicken13k
+searchType bed
+searchMethod exact
+searchPriority 55
