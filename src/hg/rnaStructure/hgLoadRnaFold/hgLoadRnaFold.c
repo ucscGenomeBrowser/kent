@@ -7,7 +7,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadRnaFold.c,v 1.1 2003/10/15 04:18:54 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadRnaFold.c,v 1.2 2005/05/19 13:23:05 fanhsu Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -41,7 +41,7 @@ static char *create =
 "    fold longblob not null,     # Parenthesis and .'s that describe folding\n"
 "    energy float not null,      # Estimated free energy of folding (negative)\n"
 "              #Indices\n"
-"    PRIMARY KEY(name(10))\n"
+"    PRIMARY KEY(name(32))\n"
 ")\n";
 char query[512];
 safef(query, sizeof(query), create, table);
