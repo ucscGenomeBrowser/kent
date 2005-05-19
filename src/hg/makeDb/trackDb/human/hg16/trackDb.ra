@@ -1845,8 +1845,8 @@ longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
 track encodeGisChipPet
-shortLabel ChIp-PET/GIS
-longLabel Genome Institute of Singapore ChIp-PET of P53 TFBS in ENCODE Regions
+shortLabel ChIP-PET/GIS
+longLabel Genome Institute of Singapore ChIP-PET of P53 TFBS in ENCODE Regions
 group encode
 color 158,35,135
 priority 49.1
