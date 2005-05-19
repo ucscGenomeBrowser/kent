@@ -384,7 +384,6 @@ identifier kimWormGeneId
     hgFixed.kimWormLifeMedianRatio.name full unique
     $ce.sangerToKim.value minCheck=0.6
 
-
 identifier nci60SampleId
 "Identifiers of NCI 60 Cell lines for expression experiments"
     hgFixed.nci60Exps.id
@@ -552,6 +551,16 @@ identifier stanfordPromotersCellId
     hgFixed.encode_Stanford_PromotersExps.id
     $hg.encode_Stanford_Promoters.expIds comma full 
     $hg.encode_Stanford_Promoters.expScores comma indexOf full
+
+identifier mouseLandscape
+"U. Toronto mouse gene probe ID"
+    hgFixed.mouseLandscape.name
+    $mm.knownToXM.value
+
+identifier mouseLandscapeSampleId
+"Identifiers of U. Toronto RNA samples"
+     hgFixed.mouseLandscapeExps.id
+     hgFixed.mouseLandscape.expScores comma indexOf full
 
 # Stuff to link together alignment chains and nets
 
@@ -1424,6 +1433,7 @@ identifier transRegCode
 
 # Dependencies not already captured in identifiers
 
+dependency $mm.mouseLandscapeDistance $mm.knownToXM hgFixed.mouseLandscape
 dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRatio
 dependency $mm.affyGnfU74BDistance $mm.knownToU74  hgFixed.gnfMouseU74bMedianRatio
 dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRatio
@@ -1612,6 +1622,7 @@ type knownTo
     $hg.knownToU133Plus2
     $hg.knownToHInv
     $mm.knownToU74
+    $mm.knownToXM
     $ce.sangerToKim
     $ce.sangerToPfam
     $ce.sangerToRefSeq
