@@ -1129,11 +1129,11 @@ rmdir $tmpDir
     # Use the values of --target-coverage and --expected-lengths from the 
     # last iteration of the dm2 8way run, 0.565 and 36.
     # phyloFit makes one .mod but consEntropy wants two...
-    cp starting-tree.mod starting-tree.noncons.mod
-    $EDITOR starting-tree.noncons.mod
     # Multiply each subst rate on the TREE line by 3.5 which is roughly the 
     # ratio of noncons to cons in 
     # /cluster/data/dm2/bed/multiz8way/phastCons/run.estimate/ave.*.mod
+    /cluster/bin/phast/tree_doctor -s 3.5 starting-tree.mod \
+      > starting-tree.noncons.mod
     /cluster/bin/phast/consEntropy --NH 9.7834 0.565 36 \
       starting-tree*.mod
 #( Solving for new omega: 36.000000 37.779742 37.741115 )
@@ -1402,8 +1402,6 @@ zcat `ls -1 /cluster/bluearc/droSim1/phastCons/POSTPROBS/$chr.*.pp.gz \
     sed -e 's/lod=//' all.bed | sort -k4,4nr | head -5000 \
     | awk '{printf "%s\t%d\t%d\tlod=%d\t%d\n", $1, $2, $3, $4, $4}' \
     > top5000.bed
-# NOT DONE (no /cse/grads/acs/public_html -- probably due to /projects/
-# compbio/usr problems?)
     /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
       /cse/grads/acs/public_html/ds-top5000-4way \
       "top 5000 conserved elements (4way)" droSim1
@@ -1411,5 +1409,97 @@ zcat `ls -1 /cluster/bluearc/droSim1/phastCons/POSTPROBS/$chr.*.pp.gz \
     # and clean up bluearc.
     rm -r /cluster/bluearc/droSim1/phastCons/{ELEMENTS,POSTPROBS,wib}
     rm -r /cluster/bluearc/droSim1/chrom
+
+
+# RELOAD AGP (DONE 5/19/05 angie)
+    # Many gap types that should have been labeled "contig" (type) were 
+    # labeled "fragment" in the original AGP.  LaDeana sent corrected AGP 
+    # in an email attachment -- saved to 
+    # /cluster/data/droSim1/downloads/simulans_agp.tar.gz
+    ssh kkstore01
+    cd /cluster/data/droSim1/downloads
+    tar xvzf simulans_agp.tar.gz 
+    foreach f (*.agp)
+      set chr = $f:r
+      set c = `echo $chr | sed -e 's/^chr//; s/_random$//;'`
+      mv ../$c/$f ../$c/$f.bak
+      mv $f ../$c/$f
+    end
+    cd ..
+    # check that line counts are the same, and that the files have no 
+    # differences if you ignore the gap type and bridged columns 
+    # (and extra whitespace @EOL.)
+    foreach f (*/*.agp)
+      set lc1 = `wc -l < $f`
+      set lc2 = `wc -l < $f.bak`
+      if ($lc1 != $lc2) then
+        echo "LINE COUNT DIFFERENCE: $f $lc1   vs.   $f.bak $lc2"
+      else
+        echo $f:t:r ok, $lc1 == $lc2
+      endif
+      awk '$5 == "N" {$7 = $8 = "ignored";} {print;}' $f \
+      | perl -wpe 's/\s+$/\n/' > /tmp/1
+      awk '$5 == "N" {$7 = $8 = "ignored";} {print;}' $f.bak \
+      | perl -wpe 's/\s+$/\n/' > /tmp/2
+      set lcd = `diff /tmp/1 /tmp/2 | wc -l`
+      if ($lcd) then
+        echo "DIFFERENCE OTHER THAN GAP TYPE $f vs. $f.bak"
+      else
+        echo $f:t:r ok, no diff other than gap type
+      endif
+    end
+    # run checkAgpAndFa
+    foreach f (*/*.fa)
+      echo -n "$f:t:r - "
+      checkAgpAndFa $f:r.agp $f | tail -1
+    end
+    # eyeball to make sure all AGP's have at least some contig gaps
+    foreach f (*/*.agp)
+      echo -n "$f:t:r contig gaps: "
+      awk '$5 == "N" && $7 == "contig" {print $6;}' $f | sort -n | uniq -c
+    end
+    # eyeball distribution of fragment gap sizes too:
+    awk '$5 == "N" && $7 == "fragment" {print $6;}' */*.agp | sort -n | uniq -c
+    # Hmmm, 0 fragment gaps with size 1000, fewer than would expect by chance:
+#      8 997
+#      1 998
+#      4 999
+#      3 1001
+#      6 1002
+#      5 1003
+    # super-paranoid: look for contig gaps in the middle of a run of 
+    # similarly-named contigs (implying same supercontig).
+    foreach f (*/*.agp)
+      echo $f
+      perl -we ' \
+        while (<>) { \
+	  @prevprevwords = @prevwords if (defined @prevwords); \
+	  @prevwords = @words if (defined @words); \
+          chomp; @words = split; \
+	  if (defined $prevwords[4] && $prevwords[4] eq "N" && \
+              $prevwords[6] eq "contig") { \
+	    $lastsuper = $prevprevwords[5]; $lastsuper =~ s/\.\d+$//; \
+	    $thissuper = $words[5]; $thissuper =~ s/\.\d+$//; \
+	    if ($lastsuper eq $thissuper) { \
+              print "line $.: contig gap in $thissuper\n"; \
+            } \
+	  } \
+        }' $f
+    end
+#2R/chr2R.agp
+#line 3433: contig gap in W501_Contig9
+#3L/chr3L.agp
+#line 3473: contig gap in W501_Contig4
+#X/chrX.agp
+#line 4000: contig gap in W501_Contig112
+#X/chrX_random.agp
+#line 3379: contig gap in W501_Contig763
+    # Got the go-ahead from LaDeana to edit those 4 cases to "fragment\tyes"
+    # and she will do the same.  Re-ran checks, everything looks good now.
+
+    # Reload gap (and gold) tables from agp:
+    ssh hgwdev
+    cd /cluster/data/droSim1
+    hgGoldGapGl -noGl -chromLst=chrom.lst droSim1 /cluster/data/droSim1 .
 
 
