@@ -100,13 +100,24 @@ color 10,100,150
 exonArrows on
 #pslSequenceBases all
 
+track mgcWUPcrInProgress
+shortLabel C-List Pending
+longLabel MGC C-List In-progress RT-PCR
+group mgc
+priority 101.2
+visibility pack
+type bed 12
+color 10,100,150
+exonArrows on
+#pslSequenceBases all
+
 track mgcWUPcrFail
 shortLabel C-List Fail
 longLabel MGC C-List Failed RT-PCR for MGC
 group mgc
-priority 101.2
+priority 101.3
 visibility pack
-type psl
+type bed 12
 color 10,150,100
 exonArrows on
 #pslSequenceBases all
@@ -132,17 +143,6 @@ type bed 12
 color 12,120,12
 exonArrows on
 cdsDrawOptions enabled
-
-track mgcWUPcrInProgress
-shortLabel C-List Pending
-longLabel MGC C-List In-progress RT-PCR
-group mgc
-priority 101.3
-visibility pack
-type psl
-color 10,100,150
-exonArrows on
-#pslSequenceBases all
 
 track baylorRtPcrGeneA
 shortLabel Baylor GeneA

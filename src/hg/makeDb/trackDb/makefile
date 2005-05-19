@@ -55,7 +55,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 
 MGC_DBS = \
 	hg16 hg17 \
-	mm3 mm4 mm5 \
+	mm5 mm6 \
 	rn3 \
 	danRer1	danRer2 \
 	xenTro1
