@@ -166,8 +166,9 @@
 #include "ccdsInfo.h"
 #include "ccdsGeneMap.h"
 #include "cutter.h"
+#include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.888 2005/05/17 20:19:33 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.889 2005/05/19 11:43:56 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12590,6 +12591,37 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doChicken13kDetails(struct trackDb *tdb, char *item)
+{
+struct sqlConnection *conn = hAllocConn();
+struct chicken13kInfo *chick = NULL;
+char buff[256];
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item); 
+snprintf(buff, sizeof(buff), "select * from chicken13kInfo where id='%s'",  item);
+chick = chicken13kInfoLoadByQuery(conn, buff);
+if (chick != NULL)
+    {
+    printf("<b>Probe name:</b> %s<br>\n", chick->id);
+    printf("<b>Source:</b> %s<br>\n", chick->source);
+    printf("<b>PCR Amplification code:</b> %s<br>\n", chick->pcr);
+    printf("<b>Library:</b> %s<br>\n", chick->library);
+    printf("<b>Source clone name:</b> %s<br>\n", chick->clone);
+    printf("<b>Library:</b> %s<br>\n", chick->library);
+    printf("<b>Genbank accession:</b> %s<br>\n", chick->gbkAcc);
+    printf("<b>BLAT alignment:</b> %s<br>\n", chick->blat);
+    printf("<b>Source annotation:</b> %s<br>\n", chick->sourceAnnot);
+    printf("<b>TIGR assigned TC:</b> %s<br>\n", chick->tigrTc);
+    printf("<b>TIGR TC annotation:</b> %s<br>\n", chick->tigrTcAnnot);
+    printf("<b>BLAST determined annotation:</b> %s<br>\n", chick->blastAnnot);
+    printf("<b>Comment:</b> %s<br>\n", chick->comment);
+    }
+genericBedClick(conn, tdb, item, start, 1);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void perlegenDetails(struct trackDb *tdb, char *item)
 {
 char *dupe, *words[16];
@@ -16052,6 +16084,10 @@ else if(sameWord(track, "affyUcla"))
 else if(sameWord(track, "loweProbes"))
     {
     doProbeDetails(tdb, item);
+    }
+else if  (sameWord(track, "chicken13k"))
+    {
+    doChicken13kDetails(tdb, item);
     }
 else if( sameWord(track, "ancientR"))
     {
