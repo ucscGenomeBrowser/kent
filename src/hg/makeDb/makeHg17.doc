@@ -14523,3 +14523,34 @@ end
     rm -r split fold err batch.bak
     cd ../utr5
     rm -r split fold err batch.bak
+
+# Build KEGG pathway tables.  DONE 5/19/05.  Fan.
+
+   ssh hgwdev
+   cd /cluster/store10/kg/kgHg17F
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgHg17F hg17 050415
+
+   hgsql hg17 -e "drop table keggMapDesc"
+   hgsql hg17 -e "drop table keggPathway"
+   hgsql hg17 <~/src/hg/lib/keggMapDesc.sql
+   hgsql hg17 <~/src/hg/lib/keggPathway.sql
+   hgsql hg17 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql hg17 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+# Build CGAP pathway tables
+
+   cd ..
+   ~/src/hg/protein/KGcgap.sh kgHg17F hg17 050415
+   hgsql hg17 -e "drop table cgapAlias"
+   hgsql hg17 -e "drop table cgapBiocDesc"
+   hgsql hg17 -e "drop table cgapBiocPathway"
+   hgsql hg17 <~/src/hg/lib/cgapAlias.sql
+   hgsql hg17 <~/src/hg/lib/cgapBiocDesc.sql
+   hgsql hg17 <~/src/hg/lib/cgapBiocPathway.sql
+   hgsql hg17 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
+   hgsql hg17 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
+   hgsql hg17 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
