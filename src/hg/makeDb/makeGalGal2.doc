@@ -4258,5 +4258,5 @@ zcat `ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS/$chr.*.pp.gz \
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
-
+# CHICKEN 13K ARRAY PROBES
 
