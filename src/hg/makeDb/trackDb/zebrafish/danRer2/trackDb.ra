@@ -31,6 +31,33 @@ priority 14
 visibility hide
 type psl .
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+
+track bacEndSingles
+shortLabel BAC End Singles
+longLabel BAC End Singles
+group map
+priority 16
+visibility hide
+type bed 6 +
+exonArrows off
+
+track bacEndPairsBad
+shortLabel Incorrect BAC End Pairs
+longLabel Orphan, Short, Long and Incorrectly Oriented BAC End Pairs
+group map
+priority 17
+visibility hide
+type bed 6 +
+exonArrows off
+
 track affyZebrafish
 shortLabel Affy Zebrafish
 longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
@@ -50,26 +77,6 @@ type genePred ensPep
 url http://www.ensembl.org/perl/transview?transcript=$$
 hgGene on
 
-track multiz6way
-shortLabel 6-Way Conservation
-longLabel 6-Way Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 109
-visibility hide
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-# wiggle phastCons6way
-yLineOnOff Off
-autoScaleDefault Off
-summary multiz6waySummary
-irows on
-speciesGroups mammal vertebrate
-sGroup_mammal hg17 mm6 monDom1
-sGroup_vertebrate fr1 tetNig1
-treeImage phylo/DanRer2_6way.jpg
-
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
@@ -87,6 +94,56 @@ shortCircuit 1
 termRegex (ctg|BX|AL)[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+                                                                                
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+
+searchName bacPairsAliases
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+searchBoth 1
+xrefTable bacCloneAlias
+dontCheckXrefQueryFormat .
+xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName  
+searchPriority 9
+
+searchName bacSinglesAliases
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+searchBoth 1
+xrefTable bacCloneAlias
+dontCheckXrefQueryFormat .
+xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName  
+searchPriority 9
+
+searchName bacPairsSangerSts
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,sangerName from %s where sangerName like '%s'  
+termRegex (et|st)ID[0-9]+\.[0-9]+
+searchPriority 10
+
+searchName bacSinglesSangerSts
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,sangerName from %s where sangerName like '%s'  
+termRegex (et|st)ID[0-9]+\.[0-9]+
+searchPriority 10
 
 searchTable rhMap
 searchMethod prefix
