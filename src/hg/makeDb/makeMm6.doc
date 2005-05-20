@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.40 2005/05/16 21:43:39 angie Exp $"
+#	"$Id: makeMm6.doc,v 1.41 2005/05/20 23:08:03 heather Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4394,6 +4394,8 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
 # mrnaRefseq
 # spMrna
 
+############################################################################
+
 # CYTOBAND TRACK (DONE - 2005-04-14 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/mm6/cytoBand
@@ -4417,6 +4419,8 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
     # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
     hgsql mm6 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
 
+############################################################################
+
 #  BLATSERVERS ENTRY (DONE - 2005-04-11 - Ali)
     ssh hgwdev
 
@@ -4429,6 +4433,8 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
     #	the untrans server is running with -stepSize=5, so:
     hgsql hgcentraltest \
 	-e 'update blatServers set canPcr=1 where db="mm6" and port=17782;'
+
+############################################################################
 
 ### MAKE THE affyU74 TRACK - needed for the Gene Sorter 
 #                              (DONE - 2005-04-14 - Fan)
@@ -5475,4 +5481,93 @@ http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.prot
     featureBits mm6 -enrichment refGene geneid
 #refGene 1.623%, geneid 1.561%, both 0.794%, cover 48.91%, enrich 31.34x
 
+# CLONE ENDS
 
+  ssh kkstore01
+  cd /cluster/data/mm6
+  # check disk space: 120 Gigs free
+  cd bed
+  mkdir cloneend
+  cd cloneend
+  mkdir ncbi
+  cd ncbi
+
+  ftp ftp.ncbi.nih.gov
+  # anonymous login
+  cd genomes/CLONEEND/mus_musculus
+  binary
+  prompt 
+  mget *
+
+  gunzip *
+  # 650 megs
+
+  # seems like the *.mfa files were split just for convenience
+  # concatenate
+  foreach f (*.mfa)
+    cat $f >> all.mfa
+  end
+
+  # Convert the title line of the all.mfa file
+  # Location of perl different on kkstore01
+  cat << '_EOF_' > convert.pl
+#!/usr/bin/perl -w
+
+use strict;
+
+while (my $line = <>) {
+    if (substr($line,0,1) ne ">") {
+        print $line;
+    } else {
+        my @fields = split(/\|/, $line);
+        my $printed = 0;
+        for (my $i = 0; $i < $#fields; $i++) {
+                if ($fields[$i] eq "gb" || $fields[$1] eq "dbj") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $#fields;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+chmod +x convert.pl
+./convert.pl < all.mfa > cloneEnds.fa
+
+# check that files still have the same number of lines
+# expecting 8290734
+wc -l all.mfa
+wc -l cloneEnds.fa
+
+  # concatenate the text files, too
+  foreach f (*.txt)
+    cat $f >> all.txt
+  end
+
+  # generate cloneEndPairs.txt and cloneEndSingles.txt
+  ./convertTxt.pl all.txt
+
+  # Reading in end info
+  # Writing out pair info
+  # Writing out singleton info
+  # 354485 pairs and 82570 singles
+
+  # a bit of cleanup
+  mkdir archive
+  mv 10090* archive
+
+  # noticed concatenated IDs in cloneEndPairs.txt
+  # due to duplicates
+  # question out to Terry
+  # example:
+  # in clone_info012
+  RP23-303I7      BH406146.1      17461427        RP23    500     0       BAC     T7      2005-04-06
+  # in clone_info033
+  RP23-303I7      AQ996998.1      7072095         RP23    589     0       BAC     T7      2005-04-06
+
+  # This matches
+  # http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=RP23-303I7
