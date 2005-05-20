@@ -1903,7 +1903,11 @@ table ctgPos2
 # ADDED SANGER STS NAME FIELD (sangerName) TO bacCloneAlias TABLE AND
 # RELOADED DATA INCLUDING THIS NEW FIELD, ADDED SEARCHES FOR BAC CLONES 
 # ALIASES AND ASSOCIATED STS ALIASES (DONE, 2005-05-17, hartera)
-# provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
+# ADDED MORE SEARCHES, CORRECTED BUG IN CREATING bacCloneXRef TABLE,
+# ADDED MORE INDICES FOR bacCloneXRef AND REMOVED BAC INTERNAL NAMES
+# FROM bacCloneAlias TABLE AND RELOADED DATA FOR THESE TABLES
+# (DONE, 2005-05-20, hartera)
+# Provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
 # Yi Zhou:yzhou@enders.tch.harvard.edu 
@@ -2381,7 +2385,7 @@ end
     # 337751 bacEnds.lfNames.uniq 
     # pslCheck has 2736 bad alignments
     # from psl file
-    awk '{print $10;}' bacEnds.psl > bacEndsPsl.names
+    awk '{print $10;}' ../bacEnds.psl > bacEndsPsl.names
     # remove first few lines with no names
     sort bacEndsPsl.names | uniq > bacEndsPsl.names.uniq
     # 457560 bacEndsPsl.names.uniq
@@ -2392,9 +2396,9 @@ end
     # description pages (2005-05-04, hartera)
     cat << '_EOF_' > $HOME/kent/src/hg/lib/bacCloneAlias.as
 table bacCloneAlias
-"BAC clones aliases and associated STS aliases and Sanger STS names"
+"BAC clone associated STS aliases and Sanger STS names"
     (
-    string alias;      "BAC clone alias (internal Sanger FPC name) and STS aliases"
+    string alias;      "STS aliases associated with BAC clones"
     string sangerName; "Sanger STS name"
 )
 '_EOF_'
@@ -2433,8 +2437,8 @@ table bacCloneXRef
     cd $HOME/kent/src/hg/lib
     autoSql bacCloneXRef.as bacCloneXRef
     cp bacCloneXRef.h ../inc
-    # edit bacCloneXRef.sql to add INDEX(name) to indices
-    # and remove primary key
+    # edit bacCloneXRef.sql to add INDEX(name) and remove primary key.
+    # Add indices: INDEX(intName), INDEX(sangerName) for searches (2005-05-20)
     # edit so that all fields except the relationship field can be null
     # add and commit to cvs bacCloneXRef.as, .sql, .c and .h
     ssh kksilo
@@ -2455,8 +2459,8 @@ table bacCloneXRef
     sort bacClones.namesandchrom | uniq > bacClones.namesandchrom.uniq
     # use zfish_accs.txt provided by the Sanger Centre to create a list
     # of BAC clone names, internal names and Genbank accessions
-    # extend getBACInfo.pl to add extended information 
-    perl getBACInfo.pl zfish_accs.txt > bacCloneXRef.txt
+    # extend getBACInfo.pl to add extended information (getBacInfo2.pl)
+    perl getBACInfo2.pl zfish_accs.txt > bacCloneXRef.txt
     # write program to create bacCloneAlias.tab and bacCloneXRef.tab files
     # to load into tables - zfishBacEndsandSts.c
     # in $HOME/kent/src/hg/zfishBacEndsandSts
@@ -2546,28 +2550,58 @@ if ($fields[0] =~ /^[0-9]+/)
     # a join to the XRef table to get the external name to find the
     # position in the relevant bacEnds table.
     # (hartera, 2005-05-12)
+    # Added another argument so that output directory must be specified
+    # and fixed bug as not all the BAC clone names for each Sanger STS name
+    # were being stored. Change to zfishBacClonesandSts.c so that the 
+    # internal (Sanger) BAC clone names are not added to the alias table. 
+    # These can be found in the bacCloneXRef table and there are only 
+    # 12987 internal BAC clone names that have Sanger names and over 
+    # 200,000 more internal names in the bacCloneXRef table. Re-run program
+    # and re-load tables. 
+    # Also use updated version of accessions file for BAC clones.
+    # (hartera, 2005-05-20)
+    # Received a new version of the zfish_accs.txt file:
+    # zfish_accs050605.txt (from Mario Caccamo at Sanger), move this to 
+    # /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    # Created a merged file of accessions from this file and zfish_accs.txt
+    # see makeDanRer1.doc, new version is zfish_accsMerged.txt
+    # change to zfishBacClonesandSts.c so that the internal (Sanger)
+    # BAC clone names are not added to the alias table. These can be found
+    # in the bacCloneXRef table and there are only 12987 that have Sanger names
+    # and over 200,000 more in the bacCloneXRef table. 
+    set dir=/cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    cp $dir/zfish_accsMerged.txt .
+    mkdir -p /cluster/bluearc/danRer1/bacEnds/out
     nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.02.12.04.txt \
       clonemarkers.02.12.04.txt markers.02.12.04.txt \
-      bacClones.namesandchrom.uniq zfish_accs.txt \
-      sangerandUniSTSId.format > zfishBacs.out
+      bacClones.namesandchrom.uniq zfish_accsMerged.txt \
+      sangerandUniSTSId.format /cluster/bluearc/danRer1/bacEnds/out \
+      > zfishBacs.out
     # output is in /cluster/bluearc/danRer1/bacends/out so copy over
-    # sort and uniq alias tab file
+    # sort alias file by sangerName
     sort -k2 /cluster/bluearc/danRer1/bacEnds/out/bacAlias.tab \
-         | uniq > bacAlias.uniq.tab
+         > bacAlias.sort.tab
     cp /cluster/bluearc/danRer1/bacEnds/out/bacXRef.tab .
-    
+    wc -l *.tab
+    # 55546 bacAlias.sort.tab
+    # 234056 bacXRef.tab
+ 
     ssh hgwdev
     cd /cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
     # Remove bacCloneAlias table and add new table with sangerName field 
     # instead of the external name field
     # Re-load data including sanger STS name for the associated STS markers.
     # (2005-05-05, hartera)
+    # Re-load data after bug fix and using new BAC clone accessions and 
+    # without adding internal (Sanger) BAC clone names to alias table and 
+    # using the bacCloneAlias table with indices for name, intName and
+    # sangerName for searches. (2005-05-20, hartera)
     hgsql danRer1 -e 'drop table bacCloneXRef'
     hgsql danRer1 -e 'drop table bacCloneAlias'
     hgsql danRer1 < $HOME/kent/src/hg/lib/bacCloneAlias.sql
     hgsql danRer1 < $HOME/kent/src/hg/lib/bacCloneXRef.sql
     nice hgsql danRer1 -e \
-          'load data local infile "bacAlias.uniq.tab" into table bacCloneAlias'
+          'load data local infile "bacAlias.sort.tab" into table bacCloneAlias'
     nice hgsql danRer1 -e \
           'load data local infile "bacXRef.tab" into table bacCloneXRef'
     cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
@@ -2620,6 +2654,26 @@ if ($fields[0] =~ /^[0-9]+/)
 # BAC ends tracks details pages. Update hgc.c to show the aliases associated
 # with each Sanger STS name listed for a BAC clones rather than just a list of 
 # all aliases associated with that BAC clone (2005-05-17, hartera).
+
+# add searches for internal (Sanger) BAC clone name (2005-05-20, hartera):
+# searchName bacPairsIntName
+# searchTable bacEndPairs
+# searchMethod exact
+# searchType bed
+# xrefTable bacCloneXRef
+# xrefQuery select name,intName from %s where intName like '%s'
+# termRegex (zC|zK|bZ|dZ|bY)[[:alnum:]]+
+# searchPriority 8.5
+
+# searchName bacSinglesIntName
+# searchTable bacEndSingles
+# searchMethod exact
+# searchType bed
+# xrefTable bacCloneXRef
+# xrefQuery select name,intName from %s where intName like '%s'
+# termRegex (zC|zK|bZ|dZ|bY)[[:alnum:]]+
+# searchPriority 8.5
+
 
 # MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR DANRER1
 # (DONE, 2004-07-13, hartera)
@@ -4411,7 +4465,7 @@ cat > template << 'EOF'
     # Created parasol job in bed/blat.danRer1.2005-05-13/run
     cd bed
     rm blat.danRer2
-    ln -s blat.danRer2.2005-05-16 blat.danRer2
+    ln -s blat.danRer2.2005-05-18 blat.danRer2
     cd blat.danRer2/run
     para try, check, push, check etc..
     
