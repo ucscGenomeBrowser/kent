@@ -15,5 +15,7 @@ CREATE TABLE bacCloneXRef (
     leftPrimer varchar(255),	# STS 5' primer sequence
     rightPrimer varchar(255),	# STS 3' primer sequence
               #Indices
-    INDEX(name)
+    INDEX(name),
+    INDEX(intName),
+    INDEX(sangerName)
 );
