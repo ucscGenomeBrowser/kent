@@ -38,7 +38,38 @@ group regulation
 priority 80
 visibility hide
 type psl .
-                                                                                
+
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl danRer2 Predictions
+group genes
+priority 32.8
+visibility pack
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/perl/transview?transcript=$$
+hgGene on
+
+track multiz6way
+shortLabel 6-Way Conservation
+longLabel 6-Way Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 109
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons6way
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz6waySummary
+irows on
+speciesGroups mammal vertebrate
+sGroup_mammal hg17 mm6 monDom1
+sGroup_vertebrate fr1 tetNig1
+treeImage phylo/DanRer2_6way.jpg
+
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
@@ -60,8 +91,8 @@ searchPriority 5
 searchTable rhMap
 searchMethod prefix
 searchType psl
-termRegex [[:alnum:]\._]+
-searchPriority 8
+termRegex [[:alnum:]]*-?[[:alnum:]\._:]+
+searchPriority 11
 
 searchTable ensGene
 searchType genePred

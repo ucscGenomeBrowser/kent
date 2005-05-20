@@ -298,7 +298,7 @@ searchPriority 10
 searchTable rhMap
 searchMethod prefix
 searchType psl
-termRegex [[:alnum:]\._]+
+termRegex [[:alnum:]]*-?[[:alnum:]\._:]+
 searchPriority 11
 
 searchTable uniGene_dr
