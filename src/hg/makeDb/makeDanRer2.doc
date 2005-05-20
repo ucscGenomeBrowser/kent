@@ -2220,6 +2220,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
           /cluster/data/danRer2/bed/blastz.tetNig1
     cd /cluster/data/danRer2/bed/blastz.tetNig1
 # use tetraodon sequence in contigs for dynamic masking - see below
+# for dynamic masking: M=50
 cat << '_EOF_' > DEF
 # zebrafish (danRer2) vs. tetraodon (tetNig1)
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
@@ -2539,7 +2540,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # refGene:cds 0.468%, netTetNig1 19.068%, both 0.410%, cover 87.50%, 
 # enrich 4.59x
 
-# BACENDS (in progress, 2004-12-16, hartera)
+# BACENDS (DONE, 2005-05-20, hartera)
 # provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
@@ -2597,7 +2598,8 @@ axtChain $1 /iscratch/i/danRer2/nib \
     # took 9 hours
     # With minCover=0.4, 78% of seqeunces are aligned
     # No minCover, aligns 90% of sequences but with a large number
-    # of extra alignments - a lot of noise even compared to using minCover of 0.05.
+    # of extra alignments - a lot of noise even compared to using minCover of 
+    # 0.05.
     # Total BAC ends sequences: 594614
     # minCover minAli  	#alignments  #sequences aligned %total sequences aligned
     #   0	0.85	13969946     535465		90
@@ -2609,21 +2611,39 @@ axtChain $1 /iscratch/i/danRer2/nib \
     #   0.10	0.95	4264695      498380 		84
     #   0.20	0.85	4515869	     501415		84
     #   0.40	0.85	3806487	     464067		78
-    # Using minCover of 0.10 seems good, there are 55017 extra BAC ends being aligned
-    # with an extra 1292227 alignments compared to 0.10, this is an average of 23.5 
-    # alignments per sequence compared to 8 alignments per sequence on average for 
-    # minCover of 0.40.
-    # Using minAli of 0.90 for minCover 0.10 gives 468 less sequences aligned and
-    # 2509 less alignments. Using 0.75 for minCover, increases the alignments by
-    # about 1100 compared to using 0.85 and sequences aligned only increased by about 150.
-    # Using minAli of 0.95 for minCover of 0.10 gives 834,019 less alignments with
-    # 20704 less sequences being aligned than for using minAli of 0.85.
-    # for minAli=0.92 and minCover=0.10, there are 114,544 less alignments than for
-    # minAli=0.85 and 4060 less sequences are aligned.
-    # try minAli=0.85 and minCover=0.40 and also minAli=0.92 and minCover=0.10 and compare. 
+    # Using minCover of 0.10 seems good, there are 55017 extra BAC ends 
+    # being aligned with an extra 1292227 alignments compared to 0.10, this 
+    # is an average of 23.5 alignments per sequence compared to 8 alignments 
+    # per sequence on average for minCover of 0.40.
+    # Using minAli of 0.90 for minCover 0.10 gives 468 less sequences 
+    # aligned and 2509 less alignments. Using 0.75 for minCover, increases 
+    # the number of alignments by about 1100 compared to using 0.85 and 
+    # sequences aligned only increased by about 150. Using minAli of 0.95 
+    # for minCover of 0.10 gives 834,019 less alignments with 20704 less 
+    # sequences being aligned than for using minAli of 0.85.
+    # for minAli=0.92 and minCover=0.10, there are 114,544 less alignments 
+    # than for minAli=0.85 and 4060 less sequences are aligned.
+    # try minAli=0.85 and minCover=0.40 and also minAli=0.92 and 
+    # minCover=0.10 and compare. More alignments are gained - see below
+    # but minCover=0.10 means there are a lot of alignments where < 40% of the
+    # BAC end aligns and this does not seem reliable so stick to minCover=0.4 
+# Stats for minCover=0.10, minAli=0.92:
+# Pairs: there are 205360 orphans and 97458 pairs, 1014 long, 19738 mismatch 
+# and 239 slop
+# Singles: 17829 bacEnds.orphan and 205360 from pair analysis so a total of 
+# 223189 orphans 7828 more than for danRer1 and more than for using 
+# minCover=0.40 and minAli=0.85.
+# for minCov=0.10, minAli=0.92:
+# 90450 pairs.txt
+# 69699 pairs.txt.uniq - about 4500 more than for minCover=0.40 and minAli=0.85
+# 202661 singles.txt
+# 178337 singles.txt.uniq - about 5399 more than for minCover=0.40,minAli=0.85
+
+    # Below, used same parameters as for danRer1: minCover=0.40 and minAli= 0.85
+    # all files below and tables are derived from the alignments using
+    # these parameters for pslReps filtering.
     # location of store8 has changed to kkstore01 instead of kksilo so now 
     # login there (2005-04-28)
-# USE ORIGINAL, minCover=0.4, minAli=0.85
     ssh kkstore01 
     cd /cluster/data/danRer2/bed/ZonLab/bacends
     nice pslReps -nearTop=0.02 -minCover=0.40 -minAli=0.85 -noIntrons raw.psl \
@@ -2633,21 +2653,19 @@ axtChain $1 /iscratch/i/danRer2/nib \
     # Got 299 lifts in /cluster/data/danRer2/jkStuff/liftAll.lft
     wc -l bacEnds.lifted.psl
     # 3806457 bacEnds.lifted.psl
-    # 4984175 bacEndsMinCov10MinAli92.lifted.psl
+    # 4984175 (for minCov=0.10, minAli=0.92)
     rm -r temp
     pslCheck bacEnds.lifted.psl >& pslCheck.log
     # 536 problems with overlapping exons reported by pslCheck
-    # 398 problems with overlapping exons reported by pslCheck for bacEndsMinCov10MinAli92.lifted.psl
 
     awk '{print $10;}' bacEnds.lifted.psl | sort | uniq > bacEnds.names.uniq
     # edit to remove header lines    
     
     wc -l bacEnds.names.uniq
     # 464067 bacEnds.names.uniq
-    # 515024 bacEndsMinCov10MinAli92.names.uniq
     grep '>' bacends.fa | wc -l
     # 594614 bacends.fa
-    # 78% of BAC ends have aligned, 87% aligned with MinCov10MinAli92
+    # 78% of BAC ends have aligned
     
 # Need to add accession information and BAC end sequence pairs
     mkdir -p /cluster/data/danRer2/bed/ZonLab/bacends/bacends.1
@@ -2730,7 +2748,6 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     #  594614 direction.txt
     wc -l bacEndAccs.aliases
     # 47558 bacEndAccs.aliases
-# same numbers for minCover10 minAli92 
     # bacEndAccs.aliases contains sequence read names and their
     # Genbank accessions.  
     # checked that all names from allBacEnds.names appear in either
@@ -2741,7 +2758,6 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     cd /cluster/data/danRer2/bed/ZonLab/bacends/pairs
     set bacDir = /cluster/data/danRer2/bed/ZonLab/bacends/bacends.1
     # these bacEnds vary in size from around 2800 bp to 626,000 bp
-    # do this for minCover=0.10 and minAli=0.92, in minCov.. dirs
     ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=2000 \
      -max=650000 -slopval=10000 -hardMax=800000 -slop -short -long -orphan \
      -mismatch -verbose ../bacEnds.lifted.psl $bacDir/bacEndPairs.txt \
@@ -2749,24 +2765,12 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
      wc -l bacEnds.*
 
      # There are 1411 more orphans and 18147 more pairs than for danRer1
-     # for minCover=0.4, minAli=0.85:
      #  980 bacEnds.long
      #  18083 bacEnds.mismatch
      #  201646 bacEnds.orphan
      #  90967 bacEnds.pairs
      #  0 bacEnds.short
      #  190 bacEnds.slop
-
-     # for minCover=0.10, minAli=0.92, theare are 205360 orphans and 97458 pairs
-     # minCover=0.10, minAli=0.92:
-     # 1014 bacEnds.long
-     # 4984175 bacEndsMinCov10MinAli92.lifted.psl
-     # 19738 bacEnds.mismatch
-     # 205360 bacEnds.orphan
-     # 97458 bacEnds.pairs
-     #   0 bacEnds.short
-     # 239 bacEnds.slop
-# NOTE: everything in pairs dir is now for cov10Ali92
 
     # create header required by "rdb" tools
     ssh hgwdev
@@ -2805,14 +2809,9 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     # 0 bacEnds.slop
     # there are 15853 orphans here ( 14126 in danRer1) 201646 from 
     # pair analysis so a total of 217499 orphans (2138 more than danRer1)
-# FOR minCov=0.10, minali=0.92,  17829 bacEnds.orphan and 205360 from
-    # pair analysis so a total of 223189 orphans 7828 more than for danRer1
-# NOTE: In singles dir, files are now for minCov40minAli85
     cat bacEnds.orphan ../pairs/bacEnds.orphan > bacEnds.singles
     wc -l bacEnds.singles
     # 217499 bacEnds.singles
-    # 223189 bacEnds.singles (minCov=0.10, minAli=0.92)
-# NOW USING MINCOV40MINALI85 FOR EVERYTHING BELOW:
     # make singles bed file
     cat ../header bacEnds.singles | row score ge 300 | sorttbl chr start \
                   | headchg -del > bacEndSingles.bed
@@ -2842,13 +2841,11 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
    
     # load all alignments into temporary database
     ssh hgwdev
-# just for minCov40minAli85:
     echo "create database bacsDr2_rah;" | hgsql danRer2
     cd /cluster/data/danRer2/bed/ZonLab/bacends/pairs
     hgLoadBed bacsDr2_rah bacEndPairs bacEndPairs.bed \
                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
     # Loaded 84405 elements of size 11
-    # Loaded 90450 elements of size 11 (minCov10minAli92)
     # Loaded 72272 elements of size 11 (danRer1)
     # create a bacEndSingles table like bacEndPairs if not created already
     cp $HOME/kent/src/hg/lib/bacEndPairs.sql ../singles/bacEndSingles.sql
@@ -2861,7 +2858,6 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     hgLoadBed bacsDr2_rah bacEndSingles bacEndSingles.bed \
                  -sqlTable=../singles/bacEndSingles.sql
     # Loaded 196492 elements of size 11
-    # Loaded 202661 elements of size 11 (minCov10minAli92) 
     # Loaded 203683 elements of size 11 (danRer1)
     # load all_bacends later
 
@@ -2887,9 +2883,6 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     # 72272 pairs.txt
     # 53992 pairs.txt.uniq
 
-    # for minCov10minAli92:
-    # 90450 pairs.txt
-    # 69699 pairs.txt.uniq
     # for replicate rows, find all the unique lfNames and put these
     # in one row with the relevant lfStarts, lfSizes and correct lfCount
     cp \
@@ -2907,10 +2900,6 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     # 196492 singles.txt
     # 173025 singles.txt.uniq
     
-    # minCov10minAli92  
-    # 202661 singles.txt
-    # 178337 singles.txt.uniq
-
     # 203683 singles.txt (danRer1)
     # 179170 singles.txt.uniq (danRer1)
     
@@ -2925,12 +2914,6 @@ if ($l =~ /^[t1_]*[z|Z|b|d][C|K|Z]p?[0-9]+\-?[a-zA-Z]+[0-9]+\.?([A-Z0-9a-z]+)/)
     # 18544 badPairs.txt
     # 13803 badPairs.txt.uniq
 
-    # for minCov10Ali92:
-    # 206401 badPairs.txt
-    # 180325 badPairs.txt.uniq
-
-    # 203709 badPairs.txt
-    # 178304 badPairs.txt.uniq
     nice perl removeReplicates.pl badPairs.txt.uniq bacEndPairsBad bacsDr2_rah \
          > badPairsNoReps.bed
     # sort by chrom, chromStart - done already
@@ -3132,6 +3115,202 @@ close BACS;
     hgsql danRer2 < $HOME/kent/src/hg/lib/bacEndAlias.sql
     echo "load data local infile 'bacEndAccs.aliases.intables' into table \
          bacEndAlias" | hgsql danRer2
+    # clonemarkers.02.12.04.txt, ctgnames.02.12.04.txt and markers.02.12.04.txt
+    # already downloaded from Sanger for danRer1 (see makeDanRer1.doc)
+    ssh kkstore01
+    mkdir -p /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    set dr1=/cluster/data/danRer1/bed/ZonLab/bacends/cloneandStsAliases
+    set dr2=/cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    ln -s $dr1/clonemarkers.02.12.04.txt $dr2
+    ln -s $dr1/ctgnames.02.12.04.txt $dr2
+    ln -s $dr1/markers.02.12.04.txt $dr2
+    ln -s $dr1/zfish_accs.txt $dr2
+
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    hgsql -N -e 'select name from bacEndPairs;' danRer2 > bacEnds.names
+    hgsql -N -e 'select name from bacEndSingles;' danRer2 >> bacEnds.names
+    hgsql -N -e 'select name from bacEndPairsBad;' danRer2 >> bacEnds.names
+    sort bacEnds.names | uniq > bacEnds.names.uniq
+    # 173188 bacEnds.names.uniq
+    # 594614 bacEnd sequences to start with 
+    # some of the bacEnd sequences are replicates so count lfNames from table
+    hgsql -N -e 'select lfNames from bacEndPairs;' danRer2 > bacEnds.lfNames
+    hgsql -N -e 'select lfNames from bacEndSingles;' danRer2 >> bacEnds.lfNames
+    hgsql -N -e 'select lfNames from bacEndPairsBad;' danRer2 >> bacEnds.lfNames
+    perl -pi.bak -e 's/,/\n/g' bacEnds.lfNames
+    sort bacEnds.lfNames | uniq > bacEnds.lfNames.uniq
+    # 303946 bacEnds.lfNames.uniq
+    # pslCheck has 536 bad alignments
+    # from psl file
+    awk '{print $10;}' ../bacEnds.psl > bacEndsPsl.names
+    # edit to remove first few lines with no names
+    sort bacEndsPsl.names | uniq > bacEndsPsl.names.uniq
+    # 464067 bacEndsPsl.names.uniq
+    # about 78% align - after filtering
+    # Add an alias table for BAC clones 
+    # bacCloneAlias.sql is in $HOME/kent/src/hg/lib - see makeDanRer1.doc
+    # Add a xref table to give external clone registry names, internal names
+    # sanger name, relationship between STS and BAC clone (method of finding
+    # STS), UniSTS ID, chromosomes(s) to which BAC clone is mapped by BLAT, 
+    # Genbank accession and STS primer sequences
+    # bacCloneXRef.sql is in $HOME/kent/src/hg/lib - see makeDanRer1.doc
+    
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    wc -l *.02.12.04.txt
+    28305 clonemarkers.02.12.04.txt
+   167441 ctgnames.02.12.04.txt
+   12008 markers.02.12.04.txt
+   
+    # create list of BAC clones in the tables with chromosome aligned to
+    hgsql -N -e 'select name, chrom from bacEndPairs;' danRer2 \
+          > bacClones.namesandchrom
+    hgsql -N -e 'select name, chrom from bacEndSingles;' danRer2 \
+          >> bacClones.namesandchrom
+    sort bacClones.namesandchrom | uniq > bacClones.namesandchrom.uniq
+    # use zfish_accs.txt provided by the Sanger Centre to create a list
+    # of BAC clone names, internal names and Genbank accessions
+    ssh kkstore01
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    # get list of UniSTS IDs using aliases to search alias file
+    # print Sanger name, alias and UniSTS ID, use print_markers2.pl
+    # modified version of program written by Tony DiBiase (Boston 
+    # Children's Hospital)
+    cat << '_EOF_' > find_markers2.pl
+    # example:
+# cat markers.02.12.04.txt | perl find_markers.pl
+use strict;
+my $verbose = 0;
+my ($a, $b, $f, $l, $m, $s, $t, $aliases, @alias, @rest);
+while (<>) {
+    ($f, $l, $t, $m) = 0;
+    chomp; ($a, $b, $aliases, @rest) = split /\|/;
+    if ($verbose > 3) { printf "aliases $aliases \n"; }
+    @alias = split /;/, $aliases;
+    ALIAS: foreach $s (@alias) {
+        $_ = $s;
+        if (/[\D]+/) {
+            if ($verbose > 5) { printf "this $s \n"; }
+            $m = `grep $s /cluster/data/ncbi/UniSTS.2005-04-12/danRer/UniSTS_Danio_rerio.alias`;
+            if ($m) {
+                $f = 1; $t = $s; $l = $m;
+                if ($verbose) { printf "this $s found $m \n"; }
+                last ALIAS;
+            }
+        }
+    }
+    if ($f) { printf "$b\t$t\t$l"; }
+}
+'_EOF_'
+    chmod +x find_markers2.pl
+    cat markers.02.12.04.txt | perl find_markers2.pl > out
+    awk 'BEGIN {OFS = "\t"} {print $1, $3}' out > sangerandUniSTSId.txt
+    # then reformat output as some sanger names are semicolon separated
+    # and sometimes a UniSTS ID appears on another line but is another ID 
+    # for the last line with a sanger name on it
+cat << '_EOF_' > formatUniSTS.pl
+#!/usr/bin/perl -w
+use strict;
+
+my @ids;
+while (<STDIN>)
+{
+my $l = $_;
+my @fields = split(/\t/, $l);
+
+# if the first field is a sanger STS name
+if ($fields[0] =~ /^((et|st)ID[0-9]{1,}\.?[0-9]{1,})/)
+   {
+   # first field may have more than one ID in it separated by semicolons
+   @ids = split(/;/, $fields[0]);
+   foreach my $i (@ids)
+      {
+      print "$i\t$fields[1]";
+      }
+   }
+if ($fields[0] =~ /^[0-9]+/)
+   {
+   foreach my $s (@ids)
+      {
+      print "$s\t$fields[0]\n";
+      }
+   }
+}
+'_EOF_'
+    chmod +x formatUniSTS.pl
+    perl formatUniSTS.pl < sangerandUniSTSId.txt > sangerandUniSTSId.format
+    # FPC contig information (i.e. FPC contig number) from ctgnames file is 
+    # not included in the tables as these are dynamic and constantly 
+    # changing with the assembly.
+    # Received a new version of the zfish_accs.txt file:
+    # zfish_accs050605.txt (from Mario Caccamo at Sanger), move this to 
+    # /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    awk 'BEGIN {OFS="\t"} {print $1, $2}' zfish_accs.txt | sort \
+        > zfishOld.accs.sort
+    awk 'BEGIN {OFS="\t"} {print $1, $2}' zfish_accs050605.txt \  
+        | sort > zfishNew.accs.sort
+    comm -13 zfishOld.accs.sort zfishNew.accs.sort > zfishNewAccs.only
+    comm -23 zfishOld.accs.sort zfishNew.accs.sort > zfishOldAccs.only
+    # 1974 zfishNewAccs.only
+    # 303 zfishOldAccs.only
+    # this has 1974 new BAC clone and accessions pairs and 303 of the previous 
+    # BAC internal name and accession pairs are missing compared to 
+    # zfish_accs.txt
+    awk '{print $1};' zfishOldAccs.only | sort > zfishOld.namesonly.sort
+    awk '{print $1};' zfishNewAccs.only | sort > zfishNew.namesonly.sort
+    # also uniq and check no name has more than one accession - each BAC
+    # name only appears once in the file
+    comm -12 zfishOld.namesonly.sort zfishNew.namesonly.sort \
+         > accs.OldandNew.common
+    wc -l accs.OldandNew.common
+    # 24 accs.OldandNew.common
+    # therefore 24 BAC names have new accessions in the new file
+    # zfishBacCloneandSts.c only reads the first two fields of each line
+    # in the zfish_accs.txt file so create a new file with just these 2 fields.
+    # Take the 303 BAC clones and accessions from zfish_accs.txt that are 
+    # not in zfish_accs050605.txt and add to 9000 accs in zfishNew.accs.sort 
+    cat zfishNew.accs.sort zfishOldAccs.only > zfish_accsMerged.txt
+    # 9303 zfish_accsMerged.txt - BAC clone internal names and accessions
+       
+    # use zfishBacClonesandSts to create tab files for loading into
+    # bacCloneAlias and bacCloneXRef tables
+    mkdir -p /cluster/bluearc/danRer2/bacEnds/out
+    # added code so that output directory now must be specified 
+    nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.02.12.04.txt \
+      clonemarkers.02.12.04.txt markers.02.12.04.txt \
+      bacClones.namesandchrom.uniq zfish_accsMerged.txt \
+      sangerandUniSTSId.format \
+      /cluster/bluearc/danRer2/bacEnds/out > zfishBacs.out
+
+    # output is in /cluster/bluearc/danRer2/bacends/out so copy over
+    # sort alias tab file by sangerName
+    sort -k2 /cluster/bluearc/danRer2/bacEnds/out/bacAlias.tab \
+         > bacAlias.sort.tab
+    cp /cluster/bluearc/danRer2/bacEnds/out/bacXRef.tab .
+    wc -l *.tab
+    #  83465 bacAlias.sort.tab
+    # 233418 bacXRef.tab
+ 
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    hgsql danRer2 -e 'drop table bacCloneXRef'
+    hgsql danRer2 -e 'drop table bacCloneAlias'
+
+    hgsql danRer2 < $HOME/kent/src/hg/lib/bacCloneAlias.sql
+    hgsql danRer2 < $HOME/kent/src/hg/lib/bacCloneXRef.sql
+    nice hgsql danRer2 -e \
+          'load data local infile "bacAlias.sort.tab" into table bacCloneAlias'
+    nice hgsql danRer2 -e \
+          'load data local infile "bacXRef.tab" into table bacCloneXRef'
+    cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer2
+# edit trackDb.ra to add bacEnds tracks and searches for the bacEndPairs
+# and bacEndSingles tracks as for danRer1. copy over html from danRer1 
+# for bacEndPairs and bacEndSingles tracks. Edit to include description 
+# of filtering alignments so that there is only one pair of sequence reads 
+# for each BAC pair and only one sequence read for each BAC single alignment.
+
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
     cd /tmp
@@ -3829,7 +4008,7 @@ cat > split.csh << 'EOF'
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
-# 6-WAY VAR_MULTIZ ALIGNMENTS (in progress, 2005-05-13, hartera)
+# 6-WAY VAR_MULTIZ ALIGNMENTS (DONE, 2005-05-20, hartera)
 # zebrafish(danRer2), human (hg17), mouse(mm6), opossum(monDom1), 
 # fugu(fr1) and tetraodon(tetNig1)
     ssh kkstore01
@@ -3845,12 +4024,28 @@ cat > split.csh << 'EOF'
    
     set dir=/cluster/data/danRer2/bed
     set dirMonDom=/cluster/data/monDom1/bed
-    ln -s $dir/blastz.hg17.swap/mafNet/*.maf.gz ./mafLinks/hg17
+    # need to make all the links so that they are just chrN.maf.gz 
+    # without the species db in the middle e.g. chrN.hg17.maf.gz
     ln -s $dir/blastz.mm6.swap/mafNet/*.maf.gz ./mafLinks/mm6
-    ln -s $dirMonDom/blastz.monDom1.to.danRer2/mafNet/*.maf.gz \
-          ./mafLinks/monDom1
-    ln -s $dir/blastz.fr1/mafNet/*.maf.gz ./mafLinks/fr1
-    ln -s $dir/blastz.tetNig1/mafNet/*.maf.gz ./mafLinks/tetNig1
+    echo "$dir/blastz.hg17.swap" > dir.lst
+    echo "$dirMonDom/blastz.monDom1.to.danRer2" >> dir.lst
+    echo "$dir/blastz.fr1" >> dir.lst
+    echo "$dir/blastz.tetNig1" >> dir.lst
+
+    foreach d (`cat dir.lst`)
+      foreach m ($d/mafNet/*.maf.gz)
+         foreach c (`cat /cluster/data/danRer2/chrom.lst`)
+            foreach sp (hg17 monDom1 fr1 tetNig1)
+               set maf = ${d}/mafNet/chr${c}.${sp}.maf.gz
+               if ($m == $maf) then
+                  set s = $sp
+                  echo $s
+               endif
+            end     
+            ln -s $d/mafNet/chr${c}.${s}.maf.gz ./mafLinks/$s/chr${c}.maf.gz
+         end
+      end
+    end
      
     # Copy MAFS to Iservers for kluster run
     ssh kkr1u00
@@ -3956,4 +4151,125 @@ cat > oneMultiz.csh << 'EOF'
     cd /iscratch/i/danRer2/multiz6way/penn
     cp -p /cluster/data/danRer2/bed/multiz6way/run/oneMultiz.csh .
     /cluster/bin/iSync
+    #   back to run the job
+    ssh kki
+    cd /cluster/data/danRer2/bed/multiz6way/run
+    
+    #   This tree.nh was used in the distant past for early versions
+    #   of phastCons.  Now, this is merely a convenient reference to the
+    #   tree under construction.  This is also used to draw a graphic
+    #   tree as species.nh, see below.
+    cat << '_EOF_' > tree.nh
+((tetNig1,fr1),((mm6,hg17),monDom1))
+'_EOF_'
+    # << this line keeps emacs coloring happy
 
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    # multiple alignment steps:
+set c = $1
+/iscratch/i/danRer2/multiz6way/penn/oneMultiz.csh $c hg17 mm6  0
+/iscratch/i/danRer2/multiz6way/penn/oneMultiz.csh $c monDom1 hg17mm6  0
+/iscratch/i/danRer2/multiz6way/penn/oneMultiz.csh $c tetNig1 fr1  1
+/iscratch/i/danRer2/multiz6way/penn/oneMultiz.csh $c tetNig1fr1 monDom1hg17mm6  1
+# get final alignment file
+/iscratch/i/danRer2/multiz6way/penn/oneMultiz.csh $c tetNig1fr1monDom1hg17mm6 /cluster/data/danRer2/bed/multiz6way/maf/$c.maf
+#cleanup
+/iscratch/i/danRer2/multiz6way/penn/oneMultiz.csh $c
+'EOF'
+# << keep emacs coloring happy
+    chmod +x allMultiz.csh
+
+cat  << 'EOF' > template
+#LOOP
+./allMultiz.csh $(root1) {check out line+ /cluster/data/danRer2/bed/multiz6way/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    cd /cluster/data/danRer2/bed/multiz6way/run
+    awk '{print $1}' ../../../chrom.sizes > chrom.lst
+    
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try; para check
+    para push
+# para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       5903s      98.39m     1.64h    0.07d  0.000 y
+# IO & Wait Time:                   227s       3.78m     0.06h    0.00d  0.000 y
+# Average job time:                 219s       3.65m     0.06h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1328s      22.13m     0.37h    0.02d
+# Submission to last job:          2098s      34.97m     0.58h    0.02d
+
+    # do not filter mafs as only removes a small fraction of alignments
+    # better to keep them all. check for single column alignments (these
+    # just have a single base for each species in the alignment), if 
+    # present need to do glueing step. 
+    ssh hgwdev
+    # create tab file for chr1.maf
+    cd /cluster/data/danRer2/bed/multiz6way
+    hgLoadMaf danRer2 multiz6way -test=./maf/chr1.maf
+    awk 'BEGIN {OFS="\t"} {print $2, $3, $4, $5, $6, $4-$3;}' \
+        multiz6way.tab > chr1.tab.lengths
+    sort -n -k6 chr1.tab.lengths > chr1.tab.lengths.sort
+    # chr1 - 10 single column alignments
+    # also looked at chrUn - 14 single column alignments 
+    # there are also a small number of 2,3,4 column alignments.
+    # This is ok as it is such a small number.
+    # use mafAddIRows to 'chain' the alignments 
+    ssh kkstore01
+    cd /cluster/data/danRer2/bed/multiz6way
+    mkdir mafAddIRows
+    foreach m (./maf/*.maf)
+       set n=$m:t
+       echo "Processing $n ..."
+       mafAddIRows $m /cluster/data/danRer2/danRer2.2bit ./mafAddIRows/$n
+    end
+    # cat maf files into one file for those alignments without iRows, 
+    # do not use alignments with iRows in browser at the moment
+
+    catDir maf > multiz6way.maf
+    # 978 Mb of data
+    # -rw-rw-r--  1 hartera protein 977796776 May 20 12:06 multiz6way.maf
+    # Load into database  
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    mkdir /gbdb/danRer2/multiz6way
+    ln -s /cluster/data/danRer2/bed/multiz6way/multiz6way.maf \
+        /gbdb/danRer2/multiz6way
+    hgLoadMaf danRer2 multiz6way
+    # Loaded 1230321 mafs in 1 files from /gbdb/danRer2/multiz6way
+    # took about 2 minutes to load
+    hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 danRer2 \
+        multiz6waySummary multiz6way.maf
+    # Processed 2565228 components in 1230321 mafs from multiz6way.maf
+    # took about 2 minutes to load
+    # create tree image - like tree.nh but with common names:
+    cat << '_EOF_' > species.nh
+((tetraodon,fugu),((mouse,human),opossum))
+'_EOF_'
+    /cluster/bin/phast/draw_tree -b -s species.nh > species6.ps
+    # used GIMP to reduce the amount of whitespace to make it
+    # smaller, then save as jpg
+    cp species6.jpg /usr/local/apache/htdocs/images/phylo/DanRer2_6way.jpg
+
+    # add trackDb.ra entry
+# track multiz6way
+# shortLabel 6-Way Conservation
+# longLabel 6-Way Vertebrate Multiz Alignment & Conservation
+# group compGeno
+# priority 109
+# visibility hide
+# color 0, 10, 100
+# altColor 0,90,10
+# type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+# #wiggle phastCons6way
+# yLineOnOff Off
+# autoScaleDefault Off
+# summary multiz6waySummary
+# speciesGroups mammal vertebrate
+# sGroup_mammal hg17 mm6 monDom1
+# sGroup_vertebrate fr1 tetNig1
+# treeImage phylo/DanRer2_6way.jpg
