@@ -30,10 +30,17 @@ exit
 
 
 # UVA DNA REPLICATION TEMPORAL PROFILING (2004-10-22 kate)
-    # Dutta lab (Univ. Virginia) replication data (2004-10-22 kate)
+    # Updated with new data 2005-05-17 kate
+    # Dutta lab (Univ. Virginia) replication data
     #       Submitted as custom track, coords on hg15
 
     cd /cluster/data/encode/UVa
+    mkdir 2004-10-22
+    ln -s 2004-10-22 
+    cd latest
+    mkdir -p lab
+    cd lab
+    # download data
     # data (was MS-WORD)
     dos2unix lab/Dutta_Rep_profile.txt
     # documentation (ditto)
@@ -82,6 +89,37 @@ exit
     wc -l regions
      # 43 regions (1 missing)
     hgsql  hg16 -N -s -e "SELECT name from encodeRegions" | sort | diff - regions 
+
+    # UPDATED 2005-05-17 WITH NEW DATA
+    mkdir -p 2005-05-17
+    ln -s 2005-05-17 latest
+    cd latest
+    mkdir -p lab
+    cd lab
+    # symlink to nicer names
+    ln -s encode0to2vs0to10AunionD_interval_pval_43.bed repl.0
+    ln -s encode2to4vs0to10AunionD_interval_pval_43.bed repl.2
+    ln -s encode4to6vs0to10AunionD_interval_pval_43.bed repl.4
+    ln -s encode6to8vs0to10AunionD_interval_pval_43.bed repl.6
+    ln -s encode8to10vs0to10AunionD_interval_pval_43.bed repl.8
+    wc -l repl.*
+    # 232 repl.0
+    # 493 repl.2
+    # 295 repl.4
+    # 528 repl.6
+    # 425 repl.8
+    # 1973 total
+
+    foreach F (lab/repl.?)
+        set f = $F:t
+        echo $f
+        liftOver $f /cluster/data/hg15/bed/liftOver/hg15ToHg16.over.chain \
+                    $f.hg16.bed $f.unmapped
+        set time = `echo $f:e`
+        hgLoadBed -noBin hg16 encodeUvaDnaRep$time $f.hg16.bed
+        csh /cluster/data/encode/UVa/2004-10-22/checkEncodeTable.csh encodeUvaDnaRep_$time > $time.ct
+    end
+    
 
 
 # UCSD CHIP/CHIP (2004-09-30 kate)
@@ -329,29 +367,46 @@ cat > load.csh << 'EOF'
     # copy file from email:  BED.tar.gz
     #tar xvfz BED.tar.gz
 
-    mkdir -p 2005-04-29
-    ln -s 2005-04-29/latest
+    #mkdir -p 2005-04-29
+    #ln -s 2005-04-29/latest
+    mkdir -p 2005-05-04
+    ln -s 2005-05-04 latest
     cd latest
-    # save file from email:  BED.BUApr29.tar.gz
-    tar xvfz BED.BUApr29.tar.gz
+    # save file from email
+    tar xvfz BED.BUMay4.tar.gz
 
     cd BED
     cp rcPCREncodeDataDescription.html ~/kent/src/hg/makeDb/trackDb/human/hg16/encodeBuFirstExon.html
     # checkin description file and edit
     cd ..
 
+    # adjust chromStart
+    cat > lowerStart.awk << 'EOF'
+        {printf ("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%s\n",
+                    $1, $2-1, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);}
+'EOF'
     # rearrange data colums to be BED 13, add RGB values to "reserved" field
     # based on score
-    makeColoredBed < BED/cerebralcortex.bed > encodeBuFirstExonCerebrum.bed
-    makeColoredBed < BED/colon.bed > encodeBuFirstExonColon.bed
-    makeColoredBed < BED/heart.bed > encodeBuFirstExonHeart.bed
-    makeColoredBed < BED/kidney.bed > encodeBuFirstExonKidney.bed
-    makeColoredBed < BED/liver.bed > encodeBuFirstExonLiver.bed
-    makeColoredBed < BED/lung.bed > encodeBuFirstExonLung.bed
-    makeColoredBed < BED/skeletalmuscle.bed > encodeBuFirstExonSkMuscle.bed
-    makeColoredBed < BED/spleen.bed > encodeBuFirstExonSpleen.bed
-    makeColoredBed < BED/stomach.bed > encodeBuFirstExonStomach.bed
-    makeColoredBed < BED/testis.bed > encodeBuFirstExonTestis.bed
+    makeColoredBed < BED/cerebralcortex.bed | \
+                        awk -f lowerStart.awk > encodeBuFirstExonCerebrum.bed
+    makeColoredBed < BED/colon.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonColon.bed
+    makeColoredBed < BED/heart.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonHeart.bed
+    makeColoredBed < BED/kidney.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonKidney.bed
+    makeColoredBed < BED/liver.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonLiver.bed
+    makeColoredBed < BED/lung.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonLung.bed
+    makeColoredBed < BED/skeletalmuscle.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonSkMuscle.bed
+    makeColoredBed < BED/spleen.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonSpleen.bed
+    makeColoredBed < BED/stomach.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonStomach.bed
+    makeColoredBed < BED/testis.bed  | \
+                        awk -f lowerStart.awk > encodeBuFirstExonTestis.bed
 
     # take a look at data distribution (previous was skewed toward 0)
     awk '{print $5}' *.bed | sort -n > scores.txt
@@ -378,7 +433,12 @@ cat > load.csh << 'EOF'
 'EOF'
 
     csh load.csh >&! load.log
-    #NOTE: 1 warning loading Spleen file -- check this out
+
+    # generate list of chromosomes with data for trackDb entry
+    foreach f (Cerebrum Colon Heart Kidney Liver Lung SkMuscle Spleen Stomach Testis)
+        /cluster/data/encode/scripts//showChromList.csh hg16 encodeBuFirstExon$f
+    end
+        #chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 
 
 # GENCODE Sanger Havana annotations (hiram)
