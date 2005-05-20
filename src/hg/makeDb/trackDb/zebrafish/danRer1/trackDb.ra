@@ -257,6 +257,24 @@ searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
+searchName bacPairsIntName
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,intName from %s where intName like '%s'  
+termRegex (zC|zK|bZ|dZ|bY)[[:alnum:]]+
+searchPriority 8.5
+
+searchName bacSinglesIntName
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,intName from %s where intName like '%s'  
+termRegex (zC|zK|bZ|dZ|bY)[[:alnum:]]+
+searchPriority 8.5
+
 searchName bacPairsAliases
 searchTable bacEndPairs
 searchMethod exact
