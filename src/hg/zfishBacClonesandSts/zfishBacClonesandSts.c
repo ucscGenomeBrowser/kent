@@ -1,19 +1,20 @@
 /*
   File: zfishBacClonesandSts.c
   Author: Rachel Harte
-  Date: 4/25/2005
+  Date: 5/20/2005
   Description: Using a the list of names of zebrafish BAC clones that are in 
   the database tables for the BAC ends track, add information including 
   internal Sanger name, alternate name (alias), UniSTS ID, and accession. 
   FPC contig is not used for the tables as these are dynamic as the assembly 
-  changes. The program assumes that all BAC clones in the markers file are also   
-  in the clonemarkers file. There are more Sanger STS marker names in the
+  changes. The program assumes that all BAC clones in the markers file are 
+  also in the clonemarkers file. There are more Sanger STS marker names in the
   clonemarkers file than appear in the markers file. There are also Sanger
   STS names that map to multiple BAC clones. In this case, etID9511.14 has
   35 BAC clones associated to it so there are 35 different external and 
   internal BAC name pairs that are associated with this Sanger STS name.
-  Each Sanger STS name may have more than one UniSTS ID, the maximum in this dataset
-  is three. These are printed out as a comma separated list in the bacXRef.tab file.
+  Each Sanger STS name may have more than one UniSTS ID, the maximum in 
+  this dataset is three. These are printed out as a comma separated list 
+  in the bacXRef.tab file.
 */
 
 #include "common.h"
@@ -226,7 +227,7 @@ while (lineFileChopCharNext(clf, sep, words, 5))
         }
     /* find empty slot in arrays to add external and internal names */
     posFound = FALSE;
-    for (i = 0; i < NUMCHROMS && (!posFound); i++)
+    for (i = 0; i < NUMALIASES && (!posFound); i++)
         {
         if (a->extName[i] == NULL)
             {
@@ -416,7 +417,7 @@ while (lineFileChopTab(usf, words))
         {
         if ((al = hashFindVal(aliasHash, sanger[j])) != NULL)
             {
-            /* add this UniSTS ID to the alias structure if this value is NULL */
+           /* add this UniSTS ID to the alias structure if this value is NULL */
             found = FALSE;
             for (i = 0; i < NUMSANGER && (!found); i++)
                 {
@@ -528,7 +529,7 @@ if (al != NULL)
         else
             fprintf(xRef, "\\N\t");
         fprintf(xRef, "%d\t", al->relation[j]);
-        /* go through array and print the UniSTS IDs in a comma separated list */
+       /* go through array and print the UniSTS IDs in a comma separated list */
         for (i = 0; i < NUMSANGER && (al->uniStsId[i] != NULL); i++)
             {
             fprintf(xRef, "%s,", al->uniStsId[i]);
@@ -562,7 +563,7 @@ struct bac *bac = NULL;
 struct alias *al = NULL, *alias = NULL;
 struct hashEl *aliasList = NULL, *aliasEl = NULL;
 struct sanger *s = NULL;
-int j, i, index = -1;
+int j, i = 0, index = -1;
 
 bacList = hashElListHash(bacHash);
 aliasList = hashElListHash(aliasHash);
@@ -576,11 +577,11 @@ if (bacList != NULL)
         /* get the sanger names struct for same BAC clone */
        if ((s = hashFindVal(sangerByExtNameHash, bac->extName)) != NULL)
             {
-            /* find alias struct for each sanger name and print out row of table */
+         /* find alias struct for each sanger name and print out row of table */
             for (j = 0; j < MAXSANGER && (s->sangerName[j] != NULL); j++)
                 {
                 al = hashFindVal(aliasHash, s->sangerName[j]);
-                /* find alias extName array index that corresponds to the extName */
+            /* find alias extName array index that corresponds to the extName */
                 for (i = 0; i < NUMALIASES && (al->extName[i] != NULL); i++)
                      {
                      if (sameString(bac->extName, al->extName[i]))
