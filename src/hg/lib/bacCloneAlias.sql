@@ -5,7 +5,7 @@
 
 #BAC clones associated STS aliases and Sanger STS names
 CREATE TABLE bacCloneAlias (
-    alias varchar(255) not null,	# BAC clone alias (internal Sanger FPC name) and STS aliases
+    alias varchar(255) not null,	# STS aliases associated with BAC clones
     sangerName varchar(255) not null,	# Sanger STS name
               #Indices
     INDEX(alias),
