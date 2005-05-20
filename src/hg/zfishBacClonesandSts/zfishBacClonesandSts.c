@@ -15,6 +15,13 @@
   Each Sanger STS name may have more than one UniSTS ID, the maximum in 
   this dataset is three. These are printed out as a comma separated list 
   in the bacXRef.tab file.
+  Output:
+  bacAlias.tab: aliases (STS aliases for STS associated with BAC clones) and
+  Sanger STS name.
+  bacXRef.tab: BAC clone external name, BAC clone internal (Sanger name), 
+  chromosomes to which BAC clone is mapped (in pairs or singles tables), 
+  Genbank accession for BAC clone, Sanger STS name, relationship (method of
+  finding STS), uniSTS ID(s) and primers for STS. 
 */
 
 #include "common.h"
@@ -456,15 +463,10 @@ if (aliasList != NULL)
         {
         al = (struct alias *)aliasEl->val;
         name = cloneString(aliasEl->name);
-        /* print out row for each internal and external name pair */
-        /* and for the sanger STS name and external BAC name */
-        for (j = 0; j < NUMALIASES && (al->intName[j] != NULL); j++) 
+        /* print out row for Sanger STS name and each alias */
+        for (i = 0; i < NUMALIASES && (al->aliases[i] != NULL); i++) 
             {
-            fprintf(alias, "%s\t%s\n", al->intName[j], al->sangerName);
-            for (i = 0; i < NUMALIASES && (al->aliases[i] != NULL); i++) 
-                {
-                fprintf(alias, "%s\t%s\n", al->aliases[i], al->sangerName);
-                }
+            fprintf(alias, "%s\t%s\n", al->aliases[i], al->sangerName);
             }
         fflush(alias);
         }
