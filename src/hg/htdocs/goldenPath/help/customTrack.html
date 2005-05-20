@@ -292,16 +292,16 @@ Genome Browser:</P>
 	Browser window, and also the label of the track control at the
 	bottom of the screen. The name can consist of up to 15
 	characters, and must be enclosed in quotes if the text contains
-	spaces. The default value is <I>User Track</I>.
+	spaces. The default value is &quot;User Track&quot;.
 	<LI><B>description=<<I>center_label</I>></B> - Defines the center label of the track
 	in the Genome Browser window. The description can consist of up
 	to 60 characters, and must be enclosed in quotes if the text contains
 	spaces. The default
-	value is <I>User Supplied Track</I>.
+	value is &quot;User Supplied Track&quot;.
 	<LI><B>visibility=<<I>display_mode</I>></B> - Defines the
 	initial display mode of the annotation track. Values for
 	<I>display_mode</I> include: 0 - hide, 1 - dense, 2 - full, 3 - pack, 
-	and 4 - squish. The default is 1.
+	and 4 - squish. The default is &quot;1&quot;.
 	<LI><B>color=<<I>RRR,GGG,BBB</I>></B> - Defines the main color
 	for the annotation track.  The track color consists of three comma-separated
 	RGB values from 0-255.  The default value is 0,0,0 (black).
@@ -314,12 +314,19 @@ Genome Browser:</P>
 	lines will be used to determine the level of shading in which 
 	the data is displayed. The track will display in shades of gray unless
 	the <I>color</I> attribute is set to 100,50,0 (shades of brown) or
-	0,60,120 (shades of blue). The default setting for <I>useScore</I> is 0.
-	<LI><B>priority=<<I>priority</I>></B> - Defines the display
-	position of the track relative to other tracks in the Genome
-	Browser window. 
+	0,60,120 (shades of blue). The default setting for <I>useScore</I> is &quot;0&quot;.
+	<LI><B>group=<<I>group</I>></B> - Defines the annotation track group
+	in which the custom track will display in the Genome Browser window.
+	By default, <em>group</em> is set to &quot;user&quot;, which causes
+	custom tracks to display at the top of the window.
+	<LI><B>priority=<<I>priority</I>></B> - When the <em>group</em>
+	attribute is set, defines the display position of the track relative 
+	to other tracks within the same group in the Genome Browser window. 
+	If <em>group</em> is not set, the <em>priority</em> attribute defines
+	the track's order relative to other custom tracks displayed in the 
+	default group, &quot;user&quot;.
 	<LI><B>offset=<<I>offset</I>></B> - Defines a number to be added
-	to all coordinates in the annotation track. The default is 0.
+	to all coordinates in the annotation track. The default is &quot;0&quot;.
 	<LI><B>url=<<I>external_url</I>></B> - Defines a URL for an
 	external link associated with this track. This URL will be used
 	in the details page for the track. Any '$$' in this string this will be substituted
