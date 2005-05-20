@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.960 2005/05/16 20:05:51 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.961 2005/05/20 22:46:57 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3331,7 +3331,7 @@ switch(colorMode)
 			if (startsWith("chr", row[0]) && ((colon = strchr(row[0], ':')) != NULL))
 			    {
 			    *colon = 0;
-			    col = getChromColor(row[0]+3, vg);
+			    col = getSeqColor(row[0], vg);
 			    }
 			}
 		    sqlFreeResult(&sr);
@@ -3343,11 +3343,11 @@ switch(colorMode)
 	    {
 	    if ((pos = strchr(acc, '.')) != NULL)
 		{
-		pos +=4;
+		pos += 1;
 		if ((colon = strchr(pos, ':')) != NULL)
 		    {
 		    *colon = 0;
-		    col = getChromColor(pos, vg);
+		    col = getSeqColor(pos, vg);
 		    }
 		}
 	    }
@@ -5105,63 +5105,93 @@ return color == chromColor[0];
 }
 
 Color getChromColor(char *name, struct vGfx *vg)
-/* Return color index corresponding to chromosome name. */
+/* Return color index corresponding to chromosome name (assumes that name 
+ * points to the first char after the "chr" prefix). */
 {
 int chromNum = 0;
 Color colorNum = 0;
-if(!chromosomeColorsMade)
+if (!chromosomeColorsMade)
     makeChromosomeShades(vg);
 if (atoi(name) != 0)
     chromNum =  atoi(name);
-else if (!strcmp(name,"X"))
-    chromNum = 23;
-else if (!strcmp(name,"X "))
-    chromNum = 23;
-else if (!strcmp(name,"Y"))
-    chromNum = 24;
-else if (!strcmp(name,"Y "))
-    chromNum = 24;
-else if (!strcmp(name,"M"))
-    chromNum = 25;
-else if (!strcmp(name,"M "))
-    chromNum = 25;
-else if (!strcmp(name,"Un"))
+else if (startsWith("U", name))
     chromNum = 26;
-else if (!strcmp(name,"Un "))
-    chromNum = 26;
-else if (!strcmp(name,"I"))
-    chromNum = 1;
-else if (!strcmp(name,"I "))
-    chromNum = 1;
-else if (!strcmp(name,"II"))
-    chromNum = 2;
-else if (!strcmp(name,"II "))
-    chromNum = 2;
-else if (!strcmp(name,"III"))
-    chromNum = 3;
-else if (!strcmp(name,"III "))
-    chromNum = 3;
-else if (!strcmp(name,"IV"))
-    chromNum = 4;
-else if (!strcmp(name,"IV "))
-    chromNum = 4;
-else if (!strcmp(name,"V"))
+else if (startsWith("X", name))
+    chromNum = 23;
+else if (startsWith("Y", name))
+    chromNum = 24;
+else if (startsWith("M", name))
+    chromNum = 25;
+else if (startsWith("V", name))
     chromNum = 5;
-else if (!strcmp(name,"V "))
-    chromNum = 5;
+else if (startsWith("IV", name))
+    chromNum = 4;
+else if (startsWith("III", name))
+    chromNum = 3;
+else if (startsWith("II", name))
+    chromNum = 2;
+else if (startsWith("I", name))
+    chromNum = 1;
 if (chromNum > CHROM_COLORS) chromNum = 0;
 colorNum = chromColor[chromNum];
 return colorNum;
 }
 
-Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg)
-/* assign fake chrom color to scaffold, based on number */
+char *chromPrefixes[] = { "chr", "Group", 
+			  NULL };
+
+char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold", 
+			     "Contig", "SuperCont", 
+			     NULL };
+
+char *maybeSkipPrefix(char *name, char *prefixes[])
+/* Return a pointer into name just past the first matching string from 
+ * prefixes[], if found.  If none are found, return NULL. */
 {
-    int chromNum;
-    chromNum = atoi(scaffoldNumber) % CHROM_COLORS;
-    if (chromNum < 0 || chromNum > CHROM_COLORS)
-        chromNum = 0;
-    return chromColor[chromNum];
+char *skipped = NULL;
+int i = 0;
+for (i = 0;  prefixes[i] != NULL;  i++)
+    {
+    skipped = stringIn(prefixes[i], name);
+    if (skipped != NULL)
+	{
+	skipped += strlen(prefixes[i]);
+	break;
+	}
+    }
+return skipped;
+}
+
+Color getScaffoldColor(char *scaffoldNum, struct vGfx *vg)
+/* assign fake chrom color to scaffold/contig, based on number */
+{
+int chromNum = atoi(scaffoldNum) % CHROM_COLORS;
+if (!chromosomeColorsMade)
+    makeChromosomeShades(vg);
+if (chromNum < 0 || chromNum > CHROM_COLORS)
+    chromNum = 0;
+return chromColor[chromNum];
+}
+
+Color getSeqColorDefault(char *seqName, struct vGfx *vg, Color defaultColor)
+/* Return color of chromosome/scaffold/contig/numeric string, or 
+ * defaultColor if seqName doesn't look like any of those. */
+{
+char *skipped = maybeSkipPrefix(seqName, chromPrefixes);
+if (skipped != NULL)
+    return getChromColor(skipped, vg);
+skipped = maybeSkipPrefix(seqName, scaffoldPrefixes);
+if (skipped != NULL)
+    return getScaffoldColor(skipped, vg);
+if (isdigit(seqName[0]))
+    return getScaffoldColor(seqName, vg);
+return defaultColor;
+}
+
+Color getSeqColor(char *seqName, struct vGfx *vg)
+/* Return color of chromosome/scaffold/contig/numeric string. */
+{
+return getSeqColorDefault(seqName, vg, chromColor[0]);
 }
 
 Color lfChromColor(struct track *tg, void *item, struct vGfx *vg)
@@ -5169,22 +5199,7 @@ Color lfChromColor(struct track *tg, void *item, struct vGfx *vg)
  * where the chromosome is listed somewhere in the lf->name. */
 {
 struct linkedFeatures *lf = item;
-char *chptr = strstr(lf->name, "chr");
-
-if (chptr == NULL)
-    {
-    return(tg->ixColor);
-    }
-else
-    {
-    char chromStr[3];
-    Color c;
-    strncpy(chromStr, (char *)(chptr+3), 2);
-    chromStr[2] = '\0';
-    c = getChromColor(chromStr, vg);
-    tg->ixAltColor = c;
-    return c;
-    }
+return getSeqColorDefault(lf->name, vg, tg->ixColor);
 }
 
 void loadRnaGene(struct track *tg)
@@ -5896,25 +5911,10 @@ tg->itemNameColor = NULL;
 
 Color bedChromColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of chromosome for bed type items
- * where the chromosome is listed somewhere in the bed->name. */
+ * where the chromosome/scaffold is listed somewhere in the bed->name. */
 {
 struct bed *bed = item;
-char *chptr = strstr(bed->name, "chr");
-
-if (chptr == NULL)
-    {
-    return(tg->ixColor);
-    }
-else
-    {
-    char chromStr[3];
-    Color c;
-    strncpy(chromStr, (char *)(chptr+3), 2);
-    chromStr[2] = '\0';
-    c = getChromColor(chromStr, vg);
-    tg->ixAltColor = c;
-    return c;
-    }
+return getSeqColorDefault(bed->name, vg, tg->ixColor);
 }
 
 void bedChromColorMethods(struct track *tg)
@@ -5976,19 +5976,7 @@ Color ensPhusionBlastItemColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of ensPhusionBlast track item. */
 {
 struct ensPhusionBlast *epb = item;
-char *ptr;
-char chromStr[20];
-
-if ((ptr = strstr(epb->name, "chr")) != NULL)
-    {
-    strncpy(chromStr, ptr+strlen("chr"), 2);
-    chromStr[2] = '\0';
-    return((Color)getChromColor(chromStr, vg));
-    }
-else
-    {
-    return(tg->ixColor);
-    }
+return getSeqColorDefault(epb->name, vg, tg->ixColor);
 }
 
 void ensPhusionBlastMethods(struct track *tg)

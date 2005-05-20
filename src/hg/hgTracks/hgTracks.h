@@ -411,11 +411,8 @@ Color contrastingColor(struct vGfx *vg, int backgroundIx);
 boolean isNonChromColor(Color color);
 /* assign fake chrom color to scaffold, based on number */
 
-Color getChromColor(char *name, struct vGfx *vg);
-/* Return color index corresponding to chromosome name. */
-
-Color getScaffoldColor(char *scaffoldNumber, struct vGfx *vg);
-/* assign fake chrom color to scaffold, based on number */
+Color getSeqColor(char *name, struct vGfx *vg);
+/* Return color index corresponding to chromosome/scaffold name. */
 
 Color lighterColor(struct vGfx *vg, Color color);
 /* Get lighter shade of a color */ 

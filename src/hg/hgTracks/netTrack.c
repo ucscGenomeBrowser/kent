@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.17 2004/12/07 01:59:41 kent Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.18 2005/05/20 22:46:57 angie Exp $";
 
 struct netItem
 /* A net track item. */
@@ -77,24 +77,12 @@ static void netColorClearCashe()
 netColorLastChrom = "UNKNOWN";
 }
 
-static Color netColor(char *chrom, int level)
-/* return appropriate color for a chromosome
- * or else use alternating black/gray for level 1 if item is not a chromosome */
+static Color netColor(char *chrom)
+/* return appropriate color for a chromosome/scaffold */
 {
 static Color color;
-char *pos;
 if (!sameString(chrom, netColorLastChrom))
-    {
-    color = getChromColor(chrom+3, rVg);
-    if (isNonChromColor(color)) 
-       {
-       if ((pos = stringIn("scaffold_", chrom)) != NULL)
-           {
-            color = getScaffoldColor(pos+9, rVg);
-            netColorLastChrom = chrom;
-           }
-        }
-    }
+    color = getSeqColor(chrom, rVg);
 netColorLastChrom = chrom;
 return color;
 }
@@ -186,7 +174,7 @@ int orientation;
 
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
-    color = netColor(fill->qName, level);
+    color = netColor(fill->qName);
     invColor = contrastingColor(rVg, color);
     orientation = orientFromChar(fill->qStrand);
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
