@@ -2,26 +2,40 @@ hgNetDist is a loader utility that takes
 interaction or other data and creates a 
 distance for each pair of genes in the set.
 
-Use code from genering to read the data,
-create the network, and then add more
-code to do the breadth-first search
-to calc the dist.  (Can add Dijkstra and 
-Floyd-Warshall later as needed for weights)
+Creates the network and uses Floyd-Warshall
+dynamic programming algorithm to calculate
+all the gene-pair distances simultaneously.
+This is efficent and handles weighted edges
+and directed edges optionally.
+(If we ever need to we can use
+for non-weighted a simple breadth-first search
+to calc the dist.  We could also use Dijkstra
+later as needed for weights)
 
-May need to create a sgdP2P.as? 
-Or some generic stand-in?
 
-Given the interaction format:
+Given the interaction .tab format:
 genex geney numrepetitions
+x	y	79
 
-and there is a header of one line
-(probably the code in the genering or its notes
-takes care of this? -  or was it a mysql import?
+There is a header of one line
+mysql import command skip one lines 
+can skip over it.  If there is no
+header record add -first to include
+the first row as input and not skip it.
 
-Of course, I could just read it straight
-and do the deed from the input file directly.
+The output is a temp .tab file then
+we drop the table if it exists 
+and create a new empty one.
+Then use mysql utility to import
+the many rows from the temp .tab
+which is removed when finished.
 
-The output would still be a table.
-
-This will be a fun Sunday project.
+I am now adding support for remapping
+ids, as this is part of the requirement
+for handling fly.  I have interaction data
+in FBgn9999 format but GS uses CG9999-RA
+format.  bdgpGeneInfo will remap FBgn
+to CG but does not have the -RA,-RB etc.
+So Angie recommends chopping the -R?
+off at runtime before doing the lookup.
 

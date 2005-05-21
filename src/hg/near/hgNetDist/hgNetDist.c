@@ -11,16 +11,20 @@
 #include "math.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.2 2005/05/11 18:04:33 galt Exp $";
+#include "hdb.h"
+
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.3 2005/05/21 01:34:58 galt Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;
 float threshold=2.0;
+char *sqlRemap=NULL;
 
 static struct optionSpec options[] = {
    {"first", OPTION_BOOLEAN},
    {"weighted", OPTION_BOOLEAN},
    {"threshold", OPTION_FLOAT},
+   {"sqlRemap", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -42,6 +46,7 @@ errAbort(
   "   -first  - include 1st row in input, do not skip.\n"
   "   -weighted  - count the 3rd column value as network edge weight.\n"
   "   -threshold=9.9  - maximum network distance allowed, default=%f.\n"
+  "   -sqlRemap='select col1, col2 from table' - specify query used to remap ids from col1 to col2 in input.tab.\n"
   , threshold
   );
 }
@@ -53,6 +58,7 @@ int numGenes = 0;
 char **geneIds;  /* dynamically allocated array of strings */
 
 struct hash *geneHash = NULL;
+struct hash *aliasHash = NULL;
 
 /* Floyd-Warshall dyn prg arrays */
 float *d;   /* previous d at step k    dynamically allocated array of strings */
@@ -155,11 +161,6 @@ return list;
 }
 
 
-double log2(double x)
-{
-return log(x)/log(2);
-}
-
 int runCmd(char *cmd)
 {
 int child=0, status=0;
@@ -171,6 +172,31 @@ if (child==0)
     }
 while (wait(&status) != child);
 return status;
+}
+
+
+void fetchRemapInfo(char *db)
+/* fetch id-remap as a hash using -sqlRemap="some sql" commandline option 
+ * read all the gene aliases from database and put in aliasHash           
+ */
+{
+struct sqlConnection* conn = NULL;
+struct sqlResult *sr;
+char **row;
+/* it is possible for each id to have multiple remap values in hash */
+if (sqlRemap == NULL) return;
+printf("beginning processing sqlRemap query [%s] \n",sqlRemap);
+aliasHash = newHash(8);
+hSetDb(db);
+conn = hAllocConn();
+sr = sqlGetResult(conn, sqlRemap);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(aliasHash, row[0], cloneString(row[1]));
+    }
+sqlFreeResult(&sr);
+
+hFreeConn(&conn);
 }
 
 
@@ -188,16 +214,15 @@ FILE *f=NULL;
 char cmd[256];
 int status=-1;
 
-uglyf("inTab=%s db=%s table=%s \n", inTab, db, table);
+printf("inTab=%s db=%s table=%s \n", inTab, db, table);
 
-uglyf("reading edges %s \n",inTab);
+printf("reading edges %s \n",inTab);
 
 edges = readEdges(inTab);
 if (edges == NULL)
 {
 errAbort("readEdges returned NULL for %s.\n",inTab);
 }
-printf("readEdges done for %s \n",inTab);
 
 numEdges = slCount(edges);
 printf("slCount(edges)=%d for %s \n",numEdges,inTab);
@@ -207,14 +232,20 @@ printf("slCount(edges)=%d for %s \n",numEdges,inTab);
 
 
 /* for now, default to using numEdges for size estimate since we don't know numGenes at this point */
-geneHash = newHash(log2((numEdges*2)));  /* estimate numGenes worst case as numEdges*2 as all disjoint pairs edges */
+geneHash = newHash(logBase2((numEdges*2)));  /* estimate numGenes worst case as numEdges*2 as all disjoint pairs edges */
 geneIds = needMem((numEdges*2)*sizeof(char*));  
 
-uglyf("beginning processing data %s ... \n",inTab);
+if (sqlRemap)
+    {
+    fetchRemapInfo(db);
+    }
+
+
+
+printf("beginning processing data %s ... \n",inTab);
 for(edge = edges; edge; edge = edge->next)
     {
     int n = 0;
-    //uglyf("%s\t%s\t%f\n",edge->geneA,edge->geneB,edge->weight);
     n = hashIntValDefault(geneHash,edge->geneA,-1);
     if (n == -1) 
 	{
@@ -250,7 +281,6 @@ for(i=0;i<numGenes;++i)
 	    {
 	    *dij = INFINITE;
 	    }
-	//uglyf("i=%d, j=%d, *dij = %f \n",i,j,*dij);
 	}
     }
 
@@ -269,12 +299,12 @@ for(edge = edges; edge; edge = edge->next)
     *dij = edge->weight;
     }
 
-/* repeat k times through the Flowyd-Warshall dyn prg algorithm */
+/* repeat k times through the Floyd-Warshall dyn prg algorithm */
 for(k=0;k<numGenes;++k)
     {
    
     if ((k % 100)==0)
-    	uglyf("k=%d \n",k);
+    	printf("k=%d \n",k);
 	
     for(i=0;i<numGenes;++i)
 	{
@@ -319,7 +349,31 @@ for(i=0;i<numGenes;++i)
     	dij = d+(i*numGenes)+j;
 	if ((*dij >= 0.0) && (*dij <= threshold))
 	    {
-    	    fprintf(f,"%s\t%s\t%f\n",geneIds[i],geneIds[j],*dij);
+	    char *gi=NULL, *gj=NULL;
+	    if (sqlRemap)
+		{ /* it is possible for each id to have multiple remap values in hash */
+	    	struct hashEl *hi=NULL, *hj=NULL;
+		hi = hashLookup(aliasHash,geneIds[i]);
+		hj = hashLookup(aliasHash,geneIds[j]);
+		if (!hi) printf("%s not found in aliasHash!\n",geneIds[i]);
+		if (!hj) printf("%s not found in aliasHash!\n",geneIds[j]);
+		for(;hi;hi=hashLookupNext(hi))
+		    {
+	    	    gi = (char *)hi->val;
+		    for(;hj;hj=hashLookupNext(hj))
+			{
+    			gj = (char *)hj->val;
+			fprintf(f,"%s\t%s\t%f\n",gi,gj,*dij);
+    			}
+		    hj = hashLookup(aliasHash,geneIds[j]); /* reset it */
+		    }
+		}
+	    else
+		{
+		gi=geneIds[i];
+		gj=geneIds[j];
+		fprintf(f,"%s\t%s\t%f\n",gi,gj,*dij);
+		}
 	    }
 	}
     }
@@ -328,19 +382,19 @@ fclose(f);
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'drop table if exists %s; create table %s (query varchar(255), target varchar(255), distance float);'",
     db, table, table);
-uglyf("%s\n",cmd);
+printf("%s\n",cmd);
 if (status=runCmd(cmd)) errAbort("returned %d\n",status);
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'load data local infile \"hgNetDist.tmp.tab\" into table %s ignore 1 lines;'",
     db, table);
-uglyf("%s\n",cmd);
+printf("%s\n",cmd);
 if (status=runCmd(cmd)) errAbort("returned %d\n",status);
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'create index query on %s (query(8));'",
     db, table);
-uglyf("%s\n",cmd);
+printf("%s\n",cmd);
 if (status=runCmd(cmd)) errAbort("returned %d\n",status);
 
 remove("hgNetDist.tmp.tab");
@@ -362,13 +416,11 @@ if (argc != 4)
 first = optionExists("first");
 weighted = optionExists("weighted");
 threshold = optionFloat("threshold", threshold);
-
-uglyf("-first=%d\n", first);
-uglyf("-weighted=%d\n", weighted);
+sqlRemap = optionVal("sqlRemap", sqlRemap);
 
 hgNetDist(argv[1],argv[2],argv[3]);
 
-uglyf("\ndone.\n");
+printf("\ndone.\n");
 return 0;
 }
 
