@@ -270,8 +270,9 @@ echo drop table xmMrna | hgsql mm6
    tail +15 rebaseRefs.txt | sed 's/ \+/ /g; s/^ //; /^$/d' | cut -f1 -d' ' | sed 's/\.//' > c1
    paste c1 c2 | sed '/^$/d' > rebaseRefs.txt
    rm c1 c2
-   # Load
+   # Load the cutters table.
    hgCutters hgFixed rebase.gcg
+   # Load the other table.
    echo delete from rebaseRefs | hgsql hgFixed
    echo "load data local infile 'rebaseRefs.txt' into table rebaseRefs" | hgsql hgFixed
-
+   
