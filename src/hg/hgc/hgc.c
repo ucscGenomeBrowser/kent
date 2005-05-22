@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.889 2005/05/19 11:43:56 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.890 2005/05/22 15:35:14 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1739,8 +1739,7 @@ boolean hasBin;
 char table[64];
 struct sqlResult *sr = NULL;
 char **row = NULL;
-char *classTable;
-char *class = "Class";
+char *classTable = trackDbSetting(tdb, GENEPRED_CLASS_TBL);
 
 hFindSplitTable(seqName, track, table, &hasBin);
 safef(query, sizeof(query), "name = \"%s\"", name);
@@ -1762,16 +1761,18 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     if (gp->next != NULL)
         printf("<br>");
     /* if a gene class table exists, get gene class and print */
-    classTable = addSuffix(track, class);
-    if (hTableExists(classTable)) 
-       {
-       safef(query, sizeof(query),
-            "select class from %s where name = \"%s\"", classTable, name);
-       sr = sqlGetResult(conn, query);
-       /* print class */
-       if ((row = sqlNextRow(sr)) != NULL)
-          printf("<b>Prediction Class:</b> %s<br>\n", row[0]);
-       }
+    if (classTable != NULL)
+        {
+        if (hTableExists(classTable)) 
+           {
+           safef(query, sizeof(query),
+                "select class from %s where name = \"%s\"", classTable, name);
+           sr = sqlGetResult(conn, query);
+           /* print class */
+           if ((row = sqlNextRow(sr)) != NULL)
+              printf("<b>Prediction Class:</b> %s<br>\n", row[0]);
+           }
+        }
     }
 genePredFreeList(&gpList);
 sqlFreeResult(&sr);
