@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.55 2005/04/20 10:16:00 aamp Exp $
+# $Id: gbBlat,v 1.56 2005/05/22 17:30:27 braney Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -80,6 +80,7 @@ proc getOoc {database} {
         caeRem*   {return /iscratch/i/caeRem1/11.ooc}
         danRer*   {return /iscratch/i/danRer1/11.ooc}
         canFam*   {return /iscratch/i/canFam1/11.ooc}
+        oryCun*   {return ""}
         tetNig*   {return /iscratch/i/tetNig1/11.ooc}
         anoGam*   {return /iscratch/i/anoGam1/11.ooc}
         apiMel*   {return /iscratch/i/apiMel2/11.ooc}
