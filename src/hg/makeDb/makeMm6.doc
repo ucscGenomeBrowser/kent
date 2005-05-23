@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.42 2005/05/20 23:08:50 heather Exp $"
+#	"$Id: makeMm6.doc,v 1.43 2005/05/23 23:55:40 heather Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5555,20 +5555,37 @@ wc -l cloneEnds.fa
   # Reading in end info
   # Writing out pair info
   # Writing out singleton info
-  # 354485 pairs and 82570 singles
+  # 354485 pairs and 78424 singles
 
   # a bit of cleanup
   mkdir archive
   mv 10090* archive
 
-  # noticed concatenated IDs in cloneEndPairs.txt
-  # due to duplicates
-  # question out to Terry
-  # example:
-  # in clone_info012
-  RP23-303I7      BH406146.1      17461427        RP23    500     0       BAC     T7      2005-04-06
-  # in clone_info033
-  RP23-303I7      AQ996998.1      7072095         RP23    589     0       BAC     T7      2005-04-06
+  # split
+  mkdir splitdir
+  faSplit sequence cloneEnds.fa 100 cloneEnds
+  mkdir /cluster/bluearc/scratch/mus/mm6
+  mkdir /cluster/bluearc/scratch/mus/mm6/cloneEnds
+  mv cloneEnds???.fa /cluster/bluearc/scratch/mus/mm6/cloneEnds
+  cp -p cloneEnds.fa /cluster/bluearc/scratch/mus/mm6/cloneEnds
+  # request updateLocal to make available on /scratch/mus/mm6/cloneEnds on the cluster
 
-  # This matches
-  # http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=RP23-303I7
+  # load sequences
+  ssh hgwdev
+  cd /gbdb/mm6
+  mkdir cloneend
+  cd cloneend
+  ln -s /cluster/data/mm6/bed/cloneend/ncbi/cloneEnds.fa .
+  cd /tmp
+  hgLoadSeq mm6 /gbdb/mm6/cloneend/cloneEnds.fa
+  #  Advisory lock created
+  # Creating .tab file
+  # Adding /gbdb/mm6/cloneend/cloneEnds.fa
+  # 789467 sequences
+  # Updating seq table
+  # Advisory lock has been released
+  # All done
+
+
+
+
