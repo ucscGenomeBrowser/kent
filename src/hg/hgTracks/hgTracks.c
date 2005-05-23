@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.961 2005/05/20 22:46:57 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.962 2005/05/23 04:03:00 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8568,6 +8568,8 @@ if (classTable != NULL && hTableExists(classTable))
         if (ct == acemblyAll)
             return sameClass;
         }
+    else if (classType == NULL)
+        return TRUE;
     conn = hAllocConn();
     safef(query, sizeof(query),
          "select class from %s where name = \"%s\"", classTable, lf->name);
@@ -8626,7 +8628,7 @@ char *geneClasses = trackDbSetting(tg->tdb, GENEPRED_CLASS_VAR);
 char *gClassesClone = NULL;
 int class, classCt = 0;
 char *classes[20];
-char gClass[24];
+char gClass[64];
 char *classTable = trackDbSetting(tg->tdb, GENEPRED_CLASS_TBL);
 struct linkedFeatures *lf = item;
 struct sqlConnection *conn = hAllocConn();
@@ -8665,6 +8667,8 @@ if (hTableExists(classTable))
               found = TRUE;
               safef(gClass, sizeof(gClass), "%s%s", GENEPRED_CLASS_PREFIX, classes[class]);
               colorString = trackDbSetting(tg->tdb, gClass);
+              if (!colorString)
+                  found = FALSE;
               break;
               }
            }
@@ -9736,6 +9740,10 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeIntronMay", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeGeneMay", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeIntronOld", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeGeneOld", gencodeGeneMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
