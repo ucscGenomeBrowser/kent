@@ -11,8 +11,12 @@ hgNetDist: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/$A $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/$A${EXE}
 	
-test1:	
-	hgNetDist yeastP2P.tab dm1 sgdP2P -threshold=3
+yeast:	
+	hgNetDist yeastP2P.tab sacCer1 yeastP2P -threshold=3
 	
-test2:	
+fly:	
 	hgNetDist flytest.tab dm1 flyP2P -threshold=2 -sqlRemap="select flyBaseId, bdgpName from bdgpGeneFb2Bdgp"
+	
+worm:	
+	hgNetDist wormP2P.tab ce2 wormP2P -threshold=2
+	
