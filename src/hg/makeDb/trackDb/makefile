@@ -20,9 +20,11 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	canFam1 \
 	mm2 mm3 mm4 mm5 mm6 \
 	rn2 rn3 \
+	oryCun1 \
 	bosTau1 \
+	dasNov1 \
+	loxAfr1 \
 	monDom1 \
-	cftRab0 \
 	galGal2 \
 	xenTro1 \
 	tetNig1 \
