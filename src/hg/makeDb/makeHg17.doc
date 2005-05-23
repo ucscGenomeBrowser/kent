@@ -14554,3 +14554,81 @@ end
    hgsql hg17 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql hg17 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
 
+# LOAD ENSEMBL GENES (DONE, 5/23/05, Fan)
+# Ensembl changed things again! Please note there are two subtle changes to make it work.
+
+    mkdir /cluster/data/hg17/bed/ensembl
+    cd /cluster/data/hg17/bed/ensembl
+    mkdir new
+    cd new
+
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+    # This time, there are some extra lines, like '		1;', 
+    # that are causing problems, so added an extra filter in the beginning 
+    # to get rid of them.
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+
+cat ensemblGene.gtf |sed -e 's/\t\t/xxxxx/g' \
+    |grep -v xxxxx \
+    | grep -v ^6_DR51 \
+    | grep -v ^DR51 \
+    | grep -v ^DR52 \
+    | grep -v ^DR53 \
+    | grep -v _NT_ \
+    | perl -wpe 's/^([0-9]|X|Y|Un|MT)/chr$1/ \
+                 || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/chrMT/chrM/g' \
+    | sed -e 's/\..\"/\"/g' \
+>ensGene.gtf
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/ensembl/new
+    /cluster/bin/i386/ldHgGene hg17 ensGene ensGene.gtf
+# Read 33581 transcripts in 699580 lines in 1 files
+# 33581 groups 25 seqs 1 sources 4 feature types
+# 33581 gene predictions
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg17 -e 'drop table ensGtp'
+    hgsql hg17 < ~/kent/src/hg/lib/ensGtp.sql
+    hgsql hg17 -e 'load data local infile "ensGtp.txt" into table ensGtp ignore 1 lines'
+
+# ensMart has some problem with the resulting ensemblPep.fa.gz, so use different
+# processing step instead:
+
+    wget -timestamp \
+    ftp://ftp.ensembl.org/pub/current_human/data/fasta/pep/Homo_sapiens.NCBI35.may.pep.fa.gz
+    zcat Homo_sapiens.NCBI35.may.pep.fa.gz | sed -e "s/transcript:/\n>/g" | grep -v 'gene:' >ensPep.fa
+    faToTab -type=protein ensPep.fa ensPep.tab
+    hgsql hg17 -e 'drop table ensPep'
+    hgsql hg17 < ~/kent/src/hg/lib/ensPep.sql
+    hgsql hg17 -e 'load data local infile "ensPep.tab" into table ensPep'
+
+# kept the following, just in case Ensembl fixed the problem in the future
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+# gunzip ensemblPep.fa.gz
+# hgPepPred hg17 ensembl ensemblPep.fa
+
+
