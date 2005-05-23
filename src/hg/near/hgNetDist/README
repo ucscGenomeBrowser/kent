@@ -39,3 +39,14 @@ to CG but does not have the -RA,-RB etc.
 So Angie recommends chopping the -R?
 off at runtime before doing the lookup.
 
+I have been getting data from Josh:
+
+hgwdev:/cluster/home/jstuart/Data/Interactions/P2P/
+
+
+So far, we have good coverage for fly and yeast.
+The coverage for worm is only about 10% of sangerGene names.
+
+
+
+
