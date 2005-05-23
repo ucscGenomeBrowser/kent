@@ -1,21 +1,32 @@
 <H2>Description</H2>
 <P>
-Human genome p53 transcription factor binding sites (TFBS) were surveyed by 
-adopting a ChIP-PET based sequencing approach that combines chromatin 
+Human genome transcription factor binding sites (TFBS) were surveyed by 
+adopting a ChIP-PET based sequencing approach that combined chromatin 
 immunoprecipitation (ChIP) with paired-end di-tag (PET) sequencing. This 
 track shows PET sequences derived from 65,572 individual p53 ChIP fragments 
-of 5FU-stimulated HCT116 cells. </P>
+of 5-fluorouracil (5FU) stimulated HCT116 cells. More datasets, including 
+STAT1, TAF250 and E2F1, will be submitted in the future.</P>
 <P>
-In the display, the actual PET sequences are represented by blocks. Each 
-ChIP fragment is defined by two boundary blocks connected by a thin arrowed 
-line. The PET singletons from non-specific ChIP fragments are discretely 
-located along the genome as background. Overlapping PET clusters (PET 
-fragments that overlap one another) originating from the ChIP enrichment 
-process define the genomic loci that are potential p53 binding sites. </P>
+In the graphical display, PET sequences are shown as two blocks representing 
+the ends of the pair, connected by a thin arrowed line. Overlapping PET 
+clusters (PET fragments that overlap one another) originating from the ChIP 
+enrichment process define the genomic loci that are potential TFBS binding 
+sites.  PET singletons from non-specific ChIP fragments did not cluster and
+are discretely located along the genome as background. </P>
 
 <H2>Methods</H2>
 <P>
-The ChIP-enriched DNA fragments were cloned into a plasmid vector,
+HCT116 cells were treated with 5FU for six hours. The cross-linked chromatin 
+was sheared and precipitated with a high affinity antibody. The DNA fragments 
+were end-polished and cloned into plasmid vector pGIS3. pGIS3 contains two 
+MmeI recognition sites that flank the cloning site, which were used to produce
+a 36 bp paired-end di-tag (PET) (18 bp from 5' and 18 bp from 3' ends) from 
+the original ChIP DNA fragments. Multiple 36 bp PETs were concatenated and 
+cloned into pZero-1 for sequencing, where each sequence read can generate 
+10-15 PETs. The PET sequences were extracted from raw sequence reads and 
+mapped to the genome, defining the boundaries of each ChIP DNA fragment.</P>
+<P>
+The ChIP-enriched DNA fragments were cloned into a plasmid vector
 and then converted into paired-end ditags (PET) for
 concatenation, cloning, and sequencing. PET sequences containing
 18 bp from the 5' end and 18 bp from the 3' end of the original ChIP 
@@ -24,19 +35,37 @@ independently for demarcating the ChIP DNA fragments. The following specific
 mapping criteria were used: 
 <UL>
 <LI>both 5' and 3' signatures must be present on the same chromosome
-<LI>orientation must be correct
-<LI>a minimal 17 bp match must exist
-<LI>the genomic distance between ends must be within 4 Kb 
+<LI>the 5' to 3' orientation must be correct
+<LI>a minimal 17 bp match must exist for each 18 bp 5' and 3' signature
+<LI>the tags must have genomic alignments within 4 Kb of each other
 </UL></P>
+<P>
+Only PETs with specific mapping (one location) to the genome were considered.
+PETs with multiple locations may represent low complexity or repetitive 
+sequences, and therefore were not included for further analysis.</P>
 
 <H2>Verification</H2>
 <P>
-40 genomic locations identified by PET-3+ clusters were randomly
-selected and subjected to quantitative real-time PCR analyses. The
-relative enrichment of candidate regions compared to control GST ChIP
-DNA was determined and all 40 regions (100%) were confirmed to have 
-significant enrichment of p53 ChIP, indicating that all these regions are 
-true p53-bound targets. </P>
+It has been validated that the overlapping PET clusters resulted from ChIP 
+enrichment events. Monte Carlo simulation using the p53 ChIP-PET data 
+estimated that about 27% of PET-2 clusters (PET clusters with two overlapping 
+members), 3% of the PET clusters with 3 overlapping members (PET-3 clusters), 
+and less than 0.0001% of PET clusters with more than 3 overlapping members 
+were due to random chance. This suggests that the PET clusters most likely 
+represent the real enrichment events by ChIP and that a higher number of 
+overlapping fragments correlates to a higher probability of a real ChIP 
+enrichment event. Furthermore, based on goodness-of-fit analysis for 
+assessing the reliability of PET clusters, it was estimated that less than 
+36% of the PET-2 clusters and over 99% of the PET-3+ clusters (clusters with 
+three or more overlapping members) are true enrichment ChIP sites. Thus, the 
+verification rate is nearly 100% for PET-3+ ChIP clusters, and the PET-2 
+clusters contain significant noise.</P>
+<P>
+In addition to these statistical analyses, 40 genomic locations identified by 
+PET-3+ clusters were randomly selected and subjected to quantitative real-time
+PCR analyses. The relative enrichment of candidate regions compared to control
+GST ChIP DNA was determined and all 40 regions (100%) were confirmed to have 
+significant enrichment of p53 ChIP clusters. </P>
 
 <H2>Credits</H2>
 <P>
@@ -44,8 +73,8 @@ The p53 ChIP-PET library and sequence data were produced at the
 <A HREF="http://www.gis.a-star.edu.sg/homepage/default.jsp" TARGET=_BLANK>Genome
 Institute of Singapore</A>.
 The data were mapped and analyzed by scientists
-from the Genome Institute and Bioinformatics Institute of Singapore, and
-Boston University. </P>
+from the Genome Institute of Singapore, the Bioinformatics Institute, 
+Singapore, and Boston University. </P>
 
 <H2>References</H2>
 <P>
