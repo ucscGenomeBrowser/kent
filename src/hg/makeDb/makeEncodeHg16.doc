@@ -382,8 +382,8 @@ cat > load.csh << 'EOF'
 
     # adjust chromStart
     cat > lowerStart.awk << 'EOF'
-        {printf ("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%d\t%d\t%d\t%s\n",
-                    $1, $2-1, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);}
+        {printf ("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%d\t%s\t%s\t%s\n",
+                $1, $2-1, $3, $4, $5, $6, $7-1, $8, $9, $10, $11, $12, $13);}
 'EOF'
     # rearrange data colums to be BED 13, add RGB values to "reserved" field
     # based on score
@@ -429,6 +429,7 @@ cat > load.csh << 'EOF'
         hgLoadBed hg16 -noBin encodeBuFirstExon encodeBuFirstExon$f.bed -sqlTable=${HOME}/kent/src/hg/lib/encodeBuFirstExon.sql
         hgsql hg16 -e "DROP TABLE IF EXISTS encodeBuFirstExon$f"
         hgsql hg16 -e "ALTER TABLE encodeBuFirstExon RENAME TO encodeBuFirstExon$f"
+        checkTableCoords hg16 encodeBuFirstExon$f
     end
 'EOF'
 
@@ -441,15 +442,18 @@ cat > load.csh << 'EOF'
         #chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 
 
-# GENCODE Sanger Havana annotations (hiram)
-#               (IN PROGRESS 2005-03-21 kate)
+# GENCODE Sanger Havana annotations  (IN PROGRESS 2005-03-21 kate)
+    # Data update 2005-04-22 with all 44 regions
+    # Data update 2005-05-20
     ssh hgwdev
     mkdir -p /cluster/data/encode/Gencode
     cd /cluster/data/encode/Gencode
+    mkdir -p 2005-05-20
+    cd 2005-05-20
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
-	"ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
+        "ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
 #  This fetches the directories:
 #	drwxrwxr-x  2 4096 Mar  7 16:01 CHR_coord
 #	drwxrwxr-x  2 4096 Mar  7 16:02 ENCODE_coord
@@ -490,16 +494,16 @@ cat > load.csh << 'EOF'
     # 4023 introns in 12 files
 
     # UPDATE 4/22/05
-
     cd /cluster/data/encode/Gencode
     mkdir 2005-04-22
-    ln -s 2005-04-22 latest
-    cd latest
+    cd 2005-04-22
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
 	"ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
     # Downloaded: 96,693,888 bytes in 488 files
+    wc -l CHR_coord_hg17/global_files/EN*CHR_coord.gtf > entries.txt
+         # 45866 total
     cat `ls CHR_coord_hg17/global_files/EN*coord.gtf | grep -v ENm006` > \
         gencode.noENm006
     liftOver -gff gencode.noENm006 \
@@ -517,6 +521,68 @@ cat > load.csh << 'EOF'
     grep -v not_tested gencode.gtf | \
         ldGencodeIntron hg16 encodeGencodeIntronNew stdin
             # 425 introns in 1 files
+
+    # UPDATE 2005-05-20
+    cd /cluster/data/encode/Gencode
+    mkdir 2005-05-20
+    cd 2005-05-20
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 \
+    ftp://genome.imim.es/pub/other/gencode/data/havana-encode/version00.3_20may/
+    # Downloaded: 14,970,341 bytes in 89 files
+    cd version00.3_20may
+    wc -l EN*CHR_coord.gtf > ../entries.txt
+         # 45268 total
+    cat `ls EN*_CHR_coord.gtf | grep -v ENm006` > \
+        ../gencode.noENm006.gtf
+    cd ..
+    liftOver -gff gencode.noENm006.gtf \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                gencode.hg16.gtf gencode.gtf.unmapped
+    wc -l gencode.hg16.gtf
+        # 40320 gencode.hg16.gtf
+    grep -v "in new" *.unmapped | wc -l
+        # 8 unmapped GTF entries
+    grep -v "in new" *.unmapped | awk '{print $12}' | sort | uniq | wc -l
+        # 3 unmapped gene ID's
+    grep -v not_tested gencode.hg16.gtf | \
+        ldGencodeIntron hg16 encodeGencodeIntron stdin
+            # 425 introns in 1 files
+
+    # converting to genePred before lifting to create gene track
+    #  due to problems in liftOver -gff found by Mark D.
+    # Exclude non-Vega sources as per France Denoued at IMIM 
+    grep VEGA gencode.noENm006.gtf > gencode.vega.gtf
+    ldHgGene -out=gencode.gp -gtf -genePredExt null null gencode.vega.gtf
+        # Read 2542 transcripts in 40133 lines in 1 files
+    liftOver -genePred gencode.gp \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                gencode.hg16.gp gencode.gp.unmapped
+     wc -l gencode.hg16.gp
+        #  2540 gencode.hg16.gp
+      wc -l gencode.gp.unmapped
+        # 4 -> 2 problem transcripts
+        # AC005538.4-001 and AC005538.4-006
+        # Each transcript had 1 exon unmapped -- notifying submitter
+    ldHgGene -predTab -genePredExt hg16 encodeGencodeGene gencode.hg16.gp
+        # 2540 gene predictions
+    checkTableCoords hg16 encodeGencodeGene
+
+    # inventory sources for genepreds (genes will be colored by these)
+    awk '{print $2}' gencode.vega.gtf | sort | uniq > classes.txt
+    wc -l classes.txt
+        # 12
+
+    # create gene class table
+    hgsql hg16 < ~/kent/src/hg/lib/gencodeGeneClass.sql
+    awk '{printf "%s\t%s\n", $10, $2}' gencode.vega.gtf | \
+        sed -e 's/"//g' -e 's/;//' -e 's/VEGA_//' | \
+        sort | uniq > gencodeGeneClass.tab
+    wc -l gencodeGeneClass.tab
+        # 2542 gencodeGeneClass.tab
+    echo "LOAD DATA LOCAL INFILE 'gencodeGeneClass.tab' into table gencodeGeneClass" | hgsql hg16
+
 
 # Sanger Chip/chip  (DONE 2005-03-14 kate)
     ssh hgwdev
