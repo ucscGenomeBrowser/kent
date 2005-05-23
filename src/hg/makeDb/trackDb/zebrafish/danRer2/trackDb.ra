@@ -66,17 +66,6 @@ priority 80
 visibility hide
 type psl .
 
-track ensGene
-shortLabel Ensembl Genes
-longLabel Ensembl danRer2 Predictions
-group genes
-priority 32.8
-visibility pack
-color 150,0,0
-type genePred ensPep
-url http://www.ensembl.org/perl/transview?transcript=$$
-hgGene on
-
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
