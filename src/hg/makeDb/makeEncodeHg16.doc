@@ -36,7 +36,7 @@ exit
 
     cd /cluster/data/encode/UVa
     mkdir 2004-10-22
-    ln -s 2004-10-22 
+    ln -s 2004-10-22  latest
     cd latest
     mkdir -p lab
     cd lab
@@ -89,37 +89,6 @@ exit
     wc -l regions
      # 43 regions (1 missing)
     hgsql  hg16 -N -s -e "SELECT name from encodeRegions" | sort | diff - regions 
-
-    # UPDATED 2005-05-17 WITH NEW DATA
-    mkdir -p 2005-05-17
-    ln -s 2005-05-17 latest
-    cd latest
-    mkdir -p lab
-    cd lab
-    # symlink to nicer names
-    ln -s encode0to2vs0to10AunionD_interval_pval_43.bed repl.0
-    ln -s encode2to4vs0to10AunionD_interval_pval_43.bed repl.2
-    ln -s encode4to6vs0to10AunionD_interval_pval_43.bed repl.4
-    ln -s encode6to8vs0to10AunionD_interval_pval_43.bed repl.6
-    ln -s encode8to10vs0to10AunionD_interval_pval_43.bed repl.8
-    wc -l repl.*
-    # 232 repl.0
-    # 493 repl.2
-    # 295 repl.4
-    # 528 repl.6
-    # 425 repl.8
-    # 1973 total
-
-    foreach F (lab/repl.?)
-        set f = $F:t
-        echo $f
-        liftOver $f /cluster/data/hg15/bed/liftOver/hg15ToHg16.over.chain \
-                    $f.hg16.bed $f.unmapped
-        set time = `echo $f:e`
-        hgLoadBed -noBin hg16 encodeUvaDnaRep$time $f.hg16.bed
-        csh /cluster/data/encode/UVa/2004-10-22/checkEncodeTable.csh encodeUvaDnaRep_$time > $time.ct
-    end
-    
 
 
 # UCSD CHIP/CHIP (2004-09-30 kate)
