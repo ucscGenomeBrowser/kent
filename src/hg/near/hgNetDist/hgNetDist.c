@@ -13,7 +13,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.3 2005/05/21 01:34:58 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.4 2005/05/24 20:55:33 galt Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;
@@ -158,20 +158,6 @@ slReverse(&list);
 
 lineFileClose(&lf);
 return list;
-}
-
-
-int runCmd(char *cmd)
-{
-int child=0, status=0;
-child = fork();
-if (child==0)
-    {
-    if (!execlp("/bin/sh","/bin/sh","-c",cmd,0))
-	errAbort("execlp /bin/sh failed for cmd: %s\n",cmd);
-    }
-while (wait(&status) != child);
-return status;
 }
 
 
@@ -383,19 +369,19 @@ safef(cmd, sizeof(cmd),
     "hgsql %s -e 'drop table if exists %s; create table %s (query varchar(255), target varchar(255), distance float);'",
     db, table, table);
 printf("%s\n",cmd);
-if (status=runCmd(cmd)) errAbort("returned %d\n",status);
+if (status=system(cmd)) errAbort("returned %d\n",status);
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'load data local infile \"hgNetDist.tmp.tab\" into table %s ignore 1 lines;'",
     db, table);
 printf("%s\n",cmd);
-if (status=runCmd(cmd)) errAbort("returned %d\n",status);
+if (status=system(cmd)) errAbort("returned %d\n",status);
 
 safef(cmd, sizeof(cmd), 
     "hgsql %s -e 'create index query on %s (query(8));'",
     db, table);
 printf("%s\n",cmd);
-if (status=runCmd(cmd)) errAbort("returned %d\n",status);
+if (status=system(cmd)) errAbort("returned %d\n",status);
 
 remove("hgNetDist.tmp.tab");
 
