@@ -2,7 +2,7 @@ include ../../../../inc/common.mk
 
 all:
 
-test: refSeqTest refSeqCdsTest trackNamesTest selectTrackTest select2TracksTest
+test: refSeqTest refSeqCdsTest trackNamesTest joinTest joinCdsTest
 
 # test files blatRefSeq.gp  ncbiRefSeq.gp
 #  chr1:11,689,948-12,078,317 - some basic genes
@@ -11,27 +11,26 @@ test: refSeqTest refSeqCdsTest trackNamesTest selectTrackTest select2TracksTest
 #  chr4:71,201,777-71,250,403 - a merged cluster
 
 refSeqTest: mkout
-	clusterGenes -clusterBed=output/refSeqTest.bed output/refSeqTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
-	diff -u expected/refSeqTest.gl output/refSeqTest.gl
-	diff -u expected/refSeqTest.bed output/refSeqTest.bed
+	clusterGenes -clusterBed=output/$@.bed output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	diff -u expected/$@.gl output/$@.gl
+	diff -u expected/$@.bed output/$@.bed
 
 refSeqCdsTest: mkout
-	clusterGenes -cds output/refSeqCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
-	diff -u expected/refSeqCdsTest.gl output/refSeqCdsTest.gl
+	clusterGenes -cds output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	diff -u expected/$@.gl output/$@.gl
 
 trackNamesTest: mkout
-	clusterGenes -cds -trackNames output/trackNamesTest.gl hg16 fred input/blatRefSeq.gp barney input/ncbiRefSeq.gp
-	diff -u expected/trackNamesTest.gl output/trackNamesTest.gl
-
-# test requiring one track
-selectTrackTest: mkout
-	clusterGenes -cds -requiredTracks=ncbiRefSeq output/selectTrackTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
-	diff -u expected/selectTrackTest.gl output/selectTrackTest.gl
-
-# test requiring two tracks
-select2TracksTest: mkout
-	clusterGenes -cds -trackNames -requiredTracks=barney,wilma output/$@.gl hg16 fred input/blatRefSeq.gp barney input/ncbiRefSeq.gp wilma input/ncbiRefSeqSubset.gp
+	clusterGenes -cds -trackNames output/$@.gl hg16 fred input/blatRefSeq.gp barney input/ncbiRefSeq.gp
 	diff -u expected/$@.gl output/$@.gl
+
+joinTest: mkout
+	clusterGenes -joinContained -clusterBed=output/$@.bed output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp
+	diff -u expected/$@.gl output/$@.gl
+	diff -u expected/$@.bed output/$@.bed
+
+joinCdsTest: mkout
+	clusterGenes -joinContained -cds output/joinCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp
+	diff -u expected/joinCdsTest.gl output/joinCdsTest.gl
 
 mkout:
 	${MKDIR} output
