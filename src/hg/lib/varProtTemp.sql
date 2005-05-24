@@ -3,6 +3,6 @@ CREATE TABLE varProtTemp (
   biodatabaseID int(11) NOT NULL default '0',
   parAcc varchar(40) NOT NULL default '',
   description varchar(255) NOT NULL default '',
-  KEY accession (accession)
+  KEY acc(acc)
 ) TYPE=MyISAM;
 
