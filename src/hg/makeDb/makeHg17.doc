@@ -15113,21 +15113,23 @@ hgLoadBlastTab hg17 scBlastTab -maxPer=1 *.tab
 
 # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
 # First make SwissProt protein database and copy it to cluster/bluearc
-cd /cluster/data/dm2/bed
-mkdir blastp
-cd blastp
-wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
-zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
-formatdb -i flyBase.faa -t flyBase -n flyBase
-if (-e /cluster/bluearc/dm2/blastp) then
-   rm -r /cluster/bluearc/dm2/blastp
-endif
-mkdir -p /cluster/bluearc/dm2/blastp
-cp /cluster/data/dm2/bed/blastp/flyBase.p?? /cluster/bluearc/dm2/blastp
+# The following section was already done.
+# cd /cluster/data/dm1/bed
+# mkdir blastp
+# cd blastp
+#wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
+# zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
+# formatdb -i flyBase.faa -t flyBase -n flyBase
+# if (-e /cluster/bluearc/dm1/blastp) then
+#    rm -r /cluster/bluearc/dm1/blastp
+# endif
+# mkdir -p /cluster/bluearc/dm1/blastp
+# cp /cluster/data/dm1/bed/blastp/flyBase.p?? /cluster/bluearc/dm1/blastp
+
 # Make parasol run directory 
 ssh kk
-mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm2
-cd /cluster/data/hg17/bed/geneSorter/blastp/dm2
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm1
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1
 mkdir run
 cd run
 mkdir out
@@ -15136,7 +15138,7 @@ mkdir out
 cat  << '_EOF_' > blastSome
 #!/bin/sh
 BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
--p blastp -d /cluster/bluearc/dm2/blastp/flyBase \
+-p blastp -d /cluster/bluearc/dm1/blastp/flyBase \
 -i $1 -o $2 -e 0.01 -m 8 -b 1
 '_EOF_'
     # << keep emacs happy
@@ -15156,18 +15158,18 @@ gensub2 split.lst single gsub jobList
 para create jobList
 para try
 para check
-para push ... etc ... 
+para push ... etc ...
 # Completed: 7739 of 7739 jobs
-# CPU time in finished jobs:      73574s    1226.24m    20.44h    0.85d  0.002 y
-# IO & Wait Time:                 20557s     342.61m     5.71h    0.24d  0.001 y
-# Average job time:                  12s       0.20m     0.00h    0.00d
+# CPU time in finished jobs:      73518s    1225.30m    20.42h    0.85d  0.002 y
+# IO & Wait Time:                 45038s     750.63m    12.51h    0.52d  0.001 y
+# Average job time:                  15s       0.26m     0.00h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              68s       1.13m     0.02h    0.00d
-# Submission to last job:           532s       8.87m     0.15h    0.01d
+# Longest finished job:              69s       1.15m     0.02h    0.00d
+# Submission to last job:           762s      12.70m     0.21h    0.01d 
 
 # Load into database.  
 ssh hgwdev
-cd /cluster/data/hg17/bed/geneSorter/blastp/dm2/run/out
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
 hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 # Loading database with 27212 rows
 
@@ -15176,215 +15178,5 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # count changed to 28851
 
-#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-11-30 - Fan)
-
-    # Get the ensembl gene/protein cross-reference data from
-    # http://www.ensembl.org/Homo_sapiens/martview
-    # Follow this sequence through the pages:
-    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
-    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
-    # Page 3) Choose the "Feature" box, select gene, transcript, protein,
-              SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC
-    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
-    # Save as ensXref.txt
-
-    sed ensXref.txt -e 's/\./\t/g' > ensemblXref3.tab
-
-    hgsql hg17 -e "drop table ensemblXref3"
-    hgsql hg17 < ~/src/hg/lib/ensemblXref3.sql
-
-    hgsql hg17 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
-
-#### BUILD SUPERFAMILY RELATED TABLES (DONE - 2004-11-30 - Fan)
-
-# Download Superfamily data files and build the Superfamily DB
-# from supfam.mrc-lmb.cam.ac.uk
-
-    mkdir /cluster/store8/superfamily/041128
-    ln -s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
-    cd /cluster/data/superfamily/041128
-# ftp over the following two files:
-ass_28-Nov-2004.tab.gz
-      supfam_28-Nov-2004.sql.gz
-    
-    gzip -d *.gz
-# Load the Superfamily database
-    hgsql hg17 -e "create database superfam041128"
-    hgsql superfam041128 < supfam_28-Nov-2004.sql
-# This may take about an hour.
-
-# Make sure to add an index on id of the des table of superfam041128.
-    hgsql superfam041128 -e "create index id on des(id);"
-
-    hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
-    hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
-superfam041128.sfAssign;'
-
-# Build or rebuild Superfamily track and create sf tables needed for PB
-
-   hgsql hg17 < ~/src/hg/lib/sfAssign.sql
-
-   cd /cluster/data/superfamily/041128  
-   hgsql hg17 -e 'load data local infile "ass_28-Nov-2004.tab" into table hg17.sfAssign;'
-
-# If hg17.sfDes already exists, drop it.
-
-   hgsql superfam041128 -e "select * from des" >sfDes.tab
-   hgsql hg17 < ~/src/hg/lib/sfDes.sql
-   hgsql hg17 -e 'load data local infile "sfDes.tab" into table hg17.sfDes ignore 1 lines;'
-
-# If hg17.superfamily already exists, drop it.
-   cd /cluster/data/hg17/bed
-   mkdir /cluster/data/hg17/sf.2004-1128
-   ln -s sf.2004-1128 sf
-   hgSuperfam hg17 > sf.log
-
-# It is normal that many proteins does not have corresponding Superfamily entries.
-
-# If hg17.sfDescription exists, drop it.
-
-   hgsql hg17 < ~/src/hg/lib/sfDescription.sql
-   hgsql hg17 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg17.sfDescription;'
-
-# Finally, load the superfamily table.
-
-   hgLoadBed hg17 superfamily superfamily.tab -tab
-
-# Create knownToSuperfamily table
-# Note hs is changed into ht for this Superfamily release.
-   
-   cat /cluster/data/superfamily/041128/ass_28-Nov-2004.tab \
-   | hgKnownToSuper hg17 hs stdin
-# created 25287 rows in knownToSuper
-
-### HG17 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2004-12-01 - Fan)
-# These are instructions for rebuilding tables 
-# needed for the Proteome Browser.  
-# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  
-# This update is based on proteins DBs dated 041115.
-
-# Create the working directory
-
-    ssh hgwdev
-    mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
-    mkdir /cluster/data/hg17/bed/pb.2004-12-01
-    cd /cluster/data/hg17/bed
-    ln -s /cluster/data/hg17/bed/pb.2004-12-01 pb
-
-# Move the existing PB tables by:
-
-hgsql hg17
-create database hg17Sav2;
-
-alter table hg17.pepCCntDist rename as hg17Sav2.pepCCntDist;
-alter table hg17.pepExonCntDist rename as hg17Sav2.pepExonCntDist;
-alter table hg17.pepHydroDist rename as hg17Sav2.pepHydroDist;
-alter table hg17.pepIPCntDist rename as hg17Sav2.pepIPCntDist;
-alter table hg17.pepMolWtDist rename as hg17Sav2.pepMolWtDist;
-alter table hg17.pepMwAa rename as hg17Sav2.pepMwAa;
-alter table hg17.pepPi rename as hg17Sav2.pepPi;
-alter table hg17.pepPiDist rename as hg17Sav2.pepPiDist;
-alter table hg17.pepResDist rename as hg17Sav2.pepResDist;
-
-alter table hg17.pbAaDistA rename as hg17Sav2.pbAaDistA;
-alter table hg17.pbAaDistC rename as hg17Sav2.pbAaDistC;
-alter table hg17.pbAaDistD rename as hg17Sav2.pbAaDistD;
-alter table hg17.pbAaDistE rename as hg17Sav2.pbAaDistE;
-alter table hg17.pbAaDistF rename as hg17Sav2.pbAaDistF;
-alter table hg17.pbAaDistG rename as hg17Sav2.pbAaDistG;
-alter table hg17.pbAaDistH rename as hg17Sav2.pbAaDistH;
-alter table hg17.pbAaDistI rename as hg17Sav2.pbAaDistI;
-alter table hg17.pbAaDistK rename as hg17Sav2.pbAaDistK;
-alter table hg17.pbAaDistL rename as hg17Sav2.pbAaDistL;
-alter table hg17.pbAaDistM rename as hg17Sav2.pbAaDistM;
-alter table hg17.pbAaDistN rename as hg17Sav2.pbAaDistN;
-alter table hg17.pbAaDistP rename as hg17Sav2.pbAaDistP;
-alter table hg17.pbAaDistQ rename as hg17Sav2.pbAaDistQ;
-alter table hg17.pbAaDistR rename as hg17Sav2.pbAaDistR;
-alter table hg17.pbAaDistS rename as hg17Sav2.pbAaDistS;
-alter table hg17.pbAaDistT rename as hg17Sav2.pbAaDistT;
-alter table hg17.pbAaDistV rename as hg17Sav2.pbAaDistV;
-alter table hg17.pbAaDistW rename as hg17Sav2.pbAaDistW;
-alter table hg17.pbAaDistY rename as hg17Sav2.pbAaDistY;
-alter table hg17.pbAnomLimit rename as hg17Sav2.pbAnomLimit;
-alter table hg17.pbResAvgStd rename as hg17Sav2.pbResAvgStd;
-alter table hg17.pbStamp rename as hg17Sav2.pbStamp;
-
-quit
-
-# Define pep* tables in hg17 DB
-
-	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
-
-#  First edit out pepPred table definition, then
-
-	hgsql hg17 < pepAll.sql
-
-# Build the pepMwAa table
-
-  hgsql proteins041115 -e "select info.acc, molWeight, aaSize from sp041115.info, sp041115.accToTaxon where 
-accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
-
-hgsql hg17 <<end
-load data local infile "pepMwAa.tab" into table hg17.pepMwAa ignore 1 lines;
-end
-
-o Build the pepPi table
-
-  hgsql proteins041115 -e "select info.acc from sp041115.info, sp041115.accToTaxon where 
-accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
-
-  pbCalPi protAcc.lis sp041115 pepPi.tab
-
-hgsql hg17 <<end
-load data local infile "pepPi.tab" into table hg17.pepPi;
-end
-
-# Calculate and load pep distributions
-
-  pbCalDist sp041115 proteins041115 9606 hg17 >pbCalDist.out
-
-    cat pbCalDist.out
-    wc  pbCalDist.out
-
-    hgsql hg17
-
-    load data local infile "pepExonCntDist.tab" into table hg17.pepExonCntDist;
-    load data local infile "pepCCntDist.tab" into table hg17.pepCCntDist;
-    load data local infile "pepHydroDist.tab" into table hg17.pepHydroDist;
-    load data local infile "pepMolWtDist.tab" into table hg17.pepMolWtDist;
-    load data local infile "pepResDist.tab" into table hg17.pepResDist;
-    load data local infile "pepIPCntDist.tab" into table hg17.pepIPCntDist;
-    load data local infile "pepPiDist.tab" into table hg17.pepPiDist;
-    quit
-
-# Calculate frequency distributions
-
-    pbCalResStd 041115 9606 hg17
-
-# Create pbAnomLimit and pbResAvgStd tables
-
-   hgsql hg17 < ~/src/hg/lib/pbAnomLimit.sql
-   hgsql hg17 < ~/src/hg/lib/pbResAvgStd.sql
-
-   hgsql hg17 -e 'load data local infile "pbResAvgStd.tab" into table hg17.pbResAvgStd;'
-   hgsql hg17 -e 'load data local infile "pbAnomLimit.tab" into table hg17.pbAnomLimit;'
-
-# Create pbStamp table for PB
-   
-  hgsql hg17 < ~/src/hg/lib/pbStamp.sql
-  hgsql hg17Sav2 -e 'select * from pbStamp' > pbStamp.tab
-
-  hgsql hg17 -e 'load data local infile "pbStamp.tab" into table hg17.pbStamp ignore 1 lines;'
-
-# Adjust drawing parameters for Proteome Browser stamps
-
-  Now invoke Proteome Browser and adjust various drawing parameters
-  (mostly the ymax of each stamp) if necessary, by updating the 
-  pbStamp.tab file and then delete and reload the pbStamp table. 
-
-# Perform preliminary review of Proteome Browser for hg17, then
-  notify QA for formal review.
 
 
