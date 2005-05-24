@@ -6195,7 +6195,9 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     nice gzip {axt,psl}Chrom/* axtChain/{all.chain,*.net} &
 
 
-# SGP GENES (DONE 9/17/04 angie)
+# SGP GENES (REDONE 5/24/05 angie)
+    # Originally loaded 9/17/04; user noticed chrX was missing; IMIM folks 
+    # regenerated & we reloaded.
     ssh kksilo
     mkdir /cluster/data/mm5/bed/sgp
     cd /cluster/data/mm5/bed/sgp
@@ -6206,7 +6208,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
     cp /dev/null sgpPep.fa
     foreach f (chr*.prot)
-      perl -wpe 's/^(>chr\S+)/$1.1/' $f >> sgpPep.fa
+      nice perl -wpe 's/^(>chr\S+)/$1.1/' $f >> sgpPep.fa
     end
     ssh hgwdev
     cd /cluster/data/mm5/bed/sgp
