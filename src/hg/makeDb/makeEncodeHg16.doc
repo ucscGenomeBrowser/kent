@@ -15,8 +15,7 @@ exit
 
     /cluster/data/encode/StanfordPromoters
     mkdir StanfordPromoters_20040825
-    ln -s latest StanfordPromoters_20040825
-    cd latest
+    cd StanfordPromoters_20040825
 
     csh makePromoterFiles.csh > promoterExps.tab
     wc -l promoterExps.exp
@@ -27,6 +26,17 @@ exit
     hgExperiment hgFixed encode_Stanford_Promoters \
                     promoterExps.tab promoterPos.bed promoterData.tab
     hgLoadBed hg16 encode_Stanford_Promoters encode_Stanford_Promoters.tab
+
+    # data update (2005-04-12 kate IN PROGRESS) 
+    /cluster/data/encode/StanfordPromoters
+    mkdir -p 2005-04-12; cd 2005-04-12
+    mkdir lab; cd lab
+    # save from email
+    ls
+    # ENCODE_DATA_SUBMIT_2005.04.12.txt  UCSCREADME.txt
+    # NOTE: scores are outside of 1-1000.  I've asked for
+    # a redo from Sara.
+
 
 
 # UVA DNA REPLICATION TEMPORAL PROFILING (2004-10-22 kate)
