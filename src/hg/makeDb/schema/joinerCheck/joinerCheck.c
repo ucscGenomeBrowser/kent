@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.32 2005/04/06 00:19:22 galt Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.33 2005/05/24 21:00:45 heather Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -479,6 +479,7 @@ void doKeyChecks(char *db, struct joiner *joiner, struct joinerSet *js,
 struct sqlConnection *conn = sqlMayConnect(db);
 if (conn != NULL)
     {
+    boolean okFlag = FALSE;
     int total = 0, hits = 0, hitsNeeded;
     char *miss = NULL;
     struct slName *table;
@@ -522,8 +523,11 @@ if (conn != NULL)
 	}
     if (tableList != NULL)
 	{
-	verbose(1, " %s.%s.%s - hits %d of %d%s\n", db, jf->table, jf->field, hits, total, hits==total ? " ok":"");
+	okFlag = FALSE;
+	if (hits==total) okFlag = TRUE;
 	hitsNeeded = round(total * jf->minCheck);
+	if (jf->minCheck < 1.0 && hits >= hitsNeeded) okFlag = TRUE;
+	verbose(1, " %s.%s.%s - hits %d of %d%s\n", db, jf->table, jf->field, hits, total, okFlag ? " ok":"");
 	if (hits < hitsNeeded)
 	    {
 	    warn("Error: %d of %d elements of %s.%s.%s are not in key %s.%s line %d of %s\n"
@@ -532,6 +536,7 @@ if (conn != NULL)
 		, keyField->table, keyField->field
 		, jf->lineIx, joiner->fileName, miss);
 	    }
+
 	if (jf->unique || jf->full)
 	    checkUniqueAndFull(joiner, js, db, jf, keyField, khiList);
 	}
