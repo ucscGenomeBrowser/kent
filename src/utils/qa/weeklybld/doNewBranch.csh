@@ -98,7 +98,10 @@ echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build compl
 echo
 ./doRobots.csh
 if ( $status ) then
- exit 1
+    echo "One or more of the robots had errors.  See the logs."
+    exit 1
+else
+    echo "Robots done. No errors reported."
 endif
 
 echo
