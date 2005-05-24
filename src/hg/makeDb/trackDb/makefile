@@ -147,7 +147,7 @@ strict:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb -strict=yes $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -strict $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -173,7 +173,7 @@ mgc:
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
 		    vis="" ; \
-		    cmd="hgTrackDb -strict=yes -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
+		    cmd="hgTrackDb -strict -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgsql $$DB < grpMgc.sql" ; \
 		    echo $$cmd ;  $$cmd ; \
