@@ -1,23 +1,25 @@
 /*
   File: zfishBacClonesandSts.c
   Author: Rachel Harte
-  Date: 5/20/2005
+  Date: 5/24/2005
   Description: Using a the list of names of zebrafish BAC clones that are in 
   the database tables for the BAC ends track, add information including 
   internal Sanger name, alternate name (alias), UniSTS ID, and accession. 
   FPC contig is not used for the tables as these are dynamic as the assembly 
   changes. The program assumes that all BAC clones in the markers file are 
-  also in the clonemarkers file. There are more Sanger STS marker names in the
-  clonemarkers file than appear in the markers file. There are also Sanger
-  STS names that map to multiple BAC clones. In this case, etID9511.14 has
-  35 BAC clones associated to it so there are 35 different external and 
-  internal BAC name pairs that are associated with this Sanger STS name.
+  also in the clonemarkers file. There are more Sanger STS marker names in 
+  the clonemarkers file than appear in the markers file. There are also 
+  Sanger STS names that map to multiple BAC clones. In this case, 
+  etID9511.14 has 35 BAC clones associated to it so there are 35 different 
+  external and internal BAC name pairs that are associated with this 
+  Sanger STS name. Each Sanger STS name has multiple aliases - the most is
+  216 (etID22623.3) and all but 4 have under 50.
   Each Sanger STS name may have more than one UniSTS ID, the maximum in 
   this dataset is three. These are printed out as a comma separated list 
   in the bacXRef.tab file.
   Output:
-  bacAlias.tab: aliases (STS aliases for STS associated with BAC clones) and
-  Sanger STS name.
+  bacAlias.tab: aliases (STS aliases for STS associated with BAC clones) 
+  and Sanger STS name.
   bacXRef.tab: BAC clone external name, BAC clone internal (Sanger name), 
   chromosomes to which BAC clone is mapped (in pairs or singles tables), 
   Genbank accession for BAC clone, Sanger STS name, relationship (method of
@@ -39,10 +41,10 @@
 #include "psl.h"
 #include "options.h"
 
-#define NUMALIASES 50
+#define NUMALIASES 250
 #define NUMCHROMS 10
-#define NUMSANGER 4
-#define NUMPREFIXES 7
+#define NUMSANGER 5
+#define NUMPREFIXES 9
 #define MAXSANGER 50
 
 /* command line option specifications */
@@ -81,8 +83,8 @@ struct hash *extNameHash;
 struct hash *aliasHash; 
 struct hash *sangerByExtNameHash;
 
-char *intNamePrefix[] = {"zC", "ZC", "zK", "zKp", "bZ", "dZ", "bY"};
-char *extNamePrefix[] = {"CH211-", "CH211-", "DKEY-", "DKEYP-", "RP71-", "BUSM1-", "XX-"};
+char *intNamePrefix[] = {"zC", "ZC", "zK", "zKp", "bZ", "dZ", "bY", "zH", "bP"};
+char *extNamePrefix[] = {"CH211-", "CH211-", "DKEY-", "DKEYP-", "RP71-", "BUSM1-", "XX-", "CH73", "CT7"};
 
 struct hashEl *addHashElUnique(struct hash *hash, char *name, void *val)
 /* Adds new element to hash table. If not unique, remove old element */
@@ -216,20 +218,23 @@ while (lineFileChopCharNext(clf, sep, words, 5))
         /* and initialize the arrays */
         AllocArray(a->uniStsId, (sizeof(char *) * NUMSANGER));
         AllocArray(a->aliases, (sizeof(char *) * NUMALIASES));
-        AllocArray(a->extName, (sizeof(char *) * NUMALIASES));
-        AllocArray(a->intName, (sizeof(char *) * NUMALIASES));
-        AllocArray(a->relation, (sizeof(int) * NUMALIASES));
+        AllocArray(a->extName, (sizeof(char *) * MAXSANGER));
+        AllocArray(a->intName, (sizeof(char *) * MAXSANGER));
+        AllocArray(a->relation, (sizeof(int) * MAXSANGER));
 
         for (i = 0; i < NUMSANGER; i++)
             {
             a->uniStsId[i] = NULL;
             }
-        for (i = 0; i < NUMALIASES; i++)
+        for (i = 0; i < MAXSANGER; i++)
             {
-            a->aliases[i] = NULL;
             a->extName[i] = NULL;
             a->intName[i] = NULL;
             a->relation[i] = -1;
+            }
+        for (i = 0; i < NUMALIASES; i++)
+            {
+            a->aliases[i] = NULL;
             }
         }
     /* find empty slot in arrays to add external and internal names */
@@ -362,6 +367,9 @@ while (lineFileChopTab(nmf, words))
             b->chrom[i] = NULL;
             }
         b->acc = NULL;
+        /* add this new entry to the extNameHash, added to bacHash later */
+        if (intName != NULL)
+            addHashElUnique(extNameHash, intName, extName);
         }
     found = FALSE;
     for (i = 0; i < NUMCHROMS && (!found); i++)
@@ -377,8 +385,6 @@ while (lineFileChopTab(nmf, words))
         errAbort("No room left in chrom array to add chrom for %s\n", extName);
     /* add BAC info to hash keyed by external name */
     addHashElUnique(bacHash, extName, b);
-    if (intName != NULL)
-        addHashElUnique(extNameHash, intName, extName);
     }
 }
 
@@ -517,7 +523,7 @@ if (al != NULL)
     {
     /* if nameIndex >= 0 then print information just for the extName and intName */
     /* at that index in those arrays else print information for all BACs in arrays */
-    for (j = 0; j < NUMALIASES && (al->extName[j] != NULL); j++)
+    for (j = 0; j < MAXSANGER && (al->extName[j] != NULL); j++)
         {
         if (nameIndex >= 0)
             {
@@ -545,7 +551,7 @@ if (al != NULL)
         else
             fprintf(xRef, "\\N\t\\N\n");
         if (printOnce)
-            j = NUMALIASES - 1;
+            j = MAXSANGER - 1;
         }
     }
 else
@@ -584,7 +590,7 @@ if (bacList != NULL)
                 {
                 al = hashFindVal(aliasHash, s->sangerName[j]);
             /* find alias extName array index that corresponds to the extName */
-                for (i = 0; i < NUMALIASES && (al->extName[i] != NULL); i++)
+                for (i = 0; i < MAXSANGER && (al->extName[i] != NULL); i++)
                      {
                      if (sameString(bac->extName, al->extName[i]))
                          index = i;
@@ -597,8 +603,6 @@ if (bacList != NULL)
             printXRefTable(xRef, bac, NULL, index);
             }
        }
-       if (s == NULL)
-           fprintf(stderr, "There are no sanger names for this bac name %s \n", bac->extName);
        fflush(stderr);
        fflush(xRef);
    }
@@ -611,7 +615,7 @@ if (aliasList != NULL)
         {
         alias = (struct alias *)aliasEl->val;
         /* if this extName is not found in the BAC clones hash */
-        for (j = 0; j < NUMALIASES && (alias->extName[j] != NULL); j++)
+        for (j = 0; j < MAXSANGER && (alias->extName[j] != NULL); j++)
             {          
             if ((bac = hashFindVal(bacHash, alias->extName[j])) == NULL)
                 {
