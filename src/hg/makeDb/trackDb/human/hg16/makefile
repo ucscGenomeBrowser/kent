@@ -1,9 +1,9 @@
 # Make symlinks to reused doc files, to simplify maintenance
 
-all: UVA UCSD GENCODE
+all: UCSD GENCODE
 
 clean::
-	rm -f ${UVA_LINKS} ${UCSD_LINKS}
+	rm -f ${UCSD_LINKS}
 
 GENCODE_LINKS = \
         encodeGencodeGene.html \
@@ -12,20 +12,6 @@ GENCODE_LINKS = \
 GENCODE: ${GENCODE_LINKS}
      
 encodeGencode%.html: encodeGencode.html
-	rm -f $@
-	ln -s $< $@
-
-UVA_LINKS = \
-	encode_UVA_DNARep_0_2.html \
-	encode_UVA_DNARep_0_2.html \
-	encode_UVA_DNARep_2_4.html \
-	encode_UVA_DNARep_4_6.html \
-	encode_UVA_DNARep_6_8.html \
-	encode_UVA_DNARep_8_10.html 
-
-UVA:    ${UVA_LINKS}
-
-encode_UVA_DNARep_%.html: encode_UVA_DNARep.html
 	rm -f $@
 	ln -s $< $@
 
