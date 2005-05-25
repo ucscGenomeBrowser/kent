@@ -4258,5 +4258,36 @@ zcat `ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS/$chr.*.pp.gz \
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
-# CHICKEN 13K ARRAY PROBES
-
+# CHICKEN 13K ARRAY PROBES (DONE 5/19/2005 Andy)
+    mkdir /cluster/data/galGal2/bed/chicken13k
+    cd /cluster/data/galGal2/bed/chicken13k
+    wget http://www.fhcrc.org/shared_resources/genomics/dna_array/spotted_arrays/chicken_array/chicken13k_anno_v2.0.txt
+    cut -f1,8,9,10 chicken13k_anno_v2.0.txt | grep chr \
+      | awk '{printf("%s\t%s\t%s\t%s\n", $2, $3, $4, $1)}' > chicken13k.bed
+    # Not all the probes are mapped.
+    tail +2 chicken13k_anno_v2.0.txt | wc -l
+# 15769
+    wc -l chicken13k.bed
+# 13174
+    # So that's a loss of about 17% of the probes.
+    # Double-checked the half-open bed start in the browser with the corresponding EST.
+    # It appears to be bed-ready.
+    hgLoadBed galGal2 chicken13k chicken13k.bed
+    # trackDb entry:
+track chicken13k
+shortLabel 13k Probes
+longLabel Probes for 13k Microarray
+group regulation
+priority 91.0
+visibility hide
+type bed 4 .
+    # trackDb findSpec:
+searchName chicken13k
+searchTable chicken13k
+searchType bed
+searchMethod exact
+searchPriority 55
+   # Add information to the chicken13kInfo table:
+   cut -f1-7,11-15 chicken13k_anno_v2.0.txt | tail +2 > chicken13kInfo.txt
+   hgsql galGal2 < ~/kent/src/hg/lib/chicken13kInfo.sql
+   echo "load data local infile 'chicken13kInfo.txt' into table chicken13kinfo" | hgsql galGal2
