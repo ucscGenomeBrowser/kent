@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.56 2005/05/25 21:09:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.57 2005/05/25 22:58:26 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -428,8 +428,10 @@ if (protAcc != NULL)
     kgProteinID = strdup("");
     if (hTableExists("knownGene"))
     	{
-    	sprintf(condStr, "chrom = '%s' and txStart=%s and txEnd=%s", cartOptionalString(cart, hggChrom), 
-    	cartOptionalString(cart, hggStart), cartOptionalString(cart, hggEnd));
+    	sprintf(condStr, "name = '%s' and chrom = '%s' and txStart=%s and txEnd=%s", 
+	        id, cartOptionalString(cart, hggChrom), 
+    	        cartOptionalString(cart, hggStart), 
+		cartOptionalString(cart, hggEnd));
     	kgProteinID = sqlGetField(conn, database, "knownGene", "proteinID", condStr);
     	}
 	
