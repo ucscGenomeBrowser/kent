@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.55 2005/05/24 18:21:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.56 2005/05/25 21:09:06 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -390,6 +390,8 @@ boolean gotRefseqAli = idInRefseq(id, conn);
 char *oldDisplayId;
 char condStr[255];
 char *kgProteinID;
+char *parAcc; /* parent accession of a variant splice protein */
+char *chp;
 
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
@@ -434,13 +436,17 @@ if (protAcc != NULL)
     hPrintf("<B>Protein: ");
     if (strstr(kgProteinID, "-") != NULL)
         {
+	parAcc = strdup(kgProteinID);
+	chp = strstr(parAcc, "-");
+	*chp = '\0';
+	
         /* show variant splice protein and the UniProt link here */
 	hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
 	    "TARGET=_blank>%s</A></B>, splice isoform of ",
 	    kgProteinID, kgProteinID);
         hPrintf("<A HREF=\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\" "
 	    "TARGET=_blank>%s</A></B>\n",
-	    protAcc, protAcc);
+	    parAcc, parAcc);
 	}
     else
         {
