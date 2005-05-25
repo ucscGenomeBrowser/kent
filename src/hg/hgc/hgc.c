@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.891 2005/05/24 23:43:39 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.892 2005/05/25 21:17:16 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1979,11 +1979,16 @@ void printTBSchemaLink(struct trackDb *tdb)
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 {
 if (hTableOrSplitExists(tdb->tableName))
+    {
+    char *trackTable = trackDbSetting(tdb, "subTrack");
+    if (trackTable == NULL)
+	trackTable = tdb->tableName;
     printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	   "TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, tdb->tableName, tdb->tableName);
+	   database, tdb->grp, trackTable, tdb->tableName);
+    }
 }
 
 void printTrackHtml(struct trackDb *tdb)
