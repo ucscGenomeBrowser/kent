@@ -652,7 +652,7 @@ droSim1.downloadDir = droSim1
     hgGcPercent droSim1 ../../nib
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (TODO 5/13/05 alisq)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 5/13/05 alisq)
     ssh hgwdev
     echo 'insert into blatServers values("droSim1", "blat9", "17780", 1, 0); \
           insert into blatServers values("droSim1", "blat9", "17781", 0, 1);' \
