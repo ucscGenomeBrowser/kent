@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.892 2005/05/25 21:17:16 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.893 2005/05/25 23:41:04 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11951,7 +11951,6 @@ if (sr1 != NULL)
         else
             printf("n/a</TD>");
         printf("<TD ALIGN=center>"); 
-    fflush(stdout);
         if (sameString(row1[1], "1"))
             printf("BAC end</TD>"); 
         else if (sameString(row1[1], "2"))
@@ -11961,9 +11960,7 @@ if (sr1 != NULL)
         else 
             printf("n/a</TD>");
             
-    fflush(stdout);
         printf("<TD>"); 
-    fflush(stdout);
         if (uniStsId != NULL)
             {
             /* remove last comma from string before printing */
@@ -11972,16 +11969,12 @@ if (sr1 != NULL)
             }
         else
             printf("n/a</TD>");
-    fflush(stdout);
         printf("<TD>"); 
-    fflush(stdout);
         if (row1[3] != NULL)
             printf("%s</TD>", row1[3]); 
         else
             printf("n/a</TD>");
-    fflush(stdout);
         printf("<TD>"); 
-    fflush(stdout);
         if (row1[4] != NULL)
             printf("%s</TD>", row1[4]); 
         else
@@ -12000,14 +11993,11 @@ if (sr1 != NULL)
             printf("%s", row2[0]);
             }
         printf("</TD></TR>\n");
-        fflush(stdout);
         }
     }
-    fflush(stdout);
 if (foundStsResult)
     {
     printf("</TABLE>\n");
-    fflush(stdout);
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
     }
 }
