@@ -53,6 +53,8 @@ class ScaffoldQuality {
           scoreArray = QADBLibrary.getScores(contig, "contigQuality", stmt2);
 	  int pos = contig.chromStart + 1;
 	  System.out.println("fixedStep chrom=" + scaffold.name + " start=" + pos);
+	  // could check here if extra scores getting throw away
+	  // LoadQuality padded with extra zeroes if necessary
 	  for (int k = contig.fragStart; k < contig.fragEnd; k++)
 	    System.out.println(scoreArray.get(k));
 	}
