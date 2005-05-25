@@ -1,62 +1,65 @@
-Description
-
+<H2>Description</H2>
+<P>
 In order to survey the entire human genome in an unbiased fashion, a
 total of 38 high-density oligonucleotide arrays (Nimblegen platform)
-were fabricated, representing approximately 1.45 billion basepairs of
+were fabricated, representing approximately 1.45 billion base pairs of
 non-repetitive DNA with 50-mer oligonucleotides positioned at every 100
-basepairs throughout the human genome (UCSC HG16). Using this array,
-genome-wide location analysis of TAF1 (TBP associated factor 1 of TFIID
+base pairs throughout the human genome (UCSC hg16). Using this array,
+genome-wide location analysis of TAF1 (TBP-associated factor 1 of TFIID
 complex, formerly TAF250) was conducted employing ChIP/chip using
 chromatin extracted from primary fibroblast IMR90 cells.  General
 transcription factor TFIID is one of the key components of the
-preinitiation complex (PIC) on the promoter.
+pre-initiation complex (PIC) on the promoter.</P>
 
-Methods
+<H2>Methods</H2>
+<P>
 Chromatin from IMR90 cells lines was cross-linked, precipitated with
-TAF1 antibody (sc-735, Santa Cruze), sheared, amplified and hybridized
-to 38 high-density oligonucleotide arrays (Nimblgen). There arrays
+TAF1 antibody (sc-735, Santa Cruz), sheared, amplified and hybridized
+to 38 high-density oligonucleotide arrays (Nimblgen). These arrays
 contain a total of 14,535,659 50-mer oligonucleotides, positioned at
-every 100 basepairs throught the human genome (UCSC HG16).  Using this
+every 100 base pairs through the human genome (UCSC hg16).  Using this
 set of arrays, a total of 9,966 clusters of TFIID binding sites were
-identified.
-
+identified.</P>
+<P>
 To verify the binding of TFIID to these sequences, we designed a
 condensed array that contained a total of 379,521 oligonucleotides to
 represent the 9,966 putative TFIID binding sequences plus 29 control
 genomic loci, from the 44 ENCODE6 regions, at 100 bp resolution.  Using
 these condensed arrays, two independent chromatin immunoprecipitation
-(ChIP) experiments with the antibodies against TAF1, RNA polymerase II,
-acetylated histone 3 and dimethylated K4 histone 3 were performed.  A
+(ChIP) experiments were performed with the antibodies against TAF1, RNA 
+polymerase II, acetylated histone 3 and dimethylated K4 histone 3.  A
 total of 8,597 TFIID binding regions, ranging in size from 400 bp to 9.8
-Kbp, were confirmed by the TAF1 replicate experiments.
-
+Kbp, were confirmed by the TAF1 replicate experiments.</P>
+<P>
 To further define the sites of TFIID binding within the identified
-regions, we have developed a model-based peak finding algorithm that
+regions, we have developed a model-based peak-finding algorithm that
 estimates the most-likely TFIID binding sites based on the hybridization
 intensity of probes within each fragment.  The signals from a set of
-consecutive significantly enriched probes were collectively used to
+consecutive significantly-enriched probes were collectively used to
 locate the most likely TFIID binding site to the probe with the peak
 signal.  Our algorithm predicted a total of 12,150 TFIID binding
-sites within the 8,597 confirmed TFIID binding fragments.
+sites within the 8,597 confirmed TFIID binding fragments.</P>
+<P>
+We compared the location of the 12,150 peaks to the annotated 5' end of
+transcripts from RefSeq, GenBank and DBTSS, using 2.5 Kbp as the cutoff.
+We found that 10,504 peaks corresponding to 9,281 non-redundant 
+transcripts were within 2.5 Kbp of the annotated 5' end. 47 of the 
+remaining peaks were within 2.5 Kbp of Ensembl genes, resulting in a 
+total of 9328 known non-redundant promoters.  The remaining peaks were 
+further filtered using Acembly annotation and AcH3, RNAP and MeH3K4 
+ChIP/chip data. The total number of novel peaks was 1239.</P>
+<P>
+The raw data have been deposited in GEO (GSE2672) and will be released 
+after the paper published.</P>
 
-We compared the location of the 12,150 peaks to annotated 5' end of
-transcripts from RefSeq, GeneBank and DBTSS using 2.5Kbp as the cutoff.
-We found 10,504 peaks corresponding to 9,281 not-redudent transcripts
-are within 2.5Kbp of the annotated 5' end.  47 of the remaining peaks
-are within 2.5Kbp of Ensemble genes, making the total number of known
-non-redundent promoters as 9328.  The remaining peaks were further
-filtered using Acembly annotation, and AcH3, RNAP and MeH3K4 ChIP/chip
-data.  The total number of novel peak is 1239.
+<H2>Verification</H2>
+<P>
+The peaks from genome scan experiments were verified using condensed
+arrays, as described in the Methods section.</P>
 
-The raw data has beed deposied to GEO (GSE2672, with be released after
-the paper published).
-
-Verification
-The peaks from genome scan experiments were verified using consensed
-array, as described in the Methods section.
-
-References:
-Tae Hoon Kim1, Leah O. Barrera Ming Zheng, Chunxu Qu, Michael A. Singer,
-Todd A. Richmond, Yingnian Wu, Roland D. Green and Bing Ren, A high-
-resolution map of active promoters in the human genome.  Accepted by
-Nature.
+<H2>References</H2>
+<P>
+Kim, T.H., Barrera, L.O., Zheng, M., Qu, C., Singer, M.A., 
+Richmond, T.A., Wu, Y., Green, R.D. and Ren, B. 
+A high-resolution map of active promoters in the human genome.  
+<em>Nature, to appear</em>.</P>
