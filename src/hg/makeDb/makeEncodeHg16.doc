@@ -618,3 +618,52 @@ cat > load.csh << 'EOF'
     # Loaded 65513 elements of size 12
 
 
+# TEST RE-LOADING AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING
+#	- Hiram 2005-05-24
+#	as bedGraph type tracks instead of wiggle to provide accurate
+#	data retrieval of the original data rather than have the wiggle
+#	transformations interferring.  An experiment to see if there is
+#	a large difference in storage requirements for this data.
+    ssh hgwdev
+    mkdir /cluster/data/encode/Affy/Dec03_2004/ucsc_formats/bedGraph
+    cd /cluster/data/encode/Affy/Dec03_2004/ucsc_formats/bedGraph
+
+    for HR in 00 02 08 32
+    do
+	rm -f encodeAfyRnaHl60SigHr${HR}.bed
+	rm -f bedGraph.sql
+	zcat ../wig/EC_HL60_RA_RNA_${HR}hr_AS.hs.NCBIv34.wig.gz | \
+	    ./varStepToBedGraph.pl /dev/stdin | sort -k1,1 -k2,2n > \
+	    encodeAfyRnaHl60SigHr${HR}.bed
+	hgsql -e "drop table encodeAfyRnaHl60SigHr${HR}" hg16 2> /dev/stderr
+	echo "CREATE TABLE encodeAfyRnaHl60SigHr${HR} (" > bedGraph.sql
+	echo 'bin smallint unsigned not null,' >> bedGraph.sql
+	echo 'chrom varchar(255) not null,' >> bedGraph.sql
+	echo 'chromStart int unsigned not null,' >> bedGraph.sql
+	echo 'chromEnd int unsigned not null,' >> bedGraph.sql
+	echo 'dataValue float not null,' >> bedGraph.sql
+	echo 'INDEX(chrom(6),bin)' >> bedGraph.sql
+	echo ');' >> bedGraph.sql
+	hgLoadBed -sqlTable=bedGraph.sql hg16 encodeAfyRnaHl60SigHr${HR} \
+		encodeAfyRnaHl60SigHr${HR}.bed
+    done
+    #
+    #	Measuring previous data requirements:
+    ssh hgwdev
+    cd /gbdb/hg16/encode/Affy/2004-12-03/wib
+    du -hscL encodeAffyRna*
+# 19M     encodeAffyRnaHl60SigHr00.wib
+# 19M     encodeAffyRnaHl60SigHr02.wib
+# 19M     encodeAffyRnaHl60SigHr08.wib
+# 19M     encodeAffyRnaHl60SigHr32.wib
+# 76M     total
+    #	examining the "show table status" on these tables shows:
+    #	index length: 277,504 * 4 = 1,110,016 = 1.06 Mb
+    #   data length: 3,291,136 * 4 = 13,181,472 = 12.57 Mb
+    #	therefore total size: 76 + 1 + 13 = 90 Mb
+    #	These new tables loaded are:
+    #	index length: 9,033,728 * 4 = 36,134,912 = 34.46 Mb
+    #   data length: 17,331,152 * 4 = 69,096,304 = 65.90 Mb
+    #	thus total length: 34 + 66  = 100 Mb
+    #	At this density of data these storage areas are certainly
+    #	comparable and practically equivalent.
