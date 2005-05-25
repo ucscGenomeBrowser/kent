@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.250 2005/05/06 18:37:00 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.251 2005/05/25 21:13:40 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3130,7 +3130,10 @@ for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
             if (compositeTdb)
                 {
 		if(!trackDbSetting(tdb, "noInherit"))
+		    {
 		    tdb->type = cloneString(compositeTdb->type); 
+		    tdb->grp = cloneString(compositeTdb->grp);
+		    }
                 /* should be a short list -- we can shortcut and add to tail
                  * rather than reversing later */
                 slAddTail(&compositeTdb->subtracks, tdb);
