@@ -40,7 +40,7 @@ exit
 
 
 # UVA DNA REPLICATION TEMPORAL PROFILING (2004-10-22 kate)
-    # Updated with new data 2005-05-17 kate
+# Updated with new data 2005-05-25 angie, see below
     # Dutta lab (Univ. Virginia) replication data
     #       Submitted as custom track, coords on hg15
 
@@ -71,7 +71,8 @@ exit
 
     cat > checkEncodeTable.csh << 'EOF'
     hgsql hg16 -N -s -e "SELECT er.name, count(*) FROM encodeRegions er, $1 hs WHERE er.chrom=hs.chrom AND hs.chromStart between er.chromStart AND er.chromEnd group by er.name"
-    'EOF'
+'EOF'
+    # << for emacs
 
     # load w/o binning to maintain ordering by chromStart
     foreach f (repl.?-?{,?})
@@ -99,6 +100,106 @@ exit
     wc -l regions
      # 43 regions (1 missing)
     hgsql  hg16 -N -s -e "SELECT name from encodeRegions" | sort | diff - regions 
+    # UPDATED 2005-05-25 WITH NEW DATA (angie)
+    cd /cluster/data/encode/UVa
+    mkdir 2005-05-25
+    rm latest
+    ln -s 2005-05-25 latest
+    ln -s 2004-10-22 previous
+    cd latest
+    mkdir lab
+    cd lab
+    # saved email attachments here.
+    # symlink to nicer names:
+    ln -s encode0to2hrAuD4030.bed.txt repl.0
+    ln -s encode2to4hrAuD4030.bed.txt repl.2
+    ln -s encode4to6hrAuD4030.bed.txt repl.4
+    ln -s encode6to8hrAuD4030.bed.txt repl.6
+    ln -s encode8to10hrAuD4030.bed.txt repl.8
+    wc -l repl.*
+#    249 repl.0
+#    618 repl.2
+#    305 repl.4
+#    569 repl.6
+#    429 repl.8
+#   2170 total
+    # Any 0-length items?
+    foreach f (encode*)
+      echo $f
+      awk '$3 == $2 {print;}' $f
+    end
+    # Any >1Mbp items?  (Previously there were some of these items spanning 
+    # multiple encode regions...
+    cd lab
+    foreach f (encode*)
+      echo $f
+      awk '$3 - $2 > 1000000 {print;}' $f
+    end
+    cd ..
+    foreach F (lab/repl.?)
+      set f = $F:t
+      echo $f
+      tail +2 $F \
+      | liftOver stdin /cluster/data/hg15/bed/liftOver/hg15ToHg16.over.chain \
+          $f.hg16.bed $f.unmapped
+      set time = $f:e
+      hgLoadBed -noBin hg16 encodeUvaDnaRep$time $f.hg16.bed
+      csh /cluster/data/encode/UVa/2004-10-22/checkEncodeTable.csh \
+        encodeUvaDnaRep$time > $time.ct
+    end
+    wc -l *.bed
+#    248 repl.0.hg16.bed
+#    616 repl.2.hg16.bed
+#    304 repl.4.hg16.bed
+#    568 repl.6.hg16.bed
+#    428 repl.8.hg16.bed
+#   2164 total
+    wc -l *.unmapped
+#      0 repl.0.unmapped
+#      2 repl.2.unmapped
+#      0 repl.4.unmapped
+#      0 repl.6.unmapped
+#      0 repl.8.unmapped
+#      2 total
+    cat repl.2.unmapped 
+##Split in new
+#chr21   39652869        39703581
+    # The main chr21 over.chain is interrupted by a little inversion chain 
+    # 39661243 39662854... so try liftOvering the start and end:
+    cat > hg15.chr21troublespot.bed <<EOF
+chr21 39652869 39652870
+chr21 39703580 39703581
+EOF
+    liftOver hg15.chr21troublespot.bed \
+       /cluster/data/hg15/bed/liftOver/hg15ToHg16.over.chain \
+       hg16.chr21troublespot.{bed,unmapped}
+    cat hg16.chr21troublespot.*
+#chr21   39652870        39652871
+#chr21   39703140        39703141
+    # OK, manually add an entry for chr21 39652870 39703141 to repl.2.hg16.bed:
+    $EDITOR repl.2.hg16.bed
+    wc -l repl.2.hg16.bed
+#    617 repl.2.hg16.bed
+    # Reload:
+    hgLoadBed -noBin hg16 encodeUvaDnaRep2 repl.2.hg16.bed
+
+    # Look for ENCODE regions completely missing from all 5 tables:
+    cut -f 1 *.ct | sort | uniq > regions
+    wc -l regions
+    # 43 regions (1 missing)
+    hgsql  hg16 -N -s -e "SELECT name from encodeRegions" | sort \
+    | diff - regions 
+    # < ENm011
+    foreach t (0 2 4 6 8)
+      set t2 = `expr $t + 2`
+      featureBits hg16 -enrichment encode_UVA_DNARep_${t}_$t2 \
+        encodeUvaDnaRep$t
+    end
+#encode_UVA_DNARep_0_2 0.154%, encodeUvaDnaRep0 0.154%, both 0.154%, cover 99.90%, enrich 648.98x
+#encode_UVA_DNARep_2_4 0.621%, encodeUvaDnaRep2 0.621%, both 0.620%, cover 99.93%, enrich 161.04x
+#encode_UVA_DNARep_4_6 0.181%, encodeUvaDnaRep4 0.181%, both 0.181%, cover 99.75%, enrich 551.92x
+#encode_UVA_DNARep_6_8 0.418%, encodeUvaDnaRep6 0.418%, both 0.418%, cover 99.90%, enrich 239.17x
+#encode_UVA_DNARep_8_10 0.178%, encodeUvaDnaRep8 0.177%, both 0.177%, cover 99.42%, enrich 562.02x
 
 
 # UCSD CHIP/CHIP (2004-09-30 kate)
