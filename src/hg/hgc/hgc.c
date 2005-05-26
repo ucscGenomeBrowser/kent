@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.895 2005/05/26 00:19:46 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.896 2005/05/26 00:30:05 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4045,6 +4045,8 @@ boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
 struct trackDb *tdbRgdEst;
+char *chrom = cartString(cart, "c");
+int start = cartInt(cart, "o");
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4173,7 +4175,7 @@ if (row != NULL)
 	if (hTableExists("estOrientInfo"))
 	    {
 	    snprintf(query, sizeof(query),
-            	"select intronOrientation from %s.estOrientInfo where name = '%s';",  database, acc);
+            	"select intronOrientation from %s.estOrientInfo where chrom = '%s' and chromStart = %d and name = '%s';",  database, chrom, start, acc);
 	    if (sqlQuickQuery(conn2, query, estOrient, sizeof(estOrient)) != NULL)
                 {
                 int estOrientInt = atoi(estOrient);
