@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.894 2005/05/26 00:15:55 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.895 2005/05/26 00:19:46 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4177,8 +4177,11 @@ if (row != NULL)
 	    if (sqlQuickQuery(conn2, query, estOrient, sizeof(estOrient)) != NULL)
                 {
                 int estOrientInt = atoi(estOrient);
-        	printf("<B>EST on %c strand </b>supported by %d splice sites.", estOrientInt > 0 ? '+' : '-' , abs(estOrientInt) );
-        	printf("<BR>\n" );
+                if (estOrientInt != 0)
+                    {
+                    printf("<B>EST on %c strand </b>supported by %d splice sites.", estOrientInt > 0 ? '+' : '-' , abs(estOrientInt) );
+                    printf("<BR>\n" );
+                    }
                 }
             }
         
