@@ -73,10 +73,8 @@ while ( $i <= $#files )
     echo
     set f = $files[$i]
     set r = $revs[$i]
-    cd $dir/$f:h
-    pwd
     # move the tag in cvs for this week's branch.
-    set cmd = "cvs tag -r${r} -F -B -b v${BRANCHNN}_branch $f:t"
+    set cmd = "cvs rtag -r${r} -F -B -b v${BRANCHNN}_branch kent/src/$f"
     echo $cmd
     $cmd
     if ( $status ) then 
@@ -86,7 +84,7 @@ while ( $i <= $#files )
     endif
     echo $f >> $WEEKLYBLD/mbt-tag.txt
     # move the beta tag in cvs to track the change to this week's branch.
-    set cmd = "cvs tag -rv${BRANCHNN}_branch -F beta $f:t"
+    set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
     echo $cmd
     $cmd
     if ( $status ) then 
@@ -95,7 +93,9 @@ while ( $i <= $#files )
 	break
     endif
     # update the file from cvs branch in branch sandbox.
-    set cmd = "cvs up -rv${BRANCHNN}_branch -dP $f:t"
+    cd $dir/$f:h:h   # just go to parent and update
+    pwd
+    set cmd = "cvs up -dP"
     echo $cmd
     $cmd
     if ( $status ) then 
