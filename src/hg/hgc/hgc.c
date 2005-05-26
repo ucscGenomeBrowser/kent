@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.893 2005/05/25 23:41:04 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.894 2005/05/26 00:15:55 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4030,6 +4030,7 @@ struct sqlConnection *conn2= hgAllocConn();
 struct sqlResult *sr;
 char **row;
 char rgdEstId[512];
+char estOrient[512];
 char query[256];
 char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
@@ -4167,6 +4168,21 @@ if (row != NULL)
 	    }
 	}
     printStanSource(acc, type);
+    if (sameWord(tdb->tableName, "intronEst")) 
+        {
+	if (hTableExists("estOrientInfo"))
+	    {
+	    snprintf(query, sizeof(query),
+            	"select intronOrientation from %s.estOrientInfo where name = '%s';",  database, acc);
+	    if (sqlQuickQuery(conn2, query, estOrient, sizeof(estOrient)) != NULL)
+                {
+                int estOrientInt = atoi(estOrient);
+        	printf("<B>EST on %c strand </b>supported by %d splice sites.", estOrientInt > 0 ? '+' : '-' , abs(estOrientInt) );
+        	printf("<BR>\n" );
+                }
+            }
+        
+        }
     if (hGenBankHaveSeq(acc, NULL))
         {
         printf("<B>%s sequence:</B> ", type); 
