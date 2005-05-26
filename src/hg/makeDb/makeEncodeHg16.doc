@@ -768,3 +768,75 @@ cat > load.csh << 'EOF'
     #	thus total length: 34 + 66  = 100 Mb
     #	At this density of data these storage areas are certainly
     #	comparable and practically equivalent.
+
+# Sanger Chip/chip updated  (DONE - 2005-05-25 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/encode/sanger/chipchip/2005-05-25
+    cd /cluster/data/encode/sanger/chipchip
+    rm latest
+    ln -s 2005-05-25 latest
+    cd 2005-05-25
+
+    cp -p /var/ftp/encode/*GM06990* .
+
+    #	convert to simple bedGraph files:  (stripping browser and track
+    #	line definitions from the custom track format), make sure they
+    #	are sorted properly.
+    grep "^chr" H3K4me1_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me1_GM06990_1.bed
+    grep "^chr" H3K4me3_GM06990_2.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me3_GM06990_2.bed
+    grep "^chr" H4ac_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+	H4ac_GM06990_1.bed 
+    grep "^chr" H3K4me2_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me2_GM06990_1.bed 
+    grep "^chr" H3ac_GM06990_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3ac_GM06990_1.bed 
+
+    #	find min and max in the data:
+    awk '{print $4}' *.bed | sort -n | head -1
+    #	0.02
+    awk '{print $4}' *.bed | sort -n | tail -1
+    #	72.34
+
+    #	This used to be a single track with only one data set
+    #	Place these new five data sets into a single composite track
+
+    #	Simplify the naming scheme here:
+    ln -s H3K4me1_GM06990_1.bed H3K4me1.bed
+    ln -s H3K4me2_GM06990_1.bed H3K4me2.bed
+    ln -s H3K4me3_GM06990_2.bed H3K4me3.bed
+    ln -s H3ac_GM06990_1.bed H3ac.bed
+    ln -s H4ac_GM06990_1.bed H4ac.bed
+
+    #	so the names can now be used in a for loop:
+    for T in H3K4me1 H3K4me2 H3K4me3 H3ac H4ac
+    do
+	hgsql -e "drop table encodeSangerChip${T}" hg16 2> /dev/stderr
+	echo "CREATE TABLE encodeSangerChip${T} (" > bedGraph.sql
+	echo 'bin smallint unsigned not null,' >> bedGraph.sql
+	echo 'chrom varchar(255) not null,' >> bedGraph.sql
+	echo 'chromStart int unsigned not null,' >> bedGraph.sql
+	echo 'chromEnd int unsigned not null,' >> bedGraph.sql
+	echo 'score float not null,' >> bedGraph.sql
+	echo 'INDEX(chrom(6),bin)' >> bedGraph.sql
+	echo ');' >> bedGraph.sql
+	hgLoadBed -sqlTable=bedGraph.sql hg16 encodeSangerChip${T} ${T}.bed
+    done
+
+    #	transform the five description pages into one single page.
+    #	see hg16/trackDb.ra for encodeSangerChipH3H4 composite track
+    #	definitions
+    #	clean up /var/ftp/encode
+    
+    rm -f /var/ftp/encode/Description_H3K4me1_GM06990_1.html
+    rm -f /var/ftp/encode/Description_H3K4me2_GM06990_1.html
+    rm -f /var/ftp/encode/Description_H3K4me3_GM06990_2.html
+    rm -f /var/ftp/encode/Description_H3ac_GM06990_1.html
+    rm -f /var/ftp/encode/Description_H4ac_GM06990_1.html
+    rm -f /var/ftp/encode/H3K4me1_GM06990_1.wig.txt
+    rm -f /var/ftp/encode/H3K4me2_GM06990_1.wig.txt
+    rm -f /var/ftp/encode/H3K4me3_GM06990_2.wig.txt
+    rm -f /var/ftp/encode/H3ac_GM06990_1.wig.txt
+    rm -f /var/ftp/encode/H4ac_GM06990_1.wig.txt
+
