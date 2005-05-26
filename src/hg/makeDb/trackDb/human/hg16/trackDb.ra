@@ -1825,33 +1825,38 @@ maxLimit 75
 
 track encodeSangerChipH3K4me1
 subTrack encodeSangerChipH3H4
-shortLabel H3 monoethyl lysine 4
+shortLabel H3K4me1 ChIP/Sanger
 longLabel Sanger ChIP/Chip H3 monomethyl lysine 4
 priority 1
+color 10,10,130
 
 track encodeSangerChipH3K4me2
 subTrack encodeSangerChipH3H4
-shortLabel H3 dimethyl lysine 4
+shortLabel H3K4me2 ChIP/Sanger
 longLabel Sanger ChIP/Chip H3 dimethyl lysine 4
 priority 2
+color 10,10,10
 
 track encodeSangerChipH3K4me3
 subTrack encodeSangerChipH3H4
-shortLabel H3 trimethyl lysine 4
+shortLabel H3K4me3 ChIP/Sanger
 longLabel Sanger ChIP/Chip H3 trimethyl lysine 4
 priority 3
+color 10,10,130
 
 track encodeSangerChipH3ac
 subTrack encodeSangerChipH3H4
-shortLabel H3 acetylated lysines 9 and 14
+shortLabel H3ac ChIP/Sanger
 longLabel Sanger ChIP/Chip H3 acetylated lysines 9 and 14
 priority 4
+color 10,10,10
 
 track encodeSangerChipH4ac
 subTrack encodeSangerChipH3H4
-shortLabel H4 acetylated lysines 5, 8, 12, 16
+shortLabel H4ac ChIP/Sanger
 longLabel Sanger ChIP/Chip H4 acetylated lysines 5, 8, 12, 16
 priority 5
+color 10,10,130
 
 track encodeAffyRnaHl60Sites
 compositeTrack on
