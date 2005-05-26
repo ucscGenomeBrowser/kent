@@ -1808,6 +1808,51 @@ shortLabel RNA 32hr
 longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Signal in ENCODE Regions
 priority 4
 
+track encodeSangerChipH3H4
+compositeTrack on
+shortLabel ChIP/Sanger
+longLabel Sanger ChIP/Chip (histones H3,H4 GM06990) in ENCODE Regions
+group encode
+color 10,10,130
+altColor 50,50,50
+priority 47.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:40:16
+minLimit 0
+maxLimit 75
+
+track encodeSangerChipH3K4me1
+subTrack encodeSangerChipH3H4
+shortLabel H3 monoethyl lysine 4
+longLabel Sanger ChIP/Chip H3 monomethyl lysine 4
+priority 1
+
+track encodeSangerChipH3K4me2
+subTrack encodeSangerChipH3H4
+shortLabel H3 dimethyl lysine 4
+longLabel Sanger ChIP/Chip H3 dimethyl lysine 4
+priority 2
+
+track encodeSangerChipH3K4me3
+subTrack encodeSangerChipH3H4
+shortLabel H3 trimethyl lysine 4
+longLabel Sanger ChIP/Chip H3 trimethyl lysine 4
+priority 3
+
+track encodeSangerChipH3ac
+subTrack encodeSangerChipH3H4
+shortLabel H3 acetylated lysines 9 and 14
+longLabel Sanger ChIP/Chip H3 acetylated lysines 9 and 14
+priority 4
+
+track encodeSangerChipH4ac
+subTrack encodeSangerChipH3H4
+shortLabel H4 acetylated lysines 5, 8, 12, 16
+longLabel Sanger ChIP/Chip H4 acetylated lysines 5, 8, 12, 16
+priority 5
+
 track encodeAffyRnaHl60Sites
 compositeTrack on
 shortLabel RNA/Affy Sites
