@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.194 2005/05/25 21:25:50 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.195 2005/05/26 18:00:13 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -890,7 +890,7 @@ wigFetchYLineMarkValue(tdb, &yLineMark);
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
 if (bedGraph)
-printf("<b>bedGraph Type of graph:&nbsp;</b>");
+printf("<b>Type of graph:&nbsp;</b>");
 else
 printf("<b>Type of graph:&nbsp;</b>");
 wiggleGraphDropDown(&options[8][0], lineBar);
