@@ -1756,8 +1756,8 @@ longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 32hrs) Sites in ENCODE Region
 priority 4
 
 track encodeSangerChip
-shortLabel ChIP/Sanger
-longLabel Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions
+shortLabel ChIP/Sanger/Feb05
+longLabel Feb 2005 Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions - Obsolete
 group encode
 color 10,10,130
 altColor 50,50,50
