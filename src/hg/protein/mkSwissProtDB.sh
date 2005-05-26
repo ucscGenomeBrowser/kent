@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkSwissProtDB.sh,v 1.5 2004/09/24 23:13:48 fanhsu Exp $"
+#	"$Id: mkSwissProtDB.sh,v 1.6 2005/05/26 16:08:43 fanhsu Exp $"
 
 TOP=/cluster/data/swissprot
 export TOP
@@ -31,14 +31,16 @@ if [ ${MACHINE} != "kksilo" -a ${MACHINE} != "hgwdev" ]; then
     exit 255
 fi
 
-DATE=`date "+%y%m%d"`
+DATE=$1
 SP="${DATE}"
 SPDB="sp${DATE}"
 export SP SPDB
 
 echo "Creating Db: ${SP}"
 
-if [ ${MACHINE} = "kksilo" ]; then
+# kksilo is no longer accessible.
+#if [ ${MACHINE} = "kksilo" ]; then
+if [ ${MACHINE} = "hgwdev" ]; then
 
     if [ -d "${SP}" ]; then
 	echo "WARNING: ${SP} already exists."
@@ -52,23 +54,21 @@ if [ ${MACHINE} = "kksilo" ]; then
 	fi
     fi
 
-
     echo mkdir -p ./${SP}
     mkdir -p ./${SP}
     cd ./${SP}
     mkdir -p ./build
     cd ./build
-    for db in uniprot_sprot uniprot_trembl new/uniprot_trembl_new
+    for db in uniprot_sprot uniprot_trembl 
     do
 	if [ ! -f ${db}.dat.gz ]; then
-		wget --timestamping \
-			ftp://us.expasy.org/databases/uniprot/knowledgebase/${db}.dat.gz
+  	    wget --timestamping \
+	    ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/${db}.dat.gz
 	fi
     done
     
     mv uniprot_sprot.dat.gz sprot.dat.gz
     mv uniprot_trembl.dat.gz trembl.dat.gz
-    mv uniprot_trembl_new.dat.gz trembl_new.dat.gz
 
     zcat *.dat.gz | spToDb stdin ../tabFiles
 
