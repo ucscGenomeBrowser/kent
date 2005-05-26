@@ -15178,5 +15178,9 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # count changed to 28851
 
+# The new KG process no longer need entries in knownGeneLink (used to store
+# info for DNA based RefSeqs.  So clean out the old data in knownGeneLink.
+
+hgsql hg17 -e "delete from knownGeneLink"
 
 
