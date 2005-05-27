@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.71 2005/05/18 22:42:10 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.72 2005/05/27 20:09:54 hiram Exp $";
 
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
@@ -412,7 +412,7 @@ void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
 struct grp *selGroup;
-boolean isWig, isPositional = FALSE, isMaf = FALSE;
+boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGraph = FALSE;
 boolean gotClade = hGotClade();
 hPrintf("<TABLE BORDER=0>\n");
 
@@ -444,6 +444,8 @@ hPrintf("<TABLE BORDER=0>\n");
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");
+    if (curTrack && curTrack->type)
+	isBedGraph = startsWith("bedGraph", curTrack->type);
     }
 
 /* Print table line. */
@@ -531,7 +533,7 @@ if (anyFilter())
     cgiMakeButton(hgtaDoFilterPage, "edit");
     hPrintf(" ");
     cgiMakeButton(hgtaDoClearFilter, "clear");
-    if (isWig)
+    if (isWig || isBedGraph)
 	wigShowFilter(conn);
     }
 else
