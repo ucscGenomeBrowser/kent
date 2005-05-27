@@ -850,3 +850,7 @@ cat > load.csh << 'EOF'
     rm -f /var/ftp/encode/H3ac_GM06990_1.wig.txt
     rm -f /var/ftp/encode/H4ac_GM06990_1.wig.txt
 
+    #	Sanger confirmed they no longer need the old data, remove the
+    #	table from hgwdev:
+    hgsql -e "drop table encodeSangerChip;" hg16
+
