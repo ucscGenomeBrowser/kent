@@ -14,7 +14,8 @@ test:   pslSelectTests \
 	thresholdTests \
 	similarityTests \
 	aggregateTests \
-	protTests
+	protTests \
+	idMatchTests
 
 ###
 # selecting PSLs
@@ -23,11 +24,12 @@ pslSelectTests: psl_over_NM_015110gp psl_nonover_NM_015110gp \
 		psl_over_NM_015110bed psl_nonover_NM_015110bed psl_over_NM_001206gp \
 		psl_nonover_NM_001206gp psl_over_NM_001206bed psl_nonover_NM_001206bed \
 		psl_over_NM_015110bed_split psl_nonover_NM_015110bed_split
+
 # select psls overlaping NM_015110 with gp
 psl_over_NM_015110gp: mkout
-	${OVERSEL} -dropped=output/psl_over_NM_015110gp.drop.psl input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gp.psl
-	${DIFF} expected/psl_over_NM_015110gp.psl output/psl_over_NM_015110gp.psl
-	${DIFF} expected/psl_over_NM_015110gp.drop.psl output/psl_over_NM_015110gp.drop.psl
+	${OVERSEL} -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # select psls overlaping not NM_015110 with gp
 psl_nonover_NM_015110gp: mkout
@@ -197,25 +199,25 @@ mergeTests: psl_over_NM_015110gpMerge psl_over_NM_001206bedMerge \
 
 # select psls overlaping NM_015110 with gp and merge
 psl_over_NM_015110gpMerge: mkout
-	${OVERSEL} -mergeOutput -dropped=output/psl_over_NM_015110gpMerge.drop.psl input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gpMerge.psl
-	${DIFF} expected/psl_over_NM_015110gpMerge.psl output/psl_over_NM_015110gpMerge.psl
-	${DIFF} expected/psl_over_NM_015110gp.drop.psl output/psl_over_NM_015110gpMerge.drop.psl
+	${OVERSEL} -mergeOutput -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # select psls overlaping NM_001206 with bed and merge
 psl_over_NM_001206bedMerge: mkout
-	${OVERSEL} -mergeOutput input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bedMerge.psl
-	${DIFF} expected/psl_over_NM_001206bedMerge.psl output/psl_over_NM_001206bedMerge.psl
+	${OVERSEL} -mergeOutput input/NM_001206.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select beds overlaping NM_015110 with bed and merge
 bed_over_NM_015110bedMerge: mkout
-	${OVERSEL} -mergeOutput input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedMerge.bed
-	${DIFF} expected/bed_over_NM_015110bedMerge.bed output/bed_over_NM_015110bedMerge.bed
+	${OVERSEL} -mergeOutput input/NM_015110.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 # select by column and merge
 colSelectMerge: mkout
 	${OVERSEL} -mergeOutput -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
-	    input/gene.select input/gene.clusters output/colSelectMerge.cluster
-	${DIFF} expected/colSelectMerge.cluster output/colSelectMerge.cluster
+	    input/gene.select input/gene.clusters output/$@.cluster
+	${DIFF} expected/$@.cluster output/$@.cluster
 
 ###
 # -idOutput tests
@@ -225,19 +227,19 @@ idOutputTests: psl_over_NM_015110gpIdOutput psl_over_NM_001206bedIdOutput \
 
 # select psls overlaping NM_015110 with gp and idOutput
 psl_over_NM_015110gpIdOutput: mkout
-	${OVERSEL} -idOutput -dropped=output/psl_over_NM_015110gpIdOutput.drop.ids input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gpIdOutput.ids
-	${DIFF} expected/psl_over_NM_015110gpIdOutput.ids output/psl_over_NM_015110gpIdOutput.ids
-	${DIFF} expected/psl_over_NM_015110gpIdOutput.drop.ids output/psl_over_NM_015110gpIdOutput.drop.ids
+	${OVERSEL} -idOutput -dropped=output/$@.drop.ids input/NM_015110.gp input/mrna.psl output/$@.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@.drop.ids output/$@.drop.ids
 
 # select psls overlaping NM_001206 with bed and idOutput
 psl_over_NM_001206bedIdOutput: mkout
-	${OVERSEL} -idOutput input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bedIdOutput.ids
-	${DIFF} expected/psl_over_NM_001206bedIdOutput.ids output/psl_over_NM_001206bedIdOutput.ids
+	${OVERSEL} -idOutput input/NM_001206.bed input/mrna.psl output/$@.ids
+	${DIFF} expected/$@.ids output/$@.ids
 
 # select beds overlaping NM_015110 with bed and idOutput
 bed_over_NM_015110bedIdOutput: mkout
-	${OVERSEL} -idOutput input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedIdOutput.ids
-	${DIFF} expected/bed_over_NM_015110bedIdOutput.ids output/bed_over_NM_015110bedIdOutput.ids
+	${OVERSEL} -idOutput input/NM_015110.bed input/mrna.bed output/$@.ids
+	${DIFF} expected/$@.ids output/$@.ids
 
 ###
 # -statsOutput tests
@@ -247,18 +249,18 @@ statsOutputTests: psl_over_NM_015110gpStatsOutput psl_over_NM_001206bedStatsOutp
 
 # select psls overlaping NM_015110 with gp and statsOutput
 psl_over_NM_015110gpStatsOutput: mkout
-	${OVERSEL} -statsOutput input/NM_015110.gp input/mrna.psl output/psl_over_NM_015110gpStatsOutput.stats
-	${DIFF} expected/psl_over_NM_015110gpStatsOutput.stats output/psl_over_NM_015110gpStatsOutput.stats
+	${OVERSEL} -statsOutput input/NM_015110.gp input/mrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
 
 # select psls overlaping NM_001206 with bed and statsOutput
 psl_over_NM_001206bedStatsOutput: mkout
-	${OVERSEL} -statsOutput input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bedStatsOutput.stats
-	${DIFF} expected/psl_over_NM_001206bedStatsOutput.stats output/psl_over_NM_001206bedStatsOutput.stats
+	${OVERSEL} -statsOutput input/NM_001206.bed input/mrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
 
 # select beds overlaping NM_015110 with bed and statsOutput
 bed_over_NM_015110bedStatsOutput: mkout
-	${OVERSEL} -statsOutput input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bedStatsOutput.stats
-	${DIFF} expected/bed_over_NM_015110bedStatsOutput.stats output/bed_over_NM_015110bedStatsOutput.stats
+	${OVERSEL} -statsOutput input/NM_015110.bed input/mrna.bed output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
 
 ###
 # threshold tests
@@ -269,57 +271,57 @@ thresholdTests: psl_gp_threshold  psl_gp_non_threshold \
 
 # select psls overlaping NM_015110 with gp and overlapThreshold
 psl_gp_threshold: mkout
-	${OVERSEL} -overlapThreshold=0.4 -dropped=output/psl_gp_threshold.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_threshold.psl
-	${DIFF} expected/psl_gp_threshold.psl output/psl_gp_threshold.psl
-	${DIFF} expected/psl_gp_threshold.drop.psl output/psl_gp_threshold.drop.psl
+	${OVERSEL} -overlapThreshold=0.4 -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # select psls overlaping not NM_015110 with gp and overlapThreshold
 psl_gp_non_threshold: mkout
-	${OVERSEL} -overlapThreshold=0.4 -nonOverlapping -dropped=output/psl_gp_non_threshold.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_non_threshold.psl
-	${DIFF} expected/psl_gp_non_threshold.psl output/psl_gp_non_threshold.psl
-	${DIFF} expected/psl_gp_non_threshold.drop.psl output/psl_gp_non_threshold.drop.psl
+	${OVERSEL} -overlapThreshold=0.4 -nonOverlapping -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # 95% threshold
 gp_gp_threshold95: mkout
-	${OVERSEL} -idOutput -overlapThreshold=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_threshold95.ids
-	${OVERSEL} -idOutput -overlapThreshold=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_threshold95Rev.ids
-	${DIFF} expected/gp_gp_threshold95.ids output/gp_gp_threshold95.ids
-	${DIFF} expected/gp_gp_threshold95Rev.ids output/gp_gp_threshold95Rev.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 75% threshold
 gp_gp_threshold75: mkout
-	${OVERSEL} -idOutput -overlapThreshold=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_threshold75.ids
-	${OVERSEL} -idOutput -overlapThreshold=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_threshold75Rev.ids
-	${DIFF} expected/gp_gp_threshold75.ids output/gp_gp_threshold75.ids
-	${DIFF} expected/gp_gp_threshold75Rev.ids output/gp_gp_threshold75Rev.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 100% threshold
 gp_gp_threshold100: mkout
-	${OVERSEL} -idOutput -overlapThreshold=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_threshold100.ids
-	${OVERSEL} -idOutput -overlapThreshold=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_threshold100Rev.ids
-	${DIFF} expected/gp_gp_threshold100.ids output/gp_gp_threshold100.ids
-	${DIFF} expected/gp_gp_threshold100Rev.ids output/gp_gp_threshold100Rev.ids
+	${OVERSEL} -idOutput -overlapThreshold=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapThreshold=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 95% CDS threshold
 gp_gp_thresholdCds95: mkout
-	${OVERSEL} -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_thresholdCds95.ids
-	${OVERSEL} -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_thresholdCds95Rev.ids
-	${DIFF} expected/gp_gp_thresholdCds95.ids output/gp_gp_thresholdCds95.ids
-	${DIFF} expected/gp_gp_thresholdCds95Rev.ids output/gp_gp_thresholdCds95Rev.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 75% CDS threshold
 gp_gp_thresholdCds75: mkout
-	${OVERSEL} -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_thresholdCds75.ids
-	${OVERSEL} -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_thresholdCds75Rev.ids
-	${DIFF} expected/gp_gp_thresholdCds75.ids output/gp_gp_thresholdCds75.ids
-	${DIFF} expected/gp_gp_thresholdCds75Rev.ids output/gp_gp_thresholdCds75Rev.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 100% CDS threshold
 gp_gp_thresholdCds100: mkout
-	${OVERSEL} -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_thresholdCds100.ids
-	${OVERSEL} -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_thresholdCds100Rev.ids
-	${DIFF} expected/gp_gp_thresholdCds100.ids output/gp_gp_thresholdCds100.ids
-	${DIFF} expected/gp_gp_thresholdCds100Rev.ids output/gp_gp_thresholdCds100Rev.ids
+	${OVERSEL} -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 ###
 # similarity tests
@@ -330,57 +332,57 @@ similarityTests: psl_gp_similarity  psl_gp_non_similarity \
 
 # select psls overlaping NM_015110 with gp and overlapSimilarity
 psl_gp_similarity: mkout
-	${OVERSEL} -overlapSimilarity=0.4 -dropped=output/psl_gp_similarity.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_similarity.psl
-	${DIFF} expected/psl_gp_similarity.psl output/psl_gp_similarity.psl
-	${DIFF} expected/psl_gp_similarity.drop.psl output/psl_gp_similarity.drop.psl
+	${OVERSEL} -overlapSimilarity=0.4 -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # select psls overlaping not NM_015110 with gp and overlapSimilarity
 psl_gp_non_similarity: mkout
-	${OVERSEL} -overlapSimilarity=0.4 -nonOverlapping -dropped=output/psl_gp_non_similarity.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_non_similarity.psl
-	${DIFF} expected/psl_gp_non_similarity.psl output/psl_gp_non_similarity.psl
-	${DIFF} expected/psl_gp_non_similarity.drop.psl output/psl_gp_non_similarity.drop.psl
+	${OVERSEL} -overlapSimilarity=0.4 -nonOverlapping -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # 95% similarity
 gp_gp_similarity95: mkout
-	${OVERSEL} -idOutput -overlapSimilarity=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_similarity95.ids
-	${OVERSEL} -idOutput -overlapSimilarity=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarity95Rev.ids
-	${DIFF} expected/gp_gp_similarity95.ids output/gp_gp_similarity95.ids
-	${DIFF} expected/gp_gp_similarity95Rev.ids output/gp_gp_similarity95Rev.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 75% similarity
 gp_gp_similarity75: mkout
-	${OVERSEL} -idOutput -overlapSimilarity=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_similarity75.ids
-	${OVERSEL} -idOutput -overlapSimilarity=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarity75Rev.ids
-	${DIFF} expected/gp_gp_similarity75.ids output/gp_gp_similarity75.ids
-	${DIFF} expected/gp_gp_similarity75Rev.ids output/gp_gp_similarity75Rev.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 100% similarity
 gp_gp_similarity100: mkout
-	${OVERSEL} -idOutput -overlapSimilarity=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_similarity100.ids
-	${OVERSEL} -idOutput -overlapSimilarity=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarity100Rev.ids
-	${DIFF} expected/gp_gp_similarity100.ids output/gp_gp_similarity100.ids
-	${DIFF} expected/gp_gp_similarity100Rev.ids output/gp_gp_similarity100Rev.ids
+	${OVERSEL} -idOutput -overlapSimilarity=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapSimilarity=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 95% CDS similarity
 gp_gp_similarityCds95: mkout
-	${OVERSEL} -idOutput -overlapSimilarity=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_similarityCds95.ids
-	${OVERSEL} -idOutput -overlapSimilarity=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarityCds95Rev.ids
-	${DIFF} expected/gp_gp_similarityCds95.ids output/gp_gp_similarityCds95.ids
-	${DIFF} expected/gp_gp_similarityCds95Rev.ids output/gp_gp_similarityCds95Rev.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 75% CDS similarity
 gp_gp_similarityCds75: mkout
-	${OVERSEL} -idOutput -overlapSimilarity=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_similarityCds75.ids
-	${OVERSEL} -idOutput -overlapSimilarity=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarityCds75Rev.ids
-	${DIFF} expected/gp_gp_similarityCds75.ids output/gp_gp_similarityCds75.ids
-	${DIFF} expected/gp_gp_similarityCds75Rev.ids output/gp_gp_similarityCds75Rev.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapSimilarity=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 100% CDS similarity
 gp_gp_similarityCds100: mkout
-	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_similarityCds100.ids
-	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_similarityCds100Rev.ids
-	${DIFF} expected/gp_gp_similarityCds100.ids output/gp_gp_similarityCds100.ids
-	${DIFF} expected/gp_gp_similarityCds100Rev.ids output/gp_gp_similarityCds100Rev.ids
+	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -idOutput -overlapSimilarity=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 ###
 # aggregate threshold tests
@@ -391,57 +393,57 @@ aggregateTests: psl_gp_aggregate  psl_gp_non_aggregate \
 
 # select psls overlaping NM_015110 with gp and overlapThreshold
 psl_gp_aggregate: mkout
-	${OVERSEL} -aggregate -overlapThreshold=0.4 -dropped=output/psl_gp_aggregate.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_aggregate.psl
-	${DIFF} expected/psl_gp_aggregate.psl output/psl_gp_aggregate.psl
-	${DIFF} expected/psl_gp_aggregate.drop.psl output/psl_gp_aggregate.drop.psl
+	${OVERSEL} -aggregate -overlapThreshold=0.4 -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # select psls overlaping not NM_015110 with gp and overlapThreshold
 psl_gp_non_aggregate: mkout
-	${OVERSEL} -aggregate -overlapThreshold=0.4 -nonOverlapping -dropped=output/psl_gp_non_aggregate.drop.psl input/NM_015110.gp input/mrna.psl output/psl_gp_non_aggregate.psl
-	${DIFF} expected/psl_gp_non_aggregate.psl output/psl_gp_non_aggregate.psl
-	${DIFF} expected/psl_gp_non_aggregate.drop.psl output/psl_gp_non_aggregate.drop.psl
+	${OVERSEL} -aggregate -overlapThreshold=0.4 -nonOverlapping -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # 95% aggregate
 gp_gp_aggregate95: mkout
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregate95.ids
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregate95Rev.ids
-	${DIFF} expected/gp_gp_aggregate95.ids output/gp_gp_aggregate95.ids
-	${DIFF} expected/gp_gp_aggregate95Rev.ids output/gp_gp_aggregate95Rev.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 75% aggregate
 gp_gp_aggregate75: mkout
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregate75.ids
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregate75Rev.ids
-	${DIFF} expected/gp_gp_aggregate75.ids output/gp_gp_aggregate75.ids
-	${DIFF} expected/gp_gp_aggregate75Rev.ids output/gp_gp_aggregate75Rev.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 100% aggregate
 gp_gp_aggregate100: mkout
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregate100.ids
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregate100Rev.ids
-	${DIFF} expected/gp_gp_aggregate100.ids output/gp_gp_aggregate100.ids
-	${DIFF} expected/gp_gp_aggregate100Rev.ids output/gp_gp_aggregate100Rev.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 95% CDS aggregate
 gp_gp_aggregateCds95: mkout
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregateCds95.ids
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds95Rev.ids
-	${DIFF} expected/gp_gp_aggregateCds95.ids output/gp_gp_aggregateCds95.ids
-	${DIFF} expected/gp_gp_aggregateCds95Rev.ids output/gp_gp_aggregateCds95Rev.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.95 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 75% CDS aggregate
 gp_gp_aggregateCds75: mkout
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregateCds75.ids
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds75Rev.ids
-	${DIFF} expected/gp_gp_aggregateCds75.ids output/gp_gp_aggregateCds75.ids
-	${DIFF} expected/gp_gp_aggregateCds75Rev.ids output/gp_gp_aggregateCds75Rev.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=0.75 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 # 100% CDS aggregate
 gp_gp_aggregateCds100: mkout
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/gp_gp_aggregateCds100.ids
-	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/gp_gp_aggregateCds100Rev.ids
-	${DIFF} expected/gp_gp_aggregateCds100.ids output/gp_gp_aggregateCds100.ids
-	${DIFF} expected/gp_gp_aggregateCds100Rev.ids output/gp_gp_aggregateCds100Rev.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110.gp  input/NM_015110Similar.gp output/$@.ids
+	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
+	${DIFF} expected/$@.ids output/$@.ids
+	${DIFF} expected/$@Rev.ids output/$@Rev.ids
 
 
 ###
@@ -454,20 +456,36 @@ protTests: gp_psl_prot80 gp_psl_protStats psl_gp_prot80 psl_gp_protStats
 # translated to query base coords, otherwise it appears to be 1/3 the size.
 # Also checks if the strand was correctly translated.
 gp_psl_prot80: mkout
-	${OVERSEL} -strand -overlapSimilarity=0.9 -selectCds input/refGeneForProt.gp  input/prot.psl output/gp_psl_prot80.psl
-	${DIFF} expected/gp_psl_prot80.psl output/gp_psl_prot80.psl
+	${OVERSEL} -strand -overlapSimilarity=0.9 -selectCds input/refGeneForProt.gp  input/prot.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 gp_psl_protStats: mkout
-	${OVERSEL} -statsOutput -strand -selectCds input/refGeneForProt.gp  input/prot.psl output/gp_psl_protStats.stats
-	${DIFF} expected/gp_psl_protStats.stats output/gp_psl_protStats.stats
+	${OVERSEL} -statsOutput -strand -selectCds input/refGeneForProt.gp  input/prot.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
 
 psl_gp_prot80: mkout
-	${OVERSEL} -strand -overlapSimilarity=0.9 -inCds input/prot.psl input/refGeneForProt.gp  output/psl_gp_prot80.gp
-	${DIFF} expected/psl_gp_prot80.gp output/psl_gp_prot80.gp
+	${OVERSEL} -strand -overlapSimilarity=0.9 -inCds input/prot.psl input/refGeneForProt.gp  output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 
 psl_gp_protStats: mkout
-	${OVERSEL} -statsOutput -strand -inCds input/prot.psl input/refGeneForProt.gp output/psl_gp_protStats.stats
-	${DIFF} expected/psl_gp_protStats.stats output/psl_gp_protStats.stats
+	${OVERSEL} -statsOutput -strand -inCds input/prot.psl input/refGeneForProt.gp output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+###
+# idMatch tests
+###
+idMatchTests: psl_idMatch psl_idMatch_non
+
+psl_idMatch: mkout
+	${OVERSEL} -idMatch -overlapSimilarity=0.8 -dropped=output/$@.drop.psl input/mrna-idMatch1.psl input/mrna-idMatch2.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
+psl_idMatch_non: mkout
+	${OVERSEL} -idMatch -overlapSimilarity=0.8 -nonOverlapping -dropped=output/$@.drop.psl input/mrna-idMatch1.psl input/mrna-idMatch2.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
 
 mkout:
 	@${MKDIR} output

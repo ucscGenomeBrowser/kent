@@ -135,6 +135,9 @@ if ((opts & selUseStrand) && (inCa->strand != selCa->strand))
     return FALSE;
 if ((opts & selExcludeSelf) && isSelfMatch(opts, inCa, selCa))
     return FALSE;
+if ((opts & selIdMatch) && (inCa->name != NULL) && (selCa->name != NULL)
+    && sameString(inCa->name, selCa->name))
+    return FALSE;
 return TRUE;
 }
 
@@ -253,9 +256,8 @@ return anyHits;
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            float overlapThreshold, float overlapSimilarity,
                            struct slRef **overlappingRecs)
-/* Determine if a range is overlapped.  If overlappingRecs is not null,
- * a list of the line form of overlaping select records is returned.  Free
- * with slFreelList. */
+/* Determine if a range is overlapped.  If overlappingRecs is not null, a list
+ * of the of selected records is returned.  Free with slFreelList. */
 {
 boolean hit = FALSE;
 struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);

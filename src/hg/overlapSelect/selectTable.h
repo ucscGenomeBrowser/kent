@@ -8,7 +8,8 @@ enum selectOpts
     selExcludeSelf  = 0x01,    /* skipping matching records */
     selUseStrand    = 0x02,    /* select by strand */
     selSelectCds    = 0x04,    /* only use CDS range for select table */
-    selSaveLines    = 0x08     /* save lines for merge */
+    selSaveLines    = 0x08,    /* save lines for merge */
+    selIdMatch      = 0x19     /* ids must match and overlap  */
 };
 
 struct coordCols;
@@ -33,9 +34,8 @@ float selectFracOverlap(struct chromAnn *inCa, struct chromAnn *selCa);
 boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
                            float overlapThreshold, float overlapSimilarity,
                            struct slRef **overlappingRecs);
-/* Determine if a range is overlapped.  If overlappingRecs is not null,
- * a list of the line form of overlaping select records is returned.  Free
- * with slFreelList. */
+/* Determine if a range is overlapped.  If overlappingRecs is not null, a list
+ * of the of selected records is returned.  Free with slFreelList. */
 
 float selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
 /* Compute the aggregate overlap of a chromAnn */
