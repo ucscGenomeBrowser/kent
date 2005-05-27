@@ -78,7 +78,7 @@ while ( $i <= $#files )
     echo $cmd
     $cmd
     if ( $status ) then 
-	echo "error moving cvs branch tag for $dir/$f"
+	echo "error moving cvs branch tag for $f"
 	set err=1
 	break
     endif
@@ -88,18 +88,23 @@ while ( $i <= $#files )
     echo $cmd
     $cmd
     if ( $status ) then 
-	echo "error moving cvs beta tag for $dir/$f"
+	echo "error moving cvs beta tag for $f"
 	set err=1
 	break
     endif
     # update the file from cvs branch in branch sandbox.
-    cd $dir/$f:h:h   # just go to parent and update
+    if ( -d $dir/$f:h )
+	cd $dir/$f:h    # just dir and update one file
+    	set cmd = "cvs up -dP $f:t"
+    else
+	cd $dir/$f:h:h   # just go to parent and update because dir does not exist yet
+	set cmd = "cvs up -dP $f:h:t"
+    endif
     pwd
-    set cmd = "cvs up -dP"
     echo $cmd
-    $cmd
+    $cmd >& /dev/null
     if ( $status ) then 
-	echo "error in cvs update of $dir/$f"
+	echo "error in cvs update of $f"
 	set err=1
 	break
     endif
