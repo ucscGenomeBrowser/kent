@@ -323,6 +323,12 @@ EOF
          # IMR90 (darkish red)
          # HCT116 (darkish green)
 
+# UCSD Histone Methylation Chip/chip on IFN-g induced Hela (2005-05-26)
+    cd /cluster/data/encode/UCSD
+    mkdir -p 2005-05-26
+    cd 2005-05-26
+    # copied files from ftp dir
+    
 
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
 #       From George Asimenos, Batzoglou lab (asimenos@stanford.edu)
@@ -662,6 +668,10 @@ cat > load.csh << 'EOF'
     wc -l gencodeGeneClass.tab
         # 2542 gencodeGeneClass.tab
     echo "LOAD DATA LOCAL INFILE 'gencodeGeneClass.tab' into table gencodeGeneClass" | hgsql hg16
+
+    # run Mark D's gene checker on VEGA_Known
+    echo " select encodeGencodeGene.* from encodeGencodeGene, gencodeGeneClass where encodeGencodeGene.name=gencodeGeneClass.name and gencodeGeneClass.class='Known'" | hgsql hg16 -N > gencode.known.gp
+/cluster/bin/i386/gene-check -incl-ok -nib-dir /cluster/data/hg16/nib -details-out encodeGencodeGene.chk-details gencode.known.gp encodeGencodeGene.chk
 
 
 # Sanger Chip/chip  (DONE 2005-03-14 kate)
