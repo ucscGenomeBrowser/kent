@@ -100,7 +100,6 @@ searchName bacPairsAliases
 searchTable bacEndPairs
 searchMethod exact
 searchType bed
-searchBoth 1
 xrefTable bacCloneAlias
 dontCheckXrefQueryFormat .
 xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName  
@@ -110,7 +109,6 @@ searchName bacSinglesAliases
 searchTable bacEndSingles
 searchMethod exact
 searchType bed
-searchBoth 1
 xrefTable bacCloneAlias
 dontCheckXrefQueryFormat .
 xrefQuery select bacCloneXRef.name,alias from %s as bca, bacCloneXRef where alias like '%s' and bacCloneXRef.sangerName = bca.sangerName  
