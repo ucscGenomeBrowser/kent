@@ -15183,4 +15183,81 @@ hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 
 hgsql hg17 -e "delete from knownGeneLink"
 
+#### RE-BUILD SUPERFAMILY RELATED TABLES (DONE - 2005-05-27 - Fan)
+
+# Download latest Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+    mkdir /cluster/store10/superfamily/050524
+    ln -s /cluster/store10/superfamily/050524 /cluster/data/superfamily/050524
+    cd /cluster/data/superfamily/050524
+
+# ftp over the following two files:
+ass_22-May-2005.tab.gz
+supfam_22-May-2005.sql.gz
+    gzip -d *.gz
+
+# Load the Superfamily database
+    hgsql hg17 -e "create database superfam050524"
+    nice hgsql superfam050524 < supfam_22-May-2005.sql &
+
+# This may take about an hour.
+
+# Make sure to add an index on id of the des table of superfam050524.
+    hgsql superfam050524 -e "create index id on des(id);"
+
+    hgsql superfam050524 < ~/src/hg/lib/sfAssign.sql
+    hgsql superfam050524 -e 'load data local infile "ass_22-May-2005.tab" into table 
+superfam050524.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql hg17 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/data/superfamily/050524  
+   hgsql hg17 -e 'load data local infile "ass_22-May-2005.tab" into table hg17.sfAssign;'
+
+# If hg17.sfDes already exists, drop it.
+
+   hgsql superfam050524 -N -e "select * from des" >sfDes.tab
+   hgsql hg17 < ~/src/hg/lib/sfDes.sql
+   hgsql hg17 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+# If hg17.superfamily already exists, drop it.
+   cd /cluster/data/hg17/bed
+   mkdir /cluster/data/hg17/sf.2004-1128
+   ln -s sf.2004-1128 sf
+   hgSuperfam hg17 > sf.log
+
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# If hg17.sfDescription exists, drop it.
+
+   hgsql hg17 < ~/src/hg/lib/sfDescription.sql
+   hgsql hg17 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg17.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed hg17 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+   
+   cat /cluster/data/superfamily/050524/ass_22-May-2005.tab \
+   | hgKnownToSuper hg17 hs stdin
+# created 25287 rows in knownToSuper
+
+# Build tables needed by pbGlobal in proteins050415
+
+   cd /cluster/data/superfamily/050524  
+   hgsql proteins050415 -e 'load data local infile "ass_22-May-2005.tab" into table sfAssign'
+
+   hgsql proteins050415 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+   cd /cluster/store10/kg/kgHg17F
+   hgsql proteins050415 -e 'load data local infile "ensemblXref.tab" into table ensemblXref'
+
+# These sf tables and ensemblXref3 are needed for non-HMR KG proteins.
+# Should add content of ensemblXref3 of mm6 after it is done.
+# And similarly for rn4 and possibly for other non-HMR species.
 
