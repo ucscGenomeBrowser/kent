@@ -14367,6 +14367,14 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql hg17 < ~/src/hg/lib/kgXref.sql
    hgsql hg17 -e  'load data local infile "kgXref.tab" into table kgXref'
 
+# Build spMrna table
+
+   hgsql hg17 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+
+   hgsql hg17 -e  'drop table spMrna'
+   hgsql hg17 <~/src/hg/lib/spMrna.sql
+   hgsql hg17 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
+
 # Build kgProtMap table
 
     ~/src/hg/protein/kgProtMap2.sh kgHg17F hg17 050415
