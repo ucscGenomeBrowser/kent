@@ -14,7 +14,14 @@
 #include "dystring.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.12 2005/01/10 00:39:02 kent Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.13 2005/05/28 00:38:33 markd Exp $";
+
+/* command line options */
+static struct optionSpec optionSpecs[] = {
+    {"tMasked", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+boolean tMasked = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -29,7 +36,8 @@ errAbort(
   "The target and query lists can either be fasta files, nib files, \n"
   "or a list of fasta and/or nib files one per line\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tMasked - If specified, the target is soft-masked and the repMatch counts are\n"
+  "    computed\n"
   );
 }
 
@@ -177,7 +185,7 @@ else
     }
 }
 
-void readCachedSeqPart(char *seqName, int start, int size, 
+void readCachedSeqPart(char *seqName, int start, int size, boolean getMasked,
      struct hash *hash, struct dlList *fileCache, 
      struct dnaSeq **retSeq, int *retOffset, boolean *retIsNib)
 /* Read sequence hopefully using file cashe. If sequence is in a nib
@@ -187,12 +195,14 @@ struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
 FILE *f = openFromCache(fileCache, sfp);
 if (sfp->isNib)
     {
-    *retSeq = nibLdPart(sfp->file, f, sfp->pos, start, size);
+    *retSeq = nibLdPartMasked((getMasked ? NIB_MASK_MIXED : 0), sfp->file, f, sfp->pos, start, size);
     *retOffset = start;
     *retIsNib = TRUE;
     }
 else
     {
+    if (getMasked)
+        errAbort("masked sequences not supported with fasta files");
     *retSeq = readSeqFromFaPos(sfp, f);
     *retOffset = 0;
     *retIsNib = FALSE;
@@ -329,6 +339,7 @@ static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
 //struct dyString *t = newDyString(16*1024);
 unsigned match = 0;	/* Number of bases that match */
 unsigned misMatch = 0;	/* Number of bases that don't match */
+unsigned repMatch = 0;	/* Number of bases that match but are part of repeats */
 unsigned qNumInsert = 0;	/* Number of inserts in query */
 int qBaseInsert = 0;	/* Number of bases inserted in query */
 unsigned tNumInsert = 0;	/* Number of inserts in target */
@@ -359,8 +370,8 @@ if (qName == NULL || !sameString(qName, qNameParm))
     freeDnaSeq(&qSeq);
     freez(&qName);
     qName = cloneString(qNameParm);
-    readCachedSeqPart(qName, qStart, qEnd-qStart, 
-    	qHash, fileCache, &qSeq, &qOffset, &qIsNib);
+    readCachedSeqPart(qName, qStart, qEnd-qStart, FALSE,
+    	qHash, fileCache, &qSeq, &qOffset , &qIsNib);
     if (qIsNib && strand == '-')
 	    qOffset = qSize - qEnd;
     }
@@ -369,7 +380,7 @@ if (tIsNib || tName == NULL || !sameString(tName, tNameParm) )
     freeDnaSeq(&tSeq);
     freez(&tName);
     tName = cloneString(tNameParm);
-    readCachedSeqPart(tName, tStart, tEnd-tStart, 
+    readCachedSeqPart(tName, tStart, tEnd-tStart, tMasked,
 	tHash, fileCache, &tSeq, &tOffset, &tIsNib);
     }
 if (strand == '-')
@@ -414,7 +425,12 @@ for (b = chain->blockList; b != NULL; b = nextB)
                 qq = qSeq->dna[i];
                 tt = tSeq->dna[j++];
                 if (toupper(qq) == toupper(tt))
-                    ++match;
+                    {
+                    if (tMasked && islower(tt))
+                        ++repMatch;
+                    else
+                        ++match;
+                    }
                 else 
                     ++misMatch;
                 }
@@ -438,7 +454,7 @@ assert(tStart < te);
 /* Output header */
 fprintf(f, "%d\t", match);
 fprintf(f, "%d\t", misMatch);
-fprintf(f, "0\t");
+fprintf(f, "%d\t", repMatch);
 fprintf(f, "0\t");
 fprintf(f, "%d\t", qNumInsert);
 fprintf(f, "%d\t", qBaseInsert);
@@ -530,11 +546,12 @@ carefulClose(&f);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 7)
     {
     usage();
     }
+tMasked = optionExists("tMasked");
 chainToPsl(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
