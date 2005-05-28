@@ -143,6 +143,8 @@
 #include "encodeRegionInfo.h"
 #include "encodeErge.h"
 #include "encodeErgeHssCellLines.h"
+#include "encodeStanfordPromoters.h"
+#include "encodeStanfordPromotersAverage.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -168,7 +170,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.896 2005/05/26 00:30:05 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.897 2005/05/28 00:53:11 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15036,6 +15038,67 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+
+static void printESPDetails(char **row)
+/* Print details from a cell line subtrack table of encodeStanfordPromoters. */
+{
+struct encodeStanfordPromoters *esp = encodeStanfordPromotersLoad(row);
+bedPrintPos((struct bed *)esp, 6);
+printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
+printf("<B>Gene description:</B> %s<BR>\n", esp->description);
+printf("<B>Luciferase signal A:</B> %d<BR>\n", esp->lucA);
+printf("<B>Renilla signal A:</B> %d<BR>\n", esp->renA);
+printf("<B>Luciferase signal B:</B> %d<BR>\n", esp->lucB);
+printf("<B>Renilla signal B:</B> %d<BR>\n", esp->renB);
+printf("<B>Average Luciferase/Renilla Ratio:</B> %f<BR>\n", esp->avgRatio);
+printf("<B>Normalized Luciferase/Renilla Ratio:</B> %f<BR>\n", esp->normRatio);
+printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %f<BR>\n",
+       esp->normLog2Ratio);
+}
+
+static void printESPAverageDetails(char **row)
+/* Print details from the averaged subtrack table of encodeStanfordPromoters. */
+{
+struct encodeStanfordPromotersAverage *esp =
+    encodeStanfordPromotersAverageLoad(row);
+bedPrintPos((struct bed *)esp, 6);
+printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
+printf("<B>Gene description:</B> %s<BR>\n", esp->description);
+printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %f<BR>\n",
+       esp->normLog2Ratio);
+}
+
+void doEncodeStanfordPromoters(struct trackDb *tdb, char *item)
+/* Print ENCODE Stanford Promoters data. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int start = cartInt(cart, "o");
+char fullTable[64];
+boolean hasBin = FALSE;
+char query[1024];
+
+cartWebStart(cart, tdb->longLabel);
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+safef(query, sizeof(query),
+     "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+      fullTable, seqName, start, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (endsWith(tdb->tableName, "Average"))
+	printESPAverageDetails(row+hasBin);
+    else
+	printESPDetails(row+hasBin);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
@@ -16303,6 +16366,10 @@ else if (startsWith("flyreg", track))
 else if (startsWith("encodeGencodeIntron", track))
     {
     doGencodeIntron(tdb, item);
+    }
+else if (startsWith("encodeStanfordPromoters", track))
+    {
+    doEncodeStanfordPromoters(tdb, item);
     }
 else if (sameString("cutters", track))
     {
