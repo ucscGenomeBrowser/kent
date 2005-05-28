@@ -73,11 +73,35 @@ visibility hide
 color 100,50,0
 type bed 4 +
 
+track multiz9way
+shortLabel Conservation
+longLabel 7 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
+group compGeno
+priority 100
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons9way
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel1
+
+track phastConsElements9way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements (7 Flies, Mosquito and Honeybee)
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track multiz8way
 shortLabel Conservation
 longLabel 6 Flies, Mosquito and Honeybee Multiz Alignments & phastCons Scores
 group compGeno
-priority 100
+priority 105.1
 visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
@@ -91,7 +115,7 @@ track phastConsElements8way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements (6 Flies, Mosquito and Honeybee)
 group compGeno
-priority 105
+priority 105.2
 visibility hide
 exonArrows off
 showTopScorers 200
