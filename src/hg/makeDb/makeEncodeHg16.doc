@@ -328,6 +328,20 @@ EOF
     mkdir -p 2005-05-26
     cd 2005-05-26
     # copied files from ftp dir
+
+    # bed format; use vi to strip header lines
+    cp tmH3K4_p0.wig tmH3K4_p0.bed
+    cp tmH3K4_p30.wig tmH3K4_p30.bed
+    
+    # save originals
+    mv tmH3K4_p0.wig tmH3K4_p0.wig.orig
+    mv tmH3K4_p30.wig tmH3K4_p30.wig.orig
+
+    # load
+    wigEncode tmH3K4_p0.bed tmH3K4_p0.wig tmH3K4_p0.wib
+    ln -s `pwd`/tmH3K4_p0.wib /gbdb/hg16/encode/UcsdChip/wib
+    hgLoadWiggle hg16 encode_UCSD_ChIP_tmH3K4_p0 tmH3K4_p0.wig -pathPrefix=/gbdb/hg16/encode/UcsdChip/wib
+
     
 
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
