@@ -1,216 +1,161 @@
-/* pslSwap - Swap query and target in  PSL  */
+/* pslSwap - reverse target and query in psls */
+
 #include "common.h"
 #include "linefile.h"
-#include "hash.h"
+#include "dnautil.h"
 #include "options.h"
-#include "dystring.h"
-#include "dlist.h"
-#include "fa.h"
-#include "nib.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSwap.c,v 1.6 2004/12/30 20:01:21 braney Exp $";
+/* command line options */
+static struct optionSpec optionSpecs[] = {
+    {"noRc", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+boolean gNoRc = FALSE;
 
-void usage()
-/* Explain usage and exit. */
+void usage(char *msg)
+/* usage message and abort */
 {
-errAbort(
-  "pslSwap - Swap query and target in  PSL  \n"
-  "usage:\n"
-  "   pslSwap in.psl out.psl\n"
-  "options:\n"
-  "   -keepStrand     don't force target strand to '+'\n"
-  );
+errAbort("%s:\n"
+         "pslSwap [options] inPsl outPsl\n"
+         "\n"
+         "Swap target and query in psls\n"
+         "\n"
+         "Options:\n"
+         "  -noRc - don't reverse complement untranslated alignments to\n"
+         "   keep target positive strand.  This will make the target strand\n"
+         "   explict.\n",
+         msg);
 }
 
-boolean keepStrand = FALSE;
-int dot = 0;
-boolean doShort = FALSE;
+struct psl *allocPsl(struct psl *inPsl)
+/* allocated memory, including block arrays for a PSL */
+{
+struct psl *outPsl;
+AllocVar(outPsl);
+outPsl->blockSizes = needMem(inPsl->blockCount*sizeof(unsigned));
+outPsl->qStarts = needMem(inPsl->blockCount*sizeof(unsigned));
+outPsl->tStarts = needMem(inPsl->blockCount*sizeof(unsigned));
+if (inPsl->qSequence != NULL)
+    {
+    outPsl->qSequence = needMem(inPsl->blockCount*sizeof(char*));
+    outPsl->tSequence = needMem(inPsl->blockCount*sizeof(char*));
+    }
+return outPsl;
+}
 
-void pslWrite(struct psl *el, FILE *f, char* q, char *t, char *blk, char sep, char lastSep) 
-/* Print out psl.  Separate fields with sep. Follow last field with lastSep. */
+void swapBlocks(struct psl *inPsl, struct psl *outPsl)
+/* swap the blocks in a psl without reverse complementing them */
 {
 int i;
-fprintf(f, "%u", el->match);
-fputc(sep,f);
-fprintf(f, "%u", el->misMatch);
-fputc(sep,f);
-fprintf(f, "%u", el->repMatch);
-fputc(sep,f);
-fprintf(f, "%u", el->nCount);
-fputc(sep,f);
-fprintf(f, "%u", el->qNumInsert);
-fputc(sep,f);
-fprintf(f, "%d", el->qBaseInsert);
-fputc(sep,f);
-fprintf(f, "%u", el->tNumInsert);
-fputc(sep,f);
-fprintf(f, "%d", el->tBaseInsert);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->strand);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->qName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->qSize);
-fputc(sep,f);
-fprintf(f, "%u", el->qStart);
-fputc(sep,f);
-fprintf(f, "%u", el->qEnd);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->tName);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->tSize);
-fputc(sep,f);
-fprintf(f, "%u", el->tStart);
-fputc(sep,f);
-fprintf(f, "%u", el->tEnd);
-fputc(sep,f);
-fprintf(f, "%u", el->blockCount);
-fputc(sep,f);
-if (sep == ',') fputc('{',f);
-fprintf(f, "%s", blk);
-if (sep == ',') fputc('}',f);
-fputc(sep,f);
-if (sep == ',') fputc('{',f);
-fprintf(f, "%s", q);
-if (sep == ',') fputc('}',f);
-fputc(sep,f);
-if (sep == ',') fputc('{',f);
-fprintf(f, "%s", t);
-if (sep == ',') fputc('}',f);
-fputc(lastSep,f);
-if (ferror(f))
+for (i = 0; i < inPsl->blockCount; i++)
     {
-    perror("Error writing psl file\n");
-    errAbort("\n");
+    outPsl->blockSizes[i] = inPsl->blockSizes[i];
+    outPsl->qStarts[i] = inPsl->tStarts[i];
+    outPsl->tStarts[i] = inPsl->qStarts[i];
+    if (outPsl->qSequence != NULL)
+        {
+        outPsl->qSequence[i] = cloneString(inPsl->tSequence[i]);
+        outPsl->tSequence[i] = cloneString(inPsl->qSequence[i]);
+        }
     }
 }
 
-void swapOne(struct psl *psl, FILE *f)
-    /* swap query and target , blockStarts = size - blockStarts  if strand direction changes */
+void swapRCBlocks(struct psl *inPsl, struct psl *outPsl)
+/* swap and reverse complement blocks in a psl */
 {
-static char *tName = NULL, *qName = NULL;
-struct dyString *q = newDyString(16*1024);
-struct dyString *t = newDyString(16*1024);
-struct dyString *blockSize = newDyString(16*1024);
-int blockIx, diff, x;
-int qs, ts;
-int lastQ = 0, lastT = 0, size;
-int qOffset = 0;
-int tOffset = 0;
-char *s;
-char qStr[512], tStr[512], bStr[512];
-
-if (qName == NULL || !sameString(qName, psl->qName))
+int ii, oi;
+for (ii = 0, oi = inPsl->blockCount-1; ii < inPsl->blockCount; ii++, oi--)
     {
-    freez(&qName);
-    qName = cloneString(psl->qName);
-    if (psl->strand[0] == '-' && psl->strand[1] != '-')
-	    qOffset = psl->qSize ;
-    }
-/* if (tName == NULL) || !sameString(tName, psl->tName))
-    {*/
-    freez(&tName);
-    tName = cloneString(psl->tName);
-    if (psl->strand[0] == '-' && psl->strand[1] != '-')
-	    tOffset = psl->tSize ;
-/*    }*/
-    /*
-if (psl->strand[0] == '-')
-if (psl->strand[1] == '-')
-*/
-if (!keepStrand && (psl->strand[0] == '-' && psl->strand[1] != '-'))
-    {
-    for (blockIx=(psl->blockCount)-1; blockIx >= 0; --blockIx)
+    outPsl->blockSizes[oi] = inPsl->blockSizes[ii];
+    outPsl->qStarts[oi] = inPsl->tSize - (inPsl->tStarts[ii] + inPsl->blockSizes[ii]);
+    outPsl->tStarts[oi] = inPsl->qSize - (inPsl->qStarts[ii] + inPsl->blockSizes[ii]);
+    if (outPsl->qSequence != NULL)
         {
-        sprintf(qStr, "%d,", qOffset - psl->qStarts[blockIx] - psl->blockSizes[blockIx]);
-        sprintf(tStr, "%d,", tOffset - psl->tStarts[blockIx] - psl->blockSizes[blockIx]);
-        dyStringAppend(q, qStr );
-        dyStringAppend(t, tStr );
-        sprintf(bStr, "%d,",psl->blockSizes[blockIx] );
-        dyStringAppend(blockSize, bStr);
-        };
-        if ((qOffset - psl->qStarts[blockIx]) < 0)
-            printf("qOffset %d tStart %d qStart %d strand %s q %s t %s tStarts[0] %d %d q %d %d %s\n",qOffset, psl->tStart,psl->qStart,psl->strand,q->string, t->string, psl->tStarts[0], psl->tStarts[1], psl->qStarts[0], psl->qStarts[1],qStr );
-        if ((tOffset - psl->tStarts[blockIx]) < 0)
-            printf("tOffset %d tStart %d qStart %d strand %s q %s t %s tStarts[0] %d %d q %d %d %s\n",tOffset, psl->tStart,psl->qStart,psl->strand,q->string, t->string, psl->tStarts[0], psl->tStarts[1], psl->qStarts[0], psl->qStarts[1], tStr);
+        outPsl->qSequence[oi] = cloneString(inPsl->tSequence[ii]);
+        reverseComplement(outPsl->qSequence[oi], strlen(outPsl->qSequence[oi]));
+        outPsl->tSequence[oi] = cloneString(inPsl->qSequence[ii]);
+        reverseComplement(outPsl->tSequence[oi], strlen(outPsl->tSequence[oi]));
+        }
+    }
+}
+
+struct psl *pslSwap(struct psl *inPsl)
+/* reverse target and query in a psl */
+{
+struct psl *outPsl = allocPsl(inPsl);
+outPsl->match = inPsl->match;
+outPsl->misMatch = inPsl->misMatch;
+outPsl->repMatch = inPsl->repMatch;
+outPsl->nCount = inPsl->nCount;
+outPsl->qNumInsert = inPsl->tNumInsert;
+outPsl->qBaseInsert = inPsl->tBaseInsert;
+outPsl->tNumInsert = inPsl->qNumInsert;
+outPsl->tBaseInsert = inPsl->qBaseInsert;
+outPsl->qName = cloneString(inPsl->tName);
+outPsl->qSize = inPsl->tSize;
+outPsl->qStart = inPsl->tStart;
+outPsl->qEnd = inPsl->tEnd;
+outPsl->tName = cloneString(inPsl->qName);
+outPsl->tSize = inPsl->qSize;
+outPsl->tStart = inPsl->qStart;
+outPsl->tEnd = inPsl->qEnd;
+outPsl->blockCount = inPsl->blockCount;
+
+/* handle strand and block copy */
+if (inPsl->strand[1] != '\0')
+    {
+    /* translated */
+    outPsl->strand[0] = inPsl->strand[1];
+    outPsl->strand[1] = inPsl->strand[0];
+    swapBlocks(inPsl, outPsl);
+    }
+else if (gNoRc)
+    {
+    /* untranslated with no reverse complement */
+    outPsl->strand[0] = '+';
+    outPsl->strand[1] = inPsl->strand[0];
+    swapBlocks(inPsl, outPsl);
     }
 else
     {
-    for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
-        {
-        sprintf(qStr, "%d,", psl->qStarts[blockIx] );
-        sprintf(tStr, "%d,", psl->tStarts[blockIx] );
-        dyStringAppend(q, qStr );
-        dyStringAppend(t, tStr );
-        sprintf(bStr, "%d,",psl->blockSizes[blockIx] );
-        dyStringAppend(blockSize, bStr);
-        }
+    /* untranslated */
+    outPsl->strand[0] = inPsl->strand[0];
+    if (inPsl->strand[0] == '+')
+        swapBlocks(inPsl, outPsl);
+    else
+        swapRCBlocks(inPsl, outPsl);
     }
-
-x = psl->tStart; psl->tStart = psl->qStart; psl->qStart = x;
-x = psl->tEnd;   psl->tEnd = psl->qEnd;     psl->qEnd = x;
-x = psl->tSize;  psl->tSize = psl->qSize;   psl->qSize = x;
-x = psl->tNumInsert;   psl->tNumInsert = psl->qNumInsert; psl->qNumInsert = x;
-x = psl->tBaseInsert;  psl->tBaseInsert = psl->qBaseInsert; psl->qBaseInsert = x;
-s = psl->tName;  psl->tName = psl->qName;   psl->qName = s;
-if (keepStrand)
-    {
-    x = psl->strand[0]; psl->strand[0] = psl->strand[1]; psl->strand[1] = x;
-    }
-pslWrite(psl,f,t->string,q->string, blockSize->string,'\t','\n');
-dyStringFree(&blockSize);
-dyStringFree(&q);
-dyStringFree(&t);
-    freez(&qName);
+return outPsl;
 }
 
-void pslSwap(char *pslName, char *outName)
-/* pslSwap - Convert PSL to human readable output. */
+void pslSwapFile(char *inPslFile, char *outPslFile)
+/* reverse target and query in a psl file */
 {
-struct hash *fileHash = newHash(0);  /* No value. */
-struct hash *tHash = newHash(20);  /* seqFilePos value. */
-struct hash *qHash = newHash(20);  /* seqFilePos value. */
-struct dlList *fileCache = newDlList();
-struct lineFile *lf = pslFileOpen(pslName);
-FILE *f = mustOpen(outName, "w");
-struct psl *psl;
-int dotMod = dot;
+struct lineFile *inLf = pslFileOpen(inPslFile);
+FILE *outFh = mustOpen(outPslFile, "w");
+struct psl *inPsl;
 
-verbose(1,"Converting %s\n", pslName);
-while ((psl = pslNext(lf)) != NULL)
+while ((inPsl = pslNext(inLf)) != NULL)
     {
-    if (dot > 0)
-        {
-	if (--dotMod <= 0)
-	   {
-	   printf(".");
-       fflush(stdout);
-	   dotMod = dot;
-	   }
-	}
-    swapOne(psl, f);
-    pslFree(&psl);
+    struct psl *outPsl = pslSwap(inPsl);
+    pslTabOut(outPsl, outFh);
+    pslFree(&outPsl);
+    pslFree(&inPsl);
     }
-lineFileClose(&lf);
+
+carefulClose(&outFh);
+lineFileClose(&inLf);
 }
 
-int main(int argc, char *argv[])
-/* Process command line. */
+int main(int argc, char** argv)
+/* entry */
 {
-static boolean axt;
-optionHash(&argc, argv);
-dot = optionInt("dot", dot);
-doShort = !optionExists("long");
-keepStrand = optionExists("keepStrand");
+optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage();
-pslSwap(argv[1], argv[2]);
+    usage("wrong # args");
+gNoRc = optionExists("noRc");
+dnaUtilOpen();
+pslSwapFile(argv[1], argv[2]);
 return 0;
 }
