@@ -15269,3 +15269,6 @@ superfam050524.sfAssign;'
 # Should add content of ensemblXref3 of mm6 after it is done.
 # And similarly for rn4 and possibly for other non-HMR species.
 
+# CCDS <-> knownGene mapping need to be updated (markd 2005-05-29)
+# this should be part of the known gene build
+    /cluster/data/genbank/bin/i386/mkCcdsGeneMap -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
