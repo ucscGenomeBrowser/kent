@@ -413,7 +413,8 @@ errAbort("%s:\n"
 }
 
 /* entry */
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
 char *selectFile, *inFile, *outFile, *dropFile;
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
