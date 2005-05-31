@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.963 2005/05/31 17:28:50 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.964 2005/05/31 20:29:51 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9486,7 +9486,7 @@ if (sameString(database, "hg17"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "mm5"))
+if (sameString(database, "mm6"))
     {
     hPrintf("<TD ALIGN=CENTER>");
     hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
