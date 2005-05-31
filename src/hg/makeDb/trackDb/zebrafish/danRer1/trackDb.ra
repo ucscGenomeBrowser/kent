@@ -263,7 +263,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,intName from %s where intName like '%s'  
-termRegex (zC|zK|bZ|dZ|bY)[[:alnum:]]+
+termRegex (zC|zK|bZ|dZ|bY|zH|bP)[[:alnum:]]+
 searchPriority 8.5
 
 searchName bacSinglesIntName
@@ -272,7 +272,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,intName from %s where intName like '%s'  
-termRegex (zC|zK|bZ|dZ|bY)[[:alnum:]]+
+termRegex (zC|zK|bZ|dZ|bY|zH|bP)[[:alnum:]]+
 searchPriority 8.5
 
 searchName bacPairsAliases
