@@ -79,7 +79,7 @@ if(bed->blockCount <= 1)
    cs
    css  bs        css
 */
-for(i = 0; i < bed->blockCount; i++)
+for(i = 0; i < bed->blockCount-1; i++)
     {
     int startIx = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
     int endIx = bed->chromStart + bed->chromStarts[i+1];
@@ -202,7 +202,7 @@ warn("Reading in beds.");
 bedList = bedLoadAll(bedFile);
 inAgx = mustOpen(inGraphFile, "w");
 notInAgx = mustOpen(notInGraphFile, "w");
-dotForUserInit(slCount(bedList) / 20);
+dotForUserInit(max(slCount(bedList) / 20, 1));
 warn("Examiningg beds.");
 for(bed = bedList; bed != NULL; bed = bed->next)
     {
