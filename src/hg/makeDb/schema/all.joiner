@@ -1358,6 +1358,7 @@ identifier extFileId
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
     $dm.d_yakuba_mypa.extFile
+    danRer2.multiz6way.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
