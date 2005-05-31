@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.11 2005/01/10 00:37:52 kent Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.12 2005/05/31 22:49:35 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,8 +37,11 @@ errAbort(
   "   -qMinGap=N     - pass those with minimum gap size of at least N\n"
   "   -tMinGap=N     - pass those with minimum gap size of at least N\n"
   "   -qMinSize=N    - minimum size of spanned query region\n"
+  "   -qMaxSize=N    - maximum size of spanned query region\n"
   "   -tMinSize=N    - minimum size of spanned target region\n"
-  "   -noRandom      - suppress chains involving 'random' chromosomes\n"
+  "   -tMaxSize=N    - maximum size of spanned target region\n"
+  "   -noRandom      - suppress chains involving '_random' chromosomes\n"
+  "   -noHap         - suppress chains involving '_hap' chromosomes\n"
   );
 }
 
@@ -64,8 +67,11 @@ struct optionSpec options[] = {
    {"minGapless", OPTION_INT},
    {"qMinGap", OPTION_INT},
    {"qMinSize", OPTION_INT},
+   {"qMaxSize", OPTION_INT},
    {"tMinSize", OPTION_INT},
+   {"tMaxSize", OPTION_INT},
    {"noRandom", OPTION_BOOLEAN},
+   {"noHap", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -189,12 +195,15 @@ int minGapless = optionInt("minGapless", 0);
 int qMinGap = optionInt("qMinGap", 0);
 int tMinGap = optionInt("tMinGap", 0);
 int qMinSize = optionInt("qMinSize", 0);
+int qMaxSize = optionInt("qMaxSize", BIGNUM);
 int tMinSize = optionInt("tMinSize", 0);
+int tMaxSize = optionInt("tMaxSize", BIGNUM);
 char *strand = optionVal("strand", NULL);
 boolean zeroGap = optionExists("zeroGap");
 int id = optionInt("id", -1);
 boolean doLong = optionExists("long");
 boolean noRandom = optionExists("noRandom");
+boolean noHap = optionExists("noHap");
 int i;
 
 for (i=0; i<inCount; ++i)
@@ -225,7 +234,9 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (chain->tEnd < tEndMin || chain->tEnd >= tEndMax)
 	    writeIt = FALSE;
-	if (chain->qSize < qMinSize || chain->tSize < tMinSize)
+	if (chain->qEnd-chain->qStart < qMinSize || chain->tEnd-chain->tStart < tMinSize)
+	    writeIt = FALSE;
+	if (chain->qEnd-chain->qStart > qMaxSize || chain->tEnd-chain->tStart > tMaxSize)
 	    writeIt = FALSE;
 	if (strand != NULL && strand[0] != chain->qStrand)
 	    writeIt = FALSE;
@@ -250,6 +261,12 @@ for (i=0; i<inCount; ++i)
 	    {
 	    if (endsWith(chain->tName, "_random") 
 	    	|| endsWith(chain->qName, "_random"))
+	        writeIt = FALSE;
+	    }
+	if (noHap)
+	    {
+	    if (stringIn("_hap",chain->tName) 
+	    	|| stringIn("_hap",chain->qName))
 	        writeIt = FALSE;
 	    }
 	if (writeIt)
