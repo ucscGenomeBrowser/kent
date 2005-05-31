@@ -130,7 +130,7 @@ public class ApacheReport {
         }
         // start new month file when month changes
 
-        String thisMonthFile = outpath + nowYear + thisMonth + ".html";
+        String thisMonthFile = outpath + nowYear + "-" + thisMonth + ".html";
 
         FileWriter fwNextMonth = new FileWriter(thisMonthFile);
         PrintWriter pwNextMonth = new PrintWriter(fwNextMonth);
