@@ -49,6 +49,9 @@ struct row1lq **gcBins = NULL;     /* Bins of lists of row1lqs for different amo
 struct row1lq *badBin = NULL;
 struct hash *probeSetHash = NULL;  /* Hash of slRefs for each probe set where slRef->val is a row1lq. */
 struct hash *killHash = NULL;      /* Hash of probes to be ignored. */
+struct hash *outputValsHash= NULL; /* Hash of probe sets to output values for. */
+FILE *outputIntenVals = NULL;       /* File to output intensity for individual values to. */
+FILE *outputPvals = NULL;          /* File to output pvals for individual to. */
 int minGcBin = 0;                  /* Minimum GC bin. */
 int maxGcBin = 0;                  /* Maximum GC bin. */
 struct psProb *probePVals = NULL;  /* List of psProbe structs with pVals filled in. */
@@ -62,7 +65,8 @@ int numBadProbes = 0;              /* Number of bad probes counted. */
 FILE *gCountsFile = NULL;              /* File to output 'G' counts per probe to. */
 FILE *gcCountFile = NULL;             /* File to output 'G' + 'C' counts per probe to. */
 FILE *cCountsFile = NULL;              /* File to output 'C' counts per probe. */
-
+boolean doMedianComb = FALSE;          /* Do a median rather than Fisher's combination. */
+boolean doCombo = FALSE; /* Do a combination of median and fisher. */
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -74,6 +78,11 @@ static struct optionSpec optionSpecs[] =
     {"outputDuplicates", OPTION_BOOLEAN},
     {"testVals", OPTION_BOOLEAN},
     {"countPrefix", OPTION_STRING},
+    {"doMedianComb", OPTION_BOOLEAN},
+    {"testMedian", OPTION_BOOLEAN},
+    {"doCombo", OPTION_BOOLEAN},
+    {"outputVals", OPTION_STRING},
+    {"outputValsList", OPTION_STRING},
     {NULL,0}
 };
 
@@ -87,7 +96,12 @@ static char *optionDescripts[] =
     "Combine experiments with same name prefix.",
     "When used with combineReplicates, outputs a column for each tissue that has same prefix.",
     "Skip everything else and just run inverse chisq on each value degreeFreedom pair on command line.",
-    "Output G/C probe countent counts to prefixCounts.tab"
+    "Output G/C probe countent counts to prefixCounts.tab",
+    "Use median rather than Fisher's combination",
+    "Test the median code.",
+    "Do a combination of medians and fischer's combination.",
+    "Output the intensity and probability to file with this prefix.",
+    "Only output probe sets in this list."
 };
 
 void usage()
@@ -118,7 +132,13 @@ int row1lqCmp(const void *va, const void *vb)
 {
 const struct row1lq *a = *((struct row1lq **)va);
 const struct row1lq *b = *((struct row1lq **)vb);
-return b->intensity[repToSort] - a->intensity[repToSort];
+double bI = b->intensity[repToSort];
+double aI = a->intensity[repToSort];
+if(aI < bI)
+    return 1;
+if(aI > bI)
+    return -1;
+return 0;
 }
 
 int countGc(char *sequence)
@@ -228,10 +248,6 @@ for(row = rowList; row != NULL; row = rowNext)
 
     /* Skip things that are on the kill list. */
     tolowers(row->seq);
-/*     if(sameString(row->psName, "AFFX-18SRNAMur/X00686_3_at")) */
-/* 	{ */
-/* 	warn("AdFFX-18SRNAMur/X00686_3_at encountered. Here we go"); */
-/* 	} */
     if(sameString(row->seq, "!") || (killHash != NULL && hashFindVal(killHash, row->seq) != NULL))
 	{
 	slAddHead(&badBin, row);
@@ -305,6 +321,89 @@ int xy2i(int x, int y)
 return (712 * y) + x;
 }
 
+int doubleComp(const void *a, const void *b)
+/* Return difference to sort on doubles. */
+{
+double x = (*(double *)a);
+double y = (*(double *)b);
+if(x > y)
+    return 1;
+else if(y > x)
+    return -1;
+else 
+    return 0;
+}
+
+double medianArray(double *array, int count)
+/* give the median of the array. */
+{
+double *results = NULL;
+boolean isEven = FALSE;
+int i = 0;
+double median = 0;
+
+assert(count);
+AllocArray(results, count);
+if(count % 2 == 0)
+    isEven = TRUE;
+
+for(i = 0; i < count; i++)
+    results[i] = array[i];
+qsort(results, count, sizeof(results[0]), doubleComp);
+if(isEven)
+    median = (results[count/2-1] + results[count/2])/2;
+else
+    median = results[count/2];
+freez(&results);
+return median;
+}
+
+void printDoubleArray(double *array, int count)
+/* Print the elements of a double array. */
+{
+int i = 0;
+for(i = 0; i<count; i++) 
+    printf("%.3f, ", array[i]);
+printf("\n");
+}
+
+double medianRefList(struct slRef *refList)
+/** Return the median value of the row list. */
+{
+struct slRef *ref = NULL;
+struct row1lq *row = NULL;
+int count = 0, currentIx = 0;
+boolean isEven = FALSE;
+double median = 0;
+double *results = NULL;
+int repIx = 0;
+
+/* How much memory do we need? */
+for(ref = refList; ref != NULL; ref = ref->next)
+    {
+    row = ref->val;
+    count += row->repCount;
+    }
+
+assert(count > 0);
+AllocArray(results, count);
+/* Fill in the values. */
+for(ref = refList; ref != NULL; ref = ref->next)
+    {
+    row = ref->val;
+    for(repIx = 0; repIx < row->repCount; repIx++)
+	{
+	results[currentIx++] = row->pVal[repIx];
+	}
+    }
+
+/* Get the median. */
+median = medianArray(results, count);
+
+freez(&results);
+return 1 - median;
+}
+
 void probeSetCalcPval(void *val)
 /* Loop through the slRef list calculating pVal based
    on row1lq->pval using fishers method for combining probabilities.
@@ -321,57 +420,47 @@ int i = 0, j = 0;
 refList = val;
 probeCount = slCount(refList);
 
-/* /\* If we don't have enough probes don't make an estimate.  */
-/*    Might want to change this to set to zero instead... *\/ */
-/* if(probeCount < minProbeNum)  */
-/*     return; */
-/* assert(probeCount > 0); */
-
-
 /* Allocate some memory. */
 AllocVar(ps);
 row = refList->val;
 ps->pVal = 0;
 safef(ps->psName, sizeof(ps->psName), "%s", row->psName);
-/* if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
-/*     { */
-/*     warn("\nDoing probeSet G6905332@J919098_RC@j_at, %d probes", slCount(refList)); */
-/*     } */
-/* For each probe in probe set look at all the replicates. */
+
 if(probeCount < minProbeNum)
     {
     ps->pVal=0;
     }
+else if(doMedianComb)
+    {
+    ps->pVal = medianRefList(refList);
+    }
 else 
     {
-
     for(ref = refList; ref != NULL; ref = ref->next)
 	{
 	row = ref->val;
-/*     if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
-/* 	fprintf(stderr,"%s\t%d\t", row->seq,row->gcCount); */
-/* 	if(sameString(row->psName, "AFFX-18SRNAMur/X00686_3_at")) */
-/* 	    { */
-/* 	    warn("AdFFX-18SRNAMur/X00686_3_at encountered. Here we go"); */
-/* 	    } */
-	for(i = 0; i < row->repCount; i++)
+	if(doCombo)
 	    {
-/* 	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
-/* 	    fprintf(stderr, "%.2f,",row->pVal[i]); */
+	    double med = medianArray(row->pVal, row->repCount);
+	    if(med == 0)
+		med = .00000000001;
 	    probRepCount++;
-	    if(row->pVal[i] != 0)
-		probProduct = probProduct + log(row->pVal[i]);
-	    else
-		probProduct = probProduct + log(.9999999999);
+	    probProduct += log(med);
 	    }
-/* 	if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
-/* 	    fprintf(stderr,"\n"); */
+	else 
+	    {
+	    for(i = 0; i < row->repCount; i++)
+		{
+		probRepCount++;
+		if(row->pVal[i] != 0)
+		    probProduct = probProduct + log(row->pVal[i]);
+		else
+		    probProduct = probProduct + log(.000000001);
+		}
+	    }
 	}
-    
 /* Fisher's method for combining probabilities. */
     ps->pVal = gsl_cdf_chisq_P(-2*probProduct,2*probRepCount); 
-/*     if(sameString(row->psName, "G6905332@J919098_RC@j_at") && debug) */
-/* 	fprintf(stderr, "Overall pval is: %.2f\n", ps->pVal); */
     }
 if(ps->pVal > 1 || ps->pVal < 0) 
     warn("%s pVal is %.10f, wrong!");
@@ -390,10 +479,24 @@ for(i = 1; i < argc; i+=2)
     }
 }
 
+void printIntensities(struct row1lq *rowList, int limit)
+/* Loop through and print out the row intensity for a list. */
+{
+struct row1lq *row = NULL;
+int count = 0;
+if(limit == -1)
+    limit = slCount(rowList);
+
+for(row = rowList; count < limit && row != NULL; row = row->next)
+    {
+    fprintf(stdout, "%.1f\n", row->intensity[repToSort]);
+    count++;
+    }
+}
 
 void fillInProbeSetPvals(double **matrix, int rowCount, int colCount, int repCount, int *repIndexes, 
 			 int sampleIx, struct row1lq **row1lqArray, double ***probeSetPValsP, 
-			 char ***probeSetNamesP, int *psCountP)
+			 char ***probeSetNamesP, int *psCountP, double **probMatrix)
 /* Calculate and fill in the probe set probabilities of expression given
    the data in the matrix. */
 {
@@ -426,11 +529,8 @@ for(i = minGcBin; i <= maxGcBin; i++)
 	binCount = slCount(gcBins[i-minGcBin]);
 	for(row = gcBins[i-minGcBin]; row != NULL; row = row->next)
 	    {
-/* 	    if(sameString(row->psName, "AFFX-18SRNAMur/X00686_3_at")) */
-/* 		{ */
-/* 		warn("AdFFX-18SRNAMur/X00686_3_at encountered. Here we go"); */
-/* 		} */
 	    row->pVal[j] = ((double)rank)/binCount;
+	    probMatrix[xy2i(row->x, row->y)][repIndexes[j]] = row->pVal[j];
 	    rank++;
 	    }
 	}
@@ -541,16 +641,80 @@ else /* Make each expName a new replicate. */
 
 slReverse(&rMapList);
 /* Do a summmary of the replicates... */
-for(rMap = rMapList; rMap != NULL; rMap = rMap->next)
-    {
-    printf("%s\t", rMap->rootName);
-    for(i = 0; i < rMap->repCount; i++)
-	{
-	printf("%s,", expNames[rMap->repIndexes[i]]);
-	}
-    printf("\n");
-    }
+/* for(rMap = rMapList; rMap != NULL; rMap = rMap->next) */
+/*     { */
+/*     printf("%s\t", rMap->rootName); */
+/*     for(i = 0; i < rMap->repCount; i++) */
+/* 	{ */
+/* 	printf("%s,", expNames[rMap->repIndexes[i]]); */
+/* 	} */
+/*     printf("\n"); */
+/*     } */
 return rMapList;
+}
+
+boolean reportThisPSet(char *name)
+/* Return TRUE if thes pset should be outputed for intensity and pvals. */
+{
+if(outputValsHash == NULL)
+    return TRUE;
+return hashLookup(outputValsHash, name) != NULL;
+}
+
+void outputPvalValues(struct row1lq **row1lqArray, double **probMatrix,
+		      char **expNames, int rowCount, int colCount)
+/* Write out the pvals of the probe sets over all the tissues. */
+{
+int rowIx = 0, colIx = 0;
+struct row1lq *row = NULL;
+assert(outputPvals);
+/* Print column headers. */
+fprintf(outputPvals, "%s\t", "probeSetName");
+for(colIx = 0; colIx < colCount-1; colIx++)
+    fprintf(outputPvals, "%s\t", expNames[colIx]);
+fprintf(outputPvals
+, "%s\n", expNames[colIx]);
+
+/* Print all the data. */
+for(rowIx = 0; rowIx < rowCount; rowIx++)
+    {
+    row = row1lqArray[rowIx];
+    if(reportThisPSet(row->psName))
+	{
+	fprintf(outputPvals,"%d\t%s",rowIx, row->psName);
+	for(colIx = 0; colIx < colCount; colIx++)
+	    {
+	    fprintf(outputPvals, "\t%.5f", probMatrix[rowIx][colIx]);
+	    }
+	fputc('\n', outputPvals);
+	}
+    }
+}
+
+void outputValues(double **matrix, struct row1lq **row1lqArray, char **expNames, int rowCount, int colCount)
+/* Write out the intensity values for each probe. */
+{
+int rowIx = 0, colIx = 0;
+struct row1lq *row = NULL;
+assert(outputIntenVals);
+fprintf(outputIntenVals, "%s\t", "probeSetName");
+for(colIx = 0; colIx < colCount-1; colIx++)
+    fprintf(outputIntenVals, "%s\t", expNames[colIx]);
+fprintf(outputIntenVals, "%s\n", expNames[colIx]);
+
+for(rowIx = 0; rowIx < rowCount; rowIx++)
+    {
+    row = row1lqArray[rowIx];
+    if(reportThisPSet(row->psName))
+	{
+	assert(rowIx == xy2i(row->x, row->y));
+ 	fprintf(outputIntenVals, "%d\t%s", rowIx, row->psName);
+/* 	fprintf(outputIntenVals, "%s\t%s\t%d\t%d\t%d\t%d", row->psName, row->seq, row->x, row->y, rowIx, xy2i(row->x, row->y)); */
+	for(colIx = 0; colIx < colCount; colIx++)
+	    fprintf(outputIntenVals, "\t%.1f", matrix[rowIx][colIx]);
+	fputc('\n', outputIntenVals);
+	}
+    }
 }
 
 void gcPresAbs(char *outFile, char *file1lq, int celCount, char *celFiles[])
@@ -558,8 +722,8 @@ void gcPresAbs(char *outFile, char *file1lq, int celCount, char *celFiles[])
    calculated from the intensities in the cel files. */
 {
 struct row1lq **rowArray = NULL, *row=NULL;
-char **expNames = NULL;
-double **matrix = NULL;
+char **expNames = NULL, **expOutNames = NULL;
+double **matrix = NULL, **probMatrix = NULL;
 double **probeSetPVals = NULL; /* Matrix of pVals of expression with probe sets ordered altphabetically. */
 char **probeSetNames = NULL;   /* List of probe set names indexing the probeSetPVals matrix. */
 char *badProbeName = NULL;     /* Name of file with bad probes. */
@@ -589,15 +753,19 @@ read1lqFile(file1lq, &rowArray, &rowCount);
 
 /* Lets initialize some memory. */
 AllocArray(expNames, celCount);
+AllocArray(expOutNames, celCount);
 AllocArray(matrix, rowCount);
+AllocArray(probMatrix, rowCount);
 for(i=0; i<rowCount; i++)
+    {
     AllocArray(matrix[i], celCount);
+    AllocArray(probMatrix[i], celCount);
+    }
 
 /* Read in the cel files. */
 for(i=0; i<celCount; i++)
     {
     char *lastSlash = NULL;
-    warn("Reading in cel file: %s", celFiles[i]);
     dotForUser();
     expNames[i] = cloneString(celFiles[i]);
     lastSlash = strrchr(expNames[i], '/');
@@ -605,7 +773,9 @@ for(i=0; i<celCount; i++)
 	expNames[i] = lastSlash+1;
     fillInMatrix(matrix, i, rowCount, celFiles[i]);
     }
-warn("Done.");
+
+if(optionExists("outputVals"))
+    outputValues(matrix, rowArray, expNames, rowCount, celCount);
 rMapList = createReplicateMap(expNames, celCount);
 sampleCount = slCount(rMapList);
 /* Allocate enough memory for the maximum number of replicates. */
@@ -621,14 +791,18 @@ i = 0;
 for(rMap = rMapList; rMap != NULL; rMap = rMap->next)
     {
     dotForUser();
+    for(j = 0; j < rMap->repCount; j++)
+	expOutNames[i+j] = cloneString(expNames[rMap->repIndexes[j]]);
     fillInProbeSetPvals(matrix, rowCount, celCount, rMap->repCount, rMap->repIndexes, i++, rowArray,
-			&probeSetPVals, &probeSetNames, &psCount);
+			&probeSetPVals, &probeSetNames, &psCount, probMatrix);
     }
+if(optionExists("outputVals"))
+    outputPvalValues(rowArray, probMatrix, expOutNames, rowCount, celCount);
+
 warn("Done.");
 warn("Found %d bad probes.", numBadProbes);
 warn("Writing out the results.");
 out = mustOpen(outFile, "w");
-
 
 if(outputDuplicates)
     {
@@ -705,21 +879,120 @@ carefulClose(&gcCountFile);
 carefulClose(&gCountsFile);
 carefulClose(&cCountsFile);
 }
+
+void setupTestRow(struct slRef **refList, double *array, int count)
+/* Create a test row and add it to the list. */
+{
+int i = 0;
+struct row1lq *row = NULL;
+struct slRef *ref = NULL;
+AllocVar(row);
+row->repCount = count;
+AllocArray(row->pVal, row->repCount);
+for(i = 0; i < count; i++)
+    row->pVal[i] = array[i];
+
+AllocVar(ref);
+ref->val = row;
+slAddHead(refList, ref);
+}
+
+boolean sameDoubles(double a, double b)
+/* return TRUE if two doubles are the same to 6 significant
+   digits. */
+{
+char buffA[256];
+char buffB[256];
+safef(buffA, sizeof(buffA), "%.6f", a);
+safef(buffB, sizeof(buffB), "%.6f", b);
+return sameString(buffA, buffB);
+}
     
+void testMedian()
+/* Quick testing of the median function. */
+{
+struct slRef *refList = NULL;
+int count = 0, i = 0;
+double first[] = {.7, .8, .9, .6, .5};
+double second[] = {.8, .7, .6};
+double third[] = {.6, .5};
+double median = 0;
+/* set up the first guy. */
+setupTestRow(&refList, first, ArraySize(first));
+
+median = medianRefList(refList);
+if(!sameDoubles(median, .3))
+    errAbort("Median should be .3, but it isn't.");
+setupTestRow(&refList, second, ArraySize(second));
+
+median = medianRefList(refList);
+if(!sameDoubles(median, .3))
+    errAbort("Median should still be .3, but it isn't.");
+setupTestRow(&refList, third, ArraySize(third));
+median = medianRefList(refList);
+if(!sameDoubles(median, .35))
+    errAbort("Median should be .7, but it isn't.");
+warn("Passed all median tests.");
+exit(0);
+}
+    
+void initOutputValsList()
+/* Read in the output vals list from the file and inititalize
+   the outputValsHash. */
+{
+struct lineFile *lf = NULL;
+char *s = NULL;
+char *fileName = optionVal("outputValsList", NULL);
+assert(fileName);
+lf = lineFileOpen(fileName, TRUE);
+outputValsHash = newHash(10);
+while(lineFileNextReal(lf, &s))
+    hashAdd(outputValsHash, s, NULL);
+lineFileClose(&lf);
+}
+
+void initOutputVals()
+/* Open two files for writing the probe level intensities
+   and probabilities to. */
+{
+struct dyString *s = newDyString(512);
+char *filePrefix = optionVal("outputVals", NULL);
+assert(filePrefix);
+dyStringPrintf(s, "%s.inten", filePrefix);
+outputIntenVals = mustOpen(s->string, "w");
+dyStringClear(s);
+dyStringPrintf(s, "%s.pvals", filePrefix);
+outputPvals = mustOpen(s->string, "w");
+dyStringFree(&s);
+}
+
 int main(int argc, char *argv[])
+/* Everybodys favorite function. */
 {
 char *affy1lqName = NULL;
 char *outFileName = NULL;
 int origCount = argc;
 optionInit(&argc, argv, optionSpecs);
+if(optionExists("testMedian"))
+    testMedian();
 if(optionExists("help") || origCount < 3)
     usage();
 if(optionExists("countPrefix"))
     initCountFiles(optionVal("countPrefix", NULL));
+if(optionExists("doMedianComb"))
+    doMedianComb = TRUE;
+if(optionExists("doCombo"))
+    doCombo = TRUE;
+if(optionExists("outputValsList"))
+    initOutputValsList();
+if(optionExists("outputVals"))
+    initOutputVals();
 affy1lqName = optionVal("1lqFile", NULL);
 outFileName = optionVal("outFile", NULL);
+
 if(optionExists("testVals"))
     doInvChiSq(argc, argv);
+    
 else if(affy1lqName == NULL || outFileName == NULL)
     errAbort("Need to specify 1lqFile and outFile, use -help for usage.");
 else 
