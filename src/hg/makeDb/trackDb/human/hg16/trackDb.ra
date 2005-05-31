@@ -1549,19 +1549,119 @@ visibility hide
 color 20,0,50
 type bed 4 .
 
-track encode_Stanford_Promoters
+track encodeStanfordPromoters
+compositeTrack on
 shortLabel Promoter/Stanford
 longLabel Stanford Promoter Activity in ENCODE Regions
 group encode
 priority 20.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type expRatio
-expTable encode_Stanford_PromotersExps
-expScale 999
-expStep 100
-expColorDense On
-chip x
+type bed 9 +
+itemRgb on
+exonArrowsDense on
+
+track encodeStanfordPromotersAGS
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford AGS
+longLabel Stanford Promoter Activity in ENCODE Regions (AGS)
+priority 1
+
+track encodeStanfordPromotersBe2C
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford Be2c
+longLabel Stanford Promoter Activity in ENCODE Regions (Be2c)
+priority 2
+
+track encodeStanfordPromotersCRL1690
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford CRL1690
+longLabel Stanford Promoter Activity in ENCODE Regions (CRL1690)
+priority 3
+
+track encodeStanfordPromotersG402
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford G402
+longLabel Stanford Promoter Activity in ENCODE Regions (G402)
+priority 4
+
+track encodeStanfordPromotersHCT116
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford HCT116
+longLabel Stanford Promoter Activity in ENCODE Regions (HCT116)
+priority 5
+
+track encodeStanfordPromotersHMCB
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford HMCB
+longLabel Stanford Promoter Activity in ENCODE Regions (HMCB)
+priority 6
+
+track encodeStanfordPromotersHT1080
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford HT1080
+longLabel Stanford Promoter Activity in ENCODE Regions (HT1080)
+priority 7
+
+track encodeStanfordPromotersHTB11
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford HTB11
+longLabel Stanford Promoter Activity in ENCODE Regions (HTB11)
+priority 8
+
+track encodeStanfordPromotersHela
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford Hela
+longLabel Stanford Promoter Activity in ENCODE Regions (Hela)
+priority 9
+
+track encodeStanfordPromotersHepG2
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford HepG2
+longLabel Stanford Promoter Activity in ENCODE Regions (HepG2)
+priority 10
+
+track encodeStanfordPromotersJEG3
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford JEG3
+longLabel Stanford Promoter Activity in ENCODE Regions (JEG3)
+priority 11
+
+track encodeStanfordPromotersMG63
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford MG63
+longLabel Stanford Promoter Activity in ENCODE Regions (MG63)
+priority 12
+
+track encodeStanfordPromotersMRC5
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford MRC5
+longLabel Stanford Promoter Activity in ENCODE Regions (MRC5)
+priority 13
+
+track encodeStanfordPromotersPanc1
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford Panc1
+longLabel Stanford Promoter Activity in ENCODE Regions (Panc1)
+priority 14
+
+track encodeStanfordPromotersSnu182
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford Snu182
+longLabel Stanford Promoter Activity in ENCODE Regions (Snu182)
+priority 15
+
+track encodeStanfordPromotersU87
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford U87
+longLabel Stanford Promoter Activity in ENCODE Regions (U87)
+priority 16
+
+track encodeStanfordPromotersAverage
+subTrack encodeStanfordPromoters
+shortLabel Promoter/Stanford Average
+longLabel Stanford Promoter Activity in ENCODE Regions (Average)
+priority 17
 
 track encode_NHGRI_DNAseHS
 shortLabel DNaseI-HS/NHGRI
