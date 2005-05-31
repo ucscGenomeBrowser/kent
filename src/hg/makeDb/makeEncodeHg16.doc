@@ -11,7 +11,8 @@ exit
     hgLoadBed hg16 encode_NHGRI_DNAseHS DNAseHS.bed
 
 
-    # Stanford Promoters from Rick Myers lab (2004-10-17 kate)
+# STANFORD PROMOTERS FROM RICK MYERS LAB (2004-10-17 kate)
+# Updated with new data 2005-05-26 angie, see below
 
     /cluster/data/encode/StanfordPromoters
     mkdir StanfordPromoters_20040825
@@ -37,6 +38,99 @@ exit
     # NOTE: scores are outside of 1-1000.  I've asked for
     # a redo from Sara.
 
+    # UPDATED 2005-05-26 angie
+    mkdir /cluster/data/encode/StanfordPromoters/2005-05-25
+    cd /cluster/data/encode/StanfordPromoters
+    rm latest previous
+    ln -s StanfordPromoters_20040825 previous
+    ln -s 2005-05-25 latest
+    mkdir latest/lab
+    cd latest/lab
+    # Saved email attachments from Sara Hartman.  
+    # Used ooffice to translate Description.doc to Description.html and 
+    # NegativeControlDataStanfordPromoters.xls to tab-sep'd ....txt.
+    # Datafile column descriptions from Sara's email 5/25/2005, augmented 
+    # with the bed9+ fields that we will shuffle them into:
+    # 1->4) Accession number of the mRNA used to predict the promoter
+    # 2->10) Gene model ID. If a gene has more than one predicted promoter 
+    #        they would have the same gene model ID.
+    # 3->1) chromosome
+    # 4->6) strand (0 for negative, 1 for positive)
+    # 5->2) Promoter Start coordinate
+    # 6->3) Promoter End Coordinate
+    # 7->X) Promoter length
+    # 8->11) Promoter Name [really a description -- some of these are quoted]
+    # 9->12) Luciferase signal A
+    # 10->13) Renilla Signal A
+    # 11->14) Luciferase Signal B
+    # 12->15) Renilla Signal B
+    # 13->16) Average Luciferase/Renilla Ratio
+    # 14->17) Normalized Luciferase/Renilla Ratio
+    # 15->18) Normalized and log2 transformed Luciferase Renilla Ratio
+    # 16->5) Score (from 0-1000)
+    # -- The Average file is like that but missing columns 9 to 14.
+    # Some cell-line data files have some rows with "Bad Txfn" in the last 
+    # 4 columns; Sara said we should ignore those rows.
+    foreach f (StanfordPromoters_*.txt)
+      set cellType = `echo $f | sed -e 's/StanfordPromoters_//; s/\.txt//;'`
+      echo $cellType
+      if ($cellType == "Average") then
+        tail +2 $f \
+        | perl -wpe 'chomp; @w = split("\t"); $w[7] =~ s/^\"(.*)\"$/$1/; \
+                     $w[3] =~ tr/01/-+/; \
+                     $_ = join("\t", \
+  $w[2], $w[4], $w[5], $w[0], $w[9], $w[3], $w[4], $w[5], 0, $w[1], $w[7], \
+  $w[8]) . "\n";' \
+	| makeColoredBed > encodeStanfordPromoters$cellType.bed
+      else
+        tail +2 $f \
+	| grep -v "Bad Txfn" \
+        | perl -wpe 'chomp; @w = split("\t"); $w[7] =~ s/^\"(.*)\"$/$1/; \
+                     $w[3] =~ tr/01/-+/; \
+                     $_ = join("\t", \
+  $w[2], $w[4], $w[5], $w[0], $w[15], $w[3], $w[4], $w[5], 0, $w[1], $w[7], \
+  $w[8], $w[9], $w[10], $w[11], $w[12], $w[13], $w[14]) . "\n";' \
+	| makeColoredBed > encodeStanfordPromoters$cellType.bed
+      endif
+    end
+    foreach f (encode*.bed)
+      set track = $f:r
+      if ($track == "encodeStanfordPromotersAverage") then
+        hgLoadBed -tab -noBin -sqlTable=$HOME/kent/src/hg/lib/$track.sql \
+	  hg16 $track $f
+      else
+        sed -e "s/encodeStanfordPromoters/$track/" \
+          $HOME/kent/src/hg/lib/encodeStanfordPromoters.sql > /tmp/esp.sql
+        hgLoadBed -tab -noBin -sqlTable=/tmp/esp.sql hg16 $track $f
+      endif
+    end
+    featureBits hg16 -enrichment encode_Stanford_Promoters \
+      encodeStanfordPromotersSnu182
+#encode_Stanford_Promoters 0.011%, encodeStanfordPromotersSnu182 0.011%, both 0.011%, cover 99.84%, enrich 9194.85x
+    featureBits hg16 encode_Stanford_Promoters \!encodeStanfordPromotersSnu182 \
+      -bed=stdout
+#chr21   32827801        32828259        chr21.1
+#chr21   33617743        33617751        chr21.2
+#chr11   1749652 1749673 chr11.1
+#chr7    126437698       126437700       chr7.1
+#chr5    131669622       131669641       chr5.1
+#508 bases of 2865248791 (0.000%) in intersection
+    # -- of those, only the first is not in the new set at all.  
+    featureBits hg16 \!encode_Stanford_Promoters encodeStanfordPromotersSnu182 \
+      -bed=stdout
+#chr21   33617194        33617203        chr21.1
+#chr18   32827801        32828259        chr18.1
+#chr7    126438195       126438196       chr7.1
+#chr2    235023631       235024097       chr2.1
+#934 bases of 2865248791 (0.000%) in intersection
+    # -- only the second and the last are not in the old set at all.
+    # Put the negative control data spreadsheet out for download.
+    mkdir -p \
+  /usr/local/apache/htdocs/goldenPath/hg16/encode/datafiles/stanfordPromoters
+    nice gzip NegativeControlDataStanfordPromoters.txt
+    cp -p NegativeControlDataStanfordPromoters.{xls,txt.gz} \
+  /usr/local/apache/htdocs/goldenPath/hg16/encode/datafiles/stanfordPromoters/
+    # Added a README.txt.
 
 
 # UVA DNA REPLICATION TEMPORAL PROFILING (2004-10-22 kate)
