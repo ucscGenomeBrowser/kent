@@ -481,6 +481,7 @@ cat > makeMaf.csh << 'EOF'
 
 
 # AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING (2004-12-08 kate)
+#	(RELOADED TABLES 2005-05-31 as bedGraph types - Hiram)
 
     # HL60 cells stimulated with Retinoic Acid
     # Transcription and PolII ChIP/Chip at 4 timepoints (8 experiments)
@@ -844,18 +845,18 @@ cat > load.csh << 'EOF'
 #	transformations interferring.  An experiment to see if there is
 #	a large difference in storage requirements for this data.
     ssh hgwdev
-    mkdir /cluster/data/encode/Affy/Dec03_2004/ucsc_formats/bedGraph
-    cd /cluster/data/encode/Affy/Dec03_2004/ucsc_formats/bedGraph
+    mkdir /cluster/data/encode/Affy/Dec03_2004/bedGraph
+    cd /cluster/data/encode/Affy/Dec03_2004/bedGraph
 
     for HR in 00 02 08 32
     do
-	rm -f encodeAfyRnaHl60SigHr${HR}.bed
+	rm -f encodeAffyRnaHl60SigHr${HR}.bed
 	rm -f bedGraph.sql
-	zcat ../wig/EC_HL60_RA_RNA_${HR}hr_AS.hs.NCBIv34.wig.gz | \
-	    ./varStepToBedGraph.pl /dev/stdin | sort -k1,1 -k2,2n > \
-	    encodeAfyRnaHl60SigHr${HR}.bed
-	hgsql -e "drop table encodeAfyRnaHl60SigHr${HR}" hg16 2> /dev/stderr
-	echo "CREATE TABLE encodeAfyRnaHl60SigHr${HR} (" > bedGraph.sql
+	zcat ../ucsc_formats/wig/EC_HL60_RA_RNA_${HR}hr_AS.hs.NCBIv34.wig.gz | \
+	    /cluster/bin/scripts/varStepToBedGraph.pl /dev/stdin | \
+		sort -k1,1 -k2,2n > encodeAffyRnaHl60SigHr${HR}.bed
+	hgsql -e "drop table encodeAffyRnaHl60SigHr${HR}" hg16 2> /dev/stderr
+	echo "CREATE TABLE encodeAffyRnaHl60SigHr${HR} (" > bedGraph.sql
 	echo 'bin smallint unsigned not null,' >> bedGraph.sql
 	echo 'chrom varchar(255) not null,' >> bedGraph.sql
 	echo 'chromStart int unsigned not null,' >> bedGraph.sql
@@ -863,8 +864,8 @@ cat > load.csh << 'EOF'
 	echo 'dataValue float not null,' >> bedGraph.sql
 	echo 'INDEX(chrom(6),bin)' >> bedGraph.sql
 	echo ');' >> bedGraph.sql
-	hgLoadBed -sqlTable=bedGraph.sql hg16 encodeAfyRnaHl60SigHr${HR} \
-		encodeAfyRnaHl60SigHr${HR}.bed
+	hgLoadBed -sqlTable=bedGraph.sql hg16 encodeAffyRnaHl60SigHr${HR} \
+		encodeAffyRnaHl60SigHr${HR}.bed
     done
     #
     #	Measuring previous data requirements:
@@ -887,6 +888,30 @@ cat > load.csh << 'EOF'
     #	At this density of data these storage areas are certainly
     #	comparable and practically equivalent.
 
+
+    #	do the other set of data too
+    for HR in 00 02 08 32
+    do
+	rm -f encodeAffyChIpRnapHl60PvalHr${HR}.bed
+	rm -f bedGraph.sql
+	zcat \
+	../ucsc_formats/wig/EC_HL60_RA_RNApol2_${HR}hr_AS_b.hs.NCBIv34.wig.gz \
+	    | /cluster/bin/scripts/varStepToBedGraph.pl /dev/stdin | \
+		sort -k1,1 -k2,2n > encodeAffyChIpRnapHl60PvalHr${HR}.bed
+	hgsql -e "drop table encodeAffyChIpRnapHl60PvalHr${HR}" hg16 2> /dev/stderr
+	echo "CREATE TABLE encodeAffyChIpRnapHl60PvalHr${HR} (" > bedGraph.sql
+	echo 'bin smallint unsigned not null,' >> bedGraph.sql
+	echo 'chrom varchar(255) not null,' >> bedGraph.sql
+	echo 'chromStart int unsigned not null,' >> bedGraph.sql
+	echo 'chromEnd int unsigned not null,' >> bedGraph.sql
+	echo 'dataValue float not null,' >> bedGraph.sql
+	echo 'INDEX(chrom(6),bin)' >> bedGraph.sql
+	echo ');' >> bedGraph.sql
+	hgLoadBed -sqlTable=bedGraph.sql hg16 \
+	    encodeAffyChIpRnapHl60PvalHr${HR} \
+		encodeAffyChIpRnapHl60PvalHr${HR}.bed
+    done
+    #
 # Sanger Chip/chip updated  (DONE - 2005-05-25 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/encode/sanger/chipchip/2005-05-25
