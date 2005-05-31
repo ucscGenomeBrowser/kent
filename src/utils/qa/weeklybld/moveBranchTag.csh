@@ -93,7 +93,7 @@ while ( $i <= $#files )
 	break
     endif
     # update the file from cvs branch in branch sandbox.
-    if ( -d $dir/$f:h )
+    if ( -d $dir/$f:h ) then
 	cd $dir/$f:h    # just dir and update one file
     	set cmd = "cvs up -dP $f:t"
     else
