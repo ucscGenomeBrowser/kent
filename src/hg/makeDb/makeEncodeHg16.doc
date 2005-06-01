@@ -812,6 +812,9 @@ cat > load.csh << 'EOF'
     );
     'EOF'
 
+    #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
+    #	these bedGraph types without this special sql business.
+
     set tablename = encodeSangerChipH3me3GM06990
     sed "s/tablename/$tablename/" table.sql > $tablename.sql
 
@@ -847,6 +850,9 @@ cat > load.csh << 'EOF'
     ssh hgwdev
     mkdir /cluster/data/encode/Affy/Dec03_2004/bedGraph
     cd /cluster/data/encode/Affy/Dec03_2004/bedGraph
+
+    #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
+    #	these bedGraph types without this special sql business.
 
     for HR in 00 02 08 32
     do
@@ -888,6 +894,8 @@ cat > load.csh << 'EOF'
     #	At this density of data these storage areas are certainly
     #	comparable and practically equivalent.
 
+    #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
+    #	these bedGraph types without this special sql business.
 
     #	do the other set of data too
     for HR in 00 02 08 32
@@ -952,6 +960,9 @@ cat > load.csh << 'EOF'
     ln -s H3ac_GM06990_1.bed H3ac.bed
     ln -s H4ac_GM06990_1.bed H4ac.bed
 
+    #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
+    #	these bedGraph types without this special sql business.
+
     #	so the names can now be used in a for loop:
     for T in H3K4me1 H3K4me2 H3K4me3 H3ac H4ac
     do
@@ -996,6 +1007,8 @@ cat > load.csh << 'EOF'
     #	Naming consistency so for() loop can work on this data
     ln -s tmH3K4_p0.wig.orig encodeUcsdChipTriK4IMR90_00.wig.orig
     ln -s tmH3K4_p30.wig.orig encodeUcsdChipTriK4IMR90_30.wig.orig
+    #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
+    #	these bedGraph types without this special sql business.
     for T in 00 30
     do
 	grep "^chr" encodeUcsdChipTriK4IMR90_${T}.wig.orig | \
