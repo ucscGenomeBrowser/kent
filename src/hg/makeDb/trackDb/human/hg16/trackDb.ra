@@ -1780,6 +1780,82 @@ longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) in ENCODE Regions
 priority 4
 color 58,119,40
 
+track encodeUcsdNgChip
+compositeTrack on
+shortLabel ChIP/LI TAF1 Ng
+longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan
+group encode
+priority 30.25
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -8
+maxLimit 8
+
+track encodeUcsdNgChipSignal
+subTrack encodeUcsdNgChip
+shortLabel ChIP/LI TAF1 Ng (Signal)
+longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Signal)
+type bedGraph 4
+priority 1
+
+track encodeUcsdNgChipKnownSites
+subTrack encodeUcsdNgChip
+shortLabel ChIP/LI TAF1 Ng (Known Sites)
+longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Known Sites)
+noInherit on
+type bed 3
+color 0,0,200
+priority 2
+
+track encodeUcsdNgChipNovelSites
+subTrack encodeUcsdNgChip
+shortLabel ChIP/LI TAF1 Ng (Novel Sites)
+longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Novel Sites)
+noInherit on
+type bed 3
+color 0,200,0
+priority 3
+
+track encodeUcsdNgValChip
+compositeTrack on
+shortLabel ChIP/LI Ng Val
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation
+group encode
+priority 30.26
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -8
+maxLimit 8
+
+track encodeUcsdNgValChipAch3
+subTrack encodeUcsdNgValChip
+shortLabel ChIP/LI Ng Val (Ach3)
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Ach3)
+priority 1
+
+track encodeUcsdNgValChipMeh3k4
+subTrack encodeUcsdNgValChip
+shortLabel ChIP/LI Ng Val (Meh3k4)
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Meh3k4)
+priority 2
+color 0,63,135
+
+track encodeUcsdNgValChipRnap
+subTrack encodeUcsdNgValChip
+shortLabel ChIP/LI Ng Val (Rnap)
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Rnap)
+priority 3
+color 109,51,43
+
+track encodeUcsdNgValChipTaf
+subTrack encodeUcsdNgValChip
+shortLabel ChIP/LI Ng Val (Taf)
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Taf)
+priority 4
+color 58,119,40
+
 track encodeUcsdChipAch3Imr90
 shortLabel ChIP/LI AcH3
 longLabel Ludwig Institute, UCSD ChIP/Chip (AcH3 IMR90) in ENCODE Regions
