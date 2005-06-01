@@ -1,9 +1,74 @@
 <H2>Description</H2>
 <P>
-This track shows high-quality manual annotations as well as experimental 
-gene structure validations generated within the 
+The Gencode Gene and Intron Validation tracks show high-quality manual 
+annotations as well as experimental gene structure validations generated within the 
 <A HREF="http://genome.imim.es/gencode/" TARGET=_blank>GENCODE project</A>.
-</P>
+<P>
+The Gene track displays gene annotations with colors
+based on the Vega type.  The types and colors are:
+<P>
+<TABLE BORDER=1>
+<TR>
+<TD>Type</TD><TD>Color</TD><TD>Description</TD>
+</TR>
+<TR>
+<TD>Known</TD><TD>dark red</TD><TD> Known protein coding genes (referenced in NCBI)</TD>
+</TR>
+<TR> <TD>Novel_CDS</TD><TD>dark red</TD><TD> Novel protein coding genes annotated by Havana (not referenced in NCBI)</TD> </TR>
+
+<TR> <TD>Novel_transcript_val</TD><TD>dark red</TD><TD> Novel transcripts annotated 
+    by Havana (no ORF was determined) that had at least one junction 
+    validated by RT-PCR</TD> </TR>
+
+<TR> <TD>Putative_val</TD><TD>dark red</TD><TD> Putative transcripts (similar to "novel 
+        transcripts" with less evidence, no ORF was determined), that had
+        at least one junction validated by RT-PCR</TD> </TR>
+
+<TR><TD> Antisense_val</TD><TD>dark red</TD><TD> Antisense transcripts (no ORF), 
+        that had at least one junction validated by RT-PCR</TD></TR>
+
+<TR> <TD>Novel_transcript</TD><TD>light red</TD><TD>Novel transcripts annotated
+        by Havana (no ORF was determined), that were not validated by RT-PCR</TD> </TR>
+
+<TR> <TD>Putative</TD><TD>light red</TD><TD> Putative transcripts (similar to 
+        "novel transcripts" with less evidence, no ORF was determined), that were not
+                validated by RT-PCR</TD> </TR>
+<TR> <TD>Antisense</TD><TD>light red</TD><TD> Antisense transcripts (no ORF), 
+        that were not validated by RT-PCR </TD> </TR>
+
+<TR> <TD>TEC</TD><TD>light red</TD> <TD>Single exon annotations that need to be 
+        experimentaly confirmed<TD> </TR>
+
+<TR><TD> Processed_pseudogene</TD><TD>blue</TD><TD>Pseudogenes issued from reverse 
+        transcription of the mRNA and re-integration (no introns)</TD></TR>
+
+<TR><TD>Unprocessed_pseudogene </TD><TD>blue</TD><TD> Pseudogenes with introns</TD></TR>
+
+<TR><TD> Artifact</TD><TD>grey</TD><TD> Correspond to erroneous evidence</TD></TR>
+</TABLE>
+<P>
+
+The Gencode Intron Validation track displays item color
+based on the validation status determined via RT-PCR of exons flanking the intron:
+<P>
+<TABLE BORDER=1>
+<TR>
+<TD>Status</TD><TD>Color</TD><TD>Validation Result</TD>
+</TR>
+<TR>
+<TD> <FONT COLOR="#3D8E33"> RT_positive </FONT></TD> <TD>green</TD>
+<TD> Intron validated (PCR product corresponds to expected junction)</TD>
+</TR>
+<TR>
+<TD> <FONT COLOR="#913338"> RT_negative </FONT></TD><TD>red</TD>
+<TD> Intron not validated (No PCR product was obtained)</TD>
+</TR>
+<TR>
+<TD> <FONT COLOR="#E68200"> RT_wrong_junction </FONT></TD><TD>gold</TD>
+<TD> Intron not validated but another junction exists between the two
+(PCR product does not corresponds to the expected junction)</TD>
+</TR>
+</TABLE>
 
 <H2>Methods</H2>
 <P>
