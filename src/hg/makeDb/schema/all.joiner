@@ -634,7 +634,7 @@ identifier bacExtName
 identifier bacSangerName
 "Sanger STS name for STS associated with BAC clones"
     $danRer.bacCloneXRef.sangerName dupeOk
-    $danRer.bacAlias.sangerName
+    $danRer.bacCloneAlias.sangerName
 
 identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
