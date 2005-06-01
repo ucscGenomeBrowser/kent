@@ -37,7 +37,7 @@ based on the Vega type.  The types and colors are:
         that were not validated by RT-PCR </TD> </TR>
 
 <TR> <TD>TEC</TD><TD>light green</TD> <TD>Single exon annotations that need to be 
-        experimentaly confirmed<TD> </TR>
+        experimentally confirmed<TD> </TR>
 
 <TR><TD> Processed_pseudogene</TD><TD>blue</TD><TD>Pseudogenes issued from reverse 
         transcription of the mRNA and re-integration (no introns)</TD></TR>
@@ -75,6 +75,7 @@ based on the validation status determined via RT-PCR of exons flanking the intro
 The Human and Vertebrate Analysis and Annotation manual curation process 
 (<A HREF="http://www.sanger.ac.uk/HGP/havana/" TARGET=_blank>HAVANA</A>) was
 used to produce these annotations.
+<P>
 Finished genomic sequence was analyzed on a clone-by-clone basis using a
 combination of similarity searches against DNA and protein databases, as
 well as a series of <em>ab initio</em> gene predictions. Nucleotide sequence 
@@ -85,9 +86,12 @@ the <A HREF="http://www.uniprot.org" TARGET=_blank>Uniprot protein
 database</A>, and the accession numbers of significant hits were
 retrieved from the Pfam database. Hidden Markov models for Pfam protein 
 domains were aligned against the genomic sequence using Genewise to provide
-annotation of protein domains. A number of <em>ab initio</em>
+annotation of protein domains. 
+<P>
+A number of <em>ab initio</em>
 prediction algorithms were also run: Genscan and Fgenesh for genes, tRNAscan 
 to find tRNA genes, and Eponine TSS for transcription start site predictions.
+<P>
 The annotators used the (AceDB-based) Otterlace interface to create and
 edit gene objects, which were then stored in a local database named 
 <em>Otter</em>. In cases where predicted transcript structures from Ensembl 
@@ -98,8 +102,8 @@ database is submitted to the EMBL/Genbank/DDBJ nucleotide database.</P>
 <H2>Verification</H2>
 <P>
 The gene objects selected for verification came from various
-computational prediction methods and HAVANA annotations. RT-PCR and
-RACE experiments were performed on them, using a variety of human
+computational prediction methods and HAVANA annotations. 
+<P>RT-PCR and RACE experiments were performed on them, using a variety of human
 tissues, to confirm their structure. Human cDNAs from 24 different
 tissues (brain, heart, kidney, spleen, liver, colon, small intestine,
 muscle, lung, stomach, testis, placenta, skin, peripheral blood
@@ -113,7 +117,9 @@ ABI Prism 7700 Sequence Detection System.</P>
 <P>
 Predictions of human genes junctions were assayed experimentally by
 RT-PCR as previously described and modified [Reymond, 2002b;
-Waterston, 2002; Guigo, 2003]. Similar amounts of <em>Homo
+Waterston, 2002; Guigo, 2003]. 
+<P>
+Similar amounts of <em>Homo
 sapiens</em> cDNAs were mixed with JumpStart REDTaq ReadyMix (Sigma) and four
 ng/ul primers (Sigma-Genosys) with a BioMek 2000 robot (Beckman). The
 ten first cycles of PCR amplification were performed with a touchdown
