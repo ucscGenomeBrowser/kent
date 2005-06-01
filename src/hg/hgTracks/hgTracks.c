@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.964 2005/05/31 20:29:51 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.965 2005/06/01 04:31:01 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8971,13 +8971,17 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 }
 
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
-/* Return total height of composite track */
+/* Return total height of composite track and set subtrack->height's. */
 {
 struct track *subtrack;
 int height = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
-        height += subtrack->totalHeight(subtrack, vis);
+	{
+	int h = subtrack->totalHeight(subtrack, vis);
+	subtrack->height = h;
+	height += h;
+	}
 track->height = height;
 return height;
 }
