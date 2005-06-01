@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.33 2005/04/25 19:25:51 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.34 2005/06/01 18:02:48 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -19,6 +19,7 @@ boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 boolean noLoad = FALSE;		/* Do not load DB or remove tab file */
+int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
 /* command line option specifications */
@@ -32,6 +33,7 @@ static struct optionSpec optionSpecs[] = {
     {"tab", OPTION_BOOLEAN},
     {"hasBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
+    {"bedGraph", OPTION_INT},
     {NULL, 0}
 };
 
@@ -52,6 +54,9 @@ errAbort(
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
   "   -noLoad  - Do not load database and do not clean up tab files\n"
+  "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
+  "               - bedGraph N is typically 4: -bedGraph=4\n"
+  "               - and it must be the last column of the input file."
   );
 }
 
@@ -182,7 +187,16 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 fclose(f);
 }
 
-void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedList)
+static void maybeBedGraph(int col, struct dyString *dy, char *colDefinition)
+/* output definition "default" for column "col" when not bedGraph */
+{
+if (col == bedGraph)
+    dyStringAppend(dy, "  dataValue float not null,\n");
+else
+    dyStringAppend(dy, colDefinition);
+}
+
+static void loadDatabase(char *database, char *track, int bedSize, struct bedStub *bedList)
 /* Load database from bedList. */
 {
 struct sqlConnection *conn;
@@ -215,10 +229,13 @@ else if (!oldTable)
     int minLength;
 
     hSetDb(database);
-    minLength = hGetMinIndexLength();
+    if (noLoad)
+	minLength=6;
+    else
+	minLength = hGetMinIndexLength();
 
     /* Create definition statement. */
-    verbose(1, "Creating table definition for \n");
+    verbose(1, "Creating table definition for %s\n", track);
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
@@ -226,39 +243,41 @@ else if (!oldTable)
     dyStringAppend(dy, "  chromStart int unsigned not null,\n");
     dyStringAppend(dy, "  chromEnd int unsigned not null,\n");
     if (bedSize >= 4)
-       dyStringAppend(dy, "  name varchar(255) not null,\n");
+       maybeBedGraph(4, dy, "  name varchar(255) not null,\n");
     if (bedSize >= 5)
-       dyStringAppend(dy, "  score int unsigned not null,\n");
+       maybeBedGraph(5, dy, "  score int unsigned not null,\n");
     if (bedSize >= 6)
-       dyStringAppend(dy, "  strand char(1) not null,\n");
+       maybeBedGraph(6, dy, "  strand char(1) not null,\n");
     if (bedSize >= 7)
-       dyStringAppend(dy, "  thickStart int unsigned not null,\n");
+       maybeBedGraph(7, dy, "  thickStart int unsigned not null,\n");
     if (bedSize >= 8)
-       dyStringAppend(dy, "  thickEnd int unsigned not null,\n");
+       maybeBedGraph(8, dy, "  thickEnd int unsigned not null,\n");
     /*	As of 2004-11-22 the reserved field is used as itemRgb in code */
     if (bedSize >= 9)
-       dyStringAppend(dy, "  reserved int unsigned  not null,\n");
+       maybeBedGraph(9, dy, "  reserved int unsigned  not null,\n");
     if (bedSize >= 10)
-       dyStringAppend(dy, "  blockCount int unsigned not null,\n");
+       maybeBedGraph(10, dy, "  blockCount int unsigned not null,\n");
     if (bedSize >= 11)
-       dyStringAppend(dy, "  blockSizes longblob not null,\n");
+       maybeBedGraph(11, dy, "  blockSizes longblob not null,\n");
     if (bedSize >= 12)
-       dyStringAppend(dy, "  chromStarts longblob not null,\n");
+       maybeBedGraph(12, dy, "  chromStarts longblob not null,\n");
     if (bedSize >= 13)
-       dyStringAppend(dy, "  expCount int unsigned not null,\n");
+       maybeBedGraph(13, dy, "  expCount int unsigned not null,\n");
     if (bedSize >= 14)
-       dyStringAppend(dy, "  expIds longblob not null,\n");
+       maybeBedGraph(14, dy, "  expIds longblob not null,\n");
     if (bedSize >= 15)
-       dyStringAppend(dy, "  expScores longblob not null,\n");
+       maybeBedGraph(15, dy, "  expScores longblob not null,\n");
     dyStringAppend(dy, "#Indices\n");
     if (!noBin)
        dyStringPrintf(dy, "  INDEX(chrom(%d),bin),\n", minLength);
-    if (bedSize >= 4)
+    if ((bedSize >= 4) && (0 == bedGraph))
        dyStringAppend(dy, "  INDEX(name(16)),\n");
     dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
     dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", minLength);
     dyStringAppend(dy, ")\n");
-    if ( ! noLoad )
+    if (noLoad)
+	verbose(2,"%s", dy->string);
+    else
 	sqlRemakeTable(conn, track, dy->string);
     }
 
@@ -291,6 +310,12 @@ int i;
 
 if (hasBin)
     bedSize--;
+
+/*	verify proper usage of bedGraph column, must be last one */
+if ((bedGraph > 0) && (bedSize != bedGraph))
+    errAbort("bedGraph column %d must be last column, last column is %d",
+	bedGraph, bedSize);
+
 for (i=0; i<bedCount; ++i)
     {
     /* bedFiles[0] was opened by findBedSize above -- since it might be stdin,
@@ -328,6 +353,7 @@ oldTable = optionExists("oldTable");
 sqlTable = optionVal("sqlTable", sqlTable);
 hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
+bedGraph = optionInt("bedGraph",0);
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
