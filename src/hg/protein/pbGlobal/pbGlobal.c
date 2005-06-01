@@ -231,10 +231,8 @@ hPrintf("Organism: ");
 /* get scientific and Genbank common name of this organism */
 sciName    = NULL;
 commonName = NULL;
-/* NOTE: on rare occasions, acc to taxon id is not a one to one relationship, 
-   but we will just use the first valid one */
-safef(cond_str, sizeof(cond_str),"accToTaxon.acc='%s' and accToTaxon.taxon=taxon.id", proteinID);
-answer = sqlGetField(conn, UNIPROT_DB_NAME, "accToTaxon, taxon", "taxon.id", cond_str);
+safef(cond_str, sizeof(cond_str),"accession='%s'", proteinID);
+answer = sqlGetField(conn, PROTEOME_DB_NAME, "spXref3", "division", cond_str);
 if (answer != NULL)
     {
     safef(cond_str, sizeof(cond_str), "id=%s and nameType='scientific name'", answer);

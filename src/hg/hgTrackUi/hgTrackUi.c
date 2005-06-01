@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.192 2005/05/03 02:07:40 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.196 2005/05/26 20:59:18 sugnet Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -890,7 +890,7 @@ wigFetchYLineMarkValue(tdb, &yLineMark);
 printf("<TABLE BORDER=0><TR><TD ALIGN=LEFT>\n");
 
 if (bedGraph)
-printf("<b>bedGraph Type of graph:&nbsp;</b>");
+printf("<b>Type of graph:&nbsp;</b>");
 else
 printf("<b>Type of graph:&nbsp;</b>");
 wiggleGraphDropDown(&options[8][0], lineBar);
@@ -1191,7 +1191,19 @@ if( optionNum >= 7 )
     }
 }
 
+void affyTxnPhase2Ui(struct trackDb *tdb) 
+/* Ui for affymetrix transcriptome phase 2 data. */
+{
+enum trackVisibility tnfgVis = tvHide;
+char *visString = cartUsualString(cart, "hgt.affyPhase2.tnfg", "hide");
+tnfgVis = hTvFromString(visString);
+printf("<b>Transfrags Display Mode: </b>");
+hTvDropDown("hgt.affyPhase2.tnfg", tnfgVis, TRUE);
 
+printf("<p><b><u>Graph Plotting options:</u></b><br>");
+wigUi(tdb);
+printf("<p><b><u>View/Hide individual cell lines:</u></b>");
+}
 
 void humMusUi(struct trackDb *tdb, int optionNum )
 /* put up UI for human/mouse conservation sample tracks (humMusL and musHumL)*/
@@ -1309,6 +1321,8 @@ char *track = tdb->tableName;
 
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
+else if (sameString(track, "affyTxnPhase2"))
+    affyTxnPhase2Ui(tdb);
 else if (sameString(track, "stsMapMouseNew"))
         stsMapMouseUi(tdb);
 else if (sameString(track, "stsMapRat"))
@@ -1407,6 +1421,7 @@ else if (sameString(track, "mouseSyn"))
     crossSpeciesUi(tdb);
 else if (sameString(track, "affyTranscriptome"))
     affyTranscriptomeUi(tdb);
+
 else if (startsWith("sample", tdb->type))
     genericWiggleUi(tdb,7);
 else if (sameString(track, RULER_TRACK_NAME))
@@ -1485,6 +1500,13 @@ if (hTableOrSplitExists(tdb->tableName))
 	   "TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
 	   database, tdb->grp, tdb->tableName, tdb->tableName);
+else if (tdb->subtracks != NULL &&
+	 hTableOrSplitExists(tdb->subtracks->tableName))
+    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
+	   "TARGET=_BLANK>"
+	   "View table schema</A></P>\n",
+	   database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {

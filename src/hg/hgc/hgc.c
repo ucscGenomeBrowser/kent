@@ -168,7 +168,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.890 2005/05/22 15:35:14 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.891 2005/05/24 23:43:39 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15165,7 +15165,7 @@ if (cut)
 	printf("<B>Isoligamers: </B>");
 	for (cur = isoligs; cur->next != NULL; cur = cur->next)
 	    printf("<A HREF=\"%s&g=%s&i=%s\">%s</A>, ", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
-	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A> *<BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
+	printf("<A HREF=\"%s&g=%s&i=%s\">%s</A><BR>\n", hgcPathAndSettings(), CUTTERS_TRACK_NAME, cur->name, cur->name);
 	slFreeList(&isoligs);
 	}
     if (cut->numRefs > 0)

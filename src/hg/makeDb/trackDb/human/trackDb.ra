@@ -519,18 +519,18 @@ track affyTxnPhase2
 shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
 compositeTrack on
-visibility pack
+visibility dense
 defaultViewLimits 0:150
 autoScaleDefault Off
 group regulation
 priority 98.9
-maxHeightPixels 100:20:10
-canPack on
+maxHeightPixels 100:30:10
+canPack off
 type wig 0 1000
 
 track A375_cytosolic_polyAPlusTxn
 shortLabel A375 Txn
-longLabel A375 Cytosolic Affy Transcriptome
+longLabel A375 Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.01
 autoScaleDefault Off
@@ -546,7 +546,7 @@ wigColorBy A375_cytosolic_polyAPlusTnFg
 
 track A375_cytosolic_polyAPlusTnFg
 shortLabel A375 TnFg
-longLabel A375 Cytosolic polyA+ Affy Transfrags
+longLabel A375 Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.02
 visibility pack
@@ -559,7 +559,7 @@ noInherit on
 
 track FHs738Lu_cytosolic_polyAPlusTxn
 shortLabel FHs738Lu Txn
-longLabel FHs738Lu Cytosolic Affy Transcriptome
+longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.03
 autoScaleDefault Off
@@ -575,7 +575,7 @@ wigColorBy FHs738Lu_cytosolic_polyAPlusTnFg
 
 track FHs738Lu_cytosolic_polyAPlusTnFg
 shortLabel FHs738Lu TnFg
-longLabel FHs738Lu Cytosolic polyA+ Affy Transfrags
+longLabel FHs738Lu Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.04
 visibility pack
@@ -588,7 +588,7 @@ noInherit on
 
 track HepG2_cytosolic_polyAPlusTxn
 shortLabel HepG2+ Cyto Txn
-longLabel HepG2 Cytosolic polyA+ Affy Transcriptome
+longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.05
 autoScaleDefault Off
@@ -604,7 +604,7 @@ wigColorBy HepG2_cytosolic_polyAPlusTnFg
 
 track HepG2_cytosolic_polyAPlusTnFg
 shortLabel HepG2+ Cyto TnFg
-longLabel HepG2 Cytosolic polyA+ Affy Transfrags
+longLabel HepG2 Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.06
 visibility pack
@@ -617,7 +617,7 @@ noInherit on
 
 track HepG2_nuclear_polyAPlusTxn
 shortLabel HepG2+ Nuc Txn
-longLabel HepG2 Nuclear polyA+ Affy Transcriptome
+longLabel HepG2 Nuclear polyA+, Affy Transcriptome
 group regulation
 priority 99.061
 autoScaleDefault Off
@@ -633,7 +633,7 @@ wigColorBy HepG2_nuclear_polyAPlusTnFg
 
 track HepG2_nuclear_polyAPlusTnFg
 shortLabel HepG2+ Nuc TnFg
-longLabel HepG2 Nuclear polyA+ Affy Transfrags
+longLabel HepG2 Nuclear polyA+, Affy Transfrags
 group regulation
 priority 99.062
 visibility pack
@@ -646,7 +646,7 @@ noInherit on
 
 track HepG2_cytosolic_polyAMinusTxn
 shortLabel HepG2- Cyto Txn
-longLabel HepG2 Cytosolic polyA- Affy Transcriptome
+longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
 group regulation
 priority 99.063
 autoScaleDefault Off
@@ -662,7 +662,7 @@ wigColorBy HepG2_cytosolic_polyAMinusTnFg
 
 track HepG2_cytosolic_polyAMinusTnFg
 shortLabel HepG2- Cyto TnFg
-longLabel HepG2 Cytosolic polyA- Affy Transfrags
+longLabel HepG2 Cytosolic polyA-, Affy Transfrags
 group regulation
 priority 99.064
 visibility pack
@@ -675,7 +675,7 @@ noInherit on
 
 track HepG2_nuclear_polyAMinusTxn
 shortLabel HepG2- Nuc Txn
-longLabel HepG2 Nuclear polyA- Affy Transcriptome
+longLabel HepG2 Nuclear polyA-, Affy Transcriptome
 group regulation
 priority 99.065
 autoScaleDefault Off
@@ -691,7 +691,7 @@ wigColorBy HepG2_nuclear_polyAMinusTnFg
 
 track HepG2_nuclear_polyAMinusTnFg
 shortLabel HepG2- Nuc TnFg
-longLabel HepG2 Nuclear polyA- Affy Transfrags
+longLabel HepG2 Nuclear polyA-, Affy Transfrags
 group regulation
 priority 99.067
 visibility pack
@@ -704,7 +704,7 @@ noInherit on
 
 track Jurkat_cytosolic_polyAPlusTxn
 shortLabel Jurkat Txn
-longLabel Jurkat Cytosolic Affy Transcriptome
+longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.07
 autoScaleDefault Off
@@ -720,7 +720,7 @@ wigColorBy Jurkat_cytosolic_polyAPlusTnFg
 
 track Jurkat_cytosolic_polyAPlusTnFg
 shortLabel Jurkat TnFg
-longLabel Jurkat Cytosolic polyA+ Affy Transfrags
+longLabel Jurkat Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.08
 visibility pack
@@ -733,7 +733,7 @@ noInherit on
 
 track NCCIT_cytosolic_polyAPlusTxn
 shortLabel NCCIT Txn
-longLabel NCCIT Cytosolic Affy Transcriptome
+longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.09
 autoScaleDefault Off
@@ -749,7 +749,7 @@ wigColorBy NCCIT_cytosolic_polyAPlusTnFg
 
 track NCCIT_cytosolic_polyAPlusTnFg
 shortLabel NCCIT TnFg
-longLabel NCCIT Cytosolic polyA+ Affy Transfrags
+longLabel NCCIT Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.10
 visibility pack
@@ -762,7 +762,7 @@ noInherit on
 
 track PC3_cytosolic_polyAPlusTxn
 shortLabel PC3 Txn
-longLabel PC3 Cytosolic Affy Transcriptome
+longLabel PC3 Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.11
 autoScaleDefault Off
@@ -778,7 +778,7 @@ wigColorBy PC3_cytosolic_polyAPlusTnFg
 
 track PC3_cytosolic_polyAPlusTnFg
 shortLabel PC3 TnFg
-longLabel PC3 Cytosolic polyA+ Affy Transfrags
+longLabel PC3 Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.12
 visibility pack
@@ -791,7 +791,7 @@ noInherit on
 
 track SK_N_AS_cytosolic_polyAPlusTxn
 shortLabel SK-N-AS Txn
-longLabel SK-N-AS Cytosolic Affy Transcriptome
+longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.13
 autoScaleDefault Off
@@ -807,7 +807,7 @@ wigColorBy SK_N_AS_cytosolic_polyAPlusTnFg
 
 track SK_N_AS_cytosolic_polyAPlusTnFg
 shortLabel SK-N-AS TnFg
-longLabel SK-N-AS Cytosolic polyA+ Affy Transfrags
+longLabel SK-N-AS Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.14
 visibility pack
@@ -821,7 +821,7 @@ noInherit on
 
 track U87_cytosolic_polyAPlusTxn
 shortLabel U87 Txn
-longLabel U87 Cytosolic polyA+ Affy Transcriptome
+longLabel U87 Cytosolic polyA+, Affy Transcriptome
 group regulation
 priority 99.15
 autoScaleDefault Off
@@ -838,7 +838,7 @@ wigColorBy U87_cytosolic_polyAPlusTnFg
 
 track U87_cytosolic_polyAPlusTnFg
 shortLabel U87 TnFg
-longLabel U87 Cytosolic polyA+ Affy Transfrags
+longLabel U87 Cytosolic polyA+, Affy Transfrags
 group regulation
 priority 99.16
 visibility pack
@@ -848,7 +848,6 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
-
 
 track bacEndPairs
 shortLabel BAC End Pairs

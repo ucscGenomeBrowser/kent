@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.2 2005/05/03 01:58:52 sugnet Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.3 2005/05/26 21:00:45 sugnet Exp $";
 
 
 
@@ -190,15 +190,6 @@ static int affyTxnPhase2TotalHeight(struct track *track, enum trackVisibility vi
 return track->height;
 }
 
-static enum trackVisibility subTrackCompatVis(struct track *subTrack, enum trackVisibility vis)
-/* Return a visibility compatible with the subtrack type. */
-{
-enum trackVisibility compatVis = vis;
-if((vis == tvSquish || vis == tvPack) && (!subTrack->canPack))
-    compatVis = tvFull;
-return compatVis;
-}
-
 static void affyTxnPhase2MapItem(struct track *tg, void *item, 
 			  char *itemName, int start, int end, 
 			  int x, int y, int width, int height)
@@ -214,19 +205,26 @@ struct track *sub = NULL;
 int totalHeight=0;
 boolean first = TRUE;
 boolean tooBig = (winEnd - winStart) > 1000000;
+enum trackVisibility tnfgVis = tvHide;
+char *visString = cartUsualString(cart, "hgt.affyPhase2.tnfg", "hide");
+tnfgVis = hTvFromString(visString);
+
 
 /* After a megabase, just give the packed view. */
 if(tooBig && track->visibility == tvFull)
-    track->limitedVis = tvPack;
+    track->limitedVis = tvDense;
 else
     track->limitedVis = track->visibility;
+
+/* Hide the transfrags tracks when not in full. */
+if(track->limitedVis != tvFull)
+    tnfgVis = tvHide;
 
 /* Override composite default settings. */
 for(sub = track->subtracks; sub != NULL; sub = sub->next)
     {
-    sub->visibility = subTrackCompatVis(sub, track->limitedVis);
     if(stringIn("bed", sub->tdb->type) && track->limitedVis == tvFull)
-	sub->visibility = tvPack;
+	sub->visibility = tnfgVis;
     if(stringIn("wig", sub->tdb->type))
 	{
 	sub->mapItem = affyTxnPhase2MapItem;
@@ -235,17 +233,17 @@ for(sub = track->subtracks; sub != NULL; sub = sub->next)
 	}
     }
 
-/* If we are in pack, squish, or dense mode just show first wiggle
-   plot. */
-if(track->limitedVis == tvPack || 
-   track->limitedVis == tvDense || 
-   track->limitedVis == tvSquish )
+/* For the composite track we are going to display the first
+   track. */
+if(track->limitedVis == tvDense)
     {
     for(sub = track->subtracks; sub != NULL; sub = sub->next)
 	{
 	if(first && stringIn("wig", sub->tdb->type))
 	    {
 	    struct dyString *s = newDyString(128);
+	    /* Display first track as full when in dense mode. */
+	    sub->visibility = tvFull;
 	    /* Display parent track name when we are not in full mode. */
 	    dyStringPrintf(s, "%s (%s)", track->longLabel, sub->shortLabel);
 	    freez(&sub->shortLabel);
