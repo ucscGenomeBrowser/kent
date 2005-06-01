@@ -12,9 +12,11 @@ endif
 cd $WEEKLYBLD
 
 echo "REVIEWDAY=$REVIEWDAY   (review day, day2)"
+echo "LASTREVIEWDAY=$LASTREVIEWDAY   (previous review day, day2)"
 echo "BRANCHNN=$BRANCHNN"
 echo "TODAY=$TODAY   (last build day)"
 echo "LASTWEEK=$LASTWEEK   (previous build day)"
+
 
 if ( "$TODAY" == "" ) then
  echo "TODAY undefined."
@@ -26,6 +28,14 @@ if ( "$BRANCHNN" == "" ) then
 endif
 if ( "$LASTWEEK" == "" ) then
  echo "LASTWEEK undefined."
+ exit 1
+endif
+if ( "$REVIEWDAY" == "" ) then
+ echo "REVIEWDAY undefined."
+ exit 1
+endif
+if ( "$LASTREVIEWDAY" == "" ) then
+ echo "LASTREVIEWDAY undefined."
  exit 1
 endif
 
