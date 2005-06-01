@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: splice.c,v 1.3 2004/12/27 20:24:22 sugnet Exp $";
+static char const rcsid[] = "$Id: splice.c,v 1.4 2005/06/01 01:08:38 sugnet Exp $";
 
 struct path *pathCommaIn(char **pS, struct path *ret)
 /* Create a path out of a comma separated string. 
@@ -383,9 +383,9 @@ if(spoofEnds && verts[vertIx] != source && verts[vertIx+1] <= splice->vCount &&
    pathEdgeType(vTypes, verts[vertIx], verts[vertIx+1]) != ggExon)
     {
     bed->blockSizes[bed->blockCount] = 1;
-    bed->chromStarts[bed->blockCount] = vPos[verts[vertIx+1]] - 1;
-    bed->chromStart = bed->thickStart = min(bed->chromStart, vPos[verts[vertIx]] - 1);
-    bed->chromEnd = bed->thickEnd = max(bed->chromEnd, vPos[verts[vertIx+1]]);
+    bed->chromStarts[bed->blockCount] = vPos[verts[vertIx+1]];
+    bed->chromStart = bed->thickStart = min(bed->chromStart, vPos[verts[vertIx+1]]);
+    bed->chromEnd = bed->thickEnd = max(bed->chromEnd, vPos[verts[vertIx+1]]+1);
     bed->blockCount++;
     }
 
