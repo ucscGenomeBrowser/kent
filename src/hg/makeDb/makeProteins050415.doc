@@ -68,6 +68,8 @@ cut -f 1,2 spXref3Var.tab >j.tmp
 hgsql sp050415 -e 'load data local infile "j.tmp" into table displayId'
 rm j.tmp
 
+hgsql sp050415 -e 'drop table varProtTemp'
+
 # BUILD TABLES FOR pbGlobal (PB V1.1)
 
     cd /cluster/data/proteins/050415
