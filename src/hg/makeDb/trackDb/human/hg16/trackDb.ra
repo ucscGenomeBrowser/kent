@@ -1941,35 +1941,35 @@ maxLimit 75
 track encodeSangerChipH3K4me1
 subTrack encodeSangerChipH3H4
 shortLabel H3K4me1 ChIP/Sanger
-longLabel Sanger ChIP/Chip H3K4me1 H3 monomethyl lysine 4 in GM06990
+longLabel Sanger ChIP/Chip (H3K4me1 GM06990) in ENCODE Regions
 priority 1
 color 10,10,130
 
 track encodeSangerChipH3K4me2
 subTrack encodeSangerChipH3H4
 shortLabel H3K4me2 ChIP/Sanger
-longLabel Sanger ChIP/Chip H3K4me2 H3 dimethyl lysine 4 in GM06990
+longLabel Sanger ChIP/Chip (H3K4me2 GM06990) in ENCODE Regions
 priority 2
 color 10,10,10
 
 track encodeSangerChipH3K4me3
 subTrack encodeSangerChipH3H4
 shortLabel H3K4me3 ChIP/Sanger
-longLabel Sanger ChIP/Chip H3K4me3 H3 trimethyl lysine 4 in GM06990
+longLabel Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions
 priority 3
 color 10,10,130
 
 track encodeSangerChipH3ac
 subTrack encodeSangerChipH3H4
 shortLabel H3ac ChIP/Sanger
-longLabel Sanger ChIP/Chip H3ac H3 acetylated lysines 9 and 14 in GM06990
+longLabel Sanger ChIP/Chip (H3ac GM06990) in ENCODE Regions
 priority 4
 color 10,10,10
 
 track encodeSangerChipH4ac
 subTrack encodeSangerChipH3H4
 shortLabel H4ac ChIP/Sanger
-longLabel Sanger ChIP/Chip H4ac H4 acetylated lysines 5, 8, 12, 16 in GM06990
+longLabel Sanger ChIP/Chip (H4ac GM06990) in ENCODE Regions
 priority 5
 color 10,10,130
 
