@@ -120,7 +120,7 @@ public class ApacheReport {
 
       if (!thisMonth.equals(yestMonth)) {
         System.out.println("\n========================================\n");
-        System.out.println("\n" + getMonth(month)
+        System.out.println("\n" + getMonthText(month)
                    + " monthly report available at: \n" + fileMonth + "\n");
         String url = "/usr/local/apache/htdocs/";
         if (outpath.startsWith(url)) {
