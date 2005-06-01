@@ -70,7 +70,7 @@ track multiz6way
 shortLabel 6-Way Conservation
 longLabel 6-Way Vertebrate Multiz Alignment & Conservation
 group compGeno
-priority 109
+priority 104
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
