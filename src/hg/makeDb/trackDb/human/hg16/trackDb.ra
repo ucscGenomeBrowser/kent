@@ -1675,7 +1675,7 @@ type bed 4 .
 
 track encodeUcsdChipTriK4IMR90
 compositeTrack on
-shortLabel Ludwig/UCSD H3K4me3
+shortLabel ChIP/LI H3K4me3
 longLabel Ludwig Institute, UCSD ChIP/Chip (H3K4me3 IMR90) in ENCODE Regions
 group encode
 priority 30.1
