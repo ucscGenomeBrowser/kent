@@ -1551,7 +1551,7 @@ type bed 4 .
 
 track encodeStanfordPromoters
 compositeTrack on
-shortLabel Promoter/Stanford
+shortLabel Stanf. Promoter
 longLabel Stanford Promoter Activity in ENCODE Regions
 group encode
 priority 20.1
@@ -1563,103 +1563,103 @@ exonArrowsDense on
 
 track encodeStanfordPromotersAGS
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford AGS
+shortLabel Stan. Pro. AGS
 longLabel Stanford Promoter Activity in ENCODE Regions (AGS)
 priority 1
 
 track encodeStanfordPromotersBe2C
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford Be2c
+shortLabel Stan. Pro. Be2c
 longLabel Stanford Promoter Activity in ENCODE Regions (Be2c)
 priority 2
 
 track encodeStanfordPromotersCRL1690
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford CRL1690
+shortLabel Stan. Pro. CRL1690
 longLabel Stanford Promoter Activity in ENCODE Regions (CRL1690)
 priority 3
 
 track encodeStanfordPromotersG402
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford G402
+shortLabel Stan. Pro. G402
 longLabel Stanford Promoter Activity in ENCODE Regions (G402)
 priority 4
 
 track encodeStanfordPromotersHCT116
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford HCT116
+shortLabel Stan. Pro. HCT116
 longLabel Stanford Promoter Activity in ENCODE Regions (HCT116)
 priority 5
 
 track encodeStanfordPromotersHMCB
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford HMCB
+shortLabel Stan. Pro. HMCB
 longLabel Stanford Promoter Activity in ENCODE Regions (HMCB)
 priority 6
 
 track encodeStanfordPromotersHT1080
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford HT1080
+shortLabel Stan. Pro. HT1080
 longLabel Stanford Promoter Activity in ENCODE Regions (HT1080)
 priority 7
 
 track encodeStanfordPromotersHTB11
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford HTB11
+shortLabel Stan. Pro. HTB11
 longLabel Stanford Promoter Activity in ENCODE Regions (HTB11)
 priority 8
 
 track encodeStanfordPromotersHela
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford Hela
+shortLabel Stan. Pro. Hela
 longLabel Stanford Promoter Activity in ENCODE Regions (Hela)
 priority 9
 
 track encodeStanfordPromotersHepG2
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford HepG2
+shortLabel Stan. Pro. HepG2
 longLabel Stanford Promoter Activity in ENCODE Regions (HepG2)
 priority 10
 
 track encodeStanfordPromotersJEG3
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford JEG3
+shortLabel Stan. Pro. JEG3
 longLabel Stanford Promoter Activity in ENCODE Regions (JEG3)
 priority 11
 
 track encodeStanfordPromotersMG63
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford MG63
+shortLabel Stan. Pro. MG63
 longLabel Stanford Promoter Activity in ENCODE Regions (MG63)
 priority 12
 
 track encodeStanfordPromotersMRC5
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford MRC5
+shortLabel Stan. Pro. MRC5
 longLabel Stanford Promoter Activity in ENCODE Regions (MRC5)
 priority 13
 
 track encodeStanfordPromotersPanc1
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford Panc1
+shortLabel Stan. Pro. Panc1
 longLabel Stanford Promoter Activity in ENCODE Regions (Panc1)
 priority 14
 
 track encodeStanfordPromotersSnu182
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford Snu182
+shortLabel Stan. Pro. Snu182
 longLabel Stanford Promoter Activity in ENCODE Regions (Snu182)
 priority 15
 
 track encodeStanfordPromotersU87
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford U87
+shortLabel Stan. Pro. U87
 longLabel Stanford Promoter Activity in ENCODE Regions (U87)
 priority 16
 
 track encodeStanfordPromotersAverage
 subTrack encodeStanfordPromoters
-shortLabel Promoter/Stanford Average
+shortLabel Stan. Pro. Average
 longLabel Stanford Promoter Activity in ENCODE Regions (Average)
 priority 17
 
@@ -1675,7 +1675,7 @@ type bed 4 .
 
 track encodeUcsdChipTriK4IMR90
 compositeTrack on
-shortLabel ChIP/LI H3K4me3
+shortLabel LI H3K4me3
 longLabel Ludwig Institute, UCSD ChIP/Chip (H3K4me3 IMR90) in ENCODE Regions
 group encode
 priority 30.1
@@ -1688,21 +1688,21 @@ maxLimit 16
 
 track encodeUcsdChipTriK4IMR90_00
 subTrack encodeUcsdChipTriK4IMR90
-shortLabel H3K4me3 t=0 Ludwig/UCSD
+shortLabel LI H3K4me3 t=0
 longLabel UCSD ChIP/Chip (H3K4me3 IMR90) in ENCODE Regions, 0 minute
 priority 3
 color 109,51,43
 
 track encodeUcsdChipTriK4IMR90_30
 subTrack encodeUcsdChipTriK4IMR90
-shortLabel H3K4me3 t=30 Ludwig/UCSD
+shortLabel LI H3K4me3 t=30
 longLabel UCSD ChIP/Chip (H3K4me3 IMR90) in ENCODE Regions, 30 minute
 priority 4
 color 109,51,43
 
 track encodeUcsdChipRnap
 compositeTrack on
-shortLabel ChIP/LI Pol2
+shortLabel LI ChIP Pol2
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II) in ENCODE Regions
 group encode
 priority 30.1
@@ -1715,34 +1715,34 @@ maxLimit 16
 
 track encodeUcsdChipRnapHela
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 HeLa
+shortLabel LI Pol2 HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
 priority 1
 
 track encodeUcsdChipRnapThp1
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 THP1
+shortLabel LI Pol2 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
 priority 2
 color 0,63,135
 
 track encodeUcsdChipRnapImr90
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 IMR90
+shortLabel LI Pol2 IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
 priority 3
 color 109,51,43
 
 track encodeUcsdChipRnapHct116
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 HCT116
+shortLabel LI Pol2 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
 priority 4
 color 58,119,40
 
 track encodeUcsdChipTaf250
 compositeTrack on
-shortLabel ChIP/LI TAF1
+shortLabel LI ChIP TAF1
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) in ENCODE Regions
 group encode
 priority 30.2
@@ -1755,27 +1755,27 @@ maxLimit 16
 
 track encodeUcsdChipTaf250Hela
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 HeLa
+shortLabel LI TAF1 HeLa
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HeLa) in ENCODE Regions
 priority 1
 
 track encodeUcsdChipTaf250Thp1
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 THP1
+shortLabel LI TAF1 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 THP1) in ENCODE Regions
 priority 2
 color 0,63,135
 
 track encodeUcsdChipTaf250Imr90
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 IMR90
+shortLabel LI TAF1 IMR90
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) in ENCODE Regions
 priority 3
 color 109,51,43
 
 track encodeUcsdChipTaf250Hct116
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 HCT116
+shortLabel LI TAF1 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) in ENCODE Regions
 priority 4
 color 58,119,40
@@ -1857,7 +1857,7 @@ priority 4
 color 58,119,40
 
 track encodeUcsdChipAch3Imr90
-shortLabel ChIP/LI AcH3
+shortLabel LI AcH3 IMR90
 longLabel Ludwig Institute, UCSD ChIP/Chip (AcH3 IMR90) in ENCODE Regions
 group encode
 priority 30.3
@@ -1870,7 +1870,7 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipMeh3k4Imr90
-shortLabel ChIP/LI MeH3K4
+shortLabel LI MeH3K4 IMR90
 longLabel Ludwig Institute, UCSD ChIP/Chip (MeH3K4 IMR90) in ENCODE Regions
 group encode
 priority 30.4
@@ -1884,8 +1884,8 @@ maxLimit 16
 
 track encodeAffyChIpRnapHl60Pval
 compositeTrack on
-shortLabel ChIP/Affy Pol2 Pval
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60) PValue in ENCODE Regions
+shortLabel Affy ChIP Pol2 
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60) P Value in ENCODE Regions
 group encode
 color 10,10,130
 altColor 50,50,50
@@ -1901,33 +1901,33 @@ defaultViewLimits 0:80
 
 track encodeAffyChIpRnapHl60PvalHr00
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel ChIP/Affy Pol2 0hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 0hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 0h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 0hrs) P Value in ENCODE Regions
 priority 1
 
 track encodeAffyChIpRnapHl60PvalHr02
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel ChIP/Affy Pol2 2hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 2hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 2h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 2hrs) PValue in ENCODE Regions
 priority 2
 
 track encodeAffyChIpRnapHl60PvalHr08
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel ChIP/Affy Pol2 8hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 8hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 8h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 8hrs) PValue in ENCODE Regions
 priority 3
 
 track encodeAffyChIpRnapHl60PvalHr32
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel ChIP/Affy Pol2 32hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 32hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 32h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 32hrs) PValue in ENCODE Regions
 priority 4
 visibility hide
 
 track encodeAffyChIpRnapHl60Sites
 compositeTrack on
-shortLabel ChIP/Affy Pol2 Sites
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA Sites
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60) Sites in ENCODE Regions
 group encode
 priority 47.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1938,32 +1938,32 @@ type bed 3 .
 
 track encodeAffyChIpRnapHl60SitesHr00
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel ChIP/Affy Pol2 0hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 0hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 0h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 0hrs) Sites in ENCODE Regions
 priority 1
 
 track encodeAffyChIpRnapHl60SitesHr02
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel ChIP/Affy Pol2 2hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 2hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 2h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 2hrs) Sites in ENCODE Regions
 priority 2
 
 track encodeAffyChIpRnapHl60SitesHr08
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel ChIP/Affy Pol2 8hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 8hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 8h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 8hrs) Sites in ENCODE Regions
 priority 3
 
 track encodeAffyChIpRnapHl60SitesHr32
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel Pol2 32hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 32hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 32h
+longLabel Affymetrix ChIP/Chip (Pol2 RA-treated HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
 track encodeAffyRnaHl60Sig
 compositeTrack on
-shortLabel RNA/Affy Signal
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60) Signal in ENCODE Regions
+shortLabel Affy RNA Signal
+longLabel Affymetrix RNA (Pol2 RA-treated HL60) Signal in ENCODE Regions
 group encode
 color 130,10,10
 altColor 50,50,50
@@ -1979,26 +1979,26 @@ defaultViewLimits 0:50
 
 track encodeAffyRnaHl60SigHr00
 subTrack encodeAffyRnaHl60Sig
-shortLabel RNA/Affy 0hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Signal in ENCODE Regions
+shortLabel Affy RNA RA 0h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 0hrs) Signal in ENCODE Regions
 priority 1
 
 track encodeAffyRnaHl60SigHr02
 subTrack encodeAffyRnaHl60Sig
-shortLabel RNA/Affy 2hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Signal in ENCODE Regions
+shortLabel Affy RNA RA 2h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 2hrs) Signal in ENCODE Regions
 priority 2
 
 track encodeAffyRnaHl60SigHr08
 subTrack encodeAffyRnaHl60Sig
-shortLabel RNA/Affy 8hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Signal in ENCODE Regions
+shortLabel Affy RNA RA 8h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 8hrs) Signal in ENCODE Regions
 priority 3
 
 track encodeAffyRnaHl60SigHr32
 subTrack encodeAffyRnaHl60Sig
-shortLabel RNA/Affy 32hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Signal in ENCODE Regions
+shortLabel Affy RNA RA 32h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 32hrs) Signal in ENCODE Regions
 priority 4
 
 track encodeSangerChipH3H4
@@ -2052,7 +2052,7 @@ color 10,10,130
 track encodeAffyRnaHl60Sites
 compositeTrack on
 shortLabel RNA/Affy Sites
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60 cells) Sites in ENCODE Regions
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60 cells) Sites in ENCODE Regions
 group encode
 priority 48.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2063,26 +2063,26 @@ type bed 3 .
 
 track encodeAffyRnaHl60SitesHr00
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA/Affy 0hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 0h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 0hrs) Sites in ENCODE Regions
 priority 1
 
 track encodeAffyRnaHl60SitesHr02
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA/Affy 2hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 2h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 2hrs) Sites in ENCODE Regions
 priority 2
 
 track encodeAffyRnaHl60SitesHr08
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA/Affy 8hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 8h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 8hrs) Sites in ENCODE Regions
 priority 3
 
 track encodeAffyRnaHl60SitesHr32
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA/Affy 32hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 32h
+longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
 track encodeGisChipPet
