@@ -66,6 +66,25 @@ priority 80
 visibility hide
 type psl .
 
+track multiz6way
+shortLabel 6-Way Conservation
+longLabel 6-Way Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 109
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons6way
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz6waySummary
+speciesGroups mammal vertebrate
+sGroup_mammal hg17 mm6 monDom1
+sGroup_vertebrate fr1 tetNig1
+treeImage phylo/DanRer2_6way.jpg
+
 track blastHg17KG
 shortLabel $o_Organism Proteins
 longLabel $o_Organism ($o_date/$o_db) proteins mapped by chained tBLASTn
@@ -96,6 +115,24 @@ searchMethod exact
 searchType bed
 termRegex ([[:alnum:]_ ]+|((RP|DK|BU|CH)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
+
+searchName bacPairsIntName
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,intName from %s where intName like '%s'  
+termRegex (zC|zK|bZ|dZ|bY|zH|bP)[[:alnum:]]+
+searchPriority 8.5
+
+searchName bacSinglesIntName
+searchTable bacEndSingles
+searchMethod exact
+searchType bed
+xrefTable bacCloneXRef
+xrefQuery select name,intName from %s where intName like '%s'  
+termRegex (zC|zK|bZ|dZ|bY|zH|bP)[[:alnum:]]+
+searchPriority 8.5
 
 searchName bacPairsAliases
 searchTable bacEndPairs
