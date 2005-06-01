@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.965 2005/06/01 04:31:01 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.966 2005/06/01 20:45:04 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7903,23 +7903,25 @@ if (withLeftLabels)
 	{
 	if (track->limitedVis == tvHide)
             continue;
-        if (track->drawLeftLabels != NULL)
-            {
-            if (isCompositeTrack(track))
-                {
-                struct track *subtrack;
-		if (isWithCenterLabels(track))
-		    y += fontHeight;
-                for (subtrack = track->subtracks; subtrack != NULL;
-                             subtrack = subtrack->next)
-                    if (isSubtrackVisible(subtrack))
-			{
+	if (isCompositeTrack(track))
+	    {
+	    struct track *subtrack;
+	    if (isWithCenterLabels(track))
+		y += fontHeight;
+	    for (subtrack = track->subtracks; subtrack != NULL;
+		 subtrack = subtrack->next)
+		if (isSubtrackVisible(subtrack))
+		    {
+		    if (subtrack->drawLeftLabels != NULL)
 			y = doOwnLeftLabels(subtrack, vg, font, y);
-			}
-		}
-            else
-                y = doOwnLeftLabels(track, vg, font, y);
-            }
+		    else
+			y += trackPlusLabelHeight(subtrack, fontHeight);
+		    }
+	    }
+        else if (track->drawLeftLabels != NULL)
+	    {
+	    y = doOwnLeftLabels(track, vg, font, y);
+	    }
         else
             {
 	    y += trackPlusLabelHeight(track, fontHeight);
