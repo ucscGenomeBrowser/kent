@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.71 2005/01/31 21:14:53 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.72 2005/06/02 21:38:46 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -585,13 +585,10 @@ else
 		); 
 	    }
 	    
-	if (ki->priority[0]!='L')
-	    {
-	    replaceInStr(html, sizeof(html), 
-		"<!clonebutton>", 
-		"<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">&nbsp;&nbsp;"
-		); 
-	    }
+	replaceInStr(html, sizeof(html), 
+	    "<!clonebutton>", 
+	    "<input TYPE=SUBMIT NAME=\"clonebutton\" VALUE=\"clone\">&nbsp;&nbsp;"
+	    ); 
 	    
 	if (ki->priority[0]=='A')
 	    {
@@ -1669,12 +1666,6 @@ if ((sameString(pushbutton,"push requested"))&&(sameString(q.joinerYN,"N")))
     isRedo = TRUE;
     }
 
-if ((sameString(clonebutton,"clone"))&&(sameString(q.priority,"L")))
-    {
-    safef(msg,sizeof(msg),"Log records should not be cloned. <br>\n");
-    isRedo = TRUE;
-    }
-
 if ((sameString(bouncebutton,"bounce"))&&(!sameString(q.priority,"A")))
     {
     safef(msg,sizeof(msg),"Only priority A records should be bounced. <br>\n");
@@ -1784,7 +1775,14 @@ if (sameString(clonebutton,"clone"))
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
     safef(msg, sizeof(msg), "%s", "");
-    q.rank = getNextAvailRank(q.priority);
+    if (q.priority[0]=='L') 
+	{
+	q.rank = 0;
+	}
+    else
+	{
+	q.rank = getNextAvailRank(q.priority);
+	}
     safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
     pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
     }
@@ -1917,6 +1915,13 @@ printf("</TD>\n");
 printf("</TR>\n");
 
 printf("</TABLE>\n");
+
+if (sameString(utsName.nodename,"hgwdev"))
+    {
+    printf("<br><p style=\"color:red\">Machine: %s THIS IS NOT THE REAL PUSHQ- GO TO "
+           "<a href=http://hgwbeta.cse.ucsc.edu/cgi-bin/qaPushQ>HGWBETA</a> </p>\n",utsName.nodename);
+    }
+
 printf("</FORM>\n");
 
 printf("<br>\n");
@@ -2398,7 +2403,7 @@ freez(&temp);
 
 
 
-long long getTableSize(char *rhost, char *db, char *tbl)
+long long pq_getTableSize(char *rhost, char *db, char *tbl)  /* added extension pq_ to supress name conflict in hdb.c */
 /* Get table size via show table status command. Return -1 if err. Will match multiple if "%" used in tbl */ 
 {
 char query[256];
@@ -2536,18 +2541,6 @@ for(i=0;i<=l;i++)
 	}
     }
 safef(s, l+1, "%s", ss);
-}
-
-long fsize(char *pathname)
-/* get file size for pathname. return -1 if not found */
-{
-struct stat mystat;
-//ZeroVar(&mystat);
-if (stat(pathname,&mystat)==-1)
-    {
-    return -1;
-    }
-return mystat.st_size;
 }
 
 
@@ -2701,7 +2694,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		    if (tempVal[0]!=0) 
 			{
 			safef(tbl,sizeof(tbl),"%s",tempVal);
-			totalsize += getTableSize(q.currLoc,db,tbl);
+			totalsize += pq_getTableSize(q.currLoc,db,tbl);
 			}
 		    }
 		}
