@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.967 2005/06/02 04:44:11 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.968 2005/06/02 14:19:32 kschneid Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9810,6 +9810,10 @@ registerTrackHandler("rabbitScore",valAlMethods);
 registerTrackHandler("armadilloScore",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
 registerTrackHandler("sargassoSea",sargassoSeaMethods);
+registerTrackHandler("llaPfuPrintC2", loweExpRatioMethods);
+
+/*Test for my own MA data
+registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -9950,6 +9954,7 @@ if(hideAll || defaultTracks)
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
+    //uglyf("working on %s\n", track->shortLabel);
     if(!hTrackOnChrom(track->tdb, chromName)) 
 	{
 	track->limitedVis = tvHide;
@@ -9983,7 +9988,7 @@ if (!hideControls)
     if (hIsMgcServer())
 	{
 	if (sameString(organism, "Archaea"))
-            hPrintf("MGC Genome Browser on Archaeon %s Assembly", freezeName);
+            hPrintf("Genome Browser on Archaeon %s", freezeName);
 	else
             hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
 	}
@@ -9999,10 +10004,12 @@ if (!hideControls)
 	    }
 	else
 	    {
+
 	    if (sameString(clade, "ancestor"))
                 hPrintf("UCSC Genome Browser on %s Common Ancestor (%s)", organism, freezeName);
 	    else if (sameString(organism, "Archaea"))
                 hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
+
 	    else
                 hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
 	    }
@@ -10085,7 +10092,10 @@ if (showTrackControls)
 makeChromIdeoImage(&trackList, psOutput);
 
 /* Make clickable image and map. */
+//uglyf("calling makeActiveImage\n");
 makeActiveImage(trackList, psOutput);
+//uglyf("back from makeActiveImage\n");
+fflush(stdout);
 if (!hideControls)
     {
     struct controlGrid *cg = NULL;
