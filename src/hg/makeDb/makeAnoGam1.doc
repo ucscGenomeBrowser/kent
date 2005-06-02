@@ -975,3 +975,58 @@ chainSome $(path1)
      hgGcPercent anoGam1 ../../nib
 
 
+# ANOEST FROM ZDOBNOV (DONE 6/2/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/anoGam1/bed/anoEst
+    cd /cluster/data/anoGam1/bed/anoEst
+    wget http://komar.embl.de/Data/ag_clusters_GFF.txt
+    perl -wpe 'chomp;  @words = split; \
+      if (scalar(@words) != 9 || $words[0] eq "") {$_ = ""; next;} \
+      $words[0] = "chr$words[0]"; \
+      $words[6] = "+" if ($words[6] eq "1"); \
+      $words[6] = "-" if ($words[6] eq "-1"); \
+      $words[8] = $words[8] . $words[6] if ($words[8] eq "NCLAG018843" \
+         || $words[8] eq "NCLAG026485" || $words[8] eq "NCLAG028206" \
+         || $words[8] eq "NCLAG030852" || $words[8] eq "TCLAG029693" \
+         || $words[8] eq "TCLAG068099"); \
+      $_ = join("\t", @words) . "\n";' \
+    ag_clusters_GFF.txt > anoEst.gff
+    # Two tracks, separated by ID.  From Evgeny's email 4/17/05:
+    # TCLAG.. - clusters have at least one EST that 'uniquely' aligns
+    # to this genomic region, and
+    # NCLAG.. - all the rest that did not get into TCLAGs, eg mostly 
+    # transposon derived and some resent paralogs (or haplotype artifacts).
+    # NCLAG.. hidden by default and TCLAG..s expanded.
+    awk '$9 ~ /^TCLAG/ {print;}' anoEst.gff > anoEstTcl.gff
+    awk '$9 ~ /^NCLAG/ {print;}' anoEst.gff > anoEstNcl.gff
+    wc -l *.gff
+# 229268 anoEst.gff
+# 154371 anoEstNcl.gff
+#  74897 anoEstTcl.gff
+    expr 154371 + 74897
+#229268
+    # These are not really meant to be genePreds (no CDS/UTR), so 
+    # translate into bed 12 via genePred.tab.  
+    ldHgGene anoGam1 anoEstTcl anoEstTcl.gff -out=stdout \
+    | $HOME/kent/src/utils/genePredToBed/genePredToBed \
+    > anoEstTcl.bed
+    ldHgGene anoGam1 anoEstNcl anoEstNcl.gff -out=stdout \
+    | $HOME/kent/src/utils/genePredToBed/genePredToBed \
+    > anoEstNcl.bed
+    # List of TCLAG* ids considered to be expressed, saved from email 
+    # 6/2/05 to /cluster/data/anoGam1/bed/anoEst/expressed_cl_ids.txt.
+    # OK, load 'em up:
+    hgLoadBed anoGam1 anoEstTcl anoEstTcl.bed
+    hgLoadBed anoGam1 anoEstNcl anoEstNcl.bed
+    # Scores are not real so set to 0:
+    hgsql anoGam1 -e 'update anoEstTcl set score = 0'
+    hgsql anoGam1 -e 'update anoEstNcl set score = 0'
+    tail +2 expressed_cl_ids.txt > anoEstExpressed.tab
+    hgsql anoGam1 -e \
+    'CREATE TABLE anoEstExpressed ( \
+      name char(11) not null, \
+      PRIMARY KEY(name(11)) \
+     ); \
+    load data local infile "anoEstExpressed.tab" into table anoEstExpressed'
+
+
