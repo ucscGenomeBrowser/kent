@@ -1892,7 +1892,7 @@ altColor 50,50,50
 priority 47.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bedGraph 4
+type wig -3.4 750
 minLimit -3.4
 maxLimit 750
 maxHeightPixels 128:16:16
@@ -1970,7 +1970,7 @@ altColor 50,50,50
 priority 48.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bedGraph 4
+type wig -3.4 750
 minLimit -3.4
 maxLimit 750
 maxHeightPixels 128:16:16
@@ -2346,6 +2346,34 @@ spectrum on
 type chain hg17
 otherDb hg17
 
+track encodeSangerChip
+shortLabel ChIP/Sanger
+longLabel Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions
+group encode
+color 10,10,130
+altColor 50,50,50
+priority 47.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:40:16
+minLimit 0
+maxLimit 75
+
+track encode_Stanford_Promoters
+shortLabel Promoter/Stanford
+longLabel Stanford Promoter Activity in ENCODE Regions
+group encode
+priority 20.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type expRatio
+expTable encode_Stanford_PromotersExps
+expScale 999
+expStep 100
+expColorDense On
+chip x
+
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
@@ -2358,3 +2386,5 @@ searchType bed
 termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
 searchMethod exact
 searchPriority 50.2
+
+
