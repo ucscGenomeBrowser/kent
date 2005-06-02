@@ -7,10 +7,11 @@
 #include "localmem.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslStats.c,v 1.1 2005/02/24 18:13:27 markd Exp $";
+static char const rcsid[] = "$Id: pslStats.c,v 1.2 2005/06/02 23:29:09 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"queryStats", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -21,9 +22,10 @@ errAbort(
   "pslStats - collect statistics from a psl file.\n"
   "\n"
   "usage:\n"
-  "   pslStats [options] pslFile alnStats queryStats\n"
+  "   pslStats [options] psl statsOut\n"
   "\n"
   "Options:\n"
+  "  -queryStats - output per-query statistics, the default is per-alignment stats\n"
   );
 }
 
@@ -85,6 +87,25 @@ void alnStatsOutput(FILE *fh, struct psl *psl, struct alnStats *as)
 fprintf(fh, "%s\t%d\t%s\t%d\t%d\t%0.4f\t%0.4f\t%0.4f\n",
         psl->qName, psl->qSize, psl->tName, psl->tStart, psl->tEnd,
         as->ident, as->qCover, as->repMatch);
+}
+
+void pslAlignStats(char *pslFile, char *statsFile)
+/* collect and output per-alignment stats */
+{
+struct lineFile *pslLf = pslFileOpen(pslFile);
+FILE *statsFh = mustOpen(statsFile, "w");
+struct psl* psl;
+
+fputs(alnStatsHdr, statsFh);
+while ((psl = pslNext(pslLf)) != NULL)
+    {
+    struct alnStats as = alnStatsCompute(psl);
+    alnStatsOutput(statsFh, psl, &as);
+    pslFree(&psl);
+    }
+lineFileClose(&pslLf);
+
+carefulClose(&statsFh);
 }
 
 struct queryStats
@@ -152,56 +173,47 @@ fprintf(fh, "%s\t%d\t%d\t%0.4f\t%0.4f\t%0.4f\t%0.4f\t%0.4f\t%0.4f\n",
         qs->minQCover, qs->maxQCover, qs->minRepMatch, qs->maxRepMatch);
 }
 
-void collectStats(struct psl* psl, struct hash *queryStatsTbl, FILE *alnStatsFh)
-/* collect statistics on a psl */
-{
-struct alnStats as = alnStatsCompute(psl);
-alnStatsOutput(alnStatsFh, psl, &as);
-queryStatsCollect(queryStatsTbl, psl, &as);
-}
-
-void outputQueryStats(struct hash *queryStatsTbl, char *queryStatsFile)
+void outputQueryStats(struct hash *queryStatsTbl, char *statsFile)
 /* output statistics on queries */
 {
 struct hashCookie cookie = hashFirst(queryStatsTbl);
-FILE *queryStatsFh = mustOpen(queryStatsFile, "w");
+FILE *statsFh = mustOpen(statsFile, "w");
 struct hashEl *hel;
 
-fputs(queryStatsHdr, queryStatsFh);
+fputs(queryStatsHdr, statsFh);
 while ((hel = hashNext(&cookie)) != NULL)
-    queryStatsOutput(queryStatsFh, hel->val);
+    queryStatsOutput(statsFh, hel->val);
 
-carefulClose(&queryStatsFh);
+carefulClose(&statsFh);
 }
 
-void pslStats(char *pslFile, char *alnStatsFile, char *queryStatsFile)
-/* collect statistics from a psl file */
+void pslQueryStats(char *pslFile, char *statsFile)
+/* collect and output per-query stats */
 {
 struct hash *queryStatsTbl = hashNew(20);
 struct lineFile *pslLf = pslFileOpen(pslFile);
-FILE *alnStatsFh = mustOpen(alnStatsFile, "w");
 struct psl* psl;
-
-fputs(alnStatsHdr, alnStatsFh);
 
 while ((psl = pslNext(pslLf)) != NULL)
     {
-    collectStats(psl, queryStatsTbl, alnStatsFh);
+    struct alnStats as = alnStatsCompute(psl);
+    queryStatsCollect(queryStatsTbl, psl, &as);
     pslFree(&psl);
     }
 lineFileClose(&pslLf);
-
-carefulClose(&alnStatsFh);
-outputQueryStats(queryStatsTbl, queryStatsFile);
+outputQueryStats(queryStatsTbl, statsFile);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 4)
+if (argc != 3)
     usage();
-pslStats(argv[1], argv[2], argv[3]);
+if (optionExists("queryStats"))
+    pslQueryStats(argv[1], argv[2]);
+else
+    pslAlignStats(argv[1], argv[2]);
 return 0;
 }
 /*
