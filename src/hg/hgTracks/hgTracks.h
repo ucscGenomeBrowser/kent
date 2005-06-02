@@ -675,6 +675,9 @@ void zooMethods( struct track *tg );
 void expRatioMethods(struct track *tg);
 /* Set up methods for expRatio type tracks in general. */
 
+void loweExpRatioMethods(struct track *tg);
+/* Set up methods for expRatio type tracks in general. */
+
 void affyTranscriptomeMethods(struct track *tg);
 /* Overide the load function to look for zoomed out tracks. */
 
