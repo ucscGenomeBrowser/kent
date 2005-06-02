@@ -5,7 +5,7 @@
 #include "gifLabel.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.5 2005/06/02 09:18:55 galt Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.6 2005/06/02 21:16:21 galt Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -59,7 +59,7 @@ void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 /* Make a gif file with given labels.  This will check to see if fileName
  * exists already, and if so do nothing. */
 {
-if (!fileExists(fileName) || (fsize(fileName)<=0))
+if (fsize(fileName)<=0)
     {
     struct memGfx *straight = altColorLabels(labels, labelCount, height);
     struct memGfx *rotated = mgRotate90(straight);
