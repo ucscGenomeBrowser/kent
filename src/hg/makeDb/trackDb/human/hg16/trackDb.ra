@@ -1829,16 +1829,16 @@ maxHeightPixels 128:16:16
 minLimit -8
 maxLimit 8
 
-track encodeUcsdNgValChipAch3
+track encodeUcsdNgValChipH3ac
 subTrack encodeUcsdNgValChip
-shortLabel LI/Ng Val Ach3
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Ach3)
+shortLabel LI/Ng Val H3ac
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (H3ac)
 priority 1
 
-track encodeUcsdNgValChipMeh3k4
+track encodeUcsdNgValChipH3K4me
 subTrack encodeUcsdNgValChip
-shortLabel LI/Ng Val Meh3k4
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Meh3k4)
+shortLabel LI/Ng Val H3K4me
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (H3K4me)
 priority 2
 color 0,63,135
 
