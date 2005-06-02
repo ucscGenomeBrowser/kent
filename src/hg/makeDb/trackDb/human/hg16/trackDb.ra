@@ -1664,7 +1664,7 @@ longLabel Stanford Promoter Activity  (Average)
 priority 17
 
 track encode_NHGRI_DNAseHS
-shortLabel DNaseI-HS/NHGRI
+shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites 
 group encode
 priority 25.1
@@ -1676,7 +1676,7 @@ type bed 4 .
 track encodeUcsdChipTriK4IMR90
 compositeTrack on
 shortLabel LI H3K4me3
-longLabel Ludwig Institute, UCSD ChIP/Chip (H3K4me3 antibody, IMR90) 
+longLabel Ludwig Institute, UCSD ChIP/Chip (H3K4me3 antibody, IMR90 cells, gamma-interferon) 
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1851,7 +1851,7 @@ color 109,51,43
 
 track encodeUcsdNgValChipTaf
 subTrack encodeUcsdNgValChip
-shortLabel ChIP/LI Ng Val TAF1
+shortLabel LI Ng Val TAF1
 longLabel Ludwig Institute, UCSD ChIP/Chip Validation (TAF1)
 priority 4
 color 58,119,40
@@ -2347,7 +2347,7 @@ type chain hg17
 otherDb hg17
 
 track encodeSangerChip
-shortLabel ChIP/Sanger
+shortLabel Sanger ChIP
 longLabel Sanger ChIP/Chip (H3K4me3 GM06990) 
 group encode
 color 10,10,130
