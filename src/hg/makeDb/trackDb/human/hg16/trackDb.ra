@@ -2220,8 +2220,8 @@ color 58,119,40
 
 track encodeUvaDnaRep
 compositeTrack on
-shortLabel UV DNA Rep
-longLabel Univ. Virginia Temporal Profiling of DNA Replication 
+shortLabel UVa DNA Rep
+longLabel Univeristy of Virginia Temporal Profiling of DNA Replication 
 group encode
 priority 50
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2232,32 +2232,32 @@ type bed 3 .
 
 track encodeUvaDnaRep0
 subTrack encodeUvaDnaRep
-shortLabel UV DNA Rep 0h
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) 
+shortLabel UVa DNA Rep 0h
+longLabel University of Virginia Temporal Profiling of DNA Replication (0-2 hrs) 
 priority 1
 
 track encodeUvaDnaRep2
 subTrack encodeUvaDnaRep
-shortLabel UV DNA Rep 2h
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) 
+shortLabel UVa DNA Rep 2h
+longLabel University of Virginia Temporal Profiling of DNA Replication (2-4 hrs) 
 priority 2
 
 track encodeUvaDnaRep4
 subTrack encodeUvaDnaRep
-shortLabel UV DNA Rep 4h
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) 
+shortLabel UVa DNA Rep 4h
+longLabel University of Virginia Temporal Profiling of DNA Replication (4-6 hrs) 
 priority 3
 
 track encodeUvaDnaRep6
 subTrack encodeUvaDnaRep
-shortLabel UV DNA Rep 6h
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) 
+shortLabel UVa DNA Rep 6h
+longLabel University of Virginia Temporal Profiling of DNA Replication (6-8 hrs) 
 priority 4
 
 track encodeUvaDnaRep8
 subTrack encodeUvaDnaRep
-shortLabel UV DNA Rep 8h
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
+shortLabel UVa DNA Rep 8h
+longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
 priority 5
 
 track encodeBuFirstExon
