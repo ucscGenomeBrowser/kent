@@ -9,7 +9,7 @@
 #include "hgExp.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.9 2005/06/02 06:23:12 galt Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.10 2005/06/02 06:56:00 galt Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -133,7 +133,9 @@ for (fi = listDirX("../trash","nea_*.gif",TRUE);fi!=NULL;fi=fi->next)
     {
     if (!fi->isDir)
 	{
-	remove(fi->name);
+	/* remove(fi->name); permission denied in trash */
+	FILE *f = mustOpen(fi->name, "w");
+	fclose(f);
 	}
     }
 slFreeList(&fi);

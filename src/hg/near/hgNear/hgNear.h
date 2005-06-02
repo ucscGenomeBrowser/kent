@@ -303,6 +303,8 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define customSubmitDoName "near.do.customSubmit" /* Custom submit data. */
 #define customClearDoName "near.do.customClear"   /* Custom clear data. */
 
+	/* Backdoor cache clear */
+#define expVertLblClear "near.do.expVertLabelClear"   /* Clear vertical label gifs cached in trash. */
 
 /* ---- General purpose helper routines. ---- */
 
@@ -572,6 +574,10 @@ struct genePos *weedUnlessInHash(struct genePos *inList, struct hash *hash);
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 	int height);
 /* Make a gif file with given labels. */
+
+void expVertLabelClear();
+/* Clear out the vertical text gif labels cached in trash.
+   This may need doing when the .ra config files have changed. */
 
 int gifLabelMaxWidth(char **labels, int labelCount);
 /* Return maximum pixel width of labels.  It's ok to have

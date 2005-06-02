@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.3 2005/02/22 23:07:54 hiram Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.4 2005/06/02 06:56:17 galt Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -58,7 +58,7 @@ void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 /* Make a gif file with given labels.  This will check to see if fileName
  * exists already, and if so do nothing. */
 {
-if (!fileExists(fileName))
+if (!fileExists(fileName) || (fsize(fileName)<=0))
     {
     struct memGfx *straight = altColorLabels(labels, labelCount, height);
     struct memGfx *rotated = mgRotate90(straight);

@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.152 2004/09/10 21:26:34 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.153 2005/06/02 06:56:42 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1809,6 +1809,7 @@ else
     }
 }
 
+
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 
  * This routine sets up some globals and then
@@ -1901,6 +1902,8 @@ else if (cartVarExists(cart, customUploadDoName))
     doCustomUpload(conn, colList); 
 else if (cartVarExists(cart, customFromUrlDoName))
     doCustomFromUrl(conn, colList);
+else if (cartVarExists(cart, expVertLblClear))
+    expVertLabelClear();
 else if (cartVarExists(cart, orderInfoDoName))
     doOrderInfo(conn);
 else if (cartVarExists(cart, affineAliVarName))
