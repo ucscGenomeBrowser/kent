@@ -17,7 +17,7 @@ O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     mgTinyFont.o mgSmallFont.o mgMediumFont.o mgLargeFont.o mgHugeFont.o \
     memalloc.o memgfx.o mgCircle.o mgPolygon.o net.o nib.o nibTwo.o \
     nt4.o obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o pipeline.o \
-    portimpl.o pscmGfx.o psGfx.o psl.o pslShow.o pslTbl.o \
+    portimpl.o pscmGfx.o psGfx.o psl.o pslGenoShow.o pslShow.o pslTbl.o \
     pthreadWrap.o qa.o ra.o rbTree.o \
     repMask.o rle.o rnautil.o rudp.o scoreWindow.o \
     seqOut.o seqStats.o servBrcMcw.o servcis.o \
@@ -26,7 +26,7 @@ O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     spacedSeed.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o tokenizer.o \
     twoBit.o verbose.o vGfx.o vGif.o wildcmp.o wormdna.o \
-    xa.o xAli.o xap.o xenshow.o xp.o pslGenoShow.o
+    xa.o xAli.o xap.o xenshow.o xp.o 
 
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
