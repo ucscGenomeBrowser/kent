@@ -7,8 +7,9 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "hgExp.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.8 2005/04/29 08:26:34 aamp Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.9 2005/06/02 06:23:12 galt Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -122,6 +123,22 @@ for (i=0; i<representativeCount; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
 }
+
+void expVertLabelClear()
+/* Clear out the vertical text gif labels cached in trash.
+   This may need doing when the .ra config files have changed. */
+{
+struct fileInfo *fi = NULL;
+for (fi = listDirX("../trash","nea_*.gif",TRUE);fi!=NULL;fi=fi->next)
+    {
+    if (!fi->isDir)
+	{
+	remove(fi->name);
+	}
+    }
+slFreeList(&fi);
+}
+
 
 boolean hgExpLoadVals(struct sqlConnection *lookupConn,
 	struct sqlConnection *dataConn,
