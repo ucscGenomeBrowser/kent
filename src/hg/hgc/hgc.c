@@ -170,7 +170,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.898 2005/06/02 14:17:43 kschneid Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.899 2005/06/02 19:18:07 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15357,6 +15357,29 @@ cutterFree(&cut);
 hFreeOrDisconnect(&conn);
 }
 
+static void doAnoEstTcl(struct trackDb *tdb, char *item)
+/* Print info about AnoEst uniquely-clustered item. */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+genericBedClick(conn, tdb, item, start, 12);
+if (hTableExists("anoEstExpressed"))
+    {
+    char query[512];
+    
+    safef(query, sizeof(query),
+	  "select 1 from anoEstExpressed where name = '%s'", item);
+    if (sqlQuickNum(conn, query))
+	puts("<B>Expressed:</B> yes<BR>");
+    else
+	puts("<B>Expressed:</B> no<BR>");
+    }
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
 void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qStart, 
 			int qEnd, char *entryName, char *geneName, char *geneTable, int cdsS, int cdsE)
 /* Display protein or DNA alignment in a frame. */
@@ -16461,6 +16484,10 @@ else if (startsWith("encodeStanfordPromoters", track))
 else if (sameString("cutters", track))
     {
     doCutters(item);
+    }
+else if (sameString("anoEstTcl", track))
+    {
+    doAnoEstTcl(tdb, item);
     }
 else if (tdb != NULL)
     {
