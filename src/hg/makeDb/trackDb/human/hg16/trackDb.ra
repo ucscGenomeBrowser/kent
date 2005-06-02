@@ -1563,103 +1563,103 @@ exonArrowsDense on
 
 track encodeStanfordPromotersAGS
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. AGS
+shortLabel Stan Pro. AGS
 longLabel Stanford Promoter Activity in ENCODE Regions (AGS)
 priority 1
 
 track encodeStanfordPromotersBe2C
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. Be2c
+shortLabel Stan Pro. Be2c
 longLabel Stanford Promoter Activity in ENCODE Regions (Be2c)
 priority 2
 
 track encodeStanfordPromotersCRL1690
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. CRL1690
+shortLabel Stan Pro. CRL1690
 longLabel Stanford Promoter Activity in ENCODE Regions (CRL1690)
 priority 3
 
 track encodeStanfordPromotersG402
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. G402
+shortLabel Stan Pro. G402
 longLabel Stanford Promoter Activity in ENCODE Regions (G402)
 priority 4
 
 track encodeStanfordPromotersHCT116
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. HCT116
+shortLabel Stan Pro. HCT116
 longLabel Stanford Promoter Activity in ENCODE Regions (HCT116)
 priority 5
 
 track encodeStanfordPromotersHMCB
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. HMCB
+shortLabel Stan Pro. HMCB
 longLabel Stanford Promoter Activity in ENCODE Regions (HMCB)
 priority 6
 
 track encodeStanfordPromotersHT1080
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. HT1080
+shortLabel Stan Pro. HT1080
 longLabel Stanford Promoter Activity in ENCODE Regions (HT1080)
 priority 7
 
 track encodeStanfordPromotersHTB11
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. HTB11
+shortLabel Stan Pro. HTB11
 longLabel Stanford Promoter Activity in ENCODE Regions (HTB11)
 priority 8
 
 track encodeStanfordPromotersHela
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. Hela
+shortLabel Stan Pro. Hela
 longLabel Stanford Promoter Activity in ENCODE Regions (Hela)
 priority 9
 
 track encodeStanfordPromotersHepG2
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. HepG2
+shortLabel Stan Pro. HepG2
 longLabel Stanford Promoter Activity in ENCODE Regions (HepG2)
 priority 10
 
 track encodeStanfordPromotersJEG3
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. JEG3
+shortLabel Stan Pro. JEG3
 longLabel Stanford Promoter Activity in ENCODE Regions (JEG3)
 priority 11
 
 track encodeStanfordPromotersMG63
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. MG63
+shortLabel Stan Pro. MG63
 longLabel Stanford Promoter Activity in ENCODE Regions (MG63)
 priority 12
 
 track encodeStanfordPromotersMRC5
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. MRC5
+shortLabel Stan Pro. MRC5
 longLabel Stanford Promoter Activity in ENCODE Regions (MRC5)
 priority 13
 
 track encodeStanfordPromotersPanc1
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. Panc1
+shortLabel Stan Pro. Panc1
 longLabel Stanford Promoter Activity in ENCODE Regions (Panc1)
 priority 14
 
 track encodeStanfordPromotersSnu182
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. Snu182
+shortLabel Stan Pro. Snu182
 longLabel Stanford Promoter Activity in ENCODE Regions (Snu182)
 priority 15
 
 track encodeStanfordPromotersU87
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. U87
+shortLabel Stan Pro. U87
 longLabel Stanford Promoter Activity in ENCODE Regions (U87)
 priority 16
 
 track encodeStanfordPromotersAverage
 subTrack encodeStanfordPromoters
-shortLabel Stan. Pro. Average
+shortLabel Stan Pro. Average
 longLabel Stanford Promoter Activity in ENCODE Regions (Average)
 priority 17
 
@@ -1782,8 +1782,8 @@ color 58,119,40
 
 track encodeUcsdNgChip
 compositeTrack on
-shortLabel ChIP/LI TAF1 Ng
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan
+shortLabel LI/Ng TAF1 IMR90
+longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) on Nimblegen Chip
 group encode
 priority 30.25
 visibility hide
@@ -1794,14 +1794,14 @@ maxLimit 8
 
 track encodeUcsdNgChipSignal
 subTrack encodeUcsdNgChip
-shortLabel ChIP/LI TAF1 Ng (Signal)
+shortLabel LI/Ng TAF1 (Signal)
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Signal)
 type bedGraph 4
 priority 1
 
 track encodeUcsdNgChipKnownSites
 subTrack encodeUcsdNgChip
-shortLabel ChIP/LI TAF1 Ng (Known Sites)
+shortLabel LI/Ng TAF1 (Known Sites)
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Known Sites)
 noInherit on
 type bed 3
@@ -1810,7 +1810,7 @@ priority 2
 
 track encodeUcsdNgChipNovelSites
 subTrack encodeUcsdNgChip
-shortLabel ChIP/LI TAF1 Ng (Novel Sites)
+shortLabel LI/Ng TAF1 (Novel Sites)
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Novel Sites)
 noInherit on
 type bed 3
@@ -1819,7 +1819,7 @@ priority 3
 
 track encodeUcsdNgValChip
 compositeTrack on
-shortLabel ChIP/LI Ng Val
+shortLabel LI/Ng Validation
 longLabel Ludwig Institute, UCSD ChIP/Chip Validation
 group encode
 priority 30.26
@@ -1831,28 +1831,28 @@ maxLimit 8
 
 track encodeUcsdNgValChipAch3
 subTrack encodeUcsdNgValChip
-shortLabel ChIP/LI Ng Val (Ach3)
+shortLabel LI/Ng Val Ach3
 longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Ach3)
 priority 1
 
 track encodeUcsdNgValChipMeh3k4
 subTrack encodeUcsdNgValChip
-shortLabel ChIP/LI Ng Val (Meh3k4)
+shortLabel LI/Ng Val Meh3k4
 longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Meh3k4)
 priority 2
 color 0,63,135
 
 track encodeUcsdNgValChipRnap
 subTrack encodeUcsdNgValChip
-shortLabel ChIP/LI Ng Val (Rnap)
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Rnap)
+shortLabel LI/Ng Val Pol2
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Pol2)
 priority 3
 color 109,51,43
 
 track encodeUcsdNgValChipTaf
 subTrack encodeUcsdNgValChip
 shortLabel ChIP/LI Ng Val (Taf)
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Taf)
+longLabel Ludwig Institute, UCSD ChIP/Chip Validation (TAF1)
 priority 4
 color 58,119,40
 
@@ -2003,7 +2003,7 @@ priority 4
 
 track encodeSangerChipH3H4
 compositeTrack on
-shortLabel ChIP/Sanger
+shortLabel San H3&4 GM06990
 longLabel Sanger ChIP/Chip (histones H3,H4 GM06990) in ENCODE Regions
 group encode
 priority 47.3
@@ -2016,42 +2016,42 @@ maxLimit 75
 
 track encodeSangerChipH3K4me1
 subTrack encodeSangerChipH3H4
-shortLabel H3K4me1 ChIP/Sanger
+shortLabel San H3K4me1 GM06990
 longLabel Sanger ChIP/Chip (H3K4me1 GM06990) in ENCODE Regions
 priority 1
 color 10,10,130
 
 track encodeSangerChipH3K4me2
 subTrack encodeSangerChipH3H4
-shortLabel H3K4me2 ChIP/Sanger
+shortLabel San H3K4me2 GM06990
 longLabel Sanger ChIP/Chip (H3K4me2 GM06990) in ENCODE Regions
 priority 2
 color 10,10,10
 
 track encodeSangerChipH3K4me3
 subTrack encodeSangerChipH3H4
-shortLabel H3K4me3 ChIP/Sanger
+shortLabel San H3K4me3 GM06990
 longLabel Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions
 priority 3
 color 10,10,130
 
 track encodeSangerChipH3ac
 subTrack encodeSangerChipH3H4
-shortLabel H3ac ChIP/Sanger
+shortLabel San H3ac GM06990
 longLabel Sanger ChIP/Chip (H3ac GM06990) in ENCODE Regions
 priority 4
 color 10,10,10
 
 track encodeSangerChipH4ac
 subTrack encodeSangerChipH3H4
-shortLabel H4ac ChIP/Sanger
+shortLabel San H4ac GM06990
 longLabel Sanger ChIP/Chip (H4ac GM06990) in ENCODE Regions
 priority 5
 color 10,10,130
 
 track encodeAffyRnaHl60Sites
 compositeTrack on
-shortLabel RNA/Affy Sites
+shortLabel Affy RNA RA Sites
 longLabel Affymetrix PolyA+ RNA (RA-treated HL60 cells) Sites in ENCODE Regions
 group encode
 priority 48.2
@@ -2086,8 +2086,8 @@ longLabel Affymetrix PolyA+ RNA (RA-treated HL60, 32hrs) Sites in ENCODE Regions
 priority 4
 
 track encodeGisChipPet
-shortLabel ChIP-PET/GIS
-longLabel Genome Institute of Singapore ChIP-PET of P53 TFBS in ENCODE Regions
+shortLabel GIS p53 5FU HCT116
+longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
 group encode
 color 158,35,135
 priority 49.1
@@ -2097,7 +2097,7 @@ type bed 12
 
 track encodeGisRnaPet
 compositeTrack on
-shortLabel RNA-PET/GIS
+shortLabel GIS PET RNA
 longLabel Genome Institute of Singapore PET of PolyA+ RNA
 group encode
 priority 49.2
@@ -2106,20 +2106,20 @@ type bed 12
 
 track encodeGisRnaPetMCF7
 subTrack encodeGisRnaPet
-shortLabel RNA-PET/GIS MCF7
+shortLabel GIS RNA MCF7
 longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
 priority 1
 
 track encodeGisRnaPetHCT116
 subTrack encodeGisRnaPet
-shortLabel RNA-PET/GIS HCT116
+shortLabel GIS RNA HCT116
 longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
 priority 2
 color 58,119,40
 
 track encodeUvaDnaRep
 compositeTrack on
-shortLabel DNA Rep/UVA
+shortLabel UV DNA Rep
 longLabel Univ. Virginia Temporal Profiling of DNA Replication in ENCODE Regions
 group encode
 priority 50
@@ -2131,37 +2131,37 @@ type bed 3 .
 
 track encodeUvaDnaRep0
 subTrack encodeUvaDnaRep
-shortLabel DNA Rep/UVA 0hr
+shortLabel UV DNA Rep 0h
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
 priority 1
 
 track encodeUvaDnaRep2
 subTrack encodeUvaDnaRep
-shortLabel DNA Rep/UVA 2hr
+shortLabel UV DNA Rep 2h
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCODE Regions
 priority 2
 
 track encodeUvaDnaRep4
 subTrack encodeUvaDnaRep
-shortLabel DNA Rep/UVA 4hr
+shortLabel UV DNA Rep 4h
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) in ENCODE Regions
 priority 3
 
 track encodeUvaDnaRep6
 subTrack encodeUvaDnaRep
-shortLabel DNA Rep/UVA 6hr
+shortLabel UV DNA Rep 6h
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) in ENCODE Regions
 priority 4
 
 track encodeUvaDnaRep8
 subTrack encodeUvaDnaRep
-shortLabel DNA Rep/UVA 8hr
+shortLabel UV DNA Rep 8h
 longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) in ENCODE Regions
 priority 5
 
 track encodeBuFirstExon
 compositeTrack on
-shortLabel First Exon/BU
+shortLabel BU First Exon
 longLabel Boston University First Exon Activity in ENCODE Regions
 group encode
 itemRgb on
@@ -2172,67 +2172,67 @@ type bed 12 +
 
 track encodeBuFirstExonCerebrum
 subTrack encodeBuFirstExon
-shortLabel Cerebral Cortex
+shortLabel BU Cere. Cortex
 longLabel Boston University First Exon Activity in Cerebral Cortex
 priority 1
 
 track encodeBuFirstExonColon
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Colon
-shortLabel Colon
+shortLabel BU Colon
 priority 2
 
 track encodeBuFirstExonHeart
 subTrack encodeBuFirstExon
-shortLabel Heart
+shortLabel BU Heart
 longLabel Boston University First Exon Activity in Heart
 priority 3
 
 track encodeBuFirstExonKidney
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Kidney
-shortLabel Kidney
+shortLabel BU Kidney
 priority 4
 
 track encodeBuFirstExonLiver
 subTrack encodeBuFirstExon
-shortLabel Liver
+shortLabel BU Liver
 longLabel Boston University First Exon Activity in Liver
 priority 5
 
 track encodeBuFirstExonLung
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Lung
-shortLabel Lung
+shortLabel BU Lung
 priority 6
 
 track encodeBuFirstExonSkMuscle
 subTrack encodeBuFirstExon
-shortLabel Skeletal Muscle
+shortLabel BU Skel. Muscle
 longLabel Boston University First Exon Activity in Skeletal Muscle
 priority 7
 
 track encodeBuFirstExonSpleen
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity  in Spleen
-shortLabel Spleen
+shortLabel BU Spleen
 priority 8
 
 track encodeBuFirstExonStomach
 subTrack encodeBuFirstExon
-shortLabel Stomach
+shortLabel BU Stomach
 longLabel Boston University First Exon Activity in Stomach
 priority 9
 
 track encodeBuFirstExonTestis
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Testis
-shortLabel Testis
+shortLabel BU Testis
 priority 10
 
 track encodeBuPromoters
 compositeTrack on
-shortLabel Promoter/BU
+shortLabel BU Promoter
 longLabel Boston University Promoter Activity in ENCODE Regions
 group encode
 itemRgb on
@@ -2243,62 +2243,62 @@ type bed 12 +
 
 track encodeBuPromCerebrum
 subTrack encodeBuPromoters
-shortLabel Cerebral Cortex
+shortLabel BU Cere. Cortex
 longLabel Boston University Promoter Activity in Cerebral Cortex
 priority 1
 
 track encodeBuPromColon
 subTrack encodeBuPromoters
 longLabel Boston University Promoter Activity in Colon
-shortLabel Colon
+shortLabel BU Colon
 priority 2
 
 track encodeBuPromHeart
 subTrack encodeBuPromoters
-shortLabel Heart
+shortLabel BU Heart
 longLabel Boston University Promoter Activity in Heart
 priority 3
 
 track encodeBuPromKidney
 subTrack encodeBuPromoters
 longLabel Boston University Promoter Activity in Kidney
-shortLabel Kidney
+shortLabel BU Kidney
 priority 4
 
 track encodeBuPromLiver
 subTrack encodeBuPromoters
-shortLabel Liver
+shortLabel BU Liver
 longLabel Boston University Promoter Activity in Liver
 priority 5
 
 track encodeBuPromLung
 subTrack encodeBuPromoters
 longLabel Boston University Promoter Activity in Lung
-shortLabel Lung
+shortLabel BU Lung
 priority 6
 
 track encodeBuPromSkMuscle
 subTrack encodeBuPromoters
-shortLabel Skeletal Muscle
+shortLabel BU Skel. Muscle
 longLabel Boston University Promoter Activity in Skeletal Muscle
 priority 7
 
 track encodeBuPromSpleen
 subTrack encodeBuPromoters
 longLabel Boston University Promoter Activity  in Spleen
-shortLabel Spleen
+shortLabel BU Spleen
 priority 8
 
 track encodeBuPromStomach
 subTrack encodeBuPromoters
-shortLabel Stomach
+shortLabel BU Stomach
 longLabel Boston University Promoter Activity in Stomach
 priority 9
 
 track encodeBuPromTestis
 subTrack encodeBuPromoters
 longLabel Boston University Promoter Activity in Testis
-shortLabel Testis
+shortLabel BU Testis
 priority 10
 
 track encodeGencodeGene
