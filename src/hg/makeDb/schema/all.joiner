@@ -1444,6 +1444,11 @@ identifier transRegCode
     $sacCer.transRegCode.name
     $sacCer.transRegCodeProbe.tfList comma chopAfter=_
 
+identifier anoEstTclId
+"AnoEST TCL* ID -- joins track and aux. table of expressed IDs"
+    $anoGam.anoEstTcl.name
+    $anoGam.anoEstExpressed.name minCheck=0.30
+
 # Dependencies not already captured in identifiers
 
 dependency $mm.mouseLandscapeDistance $mm.knownToXM hgFixed.mouseLandscape
@@ -1793,6 +1798,7 @@ tablesIgnored $droMult
 
 tablesIgnored $anoGam
     chr%_gold
+    anoEstNcl
 
 tablesIgnored $apiMel
     gap
