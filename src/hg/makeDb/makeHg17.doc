@@ -15281,20 +15281,8 @@ superfam050524.sfAssign;'
     cd /cluster/data/hg17/bed
     mkdir augustus
     cd augustus/
-    wget http://augustus.gobics.de/predictions/hg17/hg17.chr22.augustus.gtf.gz
-    ldHgGene -gtf hg17 augustus hg17.chr22.augustus.gtf.gz
-    for c in `seq 1 21` X Y; do 
-      wget http://augustus.gobics.de/predictions/hg17/hg17.chr${c}.augustus.gtf.gz
-      ldHgGene -gtf -oldTable hg17 augustus hg17.chr${c}.augustus.gtf.gz
-    done
-    featureBits hg17 augustus
-#35382897 bases of 2866216770 (1.234%) in intersection
-    featureBits hg17 genscan
-#55323340 bases of 2866216770 (1.930%) in intersection
-    echo 'select count(*) from genscan' | hgsql hg17
-#count(*)
-#42807
-    echo 'select count(*) from augustus' | hgsql hg17
-#count(*)
-#36314
-    # OK so there's not quite as many of these as genscans.
+    wget http://augustus.gobics.de/predictions/hg17/hg17.allchr.augustus.gtf.gz
+    cp /cluster/data/dm2/bed/augustus/cleanAugustus.awk .
+    zcat hg17.allchr.augustus.gtf.gz | awk -f cleanAugustus.awk | gzip > hg17.allchr.augustus.clean.gtf.gz
+    ldHgGene -gtf hg17 augustus hg17.allchr.augustus.clean.gtf.gz
+    rm hg17.allchr.augustus.gtf.gz

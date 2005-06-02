@@ -2568,9 +2568,21 @@ BASE=/cluster/data/dm2/bed/blastz.droSim1.2005-05-21
     cd /cluster/data/dm2/bed
     mkdir augustus
     cd augustus/
-    wget http://augustus.gobics.de/predictions/dm2/dm2.chr2L.augustus.gtf.gz
-    ldHgGene -gtf dm2 augustus dm2.chr2L.augustus.gtf.gz
-    for chr in chr{2R,2h,3L,3R,3h,4,U,X,Xh,Yh}; do 
-      wget http://augustus.gobics.de/predictions/dm2/dm2.${chr}.augustus.gtf.gz
-      ldHgGene -gtf -oldTable dm2 augustus dm2.${chr}.augustus.gtf.gz
-    done
+    cat > cleanAugustus.awk << _EOF_
+# Add the chrom name to the gene and transcript IDs.
+{
+   ch = \$1
+   while (match(\$0, /"g[0-9\.]+"/))
+       {
+       before = substr(\$0, 1, RSTART)
+       name = substr(\$0, RSTART+1, RLENGTH)
+       after = substr(\$0, RSTART + RLENGTH + 1)
+       \$0 = before "" ch "." name "" after
+       }
+   print
+}
+_EOF_
+    wget http://augustus.gobics.de/predictions/dm2/dm2.allchr.augustus.gtf.gz
+    zcat dm2.allchr.augustus.gtf.gz | awk -f cleanAugustus.awk | gzip > dm2.allchr.augustus.clean.gtf.gz
+    ldHgGene -gtf dm2 augustus dm2.allchr.augustus.clean.gtf.gz
+    rm dm2.allchr.augustus.gtf.gz
