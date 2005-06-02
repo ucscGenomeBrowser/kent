@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.966 2005/06/01 20:45:04 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.967 2005/06/02 04:44:11 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8686,6 +8686,35 @@ hFreeConn(&conn);
 filterItems(tg, genePredClassFilter, "include");
 }
 
+void loadGenePredWithConfiguredName(struct track *tg)
+/* Convert bed info in window to linked feature. Include name
+ * in "extra" field (gene name, accession, or both, depending on UI) */
+{
+char buf[64];
+char *geneLabel;
+boolean useGeneName, useAcc;
+struct linkedFeatures *lf;
+
+safef(buf, sizeof buf, "%s.label", tg->mapName);
+geneLabel = cartUsualString(cart, buf, "gene");
+useGeneName = sameString(geneLabel, "gene") || sameString(geneLabel, "both");
+useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
+
+loadGenePredWithName2(tg);
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    struct dyString *name = dyStringNew(64);
+    if (useGeneName)
+        dyStringAppend(name, lf->extra);
+    if (useGeneName && useAcc)
+        dyStringAppendC(name, '/');
+    if (useAcc)
+        dyStringAppend(name, lf->name);
+    lf->extra = dyStringCannibalize(&name);
+    }
+}
+
+
 Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a genePred in based on looking it up in a itemAttr
  * table. */
@@ -8821,7 +8850,7 @@ tg->itemColor = gencodeIntronColorItem;
 static void gencodeGeneMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode gene track */
 {
-tg->loadItems = loadGenePredWithName2;
+tg->loadItems = loadGenePredWithConfiguredName;
 tg->itemName = gencodeGeneName;
 }
 

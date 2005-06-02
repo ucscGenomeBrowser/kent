@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.196 2005/05/26 20:59:18 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.197 2005/06/02 04:44:11 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -555,36 +555,38 @@ printf("Human Position");
 cdsColorOptions(tdb, 2);
 }
 
+void geneIdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+geneLabel = cartUsualString(cart, varName, "gene");
+printf("<B>Label:</B> ");
+radioButton(varName, geneLabel, "gene");
+radioButton(varName, geneLabel, "accession");
+radioButton(varName, geneLabel, "both");
+radioButton(varName, geneLabel, "none");
+}
+
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
-char varName[64];
-char *refGeneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-refGeneLabel = cartUsualString(cart, varName, "gene");
-printf("<B>Label:</B> ");
-radioButton(varName, refGeneLabel, "gene");
-radioButton(varName, refGeneLabel, "accession");
-radioButton(varName, refGeneLabel, "both");
-radioButton(varName, refGeneLabel, "none");
-
+geneIdConfig(tdb);
 cdsColorOptions(tdb, 2);
 }
 
 void retroGeneUI(struct trackDb *tdb)
 /* Put up retroGene-specifc controls */
 {
-char varName[64];
-char *retroGeneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-retroGeneLabel = cartUsualString(cart, varName, "gene");
-printf("<B>Label:</B> ");
-radioButton(varName, retroGeneLabel, "gene");
-radioButton(varName, retroGeneLabel, "accession");
-radioButton(varName, retroGeneLabel, "both");
-radioButton(varName, retroGeneLabel, "none");
-
+geneIdConfig(tdb);
 cdsColorOptions(tdb, 2);
+}
+
+void gencodeUI(struct trackDb *tdb)
+/* Put up gencode-specifc controls */
+{
+geneIdConfig(tdb);
 }
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
@@ -1447,8 +1449,9 @@ else if (tdb->type != NULL)
             {
             if (sameString(track, "acembly"))
                 acemblyUi(tdb);
-
-		nmdFilterOptions(tdb);
+            else if (startsWith("encodeGencode", track))
+                gencodeUI(tdb);
+            nmdFilterOptions(tdb);
 	    cdsColorOptions(tdb, 2);
             }
 	
