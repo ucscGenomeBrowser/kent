@@ -121,6 +121,9 @@ void affyDetails(struct trackDb *tdb, char *item);
 void gnfExpRatioDetails(struct trackDb *tdb, char *item);
 /* Put up details on some gnf track. */
 
+void loweExpRatioDetails(struct trackDb *tdb, char *item);
+/* Put up details on some lowe track. */
+
 void affyUclaDetails(struct trackDb *tdb, char *item);
 /* Set up details for affyUcla. */
 
