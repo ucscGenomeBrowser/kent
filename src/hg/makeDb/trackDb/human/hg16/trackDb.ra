@@ -1867,16 +1867,13 @@ longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) on Nimblegen Chip
 group encode
 priority 30.25
 visibility hide
-type bedGraph 4
 maxHeightPixels 128:16:16
-minLimit -8
-maxLimit 8
+type wig -5.61 6.47
 
 track encodeUcsdNgChipSignal
 subTrack encodeUcsdNgChip
 shortLabel LI/Ng TAF1 Signal
 longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Signal)
-type bedGraph 4
 priority 1
 
 track encodeUcsdNgChipKnownSites
