@@ -250,7 +250,6 @@ struct sqlResult *sr;
 char **temparray3;
 char *temparray[16];
 char *temparray2;
-char query[256];
 char **row;
 char *tempstring;
 int x;

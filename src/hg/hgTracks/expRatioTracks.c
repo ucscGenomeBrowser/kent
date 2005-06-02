@@ -735,7 +735,6 @@ float maxDeviation = 1.0;
 static char *colorSchemes[] = { "rg", "rb" };
 static char *colorScheme = NULL;
 static int colorSchemeFlag = -1;
-struct rgbColor color;
 if(val>5000){ absVal=fabs(absVal-10000);}
 /* set up the color scheme items if not done yet */
 if(colorScheme == NULL)
