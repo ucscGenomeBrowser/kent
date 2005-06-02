@@ -14287,6 +14287,10 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql kgHg17FTemp -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
    hgsql kgHg17FTemp -e 'create index alignID on kgCandidate(alignID)'
 
+# ####### NEXT TIME AROUND PUT IN AN EXTRA STEP TO BRING IN ITEMS ON A "PUT BACK" LIST
+# FOR SPECIAL CASES LIKE SELENOCYSTEINE, NON-AUG INITIATION CODON, RIBOSOMAL SLIPPAGE, ETC.
+# #######
+
 # Construct the kgCandidateX table that has alignID in the name field. 
    cut -f 2-10 kgCandidate.tab >j2.tmp
    cut -f 11 kgCandidate.tab >j1.tmp
