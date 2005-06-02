@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.25 2005/05/24 19:50:06 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.26 2005/06/02 16:49:30 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,6 +36,7 @@ errAbort(
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
+  "  -release=alpha|beta - Include trackDb entries with this release only.\n"
   );
 }
 
@@ -44,9 +45,11 @@ static struct optionSpec optionSpecs[] = {
     {"raName", OPTION_STRING},
     {"strict", OPTION_BOOLEAN},
     {"hideFirst", OPTION_BOOLEAN},
+    {"release", OPTION_STRING},
 };
 
 static char *raName = "trackDb.ra";
+static char *release = "alpha";
 
 void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
@@ -73,6 +76,8 @@ if (strict)
         tdNext = td->next;
         if (hTableOrSplitExists(td->tableName))
             {
+            if (verboseLevel() > 2)
+                printf("%s table exists\n", td->tableName);
 	    slAddHead(&strictList, td);
             if ((setting = trackDbSetting(td, "subTrack")) != NULL)
                 {
@@ -110,7 +115,16 @@ if (strict)
     /* No need to slReverse, it's sorted later. */
     tdList = strictList;
     }
-   
+
+/* prune out alternate track entries for another release */
+for (td = tdList; td != NULL; td = tdNext)
+    {
+    char *rel;
+    tdNext = td->next;
+    if ((rel = trackDbSetting(td, "release")) != NULL)
+        if (differentString(rel, release))
+           slRemoveEl(&tdList, td);
+    }
 
 for (td = tdList; td != NULL; td = tdNext)
     {
@@ -325,6 +339,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
+release = optionVal("release", release);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
           optionVal("visibility", NULL), optionExists("strict"));
