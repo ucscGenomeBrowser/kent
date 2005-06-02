@@ -15268,7 +15268,29 @@ superfam050524.sfAssign;'
 # These sf tables and ensemblXref3 are needed for non-HMR KG proteins.
 # Should add content of ensemblXref3 of mm6 after it is done.
 # And similarly for rn4 and possibly for other non-HMR species.
-
 # CCDS <-> knownGene mapping need to be updated (markd 2005-05-29)
 # this should be part of the known gene build
     /cluster/data/genbank/bin/i386/mkCcdsGeneMap -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+
+# AUGUSTUS GENES (DONE 6/1/2005 Andy)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir augustus
+    cd augustus/
+    wget http://augustus.gobics.de/predictions/hg17/hg17.chr22.augustus.gtf.gz
+    ldHgGene -gtf hg17 augustus hg17.chr22.augustus.gtf.gz
+    for c in `seq 1 21` X Y; do 
+      wget http://augustus.gobics.de/predictions/hg17/hg17.chr${c}.augustus.gtf.gz
+      ldHgGene -gtf -oldTable hg17 augustus hg17.chr${c}.augustus.gtf.gz
+    done
+    featureBits hg17 augustus
+#35382897 bases of 2866216770 (1.234%) in intersection
+    featureBits hg17 genscan
+#55323340 bases of 2866216770 (1.930%) in intersection
+    echo 'select count(*) from genscan' | hgsql hg17
+#count(*)
+#42807
+    echo 'select count(*) from augustus' | hgsql hg17
+#count(*)
+#36314
+    # OK so there's not quite as many of these as genscans.

@@ -3921,4 +3921,14 @@ BASE=/cluster/data/dm2/bed/blastz.droSim1.2005-04-13
     ln -s blastz.droSim1.2005-04-13 /cluster/data/dm2/bed/blastz.droSim1
     # Add {chain,net}DroSim1 to trackDb.ra if necessary.
 
-
+# AUGUSTUS GENE PREDICTIONS (Done 6/1/2005 Andy)
+    ssh hgwdev
+    cd /cluster/data/dm2/bed
+    mkdir augustus
+    cd augustus/
+    wget http://augustus.gobics.de/predictions/dm2/dm2.chr2L.augustus.gtf.gz
+    ldHgGene -gtf dm2 augustus dm2.chr2L.augustus.gtf.gz
+    for chr in chr{2R,2h,3L,3R,3h,4,U,X,Xh,Yh}; do 
+      wget http://augustus.gobics.de/predictions/dm2/dm2.${chr}.augustus.gtf.gz
+      ldHgGene -gtf -oldTable dm2 augustus dm2.${chr}.augustus.gtf.gz
+    done
