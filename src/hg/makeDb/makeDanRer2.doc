@@ -1887,6 +1887,8 @@ zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # BLASTZ FOR FUGU (fr1) (DONE, 2004-12-14, hartera)
+# Fugu is quite distant from zebrafish, more distant than human/chicken
+# so use the HoxD55.q matrix in future for blastz (2005-06-01, hartera)
 # Blastz requires lineage-specific repeats but there are none 
 # for these two fish.
 
@@ -2212,6 +2214,8 @@ axtChain $1 /iscratch/i/danRer2/nib \
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # BLASTZ FOR TETRAODON (tetNig1) (DONE, 2004-12-21, hartera)
+# Tetraodon is quite distant from zebrafish, more distant than human/chicken
+# so use the HoxD55.q matrix in future for blastz (2005-06-01, hartera)
     # blastz requires lineage-specific repeats but there are none
     # available between these two fish species 
     ssh kk
@@ -3337,11 +3341,14 @@ close MARKERS;
 
 # BACENDS: TESTING FOR bacCloneAlias and bacCloneXRef TABLES
 # (DONE, 2005-05-25, hartera)
+# ADDED TEST TO CHECK SANGERNAMES IN ALIAS AND XREF TABLES 
+# (DONE, 2005-05-26, hartera)
     # The following tests were carried out to check that all the data
     # in the bacCloneAlias and bacCloneXRef tables is correct.
     mkdir -p \
         /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables
     cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables
+
 # Check that the correct aliases are associated with their Sanger STS names
     awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $3;}' \
         ../markers.02.12.04.txt > sNameandaliases
@@ -3356,6 +3363,42 @@ close MARKERS;
     # 55836 alias.db.sort
     diff sNameandaliases.sort alias.db.sort
     # No difference between data file and data from database so ok
+
+# Check Sanger STS names correspond in bacAlias and bacCloneXRef tables
+# (2005-05-26, hartera)
+    # get Sanger names from alias table
+    hgsql -N -e 'select sangerName from bacCloneAlias;' danRer2 \
+             | sort | uniq > sName.alias.sort  
+    wc -l sName.alias.sort 
+    # 14940 sName.alias.sort
+    # get Sanger names from xRef table
+    hgsql -N -e 'select sangerName from bacCloneXRef where sangerName \
+          is not null;' danRer2 | sort | uniq > sName.xRef.sort
+    wc -l sName.xRef.sort
+    # 15153 sName.xRef.sort
+    comm -23 sName.alias.sort sName.xRef.sort 
+    # nothing in alias file only so all sanger names in the alias table are
+    # also in the xRef table
+    comm -13 sName.alias.sort sName.xRef.sort > sNamexRefNotAlias 
+    wc -l sNamexRefNotAlias
+    # 213 sNamexRefNotAlias - 213 sangerNames in alias table not in XRef table
+    # get Sanger names from clonemarkers file
+    awk 'BEGIN {FS="|"}{print $2}' ../clonemarkers.02.12.04.txt | sort | uniq \         > clonemarkers.sNames.sort
+    # get Sanger names from markers file
+    awk 'BEGIN {FS="|"}{print $2}' ../markers.02.12.04.txt > markers.sNames
+    # remove semi-colons and sort 
+    sed -e 's/;/\n/g' markers.sNames | sort | uniq > markers.sNames.sort
+    # sanger names unique to markers file
+    comm -13 clonemarkers.sNames.sort markers.sNames.sort
+    # there are none
+    comm -23 clonemarkers.sNames.sort markers.sNames.sort \
+         > sNames.clonemarkersOnly
+    wc -l sNames.clonemarkersOnly
+    # 213 sNames.clonemarkersOnly
+    diff sNames.clonemarkersOnly sNamexRefNotAlias
+    # no difference so all the extra Sanger Names in the xRef table are 
+    # from the clonemarkers file and these have no aliases in the markers file
+    # so they are not in the alias table so this is all ok.
 
 # Check that Sanger STS names and primers are associated correctly
     cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables
@@ -4311,6 +4354,12 @@ cat > split.csh << 'EOF'
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 # 6-WAY VAR_MULTIZ ALIGNMENTS (DONE, 2005-05-20, hartera)
+# Species: zebrafish(danRer2), human (hg17), mouse(mm6), opossum(monDom1), 
+# fugu(fr1) and tetraodon(tetNig1)
+# Tetraodon and Fugu are quite distant from zebrafish, more distant than 
+# human/chicken so use the HoxD55.q matrix in future for blastz with these 
+# species. Here the pairwise alignments of zebrafish with Tetraodon and Fugu
+# were done using the default matrix for blastz. (2005-06-01, hartera)
 # zebrafish(danRer2), human (hg17), mouse(mm6), opossum(monDom1), 
 # fugu(fr1) and tetraodon(tetNig1)
     ssh kkstore01
@@ -4556,6 +4605,7 @@ cat  << 'EOF' > template
     # smaller, then save as jpg
     cp species6.jpg /usr/local/apache/htdocs/images/phylo/DanRer2_6way.jpg
 
+# add all.joiner entry for danRer2 multiz6way (2005-05-31, hartera)
     # add trackDb.ra entry
 # track multiz6way
 # shortLabel 6-Way Conservation
@@ -4576,8 +4626,13 @@ cat  << 'EOF' > template
 # sGroup_vertebrate fr1 tetNig1
 # treeImage phylo/DanRer2_6way.jpg
 
-# PHYLO-HMM (PHASTCONS) CONSERVATION FOR 6-WAY ALIGNMENT 
-# (in progress, 2005-05-24, hartera)
+# PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 6-WAY ALIGNMENT 
+# (DONE, 2005-06-01, hartera)
+# Tetraodon and Fugu are quite distant from zebrafish, more distant than 
+# human/chicken so use the HoxD55.q matrix in future for blastz with these 
+# species. Here the pairwise alignments of zebrafish with Tetraodon and Fugu 
+# that were used for the 6-way multiz were done using the default matrix 
+# for blastz. (2005-06-01, hartera)
     ssh kkstore01
     mkdir /cluster/data/danRer2/bed/multiz6way/cons
     cd /cluster/data/danRer2/bed/multiz6way/cons
@@ -4634,6 +4689,7 @@ cat  << 'EOF' > template
     mv fileList2 fileList
     cat fileList | awk '$5 > 4000000 {print $9;}' | \
         randomLines stdin 50 ../randomSs
+    rm fileList
 
     # Set up parasol directory to calculate trees on these 50 regions
     ssh kk9
@@ -4656,7 +4712,6 @@ cat  << 'EOF' > template
     #   emacs happy
     chmod a+x makeTree
 
-    # Be sure to substitute in the right G+C content. Use GC content from
     # msa_view as this is from the whole genome. Also, notice the
     # target coverage of 0.17.  Here we are going to aim for 65% coverage
     # of coding regions by conserved elements.
@@ -4693,16 +4748,356 @@ makeTree $(root1)
     cd ..
     cp -p ave.*.mod /cluster/data/danRer2/bed/multiz6way/cons
     #   measuring entropy
-    #   consEntopy <target coverage> <expected lengths>
+    #   consEntropy <target coverage> <expected lengths>
     #            ave.cons.mod ave.noncons.mod --NH 9.78
     #   never stops with the --NH argument
-    /cluster/bin/phast/consEntropy .10 12 \
+    # target entropy should be L_min*H=9.8 bits, the expected length
+    # that produces this entropy is the one to use for phastCons.
+    /cluster/bin/phast/consEntropy 0.17 12 \
                         ave.cons.mod ave.noncons.mod
-#Transition parameters:gamma=0.100000,omega=12.000000, mu=0.083333, nu=0.009259
-#Relative entropy: H=0.768727 bits/site
-#Expected min. length: L_min=15.535545 sites
-#Expected max. length: L_max=9.616662 sites
-#Total entropy: L_min*H=11.942594 bits
+
+# the above steps were repeated with the target coverage and expected lengths
+# parameters set as below:
+
+# -target-coverage=0.17 -expected-lengths 12
+#Transition parameters:gamma=0.170000,omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=0.768727 bits/site
+# Expected min. length: L_min=13.932145 sites
+# Expected max. length: L_max=8.869545 sites
+# Total entropy: L_min*H=10.710017 bits
+
+# -target-coverage=0.20 -expected-lengths 10
+#Transition parameters:gamma=0.200000,omega=10.000000, mu=0.100000, nu=0.025000
+# Relative entropy: H=0.799627 bits/site
+# Expected min. length: L_min=12.358880 sites
+# Expected max. length: L_max=7.593192 sites
+# Total entropy: L_min*H=9.882496 bits
+
+# -target-coverage=0.20 -expected-lengths=9
+#Transition parameters:gamma=0.200000, omega=9.000000, mu=0.111111, nu=0.027778
+# Relative entropy: H=0.805459 bits/site
+# Expected min. length: L_min=12.022440 sites
+# Expected max. length: L_max=7.111297 sites
+# Total entropy: L_min*H=9.683580 bits
+
+# -target-coverage=0.25 -expected-lengths=10
+#Transition parameters:gamma=0.250000, omega=10.000000, mu=0.100000, nu=0.033333
+# Relative entropy: H=0.843206 bits/site
+# Expected min. length: L_min=10.846871 sites
+# Expected max. length: L_max=6.973477 sites
+# Total entropy: L_min*H=9.146148 bits
+
+# -target-coverage=0.35 -expected-lengths=12
+#Transition parameters:gamma=0.350000, omega=12.000000, mu=0.083333, nu=0.044872
+# Relative entropy: H=0.917684 bits/site
+# Expected min. length: L_min=9.169807 sites
+# Expected max. length: L_max=6.687135 sites
+# Total entropy: L_min*H=8.414989 bits
+
+# -target-coverage=0.35 -expected-lengths=14
+#Transition parameters:gamma=0.350000,omega=14.000000, mu=0.071429, nu=0.038462
+# Relative entropy: H=0.903639 bits/site
+# Expected min. length: L_min=9.778765 sites
+# Expected max. length: L_max=7.300778 sites
+# Total entropy: L_min*H=8.836478 bits
+
+# -target-coverage=0.35 -expected-lengths=18
+#Transition parameters:gamma=0.350000,omega=18.000000, mu=0.055556, nu=0.029915
+# Relative entropy: H=0.881986 bits/site
+# Expected min. length: L_min=10.798324 sites
+# Expected max. length: L_max=8.320602 sites
+# Total entropy: L_min*H=9.523968 bits
+
+# -target-coverage=0.35 -expected-lengths=19
+#Transition parameters:gamma=0.350000,omega=19.000000, mu=0.052632, nu=0.028340
+# Relative entropy: H=0.877572 bits/site
+# Expected min. length: L_min=11.021340 sites
+# Expected max. length: L_max=8.542773 sites
+# Total entropy: L_min*H=9.672025 bits
+
+# -target-coverage=0.32 -expected-lengths=20
+#Transition parameters:gamma=0.320000, omega=20.000000, mu=0.050000, nu=0.023529
+# Relative entropy: H=0.853466 bits/site
+# Expected min. length: L_min=11.824480 sites
+# Expected max. length: L_max=9.084203 sites
+# Total entropy: L_min*H=10.091797 bits
+
+#### !!! THESE PARAMETERS BELOW WERE THOSE THAT WERE FINALLY USED ####
+# -target-coverage=0.32 -expected-lengths=18
+#Transition parameters:gamma=0.320000,omega=18.000000, mu=0.055556, nu=0.026144
+# Relative entropy: H=0.860401 bits/site
+# Expected min. length: L_min=11.402969 sites
+# Expected max. length: L_max=8.648243 sites
+# Total entropy: L_min*H=9.811131 bits
 
 # need to iterate and get the right coverage and parameters
+# try running phastCons below with parameters used above and check the 
+# coverage of coding regions by the most conserved elements
+    # Create cluster dir to do main phastCons run
+    ssh kk9
+    mkdir /cluster/bluearc/danRer2/cons/consRun1
+    cd /cluster/bluearc/danRer2/cons/consRun1
+    mkdir ppRaw bed
+    # Create script to run phastCons with right parameters
+    # This job is I/O intensive in its output files.  To make this
+    # cluster safe, it would be better to do this work somewhere over
+    # in /tmp/... and copy the final result back.  kk9 can do this
+    # run, but kk cannot.
+    # Run whole genome, this goes fast in this case.
+cat > doPhast << '_EOF_'
+mkdir -p ppRaw/$2
+/cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
+   --expected-lengths 12 --target-coverage 0.17 --quiet --seqname $2 \
+   --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
+   ppRaw/$2/$1.pp
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast
+
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+doPhast $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+                                                                                
+    # Create parasol batch and run it for the whole genome
+    ls -1 ../ss | sed 's/.ss//' > in.lst
+    gensub2 in.lst single template jobList
+    para create jobList
+    para try/check/push/etc.
+# para time
+# Completed: 1604 of 1604 jobs
+# CPU time in finished jobs:      11005s     183.42m     3.06h    0.13d  0.000 y
+# IO & Wait Time:                 30912s     515.19m     8.59h    0.36d  0.001 y
+# Average job time:                  26s       0.44m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              55s       0.92m     0.02h    0.00d
+# Submission to last job:           608s      10.13m     0.17h    0.01d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #   it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /cluster/bluearc/danRer2/cons/consRun
+    catDir bed | awk ' \
+        {printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+        /cluster/bin/scripts/lodToBedScore /dev/stdin > \
+        /cluster/data/danRer2/bed/multiz6way/mostConserved.bed
+                                                                                
+    # Figure out how much is actually covered by the bed files as so:
+    ssh kkstore01
+    cd /cluster/data/danRer2/bed/multiz6way
+    foreach f ( `cat /cluster/data/danRer2/chrom.lst` )
+       cat $f/chr${f}.fa >> allChroms.fa
+    end
+    faSize allChroms.fa
+    # 1589273282 bases (101846391 N's 1487426891 real 813899141 upper 
+    # 673527750 lower) in 28 sequences in 1 files
+
+    # Total size: mean 56759760.1 sd 58536773.4 min 16596 (chrM) 
+    # max 318297480 (chrNA) median 42763181 
+    
+    awk '{sum+=$3-$2} \
+END{printf "%% %.2f = 100.0*%d/1487426891\n",100.0*sum/1487426891,sum}' \
+        mostConserved.bed
+    -target-coverage 0.17: % 1.99 = 100.0*29631918/1487426891 length 12
+    -target-coverage 0.20: % 1.96 = 100.0*29183170/1487426891 length 10
+    -target-coverage 0.25: % 2.11 = 100.0*31391360/1487426891 length 10
+    -target-coverage 0.35  % 2.69 = 100.0*39940068/1487426891 length 19
+    -target-coverage 0.32  % 2.60 = 100.0*38730791/1487426891 length 18
+    #   the non-N genome size, from faSize on all chroms: 1487426891
+
+# check with featureBits
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    # get an or of refGene and mgcGenes CDS regions 
+    featureBits danRer2 refGene:cds mgcGenes:cds -or -bed=refSeqOrMgcCds.bed
+    # 9745850 bases of 1560497282 (0.625%) in intersection
+    featureBits danRer2 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # featureBits danRer2 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # -target-coverage=0.17 -expected-lengths=12
+    # refSeqOrMgcCds.bed 0.625%, mostConserved.bed 1.899%, both 0.350%, 
+    # cover 56.07%, enrich 29.53x
+    # -target-coverage=0.20 -expected-lengths=10
+    # refSeqOrMgcCds.bed 0.625%, mostConserved.bed 1.870%, both 0.347%, 
+    # cover 55.54%, enrich 29.70x
+    # -target-coverage=0.25 -expected-length=10
+    # refSeqOrMgcCds.bed 0.625%, mostConserved4.bed 2.012%, both 0.364%, 
+    # cover 58.35%, enrich 29.01x
+    # -target-coverage=0.35 -expected-lengths=19
+    # refSeqOrMgcCds.bed 0.625%, mostConserved5.bed 2.559%, both 0.431%, 
+    # cover 68.98%, enrich 26.95x
+    # -target-coverage=0.32 -expected-lengths=18
+    # refSeqOrMgcCds.bed 0.625%, mostConserved6.bed 2.482%, both 0.423%, 
+    # cover 67.75%, enrich 27.30x
+    # looking at ensGene:
+    # featureBits danRer2 ensGene:cds mostConserved.bed -enrichment
+    # ensGene:cds 2.135%, mostConserved.bed 2.482%, both 1.210%, 
+    # cover 56.67%, enrich 22.83x
+
+# so use this result with -target-coverage=0.32 -expected-lengths=18
+# total entropy is 9.81 which is good, aiming for 9.8 and 65% coverage
+# of coding regions with most conserved elements, here it is 67.8%
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    hgLoadBed danRer2 phastConsElements mostConserved.bed
+    # Loaded 393654 elements of size 5
+    # less than 1 minute load time
+    featureBits danRer2 -enrichment refSeqOrMgcCds.bed phastConsElements
+# refSeqOrMgcCds.bed 0.625%, phastConsElements 2.482%, both 0.423%, 
+# cover 67.75%, enrich 27.30x
+    featureBits danRer2 mgcGenes:cds phastConsElements -enrichment
+# mgcGenes:cds 0.486%, phastConsElements 2.482%, both 0.336%, 
+# cover 69.06%, enrich 27.82x
+    featureBits danRer2 refGene:cds phastConsElements -enrichment
+# refGene:cds 0.597%, phastConsElements 2.482%, both 0.400%, 
+# cover 66.97%, enrich 26.98x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kkstore01
+    cd /cluster/bluearc/danRer2/cons/consRun
+    # interesting sort here on the chr name and position.
+    # first convert all . and - characters to special strings x/ and x_/
+    #   to get a consistent delimiter of / for all fields to be sorted.
+    #   Then do the sort on the chrom name and the start position, after
+    #   the sort convert the special stringx x_/ and x/ back to - and .
+    #   respectively.  This gets everything in order by chrom name and
+    #   chrom start.
+    find ./ppRaw -type f | sed -e "s#\.#x/#g; s#-#x_/#g" | \
+        sort -t"/" -k4,4 -k6,6n | sed -e "s#x_/#-#g; s#x/#.#g" | xargs cat | \
+            wigEncode stdin phastCons6way.wig phastCons6way.wib
+    # about 3 minutes for above
+
+    ssh kkstore01
+    cd /cluster/bluearc/danRer2/cons/consRun
+    cp -p phastCons6way.wi? /cluster/data/danRer2/bed/multiz6way/cons
+                                                                                
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way/cons
+    mkdir -p /gbdb/danRer2/wib
+    ln -s `pwd`/phastCons6way.wib /gbdb/danRer2/wib/phastCons6way.wib
+    # use this if need to reload table
+    hgsql -e 'drop table phastCons6way;' danRer2
+    # load table
+    hgLoadWiggle danRer2 phastCons6way phastCons6way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way/cons
+    bash
+    time hgWiggle -doHistogram \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            -db=danRer2 phastCons6way > histogram.data 2>&1
+    # real    3m1.185s  user    2m19.440s  sys     0m11.850s
+ 
+        #   create plot of histogram:
+    cat << '_EOF_' > histo.gp
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish danRer2 Histogram phastCons6 track"
+set xlabel " phastCons6 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+                                                                                
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    #   happy emacs
+    gnuplot histo.gp > histo.png
+    display histo.png &
+
+# add line: wiggle phastCons6way to trackDb.ra for multiz6way to display the 
+# wiggle for the conservation track.
+# copy over html for multiz and edit.
+
+# PHASTCONS SCORES DOWNLOADABLES (DONE, 2005-05-31, hartera)
+    #   prepare compressed copy of ascii data values for downloads
+    ssh kkstore01
+    cd /cluster/bluearc/danRer2/cons/consRun
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+                                                                                
+TOP=`pwd`
+export TOP
+                                                                                
+mkdir -p phastCons6wayScores
+                                                                                
+ls ppRaw | while read D
+do
+    out=${TOP}/phastCons6wayScores/${D}.gz
+    echo -n "$out ... "
+    cd ${TOP}/ppRaw/${D}
+    gzip -c `ls *.pp  | sed -e "s#-#.x-x.#g;" | \
+        sort -t"." -k1,1 -k2,2n | sed -e "s#.x-x.#-#g;"` > ${out}
+    echo "done"
+done
+'_EOF_'
+    #   happy emacs
+    chmod +x gzipAscii.sh
+    time ./gzipAscii.sh
+    # 104.769u 8.789s 3:00.18 63.0%   0+0k 0+0io 11pf+0w
+    # 182 Mb of data
+    #  copy scores for downloads
+    ssh kkstore01
+    mkdir /cluster/data/danRer2/bed/multiz6way/phastCons6wayScores
+    cd /cluster/data/danRer2/bed/multiz6way/phastCons6wayScores
+    rsync -a --progress \
+          /cluster/bluearc/danRer2/cons/consRun/phastCons6wayScores/ .
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/danRer2/phastCons6wayScores
+    cd /usr/local/apache/htdocs/goldenPath/danRer2/phastCons6wayScores
+    ln -s /cluster/data/danRer2/bed/multiz6way/phastCons6wayScores/*.gz .
+    md5sum *.gz > md5sum.txt
+    # copy over and edit README.txt.
+
+# MULTIZ 6-WAY DOWNLOADABLES (DONE, 2005-05-31, hartera)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer2
+    mkdir -p multiz6way
+    cd multiz6way
+    foreach f (/cluster/data/danRer2/bed/multiz6way/maf/*.maf)
+        set c = $f:r:t
+        echo $c
+        nice gzip -c $f > $c.maf.gz
+    end
+    # copy README and edit
+                                                                                
+    # Create upstream files for download
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    echo danRer2 tetNig1 fr1 mm6 hg17 monDom1 > org.txt
+    # mafFrags is quick for these
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits danRer2 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
+0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags danRer2 multiz6way up.bed upstream$i.maf -orgs=org.txt
+        rm up.bed
+    end
+    # took less than 3 minutes
+ 
+    ssh kkstore01
+    cd /cluster/data/danRer2/bed/multiz6way
+    nice gzip upstream{1000,2000,5000}.maf
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer2
+    mv /cluster/data/danRer2/bed/multiz6way/upstream*.maf.gz multiz6way
+    cd multiz6way
+    md5sum *.gz > md5sum.txt
 
