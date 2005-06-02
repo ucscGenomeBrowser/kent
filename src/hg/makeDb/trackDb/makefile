@@ -85,7 +85,7 @@ update:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -release=alpha $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -114,7 +114,7 @@ alpha:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -release=alpha $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -147,7 +147,7 @@ strict:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb -strict $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -strict -release=beta $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -173,7 +173,7 @@ mgc:
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
 		    vis="" ; \
-		    cmd="hgTrackDb -strict -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
+		    cmd="hgTrackDb -strict -release=beta -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgsql $$DB < grpMgc.sql" ; \
 		    echo $$cmd ;  $$cmd ; \
