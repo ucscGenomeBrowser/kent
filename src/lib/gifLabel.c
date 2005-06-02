@@ -3,8 +3,9 @@
 #include "common.h"
 #include "memgfx.h"
 #include "gifLabel.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.4 2005/06/02 06:56:17 galt Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.5 2005/06/02 09:18:55 galt Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have

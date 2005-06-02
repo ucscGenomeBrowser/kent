@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.22 2005/04/25 23:25:09 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.23 2005/06/02 09:18:55 galt Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -210,6 +210,19 @@ if (stat(pathName, &st) < 0)
     errAbort("stat failed in fileModTime");
 return st.st_mtime;
 }
+
+off_t fsize(char *pathname)
+/* get file size for pathname. return -1 if not found */
+{
+struct stat mystat;
+ZeroVar(&mystat);
+if (stat(pathname,&mystat)==-1)
+    {
+    return -1;
+    }
+return mystat.st_size;
+}
+
 
 char *getHost()
 /* Return host name. */
