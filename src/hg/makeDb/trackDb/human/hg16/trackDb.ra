@@ -2312,11 +2312,11 @@ visibility hide
 type genePred
 itemClassTbl gencodeGeneClass
 geneClasses Antisense Antisense_val Artifact Known Novel_CDS Novel_transcript Novel_transcript_val Putative Putative_val TEC Processed_pseudogene Unprocessed_pseudogene
-gClass_Known 34,68,34
-gClass_Novel_CDS 34,68,34
-gClass_Novel_transcript_val 34,68,34
-gClass_Putative_val 34,68,34
-gClass_Antisense_val 34,68,34
+gClass_Known 33,91,51
+gClass_Novel_CDS 33,91,51
+gClass_Novel_transcript_val 33,91,51
+gClass_Putative_val 33,91,51
+gClass_Antisense_val 33,91,51
 gClass_Novel_transcript 52,144,52
 gClass_TEC 52,144,52
 gClass_Putative 52,144,52
