@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.46 2005/06/01 20:02:47 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.47 2005/06/02 00:08:16 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5496,7 +5496,7 @@ http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.prot
 #refGene 1.623%, geneid 1.561%, both 0.794%, cover 48.91%, enrich 31.34x
 
 ##############################################################################
-# CLONE ENDS
+# CLONE ENDS - BACEND TRACK (started - 2005-05-20 - Heather)
 
   ssh kkstore01
   cd /cluster/data/mm6
@@ -5601,6 +5601,106 @@ wc -l cloneEnds.fa
   # Advisory lock has been released
   # All done
 
+# BACEND SEQUENCE ALIGNMENTS (WORKING - 2005-06-01 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/mm6/noMask
+    cd /cluster/data/mm6/
+    #	Need an unmasked sequence for this work
+    for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa
+    do
+	C=`basename ${CHR}`
+	echo -n "working ${C} ... "
+	head -1 ${CHR} > noMask/${C}
+	tail +2 ${CHR} | tr [:lower:] [:upper:] >> noMask/${C}
+	echo "done"
+    done
+    mkdir ooc
+    ls noMask/chr*.fa > fa.list
+    blat -makeOoc=ooc/11.ooc -repMatch=1024 fa.list fa.list output.psl
+    #	Wrote 25952 overused 11-mers to ooc/11.ooc
+    ssh kkr1u00
+    mkdir /iscratch/i/mm6/ooc
+    cp -p /cluster/data/mm6/ooc/11.ooc /iscratch/i/mm6/ooc
+    mkdir /iscratch/i/mm6/noMask
+    cp -p /cluster/data/mm6/noMask/chr*.fa /iscratch/i/mm6/noMask
+    for U in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm6/ooc/ kkr${U}u00:/iscratch/i/mm6/ooc
+	rsync -a --progress /iscratch/i/mm6/noMask/ \
+		kkr${U}u00:/iscratch/i/mm6/noMask
+	echo "done kkr${U}u00"
+    done
+    
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+    ssh kk
+    mkdir /cluster/data/mm6/bed/bacends
+    cd /cluster/data/mm6/bed/bacends
+
+    cat << '_EOF_' > runBlat.sh
+#!/bin/sh
+path1=$1
+path2=$2
+root1=$3
+root2=$4
+result=$5
+rm -fr /tmp/${root1}_${root2}
+mkdir /tmp/${root1}_${root2}
+pushd /tmp/${root1}_${root2}
+/cluster/bin/i386/blat ${path1} ${path2} -ooc=/iscratch/i/mm6/ooc/11.ooc \
+	${root1}.${root2}.psl
+popd
+rm -f ${result}
+mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /tmp/${root1}_${root2}
+'_EOF_'
+    # << emacs happy
+    chmod +x runBlat.sh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.sh {check in exists $(path1)} {check in exists $(path2)} $(root1) $(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs happy
+
+    ls -1S /scratch/mus/mm6/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    mkdir bacEnds.out
+    #	create results directories for each to avoid the all result files in
+    #	one directory problem
+    foreach f (`cat bacEnds.lst`)
+	set b = $f:t:r
+	echo $b
+	mkdir bacEnds.out/$b
+    end
+
+    ls -1S /iscratch/i/mm6/noMask/chr*.fa > contig.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+    # 7850 jobs written to batch
+    para try, check, push, etc ...
+# Completed: 3920 of 3920 jobs
+# CPU time in finished jobs:    2681337s   44688.95m   744.82h   31.03d  0.085 y
+# IO & Wait Time:                110523s    1842.05m    30.70h    1.28d  0.004 y
+# Average job time:                 712s      11.87m     0.20h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5203s      86.72m     1.45h    0.06d
+# Submission to last job:          6402s     106.70m     1.78h    0.07d
+
+
+    ssh kkstore01
+    cd /cluster/data/mm6/bed/bacends
+    screen
+
+    mkdir temp
+    time pslSort dirs raw.psl temp bacEnds.out/* > pslSort.out 2>&1 &
+    #	real    27m20.352s
+    #	user    20m10.329s
+    #	sys     1m55.287s
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
+	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
+# XXX RUNNING 2005-06-01 17:05
 
 # SGP GENES (DONE 5/25/05 angie)
     ssh hgwdev
