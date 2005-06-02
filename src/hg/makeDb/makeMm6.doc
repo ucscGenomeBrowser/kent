@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.47 2005/06/02 00:08:16 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.48 2005/06/02 23:50:02 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5601,7 +5601,8 @@ wc -l cloneEnds.fa
   # Advisory lock has been released
   # All done
 
-# BACEND SEQUENCE ALIGNMENTS (WORKING - 2005-06-01 - Hiram)
+############################################################################
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2005-06-02 - Hiram)
     ssh kkstore01
     mkdir /cluster/data/mm6/noMask
     cd /cluster/data/mm6/
@@ -5700,7 +5701,105 @@ rm -fr /tmp/${root1}_${root2}
 
     time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
 	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
-# XXX RUNNING 2005-06-01 17:05
+    #	real    8m15.671s
+    #	user    7m18.229s
+    #	sys     0m20.554s
+
+    cp -p ~booch/clusterJobs/bacends/split.pl .
+    cp -p ~booch/clusterJobs/bacends/header .
+    time ./split.pl header < bacEnds.psl
+
+    cp -p bacEnds.psl bacEnds.psl.save
+    time pslSort dirs bacEnds.psl temp split
+    #	~ 3 minutes
+
+    # Copy files to final destination and remove
+    mkdir /cluster/data/mm6/bacends
+    cp -p bacEnds.psl /cluster/data/mm6/bacends
+
+############################################################################
+# BACEND PAIRS TRACK (DONE  2005-06-02 - Hiram)
+
+    ssh kolossus
+    cd /cluster/data/mm6/bacends
+
+time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+-mismatch -verbose bacEnds.psl \
+	../bed/cloneend/ncbi/cloneEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+    echo -e \
+"chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes" > header
+    echo -e "10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10" >> header
+
+    cat header bacEnds.pairs | \
+	/cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairs.bed
+
+    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+	bacEnds.orphan | /cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairsBad.bed
+
+    /cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+	bacEndPairsBad.bed >j1.out
+    cat j1.out| /cluster/bin/scripts/sorttbl tname tstart >j2.out
+    cat j2.out | /cluster/bin/scripts/headchg -del > bacEnds.load.psl
+
+    rm j1.out j2.out
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm6/bacends
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+    #	result should be the scores, no extraneous strings:
+#	1000
+#	300
+#	375
+#	500
+#	750
+    #	edit the file and fix it if it has a bad name.
+
+    hgLoadBed -notItemRgb mm6 bacEndPairs bacEndPairs.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    #	Loaded 226279 elements of size 11
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -notItemRgb mm6 bacEndPairsBad bacEndPairsBad.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    #	Loaded 104221 elements of size 11
+
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl mm6 -table=all_bacends bacEnds.load.psl
+XXXX loading 2005-06-02 16:50
+    # load of all_bacends did not go as planned: 14426473 record(s), 0 row(s) 
+    skipped, 4519 warning(s) loading psl.tab
+
+# featureBits mm6 all_bacends
+... WORKING 2005-06-02
+# featureBits mm5 all_bacends
+# 268502414 bases of 2615483787 (10.266%) in intersection
+# featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+
+# featureBits mm6 bacEndPairs
+# 2570768812 bases of 2597150411 (98.984%) in intersection
+# featureBits mm5 bacEndPairs
+# 2567958504 bases of 2615483787 (98.183%) in intersection
+# featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+
+# featureBits mm6 bacEndPairsBad
+# 1006314997 bases of 2597150411 (38.747%) in intersection
+# featureBits mm5 bacEndPairsBad
+# 541027882 bases of 2615483787 (20.686%) in intersection
+# featureBits mm4 bacEndPairsBad
+# 1074505863 bases of 2627444668 (40.895%) in intersection
+
 
 # SGP GENES (DONE 5/25/05 angie)
     ssh hgwdev
