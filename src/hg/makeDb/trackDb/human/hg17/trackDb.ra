@@ -29,7 +29,7 @@ blastRef mm6.blastKGRef03
 
 track knownGene
 shortLabel Known Genes
-longLabel Known Genes (May, 05) Based on UniProt, RefSeq, and GenBank mRNA
+longLabel Known Genes (June, 05) Based on UniProt, RefSeq, and GenBank mRNA
 group genes
 priority 34
 visibility pack
