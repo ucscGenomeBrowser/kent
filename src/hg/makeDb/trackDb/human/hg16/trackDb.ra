@@ -1699,7 +1699,7 @@ color 180,0,0
 
 track encodeUcsdChipHeLaH3H4
 compositeTrack on
-shortLabel LI HeLa H3H4
+shortLabel LI HeLa ChIP
 longLabel Ludwig Institute, UCSD ChIP/Chip (H3,H4,acH3,acH4,STAT1 antibodies, HeLa cells, gamma-interferon) 
 group encode
 priority 30.1
