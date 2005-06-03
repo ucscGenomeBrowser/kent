@@ -57,6 +57,14 @@ type distance sangerBlastTab query target eValue
 name percentId
 type distance sangerBlastTab query target identity
 
+name p2p
+type distance wormP2P query target distance
+visibility off
+shortLabel P2P
+longLabel Protein-Protein Interaction Network
+priority 12
+
+
 name description
 type knownDetails sangerLinks orfName description
 

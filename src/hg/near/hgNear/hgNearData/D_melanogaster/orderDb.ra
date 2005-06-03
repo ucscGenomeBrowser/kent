@@ -24,3 +24,10 @@ name goSimilarity
 queryOne select goId from go.goaPart where dbObjectId='%s'
 queryAll select dbObjectId,goId from go.goaPart
 
+
+name p2p
+shortLabel Protein-to-Protein
+longLabel P2P Network Distance to Selected Gene
+type pair flyP2P query target distance 1
+priority 9
+
