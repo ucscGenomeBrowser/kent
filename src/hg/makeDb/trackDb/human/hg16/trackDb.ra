@@ -1780,6 +1780,7 @@ priority 10
 color 109,51,43
 
 track encodeLIChIP
+release alpha
 compositeTrack on
 shortLabel LI/UCSD ChIP
 longLabel Ludwig Institute/UCSD ChIP/Chip - Pol II, TAF1, AcH3, H3K4me antibodies
@@ -1793,12 +1794,14 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipRnapHela
+release alpha
 subTrack encodeLIChIP
 shortLabel LI Pol2 HeLa
 longLabel Ludwig Institute ChIP/Chip (Pol II ab, HeLa cells) 
 priority 1
 
 track encodeUcsdChipRnapThp1
+release alpha
 subTrack encodeLIChIP
 shortLabel LI Pol2 THP1
 longLabel Ludwig Institute ChIP/Chip (Pol II ab, THP1 cells) 
@@ -1806,6 +1809,7 @@ priority 2
 color 0,63,135
 
 track encodeUcsdChipRnapImr90
+release alpha
 subTrack encodeLIChIP
 shortLabel LI Pol2 IMR90
 longLabel Ludwig Institute ChIP/Chip (Pol II ab, IMR90 cells) 
@@ -1813,6 +1817,7 @@ priority 3
 color 109,51,43
 
 track encodeUcsdChipRnapHct116
+release alpha
 subTrack encodeLIChIP
 shortLabel LI Pol2 HCT116
 longLabel Ludwig Institute ChIP/Chip (Pol II ab, HCT116 cells) 
@@ -1820,12 +1825,14 @@ priority 4
 color 58,119,40
 
 track encodeUcsdChipTaf250Hela
+release alpha
 subTrack encodeLIChIP
 shortLabel LI TAF1 HeLa
 longLabel Ludwig Institute ChIP/Chip (TAF1 ab, HeLa cells) 
 priority 5
 
 track encodeUcsdChipTaf250Thp1
+release alpha
 subTrack encodeLIChIP
 shortLabel LI TAF1 THP1
 longLabel Ludwig Institute ChIP/Chip (TAF1 ab, THP1 cells) 
@@ -1833,6 +1840,7 @@ priority 6
 color 0,63,135
 
 track encodeUcsdChipTaf250Imr90
+release alpha
 subTrack encodeLIChIP
 shortLabel LI TAF1 IMR90
 longLabel Ludwig Institute ChIP/Chip (TAF1 ab, IMR90 cells) 
@@ -1840,6 +1848,7 @@ priority 7
 color 109,51,43
 
 track encodeUcsdChipTaf250Hct116
+release alpha
 subTrack encodeLIChIP
 shortLabel LI TAF1 HCT116
 longLabel Ludwig Institute ChIP/Chip (TAF1 ab, HCT116 cells) 
@@ -1847,6 +1856,7 @@ priority 8
 color 58,119,40
 
 track encodeUcsdChipAch3Imr90
+release alpha
 subTrack encodeLIChIP
 shortLabel LI AcH3 IMR90
 longLabel Ludwig Institute ChIP/Chip (AcH3 ab, IMR90 cells) 
@@ -1854,6 +1864,7 @@ priority 9
 color 109,51,43
 
 track encodeUcsdChipMeh3k4Imr90
+release alpha
 subTrack encodeLIChIP
 shortLabel LI H3K4me IMR90
 longLabel Ludwig Institute ChIP/Chip (MeH3K4 ab, IMR90 cells) 
@@ -1861,6 +1872,7 @@ priority 10
 color 109,51,43
 
 track encodeUcsdChipRnap
+release beta
 compositeTrack on
 shortLabel LI ChIP Pol2
 longLabel Ludwig Institute ChIP/Chip (Pol II initiation form antibody) 
@@ -1874,12 +1886,14 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipRnapHela
+release beta
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 HeLa
 longLabel Ludwig Institute ChIP/Chip (Pol II antibody, HeLa cells) 
 priority 1
 
 track encodeUcsdChipRnapThp1
+release beta
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 THP1
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II antibody, THP1 cells) 
@@ -1887,6 +1901,7 @@ priority 2
 color 0,63,135
 
 track encodeUcsdChipRnapImr90
+release beta
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 IMR90
 longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II antibody, IMR90 cells) 
@@ -1894,12 +1909,15 @@ priority 3
 color 109,51,43
 
 track encodeUcsdChipRnapHct116
+release beta
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 HCT116
 longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II antibody, HCT116 cells) 
 priority 4
 color 58,119,40
 
+track encodeUcsdChipTaf250
+release beta
 compositeTrack on
 shortLabel LI ChIP TAF1
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) 
@@ -1913,12 +1931,14 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipTaf250Hela
+release beta
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 HeLa
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, HeLa cells) 
 priority 1
 
 track encodeUcsdChipTaf250Thp1
+release beta
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 THP1
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, THP1 cells) 
@@ -1926,6 +1946,7 @@ priority 2
 color 0,63,135
 
 track encodeUcsdChipTaf250Imr90
+release beta
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 IMR90
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) 
@@ -1933,6 +1954,7 @@ priority 3
 color 109,51,43
 
 track encodeUcsdChipTaf250Hct116
+release beta
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 HCT116
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, HCT116 cells) 
@@ -2013,6 +2035,7 @@ priority 4
 color 58,119,40
 
 track encodeUcsdChipAch3Imr90
+release beta
 shortLabel LI AcH3 IMR90
 longLabel Ludwig Institute ChIP/Chip (AcH3 antibody, IMR90 cells) 
 group encode
@@ -2026,6 +2049,7 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipMeh3k4Imr90
+release beta
 shortLabel LI MeH3K4 IMR90
 longLabel Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells) 
 group encode
