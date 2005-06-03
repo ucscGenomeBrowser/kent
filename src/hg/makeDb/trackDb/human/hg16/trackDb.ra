@@ -1149,7 +1149,7 @@ type wig -600 2000
 
 track hetChimp
 shortLabel Chimp Heterozygosity
-longLabel Chimp (Nov. 2003/panTro1) single nucleotide mutation rate %, 10Kb bins
+longLabel Chimp (Nov. 2003/panTro1) Single Nucleotide Mutation Rate %, 10Kb Bins
 group compGeno
 priority 207
 visibility hide
@@ -1280,7 +1280,7 @@ type bed 5 .
 
 track mrnaBad
 shortLabel Bad mRNAs
-longLabel $Organism mRNAs from GenBank with potential genomic priming
+longLabel $Organism mRNAs from GenBank with Potential Genomic Priming
 group x
 priority 132
 visibility hide
@@ -1300,7 +1300,7 @@ type maf
 
 track NISC_phyloHMM
 shortLabel NISC phyloHMMcons
-longLabel Phylo-HMM-based conservation for NISC targets
+longLabel Phylo-HMM-based Conservation for NISC Targets
 group compGeno
 priority 107.1
 visibility hide
@@ -1542,7 +1542,7 @@ otherDb galGal1
 
 track unAnnotated
 shortLabel unAnnotated
-longLabel Regions not annotated as genes/mRNAs/ESTs/CpG/repeats/gaps
+longLabel Regions Not Annotated as Genes/mRNAs/ESTs/CpG/Repeats/Gaps
 group x
 priority 161
 visibility hide
@@ -1961,7 +1961,7 @@ maxLimit 16
 track encodeAffyChIpRnapHl60Pval
 compositeTrack on
 shortLabel Affy ChIP Pol2 
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60 cells) P Value 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60 cells) P Value 
 group encode
 color 10,10,130
 altColor 50,50,50
@@ -1978,32 +1978,32 @@ defaultViewLimits 0:80
 track encodeAffyChIpRnapHl60PvalHr00
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 0h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 0hrs) P Value 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 0hrs) P Value 
 priority 1
 
 track encodeAffyChIpRnapHl60PvalHr02
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 2h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 2hrs) P Value 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 2hrs) P Value 
 priority 2
 
 track encodeAffyChIpRnapHl60PvalHr08
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 8h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 8hrs) P Value 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 8hrs) P Value 
 priority 3
 
 track encodeAffyChIpRnapHl60PvalHr32
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 32h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 32hrs) P Value 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 32hrs) P Value 
 priority 4
 visibility hide
 
 track encodeAffyChIpRnapHl60Sites
 compositeTrack on
 shortLabel Affy Pol2 RA Sites
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60 cells) Sites 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60 cells) Sites 
 group encode
 priority 47.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2015,31 +2015,31 @@ type bed 3 .
 track encodeAffyChIpRnapHl60SitesHr00
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Affy Pol2 RA 0h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 0hrs) Sites 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 0hrs) Sites 
 priority 1
 
 track encodeAffyChIpRnapHl60SitesHr02
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Affy Pol2 RA 2h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 2hrs) Sites 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 2hrs) Sites 
 priority 2
 
 track encodeAffyChIpRnapHl60SitesHr08
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Affy Pol2 RA 8h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 8hrs) Sites 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 8hrs) Sites 
 priority 3
 
 track encodeAffyChIpRnapHl60SitesHr32
 subTrack encodeAffyChIpRnapHl60Sites
 shortLabel Affy Pol2 RA 32h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 32hrs) Sites 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 32hrs) Sites 
 priority 4
 
 track encodeAffyRnaHl60Sig
 compositeTrack on
 shortLabel Affy RNA Signal
-longLabel Affymetrix RNA (Pol2 retinoic acid treated HL60 cells) Signal 
+longLabel Affymetrix RNA (Pol2 retinoic acid-treated HL60 cells) Signal 
 group encode
 color 130,10,10
 altColor 50,50,50
@@ -2056,25 +2056,25 @@ defaultViewLimits 0:50
 track encodeAffyRnaHl60SigHr00
 subTrack encodeAffyRnaHl60Sig
 shortLabel Affy RNA RA 0h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 0hrs) Signal 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 0hrs) Signal 
 priority 1
 
 track encodeAffyRnaHl60SigHr02
 subTrack encodeAffyRnaHl60Sig
 shortLabel Affy RNA RA 2h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 2hrs) Signal 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 2hrs) Signal 
 priority 2
 
 track encodeAffyRnaHl60SigHr08
 subTrack encodeAffyRnaHl60Sig
 shortLabel Affy RNA RA 8h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 8hrs) Signal 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 8hrs) Signal 
 priority 3
 
 track encodeAffyRnaHl60SigHr32
 subTrack encodeAffyRnaHl60Sig
 shortLabel Affy RNA RA 32h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 32hrs) Signal 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 32hrs) Signal 
 priority 4
 
 track encodeSangerChipH3H4
@@ -2149,7 +2149,7 @@ color 10,10,130
 track encodeAffyRnaHl60Sites
 compositeTrack on
 shortLabel Affy RNA RA Sites
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60 cells) Sites 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60 cells) Sites 
 group encode
 priority 48.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2161,25 +2161,25 @@ type bed 3 .
 track encodeAffyRnaHl60SitesHr00
 subTrack encodeAffyRnaHl60Sites
 shortLabel Affy RNA RA 0h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 0hrs) Sites 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 0hrs) Sites 
 priority 1
 
 track encodeAffyRnaHl60SitesHr02
 subTrack encodeAffyRnaHl60Sites
 shortLabel Affy RNA RA 2h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 2hrs) Sites 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 2hrs) Sites 
 priority 2
 
 track encodeAffyRnaHl60SitesHr08
 subTrack encodeAffyRnaHl60Sites
 shortLabel Affy RNA RA 8h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 8hrs) Sites 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 8hrs) Sites 
 priority 3
 
 track encodeAffyRnaHl60SitesHr32
 subTrack encodeAffyRnaHl60Sites
 shortLabel Affy RNA RA 32h
-longLabel Affymetrix PolyA+ RNA (retinoic acid treated HL60, 32hrs) Sites 
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 32hrs) Sites 
 priority 4
 
 track encodeGisChipPet
