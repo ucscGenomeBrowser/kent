@@ -20,22 +20,33 @@ my::
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-${USER}
 	chmod a+r ${CGI_BIN}-${USER}/all.joiner
 	chmod g+w ${CGI_BIN}-${USER}/all.joiner
+	chmod a+r galaAvail.tab
+	chmod g+w galaAvail.tab
+	cp galaAvail.tab ${CGI_BIN}-${USER}/galaAvail.tab
 
 alpha::
 	rm -f ${CGI_BIN}/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}
 	chmod a+r ${CGI_BIN}/all.joiner
 	chmod g+w ${CGI_BIN}/all.joiner
-	wget --quiet -O ${CGI_BIN}/galaAvail.tab \
-	  http://gala.cse.psu.edu/cgi-bin/live_versions
+	chmod a+r galaAvail.tab
+	chmod g+w galaAvail.tab
+	cp galaAvail.tab ${CGI_BIN}/galaAvail.tab
+	# Original source of galaAvail.tab:
+	#	wget --quiet -O ${CGI_BIN}/galaAvail.tab \
+	#	  http://gala.cse.psu.edu/cgi-bin/live_versions
 
 beta::
 	rm -f ${CGI_BIN}-beta/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-beta
 	chmod a+r ${CGI_BIN}-beta/all.joiner
 	chmod g+w ${CGI_BIN}-beta/all.joiner
-	wget --quiet -O ${CGI_BIN}-beta/galaAvail.tab \
-	  http://gala.cse.psu.edu/cgi-bin/live_versions
+	chmod a+r galaAvail.tab
+	chmod g+w galaAvail.tab
+	cp galaAvail.tab ${CGI_BIN}-beta/galaAvail.tab
+	# Original source of galaAvail.tab:
+	#	wget --quiet -O ${CGI_BIN}-beta/galaAvail.tab \
+	#	  http://gala.cse.psu.edu/cgi-bin/live_versions
 
 
 compile: $O 
