@@ -1,8 +1,16 @@
 <H2>Description</H2>
+<P>This track shows the beginning and end of mRNA transcripts as
+determined by paired-end ditag (PET) sequencing.  The beginning
+and end are shown by tick marks that are connected by a horizontal 
+line.  In full or packed display modes the arrowheads on the horizontal
+line represent the direction of transcription.
+PETs are composed of 18 bases from either end of a 
+cDNA.  PETs from many clones are concatenated together for efficient
+sequencing.  Please see the methods and reference sections of this
+page for more details on PET sequencing.</P>
 <P>
-This track shows paired end ditag (PET) sequences mapped to the
-genome.  Full-length transcripts derived from two cell lines 
-were represented by the PET sequences: 
+The PET sequences in this track are full-length transcripts
+derived from two cell cell lines:
 <UL>
 <LI>the log phase of MCF7 cells</LI>
 <LI>HCT116 cells treated with 5FU for 6 hours</LI>
@@ -15,29 +23,38 @@ multiple (up to 10) matches in the genome are shown in the two
 subtracks of this track.
 </P>
 <P> 
-In the graphical display, PET sequences are shown as two blocks
-representing the ends of the pair, connected by a thin arrowed
-line. The arrows indicate the orientation of transcription
-direction. Each PET sequence has an ID followed by some descriptive
-numbers, like this: XXXXX-N-M.  Where the X is the unique ID for each
+In full or packed mode an ID is shown to the left of each PET.
+The ID is of the format: XXXXX-N-M.  X is the unique ID for each
 PET, N indicates the number of mapping locations in the genome (1 for
 single mapping location, 2 for two mapping location, and so forth),
 and the M is the count of this PET measured. The total count of PET
 sequences mapped to the same loci but with slight nucleotide
 difference may reflect the expression level of the transcripts.
 </P>
+<P>The visual display also uses a color coding to reflect the uniqueness
+and expression level of each PET:
+<TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4>
+  <TR><TH>Color</TH><TH>Mapping</TH><TH>PETS observed at location</TH></TR>
+  <TR><TD>Dark Blue</TD><TD>Unique</TD><TD>2 or more</TD></TR>
+  <TR><TD>Light Blue</TD><TD>Unique</TD><TD>1</TD></TR>
+  <TR><TD>Medium Brown</TD><TD>Multiple</TD><TD>2 or more</TD></TR>
+  <TR><TD>Light Brown</TD><TD>Multiple</TD><TD>1</TD></TR>
+</TABLE>
+</P>
+ 
 
 
 <H2>Methods</H2>
 <P>
 PolyA+ RNA was isolated from the cells. A full-length cDNA library was
 constructed and further converted into a PET library for Gene
-Identification Signature analysis (Ng et al, 2005, Nature Methods
-2:105). Each PET sequence contains an 18 bp from the 5' end and an 18
-bp from the 3' end of the original full-length cDNA clone. The 18 bp
-3' signature contains 16 bp 3' specific nucleotides and an AA residual
-of the polyA tail as the indicator of sequence orientation.  The
-following specific mapping criteria were used:
+Identification Signature analysis 
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15782207&query_hl=1" TARGET=_BLANK>
+(Ng et al, 2005, Nature Methods 2:105)</A>. Each PET sequence contains an 
+18 bp from the 5' end and an 18 bp from the 3' end of the original 
+full-length cDNA clone. The 18 bp 3' signature contains 16 bp 3' specific 
+nucleotides and an AA residual of the polyA tail as the indicator of sequence 
+orientation.  The following specific mapping criteria were used:
 <UL>
 <LI> a minimal continues 16 bp match must exist for the 5' signature and a 
      minimal continues 14 bp for the 3'signature</LI>
