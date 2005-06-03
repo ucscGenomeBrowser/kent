@@ -1951,14 +1951,14 @@ type wig -5.61 6.47
 
 track encodeUcsdNgChipSignal
 subTrack encodeUcsdNgChip
-shortLabel LI/Ng TAF1 Signal
-longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) genome scan (Signal)
+shortLabel LI/Ng TAF1 IMR90
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) on Nimblegen Chip
 priority 1
 
 track encodeUcsdNgChipKnownSites
 subTrack encodeUcsdNgChip
 shortLabel TAF1 Known Sites
-longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) genome scan (Known Sites)
+longLabel Ludwig Institute Known TAF1 Binding Sites
 noInherit on
 type bed 3
 color 0,0,200
@@ -1967,7 +1967,7 @@ priority 2
 track encodeUcsdNgChipNovelSites
 subTrack encodeUcsdNgChip
 shortLabel TAF1 Novel Sites
-longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) genome scan (Novel Sites)
+longLabel Ludwig Institute Novel High-Probability TAF1 Binding Sites
 noInherit on
 type bed 3
 color 0,200,0
