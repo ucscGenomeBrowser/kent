@@ -1006,12 +1006,14 @@ chainSome $(path1)
     expr 154371 + 74897
 #229268
     # These are not really meant to be genePreds (no CDS/UTR), so 
-    # translate into bed 12 via genePred.tab.  
+    # translate into bed 12 via genePred.tab.  Also fix chrom names...
     ldHgGene anoGam1 anoEstTcl anoEstTcl.gff -out=stdout \
     | $HOME/kent/src/utils/genePredToBed/genePredToBed \
+    | sed -e 's/^chrMIAGCG/chrM/; s/chrUNKN/chrU/;' \
     > anoEstTcl.bed
     ldHgGene anoGam1 anoEstNcl anoEstNcl.gff -out=stdout \
     | $HOME/kent/src/utils/genePredToBed/genePredToBed \
+    | sed -e 's/^chrMIAGCG/chrM/; s/chrUNKN/chrU/;' \
     > anoEstNcl.bed
     # List of TCLAG* ids considered to be expressed, saved from email 
     # 6/2/05 to /cluster/data/anoGam1/bed/anoEst/expressed_cl_ids.txt.
