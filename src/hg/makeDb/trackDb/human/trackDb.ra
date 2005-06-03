@@ -526,6 +526,7 @@ group regulation
 priority 98.9
 maxHeightPixels 100:30:10
 canPack off
+centerLabelsDense on
 type wig 0 1000
 
 track A375_cytosolic_polyAPlusTxn
