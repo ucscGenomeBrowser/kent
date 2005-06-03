@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.39 2005/05/27 18:54:06 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.40 2005/06/03 19:13:46 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -752,7 +752,7 @@ if (isWig)
 	double min, max;
 	wiggleMinMax(curTrack,&min,&max);
 
-	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue limits: %g,%g) "
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g:%g]) "
 		"</TD></TR></TABLE>\n", min, max);
 	}
     else
@@ -801,7 +801,7 @@ else
 		    min = tDbMin;
 		if (tDbMax > max)
 		    max = tDbMax;
-		hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s limits: %g,%g) "
+		hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
 		    "</TD></TR>\n", field, min, max);
 		}
 	    }
@@ -856,7 +856,7 @@ if (ct->wiggle)
 	double min, max;
 	wiggleMinMax(curTrack,&min,&max);
 
-	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue limits: %g,%g) "
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g,%g]) "
 		"</TD></TR>\n", min, max);
 	}
     }
