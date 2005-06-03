@@ -2199,6 +2199,7 @@ longLabel Genome Institute of Singapore PET of PolyA+ RNA
 group encode
 priority 49.2
 visibility hide
+itemRgb on
 type bed 12
 
 track encodeGisRnaPetMCF7
