@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.968 2005/06/02 14:19:32 kschneid Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.969 2005/06/03 01:55:48 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6976,12 +6976,22 @@ return ((trackDbSetting(track->tdb, "subTrack") != NULL) ||
 static boolean isWithCenterLabels(struct track *track)
 /* Special cases: inhibit center labels of subtracks in dense mode, and 
  * of composite track in non-dense mode.
+ * BUT if track->tdb has a centerLabelDense setting, let subtracks go with 
+ * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 {
-if (track != NULL &&
-    (((limitVisibility(track) == tvDense) && isSubtrack(track)) ||
-     ((limitVisibility(track) != tvDense) && isCompositeTrack(track))))
-    return FALSE;
+if (track != NULL)
+    {
+    char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
+    if (centerLabelsDense && !sameWord(centerLabelsDense, "off"))
+	{
+	if (isCompositeTrack(track))
+	    return FALSE;
+	}
+    else if (((limitVisibility(track) == tvDense) && isSubtrack(track)) ||
+	     ((limitVisibility(track) != tvDense) && isCompositeTrack(track)))
+	return FALSE;
+    }
 return withCenterLabels;
 }
 
