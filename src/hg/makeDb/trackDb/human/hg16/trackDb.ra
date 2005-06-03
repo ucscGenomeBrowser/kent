@@ -1686,20 +1686,20 @@ useScore 1
 
 track encodeNhgriDnaseHsNonAct
 subTrack encodeNhgriDnaseHs
-shortLabel NHGRI DNaseI (Not Act)
-longLabel NHGRI DNaseI-Hypersensitive Sites (CD4 Not activated)
+shortLabel DNase CD4 Unact.
+longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Unactivated)
 priority 1
 
 track encodeNhgriDnaseHsAct
 subTrack encodeNhgriDnaseHs
-shortLabel NHGRI DNaseI (Activated)
-longLabel NHGRI DNaseI-Hypersensitive Sites (CD4 Activated)
+shortLabel DNase CD4 Activ.
+longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated)
 priority 2
 
 track encodeUcsdChipHeLaH3H4
 compositeTrack on
 shortLabel LI HeLa ChIP
-longLabel Ludwig Institute, UCSD ChIP/Chip (H3,H4,acH3,acH4,STAT1 antibodies, HeLa cells, gamma-interferon) 
+longLabel Ludwig Institute ChIP/Chip (H3,H4,acH3,acH4,STAT1 ab, HeLa cells, gamma-interferon) 
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1712,77 +1712,77 @@ maxLimit 16
 track encodeUcsdChipHeLaH3H4dmH3K4_p0
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI H3K4me2 -gIF
-longLabel UCSD ChIP/Chip (H3K4me2 antibody, HeLa cells, no gamma interferon)
+longLabel Ludwig Institute ChIP/Chip (H3K4me2 ab, HeLa cells, no gamma interferon)
 priority 1
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4dmH3K4_p30
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI H3K4me2 +gIF
-longLabel UCSD ChIP/Chip (H3K4me2 antibody, HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (H3K4me2 ab, HeLa cells, 30 min. after gamma interferon) 
 priority 2
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4tmH3K4_p0
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI H3K4me3 -gIF
-longLabel UCSD ChIP/Chip (H3K4me3 antibody, HeLa cells, no gamma interferon)
+longLabel Ludwig Institute ChIP/Chip (H3K4me3 ab, HeLa cells, no gamma interferon)
 priority 3
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4tmH3K4_p30
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI H3K4me3 +gIF
-longLabel UCSD ChIP/Chip (H3K4me3 antibody, HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (H3K4me3 ab, HeLa cells, 30 min. after gamma interferon) 
 priority 4
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH3_p0
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI acH3 -gIF
-longLabel UCSD ChIP/Chip (acH3 antibody, HeLa cells, no gamma interferon)
+longLabel Ludwig Institute ChIP/Chip (acH3 ab, HeLa cells, no gamma interferon)
 priority 5
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH3_p30
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI acH3 +gIF
-longLabel UCSD ChIP/Chip (acH3 antibody, HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (acH3 ab, HeLa cells, 30 min. after gamma interferon) 
 priority 6
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH4_p0
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI acH4 -gIF
-longLabel UCSD ChIP/Chip (acH4 antibody, HeLa cells, no gamma interferon)
+longLabel Ludwig Institute ChIP/Chip (acH4 ab, HeLa cells, no gamma interferon)
 priority 7
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH4_p30
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI acH4 +gIF
-longLabel UCSD ChIP/Chip (acH4 antibody, HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (acH4 ab, HeLa cells, 30 min. after gamma interferon) 
 priority 8
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4stat1_p0
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI STAT1 -gIF
-longLabel UCSD ChIP/Chip (STAT1 antibody, HeLa cells, no gamma interferon)
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, HeLa cells, no gamma interferon)
 priority 9
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4stat1_p30
 subTrack encodeUcsdChipHeLaH3H4
 shortLabel LI STAT1 +gIF
-longLabel UCSD ChIP/Chip (STAT1 antibody, HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, HeLa cells, 30 min. after gamma interferon) 
 priority 10
 color 109,51,43
 
 track encodeUcsdChipRnap
 compositeTrack on
 shortLabel LI ChIP Pol2
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II initiation form antibody) 
+longLabel Ludwig Institute ChIP/Chip (Pol II initiation form antibody) 
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1795,34 +1795,34 @@ maxLimit 16
 track encodeUcsdChipRnapHela
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 HeLa
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) 
+longLabel Ludwig Institute ChIP/Chip (Pol II antibody, HeLa cells) 
 priority 1
 
 track encodeUcsdChipRnapThp1
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 THP1
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) 
+longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II antibody, THP1 cells) 
 priority 2
 color 0,63,135
 
 track encodeUcsdChipRnapImr90
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 IMR90
-longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) 
+longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II antibody, IMR90 cells) 
 priority 3
 color 109,51,43
 
 track encodeUcsdChipRnapHct116
 subTrack encodeUcsdChipRnap
 shortLabel LI Pol2 HCT116
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) 
+longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II antibody, HCT116 cells) 
 priority 4
 color 58,119,40
 
 track encodeUcsdChipTaf250
 compositeTrack on
 shortLabel LI ChIP TAF1
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) 
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) 
 group encode
 priority 30.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1835,34 +1835,34 @@ maxLimit 16
 track encodeUcsdChipTaf250Hela
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 HeLa
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HeLa) 
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, HeLa cells) 
 priority 1
 
 track encodeUcsdChipTaf250Thp1
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 THP1
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 THP1) 
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, THP1 cells) 
 priority 2
 color 0,63,135
 
 track encodeUcsdChipTaf250Imr90
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 IMR90
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) 
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) 
 priority 3
 color 109,51,43
 
 track encodeUcsdChipTaf250Hct116
 subTrack encodeUcsdChipTaf250
 shortLabel LI TAF1 HCT116
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) 
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, HCT116 cells) 
 priority 4
 color 58,119,40
 
 track encodeUcsdNgChip
 compositeTrack on
 shortLabel LI/Ng TAF1 IMR90
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) on Nimblegen Chip
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) on Nimblegen Chip
 group encode
 priority 30.25
 visibility hide
@@ -1872,13 +1872,13 @@ type wig -5.61 6.47
 track encodeUcsdNgChipSignal
 subTrack encodeUcsdNgChip
 shortLabel LI/Ng TAF1 Signal
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Signal)
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) genome scan (Signal)
 priority 1
 
 track encodeUcsdNgChipKnownSites
 subTrack encodeUcsdNgChip
 shortLabel TAF1 Known Sites
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Known Sites)
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) genome scan (Known Sites)
 noInherit on
 type bed 3
 color 0,0,200
@@ -1887,7 +1887,7 @@ priority 2
 track encodeUcsdNgChipNovelSites
 subTrack encodeUcsdNgChip
 shortLabel TAF1 Novel Sites
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) genome scan (Novel Sites)
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) genome scan (Novel Sites)
 noInherit on
 type bed 3
 color 0,200,0
@@ -1896,7 +1896,7 @@ priority 3
 track encodeUcsdNgValChip
 compositeTrack on
 shortLabel LI/Ng Validation
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation
+longLabel Ludwig Institute ChIP/Chip Validation (IMR90 cells)
 group encode
 priority 30.26
 visibility hide
@@ -1908,33 +1908,33 @@ maxLimit 8
 track encodeUcsdNgValChipH3ac
 subTrack encodeUcsdNgValChip
 shortLabel LI/Ng Val H3ac
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (H3ac)
+longLabel Ludwig Institute ChIP/Chip Validation (H3ac antibody, IMR90 cells)
 priority 1
 
 track encodeUcsdNgValChipH3K4me
 subTrack encodeUcsdNgValChip
 shortLabel LI/Ng Val H3K4me
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (H3K4me)
+longLabel Ludwig Institute ChIP/Chip Validation (H3K4me antibody, IMR90 cells)
 priority 2
 color 0,63,135
 
 track encodeUcsdNgValChipRnap
 subTrack encodeUcsdNgValChip
 shortLabel LI/Ng Val Pol2
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (Pol2)
+longLabel Ludwig Institute ChIP/Chip Validation (Pol2 antibody, IMR90 cells)
 priority 3
 color 109,51,43
 
 track encodeUcsdNgValChipTaf
 subTrack encodeUcsdNgValChip
 shortLabel LI Ng Val TAF1
-longLabel Ludwig Institute, UCSD ChIP/Chip Validation (TAF1)
+longLabel Ludwig Institute ChIP/Chip Validation (TAF1 antibody, IMR90 cells)
 priority 4
 color 58,119,40
 
 track encodeUcsdChipAch3Imr90
 shortLabel LI AcH3 IMR90
-longLabel Ludwig Institute, UCSD ChIP/Chip (AcH3 IMR90) 
+longLabel Ludwig Institute ChIP/Chip (AcH3 antibody, IMR90 cells) 
 group encode
 priority 30.3
 color 109,51,43
@@ -1947,7 +1947,7 @@ maxLimit 16
 
 track encodeUcsdChipMeh3k4Imr90
 shortLabel LI MeH3K4 IMR90
-longLabel Ludwig Institute, UCSD ChIP/Chip (MeH3K4 IMR90) 
+longLabel Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells) 
 group encode
 priority 30.4
 color 109,51,43
@@ -1961,7 +1961,7 @@ maxLimit 16
 track encodeAffyChIpRnapHl60Pval
 compositeTrack on
 shortLabel Affy ChIP Pol2 
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60) P Value 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60 cells) P Value 
 group encode
 color 10,10,130
 altColor 50,50,50
@@ -1984,26 +1984,26 @@ priority 1
 track encodeAffyChIpRnapHl60PvalHr02
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 2h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 2hrs) PValue 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 2hrs) P Value 
 priority 2
 
 track encodeAffyChIpRnapHl60PvalHr08
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 8h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 8hrs) PValue 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 8hrs) P Value 
 priority 3
 
 track encodeAffyChIpRnapHl60PvalHr32
 subTrack encodeAffyChIpRnapHl60Pval
 shortLabel Affy Pol2 RA 32h
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 32hrs) PValue 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 32hrs) P Value 
 priority 4
 visibility hide
 
 track encodeAffyChIpRnapHl60Sites
 compositeTrack on
 shortLabel Affy Pol2 RA Sites
-longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60) Sites 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60 cells) Sites 
 group encode
 priority 47.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2032,14 +2032,14 @@ priority 3
 
 track encodeAffyChIpRnapHl60SitesHr32
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel Affy Pol2 32h
+shortLabel Affy Pol2 RA 32h
 longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid treated HL60, 32hrs) Sites 
 priority 4
 
 track encodeAffyRnaHl60Sig
 compositeTrack on
 shortLabel Affy RNA Signal
-longLabel Affymetrix RNA (Pol2 retinoic acid treated HL60) Signal 
+longLabel Affymetrix RNA (Pol2 retinoic acid treated HL60 cells) Signal 
 group encode
 color 130,10,10
 altColor 50,50,50
@@ -2080,7 +2080,7 @@ priority 4
 track encodeSangerChipH3H4
 compositeTrack on
 shortLabel San H3&4 GM06990
-longLabel Sanger ChIP/Chip (histones H3,H4 GM06990) 
+longLabel Sanger ChIP/Chip (histones H3,H4 antibody, GM06990 cells) 
 group encode
 priority 47.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2093,56 +2093,56 @@ maxLimit 75
 track encodeSangerChipH3K4me1
 subTrack encodeSangerChipH3H4
 shortLabel SI H3K4m1 GM06990
-longLabel Sanger Institute ChIP/Chip (Histone H3 K4 monomethylated in GM06990 cells) 
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 monomethylated ab, GM06990 cells) 
 priority 1
 color 10,10,130
 
 track encodeSangerChipH3K4me2
 subTrack encodeSangerChipH3H4
 shortLabel SI H3K4m2 GM06990
-longLabel Sanger Institute ChIP/Chip (Histone H3 K4 dimethylated in GM06990 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 dimethylated ab, GM06990 cells)
 priority 2
 color 10,10,10
 
 track encodeSangerChipH3K4me3
 subTrack encodeSangerChipH3H4
 shortLabel SI H3K4m3 GM06990
-longLabel Sanger Institute ChIP/Chip (Histone H3 K4 trimethylated in GM06990)
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 trimethylated ab, GM06990 cells)
 priority 3
 color 10,10,130
 
 track encodeSangerChipH3ac
 subTrack encodeSangerChipH3H4
 shortLabel SI H3ac GM06990
-longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated in GM06990 cells) 
+longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated ab, GM06990 cells) 
 priority 4
 color 10,10,10
 
 track encodeSangerChipH4ac
 subTrack encodeSangerChipH3H4
 shortLabel SI H4ac GM06990
-longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated in GM06990 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated ab, GM06990 cells)
 priority 5
 color 10,10,130
 
 track encodeSangerChipH3K4me2K562
 subTrack encodeSangerChipH3H4
 shortLabel SI H3K4me2 K562
-longLabel Sanger Institute ChIP/Chip (Histone H3 K4 dimethylated in K562 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 dimethylated ab, K562 cells)
 priority 6
 color 10,10,130
 
 track encodeSangerChipH3acK562
 subTrack encodeSangerChipH3H4
 shortLabel SI H3ac K562
-longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated in K562 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated antibody, K562 cells)
 priority 7
 color 10,10,130
 
 track encodeSangerChipH4acK562
 subTrack encodeSangerChipH3H4
 shortLabel SI H4ac K562
-longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated in K562 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated antibody, K562 cells)
 priority 8
 color 10,10,130
 
@@ -2217,7 +2217,7 @@ color 58,119,40
 track encodeUvaDnaRep
 compositeTrack on
 shortLabel UVa DNA Rep
-longLabel Univeristy of Virginia Temporal Profiling of DNA Replication 
+longLabel University of Virginia Temporal Profiling of DNA Replication 
 group encode
 priority 50
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2445,7 +2445,7 @@ otherDb hg17
 
 track encodeSangerChip
 shortLabel Sanger ChIP
-longLabel Sanger ChIP/Chip (H3K4me3 GM06990) 
+longLabel Sanger ChIP/Chip (H3K4me3 antibody, GM06990 cells) 
 group encode
 color 10,10,130
 altColor 50,50,50
