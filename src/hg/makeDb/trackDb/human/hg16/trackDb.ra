@@ -1681,11 +1681,11 @@ group encode
 priority 25.11
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 4 .
+type bed 5 .
+useScore 1
 
 track encodeNhgriDnaseHsNonAct
 subTrack encodeNhgriDnaseHs
-color 0,0,255
 shortLabel NHGRI DNaseI (Not Act)
 longLabel NHGRI DNaseI-Hypersensitive Sites (CD4 Not activated)
 priority 1
@@ -1695,7 +1695,6 @@ subTrack encodeNhgriDnaseHs
 shortLabel NHGRI DNaseI (Activated)
 longLabel NHGRI DNaseI-Hypersensitive Sites (CD4 Activated)
 priority 2
-color 180,0,0
 
 track encodeUcsdChipHeLaH3H4
 compositeTrack on
