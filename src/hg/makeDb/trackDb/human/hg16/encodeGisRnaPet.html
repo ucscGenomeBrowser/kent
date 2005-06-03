@@ -1,13 +1,10 @@
 <H2>Description</H2>
-<P>This track shows the beginning and end of mRNA transcripts as
-determined by paired-end ditag (PET) sequencing.  The beginning
-and end are shown by tick marks that are connected by a horizontal 
-line.  In full or packed display modes the arrowheads on the horizontal
-line represent the direction of transcription.
-PETs are composed of 18 bases from either end of a 
-cDNA.  PETs from many clones are concatenated together for efficient
-sequencing.  Please see the methods and reference sections of this
-page for more details on PET sequencing.</P>
+<P>
+This track shows the beginnings and ends of mRNA transcripts as
+determined by paired-end ditag (PET) sequencing. 
+PETs are composed of 18 bases from either end of a cDNA; those from many 
+clones are concatenated together for efficient sequencing. See the Methods 
+and References sections below for more details on PET sequencing.</P>
 <P>
 The PET sequences in this track are full-length transcripts
 derived from two cell cell lines:
@@ -15,90 +12,88 @@ derived from two cell cell lines:
 <LI>the log phase of MCF7 cells</LI>
 <LI>HCT116 cells treated with 5FU for 6 hours</LI>
 </UL>
-In total, 584624 PETs were generated for MCF7 and 280340 PETs were
-generated for HCT116, and more than 80% of PETs in each group were 
+In total, 584,624 PETs were generated for MCF7 and 280,340 PETs were
+generated for HCT116. More than 80% of the PETs in each group were 
 mapped to the genome.
-The 474278 MCF7 PETs and 223261 HCT116 PETs mapped with single and
-multiple (up to 10) matches in the genome are shown in the two 
-subtracks of this track.
-</P>
+The 474,278 MCF7 PETs and 223,261 HCT116 PETs that mapped with single and
+multiple (up to ten) matches in the genome are shown in the two 
+subtracks. </P>
 <P> 
-In full or packed mode an ID is shown to the left of each PET.
-The ID is of the format: XXXXX-N-M.  X is the unique ID for each
-PET, N indicates the number of mapping locations in the genome (1 for
-single mapping location, 2 for two mapping location, and so forth),
-and the M is the count of this PET measured. The total count of PET
-sequences mapped to the same loci but with slight nucleotide
-difference may reflect the expression level of the transcripts.
-</P>
-<P>The visual display also uses a color coding to reflect the uniqueness
-and expression level of each PET:
+In the graphical display, 
+the ends are represented by blocks connected by a horizontal line. In full
+and packed display modes, the arrowheads on the horizontal line represent the 
+direction of transcription, and an ID of the format <em>XXXXX-N-M</em> is 
+shown to the left of each PET, where <em>X</em> is the unique ID for each
+PET, <em>N</em> indicates the number of mapping locations in the genome 
+(1 for a single mapping location, 2 for two mapping locations, and so forth),
+and <em>M</em> is the number of PET sequences at this location. The total 
+count of PET sequences mapped to the same loci but with slight nucleotide
+differences may reflect the expression level of the transcripts. </P>
+<P>
+The graphical display also uses color coding to reflect the uniqueness
+and expression level of each PET:</P>
+<BR>
 <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4>
-  <TR><TH>Color</TH><TH>Mapping</TH><TH>PETS observed at location</TH></TR>
-  <TR><TD>Dark Blue</TD><TD>Unique</TD><TD>2 or more</TD></TR>
-  <TR><TD>Light Blue</TD><TD>Unique</TD><TD>1</TD></TR>
-  <TR><TD>Medium Brown</TD><TD>Multiple</TD><TD>2 or more</TD></TR>
-  <TR><TD>Light Brown</TD><TD>Multiple</TD><TD>1</TD></TR>
+  <TR><TH align=left>Color</TH><TH align=left>Mapping</TH><TH align=left>PETS observed at location</TH></TR>
+  <TR><TD>Dark blue</TD><TD>Unique</TD><TD>2 or more</TD></TR>
+  <TR><TD>Light blue</TD><TD>Unique</TD><TD>1</TD></TR>
+  <TR><TD>Medium brown</TD><TD>Multiple</TD><TD>2 or more</TD></TR>
+  <TR><TD>Light brown</TD><TD>Multiple</TD><TD>1</TD></TR>
 </TABLE>
-</P>
- 
-
 
 <H2>Methods</H2>
 <P>
 PolyA+ RNA was isolated from the cells. A full-length cDNA library was
-constructed and further converted into a PET library for Gene
-Identification Signature analysis 
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15782207&query_hl=1" TARGET=_BLANK>
-(Ng et al, 2005, Nature Methods 2:105)</A>. Each PET sequence contains an 
-18 bp from the 5' end and an 18 bp from the 3' end of the original 
-full-length cDNA clone. The 18 bp 3' signature contains 16 bp 3' specific 
-nucleotides and an AA residual of the polyA tail as the indicator of sequence 
-orientation.  The following specific mapping criteria were used:
+constructed and converted into a PET library for Gene
+Identification Signature analysis (Ng <em>et al</em>., 2005). 
+Each 36 bp PET sequence contains 18 bp from each of the 5' and 3' ends of the 
+original full-length cDNA clone. The 18 bp 3' signature contains 16 bp 
+3'-specific nucleotides and an AA residual of the polyA tail to indicate the 
+sequence orientation. The following specific mapping criteria were used:
 <UL>
-<LI> a minimal continues 16 bp match must exist for the 5' signature and a 
-     minimal continues 14 bp for the 3'signature</LI>
-<LI> both 5' and 3' signatures must be present on the same chromosome</LI>
-<LI> the 5' to 3' orientation must be correct</LI>
-<LI> the maximal genomic span of a PET genomic alignment must be within 
-     1 million bp. </LI>
-</UL>
-</P>
+<LI>a minimal continuous 16 bp match must exist for the 5' signature; the 
+3' signature must have a minimal continuous 14 bp match
+<LI>both 5' and 3' signatures must be present on the same chromosome
+<LI>their 5' to 3' orientation must be correct
+<LI>the maximal genomic span of a PET genomic alignment must be less than 
+one million bp
+</UL></P>
 <P>
-Most of the PET sequences (>90%) are mapped to specific locations
-(single mapping loci). PETs mapped to multiple locations up to 10 are
-also included, which may represent duplicated genes or pseudogenes in
-the genome.
-</P> 
+Most of the PET sequences (more than 90%) were mapped to specific locations
+(single mapping loci). PETs mapping to 2 - 10 locations are
+also included and may represent duplicated genes or pseudogenes in
+the genome. </P> 
+
 <H2>Verification</H2>
 <P>
-To assess overall PET quality and mapping specificity, we first
-examined the top 10 most abundant PET clusters that mapped to
-well-characterized known genes. Over 99% of PETs represented
-full-length transcripts, and the majority fell within 10 bp of the
-known 5' and 3' boundaries of these transcripts.  We further verified
-the PET mapping by confirming the existence of physical cDNA clones
-represented by the ditags. We designed PCR primers based on the PET
-sequences, amplified the corresponding cDNA inserts from the parental
-GIS flcDNA library for sequencing analysis. In a set of 86
+To assess overall PET quality and mapping specificity, the top ten most 
+abundant PET clusters that mapped to well-characterized known genes were
+examined. Over 99% of the PETs represented full-length transcripts, and the 
+majority fell within ten bp of the known 5' and 3' boundaries of these 
+transcripts. The PET mapping was further verified by confirming the existence 
+of physical cDNA clones represented by the ditags. PCR primers were designed
+based on the PET sequences and amplified the corresponding cDNA inserts from 
+the parental GIS flcDNA library for sequencing analysis. In a set of 86
 arbitrarily-selected PETs representing a wide range of annotation
-categories, including known genes (38 PETs), predicted genes (2 PETs),
-and novel transcripts (46 PETs) examined, 84 (97.7%) were confirmed
-the existence of bona fide transcripts.
-</P>
+categories -- including known genes (38 PETs), predicted genes (2 PETs),
+and novel transcripts (46 PETs) -- 84 (97.7%) confirmed
+the existence of bona fide transcripts. </P>
  
 <H2>Credits</H2>
 <P>
-The GIS-PET libraries and sequence data for transcriptome analysis
-were produced at the Genome Institute of Singapore. The data were
+The GIS-PET libraries and sequence data for transcriptome analysis were 
+produced at the 
+<A HREF="http://www.gis.a-star.edu.sg/homepage/default.jsp"
+TARGET=_blank>Genome Institute of Singapore</A>. The data were
 mapped and analyzed by scientists from the Genome Institute of
-Singapore and the Bioinformatics Institute, Singapore.
-</P>
+Singapore and the 
+<A HREF="http://www.bii-sg.org/" TARGET=_blank>Bioinformatics Institute of 
+Singapore</A>.</P>
  
 <H2>References</H2>
- Ng, P. et al.
-Gene identification signature (GIS) analysis for transcriptome 
-characterization and genome annotation.
-<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15782207&query_hl=1" TARGET=_BLANK>Nature Methods 2, 
-105-111 (2005)</A>.
- 
+<P>
+Ng, P. <em>et al</em>.
+<A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15782207&query_hl=1" 
+TARGET=_blank>Gene identification signature (GIS) analysis for transcriptome 
+characterization and genome annotation</A>.
+<em>Nat. Methods</em> <B>2</B>(2), 93-4 (2005).</P>
