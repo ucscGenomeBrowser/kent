@@ -516,11 +516,14 @@ hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandsca
 # using the Floyd-Warshall dynamic programming algorithm.
 # These .tab files are from Josh Stuart /cluster/home/jstuart/Data/Interaction/P2P/{Worm,Fly,Yeast}/Compendium/data.tab
 # I have also deposited copies of the .tab files used in /cluster/data/$db/p2p/
+# added entries to hgNearData/$species/{orderDb,columbDb}.ra
+# added hgNearData/$species/p2p.html
+# added hgNearData/p2p.html
 #  
-#yeast:
+#yeast: (1.5 hours for about 5000 genes, 24452 edges)
 hgNetDist yeastP2P.tab sacCer1 yeastP2P -threshold=3
  
-#fly:
+#fly: (3 hours for about 6500 genes, 19993 edges)
 # The temporary table bdgpGeneFb2Bdgp was constructed just for fly from this sql command:
 # create table bdgpGeneFb2Bdgp as
 # select flyBaseId, name bdgpName from bdgpGene a, bdgpGeneInfo b
@@ -528,7 +531,7 @@ hgNetDist yeastP2P.tab sacCer1 yeastP2P -threshold=3
 #
 hgNetDist flytest.tab dm1 flyP2P -threshold=2 -sqlRemap="select flyBaseId, bdgpName from bdgpGeneFb2Bdgp"
  
-#worm:
+#worm: (15 minutes for about 2514 genes, 3871 edges - interaction data available is small)
 hgNetDist wormP2P.tab ce2 wormP2P -threshold=2
  
 
