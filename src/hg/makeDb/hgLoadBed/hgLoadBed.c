@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.34 2005/06/01 18:02:48 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.35 2005/06/04 03:59:05 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -19,6 +19,9 @@ boolean hasBin = FALSE;		/* Input bed file includes bin. */
 boolean strictTab = FALSE;	/* Separate on tabs. */
 boolean oldTable = FALSE;	/* Don't redo table. */
 boolean noLoad = FALSE;		/* Do not load DB or remove tab file */
+boolean itemRgb = TRUE;		/* parse field nine as r,g,b when commas seen */
+boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
+boolean strict = FALSE;		/* do sanity checks on chrom start,end */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 
@@ -34,6 +37,8 @@ static struct optionSpec optionSpecs[] = {
     {"hasBin", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
+    {"notItemRgb", OPTION_BOOLEAN},
+    {"strict", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -54,9 +59,13 @@ errAbort(
   "   -tab  Separate by tabs rather than space\n"
   "   -hasBin   Input bed file starts with a bin field.\n"
   "   -noLoad  - Do not load database and do not clean up tab files\n"
+  "   -notItemRgb  - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
-  "               - and it must be the last column of the input file."
+  "               - and it must be the last column of the input file.\n"
+  "   -strict  - do sanity testing,\n"
+  "            - issue warnings when: chromStart >= chromEnd\n"
+  "   -verbose=N - verbose level for extra information to STDERR"
   );
 }
 
@@ -149,6 +158,12 @@ for (bed = bedList; bed != NULL; bed = bed->next)
     {
     if (!noBin)
         fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
+    if (strict)
+	if (bed->chromStart >= bed->chromEnd)
+	    {
+	    verbose(1,"WARNING: start >= end: %s\n", bed->line);
+	    continue;
+	    }
     if (strictTab)
 	wordCount = chopTabs(bed->line, words);
     else
@@ -157,7 +172,7 @@ for (bed = bedList; bed != NULL; bed = bed->next)
         {
 	/*	new definition for old "reserved" field, now itemRgb */
 	/*	and when itemRgb, it is a comma separated string r,g,b */
-	if (i == 8)
+	if (itemRgb && (i == 8))
 	    {
 	    char *comma;
 	    /*  Allow comma separated list of rgb values here   */
@@ -354,6 +369,9 @@ sqlTable = optionVal("sqlTable", sqlTable);
 hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 bedGraph = optionInt("bedGraph",0);
+notItemRgb = optionExists("notItemRgb");
+if (notItemRgb) itemRgb = FALSE;
+strict = optionExists("strict");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
