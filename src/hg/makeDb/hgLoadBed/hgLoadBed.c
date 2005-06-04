@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.35 2005/06/04 03:59:05 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.36 2005/06/04 06:42:21 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -156,14 +156,14 @@ char *words[64];
 int i, wordCount;
 for (bed = bedList; bed != NULL; bed = bed->next)
     {
-    if (!noBin)
-        fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
     if (strict)
 	if (bed->chromStart >= bed->chromEnd)
 	    {
 	    verbose(1,"WARNING: start >= end: %s\n", bed->line);
 	    continue;
 	    }
+    if (!noBin)
+        fprintf(f, "%u\t", hFindBin(bed->chromStart, bed->chromEnd));
     if (strictTab)
 	wordCount = chopTabs(bed->line, words);
     else
