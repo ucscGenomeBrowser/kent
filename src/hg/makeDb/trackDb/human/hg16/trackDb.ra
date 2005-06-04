@@ -1907,6 +1907,83 @@ longLabel Ludwig Institute ChIP/Chip (MeH3K4 ab, IMR90 cells)
 priority 10
 color 109,51,43
 
+track encodeYaleChIPSTAT1Sig
+compositeTrack on
+shortLabel Yale ChIP Sig
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, Signal)
+group encode
+priority 33.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 200,50,50
+altColor 50,50,200
+maxHeightPixels 128:16:16
+minLimit -1.0e-06
+maxLimit 1.0e-04
+
+track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP 36-36
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, Signal
+priority 1
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP 50-38
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, Signal
+priority 2
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP 50-50
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, Signal
+priority 3
+
+track encodeYaleChIPSTAT1HeLaBingRenSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP BingRen
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing,Ren Signal
+priority 4
+
+track encodeYaleChIPSTAT1Pval
+compositeTrack on
+shortLabel Yale ChIP Pval
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, p-Values)
+group encode
+priority 33.2
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+color 50,50,200
+minLimit 0
+maxLimit 18.2
+
+track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pV36-36
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, p-Values
+priority 1
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pV50-38
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, p-Values
+priority 2
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pV50-50
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, p-Values
+priority 3
+
+track encodeYaleChIPSTAT1HeLaBingRenPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pVBingRen
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing,Ren p-Values
+priority 4
+
 track encodeUcsdChipRnap
 release beta
 compositeTrack on
