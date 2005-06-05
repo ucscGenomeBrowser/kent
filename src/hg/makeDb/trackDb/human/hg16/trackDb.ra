@@ -2039,6 +2039,187 @@ longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, p-Values
 priority 4
 color 50,50,200
 
+track encodeYaleAffyNeutRNATransMap
+compositeTrack on
+shortLabel Yale ChIP TranMap
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map
+group encode
+priority 33.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -2730
+maxLimit 3394
+viewLimits -25:25
+autoScale Off
+
+track encodeYaleAffyNeutRNATransMapAll
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM Summary
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, summary
+priority 1
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap01
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 1
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 1
+priority 2
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap02
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 2
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 2
+priority 3
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap03
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 3
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 3
+priority 4
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap04
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 4
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 4
+priority 5
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap05
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 5
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 5
+priority 6
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap06
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 6
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 6
+priority 7
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap07
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 7
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 7
+priority 8
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap08
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 8
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 8
+priority 9
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap09
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 9
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 9
+priority 10
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap10
+subTrack encodeYaleAffyNeutRNATransMap
+shortLabel Yale ChIP TM 10
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcript Map, sample 10
+priority 11
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATars
+compositeTrack on
+shortLabel Yale ChIP TARs
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Regions (TARs)
+group encode
+priority 33.4
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+color 128,128,0
+altColor 0,128,128
+
+track encodeYaleAffyNeutRNATarsAll
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR Summary
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region (TAR), summary
+priority 1
+
+track encodeYaleAffyNeutRNATars01
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 1
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 1
+priority 2
+
+track encodeYaleAffyNeutRNATars02
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 2
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 2
+priority 3
+
+track encodeYaleAffyNeutRNATars03
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 3
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 3
+priority 4
+
+track encodeYaleAffyNeutRNATars04
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 4
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 4
+priority 5
+
+track encodeYaleAffyNeutRNATars05
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 5
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 5
+priority 6
+
+track encodeYaleAffyNeutRNATars06
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 6
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 6
+priority 7
+
+track encodeYaleAffyNeutRNATars07
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 7
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 7
+priority 8
+
+track encodeYaleAffyNeutRNATars08
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 8
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 8
+priority 9
+
+track encodeYaleAffyNeutRNATars09
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 9
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 9
+priority 10
+
+track encodeYaleAffyNeutRNATars10
+subTrack encodeYaleAffyNeutRNATars
+shortLabel Yale ChIP TAR 10
+longLabel Yale ChIP/Chip, Affymetrix Neutrophil RNA Transcriptionally Active Region, sample 10
+priority 11
+
 track encodeUcsdChipRnap
 release beta
 compositeTrack on
