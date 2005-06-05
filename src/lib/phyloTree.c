@@ -185,7 +185,7 @@ void phyloMarkUpTree(struct phyloTree *tree)
 
 char *phyloFindPath(struct phyloTree *tree, char *ref, char *cross)
 /* find the shortest path from ref to cross (returns a list
- * of the node names separated by spaces */
+ * of the node names separated by spaces) */
 {
 struct phyloTree *treeRef, *treeCross, *parent;
 struct dyString *ds = newDyString(0);
@@ -201,13 +201,12 @@ phyloMarkUpTree(treeCross);
 if ((parent = phyloFindMarkUpTree(treeRef)) == NULL)
     return NULL;
 
-dyStringAppendN(ds, treeRef->ident->name, strlen(treeRef->ident->name));
-
 /* walk up the tree till we hit the common parent */
 while(treeRef != parent)
     {
     treeRef = treeRef->parent;
-    dyStringAppendC(ds, ' ');
+    if (ds->stringSize)
+	dyStringAppendC(ds, ' ');
     if (treeRef->ident->name)
 	dyStringAppendN(ds, treeRef->ident->name, strlen(treeRef->ident->name));
     }
