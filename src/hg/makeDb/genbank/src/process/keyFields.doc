@@ -53,4 +53,9 @@ rsc - RefSeq completeness from comment.
         incmpl3 = incomplete on the 3' end.
         part    = not full length.
         unk     = unknown
-rsd - space seperated list of accessions that a RefSeq was derived from.
+rsd - space separated list of accessions that a RefSeq was derived from.
+translExcept - space-seperated list of /transl_except= values.
+    - selenocysteine example: pos:275..277,aa:Sec 
+    - non-AUG starts example: pos:307..309,aa:Met
+exception - space separated list /exception= values, with spaces in
+    individual values replaces by '_'.

@@ -850,3 +850,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - gbDbload should contain orgCat as well, otherwise, adding a new orgCat
   may not be detected as out-of-date.
+
+- should be able to have a lift with only some of the chroms.
