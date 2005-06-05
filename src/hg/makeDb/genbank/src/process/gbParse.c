@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.11 2005/06/05 14:05:44 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.12 2005/06/05 18:55:12 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -302,6 +302,9 @@ slAddTail(&c1->children, c2);
 c2 = newField("/exception", "exception", GBF_MULTI_VAL|GBF_SUB_SPACE, 128); 
 slAddTail(&c1->children, c2);
 
+c2 = newField("/selenocysteine", "selenocysteine", GBF_BOOLEAN, 32); 
+slAddTail(&c1->children, c2);
+
 /* for refseq, we parse data stuff into comment. */
 gbRefSeqStatusField = newField("refSeqStatus", "rss", GBF_NONE, 128);
 gbRefSeqRoot = gbRefSeqStatusField;
@@ -488,7 +491,7 @@ while (lineFileNext(lf, &line, &lineSize))
             if (s == NULL)
                 {
                 if (gbf->flags & GBF_BOOLEAN)
-                    dyStringAppend(gbf->val, "true");
+                    dyStringAppend(gbf->val, "yes");
                 }
             else
                 readOneField(s, lf, gbf, subIndent);

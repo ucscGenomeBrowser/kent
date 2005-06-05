@@ -39,6 +39,7 @@ rss - RefSeq status:
         inf = inferred
         mod = model
         unk = unknown, has RefSeq accession, but no status.
+cur - set to "yes" for reviewed RefSeqs
 prt - Protein product accession and version.
 prs - protein product sequence size.
 pfo - protein product fasta offset
@@ -59,3 +60,4 @@ translExcept - space-seperated list of /transl_except= values.
     - non-AUG starts example: pos:307..309,aa:Met
 exception - space separated list /exception= values, with spaces in
     individual values replaces by '_'.
+selenocysteine - set to "yes" if the /selenocysteine attribute is specified.
