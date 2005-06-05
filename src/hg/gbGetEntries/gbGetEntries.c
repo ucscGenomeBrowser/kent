@@ -4,8 +4,9 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: gbGetEntries.c,v 1.4 2005/04/18 20:32:50 markd Exp $";
+static char const rcsid[] = "$Id: gbGetEntries.c,v 1.5 2005/06/05 04:29:55 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -126,13 +127,20 @@ if (accHel != NULL)
 
 }
 
+static void addAcc(struct hash *accTbl, char *acc)
+/* add an accession to a table, make sure it's only stored once */
+{
+struct hashEl *hel = hashStore(accTbl, acc);
+hel->val = (void*)FALSE;
+}
+
 void loadAccs(char *accFile, struct hash *accTbl)
 /* load accessions from a file */
 {
 struct lineFile *lf = lineFileOpen(accFile, TRUE);
 char *line;
 while (lineFileNextReal(lf, &line))
-    hashAdd(accTbl, line, (void*)FALSE);
+    addAcc(accTbl, trimSpaces(line));
 
 lineFileClose(&lf);
 }
@@ -170,7 +178,7 @@ int i;
 if (accFile != NULL)
     loadAccs(accFile, accTbl);
 for (i = 0; i < accCount; i++)
-    hashAdd(accTbl, accNames[i], (void*)FALSE);
+    addAcc(accTbl, accNames[i]);
 
 /* process file */
 lf = lineFileOpen(gbFile, TRUE);

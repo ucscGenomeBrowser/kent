@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 all:
 
 test: noVerCmdTest noVerFileTest noVerMissingTest noVerMissingOkTest \
-	verCmdTest verFileTest verMissingTest verMissingOkTest
+	verCmdTest verFileTest verMissingTest verMissingOkTest accDupTest
 
 # test no version on cmdline
 noVerCmdTest: mkdirs
@@ -48,10 +48,15 @@ verMissingTest: mkdirs
 	(wc output/$@.gbff && fgrep VERSION output/$@.gbff) >>output/$@.info
 	diff -u expected/$@.info output/$@.info
 
-
 # test version, one missing, missing ok
 verMissingOkTest: mkdirs
 	gbGetEntries -missingOk input/test.gbff NM_009304 NM_004666 >output/$@.gbff
+	(wc output/$@.gbff && fgrep VERSION output/$@.gbff) >output/$@.info
+	diff -u expected/$@.info output/$@.info
+
+# test that duplicate entries in acc file are 
+accDupTest: mkdirs
+	gbGetEntries -accFile=input/dup.acc input/test.gbff >output/$@.gbff
 	(wc output/$@.gbff && fgrep VERSION output/$@.gbff) >output/$@.info
 	diff -u expected/$@.info output/$@.info
 
