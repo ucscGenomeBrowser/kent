@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.50 2005/06/03 00:13:33 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.51 2005/06/05 20:14:04 braney Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5474,6 +5474,65 @@ SEQ2_LEN=$BASE/S2.len
     HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainMm5Link
     #	1020106336 bases of 2866216770 (35.591%) in intersection
 
+####  Blat knownGene proteins to determine exons (braney 2005-05-20 DONE)
+    ssh hgwdev
+    cd /cluster/data/mm6/bed
+    mkdir blat.mm6KG.2005-05-02
+    rm blat.mm6KG
+    ln -s  blat.mm6KG.2005-05-02 blat.mm6KG
+    cd blat.mm6KG
+    pepPredToFa mm6 knownGenePep known.fa
+    hgPepPred mm6 generic blastKGPep03 known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    ssh kk
+    cd /cluster/data/mm6/bed/blat.mm6KG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /panasas/store/mm6/nib/*.nib > mouse.lst
+    mkdir kgfa
+    cd kgfa
+    faSplit sequence ../known.fa 3000 kg
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    gensub2 mouse.lst kg.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../mouse.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+
+# Completed: 115720 of 115720 jobs
+# CPU time in finished jobs:   14938417s  248973.62m  4149.56h  172.90d  0.474 y
+# IO & Wait Time:               2116275s   35271.25m   587.85h   24.49d  0.067 y
+# Average job time:                 147s       2.46m     0.04h    0.00d
+# Longest finished job:            9235s     153.92m     2.57h    0.11d
+# Submission to last job:         25264s     421.07m     7.02h    0.29d
+
+    ssh eieio
+    cd /cluster/data/mm6/bed/blat.mm6KG
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslUniq cooked.psl mm6KG.psl
+    pslxToFa mm6KG.psl mm6KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+
+    ssh hgwdev
+    kgName mm6 mm6KG.psl blastKGRef03
+    hgsql mm6 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastKGRef03" | hgsql mm6
+    echo "load data local infile 'blastKGRef03' into table blastKGRef03" | hgsql mm6
 
 # LOAD GENEID GENES (DONE 5/16/05 angie)
     mkdir -p /cluster/data/mm6/bed/geneid/download
