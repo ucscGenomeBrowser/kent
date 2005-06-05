@@ -105,7 +105,7 @@ void kgName(char *database, char *protDb, char *refPsl,  char *outAssoc)
 /* kgName - builds association table between knownPep and gene common name. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct sqlConnection *conn2 = sqlConnect("swissProt");
+struct sqlConnection *conn2 = sqlConnect("uniProt");
 char *words[1], **row;
 FILE *f = mustOpen(outAssoc, "w");
 int count = 0, found = 0;
