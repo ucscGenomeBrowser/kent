@@ -8,35 +8,37 @@ L = -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-test:   hardTest.as  newTest.as  polyTest.as  mainTest.as \
+# .as not used as dependencies, as we want to run everything each time
+test:   hardTest  newTest  polyTest  mainTest \
         testHarness dbLinkTest
 
 # hardTest
-hardTest.as: mkout
+hardTest: mkout
 	${AUTOSQL} input/hardTest.as output/hardTest
-	${DIFF} output/hardTest.sql expected/hardTest.sql
-	${DIFF} output/hardTest.h   expected/hardTest.h
-	${DIFF} output/hardTest.c   expected/hardTest.c
+	${DIFF} expected/hardTest.sql output/hardTest.sql
+	${DIFF} expected/hardTest.h   output/hardTest.h  
+	${DIFF} expected/hardTest.c   output/hardTest.c  
 
 # newTest
-newTest.as: mkout
-	${AUTOSQL} -dbLink input/newTest.as output/newTest
-	${DIFF} output/newTest.sql expected/newTest.sql
-	${DIFF} output/newTest.h   expected/newTest.h
-	${DIFF} output/newTest.c   expected/newTest.c
+newTest: mkout
+	${AUTOSQL} -dbLink input/newTest.as output/newTest 2>output/newTest.err
+	${DIFF} expected/newTest.sql output/newTest.sql
+	${DIFF} expected/newTest.h   output/newTest.h  
+	${DIFF} expected/newTest.c   output/newTest.c  
+	${DIFF} expected/newTest.err   output/newTest.err
 	sed -e "s/output\\///" output/newTest.c > newTest.c
 	sed -e "s/OUTPUT\\///" output/newTest.h > newTest.h
 	cp output/newTest.sql .
 
 # polyTest
-polyTest.as: mkout
+polyTest: mkout
 	${AUTOSQL} input/polyTest.as output/polyTest
 	${DIFF} output/polyTest.sql expected/polyTest.sql
 	${DIFF} output/polyTest.h   expected/polyTest.h
 	${DIFF} output/polyTest.c   expected/polyTest.c
 
 # test
-mainTest.as: mkout
+mainTest: mkout
 	${AUTOSQL} input/mainTest.as output/mainTest
 	${DIFF} output/mainTest.sql expected/mainTest.sql
 	${DIFF} output/mainTest.h   expected/mainTest.h
@@ -50,7 +52,7 @@ testHarness: mainTest.o testHarness.o
 	./testHarness > output/testHarness.out
 	${DIFF} output/testHarness.out expected/testHarness.out
 
-mainTest.c: mainTest.as
+mainTest.c: mainTest
 
 # dbLinkTest:
 dbLinkTest:  newTest.o dbLinkTest.o
@@ -58,7 +60,7 @@ dbLinkTest:  newTest.o dbLinkTest.o
 	./dbLinkTest >& output/dbLinkTest.out
 	${DIFF} output/dbLinkTest.out expected/dbLinkTest.out
 
-newTest.c: newTest.as
+newTest.c: newTest
 
 mkout:
 	@${MKDIR} output
