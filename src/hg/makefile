@@ -84,15 +84,24 @@ clean_utils::
 
 test::	hgLib
 	cd lib && ${MAKE} test
+	cd autoSql && ${MAKE} test
 	cd blastToPsl && ${MAKE} test
+	cd checkTableCoords && ${MAKE} test
 	cd embossToPsl && ${MAKE} test
-	cd geneBounds && ${MAKE} test
+	cd gbGetEntries && ${MAKE} test
 	cd hgGetAnn && ${MAKE} test
-	cd liftUp && ${MAKE} test
+	#cd liftOver && ${MAKE} test
 	cd mrnaToGene && ${MAKE} test
 	cd overlapSelect && ${MAKE} test
+	cd pslCDnaFilter && ${MAKE} test
 	cd pslDiff && ${MAKE} test
+	cd pslFlip && ${MAKE} test
+	cd pslHisto && ${MAKE} test
 	cd pslMap && ${MAKE} test
+	cd pslSelect && ${MAKE} test
+	cd pslStats && ${MAKE} test
+	cd pslSwap && ${MAKE} test
+	#cd scaffoldFaToAgp && ${MAKE} test
 	cd spideyToPsl && ${MAKE} test
 
 UTIL_DIRS = \
