@@ -11016,3 +11016,13 @@ echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
 
+##########################################################################
+# CNPs from Wash U (In progress, Heather, June 2005)
+# data from http://humanparalogy.gs.washington.edu/structuralvariation
+
+ssh hgwdev
+cd /cluster/data/hg16/bed
+mkdir cnp
+cd cnp
+cp dupArray.txt cnpSharp.bed
+hgLoadBed hg16 cnpSharp -tab -sqlTable=cnpSharp.sql cnpSharp.bed
