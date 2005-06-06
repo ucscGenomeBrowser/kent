@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.153 2005/06/02 06:56:42 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.154 2005/06/06 20:20:10 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1902,8 +1902,6 @@ else if (cartVarExists(cart, customUploadDoName))
     doCustomUpload(conn, colList); 
 else if (cartVarExists(cart, customFromUrlDoName))
     doCustomFromUrl(conn, colList);
-else if (cartVarExists(cart, expVertLblClear))
-    expVertLabelClear();
 else if (cartVarExists(cart, orderInfoDoName))
     doOrderInfo(conn);
 else if (cartVarExists(cart, affineAliVarName))
