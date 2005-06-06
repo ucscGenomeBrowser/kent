@@ -2378,7 +2378,7 @@ color 58,119,40
 
 track encodeUcsdNgChip
 compositeTrack on
-shortLabel LI/Ng TAF1 IMR90
+shortLabel LI Ng TAF1 IMR90
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) on Nimblegen Chip
 group encode
 priority 30.25
@@ -2390,7 +2390,7 @@ autoScale off
 
 track encodeUcsdNgChipSignal
 subTrack encodeUcsdNgChip
-shortLabel LI/Ng TAF1 IMR90
+shortLabel LI Ng TAF1 IMR90
 longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) on Nimblegen Chip
 priority 1
 
@@ -2414,7 +2414,7 @@ priority 3
 
 track encodeUcsdNgValChip
 compositeTrack on
-shortLabel LI/Ng Validation
+shortLabel LI Ng Validation
 longLabel Ludwig Institute ChIP/Chip Validation (IMR90 cells)
 group encode
 priority 30.26
@@ -2428,20 +2428,20 @@ autoScale off
 
 track encodeUcsdNgValChipH3ac
 subTrack encodeUcsdNgValChip
-shortLabel LI/Ng Val H3ac
+shortLabel LI Ng Val H3ac
 longLabel Ludwig Institute ChIP/Chip Validation (H3ac antibody, IMR90 cells)
 priority 1
 
 track encodeUcsdNgValChipH3K4me
 subTrack encodeUcsdNgValChip
-shortLabel LI/Ng Val H3K4me
+shortLabel LI Ng Val H3K4me
 longLabel Ludwig Institute ChIP/Chip Validation (H3K4me antibody, IMR90 cells)
 priority 2
 color 0,63,135
 
 track encodeUcsdNgValChipRnap
 subTrack encodeUcsdNgValChip
-shortLabel LI/Ng Val Pol2
+shortLabel LI Ng Val Pol2
 longLabel Ludwig Institute ChIP/Chip Validation (Pol2 antibody, IMR90 cells)
 priority 3
 color 109,51,43
