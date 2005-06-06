@@ -2975,20 +2975,6 @@ maxHeightPixels 128:40:16
 minLimit 0
 maxLimit 75
 
-track encode_Stanford_Promoters
-shortLabel Promoter/Stanford
-longLabel Stanford Promoter Activity 
-group encode
-priority 20.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type expRatio
-expTable encode_Stanford_PromotersExps
-expScale 999
-expStep 100
-expColorDense On
-chip x
-
 track cnpSharp
 shortLabel CNPs (Sharp) 
 longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp lab)
@@ -3003,11 +2989,5 @@ searchType bed
 termRegex 500bp_[0-9]+_[0-9]+
 searchMethod exact
 searchPriority 50.1
-
-searchTable encode_Stanford_Promoters
-searchType bed
-termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
-searchMethod exact
-searchPriority 50.2
 
 
