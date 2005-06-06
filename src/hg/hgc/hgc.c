@@ -170,7 +170,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.899 2005/06/02 19:18:07 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.900 2005/06/06 04:01:13 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -572,7 +572,7 @@ printf("%s:%d-%d</A><BR>\n", chrom, start+1, end);
 printBand(chrom, start, end, FALSE);
 printf("<B>Genomic Size:</B> %d<BR>\n", end - start);
 if (strand != NULL)
-    printf("<B>Strand:</B> %s<BR>\n", item);
+    printf("<B>Strand:</B> %s<BR>\n", strand);
 else
     strand = "?";
 if (featDna)
@@ -1774,8 +1774,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
            if ((row = sqlNextRow(sr)) != NULL)
               printf("<b>Prediction Class:</b> %s<br>\n", row[0]);
            }
-        }
-    }
+        } }
 genePredFreeList(&gpList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
