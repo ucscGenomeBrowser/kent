@@ -788,6 +788,10 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.affyGnfU74BDistance.target
     $kgDb.affyGnfU74CDistance.query
     $kgDb.affyGnfU74CDistance.target
+    $kgDb.humanNormalDistance.query
+    $kgDb.humanNormalDistance.target
+    $kgDb.mouseLandscapeDistance.query
+    $kgDb.mouseLandscapeDistance.target
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
@@ -1605,9 +1609,11 @@ type exprBed
 type expDistance
     $hg.gnfAtlas2Distance
     $hg.gnfU95Distance
+    $hg.humanNormalDistance
     $mm.affyGnfU74ADistance
     $mm.affyGnfU74BDistance
     $mm.affyGnfU74CDistance
+    $mm.mouseLandscapeDistance
     $hg.knownGnfDistance
     $ce.kimExpDistance
     $dm.arbExpDistance
