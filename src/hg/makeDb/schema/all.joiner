@@ -1355,6 +1355,7 @@ identifier extFileId
     hg17.multiz8way.extFile
     $sacCer.multizYeast.extFile
     $dm.multiz8way.extFile
+    $dm.multiz9way.extFile
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
     $dm.d_yakuba_mypa.extFile
@@ -1773,6 +1774,8 @@ tablesIgnored $dm
     fbRole
     flyreg
     flyreg2
+    phastCons9way
+    phastConsElements9way
 
 tablesIgnored $fr
     chr%_gold
