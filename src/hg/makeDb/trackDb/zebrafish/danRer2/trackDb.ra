@@ -71,7 +71,7 @@ shortLabel 6-Way Conservation
 longLabel 6-Way Vertebrate Multiz Alignment & Conservation
 group compGeno
 priority 104
-visibility hide
+visibility full
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -90,12 +90,42 @@ shortLabel $o_Organism Proteins
 longLabel $o_Organism ($o_date/$o_db) proteins mapped by chained tBLASTn
 group compGeno
 priority 124
-visibility pack
+visibility squish
 colorChromDefault off
 type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 otherDb hg17
+
+track tigrGeneIndex
+shortLabel TIGR Gene Index
+longLabel Alignment of TIGR Gene Index TCs Against the $Organism Genome
+group rna
+priority 68
+visibility squish
+color 100,0,0
+type genePred
+autoTranslate 0
+url http://www.tigr.org/tigr-scripts/tgi/tc_report.pl?$$
+
+track refGene
+shortLabel RefSeq Genes
+longLabel RefSeq Genes
+group genes
+priority 35
+visibility pack 
+color 12,12,120
+type genePred refPep refMrna
+
+track phastConsElements
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility dense
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 searchTable ctgPos2
 searchMethod exact
