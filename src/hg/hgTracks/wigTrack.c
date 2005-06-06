@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.68 2005/05/03 01:55:22 sugnet Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.69 2005/06/06 23:07:46 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -820,10 +820,12 @@ for (x1 = 0; x1 < width; ++x1)
 	    }	/*	vis == tvFull	*/
 	else if (vis == tvDense)
 	    {
-	    double dataValue;
+	    double grayValue;
 	    int grayIndex;
-	    dataValue = preDraw[preDrawIndex].smooth - graphLowerLimit;
-	    grayIndex = (dataValue/graphRange) * MAX_WIG_VALUE;
+	    /* honor the viewLimits, data below is white, data above is black */
+	    grayValue = max(dataValue,graphLowerLimit);
+	    grayValue = min(grayValue,graphUpperLimit);
+	    grayIndex = ((grayValue-graphLowerLimit)/graphRange)*MAX_WIG_VALUE;
 
 	    drawColor =
 		tg->colorShades[grayInRange(grayIndex, 0, MAX_WIG_VALUE)];
@@ -953,9 +955,6 @@ Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 wigCart = (struct wigCartOptions *) tg->extraUiData;
 
 currentFile[0] = '\0';
-
-if(trackDbSetting(tg->tdb, "wigColorBy") != NULL)
-    wigCart->colorTrack = trackDbSetting(tg->tdb, "wigColorBy");
 
 if (pixelsPerBase > 0.0)
     basesPerPixel = 1.0 / pixelsPerBase;
@@ -1347,6 +1346,9 @@ wigCart->yLineOnOff = wigFetchYLineMark(tdb, (char **) NULL);
 wigCart->maxHeight = maxHeight;
 wigCart->defaultHeight = defaultHeight;
 wigCart->minHeight = minHeight;
+
+if(trackDbSetting(tdb, "wigColorBy") != NULL)
+    wigCart->colorTrack = trackDbSetting(tdb, "wigColorBy");
 
 wigFetchMinMaxY(tdb, &minY, &maxY, &tDbMinY, &tDbMaxY, wordCount, words);
 track->minRange = minY;
