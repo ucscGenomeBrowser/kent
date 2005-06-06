@@ -3601,7 +3601,7 @@ maxLimit 75
 
 track cnpSharp
 shortLabel CNPs (Sharp) 
-longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp lab)
+longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp)
 group varRep
 priority 146
 visibility dense
@@ -3609,12 +3609,19 @@ type bed 4 +
 
 track cnpIafrate
 shortLabel CNPs (Iafrate) 
-longLabel Copy Number Polymorphisms from BAC microarray analysis (Iafrate lab)
+longLabel Copy Number Polymorphisms from BAC microarray analysis (Iafrate)
 group varRep
 priority 146.1
 visibility dense
 type bed 4 +
 
+track cnpSebat
+shortLabel CNPs (Sebat) 
+longLabel Copy Number Polymorphisms from ROMA (Sebat)
+group varRep
+priority 146.1
+visibility dense
+type bed 4 + 
 
 track fosmidDiscordant
 shortLabel Fosmid Discordants
@@ -3623,8 +3630,6 @@ group varRep
 priority 170
 visibility dense
 type bed 4 .
-
-
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
