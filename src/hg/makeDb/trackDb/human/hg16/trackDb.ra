@@ -2967,6 +2967,14 @@ expStep 100
 expColorDense On
 chip x
 
+track cnpSharp
+shortLabel CNPs (Sharp) 
+longLabel CNPs from BAC microarray analysis (Sharp lab)
+group varRep
+priority 146
+visibility dense
+type bed 4 +
+
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
