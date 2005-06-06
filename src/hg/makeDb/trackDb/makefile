@@ -62,7 +62,7 @@ MGC_DBS = \
 	danRer1	danRer2 \
 	xenTro1
 
-update:
+update: clean
 	@for D in *; do \
             if [ -d "$$D" ]; then \
 		if test "$$D" != "zoo" ; then \
@@ -92,7 +92,7 @@ update:
 	    fi ; \
 	done
 
-alpha:
+alpha: clean
 	${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
@@ -125,7 +125,7 @@ alpha:
 	done
 	cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
-strict:
+strict: clean
 	${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
@@ -158,7 +158,7 @@ strict:
 checkbeta:
 	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
-beta: checkbeta strict
+beta: checkbeta clean strict
 
 # This target adds trackDbLocal to the mgc-specific server.  Also
 # loads the grpMgc table.
@@ -180,4 +180,8 @@ mgc:
 		fi ; \
 	    fi ; \
 	done
+
+# Get rid of symbolic links (created by lower-level makefiles):
+clean:
+	find . -type l -exec rm {} \;
 
