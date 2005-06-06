@@ -11041,3 +11041,11 @@ hgsql hg16 < fosmidDiscordant.sql
 echo 'insert into fosmidDiscordant select bin, chrom, chromStart, chromEnd, name from fosmidDiscordantPrelim' | hgsql hg16
 echo 'drop table fosmidDiscordantPrelim' | hgsql hg16
 
+# Iafrate data
+cp Iafrate.txt cnpIafrate.bed
+hgLoadBed hg16 cnpIafrate -tab -sqlTable=cnpIafrate.sql cnpIafrate.bed
+
+# Sebat data
+cp Sebat.txt cnpSebat.bed
+hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
+
