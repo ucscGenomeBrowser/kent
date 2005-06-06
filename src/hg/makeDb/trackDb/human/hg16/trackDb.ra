@@ -2868,10 +2868,10 @@ gClass_Novel_CDS 33,91,51
 gClass_Novel_transcript_val 33,91,51
 gClass_Putative_val 33,91,51
 gClass_Antisense_val 33,91,51
-gClass_Novel_transcript 52,144,52
-gClass_TEC 52,144,52
-gClass_Putative 52,144,52
-gClass_Antisense 52,144,52
+gClass_Novel_transcript  84,188,0
+gClass_TEC  84,188,0
+gClass_Putative  84,188,0
+gClass_Antisense  84,188,0
 gClass_Artifact 163,168,163
 gClass_Processed_pseudogene 0,91,191
 gClass_Unprocessed_pseudogene 0,91,191
