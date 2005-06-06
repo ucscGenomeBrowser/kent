@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.26 2005/06/02 16:49:30 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.27 2005/06/06 21:44:19 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -122,8 +122,16 @@ for (td = tdList; td != NULL; td = tdNext)
     char *rel;
     tdNext = td->next;
     if ((rel = trackDbSetting(td, "release")) != NULL)
+        {
         if (differentString(rel, release))
            slRemoveEl(&tdList, td);
+        else
+            /* remove release setting from trackDb entry -- there
+             * should only be a single entry for the track, so 
+             * the release setting is no longer relevant (and it
+             * confuses Q/A */
+        hashRemove(td->settingsHash, "release")
+        }
     }
 
 for (td = tdList; td != NULL; td = tdNext)
