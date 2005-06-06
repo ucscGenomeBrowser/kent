@@ -2070,7 +2070,7 @@ color 50,50,200
 track encodeYaleAffyRNATransMap
 compositeTrack on
 shortLabel Yale RNA TranMap
-longLabel Yale Neutrophil RNA Transcript Map
+longLabel Yale RNA Transcript Map, Neutrophil, Placenta and NB4 cell types
 group encode
 priority 33.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2178,7 +2178,7 @@ altColor 50,50,127
 
 track encodeYaleAffyNB4RARNATransMap
 subTrack encodeYaleAffyRNATransMap
-shortLabel Yale NB4 TM
+shortLabel Yale NB4 RA TM
 longLabel Yale NB4 RNA Transcript Map, treated with retinoic acid
 priority 13
 color 127,50,50
@@ -2186,7 +2186,7 @@ altColor 50,50,127
 
 track encodeYaleAffyNB4TPARNATransMap
 subTrack encodeYaleAffyRNATransMap
-shortLabel Yale NB4 TM
+shortLabel Yale NB4 TPA TM
 longLabel Yale NB4 RNA Transcript Map, treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
 priority 13
 color 127,50,50
@@ -2194,7 +2194,7 @@ altColor 50,50,127
 
 track encodeYaleAffyNB4UntrRNATransMap
 subTrack encodeYaleAffyRNATransMap
-shortLabel Yale NB4 TM
+shortLabel Yale NB4 Un TM
 longLabel Yale NB4 RNA Transcript Map, Untreated
 priority 14
 color 127,50,50
