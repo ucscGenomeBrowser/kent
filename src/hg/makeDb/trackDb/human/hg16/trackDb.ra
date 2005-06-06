@@ -2286,6 +2286,24 @@ shortLabel Yale Placenta RNA
 longLabel Yale Placenta RNA Transcriptionally Active Region (TAR), summary
 priority 12
 
+track encodeYaleAffyNB4RARNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale NB4 RA RNA TAR
+longLabel Yale NB4 RNA, TAR, treated with retinoic acid
+priority 13
+
+track encodeYaleAffyNB4TPARNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale NB4 TPA RNA TAR
+longLabel Yale NB4 RNA, TAR, treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+priority 14
+
+track encodeYaleAffyNB4UntrRNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale NB4 Un RNA TAR
+longLabel Yale NB4 RNA, TAR, Untreated
+priority 15
+
 track encodeUcsdChipRnap
 release beta
 compositeTrack on
