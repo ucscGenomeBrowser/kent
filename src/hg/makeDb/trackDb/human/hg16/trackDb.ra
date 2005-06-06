@@ -1563,103 +1563,103 @@ exonArrowsDense on
 
 track encodeStanfordPromotersAGS
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. AGS
+shortLabel Stan Pro AGS
 longLabel Stanford Promoter Activity  (AGS cells)
 priority 1
 
 track encodeStanfordPromotersBe2C
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. Be2c
+shortLabel Stan Pro Be2c
 longLabel Stanford Promoter Activity  (Be2c cells)
 priority 2
 
 track encodeStanfordPromotersCRL1690
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. CRL1690
+shortLabel Stan Pro CRL1690
 longLabel Stanford Promoter Activity  (CRL1690 cells)
 priority 3
 
 track encodeStanfordPromotersG402
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. G402
+shortLabel Stan Pro G402
 longLabel Stanford Promoter Activity  (G402 cells)
 priority 4
 
 track encodeStanfordPromotersHCT116
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. HCT116
+shortLabel Stan Pro HCT116
 longLabel Stanford Promoter Activity  (HCT116 cells)
 priority 5
 
 track encodeStanfordPromotersHMCB
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. HMCB
+shortLabel Stan Pro HMCB
 longLabel Stanford Promoter Activity  (HMCB cells)
 priority 6
 
 track encodeStanfordPromotersHT1080
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. HT1080
+shortLabel Stan Pro HT1080
 longLabel Stanford Promoter Activity  (HT1080 cells)
 priority 7
 
 track encodeStanfordPromotersHTB11
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. HTB11
+shortLabel Stan Pro HTB11
 longLabel Stanford Promoter Activity  (HTB11 cells)
 priority 8
 
 track encodeStanfordPromotersHela
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. Hela
+shortLabel Stan Pro Hela
 longLabel Stanford Promoter Activity  (HeLa cells)
 priority 9
 
 track encodeStanfordPromotersHepG2
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. HepG2
+shortLabel Stan Pro HepG2
 longLabel Stanford Promoter Activity  (HepG2 cells)
 priority 10
 
 track encodeStanfordPromotersJEG3
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. JEG3
+shortLabel Stan Pro JEG3
 longLabel Stanford Promoter Activity  (JEG3 cells)
 priority 11
 
 track encodeStanfordPromotersMG63
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. MG63
+shortLabel Stan Pro MG63
 longLabel Stanford Promoter Activity  (MG63 cells)
 priority 12
 
 track encodeStanfordPromotersMRC5
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. MRC5
+shortLabel Stan Pro MRC5
 longLabel Stanford Promoter Activity  (MRC5 cells)
 priority 13
 
 track encodeStanfordPromotersPanc1
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. Panc1
+shortLabel Stan Pro Panc1
 longLabel Stanford Promoter Activity  (Panc1 cells)
 priority 14
 
 track encodeStanfordPromotersSnu182
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. Snu182
+shortLabel Stan Pro Snu182
 longLabel Stanford Promoter Activity  (Snu182 cells)
 priority 15
 
 track encodeStanfordPromotersU87
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. U87
+shortLabel Stan Pro U87
 longLabel Stanford Promoter Activity  (U87 cells)
 priority 16
 
 track encodeStanfordPromotersAverage
 subTrack encodeStanfordPromoters
-shortLabel Stan Pro. Average
+shortLabel Stan Pro Average
 longLabel Stanford Promoter Activity  (Average)
 priority 17
 
