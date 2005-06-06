@@ -2983,6 +2983,15 @@ priority 146
 visibility dense
 type bed 4 +
 
+track fosmidDiscordant
+shortLabel Fosmid Discordants
+longLabel Fosmid Discordants
+group varRep
+priority 170
+visibility dense
+type bed 4 +
+
+
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
