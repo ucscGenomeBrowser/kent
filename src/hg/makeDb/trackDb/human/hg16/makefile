@@ -1,19 +1,9 @@
 # Make symlinks to reused doc files, to simplify maintenance
 
-all: UCSD GENCODE
+all: UCSD
 
 clean::
 	rm -f ${UCSD_LINKS}
-
-GENCODE_LINKS = \
-        encodeGencodeGene.html \
-        encodeGencodeIntron.html
-
-GENCODE: ${GENCODE_LINKS}
-     
-encodeGencode%.html: encodeGencode.html
-	rm -f $@
-	ln -s $< $@
 
 UCSD_LINKS = \
 	encodeUcsdChipRnap.html \
