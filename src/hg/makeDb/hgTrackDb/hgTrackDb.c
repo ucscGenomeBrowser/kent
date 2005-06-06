@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.27 2005/06/06 21:44:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.28 2005/06/06 21:45:29 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,8 +58,6 @@ void addVersion(boolean strict, char *database, char *dirName, char *raName,
 /* Read in tracks from raName and add them to list/database if new. */
 {
 struct trackDb *tdList = NULL, *td, *tdNext;
-struct slName *allChroms = hAllChromNames();
-struct slName *chromPtr;
 char fileName[512];
 char *words[1];
 
@@ -130,7 +128,7 @@ for (td = tdList; td != NULL; td = tdNext)
              * should only be a single entry for the track, so 
              * the release setting is no longer relevant (and it
              * confuses Q/A */
-        hashRemove(td->settingsHash, "release")
+        hashRemove(td->settingsHash, "release");
         }
     }
 
