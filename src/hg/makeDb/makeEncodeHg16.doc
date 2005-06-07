@@ -440,9 +440,7 @@ EOF
     mkdir -p 2005-05-26
     cd 2005-05-26
     # copied files from ftp dir
-<<<<<<< makeEncodeHg16.doc
     # TODO: load as bedGraph, as above
-=======
 
     # bed format; use vi to strip header lines
     cp tmH3K4_p0.wig tmH3K4_p0.bed
@@ -457,8 +455,6 @@ EOF
     ln -s `pwd`/tmH3K4_p0.wib /gbdb/hg16/encode/UcsdChip/wib
     hgLoadWiggle hg16 encode_UCSD_ChIP_tmH3K4_p0 tmH3K4_p0.wig -pathPrefix=/gbdb/hg16/encode/UcsdChip/wib
 
->>>>>>> 1.20
-    
 
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
 #       From George Asimenos, Batzoglou lab (asimenos@stanford.edu)
@@ -1228,6 +1224,20 @@ done
       hgLoadBed -onServer -bedGraph=4 hg16 $f:t:r $f
     end
 
+<<<<<<< makeEncodeHg16.doc
+
+# TBA Alignments from Elliott Margulies (2005-06-06 kate)
+    mkdir /cluster/data/encode/TBA
+    cd /cluster/datea/encode/TBA
+    mkdir 2005-06-03
+    cd 2005-06-03
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 \
+    ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_tba/MAY-2005/
+
+
+=======
 #  REPACKAGE existing UCSD tracks into one composite
 #	DONE - 2005-06-06 - Hiram)
     #	This is merely a trackDb.ra edit, create composite track: encodeLIChIP
