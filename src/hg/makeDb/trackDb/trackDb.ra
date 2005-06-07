@@ -2158,8 +2158,23 @@ searchPriority 50
 
 searchTable vegaGene
 searchType genePred
-termRegex [^[:space:]]+
 searchPriority 50
+
+searchTable vegaPseudoGene
+searchType genePred
+searchPriority 50
+
+searchTable vegaGene
+searchName vegaGene2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 50.1
+
+searchTable vegaPseudoGene
+searchName vegaPseudoGene2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 50.1
 
 searchTable slamRat
 searchType genePred
