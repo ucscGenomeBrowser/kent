@@ -440,6 +440,9 @@ EOF
     mkdir -p 2005-05-26
     cd 2005-05-26
     # copied files from ftp dir
+<<<<<<< makeEncodeHg16.doc
+    # TODO: load as bedGraph, as above
+=======
 
     # bed format; use vi to strip header lines
     cp tmH3K4_p0.wig tmH3K4_p0.bed
@@ -454,6 +457,7 @@ EOF
     ln -s `pwd`/tmH3K4_p0.wib /gbdb/hg16/encode/UcsdChip/wib
     hgLoadWiggle hg16 encode_UCSD_ChIP_tmH3K4_p0 tmH3K4_p0.wig -pathPrefix=/gbdb/hg16/encode/UcsdChip/wib
 
+>>>>>>> 1.20
     
 
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
@@ -776,137 +780,62 @@ cat > load.csh << 'EOF'
         #chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 
 
-# GENCODE Sanger Havana annotations  (IN PROGRESS 2005-03-21 kate)
-    # Data update 2005-04-22 with all 44 regions
-    # Data update 2005-05-20
+# GENCODE Sanger Havana annotations  (2005-06-03 kate)
     ssh hgwdev
     mkdir -p /cluster/data/encode/Gencode
     cd /cluster/data/encode/Gencode
-    mkdir -p 2005-05-20
-    cd 2005-05-20
+    mkdir 2005-06-03
+    cd 2005-06-03
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
-        "ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
-#  This fetches the directories:
-#	drwxrwxr-x  2 4096 Mar  7 16:01 CHR_coord
-#	drwxrwxr-x  2 4096 Mar  7 16:02 ENCODE_coord
-#	-rw-r--r--  1 2874 Feb 10 13:44 README.txt
-#	drwxrwxr-x  4 4096 Mar  7 16:02 old
-
-    # special handling for ENm006 -- submitted in hg17 coords
-    # convert hg17 coord file to hg16 using liftOver 
-    cd CHR_coord
-    liftOver -gff ENm006_hg17_CHR_coord.gtf \
-        /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
-                ENm006_CHR_coord.mapped.gtf unmapped
-    # check coordinates and manually adjust as needed 
-    ldHgGene -gtf -genePredExt hg16 encodeGencodeENm006 ENm006_CHR_coord.mapped.gtf
-# invalid gffGroup detected on line: chrX VEGA_Known      exon    153120186      153120333        0.000000        +       .       gene_id "F8"; transcript_id "RP11-115M6.7-003"; 
-# GFF/GTF group RP11-115M6.7-003 on chrX-, this line is on chrX+, all group members must be on same seq and strand
-    # manually blat exon and CDS coords for this exon (exon-1)
-    # they map to same place as liftOver, but on - strand.
-    # edit 2 entires in the ".fixed" file to reflect this
-    ldHgGene -gtf -genePredExt hg16 encodeGencodeENm006 ENm006_CHR_coord.fixed.gtf
-    # Read 292 transcripts in 4564 lines in 1 files
-    # 292 groups 1 seqs 13 sources 3 feature types
-    # 292 gene predictions
-    checkTableCoords hg16 encodeGencodeENm006
-    # hg16.encodeGencodeENm006 has 10 records with blockStart[0] != start.
-    #hg16.encodeGencodeENm006 has 7 records with blockEnd[n-1] != end.
-    # run with -verbose=2
-    ldHgGene -gtf -genePredExt hg17 encodeGencodeENm006 ENm006_hg17_CHR_coord.gtf
-    # 293 gene predictions
-    checkTableCoords hg17 encodeGencodeENm006
-
-    # for now, load w/o ENm006
-    # load all
-    ldHgGene -gtf -genePredExt hg16 encodeGencodeGene EN????_CHR_coord.gtf
-    # 777 gene predictions
-
-    ldGencodeIntron hg16 encodeGencodeIntron EN????_CHR_coord.gtf
-    # 4023 introns in 12 files
-
-    # UPDATE 4/22/05
-    cd /cluster/data/encode/Gencode
-    mkdir 2005-04-22
-    cd 2005-04-22
-    wget --timestamping --force-directories --directory-prefix=. \
-	--dont-remove-listing --recursive --level=3 --no-parent \
-	--no-host-directories --cut-dirs=5 \
-	"ftp://genome.imim.es/pub/other/gencode/data/havana-encode/*"
-    # Downloaded: 96,693,888 bytes in 488 files
-    wc -l CHR_coord_hg17/global_files/EN*CHR_coord.gtf > entries.txt
-         # 45866 total
-    cat `ls CHR_coord_hg17/global_files/EN*coord.gtf | grep -v ENm006` > \
-        gencode.noENm006
-    liftOver -gff gencode.noENm006 \
-            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
-                gencode.gtf gencode.unmapped
-     wc -l gencode.gtf
-        # 40857 mapped GTF entries
-     grep -v "in new" *.unmapped | wc -l
-        # 19 unmapped GTF entries 
-     grep -v "in new" *.unmapped | awk '{print $12}' | sort | uniq | wc -l
-        # 8 unmapped gene ID's
-    ldHgGene -gtf -genePredExt hg16 encodeGencodeGeneNew gencode.gtf
-        # Read 2602 transcripts in 40856 lines in 1 files
-    checkTableCoords hg16 encodeGencodeNew
-    grep -v not_tested gencode.gtf | \
-        ldGencodeIntron hg16 encodeGencodeIntronNew stdin
-            # 425 introns in 1 files
-
-    # UPDATE 2005-05-20
-    cd /cluster/data/encode/Gencode
-    mkdir 2005-05-20
-    cd 2005-05-20
-    wget --timestamping --force-directories --directory-prefix=. \
-	--dont-remove-listing --recursive --level=3 --no-parent \
-	--no-host-directories --cut-dirs=5 \
-    ftp://genome.imim.es/pub/other/gencode/data/havana-encode/version00.3_20may/
-    # Downloaded: 14,970,341 bytes in 89 files
-    cd version00.3_20may
-    wc -l EN*CHR_coord.gtf > ../entries.txt
-         # 45268 total
-    cat `ls EN*_CHR_coord.gtf | grep -v ENm006` > \
-        ../gencode.noENm006.gtf
-    cd ..
-    liftOver -gff gencode.noENm006.gtf \
-            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
-                gencode.hg16.gtf gencode.gtf.unmapped
-    wc -l gencode.hg16.gtf
-        # 40320 gencode.hg16.gtf
-    grep -v "in new" *.unmapped | wc -l
-        # 8 unmapped GTF entries
-    grep -v "in new" *.unmapped | awk '{print $12}' | sort | uniq | wc -l
-        # 3 unmapped gene ID's
-    grep -v not_tested gencode.hg16.gtf | \
-        ldGencodeIntron hg16 encodeGencodeIntron stdin
-            # 425 introns in 1 files
+    ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/CHR_coord_hg17/global_files/44regions_CHR_coord.gtf
+    # Downloaded:  7,718,475 bytes in 2 filesa (note: 1/2 as many as previous)
+    mv current/CHR_coord_hg17/global_files/44regions_CHR_coord.gtf .
+    rm -fr current
+    wc -l 44regions_CHR_coord.gtf
+    ln -s 44regions_CHR_coord.gtf gencode.gtf
+        # 46191 44regions_CHR_coord.gtf
 
     # converting to genePred before lifting to create gene track
     #  due to problems in liftOver -gff found by Mark D.
     # Exclude non-Vega sources as per France Denoued at IMIM 
-    grep VEGA gencode.noENm006.gtf > gencode.vega.gtf
+    grep VEGA gencode.gtf > gencode.vega.gtf
     ldHgGene -out=gencode.gp -gtf -genePredExt null null gencode.vega.gtf
         # Read 2542 transcripts in 40133 lines in 1 files
     liftOver -genePred gencode.gp \
             /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
                 gencode.hg16.gp gencode.gp.unmapped
      wc -l gencode.hg16.gp
-        #  2540 gencode.hg16.gp
+        #  previous 2540 gencode.hg16.gp
+        #  2851 gencode.hg16.gp
       wc -l gencode.gp.unmapped
+        # PREVIOUS
         # 4 -> 2 problem transcripts
         # AC005538.4-001 and AC005538.4-006
-        # Each transcript had 1 exon unmapped -- notifying submitter
+        # UPDATE
+        # 37 unmapped, all on chrX except:
+        # AC005538.4-001 and AC005538.4-006 on chr2
+         Each transcript had 1 exon unmapped -- notifying submitter
     ldHgGene -predTab -genePredExt hg16 encodeGencodeGene gencode.hg16.gp
-        # 2540 gene predictions
+        # OLD: 2540 gene predictions
+        # NEW: 2851 gene predictions
     checkTableCoords hg16 encodeGencodeGene
 
-    # inventory sources for genepreds (genes will be colored by these)
-    awk '{print $2}' gencode.vega.gtf | sort | uniq > classes.txt
-    wc -l classes.txt
-        # 12
+    # introns track
+    liftOver -gff gencode.gtf \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                gencode.hg16.gtf gencode.gtf.unmapped
+    wc -l gencode.hg16.gtf
+    #  46014 gencode.hg16.gtf
+    grep intron gencode.hg16.gtf | wc -l
+        # 15625
+    grep intron gencode.hg16.gtf | grep -v not_tested | wc -l
+        # 397
+    grep -v not_tested gencode.hg16.gtf | sed -e 's/-intron/-/g' | \
+        ldGencodeIntron hg16 encodeGencodeIntron stdin
+            # OLD: 425 introns in 1 files
+            # NEW: 397 introns in 1 files
 
     # create gene class table
     hgsql hg16 < ~/kent/src/hg/lib/gencodeGeneClass.sql
@@ -914,12 +843,17 @@ cat > load.csh << 'EOF'
         sed -e 's/"//g' -e 's/;//' -e 's/VEGA_//' | \
         sort | uniq > gencodeGeneClass.tab
     wc -l gencodeGeneClass.tab
-        # 2542 gencodeGeneClass.tab
+        # 2888 gencodeGeneClass.tab
     echo "LOAD DATA LOCAL INFILE 'gencodeGeneClass.tab' into table gencodeGeneClass" | hgsql hg16
 
-    # run Mark D's gene checker on VEGA_Known
+    # inventory sources for genepreds (genes will be colored by these)
+    awk '{print $2}' gencode.vega.gtf | sort | uniq > classes.txt
+    wc -l classes.txt
+        # 12
+
+    # run Mark D's gene checker on VEGA_Known and email results to submitter
     echo " select encodeGencodeGene.* from encodeGencodeGene, gencodeGeneClass where encodeGencodeGene.name=gencodeGeneClass.name and gencodeGeneClass.class='Known'" | hgsql hg16 -N > gencode.known.gp
-/cluster/bin/i386/gene-check -incl-ok -nib-dir /cluster/data/hg16/nib -details-out encodeGencodeGene.chk-details gencode.known.gp encodeGencodeGene.chk
+    /cluster/bin/i386/gene-check -incl-ok -nib-dir /cluster/data/hg16/nib -details-out encodeGencodeGene.chk-details gencode.known.gp encodeGencodeGene.chk
 
 
 # Sanger Chip/chip  (DONE 2005-03-14 kate)
@@ -971,7 +905,7 @@ cat > load.csh << 'EOF'
     # maxLimit 75
 
 
-# Genome Institute of Singapore -ChIP/PET of p53 TFBS (IN PROGRESS 2005-03-31 kate)
+# Genome Institute of Singapore -ChIP/PET of p53 TFBS (2005-03-31 kate)
     cd /cluster/data/encode
     mkdir -p GIS/2005-04-07
     cd GIS/2005-04-07
