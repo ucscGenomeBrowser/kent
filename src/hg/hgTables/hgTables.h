@@ -378,6 +378,7 @@ boolean anyIntersection();
 #define hgtaDoGalaxyPrintPairwiseAligns "hgta_doGalaxyPrintPairwiseAligns"
 #define hgtaDoGalaxyQuery "hgta_doGalaxyQuery"
 #define hgtaDoAllGalaQuery "hgta_doAllGalaQuery"
+#define hgtaDoGetGalaxyQuery "hgta_doGetGalaxyQuery"
 #define hgtaDoLookupPosition "hgta_doLookupPosition"
 
 /* Other CGI variables. */
@@ -658,8 +659,8 @@ void doOutCustomTrack(char *table, struct sqlConnection *conn);
 void doOutGalaQuery(struct trackDb *track, char *table);
 /* Put up form to select GALA query output format. */
 
-void doOutGalaxyQuery(struct trackDb *track, char *table, unsigned int hguid);
-/* Put up form for GALA background query */
+void doOutGalaxyQuery (struct trackDb *track, char *table, unsigned int hguid);
+/* print options page for background query */
 
 void doSummaryStats(struct sqlConnection *conn);
 /* Put up page showing summary stats for track. */

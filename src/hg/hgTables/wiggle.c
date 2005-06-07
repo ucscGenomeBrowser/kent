@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.45 2005/04/05 18:17:17 kent Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.45.8.1 2005/06/07 19:38:11 giardine Exp $";
 
 extern char *maxOutMenu[];
 
@@ -89,7 +89,7 @@ for (var = varList; var != NULL; var = var->next)
 	name = cloneString(var->name);
 	tolowers(name);
 	/*	make sure we are actually looking at datavalue	*/
-	if (stringIn("datavalue", name))
+	if (stringIn("datavalue", name) || stringIn("score", name))
 	    {
 	    pat = cloneString(var->val);
 	    }
@@ -101,7 +101,7 @@ for (var = varList; var != NULL; var = var->next)
 	name = cloneString(var->name);
 	tolowers(name);
 	/*	make sure we are actually looking at datavalue	*/
-	if (stringIn("datavalue", name))
+	if (stringIn("datavalue", name) || stringIn("score", name))
 	    {
 	    cmp = cloneString(var->val);
 	    tolowers(cmp);

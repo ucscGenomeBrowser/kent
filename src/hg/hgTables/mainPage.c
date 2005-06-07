@@ -16,8 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.70.10.1 2005/04/26 19:21:55 giardine Exp $";
-
+static char const rcsid[] = "$Id: mainPage.c,v 1.70.10.2 2005/06/07 19:38:11 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -376,7 +375,8 @@ if (isWig)
     slAddTail(&otList, &otWigBed);
     if (galaAvail(database))
         slAddTail(&otList, &otGala);
-    if (cgiServerName() == NULL || startsWith("hgwdev-giardine", cgiServerName()))
+    if (cgiServerName() == NULL || startsWith("hgwdev-", cgiServerName()) ||
+        startsWith("genome-test", cgiServerName()))
         slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     }
@@ -394,7 +394,8 @@ else if (isPositional)
     slAddTail(&otList, &otBed);
     if (galaAvail(database))
 	slAddTail(&otList, &otGala);
-    if (cgiServerName() == NULL || startsWith("hgwdev-giardine", cgiServerName()))
+    if (cgiServerName() == NULL || startsWith("hgwdev-", cgiServerName())||
+        startsWith("genome-test", cgiServerName()))
     slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
@@ -419,7 +420,7 @@ void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
 struct grp *selGroup;
-boolean isWig, isPositional = FALSE, isMaf = FALSE;
+boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGraph = FALSE;
 boolean gotClade = hGotClade();
 hPrintf("<TABLE BORDER=0>\n");
 
@@ -451,6 +452,8 @@ hPrintf("<TABLE BORDER=0>\n");
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");
+    if (curTrack && curTrack->type)
+	isBedGraph = startsWith("bedGraph", curTrack->type);
     }
 
 /* Print table line. */
@@ -538,7 +541,7 @@ if (anyFilter())
     cgiMakeButton(hgtaDoFilterPage, "edit");
     hPrintf(" ");
     cgiMakeButton(hgtaDoClearFilter, "clear");
-    if (isWig)
+    if (isWig || isBedGraph)
 	wigShowFilter(conn);
     }
 else
@@ -616,7 +619,7 @@ hPrintf("</TABLE>\n");
     else
 	{
 	if (anyIntersection())
-	    hPrintf("<I>Note: Intersection doesn't work with all fields, selected fields or maf output.</I><BR>");
+	    hPrintf("<I>Note: Intersection doesn't work with all fields or selected fields output.</I><BR>");
         }
     cgiMakeButton(hgtaDoTopSubmit, "get output");
     hPrintf(" ");
