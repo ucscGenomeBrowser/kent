@@ -11,7 +11,7 @@ A = hgTables
 O = $A.o asObj.o bedList.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o javascript.o \
     joining.o maf.o mainPage.o rangeHistogram.o schema.o \
-    seqOut.o sumStats.o usage.o wiggle.o gala.o
+    seqOut.o sumStats.o usage.o wiggle.o gala.o galaxy.o
 
 include ../../inc/cgi_build_rules.mk
 
@@ -60,6 +60,7 @@ bedList.o:	hgTables.h
 custom.o:	hgTables.h
 filterFields.o:	hgTables.h
 gala.o:	hgTables.h
+galaxy.o:	hgTables.h
 gffOut.o:	hgTables.h
 hgTables.o:	hgTables.h
 identifiers.o:	hgTables.h
