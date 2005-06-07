@@ -11,6 +11,7 @@ HG_WARN_ERR = -DJK_WARN -Wall -Werror
 
 SCRIPTS=/cluster/bin/scripts
 CGI_BIN=/usr/local/apache/cgi-bin
+BINDIR = ${HOME}/bin/${MACHTYPE}
 MKDIR=mkdir -p
 STRIP=strip
 CVS=cvs
