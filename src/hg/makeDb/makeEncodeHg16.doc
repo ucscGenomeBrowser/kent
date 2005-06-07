@@ -1237,7 +1237,6 @@ done
     ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_tba/MAY-2005/
 
 
-=======
 #  REPACKAGE existing UCSD tracks into one composite
 #	DONE - 2005-06-06 - Hiram)
     #	This is merely a trackDb.ra edit, create composite track: encodeLIChIP
