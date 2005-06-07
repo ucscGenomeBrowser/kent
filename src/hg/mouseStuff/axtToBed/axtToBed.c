@@ -6,9 +6,10 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: axtToBed.c,v 1.7 2005/06/06 22:37:36 jill Exp $";
+static char const rcsid[] = "$Id: axtToBed.c,v 1.8 2005/06/07 07:31:30 jill Exp $";
 bool extended = FALSE;
 bool bed4 = FALSE;
+bool axtName = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +21,8 @@ errAbort(
   "options:\n"
   "   -extended     output extended format include other species\n"
   "   -bed4         output bed4 file\n"
+  "   -axtName      use axt alignment number as interval name in bed4/extended\n"
+  "                 (usually first axt record is numbered 0, next is 1, etc.)\n"
   );
 }
 
@@ -42,11 +45,11 @@ for (;;)
         int xs = lineFileNeedNum(lf, row, 5) - 1;
         int xe = lineFileNeedNum(lf, row, 6);
         int score = lineFileNeedNum(lf, row, 8);
-        fprintf(f, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\n", row[1], s, e, row[4], score, row[7], xs, xe);
+        fprintf(f, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\n", row[1], s, e, (axtName? row[0] : row[4]), score, row[7], xs, xe);
         }
     else
 	if (bed4)
-	    fprintf(f, "%s\t%d\t%d\t%s\n", row[1], s, e,row[4]);
+	    fprintf(f, "%s\t%d\t%d\t%s\n", row[1], s, e, (axtName? row[0] : row[4]));
 	else
 	    fprintf(f, "%s\t%d\t%d\n", row[1], s, e);
     lineFileSkip(lf, 3);
@@ -61,6 +64,7 @@ if (argc != 3)
     usage();
 extended = optionExists("extended");
 bed4 = optionExists("bed4");
+axtName = optionExists("axtName");
 axtToBed(argv[1],argv[2]);
 return 0;
 }
