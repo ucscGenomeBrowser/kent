@@ -2,13 +2,31 @@
 exit
 
 # NHGRI DNASE I HYPERSENSITIVE SITES (2004-10-15 kate)
+    # Updated 2005-06-01 angie, see below
     # Data from Greg Crawford <crawford@mail.nih.gov> at the Collins Lab
-
     cd /cluster/data/encode/NHGRI
-
     set data = lab/DNaseI_HS_NHGRI_ENCODE2.txt
     sed '/^track/d' $data > DNAseHS.bed
     hgLoadBed hg16 encode_NHGRI_DNAseHS DNAseHS.bed
+
+    # Updated 2005-06-01 angie
+    cd /cluster/data/encode/NHGRI/crawford/2005-06-01
+    # Jim asked to add scores for grayscale-coloring:
+    #   clusters of 2 drawn in 50%,  clusters of 3 drawn in 75%,
+    #   and clusters of 4 or more drawn in 100% black.
+    #   Shorten names: CD4_not_activated_500bp_13381_2 --> 13381_2
+    tail +2 CD4_Activated.txt \
+    | perl -wpe 'if (/CD4_\S+500bp_(\d+)_(\d+)/) { \
+                   $id = $1 . "_" . $2; \
+                   $score = ($2 >= 4) ? 1000 : $2 * 250; \
+                   s/CD4\S+/$id\t$score/; } else { die "parse"; }' \
+    | hgLoadBed hg16 encodeNhgriDnaseHsAct stdin
+    tail +2 CD4_Not_Activated.txt \
+    | perl -wpe 'if (/CD4_\S+500bp_(\d+)_(\d+)/) { \
+                   $id = $1 . "_" . $2; \
+                   $score = ($2 >= 4) ? 1000 : $2 * 250; \
+                   s/CD4\S+/$id\t$score/; } else { die "parse"; }' \
+    | hgLoadBed hg16 encodeNhgriDnaseHsNonAct stdin
 
 
 # STANFORD PROMOTERS FROM RICK MYERS LAB (2004-10-17 kate)
@@ -471,6 +489,7 @@ cat > makeMaf.csh << 'EOF'
                         > $outDir/$r.human.maf
     end
 'EOF'
+    # << for emacs
     csh makeMaf.csh >&! makeMaf.log &
 
     mkdir /gbdb/hg16/encode_MSA2_MLAGAN
@@ -482,6 +501,7 @@ cat > makeMaf.csh << 'EOF'
 
 # AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING (2004-12-08 kate)
 #	(RELOADED TABLES 2005-05-31 as bedGraph types - Hiram)
+# UPDATED 2005-06-03 angie with lots more data - see below
 
     # HL60 cells stimulated with Retinoic Acid
     # Transcription and PolII ChIP/Chip at 4 timepoints (8 experiments)
@@ -549,6 +569,124 @@ cat > load.csh << 'EOF'
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyChIpRnapHl60Sites.html
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyChIpRnapHl60Pval.html
 
+    # UPDATED 2005-06-06 angie
+    cd /cluster/data/encode/Affy/2005-06-05
+    # Load up the 41 bed3 tables of ChIP/chip sites...
+    foreach f (chipchip/bed/*.bed)
+      set track = `echo $f:t:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/Pol2/Rnap/;  s/RARecA/Rara/;  s/TFIIB-R/TFIIB/; \
+                      s/(\S+)_(\d+)hr/encodeAffyChIpHl60Sites\u\L$1\EHr$2/; \
+                      s/H3k27t/H3K27me3/; s/Hish4/H4Kac4/;'`
+      echo $track
+      tail +2 $f \
+      | hgLoadBed -noBin hg16 $track stdin
+    end
+    # Loop over those bed files again to make trackDb.ra contents...
+    set pri = 2
+    foreach f (chipchip/bed/*.bed)
+      set track = `echo $f:t:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/Pol2/Rnap/;  s/RARecA/Rara/;  s/TFIIB-R/TFIIB/; \
+                      s/(\S+)_(\d+)hr/encodeAffyChIpHl60Sites\u\L$1\EHr$2/; \
+                      s/H3k27t/H3K27me3/; s/Hish4/H4Kac4/;'`
+      set factor = `echo $f:t:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_\d+hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/RARecA/RARA/;  s/TFIIB-R/TFIIB/; \
+                      s/H3K27T/H3K27me3/; s/HisH4/H4Kac4/;'`
+      set hh = `echo $f:t:r:r:r | perl -wpe 's/.*_(\d+)hr_.*/$1/'`
+      set hr = `expr $hh + 0`
+      set fIndex = `echo $factor | sed -e \
+            's/Brg1/0/; s/CEBPe/1/; s/CTCF/2/; s/H3K27me3/3/; s/H4Kac4/4/; \
+             s/P300/5/; s/PU1/6/; s/Pol2/7/; s/RARA/8/; s/SIRT1/9/; \
+             s/TFIIB/10/;'`
+      if ($fIndex == 10) then
+        set r = 0
+	set g = 0
+	set b = 200
+      else
+        set r = `expr 28 \* \( 9 - $fIndex \)`
+        set g = `expr 28 \* $fIndex`
+        set b = 0
+      endif
+      echo track $track
+      echo subTrack encodeAffyChIpHl60Hr$hh off
+      echo shortLabel Affy $factor RA ${hr}h
+      echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL60, ${hr}hrs\) Sites
+      echo noInherit on
+      echo type bed 3 .
+      echo color $r,$g,$b
+      echo priority $pri
+      echo ""
+      set pri = `expr $pri + 2`
+    end
+    ssh kolossus
+    cd /cluster/data/encode/Affy/2005-06-01
+    # chr7 has >150,000 rows, and >100,000 means trouble for bedGraph 
+    # performance; so load this as wiggle instead.
+    mkdir wig wib
+    foreach f (chipchip/wig/*.median.wig.bz2)
+      set track = `echo $f:t:r:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/Pol2/Rnap/;  s/RARecA/Rara/;  s/TFIIB-R/TFIIB/; \
+                      s/(\S+)_(\d+)hr/encodeAffyChIpHl60Pval\u\L$1\EHr$2/; \
+                      s/H3k27t/H3K27me3/; s/Hish4/H4Kac4/;'`
+      echo $track
+      bzcat $f | wigEncode stdin wig/$track.wig wib/$track.wib
+    end
+    # lower limit is 0 for all.  Upper limit varies quite a bit.
+    # *Hr00: 72.60 (encodeAffyChIpHl60PvalCtcfHr00) to 534.54 (H4Kac4)
+    # *Hr02: 65.62 (encodeAffyChIpHl60PvalCtcfHr02) to 425.79 (H4Kac4)
+    # *Hr08: 85.14 (encodeAffyChIpHl60PvalSirt1Hr08) to 505.86 (H4Kac4)
+    # *Hr32: 50.18 (encodeAffyChIpHl60PvalCtcfHr32) to 490.03 (H4Kac4)
+    # Use the top upper value as the limit for now... if the other 
+    # subtracks look too smushed, maybe we can adjust?
+    # back on hgwdev:
+    cd /cluster/data/encode/Affy/2005-06-01
+    set gbdbDir = /gbdb/hg16/encode/Affy/2005-06-01
+    mkdir -p $gbdbDir/wib
+    foreach f (chipchip/wig/*.median.wig.bz2)
+      set track = `echo $f:t:r:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/Pol2/Rnap/;  s/RARecA/Rara/;  s/TFIIB-R/TFIIB/; \
+                      s/(\S+)_(\d+)hr/encodeAffyChIpHl60Pval\u\L$1\EHr$2/; \
+                      s/H3k27t/H3K27me3/; s/Hish4/H4Kac4/;'`
+      echo $track
+      ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+      nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
+    end
+    # same trackDb-helper:
+    set pri = 1
+    foreach f (chipchip/wig/*.median.wig.bz2)
+      set track = `echo $f:t:r:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/Pol2/Rnap/;  s/RARecA/Rara/;  s/TFIIB-R/TFIIB/; \
+                      s/(\S+)_(\d+)hr/encodeAffyChIpHl60Pval\u\L$1\EHr$2/; \
+                      s/H3k27t/H3K27me3/; s/Hish4/H4Kac4/;'`
+      set factor = `echo $f:t:r:r:r:r | perl -wpe \
+                     's/EC_AS_HL60_DN_RA_//; \
+                      s/_\d+hr_C01_EC_AS_HL60_DN_RA_Input_All_B1_B2_B3//; \
+                      s/RARecA/RARA/;  s/TFIIB-R/TFIIB/; \
+                      s/H3K27T/H3K27me3/; s/HisH4/H4Kac4/;'`
+      set hh = `echo $f:t:r:r:r | perl -wpe 's/.*_(\d+)hr_.*/$1/'`
+      set hr = `expr $hh + 0`
+      echo track $track
+      echo subTrack encodeAffyChIpHl60Hr$hh
+      echo shortLabel Affy $factor RA ${hr}h
+      echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL60, ${hr}hrs\) P Value
+      echo priority $pri
+      echo ""
+      set pri = `expr $pri + 2`
+    end
+#TODO
+    cd /cluster/data/encode/Affy/2005-06-01/rna
+
 
 # BOSTON UNIVERSITY / ZHIPING WENG LAB FIRST EXON DATA (WORKING 2005-01-27 kate)
 
@@ -580,6 +718,7 @@ cat > load.csh << 'EOF'
         {printf ("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%s\t%d\t%s\t%s\t%s\n",
                 $1, $2-1, $3, $4, $5, $6, $7-1, $8, $9, $10, $11, $12, $13);}
 'EOF'
+    # << for emacs
     # rearrange data colums to be BED 13, add RGB values to "reserved" field
     # based on score
     makeColoredBed < BED/cerebralcortex.bed | \
@@ -811,6 +950,7 @@ cat > load.csh << 'EOF'
         INDEX(chrom(13),chromEnd)
     );
     'EOF'
+    # << for emacs
 
     #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
     #	these bedGraph types without this special sql business.
@@ -1025,4 +1165,103 @@ cat > load.csh << 'EOF'
 	hgLoadBed -sqlTable=bedGraph.sql hg16 encodeUcsdChipTriK4IMR90_${T} \
 		encodeUcsdChipTriK4IMR90_${T}.bed
     done
+
+
+# GIS RNA PET (2005-06-03 angie)
+    # Data saved to:
+    cd /cluster/data/encode/GIS/rna5fu/2005-05-31
+    ln -s 2005-05-31 /cluster/data/encode/GIS/rna5fu/latest
+    # Jim requested colored bed.  Names are of the form $id-$mapCount-$atCount.
+    # Coloring scheme (inspired by Chuck's transcriptome track):
+    #  ($mapCount == 1 && $atCount > 1):  dark blue
+    #  ($mapCount == 1 && $atCount == 1): light blue
+    #  ($mapCount > 1  && $atCount > 1):  medium brown
+    #  ($mapCount > 1  && $atCount == 1): light brown
+    foreach f (*.bed)
+      set cellType = `echo $f:r | sed -e 's/GIS-PET-//'`
+      tail +2 $f \
+      | perl -wpe \
+     'chomp; @w = split; \
+      if ($w[3] =~ /\d+-(\d+)-(\d+)/) { \
+        ($mc, $ac) = ($1, $2, $3); \
+        if ($mc == 1)   { $w[8] = ($ac > 1) ? "35,35,175" : "160,160,188"; } \
+        elsif ($mc > 1) { $w[8] = ($ac > 1) ? "180,120,0" : "225,150,0"; } \
+        else { die "mc $mc" } \
+      } else { die "parse"; } \
+      $_ = join(" ", @w) . "\n";' \
+      | hgLoadBed hg16 encodeGisRnaPet$cellType stdin
+    end
+
+
+# UCSD/LI Nimblegen whole genome TAF1 & condensed validation (2005-06-02 angie)
+    # Data saved to:
+    cd /cluster/data/encode/UCSD/nimblegen/2005-05-31
+    # TAF1.bed contains two separate tracks: known and novel sites.
+    # I manually split it into two files: TAF1_known.bed and TAF1_novel.bed.
+    # Coordinates were off-by-1 so adjust before loading:
+    awk '{print $1 "\t" $2-1 "\t" $3-1;}' TAF1_known.bed \
+    | hgLoadBed -noBin hg16 encodeUcsdNgChipKnownSites stdin
+    awk '{print $1 "\t" $2-1 "\t" $3-1;}' TAF1_novel.bed \
+    | hgLoadBed -noBin hg16 encodeUcsdNgChipNovelSites stdin
+    # There are >1M rows on the big chromosomes, while 100k seems to be 
+    # kind of an upper limit for bedGraph, performance-wise (>3sec load).
+    # So load as wiggle; adjust coords here too:
+    ssh kolossus
+    cd /cluster/data/encode/UCSD/nimblegen/2005-05-31
+    set track = encodeUcsdNgChipSignal
+    awk '$1 == "variableStep" {print;} \
+         $1 ~ /[0-9]+/ {print $1+1 "\t" $2;}' chr*.sub \
+    > $track.varStep
+    wigEncode $track.varStep $track.wig $track.wib
+#Converted stdin, upper limit 6.47, lower limit -5.61
+    # back on hgwdev:
+    set track = encodeUcsdNgChipSignal
+    set gbdbDir = /gbdb/hg16/encode/UCSD/2005-05-31/wib
+    mkdir -p $gbdbDir
+    ln -s `pwd`/$track.wib $gbdbDir/
+    nice hgLoadWiggle hg16 $track $track.wig -pathPrefix=$gbdbDir
+    # Load validation subtracks; standardize hist mod names and adjust coords:
+    foreach f (*.wig)
+      set cellType = `echo $f:r | perl -wpe 's/(\S+)_condensed_sorted/\u$1/; \
+                                  s/Ach3/H3ac/g;  s/Meh3k4/H3K4me/g;'`
+      set table = encodeUcsdNgValChip$cellType
+      echo $f ' -> ' $table
+      tail +5 $f | awk '{print $1 "\t" $2-1 "\t" $3-1 "\t" $4;}' \
+      | nice hgLoadBed -onServer -bedGraph=4 hg16 $table stdin
+    end
+    # back on kolossus, clean up:
+    gzip encodeUcsdNgChipSignal.wig encodeUcsdNgChipSignal.varStep 
+    rm *.tab
+
+
+# UCSD/LI Nimblegen RnaP & H3K4me3 (2005-06-03 angie)
+    ssh kolossus
+    cd /cluster/data/encode/UCSD/nimblegen/2005-06-01
+    # Data are in hg17 coords, so must liftOver to hg16.
+    foreach f (lab/Nim*/*.wig)
+      set track = `echo $f:t:r | sed -e \
+         's/rnap/encodeUcsdNgHeLaRnap/; s/tmh3k4/encodeUcsdNgHeLaH3K4me3/;'`
+      echo $track
+      tail +5 $f \
+      | liftOver stdin /cluster/data/hg17/bed/liftOver/hg17ToHg16.over.chain \
+          hg16.$track.bed hg16.$track.unmapped
+    end
+    wc -l hg16*
+# 384969 hg16.encodeUcsdNgHeLaH3K4me3_p0.bed
+#    360 hg16.encodeUcsdNgHeLaH3K4me3_p0.unmapped
+# 384969 hg16.encodeUcsdNgHeLaH3K4me3_p30.bed
+#    360 hg16.encodeUcsdNgHeLaH3K4me3_p30.unmapped
+# 384969 hg16.encodeUcsdNgHeLaRnap_p0.bed
+#    360 hg16.encodeUcsdNgHeLaRnap_p0.unmapped
+# 384969 hg16.encodeUcsdNgHeLaRnap_p30.bed
+#    360 hg16.encodeUcsdNgHeLaRnap_p30.unmapped
+    # All but one of the unmapped's were from chrX, and most of those were 
+    # "Deleted in new" (i.e. in hg17 but not hg16).  Seems OK.
+    # There are <100,000 per chrom, so load as bedGraph.
+    ssh hgwdev
+    cd /cluster/data/encode/UCSD/nimblegen/2005-06-01
+    foreach f (hg16.*.bed)
+      hgLoadBed -onServer -bedGraph=4 hg16 $f:t:r $f
+    end
+
 
