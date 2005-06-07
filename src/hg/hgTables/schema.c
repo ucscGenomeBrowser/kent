@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.30 2005/03/22 00:21:25 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.31 2005/06/07 14:04:09 giardine Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -121,7 +121,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if ((isSqlStringType(row[1]) && !sameString(row[1], "longblob")) ||
 	    isSqlEnumType(row[1]) || isSqlSetType(row[1]))
 	    {
-	    hPrintf("<A HREF=\"../cgi-bin/hgTables");
+	    hPrintf("<A HREF=\"..%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
 	    hPrintf("&%s=%s", hgtaDatabase, db);
 	    hPrintf("&%s=%s", hgtaHistoTable, table);
@@ -132,7 +132,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	else if (isSqlNumType(row[1]))
 	    {
-	    hPrintf("<A HREF=\"../cgi-bin/hgTables");
+	    hPrintf("<A HREF=\"..%s", getScriptName());
 	    hPrintf("?%s", cartSidUrlString(cart));
 	    hPrintf("&%s=%s", hgtaDatabase, db);
 	    hPrintf("&%s=%s", hgtaHistoTable, table);
@@ -332,7 +332,7 @@ if (jpList != NULL)
 	boolean aViaIndex, bViaIndex;
 	hPrintSpaces(6);
 	hPrintf("%s.", jp->b->database);
-	hPrintf("<A HREF=\"../cgi-bin/hgTables?");
+	hPrintf("<A HREF=\"..%s?", cgiScriptName());
 	hPrintf("%s&", cartSidUrlString(cart));
 	hPrintf("%s=%s&", hgtaDoSchemaDb, jp->b->database);
 	hPrintf("%s=%s", hgtaDoSchemaTable, jp->b->table);

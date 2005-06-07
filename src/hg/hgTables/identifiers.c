@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: identifiers.c,v 1.7 2005/03/03 06:47:19 donnak Exp $";
+static char const rcsid[] = "$Id: identifiers.c,v 1.8 2005/06/07 14:04:09 giardine Exp $";
 
 
 void doPasteIdentifiers(struct sqlConnection *conn)
@@ -19,7 +19,7 @@ void doPasteIdentifiers(struct sqlConnection *conn)
 {
 char *oldPasted = cartUsualString(cart, hgtaPastedIdentifiers, "");
 htmlOpen("Paste In Identifiers for %s", curTableLabel());
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=POST>\n", getScriptName());
 cartSaveSession(cart);
 hPrintf("Please paste in the identifiers you want to include.<BR>\n");
 cgiMakeTextArea(hgtaPastedIdentifiers, oldPasted, 10, 70);
@@ -37,7 +37,8 @@ void doUploadIdentifiers(struct sqlConnection *conn)
 /* Respond to upload identifiers button. */
 {
 htmlOpen("Upload Identifiers for %s", curTableLabel());
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=POST ENCTYPE=\"multipart/form-data\">\n",
+	getScriptName());
 cartSaveSession(cart);
 hPrintf("Please enter the name of a file from your computer that contains a ");
 hPrintf("space, tab, or ");

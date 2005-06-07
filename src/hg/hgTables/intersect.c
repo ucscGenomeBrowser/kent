@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.24 2005/05/18 18:56:54 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.25 2005/06/07 14:04:09 giardine Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -94,7 +94,7 @@ char *onChange = onChangeEither();
 char *op, *setting;
 htmlOpen("Intersect with %s", name);
 
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
+hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
 cartSaveSession(cart);
 hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */

@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.40 2005/06/03 19:13:46 hiram Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.41 2005/06/07 14:04:08 giardine Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -367,7 +367,7 @@ if (strchr(table, '.'))
     htmlOpen("Select Fields from %s", table);
 else
     htmlOpen("Select Fields from %s.%s", db, table);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=POST>\n", cgiScriptName());
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);
@@ -957,7 +957,7 @@ if (strchr(table, '.'))
     htmlOpen("Filter on Fields from %s", table);
 else
     htmlOpen("Filter on Fields from %s.%s", db, table);
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"..%s\" METHOD=POST>\n", cgiScriptName());
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgtaDatabase, db);
 cgiMakeHiddenVar(hgtaTable, table);

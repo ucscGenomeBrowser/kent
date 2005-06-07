@@ -8,10 +8,12 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTables
 
+T = tstbug.o
+
 O = $A.o asObj.o bedList.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o javascript.o \
     joining.o maf.o mainPage.o rangeHistogram.o schema.o \
-    seqOut.o sumStats.o usage.o wiggle.o gala.o
+    seqOut.o sumStats.o usage.o wiggle.o gala.o galaxy.o
 
 include ../../inc/cgi_build_rules.mk
 
@@ -50,7 +52,7 @@ beta::
 
 
 compile: $O 
-	${CC} $O ${MYLIBS} ${L} 
+	${CC} -g $O ${MYLIBS} ${L} 
 	mv a.out $A
 
 #	all objects depend on hgTables.h
@@ -60,6 +62,7 @@ bedList.o:	hgTables.h
 custom.o:	hgTables.h
 filterFields.o:	hgTables.h
 gala.o:	hgTables.h
+galaxy.o:	hgTables.h
 gffOut.o:	hgTables.h
 hgTables.o:	hgTables.h
 identifiers.o:	hgTables.h
@@ -74,3 +77,10 @@ seqOut.o:	hgTables.h
 sumStats.o:	hgTables.h
 usage.o:	hgTables.h
 wiggle.o:	hgTables.h
+
+compiletest: $T
+	${CC} -g -Wall $T ${MYLIBS} ${L}
+
+compileLists: listFiles.o
+	${CC} -g -Wall listFiles.o ${MYLIBS} ${L}
+
