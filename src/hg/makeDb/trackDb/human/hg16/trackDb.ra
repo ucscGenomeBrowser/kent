@@ -2315,7 +2315,7 @@ type bedGraph 4
 maxHeightPixels 128:16:16
 minLimit -2.41
 maxLimit 4.59
-viewLimits -1:1
+viewLimits -1.5:3.95
 color 32,128,180
 altColor 180,128,32
 autoScale Off
