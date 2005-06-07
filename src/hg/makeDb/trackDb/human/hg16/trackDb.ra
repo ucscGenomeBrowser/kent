@@ -3347,9 +3347,6 @@ longLabel Affymetrix ChIP/Chip (TFIIB retinoic acid-treated HL60, 32hrs) P Value
 color 0,0,200
 priority 81
 
-
-
-
 track encodeSangerChipH3H4
 compositeTrack on
 shortLabel San H3&4 GM06990
