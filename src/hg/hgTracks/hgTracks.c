@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.970 2005/06/03 19:54:55 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.971 2005/06/07 04:38:09 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7348,13 +7348,14 @@ return y;
 }
 
 static void setSubtrackVisible(char *tableName, bool visible)
+/* Set tableName's _sel variable in cart. */
 {
 char option[64];
 safef(option, sizeof(option), "%s_sel", tableName);
 cartSetBoolean(cart, option, visible);
 }
 
-static void subtrackVisibleTdb(struct trackDb *tdb)
+static void subtrackVisible(struct track *subtrack)
 /* Determine if subtrack should be displayed.  Save in cart */
 {
 char option[64];
@@ -7362,26 +7363,39 @@ char *words[2];
 char *setting;
 bool selected = TRUE;
 
-if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+/* Note: this will only work when noInherit is used; otherwise subtrack 
+ * inherits its parent's tdb: */
+if ((setting = trackDbSetting(subtrack->tdb, "subTrack")) != NULL)
     {
     if (chopLine(cloneString(setting), words) >= 2)
         if (sameString(words[1], "off"))
             selected = FALSE;
     }
-safef(option, sizeof(option), "%s_sel", tdb->tableName);
+safef(option, sizeof(option), "%s_sel", subtrack->mapName);
 selected = cartCgiUsualBoolean(cart, option, selected);
-setSubtrackVisible(tdb->tableName, selected);
+setSubtrackVisible(subtrack->mapName, selected);
 }
 
-bool isSubtrackVisible(struct track *tg)
-/* Should this subtrack be displayed? */
+bool isSubtrackSelected(struct track *tg)
+/* Has this subtrack not been deselected in hgTrackUi? */
 {
 char option[64];
 safef(option, sizeof(option), "%s_sel", tg->mapName);
-return  tg->visibility != tvHide && cartCgiUsualBoolean(cart, option, TRUE);
+return cartCgiUsualBoolean(cart, option, TRUE);
+}
+
+bool isSubtrackVisible(struct track *tg)
+/* Should this subtrack be displayed?  Check cart, not cgi, for selectedness 
+ * because by this point we may have overridden CGI settings and saved into 
+ * the cart. */
+{
+char option[64];
+safef(option, sizeof(option), "%s_sel", tg->mapName);
+return tg->visibility != tvHide && cartUsualBoolean(cart, option, TRUE);
 }
 
 static int subtrackCount(struct track *trackList)
+/* Count the number of visible subtracks in (sub)trackList. */
 {
 struct track *subtrack;
 int ct = 0;
@@ -9129,14 +9143,16 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 subtrackCt = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    subtrackVisibleTdb(subtrack->tdb);
-    if (isSubtrackVisible(subtrack))
+    subtrackVisible(subtrack);
+    /* visibilities have not been set yet, so don't use isSubtrackVisible 
+     * which gates with visibility: */
+    if (isSubtrackSelected(subtrack))
         subtrackCt++;
     }
 /* if no subtracks are selected in cart, turn them all on */
 if (subtrackCt == 0)
     for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        setSubtrackVisible(subtrack->tdb->tableName, TRUE);
+        setSubtrackVisible(subtrack->mapName, TRUE);
 
 slSort(&track->subtracks, trackPriCmp);
 }
