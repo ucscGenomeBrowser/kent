@@ -4,16 +4,35 @@
 <H2>Description</H2>
 <P>
 This track shows the transcript map of signal intensity (estimating RNA 
-abundance) for Human Neutrophil (PMN) Total RNA hybridized to the 
-Affymetrix ENCODE oligonucleotide microarray. This array has 25 mer 
-oligonucleotide probes tiled approximately every 21 bp covering all the 
-non-repetitive DNA sequence of the ENCODE regions. The transcript map 
-is a combined signal for both strands of DNA. This is derived from 10 
-different biological samples (each sample was extracted from a 
-different individual), each with 2 technical replicates. See NCBI GEO 
-<a 
-href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2678
-">GSE2678</a> for details of experimental protocols. 
+abundance) for
+<UL>
+<LI>Human Neutrophil (PMN) Total RNA (10 biological samples from different individuals)
+<LI>Human Placental Poly(A)+ RNA (3 biological replicates)
+<LI>Total RNA from untreated Human NB4 cells
+<LI>Human NB4 cells treated with retinoic acid (RA)
+<LI>Human NB4 cells treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+<UL>
+hybridized to the Affymetrix ENCODE oligonucleotide microarray.
+The Human NB4 cell can be made to differentiate towards either monocytes by 
+treatment with TPA or neutrophils by treatment with RA (see Kluger et al.
+below for more details of differentitation of hematopoietic cells). 
+This array has 25 mer oligonucleotide probes tiled approximately every 21 bp
+covering all the non-repetitive DNA sequence of the ENCODE regions.
+The transcript map is a combined signal for both strands of DNA.
+This is derived from the different biological samples (number of samples
+indicated above), each with at least 2 technical replicates. See NCBI GEO 
+<UL>
+<LI>
+<a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2678">
+GSE2678</a>
+<LI>
+<a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2671">
+GSE2671</a>
+<LI>
+<a href="http://www.ncbi.nlm.nih.gov/projects/geo/query/acc.cgi?acc=GSE2679">
+GSE2679</a>
+</UL>
+for details of experimental protocols.
 
 <H2>Methods</H2>
 <P>
@@ -28,13 +47,13 @@ each oligonucleotide probe location.
 
 <H2>Verification</H2>
 <P>
-Ten independant biological replicates were generated and each was 
-hybridized to at least two different arrays (technical replicates). 
-Transcribed regions are then identified using a signal theshold of 90 
-percentile of signal intensities as well as a maximum gap of 50 bp and 
-a minimum run of 50 bp (between oligonucleotide positions). Transcribed 
-regions as determined by individual biological samples are compared to 
-ensure significant overlap.
+Independant biological replicates (number indicated above) were generated
+and each was hybridized to at least two different arrays
+(technical replicates).  Transcribed regions are then identified using a
+signal theshold of 90 percentile of signal intensities as well as a maximum
+gap of 50 bp and a minimum run of 50 bp (between oligonucleotide positions).
+Transcribed regions as determined by individual biological samples are
+compared to ensure significant overlap.
 
 <H2>Credits</H2>
 <P>
@@ -47,9 +66,8 @@ Sherman Weissman at Yale and Tom Gingeras at Affymetrix.
 
 Kapranov P, Cawley SE, Drenkow J, Bekiranov S, Strausberg RL, Fodor SP, 
 Gingeras TR,
-<a href 
-="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&d
-opt=Abstract&list_uids=11988577&query_hl=5">
+<a
+href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=11988577&query_hl=5">
 Large-scale transcriptional activity in chromosomes 21 and 22
 </a>, 
 <i>Science</i>. 2002 May 3;296(5569):916-9.
@@ -58,8 +76,7 @@ Large-scale transcriptional activity in chromosomes 21 and 22
 Rinn JL, Euskirchen G, Bertone P, Martone R, Luscombe NM, Hartman S, 
 Harrison PM, Nelson FK, Miller P, Gerstein M, Weissman S, Snyder M, 
 <a 
-href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubm
-ed&dopt=Abstract&list_uids=12600945&query_hl=1">
+href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=12600945&query_hl=1">
 The transcriptional activity of human Chromosome 22
 </a>, 
 <i>Genes Dev</i>, 2003 Feb 15;17(4):529-40.
@@ -67,11 +84,9 @@ The transcriptional activity of human Chromosome 22
 <BR><BR>
 Bertone P, Stolc V, Royce TE, Rozowsky JS, Urban AE, Zhu X, Rinn JL, 
 Tongprasit W, Samanta M, Weissman S, Gerstein M, Snyder M,
-<a href = 
-"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&do
-pt=Abstract&list_uids=15539566&query_hl=7">
-Global identification of human transcribed sequences with genome tiling 
-arrays
+<a
+href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15539566&query_hl=7">
+Global identification of human transcribed sequences with genome tiling arrays
 </a>, 
 <i>Science</i>. 2004 Dec 24;306(5705):2242-6. Epub 2004 Nov 11.
 
@@ -79,10 +94,17 @@ arrays
 Cheng J, Kapranov P, Drenkow J, Dike S, Brubaker S, Patel S, Long J, 
 Stern D, Tammana H, Helt G, Sementchenko V, Piccolboni A, Bekiranov S, 
 Bailey DK, Ganesh M, Ghosh S, Bell I, Gerhard DS, Gingeras TR,
-<a href = 
-"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&do
-pt=Abstract&list_uids=15790807&query_hl=5">
+<a
+href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15790807&query_hl=5">
 Transcriptional maps of 10 human chromosomes at 5-nucleotide resolution
 </a>, 
 <i>Science</i>. 2005 May 20;308(5725):1149-54. Epub 2005 Mar 24.
 
+<BR><BR>
+Kluger Y, Tuck DP, Chang JT, Nakayama Y, Poddar R, Kohya N, Lian Z, Ben 
+Nasr A, Halaban HR, Krause DS, Zhang X, Newburger PE, Weissman SM, 
+<a 
+href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15096607&query_hl=10">
+Lineage specificity of gene expression patterns
+</a>, 
+<i>Proc Natl Acad Sci U S A</i>. 2004 Apr 27;101(17):6508-13. Epub 2004 Apr 19.
