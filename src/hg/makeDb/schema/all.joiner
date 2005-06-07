@@ -623,26 +623,19 @@ identifier bacEndNames
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $danRer.bacEndSingles.lfNames comma
+    $danRer.bacEndPairsBad.lfNames comma
+    $danRer.bacEndAlias.alias minCheck=0.55
     $hg.fishClones.beNames comma minCheck=0.70
 
-identifier bacExtName
+identifier danRerBacExtName
 "External name for BAC clones." 
     $danRer.bacCloneXRef.name dupeOk
-    $danRer.bacEndPairs.name minCheck=0.24
-    $danRer.bacEndSingles.name minCheck=0.50
-    
-identifier bacSangerName
-"Sanger STS name for STS associated with BAC clones"
-    $danRer.bacCloneXRef.sangerName dupeOk
-    $danRer.bacCloneAlias.sangerName
+    $danRer.bacEndPairs.name
+    $danRer.bacEndSingles.name
+    $danRer.bacEndPairsBad.name minCheck=0.70
 
 identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
-    $danRer.bacCloneXRef.genbank dupeOk
-
-identifier bacEndAccession typeOf=genbankAccession external=genbank
-"Genbank accession of a sequenced BAC end"
-    $danRer.bacEndAlias.acc dupeOk
 
 identifier humanBacAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
