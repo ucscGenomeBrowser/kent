@@ -1243,3 +1243,68 @@ done
     #	encodeUcsdChipAch3Imr90
     #	encodeUcsdChipMeh3k4Imr90
 
+#  Loading Yale Affy ChIP/Chip data
+    #	Two files were found to have bad start,end coordinates, they
+    #	were resubmitted by Joel Rozowsky:
+    #	encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Pvalue_Map.wig
+    #	encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Signal_Map.wig
+    #	This prompted the addition of the -strict option to hgLoadBed
+
+    cd /cluster/data/encode/yale/affy/2005-06-01/CHIPCHIP_STAT1
+    #	rename the data files to their resulting table names:
+    ln -s encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Pvalue_Map.wig \
+	encodeYaleChIPSTAT1HeLaBingRenPval.wig
+    ln -s encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Signal_Map.wig \
+	encodeYaleChIPSTAT1HeLaBingRenSig.wig
+    ln -s encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Sites.bed \
+	encodeYaleChIPSTAT1HeLaBingRenSites.bed
+    ln -s \
+	encode_Yale_Chipchip_STAT1_Hela_Maskless36merevery36bp_Pvalue_Map.wig \
+	encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval.wig
+    ln -s \
+	encode_Yale_Chipchip_STAT1_Hela_Maskless36merevery36bp_Signal_Map.wig \
+	encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig.wig
+    ln -s encode_Yale_Chipchip_STAT1_Hela_Maskless36merevery36bp_Sites.bed \
+	encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite.bed
+    ln -s \
+	encode_Yale_Chipchip_STAT1_Hela_Maskless50merevery38bp_Pvalue_Map.wig \
+	encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval.wig
+    ln -s \
+	encode_Yale_Chipchip_STAT1_Hela_Maskless50merevery38bp_Signal_Map.wig \
+	encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSig.wig
+    ln -s encode_Yale_Chipchip_STAT1_Hela_Maskless50merevery38bp_Sites.bed \
+	encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSite.bed
+    ln -s \
+	encode_Yale_Chipchip_STAT1_Hela_Maskless50merevery50bp_Pvalue_Map.wig \
+	encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval.wig
+    ln -s \
+	encode_Yale_Chipchip_STAT1_Hela_Maskless50merevery50bp_Signal_Map.wig \
+	encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSig.wig
+    ln -s encode_Yale_Chipchip_STAT1_Hela_Maskless50merevery50bp_Sites.bed \
+	encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSite.bed
+    #	now they can simply be loaded, the .wig files:
+for T in BingRenPval BingRenSig MaskLess36mer36bpPval MaskLess50mer38bpPval \
+        MaskLess50mer50bpPval MaskLess36mer36bpSig MaskLess50mer38bpSig \
+        MaskLess50mer50bpSig
+do
+    TBL="encodeYaleChIPSTAT1HeLa${T}"
+    grep "^chr" ${TBL}.wig | sort -k1,1 -k 2,2n |
+        hgLoadBed -strict -bedGraph=4 hg16 ${TBL} stdin
+done
+    #	The bed files:
+for T in BingRenSites MaskLess36mer36bpSite MaskLess50mer38bpSite \
+	MaskLess50mer50bpSite
+do
+    TBL="encodeYaleChIPSTAT1HeLa${T}"
+    grep "^chr" ${TBL}.bed | sort -k1,1 -k 2,2n |
+        hgLoadBed -strict hg16 ${TBL} stdin
+done
+    #	very good description html files were delivered with this data
+    #	set.
+
+    #	The four Signal data sets were packaged into the composite track:
+    #	encodeYaleChIPSTAT1Sig
+    #	The four Sites data sets were packaged into the composite track:
+    #	encodeYaleChIPSTAT1Sites
+    #	The four Pvalue data sets were packaged into the composite track:
+    #	encodeYaleChIPSTAT1Pval
