@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.39 2005/06/03 21:37:16 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.40 2005/06/07 05:53:25 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -549,7 +549,7 @@ int netUrlOpen(char *url)
 /* Return unix low-level file handle for url. 
  * Just close(result) when done. */
 {
-if (startsWith("http://",url))
+if (startsWith("http://",url) || (stringIn("://", url) == NULL))
     return netGetOpenHttp(url);
 else if (startsWith("ftp://",url))
     return netGetOpenFtp(url);
