@@ -3350,7 +3350,7 @@ priority 81
 track encodeSangerChipH3H4
 compositeTrack on
 shortLabel San H3&4 GM06990
-longLabel Sanger ChIP/Chip (histones H3,H4 antibody, GM06990 cells) 
+longLabel Sanger ChIP/Chip (histones H3,H4 antibody, GM06990 and K562 cells) 
 group encode
 priority 47.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3405,14 +3405,14 @@ color 10,10,130
 track encodeSangerChipH3acK562
 subTrack encodeSangerChipH3H4
 shortLabel SI H3ac K562
-longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated antibody, K562 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated ab, K562 cells)
 priority 7
 color 10,10,130
 
 track encodeSangerChipH4acK562
 subTrack encodeSangerChipH3H4
 shortLabel SI H4ac K562
-longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated antibody, K562 cells)
+longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated ab, K562 cells)
 priority 8
 color 10,10,130
 
