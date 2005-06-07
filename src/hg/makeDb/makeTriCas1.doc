@@ -1,0 +1,62 @@
+#!/bin/bash  # set emacs mode
+exit; # don't actually run this like a script :)
+# 
+# RED FLOUR BEETLE!!!
+# Tribolium castaneum -- 1.0 assembly Jan 20, 2005
+# 
+# ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Tcastaneum/
+
+# DOWNLOAD SEQUENCE (IN PROGRESS 6/7/2005 Andy)
+   ssh hgwdev
+   df -h /cluster/store*
+#Filesystem            Size  Used Avail Use% Mounted on
+#kkstore01-10:/export/cluster/store1
+#                      1.1T  749G  265G  74% /cluster/store1
+#kkstore01-10:/export/cluster/store10
+#                      1.1T  965G   49G  96% /cluster/store10
+#kkstore-10:/export/cluster/store2
+#                      472G  431G   18G  97% /cluster/store2
+#eieio-10:/export/cluster/store3
+#                      767G  678G   51G  94% /cluster/store3
+#eieio-10:/export/cluster/store4
+#                      514G  460G   28G  95% /cluster/store4
+#eieio-10:/export/cluster/store5
+#                      1.1T  947G   53G  95% /cluster/store5
+#kkusr01-10:/export/cluster/store6
+#                      2.0T  1.6T  293G  85% /cluster/store6
+#kkusr01-10:/export/cluster/store7
+#                      789G  734G   15G  99% /cluster/store7
+#kkstore01-10:/export/cluster/store8
+#                      1.3T  1.2T   54G  96% /cluster/store8
+#kkstore01-10:/export/cluster/store9
+#                      1.3T  1.1T  159G  88% /cluster/store9
+    # Ok, store9 looks the happiest.
+    mkdir -p /cluster/store9/triCas1/downloads
+    ln -s /cluster/store9/triCas1 /cluster/data/triCas1
+    cd /cluster/data/triCas1/downloads
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Tcastaneum/contigs/Tcas_1.0.agp
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Tcastaneum/contigs/Tcas_1.0.fa
+    grep W Tcas_1.0.agp | cut -f6 | sort | uniq | wc -l
+# 11323
+    grep '^>' Tcas_1.0.fa | wc -l
+# 11323
+    # Wow, is this an AGP file I don't have to fix?
+    grep W Tcas_1.0.agp | cut -f1 | sort | uniq | wc -l
+# 4365
+    # Well, that reduces the clutter by 60% or something.  Not bad.
+    agpAllToFaFile Tcas_1.0.agp Tcas_1.0.fa beetle.fa
+#Reading Tcas_1.0.agp
+#Start doesn't match previous end line 15269 of Tcas_1.0.agp
+    # OK that's garbage.  I don't really understand why this errored. 
+    # I deleted this line from Tcas_1.0.agp manually and rerunning agpAllToFaFile
+    # worked:
+#Tcas_1.0.agp:15289:Contig7119    1       1820    1       W       Contig7119      1       1820   +
+    # Turns out thats because the .agp file also has this line:
+#Tcas_1.0.agp:13842:Contig7119   1       3018    1       W       Reptig1071      1       3018 -
+    # OK I changed line 13842 to: 
+#Tcas_1.0.agp:13842:Reptig1071   1       3018    1       W       Reptig1071      1       3018 +
+    agpAllToFaFile Tcas_1.0.agp Tcas_1.0.fa beetle.fa
+#Reading Tcas_1.0.agp
+#Reading Tcas_1.0.fa
+#Writing beetle.fa
+    # Maybe everything's cool now.  I don't know. I'll continue when I hear back from Baylor.
