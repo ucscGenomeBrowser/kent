@@ -16,17 +16,6 @@ group map
 visibility dense
 type bed 3 +
 
-track blastMm6KG
-shortLabel Mouse Proteins
-longLabel Mouse(mm6) proteins mapped by chained tBLASTn
-group genes
-priority 30
-visibility dense
-colorChromDefault off
-type psl protein
-pred mm6.blastKGPep03
-blastRef mm6.blastKGRef03
-
 track knownGene
 shortLabel Known Genes
 longLabel Known Genes (June, 05) Based on UniProt, RefSeq, and GenBank mRNA
@@ -1502,6 +1491,19 @@ visibility hide
 spectrum on
 type netAlign monDom1 chainMonDom1
 otherDb monDom1
+
+track blastMm6KG
+shortLabel Mouse Proteins
+longLabel Mouse(mm6) proteins mapped by chained tBLASTn
+group x
+priority 30
+visibility hide
+colorChromDefault off
+type psl protein
+pred mm6.blastKGPep03
+blastRef mm6.blastKGRef03
+chromosome 13
+
 
 searchTable bacendsCow
 searchMethod exact
