@@ -139,97 +139,73 @@
     		  <TR><TH HEIGHT=3></TH></TR>
     		  <TR><TD WIDTH=10></TD><TD>
 <!-- start news item -->
-		    <FONT FACE="courier" SIZE=3><B>24 May 2005 - New MSA sequence data freeze available</B></FONT><BR>
+		    <FONT FACE="courier" SIZE=3><B>6 June 2005 - Changes to ENCODE track labels in Genome Browser</B></FONT><BR>
 		    <P>
-		    A new ENCODE MSA sequence data freeze is available on the 
-		    UCSC downloads server. The latest freeze contains 
-		    sequences from 23 vertebrates provided by NISC, Baylor, 
-		    the Broad Institute (2X) and the whole genome shotgun 
-		    (WGS) assemblies.  The data may be downloaded as 
-		    <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg16/encode/alignments/MAY-2005/">individual data files</A> or a
-		    <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg16/encode/alignments/MAY-2005.tgz">directory tarball</A>. 
-		    Aligners are encouraged to upload alignments and related 
-		    data (such as conservation scores and elements) to the 
-		    UCSC ENCODE ftp site as soon as possible and then notify 
-		    <A HREF="mailto:kate@soe.ucsc.edu">Kate Rosenbloom</A>. 
-		    Other data, (conservation, trees, etc.) 
-		    will be generated based on this dataset.</P>
-		    <P>
-		    The following is a summary of data updates from the
-		    previous release:
-		    <UL>
-		    <LI>
-		    The human assembly version remains at hg16 (Jul. 2003).
-		    <LI>
-		    The mouse assembly has been updated from mm5 (May 2004) to
-		    mm6 (Mar. 2005).
-		    <LI>
-		    The multiple rat sequences have been replaced by a single
-		    sequence: rn3 (Jun. 2003).
-		    <LI>
-		    The cow sequences have been updated using an assembly of 
-		    BAC-based sequences provided by Baylor College of 
-		    Medicine.
-		    <LI>
-		    Fugu (fr1), macaque (rheMac1), opossum (monDom1), 
-		    Tetraodon (tetNig1), Xenopus (xenTro1), and zebrafish 
-		    (danRer2) have been added.  The macaque sequence was 
-		    obtained from a Baylor 
-		    College of Medicine assembly that has not yet been 
-		    officially released. 
-		    <LI>
-		    A new NISC species, rfbat 
-		    (<em>Rhinolophus ferrumequinum</em>), is now available.
-		    <LI>
-		    Platypus data from regions 
-		    where NISC has not yet generated data were provided by 
-		    Jim Mullikin from a preliminary assembly of Washington 
-		    University WGS reads. 
-		    <LI>
-		    This freeze includes low-redundancy sequence data from 
-		    tenrec, elephant, armadillo, and rabbit. Only one set of 
-		    sequences are provided per species/target combination; 
-		    where available, NISC data is provided instead of 
-		    the 2X assemblies. These data are not yet accessioned at 
-		    NCBI, but were made available by the Broad Institute 
-		    (rabbit, elephant, armadillo) and Jim Mullikin (tenrec).
-		    <LI>
-		    Orthology predictions for Fugu were made only by 
-		    MAVID/Mercator; predictions for all other assemblies 
-		    supported by the UCSC Genome Browser represent a union 
-		    with UCSC predictions as well. Because no additional 
-		    post-processing was done on the Fugu predictions, they 
-		    contain a few very small contigs.
-		    </UL>
-		    <P>
-		    Thanks to the many people, particularly Elliott Margulies
-		    and Daryl Thomas, who made this release possible.</P>
+		    We have modified the Genome Browser labels for the 
+		    existing ENCODE data tracks to trim overly-long labels
+		    that were truncated in the display and to facilitate 
+		    cross-track analysis. The new label format shows the 
+		    submitter and the experiment, followed by the cell line 
+		    (in tracks where the data includes only one cell line).
+		    </P>
 		    <P>
 		    <HR>
 
 <!-- start news item -->
-		    <FONT FACE="courier" SIZE=3><B>24 May 2005 - ChIP-PET/GIS annotation track (Genome Institute of Singapore) released</B></FONT><BR>
+		    <FONT FACE="courier" SIZE=3><B>6 June 2005 - Stanford Promoters and UVa DNA Replication tracks released</B></FONT><BR>
 		    <P>
+		    We are pleased to announce the first UCSC Genome Browser 
+		    tracks released for the June 2005 ENCODE data freeze:
+		    Stanford Promoters and UVa DNA Replication Temporal 
+		    Profiling.
+		    <P>
+		    Stanford has provided an update of their promoter activity
+		    data based on transient transfection luciferase reporter 
+		    assays of 643 putative promoter fragments in the ENCODE 
+		    regions.  The update includes two additional cell lines 
+		    and activity averaged across all cell lines.  The data 
+		    tables now contain additional experimental detail to 
+		    facilitate analysis.  This track, containing 17 subtracks 
+		    (16 cell lines and the average), is labeled 				  &quot;Stanf. Promoter&quot;. Thanks to Sara Hartman at 
+		    the Myers lab for providing these data.</P>
+		    <P>
+		    The Dutta lab at Univerity of Virginia (UVa) has completed
+		    the second biological replicate of their temporal 
+		    profiling of HeLa cell replication products and has
+		    provided a dataset containing merged data from the two 
+		    replicates. The track, containing five subtracks 
+		    representing two-hour intervals, is labeled
+		    &quot;UVa DNA Rep&quot;. Thanks to Christopher Taylor at 
+		    the Dutta lab for providing these data.</P>
+		    <P>
+		    We'd also like to acknowledge the UCSC team members who
+		    worked on these annotation tracks: Angie Hinrichs (track
+		    development), Galt Barber and Ali Sultan-Qurraie (QA), and
+		    Jim Kent and Donna Karolchik (track documentation).</P>
+		    <P>
+		    <HR>
+<!-- end news item -->
+
+<!-- start archived item section-->
+		    <FONT FACE="courier" SIZE=3><B>24 May 2005 - New MSA sequence data freeze available: </B></FONT>
+		    A new ENCODE MSA sequence data freeze is available on the 
+		    UCSC downloads server. The latest freeze contains 
+		    sequences from 23 vertebrates provided by NISC, Baylor, 
+		    the Broad Institute (2X) and the whole genome shotgun 
+		    (WGS) assemblies.  
+		    <A HREF="newsarch.html#052405b">Read more</A>.
+		    <P>
+
+		    <FONT FACE="courier" SIZE=3><B>24 May 2005 - ChIP-PET/GIS annotation track (Genome Institute of Singapore) released: </B></FONT>
 		    The ENCODE Genome Browser now features the ChIP-PET/GIS 
 		    annotation track, which shows paired-end 
 		    ditag (PET) sequences derived from 65,572 individual p53 
 		    ChIP fragments of 5-fluorouracil (5FU) stimulated HCT116 
 		    (colon) cells. Only PETs with a single specific mapping 
 		    to the genome are included in this track.
+		    <A HREF="newsarch.html#052405a">Read more</A>.
 		    <P>
-		    Thanks to Atif Shahab, Chia-Lin Wei, and Yijun Ruan at the 
-		    <A HREF="http://www.gis.a-star.edu.sg/homepage/default.jsp"
-		    TARGET=_blank>Genome Institute of Singapore</A> for 
-		    providing the p53 ChIP-PET library and sequence data. The 
-		    data were mapped and analyzed by scientists from the 
-		    Genome Institute of Singapore, the Bioinformatics 
-		    Institute, Singapore, and Boston University. For more
-		    information about this annotation, see the ChIP-PET/GIS
-		    track description page.</P>
-		    <HR>
-<!-- end news item -->
  
-<!-- start archived item section-->
 		    <FONT FACE="courier" SIZE=3><B>23 May 2005 - Boston University First Exon annotation track released: </B></FONT>
 		    The First Exon/BU annotation track, contributed by the
 		    <A HREF="http://zlab.bu.edu/zlab/index.shtml"
@@ -239,19 +215,6 @@
 		    exons and a constitutive exon of 20 genes in the ENCODE 
 		    regions. <A HREF="newsarch.html#052305">Read more</A>.
 		    <P>
-
-		    <FONT FACE="courier" SIZE=3><B>7 May 2005 - ENCODE status page now available: </B></FONT>
-		    A simple summary page has been added to the UCSC ENCODE
-		    portal to show the status of datasets submitted to UCSC by
-		    ENCODE contributors. The page may be found at
-		    <A HREF="http://genome.ucsc.edu/ENCODE/trackStatus.html">http://genome.ucsc.edu/ENCODE/trackStatus.html</A>.
-		    <A HREF="newsarch.html#050705">Read more</A>.
-		    <P>
-
-                    <FONT FACE="courier" SIZE=3><B>6 May 2005 - UCSD/Ludwig Institute histone modification ChIp/Chip data released: </B></FONT>
-                    Two additional sets of ChIp/Chip data from UCSD/Ludwig
-                    Institute are now available: ChIp/LI AcH3 and ChIp/LI MeH3K4.   
-		    <A HREF="newsarch.html#050605">Read more</A>.
 <!-- end archived item section--> 
 
 
