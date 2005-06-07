@@ -1227,3 +1227,19 @@ done
     foreach f (hg16.*.bed)
       hgLoadBed -onServer -bedGraph=4 hg16 $f:t:r $f
     end
+
+#  REPACKAGE existing UCSD tracks into one composite
+#	DONE - 2005-06-06 - Hiram)
+    #	This is merely a trackDb.ra edit, create composite track: encodeLIChIP
+    #	include as subtracks the tables:
+    #	encodeUcsdChipRnapHela
+    #	encodeUcsdChipRnapThp1
+    #	encodeUcsdChipRnapImr90
+    #	encodeUcsdChipRnapHct116
+    #	encodeUcsdChipTaf250Hela
+    #	encodeUcsdChipTaf250Thp1
+    #	encodeUcsdChipTaf250Imr90
+    #	encodeUcsdChipTaf250Hct116
+    #	encodeUcsdChipAch3Imr90
+    #	encodeUcsdChipMeh3k4Imr90
+
