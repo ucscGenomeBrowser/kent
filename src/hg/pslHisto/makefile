@@ -5,16 +5,11 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-
 O = pslHisto.o
-B =  ${HOME}/bin/${MACHTYPE}/pslHisto
 
-$B: pslHisto
-	@${MKDIR} `dirname $B`
-	cp -f pslHisto $B
-
-pslHisto: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o pslHisto $O ${MYLIBS} ${MYSQLLIBS} $L
+${BINDIR}/pslHisto: $O ${MYLIBS}
+	@${MKDIR} ${BINDIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $O ${MYLIBS} ${MYSQLLIBS} $L
 
 pslHisto.o: pslHisto.c $H
 
