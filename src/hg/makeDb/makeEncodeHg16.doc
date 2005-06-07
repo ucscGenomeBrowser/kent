@@ -1474,3 +1474,10 @@ done
 
     #	The primary .html file was enhanced to include the specifics of
     #	each of these three data sets into the one document
+
+#  Farnham Lab/UC Davis Nimblegen track (DONE - 2005-06-07 - Hiram)
+    cd /cluster/data/encode/UcDavis/2005-06-01
+    awk '{printf "%s\t%s\t%s\t%s\n", $1,$4,$5,$6}' E2F1_Median.gff | \
+	sort -k1,1 -k2,2n > encodeUCDavisE2F1Median.bedGraph4
+    hgLoadBed -strict -bedGraph=4 hg16 encodeUCDavisE2F1Median \
+        encodeUCDavisE2F1Median.bedGraph4
