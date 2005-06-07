@@ -1072,34 +1072,65 @@ cat > load.csh << 'EOF'
     #	table from hgwdev:
     hgsql -e "drop table encodeSangerChip;" hg16
 
+    #   Additional data submitted 2005-06-02
+    ssh hgwdev
+    cd /cluster/data/encode/sanger/chipchip/2005-06-02
+    ln -s 
+    grep "^chr" H3K4me2_K562_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me2K562.bedGraph4
+    grep "^chr" H4ac_K562_1.wig.txt | sort -k1,1 -k2,2n > \
+	H4acK562.bedGraph4
+    grep "^chr" H3ac_K562_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3acK562.bedGraph4
+    for T in H3K4me2K562 H4acK562 H3acK562
+    do
+	hgLoadBed -bedGraph=4 hg16 encodeSangerChip${T} ${T}.bedGraph4
+    done
+    
+
 ########################################################################
+#  DONE - 2005-06-06 - Hiram
 #  Loading tables UCSD Ludwig Institute ChIP/Chip(H3K4me3 Hela and
-#	H3K4Me2 Hela/IFN-g
+#	H3K4Me2 Hela/IFN-g - two tables here replace the data we
+#	received on 2005-05-26 -> tmH3K4_p0.wig and tmH3K4_p30.wig
+#	The data in the two files is identical except for their track
+#	label comments.
 
     ssh hgwdev
-    cd /cluster/data/encode/UCSD/2005-05-26
-    #	Naming consistency so for() loop can work on this data
-    ln -s tmH3K4_p0.wig.orig encodeUcsdChipTriK4IMR90_00.wig.orig
-    ln -s tmH3K4_p30.wig.orig encodeUcsdChipTriK4IMR90_30.wig.orig
-    #	NOTE !*! hgLoadBed has been fixed 2005-06-01 to be able to load
-    #	these bedGraph types without this special sql business.
-    for T in 00 30
+    cd /cluster/data/encode/UCSD/2005-05-31
+    for T in acH3 acH4 dmH3K4 stat1 tmH3K4
     do
-	grep "^chr" encodeUcsdChipTriK4IMR90_${T}.wig.orig | \
-		sort -k1,1 -k2,2n > encodeUcsdChipTriK4IMR90_${T}.bed
-	hgsql -e "drop table encodeUcsdChipTriK4IMR90_${T}" hg16 2> /dev/stderr
-	echo "CREATE TABLE encodeUcsdChipTriK4IMR90_${T} (" > bedGraph.sql
-	echo 'bin smallint unsigned not null,' >> bedGraph.sql
-	echo 'chrom varchar(255) not null,' >> bedGraph.sql
-	echo 'chromStart int unsigned not null,' >> bedGraph.sql
-	echo 'chromEnd int unsigned not null,' >> bedGraph.sql
-	echo 'score float not null,' >> bedGraph.sql
-	echo 'INDEX(chrom(6),bin)' >> bedGraph.sql
-	echo ');' >> bedGraph.sql
-	hgLoadBed -sqlTable=bedGraph.sql hg16 encodeUcsdChipTriK4IMR90_${T} \
-		encodeUcsdChipTriK4IMR90_${T}.bed
+	grep "^chr" ${T}_p0.wig | sort -k1,1 -k2,2n \
+		> encodeUcsdChipHeLaH3H4${T}_p0.bedGraph4
+	grep "^chr" ${T}_p30.wig | sort -k1,1 -k2,2n \
+		> encodeUcsdChipHeLaH3H4${T}_p30.bedGraph4
+	hgLoadBed -bedGraph=4 hg16 encodeUcsdChipHeLaH3H4${T}_p0 \
+		encodeUcsdChipHeLaH3H4${T}_p0.bedGraph4
+	hgLoadBed -bedGraph=4 hg16 encodeUcsdChipHeLaH3H4${T}_p30 \
+		encodeUcsdChipHeLaH3H4${T}_p30.bedGraph4
     done
 
+    # a couple of later additions, just under the wire
+    cd /cluster/data/encode/UCSD/2005-06-06
+    #	rename to track name
+    ln -s RNAP/rnap_p0.wig encodeUcsdChipHeLaH3H4RNAP_p0.wig
+    ln -s Taf250/taf250_p0.wig encodeUcsdChipHeLaH3H4TAF250_p0.wig
+    ln -s RNAP/rnap_p30.wig encodeUcsdChipHeLaH3H4RNAP_p30.wig
+    ln -s Taf250/taf250_p30.wig encodeUcsdChipHeLaH3H4TAF250_p30.wig
+for T in RNAP TAF250
+do
+    grep "^chr" encodeUcsdChipHeLaH3H4${T}_p0.wig | sort -k1,1 -k2,2n \
+        > encodeUcsdChipHeLaH3H4${T}_p0.bed
+    grep "^chr" encodeUcsdChipHeLaH3H4${T}_p30.wig | sort -k1,1 -k2,2n \
+        > encodeUcsdChipHeLaH3H4${T}_p30.bed
+    hgLoadBed -strict -bedGraph=4 hg16 encodeUcsdChipHeLaH3H4${T}_p0 \
+        encodeUcsdChipHeLaH3H4${T}_p0.bed
+    hgLoadBed -strict -bedGraph=4 hg16 encodeUcsdChipHeLaH3H4${T}_p30 \
+        encodeUcsdChipHeLaH3H4${T}_p30.bed
+done
+
+    #	extensive edits were performed on the delivered description files
+    #	they were pretty sparse
 
 # GIS RNA PET (2005-06-03 angie)
     # Data saved to:
@@ -1167,7 +1198,6 @@ cat > load.csh << 'EOF'
     gzip encodeUcsdNgChipSignal.wig encodeUcsdNgChipSignal.varStep 
     rm *.tab
 
-
 # UCSD/LI Nimblegen RnaP & H3K4me3 (2005-06-03 angie)
     ssh kolossus
     cd /cluster/data/encode/UCSD/nimblegen/2005-06-01
@@ -1197,5 +1227,3 @@ cat > load.csh << 'EOF'
     foreach f (hg16.*.bed)
       hgLoadBed -onServer -bedGraph=4 hg16 $f:t:r $f
     end
-
-
