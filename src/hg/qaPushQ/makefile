@@ -29,7 +29,7 @@ pushQ.o: pushQ.c pushQ.h
 
 formPushQ.h: formPushQ.html
 	echo "char formQ[] =" > formPushQ.h
-	gawk '{ print "\"" $$0 "\\n\"" }' formPushQ.html >> formPushQ.h
+	sed -e 's/\"/\\\"/g' formPushQ.html | gawk '{ print "\"" $$0 "\\n\"" }' >> formPushQ.h
 	echo ";" >> formPushQ.h
 	
 
