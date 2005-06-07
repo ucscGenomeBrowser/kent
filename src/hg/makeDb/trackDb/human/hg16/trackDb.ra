@@ -1811,7 +1811,7 @@ color 109,51,43
 track encodeUcsdNgGif
 compositeTrack on
 shortLabel LI Ng gIF ChIP
-longLabel Ludwig Institute/UCSD ChIP/Chip Nimblegen - gamma interferon experiments
+longLabel Ludwig Institute/UCSD ChIP/Chip Nimblegen - Gamma Interferon Experiments
 group encode
 priority 30.075
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1825,32 +1825,32 @@ autoScale off
 track encodeUcsdNgHeLaH3K4me3_p0
 subTrack encodeUcsdNgGif
 shortLabel LI Ng H3K4m3 -gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, H3K4me, no gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng (HeLa, H3K4me, no gamma interferon)
 priority 1
 
 track encodeUcsdNgHeLaH3K4me3_p30
 subTrack encodeUcsdNgGif
 shortLabel LI Ng H3K4m3 +gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, H3K4me, 30 min after gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng (HeLa, H3K4me, 30 min after gamma interferon)
 priority 2
 
 track encodeUcsdNgHeLaRnap_p0
 subTrack encodeUcsdNgGif
 shortLabel LI Ng Rnap -gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, Rnap, no gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng (HeLa, Rnap, no gamma interferon)
 priority 3
 
 track encodeUcsdNgHeLaRnap_p30
 subTrack encodeUcsdNgGif
 shortLabel LI Ng Rnap +gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, Rnap, 30 min after gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng (HeLa, Rnap, 30 min after gamma interferon)
 priority 4
 
 track encodeLIChIP
 release alpha
 compositeTrack on
 shortLabel LI/UCSD ChIP
-longLabel Ludwig Institute/UCSD ChIP/Chip - Pol2, TAF1, AcH3, H3K4me antibodies
+longLabel Ludwig Institute/UCSD ChIP/Chip (Pol2, TAF1, AcH3, H3K4me antibodies)
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2030,7 +2030,7 @@ altColor 50,50,200
 track encodeYaleChIPSTAT1Pval
 compositeTrack on
 shortLabel Yale ChIP pVal
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, p-Values)
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, p values)
 group encode
 priority 33.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2044,28 +2044,28 @@ autoScale Off
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
 subTrack encodeYaleChIPSTAT1Pval
 shortLabel Yale ChIP pV36-36
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, p-Values
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, P Values
 priority 1
 color 50,50,200
 
 track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
 subTrack encodeYaleChIPSTAT1Pval
 shortLabel Yale ChIP pV50-38
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, p-Values
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, P Values
 priority 2
 color 50,50,200
 
 track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
 subTrack encodeYaleChIPSTAT1Pval
 shortLabel Yale ChIP pV50-50
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, p-Values
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, P Values
 priority 3
 color 50,50,200
 
 track encodeYaleChIPSTAT1HeLaBingRenPval
 subTrack encodeYaleChIPSTAT1Pval
 shortLabel Yale ChIP pVBing Ren
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, p-Values
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, P Values
 priority 4
 color 50,50,200
 
@@ -2093,7 +2093,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap01
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 1
-longLabel Yale Neutrophil RNA Transcript Map, sample 1
+longLabel Yale Neutrophil RNA Transcript Map, Sample 1
 priority 2
 color 127,50,50
 altColor 50,50,127
@@ -2101,7 +2101,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap02
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 2
-longLabel Yale Neutrophil RNA Transcript Map, sample 2
+longLabel Yale Neutrophil RNA Transcript Map, Sample 2
 priority 3
 color 127,50,50
 altColor 50,50,127
@@ -2109,7 +2109,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap03
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 3
-longLabel Yale Neutrophil RNA Transcript Map, sample 3
+longLabel Yale Neutrophil RNA Transcript Map, Sample 3
 priority 4
 color 127,50,50
 altColor 50,50,127
@@ -2117,7 +2117,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap04
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 4
-longLabel Yale Neutrophil RNA Transcript Map, sample 4
+longLabel Yale Neutrophil RNA Transcript Map, Sample 4
 priority 5
 color 127,50,50
 altColor 50,50,127
@@ -2125,7 +2125,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap05
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 5
-longLabel Yale Neutrophil RNA Transcript Map, sample 5
+longLabel Yale Neutrophil RNA Transcript Map, Sample 5
 priority 6
 color 127,50,50
 altColor 50,50,127
@@ -2133,7 +2133,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap06
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 6
-longLabel Yale Neutrophil RNA Transcript Map, sample 6
+longLabel Yale Neutrophil RNA Transcript Map, Sample 6
 priority 7
 color 127,50,50
 altColor 50,50,127
@@ -2141,7 +2141,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap07
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 7
-longLabel Yale Neutrophil RNA Transcript Map, sample 7
+longLabel Yale Neutrophil RNA Transcript Map, Sample 7
 priority 8
 color 127,50,50
 altColor 50,50,127
@@ -2149,7 +2149,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap08
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 8
-longLabel Yale Neutrophil RNA Transcript Map, sample 8
+longLabel Yale Neutrophil RNA Transcript Map, Sample 8
 priority 9
 color 127,50,50
 altColor 50,50,127
@@ -2157,7 +2157,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap09
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 9
-longLabel Yale Neutrophil RNA Transcript Map, sample 9
+longLabel Yale Neutrophil RNA Transcript Map, Sample 9
 priority 10
 color 127,50,50
 altColor 50,50,127
@@ -2165,7 +2165,7 @@ altColor 50,50,127
 track encodeYaleAffyNeutRNATransMap10
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM 10
-longLabel Yale Neutrophil RNA Transcript Map, sample 10
+longLabel Yale Neutrophil RNA Transcript Map, Sample 10
 priority 11
 color 127,50,50
 altColor 50,50,127
@@ -2181,7 +2181,7 @@ altColor 50,50,127
 track encodeYaleAffyNB4RARNATransMap
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale NB4 RA TM
-longLabel Yale NB4 RNA Transcript Map, treated with retinoic acid
+longLabel Yale NB4 RNA Transcript Map, Treated with retinoic acid
 priority 13
 color 127,50,50
 altColor 50,50,127
@@ -2189,7 +2189,7 @@ altColor 50,50,127
 track encodeYaleAffyNB4TPARNATransMap
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale NB4 TPA TM
-longLabel Yale NB4 RNA Transcript Map, treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
 priority 13
 color 127,50,50
 altColor 50,50,127
@@ -2223,79 +2223,79 @@ priority 1
 track encodeYaleAffyNeutRNATars01
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 1
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 1
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 1
 priority 2
 
 track encodeYaleAffyNeutRNATars02
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 2
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 2
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 2
 priority 3
 
 track encodeYaleAffyNeutRNATars03
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 3
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 3
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 3
 priority 4
 
 track encodeYaleAffyNeutRNATars04
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 4
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 4
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 4
 priority 5
 
 track encodeYaleAffyNeutRNATars05
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 5
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 5
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 5
 priority 6
 
 track encodeYaleAffyNeutRNATars06
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 6
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 6
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 6
 priority 7
 
 track encodeYaleAffyNeutRNATars07
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 7
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 7
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 7
 priority 8
 
 track encodeYaleAffyNeutRNATars08
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 8
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 8
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 8
 priority 9
 
 track encodeYaleAffyNeutRNATars09
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 9
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 9
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 9
 priority 10
 
 track encodeYaleAffyNeutRNATars10
 subTrack encodeYaleAffyRNATars
 shortLabel Yale RNA TAR 10
-longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 10
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 10
 priority 11
 
 track encodeYaleAffyPlacRNATars
 subTrack encodeYaleAffyRNATars
 shortLabel Yale Placenta RNA
-longLabel Yale Placenta RNA Transcriptionally Active Region (TAR), summary
+longLabel Yale Placenta RNA Transcriptionally Active Region (TAR), Summary
 priority 12
 
 track encodeYaleAffyNB4RARNATars
 subTrack encodeYaleAffyRNATars
 shortLabel Yale NB4 RA RNA TAR
-longLabel Yale NB4 RNA, TAR, treated with retinoic acid
+longLabel Yale NB4 RNA, TAR, Treated with retinoic acid
 priority 13
 
 track encodeYaleAffyNB4TPARNATars
 subTrack encodeYaleAffyRNATars
 shortLabel Yale NB4 TPA RNA TAR
-longLabel Yale NB4 RNA, TAR, treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
 priority 14
 
 track encodeYaleAffyNB4UntrRNATars
@@ -2431,7 +2431,7 @@ priority 1
 track encodeUcsdNgChipKnownSites
 subTrack encodeUcsdNgChip
 shortLabel TAF1 Known Sites
-longLabel Ludwig Institute TAF1 sites matching to known transcripts
+longLabel Ludwig Institute TAF1 Sites Matching to Known Transcripts
 noInherit on
 type bed 3
 color 0,0,200
@@ -2440,7 +2440,7 @@ priority 2
 track encodeUcsdNgChipNovelSites
 subTrack encodeUcsdNgChip
 shortLabel TAF1 Novel Sites
-longLabel Ludwig Institute TAF1 sites matching no known transcripts
+longLabel Ludwig Institute TAF1 Sites Matching No Known Transcripts
 noInherit on
 type bed 3
 color 0,200,0
@@ -2637,7 +2637,7 @@ priority 4
 track encodeAffyChIpHl60Hr00
 compositeTrack on
 shortLabel Affy HL-60 RA 0hr
-longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 0hrs
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P Values and Sites, 0hrs
 group encode
 priority 47.25
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2650,7 +2650,7 @@ autoScale off
 track encodeAffyChIpHl60Hr02
 compositeTrack on
 shortLabel Affy HL-60 RA 2hr
-longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 2hrs
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P values and Sites, 2hrs
 group encode
 priority 47.26
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2663,7 +2663,7 @@ autoScale off
 track encodeAffyChIpHl60Hr08
 compositeTrack on
 shortLabel Affy HL-60 RA 8hr
-longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 8hrs
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P Values and Sites, 8hrs
 group encode
 priority 47.27
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2676,7 +2676,7 @@ autoScale off
 track encodeAffyChIpHl60Hr32
 compositeTrack on
 shortLabel Affy HL-60 RA 32hr
-longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 32hrs
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P Values and Sites, 32hrs
 group encode
 priority 47.28
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
