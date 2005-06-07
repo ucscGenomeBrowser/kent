@@ -776,29 +776,33 @@ cat > load.csh << 'EOF'
         #chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 
 
-# GENCODE Sanger Havana annotations  (2005-06-03 kate)
+# GENCODE Sanger Havana annotations  (2005-06-07 kate)
+    # previous versions are in other dirs
     ssh hgwdev
     mkdir -p /cluster/data/encode/Gencode
     cd /cluster/data/encode/Gencode
-    mkdir 2005-06-03
-    cd 2005-06-03
+    mkdir 2005-06-07
+    cd 2005-06-07
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
     ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/CHR_coord_hg17/global_files/44regions_CHR_coord.gtf
-    # Downloaded:  7,718,475 bytes in 2 filesa (note: 1/2 as many as previous)
+    # Previous: Downloaded:  7,718,475 bytes in 2 files (note: 1/2 as many as previous)
+    # Current: Downloaded: 7,753,057 bytes in 2 files
     mv current/CHR_coord_hg17/global_files/44regions_CHR_coord.gtf .
     rm -fr current
     wc -l 44regions_CHR_coord.gtf
+        # CURRENT:   46418 44regions_CHR_coord.gtf
+        # PREVIOUS: 46191 44regions_CHR_coord.gtf
     ln -s 44regions_CHR_coord.gtf gencode.gtf
-        # 46191 44regions_CHR_coord.gtf
 
     # converting to genePred before lifting to create gene track
     #  due to problems in liftOver -gff found by Mark D.
     # Exclude non-Vega sources as per France Denoued at IMIM 
     grep VEGA gencode.gtf > gencode.vega.gtf
     ldHgGene -out=gencode.gp -gtf -genePredExt null null gencode.vega.gtf
-        # Read 2542 transcripts in 40133 lines in 1 files
+        # CURRENT: Read 2888 transcripts in 46127 lines in 1 files
+        # PREVIOUS: Read 2542 transcripts in 40133 lines in 1 files
     liftOver -genePred gencode.gp \
             /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
                 gencode.hg16.gp gencode.gp.unmapped
@@ -814,8 +818,7 @@ cat > load.csh << 'EOF'
         # AC005538.4-001 and AC005538.4-006 on chr2
          Each transcript had 1 exon unmapped -- notifying submitter
     ldHgGene -predTab -genePredExt hg16 encodeGencodeGene gencode.hg16.gp
-        # OLD: 2540 gene predictions
-        # NEW: 2851 gene predictions
+        # 2851 gene predictions
     checkTableCoords hg16 encodeGencodeGene
 
     # introns track
@@ -823,15 +826,19 @@ cat > load.csh << 'EOF'
             /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
                 gencode.hg16.gtf gencode.gtf.unmapped
     wc -l gencode.hg16.gtf
-    #  46014 gencode.hg16.gtf
+    #  CURRENT:   46239 gencode.hg16.gtf
+    #  PREVIOUS: 46014 gencode.hg16.gtf
+
     grep intron gencode.hg16.gtf | wc -l
-        # 15625
+        # 15695
     grep intron gencode.hg16.gtf | grep -v not_tested | wc -l
-        # 397
+        # CURRENT: 467
+        # PREVIOUS: 397
     grep -v not_tested gencode.hg16.gtf | sed -e 's/-intron/-/g' | \
         ldGencodeIntron hg16 encodeGencodeIntron stdin
-            # OLD: 425 introns in 1 files
-            # NEW: 397 introns in 1 files
+            # CURRENT: 467 introns in 1 files
+            # PREVIOUS: 397 introns in 1 files
+            # OLDER: 425 introns in 1 files
 
     # create gene class table
     hgsql hg16 < ~/kent/src/hg/lib/gencodeGeneClass.sql
