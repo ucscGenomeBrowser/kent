@@ -1787,28 +1787,28 @@ color 109,51,43
 track encodeUcsdChipHeLaH3H4RNAP_p0
 subTrack encodeLIChIPgIF
 shortLabel LI RNAP -gIF
-longLabel Ludwig Institute ChIP/Chip (STAT1 ab, RNA polymerase, HeLa cells, no gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (RNA polymerase, HeLa cells, no gamma interferon) 
 priority 11
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4RNAP_p30
 subTrack encodeLIChIPgIF
 shortLabel LI RNAP +gIF
-longLabel Ludwig Institute ChIP/Chip (STAT1 ab, RNA polymerase, HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (RNA polymerase, HeLa cells, 30 min. after gamma interferon) 
 priority 12
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4TAF250_p0
 subTrack encodeLIChIPgIF
 shortLabel LI Taf250 -gIF
-longLabel Ludwig Institute ChIP/Chip (STAT1 ab, Taf250 polymerase, HeLa cells, no gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (Taf250 polymerase, HeLa cells, no gamma interferon) 
 priority 13
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4TAF250_p30
 subTrack encodeLIChIPgIF
 shortLabel LI Taf250 +gIF
-longLabel Ludwig Institute ChIP/Chip (STAT1 ab, Taf250 polymerase HeLa cells, 30 min. after gamma interferon) 
+longLabel Ludwig Institute ChIP/Chip (Taf250 polymerase, HeLa cells, 30 min. after gamma interferon) 
 priority 14
 color 109,51,43
 
