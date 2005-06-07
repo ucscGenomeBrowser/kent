@@ -1865,6 +1865,17 @@ tablesIgnored $hg
     encodeUcsdChipTaf250Hela
     encodeUcsdChipTaf250Imr90
     encodeUcsdChipTaf250Thp1
+    encodeUcsdNgChipKnownSites
+    encodeUcsdNgChipNovelSites
+    encodeUcsdNgChipSignal
+    encodeUcsdNgHeLaH3K4me3_p0
+    encodeUcsdNgHeLaH3K4me3_p30
+    encodeUcsdNgHeLaRnap_p0
+    encodeUcsdNgHeLaRnap_p30
+    encodeUcsdNgValChipH3K4me
+    encodeUcsdNgValChipH3ac
+    encodeUcsdNgValChipRnap
+    encodeUcsdNgValChipTaf
     encodeUvaDnaRep%
     pseudoYale
 
