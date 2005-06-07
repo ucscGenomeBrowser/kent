@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.252 2005/06/07 17:09:12 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.253 2005/06/07 17:17:08 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3195,7 +3195,7 @@ if (compositeTdb)
 	    /* Make sure that this matches the specified track, not just a 
 	     * prefix of it: */
 	    char *words[2];
-	    if ((chopLine(cloneString(settingLine), words) > 0) &&
+	    if ((chopLine(cloneString(setting), words) > 0) &&
 		sameString(words[0], track))
 		{
 		slAddHead(&compositeTdb->subtracks, tdb);
