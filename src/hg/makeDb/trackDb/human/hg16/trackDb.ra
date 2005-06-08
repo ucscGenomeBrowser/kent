@@ -2445,8 +2445,8 @@ color 50,50,200
 altColor 200,50,50
 
 track encodeUCDavisE2F1Median
-shortLabel FL/UCD Ng E2F1
-longLabel Farnham Lab/UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa cells
+shortLabel UCD Ng E2F1
+longLabel UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa cells
 group encode
 priority 34.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
