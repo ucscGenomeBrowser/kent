@@ -1249,48 +1249,6 @@ defaultViewLimits 30:70
 spanList 5
 type wig 0 100 
 
-track encode_tba
-shortLabel ENCODE TBA
-longLabel TBA Alignments of ENCODE Regions
-group encode
-priority 20.0
-visibility hide
-color 0, 10, 100
-altColor 1,128,0
-type wigMaf 0.0 10.0
-maxHeightPixels 100:40:11
-wiggle binCons_encode
-yLineOnOff Off
-pairwise encode_tba 15
-autoScaleDefault Off
-speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp baboon marmoset galago
-sGroup_placental rat mouse cow dog armadillo 
-sGroup_mammal platypus 
-sGroup_vertebrate chicken 
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-
-track binMCS95_encode
-shortLabel MCSs (5%)
-longLabel Binomial-based MCSs from ENCODE TBA alignments (top 5%)
-group encode
-visibility hide
-color 0,60,120
-useScore 1
-type bed 5 +
-
-track encode_phyloHMM
-shortLabel ENCODE phyloHMM
-longLabel phylo-HMM-based conservation for ENCODE targets
-group encode
-priority 108.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 175,150,128
-altColor 255,128,0
-type wig 0.0 1.0
-autoScaleDefault Off
-
 track blatHg16KG
 shortLabel Human knownGene BLAT
 longLabel Human knownGene BLAT

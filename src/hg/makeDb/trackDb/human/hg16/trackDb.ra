@@ -515,6 +515,7 @@ altColor 255,240,200
 type bed 4 +
 otherDb rn3
 
+
 track tba9MammalCFTR
 shortLabel 9 Species CFTR
 longLabel CFTR Region TBA Alignments (human,mouse,rat,chimp,baboon,cow,pig,cat,dog)
@@ -544,11 +545,87 @@ sGroup_placental rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog
 sGroup_mammal opossum dunnart platypus 
 sGroup_vertebrate chicken zfish tetra fr1
 
+track encodeTbaAlign
+shortLabel TBA Alignments
+longLabel TBA Alignments and PhastCons Conservation
+group encode
+priority 112.1
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeTbaSummary
+maxHeightPixels 100:40:11
+wiggle encodeTbaPhastCons
+yLineOnOff Off
+autoScaleDefault Off
+speciesGroups primate placental mammal vertebrate
+sGroup_primate panTro1 baboon rheMac1 marmoset galago
+sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog armadillo elephant tenrec
+sGroup_mammal monDom1 platypus 
+sGroup_vertebrate galGal2 xenTro1 danRer2 tetNig1 fr1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeTbaCons
+compositeTrack on
+shortLabel TBA Conservation
+longLabel TBA Conservation
+group encode
+priority 112.2
+visibility hide
+type wig 0.0 1.0
+maxHeightPixels 100:25:11
+autoScaleDefault Off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeTbaBinCons
+subTrack encodeTbaCons
+shortLabel TBA BinCons
+longLabel TBA BinCons Conservation
+color 0, 10, 100
+
+track encodeTbaPhastCons
+subTrack encodeTbaCons
+shortLabel TBA PhastCons
+longLabel TBA PhastCons Conservation
+color 0, 10, 100
+
+track encode_tba
+shortLabel TBA Nov04
+longLabel TBA Nov. 2004 Alignments of ENCODE Regions
+group encode
+priority 112.4
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 10.0
+maxHeightPixels 100:40:11
+wiggle binCons_encode
+yLineOnOff Off
+pairwise encode_tba 15
+autoScaleDefault Off
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp baboon marmoset galago
+sGroup_placental rat mouse cow dog armadillo 
+sGroup_mammal platypus 
+sGroup_vertebrate chicken 
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track binMCS95_encode
+shortLabel TBA Nov05 MCSs
+longLabel Binomial-based MCSs from ENCODE Nov. 2004 TBA alignments (top 5%)
+group encode
+priority 112.5
+visibility hide
+color 0,60,120
+useScore 1
+type bed 5 .
+
 track encode_MSA2_MLAGAN
 shortLabel MSA/MLAGAN
 longLabel MLAGAN Alignments of ENCODE Regions
 group encode
-priority 112.2
+priority 112.7
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
