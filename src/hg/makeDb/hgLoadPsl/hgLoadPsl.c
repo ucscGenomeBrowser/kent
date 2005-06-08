@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.31 2005/04/06 18:20:45 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadPsl.c,v 1.32 2005/06/08 20:59:52 jill Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -40,6 +40,8 @@ errAbort(
   "   hgLoadPsl database file1.psl ... fileN.psl\n"
   "This must be run in the same directory as the .psl files\n"
   "It will create a table for each psl file.\n"
+  "If you get mySQL error 1085 check your umask -\n"
+  " tab file must be world readable (path to, and psl file can have any perms)\n"
   "options:\n"
   "   -table=tableName  Explicitly set tableName.  (Defaults to file name)\n"
   "                     Only one file maybe specified with this option\n"
@@ -50,8 +52,8 @@ errAbort(
   "               load file, use this.  It will load via the client API, which\n"
   "               is slower.  This can also load remotely\n"
   "   -append  Append data, don't drop tables before loading\n"
-  "   -nobin Repress binning"
-  "   -keep  Don't remove intermediate tab after load"
+  "   -nobin Repress binning\n"
+  "   -keep  Don't remove intermediate tab file/s after load\n"
 );
 }
 
