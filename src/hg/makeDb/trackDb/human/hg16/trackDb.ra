@@ -1943,7 +1943,7 @@ track encodeUcsdChipH3K27me3
 subTrack encodeLIChIP
 shortLabel LI H3K27me3 HeLa
 longLabel Ludwig Institute ChIP/Chip (H3K27me3 ab, HeLa cells)
-priority 10
+priority 12
 color 109,51,43
 
 track encodeYaleChIPSTAT1Sig
