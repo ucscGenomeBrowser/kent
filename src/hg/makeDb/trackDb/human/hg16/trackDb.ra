@@ -3870,6 +3870,14 @@ priority 170
 visibility dense
 type bed 4 .
 
+track encodeIndels
+shortLabel DIPs 
+longLabel Deletions and Insertions in ENCODE regions
+group encode
+priority 50
+visibility dense
+type bed 6 + 
+
 searchTable encode_NHGRI_DNaseHS
 searchType bed
 termRegex 500bp_[0-9]+_[0-9]+
