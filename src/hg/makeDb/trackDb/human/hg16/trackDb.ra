@@ -3350,7 +3350,7 @@ type bedGraph 4
 maxHeightPixels 128:40:16
 minLimit -46.1
 maxLimit 75
-viewLimits 0:1.5
+viewLimits 0.5:35
 autoScale Off
 
 track encodeSangerChipH3K4me1
