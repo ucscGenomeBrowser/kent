@@ -783,6 +783,10 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 # MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF 
 # (DONE, 2004-11-22, hartera)
 # RE-DONE (2004-12-02, hartera)
+# RE-MAKE MASKED CHR1 SEQUENCE AS INCOMPLETELY MASKED (2005-06-06, hartera)
+# Although there was an error in the RepeatMasker output for chr1, this 
+# loaded ok for the chr1_rmsk table so that is complete. It is just the 
+# actual sequence that was not masked properly.
     ssh kksilo
     cd /cluster/data/danRer2
     # Soft-mask (lower-case) the contig and chr .fa's,
@@ -837,6 +841,61 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
       faToNib -softMask $f nib/$f:t:r.nib
     end
 
+    # Re-do masking for chr1.fa. A user noticed that the masking for this 
+    # is very low compared to other chroms (2% vs almost 50%). Re-running
+    # maskOutFa and debugging revealed that the error reported above
+    # "invalid signed number: "*" " is causing the program to abort 
+    # so the chrom is incompletely masked. This row of the RepeatMasker file
+    # (chr1.fa.out) is incorrect and the maskOutFa program fails when it 
+    # tries to load this line into a data structure. 
+    # Solution: remove the erroneous line (line 52575) and re-run maskOutFa
+    ssh kkstore01
+    mkdir /cluster/data/danRer2/tmpMask
+    cd  /cluster/data/danRer2/tmpMask
+    cp /cluster/data/danRer2/1/chr1.fa .
+    cp /cluster/data/danRer2/1/chr1.fa.out .
+    # make sure it is all upper case
+    cat chr1.fa | tr '[a-z]' '[A-Z]' > chr1.tmp
+    sed -e 's/>CHR1/>chr1/' chr1.tmp > chr1.fa
+    # remove line 52575 from chr1.fa.out
+    # re-run maskOutFa
+    set trfCtg=/cluster/data/danRer2/bed/simpleRepeat/trfMask
+    set trfChr=/cluster/data/danRer2/bed/simpleRepeat/trfMaskChrom
+    
+    foreach f (chr1.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+    # then add chr1New as FASTA heading and copy to the directory for chr1
+    sed -e 's/>chr1/>chr1New/' chr1.fa > chr1New.fa
+    sed -e 's/>chr1/>chr1New/' chr1.fa.masked > chr1New.fa.masked
+    mv chr1.fa.out /cluster/data/danRer2/1/chr1New.fa.out
+    mv chr1New.fa /cluster/data/danRer2/1/
+    mv chr1New.fa.masked /cluster/data/danRer2/1/
+    cd ..
+    rm -r tmpMask
+    cd 1
+    faSize chr1.fa
+    # 62208023 bases (3421437 N's 58786586 real 57507587 upper 1278999 lower) 
+    faSize chr1New.fa
+    # 2.1% are in lower case
+    # 62208023 bases (3421437 N's 58786586 real 31874160 upper 26912426 lower)
+    # 43% masked as lower case
+    faSize chr1.fa.masked
+    # 62208023 bases (4700436 N's 57507587 real 57507587 upper 0 lower) 
+    # 7.6% are Ns
+    faSize chr1New.fa.masked
+    # 62208023 bases (30333863 N's 31874160 real 31874160 upper 0 lower)
+    # 49% are Ns
+
+    # just use this new masked sequence for downloads and replace the
+    # masked chr1 sequences for downloads - see DOWNLOADABLE SEQUENCE
+    # section below
+ 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2004-11-22, hartera)
 # RE-DONE (2004-12-02, hartera)
 # MOVE danRer2.2bit out of gbdb nib directory (2004-12-15, hartera)
@@ -1720,6 +1779,10 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # CORRECTION MADE TO chrM.agp FILE - MADE TAB DELIMITED INSTEAD OF
 # SPACE DELIMITED SO REPLACE OLD AGP FILE IN DOWNLOADS 
 # (DONE, 2005-04-25, hartera)
+# REPLACE chr1 WITH chr1New IN chromFa and chromFaMasked - chr1 was
+# incompletely masked due to an error in the RepeatMasker output for chr1.
+# See section on "MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF"
+# (2005-06-06, hartera) 
     ssh kksilo
     cd /cluster/data/danRer2
     #- Build the .zip files
@@ -1797,6 +1860,7 @@ zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
     cd $gp/chromosomes
     md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
     # Remake just the chromAgp.zip with correct chrM.agp (2005-04-25,hartera)
     ssh kksilo
     cd /cluster/data/danRer2
@@ -1819,6 +1883,48 @@ zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
     # go to directory with zip files and remake the md5sum.txt file
     cd $gp/bigZips
     md5sum *.zip > md5sum.txt
+
+    # Remake chr1 zips for masked file with chr1New.fa (2005-06-06, hartera)
+    ssh kkstore01
+    cd /cluster/data/danRer2
+    # move old chr1 files temporarily out of the way
+    mkdir 1/tmp
+    mv 1/chr1.fa.out ./tmp
+    mv 1/chr1.fa ./tmp
+    mv 1/chr1.fa.masked ./tmp
+    rm zip/chromOut.zip zip/chromFa.zip zip/chromFaMasked.zip
+    # chrom RepeatMasker out files
+    zip -j zip/chromOut.zip */chr*.fa.out
+    # soft masked chrom fasta
+    zip -j zip/chromFa.zip */chr*.fa
+    # hard masked chrom fasta
+    zip -j zip/chromFaMasked.zip */chr*.fa.masked
+ 
+    cd /cluster/data/danRer2/zip
+    #- Check zip file integrity:
+    foreach f (*.zip)
+      unzip -t $f > $f.test
+      tail -1 $f.test
+    end
+    wc -l *.zip.test
+    ssh hgwdev
+    cd /cluster/data/danRer2/zip
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer2
+    # copy over just those modified zip files
+    cp -p chromOut.zip $gp/bigZips
+    cp -p chromFa.zip $gp/bigZips
+    cp -p chromFaMasked.zip $gp/bigZips
+    # remove chr1.fa.zip and zip chr1New
+    rm $gp/chromosomes/chr1.fa.zip
+    zip -j $gp/chromosomes/chr1New.fa.zip ../1/chr1New.fa
+    # replace md5sum 
+    cd $gp/bigZips
+    rm md5sum.txt
+    md5sum *.zip > md5sum.txt
+    cd $gp/chromosomes
+    rm md5sum.txt
+    md5sum *.zip > md5sum.txt
+    # Update README.txt for each to state that a new masked chr1 was produced
 
 # MAKE VSHG17 DOWNLOADABLES (DONE, 2004-12-14, hartera)
 # REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat 
@@ -4362,6 +4468,7 @@ cat > split.csh << 'EOF'
 # were done using the default matrix for blastz. (2005-06-01, hartera)
 # zebrafish(danRer2), human (hg17), mouse(mm6), opossum(monDom1), 
 # fugu(fr1) and tetraodon(tetNig1)
+# Prepared tree image for Conservation track details page (2005-06-07, hartera)
     ssh kkstore01
     mkdir -p /cluster/data/danRer2/bed/multiz6way
     cd /cluster/data/danRer2/bed/multiz6way
@@ -4511,7 +4618,7 @@ cat > oneMultiz.csh << 'EOF'
     #   tree under construction.  This is also used to draw a graphic
     #   tree as species.nh, see below.
     cat << '_EOF_' > tree.nh
-((tetNig1,fr1),((mm6,hg17),monDom1))
+((hg17,mm6),monDom1),((tetNig1,fr1),danRer2))
 '_EOF_'
     # << this line keeps emacs coloring happy
 
@@ -4596,15 +4703,20 @@ cat  << 'EOF' > template
         multiz6waySummary multiz6way.maf
     # Processed 2565228 components in 1230321 mafs from multiz6way.maf
     # took about 2 minutes to load
-    # create tree image - like tree.nh but with common names:
-    cat << '_EOF_' > species.nh
-((tetraodon,fugu),((mouse,human),opossum))
+    # create tree image - like tree.nh but with common names, added zebrafish
+    # to tree (2005-06-07, hartera):
+    cat << '_EOF_' > species6.nh
+(((human,mouse),opossum),((tetraodon,fugu),zebrafish))
 '_EOF_'
-    /cluster/bin/phast/draw_tree -b -s species.nh > species6.ps
+    /cluster/bin/phast/draw_tree -b -s species6.nh > species6.ps
     # used GIMP to reduce the amount of whitespace to make it
     # smaller, then save as jpg
+    display species6.jpg
+    # use the Transform->Chop and then Direction->horizontal or vertical
+    # to reduce the tree size while keeping label sizes the same
     cp species6.jpg /usr/local/apache/htdocs/images/phylo/DanRer2_6way.jpg
-
+    # change permissions for display
+    chmod +r /usr/local/apache/htdocs/images/phylo/DanRer2_6way.jpg
 # add all.joiner entry for danRer2 multiz6way (2005-05-31, hartera)
     # add trackDb.ra entry
 # track multiz6way
