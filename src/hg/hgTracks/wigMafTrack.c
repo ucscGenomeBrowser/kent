@@ -19,7 +19,7 @@
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.81 2005/06/05 19:44:58 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.82 2005/06/08 20:09:32 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -802,27 +802,30 @@ for (mi = miList; mi != NULL; mi = mi->next)
         continue;
     summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->db);
     if (summaryList == NULL)
-        summaryList = 
-            (struct mafSummary *)hashMustFindVal(componentHash, mi->name);
-    if (vis == tvFull)
-        {
-        vgSetClip(vg, xOff, yOff, width, 16);
-        drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
-                                xOff, yOff, width, font, track->ixAltColor,
-                                track->ixAltColor, tvFull, useIrowChains);
-        vgUnclip(vg);
-        }
-    else 
-        {
-        /* pack */
-        /* get maf table, containing pairwise alignments for this organism */
-        /* display pairwise alignments in this region in dense format */
-        vgSetClip(vg, xOff, yOff, width, mi->height);
-        drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
-                            xOff, yOff, width, font, color, color, tvDense,
-                            useIrowChains);
-        vgUnclip(vg);
-        }
+        summaryList = (struct mafSummary *)hashFindVal(componentHash, mi->name);
+
+    if (summaryList != NULL)
+	{
+	if (vis == tvFull)
+	    {
+	    vgSetClip(vg, xOff, yOff, width, 16);
+	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
+				    xOff, yOff, width, font, track->ixAltColor,
+				    track->ixAltColor, tvFull, useIrowChains);
+	    vgUnclip(vg);
+	    }
+	else 
+	    {
+	    /* pack */
+	    /* get maf table, containing pairwise alignments for this organism */
+	    /* display pairwise alignments in this region in dense format */
+	    vgSetClip(vg, xOff, yOff, width, mi->height);
+	    drawScoreSummary(summaryList, mi->height, seqStart, seqEnd, vg, 
+				xOff, yOff, width, font, color, color, tvDense,
+				useIrowChains);
+	    vgUnclip(vg);
+	    }
+	}
     yOff += mi->height;
     }
 return TRUE;
