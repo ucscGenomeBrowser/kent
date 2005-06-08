@@ -1231,18 +1231,60 @@ done
       hgLoadBed -onServer -bedGraph=4 hg16 $f:t:r $f
     end
 
-<<<<<<< makeEncodeHg16.doc
 
 # TBA Alignments from Elliott Margulies (2005-06-06 kate)
     mkdir /cluster/data/encode/TBA
-    cd /cluster/datea/encode/TBA
-    mkdir 2005-06-03
-    cd 2005-06-03
+    cd /cluster/data/encode/TBA
+    mkdir 2005-06-07
+    cd 2005-06-07
+    mkdir lab; cd lab
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
     ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_tba/MAY-2005/
 
+    # load mafs
+    gunzip *.maf.gz
+    mkdir -p /gbdb/hg16/encode/TBA/maf
+    ln -s /cluster/data/encode/TBA/latest/lab/*.maf /gbdb/hg16/encode/TBA/maf
+    cd ..
+    hgLoadMaf -pathPrefix=/gbdb/hg16/encode/TBA/maf -WARN \
+        hg16 encodeTba >&! load.log &
+    # Loaded 229243 mafs in 44 files from /gbdb/hg16/encode/TBA/maf
+    # NOTE: many warnings about "Score too small"
+
+    # load phastCons conservation wiggle
+    gunzip -c lab/wig/human.EN*.pC.*.wig.gz | \
+        wigEncode stdin phastCons.wig phastCons.wib
+    ln -s `pwd`/phastCons.wib /gbdb/hg16/encode/TBA
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/TBA hg16 \
+                        encodeTbaPhastCons phastCons.wig 
+    # load binCons conservation wiggle
+cat > makeWig.csh << 'EOF'
+    foreach f (lab/wig/chr*.tba.binCons.n.gz)
+        set c = $f:t:r:r:r:r
+        echo "variableStep chrom=$c span=1"
+        gunzip -c $f
+    end
+'EOF'
+    csh makeWig.csh | wigEncode stdin binCons.wig binCons.wib >&! makeWig.log &
+    ln -s `pwd`/binCons.wib /gbdb/hg16/encode/TBA
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/TBA hg16 \
+                        encodeTbaBinCons binCons.wig 
+
+    # load MAF summary table
+    cat lab/*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 hg16 encodeTbaSummary stdin
+
+    # load conserved elements (6 tables)
+    gunzip -c lab/mcs/bCandpC.tpC.bed.gz | hgLoadBed hg16 encodeTbaBinAndPhastEl stdin
+    gunzip -c lab/mcs/bCandpC.tpC.nc.bed.gz | hgLoadBed hg16 encodeTbaNcBinAndPhastEl stdin
+    gunzip -c lab/mcs/bCorpC.tpC.bed.gz | hgLoadBed hg16 encodeTbaBinOrPhastEl stdin
+    gunzip -c lab/mcs/bCorpC.tpC.nc.bed.gz | hgLoadBed hg16 encodeTbaNcBinOrPhastEl stdin
+    gunzip -c lab/mcs/binCons.tpC.bed.gz | hgLoadBed hg16 encodeTbaBinConsEl stdin
+    gunzip -c lab/mcs/phastCons.t95.bed.gz | hgLoadBed hg16 encodeTbaPhastConsEl stdin
+        # error message: Expecting 5 words line 264 of stdin got 6
+        # bounce back to Elliott
+    
 
 #  REPACKAGE existing UCSD tracks into one composite
 #	DONE - 2005-06-06 - Hiram)

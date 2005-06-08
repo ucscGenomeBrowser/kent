@@ -12797,7 +12797,7 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     para try; para check
     para push
 
-    # post-process multiz maf with maf_order to "glue" short
+    # post-process multiz maf with maf_project to "glue" short
     # alignment blocks together
     ssh eieio
     cd /cluster/data/hg17/bed/multiz10way.v8
@@ -12834,29 +12834,6 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$
     set mafDir = /gbdb/hg17/mafNet
     mkdir -p $mafDir
 
-    # new pairwise (frog & tetra)
-    set table = xenTro1_netBlastz
-    mkdir -p $mafDir/$table
-    cd /cluster/data/xenTro1/bed/zb.hg17/mafNet
-    ln -s `pwd`/*.maf $mafDir/$table
-    hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
-
-set table = tetNig1_netBlastz
-    mkdir -p $mafDir/$table
-    cd /cluster/data/hg17/bed/blastz.tetNig1/mafNet
-    ln -s `pwd`/*.maf $mafDir/$table
-    hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
-
-    # old pairwise
-    foreach db (panTro1 mm5 rn3 canFam1 galGal2 fr1 danRer1)
-        set table = ${db}_netBlastz
-        mkdir -p $mafDir/$table
-        cd /cluster/data/hg17/bed/blastz.$db/mafNet
-        ln -s /cluster/data/hg17/bed/blastz.$db/mafNet/*.maf $mafDir/$table
-        hgLoadMaf hg17 -warn $table -pathPrefix=$mafDir/$table
-        rm *.tab
-    end
-
     # multiple alignment
     set mafDir = /gbdb/hg17/multiz10way/maf
     mkdir -p $mafDir/multiz10way
@@ -12866,9 +12843,40 @@ set table = tetNig1_netBlastz
 
     # load summary table to replace pairwise
     cd /cluster/data/hg17/bed/multiz10way.v8/mafGlued/
-    time cat chr*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 hg17 multiz10waySummaryNew stdin
+    time cat chr*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 hg17 multiz10waySummary stdin
     # Processed 27314693 components in 9081437 mafs from stdin
     # 30 minutes
+
+    # Gap/Break Annotation version of multiple alignment
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz10way
+    mkdir -p mafGap
+    cd mafGlued
+cat > doGap.csh << 'EOF'
+    foreach f (chr*.maf)
+        set c = $f:r
+        echo $c
+        mafAddIRows $c.maf /cluster/data/hg17/hg17.2bit ../mafGap/$c.maf
+    end
+'EOF'
+    time csh doGap.csh >&! doGap.log &
+    #  1:24:32
+
+    ssh hgwdev
+    set mafDir = /gbdb/hg17/multiz10wayGap
+    mkdir -p $mafDir/multiz10wayGap
+    cd /cluster/data/hg17/bed/multiz10way.v8/mafGap
+    ln -s `pwd`/*.maf $mafDir/multiz10wayGap
+    hgLoadMaf hg17 -warn multiz10wayGap -pathPrefix=$mafDir/multiz10wayGap
+    # Loaded 9373055 mafs in 46 files 
+    #   from /gbdb/hg17/multiz10wayGap/multiz10wayGap
+    # > 30 minutes
+
+    # load summary table
+    cd /cluster/data/hg17/bed/multiz10way.v8/mafGap
+    cat chr*.maf | ~kate/bin/i386/hgLoadMafSummary -minSize=10000 -mergeGap=500  hg17 multiz10wayGapSummary stdin
+      Processed 27314693 components in 9373055 mafs 
+    # ~30 minutes
 
 
 # CONSERVATION SCORING WITH PHASTCONS (DONE 2005-01-14 kate)
