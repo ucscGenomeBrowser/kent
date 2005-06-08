@@ -7,9 +7,11 @@ struct phyloTree *phyloReadTree(struct lineFile *lf)
 /* reads a phyloTree from lineFile (first line only) */
 {
 struct phyloTree *tree = NULL;
-char buffer[512];
+char *ptr;
+int len;
 
-tree = phyloParseString(buffer);
+if (lineFileNext(lf, &ptr, &len) && (len > 0))
+    tree = phyloParseString(ptr);
 
 return tree;
 }
