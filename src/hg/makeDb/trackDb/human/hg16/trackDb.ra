@@ -2388,6 +2388,62 @@ shortLabel Yale NB4 Un RNA TAR
 longLabel Yale NB4 RNA, TAR, Untreated
 priority 15
 
+track encodeYaleMASPlacRNATransMap
+compositeTrack on
+shortLabel Yale MAS TM
+longLabel Yale MAS array, RNA Transcript Map, Placenta, Nimblegen protocol
+group encode
+priority 33.45
+chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 0
+maxLimit 10.536
+autoScale Off
+
+track encodeYaleMASPlacRNATransMapFwdMless36mer36bp
+subTrack encodeYaleMASPlacRNATransMap
+shortLabel Yale MAS Fwd TM
+longLabel Yale MAS array, RNA Trans Map, Placenta, Forward direction, 36mer, 36bp win
+priority 1
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleMASPlacRNATransMapRevMless36mer36bp
+subTrack encodeYaleMASPlacRNATransMap
+shortLabel Yale MAS Rev TM
+longLabel Yale MAS array, RNA Trans Map, Placenta, Reverse direction, 36mer, 36bp win
+priority 2
+color 50,50,200
+altColor 200,50,50
+
+track encodeYaleMASPlacRNATars
+compositeTrack on
+shortLabel Yale MAS TAR
+longLabel Yale MAS array, RNA Transcriptionally Active Regions, Placenta, Nimblegen protocol
+group encode
+priority 33.46
+chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
+visibility hide
+type bed 6 .
+
+track encodeYaleMASPlacRNATarsFwdMless36mer36bp
+subTrack encodeYaleMASPlacRNATars
+shortLabel Yale MAS Fwd TAR
+longLabel Yale MAS array, RNA TARs, Placenta, Forward direction, 36mer, 36bp win
+priority 1
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleMASPlacRNATarsRevMless36mer36bp
+subTrack encodeYaleMASPlacRNATars
+shortLabel Yale MAS Rev TAR
+longLabel Yale MAS array, RNA TARs, Placenta, Reverse direction, 36mer, 36bp win
+priority 2
+color 50,50,200
+altColor 200,50,50
+
 track encodeUCDavisE2F1Median
 shortLabel FL/UCD Ng E2F1
 longLabel Farnham Lab/UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa cells
