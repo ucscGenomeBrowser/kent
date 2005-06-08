@@ -95,7 +95,7 @@ longLabel  MGC C-List sucessful RT-PCR
 group mgc
 priority 101.1
 visibility pack
-type psl
+type bed 12
 color 10,100,150
 exonArrows on
 #pslSequenceBases all
@@ -275,6 +275,54 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+
+track mgcGreenPcrHit
+shortLabel Green Success 
+longLabel MGC Green C-List Success
+group mgc
+priority 540
+visibility dense
+type genePred
+color 10,100,150
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
+
+track mgcGreenPcrInProgress
+shortLabel Green Pending
+longLabel MGC Green C-List Pending
+group mgc
+priority 541
+visibility dense
+type genePred
+color 10,100,150
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
+
+track mgcGreenPcrFail
+shortLabel Green Fail
+longLabel MGC Green C-List Fail
+group mgc
+priority 542
+visibility dense
+type genePred
+color 10,100,150
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
+
+track mgcOrthoMmRefGene
+shortLabel ortho mm refGene
+longLabel orthoMapped mm6 refGene
+group mgc
+priority 210
+visibility hide
+color 34,34,139
+type genePred
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
 
 track refGene
 shortLabel RefSeq Genes
