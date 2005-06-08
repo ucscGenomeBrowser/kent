@@ -58,6 +58,26 @@ while (row != NULL)
 sqlFreeResult(&sr);
 }
 
+/* convert a possible compund mrnaID ("protID_mrnaID") to just the mrnaID. */
+char *convert(char *compound)
+{
+char *chp;
+    
+chp = compound;
+if ((*chp == 'N') && (*(chp+1) == 'M') && (*(chp+2) == '_'))
+    {
+    return compound;
+    }
+else
+    {
+    chp = strstr(compound, "_");
+    if (chp == NULL) return compound;
+
+    chp ++;
+    }
+return chp;
+}	
+    
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn2, *conn3, *conn4, *conn5;
@@ -180,7 +200,7 @@ while (row2 != NULL)
 	    {
 	    if ( (!sameWord(printedMrna, mrnaID)) || (!sameWord(printedProt, protAcc)) )
 	    	{
-	    	fprintf(dupOutf, "%s\t%s\t%s\t%s\n", printedMrna, printedProt, mrnaID, protAcc);
+	    	fprintf(dupOutf, "%s\t%s\t%s\t%s\n", convert(printedMrna), printedProt, convert(mrnaID), protAcc);
 	   	}
 	    }
         row3 = sqlNextRow(sr3);
