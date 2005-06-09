@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.51 2005/06/05 20:14:04 braney Exp $"
+#	"$Id: makeMm6.doc,v 1.52 2005/06/09 02:12:49 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7120,5 +7120,531 @@ o Build the pepPi table
  spMrna
 
 # END OF mm6 KG/GS/PB RE-BUILD. 6/1/05 Fan.
+#####################################################################
+
+####################################################################################
+# RE-BUILD KNOWN GENES TABLES, 3RD TRIAL WITH CORRECTED kgCheck and kgGetCds (DONE 6/8/05 Fan)
+   ssh hgwdev 
+   cd /cluster/store10/kg/kgMm6B
+   mkdir try2
+   mv * try2
+
+   hgsql mm6 -e 'create database kgMm6BTempTry2'
+
+   hgsql kgMm6BTempTry2 -e 'drop table kgCandidate0'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/kgCandidate0.sql 
+   hgsql kgMm6BTempTry2 -e  'load data local infile "try2/kgCandidate0.gp" into table kgCandidate0'
+
+   hgsql kgMm6BTempTry2 -e 'drop table geneCheck'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/geneCheck.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "try2/kgCandidate0.check" into table geneCheck ignore 2 lines'
+
+# Run kgCheck to get all KG candidates that pass the KG gene check criteria
+
+   kgCheck kgMm6BTempTry2 mm6 kgCandidate0 geneCheck kgCandidate.tab
+   hgsql kgMm6BTempTry2 -e  'drop table kgCandidate'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/kgCandidate.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
+   hgsql kgMm6BTempTry2 -e 'create index alignID on kgCandidate(alignID)'
+
+# Construct the kgCandidateX table that has alignID in the name field. 
+   cut -f 2-10 kgCandidate.tab >j2.tmp
+   cut -f 11 kgCandidate.tab >j1.tmp
+   paste j1.tmp j2.tmp >kgCandidateX.tab
+   rm j1.tmp j2.tmp
+   
+   hgsql kgMm6BTempTry2 -e  'drop table kgCandidateX'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/kgCandidateX.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "kgCandidateX.tab" into table kgCandidateX'
+
+# Score protein/mRna and protein/RefSeq alignments
+
+#   kgResultBestMrna2 050415 kgMm6BTempTry2 mm6|sort -u >protMrnaBlatScore.tab
+#   kgResultBestRef2  050415 kgMm6BTempTry2 mm6|sort -u >protRefScore.tab
+
+# Combine scoring results and load them into temp DB.
+#   cat protMrnaBlatScore.tab protRefScore.tab >protMrnaScore.tab
+   hgsql kgMm6BTempTry2 -e 'drop table protMrnaScore'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/protMrnaScore.sql
+   hgsql kgMm6BTempTry2 -e 'load data local infile "try2/protMrnaScore.tab" into table protMrnaScore'
+   hgsql kgMm6BTempTry2 -e 'create index mrnaAcc on protMrnaScore(mrnaAcc)'
+
+
+# Run kgGetCds to get CDS structure of each gene
+
+   kgGetCds kgMm6BTempTry2 kgCandidateX jY.tmp
+   cat jY.tmp |sort -u >kgCandidateY.tab
+#   rm jY.tmp
+   hgsql kgMm6BTempTry2 -e  'drop table kgCandidateY'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/kgCandidateY.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "kgCandidateY.tab" into table kgCandidateY'
+
+# Run kgPickPrep to replace long cds structure string with cdsId.
+   kgPickPrep kgMm6BTempTry2 kgCandidateZ.tab
+   hgsql kgMm6BTempTry2 -e  'drop table kgCandidateZ'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/kgCandidateZ.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "kgCandidateZ.tab" into table kgCandidateZ'
+   hgsql kgMm6BTempTry2 -e 'create index cdsId on kgCandidateZ(cdsId)'
+
+# Run kgPick to pick the representative a mrna/protein pair for each unique CDS structure.
+
+   kgPick kgMm6BTempTry2 mm6 proteins050415 kgTry2.tmp dupSpMrna.tmp
+
+   cat kgTry2.tmp | grep NM_ > jNM
+   cat kgTry2.tmp | grep -v NM_ >jnoNM
+   cut -f 1 jnoNM | sed -e "s/_/_\n/" |grep -v _ >jnoNM1
+   cut -f 2-12  jnoNM >jnoNM2
+   paste jnoNM1 jnoNM2 > kgTry2B.tmp
+   cat jNM >> kgTry2B.tmp
+
+   sort -u dupSpMrna.tmp >dupSpMrna.tab
+   hgsql mm6 -e  'drop table dupSpMrna'
+   hgsql mm6 < ~/src/hg/lib/dupSpMrna.sql
+   hgsql mm6 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
+
+# Add entries in the put back list
+# Obtain the mouse put back list from Mark and save it as kgPutBack.tab
+
+   hgsql kgMm6BTempTry2 -e  'drop table kgPutBack'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/kgPutBack.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "kgPutBack.tab" into table kgPutBack'
+
+   kgPutBack kgMm6BTempTry2 mm6 proteins050415 kgPutBack kgPutBack.gp
+
+# Sort KG genes to make the kgTry2.gp table file.
+
+   cat kgTry2B.tmp kgPutBack.gp >kgTry2C.tmp
+  ~/kent/src/hg/protein/sortKg.pl kgTry2C.tmp >kgTry2.gp
+
+# Manually edit to correct one line problem of O75438_BC009691
+
+   hgsql kgMm6BTempTry2 -e  'drop table knownGene'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/knownGene.sql
+   hgsql kgMm6BTempTry2 -e  'load data local infile "kgTry2.gp" into table knownGene'
+
+# Load data into mm6 knownGene table.
+   hgsql mm6 -e  'drop table knownGene'
+   hgsql mm6 < ~/src/hg/lib/knownGene.sql
+   hgsql mm6 -e  'load data local infile "kgTry2.gp" into table knownGene'
+
+# Build knownGeneMrna and knownGenePep tables.
+   hgsql kgMm6BTempTry2 -e  'drop table mrnaSeq'
+   hgsql kgMm6BTempTry2 < ~/src/hg/lib/mrnaSeq.sql
+#  hgsql kgMm6BTempTry2 -e  'load data local infile "try2/mrnaSeq.tab" into table mrnaSeq'
+   hgsql kgMm6BTempTry2 -e  'load data local infile "/cluster/store10/kg/kgMm6A/mrnaSeq.tab" into table mrnaSeq'
+   kgPepMrna kgMm6BTempTry2 mm6 050415
+
+   hgsql mm6 -e  'drop table knownGeneMrna'
+   hgsql mm6 < ~/src/hg/lib/knownGeneMrna.sql
+   hgsql mm6 -e  'load data local infile "knownGeneMrna.tab" into table knownGeneMrna'
+   hgsql mm6 -e  'drop table knownGenePep'
+   hgsql mm6 < ~/src/hg/lib/knownGenePep.sql
+   hgsql mm6 -e  'load data local infile "knownGenePep.tab" into table knownGenePep'
+
+
+# Build kgXref table
+
+   kgXref2 kgMm6BTempTry2 050415 mm6
+
+   hgsql mm6 -e  'drop table kgXref'
+   hgsql mm6 < ~/src/hg/lib/kgXref.sql
+   hgsql mm6 -e  'load data local infile "kgXref.tab" into table kgXref'
+
+# Build kgProtMap table
+
+    ~/src/hg/protein/kgProtMap2.sh kgMm6B mm6 050415
+
+# Update and clean up kgResultBestMrna2.c and then check it in.
+
+# Build spMrna table
+
+   hgsql mm6 -N -e 'select name, proteinID from knownGene' |sort -u| >kgSpMrna.tab
+
+   hgsql mm6 -e  'drop table spMrna'
+   hgsql mm6 <~/src/hg/lib/spMrna.sql
+   hgsql mm6 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
+
+# Build mrnaRefseq table
+
+   cd /cluster/store10/entrez
+   mkdir 050601
+   rm /cluster/data/entrez
+   ln -s /cluster/store10/entrez/050601 /cluster/data/entrez
+   cd /cluster/data/entrez
+
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2accession.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
+   gzip -d *.gz
+
+   cut -f 2,4 gene2accession | sort -u | grep -v "-" | grep -v "NM_" | sed -e 's/\./\t/g' > entrezMrna.tab
+   cut -f 2,4 gene2refseq | grep "NM_"| sort -u | grep -v "-" | sed -e 's/\./\t/g' > entrezRefseq.tab
+   cut -f 2,4,6 gene2accession | grep "NM_"| grep "NP_"|sort -u | sed -e 's/\./\t/g' > entrezRefProt.tab
+   
+   hgsql entrez -e 'drop table entrezRefseq'
+   hgsql entrez -e 'drop table entrezMrna'
+   hgsql entrez -e 'drop table entrezRefProt'
+
+   hgsql entrez < ~/src/hg/lib/entrezRefseq.sql
+   hgsql entrez < ~/src/hg/lib/entrezMrna.sql
+   hgsql entrez < ~/src/hg/lib/entrezRefProt.sql
+
+   hgsql entrez -e 'load data local infile "entrezRefseq.tab" into table entrezRefseq'
+   hgsql entrez -e 'load data local infile "entrezMrna.tab" into table entrezMrna'
+   hgsql entrez -e 'load data local infile "entrezRefProt.tab" into table entrezRefProt'
+
+   hgsql entrez -N -e \
+   'select mrna, refseq from entrezRefseq, entrezMrna where entrezRefseq.geneID=entrezMrna.geneID' \
+   >mrnaRefseq.tab
+
+   hgsql mm6 -e 'drop table mrnaRefseq'
+   hgsql mm6 < ~/src/hg/lib/mrnaRefseq.sql
+   hgsql mm6 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# Build alias tables.		
+#	kgAliasM reads from proteins050415.hugo.symbol, proteins050415.hugo.aliases
+#	proteins050415.hugo.withdraws, mm6.kgXref.kgID
+#	to create kgAliasM.tab and geneAlias.tab
+#	by picking out those kgID items from kgXref where
+#	kgXref.geneSymbol == hugo.symbol
+
+   cd /cluster/store10/kg/kgMm6B
+   mkdir alias
+   cd alias
+   kgAliasM mm6 proteins050415
+
+#	kgAliasKgXref reads from mm6.knownGene.proteinID,
+#	mm6.knownGene.name, mm6.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
+
+   kgAliasKgXref mm6
+
+#	kgAliasRefseq reads from mm6.knownGene.name,
+#	mm6.knownGene.proteinID, mm6.kgXref.refseq
+#	to create kgAliasRefseq.tab
+
+   kgAliasRefseq mm6
+
+   hgsql sp050415 -N -e 'select name,gene.val from mm6.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
+   | sort -u  > kgAliasP.tab
+
+   hgsql mm6 -N -e 'select name, name from knownGene' >kgAliasDup.tab
+   hgsql mm6 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >>kgAliasDup.tab
+   
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab kgAliasDup.tab| \
+   sort |uniq > kgAlias.tab
+
+   hgsql -e "drop table kgAlias;" mm6 
+   hgsql mm6 < ~/kent/src/hg/lib/kgAlias.sql
+   hgsql mm6 -e 'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias' 
+
+#	kgProtAlias reads from mm6.knownGene.name,
+#	mm6.knownGene.proteinID, mm6.knownGene.alignID,
+#	proteins050415.spXref3.accession, proteins050415.spSecondaryID, proteins050415.pdbSP.pdb
+#	to create kgProtAlias.tab
+
+   kgProtAlias mm6 050415
+
+   hgsql mm6 -N -e \
+   'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
+   | sort -u >kgProtAliasNCBI.tab
+
+# include variant splice protein IDs
+   
+   hgsql mm6 -N -e \
+   'select name, proteinID, parAcc from knownGene,sp050415.varAcc where varAcc=proteinID'\
+   |sort -u >kgProtAliasDup.tab
+
+# include duplicate protein IDs from dupSpMrna table
+   hgsql mm6 -N -e \
+   'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna where name=mrnaID'\
+   |sort -u >>kgProtAliasDup.tab
+
+# catch parent acc from dupProteinID too
+   hgsql mm6 -N -e\
+   'select name, knownGene.proteinID, parAcc from knownGene,dupSpMrna,sp050415.varAcc where name=mrnaID and dupProteinID=varAcc.varAcc'\
+   |sort -u >>kgProtAliasDup.tab
+    cat kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab | sort -u > kgProtAliasAll.tab
+
+    echo "`date` creating table kgProtAlias"
+    hgsql mm6 -e "drop table kgProtAlias;"
+    hgsql mm6 <~/src/hg/lib/kgProtAlias.sql; 
+    hgsql mm6 -e 'LOAD DATA local INFILE "kgProtAliasAll.tab" into table kgProtAlias;'  
+
+# Build kgSpAlias table
+
+    hgsql mm6 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm6 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm6.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm6 -e 'drop table kgSpAlias';
+    hgsql mm6 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm6 -e 'load data local infile "mm6.kgSpAlias.tab" into table kgSpAlias'
+
+# MAKE FOLDUTR TABLES 
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    cd /cluster/data/mm6/bed
+    mkdir rnaStruct.2005-06-05
+    rm rnaStruct
+    ln -s rnaStruct.2005-06-05 rnaStruct
+    cd rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa mm6 knownGene utr3 utr3/utr.fa
+    utrFa mm6 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh kk
+    cd /cluster/data/mm6/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 25133 of 25133 jobs
+# CPU time in finished jobs:     554915s    9248.58m   154.14h    6.42d  0.018 y
+# IO & Wait Time:                 67099s    1118.32m    18.64h    0.78d  0.002 y
+# Average job time:                  25s       0.41m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6713s     111.88m     1.86h    0.08d
+# Submission to last job:          7435s     123.92m     2.07h    0.09d
+
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+Completed: 23548 of 23548 jobs
+CPU time in finished jobs:     102308s    1705.14m    28.42h    1.18d  0.003 y
+IO & Wait Time:                 64370s    1072.83m    17.88h    0.75d  0.002 y
+Average job time:                   7s       0.12m     0.00h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            8211s     136.85m     2.28h    0.10d
+Submission to last job:          8311s     138.52m     2.31h    0.10d
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/rnaStruct/utr5
+    hgLoadRnaFold mm6 foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold mm6 foldUtr3 fold
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
+
+# Build KEGG pathway tables.  
+   ssh hgwdev
+   cd /cluster/store10/kg/kgMm6B
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgMm6B mm6 050415
+
+   hgsql mm6 -e "drop table keggMapDesc"
+   hgsql mm6 -e "drop table keggPathway"
+   hgsql mm6 <~/src/hg/lib/keggMapDesc.sql
+   hgsql mm6 <~/src/hg/lib/keggPathway.sql
+   hgsql mm6 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql mm6 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+# Build CGAP pathway tables
+
+   cd ..
+   ~/src/hg/protein/KGcgap.sh kgMm6B mm6 050415
+   hgsql mm6 -e "drop table cgapAlias"
+   hgsql mm6 -e "drop table cgapBiocDesc"
+   hgsql mm6 -e "drop table cgapBiocPathway"
+   hgsql mm6 <~/src/hg/lib/cgapAlias.sql
+   hgsql mm6 <~/src/hg/lib/cgapBiocDesc.sql
+   hgsql mm6 <~/src/hg/lib/cgapBiocPathway.sql
+   hgsql mm6 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
+   hgsql mm6 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
+   hgsql mm6 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
+ 
+### MM6 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2005-06-06 - Fan)
+# These are instructions for re-building tables 
+# needed for the Proteome Browser to be used with mm6.  
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 050415.
+
+# Create the working directory
+   ssh hgwdev
+   mkdir /cluster/data/mm6/bed/pb.2005-06-06
+   cd /cluster/data/mm6/bed
+   rm pb
+   ln -s /cluster/data/mm6/bed/pb.2005-06-06 pb
+   cd pb
+
+# Define pep* tables in mm6 DB
+
+#   cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+# delete from the following tables (previously built):
+
+  hgsql mm6
+  delete from  pepCCntDist ;
+  delete from  pepExonCntDist ;
+  delete from  pepHydroDist ;
+  delete from  pepIPCntDist ;
+  delete from  pepMolWtDist ;
+  delete from  pepMwAa ;
+  delete from  pepPi ;
+  delete from  pepPiDist ;
+  delete from  pepPred ;
+  delete from  pepResDist ;
+  delete from pbAnomLimit;
+  delete from pbResAvgStd;
+  delete from pbStamp; 
+  quit; 
+
+# Build the pepMwAa table
+
+  hgsql proteins050415 -e \
+"select info.acc, molWeight, aaSize from sp050415.info, sp050415.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql mm6 -e 'load data local infile "pepMwAa.tab" into table mm6.pepMwAa ignore 1 lines;'
+
+o Build the pepPi table
+
+  hgsql proteins050415 -e "select info.acc from sp050415.info, sp050415.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.lis
+
+  pbCalPi protAcc.lis sp050415 pepPi.tab
+
+  hgsql mm6 -e 'load data local infile "pepPi.tab" into table mm6.pepPi;'
+
+
+# Calculate and load pep distributions
+
+  pbCalDist sp050415 proteins050415 10090 mm6 >pbCalDist.out
+
+    cat pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql mm6
+
+    load data local infile "pepExonCntDist.tab" into table mm6.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table mm6.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table mm6.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table mm6.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table mm6.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table mm6.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table mm6.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp050415 10090 mm6
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+#  hgsql mm6 < ~/src/hg/lib/pbAnomLimit.sql
+#  hgsql mm6 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql mm6 -e 'load data local infile "pbResAvgStd.tab" into table mm6.pbResAvgStd;'
+   hgsql mm6 -e 'load data local infile "pbAnomLimit.tab" into table mm6.pbAnomLimit;'
+
+# UPDATE kgSpAlias TABLE TO BE USED BY PB 
+
+    cd /cluster/data/mm6/bed/pb
+    hgsql mm6 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm6 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm6.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm6 -e 'drop table kgSpAlias';
+    hgsql mm6 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm6 -e 'load data local infile "mm6.kgSpAlias.tab" into table kgSpAlias'
+    gzip mm6.kgSpAlias.tab
+
+# Create pbStamp table for PB
+   
+  hgsql mm6 < ~/src/hg/lib/pbStamp.sql
+  hgsql mm5 -N -e 'select * from pbStamp' > pbStamp.tab
+
+  hgsql mm6 -e 'delete from pbStamp'
+  hgsql mm6 -e 'load data local infile "pbStamp.tab" into table mm6.pbStamp'
+
+# ENABLE PROTEOME BROWSER FOR mm6 IN HGCENTRALTEST (already done previously)
+    echo "update dbDb set hgPbOk = 1 where name = 'mm6';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+# Perform preliminary review of Proteome Browser for mm6, then
+  notify QA for formal review.
+
+# Update default Browser position
+# bring up mySQL on genome-testdb and use hgcentraltest DB (done previously):
+
+   update dbDb set defaultPos="chrX:87947304-87959012" where name="mm6";
+
+# Create QA Push Queue entry with the following tables:
+
+ ceBlastTab 
+ cgapAlias 
+ cgapBiocDesc 
+ cgapBiocPathway 
+ dmBlastTab 
+ drBlastTab 
+ dupSpMrna 
+ foldUtr3 
+ foldUtr5 
+ gnfAtlas2Distance 
+ hgBlastTab 
+ keggMapDesc 
+ keggPathway 
+ kgAlias 
+ kgProtAlias 
+ kgProtMap 
+ kgXref 
+ knownBlastTab 
+ knownCanonical 
+ knownGene 
+ knownGeneMrna 
+ knownGenePep 
+ knownIsoforms 
+ knownToGenePix 
+ knownToGnf1m 
+ knownToGnfAtlas2 
+ knownToLocusLink 
+ knownToMOE430 
+ knownToMOE430A 
+ knownToPfam 
+ knownToRefSeq 
+ knownToU74 
+ knownToXmBest 
+ rinnSex 
+ rnBlastTab 
+ scBlastTab 
+ spMrna
+
+# END OF mm6 KG/GS/PB RE-BUILD. 6/6/05 Fan.
 #####################################################################
 
