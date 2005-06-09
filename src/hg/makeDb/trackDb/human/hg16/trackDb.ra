@@ -4034,10 +4034,37 @@ priority 50
 visibility dense
 type bed 6 + 
 
+track encodeRikenCage
+compositeTrack on
+shortLabel Riken CAGE
+longLabel Riken CAGE
+group encode
+priority 47.9
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 1
+maxLimit 4316
+viewLimits 1.0:10.0
+autoScale Off
+
+track encodeRikenCagePlus
+subTrack encodeRikenCage
+shortLabel Riken CAGE +
+longLabel Riken CAGE Plus strand
+priority 1
+color 109,51,43
+
+track encodeRikenCageMinus
+subTrack encodeRikenCage
+shortLabel Riken CAGE -
+longLabel Riken CAGE Minus strand
+priority 2
+color 43,51,109
+
 searchTable encode_NHGRI_DNaseHS
 searchType bed
 termRegex 500bp_[0-9]+_[0-9]+
 searchMethod exact
 searchPriority 50.1
-
-
