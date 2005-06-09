@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.73 2005/06/07 14:04:09 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.74 2005/06/09 11:43:22 giardine Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -375,7 +375,7 @@ if (isWig)
     slAddTail(&otList, &otWigBed);
     if (galaAvail(database))
         slAddTail(&otList, &otGala);
-    if (cgiServerName() == NULL || startsWith("hgwdev-", cgiServerName()) ||
+    if (cgiServerName() == NULL || startsWith("hgwdev", cgiServerName()) ||
         startsWith("genome-test", cgiServerName()))
         slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
@@ -394,9 +394,9 @@ else if (isPositional)
     slAddTail(&otList, &otBed);
     if (galaAvail(database))
 	slAddTail(&otList, &otGala);
-    if (cgiServerName() == NULL || startsWith("hgwdev-", cgiServerName())||
+    if (cgiServerName() == NULL || startsWith("hgwdev", cgiServerName())||
         startsWith("genome-test", cgiServerName()))
-    slAddTail(&otList, &otGalaxy);
+        slAddTail(&otList, &otGalaxy);
     slAddTail(&otList, &otCustomTrack);
     slAddTail(&otList, &otHyperlinks);
     }
