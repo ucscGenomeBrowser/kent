@@ -3791,7 +3791,7 @@ priority 8
 
 
 track encodeGisChipPet
-shortLabel GIS p53 HCT116
+shortLabel GIS p53 5FU HCT116
 longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
 group encode
 color 158,35,135
