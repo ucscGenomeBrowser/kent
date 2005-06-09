@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.10 2005/06/06 21:59:49 jill Exp $";
+static char const rcsid[] = "$Id: axtFilter.c,v 1.11 2005/06/09 01:51:40 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +22,7 @@ errAbort(
   "   -t=chr1,chr2 - restrict target side sequence to those named\n"
   "   -notT=chr1,chr2 - restrict target side sequence to those not named\n"
   "   -notT_random - restrict target side sequence, no *_random to be used\n"
+  "   -notT_anyRandom - restrict target side sequence, no *_random/chrUn/NA/U\n"
   "   -notT_hap - restrict target side sequence, no *_hap to be used\n"
   "   -minScore=N - restrict to those scoring at least N\n"
   "   -maxScore=N - restrict to those scoring less than N\n"
@@ -81,6 +82,7 @@ char *tStartsWith = optionVal("tStartsWith", NULL);
 boolean notQ_random = optionExists("notQ_random");
 boolean notQ_hap = optionExists("notQ_hap");
 boolean notT_random = optionExists("notT_random");
+boolean notT_anyRandom = optionExists("notT_anyRandom");
 boolean notT_hap = optionExists("notT_hap");
 int i;
 
@@ -101,6 +103,11 @@ for (i=0; i<inCount; ++i)
 	if (notQ_hap && stringIn("_hap",axt->qName))
 	    writeIt = FALSE;
 	if (notT_random && endsWith(axt->tName, "_random"))
+	    writeIt = FALSE;
+	if (notT_anyRandom && (endsWith(axt->tName, "_random") ||
+			       startsWith("chrUn", axt->tName) || /* galGal */
+			       sameWord("chrNA", axt->tName) || /* danRer */
+			       sameWord("chrU", axt->tName) ))  /* dm */
 	    writeIt = FALSE;
 	if (notT_hap && stringIn("_hap",axt->tName))
 	    writeIt = FALSE;
