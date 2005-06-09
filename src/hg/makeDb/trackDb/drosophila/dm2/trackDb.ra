@@ -85,7 +85,7 @@ wiggle phastCons9way
 yLineOnOff Off
 autoScaleDefault Off
 summary multiz9waySummary
-speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel1
+speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel2
 
 track phastConsElements9way
 shortLabel Most Conserved
