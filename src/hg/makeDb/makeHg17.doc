@@ -15524,3 +15524,1121 @@ chainSome $(path1)
     # back to kkstore01
     rm -rf blastOut
 # End tblastn of mouse proteins
+
+
+####################################################################################
+# RE-BUILD KNOWN GENES TABLES, 3ND TRIAL WITH CORRECTED kgCheck and kgGetCds (DONE 6/5/05 Fan)
+
+# Start from the step that gene-check is run and kgCandidate0.gp is produced.
+
+   cd
+   cd /cluster/store10/kg/kgHg17F
+
+   mkdir try3
+   cd try3
+   hgsql kgHg17FTempTry3 -e 'drop table kgCandidate0'
+
+   hgsql kgHg17FTempTry3 -e 'drop table kgCandidate0'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/kgCandidate0.sql 
+   hgsql kgHg17FTempTry3 -e  'load data local infile "../kgCandidate0.gp" into table kgCandidate0'
+
+   hgsql kgHg17FTempTry3 -e 'drop table geneCheck'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/geneCheck.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "../kgCandidate0.check" into table geneCheck ignore 2 lines'
+
+# Run kgCheck to get all KG candidates that pass the KG gene check criteria
+
+   kgCheck kgHg17FTempTry3 hg17 kgCandidate0 geneCheck kgCandidate.tab
+   hgsql kgHg17FTempTry3 -e  'drop table kgCandidate'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/kgCandidate.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
+   hgsql kgHg17FTempTry3 -e 'create index alignID on kgCandidate(alignID)'
+
+# Construct the kgCandidateX table that has alignID in the name field. 
+   cut -f 2-10 kgCandidate.tab >j2.tmp
+   cut -f 11 kgCandidate.tab >j1.tmp
+   paste j1.tmp j2.tmp >kgCandidateX.tab
+
+   hgsql kgHg17FTempTry3 -e  'drop table kgCandidateX'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/kgCandidateX.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "kgCandidateX.tab" into table kgCandidateX'
+
+# Score protein/mRna and protein/RefSeq alignments
+
+#   kgResultBestMrna2 050415 kgHg17FTempTry3 hg17|sort -u >protMrnaBlatScore.tab
+#   kgResultBestRef2  050415 kgHg17FTempTry3 hg17|sort -u >protRefScore.tab
+
+# Combine scoring results and load them into temp DB.
+   cat protMrnaBlatScore.tab protRefScore.tab >protMrnaScore.tab
+   hgsql kgHg17FTempTry3 -e 'drop table protMrnaScore'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/protMrnaScore.sql
+   hgsql kgHg17FTempTry3 -e 'load data local infile "../protMrnaScore.tab" into table protMrnaScore'
+   hgsql kgHg17FTempTry3 -e 'create index mrnaAcc on protMrnaScore(mrnaAcc)'
+
+
+# Run kgGetCds to get CDS structure of each gene
+
+   kgGetCds kgHg17FTempTry3 kgCandidateX jY.tmp1
+   cat jY.tmp1 |sort -u >kgCandidateY.tab
+   rm jY.tmp1
+   hgsql kgHg17FTempTry3 -e  'drop table kgCandidateY'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/kgCandidateY.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "kgCandidateY.tab" into table kgCandidateY'
+
+# Run kgPickPrep to replace long cds structure string with cdsId.
+   kgPickPrep kgHg17FTempTry3 kgCandidateZ.tab
+   hgsql kgHg17FTempTry3 -e  'drop table kgCandidateZ'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/kgCandidateZ.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "kgCandidateZ.tab" into table kgCandidateZ'
+   hgsql kgHg17FTempTry3 -e 'create index cdsId on kgCandidateZ(cdsId)'
+
+# Run kgPick to pick the representative a mrna/protein pair for each unique CDS structure.
+
+   kgPick kgHg17FTempTry3 hg17 proteins050415 kg3Try3.tmp dupSpMrna.tmp
+
+   cat kg3Try3.tmp | grep NM_ > jNM
+   cat kg3Try3.tmp | grep -v NM_ >jnoNM
+   cut -f 1 jnoNM | sed -e "s/_/_\n/" |grep -v _ >jnoNM1
+   cut -f 2-12  jnoNM >jnoNM2
+   paste jnoNM1 jnoNM2 > kg3Try3B.tmp
+   cat jNM >> kg3Try3B.tmp
+
+   sort -u dupSpMrna.tmp >dupSpMrna.tab
+
+   hgsql hg17 -e 'drop table dupSpMrna'
+   hgsql hg17 < ~/src/hg/lib/dupSpMrna.sql
+   hgsql hg17 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
+
+
+# Add entries in the put back list
+# Obtain from Mark the put back list, kgPutBack.lis, for human RefSeq.
+
+   hgsql kgHg17FTempTry3 -e 'drop table kgPutBack'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/kgPutBack.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "kgPutBack.lis" into table kgPutBack'
+
+   kgPutBack kgHg17FTempTry3 hg17 proteins050415 kgPutBack kgPutBack.gp
+
+# Sort KG genes to make the kg3Try3.gp table file.
+
+   cat kg3Try3B.tmp kgPutBack.gp >kg3Try3C.tmp
+   ~/kent/src/hg/protein/sortKg.pl kg3Try3C.tmp >kg3Try3.gp
+
+# Manually edit to correct one line problem of O75438_BC009691
+
+   hgsql kgHg17FTempTry3 -e  'drop table knownGene'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/knownGene.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "kg3Try3.gp" into table knownGene'
+
+   hgsql hg17 -e  'drop table kg3Try3'
+   hgsql hg17 < ~/src/hg/lib/kg3Try3.sql
+   hgsql hg17 -e  'load data local infile "kg3Try3.gp" into table kg3Try3'
+
+# Perform analysis before renaming the kg3Try3 table to knownGene.
+
+# Load data into hg17 knownGene table.
+   hgsql hg17 -e  'drop table knownGene'
+   hgsql hg17 < ~/src/hg/lib/knownGene.sql
+   hgsql hg17 -e  'load data local infile "kg3Try3.gp" into table knownGene'
+
+# Build knownGeneMrna and knownGenePep tables.
+   hgsql kgHg17FTempTry3 -e  'drop table mrnaSeq'
+   hgsql kgHg17FTempTry3 < ~/src/hg/lib/mrnaSeq.sql
+   hgsql kgHg17FTempTry3 -e  'load data local infile "../mrnaSeq.tab" into table mrnaSeq'
+
+   kgPepMrna kgHg17FTempTry3 hg17 050415
+
+   hgsql hg17 -e  'drop table knownGeneMrna'
+   hgsql hg17 < ~/src/hg/lib/knownGeneMrna.sql
+   hgsql hg17 -e  'load data local infile "knownGeneMrna.tab" into table knownGeneMrna'
+   hgsql hg17 -e  'drop table knownGenePep'
+   hgsql hg17 < ~/src/hg/lib/knownGenePep.sql
+   hgsql hg17 -e  'load data local infile "knownGenePep.tab" into table knownGenePep'
+
+# Build spMrna table
+
+   hgsql hg17 -N -e 'select proteinID, name from knownGene' |sort -u >kgSpMrna.tab
+
+   hgsql hg17 -e  'drop table spMrna'
+   hgsql hg17 <~/src/hg/lib/spMrna.sql
+   hgsql hg17 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
+
+# Build kgXref table
+
+   kgXref2 kgHg17FTempTry3 050415 hg17
+
+   hgsql hg17 -e  'drop table kgXref'
+   hgsql hg17 < ~/src/hg/lib/kgXref.sql
+   hgsql hg17 -e  'load data local infile "kgXref.tab" into table kgXref'
+ 
+# MAKE FOLDUTR TABLES 
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir rnaStruct.2005-06-05
+    rm rnaStruct
+    ln -s rnaStruct.2005-06-05 rnaStruct
+    cd rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa hg17 knownGene utr3 utr3/utr.fa
+    utrFa hg17 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh kk
+    cd /cluster/data/hg17/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 35774 of 35774 jobs
+# CPU time in finished jobs:    1174534s   19575.57m   326.26h   13.59d  0.037 y
+# IO & Wait Time:                 98071s    1634.51m    27.24h    1.14d  0.003 y
+# Average job time:                  36s       0.59m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5409s      90.15m     1.50h    0.06d
+# Submission to last job:          6712s     111.87m     1.86h    0.08d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 33765 of 33765 jobs
+# CPU time in finished jobs:     341000s    5683.33m    94.72h    3.95d  0.011 y
+# IO & Wait Time:                106605s    1776.75m    29.61h    1.23d  0.003 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           30479s     507.98m     8.47h    0.35d
+# Submission to last job:         30622s     510.37m     8.51h    0.35d 
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/rnaStruct/utr5
+    hgLoadRnaFold hg17 foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold hg17 foldUtr3 fold
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
+
+# Build kgProtMap table
+
+# move all files under hg17Kg to old and copy try3/kgXref.tab up.
+
+# Note: it is important that tight_mrna.psl is here!
+    cp old/tight_mrna.psl . -p
+
+    ~/src/hg/protein/kgProtMap2.sh kgHg17F hg17 050415
+
+# Update and clean up kgResultBestMrna2.c and then check it in.
+
+# Build alias tables
+
+#	kgAliasM reads from proteins050415.hugo.symbol, proteins050415.hugo.aliases
+#	proteins050415.hugo.withdraws, hg17.kgXref.kgID
+#	to create kgAliasM.tab and geneAlias.tab
+#	by picking out those kgID items from kgXref where
+#	kgXref.geneSymbol == hugo.symbol
+
+   kgAliasM hg17 proteins050415
+
+#	kgAliasKgXref reads from hg17.knownGene.proteinID,
+#	hg17.knownGene.name, hg17.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
+
+   kgAliasKgXref hg17
+
+
+#	kgAliasRefseq reads from hg17.knownGene.name,
+#	hg17.knownGene.proteinID, hg17.kgXref.refseq
+#	to create kgAliasRefseq.tab
+
+   kgAliasRefseq hg17
+
+   hgsql sp050415 -N -e 'select name,gene.val from hg17.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
+   | sort -u  > kgAliasP.tab
+
+   hgsql hg17 -N -e 'select name, name from knownGene' >kgAliasDup.tab
+   hgsql hg17 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >>kgAliasDup.tab
+   
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab kgAliasDup.tab| \
+   sort |uniq > kgAlias.tab
+
+   hgsql -e "drop table kgAlias;" hg17 
+   hgsql hg17 < ~/kent/src/hg/lib/kgAlias.sql
+   hgsql hg17 -e 'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias' 
+
+#	kgProtAlias reads from hg17.knownGene.name,
+#	hg17.knownGene.proteinID, hg17.knownGene.alignID,
+#	proteins050415.spXref3.accession, proteins050415.spSecondaryID, proteins050415.pdbSP.pdb
+#	to create kgProtAlias.tab
+#
+
+   kgProtAlias hg17 050415
+
+   hgsql hg17 -N -e \
+   'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
+   | sort -u >kgProtAliasNCBI.tab
+
+# include variant splice protein IDs
+   
+   hgsql hg17 -N -e \
+   'select name, proteinID, parAcc from knownGene,sp050415.varAcc where varAcc=proteinID'\
+   |sort -u >kgProtAliasDup.tab
+
+# include duplicate protein IDs from dupSpMrna table
+   hgsql hg17 -N -e \
+   'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna where name=mrnaID'\
+   |sort -u >>kgProtAliasDup.tab
+
+# catch parent acc from dupProteinID too
+
+   hgsql hg17 -N -e\
+   'select name, knownGene.proteinID, parAcc from knownGene,dupSpMrna,sp050415.varAcc where name=mrnaID and dupProteinID=varAcc.varAcc'\
+   |sort -u >>kgProtAliasDup.tab
+    cat kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab | sort -u > kgProtAliasAll.tab
+
+    echo "`date` creating table kgProtAlias"
+    hgsql hg17 -e "drop table kgProtAlias;"
+    hgsql hg17 <~/src/hg/lib/kgProtAlias.sql; 
+    hgsql hg17 -e 'LOAD DATA local INFILE "kgProtAliasAll.tab" into table kgProtAlias;'  
+
+# Build kgSpAlias table
+
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg17 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg17.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg17 -e 'drop table kgSpAlias';
+    hgsql hg17 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql hg17 -e 'load data local infile "hg17.kgSpAlias.tab" into table kgSpAlias'
+    
+
+# Build KEGG pathway tables
+
+   ssh hgwdev
+   cd /cluster/store10/kg/kgHg17F
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgHg17F hg17 050415
+
+   hgsql hg17 -e "drop table keggMapDesc"
+   hgsql hg17 -e "drop table keggPathway"
+   hgsql hg17 <~/src/hg/lib/keggMapDesc.sql
+   hgsql hg17 <~/src/hg/lib/keggPathway.sql
+   hgsql hg17 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql hg17 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+# Build CGAP pathway tables
+
+   cd ..
+   ~/src/hg/protein/KGcgap.sh kgHg17F hg17 050415
+   hgsql hg17 -e "drop table cgapAlias"
+   hgsql hg17 -e "drop table cgapBiocDesc"
+   hgsql hg17 -e "drop table cgapBiocPathway"
+   hgsql hg17 <~/src/hg/lib/cgapAlias.sql
+   hgsql hg17 <~/src/hg/lib/cgapBiocDesc.sql
+   hgsql hg17 <~/src/hg/lib/cgapBiocPathway.sql
+   hgsql hg17 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
+   hgsql hg17 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
+   hgsql hg17 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
+# Build BioCyc pathway tables
+
+# Download BioCyc DB, create and load bioCyc DB
+# See makeBioCycDB.doc for details.
+   
+   hgsql hg17 -e "drop table bioCycMapDesc"
+   hgsql hg17 <~/src/hg/lib/bioCycMapDesc.sql
+   hgsql hg17 -e 'load data local infile "bioCycMapDesc.tab" into table bioCycMapDesc'
+
+   kgBioCyc |sort -u > bioCycPathway.tab
+
+   hgsql hg17 -e "drop table bioCycPathway"
+   hgsql hg17 <~/src/hg/lib/bioCycPathway.sql
+   hgsql hg17 -e 'load data local infile "bioCycPathway.tab" into table bioCycPathway'
+
+# CCDS <-> knownGene mapping need to be updated (Fan redone 2005-06-05)
+# this should be part of the known gene build
+    /cluster/data/genbank/bin/i386/mkCcdsGeneMap -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+
+
+### HG17 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2005-06-05 - Fan)
+# These are instructions for rebuilding tables 
+# needed for the Proteome Browser.  
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This update is based on proteins DBs dated 050415.
+
+# Create the working directory
+
+    ssh hgwdev
+    mkdir /cluster/store10/kg/kgHg17F/pb-2005-06-05
+    cd /cluster/data/hg17/bed
+    rm pb
+    ln -s /cluster/store10/kg/kgHg17F/pb-2005-06-05 pb
+    cd pb
+
+# Move the existing PB tables by:
+
+hgsql hg17
+create database hg17Sav4;
+
+alter table hg17.pepCCntDist rename as hg17Sav4.pepCCntDist;
+alter table hg17.pepExonCntDist rename as hg17Sav4.pepExonCntDist;
+alter table hg17.pepHydroDist rename as hg17Sav4.pepHydroDist;
+alter table hg17.pepIPCntDist rename as hg17Sav4.pepIPCntDist;
+alter table hg17.pepMolWtDist rename as hg17Sav4.pepMolWtDist;
+alter table hg17.pepMwAa rename as hg17Sav4.pepMwAa;
+alter table hg17.pepPi rename as hg17Sav4.pepPi;
+alter table hg17.pepPiDist rename as hg17Sav4.pepPiDist;
+alter table hg17.pepResDist rename as hg17Sav4.pepResDist;
+
+alter table hg17.pbAnomLimit rename as hg17Sav4.pbAnomLimit;
+alter table hg17.pbResAvgStd rename as hg17Sav4.pbResAvgStd;
+alter table hg17.pbStamp rename as hg17Sav4.pbStamp;
+
+quit
+
+# Define pep* tables in hg17 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+#  First edit out pepPred table definition, then
+
+	hgsql hg17 < pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins050415 -N -e \
+"select info.acc, molWeight, aaSize from sp050415.info, sp050415.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql hg17 -e 'load data local infile "pepMwAa.tab" into table pepMwAa'
+
+o Build the pepPi table
+
+    hgsql proteins050415 -e \
+    "select info.acc from sp050415.info, sp050415.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
+
+    hgsql hg17 -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+
+    pbCalPi protAcc.lis sp050415 pepPi.tab
+    hgsql hg17 -e 'delete from pepPi'
+    hgsql hg17 -e 'load data local infile "pepPi.tab" into table hg17.pepPi'
+
+# Calculate and load pep distributions
+
+    pbCalDist sp050415 proteins050415 9606 hg17 >pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql hg17
+    load data local infile "pepExonCntDist.tab" into table hg17.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table hg17.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table hg17.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table hg17.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table hg17.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table hg17.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table hg17.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp050415 9606 hg17
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql hg17 -e "drop table pbAnomLimit"
+   hgsql hg17 -e "drop table pbResAvgStd"
+   hgsql hg17 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql hg17 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql hg17 -e 'load data local infile "pbResAvgStd.tab" into table hg17.pbResAvgStd;'
+   hgsql hg17 -e 'load data local infile "pbAnomLimit.tab" into table hg17.pbAnomLimit;'
+
+# Create pbStamp table for PB
+  hgsql hg17 -e "drop table pbStamp"
+  hgsql hg17 < ~/src/hg/lib/pbStamp.sql
+  hgsql hg17Sav4 -N -e 'select * from pbStamp' > pbStamp.tab
+  hgsql hg17 -e 'load data local infile "pbStamp.tab" into table hg17.pbStamp'
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+# Perform preliminary review of Proteome Browser for hg17, then
+  notify QA for formal review.
+
+
+# RE-BUILD GENE SORTER TABLES (AKA: FAMILY BROWSER) (DONE - 2005-06-04 - Fan)
+#	This should be done after KG tables are complete from known genes build
+#	process.
+#
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/hg17/bed/geneSorter.2005-06-04
+# remove old symbolic link
+rm /cluster/data/hg17/bed/geneSorter
+ln -s /cluster/data/hg17/bed/geneSorter.2005-06-04 /cluster/data/hg17/bed/geneSorter
+cd /cluster/data/hg17/bed/geneSorter
+hgClusterGenes hg17 knownGene knownIsoforms knownCanonical
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/hg17/bed/geneSorter/blastp
+cd /cluster/data/hg17/bed/geneSorter/blastp
+pepPredToFa hg17 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/scratch/blast/formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
+
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/hg17/blastp
+mkdir -p /cluster/bluearc/hg17/blastp
+cp -p /cluster/data/hg17/bed/geneSorter/blastp/known.* /cluster/bluearc/hg17/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/hg17/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/self
+cd /cluster/data/hg17/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/hg17/blastp/known -i $1 -o $2 \
+-e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << keep emacs happy
+chmod +x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para push
+para check
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:     142764s    2379.39m    39.66h    1.65d  0.005 y
+# IO & Wait Time:                 67623s    1127.06m    18.78h    0.78d  0.002 y
+# Average job time:                  27s       0.45m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             144s       2.40m     0.04h    0.00d
+# Submission to last job:           392s       6.53m     0.11h    0.00d
+
+# Load into database.  This takes about 30 minutes
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/self/run/out
+time hgLoadBlastTab hg17 knownBlastTab *.tab
+# Scanning through 7735 files
+# Loading database with 9757382 rows
+# 255.200u 50.520s 25:19.66 20.1% 0+0k 0+0io 247pf+0w
+
+cd /cluster/data/hg17/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene hg17 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+#	hgsql -e "select count(*) from knownToRefSeq;" hg17
+#	row count changed 34667
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg17 > refToLl.txt
+hgMapToGene hg17 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#	hgsql -e "select count(*) from knownToLocusLink;" hg17
+#	row count changed to 34773
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
+#	hgsql -e "select count(*) from knownToPfam;" hg17
+#	row count changed to 29171 
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene hg17 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+#	hgsql -e "select count(*) from knownToGnfAtlas2;" hg17
+#	row count changed to 32458
+
+# Create expression distance table - takes about an hour
+    hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+    	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2 &
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 32458 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+#	hgsql -e "select count(*) from gnfAtlas2Distance;" hg17
+#	row count changed to 32381000
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene "-type=bed 12" hg17 affyUclaNorm knownGene knownToU133
+#	hgsql -e "select count(*) from knownToU133;" hg17
+#	row count changed to 32965
+
+# Create expression distance table.  This will take about 2.5 hours
+cd /tmp
+cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
+time hgExpDistance hg17 affyUclaNorm affyUclaExp knownExpDistance \
+	-weights=affyUcla.weight -lookup=knownToU133 &
+# Have 43039 elements in affyUclaNorm
+# 211 genes, 42 weights, 26.500000 total wieght
+# Got 32965 unique elements in affyUclaNorm
+
+# Create table that maps between known genes and 
+# the GNF data.
+cd /tmp
+hgMapToGene hg17 affyU95 knownGene knownToU95
+#	row count changed to 17555
+#	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
+hgExpDistance hg17 hgFixed.gnfHumanU95MedianRatio \
+	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95 &
+# Have 11545 elements in hgFixed.gnfHumanU95MedianRatio
+# Got 16501 unique elements in hgFixed.gnfHumanU95MedianRatio
+#	row count changed to 16450000  
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes only 10 minutes.)
+
+hgMapToGene hg17 affyGnf1h knownGene knownToGnf1h
+hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1h &
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 8827 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
+cd /cluster/data/hg17/bed/geneSorter
+hgMapToGene hg17 affyU133Plus2 knownGene knownToU133Plus2
+#	row count changed to 35139  
+
+# UPDATE GO DATABASE (THIS PART WAS DONE 5/21/05 Fan)
+
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /cluster/store1/geneOntology/20050521
+cd /cluster/store1/geneOntology/20050521
+
+wget --timestamping http://www.godatabase.org/dev/database/archive/latest/go_200504-assocdb-data.gz
+
+hgsql mysql <<end
+create database go050521;
+end
+zcat go_*data.gz | sed -e 's/ENGINE=MyISAM DEFAULT CHARSET=latin1/TYPE=MyISAM/g' >j.tmp
+hgsql go050521 <j.tmp
+rm j.tmp
+
+wget --timestamping ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_uniprot.gz
+
+zcat gene_association.goa_uniprot.gz | hgGoAssociation go050521 goaPart stdin 
+# Passed 5589891 of 6584507 of 6584507, 84.89%
+
+# Ask sys-admin to switch the database pointer go to point to go050521.
+
+cd /cluster/data/hg17/bed/geneSorter
+
+# Rebuilt Ensembl Gene tables.  See documentation (5/23/05 Fan) above.
+
+# Create knownToEnsembl column
+hgMapToGene hg17 ensGene knownGene knownToEnsembl
+# hgsql hg17 -e "select count(*) from knownToEnsembl" 
+#	table row count 35521
+
+# Make knownToCdsSnp table 
+  ssh hgwdev
+  nice hgMapToGene hg17 snp knownGene knownToCdsSnp -all -cds
+# hgsql hg17 -e "select count(*) from knownToCdsSnp" 
+# row count 94633
+# approx. 5 minutes running time
+
+# C.ELEGANS BLASTP FOR GENE SORTER 
+    # Make C. elegans ortholog column using blastp on wormpep.
+    # First make C. elegans protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+
+# The following section is done during mm6 build already.
+#    ssh eieio
+#    mkdir /cluster/data/ce2/bed/blastp
+#    cd /cluster/data/ce2/bed/blastp
+#    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+#    # to find out the latest version.  Then use that in place of 142 below.
+#    wget -O wormPep142.faa ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep142/wormpep142
+#    formatdb -i wormPep142.faa -t wormPep142 -n wormPep142
+#    ssh kkr1u00
+#    if (-e /iscratch/i/ce2/blastp) then
+#      rm -r /iscratch/i/ce2/blastp
+#    endif
+#    mkdir -p /iscratch/i/ce2/blastp
+#    cp /cluster/data/ce2/bed/blastp/wormPep142.p?? /iscratch/i/ce2/blastp
+#    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastp/ce2/run/out
+    cd /cluster/data/hg17/bed/blastp/ce2/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce2/blastp/wormPep142 -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/hg17/bed/geneSorter/blastp/split \
+    |sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...  
+
+# Initial run has 13 jobs crashed.
+# crashed: 13
+# ranOk: 7722
+
+# para problems show the following typical message:
+
+# total jobs in batch: 7735
+# job: blastSome ../../../geneSorter/blastp/split/kg5911.fa out/kg5911.tab
+# id: 209522384
+# failure type: crash
+# host: kkr2u28.kilokluster.ucsc.edu
+# start time: Sat Jun  4 11:45:51 2005
+# return: 0
+# stderr:
+# [blastall] FATAL ERROR: blast: Unable to open input file ../../../geneSorter/blastp/split/kg5911.fa
+
+# para push again and these 13 ran fine.
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:      60319s    1005.32m    16.76h    0.70d  0.002 y
+# IO & Wait Time:                 31239s     520.65m     8.68h    0.36d  0.001 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              72s       1.20m     0.02h    0.00d
+# Submission to last job:           199s       3.32m     0.06h    0.00d
+
+# Load into database.  
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastp/ce2/run/out
+    hgLoadBlastTab hg17 ceBlastTab -maxPer=1 *.tab
+# Scanning through 7735 files
+# Loading database with 25574 rows
+
+# Make mouse ortholog column using blastp on mouse known genes.
+# First make mouse protein database and copy it to /cluster/panasas
+# if it doesn't exist already
+#	This already exists.  See makeMm6.doc for procedure
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/mm6
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm6
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/panasas/home/store/mm6/blastp/known \
+-i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:      85769s    1429.49m    23.82h    0.99d  0.003 y
+# IO & Wait Time:                 20587s     343.11m     5.72h    0.24d  0.001 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              78s       1.30m     0.02h    0.00d
+# Submission to last job:           206s       3.43m     0.06h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm6/run/out
+hgLoadBlastTab hg17 mmBlastTab -maxPer=1 *.tab
+# Scanning through 7735 files
+# Loading database with 32951 rows
+
+# Make rat ortholog column using blastp on rat known genes.
+# First make rat protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This already exists.  See makeRn3.doc for procedure.
+#	Files were put in this directory: /cluster/bluearc/rn3/blastp/
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/rn3
+cd /cluster/data/hg17/bed/geneSorter/blastp/rn3
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/rn3/blastp/known \
+-i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc 
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:      27804s     463.40m     7.72h    0.32d  0.001 y
+# IO & Wait Time:                 30334s     505.56m     8.43h    0.35d  0.001 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              26s       0.43m     0.01h    0.00d
+# Submission to last job:           119s       1.98m     0.03h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/rn3/run/out
+hgLoadBlastTab hg17 rnBlastTab -maxPer=1 *.tab
+# Scanning through 7735 files
+# Loading database with 24030 rows
+
+# ZEBRAFISH BLASTP FOR GENE SORTER 
+    # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+    # First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    ssh kkstore
+    mkdir /cluster/data/danRer2/bed/blastp
+    cd /cluster/data/danRer2/bed/blastp
+    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH4.may.pep.fa.gz 
+    zcat Dan*.pep.fa.gz > ensembl.faa
+    /scratch/blast/formatdb -i ensembl.faa -t ensembl -n ensembl
+    ssh kkr1u00
+    if (-e /iscratch/i/danRer2/blastp) then
+      rm -r /iscratch/i/danRer2/blastp
+    endif
+    mkdir -p /iscratch/i/danRer2/blastp
+    cp /cluster/data/danRer2/bed/blastp/ensembl.p?? /iscratch/i/danRer2/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/hg17/bed/blastp/danRer2/run/out
+    cd /cluster/data/hg17/bed/blastp/danRer2/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/danRer2/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+    ls -1S /cluster/data/hg17/bed/geneSorter/blastp/split \
+    |sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try, check, push, check, ...
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:     111467s    1857.78m    30.96h    1.29d  0.004 y
+# IO & Wait Time:                 21159s     352.65m     5.88h    0.24d  0.001 y
+# Average job time:                  17s       0.29m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              95s       1.58m     0.03h    0.00d
+# Submission to last job:           223s       3.72m     0.06h    0.00d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastp/danRer2/run/out
+    hgLoadBlastTab hg17 drBlastTab -maxPer=1 *.tab
+# Scanning through 7735 files
+# Loading database with 30651 rows
+
+# Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on RefSeq.
+# First make protein database and copy it to cluster/bluearc
+# if it doesn't exist already
+#	This is already done, see makeMm3.doc for procedure
+#	the directory: /cluster/bluearc/sc1/blastp should have data
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/sc1
+cd /cluster/data/hg17/bed/geneSorter/blastp/sc1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/sc1/blastp/sgd \
+-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:      18194s     303.23m     5.05h    0.21d  0.001 y
+# IO & Wait Time:                 24452s     407.53m     6.79h    0.28d  0.001 y
+# Average job time:                   6s       0.09m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:           120s       2.00m     0.03h    0.00d
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/sc1/run/out
+hgLoadBlastTab hg17 scBlastTab -maxPer=1 *.tab
+# Scanning through 7735 files
+# Loading database with 16395 rows 
+
+# Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+# First make SwissProt protein database and copy it to cluster/bluearc
+# The following section was already done.
+# cd /cluster/data/dm1/bed
+# mkdir blastp
+# cd blastp
+#wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
+# zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
+# formatdb -i flyBase.faa -t flyBase -n flyBase
+# if (-e /cluster/bluearc/dm1/blastp) then
+#    rm -r /cluster/bluearc/dm1/blastp
+# endif
+# mkdir -p /cluster/bluearc/dm1/blastp
+# cp /cluster/data/dm1/bed/blastp/flyBase.p?? /cluster/bluearc/dm1/blastp
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm1
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/dm1/blastp/flyBase \
+-i $1 -o $2 -e 0.01 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+# Create parasol batch
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+# Completed: 7735 of 7735 jobs
+# CPU time in finished jobs:      72141s    1202.35m    20.04h    0.83d  0.002 y
+# IO & Wait Time:                 41717s     695.28m    11.59h    0.48d  0.001 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              57s       0.95m     0.02h    0.00d
+# Submission to last job:           204s       3.40m     0.06h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
+hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
+# Scanning through 7735 files
+# Loading database with 27109 rows
+
+# update knownToHInv table
+# Verified that there is now new release of HInv data.
+hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
+# count changed to 28851
+
+# The new KG process no longer need entries in knownGeneLink (used to store
+# info for DNA based RefSeqs.  So clean out the old data in knownGeneLink.
+
+hgsql hg17 -e "delete from knownGeneLink"
+
+#### RE-BUILD SUPERFAMILY RELATED TABLES (DONE - 2005-05-27 - Fan)
+
+# Download latest Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+    mkdir /cluster/store10/superfamily/050524
+    ln -s /cluster/store10/superfamily/050524 /cluster/data/superfamily/050524
+    cd /cluster/data/superfamily/050524
+
+# ftp over the following two files:
+ass_22-May-2005.tab.gz
+supfam_22-May-2005.sql.gz
+    gzip -d *.gz
+
+# Load the Superfamily database
+    hgsql hg17 -e "create database superfam050524"
+    nice hgsql superfam050524 < supfam_22-May-2005.sql &
+
+# This may take about an hour.
+
+# Make sure to add an index on id of the des table of superfam050524.
+    hgsql superfam050524 -e "create index id on des(id);"
+
+    hgsql superfam050524 < ~/src/hg/lib/sfAssign.sql
+    hgsql superfam050524 -e 'load data local infile "ass_22-May-2005.tab" into table 
+superfam050524.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql hg17 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/data/superfamily/050524  
+   hgsql hg17 -e 'load data local infile "ass_22-May-2005.tab" into table hg17.sfAssign;'
+
+# If hg17.sfDes already exists, drop it.
+
+   hgsql superfam050524 -N -e "select * from des" >sfDes.tab
+   hgsql hg17 < ~/src/hg/lib/sfDes.sql
+   hgsql hg17 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+# If hg17.superfamily already exists, drop it.
+   cd /cluster/data/hg17/bed
+   mkdir /cluster/data/hg17/sf.2004-1128
+   ln -s sf.2004-1128 sf
+   hgSuperfam hg17 > sf.log
+
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# If hg17.sfDescription exists, drop it.
+
+   hgsql hg17 < ~/src/hg/lib/sfDescription.sql
+   hgsql hg17 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg17.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed hg17 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+   
+   cat /cluster/data/superfamily/050524/ass_22-May-2005.tab \
+   | hgKnownToSuper hg17 hs stdin
+# created 32906 rows in knownToSuper
+
+# Build tables needed by pbGlobal in proteins050415
+
+   cd /cluster/data/superfamily/050524  
+   hgsql proteins050415 -e 'load data local infile "ass_22-May-2005.tab" into table sfAssign'
+
+   hgsql proteins050415 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+   cd /cluster/store10/kg/kgHg17F
+   hgsql proteins050415 -e 'load data local infile "ensemblXref.tab" into table ensemblXref'
+
+# These sf tables and ensemblXref3 are needed for non-HMR KG proteins.
+# Should add content of ensemblXref3 of mm6 after it is done.
+# And similarly for rn4 and possibly for other non-HMR species.
+# CCDS <-> knownGene mapping need to be updated (markd 2005-05-29)
+# this should be part of the known gene build
+    /cluster/data/genbank/bin/i386/mkCcdsGeneMap -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+
+
+
+
+
+
