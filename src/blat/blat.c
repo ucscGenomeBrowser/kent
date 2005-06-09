@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.102 2005/05/04 21:29:36 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.103 2005/06/09 18:36:55 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -64,7 +64,7 @@ printf(
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"
-  "   database and database are each either a .fa , .nib or .2bit file,\n"
+  "   database and query are each either a .fa , .nib or .2bit file,\n"
   "   or a list these files one file name per line.\n"
   "   -ooc=11.ooc tells the program to load over-occurring 11-mers from\n"
   "               and external file.  This will increase the speed\n"
