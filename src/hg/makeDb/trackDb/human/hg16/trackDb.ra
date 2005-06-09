@@ -1843,7 +1843,6 @@ priority 2
 
 track encodeLIChIPgIF
 compositeTrack on
-release alpha
 shortLabel LI/UCSD gIF ChIP
 longLabel Ludwig Institute/UCSD ChIP/Chip - Gamma Interferon Experiments
 group encode
@@ -3543,7 +3542,7 @@ priority 81
 
 track encodeSangerChipH3H4
 compositeTrack on
-shortLabel Sanger ChIP/Chip
+shortLabel Sanger ChIP
 longLabel Sanger ChIP/Chip (histones H3,H4 antibodies, GM06990 and K562 cells) 
 group encode
 priority 47.3
