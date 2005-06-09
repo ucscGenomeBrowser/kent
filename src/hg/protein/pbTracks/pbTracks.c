@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.39 2005/04/19 20:32:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.40 2005/06/09 00:22:25 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -212,16 +212,14 @@ if (strstr(spDisplayId, proteinID) == NULL)
    {
    hPrintf(" (aka %s", spDisplayId);
    /* don't show 2nd aka if the new and old displayId are the same */
-   if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
+   if (oldSpDisplayId(spDisplayId) != NULL)
 	{
-	hPrintf(" or %s", oldSpDisplayId(spDisplayId));
-        /* add an extra <br> */
-	hPrintf(")<br>\n", oldSpDisplayId(spDisplayId));
+   	if (!sameWord(spDisplayId, oldSpDisplayId(spDisplayId)))
+	    {
+	    hPrintf(" or %s", oldSpDisplayId(spDisplayId));
+	    }
 	}
-   else
-	{
-        hPrintf(")\n", oldSpDisplayId(spDisplayId));
-	}
+   hPrintf(") ", oldSpDisplayId(spDisplayId));
    }
 hPrintf(" %s\n", description);
 hPrintf("</font><br><br>");
