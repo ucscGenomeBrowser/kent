@@ -84,7 +84,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons9way
 yLineOnOff Off
 autoScaleDefault Off
-pairwise netBlastz
+summary multiz9waySummary
 speciesOrder droSim1 droYak1 droAna1 dp3 droVir1 droMoj1 anoGam1 apiMel1
 
 track phastConsElements9way
