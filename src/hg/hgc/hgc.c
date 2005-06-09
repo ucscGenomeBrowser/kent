@@ -170,7 +170,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.900 2005/06/06 04:01:13 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.901 2005/06/09 21:40:07 jill Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9417,6 +9417,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *chrom = cartString(cart, "c");
 struct psl *pslList = NULL, *psl;
 boolean hasBin;
 char table[64];
@@ -9437,6 +9439,7 @@ if (wordCount == 3)
     }
 freeMem(typeLine);
 cartWebStart(cart, itemName);
+printPosOnChrom(chrom,start,end,NULL,FALSE,NULL);
 printf("<H1>Information on %s Sequence %s</H1>", otherGenome, itemName);
 
 printf("Get ");
