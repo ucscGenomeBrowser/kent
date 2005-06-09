@@ -1795,6 +1795,16 @@ shortLabel Stan Pro Average
 longLabel Stanford Promoter Activity  (Average)
 priority 17
 
+track encodeStanfordRtPcr
+shortLabel Stanf. RTPCR
+longLabel Stanford Endogenous Transcript Levels in HCT116 Cells
+group encode
+priority 49.5
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+useScore 1
+type bed 5 +
+
 track encode_NHGRI_DNAseHS
 release beta
 shortLabel NHGRI DNaseI-HS
