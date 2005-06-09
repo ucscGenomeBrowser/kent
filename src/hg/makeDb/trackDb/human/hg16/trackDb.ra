@@ -2095,7 +2095,7 @@ autoScale Off
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
 subTrack encodeYaleChIPSTAT1Sig
 shortLabel Yale ChIP 36-36
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, Signal
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp Win, Signal
 priority 1
 color 200,50,50
 altColor 50,50,200
@@ -2103,7 +2103,7 @@ altColor 50,50,200
 track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSig
 subTrack encodeYaleChIPSTAT1Sig
 shortLabel Yale ChIP 50-38
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, Signal
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp Win, Signal
 priority 2
 color 200,50,50
 altColor 50,50,200
@@ -2111,15 +2111,15 @@ altColor 50,50,200
 track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSig
 subTrack encodeYaleChIPSTAT1Sig
 shortLabel Yale ChIP 50-50
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, Signal
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp Win, Signal
 priority 3
 color 200,50,50
 altColor 50,50,200
 
 track encodeYaleChIPSTAT1HeLaBingRenSig
 subTrack encodeYaleChIPSTAT1Sig
-shortLabel Yale ChIP Bing Ren
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, Signal
+shortLabel Yale ChIP UCSD
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren Chip, Signal
 priority 4
 color 200,50,50
 altColor 50,50,200
@@ -2127,7 +2127,7 @@ altColor 50,50,200
 track encodeYaleChIPSTAT1Sites
 compositeTrack on
 shortLabel Yale ChIP Sites
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, binding sites)
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, Binding Sites)
 group encode
 priority 33.15
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2137,7 +2137,7 @@ type bed .
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite
 subTrack encodeYaleChIPSTAT1Sites
 shortLabel Yale ChIP 36-36 Sites
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, binding sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp Win, Binding Sites
 priority 1
 color 200,50,50
 altColor 50,50,200
@@ -2145,7 +2145,7 @@ altColor 50,50,200
 track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSite
 subTrack encodeYaleChIPSTAT1Sites
 shortLabel Yale ChIP 50-38 Sites
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, binding sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp Win, Binding Sites
 priority 2
 color 200,50,50
 altColor 50,50,200
@@ -2153,15 +2153,15 @@ altColor 50,50,200
 track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSite
 subTrack encodeYaleChIPSTAT1Sites
 shortLabel Yale ChIP 50-50 Sites
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, binding sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp Win, Binding Sites
 priority 3
 color 200,50,50
 altColor 50,50,200
 
 track encodeYaleChIPSTAT1HeLaBingRenSites
 subTrack encodeYaleChIPSTAT1Sites
-shortLabel Yale ChIP Bing Ren Sites
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, binding sites
+shortLabel Yale ChIP UCSD Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren Chip, Binding Sites
 priority 4
 color 200,50,50
 altColor 50,50,200
@@ -2182,36 +2182,36 @@ autoScale Off
 
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
 subTrack encodeYaleChIPSTAT1Pval
-shortLabel Yale ChIP pV36-36
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, P-Values
+shortLabel Yale ChIP 36-36
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp Win, P-Values
 priority 1
 color 50,50,200
 
 track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
 subTrack encodeYaleChIPSTAT1Pval
-shortLabel Yale ChIP pV50-38
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, P-Values
+shortLabel Yale ChIP 50-38
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp Win, P-Values
 priority 2
 color 50,50,200
 
 track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
 subTrack encodeYaleChIPSTAT1Pval
-shortLabel Yale ChIP pV50-50
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, P-Values
+shortLabel Yale ChIP 50-50
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp Win, P-Values
 priority 3
 color 50,50,200
 
 track encodeYaleChIPSTAT1HeLaBingRenPval
 subTrack encodeYaleChIPSTAT1Pval
-shortLabel Yale ChIP pVBing Ren
-longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, P-Values
+shortLabel Yale ChIP UCSD
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren Chip, P-Values
 priority 4
 color 50,50,200
 
 track encodeYaleAffyRNATransMap
 compositeTrack on
-shortLabel Yale RNA TranMap
-longLabel Yale RNA Transcript Map, Neutrophil, Placenta and NB4 cell types
+shortLabel Yale RNA 
+longLabel Yale RNA Transcript Map (Neutrophil, Placenta and NB4 cells) 
 group encode
 priority 33.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2224,7 +2224,7 @@ autoScale Off
 track encodeYaleAffyNeutRNATransMapAll
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA TM Summary
-longLabel Yale Neutrophil RNA Transcript Map, summary
+longLabel Yale Neutrophil RNA Transcript Map, Summary
 priority 1
 color 127,50,50
 altColor 50,50,127
@@ -2320,7 +2320,7 @@ altColor 50,50,127
 track encodeYaleAffyNB4RARNATransMap
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale NB4 RA TM
-longLabel Yale NB4 RNA Transcript Map, Treated with retinoic acid
+longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
 priority 13
 color 127,50,50
 altColor 50,50,127
@@ -2328,7 +2328,7 @@ altColor 50,50,127
 track encodeYaleAffyNB4TPARNATransMap
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale NB4 TPA TM
-longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
 priority 13
 color 127,50,50
 altColor 50,50,127
@@ -2343,7 +2343,7 @@ altColor 50,50,127
 
 track encodeYaleAffyRNATars
 compositeTrack on
-shortLabel Yale RNA TARs
+shortLabel Yale TAR
 longLabel Yale RNA Transcriptionally Active Regions (TARs)
 group encode
 priority 33.4
@@ -2355,67 +2355,67 @@ altColor 0,128,128
 
 track encodeYaleAffyNeutRNATarsAll
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR Summary
-longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), summary
+shortLabel Yale Neu TAR Sum
+longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), Summary
 priority 1
 
 track encodeYaleAffyNeutRNATars01
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 1
+shortLabel Yale Neu TAR 1
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 1
 priority 2
 
 track encodeYaleAffyNeutRNATars02
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 2
+shortLabel Yale Neu TAR 2
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 2
 priority 3
 
 track encodeYaleAffyNeutRNATars03
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 3
+shortLabel Yale Neu TAR 3
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 3
 priority 4
 
 track encodeYaleAffyNeutRNATars04
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 4
+shortLabel Yale Neu TAR 4
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 4
 priority 5
 
 track encodeYaleAffyNeutRNATars05
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 5
+shortLabel Yale Neu TAR 5
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 5
 priority 6
 
 track encodeYaleAffyNeutRNATars06
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 6
+shortLabel Yale Neu TAR 6
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 6
 priority 7
 
 track encodeYaleAffyNeutRNATars07
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 7
+shortLabel Yale Neu TAR 7
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 7
 priority 8
 
 track encodeYaleAffyNeutRNATars08
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 8
+shortLabel Yale Neu TAR 8
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 8
 priority 9
 
 track encodeYaleAffyNeutRNATars09
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 9
+shortLabel Yale Neu TAR 9
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 9
 priority 10
 
 track encodeYaleAffyNeutRNATars10
 subTrack encodeYaleAffyRNATars
-shortLabel Yale RNA TAR 10
+shortLabel Yale Neu TAR 10
 longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 10
 priority 11
 
@@ -2428,13 +2428,13 @@ priority 12
 track encodeYaleAffyNB4RARNATars
 subTrack encodeYaleAffyRNATars
 shortLabel Yale NB4 RA RNA TAR
-longLabel Yale NB4 RNA, TAR, Treated with retinoic acid
+longLabel Yale NB4 RNA, TAR, Treated with Retinoic Acid
 priority 13
 
 track encodeYaleAffyNB4TPARNATars
 subTrack encodeYaleAffyRNATars
 shortLabel Yale NB4 TPA RNA TAR
-longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
 priority 14
 
 track encodeYaleAffyNB4UntrRNATars
@@ -2446,7 +2446,7 @@ priority 15
 track encodeYaleMASPlacRNATransMap
 compositeTrack on
 shortLabel Yale MAS TM
-longLabel Yale MAS array, RNA Transcript Map, Placenta, Nimblegen protocol
+longLabel Yale MAS array, RNA Transcript Map, Placenta, Nimblegen Protocol
 group encode
 priority 33.45
 chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
@@ -2460,7 +2460,7 @@ autoScale Off
 track encodeYaleMASPlacRNATransMapFwdMless36mer36bp
 subTrack encodeYaleMASPlacRNATransMap
 shortLabel Yale MAS Fwd TM
-longLabel Yale MAS array, RNA Trans Map, Placenta, Forward direction, 36mer, 36bp win
+longLabel Yale MAS array, RNA Trans Map, Placenta, Forward Direction, 36mer, 36bp Win
 priority 1
 color 200,50,50
 altColor 50,50,200
@@ -2468,7 +2468,7 @@ altColor 50,50,200
 track encodeYaleMASPlacRNATransMapRevMless36mer36bp
 subTrack encodeYaleMASPlacRNATransMap
 shortLabel Yale MAS Rev TM
-longLabel Yale MAS array, RNA Trans Map, Placenta, Reverse direction, 36mer, 36bp win
+longLabel Yale MAS array, RNA Trans Map, Placenta, Reverse Direction, 36mer, 36bp Win
 priority 2
 color 50,50,200
 altColor 200,50,50
@@ -2476,7 +2476,7 @@ altColor 200,50,50
 track encodeYaleMASPlacRNATars
 compositeTrack on
 shortLabel Yale MAS TAR
-longLabel Yale MAS array, RNA Transcriptionally Active Regions, Placenta, Nimblegen protocol
+longLabel Yale MAS array, RNA Transcriptionally Active Regions, Placenta, Nimblegen Protocol
 group encode
 priority 33.46
 chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
@@ -2486,7 +2486,7 @@ type bed 6 .
 track encodeYaleMASPlacRNATarsFwdMless36mer36bp
 subTrack encodeYaleMASPlacRNATars
 shortLabel Yale MAS Fwd TAR
-longLabel Yale MAS array, RNA TARs, Placenta, Forward direction, 36mer, 36bp win
+longLabel Yale MAS array, RNA TARs, Placenta, Forward Direction, 36mer, 36bp Win
 priority 1
 color 200,50,50
 altColor 50,50,200
@@ -2494,14 +2494,14 @@ altColor 50,50,200
 track encodeYaleMASPlacRNATarsRevMless36mer36bp
 subTrack encodeYaleMASPlacRNATars
 shortLabel Yale MAS Rev TAR
-longLabel Yale MAS array, RNA TARs, Placenta, Reverse direction, 36mer, 36bp win
+longLabel Yale MAS array, RNA TARs, Placenta, Reverse Direction, 36mer, 36bp Win
 priority 2
 color 50,50,200
 altColor 200,50,50
 
 track encodeUCDavisE2F1Median
 shortLabel UCD Ng E2F1
-longLabel UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa cells
+longLabel UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa Cells
 group encode
 priority 34.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
