@@ -271,7 +271,7 @@ package require Itcl
 	set r2l [llength $r2s] 
         set i 0
 	while {1} {
-	  if {($i >= $r1l) & ($i >= $r2l)} { return 0 }
+	  if {($i >= $r1l) && ($i >= $r2l)} { return 0 }
 	  if {$i >= $r1l} { return -1 }
 	  if {$i >= $r2l} { return  1 }
 	  set n1 [lindex $r1s $i]
@@ -868,8 +868,18 @@ proc genUserReports {outDir userTableVar numChangedFiles} {
 proc fileReport {fh outDir fileInfo fileRevs} {
 
     #added by galt
-    set rev1 [$fileInfo getRevisionParent [$fileInfo getTag $::gFromTag] ]
-    set rev2 [$fileInfo getRevisionParent [$fileInfo getTag $::gToTag]   ]
+    #set rev1 [$fileInfo getRevisionParent [$fileInfo getTag $::gFromTag] ]
+    #set rev2 [$fileInfo getRevisionParent [$fileInfo getTag $::gToTag]   ]
+
+    #added by galt (new way using gWhichReport)
+    set rev1 [$fileInfo getTag $::gFromTag]
+    set rev2 [$fileInfo getTag $::gToTag]
+    if {$::gWhichReport=="branch"} {
+        set rev2 [$fileInfo getRevisionParent $rev2 ]
+    } else {
+        set rev1 [$fileInfo getRevisionParent $rev1 ]
+    }
+
     
     set title "[$fileInfo getWorkingFile]"
     set desc {<ul>}
@@ -984,23 +994,29 @@ proc isRevSelected {fileInfo rev} {
         return 0
     }
 
-    #added by galt
+    #--- old way by date.  not used ---
     #set revRec [$fileInfo getRevision $rev]
     #return [expr [cnvDateTime [lindex $revRec 1]] >= $::gStartDate]
 
     # trying to ignore the specific revs of from/to and look at
     # the parent trunk revs instead, to use those for comparison
-    set ftr [$fileInfo getRevisionParent [$fileInfo getTag $::gFromTag] ]
-    set ttr [$fileInfo getRevisionParent [$fileInfo getTag $::gToTag]   ]
-    #used to be ftr,ttr were only x.x.x.x branch revisions
-    #but now they can be just trunk/tip x.x revisions also
-    # this compensates for those
-    if {"$ftr"==""} { set ftr [$fileInfo getTag $::gFromTag] }
-    if {"$ttr"==""} { set ttr [$fileInfo getTag $::gToTag] }
-    # however, the review tag is getting set on old files,
-    #  which does not happen by default with branch tags.
-    #  I have added -a to the review rtag command to suppress
-    #   the tagging of removed files in ./Attic.
+    set ftr [$fileInfo getTag $::gFromTag] 
+    set ttr [$fileInfo getTag $::gToTag]   
+   
+    if {$::gWhichReport=="branch"} { 
+	set ttr [$fileInfo getRevisionParent $ttr ]
+    } else {
+	set ftr [$fileInfo getRevisionParent $ftr ] 
+    }
+    ##used to be ftr,ttr were only x.x.x.x branch revisions
+    ##but now they can be just trunk/tip x.x revisions also
+    ## this compensates for those
+    #if {$ftr==""} { set ftr [$fileInfo getTag $::gFromTag] }
+    #if {$ttr==""} { set ttr [$fileInfo getTag $::gToTag] }
+    ## however, the review tag is getting set on old files,
+    ##  which does not happen by default with branch tags.
+    ##  I have added -a to the review rtag command to suppress
+    ##   the tagging of removed files in ./Attic.
 
     # Too new = no from- or to- tags (we don't want to see these)
     # New     = no from-tag but to-tag ok
@@ -1008,9 +1024,9 @@ proc isRevSelected {fileInfo rev} {
     # Recently removed = only from-tag, no to=tag
     # Removed long ago = no from- nor to- tags (we don't want to see these)
     
-    if {"$ttr"==""} { 
+    if {$ttr==""} { 
 	# is this a recently deleted rev? if not recent, skip
-	if {"$ftr"==""} {
+	if {$ftr==""} {
 	    return 0
 	}
 	if {[$fileInfo compareRevs $rev $ftr] <= 0} {
@@ -1020,8 +1036,8 @@ proc isRevSelected {fileInfo rev} {
     	if {[$fileInfo compareRevs $rev $ttr] >  0} {
     	    return 0
 	}
-    	if {"$ftr"!=""} { 
-    	    if {"$ftr"=="$ttr"} {
+    	if {$ftr!=""} { 
+    	    if {$ftr=="$ttr"} {
     		return 0
 	    }
 	    if {[$fileInfo compareRevs $rev $ftr] <= 0} {
@@ -1274,6 +1290,7 @@ proc genReports {outDir infoList} {
 # these will be calculated from value(s) passed in
 set gToTag   "v66_branch"
 set gFromTag "v65_branch"
+set gWhichReport "none"
 
 set gStartDate 0
 set gCgiProgress 0
@@ -1302,15 +1319,21 @@ while {[string match -* [lindex $argv 0]]} {
 	}
         -fromDate {  #added by galt
             if {[lempty $argv]} {
-                usage "-from requires an argument"
+                usage "-fromDate requires an argument"
             }
             set gFromTagDate [lvarpop argv]
         }
         -toDate {  #added by galt
             if {[lempty $argv]} {
-                usage "-to requires an argument"
+                usage "-toDate requires an argument"
             }
             set gToTagDate [lvarpop argv]
+	}
+        -whichReport {  #added by galt
+            if {[lempty $argv]} {
+                usage "-whichReport requires an argument"
+            }
+            set gWhichReport [lvarpop argv]
 	}
         -start {
             if {[lempty $argv]} {
@@ -1342,6 +1365,12 @@ while {[string match -* [lindex $argv 0]]} {
     }
 }
 
+
+if { ($gWhichReport != "branch") && ($gWhichReport != "review") } {
+    usage "wrong report type $gWhichReport, should be branch or review"
+}
+
+
 if {[llength $argv] != 2} {
     usage "wrong \# args"
 }
@@ -1365,6 +1394,7 @@ progress "starting from-tag $gFromTag"
 progress "  ending   to-tag $gToTag"
 progress "starting from-tag-date $gFromTagDate"
 progress "  ending   to-tag-date $gToTagDate"
+progress " which report: $gWhichReport"
 
 # update the working directory (if rdiff supported -U, we wouldn't need
 # a working dir
