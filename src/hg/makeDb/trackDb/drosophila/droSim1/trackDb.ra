@@ -61,6 +61,19 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track blastDm1FB
+shortLabel D. mel. Proteins
+longLabel $o_Organism ($o_date/$o_db) Proteins
+group compGeno
+priority 112
+visibility pack
+colorChromDefault off
+type psl protein
+pred dm1.blastFBPep00
+blastRef dm1.blastFBRef00
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
+otherDb dm2
+
 track chainDm2
 shortLabel D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
