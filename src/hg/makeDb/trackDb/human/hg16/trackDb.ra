@@ -2613,7 +2613,8 @@ priority 30.25
 visibility hide
 maxHeightPixels 128:16:16
 type wig -5.61 6.47
-viewLimits 0:1
+viewLimits -1:2
+windowingFunction mean
 autoScale off
 
 track encodeUcsdNgChipSignal
