@@ -1683,7 +1683,7 @@ type bed 4 .
 
 track encodeStanfordPromoters
 compositeTrack on
-shortLabel Stanf. Promoter
+shortLabel Stanf Promoter
 longLabel Stanford Promoter Activity 
 group encode
 priority 20.1
@@ -1796,7 +1796,7 @@ longLabel Stanford Promoter Activity  (Average)
 priority 17
 
 track encodeStanfordRtPcr
-shortLabel Stanf. RTPCR
+shortLabel Stanf RTPCR
 longLabel Stanford Endogenous Transcript Levels in HCT116 Cells
 group encode
 priority 49.5
