@@ -1843,7 +1843,7 @@ priority 2
 
 track encodeLIChIPgIF
 compositeTrack on
-shortLabel LI/UCSD gIF ChIP
+shortLabel LI gIF ChIP
 longLabel Ludwig Institute/UCSD ChIP/Chip - Gamma Interferon Experiments
 group encode
 priority 30.05
@@ -1994,7 +1994,7 @@ priority 4
 
 track encodeLIChIP
 compositeTrack on
-shortLabel LI/UCSD ChIP
+shortLabel LI ChIP
 longLabel Ludwig Institute/UCSD ChIP/Chip (Pol2, TAF1, AcH3, H3K4me, H3K27me3 antibodies)
 group encode
 priority 30.1
