@@ -38,7 +38,7 @@ type psl est
 pslSequenceBases no
 
 track multiz4way
-shortLabel 4-way Conservation
+shortLabel Conservation
 longLabel 4-way (D.sim./mel./yak./pseud.) Multiz Alignments & Conservation
 group compGeno
 priority 100
