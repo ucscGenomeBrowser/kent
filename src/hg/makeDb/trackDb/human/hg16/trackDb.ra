@@ -4042,7 +4042,7 @@ compositeTrack on
 shortLabel Riken CAGE
 longLabel Riken CAGE
 group encode
-priority 47.9
+priority 47.90
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
@@ -4065,6 +4065,16 @@ shortLabel Riken CAGE -
 longLabel Riken CAGE Minus strand
 priority 2
 color 43,51,109
+
+track encodeRikenCageMappedTags
+shortLabel Riken CAGE Tags
+longLabel Riken CAGE Mapped Tags
+group encode
+priority 47.91
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 9 .
+itemRgb On
 
 track encodeBu_ORChID1
 shortLabel BU ORChID
