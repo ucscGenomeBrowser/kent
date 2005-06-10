@@ -2836,7 +2836,7 @@ priority 4
 
 track encodeAffyChIpHl60Hr00
 compositeTrack on
-shortLabel Affy HL-60 RA 0hr
+shortLabel Affy HL-60 RA 0h
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P-Values and Sites, 0hrs
 group encode
 priority 47.25
@@ -2849,7 +2849,7 @@ autoScale off
 
 track encodeAffyChIpHl60Hr02
 compositeTrack on
-shortLabel Affy HL-60 RA 2hr
+shortLabel Affy HL-60 RA 2h
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P-Values and Sites, 2hrs
 group encode
 priority 47.26
@@ -2862,7 +2862,7 @@ autoScale off
 
 track encodeAffyChIpHl60Hr08
 compositeTrack on
-shortLabel Affy HL-60 RA 8hr
+shortLabel Affy HL-60 RA 8h
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P-Values and Sites, 8hrs
 group encode
 priority 47.27
@@ -2875,7 +2875,7 @@ autoScale off
 
 track encodeAffyChIpHl60Hr32
 compositeTrack on
-shortLabel Affy HL-60 RA 32hr
+shortLabel Affy HL-60 RA 32h
 longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) P-Values and Sites, 32hrs
 group encode
 priority 47.28
