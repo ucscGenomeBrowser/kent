@@ -4063,6 +4063,41 @@ longLabel Riken CAGE Minus strand
 priority 2
 color 43,51,109
 
+track encodeBu_ORChID
+compositeTrack on
+shortLabel BU ORChID
+longLabel Boston University ORChID
+group encode
+priority 20.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig -0.56 1.58
+maxHeightPixels 128:16:16
+viewLimits -0.25:+0.25
+autoScale Off
+windowingFunction Mean
+
+track encodeBu_ORChID1
+subTrack encodeBu_ORChID
+shortLabel BU ORChID 1bp win
+longLabel Boston University ORChID 1bp window
+priority 1
+color 109,51,43
+
+track encodeBu_ORChID5
+subTrack encodeBu_ORChID
+shortLabel BU ORChID 5bp win
+longLabel Boston University ORChID 5bp window
+priority 2
+color 43,51,109
+
+track encodeBu_ORChID15
+subTrack encodeBu_ORChID
+shortLabel BU ORChID 15bp win
+longLabel Boston University ORChID 15bp window
+priority 3
+color 43,51,109
+
 searchTable encode_NHGRI_DNaseHS
 searchType bed
 termRegex 500bp_[0-9]+_[0-9]+
