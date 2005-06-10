@@ -1,8 +1,7 @@
 <h2>Description</h2>
 <p>This track displays the predicted hydroxyl radical cleavage
-intensity for each nucleotide in the ENCODE regions.&nbsp; Three
-smoothing windows are available: 0, 5, and 15 nucleotides.&nbsp; As the
-hydroxyl radical cleavage intensity is proportional to the solvent
+intensity for each nucleotide in the ENCODE regions.
+As the hydroxyl radical cleavage intensity is proportional to the solvent
 accessible surface area of the deoxyribose hydrogen atoms (<a
  href="http://www.pnas.org/cgi/content/full/95/17/9738">Balasubramanian
 et al., 1998</a>), this track represents a structural profile of the
@@ -14,17 +13,17 @@ tool</a> to make plots using any smoothing window you prefer.<br>
 </p>
 <h2>Methods</h2>
 <p>Hydroxyl radical cleavage intensity predictions were performed using
-an in-house sliding trimer window (STW) algorithm.&nbsp; This algorithm
+an in-house sliding trimer window (STW) algorithm.  This algorithm
 draws data from our &middot;OH Radical Cleavage Intensity Database
 (ORChID), which contains &gt;150 experimentally determined cleavage
-patterns.&nbsp; These predictions are fairly accurate, with a Pearson
+patterns.  These predictions are fairly accurate, with a Pearson
 coefficient of ~0.85 between the predicted and experimentally
-determined cleavage intensities.&nbsp; For more details on the hydroxyl
+determined cleavage intensities.  For more details on the hydroxyl
 radical cleavage method, please see the references below.<br>
 </p>
 <h2>Verification</h2>
 <p>The STW algorithm has been cross-validated by removing each test
-sequence from the training set and performing a prediction.&nbsp; The
+sequence from the training set and performing a prediction.  The
 mean correlation coefficient (between predicted and experimental
 cleavage patterns) from this study was 0.85.<br>
 </p>
