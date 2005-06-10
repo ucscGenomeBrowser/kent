@@ -677,7 +677,7 @@ useScore 1
 type bed 5 .
 
 track encode_MSA2_MLAGAN
-shortLabel MSA/MLAGAN
+shortLabel Stanf. MLAGAN
 longLabel MLAGAN Alignments of ENCODE Regions
 group encode
 priority 112.7
