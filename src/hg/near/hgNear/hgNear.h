@@ -239,7 +239,11 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define idPosVarName "near.idPos"      	
 	/* chrN:X-Y position of id, may be empty. */
 #define groupVarName "near.group"	/* Grouping scheme. */
-#define orderVarName "near.order"	/* Ordering scheme. */
+
+#define orderVarName "near_order"	/* Ordering scheme. */
+	/* Search term - underbar for Javascript.  Hardcoded in Javascript. 
+	 * and in columnDb.ra. */
+
 #define getSeqVarName "near.do.getSeq"	/* Button to get sequence. */
 #define getGenomicSeqVarName "near.do.getGenomicSeq"	
 	/* Button to fetch genomic sequence. */

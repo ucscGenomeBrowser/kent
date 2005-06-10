@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.154 2005/06/06 20:20:10 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.155 2005/06/10 23:16:23 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1131,7 +1131,15 @@ hPrintf("</TD></TR>\n<TR><TD>");
     hPrintf("\">");
     hPrintf("sort by");
     hPrintf("</A> ");
-    hPrintf("<SELECT NAME=\"%s\">\n", orderVarName);
+    hPrintf("<SELECT NAME=\"%s\"", orderVarName);
+    hPrintf(" onchange=\""
+	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
+      	"document.orgForm.submit();"
+	"\"", 
+	orderVarName,
+	orderVarName,
+	orderVarName);
+    hPrintf(">\n");
     for (ord = ordList; ord != NULL; ord = ord->next)
         {
 	hPrintf("<OPTION VALUE=\"%s\"", ord->name);
@@ -1613,6 +1621,8 @@ hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", searchVarName,
 	cartUsualString(cart, searchVarName, ""));
+hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orderVarName,
+	cartUsualString(cart, orderVarName, ""));
 cartSaveSession(cart);
 puts("</FORM>");
 }
