@@ -1994,7 +1994,7 @@ priority 4
 
 track encodeLIChIP
 compositeTrack on
-shortLabel LI ChIP
+shortLabel LI ChIP Various
 longLabel Ludwig Institute/UCSD ChIP/Chip (Pol2, TAF1, AcH3, H3K4me, H3K27me3 antibodies)
 group encode
 priority 30.1
