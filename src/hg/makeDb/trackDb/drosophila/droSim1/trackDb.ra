@@ -21,7 +21,7 @@ shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54
-visibility pack
+visibility hide
 spectrum on
 type psl .
 cdsDrawOptions enabled
@@ -139,4 +139,14 @@ visibility hide
 spectrum on
 type netAlign dp2 chainDp2
 otherDb dp2
+
+track xenoRefGene
+shortLabel Non-$Organism RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility pack
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
 
