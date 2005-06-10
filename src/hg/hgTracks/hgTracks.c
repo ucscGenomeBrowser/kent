@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.971 2005/06/07 04:38:09 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.972 2005/06/10 22:57:05 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7310,6 +7310,14 @@ for (item = track->items; item != NULL; item = item->next)
         y += height;
         }
     }
+/* Wiggle track's ->height is actually one less than what it returns from 
+ * totalHeight()... I think the least disruptive way to account for this
+ * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
+ * we see wiggle or bedGraph: */
+if (sameString("wig", track->tdb->type) ||
+    startsWith("wig ", track->tdb->type) ||
+    startsWith("bedGraph", track->tdb->type))
+    y++;
 return y;
 }
 
