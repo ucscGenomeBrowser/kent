@@ -4073,8 +4073,6 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type wig -0.56 1.58
 maxHeightPixels 128:16:16
-viewLimits -0.25:+0.25
-autoScale Off
 windowingFunction Mean
 
 track encodeBu_ORChID1
