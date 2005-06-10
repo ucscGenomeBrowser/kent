@@ -2088,6 +2088,8 @@ maxHeightPixels 128:16:16
 minLimit -4.19
 maxLimit 3.69
 windowingFunction mean
+viewLimits -0.4:0.4
+autoScale Off
 
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
 subTrack encodeYaleChIPSTAT1Sig
