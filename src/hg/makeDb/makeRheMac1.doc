@@ -569,3 +569,16 @@ ln /cluster/data/hg17/bed/liftOver/hg17.rheMac1.over.chain /gbdb/hg17/liftOver/h
     #   should see good numbers in Cardinality column, not NULL:
     hgsql rheMac1 -e "show index from gc5Base;"
 
+# load qual scores (DONE - 2005-06-09  - Robert)
+
+    ssh kkstore01-10
+    cd /cluster/data/rheMac1/qual
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Rmacaque/fasta/linearScaffolds/Rmac20041001-freeze-assembly.fa.qual.gz 
+    gunzip *.gz
+    qaToQac Rmac20041001-freeze-assembly.fa.qual Rmac20041001-freeze-assembly.fa.qac
+    qacToWig -fixed Rmac20041001-freeze-assembly.fa.qac rheMac1.wig
+    wigEncode rheMac1.wig rheMac1.qual.wig rheMac1.qual.wib 
+    ln /cluster/data/rheMac1/qual/rheMac1.qual.wib /gbdb/rheMac1/wib/rheMac.qual.wib -s
+    ssh hgwdev
+    cd /cluster/data/rheMac1/qual
+    hgLoadWiggle rheMac1 quality rheMac1.qual.wig
