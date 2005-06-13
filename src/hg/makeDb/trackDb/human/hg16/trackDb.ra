@@ -4118,7 +4118,7 @@ type bed 4 .
 
 track encodeIndels
 shortLabel DIPs 
-longLabel Deletions and Insertions in ENCODE regions
+longLabel Deletions/Insertion Polymorphisms in ENCODE regions
 group encode
 priority 50
 visibility dense
