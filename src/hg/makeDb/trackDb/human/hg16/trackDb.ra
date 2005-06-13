@@ -2088,7 +2088,7 @@ maxHeightPixels 128:16:16
 minLimit -4.19
 maxLimit 3.69
 windowingFunction mean
-viewLimits -0.4:0.4
+viewLimits 0:2
 autoScale Off
 
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
@@ -2178,6 +2178,8 @@ maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 18.2
 autoScale Off
+windowingFunction mean
+viewLimits 0:10
 
 track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
 subTrack encodeYaleChIPSTAT1Pval
@@ -4173,4 +4175,5 @@ maxHeightPixels 128:36:16
 windowingFunction Mean
 color 44,44,200
 altColor 200,44,44
-
+viewWindow 0.22 0.5
+autoScale Off
