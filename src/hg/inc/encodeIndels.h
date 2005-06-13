@@ -5,7 +5,7 @@
 #ifndef ENCODEINDELS_H
 #define ENCODEINDELS_H
 
-#define ENCODEINDELS_NUM_COLS 10
+#define ENCODEINDELS_NUM_COLS 11
 
 struct encodeIndels
 /* ENCODE Deletion and Insertion Polymorphisms from NHGRI */
@@ -17,10 +17,11 @@ struct encodeIndels
     char *name;	/* Trace sequence */
     unsigned score;	/* Quality score  */
     char strand[2];	/* Value should be + or - */
-    char *name2;	/* Name 2 */
+    char *traceName;	/* Name of trace */
     char *traceId;	/* Trace Id (always integer) */
     unsigned tracePos;	/* Position in trace */
-    char *refSeq;	/* Reference sequence */
+    char traceStrand[2];	/* Value should be + or - */
+    char *reference;	/* Reference sequence */
     };
 
 void encodeIndelsStaticLoad(char **row, struct encodeIndels *ret);
