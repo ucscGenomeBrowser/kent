@@ -46,7 +46,7 @@ exit
                     promoterExps.tab promoterPos.bed promoterData.tab
     hgLoadBed hg16 encode_Stanford_Promoters encode_Stanford_Promoters.tab
 
-    # data update (2005-04-12 kate IN PROGRESS) 
+    # data update (2005-04-12 kate) 
     /cluster/data/encode/StanfordPromoters
     mkdir -p 2005-04-12; cd 2005-04-12
     mkdir lab; cd lab
@@ -501,7 +501,7 @@ cat > makeMaf.csh << 'EOF'
 
 # AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING (2004-12-08 kate)
 #	(RELOADED TABLES 2005-05-31 as bedGraph types - Hiram)
-# UPDATED 2005-06-03 angie with lots more data - see below
+# UPDATED 2005-06-06 (ChIP/chip) and 2005-06-08 (RNA) angie - see below
 
     # HL60 cells stimulated with Retinoic Acid
     # Transcription and PolII ChIP/Chip at 4 timepoints (8 experiments)
@@ -569,7 +569,7 @@ cat > load.csh << 'EOF'
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.bed.dsc encodeAffyChIpRnapHl60Sites.html
     cp EC_HL60_RA_RNApol2_00hr_AS_hs.NCBIv34.wig.dsc encodeAffyChIpRnapHl60Pval.html
 
-    # UPDATED 2005-06-06 angie
+    # UPDATED ChIP/chip 2005-06-06 angie
     cd /cluster/data/encode/Affy/2005-06-05
     # Load up the 41 bed3 tables of ChIP/chip sites...
     foreach f (chipchip/bed/*.bed)
@@ -608,8 +608,8 @@ cat > load.csh << 'EOF'
 	set g = 0
 	set b = 200
       else
-        set r = `expr 28 \* \( 9 - $fIndex \)`
-        set g = `expr 28 \* $fIndex`
+        set r = `expr 25 \* \( 9 - $fIndex \)`
+        set g = `expr 25 \* $fIndex`
         set b = 0
       endif
       echo track $track
@@ -676,16 +676,67 @@ cat > load.csh << 'EOF'
                       s/H3K27T/H3K27me3/; s/HisH4/H4Kac4/;'`
       set hh = `echo $f:t:r:r:r | perl -wpe 's/.*_(\d+)hr_.*/$1/'`
       set hr = `expr $hh + 0`
+      set fIndex = `echo $factor | sed -e \
+            's/Brg1/0/; s/CEBPe/1/; s/CTCF/2/; s/H3K27me3/3/; s/H4Kac4/4/; \
+             s/P300/5/; s/PU1/6/; s/Pol2/7/; s/RARA/8/; s/SIRT1/9/; \
+             s/TFIIB/10/;'`
+      if ($fIndex == 10) then
+        set r = 0
+	set g = 0
+	set b = 200
+      else
+        set r = `expr 25 \* \( 9 - $fIndex \)`
+        set g = `expr 25 \* $fIndex`
+        set b = 0
+      endif
       echo track $track
       echo subTrack encodeAffyChIpHl60Hr$hh
       echo shortLabel Affy $factor RA ${hr}h
       echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL60, ${hr}hrs\) P Value
+      echo color $r,$g,$b
       echo priority $pri
       echo ""
       set pri = `expr $pri + 2`
     end
-#TODO
-    cd /cluster/data/encode/Affy/2005-06-01/rna
+
+    # UPDATED RNA 2005-06-08 angie
+    cd /cluster/data/encode/Affy/2005-06-01
+    tail +2 rna/bed/EC_AS_GM06990_RCyP+_C01vsNULL.sig.gr.bed \
+    | hgLoadBed -noBin hg16 encodeAffyRnaGm06990Sites stdin
+    tail +2 rna/bed/EC_AS_HeLa_RCyP+_C01vsNULL.sig.gr.bed \
+    | hgLoadBed -noBin hg16 encodeAffyRnaHeLaSites stdin
+    foreach f (rna/bed/*HL60*.bed)
+      set track = `echo $f:t:r:r:r | perl -wpe \
+        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SitesHr$1/;'`
+      echo $track
+      tail +2 $f \
+      | hgLoadBed -noBin hg16 $track stdin
+    end
+    set gbdbDir = /gbdb/hg16/encode/Affy/2005-06-01
+    mkdir -p $gbdbDir/wib
+    set track = encodeAffyRnaGm06990Signal
+    bzcat rna/wig/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig.bz2 \
+    | wigEncode stdin wig/$track.wig wib/$track.wib
+#Converted stdin, upper limit 1686.50, lower limit -899.25
+    ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+    nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
+    set track = encodeAffyRnaHeLaSignal
+    bzcat rna/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig.bz2 \
+    | wigEncode stdin wig/$track.wig wib/$track.wib
+#Converted stdin, upper limit 1250.00, lower limit -763.50
+    ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+    nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
+    foreach f (rna/wig/*HL60*C01vsNULL.sig.wig.bz2)
+      set track = `echo $f:t:r:r:r | perl -wpe \
+       's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SignalHr$1/;'`
+      echo $track
+      bzcat rna/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig.bz2 \
+      | wigEncode stdin wig/$track.wig wib/$track.wib
+      ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+      nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
+    end
+    # All 4 timepoints had same max & min:
+#Converted stdin, upper limit 1250.00, lower limit -763.50
 
 
 # BOSTON UNIVERSITY / ZHIPING WENG LAB FIRST EXON DATA (WORKING 2005-01-27 kate)
@@ -909,13 +960,27 @@ cat > load.csh << 'EOF'
 
 
 # Genome Institute of Singapore -ChIP/PET of p53 TFBS (2005-03-31 kate)
+# UPDATED (2005-06-13 angie)
     cd /cluster/data/encode
     mkdir -p GIS/2005-04-07
     cd GIS/2005-04-07
     # files: description.html, p53ChIP-PET.bed
-
     sed '1d' p53ChIP-PET.bed | hgLoadBed hg16 encodeGisChipPet stdin
     # Loaded 65513 elements of size 12
+
+    # UPDATE (2005-06-13 angie)
+    # Use cluster-count info, now embedded into the name, to make scored BED:
+    cd /cluster/data/encode/GIS/p53/2005-06-10
+    tail +2 p53ChIP-PET-hg16.bed \
+    | perl -wpe 'chomp; @w = split; \
+                 if ($w[3] =~ /^\d+-(\d+)$/) { \
+                   $w[4] = ($1 >= 4 ? 1000 : ($1 >= 3 ? 800 : 333)); \
+                 } else { die "parse"; } \
+                 $_ = join("\t", @w) . "\n";' \
+    | hgLoadBed hg16 encodeGisChipPet stdin
+    # checkTableCoords cron job caught some overlapping blocks.  
+    # I would like to fix it, but Atif prefers to leave in the overlapping 
+    # blocks for consistency with what is on their site!  :[  Oh well.
 
 
 # TEST RE-LOADING AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING
@@ -1269,6 +1334,7 @@ cat > makeWig.csh << 'EOF'
         gunzip -c $f
     end
 'EOF'
+    # << for emacs
     csh makeWig.csh | wigEncode stdin binCons.wig binCons.wib >&! makeWig.log
     rm -f /gbdb/hg16/encode/TBA/binCons.wib
     ln -s `pwd`/binCons.wib /gbdb/hg16/encode/TBA
@@ -1548,6 +1614,7 @@ done
     hgLoadBed -strict -bedGraph=4 hg16 encodeUCDavisE2F1Median \
         encodeUCDavisE2F1Median.bedGraph4
 
+
 #########################################################################
 #  Rearrangement of existing UCSD tracks, combining into a single
 #  composite track: encodeLIChIP - (DONE - 2005-06-07 - Hiram)
@@ -1737,4 +1804,5 @@ done
     # Combine these two tables into the composite: encodeYaleMASPlacRNATransMap
     # Yale MAS RNA - Yale MAS array, RNA Transcript Map, Placenta,
     #	Nimblegen Protocol
+
 
