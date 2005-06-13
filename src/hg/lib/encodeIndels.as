@@ -7,8 +7,9 @@ table encodeIndels
    string           name;        "Trace sequence"
    uint             score;       "Quality score "
    char[1]          strand;      "Value should be + or -"
-   string           name2;       "Name 2"
+   string           traceName;   "Name of trace"
    string           traceId;     "Trace Id (always integer)"
    uint             tracePos;    "Position in trace"
-   string           refSeq;      "Reference sequence"
+   char[1]          traceStrand; "Value should be + or -"
+   string           reference;   "Reference sequence"
    )
