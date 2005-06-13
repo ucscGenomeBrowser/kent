@@ -1663,6 +1663,7 @@ done
     wc -l *.unmapped
 
     
+##########################################################################
 # EXOGEAN GENES FROM EGASP (2005-06-10 kate)
     # Contrib: Sarah Djebali, ENS-Dyogean (France)
     cd /cluster/data/encode
@@ -1677,3 +1678,63 @@ done
 
     # convert to genePred
     ldHgGene -out=exogean.gp -gtf -genePredExt null null exogean.gtf
+
+##########################################################################
+# Yale Nimblegen data (DONE - 2005-06-08 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/encode/yale/nimblegen/2005-06-01
+    # symlink data files to the names as their table names will be:
+D="encode_Yale_MAS_pbclassicprot_01Jun2005"
+
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Tars-FWD_Maskless36
+merevery36bp.html > \
+        encodeYaleMASPlacRNATarsFwdMless36mer36bp.html
+
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Tars-REV_Maskless36
+merevery36bp.html > \
+        encodeYaleMASPlacRNATarsRevMless36mer36bp.html
+
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Tars_FWD.Maskless36merever
+y36bp.bed \
+        encodeYaleMASPlacRNATarsFwdMless36mer36bp.bed
+
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Tars_REV.Maskless36merever
+y36bp.bed \
+        encodeYaleMASPlacRNATarsRevMless36mer36bp.bed
+
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Transcript-Map-FWD_
+Maskless36merevery36bp.html > \
+        encodeYaleMASPlacRNATransMapFwdMless36mer36bp.html
+
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Transcript-Map-FWD_Maskles
+s36merevery36bp.wig \
+        encodeYaleMASPlacRNATransMapFwdMless36mer36bp.wig
+
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Transcript-Map-REV_
+Maskless36merevery36bp.html > \
+        encodeYaleMASPlacRNATransMapRevMless36mer36bp.html
+
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_pbclassicprot_Transcript-Map-REV_Maskles
+s36merevery36bp.wig \
+        encodeYaleMASPlacRNATransMapRevMless36mer36bp.wig
+    #  load the tables
+for T in encodeYaleMASPlacRNATarsFwdMless36mer36bp \
+        encodeYaleMASPlacRNATarsRevMless36mer36bp
+do
+    grep "^chr" ${T}.bed | sort -k1,1 -k2,2n | \
+        hgLoadBed -strict hg16 ${T} stdin
+done
+    # Combine these two tables into the composite: encodeYaleMASPlacRNATars
+    # Yale MAS TAR - Yale MAS array, RNA Transcriptionally Active Regions,
+    #	Placenta, Nimblegen Protocol
+
+for T in encodeYaleMASPlacRNATransMapFwdMless36mer36bp \
+        encodeYaleMASPlacRNATransMapRevMless36mer36bp
+do
+    grep "^chr" ${T}.wig | sort -k1,1 -k2,2n | \
+        hgLoadBed -bedGraph=4 -strict hg16 ${T} stdin
+done
+    # Combine these two tables into the composite: encodeYaleMASPlacRNATransMap
+    # Yale MAS RNA - Yale MAS array, RNA Transcript Map, Placenta,
+    #	Nimblegen Protocol
+
