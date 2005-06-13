@@ -4124,10 +4124,10 @@ priority 50
 visibility dense
 type bed 6 + 
 
-track encodeRikenCage
+track encodeRikenCageMappedTagsScore
 compositeTrack on
-shortLabel Riken CAGE
-longLabel Riken CAGE
+shortLabel Riken CAGE MT
+longLabel Riken CAGE Mapped Tags count
 group encode
 priority 47.90
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -4135,8 +4135,39 @@ visibility hide
 type bedGraph 4
 maxHeightPixels 128:16:16
 minLimit 1
+maxLimit 5945
+viewLimits 0.0:10.0
+windowingFunction mean
+autoScale Off
+
+track encodeRikenCageMappedTagsPositive
+subTrack encodeRikenCageMappedTagsScore
+shortLabel Riken CAGE MT +
+longLabel Riken CAGE Mapped Tags count, Plus strand
+priority 1
+color 109,51,43
+
+track encodeRikenCageMappedTagsNegative
+subTrack encodeRikenCageMappedTagsScore
+shortLabel Riken CAGE MT -
+longLabel Riken CAGE Mapped Tags count, Minus strand
+priority 2
+color 43,51,109
+
+track encodeRikenCage
+compositeTrack on
+shortLabel Riken CAGE
+longLabel Riken CAGE - TEST TRACK ONLY
+group encode
+priority 47.91
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 1
 maxLimit 4316
 viewLimits 1.0:10.0
+windowingFunction mean
 autoScale Off
 
 track encodeRikenCagePlus
@@ -4155,9 +4186,9 @@ color 43,51,109
 
 track encodeRikenCageMappedTags
 shortLabel Riken CAGE Tags
-longLabel Riken CAGE Mapped Tags
+longLabel Riken CAGE Mapped Tags - TEST TRACK ONLY
 group encode
-priority 47.91
+priority 47.92
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 9 .
