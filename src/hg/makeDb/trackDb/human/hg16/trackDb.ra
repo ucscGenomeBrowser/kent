@@ -2689,7 +2689,7 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipMeh3k4Imr90
-shortLabel LI MeH3K4 IMR90
+shortLabel LI H3K4me2 IMR90
 longLabel Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells) 
 group encode
 priority 30.4
