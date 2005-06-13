@@ -5,17 +5,19 @@
 
 #ENCODE Deletion and Insertion Polymorphisms from NHGRI
 CREATE TABLE encodeIndels (
-    bin smallint not null,              # bin for speed
+    bin smallint not null,
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Trace sequence
     score int unsigned not null,	# Quality score 
     strand char(1) not null,	# Value should be + or -
-    name2 varchar(255) not null,	# Name 2
+    traceName varchar(255) not null,	# Name of trace
     traceId varchar(255) not null,	# Trace Id (always integer)
     tracePos int unsigned not null,	# Position in trace
-    refSeq varchar(255) not null,	# Reference sequence
-              #Indices
-    PRIMARY KEY(chrom)
+    traceStrand char(1) not null,	# Value should be + or -
+    reference varchar(255) not null,	# Reference sequence
+    #Indices
+    INDEX chrom (chrom(12),chromStart),
+    INDEX name (name)
 );
