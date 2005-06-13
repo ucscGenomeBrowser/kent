@@ -17,43 +17,36 @@ The gene annotations are colored based on the Vega type: </P>
 <TR>
   <TD>Known</TD>
   <TD>dark green</TD>
-  <TD>Known protein coding genes (referenced in NCBI)</TD>
+  <TD>Known protein coding genes (referenced in Entrez Gene, NCBI)</TD>
 </TR>
 <TR>
   <TD>Novel_CDS</TD>
   <TD>dark green</TD>
-  <TD>Novel protein coding genes annotated by Havana (not referenced in NCBI)</TD>
+  <TD>Novel protein coding genes annotated by Havana (not referenced in Entrez Gene, NCBI)</TD>
 </TR>
 <TR> 
-  <TD>Novel_transcript_val</TD>
+  <TD>Novel_transcript_gencode_conf</TD>
   <TD>dark green</TD>
-  <TD> Novel transcripts annotated by Havana (no ORF determined) with at least
+  <TD> Novel transcripts annotated by Havana (no ORF assigned) with at least
        one junction validated by RT-PCR</TD> 
 </TR>
 <TR> 
-  <TD>Putative_val</TD>
+  <TD>Putative_gencode_conf</TD>
   <TD>dark green</TD>
-  <TD>Putative transcripts (similar to &quot;novel transcripts&quot; with 
-      less evidence, no ORF determined) with at least one junction 
-      validated by RT-PCR</TD> 
-</TR>
-<TR>
-  <TD>Antisense_val</TD>
-  <TD>dark green</TD>
-  <TD>Antisense transcripts (no ORF) with at least one junction validated by 
-      RT-PCR</TD>
+  <TD>Putative transcripts (similar to &quot;novel transcripts&quot;, EST supported,
+         short, no viable ORF) with at least one junction validated by RT-PCR</TD> 
 </TR>
 <TR> 
   <TD>Novel_transcript</TD>
   <TD>light green</TD>
-  <TD>Novel transcripts annotated by Havana (no ORF determined) not validated 
+  <TD>Novel transcripts annotated by Havana (no ORF assigned) not validated 
       by RT-PCR</TD> 
 </TR>
 <TR> 
   <TD>Putative</TD>
   <TD>light green</TD>
-  <TD>Putative transcripts (similar to &quot;novel transcripts&quot; with 
-      less evidence, no ORF determined) not validated by RT-PCR</TD> 
+  <TD>Putative transcripts (similar to &quot;novel transcripts&quot;, EST supported,
+                short, no viable ORF) not validated by RT-PCR</TD> 
 </TR>
 <TR> 
   <TD>Antisense</TD>
@@ -63,23 +56,23 @@ The gene annotations are colored based on the Vega type: </P>
 <TR> 
   <TD>TEC</TD>
   <TD>light green</TD> 
-  <TD>Single exon annotations that need to be experimentally confirmed<TD> 
+  <TD>Single exon annotations (not spliced, poor evidence) not yet validated by RT-PCR 
+        (in process) <TD> 
 </TR>
 <TR>
   <TD>Processed_pseudogene</TD>
   <TD>blue</TD>
-  <TD>Pseudogenes issued from reverse transcription of the mRNA and 
-      re-integration (no introns)</TD>
+  <TD>Pseudogenes arising via retrotransposition (exon structure of parent gene lost) </TD>
 </TR>
 <TR>
   <TD>Unprocessed_pseudogene</TD>
   <TD>blue</TD>
-  <TD>Pseudogenes with introns</TD>
+  <TD>Pseudogenes arising via gene duplication (exon structure of parent gene retained)</TD>
 </TR>
 <TR>
   <TD>Artifact</TD>
   <TD>grey</TD>
-  <TD>Correspond to erroneous evidence</TD>
+  <TD>Transcript evidence and/or its translation equivocal</TD>
 </TR>
 </TABLE></P>
 
