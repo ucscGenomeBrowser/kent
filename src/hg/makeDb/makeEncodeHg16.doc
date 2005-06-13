@@ -1548,6 +1548,77 @@ done
     hgLoadBed -strict -bedGraph=4 hg16 encodeUCDavisE2F1Median \
         encodeUCDavisE2F1Median.bedGraph4
 
+#########################################################################
+#  Rearrangement of existing UCSD tracks, combining into a single
+#  composite track: encodeLIChIP - (DONE - 2005-06-07 - Hiram)
+# long label: Ludwig Institute/UCSD ChIP/Chip (Pol2, TAF1, AcH3, H3K4me,
+# 	H3K27me3 antibodies)
+# short label: LI ChIP Various
+    ssh hgwdev
+    #	two new data tracks:
+    cd /cluster/data/encode/UCSD/2005-06-01
+    grep "^chr" suz12.wig | sort -k1,1 -k2,2n > \
+	encodeUcsdChipH3K27me3Suz12.bedGraph
+    grep "^chr" tmh3k27.wig | sort -k1,1 -k2,2n > \
+	encodeUcsdChipH3K27me3.bedGraph
+
+    hgLoadBed -strict -bedGraph=4 hg16 encodeUcsdChipH3K27me3Suz12 \
+        encodeUcsdChipH3K27me3Suz12.bedGraph
+    hgLoadBed -strict -bedGraph=4 hg16 encodeUcsdChipH3K27me3 \
+        encodeUcsdChipH3K27me3.bedGraph
+
+    #	Reloading existing tracks to change the data value column from a
+    #	string to a float:
+    mkdir /cluster/data/encode/UCSD/fix_columns
+    cd /cluster/data/encode/UCSD/fix_columns
+    #	fetch data from existing tables
+for T in encodeUcsdChipMeh3k4Imr90 encodeUcsdChipAch3Imr90 \
+        encodeUcsdChipTaf250Hct116 encodeUcsdChipTaf250Imr90 \
+        encodeUcsdChipTaf250Thp1 encodeUcsdChipTaf250Hela \
+        encodeUcsdChipRnapHct116 encodeUcsdChipRnapImr90 \
+        encodeUcsdChipRnapThp1 encodeUcsdChipRnapHela
+do
+    hgsql -N -e "describe ${T}" hg16 > ${T}.desc
+    hgsql -N -e \
+        "select chrom,chromStart,chromEnd,name from ${T};" hg16 | \
+        sort -k1,1 -k2,2n > ${T}.bed
+done
+
+    #	reload these tables as bed graph, adding a _f to the table names:
+    for T in encodeUcsdChipMeh3k4Imr90 encodeUcsdChipAch3Imr90 \
+        encodeUcsdChipTaf250Hct116 encodeUcsdChipTaf250Imr90 \
+        encodeUcsdChipTaf250Thp1 encodeUcsdChipTaf250Hela \
+        encodeUcsdChipRnapHct116 encodeUcsdChipRnapImr90 \
+        encodeUcsdChipRnapThp1 encodeUcsdChipRnapHela
+do
+    hgLoadBed -strict -bedGraph=4 hg16 ${T}_f ${T}.bed
+done
+    #	each individual track's short and long label:
+# LI Pol2 HeLa - Ludwig Institute ChIP/Chip (Pol2 ab, HeLa cells)
+# LI Pol2 THP1 - Ludwig Institute ChIP/Chip (Pol2 ab, THP1 cells)
+# LI Pol2 IMR90 - Ludwig Institute ChIP/Chip (Pol2 ab, IMR90 cells)
+# LI Pol2 HCT116 - Ludwig Institute ChIP/Chip (Pol2 ab, HCT116 cells)
+# LI TAF1 HeLa - Ludwig Institute ChIP/Chip (TAF1 ab, HeLa cells)
+# LI TAF1 THP1 - Ludwig Institute ChIP/Chip (TAF1 ab, THP1 cells)
+# LI TAF1 IMR90 - Ludwig Institute ChIP/Chip (TAF1 ab, IMR90 cells)
+# LI TAF1 HCT116 - Ludwig Institute ChIP/Chip (TAF1 ab, HCT116 cells)
+# LI AcH3 IMR90 - Ludwig Institute ChIP/Chip (AcH3 ab, IMR90 cells)
+# LI H3K4me IMR90 - Ludwig Institute ChIP/Chip (MeH3K4 ab, IMR90 cells)
+# LI SUZ12 HeLa - Ludwig Institute ChIP/Chip (SUZ12 protein ab, HeLa cells
+#	unstimulated)
+# LI H3K27me3 HeLa - Ludwig Institute ChIP/Chip (H3K27me3 ab, HeLa cells
+#	unstimulated)
+    #	Replaces the composite track: encodeUcsdChipRnap
+    # LI ChIP Pol2 - Ludwig Institute ChIP/Chip (Pol2 initiation form antibody)
+    #		which had four subtracks.
+    #   And: encodeUcsdChipTaf250
+    # LI ChIP TAF1 - Ludwig Institute ChIP/Chip (TAF1 antibody)
+    #		which had four subtracks.
+    #	And the single track: encodeUcsdChipAch3Imr90
+    # LI AcH3 IMR90 - Ludwig Institute ChIP/Chip (AcH3 antibody, IMR90 cells)
+    #   And the single track:  encodeUcsdChipMeh3k4Imr90
+    #LI MeH3K4 IMR90 - Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells)
+
 # AUGUSTUS GENES FROM EGASP (2005-06-10 kate)
     # Contrib: Mario Stanke (mstanke@gwdg.de)
     # Department of Bioinformatics of the University of Gottingen in Germany
@@ -1606,4 +1677,3 @@ done
 
     # convert to genePred
     ldHgGene -out=exogean.gp -gtf -genePredExt null null exogean.gtf
-
