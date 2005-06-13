@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "encodeIndels.h"
 
-static char const rcsid[] = "$Id: encodeIndels.c,v 1.1 2005/06/08 23:46:02 heather Exp $";
+static char const rcsid[] = "$Id: encodeIndels.c,v 1.2 2005/06/13 22:01:53 heather Exp $";
 
 void encodeIndelsStaticLoad(char **row, struct encodeIndels *ret)
 /* Load a row from encodeIndels table into ret.  The contents of ret will
@@ -21,10 +21,11 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->name2 = row[6];
+ret->traceName = row[6];
 ret->traceId = row[7];
 ret->tracePos = sqlUnsigned(row[8]);
-ret->refSeq = row[9];
+strcpy(ret->traceStrand, row[9]);
+ret->reference = row[10];
 }
 
 struct encodeIndels *encodeIndelsLoad(char **row)
@@ -40,10 +41,11 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
-ret->name2 = cloneString(row[6]);
+ret->traceName = cloneString(row[6]);
 ret->traceId = cloneString(row[7]);
 ret->tracePos = sqlUnsigned(row[8]);
-ret->refSeq = cloneString(row[9]);
+strcpy(ret->traceStrand, row[9]);
+ret->reference = cloneString(row[10]);
 return ret;
 }
 
@@ -53,7 +55,7 @@ struct encodeIndels *encodeIndelsLoadAll(char *fileName)
 {
 struct encodeIndels *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +73,7 @@ struct encodeIndels *encodeIndelsLoadAllByChar(char *fileName, char chopper)
 {
 struct encodeIndels *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -98,10 +100,11 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
-ret->name2 = sqlStringComma(&s);
+ret->traceName = sqlStringComma(&s);
 ret->traceId = sqlStringComma(&s);
 ret->tracePos = sqlUnsignedComma(&s);
-ret->refSeq = sqlStringComma(&s);
+sqlFixedStringComma(&s, ret->traceStrand, sizeof(ret->traceStrand));
+ret->reference = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -115,9 +118,9 @@ struct encodeIndels *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->name2);
+freeMem(el->traceName);
 freeMem(el->traceId);
-freeMem(el->refSeq);
+freeMem(el->reference);
 freez(pEl);
 }
 
@@ -156,7 +159,7 @@ fprintf(f, "%s", el->strand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name2);
+fprintf(f, "%s", el->traceName);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -166,7 +169,11 @@ fputc(sep,f);
 fprintf(f, "%u", el->tracePos);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->refSeq);
+fprintf(f, "%s", el->traceStrand);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->reference);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
