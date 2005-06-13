@@ -4175,5 +4175,5 @@ maxHeightPixels 128:36:16
 windowingFunction Mean
 color 44,44,200
 altColor 200,44,44
-viewWindow 0.22 0.5
+viewLimits 0.22:0.5
 autoScale Off
