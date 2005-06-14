@@ -145,6 +145,7 @@
 #include "encodeErgeHssCellLines.h"
 #include "encodeStanfordPromoters.h"
 #include "encodeStanfordPromotersAverage.h"
+#include "encodeIndels.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -170,7 +171,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.901 2005/06/09 21:40:07 jill Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.902 2005/06/14 17:55:45 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11856,6 +11857,47 @@ encodeErgeHssCellLinesFree(&ee);
 hFreeConn(&conn);
 }
 
+
+void doEncodeIndels(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct encodeIndels encodeIndel;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+boolean firstTime = TRUE;
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    encodeIndelsStaticLoad(row+rowOffset, &encodeIndel);
+    if (firstTime)
+        {
+        printf("<B>Reference Sequence:</B> %s <BR>\n", encodeIndel.reference);
+        bedPrintPos((struct bed *)&encodeIndel, 3);
+        firstTime = FALSE;
+        printf("-----------------------------------------------------<BR>\n");
+        }
+    printf("<B>Trace Name:</B> %s <BR>\n", encodeIndel.traceName);
+    printf("<B>Trace Id:</B> %s <BR>\n", encodeIndel.traceId);
+    printf("<B>Trace Pos:</B> %d <BR>\n", encodeIndel.tracePos);
+    printf("<B>Trace Strand:</B> %s <BR>\n", encodeIndel.traceStrand);
+    printf("<B>Quality Score:</B> %d <BR>\n", encodeIndel.score);
+    printf("-----------------------------------------------------<BR>\n");
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doGbProtAnn(struct trackDb *tdb, char *item)
 /* Show extra info for GenBank Protein Annotations track. */
 {
@@ -16478,6 +16520,10 @@ else if (startsWith("flyreg", track))
 else if (startsWith("encodeGencodeIntron", track))
     {
     doGencodeIntron(tdb, item);
+    }
+else if (sameWord(track, "encodeIndels"))
+    {
+    doEncodeIndels(tdb, item);
     }
 else if (startsWith("encodeStanfordPromoters", track))
     {
