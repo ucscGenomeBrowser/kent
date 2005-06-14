@@ -2282,8 +2282,9 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type wig -2730 3394
 maxHeightPixels 128:16:16
-viewLimits 0:25
+viewLimits 0:200
 autoScale Off
+windowingFunction mean
 
 track encodeYaleAffyNeutRNATransMapAll
 subTrack encodeYaleAffyRNATransMap
