@@ -1805,6 +1805,69 @@ visibility hide
 useScore 1
 type bed 5 +
 
+track encodeStanfordMeth
+compositeTrack on
+shortLabel Stanf Methylation
+longLabel Stanford Methylation (Be2C, CRL1690, HCT116, HT1080, HepG2, JEG3, Snu182, U87)
+group encode
+priority 49.6
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 114
+viewLimits 0:5
+
+track encodeStanfordMethBe2C
+subTrack encodeStanfordMeth
+shortLabel Stan Meth Be2C
+longLabel Stanford Methylation (Be2C cells)
+priority 1
+
+track encodeStanfordMethCRL1690
+subTrack encodeStanfordMeth
+shortLabel Stan Meth CRL1690
+longLabel Stanford Methylation (CRL1690 cells)
+priority 2
+
+track encodeStanfordMethHCT116
+subTrack encodeStanfordMeth
+shortLabel Stan Meth HCT116
+longLabel Stanford Methylation (HCT116 cells)
+priority 3
+
+track encodeStanfordMethHT1080
+subTrack encodeStanfordMeth
+shortLabel Stan Meth HT1080
+longLabel Stanford Methylation (HT1080 cells)
+priority 4
+
+track encodeStanfordMethHepG2
+subTrack encodeStanfordMeth
+shortLabel Stan Meth HepG2
+longLabel Stanford Methylation (HepG2 cells)
+priority 5
+
+track encodeStanfordMethJEG3
+subTrack encodeStanfordMeth
+shortLabel Stan Meth JEG3
+longLabel Stanford Methylation (JEG3 cells)
+priority 6
+
+track encodeStanfordMethSnu182
+subTrack encodeStanfordMeth
+shortLabel Stan Meth Snu182
+longLabel Stanford Methylation (Snu182 cells)
+priority 7
+
+track encodeStanfordMethU87
+subTrack encodeStanfordMeth
+shortLabel Stan Meth U87
+longLabel Stanford Methylation (U87 cells)
+priority 8
+
 track encodeNhgriDnaseHs
 compositeTrack on
 shortLabel NHGRI DNaseI-HS
