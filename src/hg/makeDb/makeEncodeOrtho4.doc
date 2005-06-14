@@ -380,7 +380,7 @@ rm -rf genomeAgps.csh >& /dev/null
 cat > genomeAgps.csh << 'EOF'
 #!/bin/csh
 
-# create AGP's for a genome assembly
+# create AGPs for a genome assembly
 # NOTE: should have freeze dir (${ortho}) as an arg
 # WARNING: this script uses $consensusDir/*.bed5, but instructions
 # below create a separate version, from the encodeRegionsConsensus table
@@ -462,7 +462,7 @@ end
 
 ########################################################################
 
-# MOUSE AGP'S
+# MOUSE AGPs
 
 cd /cluster/data/encode/${ortho}/agp
 #set db  = mm5
@@ -471,14 +471,14 @@ set org = mouse
 
 #create consensus list from database, verify it's the same as consensus dir
 mkdir $db
-hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus order by name" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 sort $db/$db.encodeRegionsConsensus.bed5 > temp
 sort ../consensus/$db.encodeRegionsConsensus.bed5 | diff - temp
 # should be empty
 hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 # 57
 
-# Create AGP's
+# Create AGPs
 genomeAgps.csh $db $org $db $ortho
 
 # Test 
@@ -515,7 +515,7 @@ tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
 # 57
 
 ######################################################################a
-# RAT AGP'S (DONE 2005-03-16 kate)
+# RAT AGPs
 
 cd /cluster/data/encode/${ortho}/agp
 set db  = rn3
@@ -525,18 +525,18 @@ set encodeRegionPackingList = /cluster/data/encode/bin/scripts/encodeRegionPacki
 
 #create consensus list
 mkdir $db
-hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
+hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus order by name" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 
 # Get contig to accession map
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
-csh genomeAgps.csh $db $org $db
+# Create AGPs
+csh genomeAgps.csh $db $org $db $ortho
 
 # Test
 cd tests
 mkdir -p $db.test $db.nibTest
-# note: tab required in grep (retype when pasting)
+# note: tab required in grep (retype when pasting)  *********************************
 cat ../$db/${org}_EN*.agp | grep -v "	N" | cut -f6 > $db.accessions
 head $db.accessions
 # download contig sequences to $db.contig.fa directory
@@ -556,7 +556,7 @@ cd ..
 
 # Create packing list
 $encodeRegionPackingList $db/$db.encodeRegionsConsensus.bed5 $db $org "Rattus norvegicus" 10116 BN/SsNHsdMCW JUN-2003 $db "Baylor HGSC v3.1" > $db/$db.packing.list
-
+ 
 # Copy  to downloads area
 cp -f $db/$db.packing.list $downloadDir
 tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
@@ -568,7 +568,7 @@ grep Region $downloadDir/$db.packing.list | wc -l
 
 
 ########################################################################
-# CHICKEN AGP'S (DONE 2005-03-16 kate)
+# CHICKEN AGPs
 
 cd /cluster/data/encode/${ortho}/agp
 set db  = galGal2
@@ -586,7 +586,7 @@ hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 # Get contig to accession mapping (documented in makeGalGal2.doc) 
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
+# Create AGPs
 # errors here: missing /cluster/data/galGal2/chr*_random.agp and chrM.agp files
 # but there are no ENCODE orthologous sequences on these chicken chromosomes
 csh genomeAgps.csh $db $org $db
@@ -624,7 +624,7 @@ tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
 # 92 
 
 ########################################################################
-#  DOG AGP'S (DONE 2006-03-16 kate)
+#  DOG AGPs
 set db  = canFam1
 set org = dog
 
@@ -637,7 +637,7 @@ mkdir $db
 hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
+# Create AGPs
 csh genomeAgps.csh $db $org $db
 # ignore error messages for random chrom's and chrM (not in dog assembly)
 
@@ -678,7 +678,7 @@ grep Region $downloadDir/$db.packing.list | wc -l
 # 52
 
 ########################################################################
-# CHIMP AGP'S (DONE 2005-03-16 kate)
+# CHIMP AGPs
 set db  = panTro1
 set org = chimp
 
@@ -691,7 +691,7 @@ mkdir $db
 hgsql $db -e "select chrom, chromStart, chromEnd, name from encodeRegionsConsensus" | makeBed5.pl > $db/$db.encodeRegionsConsensus.bed5
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
+# Create AGPs
 # NOTE: next time, put chimpChromContigs.agp into $outDir
 cat /cluster/data/$db/?{,?}/*.agp | \
    chimpChromContigAgp stdin /cluster/data/$db/assembly.agp chimpChromContigs.agp
@@ -736,7 +736,7 @@ grep Region $downloadDir/$db.packing.list | wc -l
 # 81
 
 ########################################################################
-# OPOSSUM AGP'S (DONE 2005-03-17 kate)
+# OPOSSUM AGPs
 set db  = monDom1
 set org = opossum
 
@@ -754,7 +754,7 @@ hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 # get contig to accession mapping
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
+# Create AGPs
 gunzip -c /cluster/data/monDom1/broad.mit.edu/assembly.agp.gz > $db.assembly.agp
 regionAgp -contigFile=$org.contig.tab -namePrefix=${org}_ \
         $db/$db.encodeRegionsConsensus.bed5 $db.assembly.agp -dir $db
@@ -815,7 +815,7 @@ tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
 
 
 ########################################################################
-# TETRA AGP'S (DONE 2005-03-17 kate)
+# TETRA AGPs
 set db  = tetNig1
 set org = tetra
 
@@ -833,7 +833,7 @@ hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 # get contig to accession mapping
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
+# Create AGPs
 csh genomeAgps.csh $db $org $db
 
 # Test
@@ -872,7 +872,7 @@ tar cvfz $downloadDir/$db.agp.tar.gz $db/*.agp
 tar tvfz $downloadDir/$db.agp.tar.gz | wc -l
 
 ########################################################################
-# ZEBRAFISH AGP'S (DONE 2005-03-17 kate)
+# ZEBRAFISH AGPs
 set db  = danRer2
 set org = zebrafish
 
@@ -890,7 +890,7 @@ hgsql -e "select count(*) from $db.encodeRegionsConsensus"
 # get contig to accession mapping
 hgsql $db -s -e "select * from contigAcc" > $org.contig.tab
 
-# Create AGP's
+# Create AGPs
 csh genomeAgps.csh $db $org $db
 
 # Test
