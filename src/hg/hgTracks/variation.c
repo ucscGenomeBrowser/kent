@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.29 2005/05/06 15:11:36 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.30 2005/06/14 17:44:45 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -624,8 +624,8 @@ static struct rgbColor blue  = {  0,   0, 255};
 vgMakeColorGradient(vg, &white, &red,   LD_DATA_SHADES, ldShadesOfRed);
 vgMakeColorGradient(vg, &white, &green, LD_DATA_SHADES, ldShadesOfGreen);
 vgMakeColorGradient(vg, &white, &blue,  LD_DATA_SHADES, ldShadesOfBlue);
-ldHighLodLowDprime = vgFindColorIx(vg, 255, 224, 224);
-ldHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240);
+ldHighLodLowDprime = vgFindColorIx(vg, 255, 224, 224); /* pink */
+ldHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240); /* blue */
 ldColorsMade       = TRUE;
 }
 
@@ -692,7 +692,7 @@ if (isLod)
     {
     if (lodScore>2)             /* high LOD */
 	{
-	if (abs(score)<0.5)          /* high LOD, low D' */
+	if (abs(score)<0.5)          /* high LOD, low D' -> pink */
 	    return ldHighLodLowDprime;
 	else                    /* high LOD, high D' -> shades */
 	    {
