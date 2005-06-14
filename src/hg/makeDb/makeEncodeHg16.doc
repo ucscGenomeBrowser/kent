@@ -910,6 +910,7 @@ cat > load.csh << 'EOF'
     /cluster/bin/i386/gene-check -incl-ok -nib-dir /cluster/data/hg16/nib -details-out encodeGencodeGene.chk-details gencode.known.gp encodeGencodeGene.chk
 
 
+##########################################################################
 # Sanger Chip/chip  (DONE 2005-03-14 kate)
     ssh hgwdev
     cd /cluster/data/encode/sanger/
@@ -959,6 +960,7 @@ cat > load.csh << 'EOF'
     # maxLimit 75
 
 
+##########################################################################
 # Genome Institute of Singapore -ChIP/PET of p53 TFBS (2005-03-31 kate)
 # UPDATED (2005-06-13 angie)
     cd /cluster/data/encode
@@ -983,6 +985,7 @@ cat > load.csh << 'EOF'
     # blocks for consistency with what is on their site!  :[  Oh well.
 
 
+##########################################################################
 # TEST RE-LOADING AFFY TRANSCRIPTION AND CHIP/CHIP TEMPORAL PROFILING
 #	- Hiram 2005-05-24
 #	as bedGraph type tracks instead of wiggle to provide accurate
@@ -1062,7 +1065,11 @@ cat > load.csh << 'EOF'
 		encodeAffyChIpRnapHl60PvalHr${HR}.bed
     done
     #
+
+########################################################################
 # Sanger Chip/chip updated  (DONE - 2005-05-25 - Hiram)
+#	data supplier contacts: Christoph Koch <cmk@sanger.ac.uk>
+#	Ian Dunham <id1@sanger.ac.uk> Robert Andrews <rma@sanger.ac.uk>
     ssh hgwdev
     mkdir /cluster/data/encode/sanger/chipchip/2005-05-25
     cd /cluster/data/encode/sanger/chipchip
@@ -1163,6 +1170,7 @@ cat > load.csh << 'EOF'
 #	received on 2005-05-26 -> tmH3K4_p0.wig and tmH3K4_p30.wig
 #	The data in the two files is identical except for their track
 #	label comments.
+#	data supplier contact: Bing Ren biren@UCSD.EDU
 
     ssh hgwdev
     cd /cluster/data/encode/UCSD/2005-05-31
@@ -1296,7 +1304,7 @@ done
       hgLoadBed -onServer -bedGraph=4 hg16 $f:t:r $f
     end
 
-
+###########################################################################
 # TBA Alignments from Elliott Margulies (2005-06-06 kate)
     mkdir /cluster/data/encode/TBA
     cd /cluster/data/encode/TBA
@@ -1359,12 +1367,14 @@ cat > makeWig.csh << 'EOF'
     gunzip -c lab/mcs/phastCons.t95.bed.gz | \
                  hgLoadBed hg16 encodeTbaPhastConsEl stdin
     
-#  Loading Yale Affy ChIP/Chip data
+###########################################################################
+#  Loading Yale Affy ChIP/Chip data (DONE - 2005-06-03 - Hiram)
     #	Two files were found to have bad start,end coordinates, they
     #	were resubmitted by Joel Rozowsky:
     #	encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Pvalue_Map.wig
     #	encode_Yale_Chipchip_STAT1_Hela_BingRenArray_Signal_Map.wig
     #	This prompted the addition of the -strict option to hgLoadBed
+    #	data supplier contact: Joel Rozowsky joel.rozowsky@yale.edu
 
     cd /cluster/data/encode/yale/affy/2005-06-01/CHIPCHIP_STAT1
     #	rename the data files to their resulting table names:
@@ -1425,7 +1435,9 @@ done
     #	The four Pvalue data sets were packaged into the composite track:
     #	encodeYaleChIPSTAT1Pval
 
+#######################################################################
 #  Yale Affy RNA data sets (DONE - 2005-06-07 - Hiram)
+#	data supplier contact: Joel Rozowsky joel.rozowsky@yale.edu
     cd /cluster/data/encode/yale/affy/2005-06-01/RNA_NEUTROPHIL
     #	create symlinks to rename the files to their table names:
    ln -s encode_Yale_Affy_Neutrophil_RNA_Tars.html \
@@ -1604,6 +1616,8 @@ done
 #########################################################################
 #  Rearrangement of existing UCSD tracks, combining into a single
 #  composite track: encodeLIChIP - (DONE - 2005-06-07 - Hiram)
+#	In general, the data supplier contact for UCSD data is:
+#	Bing Ren biren@UCSD.EDU
 # long label: Ludwig Institute/UCSD ChIP/Chip (Pol2, TAF1, AcH3, H3K4me,
 # 	H3K27me3 antibodies)
 # short label: LI ChIP Various
@@ -1734,6 +1748,7 @@ done
 
 ##########################################################################
 # Yale Nimblegen data (DONE - 2005-06-08 - Hiram)
+#	Data supplier contact: Olof Emanuelsson olof.emanuelsson@yale.edu
     ssh hgwdev
     cd /cluster/data/encode/yale/nimblegen/2005-06-01
     # symlink data files to the names as their table names will be:
@@ -1793,7 +1808,7 @@ done
 
 
 #######################################################################
-# Boston University ORChID track
+# Boston University ORChID track - (DONE - 2005-06-09 - Hiram)
 #	data developer contact:  Jay Greenbaum jj@bu.edu
     ssh hgwdev
     cd /cluster/data/encode/BU/2005-06-09
