@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.972 2005/06/10 22:57:05 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.973 2005/06/14 00:46:50 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8751,7 +8751,6 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     }
 }
 
-
 Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a genePred in based on looking it up in a itemAttr
  * table. */
@@ -8804,7 +8803,7 @@ if (hTableExists(classTable))
         /* scan through groups to find a match */
         for (class = 0; class < classCt; class++)
            {
-           if (startsWith(classes[class], row[0]))
+           if (sameString(classes[class], row[0]))
            /* get color from trackDb settings hash */
               {
               found = TRUE;
