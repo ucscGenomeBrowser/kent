@@ -171,7 +171,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.902 2005/06/14 17:55:45 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.903 2005/06/14 18:29:55 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2766,6 +2766,16 @@ if (track != NULL)
 	    }
 	}
     }
+return dyStringCannibalize(&url);
+}
+
+char *traceUrl(char *traceId)
+/* Make up URL for trace archive. */
+{
+struct dyString *url = dyStringNew(0);
+dyStringAppend(url, "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?");
+dyStringPrintf(url, "cmd=retrieve&size=1&val=%s&", traceId);
+dyStringAppend(url, "file=trace&dopt=trace");
 return dyStringCannibalize(&url);
 }
 
@@ -11887,7 +11897,9 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("-----------------------------------------------------<BR>\n");
         }
     printf("<B>Trace Name:</B> %s <BR>\n", encodeIndel.traceName);
-    printf("<B>Trace Id:</B> %s <BR>\n", encodeIndel.traceId);
+    printf("<B>Trace Id:</B> ");
+    printf("<A HREF=\"%s\" TARGET=_blank> %s</A> <BR>\n", 
+            traceUrl(encodeIndel.traceId), encodeIndel.traceId);
     printf("<B>Trace Pos:</B> %d <BR>\n", encodeIndel.tracePos);
     printf("<B>Trace Strand:</B> %s <BR>\n", encodeIndel.traceStrand);
     printf("<B>Quality Score:</B> %d <BR>\n", encodeIndel.score);
