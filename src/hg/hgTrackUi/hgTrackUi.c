@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.198 2005/06/05 19:23:48 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.199 2005/06/14 16:00:51 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1073,13 +1073,21 @@ if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
     char buffer[128];
     char *nodeNames[512];
     int numNodes = 0;
-    char *path;
+    char *path, *orgName;
+    int ii;
 
     safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
     cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
     printf("Show shortest path to target species:  ");
     path = phyloNodeNames(tree);
     numNodes = chopLine(path, nodeNames);
+    for(ii=0; ii < numNodes; ii++)
+	{
+	if ((orgName = hOrganism(nodeNames[ii])) != NULL)
+	    nodeNames[ii] = orgName;
+	nodeNames[ii][0] = toupper(nodeNames[ii][0]);
+	}
+
     cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
 	cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
     puts("<br>");
