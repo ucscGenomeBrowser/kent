@@ -124,6 +124,12 @@ The format of the type fields:
         there are many species.  Each speciesGroup in the list must have it's
         own setting (sGroup_<group>), followed by a list of species,
         specified as for speciesOrder.
+      speciesTree - the phylogenetic tree for the species represented
+        in the maf. This will be used for the "show shortest path" display
+	mode if "speciesTarget" is defined. 
+      speciesTarget - the default species target for the "show shortest path"
+        mode of maf display. If this setting is present, then the default 
+	maf display is "show shortest path".
       treeImage - path from web server htdocs dir (normally /images)
             to a file containing a picture of the phylogenetic tree for
             this track
