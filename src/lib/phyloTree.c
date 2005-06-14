@@ -153,7 +153,7 @@ return subTree;
 }
 
 void phyloClearTreeMarks(struct phyloTree *tree)
-/* clear the favortite child marks */
+/* clear the favorite child marks */
 {
 tree->mark = 0;
 
