@@ -4487,6 +4487,76 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
 
 
 
+# Tajima's D (DONE -- 2005-06-04 -- Daryl)
+# Data from Chris Carlson in Debbie Nickerson's lab
+# Chris Carlson [csc47<AT>u<DOT>washington<DOT>edu]
+
+    # get data from ftp site, unpack in $dir:
+    # tar tvfz *gz | more
+    # -rw-r--r-- chris/admin 34405061 2005-06-03 13:22:15 AD.SNP.track
+    # -rw-r--r-- chris/admin 29869512 2005-06-03 13:22:30 ED.SNP.track
+    # -rw-r--r-- chris/admin 27154049 2005-06-03 13:22:41 XD.SNP.track
+    # -rw-r--r-- chris/admin 10948753 2005-06-02 21:12:27 AD.tajd.track
+    # -rw-r--r-- chris/admin 10928630 2005-06-02 21:12:39 ED.tajd.track
+    # -rw-r--r-- chris/admin 10926122 2005-06-02 21:12:51 XD.tajd.track
+
+    set db=hg17
+    set dir=/cluster/data/$db/bed/tajdpoly/latest
+    cd $dir
+    
+    foreach p (AD ED XD)
+	set f = $p.SNP.track
+	echo `date` $f "=>" $f.bed4
+	rm -f $f.bed*
+	mac2unix < $f | grep -v description | awk '{printf "%s\t%d\t%d\t1\n", $1, $2, $3}' > $f.bed4
+	hgLoadBed -bedGraph=4 $db tajdSnp$p $f.bed4
+	head -3 $f*
+	hgsql -e "select * from tajdSnp$p limit 3" $db
+    end
+    foreach p (AD ED XD)
+	set f = $p.tajd.track
+	echo `date` $f "=>" $f.bedGraph
+	rm -f $f.bed*
+	mac2unix < $f | grep -v description | awk '{printf "%s\t%d\t%d\t%.2f\n", $1, $2-1, $3, $4}' > $f.bedGraph
+	hgLoadBed -bedGraph=4 $db tajd$p $f.bedGraph
+	head -3 $f*
+	hgsql -e "select * from tajd$p limit 3" $db
+    end
+    rm -f bed.tab
+    echo `date`
+
+    # deleting elements that overlap with gaps -- tajd files have overlaps due to the windowing scheme (snps are not found in gaps)
+    rm -f delete.sql
+    touch delete.sql
+    set $where="where t.chrom=g.chrom and (t.chromStart between g.chromStart and g.chromEnd or t.chromEnd between g.chromStart and g.chromEnd)"
+    foreach p (AD ED XD SnpAD SnpED SnpXD)
+	foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	    echo "select 'tajd$p' as pop, t.chrom, t.chromStart from tajd${p} t, chr${c}_gap g $where " | \
+		hgsql hg17 | grep -v pop | \
+		awk '{printf "delete from %s where chrom=\"%s\" and chromStart=%d;\n", $1, $2, $3}' >> delete.sql
+	end
+    end
+    $db < delete.sql
+
+    # cleanup elements that didn't get deleted properly
+    ## cleanup.pl
+    #!/usr/bin/perl -W
+    $pop=shift;
+    while (<>)
+    {   
+	if (/^(chr..?)\s+(\d+)/) 
+	{ print "delete from tajd$pop where chrom='$1' and chromStart<$2 and chromEnd>$2;\n"; }
+    }
+    ##
+
+    foreach p (AD ED XD)
+	featureBits $db tajd$p gap -bed=$p.inGaps.bed
+	cleanup.pl < $p.inGaps.bed $p | $db
+	featureBits $db tajd$p gap -bed=$p.inGaps.bed ## should be empty now
+    end
+
+
+
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
 # Added knownToU133Plus2 track (2004-10-14)
 #	to be done after knownGene tables are complete from known gene
@@ -14287,6 +14357,10 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql kgHg17FTemp -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
    hgsql kgHg17FTemp -e 'create index alignID on kgCandidate(alignID)'
 
+# ####### NEXT TIME AROUND PUT IN AN EXTRA STEP TO BRING IN ITEMS ON A "PUT BACK" LIST
+# FOR SPECIAL CASES LIKE SELENOCYSTEINE, NON-AUG INITIATION CODON, RIBOSOMAL SLIPPAGE, ETC.
+# #######
+
 # Construct the kgCandidateX table that has alignID in the name field. 
    cut -f 2-10 kgCandidate.tab >j2.tmp
    cut -f 11 kgCandidate.tab >j1.tmp
@@ -14366,6 +14440,14 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql hg17 -e  'drop table kgXref'
    hgsql hg17 < ~/src/hg/lib/kgXref.sql
    hgsql hg17 -e  'load data local infile "kgXref.tab" into table kgXref'
+
+# Build spMrna table
+
+   hgsql hg17 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+
+   hgsql hg17 -e  'drop table spMrna'
+   hgsql hg17 <~/src/hg/lib/spMrna.sql
+   hgsql hg17 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
 
 # Build kgProtMap table
 
@@ -15113,21 +15195,23 @@ hgLoadBlastTab hg17 scBlastTab -maxPer=1 *.tab
 
 # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
 # First make SwissProt protein database and copy it to cluster/bluearc
-cd /cluster/data/dm2/bed
-mkdir blastp
-cd blastp
-wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
-zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
-formatdb -i flyBase.faa -t flyBase -n flyBase
-if (-e /cluster/bluearc/dm2/blastp) then
-   rm -r /cluster/bluearc/dm2/blastp
-endif
-mkdir -p /cluster/bluearc/dm2/blastp
-cp /cluster/data/dm2/bed/blastp/flyBase.p?? /cluster/bluearc/dm2/blastp
+# The following section was already done.
+# cd /cluster/data/dm1/bed
+# mkdir blastp
+# cd blastp
+#wget ftp://ftp.fruitfly.org/pub/download/dmel_RELEASE3-1/FASTA/whole_genome_translation_dmel_RELEASE3-1.FASTA.gz
+# zcat whole_ge*.gz | faFlyBaseToUcsc stdin flyBase.faa
+# formatdb -i flyBase.faa -t flyBase -n flyBase
+# if (-e /cluster/bluearc/dm1/blastp) then
+#    rm -r /cluster/bluearc/dm1/blastp
+# endif
+# mkdir -p /cluster/bluearc/dm1/blastp
+# cp /cluster/data/dm1/bed/blastp/flyBase.p?? /cluster/bluearc/dm1/blastp
+
 # Make parasol run directory 
 ssh kk
-mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm2
-cd /cluster/data/hg17/bed/geneSorter/blastp/dm2
+mkdir /cluster/data/hg17/bed/geneSorter/blastp/dm1
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1
 mkdir run
 cd run
 mkdir out
@@ -15136,7 +15220,7 @@ mkdir out
 cat  << '_EOF_' > blastSome
 #!/bin/sh
 BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
--p blastp -d /cluster/bluearc/dm2/blastp/flyBase \
+-p blastp -d /cluster/bluearc/dm1/blastp/flyBase \
 -i $1 -o $2 -e 0.01 -m 8 -b 1
 '_EOF_'
     # << keep emacs happy
@@ -15156,18 +15240,18 @@ gensub2 split.lst single gsub jobList
 para create jobList
 para try
 para check
-para push ... etc ... 
+para push ... etc ...
 # Completed: 7739 of 7739 jobs
-# CPU time in finished jobs:      73574s    1226.24m    20.44h    0.85d  0.002 y
-# IO & Wait Time:                 20557s     342.61m     5.71h    0.24d  0.001 y
-# Average job time:                  12s       0.20m     0.00h    0.00d
+# CPU time in finished jobs:      73518s    1225.30m    20.42h    0.85d  0.002 y
+# IO & Wait Time:                 45038s     750.63m    12.51h    0.52d  0.001 y
+# Average job time:                  15s       0.26m     0.00h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              68s       1.13m     0.02h    0.00d
-# Submission to last job:           532s       8.87m     0.15h    0.01d
+# Longest finished job:              69s       1.15m     0.02h    0.00d
+# Submission to last job:           762s      12.70m     0.21h    0.01d 
 
 # Load into database.  
 ssh hgwdev
-cd /cluster/data/hg17/bed/geneSorter/blastp/dm2/run/out
+cd /cluster/data/hg17/bed/geneSorter/blastp/dm1/run/out
 hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 # Loading database with 27212 rows
 
@@ -15176,62 +15260,50 @@ hgLoadBlastTab hg17 dmBlastTab -maxPer=1 *.tab
 hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # count changed to 28851
 
-#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2004-11-30 - Fan)
+# The new KG process no longer need entries in knownGeneLink (used to store
+# info for DNA based RefSeqs.  So clean out the old data in knownGeneLink.
 
-    # Get the ensembl gene/protein cross-reference data from
-    # http://www.ensembl.org/Homo_sapiens/martview
-    # Follow this sequence through the pages:
-    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
-    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
-    # Page 3) Choose the "Feature" box, select gene, transcript, protein,
-              SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC
-    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
-    # Save as ensXref.txt
+hgsql hg17 -e "delete from knownGeneLink"
 
-    sed ensXref.txt -e 's/\./\t/g' > ensemblXref3.tab
+#### RE-BUILD SUPERFAMILY RELATED TABLES (DONE - 2005-05-27 - Fan)
 
-    hgsql hg17 -e "drop table ensemblXref3"
-    hgsql hg17 < ~/src/hg/lib/ensemblXref3.sql
-
-    hgsql hg17 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3 ignore 1 lines'
-
-#### BUILD SUPERFAMILY RELATED TABLES (DONE - 2004-11-30 - Fan)
-
-# Download Superfamily data files and build the Superfamily DB
+# Download latest Superfamily data files and build the Superfamily DB
 # from supfam.mrc-lmb.cam.ac.uk
 
-    mkdir /cluster/store8/superfamily/041128
-    ln -s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
-    cd /cluster/data/superfamily/041128
+    mkdir /cluster/store10/superfamily/050524
+    ln -s /cluster/store10/superfamily/050524 /cluster/data/superfamily/050524
+    cd /cluster/data/superfamily/050524
+
 # ftp over the following two files:
-ass_28-Nov-2004.tab.gz
-      supfam_28-Nov-2004.sql.gz
-    
+ass_22-May-2005.tab.gz
+supfam_22-May-2005.sql.gz
     gzip -d *.gz
+
 # Load the Superfamily database
-    hgsql hg17 -e "create database superfam041128"
-    hgsql superfam041128 < supfam_28-Nov-2004.sql
+    hgsql hg17 -e "create database superfam050524"
+    nice hgsql superfam050524 < supfam_22-May-2005.sql &
+
 # This may take about an hour.
 
-# Make sure to add an index on id of the des table of superfam041128.
-    hgsql superfam041128 -e "create index id on des(id);"
+# Make sure to add an index on id of the des table of superfam050524.
+    hgsql superfam050524 -e "create index id on des(id);"
 
-    hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
-    hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
-superfam041128.sfAssign;'
+    hgsql superfam050524 < ~/src/hg/lib/sfAssign.sql
+    hgsql superfam050524 -e 'load data local infile "ass_22-May-2005.tab" into table 
+superfam050524.sfAssign;'
 
 # Build or rebuild Superfamily track and create sf tables needed for PB
 
    hgsql hg17 < ~/src/hg/lib/sfAssign.sql
 
-   cd /cluster/data/superfamily/041128  
-   hgsql hg17 -e 'load data local infile "ass_28-Nov-2004.tab" into table hg17.sfAssign;'
+   cd /cluster/data/superfamily/050524  
+   hgsql hg17 -e 'load data local infile "ass_22-May-2005.tab" into table hg17.sfAssign;'
 
 # If hg17.sfDes already exists, drop it.
 
-   hgsql superfam041128 -e "select * from des" >sfDes.tab
+   hgsql superfam050524 -N -e "select * from des" >sfDes.tab
    hgsql hg17 < ~/src/hg/lib/sfDes.sql
-   hgsql hg17 -e 'load data local infile "sfDes.tab" into table hg17.sfDes ignore 1 lines;'
+   hgsql hg17 -e 'load data local infile "sfDes.tab" into table sfDes'
 
 # If hg17.superfamily already exists, drop it.
    cd /cluster/data/hg17/bed
@@ -15253,138 +15325,194 @@ superfam041128.sfAssign;'
 # Create knownToSuperfamily table
 # Note hs is changed into ht for this Superfamily release.
    
-   cat /cluster/data/superfamily/041128/ass_28-Nov-2004.tab \
+   cat /cluster/data/superfamily/050524/ass_22-May-2005.tab \
    | hgKnownToSuper hg17 hs stdin
 # created 25287 rows in knownToSuper
 
-### HG17 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2004-12-01 - Fan)
-# These are instructions for rebuilding tables 
-# needed for the Proteome Browser.  
-# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
-# ARE REBUILT.  
-# This update is based on proteins DBs dated 041115.
+# Build tables needed by pbGlobal in proteins050415
 
-# Create the working directory
+   cd /cluster/data/superfamily/050524  
+   hgsql proteins050415 -e 'load data local infile "ass_22-May-2005.tab" into table sfAssign'
 
+   hgsql proteins050415 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+   cd /cluster/store10/kg/kgHg17F
+   hgsql proteins050415 -e 'load data local infile "ensemblXref.tab" into table ensemblXref'
+
+# These sf tables and ensemblXref3 are needed for non-HMR KG proteins.
+# Should add content of ensemblXref3 of mm6 after it is done.
+# And similarly for rn4 and possibly for other non-HMR species.
+# CCDS <-> knownGene mapping need to be updated (markd 2005-05-29)
+# this should be part of the known gene build
+    /cluster/data/genbank/bin/i386/mkCcdsGeneMap -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
+
+# AUGUSTUS GENES (DONE 6/1/2005 Andy)
     ssh hgwdev
-    mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
-    mkdir /cluster/data/hg17/bed/pb.2004-12-01
     cd /cluster/data/hg17/bed
-    ln -s /cluster/data/hg17/bed/pb.2004-12-01 pb
+    mkdir augustus
+    cd augustus/
+    wget http://augustus.gobics.de/predictions/hg17/hg17.allchr.augustus.gtf.gz
+    cp /cluster/data/dm2/bed/augustus/cleanAugustus.awk .
+    zcat hg17.allchr.augustus.gtf.gz | awk -f cleanAugustus.awk | gzip > hg17.allchr.augustus.clean.gtf.gz
+    ldHgGene -gtf hg17 augustus hg17.allchr.augustus.clean.gtf.gz
+    rm hg17.allchr.augustus.gtf.gz
 
-# Move the existing PB tables by:
+# MAKE Mouse Proteins track (DONE for chr13 braney ~5/25/05)
+    ssh kkstore01
+    mkdir -p /cluster/data/hg17/blastDb
+    cd /cluster/data/hg17/blastDb
+    awk "{print \$2}" ../*/chr*/*.lft > subChr.lst
+    for i in `cat subChr.lst`
+    do
+	ln -s ../*/chr*/$i.fa 
+	echo formatdb -i $i.fa -p F
+	formatdb -i $i.fa -p F
+    done
+    rm *.log *.fa list
+    cd ..
+    for i in `cat chrom.lst`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
 
-hgsql hg17
-create database hg17Sav2;
+    ssh kkr1u00
+    rm -rf /iscratch/i/hg17/blastDb
+    mkdir -p /iscratch/i/hg17/blastDb
+    cd /cluster/data/hg17/blastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/hg17/blastDb     ; echo $i; done
 
-alter table hg17.pepCCntDist rename as hg17Sav2.pepCCntDist;
-alter table hg17.pepExonCntDist rename as hg17Sav2.pepExonCntDist;
-alter table hg17.pepHydroDist rename as hg17Sav2.pepHydroDist;
-alter table hg17.pepIPCntDist rename as hg17Sav2.pepIPCntDist;
-alter table hg17.pepMolWtDist rename as hg17Sav2.pepMolWtDist;
-alter table hg17.pepMwAa rename as hg17Sav2.pepMwAa;
-alter table hg17.pepPi rename as hg17Sav2.pepPi;
-alter table hg17.pepPiDist rename as hg17Sav2.pepPiDist;
-alter table hg17.pepResDist rename as hg17Sav2.pepResDist;
+    cd
+    iSync > sync.out
 
-alter table hg17.pbAaDistA rename as hg17Sav2.pbAaDistA;
-alter table hg17.pbAaDistC rename as hg17Sav2.pbAaDistC;
-alter table hg17.pbAaDistD rename as hg17Sav2.pbAaDistD;
-alter table hg17.pbAaDistE rename as hg17Sav2.pbAaDistE;
-alter table hg17.pbAaDistF rename as hg17Sav2.pbAaDistF;
-alter table hg17.pbAaDistG rename as hg17Sav2.pbAaDistG;
-alter table hg17.pbAaDistH rename as hg17Sav2.pbAaDistH;
-alter table hg17.pbAaDistI rename as hg17Sav2.pbAaDistI;
-alter table hg17.pbAaDistK rename as hg17Sav2.pbAaDistK;
-alter table hg17.pbAaDistL rename as hg17Sav2.pbAaDistL;
-alter table hg17.pbAaDistM rename as hg17Sav2.pbAaDistM;
-alter table hg17.pbAaDistN rename as hg17Sav2.pbAaDistN;
-alter table hg17.pbAaDistP rename as hg17Sav2.pbAaDistP;
-alter table hg17.pbAaDistQ rename as hg17Sav2.pbAaDistQ;
-alter table hg17.pbAaDistR rename as hg17Sav2.pbAaDistR;
-alter table hg17.pbAaDistS rename as hg17Sav2.pbAaDistS;
-alter table hg17.pbAaDistT rename as hg17Sav2.pbAaDistT;
-alter table hg17.pbAaDistV rename as hg17Sav2.pbAaDistV;
-alter table hg17.pbAaDistW rename as hg17Sav2.pbAaDistW;
-alter table hg17.pbAaDistY rename as hg17Sav2.pbAaDistY;
-alter table hg17.pbAnomLimit rename as hg17Sav2.pbAnomLimit;
-alter table hg17.pbResAvgStd rename as hg17Sav2.pbResAvgStd;
-alter table hg17.pbStamp rename as hg17Sav2.pbStamp;
+    mkdir -p /cluster/data/hg17/bed/tblastn.mm6KG
+    cd /cluster/data/hg17/bed/tblastn.mm6KG
+    echo  /panasas/store/hg17/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst    
+    # back to kkstore01
+    exit
 
-quit
+    cd /cluster/data/hg17/bed/tblastn.mm6KG
+    rm -rf /cluster/bluearc/hg17/bed/tblastn.mm6KG/kgfa
+    mkdir -p /cluster/bluearc/hg17/bed/tblastn.mm6KG/kgfa
+    split -l 560 /cluster/data/mm6/bed/blat.mm6KG/mm6KG.psl /cluster/bluearc/hg17/bed/tblastn.mm6KG/kgfa/kg
+    ln -s /cluster/bluearc/hg17/bed/tblastn.mm6KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    rm -rf /cluster/bluearc/hg17/bed/tblastn.mm6KG/blastOut
+    mkdir -p /cluster/bluearc/hg17/bed/tblastn.mm6KG/blastOut
+    ln -s /cluster/bluearc/hg17/bed/tblastn.mm6KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 ../../jkStuff/subLiftAll.lft carry $f.2                     
+	liftUp -nosort -type=".psl" -nohead $f.4 ../../jkStuff/liftAll.lft carry $f.3                     
+	liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/mm6/bed/blat.mm6KG/protein.lft warn $f.4       
 
-# Define pep* tables in hg17 DB
+        if pslCheck -prot $3.tmp                                                                          
+        then                                                                                              
+            mv $3.tmp $3                                                                                  
+            rm -f $f.1 $f.2 $f.3  $f.4
+        fi
+        exit 0                                                                                            
+    fi                                                                                                    
+fi                                                                                                        
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
 
-	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
 
-#  First edit out pepPred table definition, then
+    ssh kk
+    cd /cluster/data/hg17/bed/tblastn.mm6KG
+    para create blastSpec
+    para push
+# Completed: 214524 of 214524 jobs
+# CPU time in finished jobs:   44907411s  748456.85m 12474.28h  519.76d  1.424 y
+# IO & Wait Time:                712709s   11878.48m   197.97h    8.25d  0.023 y
+# Average job time:                 213s       3.54m     0.06h    0.00d
+# Longest finished job:            1363s      22.72m     0.38h    0.02d
+# Submission to last job:         75910s    1265.17m    21.09h    0.88d
 
-	hgsql hg17 < pepAll.sql
-
-# Build the pepMwAa table
-
-  hgsql proteins041115 -e "select info.acc, molWeight, aaSize from sp041115.info, sp041115.accToTaxon where 
-accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
-
-hgsql hg17 <<end
-load data local infile "pepMwAa.tab" into table hg17.pepMwAa ignore 1 lines;
-end
-
-o Build the pepPi table
-
-  hgsql proteins041115 -e "select info.acc from sp041115.info, sp041115.accToTaxon where 
-accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
-
-  pbCalPi protAcc.lis sp041115 pepPi.tab
-
-hgsql hg17 <<end
-load data local infile "pepPi.tab" into table hg17.pepPi;
-end
-
-# Calculate and load pep distributions
-
-  pbCalDist sp041115 proteins041115 9606 hg17 >pbCalDist.out
-
-    cat pbCalDist.out
-    wc  pbCalDist.out
-
-    hgsql hg17
-
-    load data local infile "pepExonCntDist.tab" into table hg17.pepExonCntDist;
-    load data local infile "pepCCntDist.tab" into table hg17.pepCCntDist;
-    load data local infile "pepHydroDist.tab" into table hg17.pepHydroDist;
-    load data local infile "pepMolWtDist.tab" into table hg17.pepMolWtDist;
-    load data local infile "pepResDist.tab" into table hg17.pepResDist;
-    load data local infile "pepIPCntDist.tab" into table hg17.pepIPCntDist;
-    load data local infile "pepPiDist.tab" into table hg17.pepPiDist;
-    quit
-
-# Calculate frequency distributions
-
-    pbCalResStd 041115 9606 hg17
-
-# Create pbAnomLimit and pbResAvgStd tables
-
-   hgsql hg17 < ~/src/hg/lib/pbAnomLimit.sql
-   hgsql hg17 < ~/src/hg/lib/pbResAvgStd.sql
-
-   hgsql hg17 -e 'load data local infile "pbResAvgStd.tab" into table hg17.pbResAvgStd;'
-   hgsql hg17 -e 'load data local infile "pbAnomLimit.tab" into table hg17.pbAnomLimit;'
-
-# Create pbStamp table for PB
-   
-  hgsql hg17 < ~/src/hg/lib/pbStamp.sql
-  hgsql hg17Sav2 -e 'select * from pbStamp' > pbStamp.tab
-
-  hgsql hg17 -e 'load data local infile "pbStamp.tab" into table hg17.pbStamp ignore 1 lines;'
-
-# Adjust drawing parameters for Proteome Browser stamps
-
-  Now invoke Proteome Browser and adjust various drawing parameters
-  (mostly the ymax of each stamp) if necessary, by updating the 
-  pbStamp.tab file and then delete and reload the pbStamp table. 
-
-# Perform preliminary review of Proteome Browser for hg17, then
-  notify QA for formal review.
+# just for chr13
+# completed: 55290 of 55290 jobs
+# cCPU time in finished jobs:    1487547s   24792.46m   413.21h   17.22d  0.047 y
+# cIO & Wait Time:                148854s    2480.89m    41.35h    1.72d  0.005 y
+# cAverage job time:                  30s       0.49m     0.01h    0.00d
+# cLongest running job:                0s       0.00m     0.00h    0.00d
+# cLongest finished job:              98s       1.63m     0.03h    0.00d
+# cSubmission to last job:          3904s      65.07m     1.08h    0.05d
 
 
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    ssh kki
+    cd /cluster/data/hg17/bed/tblastn.mm6KG
+    tcsh
+    cat << '_EOF_' > chainOne
+(cd $1; cat q."$2"* | simpleChain -prot -outPsl -maxGap=200000 stdin ../c.`basename $1`.$2.psl)
+'_EOF_'
+    chmod +x chainOne
+
+    for j in blastOut/kg??; do for i in `cat ../../chrom.lst`; do echo chainOne $j chr"$i"; done ; done > chainSpec
+
+    para create chainSpec
+    para push
+# CPU time in finished jobs:         90s       1.50m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                 19151s     319.18m     5.32h    0.22d  0.001 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               5s       0.08m     0.00h    0.00d
+# Submission to last job:          1642s      27.37m     0.46h    0.02d
+
+# Completed: 7695 of 7695 jobs
+# CPU time in finished jobs:         48s       0.80m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                 18931s     315.51m     5.26h    0.22d  0.001 y
+# Average job time:                   2s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:          1618s      26.97m     0.45h    0.02d
+
+    exit
+    # back to kkstore01
+    cd /cluster/data/hg17/bed/tblastn.mm6KG/blastOut
+    for i in kg??
+    do 
+	cat c.$i.*.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.90 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/hg17/bed/tblastn.mm6KG/blastMm6KG.psl
+    cd ..
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/tblastn.mm6KG
+    hgLoadPsl hg17 blastHg17KG.psl
+    # 1425966 bases of 64944656 (2.196%) 
+
+    # back to kkstore01
+    rm -rf blastOut
+# End tblastn of mouse proteins

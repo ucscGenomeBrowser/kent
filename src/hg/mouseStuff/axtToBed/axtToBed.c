@@ -6,8 +6,9 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: axtToBed.c,v 1.6 2004/09/25 17:36:28 baertsch Exp $";
+static char const rcsid[] = "$Id: axtToBed.c,v 1.7 2005/06/06 22:37:36 jill Exp $";
 bool extended = FALSE;
+bool bed4 = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,7 +19,7 @@ errAbort(
   "   axtToBed in.axt out.bed\n"
   "options:\n"
   "   -extended     output extended format include other species\n"
-  "   -bed4=output bed4 file\n"
+  "   -bed4         output bed4 file\n"
   );
 }
 
@@ -44,13 +45,10 @@ for (;;)
         fprintf(f, "%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\n", row[1], s, e, row[4], score, row[7], xs, xe);
         }
     else
-        {
-        fprintf(f, "%s\t%d\t%d\n", row[1], s, e);
-        }
-    if (optionExists("bed4"))
-	fprintf(f, "%s\t%d\t%d\t%s\n", row[1], s, e,row[4]);
-    else
-	fprintf(f, "%s\t%d\t%d\n", row[1], s, e);
+	if (bed4)
+	    fprintf(f, "%s\t%d\t%d\t%s\n", row[1], s, e,row[4]);
+	else
+	    fprintf(f, "%s\t%d\t%d\n", row[1], s, e);
     lineFileSkip(lf, 3);
     }
 }
@@ -62,6 +60,7 @@ optionHash(&argc, argv);
 if (argc != 3)
     usage();
 extended = optionExists("extended");
+bed4 = optionExists("bed4");
 axtToBed(argv[1],argv[2]);
 return 0;
 }

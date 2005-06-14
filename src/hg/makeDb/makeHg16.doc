@@ -7620,6 +7620,71 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     select chrom, count(*) from snp where name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329') group by chrom;
     
 
+# Tajima's D (DONE -- 2005-06-04 -- Daryl)
+# Data from Chris Carlson in Debbie Nickerson's lab
+# Chris Carlson [csc47<AT>u<DOT>washington<DOT>edu]
+
+    set db=hg16
+    set dir=/cluster/data/$db/bed/tajdpoly/latest
+    cd $dir
+    
+    set chain = "/gbdb/hg17/liftOver/hg17ToHg16.over.chain"
+    foreach p (AD ED XD)
+	# lift SNP tracks
+	set f   = $p.SNP.track
+	set in  = /cluster/data/hg17/bed/tajdpoly/latest/$f.bed4
+	set out = /cluster/data/hg16/bed/tajdpoly/latest/$f.$db
+	liftOver $in $chain $out.$db.bed4 $out.$db.unmapped
+	# lift tajd tracks
+	set f   = $p.tajd.track
+	set in  = /cluster/data/hg17/bed/tajdpoly/latest/$f.bedGraph
+	set out = /cluster/data/hg16/bed/tajdpoly/latest/$f.$db
+	liftOver $in $chain $out.bedGraph $out.unmapped
+	# load SNP tracks
+	set f = $p.SNP.track.hg16
+	echo `date` $f "=>" $f.bed4
+	hgLoadBed $db tajdSnp$p $f.bed4
+	head -3 $f*
+	hgsql -e "select * from tajdSnp$p limit 3" $db
+	# load tajd tracks
+	set f = $p.tajd.track.$db
+	echo `date` $f "=>" $f.bedGraph
+	hgLoadBed -bedGraph=4 $db tajd$p $f.bedGraph
+	head -3 $f*
+	hgsql -e "select * from tajd$p limit 3" $db
+    end
+
+    # deleting elements that overlap with gaps -- tajd files have overlaps due to the windowing scheme (snps are not found in gaps)
+    rm -f delete.sql
+    touch delete.sql
+    set $where="where t.chrom=g.chrom and (t.chromStart between g.chromStart and g.chromEnd or t.chromEnd between g.chromStart and g.chromEnd)"
+    foreach p (AD ED XD SnpAD SnpED SnpXD)
+	foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	    echo "select 'tajd$p' as pop, t.chrom, t.chromStart from tajd${p} t, chr${c}_gap g $where " | \
+		hgsql $db | grep -v pop | \
+		awk '{printf "delete from %s where chrom=\"%s\" and chromStart=%d;\n", $1, $2, $3}' >> delete.sql
+	end
+    end
+    $db < delete.sql
+
+    # cleanup elements that didn't get deleted properly
+    ## cleanup.pl
+    #!/usr/bin/perl -W
+    $pop=shift;
+    while (<>)
+    {   
+	if (/^(chr..?)\s+(\d+)/) 
+	{ print "delete from tajd$pop where chrom='$1' and chromStart<$2 and chromEnd>$2;\n"; }
+    }
+    ##
+
+    foreach p (AD ED XD)
+	featureBits $db tajd$p gap -bed=$p.inGaps.bed
+	cleanup.pl < $p.inGaps.bed $p | $db
+	featureBits $db tajd$p gap -bed=$p.inGaps.bed ## should be empty now
+    end
+
+
 # JAX ORTHOLOG (WORKING hiram 2004-02-20 )
     # Add Jackson labs info
     cd /cluster/data/hg16/bed
@@ -10950,4 +11015,37 @@ echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
+
+##########################################################################
+# CNPs from Wash U (In progress, Heather, June 2005)
+# data from http://humanparalogy.gs.washington.edu/structuralvariation
+
+ssh hgwdev
+cd /cluster/data/hg16/bed
+mkdir cnp
+cd cnp
+
+# Sharp data
+cp dupArray.txt cnpSharp.bed
+hgLoadBed hg16 cnpSharp -tab -sqlTable=cnpSharp.sql cnpSharp.bed
+# Loaded 160 elements of size 14
+# note: 11 names with special characters: CTD-2183E4*, RP11-111A4?, RP11-325E8#, RP11-1000I9*, RP11-159F11*,
+# RP11-177L24*, RP11-136P13*, RP11-1151C19*, RP11-1008M3*, RP11-379N11?, CTD-3185D7#
+# no apparent problems with these
+
+# fosmid discordants
+# don't need the id column
+cp fosmidDiscordant.txt fosmidDiscordant.bed
+hgLoadBed hg16 fosmidDiscordantPrelim -tab -sqlTable=fosmidDiscordantPrelim.sql fosmidDiscordant.bed
+hgsql hg16 < fosmidDiscordant.sql
+echo 'insert into fosmidDiscordant select bin, chrom, chromStart, chromEnd, name from fosmidDiscordantPrelim' | hgsql hg16
+echo 'drop table fosmidDiscordantPrelim' | hgsql hg16
+
+# Iafrate data
+cp Iafrate.txt cnpIafrate.bed
+hgLoadBed hg16 cnpIafrate -tab -sqlTable=cnpIafrate.sql cnpIafrate.bed
+
+# Sebat data
+cp Sebat.txt cnpSebat.bed
+hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 

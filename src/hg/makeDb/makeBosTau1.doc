@@ -552,6 +552,7 @@ exit; # don't actually run this like a script :)
     /usr/java/jdk1.5.0_01/bin/java ScaffoldQualityTest bosTau1 goldClean > goldClean.run
 
     # run for real; took about 7 hours (3pm - 10pm)
+    # should have written to local scratch on kolossus
     /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 gold > gold.run
 
     # check
@@ -589,6 +590,7 @@ exit; # don't actually run this like a script :)
     hgsql bosTau1 < gold.dump.2
 
     source javaenv
+    # should have written to local scratch on kolossus
     /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 gold > gold.run.2
 
     # check
@@ -607,6 +609,22 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/data/bosTau1/bed/quality/quality.wib.2 /gbdb/bosTau1/wib
     cd /cluster/data/bosTau1/bed/quality
     hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 quality quality.wig.2
+
+# Rerun without using zeroes for gaps (new version of ScaffoldQuality)
+# (Heather, May 24, 2005)
+
+    ssh kkstore01
+    cd /cluster/data/bosTau1/bed/quality
+    source javaenv
+    # should have written to local scratch on kolossus
+    /usr/java/jdk1.5.0_01/bin/java ScaffoldQuality bosTau1 gold > gold.run.3
+    wigEncode gold.run.3 quality.wig.3 quality.wib.3
+    # upper limit 90.0, lower limit 0.0
+    ssh hgwdev
+    ln -s /cluster/data/bosTau1/bed/quality/quality.wib.3 /gbdb/bosTau1/wib
+    cd /cluster/data/bosTau1/bed/quality
+    hgLoadWiggle -pathPrefix=/gbdb/bosTau1/wib bosTau1 quality quality.wig.3
+
 
 
 # GENSCAN (DONE Nov. 17, 2004 Heather)

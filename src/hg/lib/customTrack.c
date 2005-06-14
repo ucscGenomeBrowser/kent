@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.59 2005/05/14 02:40:46 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.60 2005/06/03 22:31:26 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -626,7 +626,7 @@ for (;;)
     boolean gotLine = getNextFlatLine(pLf, pLine, pNextLine);
     if (gotLine)
         {
-	if (startsWith("http://", *pLine))
+	if (startsWith("http://", *pLine) || startsWith("ftp://", *pLine))
 	    {
 	    struct lineFile *lf = netLineFileOpen(*pLine);
 	    slAddHead(pLf, lf);

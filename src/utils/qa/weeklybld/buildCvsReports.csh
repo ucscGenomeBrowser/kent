@@ -26,6 +26,10 @@ if ( "$REVIEWDAY" == "" ) then
  echo "REVIEWDAY undefined."
  exit 1
 endif
+if ( "$LASTREVIEWDAY" == "" ) then
+ echo "LASTREVIEWDAY undefined."
+ exit 1
+endif
 
 echo
 echo "now building CVS reports."
@@ -49,6 +53,7 @@ echo "LASTNN=$LASTNN"
 echo "TODAY=$TODAY"
 echo "LASTWEEK=$LASTWEEK"
 echo "REVIEWDAY=$REVIEWDAY"
+echo "LASTREVIEWDAY=$LASTREVIEWDAY"
 
 if ( "$2" != "real" ) then
 	echo
@@ -65,23 +70,29 @@ if ( "$mode" == "review") then
 else    
     ./cvs-reports-delta $reviewTag $toTag $REVIEWDAY $TODAY branch
 endif    
-cd $WEEKLYBLD
-
-# fix main report page /cvs-reports/index.html to have dates
-if ( "$mode" == "review") then
-    set cmd="s/<\!-- comment1Start -->.*<\!-- comment1End -->/<\!-- comment1Start -->($TODAY to $REVIEWDAY)<\!-- comment1End -->/"
-else    
-    set cmd="s/<\!-- comment2Start -->.*<\!-- comment2End -->/<\!-- comment2Start -->($REVIEWDAY to $TODAY)<\!-- comment2End -->/"
-endif    
-sed -e "$cmd" /usr/local/apache/htdocs/cvs-reports/index.html > index.html
-cp index.html /usr/local/apache/htdocs/cvs-reports/index.html 
-#rm index.html
-
 if ( $status ) then
  echo "cvs-reports-delta failed on $HOST"
  exit 1
 endif
 echo "cvs-reports-delta done on $HOST"
+cd $WEEKLYBLD
+
+
+# fix main report page /cvs-reports/index.html to have dates
+cd /usr/local/apache/htdocs/cvs-reports/
+echo "<html><head><title>cvs-reports</title></head><body>" > index.html
+echo "<h1>CVS changes: kent</h1>" >> index.html
+echo "<ul>" >> index.html
+if ( "$mode" == "review") then
+    echo "<li><a href="review/index.html">Design/Review - Day 2</a> ($TODAY to $REVIEWDAY)" >> index.html
+    echo "<li><a href="branch/index.html">Biweekly Branch - Day 9</a> ($LASTREVIEWDAY to $TODAY)" >> index.html
+else
+    echo "<li><a href="branch/index.html">Biweekly Branch - Day 9</a> ($REVIEWDAY to $TODAY)" >> index.html
+    echo "<li><a href="review/index.html">Design/Review - Day 2</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
+endif    
+echo "</ul></body></html>" >> index.html
+cd $WEEKLYBLD
+
 
 exit 0
 

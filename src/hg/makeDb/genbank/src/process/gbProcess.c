@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.9 2005/04/18 21:53:14 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.10 2005/06/05 14:05:44 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1058,7 +1058,7 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
     isEst = TRUE;
     }
 
-/* Handle some other fields handling */
+/* Handle other fields */
 parseDbXrefs();
 
 /* for refseqs, we only keep NC_, NR_ and NM_ */

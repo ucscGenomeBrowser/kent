@@ -70,7 +70,11 @@ if ((winEnd - winStart) < 1000001)
  *	We have to do the ascii data list format, and prepare that to
  *	send to the histogram function.
  */
-valuesMatched = wds->getData(wds, database, table, operations);
+
+if (isCustom)
+    valuesMatched = wds->getData(wds, (char *)NULL, table, operations);
+else
+    valuesMatched = wds->getData(wds, database, table, operations);
 
 statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
 
@@ -78,6 +82,7 @@ statsPreamble(wds, chrom, winStart, winEnd, span, valuesMatched, NULL);
  *		(+sort, +html output, +with header, +close table)
  */
 wds->statsOut(wds, "stdout", TRUE, TRUE, TRUE, FALSE);
+
 
 if ((winEnd - winStart) < 1000001)
     {

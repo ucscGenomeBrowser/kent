@@ -82,6 +82,13 @@ invQueryOne select swissAC from proteome.pfamXref,proteome.pfamDesc where descri
 name go
 goaIdColumn dbObjectId
 
+name p2p
+type distance flyP2P query target distance
+visibility off
+shortLabel P2P
+longLabel Protein-Protein Interaction Network
+priority 12
+
 name description
 type knownDetails bdgpSwissProt bdgpName spGeneName
 

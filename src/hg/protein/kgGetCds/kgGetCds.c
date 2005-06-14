@@ -7,7 +7,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: kgGetCds.c,v 1.1 2005/05/16 22:53:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: kgGetCds.c,v 1.2 2005/06/04 15:57:23 fanhsu Exp $";
 
 char cdsBloc[2000][30];
 void usage(char *msg)
@@ -42,6 +42,8 @@ char *protDbId;
 char condStr[255];
 int  i;
 char *parProtAcc;
+boolean first;
+char *chp;
 
 conn2= hAllocConn();
 conn3= hAllocConn();
@@ -56,8 +58,26 @@ while (row2 != NULL)
     chrom = row2[1];
     ranking = row2[11];
     
-    safef(query3, sizeof(query3), 
-    	  "select protAcc, score from %s.protMrnaScore where mrnaAcc='%s'", kgTempDb, mrnaID);
+    /* check if it is a composite mrnaID */
+    /* if yes, select from entries with both protein and mrna specified */
+    if (alignID[0] == 'U') 
+    	{
+	chp = strstr(row2[0], "_");
+	*chp = '\0';
+	protAcc = row2[0];
+	chp ++;
+	mrnaID = chp;
+    	safef(query3, sizeof(query3), 
+    	      "select protAcc, score from %s.protMrnaScore where mrnaAcc='%s' and protAcc='%s'",
+	      kgTempDb, mrnaID, protAcc);
+	}
+    else
+    	{
+    	safef(query3, sizeof(query3), 
+    	      "select protAcc, score from %s.protMrnaScore where mrnaAcc='%s' order by score desc",
+	      kgTempDb, mrnaID);
+	}
+	
     sr3  = sqlMustGetResult(conn3, query3);
     row3 = sqlNextRow(sr3);
 	      
@@ -71,13 +91,6 @@ while (row2 != NULL)
 
 	if (protDbId == NULL)
 	    {
-            safef(condStr, sizeof(condStr), "varAcc='%s'", protAcc);
-	    parProtAcc = sqlGetField(conn4, "kgHg17FTemp", "splicProt", "parAcc", condStr);
-            safef(condStr, sizeof(condStr), "accession='%s'", parProtAcc);
-	    protDbId = sqlGetField(conn4, "proteins050415", "spXref3", "biodatabaseID", condStr);
-	    fprintf(outf, "%s %s\n", protAcc, parProtAcc);fflush(stdout);}
-	if (protDbId == NULL)
-	    {
 	    fprintf(stderr, "Can't find protId for %s\n", protAcc);fflush(stdout);exit(1);
 	    }
 
@@ -85,7 +98,10 @@ while (row2 != NULL)
 	for (i=0; i<cdsCnt; i++) fprintf(outf, "%s", cdsBloc[i]);
 	fprintf(outf, "\t%s\t%s\t%8s\t%s\t%s\t%s\n", 
 		ranking, protDbId, score, mrnaID, protAcc, alignID);
-        row3 = sqlNextRow(sr3);
+
+	/* for composite type, process just one record */ 
+        if (alignID[0] == 'U') break; 
+	row3 = sqlNextRow(sr3);
 	}
     sqlFreeResult(&sr3);
     row2 = sqlNextRow(sr2);

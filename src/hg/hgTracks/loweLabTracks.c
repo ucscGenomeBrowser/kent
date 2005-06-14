@@ -74,6 +74,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&list);
 tg->items = list;
+
 }
 
 Color gbGeneColor(struct track *tg, void *item, struct vGfx *vg)
@@ -108,8 +109,12 @@ if(hTableExists("COG")){
     }
 else
     {
-    return shadesOfGray[9];
+        hFreeConn(&conn);
+
+	return shadesOfGray[9];
     }
+slFreeList(&bed);
+
 }
 
 void gbGeneMethods(struct track *tg)
@@ -245,15 +250,16 @@ struct sqlResult *sr;
 char **temparray3;
 char *temparray[16];
 char *temparray2;
-char query[256];
 char **row;
 char *tempstring;
 int x;
-char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", "eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anerobe or aerobe"}; int i;
+char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", 
+"eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anaerobe or aerobe"}; int i;
  
-sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
-sr = sqlGetResult(conn, query);
-
+/*sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
+sr = sqlGetResult(conn, query);*/
+sr=hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, 0);
+    
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cb = codeBlastLoad(row);
@@ -277,6 +283,52 @@ for(cb = list; cb != NULL; cb = cb->next)
     tempstring=cloneString(cb->code);
  
     chopString(tempstring, "," , temparray, ArraySize(temparray));
+    if(sameWord(database, "pyrFur2")){
+    temparray3=(char**)calloc(19*8,sizeof(char**));
+    for(x=0; x<19; x++){
+    	
+        temparray3[x]=(char *)calloc(256, sizeof(char*));
+	//Fix to cloneString problem when both patricia and my track
+	//was showing at the same time	
+	if(temparray[x]!=NULL){
+	    if(atoi(temparray[x])==1000){
+		temparray3[x]="1000";
+	    }
+	    else if(atoi(temparray[x])==900){
+		temparray3[x]="900";
+	    }
+	    else if(atoi(temparray[x])==800){
+		temparray3[x]="800";
+            }
+	    else if(atoi(temparray[x])==700){
+		temparray3[x]="700";
+	    }
+	    else if(atoi(temparray[x])==600){
+		temparray3[x]="600";
+	    }
+	    else if(atoi(temparray[x])==500){
+		temparray3[x]="500";
+	    }
+	    else if(atoi(temparray[x])==400){
+		temparray3[x]="400";
+	    }
+	    else if(atoi(temparray[x])==300){
+		temparray3[x]="300";
+	    }
+	    else if(atoi(temparray[x])==200){
+		temparray3[x]="200";
+	    }
+	    else if(atoi(temparray[x])==100){
+		temparray3[x]="100";
+	    }
+	    else{
+		temparray3[x]="0";
+ 	    }
+        }
+	
+    }
+    }
+    else{
     temparray3=(char**)calloc(18*8,sizeof(char**));
     for(x=0; x<18; x++){
         temparray3[x]=(char *)calloc(256, sizeof(char*));
@@ -319,6 +371,7 @@ for(cb = list; cb != NULL; cb = cb->next)
         }
 	
     }
+    }
     lf->extra = temparray3;
     
     lfs->start = lf->start;
@@ -334,34 +387,72 @@ bedList=tg->items;
 lfsList=NULL;
 
 if(tg->limitedVis != tvDense)
-    {
-
-    originalLfs = tg->items;
-    for (i = 0; i < 18; i++)
-        {
-	struct linkedFeatures *lfList = NULL;
-        AllocVar(codeLfs);
-        codeLfs->name = cloneString(codeNames[i]);
-        codeLfs->noLine = TRUE;
-	for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
+{
+	 originalLfs = tg->items;
+	
+	if(sameWord(database, "pyrFur2")){
+ 	    for (i = 0; i < 19; i++)
             {
-	    lf = lfsToLf(lfs);
-            temparray2=((char**)(lfs->features->extra))[i];
-	    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)!=-9999)
-                {
-		lf->score=atoi(temparray2);
-                slAddHead(&lfList,lf);
+		struct linkedFeatures *lfList = NULL;
+        	AllocVar(codeLfs);
+		
+		if(i == 0)
+		    codeLfs->name="within Pho";
+		else if (i==1)
+		    codeLfs->name="within Pab";
+		else if (i==2)
+		    codeLfs->name="\t";
+		else
+        	    codeLfs->name = cloneString(codeNames[i-1]);
+        	    codeLfs->noLine = TRUE;
+		for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
+            	{
+	    	    lf = lfsToLf(lfs);
+		    if(i>2)
+            	    temparray2=((char**)(lfs->features->extra))[i-1];
+		    else temparray2=((char**)(lfs->features->extra))[i];
+	   	    if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)!=-9999)
+                    {
+			lf->score=atoi(temparray2);
+                	slAddHead(&lfList,lf);
 
-		}
+		    }
+                }
+        	slReverse(&lfList);
+        	codeLfs->features = lfList;   
+        	slAddHead(&lfsList,codeLfs);
             }
-        slReverse(&lfList);
-        codeLfs->features = lfList;   
-        slAddHead(&lfsList,codeLfs);
-        }
-    freeLinkedFeaturesSeries(&originalLfs);
-    slReverse(&lfsList);
-    tg->items=lfsList;
-    }
+	}
+	else
+	{   
+   	    for (i = 0; i < 18; i++)
+            {
+		struct linkedFeatures *lfList = NULL;
+        	AllocVar(codeLfs);
+        	codeLfs->name = cloneString(codeNames[i]);
+        	codeLfs->noLine = TRUE;
+		for (lfs = originalLfs; lfs != NULL; lfs = lfs->next)
+                {
+		    lf = lfsToLf(lfs);
+        	    temparray2=((char**)(lfs->features->extra))[i];
+		    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)!=-9999)
+        	    {
+			lf->score=atoi(temparray2);
+        	        slAddHead(&lfList,lf);
+
+
+	      	    }
+                }
+        	slReverse(&lfList);
+        	codeLfs->features = lfList;   
+        	slAddHead(&lfsList,codeLfs);
+            }
+	   }
+    	freeLinkedFeaturesSeries(&originalLfs);
+    	slReverse(&lfsList);
+    	tg->items=lfsList;
+    
+}
 
 slFreeList(&track);
 
@@ -392,8 +483,8 @@ else if (lf->score > 200)
     return shadesOfGray[3];
 else if (lf->score > 100)
     return shadesOfGray[3];
-else return shadesOfGray[2];
-
+else if (lf->score != -9999) return shadesOfGray[2];
+else return shadesOfGray[0];
 }
 
 void codeBlastMethods(struct track *tg)

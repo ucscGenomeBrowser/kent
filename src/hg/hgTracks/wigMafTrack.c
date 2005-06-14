@@ -14,11 +14,12 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 #include "mafSummary.h"
+#include "phyloTree.h"
 
 #define ANNOT_DEBUG 1
 #undef ANNOT_DEBUG
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.80 2005/05/04 22:44:27 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.81 2005/06/05 19:44:58 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -110,11 +111,30 @@ int i;
 int speciesCt = 0, groupCt = 1;
 int speciesOffCt = 0;
 struct hash *speciesOffHash = newHash(0);
+char buffer[128];
+char *speciesTarget = trackDbSetting(track->tdb, SPECIES_TARGET_VAR);
+char *speciesTree = trackDbSetting(track->tdb, SPECIES_TREE_VAR);
+bool useTarg;	/* use phyloTree to find shortest path */
+struct phyloTree *tree = NULL;
 
 /* either speciesOrder or speciesGroup is specified in trackDb */
 char *speciesOrder = trackDbSetting(track->tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(track->tdb, SPECIES_GROUP_VAR);
 char *speciesOff = trackDbSetting(track->tdb, SPECIES_DEFAULT_OFF_VAR);
+
+safef(buffer, sizeof(buffer), "%s.vis",track->mapName);
+if (!cartVarExists(cart, buffer) && (speciesTarget != NULL))
+    useTarg = TRUE;
+else
+    {
+    char *val;
+
+    val = cartUsualString(cart, buffer, "useCheck");
+    useTarg = sameString("useTarg",val);
+    }
+
+if (useTarg && (tree = phyloParseString(speciesTree)) == NULL)
+    useTarg = FALSE;
 
 if (speciesOrder == NULL && speciesGroup == NULL)
     errAbort(
@@ -141,16 +161,24 @@ for (group = 0; group < groupCt; group++)
                                 SPECIES_GROUP_PREFIX, groups[group]);
         speciesOrder = trackDbRequiredSetting(track->tdb, sGroup);
         }
+    if (useTarg)
+	{
+	speciesOrder = phyloFindPath(tree, database, cartUsualString(cart, SPECIES_HTML_TARGET,speciesTarget));
+	}
+
     speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
         {
-        /* skip this species if UI checkbox was unchecked */
-        safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
-        if (!cartVarExists(cart, option))
-            if (hashLookup(speciesOffHash, species[i]))
-                cartSetBoolean(cart, option, FALSE);
-        if (!cartUsualBoolean(cart, option, TRUE))
-            continue;
+	if (!useTarg)
+	    {
+	    /* skip this species if UI checkbox was unchecked */
+	    safef(option, sizeof(option), "%s.%s", track->mapName, species[i]);
+	    if (!cartVarExists(cart, option))
+		if (hashLookup(speciesOffHash, species[i]))
+		    cartSetBoolean(cart, option, FALSE);
+	    if (!cartUsualBoolean(cart, option, TRUE))
+		continue;
+	    }
         mi = newMafItem(species[i], group);
         slAddHead(&miList, mi);
         }

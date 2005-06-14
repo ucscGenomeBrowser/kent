@@ -20,12 +20,13 @@
 #include "obscure.h"
 #include "chainCart.h"
 #include "chainDb.h"
+#include "phyloTree.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.196 2005/05/26 20:59:18 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.198 2005/06/05 19:23:48 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -555,36 +556,38 @@ printf("Human Position");
 cdsColorOptions(tdb, 2);
 }
 
+void geneIdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+geneLabel = cartUsualString(cart, varName, "gene");
+printf("<B>Label:</B> ");
+radioButton(varName, geneLabel, "gene");
+radioButton(varName, geneLabel, "accession");
+radioButton(varName, geneLabel, "both");
+radioButton(varName, geneLabel, "none");
+}
+
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
-char varName[64];
-char *refGeneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-refGeneLabel = cartUsualString(cart, varName, "gene");
-printf("<B>Label:</B> ");
-radioButton(varName, refGeneLabel, "gene");
-radioButton(varName, refGeneLabel, "accession");
-radioButton(varName, refGeneLabel, "both");
-radioButton(varName, refGeneLabel, "none");
-
+geneIdConfig(tdb);
 cdsColorOptions(tdb, 2);
 }
 
 void retroGeneUI(struct trackDb *tdb)
 /* Put up retroGene-specifc controls */
 {
-char varName[64];
-char *retroGeneLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-retroGeneLabel = cartUsualString(cart, varName, "gene");
-printf("<B>Label:</B> ");
-radioButton(varName, retroGeneLabel, "gene");
-radioButton(varName, retroGeneLabel, "accession");
-radioButton(varName, retroGeneLabel, "both");
-radioButton(varName, retroGeneLabel, "none");
-
+geneIdConfig(tdb);
 cdsColorOptions(tdb, 2);
+}
+
+void gencodeUI(struct trackDb *tdb)
+/* Put up gencode-specifc controls */
+{
+geneIdConfig(tdb);
 }
 
 void oneMrnaFilterUi(struct controlGrid *cg, char *text, char *var)
@@ -1014,6 +1017,8 @@ void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
 {
+char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
+char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
 char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
 char *species[100];
@@ -1025,6 +1030,7 @@ int group, prevGroup;
 int speciesCt = 0, groupCt = 1;
 int i;
 char option[64];
+struct phyloTree *tree;
 
 if (speciesOrder == NULL && speciesGroup == NULL)
     errAbort(
@@ -1061,31 +1067,51 @@ puts("<P><B>Pairwise alignments:</B><BR>" );
 treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
     printf("<IMG ALIGN=right SRC=\"/images/%s\">", treeImage);
+
+if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
+{
+    char buffer[128];
+    char *nodeNames[512];
+    int numNodes = 0;
+    char *path;
+
+    safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
+    cartMakeRadioButton(cart, buffer,"useTarg", "useTarg");
+    printf("Show shortest path to target species:  ");
+    path = phyloNodeNames(tree);
+    numNodes = chopLine(path, nodeNames);
+    cgiMakeDropList(SPECIES_HTML_TARGET, nodeNames, numNodes,
+	cartUsualString(cart, SPECIES_HTML_TARGET, speciesTarget));
+    puts("<br>");
+    cartMakeRadioButton(cart,buffer,"useCheck", "useTarg");
+    printf("Show all species checked : ");
+}
+
 if (groupCt == 1)
     puts("<TABLE><TR>");
 group = -1;
 for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL; 
-                wmSpecies = wmSpecies->next, i++)
+		    wmSpecies = wmSpecies->next, i++)
     {
     char *label;
     prevGroup = group;
     group = wmSpecies->group;
     if (groupCt != 1 && group != prevGroup)
-        {
-        i = 0;
-        if (group != 0)
-            puts("</TR></TABLE>");
-        printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
-        puts("<TABLE><TR>");
-        }
+	{
+	i = 0;
+	if (group != 0)
+	    puts("</TR></TABLE>");
+	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
+	puts("<TABLE><TR>");
+	}
     if (i != 0 && (i % 6) == 0)
-        puts("</TR><TR>");
+	puts("</TR><TR>");
     puts("<TD>");
     safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
     cgiMakeCheckBox(option, cartUsualBoolean(cart, option, TRUE));
     label = hOrganism(wmSpecies->name);
     if (label == NULL)
-        label = wmSpecies->name;
+	label = wmSpecies->name;
     *label = tolower(*label);
     printf ("%s<BR>", label);
     puts("</TD>");
@@ -1447,8 +1473,9 @@ else if (tdb->type != NULL)
             {
             if (sameString(track, "acembly"))
                 acemblyUi(tdb);
-
-		nmdFilterOptions(tdb);
+            else if (startsWith("encodeGencode", track))
+                gencodeUI(tdb);
+            nmdFilterOptions(tdb);
 	    cdsColorOptions(tdb, 2);
             }
 	

@@ -48,6 +48,8 @@ echo "Push request:"
 echo "Please push from dev-->hgdownload "
 echo "  /usr/local/apache/htdocs/admin/hgcentral.sql"
 echo
+echo "reason: (describe here)"
+echo
 
 exit 0
 

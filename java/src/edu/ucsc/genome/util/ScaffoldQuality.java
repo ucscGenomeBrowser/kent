@@ -42,43 +42,23 @@ class ScaffoldQuality {
       while (scaffoldIter.hasNext()) {
         scaffold = (Scaffold) scaffoldIter.next();
 	// scaffold.print();
-	int expectedPos = 0;
-	System.out.println("fixedStep chrom=" + scaffold.name + " start=1");
 	contigs = scaffold.contigs;
-	// handle starting gaps
-	if (scaffold.startPos > expectedPos) {
-	  for (int i = 0; i < expectedPos; i++) 
-	    System.out.println("0");
-        }
-	expectedPos = scaffold.startPos;
 
 	// iterate through contigs
-	// store scores in ArrayList
 	Iterator contigIter = contigs.iterator();
 	ArrayList scoreArray = new ArrayList();
 	while (contigIter.hasNext()) {
 	  contig = (Contig) contigIter.next();
-	  // handle gaps
-	  if (contig.chromStart > expectedPos) {
-	    for (int j = expectedPos; j <= contig.chromStart; j++)
-	      System.out.println("0");
-	  }
-
-	  expectedPos = contig.chromEnd + 1;
           Statement stmt2 = con.createStatement();
           scoreArray = QADBLibrary.getScores(contig, "contigQuality", stmt2);
-
-	  // print
+	  int pos = contig.chromStart + 1;
+	  System.out.println("fixedStep chrom=" + scaffold.name + " start=" + pos);
+	  // could check here if extra scores getting throw away
+	  // LoadQuality padded with extra zeroes if necessary
 	  for (int k = contig.fragStart; k < contig.fragEnd; k++)
 	    System.out.println(scoreArray.get(k));
-	  expectedPos = contig.chromEnd + 1;
 	}
 
-	// this is where I would check for ending gaps?
-	// to do that, would need to read gap table
-	// if (expectedPos < scaffold.endPos)
-	  // for (int k = expectedPos; k < scaffold.endPos; k++)
-	    // System.out.println("0");
       }
     } catch (Exception e) { 
       System.out.println(e.toString()); 

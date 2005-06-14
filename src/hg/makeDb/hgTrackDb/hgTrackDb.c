@@ -11,7 +11,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgTrackDb.c,v 1.24 2005/04/04 23:44:20 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackDb.c,v 1.28 2005/06/06 21:45:29 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,33 +36,34 @@ errAbort(
   "  -strict - only include tables that exist (and complain about missing html files).\n"
   "  -raName=trackDb.ra - Specify a file name to use other than trackDb.ra\n"
   "   for the ra files.\n" 
+  "  -release=alpha|beta - Include trackDb entries with this release only.\n"
   );
 }
 
 static struct optionSpec optionSpecs[] = {
     {"visibility", OPTION_STRING},
     {"raName", OPTION_STRING},
-    {"strict", OPTION_STRING},
+    {"strict", OPTION_BOOLEAN},
     {"hideFirst", OPTION_BOOLEAN},
+    {"release", OPTION_STRING},
 };
 
 static char *raName = "trackDb.ra";
+static char *release = "alpha";
 
-void addVersion(char *strict, char *database, char *dirName, char *raName, 
+void addVersion(boolean strict, char *database, char *dirName, char *raName, 
     struct hash *uniqHash,
     struct hash *htmlHash,
     struct trackDb **pTrackList)
 /* Read in tracks from raName and add them to list/database if new. */
 {
 struct trackDb *tdList = NULL, *td, *tdNext;
-struct slName *allChroms = hAllChromNames();
-struct slName *chromPtr;
 char fileName[512];
 char *words[1];
 
 tdList = trackDbFromRa(raName);
 
-if (strict != NULL) 
+if (strict) 
     {
     struct trackDb *strictList = NULL;
     struct hash *compositeHash = hashNew(0);
@@ -73,6 +74,8 @@ if (strict != NULL)
         tdNext = td->next;
         if (hTableOrSplitExists(td->tableName))
             {
+            if (verboseLevel() > 2)
+                printf("%s table exists\n", td->tableName);
 	    slAddHead(&strictList, td);
             if ((setting = trackDbSetting(td, "subTrack")) != NULL)
                 {
@@ -110,7 +113,24 @@ if (strict != NULL)
     /* No need to slReverse, it's sorted later. */
     tdList = strictList;
     }
-   
+
+/* prune out alternate track entries for another release */
+for (td = tdList; td != NULL; td = tdNext)
+    {
+    char *rel;
+    tdNext = td->next;
+    if ((rel = trackDbSetting(td, "release")) != NULL)
+        {
+        if (differentString(rel, release))
+           slRemoveEl(&tdList, td);
+        else
+            /* remove release setting from trackDb entry -- there
+             * should only be a single entry for the track, so 
+             * the release setting is no longer relevant (and it
+             * confuses Q/A */
+        hashRemove(td->settingsHash, "release");
+        }
+    }
 
 for (td = tdList; td != NULL; td = tdNext)
     {
@@ -194,7 +214,7 @@ return cloneString(newCreate);
 }
 
 
-void layerOn(char *strict, char *database, char *dir, struct hash *uniqHash, 
+void layerOn(boolean strict, char *database, char *dir, struct hash *uniqHash, 
 	struct hash *htmlHash,  boolean mustExist, struct trackDb **tdList)
 /* Read trackDb.ra from directory and any associated .html files,
  * and layer them on top of whatever is in tdList. */
@@ -237,7 +257,7 @@ else
 }
 
 void hgTrackDb(char *org, char *database, char *trackDbName, char *sqlFile, char *hgRoot,
-               char *visibilityRa, char *strict)
+               char *visibilityRa, boolean strict)
 /* hgTrackDb - Create trackDb table from text files. */
 {
 struct hash *uniqHash = newHash(8);
@@ -294,7 +314,7 @@ printf("Loaded %d track descriptions total\n", slCount(tdList));
 	char *html = hashFindVal(htmlHash, td->tableName);
         if (html == NULL)
 	    {
-	    if (strict != NULL  && !trackDbSetting(td, "subTrack"))
+	    if (strict && !trackDbSetting(td, "subTrack") && !sameString(td->tableName,"cytoBandIdeo"))
 		{
 		printf("html missing for %s %s %s '%s'\n",org, database, td->tableName, td->shortLabel);
 		}
@@ -325,8 +345,9 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 6)
     usage();
 raName = optionVal("raName", raName);
+release = optionVal("release", release);
 
 hgTrackDb(argv[1], argv[2], argv[3], argv[4], argv[5],
-          optionVal("visibility", NULL), optionVal("strict", NULL));
+          optionVal("visibility", NULL), optionExists("strict"));
 return 0;
 }

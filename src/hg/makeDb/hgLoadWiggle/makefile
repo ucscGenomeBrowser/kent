@@ -46,6 +46,8 @@ test_verbose:
 install::
 	rm -f ${SCRIPTS}/chkWiggleTable.sh
 	cp -p chkWiggleTable.sh ${SCRIPTS}
+	rm -f ${SCRIPTS}/varStepToBedGraph.pl
+	cp -p varStepToBedGraph.pl ${SCRIPTS}
 
 clean:
 	rm -f test_data/chr1_0.wib test_data/chr1_0.wig test_data/chr1_1.wib \

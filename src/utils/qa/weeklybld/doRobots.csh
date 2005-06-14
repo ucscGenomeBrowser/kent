@@ -16,44 +16,42 @@ if ( ! -d ~/bin/i386.cluster ) then
  exit 1
 endif
 
+set returnCode=0
+
 # Symlink Trick safe now
 echo "Symlink Trick."
 ./symtrick.csh
 
-
 ssh hgwbeta $WEEKLYBLD/doHgNearTestRobot.csh
 set err = $status
 if ( $err ) then
- echo "error running doHgNearTestRobot.csh: $err" 
- ./unsymtrick.csh
- exit 1
+    echo "error running doHgNearTestRobot.csh: $err" 
+    set returnCode=1
 endif
 
 ssh hgwbeta $WEEKLYBLD/doHgTablesTestRobot.csh
 set err = $status
 if ( $err ) then
- echo "error running doHgTablesTestRobot.csh: $err" 
- ./unsymtrick.csh
- exit 1
+    echo "error running doHgTablesTestRobot.csh: $err" 
+    set returnCode=1
 endif
 
 ./doTrackCheckRobot.csh
 set err = $status
 if ( $err ) then
- echo "error running doTrackCheckRobot.csh: $err" 
- ./unsymtrick.csh
- exit 1
+    echo "error running doTrackCheckRobot.csh: $err" 
+    set returnCode=1
 endif 
 
 ./doLiftOverTestRobot.csh
 set err = $status
 if ( $err ) then
- echo "error running doLiftOverTestRobot.csh: $err" 
- ./unsymtrick.csh
- exit 1
+    echo "error running doLiftOverTestRobot.csh: $err" 
+    set returnCode=1
 endif 
 
 echo "Done running robots TrackCheck, LiftOverTest, hgNearTest, and hgTablesTest."
 ./unsymtrick.csh
-exit 0
+
+exit $returnCode
 

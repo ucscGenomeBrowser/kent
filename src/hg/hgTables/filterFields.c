@@ -17,8 +17,9 @@
 #include "joiner.h"
 #include "hgTables.h"
 #include "bedCart.h"
+#include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.38 2005/03/30 19:00:11 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.40 2005/06/03 19:13:46 hiram Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -720,8 +721,28 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 boolean gotFirst = FALSE;
+boolean isWig = FALSE;
+boolean isBedGraph = FALSE;
+int bedGraphColumn = 5;		/*	default score column	*/
 
-if (isWiggle(db, table))
+if (curTrack && curTrack->type)
+    isBedGraph = startsWith("bedGraph", curTrack->type);
+
+isWig = isWiggle(db, table);
+
+if (isBedGraph)
+    {
+    int wordCount;
+    char *words[8];
+    char *typeLine = cloneString(curTrack->type);
+
+    wordCount = chopLine(typeLine,words);
+    if (wordCount > 1)
+	bedGraphColumn = sqlUnsigned(words[1]);
+    freez(&typeLine);
+    }
+
+if (isWig)
     {
     hPrintf("<TABLE BORDER=0>\n");
     numericFilterOption(db, rootTable, filterDataValueVar,
@@ -731,7 +752,7 @@ if (isWiggle(db, table))
 	double min, max;
 	wiggleMinMax(curTrack,&min,&max);
 
-	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue limits: %g,%g) "
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g:%g]) "
 		"</TD></TR></TABLE>\n", min, max);
 	}
     else
@@ -739,6 +760,7 @@ if (isWiggle(db, table))
     }
 else
     {
+    int fieldNum = 0;
     safef(query, sizeof(query), "describe %s", table);
     sr = sqlGetResult(conn, query);
     hPrintf("<TABLE BORDER=0>\n");
@@ -752,27 +774,44 @@ else
 	    {
 	    if (!gotFirst)
 		gotFirst = TRUE;
-	    else
+	    else if (!isBedGraph)
 		logic = " AND ";
 	    }
-	if (isSqlStringType(type))
+	if (!isBedGraph || (bedGraphColumn == fieldNum))
 	    {
-	    stringFilterOption(db, rootTable, field, logic);
+	    if (isSqlStringType(type))
+		{
+		stringFilterOption(db, rootTable, field, logic);
+		}
+	    else if (isSqlEnumType(type) || isSqlSetType(type))
+		{
+		enumFilterOption(db, rootTable, field, type, logic);
+		}
+	    else
+		{
+		numericFilterOption(db, rootTable, field, field, logic);
+		}
+	    if (isBedGraph)
+		{
+		double min, max;
+		double tDbMin, tDbMax;
+
+		wigFetchMinMaxLimits(curTrack, &min, &max, &tDbMin, &tDbMax);
+		if (tDbMin < min)
+		    min = tDbMin;
+		if (tDbMax > max)
+		    max = tDbMax;
+		hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (%s range: [%g:%g]) "
+		    "</TD></TR>\n", field, min, max);
+		}
 	    }
-	else if (isSqlEnumType(type) || isSqlSetType(type))
-	    {
-	    enumFilterOption(db, rootTable, field, type, logic);
-	    }
-	else
-	    {
-	    numericFilterOption(db, rootTable, field, field, logic);
-	    }
+	++fieldNum;
 	}
     hPrintf("</TABLE>\n");
     }
 
 /* Printf free-form query row. */
-    if (!isWiggle(db, table)) {
+    if (!(isWig||isBedGraph)) {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);
@@ -784,7 +823,7 @@ else
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWiggle(db, table))
+if (isWig)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -817,7 +856,7 @@ if (ct->wiggle)
 	double min, max;
 	wiggleMinMax(curTrack,&min,&max);
 
-	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue limits: %g,%g) "
+	hPrintf("<TR><TD COLSPAN=3 ALIGN=RIGHT> (dataValue range: [%g,%g]) "
 		"</TD></TR>\n", min, max);
 	}
     }

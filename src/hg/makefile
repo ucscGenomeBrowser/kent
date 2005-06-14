@@ -4,6 +4,13 @@ BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgPcr hgTables hg
 	hgTrackUi hgc cartDump near/hgNear protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver hgc/cgiClustalw
 
+TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl gbGetEntries \
+            hgGetAnn mrnaToGene overlapSelect pslCDnaFilter pslDiff \
+            pslHisto pslMap pslSelect pslStats pslSwap spideyToPsl
+
+BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
+
+
 all::    cgi utils
 
 hgLib:
@@ -82,18 +89,10 @@ clean_utils::
 		(cd $${D} && ${MAKE} clean;) \
 	done
 
-test::	hgLib
-	cd lib && ${MAKE} test
-	cd blastToPsl && ${MAKE} test
-	cd embossToPsl && ${MAKE} test
-	cd geneBounds && ${MAKE} test
-	cd hgGetAnn && ${MAKE} test
-	cd liftUp && ${MAKE} test
-	cd mrnaToGene && ${MAKE} test
-	cd overlapSelect && ${MAKE} test
-	cd pslDiff && ${MAKE} test
-	cd pslMap && ${MAKE} test
-	cd spideyToPsl && ${MAKE} test
+test::	${TEST_DIRS:%=%.test}
+
+%.test: hgLib
+	cd $* && ${MAKE} test
 
 UTIL_DIRS = \
 	affyTransciptome \

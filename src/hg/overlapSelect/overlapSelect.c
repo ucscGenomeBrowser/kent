@@ -24,6 +24,7 @@ static struct optionSpec optionSpecs[] = {
     {"nonOverlapping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
+    {"idMatch", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
     {"overlapThreshold", OPTION_FLOAT},
     {"overlapSimilarity", OPTION_FLOAT},
@@ -37,7 +38,7 @@ static struct optionSpec optionSpecs[] = {
 /* incompatible with aggregate */
 static char *aggIncompatible[] =
 {
-    "overlapSimilarity", "merge", "mergeOutput", NULL
+    "overlapSimilarity", "merge", "mergeOutput", "idMatch", NULL
 };
 
 /* file format constants */
@@ -347,7 +348,7 @@ void usage(char *msg)
 errAbort("%s:\n"
          "overlapSelect [options] selectFile inFile outFile\n"
          "\n"
-         "Select records bases on overlaping chromosome ranges.\n"
+         "Select records based on overlaping chromosome ranges.\n"
          "The ranges are specified in the selectFile, with each block\n"
          "specifying a range.  Records are copied from the inFile to outFile\n"
          "based on the selection criteria.  Selection is based on blocks or\n"
@@ -374,7 +375,8 @@ errAbort("%s:\n"
          "  -inCds - Use only CDS in the in file\n"
          "  -nonOverlapping - select non-overlaping instead of overlaping records\n"
          "  -strand - must be on the same strand to be considered overlaping\n"
-         "  -excludeSelf - don't compare alignments with the same coordinates and name.\n"
+         "  -excludeSelf - don't compare records with the same coordinates and name.\n"
+         "  -idMatch - only select overlapping records if they have the same id\n"
          "  -aggregate - instead of computing overlap bases on individual select entries, \n"
          "      compute it based on the total number of inFile bases overlap by select file\n"
          "      records. -overlapSimilarity and -mergeOutput will not work with\n"
@@ -411,7 +413,8 @@ errAbort("%s:\n"
 }
 
 /* entry */
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
 char *selectFile, *inFile, *outFile, *dropFile;
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
@@ -469,8 +472,13 @@ useAggregate = optionExists("aggregate");
 nonOverlapping = optionExists("nonOverlapping");
 if (optionExists("strand"))
     selectOpts |= selUseStrand;
+if (optionExists("excludeSelf") && (optionExists("idMatch")))
+    errAbort("can't specify both -excludeSelf and -idMatch");
 if (optionExists("excludeSelf"))
     selectOpts |= selExcludeSelf;
+if (optionExists("idMatch"))
+    selectOpts |= selIdMatch;
+
 overlapThreshold = optionFloat("overlapThreshold", 0.0);
 overlapSimilarity = optionFloat("overlapSimilarity", 0.0);
 if ((overlapThreshold != 0.0) && (overlapSimilarity != 0.0))

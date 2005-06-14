@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.54 2005/04/10 14:41:24 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.55 2005/06/02 02:54:16 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -678,9 +678,10 @@ int pslCalcMilliBad(struct psl *psl, boolean isMrna)
 {
 int sizeMul = pslIsProtein(psl) ? 3 : 1;
 int qAliSize, tAliSize, aliSize;
-int milliBad;
+int milliBad = 0;
 int sizeDif;
 int insertFactor;
+int total;
 
 qAliSize = sizeMul * (psl->qEnd - psl->qStart);
 tAliSize = psl->tEnd - psl->tStart;
@@ -699,7 +700,9 @@ insertFactor = psl->qNumInsert;
 if (!isMrna)
     insertFactor += psl->tNumInsert;
 
-milliBad = (1000 * (psl->misMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / (sizeMul * (psl->match + psl->repMatch + psl->misMatch));
+total = (sizeMul * (psl->match + psl->repMatch + psl->misMatch));
+if (total != 0)
+    milliBad = (1000 * (psl->misMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / total;
 return milliBad;
 }
 

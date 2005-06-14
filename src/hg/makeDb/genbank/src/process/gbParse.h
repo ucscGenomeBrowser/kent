@@ -13,6 +13,8 @@ struct lineFile;
 #define GBF_TO_LOWER   0x04
 #define GBF_MULTI_VAL  0x08
 #define GBF_CONCAT_VAL 0x10 /* don't space-seperate multiline values */
+#define GBF_BOOLEAN    0x20 /* boolean value */
+#define GBF_SUB_SPACE  0x40 /* change spaces to _ in values */
 
 struct gbFieldUseCounter
 /* For some fields we use this to keep track of all

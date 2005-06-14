@@ -11,7 +11,7 @@
 #include "psl.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: pslPretty.c,v 1.30 2005/01/10 00:42:30 kent Exp $";
+static char const rcsid[] = "$Id: pslPretty.c,v 1.31 2005/06/01 22:56:06 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -696,38 +696,38 @@ int dotMod = dot;
 
 if (checkFileName != NULL)
     checkFile = mustOpen(checkFileName, "w");
-printf("Scanning %s\n", targetList);
+fprintf(stderr,"Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
-printf("Scanning %s\n", queryList);
+fprintf(stderr,"Scanning %s\n", queryList);
 hashFileList(queryList, fileHash, qHash);
-printf("Converting %s\n", pslName);
+fprintf(stderr,"Converting %s\n", pslName);
 while ((psl = pslNext(lf)) != NULL)
     {
     if (dot > 0)
         {
 	if (--dotMod <= 0)
 	   {
-	   printf(".");
-	   fflush(stdout);
+	   fprintf(stderr,"."); /* stderr flushes itself */
 	   dotMod = dot;
 	   }
 	}
     prettyOne(psl, qHash, tHash, fileCache, f, axt, checkFile);
     pslFree(&psl);
     }
+fprintf(stderr,"\n");
 if (checkFile != NULL)
     {
-    printf("missLargeStart: %d\n", total_missLargeStart);
-    printf("missSmallStart: %d\n", total_missSmallStart);
-    printf("missLargeEnd: %d\n", total_missLargeEnd);
-    printf("missSmallEnd: %d\n", total_missSmallEnd);
-    printf("missLargeMiddle: %d\n", total_missLargeMiddle);
-    printf("missSmallMiddle: %d\n", total_missSmallMiddle);
-    printf("weirdSplice: %d\n", total_weirdSplice);
-    printf("doubleGap: %d\n", total_doubleGap);
-    printf("jumpBack: %d\n", total_jumpBack);
-    printf("perfect: %d\n", total_rnaPerfect);
-    printf("total: %d\n", total_rnaCount);
+    fprintf(checkFile,"missLargeStart: %d\n", total_missLargeStart);
+    fprintf(checkFile,"missSmallStart: %d\n", total_missSmallStart);
+    fprintf(checkFile,"missLargeEnd: %d\n", total_missLargeEnd);
+    fprintf(checkFile,"missSmallEnd: %d\n", total_missSmallEnd);
+    fprintf(checkFile,"missLargeMiddle: %d\n", total_missLargeMiddle);
+    fprintf(checkFile,"missSmallMiddle: %d\n", total_missSmallMiddle);
+    fprintf(checkFile,"weirdSplice: %d\n", total_weirdSplice);
+    fprintf(checkFile,"doubleGap: %d\n", total_doubleGap);
+    fprintf(checkFile,"jumpBack: %d\n", total_jumpBack);
+    fprintf(checkFile,"perfect: %d\n", total_rnaPerfect);
+    fprintf(checkFile,"total: %d\n", total_rnaCount);
     }
 lineFileClose(&lf);
 carefulClose(&f);

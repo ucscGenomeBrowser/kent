@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.10 2005/03/26 15:49:45 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.12 2005/06/05 18:55:12 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -268,6 +268,7 @@ slAddTail(&c0->children, c1);
 c2 = newField("/gene", "gen", GBF_TRACK_VALS, 128);
 slAddTail(&c1->children, c2);
 c2 = newField("/locus_tag", "lot", GBF_TRACK_VALS, 128);
+
 slAddTail(&c1->children, c2);
 
 c2 = newField("/product", "pro", GBF_NONE, 128);
@@ -294,6 +295,15 @@ gbPrtField = c2;
 c2 = newField("/db_xref", NULL, GBF_MULTI_VAL, 128); 
 slAddTail(&c1->children, c2);
 gbCdsDbxField = c2;
+
+c2 = newField("/transl_except", "translExcept", GBF_MULTI_VAL, 128); 
+slAddTail(&c1->children, c2);
+
+c2 = newField("/exception", "exception", GBF_MULTI_VAL|GBF_SUB_SPACE, 128); 
+slAddTail(&c1->children, c2);
+
+c2 = newField("/selenocysteine", "selenocysteine", GBF_BOOLEAN, 32); 
+slAddTail(&c1->children, c2);
 
 /* for refseq, we parse data stuff into comment. */
 gbRefSeqStatusField = newField("refSeqStatus", "rss", GBF_NONE, 128);
@@ -324,6 +334,7 @@ int lineLen;
 boolean inSlashSub = (gbf->readName[0] == '/');
 int indentCount;
 struct hash *valHash;
+char closeQuote = '"';  /* can be "..." or (...) */
 
 /* special handling for field that occurs multiple times */
 if (gbf->val->stringSize > 0)
@@ -336,7 +347,20 @@ if (gbf->val->stringSize > 0)
     }
 
 if (inSlashSub)
-    line += 2;  /* Skip over =" */
+    {
+    line++; /* skip = */
+    /* skip quote or paren */
+    if (*line == '"')
+        {
+        closeQuote = '"';
+        line++;
+        }
+    else if (*line == '(')
+        {
+        closeQuote = ')';
+        line++;
+        }
+    }
 for (;;)
     {
     /* Erase trailing spaces and quotes. */
@@ -351,14 +375,21 @@ for (;;)
         }
     if (lineLen > 0 && inSlashSub)
         {
-        if (line[lineLen-1] == '"')
+        if (line[lineLen-1] == closeQuote)
             {
             --lineLen;
             line[lineLen] = 0;
             }
         }
+
+    /* change spaces to _ if requested */
+    if (gbf->flags & GBF_SUB_SPACE)
+        {
+        subChar(line, ' ', '_');
+        subChar(line, '\t', '_');
+        }
     
-    /* Copy in the line. */
+    /* Copy in the line */
     dyStringAppendN(gbf->val, line, lineLen);
 
     /* All done if single line field. */
@@ -457,7 +488,12 @@ while (lineFileNext(lf, &line, &lineSize))
                     s = firstWord + strlen(firstWord);
                 subIndent = s - line;
                 }
-            if (s != NULL)
+            if (s == NULL)
+                {
+                if (gbf->flags & GBF_BOOLEAN)
+                    dyStringAppend(gbf->val, "yes");
+                }
+            else
                 readOneField(s, lf, gbf, subIndent);
             if (gbf->children)
                 recurseReadFields(lf, gbf->children, indent);        

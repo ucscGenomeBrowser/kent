@@ -100,5 +100,9 @@ unsigned long fileModTime(char *pathName);
  * these may vary from OS to OS, but you can depend on
  * later files having a larger time. */
 
+
+off_t fsize(char *pathname);
+/* get file size for pathname. return -1 if not found */
+
 #endif /* PORTABLE_H */
 

@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.15 2004/09/16 00:18:42 markd Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.16 2005/06/02 02:17:36 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +28,14 @@ errAbort(
   "   -minAli=N - restrict to those with at least given bases aligning\n"
   "   -minSizeT=N - restrict to those at least this big on target\n"
   "   -minSizeQ=N - restrict to those at least this big on query\n"
+  "   -qStartMin=N - restrict to those with qStart at least N\n"
+  "   -qStartMax=N - restrict to those with qStart less than N\n"
+  "   -qEndMin=N - restrict to those with qEnd at least N\n"
+  "   -qEndMax=N - restrict to those with qEnd less than N\n"
+  "   -tStartMin=N - restrict to those with tStart at least N\n"
+  "   -tStartMax=N - restrict to those with tStart less than N\n"
+  "   -tEndMin=N - restrict to those with tEnd at least N\n"
+  "   -tEndMax=N - restrict to those with tEnd less than N\n"
   "   -syn        - do filtering based on synteny.  \n"
   "   -nonsyn     - do inverse filtering based on synteny.  \n"
   "   -type=XXX - restrict to given type, maybe repeated to allow several types\n"
@@ -49,6 +57,14 @@ struct optionSpec options[] = {
    {"minAli", OPTION_INT},
    {"minSizeT", OPTION_INT},
    {"minSizeQ", OPTION_INT},
+   {"qStartMin", OPTION_INT},
+   {"qStartMax", OPTION_INT},
+   {"qEndMin", OPTION_INT},
+   {"qEndMax", OPTION_INT},
+   {"tStartMin", OPTION_INT},
+   {"tStartMax", OPTION_INT},
+   {"tEndMin", OPTION_INT},
+   {"tEndMax", OPTION_INT},
    {"syn", OPTION_BOOLEAN},
    {"chimpSyn", OPTION_BOOLEAN},
    {"nonsyn", OPTION_BOOLEAN},
@@ -91,6 +107,14 @@ return hashCommaString(s);
 struct hash *tHash, *notTHash;	/* Target chromosomes. */
 struct hash *qHash, *notQHash;	/* Query chromosomes. */
 double minScore, maxScore;	/* Min/max score. */
+int qStartMin;  /* query range */
+int qStartMax;
+int qEndMin;
+int qEndMax;
+int tStartMin;  /* target range */
+int tStartMax;
+int tEndMin;
+int tEndMax;
 boolean doSyn;		/* Do synteny based filtering. */
 boolean doChimpSyn;	/* Do chimp synteny based filtering. */
 boolean doNonSyn;		/* Do synteny based filtering. */
@@ -186,6 +210,14 @@ if (fill->chainId)
 	if (endsWith(fill->qName, "_random"))
 	    return FALSE;
 	}
+    if (fill->qStart < qStartMin || fill->qStart >= qStartMax)
+        return FALSE;
+    if ((fill->qStart+fill->qSize) < qEndMin || (fill->qStart+fill->qSize) >= qEndMax)
+        return FALSE;
+    if (fill->tStart < tStartMin || fill->tStart >= tStartMax)
+        return FALSE;
+    if ((fill->tStart+fill->tSize) < tEndMin || (fill->tStart+fill->tSize) >= tEndMax)
+        return FALSE;
     if (doSyn && !synFilter(fill))
 	return FALSE;
     if (doNonSyn && synFilter(fill))
@@ -276,6 +308,14 @@ qHash = hashCommaOption("q");
 notQHash = hashCommaOption("notQ");
 minScore = optionInt("minScore", -BIGNUM);
 maxScore = optionFloat("maxScore", 9e99);
+qStartMin = optionInt("qStartMin", -BIGNUM);
+qStartMax = optionInt("qStartMax", BIGNUM);
+qEndMin = optionInt("qEndMin", -BIGNUM);
+qEndMax = optionInt("qEndMax", BIGNUM);
+tStartMin = optionInt("tStartMin", -BIGNUM);
+tStartMax = optionInt("tStartMax", BIGNUM);
+tEndMin = optionInt("tEndMin", -BIGNUM);
+tEndMax = optionInt("tEndMax", BIGNUM);
 doSyn = optionExists("syn");
 doChimpSyn = optionExists("chimpSyn");
 doNonSyn = optionExists("nonsyn");

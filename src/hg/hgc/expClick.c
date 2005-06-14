@@ -10,7 +10,7 @@
 #include "cheapcgi.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.8 2004/12/07 18:16:44 kate Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.9 2005/06/02 14:16:33 kschneid Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -20,6 +20,7 @@ boolean redGreen = sameString(colorScheme, "rg");
 float absVal = fabs(val);
 struct rgbColor color; 
 int colorIndex = 0;
+
 /* if log score is -10000 data is missing */
 if(val == -10000) 
     {
@@ -32,9 +33,11 @@ if(absVal > max)
 if (max == 0) 
     errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
 colorIndex = (int)(absVal * 255/max);
+
+
 if(redGreen) 
     {
-    if(val > 0) 
+   if(val > 0) 
 	{
 	color.r = colorIndex; 
 	color.g = 0;
@@ -60,8 +63,83 @@ else
 	color.r = 0;
 	color.g = 0;
 	color.b = colorIndex;
-	}
+	}	
+  	 }
+
+return color;
+}
+
+static struct rgbColor getColorForLoweExprBed(float val, float max)
+/* Return the correct color for a given score */
+{
+char *colorScheme = cartUsualString(cart, "exprssn.color", "rg");
+boolean redGreen = sameString(colorScheme, "rg");
+float absVal = fabs(val);
+struct rgbColor color; 
+int colorIndex = 0;
+
+/* if log score is -10000 data is missing */
+if(val == -10000) 
+    {
+    color.g = color.r = color.b = 128;
+    return(color);
     }
+if(val>5000){ absVal=fabs(absVal-10000.0); max=1;}
+if(absVal > max) 
+    absVal = max;
+if (max == 0) 
+    errAbort("ERROR: hgc::getColorForExprBed() maxDeviation can't be zero\n"); 
+colorIndex = (int)(absVal * 255/max);
+if(val>5000){
+	color.r=0;
+	color.g=0;
+	if(val == 10001){
+		color.b=255;
+		color.r=120;
+		color.g=255;
+	}
+	else if(val == 10002){
+		color.b=255;
+		color.r=80;
+		color.g=200;
+	}
+	else {
+		color.b=255;
+		color.g=60;
+	}	
+}
+else{
+	if(redGreen) 
+	    {
+ 	   if(val > 0) 
+		{
+		color.r = colorIndex; 
+		color.g = 0;
+		color.b = 0;
+		}
+	    else 
+		{
+		color.r = 0;
+		color.g = colorIndex;
+		color.b = 0;
+		}
+	    }
+	else
+	    {
+	    if(val > 0) 
+		{
+		color.r = colorIndex; 
+		color.g = 0;
+		color.b = 0;
+		}
+	    else 
+		{
+		color.r = 0;
+		color.g = 0;
+		color.b = colorIndex;
+		}	
+   	 }
+}
 return color;
 }
 
@@ -261,6 +339,34 @@ for(bed = bedList;bed != NULL; bed = bed->next)
 printf("</tr>\n");
 }
 
+static void msBedExpressionPrintLoweRow(struct bed *bedList, struct hash *erHash, 
+			     int expIndex, char *expName, float maxScore)
+/* print the name of the experiment and color the 
+   background of individual cells using the score to 
+   create false two color display */
+{
+char buff[32];
+struct bed *bed = bedList;
+struct expRecord *er = NULL;
+int square = 10;
+snprintf(buff, sizeof(buff), "%d", expIndex);
+er = hashMustFindVal(erHash, buff);
+
+printf("<tr>\n");
+if(strstr(er->name, expName))
+    printf("<td align=left bgcolor=\"D9E4F8\"> %s</td>\n",er->name);
+else
+    printf("<td align=left> %s</td>\n", er->name);
+
+for(bed = bedList;bed != NULL; bed = bed->next)
+    {
+    /* use the background colors to creat patterns */
+    struct rgbColor rgb = getColorForLoweExprBed(bed->expScores[expIndex], maxScore);
+    printf("<td height=%d width=%d bgcolor=\"#%.2X%.2X%.2X\">&nbsp</td>\n", square, square, rgb.r, rgb.g, rgb.b);
+    }
+printf("</tr>\n");
+}
+
 static void msBedAffyPrintRow(struct bed *bedList, struct hash *erHash, int expIndex, char *expName, float maxScore)
 /* print the name of the experiment and color the 
    background of individual cells using the score to 
@@ -305,6 +411,7 @@ featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
     printKey(minScore, maxScore, stepSize, base, getColor);
+   
 printf("<p>\n");
 printf("<basefont size=-1>\n");
 printf("<table  bgcolor=\"#000000\" border=\"0\" cellspacing=\"0\" cellpadding=\"1\"><tr><td>");
@@ -312,6 +419,7 @@ printf("<table  bgcolor=\"#fffee8\" border=\"0\" cellspacing=\"0\" cellpadding=\
 printHeader(bedList, erHash, itemName);
 for(i=0; i<bedList->expCount; i++)
     {
+     
     printRow(bedList, erHash, i, expName, maxScore);
     }
 printf("</table>");
@@ -726,6 +834,7 @@ else
 	hashAddUnique(erHash, buff, er);
 	}
     printf("<h2></h2><p>\n");
+
     msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
 		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
     expRecordFreeList(&erList);
@@ -733,8 +842,52 @@ else
     bedFreeList(&bedList);
     }
 printf("<h2></h2><p>\n");
+
 if (printHtml)
     printf("%s", tdb->html);
+
+if (printLinks)
+    printLinks(itemName, chip);
+}
+
+static void loweRatioDetails(struct trackDb *tdb, char *expName, char *expTable,
+	char *chip, float stepSize, float maxScore,
+	void (*printLinks)(char *item, char *chip), boolean printHtml) 
+/* print out a page for the affy data from gnf based on ratio of
+ * measurements to the median of the measurements. */
+{
+struct bed *bedList;
+char *itemName = cgiUsualString("i2","none");
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+
+genericHeader(tdb, itemName);
+bedList = loadMsBed(tdb->tableName, seqName, winStart, winEnd);
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    erHash = newHash(2);
+    erList = loadExpRecord(expTable, "hgFixed");
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    printf("<h2></h2><p>\n");
+
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
+		    msBedDefaultPrintHeader, msBedExpressionPrintLoweRow, printExprssnColorKey, getColorForLoweExprBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+printf("<h2></h2><p>\n");
+
+if (printHtml)
+    printf("%s", tdb->html);
+
 if (printLinks)
     printLinks(itemName, chip);
 }
@@ -893,6 +1046,27 @@ double maxScore = atof(expScale);
 double stepSize = atof(expStep);
 genericRatioDetails(tdb, item, expTable, chip, stepSize, maxScore, 
 	printLinks, printHtml);
+}
+
+static void loweExpRatio(struct trackDb *tdb, char *item,
+	void (*printLinks)(char *item, char *chip), boolean printHtml)
+/* Print display for expRatio tracks with given link. */
+{
+char *expTable = trackDbRequiredSetting(tdb, "expTable");
+char *expScale = trackDbRequiredSetting(tdb, "expScale");
+char *expStep = trackDbRequiredSetting(tdb, "expStep");
+char *chip = trackDbRequiredSetting(tdb, "chip");
+double maxScore = atof(expScale);
+double stepSize = atof(expStep);
+loweRatioDetails(tdb, item, expTable, chip, stepSize, maxScore, 
+	printLinks, printHtml);
+}
+
+
+void loweExpRatioDetails(struct trackDb *tdb, char *item)
+/* Put up details on some gnf track. */
+{
+loweExpRatio(tdb, item, NULL, FALSE);
 }
 
 void gnfExpRatioDetails(struct trackDb *tdb, char *item)

@@ -14,6 +14,9 @@ cd $WEEKLYBLD
 echo "BRANCHNN=$BRANCHNN"
 echo "TODAY=$TODAY       (last build day)"
 echo "LASTWEEK=$LASTWEEK   (previous build day)"
+echo "REVIEWDAY=$REVIEWDAY   (review day, day2)"
+echo "LASTREVIEWDAY=$LASTREVIEWDAY   (previous review day, day2)"
+
 
 if ( "$TODAY" == "" ) then
  echo "TODAY undefined."
@@ -25,6 +28,14 @@ if ( "$BRANCHNN" == "" ) then
 endif
 if ( "$LASTWEEK" == "" ) then
  echo "LASTWEEK undefined."
+ exit 1
+endif
+if ( "$REVIEWDAY" == "" ) then
+ echo "REVIEWDAY undefined."
+ exit 1
+endif
+if ( "$LASTREVIEWDAY" == "" ) then
+ echo "LASTREVIEWDAY undefined."
  exit 1
 endif
 
@@ -98,7 +109,10 @@ echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build compl
 echo
 ./doRobots.csh
 if ( $status ) then
- exit 1
+    echo "One or more of the robots had errors.  See the logs."
+    exit 1
+else
+    echo "Robots done. No errors reported."
 endif
 
 echo

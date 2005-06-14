@@ -143,6 +143,8 @@
 #include "encodeRegionInfo.h"
 #include "encodeErge.h"
 #include "encodeErgeHssCellLines.h"
+#include "encodeStanfordPromoters.h"
+#include "encodeStanfordPromotersAverage.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -168,7 +170,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.891 2005/05/24 23:43:39 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.900 2005/06/06 04:01:13 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1772,8 +1774,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
            if ((row = sqlNextRow(sr)) != NULL)
               printf("<b>Prediction Class:</b> %s<br>\n", row[0]);
            }
-        }
-    }
+        } }
 genePredFreeList(&gpList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -1979,11 +1980,16 @@ void printTBSchemaLink(struct trackDb *tdb)
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 {
 if (hTableOrSplitExists(tdb->tableName))
+    {
+    char *trackTable = trackDbSetting(tdb, "subTrack");
+    if (trackTable == NULL)
+	trackTable = tdb->tableName;
     printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	   "TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, tdb->tableName, tdb->tableName);
+	   database, tdb->grp, trackTable, tdb->tableName);
+    }
 }
 
 void printTrackHtml(struct trackDb *tdb)
@@ -4025,6 +4031,7 @@ struct sqlConnection *conn2= hgAllocConn();
 struct sqlResult *sr;
 char **row;
 char rgdEstId[512];
+char estOrient[512];
 char query[256];
 char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
@@ -4039,6 +4046,8 @@ boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
 char *version = NULL;
 struct trackDb *tdbRgdEst;
+char *chrom = cartString(cart, "c");
+int start = cartInt(cart, "o");
 
 /* This sort of query and having to keep things in sync between
  * the first clause of the select, the from clause, the where
@@ -4162,6 +4171,24 @@ if (row != NULL)
 	    }
 	}
     printStanSource(acc, type);
+    if (sameWord(tdb->tableName, "intronEst")) 
+        {
+	if (hTableExists("estOrientInfo"))
+	    {
+	    snprintf(query, sizeof(query),
+            	"select intronOrientation from %s.estOrientInfo where chrom = '%s' and chromStart = %d and name = '%s';",  database, chrom, start, acc);
+	    if (sqlQuickQuery(conn2, query, estOrient, sizeof(estOrient)) != NULL)
+                {
+                int estOrientInt = atoi(estOrient);
+                if (estOrientInt != 0)
+                    {
+                    printf("<B>EST on %c strand </b>supported by %d splice sites.", estOrientInt > 0 ? '+' : '-' , abs(estOrientInt) );
+                    printf("<BR>\n" );
+                    }
+                }
+            }
+        
+        }
     if (hGenBankHaveSeq(acc, NULL))
         {
         printf("<B>%s sequence:</B> ", type); 
@@ -11946,7 +11973,6 @@ if (sr1 != NULL)
         else
             printf("n/a</TD>");
         printf("<TD ALIGN=center>"); 
-    fflush(stdout);
         if (sameString(row1[1], "1"))
             printf("BAC end</TD>"); 
         else if (sameString(row1[1], "2"))
@@ -11956,9 +11982,7 @@ if (sr1 != NULL)
         else 
             printf("n/a</TD>");
             
-    fflush(stdout);
         printf("<TD>"); 
-    fflush(stdout);
         if (uniStsId != NULL)
             {
             /* remove last comma from string before printing */
@@ -11967,16 +11991,12 @@ if (sr1 != NULL)
             }
         else
             printf("n/a</TD>");
-    fflush(stdout);
         printf("<TD>"); 
-    fflush(stdout);
         if (row1[3] != NULL)
             printf("%s</TD>", row1[3]); 
         else
             printf("n/a</TD>");
-    fflush(stdout);
         printf("<TD>"); 
-    fflush(stdout);
         if (row1[4] != NULL)
             printf("%s</TD>", row1[4]); 
         else
@@ -11995,14 +12015,11 @@ if (sr1 != NULL)
             printf("%s", row2[0]);
             }
         printf("</TD></TR>\n");
-        fflush(stdout);
         }
     }
-    fflush(stdout);
 if (foundStsResult)
     {
     printf("</TABLE>\n");
-    fflush(stdout);
     printf("<P><HR ALIGN=\"CENTER\"></P>\n");
     }
 }
@@ -13280,6 +13297,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, cbs);
     }
 slReverse(&list);
+
 /*Print out the table for the alignments*/
 printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
@@ -13320,6 +13338,7 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     flag=0;
     }
    
+
 /*Print out table with Blast information*/
 printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
@@ -13354,7 +13373,7 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
     printf("%s",cbs2->evalue);
     printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-    printf("%f",cbs2->PI);
+    printf("%.2f",cbs2->PI);
     printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
     printf("%i",cbs2->length);
     printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -13364,6 +13383,56 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     }	
 printf("  <br><br></tbody>\n</table>  \n");
 printf("  </tbody>\n</table>  \n");
+
+
+/*Print out the table for the alignments*/
+printf("</td></td></td><br>\n<table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"width: 100%%;\">");
+printf(" <tbody>\n    <tr>\n");
+printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
+printf("</td>\n    </tr>\n    <tr>");
+printf("     <td style=\"vertical-align: top;\">%s where each plus(+) is approx. %f amino acids", trnaName, dashlength);
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+printf("<code>\n");
+for(z=0; z<60; z++)
+{
+	printf("+");
+}
+printf("</code>");
+
+printf("</td>\n    </tr>\n    <tr>");
+flag=0;
+flag2=0;
+
+for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
+    {		    
+    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
+    dashes=cbs2->queryseqstart-cbs2->queryseqend;
+    if(dashes<0) dashes=dashes*-1;          
+    printf("<a name=\"%i-align\"></a>",cbs2->GI);
+    printf("<a\nhref=\"#%i-desc\">%s</a>, %s",cbs2->GI, cbs2->species,cbs2->qName);
+    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
+    printf("<code>\n");
+    dashes=dashes/dashlength;
+    if(cbs2->queryseqstart>cbs2->queryseqend)
+	for(z=0; z<((cbs2->queryseqend)/dashlength); z++)
+	    {
+	    printf("&nbsp;");
+	    }
+    else
+        for(z=0; z<((cbs2->queryseqstart)/dashlength); z++)
+	    {
+	    printf("&nbsp;");
+	    }
+    if(dashes<1) printf("+");
+    for(z=0; z<dashes; z++) printf("+");
+    printf("</code>");
+    printf("</td>\n    </tr>\n");
+    flag=0;
+	
+                     
+    }
+   
 
 /*Free the data*/
 
@@ -13385,13 +13454,13 @@ void printCode(char code)
 	    printf("Bacteria");
 	    break;
 	case 'c':
-	    printf("Crenarchea");
+	    printf("Crenarchaea");
 	    break;
 	case 'd':
 	    printf("Acidophile");
 	    break;
 	case 'e':
-	    printf("Euryarchae");
+	    printf("Euryarchaea");
 	    break;
 	case 'g':
 	    printf("Genus");
@@ -13418,7 +13487,7 @@ void printCode(char code)
 	    printf("Viral");
     	    break;
 	case 'k':
-	    printf("Alkali");
+	    printf("Alkaliphile");
     	    break;	
 	case 'l':
 	    printf("Halophile");
@@ -13427,7 +13496,6 @@ void printCode(char code)
 	    printf("Both Aerobic and Anerobic");
     	    break;
 	default:
-	    printf("Bad code %c", code);
 	    break;
        }
 }
@@ -13456,7 +13524,9 @@ rowOffset = hOffsetPastBin(seqName, track);
 sprintf(query, "select * from %s where name = '%s'", track, trnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
+
     trna = rnaGenesLoad(row+rowOffset);
+
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 if (trna->scan > 0)
@@ -13569,9 +13639,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 /*Print out table with Blast information*/
 printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
-printf("     <td style=\"vertical-align: top;\"><b>Blast Against Category</b>");
+printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Organism Name</b>");
+printf("<b>Phylogenetic/Functional Category</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Gene Name</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -13582,7 +13652,7 @@ printf("<b>Evalue</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Percent Identity</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-printf("<b>Alignment Length</b>");
+printf("<b>Alignment Length(AA)</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Gap openings</b>");
 printf("</td>\n    </tr>\n    <tr>");
@@ -13596,6 +13666,11 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    {
 	    currentGI=cbs2->GI;
 	    printf("\n      \n      <td style=\"vertical-align: top;\">");
+	    printf("<a name=\"%i-desc\"></a>",cbs2->GI);
+	
+	    printf("<a\nhref=\"#%i-align\">%s</a>",cbs2->GI,cbs2->species);
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+
 	    flag=1;
 	    }
 			
@@ -13609,23 +13684,47 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    {
 	   
 	    printCode(cbs2->code[0]);
-	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	   
-	    printf("<a name=\"%i-desc\"></a>",cbs2->GI);
-	
-	    printf("<a\nhref=\"#%i-align\">%s</a>",cbs2->GI,cbs2->species);
+	    if((sameString(cbs2->species, "Pyrococcus furiosus"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrFur2&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Sulfolobus solfataricus"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=sulSol1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Pyrobaculum aerophilum"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrAer2&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Nanoarchaeum equitans"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=nanEqu1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Methanococcus maripaludis"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=metMar1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Haloarcula marismortui"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=halMar1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Aeropyrum pernix"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=aerPer1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else{
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("%s",cbs2->name);
+	    }
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("%s",cbs2->product);
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&amp;val=%i\">NCBI Link</a>",cbs2->GI);
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-#ifdef SOON
 	    printf("%s",cbs2->evalue);
-#endif /* SOON */
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("%f",cbs2->PI);
+	    printf("%.2f",cbs2->PI);
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("%i",cbs2->length);
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -13643,12 +13742,12 @@ printf(" <tbody>\n    <tr>\n");
 printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
 printf("</td>\n    </tr>\n    <tr>");
-printf("     <td style=\"vertical-align: top;\">%s where each - is approx. %f amino acids", trnaName, dashlength);
+printf("     <td style=\"vertical-align: top;\">%s where each plus(+) is approx. %f amino acids", trnaName, dashlength);
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<code>\n");
 for(z=0; z<60; z++)
 {
-	printf("-");
+	printf("+");
 }
 printf("</code>");
 
@@ -13688,8 +13787,8 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 		    {
 		    printf("&nbsp;");
 		    }
-	    if(dashes<1) printf("-");
-	    for(z=0; z<dashes; z++) printf("-");
+	    if(dashes<1) printf("+");
+	    for(z=0; z<dashes; z++) printf("+");
 	    printf("</code>");
 	    printf("</td>\n    </tr>\n");
 	    flag=0;
@@ -15020,6 +15119,67 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+
+static void printESPDetails(char **row)
+/* Print details from a cell line subtrack table of encodeStanfordPromoters. */
+{
+struct encodeStanfordPromoters *esp = encodeStanfordPromotersLoad(row);
+bedPrintPos((struct bed *)esp, 6);
+printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
+printf("<B>Gene description:</B> %s<BR>\n", esp->description);
+printf("<B>Luciferase signal A:</B> %d<BR>\n", esp->lucA);
+printf("<B>Renilla signal A:</B> %d<BR>\n", esp->renA);
+printf("<B>Luciferase signal B:</B> %d<BR>\n", esp->lucB);
+printf("<B>Renilla signal B:</B> %d<BR>\n", esp->renB);
+printf("<B>Average Luciferase/Renilla Ratio:</B> %f<BR>\n", esp->avgRatio);
+printf("<B>Normalized Luciferase/Renilla Ratio:</B> %f<BR>\n", esp->normRatio);
+printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %f<BR>\n",
+       esp->normLog2Ratio);
+}
+
+static void printESPAverageDetails(char **row)
+/* Print details from the averaged subtrack table of encodeStanfordPromoters. */
+{
+struct encodeStanfordPromotersAverage *esp =
+    encodeStanfordPromotersAverageLoad(row);
+bedPrintPos((struct bed *)esp, 6);
+printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
+printf("<B>Gene description:</B> %s<BR>\n", esp->description);
+printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %f<BR>\n",
+       esp->normLog2Ratio);
+}
+
+void doEncodeStanfordPromoters(struct trackDb *tdb, char *item)
+/* Print ENCODE Stanford Promoters data. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int start = cartInt(cart, "o");
+char fullTable[64];
+boolean hasBin = FALSE;
+char query[1024];
+
+cartWebStart(cart, tdb->longLabel);
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+safef(query, sizeof(query),
+     "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+      fullTable, seqName, start, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (endsWith(tdb->tableName, "Average"))
+	printESPAverageDetails(row+hasBin);
+    else
+	printESPDetails(row+hasBin);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
 {
@@ -15194,6 +15354,29 @@ readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 cutterFree(&cut);
 hFreeOrDisconnect(&conn);
+}
+
+static void doAnoEstTcl(struct trackDb *tdb, char *item)
+/* Print info about AnoEst uniquely-clustered item. */
+{
+struct sqlConnection *conn = hAllocConn();
+int start = cartInt(cart, "o");
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+genericBedClick(conn, tdb, item, start, 12);
+if (hTableExists("anoEstExpressed"))
+    {
+    char query[512];
+    
+    safef(query, sizeof(query),
+	  "select 1 from anoEstExpressed where name = '%s'", item);
+    if (sqlQuickNum(conn, query))
+	puts("<B>Expressed:</B> yes<BR>");
+    else
+	puts("<B>Expressed:</B> no<BR>");
+    }
+hFreeConn(&conn);
+printTrackHtml(tdb);
 }
 
 void showSomeAlignment2(struct psl *psl, bioSeq *qSeq, enum gfType qType, int qStart, 
@@ -16078,6 +16261,11 @@ else if ( sameWord(track, "affyRatio") || sameWord(track, "affyGnfU74A")
     {
     gnfExpRatioDetails(tdb, item);
     }
+else if(sameWord(track, "llaPfuPrintC2"))
+    {
+   loweExpRatioDetails(tdb, item);
+  
+    }
 else if(sameWord(track, "affyUcla"))
     {
     affyUclaDetails(tdb, item);
@@ -16288,9 +16476,17 @@ else if (startsWith("encodeGencodeIntron", track))
     {
     doGencodeIntron(tdb, item);
     }
+else if (startsWith("encodeStanfordPromoters", track))
+    {
+    doEncodeStanfordPromoters(tdb, item);
+    }
 else if (sameString("cutters", track))
     {
     doCutters(item);
+    }
+else if (sameString("anoEstTcl", track))
+    {
+    doAnoEstTcl(tdb, item);
     }
 else if (tdb != NULL)
     {

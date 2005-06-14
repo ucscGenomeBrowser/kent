@@ -653,3 +653,12 @@ SEQ2_LEN=$BASE/S2.len
     cd /cluster/data/ce3/bed/blastzCb1.2005_05_02
     time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
 	swap.run.out 2>&1 &
+
+# BLAT SERVER SETUP (DONE - 2005-06-02 - Hiram)
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES("ce3", "blat15", 17784, 1, 0);' \
+	-h localhost hgcentraltest
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES("ce3", "blat15", 17785, 0, 1);' \
+	-h localhost hgcentraltest

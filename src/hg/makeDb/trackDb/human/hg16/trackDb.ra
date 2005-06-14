@@ -1149,7 +1149,7 @@ type wig -600 2000
 
 track hetChimp
 shortLabel Chimp Heterozygosity
-longLabel Chimp (Nov. 2003/panTro1) single nucleotide mutation rate %, 10Kb bins
+longLabel Chimp (Nov. 2003/panTro1) Single Nucleotide Mutation Rate %, 10Kb Bins
 group compGeno
 priority 207
 visibility hide
@@ -1280,7 +1280,7 @@ type bed 5 .
 
 track mrnaBad
 shortLabel Bad mRNAs
-longLabel $Organism mRNAs from GenBank with potential genomic priming
+longLabel $Organism mRNAs from GenBank with Potential Genomic Priming
 group x
 priority 132
 visibility hide
@@ -1300,7 +1300,7 @@ type maf
 
 track NISC_phyloHMM
 shortLabel NISC phyloHMMcons
-longLabel Phylo-HMM-based conservation for NISC targets
+longLabel Phylo-HMM-based Conservation for NISC Targets
 group compGeno
 priority 107.1
 visibility hide
@@ -1542,30 +1542,130 @@ otherDb galGal1
 
 track unAnnotated
 shortLabel unAnnotated
-longLabel Regions not annotated as genes/mRNAs/ESTs/CpG/repeats/gaps
+longLabel Regions Not Annotated as Genes/mRNAs/ESTs/CpG/Repeats/Gaps
 group x
 priority 161
 visibility hide
 color 20,0,50
 type bed 4 .
 
-track encode_Stanford_Promoters
-shortLabel Promoter/Stanford
-longLabel Stanford Promoter Activity in ENCODE Regions
+track encodeStanfordPromoters
+compositeTrack on
+shortLabel Stanf. Promoter
+longLabel Stanford Promoter Activity 
 group encode
 priority 20.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type expRatio
-expTable encode_Stanford_PromotersExps
-expScale 999
-expStep 100
-expColorDense On
-chip x
+type bed 9 +
+itemRgb on
+exonArrowsDense on
+
+track encodeStanfordPromotersAGS
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro AGS
+longLabel Stanford Promoter Activity  (AGS cells)
+priority 1
+
+track encodeStanfordPromotersBe2C
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro Be2c
+longLabel Stanford Promoter Activity  (Be2c cells)
+priority 2
+
+track encodeStanfordPromotersCRL1690
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro CRL1690
+longLabel Stanford Promoter Activity  (CRL1690 cells)
+priority 3
+
+track encodeStanfordPromotersG402
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro G402
+longLabel Stanford Promoter Activity  (G402 cells)
+priority 4
+
+track encodeStanfordPromotersHCT116
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro HCT116
+longLabel Stanford Promoter Activity  (HCT116 cells)
+priority 5
+
+track encodeStanfordPromotersHMCB
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro HMCB
+longLabel Stanford Promoter Activity  (HMCB cells)
+priority 6
+
+track encodeStanfordPromotersHT1080
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro HT1080
+longLabel Stanford Promoter Activity  (HT1080 cells)
+priority 7
+
+track encodeStanfordPromotersHTB11
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro HTB11
+longLabel Stanford Promoter Activity  (HTB11 cells)
+priority 8
+
+track encodeStanfordPromotersHela
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro Hela
+longLabel Stanford Promoter Activity  (HeLa cells)
+priority 9
+
+track encodeStanfordPromotersHepG2
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro HepG2
+longLabel Stanford Promoter Activity  (HepG2 cells)
+priority 10
+
+track encodeStanfordPromotersJEG3
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro JEG3
+longLabel Stanford Promoter Activity  (JEG3 cells)
+priority 11
+
+track encodeStanfordPromotersMG63
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro MG63
+longLabel Stanford Promoter Activity  (MG63 cells)
+priority 12
+
+track encodeStanfordPromotersMRC5
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro MRC5
+longLabel Stanford Promoter Activity  (MRC5 cells)
+priority 13
+
+track encodeStanfordPromotersPanc1
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro Panc1
+longLabel Stanford Promoter Activity  (Panc1 cells)
+priority 14
+
+track encodeStanfordPromotersSnu182
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro Snu182
+longLabel Stanford Promoter Activity  (Snu182 cells)
+priority 15
+
+track encodeStanfordPromotersU87
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro U87
+longLabel Stanford Promoter Activity  (U87 cells)
+priority 16
+
+track encodeStanfordPromotersAverage
+subTrack encodeStanfordPromoters
+shortLabel Stan Pro Average
+longLabel Stanford Promoter Activity  (Average)
+priority 17
 
 track encode_NHGRI_DNAseHS
-shortLabel DNaseI-HS/NHGRI
-longLabel NHGRI DNaseI-Hypersensitive Sites in ENCODE Regions
+shortLabel NHGRI DNaseI-HS
+longLabel NHGRI DNaseI-Hypersensitive Sites 
 group encode
 priority 25.1
 color 0,0,255
@@ -1573,10 +1673,658 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
-track encodeUcsdChipRnap
+track encodeNhgriDnaseHs
 compositeTrack on
-shortLabel ChIP/LI Pol2
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II) in ENCODE Regions
+shortLabel NHGRI DNaseI-HS
+longLabel NHGRI DNaseI-Hypersensitive Sites 
+group encode
+priority 25.11
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 5 .
+useScore 1
+
+track encodeNhgriDnaseHsNonAct
+subTrack encodeNhgriDnaseHs
+shortLabel DNase CD4 Unact.
+longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Unactivated)
+priority 1
+
+track encodeNhgriDnaseHsAct
+subTrack encodeNhgriDnaseHs
+shortLabel DNase CD4 Activ.
+longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated)
+priority 2
+
+track encodeLIChIPgIF
+compositeTrack on
+shortLabel LI/UCSD gIF ChIP
+longLabel Ludwig Institute/UCSD ChIP/Chip - Gamma Interferon Experiments
+group encode
+priority 30.05
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+autoScale Off
+maxHeightPixels 128:16:16
+minLimit 0
+maxLimit 16
+
+track encodeUcsdChipHeLaH3H4dmH3K4_p0
+subTrack encodeLIChIPgIF
+shortLabel LI H3K4me2 -gIF
+longLabel Ludwig Institute ChIP/Chip (H3K4me2 ab, HeLa cells, no gamma interferon)
+priority 1
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4dmH3K4_p30
+subTrack encodeLIChIPgIF
+shortLabel LI H3K4me2 +gIF
+longLabel Ludwig Institute ChIP/Chip (H3K4me2 ab, HeLa cells, 30 min. after gamma interferon) 
+priority 2
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4tmH3K4_p0
+subTrack encodeLIChIPgIF
+shortLabel LI H3K4me3 -gIF
+longLabel Ludwig Institute ChIP/Chip (H3K4me3 ab, HeLa cells, no gamma interferon)
+priority 3
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4tmH3K4_p30
+subTrack encodeLIChIPgIF
+shortLabel LI H3K4me3 +gIF
+longLabel Ludwig Institute ChIP/Chip (H3K4me3 ab, HeLa cells, 30 min. after gamma interferon) 
+priority 4
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4acH3_p0
+subTrack encodeLIChIPgIF
+shortLabel LI acH3 -gIF
+longLabel Ludwig Institute ChIP/Chip (acH3 ab, HeLa cells, no gamma interferon)
+priority 5
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4acH3_p30
+subTrack encodeLIChIPgIF
+shortLabel LI acH3 +gIF
+longLabel Ludwig Institute ChIP/Chip (acH3 ab, HeLa cells, 30 min. after gamma interferon) 
+priority 6
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4acH4_p0
+subTrack encodeLIChIPgIF
+shortLabel LI acH4 -gIF
+longLabel Ludwig Institute ChIP/Chip (acH4 ab, HeLa cells, no gamma interferon)
+priority 7
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4acH4_p30
+subTrack encodeLIChIPgIF
+shortLabel LI acH4 +gIF
+longLabel Ludwig Institute ChIP/Chip (acH4 ab, HeLa cells, 30 min. after gamma interferon) 
+priority 8
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4stat1_p0
+subTrack encodeLIChIPgIF
+shortLabel LI STAT1 -gIF
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, HeLa cells, no gamma interferon)
+priority 9
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4stat1_p30
+subTrack encodeLIChIPgIF
+shortLabel LI STAT1 +gIF
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, HeLa cells, 30 min. after gamma interferon) 
+priority 10
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4RNAP_p0
+subTrack encodeLIChIPgIF
+shortLabel LI RNAP -gIF
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, RNA polymerase, HeLa cells, no gamma interferon) 
+priority 11
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4RNAP_p30
+subTrack encodeLIChIPgIF
+shortLabel LI RNAP +gIF
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, RNA polymerase, HeLa cells, 30 min. after gamma interferon) 
+priority 12
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4TAF250_p0
+subTrack encodeLIChIPgIF
+shortLabel LI Taf250 -gIF
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, Taf250 polymerase, HeLa cells, no gamma interferon) 
+priority 13
+color 109,51,43
+
+track encodeUcsdChipHeLaH3H4TAF250_p30
+subTrack encodeLIChIPgIF
+shortLabel LI Taf250 +gIF
+longLabel Ludwig Institute ChIP/Chip (STAT1 ab, Taf250 polymerase HeLa cells, 30 min. after gamma interferon) 
+priority 14
+color 109,51,43
+
+track encodeUcsdNgGif
+compositeTrack on
+shortLabel LI Ng gIF ChIP
+longLabel Ludwig Institute/UCSD ChIP/Chip Nimblegen - gamma interferon experiments
+group encode
+priority 30.075
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -5
+maxLimit 5
+viewLimits 0:3.5
+autoScale off
+
+track encodeUcsdNgHeLaH3K4me3_p0
+subTrack encodeUcsdNgGif
+shortLabel LI Ng H3K4m3 -gIF
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, H3K4me, no gamma interferon
+priority 1
+
+track encodeUcsdNgHeLaH3K4me3_p30
+subTrack encodeUcsdNgGif
+shortLabel LI Ng H3K4m3 +gIF
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, H3K4me, 30 min after gamma interferon
+priority 2
+
+track encodeUcsdNgHeLaRnap_p0
+subTrack encodeUcsdNgGif
+shortLabel LI Ng Rnap -gIF
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, Rnap, no gamma interferon
+priority 3
+
+track encodeUcsdNgHeLaRnap_p30
+subTrack encodeUcsdNgGif
+shortLabel LI Ng Rnap +gIF
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng - HeLa, Rnap, 30 min after gamma interferon
+priority 4
+
+track encodeLIChIP
+release alpha
+compositeTrack on
+shortLabel LI/UCSD ChIP
+longLabel Ludwig Institute/UCSD ChIP/Chip - Pol2, TAF1, AcH3, H3K4me antibodies
+group encode
+priority 30.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+autoScale Off
+maxHeightPixels 128:16:16
+minLimit 0
+maxLimit 16
+
+track encodeUcsdChipRnapHela
+release alpha
+subTrack encodeLIChIP
+shortLabel LI Pol2 HeLa
+longLabel Ludwig Institute ChIP/Chip (Pol2 ab, HeLa cells) 
+priority 1
+
+track encodeUcsdChipRnapThp1
+release alpha
+subTrack encodeLIChIP
+shortLabel LI Pol2 THP1
+longLabel Ludwig Institute ChIP/Chip (Pol2 ab, THP1 cells) 
+priority 2
+color 0,63,135
+
+track encodeUcsdChipRnapImr90
+release alpha
+subTrack encodeLIChIP
+shortLabel LI Pol2 IMR90
+longLabel Ludwig Institute ChIP/Chip (Pol2 ab, IMR90 cells) 
+priority 3
+color 109,51,43
+
+track encodeUcsdChipRnapHct116
+release alpha
+subTrack encodeLIChIP
+shortLabel LI Pol2 HCT116
+longLabel Ludwig Institute ChIP/Chip (Pol2 ab, HCT116 cells) 
+priority 4
+color 58,119,40
+
+track encodeUcsdChipTaf250Hela
+release alpha
+subTrack encodeLIChIP
+shortLabel LI TAF1 HeLa
+longLabel Ludwig Institute ChIP/Chip (TAF1 ab, HeLa cells) 
+priority 5
+
+track encodeUcsdChipTaf250Thp1
+release alpha
+subTrack encodeLIChIP
+shortLabel LI TAF1 THP1
+longLabel Ludwig Institute ChIP/Chip (TAF1 ab, THP1 cells) 
+priority 6
+color 0,63,135
+
+track encodeUcsdChipTaf250Imr90
+release alpha
+subTrack encodeLIChIP
+shortLabel LI TAF1 IMR90
+longLabel Ludwig Institute ChIP/Chip (TAF1 ab, IMR90 cells) 
+priority 7
+color 109,51,43
+
+track encodeUcsdChipTaf250Hct116
+release alpha
+subTrack encodeLIChIP
+shortLabel LI TAF1 HCT116
+longLabel Ludwig Institute ChIP/Chip (TAF1 ab, HCT116 cells) 
+priority 8
+color 58,119,40
+
+track encodeUcsdChipAch3Imr90
+release alpha
+subTrack encodeLIChIP
+shortLabel LI AcH3 IMR90
+longLabel Ludwig Institute ChIP/Chip (AcH3 ab, IMR90 cells) 
+priority 9
+color 109,51,43
+
+track encodeUcsdChipMeh3k4Imr90
+release alpha
+subTrack encodeLIChIP
+shortLabel LI H3K4me IMR90
+longLabel Ludwig Institute ChIP/Chip (MeH3K4 ab, IMR90 cells) 
+priority 10
+color 109,51,43
+
+track encodeYaleChIPSTAT1Sig
+compositeTrack on
+shortLabel Yale ChIP Sig
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, Signal)
+group encode
+priority 33.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -1.0e-06
+maxLimit 1.0e-04
+autoScale Off
+
+track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP 36-36
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, Signal
+priority 1
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP 50-38
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, Signal
+priority 2
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP 50-50
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, Signal
+priority 3
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1HeLaBingRenSig
+subTrack encodeYaleChIPSTAT1Sig
+shortLabel Yale ChIP Bing Ren
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, Signal
+priority 4
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1Sites
+compositeTrack on
+shortLabel Yale ChIP Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, binding sites)
+group encode
+priority 33.15
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed .
+
+track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite
+subTrack encodeYaleChIPSTAT1Sites
+shortLabel Yale ChIP 36-36 Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, binding sites
+priority 1
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSite
+subTrack encodeYaleChIPSTAT1Sites
+shortLabel Yale ChIP 50-38 Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, binding sites
+priority 2
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSite
+subTrack encodeYaleChIPSTAT1Sites
+shortLabel Yale ChIP 50-50 Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, binding sites
+priority 3
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1HeLaBingRenSites
+subTrack encodeYaleChIPSTAT1Sites
+shortLabel Yale ChIP Bing Ren Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, binding sites
+priority 4
+color 200,50,50
+altColor 50,50,200
+
+track encodeYaleChIPSTAT1Pval
+compositeTrack on
+shortLabel Yale ChIP pVal
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, p-Values)
+group encode
+priority 33.2
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 0
+maxLimit 18.2
+autoScale Off
+
+track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pV36-36
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 36mer, 36bp win, p-Values
+priority 1
+color 50,50,200
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pV50-38
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 38bp win, p-Values
+priority 2
+color 50,50,200
+
+track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pV50-50
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Maskless 50mer, 50bp win, p-Values
+priority 3
+color 50,50,200
+
+track encodeYaleChIPSTAT1HeLaBingRenPval
+subTrack encodeYaleChIPSTAT1Pval
+shortLabel Yale ChIP pVBing Ren
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) Bing Ren chip, p-Values
+priority 4
+color 50,50,200
+
+track encodeYaleAffyRNATransMap
+compositeTrack on
+shortLabel Yale RNA TranMap
+longLabel Yale RNA Transcript Map, Neutrophil, Placenta and NB4 cell types
+group encode
+priority 33.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig -2730 3394
+maxHeightPixels 128:16:16
+viewLimits 0:25
+autoScale Off
+
+track encodeYaleAffyNeutRNATransMapAll
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM Summary
+longLabel Yale Neutrophil RNA Transcript Map, summary
+priority 1
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap01
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 1
+longLabel Yale Neutrophil RNA Transcript Map, sample 1
+priority 2
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap02
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 2
+longLabel Yale Neutrophil RNA Transcript Map, sample 2
+priority 3
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap03
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 3
+longLabel Yale Neutrophil RNA Transcript Map, sample 3
+priority 4
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap04
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 4
+longLabel Yale Neutrophil RNA Transcript Map, sample 4
+priority 5
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap05
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 5
+longLabel Yale Neutrophil RNA Transcript Map, sample 5
+priority 6
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap06
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 6
+longLabel Yale Neutrophil RNA Transcript Map, sample 6
+priority 7
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap07
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 7
+longLabel Yale Neutrophil RNA Transcript Map, sample 7
+priority 8
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap08
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 8
+longLabel Yale Neutrophil RNA Transcript Map, sample 8
+priority 9
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap09
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 9
+longLabel Yale Neutrophil RNA Transcript Map, sample 9
+priority 10
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNeutRNATransMap10
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale RNA TM 10
+longLabel Yale Neutrophil RNA Transcript Map, sample 10
+priority 11
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyPlacRNATransMap
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale Placenta TM
+longLabel Yale Placenta RNA Transcript Map
+priority 12
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNB4RARNATransMap
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale NB4 RA TM
+longLabel Yale NB4 RNA Transcript Map, treated with retinoic acid
+priority 13
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNB4TPARNATransMap
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale NB4 TPA TM
+longLabel Yale NB4 RNA Transcript Map, treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+priority 13
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyNB4UntrRNATransMap
+subTrack encodeYaleAffyRNATransMap
+shortLabel Yale NB4 Un TM
+longLabel Yale NB4 RNA Transcript Map, Untreated
+priority 14
+color 127,50,50
+altColor 50,50,127
+
+track encodeYaleAffyRNATars
+compositeTrack on
+shortLabel Yale RNA TARs
+longLabel Yale RNA Transcriptionally Active Regions (TARs)
+group encode
+priority 33.4
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+color 128,128,0
+altColor 0,128,128
+
+track encodeYaleAffyNeutRNATarsAll
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR Summary
+longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), summary
+priority 1
+
+track encodeYaleAffyNeutRNATars01
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 1
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 1
+priority 2
+
+track encodeYaleAffyNeutRNATars02
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 2
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 2
+priority 3
+
+track encodeYaleAffyNeutRNATars03
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 3
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 3
+priority 4
+
+track encodeYaleAffyNeutRNATars04
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 4
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 4
+priority 5
+
+track encodeYaleAffyNeutRNATars05
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 5
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 5
+priority 6
+
+track encodeYaleAffyNeutRNATars06
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 6
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 6
+priority 7
+
+track encodeYaleAffyNeutRNATars07
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 7
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 7
+priority 8
+
+track encodeYaleAffyNeutRNATars08
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 8
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 8
+priority 9
+
+track encodeYaleAffyNeutRNATars09
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 9
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 9
+priority 10
+
+track encodeYaleAffyNeutRNATars10
+subTrack encodeYaleAffyRNATars
+shortLabel Yale RNA TAR 10
+longLabel Yale Neutrophil RNA Transcriptionally Active Region, sample 10
+priority 11
+
+track encodeYaleAffyPlacRNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale Placenta RNA
+longLabel Yale Placenta RNA Transcriptionally Active Region (TAR), summary
+priority 12
+
+track encodeYaleAffyNB4RARNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale NB4 RA RNA TAR
+longLabel Yale NB4 RNA, TAR, treated with retinoic acid
+priority 13
+
+track encodeYaleAffyNB4TPARNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale NB4 TPA RNA TAR
+longLabel Yale NB4 RNA, TAR, treated with 12-O-tetradecanoylphorbol-13 acetate (TPA)
+priority 14
+
+track encodeYaleAffyNB4UntrRNATars
+subTrack encodeYaleAffyRNATars
+shortLabel Yale NB4 Un RNA TAR
+longLabel Yale NB4 RNA, TAR, Untreated
+priority 15
+
+track encodeUCDavisE2F1Median
+shortLabel UC Davis E2F1
+longLabel UC Davis E2F1 Median
+group encode
+priority 34.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -2.41
+maxLimit 4.59
+viewLimits -1:1
+color 32,128,180
+altColor 180,128,32
+autoScale Off
+
+track encodeUcsdChipRnap
+release beta
+compositeTrack on
+shortLabel LI ChIP Pol2
+longLabel Ludwig Institute ChIP/Chip (Pol2 initiation form antibody) 
 group encode
 priority 30.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1587,36 +2335,41 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipRnapHela
+release beta
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 HeLa
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HeLa) in ENCODE Regions
+shortLabel LI Pol2 HeLa
+longLabel Ludwig Institute ChIP/Chip (Pol2 antibody, HeLa cells) 
 priority 1
 
 track encodeUcsdChipRnapThp1
+release beta
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 THP1
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II THP1) in ENCODE Regions
+shortLabel LI Pol2 THP1
+longLabel Ludwig Institute, UCSD ChIP/Chip (Pol2 antibody, THP1 cells) 
 priority 2
 color 0,63,135
 
 track encodeUcsdChipRnapImr90
+release beta
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 IMR90
-longLabel Ludwig Institute,UCSD ChIP/Chip (Pol II IMR90) in ENCODE Regions
+shortLabel LI Pol2 IMR90
+longLabel Ludwig Institute,UCSD ChIP/Chip (Pol2 antibody, IMR90 cells) 
 priority 3
 color 109,51,43
 
 track encodeUcsdChipRnapHct116
+release beta
 subTrack encodeUcsdChipRnap
-shortLabel ChIP/LI Pol2 HCT116
-longLabel Ludwig Institute, UCSD ChIP/Chip (Pol II HCT116) in ENCODE Regions
+shortLabel LI Pol2 HCT116
+longLabel Ludwig Institute, UCSD ChIP/Chip (Pol2 antibody, HCT116 cells) 
 priority 4
 color 58,119,40
 
 track encodeUcsdChipTaf250
+release beta
 compositeTrack on
-shortLabel ChIP/LI TAF1
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1) in ENCODE Regions
+shortLabel LI ChIP TAF1
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody) 
 group encode
 priority 30.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1627,35 +2380,117 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipTaf250Hela
+release beta
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 HeLa
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HeLa) in ENCODE Regions
+shortLabel LI TAF1 HeLa
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, HeLa cells) 
 priority 1
 
 track encodeUcsdChipTaf250Thp1
+release beta
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 THP1
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 THP1) in ENCODE Regions
+shortLabel LI TAF1 THP1
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, THP1 cells) 
 priority 2
 color 0,63,135
 
 track encodeUcsdChipTaf250Imr90
+release beta
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 IMR90
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 IMR90) in ENCODE Regions
+shortLabel LI TAF1 IMR90
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) 
 priority 3
 color 109,51,43
 
 track encodeUcsdChipTaf250Hct116
+release beta
 subTrack encodeUcsdChipTaf250
-shortLabel ChIP/LI TAF1 HCT116
-longLabel Ludwig Institute, UCSD ChIP/Chip (TAF1 HCT116) in ENCODE Regions
+shortLabel LI TAF1 HCT116
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, HCT116 cells) 
+priority 4
+color 58,119,40
+
+track encodeUcsdNgChip
+compositeTrack on
+shortLabel LI Ng TAF1 IMR90
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) on Nimblegen Chip
+group encode
+priority 30.25
+visibility hide
+maxHeightPixels 128:16:16
+type wig -5.61 6.47
+viewLimits 0:1
+autoScale off
+
+track encodeUcsdNgChipSignal
+subTrack encodeUcsdNgChip
+shortLabel LI Ng TAF1 IMR90
+longLabel Ludwig Institute ChIP/Chip (TAF1 antibody, IMR90 cells) on Nimblegen Chip
+priority 1
+
+track encodeUcsdNgChipKnownSites
+subTrack encodeUcsdNgChip
+shortLabel TAF1 Known Sites
+longLabel Ludwig Institute TAF1 sites matching to known transcripts
+noInherit on
+type bed 3
+color 0,0,200
+priority 2
+
+track encodeUcsdNgChipNovelSites
+subTrack encodeUcsdNgChip
+shortLabel TAF1 Novel Sites
+longLabel Ludwig Institute TAF1 sites matching no known transcripts
+noInherit on
+type bed 3
+color 0,200,0
+priority 3
+
+track encodeUcsdNgValChip
+compositeTrack on
+shortLabel LI Ng Validation
+longLabel Ludwig Institute ChIP/Chip Validation (IMR90 cells)
+group encode
+priority 30.26
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -8
+maxLimit 8
+viewLimits 0:4
+autoScale off
+
+track encodeUcsdNgValChipH3ac
+subTrack encodeUcsdNgValChip
+shortLabel LI Ng Val H3ac
+longLabel Ludwig Institute ChIP/Chip Validation (H3ac antibody, IMR90 cells)
+priority 1
+
+track encodeUcsdNgValChipH3K4me
+subTrack encodeUcsdNgValChip
+shortLabel LI Ng Val H3K4me
+longLabel Ludwig Institute ChIP/Chip Validation (H3K4me antibody, IMR90 cells)
+priority 2
+color 0,63,135
+
+track encodeUcsdNgValChipRnap
+subTrack encodeUcsdNgValChip
+shortLabel LI Ng Val Pol2
+longLabel Ludwig Institute ChIP/Chip Validation (Pol2 antibody, IMR90 cells)
+priority 3
+color 109,51,43
+
+track encodeUcsdNgValChipTaf
+subTrack encodeUcsdNgValChip
+shortLabel LI Ng Val TAF1
+longLabel Ludwig Institute ChIP/Chip Validation (TAF1 antibody, IMR90 cells)
 priority 4
 color 58,119,40
 
 track encodeUcsdChipAch3Imr90
-shortLabel ChIP/LI AcH3
-longLabel Ludwig Institute, UCSD ChIP/Chip (AcH3 IMR90) in ENCODE Regions
+release beta
+shortLabel LI AcH3 IMR90
+longLabel Ludwig Institute ChIP/Chip (AcH3 antibody, IMR90 cells) 
 group encode
 priority 30.3
 color 109,51,43
@@ -1667,8 +2502,9 @@ minLimit 0
 maxLimit 16
 
 track encodeUcsdChipMeh3k4Imr90
-shortLabel ChIP/LI MeH3K4
-longLabel Ludwig Institute, UCSD ChIP/Chip (MeH3K4 IMR90) in ENCODE Regions
+release beta
+shortLabel LI MeH3K4 IMR90
+longLabel Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells) 
 group encode
 priority 30.4
 color 109,51,43
@@ -1681,48 +2517,50 @@ maxLimit 16
 
 track encodeAffyChIpRnapHl60Pval
 compositeTrack on
-shortLabel ChIP/Affy Pol2 Pval
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60) PValue in ENCODE Regions
+shortLabel Affy ChIP Pol2 
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60 cells) P Value 
 group encode
 color 10,10,130
 altColor 50,50,50
 priority 47.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type wig -3.4 750
+type bedGraph 4
+minLimit -3.4
+maxLimit 750
 maxHeightPixels 128:16:16
 autoScaleDefault Off
 defaultViewLimits 0:80
 
 track encodeAffyChIpRnapHl60PvalHr00
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel Pol2 0hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 0hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 0h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 0hrs) P Value 
 priority 1
 
 track encodeAffyChIpRnapHl60PvalHr02
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel Pol2 2hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 2hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 2h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 2hrs) P Value 
 priority 2
 
 track encodeAffyChIpRnapHl60PvalHr08
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel Pol2 8hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 8hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 8h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 8hrs) P Value 
 priority 3
 
 track encodeAffyChIpRnapHl60PvalHr32
 subTrack encodeAffyChIpRnapHl60Pval
-shortLabel Pol2 32hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 32hrs) PValue in ENCODE Regions
+shortLabel Affy Pol2 RA 32h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 32hrs) P Value 
 priority 4
 visibility hide
 
 track encodeAffyChIpRnapHl60Sites
 compositeTrack on
-shortLabel ChIP/Affy Pol2 Sites
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA Sites
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60 cells) Sites 
 group encode
 priority 47.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1733,34 +2571,745 @@ type bed 3 .
 
 track encodeAffyChIpRnapHl60SitesHr00
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel Pol2 0hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 0hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 0h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 0hrs) Sites 
 priority 1
 
 track encodeAffyChIpRnapHl60SitesHr02
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel Pol2 2hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 2hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 2h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 2hrs) Sites 
 priority 2
 
 track encodeAffyChIpRnapHl60SitesHr08
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel Pol2 8hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 8hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 8h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 8hrs) Sites 
 priority 3
 
 track encodeAffyChIpRnapHl60SitesHr32
 subTrack encodeAffyChIpRnapHl60Sites
-shortLabel Pol2 32hr
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60, 32hrs) Sites in ENCODE Regions
+shortLabel Affy Pol2 RA 32h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 32hrs) Sites 
 priority 4
 
-track encodeSangerChip
-shortLabel ChIP/Sanger
-longLabel Sanger ChIP/Chip (H3K4me3 GM06990) in ENCODE Regions
+track encodeAffyRnaHl60Sig
+compositeTrack on
+shortLabel Affy RNA Signal
+longLabel Affymetrix RNA (Pol2 retinoic acid-treated HL60 cells) Signal 
 group encode
-color 10,10,130
+color 130,10,10
 altColor 50,50,50
+priority 48.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+minLimit -3.4
+maxLimit 750
+maxHeightPixels 128:16:16
+autoScaleDefault Off
+defaultViewLimits 0:50
+
+track encodeAffyRnaHl60SigHr00
+subTrack encodeAffyRnaHl60Sig
+shortLabel Affy RNA RA 0h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 0hrs) Signal 
+priority 1
+
+track encodeAffyRnaHl60SigHr02
+subTrack encodeAffyRnaHl60Sig
+shortLabel Affy RNA RA 2h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 2hrs) Signal 
+priority 2
+
+track encodeAffyRnaHl60SigHr08
+subTrack encodeAffyRnaHl60Sig
+shortLabel Affy RNA RA 8h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 8hrs) Signal 
+priority 3
+
+track encodeAffyRnaHl60SigHr32
+subTrack encodeAffyRnaHl60Sig
+shortLabel Affy RNA RA 32h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 32hrs) Signal 
+priority 4
+
+track encodeAffyChIpHl60Hr00
+compositeTrack on
+shortLabel Affy HL-60 RA 0hr
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 0hrs
+group encode
+priority 47.25
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig 0.0 534.54
+viewLimits 0:50
+maxHeightPixels 128:16:16
+autoScale off
+
+track encodeAffyChIpHl60Hr02
+compositeTrack on
+shortLabel Affy HL-60 RA 2hr
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 2hrs
+group encode
+priority 47.26
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig 0.0 425.79
+viewLimits 0:50
+maxHeightPixels 128:16:16
+autoScale off
+
+track encodeAffyChIpHl60Hr08
+compositeTrack on
+shortLabel Affy HL-60 RA 8hr
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 8hrs
+group encode
+priority 47.27
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig 0.0 505.86
+viewLimits 0:50
+maxHeightPixels 128:16:16
+autoScale off
+
+track encodeAffyChIpHl60Hr32
+compositeTrack on
+shortLabel Affy HL-60 RA 32hr
+longLabel Affymetrix ChIP/Chip (retinoic acid-treated HL-60 cells) Pvals and Sites, 32hrs
+group encode
+priority 47.28
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig 0.0 490.03
+viewLimits 0:50
+maxHeightPixels 128:16:16
+autoScale off
+
+track encodeAffyChIpHl60SitesBrg1Hr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy Brg1 RA 0h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 252,0,0
+priority 2
+
+track encodeAffyChIpHl60SitesBrg1Hr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy Brg1 RA 2h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 252,0,0
+priority 4
+
+track encodeAffyChIpHl60SitesBrg1Hr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy Brg1 RA 8h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 252,0,0
+priority 6
+
+track encodeAffyChIpHl60SitesBrg1Hr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy Brg1 RA 32h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 252,0,0
+priority 8
+
+track encodeAffyChIpHl60SitesCebpeHr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy CEBPe RA 0h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 224,28,0
+priority 10
+
+track encodeAffyChIpHl60SitesCebpeHr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy CEBPe RA 2h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 224,28,0
+priority 12
+
+track encodeAffyChIpHl60SitesCebpeHr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy CEBPe RA 8h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 224,28,0
+priority 14
+
+track encodeAffyChIpHl60SitesCebpeHr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy CEBPe RA 32h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 224,28,0
+priority 16
+
+track encodeAffyChIpHl60SitesCtcfHr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy CTCF RA 0h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 196,56,0
+priority 18
+
+track encodeAffyChIpHl60SitesCtcfHr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy CTCF RA 2h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 196,56,0
+priority 20
+
+track encodeAffyChIpHl60SitesCtcfHr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy CTCF RA 8h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 196,56,0
+priority 22
+
+track encodeAffyChIpHl60SitesCtcfHr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy CTCF RA 32h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 196,56,0
+priority 24
+
+track encodeAffyChIpHl60SitesH3K27me3Hr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy H3K27me3 RA 0h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 168,84,0
+priority 26
+
+track encodeAffyChIpHl60SitesH3K27me3Hr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy H3K27me3 RA 2h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 168,84,0
+priority 28
+
+track encodeAffyChIpHl60SitesH3K27me3Hr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy H3K27me3 RA 8h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 168,84,0
+priority 30
+
+track encodeAffyChIpHl60SitesH3K27me3Hr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy H3K27me3 RA 32h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 168,84,0
+priority 32
+
+track encodeAffyChIpHl60SitesH4Kac4Hr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy H4Kac4 RA 0h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 140,112,0
+priority 34
+
+track encodeAffyChIpHl60SitesH4Kac4Hr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy H4Kac4 RA 2h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 140,112,0
+priority 36
+
+track encodeAffyChIpHl60SitesH4Kac4Hr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy H4Kac4 RA 8h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 140,112,0
+priority 38
+
+track encodeAffyChIpHl60SitesH4Kac4Hr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy H4Kac4 RA 32h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 140,112,0
+priority 40
+
+track encodeAffyChIpHl60SitesP300Hr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy P300 RA 0h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 112,140,0
+priority 42
+
+track encodeAffyChIpHl60SitesP300Hr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy P300 RA 2h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 112,140,0
+priority 44
+
+track encodeAffyChIpHl60SitesP300Hr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy P300 RA 8h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 112,140,0
+priority 46
+
+track encodeAffyChIpHl60SitesP300Hr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy P300 RA 32h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 112,140,0
+priority 48
+
+track encodeAffyChIpHl60SitesPu1Hr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy PU1 RA 0h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 84,168,0
+priority 50
+
+track encodeAffyChIpHl60SitesPu1Hr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy PU1 RA 2h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 84,168,0
+priority 52
+
+track encodeAffyChIpHl60SitesPu1Hr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy PU1 RA 8h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 84,168,0
+priority 54
+
+track encodeAffyChIpHl60SitesPu1Hr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy PU1 RA 32h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 84,168,0
+priority 56
+
+track encodeAffyChIpHl60SitesRnapHr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy Pol2 RA 0h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 56,196,0
+priority 58
+
+track encodeAffyChIpHl60SitesRnapHr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy Pol2 RA 2h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 56,196,0
+priority 60
+
+track encodeAffyChIpHl60SitesRnapHr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy Pol2 RA 8h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 56,196,0
+priority 62
+
+track encodeAffyChIpHl60SitesRnapHr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy Pol2 RA 32h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 56,196,0
+priority 64
+
+track encodeAffyChIpHl60SitesRaraHr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy RARA RA 0h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 28,224,0
+priority 66
+
+track encodeAffyChIpHl60SitesRaraHr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy RARA RA 2h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 28,224,0
+priority 68
+
+track encodeAffyChIpHl60SitesRaraHr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy RARA RA 8h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 28,224,0
+priority 70
+
+track encodeAffyChIpHl60SitesRaraHr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy RARA RA 32h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 28,224,0
+priority 72
+
+track encodeAffyChIpHl60SitesSirt1Hr00
+subTrack encodeAffyChIpHl60Hr00 off
+shortLabel Affy SIRT1 RA 0h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 0hrs) Sites
+noInherit on
+type bed 3 .
+color 0,252,0
+priority 74
+
+track encodeAffyChIpHl60SitesSirt1Hr02
+subTrack encodeAffyChIpHl60Hr02 off
+shortLabel Affy SIRT1 RA 2h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 2hrs) Sites
+noInherit on
+type bed 3 .
+color 0,252,0
+priority 76
+
+track encodeAffyChIpHl60SitesSirt1Hr08
+subTrack encodeAffyChIpHl60Hr08 off
+shortLabel Affy SIRT1 RA 8h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 8hrs) Sites
+noInherit on
+type bed 3 .
+color 0,252,0
+priority 78
+
+track encodeAffyChIpHl60SitesSirt1Hr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy SIRT1 RA 32h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 0,252,0
+priority 80
+
+track encodeAffyChIpHl60SitesTfiibHr32
+subTrack encodeAffyChIpHl60Hr32 off
+shortLabel Affy TFIIB RA 32h
+longLabel Affymetrix ChIP/Chip (TFIIB retinoic acid-treated HL60, 32hrs) Sites
+noInherit on
+type bed 3 .
+color 0,0,200
+priority 82
+
+
+track encodeAffyChIpHl60PvalBrg1Hr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy Brg1 RA 0h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 0hrs) P Value
+priority 1
+
+track encodeAffyChIpHl60PvalBrg1Hr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy Brg1 RA 2h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 2hrs) P Value
+priority 3
+
+track encodeAffyChIpHl60PvalBrg1Hr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy Brg1 RA 8h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 8hrs) P Value
+priority 5
+
+track encodeAffyChIpHl60PvalBrg1Hr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy Brg1 RA 32h
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL60, 32hrs) P Value
+priority 7
+
+track encodeAffyChIpHl60PvalCebpeHr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy CEBPe RA 0h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 0hrs) P Value
+priority 9
+
+track encodeAffyChIpHl60PvalCebpeHr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy CEBPe RA 2h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 2hrs) P Value
+priority 11
+
+track encodeAffyChIpHl60PvalCebpeHr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy CEBPe RA 8h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 8hrs) P Value
+priority 13
+
+track encodeAffyChIpHl60PvalCebpeHr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy CEBPe RA 32h
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL60, 32hrs) P Value
+priority 15
+
+track encodeAffyChIpHl60PvalCtcfHr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy CTCF RA 0h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 0hrs) P Value
+priority 17
+
+track encodeAffyChIpHl60PvalCtcfHr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy CTCF RA 2h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 2hrs) P Value
+priority 19
+
+track encodeAffyChIpHl60PvalCtcfHr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy CTCF RA 8h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 8hrs) P Value
+priority 21
+
+track encodeAffyChIpHl60PvalCtcfHr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy CTCF RA 32h
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL60, 32hrs) P Value
+priority 23
+
+track encodeAffyChIpHl60PvalH3K27me3Hr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy H3K27me3 RA 0h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 0hrs) P Value
+priority 25
+
+track encodeAffyChIpHl60PvalH3K27me3Hr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy H3K27me3 RA 2h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 2hrs) P Value
+priority 27
+
+track encodeAffyChIpHl60PvalH3K27me3Hr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy H3K27me3 RA 8h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 8hrs) P Value
+priority 29
+
+track encodeAffyChIpHl60PvalH3K27me3Hr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy H3K27me3 RA 32h
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL60, 32hrs) P Value
+priority 31
+
+track encodeAffyChIpHl60PvalH4Kac4Hr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy H4Kac4 RA 0h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 0hrs) P Value
+priority 33
+
+track encodeAffyChIpHl60PvalH4Kac4Hr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy H4Kac4 RA 2h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 2hrs) P Value
+priority 35
+
+track encodeAffyChIpHl60PvalH4Kac4Hr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy H4Kac4 RA 8h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 8hrs) P Value
+priority 37
+
+track encodeAffyChIpHl60PvalH4Kac4Hr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy H4Kac4 RA 32h
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL60, 32hrs) P Value
+priority 39
+
+track encodeAffyChIpHl60PvalP300Hr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy P300 RA 0h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 0hrs) P Value
+priority 41
+
+track encodeAffyChIpHl60PvalP300Hr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy P300 RA 2h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 2hrs) P Value
+priority 43
+
+track encodeAffyChIpHl60PvalP300Hr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy P300 RA 8h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 8hrs) P Value
+priority 45
+
+track encodeAffyChIpHl60PvalP300Hr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy P300 RA 32h
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL60, 32hrs) P Value
+priority 47
+
+track encodeAffyChIpHl60PvalPu1Hr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy PU1 RA 0h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 0hrs) P Value
+priority 49
+
+track encodeAffyChIpHl60PvalPu1Hr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy PU1 RA 2h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 2hrs) P Value
+priority 51
+
+track encodeAffyChIpHl60PvalPu1Hr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy PU1 RA 8h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 8hrs) P Value
+priority 53
+
+track encodeAffyChIpHl60PvalPu1Hr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy PU1 RA 32h
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL60, 32hrs) P Value
+priority 55
+
+track encodeAffyChIpHl60PvalRnapHr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy Pol2 RA 0h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 0hrs) P Value
+priority 57
+
+track encodeAffyChIpHl60PvalRnapHr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy Pol2 RA 2h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 2hrs) P Value
+priority 59
+
+track encodeAffyChIpHl60PvalRnapHr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy Pol2 RA 8h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 8hrs) P Value
+priority 61
+
+track encodeAffyChIpHl60PvalRnapHr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy Pol2 RA 32h
+longLabel Affymetrix ChIP/Chip (Pol2 retinoic acid-treated HL60, 32hrs) P Value
+priority 63
+
+track encodeAffyChIpHl60PvalRaraHr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy RARA RA 0h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 0hrs) P Value
+priority 65
+
+track encodeAffyChIpHl60PvalRaraHr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy RARA RA 2h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 2hrs) P Value
+priority 67
+
+track encodeAffyChIpHl60PvalRaraHr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy RARA RA 8h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 8hrs) P Value
+priority 69
+
+track encodeAffyChIpHl60PvalRaraHr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy RARA RA 32h
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL60, 32hrs) P Value
+priority 71
+
+track encodeAffyChIpHl60PvalSirt1Hr00
+subTrack encodeAffyChIpHl60Hr00
+shortLabel Affy SIRT1 RA 0h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 0hrs) P Value
+priority 73
+
+track encodeAffyChIpHl60PvalSirt1Hr02
+subTrack encodeAffyChIpHl60Hr02
+shortLabel Affy SIRT1 RA 2h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 2hrs) P Value
+priority 75
+
+track encodeAffyChIpHl60PvalSirt1Hr08
+subTrack encodeAffyChIpHl60Hr08
+shortLabel Affy SIRT1 RA 8h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 8hrs) P Value
+priority 77
+
+track encodeAffyChIpHl60PvalSirt1Hr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy SIRT1 RA 32h
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL60, 32hrs) P Value
+priority 79
+
+track encodeAffyChIpHl60PvalTfiibHr32
+subTrack encodeAffyChIpHl60Hr32
+shortLabel Affy TFIIB RA 32h
+longLabel Affymetrix ChIP/Chip (TFIIB retinoic acid-treated HL60, 32hrs) P Value
+priority 81
+
+
+
+
+track encodeSangerChipH3H4
+compositeTrack on
+shortLabel San H3&4 GM06990
+longLabel Sanger ChIP/Chip (histones H3,H4 antibody, GM06990 cells) 
+group encode
 priority 47.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
@@ -1769,49 +3318,66 @@ maxHeightPixels 128:40:16
 minLimit 0
 maxLimit 75
 
-track encodeAffyRnaHl60Sig
-compositeTrack on
-shortLabel RNA/Affy Signal
-longLabel Affymetrix ChIP/Chip (Pol2 RA-stim HL60) Signal in ENCODE Regions
-group encode
-color 130,10,10
-altColor 50,50,50
-priority 48.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -3.4 750
-maxHeightPixels 128:16:16
-autoScaleDefault Off
-defaultViewLimits 0:50
-
-track encodeAffyRnaHl60SigHr00
-subTrack encodeAffyRnaHl60Sig
-shortLabel RNA 0hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Signal in ENCODE Regions
+track encodeSangerChipH3K4me1
+subTrack encodeSangerChipH3H4
+shortLabel SI H3K4m1 GM06990
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 monomethylated ab, GM06990 cells) 
 priority 1
+color 10,10,130
 
-track encodeAffyRnaHl60SigHr02
-subTrack encodeAffyRnaHl60Sig
-shortLabel RNA 2hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Signal in ENCODE Regions
+track encodeSangerChipH3K4me2
+subTrack encodeSangerChipH3H4
+shortLabel SI H3K4m2 GM06990
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 dimethylated ab, GM06990 cells)
 priority 2
+color 10,10,10
 
-track encodeAffyRnaHl60SigHr08
-subTrack encodeAffyRnaHl60Sig
-shortLabel RNA 8hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Signal in ENCODE Regions
+track encodeSangerChipH3K4me3
+subTrack encodeSangerChipH3H4
+shortLabel SI H3K4m3 GM06990
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 trimethylated ab, GM06990 cells)
 priority 3
+color 10,10,130
 
-track encodeAffyRnaHl60SigHr32
-subTrack encodeAffyRnaHl60Sig
-shortLabel RNA 32hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Signal in ENCODE Regions
+track encodeSangerChipH3ac
+subTrack encodeSangerChipH3H4
+shortLabel SI H3ac GM06990
+longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated ab, GM06990 cells) 
 priority 4
+color 10,10,10
+
+track encodeSangerChipH4ac
+subTrack encodeSangerChipH3H4
+shortLabel SI H4ac GM06990
+longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated ab, GM06990 cells)
+priority 5
+color 10,10,130
+
+track encodeSangerChipH3K4me2K562
+subTrack encodeSangerChipH3H4
+shortLabel SI H3K4me2 K562
+longLabel Sanger Institute ChIP/Chip (Histone H3 K4 dimethylated ab, K562 cells)
+priority 6
+color 10,10,130
+
+track encodeSangerChipH3acK562
+subTrack encodeSangerChipH3H4
+shortLabel SI H3ac K562
+longLabel Sanger Institute ChIP/Chip (Histone H3 Acylated antibody, K562 cells)
+priority 7
+color 10,10,130
+
+track encodeSangerChipH4acK562
+subTrack encodeSangerChipH3H4
+shortLabel SI H4ac K562
+longLabel Sanger Institute ChIP/Chip (Histone H4 Acylated antibody, K562 cells)
+priority 8
+color 10,10,130
 
 track encodeAffyRnaHl60Sites
 compositeTrack on
-shortLabel RNA/Affy Sites
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60 cells) Sites in ENCODE Regions
+shortLabel Affy RNA RA Sites
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60 cells) Sites 
 group encode
 priority 48.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1822,31 +3388,31 @@ type bed 3 .
 
 track encodeAffyRnaHl60SitesHr00
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA 0hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 0hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 0h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 0hrs) Sites 
 priority 1
 
 track encodeAffyRnaHl60SitesHr02
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA 2hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 2hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 2h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 2hrs) Sites 
 priority 2
 
 track encodeAffyRnaHl60SitesHr08
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA 8hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 8hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 8h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 8hrs) Sites 
 priority 3
 
 track encodeAffyRnaHl60SitesHr32
 subTrack encodeAffyRnaHl60Sites
-shortLabel RNA 32hr
-longLabel Affymetrix PolyA+ RNA (RA-stim HL60, 32hrs) Sites in ENCODE Regions
+shortLabel Affy RNA RA 32h
+longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL60, 32hrs) Sites 
 priority 4
 
 track encodeGisChipPet
-shortLabel ChIP-PET/GIS
-longLabel Genome Institute of Singapore ChIP-PET of P53 TFBS in ENCODE Regions
+shortLabel GIS p53 5FU HCT116
+longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 cells
 group encode
 color 158,35,135
 priority 49.1
@@ -1854,60 +3420,75 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 12
 
-track encode_UVA_DNARep_0_2
-shortLabel DNA Rep/UVA 0-2hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+track encodeGisRnaPet
+compositeTrack on
+shortLabel GIS PET RNA
+longLabel Genome Institute of Singapore PET of PolyA+ RNA
 group encode
-priority 50.1
+priority 49.2
+visibility hide
+itemRgb on
+type bed 12
+
+track encodeGisRnaPetMCF7
+subTrack encodeGisRnaPet
+shortLabel GIS RNA MCF7
+longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
+priority 1
+
+track encodeGisRnaPetHCT116
+subTrack encodeGisRnaPet
+shortLabel GIS RNA HCT116
+longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
+priority 2
+color 58,119,40
+
+track encodeUvaDnaRep
+compositeTrack on
+shortLabel UVa DNA Rep
+longLabel University of Virginia Temporal Profiling of DNA Replication 
+group encode
+priority 50
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 60,75,60
+altColor 10,130,10
 type bed 3 .
 
-track encode_UVA_DNARep_2_4
-shortLabel DNA Rep/UVA 2-4hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (2-4 hrs) in ENCODE Regions
-group encode
-priority 50.2
-color 45,80,45
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 3 .
+track encodeUvaDnaRep0
+subTrack encodeUvaDnaRep
+shortLabel UVa DNA Rep 0h
+longLabel University of Virginia Temporal Profiling of DNA Replication (0-2 hrs) 
+priority 1
 
-track encode_UVA_DNARep_4_6
-shortLabel DNA Rep/UVA 4-6hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (4-6 hrs) in ENCODE Regions
-group encode
-priority 50.3
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 30,90,30
-type bed 3 .
+track encodeUvaDnaRep2
+subTrack encodeUvaDnaRep
+shortLabel UVa DNA Rep 2h
+longLabel University of Virginia Temporal Profiling of DNA Replication (2-4 hrs) 
+priority 2
 
-track encode_UVA_DNARep_6_8
-shortLabel DNA Rep/UVA 6-8hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (6-8 hrs) in ENCODE Regions
-group encode
-priority 50.4
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 20,110,20
-type bed 3 .
+track encodeUvaDnaRep4
+subTrack encodeUvaDnaRep
+shortLabel UVa DNA Rep 4h
+longLabel University of Virginia Temporal Profiling of DNA Replication (4-6 hrs) 
+priority 3
 
-track encode_UVA_DNARep_8_10
-shortLabel DNA Rep/UVA 8-10hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (8-10 hrs) in ENCODE Regions
-group encode
-priority 50.5
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 10,130,10
-type bed 3 .
+track encodeUvaDnaRep6
+subTrack encodeUvaDnaRep
+shortLabel UVa DNA Rep 6h
+longLabel University of Virginia Temporal Profiling of DNA Replication (6-8 hrs) 
+priority 4
+
+track encodeUvaDnaRep8
+subTrack encodeUvaDnaRep
+shortLabel UVa DNA Rep 8h
+longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
+priority 5
 
 track encodeBuFirstExon
 compositeTrack on
-shortLabel First Exon/BU
-longLabel Boston University First Exon Activity in ENCODE Regions
+shortLabel BU First Exon
+longLabel Boston University First Exon Activity 
 group encode
 itemRgb on
 priority 20.2
@@ -1917,138 +3498,67 @@ type bed 12 +
 
 track encodeBuFirstExonCerebrum
 subTrack encodeBuFirstExon
-shortLabel Cerebral Cortex
+shortLabel BU Cere. Cortex
 longLabel Boston University First Exon Activity in Cerebral Cortex
 priority 1
 
 track encodeBuFirstExonColon
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Colon
-shortLabel Colon
+shortLabel BU Colon
 priority 2
 
 track encodeBuFirstExonHeart
 subTrack encodeBuFirstExon
-shortLabel Heart
+shortLabel BU Heart
 longLabel Boston University First Exon Activity in Heart
 priority 3
 
 track encodeBuFirstExonKidney
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Kidney
-shortLabel Kidney
+shortLabel BU Kidney
 priority 4
 
 track encodeBuFirstExonLiver
 subTrack encodeBuFirstExon
-shortLabel Liver
+shortLabel BU Liver
 longLabel Boston University First Exon Activity in Liver
 priority 5
 
 track encodeBuFirstExonLung
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Lung
-shortLabel Lung
+shortLabel BU Lung
 priority 6
 
 track encodeBuFirstExonSkMuscle
 subTrack encodeBuFirstExon
-shortLabel Skeletal Muscle
+shortLabel BU Skel. Muscle
 longLabel Boston University First Exon Activity in Skeletal Muscle
 priority 7
 
 track encodeBuFirstExonSpleen
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity  in Spleen
-shortLabel Spleen
+shortLabel BU Spleen
 priority 8
 
 track encodeBuFirstExonStomach
 subTrack encodeBuFirstExon
-shortLabel Stomach
+shortLabel BU Stomach
 longLabel Boston University First Exon Activity in Stomach
 priority 9
 
 track encodeBuFirstExonTestis
 subTrack encodeBuFirstExon
 longLabel Boston University First Exon Activity in Testis
-shortLabel Testis
-priority 10
-
-track encodeBuPromoters
-compositeTrack on
-shortLabel Promoter/BU
-longLabel Boston University Promoter Activity in ENCODE Regions
-group encode
-itemRgb on
-priority 20.3
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 12 +
-
-track encodeBuPromCerebrum
-subTrack encodeBuPromoters
-shortLabel Cerebral Cortex
-longLabel Boston University Promoter Activity in Cerebral Cortex
-priority 1
-
-track encodeBuPromColon
-subTrack encodeBuPromoters
-longLabel Boston University Promoter Activity in Colon
-shortLabel Colon
-priority 2
-
-track encodeBuPromHeart
-subTrack encodeBuPromoters
-shortLabel Heart
-longLabel Boston University Promoter Activity in Heart
-priority 3
-
-track encodeBuPromKidney
-subTrack encodeBuPromoters
-longLabel Boston University Promoter Activity in Kidney
-shortLabel Kidney
-priority 4
-
-track encodeBuPromLiver
-subTrack encodeBuPromoters
-shortLabel Liver
-longLabel Boston University Promoter Activity in Liver
-priority 5
-
-track encodeBuPromLung
-subTrack encodeBuPromoters
-longLabel Boston University Promoter Activity in Lung
-shortLabel Lung
-priority 6
-
-track encodeBuPromSkMuscle
-subTrack encodeBuPromoters
-shortLabel Skeletal Muscle
-longLabel Boston University Promoter Activity in Skeletal Muscle
-priority 7
-
-track encodeBuPromSpleen
-subTrack encodeBuPromoters
-longLabel Boston University Promoter Activity  in Spleen
-shortLabel Spleen
-priority 8
-
-track encodeBuPromStomach
-subTrack encodeBuPromoters
-shortLabel Stomach
-longLabel Boston University Promoter Activity in Stomach
-priority 9
-
-track encodeBuPromTestis
-subTrack encodeBuPromoters
-longLabel Boston University Promoter Activity in Testis
-shortLabel Testis
+shortLabel BU Testis
 priority 10
 
 track encodeGencodeGene
 shortLabel Gencode Genes
-longLabel Gencode Gene Annotations in ENCODE Regions
+longLabel Gencode Gene Annotations 
 group encode
 color 73,76,73
 priority 22.1
@@ -2057,22 +3567,22 @@ visibility hide
 type genePred
 itemClassTbl gencodeGeneClass
 geneClasses Antisense Antisense_val Artifact Known Novel_CDS Novel_transcript Novel_transcript_val Putative Putative_val TEC Processed_pseudogene Unprocessed_pseudogene
-gClass_Putative 160,48,51 
-gClass_Antisense 160,48,51 
-gClass_Novel_transcript 160,48,51 
-gClass_TEC 160,48,51 
-gClass_Known 252,79,89
-gClass_Novel_CDS 252,79,89
-gClass_Antisense_val 252,79,89
-gClass_Putative_val 252,79,89
-gClass_Novel_transcript_val 252,79,89
+gClass_Known 33,91,51
+gClass_Novel_CDS 33,91,51
+gClass_Novel_transcript_val 33,91,51
+gClass_Putative_val 33,91,51
+gClass_Antisense_val 33,91,51
+gClass_Novel_transcript  84,188,0
+gClass_TEC  84,188,0
+gClass_Putative  84,188,0
+gClass_Antisense  84,188,0
 gClass_Artifact 163,168,163
 gClass_Processed_pseudogene 0,91,191
 gClass_Unprocessed_pseudogene 0,91,191
 
 track encodeGencodeIntron
 shortLabel Gencode Introns
-longLabel Gencode Intron Validation in ENCODE Regions
+longLabel Gencode Intron Validation 
 group encode
 priority 22.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2091,6 +3601,51 @@ spectrum on
 type chain hg17
 otherDb hg17
 
+track encodeSangerChip
+shortLabel Sanger ChIP
+longLabel Sanger ChIP/Chip (H3K4me3 antibody, GM06990 cells) 
+group encode
+color 10,10,130
+altColor 50,50,50
+priority 47.3
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:40:16
+minLimit 0
+maxLimit 75
+
+track cnpSharp
+shortLabel CNPs (Sharp) 
+longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp)
+group varRep
+priority 146
+visibility dense
+type bed 4 +
+
+track cnpIafrate
+shortLabel CNPs (Iafrate) 
+longLabel Copy Number Polymorphisms from BAC microarray analysis (Iafrate)
+group varRep
+priority 146.1
+visibility dense
+type bed 4 +
+
+track cnpSebat
+shortLabel CNPs (Sebat) 
+longLabel Copy Number Polymorphisms from ROMA (Sebat)
+group varRep
+priority 146.1
+visibility dense
+type bed 4 + 
+
+track fosmidDiscordant
+shortLabel Fosmid Discordants
+longLabel Fosmid Discordants
+group varRep
+priority 170
+visibility dense
+type bed 4 .
 
 searchTable encode_NHGRI_DNaseHS
 searchType bed
@@ -2098,8 +3653,4 @@ termRegex 500bp_[0-9]+_[0-9]+
 searchMethod exact
 searchPriority 50.1
 
-searchTable encode_Stanford_Promoters
-searchType bed
-termRegex (me|se)(LONG|alt|ONLY)_R?P[0-9]+-[0-9]+
-searchMethod exact
-searchPriority 50.2
+

@@ -15,11 +15,11 @@ void usage()
 errAbort(
   "pbCalResStd calculates the avg frequency and standard deviation of every AA residues of the proteins in a specific genome\n"
   "usage:\n"
-  "   pbCalResStd sss xxx hhh\n"
-  "      sss is the SWISS-PROT database name\n"
-  "      xxx is the taxnomy number of the genome\n"
-  "      sss is the genome database name\n"
-  "Example: pbCalResStd sp031112 9606 hg16\n"
+  "   pbCalResStd spDb taxNum gDb\n"
+  "      spDb is the SWISS-PROT database name\n"
+  "      taxNumis the taxnomy number of the genome\n"
+  "      gDb is the genome database name\n"
+  "Example: pbCalResStd sp050415 9606 hg17\n"
   );
 }
 
@@ -159,7 +159,6 @@ for (j=0; j<MAXRES; j++)
 while (row2 != NULL)
     {
     protDisplayId = row2[0];   
-  
     safef(cond_str, sizeof(cond_str),  "val='%s'", protDisplayId);
     accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
 
@@ -169,13 +168,18 @@ while (row2 != NULL)
     	accession = sqlGetField(conn, proteinDatabaseName, "displayId", "acc", cond_str);
 	if (accession == NULL)
 	    {
-	    /* printf("%s not found.\n", protDisplayId);fflush(stdout); */
+	    printf("1 %s not found.\n", protDisplayId);fflush(stdout); 
 	    goto skip;
 	    }
 	}
     
     safef(cond_str, sizeof(cond_str),  "accession='%s'", accession);
     answer = sqlGetField(conn, "proteins040115", "spXref2", "biodatabaseID", cond_str);
+    if (answer == NULL)
+	{
+	/* this protein might be a variant splice protein, and then it won't be in spXref2 */
+	goto skip;
+	}
     if (answer[0] != '1')
 	{
 	/* printf("%s not in SWISS-PROT\n", protDisplayId);fflush(stdout); */
@@ -184,6 +188,12 @@ while (row2 != NULL)
     
     safef(cond_str, sizeof(cond_str),  "acc='%s'", accession);
     aaSeq = sqlGetField(conn, proteinDatabaseName, "protein", "val", cond_str);
+    if (aaSeq == NULL)
+	{
+	printf("Can't find peptide sequence for %s, exiting ...\n", protDisplayId);
+	fflush(stdout);
+	exit(1);
+	}
 
     len  = strlen(aaSeq);
     if (len < 100) goto skip;
@@ -219,14 +229,6 @@ while (row2 != NULL)
 	freq[icnt][j] = (double)aaResCnt[j]/lenDouble;
 	sumJ[j] = sumJ[j] + freq[icnt][j];
 	}
-    /*
-    fprintf(o1, "%s\t%s\t%d", accession, protDisplayId, len);
-    for (j=0; j<MAXRES; j++)
-	{
-	fprintf(o1, "\t%7.5f", freq[icnt][j]);
-	}
-    fprintf(o1, "\n");
-    */
 
     for (j=0; j<20; j++)
 	{

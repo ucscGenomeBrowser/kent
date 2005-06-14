@@ -1,12 +1,17 @@
 include ../../../inc/common.mk
 
-test: basicTests
+test: untransAlignTest untransQueryTest
 
 # basic set of tests with an untranslated psl
-basicTests: mkdirs
-	pslStats input/basic.psl output/basic.alnStats output/basic.queryStats
-	diff -u expected/basic.alnStats output/basic.alnStats
-	diff -u expected/basic.queryStats output/basic.queryStats
+untransAlignTest: mkdirs
+	pslStats input/basic.psl output/$@.stats
+	diff -u expected/$@.stats output/$@.stats
+
+untransQueryTest: mkdirs
+	pslStats -queryStats input/basic.psl output/$@.stats
+	diff -u expected/$@.stats output/$@.stats
+
+
 
 clean::
 	rm -rf output

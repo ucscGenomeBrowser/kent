@@ -448,8 +448,9 @@ ssh hgwdev
 cd /cluster/data/$db/bed/blastp/dm1/run/out
 hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
 
+#---------
 
-##
+## (markd did this when??)
 # create Rankprop homology score and PSI-BLAST tables.
 # requires rankprop code from Bill Noble <noble@gs.washington.edu>
 # which includes scripts to build these tables on the cluster.
@@ -498,8 +499,39 @@ hgLoadBlastTab $db dmBlastTab -maxPer=1 *.tab
       spLoadRankProp -noKgIdFile=hs.sw+tr/max1k.hg17.nokg.spids hg17 rankProp hs.sw+tr/max1k.rankp.gz >&hs.sw+tr/max1k.hg17.log
       spLoadPsiBlast hg17 spPsiBlast hs.sw+tr.eval.gz
 
+#---------
+
+## (aamp andy pohl did this when??)
 # Human data from Shyamsundar R, et al. (2005) Genome Biol 6(3):R22
 hgExpDistance hg17 hgFixed.humanNormalRatio hgFixed.humanNormalExps humanNormalDistance -lookup=knownToLocusLink
 
 # Mouse landscape data.
 hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandscapeDistance -lookup=knownToXM
+
+#---------
+
+## (galt 2005-06-03)
+# p2p Protein-to-protein network - P2P column and sort order
+# I wrote the hgNetDist program to calculate network-distances for all gene pairs from gene-to-gene edges in input data .tab,
+# using the Floyd-Warshall dynamic programming algorithm.
+# These .tab files are from Josh Stuart /cluster/home/jstuart/Data/Interaction/P2P/{Worm,Fly,Yeast}/Compendium/data.tab
+# I have also deposited copies of the .tab files used in /cluster/data/$db/p2p/
+# added entries to hgNearData/$species/{orderDb,columbDb}.ra
+# added hgNearData/$species/p2p.html
+# added hgNearData/p2p.html
+#  
+#yeast: (1.5 hours for about 5000 genes, 24452 edges)
+hgNetDist yeastP2P.tab sacCer1 yeastP2P -threshold=3
+ 
+#fly: (3 hours for about 6500 genes, 19993 edges)
+# The temporary table bdgpGeneFb2Bdgp was constructed just for fly from this sql command:
+# create table bdgpGeneFb2Bdgp as
+# select flyBaseId, name bdgpName from bdgpGene a, bdgpGeneInfo b
+# where SUBSTRING_INDEX(name, "-R", 1) = bdgpName order by flyBaseId, bdgpName;
+#
+hgNetDist flytest.tab dm1 flyP2P -threshold=2 -sqlRemap="select flyBaseId, bdgpName from bdgpGeneFb2Bdgp"
+ 
+#worm: (15 minutes for about 2514 genes, 3871 edges - interaction data available is small)
+hgNetDist wormP2P.tab ce2 wormP2P -threshold=2
+ 
+

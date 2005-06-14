@@ -36,7 +36,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$can
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $rn,$panTro,$galGal,$canFam
+set wgs $rn,$panTro,$galGal,$canFam,$bosTau
 
 # Define organism databases for which we build a xenoRefGene track:
 set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn
@@ -235,6 +235,11 @@ identifier ncbiTaxon
      uniProt.commonName.taxon 
 
 # Various types of gene predictions in UCSC Genome Browser
+
+identifier gencodeGeneName dependency
+"Link together Gencode gene model and class."
+    $hg.encodeGencodeGene.name
+    $hg.gencodeGeneClass.name full unique
 
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
@@ -623,22 +628,19 @@ identifier bacEndNames
     $gbd.all_bacends.qName dupeOk
     $gbd.bacEndPairs.lfNames comma
     $danRer.bacEndSingles.lfNames comma
+    $danRer.bacEndPairsBad.lfNames comma
     $danRer.bacEndAlias.alias minCheck=0.55
     $hg.fishClones.beNames comma minCheck=0.70
 
-identifier bacExtName
+identifier danRerBacExtName
 "External name for BAC clones." 
-    $danRer.bacCloneXRef.extName
-    $danRer.bacEndPairs.name minCheck=0.24
-    $danRer.bacEndSingles.name minCheck=0.50
-    
+    $danRer.bacCloneXRef.name dupeOk
+    $danRer.bacEndPairs.name
+    $danRer.bacEndSingles.name
+    $danRer.bacEndPairsBad.name minCheck=0.70
+
 identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
-    $danRer.bacCloneXRef.genbank dupeOk
-
-identifier bacEndAccession typeOf=genbankAccession external=genbank
-"Genbank accession of a sequenced BAC end"
-    $danRer.bacEndAlias.acc dupeOk
 
 identifier humanBacAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
@@ -706,15 +708,19 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName dupeOk
     $gbd.mrnaOrientInfo.name minCheck=0.2
-    $gbd,!mm6.dupSpMrna.mrnaID minCheck=0.80
-    $gbd,!mm6.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm6,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
-    mm6.mrnaRefseq.mrna minCheck=0.20
+    $gbd,!mm6,!hg17.dupSpMrna.mrnaID minCheck=0.80
+    $gbd,!mm6,!hg17.dupSpMrna.dupMrnaID minCheck=0.95
+    $gbd,!mm6,!hg17,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
+    mm6.mrnaRefseq.mrna minCheck=0.90
+    hg17.mrnaRefseq.mrna minCheck=0.90
     rn2,rn3.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm6.spMrna.mrnaID minCheck=0.98
+    $gbd,!mm6,!hg17.spMrna.mrnaID minCheck=0.98
     mm6.spMrna.mrnaID minCheck=0.20
     mm6.dupSpMrna.mrnaID minCheck=0.10
     mm6.dupSpMrna.dupMrnaID minCheck=0.10
+    hg17.spMrna.mrnaID minCheck=0.90
+    hg17.dupSpMrna.mrnaID minCheck=0.90
+    hg17.dupSpMrna.dupMrnaID minCheck=0.90
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
@@ -743,6 +749,10 @@ identifier refSeqId typeOf=mrnaAccession
     mm6.spMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.dupMrnaID minCheck=0.60
+    hg17.mrnaRefseq.mrna minCheck=0.50
+    hg17.spMrna.mrnaID minCheck=0.50
+    hg17.dupSpMrna.mrnaID minCheck=0.50
+    hg17.dupSpMrna.dupMrnaID minCheck=0.50
     hg15.geneBands.mrnaAcc
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
@@ -776,6 +786,10 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.affyGnfU74BDistance.target
     $kgDb.affyGnfU74CDistance.query
     $kgDb.affyGnfU74CDistance.target
+    $kgDb.humanNormalDistance.query
+    $kgDb.humanNormalDistance.target
+    $kgDb.mouseLandscapeDistance.query
+    $kgDb.mouseLandscapeDistance.target
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
@@ -1343,9 +1357,11 @@ identifier extFileId
     hg17.multiz8way.extFile
     $sacCer.multizYeast.extFile
     $dm.multiz8way.extFile
+    $dm.multiz9way.extFile
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
     $dm.d_yakuba_mypa.extFile
+    danRer2.multiz6way.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
@@ -1430,6 +1446,11 @@ identifier transRegCode
     $sacCer.transRegCodeMotif.name
     $sacCer.transRegCode.name
     $sacCer.transRegCodeProbe.tfList comma chopAfter=_
+
+identifier anoEstTclId
+"AnoEST TCL* ID -- joins track and aux. table of expressed IDs"
+    $anoGam.anoEstTcl.name
+    $anoGam.anoEstExpressed.name minCheck=0.30
 
 # Dependencies not already captured in identifiers
 
@@ -1586,9 +1607,11 @@ type exprBed
 type expDistance
     $hg.gnfAtlas2Distance
     $hg.gnfU95Distance
+    $hg.humanNormalDistance
     $mm.affyGnfU74ADistance
     $mm.affyGnfU74BDistance
     $mm.affyGnfU74CDistance
+    $mm.mouseLandscapeDistance
     $hg.knownGnfDistance
     $ce.kimExpDistance
     $dm.arbExpDistance
@@ -1755,6 +1778,8 @@ tablesIgnored $dm
     fbRole
     flyreg
     flyreg2
+    phastCons9way
+    phastConsElements9way
 
 tablesIgnored $fr
     chr%_gold
@@ -1780,6 +1805,7 @@ tablesIgnored $droMult
 
 tablesIgnored $anoGam
     chr%_gold
+    anoEstNcl
 
 tablesIgnored $apiMel
     gap
@@ -1826,6 +1852,7 @@ tablesIgnored $hg
     encodeAffyRnaHl60SitesHr02
     encodeAffyRnaHl60SitesHr08
     encodeAffyRnaHl60SitesHr32
+    encodeStanfordPromoters%
     encodeUcsdChipAch3Imr90
     encodeUcsdChipMeh3k4Imr90
     encodeUcsdChipRnapHct116
@@ -1836,6 +1863,18 @@ tablesIgnored $hg
     encodeUcsdChipTaf250Hela
     encodeUcsdChipTaf250Imr90
     encodeUcsdChipTaf250Thp1
+    encodeUcsdNgChipKnownSites
+    encodeUcsdNgChipNovelSites
+    encodeUcsdNgChipSignal
+    encodeUcsdNgHeLaH3K4me3_p0
+    encodeUcsdNgHeLaH3K4me3_p30
+    encodeUcsdNgHeLaRnap_p0
+    encodeUcsdNgHeLaRnap_p30
+    encodeUcsdNgValChipH3K4me
+    encodeUcsdNgValChipH3ac
+    encodeUcsdNgValChipRnap
+    encodeUcsdNgValChipTaf
+    encodeUvaDnaRep%
     pseudoYale
 
 tablesIgnored $mm

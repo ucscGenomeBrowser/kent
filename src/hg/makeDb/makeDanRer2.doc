@@ -1887,6 +1887,8 @@ zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # BLASTZ FOR FUGU (fr1) (DONE, 2004-12-14, hartera)
+# Fugu is quite distant from zebrafish, more distant than human/chicken
+# so use the HoxD55.q matrix in future for blastz (2005-06-01, hartera)
 # Blastz requires lineage-specific repeats but there are none 
 # for these two fish.
 
@@ -2212,6 +2214,8 @@ axtChain $1 /iscratch/i/danRer2/nib \
     nice rm -fr axtChain/chain axtChain/chainRaw axtChain/preNet &
 
 # BLASTZ FOR TETRAODON (tetNig1) (DONE, 2004-12-21, hartera)
+# Tetraodon is quite distant from zebrafish, more distant than human/chicken
+# so use the HoxD55.q matrix in future for blastz (2005-06-01, hartera)
     # blastz requires lineage-specific repeats but there are none
     # available between these two fish species 
     ssh kk
@@ -2547,6 +2551,13 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # Yi Zhou:yzhou@enders.tch.harvard.edu
 # BAC clone end sequences are from Robert Geisler's lab,
 # Max Planck Institute for Developmental Biology, Tuebingen, Germany
+# REMAKE AND RELOAD bacCloneAlias AND bacCloneXRef TABLES AFTER FIXING
+# BUGS IN THE zfishBacClonesandSts PROGRAM TO STORE ALL THE ALIASES FOR EACH
+# SANGER STS NAME AND TO STORE CORRECT INTERNAL AND EXTERNAL NAMES IN ALL
+# CASES. DATA FILE OF UniSTS IDS AND SANGER STS NAMES WAS ALSO RE-CREATED
+# AS THIS WAS INCORRECT. (DONE, 2005-05-24, hartera)
+# ALSO DO TESTING OF THE DATA IN THESE TABLES TO MAKE SURE IT IS CORRECT - SEE
+# SECTION ON TESTING BELOW.
     ssh kksilo
     mkdir -p /cluster/data/danRer2/bed/ZonLab/bacends
     cd /cluster/data/danRer2/bed/ZonLab/bacends 
@@ -3178,69 +3189,73 @@ close BACS;
     # print Sanger name, alias and UniSTS ID, use print_markers2.pl
     # modified version of program written by Tony DiBiase (Boston 
     # Children's Hospital)
-    cat << '_EOF_' > find_markers2.pl
+    # create find_markers3.pl as the previous version was finding too
+    # many UniSTS IDs for some markers as using grep (2005-05-24, hartera)
+
+    cat << '_EOF_' > find_markers3.pl
     # example:
-# cat markers.02.12.04.txt | perl find_markers.pl
+# perl find_markers.pl UniSTS.aliases markers.02.12.04.txt
 use strict;
 my $verbose = 0;
-my ($a, $b, $f, $l, $m, $s, $t, $aliases, @alias, @rest);
-while (<>) {
-    ($f, $l, $t, $m) = 0;
+my ($a, $b, $f, $m, $s, $t, $aliases, @alias, @rest);
+my $aliasFile = $ARGV[0];
+my $markersFile = $ARGV[1];
+open(ALIAS, $aliasFile) || die "Can not open $aliasFile\n";
+open(MARKERS, $markersFile) || die "Can not open $markersFile\n";
+# store aliases from aliasFile
+my ($id, $al, @alsArray, %aliasHash);
+while (<ALIAS>)
+{
+   chomp;
+   ($id, $al) = split /\t/;
+   @alsArray = split(/;/, $al);
+   foreach my $as (@alsArray)
+      {
+      push (@{$aliasHash{$as} }, $id);
+      }
+}
+close ALIAS;
+
+while (<MARKERS>) {
+    my @idArray;
+    ($f, $t, $m, $idArray[0]) = 0;
+    my @ids;
     chomp; ($a, $b, $aliases, @rest) = split /\|/;
     if ($verbose > 3) { printf "aliases $aliases \n"; }
     @alias = split /;/, $aliases;
     ALIAS: foreach $s (@alias) {
-        $_ = $s;
-        if (/[\D]+/) {
+        if ($s =~ /[\D]+/) {
             if ($verbose > 5) { printf "this $s \n"; }
-            $m = `grep $s /cluster/data/ncbi/UniSTS.2005-04-12/danRer/UniSTS_Danio_rerio.alias`;
-            if ($m) {
-                $f = 1; $t = $s; $l = $m;
+            if (exists($aliasHash{$s}))
+               {
+               @idArray = @{$aliasHash{$s}};
+               }
+            if ($idArray[0]) {
+                $f = 1; $t = $s; @ids = @idArray;
                 if ($verbose) { printf "this $s found $m \n"; }
                 last ALIAS;
             }
         }
     }
-    if ($f) { printf "$b\t$t\t$l"; }
+    if ($f) 
+     { 
+     my @sNames = split(/;/, $b);
+     foreach my $sn (@sNames)
+        {
+        foreach my $i (@ids)
+           { 
+           printf "$sn\t$i\n"; 
+           }
+        }
+    }
 }
+close MARKERS;
 '_EOF_'
-    chmod +x find_markers2.pl
-    cat markers.02.12.04.txt | perl find_markers2.pl > out
-    awk 'BEGIN {OFS = "\t"} {print $1, $3}' out > sangerandUniSTSId.txt
-    # then reformat output as some sanger names are semicolon separated
-    # and sometimes a UniSTS ID appears on another line but is another ID 
-    # for the last line with a sanger name on it
-cat << '_EOF_' > formatUniSTS.pl
-#!/usr/bin/perl -w
-use strict;
+    chmod +x find_markers3.pl
+    perl find_markers3.pl /cluster/data/ncbi/UniSTS.2005-04-12/UniSTS.aliases \
+         markers.02.12.04.txt > sangerandUniSTSId.txt
+    # No need to reformat this for zfishBacClonesandSts
 
-my @ids;
-while (<STDIN>)
-{
-my $l = $_;
-my @fields = split(/\t/, $l);
-
-# if the first field is a sanger STS name
-if ($fields[0] =~ /^((et|st)ID[0-9]{1,}\.?[0-9]{1,})/)
-   {
-   # first field may have more than one ID in it separated by semicolons
-   @ids = split(/;/, $fields[0]);
-   foreach my $i (@ids)
-      {
-      print "$i\t$fields[1]";
-      }
-   }
-if ($fields[0] =~ /^[0-9]+/)
-   {
-   foreach my $s (@ids)
-      {
-      print "$s\t$fields[0]\n";
-      }
-   }
-}
-'_EOF_'
-    chmod +x formatUniSTS.pl
-    perl formatUniSTS.pl < sangerandUniSTSId.txt > sangerandUniSTSId.format
     # FPC contig information (i.e. FPC contig number) from ctgnames file is 
     # not included in the tables as these are dynamic and constantly 
     # changing with the assembly.
@@ -3267,7 +3282,7 @@ if ($fields[0] =~ /^[0-9]+/)
     wc -l accs.OldandNew.common
     # 24 accs.OldandNew.common
     # therefore 24 BAC names have new accessions in the new file
-    # zfishBacCloneandSts.c only reads the first two fields of each line
+    # zfishBacClonesandSts.c only reads the first two fields of each line
     # in the zfish_accs.txt file so create a new file with just these 2 fields.
     # Take the 303 BAC clones and accessions from zfish_accs.txt that are 
     # not in zfish_accs050605.txt and add to 9000 accs in zfishNew.accs.sort 
@@ -3277,11 +3292,17 @@ if ($fields[0] =~ /^[0-9]+/)
     # use zfishBacClonesandSts to create tab files for loading into
     # bacCloneAlias and bacCloneXRef tables
     mkdir -p /cluster/bluearc/danRer2/bacEnds/out
-    # added code so that output directory now must be specified 
+    # added code so that output directory now must be specified
+    # fixed bug in code so that all aliases are now stored for each Sanger
+    # STS name and the correct BAC clone external name is stored for internal 
+    # names in all cases.
+    # remake tab files using the new file mapping Sanger names and UniSTS IDs
+    # and with the corrected program (2005-05-24, hartera)
+ 
     nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.02.12.04.txt \
       clonemarkers.02.12.04.txt markers.02.12.04.txt \
       bacClones.namesandchrom.uniq zfish_accsMerged.txt \
-      sangerandUniSTSId.format \
+      sangerandUniSTSId.txt \
       /cluster/bluearc/danRer2/bacEnds/out > zfishBacs.out
 
     # output is in /cluster/bluearc/danRer2/bacends/out so copy over
@@ -3290,11 +3311,16 @@ if ($fields[0] =~ /^[0-9]+/)
          > bacAlias.sort.tab
     cp /cluster/bluearc/danRer2/bacEnds/out/bacXRef.tab .
     wc -l *.tab
-    #  83465 bacAlias.sort.tab
+    #  55836 bacAlias.sort.tab
     # 233418 bacXRef.tab
- 
+    # there are 234056 entries for danRer1 bacXRef.tab - the difference
+    # reflects differences in BAC ends mapped to the assemblies
+
     ssh hgwdev
     cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases
+    # Remove and reload tables after bug fixes in the zfishBacClonesandSts
+    # program and the new UniSTS IDs and Sanger names mapping file which 
+    # were used to create these tab files (2005-05-25, hartera)
     hgsql danRer2 -e 'drop table bacCloneXRef'
     hgsql danRer2 -e 'drop table bacCloneAlias'
 
@@ -3305,11 +3331,330 @@ if ($fields[0] =~ /^[0-9]+/)
     nice hgsql danRer2 -e \
           'load data local infile "bacXRef.tab" into table bacCloneXRef'
     cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer2
+    # checked data in tables to check that everything was correctly loaded
+    # from the files and errors were corrected - see TEST section below
 # edit trackDb.ra to add bacEnds tracks and searches for the bacEndPairs
 # and bacEndSingles tracks as for danRer1. copy over html from danRer1 
 # for bacEndPairs and bacEndSingles tracks. Edit to include description 
 # of filtering alignments so that there is only one pair of sequence reads 
 # for each BAC pair and only one sequence read for each BAC single alignment.
+
+# BACENDS: TESTING FOR bacCloneAlias and bacCloneXRef TABLES
+# (DONE, 2005-05-25, hartera)
+# ADDED TEST TO CHECK SANGERNAMES IN ALIAS AND XREF TABLES 
+# (DONE, 2005-05-26, hartera)
+    # The following tests were carried out to check that all the data
+    # in the bacCloneAlias and bacCloneXRef tables is correct.
+    mkdir -p \
+        /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables
+
+# Check that the correct aliases are associated with their Sanger STS names
+    awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $3;}' \
+        ../markers.02.12.04.txt > sNameandaliases
+    # write script to get one Sanger name and one alias on each line
+    chmod +x getSangerAndAlias.pl
+    perl getSangerAndAlias.pl < sNameandaliases > sNameandaliases.format
+    sort sNameandaliases.format | uniq > sNameandaliases.sort
+    # get Sanger names and aliases from database
+    hgsql -N -e 'select sangerName, alias from bacCloneAlias;' danRer2 \
+          | sort | uniq > alias.db.sort
+    wc -l alias.db.sort
+    # 55836 alias.db.sort
+    diff sNameandaliases.sort alias.db.sort
+    # No difference between data file and data from database so ok
+
+# Check Sanger STS names correspond in bacAlias and bacCloneXRef tables
+# (2005-05-26, hartera)
+    # get Sanger names from alias table
+    hgsql -N -e 'select sangerName from bacCloneAlias;' danRer2 \
+             | sort | uniq > sName.alias.sort  
+    wc -l sName.alias.sort 
+    # 14940 sName.alias.sort
+    # get Sanger names from xRef table
+    hgsql -N -e 'select sangerName from bacCloneXRef where sangerName \
+          is not null;' danRer2 | sort | uniq > sName.xRef.sort
+    wc -l sName.xRef.sort
+    # 15153 sName.xRef.sort
+    comm -23 sName.alias.sort sName.xRef.sort 
+    # nothing in alias file only so all sanger names in the alias table are
+    # also in the xRef table
+    comm -13 sName.alias.sort sName.xRef.sort > sNamexRefNotAlias 
+    wc -l sNamexRefNotAlias
+    # 213 sNamexRefNotAlias - 213 sangerNames in alias table not in XRef table
+    # get Sanger names from clonemarkers file
+    awk 'BEGIN {FS="|"}{print $2}' ../clonemarkers.02.12.04.txt | sort | uniq \         > clonemarkers.sNames.sort
+    # get Sanger names from markers file
+    awk 'BEGIN {FS="|"}{print $2}' ../markers.02.12.04.txt > markers.sNames
+    # remove semi-colons and sort 
+    sed -e 's/;/\n/g' markers.sNames | sort | uniq > markers.sNames.sort
+    # sanger names unique to markers file
+    comm -13 clonemarkers.sNames.sort markers.sNames.sort
+    # there are none
+    comm -23 clonemarkers.sNames.sort markers.sNames.sort \
+         > sNames.clonemarkersOnly
+    wc -l sNames.clonemarkersOnly
+    # 213 sNames.clonemarkersOnly
+    diff sNames.clonemarkersOnly sNamexRefNotAlias
+    # no difference so all the extra Sanger Names in the xRef table are 
+    # from the clonemarkers file and these have no aliases in the markers file
+    # so they are not in the alias table so this is all ok.
+
+# Check that Sanger STS names and primers are associated correctly
+    cd /cluster/data/danRer2/bed/ZonLab/bacends/cloneandStsAliases/testTables
+    # get sanger names and primers from markers file
+    awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $4, $5;}' \
+        ../markers.02.12.04.txt > sNameandPrimers
+    # write script to reformat and write with one Sanger name per line
+    chmod +x getSangerandPrimers.pl
+    perl getSangerandPrimers.pl < sNameandPrimers > sNameandPrimers.format
+    sort sNameandPrimers.format > sNameandPrimers.format.sort
+    wc -l sNameandPrim*
+    # 12008 sNameandPrimers
+    # 14940 sNameandPrimers.format
+    # 14940 sNameandPrimers.format.sort
+    # get Sanger names and primers from database
+    hgsql -N -e \
+      'select sangerName, leftPrimer, rightPrimer from bacCloneXRef \
+      where sangerName is not null and leftPrimer is not null and \
+      rightPrimer is not null;' danRer2 | sort | uniq \
+      > sNamesandprimers.fromdb.sort
+   wc -l sNamesandprimers.fromdb.sort
+   # 14940 sNamesandprimers.fromdb.sort
+   diff sNamesandprimers.fromdb.sort sNameandPrimers.format.sort
+   # No difference so ok
+
+# Check that UniSTS IDs and Sanger STS names are associated correctly
+   # get Sanger names and UniSTS IDs from the database
+   hgsql -N -e 'select sangerName, uniStsId from bacCloneXRef where \
+         uniStsId is not null;' danRer2 | sort | uniq > sNameUniSTS.fromdb.sort
+   wc -l sNameUniSTS.fromdb.sort
+   #  5456 sNameUniSTS.fromdb.sort
+   # Need to reformat the sNameUniSTS.fromdb.sort
+   chmod +x formatUniSts.pl 
+   perl formatUniSts.pl < sNameUniSTS.fromdb.sort | sort \
+        > sNameUniSTS.fromdb.format.sort
+   # get Sanger names from data file and see how many UniSTS IDs there are
+   # for each name
+   awk '{print $1}' ../sangerandUniSTSId.txt | sort | uniq -c | sort -nr \
+       > sangerandUniSTSId.count
+   # the most is 3 UniSTS IDs
+   # 3 etID9056.23
+   # 3 etID9042.2
+   # 3 etID8627.2
+   # 3 etID8281.9
+   # 3 etID11096.5
+   # 2 etID9986.14
+   # 2 etID9968.17
+ 
+   sort ../sangerandUniSTSId.txt > sangerandUniSTSId.txt.sort
+   diff sangerandUniSTSId.txt.sort sNameUniSTS.fromdb.format.sort \
+       > sangerandUniSTSIdvsdb
+   # No difference between data from original file and that in database so ok
+
+# Check that chrom mappings and external BAC clone names are correct
+   # get extNames and chroms they map to from the database
+   hgsql -N -e 'select name, chroms from bacCloneXRef where \
+         chroms is not null;' danRer2 | sort | uniq \
+         > nameandchromsfromdb.sort
+   # reformat nameandchromsfromdb.sort
+   perl formatUniSts.pl < nameandchromsfromdb.sort | sort \
+        > nameandchromsfromdb.format.sort
+   # compare extNames and chroms from db to those in data file
+   diff ../bacClones.namesandchrom.uniq nameandchromsfromdb.format.sort
+   # no difference - all ok
+
+# Check Genbank accessions and internal BAC clone names
+   hgsql -N -e 'select intName,genbank from bacCloneXRef where \
+         genbank is not null;' danRer2 | sort | uniq \
+         > intNamesandAccs.fromdb.sort
+   # this should be a subset of zfish_accsMerged.txt - not all BAC clones
+   # listed here appear in either our BAC ends tracks or the markers files.
+   sort ../zfish_accsMerged.txt > zfish_accsMerged.sort
+   comm -23 intNamesandAccs.fromdb.sort zfish_accsMerged.sort
+   # there is nothing in the database that is not in zfish_accsMerged.sort 
+   comm -13 intNamesandAccs.fromdb.sort zfish_accsMerged.sort > onlyinzfishAccs
+   wc -l onlyinzfishAccs
+   # 87 onlyinzfishAccs
+   hgsql -N -e 'select intName from bacCloneXRef where genbank is null;' danRer2
+         | sort | uniq > intNamesNoAcc.fromdb.sort
+   awk '{print $1;}' zfish_accsMerged.sort | sort > intNames.withAccs.sort
+   comm -12 intNamesNoAcc.fromdb.sort intNames.withAccs.sort \
+        > indbNoAccsandAccs.out
+   # none of these names are common to both so all accessions from
+   # zfish_accsMerged.txt are in the database for the internal names stored
+   # where there are accessions available.
+  
+# Test Sanger STS names, internal names and external names are all correct
+# Test Sanger STS name and internal BAC clone names are associated correctly
+   # get internal names and Sanger names from data file 
+   awk 'BEGIN {FS="|"} {OFS="\t"} {print $1,$2}' ../clonemarkers.02.12.04.txt \
+       | sort | uniq > intNameandSanger.sort
+   hgsql -N -e 'select intName, sangerName from bacCloneXRef \
+       where sangerName is not null;' danRer2 \
+       | sort | uniq > intNameandSanger.fromdb.sort
+   diff intNameandSanger.sort intNameandSanger.fromdb.sort 
+   # No difference between data from file and that from database so ok
+
+# Check BAC clone internal name and relationship fields
+   # get internal names and relationships from data file
+   awk 'BEGIN {FS="|"} {OFS="\t"} {print $1,$3}' ../clonemarkers.02.12.04.txt \
+       | sort | uniq > intNameandRelation.sort
+   # get internal names and relationships from database
+   hgsql -N -e 'select intName, relationship from bacCloneXRef \
+       where relationship != 0;' danRer2 \
+       | sort | uniq > intNameandrelation.fromdb.sort
+   # differences unique to database file
+   comm -13 intNameandRelation.sort intNameandrelation.fromdb.sort \
+       > intNameRelation.indbonly
+   # differences unique to data file
+   comm -23 intNameandRelation.sort intNameandrelation.fromdb.sort \
+       > intNameRelation.incloneMarkersonly
+   wc -l intNameRelation*
+   # 4345 intNameRelation.incloneMarkersonly
+   # 4345 intNameRelation.indbonly
+
+   awk '{print $1}' intNameRelation.indbonly > intNameRelation.indbonly.names
+   awk '{print $1}' intNameRelation.incloneMarkersonly \
+       > intNameRelation.incloneMarkersonly.names
+   diff intNameRelation.indbonly.names intNameRelation.incloneMarkersonly.names
+   # there is no difference in the internal names with relationship fields
+   # no difference in names and the only places these should differ is that
+   # the second column should all be 3 in the data from the database only.
+   # this is because all the relationship entries that were blank were
+   # in the clonemarkers file were changed to 3 when entered into the database.
+   awk '{print $2}' intNameRelation.indbonly | sort | uniq
+   # 3 - correct so all ok
+   # all the differences should be that those that are blank in clonemarkers
+   # are 3 in the database.
+   # check that those that have 0 in the database bacCloneXRef relationshipe
+   # field are not in the list from cloneMarkers
+   # select these internal names with 0 relationship from the database
+   hgsql -N -e 'select intName from bacCloneXRef where relationship = 0;' \
+         danRer2 | sort | uniq > intNameNoRelation.fromdb.sort  
+   # get all the internal names from the data file
+   awk 'BEGIN {FS="|"} {print $1}' ../clonemarkers.02.12.04.txt \
+       | sort | uniq > intNamefromCloneMarkers.sort
+   comm -12 intNameNoRelation.fromdb.sort intNamefromCloneMarkers.sort
+   # nothing in common between these two files as expected so there are
+   # no internal names in the db with 0 in the relationship field that
+   # appear in the clonemarkers file.
+
+# Check all BAC clone internal names and external names from the
+# ctgnames file are in the database
+   # get intName and extName from ctgnames file 
+   awk 'BEGIN {FS="|"} {OFS="\t"} {print $2,$3}' ../ctgnames.02.12.04.txt \
+       | sort | uniq > intNameandextNamefromCtgNames.sort
+   # get intName and extName from database
+   hgsql -N -e 'select intName,name from bacCloneXRef;' danRer2 \
+       | sort | uniq > intNameandextName.fromdb.sort
+   wc -l intNameandextName*
+   # 218100 intNameandextName.fromdb.sort
+   # 167441 intNameandextNamefromCtgNames.sort
+   comm -12 intNameandextName.fromdb.sort intNameandextNamefromCtgNames.sort \
+        > intandextindbAndCtgNames
+   wc -l intandextindbAndCtgNames 
+   # 167441 intandextindbAndCtgNames
+   # there are 167441 name pairs common between the file and the database
+   # and this is the same number of name pairs as in the data file
+   diff intandextindbAndCtgNames intNameandextNamefromCtgNames.sort
+   # no difference between those name pairs from the data file and those that
+   # are common between the data file and the database so all internal and
+   # external names from ctgNames file are in the database
+   # get the list of extra ones from db
+   comm -23 intNameandextName.fromdb.sort intNameandextNamefromCtgNames.sort \
+        > intandextNamesindbNotinCtgNames
+   wc -l intandextNamesindbNotinCtgNames
+   # 50659 intandextNamesindbNotinCtgNames
+   # get list of internal names from the clonemarkers file
+   awk 'BEGIN {FS="|"} {print $1}' ../clonemarkers.02.12.04.txt | sort | uniq \
+       > clonemarkers.intName.sort
+   wc -l clonemarkers.intName.sort
+   # 12987 clonemarkers.intName.sort
+   # compare these intNames to those from the database not in the ctgnames file
+   comm -12 clonemarkers.intName.sort intandextNamesindbNotinCtgNames
+   # none of these clone markers internal names are in this list so they
+   # must all be in the ctgnames file too. These extra internal names will be
+   # translations of external names found in the list of mappings of BAC clones
+   # to chroms.
+
+# Check that all the BAC clone external names from the list of chromosome
+# mappings and from the ctgnames file are in the database.
+   # get all extNames from baclones.namesandchrom.uniq and from ctgnames
+   awk '{print $1}' ../bacClones.namesandchrom.uniq > \
+       extNames.ctgnamesandbacClones
+   awk 'BEGIN {FS="|"} {print $3;}' ../ctgnames.02.12.04.txt \
+       >> extNames.ctgnamesandbacClones
+   wc -l extNames.ctgnamesandbacClones
+   # 384421 extNames.ctgnamesandbacClones
+   sort extNames.ctgnamesandbacClones | uniq \
+        > extNames.ctgnamesandbacClones.sort
+   wc -l extNames.ctgnamesandbacClones.sort
+   # 218100 extNames.ctgnamesandbacClones.sort
+   # get extNames from the database
+   hgsql -N -e 'select name from bacCloneXRef;' danRer2 | sort | uniq \
+         > extNames.fromdb.sort
+   wc -l extNames.fromdb.sort
+   # 218100 extNames.fromdb.sort
+   comm -12 extNames.fromdb.sort extNames.ctgnamesandbacClones.sort \
+         > extNames.fromdbandfiles
+   wc -l extNames.fromdbandfiles
+   # 218100 extNames.fromdbandfiles
+   # find extNames in common from data files and database
+   diff extNames.fromdb.sort extNames.fromdbandfiles
+   # no difference, all extNames from files are in db
+
+# Check that all BAC clone internal names from the ctgnames and clonemarkers
+# files are in the database
+   # get internal names from ctgnames and clonemarkers files
+   awk 'BEGIN {FS="|"} {print $2;}' ../ctgnames.02.12.04.txt \
+       > intNames.ctgnamesandclonemarkers
+   awk 'BEGIN {FS="|"} {print $1;}' ../clonemarkers.02.12.04.txt \
+       >> intNames.ctgnamesandclonemarkers
+   wc -l intNames.ctgnamesandclonemarkers
+   # 195746 intNames.ctgnamesandclonemarkers
+   sort intNames.ctgnamesandclonemarkers | uniq \
+        > intNames.ctgnamesandclonemarkers.sort
+   wc -l intNames.ctgnamesandclonemarkers.sort
+   # 167441 intNames.ctgnamesandclonemarkers.sort
+   # get internal names from database
+   hgsql -N -e 'select intName from bacCloneXRef;' danRer2 | sort | uniq \
+        > intNames.fromdb.sort
+   wc -l intNames.fromdb.sort
+   #  218100 intNames.fromdb.sort
+   # some of these intNames are derived from the corresponding extNames
+   # all of the intNames from the file should be in the db
+   comm -12 intNames.fromdb.sort intNames.ctgnamesandclonemarkers.sort \
+        > intNames.fromdbandfiles
+   wc -l intNames.fromdbandfiles
+   # 167441 intNames.fromdbandfiles
+   diff intNames.fromdbandfiles intNames.ctgnamesandclonemarkers.sort
+   # no difference, all intNames from files are in db
+   
+# Check that all translations are correct between BAC clone
+# external and internal names.
+   # write script to get the prefixes from internal and external names
+   chmod +x getNamePrefixes.pl
+   hgsql -N -e 'select name, intName from bacCloneXRef;' danRer2 \
+         | sort | uniq > extandintNames.fromdb.sort
+   perl getNamePrefixes.pl < extandintNames.fromdb.sort \
+         > extandintNames.prefixes
+   sort extandintNames.prefixes | uniq > extandintNames.prefixes.uniq
+   # these all look good 
+   # BUSM1   dZ
+   # CH211   zC
+   # CH211   zc
+   # CH73    zH
+   # CT7     bP
+   # DKEY    zK
+   # DKEY    zk
+   # DKEYP   zKp
+   # RP71    bZ
+   # XX      bY
+   # zk is a internal name prefix for the external name prefix, DKEY-. There
+   # is only one example where this is used (DKEY-81G7) and this in the
+   # ctgnames file and is in the bacCloneXRef table so that is ok.
+   # All data looks good in these tables now.
 
 # Pick up photo from NHGRI (DONE - 2004-12-22 - Hiram)
     ssh hgwdev
@@ -4009,6 +4354,12 @@ cat > split.csh << 'EOF'
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 # 6-WAY VAR_MULTIZ ALIGNMENTS (DONE, 2005-05-20, hartera)
+# Species: zebrafish(danRer2), human (hg17), mouse(mm6), opossum(monDom1), 
+# fugu(fr1) and tetraodon(tetNig1)
+# Tetraodon and Fugu are quite distant from zebrafish, more distant than 
+# human/chicken so use the HoxD55.q matrix in future for blastz with these 
+# species. Here the pairwise alignments of zebrafish with Tetraodon and Fugu
+# were done using the default matrix for blastz. (2005-06-01, hartera)
 # zebrafish(danRer2), human (hg17), mouse(mm6), opossum(monDom1), 
 # fugu(fr1) and tetraodon(tetNig1)
     ssh kkstore01
@@ -4254,6 +4605,7 @@ cat  << 'EOF' > template
     # smaller, then save as jpg
     cp species6.jpg /usr/local/apache/htdocs/images/phylo/DanRer2_6way.jpg
 
+# add all.joiner entry for danRer2 multiz6way (2005-05-31, hartera)
     # add trackDb.ra entry
 # track multiz6way
 # shortLabel 6-Way Conservation
@@ -4273,3 +4625,479 @@ cat  << 'EOF' > template
 # sGroup_mammal hg17 mm6 monDom1
 # sGroup_vertebrate fr1 tetNig1
 # treeImage phylo/DanRer2_6way.jpg
+
+# PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 6-WAY ALIGNMENT 
+# (DONE, 2005-06-01, hartera)
+# Tetraodon and Fugu are quite distant from zebrafish, more distant than 
+# human/chicken so use the HoxD55.q matrix in future for blastz with these 
+# species. Here the pairwise alignments of zebrafish with Tetraodon and Fugu 
+# that were used for the 6-way multiz were done using the default matrix 
+# for blastz. (2005-06-01, hartera)
+    ssh kkstore01
+    mkdir /cluster/data/danRer2/bed/multiz6way/cons
+    cd /cluster/data/danRer2/bed/multiz6way/cons
+
+    # create a starting-tree.mod based on chr5 (67Mb - largest chrom)
+    # chr5 is the largest chrom apart from NA and Un
+    /cluster/bin/phast/msa_split ../maf/chr5.maf \
+        --refseq ../../../5/chr5.fa --in-format MAF \
+        --windows 100000000,1000 --out-format SS \
+        --between-blocks 5000 --out-root s1
+    # takes about 2 minutes
+    /cluster/bin/phast/phyloFit -i SS s1.*.ss \
+        --tree "((tetNig1,fr1),((mm6,hg17),monDom1))" \
+        --out-root starting-tree
+    # only takes about 5 minutes
+    rm s1.*.ss
+    # Get genome-wide average GC content (for all species together,
+    # not just the reference genome).  If you have a globally
+    # estimated tree model, as above, you can get this from the
+    # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.309863 0.189473 0.189412 0.311252
+    # This implies a GC content of 0.1895 + 0.1895 = 0.379
+    # If you do *not* have a global tree model and you do not know
+    # your GC content, you can get it directly from the MAFs with
+    # a command like:
+    # /cluster/bin/phast/msa_view \
+    # --aggregate danRer2,tetNig1,fr1,mm6,hg17,monDom1 -i MAF \ 
+    # --summary-only /cluster/data/danRer2/bed/multiz6way/maf/chr*.maf \
+    # > maf_summary.txt
+    # this gives GC content of 0.4026 so similar
+# break up the genome-wide MAFs into pieces
+    ssh kkstore01
+    mkdir -p /cluster/bluearc/danRer2/cons/ss
+    cd /cluster/bluearc/danRer2/cons/ss
+    bash
+    for C in `awk '{print $1}' /cluster/data/danRer2/chrom.sizes`
+    do
+      if [ -s /cluster/data/danRer2/bed/multiz6way/maf/${C}.maf ]; then
+        echo msa_split $C
+        chrN=${C/chr/}
+        /cluster/bin/phast/msa_split \
+            /cluster/data/danRer2/bed/multiz6way/maf/${C}.maf \
+            --refseq /cluster/data/danRer2/${chrN}/${C}.fa \
+            --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+            --out-format SS -I 1000 --out-root ${C}
+      fi
+    done
+    # took 15 minutes to run
+    # Create a random list of 50 1 mb regions  (do not use the NA and Un)
+    ls -l | grep -v "NA" > fileList
+    cat fileList | grep -v "Un" > fileList2
+    mv fileList2 fileList
+    cat fileList | awk '$5 > 4000000 {print $9;}' | \
+        randomLines stdin 50 ../randomSs
+    rm fileList
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh kk9
+    mkdir -p /cluster/bluearc/danRer2/cons/treeRun1
+    cd /cluster/bluearc/danRer2/cons/treeRun1
+    mkdir tree log
+
+    # now set up cluster job to estimate model parameters.  Parameters
+    # will be estimated separately for each alignment fragment then
+    # will be combined across fragments
+    #   Tuning this loop should come back to here to recalculate
+    # Create little script that calls phastCons with right arguments
+    cat > makeTree << '_EOF_'
+    /cluster/bin/phast/phastCons ../ss/$1.ss \
+      /cluster/data/danRer2/bed/multiz6way/cons/starting-tree.mod \
+      --gc 0.403 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.17 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #   emacs happy
+    chmod a+x makeTree
+
+    # msa_view as this is from the whole genome. Also, notice the
+    # target coverage of 0.17.  Here we are going to aim for 65% coverage
+    # of coding regions by conserved elements.
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+makeTree $(root1)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+                                                                             
+    # Make cluster job and run it
+    gensub2 ../randomSs single template jobList
+    para create jobList
+    para try/push/check/etc
+# para time
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:       4013s      66.89m     1.11h    0.05d  0.000 y
+# IO & Wait Time:                   139s       2.31m     0.04h    0.00d  0.000 y
+# Average job time:                  83s       1.38m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             135s       2.25m     0.04h    0.00d
+# Submission to last job:          5260s      87.67m     1.46h    0.06d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ls tree/*.cons.mod > cons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' \
+        --output-average ../ave.cons.mod > cons_summary.txt
+    ls tree/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' \
+        --output-average ../ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/danRer2/bed/multiz6way/cons
+    #   measuring entropy
+    #   consEntropy <target coverage> <expected lengths>
+    #            ave.cons.mod ave.noncons.mod --NH 9.78
+    #   never stops with the --NH argument
+    # target entropy should be L_min*H=9.8 bits, the expected length
+    # that produces this entropy is the one to use for phastCons.
+    /cluster/bin/phast/consEntropy 0.17 12 \
+                        ave.cons.mod ave.noncons.mod
+
+# the above steps were repeated with the target coverage and expected lengths
+# parameters set as below:
+
+# -target-coverage=0.17 -expected-lengths 12
+#Transition parameters:gamma=0.170000,omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=0.768727 bits/site
+# Expected min. length: L_min=13.932145 sites
+# Expected max. length: L_max=8.869545 sites
+# Total entropy: L_min*H=10.710017 bits
+
+# -target-coverage=0.20 -expected-lengths 10
+#Transition parameters:gamma=0.200000,omega=10.000000, mu=0.100000, nu=0.025000
+# Relative entropy: H=0.799627 bits/site
+# Expected min. length: L_min=12.358880 sites
+# Expected max. length: L_max=7.593192 sites
+# Total entropy: L_min*H=9.882496 bits
+
+# -target-coverage=0.20 -expected-lengths=9
+#Transition parameters:gamma=0.200000, omega=9.000000, mu=0.111111, nu=0.027778
+# Relative entropy: H=0.805459 bits/site
+# Expected min. length: L_min=12.022440 sites
+# Expected max. length: L_max=7.111297 sites
+# Total entropy: L_min*H=9.683580 bits
+
+# -target-coverage=0.25 -expected-lengths=10
+#Transition parameters:gamma=0.250000, omega=10.000000, mu=0.100000, nu=0.033333
+# Relative entropy: H=0.843206 bits/site
+# Expected min. length: L_min=10.846871 sites
+# Expected max. length: L_max=6.973477 sites
+# Total entropy: L_min*H=9.146148 bits
+
+# -target-coverage=0.35 -expected-lengths=12
+#Transition parameters:gamma=0.350000, omega=12.000000, mu=0.083333, nu=0.044872
+# Relative entropy: H=0.917684 bits/site
+# Expected min. length: L_min=9.169807 sites
+# Expected max. length: L_max=6.687135 sites
+# Total entropy: L_min*H=8.414989 bits
+
+# -target-coverage=0.35 -expected-lengths=14
+#Transition parameters:gamma=0.350000,omega=14.000000, mu=0.071429, nu=0.038462
+# Relative entropy: H=0.903639 bits/site
+# Expected min. length: L_min=9.778765 sites
+# Expected max. length: L_max=7.300778 sites
+# Total entropy: L_min*H=8.836478 bits
+
+# -target-coverage=0.35 -expected-lengths=18
+#Transition parameters:gamma=0.350000,omega=18.000000, mu=0.055556, nu=0.029915
+# Relative entropy: H=0.881986 bits/site
+# Expected min. length: L_min=10.798324 sites
+# Expected max. length: L_max=8.320602 sites
+# Total entropy: L_min*H=9.523968 bits
+
+# -target-coverage=0.35 -expected-lengths=19
+#Transition parameters:gamma=0.350000,omega=19.000000, mu=0.052632, nu=0.028340
+# Relative entropy: H=0.877572 bits/site
+# Expected min. length: L_min=11.021340 sites
+# Expected max. length: L_max=8.542773 sites
+# Total entropy: L_min*H=9.672025 bits
+
+# -target-coverage=0.32 -expected-lengths=20
+#Transition parameters:gamma=0.320000, omega=20.000000, mu=0.050000, nu=0.023529
+# Relative entropy: H=0.853466 bits/site
+# Expected min. length: L_min=11.824480 sites
+# Expected max. length: L_max=9.084203 sites
+# Total entropy: L_min*H=10.091797 bits
+
+#### !!! THESE PARAMETERS BELOW WERE THOSE THAT WERE FINALLY USED ####
+# -target-coverage=0.32 -expected-lengths=18
+#Transition parameters:gamma=0.320000,omega=18.000000, mu=0.055556, nu=0.026144
+# Relative entropy: H=0.860401 bits/site
+# Expected min. length: L_min=11.402969 sites
+# Expected max. length: L_max=8.648243 sites
+# Total entropy: L_min*H=9.811131 bits
+
+# need to iterate and get the right coverage and parameters
+# try running phastCons below with parameters used above and check the 
+# coverage of coding regions by the most conserved elements
+    # Create cluster dir to do main phastCons run
+    ssh kk9
+    mkdir /cluster/bluearc/danRer2/cons/consRun1
+    cd /cluster/bluearc/danRer2/cons/consRun1
+    mkdir ppRaw bed
+    # Create script to run phastCons with right parameters
+    # This job is I/O intensive in its output files.  To make this
+    # cluster safe, it would be better to do this work somewhere over
+    # in /tmp/... and copy the final result back.  kk9 can do this
+    # run, but kk cannot.
+    # Run whole genome, this goes fast in this case.
+cat > doPhast << '_EOF_'
+mkdir -p ppRaw/$2
+/cluster/bin/phast/phastCons ../ss/$1.ss ../ave.cons.mod,../ave.noncons.mod \
+   --expected-lengths 12 --target-coverage 0.17 --quiet --seqname $2 \
+   --idpref $2 --viterbi bed/$1.bed --score --require-informative 0 > \
+   ppRaw/$2/$1.pp
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast
+
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+doPhast $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+                                                                                
+    # Create parasol batch and run it for the whole genome
+    ls -1 ../ss | sed 's/.ss//' > in.lst
+    gensub2 in.lst single template jobList
+    para create jobList
+    para try/check/push/etc.
+# para time
+# Completed: 1604 of 1604 jobs
+# CPU time in finished jobs:      11005s     183.42m     3.06h    0.13d  0.000 y
+# IO & Wait Time:                 30912s     515.19m     8.59h    0.36d  0.001 y
+# Average job time:                  26s       0.44m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              55s       0.92m     0.02h    0.00d
+# Submission to last job:           608s      10.13m     0.17h    0.01d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #   it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /cluster/bluearc/danRer2/cons/consRun
+    catDir bed | awk ' \
+        {printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+        /cluster/bin/scripts/lodToBedScore /dev/stdin > \
+        /cluster/data/danRer2/bed/multiz6way/mostConserved.bed
+                                                                                
+    # Figure out how much is actually covered by the bed files as so:
+    ssh kkstore01
+    cd /cluster/data/danRer2/bed/multiz6way
+    foreach f ( `cat /cluster/data/danRer2/chrom.lst` )
+       cat $f/chr${f}.fa >> allChroms.fa
+    end
+    faSize allChroms.fa
+    # 1589273282 bases (101846391 N's 1487426891 real 813899141 upper 
+    # 673527750 lower) in 28 sequences in 1 files
+
+    # Total size: mean 56759760.1 sd 58536773.4 min 16596 (chrM) 
+    # max 318297480 (chrNA) median 42763181 
+    
+    awk '{sum+=$3-$2} \
+END{printf "%% %.2f = 100.0*%d/1487426891\n",100.0*sum/1487426891,sum}' \
+        mostConserved.bed
+    -target-coverage 0.17: % 1.99 = 100.0*29631918/1487426891 length 12
+    -target-coverage 0.20: % 1.96 = 100.0*29183170/1487426891 length 10
+    -target-coverage 0.25: % 2.11 = 100.0*31391360/1487426891 length 10
+    -target-coverage 0.35  % 2.69 = 100.0*39940068/1487426891 length 19
+    -target-coverage 0.32  % 2.60 = 100.0*38730791/1487426891 length 18
+    #   the non-N genome size, from faSize on all chroms: 1487426891
+
+# check with featureBits
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    # get an or of refGene and mgcGenes CDS regions 
+    featureBits danRer2 refGene:cds mgcGenes:cds -or -bed=refSeqOrMgcCds.bed
+    # 9745850 bases of 1560497282 (0.625%) in intersection
+    featureBits danRer2 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # featureBits danRer2 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # -target-coverage=0.17 -expected-lengths=12
+    # refSeqOrMgcCds.bed 0.625%, mostConserved.bed 1.899%, both 0.350%, 
+    # cover 56.07%, enrich 29.53x
+    # -target-coverage=0.20 -expected-lengths=10
+    # refSeqOrMgcCds.bed 0.625%, mostConserved.bed 1.870%, both 0.347%, 
+    # cover 55.54%, enrich 29.70x
+    # -target-coverage=0.25 -expected-length=10
+    # refSeqOrMgcCds.bed 0.625%, mostConserved4.bed 2.012%, both 0.364%, 
+    # cover 58.35%, enrich 29.01x
+    # -target-coverage=0.35 -expected-lengths=19
+    # refSeqOrMgcCds.bed 0.625%, mostConserved5.bed 2.559%, both 0.431%, 
+    # cover 68.98%, enrich 26.95x
+    # -target-coverage=0.32 -expected-lengths=18
+    # refSeqOrMgcCds.bed 0.625%, mostConserved6.bed 2.482%, both 0.423%, 
+    # cover 67.75%, enrich 27.30x
+    # looking at ensGene:
+    # featureBits danRer2 ensGene:cds mostConserved.bed -enrichment
+    # ensGene:cds 2.135%, mostConserved.bed 2.482%, both 1.210%, 
+    # cover 56.67%, enrich 22.83x
+
+# so use this result with -target-coverage=0.32 -expected-lengths=18
+# total entropy is 9.81 which is good, aiming for 9.8 and 65% coverage
+# of coding regions with most conserved elements, here it is 67.8%
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    hgLoadBed danRer2 phastConsElements mostConserved.bed
+    # Loaded 393654 elements of size 5
+    # less than 1 minute load time
+    featureBits danRer2 -enrichment refSeqOrMgcCds.bed phastConsElements
+# refSeqOrMgcCds.bed 0.625%, phastConsElements 2.482%, both 0.423%, 
+# cover 67.75%, enrich 27.30x
+    featureBits danRer2 mgcGenes:cds phastConsElements -enrichment
+# mgcGenes:cds 0.486%, phastConsElements 2.482%, both 0.336%, 
+# cover 69.06%, enrich 27.82x
+    featureBits danRer2 refGene:cds phastConsElements -enrichment
+# refGene:cds 0.597%, phastConsElements 2.482%, both 0.400%, 
+# cover 66.97%, enrich 26.98x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kkstore01
+    cd /cluster/bluearc/danRer2/cons/consRun
+    # interesting sort here on the chr name and position.
+    # first convert all . and - characters to special strings x/ and x_/
+    #   to get a consistent delimiter of / for all fields to be sorted.
+    #   Then do the sort on the chrom name and the start position, after
+    #   the sort convert the special stringx x_/ and x/ back to - and .
+    #   respectively.  This gets everything in order by chrom name and
+    #   chrom start.
+    find ./ppRaw -type f | sed -e "s#\.#x/#g; s#-#x_/#g" | \
+        sort -t"/" -k4,4 -k6,6n | sed -e "s#x_/#-#g; s#x/#.#g" | xargs cat | \
+            wigEncode stdin phastCons6way.wig phastCons6way.wib
+    # about 3 minutes for above
+
+    ssh kkstore01
+    cd /cluster/bluearc/danRer2/cons/consRun
+    cp -p phastCons6way.wi? /cluster/data/danRer2/bed/multiz6way/cons
+                                                                                
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way/cons
+    mkdir -p /gbdb/danRer2/wib
+    ln -s `pwd`/phastCons6way.wib /gbdb/danRer2/wib/phastCons6way.wib
+    # use this if need to reload table
+    hgsql -e 'drop table phastCons6way;' danRer2
+    # load table
+    hgLoadWiggle danRer2 phastCons6way phastCons6way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way/cons
+    bash
+    time hgWiggle -doHistogram \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            -db=danRer2 phastCons6way > histogram.data 2>&1
+    # real    3m1.185s  user    2m19.440s  sys     0m11.850s
+ 
+        #   create plot of histogram:
+    cat << '_EOF_' > histo.gp
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish danRer2 Histogram phastCons6 track"
+set xlabel " phastCons6 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+                                                                                
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    #   happy emacs
+    gnuplot histo.gp > histo.png
+    display histo.png &
+
+# add line: wiggle phastCons6way to trackDb.ra for multiz6way to display the 
+# wiggle for the conservation track.
+# copy over html for multiz and edit.
+
+# PHASTCONS SCORES DOWNLOADABLES (DONE, 2005-05-31, hartera)
+    #   prepare compressed copy of ascii data values for downloads
+    ssh kkstore01
+    cd /cluster/bluearc/danRer2/cons/consRun
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+                                                                                
+TOP=`pwd`
+export TOP
+                                                                                
+mkdir -p phastCons6wayScores
+                                                                                
+ls ppRaw | while read D
+do
+    out=${TOP}/phastCons6wayScores/${D}.gz
+    echo -n "$out ... "
+    cd ${TOP}/ppRaw/${D}
+    gzip -c `ls *.pp  | sed -e "s#-#.x-x.#g;" | \
+        sort -t"." -k1,1 -k2,2n | sed -e "s#.x-x.#-#g;"` > ${out}
+    echo "done"
+done
+'_EOF_'
+    #   happy emacs
+    chmod +x gzipAscii.sh
+    time ./gzipAscii.sh
+    # 104.769u 8.789s 3:00.18 63.0%   0+0k 0+0io 11pf+0w
+    # 182 Mb of data
+    #  copy scores for downloads
+    ssh kkstore01
+    mkdir /cluster/data/danRer2/bed/multiz6way/phastCons6wayScores
+    cd /cluster/data/danRer2/bed/multiz6way/phastCons6wayScores
+    rsync -a --progress \
+          /cluster/bluearc/danRer2/cons/consRun/phastCons6wayScores/ .
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/danRer2/phastCons6wayScores
+    cd /usr/local/apache/htdocs/goldenPath/danRer2/phastCons6wayScores
+    ln -s /cluster/data/danRer2/bed/multiz6way/phastCons6wayScores/*.gz .
+    md5sum *.gz > md5sum.txt
+    # copy over and edit README.txt.
+
+# MULTIZ 6-WAY DOWNLOADABLES (DONE, 2005-05-31, hartera)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer2
+    mkdir -p multiz6way
+    cd multiz6way
+    foreach f (/cluster/data/danRer2/bed/multiz6way/maf/*.maf)
+        set c = $f:r:t
+        echo $c
+        nice gzip -c $f > $c.maf.gz
+    end
+    # copy README and edit
+                                                                                
+    # Create upstream files for download
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/multiz6way
+    echo danRer2 tetNig1 fr1 mm6 hg17 monDom1 > org.txt
+    # mafFrags is quick for these
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits danRer2 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
+0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags danRer2 multiz6way up.bed upstream$i.maf -orgs=org.txt
+        rm up.bed
+    end
+    # took less than 3 minutes
+ 
+    ssh kkstore01
+    cd /cluster/data/danRer2/bed/multiz6way
+    nice gzip upstream{1000,2000,5000}.maf
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer2
+    mv /cluster/data/danRer2/bed/multiz6way/upstream*.maf.gz multiz6way
+    cd multiz6way
+    md5sum *.gz > md5sum.txt
+

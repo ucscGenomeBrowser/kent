@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.152 2004/09/10 21:26:34 kent Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.154 2005/06/06 20:20:10 galt Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1808,6 +1808,7 @@ else
     cartSetString(cart, orgVarName, genome);
     }
 }
+
 
 void doMiddle(struct cart *theCart)
 /* Write the middle parts of the HTML page. 

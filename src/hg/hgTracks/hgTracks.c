@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.962 2005/05/23 04:03:00 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.973 2005/06/14 00:46:50 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -868,7 +868,6 @@ void filterItems(struct track *tg,
 struct slList *newList = NULL, *oldList = NULL, *el, *next;
 boolean exclude = FALSE;
 boolean color = FALSE;
-enum trackVisibility vis = 0;	/* suppress compiler warning. */
 
 if (sameWord(filterType, "none"))
     return;
@@ -878,10 +877,7 @@ if (sameWord(filterType, "include"))
 else if (sameWord(filterType, "exclude"))
     exclude = TRUE;
 else
-    {
     color = TRUE;
-    vis = limitVisibility(tg);
-    }
 
 for (el = tg->items; el != NULL; el = next)
     {
@@ -898,6 +894,7 @@ for (el = tg->items; el != NULL; el = next)
 slReverse(&newList);
 if (color)
    {
+   enum trackVisibility vis = limitVisibility(tg);
    slReverse(&oldList);
    /* Draw stuff that passes filter first in full mode, last in dense. */
    if (vis == tvDense)
@@ -1336,7 +1333,11 @@ int midY = y + (heightPer>>1);
 int midY1 = midY - (heightPer>>2);
 int midY2 = midY + (heightPer>>2);
 int w;
-boolean exonArrows = tg->exonArrows;
+char *exonArrowsDense = trackDbSetting(tg->tdb, "exonArrowsDense");
+boolean exonArrowsEvenWhenDense = (exonArrowsDense != NULL &&
+				   !sameWord(exonArrowsDense, "off"));
+boolean exonArrows = (tg->exonArrows &&
+		      (vis != tvDense || exonArrowsEvenWhenDense));
 
 //variables for genePred cds coloring
 struct psl *psl = NULL;
@@ -1427,7 +1428,7 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score );
 
-            if (exonArrows && vis != tvDense &&
+            if (exonArrows &&
                 /* Display barbs only if no intron is visible on the item.
                    This occurs when the exon completely spans the window,
                    or when it is the first or last intron in the feature and
@@ -2166,12 +2167,12 @@ struct linkedFeaturesSeries *lfsList = NULL, *lfs;
 char optionScoreStr[128]; /* Option -  score filter */
 int optionScore;
 
-safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", table);
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", table);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (optionScore > 0) 
     {
     char extraWhere[128];
-    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
     sr = hOrderedRangeQuery(conn, table, chromName, start, end,
 	extraWhere, &rowOffset);
     }
@@ -6950,6 +6951,70 @@ if(ideoTrack != NULL)
     }
 }
 
+static bool isCompositeTrack(struct track *track)
+/* Determine if this is a composite track. This is currently defined
+ * as a top-level dummy track, with a list of subtracks of the same type.
+ * Need to check trackDb, as we need to ignore wigMaf's which have
+ * subtracks but aren't composites */
+{
+if (track->tdb)
+    return (track->subtracks != NULL && trackDbIsComposite(track->tdb));
+return FALSE;
+}
+
+static boolean isSubtrack(struct track *track)
+/* Return TRUE if track is a subtrack of a composite track. */
+/* Subtracks usually inherit their parent track's tdb, so their tdbs may 
+ * appear composite, but their mapNames will not be the same as tdb->tableName 
+ * in that case. */
+{
+return ((trackDbSetting(track->tdb, "subTrack") != NULL) ||
+	(trackDbIsComposite(track->tdb) &&
+	 !sameString(track->mapName, track->tdb->tableName)));
+}
+
+static boolean isWithCenterLabels(struct track *track)
+/* Special cases: inhibit center labels of subtracks in dense mode, and 
+ * of composite track in non-dense mode.
+ * BUT if track->tdb has a centerLabelDense setting, let subtracks go with 
+ * the default and inhibit composite track center labels in all modes.
+ * Otherwise use the global boolean withCenterLabels. */
+{
+if (track != NULL)
+    {
+    char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
+    if (centerLabelsDense && !sameWord(centerLabelsDense, "off"))
+	{
+	if (isCompositeTrack(track))
+	    return FALSE;
+	}
+    else if (((limitVisibility(track) == tvDense) && isSubtrack(track)) ||
+	     ((limitVisibility(track) != tvDense) && isCompositeTrack(track)))
+	return FALSE;
+    }
+return withCenterLabels;
+}
+
+int trackPlusLabelHeight(struct track *track, int fontHeight)
+/* Return the sum of heights of items in this track (or subtrack as it may be) 
+ * and the center label(s) above the items (if any). */
+{
+int y = track->height;
+if (isWithCenterLabels(track))
+    y += fontHeight;
+if (isCompositeTrack(track))
+    {
+    struct track *subtrack;
+    for (subtrack = track->subtracks;  subtrack != NULL;
+	 subtrack = subtrack->next)
+	{
+	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
+	    y += fontHeight;
+	}
+    }
+return y;
+}
+
 static int doLeftLabels(struct track *track, struct vGfx *vg, MgFont *font, 
                                 int y)
 /* Draw left labels.  Return y coord. */
@@ -6971,15 +7036,17 @@ char o5[128];
 struct slList *item;
 enum trackVisibility vis = track->limitedVis;
 enum trackVisibility savedVis = vis;
-int tHeight;
 Color labelColor = (track->labelColor ? 
                         track->labelColor : track->ixColor);
 int fontHeight = mgFontLineHeight(font);
+int tHeight = trackPlusLabelHeight(track, fontHeight);
 if (vis == tvHide)
     return y;
-tHeight = track->height;
-if (withCenterLabels)
-    tHeight += fontHeight;
+
+/*  if a track can do its own left labels, do them after drawItems */
+if (track->drawLeftLabels != NULL)
+    return y + tHeight;
+
 /*	Wiggle tracks depend upon clipping.  They are reporting
  *	totalHeight artifically high by 1 so this will leave a
  *	blank area one pixel high below the track.
@@ -6996,15 +7063,6 @@ minRangeCutoff = max( atof(cartUsualString(cart,o4,"0.0"))-0.1,
                                 track->minRange );
 maxRangeCutoff = min( atof(cartUsualString(cart,o5,"1000.0"))+0.1, 
                                 track->maxRange);
-/*  if a track can do its own left labels, do them after drawItems */
-if (track->drawLeftLabels != NULL)
-    {
-    if (withCenterLabels)
-        y += fontHeight;
-    y += track->height;
-    vgUnclip(vg);
-    return y;
-    }
 if( sameString( track->mapName, "humMusL" ) ||
     sameString( track->mapName, "musHumL" ) ||
     sameString( track->mapName, "mm3Rn2L" ) ||		
@@ -7048,12 +7106,10 @@ switch (vis)
         break;	/* Do nothing; */
     case tvPack:
     case tvSquish:
-        if (withCenterLabels)
-            y += fontHeight;
-        y += track->height;
+	y += tHeight;
         break;
     case tvFull:
-        if (withCenterLabels)
+        if (isWithCenterLabels(track))
             y += fontHeight;
         start = 1;
 
@@ -7127,7 +7183,7 @@ switch (vis)
         break;
     case tvDense:
         
-        if (withCenterLabels)
+        if (isWithCenterLabels(track))
             y += fontHeight;
         
         /*draw y-value limits for 'sample' tracks. 
@@ -7186,7 +7242,7 @@ static int doDrawItems(struct track *track, struct vGfx *vg, MgFont *font,
 {
 int fontHeight = mgFontLineHeight(font);
 int pixWidth = tl.picWidth;
-if (withCenterLabels)
+if (isWithCenterLabels(track))
     y += fontHeight;
 if (track->limitedVis == tvPack)
     {
@@ -7220,7 +7276,7 @@ struct slList *item;
 
 if (track->subType == lfSubSample && track->items == NULL)
      y += track->lineHeight;
-if (withCenterLabels)
+if (isWithCenterLabels(track))
     y += fontHeight;
 for (item = track->items; item != NULL; item = item->next)
     {
@@ -7254,39 +7310,32 @@ for (item = track->items; item != NULL; item = item->next)
         y += height;
         }
     }
+/* Wiggle track's ->height is actually one less than what it returns from 
+ * totalHeight()... I think the least disruptive way to account for this
+ * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
+ * we see wiggle or bedGraph: */
+if (sameString("wig", track->tdb->type) ||
+    startsWith("wig ", track->tdb->type) ||
+    startsWith("bedGraph", track->tdb->type))
+    y++;
 return y;
-}
-
-static int limitTrackVis(struct track *track, int pixHeight, int fontHeight)
-{
-int h;
-if(track->limitedVisSet && track->limitedVis == tvHide)
-    return pixHeight;
-if (withCenterLabels)
-    pixHeight += fontHeight;
-limitVisibility(track);
-h = track->height;
-pixHeight += h;
-return pixHeight;
 }
 
 static int doOwnLeftLabels(struct track *track, struct vGfx *vg, 
                                                 MgFont *font, int y)
 /* Track draws it own, custom left labels */
 {
-int tHeight = track->height;
 int pixWidth = tl.picWidth;
 int fontHeight = mgFontLineHeight(font);
+int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
-if (withCenterLabels)
-    tHeight += fontHeight;
 if (track->limitedVis == tvPack)
     { /*XXX This needs to be looked at, no example yet*/
     vgSetClip(vg, gfxBorder+trackTabWidth+1, y, 
               pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
     track->drawLeftLabels(track, winStart, winEnd,
                           vg, leftLabelX, y, leftLabelWidth, tHeight,
-                          withCenterLabels, font, labelColor, 
+                          isWithCenterLabels(track), font, labelColor, 
                           track->limitedVis);
     }
 else
@@ -7298,35 +7347,23 @@ else
      */
     track->drawLeftLabels(track, winStart, winEnd,
                           vg, leftLabelX, y, leftLabelWidth, tHeight,
-                          withCenterLabels, font, labelColor, 
+                          isWithCenterLabels(track), font, labelColor, 
                           track->limitedVis);
     }
 vgUnclip(vg);
-if (withCenterLabels)
-    y += fontHeight;
-y += track->height;
+y += tHeight;
 return y;
 }
 
-static bool isCompositeTrack(struct track *track)
-/* Determine if this is a composite track. This is currently defined
- * as a top-level dummy track, with a list of subtracks of the same type.
- * Need to check trackDb, as we need to ignore wigMaf's which have
- * subtracks but aren't composites */
-{
-if (track->tdb)
-    return (track->subtracks != NULL && trackDbIsComposite(track->tdb));
-return FALSE;
-}
-
 static void setSubtrackVisible(char *tableName, bool visible)
+/* Set tableName's _sel variable in cart. */
 {
 char option[64];
 safef(option, sizeof(option), "%s_sel", tableName);
 cartSetBoolean(cart, option, visible);
 }
 
-static void subtrackVisibleTdb(struct trackDb *tdb)
+static void subtrackVisible(struct track *subtrack)
 /* Determine if subtrack should be displayed.  Save in cart */
 {
 char option[64];
@@ -7334,26 +7371,39 @@ char *words[2];
 char *setting;
 bool selected = TRUE;
 
-if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+/* Note: this will only work when noInherit is used; otherwise subtrack 
+ * inherits its parent's tdb: */
+if ((setting = trackDbSetting(subtrack->tdb, "subTrack")) != NULL)
     {
     if (chopLine(cloneString(setting), words) >= 2)
         if (sameString(words[1], "off"))
             selected = FALSE;
     }
-safef(option, sizeof(option), "%s_sel", tdb->tableName);
+safef(option, sizeof(option), "%s_sel", subtrack->mapName);
 selected = cartCgiUsualBoolean(cart, option, selected);
-setSubtrackVisible(tdb->tableName, selected);
+setSubtrackVisible(subtrack->mapName, selected);
 }
 
-bool isSubtrackVisible(struct track *tg)
-/* Should this subtrack be displayed? */
+bool isSubtrackSelected(struct track *tg)
+/* Has this subtrack not been deselected in hgTrackUi? */
 {
 char option[64];
 safef(option, sizeof(option), "%s_sel", tg->mapName);
-return  tg->visibility != tvHide && cartCgiUsualBoolean(cart, option, TRUE);
+return cartCgiUsualBoolean(cart, option, TRUE);
+}
+
+bool isSubtrackVisible(struct track *tg)
+/* Should this subtrack be displayed?  Check cart, not cgi, for selectedness 
+ * because by this point we may have overridden CGI settings and saved into 
+ * the cart. */
+{
+char option[64];
+safef(option, sizeof(option), "%s_sel", tg->mapName);
+return tg->visibility != tvHide && cartUsualBoolean(cart, option, TRUE);
 }
 
 static int subtrackCount(struct track *trackList)
+/* Count the number of visible subtracks in (sub)trackList. */
 {
 struct track *subtrack;
 int ct = 0;
@@ -7372,9 +7422,15 @@ if (!tg->limitedVisSet)
     enum trackVisibility vis = tg->visibility;
     int h;
     int maxHeight = maximumTrackHeight();
+    tg->limitedVisSet = TRUE;
+    if (vis == tvHide)
+	{
+	tg->height = 0;
+	tg->limitedVis = tvHide;
+	return tvHide;;
+	}
     if (isCompositeTrack(tg))
         maxHeight = maxHeight * subtrackCount(tg->subtracks);
-    tg->limitedVisSet = TRUE;
     h = tg->totalHeight(tg, vis);
     if (h > maxHeight)
         {
@@ -7406,25 +7462,36 @@ int doTrackMap(struct track *track, int y, int fontHeight,
 	       int trackPastTabX, int trackPastTabWidth)
 /* Write out the map for this track. Return the new offset. */
 {
+int mapHeight = 0;
 switch (track->limitedVis)
     {
     case tvHide:
 	break;	/* Do nothing; */
     case tvPack:
     case tvSquish:
-	if (withCenterLabels)
-	    y += fontHeight;
-	y += track->height;
+	y += trackPlusLabelHeight(track, fontHeight);
 	break;
     case tvFull:
-	y = doMapItems(track, fontHeight, y);
+	if (isCompositeTrack(track))
+	    {
+	    struct track *subtrack;
+	    for (subtrack = track->subtracks;  subtrack != NULL;
+		 subtrack = subtrack->next)
+		if (isSubtrackVisible(subtrack))
+		    y = doMapItems(subtrack, fontHeight, y);
+	    }
+	else
+	    y = doMapItems(track, fontHeight, y);
 	break;
     case tvDense:
-	if (withCenterLabels)
+	if (isWithCenterLabels(track))
 	    y += fontHeight;
-	mapBoxToggleVis(trackPastTabX,y,trackPastTabWidth,
-			track->lineHeight,track);
-	y += track->height;
+	if (isCompositeTrack(track))
+	    mapHeight = track->height;
+	else
+	    mapHeight = track->lineHeight;
+	mapBoxToggleVis(trackPastTabX, y, trackPastTabWidth, mapHeight, track);
+	y += mapHeight;
 	break;
     }
 return y;
@@ -7474,33 +7541,33 @@ if (rulerMode != tvHide)
         }
     }
 
+/* Hash tracks/subtracks, limit visibility and calculate total image height: */
 for (track = trackList; track != NULL; track = track->next)
     {
     hashAddUnique(trackHash, track->mapName, track);
-    if (track->visibility != tvHide)
+    limitVisibility(track);
+    if (track->limitedVis != tvHide)
 	{
         if (isCompositeTrack(track))
             {
             struct track *subtrack;
-            limitTrackVis(track, pixHeight, fontHeight);
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
 		hashAddUnique(trackHash, subtrack->mapName, subtrack);
                 if (!isSubtrackVisible(subtrack))
                     continue;
-		if(!subtrack->limitedVisSet)
+		if (!subtrack->limitedVisSet)
+		    {
 		    subtrack->visibility = track->visibility;
-                pixHeight = limitTrackVis(subtrack, pixHeight, fontHeight);
+		    subtrack->limitedVis = track->limitedVis;
+		    subtrack->limitedVisSet = TRUE;
+		    }
                 }
-            }
-        else
-            pixHeight = limitTrackVis(track, pixHeight, fontHeight);
-        }
-    else
-        track->limitedVis = tvHide;
+	    }
+	pixHeight += trackPlusLabelHeight(track, fontHeight);
+	}
     }
-
 
 imagePixelHeight = pixHeight;
 if (psOutput)
@@ -7533,11 +7600,11 @@ for (track = trackList; track != NULL; track = track->next)
     {
     if (track->limitedVis != tvHide)
 	{
-        struct track *subtrack;
 	track->ixColor = vgFindRgb(vg, &track->color);
 	track->ixAltColor = vgFindRgb(vg, &track->altColor);
         if (isCompositeTrack(track))
             {
+	    struct track *subtrack;
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 {
@@ -7577,14 +7644,7 @@ if (withLeftLabels && psOutput == NULL)
 	int h, yStart = y, yEnd;
 	if (track->limitedVis != tvHide)
 	    {
-	    y += track->height;
-	    if (withCenterLabels)
-                {
-                int labelCt = 1;
-                if (isCompositeTrack(track))
-                    labelCt = subtrackCount(track->subtracks);
-		y += (fontHeight * labelCt);
-                }
+	    y += trackPlusLabelHeight(track, fontHeight);
 	    yEnd = y;
 	    h = yEnd - yStart - 1;
 
@@ -7629,9 +7689,13 @@ if (withLeftLabels)
 	}
     for (track = trackList; track != NULL; track = track->next)
         {
-        struct track *subtrack;
+	if (track->limitedVis == tvHide)
+	    continue;
         if (isCompositeTrack(track))
             {
+	    struct track *subtrack;
+	    if (isWithCenterLabels(track))
+		y += fontHeight;
             for (subtrack = track->subtracks; subtrack != NULL;
 		 subtrack = subtrack->next)
                 if (isSubtrackVisible(subtrack))
@@ -7818,12 +7882,22 @@ if (withCenterLabels)
     for (track = trackList; track != NULL; track = track->next)
         {
         struct track *subtrack;
+	if (track->limitedVis == tvHide)
+	    continue;
         if (isCompositeTrack(track))
             {
-            for (subtrack = track->subtracks; subtrack != NULL;
-                         subtrack = subtrack->next)
-                if (isSubtrackVisible(subtrack))
-                    y = doCenterLabels(subtrack, track, vg, font, y);
+	    if (isWithCenterLabels(track))
+		{
+		y = doCenterLabels(track, track, vg, font, y);
+		}
+	    else
+		{
+		for (subtrack = track->subtracks; subtrack != NULL;
+		     subtrack = subtrack->next)
+		    if (isSubtrackVisible(subtrack) &&
+			isWithCenterLabels(subtrack))
+			y = doCenterLabels(subtrack, track, vg, font, y);
+		}
             }
         else
             y = doCenterLabels(track, track, vg, font, y);
@@ -7844,6 +7918,8 @@ if (withCenterLabels)
         if (isCompositeTrack(track))
             {
             struct track *subtrack;
+	    if (isWithCenterLabels(track))
+		y += fontHeight;
             for (subtrack = track->subtracks; subtrack != NULL;
                          subtrack = subtrack->next)
                 if (isSubtrackVisible(subtrack))
@@ -7861,31 +7937,30 @@ if (withLeftLabels)
     y = yAfterRuler;
     for (track = trackList; track != NULL; track = track->next)
 	{
-        int labelCt = 1;
 	if (track->limitedVis == tvHide)
             continue;
-        if (isCompositeTrack(track))
-            labelCt = subtrackCount(track->subtracks);
-        if (track->drawLeftLabels != NULL)
-            {
-            if (isCompositeTrack(track))
-                {
-                struct track *subtrack;
-                for (subtrack = track->subtracks; subtrack != NULL;
-                             subtrack = subtrack->next)
-                    if (isSubtrackVisible(subtrack))
-			{
+	if (isCompositeTrack(track))
+	    {
+	    struct track *subtrack;
+	    if (isWithCenterLabels(track))
+		y += fontHeight;
+	    for (subtrack = track->subtracks; subtrack != NULL;
+		 subtrack = subtrack->next)
+		if (isSubtrackVisible(subtrack))
+		    {
+		    if (subtrack->drawLeftLabels != NULL)
 			y = doOwnLeftLabels(subtrack, vg, font, y);
-			}
-		}
-            else
-                y = doOwnLeftLabels(track, vg, font, y);
-            }
+		    else
+			y += trackPlusLabelHeight(subtrack, fontHeight);
+		    }
+	    }
+        else if (track->drawLeftLabels != NULL)
+	    {
+	    y = doOwnLeftLabels(track, vg, font, y);
+	    }
         else
             {
-            if (withCenterLabels)
-                y += (fontHeight * labelCt);
-            y += track->height;
+	    y += trackPlusLabelHeight(track, fontHeight);
             }
         }
     }
@@ -7895,12 +7970,8 @@ if (withLeftLabels)
 y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
-    struct track *sub;
-    y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
-    for(sub = track->subtracks; sub != NULL; sub = sub->next)
-	{
-	y = doTrackMap(sub, y, fontHeight, trackPastTabX, trackPastTabWidth);
-	}
+    if (track->limitedVis != tvHide)
+	y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
     }
 
 /* Finish map. */
@@ -8007,15 +8078,17 @@ else
     loader = bedLoad6;
 
 /* limit to items above a specified score */
-safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
+/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
+ * by default, and the variable is named after the composite track. */
+safef(option, sizeof(option), "%s.scoreFilter", tg->tdb->tableName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
 optionScore = cartUsualInt(cart, option, optionScore);
 
-if (optionScore > 0)
+if (optionScore > 0 && tg->bedSize >= 5)
     {
-    safef(query, sizeof(query), "score >= %d",optionScore);
+    safef(query, sizeof(query), "score >= %d", optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
                          query, &rowOffset);
     }
@@ -8068,10 +8141,29 @@ struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
+char optionScoreStr[128];
+int optionScore;
+char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
+ * by default, and the variable is named after the composite track. */
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+      tg->tdb->tableName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		     extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    }
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 9);
@@ -8106,10 +8198,29 @@ struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
 boolean useItemRgb = FALSE;
+char optionScoreStr[128];
+int optionScore;
+char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
+/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
+ * by default, and the variable is named after the composite track. */
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+      tg->tdb->tableName);
+optionScore = cartUsualInt(cart, optionScoreStr, 0);
+if (optionScore > 0) 
+    {
+    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		     extraWhere, &rowOffset);
+    }
+else
+    {
+    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    }
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     bed = bedLoadN(row+rowOffset, 8);
@@ -8298,11 +8409,14 @@ boolean useItemRgb = FALSE;
 
 useItemRgb = bedItemRgb(tdb);
 
-safef( optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
+/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
+ * by default, and the variable is named after the composite track. */
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
+      tg->tdb->tableName);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (optionScore > 0) 
     {
-    safef(extraWhere, sizeof(extraWhere), "score >= %d",optionScore);
+    safef(extraWhere, sizeof(extraWhere), "score >= %d", optionScore);
     sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, extraWhere, &rowOffset);
     }
 else
@@ -8609,6 +8723,34 @@ hFreeConn(&conn);
 filterItems(tg, genePredClassFilter, "include");
 }
 
+void loadGenePredWithConfiguredName(struct track *tg)
+/* Convert bed info in window to linked feature. Include name
+ * in "extra" field (gene name, accession, or both, depending on UI) */
+{
+char buf[64];
+char *geneLabel;
+boolean useGeneName, useAcc;
+struct linkedFeatures *lf;
+
+safef(buf, sizeof buf, "%s.label", tg->mapName);
+geneLabel = cartUsualString(cart, buf, "gene");
+useGeneName = sameString(geneLabel, "gene") || sameString(geneLabel, "both");
+useAcc = sameString(geneLabel, "accession") || sameString(geneLabel, "both");
+
+loadGenePredWithName2(tg);
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    struct dyString *name = dyStringNew(64);
+    if (useGeneName)
+        dyStringAppend(name, lf->extra);
+    if (useGeneName && useAcc)
+        dyStringAppendC(name, '/');
+    if (useAcc)
+        dyStringAppend(name, lf->name);
+    lf->extra = dyStringCannibalize(&name);
+    }
+}
+
 Color genePredItemAttrColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw a genePred in based on looking it up in a itemAttr
  * table. */
@@ -8661,7 +8803,7 @@ if (hTableExists(classTable))
         /* scan through groups to find a match */
         for (class = 0; class < classCt; class++)
            {
-           if (startsWith(classes[class], row[0]))
+           if (sameString(classes[class], row[0]))
            /* get color from trackDb settings hash */
               {
               found = TRUE;
@@ -8744,7 +8886,7 @@ tg->itemColor = gencodeIntronColorItem;
 static void gencodeGeneMethods(struct track *tg)
 /* Load up custom methods for ENCODE Gencode gene track */
 {
-tg->loadItems = loadGenePredWithName2;
+tg->loadItems = loadGenePredWithConfiguredName;
 tg->itemName = gencodeGeneName;
 }
 
@@ -8896,13 +9038,17 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 }
 
 static int compositeTotalHeight(struct track *track, enum trackVisibility vis)
-/* Return total height of composite track */
+/* Return total height of composite track and set subtrack->height's. */
 {
 struct track *subtrack;
 int height = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (isSubtrackVisible(subtrack))
-        height += subtrack->totalHeight(subtrack, vis);
+	{
+	int h = subtrack->totalHeight(subtrack, vis);
+	subtrack->height = h;
+	height += h;
+	}
 track->height = height;
 return height;
 }
@@ -9004,14 +9150,16 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 subtrackCt = 0;
 for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
-    subtrackVisibleTdb(subtrack->tdb);
-    if (isSubtrackVisible(subtrack))
+    subtrackVisible(subtrack);
+    /* visibilities have not been set yet, so don't use isSubtrackVisible 
+     * which gates with visibility: */
+    if (isSubtrackSelected(subtrack))
         subtrackCt++;
     }
 /* if no subtracks are selected in cart, turn them all on */
 if (subtrackCt == 0)
     for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        setSubtrackVisible(subtrack->tdb->tableName, TRUE);
+        setSubtrackVisible(subtrack->mapName, TRUE);
 
 slSort(&track->subtracks, trackPriCmp);
 }
@@ -9411,7 +9559,7 @@ if (sameString(database, "hg17"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
-if (sameString(database, "mm5"))
+if (sameString(database, "mm6"))
     {
     hPrintf("<TD ALIGN=CENTER>");
     hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
@@ -9700,6 +9848,10 @@ registerTrackHandler("rabbitScore",valAlMethods);
 registerTrackHandler("armadilloScore",valAlMethods);
 registerTrackHandler("rnaGenes",rnaGenesMethods);
 registerTrackHandler("sargassoSea",sargassoSeaMethods);
+registerTrackHandler("llaPfuPrintC2", loweExpRatioMethods);
+
+/*Test for my own MA data
+registerTrackHandler("llaPfuPrintCExps",arrayMethods);*/
 /* MGC related */
 registerTrackHandler("mgcIncompleteMrna", mrnaMethods);
 registerTrackHandler("mgcFailedEst", estMethods);
@@ -9840,6 +9992,7 @@ if(hideAll || defaultTracks)
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
+    //uglyf("working on %s\n", track->shortLabel);
     if(!hTrackOnChrom(track->tdb, chromName)) 
 	{
 	track->limitedVis = tvHide;
@@ -9873,7 +10026,7 @@ if (!hideControls)
     if (hIsMgcServer())
 	{
 	if (sameString(organism, "Archaea"))
-            hPrintf("MGC Genome Browser on Archaeon %s Assembly", freezeName);
+            hPrintf("Genome Browser on Archaeon %s", freezeName);
 	else
             hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
 	}
@@ -9889,10 +10042,12 @@ if (!hideControls)
 	    }
 	else
 	    {
+
 	    if (sameString(clade, "ancestor"))
                 hPrintf("UCSC Genome Browser on %s Common Ancestor (%s)", organism, freezeName);
 	    else if (sameString(organism, "Archaea"))
                 hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
+
 	    else
                 hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
 	    }
@@ -9975,7 +10130,10 @@ if (showTrackControls)
 makeChromIdeoImage(&trackList, psOutput);
 
 /* Make clickable image and map. */
+//uglyf("calling makeActiveImage\n");
 makeActiveImage(trackList, psOutput);
+//uglyf("back from makeActiveImage\n");
+fflush(stdout);
 if (!hideControls)
     {
     struct controlGrid *cg = NULL;

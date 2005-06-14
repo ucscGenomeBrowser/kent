@@ -44,5 +44,13 @@ if ( $status ) then
  exit 1
 endif
 
+echo
+echo "Now restoring libs to 32 bit in branch sandbox"
+# note - doing this just to make it easier for people
+#  who have to move branch tag or do patching on 32bit cgis
+cd /cluster/bin/build/v${BRANCHNN}_branch/kent/src/
+make libs
+cd $WEEKLYBLD
+
 exit 0
 

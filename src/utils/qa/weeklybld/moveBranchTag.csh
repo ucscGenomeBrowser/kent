@@ -73,33 +73,38 @@ while ( $i <= $#files )
     echo
     set f = $files[$i]
     set r = $revs[$i]
-    cd $dir/$f:h
-    pwd
     # move the tag in cvs for this week's branch.
-    set cmd = "cvs tag -r${r} -F -B -b v${BRANCHNN}_branch $f:t"
+    set cmd = "cvs rtag -r${r} -F -B -b v${BRANCHNN}_branch kent/src/$f"
     echo $cmd
     $cmd
     if ( $status ) then 
-	echo "error moving cvs branch tag for $dir/$f"
+	echo "error moving cvs branch tag for $f"
 	set err=1
 	break
     endif
     echo $f >> $WEEKLYBLD/mbt-tag.txt
     # move the beta tag in cvs to track the change to this week's branch.
-    set cmd = "cvs tag -rv${BRANCHNN}_branch -F beta $f:t"
+    set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
     echo $cmd
     $cmd
     if ( $status ) then 
-	echo "error moving cvs beta tag for $dir/$f"
+	echo "error moving cvs beta tag for $f"
 	set err=1
 	break
     endif
     # update the file from cvs branch in branch sandbox.
-    set cmd = "cvs up -rv${BRANCHNN}_branch -dP $f:t"
+    if ( -d $dir/$f:h ) then
+	cd $dir/$f:h    # just dir and update one file
+    	set cmd = "cvs up -dP $f:t"
+    else
+	cd $dir/$f:h:h   # just go to parent and update because dir does not exist yet
+	set cmd = "cvs up -dP $f:h:t"
+    endif
+    pwd
     echo $cmd
-    $cmd
+    $cmd >& /dev/null
     if ( $status ) then 
-	echo "error in cvs update of $dir/$f"
+	echo "error in cvs update of $f"
 	set err=1
 	break
     endif

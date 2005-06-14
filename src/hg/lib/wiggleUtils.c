@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.39 2005/03/14 17:48:14 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.40 2005/06/02 22:50:03 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -20,8 +20,11 @@ if (html)
 	    "\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 
     puts ("<TABLE COLS=8 BGCOLOR=\""HG_COL_INSIDE"\" BORDER=1 HSPACE=0>\n");
-    printf("<TR><TH ALIGN=CENTER COLSPAN=8>%d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
+    if (histoResults)
+	printf("<TR><TH ALIGN=CENTER COLSPAN=8>%d bin histogram on %u values (zero count bins not shown)</TH></TR>\n",
 	    histoResults->binCount - 1, histoResults->count);
+    else
+	printf("<TR><TH ALIGN=CENTER COLSPAN=8> histogram (zero count bins not shown)</TH></TR>\n");
     puts ("<TR><TH ALIGN=LEFT> bin </TH>\n");
     puts ("    <TD COLSPAN=2 ALIGN=CENTER>\n");
     puts ("      <TABLE WIDTH=100% ALIGN=CENTER COLS=2 BGCOLOR=\"");
@@ -38,8 +41,11 @@ if (html)
     }
 else
     {
-    printf("#\t%d bin histogram on %u values (zero count bins not shown)\n",
-	histoResults->binCount - 1, histoResults->count);
+    if (histoResults)
+	printf("#\tbin histogram (zero count bins not shown)\n");
+    else
+	printf("#\t%d bin histogram on %u values (zero count bins not shown)\n",
+	    histoResults->binCount - 1, histoResults->count);
     printf("# bin    range   count  pValue   log2(pValue)  CPD   1.0 - CPD\n");
     printf("#      [min max)\n");
     }

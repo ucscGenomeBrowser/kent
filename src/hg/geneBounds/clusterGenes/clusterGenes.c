@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.22 2005/05/01 09:09:52 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.23 2005/05/24 18:29:54 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -35,9 +35,10 @@ errAbort(
   "   -trackNames - If specified, input are pairs of track names and files.\n"
   "    This is useful when the file names don't reflact the desired track\n"
   "    names.\n"
-  "   -requiredTracks=tracks - only output clusters that contain genes from\n"
-  "    all of a whitespace or comma seperated list of tracks.\n"
   "   -clusterBed=bed - output BED file for each cluster\n"
+  "   -joinContained - join genes that are contained within a larger loci\n"
+  "    into that loci. Intended as a way to handled fragments and exon-level\n"
+  "    predictsions, as genes-in-introns on the same strand are very rare.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -49,8 +50,9 @@ static struct optionSpec options[] = {
    {"chrom", OPTION_STRING|OPTION_MULTI},
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
-   {"requiredTracks", OPTION_STRING},
    {"clusterBed", OPTION_STRING},
+   {"cds", OPTION_BOOLEAN},
+   {"joinContained", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -58,8 +60,7 @@ static struct optionSpec options[] = {
 boolean gUseCds;
 boolean gTrackNames;
 struct track *gTracks = NULL;  /* all tracks */
-int gNumRequiredTracks = 0;
-char **gRequiredTracks = NULL;
+boolean gJoinContained = FALSE;
 
 struct track
 /*  Object representing a track. */
@@ -68,7 +69,6 @@ struct track
     char *name;            /* name to use */
     char *table;           /* table or file */
     boolean isDb;          /* is this a database table or file? */
-    boolean required;      /* track is flagged required for output selection */
 };
 
 struct track* trackNew(char* name,
@@ -111,11 +111,7 @@ if (name == NULL)
     }
 else
     track->name = cloneString(name);
-
 track->table = cloneString(table);
-
-if (gNumRequiredTracks > 0)
-    track->required = (stringArrayIx(track->name, gRequiredTracks, gNumRequiredTracks) >= 0);
 return track;
 }
 
@@ -204,24 +200,6 @@ for (gene = cluster->genes; gene != NULL; gene = gene->next)
     if (gene->track == track)
         return TRUE;
 return FALSE;
-}
-
-boolean clusterHaveRequiredTracks(struct cluster *cluster)
-/* check if the cluster has all of the required tracks */
-{
-struct track *track;
-for (track = gTracks; track != NULL; track = track->next)
-    if (track->required && !clusterHaveTrack(cluster, track))
-        return FALSE;  /* missing required */
-return TRUE;
-}
-
-boolean clusterShouldSave(struct cluster *cluster)
-/* check if cluster should be saved */
-{
-if (gNumRequiredTracks > 0)
-    return clusterHaveRequiredTracks(cluster);
-return TRUE;  /* no restrictions */
 }
 
 void clusterDump(struct cluster *cluster)
@@ -495,12 +473,7 @@ getConflicts(clusterList);
 
 /* assign ids */
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
-    {
-    if (clusterShouldSave(cluster))
-        cluster->id = nextClusterId++;
-    else
-        cluster->id = -1;  /* don't save this one */
-    }
+    cluster->id = nextClusterId++;
 
 /* Clean up and go home. */
 binKeeperFree(&cm->bk);
@@ -515,6 +488,7 @@ void clusterMakerAddExon(struct clusterMaker *cm, struct track *track, struct ge
 {
 struct dlNode *oldNode = *oldNodePtr;
 struct binElement *bEl, *bList = binKeeperFind(cm->bk, exonStart, exonEnd);
+verbose(4, "  %s %d-%d\n", track->name, exonStart, exonEnd);
 if (bList == NULL)
     {
     if (oldNode == NULL)
@@ -539,8 +513,7 @@ else
             else
                 {
                 /* Merge new cluster into old one. */
-                if (verboseLevel() >= 3)
-                    fprintf(stderr, "Merging %p %p\n", oldNode, newNode);
+                verbose(3, "Merging %p %p\n", oldNode, newNode);
                 mergeClusters(cm->bk, bEl->next, oldNode, newNode);
                 }
             }
@@ -557,26 +530,28 @@ void clusterMakerAdd(struct clusterMaker *cm, struct track *track, struct genePr
 int exonIx;
 struct dlNode *oldNode = NULL;
 
-/* Build up cluster list with aid of binKeeper.
- * For each exon look to see if it overlaps an
- * existing cluster.  If so put it into existing
- * cluster, otherwise make a new cluster.  The hard
- * case is where part of the gene is already in one
- * cluster and the exon overlaps with a new
- * cluster.  In this case merge the new cluster into
- * the old one. */
+/* Build up cluster list with aid of binKeeper.  For each exon look to see if
+ * it overlaps an existing cluster.  If so put it into existing cluster,
+ * otherwise make a new cluster.  The hard case is where part of the gene is
+ * already in one cluster and the exon overlaps with a new cluster.  In this
+ * case merge the new cluster into the old one.  If we are joining contained
+ * genes, the only gene range is added as if it was a single exon. */
 
-if (verboseLevel() >= 2)
-    fprintf(stderr, "%s %s %d-%d\n", track->name, gp->name, gp->txStart, gp->txEnd);
-
-for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
+verbose(2, "%s %s %d-%d\n", track->name, gp->name, gp->txStart, gp->txEnd);
+if (gJoinContained)
     {
-    int exonStart, exonEnd;
-    if (gpGetExon(gp, exonIx, gUseCds, &exonStart, &exonEnd))
+    int start =(gUseCds) ? gp->cdsStart : gp->txStart;
+    int end =(gUseCds) ? gp->cdsEnd : gp->txEnd;
+    if (end > start) 
+        clusterMakerAddExon(cm, track, gp, start, end, &oldNode);
+    }
+else
+    {
+    for (exonIx = 0; exonIx < gp->exonCount; ++exonIx)
         {
-        if (verboseLevel() >= 4)
-            fprintf(stderr, "  %s %d %d\n", track->name, exonIx, exonStart);
-        clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &oldNode);
+        int exonStart, exonEnd;
+        if (gpGetExon(gp, exonIx, gUseCds, &exonStart, &exonEnd))
+            clusterMakerAddExon(cm, track, gp, exonStart, exonEnd, &oldNode);
         }
     }
 }
@@ -588,8 +563,7 @@ void loadGenes(struct clusterMaker *cm, struct sqlConnection *conn,
 {
 struct genePredReader *gpr;
 struct genePred *gp;
-if (verboseLevel() >= 2)
-    fprintf(stderr, "%s %s %c\n", track->table, chrom, strand);
+verbose(2, "%s %s %c\n", track->table, chrom, strand);
 
 /* setup reader for file or table */
 if (track->isDb)
@@ -644,19 +618,10 @@ prConflicts(f, cg->cdsConflicts);
 fprintf(f, "\n");
 }
 
-void clusterGenesOnStrand(struct sqlConnection *conn,
-                          char *chrom, char strand, FILE *outFh, FILE *clBedFh)
-/* Scan through genes on this strand, cluster, and write clusters to file. */
+void outputClusters(struct cluster *clusterList, FILE *outFh, FILE *clBedFh)
+/* output clusters */
 {
-struct genePred *gpList = NULL;
-struct cluster *clusterList = NULL, *cluster;
-struct track* track;
-struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
-
-for (track = gTracks; track != NULL; track = track->next)
-    loadGenes(cm, conn, track, chrom, strand, &gpList);
-
-clusterList = clusterMakerFinish(&cm);
+struct cluster *cluster;
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
     if (cluster->id >= 0)
         {
@@ -669,8 +634,25 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
                     cluster->chrom, cluster->start, cluster->end,
                     cluster->id);
         }
+}
+
+void clusterGenesOnStrand(struct sqlConnection *conn,
+                          char *chrom, char strand, FILE *outFh, FILE *clBedFh)
+/* Scan through genes on this strand, cluster, and write clusters to file. */
+{
+struct genePred *gpList = NULL;
+struct cluster *clusterList = NULL;
+struct track* track;
+struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
+
+for (track = gTracks; track != NULL; track = track->next)
+    loadGenes(cm, conn, track, chrom, strand, &gpList);
+
+clusterList = clusterMakerFinish(&cm);
+outputClusters(clusterList, outFh, clBedFh);
 
 genePredFreeList(&gpList);
+clusterFreeList(&clusterList);
 }
 
 struct track *buildTrackList(int specCount, char *specs[])
@@ -742,24 +724,13 @@ carefulClose(&clBedFh);
 carefulClose(&outFh);
 }
 
-void parseRequiredTracks()
-/* parse the -requiredTracks option */
-{
-static char *separators = " \t\r,";
-char *trackSpec = optionVal("requiredTracks", NULL);
-gNumRequiredTracks = chopString(trackSpec, separators, NULL, 0);
-gRequiredTracks = needMem(gNumRequiredTracks * sizeof(char*));
-chopString(trackSpec, separators, gRequiredTracks, gNumRequiredTracks);
-}
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
 gUseCds = optionExists("cds");
 gTrackNames = optionExists("trackNames");
-if (optionExists("requiredTracks"))
-    parseRequiredTracks();
+gJoinContained = optionExists("joinContained");
 
 if (!gTrackNames)
     {

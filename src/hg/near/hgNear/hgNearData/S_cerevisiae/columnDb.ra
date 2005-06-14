@@ -74,3 +74,10 @@ goaIdColumn dbObjectId
 name description
 type knownDetails sgdDescription name description
 
+name p2p
+type distance yeastP2P query target distance
+visibility off
+shortLabel P2P
+longLabel Protein-Protein Interaction Network
+priority 12
+

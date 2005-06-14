@@ -88,6 +88,8 @@ type wigMaf 0.0 1.0
 # yLinOnOff Off
 # autoScaleDefault Off
 #pairwise fakePairwise
+speciesTree ((tenrec,elephant),(armadillo,((bosTau1, canFam1),((rabbit,(rn3,mm6)),(rheMac1,(panTro1,hg17))panHg4)mmHg4)canHg4));
+speciesTarget hg17
 summary tba14waySummary
 speciesOrder mmHg4 panHg4 hg17 panTro1 rheMac1 rabbit rn3 mm6 bosTau1 canFam1 armadillo tenrec elephant 
 

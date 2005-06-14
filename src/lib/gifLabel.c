@@ -4,7 +4,7 @@
 #include "memgfx.h"
 #include "gifLabel.h"
 
-static char const rcsid[] = "$Id: gifLabel.c,v 1.3 2005/02/22 23:07:54 hiram Exp $";
+static char const rcsid[] = "$Id: gifLabel.c,v 1.7 2005/06/06 20:20:10 galt Exp $";
 
 int gifLabelMaxWidth(char **labels, int labelCount)
 /* Return maximum pixel width of labels.  It's ok to have
@@ -53,19 +53,46 @@ for (i=labelCount-1; i >= 0; --i)
 return mg;
 }
 
+
+boolean sameFileContents(char *n1, char *n2)
+/* compare two files and return true if their contents are identical using binary compare */
+{
+int r1 = 0, r2 = 0;
+char buf1[4096];
+char buf2[4096];
+FILE *f1 = NULL, *f2 = NULL;
+boolean result = TRUE;
+f1 = fopen(n1,"r"); if (f1 == NULL) { return FALSE; }
+f2 = fopen(n2,"r"); if (f2 == NULL) { fclose(f1); return FALSE; }
+while (TRUE)
+    {
+    r1 = fread(buf1, 1, sizeof(buf1), f1);
+    r2 = fread(buf2, 1, sizeof(buf2), f2);
+    if (r1 != r2) { result = FALSE; break; } /* diff file size */
+    if (r1 == 0) { break; }  /* eof */
+    if (memcmp(buf1,buf2,r1)!=0) { result = FALSE; break; } /* file contents differ */
+    }
+fclose(f2);
+fclose(f1);
+return result;
+}
+
+
 void gifLabelVerticalText(char *fileName, char **labels, int labelCount, 
 	int height)
 /* Make a gif file with given labels.  This will check to see if fileName
  * exists already, and if so do nothing. */
 {
-if (!fileExists(fileName))
-    {
-    struct memGfx *straight = altColorLabels(labels, labelCount, height);
-    struct memGfx *rotated = mgRotate90(straight);
+struct memGfx *straight = altColorLabels(labels, labelCount, height);
+struct memGfx *rotated = mgRotate90(straight);
+char tempName[512];
+safef(tempName, sizeof(tempName), "%s_trash", fileName);
+mgSaveGif(rotated, tempName);  /* note we cannot delete this later because of permissions */
+/* the savings here is in the user's own browser cache - not updated if no change */
+if (!sameFileContents(tempName,fileName))  
     mgSaveGif(rotated, fileName);
-    mgFree(&straight);
-    mgFree(&rotated);
-    }
+mgFree(&straight);
+mgFree(&rotated);
 }
 
 

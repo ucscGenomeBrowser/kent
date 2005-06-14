@@ -114,3 +114,10 @@ max 10.5
 expScale 1.5
 forceGrayscale on
 representatives 34,35,13,14,15,16,11,12,-1,4,9,6,7,21,30,31,45,-1,42,53,18,-1,47,17,36,54,32,-1,52,26,-1,37,44,25,33,40,24,8,-1,22,2,-1,27,43,0,48,49,-1,10,19,23,29,3,-1,38,20,1,-1,41,46,51,50,-1,5,28,39
+
+name mouseLandscapeDistance
+shortLabel Mouse Land Dist
+longLabel Mouse Landscape Tissue Expression from Selected Gene
+priority 3.2
+visibility off
+type distance mouseLandscapeDistance query target distance

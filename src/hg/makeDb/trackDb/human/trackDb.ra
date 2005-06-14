@@ -1,3 +1,4 @@
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -394,6 +395,72 @@ priority 144
 visibility hide
 type bed 4 .
 
+track tajdSnp
+compositeTrack on
+shortLabel Tajima's D SNPs
+longLabel Tajima's D SNPs
+group varRep
+priority 144.6
+visibility hide
+type bed 4 . 
+
+track tajdSnpAD
+subTrack tajdSnp
+shortLabel SNPs AD
+longLabel  SNPs from African Descent
+color 200,100,0
+altColor 0,100,200
+priority 1
+
+track tajdSnpED
+subTrack tajdSnp
+shortLabel SNPs ED
+longLabel  SNPs from European Descent
+color 200,100,0
+altColor 0,100,200
+priority 3
+
+track tajdSnpXD
+subTrack tajdSnp
+shortLabel SNPs XD
+longLabel  SNPs from Chinese Descent
+color 200,100,0
+altColor 0,100,200
+priority 5
+
+track tajD
+compositeTrack on
+shortLabel Tajima's D
+longLabel Tajima's D
+group varRep
+visibility hide
+priority 144.65
+type bedGraph 4 
+
+track tajdAD
+subTrack tajD
+shortLabel Tajima's D AD
+longLabel  Tajima's D from African Descent 
+color 200,100,0
+altColor 0,100,200
+priority 2
+
+track tajdED
+subTrack tajD
+shortLabel Tajima's D ED
+longLabel  Tajima's D from European Descent
+color 200,100,0
+altColor 0,100,200
+priority 4
+
+track tajdXD
+subTrack tajD
+shortLabel Tajima's D XD
+longLabel  Tajima's D from Chinese Descent
+color 200,100,0
+altColor 0,100,200
+priority 6
+
 track perlegen
 shortLabel Perlegen Haplotypes
 longLabel Perlegen Common High-Resolution Haplotype Blocks
@@ -526,12 +593,14 @@ group regulation
 priority 98.9
 maxHeightPixels 100:30:10
 canPack off
+centerLabelsDense on
 type wig 0 1000
 
-track A375_cytosolic_polyAPlusTxn
+track A375CytosolicPolyAPlusTxn
 shortLabel A375 Txn
 longLabel A375 Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.01
 autoScaleDefault Off
 color 175,150,128
@@ -542,12 +611,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy A375_cytosolic_polyAPlusTnFg
+wigColorBy A375CytosolicPolyAPlusTnFg
 
-track A375_cytosolic_polyAPlusTnFg
+track A375CytosolicPolyAPlusTnFg
 shortLabel A375 TnFg
 longLabel A375 Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.02
 visibility pack
 color 35,35,175
@@ -557,10 +627,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track FHs738Lu_cytosolic_polyAPlusTxn
+track FHs738LuCytosolicPolyAPlusTxn
 shortLabel FHs738Lu Txn
 longLabel FHs738Lu Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.03
 autoScaleDefault Off
 color 175,150,128
@@ -571,12 +642,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy FHs738Lu_cytosolic_polyAPlusTnFg
+wigColorBy FHs738LuCytosolicPolyAPlusTnFg
 
-track FHs738Lu_cytosolic_polyAPlusTnFg
+track FHs738LuCytosolicPolyAPlusTnFg
 shortLabel FHs738Lu TnFg
 longLabel FHs738Lu Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.04
 visibility pack
 color 35,35,175
@@ -586,10 +658,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track HepG2_cytosolic_polyAPlusTxn
+track HepG2CytosolicPolyAPlusTxn
 shortLabel HepG2+ Cyto Txn
 longLabel HepG2 Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.05
 autoScaleDefault Off
 color 175,150,128
@@ -600,12 +673,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy HepG2_cytosolic_polyAPlusTnFg
+wigColorBy HepG2CytosolicPolyAPlusTnFg
 
-track HepG2_cytosolic_polyAPlusTnFg
+track HepG2CytosolicPolyAPlusTnFg
 shortLabel HepG2+ Cyto TnFg
 longLabel HepG2 Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.06
 visibility pack
 color 35,35,175
@@ -615,10 +689,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track HepG2_nuclear_polyAPlusTxn
+track HepG2NuclearPolyAPlusTxn
 shortLabel HepG2+ Nuc Txn
 longLabel HepG2 Nuclear polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.061
 autoScaleDefault Off
 color 175,150,128
@@ -629,12 +704,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy HepG2_nuclear_polyAPlusTnFg
+wigColorBy HepG2NuclearPolyAPlusTnFg
 
-track HepG2_nuclear_polyAPlusTnFg
+track HepG2NuclearPolyAPlusTnFg
 shortLabel HepG2+ Nuc TnFg
 longLabel HepG2 Nuclear polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.062
 visibility pack
 color 35,35,175
@@ -644,10 +720,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track HepG2_cytosolic_polyAMinusTxn
+track HepG2CytosolicPolyAMinusTxn
 shortLabel HepG2- Cyto Txn
 longLabel HepG2 Cytosolic polyA-, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.063
 autoScaleDefault Off
 color 175,150,128
@@ -658,12 +735,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy HepG2_cytosolic_polyAMinusTnFg
+wigColorBy HepG2CytosolicPolyAMinusTnFg
 
-track HepG2_cytosolic_polyAMinusTnFg
+track HepG2CytosolicPolyAMinusTnFg
 shortLabel HepG2- Cyto TnFg
 longLabel HepG2 Cytosolic polyA-, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.064
 visibility pack
 color 35,35,175
@@ -673,10 +751,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track HepG2_nuclear_polyAMinusTxn
+track HepG2NuclearPolyAMinusTxn
 shortLabel HepG2- Nuc Txn
 longLabel HepG2 Nuclear polyA-, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.065
 autoScaleDefault Off
 color 175,150,128
@@ -687,12 +766,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy HepG2_nuclear_polyAMinusTnFg
+wigColorBy HepG2NuclearPolyAMinusTnFg
 
-track HepG2_nuclear_polyAMinusTnFg
+track HepG2NuclearPolyAMinusTnFg
 shortLabel HepG2- Nuc TnFg
 longLabel HepG2 Nuclear polyA-, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.067
 visibility pack
 color 35,35,175
@@ -702,10 +782,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track Jurkat_cytosolic_polyAPlusTxn
+track JurkatCytosolicPolyAPlusTxn
 shortLabel Jurkat Txn
 longLabel Jurkat Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.07
 autoScaleDefault Off
 color 175,150,128
@@ -716,12 +797,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy Jurkat_cytosolic_polyAPlusTnFg
+wigColorBy JurkatCytosolicPolyAPlusTnFg
 
-track Jurkat_cytosolic_polyAPlusTnFg
+track JurkatCytosolicPolyAPlusTnFg
 shortLabel Jurkat TnFg
 longLabel Jurkat Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.08
 visibility pack
 color 35,35,175
@@ -731,10 +813,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track NCCIT_cytosolic_polyAPlusTxn
+track NCCITCytosolicPolyAPlusTxn
 shortLabel NCCIT Txn
 longLabel NCCIT Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.09
 autoScaleDefault Off
 color 175,150,128
@@ -745,12 +828,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy NCCIT_cytosolic_polyAPlusTnFg
+wigColorBy NCCITCytosolicPolyAPlusTnFg
 
-track NCCIT_cytosolic_polyAPlusTnFg
+track NCCITCytosolicPolyAPlusTnFg
 shortLabel NCCIT TnFg
 longLabel NCCIT Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.10
 visibility pack
 color 35,35,175
@@ -760,10 +844,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track PC3_cytosolic_polyAPlusTxn
+track PC3CytosolicPolyAPlusTxn
 shortLabel PC3 Txn
 longLabel PC3 Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.11
 autoScaleDefault Off
 color 175,150,128
@@ -774,12 +859,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy PC3_cytosolic_polyAPlusTnFg
+wigColorBy PC3CytosolicPolyAPlusTnFg
 
-track PC3_cytosolic_polyAPlusTnFg
+track PC3CytosolicPolyAPlusTnFg
 shortLabel PC3 TnFg
 longLabel PC3 Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.12
 visibility pack
 color 35,35,175
@@ -789,10 +875,11 @@ type bed 4 +
 subTrack affyTxnPhase2
 noInherit on
 
-track SK_N_AS_cytosolic_polyAPlusTxn
+track SKNASCytosolicPolyAPlusTxn
 shortLabel SK-N-AS Txn
 longLabel SK-N-AS Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.13
 autoScaleDefault Off
 color 175,150,128
@@ -803,12 +890,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy SK_N_AS_cytosolic_polyAPlusTnFg
+wigColorBy SKNASCytosolicPolyAPlusTnFg
 
-track SK_N_AS_cytosolic_polyAPlusTnFg
+track SKNASCytosolicPolyAPlusTnFg
 shortLabel SK-N-AS TnFg
 longLabel SK-N-AS Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.14
 visibility pack
 color 35,35,175
@@ -819,10 +907,11 @@ subTrack affyTxnPhase2
 noInherit on
 
 
-track U87_cytosolic_polyAPlusTxn
+track U87CytosolicPolyAPlusTxn
 shortLabel U87 Txn
 longLabel U87 Cytosolic polyA+, Affy Transcriptome
 group regulation
+centerLabelsDense on
 priority 99.15
 autoScaleDefault Off
 color 175,150,128
@@ -834,12 +923,13 @@ chromosomes chr6,chr7,chr13,chr14,chr19,chr20,chr21,chr22,chrX,chrY
 type wig 
 subTrack affyTxnPhase2
 noInherit on
-wigColorBy U87_cytosolic_polyAPlusTnFg
+wigColorBy U87CytosolicPolyAPlusTnFg
 
-track U87_cytosolic_polyAPlusTnFg
+track U87CytosolicPolyAPlusTnFg
 shortLabel U87 TnFg
 longLabel U87 Cytosolic polyA+, Affy Transfrags
 group regulation
+centerLabelsDense on
 priority 99.16
 visibility pack
 color 35,35,175

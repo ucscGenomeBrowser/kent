@@ -687,9 +687,10 @@ if(val <= -10000)
 /* we approximate a float by storing it as an int,
    thus to bring us back to right scale divide by 1000.
    i.e. 1.27 was stored as 1270 and needs to be converted to 1.27 */
+ 
 if(tg->limitedVis == tvDense)
     absVal = absVal/1000;
-
+ 
 if(!exprBedColorsMade)
     makeRedGreenShades(vg);
 
@@ -701,6 +702,7 @@ else
     maxDeviation = denseMax;
 
 /* cap the value to be less than or equal to maxDeviation */
+
 if(absVal > maxDeviation)
     absVal = maxDeviation;
 
@@ -710,7 +712,80 @@ if(absVal > maxDeviation)
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val > 0) 
-    return shadesOfRed[colorIndex];
+	
+  	  return shadesOfRed[colorIndex];
+	 
+else 
+    {
+    if(colorSchemeFlag == 0)
+	return shadesOfGreen[colorIndex];
+    else 
+	return shadesOfBlue[colorIndex];
+    }
+}
+
+Color loweExpressionScoreColor(struct track *tg, float val, struct vGfx *vg,
+		 float denseMax, float fullMax) 
+/* Does the score->color conversion for various microarray tracks */
+/* NOTE: item is a linkedFeatures struct */
+{
+float absVal = fabs(val);
+int colorIndex = 0;
+float maxDeviation = 1.0;
+static char *colorSchemes[] = { "rg", "rb" };
+static char *colorScheme = NULL;
+static int colorSchemeFlag = -1;
+if(val>5000){ absVal=fabs(absVal-10000);}
+/* set up the color scheme items if not done yet */
+if(colorScheme == NULL)
+    colorScheme = cartUsualString(cart, "exprssn.color", "rg");
+if(colorSchemeFlag == -1)
+    colorSchemeFlag = stringArrayIx(colorScheme, colorSchemes, ArraySize(colorSchemes));
+
+/* if val is error value show make it gray */
+if(val <= -10000)
+    return shadesOfGray[5];
+
+/* we approximate a float by storing it as an int,
+   thus to bring us back to right scale divide by 1000.
+   i.e. 1.27 was stored as 1270 and needs to be converted to 1.27 */
+ 
+if(tg->limitedVis == tvDense)
+    absVal = absVal/1000;
+ 
+if(!exprBedColorsMade)
+    makeRedGreenShades(vg);
+
+/* cap the value to be less than or equal to maxDeviation */
+if (tg->limitedVis == tvFull || tg->limitedVis == tvPack || tg->limitedVis == tvSquish)
+
+    maxDeviation = fullMax;
+else 
+    maxDeviation = denseMax;
+
+/* cap the value to be less than or equal to maxDeviation */
+if(val > 5000)maxDeviation=3;
+if(absVal > maxDeviation)
+    absVal = maxDeviation;
+
+/* project the value into the number of colors we have.  
+ * i.e. if val = 1.0 and max is 2.0 and number of shades is 16 then index would be
+ * 1 * 15 /2.0 = 7.5 = 7
+ */
+colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
+if(val > 0) 
+	if(val == 10001){
+		return lighterColor(vg, shadesOfSea[2]);
+	}
+	else if(val == 10002){
+		return lighterColor(vg, shadesOfSea[9]);
+	}
+	else if(val == 10003){
+		return shadesOfSea[9];
+	}
+	else{
+  return shadesOfRed[colorIndex];
+	 }
 else 
     {
     if(colorSchemeFlag == 0)
@@ -726,6 +801,14 @@ Color expressionColor(struct track *tg, void *item, struct vGfx *vg,
 {
 struct linkedFeatures *lf = item;
 return expressionScoreColor(tg, lf->score, vg, denseMax, fullMax);
+}
+
+Color loweExpressionColor(struct track *tg, void *item, struct vGfx *vg,
+		 float denseMax, float fullMax) 
+/* Does the score->color conversion for various microarray tracks */
+{
+struct linkedFeatures *lf = item;
+return loweExpressionScoreColor(tg, lf->score, vg, denseMax, fullMax);
 }
 
 Color nci60Color(struct track *tg, void *item, struct vGfx *vg)
@@ -840,6 +923,30 @@ if(tg->customInt != 1)
 else
     {
     return expressionColor(tg, item, vg, 1.0, 3.0);
+    }
+}
+
+Color loweRatioColor(struct track *tg, void *item, struct vGfx *vg)
+/* Does the score->color conversion  */
+{
+struct linkedFeatures *lf;
+struct linkedFeaturesSeries *lfs;
+if(!exprBedColorsMade)
+    makeRedGreenShades(vg);
+if(tg->visibility == tvDense)
+    {
+    lfs = item;
+    if (trackDbSetting(tg->tdb, EXP_COLOR_DENSE))
+        /* scaled by 1000.  Brighten up just a bit... */
+        return loweExpressionScoreColor(tg, lfs->grayIx * 1100, vg, tg->expScale, 
+                                                        tg->expScale);
+    else
+        return MG_BLACK;
+    }
+else
+    {
+    lf = item;
+    return loweExpressionColor(tg, item, vg, tg->expScale, tg->expScale);
     }
 }
 
@@ -1032,3 +1139,10 @@ tg->itemColor = affyUclaNormColor;
 tg->trackFilter = lfsFromAffyUclaNormBed;
 }
 
+void loweExpRatioMethods(struct track *tg)
+/* Set up methods for expRatio type tracks in general. */
+{
+expRatioMethods(tg);
+tg->itemColor = loweRatioColor;
+
+}

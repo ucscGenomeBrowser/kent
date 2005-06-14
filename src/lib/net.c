@@ -13,7 +13,7 @@
 #include "net.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.38 2005/05/17 23:40:08 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.40 2005/06/07 05:53:25 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -285,7 +285,10 @@ else
 t = strchr(s, ':');
 if (t == NULL)
    {
-   strcpy(parsed->port, "80");
+   if (sameWord(parsed->protocol,"http"))
+      strcpy(parsed->port, "80");
+   if (sameWord(parsed->protocol,"ftp"))
+      strcpy(parsed->port, "21");
    }
 else
    {
@@ -298,6 +301,173 @@ else
 /* What's left is the host. */
 strncpy(parsed->host, s, sizeof(parsed->host));
 }
+
+
+
+/* this was cloned from rudp.c - move it later for sharing */
+static boolean readReadyWait(int sd, int microseconds)
+/* Wait for descriptor to have some data to read, up to
+ * given number of microseconds. */
+{
+struct timeval tv;
+fd_set set;
+int readyCount;
+
+for (;;)
+    {
+    if (microseconds > 1000000)
+	{
+	tv.tv_sec = microseconds/1000000;
+	tv.tv_usec = microseconds%1000000;
+	}
+    else
+	{
+	tv.tv_sec = 0;
+	tv.tv_usec = microseconds;
+	}
+    FD_ZERO(&set);
+    FD_SET(sd, &set);
+    readyCount = select(sd+1, &set, NULL, NULL, &tv);
+    if (readyCount == EINTR)	/* Select interrupted, not timed out. */
+	continue;
+    else if (readyCount < 0)
+        warn("select failure in rudp: %s", strerror(errno));
+    return readyCount > 0;	/* Zero readCount indicates time out */
+    }
+}
+
+struct dyString *sendFtpCommand(int sd, char *cmd, boolean seeResult, boolean noTimeoutError)
+/* send command to ftp server and check resulting reply code, 
+   give error if not desired reply */
+{   
+struct dyString *rs = NULL;
+int reply = 0;
+char buf[4*1024];
+int readSize;
+char *startLastLine = NULL;
+long timeOut = 1000000; /* wait in microsec */
+
+write(sd, cmd, strlen(cmd));
+
+rs = newDyString(4*1024);
+while (1)
+    {
+    while (1)
+	{
+	if (!readReadyWait(sd, timeOut))
+	    {
+	    if (!noTimeoutError)
+		errAbort("ftp server response timed out > %ld microsec",timeOut);
+	    return rs;
+	    }
+	if ((readSize = read(sd, buf, sizeof(buf))) == 0)
+	    break;
+
+	dyStringAppendN(rs, buf, readSize);
+	if (endsWith(rs->string,"\n"))
+	    break;
+	}
+	
+    /* find the start of the last line in the buffer */
+    startLastLine = rs->string+strlen(rs->string)-1;
+    if (startLastLine >= rs->string)
+	if (*startLastLine == '\n') 
+	    --startLastLine;
+    while ((startLastLine >= rs->string) && (*startLastLine != '\n'))
+	--startLastLine;
+    ++startLastLine;
+	
+    if (strlen(startLastLine)>4)
+      if (
+	isdigit(startLastLine[0]) &&
+	isdigit(startLastLine[1]) &&
+	isdigit(startLastLine[2]) &&
+	startLastLine[3]==' ')
+	break;
+	
+    /* must be some text info we can't use, ignore it till we get status code */
+
+    }
+
+reply = atoi(startLastLine);
+
+if ((reply < 200) || (reply > 399))
+    errAbort("ftp server error on cmd=[%s] response=[%s]\n",cmd,rs->string);
+if (!seeResult) dyStringFree(&rs);
+
+return rs;
+}
+
+
+int parsePasvPort(char *rs)
+/* parse PASV reply to get the port and return it */
+{
+char *rsCopy = strdup(rs);
+char *words[7];
+int wordCount;
+char *rsStart = strchr(rs,'(');
+char *rsEnd = strchr(rs,')');
+int result = 0;
+rsStart++;
+*rsEnd=0;
+wordCount = chopString(rsStart, ",", words, ArraySize(words));
+if (wordCount != 6)
+    errAbort("PASV reply does not parse correctly");
+result = atoi(words[4])*256+atoi(words[5]);    
+freez(&rsCopy);
+return result;
+}    
+
+
+int netGetOpenFtp(char *url)
+/* Return a file handle that will read the url. */
+{
+struct netParsedUrl npu;
+struct dyString *dy = newDyString(512);
+struct dyString *rs = NULL;
+int sd;
+long timeOut = 1000000; /* wait in microsec */
+
+/* Parse the URL and connect. */
+netParseUrl(url, &npu);
+if (!sameString(npu.protocol, "ftp"))
+    errAbort("Sorry, can only netOpen ftp's currently");
+sd = netMustConnect(npu.host, atoi(npu.port));
+
+/* Ask remote ftp server for a file. */
+
+/* don't send a command, just read the welcome msg */
+if (readReadyWait(sd, timeOut))
+    sendFtpCommand(sd, "", FALSE, FALSE);
+
+sendFtpCommand(sd, "USER anonymous\r\n", FALSE, FALSE);
+
+sendFtpCommand(sd, "PASS x@genome.ucsc.edu\r\n", FALSE, FALSE);
+
+rs = sendFtpCommand(sd, "PASV\r\n", TRUE, FALSE);
+/* 227 Entering Passive Mode (128,231,210,81,222,250) */
+
+dyStringPrintf(dy, "RETR %s\r\n", npu.file);
+/* we can't wait for reply because 
+   we need to start the next fetch connect 
+   but then if there is an error e.g. missing file,
+   then we don't see the err msg because we
+   already closed the port and are waiting.
+   And our timeout is long - indefinitely so?
+*/
+sendFtpCommand(sd, dy->string, FALSE, TRUE);  
+
+close(sd);
+
+sd = netMustConnect(npu.host, parsePasvPort(rs->string));
+
+/* Clean up and return handle. */
+dyStringFree(&dy);
+dyStringFree(&rs);
+return sd;
+}
+
+
 
 int netOpenHttpExt(char *url, char *method, boolean end)
 /* Return a file handle that will read the url.  If end is not
@@ -379,7 +549,13 @@ int netUrlOpen(char *url)
 /* Return unix low-level file handle for url. 
  * Just close(result) when done. */
 {
-return netGetOpenHttp(url);
+if (startsWith("http://",url) || (stringIn("://", url) == NULL))
+    return netGetOpenHttp(url);
+else if (startsWith("ftp://",url))
+    return netGetOpenFtp(url);
+else    
+    errAbort("Sorry, can only netOpen http and ftp currently");
+return -1;    
 }
 
 struct dyString *netSlurpFile(int sd)
@@ -400,7 +576,6 @@ struct dyString *netSlurpUrl(char *url)
 {
 int sd = netUrlOpen(url);
 struct dyString *dy = netSlurpFile(sd);
-
 close(sd);
 return dy;
 }
@@ -463,8 +638,11 @@ if (sd < 0)
 else
     {
     struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
-    if (!netSkipHttpHeaderLines(lf))
-	lineFileClose(&lf);
+    if (startsWith("http://",url))
+	{
+	if (!netSkipHttpHeaderLines(lf))
+	    lineFileClose(&lf);
+	}
     return lf;
     }
 }

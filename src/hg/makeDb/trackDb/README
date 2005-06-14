@@ -222,6 +222,11 @@ a gradient from color to altColor.
 To hide a subtrack initially, append "off" to the end of the
 subtrack setting.
 
+To include a subtrack of a different type, specify
+the complete settings for the subtrack type, and use the "noInherit on"
+trackDb setting.  This has not been entirely generalized -- use with care.
+
+
 Example:
 ---------------------
 track encodeDnaRep

@@ -7,16 +7,18 @@
 #include "psl.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.3 2003/12/10 23:17:14 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.4 2005/05/29 16:38:00 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"suffix", OPTION_STRING},
+    {"keepTranslated", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 /* Values parsed from command line */
 static char* suffix = NULL;
+static boolean keepTranslated = FALSE;
 
 /* count of non-fatal errors */
 static int errCount = 0;
@@ -51,7 +53,22 @@ errAbort(
   "  -suffix=str - append str to the query ids in the output alignment.\n"
   "   Useful with protein alignments, where the result is not actually\n"
   "   and alignment of the protein.\n"
+  "  -keepTranslated - if either psl is translated, the output psl will\n"
+  "   be translated (both strands explicted).  Normally an untranslated\n"
+  "   psl will always be created\n"
   );
+}
+
+static char pslTStrand(struct psl *psl)
+/* get the target strand, return implied + for untranslated */
+{
+return ((psl->strand[1] == '-') ? '-' : '+');
+}
+
+static char pslQStrand(struct psl *psl)
+/* get the query strand */
+{
+return psl->strand[0];
 }
 
 void pslProtToNA(struct psl *psl)
@@ -110,6 +127,8 @@ struct psl* createMappedPsl(struct psl* psl1, struct psl* psl2,
 struct psl* mappedPsl;
 int len;
 int newSize = (mappedPslMax * sizeof(unsigned));
+assert(pslTStrand(psl1) == pslQStrand(psl2));
+
 AllocVar(mappedPsl);
 len = strlen(psl1->qName) + 1;
 if (suffix != NULL)
@@ -119,10 +138,13 @@ strcpy(mappedPsl->qName, psl1->qName);
 if (suffix != NULL)
     strcat(mappedPsl->qName, suffix);
 mappedPsl->qSize = psl1->qSize;
-
 mappedPsl->tName = cloneString(psl2->tName);
 mappedPsl->tSize = psl2->tSize;
-strcpy(mappedPsl->strand, psl2->strand);
+
+/* strand can be taken from both alignments, since common sequence is in same
+ * orientation. */
+mappedPsl->strand[0] = pslQStrand(psl1);
+mappedPsl->strand[1] = pslTStrand(psl2);
 
 /* allocate initial array space */
 mappedPsl->blockSizes = needMem(newSize);
@@ -168,25 +190,37 @@ psl->blockSizes[newIBlk] = blk->qEnd - blk->qStart;
 /* lie about match counts. */
 psl->match += psl->blockSizes[newIBlk];
 psl->blockCount++;
-
 }
 
-void finishMappedPsl(struct psl* mappedPsl)
-/* finish filling in mapped PSL */
+void setPslBounds(struct psl* mappedPsl)
+/* set sequences bounds on mapped PSL */
 {
 int lastBlk = mappedPsl->blockCount-1;
 
 /* set start/end of sequences */
 mappedPsl->qStart = mappedPsl->qStarts[0];
 mappedPsl->qEnd = mappedPsl->qStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
-if (mappedPsl->strand[0] == '-')
+if (pslQStrand(mappedPsl) == '-')
     reverseUnsignedRange(&mappedPsl->qStart, &mappedPsl->qEnd, mappedPsl->qSize);
 
 mappedPsl->tStart = mappedPsl->tStarts[0];
 mappedPsl->tEnd = mappedPsl->tStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
-if (mappedPsl->strand[1] == '-')
+if (pslTStrand(mappedPsl) == '-')
     reverseUnsignedRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
+}
 
+void adjustOrientation(struct psl *psl1, char *psl2OrigStrand,
+                       struct psl* mappedPsl)
+/* adjust strand, possibly reverse complementing, based on keepTranslated
+ * option and input psls. */
+{
+if ((!keepTranslated) || ((psl1->strand[1] == '\0') && (psl2OrigStrand[1] == '\0')))
+    {
+    /* make untranslated */
+    if (pslTStrand(mappedPsl) == '-')
+        pslRc(mappedPsl);
+    mappedPsl->strand[1] = '\0';  /* implied target strand */
+    }
 }
 
 struct block findBlockMapping(struct psl* psl1, struct psl* psl2,
@@ -275,12 +309,12 @@ align1Blk->tStart += size;
 return TRUE;
 }
 
-struct psl* mapAlignment(struct psl *psl1, struct psl* psl2)
+struct psl* mapAlignment(struct psl *psl1, struct psl *psl2)
 /* map one pair of alignments. */
 {
 int mappedPslMax = 8; /* allocated space in output psl */
-char psl1TStrand = (psl1->strand[1] == '-') ? '-' : '+';
-char psl2QStrand = psl2->strand[0];
+char psl2OrigStrand[3];
+boolean rcPsl2 = (pslTStrand(psl1) != pslQStrand(psl2));
 boolean cnv1 = (pslIsProtein(psl1) && !pslIsProtein(psl2));
 boolean cnv2 = (pslIsProtein(psl2) && !pslIsProtein(psl1));
 int iBlock;
@@ -294,14 +328,17 @@ if (psl1->tSize != psl2->qSize)
     errCount++;
     return NULL;
     }
+
+/* convert protein PSLs */
 if (cnv1)
     pslProtToNA(psl1);
 if (cnv2)
     pslProtToNA(psl2);
 
-/* need to ensure common sequence in same orientation */
-if (psl1TStrand != psl2QStrand)
-    pslRcBoth(psl2);
+/* need to ensure common sequence in same orientation, save strand for later */
+safef(psl2OrigStrand, sizeof(psl2OrigStrand), "%s", psl2->strand);
+if (rcPsl2)
+    pslRc(psl2);
 
 mappedPsl = createMappedPsl(psl1, psl2, mappedPslMax);
 
@@ -312,17 +349,22 @@ for (iBlock = 0; iBlock < psl1->blockCount; iBlock++)
     while (mapBlock(psl1, psl2, &align1Blk, mappedPsl, &mappedPslMax))
         continue;
     }
-if (psl1TStrand != psl2QStrand)
-    {
-    pslRcBoth(psl2);
-    pslRcBoth(mappedPsl);
-    }
 
-finishMappedPsl(mappedPsl);
+/* finish up psl */
+setPslBounds(mappedPsl);
+adjustOrientation(psl1, psl2OrigStrand, mappedPsl);
+
+/* restore input */
+if (rcPsl2)
+    {
+    pslRc(psl2);
+    strcpy(psl2->strand, psl2OrigStrand);
+    }
 if (cnv1)
     pslNAToProt(psl1);
 if (cnv2)
     pslNAToProt(psl2);
+
 
 return mappedPsl;
 }
@@ -373,6 +415,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
 suffix = optionVal("suffix", NULL);
+keepTranslated = optionExists("keepTranslated");
 
 pslMap(argv[1], argv[2], argv[3]);
 

@@ -175,7 +175,8 @@ while (row2 != NULL)
 		else
 		    {
 		    chp++;
-		    geneName = chp;
+		    /* keep the composite name, so that kgGetCds can process correctly */
+		    /* geneName = chp; */
 		    srcType  = 'U';	/* src is UCSC prot/mrna alignment */
 		    }
 		}

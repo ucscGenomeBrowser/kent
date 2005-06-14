@@ -850,3 +850,17 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - gbDbload should contain orgCat as well, otherwise, adding a new orgCat
   may not be detected as out-of-date.
+
+- should be able to have a lift with only some of the chroms.
+
+- issues when trying to detect coding special cases, see tools/checkSpecial.awk
+  for a program to scan the ra file.  Need to report these:
+
+    NM_002085: selcys transl_excep listed as OTHER
+    NM_020860 no transl_except:        non-AUG initiation codon
+    NM_033013 on NMspecialcases (non-AUG), but not flag; maybe other isoform
+    NM_002537	ribosomal slippage (translational frameshift)	reviewed
+                    no /exception
+    NM_016178	ribosomal slippage (translational frameshift)	reviewed
+                    no /exception
+

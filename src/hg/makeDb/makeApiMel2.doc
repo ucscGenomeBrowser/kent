@@ -1072,4 +1072,63 @@ EOF
     # the same numbers, so don't load them up -- the predicted proteins 
     # are straight from genomic sequence anyway.  
 
+# EXONERATE TRACK (IN PROGRESS 5/23/2005 Andy)
+    ssh kk
+    mkdir /cluster/data/apiMel2/bed/exonerateDm2
+    cd /cluster/data/apiMel2/bed/exonerateDm2
+    cat << EOF > exonerate.sh
+#!/bin/bash
+dirGroup=\`dirname \$2\`
+group=\`basename \$dirGroup\`
+gSplit=\`basename \$2 .fa\`
+pSplit=\`basename \$1 .fa\`
+outFile=\${gSplit}_\${pSplit}.gff
 
+alias exonerate=/cluster/home/aamp/bin/i386/exonerate
+exonerate --model  protein2genome --percent 50 --showvulgar false --showalignment false --showtargetgff true \$1 \$2 | grep -v "^Command" | grep -v "^Hostname" | grep -v "^#" | grep -v "^--" > /tmp/\$outFile
+mkdir -p /cluster/bluearc/apiMel2/exonerateOutput/\$group
+cp /tmp/\$outFile \$3
+rm /tmp/\$outFile
+EOF
+    find /iscratch/i/apiMel2/faSplits/ -name '*.fa' > honey.lst
+    mkdir /santest/scratch/dm2
+    pushd /santest/scratch/dm2
+    cp /cluster/data/dm2/bed/flybase/flybasePep.fa .
+    faSplit sequence flybasePep.fa 25 fly_
+    rm flybasePep.fa
+    popd
+    find /santest/scratch/dm2 -name '*.fa' > fly.lst
+    cat << EOF > gsub
+#LOOP
+./exonerate.sh {check in line+ \$(path2)} {check in line+ \$(path1)} {check out exists /cluster/bluearc/apiMel2/exonerateOutput/\$(lastDir1)/\$(root1)_\$(root2).gff}
+#ENDLOOP
+EOF
+    gensub2 honey.lst fly.lst gsub spec
+    para create spec
+    para try
+    para check
+#19386 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 19386 of 19386 jobs
+#CPU time in finished jobs:    1349378s   22489.63m   374.83h   15.62d  0.043 y
+#IO & Wait Time:                192915s    3215.25m    53.59h    2.23d  0.006 y
+#Average job time:                  80s       1.33m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            7474s     124.57m     2.08h    0.09d
+#Submission to last job:         14456s     240.93m     4.02h    0.17d
+     ssh hgwdev
+     cd /cluster/data/apiMel2/bed/exonerateDm2
+     find /panasas/store/apiMel2/exonerateOutput -name "*.gff" -size +0b -exec cat '{}' ';' > dm2.gff
+     ssh kk
+     cd /cluster/data/apiMel2/bed/exonerateDm2
+     cat /iscratch/i/apiMel2/faSplits/*.lft > liftAll.lft
+     ssh hgwdev
+     cd /cluster/data/apiMel2/bed/exonerateDm2
+     liftUp fly.gff liftAll.lft warn dm2.gff 
+     ldHgGene apiMel2 exonerateDm2 fly.gff 
+#Reading fly.gff
+#Read 0 transcripts in 52886 lines in 1 files
+#  0 groups 17 seqs 1 sources 6 feature types
+#0 gene predictions
+      # Yeah that's no good.

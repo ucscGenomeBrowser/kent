@@ -88,18 +88,19 @@ spectrum on
 type psl xeno
 
 track blatTetra
-shortLabel Tetra BLAT
-longLabel Tetraodon (May 2002) Translated BLAT Alignments
+shortLabel $o_Organism BLAT
+longLabel $o_Organism ($o_date/$o_db) Translated BLAT Alignments
 group compGeno
-priority 121
+priority 227
 visibility dense
 color 0,60,120
 altColor 200,220,255
 spectrum on
 type psl xeno
+otherDb tetNig1
 
 track blatHg16
-shortLabel Human BLAT
+shortLabel $o_Organism BLAT
 longLabel $o_Organism ($o_date/$o_db) Translated BLAT Alignments
 group compGeno
 priority 130
@@ -115,7 +116,7 @@ track tbaFishBirdCFTR
 shortLabel Non-Mammal CFTR
 longLabel CFTR Region TBA Alignments (human,mouse,rat,dog,fugu,chicken)
 group compGeno
-priority 141
+priority 124
 visibility full
 type maf
 
@@ -123,7 +124,7 @@ track ecoresMm3
 shortLabel Mouse Ecores
 longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
-priority 125.1
+priority 209
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -136,7 +137,7 @@ track ecoresRn3
 shortLabel Rat Ecores
 longLabel Fugu/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions
 group compGeno
-priority 125.2
+priority 225.2
 visibility hide
 color 0,60,120
 altColor 200,220,255
@@ -191,22 +192,22 @@ termRegex SINFRUP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 track blastzDanRer2
-shortLabel Zebrafish Blastz
+shortLabel $o_Organism Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
-priority 126.1
+priority 226.1
 visibility hide
 color 0,0,0
 altColor 50,128,50
 spectrum on
-type psl xeno danRer1
-otherDb danRer1
+type psl xeno danRer2
+otherDb danRer2
 
 track chainDanRer2
-shortLabel Zebrafish Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 126.2
+priority 226.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -215,10 +216,10 @@ type chain danRer2
 otherDb danRer2
                                                                                 
 track netDanRer2
-shortLabel Zebrafish Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 126.3
+priority 226.3
 visibility dense
 spectrum on
 type netAlign danRer2 chainDanRer2
@@ -228,7 +229,7 @@ track blastzDanRer1
 shortLabel $o_db Blastz
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
 group compGeno
-priority 127.1
+priority 226.0
 visibility hide
 color 0,0,0
 altColor 50,128,50

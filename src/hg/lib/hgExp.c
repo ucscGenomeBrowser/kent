@@ -7,8 +7,9 @@
 #include "cart.h"
 #include "cheapcgi.h"
 #include "hgExp.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: hgExp.c,v 1.8 2005/04/29 08:26:34 aamp Exp $";
+static char const rcsid[] = "$Id: hgExp.c,v 1.11 2005/06/06 20:20:10 galt Exp $";
 
 static char *colorSchemeVals[] = {
 /* Menu option for color scheme. */
@@ -122,6 +123,7 @@ for (i=0; i<representativeCount; ++i)
    freeMem(experiments[i]);
 freeMem(experiments);
 }
+
 
 boolean hgExpLoadVals(struct sqlConnection *lookupConn,
 	struct sqlConnection *dataConn,

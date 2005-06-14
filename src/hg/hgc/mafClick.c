@@ -12,7 +12,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.26 2005/05/03 03:00:26 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.28 2005/06/09 22:10:58 kate Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -43,8 +43,11 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
         safef(buf, sizeof(buf), "(%s)", dbOnly);
         fprintf(f, "%-10s %-10s %-10s ", 
     	        hOrganism(dbOnly), hFreezeFromDb(dbOnly), buf);
-        linkToOtherBrowser(dbOnly, chrom, s, e);
-        fprintf(f, "%s:%d-%d</A>", chrom, s+1, e);
+        if (hDbIsActive(dbOnly))
+            linkToOtherBrowser(dbOnly, chrom, s, e);
+        fprintf(f, "%s:%d-%d", chrom, s+1, e);
+        if (hDbIsActive(dbOnly))
+            fprintf(f, "</A>");
         }
     else
         {

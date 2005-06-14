@@ -4,10 +4,11 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: lavToPsl.c,v 1.7 2004/10/22 16:14:13 kent Exp $";
+static char const rcsid[] = "$Id: lavToPsl.c,v 1.8 2005/06/01 20:43:22 jill Exp $";
 
 /* strand to us for target */
 char* targetStrand = "+";
+char* lavScoreFile = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +18,9 @@ errAbort(
   "usage:\n"
   "   lavToPsl in.lav out.psl\n"
   "options:\n"
-  "   -target-strand=c set the target strand to c (default is no strand)\n"
+  "   -target-strand=c     set the target strand to c (default is no strand)\n"
+  "   -scoreFile=filename  output lav scores to side file, such that\n"
+  "                        each psl line in out.psl is matched by a score line.\n"
   );
 }
 
@@ -217,12 +220,12 @@ for (i=0; ; ++i)
 }
 
 
-struct block *parseA(struct lineFile *lf)
+struct block *parseA(struct lineFile *lf, FILE* ff)
 /* Parse an alignment stanza into a block list. */
 {
 struct block *block, *blockList = NULL;
 char *line, *words[6];
-int wordCount;
+int wordCount,lavScore;
 
 while (lineFileNext(lf, &line, NULL))
     {
@@ -246,12 +249,17 @@ while (lineFileNext(lf, &line, NULL))
 	block->percentId = lineFileNeedNum(lf, words, 5);
 	slAddHead(&blockList, block);
 	}
+    if ((ff!=NULL) && (words[0][0] == 's'))
+       {
+       lavScore = lineFileNeedNum(lf, words, 1);
+       fprintf(ff,"%d\n", lavScore);
+       }
     }
 slReverse(&blockList);
 return blockList;
 }
 
-void parseIntoPsl(char *lavFile, FILE *f)
+void parseIntoPsl(char *lavFile, FILE *f, FILE* ff)
 /* Parse a blastz lav file and put it into something .psl like. */
 {
 struct lineFile *lf = lineFileOpen(lavFile, TRUE);
@@ -284,7 +292,7 @@ while (lineFileNext(lf, &line, NULL))
 	}
     else if (startsWith("a {", line))
         {
-	blockList = parseA(lf);
+	blockList = parseA(lf,ff);
 	outputBlocks(blockList, f, isRc, qName, qSize, tName, tSize, TRUE);
 	slFreeList(&blockList);
 	}
@@ -297,8 +305,16 @@ void lavToPsl(char *lavIn, char *pslOut)
 /* lavToPsl - Convert blastz lav to psl format. */
 {
 FILE *f = mustOpen(pslOut, "w");
-parseIntoPsl(lavIn, f);
+FILE *ff = NULL;
+
+if (lavScoreFile!=NULL)
+    ff = mustOpen(lavScoreFile, "w");
+
+parseIntoPsl(lavIn, f, ff);
 carefulClose(&f);
+
+if (lavScoreFile!=NULL)
+    carefulClose(&ff);
 }
 
 int main(int argc, char *argv[])
@@ -308,6 +324,7 @@ optionHash(&argc, argv);
 if (argc != 3)
     usage();
 targetStrand = optionVal("target-strand", "");
+lavScoreFile = optionVal("scoreFile",lavScoreFile);
 lavToPsl(argv[1], argv[2]);
 return 0;
 }

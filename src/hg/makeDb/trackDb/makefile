@@ -62,7 +62,7 @@ MGC_DBS = \
 	danRer1	danRer2 \
 	xenTro1
 
-update:
+update: clean
 	@for D in *; do \
             if [ -d "$$D" ]; then \
 		if test "$$D" != "zoo" ; then \
@@ -85,14 +85,14 @@ update:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -release=alpha $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 	    fi ; \
 	done
 
-alpha:
+alpha: clean
 	${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
@@ -114,7 +114,7 @@ alpha:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -release=alpha $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -125,7 +125,7 @@ alpha:
 	done
 	cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
-strict:
+strict: clean
 	${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
@@ -147,7 +147,7 @@ strict:
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb -strict=yes $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb -strict -release=beta $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
@@ -158,7 +158,7 @@ strict:
 checkbeta:
 	${CVS} status trackDb.ra | egrep 'v[0-9]+_branch' > /dev/null
 
-beta: checkbeta strict
+beta: checkbeta clean strict
 
 # This target adds trackDbLocal to the mgc-specific server.  Also
 # loads the grpMgc table.
@@ -173,11 +173,15 @@ mgc:
 		if test -n "$$dbpath" ; then \
 		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
 		    vis="" ; \
-		    cmd="hgTrackDb -strict=yes -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
+		    cmd="hgTrackDb -strict -release=beta -raName=trackDbMgc.ra $$vis $$org $$DB trackDbLocal ../../lib/trackDb.sql ." ; \
 		    echo $$cmd ;  $$cmd ; \
 		    cmd="hgsql $$DB < grpMgc.sql" ; \
 		    echo $$cmd ;  $$cmd ; \
 		fi ; \
 	    fi ; \
 	done
+
+# Get rid of symbolic links (created by lower-level makefiles):
+clean:
+	find . -type l -exec rm {} \;
 

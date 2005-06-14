@@ -2,10 +2,13 @@
  *           Also, items for maf track display */
 
 /* Track settings and variables */
+#define SPECIES_TREE_VAR        "speciesTree"
 #define SPECIES_ORDER_VAR       "speciesOrder"
 #define SPECIES_GROUP_VAR       "speciesGroups"
+#define SPECIES_TARGET_VAR      "speciesTarget"
 #define SPECIES_DEFAULT_OFF_VAR "speciesDefaultOff"
 #define SPECIES_GROUP_PREFIX    "sGroup_"
+#define SPECIES_HTML_TARGET	"sT"
 #define PAIRWISE_VAR            "pairwise"
 #define SUMMARY_VAR             "summary"
 #define BASE_COLORS_VAR         "baseColors"

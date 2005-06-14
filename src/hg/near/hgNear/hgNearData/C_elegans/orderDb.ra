@@ -19,3 +19,10 @@ type nameSimilarity orfToGene name value
 
 name abc
 type abc orfToGene name value
+
+name p2p
+shortLabel Protein-to-Protein
+longLabel P2P Network Distance to Selected Gene
+type pair wormP2P query target distance 1
+priority 9
+
