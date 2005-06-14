@@ -1359,22 +1359,6 @@ cat > makeWig.csh << 'EOF'
     gunzip -c lab/mcs/phastCons.t95.bed.gz | \
                  hgLoadBed hg16 encodeTbaPhastConsEl stdin
     
-
-#  REPACKAGE existing UCSD tracks into one composite
-#	DONE - 2005-06-06 - Hiram)
-    #	This is merely a trackDb.ra edit, create composite track: encodeLIChIP
-    #	include as subtracks the tables:
-    #	encodeUcsdChipRnapHela
-    #	encodeUcsdChipRnapThp1
-    #	encodeUcsdChipRnapImr90
-    #	encodeUcsdChipRnapHct116
-    #	encodeUcsdChipTaf250Hela
-    #	encodeUcsdChipTaf250Thp1
-    #	encodeUcsdChipTaf250Imr90
-    #	encodeUcsdChipTaf250Hct116
-    #	encodeUcsdChipAch3Imr90
-    #	encodeUcsdChipMeh3k4Imr90
-
 #  Loading Yale Affy ChIP/Chip data
     #	Two files were found to have bad start,end coordinates, they
     #	were resubmitted by Joel Rozowsky:
@@ -1806,3 +1790,36 @@ done
     #	Nimblegen Protocol
 
 
+#######################################################################
+# Boston University ORChID track
+#	data developer contact:  Jay Greenbaum jj@bu.edu
+    ssh hgwdev
+    cd /cluster/data/encode/BU/2005-06-09
+    wget --timestamping "http://orchid.bu.edu/encode/tracks/description.html" \
+        -O description.html
+    wget --timestamping "http://orchid.bu.edu/encode/tracks/oh_cleavage.wig" \
+        -O oh_cleavage.wig
+    #	It turns out this oh_cleavage.wig file has data for three
+    #	tracks in it, and all the data is precisely exactly identically
+    #	the same.  So, only one of the tracks is needed.
+    #	Use this perl script to split up this data into the three
+    #	data files: t0 t1 t2
+    ./splitTracks.pl oh_cleavage.wig
+    #	encode one of the data files:
+    mkdir wib
+    wigEncode t0 encodeBu_ORChID1.wig wib/encodeBu_ORChID1.wib
+    #	and load
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/Bu/2005-06-09 hg16 \
+        encodeBu_ORChID1 encodeBu_ORChID1.wig
+    mkdir -p /gbdb/hg16/encode/Bu/2005-06-09/wib
+    ln -s `pwd`/wib/encodeBu_ORChID1.wib /gbdb/hg16/encode/Bu/2005-06-09/wib
+    #	trackDb entry is for: track encodeBu_ORChID1
+#	shortLabel BU ORChID
+#	longLabel Boston University ORChID
+#	type wig -0.56 1.58
+#	maxHeightPixels 128:36:16
+#	windowingFunction Mean
+#	color 44,44,200
+#	altColor 200,44,44
+#	viewLimits 0.22:0.5
+#	autoScale Off
