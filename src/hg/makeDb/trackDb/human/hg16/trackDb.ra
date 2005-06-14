@@ -2394,7 +2394,7 @@ track encodeYaleAffyNB4TPARNATransMap
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA NB4 TPA
 longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
-priority 13
+priority 14
 color 127,50,50
 altColor 50,50,127
 
@@ -2402,7 +2402,7 @@ track encodeYaleAffyNB4UntrRNATransMap
 subTrack encodeYaleAffyRNATransMap
 shortLabel Yale RNA NB4 Un
 longLabel Yale NB4 RNA Transcript Map, Untreated
-priority 14
+priority 15
 color 127,50,50
 altColor 50,50,127
 
