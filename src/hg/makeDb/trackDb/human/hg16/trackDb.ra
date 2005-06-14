@@ -1935,29 +1935,29 @@ color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH3_p0
 subTrack encodeLIChIPgIF
-shortLabel LI acH3 -gIF
-longLabel Ludwig Institute ChIP/Chip: acH3 ab, HeLa cells, no gamma interferon
+shortLabel LI H3ac -gIF
+longLabel Ludwig Institute ChIP/Chip: H3ac ab, HeLa cells, no gamma interferon
 priority 5
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH3_p30
 subTrack encodeLIChIPgIF
-shortLabel LI acH3 +gIF
-longLabel Ludwig Institute ChIP/Chip: acH3 ab, HeLa cells, 30 min. after gamma interferon 
+shortLabel LI H3ac +gIF
+longLabel Ludwig Institute ChIP/Chip: H3ac ab, HeLa cells, 30 min. after gamma interferon 
 priority 6
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH4_p0
 subTrack encodeLIChIPgIF
-shortLabel LI acH4 -gIF
-longLabel Ludwig Institute ChIP/Chip: acH4 ab, HeLa cells, no gamma interferon
+shortLabel LI H4ac -gIF
+longLabel Ludwig Institute ChIP/Chip: H4ac ab, HeLa cells, no gamma interferon
 priority 7
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4acH4_p30
 subTrack encodeLIChIPgIF
-shortLabel LI acH4 +gIF
-longLabel Ludwig Institute ChIP/Chip: acH4 ab, HeLa cells, 30 min. after gamma interferon 
+shortLabel LI H4ac +gIF
+longLabel Ludwig Institute ChIP/Chip: H4ac ab, HeLa cells, 30 min. after gamma interferon 
 priority 8
 color 109,51,43
 
@@ -1991,15 +1991,15 @@ color 109,51,43
 
 track encodeUcsdChipHeLaH3H4TAF250_p0
 subTrack encodeLIChIPgIF
-shortLabel LI Taf250 -gIF
-longLabel Ludwig Institute ChIP/Chip: Taf250 polymerase, HeLa cells, no gamma interferon 
+shortLabel LI TAF250 -gIF
+longLabel Ludwig Institute ChIP/Chip: TAF250 polymerase, HeLa cells, no gamma interferon 
 priority 13
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4TAF250_p30
 subTrack encodeLIChIPgIF
-shortLabel LI Taf250 +gIF
-longLabel Ludwig Institute ChIP/Chip: Taf250 polymerase, HeLa cells, 30 min. after gamma interferon
+shortLabel LI TAF250 +gIF
+longLabel Ludwig Institute ChIP/Chip: TAF250 polymerase, HeLa cells, 30 min. after gamma interferon
 priority 14
 color 109,51,43
 
@@ -2033,13 +2033,13 @@ priority 2
 track encodeUcsdNgHeLaRnap_p0
 subTrack encodeUcsdNgGif
 shortLabel LI Ng Rnap -gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Rnap, no gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, no gamma interferon
 priority 3
 
 track encodeUcsdNgHeLaRnap_p30
 subTrack encodeUcsdNgGif
 shortLabel LI Ng Rnap +gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Rnap, 30 min after gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, 30 min after gamma interferon
 priority 4
 
 track encodeLIChIP
@@ -2120,7 +2120,7 @@ color 109,51,43
 track encodeUcsdChipMeh3k4Imr90_f
 subTrack encodeLIChIP
 shortLabel LI H3K4me IMR90
-longLabel Ludwig Institute ChIP/Chip: MeH3K4 ab, IMR90 cells 
+longLabel Ludwig Institute ChIP/Chip: H3K4me2 ab, IMR90 cells 
 priority 10
 color 109,51,43
 
