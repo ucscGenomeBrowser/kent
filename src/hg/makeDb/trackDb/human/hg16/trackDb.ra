@@ -1984,7 +1984,7 @@ color 109,51,43
 
 track encodeUcsdChipHeLaH3H4RNAP_p30
 subTrack encodeLIChIPgIF
-shortLabel LI RNAP +gIF
+shortLabel LI Pol2 +gIF
 longLabel Ludwig Institute ChIP/Chip: RNA polymerase, HeLa cells, 30 min. after gamma interferon
 priority 12
 color 109,51,43
@@ -2032,13 +2032,13 @@ priority 2
 
 track encodeUcsdNgHeLaRnap_p0
 subTrack encodeUcsdNgGif
-shortLabel LI Ng Rnap -gIF
+shortLabel LI Ng Pol2 -gIF
 longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, no gamma interferon
 priority 3
 
 track encodeUcsdNgHeLaRnap_p30
 subTrack encodeUcsdNgGif
-shortLabel LI Ng Rnap +gIF
+shortLabel LI Ng Pol2 +gIF
 longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, 30 min after gamma interferon
 priority 4
 
