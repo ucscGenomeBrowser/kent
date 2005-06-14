@@ -1991,15 +1991,15 @@ color 109,51,43
 
 track encodeUcsdChipHeLaH3H4TAF250_p0
 subTrack encodeLIChIPgIF
-shortLabel LI TAF250 -gIF
-longLabel Ludwig Institute ChIP/Chip: TAF250 polymerase, HeLa cells, no gamma interferon 
+shortLabel LI TAF1 -gIF
+longLabel Ludwig Institute ChIP/Chip: TAF1 polymerase, HeLa cells, no gamma interferon 
 priority 13
 color 109,51,43
 
 track encodeUcsdChipHeLaH3H4TAF250_p30
 subTrack encodeLIChIPgIF
-shortLabel LI TAF250 +gIF
-longLabel Ludwig Institute ChIP/Chip: TAF250 polymerase, HeLa cells, 30 min. after gamma interferon
+shortLabel LI TAF1 +gIF
+longLabel Ludwig Institute ChIP/Chip: TAF1 polymerase, HeLa cells, 30 min. after gamma interferon
 priority 14
 color 109,51,43
 
