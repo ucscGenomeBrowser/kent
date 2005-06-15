@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.3 2005/05/26 21:00:45 sugnet Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.4 2005/06/15 00:23:27 sugnet Exp $";
 
 
 
@@ -209,7 +209,6 @@ enum trackVisibility tnfgVis = tvHide;
 char *visString = cartUsualString(cart, "hgt.affyPhase2.tnfg", "hide");
 tnfgVis = hTvFromString(visString);
 
-
 /* After a megabase, just give the packed view. */
 if(tooBig && track->visibility == tvFull)
     track->limitedVis = tvDense;
@@ -230,6 +229,8 @@ for(sub = track->subtracks; sub != NULL; sub = sub->next)
 	sub->mapItem = affyTxnPhase2MapItem;
 	sub->mapsSelf = FALSE;
 	sub->extraUiData = CloneVar((struct wigCartOptions *)track->extraUiData);
+	if(trackDbSetting(sub->tdb, "wigColorBy") != NULL)
+	    ((struct wigCartOptions *)sub->extraUiData)->colorTrack = trackDbSetting(sub->tdb, "wigColorBy");
 	}
     }
 
