@@ -15,7 +15,7 @@
 #include "hgMaf.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: maf.c,v 1.7 2005/05/18 22:42:10 angie Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.8 2005/06/15 17:18:33 angie Exp $";
 
 boolean isMafTable(char *database, struct trackDb *track, char *table)
 /* Return TRUE if table is maf. */
@@ -27,9 +27,14 @@ else
     char *typeDupe = cloneString(track->type);
     char *s = typeDupe;
     char *type = nextWord(&s);
+    char *summary = trackDbSetting(track, "summary");
+    char *wigTrack = trackDbSetting(track, "wiggle");
     boolean retVal = FALSE;
     if (type != NULL)
 	retVal = (sameString(type, "maf") || sameString(type, "wigMaf"));
+    if ((summary && sameString(summary, table)) ||
+	(wigTrack && sameString(wigTrack, table)))
+	retVal = FALSE;
     freeMem(typeDupe);
     return retVal;
     }
