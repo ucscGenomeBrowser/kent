@@ -1808,7 +1808,7 @@ type bed 5 +
 track encodeStanfordMeth
 compositeTrack on
 shortLabel Stanf Methylation
-longLabel Stanford Methylation (Be2C, CRL1690, HCT116, HT1080, HepG2, JEG3, Snu182, U87)
+longLabel Stanford Methylation Digest: Be2C, CRL1690, HCT116, HT1080, HepG2, JEG3, Snu182, U87
 group encode
 priority 49.6
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1823,50 +1823,101 @@ viewLimits 0:5
 track encodeStanfordMethBe2C
 subTrack encodeStanfordMeth
 shortLabel Stan Meth Be2C
-longLabel Stanford Methylation (Be2C cells)
+longLabel Stanford Methylation Digest (Be2C cells)
 priority 1
 
 track encodeStanfordMethCRL1690
 subTrack encodeStanfordMeth
 shortLabel Stan Meth CRL1690
-longLabel Stanford Methylation (CRL1690 cells)
+longLabel Stanford Methylation Digest (CRL1690 cells)
 priority 2
 
 track encodeStanfordMethHCT116
 subTrack encodeStanfordMeth
 shortLabel Stan Meth HCT116
-longLabel Stanford Methylation (HCT116 cells)
+longLabel Stanford Methylation Digest (HCT116 cells)
 priority 3
 
 track encodeStanfordMethHT1080
 subTrack encodeStanfordMeth
 shortLabel Stan Meth HT1080
-longLabel Stanford Methylation (HT1080 cells)
+longLabel Stanford Methylation Digest (HT1080 cells)
 priority 4
 
 track encodeStanfordMethHepG2
 subTrack encodeStanfordMeth
 shortLabel Stan Meth HepG2
-longLabel Stanford Methylation (HepG2 cells)
+longLabel Stanford Methylation Digest (HepG2 cells)
 priority 5
 
 track encodeStanfordMethJEG3
 subTrack encodeStanfordMeth
 shortLabel Stan Meth JEG3
-longLabel Stanford Methylation (JEG3 cells)
+longLabel Stanford Methylation Digest (JEG3 cells)
 priority 6
 
 track encodeStanfordMethSnu182
 subTrack encodeStanfordMeth
 shortLabel Stan Meth Snu182
-longLabel Stanford Methylation (Snu182 cells)
+longLabel Stanford Methylation Digest (Snu182 cells)
 priority 7
 
 track encodeStanfordMethU87
 subTrack encodeStanfordMeth
 shortLabel Stan Meth U87
-longLabel Stanford Methylation (U87 cells)
+longLabel Stanford Methylation Digest (U87 cells)
 priority 8
+
+track encodeStanfordChip
+compositeTrack on
+shortLabel Stanf ChIP
+longLabel Stanford ChIP/chip (HCT116, Jurkat, K562 cells;  Sp1, Sp3 ChIP)
+group encode
+priority 49.7
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 114
+viewLimits 0:5
+
+track encodeStanfordChipHCT116Sp1
+subTrack encodeStanfordChip
+shortLabel Stan HCT116 Sp1
+longLabel Stanford ChIP/chip (HCT116 cells, Sp1 ChIP)
+priority 1
+
+track encodeStanfordChipHCT116Sp3
+subTrack encodeStanfordChip
+shortLabel Stan HCT116 Sp3
+longLabel Stanford ChIP/chip (HCT116 cells, Sp3 ChIP)
+priority 2
+
+track encodeStanfordChipJurkatSp1
+subTrack encodeStanfordChip
+shortLabel Stan Jurkat Sp1
+longLabel Stanford ChIP/chip (Jurkat cells, Sp1 ChIP)
+priority 3
+
+track encodeStanfordChipJurkatSp3
+subTrack encodeStanfordChip
+shortLabel Stan Jurkat Sp3
+longLabel Stanford ChIP/chip (Jurkat cells, Sp3 ChIP)
+priority 4
+
+track encodeStanfordChipK562Sp1
+subTrack encodeStanfordChip
+shortLabel Stan K562 Sp1
+longLabel Stanford ChIP/chip (K562 cells, Sp1 ChIP)
+priority 5
+
+track encodeStanfordChipK562Sp3
+subTrack encodeStanfordChip
+shortLabel Stan K562 Sp3
+longLabel Stanford ChIP/chip (K562 cells, Sp3 ChIP)
+priority 6
 
 track encodeNhgriDnaseHs
 compositeTrack on
@@ -2803,7 +2854,7 @@ priority 47.25
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 534.54
-viewLimits 0:50
+viewLimits 0:25
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -2817,7 +2868,7 @@ priority 47.26
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 425.79
-viewLimits 0:50
+viewLimits 0:25
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -2831,7 +2882,7 @@ priority 47.27
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 505.86
-viewLimits 0:50
+viewLimits 0:25
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -2845,7 +2896,7 @@ priority 47.28
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 490.03
-viewLimits 0:50
+viewLimits 0:25
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -3712,7 +3763,7 @@ visibility hide
 type wig -899.25 1686.5
 maxHeightPixels 128:16:16
 autoScale off
-viewLimits 0:50
+viewLimits 0:25
 
 track encodeAffyRnaGm06990Signal
 subTrack encodeAffyRna
