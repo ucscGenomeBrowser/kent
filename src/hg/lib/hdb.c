@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.253 2005/06/07 17:17:08 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.254 2005/06/15 00:22:53 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3064,6 +3064,16 @@ else
     trackDbFree(&tdb);
 }
 
+static void subtrackInherit(struct trackDb *subtrackTdb,
+			    struct trackDb *compositeTdb)
+{
+if (!trackDbSetting(subtrackTdb, "noInherit"))
+    {
+    subtrackTdb->type = cloneString(compositeTdb->type); 
+    subtrackTdb->grp = cloneString(compositeTdb->grp);
+    }
+}
+
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
  * all). If trackDbLocal exists, then it's row either override or are added to
@@ -3129,11 +3139,7 @@ for (tdb = tdbFullList; nextTdb != NULL; tdb = nextTdb)
                 (struct trackDb *)hashFindVal(compositeHash, words[0]);
             if (compositeTdb)
                 {
-		if(!trackDbSetting(tdb, "noInherit"))
-		    {
-		    tdb->type = cloneString(compositeTdb->type); 
-		    tdb->grp = cloneString(compositeTdb->grp);
-		    }
+		subtrackInherit(tdb, compositeTdb);
                 /* should be a short list -- we can shortcut and add to tail
                  * rather than reversing later */
                 slAddTail(&compositeTdb->subtracks, tdb);
@@ -3162,51 +3168,36 @@ static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn, char *tra
 /* Load trackDb object for a track. If trackDbLocal exists, then it's row is
  * used if it exists. this is common code for two external functions. */
 {
-struct trackDb *tdb, *nextTdb, *tdbList, *compositeTdb = NULL;
+struct trackDb *trackTdb = NULL;
 char where[256];
 
-safef(where, sizeof(where), "tableName = '%s' or settings like '%%subTrack %s%%'", track, track);
+safef(where, sizeof(where), "tableName = '%s'", track);
 
-tdbList = loadTrackDbLocal(conn, where);
-if (tdbList == NULL)
-    tdbList = loadTrackDb(conn, where);
-if (tdbList != NULL)
-    hLookupStringsInTdb(tdbList, hGetDb());
+trackTdb = loadTrackDbLocal(conn, where);
+if (trackTdb == NULL)
+    trackTdb = loadTrackDb(conn, where);
+if (trackTdb != NULL)
+    hLookupStringsInTdb(trackTdb, hGetDb());
 
-/* create new entry with subtrack entries in subtracks field 
- * of composite track*/
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
     {
-    if (trackDbSetting(tdb, "compositeTrack"))
-        {
-        compositeTdb = tdb;
-        break;
-        }
+    /* Fill in trackDb->subtracks.  Query to get _exact_ match for composite 
+     * track name in the subTrack setting, so we don't pick up subtracks of 
+     * some other track with the same root name. */
+    struct trackDb *subTdbList = NULL, *tdb = NULL;
+    safef(where, sizeof(where),
+	  "settings rlike '^(.*\n)?subTrack %s([ \t\n].*)?$'",
+	  track);
+    subTdbList = loadTrackDbLocal(conn, where);
+    if (subTdbList == NULL)
+	subTdbList = loadTrackDb(conn, where);
+    if (subTdbList != NULL)
+	hLookupStringsInTdb(subTdbList, hGetDb());
+    for (tdb = subTdbList; tdb != NULL; tdb = tdb->next)
+	subtrackInherit(tdb, trackTdb);
+    trackTdb->subtracks = subTdbList;
     }
-if (compositeTdb)
-    {
-    nextTdb = tdbList;
-    for (tdb = tdbList; nextTdb != NULL; tdb = nextTdb)
-        {
-	char *setting = trackDbSetting(tdb, "subTrack");
-        nextTdb = tdb->next;
-        if (setting != NULL)
-            {
-	    /* Make sure that this matches the specified track, not just a 
-	     * prefix of it: */
-	    char *words[2];
-	    if ((chopLine(cloneString(setting), words) > 0) &&
-		sameString(words[0], track))
-		{
-		slAddHead(&compositeTdb->subtracks, tdb);
-		tdb->type = cloneString(compositeTdb->type);
-		}
-            }
-        }
-    return compositeTdb;
-    }
-else
-    return tdbList;
+return trackTdb;
 }
 
 struct trackDb *hTrackDbForTrack(char *track)
