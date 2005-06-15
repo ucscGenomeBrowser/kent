@@ -78,7 +78,7 @@ echo
 
 set chrom=""
 set split=""
-set isChromInfo=""
+set isChromInfo=0
 if ( $machine == hgwdev || $machine == hgwbeta ) then
   foreach db ( $dbs )
     echo "checking "$db
@@ -111,11 +111,15 @@ else   # not dev or beta
     echo "checking "$db
     # check for chromInfo table on dev 
     #  -- except for one db that is on RR but not dev.
+    set isChromInfo=0
     if ( $db != proteins092903 ) then
-      set isChromInfo=`hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo"`
+      hgsql -N $host -e 'SHOW TABLES' $db | grep "chromInfo" > /dev/null
+      if ( $status ) then
+        set isChromInfo=1
+      endif
     endif
-    if ( $isChromInfo != "" ) then
-      set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db`
+    if ( $isChromInfo != 1 ) then
+      set chrom=`hgsql -N $host -e 'SELECT chrom FROM chromInfo LIMIT 1' $db` 
       # check if split table (on dev)
       set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
         $db | wc -l`
@@ -134,6 +138,7 @@ else   # not dev or beta
     if ( $found == 1 ) then
       echo "$db" >> $machine.$tablename.foundIn
     endif
+  set isChromInfo=""
   end # end foreach db
 endif # end if if/else dev, beta
 echo 
