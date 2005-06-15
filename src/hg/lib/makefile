@@ -20,6 +20,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     easyGene.o encodeErge.o encodeErgeHssCellLines.o\
     encodeRegionInfo.o encodeRegionInfoCustom.o \
     encodeStanfordPromoters.o encodeStanfordPromotersAverage.o \
+    encodeIndels.o \
     ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
