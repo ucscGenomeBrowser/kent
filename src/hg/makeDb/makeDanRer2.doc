@@ -1067,6 +1067,8 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
 # ADD CONTIGS TRACK (DONE, 2004-12-06, hartera)
 # make ctgPos2 (contig name, size, chrom, chromStart, chromEnd) from lift
+# RELOAD CONTIGS TRACK - NOT ALL CONTIGS HAD LOADED INTO DATABASE TABLE
+# (DONE, 2005-06-15, hartera)
     ssh kksilo
     mkdir -p /cluster/data/danRer2/bed/ctgPos2
     cd /cluster/data/danRer2/bed/ctgPos2
@@ -1079,6 +1081,16 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
 
     ssh hgwdev
     cd /cluster/data/danRer2/bed/ctgPos2
+    # Reload table (2005-06-16, hartera) - not all the contigs had loaded 
+    # into the table because the unique primary key for ctgPos2.sql consisted
+    # of only the first 14 characters of the contig name. However, contigs for 
+    # danRer2 have names such as "Zv4_scaffold99.1" and "Zv4_scaffold99.3" for
+    # which the first 14 characters are not unique so only the first one is
+    # loaded. Also, there are cases where the contig has an accession and more
+    # than one contig share the same accession as their name so names are not
+    # unique. Therefore, this was changed in ctgPos2.sql so that the first
+    # 20 characters of the contig name and the chromStart are the composite
+    # primary key: PRIMARY KEY(contig(20),chromStart),
     echo "drop table ctgPos2" | hgsql danRer2
     hgsql danRer2 < ~/kent/src/hg/lib/ctgPos2.sql
     echo "load data local infile 'ctgPos2.tab' into table ctgPos2" \
