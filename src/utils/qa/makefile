@@ -5,6 +5,7 @@ install:
 	cp -p --remove-destination bigPush.csh             ${SCRIPTS}
 	cp -p --remove-destination catchBot.csh            ${SCRIPTS}
 	cp -p --remove-destination checkAllStaticLinks.csh ${SCRIPTS}
+	cp -p --remove-destination checkBOT.csh            ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
