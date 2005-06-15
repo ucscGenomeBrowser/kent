@@ -2127,14 +2127,14 @@ color 109,51,43
 track encodeUcsdChipH3K27me3Suz12
 subTrack encodeLIChIP
 shortLabel LI SUZ12 HeLa
-longLabel Ludwig Institute ChIP/Chip: SUZ12 protein ab, HeLa cells unstimulated 
+longLabel Ludwig Institute ChIP/Chip: SUZ12 protein ab, HeLa cells 
 priority 11
 color 109,51,43
 
 track encodeUcsdChipH3K27me3
 subTrack encodeLIChIP
 shortLabel LI H3K27me3 HeLa
-longLabel Ludwig Institute ChIP/Chip: H3K27me3 ab, HeLa cells unstimulated
+longLabel Ludwig Institute ChIP/Chip: H3K27me3 ab, HeLa cells 
 priority 12
 color 109,51,43
 
