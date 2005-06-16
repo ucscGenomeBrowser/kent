@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.22 2005/05/07 21:36:41 baertsch Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.23 2005/06/16 10:11:18 jill Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -123,12 +123,17 @@ return ok;
 }
 
 static char *remapRange(struct hash *chainHash, double minRatio, 
+                        int minSizeT, int minSizeQ, 
                         int minChainSizeT, int minChainSizeQ, 
                         char *chrom, int s, int e, char strand, double minMatch,
                         char *regionName, char *db, char *chainTableName,
                         struct bed **bedRet, struct bed **unmappedBedRet)
 /* Remap a range through chain hash.  If all is well return NULL
- * and results in a BED (or a list of BED's, if regionName is set (-multiple).   * Otherwise return a string describing the problem. */
+ * and results in a BED (or a list of BED's, if regionName is set (-multiple).
+ * Otherwise return a string describing the problem. 
+ * note: minSizeT is currently NOT implemented. feel free to add it.
+ *       (its not e-s, its the boundaries of what maps of chrom:s-e to Q)
+ */
 {
 struct binElement *list = findRange(chainHash, chrom, s, e), *el;
 struct chain *chainsHit = NULL, 
@@ -142,9 +147,6 @@ double minMatchSize = minMatch * (end - start);
 int intersectSize;
 int tStart;
 bool multiple = (regionName != NULL);
-/* set minimum region size to minimum chain in query size -- later may
-   * make this a distinct parameter */
-int minSizeQ = minChainSizeQ;
 
 
 verbose(2, "%s:%d-%d", chrom, s, e);
@@ -258,6 +260,8 @@ slReverse(&bedList);
 slReverse(&unmappedBedList);
 if (unmappedBedRet)
     *unmappedBedRet = unmappedBedList;
+if (bedList==NULL)
+    return "Deleted in new";
 return NULL;
 }
 
@@ -272,8 +276,8 @@ char *liftOverRemapRange(struct hash *chainHash, double minRatio,
 struct bed *bed;
 char *error;
 
-error = remapRange(chainHash, minMatch, 0, 0, chrom, s, e, strand, minMatch,
-                                        NULL, NULL, NULL, &bed, NULL);
+error = remapRange(chainHash, minMatch, 0, 0, 0, 0, chrom, s, e, strand, minMatch,
+		   NULL, NULL, NULL, &bed, NULL);
 if (error != NULL)
     return error;
 if (retChrom)
@@ -292,7 +296,8 @@ return NULL;
 static int bedOverSmall(struct lineFile *lf, int fieldCount, 
                         struct hash *chainHash, double minMatch, 
                         int minSizeT, int minSizeQ, 
-                        FILE *mapped, FILE *unmapped, 
+                        int minChainT, int minChainQ, 
+			FILE *mapped, FILE *unmapped, 
                         bool multiple, char *chainTable, int *errCt)
 /* Do a bed without a block-list.
  * NOTE: it would be preferable to have all of the lift
@@ -338,10 +343,9 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
         }
     if (wordCount >= 6)
 	strand = words[5][0];
-    error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, 
-                                chrom, s, e, strand, minMatch, 
-                                region, db, chainTableName,
-                                &bedList, &unmappedBedList);
+    error = remapRange(chainHash, minMatch, minSizeT, minSizeQ, minChainT, 
+		       minChainQ, chrom, s, e, strand, minMatch, 
+		       region, db, chainTableName, &bedList, &unmappedBedList);
     if (error == NULL)
         {
         /* successfully mapped */
@@ -934,6 +938,7 @@ return ct;
 int liftOverBed(char *fileName, struct hash *chainHash, 
                         double minMatch,  double minBlocks, 
                         int minSizeT, int minSizeQ,
+                        int minChainT, int minChainQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
                         bool multiple, char *chainTable, int *errCt)
 /* Open up file, decide what type of bed it is, and lift it. 
@@ -955,7 +960,7 @@ if (lineFileNextReal(lf, &line))
 	 errAbort("Data format error: expecting at least 3 fields in BED file (%s)", fileName);
     if (wordCount <= 10)
 	 ct = bedOverSmall(lf, wordCount, chainHash, minMatch, 
-                                minSizeT, minSizeQ,
+                                minSizeT, minSizeQ, minChainT, minChainQ,
                                 f, unmapped, multiple, chainTable, errCt);
     else
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
@@ -1013,7 +1018,7 @@ makeTempName(&mappedBedTn, LIFTOVER_FILE_PREFIX, ".bedmapped");
 makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
 mappedBed = mustOpen(mappedBedTn.forCgi, "w");
 unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
-ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, 0, 0, 0, FALSE, 
+ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, 0, 0, 0, 0, 0, FALSE, 
                         mappedBed, unmappedBed, FALSE, NULL, errCt);
 carefulClose(&mappedBed);
 chmod(mappedBedTn.forCgi, 0666);
