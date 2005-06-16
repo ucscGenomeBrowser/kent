@@ -72,7 +72,7 @@ type psl protein
 pred dm1.blastFBPep00
 blastRef dm1.blastFBRef00
 url http://flybase.bio.indiana.edu/.bin/fbidq.html?
-otherDb dm2
+otherDb dm1
 
 track chainDm2
 shortLabel D. mel. Chain
