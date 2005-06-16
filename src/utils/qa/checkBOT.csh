@@ -43,8 +43,14 @@ echo "  current = the current delay in miliseconds."
 echo
 echo "  delay decays at the rate of 10 miliseconds per second"
 echo
+echo "  current shows the number of milliseconds they would "
+echo "  be delayed if they hit us with a query now.  "
+echo "  If current is over 10,000 they get a message.  If it's"
+echo "  over 15,000 they get cut off with a ruder message."
+echo
 
-echo "   longest delay:"
+
+echo "  the longest delay is from:"
 
 if ($worst != "") then
   ipw $worst | head -10
