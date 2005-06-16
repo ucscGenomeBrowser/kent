@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.973 2005/06/14 00:46:50 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.974 2005/06/16 15:51:34 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -868,6 +868,7 @@ void filterItems(struct track *tg,
 struct slList *newList = NULL, *oldList = NULL, *el, *next;
 boolean exclude = FALSE;
 boolean color = FALSE;
+enum trackVisibility vis = tvHide;
 
 if (sameWord(filterType, "none"))
     return;
@@ -877,7 +878,12 @@ if (sameWord(filterType, "include"))
 else if (sameWord(filterType, "exclude"))
     exclude = TRUE;
 else
+    {
     color = TRUE;
+    /* Important: call limitVisibility on *complete* item list, before it gets 
+     * divided into new and old!  Otherwise tg->height is set incorrectly. */
+    vis = limitVisibility(tg);
+    }
 
 for (el = tg->items; el != NULL; el = next)
     {
@@ -894,7 +900,6 @@ for (el = tg->items; el != NULL; el = next)
 slReverse(&newList);
 if (color)
    {
-   enum trackVisibility vis = limitVisibility(tg);
    slReverse(&oldList);
    /* Draw stuff that passes filter first in full mode, last in dense. */
    if (vis == tvDense)
