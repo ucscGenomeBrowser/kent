@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.18 2005/03/20 19:31:30 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.19 2005/06/16 23:32:57 hartera Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -69,7 +69,7 @@ errAbort(
   "example:\n"
   "  calculate GC percent in 5 base windows using a 2bit nib assembly (dp2):\n"
   "  hgGcPercent -wigOut -doGaps -file=stdout -win=5 dp2 \\\n"
-  "      /cluster/data/dp2 | wigBedToBinary stdin gc5Base.wig gc5Base.wib"
+  "      /cluster/data/dp2 | wigEncode stdin gc5Base.wig gc5Base.wib"
       , winSize);
 }
 
