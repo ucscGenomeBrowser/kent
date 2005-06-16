@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.82 2005/03/24 21:25:53 braney Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.83 2005/06/16 16:54:23 angie Exp $";
 
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
@@ -99,7 +99,7 @@ if (gotClade)
 puts(
 "<td align=center valign=baseline>genome</td>\n"
 "<td align=center valign=baseline>assembly</td>\n"
-"<td align=center valign=baseline>position</td>\n"
+"<td align=center valign=baseline>position or search term</td>\n"
 "<td align=center valign=baseline>image width</td>\n"
 "<td align=center valign=baseline> &nbsp; </td>\n"
 "</tr>\n<tr>"
