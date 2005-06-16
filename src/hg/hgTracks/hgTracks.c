@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.974 2005/06/16 15:51:34 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.975 2005/06/16 16:55:01 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10115,7 +10115,7 @@ if (showTrackControls)
 
 	sprintf(buf, "%s:%d-%d", chromName, winStart+1, winEnd);
 	position = cloneString(buf);
-	hWrites("position ");
+	hWrites("position/search ");
 	hTextVar("position", addCommasToPos(position), 30);
 	sprintLongWithCommas(buf, winEnd - winStart);
 	hWrites(" ");
