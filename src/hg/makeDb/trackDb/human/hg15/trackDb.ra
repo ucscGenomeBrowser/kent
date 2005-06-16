@@ -484,6 +484,26 @@ priority 146
 visibility hide
 type bed 6 .
 
+searchTable vegaGene
+searchType genePred
+searchPriority 50
+
+searchTable vegaPseudoGene
+searchType genePred
+searchPriority 50
+
+searchTable vegaGene
+searchName vegaGene2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 50.1
+
+searchTable vegaPseudoGene
+searchName vegaPseudoGene2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 50.1
+
 searchTable bacendsCow
 searchMethod exact
 searchType bed
