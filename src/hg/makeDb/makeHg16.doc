@@ -11049,3 +11049,53 @@ hgLoadBed hg16 cnpIafrate -tab -sqlTable=cnpIafrate.sql cnpIafrate.bed
 cp Sebat.txt cnpSebat.bed
 hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 
+##########################################################################
+# sno/miRNA track from Michel Weber (DONE - 2005-06-16 - Hiram)
+#	received the data file UCSC_snotrack_hg16.txt via email
+    ssh hgwdev
+    cd /cluster/data/hg16/bed/wgRna
+    #	As a quick first pass at classification, take a look at the
+    #	items in the hg17.wgRna table and use those as a guide
+    hgsql -N -e "select * from wgRna;" hg17 > hg17.wgRna.txt
+    awk '{print $5,$10}' hg17.wgRna.txt > name.type.hg17
+    #	combine this new sno data with the existing miRNA data
+    hgsql -N -e "select * from miRNA;" hg16 > hg16.miRNA.txt
+    cat << '_EOF_' > addTypes.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my %types;              #       key is name, value is the type
+
+open (FH, "name.type.hg17") or die "Can not open name.type.hg17";
+while (my $line=<FH>)
+{
+    chomp $line;
+    my ($name, $type) = split('\s+',$line);
+    $types{$name} = $type;
+}
+close (FH);
+
+open (FH,"grep ^chr UCSC_snotrack_hg16.txt | sort -k1,1 -k2,2n|") or
+        die "can not open UCSC_snotrack_hg16.txt";
+while (my $line=<FH>)
+{
+    chomp $line;
+    my $type="unknown";
+    my ($chrom, $start, $end, $name, $score, $strand) = split('\s+',$line);
+    if (exists($types{$name})) { $type = $types{$name}; }
+    else { if ($name =~ m/^HBII/) { $type = "CDBox"; } }
+    print "$chrom\t$start\t$end\t$name\t$score\t$strand\t0\t0\t$type\n";
+}
+close (FH);
+'_EOF_'
+    #	happy emacs
+    chmod +x addTypes.pl 
+    awk '{print $2"\t"$3"\t"$4"\t"$5"\t"$6"\t"$7"\t"$8"\t"$9"\t""miRna"}' \
+	hg16.miRNA.txt > hg16.wgRna.tab
+    ./addTypes.pl >> hg16.wgRna.tab
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/wgRna.sql hg16 wgRna \
+	hg16.wgRna.tab
+    #	this leaves 16 items classified as unknown, request to
+    #	Michel Weber for proper classification
