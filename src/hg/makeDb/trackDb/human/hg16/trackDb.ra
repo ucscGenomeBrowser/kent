@@ -4228,3 +4228,16 @@ priority 170
 visibility dense
 type bed 4 .
 
+track wgRna
+shortLabel sno/miRNA
+longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
+group genes
+priority 63.5
+visibility hide
+color 200,80,0
+type bed 8 +
+
+searchTable wgRna
+searchMethod fuzzy
+searchType bed
+searchPriority 10
