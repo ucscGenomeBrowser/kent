@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.254 2005/06/15 00:22:53 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.255 2005/06/17 01:26:12 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -515,6 +515,9 @@ struct sqlConnection *hAllocOrConnect(char *db)
 /* Get available cached connection if possible. If not, just connect. */
 {
 struct sqlConnection *conn;
+if (db == NULL)
+    errAbort("hAllocOrConnect: null db argument"
+	     "(perhaps hSetDb needs to be called first?)");
 if (sameString(db, hGetDbUsual(db)))
     conn = hAllocConn();
 else if (sameString(db, hGetDb2Usual(db)))
