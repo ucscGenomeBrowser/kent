@@ -15,12 +15,13 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
+    cnpIafrate.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cutter.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotifSql.o dnaProbe.o \
     easyGene.o encodeErge.o encodeErgeHssCellLines.o\
+    encodeIndels.o \
     encodeRegionInfo.o encodeRegionInfoCustom.o \
     encodeStanfordPromoters.o encodeStanfordPromotersAverage.o \
-    encodeIndels.o \
     ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
