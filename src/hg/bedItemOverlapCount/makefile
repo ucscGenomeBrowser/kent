@@ -12,4 +12,4 @@ ${A}: ${O} $(MYLIBS)
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/${A}${EXE}
 
 test:	${A}
-	cd tests && ./RunTest.sh -home -verbose
+	cd tests && ./RunTest.sh
