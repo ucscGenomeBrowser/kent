@@ -1872,7 +1872,7 @@ shortLabel Stanf RTPCR
 longLabel Stanford Endogenous Transcript Levels in HCT116 Cells
 group encodeTxLevels
 priority 27.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr11,chr13,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 useScore 1
 type bed 5 +
@@ -3490,6 +3490,8 @@ priority 55.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
+color 120,0,20
+altColor 150,0,25
 maxHeightPixels 128:16:16
 autoScale off
 minLimit 0
@@ -3730,6 +3732,8 @@ priority 62.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bedGraph 4
+color 120,0,20
+altColor 150,0,25
 maxHeightPixels 128:16:16
 autoScale off
 minLimit 0
