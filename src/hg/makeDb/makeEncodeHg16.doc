@@ -456,6 +456,77 @@ EOF
     hgLoadWiggle hg16 encode_UCSD_ChIP_tmH3K4_p0 tmH3K4_p0.wig -pathPrefix=/gbdb/hg16/encode/UcsdChip/wib
 
 
+# STANFORD MLAGAN MSA OF FREEZE4 (2005-06-13 kate)
+#       From George Asimenos, Batzoglou lab (asimenos@stanford.edu)
+    
+    cd /cluster/data/encode
+    mkdir -p MLAGAN/freeze4/{cons,maf}
+    cd MLAGAN/freeze4/maf
+    # move maf submission in
+    tar xvfz ENCODE_LAGAN_maf.tgz
+    mkdir out tmp
+
+        human   hg16
+        mouse   mm6
+        rat     rn3
+        macaque rheMac1
+        dog     canFam1
+        chimp   panTro1
+        monodelphis     monDom1
+        xenopus xenTro1
+        fugu    fr1
+        zebrafish       danRer2
+        tetraodon       tetNig1
+
+cat > mafProject.csh << 'EOF'
+    set tmpDir = /cluster/data/encode/MLAGAN/freeze4/maf/tmp
+    set outDir = /cluster/data/encode/MLAGAN/freeze4/maf/out
+    foreach r (EN[mr]*)
+        echo $r
+        set c = `echo "SELECT chrom from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg16`
+        set start =  \
+                `echo "SELECT chromStart from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg16`
+        set size = \
+                `echo "SELECT size from chromInfo WHERE chrom='$c'" | \
+                        hgsql -N hg16`
+        /cluster/data/encode/MLAGAN/mafCoord.pl < $r/$r.maf \
+                human.1 hg16.$c $start $size | \
+            sed 's/^a$/a score=0.0/' > $tmpDir/$r.db.maf
+        /cluster/bin/penn/maf_project $tmpDir/$r.db.maf hg16.$c \
+                        > $outDir/$r.maf
+    end
+'EOF'
+    # << for emacs
+    csh mafProject.csh >&! mafProject.log 
+    # seg faults in ENm008 and ENr324
+    # move maf files for these regions to "bad" dir
+
+    mkdir -p /gbdb/hg16/encode/MLAGAN/freeze4/mafs
+    ln -s `pwd`/out/*.maf /gbdb/hg16/encode/MLAGAN/freeze4/mafs
+    hgLoadMaf -WARN hg16 encodeMlaganAlign -pathPrefix=/gbdb/hg16/encode/MLAGAN/freeze4/mafs
+
+    # create summary table for zoomed out views of pairwise
+    cd /cluster/data/encode/MLAGAN/freeze4/maf/latest
+    cat out/*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+                                -maxSize=50000 hg16 encodeMlaganSummary stdin
+
+    # conservation wiggle (GERP)
+    cat lab/chr*.wig | \
+        wigEncode stdin GerpCons.wig GerpCons.wib
+        # Converted stdin, upper limit 3.00, lower limit 0.00
+    mkdir -p /gbdb/hg16/encode/MLAGAN/freeze4
+    rm -f /gbdb/hg16/encode/MLAGAN/freeze4/GerpCons.wib
+    ln -s `pwd`/GerpCons.wib /gbdb/hg16/encode/MLAGAN/freeze4
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/MLAGAN/freeze4 hg16 \
+                        encodeMlaganGerpCons GerpCons.wig 
+
+    # conserved elements (from GERP)
+    sed -n -e '/^chr/s/GERP.score=/GERP./p' lab/ENCODE_GERP_cons.bed | \
+        hgLoadBed hg16 encodeMlaganGerpEl stdin
+    # Loaded 48480 elements of size 5
+
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
 #       From George Asimenos, Batzoglou lab (asimenos@stanford.edu)
     
@@ -829,6 +900,7 @@ cat > load.csh << 'EOF'
 
 # GENCODE Sanger Havana annotations  (2005-06-07 kate)
     # previous versions are in other dirs
+    # reloaded class table 6/13 based on request of Havana team
     ssh hgwdev
     mkdir -p /cluster/data/encode/Gencode
     cd /cluster/data/encode/Gencode
@@ -894,16 +966,18 @@ cat > load.csh << 'EOF'
     # create gene class table
     hgsql hg16 < ~/kent/src/hg/lib/gencodeGeneClass.sql
     awk '{printf "%s\t%s\n", $10, $2}' gencode.vega.gtf | \
-        sed -e 's/"//g' -e 's/;//' -e 's/VEGA_//' | \
+        sed -e 's/"//g' -e 's/;//' -e 's/VEGA_//' \
+            -e 's/_val/_gencode_conf/' -e 's/Antisense/Novel_transcript/' | \
         sort | uniq > gencodeGeneClass.tab
     wc -l gencodeGeneClass.tab
         # 2888 gencodeGeneClass.tab
     echo "LOAD DATA LOCAL INFILE 'gencodeGeneClass.tab' into table gencodeGeneClass" | hgsql hg16
 
     # inventory sources for genepreds (genes will be colored by these)
-    awk '{print $2}' gencode.vega.gtf | sort | uniq > classes.txt
+    hgsql -N hg16 \
+        -e "select  distinct(class) from gencodeGeneClass" > classes.txt
     wc -l classes.txt
-        # 12
+        # 10
 
     # run Mark D's gene checker on VEGA_Known and email results to submitter
     echo " select encodeGencodeGene.* from encodeGencodeGene, gencodeGeneClass where encodeGencodeGene.name=gencodeGeneClass.name and gencodeGeneClass.class='Known'" | hgsql hg16 -N > gencode.known.gp
