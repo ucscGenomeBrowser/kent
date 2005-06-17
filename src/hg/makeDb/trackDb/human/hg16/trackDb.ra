@@ -3725,7 +3725,7 @@ priority 2
 
 track encodeStanfordMeth
 compositeTrack on
-shortLabel Stanf Methylation
+shortLabel Stanf Meth
 longLabel Stanford Methylation Digest: Be2C, CRL1690, HCT116, HT1080, HepG2, JEG3, Snu182, U87
 group encodeChrom
 priority 62.0
