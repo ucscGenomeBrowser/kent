@@ -14,6 +14,7 @@
 #include "gfxPoly.h"
 #include "memgfx.h"
 #include "cnpIafrate.h"
+#include "cnpSharp.h"
 
 void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
 /* Filter out items from track->itemList. */
@@ -140,3 +141,14 @@ Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg);
 
 void cnpIafrateMethods(struct track *tg);
 /* methods for cnpIafrate */
+
+void loadCnpSharp(struct track *tg);
+/* loader for cnpSharp table */
+
+void freeCnpSharp(struct track *tg);
+
+Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
+/* green for GAIN, red for LOSS, blue for both */
+
+void cnpSharpMethods(struct track *tg);
+/* methods for cnpSharp */

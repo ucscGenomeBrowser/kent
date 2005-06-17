@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.31 2005/06/17 20:31:35 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.32 2005/06/17 22:22:29 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1047,9 +1047,19 @@ void loadCnpIafrate(struct track *tg)
     bedLoadItem(tg, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
 }
 
+void loadCnpSharp(struct track *tg)
+{
+    bedLoadItem(tg, "cnpSharp", (ItemLoader)cnpSharpLoad);
+}
+
 void freeCnpIafrate(struct track *tg)
 {
     cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
+}
+
+void freeCnpSharp(struct track *tg)
+{
+    cnpSharpFreeList((struct cnpSharp**)&tg->items);
 }
 
 Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg)
@@ -1067,9 +1077,32 @@ Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg)
     return MG_BLACK;
 }
 
+Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg)
+{
+    // struct cnpSharp *cnp = (struct cnpSharp *)item;
+    struct cnpSharp *cnp = item;
+    char *type = cnp->variationType;
+
+    if (sameString(type, "Gain"))
+      return MG_GREEN;
+    if (sameString(type, "Loss"))
+      return MG_RED;
+    if (sameString(type, "Gain and Loss"))
+      return MG_BLUE;
+    return MG_BLACK;
+}
+
 void cnpIafrateMethods(struct track *tg)
 {
   tg->loadItems = loadCnpIafrate;
   tg->freeItems = freeCnpIafrate;
   tg->itemColor = cnpIafrateColor;
 }
+
+void cnpSharpMethods(struct track *tg)
+{
+  tg->loadItems = loadCnpSharp;
+  tg->freeItems = freeCnpSharp;
+  tg->itemColor = cnpSharpColor;
+}
+
