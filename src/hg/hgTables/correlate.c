@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.1 2005/06/17 19:01:32 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.2 2005/06/17 23:41:07 hiram Exp $";
 
 /*	there can be an array of these for N number of tables to work with */
 struct trackTable
@@ -29,9 +29,38 @@ struct trackTable
 struct dataVector
     {
     int count;		/*	number of data values	*/
+    int maxCount;	/*	no more than this number of data values	*/
     int *position;	/*	chrom position, 0-relative	*/
     float *value;	/*	data value at this position	*/
     };
+
+static struct dataVector *allocDataVector(int bases)
+/*	allocate a dataVector for given number of bases	*/
+{
+struct dataVector *v;
+AllocVar(v);
+v->position = needMem(sizeof(int) * bases);
+v->value = needMem(sizeof(float) * bases);
+v->count = 0;		/*	nothing here yet	*/
+v->maxCount = bases;	/*	do not run past this limit	*/
+return v;
+}
+
+static void freeDataVector(struct dataVector **v)
+/*	free up space belonging to a dataVector	*/
+{
+if (v)
+    {
+    struct dataVector *dv;
+    dv=*v;
+    if (dv)
+	{
+	freeMem(dv->position);
+	freeMem(dv->value);
+	}
+    freez(v);
+    }
+}
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -304,6 +333,124 @@ if (wigData)
     }
 }
 
+static void fetchVector(struct trackDb *tdb, struct region *regions,
+    struct sqlConnection *conn, struct dataVector *vector)
+{
+struct region *region;
+boolean isBedGraph = FALSE;
+boolean isWig = FALSE;
+char *table = NULL;
+int bedGraphColumnNum = 5;         /*      default score column    */
+char * bedGraphColumnName = NULL;  /*	1-relative, no bin column */
+
+if (tdb)
+    {
+    table = tdb->tableName;
+    isBedGraph = startsWith("bedGraph", tdb->type);
+    if (startsWith("wigMaf",tdb->type))
+	{
+	char *wigTable = trackDbSetting(tdb, "wiggle");
+	if (wigTable && hTableExists(wigTable))
+	    table = wigTable;
+	}
+    isWig = isWiggle(database,table);
+    }
+else
+    return;
+
+if (! (isWig || isBedGraph))
+    return;
+
+if (isBedGraph)
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    int wordCount;
+    char *words[8];
+    char *typeLine = cloneString(tdb->type);
+    int colCount = 0;
+
+    wordCount = chopLine(typeLine,words);
+    if (wordCount > 1)
+        bedGraphColumnNum = sqlUnsigned(words[1]);
+    freez(&typeLine);
+    sprintf(query, "describe %s", table);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	++colCount;
+	if ((1 == colCount) && sameString(row[0], "bin"))
+	    colCount = 0;
+	if (colCount == bedGraphColumnNum)
+	    bedGraphColumnName = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    }
+
+for (region = regions; region != NULL; region = region->next)
+    {
+    char *filter = filterClause(database, table, region->chrom);
+
+    if (isBedGraph)
+	{
+	int rowOffset;
+	char **row;
+	struct sqlResult *sr = NULL;
+	char fields[256];
+	safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
+		bedGraphColumnName);
+	sr = hExtendedRangeQuery(conn, table, region->chrom, region->start,
+		region->end, filter, FALSE, fields, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    float value = sqlFloat(row[2]);
+	    int vIndex = vector->count;
+	    int cStart = sqlSigned(row[0]);
+	    int cEnd = sqlSigned(row[1]);
+	    int i;
+	    for (i = cStart;
+		    (i < cEnd) && (vIndex < vector->maxCount); ++i, ++vIndex)
+		{
+		vector->value[vIndex] = value;
+		vector->position[vIndex] = i;
+		}
+		vector->count = vIndex;
+	    }
+	sqlFreeResult(&sr);
+	}
+    else if (isWig)
+	{
+        struct wigAsciiData *wigData = NULL;
+        struct wigAsciiData *asciiData;
+        struct wigAsciiData *next;
+	wigData = getWiggleAsData(conn, table, region);
+	for (asciiData = wigData; asciiData; asciiData = next)
+            {
+	    struct asciiDatum *data = asciiData->data;
+	    int i;
+            next = asciiData->next;
+	    for (i = 0; i < asciiData->count; ++i, ++data)
+		{
+		float value = data->value;
+		int vIndex = vector->count;
+		int cStart = data->chromStart;
+		int cEnd = cStart + asciiData->span;
+		int j;
+		for (j = cStart;
+			(j < cEnd) && (vIndex < vector->maxCount);++j,++vIndex)
+		    {
+		    vector->value[vIndex] = value;
+		    vector->position[vIndex] = j;
+		    }
+		    vector->count = vIndex;
+		}
+            }
+	freeWigAsciiData(&wigData);
+	}
+    }
+}
+
 static int countItems(struct trackDb *tdb, struct region *regions,
     struct sqlConnection *conn, double *dataSum, double *dataSumSquares,
 	int *baseCount, int *start, int *end)
@@ -478,7 +625,7 @@ hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*timeMs);
 }
 
-static void showStats(struct sqlConnection *conn, struct trackTable *tableList,
+static int showStats(struct sqlConnection *conn, struct trackTable *tableList,
 	int tableCount)
 /*	show the stats for the given tracks and tables	*/
 {
@@ -487,6 +634,11 @@ struct region *regionList = getRegions();
 struct region *region;
 int i;
 int regionCount = 0;
+int maxBases = 0;
+int vectorCount = 0;		/*	count of vectors allocated	*/
+#define MAX_VECTOR_COUNT	10	/*	no more than this	*/
+struct dataVector *vectors[MAX_VECTOR_COUNT] = {NULL, NULL, NULL, NULL, NULL,
+	NULL, NULL, NULL, NULL, NULL};/*allocated below as items are counted */
 
 for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
@@ -550,8 +702,91 @@ for (i = 0; i < tableCount; ++i)
     endTime = clock1000();
     statsRowOut(tdb->shortLabel, start, end, bases, itemCount,
 	sumData, sumSquares, endTime-startTime);
+    if (bases > maxBases)
+	maxBases = bases;
+    /*	debugging situation, if bases are <= 100, show everything */
+    if ((1 == regionCount) && (maxBases < 101))
+	{
+	struct dataVector *v;
+	if ((vectorCount < MAX_VECTOR_COUNT) && (bases > 0))
+	    {
+	    v = allocDataVector(bases);
+	    vectors[vectorCount++] = v;
+	    }
+	}
     }
 hPrintf("</TABLE></P>\n");
+
+/*	debugging situation, if bases are <= 100, show everything */
+if ((1 == regionCount) && (maxBases < 101))
+    {
+    hPrintf("<P>debugging mode when total bases <= 100.  Showing all data.</P>\n");
+    if (vectorCount != tableCount)
+	{
+	hPrintf("<P>ERROR: should have %d vectors allocated, only see %d</P>\n",
+		tableCount, vectorCount);
+	}
+    else
+	{
+	int vIndex0 = 0;
+	int vIndex1 = 0;
+	int firstData = 0;
+	int lastData = 0;
+
+	for (i = 0; i < tableCount; ++i)
+	    {
+	    char *label;
+	    struct trackDb *tdb;
+	    long startTime, endTime;
+
+	    startTime = clock1000();
+	    label = tableList[i].tableName;
+	    if (tableList[i].tdb != NULL &&
+		sameString(tableList[i].tdb->tableName, label))
+		    label=tableList[i].tdb->shortLabel;
+	    tdb = findTdb(tableList[i].tdb,tableList[i].tableName);
+	    fetchVector(tdb, regionList, conn, vectors[i]);
+	    endTime = clock1000();
+	    }
+
+	region = regionList;
+	firstData = min(vectors[0]->position[0],vectors[1]->position[0]);
+	lastData = max(vectors[0]->position[vectors[0]->count-1],
+		vectors[1]->position[vectors[1]->count-1]);
+
+	hPrintf("<P><TABLE BORDER=1>\n");
+	hPrintf("<TR><TH>position</TH><TH>value 0</TH><TH>value 1</TH></TR>\n");
+	for (i = firstData; (i < region->end) && (i < lastData); ++i)
+	    {
+	    int p0 = vectors[0]->position[vIndex0];
+	    int p1 = vectors[1]->position[vIndex1];
+	    float v0 = vectors[0]->value[vIndex0];
+	    float v1 = vectors[1]->value[vIndex1];
+	    hPrintf("<TR><TD>%d</TD>", i);
+	    if (i == p0)
+		{
+		hPrintf("<TD>%g</TD>", v0);
+		++vIndex0;
+		}
+	    else
+		{
+		hPrintf("<TD>&nbsp;</TD>");
+		}
+	    if (i == p1)
+		{
+		hPrintf("<TD>%g</TD></TR>\n", v1);
+		++vIndex1;
+		}
+	    else
+		{
+		hPrintf("<TD>&nbsp;</TD></TR>\n");
+		}
+	    }
+	hPrintf("</TABLE></P>\n");
+	}
+    }
+
+return (maxBases);
 }
 
 void doCorrelateMore(struct sqlConnection *conn)
@@ -567,6 +802,7 @@ char *table2;
 boolean isBedGraph1 = FALSE;
 boolean isWig1 = FALSE;
 boolean correlateOK1 = FALSE;
+int bases = 0;
 
 if (curTrack)
     isBedGraph1 = startsWith("bedGraph", curTrack->type);
@@ -596,24 +832,10 @@ tdb2 = showGroupTrackRowLimited(hgtaNextCorrelateGroup, onChange,
 
 tableName2 = tdb2->shortLabel;
 
-hPrintf("<P>\n");
-
-if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
-    {
-    if (correlateOK1)
-	{
-	struct trackTable tableList[2];
-	tableList[0].tdb = curTrack;
-	tableList[0].tableName = curTable;
-	tableList[1].tdb = tdb2;
-	tableList[1].tableName = table2;
-	showStats(conn, tableList, 2);
-	}
-    }
-
-hPrintf("<P>\n");
 
 #ifdef NOT
+hPrintf("<P>\n");
+
 op = cartUsualString(cart, hgtaNextCorrelateOp, "any");
 jsTrackingVar("op", op);
 makeOpButton("any", op);
@@ -638,6 +860,21 @@ cgiMakeButton(hgtaDoClearCorrelate, "clear selections");
 hPrintf("&nbsp;");
 cgiMakeButton(hgtaDoMainPage, "return to table browser");
 hPrintf("</FORM>\n");
+
+hPrintf("<P>\n");
+
+if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
+    {
+    if (correlateOK1)
+	{
+	struct trackTable tableList[2];
+	tableList[0].tdb = curTrack;
+	tableList[0].tableName = curTable;
+	tableList[1].tdb = tdb2;
+	tableList[1].tableName = table2;
+	bases = showStats(conn, tableList, 2);
+	}
+    }
 
 /* Hidden form - for benefit of javascript. */
     {
