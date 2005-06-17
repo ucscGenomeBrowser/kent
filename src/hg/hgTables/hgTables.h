@@ -135,10 +135,28 @@ struct trackDb *showTrackField(struct grp *selGroup,
 	char *trackVar, char *trackScript);
 /* Show track control. Returns selected track. */
 
+int trackDbCmpShortLabel(const void *va, const void *vb);
+/* Sort track by shortLabel. */
+
+struct slName *getDbListForGenome();
+/* Get list of selectable databases. */
+
+char *findSelDb();
+/* Find user selected database (as opposed to genome database). */
+
+struct slName *tablesForDb(char *db);
+/* Find tables associated with database. */
+
 /* --------- Utility functions --------------------- */
+
+void nbSpaces(int count);
+/* Print some non-breaking spaces. */
 
 boolean anyCompression();
 /*  Check if any compressed file output has been requested */
+
+struct trackDb *getFullTrackList();
+/* Get all tracks including custom tracks if any. */
 
 void initGroupsTracksTables(struct sqlConnection *conn);
 /* Get list of groups that actually have something in them. */
@@ -332,6 +350,10 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
 
+/* --------- Functions related to correlation. --------------- */
+boolean anyCorrelation();
+/* Return TRUE if there's a correlation to do. */
+
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -356,6 +378,11 @@ boolean anyIntersection();
 #define hgtaDoClearIntersect "hgta_doClearIntersect"
 #define hgtaDoIntersectMore "hgta_doIntersectMore"
 #define hgtaDoIntersectSubmit "hgta_doIntersectSubmit"
+#define hgtaDoCorrelatePage "hgta_doCorrelatePage"
+#define hgtaDoClearCorrelate "hgta_doClearCorrelate"
+#define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
+#define hgtaDoCorrelateMore "hgta_doCorrelateMore"
+#define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
 #define hgtaDoTest "hgta_doTest"
 #define hgtaDoSchemaTable "hgta_doSchemaTable"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
@@ -429,6 +456,18 @@ boolean anyIntersection();
 #define hgtaNextInvertTable "hgta_nextInvertTable"
 #define hgtaInvertTable2 "hgta_invertTable2"
 #define hgtaNextInvertTable2 "hgta_nextInvertTable2"
+
+   /* These correlate page vars come in pairs so we can cancel. */
+#define hgtaCorrelateGroup "hgta_correlateGroup"
+#define hgtaNextCorrelateGroup "hgta_nextCorrelateGroup"
+#define hgtaCorrelateTrack "hgta_correlateTrack"
+#define hgtaNextCorrelateTrack "hgta_nextCorrelateTrack"
+#define hgtaCorrelateOp "hgta_correlateOp"
+#define hgtaNextCorrelateOp "hgta_nextCorrelateOp"
+#define hgtaCorrelateTable "hgta_correlateTable"
+#define hgtaNextCorrelateTable "hgta_nextCorrelateTable"
+#define hgtaCorrelateTable2 "hgta_correlateTable2"
+#define hgtaNextCorrelateTable2 "hgta_nextCorrelateTable2"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -518,7 +557,7 @@ void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
 /*	obtain wiggle data limits from trackDb or cart or settings */
 
 struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
-	struct region *region, struct lm *lm);
+	struct region *region);
 /*	return the wigAsciiData list	*/
 
 void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn);
@@ -688,6 +727,18 @@ void doIntersectMore(struct sqlConnection *conn);
 
 void doIntersectSubmit(struct sqlConnection *conn);
 /* Finish working in intersect page. */
+
+void doCorrelatePage(struct sqlConnection *conn);
+/* Respond to correlate create/edit button */
+
+void doClearCorrelate(struct sqlConnection *conn);
+/* Respond to click on clear correlate. */
+
+void doCorrelateMore(struct sqlConnection *conn);
+/* Continue working in correlate page. */
+
+void doCorrelateSubmit(struct sqlConnection *conn);
+/* Finish working in correlate page. */
 
 void doGenePredSequence(struct sqlConnection *conn);
 /* Output genePred sequence. */

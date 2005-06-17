@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.46 2005/05/27 19:34:48 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.47 2005/06/17 19:03:56 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -592,7 +592,7 @@ return bedList;
 }	/*	struct bed *getWiggleAsBed()	*/
 
 struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
-	struct region *region, struct lm *lm)
+	struct region *region)
 /*	return the wigAsciiData list	*/
 {
 int maxOut = 0;
