@@ -3073,7 +3073,7 @@ type bed 12
 track encodeLIChIP
 compositeTrack on
 shortLabel LI ChIP Various
-longLabel Ludwig Institute/UCSD ChIP/Chip: Pol2 8WG16, TAF1, H3ac, H3K4me, H3K27me3 antibodies
+longLabel Ludwig Institute/UCSD ChIP/Chip: Pol2 8WG16, TAF1, H3ac, H3K4me2, H3K27me3 antibodies
 group encodeChip
 priority 48.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3147,7 +3147,7 @@ color 109,51,43
 
 track encodeUcsdChipMeh3k4Imr90_f
 subTrack encodeLIChIP
-shortLabel LI H3K4me IMR90
+shortLabel LI H3K4me2 IMR90
 longLabel Ludwig Institute ChIP/Chip: H3K4me2 ab, IMR90 cells 
 priority 10
 color 109,51,43
@@ -3296,13 +3296,13 @@ autoScale off
 track encodeUcsdNgHeLaH3K4me3_p0
 subTrack encodeUcsdNgGif
 shortLabel LI Ng H3K4m3 -gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me, no gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me3, no gamma interferon
 priority 1
 
 track encodeUcsdNgHeLaH3K4me3_p30
 subTrack encodeUcsdNgGif
 shortLabel LI Ng H3K4m3 +gIF
-longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me, 30 min after gamma interferon
+longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me3, 30 min after gamma interferon
 priority 2
 
 track encodeUcsdNgHeLaRnap_p0
