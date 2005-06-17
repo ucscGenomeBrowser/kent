@@ -2735,7 +2735,7 @@ track encodeAffyChIpHl60PvalBrg1Hr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy Brg1 RA 0h
-longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 0hrs) P-Value
 color 225,0,0
 priority 1
 
@@ -2743,7 +2743,7 @@ track encodeAffyChIpHl60PvalBrg1Hr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy Brg1 RA 2h
-longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 2hrs) P-Value
 color 225,0,0
 priority 3
 
@@ -2751,7 +2751,7 @@ track encodeAffyChIpHl60PvalBrg1Hr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy Brg1 RA 8h
-longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 8hrs) P-Value
 color 225,0,0
 priority 5
 
@@ -2759,7 +2759,7 @@ track encodeAffyChIpHl60PvalBrg1Hr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy Brg1 RA 32h
-longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (Brg1 retinoic acid-treated HL-60, 32hrs) P-Value
 color 225,0,0
 priority 7
 
@@ -2767,7 +2767,7 @@ track encodeAffyChIpHl60PvalCebpeHr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy CEBPe RA 0h
-longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 0hrs) P-Value
 color 200,25,0
 priority 9
 
@@ -2775,7 +2775,7 @@ track encodeAffyChIpHl60PvalCebpeHr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy CEBPe RA 2h
-longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 2hrs) P-Value
 color 200,25,0
 priority 11
 
@@ -2783,7 +2783,7 @@ track encodeAffyChIpHl60PvalCebpeHr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy CEBPe RA 8h
-longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 8hrs) P-Value
 color 200,25,0
 priority 13
 
@@ -2791,7 +2791,7 @@ track encodeAffyChIpHl60PvalCebpeHr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy CEBPe RA 32h
-longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (CEBPe retinoic acid-treated HL-60, 32hrs) P-Value
 color 200,25,0
 priority 15
 
@@ -2799,7 +2799,7 @@ track encodeAffyChIpHl60PvalCtcfHr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy CTCF RA 0h
-longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 0hrs) P-Value
 color 175,50,0
 priority 17
 
@@ -2807,7 +2807,7 @@ track encodeAffyChIpHl60PvalCtcfHr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy CTCF RA 2h
-longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 2hrs) P-Value
 color 175,50,0
 priority 19
 
@@ -2815,7 +2815,7 @@ track encodeAffyChIpHl60PvalCtcfHr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy CTCF RA 8h
-longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 8hrs) P-Value
 color 175,50,0
 priority 21
 
@@ -2823,7 +2823,7 @@ track encodeAffyChIpHl60PvalCtcfHr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy CTCF RA 32h
-longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (CTCF retinoic acid-treated HL-60, 32hrs) P-Value
 color 175,50,0
 priority 23
 
@@ -2831,7 +2831,7 @@ track encodeAffyChIpHl60PvalH3K27me3Hr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy H3K27me3 RA 0h
-longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 0hrs) P-Value
 color 150,75,0
 priority 25
 
@@ -2839,7 +2839,7 @@ track encodeAffyChIpHl60PvalH3K27me3Hr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy H3K27me3 RA 2h
-longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 2hrs) P-Value
 color 150,75,0
 priority 27
 
@@ -2847,7 +2847,7 @@ track encodeAffyChIpHl60PvalH3K27me3Hr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy H3K27me3 RA 8h
-longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 8hrs) P-Value
 color 150,75,0
 priority 29
 
@@ -2855,7 +2855,7 @@ track encodeAffyChIpHl60PvalH3K27me3Hr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy H3K27me3 RA 32h
-longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (H3K27me3 retinoic acid-treated HL-60, 32hrs) P-Value
 color 150,75,0
 priority 31
 
@@ -2863,7 +2863,7 @@ track encodeAffyChIpHl60PvalH4Kac4Hr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy H4Kac4 RA 0h
-longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 0hrs) P-Value
 color 125,100,0
 priority 33
 
@@ -2871,7 +2871,7 @@ track encodeAffyChIpHl60PvalH4Kac4Hr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy H4Kac4 RA 2h
-longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 2hrs) P-Value
 color 125,100,0
 priority 35
 
@@ -2879,7 +2879,7 @@ track encodeAffyChIpHl60PvalH4Kac4Hr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy H4Kac4 RA 8h
-longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 8hrs) P-Value
 color 125,100,0
 priority 37
 
@@ -2887,7 +2887,7 @@ track encodeAffyChIpHl60PvalH4Kac4Hr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy H4Kac4 RA 32h
-longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (H4Kac4 retinoic acid-treated HL-60, 32hrs) P-Value
 color 125,100,0
 priority 39
 
@@ -2895,7 +2895,7 @@ track encodeAffyChIpHl60PvalP300Hr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy P300 RA 0h
-longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 0hrs) P-Value
 color 100,125,0
 priority 41
 
@@ -2903,7 +2903,7 @@ track encodeAffyChIpHl60PvalP300Hr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy P300 RA 2h
-longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 2hrs) P-Value
 color 100,125,0
 priority 43
 
@@ -2911,7 +2911,7 @@ track encodeAffyChIpHl60PvalP300Hr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy P300 RA 8h
-longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 8hrs) P-Value
 color 100,125,0
 priority 45
 
@@ -2919,7 +2919,7 @@ track encodeAffyChIpHl60PvalP300Hr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy P300 RA 32h
-longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (P300 retinoic acid-treated HL-60, 32hrs) P-Value
 color 100,125,0
 priority 47
 
@@ -2927,7 +2927,7 @@ track encodeAffyChIpHl60PvalPu1Hr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy PU1 RA 0h
-longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 0hrs) P-Value
 color 75,150,0
 priority 49
 
@@ -2935,7 +2935,7 @@ track encodeAffyChIpHl60PvalPu1Hr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy PU1 RA 2h
-longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 2hrs) P-Value
 color 75,150,0
 priority 51
 
@@ -2943,7 +2943,7 @@ track encodeAffyChIpHl60PvalPu1Hr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy PU1 RA 8h
-longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 8hrs) P-Value
 color 75,150,0
 priority 53
 
@@ -2951,7 +2951,7 @@ track encodeAffyChIpHl60PvalPu1Hr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy PU1 RA 32h
-longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (PU1 retinoic acid-treated HL-60, 32hrs) P-Value
 color 75,150,0
 priority 55
 
@@ -2959,7 +2959,7 @@ track encodeAffyChIpHl60PvalRnapHr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy Pol2 RA 0h
-longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 0hrs) P-Value
 color 50,175,0
 priority 57
 
@@ -2967,7 +2967,7 @@ track encodeAffyChIpHl60PvalRnapHr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy Pol2 RA 2h
-longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 2hrs) P-Value
 color 50,175,0
 priority 59
 
@@ -2975,7 +2975,7 @@ track encodeAffyChIpHl60PvalRnapHr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy Pol2 RA 8h
-longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 8hrs) P-Value
 color 50,175,0
 priority 61
 
@@ -2983,7 +2983,7 @@ track encodeAffyChIpHl60PvalRnapHr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy Pol2 RA 32h
-longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (Pol2 8WG16 antibody, retinoic acid-treated HL-60, 32hrs) P-Value
 color 50,175,0
 priority 63
 
@@ -2991,7 +2991,7 @@ track encodeAffyChIpHl60PvalRaraHr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy RARA RA 0h
-longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 0hrs) P-Value
 color 25,200,0
 priority 65
 
@@ -2999,7 +2999,7 @@ track encodeAffyChIpHl60PvalRaraHr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy RARA RA 2h
-longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 2hrs) P-Value
 color 25,200,0
 priority 67
 
@@ -3007,7 +3007,7 @@ track encodeAffyChIpHl60PvalRaraHr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy RARA RA 8h
-longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 8hrs) P-Value
 color 25,200,0
 priority 69
 
@@ -3015,7 +3015,7 @@ track encodeAffyChIpHl60PvalRaraHr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy RARA RA 32h
-longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (RARA retinoic acid-treated HL-60, 32hrs) P-Value
 color 25,200,0
 priority 71
 
@@ -3023,7 +3023,7 @@ track encodeAffyChIpHl60PvalSirt1Hr00
 subTrack encodeAffyChIpHl60PvalHr00
 release alpha
 shortLabel Affy SIRT1 RA 0h
-longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 0hrs) P Value
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 0hrs) P-Value
 color 0,225,0
 priority 73
 
@@ -3031,7 +3031,7 @@ track encodeAffyChIpHl60PvalSirt1Hr02
 subTrack encodeAffyChIpHl60PvalHr02
 release alpha
 shortLabel Affy SIRT1 RA 2h
-longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 2hrs) P Value
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 2hrs) P-Value
 color 0,225,0
 priority 75
 
@@ -3039,7 +3039,7 @@ track encodeAffyChIpHl60PvalSirt1Hr08
 subTrack encodeAffyChIpHl60PvalHr08
 release alpha
 shortLabel Affy SIRT1 RA 8h
-longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 8hrs) P Value
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 8hrs) P-Value
 color 0,225,0
 priority 77
 
@@ -3047,7 +3047,7 @@ track encodeAffyChIpHl60PvalSirt1Hr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy SIRT1 RA 32h
-longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (SIRT1 retinoic acid-treated HL-60, 32hrs) P-Value
 color 0,225,0
 priority 79
 
@@ -3055,7 +3055,7 @@ track encodeAffyChIpHl60PvalTfiibHr32
 subTrack encodeAffyChIpHl60PvalHr32
 release alpha
 shortLabel Affy TFIIB RA 32h
-longLabel Affymetrix ChIP/Chip (TFIIB retinoic acid-treated HL-60, 32hrs) P Value
+longLabel Affymetrix ChIP/Chip (TFIIB retinoic acid-treated HL-60, 32hrs) P-Value
 color 0,0,200
 priority 81
 
@@ -3378,7 +3378,7 @@ priority 1
 track encodeUcsdNgValChipH3K4me
 subTrack encodeUcsdNgValChip
 shortLabel LI Ng Val H3K4me
-longLabel Ludwig Institute ChIP/Chip Validation: H3K4me antibody, IMR90 cells
+longLabel Ludwig Institute ChIP/Chip Validation: H3K4me2 antibody, IMR90 cells
 priority 2
 color 0,63,135
 
