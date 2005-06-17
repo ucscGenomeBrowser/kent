@@ -11026,7 +11026,12 @@ mkdir cnp
 cd cnp
 
 # Sharp data
-cp dupArray.txt cnpSharp.bed
+cp dupArray.txt cnpSharp.bed.orig
+# change CNP type to match Iafrate data (with permission from Andy)
+sed -e "s/dup/Gain" cnpSharp.bed.orig > cnpSharp.bed.2
+sed -e "s/dup/Gain/" cnpSharp.bed > cnpSharp.bed.2
+sed -e "s/del/Loss/" cnpSharp.bed.2 > cnpSharp.bed.3
+sed -e "s/Both Loss and Gain/Gain and Loss/" cnpSharp.bed.3 > cnpSharp.bed
 hgLoadBed hg16 cnpSharp -tab -sqlTable=cnpSharp.sql cnpSharp.bed
 # Loaded 160 elements of size 14
 # note: 11 names with special characters: CTD-2183E4*, RP11-111A4?, RP11-325E8#, RP11-1000I9*, RP11-159F11*,
