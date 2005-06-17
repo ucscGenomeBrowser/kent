@@ -3377,7 +3377,7 @@ priority 1
 
 track encodeUcsdNgValChipH3K4me
 subTrack encodeUcsdNgValChip
-shortLabel LI Ng Val H3K4me
+shortLabel LI Ng Val H3K4m2
 longLabel Ludwig Institute ChIP/Chip Validation: H3K4me2 antibody, IMR90 cells
 priority 2
 color 0,63,135
