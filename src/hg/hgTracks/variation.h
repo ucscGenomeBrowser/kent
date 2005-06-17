@@ -9,10 +9,11 @@
 #include "hui.h"
 #include "snpUi.h"
 #include "spaceSaver.h"
-#include "hgTracks.h"
 #include "ld.h"
 #include "ldUi.h"
 #include "gfxPoly.h"
+#include "memgfx.h"
+#include "cnpIafrate.h"
 
 void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
 /* Filter out items from track->itemList. */
@@ -128,3 +129,14 @@ void ldFreeItems(struct track *tg);
 
 void ldMethods(struct track *tg);
 /* setup special methods for Linkage Disequilibrium track */
+
+void loadCnpIafrate(struct track *tg);
+/* loader for cnpIafrate table */
+
+void freeCnpIafrate(struct track *tg);
+
+Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg);
+/* green for GAIN, red for LOSS, blue for both */
+
+void cnpIafrateMethods(struct track *tg);
+/* methods for cnpIafrate */
