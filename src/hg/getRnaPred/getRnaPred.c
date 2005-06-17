@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.15 2005/03/03 01:15:14 acs Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.16 2005/06/17 17:29:33 acs Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,9 +34,14 @@ errAbort(
   "   -suffix=suf - append suffix to each id to avoid confusion with mRNAs\n"
   "    use to define the genes.\n"
   "   -peptides - out the translation of the CDS to a peptide sequence.\n"
-  "   -exonIndices - output indices of exon boundaries after sequence name.\n"
-  "    E.g., \"103 243 290\" says positions 1-103 are from the first exon,\n"
-  "    positions 104-243 are from the second exon, etc.\n"
+  "   -exonIndices - output indices of exon boundaries after sequence name,\n"
+  "    e.g., \"103 243 290\" says positions 1-103 are from the first exon,\n"
+  "    positions 104-243 are from the second exon, etc. \n"
+  "   -maxSize=size - output a maximum of size characters.  Useful when\n"
+  "    testing gene predictions by RT-PCR.\n"
+  "   -genePredExt - (for use with -peptides) use extended genePred format,\n"
+  "    and consider frame information when translating (Warning: only\n"
+  "    considers offset at 5' end, not frameshifts between blocks)\n"
 #if 0
   /* Not implemented, not sure it's worth the complexity */
   "If frame\n"
@@ -57,15 +62,19 @@ static struct optionSpec options[] = {
    {"suffix", OPTION_STRING},
    {"peptides", OPTION_BOOLEAN},
    {"exonIndices", OPTION_BOOLEAN},
-   {NULL, 0},
+   {"maxSize", OPTION_INT},
+   {"genePredExt", OPTION_BOOLEAN},
+   {NULL, 0}
 };
 
 
 /* parsed from command line */
-boolean weird, cdsUpper, cdsOnly, peptides, keepMasking, exonIndices;
+boolean weird, cdsUpper, cdsOnly, peptides, keepMasking, exonIndices, 
+  genePredExt;
 char *cdsOut = NULL;
 char *pslOut = NULL;
 char *suffix = "";
+int maxSize = -1;
 
 boolean hasWeirdSplice(struct genePred *gp)
 /* see if a gene has weird splice sites */
@@ -198,10 +207,24 @@ freeMem(psl.blockSizes);
 void outputPeptide(struct genePred *gp, char *name, struct dyString *cdsBuf, FILE* faFh)
 /* output the peptide sequence */
 {
+int offset = 0;
+
+/* get frame offset, if available and needed */
+if (gp->exonFrames != NULL) 
+{
+    if (gp->strand[0] == '+' && gp->cdsStartStat != cdsComplete)
+        offset = (3 - gp->exonFrames[0]) % 3;
+    else if (gp->strand[0] == '-' && gp->cdsEndStat != cdsComplete)
+        offset = (3 - gp->exonFrames[gp->exonCount-1]) % 3;
+}
+/* NOTE: this fix will not handle the case in which frame is shifted
+ * internally or at multiple exons, as when frame-shift gaps occur in
+ * an alignment of an mRNA to the genome.  */
+
 /* just overwrite the buffer with the peptide, which will stop at end of DNA
  * if no stop codon.*/
-dnaTranslateSome(cdsBuf->string, cdsBuf->string, (cdsBuf->stringSize+2)/3);
-faWriteNext(faFh, name, cdsBuf->string, strlen(cdsBuf->string));
+dnaTranslateSome(cdsBuf->string+offset, cdsBuf->string+offset, (cdsBuf->stringSize+2)/3);
+faWriteNext(faFh, name, cdsBuf->string+offset, strlen(cdsBuf->string+offset));
 }
 
 void processGenePred(struct genePred *gp, struct dyString *dnaBuf, 
@@ -212,11 +235,15 @@ void processGenePred(struct genePred *gp, struct dyString *dnaBuf,
 int i;
 char name[1024];
 int index = 0;
+char *db = hGetDb();
 
 /* Load exons one by one into dna string. */
 dyStringClear(dnaBuf);
 if (exonIndices)
+    {
     dyStringClear(indBuf);
+    dyStringPrintf(indBuf, " %s", db);  /* we'll also include the db */
+    }
 for (i=0; i<gp->exonCount; ++i)
     {
     int start = gp->exonStarts[i];
@@ -229,17 +256,29 @@ for (i=0; i<gp->exonCount; ++i)
         struct dnaSeq *seq = hDnaFromSeq(gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
         dyStringAppendN(dnaBuf, seq->dna, size);
         freeDnaSeq(&seq);
-        if (exonIndices)
-          {
-          index += size;
-          dyStringPrintf(indBuf, " %d", index);
-          }
         }
     }
 
 /* Reverse complement if necessary */
 if (gp->strand[0] == '-')
     reverseComplement(dnaBuf->string, dnaBuf->stringSize);
+
+/* create list of exon indices, if necessary */
+if (exonIndices) 
+    {
+    for (i = (gp->strand[0] == '-' ? gp->exonCount-1 : 0); 
+         i >= 0 && i < gp->exonCount; 
+         i += (gp->strand[0] == '-' ? -1 : 1))
+                                /* use forward order if plus strand
+                                   and reverse order if minus
+                                   strand */
+        {
+        index += gp->exonEnds[i] - gp->exonStarts[i];
+        if (maxSize != -1 && index > maxSize) index = maxSize;
+        dyStringPrintf(indBuf, " %d", index);
+        if (index == maxSize) break; /* can only happen if maxSize != -1 */
+        }
+    } 
 
 if ((gp->cdsStart < gp->cdsEnd)
     && (cdsUpper || cdsOnly || peptides || (cdsFh != NULL)))
@@ -248,11 +287,15 @@ if ((gp->cdsStart < gp->cdsEnd)
 safef(name, sizeof(name), "%s%s%s", gp->name, suffix, 
       exonIndices ? indBuf->string : "");
 if (cdsOnly)
-    faWriteNext(faFh, name, cdsBuf->string, cdsBuf->stringSize);
+    faWriteNext(faFh, name, cdsBuf->string, 
+                (maxSize != -1 && cdsBuf->stringSize > maxSize) ? maxSize : 
+                cdsBuf->stringSize);
 else if (peptides)
     outputPeptide(gp, name, cdsBuf, faFh);
 else
-    faWriteNext(faFh, name, dnaBuf->string, dnaBuf->stringSize);
+    faWriteNext(faFh, name, dnaBuf->string, 
+                (maxSize != -1 && dnaBuf->stringSize > maxSize) ? maxSize : 
+                dnaBuf->stringSize);
 
 if (pslFh != NULL)
     writePsl(gp, pslFh);
@@ -275,7 +318,11 @@ sr = hChromQuery(conn, table, chrom, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* Load gene prediction from database. */
-    struct genePred *gp = genePredLoad(row+rowOffset);
+    struct genePred *gp;
+    if (genePredExt)
+      gp = genePredExtLoad(row+rowOffset, GENEPREDX_NUM_COLS);
+    else
+      gp = genePredLoad(row+rowOffset);
     if ((!weird) || hasWeirdSplice(gp))
         processGenePred(gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
@@ -305,10 +352,15 @@ void getRnaForFile(char *table, char *chrom, struct dyString *dnaBuf,
 {
 boolean all = sameString(chrom, "all");
 struct lineFile *lf = lineFileOpen(table, TRUE);
-char *row[GENEPRED_NUM_COLS];
-while (lineFileNextRowTab(lf, row, GENEPRED_NUM_COLS))
+char *row[GENEPREDX_NUM_COLS];
+while (lineFileNextRowTab(lf, row, genePredExt ? 
+                          GENEPREDX_NUM_COLS : GENEPRED_NUM_COLS))
     {
-    struct genePred *gp = genePredLoad(row);
+    struct genePred *gp;
+    if (genePredExt) 
+      gp = genePredExtLoad(row, GENEPREDX_NUM_COLS);
+    else 
+      gp = genePredLoad(row);
     if (all || sameString(gp->chrom, chrom))
         processGenePred(gp, dnaBuf, cdsBuf, indBuf, faFh, cdsFh, pslFh);
     genePredFree(&gp);
@@ -365,10 +417,16 @@ pslOut = optionVal("pslOut", NULL);
 suffix = optionVal("suffix", suffix); 
 peptides = optionExists("peptides");
 exonIndices = optionExists("exonIndices");
+maxSize = optionInt("maxSize", -1);
+genePredExt = optionExists("genePredExt");
 if (cdsOnly && peptides)
     errAbort("can't specify both -cdsOnly and -peptides");
 if (cdsUpper && keepMasking)
     errAbort("can't specify both -cdsUpper and -keepMasking");
+if (exonIndices && (cdsOnly || peptides))
+    errAbort("can't specify -exonIndices with -cdsOnly or -peptides");
+if (maxSize != -1 && peptides)
+    errAbort("can't specify -maxSize with -peptides");
 getRnaPred(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
