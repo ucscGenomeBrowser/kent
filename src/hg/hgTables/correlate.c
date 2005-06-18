@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.2 2005/06/17 23:41:07 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.3 2005/06/18 16:51:30 hiram Exp $";
 
 /*	there can be an array of these for N number of tables to work with */
 struct trackTable
@@ -553,6 +553,7 @@ for (region = regions; region != NULL; region = region->next)
         struct wigAsciiData *wigData = NULL;
         struct wigAsciiData *asciiData;
         struct wigAsciiData *next;
+/*	XXX - ! need to specify the minimum span here	*/
 	wigData = getWiggleAsData(conn, table, region);
 	for (asciiData = wigData; asciiData; asciiData = next)
             {
@@ -733,7 +734,7 @@ if ((1 == regionCount) && (maxBases < 101))
 	int firstData = 0;
 	int lastData = 0;
 
-	for (i = 0; i < tableCount; ++i)
+	for (i = 0; i < vectorCount; ++i)
 	    {
 	    char *label;
 	    struct trackDb *tdb;
@@ -783,6 +784,10 @@ if ((1 == regionCount) && (maxBases < 101))
 		}
 	    }
 	hPrintf("</TABLE></P>\n");
+	/*	free them up	*/
+	for (i = 0; i < vectorCount; ++i)
+	    freeDataVector(&vectors[i]);
+	hPrintf("<P>free OK</P>\n");
 	}
     }
 
