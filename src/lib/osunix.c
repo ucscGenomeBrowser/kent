@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.23 2005/06/02 09:18:55 galt Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.24 2005/06/19 05:35:20 kent Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -302,7 +302,7 @@ char *getUser()
 uid_t uid = geteuid();
 struct passwd *pw = getpwuid(uid);
 if (pw == NULL)
-    errnoAbort("can't get user name for uid %d", uid);
+    errnoAbort("can't get user name for uid %d", (int)uid);
 return pw->pw_name;
 }
 
