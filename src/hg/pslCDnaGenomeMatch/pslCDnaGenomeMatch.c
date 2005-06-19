@@ -28,7 +28,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.1 2005/06/16 18:21:54 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.2 2005/06/19 03:39:39 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -565,7 +565,7 @@ for (mme = mm ; mme != NULL ; mme = mme->next)
             /* default to empty alignment */
             mrnaMisMatch->bases[j] = '.';
             mrnaMisMatch->tStarts[j] = 0;
-            mrnaMisMatch->chroms[j] = na;
+            mrnaMisMatch->chroms[j] = cloneString(na);
             mrnaMisMatch->loci[j] = mme->loci ;
             }
         mrnaMisMatch->bases[seqCount] = '\0';
@@ -850,18 +850,21 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
                     psl->qName, i ,t, q, psl->tName, 
                     genomeStart, mm->mrnaLoc, psl->strand, genomeStrand, mm->loci);
             }
-        else if (i < 0)
+/*        else if (i < 0)
             {
             mm->chrom = cloneString(psl->tName);
             mm->chromStart = -1;
             mm->genomeBase = '-';
             mm->strand = genomeStrand;
             verbose(2, "negative index %s %s mrnaLoc %d qs %d \n",psl->qName, psl->tName, mm->mrnaLoc , qs);
-            }
+            }*/
         else if (sameString(mm->chrom , na) && index == mm->loci )
+            {
+            mm->genomeBase = '-';
             verbose(5,"   fillin skipped yz mismatch %s t %s:%d q %d %s loci %d i %d\n",
                     psl->qName, psl->tName, 
                     psl->tStart, mm->mrnaLoc, psl->strand, mm->loci, i);
+            }
         }
     /*
     snpList = getSnpList(psl->tName, ts, te, genomeStrand) ;
