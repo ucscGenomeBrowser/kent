@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.52 2005/06/09 02:12:49 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.53 2005/06/21 17:20:35 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7648,3 +7648,24 @@ o Build the pepPi table
 # END OF mm6 KG/GS/PB RE-BUILD. 6/6/05 Fan.
 #####################################################################
 
+## NIA Mouse Gene Index - (DONE - 2005-06-21 Fan)
+#       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+    ssh hgwdev 
+    mkdir -p /cluster/data/mm6/bed/NIAGene
+    cd /cluster/data/mm6/bed/NIAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex5/download/T-psl.txt.gz
+
+    cut -f 1-21 T-psl.txt >NIAGene.tab
+    hgLoadPsl mm6 NIAGene.tab
+
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex5/download/T-fasta.fa.gz
+    gzip -d T-fasta.fa.gz
+    
+    mkdir /gbdb/mm6/NIAGene
+    ln -s /cluster/data/mm6/bed/NIAGene/T-fasta.fa /gbdb/mm6/NIAGene/T-fasta.fa
+    
+    hgLoadSeq mm6 /gbdb/mm6/NIAGene/T-fasta.fa
+
+    Create/edit/check in NIAGene.html and trackDb.ra under
+    
+        kent/src/hg/makeDb/trackDb/mouse/mm6
