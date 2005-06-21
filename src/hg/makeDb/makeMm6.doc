@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.53 2005/06/21 17:20:35 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.54 2005/06/21 23:05:58 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5286,6 +5286,12 @@ hgsql mm6 -e 'load data local infile "pepPi.tab" into table mm6.pepPi;'
     echo "update dbDb set hgPbOk = 1 where name = 'mm6';" \
       | hgsql -h genome-testdb hgcentraltest
 
+# Connect to genome-testdb and use hgcentraltest DB.
+# Update the entry in gdbPdb table from mySql prompt:
+
+    delete from gdbPdb where genomeDb='mm6';
+    insert into gdbPdb values('mm6', 'proteins050415');
+    
 # Adjust drawing parameters for Proteome Browser stamps
 
   Now invoke Proteome Browser and adjust various drawing parameters
