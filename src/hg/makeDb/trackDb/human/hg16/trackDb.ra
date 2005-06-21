@@ -3272,6 +3272,59 @@ shortLabel Stan K562 Sp3
 longLabel Stanford ChIP/chip (K562 cells, Sp3 ChIP)
 priority 6
 
+track encodeStanfordChipSmoothed
+compositeTrack on
+shortLabel Stanf ChIP Score
+longLabel Stanford ChIP/chip Smoothed Score
+group encodeChip
+priority 55.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 721474
+viewLimits 0:1000
+
+track encodeStanfordChipSmoothedHCT116Sp1
+subTrack encodeStanfordChipSmoothed
+shortLabel Stan Sc HCT116 Sp1
+longLabel Stanford ChIP/chip Smoothed Score (HCT116 cells, Sp1 ChIP)
+priority 1
+
+track encodeStanfordChipSmoothedHCT116Sp3
+subTrack encodeStanfordChipSmoothed
+shortLabel Stan Sc HCT116 Sp3
+longLabel Stanford ChIP/chip Smoothed Score (HCT116 cells, Sp3 ChIP)
+priority 2
+
+track encodeStanfordChipSmoothedJurkatSp1
+subTrack encodeStanfordChipSmoothed
+shortLabel Stan Sc Jurkat Sp1
+longLabel Stanford ChIP/chip Smoothed Score (Jurkat cells, Sp1 ChIP)
+priority 3
+
+track encodeStanfordChipSmoothedJurkatSp3
+subTrack encodeStanfordChipSmoothed
+shortLabel Stan Sc Jurkat Sp3
+longLabel Stanford ChIP/chip Smoothed Score (Jurkat cells, Sp3 ChIP)
+priority 4
+
+track encodeStanfordChipSmoothedK562Sp1
+subTrack encodeStanfordChipSmoothed
+shortLabel Stan Sc K562 Sp1
+longLabel Stanford ChIP/chip Smoothed Score (K562 cells, Sp1 ChIP)
+priority 5
+
+track encodeStanfordChipSmoothedK562Sp3
+subTrack encodeStanfordChipSmoothed
+shortLabel Stan Sc K562 Sp3
+longLabel Stanford ChIP/chip Smoothed Score (K562 cells, Sp3 ChIP)
+priority 6
+
 track encodeUCDavisE2F1Median
 shortLabel UCD Ng E2F1
 longLabel UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa Cells
@@ -3524,6 +3577,71 @@ track encodeStanfordMethU87
 subTrack encodeStanfordMeth
 shortLabel Stan Meth U87
 longLabel Stanford Methylation Digest (U87 cells)
+priority 8
+
+track encodeStanfordMethSmoothed
+compositeTrack on
+shortLabel Stanf Meth Score
+longLabel Stanford Methylation Digest Smoothed Score
+group encodeChrom
+priority 62.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+color 120,0,20
+altColor 150,0,25
+maxHeightPixels 128:16:16
+autoScale off
+minLimit 0
+maxLimit 364088
+viewLimits 0:1000
+
+track encodeStanfordMethSmoothedBe2C
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc Be2C
+longLabel Stanford Methylation Digest Smoothed Score (Be2C cells)
+priority 1
+
+track encodeStanfordMethSmoothedCRL1690
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc CRL1690
+longLabel Stanford Methylation Digest Smoothed Score (CRL1690 cells)
+priority 2
+
+track encodeStanfordMethSmoothedHCT116
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc HCT116
+longLabel Stanford Methylation Digest Smoothed Score (HCT116 cells)
+priority 3
+
+track encodeStanfordMethSmoothedHT1080
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc HT1080
+longLabel Stanford Methylation Digest Smoothed Score (HT1080 cells)
+priority 4
+
+track encodeStanfordMethSmoothedHepG2
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc HepG2
+longLabel Stanford Methylation Digest Smoothed Score (HepG2 cells)
+priority 5
+
+track encodeStanfordMethSmoothedJEG3
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc JEG3
+longLabel Stanford Methylation Digest Smoothed Score (JEG3 cells)
+priority 6
+
+track encodeStanfordMethSmoothedSnu182
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc Snu182
+longLabel Stanford Methylation Digest Smoothed Score (Snu182 cells)
+priority 7
+
+track encodeStanfordMethSmoothedU87
+subTrack encodeStanfordMethSmoothed
+shortLabel Stan Meth Sc U87
+longLabel Stanford Methylation Digest Smoothed Score (U87 cells)
 priority 8
 
 track encodeUvaDnaRep
