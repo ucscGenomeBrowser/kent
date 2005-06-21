@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.3 2005/06/19 04:43:26 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.4 2005/06/21 18:58:43 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -41,6 +41,7 @@ int filterCount = 0; /* number of mrna where best hit can be determined  */
 int outputCount = 0; /* number of alignments written */
 int verbosity = 1;
 int lociCounter = 0;
+bool passthru = FALSE;
 struct dlList *fileCache = NULL;
 struct hash *nibHash = NULL;
 FILE *outFile = NULL; /* output tab sep file */
@@ -149,9 +150,10 @@ errAbort(
     "chrom.sizes is a list of chromosome followed by size\n"
     "nib.lst contains list nib files\n"
     "mrna.2bit contains fasta sequences of all mrnas \n"
-    "directory containing nibs for self alignment\n"
+    "directory containing nibs of genome\n"
     "output.psl contains filtered alignments for best matches and cases where no filtering occurred.\n"
     "    -score=output.tab  is output containing mismatch info\n" 
+    "    -passthru  if best hit cannot be decided, then pass through all alignments\n"
     "    -minDiff=N minimum difference in score to filter out 2nd best hit (default 5)\n"
     "    -bedOut=bed output file of mismatches.\n"
     "    -species1=psl file with alignment of mrna to other species.\n"
@@ -1061,7 +1063,7 @@ if (misMatchList != NULL)
     verbose(4, "compile %s mismatchList %d lociList %d of %d alist %d\n",
             name, slCount(misMatchList), seqCount, slCount(lociList), slCount(alignList));
     /* compute mismatches and dump input alignments if nothting found */
-    if (!compileOutput(name, misMatchList, seqCount, lociList))
+    if (!compileOutput(name, misMatchList, seqCount, lociList) &&  passthru)
         for (align = alignList; align != NULL ; align = align->next)
             {
             pslTabOut(align->psl, outFile);
@@ -1168,6 +1170,7 @@ nibdir1 = optionVal("nibdir1", NULL);
 nibdir2 = optionVal("nibdir2", NULL);
 mrna1 = optionVal("mrna1", NULL);
 mrna2 = optionVal("mrna2", NULL);
+passthru = optionExists("passthru");
 verbose(1,"Reading alignments from %s\n",argv[1]);
 pslCDnaGenomeMatch(argv[1], argv[5], argv[3]);
 fclose(outFile);
