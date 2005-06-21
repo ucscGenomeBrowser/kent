@@ -354,6 +354,7 @@ boolean anyIntersection();
 boolean anyCorrelation();
 /* Return TRUE if there's a correlation to do. */
 
+#define correlateMaxDataPoints "corrMaxDataPoints"
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -559,6 +560,11 @@ void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
 struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
 	struct region *region);
 /*	return the wigAsciiData list	*/
+
+struct wigAsciiData *getWiggleData(struct sqlConnection *conn, char *table,
+	struct region *region, int maxOut, int spanConstraint);
+/*	like getWiggleAsData above, but with specific spanConstraint and
+ *	a different data limit count, return the wigAsciiData list	*/
 
 void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Return wiggle data in bed format. */
