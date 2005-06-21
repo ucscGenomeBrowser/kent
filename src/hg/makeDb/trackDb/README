@@ -232,6 +232,8 @@ To include a subtrack of a different type, specify
 the complete settings for the subtrack type, and use the "noInherit on"
 trackDb setting.  This has not been entirely generalized -- use with care.
 
+For readability, please indent the subtrack entries in trackDb.ra by 4 spaces.
+
 
 Example:
 ---------------------
