@@ -998,6 +998,7 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
+spanList 1
 
 track phastCons
 shortLabel phastCons 
@@ -1009,6 +1010,7 @@ color 0,10,100
 maxHeightPixels 40
 type wig 0.0 1.0
 autoScaleDefault off
+spanList 1
 
 track phastConsElements
 shortLabel Most Conserved
@@ -1096,6 +1098,7 @@ color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
 autoScaleDefault Off
+spanList 1
 
 track leptinHuman90
 shortLabel PhyloHMMcons Leptin 90
@@ -1158,6 +1161,7 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 0.0:0.01
 type wig -0.0983 0.210
+spanList 5
 
 track regPotential2X
 shortLabel 2x Reg Potential
@@ -1173,6 +1177,7 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 0.0:0.01
 type wig -0.0732 0.153
+spanList 5
 
 track chainGalGal2
 shortLabel Chicken Chain 
@@ -1310,6 +1315,7 @@ color 0,0,0
 altColor 128,128,128
 defaultViewLimits 30:70
 type wig 0 100 
+spanList 5,1000
 
 track gc5Win20K
 shortLabel GC% Win20K
@@ -1326,6 +1332,7 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
+spanList 5
 
 track gc5Win100K
 shortLabel GC% Win100K
@@ -1342,6 +1349,7 @@ color 0,128,255
 altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
+spanList 5
 
 track ecoresFr1
 shortLabel Fugu Ecores
