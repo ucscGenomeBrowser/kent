@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.4 2005/06/21 18:58:43 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.5 2005/06/21 19:06:39 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -144,11 +144,10 @@ void usage()
 errAbort(
     "pslCDnaGenomeMatch - check if retroGene aligns better to parent or retroGene \n"
     "usage:\n"
-    "    pslCDnaGenomeMatch input.psl chrom.sizes nib.lst mrna.2bit nibDir output.psl\n\n"
+    "    pslCDnaGenomeMatch input.psl chrom.sizes mrna.2bit nibDir output.psl\n\n"
     "where \n"
     "input.psl contains input mRNA alignment psl file\n"
     "chrom.sizes is a list of chromosome followed by size\n"
-    "nib.lst contains list nib files\n"
     "mrna.2bit contains fasta sequences of all mrnas \n"
     "directory containing nibs of genome\n"
     "output.psl contains filtered alignments for best matches and cases where no filtering occurred.\n"
@@ -1075,7 +1074,7 @@ if (misMatchList != NULL)
 lociFreeList(&lociList);
 }
 
-void pslCDnaGenomeMatch(char *inName, char *tNibDir, char *nibList)
+void pslCDnaGenomeMatch(char *inName, char *tNibDir)
 {
 struct psl *psl = NULL, *pslList = NULL ;
 struct alignment *subList = NULL;
@@ -1134,7 +1133,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 7)
+if (argc != 6)
     usage();
 if (nibHash == NULL)
     nibHash = hashNew(0);
@@ -1145,8 +1144,8 @@ verboseSetLogFile("stdout");
 verboseSetLevel(verbosity);
 ss = axtScoreSchemeDefault();
 //mrnaHash = readPslToBinKeeper(argv[2], argv[1]);
-twoBitFile = twoBitOpen(argv[4]);
-outFile = fopen(argv[6],"w");
+twoBitFile = twoBitOpen(argv[3]);
+outFile = fopen(argv[5],"w");
 minDiff = optionInt("minDiff", MINDIFF);
 snpFile = optionVal("snp", NULL);
 if (snpFile != NULL)
@@ -1172,7 +1171,7 @@ mrna1 = optionVal("mrna1", NULL);
 mrna2 = optionVal("mrna2", NULL);
 passthru = optionExists("passthru");
 verbose(1,"Reading alignments from %s\n",argv[1]);
-pslCDnaGenomeMatch(argv[1], argv[5], argv[3]);
+pslCDnaGenomeMatch(argv[1], argv[4]);
 fclose(outFile);
 if (bedOut != NULL)
     fclose(bedFile);
