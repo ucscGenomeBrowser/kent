@@ -3772,7 +3772,7 @@ type bed 4 +
 
     track encodeTbaBinAndPhastEl
     subTrack encodeTbaElements
-    shortLabel TBA Bin^Phast
+    shortLabel TBA Bin&Phast
     longLabel TBA BinCons/PhastCons Intersection Conserved Elements
     color 0,65,65
 
@@ -3785,7 +3785,7 @@ type bed 4 +
 
     track encodeTbaNcBinAndPhastEl
     subTrack encodeTbaElements
-    shortLabel TBA NC Bin^Phast
+    shortLabel TBA NC Bin&Phast
     longLabel TBA BinCons/PhastCons Intersection NonCoding Conserved Elements
     color 0,65,65
     priority 6
