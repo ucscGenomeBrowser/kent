@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.18 2004/12/08 18:15:47 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.19 2005/06/21 20:43:19 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -150,6 +150,7 @@ for (;;)
 	   done = TRUE;
 	   break;
 	   }
+	line = skipLeadingSpaces(line);
 	if (startsWith("track", line))
 	   {
 	   lineFileReuse(lf);
