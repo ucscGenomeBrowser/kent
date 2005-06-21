@@ -527,6 +527,7 @@ cat > mafProject.csh << 'EOF'
         hgLoadBed hg16 encodeMlaganGerpEl stdin
     # Loaded 48480 elements of size 5
 
+
 # STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
 #       From George Asimenos, Batzoglou lab (asimenos@stanford.edu)
     
@@ -1760,6 +1761,33 @@ done
     #   And the single track:  encodeUcsdChipMeh3k4Imr90
     #LI MeH3K4 IMR90 - Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells)
 
+##########################################################################
+# TIGR Jigsaw Genes from EGASP (2005-06-20 kate)
+# Contrib: Jonathan Allen <jallen@tigr.org>
+# NOTE: hg17 coords
+
+    cd /cluster/data/encode
+    mkdir -p EGASP/Jigsaw/2005-06-01/lab
+    cd EGASP/Jigsaw/2005-06-01/lab
+
+    # convert to genepred, in preparation for dropping to hg15
+    grep '^chr' lab/jigsaw_ucsc.gtf | \
+        ldHgGene -out=jigsaw.gp -gtf -genePredExt null null stdin
+        # Read 454 transcripts in 3949 lines in 1 files
+        # 454 groups 20 seqs 1 sources 1 feature types
+        # 454 gene predictions
+    liftOver -genePred jigsaw.gp \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                jigsaw.hg16.gp jigsaw.gp.unmapped
+    wc -l jigsaw.hg16.gp jigsaw.gp.unmapped
+        # 450 jigsaw.hg16.gp
+        #   8 jigsaw.gp.unmapped
+    ldHgGene -predTab -genePredExt hg16 encodeEgaspJigsaw jigsaw.hg16.gp
+        # 450 gene predictions
+    checkTableCoords hg16 encodeEgaspJigsaw
+
+
+##########################################################################
 # AUGUSTUS GENES FROM EGASP (2005-06-10 kate)
     # Contrib: Mario Stanke (mstanke@gwdg.de)
     # Department of Bioinformatics of the University of Gottingen in Germany
@@ -1801,6 +1829,8 @@ done
     end
     wc -l *.hg16.gp
     # all sized zero -- need to investigate
+    # Problem is files are in ENCODE coords, not chrom coords
+    # requested that Mario resubmit
     wc -l *.unmapped
 
     
@@ -1819,6 +1849,10 @@ done
 
     # convert to genePred
     ldHgGene -out=exogean.gp -gtf -genePredExt null null exogean.gtf
+
+    # NOTE: these were submitted in ENCODE coords.
+    # Requested redo with chrom coords, 6/20 
+
 
 ##########################################################################
 # Yale Nimblegen data (DONE - 2005-06-08 - Hiram)
