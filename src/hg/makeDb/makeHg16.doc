@@ -11041,6 +11041,8 @@ hgsql hgFixed < cnpSharpCutoff.sql
 echo 'load data local infile "sampleCUTOFF.txt" into table cnpSharpCutoff' | hgsql hgFixed
 hgsql hg16 < cnpSharpSamples.sql
 echo 'load data local infile "andyArraySample.txt" into table cnpSharpSamples' | hgsql hg16
+hgsql hg16 < cnpSharpSampleCount.sql
+hgsql hg16 < sampleCount.sql
 
 
 # fosmid discordants
