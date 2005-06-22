@@ -711,16 +711,16 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd,!mm6,!hg17.dupSpMrna.mrnaID minCheck=0.80
     $gbd,!mm6,!hg17.dupSpMrna.dupMrnaID minCheck=0.95
     $gbd,!mm6,!hg17,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
-    mm6.mrnaRefseq.mrna minCheck=0.90
-    hg17.mrnaRefseq.mrna minCheck=0.90
+    mm6.mrnaRefseq.mrna minCheck=0.80
+    hg17.mrnaRefseq.mrna minCheck=0.80
     rn2,rn3.mrnaRefseq.mrna minCheck=0.03
     $gbd,!mm6,!hg17.spMrna.mrnaID minCheck=0.98
     mm6.spMrna.mrnaID minCheck=0.20
     mm6.dupSpMrna.mrnaID minCheck=0.10
     mm6.dupSpMrna.dupMrnaID minCheck=0.10
-    hg17.spMrna.mrnaID minCheck=0.90
-    hg17.dupSpMrna.mrnaID minCheck=0.90
-    hg17.dupSpMrna.dupMrnaID minCheck=0.90
+    hg17.spMrna.mrnaID minCheck=0.30
+    hg17.dupSpMrna.mrnaID minCheck=0.20
+    hg17.dupSpMrna.dupMrnaID minCheck=0.20
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
@@ -730,9 +730,8 @@ identifier mgcAccession typeOf=nativeMrnaAccession
 
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
-    $gbd.refLink.mrnaAcc 
+    $gbd.refLink.mrnaAcc minCheck=0.80 
     $gbd.refSeqStatus.mrnaAcc minCheck=0.10
-    $gbd.bioCycPathway.geneID minCheck=0.98
     $kgDb.kgXref.refseq exclude= minCheck=0.50
     $kgDb.knownToRefSeq.value minCheck=0.98
     $kgDb.refSeqKg.refseq minCheck=0.60
@@ -745,14 +744,14 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     $dm.bdgpToRefSeq.value minCheck=0.99
-    mm6.mrnaRefseq.mrna minCheck=0.60
+    mm6.mrnaRefseq.mrna minCheck=0.10
     mm6.spMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.dupMrnaID minCheck=0.60
-    hg17.mrnaRefseq.mrna minCheck=0.50
+    hg17.mrnaRefseq.mrna minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.50
-    hg17.dupSpMrna.mrnaID minCheck=0.50
-    hg17.dupSpMrna.dupMrnaID minCheck=0.50
+    hg17.dupSpMrna.mrnaID minCheck=0.40
+    hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg15.geneBands.mrnaAcc
 
 identifier xenoRefSeqId typeOf=xenoMrnaAccession
