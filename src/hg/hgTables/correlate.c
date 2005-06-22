@@ -1,4 +1,4 @@
-/* correlate - handle correlateing beds. */
+/* correlate - handle correlating beds. */
 
 #include "common.h"
 #include "linefile.h"
@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.9 2005/06/22 22:45:59 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.10 2005/06/22 22:59:20 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -56,6 +56,7 @@ v->min = INFINITY;	/*	must be less than this	*/
 v->max = -INFINITY;	/*	must be greater than this */
 v->sumData = 0.0;	/*	starting sum is zero	*/
 v->sumSquares = 0.0;	/*	starting sum is zero	*/
+v->r = 0.0;		/*	an initial r is zero	*/
 v->fetchTime = 0;
 v->calcTime = 0;
 return v;
@@ -244,7 +245,7 @@ static char *nextVars[] = {hgtaNextCorrelateGroup, hgtaNextCorrelateTrack,
 	};
 
 boolean anyCorrelation()
-/* Return TRUE if there's an correlateion to do. */
+/* Return TRUE if there's an correlation to do. */
 {
 return cartVarExists(cart, hgtaCorrelateTrack);
 }
@@ -295,7 +296,7 @@ static struct trackDb *getLimitedTrackList(struct grp **grpList)
 /*	create list of tracks limited to specific types, and return the
  *	groups of those tracks	*/
 {
-struct trackDb *trackList = (struct trackDb *)NULL, *tdb, *next = NULL;
+struct trackDb *trackList = NULL, *tdb, *next = NULL;
 struct hash *groupsInTrackList = newHash(0);
 struct grp *groupsAll, *groupList = NULL, *group;
 
@@ -398,12 +399,12 @@ if (track && trackDbIsComposite(track))
 return(tdb);
 }
 
+static void fillInTrackTable(struct trackTable *table,
+	struct sqlConnection *conn)
 /*	determine real tdb, and attach labels, only tdb and tableName
  *	have been set so far, these may be composites, wigMafs or
  *	something like that where the actual tdb and table is something
  *	else.	*/
-static void fillInTrackTable(struct trackTable *table,
-	struct sqlConnection *conn)
 {
 struct trackDb *tdb;
 
@@ -441,7 +442,7 @@ if (table->isBedGraph && (!table->isCustom))
     if (wordCount > 1)
         table->bedGraphColumnNum = sqlUnsigned(words[1]);
     freez(&typeLine);
-    sprintf(query, "describe %s", table->actualTable);
+    safef(query, ArraySize(query), "describe %s", table->actualTable);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1453,7 +1454,7 @@ doCorrelateMore(conn);
 }
 
 void doClearCorrelate(struct sqlConnection *conn)
-/* Respond to click on clear correlateion. */
+/* Respond to click on clear correlation. */
 {
 removeCartVars(cart, curVars, ArraySize(curVars));
 doMainPage(conn);
