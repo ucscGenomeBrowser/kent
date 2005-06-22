@@ -16,16 +16,12 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-#include "memalloc.h"	/*	debugging	*/
-
-static char const rcsid[] = "$Id: correlate.c,v 1.8 2005/06/22 21:00:01 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.9 2005/06/22 22:45:59 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
-    "1,000,000",
-    "10,000,000",
-    "100,000,000",
-    "200,000,000",
+    "40,000,000",
+    "60,000,000",
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 
@@ -591,6 +587,7 @@ if (table->isBedGraph && !table->isCustom)
     char **row;
     struct sqlResult *sr = NULL;
     char fields[256];
+
     safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
 	    table->bedGraphColumnName);
     /*	the TRUE indicates to order by start position, this is necessary
@@ -613,7 +610,7 @@ if (table->isBedGraph && !table->isCustom)
 	if (cEnd > region->end)
 	    cEnd = region->end;
 	/* watch out for overlapping bed items, get the first one started */
-	if (0 == vIndex)
+	if (0 == bases)
 	    {
 	    vector->value[vIndex] = value;
 	    vector->position[vIndex] = cStart;
@@ -704,14 +701,14 @@ v2Index = 0;
 
 while ((i < v1->count) && (j < v2->count))
     {
-    if (v1->position[i] == v2->position[j])
+    if (v1->position[i] == v2->position[j])	/*	points accepted */
 	{
-	if (v1Index < i)
+	if (v1Index < i)		/* only move data when necessary */
 	    {
 	    v1->position[v1Index] = v1->position[i];
 	    v1->value[v1Index] = v1->value[i];
 	    }
-	if (v2Index < j)
+	if (v2Index < j)		/* only move data when necessary */
 	    {
 	    v2->position[v2Index] = v2->position[j];
 	    v2->value[v2Index] = v2->value[j];
@@ -719,9 +716,9 @@ while ((i < v1->count) && (j < v2->count))
 	++v1Index; ++v2Index; ++i; ++j;
 	}
     else if (v1->position[i] < v2->position[j])
-	++i;
+	++i;				/* skip data point on v1	*/
     else if (v1->position[i] > v2->position[j])
-	++j;
+	++j;				/* skip data point on v2	*/
     }
 /*	ensure sanity check	*/
 if (v1Index != v2Index)
@@ -729,10 +726,13 @@ if (v1Index != v2Index)
 	    v1->count, v2->count);
 v1->count = v1Index;
 v2->count = v2Index;
-/*	if our count of numbers is 1K or more less than allocated,
- *	save some space and reallocate the data lists
+/*	if our count of numbers is more than 1000K less than planned for,
+ *	save some space and reallocate the data lists.
+ *	The potential savings here is three different data vectors,
+ *	where each data point occupies about 8 bytes on a vector,
+ *	thus: bytes saved at least 1024000 * 3 * 8 = 24,576,000
  */
-if ((v1->maxCount - v1Index) > 1024)
+if ((v1->maxCount - v1Index) > 1024000)
     {
     int *ip;
     float *fp;
@@ -898,17 +898,11 @@ hPrintf("<TH>r<BR>squared</TH>");
 hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
 hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
 
+rowsOutput = 0;
 
 for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     {
-    statsRowOut(v1->chrom, table1->shortLabel, v1->start, v1->end,
-	v1->data->count, v1->data->min, v1->data->max, v1->data->sumData,
-	    v1->data->sumSquares, v2->data->r, v1->data->fetchTime,
-		v1->data->calcTime);
-    statsRowOut(v2->chrom, table2->shortLabel, 0, 0,
-	v2->data->count, v2->data->min, v2->data->max, v2->data->sumData,
-	    v2->data->sumSquares, v2->data->r, v2->data->fetchTime,
-		v2->data->calcTime);
+    ++rowsOutput;
     min1 = min(min1,v1->data->min);
     min2 = min(min2,v2->data->min);
     max1 = max(max1,v1->data->max);
@@ -923,7 +917,6 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     totalSum2 += v2->data->sumData;
     totalSumSquares1 += v1->data->sumSquares;
     totalSumSquares2 += v2->data->sumSquares;
-    ++rowsOutput;
     }
 
 if (0 == rowsOutput)
@@ -936,6 +929,43 @@ else if (rowsOutput > 1)
     statsRowOut("OVERALL", table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2);
+    hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
+    }
+
+rowsOutput = 0;
+v1 = table1->vSet;
+v2 = table2->vSet;
+for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
+    {
+    ++rowsOutput;
+    statsRowOut(v1->chrom, table1->shortLabel, v1->start, v1->end,
+	v1->data->count, v1->data->min, v1->data->max, v1->data->sumData,
+	    v1->data->sumSquares, v2->data->r, v1->data->fetchTime,
+		v1->data->calcTime);
+    statsRowOut(v2->chrom, table2->shortLabel, 0, 0,
+	v2->data->count, v2->data->min, v2->data->max, v2->data->sumData,
+	    v2->data->sumSquares, v2->data->r, v2->data->fetchTime,
+		v2->data->calcTime);
+    }
+
+if (rowsOutput > 1)
+    {
+    hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
+    statsRowOut("OVERALL", table1->shortLabel, 1, 1,
+	totalBases1, min1, max1, totalSum1, totalSumSquares1,
+	    result->r, totalFetch1, totalCalc1);
+    statsRowOut("OVERALL", table2->shortLabel, 0, 0,
+	totalBases2, min1, max1, totalSum2, totalSumSquares2,
+	    result->r, totalFetch2, totalCalc2);
+
+    hPrintf("<TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
+    hPrintf("<TH>Track</TH>");
+    hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
+    hPrintf("<TH>Standard<BR>deviation</TH>");
+    hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
+    hPrintf("<TH>r<BR>squared</TH>");
+    hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
+    hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
     }
 
 hPrintf("</TABLE>\n");
@@ -1027,9 +1057,24 @@ if (1 == regionCount)
     hPrintf("&nbsp;bases:&nbsp;");
     printLongWithCommas(stdout,bases);
     hPrintf("</P>\n");
+    if (bases > 64000000)
+	{
+	hPrintf("<P><B>warning:</B> this function can currenly only work on\n");
+	hPrintf("regions of less than 64,000,000 bases.  This region may\n");
+	hPrintf("be too large, the next message you may see\n");
+	hPrintf("is a memory allocation error.  Perhaps future\n");
+	hPrintf("improvements will raise this limit.\n");
+	}
     }
 else if (sameString(regionType,"genome"))
+    {
     hPrintf("<P>position: full genome, %d chromosomes</P>\n", regionCount);
+    hPrintf("<P><B>warning:</B> this function can currenly only work on\n");
+    hPrintf("chromosomes of less than 64,000,000 bases.  If there are\n");
+    hPrintf("chromosomes on this genome larger than that, the next message\n");
+    hPrintf("you see will be a memory allocation error.  Perhaps future\n");
+    hPrintf("improvements will raise this limit.\n");
+    }
 else if (sameString(regionType,"encode"))
     hPrintf("<P>position: %d encode regions</P>\n", regionCount);
 
