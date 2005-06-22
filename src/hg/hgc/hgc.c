@@ -67,6 +67,7 @@
 #include "snp.h"
 #include "snpMap.h"
 #include "snpExceptions.h"
+#include "cnpSharp.h"
 #include "tokenizer.h"
 #include "softberryHom.h"
 #include "borkPseudoHom.h"
@@ -171,7 +172,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.903 2005/06/14 18:29:55 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.904 2005/06/22 15:35:11 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11450,6 +11451,45 @@ affy120KDetailsFree(&snp);
 sqlDisconnect(&conn);
 }
 
+void doCnpSharp(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct cnpSharp cnpSharp;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    cnpSharpStaticLoad(row+rowOffset, &cnpSharp);
+    bedPrintPos((struct bed *)&cnpSharp, 3);
+    // could make this a function
+    printf("<B>Name:</B> %s <BR>\n", cnpSharp.name);
+    printf("<B>Variation type:</B> %s <BR>\n", cnpSharp.variationType);
+    printf("<B>Cytoband:</B> %s <BR>\n", cnpSharp.cytoName);
+    printf("<B>Strain:</B> %s <BR>\n", cnpSharp.cytoStrain);
+    printf("<B>Duplication Percent:</B> %1.3f <BR>\n", cnpSharp.dupPercent);
+    printf("<B>Repeat Percent:</B> %1.3f <BR>\n", cnpSharp.repeatsPercent);
+    printf("<B>LINE Percent:</B> %1.3f <BR>\n", cnpSharp.LINEpercent);
+    printf("<B>SINE Percent:</B> %1.3f <BR>\n", cnpSharp.SINEpercent);
+    printf("<B>LTR Percent:</B> %1.3f <BR>\n", cnpSharp.LTRpercent);
+    printf("<B>DNA Percent:</B> %1.3f <BR>\n", cnpSharp.DNApercent);
+    printf("<B>Disease Percent:</B> %1.3f <BR>\n", cnpSharp.diseaseSpotsPercent);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 void doAffy120K(struct trackDb *tdb, char *itemName)
 /* Put up info on an Affymetrix SNP. */
 {
@@ -16171,6 +16211,10 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih") || sameWord(trac
 else if (sameWord(track, "snp"))
     {
     doSnp(tdb, item);
+    }
+else if (sameWord(track, "cnpSharp"))
+    {
+    doCnpSharp(tdb, item);
     }
 else if (sameWord(track, "affy120K"))
     {
