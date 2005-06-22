@@ -1435,10 +1435,10 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 6 +
 
-track encodeEgasp
+track encodeEgaspUpdate
 compositeTrack on
-shortLabel EGASP Genes
-longLabel EGASP Gene Annotations
+shortLabel EGASP Update
+longLabel EGASP Updated Gene Annotations
 group encodeGenes
 color 12,50,200
 altColor 12,100,100
@@ -1447,8 +1447,8 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 
-    track encodeEgaspJigsaw
-    subTrack encodeEgasp
+    track encodeEgaspUpdJigsaw
+    subTrack encodeEgaspUpdate
     shortLabel Jigsaw Genes
     longLabel TIGR Jigsaw Gene Predictions
 
