@@ -1438,7 +1438,7 @@ type bed 6 +
 track encodeEgaspUpdate
 compositeTrack on
 shortLabel EGASP Update
-longLabel EGASP Updated Gene Annotations
+longLabel ENCODE Gene Prediction Workshop (EGASP) Updates
 group encodeGenes
 color 12,50,200
 altColor 12,100,100
