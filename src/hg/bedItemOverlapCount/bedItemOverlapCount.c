@@ -12,10 +12,10 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.1 2005/06/17 22:13:22 hiram Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.2 2005/06/22 23:00:11 hiram Exp $";
 
 /* Command line switches. */
-static char *strand = (char *)NULL;	/* strand to process, default +	*/
+//static char *strand = (char *)NULL;	/* strand to process, default +	*/
 		/* this is not implemented, the user can filter + and - */
 
 static struct hash *chromHash = NULL;
@@ -39,7 +39,8 @@ errAbort(
   "\titems before sending into this program as it only looks at\n"
   "\tthe chrom, start and end columns of the bed file.\n"
   "The bed file must be sorted at least by chrom since the processing is\n"
-  "\tgoing to be chrom by chrom with no going back."
+  "\tgoing to be chrom by chrom with no going back.\n"
+  " *** AND *** this is only for simple bed files without multiple blocks. ***"
   );
 }
 
@@ -123,7 +124,6 @@ unsigned maxChromSize = 0;
 int i;
 unsigned short *counts = (unsigned short *)NULL;
 char *prevChrom = (char *)NULL;
-struct lineFile *bf;
 
 chromHash = loadAllChromInfo(database, &maxChromSize);
 

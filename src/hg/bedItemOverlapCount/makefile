@@ -13,3 +13,9 @@ ${A}: ${O} $(MYLIBS)
 
 test:	${A}
 	cd tests && ./RunTest.sh
+
+testVerbose:	${A}
+	cd tests && ./RunTest.sh -verbose
+
+clean::
+	rm -f ${O} ${A}
