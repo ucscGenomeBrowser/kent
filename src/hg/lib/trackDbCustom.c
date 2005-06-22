@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.19 2005/06/21 20:43:19 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.20 2005/06/22 22:34:43 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -127,7 +127,9 @@ char *t = cloneString(type);
 char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) || 
                    sameString("bed", s) || sameString("genePred", s) || 
-                   sameString("expRatio", s) || sameString("wigMaf", s));
+                   sameString("expRatio", s) || sameString("wigMaf", s) ||
+		   sameString("bed5FloatScore", s) || 
+		   sameString("bed6FloatScore", s));
 freeMem(t);
 return canPack;
 }
