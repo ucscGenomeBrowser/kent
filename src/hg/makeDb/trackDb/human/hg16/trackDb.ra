@@ -1449,8 +1449,34 @@ type genePred
 
     track encodeEgaspUpdJigsaw
     subTrack encodeEgaspUpdate
-    shortLabel Jigsaw Genes
+    shortLabel Jigsaw 
     longLabel TIGR Jigsaw Gene Predictions
+    color 12,200,50
+    priority 1
+
+    track encodeEgaspUpdAugustusAbinitio
+    subTrack encodeEgaspUpdate
+    shortLabel Augustus 
+    longLabel Augustus Ab Initio Gene Predictions
+    priority 2
+
+    track encodeEgaspUpdAugustusAny
+    subTrack encodeEgaspUpdate
+    shortLabel Augustus/Est/Mouse
+    longLabel Augustus + Est/Protein Evidence + Mouse Homology Gene Predictions
+    priority 3
+
+    track encodeEgaspUpdAugustusEst
+    subTrack encodeEgaspUpdate
+    shortLabel Augustus/Est
+    longLabel Augustus + Est/Protein Evidence Gene Predictions
+    priority 4
+
+    track encodeEgaspUpdAugustusDual
+    subTrack encodeEgaspUpdate
+    shortLabel Augustus/Mouse
+    longLabel Augustus + Mouse Homology Gene Predictions
+    priority 5
 
 track encodeGisRnaPet
 compositeTrack on
