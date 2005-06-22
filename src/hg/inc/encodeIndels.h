@@ -5,7 +5,7 @@
 #ifndef ENCODEINDELS_H
 #define ENCODEINDELS_H
 
-#define ENCODEINDELS_NUM_COLS 11
+#define ENCODEINDELS_NUM_COLS 15
 
 struct encodeIndels
 /* ENCODE Deletion and Insertion Polymorphisms from NHGRI */
@@ -16,11 +16,15 @@ struct encodeIndels
     unsigned chromEnd;	/* End position in chromosome */
     char *name;	/* Trace sequence */
     unsigned score;	/* Quality score  */
-    char strand[2];	/* Value should be + or - */
+    char strand[2];	/* Always + */
+    unsigned thickStart;	/* Start position in chromosome */
+    unsigned thickEnd;	/* End position in chromosome */
+    unsigned reserved;	/* Reserved */
     char *traceName;	/* Name of trace */
     char *traceId;	/* Trace Id (always integer) */
     unsigned tracePos;	/* Position in trace */
     char traceStrand[2];	/* Value should be + or - */
+    char *variant;	/* Variant sequence */
     char *reference;	/* Reference sequence */
     };
 
