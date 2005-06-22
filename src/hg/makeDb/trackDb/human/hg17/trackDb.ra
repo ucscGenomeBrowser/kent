@@ -119,6 +119,15 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
+track targetScanS
+shortLabel TargetScanS miRNA
+longLabel TargetScanS miRNA Regulatory Sites
+group genes
+priority 63.6
+visibility hide
+color 0,96,0
+type bed 9 .
+
 track firstEF
 shortLabel FirstEF 
 longLabel FirstEF: First-Exon and Promoter Prediction
