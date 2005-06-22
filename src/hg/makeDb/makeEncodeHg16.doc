@@ -1948,3 +1948,18 @@ done
 #	altColor 200,44,44
 #	viewLimits 0.22:0.5
 #	autoScale Off
+
+##########################################################################
+# Indels from Jim Mullikin
+# Heather, June 2005
+
+    ssh hgwdev
+    cd /cluster/data/encode/NHGRI/mullikin
+    split.pl < hg16.ENCODE.DIPtrack.Q23.bed4+ > encodeIndels.bed
+    hgsql hg16 < encodeIndels.sql
+    hgLoadBed hg16 encodeIndels -tab -sqlTable=encodeIndels.sql encodeIndels.bed
+    # check reference length
+    mysql> select chrom, chromStart, chromEnd, (chromEnd-chromStart) as size, traceName, reference, length(reference) as refsize from encodeIndels where (chromEnd-chromStart) != length(reference) and length(reference) > 1;
+    # Empty set (0.07 sec)
+
+
