@@ -104,6 +104,7 @@ UTIL_DIRS = \
 	autoSql \
 	autoXml \
 	bedIntersect \
+	bedItemOverlapCount \
 	bedSort \
 	bedToGenePred \
 	blastToPsl \
