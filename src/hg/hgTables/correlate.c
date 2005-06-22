@@ -16,7 +16,9 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.4 2005/06/21 16:43:00 hiram Exp $";
+#include "memalloc.h"	/*	debugging	*/
+
+static char const rcsid[] = "$Id: correlate.c,v 1.5 2005/06/22 17:01:47 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -27,13 +29,17 @@ static char *maxResultsMenu[] =
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 
-/*	each track data's values will be copied into one of these structures */
+/*	Each track data's values will be copied into one of these structures,
+ *	This is also the form that a result vector will take.
+ */
 struct dataVector
     {
     int count;		/*	number of data values	*/
     int maxCount;	/*	no more than this number of data values	*/
     int *position;	/*	array of chrom positions, 0-relative	*/
     float *value;	/*	array of data values at these positions	*/
+    double min;		/*	minimum data value in the set	*/
+    double max;		/*	maximum data value in the set	*/
     double sumData;	/*	sum of all data here	*/
     double sumSquares;	/*	sum of squares of all data here	*/
     long fetchTime;	/*	msec	*/
@@ -45,10 +51,12 @@ static struct dataVector *allocDataVector(int bases)
 {
 struct dataVector *v;
 AllocVar(v);
-v->position = needHugeMem(sizeof(int) * bases);
-v->value = needHugeMem(sizeof(float) * bases);
+v->position = needHugeMem((size_t)(sizeof(int) * bases));
+v->value = needHugeMem((size_t)(sizeof(float) * bases));
 v->count = 0;		/*	nothing here yet	*/
 v->maxCount = bases;	/*	do not run past this limit	*/
+v->min = INFINITY;	/*	must be less than this	*/
+v->max = -INFINITY;	/*	must be greater than this */
 v->sumData = 0.0;	/*	starting sum is zero	*/
 v->sumSquares = 0.0;	/*	starting sum is zero	*/
 v->fetchTime = 0;
@@ -88,10 +96,17 @@ static struct vectorSet *allocVectorSet(struct dataVector *dV, char *chrom)
 struct vectorSet *v;
 AllocVar(v);
 v->chrom = cloneString(chrom);
-v->start = dV->position[0];		/* first position, 0-relative	*/
-v->end = dV->position[(dV->count)-1] + 1; /* last position, non-inclusive */
+if (dV->count > 0)
+    {
+    v->start = dV->position[0];		/* first position, 0-relative	*/
+    v->end = dV->position[(dV->count)-1] + 1; /* last position, non-inclusive */
+    }
+else
+    {
+    v->start = 0;
+    v->end = 0;
+    }
 v->data = dV;
-hPrintf("<P>allocVectorSet: %s:%d-%d %d</P>\n", v->chrom, v->start, v->end, dV->count);
 return v;
 }
 
@@ -100,10 +115,10 @@ static void freeVectorSet(struct vectorSet **v)
 {
 if (v)
     {
-    struct vectorSet *vSet;
-    vSet=*v;
-    if (vSet)
+    struct vectorSet *vSet, *next;
+    for (vSet = *v; vSet != NULL; vSet = next)
 	{
+	next = vSet->next;
 	freeDataVector(&vSet->data);
 	freeMem(vSet->chrom);
 	}
@@ -189,10 +204,22 @@ struct correlationResult
     {
     struct trackTable *table1;
     struct trackTable *table2;
-    struct vectorSet *residuals;
+    struct vectorSet *residual;
     };
 
-#ifdef NOT_YET
+struct correlationResult *allocCorrelationResult(struct trackTable *t1,
+        struct trackTable *t2, int totalBases, char *chrom)
+{
+struct correlationResult *cr;
+struct dataVector *dv;
+AllocVar(cr);
+cr->table1 = t1;
+cr->table2 = t2;
+dv = allocDataVector(totalBases);
+cr->residual = allocVectorSet(dv, chrom);
+return cr;
+}
+
 static void freeCorrelationResult(struct correlationResult **cr)
 /*	free up correlationResult structure	*/
 {
@@ -202,11 +229,10 @@ if (cr)
     cResult=*cr;
     freeTrackTable(&cResult->table1);
     freeTrackTable(&cResult->table2);
-    freeVectorSet(&cResult->residuals);
+    freeVectorSet(&cResult->residual);
     freez(cr);
     }
 }
-#endif
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -652,7 +678,7 @@ else if (table->isWig && !table->isCustom)
 
 endTime = clock1000();
 
-vector->fetchTime = endTime - startTime;
+vector->fetchTime += endTime - startTime;
 
 if (vector->count > 0)
     return vector;
@@ -661,9 +687,9 @@ else
 return NULL;
 }	/*	static struct dataVector *fetchOneRegion()	*/
 
-static void statsRowOut(char *chrom, char *shortLabel, int chromStart, int chromEnd,
-    int bases, double sumData, double sumSquares,
-	long fetchMs, long calcMs)
+static void statsRowOut(char *chrom, char *shortLabel, int chromStart,
+    int chromEnd, int bases, double min, double max, double sumData,
+	double sumSquares, long fetchMs, long calcMs)
 /*	display a single line of statistics	*/
 {
 double mean = 0.0;
@@ -695,7 +721,9 @@ else
     hPrintf("<TD ALIGN=RIGHT>%d</TD><TD ALIGN=RIGHT>", chromEnd);
     }
 printLongWithCommas(stdout,(long)bases);
-hPrintf("</TD><TD ALIGN=RIGHT>%g</TD>", mean);
+hPrintf("</TD><TD ALIGN=RIGHT>%g</TD>", min);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", max);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", mean);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", variance);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
@@ -736,37 +764,93 @@ while ((i < v1->count) && (j < v2->count))
     else if (v1->position[i] > v2->position[j])
 	++j;
     }
+/*	ensure sanity check	*/
+if (v1Index != v2Index)
+    errAbort("intersected table counts not equal: %d != %d\n",
+	    v1->count, v2->count);
 v1->count = v1Index;
 v2->count = v2Index;
+/*	if our count of numbers is 1K or more less than allocated,
+ *	save some space and reallocate the data lists
+ */
+if ((v1->maxCount - v1Index) > 1024)
+    {
+    int *ip;
+    float *fp;
+
+    ip = needHugeMem((size_t)(sizeof(int) * v1Index));
+    memcpy((void *)ip, (void *)v1->position, (size_t)(sizeof(int)*v1Index));
+    freeMem(v1->position);
+    v1->position = ip;
+    ip = needHugeMem((size_t)(sizeof(int) * v2Index));
+    memcpy((void *)ip, (void *)v2->position, (size_t)(sizeof(int)*v2Index));
+    freeMem(v2->position);
+    v2->position = ip;
+
+    fp = needHugeMem((size_t)(sizeof(float) * v1Index));
+    memcpy((void *)fp, (void *)v1->value, (size_t)(sizeof(float)*v1Index));
+    freeMem(v1->value);
+    v1->value = fp;
+    fp = needHugeMem((size_t)(sizeof(float) * v2Index));
+    memcpy((void *)fp, (void *)v2->value, (size_t)(sizeof(float)*v2Index));
+    freeMem(v2->value);
+    v2->value = fp;
+    }
+
+#ifdef NOT_WORKING
+XXXX something is wrong with needHugeMemResize, it corrupts the arena
+if (1 || (v1Index * 2) < v1->maxCount)
+    {
+hPrintf("<P>before realloc: %#x, %#x, %#x, %#x</P>\n",
+	(unsigned long) v1->position, (unsigned long) v1->value,
+	(unsigned long) v2->position, (unsigned long) v2->value);
+carefulCheckHeap();
+    v1->position = (int *)needHugeMemResize((void *)v1->position, (size_t)(sizeof(int)*v1Index));
+carefulCheckHeap();	XXXX exits here after this previous call
+    v1->value = (float *)needHugeMemResize((void *)v1->value, (size_t)(sizeof(float)*v1Index));
+    v2->position = (int *)needHugeMemResize((void *)v2->position, (size_t)(sizeof(int)*v2Index));
+    v2->value = (float *)needHugeMemResize((void *)v2->value, (size_t)(sizeof(float)*v2Index));
+hPrintf("<P>after realloc: %#x, %#x, %#x, %#x</P>\n",
+	(unsigned long) v1->position, (unsigned long) v1->value,
+	(unsigned long) v2->position, (unsigned long) v2->value);
+    }
+#endif
 }
 
-static void calcMean(struct dataVector *v)
+static void calcMeanMinMax(struct dataVector *v)
 {
 long startTime, endTime;
 register double sum = 0.0;
 register double sumSquares = 0.0;
 register int i;
 register double value;
+register double min;
+register double max;
 
 startTime = clock1000();
+min = v->min;	/*	was initialized to INFINITY	*/
+max = v->max;	/*	was initialized to -INFINITY	*/
 for (i = 0; i < v->count; ++i)
     {
     value = v->value[i];
+    min = min(min,value);
+    max = max(max,value);
     sum += value;
     sumSquares += (value * value);
     }
 v->sumData = sum;
 v->sumSquares = sumSquares;
+v->min = min;
+v->max = max;
 endTime = clock1000();
-v->calcTime = endTime - startTime;
+v->calcTime += endTime - startTime;
 }
 
-static void showTwoVectors(struct trackTable *table1,
-    struct trackTable *table2, struct vectorSet *vSet1,
-	struct vectorSet *vSet2)
+static void showThreeVectors(struct trackTable *table1,
+    struct trackTable *table2, struct dataVector *result)
 {
-struct vectorSet *v1 = vSet1;
-struct vectorSet *v2 = vSet2;
+struct vectorSet *v1 = table1->vSet;
+struct vectorSet *v2 = table2->vSet;
 int rowsOutput = 0;
 int totalBases1 = 0;
 int totalBases2 = 0;
@@ -778,17 +862,31 @@ double totalSum1 = 0.0;
 double totalSumSquares1 = 0.0;
 double totalSum2 = 0.0;
 double totalSumSquares2 = 0.0;
+double min1 = INFINITY;
+double min2 = INFINITY;
+double max1 = -INFINITY;
+double max2 = -INFINITY;
 
-hPrintf("<P><TABLE BORDER=1><TR><TH>Track</TH><TH>Chrom</TH><TH>Data<BR>start</TH><TH>Data<BR>end</TH><TH>Bases<BR>covered</TH><TH>Mean</TH><TH>Variance</TH><TH>Standard<BR>deviation</TH><TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH><TH>Calculation<BR>time&nbsp;(sec)</TR>\n");
+hPrintf("<P><TABLE BORDER=1><TR><TH>Track</TH><TH>Chrom</TH>");
+hPrintf("<TH>Data<BR>start</TH><TH>Data<BR>end</TH><TH>Bases<BR>covered</TH>");
+hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
+hPrintf("<TH>Standard<BR>deviation</TH>");
+hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
+hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TR>\n");
+
 
 for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     {
     statsRowOut(v1->chrom, table1->shortLabel, v1->start, v1->end,
-	v1->data->count, v1->data->sumData, v1->data->sumSquares,
-	    v1->data->fetchTime, v1->data->calcTime);
+	v1->data->count, v1->data->min, v1->data->max, v1->data->sumData,
+	    v1->data->sumSquares, v1->data->fetchTime, v1->data->calcTime);
     statsRowOut(v2->chrom, table2->shortLabel, v2->start, v2->end,
-	v2->data->count, v2->data->sumData, v2->data->sumSquares,
-	    v2->data->fetchTime, v2->data->calcTime);
+	v2->data->count, v2->data->min, v2->data->max, v2->data->sumData,
+	    v2->data->sumSquares, v2->data->fetchTime, v2->data->calcTime);
+    min1 = min(min1,v1->data->min);
+    min2 = min(min2,v2->data->min);
+    max1 = max(max1,v1->data->max);
+    max2 = max(max2,v2->data->max);
     totalBases1 += v1->end - v1->start;
     totalBases2 += v2->end - v2->start;
     totalFetch1 += v1->data->fetchTime;
@@ -804,13 +902,13 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
 
 if (0 == rowsOutput)
     hPrintf("<TR><TD COLSPAN=9>EMPTY RESULT SET</TD></TR>\n");
-else
+else if (rowsOutput > 1)
     {
     statsRowOut("OVERALL", table1->shortLabel, 0, 0,
-	totalBases1, totalSum1, totalSumSquares1,
+	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    totalFetch1, totalCalc1);
     statsRowOut("OVERALL", table2->shortLabel, 0, 0,
-	totalBases2, totalSum2, totalSumSquares2,
+	totalBases2, min1, max1, totalSum2, totalSumSquares2,
 	    totalFetch2, totalCalc2);
     }
 
@@ -822,8 +920,8 @@ if ((1 == rowsOutput) && (totalBases1 < 100) && (totalBases2 < 100))
     int start, end, i;
     int v1Index = 0;
     int v2Index = 0;
-    v1 = vSet1;
-    v2 = vSet2;
+    v1 = table1->vSet;
+    v2 = table2->vSet;
     start = min(v1->start,v2->start);
     end = max(v1->end,v2->end);
     hPrintf("<P><TABLE BORDER=1><TR><TH>position</TH><TH>track 1</TH><TH>track 2</TH></TR>\n");
@@ -865,7 +963,7 @@ hPrintf("<TR><TD ALIGN=RIGHT>%d</TD>", i+1);
     }
 }
 
-static void collectData(struct sqlConnection *conn,
+static int collectData(struct sqlConnection *conn,
 	struct trackTable *tableList, int maxLimitCount)
 /*	for each track in the list, collect its raw data */
 {
@@ -874,6 +972,17 @@ struct region *regionList = getRegions();
 struct region *region;
 struct trackTable *table;
 int regionCount = 0;
+struct trackTable *table1;
+struct trackTable *table2;
+struct vectorSet *vSet1;
+struct vectorSet *vSet2;
+int totalBases = 0;
+
+vSet1 = NULL;	/*	initialize linked list	*/
+vSet2 = NULL;	/*	initialize linked list	*/
+
+table1 = tableList;
+table2 = tableList->next;
 
 /*	count the regions, just to get an idea of where we may be going */
 for (region = regionList; region != NULL; region = region->next)
@@ -916,61 +1025,75 @@ hPrintf("</TABLE></P>\n");
  *	after you have them both, condense them down to only those
  *	places that overlap each other
  */
+for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
+	region = region->next)
     {
-    struct vectorSet *vSet1;
-    struct vectorSet *vSet2;
-    vSet1 = NULL;
-    vSet2 = NULL;
-    for (region = regionList; region != NULL; region = region->next)
+    struct dataVector *v1;
+    struct dataVector *v2;
+
+
+    v1 = fetchOneRegion(table1, region, conn);
+    if (v1)	/*	if data there, fetch the second one	*/
 	{
-	struct dataVector *v1;
-	struct dataVector *v2;
-	struct trackTable *table1;
-	struct trackTable *table2;
-	table1 = tableList;
-	table2 = table1->next;
-
-
-	v1 = fetchOneRegion(table1, region, conn);
-	if (v1)	/*	if data there, fetch the second one	*/
+	v2 = fetchOneRegion(table2, region, conn);
+	if (v2)	/*	if both data, construct a result set	*/
 	    {
-	    v2 = fetchOneRegion(table2, region, conn);
-	    if (v2)	/*	if both data, construct a result set	*/
+	    struct vectorSet *vS1;
+	    struct vectorSet *vS2;
+	    intersectVectors(v1, v2);
+	    if (v1->count < 1)	/*	possibly no intersection	*/
 		{
-		struct vectorSet *vSet;
-		calcMean(v1);
-		vSet = allocVectorSet(v1,region->chrom);
-		slAddTail(&vSet1, vSet);
-		calcMean(v2);
-		vSet = allocVectorSet(v2,region->chrom);
-		slAddTail(&vSet2, vSet);
-		}
-	    else
 		freeDataVector(&v1);	/* no data in second	*/
+		freeDataVector(&v2);	/* no data in second	*/
+		continue;		/* next region	*/
+		}
+	    vS1 = allocVectorSet(v1,region->chrom);
+	    vS2 = allocVectorSet(v2,region->chrom);
+	    if ((totalBases + v1->count) >= maxLimitCount)
+		break;
+	    totalBases += v1->count;
+	    slAddTail(&vSet1, vS1);
+	    slAddTail(&vSet2, vS2);
 	    }
+	else
+	    freeDataVector(&v1);	/* no data in second	*/
 	}
-
-    /*showTwoVectors(tableList, tableList->next, vSet1, vSet2);*/
-    intersectVectors(vSet1->data, vSet2->data);
-    vSet1->start = vSet1->data->position[0];
-    vSet1->end = vSet1->data->position[(vSet1->data->count)-1] + 1;
-    vSet2->start = vSet2->data->position[0];
-    vSet2->end = vSet2->data->position[(vSet2->data->count)-1] + 1;
-    calcMean(vSet1->data);
-    calcMean(vSet2->data);
-hPrintf("<P>after intersection</P>\n");
-    showTwoVectors(tableList, tableList->next, vSet1, vSet2);
-    freeVectorSet(&vSet1);
-    freeVectorSet(&vSet2);
-    hPrintf("<P>freeVectorSet 1 and 2 OK</P>\n");
     }
-}
+
+/*	returning results, the collected data	*/
+table1->vSet = vSet1;
+table2->vSet = vSet2;
+return totalBases;
+}	/*	static void collectData()	*/
+
+static struct dataVector *runRegression(struct trackTable *tableList)
+{
+struct trackTable *table1, *table2;
+struct dataVector *result = (struct dataVector *)NULL;
+struct vectorSet *vSet;
+
+/*	expecting two tables	*/
+if (NULL == tableList)
+    return result;
+
+table1 = tableList;
+table2 = tableList->next;
+if (NULL == table2)
+    return result;
+
+/*	find the mean, min and max	*/
+for (vSet = table1->vSet; vSet != NULL; vSet = vSet->next)
+    calcMeanMinMax(vSet->data);
+for (vSet = table2->vSet; vSet != NULL; vSet = vSet->next)
+    calcMeanMinMax(vSet->data);
+
+return result;
+}	/*	struct dataVector *runRegression()	*/
 
 void doCorrelateMore(struct sqlConnection *conn)
 /* Continue working in correlate page. */
 {
 struct trackDb *tdb2;
-char *tableName1 = curTableLabel();
 char *tableName2;
 char *onChange = onChangeEither();
 /*char *op;*/
@@ -983,6 +1106,9 @@ char *maxLimitCartVar;
 char *maxLimitCountStr;
 int maxLimitCount;
 char *tmpString;
+struct trackTable *tableList, *tt;
+
+tableList = NULL;	/*	initialize the list	*/
 
 if (curTrack)
     isBedGraph1 = startsWith("bedGraph", curTrack->type);
@@ -996,12 +1122,19 @@ correlateOK1 = isWig1 || isBedGraph1;
 
 table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable2, "none");
 
+/*	add first table to the list	*/
+tt = allocTrackTable();
+tt->tdb = curTrack;
+tt->tableName = cloneString(curTable);
+fillInTrackTable(tt, conn);
+slAddTail(&tableList,tt);
+
 if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
-    htmlOpen("Correlate table %s with table %s", tableName1, table2onEntry);
+    htmlOpen("Correlate table '%s' with table '%s'", tt->shortLabel, table2onEntry);
     }
 else
-    htmlOpen("Correlate table %s", tableName1);
+    htmlOpen("Correlate table '%s'", tt->shortLabel);
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
@@ -1062,21 +1195,15 @@ hPrintf("</FORM>\n");
 
 hPrintf("<P>\n");
 
+/*	If we had a second table coming into this screen, do the
+ *	calculations
+ */
 if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
     if (correlateOK1)
 	{
-	struct trackTable *tableList, *tt;
-
-	tableList = NULL;
-
-	/*	add first table to the list	*/
-	tt = allocTrackTable();
-	tt->tdb = curTrack;
-	tt->tableName = cloneString(curTable);
-	fillInTrackTable(tt, conn);
-	slAddTail(&tableList,tt);
-
+	struct dataVector *resultVector;
+	int totalBases = 0;
 	/*	add second table to the list	*/
 	tt = allocTrackTable();
 	tt->tdb = tdb2;
@@ -1084,11 +1211,25 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	fillInTrackTable(tt, conn);
 	slAddTail(&tableList,tt);
 
-	collectData(conn, tableList, maxLimitCount);
+	/*	collected data ends up attached to each table in the
+ 	 *	table List in a vectorSet
+	 */
+	totalBases = collectData(conn, tableList, maxLimitCount);
+hPrintf("<P>intersected vectors are %d bases long</P>\n", totalBases);
+	if (totalBases > 0)
+	    {
+	    struct dataVector *resultVector;
+	    resultVector = runRegression(tableList);
+	    showThreeVectors(tableList, tableList->next, resultVector);
+	    }
 	freeTrackTableList(&tableList);
-hPrintf("<P>freeTrackTableList OK</P>\n");
+	hPrintf("<P>freeTrackTableList OK</P>\n");
+	/*freeDataVector(&resultVector);*/
+	hPrintf("<P>free resultVector OK</P>\n");
+
 	}
     }
+
 
 /* Hidden form - for benefit of javascript. */
     {
