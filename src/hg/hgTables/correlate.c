@@ -18,7 +18,7 @@
 
 #include "memalloc.h"	/*	debugging	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.6 2005/06/22 17:59:43 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.7 2005/06/22 19:05:19 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -42,6 +42,7 @@ struct dataVector
     double max;		/*	maximum data value in the set	*/
     double sumData;	/*	sum of all data here	*/
     double sumSquares;	/*	sum of squares of all data here	*/
+    double r;		/*	correlation coefficient	*/
     long fetchTime;	/*	msec	*/
     long calcTime;	/*	msec	*/
     };
@@ -804,7 +805,7 @@ v->calcTime += endTime - startTime;
 
 static void statsRowOut(char *chrom, char *shortLabel, int chromStart,
     int chromEnd, int bases, double min, double max, double sumData,
-	double sumSquares, long fetchMs, long calcMs)
+	double sumSquares, double r, long fetchMs, long calcMs)
 /*	display a single line of statistics	*/
 {
 double mean = 0.0;
@@ -847,6 +848,7 @@ hPrintf("<TD ALIGN=RIGHT>%g</TD>", max);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", mean);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", variance);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", r);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*calcMs);
 }
@@ -876,6 +878,7 @@ hPrintf("<P><TABLE BORDER=1><TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
 hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
+hPrintf("<TH>Correlation<BR>coefficient</TH>");
 hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
 hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
 
@@ -884,10 +887,12 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     {
     statsRowOut(v1->chrom, table1->shortLabel, v1->start, v1->end,
 	v1->data->count, v1->data->min, v1->data->max, v1->data->sumData,
-	    v1->data->sumSquares, v1->data->fetchTime, v1->data->calcTime);
+	    v1->data->sumSquares, v2->data->r, v1->data->fetchTime,
+		v1->data->calcTime);
     statsRowOut(v2->chrom, table2->shortLabel, 0, 0,
 	v2->data->count, v2->data->min, v2->data->max, v2->data->sumData,
-	    v2->data->sumSquares, v2->data->fetchTime, v2->data->calcTime);
+	    v2->data->sumSquares, v2->data->r, v2->data->fetchTime,
+		v2->data->calcTime);
     min1 = min(min1,v1->data->min);
     min2 = min(min2,v2->data->min);
     max1 = max(max1,v1->data->max);
@@ -911,10 +916,10 @@ else if (rowsOutput > 1)
     {
     statsRowOut("OVERALL", table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
-	    totalFetch1, totalCalc1);
+	    result->r, totalFetch1, totalCalc1);
     statsRowOut("OVERALL", table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
-	    totalFetch2, totalCalc2);
+	    result->r, totalFetch2, totalCalc2);
     }
 
 hPrintf("</TABLE></P>\n");
@@ -1071,11 +1076,18 @@ table2->vSet = vSet2;
 return totalBases;
 }	/*	static void collectData()	*/
 
-static struct dataVector *runRegression(struct trackTable *tableList)
+static struct dataVector *runRegression(struct trackTable *tableList,
+    int totalBases)
 {
 struct trackTable *table1, *table2;
 struct dataVector *result = (struct dataVector *)NULL;
 struct vectorSet *vSet;
+struct vectorSet *v1;
+struct vectorSet *v2;
+double totalSumProduct = 0.0;
+double vector1DataSum = 0.0;
+double vector2DataSum = 0.0;
+long startTime, endTime;
 
 /*	expecting two tables	*/
 if (NULL == tableList)
@@ -1092,6 +1104,61 @@ for (vSet = table1->vSet; vSet != NULL; vSet = vSet->next)
 for (vSet = table2->vSet; vSet != NULL; vSet = vSet->next)
     calcMeanMinMax(vSet->data);
 
+result = allocDataVector(totalBases);
+/*	calculating formula for correlation coefficient r
+ *	compute the product of the two variables
+ *	and keep a running sum of that product for the overall answer
+ *	later
+ */
+/*	This loop walks through all the regions in the vector sets.
+ *	Each region will have its own r calculated
+ */
+for (v1 = table1->vSet, v2 = table2->vSet;
+	(v1 != NULL) && (v2 != NULL);
+		v1 = v1->next, v2 = v2->next)
+    {
+    int i;
+    struct dataVector *d1 = v1->data;
+    struct dataVector *d2 = v2->data;
+    double sumP = 0.0;		/*	sum of products	*/
+
+    startTime = clock1000();
+
+    if (d1->count != d2->count)
+	errAbort("unequal sized data vectors given to regression");
+    for (i = 0; i < d1->count; ++i)
+	{
+	sumP += d1->value[i] * d2->value[i];
+	}
+    result->count += d1->count;
+    totalSumProduct += sumP;
+    vector1DataSum += d1->sumData;
+    vector2DataSum += d2->sumData;
+    result->fetchTime += d1->fetchTime;
+    result->fetchTime += d2->fetchTime;
+    result->calcTime += d1->calcTime;
+    result->calcTime += d2->calcTime;
+
+    /*	do not compute r for this region if N is < 2	*/
+    d2->r = d1->r = 0.0;
+    if (d1->count < 2)
+	{
+	endTime = clock1000();
+	result->calcTime += endTime - startTime;
+	continue;
+	}
+    /*	For this region, ready to compute r, N is d1->count	*/
+    d2->r = d1->r = (sumP - ((d1->sumData * d2->sumData)/d1->count)) /
+		(d1->count - 1);
+    endTime = clock1000();
+    result->calcTime += endTime - startTime;
+    }
+
+result->r = 0.0;
+if (result->count > 1)
+    result->r =
+	(totalSumProduct - ((vector1DataSum * vector2DataSum)/result->count)) /
+		(result->count - 1);
 return result;
 }	/*	struct dataVector *runRegression()	*/
 
@@ -1207,7 +1274,6 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
     if (correlateOK1)
 	{
-	struct dataVector *resultVector;
 	int totalBases = 0;
 	/*	add second table to the list	*/
 	tt = allocTrackTable();
@@ -1224,7 +1290,7 @@ hPrintf("<P>intersected vectors are %d bases long</P>\n", totalBases);
 	if (totalBases > 0)
 	    {
 	    struct dataVector *resultVector;
-	    resultVector = runRegression(tableList);
+	    resultVector = runRegression(tableList, totalBases);
 	    showThreeVectors(tableList, tableList->next, resultVector);
 	    }
 	freeTrackTableList(&tableList);
