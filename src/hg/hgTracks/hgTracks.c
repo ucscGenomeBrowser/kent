@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.977 2005/06/17 22:23:14 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.978 2005/06/22 21:48:27 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9013,6 +9013,20 @@ else if (sameWord(type, "axt"))
 else if (sameWord(type, "expRatio"))
     {
     expRatioMethods(track);
+    }
+else if (sameWord(type, "bed5FloatScore"))
+    {
+    boolean useItemRgb = bedItemRgb(tdb);
+    track->bedSize = 5;
+    bedMethods(track);
+    track->loadItems = loadSimpleBed;
+    }
+else if (sameWord(type, "bed6FloatScore"))
+    {
+    boolean useItemRgb = bedItemRgb(tdb);
+    track->bedSize = 4;
+    bedMethods(track);
+    track->loadItems = loadSimpleBed;
     }
 }
 
