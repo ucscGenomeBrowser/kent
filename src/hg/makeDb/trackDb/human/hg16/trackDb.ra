@@ -3925,7 +3925,8 @@ longLabel NHGRI Deletion/Insertion Polymorphisms in ENCODE regions
 group encodeVariation
 priority 80
 visibility dense
-type bed 6 + 
+itemRgb on
+type bed 9 + 
 
 track encodeSangerGenoExprAssociation
 shortLabel Sanger Assoc
