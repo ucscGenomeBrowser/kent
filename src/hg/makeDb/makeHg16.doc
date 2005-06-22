@@ -11037,6 +11037,11 @@ hgLoadBed hg16 cnpSharp -tab -sqlTable=cnpSharp.sql cnpSharp.bed
 # note: 11 names with special characters: CTD-2183E4*, RP11-111A4?, RP11-325E8#, RP11-1000I9*, RP11-159F11*,
 # RP11-177L24*, RP11-136P13*, RP11-1151C19*, RP11-1008M3*, RP11-379N11?, CTD-3185D7#
 # no apparent problems with these
+hgsql hgFixed < cnpSharpCutoff.sql
+echo 'load data local infile "sampleCUTOFF.txt" into table cnpSharpCutoff' | hgsql hgFixed
+hgsql hg16 < cnpSharpSamples.sql
+echo 'load data local infile "andyArraySample.txt" into table cnpSharpSamples' | hgsql hg16
+
 
 # fosmid discordants
 # don't need the id column
