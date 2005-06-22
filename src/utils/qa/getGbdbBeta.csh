@@ -96,5 +96,5 @@ cp gbdb.$db.$todayDate /usr/local/apache/htdocs/qa/test-results/gbdb
 
 # clean up
 rm -f xxAssembliesxx
-# rm -f xxfullListxx
+rm -f xxfullListxx
 
