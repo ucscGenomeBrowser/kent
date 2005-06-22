@@ -161,6 +161,7 @@
 #include "vntr.h"
 #include "zdobnovSynt.h"
 #include "HInv.h"
+#include "bed5FloatScore.h"
 #include "bed6FloatScore.h"
 #include "pscreen.h"
 #include "jalview.h"
@@ -172,7 +173,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.904 2005/06/22 15:35:11 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.905 2005/06/22 21:53:53 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1984,13 +1985,21 @@ void printTBSchemaLink(struct trackDb *tdb)
 if (hTableOrSplitExists(tdb->tableName))
     {
     char *trackTable = trackDbSetting(tdb, "subTrack");
+    char *tableName = tdb->tableName;
     if (trackTable == NULL)
-	trackTable = tdb->tableName;
+	trackTable = tableName;
+    else
+	{
+	/* trim off extra words in subTrack setting, if any: */
+	char *words[2];
+	if (chopLine(cloneString(trackTable), words) > 0)
+	    trackTable = words[0];
+	}
     printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	   "TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, trackTable, tdb->tableName);
+	   database, tdb->grp, trackTable, tableName);
     }
 }
 
@@ -2622,6 +2631,81 @@ freez(&dupe);
 hFreeConn(&conn);
 }
 
+void doBed5FloatScore(struct trackDb *tdb, char *item)
+/* Handle click in BED 5+ track: BED 5 with 0-1000 score (for useScore 
+ * shading in hgTracks) plus real score for display in details page. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char table[64];
+boolean hasBin;
+struct bed5FloatScore *b5;
+struct dyString *query = newDyString(512);
+char **row;
+boolean firstTime = TRUE;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       table, seqName);
+hAddBinToQuery(winStart, winEnd, query);
+dyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    b5 = bed5FloatScoreLoad(row+hasBin);
+    bedPrintPos((struct bed *)b5, 4);
+    printf("<B>Score:</B> %f<BR>\n", b5->floatScore);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+void doBed6FloatScore(struct trackDb *tdb, char *item)
+/* Handle click in BED 4+ track that's like BED 6 but with floating pt score */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char table[64];
+boolean hasBin;
+struct bed6FloatScore *b6;
+struct dyString *query = newDyString(512);
+char **row;
+boolean firstTime = TRUE;
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+	       table, seqName);
+hAddBinToQuery(winStart, winEnd, query);
+dyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (firstTime)
+	firstTime = FALSE;
+    else
+	htmlHorizontalLine();
+    b6 = bed6FloatScoreLoad(row+hasBin);
+    bedPrintPos((struct bed *)b6, 4);
+    printf("<B>Score:</B> %f<BR>\n", b6->score);
+    printf("<B>Strand:</B> %s<BR>\n", b6->strand);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -2717,6 +2801,14 @@ if (wordCount > 0)
         {
 	genericWiggleClick(conn, tdb, item, start);
         }
+    else if (sameString(type, "bed5FloatScore"))
+	{
+	doBed5FloatScore(tdb, item);
+	}
+    else if (sameString(type, "bed6FloatScore"))
+	{
+	doBed6FloatScore(tdb, item);
+	}
     }
 printTrackHtml(tdb);
 freez(&dupe);
@@ -15087,43 +15179,6 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
-
-void doBed6FloatScore(struct trackDb *tdb, char *item)
-/* Handle click in BED 4+ track that's like BED 6 but with floating pt score */
-{
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
-char table[64];
-boolean hasBin;
-struct bed6FloatScore *b6;
-struct dyString *query = newDyString(512);
-char **row;
-boolean firstTime = TRUE;
-int start = cartInt(cart, "o");
-
-genericHeader(tdb, item);
-printCustomUrl(tdb, item, TRUE);
-hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
-dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
-	       table, seqName);
-hAddBinToQuery(winStart, winEnd, query);
-dyStringPrintf(query, "name = '%s' and chromStart = %d", item, start);
-sr = sqlGetResult(conn, query->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (firstTime)
-	firstTime = FALSE;
-    else
-	htmlHorizontalLine();
-    b6 = bed6FloatScoreLoad(row+hasBin);
-    bedPrintPos((struct bed *)b6, 4);
-    printf("<B>Score:</B> %f<BR>\n", b6->score);
-    printf("<B>Strand:</B> %s<BR>\n", b6->strand);
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-printTrackHtml(tdb);
-}
 
 void doScaffoldEcores(struct trackDb *tdb, char *item)
 /* Creates details page and gets the scaffold co-ordinates for unmapped */
