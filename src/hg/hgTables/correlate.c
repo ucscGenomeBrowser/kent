@@ -18,7 +18,7 @@
 
 #include "memalloc.h"	/*	debugging	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.5 2005/06/22 17:01:47 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.6 2005/06/22 17:59:43 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -687,50 +687,6 @@ else
 return NULL;
 }	/*	static struct dataVector *fetchOneRegion()	*/
 
-static void statsRowOut(char *chrom, char *shortLabel, int chromStart,
-    int chromEnd, int bases, double min, double max, double sumData,
-	double sumSquares, long fetchMs, long calcMs)
-/*	display a single line of statistics	*/
-{
-double mean = 0.0;
-double variance = 0.0;
-double stddev = 0.0;
-
-if (bases > 0)
-    {
-    mean = sumData/bases;
-    if (bases > 1)
-	{
-	variance = (sumSquares - ((sumData*sumData)/bases)) /
-		(double)(bases-1);
-	if (variance > 0.0)
-	    stddev = sqrt(variance);
-	}
-    }
-
-hPrintf("<TD ALIGN=LEFT>%s</TD>", shortLabel);
-hPrintf("<TD ALIGN=LEFT>%s</TD>", chrom);
-/*	browser 1-relative start coordinates	*/
-if ((0 == chromStart) && (0 == chromEnd))
-    {
-    hPrintf("<TD COLSPAN=2>&nbsp;</TD><TD ALIGN=RIGHT>");
-    }
-else
-    {
-    hPrintf("<TD ALIGN=RIGHT>%d</TD>", chromStart+1);
-    hPrintf("<TD ALIGN=RIGHT>%d</TD><TD ALIGN=RIGHT>", chromEnd);
-    }
-printLongWithCommas(stdout,(long)bases);
-hPrintf("</TD><TD ALIGN=RIGHT>%g</TD>", min);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", max);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", mean);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", variance);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
-hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
-hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*calcMs);
-}
-
-
 static void intersectVectors(struct dataVector *v1, struct dataVector *v2)
 /* collapse vector data sets down to only values when positions are equal */
 {
@@ -846,6 +802,55 @@ endTime = clock1000();
 v->calcTime += endTime - startTime;
 }
 
+static void statsRowOut(char *chrom, char *shortLabel, int chromStart,
+    int chromEnd, int bases, double min, double max, double sumData,
+	double sumSquares, long fetchMs, long calcMs)
+/*	display a single line of statistics	*/
+{
+double mean = 0.0;
+double variance = 0.0;
+double stddev = 0.0;
+
+if (bases > 0)
+    {
+    mean = sumData/bases;
+    if (bases > 1)
+	{
+	variance = (sumSquares - ((sumData*sumData)/bases)) /
+		(double)(bases-1);
+	if (variance > 0.0)
+	    stddev = sqrt(variance);
+	}
+    }
+
+hPrintf("<TR>");
+/*	Check for first or second data rows, 2nd has 0,0 coordinates
+ *	Final row has 1,1 start,end	*/
+if (chromStart || chromEnd)
+    {
+    hPrintf("<TD ALIGN=LEFT ROWSPAN=2>%s:", chrom);
+    if (!((1 == chromStart) && (1 == chromEnd)))
+	{
+	/*	browser 1-relative start coordinates	*/
+	printLongWithCommas(stdout,(long)chromStart+1);
+	hPrintf("-");
+	printLongWithCommas(stdout,(long)chromEnd);
+	}
+	hPrintf("<BR>");
+	printLongWithCommas(stdout,(long)bases);
+	hPrintf("&nbsp;bases</TD>");
+    }
+
+hPrintf("<TD ALIGN=LEFT>%s</TD>", shortLabel);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", min);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", max);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", mean);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", variance);
+hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
+hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
+hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*calcMs);
+}
+
 static void showThreeVectors(struct trackTable *table1,
     struct trackTable *table2, struct dataVector *result)
 {
@@ -867,12 +872,12 @@ double min2 = INFINITY;
 double max1 = -INFINITY;
 double max2 = -INFINITY;
 
-hPrintf("<P><TABLE BORDER=1><TR><TH>Track</TH><TH>Chrom</TH>");
-hPrintf("<TH>Data<BR>start</TH><TH>Data<BR>end</TH><TH>Bases<BR>covered</TH>");
+hPrintf("<P><TABLE BORDER=1><TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
+hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
 hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
-hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TR>\n");
+hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
 
 
 for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
@@ -880,7 +885,7 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     statsRowOut(v1->chrom, table1->shortLabel, v1->start, v1->end,
 	v1->data->count, v1->data->min, v1->data->max, v1->data->sumData,
 	    v1->data->sumSquares, v1->data->fetchTime, v1->data->calcTime);
-    statsRowOut(v2->chrom, table2->shortLabel, v2->start, v2->end,
+    statsRowOut(v2->chrom, table2->shortLabel, 0, 0,
 	v2->data->count, v2->data->min, v2->data->max, v2->data->sumData,
 	    v2->data->sumSquares, v2->data->fetchTime, v2->data->calcTime);
     min1 = min(min1,v1->data->min);
@@ -904,7 +909,7 @@ if (0 == rowsOutput)
     hPrintf("<TR><TD COLSPAN=9>EMPTY RESULT SET</TD></TR>\n");
 else if (rowsOutput > 1)
     {
-    statsRowOut("OVERALL", table1->shortLabel, 0, 0,
+    statsRowOut("OVERALL", table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    totalFetch1, totalCalc1);
     statsRowOut("OVERALL", table2->shortLabel, 0, 0,
