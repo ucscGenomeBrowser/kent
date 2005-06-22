@@ -1955,8 +1955,9 @@ done
 
     ssh hgwdev
     cd /cluster/data/encode/NHGRI/mullikin
-    split.pl < hg16.ENCODE.DIPtrack.Q23.bed4+ > encodeIndels.bed
     hgsql hg16 < encodeIndels.sql
+    split4.pl < hg16.ENCODE.DIPtrack.Q23.bed4+ > split4.out
+    makeColoredBed < split4.out > encodeIndels.bed  
     hgLoadBed hg16 encodeIndels -tab -sqlTable=encodeIndels.sql encodeIndels.bed
     # check reference length
     mysql> select chrom, chromStart, chromEnd, (chromEnd-chromStart) as size, traceName, reference, length(reference) as refsize from encodeIndels where (chromEnd-chromStart) != length(reference) and length(reference) > 1;
