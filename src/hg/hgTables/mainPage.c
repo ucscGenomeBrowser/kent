@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.74 2005/06/09 11:43:22 giardine Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.75 2005/06/17 19:03:56 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -569,6 +569,24 @@ if (isPositional)
 	}
     hPrintf("</TD></TR>\n");
     }
+
+#ifdef NOT_YET
+/* Correlation line. */
+if (isPositional && (isWig || isBedGraph))
+    {
+    char *selTable = cartUsualString(cart, hgtaCorrelateTable2, "none");
+    hPrintf("<TR><TD><B>correlation:</B>\n");
+    cgiMakeButton(hgtaDoCorrelatePage, "calculate");
+    if (curTrack && curTrack->type)
+	{
+	hPrintf("&nbsp;");
+	hPrintf("(type %s)", curTrack->type);
+	hPrintf("&nbsp;");
+	hPrintf("(table2: %s)", selTable);
+	}
+    hPrintf("</TD></TR>\n");
+    }
+#endif
 
 /* Print output type line. */
 showOutputTypeRow(isWig, isPositional, isMaf);

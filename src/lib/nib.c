@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.20 2005/04/10 14:41:24 markd Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.21 2005/06/16 06:25:19 markd Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -185,7 +185,7 @@ bytePos = (start>>1);
 fseek(f, bytePos + 2*sizeof(bits32), SEEK_SET);
 if (start & 1)
     {
-    bVal = getc(f);
+    bVal = getc_unlocked(f);
     if (bVal < 0)
 	{
 	errAbort("Read error 1 in %s", fileName);
@@ -202,7 +202,7 @@ if (start & 1)
 byteSize = (size>>1);
 while (--byteSize >= 0)
     {
-    bVal = getc(f);
+    bVal = getc_unlocked(f);
     if (bVal < 0)
 	errAbort("Read error 2 in %s", fileName);
     d[0] = valToNtTbl[(bVal>>4)];
@@ -219,7 +219,7 @@ while (--byteSize >= 0)
     }
 if (size&1)
     {
-    bVal = getc(f);
+    bVal = getc_unlocked(f);
     if (bVal < 0)
 	errAbort("Read error 3 in %s", fileName);
     *d++ = valToNtTbl[(bVal>>4)];

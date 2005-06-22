@@ -1,0 +1,17 @@
+track xenoRefGene
+visibility pack
+
+track intronEst
+visibility pack
+
+track xenoMrna
+visibility squish
+
+track gold
+visibility dense
+
+track gap
+visibility dense
+
+track quality
+visibility dense

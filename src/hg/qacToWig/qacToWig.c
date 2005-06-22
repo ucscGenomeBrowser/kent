@@ -5,7 +5,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: qacToWig.c,v 1.3 2005/06/11 04:38:07 baertsch Exp $";
+static char const rcsid[] = "$Id: qacToWig.c,v 1.4 2005/06/15 19:50:03 angie Exp $";
 
 static char *name = NULL;
 static bool fixed = FALSE;
@@ -61,7 +61,7 @@ void qacToWig(char *inName, char *outDir)
 {
 boolean isSwapped;
 FILE *in = qacOpenVerify(inName, &isSwapped);
-FILE *out;
+FILE *out = NULL;
 struct qaSeq *qa;
 char outPath[1024];
 int i;

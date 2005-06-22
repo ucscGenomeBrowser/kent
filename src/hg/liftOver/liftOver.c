@@ -10,12 +10,14 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.18 2004/11/18 16:42:52 kent Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.19 2005/06/16 10:14:29 jill Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
-double minSizeT = 0;
-double minSizeQ = 0;
+int minSizeT = 0;
+int minSizeQ = 0;
+int minChainT = 0;
+int minChainQ = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
@@ -46,9 +48,10 @@ errAbort(
   "   -fudgeThick    If thickStart/thickEnd is not mapped, use the closest \n"
   "                  mapped base.  Recommended if using -minBlocks.\n"
   "   -multiple               Allow multiple output regions\n"
-  "   -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
-  "                             when mapping to multiple output regions\n"
-  "                                     (default 0, 0)\n"
+  "   -minChainT, -minChainQ  Minimum chain size in target/query, when mapping\n" 
+  "                           to multiple output regions (default 0, 0)\n"
+  "   -minSizeT               deprecated synonym for -minChainT (ENCODE compat.)\n"
+  "   -minSizeQ               Min matching region size in query with -multiple.\n"
   "   -chainTable             Used with -multiple, format is db.tablename,\n"
   "                               to extend chains from net (preserves dups)\n"
   "   -errorHelp              Explain error messages\n",
@@ -58,7 +61,7 @@ errAbort(
 
 void liftOver(char *oldFile, char *mapFile, double minMatch, 
                 double minBlocks, int minSizeT, int minSizeQ,
-                bool multiple, char *chainTable, 
+                int minChainT, int minChainQ, bool multiple, char *chainTable, 
                 char *newFile, char *unmappedFile)
 /* liftOver - Move annotations from one assembly to another. */
 {
@@ -85,7 +88,8 @@ else if (optionExists("pslT"))
                         mapped, unmapped);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
-                fudgeThick, mapped, unmapped, multiple, chainTable, &errCt);
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+		chainTable, &errCt);
 carefulClose(&mapped);
 carefulClose(&unmapped);
 }
@@ -98,14 +102,22 @@ minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
 multiple = optionExists("multiple");
-minSizeT = optionInt("minSizeT", minSizeT);
+if ((!multiple) && (optionExists("minSizeT")  || optionExists("minSizeQ") ||
+		    optionExists("minChainT") || optionExists("minChainQ") ||
+		    optionExists("chainTable")))
+    errAbort("minSizeT/Q, minChainT/Q and chainTable can only be used with -multiple.");
+if (optionExists("minSizeT") && optionExists("minChainT"))
+    errAbort("minSizeT is currently a deprecated synonym for minChainT. Can't set both.");
+minSizeT = optionInt("minSizeT", minChainT); /* note: we're setting minChainT */
 minSizeQ = optionInt("minSizeQ", minSizeQ);
+minChainT = optionInt("minChainT", minChainT);
+minChainQ = optionInt("minChainQ", minChainQ);
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
     errAbort(liftOverErrHelp());
 if (argc != 5)
     usage();
 liftOver(argv[1], argv[2], minMatch, minBlocks, minSizeT, minSizeQ, 
-                        multiple, chainTable, argv[3], argv[4]);
+	 minChainT, minChainQ, multiple, chainTable, argv[3], argv[4]);
 return 0;
 }

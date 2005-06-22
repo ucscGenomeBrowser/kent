@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.108 2005/06/07 14:04:08 giardine Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.110 2005/06/17 19:03:56 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -287,7 +287,7 @@ if (s != NULL)
     }
 }
 
-static struct trackDb *getFullTrackList()
+struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
 struct trackDb *list = hTrackDb(NULL), *tdb;
@@ -815,11 +815,18 @@ if (trackDupe != NULL && trackDupe[0] != 0)
     if (sameString(type, "wigMaf"))
         {
 	char *wigTrack = trackDbSetting(track, "wiggle");
+	char *summary = trackDbSetting(track, "summary");
 	if (wigTrack != NULL) 
 	    {
 	    name = slNameNew(wigTrack);
 	    slAddHead(pList, name);
 	    hashAdd(uniqHash, wigTrack, NULL);
+	    }
+	if (summary != NULL)
+	    {
+	    name = slNameNew(summary);
+	    slAddTail(pList, name);
+	    hashAdd(uniqHash, summary, NULL);
 	    }
 	}
     if (trackDbIsComposite(track))
@@ -1300,6 +1307,14 @@ else if (cartVarExists(cart, hgtaDoIntersectMore))
     doIntersectMore(conn);
 else if (cartVarExists(cart, hgtaDoIntersectSubmit))
     doIntersectSubmit(conn);
+else if (cartVarExists(cart, hgtaDoCorrelatePage))
+    doCorrelatePage(conn);
+else if (cartVarExists(cart, hgtaDoClearCorrelate))
+    doClearCorrelate(conn);
+else if (cartVarExists(cart, hgtaDoCorrelateMore))
+    doCorrelateMore(conn);
+else if (cartVarExists(cart, hgtaDoCorrelateSubmit))
+    doCorrelateSubmit(conn);
 else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
     doPasteIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoClearPasteIdentifierText))

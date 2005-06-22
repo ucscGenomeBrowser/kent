@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.47 2005/04/13 06:25:50 markd Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.48 2005/06/15 21:20:51 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -207,7 +207,7 @@ for (el = elList; el != NULL; el = el->next)
 
 /* Make up update statement unless it looks like a robot with
  * a great bunch of variables. */
-if (encoded->stringSize < 6*1024 || cart->userInfo->useCount > 0)
+if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
     {
     updateOne(conn, "userDb", cart->userInfo, encoded->string, encoded->stringSize);
     updateOne(conn, "sessionDb", cart->sessionInfo, encoded->string, encoded->stringSize);

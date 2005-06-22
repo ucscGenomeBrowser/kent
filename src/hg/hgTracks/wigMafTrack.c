@@ -16,10 +16,7 @@
 #include "mafSummary.h"
 #include "phyloTree.h"
 
-#define ANNOT_DEBUG 1
-#undef ANNOT_DEBUG
-
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.82 2005/06/08 20:09:32 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.83 2005/06/19 18:18:02 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -163,8 +160,35 @@ for (group = 0; group < groupCt; group++)
         }
     if (useTarg)
 	{
-	speciesOrder = phyloFindPath(tree, database, cartUsualString(cart, SPECIES_HTML_TARGET,speciesTarget));
+	char *ptr, *path;
+	struct hash *orgHash = newHash(0);
+	int numNodes, ii;
+	char *nodeNames[512];
+	char *species = NULL;
+	char *lowerString;
+
+	path = phyloNodeNames(tree);
+	numNodes = chopLine(path, nodeNames);
+	for(ii=0; ii < numNodes; ii++)
+	    {
+	    if ((ptr = hOrganism(nodeNames[ii])) != NULL)
+		{
+		ptr[0] = tolower(ptr[0]);
+		hashAdd(orgHash, ptr, nodeNames[ii]);
+		}
+	    else
+		{
+		hashAdd(orgHash, nodeNames[ii], nodeNames[ii]);
+		}
+	    }
+
+	lowerString = cartUsualString(cart, SPECIES_HTML_TARGET,speciesTarget);
+	lowerString[0] = tolower(lowerString[0]);
+	species = hashFindVal(orgHash, lowerString);
+	if ((ptr = phyloFindPath(tree, database, species)) != NULL)
+	    speciesOrder = ptr;
 	}
+
 
     speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
@@ -965,6 +989,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 
     /* using maf sequences from file */
     /* create pairwise maf list from the multiple maf */
+//#define ANNOT_DEBUG
 #ifdef ANNOT_DEBUG
 {
 struct mafComp *mc;

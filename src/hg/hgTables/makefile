@@ -9,7 +9,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgTables
 
 O = $A.o asObj.o bedList.o custom.o filterFields.o \
-    gffOut.o identifiers.o intersect.o javascript.o \
+    gffOut.o identifiers.o intersect.o correlate.o javascript.o \
     joining.o maf.o mainPage.o rangeHistogram.o schema.o \
     seqOut.o sumStats.o usage.o wiggle.o gala.o galaxy.o
 

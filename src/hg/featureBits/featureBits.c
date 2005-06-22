@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.36 2005/03/20 19:28:07 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.37 2005/06/19 19:53:39 jill Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -223,9 +223,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     start = atoi(row[0]);
     end = atoi(row[1]);
     if (start < lastStart)
-        printf("Out of order: %d,%d\n", lastStart, start);
+        fprintf(stderr,"Out of order: %d,%d\n", lastStart, start);
     if (rangeIntersection(lastStart, lastEnd, start-1, end) > 0)
-        printf("Overlapping: (%d %d) (%d %d)\n", lastStart, lastEnd, start, end);
+        fprintf(stderr,"Overlapping: (%d %d) (%d %d)\n", lastStart, lastEnd, start, end);
     lastStart = start;
     lastEnd = end;
     }
@@ -642,7 +642,7 @@ if (!faIndependent)
 	    }
 	}
     if (calcEnrichment)
-        printf("%s %5.3f%%, %s %5.3f%%, both %5.3f%%, cover %4.2f%%, enrich %4.2fx\n",
+        fprintf(stderr,"%s %5.3f%%, %s %5.3f%%, both %5.3f%%, cover %4.2f%%, enrich %4.2fx\n",
 		tables[0], 
 		100.0 * totalFirstBits/totalBases,
 		tables[1],
@@ -651,7 +651,7 @@ if (!faIndependent)
 		100.0 * totalBits / totalFirstBits,
 		(totalBits/totalSecondBits) / (totalFirstBits/totalBases) );
     else
-	printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
+	fprintf(stderr,"%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
 	    totalBits, totalBases, 100.0*totalBits/totalBases);
     }
 else

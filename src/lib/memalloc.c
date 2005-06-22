@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.22 2005/04/11 08:00:56 markd Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.23 2005/06/20 21:32:51 galt Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -142,7 +142,7 @@ if (size == 0)
     assert(FALSE);
     }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of huge memory - request size %lld bytes\n",
+    errAbort("Out of huge memory - request size %llu bytes\n",
              (long long)size);
 return pt;
 }

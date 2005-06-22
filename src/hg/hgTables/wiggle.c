@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.46 2005/05/27 19:34:48 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.48 2005/06/21 16:43:00 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -307,7 +307,7 @@ return valuesMatched;
 
 static int wigOutRegion(char *table, struct sqlConnection *conn,
 	struct region *region, int maxOut, enum wigOutputType wigOutType,
-	struct wigAsciiData **data)
+	struct wigAsciiData **data, int spanConstraint)
 /* Write out wig data in region.  Write up to maxOut elements. 
  * Returns number of elements written. */
 {
@@ -367,6 +367,9 @@ else
 		region->start, region->end, cart, curTrack);
 	    wds->setSpanConstraint(wds, span);
 	    }
+	else if (spanConstraint)
+	    wds->setSpanConstraint(wds,spanConstraint);
+
 	valuesMatched = getWigglePossibleIntersection(wds, region, database,
 	    table2, &intersectBedList, splitTableOrFileName, operations);
 	}
@@ -455,7 +458,7 @@ wigDataHeader(shortLabel, longLabel, NULL, wigOutType);
 for (region = regionList; region != NULL; region = region->next)
     {
     outCount = wigOutRegion(table, conn, region, maxOut - curOut,
-	wigOutType, NULL);
+	wigOutType, NULL, 0);
     curOut += outCount;
     if (curOut >= maxOut)
         break;
@@ -592,7 +595,7 @@ return bedList;
 }	/*	struct bed *getWiggleAsBed()	*/
 
 struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
-	struct region *region, struct lm *lm)
+	struct region *region)
 /*	return the wigAsciiData list	*/
 {
 int maxOut = 0;
@@ -600,7 +603,21 @@ struct wigAsciiData *data = NULL;
 int outCount;
 
 maxOut = wigMaxOutput(database, curTable);
-outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data);
+outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data, 0);
+
+return data;
+}
+
+struct wigAsciiData *getWiggleData(struct sqlConnection *conn, char *table,
+	struct region *region, int maxOut, int spanConstraint)
+/*	like getWiggleAsData above, but with specific spanConstraint and
+ *	a different data limit count, return the wigAsciiData list	*/
+{
+struct wigAsciiData *data = NULL;
+int outCount;
+
+outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data,
+	spanConstraint);
 
 return data;
 }

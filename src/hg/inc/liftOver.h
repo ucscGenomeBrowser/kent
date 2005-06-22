@@ -15,6 +15,7 @@ char *liftOverChainFile(char *fromDb, char *toDb);
 int liftOverBed(char *fileName, struct hash *chainHash, 
                         double minMatch,  double minBlocks, 
                         int minSizeT, int minSizeQ,
+                        int minChainT, int minChainQ,
                         bool fudgeThick, FILE *f, FILE *unmapped, 
                         bool multiple, char *chainTable, int *errCt);
 /* Open up file, decide what type of bed it is, and lift it. 

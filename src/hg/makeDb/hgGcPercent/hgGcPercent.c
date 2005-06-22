@@ -5,12 +5,13 @@
 #include "dnaseq.h"
 #include "nib.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "cheapcgi.h"
 #include "options.h"
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.18 2005/03/20 19:31:30 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.20 2005/06/17 01:22:48 angie Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -69,7 +70,7 @@ errAbort(
   "example:\n"
   "  calculate GC percent in 5 base windows using a 2bit nib assembly (dp2):\n"
   "  hgGcPercent -wigOut -doGaps -file=stdout -win=5 dp2 \\\n"
-  "      /cluster/data/dp2 | wigBedToBinary stdin gc5Base.wig gc5Base.wib"
+  "      /cluster/data/dp2 | wigEncode stdin gc5Base.wig gc5Base.wib"
       , winSize);
 }
 
@@ -82,8 +83,7 @@ char *createTable =
     "name varchar(255) not null,	# Constant string GCpct\n"
     "gcPpt int unsigned not null,	# GC percentage for 20Kb block\n"
               "#Indices\n"
-    "UNIQUE(chrom(12),chromStart),\n"
-    "INDEX(chrom(12), chromEnd)\n"
+    "UNIQUE(chrom(%d),chromStart)\n"
 ");\n";
 
 static void wigOutLine(FILE *f, char *chrom, int start, int end, int ppt)
@@ -306,6 +306,8 @@ FILE *tabFile = mustOpen(tabFileName, "w");
 char twoBitFile[512];
 struct bed *bedRegionList = NULL;
 
+hSetDb(database);
+
 verbose(1, "#\tCalculating gcPercent with window size %d\n", winSize);
 verbose(2, "#\tWriting to tab file %s\n", tabFileName);
 
@@ -362,9 +364,11 @@ verbose(1, "#\tFile %s created\n", tabFileName);
 if (!noLoad)
     {
     struct sqlConnection *conn = sqlConnect(database);
+    int indexLen = hGetMinIndexLength();
     char query[1024];
+    safef(query, sizeof(query), createTable, indexLen);
     verbose(1, "#\tLoading gcPercent table\n");
-    sqlMaybeMakeTable(conn, "gcPercent", createTable);
+    sqlRemakeTable(conn, "gcPercent", query);
     sqlUpdate(conn, "DELETE from gcPercent");
     safef(query, sizeof(query),
 	  "LOAD data local infile '%s' into table gcPercent", tabFileName);
