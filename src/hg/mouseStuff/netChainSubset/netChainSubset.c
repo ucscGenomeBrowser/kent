@@ -6,10 +6,11 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.8 2005/02/26 01:11:28 angie Exp $";
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.9 2005/06/22 22:35:56 markd Exp $";
 
 char *type = NULL;
 boolean splitOnInsert = FALSE;
+boolean wholeChains = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +23,9 @@ errAbort(
   "   -gapOut=gap.tab - Output gap sizes to file\n"
   "   -type=XXX - Restrict output to particular type in net file\n"
   "   -splitOnInsert - Split chain when get an insertion of another chain\n"
+  "   -wholeChains - Write entire chain references by net, don't split\n"
+  "    when a high-level net is encoundered.  This is useful when nets\n"
+  "    have been filtered.\n"
   );
 }
 
@@ -29,6 +33,7 @@ struct optionSpec options[] = {
    {"gapOut", OPTION_STRING},
    {"type", OPTION_STRING},
    {"splitOnInsert", OPTION_BOOLEAN},
+   {"wholeChains", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -57,6 +62,14 @@ chainWrite(subChain, f);
 if (gapFile != NULL)
     gapWrite(subChain, gapFile);
 chainFree(&chainToFree);
+}
+
+void writeChainWhole(struct chain *chain, FILE *f, FILE *gapFile)
+/* Write out entire chain. */
+{
+chainWrite(chain, f);
+if (gapFile != NULL)
+    gapWrite(chain, gapFile);
 }
 
 struct cnFill *nextGapWithInsert(struct cnFill *gapList)
@@ -102,6 +115,8 @@ if (type != NULL)
     }
 if (splitOnInsert)
     splitWrite(fill, chain, f, gapFile);
+else if (wholeChains)
+    writeChainWhole(chain, f, gapFile);
 else
     writeChainPart(chain, fill->tStart, fill->tStart + fill->tSize, f, gapFile);
 }
@@ -149,6 +164,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 type = optionVal("type", type);
 splitOnInsert = optionExists("splitOnInsert");
+wholeChains = optionExists("wholeChains");
 if (argc != 4)
     usage();
 netChainSubset(argv[1], argv[2], argv[3]);
