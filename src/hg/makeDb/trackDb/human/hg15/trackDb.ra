@@ -495,13 +495,13 @@ searchPriority 50
 searchTable vegaGene
 searchName vegaGene2
 searchMethod prefix
-query select chrom, txStart,txEnd, name from %s where name = 'nomatch'
+query select chrom, txStart,txEnd, name from %s where name like 'nomatch%s%%'
 searchPriority 50.1
 
 searchTable vegaPseudoGene
 searchName vegaPseudoGene2
 searchMethod prefix
-query select chrom, txStart,txEnd, name from %s where name = 'nomatch'
+query select chrom, txStart,txEnd, name from %s where name like 'nomatch%s%%'
 searchPriority 50.1
 
 searchTable bacendsCow
