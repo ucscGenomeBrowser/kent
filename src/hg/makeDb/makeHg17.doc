@@ -16637,8 +16637,18 @@ superfam050524.sfAssign;'
 # this should be part of the known gene build
     /cluster/data/genbank/bin/i386/mkCcdsGeneMap -db=hg17 -loadDb ccdsGene knownGene ccdsKgMap
 
+# Build targetScanS track - (DONE - 2005-06-22 Fan)
+#       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+    ssh hgwdev 
+    mkdir -p /cluster/data/hg17/bed/targetScanS
+    cd /cluster/data/hg17/bed/targetScanS
+    wget --timestamp http://genes.mit.edu/targetscan/tracks/targetscan.bed
 
+# Remove the first description line of targetscan.bed
 
+    hgLoadBed -tab hg17 targetScanS targetscan.bed
 
+# Create/edit/check in targetScans.html and trackDb.ra under
+# kent/src/hg/makeDb/trackDb/human/hg17
 
 
