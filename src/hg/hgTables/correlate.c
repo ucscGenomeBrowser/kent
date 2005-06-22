@@ -18,7 +18,7 @@
 
 #include "memalloc.h"	/*	debugging	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.7 2005/06/22 19:05:19 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.8 2005/06/22 21:00:01 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -200,6 +200,7 @@ if (tl)
     }
 }
 
+#ifdef NOT
 /*	this is the end result of all the data collection and analysis */
 struct correlationResult
     {
@@ -234,6 +235,7 @@ if (cr)
     freez(cr);
     }
 }
+#endif
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -848,7 +850,15 @@ hPrintf("<TD ALIGN=RIGHT>%g</TD>", max);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", mean);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", variance);
 hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", r);
+if (chromStart || chromEnd)
+    {
+    hPrintf("<TD ALIGN=RIGHT>%g</TD>", r);
+    hPrintf("<TD ALIGN=RIGHT>%g</TD>", r*r);
+    }
+else
+    {
+    hPrintf("<TD COLSPAN=2>&nbsp;</TD>");
+    }
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*calcMs);
 }
@@ -874,11 +884,17 @@ double min2 = INFINITY;
 double max1 = -INFINITY;
 double max2 = -INFINITY;
 
-hPrintf("<P><TABLE BORDER=1><TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
+hPrintf("<P><!--outer table is for border purposes-->\n");
+hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
+hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+
+hPrintf("<TABLE BGCOLOR=\"%s\"", HG_COL_INSIDE);
+hPrintf("BORDER=1><TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
 hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
-hPrintf("<TH>Correlation<BR>coefficient</TH>");
+hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
+hPrintf("<TH>r<BR>squared</TH>");
 hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
 hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
 
@@ -922,7 +938,8 @@ else if (rowsOutput > 1)
 	    result->r, totalFetch2, totalCalc2);
     }
 
-hPrintf("</TABLE></P>\n");
+hPrintf("</TABLE>\n");
+hPrintf("</TD></TR></TABLE></P>\n");
 
 /*	debugging when 1 region, less than 100 bases, show all values	*/
 if ((1 == rowsOutput) && (totalBases1 < 100) && (totalBases2 < 100))
@@ -980,7 +997,6 @@ static int collectData(struct sqlConnection *conn,
 char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 struct region *regionList = getRegions();
 struct region *region;
-struct trackTable *table;
 int regionCount = 0;
 struct trackTable *table1;
 struct trackTable *table2;
@@ -1017,19 +1033,24 @@ else if (sameString(regionType,"genome"))
 else if (sameString(regionType,"encode"))
     hPrintf("<P>position: %d encode regions</P>\n", regionCount);
 
-/*	some more debugging stuff, do we have the tables correct */
-hPrintf("<P><TABLE BORDER=1><TR><TH COLSPAN=8>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH></TR>\n");
-
-for (table = tableList; table != NULL; table = table->next)
+#ifdef NOT
+/*	some debugging stuff, do we have the tables correctly identified */
     {
-    hPrintf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%s</TD><TD>%s</TD></TR>\n",
-	table->shortLabel, table->tdb->tableName, table->tableName,
-	table->actualTdb->type,
-	table->isBedGraph ? "bedGraph" : table->isWig ? "wiggle" : "other",
-	table->bedGraphColumnNum, table->bedGraphColumnName,
-	table->isCustom ? "YES" : "NO");
+    struct trackTable *table;
+    hPrintf("<P><TABLE BORDER=1><TR><TH COLSPAN=8>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH></TR>\n");
+
+    for (table = tableList; table != NULL; table = table->next)
+	{
+	hPrintf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%s</TD><TD>%s</TD></TR>\n",
+	    table->shortLabel, table->tdb->tableName, table->tableName,
+	    table->actualTdb->type,
+	    table->isBedGraph ? "bedGraph" : table->isWig ? "wiggle" : "other",
+	    table->bedGraphColumnNum, table->bedGraphColumnName,
+	    table->isCustom ? "YES" : "NO");
+	}
+    hPrintf("</TABLE></P>\n");
     }
-hPrintf("</TABLE></P>\n");
+#endif
 
 /*	walk through the regions and fetch each table's data
  *	after you have them both, condense them down to only those
@@ -1085,8 +1106,14 @@ struct vectorSet *vSet;
 struct vectorSet *v1;
 struct vectorSet *v2;
 double totalSumProduct = 0.0;
-double vector1DataSum = 0.0;
-double vector2DataSum = 0.0;
+double vector1sumData = 0.0;
+double vector2sumData = 0.0;
+double vector1sumSquares = 0.0;
+double vector2sumSquares = 0.0;
+double variance1 = 0.0;
+double variance2 = 0.0;
+double stddev1 = 0.0;
+double stddev2 = 0.0;
 long startTime, endTime;
 
 /*	expecting two tables	*/
@@ -1132,8 +1159,10 @@ for (v1 = table1->vSet, v2 = table2->vSet;
 	}
     result->count += d1->count;
     totalSumProduct += sumP;
-    vector1DataSum += d1->sumData;
-    vector2DataSum += d2->sumData;
+    vector1sumData += d1->sumData;
+    vector2sumData += d2->sumData;
+    vector1sumSquares += d1->sumSquares;
+    vector2sumSquares += d2->sumSquares;
     result->fetchTime += d1->fetchTime;
     result->fetchTime += d2->fetchTime;
     result->calcTime += d1->calcTime;
@@ -1148,17 +1177,49 @@ for (v1 = table1->vSet, v2 = table2->vSet;
 	continue;
 	}
     /*	For this region, ready to compute r, N is d1->count	*/
-    d2->r = d1->r = (sumP - ((d1->sumData * d2->sumData)/d1->count)) /
-		(d1->count - 1);
+    variance1 = (d1->sumSquares - ((d1->sumData*d1->sumData)/d1->count)) /
+	(double)(d1->count-1);
+    variance2 = (d2->sumSquares - ((d2->sumData*d2->sumData)/d2->count)) /
+	(double)(d2->count-1);
+    stddev1 = stddev2 = 0.0;
+    if (variance1 > 0.0)
+	stddev1 = sqrt(variance1);
+    if (variance2 > 0.0)
+	stddev2 = sqrt(variance2);
+    if ((stddev1 * stddev2) != 0.0)
+	d2->r = d1->r = ((sumP - ((d1->sumData * d2->sumData)/d1->count)) /
+		(d1->count - 1)) /
+			(stddev1 * stddev2);
+    else
+	d2->r = d1->r = 1.0;
+
     endTime = clock1000();
     result->calcTime += endTime - startTime;
     }
 
 result->r = 0.0;
 if (result->count > 1)
-    result->r =
-	(totalSumProduct - ((vector1DataSum * vector2DataSum)/result->count)) /
-		(result->count - 1);
+    {
+    variance1 = (vector1sumSquares -
+			((vector1sumData*vector1sumData)/result->count)) /
+		(double)(result->count-1);
+    variance2 = (vector2sumSquares -
+			((vector2sumData*vector2sumData)/result->count)) /
+		(double)(result->count-1);
+    stddev1 = stddev2 = 0.0;
+    if (variance1 > 0.0)
+	stddev1 = sqrt(variance1);
+    if (variance2 > 0.0)
+	stddev2 = sqrt(variance2);
+    if ((stddev1 * stddev2) != 0.0)
+	result->r = ((totalSumProduct -
+			((vector1sumData * vector2sumData)/result->count)) /
+		    (result->count - 1)) /
+			(stddev1 * stddev2);
+    else
+	result->r = 1.0;
+    }
+
 return result;
 }	/*	struct dataVector *runRegression()	*/
 
@@ -1274,6 +1335,7 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
     if (correlateOK1)
 	{
+	struct dataVector *resultVector;
 	int totalBases = 0;
 	/*	add second table to the list	*/
 	tt = allocTrackTable();
@@ -1286,17 +1348,16 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
  	 *	table List in a vectorSet
 	 */
 	totalBases = collectData(conn, tableList, maxLimitCount);
-hPrintf("<P>intersected vectors are %d bases long</P>\n", totalBases);
+//hPrintf("<P>intersected vectors are %d bases long</P>\n", totalBases);
 	if (totalBases > 0)
 	    {
-	    struct dataVector *resultVector;
 	    resultVector = runRegression(tableList, totalBases);
 	    showThreeVectors(tableList, tableList->next, resultVector);
 	    }
 	freeTrackTableList(&tableList);
-	hPrintf("<P>freeTrackTableList OK</P>\n");
-	/*freeDataVector(&resultVector);*/
-	hPrintf("<P>free resultVector OK</P>\n");
+//	hPrintf("<P>freeTrackTableList OK</P>\n");
+	freeDataVector(&resultVector);
+//	hPrintf("<P>free resultVector OK</P>\n");
 
 	}
     }
