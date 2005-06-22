@@ -16651,4 +16651,21 @@ superfam050524.sfAssign;'
 # Create/edit/check in targetScans.html and trackDb.ra under
 # kent/src/hg/makeDb/trackDb/human/hg17
 
+# Update mrnaRefseq table (DONE - Fan 6/22/05)
+# The old table contains non-human mrna/RefSeqs.
+# The new table contains only human mrna/RefSeq and RefSeq/RefSeq.
 
+# First build entrez DB tables, see makeMm6.doc for details.
+
+    hgsql entrez -N -e \
+    'select mrna, refseq from entrezRefseq, entrezMrna, hg17.all_mrna where entrezRefseq.geneID=entrezMrna.geneID and mrna=all_mrna.qName' \
+    >mrnaRefseq1.tab
+
+# Include RefSeq as valid mRNA too.
+    hgsql hg17 -N -e 'select name, name from refGene' >mrnaRefseq2.tab
+
+    cat mrnaRefseq1.tab mrnaRefseq2.tab |sort -u >mrnaRefseq.tab
+
+    hgsql hg17 -e 'drop table mrnaRefseq'
+    hgsql hg17 < ~/src/hg/lib/mrnaRefseq.sql
+    hgsql hg17 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
