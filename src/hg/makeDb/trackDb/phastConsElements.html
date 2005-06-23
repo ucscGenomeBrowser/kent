@@ -18,8 +18,8 @@ PhastCons constructs a two-state phylo-HMM with a state for conserved
 regions and a state for non-conserved regions.  The two states share a
 single phylogenetic model, except that the branch lengths of the tree
 associated with the conserved state are multiplied by a constant scaling
-factor &rho (0 &le &rho &le 1).  The phylogenetic model and the scaling
-factor &rho are estimated from the data by maximum likelihood using an EM
+factor <em>rho</em> (0 <= <em>rho</em> <= 1).  The phylogenetic model and the scaling
+factor <em>rho</em> are estimated from the data by maximum likelihood using an EM
 algorithm.  The state-transition probabilities of the phylo-HMM may also be
 estimated by maximum likelihood, but we find that more biologically useful
 results are obtained by treating them as tuning parameters.  The transition
