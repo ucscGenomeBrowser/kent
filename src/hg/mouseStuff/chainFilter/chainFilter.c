@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainFilter.c,v 1.12 2005/05/31 22:49:35 jill Exp $";
+static char const rcsid[] = "$Id: chainFilter.c,v 1.13 2005/06/23 00:46:01 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +30,10 @@ errAbort(
   "   -tStartMax=N - restrict to those with tStart less than N\n"
   "   -tEndMin=N - restrict to those with tEnd at least N\n"
   "   -tEndMax=N - restrict to those with tEnd less than N\n"
+  "   -qOverlapStart=N - restrict to those where the query overlaps a region starting here\n"
+  "   -qOverlapEnd=N - restrict to those where the query overlaps a region ending here\n"
+  "   -tOverlapStart=N - restrict to those where the target overlaps a region starting here\n"
+  "   -tOverlapEnd=N - restrict to those where the target overlaps a region ending here\n"
   "   -strand=?    -restrict strand (to + or -)\n"
   "   -long        -output in long format\n"
   "   -zeroGap     -get rid of gaps of length zero\n"
@@ -61,6 +65,10 @@ struct optionSpec options[] = {
    {"tStartMax", OPTION_INT},
    {"tEndMin", OPTION_INT},
    {"tEndMax", OPTION_INT},
+   {"qOverlapStart", OPTION_INT},
+   {"qOverlapEnd", OPTION_INT},
+   {"tOverlapStart", OPTION_INT},
+   {"tOverlapEnd", OPTION_INT},
    {"strand", OPTION_STRING},
    {"long", OPTION_BOOLEAN},
    {"zeroGap", OPTION_BOOLEAN},
@@ -191,6 +199,10 @@ int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
 int tEndMin = optionInt("tEndMin", -BIGNUM);
 int tEndMax = optionInt("tEndMax", BIGNUM);
+int qOverlapStart = optionInt("qOverlapStart", -BIGNUM);
+int qOverlapEnd = optionInt("qOverlapEnd", BIGNUM);
+int tOverlapStart = optionInt("tOverlapStart", -BIGNUM);
+int tOverlapEnd = optionInt("tOverlapEnd", BIGNUM);
 int minGapless = optionInt("minGapless", 0);
 int qMinGap = optionInt("qMinGap", 0);
 int tMinGap = optionInt("tMinGap", 0);
@@ -234,6 +246,10 @@ for (i=0; i<inCount; ++i)
 	    writeIt = FALSE;
 	if (chain->tEnd < tEndMin || chain->tEnd >= tEndMax)
 	    writeIt = FALSE;
+        if (chain->qEnd < qOverlapStart || chain->qStart >= qOverlapEnd)
+            writeIt = FALSE;
+        if (chain->tEnd < tOverlapStart || chain->tStart >= tOverlapEnd)
+            writeIt = FALSE;
 	if (chain->qEnd-chain->qStart < qMinSize || chain->tEnd-chain->tStart < tMinSize)
 	    writeIt = FALSE;
 	if (chain->qEnd-chain->qStart > qMaxSize || chain->tEnd-chain->tStart > tMaxSize)

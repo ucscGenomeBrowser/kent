@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.16 2005/06/02 02:17:36 markd Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.17 2005/06/23 00:46:01 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,6 +36,10 @@ errAbort(
   "   -tStartMax=N - restrict to those with tStart less than N\n"
   "   -tEndMin=N - restrict to those with tEnd at least N\n"
   "   -tEndMax=N - restrict to those with tEnd less than N\n"
+  "   -qOverlapStart=N - restrict to those where the query overlaps a region starting here\n"
+  "   -qOverlapEnd=N - restrict to those where the query overlaps a region ending here\n"
+  "   -tOverlapStart=N - restrict to those where the target overlaps a region starting here\n"
+  "   -tOverlapEnd=N - restrict to those where the target overlaps a region ending here\n"
   "   -syn        - do filtering based on synteny.  \n"
   "   -nonsyn     - do inverse filtering based on synteny.  \n"
   "   -type=XXX - restrict to given type, maybe repeated to allow several types\n"
@@ -65,6 +69,10 @@ struct optionSpec options[] = {
    {"tStartMax", OPTION_INT},
    {"tEndMin", OPTION_INT},
    {"tEndMax", OPTION_INT},
+   {"qOverlapStart", OPTION_INT},
+   {"qOverlapEnd", OPTION_INT},
+   {"tOverlapStart", OPTION_INT},
+   {"tOverlapEnd", OPTION_INT},
    {"syn", OPTION_BOOLEAN},
    {"chimpSyn", OPTION_BOOLEAN},
    {"nonsyn", OPTION_BOOLEAN},
@@ -115,6 +123,10 @@ int tStartMin;  /* target range */
 int tStartMax;
 int tEndMin;
 int tEndMax;
+int qOverlapStart; /* query overlap region */
+int qOverlapEnd;
+int tOverlapStart; /* query overlap region */
+int tOverlapEnd;
 boolean doSyn;		/* Do synteny based filtering. */
 boolean doChimpSyn;	/* Do chimp synteny based filtering. */
 boolean doNonSyn;		/* Do synteny based filtering. */
@@ -218,6 +230,10 @@ if (fill->chainId)
         return FALSE;
     if ((fill->tStart+fill->tSize) < tEndMin || (fill->tStart+fill->tSize) >= tEndMax)
         return FALSE;
+    if ((fill->qStart+fill->qSize) < qOverlapStart || fill->qStart >= qOverlapEnd)
+        return FALSE;
+    if ((fill->tStart+fill->tSize) < tOverlapStart || fill->tStart >= tOverlapEnd)
+        return FALSE;
     if (doSyn && !synFilter(fill))
 	return FALSE;
     if (doNonSyn && synFilter(fill))
@@ -316,6 +332,10 @@ tStartMin = optionInt("tStartMin", -BIGNUM);
 tStartMax = optionInt("tStartMax", BIGNUM);
 tEndMin = optionInt("tEndMin", -BIGNUM);
 tEndMax = optionInt("tEndMax", BIGNUM);
+qOverlapStart = optionInt("qOverlapStart", -BIGNUM);
+qOverlapEnd = optionInt("qOverlapEnd", BIGNUM);
+tOverlapStart = optionInt("tOverlapStart", -BIGNUM);
+tOverlapEnd = optionInt("tOverlapEnd", BIGNUM);
 doSyn = optionExists("syn");
 doChimpSyn = optionExists("chimpSyn");
 doNonSyn = optionExists("nonsyn");
