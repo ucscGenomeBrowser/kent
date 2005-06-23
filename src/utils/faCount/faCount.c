@@ -4,14 +4,17 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faCount.c,v 1.5 2004/08/03 20:57:20 hiram Exp $";
+static char const rcsid[] = "$Id: faCount.c,v 1.6 2005/06/23 22:52:27 baertsch Exp $";
 
+bool summary = FALSE;
 void usage()
 /* Print usage info and exit. */
 {
 errAbort("faCount - count base statistics and CpGs in FA files.\n"
 	 "usage:\n"
-	 "   faCount file(s).fa\n");
+	 "   faCount file(s).fa\n"
+         "     -summary  show only summary statistics\n"
+             );
 }
 
 void faCount(char *faFiles[], int faCount)
@@ -53,7 +56,8 @@ for (f = 0; f<faCount; ++f)
                 cpgCount++;
             prevBase = baseVal;
 	    }
-        printf("%s\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\n",
+        if (!summary)
+            printf("%s\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\n",
                seq.name, length,
                baseCount[A_BASE_VAL], baseCount[C_BASE_VAL],
                baseCount[G_BASE_VAL], baseCount[T_BASE_VAL],
@@ -70,12 +74,19 @@ printf("total\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\t%llu\n",
        totalBaseCount[A_BASE_VAL], totalBaseCount[C_BASE_VAL],
        totalBaseCount[G_BASE_VAL], totalBaseCount[T_BASE_VAL],
        totalBaseCount[N_BASE_VAL], totalCpgCount);
+if (summary)
+    printf("percent\t%10.1f\t%10.4f\t%10.4f\t%10.4f\t%10.4f\t%10.6f\t%10.4f\n",
+       (float)totalLength/totalLength,
+       ((float)totalBaseCount[A_BASE_VAL])/(float)totalLength, ((float)totalBaseCount[C_BASE_VAL])/(float)totalLength,
+       ((float)totalBaseCount[G_BASE_VAL])/(float)totalLength, ((float)totalBaseCount[T_BASE_VAL])/(float)totalLength,
+       ((float)totalBaseCount[N_BASE_VAL])/(float)totalLength, (float)totalCpgCount/(float)totalLength);
 }
 
 int main(int argc, char *argv[])
 /* Process command line . */
 {
 optionHash(&argc, argv);
+summary = optionExists("summary");
 if (argc < 2)
     usage();
 faCount(argv+1, argc-1);
