@@ -72,7 +72,7 @@ void htmlClose();
 void textOpen();
 /* Start up page in text format. (No need to close this). */
 
-void explainWhyNoResults();
+void explainWhyNoResults(FILE *f);
 /* Put up a little explanation to user of why they got nothing. */
 
 char *curTableLabel();
@@ -135,10 +135,28 @@ struct trackDb *showTrackField(struct grp *selGroup,
 	char *trackVar, char *trackScript);
 /* Show track control. Returns selected track. */
 
+int trackDbCmpShortLabel(const void *va, const void *vb);
+/* Sort track by shortLabel. */
+
+struct slName *getDbListForGenome();
+/* Get list of selectable databases. */
+
+char *findSelDb();
+/* Find user selected database (as opposed to genome database). */
+
+struct slName *tablesForDb(char *db);
+/* Find tables associated with database. */
+
 /* --------- Utility functions --------------------- */
+
+void nbSpaces(int count);
+/* Print some non-breaking spaces. */
 
 boolean anyCompression();
 /*  Check if any compressed file output has been requested */
+
+struct trackDb *getFullTrackList();
+/* Get all tracks including custom tracks if any. */
 
 void initGroupsTracksTables(struct sqlConnection *conn);
 /* Get list of groups that actually have something in them. */
@@ -221,9 +239,12 @@ char *chrnTable(struct sqlConnection *conn, char *table);
  * You can freeMem this when done. */
 
 
-void doTabOutTable(char *database, char *table, 
+void doTabOutTable(char *database, char *table, FILE *f,
 	struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
+
+struct slName *fullTableFields(char *db, char *table);
+/* Return list of fields in db.table.field format. */
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm,
@@ -300,6 +321,7 @@ boolean isSqlNumType(char *type);
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
+	FILE *f,                        /* file for output, null for stdout */
 	struct slName *fieldList);	/* List of db.table.field */
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
@@ -332,6 +354,11 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
 
+/* --------- Functions related to correlation. --------------- */
+boolean anyCorrelation();
+/* Return TRUE if there's a correlation to do. */
+
+#define correlateMaxDataPoints "corrMaxDataPoints"
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -356,6 +383,11 @@ boolean anyIntersection();
 #define hgtaDoClearIntersect "hgta_doClearIntersect"
 #define hgtaDoIntersectMore "hgta_doIntersectMore"
 #define hgtaDoIntersectSubmit "hgta_doIntersectSubmit"
+#define hgtaDoCorrelatePage "hgta_doCorrelatePage"
+#define hgtaDoClearCorrelate "hgta_doClearCorrelate"
+#define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
+#define hgtaDoCorrelateMore "hgta_doCorrelateMore"
+#define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
 #define hgtaDoTest "hgta_doTest"
 #define hgtaDoSchemaTable "hgta_doSchemaTable"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
@@ -429,6 +461,18 @@ boolean anyIntersection();
 #define hgtaNextInvertTable "hgta_nextInvertTable"
 #define hgtaInvertTable2 "hgta_invertTable2"
 #define hgtaNextInvertTable2 "hgta_nextInvertTable2"
+
+   /* These correlate page vars come in pairs so we can cancel. */
+#define hgtaCorrelateGroup "hgta_correlateGroup"
+#define hgtaNextCorrelateGroup "hgta_nextCorrelateGroup"
+#define hgtaCorrelateTrack "hgta_correlateTrack"
+#define hgtaNextCorrelateTrack "hgta_nextCorrelateTrack"
+#define hgtaCorrelateOp "hgta_correlateOp"
+#define hgtaNextCorrelateOp "hgta_nextCorrelateOp"
+#define hgtaCorrelateTable "hgta_correlateTable"
+#define hgtaNextCorrelateTable "hgta_nextCorrelateTable"
+#define hgtaCorrelateTable2 "hgta_correlateTable2"
+#define hgtaNextCorrelateTable2 "hgta_nextCorrelateTable2"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -518,8 +562,13 @@ void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
 /*	obtain wiggle data limits from trackDb or cart or settings */
 
 struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
-	struct region *region, struct lm *lm);
+	struct region *region);
 /*	return the wigAsciiData list	*/
+
+struct wigAsciiData *getWiggleData(struct sqlConnection *conn, char *table,
+	struct region *region, int maxOut, int spanConstraint);
+/*	like getWiggleAsData above, but with specific spanConstraint and
+ *	a different data limit count, return the wigAsciiData list	*/
 
 void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Return wiggle data in bed format. */
@@ -566,7 +615,7 @@ struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
 
 void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
-	char *fields);
+	char *fields, FILE *f);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 
@@ -638,6 +687,9 @@ void doClearAllField(char *dbTable);
 void doSetAllField(char *dbTable);
 /* Set all checks by fields in db.table. */
 
+void doOutPrimaryTable(char *table, struct sqlConnection *conn);
+/* Dump out primary table. */
+
 void doOutSelectedFields(char *table, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */
 
@@ -688,6 +740,18 @@ void doIntersectMore(struct sqlConnection *conn);
 
 void doIntersectSubmit(struct sqlConnection *conn);
 /* Finish working in intersect page. */
+
+void doCorrelatePage(struct sqlConnection *conn);
+/* Respond to correlate create/edit button */
+
+void doClearCorrelate(struct sqlConnection *conn);
+/* Respond to click on clear correlate. */
+
+void doCorrelateMore(struct sqlConnection *conn);
+/* Continue working in correlate page. */
+
+void doCorrelateSubmit(struct sqlConnection *conn);
+/* Finish working in correlate page. */
 
 void doGenePredSequence(struct sqlConnection *conn);
 /* Output genePred sequence. */

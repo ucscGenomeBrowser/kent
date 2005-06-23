@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.10 2005/06/22 22:59:20 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.10.2.1 2005/06/23 14:14:56 giardine Exp $";
 
 static char *maxResultsMenu[] =
 {

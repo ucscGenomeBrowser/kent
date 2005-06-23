@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.41 2005/02/12 00:22:46 angie Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.41.16.1 2005/06/23 14:14:57 giardine Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -88,6 +88,57 @@ for (jr = joined->rowList; jr != NULL; jr = jr->next)
 		}
 	    }
 	hPrintf("\n");
+	++outCount;
+	}
+    }
+}
+
+static void joinedTablesTabOutFile(struct joinedTables *joined, FILE *f)
+/* write out fields to file handle */
+{
+struct joinedRow *jr;
+struct joinerDtf *field;
+int outCount = 0;
+
+/* Print out field names. */
+if (joined->filter)
+    {
+    fprintf(f, "#filter: %s\n", joined->filter->string);
+    }
+fprintf(f, "#");
+for (field = joined->fieldList; field != NULL; field = field->next)
+    {
+    fprintf(f, "%s.%s.%s", field->database, field->table, field->field);
+    if (field->next == NULL)
+        fprintf(f, "\n");
+    else
+        fprintf(f, "\t");
+    }
+for (jr = joined->rowList; jr != NULL; jr = jr->next)
+    {
+    int i;
+    if (jr->passedFilter)
+	{
+	for (i=0; i<joined->fieldCount; ++i)
+	    {
+	    struct slName *s;
+	    if (i != 0)
+                fprintf(f, "\t");
+	    s = jr->fields[i];
+	    if (s == NULL)
+                fprintf(f, "n/a");
+	    else if (s->next == NULL)
+	        fprintf(f, "%s", s->name);
+	    else
+	        {
+		while (s != NULL)
+		    {
+		    fprintf(f, "%s,", s->name);
+		    s = s->next;
+		    }
+		}
+	    }
+	fprintf(f, "\n");
 	++outCount;
 	}
     }
@@ -884,6 +935,7 @@ return ret;
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
+	FILE *f,			/* file for output, null for stdout */
 	struct slName *fieldList)	/* List of db.table.field */
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
@@ -902,7 +954,7 @@ if (! doJoin)
         makeCtOrderedCommaFieldList(dtfList, dy);
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);
-    doTabOutTable(dtfList->database, dtfList->table, conn, dy->string);
+    doTabOutTable(dtfList->database, dtfList->table, f, conn, dy->string);
     sqlDisconnect(&conn);
     }
 else
@@ -910,7 +962,10 @@ else
     struct joiner *joiner = allJoiner;
     struct joinedTables *joined = joinedTablesCreate(joiner, 
     	primaryDb, primaryTable, dtfList, filterTables, 1000000, getRegions());
-    joinedTablesTabOut(joined);
+    if (f == NULL)
+        joinedTablesTabOut(joined);
+    else
+        joinedTablesTabOutFile(joined, f);
     joinedTablesFree(&joined);
     }
 joinerDtfFreeList(&dtfList);

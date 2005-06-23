@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.106.6.2 2005/06/07 19:38:11 giardine Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.106.6.3 2005/06/23 14:14:57 giardine Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -105,19 +105,35 @@ void htmlClose()
 cartWebEnd();
 }
 
-void explainWhyNoResults()
+void explainWhyNoResults(FILE *f)
 /* Put up a little explanation to user of why they got nothing. */
 {
-hPrintf("# No results");
-if (identifierFileName() != NULL)
-    hPrintf(" matching identifier list");
-if (anyFilter())
-    hPrintf(" passing filter");
-if (!fullGenomeRegion())
-    hPrintf(" in given region");
-if (anyIntersection())
-    hPrintf(" after intersection");
-hPrintf(".");
+if (f == NULL)
+    {
+    hPrintf("# No results");
+    if (identifierFileName() != NULL)
+        hPrintf(" matching identifier list");
+    if (anyFilter())
+        hPrintf(" passing filter");
+    if (!fullGenomeRegion())
+        hPrintf(" in given region");
+    if (anyIntersection())
+        hPrintf(" after intersection");
+    hPrintf(".");
+    }
+else
+    {
+    fprintf(f, "# No results");
+    if (identifierFileName() != NULL)
+        fprintf(f, " matching identifier list");
+    if (anyFilter())
+        fprintf(f, " passing filter");
+    if (!fullGenomeRegion())
+        fprintf(f, " in given region");
+    if (anyIntersection())
+        fprintf(f, " after intersection");
+    fprintf(f, ".");
+    }
 }
 
 char *curTableLabel()
@@ -287,7 +303,7 @@ if (s != NULL)
     }
 }
 
-static struct trackDb *getFullTrackList()
+struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
 struct trackDb *list = hTrackDb(NULL), *tdb;
@@ -815,11 +831,18 @@ if (trackDupe != NULL && trackDupe[0] != 0)
     if (sameString(type, "wigMaf"))
         {
 	char *wigTrack = trackDbSetting(track, "wiggle");
+	char *summary = trackDbSetting(track, "summary");
 	if (wigTrack != NULL) 
 	    {
 	    name = slNameNew(wigTrack);
 	    slAddHead(pList, name);
 	    hashAdd(uniqHash, wigTrack, NULL);
+	    }
+	if (summary != NULL)
+	    {
+	    name = slNameNew(summary);
+	    slAddTail(pList, name);
+	    hashAdd(uniqHash, summary, NULL);
 	    }
 	}
     if (trackDbIsComposite(track))
@@ -1121,21 +1144,132 @@ for (region = regionList; region != NULL; region = region->next)
 
 /* Do some error diagnostics for user. */
 if (outCount == 0)
-    explainWhyNoResults();
+    explainWhyNoResults(NULL);
 hashFree(&idHash);
 }
 
-void doTabOutTable( char *db, char *table, struct sqlConnection *conn, char *fields)
+static void doTabOutDbFile( char *db, char *table, FILE *f,
+        struct sqlConnection *conn, char *fields)
+/* Do tab-separated output on fields of a single table, to a file. */
+{
+struct region *regionList = getRegions();
+struct region *region;
+struct hTableInfo *hti = NULL;
+struct dyString *fieldSpec = newDyString(256);
+struct hash *idHash = NULL;
+int outCount = 0;
+boolean isPositional;
+int fieldCount;
+char *idField;
+boolean showItemRgb = FALSE;
+int itemRgbCol = -1;	/*	-1 means not found	*/
+boolean printedColumns = FALSE;
+
+hti = getHti(db, table);
+idField = getIdField(db, curTrack, table, hti);
+showItemRgb=bedItemRgb(curTrack);	/* should we expect itemRgb */
+					/*	instead of "reserved" */
+
+/* If they didn't pass in a field list assume they want all fields. */
+if (fields != NULL)
+    {
+    dyStringAppend(fieldSpec, fields);
+    fieldCount = countChars(fields, ',') + 1;
+    }
+else
+    {
+    dyStringAppend(fieldSpec, "*");
+    fieldCount = countTableColumns(conn, table);
+    }
+
+/* If can find id field for table then get
+ * uploaded list of identifiers, create identifier hash
+ * and add identifier column to end of result set. */
+if (idField != NULL)
+    {
+    idHash = identifierHash();
+    if (idHash != NULL)
+	{
+	dyStringAppendC(fieldSpec, ',');
+	dyStringAppend(fieldSpec, idField);
+	}
+    }
+isPositional = htiIsPositional(hti);
+
+/* Loop through each region. */
+for (region = regionList; region != NULL; region = region->next)
+    {
+    struct sqlResult *sr;
+    char **row;
+    int colIx, lastCol = fieldCount-1;
+    char *filter = filterClause(db, table, region->chrom);
+
+    sr = regionQuery(conn, table, fieldSpec->string, 
+    	region, isPositional, filter);
+    if (sr == NULL)
+	continue;
+
+    /* First time through print column names. */
+    if (! printedColumns)
+        {
+	if (filter != NULL)
+	    fprintf(f, "#filter: %s\n", filter);
+	fprintf(f, "#");
+	if (showItemRgb)
+	    {
+	    itemRgbCol = itemRgbHeader(sr, lastCol);
+	    if (itemRgbCol == -1)
+		showItemRgb = FALSE;	/*  did not find "reserved" */
+	    }
+	else
+	    {
+	    for (colIx = 0; colIx < lastCol; ++colIx)
+		fprintf(f, "%s\t", sqlFieldName(sr));
+	    fprintf(f, "%s\n", sqlFieldName(sr));
+	    }
+	printedColumns = TRUE;
+	}
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (idHash == NULL || hashLookup(idHash, row[fieldCount]))
+	    {
+	    if (showItemRgb)
+		itemRgbDataOut(row, lastCol, itemRgbCol);
+	    else
+		{
+		for (colIx = 0; colIx < lastCol; ++colIx)
+		    fprintf(f, "%s\t", row[colIx]);
+		fprintf(f, "%s\n", row[lastCol]);
+		}
+	    ++outCount;
+	    }
+	}
+    sqlFreeResult(&sr);
+    if (!isPositional)
+        break;	/* No need to iterate across regions in this case. */
+    freez(&filter);
+    }
+
+/* Do some error diagnostics for user. */
+if (outCount == 0)
+    explainWhyNoResults(f);
+hashFree(&idHash);
+}
+
+void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
 if (isCustomTrack(table))
     {
     struct trackDb *track = findTrack(table, fullTrackList);
-    doTabOutCustomTracks(track, conn, fields);
+    doTabOutCustomTracks(track, conn, fields, f);
     }
 else
     {
-    doTabOutDb(db, table, conn, fields);
+    if (f == NULL)
+        doTabOutDb(db, table, conn, fields);
+    else
+        doTabOutDbFile(db, table, f, conn, fields);
     }
 }
 
@@ -1179,7 +1313,7 @@ if (anyIntersection())
     errAbort("Can't do all fields output when intersection is on. "
     "Please go back and select another output type, or clear the intersection.");
 textOpen();
-tabOutSelectedFields(database, table, fullTableFields(database, table));
+tabOutSelectedFields(database, table, NULL, fullTableFields(database, table));
 }
 
 void doOutHyperlinks(char *table, struct sqlConnection *conn)
@@ -1300,6 +1434,14 @@ else if (cartVarExists(cart, hgtaDoIntersectMore))
     doIntersectMore(conn);
 else if (cartVarExists(cart, hgtaDoIntersectSubmit))
     doIntersectSubmit(conn);
+else if (cartVarExists(cart, hgtaDoCorrelatePage))
+    doCorrelatePage(conn);
+else if (cartVarExists(cart, hgtaDoClearCorrelate))
+    doClearCorrelate(conn);
+else if (cartVarExists(cart, hgtaDoCorrelateMore))
+    doCorrelateMore(conn);
+else if (cartVarExists(cart, hgtaDoCorrelateSubmit))
+    doCorrelateSubmit(conn);
 else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
     doPasteIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoClearPasteIdentifierText))
