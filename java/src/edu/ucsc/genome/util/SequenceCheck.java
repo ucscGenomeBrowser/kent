@@ -9,7 +9,7 @@ class SequenceCheck {
 
   static void usage() {
     System.out.println(
-      "SequenceCheck - calls faFrag, compares sequence value.\n" +
+      "SequenceCheck - calls nibFrag, compares sequence value.\n" +
 
       "usage:\n" +
       "   java SequenceCheck\n" 
@@ -36,6 +36,8 @@ class SequenceCheck {
       int start = rs.getInt("chromStart");
       int end = rs.getInt("chromEnd");
       String sequence = rs.getString("reference");
+      // skip simple insertions
+      if (sequence.equals("-")) continue;
 
       SequenceCheckTarget newTarget = new SequenceCheckTarget(chrom, start, end, sequence);
       al.add(newTarget);
@@ -43,6 +45,7 @@ class SequenceCheck {
 	     
     stmt.close();
     con.close();
+    System.out.println(al.size() + " targets found");
     return(al);
 
   }
@@ -60,15 +63,15 @@ class SequenceCheck {
     String chromNum = chrom.substring(3);
     String path = "/cluster/bin/i386";
 
-    String fa = "/cluster/data/hg16/" + chromNum + "/" + chrom + ".fa";
-    if (!checkForFile(fa)) {
-      System.out.println("Cannot find or open " + fa);
+    String nib = "/gbdb/hg16/nib/" + chrom + ".nib";
+    if (!checkForFile(nib)) {
+      System.out.println("Cannot find or open " + nib);
       return (false);
     }
 
     Runtime runtime = Runtime.getRuntime();
     try {
-      String command = path + "/faFrag " + fa + " " + target.start + " " + target.end + " out.fa";
+      String command = path + "/nibFrag " + nib + " " + target.start + " " + target.end + " + out.fa";
       System.out.println(command);
       Process process = runtime.exec(command);
       process.waitFor();
@@ -128,6 +131,7 @@ class SequenceCheck {
       SequenceCheckTarget target = (SequenceCheckTarget) iter.next();
       try {
         runCommand(target);
+	Thread.sleep(1000);
       } catch (Exception e) {
         System.out.println(e.getMessage());
 	continue;
