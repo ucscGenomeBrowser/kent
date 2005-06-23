@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.12 2005/06/23 19:18:41 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.13 2005/06/23 23:31:11 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -28,6 +28,8 @@ static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 /*	Each track data's values will be copied into one of these structures,
  *	This is also the form that a result vector will take.
  *	There can be a linked list of these for multiple regions.
+ *	The positions are in order, there are no gaps, count is the
+ *	length of the position and value arrays.
  */
 struct dataVector
     {
@@ -51,7 +53,7 @@ struct dataVector
     };
 
 static struct dataVector *allocDataVector(char *chrom, int bases)
-/*	allocate a dataVector for given number of bases	on this chrom */
+/*	allocate a dataVector for given number of bases	on specified chrom */
 {
 struct dataVector *v;
 AllocVar(v);
@@ -147,15 +149,13 @@ freez(t);
 }
 
 static void freeTrackTableList(struct trackTable **tl)
+/*	free a list of track tables	*/
 {
-if (tl)
+struct trackTable *table, *next;
+for (table = *tl; table != NULL; table = next)
     {
-    struct trackTable *table, *next;
-    for (table = *tl; table != NULL; table = next)
-	{
-	next = table->next;
-	freeTrackTable(&table);
-	}
+    next = table->next;
+    freeTrackTable(&table);
     }
 }
 
@@ -555,10 +555,12 @@ if (table->isBedGraph && !table->isCustom)
 
     safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
 	    table->bedGraphColumnName);
+
+//hPrintf("<P>select: %s %s:%d-%d</P>\n", table->actualTable, region->chrom, region->start, region->end );
+
     /*	the TRUE indicates to order by start position, this is necessary
      *	so the walk-through positions will work properly
      */
-hPrintf("<P>select: %s %s:%d-%d</P>\n", table->actualTable, region->chrom, region->start, region->end );
     sr = hExtendedRangeQuery(conn, table->actualTable, region->chrom,
 	region->start, region->end, filter, TRUE, fields, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -598,7 +600,7 @@ hPrintf("<P>select: %s %s:%d-%d</P>\n", table->actualTable, region->chrom, regio
 	    vector->count += bases;
 	}
     vector->start = vector->position[0];
-    vector->end = vector->position[(vector->count)-1];
+    vector->end = vector->position[(vector->count)-1] + 1; /* non-inclusive */
     sqlFreeResult(&sr);
     }
 else if (table->isWig)
@@ -651,7 +653,7 @@ else if (table->isWig)
     vector->count += bases;
     freeWigAsciiData(&wigData);
     vector->start = vector->position[0];
-    vector->end = vector->position[(vector->count)-1];
+    vector->end = vector->position[(vector->count)-1] + 1; /* non-inclusive */
     }
 
 endTime = clock1000();
@@ -740,9 +742,9 @@ if ((v1->maxCount - v1Index) > 1024000)
     }
 
 v1->start = v1->position[0];
-v1->end = v1->position[(v1->count)-1];
+v1->end = v1->position[(v1->count)-1] + 1; /* non-inclusive */
 v2->start = v2->position[0];
-v2->end = v2->position[(v2->count)-1];
+v2->end = v2->position[(v2->count)-1] + 1; /* non-inclusive */
 
 #ifdef NOT_WORKING
 XXXX something is wrong with needHugeMemResize, it corrupts the arena
@@ -795,7 +797,8 @@ v->calcTime += endTime - startTime;
 
 static void statsRowOut(char *chrom, char *name, char *shortLabel,
     int chromStart, int chromEnd, int bases, double min, double max,
-	double sumData, double sumSquares, double r, long fetchMs, long calcMs)
+	double sumData, double sumSquares, double r, long fetchMs, long calcMs,
+		char *table1, char *table2)
 /*	display a single line of statistics	*/
 {
 double mean = 0.0;
@@ -815,44 +818,77 @@ if (bases > 0)
     }
 
 hPrintf("<TR>");
-/*	Check for first or second data rows, 2nd has 0,0 coordinates
- *	Final row has 1,1 start,end	*/
+/*	Check for first or second data rows, 2nd has 0,0 coordinates.
+ *	Summary row has 1,1 start,end	*/
 if (chromStart || chromEnd)
     {
-    hPrintf("<TD ALIGN=LEFT ROWSPAN=2>%s:", chrom);
-    if (!((1 == chromStart) && (1 == chromEnd)))
+    char posBuf[64];
+    safef(posBuf, ArraySize(posBuf), "%s:%d-%d", chrom, chromStart+1, chromEnd);
+    hPrintf("<TD ALIGN=LEFT ROWSPAN=2>");
+    /* Construct browser anchor URL with tracks we're looking at open. */
+    hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
+    hPrintf("&db=%s", database);
+    hPrintf("&position=%s", posBuf);
+    hPrintf("&%s=%s", table1, hTrackOpenVis(table1));
+    if (table2 != NULL)
+	hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+    hPrintf("\" TARGET=_blank>");
+    if (name)
 	{
-	/*	browser 1-relative start coordinates	*/
-	printLongWithCommas(stdout,(long)chromStart+1);
-	hPrintf("-");
-	printLongWithCommas(stdout,(long)chromEnd);
+	hPrintf("%s</A>", name);
 	}
-	hPrintf("<BR>");
-	printLongWithCommas(stdout,(long)bases);
-	hPrintf("&nbsp;bases");
-	if (name)
-	    hPrintf(",&nbsp;&nbsp;&nbsp;%s</TD>", name);
-	else
-	    hPrintf("</TD>");
+    else
+	{
+	hPrintf("%s:", chrom);
+	if (!((1 == chromStart) && (1 == chromEnd)))
+	    {
+	    /*	browser 1-relative start coordinates	*/
+	    printLongWithCommas(stdout,(long)chromStart+1);
+	    hPrintf("-");
+	    printLongWithCommas(stdout,(long)chromEnd);
+	    }
+	hPrintf("</A>");
+	}
+    hPrintf("<BR>\n");
+    printLongWithCommas(stdout,(long)bases);
+    hPrintf("&nbsp;bases</TD>");
     }
 
-hPrintf("<TD ALIGN=LEFT>%s</TD>", shortLabel);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", min);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", max);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", mean);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", variance);
-hPrintf("<TD ALIGN=RIGHT>%g</TD>", stddev);
 if (chromStart || chromEnd)
     {
-    hPrintf("<TD ALIGN=RIGHT>%g</TD>", r);
-    hPrintf("<TD ALIGN=RIGHT>%g</TD>", r*r);
+    hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", r);
+    hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", r*r);
     }
 else
     {
     hPrintf("<TD COLSPAN=2>&nbsp;</TD>");
     }
+hPrintf("<TD ALIGN=LEFT>%s</TD>", shortLabel);
+hPrintf("<TD ALIGN=RIGHT>%.3gg</TD>", min);
+hPrintf("<TD ALIGN=RIGHT>%.3g</TD>", max);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", mean);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", variance);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", stddev);
+/*
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*calcMs);
+*/
+hPrintf("</TR>\n");
+}
+
+static void tableLabels()
+{
+hPrintf("<TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
+hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
+hPrintf("<TH>r<BR>squared</TH>");
+hPrintf("<TH>Track</TH>");
+hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
+hPrintf("<TH>Standard<BR>deviation</TH>");
+/*
+hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
+hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
+*/
+hPrintf("</TR>\n");
 }
 
 static void showThreeVectors(struct trackTable *table1,
@@ -876,19 +912,15 @@ double min2 = INFINITY;
 double max1 = -INFINITY;
 double max2 = -INFINITY;
 
+/*	start the table with the funky border thing to make sure all the
+ *	inner border lines work
+ */
 hPrintf("<P><!--outer table is for border purposes-->\n");
 hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
 hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
 
-hPrintf("<TABLE BGCOLOR=\"%s\"", HG_COL_INSIDE);
-hPrintf("BORDER=1><TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
-hPrintf("<TH>Track</TH>");
-hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
-hPrintf("<TH>Standard<BR>deviation</TH>");
-hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
-hPrintf("<TH>r<BR>squared</TH>");
-hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
-hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
+tableLabels();
 
 rowsOutput = 0;
 
@@ -917,10 +949,12 @@ else if (rowsOutput > 1)
     {
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
-	    result->r, totalFetch1, totalCalc1);
+	    result->r, totalFetch1, totalCalc1, table1->actualTable,
+		table2->actualTable);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
-	    result->r, totalFetch2, totalCalc2);
+	    result->r, totalFetch2, totalCalc2, table1->actualTable,
+		table2->actualTable);
     hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
     }
 
@@ -933,11 +967,11 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     statsRowOut(v1->chrom, v1->name, table1->shortLabel, v1->start, v1->end,
 	v1->count, v1->min, v1->max, v1->sumData,
 	    v1->sumSquares, v2->r, v1->fetchTime,
-		v1->calcTime);
+		v1->calcTime, table1->actualTable, table2->actualTable);
     statsRowOut(v2->chrom, v1->name, table2->shortLabel, 0, 0,
 	v2->count, v2->min, v2->max, v2->sumData,
 	    v2->sumSquares, v2->r, v2->fetchTime,
-		v2->calcTime);
+		v2->calcTime, table1->actualTable, table2->actualTable);
     }
 
 if (rowsOutput > 1)
@@ -945,22 +979,18 @@ if (rowsOutput > 1)
     hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
-	    result->r, totalFetch1, totalCalc1);
+	    result->r, totalFetch1, totalCalc1, table1->actualTable,
+		table2->actualTable);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
-	    result->r, totalFetch2, totalCalc2);
+	    result->r, totalFetch2, totalCalc2, table1->actualTable,
+		table2->actualTable);
 
-    hPrintf("<TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
-    hPrintf("<TH>Track</TH>");
-    hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
-    hPrintf("<TH>Standard<BR>deviation</TH>");
-    hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
-    hPrintf("<TH>r<BR>squared</TH>");
-    hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
-    hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
+    tableLabels();
     }
 
 hPrintf("</TABLE>\n");
+/*	and end the special container table	*/
 hPrintf("</TD></TR></TABLE></P>\n");
 
 /*	debugging when 1 region, less than 100 bases, show all values	*/
@@ -1271,7 +1301,7 @@ char *maxLimitCartVar;
 char *maxLimitCountStr;
 int maxLimitCount;
 char *tmpString;
-struct trackTable *tableList, *tt;
+struct trackTable *tableList;
 long startTime, endTime;
 
 startTime = clock1000();
@@ -1291,18 +1321,17 @@ correlateOK1 = isWig1 || isBedGraph1;
 table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable2, "none");
 
 /*	add first table to the list	*/
-tt = allocTrackTable();
-tt->tdb = curTrack;
-tt->tableName = cloneString(curTable);
-fillInTrackTable(tt, conn);
-slAddTail(&tableList,tt);
+tableList = allocTrackTable();
+tableList->tdb = curTrack;
+tableList->tableName = cloneString(curTable);
+fillInTrackTable(tableList, conn);
 
 if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
-    htmlOpen("Correlate table '%s' with table '%s'", tt->shortLabel, table2onEntry);
+    htmlOpen("Correlate table '%s' with table '%s'", tableList->shortLabel, table2onEntry);
     }
 else
-    htmlOpen("Correlate table '%s'", tt->shortLabel);
+    htmlOpen("Correlate table '%s'", tableList->shortLabel);
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);
@@ -1370,6 +1399,7 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
     if (correlateOK1)
 	{
+	struct trackTable *tt;
 	struct dataVector *resultVector;
 	int totalBases = 0;
 	/*	add second table to the list	*/
@@ -1390,10 +1420,9 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    showThreeVectors(tableList, tableList->next, resultVector);
 	    }
 	freeTrackTableList(&tableList);
-//	hPrintf("<P>freeTrackTableList OK</P>\n");
+	hPrintf("<P>freeTrackTableList OK</P>\n");
 	freeDataVector(&resultVector);
-//	hPrintf("<P>free resultVector OK</P>\n");
-
+	hPrintf("<P>free resultVector OK</P>\n");
 	}
     }
 
