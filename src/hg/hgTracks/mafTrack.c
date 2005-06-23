@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.50 2005/05/04 22:46:13 kate Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.51 2005/06/23 18:08:59 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -592,7 +592,7 @@ for (full = mafList; full != NULL; full = full->next)
         x1 = round((double)((int)mcMaster->start-seqStart-1)*scale) + xOff;
         x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
 	w = x2-x1+1;
-        if (mc->size == 0)
+        if ((mc->size == 0) && (mc->srcSize == 0))
             {
             /* suppress chain/alignment overlap */
             if (x1 <= lastAlignX2)
@@ -621,7 +621,8 @@ for (full = mafList; full != NULL; full = full->next)
             lastAlignX2 = x2;
             AllocArray(pixelScores, w);
             mafFillInPixelScores(maf, mcMaster, pixelScores, w);
-            if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS &&
+            if (vis != tvFull && ((mc->leftStatus == MAF_NEW_NESTED_STATUS) || 
+		(mc->leftStatus == MAF_NEW_STATUS)) &&
                 winEnd - winStart <= MAF_DETAIL_VIEW)
                     vgBox(vg, x1-3, yOff, 2, height-1, getBlueColor());
             for (i=0; i<w; ++i)
@@ -643,9 +644,10 @@ for (full = mafList; full != NULL; full = full->next)
                         1, height-1, c);
                     }
                 }
-            if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS &&
+            if (vis != tvFull &&((mc->rightStatus == MAF_NEW_NESTED_STATUS) || 
+		(mc->rightStatus == MAF_NEW_STATUS)) &&
                 winEnd - winStart <= MAF_DETAIL_VIEW)
-                    vgBox(vg, i+x1+1, yOff, 2, 
+                    vgBox(vg, i+x1+1, yOff, 2,
                             height-1, getBlueColor());
             freez(&pixelScores);
             }

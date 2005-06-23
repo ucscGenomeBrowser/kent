@@ -16,7 +16,7 @@
 #include "mafSummary.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.83 2005/06/19 18:18:02 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.84 2005/06/23 18:07:31 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1307,7 +1307,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                      }
                 }
             seq = mc->text;
-            if (mc->size == 0)
+            if ( (mc->size == 0) && (mc->srcSize == 0))
                 {
                 /* if no alignment here, but MAF annotation indicates continuity
                  * of flanking alignments, fill with dashes or ='s */
@@ -1389,7 +1389,7 @@ y += mi->height;
         int baseWidth = spreadStringCharWidth(width, winBaseCount);
         int colorX = x + alternateColorBaseOffset * baseWidth;
         alternateBlocksBehindChars(vg, colorX, y-1, width, 
-                mi->height*(lineCount-2), tl.mWidth, winBaseCount, 
+                mi->height*(lineCount-1), tl.mWidth, winBaseCount, 
                 alternateColorBaseCount, shadesOfSea[0], MG_WHITE);
         }
     }
