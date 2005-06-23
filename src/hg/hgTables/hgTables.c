@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.110 2005/06/17 19:03:56 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.111 2005/06/23 17:57:47 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -345,6 +345,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     region->chrom = cloneString(row[0]);
     region->end = sqlUnsigned(row[1]);
     region->fullChrom = TRUE;
+    region->name = NULL;		/* unused for full chrom */
     slAddHead(&regionList, region);
     }
 slSort(&regionList, regionCmp);
@@ -360,13 +361,14 @@ struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
 
-sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd from encodeRegions order by name desc");
+sr = sqlGetResult(conn, "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
     region->chrom = cloneString(row[0]);
     region->start = atoi(row[1]);
     region->end = atoi(row[2]);
+    region->name = cloneString(row[3]);	/* encode region name	*/
     slAddHead(&list, region);
     }
 sqlFreeResult(&sr);
@@ -443,6 +445,7 @@ else if (sameString(regionType, "range"))
 	errAbort("Bad position %s, please enter something else in position box",
 		 range);
 	}
+    region->name = NULL;	/*	unused for range	*/
     }
 else if (sameString(regionType, "encode"))
     {

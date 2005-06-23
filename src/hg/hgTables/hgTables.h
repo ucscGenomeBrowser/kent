@@ -39,6 +39,7 @@ struct region
     int start;			/* Zero-based. */
     int end;			/* Non-inclusive. */
     boolean fullChrom;		/* If TRUE it's full chromosome. */
+    char *name;			/* possibly the encode region name */
     };
 
 /* Global variables - generally set during initialization and then read-only. */
