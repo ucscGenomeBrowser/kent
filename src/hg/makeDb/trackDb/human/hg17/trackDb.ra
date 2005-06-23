@@ -70,6 +70,15 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
+track augustus
+shortLabel AUGUSTUS genes
+longLabel AUGUSTUS Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred
+
 track pseudoExpressed
 shortLabel Expressed Retro
 longLabel Expressed retroGenes with orf 
@@ -262,6 +271,14 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track LLncRNAarray
+shortLabel Candidates
+longLabel Lowe Lab ncRNA 148 microarray probes
+group compGeno
+priority 109.53
+visibility pack
+type bed 6 .
 
 track varMultizMm5Rn3GalGal2Fr1
 shortLabel Conservation (Std.)
@@ -1520,3 +1537,7 @@ searchType bed
 termRegex (BZ|CC|CG|CL)[1-9][0-9][0-9][0-9][0-9][0-9]
 searchPriority 7
 
+searchTable LLncRNAarray
+searchMethod exact
+searchType bed
+searchPriority 10

@@ -517,15 +517,6 @@ color 180,90,0
 type bed 6 .
 chromosomes chr22,
 
-track augustus
-shortLabel AUGUSTUS genes
-longLabel AUGUSTUS Gene Predictions
-group genes
-priority 51.7
-visibility hide
-color 180,0,0
-type genePred
-
 track rnaGene
 shortLabel RNA Genes
 longLabel Non-coding RNA Genes (dark) and Pseudogenes (light)

@@ -161,3 +161,12 @@ color 0,100,180
 type genePred
 otherDb dm1
 
+track augustus
+shortLabel AUGUSTUS genes
+longLabel AUGUSTUS Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred
+
