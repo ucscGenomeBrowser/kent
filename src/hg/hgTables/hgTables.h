@@ -73,7 +73,7 @@ void htmlClose();
 void textOpen();
 /* Start up page in text format. (No need to close this). */
 
-void explainWhyNoResults();
+void explainWhyNoResults(FILE *f);
 /* Put up a little explanation to user of why they got nothing. */
 
 char *curTableLabel();
@@ -240,9 +240,12 @@ char *chrnTable(struct sqlConnection *conn, char *table);
  * You can freeMem this when done. */
 
 
-void doTabOutTable(char *database, char *table, 
+void doTabOutTable(char *database, char *table, FILE *f,
 	struct sqlConnection *conn, char *fields);
 /* Do tab-separated output on table. */
+
+struct slName *fullTableFields(char *db, char *table);
+/* Return list of fields in db.table.field format. */
 
 struct bed *getFilteredBeds(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm,
@@ -319,6 +322,7 @@ boolean isSqlNumType(char *type);
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
 	char *primaryTable, 		/* The primary table. */
+	FILE *f,                        /* file for output, null for stdout */
 	struct slName *fieldList);	/* List of db.table.field */
 /* Do tab-separated output on selected fields, which may
  * or may not include multiple tables. */
@@ -612,7 +616,7 @@ struct hTableInfo *ctToHti(struct customTrack *ct);
 /* Create an hTableInfo from a customTrack. */
 
 void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
-	char *fields);
+	char *fields, FILE *f);
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 
@@ -683,6 +687,9 @@ void doClearAllField(char *dbTable);
 
 void doSetAllField(char *dbTable);
 /* Set all checks by fields in db.table. */
+
+void doOutPrimaryTable(char *table, struct sqlConnection *conn);
+/* Dump out primary table. */
 
 void doOutSelectedFields(char *table, struct sqlConnection *conn);
 /* Put up select fields (for tab-separated output) page. */

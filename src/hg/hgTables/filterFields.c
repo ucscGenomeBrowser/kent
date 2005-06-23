@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.41 2005/06/07 14:04:08 giardine Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.42 2005/06/23 18:34:03 giardine Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -475,7 +475,7 @@ if (fieldList == NULL)
 slReverse(&fieldList);
 
 /* Do output. */
-tabOutSelectedFields(db, table, fieldList);
+tabOutSelectedFields(db, table, NULL, fieldList);
 
 /* Clean up. */
 slFreeList(&fieldList);

@@ -8,6 +8,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTables
 
+T = tstbug.o
+
 O = $A.o asObj.o bedList.o custom.o filterFields.o \
     gffOut.o identifiers.o intersect.o correlate.o javascript.o \
     joining.o maf.o mainPage.o rangeHistogram.o schema.o \
@@ -50,7 +52,7 @@ beta::
 
 
 compile: $O 
-	${CC} $O ${MYLIBS} ${L} 
+	${CC} -g $O ${MYLIBS} ${L} 
 	mv a.out $A
 
 #	all objects depend on hgTables.h
@@ -75,3 +77,10 @@ seqOut.o:	hgTables.h
 sumStats.o:	hgTables.h
 usage.o:	hgTables.h
 wiggle.o:	hgTables.h
+
+compiletest: $T
+	${CC} -Wall $T ${MYLIBS} ${L}
+
+compileLists: listFiles.o
+	${CC} -Wall listFiles.o ${MYLIBS} ${L}
+

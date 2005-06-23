@@ -235,6 +235,60 @@ for (field = fieldList; field != NULL; field = field->next)
 hPrintf("\n");
 }
 
+static void tabBedRowFile(struct bed *bed, struct slName *fieldList, FILE *f)
+/* Print out to a file named fields from bed. */
+{
+struct slName *field;
+boolean needTab = FALSE;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    char *type = field->name;
+    if (needTab)
+        fprintf(f, "\t");
+    else
+        needTab = TRUE;
+    if (sameString(type, "chrom"))
+        fprintf(f, "%s", bed->chrom);
+    else if (sameString(type, "chromStart"))
+        fprintf(f, "%u", bed->chromStart);
+    else if (sameString(type, "chromEnd"))
+        fprintf(f, "%u", bed->chromEnd);
+    else if (sameString(type, "name"))
+        fprintf(f, "%s", bed->name);
+    else if (sameString(type, "score"))
+        fprintf(f, "%d", bed->score);
+    else if (sameString(type, "strand"))
+        fprintf(f, "%s", bed->strand);
+    else if (sameString(type, "thickStart"))
+        fprintf(f, "%u", bed->thickStart);
+    else if (sameString(type, "thickEnd"))
+        fprintf(f, "%u", bed->thickEnd);
+    else if (sameString(type, "itemRgb"))
+	{
+	int rgb = bed->itemRgb;
+	fprintf(f, "%d,%d,%d", (rgb & 0xff0000) >> 16,
+		(rgb & 0xff00) >> 8, (rgb & 0xff));
+	}
+    else if (sameString(type, "blockCount"))
+        fprintf(f, "%u", bed->blockCount);
+    else if (sameString(type, "blockSizes"))
+	{
+	unsigned i;
+	for (i=0; i<bed->blockCount; ++i)
+	    fprintf(f, "%u,", bed->blockSizes[i]);
+	}
+    else if (sameString(type, "chromStarts"))
+	{
+	unsigned i;
+	for (i=0; i<bed->blockCount; ++i)
+	    fprintf(f, "%u,", bed->chromStarts[i]);
+	}
+    else
+        errAbort("Unrecognized bed field %s", type);
+    }
+fprintf(f, "\n");
+}
+
 static void cgiToCharFilter(char *dd, char *pat, enum charFilterType *retCft,
 		     char **retVals, boolean *retInv)
 /* Given a "does/doesn't" and a (list of) literal chars from CGI, fill in 
@@ -535,7 +589,7 @@ return bedList;
 }
 
 void doTabOutCustomTracks(struct trackDb *track, struct sqlConnection *conn,
-	char *fields)
+	char *fields, FILE *f)
 /* Print out selected fields from custom track.  If fields
  * is NULL, then print out all fields. */
 {
@@ -550,14 +604,28 @@ if (fields == NULL)
 else
     chosenFields = commaSepToSlNames(fields);
 
-hPrintf("#");
-for (field = chosenFields; field != NULL; field = field->next)
+if (f == NULL)
     {
-    if (field != chosenFields)
-        hPrintf("\t");
-    hPrintf("%s", field->name);
+    hPrintf("#");
+    for (field = chosenFields; field != NULL; field = field->next)
+        {
+        if (field != chosenFields)
+            hPrintf("\t");
+        hPrintf("%s", field->name);
+        }
+    hPrintf("\n");
     }
-hPrintf("\n");
+else
+    {
+    fprintf(f, "#");
+    for (field = chosenFields; field != NULL; field = field->next)
+        {
+        if (field != chosenFields)
+            fprintf(f, "\t");
+        fprintf(f, "%s", field->name);
+        }
+    fprintf(f, "\n");
+    }
 
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -566,13 +634,16 @@ for (region = regionList; region != NULL; region = region->next)
     	region, lm, NULL);
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
-	tabBedRow(bed, chosenFields);
+        if (f == NULL)
+	    tabBedRow(bed, chosenFields);
+        else
+            tabBedRowFile(bed, chosenFields, f);
 	++count;
 	}
     lmCleanup(&lm);
     }
 if (count == 0)
-    explainWhyNoResults();
+    explainWhyNoResults(f);
 }
 
 void removeNamedCustom(struct customTrack **pList, char *name)
