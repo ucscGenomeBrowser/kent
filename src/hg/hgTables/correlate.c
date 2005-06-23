@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.11 2005/06/23 17:57:47 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.12 2005/06/23 19:18:41 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -526,7 +526,6 @@ static struct dataVector *fetchOneRegion(struct trackTable *table,
 /*	fetch all the data for this track and table in the given region */
 {
 struct dataVector *vector;
-char *filter = filterClause(database, table->actualTable, region->chrom);
 int regionSize = region->end - region->start;
 long startTime, endTime;
 
@@ -536,6 +535,8 @@ if (! (table->isWig || table->isBedGraph))
 /*	makes no sense to work on less than two numbers	*/
 if (regionSize < 2)
     return NULL;
+
+
 
 startTime = clock1000();
 /*	assume entire region is going to produce numbers	*/
@@ -548,12 +549,16 @@ if (table->isBedGraph && !table->isCustom)
     char **row;
     struct sqlResult *sr = NULL;
     char fields[256];
+    char *filter = NULL;
+
+    filter = filterClause(database, table->actualTable, region->chrom);
 
     safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
 	    table->bedGraphColumnName);
     /*	the TRUE indicates to order by start position, this is necessary
      *	so the walk-through positions will work properly
      */
+hPrintf("<P>select: %s %s:%d-%d</P>\n", table->actualTable, region->chrom, region->start, region->end );
     sr = hExtendedRangeQuery(conn, table->actualTable, region->chrom,
 	region->start, region->end, filter, TRUE, fields, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -596,7 +601,7 @@ if (table->isBedGraph && !table->isCustom)
     vector->end = vector->position[(vector->count)-1];
     sqlFreeResult(&sr);
     }
-else if (table->isWig && !table->isCustom)
+else if (table->isWig)
     {
     int span = 1;
     struct wigAsciiData *wigData = NULL;
@@ -605,8 +610,16 @@ else if (table->isWig && !table->isCustom)
     int vIndex = vector->count;	/* it is starting at zero	*/
     register int bases = 0;
 
-    span = minSpan(conn, table->actualTable, region->chrom,
-	region->start, region->end, cart, table->actualTdb);
+    /*	we still do not have a proper minSpan finder for custom tracks */
+    /*	they should have a spanList setup during their encoding, then it
+     *	would always be there.
+     */
+    if (table->isCustom)
+	span = 1;
+    else
+	span = minSpan(conn, table->actualTable, region->chrom,
+	    region->start, region->end, cart, table->actualTdb);
+
     wigData = getWiggleData(conn, table->actualTable, region,
 	vector->maxCount, span);
     for (asciiData = wigData; asciiData; asciiData = next)
@@ -1085,7 +1098,6 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
     {
     struct dataVector *v1;
     struct dataVector *v2;
-
 
     v1 = fetchOneRegion(table1, region, conn);
     if (v1)	/*	if data there, fetch the second one	*/
