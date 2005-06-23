@@ -11029,7 +11029,6 @@ cd cnp
 cp dupArray.txt cnpSharp.bed.orig
 # change CNP type to match Iafrate data (with permission from Andy)
 sed -e "s/dup/Gain" cnpSharp.bed.orig > cnpSharp.bed.2
-sed -e "s/dup/Gain/" cnpSharp.bed > cnpSharp.bed.2
 sed -e "s/del/Loss/" cnpSharp.bed.2 > cnpSharp.bed.3
 sed -e "s/Both Loss and Gain/Gain and Loss/" cnpSharp.bed.3 > cnpSharp.bed
 hgLoadBed hg16 cnpSharp -tab -sqlTable=cnpSharp.sql cnpSharp.bed
