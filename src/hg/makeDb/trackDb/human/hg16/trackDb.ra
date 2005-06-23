@@ -3414,8 +3414,8 @@ viewLimits 0:10
 
     track encodeYaleChIPSTAT1HeLaBingRenPval
     subTrack encodeYaleChIPSTAT1Pval
-    shortLabel Yale UCSD PVal
-    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) UCSD Chip, P-Values
+    shortLabel Yale LI PVal
+    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) LI/UCSD PCR Amplicon, P-Values
     priority 4
     color 50,50,200
 
@@ -3477,8 +3477,8 @@ autoScale Off
 
     track encodeYaleChIPSTAT1HeLaBingRenSig
     subTrack encodeYaleChIPSTAT1Sig
-    shortLabel Yale UCSD Sig
-    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) UCSD Chip, Signal
+    shortLabel Yale LI Sig
+    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) LI/UCSD PCR Amplicon, Signal
     priority 4
     color 112,63,175
     altColor 224,66,81
@@ -3519,8 +3519,8 @@ autoScale Off
 
     track encodeYaleChIPSTAT1HeLaBingRenSites
     subTrack encodeYaleChIPSTAT1Sites
-    shortLabel Yale UCSD Sites
-    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) UCSD Chip, Binding Sites
+    shortLabel Yale LI Sites
+    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells) LI/UCSD PCR Amplicon, Binding Sites
     priority 4
     color 200,50,50
     altColor 50,50,200
