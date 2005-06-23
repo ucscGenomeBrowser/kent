@@ -170,6 +170,10 @@
            <param name="progPkg" value="edu.ucsc.genome.util"/>
            <param name="progClass" value="LiftOverTest"/>
         </antcall>
+        <antcall target="generateWrapper" inheritAll="yes" inheritRefs="yes">
+           <param name="progPkg" value="edu.ucsc.genome.util"/>
+           <param name="progClass" value="SequenceCheck"/>
+        </antcall>
     </target>
 
     <target name="clean" depends="init">
