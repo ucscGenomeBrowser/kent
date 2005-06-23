@@ -4145,3 +4145,7 @@ searchTable wgRna
 searchMethod fuzzy
 searchType bed
 searchPriority 10
+
+searchTable encodeIndels
+query select chrom, chromStart, chromEnd, name from %s where traceName like '%s'
+searchPriority 10
