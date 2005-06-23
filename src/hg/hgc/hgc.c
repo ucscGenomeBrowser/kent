@@ -173,7 +173,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.905 2005/06/22 21:53:53 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.906 2005/06/23 13:59:53 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12023,7 +12023,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     encodeIndelsStaticLoad(row+rowOffset, &encodeIndel);
     if (firstTime)
         {
-        printf("<B>Reference Sequence:</B> %s <BR>\n", encodeIndel.reference);
+        printf("<B>Variant and Reference Sequences: </B><BR>\n");
+        printf("<PRE><TT>%s<BR>\n", encodeIndel.variant);
+        printf("%s</TT></PRE><BR>\n", encodeIndel.reference);
         bedPrintPos((struct bed *)&encodeIndel, 3);
         firstTime = FALSE;
         printf("-----------------------------------------------------<BR>\n");
