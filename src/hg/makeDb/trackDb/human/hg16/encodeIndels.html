@@ -1,13 +1,16 @@
 <H2>Description</H2>
 <P>
 This track shows deletion/insertion polymorphisms (DIPs). In packed and full 
-modes, the variant sequence is shown to the left of the DIP. The details
+modes, the sequence variance is shown to the left of the DIP. 
+We use the convention "-/seq" for deletions and "seq/-" for insertions.
+The details
 page shows the name of the trace used to define the polymorphism, the
 quality score, and the strand on which the trace aligns to the reference
 sequence.</P>
 <P>
 The quality score reflects the minimum PHRED quality value over 
-the entire range of the DIP within the trace. PHRED quality scores are 
+the entire range of the DIP within the trace, plus 5 flanking bases. 
+PHRED quality scores are 
 expressed as log probabilities using the formula: 
 <PRE>  Q = -10 * log<sub>10</sub>(P<sub>e</sub>)
 </PRE>
@@ -15,9 +18,11 @@ where  P<sub>e</sub> is the estimated probability of an
 error at that base. PHRED quality scores typically vary from 0 to 40, where 0 
 indicates complete uncertainty about the base and 40 implies odds of 10,000 
 to 1 that the base is correct. Sometimes a PHRED value of 50 or higher is 
-used to denote finished sequence.</P>
+used to denote finished sequence.  We use a color gradient to distinguish
+quality scores in the browser display.</P>
+
 <P>
-The number after &quot;trace pos&quot; on the details page the 3' position 
+The number after &quot;trace pos&quot; on the details page is the 3' position 
 of the DIP within the trace. The alleles are 
 reported relative to the &quot;+&quot; strand of the reference sequence; 
 however, the trace may actually align to the &quot;-&quot; strand. 
