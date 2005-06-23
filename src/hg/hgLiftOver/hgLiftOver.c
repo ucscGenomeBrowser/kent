@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.39 2005/06/16 18:18:31 jill Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.40 2005/06/23 02:13:40 jill Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -153,7 +153,7 @@ cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
-cgiTableField("Minimum chain size in query:");
+cgiTableField("Minimum hit size in query:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeIntVar(HGLFT_MINSIZEQ,chain->minSizeQ,4);
@@ -494,11 +494,10 @@ if (userData != NULL && userData[0] != '\0')
         }
     else if (sameString(dataFormat, BED_FORMAT))
         {
-/* minSizeT/Q here and in liftOverChain.c/h have been 
-   renamed minChainT/Q in liftOver.c */
+/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
         ct = liftOverBed(oldTn.forCgi, chainHash, 
-			 minMatch, minBlocks, 0, 0,
-			 minSizeT, minSizeQ,
+			 minMatch, minBlocks, 0, minSizeQ,
+			 minSizeT, 0,
 			 fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
         }
     else
