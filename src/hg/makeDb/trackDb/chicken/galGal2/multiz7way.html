@@ -47,21 +47,22 @@ The resulting multiple alignments were then assigned
 conservation scores by phastCons.</P>
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
-type of probabilistic model that describes both the process of DNA substitution at
-each site in a genome and the way this process changes from one site to the
-next (Felsenstein and Churchill 1996, Yang 1995, Siepel and Haussler 2003,
-Siepel and Haussler 2004). In this case, a two-state phylo-HMM was used,
-with a state for conserved regions and a state for non-conserved regions.
-The value plotted at each site is the posterior probability that the
-corresponding alignment column was "generated" by the conserved state of
-the phylo-HMM.  These scores reflect the phylogeny (including branch
-lengths) of the species in question, a continuous-time Markov model of the
-nucleotide substitution process, and a tendency for conservation levels to
-be autocorrelated along the genome (i.e., to be similar at adjacent sites).  The
-general reversible (REV) substitution model was used.
-Note that, unlike many conservation-scoring programs, phastCons does not
-rely on a sliding window of fixed size, so short highly-conserved regions
-and long moderately conserved regions can both obtain high scores.</P>
+type of probabilistic model that describes both the process of DNA
+substitution at each site in a genome and the way this process changes from
+one site to the next (Felsenstein and Churchill 1996, Yang 1995, Siepel and
+Haussler 2005).  PhastCons uses a two-state phylo-HMM, with a state for
+conserved regions and a state for non-conserved regions.  The value plotted
+at each site is the posterior probability that the corresponding alignment
+column was "generated" by the conserved state of the phylo-HMM.  These
+scores reflect the phylogeny (including branch lengths) of the species in
+question, a continuous-time Markov model of the nucleotide substitution
+process, and a tendency for conservation levels to be autocorrelated along
+the genome (i.e., to be similar at adjacent sites).  The general reversible
+(REV) substitution model was used.  Note that, unlike many
+conservation-scoring programs, phastCons does not rely on a sliding window
+of fixed size, so short highly-conserved regions and long moderately
+conserved regions can both obtain high scores.  More information about
+phastCons can be found in Siepel et al. (2005).</P> 
 <P> 
 PhastCons currently treats alignment gaps as missing data, which
 sometimes has the effect of producing undesirably high conservation scores
@@ -73,14 +74,13 @@ of improving the handling of alignment gaps.</P>
 This track was created at UCSC using the following programs:
 <UL>
 <LI>
-Blastz and multiz from Scott Schwartz and Webb Miller of the 
+Blastz and multiz by Scott Schwartz and Webb Miller of the 
 <A HREF="http://bio.cse.psu.edu/" TARGET=_blank>Penn State Bioinformatics 
 Group</A>. 
 <LI>
 AxtBest, axtChain, chainNet, netSyntenic, and netClass 
-developed by Jim Kent at UCSC. 
-<LI>Tree estimation (phyloFit) and conservation-scoring (phastCons)
-software by Adam Siepel at UCSC. 
+by Jim Kent at UCSC. 
+<LI> PhastCons by Adam Siepel at UCSC. 
 <LI>"Wiggle track" plotting software by Hiram Clawson at UCSC.
 </UL>
 </P>
@@ -89,23 +89,26 @@ software by Adam Siepel at UCSC.
 
 <H3>Phylo-HMM</H3>
 <P>
-Felsenstein J and Churchill GA (1996).  A hidden Markov model approach to
-variation among sites in rate of evolution.
+Felsenstein J and Churchill GA (1996).  
+<A HREF="http://mbe.oxfordjournals.org/cgi/content/abstract/13/1/93"
+TARGET=_blank>A hidden Markov model approach to 
+variation among sites in rate of evolution</A>.
 <em>Mol Biol Evol</em> 13:93-104. </P>
 <P>
-Siepel A and Haussler D (2003).  
-<a href="http://www.cse.ucsc.edu/~acs/phyhmm.pdf">Combining
-phylogenetic and hidden Markov models in biosequence analysis</a>.
-In <em> Proceedings of the Seventh Annual 
-International Conference on Computational Molecular Biology (RECOMB
-2003)</em>, pp. 277-286. </P>
+Siepel A and Haussler D (2005). Phylogenetic hidden Markov models.
+In R. Nielsen, ed., <em>Statistical Methods in Molecular Evolution</em>,
+pp. 325-351, Springer, New York. </P>
 <P>
-Siepel A and Haussler D (2004). Phylogenetic hidden Markov models.
-In R. Nielsen, ed.,  Statistical Methods in Molecular Evolution, Springer  
+Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
+Clawson H, Spieth J, Hillier LW, Richards S, Weinstock GM, Wilson RK, Gibbs
+RA, Kent WJ, Miller W, and Haussler D (2005).  Evolutionarily conserved
+elements in vertebrate, insect, worm, and yeast genomes.  <i>Genome Res</i>
 (in press). </P>
 <P>
-Yang Z (1995).  A space-time process model for the evolution of DNA
-sequences.  <em>Genetics</em>, 139:993-1005. </P>
+Yang Z (1995).  
+<A HREF="http://www.genetics.org/cgi/content/abstract/139/2/993" 
+TARGET=_blank>A space-time process model for the evolution of DNA
+sequences</A>.  <em>Genetics</em>, 139:993-1005. </P>
 
 <H3>Chain/Net</H3>
 <P>
