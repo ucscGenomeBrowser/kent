@@ -25,17 +25,16 @@ subject to certain constraints on the "coverage" of the genome by conserved
 elements and the "smoothness" of the conservation scores.  Details can be
 found in Siepel et al. (2005).</P>
 <P>
-The predicted elements are segments of the alignment that are likely to
-have been "generated" by the conserved state of the phylo-HMM--i.e.,
-maximal segments in which the maximum-likelihood (Viterbi) path completely
-resides in the conserved state.  Each predicted conserved element is
-assigned a log-odds score equal to its log probability under the conserved
-model minus its log probability under the non-conserved model.  The "score"
-field associated with this track contains transformed log-odds scores,
-taking values between 0 and 1000.  (The scores are transformed using a
-monotonic function of the form a * log(x) + b.)  The raw log odds scores
-are retained in the "name" field and can be seen on the details page or in
-the browser when the track's display mode is set to "pack" or "full".</P>
+The predicted conserved elements are segments of the alignment that are
+likely to have been "generated" by the conserved state of the phylo-HMM.
+Each element is assigned a log-odds score equal to its log probability
+under the conserved model minus its log probability under the non-conserved
+model.  The "score" field associated with this track contains transformed
+log-odds scores, taking values between 0 and 1000.  (The scores are
+transformed using a monotonic function of the form a * log(x) + b.)  The
+raw log odds scores are retained in the "name" field and can be seen on the
+details page or in the browser when the track's display mode is set to
+"pack" or "full".</P>
 
 <H2>Credits</H2>
 <P>
