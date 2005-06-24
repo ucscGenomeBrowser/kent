@@ -1762,6 +1762,26 @@ done
     #LI MeH3K4 IMR90 - Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells)
 
 ##########################################################################
+# EGASP Full and Partial (2005-06-22 kate)
+# Gene tracks submitted for the EGASP competition, submitted
+#       by the Gencode group (Roderic Guigo, Julien Legarde, IMIM) 
+    cd /cluster/data/encode
+    mkdir -p EGASP/competition
+    cd EGASP/competition
+    mkdir -p partial/lab full/lab
+    cd partial/lab
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 -nd \
+       ftp://genome.imim.es/pub/projects/gencode/data/egasp05/submitted_predictions/EGASP_partial/
+    cd ../../full/lab
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 \
+            ftp://genome.imim.es/pub/projects/gencode/data/egasp05/submitted_predictions/EGASP_on_all_regions/ -nd
+
+
+##########################################################################
 # TIGR Jigsaw Genes from EGASP (2005-06-20 kate)
 # Contrib: Jonathan Allen <jallen@tigr.org>
 # NOTE: hg17 coords
@@ -1771,8 +1791,9 @@ done
     cd EGASP/Jigsaw/2005-06-01/lab
 
     # convert to genepred, in preparation for dropping to hg15
+    # NOTE: no start_codons, so omit -gtf option
     grep '^chr' lab/jigsaw_ucsc.gtf | \
-        ldHgGene -out=jigsaw.gp -gtf -genePredExt null null stdin
+        ldHgGene -out=jigsaw.gp -genePredExt null null stdin
         # Read 454 transcripts in 3949 lines in 1 files
         # 454 groups 20 seqs 1 sources 1 feature types
         # 454 gene predictions
@@ -1782,9 +1803,9 @@ done
     wc -l jigsaw.hg16.gp jigsaw.gp.unmapped
         # 450 jigsaw.hg16.gp
         #   8 jigsaw.gp.unmapped
-    ldHgGene -predTab -genePredExt hg16 encodeEgaspJigsaw jigsaw.hg16.gp
+    ldHgGene -predTab -genePredExt hg16 encodeEgaspUpdJigsaw jigsaw.hg16.gp
         # 450 gene predictions
-    checkTableCoords hg16 encodeEgaspJigsaw
+    genePredCheck -db=hg16 encodeEgaspUpdJigsaw
 
 
 ##########################################################################
@@ -1797,27 +1818,38 @@ done
     cd /cluster/data/encode
     mkdir -p EGASP/Augustus
     cd EGASP/Augustus
-    mkdir 2005-06-10
-    cd 2005-06-10
+    mkdir 2005-06-22
+    cd 2005-06-22
     mkdir lab
-    wc -l lab/*.gtf
-   # 4075 44encode.augustus.ESTprotein.gtf
-   # 3701 44encode.augustus.abinitio.gtf
-   # 4162 44encode.augustus.anyInformation.gtf
-   # 4026 44encode.augustus.dualgenome.gtf
+    cd lab
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=3 --no-parent \
+	--no-host-directories --cut-dirs=5 http://augustus.gobics.de/predictions/encode/chr_coords/ --accept=gtf
+
+    # NOTE: remove non .gtf files
+    wc -l *.gtf
+   # 4075 44encode.augustus.ESTprotein.chrcoord.sgtf
+   # 3701 44encode.augustus.abinitio.chrcoords.gtf
+   # 4162 44encode.augustus.anyInformation.chrcoords.gtf
+   # 4026 44encode.augustus.dualgenome.chrcoords.gtf
+   cd ..
+   ln -s lab/44encode.augustus.ESTprotein.chrcoords.gtf est.gtf
+   ln -s lab/44encode.augustus.abinitio.chrcoords.gtf  abinitio.gtf
+   ln -s lab/44encode.augustus.anyInformation.chrcoords.gtf any.gtf
+   ln -s lab/44encode.augustus.dualGenome.chrcoords.gtf dual.gtf
 
     # convert to genePred
-    foreach f (lab/*.gtf)
+    foreach f (*.gtf)
         set b = $f:t:r
-        ldHgGene -out=$b.gp -gtf -genePredExt null null $f
+        ldHgGene -out=$b.gp -genePredExt null null $f
     end
-    #Reading lab/44encode.augustus.ESTprotein.gtf
+    #Reading est.gtf
     #543 gene predictions
-    #Reading lab/44encode.augustus.abinitio.gtf
+    #Reading abinitio.gtf
     #622 gene predictions
-    #Reading lab/44encode.augustus.anyInformation.gtf
+    #Reading any.gtf
     #571 gene predictions
-    #Reading lab/44encode.augustus.dualgenome.gtf
+    #Reading dual.gtf
     #617 gene predictions
 
     # lift to hg16
@@ -1828,10 +1860,29 @@ done
                 $b.hg16.gp $b.gp.unmapped
     end
     wc -l *.hg16.gp
-    # all sized zero -- need to investigate
-    # Problem is files are in ENCODE coords, not chrom coords
-    # requested that Mario resubmit
+        # 616 abinitio.hg16.gp
+        # 568 any.hg16.gp
+        # 612 dual.hg16.gp
+        # 541 est.hg16.gp
+
     wc -l *.unmapped
+     # 12 abinitio.gp.unmapped
+        # Missing 1 or 2 exons: ENr131.g14.1, ENm006.g18.1, ENm006.g20.1,
+                        # ENm006.g23.1, ENm006.g28.1, ENm006.g49.1
+     # 6 any.gp.unmapped
+        # ENr131.g14.1, ENm006.g21.1, ENm006.g41.1
+     # 10 dual.gp.unmapped
+        # ENr131.g14.1, ENm006.g16.1, ENm006.g20.1, ENm006.g25.1 , ENm006.g42.1
+     # 4 esg.gp.unmapped
+        # Missing 1 exon: ENr131.g12.1, ENm006.g21.1
+
+    # load
+    foreach f (*.hg16.gp)
+        genePredCheck $f
+        set t = `echo $f | sed -e 's/\(.*\).hg16.gp/encodeEgaspUpdAugustus\u\1/'`
+        ldHgGene -predTab -genePredExt hg16 $t $f
+        checkTableCoords hg16 $t
+    end
 
     
 ##########################################################################
@@ -1840,18 +1891,35 @@ done
     cd /cluster/data/encode
     mkdir -p EGASP/Exogean
     cd EGASP/Exogean
-    mkdir 2005-06-10
-    cd 2005-06-10
+    mkdir 2005-06-23
+    cd 2005-06-23
     mkdir lab
     # retrieve files from FTP site
     wc -l lab/*.gtf
     # 18958 All44_EXOGEAN_new3_ucsc.gtf
 
     # convert to genePred
-    ldHgGene -out=exogean.gp -gtf -genePredExt null null exogean.gtf
+    tr '[ ]' '[\t]' < lab/*exogean*gtf > exogean.gtf
+    ldHgGene -out=exogean.gp null null exogean.gtf
+        # 342 groups 20 seqs 1 sources 2 feature types
+    liftOver -genePred exogean.gp \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                exogean.hg16.gp exogean.gp.unmapped
+    wc -l exogean.hg16.gp exogean.gp.unmapped
+        # 337 exogean.hg16.gp
+        # 10 exogean.gp.unmapped
+            # ENr131.3.fw, ENm006.7.fw, ENm006.10.rv, ENm006.8.fw, ENm006.20.rv
 
-    # NOTE: these were submitted in ENCODE coords.
-    # Requested redo with chrom coords, 6/20 
+    ldHgGene -predTab hg16 encodeEgaspUpdExogean exogean.hg16.gp
+        # 337 gene predictions
+    genePredCheck -db=hg16 encodeEgaspUpdExogean
+
+
+##########################################################################
+# GENEIDU12 and SGPU12 GENES FROM EGASP (2005-06-21 kate)
+    # Contrib: Tyler Alioto, IMIM, Barcelona
+
+
 
 
 ##########################################################################
