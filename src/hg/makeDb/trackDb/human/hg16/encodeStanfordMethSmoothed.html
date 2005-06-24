@@ -29,12 +29,20 @@ restriction enzymes (AciI, HhaI, BstUI, HpaII, HgaI, and HpyCH4IV) and
 size selected to deplete the genome of unmethylated regions.  Digested
 and undigested DNA (control) were amplified, labeled, and hybridized
 to oligo tiling arrays produced by Nimblegen.  The data for each array
-were median subtracted (log 2 ratios) and normalized.</P>
+were median subtracted (log 2 ratios) and normalized (divided by the 
+standard deviation).</P>
 <P>
 The transformed mean ratios of undigested:digested genomic DNA for 
-all probes were then smoothed by calculating a sliding-window mean 
-of six neighboring probes' ratios.  The sliding-window means were 
-scaled to the range 0-1000 (although the maximum score is 364,088).
+all probes were then smoothed by calculating a sliding-window mean.  
+Windows of 6 neighboring probes (sliding 2 probes at a time) were 
+used; within each window, the highest and lowest value were dropped, 
+and the remaining 4 values were averaged.  In order to increase the 
+contrast between high and low values for visual display, the average 
+was converted to a score by this formula: <BR>
+score = 8^(average) * 10<BR>
+These scores are for visualization purposes; for all analyses, 
+the raw ratios should be used.  Those ratios are available in the 
+"Stanf Meth" track.  
 </P>
 
 <H2>Verification</H2>

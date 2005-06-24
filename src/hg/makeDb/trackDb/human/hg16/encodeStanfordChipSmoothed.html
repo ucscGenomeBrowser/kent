@@ -22,12 +22,19 @@ Chromatin IP was performed as previously described (Trinklein <em>et
 al</em>. 2004).  Amplified and labeled ChIP DNA was hybridized to
 oligo tiling arrays produced by Nimblegen along with a total genomic
 reference sample.  The data for each array were median subtracted (log
-2 ratios) and normalized.</P>
+2 ratios) and normalized (divided by the standard deviation).</P>
 <P>
 The transformed mean ratios of ChIP DNA:Total DNA for 
-all probes were then smoothed by calculating a sliding-window mean 
-of six neighboring probes' ratios.  The sliding-window means were 
-scaled to the range 0-1000 (although the maximum score is 721,474).
+all probes were then smoothed by calculating a sliding-window mean.  
+Windows of 6 neighboring probes (sliding 2 probes at a time) were 
+used; within each window, the highest and lowest value were dropped, 
+and the remaining 4 values were averaged.  In order to increase the 
+contrast between high and low values for visual display, the average 
+was converted to a score by this formula: <BR>
+score = 8^(average) * 10<BR>
+These scores are for visualization purposes; for all analyses, 
+the raw ratios should be used.  Those ratios are available in the 
+"Stanf ChIP" track.  
 </P>
 
 <H2>Verification</H2>
