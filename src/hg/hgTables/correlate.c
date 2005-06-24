@@ -15,8 +15,9 @@
 #include "obscure.h"
 #include "wiggle.h"
 #include "hgTables.h"
+#include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.16 2005/06/24 20:17:43 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.17 2005/06/24 21:12:09 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1476,6 +1477,8 @@ endTime = clock1000();
 
 hPrintf("<P>total elapsed time for this page: %.3f seconds.</P>\n",
 	0.001*(endTime-startTime));
+
+hPrintf("%s", corrHelpText);
 
 /* Hidden form - for benefit of javascript. */
     {

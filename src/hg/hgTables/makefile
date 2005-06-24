@@ -77,6 +77,7 @@ seqOut.o:	hgTables.h
 sumStats.o:	hgTables.h
 usage.o:	hgTables.h
 wiggle.o:	hgTables.h
+correlate.o:	hgTables.h correlate.h
 
 compiletest: $T
 	${CC} -Wall $T ${MYLIBS} ${L}
