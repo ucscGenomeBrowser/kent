@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.112 2005/06/23 18:34:03 giardine Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.113 2005/06/24 19:29:57 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1441,6 +1441,8 @@ else if (cartVarExists(cart, hgtaDoCorrelatePage))
     doCorrelatePage(conn);
 else if (cartVarExists(cart, hgtaDoClearCorrelate))
     doClearCorrelate(conn);
+else if (cartVarExists(cart, hgtaDoClearContinueCorrelate))
+    doClearContinueCorrelate(conn);
 else if (cartVarExists(cart, hgtaDoCorrelateMore))
     doCorrelateMore(conn);
 else if (cartVarExists(cart, hgtaDoCorrelateSubmit))

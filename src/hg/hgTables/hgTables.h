@@ -386,6 +386,7 @@ boolean anyCorrelation();
 #define hgtaDoIntersectSubmit "hgta_doIntersectSubmit"
 #define hgtaDoCorrelatePage "hgta_doCorrelatePage"
 #define hgtaDoClearCorrelate "hgta_doClearCorrelate"
+#define hgtaDoClearContinueCorrelate "hgta_doClearContinueCorrelate"
 #define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
 #define hgtaDoCorrelateMore "hgta_doCorrelateMore"
 #define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
@@ -744,6 +745,9 @@ void doIntersectSubmit(struct sqlConnection *conn);
 
 void doCorrelatePage(struct sqlConnection *conn);
 /* Respond to correlate create/edit button */
+
+void doClearContinueCorrelate(struct sqlConnection *conn);
+/* Respond to click on clear selections from correlation calculate page. */
 
 void doClearCorrelate(struct sqlConnection *conn);
 /* Respond to click on clear correlate. */

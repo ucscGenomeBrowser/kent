@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.14 2005/06/24 00:24:54 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.15 2005/06/24 19:29:56 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -418,6 +418,15 @@ if (table->isBedGraph && (!table->isCustom))
     }
 }
 
+/****************************   NOTE   ********************************
+ *	the following showGroupFieldLimited, showTable2FieldLimited and
+ *	showGroupTrackRowLimited, are almost near duplicates of the
+ *	same functions showGroupField, showTableField and showTrackField
+ *	in mainPage.c - the specialized limited list function in these
+ *	instances should be folded back into the mainPage ones so there
+ *	would be only one copy.
+ **********************************************************************/
+
 static struct grp *showGroupFieldLimited(char *groupVar, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk, struct grp *groupList)
 /* Show group control. Returns selected group. */
@@ -438,7 +447,6 @@ for (group = groupList; group != NULL; group = group->next)
 hPrintf("</SELECT>\n");
 return selGroup;
 }
-
 static char *showTable2FieldLimited(struct trackDb *track, char *table)
 /* Show table control and label. */
 {
@@ -472,7 +480,6 @@ for (name = nameList; name != NULL; name = name->next)
 hPrintf("</SELECT>\n");
 return selTable;
 }
-
 
 static struct trackDb *showGroupTrackRowLimited(char *groupVar,
     char *groupScript, char *trackVar, char *trackScript,
@@ -1416,7 +1423,7 @@ hPrintf("<P>\n");
 
 cgiMakeButton(hgtaDoCorrelateSubmit, "calculate");
 hPrintf("&nbsp;");
-cgiMakeButton(hgtaDoClearCorrelate, "clear selections");
+cgiMakeButton(hgtaDoClearContinueCorrelate, "clear selections");
 hPrintf("&nbsp;");
 cgiMakeButton(hgtaDoMainPage, "return to table browser");
 hPrintf("</FORM>\n");
@@ -1506,8 +1513,16 @@ copyCartVars(cart, curVars, nextVars, ArraySize(curVars));
 doCorrelateMore(conn);
 }
 
+void doClearContinueCorrelate(struct sqlConnection *conn)
+/* Respond to click on clear selections from correlation calculate page. */
+{
+removeCartVars(cart, curVars, ArraySize(curVars));
+copyCartVars(cart, curVars, nextVars, ArraySize(curVars));
+doCorrelateMore(conn);
+}
+
 void doClearCorrelate(struct sqlConnection *conn)
-/* Respond to click on clear correlation. */
+/* Respond to click on clear correlation from main hgTable page. */
 {
 removeCartVars(cart, curVars, ArraySize(curVars));
 doMainPage(conn);

@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.75 2005/06/17 19:03:56 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.76 2005/06/24 19:29:57 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -574,16 +574,42 @@ if (isPositional)
 /* Correlation line. */
 if (isPositional && (isWig || isBedGraph))
     {
-    char *selTable = cartUsualString(cart, hgtaCorrelateTable2, "none");
+    char *table2 = cartUsualString(cart, hgtaCorrelateTable2, "none");
     hPrintf("<TR><TD><B>correlation:</B>\n");
-    cgiMakeButton(hgtaDoCorrelatePage, "calculate");
-    if (curTrack && curTrack->type)
+    if (differentWord(table2,"none") && strlen(table2))
 	{
-	hPrintf("&nbsp;");
-	hPrintf("(type %s)", curTrack->type);
-	hPrintf("&nbsp;");
-	hPrintf("(table2: %s)", selTable);
+	struct grp *groupList = makeGroupList(conn, fullTrackList, TRUE);
+	struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
+	struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,
+		hgtaCorrelateTrack);
+	if (trackDbIsComposite(tdb2))
+	    {
+	    struct trackDb *subTdb;
+	    for (subTdb=tdb2->subtracks; subTdb != NULL; subTdb=subTdb->next)
+		{
+		if (sameString(table2, subTdb->tableName))
+		    {
+		    tdb2 = subTdb;
+		    break;
+		    }
+		}
+	    }
+	cgiMakeButton(hgtaDoCorrelatePage, "calculate");
+	cgiMakeButton(hgtaDoClearCorrelate, "clear");
+        if (tdb2 && tdb2->shortLabel)
+	    hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", tdb2->shortLabel);
+
+/* debugging 	dbg	vvvvv	*/
+if (curTrack && curTrack->type)		/*	dbg	*/
+    {
+    hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')", curTrack->type, tdb2->type, table2);
+    }
+/* debugging 	debug	^^^^^	*/
+
 	}
+    else
+	cgiMakeButton(hgtaDoCorrelatePage, "create");
+
     hPrintf("</TD></TR>\n");
     }
 #endif
