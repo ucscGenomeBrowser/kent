@@ -20,7 +20,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.48 2005/06/21 16:43:00 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.49 2005/06/24 20:17:43 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -63,7 +63,7 @@ if (anyIntersection()) \
 if (hasConstraint)\
     wds->setDataConstraint(wds, dataConstraint, ll, ul);
 
-static boolean checkWigDataFilter(char *db, char *table,
+boolean checkWigDataFilter(char *db, char *table,
 	char **constraint, double *ll, double *ul)
 /*	check if filter exists, return its values, call with db="ct" for
  *	custom tracks	*/
@@ -910,7 +910,9 @@ void wigShowFilter(struct sqlConnection *conn)
 double ll, ul;
 char *constraint;
 
-if (checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
+if ( (isCustomTrack(curTable) &&
+	checkWigDataFilter("ct", curTable, &constraint, &ll, &ul))
+	|| checkWigDataFilter(database, curTable, &constraint, &ll, &ul))
     {
     if (constraint && sameWord(constraint, "in range"))
 	{

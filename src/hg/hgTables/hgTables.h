@@ -572,6 +572,11 @@ struct wigAsciiData *getWiggleData(struct sqlConnection *conn, char *table,
 /*	like getWiggleAsData above, but with specific spanConstraint and
  *	a different data limit count, return the wigAsciiData list	*/
 
+boolean checkWigDataFilter(char *db, char *table,
+	char **constraint, double *ll, double *ul);
+/*	check if filter exists, return its values, call with db="ct" for
+ *	custom tracks	*/
+
 void doOutWigBed(struct trackDb *track, char *table, struct sqlConnection *conn);
 /* Return wiggle data in bed format. */
 

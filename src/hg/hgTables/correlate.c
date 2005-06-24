@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.15 2005/06/24 19:29:56 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.16 2005/06/24 20:17:43 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1129,6 +1129,14 @@ else if (sameString(regionType,"genome"))
     }
 else if (sameString(regionType,"encode"))
     hPrintf("<P>position: %d encode regions</P>\n", regionCount);
+
+if ( (table1->isCustom && checkWigDataFilter("ct", curTable, NULL, NULL, NULL))
+	|| checkWigDataFilter(database, curTable, NULL, NULL, NULL))
+    {
+    hPrintf("<P>data filter on %s:", table1->shortLabel);
+    wigShowFilter(conn);
+    hPrintf("</P>\n");
+    }
 
 #ifdef NOT
 /*	some debugging stuff, do we have the tables correctly identified */
