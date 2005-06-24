@@ -685,11 +685,9 @@ cat > load.csh << 'EOF'
         set b = 0
       endif
       echo track $track
-      echo subTrack encodeAffyChIpHl60Hr$hh off
+      echo subTrack encodeAffyChIpHl60SitesHr$hh
       echo shortLabel Affy $factor RA ${hr}h
-      echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL60, ${hr}hrs\) Sites
-      echo noInherit on
-      echo type bed 3 .
+      echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL-60, ${hr}hrs\) Sites
       echo color $r,$g,$b
       echo priority $pri
       echo ""
@@ -762,9 +760,9 @@ cat > load.csh << 'EOF'
         set b = 0
       endif
       echo track $track
-      echo subTrack encodeAffyChIpHl60Hr$hh
+      echo subTrack encodeAffyChIpHl60PvalHr$hh
       echo shortLabel Affy $factor RA ${hr}h
-      echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL60, ${hr}hrs\) P Value
+      echo longLabel Affymetrix ChIP/Chip \($factor retinoic acid-treated HL-60, ${hr}hrs\) P-Value
       echo color $r,$g,$b
       echo priority $pri
       echo ""
@@ -2017,6 +2015,142 @@ done
 #	viewLimits 0.22:0.5
 #	autoScale Off
 
+
+# STANFORD DNA METHYLATION, RTPCR AND CHIP (2005-06-20 angie)
+    # RTPCR:
+    cd /cluster/data/encode/stanford/2005-05-31/
+    tail +2 lab/stanford_rtpcr \
+    | perl -wpe 'chomp; @w = split("\t"); \
+         $w[1] =~ s/\>/gt/;  $w[1] =~ s/(EN\w\d+) /$1_/; \
+         $score = int(300 + ($w[6] / 10));  $score = 1000 if ($score > 1000); \
+         $_ = "$w[2]\t$w[3]\t$w[4]\t$w[1]\t$score\t$w[5]\t$w[6]\n";' \
+    | hgLoadBed hg16 \
+        -noBin -sqlTable=$HOME/kent/src/hg/lib/encodeStanfordRtPcr.sql \
+        encodeStanfordRtPcr stdin
+    # Methylation:
+    cd /cluster/data/encode/stanford/2005-05-31/
+    set scoreColumn = 5
+    foreach cellType (Be2C CRL1690 HCT116 HT1080 HepG2 JEG3 Snu182 U87)
+      tail +2 lab/stanford_meth \
+      | awk '$'$scoreColumn' != "outlier" { \
+               print $2 " " $3-1 " " $4 " " $'$scoreColumn';}' \
+      | hgLoadBed -bedGraph=4 hg16 encodeStanfordMeth$cellType stdin
+      set scoreColumn = `expr $scoreColumn + 1`
+    end
+    set pri = 1
+    foreach cellType (Be2C CRL1690 HCT116 HT1080 HepG2 JEG3 Snu182 U87)
+      echo track encodeStanfordMeth$cellType
+      echo subTrack encodeStanfordMeth
+      echo shortLabel Stan Meth $cellType
+      echo longLabel Stanford Methylation \($cellType cells\)
+      echo priority $pri
+      echo ""
+      set pri = `expr $pri + 1`
+    end
+    ssh kolossus
+    cd /cluster/data/encode/stanford/2005-05-31/
+    perl -we 'while (<>) { \
+      if (/^track name=(\S+)/) { \
+        $track = "encodeStanfordMethSmoothed$1"; \
+        close(OUT); open(OUT, ">$track.bed") || die; \
+      } else { \
+        @w = split; print OUT "$w[0]\t$w[1]\t$w[2]\t$w[4]\n"; \
+      } }' lab/stanford_meth.bed
+    sort -k4n,4n encodeStanfordMethSmoothed*.bed | head
+    sort -k4n,4n encodeStanfordMethSmoothed*.bed | tail
+    # range of scores: 0 to 364088
+    # back on hgwdev:
+    foreach f (encodeStanfordMethSmoothed*.bed)
+      hgLoadBed -bedGraph=4 hg16 $f:r $f
+    end
+    # ChIP/chip:
+    cd /cluster/data/encode/stanford/2005-05-31/
+    set scoreColumn = 5
+    foreach specifier (HCT116Sp1 HCT116Sp3 JurkatSp1 JurkatSp3 K562Sp1 K562Sp3)
+      tail +2 lab/stanford_meth \
+      | awk '$'$scoreColumn' != "outlier" { \
+               print $2 " " $3-1 " " $4 " " $'$scoreColumn';}' \
+      | hgLoadBed -bedGraph=4 hg16 encodeStanfordChip$specifier stdin
+      set scoreColumn = `expr $scoreColumn + 1`
+    end
+    set pri = 1
+    foreach specifier (HCT116Sp1 HCT116Sp3 JurkatSp1 JurkatSp3 K562Sp1 K562Sp3)
+      set cellType = `echo $specifier | perl -wpe 's/(Sp1|Sp3)//'`
+      set factor = `echo $specifier | perl -wpe 's/(HCT116|Jurkat|K562)//'`
+      echo track encodeStanfordChip$specifier
+      echo subTrack encodeStanfordChip
+      echo shortLabel Stan $cellType $factor
+      echo longLabel Stanford ChIP/chip \($cellType cells, $factor ChIP\)
+      echo priority $pri
+      echo ""
+      set pri = `expr $pri + 1`
+    end
+    ssh kolossus
+    cd /cluster/data/encode/stanford/2005-05-31/
+    perl -we 'while (<>) { \
+      if (/^track name=(\S+)/) { \
+        $track = "encodeStanfordChipSmoothed$1"; \
+        $track =~ s@_ChIP/total@@;  $track =~ s@_@@; \
+        close(OUT); open(OUT, ">$track.bed") || die $!; \
+      } else { \
+        @w = split; print OUT "$w[0]\t$w[1]\t$w[2]\t$w[4]\n"; \
+      } }' lab/stanford_sp_ChIP.bed
+    sort -k4n,4n encodeStanfordChipSmoothed*.bed | head
+    sort -k4n,4n encodeStanfordChipSmoothed*.bed | tail
+    # range of scores: 0 to 721474
+    # back on hgwdev:
+    foreach f (encodeStanfordChipSmoothed*.bed)
+      hgLoadBed -bedGraph=4 hg16 $f:r $f
+    end
+    rm bed.tab
+
+
+# SANGER GENOTYPE/EXPRESSION ASSOCIATION (IN PROGRESS angie 6/24/05)
+    cd /cluster/data/encode/sanger/genotypeExpressionAssociation
+    sed -e 's/bed5FloatScore/encodeSangerGenoExprAssociation/' \
+      $HOME/kent/src/hg/lib/bed5FloatScore.sql > /tmp/tmp.sql
+    # Wow... all the coords in sanger-assoc-pftk1-enm013.txt 
+    # are for 6billion-odd bases from start of chr7, while the 
+    # size of chr7 in hg16 is only 158M.  So filter out PFTK1 for now:
+    grep --no-filename -v chrstart sanger*.txt \
+    | awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", \
+           $1, $2, $3, $6, (250 + ($4 * 375)), $4}' \
+    | grep -v PFTK1 \
+    | hgLoadBed hg16 encodeSangerGenoExprAssociation stdin \
+      -sqlTable=/tmp/tmp.sql
+    rm bed.tab
+    # Asked Manolis Dermitzakis about the PFTK1 coords.
+
+    # OK, he hates the combined bed and wants a composite of 25 bedGraphs.
+    # The subtracks are sparse (each has data for only one ENCODE region) 
+    # but give it a whirl.  (still skip PFTK1 until Manolis sends correction)
+    foreach f (sanger*.txt)
+      set gene = `echo $f | awk -F- '{print $3;}' | tr 'a-z' 'A-Z'`
+      set region = `echo $f | awk -F- '{print $4;}' \
+                    | sed -e 's/.txt//; s/en/EN/;'`
+      if ($gene == "PFTK1") continue
+      tail +2 $f | awk '{print $1 "\t" $2 "\t" $3 "\t" $4;}' \
+      | hgLoadBed -bedGraph=4 hg16 encodeSanger$region$gene stdin
+    end
+    # oops, make sure filenames accurately reflect region:
+    mv sanger-assoc-loc168850-enm010.txt sanger-assoc-loc168850-enm014.txt
+    # and a trackDb-helper:
+    set pri = 0
+    foreach f (`ls -1 sanger-* | sort -t- -k4,4`)
+      set gene = `echo $f | awk -F- '{print $3;}' | tr 'a-z' 'A-Z'`
+      set region = `echo $f | awk -F- '{print $4;}' \
+                    | sed -e 's/.txt//; s/en/EN/;'`
+      set pri = `expr $pri + 1`
+      if ($gene == "PFTK1") continue
+      echo "    track encodeSanger$region$gene"
+      echo "    subTrack encodeSangerGenoExprAssoc"
+      echo "    shortLabel Sanger $region $gene"
+      echo "    longLabel Sanger Genotype-Expression Association ($region SNPs, $gene)"
+      echo "    priority $pri"
+      echo ""
+    end
+
+
 ##########################################################################
 # Indels from Jim Mullikin
 # Heather, June 2005
@@ -2038,6 +2172,5 @@ done
     # |        0 |
     # +----------+
     # 1 row in set (0.10 sec)
-
 
 
