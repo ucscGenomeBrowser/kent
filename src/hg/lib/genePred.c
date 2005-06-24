@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.68 2005/06/24 05:28:08 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.69 2005/06/24 21:21:44 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -911,14 +911,18 @@ static void pslToExons(struct psl *psl, struct genePred *gene,
  * separated by small inserts as necessary.  Optionally add frame
  * information. */
 {
-int iBlk, iExon = -1;
+int iBlk, iExon;
 int startIdx, stopIdx, idxIncr;
-int mrnaStart = 0;
 
 gene->exonStarts = needMem(psl->blockCount*sizeof(unsigned));
 gene->exonEnds = needMem(psl->blockCount*sizeof(unsigned));
 if (gene->optFields & genePredExonFramesFld)
+    {
+    /* this is bigger than needed if blocks merge; default to no frame */
     gene->exonFrames = needMem(psl->blockCount*sizeof(unsigned));
+    for (iExon = 0; iExon < psl->blockCount; iExon++)
+        gene->exonFrames[iExon] = -1;
+    }
 
 if (psl->strand[1] == '-')
     {
@@ -933,6 +937,7 @@ else
     idxIncr = 1;
     }
 
+iExon = -1;  /* indicate none have been added */
 for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
@@ -946,15 +951,16 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
         {
         iExon++;
         gene->exonStarts[iExon] = tStart;
-        mrnaStart = psl->qStarts[iBlk];
 	}
     gene->exonEnds[iExon] = tEnd;
-    if (gene->optFields & genePredExonFramesFld)
+    /* only set frame if it hasn't already been set for this exon. This will give
+     * the frame for the first CDS block that is merged into the exon */
+    if ((gene->optFields & genePredExonFramesFld) && (gene->exonFrames[iExon] < 0))
 	{
 	if (pslIsProtein(psl))
-	    gene->exonFrames[iExon] = getFrame(psl, mrnaStart, mrnaStart+3*psl->blockSizes[iBlk], cds);
+	    gene->exonFrames[iExon] = getFrame(psl, psl->qStarts[iBlk], psl->qStarts[iBlk]+3*psl->blockSizes[iBlk], cds);
 	else
-	    gene->exonFrames[iExon] = getFrame(psl, mrnaStart, mrnaStart+psl->blockSizes[iBlk], cds);
+	    gene->exonFrames[iExon] = getFrame(psl, psl->qStarts[iBlk], psl->qStarts[iBlk]+psl->blockSizes[iBlk], cds);
 	}
     }
 gene->exonCount = iExon+1;
