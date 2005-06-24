@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.18 2005/06/24 21:44:36 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.19 2005/06/24 22:25:54 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1472,9 +1472,9 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    showThreeVectors(tableList, tableList->next, resultVector);
 	    }
 	freeTrackTableList(&tableList);
-	hPrintf("<P>freeTrackTableList OK</P>\n");
+//	hPrintf("<P>freeTrackTableList OK</P>\n");
 	freeDataVector(&resultVector);
-	hPrintf("<P>free resultVector OK</P>\n");
+//	hPrintf("<P>free resultVector OK</P>\n");
 	}
     }
 
