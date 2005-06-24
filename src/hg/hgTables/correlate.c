@@ -16,7 +16,7 @@
 #include "wiggle.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.13 2005/06/23 23:31:11 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.14 2005/06/24 00:24:54 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -48,6 +48,8 @@ struct dataVector
     double sumSquares;	/*	sum of squares of all data here, sum(Xi*Xi) */
     double sumProduct;	/*	accumulates sum(Xi * Yi) here */
     double r;		/*	correlation coefficient	*/
+    double a;		/*	the a in: y = ax + b [linear regression line] */
+    double b;		/*	the b in: y = ax + b [linear regression line] */
     long fetchTime;	/*	msec	*/
     long calcTime;	/*	msec	*/
     };
@@ -675,6 +677,9 @@ int v1Index = 0;
 int v2Index = 0;
 int i, j;
 double sumProducts = 0.0;
+long startTime, endTime;
+
+startTime = clock1000();
 
 i = 0;
 j = 0;
@@ -764,6 +769,9 @@ hPrintf("<P>after realloc: %#x, %#x, %#x, %#x</P>\n",
 	(unsigned long) v2->position, (unsigned long) v2->value);
     }
 #endif
+
+endTime = clock1000();
+v1->calcTime += endTime - startTime;
 }
 
 static void calcMeanMinMax(struct dataVector *v)
@@ -793,12 +801,12 @@ v->min = min;
 v->max = max;
 endTime = clock1000();
 v->calcTime += endTime - startTime;
-}
+}	/*	static void calcMeanMinMax(struct dataVector *v)	*/
 
 static void statsRowOut(char *chrom, char *name, char *shortLabel,
     int chromStart, int chromEnd, int bases, double min, double max,
 	double sumData, double sumSquares, double r, long fetchMs, long calcMs,
-		char *table1, char *table2)
+		char *table1, char *table2, double a, double b)
 /*	display a single line of statistics	*/
 {
 double mean = 0.0;
@@ -864,11 +872,18 @@ else
     hPrintf("<TD COLSPAN=2>&nbsp;</TD>");
     }
 hPrintf("<TD ALIGN=LEFT>%s</TD>", shortLabel);
-hPrintf("<TD ALIGN=RIGHT>%.3gg</TD>", min);
+hPrintf("<TD ALIGN=RIGHT>%.3g</TD>", min);
 hPrintf("<TD ALIGN=RIGHT>%.3g</TD>", max);
 hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", mean);
 hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", variance);
 hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", stddev);
+if ((chromStart || chromEnd) && !((1==chromStart) && (1==chromEnd)))
+    {
+    hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", a);
+    hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", b);
+    }
+else
+    hPrintf("<TD COLSPAN=2>&nbsp;</TD>");
 /*
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD>", 0.001*fetchMs);
 hPrintf("<TD ALIGN=RIGHT>%.3f</TD></TR>\n", 0.001*calcMs);
@@ -884,6 +899,12 @@ hPrintf("<TH>r<BR>squared</TH>");
 hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
+hPrintf("<TH COLSPAN=2>");
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=0 WIDTH=100%>", HG_COL_INSIDE);
+hPrintf("<TR WIDTH=100%><TH COLSPAN=2>Regression<BR>line<BR>");
+hPrintf("y&nbsp;=&nbsp;a*x&nbsp;+&nbsp;b</TH></TR>");
+hPrintf("<TR><TH>a</TH><TH>b</TH></TR></TABLE>");
+hPrintf("</TH>");
 /*
 hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
 hPrintf("<TH>Calculation<BR>time&nbsp;(sec)</TH></TR>\n");
@@ -944,17 +965,17 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     }
 
 if (0 == rowsOutput)
-    hPrintf("<TR><TD COLSPAN=9>EMPTY RESULT SET</TD></TR>\n");
+    hPrintf("<TR><TD COLSPAN=11>EMPTY RESULT SET</TD></TR>\n");
 else if (rowsOutput > 1)
     {
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable);
+		table2->actualTable, 0.0, 0.0);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
-		table2->actualTable);
+		table2->actualTable, 0.0, 0.0);
     hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
     }
 
@@ -967,11 +988,13 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     statsRowOut(v1->chrom, v1->name, table1->shortLabel, v1->start, v1->end,
 	v1->count, v1->min, v1->max, v1->sumData,
 	    v1->sumSquares, v2->r, v1->fetchTime,
-		v1->calcTime, table1->actualTable, table2->actualTable);
+		v1->calcTime, table1->actualTable, table2->actualTable,
+		    v1->a, v1->b);
     statsRowOut(v2->chrom, v1->name, table2->shortLabel, 0, 0,
 	v2->count, v2->min, v2->max, v2->sumData,
 	    v2->sumSquares, v2->r, v2->fetchTime,
-		v2->calcTime, table1->actualTable, table2->actualTable);
+		v2->calcTime, table1->actualTable, table2->actualTable,
+		    0.0, 0.0);
     }
 
 if (rowsOutput > 1)
@@ -980,11 +1003,11 @@ if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable);
+		table2->actualTable, 0.0, 0.0);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
-		table2->actualTable);
+		table2->actualTable, 0.0, 0.0);
 
     tableLabels();
     }
@@ -1211,11 +1234,13 @@ for (v1 = table1->vSet, v2 = table2->vSet;
 		v1 = v1->next, v2 = v2->next)
     {
     double sumProduct = 0.0;		/*	sum of products	*/
+    double numeratorCoVariance = 0.0;
+    double numeratorVariance = 0.0;
 
     startTime = clock1000();
 
-    if (v1->count != v2->count)
-	errAbort("unequal sized data vectors given to regression");
+    if ((v1->count != v2->count) || (0 == v1->count))
+     errAbort("unequal sized, or zero length data vectors given to regression");
 
     sumProduct = v1->sumProduct;
     result->count += v1->count;
@@ -1228,9 +1253,18 @@ for (v1 = table1->vSet, v2 = table2->vSet;
     result->fetchTime += v2->fetchTime;
     result->calcTime += v1->calcTime;
     result->calcTime += v2->calcTime;
+    /* Sxy - page 101, page 488, Mendenhall, Beaver, Beaver - 2003 */
+    numeratorCoVariance = sumProduct - ((v1->sumData*v2->sumData)/v1->count);
+    /* Sxx - page 61, page 488, Mendenhall, Beaver, Beaver - 2003 */
+    numeratorVariance = v1->sumSquares - ((v1->sumData*v1->sumData)/v1->count);
 
-    /*	do not compute r for this region if N is < 2	*/
+    /* b = Sxy / Sxx	page 489 Mendenhall, Beaver, Beaver - 2003 */
+    v1->b = numeratorCoVariance / numeratorVariance;
+    /* a = mean(y) - b*mean(x) page 489 Mendenhall, Beaver, Beaver - 2003 */
+    v1->a = (v2->sumData/v2->count) - (v1->b * (v1->sumData/v1->count));
+
     v2->r = v1->r = 0.0;
+    /*	do not compute r for this region if N is < 2	*/
     if (v1->count < 2)
 	{
 	endTime = clock1000();
@@ -1238,8 +1272,7 @@ for (v1 = table1->vSet, v2 = table2->vSet;
 	continue;
 	}
     /*	For this region, ready to compute r, N is v1->count	*/
-    variance1 = (v1->sumSquares - ((v1->sumData*v1->sumData)/v1->count)) /
-	(double)(v1->count-1);
+    variance1 = numeratorVariance / (double)(v1->count-1);
     variance2 = (v2->sumSquares - ((v2->sumData*v2->sumData)/v2->count)) /
 	(double)(v2->count-1);
     stddev1 = stddev2 = 0.0;
@@ -1248,9 +1281,7 @@ for (v1 = table1->vSet, v2 = table2->vSet;
     if (variance2 > 0.0)
 	stddev2 = sqrt(variance2);
     if ((stddev1 * stddev2) != 0.0)
-	v2->r = v1->r =
-		((sumProduct - ((v1->sumData * v2->sumData)/v1->count)) /
-		    (v1->count - 1)) /
+	v2->r = v1->r = (numeratorCoVariance / (v1->count - 1)) /
 			(stddev1 * stddev2);
     else
 	v2->r = v1->r = 1.0;
