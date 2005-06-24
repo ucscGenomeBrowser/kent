@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.17 2005/06/24 21:12:09 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.18 2005/06/24 21:44:36 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -885,7 +885,7 @@ hPrintf("<TD ALIGN=RIGHT>%.3g</TD>", max);
 hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", mean);
 hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", variance);
 hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", stddev);
-if ((chromStart || chromEnd) && !((1==chromStart) && (1==chromEnd)))
+if (chromStart || chromEnd)
     {
     hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", a);
     hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", b);
@@ -979,7 +979,7 @@ else if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable, 0.0, 0.0);
+		table2->actualTable, result->a, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
@@ -1011,7 +1011,7 @@ if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable, 0.0, 0.0);
+		table2->actualTable, result->a, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min1, max1, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
@@ -1110,23 +1110,10 @@ if (1 == regionCount)
     hPrintf("&nbsp;bases:&nbsp;");
     printLongWithCommas(stdout,bases);
     hPrintf("</P>\n");
-    if (bases > 64000000)
-	{
-	hPrintf("<P><B>warning:</B> this function can currenly only work on\n");
-	hPrintf("regions of less than 64,000,000 bases.  This region may\n");
-	hPrintf("be too large, the next message you may see\n");
-	hPrintf("is a memory allocation error.  Perhaps future\n");
-	hPrintf("improvements will raise this limit.\n");
-	}
     }
 else if (sameString(regionType,"genome"))
     {
     hPrintf("<P>position: full genome, %d chromosomes</P>\n", regionCount);
-    hPrintf("<P><B>warning:</B> this function can currenly only work on\n");
-    hPrintf("chromosomes of less than 64,000,000 bases.  If there are\n");
-    hPrintf("chromosomes on this genome larger than that, the next message\n");
-    hPrintf("you see will be a memory allocation error.  Perhaps future\n");
-    hPrintf("improvements will raise this limit.\n");
     }
 else if (sameString(regionType,"encode"))
     hPrintf("<P>position: %d encode regions</P>\n", regionCount);
@@ -1167,7 +1154,17 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
     {
     struct dataVector *v1;
     struct dataVector *v2;
+    long bases = region->end - region->start;
 
+    if (bases > 64000000)
+	{
+	hPrintf("<P><B>warning:</B> This region: %s:%d-%d is too large",
+		region->chrom, region->start, region->end);
+	hPrintf(" to process.  This function can currenly only work on\n");
+	hPrintf("regions of less than 64,000,000 bases. Perhaps future\n");
+	hPrintf("improvements will raise this limit.\n");
+	errAbort("");
+	}
     v1 = fetchOneRegion(table1, region, conn);
     if (v1)	/*	if data there, fetch the second one	*/
 	{
@@ -1298,7 +1295,7 @@ for (v1 = table1->vSet, v2 = table2->vSet;
 	stddev2 = sqrt(variance2);
     if ((stddev1 * stddev2) != 0.0)
 	v2->r = v1->r = (numeratorCoVariance / (v1->count - 1)) /
-			(stddev1 * stddev2);
+			    (stddev1 * stddev2);
     else
 	v2->r = v1->r = 1.0;
 
@@ -1309,9 +1306,19 @@ for (v1 = table1->vSet, v2 = table2->vSet;
 result->r = 0.0;
 if (result->count > 1)
     {
-    variance1 = (vector1sumSquares -
-			((vector1sumData*vector1sumData)/result->count)) /
-		(double)(result->count-1);
+    double numeratorCoVariance = 0.0;
+    double numeratorVariance = 0.0;
+
+    numeratorCoVariance = totalSumProduct -
+	((vector1sumData*vector2sumData)/result->count);
+    numeratorVariance = vector1sumSquares -
+	((vector1sumData*vector1sumData)/result->count);
+
+    result->b = numeratorCoVariance / numeratorVariance;
+    result->a = (vector2sumData/result->count) -
+	(result->b * (vector1sumData/result->count));
+
+    variance1 = numeratorVariance / (double)(result->count-1);
     variance2 = (vector2sumSquares -
 			((vector2sumData*vector2sumData)/result->count)) /
 		(double)(result->count-1);
@@ -1321,9 +1328,7 @@ if (result->count > 1)
     if (variance2 > 0.0)
 	stddev2 = sqrt(variance2);
     if ((stddev1 * stddev2) != 0.0)
-	result->r = ((totalSumProduct -
-			((vector1sumData * vector2sumData)/result->count)) /
-		    (result->count - 1)) /
+	result->r = (numeratorCoVariance / (result->count - 1)) /
 			(stddev1 * stddev2);
     else
 	result->r = 1.0;
