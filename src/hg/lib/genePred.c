@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.67 2005/05/03 01:31:13 sugnet Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.68 2005/06/24 05:28:08 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1243,6 +1243,16 @@ if (gp->optFields & genePredExonFramesFld)
     int frame = gp->exonFrames[iExon];
     if ((frame < -1) || (frame > 2))
         gpError("%s: %s invalid exonFrame: %d", desc, gp->name, frame);
+    if ((exonEnd > gp->cdsStart) && (exonStart < gp->cdsEnd))
+        {
+        if (frame == -1)
+            gpError("%s: %s no exonFrame on CDS exon %d", desc, gp->name, iExon);
+        }
+    else
+        {
+        if (frame != -1)
+            gpError("%s: %s exonFrame on non-CDS exon %d", desc, gp->name, iExon);
+        }
     }
 }
 
