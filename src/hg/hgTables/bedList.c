@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.35 2005/06/17 19:03:56 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.36 2005/06/25 06:48:46 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -290,6 +290,14 @@ char *ctVisMenu[] =
 };
 int ctVisMenuSize = 5;
 
+char *ctVisWigMenu[] =
+{
+    "hide",
+    "dense",
+    "full",
+};
+int ctVisWigMenuSize = 3;
+
 void doBedOrCtOptions(char *table, struct sqlConnection *conn, 
 	boolean doCt)
 /* Put up form to get options on BED or custom track output. */
@@ -329,8 +337,16 @@ safef(buf, sizeof(buf), "table browser query on %s%s%s",
 setting = cgiUsualString(hgtaCtDesc, buf);
 cgiMakeTextVar(hgtaCtDesc, setting, 50);
 hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>visibility=");
-setting = cartCgiUsualString(cart, hgtaCtVis, ctVisMenu[3]);
-cgiMakeDropList(hgtaCtVis, ctVisMenu, ctVisMenuSize, setting);
+if (isWiggle(database, table))
+    {
+    setting = cartCgiUsualString(cart, hgtaCtVis, ctVisWigMenu[2]);
+    cgiMakeDropList(hgtaCtVis, ctVisWigMenu, ctVisWigMenuSize, setting);
+    }
+else
+    {
+    setting = cartCgiUsualString(cart, hgtaCtVis, ctVisMenu[3]);
+    cgiMakeDropList(hgtaCtVis, ctVisMenu, ctVisMenuSize, setting);
+    }
 hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>url=");
 setting = cartCgiUsualString(cart, hgtaCtUrl, "");
 cgiMakeTextVar(hgtaCtUrl, setting, 50);
