@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.20 2005/06/25 00:23:01 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.21 2005/06/25 06:56:55 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -836,35 +836,41 @@ if (bases > 0)
 
 hPrintf("<TR>");
 /*	Check for first or second data rows, 2nd has 0,0 coordinates.
- *	Summary row has 1,1 start,end	*/
+ *	Summary row has 1,1 start,end for the first data	*/
 if (chromStart || chromEnd)
     {
-    char posBuf[64];
-    safef(posBuf, ArraySize(posBuf), "%s:%d-%d", chrom, chromStart+1, chromEnd);
-    hPrintf("<TD ALIGN=LEFT ROWSPAN=2>");
-    /* Construct browser anchor URL with tracks we're looking at open. */
-    hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
-    hPrintf("&db=%s", database);
-    hPrintf("&position=%s", posBuf);
-    hPrintf("&%s=%s", table1, hTrackOpenVis(table1));
-    if (table2 != NULL)
-	hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
-    hPrintf("\" TARGET=_blank>");
-    if (name)
-	{
-	hPrintf("%s</A>", name);
-	}
+    if ((1 == chromStart) && (1 == chromEnd))	/* OVERALL first row */
+	hPrintf("<TD ALIGN=LEFT ROWSPAN=2>%s", chrom);
     else
 	{
-	hPrintf("%s:", chrom);
-	if (!((1 == chromStart) && (1 == chromEnd)))
+	char posBuf[64];
+	safef(posBuf, ArraySize(posBuf), "%s:%d-%d",
+		chrom, chromStart+1, chromEnd);
+	hPrintf("<TD ALIGN=LEFT ROWSPAN=2>");
+	/* Construct browser anchor URL with tracks we're looking at open. */
+	hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
+	hPrintf("&db=%s", database);
+	hPrintf("&position=%s", posBuf);
+	hPrintf("&%s=%s", table1, hTrackOpenVis(table1));
+	if (table2 != NULL)
+	    hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+	hPrintf("\" TARGET=_blank>");
+	if (name)
 	    {
-	    /*	browser 1-relative start coordinates	*/
-	    printLongWithCommas(stdout,(long)chromStart+1);
-	    hPrintf("-");
-	    printLongWithCommas(stdout,(long)chromEnd);
+	    hPrintf("%s</A>", name);
 	    }
-	hPrintf("</A>");
+	else
+	    {
+	    hPrintf("%s:", chrom);
+	    if (!((1 == chromStart) && (1 == chromEnd)))
+		{
+		/*	browser 1-relative start coordinates	*/
+		printLongWithCommas(stdout,(long)chromStart+1);
+		hPrintf("-");
+		printLongWithCommas(stdout,(long)chromEnd);
+		}
+	    hPrintf("</A>");
+	    }
 	}
     hPrintf("<BR>\n");
     printLongWithCommas(stdout,(long)bases);
@@ -982,7 +988,7 @@ else if (rowsOutput > 1)
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
 		table2->actualTable, result->a, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
-	totalBases2, min1, max1, totalSum2, totalSumSquares2,
+	totalBases2, min2, max2, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
 		table2->actualTable, 0.0, 0.0);
     hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
@@ -1014,7 +1020,7 @@ if (rowsOutput > 1)
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
 		table2->actualTable, result->a, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
-	totalBases2, min1, max1, totalSum2, totalSumSquares2,
+	totalBases2, min2, max2, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
 		table2->actualTable, 0.0, 0.0);
 
