@@ -1461,8 +1461,8 @@ type genePred
 
     track encodeEgaspUpdAugustusEst
     subTrack encodeEgaspUpdate
-    shortLabel Augustus/Est
-    longLabel Augustus + Est/Protein Evidence Gene Predictions
+    shortLabel Augustus/EST
+    longLabel Augustus + EST/Protein Evidence Gene Predictions
     color 12,65,165
     priority 3
 
@@ -1475,8 +1475,8 @@ type genePred
 
     track encodeEgaspUpdAugustusAny
     subTrack encodeEgaspUpdate
-    shortLabel Augustus/Est/Mouse
-    longLabel Augustus + Est/Protein Evidence + Mouse Homology Gene Predictions
+    shortLabel Augustus/EST/Mouse
+    longLabel Augustus + EST/Protein Evidence + Mouse Homology Gene Predictions
     priority 5
     color 12,100,100
 
