@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.76 2005/06/24 19:29:57 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.77 2005/06/25 00:23:01 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -570,7 +570,6 @@ if (isPositional)
     hPrintf("</TD></TR>\n");
     }
 
-#ifdef NOT_YET
 /* Correlation line. */
 if (isPositional && (isWig || isBedGraph))
     {
@@ -599,12 +598,14 @@ if (isPositional && (isWig || isBedGraph))
         if (tdb2 && tdb2->shortLabel)
 	    hPrintf("&nbsp;(with:&nbsp;&nbsp;%s)", tdb2->shortLabel);
 
+#ifdef NOT_YET
 /* debugging 	dbg	vvvvv	*/
 if (curTrack && curTrack->type)		/*	dbg	*/
     {
     hPrintf("<BR>&nbsp;(debug:&nbsp;'%s',&nbsp;'%s(%s)')", curTrack->type, tdb2->type, table2);
     }
 /* debugging 	debug	^^^^^	*/
+#endif
 
 	}
     else
@@ -612,7 +613,6 @@ if (curTrack && curTrack->type)		/*	dbg	*/
 
     hPrintf("</TD></TR>\n");
     }
-#endif
 
 /* Print output type line. */
 showOutputTypeRow(isWig, isPositional, isMaf);

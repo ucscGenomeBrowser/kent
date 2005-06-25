@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.19 2005/06/24 22:25:54 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.20 2005/06/25 00:23:01 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -160,6 +160,7 @@ for (table = *tl; table != NULL; table = next)
     next = table->next;
     freeTrackTable(&table);
     }
+*tl = NULL;
 }
 
 #ifdef NOT
