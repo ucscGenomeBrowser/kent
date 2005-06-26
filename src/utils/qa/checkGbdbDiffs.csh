@@ -10,6 +10,7 @@
 set filePath=""
 set db=""
 set errFlag=0
+set mode=""
 set debug="true"
 set debug="false"
 
@@ -21,16 +22,22 @@ if ($#argv != 1) then
   echo "    ignores scaffolds description genbank axtNetDp1 ci1 zoo."
   echo "    ignores /sacCer1/sam."
   echo
-  echo '      usage:  go'
+  echo '      usage:  go|override'
+  echo '        where "override" regenerates the file for today'
   echo
   exit
 endif
 
-set go=$argv[1]
+set mode=$argv[1]
 
-if ($go != "go") then
-  echo 'the only way to run this is to use "go" on the command line.'
-  exit 0
+if ($mode != "go") then
+  if ($mode != "override") then
+    echo '\nthe only way to run this is to use "go" or "override" \
+         on the command line.'
+    echo "\n${0}:"
+    $0
+    exit 0
+  endif
 endif
 
 set todayDate=`date +%Y%m%d`
@@ -41,7 +48,11 @@ set output=$outpath/$todayDate.gbdb.diff
 rm -f $output
 
 # get the two files to compare or create if none for today
-if (! -e $outpath/gbdb.all.$todayDate ) then
+if ($mode == "override" ) then
+  rm -f $outpath/gbdb.all.$todayDate
+endif
+
+if (! -e $outpath/gbdb.all.$todayDate) then
   getGbdbBeta.csh all > /dev/null
 endif
 
