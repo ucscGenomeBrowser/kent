@@ -361,6 +361,9 @@ boolean anyCorrelation();
 
 #define correlateMaxDataPoints "corrMaxDataPoints"
 
+struct trackDb *findTdb(struct trackDb *track, char *table);
+/*	if the given track is a composite, find the tdb for the table */
+
 /* --------- CGI/Cart Variables --------------------- */
 
 /* Command type variables - control which page is up.  Get stripped from

@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.21 2005/06/25 06:56:55 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.22 2005/06/26 15:32:57 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -343,7 +343,7 @@ hPrintf("\n");
 return selTrack;
 }
 
-static struct trackDb *findTdb(struct trackDb *track, char *table)
+struct trackDb *findTdb(struct trackDb *track, char *table)
 /*	if the given track is a composite, find the tdb for the table */
 {
 struct trackDb *tdb = track;
@@ -470,13 +470,18 @@ hPrintf("<B>table: </B>");
 hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
-    struct trackDb *tdb = findTdb(track, name->name);
+    struct trackDb *tdb = NULL;
+    if (track != NULL)
+	tdb = findTdb(track, name->name);
     if (validTable(tdb))
 	{
 	hPrintf("<OPTION VALUE=%s", name->name);
 	if (sameString(selTable, name->name))
 	    hPrintf(" SELECTED");
-	hPrintf(">%s\n", tdb->shortLabel);
+	if (tdb != NULL)
+	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+	else
+	    hPrintf(">%s\n", name->name);
 	}
     }
 hPrintf("</SELECT>\n");

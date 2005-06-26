@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.77 2005/06/25 00:23:01 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.78 2005/06/26 15:32:57 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -287,10 +287,16 @@ hPrintf("<B>table: </B>");
 hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeTable());
 for (name = nameList; name != NULL; name = name->next)
     {
+    struct trackDb *tdb = NULL;
+    if (track != NULL)
+	tdb = findTdb(track, name->name);
     hPrintf("<OPTION VALUE=%s", name->name);
     if (sameString(selTable, name->name))
         hPrintf(" SELECTED");
-    hPrintf(">%s\n", name->name);
+    if (tdb != NULL)
+	hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+    else
+	hPrintf(">%s\n", name->name);
     }
 hPrintf("</SELECT>\n");
 return selTable;
