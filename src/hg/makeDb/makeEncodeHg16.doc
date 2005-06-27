@@ -2067,7 +2067,8 @@ done
     cd /cluster/data/encode/stanford/2005-05-31/
     set scoreColumn = 5
     foreach specifier (HCT116Sp1 HCT116Sp3 JurkatSp1 JurkatSp3 K562Sp1 K562Sp3)
-      tail +2 lab/stanford_meth \
+      tail +2 lab/stanford_sp_ChIP \
+      | sed -e 's/chr0/chr/;' \
       | awk '$'$scoreColumn' != "outlier" { \
                print $2 " " $3-1 " " $4 " " $'$scoreColumn';}' \
       | hgLoadBed -bedGraph=4 hg16 encodeStanfordChip$specifier stdin
@@ -2105,50 +2106,16 @@ done
     rm bed.tab
 
 
-# SANGER GENOTYPE/EXPRESSION ASSOCIATION (IN PROGRESS angie 6/24/05)
+# SANGER GENOTYPE/EXPRESSION ASSOCIATION (angie 6/25/05)
     cd /cluster/data/encode/sanger/genotypeExpressionAssociation
     sed -e 's/bed5FloatScore/encodeSangerGenoExprAssociation/' \
       $HOME/kent/src/hg/lib/bed5FloatScore.sql > /tmp/tmp.sql
-    # Wow... all the coords in sanger-assoc-pftk1-enm013.txt 
-    # are for 6billion-odd bases from start of chr7, while the 
-    # size of chr7 in hg16 is only 158M.  So filter out PFTK1 for now:
-    grep --no-filename -v chrstart sanger*.txt \
+    grep --no-filename -v encode_region sanger*.txt \
     | awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", \
            $1, $2, $3, $6, (250 + ($4 * 375)), $4}' \
-    | grep -v PFTK1 \
     | hgLoadBed hg16 encodeSangerGenoExprAssociation stdin \
       -sqlTable=/tmp/tmp.sql
     rm bed.tab
-    # Asked Manolis Dermitzakis about the PFTK1 coords.
-
-    # OK, he hates the combined bed and wants a composite of 25 bedGraphs.
-    # The subtracks are sparse (each has data for only one ENCODE region) 
-    # but give it a whirl.  (still skip PFTK1 until Manolis sends correction)
-    foreach f (sanger*.txt)
-      set gene = `echo $f | awk -F- '{print $3;}' | tr 'a-z' 'A-Z'`
-      set region = `echo $f | awk -F- '{print $4;}' \
-                    | sed -e 's/.txt//; s/en/EN/;'`
-      if ($gene == "PFTK1") continue
-      tail +2 $f | awk '{print $1 "\t" $2 "\t" $3 "\t" $4;}' \
-      | hgLoadBed -bedGraph=4 hg16 encodeSanger$region$gene stdin
-    end
-    # oops, make sure filenames accurately reflect region:
-    mv sanger-assoc-loc168850-enm010.txt sanger-assoc-loc168850-enm014.txt
-    # and a trackDb-helper:
-    set pri = 0
-    foreach f (`ls -1 sanger-* | sort -t- -k4,4`)
-      set gene = `echo $f | awk -F- '{print $3;}' | tr 'a-z' 'A-Z'`
-      set region = `echo $f | awk -F- '{print $4;}' \
-                    | sed -e 's/.txt//; s/en/EN/;'`
-      set pri = `expr $pri + 1`
-      if ($gene == "PFTK1") continue
-      echo "    track encodeSanger$region$gene"
-      echo "    subTrack encodeSangerGenoExprAssoc"
-      echo "    shortLabel Sanger $region $gene"
-      echo "    longLabel Sanger Genotype-Expression Association ($region SNPs, $gene)"
-      echo "    priority $pri"
-      echo ""
-    end
 
 
 ##########################################################################
