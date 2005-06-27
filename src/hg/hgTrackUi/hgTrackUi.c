@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.199 2005/06/14 16:00:51 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.200 2005/06/27 17:16:16 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1411,7 +1411,7 @@ else if (sameString(track, "xenoEst"))
         mrnaUi(tdb, TRUE);
 else if (sameString(track, "rosetta"))
         rosettaUi(tdb);
-else if (sameString(track, "blastDm1FB"))
+else if (startsWith("blastDm", track))
         blastFBUi(tdb);
 else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
