@@ -157,12 +157,21 @@ if (cdAlns->nextCDnaPsl != NULL)
     psl = cdAlns->nextCDnaPsl;
     cdAlns->nextCDnaPsl = NULL;
     }
-while (psl == NULL)
+else
     {
-    char *row[PSL_NUM_COLS];
-    if (!lineFileNextRowTab(cdAlns->pslLf, row, ArraySize(row)))
-        break; /* EOF */
-    psl = pslLoad(row);
+    char *row[PSLX_NUM_COLS];
+    int nCols;
+    if ((nCols = lineFileChopNextTab(cdAlns->pslLf, row, ArraySize(row))) > 0)
+        {
+        if (nCols == PSL_NUM_COLS)
+            psl = pslLoad(row);
+        else if (nCols == PSLX_NUM_COLS)
+            psl = pslxLoad(row);
+        else
+            errAbort("%s:%d: expected %d or %d columns, got %d",
+                     cdAlns->pslLf->fileName, cdAlns->pslLf->lineIx,
+                     PSL_NUM_COLS, PSLX_NUM_COLS, nCols);
+        }
     }
 return psl;
 }
