@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.22 2005/06/26 15:32:57 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.23 2005/06/27 18:15:39 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -198,6 +198,9 @@ if (cr)
 }
 #endif
 
+/*	This restrictedTrackList is created in getLimitedTrackList() */
+static struct trackDb *restrictedTrackList = NULL;
+
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
 
@@ -264,10 +267,11 @@ struct trackDb *trackList = NULL, *tdb, *next = NULL;
 struct hash *groupsInTrackList = newHash(0);
 struct grp *groupsAll, *groupList = NULL, *group;
 
-fullTrackList = getFullTrackList();
+/*	The restrictedTrackList will become shortened by the work below */
+restrictedTrackList = getFullTrackList();
 groupsAll = hLoadGrps();
 
-for (tdb = fullTrackList; tdb != NULL; tdb = next)
+for (tdb = restrictedTrackList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
     if (validTable(tdb))
@@ -279,6 +283,7 @@ for (tdb = fullTrackList; tdb != NULL; tdb = next)
 	slAddHead(&trackList, tdb);
 	}
     }
+
 for (group = slPopHead(&groupsAll);group != NULL;group = slPopHead(&groupsAll))
     {
     if (hashLookup(groupsInTrackList, group->name))
@@ -494,7 +499,7 @@ static struct trackDb *showGroupTrackRowLimited(char *groupVar,
 /* Show group & track row of controls, limited by track type.
     Returns selected track */
 {
-struct trackDb *track, *trackList;
+struct trackDb *track2, *trackList;
 struct grp *selGroup, *groupList;
 char *table2;
 
@@ -507,12 +512,12 @@ hPrintf("<TR><TD>");
 
 selGroup = showGroupFieldLimited(groupVar, groupScript, conn, FALSE, groupList);
 nbSpaces(3);
-track = showTrackFieldLimited(selGroup, trackVar, trackScript, trackList);
+track2 = showTrackFieldLimited(selGroup, trackVar, trackScript, trackList);
 
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
-table2 = showTable2FieldLimited(track, tableVar);
+table2 = showTable2FieldLimited(track2, tableVar);
 hPrintf("</TD></TR>\n");
 
 if (table2Return)
@@ -520,7 +525,7 @@ if (table2Return)
 
 hPrintf("</TABLE>\n");
 
-return track;
+return track2;
 }
 
 static void freeWigAsciiData(struct wigAsciiData **wigData)
