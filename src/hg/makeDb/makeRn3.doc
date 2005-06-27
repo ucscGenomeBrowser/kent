@@ -4969,4 +4969,18 @@ mkdir -p $3:h
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
 
+# BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 6/27/05 Fan.
 
+    cd /cluster/data/rn3/bed
+    rm -rf knownGeneList/rn3
+    
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/rn3
+
+    hgKnownGeneList rn3
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/rn3
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/rn3
+    cp -Rfp knownGeneList/rn3/* /usr/local/apache/htdocs/knownGeneList/rn3
