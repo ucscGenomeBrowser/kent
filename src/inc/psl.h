@@ -25,7 +25,8 @@
 #include "dnaseq.h"
 #endif
 
-#define PSL_NUM_COLS 21  /* number of columns in a PSL */
+#define PSL_NUM_COLS  21  /* number of columns in a PSL */
+#define PSLX_NUM_COLS 23  /* number of columns in a PSLX */
 
 /* Options to pslGetCreateSql */
 #define PSL_TNAMEIX   0x01  /* create target name index */
