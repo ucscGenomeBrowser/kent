@@ -16669,3 +16669,20 @@ superfam050524.sfAssign;'
     hgsql hg17 -e 'drop table mrnaRefseq'
     hgsql hg17 < ~/src/hg/lib/mrnaRefseq.sql
     hgsql hg17 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 6/27/05 Fan.
+
+    cd /cluster/data/hg17/bed
+    rm -rf knownGeneList/hg17
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/hg17
+
+    hgKnownGeneList hg17
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/hg17
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/hg17
+    cp -Rfp knownGeneList/hg17/* /usr/local/apache/htdocs/knownGeneList/hg17
+

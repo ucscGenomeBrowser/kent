@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.55 2005/06/22 21:28:10 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.56 2005/06/27 23:34:48 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7697,3 +7697,19 @@ o Build the pepPi table
     hgsql mm6 -e 'drop table mrnaRefseq'
     hgsql mm6 < ~/src/hg/lib/mrnaRefseq.sql
     hgsql mm6 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 6/27/05 Fan.
+
+    cd /cluster/data/mm6/bed
+    rm -rf knownGeneList/mm6
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/mm6
+
+    hgKnownGeneList mm6
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/mm6
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/mm6
+    cp -Rfp knownGeneList/mm6/* /usr/local/apache/htdocs/knownGeneList/mm6
