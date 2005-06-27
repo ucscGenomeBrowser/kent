@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.23 2005/06/27 18:15:39 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.24 2005/06/27 19:22:27 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1041,6 +1041,7 @@ hPrintf("</TABLE>\n");
 /*	and end the special container table	*/
 hPrintf("</TD></TR></TABLE></P>\n");
 
+#ifdef NOT
 /*	debugging when 1 region, less than 100 bases, show all values	*/
 if ((1 == rowsOutput) && (totalBases1 < 100) && (totalBases2 < 100))
     {
@@ -1088,6 +1089,7 @@ hPrintf("<TR><TD ALIGN=RIGHT>%d</TD>", i+1);
 	}
     hPrintf("</TABLE></P>\n");
     }
+#endif
 }
 
 static int collectData(struct sqlConnection *conn,
