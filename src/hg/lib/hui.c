@@ -9,9 +9,10 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hCommon.h"
+#include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.61 2005/05/03 01:31:58 sugnet Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.62 2005/06/27 18:01:06 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -19,7 +20,7 @@ char *hUserCookie()
 if (hIsMgcServer())
     return "mgcuid";
 else    
-    return "hguid";
+    return cfgOptionDefault("central.cookie", "hguid");
 }
 
 char *wrapWhiteFont(char *s)
