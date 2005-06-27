@@ -3980,45 +3980,39 @@ visibility hide
 type bed5FloatScore
 useScore 1
 
-track encodeHapMapAlleleFreqCEU
-shortLabel HapMap SNPs CEU
-longLabel HapMap Allele Frequencies (CEU)
-group encodeVariation
+track encodeHapMapAlleleFreq
+compositeTrack on
+shortLabel HapMap SNPs
+longLabel ENCODE HapMap (16c.1) Allele Frequencies
 priority 82
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 visibility dense
 type bed 6 + 
-chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 useScore 1
 
-track encodeHapMapAlleleFreqCHB
-shortLabel HapMap SNPs CHB
-longLabel HapMap Allele Frequencies (CHB)
-group encodeVariation
-priority 83
-visibility dense
-type bed 6 + 
-chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-useScore 1
+    track encodeHapMapAlleleFreqCEU
+    subTrack encodeHapMapAlleleFreq
+    shortLabel CEU
+    longLabel HapMap Allele Frequencies (CEU)
+    priority 1
 
-track encodeHapMapAlleleFreqJPT
-shortLabel HapMap SNPs JPT
-longLabel HapMap Allele Frequencies (JPT)
-group encodeVariation
-priority 84
-visibility dense
-type bed 6 + 
-chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-useScore 1
+    track encodeHapMapAlleleFreqCHB
+    subTrack encodeHapMapAlleleFreq
+    shortLabel CHB
+    longLabel HapMap Allele Frequencies (CHB)
+    priority 2
 
-track encodeHapMapAlleleFreqYRI
-shortLabel HapMap SNPs YRI
-longLabel HapMap Allele Frequencies (YRI)
-group encodeVariation
-priority 85
-visibility dense
-type bed 6 + 
-chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-useScore 1
+    track encodeHapMapAlleleFreqJPT
+    subTrack encodeHapMapAlleleFreq
+    shortLabel JPT
+    longLabel HapMap Allele Frequencies (JPT)
+    priority 3
+
+    track encodeHapMapAlleleFreqYRI
+    subTrack encodeHapMapAlleleFreq
+    shortLabel YRI
+    longLabel HapMap Allele Frequencies (YRI)
+    priority 4
 
 track encodeRecomb
 shortLabel Recombination 
