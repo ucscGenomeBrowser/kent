@@ -3981,7 +3981,7 @@ type bed5FloatScore
 useScore 1
 
 track encodeHapMapAlleleFreqCEU
-shortLabel HapMap Alleles (CEU)
+shortLabel HapMap SNPs CEU
 longLabel HapMap Allele Frequencies (CEU)
 group encodeVariation
 priority 82
@@ -3991,7 +3991,7 @@ chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 useScore 1
 
 track encodeHapMapAlleleFreqCHB
-shortLabel HapMap Alleles (CHB)
+shortLabel HapMap SNPs CHB
 longLabel HapMap Allele Frequencies (CHB)
 group encodeVariation
 priority 83
@@ -4001,7 +4001,7 @@ chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 useScore 1
 
 track encodeHapMapAlleleFreqJPT
-shortLabel HapMap Alleles (JPT)
+shortLabel HapMap SNPs JPT
 longLabel HapMap Allele Frequencies (JPT)
 group encodeVariation
 priority 84
@@ -4011,7 +4011,7 @@ chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 useScore 1
 
 track encodeHapMapAlleleFreqYRI
-shortLabel HapMap Alleles (YRI)
+shortLabel HapMap SNPs YRI
 longLabel HapMap Allele Frequencies (YRI)
 group encodeVariation
 priority 85
