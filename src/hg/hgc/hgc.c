@@ -173,7 +173,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.906 2005/06/23 13:59:53 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.907 2005/06/27 17:28:06 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14817,7 +14817,7 @@ char *blastRef = trackDbSettingOrDefault(tdb, "blastRef", "NULL");
 
 if (sameString("blastSacCer1SG", tdb->tableName))
     isSacCer = TRUE;
-if (sameString("blastDm1FB", tdb->tableName))
+if (startsWith("blastDm", tdb->tableName))
     isDm = TRUE;
 buffer = needMem(strlen(itemName)+ 1);
 strcpy(buffer, itemName);
@@ -14866,9 +14866,14 @@ if (pos != NULL)
     {
     if (isDm == TRUE)
 	{
+	char *dmDb = cloneString(strchr(tdb->tableName, 'D'));
+
+	*dmDb = tolower(*dmDb);
+	*strchr(dmDb, 'F') = 0;
+
 	printf("<B>D. melanogaster position:</B>\n");
 	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
-	    hgTracksName(), pos, "dm1");
+	    hgTracksName(), pos, dmDb);
 	}
     else if (isSacCer == TRUE)
 	{
@@ -16137,8 +16142,7 @@ else if (sameWord(track, "firstEF"))
     firstEF(tdb, item);
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
-        sameWord(track, "tblastnHg16KGPep") || sameWord(track, "blastDm1FB") ||
-        sameWord(track, "blastMm6KG") || 
+        startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") || 
         sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") )
     {
     blastProtein(tdb, item);
