@@ -1,0 +1,29 @@
+<H2>Description</H2>
+<P>
+This track shows allele frequencies for the JPT HapMap population in the 10 ENCODE regions
+that have been resequenced for variation.   JPT refers to Japanese in Tokyo, Japan.
+
+<P>
+The score is a function of the minor allele frequency (maf).  
+Minor allele frequency varies from 0.0 to .5.
+For our score, it is normalized to have minimum 500, maximum 1000.
+Precisely: score = 500 + (maf * 1000).   Thus a score of 500 indicates no variation;  
+a score of 1000 indicates an even split between 
+reference and variant observations in the population.
+The display uses a grayscale based on score, where darker is higher.
+<P>
+The targeted ENCODE regions are:
+
+<UL>
+<LI>ENr112 (chr2)
+<LI>ENr131 (chr2)
+<LI>ENr113 (chr4)
+<LI>ENm010 (chr7)
+<LI>ENm013 (chr7)
+<LI>ENm014 (chr7)
+<LI>ENr321 (chr8)
+<LI>ENr232 (chr9)
+<LI>ENr123 (chr12)
+<LI>ENr213 (chr18)
+</UL>
+
