@@ -2586,3 +2586,60 @@ _EOF_
     zcat dm2.allchr.augustus.gtf.gz | awk -f cleanAugustus.awk | gzip > dm2.allchr.augustus.clean.gtf.gz
     ldHgGene -gtf dm2 augustus dm2.allchr.augustus.clean.gtf.gz
     rm dm2.allchr.augustus.gtf.gz
+
+# BLAT FlyBase predicted DM proteins against DM (DONE 2005-06-27 braney)
+    ssh hgwdev
+    cd /cluster/data/dm2/bed
+    mkdir blat.dm2FB
+    cd blat.dm2FB
+    pepPredToFa dm2 flyBasePep dm2FB.fa
+    hgPepPred dm2 generic blastFBPep01 dm2FB.fa
+    ssh kk
+    cd /cluster/data/dm2/bed/blat.dm2FB
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+/cluster/bin/i386/blat -t=dnax -q=prot -out=pslx $1 $2 $3
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /iscratch/i/dm2/nib/*.nib > bug.lst
+    mkdir fbfas
+    cd fbfas
+    faSplit sequence ../dm2FB.fa 5010 fb
+    cd ..
+    ls -1S fbfas/*.fa > fb.lst
+    cat << '_EOF_' > blatGsub
+#LOOP
+blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    gensub2 bug.lst fb.lst blatGsub blatSpec
+    mkdir psl
+    cd psl
+    foreach i (`cat ../bug.lst`)
+	mkdir `basename $i .nib`
+    end
+    cd ..
+    para create blatSpec
+    para push
+
+# Completed: 63193 of 63193 jobs
+# CPU time in finished jobs:     712543s   11875.72m   197.93h    8.25d  0.023 y
+# IO & Wait Time:                172878s    2881.30m    48.02h    2.00d  0.005 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:            2172s      36.20m     0.60h    0.03d
+# Submission to last job:          3192s      53.20m     0.89h    0.04d
+
+    ssh eieio
+    cd /cluster/data/dm2/bed/blat.dm2FB
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cov90.psl /dev/null
+    sort -rn cov90.psl | pslUniq stdin dm2FB.psl
+    pslxToFa dm2FB.psl dm2FB_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    fbName dm2 dm2FB.psl blastFBRef01
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/blat.dm2FB
+    hgsql dm2 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastFBRef01" | hgsql dm2
+    echo "load data local infile 'blastFBRef01' into table blastFBRef01" | hgsql dm2
