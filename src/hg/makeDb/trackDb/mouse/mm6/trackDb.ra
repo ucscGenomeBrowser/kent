@@ -1,6 +1,6 @@
 track knownGene
 shortLabel Known Genes
-longLabel Known Genes Based on UniProt, RefSeq, and mRNA
+longLabel UCSC Known Genes (June, 05) Based on UniProt, RefSeq, and GenBank mRNA
 group genes
 priority 34
 visibility pack
