@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.255 2005/06/17 01:26:12 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.256 2005/06/27 23:39:01 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1539,7 +1539,8 @@ return desc;
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
 			   int chromEnd, char *sqlConstraints)
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table. */
+ * in the given range in table.
+ * WARNING: this does not use the bin column and maybe slower than you would like. */
 {
 struct dyString *query = newDyString(512);
 struct sqlConnection *conn = hAllocOrConnect(db);
@@ -1765,7 +1766,8 @@ return(bedList);
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints)
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table. */
+ * in the given range in table.
+ * WARNING: this does not use the bin column and maybe slower than you would like. */
 {
 return(hGetBedRangeDb(hGetDb(), table, chrom, chromStart, chromEnd,
 		      sqlConstraints));

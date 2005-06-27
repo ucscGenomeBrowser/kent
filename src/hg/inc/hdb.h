@@ -366,12 +366,15 @@ char *hGenBankGetDesc(char *acc, boolean native);
 struct bed *hGetBedRange(char *table, char *chrom, int chromStart,
 			 int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table. */
+ *  in the given range in table.
+ * WARNING: this does not use the bin column and maybe slower than you would like.
+ */
 
 struct bed *hGetBedRangeDb(char *db, char *table, char *chrom, int chromStart,
 			   int chromEnd, char *sqlConstraints);
 /* Return a bed list of all items (that match sqlConstraints, if nonNULL) 
-   in the given range in table. */
+ * in the given range in table.
+ * WARNING: this does not use the bin column and maybe slower than you would like.*/
 
 struct hash *hCtgPosHash();
 /* Return hash of ctgPos from current database keyed by contig name. */
