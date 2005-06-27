@@ -813,8 +813,10 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
 #   $kgDb.blastKGPep00.name minCheck=0.90 (knownGene updated)
-    $kgDb.blastKGPep01.name minCheck=0.99
-    $kgDb.blastKGRef01.acc minCheck=0.99
+#   $kgDb.blastKGPep01.name minCheck=0.99 (another knownGene update)
+#   $kgDb.blastKGRef01.acc minCheck=0.99
+    $kgDb.blastKGPep02.name minCheck=0.99
+    $kgDb.blastKGRef02.acc minCheck=0.99
     $kgDb.refSeqKg.kgId minCheck=0.50
 
 identifier knownAlignId
