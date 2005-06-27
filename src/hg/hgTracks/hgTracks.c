@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.979 2005/06/23 15:02:51 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.980 2005/06/27 17:21:08 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3210,7 +3210,7 @@ if (blastRef != NULL)
 		strcpy(buffer, lf->name);
 		if ((char *)NULL != (ptr = strchr(buffer, '.')))
 		    *ptr = 0;
-		if (!sameString("blastDm1FB", tg->tdb->tableName))
+		if (!startsWith("blastDm", tg->tdb->tableName))
 		    safef(query, sizeof(query), "select geneId, refPos, extra1 from %s where acc = '%s'", blastRef, buffer);
 		else
 		    safef(query, sizeof(query), "select geneId, refPos from %s where acc = '%s'", blastRef, buffer);
@@ -6700,8 +6700,10 @@ for (i=0; i<count; i++, text++, textPos++)
         vgBox(vg, x+x1, y, 1, height, getBlueColor());
         text[1] = MAF_DOUBLE_GAP;
         i--;
+	continue;
         }
-    if (match != NULL && *text == MAF_PART_BREAK_BEFORE)
+    
+    if (match != NULL && (*text == MAF_PART_BREAK_BEFORE || *text == MAF_PART_BREAK_AFTER))
         {
         /* ignore if we lack room at window start to display this */
         i--;
@@ -9777,6 +9779,7 @@ registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
+registerTrackHandler("blastDm2FB", blastMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
