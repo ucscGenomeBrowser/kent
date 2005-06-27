@@ -2174,3 +2174,30 @@ done
     # 1 row in set (0.10 sec)
 
 
+##########################################################################
+# Recombination Rates from Gil McVean
+# Heather, June 2005
+
+# 10 ENCODE regions that were resequenced:
+# ENr112 (chr2)
+# ENr131 (chr2)
+# ENr113 (chr4)
+# ENm010 (chr7)
+# ENm013 (chr7)
+# ENm014 (chr7)
+# ENr321 (chr8)
+# ENr232 (chr9)
+# ENr123 (chr12)
+# ENr213 (chr18)
+
+# units are cM/Mb
+
+# extra precision in input files
+
+    ssh hgwdev
+    cd /cluster/data/encode/oxford/mcvean
+
+#   a few notes on the data: had to add "chr" and flip start/end
+    fix.pl < ENCODE_release16.txt.2 > ENCODE_release16.bed
+
+    hgLoadBed -strict -sqlTable=bedGraph.sql hg16 encodeRecomb ENCODE_release16.bed
