@@ -1983,7 +1983,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type wig -2730 3394
 maxHeightPixels 128:16:16
-viewLimits 0:200
+viewLimits 0:150
 autoScale Off
 windowingFunction mean
 
@@ -2216,7 +2216,7 @@ priority 43.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 534.54
-viewLimits 0:25
+viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -2239,7 +2239,7 @@ priority 44.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 425.79
-viewLimits 0:25
+viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -2262,7 +2262,7 @@ priority 45.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 505.86
-viewLimits 0:25
+viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -2285,7 +2285,7 @@ priority 46.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 490.03
-viewLimits 0:25
+viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
 
@@ -3236,7 +3236,7 @@ type bedGraph 4
 maxHeightPixels 128:40:16
 minLimit -46.1
 maxLimit 75
-viewLimits 0.5:35
+viewLimits 0:10
 autoScale Off
 
     track encodeSangerChipH3K4me1
@@ -3310,7 +3310,7 @@ maxHeightPixels 128:16:16
 autoScale off
 minLimit 0
 maxLimit 114
-viewLimits 0:5
+viewLimits 0:10
 
     track encodeStanfordChipHCT116Sp1
     subTrack encodeStanfordChip
@@ -3412,7 +3412,7 @@ type bedGraph 4
 maxHeightPixels 128:16:16
 minLimit -2.41
 maxLimit 4.59
-viewLimits -1.5:3.95
+viewLimits 0:2.2
 color 32,128,180
 altColor 180,128,32
 autoScale Off
@@ -3605,7 +3605,7 @@ maxHeightPixels 128:16:16
 autoScale off
 minLimit 0
 maxLimit 114
-viewLimits 0:5
+viewLimits 0:10
 
     track encodeStanfordMethBe2C
     subTrack encodeStanfordMeth
