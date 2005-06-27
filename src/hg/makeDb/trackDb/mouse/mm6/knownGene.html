@@ -3,7 +3,7 @@
 The UCSC Known Genes track shows known protein-coding genes based on
 protein data from UniProt (SWISS-PROT and TrEMBL) and mRNA data from
 the NCBI reference sequences collection (RefSeq) and GenBank. 
-
+Each Known Gene is represented by an mRNA and a protein.
 <H2>Display Conventions and Configuration</H2>
 <P>
 This track follows the display conventions for 
@@ -23,28 +23,37 @@ To display codon colors, select the <em>genomic codons</em> option from the
 information about this feature. </P>
 
 <H2>Methods</H2>
+<P>This release of UCSC Known Genes was build by a new process, KG II, 
+as described below.
 <P>
-mRNA sequences from RefSeq and GenBank were aligned
-against the $organism genome using blat. When a single mRNA aligned in
-multiple places, only alignments having at least 97% base identity with the 
-genomic sequence were kept. The mouse protein sequences were also aligned.</P>
-<P>
-The genomic mRNA and protein alignments were compared, and
-protein-mRNA pairings were determined from alignments with significant 
-overlap. CDS data for the mRNAs were obtained from RefSeq, 
-GenBank and UCSC protein-mRNA blat alignments.
-The initial set of UCSC Known Genes candidates, comprised of the mRNA 
-alignments with their CDS data, was then analyzed by a gene 
-check program to remove questionable candidates, such as those with in-frame 
-stop codons, missing start or stop codons, <em>etc</em>.</P>
-<P>
-Among multiple mRNAs referenced by a single protein, the best mRNA
-was chosen, based on a quality score derived from its length, the level
-of the match between its translation and the protein sequence, and its release
-date. The resulting mRNA and protein pairs were further consolidated by 
-removing duplicated entries with identical CDS regions to produce the final
-data set shown in this track.</P>
-
+UniProt protein sequences (including alternative splicing isoforms) 
+and mRNA sequences from RefSeq and GenBank 
+were aligned against the base genome using BLAT. 
+RefSeq alignments having a base identity level within 0.1% of the best 
+and at least 96% base identity with the genomic sequence were kept.  
+GenBank mRNA alignments having a base identity level within 0.2% of 
+the best and at least 97% base identity with the genomic sequence were kept.  
+Protein alignments having a base identity level within 0.2% of the best and 
+at least 80% base identity with the genomic sequence were kept.
+<P>Then the genomic mRNA and protein alignments were compared, 
+and protein-mRNA pairings were determined from their overlaps. 
+mRNA CDS data were obtained from RefSeq and GenBank data 
+and supplemented by CDS structures derived from UCSC protein-mRNA BLAT alignments. 
+The initial set of UCSC Known Genes candidates consists of 
+all protein-mRNA pairs with valid mRNA CDS structures.  
+A gene-check program (similar to the one used for the Consensus CDS (CCDS) project) 
+is used to remove questionable candidates, such as those with in-frame stop codons, 
+missing start or stop codons, etc.
+<P>From each group of gene candidates that share the same CDS structure, 
+the protein-mRNA pair having the best ranking and protein-mRNA alignment score 
+is selected as a UCSC Known Gene.  
+The ranking of a gene candidate depends on its gene-check quality measures.  
+When everything else being equal, 
+a preference is given to RefSeq mRNAs and next to MGC mRNAs.  
+Similarly a preference is given to gene candidates represented by Swiss-Prot proteins.  
+The protein-mRNA alignment score is calculated based on protein to 
+mRNA alignment using TBLASTN, plus weighted sub-scores according 
+to the date and length of the mRNA. 
 <H2>Credits</H2>
 <P>
 The UCSC Known Genes track was produced using protein data from 
