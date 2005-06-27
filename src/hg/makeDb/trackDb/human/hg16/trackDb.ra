@@ -3980,6 +3980,52 @@ visibility hide
 type bed5FloatScore
 useScore 1
 
+track hapMapAlleleFreqCEU
+shortLabel HapMap Alleles (CEU)
+longLabel HapMap Allele Frequencies (CEU)
+group encodeVariation
+priority 82
+visibility dense
+type bed 6 + 
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+
+track hapMapAlleleFreqCHB
+shortLabel HapMap Alleles (CHB)
+longLabel HapMap Allele Frequencies (CHB)
+group encodeVariation
+priority 83
+visibility dense
+type bed 6 + 
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+
+track hapMapAlleleFreqJPT
+shortLabel HapMap Alleles (JPT)
+longLabel HapMap Allele Frequencies (JPT)
+group encodeVariation
+priority 84
+visibility dense
+type bed 6 + 
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+
+track hapMapAlleleFreqYRI
+shortLabel HapMap Alleles (YRI)
+longLabel HapMap Allele Frequencies (YRI)
+group encodeVariation
+priority 85
+visibility dense
+type bed 6 + 
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+
+track encodeRecomb
+shortLabel Recombination 
+longLabel Recombination Rates in ENCODE regions
+group encodeVariation
+priority 86
+visibility dense
+type bedGraph 4
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+
+
 #ENCODE TRACK END
 
 track chainFr1ProtEx
