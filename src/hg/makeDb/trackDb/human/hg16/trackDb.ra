@@ -1566,15 +1566,15 @@ type genePred
 
     track encodeEgaspFullSgp2
     subTrack encodeEgaspFull
-    shortLabel SGP2
-    longLabel SGP2 Gene Predictions
+    shortLabel Sgp2
+    longLabel Sgp2 Gene Predictions
     priority 18
     color 100,12,100
 
     track encodeEgaspFullSgp2U12
     subTrack encodeEgaspFull
-    shortLabel SGP2 U12
-    longLabel SGP2 U12 Intron Predictions
+    shortLabel Sgp2 U12
+    longLabel Sgp2 U12 Intron Predictions
     priority 19
     color 220,132,0
 
@@ -1712,15 +1712,15 @@ type genePred
 
     track encodeEgaspUpdSgp2
     subTrack encodeEgaspUpdate
-    shortLabel SGP2
-    longLabel SGP2 Gene Predictions
+    shortLabel Sgp2
+    longLabel Sgp2 Gene Predictions
     priority 9
     color 100,12,100
 
     track encodeEgaspUpdSgp2U12
     subTrack encodeEgaspUpdate
-    shortLabel SGP2 U12
-    longLabel SGP2 U12 Intron Predictions
+    shortLabel Sgp2 U12
+    longLabel Sgp2 U12 Intron Predictions
     priority 10
     color 220,132,0
 
