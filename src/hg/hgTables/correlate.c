@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.24 2005/06/27 19:22:27 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.25 2005/06/28 00:25:16 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1471,7 +1471,6 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     if (correlateOK1)
 	{
 	struct trackTable *tt;
-	struct dataVector *resultVector;
 	int totalBases = 0;
 	/*	add second table to the list	*/
 	tt = allocTrackTable();
@@ -1487,13 +1486,14 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 //hPrintf("<P>intersected vectors are %d bases long</P>\n", totalBases);
 	if (totalBases > 0)
 	    {
+	    struct dataVector *resultVector;
 	    resultVector = runRegression(tableList, totalBases);
 	    showThreeVectors(tableList, tableList->next, resultVector);
+	    freeDataVector(&resultVector);
+//	hPrintf("<P>free resultVector OK</P>\n");
 	    }
 	freeTrackTableList(&tableList);
 //	hPrintf("<P>freeTrackTableList OK</P>\n");
-	freeDataVector(&resultVector);
-//	hPrintf("<P>free resultVector OK</P>\n");
 	}
     }
 
