@@ -1760,23 +1760,269 @@ done
     #LI MeH3K4 IMR90 - Ludwig Institute ChIP/Chip (MeH3K4 antibody, IMR90 cells)
 
 ##########################################################################
-# EGASP Full and Partial (2005-06-22 kate)
+# EGASP Partial (2005-06-22 kate)
 # Gene tracks submitted for the EGASP competition, submitted
 #       by the Gencode group (Roderic Guigo, Julien Legarde, IMIM) 
     cd /cluster/data/encode
-    mkdir -p EGASP/competition
-    cd EGASP/competition
-    mkdir -p partial/lab full/lab
-    cd partial/lab
+    mkdir -p EGASP/Partial/lab
+    cd EGASP/Partial/lab
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 -nd \
        ftp://genome.imim.es/pub/projects/gencode/data/egasp05/submitted_predictions/EGASP_partial/
-    cd ../../full/lab
+
+    wc -l lab/*.gtf
+       # 1778 lab/ASPic.gtf
+       # 4215 lab/AceSCAN.gtf
+       # 2692 lab/Augustus_EST-Protein.gtf
+       # 2347 lab/Augustus_abinitio.gtf
+       # 2736 lab/Augustus_any.gtf
+       # 2567 lab/Augustus_dualgenome.gtf
+       # 3458 lab/GeneZilla.gtf
+       # 2194 lab/SAGA.gtf
+    # NOTE: exclude ASPic, which contains only intron records
+    # Filenames above, with _CHR_COORDS_hg17.gff appended, are chrom coordinate versions
+
+    # GeneZilla
+    ldHgGene -out=genezilla.gp null null lab/GeneZilla.*.gff
+        # Read 454 transcripts in 3949 lines in 1 files
+        # 454 groups 20 seqs 1 sources 1 feature types
+        # 454 gene predictions
+    liftOver -genePred genezilla.gp \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                genezilla.hg16.gp genezilla.gp.unmapped
+    wc -l genezilla.hg16.gp genezilla.gp.unmapped
+      # 655 genezilla.hg16.gp
+      # 2 genezilla.gp.unmapped
+        # ENr131-19
+    ldHgGene -predTab hg16 encodeEgaspPartGenezilla genezilla.hg16.gp
+        # 655 gene predictions
+    genePredCheck -db=hg16 encodeEgaspPartGenezilla
+
+    # SAGA
+    # Strip out trailing ## on lines where manual changes were made
+    #   (see notes in .gtf file)
+    sed -e 's/ ##.*//' lab/SAGA.*.gff | \
+        ldHgGene -out=saga.gp null null stdin
+            # 378 gene predictions
+    liftOver -genePred saga.gp \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                saga.hg16.gp saga.gp.unmapped
+    wc -l saga.hg16.gp saga.gp.unmapped
+      # 377 saga.hg16.gp
+      # 2 saga.gp.unmapped
+        # ENr131.3.0
+    ldHgGene -predTab hg16 encodeEgaspPartSaga saga.hg16.gp
+        # 377 gene predictions
+    genePredCheck -db=hg16 encodeEgaspPartSaga
+
+    # Augustus
+   wc -l lab/Augustus*.gff
+       # 2646 lab/Augustus_EST-Protein.gtf_CHR_COORDS_hg17.gff
+       # 2301 lab/Augustus_abinitio.gtf_CHR_COORDS_hg17.gff
+       # 2690 lab/Augustus_any.gtf_CHR_COORDS_hg17.gff
+       # 2521 lab/Augustus_dualgenome.gtf_CHR_COORDS_hg17.gff
+   ln -s lab/Augustus_EST-Protein.gtf_CHR_COORDS_hg17.gff augustus.est.gff
+   ln -s lab/Augustus_abinitio.gtf_CHR_COORDS_hg17.gff augustus.abinitio.gff
+   ln -s lab/Augustus_any.gtf_CHR_COORDS_hg17.gff augustus.any.gff
+   ln -s lab/Augustus_dualgenome.gtf_CHR_COORDS_hg17.gff augustus.dual.gff
+
+    # convert to genePred
+    foreach f (augustus.*.gff)
+        set b = $f:r
+        ldHgGene -out=$b.gp -genePredExt null null $f
+    end
+        # Reading abinitio.gff
+        # 418 gene predictions
+        # Reading any.gff
+        # 399 gene predictions
+        # Reading dual.gff
+        # 413 gene predictions
+        # Reading est.gff
+        # 381 gene predictions
+
+    # lift to hg16
+    foreach f (augustus.*.gp)
+        set b = $f:r
+        liftOver -genePred $b.gp \
+            /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                $b.hg16.gp $b.gp.unmapped
+    end
+    wc -l augustus.*.hg16.gp
+        # 417 augustus.abinitio.hg16.gp
+        # 398 augustus.any.hg16.gp
+        # 412 augustus.dual.hg16.gp
+        # 380 augustus.est.hg16.gp
+
+    wc -l augustus.*.unmapped
+      # 2 augustus.abinitio.gp.unmapped
+      # 2 augustus.any.gp.unmapped
+      # 2 augustus.dual.gp.unmapped
+      # 2 augustus.est.gp.unmapped
+
+    # load
+    foreach f (augustus.*.hg16.gp)
+        genePredCheck $f
+        set t = `echo $f | sed -e 's/augustus.\(.*\).hg16.gp/encodeEgaspPartAugustus\u\1/'`
+        ldHgGene -predTab -genePredExt hg16 $t $f
+        checkTableCoords hg16 $t
+    end
+
+##########################################################################
+# EGASP Full (2005-06-27 kate)
+# Gene tracks submitted for the EGASP competition, submitted
+#       by the Gencode group (Roderic Guigo, Julien Legarde, IMIM) 
+    cd /cluster/data/encode
+    mkdir -p EGASP/Full/lab
+    cd EGASP/Full/lab
     wget --timestamping --force-directories --directory-prefix=. \
 	--dont-remove-listing --recursive --level=3 --no-parent \
 	--no-host-directories --cut-dirs=5 \
             ftp://genome.imim.es/pub/projects/gencode/data/egasp05/submitted_predictions/EGASP_on_all_regions/ -nd
+    wc -l *.gtf
+    cd ..
+    mkdir custom
+      # 34059 Aceview.gtf
+    ln -s lab/Aceview.*.gff Aceview.gff
+      # 11968 CSTminer.gtf
+            # SKIP THIS (it's sequence tags, not gene preds)
+       # 3241 DOGFISH-C.gtf
+    ln -s lab/DOGFISH-C.*.gff Dogfish.gff
+      # 13106 EnsEMBL_predictions.gtf
+    ln -s `pwd`/lab/EnsEMBL*gff custom/Ensembl.gff
+        # Has frames
+      # 19004 ExoGean.gtf
+    ln -s lab/ExoGean.*.gff Exogean.gff
+       # 9273 ExonHunter.gtf
+    ln -s `pwd`/lab/ExonHunter.*.gff custom/Exonhunter.gff
+       # NOTE: has frame and start_codon annotations
+      # 11679 FGenesh++.gtf
+    ln -s lab/FGene*.gff Fgenesh.gff
+        # 688 FProm.gtf
+        # SKIPPING (promoter, not genepred)
+       # 4178 GeneID_U12.gtf
+    ln -s `pwd`/lab/GeneID_U12.*.gff custom/GeneIdU12.gff
+      # 12107 GeneMark_on_masked_seq.gtf
+    ln -s `pwd`/lab/GeneMark*.gff custom/Genemark.gff
+        # Has transcript_ID but not gene_id
+       # 4004 JigSaw.gtf
+    ln -s lab/JigSaw.*.gff Jigsaw.gff
+        # 740 McPromoter.gtf
+        # SKIPPING (promoters)
+      # 12816 N-SCAN-Pairagon_any_v1.gtf
+    sed -e 's/.pmasked.100Kpad.fa//g' lab/N-SCAN-Pairagon_any*.gff > PairagonAny.gff
+      # 12798 N-SCAN-Pairagon_mRNA_EST_v1.gtf
+    sed -e 's/.pmasked.100Kpad.fa//g' lab/N-SCAN-Pairagon_mRNA*.gff > PairagonMrna.gff
+       # 7676 N-SCAN-Pairagon_multiple_v2.gtf
+    sed -e 's/.pmasked.100Kpad.fa//g' lab/N-SCAN-Pairagon_multiple*.gff > PairagonMultiple.gff
+       # 7676 N-SCAN-Pairagon_novel_v2.gtf
+    sed -e 's/.pmasked.100Kpad.fa//g' lab/N-SCAN-Pairagon_novel*.gff > PairagonNovel.gff
+       # 6107 SGP_U12.gtf
+    ln -s `pwd`/lab/SGP_U12.*.gff custom/SGP2U12.gff
+      # 10007 SPIDA.gtf
+    ln -s lab/SPIDA.*.gff Spida.gff
+        # 208 SoftBerry_pseudogenes.gtf
+    sed -e 's/pseudogene\t/CDS\t/' lab/SoftBerry*.gff > SoftberryPseudo.gff
+      # 11540 TwinScan-MARS.gtf
+    sed -e 's/transcript_id "W-U-Mm/transcript_id "/' lab/Twin*.gff > custom/Twinscan.gff
+        # Has start_codon annotation and frames
+        # 252 Uncover.gtf
+        # SKIPPING (skipped exons, not gene preds)
+    
+    # Process "standard" gff files
+    # NOTE: must dummy out scores -- float values
+cat > doGene.csh << 'EOF'
+foreach f (*.gff)
+    set b = $f:r
+    echo $f
+    awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' $f | \
+    ldHgGene -out=$b.gp null null stdin
+    liftOver -genePred $b.gp /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                $b.hg16.gp $b.gp.unmapped
+    wc -l $b.hg16.gp $b.gp.unmapped
+    set t = encodeEgaspFull$b
+    ldHgGene -predTab hg16 $t $b.hg16.gp
+    genePredCheck -db=hg16 $t
+end
+'EOF'
+csh doGene.csh >&! doGene.log
+# NOTE: warnings about missing frames are OK.  We're using -genePredExt
+# just to pick up the gene name
+
+    # process special files
+    cd custom
+    ldHgGene -genePredExt -out=Ensembl.gp null null Ensembl.gff
+        # 769 gene predictions
+    ldHgGene -gtf -genePredExt -out=Exonhunter.gp null null Exonhunter.gff
+        # 1435 gene predictions
+    awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' Twinscan.gff | \
+        ldHgGene -genePredExt -gtf -out=Twinscan.gp null null stdin
+            # 954 gene predictions
+
+    # GENEID and SGP2 with special intron tracks
+    # NOTE: dummy out scores (wrong format -- float, and neg. values)
+    awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' < GeneIdU12.gff > geneId.gff
+    ldHgGene -genePredExt -out=GeneId.gp null null geneId.gff
+        # 476 gene predictions
+
+    awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' < SGP2U12.gff > sgp2.gff
+    ldHgGene -genePredExt -out=Sgp2.gp null null sgp2.gff
+        # 930 gene predictions
+
+    # lift and load some customs
+cat > doGene.csh << 'EOF'
+foreach f (*.gp)
+    set b = $f:r
+    echo $f
+    liftOver -genePred $b.gp /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                $b.hg16.gp $b.gp.unmapped
+    wc -l $b.hg16.gp $b.gp.unmapped
+    set t = encodeEgaspFull$b
+    ldHgGene -genePredExt -predTab hg16 $t $b.hg16.gp
+    genePredCheck -db=hg16 $t
+end
+'EOF'
+csh doGene.csh >&! doGene.log
+
+    # process others
+    ldHgGene -out=Genemark.gp null null Genemark.gff
+        # 880 gene predictions
+    liftOver -genePred  \
+        Genemark.gp /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                Genemark.hg16.gp Genemark.gp.unmapped
+    set t = "encodeEgaspFullGenemark"
+    ldHgGene -predTab hg16 $t Genemark.hg16.gp
+        # 872 gene predictions
+    genePredCheck -db=hg16 $t
+
+    # create genepreds containing just exons flanking U12 introns
+    # use U12 annotation as gene name, so it appears on details page
+    grep U12 geneId.gff | perl -wpe \
+ 's/(^.*gene_id) (\S+) (.*exon_type) (.*)(U12[^-]+)(.*)/$1 "$5"; $3 $4$5$6/' \
+        > geneId.introns.gff
+    ldHgGene -genePredExt -out=geneId.introns.gp null null geneId.introns.gff
+        #  24 gene predictions
+    liftOver -genePred geneId.introns.gp \
+        /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                geneId.introns.hg16.gp geneId.introns.gp.unmapped
+    set t = encodeEgaspFullGeneIdU12
+    ldHgGene -predTab -genePredExt hg16 $t geneId.introns.hg16.gp
+    genePredCheck -db=hg16 $t
+
+    set b = sgp2
+    grep U12 $b.gff | perl -wpe \
+ 's/(^.*gene_id) (\S+) (.*exon_type) (.*)(U12[^-]+)(.*)/$1 "$5"; $3 $4$5$6/' \
+        > $b.introns.gff
+    ldHgGene -genePredExt -out=$b.introns.gp null null $b.introns.gff
+        #  20 gene predictions
+    liftOver -genePred $b.introns.gp \
+        /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                $b.introns.hg16.gp $b.introns.gp.unmapped
+    set t = encodeEgaspFullSgp2U12
+    ldHgGene -predTab -genePredExt hg16 $t $b.introns.hg16.gp
+    genePredCheck -db=hg16 $t
+
+
 
 
 ##########################################################################
@@ -1811,6 +2057,8 @@ done
     # Contrib: Mario Stanke (mstanke@gwdg.de)
     # Department of Bioinformatics of the University of Gottingen in Germany
     # submitted in hg17 coords.
+    # NOTE: these were dropped from Update track -- Mario says they
+        # belong in the Partial.
 
     ssh hgwdev
     cd /cluster/data/encode
@@ -1882,7 +2130,6 @@ done
         checkTableCoords hg16 $t
     end
 
-    
 ##########################################################################
 # EXOGEAN GENES FROM EGASP (2005-06-10 kate)
     # Contrib: Sarah Djebali, ENS-Dyogean (France)
@@ -1895,18 +2142,23 @@ done
     # retrieve files from FTP site
     wc -l lab/*.gtf
     # 18958 All44_EXOGEAN_new3_ucsc.gtf
-
+    
+    # reformat file with tab delimiters , add dummy frame so we
+    # can pick up transcript ID
     # convert to genePred
-    tr '[ ]' '[\t]' < lab/*exogean*gtf > exogean.gtf
+    perl -wpe 's/(chr\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)/$1\t$2\t$3\t$4\t$5\t$6\t$7\t.\t$8/' lab/*exogean*.gtf > exogean.gtf
     ldHgGene -out=exogean.gp null null exogean.gtf
-        # 342 groups 20 seqs 1 sources 2 feature types
+        # 850 gene predictions
     liftOver -genePred exogean.gp \
             /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
                 exogean.hg16.gp exogean.gp.unmapped
     wc -l exogean.hg16.gp exogean.gp.unmapped
-        # 337 exogean.hg16.gp
-        # 10 exogean.gp.unmapped
-            # ENr131.3.fw, ENm006.7.fw, ENm006.10.rv, ENm006.8.fw, ENm006.20.rv
+        # 834 exogean.hg16.gp
+        # 32 exogean.gp.unmapped
+          # 16 unmapped
+          # ENr131.2.{13,14,15}
+          # ENm006.2.{7,9,10,11,12,13,14}
+          # ENm006.9.{1,2,21,22,23,24}
 
     ldHgGene -predTab hg16 encodeEgaspUpdExogean exogean.hg16.gp
         # 337 gene predictions
@@ -1914,11 +2166,64 @@ done
 
 
 ##########################################################################
-# GENEIDU12 and SGPU12 GENES FROM EGASP (2005-06-21 kate)
+# GENEIDU12 and SGPU12 GENES FROM EGASP (2005-06-24 kate)
     # Contrib: Tyler Alioto, IMIM, Barcelona
+    cd /cluster/data/encode
+    mkdir -p EGASP/GeneIdU12
+    cd EGASP/GeneIdU12
+    mkdir -p 2005-06-10/lab
+    cd 2005-06-10
+    wc -l lab/*.gtf
+        # 3551 lab/GeneIDu12_hg16.gtf
+        # 5020 lab/SGP2u12_hg16.gtf
 
+    # load gene preds
+    # NOTE: dummy out scores (wrong format -- float, and neg. values)
+    awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' < lab/GeneIDu12_hg16.gtf > geneId.gtf
+    awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' < lab/SGP2u12_hg16.gtf > sgp2.gtf
 
+    ldHgGene -genePredExt hg16 encodeEgaspUpdGeneId geneId.gtf
+        # 475 gene predictions
+    genePredCheck -db=hg16 encodeEgaspUpdGeneId
 
+    ldHgGene -genePredExt hg16 encodeEgaspUpdSgp2 sgp2.gtf
+        # 929 gene predictions
+    genePredCheck -db=hg16 encodeEgaspUpdSgp2
+
+    # create genepreds containing just exons flanking U12 introns
+    # use U12 annotation as gene name, so it appears on details page
+    grep U12 geneId.gtf | perl -wpe \
+ 's/(^.*gene_id) (\S+) (.*exon_type) (.*)(U12[^-]+)(.*)/$1 "$5"; $3 $4$5$6/' \
+        > geneId.introns.gtf
+    ldHgGene -genePredExt hg16 encodeEgaspUpdGeneIdU12 geneId.introns.gtf
+        #  27 gene predictions
+
+    grep U12 sgp2.gtf | perl -wpe \
+ 's/(^.*gene_id) (\S+) (.*exon_type) (.*)(U12[^-]+)(.*)/$1 "$5"; $3 $4$5$6/' \
+        > sgp2.introns.gtf
+    ldHgGene -genePredExt hg16 encodeEgaspUpdSgp2U12 sgp2.introns.gtf
+        # 20 gene predictions
+
+##########################################################################
+# EGASP Yale Pseudogenes (2005-06-25 kate)
+#       Contact: Deyou Zheng <deyou.zheng@yale.edu>
+
+    cd /cluster/data/encode
+    mkdir -p EGASP/yale/2005-06-20/lab
+    cd EGASP/yale/2005-06-20
+    wc -l lab/*.submitted
+        #  203 lab/YalePgene-NCBI34.gtf.submitted
+
+    # munge to create CDS entries to display, and assign pseudogene
+    # name as transcript_id, and pseudogene type as gene_id so
+    # it displays on details page
+    sed -e 's/pseudogene\t/CDS\t/' -e 's/pgene_type/gene_id/'  \
+        -e 's/alt_name ENCODE_Yale/transcript_id /' \
+                lab/YalePgene-NCBI34.gtf.submitted > yale.gtf
+    ldHgGene -genePredExt hg16 encodeEgaspUpdYalePseudo yale.gtf
+        # 203 gene predictions 
+    
+    
 
 ##########################################################################
 # Yale Nimblegen data (DONE - 2005-06-08 - Hiram)
