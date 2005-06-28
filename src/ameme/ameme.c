@@ -2969,11 +2969,11 @@ for (;;)
     struct profileColumn *col;
 
 
-    /* Skip over any blank lines */
+    /* Skip over any blank lines or lines that start with #*/
     for (;lineIx < lineCount; ++lineIx)
         {
         char *s = skipLeadingSpaces(lines[lineIx]);
-        if (s != 0)
+        if (s != 0 && s[0] != '#')
             break;
         }
 
