@@ -52,6 +52,7 @@ $basename  [-kentSrc dir]  [-gbdDPath f]  [-noLoad]  [-help]
 			Default: $kentSrc.
     -gbdDPath f:	Use f as the gbdDescriptions.html.  
 			Default: $gbdDPath.
+    -db db:             Work only on db, not on all active dbs.
     -noLoad:		Don't load the database, just create .sql files.
     -help:		Print this message.
 ";
