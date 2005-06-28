@@ -3,6 +3,9 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dnaMotif.h"
+
+boolean improbizer = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -10,13 +13,14 @@ void usage()
 errAbort(
   "motifConvert - Convert motif into a new format\n"
   "usage:\n"
-  "   motifConvert inMotifFastaLike outMotifImprobizer\n"
+  "   motifConvert inMotifFastaLike output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -improbizer\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"improbizer", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -106,6 +110,33 @@ writeRow(motif, 'T', 3, f);
 fprintf(f, "\n");
 }
 
+void writeAsDnaMotif(struct motif *motif, FILE *f)
+/* Convert to dnaMotif and write. */
+{
+struct dnaMotif *dm;
+int count = slCount(motif->columns);
+int i;
+struct motifColumn *col;
+AllocVar(dm);
+dm->name = cloneString(motif->name);
+subChar(dm->name, ' ', '_');
+dm->columnCount = count;
+AllocArray(dm->aProb, count);
+AllocArray(dm->cProb, count);
+AllocArray(dm->gProb, count);
+AllocArray(dm->tProb, count);
+for (col = motif->columns, i=0; col != NULL; col = col->next, i++)
+    {
+    dm->aProb[i] = col->val[0];
+    dm->cProb[i] = col->val[1];
+    dm->gProb[i] = col->val[2];
+    dm->tProb[i] = col->val[3];
+    }
+dnaMotifNormalize(dm);
+dnaMotifTabOut(dm, f);
+dnaMotifFree(&dm);
+}
+
 void motifConvert(char *inFile, char *outFile)
 /* motifConvert - Convert motif into a new format. */
 {
@@ -113,7 +144,12 @@ struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct motif *motif;
 while ((motif = motifRead(lf)) != NULL)
-    improbizerMotifWrite(motif, f);
+    {
+    if (improbizer)
+	improbizerMotifWrite(motif, f);
+    else
+        writeAsDnaMotif(motif, f);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -122,6 +158,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+improbizer = optionExists("improbizer");
 motifConvert(argv[1], argv[2]);
 return 0;
 }
