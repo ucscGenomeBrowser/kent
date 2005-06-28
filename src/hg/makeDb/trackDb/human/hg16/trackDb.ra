@@ -4172,6 +4172,7 @@ shortLabel Sanger Assoc
 longLabel Sanger Genotype-Expression Association
 group encodeVariation
 priority 81
+chromosomes chr2,chr7,chr8,chr9,chr12,chr18
 visibility hide
 type bed5FloatScore
 useScore 1
