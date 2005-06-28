@@ -4180,6 +4180,7 @@ track encodeHapMapAlleleFreq
 compositeTrack on
 shortLabel HapMap SNPs
 longLabel ENCODE HapMap (16c.1) Allele Frequencies
+group encodeVariation
 priority 82
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 visibility dense
