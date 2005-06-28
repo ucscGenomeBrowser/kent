@@ -26,6 +26,19 @@ colorChromDefault off
 type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
+release beta
+
+track blastHg17KG
+shortLabel Human Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
+group genes
+priority 30
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
+release alpha
 
 track ensGene
 shortLabel Ensembl Genes
