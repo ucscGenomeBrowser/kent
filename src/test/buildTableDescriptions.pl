@@ -141,7 +141,7 @@ sub slurpAutoSql {
     my $fields = "";
     while (<F>) {
       $as .= $_;
-      if (/^\s*table\s+(\S+)[^\;]*$/) {
+      if (/^\s*table\s+(\S+)[^\;]*$/i) {
 	$table = $1;
 	$object = "";
       } elsif (/^\s*(object|simple)\s+(\S+)/) {
