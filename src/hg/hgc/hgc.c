@@ -147,6 +147,7 @@
 #include "encodeStanfordPromoters.h"
 #include "encodeStanfordPromotersAverage.h"
 #include "encodeIndels.h"
+#include "encodeHapMapAlleleFreq.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -173,7 +174,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.907 2005/06/27 17:28:06 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.908 2005/06/28 04:29:52 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15338,6 +15339,41 @@ hFreeConn(&conn);
 printTrackHtml(tdb);
 }
 
+void doEncodeHapMapAlleleFreq(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct encodeHapMapAlleleFreq alleleFreq;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    encodeHapMapAlleleFreqStaticLoad(row+rowOffset, &alleleFreq);
+    printf("<B>Variant and Reference Sequences: </B><BR>\n");
+    printf("<PRE><TT>%s<BR>\n", alleleFreq.otherAllele);
+    printf("%s</TT></PRE><BR>\n", alleleFreq.refAllele);
+    bedPrintPos((struct bed *)&alleleFreq, 3);
+    printf("<B>Reference Allele Frequency:</B> %f <BR>\n", alleleFreq.refAlleleFreq);
+    printf("<B>Other Allele Frequency:</B> %f <BR>\n", alleleFreq.otherAlleleFreq);
+    printf("<B>Center:</B> %s <BR>\n", alleleFreq.center);
+    printf("<B>Total count:</B> %d <BR>\n", alleleFreq.totalCount);
+    printf("-----------------------------------------------------<BR>\n");
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
@@ -16645,6 +16681,10 @@ else if (sameWord(track, "encodeIndels"))
 else if (startsWith("encodeStanfordPromoters", track))
     {
     doEncodeStanfordPromoters(tdb, item);
+    }
+else if (startsWith("encodeHapMapAlleleFreq", track))
+    {
+    doEncodeHapMapAlleleFreq(tdb, item);
     }
 else if (sameString("cutters", track))
     {
