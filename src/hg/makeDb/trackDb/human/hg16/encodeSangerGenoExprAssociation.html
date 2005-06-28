@@ -1,12 +1,12 @@
 <H2>Description</H2>
 <P>
 This track displays associations between gene expression
-data from the 60 unrelated CEPH individuals of the 
-<A HREF="http://www.hapmap.org/" TARGET=_BLANK>International 
+data from the 60 unrelated Centre d'Etude du Polymorphisme Humain (CEPH)
+individuals of the <A HREF="http://www.hapmap.org/" TARGET=_BLANK>International 
 HapMap Project</A> with SNPs
 genotyped by HapMap.  The expression data were generated with the
-Illumina platfrom at the 
-<A HREF="http://www.sanger.ac.uk/" TARGET=_BLANK>Wellcome Trust 
+Illumina platform at the 
+<A HREF="http://www.sanger.ac.uk/" TARGET=_blank>Wellcome Trust 
 Sanger Institute</A>.  
 The CEPH population is composed of 
 Utah residents with ancestry from northern and western Europe.
@@ -18,7 +18,7 @@ In the graphical display, an association is displayed as a block
 drawn at the location of the associated SNP.  In pack or full modes, 
 the name of the associated gene is drawn to the left of the block.  
 The shading of the block indicates the strength of the association:
-light gray indicates a (-log10) P-value close to 0, and black indicates a 
+light gray indicates a (-log10) P-value close to 0 and black indicates a 
 P-value of 2 or more.  
 </P>
 
@@ -28,33 +28,30 @@ An association analysis was performed for each ENCODE RefSeq gene with the
 genotypes of SNPs in the same ENCODE region (cis).  Expression values were
 initially log2 transformed and subsequently normalized with quantile
 normalization to ensure homogeneous levels between arrays. 
-Analysis Of Variance (ANOVA) was then performed with 1 or 2 degress of 
-freedom (depending on whether only 2 or all 3 genotypes in the population 
+Analysis of variance (ANOVA) was then performed with 1 or 2 degrees of 
+freedom (depending on whether only two or all three genotypes in the population
 were available), using 
 the genotype as a categorical variable and the normalized/transformed
 expression values as the response.  The values presented here are the
 -log10 P-value.</P>
 
-
 <H2>Verification</H2>
 <P>
-There were 6 technical replicates for each sample and the average values
-from the 6 replicates were used for the ANOVA.</P>
-
+There were six technical replicates for each sample; the average values
+from these were used for the ANOVA.</P>
 
 <H2>Credits</H2>
 <P>
 The following people contributed to this analysis:
-Barbara Stranger (Wellcome Trust Sanger Institute),
-Matthew Forrest (Wellcome Trust Sanger Institute),
-Simon Tavare (Cambridge University),
-Panos Deloukas (Wellcome Trust Sanger Institute), and
-Manolis Dermitzakis (Wellcome Trust Sanger Institute).</P>
+Barbara Stranger, Matthew Forrest, Panos Deloukas, and Manolis Dermitzakis 
+from Wellcome Trust Sanger Institute and Simon Tavare from Cambridge 
+University. </P>
 
 <H2>References</H2>
-<P>Dausset J, Cann H, Cohen D, Lathrop M, Lalouel JM, White R.
+<P>
+Dausset, J., Cann, H., Cohen, D., Lathrop, M., Lalouel, J.M. and White, R.
 <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=2184120&query_hl=2" 
-TARGET=_BLANK>Centre d'Etude du Polymorphisme Humain (CEPH): 
+TARGET=_blank>Centre d'Etude du Polymorphisme Humain (CEPH): 
 collaborative genetic mapping of the human genome</A>.
-<EM>Genomics.</EM> <B>6</B>(3):575-7 (1990).</P>
+<em>Genomics</em> <B>6</B>(3), 575-7 (1990).</P>
 
