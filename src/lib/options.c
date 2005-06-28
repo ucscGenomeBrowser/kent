@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.22 2005/04/16 06:04:59 markd Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.23 2005/06/28 19:06:18 hartera Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -371,12 +371,12 @@ if (ret == NULL)
 return ret;
 }
 
-double optionDouble(char *name, float defaultVal)
+double optionDouble(char *name, double defaultVal)
 /* Return double value or default value if not set */
 {
 char *s = optGet(name);
 char *valEnd;
-float val;
+double val;
 if (s == NULL)
     return defaultVal;
 
