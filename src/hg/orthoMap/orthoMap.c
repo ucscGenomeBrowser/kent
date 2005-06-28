@@ -121,10 +121,11 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.17 2005/05/20 14:43:50 markd Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.18 2005/06/28 21:32:23 sugnet Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
+static int maxExonChange = 30; /* Maximum size in nucleotides that a block can change by. */
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -142,6 +143,7 @@ static struct optionSpec optionSpecs[] =
     {"outputFile", OPTION_STRING},
     {"selectedFile", OPTION_STRING},
     {"cdsErrorFile", OPTION_STRING},
+    {"maxExonChange", OPTION_INT},
     {NULL, 0}
 };
 
@@ -161,7 +163,8 @@ static char *optionDescripts[] =
     "File to output mappings to.",
     "Records that are mapped are copied to this file",
     "Output records that are selected to this file.",
-    "File for gene predictions with CDS errors."
+    "File for gene predictions with CDS errors.",
+    "Maximum number in nucleotides that an exon can change by.",
 };
 
 void usage()
@@ -503,9 +506,14 @@ chainSubsetOnT(chain, blockStart,blockEnd , &subChain, &toFree);
 if(subChain == NULL)
     return;
 qChainRangePlusStrand(subChain, &qs, &qe);
-bed->chromStarts[bed->blockCount] = qs - bed->chromStart;
-bed->blockSizes[bed->blockCount] = abs(qe-qs);
-bed->blockCount++;
+
+/* Check to make sure we aren't mapping over a huge insert. */
+if(abs(abs(qe-qs) - abs(blockEnd - blockStart)) <= maxExonChange) 
+    {
+    bed->chromStarts[bed->blockCount] = qs - bed->chromStart;
+    bed->blockSizes[bed->blockCount] = abs(qe-qs);
+    bed->blockCount++;
+    }
 chainFree(&toFree);
 }
 
@@ -1214,6 +1222,7 @@ netTable = optionVal("netTable", NULL);
 db = optionVal("db", NULL);
 orthoDb = optionVal("orthoDb", NULL);
 chrom = optionVal("chrom", NULL);
+maxExonChange = optionInt("maxExonChange", 30);
 
 /* Check over our user input. */
 if(orthoDb == NULL || db == NULL)
