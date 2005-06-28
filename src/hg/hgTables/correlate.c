@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "correlate.h"	/*	to fetch corrHelpText	*/
 
-static char const rcsid[] = "$Id: correlate.c,v 1.25 2005/06/28 00:25:16 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.26 2005/06/28 00:28:21 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1492,6 +1492,8 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    freeDataVector(&resultVector);
 //	hPrintf("<P>free resultVector OK</P>\n");
 	    }
+	else
+	    hPrintf("<P>no intersection between the two tables in this region</P>\n");
 	freeTrackTableList(&tableList);
 //	hPrintf("<P>freeTrackTableList OK</P>\n");
 	}
