@@ -174,7 +174,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.908 2005/06/28 04:29:52 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.909 2005/06/28 16:37:43 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2666,7 +2666,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-printTrackHtml(tdb);
+/* printTrackHtml is done in genericClickHandlerPlus. */
 }
 
 void doBed6FloatScore(struct trackDb *tdb, char *item)
@@ -2703,7 +2703,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-printTrackHtml(tdb);
+/* printTrackHtml is done in genericClickHandlerPlus. */
 }
 
 
@@ -16656,6 +16656,7 @@ else if (startsWith("deweySynt", track))
 else if (startsWith("eponine", track))
     {
     doBed6FloatScore(tdb, item);
+    printTrackHtml(tdb);
     }
 else if (sameWord(organism, "fugu") && startsWith("ecores", track))
     {
