@@ -1868,6 +1868,37 @@ done
         checkTableCoords hg16 $t
     end
 
+    # AceSCAN
+    # Split into two tracks -- conserved, and other, based on feature
+    wc -l lab/AceSCAN*.gff
+        # 4163 lab/AceSCAN.gtf_CHR_COORDS_hg17.gff
+    sed -n '/ACE\[+\]exon/s//exon/p' lab/AceSCAN*.gff > aceCons.scored.gff
+    sed -n '/ACE\[-\]exon/s//exon/p' lab/AceSCAN*.gff > aceOther.scored.gff
+    wc -l ace*.gff
+        #    159 aceCons.gff
+        #    4004 aceOther.gff
+
+cat > doGene.csh << 'EOF'
+    foreach f (ace*.scored.gff)
+        echo $f
+        set b = $f:r:r
+        awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' $f | \
+            ldHgGene -out=$b.gp null null stdin
+        liftOver -genePred $b.gp \
+                /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
+                    $b.hg16.gp $b.gp.unmapped
+        wc -l $b.hg16.gp $b.gp.unmapped
+        set t = `echo $b | perl -wpe 's/(.*)/encodeEgaspPart\u$1/'`
+        ldHgGene -predTab hg16 $t $b.hg16.gp
+        genePredCheck -db=hg16 $t
+    end
+'EOF'
+csh doGene.csh >&! doGene.log
+# aceCons
+# 117 gene predictions
+# aceOther
+# 727 gene predictions (708 mapped)
+
 ##########################################################################
 # EGASP Full (2005-06-27 kate)
 # Gene tracks submitted for the EGASP competition, submitted
