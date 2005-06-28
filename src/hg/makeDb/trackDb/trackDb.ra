@@ -1249,6 +1249,18 @@ visibility hide
 colorChromDefault off
 type psl protein
 
+track blastDm2FB
+shortLabel D. mel. Proteins (dm2)
+longLabel D. melanogaster Proteins (dm2)
+group compGeno
+priority 112
+visibility dense
+colorChromDefault off
+type psl protein
+pred dm2.blastFBPep01
+blastRef dm2.blastFBRef01
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
+
 track blastDm1FB
 shortLabel D. mel. Proteins
 longLabel D. melanogaster Proteins
@@ -2169,6 +2181,11 @@ searchType bed
 termRegex chr[0-9a-z_]+[.][0-9]+
 searchPriority 50
 
+searchTable blastDm2FB
+searchMethod prefix
+searchType psl
+searchPriority 25
+
 searchTable blastDm1FB
 searchMethod prefix
 searchType psl
@@ -2233,6 +2250,13 @@ searchPriority 25
 searchTable blastHg17KG
 searchMethod prefix
 searchType psl
+
+searchName blastDm2FBGene
+searchTable blastDm2FB
+searchMethod prefix
+searchType psl
+xrefTable dm2.blastFBRef01
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
 searchPriority 25
 
 searchName blastDm1FBGene
