@@ -1538,8 +1538,8 @@ type genePred
 
     track encodeEgaspFullFgenesh
     subTrack encodeEgaspFull
-    shortLabel FGenesh++
-    longLabel FGenesh++ Gene Predictions
+    shortLabel Fgenesh++
+    longLabel Fgenesh++ Gene Predictions
     color 12,150,20
     priority 14
 
