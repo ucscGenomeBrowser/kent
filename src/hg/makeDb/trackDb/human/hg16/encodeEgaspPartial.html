@@ -1,16 +1,15 @@
 <H2>Description</H2>
 <P>
-This track shows gene predictions for a partial set of ENCODE regions 
-originally submitted for the 
+This track shows gene predictions submitted for the 
 <A HREF="http://genome.imim.es/gencode/workshop2005.html"
-TARGET=_blank>EGASP/2005</A> ENCODE Gene Prediction Workshop.
+TARGET=_blank>EGASP/2005</A> ENCODE Gene Prediction Workshop that cover only
+a partial set of the 44 ENCODE regions.  This set of 31 regions excludes
+the 13 ENCODE regions for which high-quality annotations were released in late
+2004.
 The following gene predictions are included:
 <UL>
 <LI>
 <A HREF="http://genes.mit.edu/acescan/" TARGET=_blank>ACEScan</A></LI>
-<LI>
-<A HREF="http://aspic.algo.disco.unimib.it/aspic-devel/user/index.php?PHPSESSID=b47ee2e0c36918e64636edb06b335fe3" 
-TARGET=_blank>ASPic</A></LI>
 <LI>
 <A HREF="http://augustus.gobics.de/" TARGET=_blank>Augustus</A></LI>
 <LI>
@@ -19,13 +18,13 @@ TARGET=_blank>ASPic</A></LI>
 SAGA</LI>
 </UL>
 The EGASP Full companion track shows original gene prediction submissions for 
-the full set of ENCODE regions; the EGASP Update track shows updated versions 
+the full set of 44 ENCODE regions; the EGASP Update track shows updated versions
 of the submitted predictions.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
 Data for each gene prediction method within this composite annotation track 
-are displayed in separate subtracks. See the top of the track description page 
+is displayed in a separate subtrack. See the top of the track description page 
 for a complete list of the subtracks available for this annotation. To display
 only selected subtracks, uncheck the boxes next to the tracks you wish to
 hide.  
@@ -47,21 +46,13 @@ visual cue for distinguishing the different gene prediction methods.</P>
 
 <H3>ACEScan</H3>
 <P>
-ACE is an acronym for &quot;alternative conserved exons&quot;, 
-indicating alternative splicing that is evolutionarily conserved in human and 
-mouse/rat. ACE[+]exons are predicted alternative conserved exons. ACE[-]exons 
+ACEScan (alternative conserved exons scan) 
+indicates alternative splicing that is evolutionarily conserved in human and 
+mouse/rat. The Conserved Alternative Exon Predictions subtrack shows
+predicted alternative conserved exons. The Unconserved Alternative and 
+Constitutive Exon Predictions subtrack shows exons that 
 are predicted to be constitutive or may have species-specific alternative 
 splicing. <P>
-</UL>
-
-<H3>ASPic</H3>
-<P>
-ASPic (Alternative Splicing Prediction) is a web-based tool that detects the 
-exon-intron structure of a gene by comparing its genomic sequence to the 
-related cluster of ESTs.  ASPic predicts constitutive and alternative splice 
-sites through a novel methodology that uses a combined analysis of all EST 
-alignments to make them most compatible to a common exon-intron structure of 
-the gene considered. </P>
 
 <H3>Augustus</H3>
 <P>
@@ -82,8 +73,10 @@ generate hints for Augustus.</P>
 <P>
 GeneZilla is a program for the computational prediction of protein-coding genes 
 in eukaryotic DNA, based on the generalized hidden Markov model (GHMM) 
-framework. These predictions were generated using GeneZilla and isochore-finder 
-IsoScan.</P>
+framework. These predictions were generated using GeneZilla and 
+<A HREF="http://bioinformatics.org/project/?group_id=485"
+TARGET=_blank>IsoScan</A>, which uses a four-state hidden Markov model to 
+predict isochores (regions of homogeneous G+C content) in genomic DNA.</P>
 
 <H3>SAGA</H3>
 
@@ -92,17 +85,16 @@ IsoScan.</P>
 The gene prediction data sets were submitted by the following individuals and 
 institution:
 <LI>
-<B>ASPic:</B> Graziano Pesole, Scienze Biomolecolari e Biotecnologie, Universita di 
-Milano.
+<B>ACEScan:</B> Gene Yeo, Crick-Jacobs Center for Computational Biology, 
+<A HREF="http://www.salk.edu/" TARGET=_blank>Salk Institute</A>.
 <LI>
-<B>ACEScan:</B> Gene Yeo, Crick-Jacobs Center for Computational Biology, Salk 
-Institute.
-<LI>
-<B>Augustus:</B> Mario Stanke, Department of Bioinformatics, University of Göttingen, 
+<B>Augustus:</B> Mario Stanke, <A HREF="http://gobics.de/department/"
+TARGET=_blank>Department of Bioinformatics</A>, University of Göttingen, 
 Germany.
 <LI>
-<B>GeneZilla:</B> William Majoros, Dept. of Bioinformatics, The Institute for Genomic
-Research (TIGR).
+<B>GeneZilla:</B> William Majoros, Dept. of Bioinformatics, The Institute for 
+Genomic Research (<A HREF="http://www.tigr.org/" TARGET=_blank>TIGR</A>).
 <LI>
-<B>SAGA:</B> Sourav Chatterji, Lior Pachter lab, U.C. Berkeley.
+<B>SAGA:</B> Sourav Chatterji, Lior Pachter lab, 
+<A HREF="http://math.berkeley.edu/" TARGET=_blank>U.C. Berkeley</A>.
 </UL></P>
