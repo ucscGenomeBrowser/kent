@@ -1552,15 +1552,15 @@ type genePred
 
     track encodeEgaspFullGeneId
     subTrack encodeEgaspFull
-    shortLabel Geneid
-    longLabel Geneid Gene Predictions
+    shortLabel GeneID
+    longLabel GeneID Gene Predictions
     priority 16
     color 100,12,100
 
     track encodeEgaspFullGeneIdU12
     subTrack encodeEgaspFull
-    shortLabel Geneid U12
-    longLabel Geneid U12 Intron Predictions
+    shortLabel GeneID U12
+    longLabel GeneID U12 Intron Predictions
     priority 17
     color 220,132,0
 
