@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.200 2005/06/27 17:16:16 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.201 2005/06/29 05:58:27 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1168,9 +1168,11 @@ cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
 puts ("bases<BR>");
 #endif
 
-
-puts("<P><B>Conservation graph:</B>" );
-wigUi(tdb);
+if (trackDbSetting(tdb, "wiggle"))
+    {
+    puts("<P><B>Conservation graph:</B>" );
+    wigUi(tdb);
+    }
 }
 
 void genericWiggleUi(struct trackDb *tdb, int optionNum )
