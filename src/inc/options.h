@@ -39,7 +39,7 @@ float optionFloat(char *name, float defaultVal);
 struct slName *optionMultiVal(char *name, struct slName *defaultVal);
 /* Returns a list of the values assocated with a named option if in options hash, otherwise default. */
 
-double optionDouble(char *name, float defaultVal);
+double optionDouble(char *name, double defaultVal);
 /* Return double value or default value if not set */
 
 boolean optionExists(char *name);
