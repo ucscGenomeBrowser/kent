@@ -1,0 +1,108 @@
+<H2>Description</H2>
+<P>
+This track shows gene predictions for a partial set of ENCODE regions 
+originally submitted for the 
+<A HREF="http://genome.imim.es/gencode/workshop2005.html"
+TARGET=_blank>EGASP/2005</A> ENCODE Gene Prediction Workshop.
+The following gene predictions are included:
+<UL>
+<LI>
+<A HREF="http://genes.mit.edu/acescan/" TARGET=_blank>ACEScan</A></LI>
+<LI>
+<A HREF="http://aspic.algo.disco.unimib.it/aspic-devel/user/index.php?PHPSESSID=b47ee2e0c36918e64636edb06b335fe3" 
+TARGET=_blank>ASPic</A></LI>
+<LI>
+<A HREF="http://augustus.gobics.de/" TARGET=_blank>Augustus</A></LI>
+<LI>
+<A HREF="http://www.genezilla.org/" TARGET=_blank>GeneZilla</A></LI>
+<LI>
+SAGA</LI>
+</UL>
+The EGASP Full companion track shows original gene prediction submissions for 
+the full set of ENCODE regions; the EGASP Update track shows updated versions 
+of the submitted predictions.</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+Data for each gene prediction method within this composite annotation track 
+are displayed in separate subtracks. See the top of the track description page 
+for a complete list of the subtracks available for this annotation. To display
+only selected subtracks, uncheck the boxes next to the tracks you wish to
+hide.  
+<P>
+The individual subtracks within this annotation follow the display conventions 
+for <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction
+tracks</A>. The track description page offers the option 
+to color and label codons in a zoomed-in display of the subtracks to facilitate 
+validation and comparison of gene predictions. To enable this feature, select 
+the <em>genomic codons</em> option from the &quot;Color track by codons&quot;
+menu. Click the
+<A HREF="../goldenPath/help/hgCodonColoring.html">Help on codon coloring</A>
+link for more information about this feature. </P>
+<P>
+Color differences among the subtracks are arbitrary. They provide a
+visual cue for distinguishing the different gene prediction methods.</P>
+
+<H2>Methods</H2>
+
+<H3>ACEScan</H3>
+<P>
+ACE is an acronym for &quot;alternative conserved exons&quot;, 
+indicating alternative splicing that is evolutionarily conserved in human and 
+mouse/rat. ACE[+]exons are predicted alternative conserved exons. ACE[-]exons 
+are predicted to be constitutive or may have species-specific alternative 
+splicing. <P>
+</UL>
+
+<H3>ASPic</H3>
+<P>
+ASPic (Alternative Splicing Prediction) is a web-based tool that detects the 
+exon-intron structure of a gene by comparing its genomic sequence to the 
+related cluster of ESTs.  ASPic predicts constitutive and alternative splice 
+sites through a novel methodology that uses a combined analysis of all EST 
+alignments to make them most compatible to a common exon-intron structure of 
+the gene considered. </P>
+
+<H3>Augustus</H3>
+<P>
+Augustus is a generalized hidden Markov model (GHMM) that
+models coding and non-coding sequence, splice sites, the branch point region, 
+translation start and end, and lengths of exons and introns. The track 
+contains four different sets of predictions. <em>Ab initio</em>
+single genome predictions are based solely on the input sequence. EST and
+protein evidence predictions were generated using AGRIPPA hints based on 
+alignments of human sequence from the dbEST and nr databases. Mouse homology 
+gene predictions were produced using mouse genomic sequence only; BLAST, CHAOS, 
+DIALIGN were used to generate the hints for Augustus. The combined 
+EST/protein evidence and mouse homology gene predictions were created using 
+human sequence from the dbEST and nr databases and mouse genomic sequence to 
+generate hints for Augustus.</P>
+
+<H3>GeneZilla</H3>
+<P>
+GeneZilla is a program for the computational prediction of protein-coding genes 
+in eukaryotic DNA, based on the generalized hidden Markov model (GHMM) 
+framework. These predictions were generated using GeneZilla and isochore-finder 
+IsoScan.</P>
+
+<H3>SAGA</H3>
+
+<H2>Credits</H2>
+<P>
+The gene prediction data sets were submitted by the following individuals and 
+institution:
+<LI>
+ASPic: Graziano Pesole, Scienze Biomolecolari e Biotecnologie, Universita di 
+Milano.
+<LI>
+ACEScan: Gene Yeo, Crick-Jacobs Center for Computational Biology, Salk 
+Institute.
+<LI>
+Augustus: Mario Stanke, Department of Bioinformatics, University of Göttingen, 
+Germany.
+<LI>
+GeneZilla: William Majoros, Dept. of Bioinformatics, The Institute for Genomic
+Research (TIGR)
+<LI>
+SAGA: Sourav Chatterji, Lior Pachter lab, U.C. Berkeley.
+</UL></P>
