@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.56 2005/06/27 23:34:48 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.57 2005/06/29 00:31:52 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7713,3 +7713,19 @@ o Build the pepPi table
     rm -rf /usr/local/apache/htdocs/knownGeneList/mm6
     mkdir -p /usr/local/apache/htdocs/knownGeneList/mm6
     cp -Rfp knownGeneList/mm6/* /usr/local/apache/htdocs/knownGeneList/mm6
+
+# Build kgReactome table for KG to Reactome xref.  Done 6/28/05 Fan.
+
+# First, make sure the reactome DB is built.  See makeHg17.doc for details.
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm6/bed/reactome
+    cd /cluster/data/mm6/bed/reactome
+
+    hgsql reactome -N -e 'select kgId, spID, DB_ID from ReferenceEntity, mm6.kgXref where identifier=spID' >kgReactome.tab;
+
+    hgsql mm6 -e 'drop table kgReactome'
+    hgsql mm6 < ~/src/hg/lib/kgReactome.sql
+    hgsql mm6 -e 'load data local infile "kgReactome.tab" into table kgReactome'
+
+

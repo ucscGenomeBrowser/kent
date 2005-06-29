@@ -4984,3 +4984,19 @@ mkdir -p $3:h
     rm -rf /usr/local/apache/htdocs/knownGeneList/rn3
     mkdir -p /usr/local/apache/htdocs/knownGeneList/rn3
     cp -Rfp knownGeneList/rn3/* /usr/local/apache/htdocs/knownGeneList/rn3
+
+# Build kgReactome table for KG to Reactome xref.  Done 6/28/05 Fan.
+
+# First, make sure the reactome DB is built.  See makeHg17.doc for details.
+
+    ssh hgwdev
+    mkdir -p /cluster/data/rn3/bed/reactome
+    cd /cluster/data/rn3/bed/reactome
+
+    hgsql reactome -N -e 'select kgId, spID, DB_ID from ReferenceEntity, rn3.kgXref where identifier=spID' >kgReactome.tab;
+
+    hgsql rn3 -e 'drop table kgReactome'
+    hgsql rn3 < ~/src/hg/lib/kgReactome.sql
+    hgsql rn3 -e 'load data local infile "kgReactome.tab" into table kgReactome'
+
+
