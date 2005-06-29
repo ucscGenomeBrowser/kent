@@ -3490,18 +3490,25 @@ autoScale Off
     priority 6
     color 10,10,130
 
+    track encodeSangerChipH3K4me3K562
+    subTrack encodeSangerChipH3H4
+    shortLabel SI H3K4me3 K562
+    longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, K562 cells)
+    priority 7
+    color 10,10,130
+
     track encodeSangerChipH3acK562
     subTrack encodeSangerChipH3H4
     shortLabel SI H3ac K562
     longLabel Sanger Institute ChIP/Chip (H3ac ab, K562 cells)
-    priority 7
+    priority 8
     color 10,10,130
 
     track encodeSangerChipH4acK562
     subTrack encodeSangerChipH3H4
     shortLabel SI H4ac K562
     longLabel Sanger Institute ChIP/Chip (H4ac ab, K562 cells)
-    priority 8
+    priority 9
     color 10,10,130
 
 track encodeStanfordChip
