@@ -24,12 +24,12 @@
 #include "bed.h"
 //#include "chainToAxt.h"
 #include "pipeline.h"
-#define MINDIFF 5
+#define MINDIFF 3
 #define MAXLOCI 2048
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.5 2005/06/21 19:06:39 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.6 2005/06/29 21:09:10 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -42,6 +42,7 @@ int outputCount = 0; /* number of alignments written */
 int verbosity = 1;
 int lociCounter = 0;
 bool passthru = FALSE;
+bool computeSS = FALSE;
 struct dlList *fileCache = NULL;
 struct hash *nibHash = NULL;
 FILE *outFile = NULL; /* output tab sep file */
@@ -57,6 +58,8 @@ char *mrna2 = NULL;
 char *bedOut = NULL;
 char *scoreOut = NULL;
 char *snpFile = NULL; /* snp tab file (browser format)*/
+int histogram[256][256];       /* histogram of counts for suff statistics, index is a,c,g,t,-,. */
+float  histoNorm[256][256]; /* normalized histogram for suff statistics, index is a,c,g,t,-,. */
 //static int lociMap[MAXLOCI];
 
 /* command line */
@@ -71,6 +74,7 @@ static struct optionSpec optionSpecs[] = {
     {"score", OPTION_STRING},
     {"snp", OPTION_STRING},
     {"minDiff", OPTION_INT},
+    {"computeSS", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -152,6 +156,7 @@ errAbort(
     "directory containing nibs of genome\n"
     "output.psl contains filtered alignments for best matches and cases where no filtering occurred.\n"
     "    -score=output.tab  is output containing mismatch info\n" 
+    "    -computeSS compute sufficient statistics instead of filtering\n"
     "    -passthru  if best hit cannot be decided, then pass through all alignments\n"
     "    -minDiff=N minimum difference in score to filter out 2nd best hit (default 5)\n"
     "    -bedOut=bed output file of mismatches.\n"
@@ -203,6 +208,30 @@ struct dnaSeq *nibInfoLoadSeq(struct nibInfo *nib, int start, int size)
 {
 return nibLdPartMasked(NIB_MASK_MIXED, nib->fileName, nib->f, nib->size, 
 	start, size);
+}
+
+bool purine(char a)
+{
+if (toupper(a) == 'A' || toupper(a) == 'G')
+    return(TRUE);
+else
+    return(FALSE);
+}
+
+bool transversion(char a, char b)
+{
+if (purine(a) != purine(b))
+    return TRUE;
+else
+    return FALSE;
+}
+
+bool transition(char a, char b)
+{
+if (!transversion(a,b))
+    return TRUE;
+else
+    return FALSE;
 }
 
 struct dnaSeq *nibInfoLoadStrand(struct nibInfo *nib, int start, int end,
@@ -784,6 +813,189 @@ freez(&neither);
 freez(&snpCount);
 return FALSE;
 }
+
+bool isDna(char a)
+/* return true of the base is a valid dna nt */
+{
+char b = tolower(a);
+if (b == 'a' || b == 'c' || b == 'g' || b == 't')
+    return TRUE;
+else
+    return FALSE;
+}
+
+void updateCount(char x1, char x2)
+{
+int a = tolower(x1);
+int b = tolower(x2);
+if (x1 == -1 )
+    a = '.';
+if (x2 == -1)
+    b = '.';
+
+if (isDna(a) && isDna(b))
+    {
+    histogram[a][b]++;
+    }
+else
+    /* handle mismatches */
+    {
+    histogram[a][b]++;
+    }
+}
+
+void normalizeSS()
+{
+unsigned int i, j;
+int sum = 0;
+
+for (i = 0 ; i < 256 ; i++)
+    for (j = 0 ; j < 256 ; j++)
+        sum += histogram[i][j] ;
+for (i = 0 ; i < 256 ; i++)
+    for (j = 0 ; j < 256 ; j++)
+            histoNorm[i][j] = (float)histogram[i][j] / (float)sum ;
+}
+
+int getHistogram(char a, char b)
+{
+//if (a == 'N')
+//    return(histogram[(unsigned int)'a'][(unsigned int)b] + histogram[(unsigned int)'c'][(unsigned int)b] + histogram[(unsigned int)'g'][(unsigned int)b] + histogram[(unsigned int)'t'][(unsigned int)b] );
+//else
+    return(histogram[(unsigned int)a][(unsigned int)b]);
+}
+
+float getHistoNorm(char a, char b)
+{
+    return(histoNorm[(unsigned int)a][(unsigned int)b]);
+}
+
+void initSS()
+{
+unsigned int i, j;
+
+for (i = 0 ; i < 256 ; i++)
+    for (j = 0 ; j < 256 ; j++)
+        {
+        histogram[i][j] = 0;
+        histoNorm[i][j] = 0.0;
+        }
+}
+
+void computeSuffStats(struct misMatch **misMatchList, struct alignment *align, struct loci *lociList)
+/* compute sufficient statistics from each alignment */
+{
+int blockIx = 0;
+//int i, j,    sum = 0;
+struct psl *psl = align->psl;
+struct nibInfo *tNib = nibInfoFromCache(nibHash, align->nibDir, psl->tName);
+static struct dnaSeq *tSeq = NULL;
+int tStart = psl->tStart;
+int tEnd   = psl->tEnd;
+//int misMatchCount = 0;
+char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
+if (genomeStrand == '-')
+    reverseIntRange(&tStart, &tEnd, psl->tSize);
+for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
+    /* for each alignment block get sequence for both strands */
+    {
+    struct snp *snp = NULL, *snpList = NULL;
+    if (hashFindVal(twoBitFile->hash, psl->qName) == NULL)
+        {
+        printf("skipping %s not found \n",psl->qName);
+        return;
+        }
+    int size = twoBitSeqSize(twoBitFile, psl->qName);
+    int i = 0;
+    int ts = psl->tStarts[blockIx];
+    int te = psl->tStarts[blockIx]+(psl->blockSizes[blockIx]);
+    int qe = psl->qStarts[blockIx]+(psl->blockSizes[blockIx]);
+    struct dnaSeq *qSeq = NULL;
+    if (qe > size)
+        {
+        printf("skipping %s %d > %d \n",psl->qName, qe, size );
+        return;
+        }
+    qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, psl->qStarts[blockIx], 
+            psl->qStarts[blockIx]+(psl->blockSizes[blockIx]));
+
+    if (genomeStrand == '-')
+        reverseIntRange(&ts, &te, psl->tSize);
+
+    tSeq = nibInfoLoadStrand(tNib, psl->tStarts[blockIx], 
+            psl->tStarts[blockIx]+(psl->blockSizes[blockIx]), genomeStrand);
+
+    verbose(4,"  xyz %s t %s:%d-%d q %d-%d %s strand %c\n",
+            psl->qName, psl->tName, ts, te, psl->qStarts[blockIx], 
+            psl->qStarts[blockIx]+psl->blockSizes[blockIx], psl->strand, genomeStrand);
+    verbose(6,"tSeq %s len %d %d\n",tSeq->dna, tSeq->size, strlen(tSeq->dna));
+    verbose(6,"qSeq %s\n",qSeq->dna);
+    assert(psl->strand[0] == '+');
+
+    /* count match and mismatches in each alignment block */
+    for (i = 0 ; i < tSeq->size; i++)
+        {
+        char t = toupper(tSeq->dna[i]);
+        char q = toupper(qSeq->dna[i]);
+        int genomeStart = ts+i;
+        //int mrnaLoc = psl->qStarts[blockIx]+i;
+
+        if (q == 'n' || q == 'N')
+            printf("N in sequence %s\n",psl->qName);
+        updateCount(t,q);
+
+        if (genomeStrand == '-')
+            genomeStart = te-i-1;
+
+        /* get overlapping snps */
+        snpList = getSnpList(psl->tName, genomeStart, genomeStart+1, genomeStrand) ;
+        for (snp = snpList ; snp != NULL ; snp = snp->next)
+            {
+            int offset = (snp->chromStart)-ts;
+            char snpBase = ' ';
+            assert(sameString(psl->tName, snp->chrom));
+            if (genomeStrand == '-')
+                offset = (tSeq->size - offset)-1;
+            snpBase = toupper(tSeq->dna[offset]);
+           if (snpBase != t)
+               {
+               verbose(3,"snp mismatch genome %c snpbase %c mrna %c ts %d snp %d valid %s\n",
+                       t, snpBase, q, ts, snp->chromStart, snp->valid);
+//                        assert(snpBase == t);
+               }
+           else
+            verbose(3,"       [%d] snp match %s %s %s:%d %s %s offset %d gs %c ts %d genomic%c %c valid %s\n",
+                    getLoci(lociList, psl->tName, psl->tStart), snp->name, psl->qName, snp->chrom, snp->chromStart, snp->observed, 
+                    snp->strand, offset, genomeStrand, ts, genomeStrand, t, snp->valid);
+            }
+        }
+    /* add indel for portions of mrna that do not align at all */
+//    for (i = 0 ; i < psl->qStarts[0] ; i++)
+//        {
+//        char q = toupper(qSeq->dna[i]);
+//        }
+    freeDnaSeq(&tSeq);
+    freeDnaSeq(&qSeq);
+    }
+/*
+for (i = 0 ; i < 256 ; i++)
+    for (j = 0 ; j < 256 ; j++)
+        sum += histogram[i][j] ;
+    fprintf(outFile, "%5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %5.4f %s  ",
+            getHistogram('a','a')/sum, getHistogram('a','c')/sum, getHistogram('a','g')/sum, getHistogram('a','t')/sum, 
+            getHistogram('c','a')/sum, getHistogram('c','c')/sum, getHistogram('c','g')/sum, getHistogram('c','t')/sum, 
+            getHistogram('g','a')/sum, getHistogram('g','c')/sum, getHistogram('g','g')/sum, getHistogram('g','t')/sum, 
+            getHistogram('t','a')/sum, getHistogram('t','c')/sum, getHistogram('t','g')/sum, getHistogram('t','t')/sum , psl->qName
+           );
+    fprintf(outFile,"Transitions %5.4f Transversions %5.4f Matches %5.4f\n",
+            (getHistogram('a','g')+ getHistogram('g','a')+ getHistogram('c','t')+ getHistogram('t','c'))/sum, 
+            (getHistogram('a','c')+ getHistogram('a','t')+ getHistogram('c','a')+ getHistogram('c','g')+ 
+             getHistogram('g','c')+ getHistogram('g','t')+ getHistogram('t','a')+ getHistogram('t','g'))/sum, 
+            (getHistogram('a','a')+ getHistogram('c','c')+ getHistogram('g','g')+ getHistogram('t','t'))/sum
+           );
+           */
+}
+
 void addOtherAlignments( struct alignment *alignList, struct hash *speciesHash, char *name, char *nibDir, char *mrnaPath)
 {
 /* add alignemnts from other species to the list */
@@ -910,6 +1122,8 @@ static struct dnaSeq *tSeq = NULL;
 int tStart = psl->tStart;
 int tEnd   = psl->tEnd;
 int misMatchCount = 0;
+int transitionCount = 0;
+int transversionCount = 0;
 char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
 if (genomeStrand == '-')
     reverseIntRange(&tStart, &tEnd, psl->tSize);
@@ -954,6 +1168,10 @@ for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
             int mrnaLoc = psl->qStarts[blockIx]+i;
 
             misMatchCount++;
+            if (transition(t,q))
+                transitionCount++;
+            if (transversion(t,q))
+                transversionCount++;
 
             if (genomeStrand == '-')
                 genomeStart = te-i-1;
@@ -1049,10 +1267,13 @@ for (align = alignList; align != NULL ; align = align->next)
     /* for each alignment, build mismatch list */
     verbose(3,"buildMisMatch %s tName %s:%d-%d\n",
             name, align->psl->tName, align->psl->tStart, align->psl->tEnd);
-    buildMisMatches(&misMatchList, align, lociList);
+    if (computeSS)
+        computeSuffStats(&misMatchList, align, lociList);
+    else
+        buildMisMatches(&misMatchList, align, lociList);
     }
 slReverse(&misMatchList);
-if (misMatchList != NULL)
+if (misMatchList != NULL && !computeSS )
     {
     /* sort list by mrna position */
     slSort(&misMatchList, misMatchCmpMrnaLoc);
@@ -1071,6 +1292,10 @@ if (misMatchList != NULL)
         ;
     misMatchFreeList(&misMatchList);
     }
+else if (computeSS)
+    {
+    }
+
 lociFreeList(&lociList);
 }
 
@@ -1079,6 +1304,7 @@ void pslCDnaGenomeMatch(char *inName, char *tNibDir)
 struct psl *psl = NULL, *pslList = NULL ;
 struct alignment *subList = NULL;
 char lastName[512];
+unsigned int i , j;
 
 pslList = readPslList(inName);
 
@@ -1127,6 +1353,47 @@ alignFreeList(&subList);
 //pslFreeList(&pslList);
 verbose(1,"Wrote %d alignments out of %d \n", outputCount, aliCount);
 verbose(1,"Filtered %d out of %d mRNAs \n", filterCount, mrnaCount);
+if (computeSS)
+    {
+    fprintf(outFile, "%8d %8d %8d %8d  %8d %8d %8d %8d  %8d %8d %8d %8d  %8d %8d %8d %8d \n",
+            getHistogram('a','a'), getHistogram('a','c'), getHistogram('a','g'), getHistogram('a','t'), 
+            getHistogram('c','a'), getHistogram('c','c'), getHistogram('c','g'), getHistogram('c','t'), 
+            getHistogram('g','a'), getHistogram('g','c'), getHistogram('g','g'), getHistogram('g','t'), 
+            getHistogram('t','a'), getHistogram('t','c'), getHistogram('t','g'), getHistogram('t','t') 
+           );
+    for (i = 0 ; i < 128 ; i++)
+        for (j = 0 ; j < 128 ; j++)
+            if (getHistogram(i,j) > 0)
+                fprintf(outFile, "%d %d %c %c = %d \n",i, j, (char)i, (char)j, getHistogram(i,j)) ;
+    normalizeSS();
+    fprintf(outFile, "%5.5f %5.5f %5.5f %5.5f  %5.5f %5.5f %5.5f %5.5f  %5.5f %5.5f %5.5f %5.5f  %5.5f %5.5f %5.5f %5.5f \n",
+            getHistoNorm('a','a'), getHistoNorm('a','c'), getHistoNorm('a','g'), getHistoNorm('a','t'), 
+            getHistoNorm('c','a'), getHistoNorm('c','c'), getHistoNorm('c','g'), getHistoNorm('c','t'), 
+            getHistoNorm('g','a'), getHistoNorm('g','c'), getHistoNorm('g','g'), getHistoNorm('g','t'), 
+            getHistoNorm('t','a'), getHistoNorm('t','c'), getHistoNorm('t','g'), getHistoNorm('t','t') 
+           );
+    fprintf(outFile, "      A       C       G       T\nA %5.5f %5.5f %5.5f %5.5f\nC %5.5f %5.5f %5.5f %5.5f\nG %5.5f %5.5f %5.5f %5.5f\nT %5.5f %5.5f %5.5f %5.5f\n",
+            getHistoNorm('a','a'), getHistoNorm('a','c'), getHistoNorm('a','g'), getHistoNorm('a','t'), 
+            getHistoNorm('c','a'), getHistoNorm('c','c'), getHistoNorm('c','g'), getHistoNorm('c','t'), 
+            getHistoNorm('g','a'), getHistoNorm('g','c'), getHistoNorm('g','g'), getHistoNorm('g','t'), 
+            getHistoNorm('t','a'), getHistoNorm('t','c'), getHistoNorm('t','g'), getHistoNorm('t','t') 
+           );
+    fprintf(outFile,"Transitions %5.5f Transversions %5.5f Matches %5.5f\n",
+            getHistoNorm('a','g')+ getHistoNorm('g','a')+ getHistoNorm('c','t')+ getHistoNorm('t','c'), 
+            getHistoNorm('a','c')+ getHistoNorm('a','t')+ getHistoNorm('c','a')+ getHistoNorm('c','g')+ 
+            getHistoNorm('g','c')+ getHistoNorm('g','t')+ getHistoNorm('t','a')+ getHistoNorm('t','g'), 
+            getHistoNorm('a','a')+ getHistoNorm('c','c')+ getHistoNorm('g','g')+ getHistoNorm('t','t')
+           );
+    fprintf(outFile,"acgt N %f \n",
+            getHistoNorm('a','n')+ getHistoNorm('c','n')+ getHistoNorm('g','n')+ getHistoNorm('t','n') );
+    fprintf(outFile,"N acgt %f \n",
+            getHistoNorm('n','a')+ getHistoNorm('n','c')+ getHistoNorm('n','g')+ getHistoNorm('n','t') );
+
+    for (i = 0 ; i < 128 ; i++)
+        for (j = 0 ; j < 128 ; j++)
+            if (getHistogram(i,j) > 0)
+                fprintf(outFile, "%c %c = %f \n",(char)i, (char)j, getHistoNorm(i,j)) ;
+    }
 }
 
 int main(int argc, char *argv[])
@@ -1146,6 +1413,8 @@ ss = axtScoreSchemeDefault();
 //mrnaHash = readPslToBinKeeper(argv[2], argv[1]);
 twoBitFile = twoBitOpen(argv[3]);
 outFile = fopen(argv[5],"w");
+
+initSS();
 minDiff = optionInt("minDiff", MINDIFF);
 snpFile = optionVal("snp", NULL);
 if (snpFile != NULL)
