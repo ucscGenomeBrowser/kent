@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.57 2005/06/29 00:31:52 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.58 2005/06/29 16:30:55 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7728,4 +7728,23 @@ o Build the pepPi table
     hgsql mm6 < ~/src/hg/lib/kgReactome.sql
     hgsql mm6 -e 'load data local infile "kgReactome.tab" into table kgReactome'
 
+#  miRNA track (DONE - 2005-06-29 - Fan)
+    #   data from: Michel.Weber@ibcg.biotoul.fr
+    #   notify them when done.
+    cd /cluster/data/mm6/bed
+    mkdir miRNA
+    cd miRNA
+    save miRNA_track_mm6.txt file from email
+    cp miRNA_track_mm6.txt miRNA.bed
+    
+# edit miRNA.bed to get rid of the top field description lines
+
+    hgLoadBed mm6 miRNA miRNA.bed
+    
+# check previous release track before update
+    nice featureBits mm5 miRNA
+    # 17957 bases of 2615483787 (0.001%) in intersection
+
+    nice featureBits mm6 
+    #19126 bases of 2597150411 (0.001%) in intersection
 
