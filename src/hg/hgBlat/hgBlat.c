@@ -1,4 +1,4 @@
-/* hgSeqSearch - CGI-script to manage fast human genome sequence searching. */
+/* hgBlat - CGI-script to manage fast human genome sequence searching. */
 #include "common.h"
 #include "errabort.h"
 #include "hCommon.h"
@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.91 2005/03/03 07:15:42 donnak Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.92 2005/06/29 01:34:02 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -92,7 +92,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgSeqSearch - CGI-script to manage fast human genome sequence searching\n");
+  "hgBlat - CGI-script to manage fast human genome sequence searching\n");
 }
 
 int countSameNonDigit(char *a, char *b)
