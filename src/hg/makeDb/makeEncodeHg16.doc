@@ -1240,6 +1240,12 @@ cat > load.csh << 'EOF'
     do
 	hgLoadBed -bedGraph=4 hg16 encodeSangerChip${T} ${T}.bedGraph4
     done
+
+    # Additional data submitted 2005-06-27 (Heather)
+    ssh hgwdev
+    cd /cluster/data/encode/sanger/chipchip/2005-06-27
+    grep "^chr" H3K4me3_K562_1.wig.txt | sort -k1,1 -k2,2n > H3K4me3_K562.bedGraph4
+    hgLoadBed -bedGraph=4 hg16 encodeSangerChipH3K4me3K562 H3K4me3_K562.bedGraph4
     
 
 ########################################################################
