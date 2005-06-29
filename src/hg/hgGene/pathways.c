@@ -5,9 +5,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.7 2004/12/03 21:54:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.8 2005/06/29 00:42:29 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -90,7 +91,6 @@ safef(query, sizeof(query),
 return sqlQuickNum(conn, query);
 }
 
-
 static char *getCgapId(struct sqlConnection *conn)
 /* Get cgap ID. */
 {
@@ -98,6 +98,23 @@ char query[256];
 safef(query, sizeof(query), 
 	"select cgapId from cgapAlias where alias=\"%s\"", curGeneName);
 return sqlQuickString(conn, query);
+}
+
+static void reactomeLink(struct pathwayLink *pl, struct sqlConnection *conn, 
+	char *geneId)
+{
+char condStr[255];
+char *protAccR;
+char *reactomeId;
+safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+reactomeId = sqlGetField(conn, database, "kgReactome", "reactomeId", condStr);
+if (reactomeId != NULL)
+    {
+    hPrintf("<BR>Reactome: ");
+    hPrintf("<A href=\"http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=%s&\">%s</A><BR>",reactomeId, reactomeId);
+    //hPrintf("<A href=\"http://www.reactome.org/cgi-bin/search?SUBMIT=1&QUERY_CLASS=ReferencePeptideSequence&QUERY=UniProt:%s\">%s</A><BR>",
+    fflush(stdout);
+    }
 }
 
 static void bioCartaLink(struct pathwayLink *pl, struct sqlConnection *conn, 
@@ -132,7 +149,6 @@ if (cgapId != NULL)
     }
 }
 
-
 static int bioCartaCount(struct pathwayLink *pl, struct sqlConnection *conn, 
 	char *geneId)
 /* Count up number of hits. */
@@ -150,6 +166,17 @@ if (cgapId != NULL)
 return ret;
 }
 
+static int reactomeCount(struct pathwayLink *pl, struct sqlConnection *conn, 
+	char *geneId)
+/* Count up number of hits. */
+{
+int ret = 0;
+char query[256];
+safef(query, sizeof(query), 
+	    "select count(*) from kgReactome where kgID='%s'", geneId);
+ret = sqlQuickNum(conn, query);
+return ret;
+}
 
 struct pathwayLink pathwayLinks[] =
 {
@@ -162,6 +189,9 @@ struct pathwayLink pathwayLinks[] =
    { "bioCarta", "BioCarta", "BioCarta from NCI Cancer Genome Anatomy Project",
    	"cgapBiocPathway cgapBiocDesc cgapAlias",
 	bioCartaCount, bioCartaLink},
+   { "reactome", "Reactome", "Reactome from CSHL, EBI, and GO",
+   	"kgReactome",
+	reactomeCount, reactomeLink},
 };
 
 static boolean pathwayExists(struct pathwayLink *pl,
