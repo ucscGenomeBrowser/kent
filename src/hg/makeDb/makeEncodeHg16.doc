@@ -802,17 +802,21 @@ cat > load.csh << 'EOF'
 #Converted stdin, upper limit 1250.00, lower limit -763.50
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
     nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
+    # Reloaded these four 6/29/05 after Jim and Hiram found that they'd 
+    # been loaded with the HeLa data due to a copy/paste error:
     foreach f (rna/wig/*HL60*C01vsNULL.sig.wig.bz2)
       set track = `echo $f:t:r:r:r | perl -wpe \
        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SignalHr$1/;'`
       echo $track
-      bzcat rna/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig.bz2 \
+      bzcat $f \
       | wigEncode stdin wig/$track.wig wib/$track.wib
       ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
       nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
     end
-    # All 4 timepoints had same max & min:
-#Converted stdin, upper limit 1250.00, lower limit -763.50
+#Converted stdin, upper limit 1405.00, lower limit -1052.50
+#Converted stdin, upper limit 1238.50, lower limit -1019.75
+#Converted stdin, upper limit 1587.00, lower limit -1168.00
+#Converted stdin, upper limit 1290.00, lower limit -910.75
 
 
 # BOSTON UNIVERSITY / ZHIPING WENG LAB FIRST EXON DATA (WORKING 2005-01-27 kate)
@@ -2055,6 +2059,7 @@ foreach f (*.gp)
     genePredCheck -db=hg16 $t
 end
 'EOF'
+# << for emacs
 csh doGene.csh >&! doGene.log
 
     # process others
