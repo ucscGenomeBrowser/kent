@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.18 2005/06/28 21:32:23 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.19 2005/06/29 16:45:34 sugnet Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -189,6 +189,24 @@ errAbort("\nusage:\n"
 	 "   orthoMap -db=mm3 -orthoDb=hg15 -chrom=chr18 -itemFile=psls/chr18.mrna.psl \\\n"
 	 "     -itemType=psl -netFile=nets/chr18.net -chainFile=chains/chr18.chain \\\n"
 	 "     -outputFile=beds/chr18.mm3.hg15.mrna.bed");
+}
+
+void chainSubSetForRegion(struct chain *chain, int blockStart, int blockEnd,
+			  struct chain **subChain, struct chain **toFree)
+/* Call chainSubsetOnT and check to make sure that the change wasn't too great. */
+{
+int size = 0;
+chainSubsetOnT(chain, blockStart, blockEnd, subChain, toFree);
+if(*subChain == NULL)
+    return;
+size = abs((*subChain)->qEnd - (*subChain)->qStart);
+
+/* If difference is too large don't believe it. */
+if(abs(size - abs(blockEnd - blockStart)) > maxExonChange) 
+    {
+    chainFree(toFree);
+    *subChain = NULL;
+    }
 }
 
 int cnFillRangeCmp(void *va, void *vb)
@@ -453,6 +471,8 @@ chainNetFreeList(&net);
 return chain;
 }
 
+
+
 void qChainRangePlusStrand(struct chain *chain, int *retQs, int *retQe)
 /* Return range of bases covered by chain on q side on the plus
  * strand. */
@@ -502,18 +522,14 @@ void addExonToBedFromBlock(struct chain *chain, struct bed *bed, int blockStart,
 {
 struct chain *subChain=NULL, *toFree=NULL;
 int qs, qe;
-chainSubsetOnT(chain, blockStart,blockEnd , &subChain, &toFree);    
+chainSubSetForRegion(chain, blockStart,blockEnd , &subChain, &toFree);    
 if(subChain == NULL)
     return;
 qChainRangePlusStrand(subChain, &qs, &qe);
 
-/* Check to make sure we aren't mapping over a huge insert. */
-if(abs(abs(qe-qs) - abs(blockEnd - blockStart)) <= maxExonChange) 
-    {
-    bed->chromStarts[bed->blockCount] = qs - bed->chromStart;
-    bed->blockSizes[bed->blockCount] = abs(qe-qs);
-    bed->blockCount++;
-    }
+bed->chromStarts[bed->blockCount] = qs - bed->chromStart;
+bed->blockSizes[bed->blockCount] = abs(qe-qs);
+bed->blockCount++;
 chainFree(&toFree);
 }
 
@@ -700,7 +716,7 @@ freez(&sizes);
 if(chain == NULL)
     return NULL;
 /* Make a smaller chain to work on... */
-chainSubsetOnT(chain, ag->tStart-1, ag->tEnd+1, &workingChain, &workingChainFree);
+chainSubSetForRegion(chain, ag->tStart-1, ag->tEnd+1, &workingChain, &workingChainFree);
 if(workingChain == NULL)
     return NULL;
 if ((chain->qStrand == '-'))
@@ -715,7 +731,7 @@ for(i = 0; i < agNew->vertexCount; i++)
     int targetPos = agNew->vPositions[i];
     struct chain *subChain=NULL, *toFree=NULL;
     agNew->vPositions[i] = -1;
-    chainSubsetOnT(workingChain, targetPos , targetPos, &subChain, &toFree);    
+    chainSubSetForRegion(workingChain, targetPos , targetPos, &subChain, &toFree);    
     if(subChain != NULL)
 	{
 	int qs, qe;
@@ -922,7 +938,7 @@ struct genePred *synGene = NULL;
 int qs, qe;
 struct chain *subChain=NULL, *toFree=NULL;
 AllocVar(synGene);
-chainSubsetOnT(chain, gene->txStart, gene->txEnd , &subChain, &toFree);    
+chainSubSetForRegion(chain, gene->txStart, gene->txEnd , &subChain, &toFree);    
 if(subChain == NULL)
     {
     *pGene= NULL;
@@ -947,7 +963,7 @@ else
 	errAbort("Don't recognize strand %s from gene %s", gene->strand, gene->name);
     }
 chainFree(&toFree);
-chainSubsetOnT(chain, gene->cdsStart, gene->cdsEnd , &subChain, &toFree);    
+chainSubSetForRegion(chain, gene->cdsStart, gene->cdsEnd , &subChain, &toFree);    
 if(subChain == NULL )
     {
     if(optionExists("cdsErrorFile"))
@@ -974,7 +990,7 @@ void addExonToGene(struct chain *chain, struct genePred *gene, struct genePred *
 struct chain *subChain=NULL, *toFree=NULL;
 int qs, qe;
 int end = gene->exonEnds[block];
-chainSubsetOnT(chain, gene->exonStarts[block], end , &subChain, &toFree);    
+chainSubSetForRegion(chain, gene->exonStarts[block], end , &subChain, &toFree);    
 if(subChain == NULL)
     return;
 qChainRangePlusStrand(subChain, &qs, &qe);
