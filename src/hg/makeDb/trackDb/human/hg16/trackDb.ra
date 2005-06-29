@@ -1633,14 +1633,14 @@ type genePred
     track encodeEgaspPartAceCons
     subTrack encodeEgaspPartial
     shortLabel ACEScan Cons Alt
-    longLabel AceScan Conserved Alternative Exon Predictions
+    longLabel ACEScan Conserved Alternative Exon Predictions
     priority 7
     color 100,12,100
 
     track encodeEgaspPartAceOther
     subTrack encodeEgaspPartial
     shortLabel ACEScan Other
-    longLabel AceScan Unconserved Alternative and Constitutive Exon Predictions
+    longLabel ACEScan Unconserved Alternative and Constitutive Exon Predictions
     priority 8
     color 66,12,133
 
