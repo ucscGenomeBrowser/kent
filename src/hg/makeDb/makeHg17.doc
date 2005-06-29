@@ -16686,3 +16686,25 @@ superfam050524.sfAssign;'
     mkdir -p /usr/local/apache/htdocs/knownGeneList/hg17
     cp -Rfp knownGeneList/hg17/* /usr/local/apache/htdocs/knownGeneList/hg17
 
+# Build kgReactome table for KG to Reactome xref.  Done 6/28/05 Fan.
+
+    ssh hgwdev
+    mkdir -p /cluster/store10/reactome/reactome050613
+    rm    /cluster/data/reactome
+    ln -s /cluster/store10/reactome/reactome050613 /cluster/data/reactome
+
+    cd /cluster/data/reactome
+    
+    wget --timestamp http://www.reactome.org/download/current/sql.gz
+    
+    hgsql hg17 -e 'drop database reactome'
+    hgsql hg17 -e 'create database reactome'
+    zcat sql.gz| hgsql reactome 
+
+    hgsql reactome -N -e 'select kgId, spID, DB_ID from ReferenceEntity, hg17.kgXref where identifier=spID' >kgReactome.tab;
+
+    hgsql hg17 -e 'drop table kgReactome'
+    hgsql hg17 < ~/src/hg/lib/kgReactome.sql
+    hgsql hg17 -e 'load data local infile "kgReactome.tab" into table kgReactome'
+
+
