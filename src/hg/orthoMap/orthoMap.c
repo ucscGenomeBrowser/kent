@@ -121,7 +121,7 @@ the corresponding region of the chain alignment.
 #include "bed.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: orthoMap.c,v 1.19 2005/06/29 16:45:34 sugnet Exp $";
+static char const rcsid[] = "$Id: orthoMap.c,v 1.20 2005/06/29 16:51:14 sugnet Exp $";
 static boolean doHappyDots;            /* output activity dots? */
 static struct rbTree *netTree = NULL;  /* Global red-black tree to store cnfills in for quick searching. */
 static char *workingChrom = NULL;      /* Chromosme we are working on. */
@@ -161,7 +161,7 @@ static char *optionDescripts[] =
     "Table containing items to map.",
     "Type of item: {psl, bed, altGraphX, genePred}",
     "File to output mappings to.",
-    "Records that are mapped are copied to this file",
+/*     "Records that are mapped are copied to this file", */
     "Output records that are selected to this file.",
     "File for gene predictions with CDS errors.",
     "Maximum number in nucleotides that an exon can change by.",
