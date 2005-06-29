@@ -5,7 +5,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: nibFrag.c,v 1.15 2005/01/31 00:46:13 daryl Exp $";
+static char const rcsid[] = "$Id: nibFrag.c,v 1.16 2005/06/29 23:25:43 galt Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"masked", OPTION_BOOLEAN},
@@ -27,7 +27,7 @@ errAbort(
   "options:\n"
   "   -masked - use lower case characters for bases meant to be masked out\n"
   "   -hardMasked - use upper case for not masked-out and 'N' characters for masked-out bases\n"
-  "   -upper - use uppper case characters for all bases\n"
+  "   -upper - use upper case characters for all bases\n"
   "   -name=name Use given name after '>' in output sequence\n"
   "   -dbHeader=db Add full database info to the header, with or without -name option\n"
   "   -tbaHeader=db Format header for compatibility with tba, takes database name as argument\n"
