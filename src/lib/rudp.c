@@ -55,7 +55,7 @@
 #include "errabort.h"
 #include "rudp.h"
 
-static char const rcsid[] = "$Id: rudp.c,v 1.12 2005/04/10 14:41:25 markd Exp $";
+static char const rcsid[] = "$Id: rudp.c,v 1.13 2005/06/29 22:29:15 galt Exp $";
 
 #define MAX_TIME_OUT 999999
 
@@ -219,11 +219,17 @@ for (;;)
     FD_ZERO(&set);
     FD_SET(sd, &set);
     readyCount = select(sd+1, &set, NULL, NULL, &tv);
-    if (readyCount == EINTR)	/* Select interrupted, not timed out. */
-	continue;
-    else if (readyCount < 0)
-        warn("select failure in rudp: %s", strerror(errno));
-    return readyCount > 0;	/* Zero readCount indicates time out */
+    if (readyCount < 0) 
+	{
+	if (errno == EINTR)	/* Select interrupted, not timed out. */
+	    continue;
+    	else 
+    	    warn("select failure in rudp: %s", strerror(errno));
+    	}
+    else
+	{
+    	return readyCount > 0;	/* Zero readyCount indicates time out */
+	}
     }
 }
 
