@@ -9,3 +9,9 @@ O = ${X}.o
 
 ${X}: $O ${MYLIBS}
 	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
+
+X = countNib
+O = ${X}.o
+
+${X}: $O ${MYLIBS}
+	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
