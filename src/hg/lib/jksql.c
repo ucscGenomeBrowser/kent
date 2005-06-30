@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.76 2005/04/19 20:35:41 fanhsu Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.77 2005/06/30 07:37:49 genbank Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -102,28 +102,24 @@ if (monitorFlags)
 return deltaTime;
 }
 
-/* NULL or empty formats generate a warning in gcc 3.2.2, so only check
- * format on in 3.4 on */
-#if defined(__GNUC__) && defined(JK_WARN) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >=4)))
-static void monitorPrint(struct sqlConnection *sc, char *name,
-                         char *format, ...)
-__attribute__((format(printf, 3, 4)));
-#endif
+static void monitorPrintInfo(struct sqlConnection *sc, char *name)
+/* print a monitor message, with connection id and databases. */
+{
+fprintf(stderr, "%.*s%s %ld %s\n", traceIndent, indentStr, name,
+        sc->conn->thread_id, sc->conn->db);
+}
 
 static void monitorPrint(struct sqlConnection *sc, char *name,
                          char *format, ...)
-/* print a monitor message, with connection id and databases.  Handle
- * indentation.   Format maybe NULL. */
+/* print a monitor message, with connection id, databases, and
+ * printf style message.*/
 {
 va_list args;
 fprintf(stderr, "%.*s%s %ld %s ", traceIndent, indentStr, name,
         sc->conn->thread_id, sc->conn->db);
-if (format != NULL)
-    {
-    va_start(args, format);
-    vfprintf(stderr, format, args);
-    va_end(args);
-    }
+va_start(args, format);
+vfprintf(stderr, format, args);
+va_end(args);
 fputc('\n', stderr);
 }
 
@@ -235,7 +231,7 @@ if (sc != NULL)
     if (conn != NULL)
 	{
         if (monitorFlags & JKSQL_TRACE)
-            monitorPrint(sc, "SQL_DISCONNECT", NULL);
+            monitorPrintInfo(sc, "SQL_DISCONNECT");
         monitorEnter();
 	mysql_close(conn);
         monitorLeave();
