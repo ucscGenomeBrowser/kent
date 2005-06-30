@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.980 2005/06/27 17:21:08 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.981 2005/06/30 19:08:18 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2667,17 +2667,48 @@ void lookupKnownGeneNames(struct linkedFeatures *lfList)
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn();
 char *geneSymbol;
+char *protDisplayId;
 char cond_str[256];
+char *knownGeneLabel = cartUsualString(cart, "knownGene.label", "gene");
 
+boolean useGeneSymbol= sameString(knownGeneLabel, "gene symbol")
+    || sameString(knownGeneLabel, "all");
+
+boolean useKgId      = sameString(knownGeneLabel, "UCSC Known Gene ID")
+    || sameString(knownGeneLabel, "all");
+
+boolean useProtDisplayId = sameString(knownGeneLabel, "UniProt Display ID")
+    || sameString(knownGeneLabel, "all");
+
+boolean useAll = sameString(knownGeneLabel, "all");
+	
 if (hTableExists("kgXref"))
     {
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
-	/* default is to use kgID */
-	lf->extra = lf->name;
-        sprintf(cond_str, "kgID='%s'", lf->name);
-        geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
-	if (geneSymbol != NULL) lf->extra = geneSymbol;
+        struct dyString *name = dyStringNew(64);
+    	if (useGeneSymbol)
+            {
+            sprintf(cond_str, "kgID='%s'", lf->name);
+            geneSymbol = sqlGetField(conn, database, "kgXref", "geneSymbol", cond_str);
+            if (geneSymbol != NULL)
+            	{
+            	dyStringAppend(name, geneSymbol);
+            	if (useAll) dyStringAppendC(name, '/');
+            	}
+            }
+    	if (useKgId)
+            {
+            dyStringAppend(name, lf->name);
+            if (useAll) dyStringAppendC(name, '/');
+	    }
+    	if (useProtDisplayId)
+            {
+	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+            protDisplayId = sqlGetField(conn, database, "kgXref", "spDisplayID", cond_str);
+            dyStringAppend(name, protDisplayId);
+	    }
+    	lf->extra = dyStringCannibalize(&name);
 	}
     }
 hFreeConn(&conn);
