@@ -18,7 +18,8 @@ if ($#argv != 1) then
   echo "    uses list of assemblies on beta."
   echo "    ignores files with Scaffold in the name "
   echo "      unless a db that uses them is specified."
-  echo "    ignores: description genbank axtNetDp1 ci1 zoo."
+  # echo "    ignores: description genbank axtNetDp1 ci1 zoo."
+  echo "    ignores: axtNetDp1 ci1 zoo."
   echo "    ignores: /sacCer1/sam."
   echo
   echo '      usage:  database or path (will use "all")'
@@ -40,6 +41,7 @@ rm -f $output2
 hgsql -h hgwbeta -N -e "SELECT name FROM dbDb" hgcentralbeta \
    | sort | grep -v ci1 | grep -v zoo > xxAssembliesxx
 echo "all" >> xxAssembliesxx
+echo "genbank" >> xxAssembliesxx
 
 # error checking for db name on command line
 set dbFlag=0
@@ -66,16 +68,16 @@ if ($db == "all") then
       foreach yedir ( $yeDirs )
         ssh hgwbeta find /gbdb/$assembly/$yedir -type f -print \
           | grep -vi Scaffold \
-          | grep -v description | grep -v genbank \
           | grep -v axtNetDp1   | grep -v "sacCer1/sam/" > tempfile
+          # grep -v description | grep -v genbank \
         cat tempfile >> xxfullListxx
         cat tempfile
         rm -f tempfile
       end
     else 
       ssh hgwbeta find /gbdb/$assembly -type f -print | grep -vi Scaffold \
-         | grep -v description | grep -v genbank \
          | grep -v axtNetDp1   | grep -v "sacCer1/sam/" > tempfile
+         # grep -v description | grep -v genbank \
       cat tempfile >> xxfullListxx
       cat tempfile
       rm -f tempfile
@@ -97,4 +99,3 @@ cp gbdb.$db.$todayDate /usr/local/apache/htdocs/qa/test-results/gbdb
 # clean up
 rm -f xxAssembliesxx
 rm -f xxfullListxx
-

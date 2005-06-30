@@ -19,7 +19,7 @@ if ($#argv != 1) then
   echo "  script to check for /gbdb files missing after reboot."
   echo "    checks for missing files on hgnfs1."
   echo "    uses existing list of /gbdb files - in dev:qa/test-results."
-  echo "    ignores scaffolds description genbank axtNetDp1 ci1 zoo."
+  echo "    ignores scaffolds axtNetDp1 ci1 zoo."
   echo "    ignores /sacCer1/sam."
   echo
   echo '      usage:  go|override'
