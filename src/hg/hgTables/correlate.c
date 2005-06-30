@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.27 2005/06/30 21:43:36 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.28 2005/06/30 23:13:21 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -924,7 +924,8 @@ v->calcTime += endTime - startTime;
 static void statsRowOut(char *chrom, char *name, char *shortLabel,
     int chromStart, int chromEnd, int bases, double min, double max,
 	double sumData, double sumSquares, double r, long fetchMs, long calcMs,
-		char *table1, char *table2, double a, double b)
+	    char *table1, char *table2, char *compositeTable1,
+		char *compositeTable2, double a, double b)
 /*	display a single line of statistics	*/
 {
 double mean = 0.0;
@@ -960,9 +961,25 @@ if (chromStart || chromEnd)
 	hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
 	hPrintf("&db=%s", database);
 	hPrintf("&position=%s", posBuf);
-	hPrintf("&%s=%s", table1, hTrackOpenVis(table1));
+	if ((compositeTable1 != NULL)&&differentWord(table1, compositeTable1))
+	    {
+	    hPrintf("&%s=%s", compositeTable1, hTrackOpenVis(compositeTable1));
+	    hPrintf("&%s_sel=1", table1);
+	    }
+	else
+	    hPrintf("&%s=%s", table1, hTrackOpenVis(table1));
 	if (table2 != NULL)
-	    hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+	    {
+	    if ((compositeTable2 != NULL)
+			&&differentWord(table2, compositeTable2))
+		{
+		hPrintf("&%s=%s", compositeTable2,
+			hTrackOpenVis(compositeTable2));
+		hPrintf("&%s_sel=1", table2);
+		}
+	    else
+		hPrintf("&%s=%s", table2, hTrackOpenVis(table2));
+	    }
 	hPrintf("\" TARGET=_blank>");
 	if (name)
 	    {
@@ -1103,11 +1120,11 @@ else if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable, result->m, result->b);
+		table2->actualTable, NULL, NULL, result->m, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min2, max2, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
-		table2->actualTable, 0.0, 0.0);
+		table2->actualTable, NULL, NULL, 0.0, 0.0);
     hPrintf("<TR><TD COLSPAN=11><HR></TD></TR>\n");
     }
 
@@ -1121,12 +1138,13 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
 	v1->count, v1->min, v1->max, v1->sumData,
 	    v1->sumSquares, v2->r, v1->fetchTime,
 		v1->calcTime, table1->actualTable, table2->actualTable,
-		    v1->m, v1->b);
+		    table1->tdb->tableName, table2->tdb->tableName, v1->m,
+			v1->b);
     statsRowOut(v2->chrom, v1->name, table2->shortLabel, 0, 0,
 	v2->count, v2->min, v2->max, v2->sumData,
 	    v2->sumSquares, v2->r, v2->fetchTime,
 		v2->calcTime, table1->actualTable, table2->actualTable,
-		    0.0, 0.0);
+		    NULL, NULL, 0.0, 0.0);
     }
 
 if (rowsOutput > 1)
@@ -1135,11 +1153,11 @@ if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable, result->m, result->b);
+		table2->actualTable, NULL, NULL, result->m, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min2, max2, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
-		table2->actualTable, 0.0, 0.0);
+		table2->actualTable, NULL, NULL, 0.0, 0.0);
 
     tableLabels();
     }
