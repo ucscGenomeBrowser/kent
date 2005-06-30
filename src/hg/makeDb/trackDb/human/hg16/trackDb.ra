@@ -4081,31 +4081,31 @@ type bed 5 .
     color 200,200,5
     priority 3
 
-    track encodeTbaBinOrPhastEl
-    shortLabel TBA Bin|Phast
-    longLabel TBA BinCons/PhastCons Union Conserved Elements
+    track encodeTbaUnionEl
+    shortLabel TBA Union
+    longLabel TBA PhastCons/BinCons/GERP Union Conserved Elements
     subTrack encodeTbaElements
     color 220,132,0
     priority 4
 
-    track encodeTbaBinAndPhastEl
+    track encodeTbaNcUnionEl
+    shortLabel TBA NC Union
+    longLabel TBA PhastCons/BinCons/GERP Union NonCoding Conserved Elements
     subTrack encodeTbaElements
-    shortLabel TBA Bin&Phast
-    longLabel TBA BinCons/PhastCons Intersection Conserved Elements
     color 220,132,0
     priority 5
 
-    track encodeTbaNcBinOrPhastEl
-    shortLabel TBA NC Bin|Phast
-    longLabel TBA BinCons/PhastCons Union NonCoding Conserved Elements
+    track encodeTbaIntersectEl
     subTrack encodeTbaElements
+    shortLabel TBA Intersect
+    longLabel TBA PhastCons/BinCons/GERP Intersection Conserved Elements
     color 220,132,0
     priority 6
 
-    track encodeTbaNcBinAndPhastEl
+    track encodeTbaNcIntersectEl
     subTrack encodeTbaElements
-    shortLabel TBA NC Bin&Phast
-    longLabel TBA BinCons/PhastCons Intersection NonCoding Conserved Elements
+    shortLabel TBA NC Intersect
+    longLabel TBA PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
     color 220,132,0
     priority 7
 
@@ -4179,8 +4179,6 @@ shortLabel LAGAN Elements
 longLabel Stanford LAGAN Conserved Elements
 group encodeCompGeno
 priority 74.2
-color 0,60,120
-useScore 1
 visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -4188,8 +4186,53 @@ type bed 5 .
 
     track encodeMlaganGerpEl
     subTrack encodeMlaganElements
-    shortLabel LAGAN GERP Els
+    shortLabel LAGAN GERP
     longLabel LAGAN GERP Conserved Elements
+    color 100,5,100
+    priority 1
+
+    track encodeMlaganBinConsEl
+    subTrack encodeMlaganElements
+    shortLabel LAGAN BinCons
+    longLabel LAGAN BinCons Conserved Elements
+    color 170,5,10
+    priority 2
+
+    track encodeMlaganPhastConsEl
+    subTrack encodeMlaganElements
+    shortLabel LAGAN PhastCons
+    longLabel LAGAN PhastCons Conserved Elements
+    color 200,200,5
+    priority 3
+
+    track encodeMlaganUnionEl
+    shortLabel LAGAN Union
+    longLabel LAGAN PhastCons/BinCons/GERP Union Conserved Elements
+    subTrack encodeMlaganElements
+    color 220,132,0
+    priority 4
+
+    track encodeMlaganNcUnionEl
+    shortLabel LAGAN NC Union
+    longLabel LAGAN PhastCons/BinCons/GERP Union NonCoding Conserved Elements
+    subTrack encodeMlaganElements
+    color 220,132,0
+    priority 5
+
+    track encodeMlaganIntersectEl
+    subTrack encodeMlaganElements
+    shortLabel LAGAN Intersect
+    longLabel LAGAN PhastCons/BinCons/GERP Intersection Conserved Elements
+    color 220,132,0
+    priority 6
+
+    track encodeMlaganNcIntersectEl
+    subTrack encodeMlaganElements
+    shortLabel LAGAN NC Intersect
+    longLabel LAGAN PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
+    color 220,132,0
+    priority 7
+
 
 track encode_tba
 shortLabel TBA Nov04
