@@ -11,8 +11,8 @@ A = hgTables
 T = tstbug.o
 
 O = $A.o asObj.o bedList.o compositeTrack.o custom.o filterFields.o \
-    gffOut.o identifiers.o intersect.o correlate.o javascript.o \
-    joining.o maf.o mainPage.o rangeHistogram.o schema.o \
+    gffOut.o identifiers.o intersect.o correlate.o correlatePlot.o \
+    javascript.o joining.o maf.o mainPage.o rangeHistogram.o schema.o \
     seqOut.o sumStats.o usage.o wiggle.o gala.o galaxy.o
 
 include ../../inc/cgi_build_rules.mk
@@ -79,6 +79,7 @@ sumStats.o:	hgTables.h
 usage.o:	hgTables.h
 wiggle.o:	hgTables.h
 correlate.o:	hgTables.h correlate.h
+correlatePlot.o:	hgTables.h correlate.h
 
 compiletest: $T
 	${CC} -Wall $T ${MYLIBS} ${L}

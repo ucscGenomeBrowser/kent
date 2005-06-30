@@ -1,8 +1,10 @@
 /* correlate.h - a help text string for correlate.c */
+/*	and communication between correlate.c and correlatePlot.c	*/
 
 #ifndef CORRELATE_H
 #define CORRELATE_H
 
+#if defined(INCL_HELP_TEXT)
 static char *corrHelpText = "\
 <HR>\
 <H2>Description</H2>\
@@ -25,12 +27,95 @@ standard deviations of the data sets X and Y, and \
 <em>s<sub>xy</sub> = ( sum(X<sub>i</sub>*Y<sub>i</sub>) - \
 ((sum(X<sub>i</sub>)*sum(Y<sub>i</sub>))/n) ) / (n - 1)</em> \
 </P>\
+<P>\
+When available, the data values from a track are used in the calculations. \
+For tracks that do not have data values, such as gene structured tracks, \
+the data value used in the calculation is a 1.0 for bases that are covered \
+by exons, and 0.0 at other positions of the item.  For simple tracks \
+that are not gene structures, or data valued tracks, the calculation becomes \
+a filter where the value 1.0 is used for the extent of the item and only \
+those bases are used in the calculation.\
+</P>\
 <H2>Known Limitations</H2>\
 <P>The number of bases that can be processed is limited, on the order of \
 about 60,000,000 due to memory and processing time limits.  Therefore, \
 large chromosomes, e.g. chr1 on human, can not be processed entirely. \
 Future improvements to the process are expected to remove this processing \
 limit.\
+</P>\
+<P>\
+Intersection filters set on the main table browser page will function here, \
+but they will apply to both tables when possible.  The various intersection \
+options can produce unusual results.  It is probably best to not use \
+intersections, or use the results of an intersection that has been \
+sent to a custom track.\
 </P>";
+#endif
+
+/*	Each track data's values will be copied into one of these structures,
+ *	This is also the form that a result vector will take.
+ *	There can be a linked list of these for multiple regions.
+ *	The positions are in order, there are no gaps, count is the
+ *	length of the position and value arrays.
+ */
+struct dataVector
+    {
+    struct dataVector *next;	/* linked list for multiple regions */
+    char *chrom;		/* Chromosome. */
+    int start;			/* Zero-based. */
+    int end;			/* Non-inclusive. */
+    char *name;		/*	potentially a region name (for encode) */
+    int count;		/*	number of data values	*/
+    int maxCount;	/*	no more than this number of data values	*/
+    int *position;	/*	array of chrom positions, 0-relative	*/
+    float *value;	/*	array of data values at these positions	*/
+    double min;		/*	minimum data value in the set	*/
+    double max;		/*	maximum data value in the set	*/
+    double sumData;	/*	sum of all data here, sum(Xi)	*/
+    double sumSquares;	/*	sum of squares of all data here, sum(Xi*Xi) */
+    double sumProduct;	/*	accumulates sum(Xi * Yi) here */
+    double r;		/*	correlation coefficient	*/
+    double m;		/*	the m in: y = mx + b [linear regression line] */
+    double b;		/*	the b in: y = mx + b [linear regression line] */
+    long fetchTime;	/*	msec	*/
+    long calcTime;	/*	msec	*/
+    };
+
+/*	there can be a list of these for N number of tables to work with */
+/*	the first case will be two only, later improvements may do N tables */
+struct trackTable
+    {
+    struct trackTable *next;
+    struct trackDb *tdb;	/*	may be wigMaf primary	*/
+    char *tableName;	/* the actual name, without composite confusion */
+    char *shortLabel;
+    char *longLabel;
+    boolean isBedGraph;		/* type of data in table	*/
+    boolean isWig;		/* type of data in table	*/
+    boolean isCustom;		/* might be a custom track	*/
+    int bedGraphColumnNum;	/* the column where the dataValue is */
+    char *bedGraphColumnName;	/* the name of the bedGraph column */
+    int bedColumns;		/* the number of columns in the bed table */
+				/*	as specified in the type line */
+    struct trackDb *actualTdb;
+			/* the actual tdb, without composite/wigMaf confusion */
+    char *actualTable;	/* without composite/wigMaf confusion */
+    struct dataVector *vSet;	/* the data for this table, all regions */
+    };
+
+/*	functions in correlatePlot.c	*/
+
+#define PLOT_WIDTH	304
+#define PLOT_HEIGHT	304
+#define PLOT_MARGIN	2
+#define DOT_SIZE	2
+
+struct tempName *scatterPlot(struct trackTable *table1,
+    struct trackTable *table2, struct dataVector *result);
+/*	create scatter plot gif file in trash, return path name */
+
+struct tempName *residualPlot(struct trackTable *table1,
+    struct trackTable *table2, struct dataVector *result);
+/*	create residual plot gif file in trash, return path name */
 
 #endif /* CORRELATE_H */

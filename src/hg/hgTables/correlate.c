@@ -14,46 +14,21 @@
 #include "featureBits.h"
 #include "obscure.h"
 #include "wiggle.h"
+#include "customTrack.h"
 #include "hgTables.h"
-#include "correlate.h"	/*	to fetch corrHelpText	*/
+#define INCL_HELP_TEXT
+#include "correlate.h"	/* our structure defns and the corrHelpText string */
+#include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.26 2005/06/28 00:28:21 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.27 2005/06/30 21:43:36 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
+    "20,000,000",
     "40,000,000",
     "60,000,000",
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
-
-/*	Each track data's values will be copied into one of these structures,
- *	This is also the form that a result vector will take.
- *	There can be a linked list of these for multiple regions.
- *	The positions are in order, there are no gaps, count is the
- *	length of the position and value arrays.
- */
-struct dataVector
-    {
-    struct dataVector *next;	/* linked list for multiple regions */
-    char *chrom;		/* Chromosome. */
-    int start;			/* Zero-based. */
-    int end;			/* Non-inclusive. */
-    char *name;		/*	potentially a region name (for encode) */
-    int count;		/*	number of data values	*/
-    int maxCount;	/*	no more than this number of data values	*/
-    int *position;	/*	array of chrom positions, 0-relative	*/
-    float *value;	/*	array of data values at these positions	*/
-    double min;		/*	minimum data value in the set	*/
-    double max;		/*	maximum data value in the set	*/
-    double sumData;	/*	sum of all data here, sum(Xi)	*/
-    double sumSquares;	/*	sum of squares of all data here, sum(Xi*Xi) */
-    double sumProduct;	/*	accumulates sum(Xi * Yi) here */
-    double r;		/*	correlation coefficient	*/
-    double a;		/*	the a in: y = ax + b [linear regression line] */
-    double b;		/*	the b in: y = ax + b [linear regression line] */
-    long fetchTime;	/*	msec	*/
-    long calcTime;	/*	msec	*/
-    };
 
 static struct dataVector *allocDataVector(char *chrom, int bases)
 /*	allocate a dataVector for given number of bases	on specified chrom */
@@ -74,8 +49,8 @@ v->sumData = 0.0;	/*	starting sum is zero	*/
 v->sumSquares = 0.0;	/*	starting sum is zero	*/
 v->sumProduct = 0.0;	/*	starting sum is zero	*/
 v->r = 0.0;		/*	an initial r is zero	*/
-v->fetchTime = 0;
-v->calcTime = 0;
+v->fetchTime = 0;	/*	will accumulate fetch timings */
+v->calcTime = 0;	/*	will accumulate calculation timings */
 return v;
 }
 
@@ -94,43 +69,11 @@ if (dv)
 freez(v);
 }
 
-/*	there can be a list of these for N number of tables to work with */
-/*	the first case will be two only, later improvements may do N tables */
-struct trackTable
-    {
-    struct trackTable *next;
-    struct trackDb *tdb;	/*	may be wigMaf primary	*/
-    char *tableName;	/* the actual name, without composite confusion */
-    char *shortLabel;
-    char *longLabel;
-    boolean isBedGraph;		/* type of data in table	*/
-    boolean isWig;		/* type of data in table	*/
-    boolean isCustom;		/* might be a custom track	*/
-    int bedGraphColumnNum;	/* the column where the dataValue is */
-    char *bedGraphColumnName;	/* the name of the bedGraph column */
-    struct trackDb *actualTdb;	/* the actual tdb, without composite/wigMaf confusion */
-    char *actualTable;	/* without wigMaf confusion */
-    struct dataVector *vSet;	/* the data for this table, all regions */
-    };
-
 static struct trackTable *allocTrackTable()
 /*	allocate a trackTable item */
 {
 struct trackTable *t;
-AllocVar(t);
-t->next = NULL;
-t->tdb = NULL;
-t->tableName = NULL;
-t->shortLabel = NULL;
-t->longLabel = NULL;
-t->isBedGraph = FALSE;
-t->isWig = FALSE;
-t->isCustom = FALSE;
-t->bedGraphColumnNum = 0;
-t->bedGraphColumnName = NULL;
-t->actualTdb = NULL;
-t->actualTable = NULL;
-t->vSet = NULL;
+AllocVar(t);	/*	everything is zero which is what we want	*/
 return t;
 }
 
@@ -163,42 +106,9 @@ for (table = *tl; table != NULL; table = next)
 *tl = NULL;
 }
 
-#ifdef NOT
-/*	this is the end result of all the data collection and analysis */
-struct correlationResult
-    {
-    struct trackTable *table1;
-    struct trackTable *table2;
-    struct dataVector *residual;
-    };
-
-struct correlationResult *allocCorrelationResult(struct trackTable *t1,
-        struct trackTable *t2, int totalBases, char *chrom)
-{
-struct correlationResult *cr;
-AllocVar(cr);
-cr->table1 = t1;
-cr->table2 = t2;
-cr->residual = allocDataVector(chrom, totalBases);
-return cr;
-}
-
-static void freeCorrelationResult(struct correlationResult **cr)
-/*	free up correlationResult structure	*/
-{
-if (cr)
-    {
-    struct correlationResult *cResult;
-    cResult=*cr;
-    freeTrackTable(&cResult->table1);
-    freeTrackTable(&cResult->table2);
-    freeDataVector(&cResult->residual);
-    freez(cr);
-    }
-}
-#endif
-
-/*	This restrictedTrackList is created in getLimitedTrackList() */
+/*	This restrictedTrackList is created in getLimitedTrackList()
+ *	It is a subset of the fullTrackList
+ */
 static struct trackDb *restrictedTrackList = NULL;
 
 /* We keep two copies of variables, so that we can
@@ -251,53 +161,77 @@ jsMakeTrackingRadioButton(hgtaNextCorrelateOp, "op", val, selVal);
 }
 #endif
 
-static boolean validTable(struct trackDb *tdb)
+boolean correlateTableOK(struct trackDb *tdb)
+/*	is this table OK to correlate with ?	*/
 {
-if (tdb && (startsWith("bedGraph", tdb->type) || startsWith("wig ",tdb->type)))
+if (tdb &&
+	(startsWith("bedGraph", tdb->type) ||
+	startsWith("wig ",tdb->type) ||
+	startsWith("genePred",tdb->type) ||
+	startsWith("psl",tdb->type) ||
+	startsWith("wigMaf ",tdb->type) ||
+	startsWith("bed ",tdb->type) )
+    )
     return TRUE;
-else
-    return FALSE;
+//hPrintf("<P>correlateTableOK: %s FALSE</P>\n", tdb->type);
+return FALSE;
 }
 
 static struct trackDb *getLimitedTrackList(struct grp **grpList)
 /*	create list of tracks limited to specific types, and return the
  *	groups of those tracks	*/
 {
-struct trackDb *trackList = NULL, *tdb, *next = NULL;
+struct trackDb *tdb;
 struct hash *groupsInTrackList = newHash(0);
 struct grp *groupsAll, *groupList = NULL, *group;
 
-/*	The restrictedTrackList will become shortened by the work below */
-restrictedTrackList = getFullTrackList();
-groupsAll = hLoadGrps();
+if (NULL == fullTrackList)
+    errAbort("fullTrackList is null in getLimitedTrackList");
 
-for (tdb = restrictedTrackList; tdb != NULL; tdb = next)
+/*	already been done ?  Then return previous answer	*/
+if (restrictedTrackList)
+    return(restrictedTrackList);
+
+
+/*	for each track that is OK to correlate, remember its group on
+ *	the groupsInTrackList, and clone the trackDb structure onto the
+ *	restrictedTrackList
+ */
+for (tdb = fullTrackList; tdb != NULL; tdb = tdb->next)
     {
-    next = tdb->next;
-    if (validTable(tdb))
+    if (correlateTableOK(tdb))
 	{
+	struct trackDb *tdbClone;
 	if (!hashLookup(groupsInTrackList,tdb->grp))
 	    {
 	    hashAdd(groupsInTrackList, tdb->grp, NULL);
 	    }
-	slAddHead(&trackList, tdb);
+	tdbClone = cloneMem(tdb,sizeof(struct trackDb));
+	tdbClone->next = NULL;
+	slAddHead(&restrictedTrackList, tdbClone);
 	}
     }
 
-for (group = slPopHead(&groupsAll);group != NULL;group = slPopHead(&groupsAll))
-    {
-    if (hashLookup(groupsInTrackList, group->name))
-	{
-	slAddTail(&groupList, group);
-	}
-    else
-        grpFree(&group);
-    }
-hashFree(&groupsInTrackList);
 if (grpList)
+    {
+    groupsAll = hLoadGrps();
+    for (group = slPopHead(&groupsAll); group != NULL;
+		group = slPopHead(&groupsAll))
+	{
+	if (hashLookup(groupsInTrackList, group->name))
+	    {
+	    slAddTail(&groupList, group);
+	    }
+	else
+	    grpFree(&group);
+	}
     *grpList = groupList;
-slReverse(&trackList);
-return(trackList);
+    }
+
+hashFree(&groupsInTrackList);
+slReverse(&restrictedTrackList);
+
+return(restrictedTrackList);
 }
 
 static struct trackDb *showTrackFieldLimited(struct grp *selGroup,
@@ -349,11 +283,16 @@ return selTrack;
 }
 
 struct trackDb *findTdb(struct trackDb *track, char *table)
-/*	if the given track is a composite, find the tdb for the table */
+/*	find the tdb for the table, if it is custom or composite or ordinary  */
 {
 struct trackDb *tdb = track;
 
-if (track && trackDbIsComposite(track))
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    tdb = ct->tdb;
+    }
+else if (track && trackDbIsComposite(track))
     {
     struct trackDb *subTdb;
     for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
@@ -383,9 +322,24 @@ table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
 table->actualTdb = tdb;
 table->actualTable = cloneString(tdb->tableName);
-table->isBedGraph = startsWith("bedGraph", tdb->type);
+table->isBedGraph = FALSE;
 table->isWig = FALSE;
-if (startsWith("wig",tdb->type))
+if (startsWith("bedGraph", tdb->type))
+    table->isBedGraph = TRUE;
+else if (startsWith("bed ", tdb->type))
+    {
+    int wordCount;
+    char *words[8];
+    char *typeLine = cloneString(tdb->type);
+    wordCount = chopLine(typeLine,words);
+    if ((wordCount > 1) && differentWord(".",words[1]))
+	{
+        table->bedColumns = sqlUnsigned(words[1]);
+	}
+    else
+        table->bedColumns = 3;
+    }
+else if (startsWith("wig",tdb->type))
     {
     if (startsWith("wigMaf",tdb->type))
 	{
@@ -397,6 +351,9 @@ if (startsWith("wig",tdb->type))
     }
 table->isCustom = isCustomTrack(table->actualTable);
 
+/*	find the column name that belongs to the specified numeric
+ *	column from the bedGraph type line
+ */
 if (table->isBedGraph && (!table->isCustom))
     {
     char query[256];
@@ -423,7 +380,7 @@ if (table->isBedGraph && (!table->isCustom))
 	}
     sqlFreeResult(&sr);
     }
-}
+}	/*	static void fillInTrackTable()	*/
 
 /****************************   NOTE   ********************************
  *	the following showGroupFieldLimited, showTable2FieldLimited and
@@ -465,6 +422,8 @@ if (track == NULL)
 else
     nameList = tablesForTrack(track);
 
+slReverse(&nameList);
+
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
 selTable = cartUsualString(cart, table, nameList->name);
@@ -476,9 +435,8 @@ hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
-    if (track != NULL)
-	tdb = findTdb(track, name->name);
-    if (validTable(tdb))
+    tdb = findTdb(track, name->name);
+    if (correlateTableOK(tdb))
 	{
 	hPrintf("<OPTION VALUE=%s", name->name);
 	if (sameString(selTable, name->name))
@@ -542,6 +500,205 @@ if (wigData)
     }
 }
 
+static void correlateReadBed(struct trackTable *table,
+    struct dataVector *vector, struct region *region,
+	struct sqlConnection *conn)
+/*	reads any kind of bed file, from db or custom track	*/
+{
+int vIndex = vector->count;	/* it is starting at zero	*/
+struct bed *bedList = NULL, *bed;
+int bedFieldCount = 0;
+struct lm *lm = lmInit(64*1024);
+int itemCount = 0;
+
+/*	cookedBedList can read anything but bedGraph, so read bedGraph
+ *	by itself, use cookedBedList for the other types.
+ *	NOTE - this isn't intersecting the bedGraph types !
+ *		but it is doing the data filter if it is set.
+ */
+if (table->isBedGraph)
+    {
+    char *filter = filterClause(database, table->actualTable, region->chrom);
+    char fields[256];
+    struct sqlResult *sr = NULL;
+    char **row;
+    int rowOffset = 0;
+
+    if (table->isCustom)
+	errAbort("Custom track bed graph correlations not yet implemented");
+
+    safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
+	table->bedGraphColumnName);
+    itemCount = 0;	/*	dbg	*/
+    sr = hExtendedRangeQuery(conn, table->actualTable, region->chrom,
+	region->start, region->end, filter, TRUE, fields, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct bedGraph *bedItem;
+	lmAllocVar(lm,bedItem);
+	bedItem->chrom = region->chrom;
+	bedItem->chromStart = sqlUnsigned(row[0]);
+	bedItem->chromEnd = sqlUnsigned(row[1]);
+	bedItem->dataValue = sqlFloat(row[2]);
+	slAddHead(&bedList, (struct bed *)bedItem);
+	++itemCount;
+	}
+    sqlFreeResult(&sr);
+    bedFieldCount = 4;
+    }
+else
+    {
+    /*	other bed types have their vector filled with zero first	*/
+    int i;
+    int indx = vIndex;
+    register float value = 0.0;
+    for (i = region->start; (i < region->end) && (indx < vector->maxCount);
+		++i, ++indx)
+	{
+	vector->value[indx] = value;
+	vector->position[indx] = i;
+	}
+    vector->count = indx;	/*	this is how many there are	*/
+    /*	and now read in the bed list for this data set	*/
+    bedList=cookedBedList(conn, table->actualTable, region, lm, &bedFieldCount);
+    }
+
+slSort(&bedList, bedLineCmp);   /* make sure it is sorted by chrom,chromStart*/
+
+itemCount = 0;	/*	dbg	*/
+if (table->isBedGraph)	/*	bedGraphs fill with their value */
+    {
+    /*	this lastEnd business will take care of the overlapping bed
+     *	situation.  As each bed item is processed, it determines the
+     *	lastEnd position at its end, the next item has to have data beyond
+     *	that position.  The bed list was ordered by chromStart above so
+     *	we know they will be processed in the proper order.
+     */
+    int lastEnd = 0;	/*	to ensure ever increasing positions */
+    if (vector->count > 0)
+	lastEnd = vector->position[(vector->count)-1];
+
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	register int bases = 0;
+	int cStart = bed->chromStart;
+	int cEnd = bed->chromEnd;
+	int start, size, vEnd;
+	int i;
+
+	++itemCount;	/*	dbg	*/
+
+	/*	make sure we stay within the region specified	*/
+	if (cEnd < region->start || cStart > region->end)
+	    continue;	/* item is completely out of the region */
+
+	/*	trim to region if necessary	*/
+	if (cStart < region->start) cStart = region->start;
+	if (cEnd > region->end) cEnd = region->end;
+	if (cEnd <= lastEnd)
+	    continue;	/*	no new area covered by this item	*/
+
+	start = cStart;
+	if (start < lastEnd) start = lastEnd;
+	size = cEnd - start;
+	vEnd = vIndex + size;
+	if (vEnd > vector->maxCount)
+	    {
+	    vEnd = vector->maxCount;
+	    size = vEnd - vIndex;
+	    }
+	if (size > 0)
+	    {
+	    register float value = ((struct bedGraph *)bed)->dataValue;
+	    for (i = start; vIndex < vEnd; ++i, ++vIndex)
+		{
+		vector->value[vIndex] = value;
+		vector->position[vIndex] = i;
+		}
+	    bases += size;
+	    lastEnd = i;
+	    vector->count += bases;
+	    }
+	}	/* for (bed = bedList; bed != NULL; bed = bed->next) */
+    }	/*	processing bedGraph data	*/
+else if (bedFieldCount < 12)
+    /*	positional only beds fill each item's span with 1.0	*/
+    {
+    itemCount = 0;	/*	dbg	*/
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	register float value = 1.0;
+	int cStart = bed->chromStart;
+	int cEnd = bed->chromEnd;
+	int vEnd;
+
+	++itemCount;	/*	dbg	*/
+
+	/*	make sure we stay within the region specified	*/
+	if (cEnd < region->start || cStart > region->end)
+	    continue;
+	if (cStart < region->start)
+	    cStart = region->start;
+	if (cEnd > region->end)
+	    cEnd = region->end;
+	/* index 0 is the first base in region */
+	vIndex = cStart - region->start;
+	vEnd = cEnd - region->start;
+	if (vEnd > vector->maxCount) vEnd = vector->maxCount;
+	for ( ;  vIndex < vEnd; ++vIndex)
+	    vector->value[vIndex] = value;
+	}
+    }
+else if (bedFieldCount > 11)  /* bed 12 +, filling exon locations with 1.0 */
+    {
+    register float value = 1.0;
+
+    itemCount = 0;	/*	dbg	*/
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	int blockCount = bed->blockCount;
+	int *sizes = bed->blockSizes;
+	int *starts = bed->chromStarts;
+	int block = 0;
+	int chromStart = bed->chromStart;
+
+	++itemCount;	/*	dbg	*/
+
+	for (block = 0; block < blockCount; ++block)
+	    {
+	    int blockStart = starts[block] + chromStart;
+	    int blockEnd = blockStart + sizes[block];
+	    int vEnd;
+
+	    /*	stay within region	*/
+	    if (blockEnd < region->start || blockStart > region->end)
+		continue;
+	    if (blockStart < region->start)
+		blockStart = region->start;
+	    if (blockEnd > region->end)
+		blockEnd = region->end;
+
+	    /* index 0 is the first base in region */
+	    vIndex = blockStart - region->start;
+	    vEnd = blockEnd - region->start;
+	    if (vEnd > vector->maxCount) vEnd = vector->maxCount;
+	    for ( ;  vIndex < vEnd; ++vIndex)
+		vector->value[vIndex] = value;
+	    }
+	}	/*	for (bed = bedList; bed != NULL; bed = bed->next) */
+    }	/* if (bedFieldCount > 11)  bed 12 +, filling exon locations with 1.0 */
+    else
+	internalErr();	/*	it should have been one of those types */
+
+lmCleanup(&lm);
+
+vector->start = vector->position[0];
+if (vector->count > 0)
+    vector->end = vector->position[(vector->count)-1] + 1; /* non-inclusive */
+else
+    vector->end = vector->start;
+}	/*	static void correlateReadBed()	*/
+
 static struct dataVector *fetchOneRegion(struct trackTable *table,
 	struct region *region, struct sqlConnection *conn)
 /*	fetch all the data for this track and table in the given region */
@@ -550,81 +707,18 @@ struct dataVector *vector;
 int regionSize = region->end - region->start;
 long startTime, endTime;
 
-if (! (table->isWig || table->isBedGraph))
-    return NULL;
-
-/*	makes no sense to work on less than two numbers	*/
-if (regionSize < 2)
-    return NULL;
-
-
+if (! correlateTableOK(table->actualTdb))
+    internalErr();	/*	this should have been ensured long befor now */
 
 startTime = clock1000();
 /*	assume entire region is going to produce numbers	*/
 vector = allocDataVector(region->chrom, regionSize);
 
-if (table->isBedGraph && !table->isCustom)
-    {
-    int vIndex = vector->count;	/* it is starting at zero	*/
-    int rowOffset;
-    char **row;
-    struct sqlResult *sr = NULL;
-    char fields[256];
-    char *filter = NULL;
-
-    filter = filterClause(database, table->actualTable, region->chrom);
-
-    safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
-	    table->bedGraphColumnName);
-
-//hPrintf("<P>select: %s %s:%d-%d</P>\n", table->actualTable, region->chrom, region->start, region->end );
-
-    /*	the TRUE indicates to order by start position, this is necessary
-     *	so the walk-through positions will work properly
-     */
-    sr = hExtendedRangeQuery(conn, table->actualTable, region->chrom,
-	region->start, region->end, filter, TRUE, fields, &rowOffset);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	float value = sqlFloat(row[2]);
-	int cStart = sqlSigned(row[0]);
-	int cEnd = sqlSigned(row[1]);
-	int i;
-	register int bases = 0;
-	/*	make sure we stay within the region specified	*/
-	if (cEnd < region->start || cStart > region->end)
-	    continue;
-	if (cStart < region->start)
-	    cStart = region->start;
-	if (cEnd > region->end)
-	    cEnd = region->end;
-	/* watch out for overlapping bed items, get the first one started */
-	if (0 == bases)
-	    {
-	    vector->value[vIndex] = value;
-	    vector->position[vIndex] = cStart;
-	    ++bases;
-	    ++vIndex;
-	    }
-	for (i = cStart+1;
-		(i < cEnd) && (vIndex < vector->maxCount); ++i)
-	    {
-	    /*	ensure next position is past previous	*/
-	    if (i > vector->position[vIndex-1])
-		{
-		vector->value[vIndex] = value;
-		vector->position[vIndex] = i;
-		++bases;
-		++vIndex;
-		}
-	    }
-	    vector->count += bases;
-	}
-    vector->start = vector->position[0];
-    vector->end = vector->position[(vector->count)-1] + 1; /* non-inclusive */
-    sqlFreeResult(&sr);
-    }
-else if (table->isWig)
+/*	wiggle tables work properly from database or custom tracks,
+ *	    intersections and data value limits will
+ *	    function in getWiggleData().
+ */
+if (table->isWig)
     {
     int span = 1;
     struct wigAsciiData *wigData = NULL;
@@ -674,8 +768,13 @@ else if (table->isWig)
     vector->count += bases;
     freeWigAsciiData(&wigData);
     vector->start = vector->position[0];
-    vector->end = vector->position[(vector->count)-1] + 1; /* non-inclusive */
+    if (vector->count > 0)
+	vector->end = vector->position[(vector->count)-1] + 1;/*non-inclusive*/
+    else
+	vector->end = vector->start;
     }
+else
+    correlateReadBed(table, vector, region, conn);
 
 endTime = clock1000();
 
@@ -890,7 +989,7 @@ if (chromStart || chromEnd)
 if (chromStart || chromEnd)
     {
     hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", r);
-    hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", r*r);
+    hPrintf("<TD ALIGN=RIGHT><B>%.4g</B></TD>", r*r);
     }
 else
     {
@@ -918,17 +1017,18 @@ hPrintf("</TR>\n");
 
 static void tableLabels()
 {
-hPrintf("<TR><TH>Position<BR>#&nbsp;of&nbsp;bases</TH>");
+hPrintf("<TR><TH>Position&nbsp;and<BR>#&nbsp;of&nbsp;bases&nbsp;in<BR>"
+	"intersection</TH>");
 hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
-hPrintf("<TH>r<BR>squared</TH>");
+hPrintf("<TH>r<sup>2</sup></TH>");
 hPrintf("<TH>Track</TH>");
 hPrintf("<TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH><TH>Variance</TH>");
 hPrintf("<TH>Standard<BR>deviation</TH>");
 hPrintf("<TH COLSPAN=2>");
 hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=0 WIDTH=100%>", HG_COL_INSIDE);
 hPrintf("<TR WIDTH=100%><TH COLSPAN=2>Regression<BR>line<BR>");
-hPrintf("y&nbsp;=&nbsp;a*x&nbsp;+&nbsp;b</TH></TR>");
-hPrintf("<TR><TH>a</TH><TH>b</TH></TR></TABLE>");
+hPrintf("y&nbsp;=&nbsp;m*x&nbsp;+&nbsp;b</TH></TR>");
+hPrintf("<TR><TH>m</TH><TH>b</TH></TR></TABLE>");
 hPrintf("</TH>");
 /*
 hPrintf("<TH>Data&nbsp;fetch<BR>time&nbsp;(sec)</TH>");
@@ -977,8 +1077,8 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     min2 = min(min2,v2->min);
     max1 = max(max1,v1->max);
     max2 = max(max2,v2->max);
-    totalBases1 += v1->end - v1->start;
-    totalBases2 += v2->end - v2->start;
+    totalBases1 += v1->count;
+    totalBases2 += v2->count;
     totalFetch1 += v1->fetchTime;
     totalFetch2 += v2->fetchTime;
     totalCalc1 += v1->calcTime;
@@ -989,6 +1089,13 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     totalSumSquares2 += v2->sumSquares;
     }
 
+if ((totalBases1 != totalBases2) || (totalBases1 != result->count))
+    {
+    hPrintf("<P>what is this, total bases do not add up properly</P>\n");
+    hPrintf("<P>totalBases1,2: %d, %d, result count: %d</P>\n",
+		totalBases1, totalBases2, result->count);
+    }
+
 if (0 == rowsOutput)
     hPrintf("<TR><TD COLSPAN=11>EMPTY RESULT SET</TD></TR>\n");
 else if (rowsOutput > 1)
@@ -996,7 +1103,7 @@ else if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable, result->a, result->b);
+		table2->actualTable, result->m, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min2, max2, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
@@ -1014,7 +1121,7 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
 	v1->count, v1->min, v1->max, v1->sumData,
 	    v1->sumSquares, v2->r, v1->fetchTime,
 		v1->calcTime, table1->actualTable, table2->actualTable,
-		    v1->a, v1->b);
+		    v1->m, v1->b);
     statsRowOut(v2->chrom, v1->name, table2->shortLabel, 0, 0,
 	v2->count, v2->min, v2->max, v2->sumData,
 	    v2->sumSquares, v2->r, v2->fetchTime,
@@ -1028,7 +1135,7 @@ if (rowsOutput > 1)
     statsRowOut("OVERALL", NULL, table1->shortLabel, 1, 1,
 	totalBases1, min1, max1, totalSum1, totalSumSquares1,
 	    result->r, totalFetch1, totalCalc1, table1->actualTable,
-		table2->actualTable, result->a, result->b);
+		table2->actualTable, result->m, result->b);
     statsRowOut("OVERALL", NULL, table2->shortLabel, 0, 0,
 	totalBases2, min2, max2, totalSum2, totalSumSquares2,
 	    result->r, totalFetch2, totalCalc2, table1->actualTable,
@@ -1041,9 +1148,9 @@ hPrintf("</TABLE>\n");
 /*	and end the special container table	*/
 hPrintf("</TD></TR></TABLE></P>\n");
 
-#ifdef NOT
-/*	debugging when 1 region, less than 100 bases, show all values	*/
-if ((1 == rowsOutput) && (totalBases1 < 100) && (totalBases2 < 100))
+/*	debugging when 1 region, less than 1400 bases, show all values	*/
+if ((1 == rowsOutput) &&
+	(table1->vSet->count < 400) && (table2->vSet->count < 400))
     {
     int start, end, i;
     int v1Index = 0;
@@ -1052,45 +1159,56 @@ if ((1 == rowsOutput) && (totalBases1 < 100) && (totalBases2 < 100))
     v2 = table2->vSet;
     start = min(v1->start,v2->start);
     end = max(v1->end,v2->end);
-    hPrintf("<P><TABLE BORDER=1><TR><TH>position</TH><TH>track 1</TH><TH>track 2</TH></TR>\n");
+
+    hPrintf("<PRE>\n");
+    hPrintf("# Position\t%s\t%s\tResiduals\n",
+	table1->shortLabel, table2->shortLabel);
+
     for (i = start; i < end; ++i)
 	{
-hPrintf("<TR><TD ALIGN=RIGHT>%d</TD>", i+1);
+	int printResidual = 0;
+
+	if ((i == v1->position[v1Index]) || (i == v2->position[v2Index]))
+	    hPrintf("%d\t", i+1);
+
 	if (i >= v1->start)
 	    {
 	    if (i == v1->position[v1Index])
 		{
-		hPrintf("<TD ALIGN=RIGHT>%g</TD>", v1->value[v1Index]);
+		hPrintf("%g\t", v1->value[v1Index]);
 		++v1Index;
+		++printResidual;
 		}
 	    else if (i > v1->position[v1Index])
 		{
-		hPrintf("<TD ALIGN=RIGHT>N/A</TD>");
+		hPrintf("N/A\t");
 		++v1Index;
 		}
 	    }
 	else
-	    hPrintf("<TD ALIGN=RIGHT>N/A</TD>");
+	    hPrintf("N/A\t");
 	if (i >= v2->start)
 	    {
 	    if (i == v2->position[v2Index])
 		{
-		hPrintf("<TD ALIGN=RIGHT>%g</TD>", v2->value[v2Index]);
+		hPrintf("%g\t", v2->value[v2Index]);
 		++v2Index;
+		++printResidual;
 		}
 	    else if (i > v2->position[v2Index])
 		{
-		hPrintf("<TD ALIGN=RIGHT>N/A</TD>");
+		hPrintf("N/A\t");
 		++v2Index;
 		}
 	    }
 	else
-	    hPrintf("<TD ALIGN=RIGHT>N/A</TD>");
+	    hPrintf("N/A\t");
+	if (printResidual == 2)
+	    hPrintf("%g\n", result->value[v1Index-1]);
 	}
-    hPrintf("</TABLE></P>\n");
+    hPrintf("</PRE>\n");
     }
-#endif
-}
+}	/*	static void showThreeVectors()	*/
 
 static int collectData(struct sqlConnection *conn,
 	struct trackTable *tableList, int maxLimitCount)
@@ -1112,9 +1230,12 @@ vSet2 = NULL;	/*	initialize linked list	*/
 table1 = tableList;
 table2 = tableList->next;
 
+
 /*	count the regions, just to get an idea of where we may be going */
 for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
+
+//hPrintf("<P>regionCount: %d</P>\n", regionCount);
 
 /*	this display is debugging, just showing the region(s)	*/
 if (1 == regionCount)
@@ -1122,7 +1243,7 @@ if (1 == regionCount)
     long bases = 0;
     region = regionList;
     bases = region->end - region->start;
-    hPrintf("<P>position: %s:", region->chrom);
+    hPrintf("<P><B>position:</B> %s:", region->chrom);
     printLongWithCommas(stdout,(long)(region->start+1)); /* 1-relative */
     hPrintf("-");
     printLongWithCommas(stdout,(long)region->end);
@@ -1132,37 +1253,37 @@ if (1 == regionCount)
     }
 else if (sameString(regionType,"genome"))
     {
-    hPrintf("<P>position: full genome, %d chromosomes</P>\n", regionCount);
+    hPrintf("<P><B>position:</B> full genome, %d chromosomes</P>\n", regionCount);
     }
 else if (sameString(regionType,"encode"))
-    hPrintf("<P>position: %d encode regions</P>\n", regionCount);
+    hPrintf("<P><B>position:</B> %d encode regions</P>\n", regionCount);
 
 if ( (table1->isCustom && checkWigDataFilter("ct", curTable, NULL, NULL, NULL))
 	|| checkWigDataFilter(database, curTable, NULL, NULL, NULL))
     {
-    hPrintf("<P>data filter on %s:", table1->shortLabel);
+    hPrintf("<P><B>data filter on</B> '%s':", table1->shortLabel);
     wigShowFilter(conn);
     hPrintf("</P>\n");
     }
-
-#ifdef NOT
-/*	some debugging stuff, do we have the tables correctly identified */
+if (anyIntersection())
     {
-    struct trackTable *table;
-    hPrintf("<P><TABLE BORDER=1><TR><TH COLSPAN=8>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH></TR>\n");
-
-    for (table = tableList; table != NULL; table = table->next)
+    if (table1->isBedGraph && table2->isBedGraph)
+	hPrintf("<P><B>intersection filter not available on these "
+		"two types of tables</B></P>\n");
+    else if (table1->isBedGraph && (! table2->isBedGraph))
+	hPrintf("<P><B>intersecting</B> '%s' <B>with</B> '%s':</P>\n",
+	    table2->shortLabel, cartString(cart, hgtaIntersectTrack));
+    else if ((! table1->isBedGraph) && table2->isBedGraph)
+	hPrintf("<P><B>intersecting</B> '%s' <B>with</B> '%s':</P>\n",
+	    table1->shortLabel, cartString(cart, hgtaIntersectTrack));
+    else
 	{
-	hPrintf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%s</TD><TD>%s</TD></TR>\n",
-	    table->shortLabel, table->tdb->tableName, table->tableName,
-	    table->actualTdb->type,
-	    table->isBedGraph ? "bedGraph" : table->isWig ? "wiggle" : "other",
-	    table->bedGraphColumnNum, table->bedGraphColumnName,
-	    table->isCustom ? "YES" : "NO");
+	hPrintf("<P><B>intersecting both tables</B> ");
+	hPrintf("'%s' <B>and</B> '%s' <B>with</B> '%s':</P>\n",
+	    table1->shortLabel, table2->shortLabel,
+		cartString(cart, hgtaIntersectTrack));
 	}
-    hPrintf("</TABLE></P>\n");
     }
-#endif
 
 /*	walk through the regions and fetch each table's data
  *	after you have them both, condense them down to only those
@@ -1184,6 +1305,11 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
 	hPrintf("improvements will raise this limit.\n");
 	errAbort("");
 	}
+
+    /*	makes no sense to work on less than two numbers	*/
+    if (bases < 2)
+	continue;	/*	next region	*/
+
     v1 = fetchOneRegion(table1, region, conn);
     if (v1)	/*	if data there, fetch the second one	*/
 	{
@@ -1193,8 +1319,8 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
 	    intersectVectors(v1, v2);
 	    if (v1->count < 1)	/*	possibly no intersection	*/
 		{
-		freeDataVector(&v1);	/* no data in second	*/
-		freeDataVector(&v2);	/* no data in second	*/
+		freeDataVector(&v1);	/* no data in intersection	*/
+		freeDataVector(&v2);	/* no data in intersection	*/
 		continue;		/* next region	*/
 		}
 	    if ((totalBases + v1->count) >= maxLimitCount)
@@ -1221,140 +1347,228 @@ return totalBases;
 
 static struct dataVector *runRegression(struct trackTable *tableList,
     int totalBases)
+/*	runs regression calculations on the first two tables in the
+ *	tableList, returning a residual vector result
+ */
 {
-struct trackTable *table1, *table2;
+struct trackTable *yTable, *xTable;
 struct dataVector *result = NULL;
-struct dataVector *v1;
-struct dataVector *v2;
+struct dataVector *y;	/* the response variable of interest */
+struct dataVector *x;	/* the estimator variable, predicting the response */
 double totalSumProduct = 0.0;
-double vector1sumData = 0.0;
-double vector2sumData = 0.0;
-double vector1sumSquares = 0.0;
-double vector2sumSquares = 0.0;
-double variance1 = 0.0;
-double variance2 = 0.0;
-double stddev1 = 0.0;
-double stddev2 = 0.0;
+double ySumData = 0.0;
+double xSumData = 0.0;
+double ySumSquares = 0.0;
+double xSumSquares = 0.0;
+double yVariance = 0.0;
+double xVariance = 0.0;
+double yStdDev = 0.0;
+double xStdDev = 0.0;
 long startTime, endTime;
+int rIndex = 0;		/* index for result vector data values	*/
 
 /*	expecting two tables	*/
 if (NULL == tableList)
-    return result;
+    internalErr();	/*	expecting two tables	*/
 
-table1 = tableList;
-table2 = tableList->next;
-if (NULL == table2)
-    return result;
+yTable = tableList;
+xTable = tableList->next;
+if (NULL == xTable)
+    internalErr();	/*	expecting two tables	*/
 
 /*	find the mean, min and max	*/
-for (v1 = table1->vSet; v1 != NULL; v1 = v1->next)
-    calcMeanMinMax(v1);
-for (v2 = table2->vSet; v2 != NULL; v2 = v2->next)
-    calcMeanMinMax(v2);
+for (y = yTable->vSet; y != NULL; y = y->next)
+    calcMeanMinMax(y);
+for (x = xTable->vSet; x != NULL; x = x->next)
+    calcMeanMinMax(x);
 
+/*	XXXX - this single result vector is going to lose the chrom
+ *	identification for multiple region results.  We need that later
+ *	for sending this overall result back to a custom track.
+ *	It can be reconstructed because there is a one-to-one
+ *	relationship between the result vector and the y data set
+ *	positions.
+ */
 result = allocDataVector("result", totalBases);
-/*	calculating formula for correlation coefficient r
- *	compute the product of the two variables
- *	and keep a running sum of that product for the overall answer
- *	later
- */
+rIndex = 0;		/* index for result vector data values	*/
+
 /*	This loop walks through all the regions in the data vectors.
- *	Each region will have its own r calculated
+ *	Each region will have its own r calculated, and stats will be
+ *	accumulated to enable an overall result to be calculated at the
+ *	end.
  */
-for (v1 = table1->vSet, v2 = table2->vSet;
-	(v1 != NULL) && (v2 != NULL);
-		v1 = v1->next, v2 = v2->next)
+for (y = yTable->vSet, x = xTable->vSet; (y != NULL) && (x != NULL);
+		y = y->next, x = x->next)
     {
-    double sumProduct = 0.0;		/*	sum of products	*/
-    double numeratorCoVariance = 0.0;
-    double numeratorVariance = 0.0;
+    double sumProduct = y->sumProduct;	/*	sum of products */
+    double Sxy = 0.0;		/* aka Numerator of the CoVariance */
+    double Sxx = 0.0;	/* aka numerator of the Variance */
+    double Syy = 0.0;	/* aka numerator of the Variance */
 
     startTime = clock1000();
 
-    if ((v1->count != v2->count) || (0 == v1->count))
+    if ((y->count != x->count) || (0 == y->count))
      errAbort("unequal sized, or zero length data vectors given to regression");
 
-    sumProduct = v1->sumProduct;
-    result->count += v1->count;
+    result->count += y->count;
     totalSumProduct += sumProduct;
-    vector1sumData += v1->sumData;
-    vector2sumData += v2->sumData;
-    vector1sumSquares += v1->sumSquares;
-    vector2sumSquares += v2->sumSquares;
-    result->fetchTime += v1->fetchTime;
-    result->fetchTime += v2->fetchTime;
-    result->calcTime += v1->calcTime;
-    result->calcTime += v2->calcTime;
+    ySumData += y->sumData;
+    xSumData += x->sumData;
+    ySumSquares += y->sumSquares;
+    xSumSquares += x->sumSquares;
+    result->fetchTime += y->fetchTime;
+    result->fetchTime += x->fetchTime;
+    result->calcTime += y->calcTime;
+    result->calcTime += x->calcTime;
     /* Sxy - page 101, page 488, Mendenhall, Beaver, Beaver - 2003 */
-    numeratorCoVariance = sumProduct - ((v1->sumData*v2->sumData)/v1->count);
+    Sxy = sumProduct - ((y->sumData*x->sumData)/y->count);
     /* Sxx - page 61, page 488, Mendenhall, Beaver, Beaver - 2003 */
-    numeratorVariance = v1->sumSquares - ((v1->sumData*v1->sumData)/v1->count);
+    Sxx = x->sumSquares - ((x->sumData*x->sumData)/x->count);
+    Syy = y->sumSquares - ((y->sumData*y->sumData)/y->count);
 
-    /* b = Sxy / Sxx	page 489 Mendenhall, Beaver, Beaver - 2003 */
-    v1->b = numeratorCoVariance / numeratorVariance;
-    /* a = mean(y) - b*mean(x) page 489 Mendenhall, Beaver, Beaver - 2003 */
-    v1->a = (v2->sumData/v2->count) - (v1->b * (v1->sumData/v1->count));
+    /* slope m = Sxy / Sxx  page 489 (== b) Mendenhall, Beaver, Beaver - 2003 */
+    if (0.0 != Sxx)
+	y->m = Sxy / Sxx;
+    else
+	y->m = 0;
+    /*	what does it mean if the Sxx is zero ?	*/
 
-    v2->r = v1->r = 0.0;
+    /* intercept b = mean(y) - m*mean(x) page 489 (== a) Mendenhall, Beaver,
+	Beaver - 2003 */
+    y->b = (y->sumData/y->count) - (y->m * (x->sumData/x->count));
+
+    /*	if we still have the two data sets, compute the residuals */
+    if ((y->value != NULL) && (x->value != NULL))
+	{
+	int i;
+	for (i = 0; i < y->count; ++i)
+	    {
+	    /*	residual = actual - predicted */
+	    result->value[rIndex]=y->value[i]-((y->m * x->value[i]) + y->b);
+	    result->position[rIndex] = y->position[i];
+	    ++rIndex;
+	    }
+	result->start = result->position[0];
+	result->end = result->position[rIndex-1] + 1;/*non inclusive*/
+	}
+
+    x->r = y->r = 0.0;
     /*	do not compute r for this region if N is < 2	*/
-    if (v1->count < 2)
+    if (y->count < 2)
 	{
 	endTime = clock1000();
 	result->calcTime += endTime - startTime;
 	continue;
 	}
-    /*	For this region, ready to compute r, N is v1->count	*/
-    variance1 = numeratorVariance / (double)(v1->count-1);
-    variance2 = (v2->sumSquares - ((v2->sumData*v2->sumData)/v2->count)) /
-	(double)(v2->count-1);
-    stddev1 = stddev2 = 0.0;
-    if (variance1 > 0.0)
-	stddev1 = sqrt(variance1);
-    if (variance2 > 0.0)
-	stddev2 = sqrt(variance2);
-    if ((stddev1 * stddev2) != 0.0)
-	v2->r = v1->r = (numeratorCoVariance / (v1->count - 1)) /
-			    (stddev1 * stddev2);
+    /*	For this region, ready to compute r, N is y->count	*/
+    yVariance = Syy / (double)(y->count-1);
+    xVariance = Sxx / (double)(x->count-1);
+    yStdDev = xStdDev = 0.0;
+    if (yVariance > 0.0) yStdDev = sqrt(yVariance);
+    if (xVariance > 0.0) xStdDev = sqrt(xVariance);
+    /*	page 101,498, Mendenhall, Beaver, Beaver - 2003 */
+    if ((yStdDev * xStdDev) != 0.0)
+	x->r = y->r = (Sxy / (y->count - 1)) / (yStdDev * xStdDev);
     else
-	v2->r = v1->r = 1.0;
+	x->r = y->r = 1.0;
 
     endTime = clock1000();
     result->calcTime += endTime - startTime;
     }
 
+if (rIndex != result->count)
+ errAbort("did not get the correct number of data points in the result vector");
+
 result->r = 0.0;
 if (result->count > 1)
     {
-    double numeratorCoVariance = 0.0;
-    double numeratorVariance = 0.0;
+    double Sxy = 0.0;
+    double Sxx = 0.0;
+    double Syy = 0.0;
 
-    numeratorCoVariance = totalSumProduct -
-	((vector1sumData*vector2sumData)/result->count);
-    numeratorVariance = vector1sumSquares -
-	((vector1sumData*vector1sumData)/result->count);
+    Sxy = totalSumProduct - ((ySumData*xSumData)/result->count);
+    Sxx = xSumSquares - ((xSumData*xSumData)/result->count);
+    Syy = ySumSquares - ((ySumData*ySumData)/result->count);
 
-    result->b = numeratorCoVariance / numeratorVariance;
-    result->a = (vector2sumData/result->count) -
-	(result->b * (vector1sumData/result->count));
+    if (0.0 != Sxx)
+	result->m = Sxy / Sxx;
+    else
+	result->m = 0.0;
 
-    variance1 = numeratorVariance / (double)(result->count-1);
-    variance2 = (vector2sumSquares -
-			((vector2sumData*vector2sumData)/result->count)) /
-		(double)(result->count-1);
-    stddev1 = stddev2 = 0.0;
-    if (variance1 > 0.0)
-	stddev1 = sqrt(variance1);
-    if (variance2 > 0.0)
-	stddev2 = sqrt(variance2);
-    if ((stddev1 * stddev2) != 0.0)
-	result->r = (numeratorCoVariance / (result->count - 1)) /
-			(stddev1 * stddev2);
+    result->b = (ySumData/result->count) -
+	(result->m * (xSumData/result->count));
+
+    yVariance = Syy / (double)(result->count-1);
+    xVariance = Sxx / (double)(result->count-1);
+    yStdDev = xStdDev = 0.0;
+    if (yVariance > 0.0) yStdDev = sqrt(yVariance);
+    if (xVariance > 0.0) xStdDev = sqrt(xVariance);
+    if ((yStdDev * xStdDev) != 0.0)
+	result->r = (Sxy / (result->count - 1)) / (yStdDev * xStdDev);
     else
 	result->r = 1.0;
     }
 
+calcMeanMinMax(result);
 return result;
 }	/*	struct dataVector *runRegression()	*/
+
+static void showPlots(struct trackTable *table1, struct trackTable *table2,
+	struct dataVector *result)
+{
+struct tempName *scatterPlotGif = NULL;
+struct tempName *residualPlotGif = NULL;
+
+scatterPlotGif = scatterPlot(table1, table2, result);
+residualPlotGif = residualPlot(table1, table2, result);
+
+hPrintf("<P><!--outer table is for border purposes-->\n");
+hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
+hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
+hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
+hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
+hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
+	scatterPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
+hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%s</TH></TR>\n", table2->longLabel);
+hPrintf("</TABLE></TD><TD>\n");
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
+hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
+hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
+hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
+	residualPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
+hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%s</TH></TR>\n", table2->longLabel);
+hPrintf("</TABLE>\n");
+hPrintf("</TD></TR></TABLE>\n");
+
+}
+
+static void tableInfoDebugDisplay(struct trackTable *tableList)
+{
+/*	some debugging stuff, do we have the tables correctly identified */
+    {
+    struct trackTable *table;
+
+    hPrintf("<P><!--outer table is for border purposes-->\n");
+    hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
+    hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+
+    hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1><TR><TH COLSPAN=9>debugging information</TH></TR><TR><TH>Track</TH><TH>Track<BR>(perhaps composite)</TH><TH>table</TH><TH>type</TH><TH>type</TH><TH>bedGraph<BR>column</TH><TH>bedGraph<BR>column</TH><TH>isCustom</TH><TH>bedColumns</TH></TR>\n", HG_COL_INSIDE);
+
+    for (table = tableList; table != NULL; table = table->next)
+	{
+	hPrintf("<TR><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD><TD>%s</TD><TD>%s</TD><TD>%d</TD></TR>\n",
+	    table->shortLabel, table->tdb->tableName, table->tableName,
+	    table->actualTdb->type,
+	    table->isBedGraph ? "bedGraph" : table->isWig ? "wiggle" : "other",
+	    table->bedGraphColumnNum, table->bedGraphColumnName,
+	    table->isCustom ? "YES" : "NO", table->bedColumns);
+	}
+    hPrintf("</TABLE>\n");
+    hPrintf("</TD></TR></TABLE</P>\n");
+    }
+}
+
 
 void doCorrelateMore(struct sqlConnection *conn)
 /* Continue working in correlate page. */
@@ -1365,8 +1579,6 @@ char *onChange = onChangeEither();
 /*char *op;*/
 char *table2onEntry;
 char *table2;
-boolean isBedGraph1 = FALSE;
-boolean isWig1 = FALSE;
 boolean correlateOK1 = FALSE;
 char *maxLimitCartVar;
 char *maxLimitCountStr;
@@ -1379,15 +1591,11 @@ startTime = clock1000();
 
 tableList = NULL;	/*	initialize the list	*/
 
-if (curTrack)
-    isBedGraph1 = startsWith("bedGraph", curTrack->type);
-if (curTable && database)
-    isWig1 = isWiggle(database,curTable);
 
 /*	We are going to be TRUE here since this selection was limited on
  *	the mainPage to only these types of tables.
  */
-correlateOK1 = isWig1 || isBedGraph1;
+correlateOK1 = correlateTableOK(curTrack);
 
 table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable2, "none");
 
@@ -1420,7 +1628,7 @@ else
     maxLimitCartVar=filterFieldVarName(database,curTable, "_",
 	correlateMaxDataPoints);
 
-maxLimitCountStr = cartUsualString(cart, maxLimitCartVar, maxResultsMenu[0]);
+maxLimitCountStr = cartUsualString(cart, maxLimitCartVar, maxResultsMenu[1]);
 
 tmpString = cloneString(maxLimitCountStr);
 
@@ -1483,26 +1691,34 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
  	 *	table List in a dataVector list
 	 */
 	totalBases = collectData(conn, tableList, maxLimitCount);
-//hPrintf("<P>intersected vectors are %d bases long</P>\n", totalBases);
+//hPrintf("<P>intersected vectors produce %d data points</P>\n", totalBases);
 	if (totalBases > 0)
 	    {
+	    struct trackTable *table1 = tableList;
+	    struct trackTable *table2 = tableList->next;
 	    struct dataVector *resultVector;
 	    resultVector = runRegression(tableList, totalBases);
-	    showThreeVectors(tableList, tableList->next, resultVector);
+	    showThreeVectors(table1, table2, resultVector);
+	    showPlots(table1, table2, resultVector);
 	    freeDataVector(&resultVector);
-//	hPrintf("<P>free resultVector OK</P>\n");
+//hPrintf("<P>free resultVector OK</P>\n");
 	    }
 	else
-	    hPrintf("<P>no intersection between the two tables in this region</P>\n");
+	    hPrintf("<P>no intersection between the two tables "
+		"in this region</P>\n");
+
+if (1 == 0)
+    tableInfoDebugDisplay(tableList);	/*	dbg	*/
+
 	freeTrackTableList(&tableList);
-//	hPrintf("<P>freeTrackTableList OK</P>\n");
+//hPrintf("<P>freeTrackTableList OK</P>\n");
+	endTime = clock1000();
+
+	hPrintf("<P>total elapsed time for this calculation:");
+	hPrintf(" %.3f seconds.</P>\n", 0.001*(endTime-startTime));
 	}
     }
 
-endTime = clock1000();
-
-hPrintf("<P>total elapsed time for this page: %.3f seconds.</P>\n",
-	0.001*(endTime-startTime));
 
 hPrintf("%s", corrHelpText);
 

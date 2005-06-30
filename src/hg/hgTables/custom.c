@@ -496,7 +496,7 @@ hashElFreeList(&varList);
 return bf;
 }
 
-void customTrackFilteredBedOnRegion(
+static void customTrackFilteredBedOnRegion(
 	struct region *region,	/* Region to get data from. */
 	struct customTrack *ct, /* Custom track. */
 	struct hash *idHash,	/* Hash of identifiers or NULL */

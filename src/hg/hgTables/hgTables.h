@@ -368,7 +368,10 @@ boolean anyCorrelation();
 #define correlateMaxDataPoints "corrMaxDataPoints"
 
 struct trackDb *findTdb(struct trackDb *track, char *table);
-/*	if the given track is a composite, find the tdb for the table */
+/*	find the tdb for the table, if it is custom or composite or ordinary  */
+
+boolean correlateTableOK(struct trackDb *tdb);
+/*	is this table OK to correlate with ?	*/
 
 /* --------- Functions related to composite tracks/subtracks. ------------- */
 

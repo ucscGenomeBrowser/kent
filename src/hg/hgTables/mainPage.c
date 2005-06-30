@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.79 2005/06/30 19:48:57 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.80 2005/06/30 21:43:36 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -275,13 +275,17 @@ char *selTable;
 if (track == NULL)
     nameList = tablesForDb(findSelDb());
 else
+    {
     nameList = tablesForTrack(track);
+    slReverse(&nameList);
+    }
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
 selTable = cartUsualString(cart, hgtaTable, nameList->name);
 if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
+
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
 hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeTable());
@@ -594,7 +598,7 @@ if (isPositional)
     }
 
 /* Correlation line. */
-if (isPositional && (isWig || isBedGraph))
+if (correlateTableOK(curTrack))
     {
     char *table2 = cartUsualString(cart, hgtaCorrelateTable2, "none");
     hPrintf("<TR><TD><B>correlation:</B>\n");
