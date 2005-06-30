@@ -502,6 +502,8 @@ cat > mafProject.csh << 'EOF'
     csh mafProject.csh >&! mafProject.log 
     # seg faults in ENm008 and ENr324
     # move maf files for these regions to "bad" dir
+    # Minmei created projected files for these regions.
+    # (our installed maf_project must be outdated)
 
     mkdir -p /gbdb/hg16/encode/MLAGAN/freeze4/mafs
     ln -s `pwd`/out/*.maf /gbdb/hg16/encode/MLAGAN/freeze4/mafs
@@ -512,18 +514,37 @@ cat > mafProject.csh << 'EOF'
     cat out/*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 \
                                 -maxSize=50000 hg16 encodeMlaganSummary stdin
 
-    # conservation wiggle (GERP)
+    # conservation wiggles
     cat lab/chr*.wig | \
         wigEncode stdin GerpCons.wig GerpCons.wib
         # Converted stdin, upper limit 3.00, lower limit 0.00
+
+    # GERP (from Greg Cooper)
     mkdir -p /gbdb/hg16/encode/MLAGAN/freeze4
     rm -f /gbdb/hg16/encode/MLAGAN/freeze4/GerpCons.wib
     ln -s `pwd`/GerpCons.wib /gbdb/hg16/encode/MLAGAN/freeze4
     hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/MLAGAN/freeze4 hg16 \
                         encodeMlaganGerpCons GerpCons.wig 
 
+    # binCons and phastCons (from Elliott)
+    cd /cluster/data/encode/MLAGAN/freeze4/cons/latest/lab
+    wget -r -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_lagan
+    cd ..
+    gunzip -c lab/human.EN*.pC.*.wig.gz | \
+        wigEncode stdin phastCons.wig phastCons.wib
+            # Converted stdin, upper limit 1.00, lower limit 0.00
+    gunzip -c lab/EN*.binCons.lagan.*.gz | \
+        wigEncode stdin binCons.wig binCons.wib
+            # Converted stdin, upper limit 1.00, lower limit 0.00
+    set d = /gbdb/hg16/encode/MLAGAN/freeze4
+    rm -f $d/{phastCons,binCons}.wib
+    ln -s `pwd`/phastCons.wib $d
+    ln -s `pwd`/binCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg16 encodeMlaganPhastCons phastCons.wig 
+    hgLoadWiggle -pathPrefix=$d hg16 encodeMlaganBinCons binCons.wig 
+
     # conserved elements (from GERP)
-    # NOTE: round float scores
+    # NOTE: abbreviate item names and round float scores
     perl -we 'while (<>) { \
       if (/^chr/) { \
         ($chrom,$start,$end,$name,$score) = split; \
@@ -533,8 +554,17 @@ cat > mafProject.csh << 'EOF'
     hgLoadBed -noBin hg16 encodeMlaganGerpEl encodeMlaganGerpEl.tab
     # Loaded 48480 elements of size 5
 
+# MLAGAN AND TBA CONSERVED ELEMENTS (2005-06-29 kate)
+    # From Elliott Margulies
+    
+    cd /cluster/data/encode
+    mkdir -p MSA/freeze4
+    cd MSA/freeze4
+    wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/constrained_elements.tar.gz
+    tar xvfz *.gz
 
-# STANFORD MLAGAN MSA OF FREEZE2 (2004-11-17 kate)
+
+# STANFORD  MSA OF FREEZE2 (2004-11-17 kate)
 #       From George Asimenos, Batzoglou lab (asimenos@stanford.edu)
     
     cd /cluster/data/encode
@@ -1423,20 +1453,22 @@ done
     ln -s `pwd`/phastCons.wib /gbdb/hg16/encode/TBA
     hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/TBA hg16 \
                         encodeTbaPhastCons phastCons.wig 
-    # load binCons conservation wiggle
-cat > makeWig.csh << 'EOF'
-    foreach f (lab/wig/chr*.tba.binCons.n.gz)
-        set c = $f:t:r:r:r:r
-        echo "variableStep chrom=$c span=1"
-        gunzip -c $f
-    end
-'EOF'
-    # << for emacs
-    csh makeWig.csh | wigEncode stdin binCons.wig binCons.wib >&! makeWig.log
-    rm -f /gbdb/hg16/encode/TBA/binCons.wib
-    ln -s `pwd`/binCons.wib /gbdb/hg16/encode/TBA
-    hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/TBA hg16 \
-                        encodeTbaBinCons binCons.wig 
+
+    # Updated with 6/22 binCons data at Elliott's request (2005-06-29 kate)
+    cd /cluster/data/encode/TBA/
+    mkdir 2005-06-22
+    cd 2005-06-22
+    wget -r -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_tba/MAY-2005/wig/
+    # keep only the binCons (phastCons wasn't updated)
+    rm -f human.*
+    cd /cluster/data/encode/TBA/latest
+    ln -s /custer/data/encode/TBA/2005-06-22 lab/wig/binCons.jun22
+    gunzip -c lab/wig/binCons.jun22/EN*.binCons.*.wig.gz | \
+        wigEncode stdin binCons.wig binCons.wib
+    set d = /gbdb/hg16/encode/TBA
+    rm -f $d/binCons.wib
+    ln -s `pwd`/binCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg16 encodeTbaBinCons binCons.wig 
 
     # load MAF summary table
     cat lab/*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 \
@@ -2028,8 +2060,12 @@ csh doGene.csh >&! doGene.log
 
     # process special files
     cd custom
-    ldHgGene -genePredExt -out=Ensembl.gp null null Ensembl.gff
-        # 769 gene predictions
+    grep -v pseudogene Ensembl.gff | \
+        ldHgGene -genePredExt -out=Ensembl.gp null null stdin
+        # 735 gene predictions
+    grep pseudogene Ensembl.gff | \
+        ldHgGene -genePredExt -out=EnsemblPseudo.gp null null stdin
+        # 34
     ldHgGene -gtf -genePredExt -out=Exonhunter.gp null null Exonhunter.gff
         # 1435 gene predictions
     awk -F\\t '/^chr/ {printf "%s\t%s\t%s\t%s\t%s\t.\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $7, $8, $9}' Twinscan.gff | \
