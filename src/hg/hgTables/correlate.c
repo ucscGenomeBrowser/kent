@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.28 2005/06/30 23:13:21 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.29 2005/06/30 23:35:48 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1536,9 +1536,10 @@ static void showPlots(struct trackTable *table1, struct trackTable *table2,
 {
 struct tempName *scatterPlotGif = NULL;
 struct tempName *residualPlotGif = NULL;
+double F_statistic = 0.0;
 
 scatterPlotGif = scatterPlot(table1, table2, result);
-residualPlotGif = residualPlot(table1, table2, result);
+residualPlotGif = residualPlot(table1, table2, result, &F_statistic);
 
 hPrintf("<P><!--outer table is for border purposes-->\n");
 hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
@@ -1551,7 +1552,7 @@ hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%s</TH></TR>\n", table2->longLabel);
 hPrintf("</TABLE></TD><TD>\n");
 hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
+hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic&nbsp;%g</TH></TR>\n", F_statistic);
 hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	residualPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);

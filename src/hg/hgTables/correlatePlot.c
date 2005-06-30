@@ -14,7 +14,7 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.1 2005/06/30 21:43:36 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.2 2005/06/30 23:35:48 hiram Exp $";
 
 
 struct tempName *scatterPlot(struct trackTable *yTable,
@@ -101,7 +101,7 @@ return &gifFileName;
 }
 
 struct tempName *residualPlot(struct trackTable *yTable,
-    struct trackTable *xTable, struct dataVector *result)
+    struct trackTable *xTable, struct dataVector *result, double *F_statistic)
 /*	create residual plot gif file in trash, return path name */
 {
 static struct tempName gifFileName;
@@ -129,6 +129,9 @@ int plotHeight = PLOT_HEIGHT - (PLOT_MARGIN * 2);
 struct vGfx *vg;
 int resultIndex = 0;	/*	for reference within result	*/
 boolean debugOn = FALSE;
+double F = 0.0;
+double MSR = 0.0;	/*	aka MSM	- mean square residual */
+double MSE = 0.0;	/*	mean squared error	*/
 
 if (result->count < 1300) debugOn = TRUE;
 
@@ -167,10 +170,13 @@ safef(title,ArraySize(title), "ranges %g, %g", yRange, xRange);
 textWidth = mgFontStringWidth(font, title);
 //vgTextCentered(vg, 0, 0, PLOT_WIDTH, PLOT_HEIGHT, MG_BLACK, font, title);
 
+double yBar = result->sumData / result->count;
+
 for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 	y=y->next, x=x->next)
     {
     int i;
+
     for( i = 0; i < x->count; ++i, ++resultIndex)
 	{
 	float residual = result->value[resultIndex];
@@ -182,9 +188,15 @@ for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 if(debugOn)
     hPrintf("%d\t%g\t%g\t%g\t%g\n", x->position[i], x->value[i], y->value[i], fitted, residual);
 
+	MSR += (fitted - yBar) * (fitted - yBar);
+	MSE += (y->value[i] - fitted) * (y->value[i] - fitted);
+
 	vgBox(vg, x1, y1, DOT_SIZE, DOT_SIZE, MG_BLACK);
 	}
     }
+
+if ((result->count - 2) > 0)
+    F = MSR / MSE / (result->count - 2);
 
 /*	draw y = 0.0 line	*/
     {
@@ -202,6 +214,9 @@ vgClose(&vg);
 
 if(debugOn)
     hPrintf("</PRE>\n");
+
+if (F_statistic)
+    *F_statistic = F;
 
 return &gifFileName;
 }
