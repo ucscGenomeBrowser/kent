@@ -3985,6 +3985,77 @@ type bed 3 .
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
 
+track encodeRegulomeAmplicon
+compositeTrack on
+shortLabel Regulome Amplicon
+longLabel ENCODE Regulome Amplicon
+group encodeChrom
+priority 64.0
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility dense
+type bed 5 .
+
+    track encodeRegulomeAmpliconOddCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Odd)
+    longLabel CACO2 Amplicon (Odd)
+    priority 1
+
+    track encodeRegulomeAmpliconEvenCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Even)
+    longLabel CACO2 Amplicon (Even)
+    priority 2
+
+    track encodeRegulomeAmpliconOddGM06990
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Odd)
+    longLabel GM06990 Amplicon (Odd)
+    priority 3
+
+    track encodeRegulomeAmpliconEvenGM06990
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Even)
+    longLabel GM06990 Amplicon (Even)
+    priority 4
+
+    track encodeRegulomeAmpliconOddSKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Odd)
+    longLabel SKNSH Amplicon (Odd)
+    priority 5
+
+    track encodeRegulomeAmpliconEvenSKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Even)
+    longLabel SKNSH Amplicon (Even)
+    priority 6
+
+    track encodeRegulomeAmpliconOddERY
+    subTrack encodeRegulomeAmplicon
+    shortLabel ERY (Odd)
+    longLabel ERY Amplicon (Odd)
+    priority 7
+
+    track encodeRegulomeAmpliconEvenERY
+    subTrack encodeRegulomeAmplicon
+    shortLabel ERY (Even)
+    longLabel ERY Amplicon (Even)
+    priority 8
+
+    track encodeRegulomeAmpliconOddK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Odd)
+    longLabel K562 Amplicon (Odd)
+    priority 9
+
+    track encodeRegulomeAmpliconEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Even)
+    longLabel K562 Amplicon (Even)
+    priority 10
+
+
 track encodeAllElements
 compositeTrack on
 shortLabel Consensus Elements
