@@ -174,7 +174,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.910 2005/06/30 14:06:46 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.911 2005/06/30 20:54:07 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15359,9 +15359,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     encodeHapMapAlleleFreqStaticLoad(row+rowOffset, &alleleFreq);
-    printf("<B>Variant and Reference Sequences: </B><BR>\n");
-    printf("<PRE><TT>%s<BR>\n", alleleFreq.otherAllele);
-    printf("%s</TT></PRE><BR>\n", alleleFreq.refAllele);
+    printf("<B>Variant:</B> %s<BR>\n", alleleFreq.otherAllele);
+    printf("<B>Reference:</B> %s<BR>\n", alleleFreq.refAllele);
     bedPrintPos((struct bed *)&alleleFreq, 3);
     printf("<B>Reference Allele Frequency:</B> %f <BR>\n", alleleFreq.refAlleleFreq);
     printf("<B>Other Allele Frequency:</B> %f <BR>\n", alleleFreq.otherAlleleFreq);
