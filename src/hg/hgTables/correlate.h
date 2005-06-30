@@ -31,10 +31,10 @@ standard deviations of the data sets X and Y, and \
 When available, the data values from a track are used in the calculations. \
 For tracks that do not have data values, such as gene structured tracks, \
 the data value used in the calculation is a 1.0 for bases that are covered \
-by exons, and 0.0 at other positions of the item.  For simple tracks \
-that are not gene structures, or data valued tracks, the calculation becomes \
-a filter where the value 1.0 is used for the extent of the item and only \
-those bases are used in the calculation.\
+by exons, and 0.0 at all other positions in the region.  For simple tracks \
+that are not gene structures, or data valued tracks, the calculation \
+uses the value 1.0 over the extent of the item and 0.0 for all other \
+positions in the region.\
 </P>\
 <H2>Known Limitations</H2>\
 <P>The number of bases that can be processed is limited, on the order of \
