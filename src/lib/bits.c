@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.17 2005/04/10 14:41:21 markd Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.18 2005/06/30 16:49:03 angie Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -180,10 +180,31 @@ return bitFind(b, startIx, FALSE, bitCount);
 }
 
 void bitClear(Bits *b, int bitCount)
-/* Clear many bits. */
+/* Clear many bits (possibly up to 7 beyond bitCount). */
 {
 int byteCount = ((bitCount+7)>>3);
 zeroBytes(b, byteCount);
+}
+
+void bitClearRange(Bits *b, int startIx, int bitCount)
+/* Clear a range of bits. */
+{
+int endIx = (startIx + bitCount - 1);
+int startByte = (startIx>>3);
+int endByte = (endIx>>3);
+int startBits = (startIx&7);
+int endBits = (endIx&7);
+int i;
+
+if (startByte == endByte)
+    {
+    b[startByte] &= ~(leftMask[startBits] & rightMask[endBits]);
+    return;
+    }
+b[startByte] &= ~leftMask[startBits];
+for (i = startByte+1; i<endByte; ++i)
+    b[i] = 0x00;
+b[endByte] &= ~rightMask[endBits];
 }
 
 void bitAnd(Bits *a, Bits *b, int bitCount)

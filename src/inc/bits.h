@@ -39,7 +39,10 @@ int bitFindClear(Bits *b, int startIx, int bitCount);
 /* Find the index of the the next clear bit. */
 
 void bitClear(Bits *b, int bitCount);
-/* Clear many bits. */
+/* Clear many bits (possibly up to 7 beyond bitCount). */
+
+void bitClearRange(Bits *b, int startIx, int bitCount);
+/* Clear a range of bits. */
 
 void bitAnd(Bits *a, Bits *b, int bitCount);
 /* And two bitmaps.  Put result in a. */
