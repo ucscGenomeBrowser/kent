@@ -1,0 +1,73 @@
+Here are some notes on the Jackson labs database.  The schema
+viewer at:
+    http://www.informatics.jax.org/schema/
+is helpful for understanding their database.  Galt has created
+a local copy of the database using some scripts around sqsh.
+
+The main tables we need for VisiGene are:
+    GXD_Assay - Gene Expression Database Assay.  Includes info on
+                in situs and other assays such as northern blots.
+    MRK_Marker - Contains information on markers, many of which are genes.
+    PRB_Probe  - Contains primers sometimes for RNA/DNA hybridization probes.
+    GXD_InSituResultImage & GXD_InSituResult - link image to specimen
+    GXD_Specimen - Describes sex, age, links to genotype
+    IMG_Image - 
+
+
+
+    
+
+Main table for expression is GXD_Assay.  We want cases
+where the field _AssayType_key is 
+   1 - RNA In Situ
+   6 - Immunohistochemistry
+   9 - In Situ reporter (knock in)
+of which there currently are 9003 rows.
+
+This table mostly is pointers to other tables.  Here's
+the fields and what they point to:
+
+GXD_Assay FIELDS
+_Assay_key	Primary key for this table (GXD_Assay)
+_AssayType_key	Key to GXD_AssayType
+_Refs_key	Key to BIB_Refs which includes journal, author, etc.
+_Marker_key     Key to MRK_Marker.  Table includes symbol (gene symbol) 
+                when MRK_Marker._Marker_Type_key=1
+_ProbePrep_key  Key to GXD_ProbePrep. References PRB_Probe, GXD_Label, 
+                GXD_LabelCoverage, GXD_VisualizationMethod.
+_AntibodyPrep_key Key to GXD_AntibodyPrep. References GXD_Antibody, GXD_Label.
+                Either this or ProbePrep is 0.
+_ImagePane_key   Key to IMG_ImagePane.  References IMG_Image, which has
+_ReporterGene_key  Seems to be zero in all cases
+_CreatedBy_key
+
+
+Also need:
+
+GXD_InSituResultImage FIELDS
+_Result_key
+_ImagePane_key
+
+And
+
+GXD_InSituResult FIELDS
+_Result_key
+_Specimen_key	Key to GXD_Specimen
+_Strength_key	Key to GXD_Strength
+_Pattern_key	Key to GXD_Pattern
+sequenceNum
+resultNote
+
+USEFUL QUERIES
+Here's a useful query to sample the GXD_Assay table:
+select _AssayType_key, _Refs_key, _Marker_key, _ProbePrep_key, 
+       _AntibodyPrep_key, _ImagePane_key, _ReporterGene_key, 
+       _CreatedBy_key, _ModifiedBy_key 
+from GXD_Assay 
+where _AssayType_key in (1,6,9) 
+      and (_AntibodyPrep_key != 0 || _ProbePrep_key<3000) 
+order by rand() limit 10;
+
+And the GXD_Marker table:
+select _Marker_key as marker, _Organism_key as org, _Marker_Status_key as status, _Marker_Type_key as type, _CurationState_key as cura, symbol, name, chromosome as chrom, cytogeneticOffset as cyto, _CreatedBy_key from MRK_Marker order by rand() limit 10;
+
