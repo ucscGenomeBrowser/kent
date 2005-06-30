@@ -2613,3 +2613,25 @@ done
     hgLoadBed -strict -sqlTable=encodeHapMapAlleleFreqJPT.sql hg16 encodeHapMapAlleleFreqJPT allele_freqs_JPT.bed
     hgLoadBed -strict -sqlTable=encodeHapMapAlleleFreqYRI.sql hg16 encodeHapMapAlleleFreqYRI allele_freqs_YRI.bed
 
+##########################################################################
+# ENCODE Regulome 
+# Heather, June 2005
+
+    ssh hgwdev
+
+    # I am hand spliting these files on account of being rushed
+
+    cd /cluster/data/encode/Regulome/amplicons/odd
+    hgLoadBed -strict -sqlTable=CACO2.sql hg16 encodeRegulomeAmpliconOddCACO2 CACO2.bed
+    hgLoadBed -strict -sqlTable=GM06990.sql hg16 encodeRegulomeAmpliconOddGM06990 GM06990.bed
+    hgLoadBed -strict -sqlTable=SKNSH.sql hg16 encodeRegulomeAmpliconOddSKNSH SKNSH.bed
+    hgLoadBed -strict -sqlTable=ERY.sql hg16 encodeRegulomeAmpliconOddERY ERY.bed
+    hgLoadBed -strict -sqlTable=K562.sql hg16 encodeRegulomeAmpliconOddK562 K562.bed
+
+    cd /cluster/data/encode/Regulome/amplicons/even
+    hgLoadBed -strict -sqlTable=CACO2.sql hg16 encodeRegulomeAmpliconEvenCACO2 CACO2.bed
+    hgLoadBed -strict -sqlTable=GM06990.sql hg16 encodeRegulomeAmpliconEvenGM06990 GM06990.bed
+    hgLoadBed -strict -sqlTable=SKNSH.sql hg16 encodeRegulomeAmpliconEvenSKNSH SKNSH.bed
+    hgLoadBed -strict -sqlTable=ERY.sql hg16 encodeRegulomeAmpliconEvenERY ERY.bed
+    hgLoadBed -strict -sqlTable=K562.sql hg16 encodeRegulomeAmpliconEvenK562 K562.bed
+
