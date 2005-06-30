@@ -5,7 +5,7 @@
 #include "fa.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMask.c,v 1.2 2005/06/30 09:07:28 heather Exp $";
+static char const rcsid[] = "$Id: snpMask.c,v 1.3 2005/06/30 09:08:35 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -66,11 +66,6 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 
-if (!hDbIsActive(database))
-    {
-    printf("Currently no support for %s\n", database);
-    return NULL;
-    }
 
 safef(query, sizeof(query), "select name, chromStart, observed from snp "
 "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact'", chrom);
@@ -126,6 +121,11 @@ char *ptr;
 struct snp *snps = NULL;
 struct snp *snp = NULL;
 
+if (!hDbIsActive(database))
+    {
+    printf("Currently no support for %s\n", database);
+    return;
+    }
 hSetDb(database);
 
 seq = nibLoadAll(nibFile);
