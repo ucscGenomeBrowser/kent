@@ -174,7 +174,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.909 2005/06/28 16:37:43 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.910 2005/06/30 14:06:46 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11808,8 +11808,8 @@ if ((row = sqlNextRow(sr)) != NULL)
     	{
 	printCustomUrlWithLabel(tdb, item, 
 			"The miRNA Registry: ", 
-			"http://www.sanger.ac.uk/cgi-bin/Rfam/mirna/mirna_entry.pl?id=$$", TRUE);
-    	printf("<B>RNA Type:</B> microRNA\n");
+    			"http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$", TRUE);
+	printf("<B>RNA Type:</B> microRNA\n");
 	}
     printf("<BR>");
     bed = bedLoadN(row+hasBin, bedSize);
