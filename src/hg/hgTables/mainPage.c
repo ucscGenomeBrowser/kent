@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.78 2005/06/26 15:32:57 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.79 2005/06/30 19:48:57 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -557,6 +557,23 @@ else
 hPrintf("</TD></TR>\n");
 }
 
+/* Composite track subtrack merge line. */
+if (curTrack && trackDbIsComposite(curTrack) && !(isWig || isBedGraph))
+    {
+    hPrintf("<TR><TD><B>subtrack merge:</B>\n");
+    if (anySubtrackMerge(database, curTable))
+	{
+	cgiMakeButton(hgtaDoSubtrackMergePage, "edit");
+	hPrintf(" ");
+	cgiMakeButton(hgtaDoClearSubtrackMerge, "clear");
+	}
+    else
+	{
+	cgiMakeButton(hgtaDoSubtrackMergePage, "create");
+	}
+    hPrintf("</TD></TR>\n");
+    }
+
 /* Intersection line. */
 if (isPositional)
     {
@@ -668,6 +685,8 @@ hPrintf("</TABLE>\n");
 	}
     else
 	{
+	if (anySubtrackMerge(database, curTable))
+	    hPrintf("<I>Note: Subtrack merge doesn't work with all fields or selected fields output.</I><BR>");
 	if (anyIntersection())
 	    hPrintf("<I>Note: Intersection doesn't work with all fields or selected fields output.</I><BR>");
         }

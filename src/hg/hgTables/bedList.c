@@ -18,7 +18,7 @@
 #include "hgTables.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.36 2005/06/25 06:48:46 hiram Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.37 2005/06/30 19:48:57 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -366,7 +366,20 @@ if (isWiggle(database, table))
 else
     {
     hPrintf("%s\n", "<P> <B> Create one BED record per: </B>");
-    fbOptionsHtiCart(hti, cart);
+    if ((anyIntersection() && intersectionIsBpWise()) ||
+	(anySubtrackMerge(database, table) && subtrackMergeIsBpWise()))
+	{
+	/* The original table may have blocks/CDS, described in hti, but 
+	 * that info will be lost after base pair-wise operations.  So make 
+	 * a temporary copy of hti with its flags tweaked: */
+	struct hTableInfo simplifiedHti;
+	memcpy(&simplifiedHti, hti, sizeof(simplifiedHti));
+	simplifiedHti.hasBlocks = FALSE;
+	simplifiedHti.hasCDS = FALSE;
+	fbOptionsHtiCart(&simplifiedHti, cart);
+	}
+    else
+	fbOptionsHtiCart(hti, cart);
     }
 if (doCt)
     {
@@ -545,9 +558,16 @@ for (region = regionList; region != NULL; region = region->next)
 		    }
 		else
 		    {
-		    hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
+		    if (fields >= 6)
+			hPrintf("%s\t%d\t%d\t%s\t%d\t%c\n",
 			   fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name,
 			   0, fbPtr->strand);
+		    else if (fields >= 4)
+			hPrintf("%s\t%d\t%d\t%s\n",
+			  fbPtr->chrom, fbPtr->start, fbPtr->end, fbPtr->name);
+		    else
+			hPrintf("%s\t%d\t%d\n",
+				fbPtr->chrom, fbPtr->start, fbPtr->end);
 		    }
 		gotResults = TRUE;
 		}

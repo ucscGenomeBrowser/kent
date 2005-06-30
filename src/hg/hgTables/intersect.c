@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.25 2005/06/07 14:04:09 giardine Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.26 2005/06/30 19:48:57 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -32,6 +32,13 @@ boolean anyIntersection()
 /* Return TRUE if there's an intersection to do. */
 {
 return cartVarExists(cart, hgtaIntersectTrack);
+}
+
+boolean intersectionIsBpWise()
+/* Return TRUE if the intersection/union operation is base pair-wise. */
+{
+char *op = cartUsualString(cart, hgtaIntersectOp, "any");
+return (sameString(op, "and") || sameString(op, "or"));
 }
 
 static char *onChangeEnd(struct dyString **pDy)
@@ -238,6 +245,42 @@ copyCartVars(cart, nextVars, curVars, ArraySize(curVars));
 doMainPage(conn);
 }
 
+
+static void bitSetClippedRange(Bits *bits, int bitSize, int s, int e)
+/* Clip start and end to [0,bitSize) and set range. */
+{
+int w;
+if (e > bitSize) e = bitSize;
+if (s < 0) s = 0;
+w = e - s;
+if (w > 0)
+    bitSetRange(bits, s, w);
+}
+
+static void bedOrBits(Bits *bits, int bitSize, struct bed *bedList,
+		      boolean hasBlocks, int bitOffset)
+/* Or in bits.   Bits should have bitSize bits.  */
+{
+struct bed *bed;
+if (hasBlocks)
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	int i;
+	for (i=0;  i < bed->blockCount;  i++)
+	    {
+	    int s = bed->chromStart + bed->chromStarts[i] - bitOffset;
+	    int e = s + bed->blockSizes[i];
+	    bitSetClippedRange(bits, bitSize, s, e);
+	    }
+	}
+else
+    for (bed = bedList; bed != NULL; bed = bed->next)
+	{
+	bitSetClippedRange(bits, bitSize, (bed->chromStart - bitOffset),
+			   (bed->chromEnd - bitOffset));
+	}
+}
+
 static int countBasesOverlap(struct bed *bedItem, Bits *bits, boolean hasBlocks)
 /* Return the number of bases belonging to bedItem covered by bits. */
 {
@@ -302,8 +345,44 @@ slReverse(&bedList);
 return(bedList);
 }
 
-
-
+static struct bed *filterBedByOverlap(struct bed *bedListIn, boolean hasBlocks,
+				      char *op, int moreThresh, int lessThresh,
+				      Bits *bits)
+{
+struct bed *intersectedBedList = NULL;
+struct bed *bed = NULL, *nextBed = NULL;
+/* Loop through primary bed list seeing if each one intersects
+ * enough to keep. */
+for (bed = bedListIn;  bed != NULL;  bed = nextBed)
+    {
+    int numBasesOverlap = countBasesOverlap(bed, bits, hasBlocks);
+    int length = 0;
+    double pctBasesOverlap;
+    nextBed = bed->next;
+    if (hasBlocks)
+	{
+	int i;
+	for (i=0;  i < bed->blockCount;  i++)
+	    length += bed->blockSizes[i];
+	}
+    else
+	length = (bed->chromEnd - bed->chromStart);
+    if (length == 0)
+	length = 1;
+    pctBasesOverlap = ((numBasesOverlap * 100.0) / length);
+    if ((sameString("any", op) && (numBasesOverlap > 0)) ||
+	(sameString("none", op) && (numBasesOverlap == 0)) ||
+	(sameString("more", op) &&
+	 (pctBasesOverlap >= moreThresh)) ||
+	(sameString("less", op) &&
+	 (pctBasesOverlap <= lessThresh)))
+	{
+	slAddHead(&intersectedBedList, bed);
+	}
+    }
+slReverse(&intersectedBedList);
+return intersectedBedList;
+} 
 
 static struct bed *intersectOnRegion(
 	struct sqlConnection *conn,	/* Open connection to database. */
@@ -333,10 +412,8 @@ struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2,
 	NULL);
 /* Set up some other local vars. */
 struct hTableInfo *hti1 = getHti(database, table1);
-struct featureBits *fbList2 = NULL;
-struct bed *bed;
-Bits *bits2;
 int chromSize = hChromSize(region->chrom);
+Bits *bits2 = bitAlloc(chromSize+8);;
 boolean isBpWise = (sameString("and", op) || sameString("or", op));
 struct bed *intersectedBedList = NULL;
 
@@ -353,22 +430,17 @@ if ((!sameString("any", op)) &&
 
 
 /* Load intersecting track into a bitmap. */
-fbList2 = fbFromBed(table2, hti2, bedList2, region->start, region->end,
-		     isBpWise, FALSE);
-bits2 = bitAlloc(chromSize+8);
-fbOrBits(bits2, chromSize, fbList2, 0);
-featureBitsFreeList(&fbList2);
+bedOrBits(bits2, chromSize, bedList2, hti2->hasBlocks, 0);
 
 /* Produce intersectedBedList. */
 if (isBpWise)
     {
     /* Base-pair-wise operation: get bitmap  for primary table too */
-    struct featureBits *fbList1 = fbFromBed(table1, hti1, bedList1, 
-    			               region->start, region->end, 
-				       isBpWise, FALSE);
     Bits *bits1 = bitAlloc(chromSize+8);
-    fbOrBits(bits1, chromSize, fbList1, 0);
-    featureBitsFreeList(&fbList1);
+    boolean hasBlocks = hti1->hasBlocks;
+    if (retFieldCount != NULL && (*retFieldCount < 12))
+	hasBlocks = FALSE;
+    bedOrBits(bits1, chromSize, bedList1, hasBlocks, 0);
     /* invert inputs if necessary */
     if (invTable)
 	bitNot(bits1, chromSize);
@@ -379,6 +451,11 @@ if (isBpWise)
 	bitAnd(bits1, bits2, chromSize);
     else
 	bitOr(bits1, bits2, chromSize);
+    /* clip to region if necessary: */
+    if (region->start > 0)
+	bitClearRange(bits1, 0, region->start);
+    if (region->end < chromSize)
+	bitClearRange(bits1, region->end, (chromSize - region->end));
     /* translate back to bed */
     intersectedBedList = bitsToBed4List(bits1, chromSize, 
     	region->chrom, 1, region->start, region->end, lm);
@@ -387,43 +464,94 @@ if (isBpWise)
     bitFree(&bits1);
     }
 else
-    {
-    struct bed *nextBed;
-    /* Loop through primary bed list seeing if each one intersects
-     * enough to keep. */
-    for (bed = bedList1;  bed != NULL;  bed = nextBed)
-	{
-	int numBasesOverlap = countBasesOverlap(bed, bits2, hti1->hasBlocks);
-	int length = 0;
-	double pctBasesOverlap;
-	nextBed = bed->next;
-	if (hti1->hasBlocks)
-	    {
-	    int i;
-	    for (i=0;  i < bed->blockCount;  i++)
-		length += bed->blockSizes[i];
-	    }
-	else
-	    length = (bed->chromEnd - bed->chromStart);
-	if (length == 0)
-	    length = 1;
-	pctBasesOverlap = ((numBasesOverlap * 100.0) / length);
-	if ((sameString("any", op) && (numBasesOverlap > 0)) ||
-	    (sameString("none", op) && (numBasesOverlap == 0)) ||
-	    (sameString("more", op) &&
-	     (pctBasesOverlap >= moreThresh)) ||
-	    (sameString("less", op) &&
-	     (pctBasesOverlap <= lessThresh)))
-	    {
-	    slAddHead(&intersectedBedList, bed);
-	    }
-	}
-    slReverse(&intersectedBedList);
-    } 
+    intersectedBedList = filterBedByOverlap(bedList1, hti1->hasBlocks, op,
+					    moreThresh, lessThresh, bits2);
 bitFree(&bits2);
 lmCleanup(&lm2);
 return intersectedBedList;
 }
+
+struct bed *getRegionAsMergedBed(
+	char *db, char *table, 	/* Database and table. */
+	struct region *region,  /* Region to get data for. */
+	char *filter, 		/* Filter to add to SQL where clause if any. */
+	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
+	struct lm *lm,		/* Where to allocate memory. */
+	int *retFieldCount)	/* Number of fields. */
+/* Return a bed list of all items in the given range in subtrack-merged table.
+ * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+{
+if (! anySubtrackMerge(db, table))
+    return getRegionAsBed(db, table, region, filter, idHash, lm, retFieldCount);
+else
+    {
+    struct hTableInfo *hti = getHti(database, table);
+    int chromSize = hChromSize(region->chrom);
+    Bits *bits1 = bitAlloc(chromSize+8);
+    Bits *bits2 = bitAlloc(chromSize+8);
+    struct bed *bedMerged = NULL;
+    struct trackDb *subtrack = NULL;
+    char *op = cartString(cart, hgtaSubtrackMergeOp);
+    boolean isBpWise = (sameString(op, "and") || sameString(op, "or"));
+    int moreThresh = cartInt(cart, hgtaSubtrackMergeMoreThreshold);
+    int lessThresh = cartInt(cart, hgtaSubtrackMergeLessThreshold);
+    boolean firstTime = TRUE;
+    /* If doing a base-pair-wise operation, then start with the primary 
+     * subtrack's ranges in bits1, and AND/OR all the selected subtracks' 
+     * ranges into bits1.  If doing a non-bp-wise intersection, then 
+     * start with all bits clear in bits1, and then OR selected subtracks'
+     * ranges into bits1.  */
+    if (isBpWise)
+	{
+	struct lm *lm2 = lmInit(64*1024);
+	struct bed *bedList1 = getRegionAsBed(db, table, region, filter,
+					      idHash, lm2, retFieldCount);
+	bedOrBits(bits1, chromSize, bedList1, hti->hasBlocks, 0);
+	lmCleanup(&lm2);
+	}
+    for (subtrack = curTrack->subtracks; subtrack != NULL;
+	 subtrack = subtrack->next)
+	{
+	if (! sameString(curTable, subtrack->tableName) &&
+	    isSubtrackMerged(subtrack->tableName))
+	    {
+	    struct hTableInfo *hti2 = getHti(database, subtrack->tableName);
+	    struct lm *lm2 = lmInit(64*1024);
+	    struct bed *bedList2 =
+		getRegionAsBed(db, subtrack->tableName, region, filter, idHash,
+			       lm2, NULL);
+	    if (firstTime)
+		firstTime = FALSE;
+	    else
+		bitClear(bits2, chromSize);
+	    bedOrBits(bits2, chromSize, bedList2, hti2->hasBlocks, 0);
+	    if (sameString(op, "and"))
+		bitAnd(bits1, bits2, chromSize);
+	    else
+		bitOr(bits1, bits2, chromSize);
+	    lmCleanup(&lm2);
+	    }
+	}
+    if (isBpWise)
+	{
+	bedMerged = bitsToBed4List(bits1, chromSize, region->chrom, 1,
+				   region->start, region->end, lm);
+	if (retFieldCount != NULL)
+	    *retFieldCount = 4;
+	}
+    else
+	{
+	struct bed *bedList1 = getRegionAsBed(db, table, region, filter,
+					      idHash, lm, retFieldCount);
+	bedMerged = filterBedByOverlap(bedList1, hti->hasBlocks, op,
+				       moreThresh, lessThresh, bits1);
+	}
+    bitFree(&bits1);
+    bitFree(&bits2);
+    return bedMerged;
+    }
+}
+
 
 static struct bed *getIntersectedBeds(struct sqlConnection *conn,
 	char *table, struct region *region, struct lm *lm, int *retFieldCount)

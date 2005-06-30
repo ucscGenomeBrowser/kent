@@ -15,7 +15,7 @@
 #include "hgTables.h"
 
 
-static char const rcsid[] = "$Id: joining.c,v 1.42 2005/06/23 18:34:03 giardine Exp $";
+static char const rcsid[] = "$Id: joining.c,v 1.43 2005/06/30 19:48:57 angie Exp $";
 
 struct joinedRow
 /* A row that is joinable.  Allocated in joinableResult->lm. */
@@ -1113,8 +1113,8 @@ if (! doJoin)
     for (region = regionList; region != NULL; region = region->next)
 	{
 	char *filter = filterClause(database, table, region->chrom);
-	struct bed *bedListRegion = getRegionAsBed(database, table, region, 
-					filter, idHash, lm, retFieldCount);
+	struct bed *bedListRegion = getRegionAsMergedBed(database, table,
+				    region, filter, idHash, lm, retFieldCount);
 	struct bed *bed, *nextBed;
 	for (bed = bedListRegion; bed != NULL; bed = nextBed)
 	    {

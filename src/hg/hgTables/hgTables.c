@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.113 2005/06/24 19:29:57 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.114 2005/06/30 19:48:57 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -532,6 +532,20 @@ else
 return sr;
 }
 
+char *getDbTable(char *db, char *table)
+/* If table already contains its real database as a dot-prefix, then 
+ * return a clone of table; otherwise alloc and return db.table . */
+{
+if (strchr(table, '.') != NULL)
+    return cloneString(table);
+else
+    {
+    char dbTable[256];
+    safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
+    return cloneString(dbTable);
+    }
+}
+
 char *trackTable(char *rawTable)
 /* Return table name for track, substituting all_mrna
  * for mRNA if need be. */
@@ -852,6 +866,7 @@ if (trackDupe != NULL && trackDupe[0] != 0)
         {
         struct trackDb *subTdb;
         struct slName *subList = NULL;
+	slSort(&(track->subtracks), trackDbCmp);
         for (subTdb = track->subtracks; subTdb != NULL; subTdb = subTdb->next)
             {
 	    name = slNameNew(subTdb->tableName);
@@ -1312,6 +1327,9 @@ return dtfList;
 void doOutPrimaryTable(char *table, struct sqlConnection *conn)
 /* Dump out primary table. */
 {
+if (anySubtrackMerge(database, table))
+    errAbort("Can't do all fields output when subtrack merge is on. "
+    "Please go back and select another output type, or clear the subtrack merge.");
 if (anyIntersection())
     errAbort("Can't do all fields output when intersection is on. "
     "Please go back and select another output type, or clear the intersection.");
@@ -1447,6 +1465,12 @@ else if (cartVarExists(cart, hgtaDoCorrelateMore))
     doCorrelateMore(conn);
 else if (cartVarExists(cart, hgtaDoCorrelateSubmit))
     doCorrelateSubmit(conn);
+else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
+    doSubtrackMergePage(conn);
+else if (cartVarExists(cart, hgtaDoClearSubtrackMerge))
+    doClearSubtrackMerge(conn);
+else if (cartVarExists(cart, hgtaDoSubtrackMergeSubmit))
+    doSubtrackMergeSubmit(conn);
 else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
     doPasteIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoClearPasteIdentifierText))

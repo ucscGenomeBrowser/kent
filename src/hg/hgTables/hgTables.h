@@ -239,6 +239,9 @@ char *chrnTable(struct sqlConnection *conn, char *table);
 /* Return chrN_table if table is split, otherwise table. 
  * You can freeMem this when done. */
 
+char *getDbTable(char *db, char *table);
+/* If table already contains its real database as a dot-prefix, then 
+ * return a clone of table; otherwise alloc and return db.table . */
 
 void doTabOutTable(char *database, char *table, FILE *f,
 	struct sqlConnection *conn, char *fields);
@@ -355,6 +358,9 @@ char *filterFieldVarName(char *db, char *table, char *field, char *type);
 boolean anyIntersection();
 /* Return TRUE if there's an intersection to do. */
 
+boolean intersectionIsBpWise();
+/* Return TRUE if the intersection/union operation is base pair-wise. */
+
 /* --------- Functions related to correlation. --------------- */
 boolean anyCorrelation();
 /* Return TRUE if there's a correlation to do. */
@@ -363,6 +369,27 @@ boolean anyCorrelation();
 
 struct trackDb *findTdb(struct trackDb *track, char *table);
 /*	if the given track is a composite, find the tdb for the table */
+
+/* --------- Functions related to composite tracks/subtracks. ------------- */
+
+boolean anySubtrackMerge(char *db, char *table);
+/* Return TRUE if a subtrack merge has been specified on db.table. */
+
+boolean subtrackMergeIsBpWise();
+/* Return TRUE if the subtrack merge operation is base pair-wise. */
+
+boolean isSubtrackMerged(char *tableName);
+/* Return true if tableName has been selected for subtrack merge. */
+
+void doSubtrackMergePage(struct sqlConnection *conn);
+/* Respond to subtrack merge create/edit button */
+
+void doClearSubtrackMerge(struct sqlConnection *conn);
+/* Respond to click on clear intersection. */
+
+void doSubtrackMergeSubmit(struct sqlConnection *conn);
+/* Respond to submit on intersect page. */
+
 
 /* --------- CGI/Cart Variables --------------------- */
 
@@ -393,6 +420,9 @@ struct trackDb *findTdb(struct trackDb *track, char *table);
 #define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
 #define hgtaDoCorrelateMore "hgta_doCorrelateMore"
 #define hgtaDoCorrelateSubmit "hgta_doCorrelateSubmit"
+#define hgtaDoSubtrackMergePage "hgta_doSubtrackMergePage"
+#define hgtaDoClearSubtrackMerge "hgta_doClearSubtrackMerge"
+#define hgtaDoSubtrackMergeSubmit "hgta_doSubtrackMergeSubmit"
 #define hgtaDoTest "hgta_doTest"
 #define hgtaDoSchemaTable "hgta_doSchemaTable"
 #define hgtaDoSchemaDb "hgta_doSchemaDb"
@@ -478,6 +508,18 @@ struct trackDb *findTdb(struct trackDb *track, char *table);
 #define hgtaNextCorrelateTable "hgta_nextCorrelateTable"
 #define hgtaCorrelateTable2 "hgta_correlateTable2"
 #define hgtaNextCorrelateTable2 "hgta_nextCorrelateTable2"
+
+/* Subtrack merge vars (also in pairs so we can cancel). */
+#define hgtaSubtrackMergePrefix "hgta_subtrackMerge"
+#define hgtaNextSubtrackMergePrefix "hgta_nextSubtrackMerge"
+#define hgtaSubtrackMergePrimary hgtaSubtrackMergePrefix "Primary"
+#define hgtaNextSubtrackMergePrimary hgtaNextSubtrackMergePrefix "Primary"
+#define hgtaSubtrackMergeOp hgtaSubtrackMergePrefix "Op"
+#define hgtaNextSubtrackMergeOp hgtaNextSubtrackMergePrefix "Op"
+#define hgtaSubtrackMergeMoreThreshold hgtaSubtrackMergePrefix "MoreThreshold"
+#define hgtaNextSubtrackMergeMoreThreshold hgtaNextSubtrackMergePrefix "MoreThreshold"
+#define hgtaSubtrackMergeLessThreshold hgtaSubtrackMergePrefix "LessThreshold"
+#define hgtaNextSubtrackMergeLessThreshold hgtaNextSubtrackMergePrefix "LessThreshold"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
@@ -639,6 +681,16 @@ struct bed *getRegionAsBed(
 	struct lm *lm,		/* Where to allocate memory. */
 	int *retFieldCount);	/* Number of fields. */
 /* Return a bed list of all items in the given range in table.
+ * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+
+struct bed *getRegionAsMergedBed(
+	char *db, char *table, 	/* Database and table. */
+	struct region *region,  /* Region to get data for. */
+	char *filter, 		/* Filter to add to SQL where clause if any. */
+	struct hash *idHash, 	/* Restrict to id's in this hash if non-NULL. */
+	struct lm *lm,		/* Where to allocate memory. */
+	int *retFieldCount);	/* Number of fields. */
+/* Return a bed list of all items in the given range in subtrack-merged table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
 
 struct bed *dbGetFilteredBedsOnRegions(struct sqlConnection *conn, 

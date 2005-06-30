@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.42 2005/06/23 18:34:03 giardine Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.43 2005/06/30 19:48:57 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -195,20 +195,6 @@ if (outList != NULL)
     hPrintf("<BR>");
 
     cgiMakeButton(buttonName, buttonText);
-    }
-}
-
-static char *getDbTable(char *db, char *table)
-/* If table already contains its real database as a dot-prefix, then 
- * return a clone of table; otherwise alloc and return db.table . */
-{
-if (strchr(table, '.') != NULL)
-    return cloneString(table);
-else
-    {
-    char dbTable[256];
-    safef(dbTable, sizeof(dbTable), "%s.%s", db, table);
-    return cloneString(dbTable);
     }
 }
 
@@ -398,7 +384,10 @@ doBigSelectPage(db, table);
 void doOutSelectedFields(char *table, struct sqlConnection *conn)
 /* Put up select fields (for tab-separated output) page. */
 {
-if (anyIntersection())
+if (anySubtrackMerge(database, curTable))
+    errAbort("Can't do selected fields output when subtrack merge is on. "
+    "Please go back and select another output type, or clear the subtrack merge.");
+else if (anyIntersection())
     errAbort("Can't do selected fields output when intersection is on. "
     "Please go back and select another output type, or clear the intersection.");
 else
