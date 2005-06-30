@@ -4,10 +4,10 @@
 #include "nib.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: dumpNib.c,v 1.1 2005/06/30 07:06:44 heather Exp $";
+static char const rcsid[] = "$Id: dumpNib.c,v 1.2 2005/06/30 07:07:40 heather Exp $";
 
 void dumpNib(char *nibFile, char *outFile)
-/* dumpNib - Print a nib file, using IUPAC codes for single base substitutions. */
+/* dumpNib - Print a nib file. */
 {
 struct dnaSeq *seq;
 
