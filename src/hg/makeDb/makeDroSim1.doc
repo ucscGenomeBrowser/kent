@@ -1502,4 +1502,122 @@ zcat `ls -1 /cluster/bluearc/droSim1/phastCons/POSTPROBS/$chr.*.pp.gz \
     cd /cluster/data/droSim1
     hgGoldGapGl -noGl -chromLst=chrom.lst droSim1 /cluster/data/droSim1 .
 
+# MAKE Drosophila Proteins track  (DONE 06-30-05 braney)
+    ssh kk
+    mkdir -p /cluster/data/droSim1/bed/tblastn.dm2FB
+    cd /cluster/data/droSim1/bed/tblastn.dm2FB
+    ls -1S /iscratch/i/droSim1/blastDb/*.nsq | sed "s/\.nsq//" > target.lst
+    mkdir fbfa
+    # calculate a reasonable number of jobs 
+    calc `wc /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl | awk "{print \\\$1}"`/\(164630/`wc target.lst | awk "{print \\\$1}"`\)
+#18929/(164630/320) = 36.793294
 
+    split -l 50 /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir -p /cluster/bluearc/droSim1/bed/tblastn.dm2FB/blastOut  
+    ln -s /cluster/bluearc/droSim1/bed/tblastn.dm2FB/blastOut  
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/droSim1/jkStuff/subChr.lft carry $f.2
+	liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/droSim1/jkStuff/liftAll.lft carry $f.3
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/dm2/bed/blat.dm2FB/protein.lft warn $f.4
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3 $f.4
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.3 $f.8 $f.4
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 target.lst fb.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/droSim1/bed/tblastn.dm2FB
+    para create blastSpec
+    para push
+
+# Completed: 121280 of 121280 jobs
+# CPU time in finished jobs:     879967s   14666.12m   244.44h   10.18d  0.028 y
+# IO & Wait Time:                463525s    7725.41m   128.76h    5.36d  0.015 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              84s       1.40m     0.02h    0.00d
+# Submission to last job:         16896s     281.60m     4.69h    0.20d
+
+
+    ssh kki
+    cd /cluster/data/droSim1/bed/tblastn.dm2FB
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    para create chainSpec
+    para push
+ 
+# Completed: 379 of 379 jobs
+# CPU time in finished jobs:       3593s      59.89m     1.00h    0.04d  0.000 y
+# IO & Wait Time:                  9877s     164.61m     2.74h    0.11d  0.000 y
+# Average job time:                  36s       0.59m     0.01h    0.00d
+# Longest finished job:             610s      10.17m     0.17h    0.01d
+# Submission to last job:          1585s      26.42m     0.44h    0.02d
+
+    cd /cluster/data/droSim1/bed/tblastn.dm2FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -u -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > /cluster/data/droSim1/bed/tblastn.dm2FB/blastDm2FB.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/droSim1/bed/tblastn.dm2FB
+    hgLoadPsl droSim1 blastDm2FB.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn

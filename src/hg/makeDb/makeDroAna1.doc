@@ -661,4 +661,118 @@ chainSome $(path1)
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
     # Add /usr/local/apache/htdocs/goldenPath/droAna1/vsDm2/README.txt
 
+# MAKE Drosophila Proteins track (DONE braney 06-30-05)
+    ssh kk
+    mkdir -p /cluster/data/droAna1/bed/tblastn.dm2FB
+    cd /cluster/data/droAna1/bed/tblastn.dm2FB
+    ls -1S /iscratch/i/droAna1/blastDb/*.nsq | sed "s/\.nsq//" > target.lst
+    mkdir fbfa
+    # calculate a reasonable number of jobs 
+    calc `wc /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl|awk "{print \\\$1}"`/\(64630/`wc target.lst | awk "{print \\\$1}"`\)
+# 18929/(64630/396) = 115.981495
 
+    split -l 116 /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir -p /cluster/bluearc/droAna1/bed/tblastn.dm2FB/blastOut  
+    ln -s /cluster/bluearc/droAna1/bed/tblastn.dm2FB/blastOut  
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/dm2/bed/blat.dm2FB/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3 $f.4
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.3 $f.8 $f.4
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 target.lst fb.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/droAna1/bed/tblastn.dm2FB
+    para create blastSpec
+    para push
+
+# Completed: 64944 of 64944 jobs
+# CPU time in finished jobs:    1256574s   20942.91m   349.05h   14.54d  0.040 y
+# IO & Wait Time:                376729s    6278.81m   104.65h    4.36d  0.012 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:            4272s      71.20m     1.19h    0.05d
+# Submission to last job:         22769s     379.48m     6.32h    0.26d
+
+    ssh kki
+    cd /cluster/data/droAna1/bed/tblastn.dm2FB
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    para create chainSpec
+    para push
+ 
+# Completed: 164 of 164 jobs
+# CPU time in finished jobs:        332s       5.53m     0.09h    0.00d  0.000 y
+# IO & Wait Time:                  2165s      36.09m     0.60h    0.03d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest finished job:              58s       0.97m     0.02h    0.00d
+# Submission to last job:           187s       3.12m     0.05h    0.00d
+
+    cd /cluster/data/droAna1/bed/tblastn.dm2FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -u -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > /cluster/data/droAna1/bed/tblastn.dm2FB/blastDm2FB.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/droAna1/bed/tblastn.dm2FB
+    hgLoadPsl droAna1 blastDm2FB.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
