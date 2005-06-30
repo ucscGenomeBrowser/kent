@@ -1,20 +1,21 @@
-/* snpMask - Print a nib file, using IUPAC codes for single base substitutions. */
+/* snpMask - Print SNPs (single base substituions) using IUPAC codes and flanking sequences. */
 #include "common.h"
 #include "dnaseq.h"
 #include "nib.h"
 #include "fa.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMask.c,v 1.1 2005/06/30 08:55:01 heather Exp $";
+static char const rcsid[] = "$Id: snpMask.c,v 1.2 2005/06/30 09:07:28 heather Exp $";
 
 char *database = NULL;
+char *chromName = NULL;
 
 struct snp
 /* Information from snp */
     {
     struct snp *next;  	        /* Next in singly linked list. */
     char *name;			/* rsId  */
-    int chromEnd;               /* end   */
+    int chromStart;               /* start   */
     char *observed;		/* observed variants (usually slash-separated list) */
     };
 
@@ -26,7 +27,7 @@ struct snp *ret;
 
 AllocVar(ret);
 ret->name       = cloneString(row[0]);
-ret->chromEnd   =        atoi(row[1]);
+ret->chromStart   =        atoi(row[1]);
 ret->observed   = cloneString(row[2]);
 return ret;
 }
@@ -71,7 +72,7 @@ if (!hDbIsActive(database))
     return NULL;
     }
 
-safef(query, sizeof(query), "select name, chromEnd, observed from snp "
+safef(query, sizeof(query), "select name, chromStart, observed from snp "
 "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact'", chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -106,7 +107,7 @@ char iupac(char *observed, char orig)
 void printSnpSeq(struct snp *snp, struct dnaSeq *seq)
 {
 int i = 0;
-int startPos = (snp->chromEnd) - 20;
+int startPos = (snp->chromStart) - 20;
 int endPos = startPos + 40;
 char *ptr = seq->dna;
 
@@ -129,11 +130,11 @@ hSetDb(database);
 
 seq = nibLoadAll(nibFile);
 ptr = seq->dna;
-snps = readSnp("chrM");
+snps = readSnp(chromName);
 // do all substitutions
 for (snp = snps; snp != NULL; snp = snp->next)
     {
-    ptr[snp->chromEnd] = iupac(snp->observed, ptr[snp->chromEnd]);
+    ptr[snp->chromStart] = iupac(snp->observed, ptr[snp->chromStart]);
     }
 // print
 for (snp = snps; snp != NULL; snp = snp->next)
@@ -141,7 +142,7 @@ for (snp = snps; snp != NULL; snp = snp->next)
     printSnpSeq(snp, seq);
     }
 
-faWrite(outFile, "test", seq->dna, seq->size);
+faWrite(outFile, chromName, seq->dna, seq->size);
 snpFreeList(&snps);
 dnaSeqFree(&seq);  
 }
@@ -150,6 +151,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 database = argv[1];
-snpMask(argv[2], argv[3]);
+chromName = argv[2];
+snpMask(argv[3], argv[4]);
 return 0;
 }
