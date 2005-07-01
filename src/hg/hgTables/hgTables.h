@@ -366,6 +366,8 @@ boolean anyCorrelation();
 /* Return TRUE if there's a correlation to do. */
 
 #define correlateMaxDataPoints "corrMaxDataPoints"
+/* Prefix for variables managed by correlate page. */
+#define hgtaCorrelateWindowPrefix "hgta_corrWinSize."
 
 struct trackDb *findTdb(struct trackDb *track, char *table);
 /*	find the tdb for the table, if it is custom or composite or ordinary  */
@@ -511,6 +513,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaNextCorrelateTable "hgta_nextCorrelateTable"
 #define hgtaCorrelateTable2 "hgta_correlateTable2"
 #define hgtaNextCorrelateTable2 "hgta_nextCorrelateTable2"
+#define hgtaCorrelateWindowSize "hgta_CorrelateWindowSize"
+#define hgtaNextCorrelateWindowSize "hgta_nextCorrelateWindowSize"
 
 /* Subtrack merge vars (also in pairs so we can cancel). */
 #define hgtaSubtrackMergePrefix "hgta_subtrackMerge"

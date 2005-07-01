@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.29 2005/06/30 23:35:48 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.30 2005/07/01 00:15:43 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1552,7 +1552,7 @@ hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%s</TH></TR>\n", table2->longLabel);
 hPrintf("</TABLE></TD><TD>\n");
 hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic&nbsp;%g</TH></TR>\n", F_statistic);
+hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%g</TH></TR>\n", F_statistic);
 hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	residualPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
@@ -1655,10 +1655,19 @@ stripChar(tmpString, ',');
 maxLimitCount = sqlUnsigned(tmpString);
 freeMem(tmpString);
 
+/*	limit total data points and window size	options */
+{
+static char winSizeVariable[256];
+safef(winSizeVariable, sizeof(winSizeVariable), "%s%s.%s",
+	hgtaCorrelateWindowPrefix, database, curTable);
+
 hPrintf("<TABLE BORDER=0><TR><TD>Limit total data points in result:&nbsp\n");
 cgiMakeDropList(maxLimitCartVar, maxResultsMenu, maxResultsMenuSize,
     maxLimitCountStr);
-hPrintf("</TD></TR></TABLE>\n", maxLimitCount);
+hPrintf("</TD><TD>&nbsp;&nbsp;Window data to:&nbsp;\n");
+cgiMakeTextVar(winSizeVariable, cartUsualString(cart, winSizeVariable, "1"), 8);
+hPrintf("&nbsp;bases</TD></TR></TABLE>\n");
+}
 
 #ifdef NOT
 hPrintf("<P>\n");

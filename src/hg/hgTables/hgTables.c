@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.114 2005/06/30 19:48:57 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.115 2005/07/01 00:15:43 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1558,6 +1558,8 @@ void removeCustomTrackData()
 {
 cartRemove(cart, "hgt.customText");
 cartRemove(cart, "hgt.customFile");
+cartRemove(cart, "hgta_correlateTrack");
+cartRemove(cart, "hgta_correlateTable2");
 cartRemove(cart, "ct");
 }
 

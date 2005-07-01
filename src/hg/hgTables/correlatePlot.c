@@ -14,7 +14,7 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.2 2005/06/30 23:35:48 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.3 2005/07/01 00:15:43 hiram Exp $";
 
 
 struct tempName *scatterPlot(struct trackTable *yTable,
@@ -131,9 +131,13 @@ int resultIndex = 0;	/*	for reference within result	*/
 boolean debugOn = FALSE;
 double F = 0.0;
 double MSR = 0.0;	/*	aka MSM	- mean square residual */
-double MSE = 0.0;	/*	mean squared error	*/
+double SSE = 0.0;	/*	mean squared error	*/
+double ySum = 0.0;
+double yBar = 0.0;
 
 if (result->count < 1300) debugOn = TRUE;
+
+debugOn = FALSE;
 
 if(debugOn)
     {
@@ -170,7 +174,13 @@ safef(title,ArraySize(title), "ranges %g, %g", yRange, xRange);
 textWidth = mgFontStringWidth(font, title);
 //vgTextCentered(vg, 0, 0, PLOT_WIDTH, PLOT_HEIGHT, MG_BLACK, font, title);
 
-double yBar = result->sumData / result->count;
+
+for (y = yTable->vSet; y != NULL; y = y->next)
+    {
+    ySum += y->sumData;
+    }
+
+yBar = ySum / result->count;
 
 for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 	y=y->next, x=x->next)
@@ -189,14 +199,14 @@ if(debugOn)
     hPrintf("%d\t%g\t%g\t%g\t%g\n", x->position[i], x->value[i], y->value[i], fitted, residual);
 
 	MSR += (fitted - yBar) * (fitted - yBar);
-	MSE += (y->value[i] - fitted) * (y->value[i] - fitted);
+	SSE += (y->value[i] - fitted) * (y->value[i] - fitted);
 
 	vgBox(vg, x1, y1, DOT_SIZE, DOT_SIZE, MG_BLACK);
 	}
     }
 
 if ((result->count - 2) > 0)
-    F = MSR / MSE / (result->count - 2);
+    F = MSR / (SSE / (result->count - 2));
 
 /*	draw y = 0.0 line	*/
     {
