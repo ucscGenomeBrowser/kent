@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.32 2005/07/01 17:18:28 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.33 2005/07/01 20:20:02 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -30,8 +30,8 @@ static char *maxResultsMenu[] =
 };
 static int maxResultsMenuSize = ArraySize(maxResultsMenu);
 
-static struct dataVector *allocDataVector(char *chrom, int bases)
-/*	allocate a dataVector for given number of bases	on specified chrom */
+static struct dataVector *allocDataVector(char *chrom, int size)
+/* allocate a dataVector for 'size' number of data points on specified chrom */
 {
 struct dataVector *v;
 AllocVar(v);
@@ -39,10 +39,10 @@ v->chrom = cloneString(chrom);
 v->start = 0;
 v->end = 0;
 v->name = NULL;
-v->position = needHugeMem((size_t)(sizeof(int) * bases));
-v->value = needHugeMem((size_t)(sizeof(float) * bases));
+v->position = needHugeMem((size_t)(sizeof(int) * size));
+v->value = needHugeMem((size_t)(sizeof(float) * size));
 v->count = 0;		/*	nothing here yet	*/
-v->maxCount = bases;	/*	do not run past this limit	*/
+v->maxCount = size;	/*	do not run past this limit	*/
 v->min = INFINITY;	/*	must be less than this	*/
 v->max = -INFINITY;	/*	must be greater than this */
 v->sumData = 0.0;	/*	starting sum is zero	*/
@@ -485,7 +485,6 @@ int vIndex = vector->count;	/* it is starting at zero	*/
 struct bed *bedList = NULL, *bed;
 int bedFieldCount = 0;
 struct lm *lm = lmInit(64*1024);
-int itemCount = 0;
 
 /*	cookedBedList can read anything but bedGraph, so read bedGraph
  *	by itself, use cookedBedList for the other types.
@@ -505,7 +504,6 @@ if (table->isBedGraph)
 
     safef(fields,ArraySize(fields), "chromStart,chromEnd,%s",
 	table->bedGraphColumnName);
-    itemCount = 0;	/*	dbg	*/
     sr = hExtendedRangeQuery(conn, table->actualTable, region->chrom,
 	region->start, region->end, filter, TRUE, fields, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -517,7 +515,6 @@ if (table->isBedGraph)
 	bedItem->chromEnd = sqlUnsigned(row[1]);
 	bedItem->dataValue = sqlFloat(row[2]);
 	slAddHead(&bedList, (struct bed *)bedItem);
-	++itemCount;
 	}
     sqlFreeResult(&sr);
     bedFieldCount = 4;
@@ -541,7 +538,6 @@ else
 
 slSort(&bedList, bedLineCmp);   /* make sure it is sorted by chrom,chromStart*/
 
-itemCount = 0;	/*	dbg	*/
 if (table->isBedGraph)	/*	bedGraphs fill with their value */
     {
     /*	this lastEnd business will take care of the overlapping bed
@@ -561,8 +557,6 @@ if (table->isBedGraph)	/*	bedGraphs fill with their value */
 	int cEnd = bed->chromEnd;
 	int start, size, vEnd;
 	int i;
-
-	++itemCount;	/*	dbg	*/
 
 	/*	make sure we stay within the region specified	*/
 	if (cEnd < region->start || cStart > region->end)
@@ -600,15 +594,12 @@ if (table->isBedGraph)	/*	bedGraphs fill with their value */
 else if (bedFieldCount < 12)
     /*	positional only beds fill each item's span with 1.0	*/
     {
-    itemCount = 0;	/*	dbg	*/
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	register float value = 1.0;
 	int cStart = bed->chromStart;
 	int cEnd = bed->chromEnd;
 	int vEnd;
-
-	++itemCount;	/*	dbg	*/
 
 	/*	make sure we stay within the region specified	*/
 	if (cEnd < region->start || cStart > region->end)
@@ -629,7 +620,6 @@ else if (bedFieldCount > 11)  /* bed 12 +, filling exon locations with 1.0 */
     {
     register float value = 1.0;
 
-    itemCount = 0;	/*	dbg	*/
     for (bed = bedList; bed != NULL; bed = bed->next)
 	{
 	int blockCount = bed->blockCount;
@@ -637,8 +627,6 @@ else if (bedFieldCount > 11)  /* bed 12 +, filling exon locations with 1.0 */
 	int *starts = bed->chromStarts;
 	int block = 0;
 	int chromStart = bed->chromStart;
-
-	++itemCount;	/*	dbg	*/
 
 	for (block = 0; block < blockCount; ++block)
 	    {
@@ -898,7 +886,7 @@ v->calcTime += endTime - startTime;
 }	/*	static void calcMeanMinMax(struct dataVector *v)	*/
 
 static void statsRowOut(char *chrom, char *name, char *shortLabel,
-    int chromStart, int chromEnd, int bases, double min, double max,
+    int chromStart, int chromEnd, int dataPoints, double min, double max,
 	double sumData, double sumSquares, double r, long fetchMs, long calcMs,
 	    char *table1, char *table2, char *compositeTable1,
 		char *compositeTable2, double a, double b)
@@ -908,13 +896,13 @@ double mean = 0.0;
 double variance = 0.0;
 double stddev = 0.0;
 
-if (bases > 0)
+if (dataPoints > 0)
     {
-    mean = sumData/bases;
-    if (bases > 1)
+    mean = sumData/dataPoints;
+    if (dataPoints > 1)
 	{
-	variance = (sumSquares - ((sumData*sumData)/bases)) /
-		(double)(bases-1);
+	variance = (sumSquares - ((sumData*sumData)/dataPoints)) /
+		(double)(dataPoints-1);
 	if (variance > 0.0)
 	    stddev = sqrt(variance);
 	}
@@ -975,8 +963,8 @@ if (chromStart || chromEnd)
 	    }
 	}
     hPrintf("<BR>\n");
-    printLongWithCommas(stdout,(long)bases);
-    hPrintf("&nbsp;bases</TD>");
+    printLongWithCommas(stdout,(long)dataPoints);
+    hPrintf("&nbsp;data&nbsp;points</TD>");
     }
 
 if (chromStart || chromEnd)
@@ -1010,7 +998,7 @@ hPrintf("</TR>\n");
 
 static void tableLabels()
 {
-hPrintf("<TR><TH>Position&nbsp;and<BR>#&nbsp;of&nbsp;bases&nbsp;in<BR>"
+hPrintf("<TR><TH>Position&nbsp;and<BR>#&nbsp;of&nbsp;data&nbsp;points&nbsp;in<BR>"
 	"intersection</TH>");
 hPrintf("<TH>Correlation<BR>coefficient<BR>r</TH>");
 hPrintf("<TH>r<sup>2</sup></TH>");
@@ -1142,7 +1130,7 @@ hPrintf("</TABLE>\n");
 /*	and end the special container table	*/
 hPrintf("</TD></TR></TABLE></P>\n");
 
-/*	debugging when 1 region, less than 1400 bases, show all values	*/
+/*	debugging when 1 region, less than 1400 dataPoints, show all values	*/
 if ((1 == 0) && (1 == rowsOutput) &&
 	(table1->vSet->count < 400) && (table2->vSet->count < 400))
     {
@@ -1204,6 +1192,89 @@ if ((1 == 0) && (1 == rowsOutput) &&
     }
 }	/*	static void showThreeVectors()	*/
 
+static int windowData(struct trackTable *tableList, int winSize)
+/*	window data in first and second table to winSize	*/
+{
+struct trackTable *yTable = tableList;
+struct trackTable *xTable = tableList->next;
+struct dataVector *y;	/* the response variable of interest */
+struct dataVector *x;	/* the estimator variable, predicting the response */
+int totalDataPoints = 0;
+
+hPrintf("<P><B>window data to %d bases per data point</B></P>\n",winSize);
+
+/*	for each set of data (for each region we have collected data)
+ *	The length of both data sets is expected to be the same,
+ *	i.e. y->count == x->count
+ */
+for (y = yTable->vSet, x = xTable->vSet; (y != NULL) && (x != NULL);
+		y = y->next, x = x->next)
+    {
+    /*	only need to process where more than one number	*/
+    if (y->count > 1)
+	{
+	int winStart = y->position[0];
+	int winEnd = winStart + winSize;
+	int newDataCount = 0;	/* index for accumulating new data */
+	int lastPosition = y->position[(y->count)-1];
+	double ySumData = y->value[0];
+	double xSumData = x->value[0];
+	int dataCountInWindow = 1;
+	y->sumProduct = 0.0;
+	x->sumProduct = y->sumProduct;
+	int i;
+
+	if (winEnd > lastPosition) winEnd = lastPosition;
+
+	for (i = 1; i < y->count; ++i)
+	    {
+	    if (y->position[i] < winEnd)	/* accumulating in window */
+		{
+		ySumData += y->value[i];
+		xSumData += x->value[i];
+		++dataCountInWindow;
+		}
+	    else 				/* window completed	*/
+		{
+		if (dataCountInWindow > 0)
+		    {
+		    y->value[newDataCount] = ySumData / dataCountInWindow;
+		    x->value[newDataCount] = xSumData / dataCountInWindow;
+		    y->position[newDataCount] = winStart;
+		    x->position[newDataCount] = winStart;
+		    y->sumProduct += y->value[newDataCount] *
+				x->value[newDataCount];
+		    x->sumProduct = y->sumProduct;
+		    ++newDataCount;
+		    }
+		winStart = y->position[i];
+		winEnd = winStart + winSize;
+		if (winEnd > lastPosition) winEnd = lastPosition;
+		ySumData = y->value[i];		/*	new sum starts	*/
+		xSumData = x->value[i];
+		dataCountInWindow = 1;
+		}
+	    }
+	if (dataCountInWindow > 0)		/*	last one perhaps ? */
+	    {
+	    y->value[newDataCount] = ySumData / dataCountInWindow;
+	    x->value[newDataCount] = xSumData / dataCountInWindow;
+	    y->position[newDataCount] = winStart;
+	    x->position[newDataCount] = winStart;
+	    y->sumProduct += y->value[newDataCount] * x->value[newDataCount];
+	    x->sumProduct = y->sumProduct;
+	    ++newDataCount;
+	    }
+	totalDataPoints += newDataCount;
+	y->count = newDataCount;
+	x->count = newDataCount;
+	}
+    else
+	totalDataPoints += y->count;	/*	only one data value	*/
+    }
+return (totalDataPoints);
+}	/*	static int windowData()	*/
+
 static int collectData(struct sqlConnection *conn,
 	struct trackTable *tableList, int maxLimitCount)
 /*	for each track in the list, collect its raw data */
@@ -1224,14 +1295,13 @@ vSet2 = NULL;	/*	initialize linked list	*/
 table1 = tableList;
 table2 = tableList->next;
 
-
 /*	count the regions, just to get an idea of where we may be going */
 for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
 
 //hPrintf("<P>regionCount: %d</P>\n", regionCount);
 
-/*	this display is debugging, just showing the region(s)	*/
+/*	show the region(s) being worked on	*/
 if (1 == regionCount)
     {
     long bases = 0;
@@ -1241,7 +1311,7 @@ if (1 == regionCount)
     printLongWithCommas(stdout,(long)(region->start+1)); /* 1-relative */
     hPrintf("-");
     printLongWithCommas(stdout,(long)region->end);
-    hPrintf("&nbsp;bases:&nbsp;");
+    hPrintf("&nbsp;<B>bases:</B>&nbsp;");
     printLongWithCommas(stdout,bases);
     hPrintf("</P>\n");
     }
@@ -1523,7 +1593,7 @@ hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	scatterPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
 hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%s</TH></TR>\n", table2->longLabel);
-hPrintf("</TABLE></TD><TD>\n");
+hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
 hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%g</TH></TR>\n", F_statistic);
 hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
@@ -1561,6 +1631,22 @@ static void tableInfoDebugDisplay(struct trackTable *tableList)
     }
 }
 
+static void residualStats(struct dataVector *residuals)
+{
+hPrintf("<P><!--outer table is for border purposes-->\n");
+hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
+hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
+hPrintf("<TR><TH COLSPAN=3>residuals</TH></TR>\n");
+hPrintf("<TR><TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH></TR>\n");
+hPrintf("<TR><TD ALIGN=RIGHT>%.4g</TD>", residuals->min);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", residuals->max);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", residuals->sumData / residuals->count);
+hPrintf("</TR></TABLE>\n");
+
+hPrintf("</TD></TR></TABLE</P>\n");
+}
 
 void doCorrelateMore(struct sqlConnection *conn)
 /* Continue working in correlate page. */
@@ -1572,8 +1658,10 @@ char *onChange = onChangeEither();
 char *table2onEntry;
 char *table2;
 boolean correlateOK1 = FALSE;
-char *maxLimitCountStr;
-int maxLimitCount;
+char *maxLimitCountStr = NULL;
+int maxLimitCount = 40000000;
+char *windowingSizeStr = NULL;
+int windowingSize = 1;
 char *tmpString;
 struct trackTable *tableList;
 long startTime, endTime;
@@ -1614,11 +1702,14 @@ tableName2 = tdb2->shortLabel;
 
 maxLimitCountStr = cartUsualString(cart, hgtaCorrelateMaxLimitCount,
 	maxResultsMenu[1]);
-
 tmpString = cloneString(maxLimitCountStr);
-
 stripChar(tmpString, ',');
 maxLimitCount = sqlUnsigned(tmpString);
+freeMem(tmpString);
+windowingSizeStr = cartUsualString(cart, hgtaCorrelateWinSize, "1");
+tmpString = cloneString(windowingSizeStr);
+stripChar(tmpString, ',');
+windowingSize = sqlUnsigned(tmpString);
 freeMem(tmpString);
 
 /*	limit total data points and window size	options */
@@ -1679,17 +1770,21 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
  	 *	table List in a dataVector list
 	 */
 	totalBases = collectData(conn, tableList, maxLimitCount);
+	if (windowingSize > 1)
+		totalBases = windowData(tableList, windowingSize);
+
 //hPrintf("<P>intersected vectors produce %d data points</P>\n", totalBases);
 	if (totalBases > 0)
 	    {
 	    struct trackTable *table1 = tableList;
 	    struct trackTable *table2 = tableList->next;
-	    struct dataVector *resultVector;
-	    resultVector = runRegression(tableList, totalBases);
-	    showThreeVectors(table1, table2, resultVector);
-	    showPlots(table1, table2, resultVector);
-	    freeDataVector(&resultVector);
-//hPrintf("<P>free resultVector OK</P>\n");
+	    struct dataVector *residuals;
+	    residuals = runRegression(tableList, totalBases);
+	    showThreeVectors(table1, table2, residuals);
+	    showPlots(table1, table2, residuals);
+	    residualStats(residuals);
+	    freeDataVector(&residuals);
+//hPrintf("<P>free residuals OK</P>\n");
 	    }
 	else
 	    hPrintf("<P>no intersection between the two tables "
