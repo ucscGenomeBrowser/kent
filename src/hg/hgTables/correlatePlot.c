@@ -14,7 +14,75 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.3 2005/07/01 00:15:43 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.4 2005/07/01 23:35:23 hiram Exp $";
+
+static void ordinaryPlot(int **densityCounts, struct vGfx *vg)
+/* a simple point plot, not density	*/
+{
+int i, j;
+
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    for (i = 0; i < PLOT_WIDTH; ++i)
+	if (densityCounts[j][i])
+	    {
+	    vgBox(vg, i, j, DOT_SIZE, DOT_SIZE, MG_BLACK);
+	    }
+}
+
+static void densityPlot(int **densityCounts, struct vGfx *vg)
+/* density plot shading	*/
+{
+/* shade code borrowed from hgTracks	*/
+int maxShade = 9;
+Color shadesOfGray[10+1];
+double logMin = 0.0;
+double logMax = 0.0;
+double logRange = 0.0;
+double log_2 = log(2.0);
+int i, j;
+int densityMin = BIGNUM;
+int densityMax = 0;
+int densityRange = 0;
+
+#define LOG2(x) (log(x)/log_2)
+
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    for (i = 0; i < PLOT_WIDTH; ++i)
+	if (densityCounts[j][i])
+	    {
+	    densityMin = min(densityMin,densityCounts[j][i]);
+	    densityMax = max(densityMax,densityCounts[j][i]);
+	    }
+logMin = LOG2((double)densityMin);
+logMax = LOG2((double)densityMax);
+logRange = logMax - logMin;
+
+for (i=0; i<=maxShade; ++i)
+    {
+    struct rgbColor rgb;
+    int level = 255 - (255*i/maxShade);
+    if (level < 0) level = 0;
+    rgb.r = rgb.g = rgb.b = level;
+    shadesOfGray[i] = vgFindColorIx(vg, rgb.r, rgb.g, rgb.b);
+    }
+shadesOfGray[maxShade+1] = MG_RED;
+
+densityRange = densityMax - densityMin;
+
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    for (i = 0; i < PLOT_WIDTH; ++i)
+	if (densityCounts[j][i])
+	    {
+	    Color color;
+	    int level =
+		((LOG2((double)densityCounts[j][i]) - logMin)*maxShade)
+			    / logRange;
+	    if (level <= 0) level = 1;
+	    if (level > maxShade) level = maxShade;
+	    color = shadesOfGray[level];
+	    vgBox(vg, i, j, DOT_SIZE, DOT_SIZE, color);
+	    }
+}
 
 
 struct tempName *scatterPlot(struct trackTable *yTable,
@@ -35,8 +103,21 @@ double yRange = 0.0;
 double xRange = 0.0;
 int plotWidth = PLOT_WIDTH - (PLOT_MARGIN * 2);
 int plotHeight = PLOT_HEIGHT - (PLOT_MARGIN * 2);
-
+struct lm *lm = lmInit(PLOT_WIDTH);
+int **densityCounts;	/*	densityCounts[PLOT_HEIGHT] [PLOT_WIDTH] */
+int i, j;
 struct vGfx *vg;
+int pointsPlotted = 0;
+
+/*	Initialize density plot count array	*/
+/*	space for the row pointers, first	*/
+lmAllocArray(lm, densityCounts, PLOT_HEIGHT);
+/*	then space for each row	*/
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    lmAllocArray(lm, densityCounts[j], PLOT_WIDTH);
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    for (i = 0; i < PLOT_WIDTH; ++i)
+	densityCounts[j][i] = 0;
 
 /*	find overall min and max	*/
 for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
@@ -69,6 +150,8 @@ textWidth = mgFontStringWidth(font, title);
 for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
     {
     int i;
+    pointsPlotted += y->count;
+
     for( i = 0; i < y->count; ++i)
 	{
 	float yValue = y->value[i];
@@ -77,9 +160,17 @@ for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
 		(((xValue - xMin)/xRange) * plotWidth);
 	int y1 = PLOT_MARGIN +
 		(plotHeight - (((yValue - yMin)/yRange) * plotHeight));
-	vgBox(vg, x1, y1, DOT_SIZE, DOT_SIZE, MG_BLACK);
+
+	densityCounts[y1][x1]++;
 	}
     }
+
+/*	more than 100,000 points, show them as density	*/
+if (pointsPlotted > 100000)
+    densityPlot(densityCounts, vg);
+else
+    ordinaryPlot(densityCounts, vg);
+
 /*	draw regression line	*/
     {
     int x1 = PLOT_MARGIN + (((xMin - xMin)/xRange) * plotWidth);
@@ -97,11 +188,14 @@ for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
 vgUnclip(vg);
 vgClose(&vg);
 
+lmCleanup(&lm);
+
 return &gifFileName;
 }
 
 struct tempName *residualPlot(struct trackTable *yTable,
-    struct trackTable *xTable, struct dataVector *result, double *F_statistic)
+    struct trackTable *xTable, struct dataVector *result, double *F_statistic,
+	double *fitMin, double *fitMax)
 /*	create residual plot gif file in trash, return path name */
 {
 static struct tempName gifFileName;
@@ -134,6 +228,10 @@ double MSR = 0.0;	/*	aka MSM	- mean square residual */
 double SSE = 0.0;	/*	mean squared error	*/
 double ySum = 0.0;
 double yBar = 0.0;
+struct lm *lm = lmInit(PLOT_WIDTH);
+int **densityCounts;	/*	densityCounts[PLOT_HEIGHT] [PLOT_WIDTH] */
+int i, j;
+int pointsPlotted = 0;
 
 if (result->count < 1300) debugOn = TRUE;
 
@@ -144,6 +242,16 @@ if(debugOn)
     hPrintf("<PRE>\n");
     hPrintf("#position, x, y, fitted, residual\n");
     }
+
+/*	Initialize density plot count array	*/
+/*	space for the row pointers, first	*/
+lmAllocArray(lm, densityCounts, PLOT_HEIGHT);
+/*	then space for each row	*/
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    lmAllocArray(lm, densityCounts[j], PLOT_WIDTH);
+for (j = 0; j < PLOT_HEIGHT; ++j)
+    for (i = 0; i < PLOT_WIDTH; ++i)
+	densityCounts[j][i] = 0;
 
 /*	find overall min and max for the "fitted" values	*/
 for (y = yTable->vSet, x = xTable->vSet ;
@@ -187,6 +295,8 @@ for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
     {
     int i;
 
+    pointsPlotted += y->count;
+
     for( i = 0; i < x->count; ++i, ++resultIndex)
 	{
 	float residual = result->value[resultIndex];
@@ -195,15 +305,23 @@ for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 	int x1 = PLOT_MARGIN + (((fitted - fittedMin)/fittedRange) * plotWidth);
 	int y1 = PLOT_MARGIN + (plotHeight -
 		    (((residual - residualMin)/residualRange) * plotHeight));
+
+
 if(debugOn)
     hPrintf("%d\t%g\t%g\t%g\t%g\n", x->position[i], x->value[i], y->value[i], fitted, residual);
 
 	MSR += (fitted - yBar) * (fitted - yBar);
 	SSE += (y->value[i] - fitted) * (y->value[i] - fitted);
 
-	vgBox(vg, x1, y1, DOT_SIZE, DOT_SIZE, MG_BLACK);
+	densityCounts[y1][x1]++;
 	}
     }
+
+/*	more than 100,000 points, show them as density	*/
+if (pointsPlotted > 100000)
+    densityPlot(densityCounts, vg);
+else
+    ordinaryPlot(densityCounts, vg);
 
 if ((result->count - 2) > 0)
     F = MSR / (SSE / (result->count - 2));
@@ -228,5 +346,12 @@ if(debugOn)
 if (F_statistic)
     *F_statistic = F;
 
+lmCleanup(&lm);
+
+if (fitMin)
+    *fitMin = fittedMin;
+if (fitMax)
+    *fitMax = fittedMax;
+    
 return &gifFileName;
 }

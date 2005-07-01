@@ -115,7 +115,8 @@ struct tempName *scatterPlot(struct trackTable *table1,
 /*	create scatter plot gif file in trash, return path name */
 
 struct tempName *residualPlot(struct trackTable *table1,
-    struct trackTable *table2, struct dataVector *result, double *F_statistic);
+    struct trackTable *table2, struct dataVector *result, double *F_statistic,
+	double *fitMin, double *fitMax);
 /*	create residual plot gif file in trash, return path name */
 
 #endif /* CORRELATE_H */
