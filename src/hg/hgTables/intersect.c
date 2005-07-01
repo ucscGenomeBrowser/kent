@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.26 2005/06/30 19:48:57 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.27 2005/07/01 00:56:32 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -487,8 +487,8 @@ else
     {
     struct hTableInfo *hti = getHti(database, table);
     int chromSize = hChromSize(region->chrom);
-    Bits *bits1 = bitAlloc(chromSize+8);
-    Bits *bits2 = bitAlloc(chromSize+8);
+    Bits *bits1 = NULL;
+    Bits *bits2 = NULL;
     struct bed *bedMerged = NULL;
     struct trackDb *subtrack = NULL;
     char *op = cartString(cart, hgtaSubtrackMergeOp);
@@ -496,6 +496,26 @@ else
     int moreThresh = cartInt(cart, hgtaSubtrackMergeMoreThreshold);
     int lessThresh = cartInt(cart, hgtaSubtrackMergeLessThreshold);
     boolean firstTime = TRUE;
+    if (sameString(op, "cat"))
+	{
+	struct bed *bedList = getRegionAsBed(db, table, region, filter,
+					     idHash, lm, retFieldCount);
+	for (subtrack = curTrack->subtracks; subtrack != NULL;
+	     subtrack = subtrack->next)
+	    {
+	    if (! sameString(curTable, subtrack->tableName) &&
+		isSubtrackMerged(subtrack->tableName))
+		{
+		struct bed *bedList2 = 
+		    getRegionAsBed(db, subtrack->tableName, region, filter,
+				   idHash, lm, retFieldCount);
+		bedList = slCat(bedList, bedList2);
+		}
+	    }
+	return bedList;
+	}
+    bits1 = bitAlloc(chromSize+8);
+    bits2 = bitAlloc(chromSize+8);
     /* If doing a base-pair-wise operation, then start with the primary 
      * subtrack's ranges in bits1, and AND/OR all the selected subtracks' 
      * ranges into bits1.  If doing a non-bp-wise intersection, then 

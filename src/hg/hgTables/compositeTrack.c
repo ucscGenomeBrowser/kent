@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.1 2005/06/30 19:48:57 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.2 2005/07/01 00:56:32 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -138,7 +138,11 @@ printf("All %s records that have at most ",
        curTable);
 setting = cartCgiUsualString(cart, hgtaNextSubtrackMergeLessThreshold, "80");
 cgiMakeTextVar(hgtaNextSubtrackMergeLessThreshold, setting, 3);
-printf(" %% overlap with any other selected subtrack<P>\n");
+printf(" %% overlap with any other selected subtrack<BR>\n");
+
+makeOpButton("cat", op);
+printf("All %s records, as well as all records from all other selected subtracks<P>\n",
+       curTable);
 
 printf("These combinations will discard the gene/alignment structure (if any) "
        "of %s and produce a simple list of position ranges.<P>\n",
