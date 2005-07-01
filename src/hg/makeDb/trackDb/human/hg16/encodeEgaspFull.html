@@ -20,7 +20,7 @@ TARGET=_blank>Exogean</A></LI>
 <A HREF="http://genome.math.uwaterloo.ca/exonhunter/" 
 TARGET=_blank>ExonHunter</A></LI>
 <LI>
-<A HREF="http://www.softberry.org" TARGET=_blank>Fgenesh Pseudogenes</A></LI>
+<A HREF="http://www.softberry.com" TARGET=_blank>Fgenesh Pseudogenes</A></LI>
 <LI>
 <A HREF="http://www.softberry.com" TARGET=_blank>Fgenesh++</A></LI>
 <LI>
@@ -48,10 +48,10 @@ shows updated versions of the submitted predictions.</P>
 <H2>Display Conventions and Configuration</H2>
 <P>
 Data for each gene prediction method within this composite annotation track 
-is displayed in a separate subtrack. See the top of the track description page 
-for a complete list of the subtracks available for this annotation. To display
-only selected subtracks, uncheck the boxes next to the tracks you wish to
-hide.  
+are displayed in a separate subtrack.  See the top of the track description 
+page for configuration option allowing display of selected subsets of gene
+predictions.  To remove a subtack from the display,
+uncheck the appropriate box.
 <P>
 The individual subtracks within this annotation follow the display conventions 
 for <A HREF="../goldenPath/help/hgTracksHelp.html#GeneDisplay">gene prediction
@@ -124,8 +124,8 @@ genes in a completely automated manner. </P>
 <H3>Geneid-U12</H3>
 <P>
 The Geneid-U12 gene prediction set, generated using a version of GeneID modified
-to detect U12-dependent introns (both AT-AC and GT-AG subtypes) when present,
-employs a single genome <em>ab initio</em> method.
+to detect U12-dependent introns (both GT-AG and AT-AC subtypes) when present,
+employs a single-genome <em>ab initio</em> method.
 This modified version of GeneID uses matrices for U12 donor,
 acceptor and branch sites constructed from examples of published U12 
 intron splice junctions 
@@ -137,7 +137,7 @@ on the track details pages. </P>
 
 <H3>Jigsaw</H3>
 <P>
-Jigsaw uses the output from gene-finders, splice site prediction programs and 
+Jigsaw uses the output from gene-finders, splice-site prediction programs and 
 sequence alignments to predict gene models. Annotation data downloaded from 
 the UCSC Genome Browser and TIGR gene-finder output was used as input for these
 predictions. See Allen <em>et. al</em> (2004) for more information. Jigsaw 
@@ -177,7 +177,7 @@ exon of the flattened transcripts was subjected to SPI analysis, which involves
 identifying periodicity in the pattern of mutations occurring between the human
 and an informant species DNA sequence (the informant sequences and their TBA
 alignments were provided by  Elliott Margulies). SPI was calculated for all 
-available human-informant pairs for whole exons and in a sliding 48bp window. 
+available human-informant pairs for whole exons and in a sliding 48 bp window. 
 SPI analysis requires that a threshold level of periodicity be identified in at
 least two of the informant species if the exon is to be accepted. If accepted,
 SPI provides the correct frame for translation of the exon. This exon was used 
@@ -195,7 +195,7 @@ retained. </P>
 This gene prediction set was produced by a version of Twinscan that employs 
 multiple pairwise genome comparisons to identify protein-coding genes (including
 alternative splices) using nucleotide homology information. No expression or 
-protein data was used.</P>
+protein data were used.</P>
 
 <H2>Credits</H2>
 <P>
