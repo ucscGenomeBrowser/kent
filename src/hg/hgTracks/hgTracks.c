@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.982 2005/07/01 16:07:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.983 2005/07/01 19:04:10 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2641,6 +2641,99 @@ tg->itemName = genieName;
 tg->itemColor = genieKnownColor;
 }
 
+char *hg17KgName(struct track *tg, void *item)
+{
+static char cat[128];
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL) 
+    {
+    sprintf(cat,"%s",(char *)lf->extra);
+    return cat;
+    }
+else 
+    return lf->name;
+}
+
+char *hg17KgMapName(struct track *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+return lf->name;
+}
+
+void lookupHg17KgNames(struct linkedFeatures *lfList)
+/* This converts the known gene ID to a gene symbol */
+{
+struct linkedFeatures *lf;
+struct sqlConnection *conn = hAllocConn();
+char *geneSymbol;
+char *protDisplayId;
+char cond_str[256];
+char *hg17KgLabel = cartUsualString(cart, "hg17Kg.label", "gene symbol");
+
+boolean useGeneSymbol= sameString(hg17KgLabel, "gene symbol")
+    || sameString(hg17KgLabel, "all");
+
+boolean useKgId      = sameString(hg17KgLabel, "UCSC Known Gene ID")
+    || sameString(hg17KgLabel, "all");
+
+boolean useProtDisplayId = sameString(hg17KgLabel, "UniProt Display ID")
+    || sameString(hg17KgLabel, "all");
+
+boolean useAll = sameString(hg17KgLabel, "all");
+	
+if (hTableExists("kgXref"))
+    {
+    for (lf = lfList; lf != NULL; lf = lf->next)
+	{
+        struct dyString *name = dyStringNew(64);
+    	if (useGeneSymbol)
+            {
+            sprintf(cond_str, "kgID='%s'", lf->name);
+            geneSymbol = sqlGetField(conn, "hg17", "kgXref", "geneSymbol", cond_str);
+            if (geneSymbol != NULL)
+            	{
+            	dyStringAppend(name, geneSymbol);
+            	if (useAll) dyStringAppendC(name, '/');
+            	}
+            }
+    	if (useKgId)
+            {
+            dyStringAppend(name, lf->name);
+            if (useAll) dyStringAppendC(name, '/');
+	    }
+    	if (useProtDisplayId)
+            {
+	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+            protDisplayId = sqlGetField(conn, "hg17", "kgXref", "spDisplayID", cond_str);
+            dyStringAppend(name, protDisplayId);
+	    }
+    	lf->extra = dyStringCannibalize(&name);
+	}
+    }
+hFreeConn(&conn);
+}
+
+void loadHg17Kg(struct track *tg)
+/* Load up known genes. */
+{
+enum trackVisibility vis = tg->visibility;
+tg->items = lfFromGenePredInRange(tg, "hg17Kg", chromName, winStart, winEnd);
+if (vis != tvDense)
+    {
+    lookupHg17KgNames(tg->items);
+    slSort(&tg->items, linkedFeaturesCmpStart);
+    }
+limitVisibility(tg);
+}
+
+void hg17KgMethods(struct track *tg)
+/* Make track of known genes. */
+{
+tg->loadItems 	= loadHg17Kg;
+tg->itemName 	= hg17KgName;
+tg->mapItemName = hg17KgMapName;
+}
 char *knownGeneName(struct track *tg, void *item)
 {
 static char cat[128];
@@ -9806,6 +9899,7 @@ registerTrackHandler("genomicDups", genomicDupsMethods);
 registerTrackHandler("clonePos", coverageMethods);
 registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
+registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastMm6", blastMethods);
