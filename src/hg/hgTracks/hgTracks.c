@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.981 2005/06/30 19:08:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.982 2005/07/01 16:07:16 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2669,7 +2669,7 @@ struct sqlConnection *conn = hAllocConn();
 char *geneSymbol;
 char *protDisplayId;
 char cond_str[256];
-char *knownGeneLabel = cartUsualString(cart, "knownGene.label", "gene");
+char *knownGeneLabel = cartUsualString(cart, "knownGene.label", "gene symbol");
 
 boolean useGeneSymbol= sameString(knownGeneLabel, "gene symbol")
     || sameString(knownGeneLabel, "all");
