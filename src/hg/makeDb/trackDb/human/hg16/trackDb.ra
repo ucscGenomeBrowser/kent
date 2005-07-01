@@ -4697,6 +4697,16 @@ priority 170
 visibility dense
 type bed 4 .
 
+track evofold
+shortLabel evofold
+longLabel evofold predictions of RNA secondary structure (id_strand_score) - lifted from hg17
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack mzPt1Mm3Rn3Gg2_pHMM
+
 track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
