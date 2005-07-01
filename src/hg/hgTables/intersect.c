@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.27 2005/07/01 00:56:32 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.28 2005/07/01 19:21:06 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -413,7 +413,7 @@ struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2,
 /* Set up some other local vars. */
 struct hTableInfo *hti1 = getHti(database, table1);
 int chromSize = hChromSize(region->chrom);
-Bits *bits2 = bitAlloc(chromSize+8);;
+Bits *bits2 = bitAlloc(chromSize+8);
 boolean isBpWise = (sameString("and", op) || sameString("or", op));
 struct bed *intersectedBedList = NULL;
 
