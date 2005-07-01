@@ -28,22 +28,22 @@ represent the orientation of the PET sequence, and an ID of the format
 where <em>X</em> is the unique ID for each PET 
 and <em>M</em> is the number of PET sequences at this location.
 The track coloring reflects the value of <em>M</em>: 
-light gray indicates 1 or 2 sequences, dark gray is used for 3 sequences, and 
-black indicates 4 or more PET sequences at the location.</P>
+light gray indicates 1 or 2 sequences (score = 333), dark gray is used for 
+3 sequences (score = 800) and black indicates 4 or more PET sequences 
+(score = 1000) at the location.</P>
 
 <H2>Methods</H2>
 <P>
 HCT116 cells were treated with 5FU for six hours. The cross-linked
 chromatin was sheared and precipitated with a high affinity
-antibody. The DNA fragments were end-polished and cloned into plasmid
-vector pGIS3. pGIS3 contains two <I>MmeI</I> recognition sites that
+antibody. The DNA fragments were end-polished and cloned into the plasmid
+vector, pGIS3. pGIS3 contains two <I>MmeI</I> recognition sites that
 flank the cloning site, which were used to produce a 36 bp
-PET from the original ChIP
-DNA fragments (18 bp from each of the 5' and 3' ends). Multiple 36 bp
-PETs were concatenated and cloned into pZero-1 for sequencing, where
-each sequence read can generate 10-15 PETs. The PET sequences were
-extracted from raw sequence reads and mapped to the genome, defining
-the boundaries of each ChIP DNA fragment.  The following specific
+PET from the original ChIP DNA fragments (18 bp from each of the 5' and 3' 
+ends). Multiple 36 bp PETs were concatenated and cloned into pZero-1 for 
+sequencing, where each sequence read can generate 10-15 PETs. The PET 
+sequences were extracted from raw sequence reads and mapped to the genome, 
+defining the boundaries of each ChIP DNA fragment.  The following specific
 mapping criteria were used:
 <UL>
 <LI>both 5' and 3' signatures must be present on the same chromosome
@@ -54,11 +54,12 @@ mapping criteria were used:
 <P>
 Due to the known possibility of <I>MmeI</I> slippage (+/- 1 bp) that
 leads to ambiguities at the PET signature boundaries, a minimal 17 bp
-match was set for each 18 bp signature.  Only PETs with specific
-mapping (one location) to the genome were considered.  PETs that
-mapped to multiple locations may represent low complexity or
-repetitive sequences, and therefore were not included for further
-analysis.</P>
+match was set for each 18 bp signature.  The total count of PET sequences
+mapped to the same locus but with slight nucleotide differences may reflect
+the expression level of the trasncripts. Only PETs with specific mapping 
+(one location) to the genome were considered.  PETs that mapped to multiple 
+locations may represent low complexity or repetitive sequences, and therefore 
+were not included for further analysis.</P>
 
 <H2>Verification</H2>
 <P>
