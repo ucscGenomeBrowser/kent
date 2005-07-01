@@ -24,6 +24,28 @@ visibility hide
 spectrum on
 type bed 4 +
 
+track knownGene
+shortLabel Known Genes
+longLabel Known Genes (March 04) Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
+group genes
+priority 34
+visibility hide
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+hgGene on
+cdsDrawDefault genomic\ codons
+
+track hg17Kg
+shortLabel Known Genes II
+longLabel UCSC Known Genes II (June 05, Based on hg17 UCSC Known Genes)
+group genes
+priority 34.1
+visibility pack
+color 12,12,120
+type genePred
+cdsDrawDefault genomic\ codons
+url http://genome.ucsc.edu/cgi-bin/hgGene?db=hg17&hgg_gene=$$&hgg_chrom=none&hgg_type=knownGene
+
 track vegaGene2
 shortLabel Vega Genes2
 longLabel Vega Annotations from Sanger, Genoscope
