@@ -469,11 +469,11 @@ EOF
         # human   hg16
         # mouse   mm6
         # rat     rn3
-        # macaque rheMac1
+        # macaque rheMac1       rhesus
         # dog     canFam1
         # chimp   panTro1
-        # monodelphis     monDom1
-        # xenopus xenTro1
+        # monodelphis     monDom1       opossum
+        # xenopus xenTro1       x_tropicalis
         # fugu    fr1
         # zebrafish       danRer2
         # tetraodon       tetNig1
@@ -505,9 +505,21 @@ cat > mafProject.csh << 'EOF'
     # Minmei created projected files for these regions.
     # (our installed maf_project must be outdated)
 
+    # change species to match browser
+    cd /cluster/data/encode/MLAGAN/freeze4/maf
+    mkdir load
+    foreach r (EN[mr]*)
+        sed -e 's/monodelphis/opossum/' -e 's/macaque/rhesus/' \
+            -e 's/xenopus/x_tropicalis/' out/$r.maf > load/$r.maf
+    end
+
     mkdir -p /gbdb/hg16/encode/MLAGAN/freeze4/mafs
-    ln -s `pwd`/out/*.maf /gbdb/hg16/encode/MLAGAN/freeze4/mafs
-    hgLoadMaf -WARN hg16 encodeMlaganAlign -pathPrefix=/gbdb/hg16/encode/MLAGAN/freeze4/mafs
+    set d = /gbdb/hg16/encode/MLAGAN/freeze4/mafs
+    rm $d/*.maf
+    ln -s `pwd`/load/*.maf $d
+    hgLoadMaf -WARN hg16 encodeMlaganAlign -pathPrefix=$d
+        # lots of "score too small" errors. Allow this for now.
+        # Submitters may want to fix this later.
 
     # create summary table for zoomed out views of pairwise
     cd /cluster/data/encode/MLAGAN/freeze4/maf/latest
@@ -527,13 +539,14 @@ cat > mafProject.csh << 'EOF'
                         encodeMlaganGerpCons GerpCons.wig 
 
     # binCons and phastCons (from Elliott)
-    cd /cluster/data/encode/MLAGAN/freeze4/cons/latest/lab
+    # Reload on 6/30 (phastCons changed)
+    cd /cluster/data/encode/MLAGAN/freeze4/cons/latest/lab/jun30
     wget -r -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_lagan
-    cd ..
-    gunzip -c lab/human.EN*.pC.*.wig.gz | \
+    cd ../..
+    gunzip -c lab/jun30/human.EN*.pC.*.wig.gz | \
         wigEncode stdin phastCons.wig phastCons.wib
             # Converted stdin, upper limit 1.00, lower limit 0.00
-    gunzip -c lab/EN*.binCons.lagan.*.gz | \
+    gunzip -c lab/jun30/EN*.binCons.lagan.*.gz | \
         wigEncode stdin binCons.wig binCons.wib
             # Converted stdin, upper limit 1.00, lower limit 0.00
     set d = /gbdb/hg16/encode/MLAGAN/freeze4
@@ -554,14 +567,56 @@ cat > mafProject.csh << 'EOF'
     hgLoadBed -noBin hg16 encodeMlaganGerpEl encodeMlaganGerpEl.tab
     # Loaded 48480 elements of size 5
 
+    # load conserved elements (6 tables)
+    # scored elements
+    # Updated 6/30 for Elliott
+    cd /cluster/data/encode/MSA/latest
+    hgLoadBed -noBin hg16 encodeMlaganBinConsEl lab/lagan.binCons.bed
+        # loaded 18677
+    hgLoadBed -noBin hg16 encodeMlaganPhastConsEl lab/lagan.phastCons.bed
+        # loaded 36105 elements
+    # unscored - fix at score=500
+    ln -s lab/lagan.or.bed MlaganUnionEl.bed
+    ln -s lab/lagan.or.nc.bed MlaganNcUnionEl.bed
+    ln -s lab/lagan.and.bed MlaganIntersectEl.bed
+    ln -s lab/lagan.and.nc.bed MlaganNcIntersectEl.bed
+
+    foreach f (Mlagan*.bed)
+        set b = $f:r
+        set t = encode$b
+        sed -e 's/$/\t500/' $f | hgLoadBed -noBin hg16 $t stdin
+        checkTableCoords hg16 $t
+    end
+
 # MLAGAN AND TBA CONSERVED ELEMENTS (2005-06-29 kate)
     # From Elliott Margulies
     
     cd /cluster/data/encode
     mkdir -p MSA/freeze4
     cd MSA/freeze4
+    mkdir jun30/lab
+    cd jun30/lab
     wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/constrained_elements.tar.gz
     tar xvfz *.gz
+    cd ../../
+
+    # load conserved elements (combined lagan and tba) (6 tables)
+    cd /cluster/data/encode/MSA/freeze4
+    mkdir -p jun30/lab
+    cd jun30/lab
+    wget -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/constrained_elements.tar.gz
+    cd ../..
+    ln -s lab/tl.or.bed AllUnionEl.bed
+    ln -s lab/tl.or.nc.bed AllNcUnionEl.bed
+    ln -s lab/tl.and.bed AllIntersectEl.bed
+    ln -s lab/tl.and.nc.bed AllNcIntersectEl.bed
+
+    foreach f (All*.bed)
+        set b = $f:r
+        set t = encode$b
+        sed -e 's/$/\t500/' $f | hgLoadBed -noBin hg16 $t stdin
+        checkTableCoords hg16 $t
+    end
 
 
 # STANFORD  MSA OF FREEZE2 (2004-11-17 kate)
@@ -1455,38 +1510,38 @@ done
                         encodeTbaPhastCons phastCons.wig 
 
     # Updated with 6/22 binCons data at Elliott's request (2005-06-29 kate)
-    cd /cluster/data/encode/TBA/
-    mkdir 2005-06-22
-    cd 2005-06-22
+    cd /cluster/data/encode/TBA/latest/lab/wig/
+    mkdir jun30
+    cd jun30
     wget -r -nd ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/encode_tba/MAY-2005/wig/
-    # keep only the binCons (phastCons wasn't updated)
-    rm -f human.*
-    cd /cluster/data/encode/TBA/latest
-    ln -s /custer/data/encode/TBA/2005-06-22 lab/wig/binCons.jun22
-    gunzip -c lab/wig/binCons.jun22/EN*.binCons.*.wig.gz | \
+    cd ../../
+    gunzip -c lab/wig/jun30/EN*.binCons.*.wig.gz | \
         wigEncode stdin binCons.wig binCons.wib
+    gunzip -c lab/wig/jun30/human*.pC.*.wig.gz | \
+        wigEncode stdin phastCons.wig phastCons.wib
     set d = /gbdb/hg16/encode/TBA
-    rm -f $d/binCons.wib
+    rm -f $d/binCons.wib $d/phastCons.wib
     ln -s `pwd`/binCons.wib $d
-    hgLoadWiggle -pathPrefix=$d hg16 encodeTbaBinCons binCons.wig 
+    ln -s `pwd`/phastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg16 encodeTbaPhastCons phastCons.wig 
+    hgLoadWiggle -pathPrefix=$d hg16 encodeTbaPhastCons phastCons.wig 
 
     # load MAF summary table
     cat lab/*.maf | hgLoadMafSummary -minSize=10000 -mergeGap=500 \
                                 -maxSize=50000 hg16 encodeTbaSummary stdin
 
+
     # load conserved elements (6 tables)
     # scored elements
-    gunzip -c lab/mcs/binCons.tpC.bed.gz |  \
-                hgLoadBed -noBin hg16 encodeTbaBinConsEl stdin
+    hgLoadBed -noBin hg16 encodeTbaBinConsEl lab/tba.binCons.bed
         # loaded 18677
-    gunzip -c lab/mcs/phastCons.t95.bed.gz | \
-                 hgLoadBed -noBin hg16 encodeTbaPhastConsEl stdin
-        # loaded 35910 elements
+    hgLoadBed -noBin hg16 encodeTbaPhastConsEl lab/tba.phastCons.bed
+        # loaded 36105 elements
     # unscored - fix at score=500
-    gunzip -c lab/mcs/bCandpC.tpC.bed.gz > TbaBinAndPhastEl.bed
-    gunzip -c lab/mcs/bCandpC.tpC.nc.bed.gz > TbaNcBinAndPhastEl.bed
-    gunzip -c lab/mcs/bCorpC.tpC.bed.gz > TbaBinOrPhastEl.bed
-    gunzip -c lab/mcs/bCorpC.tpC.nc.bed.gz > TbaNcBinOrPhastEl.bed
+    ln -s lab/tba.or.bed TbaUnionEl.bed
+    ln -s lab/tba.or.nc.bed TbaNcUnionEl.bed
+    ln -s lab/tba.and.bed TbaIntersectEl.bed
+    ln -s lab/tba.and.nc.bed TbaNcIntersectEl.bed
 
     foreach f (Tba*.bed)
         set b = $f:r
