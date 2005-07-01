@@ -13,10 +13,10 @@ The following gene predictions are included:
 Exogean</LI>
 <LI>
 <A HREF="http://genome.imim.es/software/geneid/index.html" 
-TARGET=_blank>geneid</A>-U12 </LI>
+TARGET=_blank>GeneID</A>-U12 </LI>
 <LI>
 <A HREF="http://genome.imim.es/software/sgp2/index.html" 
-TARGET=_blank>sgp2</A>-U12</LI>
+TARGET=_blank>SGP2</A>-U12</LI>
 <LI>
 <A HREF="http://www.pseudogenes.org" TARGET=_blank>Yale pseudogenes</A></LI>
 </UL>
@@ -95,9 +95,9 @@ objects derived from human expertise. Exogean DACMs are succesively built and
 reduced, leading to increasingly complex objects. This process
 enables the production of alternative transcripts from initial HSPs.</P>
 
-<H3>Geneid-U12</H3>
+<H3>GeneID-U12</H3>
 <P>
-The geneid program predicts genes in anonymous genomic sequences 
+The GeneID program predicts genes in anonymous genomic sequences 
 designed with a hierarchical structure.
 In the first step, splice sites, start and stop codons are predicted and scored 
 along the sequence using position weight arrays (PWAs).
@@ -106,27 +106,27 @@ of the defining sites plus the the log-likelihood ratio of a Markov model for
 coding DNA.
 Finally, the gene structure is assembled from the set of predicted exons, 
 maximizing the sum of the scores of the assembled exons.
-The modified version of geneid used to generate the predictions in this track 
+The modified version of GeneID used to generate the predictions in this track 
 incorporates models for U12-dependent splice signals in addition to U2 splice 
 signals.</P>
 <P>
-The GeneID subtrack shows all geneid genes. Only U12 introns
-and their flanking exons are displayed in the GeneID U12 subtrack.
+The GeneID subtrack shows all GeneID genes. Only U12 introns
+and their flanking exons are displayed in the Geneid U12 subtrack.
 Exons flanking predicted U12-dependent introns are assigned a type
 attribute reflecting their splice sites, displayed on
-the details page of the GeneID U12 subtrack as the &quot;Alternate Name&quot; 
+the details page of the Geneid U12 subtrack as the &quot;Alternate Name&quot; 
 of the item composed of the intron plus flanking exons.</P>
 
-<H3>Sgp2-U12</H3>
+<H3>SGP2-U12</H3>
 <P>
-To predict genes in a genomic query, sgp2 combines geneid predictions with 
+To predict genes in a genomic query, SGP2 combines GeneID predictions with 
 tblastx comparisons of the genomic query against other genomic sequences.
-This modified version of sgp2 uses models for U12-dependent splice signals 
+This modified version of SGP2 uses models for U12-dependent splice signals 
 in addition to U2 splice signals. The reference genomic sequence for this data 
 set is the Oct. 2004 release of mouse sequence syntenic to ENCODE regions.</P>
 <P>
-The Sgp2 and Sgp2 U12 tracks follow the same display conventions as the 
-GeneID and GeneID U12 subtracks described above.</P>
+The SGP2 and SGP2 U12 tracks follow the same display conventions as the 
+Geneid and Geneid U12 subtracks described above.</P>
 
 <H3>Yale Pseudogenes</H3>
 <P>
@@ -163,15 +163,15 @@ Exogean was developed by Sarah Djebali and Hugues Roest Crollius from the
 Dyogen Lab, Ecole Normale Supérieure (Paris, France) and Franck Delaplace
 from the LAMI, (Evry, France).</P>
 <P>
-The geneid-U12 and sgp2-U12 programs were developed by the
+The GeneID-U12 and SGP2-U12 programs were developed by the
 Grup de Recerca en Informàtica Biomèdica 
 (<A HREF="http://www.imim.es/grib/eng/default.htm" TARGET=_blank>GRIB</A>) at 
 the Institut Municipal d'Investigació Mèdica (IMIM) in Barcelona.
-The version of geneid on which GeneIDu12 is based (geneid_v1.2) was written by 
+The version of GeneID on which GeneID-U12 is based (geneid_v1.2) was written by 
 Enrique Blanco and Roderic Guigó.
 The parameter files were constructed by Genis Parra and Francisco Camara.
 Additional contributions were made by Josep F. Abril, Moises Burset and Xavier 
-Messeguer. Modifications to geneid that allow for the prediction of 
+Messeguer. Modifications to GeneID that allow for the prediction of 
 U12-dependent splice sites and incorporation of U12 introns into gene models 
 were made by Tyler Alioto.</P>
 <P>
@@ -233,7 +233,7 @@ Guigó, R., Knudsen, S., Drake, N. and Smith, T.
 TARGET=_blank>Prediction of gene structure</A>. 
 J Mol Biol. <B>226</B>(1), 141-57 (1992).</P>
 
-<H3>Sgp2</H3>
+<H3>SGP2</H3>
 <P>
 Parra, G., Agarwal, P., Abril, J.F., Wiehe, T., Fickett, J.W. and Guigó, R. 
 <A HREF="http://www.genome.org/cgi/content/full/13/1/108"
