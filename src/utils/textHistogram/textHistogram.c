@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.21 2005/05/15 19:34:15 markd Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.22 2005/07/01 01:26:17 baertsch Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,6 +18,7 @@ static struct optionSpec optionSpecs[] = {
     {"real", OPTION_BOOLEAN},
     {"autoscale", OPTION_INT},
     {"autoScale", OPTION_INT},
+    {"skip", OPTION_INT},
     {"pValues", OPTION_BOOLEAN},
     {"freq", OPTION_BOOLEAN},
     {NULL, 0}
@@ -26,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
 int binSize = 1;
 double binSizeR = 1.0;
 int maxBinCount = 25;
+int skip = 0;
 char * minValStr = (char *) NULL;
 int minVal = 0;
 double minValR = 0.0;
@@ -59,6 +61,7 @@ errAbort(
   "   -autoScale=N - autoscale to N # of bins\n"
   "   -pValues - show p-Values as well as counts (sets -noStar too)\n"
   "   -freq - show frequences instead of counts\n"
+  "   -skip=N - skip N lines before starting, default 0\n"
   );
 }
 
@@ -150,6 +153,9 @@ double cpd;
 AllocArray(hist, maxBinCount);
 if (aveCol >= 0)
     AllocArray(total, maxBinCount);
+
+while (skip-- > 0)
+wordCount = lineFileChop(lf, row);
 
 /* Go through each line of input file accumulating
  * data. */
@@ -377,6 +383,7 @@ autoscale = optionInt("autoscale", 0);
 if (autoscale == 0)
     autoscale = optionInt("autoScale", 0);
 freq = optionExists("freq");
+skip = optionInt("skip", 0);
 
 /*	pValues turns on noStar too	*/
 if (pValues) noStar = TRUE;
