@@ -7,7 +7,7 @@ table fileLocation
     )
 
 table strain
-"Name of strain (eg C56BL for a mouse)"
+"Name of strain (eg C57BL for a mouse)"
     (
     int id;	"ID of strain"
     int taxon;	"NCBI taxon of organism"
@@ -128,7 +128,7 @@ table allele
     )
 
 table genotype
-"How different from wild type"
+"How different from wild type.  Associated with genotypeAllele table"
     (
     int id;	"Genotype id"
     int taxon;	"Taxon of organism"
@@ -225,3 +225,35 @@ table imageProbe
     int probeColor;	"ID of probeColor"
     )
 
+table expressionLevel
+"Annotated expression level if any"
+    (
+    int imageProbe;	"Image and probe"
+    int bodyPart;	"Location of expression"
+    float level;	"Expression level (0.0 to 1.0)"
+    )
+
+table lifeTime
+"Information of ages critical points in life cycle"
+    (
+    int taxon;	"NCBI taxon"
+    float birth;	"Typical number of days from conception to birth/hatching"
+    float adult;	"Typical number of days from conception to adulthood"
+    float death;	"Typical number of days from conception to death"
+    )
+
+table lifeStageScheme
+"List of schemes for developmental stages"
+    (
+    int id;	"ID of scheme"
+    int taxon;	"NCBI taxon"
+    string name;	"Theiler, or whatever"
+    )
+
+table lifeStage
+"List of life stages according to a particular scheme"
+    (
+    int lifeStageScheme; "Which staging scheme this is"
+    string name;	 "Name of this stage"
+    float age;		 "Start age of this stage measured in days since conception"
+    )
