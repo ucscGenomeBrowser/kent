@@ -1513,7 +1513,7 @@ type genePred
     shortLabel GeneID U12
     longLabel GeneID U12 Intron Predictions
     priority 9
-    color 220,132,0
+    color 200,132,12
 
     track encodeEgaspFullGeneMark
     subTrack encodeEgaspFull
@@ -1569,7 +1569,7 @@ type genePred
     shortLabel SGP2 U12
     longLabel SGP2 U12 Intron Predictions
     priority 17
-    color 220,132,0
+    color 200,132,12
 
     track encodeEgaspFullSpida
     subTrack encodeEgaspFull
@@ -1709,7 +1709,7 @@ type genePred
     shortLabel GeneID U12
     longLabel GeneID U12 Intron Predictions
     priority 7
-    color 220,132,0
+    color 200,132,12
 
     track encodeEgaspUpdJigsaw
     subTrack encodeEgaspUpdate
@@ -1730,7 +1730,7 @@ type genePred
     shortLabel SGP2 U12
     longLabel SGP2 U12 Intron Predictions
     priority 10
-    color 220,132,0
+    color 200,132,12
 
     track encodeEgaspUpdYalePseudo
     subTrack encodeEgaspUpdate
@@ -1803,14 +1803,14 @@ type bed 3 .
     subTrack encodeAffyRnaSignal
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLaS3) Signal
-    color 220,132,0
+    color 220,132,12
     priority 11
 
     track encodeAffyRnaHeLaSites
     subTrack encodeAffyRnaTransfrags
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLaS3) Sites 
-    color 220,132,0
+    color 220,132,12
     priority 12
 
     track encodeAffyRnaHl60SignalHr00
