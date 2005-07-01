@@ -3985,12 +3985,55 @@ type bed 3 .
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
 
+track encodeRegulomeSnr
+compositeTrack on
+shortLabel Regulome SNR
+longLabel ENCODE Regulome Signal-to-Noise Ratio
+group encodeChrom
+priority 64.0
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility dense
+type bedGraph 4
+minLimit 0
+maxLimit 3
+autoScaleDefault Off
+
+    track encodeRegulomeSnrCACO2
+    subTrack encodeRegulomeSnr
+    shortLabel CACO2
+    longLabel CACO2 Signal-to-Noise Ratio
+    priority 1
+
+    track encodeRegulomeSnrGM06990
+    subTrack encodeRegulomeSnr
+    shortLabel GM06990
+    longLabel GM06990 Signal-to-Noise Ratio
+    priority 2
+
+    track encodeRegulomeSnrSKNSH
+    subTrack encodeRegulomeSnr
+    shortLabel SKNSH
+    longLabel SKNSH Signal-to-Noise Ratio
+    priority 3
+
+    track encodeRegulomeSnrERY
+    subTrack encodeRegulomeSnr
+    shortLabel ERY
+    longLabel ERY Signal-to-Noise Ratio
+    priority 4
+
+    track encodeRegulomeSnrK562
+    subTrack encodeRegulomeSnr
+    shortLabel K562
+    longLabel CACO2 Signal-K562-Noise Ratio
+    priority 5
+
 track encodeRegulomeAmplicon
 compositeTrack on
 shortLabel Regulome Amplicon
 longLabel ENCODE Regulome Amplicon
 group encodeChrom
-priority 64.0
+priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility dense
 type bed 5 .
@@ -4454,6 +4497,9 @@ priority 86
 visibility dense
 type bedGraph 4
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+minLimit 0
+maxLimit 16
+autoScaleDefault Off
 
 
 #ENCODE TRACK END
