@@ -1,10 +1,11 @@
 <H2>Description</H2>
 <P>
 This track shows the starts and ends of mRNA transcripts 
-determined by paired-end ditag (PET) sequencing. 
-PETs are composed of 18 bases from either end of a cDNA; those from many 
-clones are concatenated together for efficient sequencing. See the Methods 
-and References sections below for more details on PET sequencing.</P>
+determined by paired-end ditag (PET) sequencing. PETs are composed of 18 
+bases from either end of a cDNA; 36 bp PETs from many clones were 
+concatenated together and cloned into pZero-1 for efficient sequencing.  See 
+the Methods and References sections below for more details on PET sequencing.
+</P>
 <P>
 The PET sequences in this track are full-length transcripts
 derived from two cell cell lines:
@@ -27,8 +28,10 @@ shown to the left of each PET, where <em>X</em> is the unique ID for each
 PET, <em>N</em> indicates the number of mapping locations in the genome 
 (1 for a single mapping location, 2 for two mapping locations, and so forth),
 and <em>M</em> is the number of PET sequences at this location. The total 
-count of PET sequences mapped to the same loci but with slight nucleotide
-differences may reflect the expression level of the transcripts. </P>
+count of PET sequences mapped to the same locus but with slight nucleotide
+differences may reflect the expression level of the transcripts. PETs that 
+mapped to multiple locations may represent low complexity or repetitive 
+sequences</P>
 <P>
 The graphical display also uses color coding to reflect the uniqueness
 and expression level of each PET:</P>
@@ -45,11 +48,15 @@ and expression level of each PET:</P>
 <P>
 PolyA+ RNA was isolated from the cells. A full-length cDNA library was
 constructed and converted into a PET library for Gene
-Identification Signature analysis (Ng <em>et al</em>., 2005). 
-Each 36 bp PET sequence contains 18 bp from each of the 5' and 3' ends of the 
-original full-length cDNA clone. The 18 bp 3' signature contains 16 bp 
-3'-specific nucleotides and an AA residual of the polyA tail to indicate the 
-sequence orientation. The following specific mapping criteria were used:
+Identification Signature analysis (Ng <em>et al</em>., 2005). Generation of 
+PET sequences involved cloning of cDNA sequences into the plasmid vector, 
+pGIS3. pGIS3 contains two <I>MmeI</I> recognition sites that
+flank the cloning site, which were used to produce a 36 bp PET. Each 36 bp PET 
+sequence contains 18 bp from each of the 5' and 3' ends of the original 
+full-length cDNA clone. The 18 bp 3' signature contains 16 bp 3'-specific 
+nucleotides and an AA residual of the polyA tail to indicate the sequence 
+orientation. PET sequences were mapped to the genome using the following 
+specific criteria:
 <UL>
 <LI>a minimal continuous 16 bp match must exist for the 5' signature; the 
 3' signature must have a minimal continuous 14 bp match
