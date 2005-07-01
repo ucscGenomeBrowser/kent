@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.30 2005/07/01 00:15:43 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.31 2005/07/01 02:23:50 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -421,8 +421,6 @@ if (track == NULL)
     nameList = tablesForDb(findSelDb());
 else
     nameList = tablesForTrack(track);
-
-slReverse(&nameList);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
