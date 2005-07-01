@@ -1943,7 +1943,7 @@ type bed 12 +
 track encodeRikenCage
 compositeTrack on
 shortLabel Riken CAGE
-longLabel Riken CAGE - predicted gene start sites
+longLabel Riken CAGE - Predicted Gene Start Sites
 group encodeTxLevels
 priority 23.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1959,14 +1959,14 @@ autoScale Off
     track encodeRikenCagePlus
     subTrack encodeRikenCage
     shortLabel Riken CAGE +
-    longLabel Riken CAGE Plus strand - predicted gene start sites
+    longLabel Riken CAGE Plus Strand - Predicted Gene Start Sites
     priority 1
     color 109,51,43
 
     track encodeRikenCageMinus
     subTrack encodeRikenCage
     shortLabel Riken CAGE -
-    longLabel Riken CAGE Minus strand - predicted gene start sites
+    longLabel Riken CAGE Minus Strand - Predicted Gene Start Sites
     priority 2
     color 43,51,109
 
