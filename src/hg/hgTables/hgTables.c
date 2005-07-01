@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.115 2005/07/01 00:15:43 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.116 2005/07/01 17:18:28 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -301,6 +301,31 @@ if (s != NULL)
     *s++ = 0;
     *pTable = s;
     }
+}
+
+struct trackDb *findCompositeTdb(struct trackDb *track, char *table)
+/*	find the tdb for the table, if it is custom or composite or ordinary  */
+{
+struct trackDb *tdb = track;
+
+if (isCustomTrack(table))
+    {
+    struct customTrack *ct = lookupCt(table);
+    tdb = ct->tdb;
+    }
+else if (track && trackDbIsComposite(track))
+    {
+    struct trackDb *subTdb;
+    for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
+	{
+	if (sameWord(subTdb->tableName, table))
+	    {
+	    tdb = subTdb;
+	    break;
+	    }
+	}
+    }
+return(tdb);
 }
 
 struct trackDb *getFullTrackList()
@@ -1559,7 +1584,13 @@ void removeCustomTrackData()
 cartRemove(cart, "hgt.customText");
 cartRemove(cart, "hgt.customFile");
 cartRemove(cart, "hgta_correlateTrack");
-cartRemove(cart, "hgta_correlateTable2");
+cartRemove(cart, "hgta_correlateTable");
+cartRemove(cart, "hgta_correlateGroup");
+cartRemove(cart, "hgta_correlateOp");
+cartRemove(cart, "hgta_nextCorrelateTrack");
+cartRemove(cart, "hgta_nextCorrelateTable");
+cartRemove(cart, "hgta_nextCorrelateGroup");
+cartRemove(cart, "hgta_nextCorrelateOp");
 cartRemove(cart, "ct");
 }
 

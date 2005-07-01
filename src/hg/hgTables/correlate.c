@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.31 2005/07/01 02:23:50 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.32 2005/07/01 17:18:28 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -115,10 +115,10 @@ static struct trackDb *restrictedTrackList = NULL;
  * cancel out of the page. */
 
 static char *curVars[] = {hgtaCorrelateGroup, hgtaCorrelateTrack,
-	hgtaCorrelateTable2, hgtaCorrelateOp,
+	hgtaCorrelateTable, hgtaCorrelateOp,
 	};
 static char *nextVars[] = {hgtaNextCorrelateGroup, hgtaNextCorrelateTrack,
-	hgtaNextCorrelateTable2, hgtaNextCorrelateOp,
+	hgtaNextCorrelateTable, hgtaNextCorrelateOp,
 	};
 
 boolean anyCorrelation()
@@ -282,31 +282,6 @@ hPrintf("\n");
 return selTrack;
 }
 
-struct trackDb *findTdb(struct trackDb *track, char *table)
-/*	find the tdb for the table, if it is custom or composite or ordinary  */
-{
-struct trackDb *tdb = track;
-
-if (isCustomTrack(table))
-    {
-    struct customTrack *ct = lookupCt(table);
-    tdb = ct->tdb;
-    }
-else if (track && trackDbIsComposite(track))
-    {
-    struct trackDb *subTdb;
-    for (subTdb=track->subtracks; subTdb != NULL; subTdb = subTdb->next)
-	{
-	if (sameWord(subTdb->tableName, table))
-	    {
-	    tdb = subTdb;
-	    break;
-	    }
-	}
-    }
-return(tdb);
-}
-
 static void fillInTrackTable(struct trackTable *table,
 	struct sqlConnection *conn)
 /*	determine real tdb, and attach labels, only tdb and tableName
@@ -316,7 +291,7 @@ static void fillInTrackTable(struct trackTable *table,
 {
 struct trackDb *tdb;
 
-tdb = findTdb(table->tdb,table->tableName);
+tdb = findCompositeTdb(table->tdb,table->tableName);
 
 table->shortLabel = cloneString(tdb->shortLabel);
 table->longLabel = cloneString(tdb->longLabel);
@@ -433,14 +408,17 @@ hPrintf("<SELECT NAME=%s>\n", table);
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
-    tdb = findTdb(track, name->name);
+    tdb = findCompositeTdb(track, name->name);
     if (correlateTableOK(tdb))
 	{
 	hPrintf("<OPTION VALUE=%s", name->name);
 	if (sameString(selTable, name->name))
 	    hPrintf(" SELECTED");
 	if (tdb != NULL)
-	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+	    if (differentWord(tdb->shortLabel, track->shortLabel))
+		hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
+	    else
+		hPrintf(">%s\n", name->name);
 	else
 	    hPrintf(">%s\n", name->name);
 	}
@@ -1134,11 +1112,11 @@ for ( ; (v1 != NULL) && (v2 !=NULL); v1 = v1->next, v2=v2->next)
     ++rowsOutput;
     statsRowOut(v1->chrom, v1->name, table1->shortLabel, v1->start, v1->end,
 	v1->count, v1->min, v1->max, v1->sumData,
-	    v1->sumSquares, v2->r, v1->fetchTime,
+	    v1->sumSquares, v1->r, v1->fetchTime,
 		v1->calcTime, table1->actualTable, table2->actualTable,
 		    table1->tdb->tableName, table2->tdb->tableName, v1->m,
 			v1->b);
-    statsRowOut(v2->chrom, v1->name, table2->shortLabel, 0, 0,
+    statsRowOut(v2->chrom, v2->name, table2->shortLabel, 0, 0,
 	v2->count, v2->min, v2->max, v2->sumData,
 	    v2->sumSquares, v2->r, v2->fetchTime,
 		v2->calcTime, table1->actualTable, table2->actualTable,
@@ -1165,7 +1143,7 @@ hPrintf("</TABLE>\n");
 hPrintf("</TD></TR></TABLE></P>\n");
 
 /*	debugging when 1 region, less than 1400 bases, show all values	*/
-if ((1 == rowsOutput) &&
+if ((1 == 0) && (1 == rowsOutput) &&
 	(table1->vSet->count < 400) && (table2->vSet->count < 400))
     {
     int start, end, i;
@@ -1469,13 +1447,10 @@ for (y = yTable->vSet, x = xTable->vSet; (y != NULL) && (x != NULL);
 	}
 
     x->r = y->r = 0.0;
+
     /*	do not compute r for this region if N is < 2	*/
-    if (y->count < 2)
+    if (y->count > 1)
 	{
-	endTime = clock1000();
-	result->calcTime += endTime - startTime;
-	continue;
-	}
     /*	For this region, ready to compute r, N is y->count	*/
     yVariance = Syy / (double)(y->count-1);
     xVariance = Sxx / (double)(x->count-1);
@@ -1487,7 +1462,7 @@ for (y = yTable->vSet, x = xTable->vSet; (y != NULL) && (x != NULL);
 	x->r = y->r = (Sxy / (y->count - 1)) / (yStdDev * xStdDev);
     else
 	x->r = y->r = 1.0;
-
+	}
     endTime = clock1000();
     result->calcTime += endTime - startTime;
     }
@@ -1597,7 +1572,6 @@ char *onChange = onChangeEither();
 char *table2onEntry;
 char *table2;
 boolean correlateOK1 = FALSE;
-char *maxLimitCartVar;
 char *maxLimitCountStr;
 int maxLimitCount;
 char *tmpString;
@@ -1614,7 +1588,7 @@ tableList = NULL;	/*	initialize the list	*/
  */
 correlateOK1 = correlateTableOK(curTrack);
 
-table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable2, "none");
+table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable, "none");
 
 /*	add first table to the list	*/
 tableList = allocTrackTable();
@@ -1634,18 +1608,12 @@ cartSaveSession(cart);
 
 /* Print group, track, and table selection menus */
 tdb2 = showGroupTrackRowLimited(hgtaNextCorrelateGroup, onChange, 
-    hgtaNextCorrelateTrack, onChange, conn, hgtaNextCorrelateTable2, &table2);
+    hgtaNextCorrelateTrack, onChange, conn, hgtaNextCorrelateTable, &table2);
 
 tableName2 = tdb2->shortLabel;
 
-if (isCustomTrack(curTable))
-    maxLimitCartVar=filterFieldVarName("ct", curTable, "_",
-	correlateMaxDataPoints);
-else
-    maxLimitCartVar=filterFieldVarName(database,curTable, "_",
-	correlateMaxDataPoints);
-
-maxLimitCountStr = cartUsualString(cart, maxLimitCartVar, maxResultsMenu[1]);
+maxLimitCountStr = cartUsualString(cart, hgtaCorrelateMaxLimitCount,
+	maxResultsMenu[1]);
 
 tmpString = cloneString(maxLimitCountStr);
 
@@ -1654,18 +1622,12 @@ maxLimitCount = sqlUnsigned(tmpString);
 freeMem(tmpString);
 
 /*	limit total data points and window size	options */
-{
-static char winSizeVariable[256];
-safef(winSizeVariable, sizeof(winSizeVariable), "%s%s.%s",
-	hgtaCorrelateWindowPrefix, database, curTable);
-
 hPrintf("<TABLE BORDER=0><TR><TD>Limit total data points in result:&nbsp\n");
-cgiMakeDropList(maxLimitCartVar, maxResultsMenu, maxResultsMenuSize,
+cgiMakeDropList(hgtaCorrelateMaxLimitCount, maxResultsMenu, maxResultsMenuSize,
     maxLimitCountStr);
 hPrintf("</TD><TD>&nbsp;&nbsp;Window data to:&nbsp;\n");
-cgiMakeTextVar(winSizeVariable, cartUsualString(cart, winSizeVariable, "1"), 8);
+cgiMakeTextVar(hgtaCorrelateWinSize, cartUsualString(cart, hgtaCorrelateWinSize, "1"), 8);
 hPrintf("&nbsp;bases</TD></TR></TABLE>\n");
-}
 
 #ifdef NOT
 hPrintf("<P>\n");

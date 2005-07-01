@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.82 2005/07/01 02:23:50 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.83 2005/07/01 17:18:28 hiram Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -290,12 +290,12 @@ for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
     if (track != NULL)
-	tdb = findTdb(track, name->name);
+	tdb = findCompositeTdb(track, name->name);
     hPrintf("<OPTION VALUE=%s", name->name);
     if (sameString(selTable, name->name))
         hPrintf(" SELECTED");
     if (tdb != NULL)
-	if (tdb->subtracks != NULL)
+	if (differentWord(tdb->shortLabel, curTrack->shortLabel))
 	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
 	else
 	    hPrintf(">%s\n", name->name);
@@ -600,7 +600,7 @@ if (isPositional)
 /* Correlation line. */
 if (correlateTableOK(curTrack))
     {
-    char *table2 = cartUsualString(cart, hgtaCorrelateTable2, "none");
+    char *table2 = cartUsualString(cart, hgtaCorrelateTable, "none");
     hPrintf("<TR><TD><B>correlation:</B>\n");
     if (differentWord(table2,"none") && strlen(table2))
 	{

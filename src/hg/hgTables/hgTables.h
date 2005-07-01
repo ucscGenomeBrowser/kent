@@ -156,6 +156,9 @@ void nbSpaces(int count);
 boolean anyCompression();
 /*  Check if any compressed file output has been requested */
 
+struct trackDb *findCompositeTdb(struct trackDb *track, char *table);
+/*	find the tdb for the table, if it is custom or composite or ordinary  */
+
 struct trackDb *getFullTrackList();
 /* Get all tracks including custom tracks if any. */
 
@@ -365,12 +368,9 @@ boolean intersectionIsBpWise();
 boolean anyCorrelation();
 /* Return TRUE if there's a correlation to do. */
 
-#define correlateMaxDataPoints "corrMaxDataPoints"
-/* Prefix for variables managed by correlate page. */
-#define hgtaCorrelateWindowPrefix "hgta_corrWinSize."
-
-struct trackDb *findTdb(struct trackDb *track, char *table);
-/*	find the tdb for the table, if it is custom or composite or ordinary  */
+/* variables managed by correlate page. */
+#define hgtaCorrelateMaxLimitCount "hgta_corrMaxLimitCount"
+#define hgtaCorrelateWinSize "hgta_corrWinSize"
 
 boolean correlateTableOK(struct trackDb *tdb);
 /*	is this table OK to correlate with ?	*/
@@ -511,8 +511,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaNextCorrelateOp "hgta_nextCorrelateOp"
 #define hgtaCorrelateTable "hgta_correlateTable"
 #define hgtaNextCorrelateTable "hgta_nextCorrelateTable"
-#define hgtaCorrelateTable2 "hgta_correlateTable2"
-#define hgtaNextCorrelateTable2 "hgta_nextCorrelateTable2"
+#define hgtaCorrelateTable "hgta_correlateTable"
+#define hgtaNextCorrelateTable "hgta_nextCorrelateTable"
 #define hgtaCorrelateWindowSize "hgta_CorrelateWindowSize"
 #define hgtaNextCorrelateWindowSize "hgta_nextCorrelateWindowSize"
 
