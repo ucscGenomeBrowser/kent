@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.34 2005/07/01 23:35:23 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.35 2005/07/01 23:54:18 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -856,6 +856,24 @@ endTime = clock1000();
 v1->calcTime += endTime - startTime;
 }
 
+static void overallMinMax(struct trackTable *t, double *min, double *max)
+/*	find min,max in a set of data vectors	*/
+{
+register double minimum = INFINITY;
+register double maximum = -INFINITY;
+struct dataVector *dv;
+
+for (dv = t->vSet; dv != NULL; dv = dv->next)
+    {
+    minimum = min(minimum,dv->min);
+    maximum = max(maximum,dv->max);
+    }
+if (min)
+    *min = minimum;
+if (max)
+    *max = maximum;
+}
+
 static void calcMeanMinMax(struct dataVector *v)
 {
 long startTime, endTime;
@@ -1581,6 +1599,10 @@ struct tempName *scatterPlotGif = NULL;
 struct tempName *residualPlotGif = NULL;
 double F_statistic = 0.0;
 double fitMin, fitMax;
+double yMin, yMax, xMin, xMax;
+
+overallMinMax(table1, &yMin, &yMax);
+overallMinMax(table2, &xMin, &xMax);
 
 scatterPlotGif = scatterPlot(table1, table2, result);
 residualPlotGif = residualPlot(table1, table2, result, &F_statistic,
@@ -1594,11 +1616,11 @@ hPrintf("<TR><TD WIDTH=400>\n");
 hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
 hPrintf("<TR><TH ALIGN=LEFT>%.4g<BR>&nbsp;<BR>%s<BR>&nbsp;<BR>%.4g</TH>\n",
-	table1->vSet->max, table1->shortLabel, table1->vSet->min);
+	yMax, table1->shortLabel, yMin);
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	scatterPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
 hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%.4g&nbsp;&nbsp;&lt;-&nbsp;%s&nbsp;-&gt;&nbsp;&nbsp;%.4g</TH></TR>\n",
-	table2->vSet->min, table2->longLabel, table2->vSet->max);
+	xMin, table2->longLabel, xMax);
 hPrintf("</TABLE></TD><TD WIDTH=380 BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
 
 hPrintf("<TABLE BORDER=1 BGCOLOR=\"%s\">", HG_COL_INSIDE);
