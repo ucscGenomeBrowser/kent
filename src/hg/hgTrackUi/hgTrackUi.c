@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.202 2005/06/30 19:05:10 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.203 2005/07/01 18:49:57 fanhsu Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -556,13 +556,34 @@ printf("Human Position");
 cdsColorOptions(tdb, 2);
 }
 
+void hg17KgIdConfig(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+char *geneLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+geneLabel = cartUsualString(cart, varName, "gene symbol");
+printf("<B>Label:</B> ");
+radioButton(varName, geneLabel, "gene symbol");
+radioButton(varName, geneLabel, "UCSC Known Gene ID");
+radioButton(varName, geneLabel, "all");
+radioButton(varName, geneLabel, "none");
+}
+
+void hg17KgUI(struct trackDb *tdb)
+/* Put up refGene-specifc controls */
+{
+hg17KgIdConfig(tdb);
+cdsColorOptions(tdb, 2);
+}
+
 void knownGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
 char varName[64];
 char *geneLabel;
 safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-geneLabel = cartUsualString(cart, varName, "gene");
+geneLabel = cartUsualString(cart, varName, "gene symbol");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene symbol");
 radioButton(varName, geneLabel, "UCSC Known Gene ID");
@@ -1413,6 +1434,8 @@ else if (sameString(track, "refGene"))
         refGeneUI(tdb);
 else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
+else if (sameString(track, "hg17Kg"))
+        hg17KgUI(tdb);
 else if (sameString(track, "pseudoGeneLink"))
         retroGeneUI(tdb);
 else if (sameString(track, "all_mrna"))
