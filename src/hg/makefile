@@ -192,6 +192,7 @@ UTIL_DIRS = \
 	pslSortAcc \
 	pslStats \
 	pslSwap \
+	pslToBed \
 	pslUnpile \
 	qaToQac \
 	qacToQa \
