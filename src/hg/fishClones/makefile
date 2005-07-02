@@ -10,14 +10,14 @@ O = $A.o
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	${STRIP} $A${EXE}
 	chmod a+rx $A
 	cp $A ${HOME}/bin/${MACHTYPE}
 
 debug: $O
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

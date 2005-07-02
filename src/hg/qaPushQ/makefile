@@ -19,7 +19,7 @@ mgsc: compile
 
 compile: $O pushQ.o
 	${CC} $O pushQ.o ${MYLIBS} ${L}
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
 
 pushQ.c pushQ.h: pushQ.as

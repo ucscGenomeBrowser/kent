@@ -14,7 +14,7 @@ all: compile
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
 
 lib:

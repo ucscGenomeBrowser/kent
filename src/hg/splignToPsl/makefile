@@ -19,5 +19,5 @@ test: compile
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} #/cse/grads/markd/lib/libefence.a -lpthread 
 	#${CC} $O ${F64} ${MYLIBS} ${L}	
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	chmod a+rx $A

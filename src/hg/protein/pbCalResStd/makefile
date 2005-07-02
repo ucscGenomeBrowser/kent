@@ -23,7 +23,7 @@ beta: compile
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 #	${STRIP} $A${EXE}
 	chmod a+rx $A
 

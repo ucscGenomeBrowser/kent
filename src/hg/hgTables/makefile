@@ -53,7 +53,7 @@ beta::
 
 compile: $O 
 	${CC} -g $O ${MYLIBS} ${L} 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 
 #	all objects depend on hgTables.h
 

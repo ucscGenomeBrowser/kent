@@ -19,7 +19,7 @@ mgsc: compile
 
 compile: $O interaction.o
 	${CC} $O interaction.o ${MYLIBS} ${L}
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
 
 $O: $A.c

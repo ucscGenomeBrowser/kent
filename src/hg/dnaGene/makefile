@@ -14,7 +14,7 @@ my:	compile
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
 
 clean:

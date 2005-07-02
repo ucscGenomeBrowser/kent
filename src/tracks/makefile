@@ -11,7 +11,7 @@ O = tracks.o
 
 compile: $O 
 	${CC} $O $(MYLIBS) $(L) 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 #${STRIP} $A
 	chmod a+rx $A
 
@@ -34,7 +34,7 @@ install:	compile
 
 debug: $O
 	${CC} $O $(MYLIBS) $(L) 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 
 clean:
 	rm -f $O $A

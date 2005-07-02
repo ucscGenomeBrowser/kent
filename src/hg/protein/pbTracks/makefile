@@ -26,7 +26,7 @@ mgsc: compile
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	strip $A
 	chmod a+rx $A
 
@@ -38,7 +38,7 @@ install:	compile
 
 debug: $O
 	${CC} $O ${MYLIBS} ${L} 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

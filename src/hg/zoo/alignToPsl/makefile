@@ -10,7 +10,7 @@ O = $A.o
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 	chmod a+rx $A
 	mv $A $(HOME)/bin/$(MACHTYPE)/alignToPsl
 

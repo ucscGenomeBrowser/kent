@@ -57,14 +57,14 @@ scoreSort: scoreSort.o
 
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 #	${STRIP} $A${EXE}
 	chmod a+rx $A
 
 
 debug: $O
 	${CC} $O ${MYLIBS} ${L} 
-	mv a.out $A
+	mv ${AOUT} $A${EXE}
 
 test:	compile
 	cd tests && ${MAKE} test
