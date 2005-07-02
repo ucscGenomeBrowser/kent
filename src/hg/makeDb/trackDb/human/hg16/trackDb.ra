@@ -1539,7 +1539,7 @@ cdsDrawDefault genomic\ codons
     priority 9
     color 200,132,12
 
-    track encodeEgaspFullGeneMark
+    track encodeEgaspFullGenemark
     subTrack encodeEgaspFull
     shortLabel GeneMark
     longLabel GeneMark Gene Predictions
