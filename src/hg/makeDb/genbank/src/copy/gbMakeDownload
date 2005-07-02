@@ -1,0 +1,132 @@
+#!/usr/bin/perl
+#
+# gbMakeDownload [options] database ...
+#
+# create download sequences
+#
+# $Id: gbMakeDownload,v 1.3 2005/07/02 01:10:37 genbank Exp $
+#
+use strict;
+use warnings;
+use File::Basename;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use gbCommon;
+
+my $usage = 
+    " gbMakeDownload [options] database ...\n"
+    . "\n"
+    . "create download files\n"
+    . "\n"
+    . " Options:\n"
+    . "   -getDownloadSeqs=days - create sequence gzipped fasta files and save in\n"
+    . "    \$gbRoot/download if download/dump.time doesn't exists or time is\n"
+    . "    more than \$days days old. Defaults to 5 days.\n"
+    . "   -downloadRootDir=dir - save download files in this directory, default is:\n"
+    . "       /mirrordata/apache/htdocs/goldenPath/\n"
+    . "   -verbose\n";
+
+my $verboseArg;
+
+# location of /usr/local/apache/htdocs/goldenPath on hgdownload:
+my $downloadRootDir = "/mirrordata/apache/htdocs/goldenPath";
+
+# determine if download files need to be updated for a database
+sub downloadOutOfData($$) {
+    my($db, $getDownloadSeqsDays) = @_;
+    my $timeFile = getDownloadTimeFile($downloadRootDir, $db);
+    my $downloadTime = loadTimeFile($timeFile);
+    my $deltaDays = (time() - $downloadTime) / (60 * 60 * 24);
+
+    # update if non-existant or out-of-date
+    return ($deltaDays > $getDownloadSeqsDays);
+}
+
+# Create a sequence fa.gz if the table is loaded for the specified genome.
+sub createSeqFaGz($$$$$) {
+    my($db, $srcDb, $type, $orgCat, $outBase) = @_;
+
+    # one create if table is loaded
+    my $loadTbl = getDbConfNo($db, "$srcDb.$type.$orgCat.load");
+    if (defined($loadTbl) && ($loadTbl eq "yes")) {
+        # setup out directory
+        my $downloadDir = getDownloadDir($downloadRootDir, $db);
+        makeDir($downloadDir);
+
+        my $faBase = "$downloadDir/$outBase";
+        my $faTmpGz = "$faBase.fa.tmp.gz";
+        my $cmd = "gbGetSeqs -get=seq -db=$db -$orgCat";
+        if (defined($verboseArg)) {
+            $cmd .= " " . $verboseArg;
+        }
+        $cmd .= " $srcDb $type $faTmpGz";
+        runProg($cmd);
+        renameFile($faTmpGz, "$faBase.fa.gz");
+    }
+}
+
+# make sequence download files
+sub makeDownloadSeqs($) {
+    my($db) = @_;
+    prMsg("making download sequences for $db");
+    createSeqFaGz($db, "genbank", "mrna", "native", "mrna");
+    createSeqFaGz($db, "genbank", "mrna", "xeno", "xenoMrna");
+    createSeqFaGz($db, "genbank", "est", "native", "est");
+    createSeqFaGz($db, "refseq", "mrna", "native", "refMrna");
+    #FIXME: not supported gbGetSeqs:
+    #createSeqFaGz($db, "native", "refseq", "mrna", "refPep");
+    # FIXME: need to add up/down stream seqs
+}
+
+# handle download file processing
+sub createDownload($) {
+    my($db) = @_;
+    my $timeFile = getDownloadTimeFile($downloadRootDir, $db);
+    makeDownloadSeqs($db);
+    makeTimeFile($timeFile);
+}
+
+# Entry
+my $getDownloadSeqsDays = 5;
+while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
+    my $opt = $ARGV[0];
+    shift @ARGV;
+    if ($opt eq "-verbose") {
+        $verboseArg = "-verbose";
+        $gbCommon::verbose = 1;
+    } elsif ($opt =~ /^-verbose=/) {
+        $verboseArg = "-verbose=" . parseOptEq($opt);
+        $gbCommon::verbose = parseOptEq($opt);
+    } elsif ($opt =~ /^-getDownloadSeqs(=|$)/) {
+        $getDownloadSeqsDays = parseOptEq($opt);
+    } elsif ($opt =~ /^-downloadRootDir(=|$)/) {
+        $downloadRootDir = parseOptEq($opt);
+    } else {
+        gbError("invalid option \"$opt\"\n$usage");
+    }
+}
+if ($#ARGV < 0) {
+    gbError("wrong # args: $usage");
+}
+my @databases = @ARGV;
+
+# Before locking, determine if anything needs to be done.  This avoids
+# a log and e-mail message if not needed.
+my @outdatedDbs;
+foreach my $db (@databases) {
+    if (downloadOutOfData($db, $getDownloadSeqsDays)) {
+        push(@outdatedDbs, $db);
+    }
+}
+if ($#outdatedDbs < 0) {
+    exit(0);
+}
+             
+beginTask("mkdownload", "mkdownload");
+
+foreach my $db (@outdatedDbs) {
+    createDownload($db);
+}
+
+endTask();
+
