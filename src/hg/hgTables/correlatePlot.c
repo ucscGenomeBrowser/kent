@@ -14,7 +14,7 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.4 2005/07/01 23:35:23 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.5 2005/07/02 15:27:48 hiram Exp $";
 
 static void ordinaryPlot(int **densityCounts, struct vGfx *vg)
 /* a simple point plot, not density	*/
@@ -45,6 +45,23 @@ int densityMax = 0;
 int densityRange = 0;
 
 #define LOG2(x) (log(x)/log_2)
+
+/*	the painted dots are twice as big as the data, so lower the
+ *	resolution of this data by adding together adjacent counts
+ */
+
+for (j = 0; j < PLOT_HEIGHT-1; j += 2)
+    for (i = 0; i < PLOT_WIDTH-1; i += 2)
+	{
+	int count = densityCounts[j][i];
+	count += densityCounts[j+1][i];
+	count += densityCounts[j][i+1];
+	count += densityCounts[j+1][i+1];
+	densityCounts[j][i] = count;
+	densityCounts[j+1][i] = count;
+	densityCounts[j][i+1] = count;
+	densityCounts[j+1][i+1] = count;
+	}
 
 for (j = 0; j < PLOT_HEIGHT; ++j)
     for (i = 0; i < PLOT_WIDTH; ++i)
