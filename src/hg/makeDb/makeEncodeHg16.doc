@@ -2704,3 +2704,292 @@ done
 
 
 
+##########################################################################
+# ENCODE HapMap Primate Alleles
+# Daryl, July 1, 2005
+
+    ##########################################################################
+    ## data acquisition, reformatting, cleaning, and checking
+    ## run most of this on local disk
+
+    ## get the data
+    wget ftp://www.hapmap.org/frequencies/2005-06_16c.1_phaseI/ENCODE/non-redundant/allele_freqs_EN*.txt.gz....
+
+    ## reformat the data and remove misformatted lines
+    formatAll.csh
+
+	#!/bin/csh
+	foreach pop (CEU CHB JPT YRI)
+	    rm -f allele_freqs_$pop.bed
+	    zcat allele_freqs/allele_freqs_EN*${pop}* | awk -f split.awk > allele_freqs_$pop.bed
+	end
+	rm -f alleles.bed
+	awk '$0 !~ /\?/ {printf "%s\t%d\t%d\t%s\t0\t%s\t%s\t%s\n",$1,$2,$3,$4,$6,$8,$9}' allele_freqs_*.bed | sort -u > alleles.bed
+
+    rm -f hg16.bed
+    removeErrors.pl < alleles.bed
+
+	#!/usr/bin/perl -W
+	%line=();%dups=();
+	### collect the input data from the alleles.bed file
+	while (<>)
+	{
+	    chomp();
+	    @f=split;
+	    $key="$f[0].$f[1].$f[2]";
+	    $val="$f[3]\t$f[4]\t$f[5]\t$f[6]\t$f[7]";
+	    if (defined $line{$key})
+	    {
+		$val .= "\t$line{$key}";
+		$dups{$key} = "$val";
+	    }
+	    $line{$key}=$val;
+	}
+	### write the output file of unique information for each position
+	open(OUT,">alleles.out");
+	foreach $key (sort keys %line)
+	{
+	    @f=split /\t/, $line{$key};
+	    @k=split /\./, $key;
+	    printf OUT "$k[0]\t$k[1]\t$k[2]\t$f[0]\t$f[1]\t$f[2]\t$f[3]\t$f[4]\n";
+	}
+	### write a file of observed errors (duplications); "?" alleles have been removed before this step.
+	open(ERR,">alleles.err");
+	foreach $key (sort keys %dups)
+	{
+	    @k=split /\./, $key;
+	    printf ERR "$k[0]\t$k[1]\t$k[2]\t$dups{$key}\n";
+	}
+
+    ## QA -- counts should be the same, strand should be "+ -"; 4 nucleotides should be shown
+    wc -l alleles.*
+    cut -f 1-3 alleles.out | sort -u | wc -l
+    cut -f 1-4 alleles.out | sort -u | wc -l
+    cut -f 4   alleles.out | sort -u | wc -l
+    cut -f 6   alleles.out | sort -u | xargs echo "strand " 
+    cut -f 7   alleles.out | sort -u | xargs echo "ref    "
+    cut -f 8   alleles.out | sort -u | xargs echo "other  "
+    
+    ##########################################################################
+    ## Start the real work ... lift to the other assemblies
+    ## requires local over.chain files or symlinks
+
+    ln -s alleles.out hg16.bed
+    liftOver hg16.bed hg16ToPanTro1.over.chain panTro1.bed hg16toPanTro1.unmapped
+    grep -v "#" hg16toPanTro1.unmapped > hg16toPanTro1.unmapped.bed
+    wc -l hg16.bed panTro1.bed hg16toPanTro1.unmapped.bed
+
+    liftOver hg16.bed hg16ToHg17.over.chain    hg17.bed    hg16toHg17.unmapped
+    grep -v "#" hg16toHg17.unmapped > hg16toHg17.unmapped.bed
+    wc -l hg16.bed hg17.bed hg16toHg17.unmapped.bed
+
+    liftOver hg17.bed hg17ToRheMac1.over.chain rheMac1.bed hg17toRheMac1.unmapped
+    grep -v "#" hg17toRheMac1.unmapped > hg17toRheMac1.unmapped.bed
+    wc -l hg17.bed rheMac1.bed hg17toRheMac1.unmapped.bed
+
+    ##########################################################################
+    ## Now that the positions are available, get the bases at those positions
+    ## requires nib files on /scratch
+    nice getPanTro1Base.pl < panTro1.bed > panTro1Base.bed
+    #13.440u 29.590s 1:30.91 47.3%   0+0k 0+0io 2333377pf+0w
+
+	#!/usr/bin/perl -W
+	$nibPath="/scratch/panTro1/nib";
+	$foo1=$foo2=@bar="";
+	while (<>)
+	{
+	    chomp();
+	    $seq="#";
+	    ($chrom, $chromStart, $chromEnd, $foo1, $foo2, $strand, @bar) = split /\t/;
+	    $cmd="/cluster/home/daryl/bin/i386/nibFrag $nibPath/$chrom.nib $chromStart $chromEnd $strand stdout";
+	    open(RESULT, "$cmd |") or die "can't start nibFrag:\n$cmd\n";
+	    <RESULT>;
+	    $seq=<RESULT>; #assumes a single line
+	    print "$_\t";
+	    print "$seq";
+	    close(RESULT);
+	}
+
+    ## requires 2bit file on /scratch
+    nice getRheMac1Base.pl < rheMac1.bed > rheMac1Base.bed
+    #5571.970u 501.900s 1:49:14.10 92.6%     0+0k 0+0io 2455781pf+0w
+
+	#!/usr/bin/perl -W
+	$twoBitPath="/cluster/data/rheMac1/rheMac1.2bit";
+	@bar="";
+	open(TMP,"</scratch/getRheMac1Base.tmp");
+	while ($line=<>)
+	{
+	    chomp($line);
+	    $seq=".";
+	    ($chrom, $chromStart, $chromEnd, @bar) = split /\t/, $line;
+	    $cmd="twoBitToFa ${twoBitPath}:${chrom}:${chromStart}-${chromEnd} stdout";
+	    open(RESULT, "$cmd |") or die "can't start twoBitToFa:\n$cmd\n";
+	    while (<RESULT>)    { $seq =  "$_";  }
+	    if ($seq  =~ /^\#/) { $seq =  ".\n"; }
+	    if ($line =~ /-/)   { $seq =~ tr/acgtACGT/tgcaTGCA/; }
+	    print "$line\t$seq";
+	    close(RESULT);
+	}
+
+    ##########################################################################
+    ## Get the qual scores to go with the bases
+    ## run on hgwdev -- requires the database
+    nice getOneQual.pl panTro1 < panTro1Base.bed > panTro1BaseQual.bed
+    #42.530u 95.540s 7:19.14 31.4%   0+0k 0+0io 4260405pf+0w
+
+	#!/usr/bin/perl -W
+	$db = shift;
+	$foo=@bar="";
+	while ($bed = <>)
+	{
+	    chomp($bed);
+	    $score="0";
+	    ($chrom, $foo, $chromEnd, @bar) = split /\t/, $bed;
+	    $cmd="hgWiggle -db=$db -position=$chrom:$chromEnd-$chromEnd -rawDataOut quality";
+	    open(RESULT, "$cmd |") or die "can't start '$cmd'\n";
+	    while ($line = <RESULT>)
+	    {
+		if ($line =~ /^\#/) { next; }
+		$score=int($line+.5);
+	    }
+	    print "$bed\t$score\n";
+	}
+
+    nice getOneQual.pl rheMac1 < rheMac1Base.bed > rheMac1BaseQual.bed
+    #35.170u 69.300s 5:37.85 30.9%   0+0k 0+0io 4043288pf+0w
+
+    ##########################################################################
+    ## Put it all together
+    ## run on local machine
+    nice mergeResults.pl hg16.bed panTro1BaseQual.bed rheMac1BaseQual.bed hg16.panTro1.rheMac1.bed
+
+	#!/usr/bin/perl -W
+	if (scalar (@ARGV) != 4)  {die "usage:  mergeResults.pl hg16.bed panTro1BaseQual.bed rheMac1BaseQual.bed hg16.panTro1.rheMac1.bed"}
+	$hf = shift; $cf = shift; $rf = shift; $of = shift; 
+	%c=(); %r=();
+	$sameC=$sameR=$sameB=$diffC=$diffR=$diffB=$missC=$missR=$missB=0;
+	open(H,"<$hf") or die "can't open $hf"; 
+	open(C,"<$cf") or die "can't open $cf";
+	open(R,"<$rf") or die "can't open $rf";
+	open(O,">$of") or die "can't open $of";
+	print O "rs# humanChrom humanPos humanStrand refallele otherallele chimpChrom chimpPos chimpStrand chimpAllele chimpQual rhesusChrom rhesusPos rhesusStrand rhesusAllele rhesusQual\n";
+	while (<C>) 
+	{ 
+	    chomp(); 
+	    if    (/\s(rs\d+)\s/)          { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    elsif (/\s(BCM-HGSC\S*)\s/)    { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    elsif (/\s(CSHL-HapMap\S+)\s/) { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    elsif (/\s(JCM\S+)\s/)         { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    else  { print "Chimp  ERR: $_\n"; } 
+	}
+	while (<R>) 
+	{ 
+	    chomp(); 
+	    if    (/\s(rs\d+)\s/)          { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    elsif (/\s(BCM-HGSC\S*)\s/)    { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    elsif (/\s(CSHL-HapMap\S+)\s/) { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    elsif (/\s(JCM\S+)\s/)         { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    else  { print "Rhesus ERR: $_\n"; }
+	}
+	while (<H>) 
+	{ 
+	    chomp(); 
+	    if    (/\s(rs\d+)\s/)          { $rsId=$1; $rsId =~ s/ //g; }
+	    elsif (/\s(BCM-HGSC\S*)\s/)    { $rsId=$1; $rsId =~ s/ //g; }
+	    elsif (/\s(CSHL-HapMap\S+)\s/) { $rsId=$1; $rsId =~ s/ //g; }
+	    elsif (/\s(JCM\S+)\s/)         { $rsId=$1; $rsId =~ s/ //g; }
+	    else  { print "Human ERR: $_\n"; }
+	    $Hchrom=$HchromStart=$HchromEnd=$Hname=$Hscore=$Hstrand=$Hnuc1=$Hnuc2=".";
+	    $Cchrom=$CchromStart=$CchromEnd=$Cname=$Cscore=$Cstrand=$Cnuc1=$Cnuc2=$Cnuc=$Cqual=$C=".";
+	    $Rchrom=$RchromStart=$RchromEnd=$Rname=$Rscore=$Rstrand=$Rnuc1=$Rnuc2=$Rnuc=$Rqual=$R=".";
+	    ($Hchrom, $HchromStart, $HchromEnd, $Hname, $Hscore, $Hstrand, $Hnuc1, $Hnuc2) = split /\t/, $_;
+	    if (defined $c{$rsId}) { $C = $c{$rsId}; ($Cchrom, $CchromStart, $CchromEnd, $Cname, $Cscore, $Cstrand, $Cnuc1, $Cnuc2, $Cnuc, $Cqual) = split /\t/, $C; 
+				    if (!defined($Cqual)) { $Cqual=".";} if (!defined($Cnuc)) { $Cnuc=".";} }
+	    else { $Cchrom=$CchromStart=$CchromEnd=$Cname=$Cscore=$Cstrand=$Cnuc1=$Cnuc2=$Cnuc=$Cqual=$C="."; }
+	    if (defined $r{$rsId}) { $R = $r{$rsId}; ($Rchrom, $RchromStart, $RchromEnd, $Rname, $Rscore, $Rstrand, $Rnuc1, $Rnuc2, $Rnuc, $Rqual) = split /\t/, $R; 
+				    if (!defined($Cqual)) { print "$_\n"; $Rqual=".";}}
+	    else { $Rchrom=$RchromStart=$RchromEnd=$Rname=$Rscore=$Rstrand=$Rnuc1=$Rnuc2=$Rnuc=$Rqual=$R="."; }
+	    print O "$Hname $Hchrom $HchromEnd $Hstrand $Hnuc1 $Hnuc2 ";
+	    print O "$Cchrom $CchromEnd $Cstrand $Cnuc $Cqual ";
+	    print O "$Rchrom $RchromEnd $Rstrand $Rnuc $Rqual\n"; 
+	    if (!(defined $Cnuc) || $Cnuc eq ""|| $Cnuc eq ".") { $Cnuc="x"; $missC++; }
+	    if (!(defined $Rnuc) || $Rnuc eq ""|| $Rnuc eq ".") { $Rnuc="x"; $missR++; }
+	    if ( $Cnuc eq "x" && $Rnuc eq "x") { $missB++; }
+	    else
+	    {
+		$Hnuc1 =~ tr/a-z/A-Z/; $Hnuc2 =~ tr/a-z/A-Z/; $Cnuc  =~ tr/a-z/A-Z/;
+		if ( ($Cnuc eq $Hnuc1) || ($Cnuc eq $Hnuc2) ) { $sameC++; } elsif ($Cnuc ne "x"){$diffC++;}
+		if ( ($Rnuc eq $Hnuc1) || ($Rnuc eq $Hnuc2) ) { $sameR++; } elsif ($Rnuc ne "x"){$diffR++;}
+		if ((($Cnuc eq $Hnuc1) || ($Cnuc eq $Hnuc2)) && (($Rnuc eq $Hnuc1) || ($Rnuc eq $Hnuc2))) { $sameB++; }
+		if ((($Cnuc ne $Hnuc1) && ($Cnuc ne $Hnuc2)) && (($Rnuc ne $Hnuc1) || ($Rnuc ne $Hnuc2)) && ( $Cnuc ne "x" && $Rnuc ne "x")) { $diffB++; }
+	    }
+	}
+
+    ##########################################################################
+    ## Get summary results
+    countDiffs.pl hg16.bed panTro1Base.bed rheMac1Base.bed
+
+	#!/usr/bin/perl -W
+	if (scalar (@ARGV) != 3){die "usage:  countDiffs.pl hg16.bed panTro1Base.bed rheMac1Base.bed"}
+	$hf = shift; $cf = shift; $rf = shift;
+	open(H,"<$hf") or die "can't open $hf"; open(C,"<$cf") or die "can't open $cf"; open(R,"<$rf") or die "can't open $rf";
+	%c=(); %r=(); $Hcount=0;
+	while (<C>) 
+	{
+	    chomp(); 
+	    if    (/\s(rs\d+)\s/)          { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    elsif (/\s(BCM-HGSC\S*)\s/)    { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    elsif (/\s(CSHL-HapMap\S+)\s/) { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    elsif (/\s(JCM\S+)\s/)         { $rsId=$1; $rsId =~ s/ //g; $c{$rsId}=$_; } 
+	    else  { print "Chimp  ERR: $_\n"; } 
+	}
+	while (<R>) 
+	{ 
+	    chomp(); 
+	    if    (/\s(rs\d+)\s/)          { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    elsif (/\s(BCM-HGSC\S*)\s/)    { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    elsif (/\s(CSHL-HapMap\S+)\s/) { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    elsif (/\s(JCM\S+)\s/)         { $rsId=$1; $rsId =~ s/ //g; $r{$rsId}=$_; } 
+	    else  { print "Chimp  ERR: $_\n"; } 
+	}
+	$Csame=$Cdiff=$Cmiss=$Rsame=$Rdiff=$Rmiss=0;
+	$Hchrom=$HchromStart=$HchromEnd=$Hname=$Hscore=$Hstrand=$Hnuc1=$Hnuc2=".";
+	while (<H>)
+	{
+	    $Hcount++;
+	    chomp();
+	    $C=$R=".";
+	    if    (/\s(rs\d+)\s/)          { $rsId=$1; $rsId =~ s/ //g; }
+	    elsif (/\s(BCM-HGSC\S*)\s/)    { $rsId=$1; $rsId =~ s/ //g; }
+	    elsif (/\s(CSHL-HapMap\S+)\s/) { $rsId=$1; $rsId =~ s/ //g; }
+	    elsif (/\s(JCM\S+)\s/)         { $rsId=$1; $rsId =~ s/ //g; }
+	    else  { print "Human  ERR: $_\n"; } 
+	    if (defined $c{$rsId}) { ($Cchrom,$CchromStart,$CchromEnd,$Cname,$Cscore,$Cstrand,$Cnuc1,$Cnuc2,$Cnuc)=split /\t/,$c{$rsId};} 
+	    else { $Cchrom=$CchromStart=$CchromEnd=$Cname=$Cscore=$Cstrand=$Cnuc1=$Cnuc2=$Cnuc="."; }
+	    if (defined $r{$rsId}) { ($Rchrom,$RchromStart,$RchromEnd,$Rname,$Rscore,$Rstrand,$Rnuc1,$Rnuc2,$Rnuc)=split /\t/,$r{$rsId};} 
+	    else { $Rchrom=$RchromStart=$RchromEnd=$Rname=$Rscore=$Rstrand=$Rnuc1=$Rnuc2=$Rnuc="."; }
+	    ($Hchrom, $HchromStart, $HchromEnd, $Hname, $Hscore, $Hstrand, $Hnuc1, $Hnuc2)        = split /\t/, $_;
+	    $Hnuc1 =~ tr/a-z/A-Z/; $Hnuc2 =~ tr/a-z/A-Z/; $Cnuc  =~ tr/a-z/A-Z/; $Rnuc  =~ tr/a-z/A-Z/;
+	    if ($Cnuc eq "" || $Cnuc eq ".") { $Cmiss++; } elsif (($Cnuc eq $Hnuc1) || ($Cnuc eq $Hnuc2)) { $Csame++; } 
+	    else { $Cdiff++;}# print "C $Hnuc1 $Hnuc2 $Cnuc $Rnuc $rsId \n";}
+	    if ($Rnuc eq "" || $Rnuc eq ".") { $Rmiss++; } elsif (($Rnuc eq $Hnuc1) || ($Rnuc eq $Hnuc2)) { $Rsame++; } 
+	    else { $Rdiff++;}# print "R $Hnuc1 $Hnuc2 $Cnuc $Rnuc $rsId \n";}
+	}
+	$Ctotl = $Csame+$Cdiff; $Cfrac = $Csame/$Ctotl;
+	$Rtotl = $Rsame+$Rdiff; $Rfrac = $Rsame/$Rtotl;
+	print  "\tChimp\tRhesus\tHuman\n";
+	print  "totl:\t$Ctotl\t$Rtotl\t$Hcount\n";
+	print  "same:\t$Csame\t$Rsame\n";
+	print  "diff:\t$Cdiff\t$Rdiff\n";
+	printf "frac:\t%.3f\t%.3f\n",$Cfrac,$Rfrac;
+	print  "miss:\t$Cmiss\t$Rmiss\n";
+
+    ##########################################################################
+    ## Reformat once again and load the database
+    awk -f makeTableBed.awk hg16.panTro1.rheMac1.bed > encodePrimateAlleles.bed
+	
+	$0 !~ /Chrom/ {printf "%s\t%d\t%d\t%s\t%d\t%c\t%c\t%c\t%s\t%d\t%c\t%s\t%d\t%s\t%d\t%c\t%c\t%d\n", $2,$3-1,$3,$1,0,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16}
+
+    hgLoadBed hg16 encodePrimateAlleles encodePrimateAlleles.bed -sqlTable=encodePrimateAlleles.sql -tab -strict
+
