@@ -2154,7 +2154,8 @@ end
 csh doGene.csh >&! doGene.log
 
     # process others
-    ldHgGene -out=Genemark.gp null null Genemark.gff
+    perl -wpe 's/(.*transcript_id) (\S+)$/$1 $2 gene_id $2/' Genemark.gff | \
+        ldHgGene -out=Genemark.gp null null stdin
         # 880 gene predictions
     liftOver -genePred  \
         Genemark.gp /cluster/data/hg17/bed/liftOver/hg17ToHg16.chain \
