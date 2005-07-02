@@ -19,8 +19,10 @@ CVS=cvs
 # portable naming of compiled executables: add ".exe" if compiled on 
 # Windows (with cygwin).
 ifeq (${OS}, Windows_NT)
+  AOUT=a.exe
   EXE=.exe
 else
+  AOUT=a.out
   EXE=
 endif
 
