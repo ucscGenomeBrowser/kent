@@ -2,13 +2,13 @@
 
 my:: compile
 	chmod a+rx $A${EXE}
-	mv $A${EXE} ${CGI_BIN}-${USER}/$A${EXE}
+	mv $A${EXE} ${CGI_BIN}-${USER}/$A
 
 alpha:: strip
-	mv $A${EXE} ${CGI_BIN}/$A${EXE}
+	mv $A${EXE} ${CGI_BIN}/$A
 
 beta:: strip
-	mv $A${EXE} ${CGI_BIN}-beta/$A${EXE}
+	mv $A${EXE} ${CGI_BIN}-beta/$A
 
 strip::  compile
 	${STRIP} $A${EXE}
@@ -19,11 +19,11 @@ install::  strip
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
-	mv $A${EXE} ${DESTDIR}${CGI_BIN}/$A${EXE}
+	mv $A${EXE} ${DESTDIR}${CGI_BIN}/$A
 
 debug:: $O
 	${CC} $O ${MYLIBS} ${L}
-	mv a.out $A${EXE}
+	mv ${AOUT} $A${EXE}
 
 
 lib::
