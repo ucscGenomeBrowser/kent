@@ -26,8 +26,8 @@ mgsc: compile
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
-	mv ${AOUT} $A${EXE}
-	strip $A
+	mv ${AOUT} $A
+	${STRIP} $A
 	chmod a+rx $A
 
 install:	compile
