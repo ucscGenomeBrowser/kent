@@ -1,7 +1,7 @@
 ../cgi-bin/test.cgi: ../lib/$(MACHTYPE)/jkweb.a test.c
 	${CC} ${COPT} ${CFLAGS} -I../inc test.c ../lib/$(MACHTYPE)/jkweb.a -lm
-	chmod a+x a.out
-	mv a.out ../cgi-bin/test.cgi
+	chmod a+x ${AOUT}
+	mv ${AOUT} ../cgi-bin/test.cgi
 
 test:
 	./hgTest.pl -v -db hg13 | tee $(HOST).hg13.log  2>&1

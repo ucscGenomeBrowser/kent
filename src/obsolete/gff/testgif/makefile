@@ -1,6 +1,6 @@
 s: s.c common.o dnautil.o memgfx.o gifwrite.o gifcomp.o
 	cc s.c common.o dnautil.o memgfx.o gifwrite.o gifcomp.o
-	mv a.out s
+	mv ${AOUT} s
 
 common.o: common.c
 	cc -c common.c

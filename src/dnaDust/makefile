@@ -8,7 +8,7 @@ O = dnadust.o
 
 dnadust.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
-	mv a.out dnadust.exe
+	mv ${AOUT} dnadust.exe
 	chmod a+rx dnadust.exe
 
 push:

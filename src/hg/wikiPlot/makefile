@@ -9,7 +9,7 @@ O = wikiPlot.o
 
 wikiPlot: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $L
-	mv a.out wikiPlot
+	mv ${AOUT} wikiPlot
 	${STRIP} wikiPlot${EXE}
 	chmod a+rx wikiPlot
 	mv wikiPlot $(HGCGI)

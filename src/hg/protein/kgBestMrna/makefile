@@ -26,10 +26,10 @@ ${A2}: ${O2} ${MYLIBS}
 
 compile: ${O1} ${O2}
 	${CC} -Wall ${O1} ${MYLIBS} ${L}
-	mv a.out ${A1}
+	mv ${AOUT} ${A1}
 	chmod a+rx ${A1}
 	${CC} ${O2} ${MYLIBS} ${L}
-	mv a.out ${A2}
+	mv ${AOUT} ${A2}
 	chmod a+rx ${A2}
 
 clean::

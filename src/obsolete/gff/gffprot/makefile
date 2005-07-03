@@ -1,6 +1,6 @@
 gffprot: gffprot.c common.o dnautil.o
 	cc gffprot.c common.o dnautil.o
-	mv a.out gffprot
+	mv ${AOUT} gffprot
 
 common.o: common.c
 	cc -c common.c

@@ -4,7 +4,7 @@ O = scanIntrons.o
 
 scanIntrons.exe: $(O) lib
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
-	mv a.out scanIntrons.exe
+	mv ${AOUT} scanIntrons.exe
 	chmod a+rx scanIntrons.exe
 
 push:	

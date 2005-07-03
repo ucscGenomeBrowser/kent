@@ -7,12 +7,12 @@ endif
 
 alpha: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a -lm 
-	${STRIP} a.out${EXE}
-	mv a.out $(HOME)/bin/$(MACHTYPE)/ameme
+	${STRIP} ${AOUT}${EXE}
+	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/ameme
 
 cgi: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a -lm 
-	mv a.out ameme.exe
+	mv ${AOUT} ameme.exe
 	chmod 755 ameme.exe
 	mv ameme.exe $(HOME)/.html/cgi-bin
 

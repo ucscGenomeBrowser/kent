@@ -4,7 +4,7 @@ O = getgene.o
 
 getgene.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
-	mv a.out getgene.exe
+	mv ${AOUT} getgene.exe
 
 install:	
 	chmod a+rx getgene.exe

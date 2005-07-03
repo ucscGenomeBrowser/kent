@@ -4,6 +4,6 @@ O = xenWorm.o
 
 xenWorm: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a -lm
-	chmod a+x a.out
-	chmod g-w a.out
-	mv a.out ../../cgi-bin/xenWorm.exe
+	chmod a+x ${AOUT}
+	chmod g-w ${AOUT}
+	mv ${AOUT} ../../cgi-bin/xenWorm.exe

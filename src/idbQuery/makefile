@@ -8,7 +8,7 @@ O = idbQuery.o
 
 idbQuery.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
-	mv a.out idbQuery.exe
+	mv ${AOUT} idbQuery.exe
 	chmod a+rx idbQuery.exe
 
 push:

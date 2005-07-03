@@ -5,6 +5,6 @@ O = chkGlue.o
 
 chkGlue.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv a.out chkGlue.exe
+	mv ${AOUT} chkGlue.exe
 	chmod a+rx chkGlue.exe
 	mv chkGlue.exe ../../cgi-bin

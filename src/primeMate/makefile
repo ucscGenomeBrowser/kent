@@ -4,7 +4,7 @@ O = primeMate.o
 
 primeMate.exe: $(O) 
 	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
-	mv a.out primeMate.exe
+	mv ${AOUT} primeMate.exe
 
 install:	
 	chmod a+rx primeMate.exe

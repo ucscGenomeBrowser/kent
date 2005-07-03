@@ -10,7 +10,7 @@ O = cgiExample.o
 
 cgiExample: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $L
-	mv a.out cgiExample
+	mv ${AOUT} cgiExample
 	${STRIP} cgiExample${EXE}
 	chmod a+rx cgiExample
 	mv cgiExample /usr/local/apache/cgi-bin

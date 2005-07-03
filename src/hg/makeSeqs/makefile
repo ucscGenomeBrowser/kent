@@ -10,7 +10,7 @@ O = makeSeqs.o
 
 makeSeqs: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv a.out makeSeqs
+	mv ${AOUT} makeSeqs
 	${STRIP} makeSeqs${EXE}
 	chmod a+rx makeSeqs
 	cp makeSeqs $(HOME)/bin/$(MACHTYPE)

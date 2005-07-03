@@ -1,3 +1,3 @@
 findgci: findgci.c
 	cc findgci.c
-	mv a.out findgci
+	mv ${AOUT} findgci

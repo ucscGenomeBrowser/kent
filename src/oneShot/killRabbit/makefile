@@ -7,7 +7,7 @@ O = killRabbit.o
 
 killRabbit: lib $O ../../lib/$(MACHTYPE)/jkweb.a
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a $L
-	mv a.out killRabbit
+	mv ${AOUT} killRabbit
 	${STRIP} killRabbit${EXE}
 
 lib:

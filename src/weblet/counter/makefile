@@ -5,7 +5,7 @@ O = counter.o
 
 counter: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv a.out counter.exe
+	mv ${AOUT} counter.exe
 	chmod a+rx counter.exe
 	${STRIP} counter.exe${EXE}
 

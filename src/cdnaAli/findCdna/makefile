@@ -5,4 +5,4 @@ O = findCdna.o
 
 findCdna: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv a.out $(HOME)/bin/$(MACHTYPE)/findCdna
+	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/findCdna

@@ -28,32 +28,32 @@ my: compile scoreSort blast0To8 pslUniq pslChain
 
 pslChain: pslChain.o
 	${CC} pslChain.o ${F64} ${MYLIBS} ${L} 
-	mv a.out pslChain
+	mv ${AOUT} pslChain
 vegaBuildInfo: vegaBuildInfo.o
 	${CC} vegaBuildInfo.o ${F64} ${MYLIBS} ${L} 
-	mv a.out vegaBuildInfo
+	mv ${AOUT} vegaBuildInfo
 pslUniq: pslUniq.o
 	${CC} pslUniq.o ${F64} ${MYLIBS} ${L} 
-	mv a.out pslUniq
+	mv ${AOUT} pslUniq
 blast0ToPsl: blast0ToPsl.o
 	${CC} blast0ToPsl.o ${F64} ${MYLIBS} ${L} 
-	mv a.out blast0ToPsl
+	mv ${AOUT} blast0ToPsl
 tryToPsl: tryToPsl.o
 	${CC} tryToPsl.o ${F64} ${MYLIBS} ${L} 
-	mv a.out tryToPsl
+	mv ${AOUT} tryToPsl
 blastLink: blastLink.o
 	${CC} blastLink.o ${F64} ${MYLIBS} ${L} 
-	mv a.out blastLink
+	mv ${AOUT} blastLink
 smashTab: smashTab.o
 	${CC} smashTab.o ${F64} ${MYLIBS} ${L} 
-	mv a.out smashTab
+	mv ${AOUT} smashTab
 blast0To8: blast0To8.o
 	${CC} blast0To8.o ${F64} ${MYLIBS} ${L} 
-	mv a.out blast0To8
+	mv ${AOUT} blast0To8
 
 scoreSort: scoreSort.o
 	${CC} scoreSort.o ${F64} ${MYLIBS} ${L} 
-	mv a.out scoreSort
+	mv ${AOUT} scoreSort
 
 compile: $O 
 	${CC} $O ${F64} ${MYLIBS} ${L} 

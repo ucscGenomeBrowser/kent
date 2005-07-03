@@ -5,4 +5,4 @@ O = stToXao.o
 
 stToXao: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a
-	mv a.out $(HOME)/bin/$(MACHTYPE)/stToXao
+	mv ${AOUT} $(HOME)/bin/$(MACHTYPE)/stToXao

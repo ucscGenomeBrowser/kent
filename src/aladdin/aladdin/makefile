@@ -4,7 +4,7 @@ O = aladdin.o
 
 aladdin.exe: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a -lm
-	mv a.out aladdin.exe
+	mv ${AOUT} aladdin.exe
 	chmod a+rx aladdin.exe
 
 push:	
