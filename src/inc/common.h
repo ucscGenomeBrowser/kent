@@ -42,17 +42,44 @@
 #include <math.h>
 #include <errno.h>
 #include <unistd.h>
+#include <libgen.h>
 #if defined(MACHTYPE_ppc)
 #include <sys/wait.h>
 #endif
 #ifdef __CYGWIN32__
 #include <mingw/math.h>
-#else
-#include <libgen.h>
 #endif
 
 #ifndef NAN
 #define NAN (0.0 / 0.0)
+#endif
+
+#ifndef WIFEXITED
+#define WIFEXITED(stat)  (((*((int *) &(stat))) & 0xff) == 0)
+#endif
+
+#ifndef WEXITSTATUS
+#define WEXITSTATUS(stat) (short)(((*((int *) &(stat))) >> 8) & 0xffff)
+#endif
+
+#ifndef WIFSIGNALED
+#define WIFSIGNALED(stat) (((*((int *) &(stat)))) && ((*((int *) &(stat))) == ((*((int *) &(stat))) &0x00ff)))
+#endif
+
+#ifndef WTERMSIG
+#define WTERMSIG(stat)    ((*((int *) &(stat))) & 0x7f)
+#endif
+
+#ifndef WIFSTOPPED
+#define WIFSTOPPED(stat)  (((*((int *) &(stat))) & 0xff) == 0177)
+#endif
+
+#ifndef WSTOPSIG
+#define WSTOPSIG(stat)    (((*((int *) &(stat))) >> 8) & 0xff)
+#endif
+
+#ifndef HUGE
+#define HUGE MAXFLOAT
 #endif
 
 
