@@ -11,9 +11,10 @@ test: refSeqTest refSeqCdsTest trackNamesTest joinTest joinCdsTest
 #  chr4:71,201,777-71,250,403 - a merged cluster
 
 refSeqTest: mkout
-	clusterGenes -clusterBed=output/$@.bed output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
+	clusterGenes -clusterBed=output/$@.bed -flatBed=output/$@.flat.bed output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
 	diff -u expected/$@.gl output/$@.gl
 	diff -u expected/$@.bed output/$@.bed
+	diff -u expected/$@.flat.bed output/$@.flat.bed
 
 refSeqCdsTest: mkout
 	clusterGenes -cds output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp
@@ -24,9 +25,10 @@ trackNamesTest: mkout
 	diff -u expected/$@.gl output/$@.gl
 
 joinTest: mkout
-	clusterGenes -joinContained -clusterBed=output/$@.bed output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp
+	clusterGenes -joinContained -clusterBed=output/$@.bed -flatBed=output/$@.flat.bed output/$@.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp
 	diff -u expected/$@.gl output/$@.gl
 	diff -u expected/$@.bed output/$@.bed
+	diff -u expected/$@.flat.bed output/$@.flat.bed
 
 joinCdsTest: mkout
 	clusterGenes -joinContained -cds output/joinCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp

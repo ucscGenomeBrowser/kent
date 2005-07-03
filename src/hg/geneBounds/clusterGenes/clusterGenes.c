@@ -8,9 +8,10 @@
 #include "genePred.h"
 #include "genePredReader.h"
 #include "binRange.h"
+#include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.23 2005/05/24 18:29:54 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.24 2005/07/03 09:45:21 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -36,6 +37,8 @@ errAbort(
   "    This is useful when the file names don't reflact the desired track\n"
   "    names.\n"
   "   -clusterBed=bed - output BED file for each cluster\n"
+  "   -flatBed=bed - output BED file that contains the exons of all genes\n"
+  "    flattned into a single record.\n"
   "   -joinContained - join genes that are contained within a larger loci\n"
   "    into that loci. Intended as a way to handled fragments and exon-level\n"
   "    predictsions, as genes-in-introns on the same strand are very rare.\n"
@@ -51,6 +54,7 @@ static struct optionSpec options[] = {
    {"cds", OPTION_BOOLEAN},
    {"trackNames", OPTION_BOOLEAN},
    {"clusterBed", OPTION_STRING},
+   {"flatBed", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"joinContained", OPTION_BOOLEAN},
    {NULL, 0},
@@ -618,7 +622,77 @@ prConflicts(f, cg->cdsConflicts);
 fprintf(f, "\n");
 }
 
-void outputClusters(struct cluster *clusterList, FILE *outFh, FILE *clBedFh)
+Bits* mkClusterMap(struct cluster *cluster)
+/* make a bit map of the exons in a cluster */
+{
+int len = (cluster->end - cluster->start);
+Bits *map = bitAlloc(len);
+struct clusterGene *cg;
+int iExon;
+
+for (cg = cluster->genes; cg != NULL; cg = cg->next)
+    {
+    for (iExon = 0; iExon < cg->gp->exonCount; iExon++)
+        bitSetRange(map, (cg->gp->exonStarts[iExon]-cluster->start),
+                    (cg->gp->exonEnds[iExon]-cg->gp->exonStarts[iExon]));
+    }
+return map;
+}
+
+void outputFlatBed(struct cluster *cluster, char strand, FILE *flatBedFh)
+/* output a clusters a a single bed record */
+{
+static struct bed bed;  /* bed buffer */
+static int capacity = 0;
+
+int len = (cluster->end - cluster->start);
+Bits *map = mkClusterMap(cluster); 
+int startIdx = 0;
+char nameBuf[64];
+
+/* setup bed */
+if (capacity == 0)
+    {
+    ZeroVar(&bed);
+    capacity = 16;
+    bed.blockSizes = needMem(capacity*sizeof(int));
+    bed.chromStarts = needMem(capacity*sizeof(int));
+    }
+bed.chrom = cluster->chrom;
+bed.chromStart = cluster->start;
+bed.chromEnd = cluster->end;
+bed.blockCount = 0;
+safef(nameBuf, sizeof(nameBuf), "cl%d", cluster->id);
+bed.name = nameBuf;
+bed.strand[0] = strand;
+bed.thickStart = cluster->start;
+bed.thickEnd = cluster->end;
+
+/* add blocks */
+while ((startIdx = bitFindSet(map, startIdx, len)) < len)
+    {
+    int endIdx = bitFindClear(map, startIdx, len);
+    if (bed.blockCount == capacity)
+        {
+        /* grouw memory in bed buffer */
+        int oldSize = capacity*sizeof(int);
+        int newSize = capacity*capacity*sizeof(int);
+        bed.blockSizes = needMoreMem(bed.blockSizes, oldSize, newSize);
+        bed.chromStarts = needMoreMem(bed.chromStarts, oldSize, newSize);
+        capacity *= capacity;
+        }
+    bed.blockSizes[bed.blockCount] = endIdx-startIdx;
+    bed.chromStarts[bed.blockCount] = startIdx; 
+    bed.blockCount++;
+    startIdx = endIdx;
+    }
+bedTabOutN(&bed, 12, flatBedFh);
+
+bitFree(&map);
+}
+
+void outputClusters(struct cluster *clusterList, char strand, FILE *outFh,
+                    FILE *clBedFh, FILE *flatBedFh)
 /* output clusters */
 {
 struct cluster *cluster;
@@ -633,11 +707,14 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
             fprintf(clBedFh, "%s\t%d\t%d\tcl%d\n",
                     cluster->chrom, cluster->start, cluster->end,
                     cluster->id);
+        if (flatBedFh != NULL)
+            outputFlatBed(cluster, strand, flatBedFh);
         }
 }
 
 void clusterGenesOnStrand(struct sqlConnection *conn,
-                          char *chrom, char strand, FILE *outFh, FILE *clBedFh)
+                          char *chrom, char strand, FILE *outFh,
+                          FILE *clBedFh, FILE *flatBedFh)
 /* Scan through genes on this strand, cluster, and write clusters to file. */
 {
 struct genePred *gpList = NULL;
@@ -649,7 +726,7 @@ for (track = gTracks; track != NULL; track = track->next)
     loadGenes(cm, conn, track, chrom, strand, &gpList);
 
 clusterList = clusterMakerFinish(&cm);
-outputClusters(clusterList, outFh, clBedFh);
+outputClusters(clusterList, strand, outFh, clBedFh, flatBedFh);
 
 genePredFreeList(&gpList);
 clusterFreeList(&clusterList);
@@ -701,6 +778,7 @@ struct slName *chromList, *chrom;
 struct sqlConnection *conn;
 FILE *outFh = NULL;
 FILE *clBedFh = NULL;
+FILE *flatBedFh = NULL;
 
 hSetDb(database);
 gTracks  = buildTrackList(specCount, specs);
@@ -714,13 +792,16 @@ conn = hAllocConn();
 outFh = openOutput(outFile);
 if (optionExists("clusterBed"))
     clBedFh = mustOpen(optionVal("clusterBed", NULL), "w");
+if (optionExists("flatBed"))
+    flatBedFh = mustOpen(optionVal("flatBed", NULL), "w");
 
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
-    clusterGenesOnStrand(conn, chrom->name, '+', outFh, clBedFh);
-    clusterGenesOnStrand(conn, chrom->name, '-', outFh, clBedFh);
+    clusterGenesOnStrand(conn, chrom->name, '+', outFh, clBedFh, flatBedFh);
+    clusterGenesOnStrand(conn, chrom->name, '-', outFh, clBedFh, flatBedFh);
     }
 carefulClose(&clBedFh);
+carefulClose(&flatBedFh);
 carefulClose(&outFh);
 }
 
