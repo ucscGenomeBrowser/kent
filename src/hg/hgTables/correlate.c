@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.35 2005/07/01 23:54:18 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.36 2005/07/03 14:59:08 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1238,9 +1238,10 @@ for (y = yTable->vSet, x = xTable->vSet; (y != NULL) && (x != NULL);
 	double ySumData = y->value[0];
 	double xSumData = x->value[0];
 	int dataCountInWindow = 1;
+	int i;
+
 	y->sumProduct = 0.0;
 	x->sumProduct = y->sumProduct;
-	int i;
 
 	if (winEnd > lastPosition) winEnd = lastPosition;
 
