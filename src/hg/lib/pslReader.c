@@ -68,6 +68,27 @@ getTableInfo(pr);
 return pr;
 }
 
+struct pslReader *pslReaderChromQuery(struct sqlConnection* conn,
+                                      char* table, char* chrom,
+                                      char* extraWhere)
+/* Create a new pslReader to read all rows for a chrom in a database table.
+ * If extraWhere is not null, it is added as an additional where condition. It
+ * will determine if pslx columns are in the table. */
+{
+struct pslReader* pr;
+int rowOffset;
+AllocVar(pr);
+pr->table = cloneString(table);
+
+/* non-existant table will return null */
+pr->sr = hChromQuery(conn, table, chrom, extraWhere, &rowOffset);
+if (pr->sr != NULL)
+    getTableInfo(pr);
+
+assert(pr->rowOffset == rowOffset);
+return pr;
+}
+
 struct pslReader *pslReaderRangeQuery(struct sqlConnection* conn,
                                       char* table, char* chrom,
                                       int start, int end, 

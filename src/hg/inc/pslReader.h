@@ -11,6 +11,13 @@ struct pslReader *pslReaderQuery(struct sqlConnection* conn,
  * If where is not null, it is added as a where clause.  It will determine if
  * pslx columns are in the table. */
 
+struct pslReader *pslReaderChromQuery(struct sqlConnection* conn,
+                                      char* table, char* chrom,
+                                      char* extraWhere);
+/* Create a new pslReader to read all rows for a chrom in a database table.
+ * If extraWhere is not null, it is added as an additional where condition. It
+ * will determine if pslx columns are in the table. */
+
 struct pslReader *pslReaderRangeQuery(struct sqlConnection* conn,
                                       char* table, char* chrom,
                                       int start, int end, 
