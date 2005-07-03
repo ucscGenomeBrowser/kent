@@ -6,7 +6,8 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-all: ${BIN_DIR}/genePredTester
+all: 	${BIN_DIR}/genePredTester \
+	${BIN_DIR}/pslReaderTester
 
 test: spDbTest hdbTest genePredTest
 	rm -r output
@@ -29,7 +30,14 @@ hdbTest: hdbTest.o ${MYLIBS} mkdirs
 genePredTest: ${BIN_DIR}/genePredTester mkdirs
 	${MAKE} -f genePredTests.mk test
 
+pslReaderTests: ${BIN_DIR}/pslReaderTester mkdirs
+	${MAKE} -f pslReaderTests.mk test
+
 ${BIN_DIR}/genePredTester: genePredTester.o ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
+
+${BIN_DIR}/pslReaderTester: pslReaderTester.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 

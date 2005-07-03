@@ -11,8 +11,9 @@
 #include "linefile.h"
 #include "jksql.h"
 #include "binRange.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredTester.c,v 1.6 2005/04/06 22:00:26 markd Exp $";
+static char const rcsid[] = "$Id: genePredTester.c,v 1.7 2005/07/03 20:55:33 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -36,7 +37,7 @@ errAbort(
     "  defined optional columns in file.\n"
     "\n"
     "o readFile gpFile\n"
-    "  Read rows from the table-separated file, Field command options\n"
+    "  Read rows from the tab-separated file, Field command options\n"
     "  defined optional columns in file.  If -output is specified, the\n"
     "  objects are written to that file.\n"
     "\n"
@@ -53,7 +54,7 @@ errAbort(
     "  objects are written to that file.\n"
     "\n"
     "Options:\n"
-    "  -verbose=0 - set verbose level\n"
+    "  -verbose=1 - set verbose level\n"
     "  -idFld - include id field\n"
     "  -name2Fld - include name2 field\n"
     "  -cdsStatFld - include cdsStat fields\n"
@@ -74,7 +75,6 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-    {"verbose", OPTION_INT},
     {"idFld", OPTION_BOOLEAN},
     {"name2Fld", OPTION_BOOLEAN},
     {"cdsStatFld", OPTION_BOOLEAN},
@@ -82,7 +82,6 @@ static struct optionSpec options[] = {
     {"maxRows", OPTION_INT},
     {"minRows", OPTION_INT},
     {"needRows", OPTION_INT},
-    {"db", OPTION_STRING},
     {"where", OPTION_STRING},
     {"output", OPTION_STRING},
     {"info", OPTION_STRING},
@@ -91,7 +90,6 @@ static struct optionSpec options[] = {
     {"ignoreUnconverted", OPTION_BOOLEAN},
     {NULL, 0},
 };
-int gVerbose = 0;
 unsigned gOptFields = genePredNoOptFld;;
 unsigned gCreateOpts = genePredBasicSql;
 int gMaxRows = BIGNUM;
@@ -111,8 +109,7 @@ if (numRows < gMinRows)
     errAbort("expected at least %d rows from %s, got %d", gMinRows, src, numRows);
 if ((gNeedRows >= 0) && (numRows != gNeedRows))
     errAbort("expected %d rows from %s, got %d", src, gNeedRows, numRows);
-if (gVerbose > 0)
-    printf("read %d rows from %s\n", numRows, src);
+verbose(1, "read %d rows from %s\n", numRows, src);
 }
 
 void writeOptField(FILE* infoFh, struct genePred *gp, char* desc,
@@ -340,7 +337,6 @@ optionInit(&argc, argv, options);
 if (argc < 2)
     usage("must supply a task");
 task = argv[1];
-gVerbose = optionInt("verbose", gVerbose);
 if (optionExists("idFld"))
     gOptFields |= genePredIdFld;
 if (optionExists("name2Fld"))
@@ -353,6 +349,7 @@ gMaxRows = optionInt("maxRows", gMaxRows);
 gMinRows = optionInt("minRows", gMinRows);
 gNeedRows = optionInt("minRows", gNeedRows);
 gWhere = optionVal("where", gWhere);
+gChrom = optionVal("chrom", gChrom);
 gOutput = optionVal("output", gOutput);
 gInfo = optionVal("info", gInfo);
 gExonSelectWord = optionVal("exonSelectWord", gExonSelectWord);

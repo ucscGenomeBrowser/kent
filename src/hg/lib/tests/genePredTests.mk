@@ -1,6 +1,5 @@
-include ../../../inc/common.mk
-
 # makefile with genePred and genePredReader tests
+include ../../../inc/common.mk
 
 BIN_DIR = bin/$(MACHTYPE)
 GENE_PRED_TESTER = ${BIN_DIR}/genePredTester
@@ -28,7 +27,6 @@ TEST_TBL=gpTest_${USER}
 #     is incomplete on one end or the other.
 
 test: fileTests tableTests fromPslTests compatTblTests fromGxfTests
-	hgsql -e "drop table ${TEST_TBL}" ${DB}
 
 ###
 # test of reading/writing tab-separated files.
@@ -68,6 +66,8 @@ doFileTest: mkout
 # then compare with input file, otherwise, we need an expected file.
 ###
 tableTests: tableMinTest tableIdTest tableIdName2Test tableFrameTest tableFrameStatTest
+	hgsql -e "drop table if exists ${TEST_TBL}" ${DB}
+
 doTableTest = ${MAKE} -f genePredTests.mk doTableTest
 
 tableMinTest:
