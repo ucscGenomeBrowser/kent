@@ -6,9 +6,10 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "localmem.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: estOrientInfo.c,v 1.5 2005/04/13 06:25:52 markd Exp $";
+static char const rcsid[] = "$Id: estOrientInfo.c,v 1.6 2005/07/03 23:22:36 markd Exp $";
 
 static char *createString = 
     "CREATE TABLE %s (\n"
@@ -53,6 +54,24 @@ struct estOrientInfo *ret;
 
 AllocVar(ret);
 ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->intronOrientation = sqlSigned(row[4]);
+ret->sizePolyA = sqlSigned(row[5]);
+ret->revSizePolyA = sqlSigned(row[6]);
+ret->signalPos = sqlSigned(row[7]);
+ret->revSignalPos = sqlSigned(row[8]);
+return ret;
+}
+
+struct estOrientInfo *estOrientInfoLoadLm(char **row, struct lm *lm)
+/* Load a estOrientInfo row into local memory struct. */
+{
+struct estOrientInfo *ret;
+
+lmAllocVar(lm, ret);
+ret->chrom = lmCloneString(lm, row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
