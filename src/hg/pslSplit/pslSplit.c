@@ -8,7 +8,7 @@
 #include "psl.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.5 2005/07/03 21:04:49 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSplit.c,v 1.6 2005/07/03 22:15:14 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
 int maxLines = 7000;	/* cut out this many unique qNames in each output file. */
@@ -174,7 +174,8 @@ makeMidName(tempDir, midIx, fileName);
 if (stripVer)
     {
     char *s = stringIn(".",psl->qName);
-    *s = 0;
+    if (s != NULL)
+        *s = 0;
     }
 if (chunkSize ==1)
     safef(fileName, sizeof(fileName), "%s/%s.psl",tempDir,psl->qName);
