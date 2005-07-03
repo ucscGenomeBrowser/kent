@@ -8,7 +8,7 @@ O = wordUse.o
 
 wordUse: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wordUse $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/wordUse
+	${STRIP} ${HOME}/bin/${MACHTYPE}/wordUse${EXE}
 
 clean:
 	rm -f $O

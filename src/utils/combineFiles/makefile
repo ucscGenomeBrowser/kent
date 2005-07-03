@@ -8,7 +8,7 @@ O = combineFiles.o
 
 combineFiles: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/combineFiles $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/combineFiles
+	${STRIP} ${HOME}/bin/${MACHTYPE}/combineFiles${EXE}
 
 clean:
 	rm -f $O

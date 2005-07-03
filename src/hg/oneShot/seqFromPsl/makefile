@@ -8,7 +8,7 @@ O = seqFromPsl.o
 
 seqFromPsl: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/seqFromPsl $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/seqFromPsl
+	${STRIP} ${HOME}/bin/${MACHTYPE}/seqFromPsl${EXE}
 
 clean:
 	rm -f $O

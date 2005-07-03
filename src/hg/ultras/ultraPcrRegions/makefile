@@ -8,7 +8,7 @@ O = ultraPcrRegions.o
 
 ultraPcrRegions: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/ultraPcrRegions $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/ultraPcrRegions
+	${STRIP} ${HOME}/bin/${MACHTYPE}/ultraPcrRegions${EXE}
 
 clean:
 	rm -f $O

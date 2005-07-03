@@ -8,7 +8,7 @@ O = loadMahoney.o mahoney.o
 
 loadMahoney: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/loadMahoney $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/loadMahoney
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/loadMahoney${EXE}
 
 clean:
 	rm -f $O

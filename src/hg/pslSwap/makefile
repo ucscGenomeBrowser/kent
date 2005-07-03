@@ -14,7 +14,7 @@ all: ${PROG}
 ${PROG}: pslSwap
 	@${MKDIR} ${BINDIR}
 	cp -f pslSwap ${PROG}
-	${STRIP} ${PROG}
+	${STRIP} ${PROG}${EXE}
 
 pslSwap: ${OBJS} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o pslSwap ${OBJS} ${MYLIBS} ${MYSQLLIBS} $L

@@ -8,7 +8,7 @@ O = aliFragScore.o
 
 aliFragScore: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/aliFragScore $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/aliFragScore
+	${STRIP} ${HOME}/bin/${MACHTYPE}/aliFragScore${EXE}
 
 clean:
 	rm -f $O

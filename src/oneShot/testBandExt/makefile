@@ -8,7 +8,7 @@ O = testBandExt.o
 
 testBandExt: $O ${MYLIBS}
 	${CC} ${COPT} -o testBandExt $O ${MYLIBS} $L
-	strip testBandExt
+	${STRIP} testBandExt${EXE}
 
 clean:
 	rm -f $O

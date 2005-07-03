@@ -9,11 +9,11 @@ O = pslCluster.o
 
 pslCluster: $O ${MYLIBS}
 	${CC} ${CFLAGS} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslCluster $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/pslCluster
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslCluster${EXE}
 
 pslMaxMap: pslMaxMap.o ${MYLIBS}
 	${CC} ${CFLAGS} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslMaxMap pslMaxMap.o ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/pslCluster
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslCluster${EXE}
 
 clean:
 	rm -f $O

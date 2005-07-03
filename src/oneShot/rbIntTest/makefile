@@ -8,7 +8,7 @@ O = rbIntTest.o
 
 rbIntTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/rbIntTest $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/rbIntTest
+	${STRIP} ${HOME}/bin/${MACHTYPE}/rbIntTest${EXE}
 
 clean:
 	rm -f $O

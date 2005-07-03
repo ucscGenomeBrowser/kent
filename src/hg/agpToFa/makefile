@@ -9,7 +9,7 @@ O = agpToFa.o
 agpToFa: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/agpToFa \
 		$O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/agpToFa
+	${STRIP} ${HOME}/bin/${MACHTYPE}/agpToFa${EXE}
 
 compile: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o agpToFa $O ${MYLIBS} $L

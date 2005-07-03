@@ -8,7 +8,7 @@ O = wigAsciiCrunch.o
 
 wigAsciiCrunch: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wigAsciiCrunch $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/wigAsciiCrunch
+	${STRIP} ${HOME}/bin/${MACHTYPE}/wigAsciiCrunch${EXE}
 
 clean:
 	rm -f $O

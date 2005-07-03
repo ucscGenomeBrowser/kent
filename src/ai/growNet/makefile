@@ -8,7 +8,7 @@ O = growNet.o
 
 growNet: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/growNet $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/growNet
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/growNet${EXE}
 
 clean:
 	rm -f $O

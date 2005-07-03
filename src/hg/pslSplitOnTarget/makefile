@@ -8,7 +8,7 @@ O = pslSplitOnTarget.o
 
 pslSplitOnTarget: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslSplitOnTarget $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/pslSplitOnTarget
+	${STRIP} ${HOME}/bin/${MACHTYPE}/pslSplitOnTarget${EXE}
 
 clean:
 	rm -f $O

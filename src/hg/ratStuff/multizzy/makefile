@@ -8,7 +8,7 @@ O = multizzy.o
 
 multizzy: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/multizzy $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/multizzy
+	${STRIP} ${HOME}/bin/${MACHTYPE}/multizzy${EXE}
 
 clean:
 	rm -f $O

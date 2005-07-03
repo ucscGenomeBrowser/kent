@@ -8,7 +8,7 @@ O = testIntersect.o
 
 testIntersect: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/testIntersect $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/testIntersect
+	${STRIP} ${HOME}/bin/${MACHTYPE}/testIntersect${EXE}
 
 clean:
 	rm -f $O

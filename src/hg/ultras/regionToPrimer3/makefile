@@ -8,7 +8,7 @@ O = regionToPrimer3.o
 
 regionToPrimer3: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/regionToPrimer3 $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/regionToPrimer3
+	${STRIP} ${HOME}/bin/${MACHTYPE}/regionToPrimer3${EXE}
 
 clean:
 	rm -f $O

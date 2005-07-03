@@ -8,7 +8,7 @@ O = bioImageLoad.o
 
 bioImageLoad: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/bioImageLoad $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/bioImageLoad
+	${STRIP} ${HOME}/bin/${MACHTYPE}/bioImageLoad${EXE}
 
 clean:
 	rm -f $O

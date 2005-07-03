@@ -9,7 +9,7 @@ O = ${X}.o
 
 ${X}: $O ${MYLIBS}
 	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
-	strip ${X}
+	${STRIP} ${X}${EXE}
 	cp ${X} ${HOME}/bin/${MACHTYPE}/${X} 
 
 test:

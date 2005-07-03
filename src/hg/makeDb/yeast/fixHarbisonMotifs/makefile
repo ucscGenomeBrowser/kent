@@ -8,7 +8,7 @@ O = fixHarbisonMotifs.o
 
 fixHarbisonMotifs: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fixHarbisonMotifs $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/fixHarbisonMotifs
+	${STRIP} ${HOME}/bin/${MACHTYPE}/fixHarbisonMotifs${EXE}
 
 clean:
 	rm -f $O

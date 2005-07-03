@@ -8,7 +8,7 @@ O = visiGeneLoad.o
 
 visiGeneLoad: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/visiGeneLoad $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/visiGeneLoad
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/visiGeneLoad${EXE}
 
 clean:
 	rm -f $O

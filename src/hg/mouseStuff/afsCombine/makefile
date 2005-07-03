@@ -8,7 +8,7 @@ O = afsCombine.o
 
 afsCombine: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/afsCombine $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/afsCombine
+	${STRIP} ${HOME}/bin/${MACHTYPE}/afsCombine${EXE}
 
 clean:
 	rm -f $O

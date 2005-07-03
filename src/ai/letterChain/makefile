@@ -8,7 +8,7 @@ O = letterChain.o
 
 letterChain: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/letterChain $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/letterChain
+	${STRIP} ${HOME}/bin/${MACHTYPE}/letterChain${EXE}
 
 clean:
 	rm -f $O

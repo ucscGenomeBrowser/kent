@@ -8,7 +8,7 @@ O = labSheet.o
 
 labSheet: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/labSheet $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/labSheet
+	${STRIP} ${HOME}/bin/${MACHTYPE}/labSheet${EXE}
 
 clean:
 	rm -f $O

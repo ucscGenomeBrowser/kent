@@ -10,19 +10,19 @@ all: discretize mapRecords axtSomeRecords mi
 
 axtSomeRecords: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/axtSomeRecords $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/axtSomeRecords
+	${STRIP} ${HOME}/bin/${MACHTYPE}/axtSomeRecords${EXE}
 
 mi: mi.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mi mi.o ${MYLIBS} $L 
-	strip ${HOME}/bin/${MACHTYPE}/mi
+	${STRIP} ${HOME}/bin/${MACHTYPE}/mi${EXE}
 
 discretize: discretize.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/discretize discretize.o ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/discretize
+	${STRIP} ${HOME}/bin/${MACHTYPE}/discretize${EXE}
 
 mapRecords: mapRecords.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mapRecords mapRecords.o ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/mapRecords
+	${STRIP} ${HOME}/bin/${MACHTYPE}/mapRecords${EXE}
 
 clean:
 	rm -f $O

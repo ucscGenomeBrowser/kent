@@ -8,7 +8,7 @@ O = mungeAuthors.o
 
 mungeAuthors: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/mungeAuthors $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/mungeAuthors
+	${STRIP} ${HOME}/bin/${MACHTYPE}/mungeAuthors${EXE}
 
 clean:
 	rm -f $O

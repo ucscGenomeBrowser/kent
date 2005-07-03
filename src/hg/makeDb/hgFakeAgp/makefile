@@ -8,7 +8,7 @@ O = hgFakeAgp.o
 
 hgFakeAgp: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgFakeAgp $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgFakeAgp
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgFakeAgp${EXE}
 
 clean:
 	rm -f $O

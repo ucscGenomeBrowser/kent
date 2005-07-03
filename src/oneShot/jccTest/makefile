@@ -8,7 +8,7 @@ O = jccTest.o
 
 jccTest: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/jccTest $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/jccTest
+	${STRIP} ${HOME}/bin/${MACHTYPE}/jccTest${EXE}
 
 clean:
 	rm -f $O

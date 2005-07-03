@@ -14,7 +14,7 @@ all: ${PROG}
 
 ${PROG}: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${INSTALLDIR}/${PROG} $O ${MYLIBS} $L
-#	strip ${INSTALLDIR}/${PROG}
+#	${STRIP} ${INSTALLDIR}/${PROG}${EXE}
 
 test: ${INSTALLDIR}/${PROG}
 	cd tests && ${MAKE} test

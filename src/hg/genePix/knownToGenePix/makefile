@@ -8,7 +8,7 @@ O = knownToGenePix.o
 
 knownToGenePix: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/knownToGenePix $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/knownToGenePix
+	${STRIP} ${HOME}/bin/${MACHTYPE}/knownToGenePix${EXE}
 
 clean:
 	rm -f $O

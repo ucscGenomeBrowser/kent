@@ -8,7 +8,7 @@ O = pslSomeRecords.o
 
 pslSomeRecords: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslSomeRecords $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/pslSomeRecords
+	${STRIP} ${HOME}/bin/${MACHTYPE}/pslSomeRecords${EXE}
 
 clean:
 	rm -f $O

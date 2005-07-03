@@ -8,7 +8,7 @@ O = addTopoToPrimers.o
 
 addTopoToPrimers: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/addTopoToPrimers $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/addTopoToPrimers
+	${STRIP} ${HOME}/bin/${MACHTYPE}/addTopoToPrimers${EXE}
 
 clean:
 	rm -f $O

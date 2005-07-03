@@ -8,7 +8,7 @@ O = wordChain.o
 
 wordChain: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/wordChain $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/wordChain
+	${STRIP} ${HOME}/bin/${MACHTYPE}/wordChain${EXE}
 
 clean:
 	rm -f $O

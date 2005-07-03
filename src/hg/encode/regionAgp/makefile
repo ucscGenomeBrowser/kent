@@ -40,7 +40,7 @@ O = ${PROG}.o
 
 ${PROG}: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(INSTALLDIR)/${PROG} $O $(MYLIBS) $L
-#strip $(HOME)/bin/$(MACHTYPE)/${PROG}
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/${PROG}${EXE}
 
 test: $(INSTALLDIR)/$(PROG)
 	cd tests && ${MAKE} test

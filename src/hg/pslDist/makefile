@@ -9,7 +9,7 @@ O = pslDist.o
 
 pslDist: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslDist $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/pslDist
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslDist${EXE}
 
 clean:
 	rm -f $O

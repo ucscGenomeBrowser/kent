@@ -8,7 +8,7 @@ O = echoServer.o
 
 echoServer: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/echoServer $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/echoServer
+	${STRIP} ${HOME}/bin/${MACHTYPE}/echoServer${EXE}
 
 clean:
 	rm -f $O

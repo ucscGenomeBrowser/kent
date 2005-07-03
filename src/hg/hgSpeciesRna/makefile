@@ -8,7 +8,7 @@ O = hgSpeciesRna.o
 
 hgSpeciesRna: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgSpeciesRna $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgSpeciesRna
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgSpeciesRna${EXE}
 
 clean:
 	rm -f $O

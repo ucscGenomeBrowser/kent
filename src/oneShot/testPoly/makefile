@@ -8,7 +8,7 @@ O = testPoly.o
 
 testPoly: $O ${MYLIBS}
 	${CC} ${COPT} -o testPoly $O ${MYLIBS} $L
-	strip testPoly
+	${STRIP} testPoly${EXE}
 
 clean:
 	rm -f $O

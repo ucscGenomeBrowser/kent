@@ -8,7 +8,7 @@ O = motifConvert.o
 
 motifConvert: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/motifConvert $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/motifConvert
+	${STRIP} ${HOME}/bin/${MACHTYPE}/motifConvert${EXE}
 
 clean:
 	rm -f $O

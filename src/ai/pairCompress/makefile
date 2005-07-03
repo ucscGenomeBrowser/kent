@@ -8,7 +8,7 @@ O = pairCompress.o
 
 pairCompress: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pairCompress $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/pairCompress
+	${STRIP} ${HOME}/bin/${MACHTYPE}/pairCompress${EXE}
 
 clean:
 	rm -f $O

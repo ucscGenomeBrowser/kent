@@ -13,7 +13,7 @@ chainOneTwo: ${MYLIBS} chainOneTwo.o
 
 pslOneTwo: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/pslOneTwo $O ${MYLIBS} $L
-#	strip ${HOME}/bin/${MACHTYPE}/pslOneTwo
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/pslOneTwo${EXE}
 
 clean:
 	rm -f $O

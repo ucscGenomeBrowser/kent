@@ -8,7 +8,7 @@ O = genePixTest.o
 
 genePixTest: $O ${MYLIBS}
 	${CC} ${COPT} -o genePixTest $O ${MYLIBS} $L
-	strip genePixTest
+	${STRIP} genePixTest${EXE}
 
 clean:
 	rm -f $O

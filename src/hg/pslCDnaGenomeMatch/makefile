@@ -9,7 +9,7 @@ O = pslCDnaGenomeMatch.o
 
 pslCDnaGenomeMatch: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch $O $(MARKDEBUG) $(MYLIBS) $L 
-#strip $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/pslCDnaGenomeMatch${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

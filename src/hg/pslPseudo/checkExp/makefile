@@ -17,7 +17,7 @@ O = checkExp.o
 
 checkExp: $O $(MYLIBS)
 	gcc -ggdb -o $(HOME)/bin/$(MACHTYPE)/checkExp $O $(MARKDEBUG) $(MYLIBS) $L 
-#strip $(HOME)/bin/$(MACHTYPE)/checkExp
+#${STRIP} $(HOME)/bin/$(MACHTYPE)/checkExp${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}

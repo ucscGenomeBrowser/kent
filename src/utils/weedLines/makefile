@@ -8,7 +8,7 @@ O = weedLines.o
 
 weedLines: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/weedLines $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/weedLines
+	${STRIP} ${HOME}/bin/${MACHTYPE}/weedLines${EXE}
 
 clean:
 	rm -f $O

@@ -8,7 +8,7 @@ O = hgYeastRegCode.o
 
 hgYeastRegCode: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgYeastRegCode $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgYeastRegCode
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgYeastRegCode${EXE}
 
 clean:
 	rm -f $O

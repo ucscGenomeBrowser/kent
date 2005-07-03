@@ -8,7 +8,7 @@ O = knownToBioImage.o
 
 knownToBioImage: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/knownToBioImage $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/knownToBioImage
+	${STRIP} ${HOME}/bin/${MACHTYPE}/knownToBioImage${EXE}
 
 clean:
 	rm -f $O

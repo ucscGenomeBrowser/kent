@@ -8,7 +8,7 @@ O = countLines.o
 
 countLines: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/countLines $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/countLines
+	${STRIP} ${HOME}/bin/${MACHTYPE}/countLines${EXE}
 
 clean:
 	rm -f $O

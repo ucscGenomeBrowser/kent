@@ -8,7 +8,7 @@ O = sqlAddCol.o
 
 sqlAddCol: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/sqlAddCol $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/sqlAddCol
+	${STRIP} ${HOME}/bin/${MACHTYPE}/sqlAddCol${EXE}
 
 clean:
 	rm -f $O

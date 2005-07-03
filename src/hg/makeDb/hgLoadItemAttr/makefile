@@ -8,7 +8,7 @@ O = hgLoadItemAttr.o
 
 hgLoadItemAttr: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/hgLoadItemAttr $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/hgLoadItemAttr
+	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadItemAttr${EXE}
 
 clean:
 	rm -f $O

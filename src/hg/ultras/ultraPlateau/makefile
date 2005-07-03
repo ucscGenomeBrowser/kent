@@ -8,7 +8,7 @@ O = ultraPlateau.o
 
 ultraPlateau: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/ultraPlateau $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/ultraPlateau
+	${STRIP} ${HOME}/bin/${MACHTYPE}/ultraPlateau${EXE}
 
 clean:
 	rm -f $O

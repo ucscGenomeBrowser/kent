@@ -12,7 +12,7 @@ O = tracks.o
 compile: $O 
 	${CC} $O $(MYLIBS) $(L) 
 	mv ${AOUT} $A${EXE}
-#${STRIP} $A
+#${STRIP} $A${EXE}
 	chmod a+rx $A
 
 my: compile

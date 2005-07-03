@@ -11,15 +11,15 @@ all: blatz blatzClient blatzServer
 
 blatz: standalone.o $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatz standalone.o $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/blatz
+	${STRIP} ${HOME}/bin/${MACHTYPE}/blatz${EXE}
 
 blatzServer: server.o $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatzServer server.o $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/blatzServer
+	${STRIP} ${HOME}/bin/${MACHTYPE}/blatzServer${EXE}
 
 blatzClient: client.o bzp.o ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatzClient client.o bzp.o ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/blatzClient
+	${STRIP} ${HOME}/bin/${MACHTYPE}/blatzClient${EXE}
 
 clean:
 	rm -f $O

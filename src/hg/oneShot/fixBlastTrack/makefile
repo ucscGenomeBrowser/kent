@@ -8,7 +8,7 @@ O = fixBlastTrack.o
 
 fixBlastTrack: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/fixBlastTrack $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/fixBlastTrack
+	${STRIP} ${HOME}/bin/${MACHTYPE}/fixBlastTrack${EXE}
 
 clean:
 	rm -f $O

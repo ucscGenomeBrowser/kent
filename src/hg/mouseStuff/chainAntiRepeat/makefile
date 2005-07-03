@@ -8,7 +8,7 @@ O = chainAntiRepeat.o
 
 chainAntiRepeat: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/chainAntiRepeat $O ${MYLIBS} $L
-	strip ${HOME}/bin/${MACHTYPE}/chainAntiRepeat
+	${STRIP} ${HOME}/bin/${MACHTYPE}/chainAntiRepeat${EXE}
 
 clean:
 	rm -f $O
