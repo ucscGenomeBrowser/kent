@@ -331,4 +331,33 @@ struct sqlFieldInfo *sqlFieldInfoGet(struct sqlConnection *conn, char *table);
 void sqlFieldInfoFreeList(struct sqlFieldInfo **fiListPtr);
 /* Free a list of sqlFieldInfo objects */
 
+enum sqlQueryOpts
+/* options controls behavior of sqlQueryObj */
+{
+    sqlQueryMust   = 0x01, /* must get a row back, or error */
+    sqlQuerySingle = 0x02, /* must get no more than one row back */
+    sqlQueryMulti  = 0x04  /* can get more than one row back */
+};
+
+/* type of function for loading objects from rows. */
+typedef struct slList *(*sqlLoadFunc)(char **row);
+
+void *sqlVaQueryObjs(struct sqlConnection *conn, sqlLoadFunc loadFunc,
+                     unsigned opts, char *queryFmt, va_list args);
+/* Generate a query from format and args.  Load one or more objects from rows
+ * using loadFunc.  Check the number of rows returned against the sqlQueryOpts
+ * bit set.  Designed for use with autoSql, although load function must be
+ * cast to sqlLoadFunc. */
+
+void *sqlQueryObjs(struct sqlConnection *conn, sqlLoadFunc loadFunc,
+                   unsigned opts, char *queryFmt, ...)
+/* Generate a query from format and args.  Load one or more objects from rows
+ * using loadFunc.  Check the number of rows returned against the sqlQueryOpts
+ * bit set.  Designed for use with autoSql, although load function must be
+ * cast to sqlLoadFunc. */
+#if defined(__GNUC__) && defined(JK_WARN)
+__attribute__((format(printf, 4, 5)))
+#endif
+;
+
 #endif /* JKSQL_H */

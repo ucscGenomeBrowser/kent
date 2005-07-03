@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.77 2005/06/30 07:37:49 genbank Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.78 2005/07/03 20:54:47 markd Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1594,5 +1594,54 @@ void sqlFieldInfoFreeList(struct sqlFieldInfo **fiListPtr)
 struct sqlFieldInfo *fi;
 while ((fi = slPopHead(fiListPtr)) != NULL)
        sqlFieldInfoFree(&fi);
+}
+
+void *sqlVaQueryObjs(struct sqlConnection *conn, sqlLoadFunc loadFunc,
+                     unsigned opts, char *queryFmt, va_list args)
+/* Generate a query from format and args.  Load one or more objects from rows
+ * using loadFunc.  Check the number of rows returned against the sqlQueryOpts
+ * bit set.  Designed for use with autoSql, although load function must be
+ * cast to sqlLoadFunc. */
+{
+char query[1024];
+struct slList *objs = NULL;
+struct sqlResult *sr;
+char **row;
+
+vasafef(query, sizeof(query), queryFmt, args);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL) {
+slSafeAddHead(&objs, loadFunc(row));
+}
+sqlFreeResult(&sr);
+slReverse(&objs);
+
+/* check what we got against the options */
+if (objs == NULL)
+    {
+    if (opts & sqlQueryMust)
+        errAbort("no results return from query: %s", query);
+    }
+else if ((opts & sqlQuerySingle) && (objs->next != NULL))
+    errAbort("one results, got %d, from query: %s", slCount(objs), query);
+return objs;
+}
+
+/* Generate a query from format and args.  Load one or more objects from rows
+ * using loadFunc.  Check the number of rows returned against the sqlQueryOpts
+ * bit set. */
+void *sqlQueryObjs(struct sqlConnection *conn, sqlLoadFunc loadFunc,
+                   unsigned opts, char *queryFmt, ...)
+/* Generate a query from format and args.  Load one or more objects from rows
+ * using loadFunc.  Check the number of rows returned against the sqlQueryOpts
+ * bit set.  Designed for use with autoSql, although load function must be
+ * cast to sqlLoadFunc. */
+{
+struct slList *objs = NULL;
+va_list args;
+va_start(args, queryFmt);
+objs = sqlVaQueryObjs(conn, loadFunc, opts, queryFmt, args);
+va_end(args);
+return objs;
 }
 
