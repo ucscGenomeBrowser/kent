@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.24 2005/07/03 09:45:21 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.25 2005/07/03 17:51:37 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -76,7 +76,8 @@ struct track
 };
 
 struct track* trackNew(char* name,
-                       char *table)
+                       char *table,
+                       boolean singleChrom)
 /* create a new track, adding it to the global list, if name is NULL,
  * name is derived from table. */
 {
@@ -85,7 +86,12 @@ AllocVar(track);
 
 /* determin if table or file */
 if (fileExists(table))
+    {
     track->isDb = FALSE;
+    /* can't read pipes if multiple chromosomes, due to read per chromsome */
+    if ((!singleChrom) && (sameString(table, "stdin") || sameString(table, "/dev/stdin")))
+        errAbort("can't read track from stdin if processing multiple chromsomes");
+    }
 else if (hTableExists(table))
     track->isDb = TRUE;
 else
@@ -732,21 +738,22 @@ genePredFreeList(&gpList);
 clusterFreeList(&clusterList);
 }
 
-struct track *buildTrackList(int specCount, char *specs[])
+struct track *buildTrackList(int specCount, char *specs[], struct slName *chromList)
 /* build list of tracks, consisting of list of tables, files, or
  * pairs of trackNames and files */
 {
 struct track* tracks = NULL;
+boolean singleChrom = (chromList->next ==  NULL);
 int i;
 if (gTrackNames)
     {
     for (i = 0; i < specCount; i += 2)
-        slSafeAddHead(&tracks, trackNew(specs[i], specs[i+1]));
+        slSafeAddHead(&tracks, trackNew(specs[i], specs[i+1], singleChrom));
     }
 else
     {
     for (i = 0; i < specCount; i++)
-        slSafeAddHead(&tracks, trackNew(NULL, specs[i]));
+        slSafeAddHead(&tracks, trackNew(NULL, specs[i], singleChrom));
     }
 slReverse(&tracks);
 return tracks;
@@ -781,12 +788,13 @@ FILE *clBedFh = NULL;
 FILE *flatBedFh = NULL;
 
 hSetDb(database);
-gTracks  = buildTrackList(specCount, specs);
-
 chromList = optionMultiVal("chrom", NULL);
 if (chromList == NULL)
     chromList = hAllChromNames();
 slNameSort(&chromList);
+
+gTracks  = buildTrackList(specCount, specs, chromList);
+
 conn = hAllocConn();
 
 outFh = openOutput(outFile);
