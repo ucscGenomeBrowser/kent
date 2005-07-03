@@ -11,12 +11,6 @@ struct pslReader *pslReaderQuery(struct sqlConnection* conn,
  * If where is not null, it is added as a where clause.  It will determine if
  * pslx columns are in the table. */
 
-struct pslReader *pslReaderQuery(struct sqlConnection* conn,
-                                 char* table, char* where);
-/* Create a new pslReader to read from the given table in the database.
- * If where is not null, it is added as a where clause.  It will determine if
- * pslx columns are in the table. */
-
 struct pslReader *pslReaderRangeQuery(struct sqlConnection* conn,
                                       char* table, char* chrom,
                                       int start, int end, 
