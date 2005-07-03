@@ -9,7 +9,7 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.9 2004/02/23 18:10:36 kent Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.10 2005/07/03 21:56:21 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -44,8 +44,10 @@ struct histoGram
     double log_2;
     };
 
+#ifndef log2
 /* log base two is	[regardless of the base of log() function] */
 #define	log2(x)	(log(x)/log(2.0))
+#endif
 
 /*	Working in log space for probabilities and need to add
  *	two probabilities together.  This case is for logs base
