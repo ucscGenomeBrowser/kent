@@ -8,10 +8,11 @@
 #include "psl.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pslSplit.c,v 1.4 2004/08/14 02:55:13 baertsch Exp $";
+static char const rcsid[] = "$Id: pslSplit.c,v 1.5 2005/07/03 21:04:49 baertsch Exp $";
 
 int chunkSize = 120;	/* cut out this many unique qNames in each output file. */
 int maxLines = 7000;	/* cut out this many unique qNames in each output file. */
+bool stripVer = FALSE;  /* remove version number if true */
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +26,7 @@ errAbort(
    "outDir will be created if it does not already exist.  \n"
    "     The 'how' parameter should be either 'head' or 'nohead'\n"
    "     -chunkSize=N (default %d) number of unique qNames per output file.\n"
+   "     -stripVer                 remove version number\n"
    "     -maxLines=N (default %d)  limit max number (approx.) of lines per output file.\n"
    , chunkSize, maxLines);
 }
@@ -166,8 +168,16 @@ struct psl *psl;
 
 if (*pPslList == NULL)
     return; 	/* Empty. */
+psl = *pPslList;
 //slSort(pPslList, pslCmpTarget);
 makeMidName(tempDir, midIx, fileName);
+if (stripVer)
+    {
+    char *s = stringIn(".",psl->qName);
+    *s = 0;
+    }
+if (chunkSize ==1)
+    safef(fileName, sizeof(fileName), "%s/%s.psl",tempDir,psl->qName);
 f = mustOpen(fileName, "w");
 if (!noHead)
     pslWriteHead(f);
@@ -249,6 +259,7 @@ if (argc < 4)
     usage();
 chunkSize = optionInt("chunkSize", chunkSize);
 maxLines = optionInt("maxLines", maxLines);
+stripVer = optionExists("stripVer");
 pslSplit(argv[1], argv[2], &argv[3], argc-3);
 return 0;
 }
