@@ -42,7 +42,7 @@ endif
 
 set todayDate=`date +%Y%m%d`
 set outpath="/usr/local/apache/htdocs/qa/test-results/gbdb"
-set urlpath="http://hgwdev.cse.ucsc.edu//qa/test-results/gbdb"
+set urlpath="http://hgwdev.cse.ucsc.edu/qa/test-results/gbdb"
 set output=$outpath/$todayDate.gbdb.diff
 
 rm -f $output
