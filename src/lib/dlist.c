@@ -5,7 +5,7 @@
 #include "common.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: dlist.c,v 1.10 2005/01/10 00:17:30 kent Exp $";
+static char const rcsid[] = "$Id: dlist.c,v 1.11 2005/07/04 18:44:09 markd Exp $";
 
 void dlListInit(struct dlList *dl)
 /* Initialize list to be empty */
@@ -136,7 +136,7 @@ return node;
 }
 
 void dlRemove(struct dlNode *node)
-/* Removes a node from list. */
+/* Removes a node from list. Node is not freed. */
 {
 struct dlNode *before = node->prev;
 struct dlNode *after = node->next;
@@ -147,13 +147,13 @@ node->next = NULL;
 }
 
 void dlRemoveHead(struct dlList *list)
-/* Removes head from list. */
+/* Removes head from list. Node is not freed. */
 {
 dlRemove(list->head);
 }
 
 void dlRemoveTail(struct dlList *list)
-/* Remove tail from list. */
+/* Remove tail from list. Node is not freed. */
 {
 dlRemove(list->tail);
 }
@@ -176,6 +176,17 @@ if (node->prev == NULL)
     return NULL;
 dlRemove(node);
 return node;
+}
+
+void dlDelete(struct dlNode **nodePtr)
+/* Removes a node from list and frees it. */
+{
+struct dlNode *node = *nodePtr;
+if (node != NULL)
+    {
+    dlRemove(node);
+    freeMem(node);
+    }
 }
 
 int dlCount(struct dlList *list)

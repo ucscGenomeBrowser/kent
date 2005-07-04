@@ -86,19 +86,22 @@ struct dlNode *dlAddValTail(struct dlList *list, void *val);
 /* Create a node containing val and add to tail of list. */
 
 void dlRemove(struct dlNode *node);
-/* Removes a node from list. */
+/* Removes a node from list. Node is not freed. */
 
 void dlRemoveHead(struct dlList *list);
-/* Removes head from list. */
+/* Removes head from list. Node is not freed. */
 
 void dlRemoveTail(struct dlList *list);
-/* Remove tail from list. */
+/* Remove tail from list. Node is not freed.  */
 
 struct dlNode *dlPopHead(struct dlList *list);
 /* Remove first node from list and return it. */
 
 struct dlNode *dlPopTail(struct dlList *list);
 /* Remove last node from list and return it. */
+
+void dlDelete(struct dlNode **nodePtr);
+/* Removes a node from list and frees it. */
 
 int dlCount(struct dlList *list);
 /* Return length of list. */
