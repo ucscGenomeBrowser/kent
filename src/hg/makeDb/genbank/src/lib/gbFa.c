@@ -4,7 +4,7 @@
 #include "gbFileOps.h"
 #include "gbFa.h"
 
-static char const rcsid[] = "$Id: gbFa.c,v 1.1.112.1 2005/02/15 17:15:41 markd Exp $";
+static char const rcsid[] = "$Id: gbFa.c,v 1.1.112.2 2005/07/04 04:38:50 markd Exp $";
 
 /* 16kb seems like a good size by experiment */
 #define FA_STDIO_BUFSIZ (16*1024)
@@ -136,7 +136,8 @@ return fa->seqCap;
 }
 
 char* gbFaGetSeq(struct gbFa *fa)
-/* Get the sequence for the current record, reading it is not buffered */
+/* Get the sequence for the current record, reading it if not already
+ * buffered */
 {
 if (fa->seq == NULL)
     {

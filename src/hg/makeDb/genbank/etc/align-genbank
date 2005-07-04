@@ -1,11 +1,12 @@
 #!/bin/bash -e
 
-# align-genbank [-finish] [-workdir dir]
+# align-genbank [-copy|-finish] [-workdir dir]
 
 # Script to do alignment part of build.  This is normally called by
 # genbank-build, however it can be run by hand if the alignment needs to
 # be manually completed.  Edit this file to add new genomes and assemblies.
-# 
+#
+# -copy - continue a file alignment at the copy phase
 # -finish - Finish processing an alignment that was completed by hand.
 # -workdir dir - set the workdir, need with -finish if the date has
 #  changed since the alignment was started.
@@ -31,6 +32,8 @@ while [[ $1 == -* ]] ; do
     case "$opt" in
         -finish) 
             finish="-continue=finish" ;;
+        -copy) 
+            finish="-continue=copy" ;;
         -workdir)
             workdir="$1"
             shift ;;

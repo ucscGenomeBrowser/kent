@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 
-# $Id: dumpGrepIndex,v 1.6 2005/04/13 00:39:06 genbank Exp $
+# $Id: dumpGrepIndex,v 1.6.18.1 2005/07/04 04:38:49 markd Exp $
 
 use Getopt::Long;
 use warnings;

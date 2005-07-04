@@ -15,7 +15,7 @@
 #include "bits.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: mkCcdsGeneMap.c,v 1.1 2005/04/09 03:49:25 markd Exp $";
+static char const rcsid[] = "$Id: mkCcdsGeneMap.c,v 1.1.20.1 2005/07/04 04:38:49 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */

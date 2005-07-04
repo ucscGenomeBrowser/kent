@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.27.4.2 2005/04/04 16:59:26 markd Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.27.4.3 2005/07/04 04:38:50 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -21,6 +21,7 @@ static char *hgNames[] = {"Homo sapiens", NULL};
 static char *mmNames[] = {"Mus musculus", "Mus sp.", NULL};
 static char *rnNames[] = {"Rattus norvegicus", "Rattus sp.", NULL};
 static char *ciNames[] = {"Ciona intestinalis", NULL};
+static char *strPurNames[] = {"Strongylocentrotus purpuratus", NULL};
 static char *frNames[] = {"Takifugu rubripes", NULL};
 static char *dmNames[] = {"Drosophila melanogaster", "Drosophila sp.", NULL};
 static char *dpNames[] = {"Drosophila pseudoobscura", NULL};
@@ -33,6 +34,7 @@ static char *ceNames[] = {"Caenorhabditis elegans", NULL};
 static char *cbNames[] = {"Caenorhabditis briggsae", NULL};
 static char *caeRemNames[] = {"Caenorhabditis remanei", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
+static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
 static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
 			      "Canis canis", NULL};
 static char *droYakNames[] = {"Drosophila yakuba", NULL};
@@ -40,13 +42,14 @@ static char *droAnaNames[] = {"Drosophila ananassae", NULL};
 static char *droMojNames[] = {"Drosophila mojavensis", NULL};
 static char *droVirNames[] = {"Drosophila virilis", NULL};
 static char *droEreNames[] = {"Drosophila erecta", NULL};
+static char *droSimNames[] = {"Drosophila simulans", NULL};
 static char *anoGamNames[] = {"Anopheles gambiae", NULL};
 static char *apiMelNames[] = {"Apis mellifera", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", NULL};
 /* hypothetical ancestor, will never match native */
-static char *borEutNames[] = {"BoreoEutherian ancestor", NULL};
+static char *canHgNames[] = {"Boreoeutheria ancestor", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -69,18 +72,21 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"caeRei", caeRemNames, NULL}, /* db spelling mistake, should be Rem */
     {"danRer", danRerNames, NULL},
     {"canFam", canFamNames, NULL},
+    {"oryCun", oryCunNames, NULL},
     {"droYak", droYakNames, NULL},
     {"droAna", droAnaNames, NULL},
     {"droMoj", droMojNames, NULL},
     {"droVir", droVirNames, NULL},
     {"droEre", droEreNames, NULL},
+    {"droSim", droSimNames, NULL},
     {"anoGam", anoGamNames, NULL},
     {"apiMel", apiMelNames, NULL},
     /*  "Tetraodon" was onced used for "Tetraodon nigroviridis" */
     {"tetNig", tetNigNames, "Tetraodon"},
     {"bosTau", bosTauNames, "Bos taurus "},
     {"xenTro", xenTroNames, "Xenopus tropicalis "},
-    {"borEut", borEutNames, NULL},
+    {"canHg", canHgNames, "Boreoeutheria ancestor"},
+    {"strPur", strPurNames, NULL},
     {NULL, endNames, NULL}
 };
 

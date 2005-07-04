@@ -46,7 +46,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, like fortran.
 #
-# $Id: gbBlat,v 1.44.4.4 2005/04/29 03:48:06 markd Exp $
+# $Id: gbBlat,v 1.44.4.5 2005/07/04 04:38:49 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -80,6 +80,7 @@ proc getOoc {database} {
         caeRem*   {return /iscratch/i/caeRem1/11.ooc}
         danRer*   {return /iscratch/i/danRer1/11.ooc}
         canFam*   {return /iscratch/i/canFam1/11.ooc}
+        oryCun*   {return ""}
         tetNig*   {return /iscratch/i/tetNig1/11.ooc}
         anoGam*   {return /iscratch/i/anoGam1/11.ooc}
         apiMel*   {return /iscratch/i/apiMel2/11.ooc}
@@ -90,13 +91,15 @@ proc getOoc {database} {
         droMoj*   {return /iscratch/i/droMoj1/11.ooc}
         droVir*   {return /iscratch/i/droVir1/11.ooc}
         droEre*   {return /iscratch/i/droEre1/11.ooc}
+        droSim*   {return /iscratch/i/droSim1/11.ooc}
         bosTau*   {return /iscratch/i/bosTau1/11.ooc}
-        rheMac*   {return /iscratch/i/rheMac0/11.ooc}
+        rheMac*   {return /iscratch/i/rheMac1/11.ooc}
         xenTro*   {return /iscratch/i/xenTro1/11.ooc}
         fr*       {return ""}
         sacCer*   {return ""}
         ci*       {return ""}
-        borEut*   {return /iscratch/i/borEut1/11.ooc}
+	strPur*   {return /panasas/store/strPur1/11.ooc}
+        canHg*    {return ""}
         default   {
             error "no blat OOC defined for $database, edit gbBlat function getOoc to add"
         }
@@ -323,13 +326,6 @@ proc makeLift {subInfos} {
     }
     close $fh
     return $liftFile
-}
-
-
-##
-# compute a checksum on a file, return md5 sum without file name.
-proc cksum {file} {
-    return [lindex [split [exec md5sum $file]] 0]
 }
 
 ##

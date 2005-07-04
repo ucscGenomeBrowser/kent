@@ -28,24 +28,40 @@ BEGIN {
                            findConf getConf getConfNo getDbConfUndef getDbConf
                            getDbConfNo splitSpaceList
                            getHgConf setupHgConf callMysql runMysqlDump runMysql
-                           getDownloadTimeFile getRelDownloadDir);
+                           getDownloadTimeFile getDownloadDir getRelDownloadDir);
     
     # make stdout/stderr always line buffered
     STDOUT->autoflush(1);
     STDERR->autoflush(1);
 
     # Add bin directories to path.  Tools are normally taken from
-    # /cluster/bin, however we allow them to be overridden by puting them
-    # under gbRoot/bin/i386.  Use path to this script to find bin dir. Can't
-    # use MACHTYPE as it is i686-pc-linux-gnu on the cluster.
+    # /cluster/bin, however we allow them to be overridden by putting them
+    # under gbRoot/bin/i386/.  Use path to this script to find bin dir.
     
     my $rootDir = dirname($FindBin::Bin);
+    my $sys = `uname -s`;
+    if ($? != 0) {
+        die("command failed: uname -s");
+    }
+    chomp($sys);
+    my $mach = `uname -m`;
+    if ($? != 0) {
+        die("command failed: uname -m");
+    }
+    chomp($mach);
+
     my $newPath;
     my $arch;
-    if (defined($main::ENV{MACHTYPE})) {
-        $arch = $main::ENV{MACHTYPE};
+    if ($sys eq "Linux") {
+        if ($mach eq "i686") {
+            $arch = "i386";
+        } else {
+            $arch = $mach;
+        }
+    } elsif ($sys eq "FreeBSD") {
+        $arch = "fbsd_" . $mach;
     } else {
-        $arch = "i386";  # FIXME: hack for cron.
+        die("can't determine system/arch");
     }
     $newPath .= "$rootDir/bin:$rootDir/bin/$arch:/cluster/bin/$arch";
     $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
@@ -854,12 +870,6 @@ sub runMysql($) {
     runProg("mysql -u$user $args");
 }
 
-# get download time file for a db
-sub getDownloadTimeFile($) {
-    my($db) = @_;
-    return "download/" . getRelDownloadDir($db) . "/download.time";
-}
-
 # get the relative download directory for this genome.  It defaults to
 # the database name.  Older database have it configured.
 sub getRelDownloadDir($) {
@@ -869,6 +879,18 @@ sub getRelDownloadDir($) {
         $relDir = $db;
     }
     return $relDir;
+}
+
+# the absolute path to the download directory on hgdownload.
+sub getDownloadDir($$) {
+    my($downloadRootDir, $db) = @_;
+    return $downloadRootDir . "/" . getRelDownloadDir($db) . "/bigZips";
+}
+
+# get download time file for a db
+sub getDownloadTimeFile($$) {
+    my($downloadRootDir, $db) = @_;
+    return dirname(getDownloadDir($downloadRootDir, $db)) . "/download.time";
 }
 
 

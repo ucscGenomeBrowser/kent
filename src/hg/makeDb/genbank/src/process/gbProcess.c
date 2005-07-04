@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.7.80.1 2005/02/15 17:15:42 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.7.80.2 2005/07/04 04:38:50 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -57,6 +57,7 @@ static struct optionSpec optionSpecs[] = {
     {"byAccPrefix", OPTION_INT},
     {"gbidx", OPTION_STRING},
     {"pepFa", OPTION_STRING},
+    {"inclXMs", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -91,6 +92,8 @@ static FILE *raFile = NULL;
 static FILE *gbIdxFile = NULL;
 static struct hash *openedFiles = NULL;
 static struct gbFa *gPepFa = NULL;
+
+static boolean inclXMs = FALSE; /* Should XM_ refseqs be included? */
 
 struct authorExample
 /* We keep one of these for each author, the better
@@ -1055,15 +1058,15 @@ if (((wordCount >= 5) && sameString(words[4], "EST")) ||
     isEst = TRUE;
     }
 
-/* Handle some other fields handling */
+/* Handle other fields */
 parseDbXrefs();
 
 /* for refseqs, we only keep NC_, NR_ and NM_ */
-if (isupper(accession[0]) && isupper(accession[1])
-    && (accession[2] == '_'))
+if (gbGuessSrcDb(accession) == GB_REFSEQ)
     {
     keepIt = startsWith("NC_", accession) || startsWith("NR_", accession)
-        || startsWith("NM_", accession);
+        || startsWith("NM_", accession)
+        || (inclXMs && startsWith("XM_", accession));
     }
 else
     keepIt = TRUE;
@@ -1176,7 +1179,7 @@ errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\
          "where filterFile is definition of which records and fields\n"
          "to use or the word null if you want no filtering."
          "options:\n"
-         "     -filterFile=file - filter file"
+         "     -filterFile=file - filter file\n"
          "     -filter=filter - filter expressions, lines seperated by semi-colons"
          "     -byAccPrefix=n - separate into files by the first n,\n"
          "      case-insensitive letters of the accession\n"
@@ -1210,6 +1213,7 @@ filterFile = optionVal("filterFile", NULL);
 filterExpr = optionVal("filter", NULL);
 if ((filterFile != NULL) && (filterExpr != NULL))
     errAbort("can't specify both -filterFile and -filter");
+inclXMs = optionExists("inclXMs");
 
 if (gByAccPrefixSize > 4)  /* keep small to avoid tons of open files */
     errAbort("max value of -byAccPrefix is 4");

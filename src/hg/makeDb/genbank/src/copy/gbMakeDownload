@@ -4,7 +4,7 @@
 #
 # create download sequences
 #
-# $Id: gbMakeDownload,v 1.3 2005/07/02 01:10:37 genbank Exp $
+# $Id: gbMakeDownload,v 1.3.2.1 2005/07/04 04:38:49 markd Exp $
 #
 use strict;
 use warnings;

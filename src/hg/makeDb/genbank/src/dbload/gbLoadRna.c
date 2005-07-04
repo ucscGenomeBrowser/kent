@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.19.84.1 2005/04/04 16:59:25 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.19.84.2 2005/07/04 04:38:49 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -428,7 +428,7 @@ if ((gOptions.flags & DBLOAD_DRY_RUN) == 0)
     gbMakeDirs(tmpDir);
 
 /* limit number of ext files references to change if requested.  This
-* is global for all loads. */
+ * is global for all loads. */
 if (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
     {
     maxExtFileChg = (gExtFileChged < gOptions.maxExtFileUpdate)
@@ -881,6 +881,7 @@ else
     gWorkDir = optionVal("workdir", "work/load");
 
     hgSetDb(gDatabase);
+    hSetDb(gDatabase);
     if (gOptions.flags & DBLOAD_DRY_RUN)
         printf("*** using dry run mode ***\n");
     gbLoadRna(reloadList);

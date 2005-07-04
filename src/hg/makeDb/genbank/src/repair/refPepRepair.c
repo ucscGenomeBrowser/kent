@@ -7,7 +7,7 @@
 #include "extFileTbl.h"
 #include "seqTbl.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.2 2005/05/14 20:42:38 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.2.12.1 2005/07/04 04:38:50 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link */

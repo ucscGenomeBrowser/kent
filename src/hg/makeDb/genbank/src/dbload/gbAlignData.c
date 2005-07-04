@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.16.16.1 2005/04/04 16:59:25 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.16.16.2 2005/07/04 04:38:49 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -94,10 +94,10 @@ void makeRefGeneCreateSql(char *geneTable, char *flatTable,
 /* generate the string for create one of the refGene/refFlat pair tables */
 {
 char editDef[1024], *tmpDef, *part2, *p;
-*geneTableDef = genePredGetCreateSql(geneTable, 0, 0);
+*geneTableDef = genePredGetCreateSql(geneTable, 0, 0, hGetMinIndexLength());
     
 /* edit generated SQL to add geneName column and index */
-tmpDef = genePredGetCreateSql(flatTable, 0, 0);
+tmpDef = genePredGetCreateSql(flatTable, 0, 0, hGetMinIndexLength());
 part2 = strchr(tmpDef, '(');
 *(part2++) = '\0';
 p = strrchr(part2, ')');
@@ -132,8 +132,8 @@ static void createPslTable(struct sqlConnection *conn, char* table,
                            unsigned options)
 /* create a PSL table. Will create a over 4gb table if in gLargeTables */
 {
-/* create with tName index and bin */
-char *sqlCmd = pslGetCreateSql(table, options, 0);
+int tNameIdxLen = (options & PSL_TNAMEIX) ? hGetMinIndexLength() : 0;
+char *sqlCmd = pslGetCreateSql(table, options, tNameIdxLen);
 char extra[64];
 
 if (isLargeTable(table))
@@ -216,7 +216,7 @@ if (*tabFileVar == NULL)
     *tabFileVar = sqlUpdaterNew(table, gTmpDir, (gbVerbose >= 2), &gAllUpdaters);
     if (!sqlTableExists(conn, table))
         {
-        char *createSql = estOrientInfoGetCreateSql(table);
+        char *createSql = estOrientInfoGetCreateSql(table, hGetMinIndexLength());
         sqlRemakeTable(conn, table, createSql);
         freez(&createSql);
         }
