@@ -39,3 +39,8 @@ mkout:
 
 clean:
 	rm -rf output
+
+# run valgrind
+valgrindOpts =  -v --skin=memcheck --num-callers=20 --leak-check=yes --leak-resolution=med --show-reachable=yes
+valgrind:  mkout
+	valgrind ${valgrindOpts} clusterGenes -clusterBed=output/refSeqTest.bed -flatBed=output/refSeqTest.flat.bed output/refSeqTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp

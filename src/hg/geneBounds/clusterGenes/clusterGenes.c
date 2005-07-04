@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.26 2005/07/04 08:50:44 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.27 2005/07/04 18:44:44 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -351,7 +351,7 @@ if (aCluster->end < bCluster->end)
     aCluster->end = bCluster->end;
 
 /* Remove all traces of bNode. */
-dlRemove(bNode);
+dlDelete(&bNode);
 clusterFree(&bCluster);
 if (verboseLevel() >= 3) 
     {
