@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: pslReaderTester.c,v 1.1 2005/07/03 20:55:33 markd Exp $";
+static char const rcsid[] = "$Id: pslReaderTester.c,v 1.2 2005/07/04 16:37:43 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -62,7 +62,7 @@ if (numRows < gMinRows)
     errAbort("expected at least %d rows from %s, got %d", gMinRows, src, numRows);
 if ((gNeedRows >= 0) && (numRows != gNeedRows))
     errAbort("expected %d rows from %s, got %d", src, gNeedRows, numRows);
-verbose(1, "read %d rows from %s\n", numRows, src);
+verbose(2, "read %d rows from %s\n", numRows, src);
 }
 
 void readTableTask(char *db, char *table)
