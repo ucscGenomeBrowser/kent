@@ -1,4 +1,4 @@
-/* scatterPlot - produce scatter plot graphs */
+/* correlatePlot - produce correlation plot graphs */
 
 #include "common.h"
 #include "memgfx.h"
@@ -14,23 +14,106 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.5 2005/07/02 15:27:48 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.6 2005/07/04 06:23:57 hiram Exp $";
 
-static void ordinaryPlot(int **densityCounts, struct vGfx *vg)
-/* a simple point plot, not density	*/
+#define CLIP(p,limit) \
+if (p < 0) p = 0;\
+if (p >= limit) p= limit-1;
+
+static void addLabels(struct vGfx *vg, MgFont *font, char *minXStr,
+    char *maxXStr, char *minYStr, char *maxYStr, char *shortLabel,
+	char *longLabel, int totalWidth, int totalHeight, int leftMargin,
+	    int fontHeight)
+{
+int x1 = 0;
+int y1 = 0;
+int x2 = 0;
+int y2 = 0;
+int shortLabelSize = 0;
+int longLabelSize = 0;
+int textWidth = 0;
+
+/*	border around the whole thing	*/
+vgLine(vg, 0, 0, totalWidth-1, 0, MG_BLACK);	/*	top	*/
+vgLine(vg, 0, 0, 0, totalHeight-1, MG_BLACK);	/*	left	*/
+vgLine(vg, totalWidth-1, 0, totalWidth-1, totalHeight-1, MG_BLACK); /* right */
+vgLine(vg, 0, totalHeight-1, totalWidth-1, totalHeight-1, MG_BLACK);/* bottom */
+
+/*	border just around the graph	*/
+vgLine(vg, leftMargin, PLOT_MARGIN, leftMargin,
+	PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK); /* left */
+vgLine(vg, leftMargin, PLOT_MARGIN, totalWidth-PLOT_MARGIN,
+	PLOT_MARGIN, MG_BLACK); /* top */
+vgLine(vg, totalWidth-PLOT_MARGIN, PLOT_MARGIN, /* right */
+	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK);
+vgLine(vg, leftMargin, PLOT_MARGIN+GRAPH_HEIGHT,
+	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK);
+						/*	bottom	*/
+
+x1 = leftMargin;
+y1 = totalHeight-PLOT_MARGIN-fontHeight;
+x2 = totalWidth-PLOT_MARGIN;
+y2 = totalHeight-PLOT_MARGIN;
+
+if (shortLabel)
+    shortLabelSize = mgFontStringWidth(font, shortLabel);
+if (longLabel)
+    longLabelSize = mgFontStringWidth(font, longLabel);
+
+if ((longLabel != NULL) && (longLabelSize < (x2-x1)))
+    vgTextCentered(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, longLabel);
+else if (shortLabel != NULL)
+    vgTextCentered(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, shortLabel);
+
+x1 = leftMargin;
+y1 = totalHeight-PLOT_MARGIN-fontHeight-fontHeight;
+
+vgText(vg, x1, y1, MG_BLACK, font, minXStr);
+
+textWidth = mgFontStringWidth(font, maxXStr);
+x1 = totalWidth - PLOT_MARGIN - textWidth;
+y1 = totalHeight-PLOT_MARGIN-fontHeight-fontHeight;
+vgText(vg, x1, y1, MG_BLACK, font, maxXStr);
+
+x1 = 0;
+x2 = leftMargin-1;
+y1 = PLOT_MARGIN;
+y2 = PLOT_MARGIN + fontHeight;
+
+vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, maxYStr);
+
+y1 = PLOT_MARGIN+GRAPH_HEIGHT-fontHeight;
+y2 = PLOT_MARGIN+GRAPH_HEIGHT;
+vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, minYStr);
+}
+
+static void ordinaryPlot(int **densityCounts, struct vGfx *vg,
+    int totalHeight, int totalWidth, int leftMargin)
+/* a simple point plot, not density, the inversion of the Y axis takes
+ * place here.  leftMargin is what has been passed in, the top margin is
+ * fixed at PLOT_MARGIN	*/
 {
 int i, j;
 
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    for (i = 0; i < PLOT_WIDTH; ++i)
+/*	the dots are going to overlap because of DOT_SIZE, but that is
+ *	OK for this situation, they are all MG_BLACK
+ */
+for (j = 0; j < GRAPH_HEIGHT; ++j)
+    for (i = 0; i < GRAPH_WIDTH; ++i)
 	if (densityCounts[j][i])
 	    {
-	    vgBox(vg, i, j, DOT_SIZE, DOT_SIZE, MG_BLACK);
+	    vgBox(vg, i+leftMargin, PLOT_MARGIN+(GRAPH_HEIGHT-j),
+		DOT_SIZE, DOT_SIZE, MG_BLACK);
 	    }
+	    /*	the (totalHeight-j) is the inversion of the Y axis */
 }
 
-static void densityPlot(int **densityCounts, struct vGfx *vg)
-/* density plot shading	*/
+static void densityPlot(int **densityCounts, struct vGfx *vg,
+    int totalHeight, int totalWidth, int leftMargin)
+/* density plot shading, the inversion of the Y axis takes place here.
+ * leftMargin is what has been passed in, the top margin is
+ * fixed at PLOT_MARGIN
+ */
 {
 /* shade code borrowed from hgTracks	*/
 int maxShade = 9;
@@ -50,8 +133,8 @@ int densityRange = 0;
  *	resolution of this data by adding together adjacent counts
  */
 
-for (j = 0; j < PLOT_HEIGHT-1; j += 2)
-    for (i = 0; i < PLOT_WIDTH-1; i += 2)
+for (j = 0; j < GRAPH_HEIGHT-1; j += 2)
+    for (i = 0; i < GRAPH_WIDTH-1; i += 2)
 	{
 	int count = densityCounts[j][i];
 	count += densityCounts[j+1][i];
@@ -61,19 +144,21 @@ for (j = 0; j < PLOT_HEIGHT-1; j += 2)
 	densityCounts[j+1][i] = count;
 	densityCounts[j][i+1] = count;
 	densityCounts[j+1][i+1] = count;
+	if (count > 0)
+	    {
+	    densityMin = min(densityMin,count);
+	    densityMax = max(densityMax,count);
+	    }
 	}
 
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    for (i = 0; i < PLOT_WIDTH; ++i)
-	if (densityCounts[j][i])
-	    {
-	    densityMin = min(densityMin,densityCounts[j][i]);
-	    densityMax = max(densityMax,densityCounts[j][i]);
-	    }
+//hPrintf("<P>residuals min,max: %d, %d</P>\n", densityMin, densityMax);
 logMin = LOG2((double)densityMin);
 logMax = LOG2((double)densityMax);
 logRange = logMax - logMin;
 
+//hPrintf("<P>residuals log2(min,max): %g, %g</P>\n", logMin, logMax);
+
+/*	shades of gray borrowed from hgTracks.c	*/
 for (i=0; i<=maxShade; ++i)
     {
     struct rgbColor rgb;
@@ -86,8 +171,9 @@ shadesOfGray[maxShade+1] = MG_RED;
 
 densityRange = densityMax - densityMin;
 
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    for (i = 0; i < PLOT_WIDTH; ++i)
+/* only need to draw every other one since they were reduced by two above */
+for (j = 0; j < GRAPH_HEIGHT; ++j)
+    for (i = 0; i < GRAPH_WIDTH; ++i)
 	if (densityCounts[j][i])
 	    {
 	    Color color;
@@ -97,19 +183,46 @@ for (j = 0; j < PLOT_HEIGHT; ++j)
 	    if (level <= 0) level = 1;
 	    if (level > maxShade) level = maxShade;
 	    color = shadesOfGray[level];
-	    vgBox(vg, i, j, DOT_SIZE, DOT_SIZE, color);
+	    vgBox(vg, i+leftMargin, PLOT_MARGIN+(GRAPH_HEIGHT-j),
+		DOT_SIZE, DOT_SIZE, color);
 	    }
+	    /*	the (GRAPH_HEIGHT-j) is the inversion of the Y axis */
 }
 
+static MgFont *fontSetup(int *height)
+{
+MgFont *font = NULL;
+#define textSizeVar "textSize"	/*	from hgTracks.h	*/
+char *textSize = cartUsualString(cart, textSizeVar, "small");
+
+if (sameString(textSize, "small"))
+     font = mgSmallFont();
+else if (sameString(textSize, "tiny"))
+     font = mgTinyFont();
+else if (sameString(textSize, "medium"))
+     font = mgMediumFont();
+else if (sameString(textSize, "large"))
+     font = mgLargeFont();
+else if (sameString(textSize, "huge"))
+     font = mgHugeFont();
+else
+     errAbort("incorrect text size '%s' in cart: %s", textSizeVar, textSize);
+
+if (height)
+    {
+    *height = mgFontLineHeight(font);
+    }
+
+return (font);
+}
 
 struct tempName *scatterPlot(struct trackTable *yTable,
-    struct trackTable *xTable, struct dataVector *result)
+    struct trackTable *xTable, struct dataVector *result, int *width,
+	int *height)
 /*	create scatter plot gif file in trash, return path name */
 {
 static struct tempName gifFileName;
-char title[64];
-MgFont *font = mgSmallFont();
-int textWidth = 0;
+MgFont *font = NULL;
 struct dataVector *y = yTable->vSet;
 struct dataVector *x = xTable->vSet;
 double yMin = INFINITY;
@@ -118,22 +231,34 @@ double yMax = -INFINITY;
 double xMax = -INFINITY;
 double yRange = 0.0;
 double xRange = 0.0;
-int plotWidth = PLOT_WIDTH - (PLOT_MARGIN * 2);
-int plotHeight = PLOT_HEIGHT - (PLOT_MARGIN * 2);
-struct lm *lm = lmInit(PLOT_WIDTH);
-int **densityCounts;	/*	densityCounts[PLOT_HEIGHT] [PLOT_WIDTH] */
+struct lm *lm = lmInit(GRAPH_WIDTH);
+int **densityCounts;	/*	densityCounts[GRAPH_HEIGHT] [GRAPH_WIDTH] */
 int i, j;
 struct vGfx *vg;
 int pointsPlotted = 0;
+int fontHeight = 0;
+char minXStr[32];
+char maxXStr[32];
+char minYStr[32];
+char maxYStr[32];
+char bottomLabel[256];
+int leftLabelSize = 0;
+int bottomLabelSize = 0;
+int leftMargin = 0;
+int bottomMargin = 0;
+int totalWidth = 0;
+int totalHeight = 0;
+
+font = fontSetup(&fontHeight);
 
 /*	Initialize density plot count array	*/
 /*	space for the row pointers, first	*/
-lmAllocArray(lm, densityCounts, PLOT_HEIGHT);
+lmAllocArray(lm, densityCounts, GRAPH_HEIGHT);
 /*	then space for each row	*/
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    lmAllocArray(lm, densityCounts[j], PLOT_WIDTH);
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    for (i = 0; i < PLOT_WIDTH; ++i)
+for (j = 0; j < GRAPH_HEIGHT; ++j)
+    lmAllocArray(lm, densityCounts[j], GRAPH_WIDTH);
+for (j = 0; j < GRAPH_HEIGHT; ++j)
+    for (i = 0; i < GRAPH_WIDTH; ++i)
 	densityCounts[j][i] = 0;
 
 /*	find overall min and max	*/
@@ -149,20 +274,26 @@ x = xTable->vSet;
 yRange = yMax - yMin;
 xRange = xMax - xMin;
 
-makeTempName(&gifFileName, "hgtaPlot", ".gif");
-
-vg = vgOpenGif(PLOT_WIDTH, PLOT_HEIGHT, gifFileName.forCgi);
-
-/*	x,y, w,h	*/
-vgSetClip(vg, 0, 0, PLOT_WIDTH, PLOT_HEIGHT);
-
-safef(title,ArraySize(title), "ranges %g, %g", yRange, xRange);
-textWidth = mgFontStringWidth(font, title);
-//vgTextCentered(vg, 0, 0, PLOT_WIDTH, PLOT_HEIGHT, MG_BLACK, font, title);
+safef(minXStr,ArraySize(minXStr), "%.4g", xMin);
+safef(maxXStr,ArraySize(maxXStr), "%.4g", xMax);
+safef(minYStr,ArraySize(minYStr), "%.4g", yMin);
+safef(maxYStr,ArraySize(maxYStr), "%.4g", yMax);
+/*	the axes labels will be horizontal, thus the widest establishes
+ *	the left margin.
+ */
+leftLabelSize = max(mgFontStringWidth(font, minYStr),
+    mgFontStringWidth(font, maxYStr));
+/*	the vertical text may be even wider than the numbers	*/
+leftLabelSize = max(leftLabelSize,fontHeight);
+/*	The bottom label is one line for the axes labels, and a second
+ *	line for the X axis table longLabel
+ */
+bottomLabelSize = fontHeight * 2;
 
 /*	y data is the Y axis, x data is the X axis	*/
-/*	Remember, the Y axis on the plot is 0 at top, yMax at bottom,
- *	the points get translated by the 'plotHeight - y' operation. */
+/*	Do not worry about the fact that the Y axis is 0 at the top
+ *	here, that will get translated during the actual plot.
+ */
 
 for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
     {
@@ -173,51 +304,75 @@ for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
 	{
 	float yValue = y->value[i];
 	float xValue = x->value[i];
-	int x1 = PLOT_MARGIN +
-		(((xValue - xMin)/xRange) * plotWidth);
-	int y1 = PLOT_MARGIN +
-		(plotHeight - (((yValue - yMin)/yRange) * plotHeight));
+	int x1 = ((xValue - xMin)/xRange) * GRAPH_WIDTH;
+	int y1 = ((yValue - yMin)/yRange) * GRAPH_HEIGHT;
+
+	CLIP(x1,GRAPH_WIDTH);
+	CLIP(y1,GRAPH_HEIGHT);
 
 	densityCounts[y1][x1]++;
 	}
     }
 
+leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN;
+bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
+totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
+totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
+
+makeTempName(&gifFileName, "hgtaPlot", ".gif");
+
+vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
+
+/*	x,y, w,h	*/
+vgSetClip(vg, 0, 0, totalWidth, totalHeight);
+
 /*	more than 100,000 points, show them as density	*/
 if (pointsPlotted > 100000)
-    densityPlot(densityCounts, vg);
+    densityPlot(densityCounts, vg, totalWidth, totalHeight, leftMargin);
 else
-    ordinaryPlot(densityCounts, vg);
+    ordinaryPlot(densityCounts, vg, totalWidth, totalHeight, leftMargin);
+
 
 /*	draw regression line	*/
     {
-    int x1 = PLOT_MARGIN + (((xMin - xMin)/xRange) * plotWidth);
-    int x2 = PLOT_MARGIN + (((xMax - xMin)/xRange) * plotWidth);
-    int y1 = plotHeight - PLOT_MARGIN;
-    int y2 = PLOT_MARGIN;
+    int x1 = leftMargin + (((xMin - xMin)/xRange) * GRAPH_WIDTH);
+    int x2 = leftMargin + (((xMax - xMin)/xRange) * GRAPH_WIDTH);
+    int y1 = 0;
+    int y2 = 0;
     double y;
     y = (result->m * xMin) + result->b;
-    y1 =  PLOT_MARGIN + (plotHeight - (((y - yMin)/yRange) * plotHeight));
+    y1 =  PLOT_MARGIN + (GRAPH_HEIGHT - (((y - yMin)/yRange) * GRAPH_HEIGHT));
     y = (result->m * xMax) + result->b;
-    y2 =  PLOT_MARGIN + (plotHeight - (((y - yMin)/yRange) * plotHeight));
+    y2 =  PLOT_MARGIN + (GRAPH_HEIGHT - (((y - yMin)/yRange) * GRAPH_HEIGHT));
     vgLine(vg, x1, y1, x2, y2, MG_RED);
     }
+
+safef(bottomLabel,ArraySize(bottomLabel),"%s", xTable->shortLabel);
+
+addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
+    xTable->shortLabel, xTable->longLabel, totalWidth, totalHeight,
+	leftMargin, fontHeight);
 
 vgUnclip(vg);
 vgClose(&vg);
 
 lmCleanup(&lm);
 
+if (width)
+    *width = totalWidth;
+if (height)
+    *height = totalHeight;
+
 return &gifFileName;
 }
 
 struct tempName *residualPlot(struct trackTable *yTable,
     struct trackTable *xTable, struct dataVector *result, double *F_statistic,
-	double *fitMin, double *fitMax)
+	double *fitMin, double *fitMax, int *width, int *height)
 /*	create residual plot gif file in trash, return path name */
 {
 static struct tempName gifFileName;
 char title[64];
-MgFont *font = mgSmallFont();
 int textWidth = 0;
 struct dataVector *y = yTable->vSet;
 struct dataVector *x = xTable->vSet;
@@ -235,8 +390,6 @@ double fittedRange = 0.0;
 double residualRange = 0.0;
 register double m = result->m;	/*	slope m	*/
 register double b = result->b;	/*	intercept m	*/
-int plotWidth = PLOT_WIDTH - (PLOT_MARGIN * 2);
-int plotHeight = PLOT_HEIGHT - (PLOT_MARGIN * 2);
 struct vGfx *vg;
 int resultIndex = 0;	/*	for reference within result	*/
 boolean debugOn = FALSE;
@@ -245,10 +398,24 @@ double MSR = 0.0;	/*	aka MSM	- mean square residual */
 double SSE = 0.0;	/*	mean squared error	*/
 double ySum = 0.0;
 double yBar = 0.0;
-struct lm *lm = lmInit(PLOT_WIDTH);
-int **densityCounts;	/*	densityCounts[PLOT_HEIGHT] [PLOT_WIDTH] */
+struct lm *lm = lmInit(GRAPH_WIDTH);
+int **densityCounts;	/*	densityCounts[GRAPH_HEIGHT] [GRAPH_WIDTH] */
 int i, j;
 int pointsPlotted = 0;
+MgFont *font = NULL;
+int fontHeight = 0;
+char minXStr[32];
+char maxXStr[32];
+char minYStr[32];
+char maxYStr[32];
+int leftLabelSize = 0;
+int bottomLabelSize = 0;
+int leftMargin = 0;
+int bottomMargin = 0;
+int totalWidth = 0;
+int totalHeight = 0;
+
+font = fontSetup(&fontHeight);
 
 if (result->count < 1300) debugOn = TRUE;
 
@@ -262,12 +429,12 @@ if(debugOn)
 
 /*	Initialize density plot count array	*/
 /*	space for the row pointers, first	*/
-lmAllocArray(lm, densityCounts, PLOT_HEIGHT);
+lmAllocArray(lm, densityCounts, GRAPH_HEIGHT);
 /*	then space for each row	*/
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    lmAllocArray(lm, densityCounts[j], PLOT_WIDTH);
-for (j = 0; j < PLOT_HEIGHT; ++j)
-    for (i = 0; i < PLOT_WIDTH; ++i)
+for (j = 0; j < GRAPH_HEIGHT; ++j)
+    lmAllocArray(lm, densityCounts[j], GRAPH_WIDTH);
+for (j = 0; j < GRAPH_HEIGHT; ++j)
+    for (i = 0; i < GRAPH_WIDTH; ++i)
 	densityCounts[j][i] = 0;
 
 /*	find overall min and max for the "fitted" values	*/
@@ -279,6 +446,7 @@ for (y = yTable->vSet, x = xTable->vSet ;
     yMax = max(yMax,y->max);
     xMax = max(xMax,x->max);
     }
+
 fittedMin = (m * xMin) + b;
 fittedMax = (m * xMax) + b;
 residualMin = result->min;
@@ -288,17 +456,21 @@ xRange = xMax - xMin;
 fittedRange = fittedMax - fittedMin;
 residualRange = residualMax - residualMin;
 
-makeTempName(&gifFileName, "hgtaPlot", ".gif");
-
-vg = vgOpenGif(PLOT_WIDTH, PLOT_HEIGHT, gifFileName.forCgi);
-
-/*	x,y, w,h	*/
-vgSetClip(vg, 0, 0, PLOT_WIDTH, PLOT_HEIGHT);
-
-safef(title,ArraySize(title), "ranges %g, %g", yRange, xRange);
-textWidth = mgFontStringWidth(font, title);
-//vgTextCentered(vg, 0, 0, PLOT_WIDTH, PLOT_HEIGHT, MG_BLACK, font, title);
-
+safef(minXStr,ArraySize(minXStr), "%.4g", fittedMin);
+safef(maxXStr,ArraySize(maxXStr), "%.4g", fittedMax);
+safef(minYStr,ArraySize(minYStr), "%.4g", residualMin);
+safef(maxYStr,ArraySize(maxYStr), "%.4g", residualMax);
+/*	the axes labels will be horizontal, thus the widest establishes
+ *	the left margin.
+ */
+leftLabelSize = max(mgFontStringWidth(font, minYStr),
+    mgFontStringWidth(font, maxYStr));
+/*	the vertical text may be even wider than the numbers	*/
+leftLabelSize = max(leftLabelSize,fontHeight);
+/*	The bottom label is one line for the axes labels, and a second
+ *	line for the X axis table longLabel
+ */
+bottomLabelSize = fontHeight * 2;
 
 for (y = yTable->vSet; y != NULL; y = y->next)
     {
@@ -307,6 +479,9 @@ for (y = yTable->vSet; y != NULL; y = y->next)
 
 yBar = ySum / result->count;
 
+/*	Do not worry about the fact that the Y axis is 0 at the top
+ *	here, that will get translated during the actual plot.
+ */
 for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 	y=y->next, x=x->next)
     {
@@ -319,10 +494,8 @@ for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 	float residual = result->value[resultIndex];
 	float xValue = x->value[i];
 	float fitted = (m * xValue) + b;
-	int x1 = PLOT_MARGIN + (((fitted - fittedMin)/fittedRange) * plotWidth);
-	int y1 = PLOT_MARGIN + (plotHeight -
-		    (((residual - residualMin)/residualRange) * plotHeight));
-
+	int x1 = ((fitted - fittedMin)/fittedRange) * GRAPH_WIDTH;
+	int y1 = ((residual - residualMin)/residualRange) * GRAPH_HEIGHT;
 
 if(debugOn)
     hPrintf("%d\t%g\t%g\t%g\t%g\n", x->position[i], x->value[i], y->value[i], fitted, residual);
@@ -330,29 +503,46 @@ if(debugOn)
 	MSR += (fitted - yBar) * (fitted - yBar);
 	SSE += (y->value[i] - fitted) * (y->value[i] - fitted);
 
+	CLIP(x1,GRAPH_WIDTH);
+	CLIP(y1,GRAPH_HEIGHT);
+
 	densityCounts[y1][x1]++;
 	}
     }
 
+leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN;
+bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
+totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
+totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
+
+makeTempName(&gifFileName, "hgtaPlot", ".gif");
+
+vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
+
+/*	x,y, w,h	*/
+vgSetClip(vg, 0, 0, totalWidth, totalHeight);
+
 /*	more than 100,000 points, show them as density	*/
 if (pointsPlotted > 100000)
-    densityPlot(densityCounts, vg);
+    densityPlot(densityCounts, vg, totalWidth, totalHeight, leftMargin);
 else
-    ordinaryPlot(densityCounts, vg);
+    ordinaryPlot(densityCounts, vg, totalWidth, totalHeight, leftMargin);
 
 if ((result->count - 2) > 0)
     F = MSR / (SSE / (result->count - 2));
 
 /*	draw y = 0.0 line	*/
     {
-    int x1 = PLOT_MARGIN;
-    int x2 = plotWidth - PLOT_MARGIN;
-    int y1 = PLOT_MARGIN + (plotHeight -
-                    (((0.0 - residualMin)/residualRange) * plotHeight));
+    int x1 = leftMargin;
+    int x2 = GRAPH_WIDTH - PLOT_MARGIN;
+    int y1 = PLOT_MARGIN + (GRAPH_HEIGHT -
+                    (((0.0 - residualMin)/residualRange) * GRAPH_HEIGHT));
     int y2 = y1;
     vgLine(vg, x1, y1, x2, y2, MG_RED);
     }
 
+addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
+	"Fitted", NULL, totalWidth, totalHeight, leftMargin, fontHeight);
 
 vgUnclip(vg);
 vgClose(&vg);
@@ -369,6 +559,10 @@ if (fitMin)
     *fitMin = fittedMin;
 if (fitMax)
     *fitMax = fittedMax;
+if (width)
+    *width = totalWidth;
+if (height)
+    *height = totalHeight;
     
 return &gifFileName;
 }

@@ -105,18 +105,19 @@ struct trackTable
 
 /*	functions in correlatePlot.c	*/
 
-#define PLOT_WIDTH	304
-#define PLOT_HEIGHT	304
-#define PLOT_MARGIN	2
-#define DOT_SIZE	2
+#define GRAPH_WIDTH	300	/*	actual graphing area size	*/
+#define GRAPH_HEIGHT	300	/*	left and bottom text will add to this */
+#define PLOT_MARGIN	2	/*	around graph and around everything */
+#define DOT_SIZE	2	/*	size of plotted point	*/
 
 struct tempName *scatterPlot(struct trackTable *table1,
-    struct trackTable *table2, struct dataVector *result);
+    struct trackTable *table2, struct dataVector *result,
+	int *width, int *height);
 /*	create scatter plot gif file in trash, return path name */
 
 struct tempName *residualPlot(struct trackTable *table1,
     struct trackTable *table2, struct dataVector *result, double *F_statistic,
-	double *fitMin, double *fitMax);
+	double *fitMin, double *fitMax, int *width, int *height);
 /*	create residual plot gif file in trash, return path name */
 
 #endif /* CORRELATE_H */

@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.36 2005/07/03 14:59:08 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.37 2005/07/04 06:23:57 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1601,41 +1601,34 @@ struct tempName *residualPlotGif = NULL;
 double F_statistic = 0.0;
 double fitMin, fitMax;
 double yMin, yMax, xMin, xMax;
+int totalWidth, totalHeight;
 
 overallMinMax(table1, &yMin, &yMax);
 overallMinMax(table2, &xMin, &xMax);
 
-scatterPlotGif = scatterPlot(table1, table2, result);
+scatterPlotGif = scatterPlot(table1, table2, result, &totalWidth,
+	&totalHeight);
 residualPlotGif = residualPlot(table1, table2, result, &F_statistic,
-	&fitMin, &fitMax);
+	&fitMin, &fitMax, &totalWidth, &totalHeight);
 
-hPrintf("<P><!--outer table is for border purposes-->\n");
-hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
-hPrintf("\" BORDER=1 CELLSPACING=\"0\" CELLPADDING=\"1\">");
 
-hPrintf("<TR><TD WIDTH=400>\n");
+hPrintf("<TABLE>");
+hPrintf("<TR><TD>\n");
+
 hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
-hPrintf("<TR><TH ALIGN=LEFT>%.4g<BR>&nbsp;<BR>%s<BR>&nbsp;<BR>%.4g</TH>\n",
-	yMax, table1->shortLabel, yMin);
+hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
-	scatterPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
-hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%.4g&nbsp;&nbsp;&lt;-&nbsp;%s&nbsp;-&gt;&nbsp;&nbsp;%.4g</TH></TR>\n",
-	xMin, table2->longLabel, xMax);
+	scatterPlotGif->forHtml, totalWidth, totalHeight);
 hPrintf("</TABLE></TD><TD WIDTH=380 BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
 
-hPrintf("<TABLE BORDER=1 BGCOLOR=\"%s\">", HG_COL_INSIDE);
+hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%g</TH></TR>\n", F_statistic);
-hPrintf("<TR><TH ALIGN=LEFT>%.4g<BR>&nbsp;<BR>Residuals<BR>&nbsp;<BR>%.4g</TH>\n",
-	result->max, result->min);
+hPrintf("<TR><TH ALIGN=LEFT>Residuals</TH>\n");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
-	residualPlotGif->forHtml, PLOT_WIDTH, PLOT_HEIGHT);
-hPrintf("<TR><TH COLSPAN=2 ALIGN=CENTER>%.4g&nbsp;&nbsp;&lt;-&nbsp;Fitted values&nbsp;-&gt;&nbsp;&nbsp;%.4g</TH></TR>\n",
-    fitMin, fitMax);
+	residualPlotGif->forHtml, totalWidth, totalHeight);
 hPrintf("</TABLE>\n");
-
 hPrintf("</TD></TR></TABLE>\n");
-
 }
 
 static void tableInfoDebugDisplay(struct trackTable *tableList)
