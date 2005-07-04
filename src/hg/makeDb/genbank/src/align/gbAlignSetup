@@ -34,6 +34,9 @@ Obtains other parameters from etc/genbank.conf:
      For example: 
        hg13.genome = /scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf
 
+  - $db.querySplitSize - maximum size of a fasta file for alignment, in
+    megabytes
+
   - $db.lift - the lift file is used to split up nibs.  If fasta files or
      whole nibs are used, it is ignored and can be empty or no.
 
@@ -53,7 +56,7 @@ Does:
    - create a list of all expected PSL files.";
 
 #
-# $Id: gbAlignSetup,v 1.12.8.3 2005/04/04 16:59:24 markd Exp $
+# $Id: gbAlignSetup,v 1.12.8.4 2005/07/04 03:53:25 markd Exp $
 #
 use strict;
 use warnings;
@@ -61,9 +64,6 @@ use File::Basename;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use gbCommon;
-
-# Maximum size of an individual fasta file, in bytes.
-my $maxFaSize = 64*1024*1024; # 64mb
 
 # global table to make sure we don't generate output file more than
 # once
@@ -214,8 +214,11 @@ sub extractMRnaFastas($) {
 
     # run program to extract fasta files, get back count and number.
     my $cmd = "gbAlignGet";
-    if ($maxFaSize > 0) {
-        $cmd .= " -fasize=$maxFaSize";
+
+    my $querySplitSizeMb = getDbConf($db, "querySplitSize");
+    my $querySplitSize = $querySplitSizeMb * 1024 * 1024;
+    if ($querySplitSize > 0) {
+        $cmd .= " -fasize=$querySplitSize";
     }
     if ($gbCommon::verbose) {
         $cmd .= " -verbose=$gbCommon::verbose";
