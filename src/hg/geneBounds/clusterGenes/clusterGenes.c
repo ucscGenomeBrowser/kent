@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.25 2005/07/03 17:51:37 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.26 2005/07/04 08:50:44 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -76,8 +76,7 @@ struct track
 };
 
 struct track* trackNew(char* name,
-                       char *table,
-                       boolean singleChrom)
+                       char *table)
 /* create a new track, adding it to the global list, if name is NULL,
  * name is derived from table. */
 {
@@ -88,9 +87,9 @@ AllocVar(track);
 if (fileExists(table))
     {
     track->isDb = FALSE;
-    /* can't read pipes if multiple chromosomes, due to read per chromsome */
-    if ((!singleChrom) && (sameString(table, "stdin") || sameString(table, "/dev/stdin")))
-        errAbort("can't read track from stdin if processing multiple chromsomes");
+    /* can't read pipes, due to read per chromsome and per strand */
+    if (sameString(table, "stdin") || sameString(table, "/dev/stdin"))
+        errAbort("can't read track from stdin");
     }
 else if (hTableExists(table))
     track->isDb = TRUE;
@@ -738,22 +737,21 @@ genePredFreeList(&gpList);
 clusterFreeList(&clusterList);
 }
 
-struct track *buildTrackList(int specCount, char *specs[], struct slName *chromList)
+struct track *buildTrackList(int specCount, char *specs[])
 /* build list of tracks, consisting of list of tables, files, or
  * pairs of trackNames and files */
 {
 struct track* tracks = NULL;
-boolean singleChrom = (chromList->next ==  NULL);
 int i;
 if (gTrackNames)
     {
     for (i = 0; i < specCount; i += 2)
-        slSafeAddHead(&tracks, trackNew(specs[i], specs[i+1], singleChrom));
+        slSafeAddHead(&tracks, trackNew(specs[i], specs[i+1]));
     }
 else
     {
     for (i = 0; i < specCount; i++)
-        slSafeAddHead(&tracks, trackNew(NULL, specs[i], singleChrom));
+        slSafeAddHead(&tracks, trackNew(NULL, specs[i]));
     }
 slReverse(&tracks);
 return tracks;
@@ -793,7 +791,7 @@ if (chromList == NULL)
     chromList = hAllChromNames();
 slNameSort(&chromList);
 
-gTracks  = buildTrackList(specCount, specs, chromList);
+gTracks  = buildTrackList(specCount, specs);
 
 conn = hAllocConn();
 
