@@ -62,6 +62,8 @@ static unsigned getChomAnnOpts(unsigned selOpts)
 unsigned caOpts = 0;
 if (selOpts & selSelectCds)
     caOpts |= chromAnnCds;
+if (selOpts & selSelectRange)
+    caOpts |= chromAnnRange;
 if (selOpts & selSaveLines)
     caOpts |= chromAnnSaveLines;
 return caOpts;

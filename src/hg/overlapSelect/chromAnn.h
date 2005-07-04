@@ -9,7 +9,8 @@ enum chromAnnOpts
 /* bit set of options */ 
 {
     chromAnnCds        = 0x01,  /* use only CDS in blocks */
-    chromAnnSaveLines  = 0x02   /* save records as lines os they can be
+    chromAnnRange      = 0x02,  /* save entire range, not just blocks */
+    chromAnnSaveLines  = 0x04   /* save records as lines os they can be
                                  * outputted latter */
 };
 

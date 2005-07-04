@@ -15,7 +15,8 @@ test:   pslSelectTests \
 	similarityTests \
 	aggregateTests \
 	protTests \
-	idMatchTests
+	idMatchTests \
+	rangeTests
 
 ###
 # selecting PSLs
@@ -33,49 +34,49 @@ psl_over_NM_015110gp: mkout
 
 # select psls overlaping not NM_015110 with gp
 psl_nonover_NM_015110gp: mkout
-	${OVERSEL} -nonOverlapping -dropped=output/psl_nonover_NM_015110gp.drop.psl input/NM_015110.gp input/mrna.psl output/psl_nonover_NM_015110gp.psl
-	${DIFF} expected/psl_nonover_NM_015110gp.psl output/psl_nonover_NM_015110gp.psl
-	${DIFF} expected/psl_nonover_NM_015110gp.drop.psl output/psl_nonover_NM_015110gp.drop.psl
+	${OVERSEL} -nonOverlapping -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
 # select psls overlaping NM_015110 with bed
 psl_over_NM_015110bed: mkout
-	${OVERSEL} input/NM_015110.bed input/mrna.psl output/psl_over_NM_015110bed.psl
-	${DIFF} expected/psl_over_NM_015110bed.psl output/psl_over_NM_015110bed.psl
+	${OVERSEL} input/NM_015110.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping not NM_015110 with bed
 psl_nonover_NM_015110bed: mkout
-	${OVERSEL} -nonOverlapping input/NM_015110.bed input/mrna.psl output/psl_nonover_NM_015110bed.psl
-	${DIFF} expected/psl_nonover_NM_015110bed.psl output/psl_nonover_NM_015110bed.psl
+	${OVERSEL} -nonOverlapping input/NM_015110.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping NM_001206 with gp
 psl_over_NM_001206gp: mkout
-	${OVERSEL} input/NM_001206.gp input/mrna.psl output/psl_over_NM_001206gp.psl
-	${DIFF} expected/psl_over_NM_001206gp.psl output/psl_over_NM_001206gp.psl
+	${OVERSEL} input/NM_001206.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping not NM_001206 with gp
 psl_nonover_NM_001206gp: mkout
-	${OVERSEL} -nonOverlapping input/NM_001206.gp input/mrna.psl output/psl_nonover_NM_001206gp.psl
-	${DIFF} expected/psl_nonover_NM_001206gp.psl output/psl_nonover_NM_001206gp.psl
+	${OVERSEL} -nonOverlapping input/NM_001206.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping NM_001206 with bed
 psl_over_NM_001206bed: mkout
-	${OVERSEL} input/NM_001206.bed input/mrna.psl output/psl_over_NM_001206bed.psl
-	${DIFF} expected/psl_over_NM_001206bed.psl output/psl_over_NM_001206bed.psl
+	${OVERSEL} input/NM_001206.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping not NM_001206 with bed
 psl_nonover_NM_001206bed: mkout
-	${OVERSEL} -nonOverlapping input/NM_001206.bed input/mrna.psl output/psl_nonover_NM_001206bed.psl
-	${DIFF} expected/psl_nonover_NM_001206bed.psl output/psl_nonover_NM_001206bed.psl
+	${OVERSEL} -nonOverlapping input/NM_001206.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping NM_015110 with bed, one block per record
 psl_over_NM_015110bed_split: mkout
-	${OVERSEL} input/NM_015110.split.bed input/mrna.psl output/psl_over_NM_015110bed_split.psl
-	${DIFF} expected/psl_over_NM_015110bed_split.psl output/psl_over_NM_015110bed_split.psl
+	${OVERSEL} input/NM_015110.split.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # select psls overlaping not NM_015110 with bed, one block per record
 psl_nonover_NM_015110bed_split: mkout
-	${OVERSEL} -nonOverlapping input/NM_015110.split.bed input/mrna.psl output/psl_nonover_NM_015110bed_split.psl
-	${DIFF} expected/psl_nonover_NM_015110bed_split.psl output/psl_nonover_NM_015110bed_split.psl
+	${OVERSEL} -nonOverlapping input/NM_015110.split.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 ###
 # selecting BEDs
@@ -86,34 +87,34 @@ bedSelectTests: bed_over_NM_015110gp bed_nonover_NM_015110gp \
 
 # select beds overlaping NM_015110 with gp
 bed_over_NM_015110gp: mkout
-	${OVERSEL} input/NM_015110.gp -dropped=output/bed_over_NM_015110gp.drop.bed input/mrna.bed output/bed_over_NM_015110gp.bed
-	${DIFF} expected/bed_over_NM_015110gp.bed output/bed_over_NM_015110gp.bed
-	${DIFF} expected/bed_over_NM_015110gp.drop.bed output/bed_over_NM_015110gp.drop.bed
+	${OVERSEL} input/NM_015110.gp -dropped=output/$@.drop.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+	${DIFF} expected/$@.drop.bed output/$@.drop.bed
 
 # select beds overlaping not NM_015110 with gp
 bed_nonover_NM_015110gp: mkout
-	${OVERSEL} -nonOverlapping -dropped=output/bed_nonover_NM_015110gp.drop.bed  input/NM_015110.gp input/mrna.bed output/bed_nonover_NM_015110gp.bed
-	${DIFF} expected/bed_nonover_NM_015110gp.bed output/bed_nonover_NM_015110gp.bed
-	${DIFF} expected/bed_nonover_NM_015110gp.drop.bed output/bed_nonover_NM_015110gp.drop.bed
+	${OVERSEL} -nonOverlapping -dropped=output/$@.drop.bed  input/NM_015110.gp input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+	${DIFF} expected/$@.drop.bed output/$@.drop.bed
 
 # select beds overlaping NM_015110 with bed
 bed_over_NM_015110bed: mkout
-	${OVERSEL} input/NM_015110.bed input/mrna.bed output/bed_over_NM_015110bed.bed
-	${DIFF} expected/bed_over_NM_015110bed.bed output/bed_over_NM_015110bed.bed
+	${OVERSEL} input/NM_015110.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 # select beds overlaping not NM_015110 with bed
 bed_nonover_NM_015110bed: mkout
-	${OVERSEL} -nonOverlapping input/NM_015110.bed input/mrna.bed output/bed_nonover_NM_015110bed.bed
-	${DIFF} expected/bed_nonover_NM_015110bed.bed output/bed_nonover_NM_015110bed.bed
+	${OVERSEL} -nonOverlapping input/NM_015110.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 # select beds overlaping NM_015110 with bed, one block per record
 bed_over_NM_015110bed_split: mkout
-	${OVERSEL} input/NM_015110.split.bed input/mrna.bed output/bed_over_NM_015110bed_split.bed
-	${DIFF} expected/bed_over_NM_015110bed.bed output/bed_over_NM_015110bed.bed
+	${OVERSEL} input/NM_015110.split.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 bed_nonover_NM_015110bed_split: mkout
-	${OVERSEL} -nonOverlapping input/NM_015110.split.bed input/mrna.bed output/bed_nonover_NM_015110bed_split.bed
-	${DIFF} expected/bed_nonover_NM_015110bed_split.bed output/bed_nonover_NM_015110bed_split.bed
+	${OVERSEL} -nonOverlapping input/NM_015110.split.bed input/mrna.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 ###
 # -excludeSelf tests
@@ -125,27 +126,27 @@ excludeSelfTests: exludeself_over_mrna1 exludeself_nonover_mrna1 \
 # Test -excludeSelf option with file containing two non-overlaping mRNAs.
 # Neither should be selected.
 exludeself_over_mrna1: mkout
-	${OVERSEL} -excludeSelf input/mrna-self1.psl input/mrna-self1.psl output/exludeself_over_mrna1.psl
-	${DIFF} expected/exludeself_over_mrna1.psl output/exludeself_over_mrna1.psl
+	${OVERSEL} -excludeSelf input/mrna-self1.psl input/mrna-self1.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # Test -excludeSelf and -nonOverlapping options with file containing two
 # non-overlaping mRNAs. Both should be selected.
 exludeself_nonover_mrna1: mkout
-	${OVERSEL} -excludeSelf -nonOverlapping input/mrna-self1.psl input/mrna-self1.psl output/exludeself_nonover_mrna1.psl
-	${DIFF} expected/exludeself_nonover_mrna1.psl output/exludeself_nonover_mrna1.psl
+	${OVERSEL} -excludeSelf -nonOverlapping input/mrna-self1.psl input/mrna-self1.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # Test of -excludeSelf with file containing 3 overlap mRNAs and 1
 # non-overlaping.  Overlaping should be selected, since they are overlapped by
 # more than self.
 exludeself_over_mrna2: mkout
-	${OVERSEL} -excludeSelf input/mrna-self2.psl input/mrna-self2.psl output/exludeself_over_mrna2.psl
-	${DIFF} expected/exludeself_over_mrna2.psl output/exludeself_over_mrna2.psl
+	${OVERSEL} -excludeSelf input/mrna-self2.psl input/mrna-self2.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 # Test of -excludeSelf and -nonOverlapping with file containing 3 overlap mRNAs
 # and 1 non-overlaping.  Only non-overlaping should be selected.
 exludeself_nonover_mrna2: mkout
-	${OVERSEL} -excludeSelf -nonOverlapping input/mrna-self2.psl input/mrna-self2.psl output/exludeself_nonover_mrna2.psl
-	${DIFF} expected/exludeself_nonover_mrna2.psl output/exludeself_nonover_mrna2.psl
+	${OVERSEL} -excludeSelf -nonOverlapping input/mrna-self2.psl input/mrna-self2.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
 
 ###
 # select by column tests
@@ -155,14 +156,14 @@ columnSelectTests: colSelect colExclude
 # select by column
 colSelect: mkout
 	${OVERSEL} -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
-	    input/gene.select input/gene.clusters output/colSelect.cluster
-	${DIFF} expected/colSelect.cluster output/colSelect.cluster
+	    input/gene.select input/gene.clusters output/$@.cluster
+	${DIFF} expected/$@.cluster output/$@.cluster
 
 # exclude by column
 colExclude: mkout
 	${OVERSEL} -nonOverlapping -selectCoordCols=1,2,3 -inCoordCols=3,4,5 \
-	    input/gene.select input/gene.clusters output/colExclude.cluster
-	${DIFF} expected/colExclude.cluster output/colExclude.cluster
+	    input/gene.select input/gene.clusters output/$@.cluster
+	${DIFF} expected/$@.cluster output/$@.cluster
 
 ###
 # CDS overlap tests
@@ -172,24 +173,24 @@ cdsOverlapTests: cdsOverlapCdsCds cdsOverlapCdsExon \
 
 # CDS doesn't overlap
 cdsOverlapCdsCds: mkout
-	${OVERSEL} -inCds -selectCds input/cdsOverlap1.gp input/cdsOverlap2.gp output/cdsOverlapCdsCds.gp
-	${DIFF} expected/cdsOverlapCdsCds.gp output/cdsOverlapCdsCds.gp
+	${OVERSEL} -inCds -selectCds input/cdsOverlap1.gp input/cdsOverlap2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 
 cdsOverlapCdsExon: mkout
-	${OVERSEL} -inCds input/cdsOverlap1.gp input/cdsOverlap2.gp output/cdsOverlapCdsExon.gp
-	${DIFF} expected/cdsOverlapCdsExon.gp output/cdsOverlapCdsExon.gp
+	${OVERSEL} -inCds input/cdsOverlap1.gp input/cdsOverlap2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 
 cdsOverlapExonCds: mkout
-	${OVERSEL} -selectCds input/cdsOverlap1.gp input/cdsOverlap2.gp output/cdsOverlapExonCds.gp
-	${DIFF} expected/cdsOverlapExonCds.gp output/cdsOverlapExonCds.gp
+	${OVERSEL} -selectCds input/cdsOverlap1.gp input/cdsOverlap2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 
 # regression: select with CDS and a genePred with no CDS
 noCdsSelect: mkout
-	${OVERSEL} -selectCds input/noCds.gp input/noCds2.gp output/noCdsSelect.gp
-	${DIFF} expected/noCdsSelect.gp output/noCdsSelect.gp
+	${OVERSEL} -selectCds input/noCds.gp input/noCds2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 noCdsSelectNoOver: mkout
-	${OVERSEL} -nonOverlapping -selectCds input/noCds.gp input/noCds2.gp output/noCdsSelectNoOver.gp
-	${DIFF} expected/noCdsSelectNoOver.gp output/noCdsSelectNoOver.gp
+	${OVERSEL} -nonOverlapping -selectCds input/noCds.gp input/noCds2.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 
 ###
 # -merge tests
@@ -486,6 +487,55 @@ psl_idMatch_non: mkout
 	${DIFF} expected/$@.psl output/$@.psl
 	${DIFF} expected/$@.drop.psl output/$@.drop.psl
 
+###
+# whole range overlap
+###
+rangeTests: range_psl_over_NM_015110gp range_psl_nonover_NM_015110gp \
+	    range_psl_over_NM_015110bed range_psl_nonover_NM_015110bed \
+	    range_NM_015110gp_over_psl range_NM_015110gp_nonover_psl \
+	    range_NM_015110bed_over_psl range_NM_015110bed_nonover_psl
+
+# range select psls overlaping NM_015110 with gp
+range_psl_over_NM_015110gp: mkout
+	${OVERSEL} -selectRange -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
+# range select psls overlaping not NM_015110 with gp
+range_psl_nonover_NM_015110gp: mkout
+	${OVERSEL} -selectRange -nonOverlapping -dropped=output/$@.drop.psl input/NM_015110.gp input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+	${DIFF} expected/$@.drop.psl output/$@.drop.psl
+
+# range select psls overlaping NM_015110 with bed
+range_psl_over_NM_015110bed: mkout
+	${OVERSEL} -selectRange input/NM_015110.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+
+# range select psls overlaping not NM_015110 with bed
+range_psl_nonover_NM_015110bed: mkout
+	${OVERSEL} -selectRange -nonOverlapping input/NM_015110.bed input/mrna.psl output/$@.psl
+	${DIFF} expected/$@.psl output/$@.psl
+
+# range select genePred overlapping psls
+range_NM_015110gp_over_psl: mkout
+	${OVERSEL} -inRange input/inNM_015110.psl input/NM_015110.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+# range select genePred not overlapping psls
+range_NM_015110gp_nonover_psl: mkout
+	${OVERSEL} -inRange -nonOverlapping input/inNM_015110.psl input/NM_015110.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+# range select bed overlaping psls
+range_NM_015110bed_over_psl: mkout
+	${OVERSEL} -inRange input/inNM_015110.psl input/NM_015110.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
+
+# range select psls overlaping not NM_015110 with bed
+range_NM_015110bed_nonover_psl: mkout
+	${OVERSEL} -inRange -nonOverlapping input/inNM_015110.psl input/NM_015110.bed output/$@.bed
+	${DIFF} expected/$@.bed output/$@.bed
 
 mkout:
 	@${MKDIR} output

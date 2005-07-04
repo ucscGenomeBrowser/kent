@@ -18,9 +18,11 @@ static struct optionSpec optionSpecs[] = {
     {"selectFmt", OPTION_STRING},
     {"selectCoordCols", OPTION_STRING},
     {"selectCds", OPTION_BOOLEAN},
+    {"selectRange", OPTION_BOOLEAN},
     {"inFmt", OPTION_STRING},
     {"inCoordCols", OPTION_STRING},
     {"inCds", OPTION_BOOLEAN},
+    {"inRange", OPTION_BOOLEAN},
     {"nonOverlapping", OPTION_BOOLEAN},
     {"strand", OPTION_BOOLEAN},
     {"excludeSelf", OPTION_BOOLEAN},
@@ -442,11 +444,9 @@ else
     selectFmt = getFileFormat(selectFile);
 
 if (optionExists("selectCds"))
-    {
-    if (selectFmt != GENEPRED_FMT)
-        errAbort("-selectCds only allowed with genePred format select files");
     selectOpts |= selSelectCds;
-    }
+if (optionExists("selectRange"))
+    selectOpts |= selSelectRange;
 
 if (optionExists("inFmt"))
     inFmt = parseFormatSpec(optionVal("inFmt", NULL));
@@ -461,11 +461,8 @@ else
 inCaOpts = chromAnnSaveLines; /* always need lines for output */
 if (optionExists("inCds"))
     inCaOpts |= chromAnnCds;
-if (inCaOpts & chromAnnCds)
-    {
-    if (inFmt != GENEPRED_FMT)
-        errAbort("-inCds only allowed with genePred format in files");
-    }
+if (optionExists("inRange"))
+    inCaOpts |= chromAnnRange;
 
 /* select options */
 useAggregate = optionExists("aggregate");

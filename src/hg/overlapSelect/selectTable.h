@@ -8,8 +8,9 @@ enum selectOpts
     selExcludeSelf  = 0x01,    /* skipping matching records */
     selUseStrand    = 0x02,    /* select by strand */
     selSelectCds    = 0x04,    /* only use CDS range for select table */
-    selSaveLines    = 0x08,    /* save lines for merge */
-    selIdMatch      = 0x19     /* ids must match and overlap  */
+    selSelectRange  = 0x08,    /* use entire range, not just blocks */
+    selSaveLines    = 0x10,    /* save lines for merge */
+    selIdMatch      = 0x20     /* ids must match and overlap  */
 };
 
 struct coordCols;

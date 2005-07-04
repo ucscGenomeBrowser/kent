@@ -11,7 +11,7 @@
 #include "verbose.h"
 
 static struct chromAnnBlk* chromAnnBlkNew(struct chromAnn *ca, int start, int end)
-/* create new block object and add chromAnn object */
+/* create new block object and add to chromAnn object */
 {
 struct chromAnnBlk* caBlk;
 AllocVar(caBlk);
@@ -81,6 +81,26 @@ if (ca != NULL)
     }
 }
 
+static void addBedBlocks(struct chromAnn* ca, unsigned opts, struct bed* bed)
+/* add blocks from a bed */
+{
+int iBlk;
+for (iBlk = 0; iBlk < bed->blockCount; iBlk++)
+    {
+    int start = bed->chromStart + bed->chromStarts[iBlk];
+    int end = start + bed->blockSizes[iBlk];
+    if (opts & chromAnnCds)
+        {
+        if (start < bed->thickStart)
+            start = bed->thickStart;
+        if (end > bed->thickEnd)
+            end = bed->thickEnd;
+        }
+    if (start < end)
+        chromAnnBlkNew(ca, start, end);
+    }
+}
+
 struct chromAnn* chromAnnFromBed(unsigned opts, struct lineFile *lf, char *line)
 /* create a chromAnn object from line read from a BED file */
 {
@@ -99,31 +119,39 @@ lineFileExpectAtLeast(lf, 3, numCols);
 bed = bedLoadN(row, numCols);
 ca = chromAnnNew(bed->chrom, bed->strand[0], bed->name, recLine);
 
-if (bed->blockCount == 0)
+if ((bed->blockCount == 0) || (opts & chromAnnRange))
     {
-    chromAnnBlkNew(ca, bed->chromStart, bed->chromEnd);
+    if (opts & chromAnnCds)
+        {
+        if (bed->thickStart < bed->thickEnd)
+            chromAnnBlkNew(ca, bed->thickStart, bed->thickEnd);
+        }
+    else
+        chromAnnBlkNew(ca, bed->chromStart, bed->chromEnd);
     }
 else
-    {
-    int iBlk;
-    for (iBlk = 0; iBlk < bed->blockCount; iBlk++)
-        {
-        int start = bed->chromStart + bed->chromStarts[iBlk];
-        int end = start + bed->blockSizes[iBlk];
-        if ((opts & chromAnnCds) && (bed->thickStart < bed->thickEnd))
-            {
-            if (start < bed->thickStart)
-                start = bed->thickStart;
-            if (end > bed->thickEnd)
-                end = bed->thickEnd;
-            }
-        if (start < end)
-            chromAnnBlkNew(ca, start, end);
-        }
-    }
+    addBedBlocks(ca, opts, bed);
+
 chromAnnFinish(ca);
 bedFree(&bed);
 return ca;
+}
+
+static void addGenePredBlocks(struct chromAnn* ca, unsigned opts, struct genePred* gp)
+/* add blocks from a genePred */
+{
+int iExon;
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    {
+    int start = gp->exonStarts[iExon];
+    int end = gp->exonEnds[iExon];
+    if ((opts & chromAnnCds) && (gp->cdsStart > start))
+        start = gp->cdsStart;
+    if ((opts & chromAnnCds) && (gp->cdsEnd < end))
+        end = gp->cdsEnd;
+    if (start < end)
+        chromAnnBlkNew(ca, start, end);
+    }
 }
 
 struct chromAnn* chromAnnFromGenePred(unsigned opts, struct lineFile *lf, char *line)
@@ -133,7 +161,7 @@ struct chromAnn* chromAnnFromGenePred(unsigned opts, struct lineFile *lf, char *
 {
 char *recLine = NULL;
 char* row[GENEPRED_NUM_COLS];  /* allow for extra columns */
-int numCols, iExon;
+int numCols;
 struct chromAnn* ca;
 struct genePred *gp;
 
@@ -146,20 +174,37 @@ lineFileExpectAtLeast(lf, GENEPRED_NUM_COLS, numCols);
 gp = genePredLoad(row);
 ca = chromAnnNew(gp->chrom, gp->strand[0], gp->name, recLine);
 
-for (iExon = 0; iExon < gp->exonCount; iExon++)
+if (opts & chromAnnRange)
     {
-    int start = gp->exonStarts[iExon];
-    int end = gp->exonEnds[iExon];
-    if ((opts & chromAnnCds) && (gp->cdsStart > start))
-        start = gp->cdsStart;
-    if ((opts & chromAnnCds) && (gp->cdsEnd < end))
-        end = gp->cdsEnd;
-    if (start < end)
-        chromAnnBlkNew(ca, start, end);
+    if (opts & chromAnnCds)
+        {
+        if (gp->cdsStart < gp->cdsEnd)
+            chromAnnBlkNew(ca, gp->cdsStart, gp->cdsEnd);
+        }
+    else
+        chromAnnBlkNew(ca, gp->txStart, gp->txEnd);
     }
+else
+    addGenePredBlocks(ca, opts, gp);
+
 chromAnnFinish(ca);
 genePredFree(&gp);
 return ca;
+}
+
+static void addPslBlocks(struct chromAnn* ca, unsigned opts, struct psl* psl)
+/* add blocks from a psl */
+{
+boolean blkSizeMult = pslIsProtein(psl) ? 3 : 1;
+int iBlk;
+for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+    {
+    int start = psl->tStarts[iBlk];
+    int end = start + (blkSizeMult * psl->blockSizes[iBlk]);
+    if (psl->strand[1] == '-')
+        reverseIntRange(&start, &end, psl->tSize);
+    chromAnnBlkNew(ca, start, end);
+    }
 }
 
 struct chromAnn* chromAnnFromPsl(unsigned opts, struct lineFile *lf, char *line)
@@ -167,11 +212,10 @@ struct chromAnn* chromAnnFromPsl(unsigned opts, struct lineFile *lf, char *line)
 {
 char *recLine = NULL;
 char* row[PSL_NUM_COLS];  /* allow for extra columns */
-int numCols, iBlk;
+int numCols;
 struct chromAnn* ca;
 struct psl *psl;
 char strand;
-boolean blkSizeMult = 1;  /* 3 if protein */;
 
 /* save copy of line before chopping; don't free this, ownership is passed */
 if (opts & chromAnnSaveLines)
@@ -181,22 +225,16 @@ numCols = chopTabs(line, row);
 lineFileExpectAtLeast(lf, PSL_NUM_COLS, numCols);
 
 psl = pslLoad(row);
-if (pslIsProtein(psl))
-    blkSizeMult = 3;
 if (psl->strand[1] == '\0')
     strand = psl->strand[0];
 else
-    strand = (psl->strand[0] != psl->strand[1]) ? '-' : '+';
-ca = chromAnnNew(psl->tName, psl->strand[0], psl->qName, recLine);
+    strand = psl->strand[1];
+ca = chromAnnNew(psl->tName, strand, psl->qName, recLine);
 
-for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
-    {
-    int start = psl->tStarts[iBlk];
-    int end = start + (blkSizeMult * psl->blockSizes[iBlk]);
-    if (psl->strand[1] == '-')
-        reverseIntRange(&start, &end, psl->tSize);
-    chromAnnBlkNew(ca, start, end);
-    }
+if (opts & chromAnnRange)
+    chromAnnBlkNew(ca, psl->tStart, psl->tEnd);
+else    
+    addPslBlocks(ca, opts, psl);
 chromAnnFinish(ca);
 pslFree(&psl);
 return ca;
