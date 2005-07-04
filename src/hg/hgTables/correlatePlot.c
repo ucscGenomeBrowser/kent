@@ -14,7 +14,7 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.6 2005/07/04 06:23:57 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.7 2005/07/04 06:30:17 hiram Exp $";
 
 #define CLIP(p,limit) \
 if (p < 0) p = 0;\
@@ -372,8 +372,6 @@ struct tempName *residualPlot(struct trackTable *yTable,
 /*	create residual plot gif file in trash, return path name */
 {
 static struct tempName gifFileName;
-char title[64];
-int textWidth = 0;
 struct dataVector *y = yTable->vSet;
 struct dataVector *x = xTable->vSet;
 double fittedMin = INFINITY;
