@@ -6,7 +6,7 @@ BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgPcr hgTables hg
 
 TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl gbGetEntries \
             hgGetAnn mrnaToGene overlapSelect pslCDnaFilter pslDiff \
-            pslHisto pslMap pslSelect pslStats pslSwap spideyToPsl
+            pslHisto pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
@@ -182,6 +182,7 @@ UTIL_DIRS = \
 	pslHitPercent \
 	pslIntronsOnly \
 	pslMap \
+	pslPartition \
 	pslPairs \
 	pslPretty \
 	pslQuickFilter \
