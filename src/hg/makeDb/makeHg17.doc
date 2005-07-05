@@ -7698,6 +7698,25 @@ cat > makeMaf.csh << '_EOF_'
     ln -s /cluster/data/hg17/bed/liftOver/hg17ToBosTau1.chain /gbdb/hg17/liftOver/hg17ToBosTau1.over.chain
     hgAddLiftOverChain -multiple hg17 bosTau1      
 
+# HG17 TO XENTRO1 LIFTOVER CHAIN (DONE 7/5/05 Andy)
+    ssh kolossus
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    mkdir chain net over
+    chainSplit chain all.chain
+    netSplit human.net net
+    for file in chain/*.chain; do
+       chrom=`basename $file .chain`
+       netChainSubset net/$chrom.net chain/$chrom.chain over/$chrom.over
+       cat over/$chrom.over >> /cluster/data/hg17/bed/liftOver/hg17ToXenTro1.chain
+    done
+    rm -rf over/ chain/ net/
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    cp /cluster/data/hg17/bed/liftOver/hg17ToXenTro1.chain .
+    gzip hg17ToXenTro1.chain
+    ln -s /cluster/data/hg17/bed/liftOver/hg17ToXenTro1.chain /gbdb/hg17/liftOver/hg17ToXenTro1.over.chain
+    hgAddLiftOverChain -multiple hg17 xenTro1   
+
 # ADD CHAIN AND NET TO VSMM5 AND VSRN3 DOWNLOAD AREAS (DONE 8/5/04 angie)
     ssh hgwdev
     cp -p /cluster/data/hg17/bed/blastz.mm5/axtChain/all.chain.gz \
