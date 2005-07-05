@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.983 2005/07/01 19:04:10 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.984 2005/07/05 19:27:47 donnak Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10606,14 +10606,14 @@ printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
        "Illustrator.<BR>");
 doTrackForm(psTn.forCgi);
-printf("<A HREF=\"%s\">Click here to download</A> "
-       "the current browser graphic in PostScript.  ", psTn.forCgi);
+printf("<A HREF=\"%s\">Click here</A> "
+       "to download the current browser graphic in PostScript.  ", psTn.forCgi);
 pdfFile = convertEpsToPdf(psTn.forCgi);
 if(pdfFile != NULL) 
     {
     printf("<BR><BR>PDF can be viewed with Adobe Acrobat Reader.<BR>\n");
-    printf("<A HREF=\"%s\">Click here to download</A> "
-	   "the current browser graphic in PDF", pdfFile);
+    printf("<A TARGET=_blank HREF=\"%s\">Click here</A> "
+	   "to download the current browser graphic in PDF.", pdfFile);
     }
 else
     printf("<BR><BR>PDF format not available");
