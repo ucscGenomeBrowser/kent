@@ -16707,4 +16707,23 @@ superfam050524.sfAssign;'
     hgsql hg17 < ~/src/hg/lib/kgReactome.sql
     hgsql hg17 -e 'load data local infile "kgReactome.tab" into table kgReactome'
 
+# UPDATE WGRNA TRACK (DONE, 2005-07-05, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg17/bed
+
+  mv wgRna wgRna-2005-06-16
+  mkdir wgRna-2005-07-05
+  cd wgRna-2005-07-05
+
+# Received the data file, wgtrack_july2005.txt, from Michel Weber's email (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg17/bed/wgRna-2005-07-05.
+
+  cat wgtrack_july2005.txt|sed -e 's/ /\t/g' >wgRna.tab
+  
+# edit wgRna.tab to take out the first 5 lines of data field labels.
+
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# UPDATED WGRNA DATA PER EMAIL FROM WEBER (2004-12-14, Fan).
 
