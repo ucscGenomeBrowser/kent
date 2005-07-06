@@ -34,7 +34,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.31 2004/12/06 23:27:20 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.32 2005/07/06 05:48:57 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -50,10 +50,11 @@ float minCoverPseudo = 0.01;
 int maxBlockGap = 60;
 int intronSlop = 30;
 float intronRatio = 1.5;
-boolean ignoreSize = FALSE;
-boolean noIntrons = FALSE;
-boolean noHead = FALSE;
-boolean skipExciseRepeats = FALSE;
+bool ignoreSize = FALSE;
+bool noIntrons = FALSE;
+bool noHead = FALSE;
+bool skipExciseRepeats = FALSE;
+bool stripVersion = FALSE;
 double  wt[11];     /* weights on score function*/
 int minNearTopSize = 10;
 struct genePred *gpList1 = NULL, *gpList2 = NULL, *kgList = NULL;
@@ -66,6 +67,35 @@ struct dlList *fileCache = NULL;
 struct hash *fileHash = NULL;  
 char mrnaOverlap[255];
 
+/* command line */
+static struct optionSpec optionSpecs[] = {
+    {"species1", OPTION_STRING},
+    {"species2", OPTION_STRING},
+    {"nibdir1", OPTION_STRING},
+    {"nibdir2", OPTION_STRING},
+    {"mrna1", OPTION_STRING},
+    {"mrna2", OPTION_STRING},
+    {"bedOut", OPTION_STRING},
+    {"score", OPTION_STRING},
+    {"snp", OPTION_STRING},
+    {"minDiff", OPTION_INT},
+    {"computeSS", OPTION_BOOLEAN},
+    {"nohead", OPTION_BOOLEAN},
+    {"ignoreSize", OPTION_BOOLEAN},
+    {"noIntrons", OPTION_BOOLEAN},
+    {"minCover", OPTION_FLOAT},
+    {"minCoverPseudo", OPTION_FLOAT},
+    {"minAli", OPTION_FLOAT},
+    {"minAliPseudo", OPTION_FLOAT},
+    {"splicedOverlapRatio", OPTION_FLOAT},
+    {"intronSlop", OPTION_INT},
+    {"nearTop", OPTION_FLOAT},
+    {"minNearTopSize", OPTION_INT},
+    {"maxBlockGap", OPTION_INT},
+    {"maxRep", OPTION_INT},
+    {"stripVersion", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 struct seqFilePos
 /* Where a sequence is in a file. */
     {
@@ -82,7 +112,7 @@ errAbort(
     "pslPseudo - analyse repeats and generate genome wide best\n"
     "alignments from a sorted set of local alignments\n"
     "usage:\n"
-    "    pslPseudo db in.psl sizes.lst rmsk.bed trf.bed syntenic.bed mrna.psl out.psl pseudo.psl pseudoLink.txt nib.lst mrna.fa refGene.tab mgcGene.tab kglist.tab \n\n"
+    "    pslPseudo db in.psl sizes.lst rmsk.bed syntenic.bed trf.bed mrna.psl out.psl outPseudo.psl outPseudoLink.txt out.axt nib.lst mrna.fa refGene.tab mgcGene.tab kglist.tab \n\n"
     "where in.psl is an blat alignment of mrnas sorted by pslSort\n"
     "blastz.psl is an blastz alignment of mrnas sorted by pslSort\n"
     "sizes.lst is a list of chrromosome followed by size\n"
@@ -90,8 +120,9 @@ errAbort(
     "trf.bed is the simple repeat (trf) bed file\n"
     "mrna.psl is the blat best mrna alignments\n"
     "out.psl is the best mrna alignment for the gene \n"
-    "and pseudo.psl contains pseudogenes\n"
-    "pseudoLink.txt will have the link between gene and pseudogene\n"
+    "and outPseudo.psl contains pseudogenes\n"
+    "outPseudoLink.txt will have the link between gene and pseudogene\n"
+    "out.axt contains the pseudogene aligned to the gene (can be /dev/null)\n"
     "nib.lst list of genome nib file\n"
     "mrna.fa sequence data for all aligned mrnas using blastz\n"
     "options:\n"
@@ -116,7 +147,9 @@ errAbort(
     "    -maxBlockGap=N  Max gap size between adjacent blocks that are combined. \n"
     "               Default 60.\n"
     "    -maxRep=N  max ratio of overlap with repeat masker track \n"
-    "               for aligmnent to be kept.  Default .70\n");
+    "               for aligmnent to be kept.  Default .70\n"
+    "    -stripVersion  ignore version number of mRNA in input file \n"
+        );
 }
 
 struct cachedFile
@@ -438,7 +471,14 @@ for (mrna = mrnaList; mrna != NULL ; mrna = mrna->next)
         }
     }
 if (qSeq == NULL)
-    errAbort("mrna sequence data not found %s, searched %d sequences\n",psl->qName,cnt);
+    {
+    warn("mrna sequence data not found %s, searched %d sequences\n",psl->qName,cnt);
+    dyStringFree(&q);
+    dyStringFree(&t);
+    dnaSeqFree(&tSeq);
+    dnaSeqFree(&qSeq);
+    return NULL;
+    }
 if (qSeq->size != psl->qSize)
     {
     warn("sequence %s aligned is different size %d from mrna.fa file %d \n",psl->qName,psl->qSize,qSeq->size);
@@ -645,18 +685,19 @@ void initWeights()
 {
 /*
     0 = + milliBad
-    1 = + exon Coverage
-    2 = + log axtScore
-    3 = + log polyAlen
-    4 = - overlapDiag
+  2 1 = + exon Coverage
+  8 2 = + log axtScore
+  1 3 = + log polyAlen
+  5 4 = - overlapDiag
     5 = NOT USED log (qSize - qEnd)
-    6 = + intronCount ^.5
-    7 = - log maxOverlap
-    8 = + coverage *((qSize-qEnd)/qSize)
-    9 = - repeats
+  3 6 = + intronCount ^.5
+  4 7 = - log maxOverlap
+  7 8 = + coverage *((qSize-qEnd)/qSize)
+  6 9 = - repeats
  */
 wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.4; wt[4] = 0.3; 
 wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1.3; wt[9] = 1;
+
 }
 void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *reason)
    /* char *type, char *bestqName, char *besttName, 
@@ -1149,6 +1190,10 @@ else
     assert(i < psl->blockCount);
     *qStart = psl->qStarts[i] + psl->blockSizes[i];
     *tStart = psl->tStarts[i] + psl->blockSizes[i];
+    if(*tStart <= psl->tStart)
+        printf("i %d blk %d *tStart %d psl->tStart %d qName %s %s\n",
+                i, psl->blockCount, *tStart, psl->tStart, psl->qName, 
+                psl->tName);
     assert(*tStart > psl->tStart);
 //    *tStart = *tStart - psl->tStart;
 //    *tEnd = *tEnd - psl->tStart;
@@ -1971,6 +2016,9 @@ while (lineFileNext(in, &line, &lineSize))
     if (wordCount != 21)
 	errAbort("Bad line %d of %s\n", in->lineIx, in->fileName);
     psl = pslLoad(words);
+    if (stripVersion)
+        chopSuffix(psl->qName);
+    verbose(1,"scoring %s version %d\n",psl->qName, stripVersion);
     if (!sameString(lastName, psl->qName))
 	{
         slReverse(&pslList);
@@ -1997,7 +2045,7 @@ int main(int argc, char *argv[])
 struct hash *bkHash = NULL, *trfHash = NULL, *synHash = NULL, *mrnaHash = NULL;
 //struct genePredReader *gprKg;
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 17)
     usage();
 verboseSetLogFile("stdout");
@@ -2021,6 +2069,7 @@ maxBlockGap = optionInt("maxBlockGap" , maxBlockGap) ;
 ignoreSize = optionExists("ignoreSize");
 skipExciseRepeats = optionExists("skipExciseRepeats");
 noIntrons = optionExists("noIntrons");
+stripVersion = optionExists("stripVersion");
 noHead = optionExists("nohead");
 initWeights();
 
