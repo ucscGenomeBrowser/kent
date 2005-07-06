@@ -15,6 +15,7 @@ void vgMgMethods(struct vGfx *vg);
 
 typedef void (*vg_close)(void **pV);
 typedef void (*vg_dot)(void *v, int x, int y, int colorIx);
+typedef int (*vg_getDot)(void *v, int x, int y);
 typedef void (*vg_box)(void *v, int x, int y, 
 	int width, int height, int colorIx);
 typedef void (*vg_line)(void *v, 
