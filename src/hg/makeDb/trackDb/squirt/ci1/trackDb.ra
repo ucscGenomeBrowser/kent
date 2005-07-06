@@ -72,6 +72,18 @@ altColor 200,220,255
 spectrum on
 type psl xeno
 
+track blastHg17KG
+shortLabel Human  Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
+group genes
+priority 142
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
+release alpha
+
 track chainCioSav1
 shortLabel C. savignyi chain
 longLabel C. savignyi chain
