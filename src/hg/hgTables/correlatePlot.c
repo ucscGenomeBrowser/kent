@@ -14,16 +14,94 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.7 2005/07/04 06:30:17 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.8 2005/07/06 00:07:41 hiram Exp $";
 
-#define CLIP(p,limit) \
-if (p < 0) p = 0;\
-if (p >= limit) p= limit-1;
+#define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
+
+static void verticalTextCentered(struct vGfx *vg, int x, int y,
+    int width, int height, int colorIx, MgFont *font, char *string)
+/* Draw a vertical line of text in middle of the box.
+ *	The string will read from bottom to top
+ */
+{
+/*	don't let this run wild	*/
+CLIP(width, vg->width);
+CLIP(height, vg->height);
+
+if ((width > 0) && (height > 0))
+    {
+    struct vGfx *vgHoriz;
+    int i, j;
+    /*	reversed meanings of width and height here since this is going
+     *	to rotate 90 degrees
+    struct memGfx *mgHoriz;
+    mgHoriz = mgNew(height, width);
+    mgTextCentered(mgHoriz, 0, 0, height, width, colorIx, font, string);
+     */
+    vgHoriz = vgOpenGif(height, width, "/dev/null");
+    vgTextCentered(vgHoriz, 0, 0, height, width, colorIx, font, string);
+    /*	now, blit from the horizontal to the vertical, rotate -90 (CCW) */
+    for (i = 0; i < height; ++i)	/* xSrc -> yDest */
+	{
+	int yDest = height - i;
+	for (j = 0; j < width; ++j)	/* ySrc -> xDest */
+	    {
+	    vgDot(vg,j+x,yDest+y, vgGetDot(vgHoriz, i, j));
+	    /*vgDot(vg,j+x,yDest+y, ((int)mgGetDot(mgHoriz,i,j)));*/
+	    }
+	}
+    vgClose(&vgHoriz);
+    /*mgFree(&mgHoriz);*/
+    }
+}
+
+#ifdef NOT_NEEDED
+and should be corrected if it is needed ...
+static void verticalText(struct vGfx *vg, int x, int y, int colorIx,
+    MgFont *font, char *string)
+/* Draw a vertical line of text with upper left corner x,y.
+ *	The string ends at that upper coordinate y, thus the 
+ *	string reads from bottom up.
+ */
+{
+int textWidth = mgFontStringWidth(font, string);
+int fontHeight = mgFontLineHeight(font);
+int xClip = textWidth;
+int yClip = fontHeight;
+struct vGfx *vgHoriz;
+
+CLIP(xClip,vg->width);
+CLIP(yClip,vg->height);
+/*	can't be larger than these either after rotating 90 degrees	*/
+CLIP(xClip, vg->height);
+CLIP(yClip, vg->width);
+
+if ((yClip > 0) && (xClip > 0))
+    {
+    int i, j;
+    int xx, yy;
+    int dot;
+    vgHoriz = vgOpenGif(xClip, yClip, "/dev/null");
+    vgText(vgHoriz, 0, 0, colorIx, font, string);
+    for (i = 0; i < xClip; ++i)
+	{
+	yy = xClip - i;
+	for (j = 0; j < yClip; ++j)
+	    {
+	    xx = j;
+	    dot = vgGetDot(vgHoriz, i, j);
+	    vgDot(vg,xx+x,yy+y, dot);
+	    }
+	}
+    vgClose(&vgHoriz);
+    }
+}
+#endif
 
 static void addLabels(struct vGfx *vg, MgFont *font, char *minXStr,
     char *maxXStr, char *minYStr, char *maxYStr, char *shortLabel,
 	char *longLabel, int totalWidth, int totalHeight, int leftMargin,
-	    int fontHeight)
+	    int fontHeight, char *vertLabel)
 {
 int x1 = 0;
 int y1 = 0;
@@ -42,12 +120,14 @@ vgLine(vg, 0, totalHeight-1, totalWidth-1, totalHeight-1, MG_BLACK);/* bottom */
 /*	border just around the graph	*/
 vgLine(vg, leftMargin, PLOT_MARGIN, leftMargin,
 	PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK); /* left */
+#ifdef NOT
 vgLine(vg, leftMargin, PLOT_MARGIN, totalWidth-PLOT_MARGIN,
 	PLOT_MARGIN, MG_BLACK); /* top */
 vgLine(vg, totalWidth-PLOT_MARGIN, PLOT_MARGIN, /* right */
 	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK);
+#endif
 vgLine(vg, leftMargin, PLOT_MARGIN+GRAPH_HEIGHT,
-	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK);
+	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT+1, MG_BLACK);
 						/*	bottom	*/
 
 x1 = leftMargin;
@@ -85,6 +165,13 @@ vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, maxYStr);
 y1 = PLOT_MARGIN+GRAPH_HEIGHT-fontHeight;
 y2 = PLOT_MARGIN+GRAPH_HEIGHT;
 vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, minYStr);
+
+x1 = PLOT_MARGIN;
+y1 = PLOT_MARGIN + fontHeight;
+x2 = leftMargin - PLOT_MARGIN;
+y2 = GRAPH_HEIGHT - fontHeight;
+if (vertLabel)
+    verticalTextCentered(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, vertLabel);
 }
 
 static void ordinaryPlot(int **densityCounts, struct vGfx *vg,
@@ -351,7 +438,7 @@ safef(bottomLabel,ArraySize(bottomLabel),"%s", xTable->shortLabel);
 
 addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
     xTable->shortLabel, xTable->longLabel, totalWidth, totalHeight,
-	leftMargin, fontHeight);
+	leftMargin, fontHeight, yTable->shortLabel);
 
 vgUnclip(vg);
 vgClose(&vg);
@@ -526,13 +613,11 @@ if (pointsPlotted > 100000)
 else
     ordinaryPlot(densityCounts, vg, totalWidth, totalHeight, leftMargin);
 
-if ((result->count - 2) > 0)
-    F = MSR / (SSE / (result->count - 2));
 
 /*	draw y = 0.0 line	*/
     {
     int x1 = leftMargin;
-    int x2 = GRAPH_WIDTH - PLOT_MARGIN;
+    int x2 = leftMargin + GRAPH_WIDTH - PLOT_MARGIN;
     int y1 = PLOT_MARGIN + (GRAPH_HEIGHT -
                     (((0.0 - residualMin)/residualRange) * GRAPH_HEIGHT));
     int y2 = y1;
@@ -540,7 +625,8 @@ if ((result->count - 2) > 0)
     }
 
 addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
-	"Fitted", NULL, totalWidth, totalHeight, leftMargin, fontHeight);
+    "Fitted", NULL, totalWidth, totalHeight, leftMargin, fontHeight,
+	"Residuals");
 
 vgUnclip(vg);
 vgClose(&vg);
@@ -549,7 +635,13 @@ if(debugOn)
     hPrintf("</PRE>\n");
 
 if (F_statistic)
-    *F_statistic = F;
+    {
+    if ((result->count - 2) > 0)
+	F = MSR / (SSE / (result->count - 2));
+    else
+	F = 0.0;
+	*F_statistic = F;
+    }
 
 lmCleanup(&lm);
 

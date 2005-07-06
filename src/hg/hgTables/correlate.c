@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.37 2005/07/04 06:23:57 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.38 2005/07/06 00:07:41 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -166,6 +166,7 @@ boolean correlateTableOK(struct trackDb *tdb)
 {
 if (tdb &&
 	(startsWith("bedGraph", tdb->type) ||
+	startsWith("bed5FloatScore",tdb->type) ||
 	startsWith("wig ",tdb->type) ||
 	startsWith("genePred",tdb->type) ||
 	startsWith("psl",tdb->type) ||
@@ -300,7 +301,44 @@ table->actualTable = cloneString(tdb->tableName);
 table->isBedGraph = FALSE;
 table->isWig = FALSE;
 if (startsWith("bedGraph", tdb->type))
+    {
     table->isBedGraph = TRUE;
+    /*	find the column name that belongs to the specified numeric
+     *	column from the bedGraph type line
+     */
+    if (!table->isCustom)
+	{
+	char query[256];
+	struct sqlResult *sr;
+	char **row;
+	int wordCount;
+	char *words[8];
+	char *typeLine = cloneString(tdb->type);
+	int colCount = 0;
+
+	wordCount = chopLine(typeLine,words);
+	if (wordCount > 1)
+	    table->bedGraphColumnNum = sqlUnsigned(words[1]);
+	freez(&typeLine);
+	safef(query, ArraySize(query), "describe %s", table->actualTable);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    ++colCount;
+	    if ((1 == colCount) && sameString(row[0], "bin"))
+		colCount = 0;
+	    if (colCount == table->bedGraphColumnNum)
+		table->bedGraphColumnName = cloneString(row[0]);
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+else if (sameString("cpgIsland", tdb->tableName))
+    {
+    table->isBedGraph = TRUE;
+    table->bedGraphColumnName = cloneString("perCpg");
+    table->bedGraphColumnNum = 8;
+    }
 else if (startsWith("bed ", tdb->type))
     {
     int wordCount;
@@ -310,9 +348,20 @@ else if (startsWith("bed ", tdb->type))
     if ((wordCount > 1) && differentWord(".",words[1]))
 	{
         table->bedColumns = sqlUnsigned(words[1]);
+	if ((table->bedColumns > 4) && (table->bedColumns < 12))
+	    {
+	    table->isBedGraph = TRUE;
+	    table->bedGraphColumnName = cloneString("score");
+	    }
 	}
     else
         table->bedColumns = 3;
+    }
+else if (startsWith("bed5FloatScore", tdb->type))
+    {
+    table->isBedGraph = TRUE;
+    table->bedGraphColumnName = cloneString("floatScore");
+    table->bedGraphColumnNum = 6;
     }
 else if (startsWith("wig",tdb->type))
     {
@@ -326,35 +375,6 @@ else if (startsWith("wig",tdb->type))
     }
 table->isCustom = isCustomTrack(table->actualTable);
 
-/*	find the column name that belongs to the specified numeric
- *	column from the bedGraph type line
- */
-if (table->isBedGraph && (!table->isCustom))
-    {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    int wordCount;
-    char *words[8];
-    char *typeLine = cloneString(tdb->type);
-    int colCount = 0;
-
-    wordCount = chopLine(typeLine,words);
-    if (wordCount > 1)
-        table->bedGraphColumnNum = sqlUnsigned(words[1]);
-    freez(&typeLine);
-    safef(query, ArraySize(query), "describe %s", table->actualTable);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	++colCount;
-	if ((1 == colCount) && sameString(row[0], "bin"))
-	    colCount = 0;
-	if (colCount == table->bedGraphColumnNum)
-	    table->bedGraphColumnName = cloneString(row[0]);
-	}
-    sqlFreeResult(&sr);
-    }
 }	/*	static void fillInTrackTable()	*/
 
 /****************************   NOTE   ********************************
@@ -1617,14 +1637,14 @@ hPrintf("<TR><TD>\n");
 
 hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
-hPrintf("<TR><TH ALIGN=LEFT>%s</TH>\n", table1->shortLabel);
+hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	scatterPlotGif->forHtml, totalWidth, totalHeight);
 hPrintf("</TABLE></TD><TD WIDTH=380 BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
 
 hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%g</TH></TR>\n", F_statistic);
-hPrintf("<TR><TH ALIGN=LEFT>Residuals</TH>\n");
+hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%.4g</TH></TR>\n", F_statistic);
+hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	residualPlotGif->forHtml, totalWidth, totalHeight);
 hPrintf("</TABLE>\n");
@@ -1816,8 +1836,7 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    hPrintf("<P>no intersection between the two tables "
 		"in this region</P>\n");
 
-if (1 == 0)
-    tableInfoDebugDisplay(tableList);	/*	dbg	*/
+// tableInfoDebugDisplay(tableList);	/*	dbg	*/
 
 	freeTrackTableList(&tableList);
 //hPrintf("<P>freeTrackTableList OK</P>\n");
