@@ -4166,6 +4166,46 @@ type bed 5 .
     longLabel K562 Amplicon (Even)
     priority 10
 
+track encodeRegulomeQuality
+compositeTrack on
+shortLabel Regulome Quality
+longLabel ENCODE Regulome Quality
+group encodeChrom
+priority 64.2
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility dense
+type bed 5 .
+
+    track encodeRegulomeQualityCACO2
+    subTrack encodeRegulomeQuality
+    shortLabel CACO2 
+    longLabel CACO2 Quality
+    priority 1
+
+    track encodeRegulomeQualityGM06990
+    subTrack encodeRegulomeQuality
+    shortLabel GM06990 
+    longLabel GM06990 Quality
+    priority 2
+
+    track encodeRegulomeQualitySKNSH
+    subTrack encodeRegulomeQuality
+    shortLabel SKNSH 
+    longLabel SKNSH Quality
+    priority 3
+
+    track encodeRegulomeQualityERY
+    subTrack encodeRegulomeQuality
+    shortLabel ERY 
+    longLabel ERY Quality
+    priority 4
+
+    track encodeRegulomeQualityK562
+    subTrack encodeRegulomeQuality
+    shortLabel K562 
+    longLabel K562 Quality
+    priority 5
+
 
 track encodeAllElements
 compositeTrack on
