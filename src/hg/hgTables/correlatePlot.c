@@ -15,7 +15,7 @@
 #include "correlate.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.10 2005/07/06 07:18:25 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.11 2005/07/06 19:45:33 hiram Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -412,8 +412,8 @@ makeTempName(&gifFileName, "hgtaPlot", ".gif");
 
 vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
 
-/*	x,y, w,h	*/
-vgSetClip(vg, 0, 0, totalWidth, totalHeight);
+/*	x,y, w,h, drawing area only	*/
+vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
 
 /*	more than 100,000 points, show them as density	*/
 if (pointsPlotted > 100000)
@@ -437,6 +437,9 @@ else
     }
 
 safef(bottomLabel,ArraySize(bottomLabel),"%s", xTable->shortLabel);
+
+/*	allow the entire area to be drawn into for the labels	*/
+vgSetClip(vg, 0, 0, totalWidth, totalHeight);
 
 addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
     xTable->shortLabel, xTable->longLabel, totalWidth, totalHeight,
@@ -606,8 +609,8 @@ makeTempName(&gifFileName, "hgtaPlot", ".gif");
 
 vg = vgOpenGif(totalWidth, totalHeight, gifFileName.forCgi);
 
-/*	x,y, w,h	*/
-vgSetClip(vg, 0, 0, totalWidth, totalHeight);
+/*	x,y, w,h, drawing area only	*/
+vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
 
 /*	more than 100,000 points, show them as density	*/
 if (pointsPlotted > 100000)
@@ -625,6 +628,9 @@ else
     int y2 = y1;
     vgLine(vg, x1, y1, x2, y2, MG_RED);
     }
+
+/*	allow the entire area to be drawn into for the labels	*/
+vgSetClip(vg, 0, 0, totalWidth, totalHeight);
 
 addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
     "Fitted", NULL, totalWidth, totalHeight, leftMargin, fontHeight,
@@ -736,8 +742,8 @@ totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
 
 vg = vgOpenGif(totalWidth, totalHeight, histoFileName->forCgi);
-/*	x,y, w,h	*/
-vgSetClip(vg, 0, 0, totalWidth, totalHeight);
+/*	x,y, w,h, drawing area only	*/
+vgSetClip(vg, leftMargin, PLOT_MARGIN, GRAPH_WIDTH, GRAPH_HEIGHT);
 
 if (binCountRange > 0)
     {
@@ -751,6 +757,9 @@ if (binCountRange > 0)
 	vgLine(vg, x1, y1, x1, y2, MG_BLACK);	/*	top	*/
 	}
     }
+
+/*	allow the entire area to be drawn into for the labels	*/
+vgSetClip(vg, 0, 0, totalWidth, totalHeight);
 
 addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
     bottomLabelStr, NULL, totalWidth, totalHeight, leftMargin, fontHeight,
