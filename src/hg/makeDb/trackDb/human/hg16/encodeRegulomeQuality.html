@@ -3,7 +3,7 @@
 DNaseI has long been used to map general chromatin accessibility and the DNaseI "hyperaccessibility" or 
 "hypersensitivity" that is a universal feature of active cis-regulatory sequences. 
 
-<p>These tracks annotate continous DNaseI sensitivity measurements and DNaseI Hypersensitive Sites 
+<p>The Regulome tracks annotate continous DNaseI sensitivity measurements and DNaseI Hypersensitive Sites 
 (HSs) over ENCODE regions produced using Quantitative Chromatin Profiling (QCP) 
 Dorschner et al., <a href='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15782197&query_hl=1'> Nature Methods</a>.&nbsp
 
@@ -26,18 +26,19 @@ DNaseI-treated and untreated chromatin samples from the following cell lines/phe
 <LI>ERY (CD34-derived primary adult erythroblasts; ENm009/Beta-globin locus)</LI>
 </UL>
 
-
-<br><br>
-
-<h4>Plate quality score.</h4>  QCP assays are formatted into 384-well plates for high-throughput real-time PCR.  
-Each plate is treated as a separate experiment.  This track provides a visual representation of data quality scores for each plate.  
+This track provides a visual representation of data quality scores for each plate.  
 Quality score have values between 0 and 1. 
 Plates with scores greater than or equal to 0.5 are conservatively considered acceptable for reliable scoring of HSs.  
+Scores are shown in greyscale, with darker colors for higher scores.
+<P>
+QCP assays are formatted into 384-well plates for high-throughput real-time PCR.  
+Each plate is treated as a separate experiment.  
+<P>
 Plate quality scores were computed using a Support Vector Machine (SVM). 
 Trained operators manually scored 500 plates, classifying each on a scale of 1-5 ranking the degree of experimental noise. 
 The unified set was then used to train an SVM to classify and score 'good' and 'bad' plates. 
 We conservatively assigned good plates to noise scores 1-3 and bad plates to scores 4-5. 
-By performing cross validation on a 90% subsample of the training set, the SVM achieved an ROC score of 0.93.
+By performing cross validation on a 90% subsample of the training set, the SVM achieved an ROC(?) score of 0.93.
 
 
 
