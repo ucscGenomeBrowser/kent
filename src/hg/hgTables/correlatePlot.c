@@ -13,8 +13,9 @@
 #include "obscure.h"
 #include "hgTables.h"
 #include "correlate.h"
+#include "histogram.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.9 2005/07/06 00:18:00 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.10 2005/07/06 07:18:25 hiram Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -159,11 +160,13 @@ x2 = leftMargin-1;
 y1 = PLOT_MARGIN;
 y2 = PLOT_MARGIN + fontHeight;
 
-vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, maxYStr);
+if (maxYStr)
+    vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, maxYStr);
 
 y1 = PLOT_MARGIN+GRAPH_HEIGHT-fontHeight;
 y2 = PLOT_MARGIN+GRAPH_HEIGHT;
-vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, minYStr);
+if (minYStr)
+    vgTextRight(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, minYStr);
 
 x1 = PLOT_MARGIN;
 y1 = PLOT_MARGIN + fontHeight;
@@ -654,4 +657,114 @@ if (height)
     *height = totalHeight;
     
 return &gifFileName;
+}
+
+struct tempName *histogramPlot(struct trackTable *table,
+    int *width, int *height)
+/*	create histogram plot gif file in trash, return path name */
+{
+struct tempName *histoFileName;
+struct vGfx *vg;
+MgFont *font = NULL;
+int totalWidth = 400;
+int totalHeight = 300;
+int fontHeight = 0;
+int leftLabelSize = 0;
+int leftMargin = 0;
+int bottomMargin = 0;
+int bottomLabelSize = 0;
+char bottomLabelStr[128];
+char minXStr[32];
+char maxXStr[32];
+char minYStr[32];
+char maxYStr[32];
+struct histoResult *histo = NULL;
+struct dataVector *dv;
+int totalCounts = 0;
+unsigned maxBinCount = 0;
+unsigned minBinCount = BIGNUM;
+int binCountRange = 0;
+int i;
+
+for (dv = table->vSet; dv != NULL; dv = dv->next)
+    {
+    histo = histoGram(dv->value, (size_t) dv->count, NAN,
+	(unsigned) GRAPH_WIDTH, NAN, table->min, table->max, histo);
+    totalCounts += dv->count;
+    }
+
+for (i = 0; i < histo->binCount; ++i)
+    {
+    maxBinCount = max(maxBinCount,histo->binCounts[i]);
+    minBinCount = min(minBinCount,histo->binCounts[i]);
+    }
+
+binCountRange = maxBinCount - minBinCount;
+
+if (histo->binCount != GRAPH_WIDTH)
+    errAbort("histogram is not correctly sized ? %d vs %d",
+	histo->binCount, GRAPH_WIDTH);
+
+/*
+struct histoResult *histoGram(float *values, size_t N, float binSize,
+        unsigned binCount, float minValue, float min, float max,
+        struct histoResult *accumHisto);
+*/
+
+AllocVar(histoFileName);
+makeTempName(histoFileName, "hgtaPlot", ".gif");
+
+safef(bottomLabelStr,ArraySize(bottomLabelStr), "# of data values: %d",
+	totalCounts);
+safef(minYStr,ArraySize(minYStr), "%u", minBinCount);
+safef(maxYStr,ArraySize(maxYStr), "%u", maxBinCount);
+safef(minXStr,ArraySize(minXStr), "%.4g", table->min);
+safef(maxXStr,ArraySize(maxXStr), "%.4g", table->max);
+
+font = fontSetup(&fontHeight);
+fontHeight = mgFontLineHeight(font);
+/*	the vertical text size depends on the labels	*/
+leftLabelSize = max(mgFontStringWidth(font, minYStr),
+    mgFontStringWidth(font, maxYStr));
+/*	or perhaps the fontHeight	*/
+leftLabelSize = max(leftLabelSize,fontHeight);
+/*	the horizontal text is two label height */
+bottomLabelSize = fontHeight * 2;
+leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN;
+bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
+totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
+totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
+
+vg = vgOpenGif(totalWidth, totalHeight, histoFileName->forCgi);
+/*	x,y, w,h	*/
+vgSetClip(vg, 0, 0, totalWidth, totalHeight);
+
+if (binCountRange > 0)
+    {
+    int y1 = PLOT_MARGIN + GRAPH_HEIGHT;
+    for (i = 0; i < histo->binCount; ++i)
+	{
+	int x1 = leftMargin + i;
+	int y2 = PLOT_MARGIN + GRAPH_HEIGHT - (GRAPH_HEIGHT *
+	    ((double)(histo->binCounts[i] - minBinCount) /
+		(double)binCountRange));
+	vgLine(vg, x1, y1, x1, y2, MG_BLACK);	/*	top	*/
+	}
+    }
+
+addLabels(vg, font, minXStr, maxXStr, minYStr, maxYStr,
+    bottomLabelStr, NULL, totalWidth, totalHeight, leftMargin, fontHeight,
+	"counts in bin");
+
+vgUnclip(vg);
+vgClose(&vg);
+
+freeHistoGram(&histo);
+
+if (width)
+    *width = totalWidth;
+if (height)
+    *height = totalHeight;
+
+return histoFileName;
 }

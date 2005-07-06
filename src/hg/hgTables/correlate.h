@@ -101,6 +101,11 @@ struct trackTable
 			/* the actual tdb, without composite/wigMaf confusion */
     char *actualTable;	/* without composite/wigMaf confusion */
     struct dataVector *vSet;	/* the data for this table, all regions */
+    int count;		/*	number of data values over all regions	*/
+    double min;		/*	minimum data value over all regions	*/
+    double max;		/*	maximum data value over all regions	*/
+    double sumData;	/*	sum of all data here, all regions */
+    double sumSquares;	/*	sum of squares of all data here, all regions */
     };
 
 /*	functions in correlatePlot.c	*/
@@ -119,5 +124,9 @@ struct tempName *residualPlot(struct trackTable *table1,
     struct trackTable *table2, struct dataVector *result, double *F_statistic,
 	double *fitMin, double *fitMax, int *width, int *height);
 /*	create residual plot gif file in trash, return path name */
+
+struct tempName *histogramPlot(struct trackTable *table,
+    int *width, int *height);
+/*	create histogram plot gif file in trash, return path name */
 
 #endif /* CORRELATE_H */

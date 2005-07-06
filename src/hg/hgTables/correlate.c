@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.40 2005/07/06 00:20:28 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.41 2005/07/06 07:18:24 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -876,22 +876,29 @@ endTime = clock1000();
 v1->calcTime += endTime - startTime;
 }
 
-static void overallMinMax(struct trackTable *t, double *min, double *max)
-/*	find min,max in a set of data vectors	*/
+static void overallCounts(struct trackTable *t)
+/*	find overall min,max,sum,sumSquares in a set of data vectors	*/
 {
 register double minimum = INFINITY;
 register double maximum = -INFINITY;
+double sumData = 0.0;
+double sumSquares = 0.0;
+int count = 0;
 struct dataVector *dv;
 
 for (dv = t->vSet; dv != NULL; dv = dv->next)
     {
     minimum = min(minimum,dv->min);
     maximum = max(maximum,dv->max);
+    count += dv->count;
+    sumData += dv->sumData;
+    sumSquares += dv->sumSquares;
     }
-if (min)
-    *min = minimum;
-if (max)
-    *max = maximum;
+t->count = count;
+t->min = minimum;
+t->max = maximum;
+t->sumData = sumData;
+t->sumSquares = sumSquares;
 }
 
 static void calcMeanMinMax(struct dataVector *v)
@@ -1613,24 +1620,43 @@ calcMeanMinMax(result);
 return result;
 }	/*	struct dataVector *runRegression()	*/
 
+static void residualStats(struct dataVector *residuals)
+{
+hPrintf("<P><!--outer table is for border purposes-->\n");
+hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
+hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
+
+hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
+hPrintf("<TR><TH COLSPAN=3>residuals</TH></TR>\n");
+hPrintf("<TR><TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH></TR>\n");
+hPrintf("<TR><TD ALIGN=RIGHT>%.4g</TD>", residuals->min);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", residuals->max);
+hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", residuals->sumData / residuals->count);
+hPrintf("</TR></TABLE>\n");
+
+hPrintf("</TD></TR></TABLE</P>\n");
+}
+
 static void showPlots(struct trackTable *table1, struct trackTable *table2,
 	struct dataVector *result)
 {
 struct tempName *scatterPlotGif = NULL;
 struct tempName *residualPlotGif = NULL;
+struct tempName *histogram1PlotGif = NULL;
+struct tempName *histogram2PlotGif = NULL;
 double F_statistic = 0.0;
 double fitMin, fitMax;
-double yMin, yMax, xMin, xMax;
-int totalWidth, totalHeight;
+int totalWidthScatter, totalHeightScatter;
+int totalWidthResidual, totalHeightResidual;
+int totalWidthHisto1, totalHeightHisto1;
+int totalWidthHisto2, totalHeightHisto2;
 
-overallMinMax(table1, &yMin, &yMax);
-overallMinMax(table2, &xMin, &xMax);
-
-scatterPlotGif = scatterPlot(table1, table2, result, &totalWidth,
-	&totalHeight);
+scatterPlotGif = scatterPlot(table1, table2, result, &totalWidthScatter,
+	&totalHeightScatter);
 residualPlotGif = residualPlot(table1, table2, result, &F_statistic,
-	&fitMin, &fitMax, &totalWidth, &totalHeight);
-
+	&fitMin, &fitMax, &totalWidthResidual, &totalHeightResidual);
+histogram1PlotGif=histogramPlot(table1, &totalWidthHisto1, &totalHeightHisto1);
+histogram2PlotGif=histogramPlot(table2, &totalWidthHisto2, &totalHeightHisto2);
 
 hPrintf("<TABLE>");
 hPrintf("<TR><TD>\n");
@@ -1639,16 +1665,38 @@ hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%.4g</TH></TR>\n", result->r*result->r);
 hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
-	scatterPlotGif->forHtml, totalWidth, totalHeight);
-hPrintf("</TABLE></TD><TD WIDTH=380 BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
+	scatterPlotGif->forHtml, totalWidthScatter, totalHeightScatter);
+hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
 
 hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
 hPrintf("<TR><TH COLSPAN=2>Residuals&nbsp;vs.&nbsp;Fitted,&nbsp;F&nbsp;statistic:&nbsp;%.4g</TH></TR>\n", F_statistic);
 hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
-	residualPlotGif->forHtml, totalWidth, totalHeight);
+	residualPlotGif->forHtml, totalWidthResidual, totalHeightResidual);
 hPrintf("</TABLE>\n");
 hPrintf("</TD></TR></TABLE>\n");
+
+if (1 == 0)	/*	not really useful	*/
+    residualStats(result);
+
+hPrintf("<TABLE>");
+hPrintf("<TR><TD>\n");
+
+hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table1->shortLabel);
+hPrintf("<TR>");
+hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
+	histogram1PlotGif->forHtml, totalWidthHisto1, totalHeightHisto1);
+hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
+
+hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table2->shortLabel);
+hPrintf("<TR>");
+hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
+	histogram2PlotGif->forHtml, totalWidthHisto2, totalHeightHisto2);
+hPrintf("</TABLE>\n");
+hPrintf("</TD></TR></TABLE>\n");
+
 }
 
 static void tableInfoDebugDisplay(struct trackTable *tableList)
@@ -1675,23 +1723,6 @@ static void tableInfoDebugDisplay(struct trackTable *tableList)
     hPrintf("</TABLE>\n");
     hPrintf("</TD></TR></TABLE</P>\n");
     }
-}
-
-static void residualStats(struct dataVector *residuals)
-{
-hPrintf("<P><!--outer table is for border purposes-->\n");
-hPrintf("<TABLE BGCOLOR=\"#%s",HG_COL_BORDER);
-hPrintf("\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-
-hPrintf("<TABLE BGCOLOR=\"%s\" BORDER=1>", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=3>residuals</TH></TR>\n");
-hPrintf("<TR><TH>Minimum</TH><TH>Maximum</TH><TH>Mean</TH></TR>\n");
-hPrintf("<TR><TD ALIGN=RIGHT>%.4g</TD>", residuals->min);
-hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", residuals->max);
-hPrintf("<TD ALIGN=RIGHT>%.4g</TD>", residuals->sumData / residuals->count);
-hPrintf("</TR></TABLE>\n");
-
-hPrintf("</TD></TR></TABLE</P>\n");
 }
 
 void doCorrelateMore(struct sqlConnection *conn)
@@ -1825,10 +1856,12 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    struct trackTable *table1 = tableList;
 	    struct trackTable *table2 = tableList->next;
 	    struct dataVector *residuals;
+
 	    residuals = runRegression(tableList, totalBases);
+	    overallCounts(table1);
+	    overallCounts(table2);
 	    showThreeVectors(table1, table2, residuals);
 	    showPlots(table1, table2, residuals);
-	    residualStats(residuals);
 	    freeDataVector(&residuals);
 //hPrintf("<P>free residuals OK</P>\n");
 	    }
