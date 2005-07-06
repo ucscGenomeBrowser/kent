@@ -4105,6 +4105,7 @@ priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility dense
 type bed 5 .
+useScore 1
 
     track encodeRegulomeAmpliconOddCACO2
     subTrack encodeRegulomeAmplicon
@@ -4175,6 +4176,7 @@ priority 64.2
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility dense
 type bed 5 .
+useScore 1
 
     track encodeRegulomeQualityCACO2
     subTrack encodeRegulomeQuality
