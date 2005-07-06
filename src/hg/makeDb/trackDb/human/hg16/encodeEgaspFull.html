@@ -141,10 +141,20 @@ EGASP Updates track.</P>
 
 <H3>GeneMark</H3>
 <P>
-GeneMark uses HMMs with a hidden-state network to predict genes and intergenic 
-regions in a sequence by identifying the maximum likely parse of the whole 
-sequence into protein-coding genes (with possible introns) and intergenic 
-regions.</P>
+The eukaryotic version of the GeneMark.hmm (release 2.2) gene prediction
+program utilizes the HMM statistical model with duration or hidden
+semi-Markov model (HSMM). The HMM includes hidden states for initial, 
+internal and terminal exons, introns, intergenic regions and single exon genes. 
+It also includes the &quot;border&quot; states, such as start site (initiation 
+codon), stop site (termination codons), and donor and acceptor splice sites. 
+Sequences of all protein-coding regions were modeled by three periodic 
+inhomogeneous Markov chains; sequences of non-coding regions were modeled by 
+homogeneous Markov chains.  Nucleotide sequences corresponding to the site 
+states were modeled by position-specific inhomogeneous Markov chains. 
+Parameters of the gene models were derived from the set of genes obtained by 
+cDNA mapping to genomic DNA. To reflect variations in G+C composition of the
+genome, the gene model parameters were estimated separately for the three G+C 
+regions. </P>
 
 <H3>Jigsaw</H3>
 <P>
@@ -246,6 +256,10 @@ Royal Holloway, London University.
 Grup de Recerca en Informàtica Biomèdica 
 (<A HREF="http://www.imim.es/grib/eng/default.htm" TARGET=_blank>GRIB</A>) at 
 the Institut Municipal d'Investigació Mèdica (IMIM), Barcelona.
+<LI>
+<B>GeneMark:</B> Mark Borodovsky, Alex Lomsadze and Alexander Lukashin, 
+<A HREF="http://www.biology.gatech.edu/index.html" TARGET=_blank>Department of 
+Biology</A>, Georgia Institute of Technology.
 <LI>
 <B>Jigsaw:</B>  Jonathan Allen,  Steven Salzberg group, The Institute for 
 Genomic Research (<A HREF="http://www.tigr.org" TARGET=_blank>TIGR</A>)
