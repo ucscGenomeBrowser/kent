@@ -14,7 +14,7 @@
 #include "hgTables.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.8 2005/07/06 00:07:41 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.9 2005/07/06 00:18:00 hiram Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -126,7 +126,7 @@ vgLine(vg, leftMargin, PLOT_MARGIN, totalWidth-PLOT_MARGIN,
 vgLine(vg, totalWidth-PLOT_MARGIN, PLOT_MARGIN, /* right */
 	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK);
 #endif
-vgLine(vg, leftMargin, PLOT_MARGIN+GRAPH_HEIGHT,
+vgLine(vg, leftMargin, PLOT_MARGIN+GRAPH_HEIGHT+1,
 	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT+1, MG_BLACK);
 						/*	bottom	*/
 
@@ -146,13 +146,12 @@ else if (shortLabel != NULL)
     vgTextCentered(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, shortLabel);
 
 x1 = leftMargin;
-y1 = totalHeight-PLOT_MARGIN-fontHeight-fontHeight;
+y1 = totalHeight-PLOT_MARGIN-fontHeight-fontHeight+2;
 
 vgText(vg, x1, y1, MG_BLACK, font, minXStr);
 
 textWidth = mgFontStringWidth(font, maxXStr);
 x1 = totalWidth - PLOT_MARGIN - textWidth;
-y1 = totalHeight-PLOT_MARGIN-fontHeight-fontHeight;
 vgText(vg, x1, y1, MG_BLACK, font, maxXStr);
 
 x1 = 0;
