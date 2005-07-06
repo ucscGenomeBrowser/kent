@@ -1770,6 +1770,7 @@ compositeTrack on
 shortLabel GIS PET RNA
 longLabel Genome Institute of Singapore PET of PolyA+ RNA
 group encodeGenes
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 priority 49.2
 visibility hide
 itemRgb on
@@ -3122,7 +3123,7 @@ longLabel Genome Institute of Singapore ChIP-PET: p53 Ab on 5FU treated HCT116 c
 group encodeChip
 color 158,35,135
 priority 47.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 visibility hide
 useScore 1
 type bed 12
@@ -3823,7 +3824,7 @@ shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites 
 group encodeChrom
 priority 61.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 5 .
 useScore 1
@@ -4834,3 +4835,25 @@ searchPriority 10
 searchTable encodeIndels
 query select chrom, chromStart, chromEnd, name from %s where traceName like '%s'
 searchPriority 10
+
+searchTable encodeGisRnaPetHCT116
+searchMethod exact
+searchType bed
+termRegex [0-9]+-[0-9]+-[0-9]+
+shortCircuit 1
+searchPriority 50
+
+searchTable encodeGisRnaPetMCF7
+searchMethod exact
+searchType bed
+termRegex [0-9]+-[0-9]+-[0-9]+
+shortCircuit 1
+searchPriority 50
+
+searchTable encodeGisChipPet
+searchMethod exact
+searchType bed
+termRegex [0-9]+-[0-9]+
+shortCircuit 1
+searchPriority 50
+
