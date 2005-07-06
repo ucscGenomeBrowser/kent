@@ -5,7 +5,7 @@
 #include "common.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: vGfx.c,v 1.4 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: vGfx.c,v 1.5 2005/07/06 00:06:03 hiram Exp $";
 
 
 /* Most of the implementation of this is in macros in vGfx.h. */
@@ -30,5 +30,3 @@ vg->width = width;
 vg->height = height;
 return vg;
 }
-
-

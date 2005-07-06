@@ -12,7 +12,7 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-static char const rcsid[] = "$Id: memgfx.c,v 1.43 2005/04/10 14:41:23 markd Exp $";
+static char const rcsid[] = "$Id: memgfx.c,v 1.44 2005/07/06 00:06:03 hiram Exp $";
 
 static void mgSetDefaultColorMap(struct memGfx *mg)
 /* Set up default color map for a memGfx. */
@@ -596,6 +596,12 @@ void mgSlowDot(struct memGfx *mg, int x, int y, int colorIx)
 mgPutDot(mg, x, y, colorIx);
 }
 
+int mgSlowGetDot(struct memGfx *mg, int x, int y)
+/* Fetch a dot when a macro won't do. */
+{
+return mgGetDot(mg, x, y);
+}
+
 struct memGfx *mgRotate90(struct memGfx *in)
 /* Create a copy of input that is rotated 90 degrees clockwise. */
 {
@@ -630,6 +636,7 @@ void vgMgMethods(struct vGfx *vg)
 vg->pixelBased = TRUE;
 vg->close = (vg_close)mgFree;
 vg->dot = (vg_dot)mgSlowDot;
+vg->getDot = (vg_getDot)mgSlowGetDot;
 vg->box = (vg_box)mgDrawBox;
 vg->line = (vg_line)mgDrawLine;
 vg->text = (vg_text)mgText;
