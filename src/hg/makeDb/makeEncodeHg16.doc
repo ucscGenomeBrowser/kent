@@ -3082,6 +3082,7 @@ done
 #######################################################################
 #	loading Riken CAGE data - 2005-06-10 - Hiram
 #			completed 2005-07-06 - Hiram
+#	data submitter contact: Albin Sandelin - sandelin@gsc.riken.go.jp
 #
     cd /cluster/data/encode/Riken/2005-06-08
     tar xvzf CAGE_tracks.tar.gz
