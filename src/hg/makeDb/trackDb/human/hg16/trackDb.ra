@@ -4012,6 +4012,47 @@ type bed 3 .
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
 
+track encodeRegulomeHs
+compositeTrack on
+shortLabel Regulome DNAse-I HS
+longLabel Regulome DNAse-I Hypersensitive Sites
+group encodeChrom
+priority 63.5
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility dense
+type wig 0.0 3.0
+autoScaleDefault Off
+
+    track encodeRegulomeHsCACO2
+    subTrack encodeRegulomeHs
+    shortLabel CACO2
+    longLabel CACO2 DNAse-I Hypersensitivity
+    priority 1
+
+    track encodeRegulomeHsGM06990
+    subTrack encodeRegulomeHs
+    shortLabel GM06990
+    longLabel GM06990 DNAse-I Hypersensitivity
+    priority 2
+
+    track encodeRegulomeHsSKNSH
+    subTrack encodeRegulomeHs
+    shortLabel SKNSH
+    longLabel SKNSH DNAse-I Hypersensitivity
+    priority 3
+
+    track encodeRegulomeHsERY
+    subTrack encodeRegulomeHs
+    shortLabel ERY
+    longLabel ERY DNAse-I Hypersensitivity
+    priority 4
+
+    track encodeRegulomeHsK562
+    subTrack encodeRegulomeHs
+    shortLabel K562
+    longLabel K562 DNAse-I Hypersensitivity
+    priority 5
+
 track encodeRegulomeSnr
 compositeTrack on
 shortLabel Regulome SNR
