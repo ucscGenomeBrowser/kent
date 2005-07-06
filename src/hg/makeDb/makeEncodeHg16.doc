@@ -2455,6 +2455,83 @@ done
     # Yale MAS RNA - Yale MAS array, RNA Transcript Map, Placenta,
     #	Nimblegen Protocol
 
+#######################################################################
+#	More Yale Nimblegen data - 2005-07-05 - Hiram
+    cd /cluster/data/encode/yale/nimblegen/2005-05-31
+    tar xvzf encode_Yale_MAS_nimbleprot_31May2005.tar.gz
+
+D="encode_Yale_MAS_nimbleprot_31May2005"
+
+fold -s -w72 ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Tars-FWD_Maskless36merevery36bp.html > \
+	encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp.html
+fold -s -w72 ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Tars-REV_Maskless36merevery36bp.html > \
+	encodeYaleMASNB4RNANProtTarsREVMless36mer36bp.html
+#
+fold -s -w72 ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Transcript-Map-FWD_Maskless36merevery36bp.html > \
+	encodeYaleMASNB4RNANprotTMFWDMless36mer36bp.html
+fold -s -w72 ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Transcript-Map-REV_Maskless36merevery36bp.html > \
+	encodeYaleMASNB4RNANprotTMREVMless36mer36bp.html
+#
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Tars-FWD_Maskless36merevery36bp.html > \
+	encodeYaleMASPlacRNANprotTarsFWDMless36mer36bp.html
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Tars-REV_Maskless36merevery36bp.html > \
+	encodeYaleMASPlacRNANprotTarsREVMless36mer36bp.html
+#
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Transcript-Map-FWD_Maskless36merevery36bp.html > \
+	encodeYaleMASPlacRNANprotTMFWDMless36mer36bp.html
+fold -s -w72 ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Transcript-Map-REV_Maskless36merevery36bp.html > \
+	encodeYaleMASPlacRNANprotTMREVMless36mer36bp.html
+####
+ln -s \
+  ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Tars_FWD.Maskless36merevery36bp.bed \
+	encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp.bed
+ln -s \
+  ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Tars_REV.Maskless36merevery36bp.bed \
+	encodeYaleMASNB4RNANProtTarsREVMless36mer36bp.bed
+#
+ln -s \
+  ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Transcript-Map-FWD_Maskless36merevery36bp.wig \
+	encodeYaleMASNB4RNANprotTMFWDMless36mer36bp.wig
+ln -s \
+  ${D}/encode_Yale_MAS_NB4_RNA_nimbleprot_Transcript-Map-REV_Maskless36merevery36bp.wig \
+        encodeYaleMASNB4RNANprotTMREVMless36mer36bp.wig
+#
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Tars_FWD.Maskless36merevery36bp.bed \
+	encodeYaleMASPlacRNANprotTarsFWDMless36mer36bp.bed
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Tars_REV.Maskless36merevery36bp.bed \
+	encodeYaleMASPlacRNANprotTarsREVMless36mer36bp.bed
+#
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Transcript-Map-FWD_Maskless36merevery36bp.wig \
+	encodeYaleMASPlacRNANprotTMFWDMless36mer36bp.wig
+ln -s ${D}/encode_Yale_MAS_Placenta_RNA_nimbleprot_Transcript-Map-REV_Maskless36merevery36bp.wig \
+	encodeYaleMASPlacRNANprotTMREVMless36mer36bp.wig
+
+    #  load the tables
+for T in encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp \
+	encodeYaleMASNB4RNANProtTarsREVMless36mer36bp \
+	encodeYaleMASPlacRNANprotTarsREVMless36mer36bp \
+	encodeYaleMASPlacRNANprotTarsFWDMless36mer36bp
+do
+    grep "^chr" ${T}.bed | sort -k1,1 -k2,2n | \
+        hgLoadBed -strict hg16 ${T} stdin
+done
+    # Combine these four tables into the existing composite:
+    #	encodeYaleMASPlacRNATars
+    # Yale MAS TAR - Yale MAS array, RNA Transcriptionally Active Regions,
+    #	Placenta, Nimblegen Protocol
+
+for T in encodeYaleMASNB4RNANprotTMFWDMless36mer36bp \
+    encodeYaleMASNB4RNANprotTMREVMless36mer36bp \
+    encodeYaleMASPlacRNANprotTMFWDMless36mer36bp \
+    encodeYaleMASPlacRNANprotTMREVMless36mer36bp
+do
+    grep "^chr" ${T}.wig | sort -k1,1 -k2,2n | \
+        hgLoadBed -bedGraph=4 -strict hg16 ${T} stdin
+done
+    # Combine these four tables into the existing composite:
+    #	encodeYaleMASPlacRNATransMap
+    # Yale MAS RNA - Yale MAS array, RNA Transcript Map, Placenta,
+    #	Nimblegen Protocol
 
 #######################################################################
 # Boston University ORChID track - (DONE - 2005-06-09 - Hiram)
