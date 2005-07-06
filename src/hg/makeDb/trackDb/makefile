@@ -42,6 +42,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	anoGam1 \
 	apiMel1 \
 	apiMel2	\
+	triCas1 \
 	ci1 \
 	strPur1 \
 	ce1 ce2 ce3 \
@@ -53,7 +54,8 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	pyrFur2 \
 	sc1 \
 	canHg4 mmHg4 panHg4 \
-	vibCho1
+	vibCho1 \
+	sulSol1
 
 MGC_DBS = \
 	hg16 hg17 \
@@ -62,7 +64,7 @@ MGC_DBS = \
 	danRer1	danRer2 \
 	xenTro1
 
-update: clean
+update: #clean
 	@for D in *; do \
             if [ -d "$$D" ]; then \
 		if test "$$D" != "zoo" ; then \
