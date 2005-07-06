@@ -16744,5 +16744,3 @@ superfam050524.sfAssign;'
 
     hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 
-# UPDATED WGRNA DATA PER EMAIL FROM WEBER (2004-12-14, Fan).
-
