@@ -86,8 +86,16 @@ int mgColorsFree(struct memGfx *mg);
 #define _mgPutDot(mg, x, y, color) (*_mgPixAdr(mg,x,y) = (color))
 /* Unclipped plot a dot */
 
+#define _mgGetDot(mg, x, y) (*_mgPixAdr(mg,x,y))
+/* Unclipped get a dot, you do not want to use this, this is special for
+ * verticalText only */
+
 #define mgPutDot(mg,x,y,color) if ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) _mgPutDot(mg,x,y,color)
 /* Clipped put dot */
+
+#define mgGetDot(mg,x,y) ((x)>=(mg)->clipMinX && (x) < (mg)->clipMaxX && (y)>=(mg)->clipMinY  && (y) < (mg)->clipMaxY) ? _mgGetDot(mg,x,y) : 0
+/* Clipped get dot, you do not want to use this, this is special for
+ * verticalText only */
 
 void mgPutSeg(struct memGfx *mg, int x, int y, int width, Color *dots);
 /* Put a series of dots starting at x, y and going to right width pixels. */
@@ -147,10 +155,21 @@ typedef struct font_hdr MgFont;
 
 MgFont *mgTinyFont();
 MgFont *mgSmallFont();
-MgFont *mgSmallishFont();
 MgFont *mgMediumFont();
 MgFont *mgLargeFont();
 MgFont *mgHugeFont();
+#ifdef NOT_NOW
+MgFont *mgTinyBoldFont();
+MgFont *mgSmallBoldFont();
+MgFont *mgMediumBoldFont();
+MgFont *mgLargeBoldFont();
+MgFont *mgHugeBoldFont();
+MgFont *mgTinyFixedFont();
+MgFont *mgSmallFixedFont();
+MgFont *mgMediumFixedFont();
+MgFont *mgLargeFixedFont();
+MgFont *mgHugeFixedFont();
+#endif
 
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text);

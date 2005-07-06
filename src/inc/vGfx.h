@@ -25,6 +25,10 @@ struct vGfx
     /* Draw a single pixel.  Try to work at a higher level
      * when possible! */
 
+    int (*getDot)(void *v, int x, int y);
+    /* Fetch a single pixel.  Please do not use this, this is special
+     * for verticalText only. */
+
     void (*box)(void *v, int x, int y, 
 	    int width, int height, int colorIx);
     /* Draw a box. */
@@ -88,6 +92,10 @@ void vgClose(struct vGfx **pVg);
 #define vgDot(v,x,y, color) v->dot(v->data,x,y,color)
 /* Draw a single pixel.  Try to work at a higher level
  * when possible! */
+
+#define vgGetDot(v,x,y) v->getDot(v->data,x,y)
+/* Fetch a single pixel.  Please do not use this, this is special for
+ * verticalText only */
 
 #define vgBox(v,x,y,width,height,color) v->box(v->data,x,y,width,height,color)
 /* Draw a box. */
