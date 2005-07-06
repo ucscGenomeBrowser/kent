@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.38 2005/07/06 00:07:41 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.39 2005/07/06 00:12:46 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1836,7 +1836,8 @@ if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
 	    hPrintf("<P>no intersection between the two tables "
 		"in this region</P>\n");
 
-// tableInfoDebugDisplay(tableList);	/*	dbg	*/
+if (1 == 0)
+    tableInfoDebugDisplay(tableList);	/*	dbg	*/
 
 	freeTrackTableList(&tableList);
 //hPrintf("<P>freeTrackTableList OK</P>\n");
