@@ -2164,7 +2164,7 @@ type bed 5 +
 track encodeYaleMASPlacRNATransMap
 compositeTrack on
 shortLabel Yale MAS RNA 
-longLabel Yale MAS array, RNA Transcript Map, Placenta, Nimblegen Protocol
+longLabel Yale Maskless Array Synthesizer, RNA Transcript Map
 group encodeTxLevels
 priority 28.0
 chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
@@ -2175,50 +2175,50 @@ minLimit 0
 maxLimit 10.536
 autoScale Off
 
-    track encodeYaleMASPlacRNATransMapFwdMless36mer36bp
+    track encodeYaleMASNB4RNANprotTMFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
-    shortLabel Yale MAS Fwd RNA
-    longLabel Yale MAS array, RNA Trans Map, Placenta, Forward Direction, 36-mer, 36bp Win
+    shortLabel Yale NB4 NgF RNA
+    longLabel Yale NB4 RNA Trans Map, MAS Array, Forward Direction, Nimblegen Protocol
     priority 1
     color 200,50,50
     altColor 50,50,200
 
+    track encodeYaleMASNB4RNANprotTMREVMless36mer36bp
+    subTrack encodeYaleMASPlacRNATransMap
+    shortLabel Yale NB4 NgR RNA
+    longLabel Yale NB4 RNA Trans Map, MAS Array, Reverse Direction, Nimblegen Protocol
+    priority 2
+    color 50,50,200
+    altColor 200,50,50
+
     track encodeYaleMASPlacRNANprotTMFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
-    shortLabel Yale MAS Fwd NProt
-    longLabel Yale MAS array, RNA Trans Map, Placenta, Forward Direction, 36-mer, 36bp Win
-    priority 2
+    shortLabel Yale Plc NgF RNA
+    longLabel Yale Placenta RNA Trans Map, MAS Array, Forward Direction, Nimblegen Protocol
+    priority 3
     color 200,50,50
     altColor 50,50,200
 
-    track encodeYaleMASNB4RNANprotTMFWDMless36mer36bp
+    track encodeYaleMASPlacRNANprotTMREVMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
-    shortLabel Yale MAS Fwd NProt
-    longLabel Yale MAS array, RNA Trans Map, Placenta, Forward Direction, 36-mer, 36bp Win
-    priority 3
+    shortLabel Yale Plc NgR RNA
+    longLabel Yale Placenta RNA Trans Map, MAS Array, Reverse Direction, Nimblegen Protocol
+    priority 4
+    color 50,50,200
+    altColor 200,50,50
+
+    track encodeYaleMASPlacRNATransMapFwdMless36mer36bp
+    subTrack encodeYaleMASPlacRNATransMap
+    shortLabel Yale Plc BtF RNA
+    longLabel Yale Placenta RNA TransMap, MAS array, Forward Direction, Bertone Protocol
+    priority 5
     color 200,50,50
     altColor 50,50,200
 
     track encodeYaleMASPlacRNATransMapRevMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
-    shortLabel Yale MAS Rev RNA
-    longLabel Yale MAS array, RNA Trans Map, Placenta, Reverse Direction, 36-mer, 36bp Win
-    priority 4
-    color 50,50,200
-    altColor 200,50,50
-
-    track encodeYaleMASPlacRNANprotTMREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
-    shortLabel Yale MAS Rev NProt
-    longLabel Yale MAS array, RNA Trans Map, Placenta, Reverse Direction, 36-mer, 36bp Win
-    priority 5
-    color 50,50,200
-    altColor 200,50,50
-
-    track encodeYaleMASNB4RNANprotTMREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATransMap
-    shortLabel Yale MAS Rev NProt
-    longLabel Yale MAS array, RNA Trans Map, Placenta, Reverse Direction, 36-mer, 36bp Win
+    shortLabel Yale Plc BtR RNA
+    longLabel Yale Placenta RNA Trans Map, MAS Array, Reverse Direction, Bertone Protocol
     priority 6
     color 50,50,200
     altColor 200,50,50
@@ -2226,57 +2226,57 @@ autoScale Off
 track encodeYaleMASPlacRNATars
 compositeTrack on
 shortLabel Yale MAS TAR
-longLabel Yale MAS array, RNA Transcriptionally Active Regions, Placenta, Nimblegen Protocol
+longLabel Yale Maskless Array Synthesizer, RNA Transcriptionally Active Regions
 group encodeTxLevels
 priority 29.0
 chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
 visibility hide
 type bed 6 .
 
-    track encodeYaleMASPlacRNATarsFwdMless36mer36bp
+    track encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
-    shortLabel Yale MAS Fwd TAR
-    longLabel Yale MAS array, RNA TARs, Placenta, Forward Direction, 36-mer, 36bp Win
+    shortLabel Yale NB4 NgF TAR
+    longLabel Yale NB4 RNA TARs, MAS array, Forward Direction, Nimblegen Protocol
     priority 1
     color 200,50,50
     altColor 50,50,200
 
-    track encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp
+    track encodeYaleMASNB4RNANProtTarsREVMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
-    shortLabel Yale MAS Fwd NProt TAR
-    longLabel Yale MAS array, RNA TARs, Placenta, Forward Direction, 36-mer, 36bp Win
+    shortLabel Yale NB4 NgR TAR
+    longLabel Yale NB4 RNA TARs, MAS array, Reverse Direction, Nimblegen Protocol
     priority 2
-    color 200,50,50
-    altColor 50,50,200
+    color 50,50,200
+    altColor 200,50,50
 
     track encodeYaleMASPlacRNANprotTarsFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
-    shortLabel Yale MAS Fwd NProt TAR
-    longLabel Yale MAS array, RNA TARs, Placenta, Forward Direction, 36-mer, 36bp Win
+    shortLabel Yale Plc NgF TAR
+    longLabel Yale Placenta RNA TARs, MAS array, Forward Direction, Nimblegen Protocol
     priority 3
+    color 200,50,50
+    altColor 50,50,200
+
+    track encodeYaleMASPlacRNANprotTarsREVMless36mer36bp
+    subTrack encodeYaleMASPlacRNATars
+    shortLabel Yale Plc NgR TAR
+    longLabel Yale Placenta RNA TARs, MAS array, Reverse Direction, Nimblegen Protocol
+    priority 4
+    color 50,50,200
+    altColor 200,50,50
+
+    track encodeYaleMASPlacRNATarsFwdMless36mer36bp
+    subTrack encodeYaleMASPlacRNATars
+    shortLabel Yale Plc BtF TAR
+    longLabel Yale Placenta RNA TARs, MAS array, Forward Direction, Bertone Protocol
+    priority 5
     color 200,50,50
     altColor 50,50,200
 
     track encodeYaleMASPlacRNATarsRevMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
-    shortLabel Yale MAS Rev TAR
-    longLabel Yale MAS array, RNA TARs, Placenta, Reverse Direction, 36-mer, 36bp Win
-    priority 4
-    color 50,50,200
-    altColor 200,50,50
-
-    track encodeYaleMASNB4RNANProtTarsREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
-    shortLabel Yale MAS Rev NProt TAR
-    longLabel Yale MAS array, RNA TARs, Placenta, Reverse Direction, 36-mer, 36bp Win
-    priority 5
-    color 50,50,200
-    altColor 200,50,50
-
-    track encodeYaleMASPlacRNANprotTarsREVMless36mer36bp
-    subTrack encodeYaleMASPlacRNATars
-    shortLabel Yale MAS Rev NProt TAR
-    longLabel Yale MAS array, RNA TARs, Placenta, Reverse Direction, 36-mer, 36bp Win
+    shortLabel Yale Plc BtR TAR
+    longLabel Yale Placenta RNA TARs, MAS array, Reverse Direction, Bertone Protocol
     priority 6
     color 50,50,200
     altColor 200,50,50
