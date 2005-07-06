@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.83 2005/07/01 17:18:28 hiram Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.84 2005/07/06 22:00:01 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -562,7 +562,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-if (curTrack && trackDbIsComposite(curTrack) && !(isWig || isBedGraph))
+if (curTrack && trackDbIsComposite(curTrack) && !isBedGraph)
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
     if (anySubtrackMerge(database, curTable))
@@ -727,7 +727,8 @@ hPrintf("%s",
   "for a limited period.");
 
 /* Main form. */
-hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=POST>\n", getScriptName());
+hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=%s>\n",
+	getScriptName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 jsWriteFunctions();
 showMainControlTable(conn);

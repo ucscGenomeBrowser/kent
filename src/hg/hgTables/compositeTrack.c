@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.2 2005/07/01 00:56:32 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.3 2005/07/06 22:00:01 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -20,11 +20,19 @@ static char *curVars[] = {hgtaSubtrackMergePrimary,
 			  hgtaSubtrackMergeOp,
 			  hgtaSubtrackMergeMoreThreshold,
 			  hgtaSubtrackMergeLessThreshold,
+			  hgtaSubtrackMergeWigOp,
+			  hgtaSubtrackMergeRequireAll,
+			  hgtaSubtrackMergeUseMinScore,
+			  hgtaSubtrackMergeMinScore,
 	};
 static char *nextVars[] = {hgtaNextSubtrackMergePrimary,
 			   hgtaNextSubtrackMergeOp,
 			   hgtaNextSubtrackMergeMoreThreshold,
 			   hgtaNextSubtrackMergeLessThreshold,
+			   hgtaNextSubtrackMergeWigOp,
+			   hgtaNextSubtrackMergeRequireAll,
+			   hgtaNextSubtrackMergeUseMinScore,
+			   hgtaNextSubtrackMergeMinScore,
 	};
 
 boolean anySubtrackMerge(char *db, char *table)
@@ -57,69 +65,54 @@ safef(option, sizeof(option), "%s_sel", tableName);
 return cartUsualBoolean(cart, option, FALSE);
 }
 
+static void makeWigOpButton(char *val, char *selVal)
+/* Make merge-wiggle-op radio button. */
+{
+cgiMakeRadioButton(hgtaNextSubtrackMergeWigOp, val, sameString(val, selVal));
+}
+
+static void showWiggleMergeOptions()
+/* Show subtrack merge operation options for wiggle tables. */
+{
+char *setting = cartUsualString(cart, hgtaNextSubtrackMergeWigOp, "average");
+makeWigOpButton("average", setting);
+printf("Average (at each position) of all selected subtracks' scores<BR>\n");
+makeWigOpButton("sum", setting);
+printf("Sum (at each position) of all selected subtracks' scores<BR>\n");
+makeWigOpButton("product", setting);
+printf("Product (at each position) of all selected subtracks' scores<BR>\n");
+makeWigOpButton("min", setting);
+printf("Minimum (at each position) of all selected subtracks' scores<BR>\n");
+makeWigOpButton("max", setting);
+printf("Maximum (at each position) of all selected subtracks' scores<P>\n");
+
+cgiMakeCheckBox(hgtaNextSubtrackMergeRequireAll,
+		cartUsualBoolean(cart, hgtaSubtrackMergeRequireAll, FALSE));
+printf("Discard scores for positions at which one or more selected subtracks "
+       "have no data.<BR>\n");
+cgiMakeCheckBox(hgtaNextSubtrackMergeUseMinScore,
+		cartUsualBoolean(cart, hgtaSubtrackMergeUseMinScore, FALSE));
+printf("Discard scores less than \n");
+setting = cartCgiUsualString(cart, hgtaNextSubtrackMergeMinScore, "0.0");
+cgiMakeTextVar(hgtaNextSubtrackMergeMinScore, setting, 5);
+printf(" after performing the above operation.<P>\n");
+}
+
 static void makeOpButton(char *val, char *selVal)
-/* Make merge-op radio button. */
+/* Make merge-bed-op radio button. */
 {
 cgiMakeRadioButton(hgtaNextSubtrackMergeOp, val, sameString(val, selVal));
 }
 
-void doSubtrackMergeMore(struct sqlConnection *conn)
-/* Respond to subtrack merge create/edit button */
+static void showBedMergeOptions()
+/* Show subtrack merge operation options for tables that are distilled 
+ * to BED (not wiggle/bedGraph). */
 {
-struct trackDb *subtrack = NULL;
-char *dbTable = getDbTable(database, curTable);
-char *op = NULL;
-char *primaryLongLabel = NULL, *primaryType = NULL;
+char *op = cartUsualString(cart, hgtaNextSubtrackMergeOp, "any");
 char *setting = NULL;
-
-htmlOpen("Merge subtracks of %s (%s)",
-	 curTrack->tableName, curTrack->longLabel);
-
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
-cartSaveSession(cart);
-/* Currently selected subtrack table will be the primary subtrack in the 
- * merge. */
-cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
-
-for (subtrack = curTrack->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    if (sameString(curTable, subtrack->tableName))
-	{
-	primaryLongLabel = subtrack->longLabel;
-	primaryType = subtrack->type;
-	break;
-	}
-    }
-hPrintf("<H3>Select a subset of subtracks to merge with %s:</H3>\n",
-	primaryLongLabel);
-hPrintf("<TABLE>\n");
-slSort(&(curTrack->subtracks), trackDbCmp);
-for (subtrack = curTrack->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    if (! sameString(curTable, subtrack->tableName) &&
-	sameString(primaryType, subtrack->type))
-	{
-	char option[64];
-	char *words[2];
-	boolean alreadySet = TRUE;
-	puts("<TR><TD>");
-	safef(option, sizeof(option), "%s_sel", subtrack->tableName);
-	if ((setting = trackDbSetting(curTrack, "subTrack")) != NULL)
-	    if (chopLine(cloneString(setting), words) >= 2)
-		alreadySet = differentString(words[1], "off");
-	alreadySet = cartUsualBoolean(cart, option, alreadySet);
-	cgiMakeCheckBox(option, alreadySet);
-	printf ("%s", subtrack->longLabel);
-	puts("</TD></TR>");
-	}
-    }
-hPrintf("</TABLE>\n");
-
-hPrintf("<H3>Select a merge operation:</H3>\n");
 hPrintf("These combinations will maintain the gene/alignment structure "
 	"(if any) of %s: <P>\n", curTable);
 
-op = cartUsualString(cart, hgtaNextSubtrackMergeOp, "any");
 makeOpButton("any", op);
 printf("All %s records that have any overlap with any other selected subtrack<BR>\n",
        curTable);
@@ -153,12 +146,160 @@ printf("Base-pair-wise intersection (AND) of %s and other selected subtracks<BR>
 makeOpButton("or", op);
 printf("Base-pair-wise union (OR) of %s and other selected subtracks<P>\n",
        curTable);
+}
+
+static struct trackDb *getPrimaryTdb()
+/* Return a pointer to the subtrack tdb for the primary subtrack. */
+{
+struct trackDb *primary = NULL, *sTdb = NULL;
+for (sTdb = curTrack->subtracks; sTdb != NULL; sTdb = sTdb->next)
+    {
+    if (sameString(curTable, sTdb->tableName))
+	{
+	primary = sTdb;
+	break;
+	}
+    }
+return primary;
+}
+
+void showSubtrackSelection(struct trackDb *primary)
+/* Offer the user a choice of which subtracks to merge in.  Don't offer a 
+ * choice for the primary table -- that is automatically selected because 
+ * they chose it on the main page. */
+{
+struct trackDb *subtrack = NULL;
+char option[64];
+
+safef(option, sizeof(option), "%s_sel", curTable);
+cgiMakeHiddenVar(option, "on");
+
+hPrintf("\n<TABLE>\n");
+slSort(&(curTrack->subtracks), trackDbCmp);
+for (subtrack = curTrack->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (! sameString(curTable, subtrack->tableName) &&
+	sameString(primary->type, subtrack->type))
+	{
+	char *words[2];
+	char *setting = NULL;
+	boolean alreadySet = TRUE;
+	puts("<TR><TD>");
+	safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+	if ((setting = trackDbSetting(curTrack, "subTrack")) != NULL)
+	    if (chopLine(cloneString(setting), words) >= 2)
+		alreadySet = differentString(words[1], "off");
+	alreadySet = cartUsualBoolean(cart, option, alreadySet);
+	cgiMakeCheckBox(option, alreadySet);
+	printf ("%s", subtrack->longLabel);
+	puts("</TD></TR>");
+	}
+    }
+hPrintf("</TABLE>\n");
+}
+
+void doSubtrackMergeMore(struct sqlConnection *conn)
+/* Respond to subtrack merge create/edit button */
+{
+struct trackDb *primary = getPrimaryTdb();
+char *dbTable = getDbTable(database, curTable);
+
+htmlOpen("Merge subtracks of %s (%s)",
+	 curTrack->tableName, curTrack->longLabel);
+
+hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=POST>\n");
+cartSaveSession(cart);
+/* Currently selected subtrack table will be the primary subtrack in the 
+ * merge. */
+cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
+
+hPrintf("<H3>Select a subset of subtracks to merge with %s:</H3>\n",
+	primary->longLabel);
+showSubtrackSelection(primary);
+
+hPrintf("<H3>Select a merge operation:</H3>\n");
+if (isWiggle(database, curTable))
+    showWiggleMergeOptions(primary->longLabel);
+else
+    showBedMergeOptions();
+hPrintf("If a filter is specified on the main Table Browser page, it will "
+	"be applied only to %s, not to any other selected subtrack.  ",
+	primary->longLabel);
+hPrintf("If an intersection is specified on the main page, it will be applied "
+	"to the result of this merge.<P>\n");
 hPrintf("<P>\n");
 cgiMakeButton(hgtaDoSubtrackMergeSubmit, "submit");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
 hPrintf("</FORM>\n");
 htmlClose();
+}
+
+char *describeSubtrackMerge(char *linePrefix)
+/* Return a multi-line string that describes the specified subtrack merge, 
+ * with each line beginning with linePrefix. */
+{
+struct dyString *dy = dyStringNew(512);
+struct trackDb *primary = getPrimaryTdb(), *tdb = NULL;
+dyStringAppend(dy, linePrefix);
+dyStringPrintf(dy, "Subtrack merge, primary table = %s (%s)\n",
+	       curTable, primary->longLabel);
+dyStringAppend(dy, linePrefix);
+dyStringPrintf(dy, "Subtrack merge operation: ");
+if (isWiggle(database, curTable))
+    {
+    char *op = cartString(cart, hgtaSubtrackMergeWigOp);
+    dyStringPrintf(dy, "%s of %s and selected subtracks:\n", op, curTable);
+    }
+else
+    {
+    char *op = cartString(cart, hgtaSubtrackMergeOp);
+    if (sameString(op, "any"))
+	dyStringPrintf(dy, "All %s records that have any overlap with "
+		       "any other selected subtrack:\n",
+		       curTable);
+    else if (sameString(op, "none"))
+	dyStringPrintf(dy, "All %s records that have no overlap with "
+		       "any other selected subtrack:\n",
+		       curTable);
+    else if (sameString(op, "more"))
+	{
+	dyStringPrintf(dy, "All %s records that have at least %s ",
+		       curTable,
+		       cartString(cart, hgtaNextSubtrackMergeMoreThreshold));
+	dyStringPrintf(dy, " %% overlap with any other selected subtrack:\n");
+	}
+    else if (sameString(op, "less"))
+	{
+	dyStringPrintf(dy, "All %s records that have at most ",
+		       curTable,
+		       cartString(cart, hgtaNextSubtrackMergeLessThreshold));
+	dyStringPrintf(dy, " %% overlap with any other selected subtrack:\n");
+
+	}
+    else if (sameString(op, "cat"))
+	dyStringPrintf(dy, "All %s records, as well as all records from "
+		       "all other selected subtracks:\n", curTable);
+    else if (sameString(op, "and"))
+	dyStringPrintf(dy, "Base-pair-wise intersection (AND) of %s and "
+		       "other selected subtracks:\n", curTable);
+    else if (sameString(op, "or"))
+	dyStringPrintf(dy, "Base-pair-wise union (OR) of %s and other "
+		       "selected subtracks:\n",
+       curTable);
+    else
+	errAbort("describeSubtrackMerge: unrecognized op %s", op);
+    }
+for (tdb=curTrack->subtracks;  tdb != NULL;  tdb = tdb->next)
+    {
+    if (!sameString(tdb->tableName, curTable) &&
+	isSubtrackMerged(tdb->tableName))
+	{
+	dyStringAppend(dy, linePrefix);
+	dyStringPrintf(dy, "  %s (%s)\n", tdb->tableName, tdb->longLabel);
+	}
+    }
+return dyStringCannibalize(&dy);
 }
 
 static void copyCartVars(struct cart *cart, char **source, char **dest,

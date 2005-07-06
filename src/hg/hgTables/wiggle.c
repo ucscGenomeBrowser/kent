@@ -18,9 +18,10 @@
 #include "trackDb.h"
 #include "customTrack.h"
 #include "wiggle.h"
+#include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.49 2005/06/24 20:17:43 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.50 2005/07/06 22:00:01 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -289,7 +290,10 @@ unsigned long long valuesMatched = 0;
  *	table 2 since it was then inverted at that time so it is already
  *	"none" of itself.
  */
-if (anyIntersection())
+/* If table2 is NULL, it means that the WIG_INIT macro recognized that we 
+ * are working on table2 now, so we should not use intersectBedList 
+ * (in fact we may be trying to compute it here). */
+if (anyIntersection() && (table2 != NULL))
     {
     if (*intersectBedList)
 	{
@@ -303,6 +307,150 @@ else
     }
 
 return valuesMatched;
+}
+
+static void intersectMergedResult(char *table, struct dataVector *dataVector1,
+			struct region *region, struct sqlConnection *conn)
+/* Perform intersection (if specified) on result of subtrack merge. */
+{
+/* If table is type wig (not bedGraph), then intersection has already been 
+ * performed on each input (other selected subtracks must be the same type 
+ * as table).  
+ * Otherwise, handle intersection here. */
+if (anyIntersection() && !startsWith("wig ", curTrack->type))
+    {
+    char *table2 = cartString(cart, hgtaIntersectTrack);
+    if (table2 && differentWord(table2, table))
+	{
+	struct trackDb *tdb2 = hTrackDbForTrack(table2);
+	struct trackTable *tt2 = trackTableNew(tdb2, table2, conn);
+	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
+								  conn);
+	char *op = cartString(cart, hgtaIntersectOp);
+	boolean dv2IsWiggle = (startsWith("wig ", tdb2->type) ||
+			       startsWith("bedGraph ", tdb2->type));
+	dataVectorIntersect(dataVector1, dataVector2,
+			    dv2IsWiggle, sameString(op, "none"));
+	dataVectorFree(&dataVector2);
+	}
+    }
+}
+
+static void printMergedResult(struct dataVector *dataVector1,
+			      struct region *region,
+			      enum wigOutputType wigOutType)
+/* Print out bed or data points from result. */
+{
+int i=0, start=0, lastPos=0;
+int n=0;
+if (dataVector1->count < 1)
+    return;
+switch (wigOutType)
+    {
+    case wigOutBed:
+	printf("%s", describeSubtrackMerge("#\t"));
+	start = lastPos = dataVector1->position[0];
+	for (i=1;  i < dataVector1->count;  i++)
+	    {
+	    int pos = dataVector1->position[i];
+	    if (pos != (lastPos+1))
+		{
+		printf("%s\t%d\t%d\t%s.%d\n", region->chrom, start, lastPos+1,
+		       region->chrom, ++n);
+		start = pos;
+		}
+	    lastPos = pos;
+	    }
+	printf("%s\t%d\t%d\t%s.%d\n", region->chrom, start, lastPos+1,
+	       region->chrom, ++n);
+	break;
+    case wigDataNoPrint:
+	break;
+    case wigOutData:
+    default:
+	{
+	time_t now = time(NULL);
+	char *dateStamp = sqlUnixTimeToDate(&now,TRUE);	/* TRUE == gmTime */
+	printf("#\toutput date: %s UTC\n", dateStamp);
+	freez(&dateStamp);
+	printf("#\tchrom specified: %s\n", region->chrom);
+	printf("#\tposition specified: %d-%d\n", region->start, region->end);
+	printf("%s", describeSubtrackMerge("#\t"));
+	/* Might be nice to include a generic disclaimer about loss of 
+	 * resolution here. */
+	printf("variableStep chrom=%s span=1\n", region->chrom);
+	for (i=0;  i < dataVector1->count;  i++)
+	    {
+	    printf("%d\t%g\n",
+		   dataVector1->position[i]+1, dataVector1->value[i]);
+	    }
+	}
+	break;
+    };
+}
+
+static int mergedWigOutRegion(char *table, struct sqlConnection *conn,
+			      struct region *region, int maxOut,
+			      enum wigOutputType wigOutType)
+/* Perform the specified subtrack merge wiggle-operation on table and 
+ * all other selected subtracks. */
+{
+struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
+struct dataVector *dataVector1 = dataVectorFetchOneRegion(tt1, region, conn);
+struct trackDb *sTdb = NULL;
+int numSubtracks = 1;
+int resultCount = 0;
+char *op = cartString(cart, hgtaSubtrackMergeWigOp);
+boolean requireAll = cartBoolean(cart, hgtaSubtrackMergeRequireAll);
+boolean useMinScore = cartBoolean(cart, hgtaSubtrackMergeUseMinScore);
+float minScore = atof(cartString(cart, hgtaSubtrackMergeMinScore));
+
+if (dataVector1 == NULL)
+    {
+    return 0;
+    }
+
+for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+    {
+    if (isSubtrackMerged(sTdb->tableName) &&
+	! sameString(curTable, sTdb->tableName) &&
+	sameString(sTdb->type, curTrack->type))
+	{
+	struct trackTable *tt2 = trackTableNew(sTdb, sTdb->tableName, conn);
+	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
+								  conn);
+	numSubtracks++;
+	if (dataVector2 == NULL)
+	    {
+	    if (requireAll)
+		return 0;
+	    continue;
+	    }
+	if (sameString(op, "average") || sameString(op, "sum"))
+	    dataVectorSum(dataVector1, dataVector2, requireAll);
+	else if (sameString(op, "product"))
+	    dataVectorProduct(dataVector1, dataVector2, requireAll);
+	else if (sameString(op, "min"))
+	    dataVectorMin(dataVector1, dataVector2, requireAll);
+	else if (sameString(op, "max"))
+	    dataVectorMax(dataVector1, dataVector2, requireAll);
+	else
+	    errAbort("mergedWigOutRegion: unknown WigOp %s", op);
+	dataVectorFree(&dataVector2);
+	}
+    }
+if (sameString(op, "average"))
+    dataVectorNormalize(dataVector1, numSubtracks);
+if (useMinScore)
+    dataVectorFilterMin(dataVector1, minScore);
+
+intersectMergedResult(table, dataVector1, region, conn);
+
+printMergedResult(dataVector1, region, wigOutType);
+
+resultCount = dataVector1->count;
+dataVectorFree(&dataVector1);
+return resultCount;
 }
 
 static int wigOutRegion(char *table, struct sqlConnection *conn,
@@ -452,13 +600,29 @@ if (track != NULL)
     {
     shortLabel = track->shortLabel;
     longLabel = track->longLabel;
+    if (!sameString(track->tableName, table) && track->subtracks != NULL)
+	{
+	struct trackDb *tdb = NULL;
+	for (tdb = track->subtracks;  tdb != NULL;  tdb = tdb->next)
+	    {
+	    if (sameString(tdb->tableName, table))
+		{
+		shortLabel = tdb->shortLabel;
+		longLabel = tdb->longLabel;
+		break;
+		}
+	    }
+	}
     }
 wigDataHeader(shortLabel, longLabel, NULL, wigOutType);
 
 for (region = regionList; region != NULL; region = region->next)
     {
-    outCount = wigOutRegion(table, conn, region, maxOut - curOut,
-	wigOutType, NULL, 0);
+    if (anySubtrackMerge(database, table))
+	outCount = mergedWigOutRegion(table, conn, region, maxOut, wigOutType);
+    else
+	outCount = wigOutRegion(table, conn, region, maxOut - curOut,
+				wigOutType, NULL, 0);
     curOut += outCount;
     if (curOut >= maxOut)
         break;

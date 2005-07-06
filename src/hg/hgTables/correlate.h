@@ -52,6 +52,8 @@ sent to a custom track.\
 </P>";
 #endif
 
+#include "hgTables.h"
+
 /*	Each track data's values will be copied into one of these structures,
  *	This is also the form that a result vector will take.
  *	There can be a linked list of these for multiple regions.
@@ -128,5 +130,50 @@ struct tempName *residualPlot(struct trackTable *table1,
 struct tempName *histogramPlot(struct trackTable *table,
     int *width, int *height);
 /*	create histogram plot gif file in trash, return path name */
+
+struct trackTable *trackTableNew(struct trackDb *tdb, char *tableName,
+				 struct sqlConnection *conn);
+/* Allocate, fill in and return a trackTable. */
+
+struct dataVector *dataVectorFetchOneRegion(struct trackTable *table,
+	struct region *region, struct sqlConnection *conn);
+/*	Return a dataVector containing all the data for this track and table 
+ *	in the given region */
+
+void freeDataVector(struct dataVector **v);
+/*	free up space belonging to a dataVector	*/
+#define dataVectorFree(x) freeDataVector(x)
+
+enum dataVectorBinaryOpType
+    {
+    dataVectorBinaryOpSum,
+    dataVectorBinaryOpProduct,
+    dataVectorBinaryOpMin,
+    dataVectorBinaryOpMax,
+    };
+
+void dataVectorBinaryOp(struct dataVector *dv1, struct dataVector *dv2,
+			enum dataVectorBinaryOpType op, boolean requireBoth);
+/* Store op(dv1, dv2) in dv1.  
+ * If requireBoth is TRUE, remove a value from dv1 if dv2 has no value at the 
+ * same position; if FALSE, leave dv1 value unchanged if dv2 has no value at 
+ * same position. */
+
+#define dataVectorSum(dv1,dv2,r) (dataVectorBinaryOp(dv1, dv2, dataVectorBinaryOpSum, r))
+#define dataVectorProduct(dv1,dv2,r) (dataVectorBinaryOp(dv1, dv2, dataVectorBinaryOpProduct, r))
+#define dataVectorMin(dv1,dv2,r) (dataVectorBinaryOp(dv1, dv2, dataVectorBinaryOpMin, r))
+#define dataVectorMax(dv1,dv2,r) (dataVectorBinaryOp(dv1, dv2, dataVectorBinaryOpMax, r))
+
+void dataVectorNormalize(struct dataVector *dv, float denominator);
+/* Divide each value in dv by denominator. */
+
+void dataVectorFilterMin(struct dataVector *dv, float minScore);
+/* Remove values less than minScore from dv. */
+
+void dataVectorIntersect(struct dataVector *dv1, struct dataVector *dv2,
+			 boolean dv2IsWiggle, boolean complementDv2);
+/* Remove a value from dv1 if dv2 has no value (or if complementDv2, any value)
+ * at the same position.  Note: this will change dv2 too, unless complementDv2 
+ * is set! */
 
 #endif /* CORRELATE_H */

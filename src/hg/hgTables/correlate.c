@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.41 2005/07/06 07:18:24 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.42 2005/07/06 22:00:01 angie Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -54,7 +54,7 @@ v->calcTime = 0;	/*	will accumulate calculation timings */
 return v;
 }
 
-static void freeDataVector(struct dataVector **v)
+void freeDataVector(struct dataVector **v)
 /*	free up space belonging to a dataVector	*/
 {
 struct dataVector *dv;
@@ -377,6 +377,17 @@ table->isCustom = isCustomTrack(table->actualTable);
 
 }	/*	static void fillInTrackTable()	*/
 
+struct trackTable *trackTableNew(struct trackDb *tdb, char *tableName,
+				 struct sqlConnection *conn)
+/* Allocate, fill in and return a trackTable. */
+{
+struct trackTable *tt = allocTrackTable();
+tt->tdb = tdb;
+tt->tableName = cloneString(tableName);
+fillInTrackTable(tt, conn);
+return tt;
+}
+
 /****************************   NOTE   ********************************
  *	the following showGroupFieldLimited, showTable2FieldLimited and
  *	showGroupTrackRowLimited, are almost near duplicates of the
@@ -683,7 +694,7 @@ else
     vector->end = vector->start;
 }	/*	static void correlateReadBed()	*/
 
-static struct dataVector *fetchOneRegion(struct trackTable *table,
+struct dataVector *dataVectorFetchOneRegion(struct trackTable *table,
 	struct region *region, struct sqlConnection *conn)
 /*	fetch all the data for this track and table in the given region */
 {
@@ -769,7 +780,36 @@ if (vector->count > 0)
 else
     freeDataVector(&vector);
 return NULL;
-}	/*	static struct dataVector *fetchOneRegion()	*/
+}	/*	static struct dataVector *dataVectorFetchOneRegion()	*/
+
+static void scavengeVectorSpace(struct dataVector *dv)
+/* Realloc dv->value and dv->position if newCount is sufficiently smaller 
+ * than dv->maxCount. */
+{
+/*	if our count of numbers is more than 1000K less than planned for,
+ *	save some space and reallocate the data lists.
+ *	The potential savings here is three different data vectors,
+ *	where each data point occupies about 8 bytes on a vector,
+ *	thus: bytes saved at least 1024000 * 3 * 8 = 24,576,000
+ */
+if ((dv->maxCount - dv->count) > 1024000)
+    {
+    int *ip = NULL;
+    float *fp = NULL;
+
+    ip = needHugeMem((size_t)(sizeof(int) * dv->count));
+    memcpy((void *)ip, (void *)dv->position, (size_t)(sizeof(int)*dv->count));
+    freeMem(dv->position);
+    dv->position = ip;
+
+    fp = needHugeMem((size_t)(sizeof(float) * dv->count));
+    memcpy((void *)fp, (void *)dv->value, (size_t)(sizeof(float)*dv->count));
+    freeMem(dv->value);
+    dv->value = fp;
+
+    dv->maxCount = dv->count;
+    }
+}
 
 static void intersectVectors(struct dataVector *v1, struct dataVector *v2)
 /* collapse vector data sets down to only values when positions are equal
@@ -874,6 +914,243 @@ hPrintf("<P>after realloc: %#x, %#x, %#x, %#x</P>\n",
 
 endTime = clock1000();
 v1->calcTime += endTime - startTime;
+}
+
+void dataVectorBinaryOp(struct dataVector *v1, struct dataVector *v2,
+			enum dataVectorBinaryOpType op, boolean requireBoth)
+/* Store op(v1, v2) in v1.  
+ * If requireBoth is TRUE, remove a value from v1 if v2 has no value at the 
+ * same position; if FALSE, leave v1 value unchanged if v2 has no value at 
+ * same position. */
+{
+int i=0, j=0;
+long startTime=0, endTime=0;
+
+if (v1 == NULL)
+    return;
+if (requireBoth)
+    {
+    if (v2 == NULL || v2->count < 1)
+	{
+	v1->count = 0;
+	return;
+	}
+    intersectVectors(v1, v2);
+    }
+
+startTime = clock1000();
+for (i=0, j=0;  i < v1->count && j < v2->count; )
+    {
+    if (v1->position[i] == v2->position[j])
+	{
+	switch (op)
+	    {
+	    case dataVectorBinaryOpSum:
+		v1->value[i] += v2->value[j];
+		break;
+	    case dataVectorBinaryOpProduct:
+		v1->value[i] *= v2->value[j];
+		break;
+	    case dataVectorBinaryOpMin:
+		if (v2->value[j] < v1->value[i])
+		    v1->value[i] = v2->value[j];
+		break;
+	    case dataVectorBinaryOpMax:
+		if (v2->value[j] > v1->value[i])
+		    v1->value[i] = v2->value[j];
+		break;
+	    default:
+		errAbort("dataVectorBinaryOp: unrecognized type %d", op);
+	    }
+	i++;  j++;
+	}
+    else if (v1->position[i] < v2->position[j])
+	i++;
+    else
+	j++;
+    }
+endTime = clock1000();
+v1->calcTime += endTime - startTime;
+}
+
+void dataVectorNormalize(struct dataVector *dv, float denominator)
+/* Divide each value in dv by denominator. */
+{
+int i=0;
+long startTime=0, endTime=0;
+if (dv == NULL)
+    return;
+startTime = clock1000();
+for (i=0;  i < dv->count;  i++)
+    {
+    dv->value[i] /= denominator;
+    }
+endTime = clock1000();
+dv->calcTime += endTime - startTime;
+}
+
+void dataVectorFilterMin(struct dataVector *dv, float minScore)
+/* Remove values less than minScore from dv. */
+{
+int i=0, dvIndex=0;
+long startTime=0, endTime=0;
+if (dv == NULL)
+    return;
+startTime = clock1000();
+for (i=0;  i < dv->count;  i++)
+    {
+    if (dv->value[i] >= minScore)
+	{
+	dv->value[dvIndex] = dv->value[i];
+	dv->position[dvIndex] = dv->position[i];
+	dvIndex++;
+	}
+    }
+dv->count = dvIndex;
+dv->start = dv->position[0];
+dv->end = dv->position[(dv->count)-1] + 1; /* non-inclusive */
+scavengeVectorSpace(dv);
+endTime = clock1000();
+dv->calcTime += endTime - startTime;
+}
+
+struct dataVector *dataVectorInvert(struct dataVector *dv, int start, int end)
+/* Return a new dataVector that has a value of 1 where dv has no value, 
+ * and no value where dv has any value, with positions in [start,end). */
+{
+struct dataVector *dvNew = allocDataVector("inv", end-start);
+if (dv == NULL || dv->count < 1)
+    {
+    int i=0;
+    for (i=0;  i < end-start;  i++)
+	{
+	dvNew->position[i] = i + start;
+	dvNew->value[i] = 1;
+	}
+    dvNew->count = end-start;
+    }
+else
+    {
+    int oldIndex = 0, newIndex = 0;
+    int pos = start;
+    while (oldIndex < dv->count && pos < end)
+	{
+	if (dv->position[oldIndex] < start)
+	    oldIndex++;
+	else if (dv->position[oldIndex] == pos)
+	    {
+	    oldIndex++;
+	    pos++;
+	    }
+	else /* dv->pos > pos */
+	    {
+	    dvNew->position[newIndex] = pos;
+	    dvNew->value[newIndex] = 1;
+	    pos++;
+	    newIndex++;
+	    }
+	}
+    while (pos < end)
+	{
+	dvNew->position[newIndex] = pos;
+	dvNew->value[newIndex] = 1;
+	pos++;
+	newIndex++;
+	}
+    dvNew->count = newIndex;
+    scavengeVectorSpace(dvNew);
+    }
+return dvNew;
+}
+
+struct dataVector *dataVectorBoolComp(struct dataVector *dv, int start, int end)
+/* Return a new dataVector that has a value of 1 where dv has a value of 0, 
+ * and a value of 0 where dv has any nonzero value, with positions in 
+ * [start,end). */
+{
+struct dataVector *dvNew = allocDataVector("comp", end-start);
+if (dv == NULL || dv->count < 1)
+    {
+    int i=0;
+    for (i=0;  i < end-start;  i++)
+	{
+	dvNew->position[i] = i + start;
+	dvNew->value[i] = 1;
+	}
+    dvNew->count = end-start;
+    }
+else
+    {
+    int oldIndex = 0, newIndex = 0;
+    int pos = start;
+    while (oldIndex < dv->count && pos < end)
+	{
+	if (dv->position[oldIndex] < start)
+	    oldIndex++;
+	else if (dv->position[oldIndex] == pos)
+	    {
+	    dvNew->position[newIndex] = pos;
+	    if (dv->value[oldIndex])
+		dvNew->value[newIndex] = 0;
+	    else
+		dvNew->value[newIndex] = 1;
+	    oldIndex++;
+	    newIndex++;
+	    pos++;
+	    }
+	else /* dv->pos > pos */
+	    {
+	    dvNew->position[newIndex] = pos;
+	    dvNew->value[newIndex] = 1;
+	    pos++;
+	    newIndex++;
+	    }
+	}
+    while (pos < end)
+	{
+	dvNew->position[newIndex] = pos;
+	dvNew->value[newIndex] = 1;
+	pos++;
+	newIndex++;
+	}
+    dvNew->count = newIndex;
+    scavengeVectorSpace(dvNew);
+    }
+return dvNew;
+}
+
+void dataVectorIntersect(struct dataVector *dv1, struct dataVector *dv2,
+			 boolean dv2IsWiggle, boolean complementDv2)
+/* Remove a value from dv1 if dv2 has no value (or if complementDv2, any value)
+ * at the same position.  Note: this will change dv2 too, unless complementDv2 
+ * is set! */
+{
+if (dv1 == NULL || dv1->count < 1)
+    return;
+if (complementDv2)
+    {
+    int dv1Start = dv1->position[0];
+    int dv1End = dv1->position[dv1->count-1];
+    struct dataVector *dv2Inv = NULL;
+    if (dv2 == NULL || dv2->count < 1)
+	return; /* Complement of nothing is everything, so no change to dv1 */
+    if (dv2IsWiggle)
+	dv2Inv = dataVectorInvert(dv2, dv1Start, dv1End);
+    else
+	dv2Inv = dataVectorBoolComp(dv2, dv1Start, dv1End);
+    if (dv2Inv == NULL || dv2Inv->count < 1)
+	dv1->count = 0;
+    else
+	intersectVectors(dv1, dv2Inv);
+    freeDataVector(&dv2Inv);
+    }
+else
+    {
+    if (dv2 == NULL || dv2->count < 1)
+	dv1->count = 0;
+    else
+	intersectVectors(dv1, dv2);
+    }
 }
 
 static void overallCounts(struct trackTable *t)
@@ -1420,10 +1697,10 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
     if (bases < 2)
 	continue;	/*	next region	*/
 
-    v1 = fetchOneRegion(table1, region, conn);
+    v1 = dataVectorFetchOneRegion(table1, region, conn);
     if (v1)	/*	if data there, fetch the second one	*/
 	{
-	v2 = fetchOneRegion(table2, region, conn);
+	v2 = dataVectorFetchOneRegion(table2, region, conn);
 	if (v2)	/*	if both data, construct a result set	*/
 	    {
 	    intersectVectors(v1, v2);

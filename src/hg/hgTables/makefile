@@ -77,7 +77,7 @@ schema.o:	hgTables.h
 seqOut.o:	hgTables.h
 sumStats.o:	hgTables.h
 usage.o:	hgTables.h
-wiggle.o:	hgTables.h
+wiggle.o:	hgTables.h correlate.h
 correlate.o:	hgTables.h correlate.h
 correlatePlot.o:	hgTables.h correlate.h
 

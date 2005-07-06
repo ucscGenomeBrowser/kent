@@ -386,6 +386,10 @@ boolean subtrackMergeIsBpWise();
 boolean isSubtrackMerged(char *tableName);
 /* Return true if tableName has been selected for subtrack merge. */
 
+char *describeSubtrackMerge(char *linePrefix);
+/* Return a multi-line string that describes the specified subtrack merge, 
+ * with each line beginning with linePrefix. */
+
 void doSubtrackMergePage(struct sqlConnection *conn);
 /* Respond to subtrack merge create/edit button */
 
@@ -527,6 +531,14 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaNextSubtrackMergeMoreThreshold hgtaNextSubtrackMergePrefix "MoreThreshold"
 #define hgtaSubtrackMergeLessThreshold hgtaSubtrackMergePrefix "LessThreshold"
 #define hgtaNextSubtrackMergeLessThreshold hgtaNextSubtrackMergePrefix "LessThreshold"
+#define hgtaSubtrackMergeWigOp hgtaSubtrackMergePrefix "WigOp"
+#define hgtaNextSubtrackMergeWigOp hgtaNextSubtrackMergePrefix "WigOp"
+#define hgtaSubtrackMergeRequireAll hgtaSubtrackMergePrefix "RequireAll"
+#define hgtaNextSubtrackMergeRequireAll hgtaNextSubtrackMergePrefix "RequireAll"
+#define hgtaSubtrackMergeUseMinScore hgtaSubtrackMergePrefix "UseMinScore"
+#define hgtaNextSubtrackMergeUseMinScore hgtaNextSubtrackMergePrefix "UseMinScore"
+#define hgtaSubtrackMergeMinScore hgtaSubtrackMergePrefix "MinScore"
+#define hgtaNextSubtrackMergeMinScore hgtaNextSubtrackMergePrefix "MinScore"
 
 /* Prefix for variables managed by field selector. */
 #define hgtaFieldSelectPrefix "hgta_fs."
