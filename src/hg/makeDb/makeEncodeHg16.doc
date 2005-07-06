@@ -3079,3 +3079,97 @@ done
 
     hgLoadBed hg16 encodePrimateAlleles encodePrimateAlleles.bed -sqlTable=encodePrimateAlleles.sql -tab -strict
 
+#######################################################################
+#	loading Riken CAGE data - 2005-06-10 - Hiram
+#			completed 2005-07-06 - Hiram
+#
+    cd /cluster/data/encode/Riken/2005-06-08
+    tar xvzf CAGE_tracks.tar.gz
+
+    D="CAGE_tracks"
+
+    ln -s ${D}/CAGE_MINUS_STRAND_ENCODE.html encodeRikenCageMinus.html
+    ln -s ${D}/CAGE_MINUS_STRAND_ENCODE.wig encodeRikenCageMinus.wig
+    ln -s ${D}/CAGE_PLUS_STRAND_ENCODE.html encodeRikenCagePlus.html
+    ln -s ${D}/CAGE_PLUS_STRAND_ENCODE.wig encodeRikenCagePlus.wig
+    ln -s ${D}/CAGE_mapped_tags.gff encodeRikenCageMappedTags.gff
+    ln -s ${D}/CAGE_mapped_tags.html encodeRikenCageMappedTags.html
+
+    for T in encodeRikenCageMinus encodeRikenCagePlus
+    do
+    grep "^chr" ${T}.wig | sort -k1,1 -k2,2n | \
+        hgLoadBed -strict -bedGraph=4 hg16 ${T} stdin
+    done
+
+    #	And some extra test data to help verify those tags are in the
+    #	correct location:
+    ./gffToBed6.pl encodeRikenCageMappedTags.gff | \
+        sort -k1,1 -k2,2n > encodeRikenCageMappedTags.bed6
+    hgLoadBed -strict hg16 encodeRikenCageMappedTags \
+	encodeRikenCageMappedTags.bed6
+
+    grep "\-$" encodeRikenCageMappedTags.bed.6 | sort -k1,1 -k2,2n | \
+        bedItemOverlapCount hg16 -verbose=2 stdin > negOverlaps.bedGraph4
+
+    grep "+$" encodeRikenCageMappedTags.bed.6 | sort -k1,1 -k2,2n | \
+        bedItemOverlapCount hg16 -verbose=2 stdin > posOverlaps.bedGraph4
+
+    hgLoadBed -strict -bedGraph=4 hg16 \
+	encodeRikenCageMappedTagsPositive posOverlaps.bedGraph4
+    hgLoadBed -strict -bedGraph=4 hg16 \
+	encodeRikenCageMappedTagsNegative negOverlaps.bedGraph4
+
+    ##### - an off by one error was discovered in the Minus.wig data
+    # Albin resubmitted data, but then the PLUS data was broken and the Minus
+    # was not correct either.  So, apply the following fixup script to the data:
+    cd /cluster/data/encode/Riken/2005-07-04
+    cat << '_EOF_' > fixup.pl
+#!/usr/bin/env perl
+#
+use strict;
+use warnings;
+
+open (FH,"../2005-06-08/encodeRikenCageMinus.wig") or
+        die "Can not open ../2005-06-08/encodeRikenCageMinus.wig";
+while (my $line=<FH>)
+    {
+    chomp $line;
+    if ($line =~ m/^chr/)
+        {
+        my ($chr, $start, $end, $score) = split('\s+', $line);
+        printf "%s\t%d\t%d\t%d\n", $chr, $start-1, $end-1, $score;
+        }
+    else
+        {
+        print "$line\n";
+        }
+    }
+
+close (FH);
+'_EOF_'
+    #	happy emacs
+    chmod +x fixup.pl
+    ./fixup.pl > encodeRikenCageMinus.wig
+    # examine the region: chr4:118,973,382-118,973,413
+    #	to verify that the plus and minus predicted gene start sites line
+    #	up properly with the raw Mapped Tags
+    #	reload this fixed data
+    for T in encodeRikenCageMinus
+    do
+    grep "^chr" ${T}.wig | sort -k1,1 -k2,2n | \
+        hgLoadBed -strict -bedGraph=4 hg16 ${T} stdin
+    done
+
+    #	The track's long label: "Riken CAGE - Predicted Gene Start Sites"
+    #	Short label: "Riken CAGE"
+    #	table names: encodeRikenCagePlus and encodeRikenCageMinus
+    #	in the composite track: encodeRikenCage
+    #	and the extra TEST TRACK ONLY tables:
+    #	composite: encodeRikenCageMappedTagsScore
+    #		short label: Riken CAGE MT
+    #		long: Riken CAGE Mapped Tags overlap count - TEST TRACK ONLY
+    #		subtracks: encodeRikenCageMappedTagsPositive
+    #			encodeRikenCageMappedTagsNegative
+    #   table: encodeRikenCageMappedTags
+    #		Riken CAGE Tags
+    #		Riken CAGE Mapped Tags - TEST TRACK ONLY
