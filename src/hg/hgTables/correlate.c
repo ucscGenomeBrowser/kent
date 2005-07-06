@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.39 2005/07/06 00:12:46 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.40 2005/07/06 00:20:28 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1636,7 +1636,7 @@ hPrintf("<TABLE>");
 hPrintf("<TR><TD>\n");
 
 hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%g</TH></TR>\n", result->r*result->r);
+hPrintf("<TR><TH COLSPAN=2>scatter&nbsp;plot,&nbsp;r<sup>2</sup>&nbsp;%.4g</TH></TR>\n", result->r*result->r);
 hPrintf("<TR>");
 hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
 	scatterPlotGif->forHtml, totalWidth, totalHeight);
