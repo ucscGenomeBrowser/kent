@@ -2766,17 +2766,25 @@ done
     # Could have used /cluster/data/encode/BU/2005-06-09/splitTracks.pl
 
     cd /cluster/data/encode/Regulome/sens
+    # waiting for more granular data from John Stam
+    # this is wiggle data
 
     # John Stam told me amplicons are the same for all cell lines
+    # this is bed 5
     cd /cluster/data/encode/Regulome/2005-06-12/amplicons/odd
     grep -h "^chr" *CACO2.txt > odd.bed
     hgLoadBed -strict -sqlTable=odd.sql hg16 encodeRegulomeAmpliconOdd odd.bed
-
     cd /cluster/data/encode/Regulome/2005-06-12/amplicons/even
     grep -h "^chr" *CACO2.txt > even.bed
     hgLoadBed -strict -sqlTable=even.sql hg16 encodeRegulomeAmpliconEven even.bed
 
     cd /cluster/data/encode/Regulome/2005-06-12/prob
+    # this is bedGraph
+    grep -h "^chr" *CACO2.txt > CACO2.bed
+    grep -h "^chr" *GM06900.txt > GM06900.bed
+    grep -h "^chr" *SKNSH.txt > SKNSH.bed
+    grep -h "^chr" *ERY.txt > ERY.bed
+    grep -h "^chr" *K562.txt > K562.bed
     hgLoadBed -strict -sqlTable=encodeRegulomeProbCACO2.sql hg16 encodeRegulomeProbCACO2 CACO2.bed
     hgLoadBed -strict -sqlTable=encodeRegulomeProbGM06990.sql hg16 encodeRegulomeProbGM06990 GM06990.bed
     hgLoadBed -strict -sqlTable=encodeRegulomeProbSKNSH.sql hg16 encodeRegulomeProbSKNSH SKNSH.bed
@@ -2784,6 +2792,12 @@ done
     hgLoadBed -strict -sqlTable=encodeRegulomeProbK562.sql hg16 encodeRegulomeProbK562 K562.bed
 
     cd /cluster/data/encode/Regulome/2005-06-12/quality
+    # this is bed 5
+    grep -h "^chr" *CACO2.txt > CACO2.bed
+    grep -h "^chr" *GM06900.txt > GM06900.bed
+    grep -h "^chr" *SKNSH.txt > SKNSH.bed
+    grep -h "^chr" *ERY.txt > ERY.bed
+    grep -h "^chr" *K562.txt > K562.bed
     hgLoadBed -strict -sqlTable=encodeRegulomeQualityCACO2.sql hg16 encodeRegulomeQualityCACO2 CACO2.bed
     hgLoadBed -strict -sqlTable=encodeRegulomeQualityGM06990.sql hg16 encodeRegulomeQualityGM06990 GM06990.bed
     hgLoadBed -strict -sqlTable=encodeRegulomeQualitySKNSH.sql hg16 encodeRegulomeQualitySKNSH SKNSH.bed
