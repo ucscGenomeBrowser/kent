@@ -21,6 +21,13 @@ idSql select geneSymbol from kgXref where kgID = '%s'
 url http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s
 priority 80
 
+name hugo
+shortLabel HGNC
+tables kgXref
+idSql select geneSymbol from kgXref,proteome.hugo where kgID = '%s' and geneSymbol=symbol
+url http://www.gene.ucl.ac.uk/nomenclature/data/get_data.php?match=%s
+priority 81
+
 name cgap
 url http://cgap.nci.nih.gov/Genes/GeneInfo?ORG=Hs&CID=%s
 
