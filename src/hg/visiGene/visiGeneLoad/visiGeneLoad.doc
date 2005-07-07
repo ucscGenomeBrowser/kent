@@ -66,6 +66,8 @@ itemUrl - Contributor-supplied URL associated with this particular image.  Shoul
 journal - Name of journal
 journalUrl - Main URL of journal.
 locusLink - LocusLink/Entrez Gene ID
+minAge - Minimum age of specimen.  Defaults to age.
+maxAge - Maximum age of specimen.  Defaults to age.
 pane - Label of pane within multi-paned image file.
 permeablization - How poked holes in whole mounts.  Proteinase K 30 min, etc.
 priority [200] - sort order.  Lower numbers shown first.
@@ -73,15 +75,17 @@ refSeq - RefSeq mRNA accession
 rPrimer - Reverse PCR primer used to generate RNA probe
 sectionIx [0] - zero based index of section in sectionSet
 sectionSet - an identifier that groups together sections of same sample
+sex - male, female, hermaphrodite, or mixed.
 sliceType - whole mount, frontal, sagittal, transverse, etc.
 specimenName - Name of specimen (John Doe).
 specimenNotes - Free text notes on specimen.
 strain - particular strain of specimen (eg C57BL for a mouse)
-treatment - describes treatment of sample
 publication - Title of associated publication
 pubUrl - URL of associated publication
 setUrl - Contributor-supplied URL associated with whole submitted set of images
 seq - probe sequence
+preparationNotes - notes on preparation of specimen (info not contained in
+    embedding, fixation, permeablization, slice type)
 uniProt - Uniprot accession
 
 

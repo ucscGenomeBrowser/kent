@@ -53,8 +53,8 @@ return hash;
 }
 
 char *getVal(char *fieldName, struct hash *raHash, struct hash *rowHash, char **row, char *defaultVal)
-/* Return value in row if possible, else in ra, else in default.  If no value and no default
- * return an error. */
+/* Return value in row if possible, else in ra, else in default.  
+ * If no value and no default return an error. */
 {
 char *val = NULL;
 struct hashEl *hel = hashLookup(rowHash, fieldName);
@@ -84,10 +84,12 @@ static char *requiredFields[] = {"fullDir", "screenDir", "thumbDir", "taxon",
 static char *optionalFields[] = {
     "abName", "abDescription", "abTaxon", "bodyPart", "copyright",
     "embedding", "fixation", "fPrimer", "genbank", "gene",
-    "genotype", "imagePos", "itemUrl", "journal", "journalUrl",
-    "locusLink", "pane", "permeablization", "priority", "refSeq",
-    "rPrimer", "sectionIx", "sectionSet", "sliceType", "specimenName",
-    "specimenNotes", "strain", "treatment", "publication", "pubUrl",
+    "genotype", "imagePos", "itemUrl", "minAge", "maxAge",
+    "journal", "journalUrl",
+    "locusLink", "pane", "permeablization", 
+    "preparationNotes", "priority", "refSeq",
+    "rPrimer", "sectionIx", "sectionSet", "sex", "sliceType", "specimenName",
+    "specimenNotes", "strain", "publication", "pubUrl",
     "setUrl", "seq", "uniProt",
     };
 
@@ -730,10 +732,14 @@ int submissionSetId;
 struct hash *fullDirHash = newHash(0);
 struct hash *screenDirHash = newHash(0);
 struct hash *thumbDirHash = newHash(0);
-struct hash *treatmentHash = newHash(0);
 struct hash *bodyPartHash = newHash(0);
-struct hash *sliceTypeHash = newHash(0);
+struct hash *sexHash = newHash(0);
+struct hash *copyrightHash = newHash(0);
+struct hash *embeddingHash = newHash(0);
+struct hash *fixationHash = newHash(0);
+struct hash *permeablizationHash = newHash(0);
 struct hash *probeColorHash = newHash(0);
+struct hash *sliceTypeHash = newHash(0);
 struct hash *sectionSetHash = newHash(0);
 struct dyString *dy = dyStringNew(0);
 
@@ -792,36 +798,55 @@ while (lineFileNextRowTab(lf, words, rowSize))
     	"name", thumbDirHash, "thumbDir", raHash, rowHash, words);
     int bodyPart = cachedId(conn, "bodyPart", 
     	"name", bodyPartHash, "bodyPart", raHash, rowHash, words);
-    int sliceType = cachedId(conn, "sliceType", 
-    	"name", sliceTypeHash, "sliceType", raHash, rowHash, words);
-    int treatment = cachedId(conn, "treatment", 
-    	"conditions", treatmentHash, "treatment", raHash, rowHash, words);
+    int copyright = cachedId(conn, "copyright", "notice",
+    	copyrightHash, "copyright", raHash, rowHash, words);
+    int embedding = cachedId(conn, "embedding", "description",
+    	embeddingHash, "embedding", raHash, rowHash, words);
+    int fixation = cachedId(conn, "fixation", "description",
+    	fixationHash, "fixation", raHash, rowHash, words);
+    int permeablization = cachedId(conn, "permeablization", "description",
+    	permeablizationHash, "permeablization", raHash, rowHash, words);
     int probeColor = cachedId(conn, "probeColor", 
         "name", probeColorHash, "probeColor", raHash, rowHash, words);
+    int sex = cachedId(conn, "sex", 
+    	"name", sexHash, "sex", raHash, rowHash, words);
+    int sliceType = cachedId(conn, "sliceType", 
+    	"name", sliceTypeHash, "sliceType", raHash, rowHash, words);
     
-    /* Get other fields from input (either tab or ra file) */
+    /* Get required fields in tab file */
     char *fileName = getVal("fileName", raHash, rowHash, words, NULL);
+    char *submitId = getVal("submitId", raHash, rowHash, words, NULL);
+
+    /* Get required fields that can live in tab or .ra file. */
     char *taxon = getVal("taxon", raHash, rowHash, words, NULL);
-    char *isEmbryo = getVal("isEmbryo", raHash, rowHash, words, NULL);
     char *age = getVal("age", raHash, rowHash, words, NULL);
-    char *submitId = getVal("submitId", raHash, rowHash, words, "");
-    char *sectionSet = getVal("sectionSet", raHash, rowHash, words, "");
-    char *sectionIx = getVal("sectionIx", raHash, rowHash, words, "0");
-    char *gene = getVal("gene", raHash, rowHash, words, "");
-    char *locusLink = getVal("locusLink", raHash, rowHash, words, "");
-    char *refSeq = getVal("refSeq", raHash, rowHash, words, "");
-    char *uniProt = getVal("uniProt", raHash, rowHash, words, "");
-    char *genbank = getVal("genbank", raHash, rowHash, words, "");
-    char *priority = getVal("priority", raHash, rowHash, words, "200");
-    char *journal = getVal("journal", raHash, rowHash, words, "");
-    char *journalUrl = getVal("journalUrl", raHash, rowHash, words, "");
-    char *fPrimer = getVal("fPrimer", raHash, rowHash, words, "");
-    char *rPrimer = getVal("rPrimer", raHash, rowHash, words, "");
-    char *seq = getVal("seq", raHash, rowHash, words, "");
+
+    /* Get other fields from input (either tab or ra file) */
     char *abName = getVal("abName", raHash, rowHash, words, "");
     char *abDescription = getVal("abDescription", raHash, rowHash, words, "");
     char *abTaxon = getVal("abTaxon", raHash, rowHash, words, "0");
+    char *fPrimer = getVal("fPrimer", raHash, rowHash, words, "");
+    char *genbank = getVal("genbank", raHash, rowHash, words, "");
+    char *gene = getVal("gene", raHash, rowHash, words, "");
+    char *genotype = getVal("genotype", raHash, rowHash, words, "");
     char *imagePos = getVal("imagePos", raHash, rowHash, words, "0");
+    char *journal = getVal("journal", raHash, rowHash, words, "");
+    char *journalUrl = getVal("journalUrl", raHash, rowHash, words, "");
+    char *locusLink = getVal("locusLink", raHash, rowHash, words, "");
+    char *minAge = getVal("minAge", raHash, rowHash, words, "");
+    char *maxAge = getVal("maxAge", raHash, rowHash, words, "");
+    char *pane = getVal("pane", raHash, rowHash, words, "");
+    char *preparationNotes = getVal("preparationNotes", raHash, rowHash, words, "");
+    char *priority = getVal("priority", raHash, rowHash, words, "200");
+    char *refSeq = getVal("refSeq", raHash, rowHash, words, "");
+    char *rPrimer = getVal("rPrimer", raHash, rowHash, words, "");
+    char *sectionSet = getVal("sectionSet", raHash, rowHash, words, "");
+    char *sectionIx = getVal("sectionIx", raHash, rowHash, words, "0");
+    char *seq = getVal("seq", raHash, rowHash, words, "");
+    char *specimenName = getVal("specimenName", raHash, rowHash, words, "");
+    char *specimenNotes = getVal("specimenNotes", raHash, rowHash, words, "");
+    char *strain = getVal("strain", raHash, rowHash, words, "");
+    char *uniProt = getVal("uniProt", raHash, rowHash, words, "");
 
     /* Some ID's we have to calculate individually. */
     int sectionId = 0;
@@ -830,14 +855,24 @@ while (lineFileNextRowTab(lf, words, rowSize))
     int probeId = 0;
     int imageFileId = 0;
     int imageId = 0;
+    int strainId = 0;
+    int genotypeId = 0;
+    int specimenId = 0;
 
     verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
     sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
+#ifdef SOON
     geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
     antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
     probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
     imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,
     	submissionSetId, submitId, priority);
+    strainId = doStrain(lf, conn, taxon, strain);
+    genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
+    specimenId = doSpecimen(lf, conn, specimenName, genotypeId, bodyPart, sex, 
+    	age, minAge, maxAge, specimenNotes);
+    preparationId = doPreparation(lf, conn, fixation, embedding, 
+    	permeablization, sliceType, preparationNotes);
 
     /* Get existing image ID.  If it exists and we are not in replace mode
      * then die. */
@@ -866,11 +901,9 @@ while (lineFileNextRowTab(lf, words, rowSize))
     dyStringPrintf(dy, " sectionSet = %d,\n", sectionId);
     dyStringPrintf(dy, " sectionIx = %s,\n", sectionIx);
     dyStringPrintf(dy, " taxon = %s,\n", taxon);
-    dyStringPrintf(dy, " isEmbryo = %s,\n", isEmbryo);
     dyStringPrintf(dy, " age = %s,\n", age);
     dyStringPrintf(dy, " bodyPart = %d,\n", bodyPart);
     dyStringPrintf(dy, " sliceType = %d,\n", sliceType);
-    dyStringPrintf(dy, " treatment = %d\n", treatment);
     if (imageId != 0)
         dyStringPrintf(dy, "where id = %d", imageId);
     verbose(2, "%s\n", dy->string);
@@ -879,6 +912,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	imageId = sqlLastAutoId(conn);
 
     doImageProbe(conn, imageId, probeId, probeColor, replace);
+#endif /* SOON */
     }
 }
 

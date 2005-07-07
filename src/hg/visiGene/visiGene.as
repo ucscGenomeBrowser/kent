@@ -66,14 +66,23 @@ table journal
     string url;	"Journal's main url"
     )
 
+table copyright
+"Copyright information"
+    (
+    int id;	"ID of copyright"
+    lstring notice;	"Text of copyright notice."
+    )
+
 table submissionSet
 "Info on a batch of images submitted at once"
     (
     int id;			"ID of submission set"
+    string name;		"Name of submission set"
     lstring contributors;	"Comma separated list of contributors in format Kent W.J., Wu F.Y."
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     int journal;		"Journal for publication"
+    int copyright;		"Copyright notice"
     lstring setUrl;		"URL for whole set"
     lstring itemUrl;		"URL for item.  Put %s where image.submitId should go"
     )
@@ -97,7 +106,7 @@ table antibody
     int id;	"Antibody ID"
     string name;	"Name of antibody"
     lstring description;	"Description of antibody"
-    int taxon;		"Taxon of animal antibody is from"
+    int taxon;		"NCBI Taxon of animal antibody is from"
     )
 
 table gene
@@ -131,7 +140,7 @@ table genotype
 "How different from wild type.  Associated with genotypeAllele table"
     (
     int id;	"Genotype id"
-    int taxon;	"Taxon of organism"
+    int taxon;	"NCBI Taxon of organism"
     int strain;	"Strain of organism"
     )
 
@@ -142,16 +151,25 @@ table genotypeAllele
     int allele;		"Associated allele"
     )
 
+table sex
+"Sex of a specimen"
+    (
+    int id;	"Sex ID"
+    string name;	"Name of sex - male, female, hermaphrodite, mixed"
+    )
+
 table specimen
 "A biological specimen - something mounted, possibly sliced up"
     (
     int id;	  "Specimen ID"
     string name;	"Name of specimen, frequently blank"
-    int genotype; "Genotype of specimen"
+    int taxon;		"NCBI Taxon of organism"
+    int genotype; 	"Genotype of specimen"
     int bodyPart;	"Body part of specimen"
-    byte isEmbryo;	"TRUE if embryonic.  Age will be relative to conception"
-    float age;		"Age in days since birth or conception depending on isEmbryo"
-    float ageUncertainty; "Uncertainty in age"
+    int sex;		"Sex - male, female or hermaphrodite"
+    float age;		"Age in days since conception"
+    float minAge;	"Minimum age"
+    float maxAge;	"Maximum age - may differ from minAge if uncertain of age"
     lstring notes;	"Any notes on specimen"
     )
 
@@ -211,6 +229,7 @@ table image
     int id;		"ID of image"
     int imageFile;	"ID of image file"
     int imagePos;	"Position in image file, starting with 0"
+    string paneLabel;   "Label of this pane in image file"
     int sectionSet;	"Set of sections this is part of or 0 if none"
     int sectionIx;	"Position (0 based) within set of sections"
     int specimen;	"Pointer to info on specimen"
