@@ -4,12 +4,14 @@
 #include "nib.h"
 #include "fa.h"
 #include "hdb.h"
+#include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMask.c,v 1.3 2005/06/30 09:08:35 heather Exp $";
+static char const rcsid[] = "$Id: snpMask.c,v 1.4 2005/07/07 21:48:48 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
 
+// call this something else
 struct snp
 /* Information from snp */
     {
@@ -99,12 +101,39 @@ char iupac(char *observed, char orig)
     return orig;
 }
 
+void testFB()
+{
+struct featureBits *fbList = NULL;
+struct featureBits *fbPos = NULL;
+
+// fbList = fbGetRange("snp", "rs12172168", 14430800, 14431000);
+// fbList = fbGetRange("snp", "rs12172168", 0, 10);
+fbList = fbGetRange("snp", chromName, 14430800, 14431000);
+
+for (fbPos = fbList; fbPos != NULL; fbPos = fbPos->next)
+    {
+    printf("snp start = %d\n", fbPos->start);
+    printf("snp end = %d\n", fbPos->end);
+    }
+}
+
 void printSnpSeq(struct snp *snp, struct dnaSeq *seq)
 {
 int i = 0;
 int startPos = (snp->chromStart) - 20;
 int endPos = startPos + 40;
 char *ptr = seq->dna;
+Bits bits;
+struct featureBits *fbList = NULL;
+struct featureBits *fbPos = NULL;
+
+fbList = fbGetRange("snp", chromName, startPos, endPos);
+
+for (fbPos = fbList; fbPos != NULL; fbPos = fbPos->next)
+    {
+    printf("snp start = %d\n", fbPos->start);
+    printf("snp end = %d\n", fbPos->end);
+    }
 
 printf("%s: ", snp->name);
 for (i=startPos; i < endPos; i++)
@@ -121,12 +150,6 @@ char *ptr;
 struct snp *snps = NULL;
 struct snp *snp = NULL;
 
-if (!hDbIsActive(database))
-    {
-    printf("Currently no support for %s\n", database);
-    return;
-    }
-hSetDb(database);
 
 seq = nibLoadAll(nibFile);
 ptr = seq->dna;
@@ -149,9 +172,20 @@ dnaSeqFree(&seq);
 
 int main(int argc, char *argv[])
 /* Process command line. */
+/* argv[1] is database */
+/* argv[2] is chrom */
+/* argv[3] is nib file */
+/* argv[4] is output file */
 {
 database = argv[1];
+if (!hDbIsActive(database))
+    {
+    printf("Currently no support for %s\n", database);
+    return -1;
+    }
+hSetDb(database);
 chromName = argv[2];
+// testFB();
 snpMask(argv[3], argv[4]);
 return 0;
 }
