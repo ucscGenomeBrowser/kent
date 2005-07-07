@@ -128,6 +128,13 @@ void cgiMakeRadioButton(char *name, char *value, boolean checked);
  * same name but different values.   The default selection should be
  * sent with checked on. */
 
+void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
+                                        char *command);
+/* Make radio type button with onClick command.
+ *  A group of radio buttons should have the
+ * same name but different values.   The default selection should be
+ * sent with checked on. */
+
 void cgiMakeCheckBox(char *name, boolean checked);
 /* Make check box. */
 

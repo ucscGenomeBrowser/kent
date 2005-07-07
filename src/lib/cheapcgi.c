@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.68 2005/04/10 14:41:21 markd Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.69 2005/07/07 22:12:31 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -748,6 +748,17 @@ void cgiMakeRadioButton(char *name, char *value, boolean checked)
 {
 printf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" %s>", name, value,
    (checked ? "CHECKED" : ""));
+}
+
+void cgiMakeOnClickRadioButton(char *name, char *value, boolean checked,
+                                        char *command)
+/* Make radio type button with onClick command.
+ *  A group of radio buttons should have the
+ * same name but different values.   The default selection should be
+ * sent with checked on. */
+{
+printf("<INPUT TYPE=RADIO NAME=\"%s\" VALUE=\"%s\" %s %s>",
+        name, value, command, (checked ? "CHECKED" : ""));
 }
 
 char *cgiBooleanShadowPrefix()
