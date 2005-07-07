@@ -278,23 +278,28 @@ CREATE TABLE imageFile (
 #An image.  There may be multiple images within an imageFile
 CREATE TABLE image (
     id int auto_increment not null,	# ID of image
+    submissionSet int not null, # Submission set this is part of
     imageFile int not null,	# ID of image file
     imagePos int not null,	# Position in image file, starting with 0
+    paneLabel varchar(255) not null, # Label of this pane in image file
     sectionSet int not null,	# Set of sections this is part of or 0 if none
     sectionIx int not null,	# Position (0 based) within set of sections
     specimen int not null,	# Pointer to info on specimen
     preparation int not null,	# Pointer to info on how specimen prepared
               #Indices
     PRIMARY KEY(id),
+    INDEX(submissionSet),
     INDEX(specimen)
 );
 
 #Associate probe and image
 CREATE TABLE imageProbe (
+    id int auto_increment not null, # ID of imageProbe combination
     image int not null,	# ID of image
     probe int not null,	# ID of probe
     probeColor int not null,	# ID of probeColor
               #Indices
+    PRIMARY KEY(id),
     INDEX(image),
     INDEX(probe)
 );

@@ -68,7 +68,7 @@ journalUrl - Main URL of journal.
 locusLink - LocusLink/Entrez Gene ID
 minAge - Minimum age of specimen.  Defaults to age.
 maxAge - Maximum age of specimen.  Defaults to age.
-pane - Label of pane within multi-paned image file.
+paneLabel - Label of pane within multi-paned image file.
 permeablization - How poked holes in whole mounts.  Proteinase K 30 min, etc.
 priority [200] - sort order.  Lower numbers shown first.
 refSeq - RefSeq mRNA accession

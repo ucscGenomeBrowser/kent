@@ -227,6 +227,7 @@ table image
 "An image.  There may be multiple images within an imageFile"
     (
     int id;		"ID of image"
+    int submissionSet;	"Submission set this is part of"
     int imageFile;	"ID of image file"
     int imagePos;	"Position in image file, starting with 0"
     string paneLabel;   "Label of this pane in image file"
@@ -239,6 +240,7 @@ table image
 table imageProbe
 "Associate probe and image"
     (
+    int id;	"ID of imageProbe combination"
     int image;	"ID of image"
     int probe;	"ID of probe"
     int probeColor;	"ID of probeColor"

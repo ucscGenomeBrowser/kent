@@ -1,4 +1,4 @@
-#fileName	submitId	gene	locusLink	refSeq	genbank	fPrimer	rPrimer	isEmbryo	age	sectionSet	sectionIx
+#fileName	submitId	gene	locusLink	refSeq	genbank	fPrimer	rPrimer	minAge	maxAge	age	sectionSet	sectionIx
 T00011110aa.jpg	1	Nkx2-6			XM_127732	ccggaattcggaatccggatggtttgagagc	cccaagcttatggcagtaggtgagctcaggc	13.0	14.0	13.5	0	0
 T00041110aa.jpg	4	Nkx2-2	18088	NM_010919	NM_010919	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	13.0	14.0	13.5	0	0
 T00041210aa.jpg	4	Nkx2-2	18088	NM_010919	NM_010919	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	13.0	14.0	13.5	0	0

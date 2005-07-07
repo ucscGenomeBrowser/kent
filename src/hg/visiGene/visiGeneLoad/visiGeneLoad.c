@@ -10,8 +10,6 @@
 
 /* Variables you can override from command line. */
 char *database = "visiGene";
-boolean replace = FALSE;
-boolean multicolor = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -23,17 +21,12 @@ errAbort(
   "Please see visiGeneLoad.doc for description of the .ra and .tab files\n"
   "Options:\n"
   "   -database=%s - Specifically set database\n"
-  "   -replace - Replace image rather than complaining if it exists\n"
-  "   -multicolor - More than one probe of different color on image\n"
-  "                 (Use with care, disables some error checking)\n"
   , database
   );
 }
 
 static struct optionSpec options[] = {
    {"database", OPTION_STRING,},
-   {"replace", OPTION_BOOLEAN,},
-   {"multicolor", OPTION_BOOLEAN,},
    {NULL, 0},
 };
 
@@ -86,7 +79,7 @@ static char *optionalFields[] = {
     "embedding", "fixation", "fPrimer", "genbank", "gene",
     "genotype", "imagePos", "itemUrl", "minAge", "maxAge",
     "journal", "journalUrl",
-    "locusLink", "pane", "permeablization", 
+    "locusLink", "paneLabel", "permeablization", 
     "preparationNotes", "priority", "refSeq",
     "rPrimer", "sectionIx", "sectionSet", "sex", "sliceType", "specimenName",
     "specimenNotes", "strain", "publication", "pubUrl",
@@ -257,20 +250,19 @@ int doSectionSet(struct sqlConnection *conn, struct hash *sectionSetHash,
 	char *sectionSet)
 /* Update section set table if necessary.  Return section set id */
 {
-int sectionId = 0;
+int id = 0;
 if (sectionSet[0] != 0 && !sameString(sectionSet, "0"))
     {
-    struct hashEl *hel = hashLookup(sectionSetHash, sectionSet);
-    if (hel != NULL)
-	sectionId = ptToInt(hel->val);
-    else
-	{
-	sqlUpdate(conn, "insert into sectionSet values(default)");
-	sectionId = sqlLastAutoId(conn);
-	hashAdd(sectionSetHash, sectionSet, intToPt(sectionId));
+    char query[256];
+    id = atoi(sectionSet);
+    safef(query, sizeof(query), "select id from sectionSet where id=%d", id);
+    if (!sqlQuickNum(conn, query))
+        {
+	safef(query, sizeof(query), "insert into sectionSet values(%d)", id);
+	sqlUpdate(conn, query);
 	}
     }
-return sectionId;
+return id;
 }
 
 int doGene(struct lineFile *lf, struct sqlConnection *conn,
@@ -888,35 +880,97 @@ dyStringFree(&dy);
 return id;
 }
 
-void doImageProbe(struct sqlConnection *conn,
-	int imageId, int probeId, int probeColor, boolean replace)
+int doImage(struct lineFile *lf, struct sqlConnection *conn,
+	int submissionSet, int imageFile, int imagePos, char *paneLabel,
+	int sectionSet, int sectionIx, int specimen, int preparation)
+/* Update image table. */
+{
+int id = 0;
+struct dyString *dy = newDyString(0);
+
+dyStringAppend(dy, "select id from image where ");
+dyStringPrintf(dy, "submissionSet = %d and ", submissionSet);
+dyStringPrintf(dy, "imageFile = %d and ", imageFile);
+dyStringPrintf(dy, "imagePos = %d and ", imagePos);
+dyStringPrintf(dy, "paneLabel = \"%s\" and ", paneLabel);
+dyStringPrintf(dy, "sectionSet = %d and ", sectionSet);
+dyStringPrintf(dy, "sectionIx = %d and ", sectionIx);
+dyStringPrintf(dy, "specimen = %d and ", specimen);
+dyStringPrintf(dy, "preparation = %d", preparation);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, "insert into image set ");
+    dyStringPrintf(dy, " id=default,");
+    dyStringPrintf(dy, "submissionSet = %d,", submissionSet);
+    dyStringPrintf(dy, "imageFile = %d,", imageFile);
+    dyStringPrintf(dy, "imagePos = %d,", imagePos);
+    dyStringPrintf(dy, "paneLabel = \"%s\",", paneLabel);
+    dyStringPrintf(dy, "sectionSet = %d,", sectionSet);
+    dyStringPrintf(dy, "sectionIx = %d,", sectionIx);
+    dyStringPrintf(dy, "specimen = %d,", specimen);
+    dyStringPrintf(dy, "preparation = %d", preparation);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
+    }
+dyStringFree(&dy);
+return id;
+}
+
+
+int doImageProbe(struct sqlConnection *conn,
+	int image, int probe, int probeColor)
 /* Update image probe table if need be */
 {
 struct dyString *dy = dyStringNew(0);
-boolean needUpdate = TRUE;
-uglyAbort("Need to handle specimen...");
-if (replace)
+int id = 0;
+dyStringAppend(dy, "select id from imageProbe where ");
+dyStringPrintf(dy, "image=%d and probe=%d and probeColor=%d",
+    image, probe, probeColor);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
     {
-    dyStringAppend(dy, "select count(*) from imageProbe where ");
-    dyStringPrintf(dy, "image=%d and probe=%d and probeColor=%d",
-    	imageId, probeId, probeColor);
-    if (sqlQuickNum(conn, dy->string) != 0)
-	needUpdate = FALSE;
-    else
-        dyStringClear(dy);
-    }
-if (needUpdate)
-    {
+    dyStringClear(dy);
     dyStringAppend(dy, "insert into imageProbe set");
-    dyStringPrintf(dy, " image=%d,", imageId);
-    dyStringPrintf(dy, " probe=%d,", probeId);
+    dyStringPrintf(dy, " id=default,");
+    dyStringPrintf(dy, " image=%d,", image);
+    dyStringPrintf(dy, " probe=%d,", probe);
     dyStringPrintf(dy, " probeColor=%d\n", probeColor);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
     }
+dyStringFree(&dy);
+return id;
+}
 
+void doExpression(struct lineFile *lf, struct sqlConnection *conn, 
+	int imageProbe, char *bodyPart, char *level)
+/* Add item to expression table, possibly body part table too. */
+{
+struct dyString *dy = dyStringNew(0);
+int bodyPartId = findOrAddIdTable(conn, "bodyPart", "name", bodyPart);
+double lev = atof(level);
+if (lev < 0 || lev > 1.0)
+    errAbort("expression level out of range (0 to 1) line %d of %s", 
+    	lf->lineIx, lf->fileName);
+dyStringAppend(dy, "select count(*) from expressionLevel where ");
+dyStringPrintf(dy, "imageProbe=%d and bodyPart=%d", imageProbe, bodyPartId);
+if (sqlQuickNum(conn, dy->string) == 0)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, "insert into expressionLevel set");
+    dyStringPrintf(dy, " imageProbe=%d,", imageProbe);
+    dyStringPrintf(dy, " bodyPart=%d,", bodyPartId);
+    dyStringPrintf(dy, " level=%f", lev);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    }
 dyStringFree(&dy);
 }
+
 
 void visiGeneLoad(char *setRaFile, char *itemTabFile)
 /* visiGeneLoad - Load data into visiGene database. */
@@ -941,7 +995,7 @@ struct hash *probeColorHash = newHash(0);
 struct hash *sliceTypeHash = newHash(0);
 struct hash *sectionSetHash = newHash(0);
 struct dyString *dy = dyStringNew(0);
-
+int imageProbeId = 0;
 
 /* Read first line of tab file, and from it get all the field names. */
 if (!lineFileNext(lf, &line, NULL))
@@ -985,134 +1039,122 @@ if (rowSize >= ArraySize(words))
 submissionSetId = saveSubmissionSet(conn, raHash);
 
 /* Process rest of tab file. */
-while (lineFileNextRowTab(lf, words, rowSize))
+while (lineFileNextReal(lf, &line))
     {
-    /* Find/add fields that are in simple id/name type tables. */
-    int fullDir = cachedId(conn, "fileLocation", "name", 
-    	fullDirHash, "fullDir", raHash, rowHash, words);
-    int screenDir = cachedId(conn, "fileLocation", "name", 
-    	screenDirHash, "screenDir", raHash, rowHash, words);
-    int thumbDir = cachedId(conn, "fileLocation", 
-    	"name", thumbDirHash, "thumbDir", raHash, rowHash, words);
-    int bodyPart = cachedId(conn, "bodyPart", 
-    	"name", bodyPartHash, "bodyPart", raHash, rowHash, words);
-    int copyright = cachedId(conn, "copyright", "notice",
-    	copyrightHash, "copyright", raHash, rowHash, words);
-    int embedding = cachedId(conn, "embedding", "description",
-    	embeddingHash, "embedding", raHash, rowHash, words);
-    int fixation = cachedId(conn, "fixation", "description",
-    	fixationHash, "fixation", raHash, rowHash, words);
-    int permeablization = cachedId(conn, "permeablization", "description",
-    	permeablizationHash, "permeablization", raHash, rowHash, words);
-    int probeColor = cachedId(conn, "probeColor", 
-        "name", probeColorHash, "probeColor", raHash, rowHash, words);
-    int sex = cachedId(conn, "sex", 
-    	"name", sexHash, "sex", raHash, rowHash, words);
-    int sliceType = cachedId(conn, "sliceType", 
-    	"name", sliceTypeHash, "sliceType", raHash, rowHash, words);
-    
-    /* Get required fields in tab file */
-    char *fileName = getVal("fileName", raHash, rowHash, words, NULL);
-    char *submitId = getVal("submitId", raHash, rowHash, words, NULL);
-
-    /* Get required fields that can live in tab or .ra file. */
-    char *taxon = getVal("taxon", raHash, rowHash, words, NULL);
-    char *age = getVal("age", raHash, rowHash, words, NULL);
-
-    /* Get other fields from input (either tab or ra file) */
-    char *abName = getVal("abName", raHash, rowHash, words, "");
-    char *abDescription = getVal("abDescription", raHash, rowHash, words, "");
-    char *abTaxon = getVal("abTaxon", raHash, rowHash, words, "0");
-    char *fPrimer = getVal("fPrimer", raHash, rowHash, words, "");
-    char *genbank = getVal("genbank", raHash, rowHash, words, "");
-    char *gene = getVal("gene", raHash, rowHash, words, "");
-    char *genotype = getVal("genotype", raHash, rowHash, words, "wild type");
-    char *imagePos = getVal("imagePos", raHash, rowHash, words, "0");
-    char *journal = getVal("journal", raHash, rowHash, words, "");
-    char *journalUrl = getVal("journalUrl", raHash, rowHash, words, "");
-    char *locusLink = getVal("locusLink", raHash, rowHash, words, "");
-    char *minAge = getVal("minAge", raHash, rowHash, words, "");
-    char *maxAge = getVal("maxAge", raHash, rowHash, words, "");
-    char *pane = getVal("pane", raHash, rowHash, words, "");
-    char *preparationNotes = getVal("preparationNotes", raHash, rowHash, words, "");
-    char *priority = getVal("priority", raHash, rowHash, words, "200");
-    char *refSeq = getVal("refSeq", raHash, rowHash, words, "");
-    char *rPrimer = getVal("rPrimer", raHash, rowHash, words, "");
-    char *sectionSet = getVal("sectionSet", raHash, rowHash, words, "");
-    char *sectionIx = getVal("sectionIx", raHash, rowHash, words, "0");
-    char *seq = getVal("seq", raHash, rowHash, words, "");
-    char *specimenName = getVal("specimenName", raHash, rowHash, words, "");
-    char *specimenNotes = getVal("specimenNotes", raHash, rowHash, words, "");
-    char *strain = getVal("strain", raHash, rowHash, words, "");
-    char *uniProt = getVal("uniProt", raHash, rowHash, words, "");
-
-    /* Some ID's we have to calculate individually. */
-    int sectionId = 0;
-    int geneId = 0;
-    int antibodyId = 0;
-    int probeId = 0;
-    int imageFileId = 0;
-    int imageId = 0;
-    int strainId = 0;
-    int genotypeId = 0;
-    int specimenId = 0;
-    int preparationId = 0;
-
-    verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
-    sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
-    geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
-    antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
-    probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
-    imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,
-    	submissionSetId, submitId, priority);
-    strainId = doStrain(lf, conn, taxon, strain);
-    genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
-    specimenId = doSpecimen(lf, conn, specimenName, taxon, 
-    	genotypeId, bodyPart, sex, 
-    	age, minAge, maxAge, specimenNotes);
-    preparationId = doPreparation(lf, conn, fixation, embedding, 
-    	permeablization, sliceType, preparationNotes);
-#ifdef SOON
-
-    /* Get existing image ID.  If it exists and we are not in replace mode
-     * then die. */
-    dyStringClear(dy);
-    dyStringAppend(dy, "select id from image where ");
-    dyStringPrintf(dy, "imageFile = %d and imagePos = %s", 
-    	imageFileId, imagePos);
-    imageId = sqlQuickNum(conn, dy->string);
-    if (imageId != 0 && !(replace || multicolor))
-        errAbort("Image %s in file %s already in database, aborting",
-		imagePos, fileName);
-    
-    /* insert/update image. */
-    dyStringClear(dy);
-    if (imageId == 0)
-	{
-        dyStringAppend(dy, "insert into image set\n");
-	dyStringAppend(dy, " id = default,\n");
-	}
-    else
+    int wordCount;
+    if (isspace(line[0])) /* Add to info on previous line. */
         {
-	dyStringAppend(dy, "update image set\n");
+	char *command;
+	if (imageProbeId == 0)
+	    errAbort("Can't begin %s with an indented line", lf->fileName);
+	line = skipLeadingSpaces(line);
+	wordCount = chopTabs(line, words);
+	command = words[0];
+	if (sameString(command, "expression"))
+	    {
+	    lineFileExpectWords(lf, 3, wordCount);
+	    doExpression(lf, conn, imageProbeId, words[1], words[2]);
+	    }
+	else
+	    {
+	    errAbort("Unknown command %s line %d of %s", 
+	    	command, lf->lineIx, lf->fileName);
+	    }
 	}
-    dyStringPrintf(dy, " imageFile = %d,\n", imageFileId);
-    dyStringPrintf(dy, " imagePos = %s,\n", imagePos);
-    dyStringPrintf(dy, " sectionSet = %d,\n", sectionId);
-    dyStringPrintf(dy, " sectionIx = %s,\n", sectionIx);
-    dyStringPrintf(dy, " taxon = %s,\n", taxon);
-    dyStringPrintf(dy, " age = %s,\n", age);
-    dyStringPrintf(dy, " bodyPart = %d,\n", bodyPart);
-    dyStringPrintf(dy, " sliceType = %d,\n", sliceType);
-    if (imageId != 0)
-        dyStringPrintf(dy, "where id = %d", imageId);
-    verbose(2, "%s\n", dy->string);
-    sqlUpdate(conn, dy->string);
-    if (imageId == 0)
-	imageId = sqlLastAutoId(conn);
+    else	/* Fresh imageProbe. */
+        {
+	wordCount = chopTabs(line, words);
+	lineFileExpectWords(lf, rowSize, wordCount);
+	/* Find/add fields that are in simple id/name type tables. */
+	int fullDir = cachedId(conn, "fileLocation", "name", 
+	    fullDirHash, "fullDir", raHash, rowHash, words);
+	int screenDir = cachedId(conn, "fileLocation", "name", 
+	    screenDirHash, "screenDir", raHash, rowHash, words);
+	int thumbDir = cachedId(conn, "fileLocation", 
+	    "name", thumbDirHash, "thumbDir", raHash, rowHash, words);
+	int bodyPart = cachedId(conn, "bodyPart", 
+	    "name", bodyPartHash, "bodyPart", raHash, rowHash, words);
+	int copyright = cachedId(conn, "copyright", "notice",
+	    copyrightHash, "copyright", raHash, rowHash, words);
+	int embedding = cachedId(conn, "embedding", "description",
+	    embeddingHash, "embedding", raHash, rowHash, words);
+	int fixation = cachedId(conn, "fixation", "description",
+	    fixationHash, "fixation", raHash, rowHash, words);
+	int permeablization = cachedId(conn, "permeablization", "description",
+	    permeablizationHash, "permeablization", raHash, rowHash, words);
+	int probeColor = cachedId(conn, "probeColor", 
+	    "name", probeColorHash, "probeColor", raHash, rowHash, words);
+	int sex = cachedId(conn, "sex", 
+	    "name", sexHash, "sex", raHash, rowHash, words);
+	int sliceType = cachedId(conn, "sliceType", 
+	    "name", sliceTypeHash, "sliceType", raHash, rowHash, words);
+	
+	/* Get required fields in tab file */
+	char *fileName = getVal("fileName", raHash, rowHash, words, NULL);
+	char *submitId = getVal("submitId", raHash, rowHash, words, NULL);
 
-    doImageProbe(conn, imageId, probeId, probeColor, replace);
-#endif /* SOON */
+	/* Get required fields that can live in tab or .ra file. */
+	char *taxon = getVal("taxon", raHash, rowHash, words, NULL);
+	char *age = getVal("age", raHash, rowHash, words, NULL);
+
+	/* Get other fields from input (either tab or ra file) */
+	char *abName = getVal("abName", raHash, rowHash, words, "");
+	char *abDescription = getVal("abDescription", raHash, rowHash, words, "");
+	char *abTaxon = getVal("abTaxon", raHash, rowHash, words, "0");
+	char *fPrimer = getVal("fPrimer", raHash, rowHash, words, "");
+	char *genbank = getVal("genbank", raHash, rowHash, words, "");
+	char *gene = getVal("gene", raHash, rowHash, words, "");
+	char *genotype = getVal("genotype", raHash, rowHash, words, "wild type");
+	char *imagePos = getVal("imagePos", raHash, rowHash, words, "0");
+	char *journal = getVal("journal", raHash, rowHash, words, "");
+	char *journalUrl = getVal("journalUrl", raHash, rowHash, words, "");
+	char *locusLink = getVal("locusLink", raHash, rowHash, words, "");
+	char *minAge = getVal("minAge", raHash, rowHash, words, "");
+	char *maxAge = getVal("maxAge", raHash, rowHash, words, "");
+	char *paneLabel = getVal("paneLabel", raHash, rowHash, words, "");
+	char *preparationNotes = getVal("preparationNotes", raHash, rowHash, words, "");
+	char *priority = getVal("priority", raHash, rowHash, words, "200");
+	char *refSeq = getVal("refSeq", raHash, rowHash, words, "");
+	char *rPrimer = getVal("rPrimer", raHash, rowHash, words, "");
+	char *sectionSet = getVal("sectionSet", raHash, rowHash, words, "");
+	char *sectionIx = getVal("sectionIx", raHash, rowHash, words, "0");
+	char *seq = getVal("seq", raHash, rowHash, words, "");
+	char *specimenName = getVal("specimenName", raHash, rowHash, words, "");
+	char *specimenNotes = getVal("specimenNotes", raHash, rowHash, words, "");
+	char *strain = getVal("strain", raHash, rowHash, words, "");
+	char *uniProt = getVal("uniProt", raHash, rowHash, words, "");
+
+	/* Some ID's we have to calculate individually. */
+	int sectionId = 0;
+	int geneId = 0;
+	int antibodyId = 0;
+	int probeId = 0;
+	int imageFileId = 0;
+	int strainId = 0;
+	int genotypeId = 0;
+	int specimenId = 0;
+	int preparationId = 0;
+	int imageId = 0;
+
+	verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
+	sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
+	geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
+	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
+	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
+	imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,
+	    submissionSetId, submitId, priority);
+	strainId = doStrain(lf, conn, taxon, strain);
+	genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
+	specimenId = doSpecimen(lf, conn, specimenName, taxon, 
+	    genotypeId, bodyPart, sex, 
+	    age, minAge, maxAge, specimenNotes);
+	preparationId = doPreparation(lf, conn, fixation, embedding, 
+	    permeablization, sliceType, preparationNotes);
+	imageId = doImage(lf, conn, submissionSetId, imageFileId, 
+	    atoi(imagePos), paneLabel,
+	    sectionId, atoi(sectionIx), specimenId, preparationId);
+	imageProbeId = doImageProbe(conn, imageId, probeId, probeColor);
+	}
     }
 }
 
@@ -1123,8 +1165,6 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 database = optionVal("database", database);
-replace = optionExists("replace");
-multicolor = optionExists("multicolor");
 visiGeneLoad(argv[1], argv[2]);
 return 0;
 }
