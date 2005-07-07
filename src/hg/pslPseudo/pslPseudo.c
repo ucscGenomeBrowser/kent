@@ -21,6 +21,7 @@
 #include "genePredReader.h"
 #include "dystring.h"
 #include "pseudoGeneLink.h"
+#include "twoBit.h"
 //#include "scoreWindow.h" TODO fix this
 #include "verbose.h"
 
@@ -34,7 +35,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.32 2005/07/06 05:48:57 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.33 2005/07/07 00:40:46 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -59,8 +60,10 @@ double  wt[11];     /* weights on score function*/
 int minNearTopSize = 10;
 struct genePred *gpList1 = NULL, *gpList2 = NULL, *kgList = NULL;
 FILE *bestFile, *pseudoFile, *linkFile, *axtFile;
+struct twoBitFile *twoBitFile = NULL;
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
-struct dnaSeq *mrnaList = NULL; /* list of all input mrna sequences */
+//struct dnaSeq *mrnaList = NULL; 
+struct slName *mrnaList = NULL;/* list of all input mrna sequence names  */
 struct hash *tHash = NULL;  /* seqFilePos value. */
 struct hash *qHash = NULL;  /* seqFilePos value. */
 struct dlList *fileCache = NULL;
@@ -112,7 +115,7 @@ errAbort(
     "pslPseudo - analyse repeats and generate genome wide best\n"
     "alignments from a sorted set of local alignments\n"
     "usage:\n"
-    "    pslPseudo db in.psl sizes.lst rmsk.bed syntenic.bed trf.bed mrna.psl out.psl outPseudo.psl outPseudoLink.txt out.axt nib.lst mrna.fa refGene.tab mgcGene.tab kglist.tab \n\n"
+    "    pslPseudo db in.psl sizes.lst rmsk.bed syntenic.bed trf.bed mrna.psl out.psl outPseudo.psl outPseudoLink.txt out.axt nib.lst mrna.2bit refGene.tab mgcGene.tab kglist.tab \n\n"
     "where in.psl is an blat alignment of mrnas sorted by pslSort\n"
     "blastz.psl is an blastz alignment of mrnas sorted by pslSort\n"
     "sizes.lst is a list of chrromosome followed by size\n"
@@ -124,7 +127,7 @@ errAbort(
     "outPseudoLink.txt will have the link between gene and pseudogene\n"
     "out.axt contains the pseudogene aligned to the gene (can be /dev/null)\n"
     "nib.lst list of genome nib file\n"
-    "mrna.fa sequence data for all aligned mrnas using blastz\n"
+    "mrna.2bit  sequence data for all aligned mrnas using blastz\n"
     "options:\n"
     "    -nohead don't add PSL header\n"
     "    -ignoreSize Will not weigh in favor of larger alignments so much\n"
@@ -276,10 +279,10 @@ dlAddValHead(cache, cf);
 return cf->f;
 }
 
-struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash, 
-	struct dlList *fileCache)
+//struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash, 
+//	struct dlList *fileCache)
 /* Read sequence hopefully using file cache. */
-{
+/*{
 struct dnaSeq *mrna = NULL;
 struct dnaSeq *qSeq = NULL;
 assert(seqName != NULL);
@@ -301,6 +304,7 @@ else
     return qSeq;
     }
 }
+*/
 
 struct dnaSeq *readSeqFromFaPos(struct seqFilePos *sfp,  FILE *f)
 /* Read part of FA file. */
@@ -443,7 +447,8 @@ struct axt *pslToAxt(struct psl *psl, struct hash *qHash, struct hash *tHash,
 	struct dlList *fileCache)
 {
 static char *tName = NULL, *qName = NULL;
-static struct dnaSeq *tSeq = NULL, *qSeq = NULL, *mrna;
+static struct dnaSeq *tSeq = NULL, *qSeq = NULL;
+static struct slName *mrna;
 struct dyString *q = newDyString(16*1024);
 struct dyString *t = newDyString(16*1024);
 int blockIx;
@@ -454,7 +459,7 @@ int tOffset = 0;
 struct axt *axt = NULL;
 boolean qIsNib = FALSE;
 boolean tIsNib = FALSE;
-int cnt = 0;
+//int cnt = 0;
 
 freeDnaSeq(&qSeq);
 freez(&qName);
@@ -462,17 +467,16 @@ assert(mrnaList != NULL);
 for (mrna = mrnaList; mrna != NULL ; mrna = mrna->next)
     {
     assert(mrna != NULL);
-    cnt++;
     if (sameString(mrna->name, psl->qName))
         {
-        qSeq = cloneDnaSeq(mrna);
+        qSeq = twoBitReadSeqFrag(twoBitFile, psl->qName, 0, 0);
         assert(qSeq != NULL);
         break;
         }
     }
 if (qSeq == NULL)
     {
-    warn("mrna sequence data not found %s, searched %d sequences\n",psl->qName,cnt);
+    warn("mrna sequence data not found %s\n",psl->qName);
     dyStringFree(&q);
     dyStringFree(&t);
     dnaSeqFree(&tSeq);
@@ -2076,9 +2080,12 @@ initWeights();
 verbose(1,"Scanning %s\n", argv[12]);
 hashFileList(argv[12], fileHash, tHash);
 verbose(1,"Loading mrna sequences from %s\n",argv[13]);
-mrnaList = faReadAllMixed(argv[13]);
-if (mrnaList == NULL)
+//mrnaList = faReadAllMixed(argv[13]);
+//if (mrnaList == NULL)
+twoBitFile = twoBitOpen(argv[13]);
+if (twoBitFile == NULL)
     errAbort("could not open %s\n",argv[13]);
+mrnaList = twoBitSeqNames(argv[13]);
 gpList1 = genePredLoadAll(argv[14]);
 gpList2 = genePredLoadAll(argv[15]);
 //gprKg = genePredReaderFile(argv[16], NULL);
@@ -2107,6 +2114,7 @@ binKeeperHashFree(&trfHash);
 genePredFreeList(&gpList1);
 genePredFreeList(&gpList2);
 genePredFreeList(&kgList);
-freeDnaSeqList(&mrnaList);
+//freeDnaSeqList(&mrnaList);
+twoBitClose(&twoBitFile);
 return 0;
 }
