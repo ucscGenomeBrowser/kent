@@ -88,4 +88,14 @@ preparationNotes - notes on preparation of specimen (info not contained in
     embedding, fixation, permeablization, slice type)
 uniProt - Uniprot accession
 
+ADDITIONAL INFORMATION IN INDENTED LINES OF TAB FILE
 
+The tab-separated file may include extra, optional, information in
+addition the to information described by the # header line.  This
+information is in lines that are indented.  
+
+Currently all indented lines must start with the keyword "expression".
+The format of expression lines is:
+	expression	bodyPart	level
+where bodyPart is same as the bodyPart elsewhere, and level is a
+number between 0.0 and 1.0.
