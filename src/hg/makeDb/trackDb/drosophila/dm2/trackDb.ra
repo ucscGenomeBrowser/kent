@@ -162,8 +162,8 @@ type genePred
 otherDb dm1
 
 track augustus
-shortLabel AUGUSTUS genes
-longLabel AUGUSTUS Gene Predictions
+shortLabel Augustus Genes
+longLabel Augustus Gene Predictions
 group genes
 priority 51.7
 visibility hide
