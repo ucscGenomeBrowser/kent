@@ -4080,7 +4080,7 @@ type bed 3 .
 track encodeRegulomeHs
 compositeTrack on
 shortLabel UW/Regulome DNAseI Sens
-longLabel UW/Regulome Mean DNAseI sensitivity baseline
+longLabel ENCODE UW/Regulome Mean DNAseI sensitivity baseline
 group encodeChrom
 priority 63.5
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
@@ -4163,8 +4163,8 @@ autoScaleDefault Off
 
 track encodeRegulomeAmplicon
 compositeTrack on
-shortLabel Regulome Amplicon
-longLabel ENCODE Regulome Amplicon
+shortLabel UW/Regulome Amplicon
+longLabel ENCODE UW/Regulome Amplicon
 group encodeChrom
 priority 64.0
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
@@ -4187,8 +4187,8 @@ useScore 1
 
 track encodeRegulomeQuality
 compositeTrack on
-shortLabel Regulome Quality
-longLabel ENCODE Regulome Quality
+shortLabel UW/Regulome Quality
+longLabel ENCODE UW/Regulome Quality
 group encodeChrom
 priority 64.2
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
