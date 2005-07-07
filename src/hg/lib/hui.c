@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.62 2005/06/27 18:01:06 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.63 2005/07/07 23:51:29 galt Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -545,8 +545,8 @@ int size = ArraySize(zoomOptions);
 for (i = 0; i < size; i++)
     {
     char *s = zoomOptions[i];
-    printf("&nbsp; &nbsp; %s &nbsp;", s);   
     cgiMakeRadioButton(var, s, sameString(s, curVal));
+    printf(" %s &nbsp;&nbsp;", s);   
     }
 }
 

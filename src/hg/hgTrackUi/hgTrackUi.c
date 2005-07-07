@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.204 2005/07/07 21:15:09 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.205 2005/07/07 23:51:29 galt Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -988,6 +988,12 @@ void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
 boolean complementsToo = cartUsualBoolean(cart, MOTIF_COMPLEMENT, FALSE);
+boolean showPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
+boolean showAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
+/* title var is assembly-specific */
+char titleVar[256];
+safef(titleVar,sizeof(titleVar),"%s_%s",BASE_TITLE,database);
+char *title = cartUsualString(cart, titleVar, "");
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 char *motifString = cartCgiUsualString(cart, BASE_MOTIFS, "");
@@ -996,8 +1002,17 @@ zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
 cgiMakeTextVar(BASE_MOTIFS, motifString, 20);
 puts("&nbsp;(Comma separated list, i.e.: GT,AG for splice sites)");
-puts("<P><B>Show reverse complements of motifs also:&nbsp;</B>");
+puts("<P>");
 cgiMakeCheckBox(MOTIF_COMPLEMENT, complementsToo);
+puts("&nbsp;<B>Show reverse complements of motifs also</B>");
+puts("<P><B>Title:&nbsp;</B>");
+cgiMakeTextVar(titleVar, title, 30);
+puts("<P><B>Display:&nbsp;</B>");
+cgiMakeCheckBox(BASE_SHOWASM, showAsm);
+puts("&nbsp;<B>assembly&nbsp;</B>");
+cgiMakeCheckBox(BASE_SHOWPOS, showPos);
+puts("&nbsp;<B>position</B>");
+
 }
 
 void oligoMatchUi(struct trackDb *tdb)

@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.984 2005/07/05 19:27:47 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.985 2005/07/07 23:51:29 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -161,6 +161,9 @@ int leftLabelWidth;		/* Width of area to draw left labels on. */
 boolean zoomedToBaseLevel; 	/* TRUE if zoomed so we can draw bases. */
 boolean zoomedToCodonLevel; /* TRUE if zoomed so we can print codons text in genePreds*/
 boolean zoomedToCdsColorLevel; /* TRUE if zoomed so we can color each codon*/
+boolean baseShowPos;           /* TRUE if should display full position at top of base track */
+boolean baseShowAsm;           /* TRUE if should display assembly info at top of base track */
+char *baseTitle = NULL;        /* Title it should display top of base track (optional)*/
 
 /* These variables are set by getPositionFromCustomTracks() at the very 
  * beginning of tracksDisplay(), and then used by loadCustomTracks(). */
@@ -7642,6 +7645,8 @@ int trackTabX = gfxBorder;
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int pixWidth, pixHeight;
 int y;
+int titleHeight = fontHeight; 
+int showPosHeight = fontHeight; 
 int rulerHeight = fontHeight;
 int baseHeight = fontHeight;
 int basePositionHeight = rulerHeight;
@@ -7659,8 +7664,15 @@ pixWidth = tl.picWidth;
 pixHeight = gfxBorder;
 if (rulerMode != tvHide)
     {
+    if (baseTitle)
+	basePositionHeight += titleHeight;
+	
+    if (baseShowPos||baseShowAsm)
+	basePositionHeight += showPosHeight;
+	
     if (zoomedToBaseLevel)
 	basePositionHeight += baseHeight;
+	
     yAfterRuler += basePositionHeight;
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
@@ -7807,13 +7819,28 @@ if (withLeftLabels)
     y = gfxBorder;
     if (rulerMode != tvHide)
 	{
+	if (baseTitle)
+	    {
+	    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, titleHeight, 
+			MG_BLACK, font, WIN_TITLE_LABEL);
+	    y += titleHeight;
+	    }
+	if (baseShowPos||baseShowAsm)
+	    {
+	    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, showPosHeight, 
+			MG_BLACK, font, WIN_POS_LABEL);
+	    y += showPosHeight;
+	    }
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, RULER_TRACK_LABEL);
+	y += rulerHeight;
 	if (zoomedToBaseLevel || 
                 (zoomedToCdsColorLevel && rulerMode == tvFull))
-	    drawComplementArrow(vg,leftLabelX, y+rulerHeight,
+	    {		    
+	    drawComplementArrow(vg,leftLabelX, y,
 				leftLabelWidth-1, baseHeight, font);
-	y += basePositionHeight;
+	    y += baseHeight;
+	    }
         if ((rulerMode == tvFull) &&
                 (zoomedToBaseLevel || zoomedToCdsColorLevel))
             y += rulerTranslationHeight;
@@ -7863,6 +7890,36 @@ if (rulerMode != tvHide)
     y = 0;
     vgSetClip(vg, insideX, y, insideWidth, yAfterRuler-y+1);
     relNumOff = winStart;
+    
+    if (baseTitle)
+	{
+	vgTextCentered(vg, insideX, y, insideWidth, titleHeight, 
+			    MG_BLACK, font, baseTitle);
+        mapBoxUi(insideX, y, insideWidth, titleHeight, RULER_TRACK_NAME, 
+                                                      RULER_TRACK_LABEL);
+	y += titleHeight;
+	}
+    if (baseShowPos||baseShowAsm)
+	{
+	char txt[256];
+	char numBuf[64];
+	char *freezeName = NULL;
+	freezeName = hFreezeFromDb(database);
+	sprintLongWithCommas(numBuf, winEnd-winStart);
+	if(freezeName == NULL)
+	    freezeName = "Unknown";
+	if (baseShowPos&&baseShowAsm)
+    	    safef(txt,sizeof(txt),"%s %s   %s (%sbp)",organism,freezeName,addCommasToPos(position),numBuf);
+	else if (baseShowPos)
+    	    safef(txt,sizeof(txt),"%s (%sbp)",addCommasToPos(position),numBuf);
+	else
+    	    safef(txt,sizeof(txt),"%s %s",organism,freezeName);
+	vgTextCentered(vg, insideX, y, insideWidth, showPosHeight, 
+			    MG_BLACK, font, txt);
+	freez(&freezeName);
+	y += showPosHeight;
+	}
+    
     vgDrawRulerBumpText(vg, insideX, y, rulerHeight, insideWidth, MG_BLACK, 
                         font, relNumOff, winBaseCount, 0, 1);
     {
@@ -10663,6 +10720,7 @@ void tracksDisplay()
 {
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
+char titleVar[256];
 char *motifString = cartOptionalString(cart,BASE_MOTIFS);
 boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
 position = getPositionFromCustomTracks();
@@ -10721,6 +10779,13 @@ withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
+
+baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
+baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
+safef(titleVar,sizeof(titleVar),"%s_%s", BASE_TITLE, database);
+baseTitle = cartUsualString(cart, titleVar, "");
+if (sameString(baseTitle, "")) 
+    baseTitle = NULL;
 
 setRulerMode();
 

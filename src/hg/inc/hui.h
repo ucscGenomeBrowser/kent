@@ -18,6 +18,8 @@ char *wrapWhiteFont(char *s);
 #define RULER_TRACK_NAME        "ruler"
 #define RULER_TRACK_LABEL       "Base Position"
 #define RULER_TRACK_LONGLABEL   "Genome Base Position"
+#define WIN_POS_LABEL           "Window Position"
+#define WIN_TITLE_LABEL         ""  /* "Title" */
 
 /* Definitions for restriction enzyme track. */
 #define cutterVar "hgt.cutters"
@@ -40,6 +42,9 @@ char *wrapWhiteFont(char *s);
 /*	For trackUi and hgTracks, motif highlight options	*/
 #define BASE_MOTIFS	"hgt.motifs"
 #define MOTIF_COMPLEMENT	"hgt.motifComplement"
+#define BASE_SHOWPOS	"hgt.baseShowPos"
+#define BASE_SHOWASM	"hgt.baseShowAsm"
+#define BASE_TITLE	"hgt.baseTitle"
 
 /* Configuration variable to cause ruler zoom to zoom to base level */
 #define RULER_BASE_ZOOM_VAR      "rulerBaseZoom"
