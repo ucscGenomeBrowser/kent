@@ -1,0 +1,19 @@
+submitSet abTest01
+fullDir /gbdb/bioImage/full/inSitu/Human/Freenish
+screenDir /gbdb/bioImage/700/inSitu/Human/Freenish
+thumbDir /gbdb/bioImage/200/inSitu/Human/Freenish
+contributor Kent W.J., Willis W.E., Haussler D., van Damm C.E.V.G., Theirry-Mieg J.
+taxon 9606
+abTaxon 9925
+strain unkempt
+genotype HOXA1:double,Hmx1:null,Hla1b:nx-z,recA:reduced,adh:cheap date,antp:null,recC:-
+age 365
+probeColor green
+probeType antibody
+journal International Journal of Confabulation
+journalUrl www.confabulation.org
+priority 1000
+publication The further adventures of freen
+setUrl http://www.soe.ucsc.edu/~kent/test
+itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
+sliceType sagittal

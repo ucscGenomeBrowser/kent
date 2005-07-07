@@ -104,7 +104,7 @@ return val;
 
 int findExactSubmissionId(struct sqlConnection *conn,
 	char *submitSetName,
-	char *contributors);
+	char *contributors)
 /* Find ID of submissionSet that matches all parameters.  Return 0 if none found. */
 {
 char query[1024];
@@ -689,6 +689,131 @@ dyStringFree(&dy);
 return imageFileId;
 }
 
+int doStrain(struct lineFile *lf, struct sqlConnection *conn, char *taxon,
+	char *strain)
+/* Return strain id, creating a new table entry if necessary. */
+{
+int id = 0;
+struct dyString *dy = newDyString(0);
+
+dyStringAppend(dy, "select id from strain where ");
+dyStringPrintf(dy, "taxon=%s and name='%s'", taxon, strain);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, "insert into strain set");
+    dyStringPrintf(dy, " id = default,\n");
+    dyStringPrintf(dy, " taxon = %s,\n", taxon);
+    dyStringPrintf(dy, " name = '%s'", strain);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
+    }
+dyStringFree(&dy);
+return id;
+}
+
+int doGenotype(struct lineFile *lf, struct sqlConnection *conn,
+	char *taxon, int strainId, char *genotype)
+/* Unpack genotype string, alphabatize it, return id associated
+ * with it if possible, otherwise create associated genes and
+ * alleles then genotype, and return genotypeId. */
+{
+int id = 0;
+struct dyString *dy = newDyString(0);
+struct slName *geneAlleleList = commaSepToSlNames(genotype), *el;
+struct dyString *alphabetical = newDyString(0);
+
+slSort(&geneAlleleList, slNameCmp);
+for (el = geneAlleleList; el != NULL; el = el->next)
+    dyStringPrintf(alphabetical, "%s,", el->name);
+
+dyStringAppend(dy, "select id from genotype where ");
+dyStringPrintf(dy, "taxon=%s and strain=%d and alleles='%s'", 
+	taxon, strainId, alphabetical->string);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
+    {
+    /* Create main genotype record. */
+    dyStringClear(dy);
+    dyStringAppend(dy, "insert into genotype set");
+    dyStringPrintf(dy, " id = default,\n");
+    dyStringPrintf(dy, " taxon = %s,\n", taxon);
+    dyStringPrintf(dy, " strain = %d,\n", strainId);
+    dyStringPrintf(dy, " alleles = \"%s\"", alphabetical->string);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
+
+    /* Create additional records for each component of genotype. */
+    if (!sameString(genotype, "wild type"))
+	{
+	for (el = geneAlleleList; el != NULL; el = el->next)
+	    {
+	    int geneId = 0, alleleId = 0;
+	    char *gene, *allele;
+
+	    /* Parse gene:allele */
+	    gene = el->name;
+	    allele = strchr(gene, ':');
+	    if (allele == NULL)
+		errAbort("Malformed genotype %s (missing :)", genotype);
+	    *allele++ = 0;
+
+	    /* Get or make gene ID. */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "select id from gene where ");
+	    dyStringPrintf(dy, "name = \"%s\" and taxon=%s", gene, taxon);
+	    geneId = sqlQuickNum(conn, dy->string);
+	    if (geneId == 0)
+	        {
+		dyStringClear(dy);
+		dyStringAppend(dy, "insert into gene set");
+		dyStringPrintf(dy, " id = default,\n");
+		dyStringPrintf(dy, " name = \"%s\",\n", gene);
+		dyStringPrintf(dy, " locusLink = '',\n");
+		dyStringPrintf(dy, " refSeq = '',\n");
+		dyStringPrintf(dy, " genbank = '',\n");
+		dyStringPrintf(dy, " uniProt = '',\n");
+		dyStringPrintf(dy, " taxon = %s", taxon);
+		verbose(2, "%s\n", dy->string);
+		sqlUpdate(conn, dy->string);
+		geneId = sqlLastAutoId(conn);
+		}
+
+	    /* Get or make allele ID. */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "select id from allele where ");
+	    dyStringPrintf(dy, "gene = %d and name = \"%s\"", allele);
+	    alleleId = sqlQuickNum(conn, dy->string);
+	    if (alleleId == 0)
+	        {
+		dyStringClear(dy);
+		dyStringAppend(dy, "insert into allele set");
+		dyStringPrintf(dy, " id = default,\n");
+		dyStringPrintf(dy, " gene = %d,\n", geneId);
+		dyStringPrintf(dy, " name = \"%s\"", allele);
+		verbose(2, "%s\n", dy->string);
+		sqlUpdate(conn, dy->string);
+		alleleId = sqlLastAutoId(conn);
+		}
+
+	    /* Add genotypeAllele record. */
+	    dyStringClear(dy);
+	    dyStringAppend(dy, "insert into genotypeAllele set ");
+	    dyStringPrintf(dy, "genotype = %d, allele=%d\n", id, alleleId);
+	    verbose(2, "%s\n", dy->string);
+	    sqlUpdate(conn, dy->string);
+	    }
+	}
+    }
+slFreeList(&geneAlleleList);
+dyStringFree(&alphabetical);
+dyStringFree(&dy);
+return id;
+}
+	
 void doImageProbe(struct sqlConnection *conn,
 	int imageId, int probeId, int probeColor, boolean replace)
 /* Update image probe table if need be */
@@ -743,7 +868,6 @@ struct hash *sliceTypeHash = newHash(0);
 struct hash *sectionSetHash = newHash(0);
 struct dyString *dy = dyStringNew(0);
 
-uglyAbort("Still need to add stuff for genotypes, specimens, etc.");
 
 /* Read first line of tab file, and from it get all the field names. */
 if (!lineFileNext(lf, &line, NULL))
@@ -828,7 +952,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     char *fPrimer = getVal("fPrimer", raHash, rowHash, words, "");
     char *genbank = getVal("genbank", raHash, rowHash, words, "");
     char *gene = getVal("gene", raHash, rowHash, words, "");
-    char *genotype = getVal("genotype", raHash, rowHash, words, "");
+    char *genotype = getVal("genotype", raHash, rowHash, words, "wild type");
     char *imagePos = getVal("imagePos", raHash, rowHash, words, "0");
     char *journal = getVal("journal", raHash, rowHash, words, "");
     char *journalUrl = getVal("journalUrl", raHash, rowHash, words, "");
@@ -861,7 +985,6 @@ while (lineFileNextRowTab(lf, words, rowSize))
 
     verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
     sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
-#ifdef SOON
     geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
     antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
     probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
@@ -869,6 +992,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     	submissionSetId, submitId, priority);
     strainId = doStrain(lf, conn, taxon, strain);
     genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
+#ifdef SOON
     specimenId = doSpecimen(lf, conn, specimenName, genotypeId, bodyPart, sex, 
     	age, minAge, maxAge, specimenNotes);
     preparationId = doPreparation(lf, conn, fixation, embedding, 

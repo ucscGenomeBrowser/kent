@@ -20,7 +20,6 @@ table bodyPart
     (
     int id;	"ID of body part"
     string name;	"Name of body part"
-    int parent;	"Parent body part (ie head parent of brain...)
     )
 
 table sliceType
@@ -142,6 +141,7 @@ table genotype
     int id;	"Genotype id"
     int taxon;	"NCBI Taxon of organism"
     int strain;	"Strain of organism"
+    lstring alleles; "Comma separated list of gene:allele in alphabetical order"
     )
 
 table genotypeAllele

@@ -26,7 +26,6 @@ CREATE TABLE strain (
 CREATE TABLE bodyPart (
     id int auto_increment not null,	# ID of body part
     name varchar(255) not null,	# Name of body part
-    parent int not null,	# Parent body part (ie head parent of brain...)
               #Indices
     PRIMARY KEY(id),
     INDEX(name(8))
@@ -114,7 +113,7 @@ CREATE TABLE submissionContributor (
     submissionSet int not null,	# ID in submissionSet table
     contributor int not null,	# ID in contributor table
               #Indices
-    PRIMARY KEY(submissionSet),
+    INDEX(submissionSet),
     INDEX(contributor)
 );
 
@@ -180,10 +179,12 @@ CREATE TABLE genotype (
     id int auto_increment not null,	# Genotype id
     taxon int not null,	# Taxon of organism
     strain int not null,	# Strain of organism
+    alleles longblob not null,	# Comma separated list of gene:allele in alphabetical order
               #Indices
     PRIMARY KEY(id),
     INDEX(taxon),
-    INDEX(strain)
+    INDEX(strain),
+    INDEX(alleles(16))
 );
 
 #Association between genotype and alleles
@@ -211,7 +212,7 @@ CREATE TABLE specimen (
     INDEX(name(8)),
     INDEX(genotype),
     INDEX(bodyPart),
-    INDEX(age),
+    INDEX(age)
 
 );
 
@@ -225,7 +226,7 @@ CREATE TABLE preparation (
     notes longblob not null,	# Any other notes on preparation
               #Indices
     PRIMARY KEY(id),
-    INDEX(sliceType),
+    INDEX(sliceType)
 );
 
 #Type of probe - RNA, antibody, etc.
@@ -248,7 +249,7 @@ CREATE TABLE probe (
               #Indices
     PRIMARY KEY(id),
     INDEX(gene),
-    INDEX(antibody),
+    INDEX(antibody)
 );
 
 #Color - what color probe is in

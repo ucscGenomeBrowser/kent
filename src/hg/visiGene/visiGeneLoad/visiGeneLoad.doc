@@ -59,7 +59,7 @@ fixation - formaldehyde, methanol, etc
 fPrimer - Forward PCR primer used to generate RNA probe
 genbank - Genbank/EMBL accession 
 gene - HUGO or other official gene symbol
-genotype - 'wild type' or comma separated list of mutations
+genotype - 'wild type' or comma separated list of mutations in format gene:allele
 imagePos [0] - Zero based index of image in file
 itemUrl - Contributor-supplied URL associated with this particular image.  Should
     have a %s where submitId gets substituted in.
