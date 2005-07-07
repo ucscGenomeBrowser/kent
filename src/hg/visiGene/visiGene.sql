@@ -210,6 +210,7 @@ CREATE TABLE specimen (
               #Indices
     PRIMARY KEY(id),
     INDEX(name(8)),
+    INDEX(taxon),
     INDEX(genotype),
     INDEX(bodyPart),
     INDEX(age)
@@ -225,8 +226,7 @@ CREATE TABLE preparation (
     sliceType int not null,	# How it was sliced
     notes longblob not null,	# Any other notes on preparation
               #Indices
-    PRIMARY KEY(id),
-    INDEX(sliceType)
+    PRIMARY KEY(id)
 );
 
 #Type of probe - RNA, antibody, etc.

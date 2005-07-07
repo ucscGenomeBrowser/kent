@@ -813,7 +813,81 @@ dyStringFree(&alphabetical);
 dyStringFree(&dy);
 return id;
 }
+
+int doSpecimen(struct lineFile *lf, struct sqlConnection *conn,
+	char *name, char *taxon, int genotype, int bodyPart, int sex,
+	char *age, char *minAge, char *maxAge, char *notes)
+/* Add specimen to table if it doesn't already exist. */
+{
+int id = 0;
+struct dyString *dy = newDyString(0);
+
+if (minAge[0] == 0) minAge = age;
+if (maxAge[0] == 0) maxAge = age;
+dyStringAppend(dy, "select id from specimen where ");
+dyStringPrintf(dy, "name = \"%s\" and ", name);
+dyStringPrintf(dy, "taxon = %s and ", taxon);
+dyStringPrintf(dy, "genotype = %d and ", genotype);
+dyStringPrintf(dy, "bodyPart = %d and ", bodyPart);
+dyStringPrintf(dy, "age = %s and ", age);
+dyStringPrintf(dy, "minAge = %s and ", minAge);
+dyStringPrintf(dy, "maxAge = %s and ", maxAge);
+dyStringPrintf(dy, "notes = \"%s\"", notes);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, "insert into specimen set");
+    dyStringPrintf(dy, " id = default,\n");
+    dyStringPrintf(dy, "name = \"%s\",\n", name);
+    dyStringPrintf(dy, "taxon = %s,\n", taxon);
+    dyStringPrintf(dy, "genotype = %d,\n", genotype);
+    dyStringPrintf(dy, "bodyPart = %d,\n", bodyPart);
+    dyStringPrintf(dy, "age = %s,\n", age);
+    dyStringPrintf(dy, "minAge = %s,\n", minAge);
+    dyStringPrintf(dy, "maxAge = %s,\n", maxAge);
+    dyStringPrintf(dy, "notes = \"%s\"", notes);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
+    }
+dyStringFree(&dy);
+return id;
+}
 	
+int doPreparation(struct lineFile *lf, struct sqlConnection *conn, 
+	int fixation, int embedding, int permeablization, 
+	int sliceType, char *notes)
+/* Add preparation to table if it doesn't already exist. */
+{
+int id = 0;
+struct dyString *dy = newDyString(0);
+
+dyStringAppend(dy, "select id from preparation where ");
+dyStringPrintf(dy, "fixation = %d and ", fixation);
+dyStringPrintf(dy, "embedding = %d and ", embedding);
+dyStringPrintf(dy, "permeablization = %d and ", permeablization);
+dyStringPrintf(dy, "sliceType = %d and ", sliceType);
+dyStringPrintf(dy, "notes = \"%s\"", notes);
+id = sqlQuickNum(conn, dy->string);
+if (id == 0)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, "insert into preparation set");
+    dyStringPrintf(dy, " id = default,\n");
+    dyStringPrintf(dy, " fixation = %d,\n", fixation);
+    dyStringPrintf(dy, " embedding = %d,\n", embedding);
+    dyStringPrintf(dy, " permeablization = %d,\n", permeablization);
+    dyStringPrintf(dy, " sliceType = %d,\n", sliceType);
+    dyStringPrintf(dy, " notes = '%s'", notes);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    id = sqlLastAutoId(conn);
+    }
+dyStringFree(&dy);
+return id;
+}
+
 void doImageProbe(struct sqlConnection *conn,
 	int imageId, int probeId, int probeColor, boolean replace)
 /* Update image probe table if need be */
@@ -982,6 +1056,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
     int strainId = 0;
     int genotypeId = 0;
     int specimenId = 0;
+    int preparationId = 0;
 
     verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
     sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
@@ -992,11 +1067,12 @@ while (lineFileNextRowTab(lf, words, rowSize))
     	submissionSetId, submitId, priority);
     strainId = doStrain(lf, conn, taxon, strain);
     genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
-#ifdef SOON
-    specimenId = doSpecimen(lf, conn, specimenName, genotypeId, bodyPart, sex, 
+    specimenId = doSpecimen(lf, conn, specimenName, taxon, 
+    	genotypeId, bodyPart, sex, 
     	age, minAge, maxAge, specimenNotes);
     preparationId = doPreparation(lf, conn, fixation, embedding, 
     	permeablization, sliceType, preparationNotes);
+#ifdef SOON
 
     /* Get existing image ID.  If it exists and we are not in replace mode
      * then die. */
