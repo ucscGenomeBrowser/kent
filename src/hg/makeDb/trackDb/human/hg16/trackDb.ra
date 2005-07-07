@@ -4130,6 +4130,7 @@ type bedGraph 4
 minLimit 0
 maxLimit 3
 autoScaleDefault Off
+maxHeightPixels 100:50:20
 
     track encodeRegulomeProbCACO2
     subTrack encodeRegulomeProb
