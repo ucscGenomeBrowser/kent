@@ -2679,7 +2679,7 @@ done
     hgsql hg16 < encodeIndels.sql
     split4.pl < hg16.ENCODE.DIPtrack.Q23.bed4+ > split4.out
     # use a modified makeColoredBed
-    ./makeColoredBed < split5.out > encodeIndels.bed  
+    ./makeColoredBed < split4.out > encodeIndels.bed  
     # don't use -strict because we have lots of simple insertions (where chromStart = chromEnd)
     hgLoadBed hg16 encodeIndels -tab -sqlTable=encodeIndels.sql encodeIndels.bed
     # check reference length
