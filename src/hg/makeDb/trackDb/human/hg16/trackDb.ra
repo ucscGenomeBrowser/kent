@@ -4079,8 +4079,8 @@ type bed 3 .
 
 track encodeRegulomeHs
 compositeTrack on
-shortLabel Regulome DNAse-I HS
-longLabel Regulome DNAse-I Hypersensitive Sites
+shortLabel UW/Regulome DNAseI Sens
+longLabel UW/Regulome Mean DNAseI sensitivity baseline
 group encodeChrom
 priority 63.5
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
@@ -4091,39 +4091,39 @@ autoScaleDefault Off
     track encodeRegulomeHsCACO2
     subTrack encodeRegulomeHs
     shortLabel CACO2
-    longLabel CACO2 DNAse-I Hypersensitivity
+    longLabel CACO2 DNAseI Sens
     priority 1
 
     track encodeRegulomeHsGM06990
     subTrack encodeRegulomeHs
     shortLabel GM06990
-    longLabel GM06990 DNAse-I Hypersensitivity
+    longLabel GM06990 DNAseI Sens
     priority 2
 
     track encodeRegulomeHsSKNSH
     subTrack encodeRegulomeHs
     shortLabel SKNSH
-    longLabel SKNSH DNAse-I Hypersensitivity
+    longLabel SKNSH DNAseI Sens
     priority 3
 
     track encodeRegulomeHsERY
     subTrack encodeRegulomeHs
     shortLabel ERY
-    longLabel ERY DNAse-I Hypersensitivity
+    longLabel ERY DNAseI Sens
     priority 4
 
     track encodeRegulomeHsK562
     subTrack encodeRegulomeHs
     shortLabel K562
-    longLabel K562 DNAse-I Hypersensitivity
+    longLabel K562 DNAseI Sens
     priority 5
 
-track encodeRegulomeSnr
+track encodeRegulomeProb
 compositeTrack on
-shortLabel Regulome SNR
-longLabel ENCODE Regulome Signal-to-Noise Ratio
+shortLabel UW/Regulome HS Prob
+longLabel ENCODE UW/Regulome DNaseI hypersensitive sites/scores
 group encodeChrom
-priority 64.0
+priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility dense
 type bedGraph 4
@@ -4131,34 +4131,34 @@ minLimit 0
 maxLimit 3
 autoScaleDefault Off
 
-    track encodeRegulomeSnrCACO2
-    subTrack encodeRegulomeSnr
+    track encodeRegulomeProbCACO2
+    subTrack encodeRegulomeProb
     shortLabel CACO2
-    longLabel CACO2 Signal-to-Noise Ratio
+    longLabel CACO2 Probability
     priority 1
 
-    track encodeRegulomeSnrGM06990
-    subTrack encodeRegulomeSnr
+    track encodeRegulomeProbGM06990
+    subTrack encodeRegulomeProb
     shortLabel GM06990
-    longLabel GM06990 Signal-to-Noise Ratio
+    longLabel GM06990 Probability
     priority 2
 
-    track encodeRegulomeSnrSKNSH
-    subTrack encodeRegulomeSnr
+    track encodeRegulomeProbSKNSH
+    subTrack encodeRegulomeProb
     shortLabel SKNSH
-    longLabel SKNSH Signal-to-Noise Ratio
+    longLabel SKNSH Probability
     priority 3
 
-    track encodeRegulomeSnrERY
-    subTrack encodeRegulomeSnr
+    track encodeRegulomeProbERY
+    subTrack encodeRegulomeProb
     shortLabel ERY
-    longLabel ERY Signal-to-Noise Ratio
+    longLabel ERY Probability
     priority 4
 
-    track encodeRegulomeSnrK562
-    subTrack encodeRegulomeSnr
+    track encodeRegulomeProbK562
+    subTrack encodeRegulomeProb
     shortLabel K562
-    longLabel CACO2 Signal-K562-Noise Ratio
+    longLabel CACO2 Probability
     priority 5
 
 track encodeRegulomeAmplicon
@@ -4166,71 +4166,24 @@ compositeTrack on
 shortLabel Regulome Amplicon
 longLabel ENCODE Regulome Amplicon
 group encodeChrom
-priority 64.1
+priority 64.0
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility dense
 type bed 5 .
 useScore 1
 
-    track encodeRegulomeAmpliconOddCACO2
+    track encodeRegulomeAmpliconOdd
     subTrack encodeRegulomeAmplicon
-    shortLabel CACO2 (Odd)
-    longLabel CACO2 Amplicon (Odd)
+    shortLabel Amplicon (Odd)
+    longLabel Amplicon (Odd)
     priority 1
 
-    track encodeRegulomeAmpliconEvenCACO2
+    track encodeRegulomeAmpliconEven
     subTrack encodeRegulomeAmplicon
-    shortLabel CACO2 (Even)
-    longLabel CACO2 Amplicon (Even)
+    shortLabel Amplicon (Even)
+    longLabel Amplicon (Even)
     priority 2
 
-    track encodeRegulomeAmpliconOddGM06990
-    subTrack encodeRegulomeAmplicon
-    shortLabel GM06990 (Odd)
-    longLabel GM06990 Amplicon (Odd)
-    priority 3
-
-    track encodeRegulomeAmpliconEvenGM06990
-    subTrack encodeRegulomeAmplicon
-    shortLabel GM06990 (Even)
-    longLabel GM06990 Amplicon (Even)
-    priority 4
-
-    track encodeRegulomeAmpliconOddSKNSH
-    subTrack encodeRegulomeAmplicon
-    shortLabel SKNSH (Odd)
-    longLabel SKNSH Amplicon (Odd)
-    priority 5
-
-    track encodeRegulomeAmpliconEvenSKNSH
-    subTrack encodeRegulomeAmplicon
-    shortLabel SKNSH (Even)
-    longLabel SKNSH Amplicon (Even)
-    priority 6
-
-    track encodeRegulomeAmpliconOddERY
-    subTrack encodeRegulomeAmplicon
-    shortLabel ERY (Odd)
-    longLabel ERY Amplicon (Odd)
-    priority 7
-
-    track encodeRegulomeAmpliconEvenERY
-    subTrack encodeRegulomeAmplicon
-    shortLabel ERY (Even)
-    longLabel ERY Amplicon (Even)
-    priority 8
-
-    track encodeRegulomeAmpliconOddK562
-    subTrack encodeRegulomeAmplicon
-    shortLabel K562 (Odd)
-    longLabel K562 Amplicon (Odd)
-    priority 9
-
-    track encodeRegulomeAmpliconEvenK562
-    subTrack encodeRegulomeAmplicon
-    shortLabel K562 (Even)
-    longLabel K562 Amplicon (Even)
-    priority 10
 
 track encodeRegulomeQuality
 compositeTrack on
