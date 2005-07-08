@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.51 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.52 2005/07/08 17:16:12 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -729,10 +729,13 @@ if (curTrack && sameString(curTrack->tableName, table))
 else
     {
     struct trackDb *tdb = hTrackDbForTrack(table);
-    char *subtrackSetting = trackDbSetting(tdb, "subTrack");
-    if (isEmpty(tdb->type) && isNotEmpty(subtrackSetting))
-	tdb = hTrackDbForTrack(nextWord(&subtrackSetting));
-    return (tdb && startsWith("bedGraph", tdb->type));
+    if (tdb)
+	{
+	char *subtrackSetting = trackDbSetting(tdb, "subTrack");
+	if (isEmpty(tdb->type) && isNotEmpty(subtrackSetting))
+	    tdb = hTrackDbForTrack(nextWord(&subtrackSetting));
+	return (tdb && startsWith("bedGraph", tdb->type));
+	}
     }
 }
 
