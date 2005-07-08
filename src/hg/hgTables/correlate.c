@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.44 2005/07/08 17:43:55 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.45 2005/07/08 23:56:18 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -2152,20 +2152,23 @@ if (1 == 0)	/*	not really useful	*/
 hPrintf("<TABLE>");
 hPrintf("<TR><TD>\n");
 
-hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table1->shortLabel);
-hPrintf("<TR>");
-hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
-	histogram1PlotGif->forHtml, totalWidthHisto1, totalHeightHisto1);
-hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
+if ((histogram1PlotGif != NULL) && (histogram2PlotGif != NULL))
+    {
+    hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+    hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table1->shortLabel);
+    hPrintf("<TR>");
+    hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
+	    histogram1PlotGif->forHtml, totalWidthHisto1, totalHeightHisto1);
+    hPrintf("</TABLE></TD><TD BGCOLOR=\"%s\">\n", HG_COL_INSIDE);
 
-hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
-hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table2->shortLabel);
-hPrintf("<TR>");
-hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
-	histogram2PlotGif->forHtml, totalWidthHisto2, totalHeightHisto2);
-hPrintf("</TABLE>\n");
-hPrintf("</TD></TR></TABLE>\n");
+    hPrintf("<TABLE BGCOLOR=\"%s\">", HG_COL_INSIDE);
+    hPrintf("<TR><TH COLSPAN=2>histogram<BR>%s</TH></TR>\n", table2->shortLabel);
+    hPrintf("<TR>");
+    hPrintf("<TD><IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d</TD></TR>\n",
+	    histogram2PlotGif->forHtml, totalWidthHisto2, totalHeightHisto2);
+    hPrintf("</TABLE>\n");
+    hPrintf("</TD></TR></TABLE>\n");
+    }
 
 }
 

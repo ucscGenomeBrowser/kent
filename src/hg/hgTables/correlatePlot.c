@@ -15,7 +15,7 @@
 #include "correlate.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.11 2005/07/06 19:45:33 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.12 2005/07/08 23:56:18 hiram Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -362,6 +362,10 @@ y = yTable->vSet;
 x = xTable->vSet;
 yRange = yMax - yMin;
 xRange = xMax - xMin;
+if (xRange == 0.0)
+	xRange = 1.0;
+if (yRange == 0.0)
+	yRange = 1.0;
 
 safef(minXStr,ArraySize(minXStr), "%.4g", xMin);
 safef(maxXStr,ArraySize(maxXStr), "%.4g", xMax);
@@ -433,7 +437,8 @@ else
     y1 =  PLOT_MARGIN + (GRAPH_HEIGHT - (((y - yMin)/yRange) * GRAPH_HEIGHT));
     y = (result->m * xMax) + result->b;
     y2 =  PLOT_MARGIN + (GRAPH_HEIGHT - (((y - yMin)/yRange) * GRAPH_HEIGHT));
-    vgLine(vg, x1, y1, x2, y2, MG_RED);
+    if ((x1 != x2) || (y1 != y2))
+	vgLine(vg, x1, y1, x2, y2, MG_RED);
     }
 
 safef(bottomLabel,ArraySize(bottomLabel),"%s", xTable->shortLabel);
@@ -474,8 +479,6 @@ double yMax = -INFINITY;
 double xMax = -INFINITY;
 double residualMin = INFINITY;
 double residualMax = -INFINITY;
-double yRange = 0.0;
-double xRange = 0.0;
 double fittedRange = 0.0;
 double residualRange = 0.0;
 register double m = result->m;	/*	slope m	*/
@@ -541,8 +544,6 @@ fittedMin = (m * xMin) + b;
 fittedMax = (m * xMax) + b;
 residualMin = result->min;
 residualMax = result->max;
-yRange = yMax - yMin;
-xRange = xMax - xMin;
 fittedRange = fittedMax - fittedMin;
 residualRange = residualMax - residualMin;
 
@@ -626,7 +627,8 @@ else
     int y1 = PLOT_MARGIN + (GRAPH_HEIGHT -
                     (((0.0 - residualMin)/residualRange) * GRAPH_HEIGHT));
     int y2 = y1;
-    vgLine(vg, x1, y1, x2, y2, MG_RED);
+    if ((x1 != x2) || (y1 != y2))
+	vgLine(vg, x1, y1, x2, y2, MG_RED);
     }
 
 /*	allow the entire area to be drawn into for the labels	*/
@@ -699,6 +701,9 @@ for (dv = table->vSet; dv != NULL; dv = dv->next)
     totalCounts += dv->count;
     }
 
+if (histo == NULL)
+    return NULL;
+
 for (i = 0; i < histo->binCount; ++i)
     {
     maxBinCount = max(maxBinCount,histo->binCounts[i]);
@@ -754,7 +759,8 @@ if (binCountRange > 0)
 	int y2 = PLOT_MARGIN + GRAPH_HEIGHT - (GRAPH_HEIGHT *
 	    ((double)(histo->binCounts[i] - minBinCount) /
 		(double)binCountRange));
-	vgLine(vg, x1, y1, x1, y2, MG_BLACK);	/*	top	*/
+	if (y1 != y2)
+	    vgLine(vg, x1, y1, x1, y2, MG_BLACK);	/*	top	*/
 	}
     }
 
