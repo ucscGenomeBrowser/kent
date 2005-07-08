@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.28 2005/07/01 19:21:06 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.29 2005/07/08 08:25:19 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -99,6 +99,7 @@ char *name = curTableLabel();
 char *iName;
 char *onChange = onChangeEither();
 char *op, *setting;
+boolean wigOptions = (isWiggle(database, curTable) || isBedGraph(curTable));
 htmlOpen("Intersect with %s", name);
 
 hPrintf("<FORM ACTION=\"..%s\" NAME=\"mainForm\" METHOD=GET>\n", getScriptName());
@@ -112,7 +113,7 @@ iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange,
 iName = iTrack->shortLabel;
 hPrintf("</TABLE>\n");
 
-if (!isWiggle(database, curTable))
+if (!wigOptions)
     {
     hPrintf("<BR>\n");
     hPrintf("These combinations will maintain the gene/alignment structure (if any) of %s: <P>\n",
@@ -130,7 +131,7 @@ makeOpButton("none", op);
 printf("All %s records that have no overlap with %s <BR>\n",
        name, iName);
 
-if (!isWiggle(database, curTable))
+if (!wigOptions)
     {
     makeOpButton("more", op);
     printf("All %s records that have at least ",
@@ -154,7 +155,7 @@ else
     }
 
 
-if (!isWiggle(database, curTable))
+if (!wigOptions)
     {
     printf("These combinations will discard the gene/alignment structure (if any) of %s and produce a simple list of position ranges.<P>\n",
        name);

@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.84 2005/07/06 22:00:01 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.85 2005/07/08 08:25:19 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -430,7 +430,7 @@ void showMainControlTable(struct sqlConnection *conn)
 /* Put up table with main controls for main page. */
 {
 struct grp *selGroup;
-boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGraph = FALSE;
+boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE;
 boolean gotClade = hGotClade();
 hPrintf("<TABLE BORDER=0>\n");
 
@@ -462,8 +462,6 @@ hPrintf("<TABLE BORDER=0>\n");
     nbSpaces(3);
     curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
     hPrintf("</TD></TR>\n");
-    if (curTrack && curTrack->type)
-	isBedGraph = startsWith("bedGraph", curTrack->type);
     }
 
 /* Print table line. */
@@ -477,6 +475,7 @@ hPrintf("<TABLE BORDER=0>\n");
 	}
     isWig = isWiggle(database, curTable);
     isMaf = isMafTable(database, curTrack, curTable);
+    isBedGr = isBedGraph(curTable);
     if (isWig)
 	isPositional = TRUE;
     nbSpaces(1);
@@ -551,7 +550,7 @@ if (anyFilter())
     cgiMakeButton(hgtaDoFilterPage, "edit");
     hPrintf(" ");
     cgiMakeButton(hgtaDoClearFilter, "clear");
-    if (isWig || isBedGraph)
+    if (isWig || isBedGr)
 	wigShowFilter(conn);
     }
 else
@@ -562,7 +561,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-if (curTrack && trackDbIsComposite(curTrack) && !isBedGraph)
+if (curTrack && trackDbIsComposite(curTrack))
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
     if (anySubtrackMerge(database, curTable))
@@ -642,7 +641,7 @@ if (curTrack && curTrack->type)		/*	dbg	*/
     }
 
 /* Print output type line. */
-showOutputTypeRow(isWig, isPositional, isMaf);
+showOutputTypeRow((isWig || isBedGr), isPositional, isMaf);
 
 /* Print output destination line. */
     {

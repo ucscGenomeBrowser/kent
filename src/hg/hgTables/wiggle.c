@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.50 2005/07/06 22:00:01 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.51 2005/07/08 08:25:19 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -309,9 +309,9 @@ else
 return valuesMatched;
 }
 
-static void intersectMergedResult(char *table, struct dataVector *dataVector1,
+static void intersectDataVector(char *table, struct dataVector *dataVector1,
 			struct region *region, struct sqlConnection *conn)
-/* Perform intersection (if specified) on result of subtrack merge. */
+/* Perform intersection (if specified) on dataVector. */
 {
 /* If table is type wig (not bedGraph), then intersection has already been 
  * performed on each input (other selected subtracks must be the same type 
@@ -327,8 +327,8 @@ if (anyIntersection() && !startsWith("wig ", curTrack->type))
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
 	char *op = cartString(cart, hgtaIntersectOp);
-	boolean dv2IsWiggle = (startsWith("wig ", tdb2->type) ||
-			       startsWith("bedGraph ", tdb2->type));
+	boolean dv2IsWiggle = (isWiggle(database, table) ||
+			       isBedGraph(table));
 	dataVectorIntersect(dataVector1, dataVector2,
 			    dv2IsWiggle, sameString(op, "none"));
 	dataVectorFree(&dataVector2);
@@ -336,70 +336,38 @@ if (anyIntersection() && !startsWith("wig ", curTrack->type))
     }
 }
 
-static void printMergedResult(struct dataVector *dataVector1,
-			      struct region *region,
-			      enum wigOutputType wigOutType)
-/* Print out bed or data points from result. */
+static int printDataVectorOut(struct dataVector *dataVectorList,
+			      enum wigOutputType wigOutType, int maxOut,
+			      char *description)
+/* Print out bed or data points from list of dataVectors. */
 {
-int i=0, start=0, lastPos=0;
-int n=0;
-if (dataVector1->count < 1)
-    return;
+int count = 0;
 switch (wigOutType)
     {
     case wigOutBed:
-	printf("%s", describeSubtrackMerge("#\t"));
-	start = lastPos = dataVector1->position[0];
-	for (i=1;  i < dataVector1->count;  i++)
-	    {
-	    int pos = dataVector1->position[i];
-	    if (pos != (lastPos+1))
-		{
-		printf("%s\t%d\t%d\t%s.%d\n", region->chrom, start, lastPos+1,
-		       region->chrom, ++n);
-		start = pos;
-		}
-	    lastPos = pos;
-	    }
-	printf("%s\t%d\t%d\t%s.%d\n", region->chrom, start, lastPos+1,
-	       region->chrom, ++n);
+	count = dataVectorWriteBed(dataVectorList, "stdout", maxOut,
+				   description);
 	break;
     case wigDataNoPrint:
 	break;
     case wigOutData:
     default:
-	{
-	time_t now = time(NULL);
-	char *dateStamp = sqlUnixTimeToDate(&now,TRUE);	/* TRUE == gmTime */
-	printf("#\toutput date: %s UTC\n", dateStamp);
-	freez(&dateStamp);
-	printf("#\tchrom specified: %s\n", region->chrom);
-	printf("#\tposition specified: %d-%d\n", region->start, region->end);
-	printf("%s", describeSubtrackMerge("#\t"));
-	/* Might be nice to include a generic disclaimer about loss of 
-	 * resolution here. */
-	printf("variableStep chrom=%s span=1\n", region->chrom);
-	for (i=0;  i < dataVector1->count;  i++)
-	    {
-	    printf("%d\t%g\n",
-		   dataVector1->position[i]+1, dataVector1->value[i]);
-	    }
-	}
+	count = dataVectorWriteWigAscii(dataVectorList, "stdout", maxOut,
+					description);
 	break;
     };
+return count;
 }
 
-static int mergedWigOutRegion(char *table, struct sqlConnection *conn,
-			      struct region *region, int maxOut,
-			      enum wigOutputType wigOutType)
+static struct dataVector *mergedWigDataVector(char *table,
+	struct sqlConnection *conn, struct region *region)
 /* Perform the specified subtrack merge wiggle-operation on table and 
- * all other selected subtracks. */
+ * all other selected subtracks and intersect if necessary. */
 {
 struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
 struct dataVector *dataVector1 = dataVectorFetchOneRegion(tt1, region, conn);
 struct trackDb *sTdb = NULL;
 int numSubtracks = 1;
-int resultCount = 0;
 char *op = cartString(cart, hgtaSubtrackMergeWigOp);
 boolean requireAll = cartBoolean(cart, hgtaSubtrackMergeRequireAll);
 boolean useMinScore = cartBoolean(cart, hgtaSubtrackMergeUseMinScore);
@@ -407,7 +375,7 @@ float minScore = atof(cartString(cart, hgtaSubtrackMergeMinScore));
 
 if (dataVector1 == NULL)
     {
-    return 0;
+    return NULL;
     }
 
 for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
@@ -423,7 +391,10 @@ for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
 	if (dataVector2 == NULL)
 	    {
 	    if (requireAll)
-		return 0;
+		{
+		freeDataVector(&dataVector1);
+		return NULL;
+		}
 	    continue;
 	    }
 	if (sameString(op, "average") || sameString(op, "sum"))
@@ -444,12 +415,34 @@ if (sameString(op, "average"))
 if (useMinScore)
     dataVectorFilterMin(dataVector1, minScore);
 
-intersectMergedResult(table, dataVector1, region, conn);
+intersectDataVector(table, dataVector1, region, conn);
 
-printMergedResult(dataVector1, region, wigOutType);
+return dataVector1;
+}
 
-resultCount = dataVector1->count;
-dataVectorFree(&dataVector1);
+static int mergedWigOutRegion(char *table, struct sqlConnection *conn,
+			      struct region *region, int maxOut,
+			      enum wigOutputType wigOutType)
+/* Perform the specified subtrack merge wiggle-operation on table and 
+ * all other selected subtracks, intersect if necessary, and print out. */
+{
+struct dataVector *dv = mergedWigDataVector(table, conn, region);
+int resultCount = 
+    printDataVectorOut(dv, wigOutType, maxOut, describeSubtrackMerge("#\t"));
+dataVectorFree(&dv);
+return resultCount;
+}
+
+
+static int bedGraphOutRegion(char *table, struct sqlConnection *conn,
+			     struct region *region, int maxOut,
+			     enum wigOutputType wigOutType)
+/* Read in bedGraph as dataVector (filtering is handled there), 
+ * intersect if necessary, and print it out. */
+{
+struct dataVector *dv =bedGraphDataVector(table, conn, region);
+int resultCount = printDataVectorOut(dv, wigOutType, maxOut, NULL);
+dataVectorFree(&dv);
 return resultCount;
 }
 
@@ -618,10 +611,15 @@ wigDataHeader(shortLabel, longLabel, NULL, wigOutType);
 
 for (region = regionList; region != NULL; region = region->next)
     {
+    int curMaxOut = maxOut - curOut;
     if (anySubtrackMerge(database, table))
-	outCount = mergedWigOutRegion(table, conn, region, maxOut, wigOutType);
+	outCount = mergedWigOutRegion(table, conn, region, curMaxOut,
+				      wigOutType);
+    else if (startsWith("bedGraph ", track->type))
+	outCount = bedGraphOutRegion(table, conn, region, curMaxOut,
+				     wigOutType);
     else
-	outCount = wigOutRegion(table, conn, region, maxOut - curOut,
+	outCount = wigOutRegion(table, conn, region, curMaxOut,
 				wigOutType, NULL, 0);
     curOut += outCount;
     if (curOut >= maxOut)
@@ -631,7 +629,55 @@ if (curOut >= maxOut)
     warn("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", curOut);
 }
 
+
 /***********   PUBLIC ROUTINES  *********************************/
+
+struct dataVector *bedGraphDataVector(char *table,
+	struct sqlConnection *conn, struct region *region)
+/* Read in bedGraph as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+{
+struct dataVector *dv = NULL;
+
+if (anySubtrackMerge(database, table))
+    dv = mergedWigDataVector(table, conn, region);
+else
+    {
+    struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
+    dv = dataVectorFetchOneRegion(tt1, region, conn);
+    intersectDataVector(table, dv, region, conn);
+    }
+return dv;
+}
+
+struct dataVector *wiggleDataVector(char *table,
+	struct sqlConnection *conn, struct region *region)
+/* Read in wiggle as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+{
+struct dataVector *dv = NULL;
+
+if (anySubtrackMerge(database, table))
+    dv = mergedWigDataVector(table, conn, region);
+else
+    {
+    struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
+    dv = dataVectorFetchOneRegion(tt1, region, conn);
+    }
+return dv;
+}
+
+struct bed *getBedGraphAsBed(struct sqlConnection *conn, char *table,
+			     struct region *region)
+/* Extract a bedList in region from the given bedGraph table -- filtering and 
+ * intersection are handled inside of this function. */
+{
+struct dataVector *dv = NULL;
+
+dv = bedGraphDataVector(table, conn, region);
+
+return dataVectorToBedList(dv);
+}
 
 void wiggleMinMax(struct trackDb *tdb, double *min, double *max)
 {
@@ -672,6 +718,22 @@ if (db != NULL && table != NULL)
 	}
     }
 return(typeWiggle);
+}
+
+boolean isBedGraph(char *table)
+/* Return TRUE if table is specified as a bedGraph in the current database's 
+ * trackDb. */
+{
+if (curTrack && sameString(curTrack->tableName, table))
+    return startsWith("bedGraph", curTrack->type);
+else
+    {
+    struct trackDb *tdb = hTrackDbForTrack(table);
+    char *subtrackSetting = trackDbSetting(tdb, "subTrack");
+    if (isEmpty(tdb->type) && isNotEmpty(subtrackSetting))
+	tdb = hTrackDbForTrack(nextWord(&subtrackSetting));
+    return (tdb && startsWith("bedGraph", tdb->type));
+    }
 }
 
 struct bed *getWiggleAsBed(

@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.3 2005/07/06 22:00:01 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.4 2005/07/08 08:25:19 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -72,7 +72,7 @@ cgiMakeRadioButton(hgtaNextSubtrackMergeWigOp, val, sameString(val, selVal));
 }
 
 static void showWiggleMergeOptions()
-/* Show subtrack merge operation options for wiggle tables. */
+/* Show subtrack merge operation options for wiggle/bedGraph tables. */
 {
 char *setting = cartUsualString(cart, hgtaNextSubtrackMergeWigOp, "average");
 makeWigOpButton("average", setting);
@@ -218,7 +218,7 @@ hPrintf("<H3>Select a subset of subtracks to merge with %s:</H3>\n",
 showSubtrackSelection(primary);
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
-if (isWiggle(database, curTable))
+if (isWiggle(database, curTable) || isBedGraph(curTable))
     showWiggleMergeOptions(primary->longLabel);
 else
     showBedMergeOptions();
@@ -246,7 +246,7 @@ dyStringPrintf(dy, "Subtrack merge, primary table = %s (%s)\n",
 	       curTable, primary->longLabel);
 dyStringAppend(dy, linePrefix);
 dyStringPrintf(dy, "Subtrack merge operation: ");
-if (isWiggle(database, curTable))
+if (isWiggle(database, curTable) || isBedGraph(curTable))
     {
     char *op = cartString(cart, hgtaSubtrackMergeWigOp);
     dyStringPrintf(dy, "%s of %s and selected subtracks:\n", op, curTable);

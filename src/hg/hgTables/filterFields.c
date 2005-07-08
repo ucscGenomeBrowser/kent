@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.43 2005/06/30 19:48:57 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.44 2005/07/08 08:25:19 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -711,15 +711,12 @@ struct sqlResult *sr;
 char **row;
 boolean gotFirst = FALSE;
 boolean isWig = FALSE;
-boolean isBedGraph = FALSE;
+boolean isBedGr = isBedGraph(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
-
-if (curTrack && curTrack->type)
-    isBedGraph = startsWith("bedGraph", curTrack->type);
 
 isWig = isWiggle(db, table);
 
-if (isBedGraph)
+if (isBedGr)
     {
     int wordCount;
     char *words[8];
@@ -763,10 +760,10 @@ else
 	    {
 	    if (!gotFirst)
 		gotFirst = TRUE;
-	    else if (!isBedGraph)
+	    else if (!isBedGr)
 		logic = " AND ";
 	    }
-	if (!isBedGraph || (bedGraphColumn == fieldNum))
+	if (!isBedGr || (bedGraphColumn == fieldNum))
 	    {
 	    if (isSqlStringType(type))
 		{
@@ -780,7 +777,7 @@ else
 		{
 		numericFilterOption(db, rootTable, field, field, logic);
 		}
-	    if (isBedGraph)
+	    if (isBedGr)
 		{
 		double min, max;
 		double tDbMin, tDbMax;
@@ -800,7 +797,7 @@ else
     }
 
 /* Printf free-form query row. */
-    if (!(isWig||isBedGraph)) {
+    if (!(isWig||isBedGr)) {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
     name = filterFieldVarName(db, rootTable, "", filterRawLogicVar);

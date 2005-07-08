@@ -176,4 +176,29 @@ void dataVectorIntersect(struct dataVector *dv1, struct dataVector *dv2,
  * at the same position.  Note: this will change dv2 too, unless complementDv2 
  * is set! */
 
+int dataVectorWriteWigAscii(struct dataVector *dataVectorList,
+			    char *filename, int maxOut, char *description);
+/* Write wigAscii for all dataVectors in dataVectorList to filename. 
+ * Return the number of datapoints written. */
+
+struct bed *dataVectorToBedList(struct dataVector *dvList);
+/* Allocate and return a bedList of ranges where dataVectors in dvList 
+ * contain values. */
+
+int dataVectorWriteBed(struct dataVector *dvList, char *filename, int maxOut,
+		       char *description);
+/* Print out bed of ranges where dataVectors in dvList contain values. 
+ * Return the number of datapoints distilled into bed (the number of bed 
+ * items will usually be smaller than the number of datapoints). */
+
+struct dataVector *bedGraphDataVector(char *table,
+	struct sqlConnection *conn, struct region *region);
+/* Read in bedGraph as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+
+struct dataVector *wiggleDataVector(char *table,
+	struct sqlConnection *conn, struct region *region);
+/* Read in wiggle as dataVector and return it.  Filtering, subtrack merge 
+ * and intersection are handled. */
+
 #endif /* CORRELATE_H */

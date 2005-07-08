@@ -17,8 +17,9 @@
 #include "portable.h"
 #include "hgTables.h"
 #include "wiggle.h"
+#include "correlate.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.37 2005/06/30 19:48:57 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.38 2005/07/08 08:25:19 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -353,7 +354,7 @@ cgiMakeTextVar(hgtaCtUrl, setting, 50);
 hPrintf("%s\n", "</TD></TR><TR><TD></TD><TD>");
 hPrintf("%s\n", "</TD></TR></TABLE>");
 
-if (isWiggle(database, table))
+if (isWiggle(database, table) || isBedGraph(table))
     {
     char *setting = NULL;
     hPrintf("<P> <B> Select type of data output: </B> <BR>\n");
@@ -411,6 +412,53 @@ void doOutCustomTrack(char *table, struct sqlConnection *conn)
 doBedOrCtOptions(table, conn, TRUE);
 }
 
+static struct customTrack *beginCustomTrack(char *table, int fields,
+	boolean doCt, boolean doWigHdr, boolean doDataPoints)
+/* If doCt, return a new custom track object from TB cart settings and params;
+ * if !doCt, return NULL but print out a header line. */
+{
+char *ctName = cgiUsualString(hgtaCtName, table);
+char *ctDesc = cgiUsualString(hgtaCtDesc, table);
+char *ctUrl  = cgiUsualString(hgtaCtUrl, "");
+char *ctVis  = cgiUsualString(hgtaCtVis, "dense");
+int visNum = (int) hTvFromStringNoAbort(ctVis);
+struct customTrack *ctNew = NULL;
+
+if (visNum < 0)
+    visNum = 0;
+if (doCt)
+    {
+    ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
+    if (doDataPoints)
+	{
+	struct dyString *wigSettings = newDyString(0);
+	struct tempName tn;
+	makeTempName(&tn, hgtaCtTempNamePrefix, ".wig");
+	ctNew->wigFile = cloneString(tn.forCgi);
+	makeTempName(&tn, hgtaCtTempNamePrefix, ".wib");
+	ctNew->wibFile = cloneString(tn.forCgi);
+	makeTempName(&tn, hgtaCtTempNamePrefix, ".wia");
+	ctNew->wigAscii = cloneString(tn.forCgi);
+	ctNew->wiggle = TRUE;
+	dyStringPrintf(wigSettings,
+		       "type='wiggle_0'\twigFile='%s'\twibFile='%s'",
+		       ctNew->wigFile, ctNew->wibFile);
+	ctNew->tdb->settings = dyStringCannibalize(&wigSettings);
+	}
+    }
+else
+    {
+    if (doWigHdr)
+	hPrintf("track type=wiggle_0 name=\"%s\" description=\"%s\" "
+		"visibility=%d url=%s \n",
+		ctName, ctDesc, visNum, ctUrl);
+    else
+	hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
+		ctName, ctDesc, visNum, ctUrl);
+    }
+return ctNew;
+}
+
 boolean doGetBedOrCt(struct sqlConnection *conn, boolean doCt, 
 		     boolean doCtFile, boolean redirectToGb)
 /* Actually output bed or custom track. Return TRUE unless no results. */
@@ -421,53 +469,68 @@ struct featureBits *fbList = NULL, *fbPtr;
 struct customTrack *ctNew = NULL;
 boolean doCtHdr = (cartUsualBoolean(cart, hgtaPrintCustomTrackHeaders, FALSE) 
 	|| doCt || doCtFile);
-char *ctName = cgiUsualString(hgtaCtName, table);
-char *ctDesc = cgiUsualString(hgtaCtDesc, table);
-char *ctVis  = cgiUsualString(hgtaCtVis, "dense");
-char *ctUrl  = cgiUsualString(hgtaCtUrl, "");
 char *ctWigOutType = cartCgiUsualString(cart, hgtaCtWigOutType, outWigData);
 char *fbQual = fbOptionsToQualifier();
 char fbTQ[128];
 int fields = hTableInfoBedFieldCount(hti);
 boolean gotResults = FALSE;
 struct region *region, *regionList = getRegions();
-boolean wigOutData = FALSE;
-boolean isWig = FALSE;
+boolean isBedGr = isBedGraph(curTable);
+boolean needSubtrackMerge = anySubtrackMerge(database, curTable);
+boolean doDataPoints = FALSE;
+boolean isWig = isWiggle(database, table);
 struct wigAsciiData *wigDataList = NULL;
+struct dataVector *dataVectorList = NULL;
 
 if (!doCt)
     {
     textOpen();
     }
 
-isWig = isWiggle(database, table);
-
-if (isWig && sameString(outWigData, ctWigOutType))
-    wigOutData = TRUE;
+if ((isWig || isBedGr) && sameString(outWigData, ctWigOutType))
+    doDataPoints = TRUE;
 
 for (region = regionList; region != NULL; region = region->next)
     {
     struct bed *bedList = NULL, *bed;
     struct lm *lm = lmInit(64*1024);
+    struct dataVector *dv = NULL;
 
-    if (isWig && wigOutData)
+    if (isWig && doDataPoints)
 	{
-	int count = 0;
-	struct wigAsciiData *wigData = NULL;
-	struct wigAsciiData *asciiData;
-	struct wigAsciiData *next;
-
-	wigData = getWiggleAsData(conn, curTable, region);
-	for (asciiData = wigData; asciiData; asciiData = next)
+	if (needSubtrackMerge)
 	    {
-	    next = asciiData->next;
-	    if (asciiData->count)
-		{
-		slAddHead(&wigDataList, asciiData);
-		++count;
-		}
+	    dv = wiggleDataVector(curTable, conn, region);
+	    slAddHead(&dataVectorList, dv);
 	    }
-	slReverse(&wigDataList);
+	else
+	    {
+	    int count = 0;
+	    struct wigAsciiData *wigData = NULL;
+	    struct wigAsciiData *asciiData;
+	    struct wigAsciiData *next;
+	    
+	    wigData = getWiggleAsData(conn, curTable, region);
+	    for (asciiData = wigData; asciiData; asciiData = next)
+		{
+		next = asciiData->next;
+		if (asciiData->count)
+		    {
+		    slAddHead(&wigDataList, asciiData);
+		    ++count;
+		    }
+		}
+	    slReverse(&wigDataList);
+	    }
+	}
+    else if (isBedGr && doDataPoints)
+	{
+	dv = bedGraphDataVector(curTable, conn, region);
+	slAddHead(&dataVectorList, dv);
+	}
+    else if (isBedGr)
+	{
+	bedList = getBedGraphAsBed(conn, curTable, region);
 	}
     else
 	{
@@ -478,43 +541,15 @@ for (region = regionList; region != NULL; region = region->next)
      *	structure to receive the results.  gotResults turns it off after
      *	the first time.
      */
-    if (doCtHdr && ((bedList != NULL) || (wigDataList != NULL)) && !gotResults)
+    if (doCtHdr && !gotResults &&
+	((bedList != NULL) || (wigDataList != NULL) ||
+	 (dataVectorList != NULL)))
 	{
-	int visNum = (int) hTvFromStringNoAbort(ctVis);
-	if (visNum < 0)
-	    visNum = 0;
-	if (doCt)
-	    {
-	    ctNew = newCt(ctName, ctDesc, visNum, ctUrl, fields);
-	    if (isWig && wigOutData)
-		{
-		struct dyString *wigSettings = newDyString(0);
-		struct tempName tn;
-		makeTempName(&tn, hgtaCtTempNamePrefix, ".wig");
-		ctNew->wigFile = cloneString(tn.forCgi);
-		makeTempName(&tn, hgtaCtTempNamePrefix, ".wib");
-		ctNew->wibFile = cloneString(tn.forCgi);
-		makeTempName(&tn, hgtaCtTempNamePrefix, ".wia");
-		ctNew->wigAscii = cloneString(tn.forCgi);
-		ctNew->wiggle = TRUE;
-		dyStringPrintf(wigSettings,
-                            "type='wiggle_0'\twigFile='%s'\twibFile='%s'",
-                            ctNew->wigFile, ctNew->wibFile);
-                ctNew->tdb->settings = dyStringCannibalize(&wigSettings);
-		}
-	    }
-	else
-	    {
-	    if (isWig)
-		hPrintf("track type=wiggle_0 name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
-		   ctName, ctDesc, visNum, ctUrl);
-	    else
-		hPrintf("track name=\"%s\" description=\"%s\" visibility=%d url=%s \n",
-		   ctName, ctDesc, visNum, ctUrl);
-	    }
+	ctNew = beginCustomTrack(table, fields,
+				 doCt, (isWig || isBedGr), doDataPoints);
 	}
 
-    if (isWig && wigOutData && wigDataList)
+    if (doDataPoints && (wigDataList || dataVectorList))
 	gotResults = TRUE;
     else
 	{
@@ -591,28 +626,38 @@ else if (doCt)
 	char *ctFileName = cartOptionalString(cart, "ct");
 	struct tempName tn;
 	removeNamedCustom(&ctList, ctNew->tdb->tableName);
-	if (isWig && wigOutData)
+	if (doDataPoints)
 	    {
-	    unsigned i;
-	    unsigned chromEnd;
-	    struct asciiDatum *aData;
-	    struct wiggleDataStream *wds = NULL;
-	    /*	create an otherwise empty wds so we can print out the list */
-	    wds = wiggleDataStreamNew();
-	    wds->ascii = wigDataList;
-	    wds->asciiOut(wds, ctNew->wigAscii, TRUE, FALSE);
+	    if (needSubtrackMerge || isBedGr)
+		{
+		slReverse(&dataVectorList);
+		wigDataSize =
+	      dataVectorWriteWigAscii(dataVectorList, ctNew->wigAscii,
+				      0, NULL);
+		}
+	    else
+		{
+		unsigned i;
+		unsigned chromEnd;
+		struct asciiDatum *aData;
+		struct wiggleDataStream *wds = NULL;
+		/* create an otherwise empty wds so we can print out the list */
+		wds = wiggleDataStreamNew();
+		wds->ascii = wigDataList;
+		wds->asciiOut(wds, ctNew->wigAscii, TRUE, FALSE);
 #if defined(DEBUG)    /*      dbg     */
-	    /* allow file readability for debug */
-	    chmod(ctNew->wigAscii, 0666);
+		/* allow file readability for debug */
+		chmod(ctNew->wigAscii, 0666);
 #endif
-	    aData = wds->ascii->data;
-	    chromEnd = 0;
-	    wigDataSize = wds->ascii->count;
-	    for( i = 0; i < wigDataSize; ++i, ++aData)
-		if (aData->chromStart > chromEnd) chromEnd = aData->chromStart;
-
-	    chromEnd += wds->ascii->span;
-	    wiggleDataStreamFree(&wds);
+		aData = wds->ascii->data;
+		chromEnd = 0;
+		wigDataSize = wds->ascii->count;
+		for( i = 0; i < wigDataSize; ++i, ++aData)
+		    if (aData->chromStart > chromEnd)
+			chromEnd = aData->chromStart;
+		chromEnd += wds->ascii->span;
+		wiggleDataStreamFree(&wds);
+		}
 	    }
 	else
 	    slReverse(&ctNew->bedList);
@@ -641,13 +686,14 @@ else if (doCt)
 	webStartHeader(cart, headerText,
 		       "Table Browser: %s %s: %s", hOrganism(database), 
 		       freezeName, "get custom track");
-	if (isWig && wigOutData)
+	if (doDataPoints)
 	    {
 	    hPrintf("There are %d data points in custom track. ", wigDataSize);
 	    }
 	else
 	    {
-	    hPrintf("There are %d items in custom track. ", slCount(ctNew->bedList));
+	    hPrintf("There are %d items in custom track. ",
+		    slCount(ctNew->bedList));
 	    }
 	hPrintf("You will be automatically redirected to the genome browser in\n"
 	       "%d seconds, or you can \n"
@@ -655,14 +701,22 @@ else if (doCt)
 	       redirDelay, browserUrl);
 	}
     }
-else if (isWig && wigOutData)
+else if (doDataPoints)
     {
-    /*	create an otherwise empty wds so we can print out the list */
-    struct wiggleDataStream *wds = NULL;
-    wds = wiggleDataStreamNew();
-    wds->ascii = wigDataList;
-    wds->asciiOut(wds, "stdout", TRUE, FALSE);
-    wiggleDataStreamFree(&wds);
+    if (needSubtrackMerge || isBedGr)
+	{
+	slReverse(&dataVectorList);
+	dataVectorWriteWigAscii(dataVectorList, "stdout", 0, NULL);
+	}
+    else
+	{
+	/*	create an otherwise empty wds so we can print out the list */
+	struct wiggleDataStream *wds = NULL;
+	wds = wiggleDataStreamNew();
+	wds->ascii = wigDataList;
+	wds->asciiOut(wds, "stdout", TRUE, FALSE);
+	wiggleDataStreamFree(&wds);
+	}
     }
 return gotResults;
 }

@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.42 2005/07/06 22:00:01 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.43 2005/07/08 08:25:19 angie Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -916,6 +916,56 @@ endTime = clock1000();
 v1->calcTime += endTime - startTime;
 }
 
+static void intersectVectorWithBoolean(struct dataVector *v1,
+				       struct dataVector *v2)
+/* v1 has dataVector with real values; v2 has dataVector with booleans, 
+ * i.e. all points in range are present and value is 1 where there is an 
+ * item and 0 where there is no item. 
+ * Remove positions/values from v1 for which v2 contains 0. 
+ * Note: this does not change v2, unlike intersectVectors, nor does it 
+ * compute any statistics.  It is solely for distilling v1. */
+{
+int v1Index = 0;
+int i = 0, j = 0;
+long startTime, endTime;
+
+startTime = clock1000();
+
+i = 0;
+j = 0;
+v1Index = 0;
+
+while ((i < v1->count) && (j < v2->count))
+    {
+    if (v1->position[i] == v2->position[j])	/*	points in both... */
+	{
+	if (v2->value[j])                       /*	v2 TRUE: keep v1 */
+	    {
+	    if (v1Index < i) /* only move data when necessary */
+		{
+		v1->position[v1Index] = v1->position[i];
+		v1->value[v1Index] = v1->value[i];
+		}
+	    ++v1Index; ++i; ++j;
+	    }
+	else                                    /*	v2 FALSE: skip v1 */
+	    {
+	    ++i; ++j;
+	    }
+	}
+    else if (v1->position[i] < v2->position[j])
+	++i;				/* 	skip data point on v1 */
+    else if (v1->position[i] > v2->position[j])
+	++j;				/* 	skip data point on v2 */
+    }
+v1->count = v1Index;
+v1->start = v1->position[0];
+v1->end = v1->position[(v1->count)-1] + 1; /* non-inclusive */
+scavengeVectorSpace(v1);
+endTime = clock1000();
+v1->calcTime += endTime - startTime;
+}
+
 void dataVectorBinaryOp(struct dataVector *v1, struct dataVector *v2,
 			enum dataVectorBinaryOpType op, boolean requireBoth)
 /* Store op(v1, v2) in v1.  
@@ -1141,7 +1191,12 @@ if (complementDv2)
     if (dv2Inv == NULL || dv2Inv->count < 1)
 	dv1->count = 0;
     else
-	intersectVectors(dv1, dv2Inv);
+	{
+	if (dv2IsWiggle)
+	    intersectVectors(dv1, dv2Inv);
+	else
+	    intersectVectorWithBoolean(dv1, dv2Inv);
+	}
     freeDataVector(&dv2Inv);
     }
 else
@@ -1149,8 +1204,145 @@ else
     if (dv2 == NULL || dv2->count < 1)
 	dv1->count = 0;
     else
-	intersectVectors(dv1, dv2);
+	{
+	if (dv2IsWiggle)
+	    intersectVectors(dv1, dv2);
+	else
+	    intersectVectorWithBoolean(dv1, dv2);
+	}
     }
+}
+
+int dataVectorWriteWigAscii(struct dataVector *dataVectorList,
+			    char *filename, int maxOut, char *description)
+/* Write wigAscii for all dataVectors in dataVectorList to filename. 
+ * Return the number of datapoints written. */
+{
+FILE *out = mustOpen(filename, "w");
+struct dataVector *dv = NULL;
+int i = 0, total = 0;
+boolean firstTime = TRUE;
+
+for (dv = dataVectorList;  dv != NULL;  dv = dv->next)
+    {
+    int countLimit = maxOut ? min(dv->count, (maxOut - total)) : dv->count;
+    if (dv->count < 1)
+	continue;
+    if (firstTime)
+	{
+	time_t now = time(NULL);
+	char *dateStamp = sqlUnixTimeToDate(&now,TRUE);	/* TRUE == gmTime */
+	fprintf(out, "#\toutput date: %s UTC\n", dateStamp);
+	freez(&dateStamp);
+	firstTime = FALSE;
+	}
+    fprintf(out, "#\tchrom specified: %s\n", dv->chrom);
+    fprintf(out, "#\tposition specified: %d-%d\n", dv->start, dv->end);
+    if (description)
+	fprintf(out, "%s", description);
+    fprintf(out, "variableStep chrom=%s span=1\n", dv->chrom);
+    for (i=0;  i < countLimit;  i++)
+	{
+	fprintf(out, "%d\t%g\n",
+	       dv->position[i]+1, dv->value[i]);
+	}
+    total += countLimit;
+    if (maxOut && (total >= maxOut))
+        break;
+    }
+carefulClose(&out);
+return total;
+}
+
+struct bed *dataVectorToBedList(struct dataVector *dvList)
+/* Allocate and return a bedList of ranges where dataVectors in dvList 
+ * contain values. */
+{
+struct dataVector *dv = NULL;
+struct bed *bedList = NULL;
+int i=0, start=0, lastPos=0;
+int n=0;
+
+for (dv = dvList;  dv != NULL; dv = dv->next)
+    {
+    start = lastPos = dv->position[0];
+    for (i=1;  i < dv->count;  i++)
+	{
+	int pos = dv->position[i];
+	if (pos != (lastPos+1))
+	    {
+	    struct bed *bed = NULL;
+	    char buf[256];
+	    AllocVar(bed);
+	    bed->chrom = cloneString(dv->chrom);
+	    bed->chromStart = start;
+	    bed->chromEnd = lastPos+1;
+	    safef(buf, sizeof(buf), "%s.%d", dv->chrom, ++n);
+	    bed->name = cloneString(buf);
+	    slAddHead(&bedList, bed);
+	    start = pos;
+	    }
+	lastPos = pos;
+	}
+    if (dv->count > 0)
+	{
+	struct bed *bed = NULL;
+	char buf[256];
+	AllocVar(bed);
+	bed->chrom = cloneString(dv->chrom);
+	bed->chromStart = start;
+	bed->chromEnd = lastPos+1;
+	safef(buf, sizeof(buf), "%s.%d", dv->chrom, ++n);
+	bed->name = cloneString(buf);
+	slAddHead(&bedList, bed);
+	}
+    }
+return bedList;
+}
+
+int dataVectorWriteBed(struct dataVector *dvList, char *filename, int maxOut,
+		       char *description)
+/* Print out bed of ranges where dataVectors in dvList contain values. 
+ * Return the number of datapoints distilled into bed (the number of bed 
+ * items will usually be smaller than the number of datapoints). */
+{
+FILE *out = mustOpen(filename, "w");
+struct dataVector *dv = NULL;
+int i=0, total=0, start=0, lastPos=0;
+int n=0;
+boolean firstTime = TRUE;
+
+for (dv = dvList;  dv != NULL; dv = dv->next)
+    {
+    int countLimit = maxOut ? min(dv->count, (maxOut - total)) : dv->count;
+    if (dv->count < 1)
+	continue;
+    if (firstTime)
+	{
+	if (description)
+	    fprintf(out, "%s", description);
+	firstTime = FALSE;
+	}
+    start = lastPos = dv->position[0];
+    for (i=1;  i < countLimit;  i++)
+	{
+	int pos = dv->position[i];
+	if (pos != (lastPos+1))
+	    {
+	    fprintf(out, "%s\t%d\t%d\t%s.%d\n", dv->chrom, start, lastPos+1,
+		    dv->chrom, ++n);
+	    start = pos;
+	    }
+	lastPos = pos;
+	}
+    fprintf(out, "%s\t%d\t%d\t%s.%d\n", dv->chrom, start, lastPos+1,
+	    dv->chrom, ++n);
+    total += countLimit;
+    if (maxOut && (total >= maxOut))
+        break;
+    }
+carefulClose(&out);
+return total;
 }
 
 static void overallCounts(struct trackTable *t)

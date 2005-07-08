@@ -614,6 +614,10 @@ void doOutMaf(struct trackDb *track, char *table, struct sqlConnection *conn);
 boolean isWiggle(char *db, char *table);
 /* Return TRUE if db.table is a wiggle. */
 
+boolean isBedGraph(char *table);
+/* Return TRUE if table is specified as a bedGraph in the current database's 
+ * trackDb. */
+
 struct bed *getWiggleAsBed(
     char *db, char *table, 	/* Database and table. */
     struct region *region,  /* Region to get data for. */
@@ -623,6 +627,11 @@ struct bed *getWiggleAsBed(
     struct sqlConnection *conn);	/* SQL connection to work with */
 /* Return a bed list of all items in the given range in table.
  * Cleanup result via lmCleanup(&lm) rather than bedFreeList.  */
+
+struct bed *getBedGraphAsBed(struct sqlConnection *conn, char *table,
+			     struct region *region);
+/* Extract a bedList in region from the given bedGraph table -- 
+ * subtrack merge, filtering and intersection are handled here. */
 
 void wiggleMinMax(struct trackDb *tdb, double *min, double *max);
 /*	obtain wiggle data limits from trackDb or cart or settings */

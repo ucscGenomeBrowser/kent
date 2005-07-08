@@ -58,7 +58,7 @@ compile: $O
 #	all objects depend on hgTables.h
 
 asObj.o:	hgTables.h
-bedList.o:	hgTables.h
+bedList.o:	hgTables.h correlate.h
 custom.o:	hgTables.h
 compositeTrack.o:	hgTables.h
 filterFields.o:	hgTables.h
