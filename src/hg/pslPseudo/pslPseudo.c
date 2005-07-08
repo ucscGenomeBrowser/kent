@@ -35,7 +35,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.34 2005/07/08 18:20:56 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.35 2005/07/08 18:38:58 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -754,7 +754,7 @@ verbose(1,"##score %d mb %4.1f x %4.1f ax %4.1f pA %4.1f sy- %4.1f %4.1f ic %4.1
                 wt[3]*(log(pg->polyAlen+2)*200) ,
                 wt[4]*(pg->overlapDiag*10) ,
                 wt[5]*(12-log(psl->qSize-psl->qEnd))*80 , 
-                wt[6]*pow(pg->intronCount,0.5)*2000 ,
+                wt[6]*pow(pg->intronCount,0.5)*200 ,
                 wt[7]*(maxOverlap*300),
                 pg->coverage, psl->qEnd, psl->qSize ,
                 wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0),
