@@ -98,7 +98,6 @@ if (copyright != NULL)
     fprintf(ra, "copyright %s\n", copyright);
 freez(&copyright);
 
-#ifdef SOON
 dyStringClear(query);
 dyStringAppend(query, 
 	"select MRK_Marker.symbol as gene,"
@@ -107,7 +106,8 @@ dyStringAppend(query,
 	       "GXD_Specimen.ageMin as ageMin,"
 	       "GXD_Specimen.ageMax as ageMax,"
 	       "IMG_ImagePane.paneLabel as paneLabel,"
-	       "ACC_Accession.accID as fileKey,\n"
+	       "ACC_Accession.accID as fileKey,"
+	       "IMG_Image._Image_key as imageKey\n"
 	"from MRK_Marker,"
 	     "GXD_Assay,"
 	     "GXD_Specimen,"
@@ -115,7 +115,7 @@ dyStringAppend(query,
 	     "GXD_InSituResultImage,"
 	     "IMG_ImagePane,"
 	     "IMG_Image,"
-	     "ACC_Accession"
+	     "ACC_Accession\n"
 	"where MRK_Marker._Marker_key = GXD_Assay._Marker_key "
 	  "and GXD_Assay._Assay_key = GXD_Specimen._Assay_key "
 	  "and GXD_Specimen._Specimen_key = GXD_InSituResult._Specimen_key "
@@ -123,26 +123,42 @@ dyStringAppend(query,
 	  "and GXD_InSituResultImage._ImagePane_key = IMG_ImagePane._ImagePane_key "
 	  "and IMG_ImagePane._Image_key = IMG_Image._Image_key "
 	  "and IMG_Image._Image_key = ACC_Accession._Object_key "
-	  "and ACC_Accession.prefixPart = "PIX:" "
+	  "and ACC_Accession.prefixPart = 'PIX:'"
 	);
 dyStringPrintf(query, "and GXD_Assay._Refs_key = %s", ref);
 sr = sqlGetResult(conn, query->string);
+
+fprintf(tab, "#");
+fprintf(tab, "gene\t");
+fprintf(tab, "sex\t");
+fprintf(tab, "age\t");
+fprintf(tab, "ageMin\t");
+fprintf(tab, "ageMax\t");
+fprintf(tab, "paneLabel\t");
+fprintf(tab, "fileName\t");
+fprintf(tab, "submitId\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
-    char *authors = row[1];
-    char *journal = row[2];
-    char *publication = row[3];
-    char *sex = row[4];
-    char *age = row[5];
-    char *ageMin = row[6];
-    char *ageMax = row[7];
-    char *paneLabel = row[8];
-    char *fileKey = row[9];
+    char *sex = row[1];
+    char *age = row[2];
+    char *ageMin = row[3];
+    char *ageMax = row[4];
+    char *paneLabel = row[5];
+    char *fileKey = row[6];
+    char *imageKey = row[7];
 
+    fprintf(tab, "%s\t", gene);
+    fprintf(tab, "%s\t", sex);
+    fprintf(tab, "%s\t", age);
+    fprintf(tab, "%s\t", ageMin);
+    fprintf(tab, "%s\t", ageMax);
+    fprintf(tab, "%s\t", paneLabel);
+    fprintf(tab, "%s\t", gene);
+    fprintf(tab, "%s.gif\t", fileKey);
+    fprintf(tab, "%s\n", imageKey);
     }
 sqlFreeResult(&sr);
-#endif /* SOON */
 
 carefulClose(&ra);
 carefulClose(&tab);
@@ -170,7 +186,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", outDir, ref->name);
     submitRefToFiles(conn, ref->name, path);
-    {static int count; if (++count >= 10) uglyAbort("All for now");}
+    {static int count; if (++count >= 800) uglyAbort("All for now");}
     }
 
 slNameFreeList(&specList);
