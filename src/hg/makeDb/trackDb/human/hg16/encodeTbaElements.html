@@ -5,7 +5,9 @@ derived from binCons, phastCons, and genomic evolutionary rate profiling
 (<A HREF="http://mendel.stanford.edu/sidowlab/downloads/ABC_GERP/abcgerp.html"
 TARGET=_blank>GERP</A>) conservation scoring
 of Threaded Blockset Aligner (TBA) multiple sequence alignments in the 
-ENCODE regions.
+ENCODE regions. The union and intersection tracks show the union/intersection
+of constrained elements detected by binCons, phastCons, and GERP on TBA
+alignments.
 The multiple sequence alignments are displayed in the TBA Alignments
 track and the conservation scoring is shown in the TBA Conservation
 track.  The descriptions for these tracks provide details
@@ -72,6 +74,14 @@ constrained elements identified in the actual alignment.
 Thus, all annotated constrained elements are significant at better
 than 95% confidence, and the total fraction of the ENCODE regions
 annotated as constrained is 5-7%.</P>
+
+<H3>PhastCons/BinCons/GERP Union/Intersection of Coding/NonCoding Elements</H3>
+<P>
+These subtracks were produced by performing a union or intersection of the
+constrained element data detected by binCons, phastCons, and GERP on TBA 
+alignments. Non-coding is defined as those regions not overlapping with 
+with CDS regions in any of the following gene tables: refFlat, knownGene, 
+mgcGenes, vegaGene, or ensGene.</P>
 
 <H2>Credits</H2>
 <P>
