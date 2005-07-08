@@ -19,7 +19,7 @@
 #include "wiggle.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.38 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.39 2005/07/08 08:38:21 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -637,25 +637,17 @@ else if (doCt)
 		}
 	    else
 		{
-		unsigned i;
-		unsigned chromEnd;
 		struct asciiDatum *aData;
 		struct wiggleDataStream *wds = NULL;
 		/* create an otherwise empty wds so we can print out the list */
 		wds = wiggleDataStreamNew();
 		wds->ascii = wigDataList;
-		wds->asciiOut(wds, ctNew->wigAscii, TRUE, FALSE);
+		wigDataSize = wds->asciiOut(wds, ctNew->wigAscii, TRUE, FALSE);
 #if defined(DEBUG)    /*      dbg     */
 		/* allow file readability for debug */
 		chmod(ctNew->wigAscii, 0666);
 #endif
 		aData = wds->ascii->data;
-		chromEnd = 0;
-		wigDataSize = wds->ascii->count;
-		for( i = 0; i < wigDataSize; ++i, ++aData)
-		    if (aData->chromStart > chromEnd)
-			chromEnd = aData->chromStart;
-		chromEnd += wds->ascii->span;
 		wiggleDataStreamFree(&wds);
 		}
 	    }
