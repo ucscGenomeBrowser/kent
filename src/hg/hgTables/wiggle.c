@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.52 2005/07/08 17:16:12 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.53 2005/07/08 17:41:12 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -737,6 +737,7 @@ else
 	return (tdb && startsWith("bedGraph", tdb->type));
 	}
     }
+return FALSE;
 }
 
 struct bed *getWiggleAsBed(
