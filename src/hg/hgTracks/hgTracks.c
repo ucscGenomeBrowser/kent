@@ -92,7 +92,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.985 2005/07/07 23:51:29 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.986 2005/07/08 16:27:32 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7909,9 +7909,9 @@ if (rulerMode != tvHide)
 	if(freezeName == NULL)
 	    freezeName = "Unknown";
 	if (baseShowPos&&baseShowAsm)
-    	    safef(txt,sizeof(txt),"%s %s   %s (%sbp)",organism,freezeName,addCommasToPos(position),numBuf);
+    	    safef(txt,sizeof(txt),"%s %s   %s (%s bp)",organism,freezeName,addCommasToPos(position),numBuf);
 	else if (baseShowPos)
-    	    safef(txt,sizeof(txt),"%s (%sbp)",addCommasToPos(position),numBuf);
+    	    safef(txt,sizeof(txt),"%s (%s bp)",addCommasToPos(position),numBuf);
 	else
     	    safef(txt,sizeof(txt),"%s %s",organism,freezeName);
 	vgTextCentered(vg, insideX, y, insideWidth, showPosHeight, 
