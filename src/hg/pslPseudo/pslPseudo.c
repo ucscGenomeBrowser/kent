@@ -35,7 +35,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.33 2005/07/07 00:40:46 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.34 2005/07/08 18:20:56 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -741,7 +741,7 @@ pseudoScore = ( wt[0]*pg->milliBad
                 + wt[3]*(log(pg->polyAlen+2)*200) 
                 - wt[4]*(pg->overlapDiag*10)
                 + wt[5]*(12-log(psl->qSize-psl->qEnd))*80 
-                + wt[6]*pow(pg->intronCount,0.5)*2000 
+                - wt[6]*pow(pg->intronCount,0.5)*2000 
                 - wt[7]*(maxOverlap*300)
                 + wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0)
                 - wt[9]*(pg->tReps*10)
@@ -1174,9 +1174,13 @@ bool getNextIntron(struct psl *psl, int i, int *tStart, int *tEnd, int *qStart, 
 /* t coords are virtual 0 = start of psl*/
 /* return false of no next intron */
 {
-verbose(3,"\ngetNextIntron %s:%d-%d %d-%d i=%d\n",psl->tName, *tStart, *tEnd, *qStart, *qEnd, i);
+verbose(3," getNextIntron %s %s:%d-%d %d-%d %c i=%d total blocks %d\n",
+        psl->qName, psl->tName, *tStart, *tEnd, *qStart, *qEnd, psl->strand[0], i, psl->blockCount);
 if (i+1 >= psl->blockCount)
+    {
+    verbose(3,"no next exon, cannot check for introns\n");
     return FALSE;
+    }
 if (psl->strand[0] == '-')
     {
     i = psl->blockCount - i -1;
@@ -1324,16 +1328,18 @@ pslMergeBlocks(pseudoPsl, pseudo, maxBlockGap);
 //    exciseRepeats(pseudo, bkHash );
 //    }
 //offset = interpolateStart(gene, pseudo);
-verbose(3,"pslCountIntrons gene cnt %d pseudocnt %d\n",gene->blockCount, pseudo->blockCount);
+verbose(3," pslCountIntrons gene cnt %d pseudocnt %d\n",gene->blockCount, pseudo->blockCount);
 for (i = 0 ; i < gene->blockCount ; i++)
     {
     float intronG = 0.0;
     float intronP = 0.0;
+    verbose (3, "gene block %d ",i);
     if (!getNextIntron(gene, i, &gts, &gte, &gqs, &gqe, bkHash))
         if (i+1 >= gene->blockCount)
             break;
     for (j = 0 ; j < pseudo->blockCount ; j++)
         {
+        verbose (3, "gene %d pseudogene blk %d ",i, j);
         if (!getNextIntron(pseudo, j, &pts, &pte, &pqs, &pqe, bkHash))
             {
             verbose(3,"NO gt %d-%d %d pt (%c) %d-%d %d  gq %d-%d pq %d-%d offset %d\n",
@@ -1706,7 +1712,7 @@ if (pg->trfRatio > .5)
 if ( keepChecking && positiveRangeIntersection(bestStart, bestEnd, psl->tStart, psl->tEnd) && 
             sameString(psl->tName, bestChrom))
    {
-   dyStringAppend(reason,"self ");
+   dyStringAppend(reason,"self;");
    keepChecking = FALSE;
    }
 
@@ -1733,7 +1739,7 @@ pg->tReps = round((float)(rep*100)/(float)(psl->match+(psl->misMatch)));
 if ((float)rep/(float)(psl->match+(psl->misMatch)) > maxRep )
     {
     verbose(1,"NO %s reps %.3f %.3f\n",psl->tName,(float)rep/(float)(psl->match+(psl->misMatch)) , maxRep);
-    dyStringAppend(reason,"maxRep ");
+    dyStringAppend(reason,"maxRep;");
     pg->label = NOTPSEUDO;
     keepChecking = FALSE;
     }
@@ -1756,7 +1762,7 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
             verbose(1,"NO %s:%d-%d %s expressed blat mrna %s %d bases overlap %f %%\n",
                     psl->tName, psl->tStart, psl->tEnd, psl->qName,mrnaOverlap, 
                     maxOverlap, (float)maxOverlap/(float)psl->qSize);
-            dyStringAppend(reason,"expressed ");
+            dyStringAppend(reason,"expressed");
             pg->overName = cloneString(mPsl->qName); 
             pg->overStart = mPsl->tStart;
             pg->overEnd = mPsl->tEnd;
@@ -1771,7 +1777,7 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
            {
             verbose(1,"NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
                     pg->overlapDiag, psl->tName, psl->tStart, bestChrom);
-           dyStringAppend(reason,"diagonal ");
+           dyStringAppend(reason,"diagonal;");
            keepChecking = FALSE;
            }
         if (keepChecking)
@@ -1787,13 +1793,13 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
                 );
            if (pg->exonCover < 2)
                {
-               dyStringAppend(reason,"singleExon ");
+               dyStringAppend(reason,"singleExon;");
                pg->label = PSEUDO;
                outputLink(psl, pg, reason);
                }
            else if (bestPsl == NULL)
                {
-               dyStringAppend(reason,"noBest ");
+               dyStringAppend(reason,"noBest;");
                pg->label = NOTPSEUDO;
                outputLink(psl, pg, reason);
                }
@@ -1815,21 +1821,21 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
     else
         {
         if (bestPsl == NULL)
-            dyStringAppend(reason,"noBest ");
+            dyStringAppend(reason,"noBest;");
         if (pg->bestAliCount < 1)
-            dyStringAppend(reason,"noAli ");
+            dyStringAppend(reason,"noAli;");
         if (pg->trfRatio > .5)
-            dyStringAppend(reason,"trf ");
+            dyStringAppend(reason,"trf;");
         if (pg->intronCount > 0)
-            dyStringAppend(reason,"introns ");
+            dyStringAppend(reason,"introns;");
         if (pg->exonCover < 2)
-            dyStringAppend(reason,"singleExon ");
+            dyStringAppend(reason,"singleExon;");
         if (maxExons <= 1)
-            dyStringAppend(reason,"maxExons ");
+            dyStringAppend(reason,"maxExons;");
         if (calcMilliScore(psl) < milliMinPseudo)
-            dyStringAppend(reason,"milliBad ");
+            dyStringAppend(reason,"milliBad;");
         if (psl->match + psl->misMatch + psl->repMatch < minCoverPseudo * (float)psl->qSize)
-            dyStringAppend(reason,"coverage ");
+            dyStringAppend(reason,"coverage;");
 
        if (bestPsl == NULL)
            {
