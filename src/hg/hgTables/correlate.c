@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.43 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.44 2005/07/08 17:43:55 angie Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1297,6 +1297,7 @@ for (dv = dvList;  dv != NULL; dv = dv->next)
 	slAddHead(&bedList, bed);
 	}
     }
+slReverse(&bedList);
 return bedList;
 }
 
