@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.206 2005/07/08 16:26:06 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.207 2005/07/08 18:31:37 galt Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -996,8 +996,8 @@ char *title = NULL;
 /* Configure zoom when click occurs */
 char *currentZoom = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 char *motifString = cartCgiUsualString(cart, BASE_MOTIFS, "");
-title = cartUsualString(cart, titleVar, "");
 safef(titleVar,sizeof(titleVar),"%s_%s",BASE_TITLE,database);
+title = cartUsualString(cart, titleVar, "");
 puts("<P><B>Zoom in:&nbsp;</B>");
 zoomRadioButtons(RULER_BASE_ZOOM_VAR, currentZoom);
 puts("<P><B>Motifs to highlight:&nbsp;</B>");
