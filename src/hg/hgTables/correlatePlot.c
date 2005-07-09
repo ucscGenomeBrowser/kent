@@ -15,7 +15,7 @@
 #include "correlate.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.12 2005/07/08 23:56:18 hiram Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.13 2005/07/09 23:00:26 angie Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -586,7 +586,11 @@ for (y = yTable->vSet, x = xTable->vSet ; (y != NULL) && (x !=NULL);
 	float xValue = x->value[i];
 	float fitted = (m * xValue) + b;
 	int x1 = ((fitted - fittedMin)/fittedRange) * GRAPH_WIDTH;
-	int y1 = ((residual - residualMin)/residualRange) * GRAPH_HEIGHT;
+	int y1;
+	if (residualRange != 0)
+	    y1 = ((residual - residualMin)/residualRange) * GRAPH_HEIGHT;
+	else
+	    y1 = 0;
 
 if(debugOn)
     hPrintf("%d\t%g\t%g\t%g\t%g\n", x->position[i], x->value[i], y->value[i], fitted, residual);
@@ -624,9 +628,13 @@ else
     {
     int x1 = leftMargin;
     int x2 = leftMargin + GRAPH_WIDTH - PLOT_MARGIN;
-    int y1 = PLOT_MARGIN + (GRAPH_HEIGHT -
+    int y1, y2;
+    if (residualRange != 0)
+	y1 = PLOT_MARGIN + (GRAPH_HEIGHT -
                     (((0.0 - residualMin)/residualRange) * GRAPH_HEIGHT));
-    int y2 = y1;
+    else
+	y1 = 0;
+    y2 = y1;
     if ((x1 != x2) || (y1 != y2))
 	vgLine(vg, x1, y1, x2, y2, MG_RED);
     }
