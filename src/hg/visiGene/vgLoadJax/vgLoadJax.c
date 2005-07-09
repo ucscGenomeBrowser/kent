@@ -189,6 +189,26 @@ if (strain == NULL)
 *retStrain = strain;
 }
 
+void printExpression(FILE *f, char *assayKey, struct sqlConnection *conn)
+/* Print associated expression info on assay as indented lines. */
+{
+struct dyString *query = dyStringNew(0);
+struct sqlResult *sr;
+char **row;
+
+dyStringPrintf(query, 
+	"select GXD_StructureName.structure,GXD_Expression.expressed "
+	"from GXD_Expression,GXD_Structure,GXD_StructureName "
+	"where GXD_Expression._Assay_key = %s "
+	"and GXD_Expression._Structure_key = GXD_Structure._Structure_key "
+	"and GXD_Structure._StructureName_key = GXD_StructureName._StructureName_key"
+	, assayKey);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    fprintf(f, "\texpression\t%s\t%s\n", row[0], row[1]);
+sqlFreeResult(&sr);
+}
+
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
 /* Create a .ra and a .tab file for given reference. */
 {
@@ -200,6 +220,7 @@ char **row;
 char *copyright;
 struct slName *list, *el;
 boolean gotAny = FALSE;
+struct hash *uniqAssayHash = newHash(16);
 
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
 safef(tabName, sizeof(tabName), "%s.tab", fileRoot);
@@ -598,6 +619,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", genotype);
     fprintf(tab, "%s\t", strain);
     fprintf(tab, "%s\n", priority);
+
+    if (!hashLookup(uniqAssayHash, assayKey))
+        {
+	hashAdd(uniqAssayHash, assayKey, NULL);
+	printExpression(tab, assayKey, conn2);
+	}
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);
@@ -614,6 +641,7 @@ else
     remove(raName);
 remove(tmpName);
 dyStringFree(&query);
+hashFree(&uniqAssayHash);
 }
 
 void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *outDir)
