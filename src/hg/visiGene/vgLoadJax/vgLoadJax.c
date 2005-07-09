@@ -205,7 +205,11 @@ dyStringPrintf(query,
 	, assayKey);
 sr = sqlGetResult(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
-    fprintf(f, "\texpression\t%s\t%s\n", row[0], row[1]);
+    {
+    char *bodyPart = skipLeadingSpaces(row[0]);
+    if (bodyPart[0] != 0)
+	fprintf(f, "\texpression\t%s\t%s\n", row[0], row[1]);
+    }
 sqlFreeResult(&sr);
 }
 
@@ -319,6 +323,7 @@ dyStringAppend(query,
 	);
 dyStringPrintf(query, "and GXD_Assay._Refs_key = %s", ref);
 sr = sqlGetResult(conn, query->string);
+
 
 fprintf(tab, "#");
 fprintf(tab, "gene\t");
@@ -599,6 +604,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     genotypeAndStrainFromKey(genotypeKey, conn2, &genotype, &strain);
 
+    stripChar(paneLabel, '"');	/* Get rid of a difficult quote to process. */
+
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -660,7 +667,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", outDir, ref->name);
     submitRefToFiles(conn, conn2, ref->name, path);
-    {static int count; if (++count >= 300) uglyAbort("All for now");}
+    {static int count; if (++count >= 30000) uglyAbort("All for now");}
     }
 
 slNameFreeList(&refList);
