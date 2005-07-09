@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.45 2005/07/08 23:56:18 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.46 2005/07/09 23:29:35 angie Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -780,7 +780,7 @@ if (vector->count > 0)
 else
     freeDataVector(&vector);
 return NULL;
-}	/*	static struct dataVector *dataVectorFetchOneRegion()	*/
+}	/*	struct dataVector *dataVectorFetchOneRegion()	*/
 
 static void scavengeVectorSpace(struct dataVector *dv)
 /* Realloc dv->value and dv->position if newCount is sufficiently smaller 
@@ -1346,6 +1346,25 @@ carefulClose(&out);
 return total;
 }
 
+static struct dataVector *tbDataVectorOneRegion(struct trackTable *tt,
+	struct region *region, struct sqlConnection *conn)
+/* Get a data vector on which all table browser processing has been performed:
+ * filter, subtrack merge, and intersection (some of which require a lower-
+ * level data vector fetch followed by some processing).  */
+{
+struct dataVector *dv = NULL;
+/* For wiggle and bedGraph, subtrack merge is implemented on top of 
+ * dataVectorFetchOneRegion.  For bed-able tables, it's handled below 
+ * dataVectorFetchOneRegion (under cookedBedList). */
+if (isWiggle(database, tt->tableName))
+    dv = wiggleDataVector(tt->tableName, conn, region);
+else if (isBedGraph(tt->tableName))
+    dv = bedGraphDataVector(tt->tableName, conn, region);
+else
+    dv = dataVectorFetchOneRegion(tt, region, conn);
+return dv;
+}
+
 static void overallCounts(struct trackTable *t)
 /*	find overall min,max,sum,sumSquares in a set of data vectors	*/
 {
@@ -1845,24 +1864,17 @@ if ( (table1->isCustom && checkWigDataFilter("ct", curTable, NULL, NULL, NULL))
     wigShowFilter(conn);
     hPrintf("</P>\n");
     }
+if (anySubtrackMerge(database, table1->actualTable))
+    {
+    hPrintf("<P><B>subtrack merge as specified on </B>'%s'\n",
+	    table1->shortLabel);
+    }
 if (anyIntersection())
     {
-    if (table1->isBedGraph && table2->isBedGraph)
-	hPrintf("<P><B>intersection filter not available on these "
-		"two types of tables</B></P>\n");
-    else if (table1->isBedGraph && (! table2->isBedGraph))
-	hPrintf("<P><B>intersecting</B> '%s' <B>with</B> '%s':</P>\n",
-	    table2->shortLabel, cartString(cart, hgtaIntersectTrack));
-    else if ((! table1->isBedGraph) && table2->isBedGraph)
-	hPrintf("<P><B>intersecting</B> '%s' <B>with</B> '%s':</P>\n",
-	    table1->shortLabel, cartString(cart, hgtaIntersectTrack));
-    else
-	{
-	hPrintf("<P><B>intersecting both tables</B> ");
-	hPrintf("'%s' <B>and</B> '%s' <B>with</B> '%s':</P>\n",
+    hPrintf("<P><B>intersecting both tables</B> ");
+    hPrintf("'%s' <B>and</B> '%s' <B>with</B> '%s':</P>\n",
 	    table1->shortLabel, table2->shortLabel,
-		cartString(cart, hgtaIntersectTrack));
-	}
+	    cartString(cart, hgtaIntersectTrack));
     }
 
 /*	walk through the regions and fetch each table's data
@@ -1890,10 +1902,10 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
     if (bases < 2)
 	continue;	/*	next region	*/
 
-    v1 = dataVectorFetchOneRegion(table1, region, conn);
+    v1 = tbDataVectorOneRegion(table1, region, conn);
     if (v1)	/*	if data there, fetch the second one	*/
 	{
-	v2 = dataVectorFetchOneRegion(table2, region, conn);
+	v2 = tbDataVectorOneRegion(table2, region, conn);
 	if (v2)	/*	if both data, construct a result set	*/
 	    {
 	    intersectVectors(v1, v2);
