@@ -134,3 +134,7 @@ order by rand() limit 10;
 And the GXD_Marker table:
 select _Marker_key as marker, _Organism_key as org, _Marker_Status_key as status, _Marker_Type_key as type, _CurationState_key as cura, symbol, name, chromosome as chrom, cytogeneticOffset as cyto, _CreatedBy_key from MRK_Marker order by rand() limit 10;
 
+
+REPORTER GENES
+74771 - lacZ
+74771 - GFP
