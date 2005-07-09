@@ -238,19 +238,14 @@ char *blockSizesStr;
 char *qStartsStr;
 char *tStartsStr;
 
-char *chp, *chp0, *chp9;
+char *chp;
 int exonStartPos;
 int exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
 char *exonStartStr = NULL;
-char *exonEndStr   = NULL;
 char *exonSizeStr  = NULL;
 char *exonGenomeStartStr = NULL;
-char *exonGenomeEndStr;
 char *strand       = NULL;
-int exonNumber;
-int printedExonNumber = -1;
-Color exonColor[2];
 int blockCount=0;
 int exonIndex;
 int i, isize;
@@ -390,8 +385,7 @@ for (i=0; i<blockCount; i++)
 void printFASTA(char *proteinID, char *aa)
 /* print the FASTA format protein sequence */
 {
-int i, j, k, jj;
-int l;
+int i, l;
 char *chp;
 	
 l =strlen(aa);
@@ -585,7 +579,7 @@ char cond_str[128];
 char *mapID, *locusID, *mapDescription;
 char *geneID;
 char *geneSymbol;
-char *cgapID, *biocMapID, *biocMapDesc, *biocMapName;
+char *cgapID, *biocMapID;
 boolean hasPathway;
 
 if (hTableExistsDb(database, "kgXref"))
@@ -733,13 +727,10 @@ int searchProteinsInSupportedGenomes(char *queryID, char **database)
 int  pbProteinCnt = {0};
 char *gDatabase;
 char *org = NULL;
-char *spID, *displayID, *desc;
+
 
 char cond_str[255];
 struct sqlConnection *conn;
-char query[256];
-struct sqlResult *sr;
-char **row;
 
 struct sqlConnection *connCentral;
 char queryCentral[256];
@@ -780,7 +771,6 @@ return(pbProteinCnt);
 void presentProteinSelections(char *queryID, int protCntInSwissByGene, int protCntInSupportedGenomeDb)
 /* Fuction to present a web page with proteins of different organisms */
 {
-int  pbProteinCnt = {0};
 char *gDatabase;
 char *org = NULL;
 char *spID, *displayID, *desc;

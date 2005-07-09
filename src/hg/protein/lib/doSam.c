@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: doSam.c,v 1.5 2005/01/11 00:03:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: doSam.c,v 1.6 2005/07/09 05:17:16 markd Exp $";
 
 char *getSgdId(char *protId, char *database)
 /* Get SGD gene ID from a Swiss-Prot ID */
@@ -41,7 +41,6 @@ char *bestEValStr = NULL;
 float eValue, bestEVal;
 
 char goodSCOPdomain[40];
-int  gotPDBFile;
 int  first = 1;
 
 /* return if this genome does not have SAM protein analysis results */

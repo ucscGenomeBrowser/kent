@@ -196,8 +196,6 @@ void markResStamp(char aaChar, struct pbStamp *pbStampPtr, struct pbStampPict *s
 		  double avg[], double stddev[])
 /* mark the AA residual stamp */
 {
-char res;
-int index;
 int ix, iy; 
 double txmin, tymin, txmax, tymax;
 double yPlotValue;
@@ -255,8 +253,6 @@ void markResStdvStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictP
 		  double avg[], double stddev[])
 /* mark the AA residual stddev stamp */
 {
-char res;
-int index;
 int ix, iy; 
 double txmin, tymin, txmax, tymax;
 double yValue, yPlotValue;
@@ -335,7 +331,6 @@ void markStamp(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
 /* mark the the stamp with a vertical line */
 {
 int ix, iy;
-int index;
   
 double txmin, tymin, txmax, tymax;
 double ytop=0.0;
@@ -384,14 +379,9 @@ void markStamp0(struct pbStamp *pbStampPtr, struct pbStampPict *stampPictPtr,
 	        double xValue, char *valStr, double tx[], double ty[])
 /* mark the the stamp with valStr only, used for 'N/A' case only */
 {
-int ix, iy;
-int index;
-  
 double txmin, tymin, txmax, tymax;
-double ytop=0.0;
 int len;
 int xx,  yy;
-int i, iTarget;
  
 len   = pbStampPtr->len; 
 txmin = pbStampPtr->xmin;
@@ -411,8 +401,7 @@ char query2[256];
 struct sqlResult *sr2;
 char **row2;
 struct pbStamp *pbStampPtr;
-char *stampTable, *stampTitle, *stampDesc;
-int i, n, index;
+int i;
 
 conn2= hAllocConn();
 safef(query2, sizeof(query2), "select * from %s.pbStamp where stampName ='%s'", database, stampName);
@@ -634,16 +623,11 @@ void doStamps(char *proteinID, char *mrnaID, char *aa, struct vGfx *vg, int *yOf
 {
 int i,j,l;
 
-char *exonNumStr;
-int exonNum;
 char cond_str[200];
 char *valStr;
 char valStr2[50];
-char *vertLabel;
-int sf_cnt;
 char *answer;
 double pI=0.0;
-double aaLen;
 double exonCount;
 char *chp;
 int len;
@@ -658,13 +642,9 @@ double aaResFreqDouble[30];
 int aaResFound;
 int totalResCnt;
 
-char *aap;
 double molWeight=0.0;
 double hydroSum;
 struct pbStamp *stampDataPtr;
-char tempStr[255];
-
-Color bkgColor;
 
 for (j=0; j<23; j++)
     {

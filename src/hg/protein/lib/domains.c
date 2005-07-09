@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.5 2005/05/25 20:33:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.6 2005/07/09 05:17:16 markd Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -42,8 +42,7 @@ void domainsPrint(struct sqlConnection *spConn, char *swissProtAcc)
 /* Print out protein domains. */
 {
 struct slName *el, *list;
-char condStr[128];
-char *taxon, *samDb;
+char *samDb;
 
 list = spExtDbAcc1List(spConn, swissProtAcc, "Interpro");
 if (list != NULL)

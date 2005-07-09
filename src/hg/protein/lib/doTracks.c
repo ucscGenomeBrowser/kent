@@ -44,9 +44,6 @@ void calxy0(int xin, int yin, int *outxp, int *outyp)
 void relativeScroll(double amount)
 /* Scroll percentage of visible window. */
 {
-int offset;
-int newStart, newEnd;
-
 trackOrigOffset = trackOrigOffset + (int)(amount*MAX_PB_PIXWIDTH);
 
 /* Make sure don't scroll of ends. */
@@ -78,21 +75,13 @@ void doAnomalies(char *aa, int len, int *yOffp)
 char res;
 int index;
 
-struct sqlConnection *conn;
-char query[56];
-struct sqlResult *sr;
 char cond_str[255];
 char *answer;
-char **row;
     
 int xx, yy;
-int h;
 int i, j;
 	
-float sum;
 char *chp;
-int aaResFound;
-int totalResCnt;
 int aaResCnt[20];
 double aaResFreqDouble[20];
 int abnormal;
@@ -237,7 +226,7 @@ int index;
     
 int xx, yy;
 int h;
-int i, i0, i9, j;
+int i, i0, i9;
 int l;
     
 int iw = 5;
@@ -297,9 +286,6 @@ char res;
 int index;
     
 int xx, yy;
-int h;
-int iw = 5;
-float sum;
 	
 currentYoffset = *yOffp;
     
@@ -356,20 +342,16 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy+8, trackTitleLen*6+12, 12, trackTitle
 void doAAScale(int len, int *yOffp, int top_bottom)
 /* draw the track to show AA scale */
 {
-char res;
 int index;
    
 int tb;	/* top or bottom flag */
   
 int xx, yy;
-int h;
-int i, i0, i9, j;
+int i;
 int imax;
 int interval;
    
 char scale_str[20];
-int iw = 5;
-float sum;
 int markedIndex = -1;
 
 tb = 0;
@@ -459,7 +441,7 @@ hPrintf(" target=_blank ALT=\"UCSC Genome Browser %s\">\n", posStr);
 int calPrevGB(int exonCount, char *chrom, char strand, int aaLen, int *yOffp, char *proteinID, char *mrnaID)
 /* calculate the appropriate X offset for the previous Genome Browser position range */
 {
-int xx, yy, xx0;
+int xx, yy;
 int i, j;
 char exonNumStr[10];
 int mrnaLen;
@@ -469,7 +451,6 @@ int exonGenomeStartPos, exonGenomeEndPos;
 int exonNumber;
 int printedExonNumber = -1;
 int currentPos;
-int currentPBPos;
 int jPrevStart, jPrevEnd;
 int iPrevExon = -1;
 int jPrevExonPos = 0;
@@ -594,7 +575,6 @@ int exonNumber;
 int printedExonNumber = -1;
 Color exonColor[2];
 int currentPos;
-int currentPBPos;
 int jPrevStart, jPrevEnd;
 int jcnt = 0;
 int iPrevExon = -1;
@@ -775,7 +755,7 @@ void doExon(int exonCount, char *chrom, int aaLen, int *yOffp, char *proteinID, 
 /* draw the track for exons */
 {
 int xx, yy;
-int i, j;
+int j;
 char exonNumStr[10];
 int mrnaLen;
 Color color;
@@ -882,9 +862,6 @@ int getSuperfamilies2(char *proteinID)
    from ensemblXref3, sfAssign, and sfDes from the proteinsXXXXXX database,
    and placed them in arrays to be used by doSuperfamily().*/
 {
-char *before, *after = "", *s;
-char startString[64], endString[64];
-
 struct sqlConnection *conn, *conn2, *conn3;
 char query[MAXNAMELEN], query2[MAXNAMELEN];
 struct sqlResult *sr, *sr2;
@@ -892,19 +869,14 @@ char **row, **row2;
 
 char cond_str[255];
 
-char *genomeID, *seqID, *modelID, *start, *end, *eValue, *sfID, *sfDesc;
+char *genomeID, *seqID, *modelID, *eValue, *sfID, *sfDesc;
 
-char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
-     *exonCount, *exonStarts, *exonEnds;
 char *region;
 int  done;
 
-char *gene_name;
 char *ensPep;
-char *transcriptName;
 
 char *chp, *chp2;
-int  i,l;
 int  sfCnt;
 int  int_start, int_end;
    
@@ -1008,29 +980,22 @@ int getSuperfamilies(char *proteinID)
 /* preserved here for previous older genomes.
    Newer genomes should be using getSuperfamilies2(). 6/16/04 Fan*/
 {
-char *before, *after = "", *s;
-char startString[64], endString[64];
-
 struct sqlConnection *conn, *conn2;
-char query[MAXNAMELEN], query2[MAXNAMELEN];
-struct sqlResult *sr, *sr2;
-char **row, **row2;
+char query[MAXNAMELEN];
+struct sqlResult *sr;
+char **row;
 
 char cond_str[255];
 
-char *genomeID, *seqID, *modelID, *start, *end, *eValue, *sfID, *sfDesc;
+char *genomeID, *seqID, *modelID, *eValue, *sfID, *sfDesc;
 
-char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
-     *exonCount, *exonStarts, *exonEnds;
 char *region;
 int  done;
 
-char *gene_name;
 char *ensPep;
 char *transcriptName;
 
 char *chp, *chp2;
-int  i,l;
 int  ii = 0;
 int  int_start, int_end;
 
@@ -1158,8 +1123,7 @@ void doSuperfamily(char *pepName, int sf_cnt, int *yOffp)
 /* draw the Superfamily track */
 {
 int xx, yy;
-int h;
-int i, ii, jj, i0, i9, j;
+int ii, jj;
 char exonNumStr[10];
 int len;
 int sf_len, name_len;
@@ -1217,18 +1181,11 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle
 void doResidues(char *aa, int len, int *yOffp)
 /* draw track for AA residue */
 {
-char res;
 int index;
     
 int xx, yy;
-int h;
-int i, i0, i9, j;
-
 char res_str[2];
     
-int iw = 5;
-float sum;
-	
 currentYoffset = *yOffp;
     
 calxy(0, *yOffp, &xx, &yy);
@@ -1265,14 +1222,9 @@ mapBoxTrackTitle(xx-25-trackTitleLen*6, yy-2, trackTitleLen*6+12, 14, trackTitle
 void doDnaTrack(char *chrom, char strand, int exonCount, int len, int *yOffp)
 /* draw track for AA residue */
 {
-char res;
-int index;
-
 int xx, yy;
-int h;
-int i, i0, i9, j;
+int j;
 int mrnaLen;
-char exonNumStr[10];
                        
 int exonStartPos, exonEndPos;
 int exonGenomeStartPos, exonGenomeEndPos;
@@ -1283,11 +1235,8 @@ Color color;
 int k;
 struct dnaSeq *dna;
 
-char res_str[2];
 char base[2];
 char baseComp[2];
-int iw = 5;
-float sum;
 int dnaLen;
 
 Color defaultColor;
@@ -1347,7 +1296,7 @@ for (j = 0; j < mrnaLen; j++)
 	    }
 	else
 	    {
-	    base[0]     = toupper(ntCompTable[*(dna->dna + dnaLen - k -1 )]);
+	    base[0]     = toupper(ntCompTable[(int)*(dna->dna + dnaLen - k -1 )]);
 	    baseComp[0] = toupper(*(dna->dna + dnaLen - k -1 ));
 	    }
 
@@ -1404,29 +1353,11 @@ else
 void doTracks(char *proteinID, char *mrnaID, char *aa, int *yOffp, char *psOutput)
 /* draw various protein tracks */
 {
-int i,j,l;
-char *exonNumStr;
-int exonNum;
+int l;
 
-double pI, aaLen;
-double exonCount;
-char *chp;
-int len;
-int cCnt;
-
-int xPosition;
-int yPosition;
-
-int aaResCnt[30];
-double aaResFreqDouble[30];
 char aaOrigOffsetStr[20];
-int aaResFound;
-int totalResCnt;
 int hasResFreq;
 
-char *aap;
-double molWeight, hydroSum;
-struct pbStamp *stampDataPtr;
 char *chrom;
 char strand;
 
