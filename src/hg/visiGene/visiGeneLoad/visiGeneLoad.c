@@ -116,17 +116,19 @@ int findOrAddIdTable(struct sqlConnection *conn, char *table, char *field,
 {
 char query[256];
 int id;
+char *escValue = makeEscapedString(value, '"');
 safef(query, sizeof(query), "select id from %s where %s = \"%s\"",
-	table, field, value);
+	table, field, escValue);
 id = sqlQuickNum(conn, query);
 if (id == 0)
     {
     safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
-    	table, value);
+    	table, escValue);
     verbose(2, "%s\n", query);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     }
+freeMem(escValue);
 return id;
 }
 
@@ -473,6 +475,8 @@ if (abName[0] != 0)
 	dyStringPrintf(dy, " id = default,\n");
 	dyStringPrintf(dy, " name = '%s',\n", abName);
 	dyStringPrintf(dy, " description = \"%s\",\n", abDescription);
+	if (abTaxon[0] == 0)
+	    abTaxon = "0";
 	dyStringPrintf(dy, " taxon = %s", abTaxon);
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
