@@ -7,6 +7,7 @@
 #include "portable.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "spDb.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +37,9 @@ return sqlQuickList(conn, "select _Specimen_key from GXD_Specimen");
 }
 
 char *colorFromLabel(char *label, char *gene)
-/* Return color from labeling method. */
+/* Return color from labeling method.   This could be 
+ * something in either the GXD_Label or the GXD_VisualizationMethod
+ * tables in the jackson database. */
 {
 if (label == NULL)
     return "";
@@ -74,6 +77,8 @@ else if (sameString(label, "I125"))
     return "";
 else if (sameString(label, "Oregon Green 488"))
     return "green";
+else if (sameString(label, "other - see notes"))
+    return "";
 else if (sameString(label, "P32"))
     return "";
 else if (sameString(label, "Phosphorimaging"))
@@ -207,7 +212,9 @@ fprintf(tab, "ageMin\t");
 fprintf(tab, "ageMax\t");
 fprintf(tab, "paneLabel\t");
 fprintf(tab, "fileName\t");
-fprintf(tab, "submitId\n");
+fprintf(tab, "submitId\t");
+fprintf(tab, "abName\t");
+fprintf(tab, "abTaxon\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -224,6 +231,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *assayKey = row[11];
     double calcAge = -1;
     char *probeColor = "";
+    char *abName = NULL;
+    char abTaxon[32];
 
     if (age == NULL)
         continue;
@@ -266,7 +275,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    calcAge = 7.0 * atof(age+strlen(weekPat)) + mouseBirthAge;
 	else if (sameString(adultPat, age) && calcMaxAge - calcMinAge > 1000 
 		&& calcMinAge < 365)
-	    calcAge = 365;	/* Most adult mice relatively young if not specified */
+	    calcAge = 365;	/* Most adult mice are relatively young */
 	else
 	    {
 	    warn("Calculating age from %s\n", age);
@@ -280,15 +289,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     
     /* Massage probeColor */
         {
-	if (reporterGeneKey != NULL && !sameString(reporterGeneKey, "0"))
+	if (!sameString(reporterGeneKey, "0"))
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
-	    dyStringPrintf(query, "select term from VOC_Term where _Term_key = %s", 
+	    dyStringPrintf(query, 
+	    	"select term from VOC_Term where _Term_key = %s", 
 	    	reporterGeneKey);
 	    name = sqlQuickString(conn2, query->string);
 	    if (name == NULL)
-	        warn("Can't find _ReporterGene_key %s in VOC_Term", reporterGeneKey);
+	        warn("Can't find _ReporterGene_key %s in VOC_Term", 
+			reporterGeneKey);
 	    else if (sameString(name, "GFP"))
 	        probeColor = "green";
 	    else if (sameString(name, "lacZ"))
@@ -297,15 +308,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        warn("Don't know color of reporter gene %s", name);
 	    freez(&name);
 	    }
-	if (probePrepKey != NULL && !sameString(probePrepKey, "0"))
+	if (!sameString(probePrepKey, "0"))
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
-	    dyStringPrintf(query, "select GXD_VisualizationMethod.visualization "
-	                          "from GXD_VisualizationMethod,GXD_ProbePrep "
-	                          "where GXD_ProbePrep._ProbePrep_key = %s "
-				  "and GXD_ProbePrep._Visualization_key = GXD_VisualizationMethod._Visualization_key"
-				  , probePrepKey);
+	    dyStringPrintf(query, 
+	      "select GXD_VisualizationMethod.visualization "
+	      "from GXD_VisualizationMethod,GXD_ProbePrep "
+	      "where GXD_ProbePrep._ProbePrep_key = %s "
+	      "and GXD_ProbePrep._Visualization_key = GXD_VisualizationMethod._Visualization_key"
+	      , probePrepKey);
 	    name = sqlQuickString(conn2, query->string);
 	    if (name == NULL)
 	        warn("Can't find visualization from _ProbePrep_key %s", probePrepKey);
@@ -314,26 +326,28 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (probeColor[0] == 0)
 	        {
 		dyStringClear(query);
-		dyStringPrintf(query, "select GXD_Label.label from GXD_Label,GXD_ProbePrep "
-				      "where GXD_ProbePrep._ProbePrep_key = %s "
-				      "and GXD_ProbePrep._Label_key = GXD_Label._Label_key"
-				      , probePrepKey);
+		dyStringPrintf(query, 
+			"select GXD_Label.label from GXD_Label,GXD_ProbePrep "
+		        "where GXD_ProbePrep._ProbePrep_key = %s " 
+			"and GXD_ProbePrep._Label_key = GXD_Label._Label_key"
+		        , probePrepKey);
 		name = sqlQuickString(conn2, query->string);
 		if (name == NULL)
-		    warn("Can't find label from _ProbePrep_key %s", probePrepKey);
+		    warn("Can't find label from _ProbePrep_key %s", 
+		    	probePrepKey);
 		probeColor = colorFromLabel(name, gene);
 		}
 	    freez(&name);
 	    }
-	if (antibodyPrepKey != NULL && !sameString(antibodyPrepKey, "0") && 
-	    probeColor[0] == 0 )
+	if (!sameString(antibodyPrepKey, "0") && probeColor[0] == 0 )
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
-	    dyStringPrintf(query, "select GXD_Label.label from GXD_Label,GXD_AntibodyPrep "
-				  "where GXD_AntibodyPrep._AntibodyPrep_key = %s "
-				  "and GXD_AntibodyPrep._Label_key = GXD_Label._Label_key"
-				  , antibodyPrepKey);
+	    dyStringPrintf(query, 
+		  "select GXD_Label.label from GXD_Label,GXD_AntibodyPrep "
+		  "where GXD_AntibodyPrep._AntibodyPrep_key = %s "
+		  "and GXD_AntibodyPrep._Label_key = GXD_Label._Label_key"
+		  , antibodyPrepKey);
 	    name = sqlQuickString(conn2, query->string);
 	    if (name == NULL)
 		warn("Can't find label from _AntibodyPrep_key %s", antibodyPrepKey);
@@ -342,6 +356,66 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
+    /* Get abName, abTaxon */
+    abTaxon[0] = 0;
+    if (!sameString(antibodyPrepKey, "0"))
+        {
+	struct sqlResult *sr = NULL;
+	int orgKey = 0;
+	char **row;
+	dyStringClear(query);
+	dyStringPrintf(query, 
+		"select antibodyName,_Organism_key "
+		"from GXD_AntibodyPrep,GXD_Antibody "
+		"where GXD_AntibodyPrep._AntibodyPrep_key = %s "
+		"and GXD_AntibodyPrep._Antibody_key = GXD_Antibody._Antibody_key"
+		, antibodyPrepKey);
+	sr = sqlGetResult(conn2, query->string);
+	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    abName = cloneString(row[0]);
+	    orgKey = atoi(row[1]);
+	    }
+	sqlFreeResult(&sr);
+
+	if (orgKey > 0)
+	    {
+	    struct sqlConnection *sp = sqlConnect("uniProt");
+	    char *latinName = NULL, *commonName = NULL;
+	    int spTaxon = 0;
+	    dyStringClear(query);
+	    dyStringPrintf(query, "select latinName from MGI_Organism "
+	                          "where _Organism_key = %d", orgKey);
+	    latinName = sqlQuickString(conn2, query->string);
+	    if (latinName != NULL && !sameString(latinName, "Not Specified"))
+		{
+		char *e = strchr(latinName, '/');
+		if (e != NULL) 
+		   *e = 0;	/* Chop off / and after. */
+		spTaxon = spBinomialToTaxon(sp, latinName);
+		}
+	    else
+	        {
+		dyStringClear(query);
+		dyStringPrintf(query, "select commonName from MGI_Organism "
+	                          "where _Organism_key = %d", orgKey);
+		commonName = sqlQuickString(conn2, query->string);
+		if (commonName != NULL && !sameString(commonName, "Not Specified"))
+		    {
+		    spTaxon = spCommonToTaxon(sp, commonName);
+		    }
+		}
+	    if (spTaxon != 0)
+	        safef(abTaxon, sizeof(abTaxon), "%d", spTaxon);
+	    freez(&latinName);
+	    freez(&commonName);
+	    sqlDisconnect(&sp);
+	    }
+	}
+    if (abName == NULL)
+        abName = cloneString("");
+
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -349,10 +423,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", ageMin);
     fprintf(tab, "%s\t", ageMax);
     fprintf(tab, "%s\t", paneLabel);
-    fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s.gif\t", fileKey);
-    fprintf(tab, "%s\n", imageKey);
+    fprintf(tab, "%s\t", imageKey);
+    fprintf(tab, "%s\t", abName);
+    fprintf(tab, "%s\n", abTaxon);
     gotAny = TRUE;
+    freez(&abName);
     }
 sqlFreeResult(&sr);
 
