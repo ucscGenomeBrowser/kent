@@ -30,11 +30,13 @@ vfprintf(stderr, msg, ap);
 errAbort("\n%s",
          "estOrient [options] db estTable outPsl\n"
          "\n"
-         "Read ESTs from the database and determine orientation bases on\n"
-         "estOrientInfo table or direction in gbCdnaInfo table.\n"
+         "Read ESTs from a database and determine orientation based on\n"
+         "estOrientInfo table or direction in gbCdnaInfo table.  Update\n"
+         "PSLs so that the strand reflects the direction of transcription.\n"
+         "By default, PSLs where the direction can't be determined are dropped.\n"
          "\n"
          "Options:\n"
-         "   -chrom=chr - process this chromsome, maybe repeated\n"
+         "   -chrom=chr - process this chromosome, maybe repeated\n"
          "   -keepDisoriented - don't drop ESTs where orientation can't\n"
          "    be determined.\n"
          );
