@@ -111,10 +111,33 @@ if (sameWord("Not Applicable", text)
 return text;
 }
 
+void undupeCopyFile(char *source, char *dest)
+/* Copy file, removing duplicate lines in process.  */
+{
+struct lineFile *lf = lineFileOpen(source, TRUE);
+int size;
+char *line;
+char *lastLine = strdup("");
+FILE *f = mustOpen(dest, "w");
+
+while (lineFileNext(lf, &line, &size))
+    {
+    if (lastLine == NULL || differentString(line, lastLine))
+        {
+	fprintf(f, "%s\n", line);
+	freeMem(lastLine);
+	lastLine = cloneString(line);
+	}
+    }
+freeMem(lastLine);
+lineFileClose(&lf);
+carefulClose(&f);
+}
+
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
 /* Create a .ra and a .tab file for given reference. */
 {
-char raName[PATH_LEN], tabName[PATH_LEN];
+char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN];
 FILE *ra = NULL, *tab = NULL;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
@@ -125,7 +148,8 @@ boolean gotAny = FALSE;
 
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
 safef(tabName, sizeof(tabName), "%s.tab", fileRoot);
-tab = mustOpen(tabName, "w");
+safef(tmpName, sizeof(tmpName), "%s.tmp", fileRoot);
+tab = mustOpen(tmpName, "w");
 
 
 dyStringAppend(query, "select authors, journal, title from BIB_Refs where ");
@@ -192,7 +216,8 @@ dyStringAppend(query,
 	       "GXD_Assay._ReporterGene_key as reporterGeneKey,"
 	       "GXD_FixationMethod.fixation as fixation,"
 	       "GXD_EmbeddingMethod.embeddingMethod as embedding,"
-	       "GXD_Assay._Assay_key as assayKey\n"
+	       "GXD_Assay._Assay_key as assayKey,"
+	       "GXD_Specimen.hybridization as sliceType\n"
 	"from MRK_Marker,"
 	     "GXD_Assay,"
 	     "GXD_Specimen,"
@@ -233,7 +258,9 @@ fprintf(tab, "rPrimer\t");
 fprintf(tab, "abName\t");
 fprintf(tab, "abTaxon\t");
 fprintf(tab, "fixation\t");
-fprintf(tab, "embedding\n");
+fprintf(tab, "embedding\t");
+fprintf(tab, "bodyPart\t");
+fprintf(tab, "sliceType\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -250,8 +277,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fixation = row[11];
     char *embedding = row[12];
     char *assayKey = row[13];
+    char *sliceType = row[14];
     double calcAge = -1;
     char *probeColor = "";
+    char *bodyPart = "";
     char *abName = NULL;
     char *rPrimer = NULL, *fPrimer = NULL;
     char abTaxon[32];
@@ -472,6 +501,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     fixation = blankOutUnknown(fixation);
     embedding = blankOutUnknown(embedding);
 
+    /* Massage body part and slice type.  We only handle whole mounts. */
+    if (sameString(sliceType, "whole mount"))
+	bodyPart = "whole";
+    else
+        sliceType = "";
+
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -486,7 +521,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", abName);
     fprintf(tab, "%s\t", abTaxon);
     fprintf(tab, "%s\t", fixation);
-    fprintf(tab, "%s\n", embedding);
+    fprintf(tab, "%s\t", embedding);
+    fprintf(tab, "%s\t", bodyPart);
+    fprintf(tab, "%s\n", sliceType);
     gotAny = TRUE;
     freez(&abName);
     freez(&rPrimer);
@@ -496,11 +533,11 @@ sqlFreeResult(&sr);
 
 carefulClose(&ra);
 carefulClose(&tab);
-if (!gotAny)
-    {
+if (gotAny)
+    undupeCopyFile(tmpName, tabName);
+else
     remove(raName);
-    remove(tabName);
-    }
+remove(tmpName);
 dyStringFree(&query);
 }
 
