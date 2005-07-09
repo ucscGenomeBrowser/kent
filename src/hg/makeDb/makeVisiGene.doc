@@ -1,0 +1,3 @@
+# Create empty database and tables.
+hgsql -e "create database visiGene" mysql
+hgsql visiGene < ~/kent/src/hg/visiGene/visiGene.sql
