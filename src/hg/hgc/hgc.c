@@ -175,7 +175,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.912 2005/07/09 04:08:20 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.913 2005/07/09 04:45:27 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9646,7 +9646,7 @@ hFreeConn(&conn);
 }
 
 void doEncodeRna(struct trackDb *tdb, char *itemName)
-/* Handle click on EST 3' end track. */
+/* Handle click on encodeRna track. */
 {
 char *track = tdb->tableName;
 struct encodeRna rna;
@@ -9666,20 +9666,20 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     encodeRnaStaticLoad(row + rowOffset, &rna);
-    printf("<B>name:</B%s<BR>\n", rna.name);
+    printf("<B>name:</B> %s<BR>\n", rna.name);
     bedPrintPos((struct bed *)&rna, 3);
-    printf("<B>strand:</B%s<BR>\n", rna.strand);
-    printf("<B>type:</B%s<BR>\n", rna.type);
-    printf("<B>score:</B%2.1f<BR><BR>\n", rna.fullScore);
-    printf("<B>is pseudo-gene:</B%s<BR>\n", (rna.isPsuedo ? "yes" : "no"));
-    printf("<B>is Repeatmasked:</B%s<BR>\n", (rna.isRmasked ? "yes" : "no"));
-    printf("<B>is Transcribed:</B%s<BR>\n", (rna.isTranscribed ? "yes" : "no"));
-    printf("<B>is an evoFold prediction:</B%s<BR>\n", (rna.isPrediction ? "yes" : "no"));
-    printf("<B>program predicted with:</B%s<BR>\n", rna.source);
-    printf("<BR><B>This region is transcribed in:</B>");
+    printf("<B>strand:</B> %s<BR>\n", rna.strand);
+    printf("<B>type:</B> %s<BR>\n", rna.type);
+    printf("<B>score:</B> %2.1f<BR><BR>\n", rna.fullScore);
+    printf("<B>is pseudo-gene:</B> %s<BR>\n", (rna.isPsuedo ? "yes" : "no"));
+    printf("<B>is Repeatmasked:</B> %s<BR>\n", (rna.isRmasked ? "yes" : "no"));
+    printf("<B>is Transcribed:</B> %s<BR>\n", (rna.isTranscribed ? "yes" : "no"));
+    printf("<B>is an evoFold prediction:</B> %s<BR>\n", (rna.isPrediction ? "yes" : "no"));
+    printf("<B>program predicted with:</B> %s<BR>\n", rna.source);
+    printf("<BR><B>This region is transcribed in: </B>");
     nameList = slNameListFromString(rna.transcribedIn,',');
-    if(nameList==NULL)
-      printf("<BR>Not transcribed\n");
+    if(sameString(nameList->name,"."))
+      printf("<BR>&nbsp;&nbsp;&nbsp;&nbsp;Not transcribed\n");
     else
       for (sl=nameList;sl!=NULL;sl=sl->next)
           printf("<BR>&nbsp;&nbsp;&nbsp;&nbsp;%s\n",sl->name);
