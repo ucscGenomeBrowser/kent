@@ -777,7 +777,7 @@ if (id == 0)
 	    /* Get or make allele ID. */
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "select id from allele where ");
-	    dyStringPrintf(dy, "gene = %d and name = \"%s\"", allele);
+	    dyStringPrintf(dy, "gene = %d and name = \"%s\"", geneId, allele);
 	    alleleId = sqlQuickNum(conn, dy->string);
 	    if (alleleId == 0)
 	        {
