@@ -416,8 +416,18 @@ struct trackDb *hTrackDb(char *chrom);
  * the standard trackDb. */
 
 struct trackDb *hTrackDbForTrack(char *track);
-/* Load trackDb object for a track. If trackDbLocal exists, then it's row is
- * used if it exists. */
+/* Load trackDb object for a track. If trackDbLocal exists, then its row is
+ * used if it exists.  If track is composite, its subtracks will also be 
+ * loaded and inheritance will be handled; if track is a subtrack then 
+ * inheritance will be handled.  (Unless a subtrack has "noInherit on"...)
+ * This will die if the current database does not have a trackDb, but will 
+ * return NULL if track is not found. */
+
+struct trackDb *hCompositeTrackDbForSubtrack(struct trackDb *sTdb);
+/* Given a trackDb that may be for a subtrack of a composite track, 
+ * return the trackDb for the composite track if we can find it, else NULL.
+ * Note: if the composite trackDb is found and returned, then its subtracks 
+ * member will contain a newly allocated tdb like sTdb (but not ==). */
 
 struct hTableInfo *hFindTableInfo(char *chrom, char *rootName);
 /* Find table information.  Return NULL if no table. */
@@ -569,7 +579,12 @@ boolean hgIsChromRange(char *spec);
  * chromosome chrom and some N and M. */
 
 struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName);
-/* Look up track in database, return NULL if it's not there. */
+/* Load trackDb object for a track. If trackDbLocal exists, then its row is
+ * used if it exists.  If track is composite, its subtracks will also be 
+ * loaded and inheritance will be handled; if track is a subtrack then 
+ * inheritance will be handled.  (Unless a subtrack has "noInherit on"...)
+ * Don't die if conn has no trackDb table.  Return NULL if trackName is not 
+ * found. */
 
 struct trackDb *hTrackInfo(struct sqlConnection *conn, char *trackName);
 /* Look up track in database, errAbort if it's not there. */

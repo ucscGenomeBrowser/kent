@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.256 2005/06/27 23:39:01 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.257 2005/07/09 20:48:25 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3169,20 +3169,30 @@ hFreeConn(&conn);
 return tdbRetList;
 }
 
-static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn, char *track)
-/* Load trackDb object for a track. If trackDbLocal exists, then it's row is
- * used if it exists. this is common code for two external functions. */
+static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
+					    char *where)
+/* Load trackDb object(s). If trackDbLocal exists, then its row is
+ * used if it exists.  Nothing done for composite tracks here. */
+{
+struct trackDb *trackTdb = loadTrackDbLocal(conn, where);
+if (trackTdb == NULL)
+    trackTdb = loadTrackDb(conn, where);
+if (trackTdb != NULL)
+    hLookupStringsInTdb(trackTdb, hGetDb());
+return trackTdb;
+}
+
+static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
+					   char *track)
+/* Load trackDb object for a track. If trackDbLocal exists, then its row is
+ * used if it exists. this is common code for two external functions. 
+ * Handle composite tracks and subtrack inheritance here. */
 {
 struct trackDb *trackTdb = NULL;
 char where[256];
 
 safef(where, sizeof(where), "tableName = '%s'", track);
-
-trackTdb = loadTrackDbLocal(conn, where);
-if (trackTdb == NULL)
-    trackTdb = loadTrackDb(conn, where);
-if (trackTdb != NULL)
-    hLookupStringsInTdb(trackTdb, hGetDb());
+trackTdb = loadAndLookupTrackDb(conn, where);
 
 if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
     {
@@ -3193,26 +3203,57 @@ if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
     safef(where, sizeof(where),
 	  "settings rlike '^(.*\n)?subTrack %s([ \t\n].*)?$'",
 	  track);
-    subTdbList = loadTrackDbLocal(conn, where);
-    if (subTdbList == NULL)
-	subTdbList = loadTrackDb(conn, where);
-    if (subTdbList != NULL)
-	hLookupStringsInTdb(subTdbList, hGetDb());
+    subTdbList = loadAndLookupTrackDb(conn, where);
     for (tdb = subTdbList; tdb != NULL; tdb = tdb->next)
 	subtrackInherit(tdb, trackTdb);
     trackTdb->subtracks = subTdbList;
+    }
+else if (trackTdb != NULL && trackDbSetting(trackTdb, "subTrack"))
+    {
+    struct trackDb *cTdb = NULL;
+    char *subTrackSetting = cloneString(trackDbSetting(trackTdb, "subTrack"));
+    char *compositeName = firstWordInLine(subTrackSetting);
+    safef(where, sizeof(where), "tableName = '%s'", compositeName);
+    cTdb = loadAndLookupTrackDb(conn, where);
+    if (cTdb)
+	subtrackInherit(trackTdb, cTdb);
+    freez(&subTrackSetting);
     }
 return trackTdb;
 }
 
 struct trackDb *hTrackDbForTrack(char *track)
-/* Load trackDb object for a track. If trackDbLocal exists, then it's row is
- * used if it exists. */
+/* Load trackDb object for a track. If trackDbLocal exists, then its row is
+ * used if it exists.  If track is composite, its subtracks will also be 
+ * loaded and inheritance will be handled; if track is a subtrack then 
+ * inheritance will be handled.  (Unless a subtrack has "noInherit on"...)
+ * This will die if the current database does not have a trackDb, but will 
+ * return NULL if track is not found. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
 hFreeConn(&conn);
 return tdb;
+}
+
+struct trackDb *hCompositeTrackDbForSubtrack(struct trackDb *sTdb)
+/* Given a trackDb that may be for a subtrack of a composite track, 
+ * return the trackDb for the composite track if we can find it, else NULL.
+ * Note: if the composite trackDb is found and returned, then its subtracks 
+ * member will contain a newly allocated tdb like sTdb (but not ==). */
+{
+struct trackDb *cTdb = NULL;
+if (sTdb != NULL)
+    {
+    char *subTrackSetting = cloneString(trackDbSetting(sTdb, "subTrack"));
+    if (subTrackSetting != NULL)
+	{
+	char *compositeName = firstWordInLine(subTrackSetting);
+	cTdb = hTrackDbForTrack(compositeName);
+	freez(&subTrackSetting);
+	}
+    }
+return cTdb;
 }
 
 boolean hgParseChromRangeDb(char *spec, char **retChromName, 
@@ -3341,7 +3382,12 @@ return hgParseContigRange(spec, NULL, NULL, NULL);
 #endif /* UNUSED */
 
 struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
-/* Look up track in database, return NULL if it's not there. */
+/* Load trackDb object for a track. If trackDbLocal exists, then its row is
+ * used if it exists.  If track is composite, its subtracks will also be 
+ * loaded and inheritance will be handled; if track is a subtrack then 
+ * inheritance will be handled.  (Unless a subtrack has "noInherit on"...)
+ * Don't die if conn has no trackDb table.  Return NULL if trackName is not 
+ * found. */
 {
 if (sqlTableExists(conn, hTrackDbName()))
     return loadTrackDbForTrack(conn, trackName);
