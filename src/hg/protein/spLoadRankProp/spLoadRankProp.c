@@ -2,30 +2,31 @@
 #include "common.h"
 #include "options.h"
 #include "jksql.h"
-#include "spKgMap.h"
+#include "hdb.h"
+#include "spMapper.h"
 #include "rankProp.h"
 #include "rankPropProt.h"
 #include "linefile.h"
 #include "hgRelate.h"
 #include "verbose.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.5 2004/12/23 18:37:53 markd Exp $";
+static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.6 2005/07/09 05:18:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"append", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
-    {"noKgIdFile", OPTION_STRING},
+    {"noMapFile", OPTION_STRING},
+    {"unirefFile", OPTION_STRING},
     {NULL, 0}
 };
 
 boolean gAppend = FALSE;  /* append to table? */
 boolean gKeep = FALSE;    /* keep tab file */
 boolean gLoad = TRUE;     /* load databases */
-char *gNoKgIdFile = NULL; /* output dropped sp ids to this file */
-
-struct spKgMap *gSpKgMap = NULL;  /* has of swissprot id to kg id. */
+char *gNoMapFile = NULL; /* output dropped sp ids to this file */
 
 void usage()
 /* Explain usage and exit. */
@@ -35,11 +36,15 @@ errAbort(
   "usage:\n"
   "   spLoadRankProp database table rankPropFile\n"
   "Options:\n"
+  "  -unirefFile=tab - tab-separated file containing uniref information.\n"
+  "   If specified, used to map accessions to known genes associated with\n"
+  "   all proteins in a uniref entry.\n"
   "  -append - append to the table instead of recreating it\n"
   "  -keep - keep tab file used to load database\n"
   "  -noLoad - don't load database, implies -keep\n"
-  "  -noKgIdFile=file - write list of swissprots dropped because a known gene\n"
-  "   id was not found.\n"
+  "  -noMapFile=file - write list of swissprots or uniref ids that couldn't\n"
+  "   be mapped.  First column is id, second column is R if it wasn't found\n"
+  "   in uniref, or K if it couldn't be associated with a known gene\n"
   "  -verbose=n - n >=2 lists dropped entries\n"
   "\n"
   "Load a file in the format:\n"
@@ -58,112 +63,84 @@ char createString[] =
     "    INDEX(query(12))\n"
     ");\n";
 
-enum rowStat
-/* reason a row was skipped */
-{
-    rowKeep,             /* row was loaded */
-    rowNoKgXref,         /* target or query not in kgXref */
-    rowSingleton         /* no score or e-value */
-};
 
-void outputEntry(struct rankPropProt *inRec, FILE *tabFh,
-                 struct slName *qKgList, struct slName *tKgList)
-/* output entry for all combinations of kgIDs corrisponding to the swissprot
- * pair */
+void outputHit(FILE *tabFh, struct rankPropProt *rpRec, struct spMapperPairs *kgPairs)
+/* output a rankProp hit for the kg query/target pairs */
 {
 struct rankProp outRec;
-struct slName *qKg,  *tKg;
+struct spMapperPairs *pairs;
+struct spMapperId *tId;
+outRec.score = rpRec->score;
 
-outRec.score = inRec->score;
-
-for (qKg = qKgList; qKg != NULL; qKg = qKg->next)
+for (pairs = kgPairs; pairs != NULL; pairs = pairs->next)
     {
-    outRec.query = qKg->name;
-    for (tKg = tKgList; tKg != NULL; tKg = tKg->next)
+    outRec.query = pairs->qId;
+    for (tId = pairs->tIds; tId != NULL; tId = tId->next)
         {
-        outRec.target = tKg->name;
+        outRec.target = tId->id;
         rankPropTabOut(&outRec, tabFh);
         }
     }
 }
 
-enum rowStat processRow(char **row, FILE *tabFh)
+void processRow(char **row, struct spMapper *mapper, FILE *tabFh, int *zeroScoreCntPtr)
 /* Parse and process on row of a rankProp file, converting ids to known gene
- * ids. Only output if score is greater than zero or there is an e-value */
+ * ids. Only output if score is greater than zero */
 {
-struct rankPropProt inRec;
-struct slName *qKgList, *tKgList;
-rankPropProtStaticLoad(row, &inRec);
+struct rankPropProt rpRec;
+rankPropProtStaticLoad(row, &rpRec);
 
-if ((inRec.score == 0.0) && (inRec.qtEVal < 0) && (inRec.tqEVal < 0))
+if (rpRec.score == 0.0)
     {
-    verbose(2, "no score or edges for %s <=> %s\n",
-            inRec.qSpId, inRec.tSpId);
-    return rowSingleton;;
+    verbose(2, "zero score for %s <=> %s\n", rpRec.qSpId, rpRec.tSpId);
+    (*zeroScoreCntPtr)++;
     }
-
-/* since a swissprot can be associated with multiple kgIds, need to
- * loop over all combinations. */
-qKgList = spKgMapGet(gSpKgMap, inRec.qSpId);
-tKgList = spKgMapGet(gSpKgMap, inRec.tSpId);
-if ((qKgList == NULL) || (tKgList == NULL))
+else 
     {
-    verbose(2, "can't find kgXref id for %s, skipping %s <=> %s\n",
-            ((qKgList == NULL) ? inRec.qSpId : inRec.tSpId),
-            inRec.qSpId, inRec.tSpId);
-    return rowNoKgXref;
-    }
-else
-    {
-    outputEntry(&inRec, tabFh, qKgList, tKgList);
-    return rowKeep;
+    struct spMapperPairs *kgPairs = spMapperMapPair(mapper, rpRec.qSpId, rpRec.tSpId);
+    outputHit(tabFh, &rpRec, kgPairs);
+    spMapperPairsFree(&kgPairs);
     }
 }
 
-void loadRankProp(struct sqlConnection *conn, char *table, char *rankPropFile)
-/* load rankProp file into database */
+void processRankProp(struct sqlConnection *conn, char *rankPropFile, char *unirefFile, FILE *tabFh)
+/* process rankProp file, creating load file */
 {
+char *organism = hScientificName(sqlGetDatabase(conn));
 struct lineFile *inLf = lineFileOpen(rankPropFile, TRUE);
-FILE *tabFh = hgCreateTabFile(".", table);
+struct spMapper *mapper = spMapperNew(conn, unirefFile, organism);
 char *row[RANKPROPPROT_NUM_COLS];
-int statCnts[3]; /* indexed by status */
-
-statCnts[rowKeep] = 0;
-statCnts[rowNoKgXref] = 0;
-statCnts[rowSingleton] = 0;
+int zeroScoreCnt = 0;
 
 /* copy file, converting ids */
 while (lineFileNextRowTab(inLf, row, RANKPROPPROT_NUM_COLS))
-    {
-    enum rowStat stat = processRow(row, tabFh);
-    statCnts[stat]++;
-    }
+    processRow(row, mapper, tabFh, &zeroScoreCnt);
 lineFileClose(&inLf);
-if (statCnts[rowNoKgXref] > 0)
-    {
-    verbose(1, "skipped %d pairs due to not being in kgXref \n", statCnts[rowNoKgXref]);
-    verbose(1, "%d proteins could not be mapped\n", 
-            spKgMapCountMissing(gSpKgMap));
-    }
-if (statCnts[rowSingleton] > 0)
-    verbose(1, "skipped %d entries due to no score and no edges\n", statCnts[rowSingleton]);
-verbose(1, "kept %d pairs\n", statCnts[rowKeep]);
-if (gNoKgIdFile != NULL)
-    spKgMapListMissing(gSpKgMap, gNoKgIdFile);
 
-if (gLoad)
-    hgLoadTabFileOpts(conn, ".", table, SQL_TAB_FILE_ON_SERVER, &tabFh);
-if (!gKeep)
-    hgRemoveTabFile(".", table);
+if (mapper->qtNoUnirefMapCnt > 0)
+    verbose(1, "%d pairs dropped due to missing uniref entries\n", mapper->qtNoUnirefMapCnt);
+if (mapper->noUnirefMapCnt)
+    verbose(1, "%d missing uniref entries\n", mapper->noUnirefMapCnt);
+if (mapper->qtMapCnt > 0)
+    verbose(1, "%d pairs dropped due to no swissprot to known genes mapping\n", mapper->qtMapCnt);
+if (mapper->noSpIdMapCnt > 0)
+    verbose(1, "%d swissprot ids not mapped known genes\n", mapper->noSpIdMapCnt);
+if (zeroScoreCnt > 0)
+    verbose(1, "%d entries dropped due to zero score\n", zeroScoreCnt);
+verbose(1, "%d pairs loaded\n", mapper->qtMapCnt);
+if (gNoMapFile != NULL)
+    spMapperPrintNoMapInfo(mapper, gNoMapFile);
+spMapperFree(&mapper);
+freeMem(organism);
 }
 
-void spLoadRankProp(char *database, char *table, char *rankPropFile)
+void spLoadRankProp(char *database, char *table, char *rankPropFile,
+                    char *unirefFile)
 /* spLoadRankProp - load a rankProp table */
 {
 char query[1024];
 struct sqlConnection *conn = sqlConnect(database);
-
-gSpKgMap = spKgMapNew(conn);
+FILE *tabFh = hgCreateTabFile(".", table);
 
 if (gLoad)
     {
@@ -173,7 +150,15 @@ if (gLoad)
     else
         sqlRemakeTable(conn, table, query);
     }
-loadRankProp(conn, table, rankPropFile);
+processRankProp(conn, rankPropFile, unirefFile, tabFh);
+
+if (gLoad)
+    hgLoadTabFileOpts(conn, ".", table, SQL_TAB_FILE_ON_SERVER, &tabFh);
+else
+    carefulClose(&tabFh);
+if (!gKeep)
+    hgRemoveTabFile(".", table);
+
 sqlDisconnect(&conn);
 }
 
@@ -186,9 +171,9 @@ if (argc != 4)
 gAppend = optionExists("append");
 gKeep = optionExists("keep");
 gLoad = !optionExists("noLoad");
-gNoKgIdFile = optionVal("noKgIdFile", NULL);
+gNoMapFile = optionVal("noMapFile", NULL);
 if (!gLoad)
     gKeep = TRUE;
-spLoadRankProp(argv[1], argv[2], argv[3]);
+spLoadRankProp(argv[1], argv[2], argv[3], optionVal("unirefFile", NULL));
 return 0;
 }

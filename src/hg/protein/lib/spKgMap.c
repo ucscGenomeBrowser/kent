@@ -3,42 +3,107 @@
 #include "spKgMap.h"
 #include "jksql.h"
 #include "kgXref.h"
+#include "kgProtAlias.h"
 #include "localmem.h"
 #include "hash.h"
 #include "linefile.h"
 
 struct spKgMap
-/* map of  swissprot accs to kg ids */
+/* map of swissprot accs to kg ids */
 {
     struct hash *spHash;  /* hash to slName list, or to NULL if no mapping */
 };
 
-
-struct spKgMap *spKgMapNew(struct sqlConnection *conn)
-/* load data from from kgXRef table to map from swissprot accs to
- * known gene ids. */
+static void spKgMapAdd(struct spKgMap *spKgMap, char *spAcc, char *kgId)
+/* add an entry to the map, if it doesn't already exist. */
 {
-struct spKgMap *spKgMap;
+struct hashEl *spHel = hashStore(spKgMap->spHash, spAcc);
+
+if ((spHel->val == NULL) || !slNameInList(spHel->val, kgId))
+    {
+    struct slName *kgIdSln = lmSlName(spKgMap->spHash->lm, kgId);
+    slAddHead((struct slName**)&spHel->val, kgIdSln);
+    }
+}
+
+static void loadKgXRef(struct spKgMap *spKgMap,
+                       struct sqlConnection *conn)
+/* load kgXRef data into the table */
+{
 char query[1024];
 struct kgXref kgXref;
 struct sqlResult *sr;
-struct hashEl *hel;
-struct slName *kgId;
 char **row;
-
-AllocVar(spKgMap);
-spKgMap->spHash = hashNew(21);
 
 safef(query, sizeof(query), "SELECT * from kgXref");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     kgXrefStaticLoad(row, &kgXref);
-    hel = hashStore(spKgMap->spHash, kgXref.spID);
-    kgId = lmSlName(spKgMap->spHash->lm, kgXref.kgID);
-    slAddHead((struct slName**)&hel->val, kgId);
+    spKgMapAdd(spKgMap, kgXref.spID, kgXref.kgID);
     }
 sqlFreeResult(&sr);
+}
+
+static void loadKgProtAlias(struct spKgMap *spKgMap,
+                            struct sqlConnection *conn)
+/* load entries from kgProtAlias that appear to be for other 
+ * swissprot.  Just looks for aliases starting with O,P, or Q.
+ * followed by a number. */
+{
+char query[1024];
+struct kgProtAlias kgPA;
+struct sqlResult *sr;
+char **row;
+
+safef(query, sizeof(query), "SELECT * from kgProtAlias");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    kgProtAliasStaticLoad(row, &kgPA);
+    if ((strlen(kgPA.alias) > 2)
+        && ((kgPA.alias[0] == 'O') || (kgPA.alias[0] == 'P') || (kgPA.alias[0] ==  'Q'))
+        && isdigit(kgPA.alias[1]))
+        spKgMapAdd(spKgMap, kgPA.alias, kgPA.kgID);
+    }
+sqlFreeResult(&sr);
+}
+
+static void addSpSecondaryAcc(struct spKgMap *spKgMap, char *spAcc, char *spAcc2)
+/* add a secondary accession to the map */
+{
+struct slName *kgId = spKgMapGet(spKgMap, spAcc);
+if (kgId != NULL)
+    spKgMapAdd(spKgMap, spAcc2, kgId->name);
+}
+
+static void loadSpSecondaryAcc(struct spKgMap *spKgMap)
+/* Add secondary accessions from swissProt database, link */
+{
+struct sqlConnection *conn = sqlConnect("swissProt");
+char query[1024];
+struct sqlResult *sr;
+char **row;
+
+safef(query, sizeof(query), "SELECT acc,val FROM otherAcc");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    addSpSecondaryAcc(spKgMap, row[0], row[1]);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+}
+
+struct spKgMap *spKgMapNew(struct sqlConnection *conn)
+/* load data from from kgXRef and kgProtAlias tables to map from swissprot
+ * accs to known gene ids. */
+{
+struct spKgMap *spKgMap;
+
+AllocVar(spKgMap);
+spKgMap->spHash = hashNew(24);
+loadKgXRef(spKgMap, conn);
+loadKgProtAlias(spKgMap, conn);
+loadSpSecondaryAcc(spKgMap);
 return spKgMap;
 }
 
@@ -54,43 +119,10 @@ if (spKgMap != NULL)
     }
 }
 
-struct slName *spKgMapGet(struct spKgMap *spKgMap, char *spId)
+struct slName *spKgMapGet(struct spKgMap *spKgMap, char *spAcc)
 /* Get the list of known gene ids for a swissprot acc.  If not found NULL is
- * returned and an entry is made in the table that can be used to get the
- * count of missing mappings. */
+ * returned. */
 {
-/* this will add an entry with a NULL kgId if not found */
-struct hashEl *hel = hashStore(spKgMap->spHash, spId);
-return hel->val;
-}
-
-int spKgMapCountMissing(struct spKgMap *spKgMap)
-/* count the number swissprot accs with no corresponding known gene */
-{
-int missing = 0;
-struct hashCookie cookie = hashFirst(spKgMap->spHash);
-struct hashEl *hel;
-
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    if (hel->val == NULL)
-        missing++;
-    }
-return missing;
-}
-
-void spKgMapListMissing(struct spKgMap *spKgMap, char *file)
-/* output the swissprot accs with no corresponding known gene */
-{
-FILE *fh = mustOpen(file, "w");
-struct hashCookie cookie = hashFirst(spKgMap->spHash);
-struct hashEl *hel;
-
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    if (hel->val == NULL)
-        fprintf(fh, "%s\n", hel->name);
-    }
-carefulClose(&fh);
+return hashFindVal(spKgMap->spHash, spAcc);
 }
 

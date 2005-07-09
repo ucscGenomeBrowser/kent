@@ -1,9 +1,10 @@
 XINC = -I$(MYSQLINC)
 include ../../../inc/common.mk
+HG_WARN = ${HG_WARN_ERR}
 
 L = -lm $(MYSQLLIBS)
 
-O = pbUtil.o doStamps.o doTracks.o domains.o spKgMap.o doSam.o
+O = pbUtil.o doStamps.o doTracks.o domains.o spKgMap.o doSam.o uniref.o unirefTbl.o spMapper.o
 
 
 ../../../lib/$(MACHTYPE)/jkpbap.a: $(O) 

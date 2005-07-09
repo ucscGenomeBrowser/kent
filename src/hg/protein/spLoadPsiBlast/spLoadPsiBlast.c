@@ -1,11 +1,13 @@
 /* spLoadPsiBlast - load table of swissprot all-against-all PSI-BLAST data */
 #include "common.h"
 #include "options.h"
-#include "spKgMap.h"
+#include "spMapper.h"
+#include "localmem.h"
 #include "jksql.h"
 #include "hash.h"
 #include "linefile.h"
 #include "hgRelate.h"
+#include "hdb.h"
 #include "verbose.h"
 
 /*
@@ -13,25 +15,23 @@
  * is not used due to a different in-memory representation.
  */
 
-static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.2 2005/01/08 03:25:29 markd Exp $";
+static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.3 2005/07/09 05:18:56 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"append", OPTION_BOOLEAN},
     {"keep", OPTION_BOOLEAN},
     {"noLoad", OPTION_BOOLEAN},
-    {"noKgIdFile", OPTION_STRING},
+    {"noMapFile", OPTION_STRING},
+    {"unirefFile", OPTION_STRING},
     {NULL, 0}
 };
 
 boolean gAppend = FALSE;  /* append to table? */
 boolean gKeep = FALSE;    /* keep tab file */
 boolean gLoad = TRUE;     /* load databases */
-boolean gNoKdMap = FALSE; /* don't map to kg ids */
 float gMaxEval = 10.0;    /* max e-value to save */
-char *gNoKgIdFile = NULL; /* output dropped sp ids to this file */
-
-struct spKgMap *gSpKgMap = NULL;  /* has of swissprot id to kg id. */
+char *gNoMapFile = NULL; /* output dropped sp ids to this file */
 
 void usage()
 /* Explain usage and exit. */
@@ -49,8 +49,9 @@ errAbort(
   "  -append - append to the table instead of recreating it\n"
   "  -keep - keep tab file used to load database\n"
   "  -noLoad - don't load database, implies -keep\n"
-  "  -noKgIdFile=file - write list of swissprots dropped because a known gene\n"
-  "   id was not found.\n"
+  "  -noMapFile=file - write list of swissprots or uniref ids that couldn't\n"
+  "   be mapped.  First column is id, second column is R if it wasn't found\n"
+  "   in uniref, or K if it couldn't be associated with a known gene\n"
   "  -maxEval=10.0 - only keep pairs with e-values <= max \n"
   "  -verbose=n - n >=2 lists dropped entries\n"
   "\n"
@@ -89,7 +90,7 @@ struct kgEntry
 {
     struct kgEntry *next;
     char *id;                    /* kd id, memory not owned by this struct */
-    struct pairEval *pairEval;  /* containing object shared e-value */
+    struct pairEval *pairEval;   /* containing object shared e-value */
 };
 
 struct pairEval
@@ -155,7 +156,7 @@ struct hashEl *targetHel = hashStore(gPairEvalHash, targetId);
 struct pairEval *pairEval = pairEvalFind(queryHel, targetHel);
 if (pairEval != NULL)
     {
-    if (pairEval->eValue < eValue)
+    if (eValue < pairEval->eValue)
         pairEval->eValue = eValue;
     }
 else
@@ -208,47 +209,68 @@ if (nCols < 3)
 return row[2];  /* memory is in lineFile buffer */
 }
 
-void processQueryHit(struct lineFile* inLf, struct slName *queryKgIds,
+void processQueryHit(struct lineFile* inLf, struct spMapper *mapper, char *querySpId,
                      char *targetSpId, float eValue)
 /* Process a query hit, save in table if it can be mapped to a known gene id */
 {
-struct slName *targetKgIds = spKgMapGet(gSpKgMap, targetSpId);
-struct slName *tKgId, *qKgId;
-
-for (qKgId = queryKgIds; qKgId != NULL; qKgId = qKgId->next)
+struct spMapperPairs *kgPairs = spMapperMapPair(mapper, querySpId, targetSpId);
+struct spMapperPairs *pairs;
+struct spMapperId *tId;
+    
+for (pairs = kgPairs; pairs != NULL; pairs = pairs->next)
     {
-    for (tKgId = targetKgIds; tKgId != NULL; tKgId = tKgId->next)
-        pairEvalSave(qKgId->name, tKgId->name, eValue);
+    for (tId = pairs->tIds; tId != NULL; tId = tId->next)
+        {
+        pairEvalSave(pairs->qId, tId->id, eValue);
+        }
     }
 }
 
-boolean readQuery(struct lineFile* inLf)
-/* Read a query and target hits */
+boolean processQuery(struct lineFile* inLf, struct spMapper *mapper, int *maxEvalCntPtr)
+/* Read and process a query and target hits */
 {
 char querySpId[MAX_QUERY_ID], *targetSpId;
-struct slName *queryKgIds;
 float eValue;
 
 if (!readQueryHeader(inLf, querySpId))
     return FALSE; /* eof */
-queryKgIds = spKgMapGet(gSpKgMap, querySpId);
-
 while ((targetSpId = readHit(inLf, &eValue)) != NULL)
     {
-    if ((queryKgIds != NULL) && (eValue <= gMaxEval))
-        processQueryHit(inLf, queryKgIds, targetSpId, eValue);
+    if (eValue <= gMaxEval)
+        processQueryHit(inLf, mapper, querySpId, targetSpId, eValue);
+    else
+        (*maxEvalCntPtr)++;
     }
 return TRUE;
 }
 
-void readBlastFile(char *blastFile)
+void processBlastFile(struct sqlConnection *conn, char *blastFile, char *unirefFile)
 /* read the reformat psl-blast results */
 {
+char *organism = hScientificName(sqlGetDatabase(conn));
 struct lineFile* inLf = lineFileOpen(blastFile, TRUE);
+struct spMapper *mapper = spMapperNew(conn, unirefFile, organism);
+int maxEvalCnt = 0;
 
-while (readQuery(inLf))
+while (processQuery(inLf, mapper, &maxEvalCnt))
     continue;
 lineFileClose(&inLf);
+
+if (mapper->qtNoUnirefMapCnt > 0)
+    verbose(1, "%d pairs dropped due to missing uniref entries\n", mapper->qtNoUnirefMapCnt);
+if (mapper->noUnirefMapCnt)
+    verbose(1, "%d missing uniref entries\n", mapper->noUnirefMapCnt);
+if (mapper->qtMapCnt > 0)
+    verbose(1, "%d pairs dropped due to no swissprot to known genes mapping\n", mapper->qtMapCnt);
+if (mapper->noSpIdMapCnt > 0)
+    verbose(1, "%d swissprot ids not mapped known genes\n", mapper->noSpIdMapCnt);
+if (maxEvalCnt > 0)
+    verbose(1, "%d entries dropped due to exceeding max E-value\n", maxEvalCnt);
+verbose(1, "%d pairs loaded\n", mapper->qtMapCnt);
+if (gNoMapFile != NULL)
+    spMapperPrintNoMapInfo(mapper, gNoMapFile);
+spMapperFree(&mapper);
+freeMem(organism);
 }
 
 void writePairs(FILE *tabFh)
@@ -265,22 +287,14 @@ for (pairEval = gPairEvalList; pairEval != NULL; pairEval = pairEval->next)
     }
 }
 
-void spLoadPsiBlast(char *database, char *table, char *blastFile)
+void spLoadPsiBlast(char *database, char *table, char *blastFile, char *unirefFile)
 /* spLoadPsiBlast - load table of swissprot all-against-all PSI-BLAST data */
 {
 struct sqlConnection *conn = sqlConnect(database);
-int numMissing;
 FILE *tabFh;
-gPairEvalHash = hashNew(21);
+gPairEvalHash = hashNew(22);
 
-gSpKgMap = spKgMapNew(conn);
-readBlastFile(blastFile);
-numMissing = spKgMapCountMissing(gSpKgMap);
-if (numMissing > 0)
-    verbose(1, "%d proteins could not be mapped to known genes\n", numMissing);
-if (gNoKgIdFile != NULL)
-    spKgMapListMissing(gSpKgMap, gNoKgIdFile);
-
+processBlastFile(conn, blastFile, unirefFile);
 
 tabFh = hgCreateTabFile(".", table);
 writePairs(tabFh);
@@ -309,10 +323,10 @@ if (argc != 4)
 gAppend = optionExists("append");
 gKeep = optionExists("keep");
 gLoad = !optionExists("noLoad");
-gNoKgIdFile = optionVal("noKgIdFile", NULL);
+gNoMapFile = optionVal("noMapFile", NULL);
 gMaxEval = optionFloat("maxEval", gMaxEval);
 if (!gLoad)
     gKeep = TRUE;
-spLoadPsiBlast(argv[1], argv[2], argv[3]);
+spLoadPsiBlast(argv[1], argv[2], argv[3], optionVal("unirefFile", NULL));
 return 0;
 }

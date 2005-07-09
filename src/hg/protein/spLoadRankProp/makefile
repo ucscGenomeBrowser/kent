@@ -1,5 +1,5 @@
 include ../../../inc/common.mk
-HG_WARN=-Wall
+HG_WARN = ${HG_WARN_ERR}
 
 L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
