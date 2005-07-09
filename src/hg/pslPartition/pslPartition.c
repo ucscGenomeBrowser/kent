@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslPartition.c,v 1.3 2005/07/09 19:59:30 markd Exp $";
+static char const rcsid[] = "$Id: pslPartition.c,v 1.4 2005/07/09 20:02:19 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -39,7 +39,7 @@ errAbort("Error: %s\n"
   "   files that are created while ensuring that there are no overlaps\n"
   "   between any two PSL files.  A value of 0 creates a PSL file per set of\n"
   "   overlapping PSLs.\n"
-  "\n");
+  "\n", msg);
 }
 
 struct pslInput
