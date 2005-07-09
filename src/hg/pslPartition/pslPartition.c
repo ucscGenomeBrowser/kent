@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslPartition.c,v 1.2 2005/07/09 19:58:19 markd Exp $";
+static char const rcsid[] = "$Id: pslPartition.c,v 1.3 2005/07/09 19:59:30 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -37,7 +37,7 @@ errAbort("Error: %s\n"
   "  -partSize=20000 - will combine non-overlapping partitions, while attempting\n"
   "   to keep them under this number of PSLs.  This reduces the number of\n"
   "   files that are created while ensuring that there are no overlaps\n"
-  "   between any two PSL files.  A value of 0 creates a psl per set of\n"
+  "   between any two PSL files.  A value of 0 creates a PSL file per set of\n"
   "   overlapping PSLs.\n"
   "\n");
 }
