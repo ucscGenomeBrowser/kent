@@ -9,7 +9,7 @@ A = kgXref
 O = $A.o
 
 my: compile
-	mv $A /cluster/home/$(USER)/bin/$(MACHTYPE)
+	mv $A ${BINDIR}/$(MACHTYPE)
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 

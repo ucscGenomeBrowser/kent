@@ -10,7 +10,7 @@ A = kgUniq
 O = $A.o
 
 my: compile
-	mv $A /cluster/home/$(USER)/bin/i386/$A
+	mv $A ${BINDIR}/$A
 
 mgsc: compile
 	mv $A /usr/local/apache/cgi-bin-mgsc/$A

@@ -10,7 +10,7 @@ A = kgAliasP
 O = $A.o
 
 my: compile
-	mv $A /cluster/home/$(USER)/bin/$(MACHTYPE)
+	mv $A ${BINDIR}
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 

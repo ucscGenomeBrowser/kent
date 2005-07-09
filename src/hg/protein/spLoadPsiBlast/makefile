@@ -7,7 +7,7 @@ MYLIBS = $(MYLIBDIR)/jkpbap.a $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
 O = spLoadPsiBlast.o
 
-$(HOME)/bin/$(MACHTYPE)/spLoadPsiBlast: $O $(MYLIBS)
+${BINDIR}/spLoadPsiBlast: $O $(MYLIBS)
 	${CC} ${CFLAGS} -o $@ $O $(MYLIBS) $L
 
 clean::

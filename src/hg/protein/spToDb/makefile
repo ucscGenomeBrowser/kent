@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = spToDb.o
 
 spToDb: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/spToDb $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/spToDb${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/spToDb $O $(MYLIBS) $L
+#	${STRIP} ${BINDIR}/spToDb${EXE}
 
 test: test1 
 %:	input/%

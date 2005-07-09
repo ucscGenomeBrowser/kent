@@ -9,8 +9,8 @@ O = $A.o
 
 $A: $O ${MYLIBS}
 	${CC} ${COPT} ${HG_WARN} ${HG_DEFS} \
-		-o ${HOME}/bin/${MACHTYPE}/$A $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/$A${EXE}
+		-o ${BINDIR}/$A $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/$A${EXE}
 
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}

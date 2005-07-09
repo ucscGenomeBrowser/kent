@@ -10,7 +10,7 @@ A = rmKGPepMrna
 O = $A.o
 
 my: compile
-	mv $A /cluster/home/$(USER)/bin/$(MACHTYPE)
+	mv $A ${BINDIR}
 
 mgsc: compile
 	mv $A /usr/local/apache/cgi-bin-mgsc/$A

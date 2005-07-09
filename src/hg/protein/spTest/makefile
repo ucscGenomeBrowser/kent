@@ -7,8 +7,8 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = spTest.o
 
 spTest: $O ${MYLIBS}
-	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/spTest $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/spTest${EXE}
+	${CC} ${COPT} -o ${BINDIR}/spTest $O ${MYLIBS} $L
+	${STRIP} ${BINDIR}/spTest${EXE}
 
 test: 
 	${MKDIR} output

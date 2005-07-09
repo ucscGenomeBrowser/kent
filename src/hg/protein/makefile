@@ -35,6 +35,8 @@ DIRS = \
 	spOrganism \
 	spTest \
 	spToDb \
+	spLoadPsiBlast \
+	spLoadRankProp \
 	spXref3 \
 	spm3 \
 	spm6 \
