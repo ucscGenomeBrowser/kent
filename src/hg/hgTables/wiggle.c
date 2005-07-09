@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.53 2005/07/08 17:41:12 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.54 2005/07/09 23:28:29 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -317,7 +317,7 @@ static void intersectDataVector(char *table, struct dataVector *dataVector1,
  * performed on each input (other selected subtracks must be the same type 
  * as table).  
  * Otherwise, handle intersection here. */
-if (anyIntersection() && !startsWith("wig ", curTrack->type))
+if (anyIntersection() && !isWiggle(database, table))
     {
     char *table2 = cartString(cart, hgtaIntersectTrack);
     if (table2 && differentWord(table2, table))
@@ -364,8 +364,10 @@ static struct dataVector *mergedWigDataVector(char *table,
 /* Perform the specified subtrack merge wiggle-operation on table and 
  * all other selected subtracks and intersect if necessary. */
 {
-struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
+struct trackDb *tdb1 = hTrackDbForTrack(table);
+struct trackTable *tt1 = trackTableNew(tdb1, table, conn);
 struct dataVector *dataVector1 = dataVectorFetchOneRegion(tt1, region, conn);
+struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb1);
 struct trackDb *sTdb = NULL;
 int numSubtracks = 1;
 char *op = cartString(cart, hgtaSubtrackMergeWigOp);
@@ -373,16 +375,20 @@ boolean requireAll = cartBoolean(cart, hgtaSubtrackMergeRequireAll);
 boolean useMinScore = cartBoolean(cart, hgtaSubtrackMergeUseMinScore);
 float minScore = atof(cartString(cart, hgtaSubtrackMergeMinScore));
 
+if (cTdb == NULL)
+    errAbort("mergedWigDataVector: could not find parent/composite trackDb "
+	     "entry for subtrack %s", table);
+
 if (dataVector1 == NULL)
     {
     return NULL;
     }
 
-for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+for (sTdb = cTdb->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
     {
     if (isSubtrackMerged(sTdb->tableName) &&
-	! sameString(curTable, sTdb->tableName) &&
-	sameString(sTdb->type, curTrack->type))
+	! sameString(tdb1->tableName, sTdb->tableName) &&
+	sameString(tdb1->type, sTdb->type))
 	{
 	struct trackTable *tt2 = trackTableNew(sTdb, sTdb->tableName, conn);
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
@@ -446,6 +452,34 @@ dataVectorFree(&dv);
 return resultCount;
 }
 
+static struct trackDb *trackDbWithWiggleSettings(char *table)
+/* Get trackDb for a table in the database -- or if it has a parent/composite 
+ * track, then return that because it contains the wiggle settings. */
+{
+if (curTrack == NULL)
+    errAbort("curTrack is NULL but we need wiggle settings from it.");
+if (sameString(table, curTrack->tableName))
+    return curTrack;
+else if (curTrack->subtracks)
+    {
+    struct trackDb *sTdb = NULL;
+    for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+	{
+	if (sameString(table, sTdb->tableName))
+	    return curTrack;
+	}
+    }
+/* OK, table is not curTrack nor any of its subtracks -- look it up (and its 
+ * parent if there is one): */
+{
+struct trackDb *tdb = hTrackDbForTrack(table);
+struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+if (cTdb != NULL)
+    return cTdb;
+return tdb;
+}
+}
+
 static int wigOutRegion(char *table, struct sqlConnection *conn,
 	struct region *region, int maxOut, enum wigOutputType wigOutType,
 	struct wigAsciiData **data, int spanConstraint)
@@ -496,6 +530,7 @@ if (isCustom)
     }
 else
     {
+    struct trackDb *tdb = trackDbWithWiggleSettings(table);
     boolean hasBin;
 
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
@@ -505,7 +540,7 @@ else
 	    {
 	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
-		region->start, region->end, cart, curTrack);
+		region->start, region->end, cart, tdb);
 	    wds->setSpanConstraint(wds, span);
 	    }
 	else if (spanConstraint)
@@ -551,18 +586,18 @@ wiggleDataStreamFree(&wds);
 return linesOut;
 }	/*	static int wigOutRegion()	*/
 
-static int wigMaxOutput(char *db, char *table)
-/*	return maxOut value	*/
+static int wigMaxOutput()
+/*	return maxOut value (cart variable defined on curTable)	*/
 {
 char *maxOutputStr = NULL;
 char *name;
 int maxOut;
 char *maxOutput = NULL;
 
-if (isCustomTrack(table))
+if (isCustomTrack(curTable))
     name = filterFieldVarName("ct", curTable, "_", filterMaxOutputVar);
 else
-    name = filterFieldVarName(db, curTable, "_", filterMaxOutputVar);
+    name = filterFieldVarName(database, curTable, "_", filterMaxOutputVar);
 
 maxOutputStr = cartOptionalString(cart, name);
 /*	Don't modify(stripChar) the values sitting in the cart hash	*/
@@ -585,7 +620,7 @@ struct region *regionList = getRegions(), *region;
 int maxOut = 0, outCount, curOut = 0;
 char *shortLabel = table, *longLabel = table;
 
-maxOut = wigMaxOutput(database, curTable);
+maxOut = wigMaxOutput();
 
 textOpen();
 
@@ -643,7 +678,8 @@ if (anySubtrackMerge(database, table))
     dv = mergedWigDataVector(table, conn, region);
 else
     {
-    struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
+    struct trackDb *tdb = hTrackDbForTrack(table);
+    struct trackTable *tt1 = trackTableNew(tdb, table, conn);
     dv = dataVectorFetchOneRegion(tt1, region, conn);
     intersectDataVector(table, dv, region, conn);
     }
@@ -661,7 +697,8 @@ if (anySubtrackMerge(database, table))
     dv = mergedWigDataVector(table, conn, region);
 else
     {
-    struct trackTable *tt1 = trackTableNew(curTrack, table, conn);
+    struct trackDb *tdb = hTrackDbForTrack(table);
+    struct trackTable *tt1 = trackTableNew(tdb, table, conn);
     dv = dataVectorFetchOneRegion(tt1, region, conn);
     }
 return dv;
@@ -689,7 +726,7 @@ if ((tdb != NULL) && (tdb->type != NULL))
     char *words[8];
     int wordCount;
     wordCount = chopLine(typeLine, words);
-    wigFetchMinMaxY(curTrack, min, max, &tDbMin, &tDbMax, wordCount, words);
+    wigFetchMinMaxY(tdb, min, max, &tDbMin, &tDbMax, wordCount, words);
     if (tDbMin < *min)
 	*min = tDbMin;
     if (tDbMax > *max)
@@ -729,13 +766,7 @@ if (curTrack && sameString(curTrack->tableName, table))
 else
     {
     struct trackDb *tdb = hTrackDbForTrack(table);
-    if (tdb)
-	{
-	char *subtrackSetting = trackDbSetting(tdb, "subTrack");
-	if (isEmpty(tdb->type) && isNotEmpty(subtrackSetting))
-	    tdb = hTrackDbForTrack(nextWord(&subtrackSetting));
-	return (tdb && startsWith("bedGraph", tdb->type));
-	}
+    return (tdb && startsWith("bedGraph", tdb->type));
     }
 return FALSE;
 }
@@ -770,7 +801,7 @@ WIG_INIT;
 if (hasConstraint)
     freeMem(dataConstraint);	/* been cloned into wds */
 
-maxOut = wigMaxOutput(database, curTable);
+maxOut = wigMaxOutput();
 
 wds->setMaxOutput(wds, maxOut);
 
@@ -787,6 +818,7 @@ if (isCustom)
     }
 else
     {
+    struct trackDb *tdb = trackDbWithWiggleSettings(table);
     boolean hasBin;
 
     if (conn == NULL)
@@ -798,7 +830,7 @@ else
 
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	span = minSpan(conn, splitTableOrFileName, region->chrom,
-	    region->start, region->end, cart, curTrack);
+	    region->start, region->end, cart, tdb);
 	wds->setSpanConstraint(wds, span);
 
 	valuesMatched = getWigglePossibleIntersection(wds, region, database,
@@ -832,7 +864,7 @@ int maxOut = 0;
 struct wigAsciiData *data = NULL;
 int outCount;
 
-maxOut = wigMaxOutput(database, curTable);
+maxOut = wigMaxOutput();
 outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data, 0);
 
 return data;
@@ -961,7 +993,7 @@ for (region = regionList; region != NULL; region = region->next)
 	if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	    {
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
-		region->start, region->end, cart, curTrack);
+		region->start, region->end, cart, track);
 	    wds->setSpanConstraint(wds, span);
 	    valuesMatched = getWigglePossibleIntersection(wds, region,
 		database, table2, &intersectBedList, splitTableOrFileName,
