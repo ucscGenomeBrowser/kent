@@ -100,6 +100,17 @@ else
     }
 }
 
+
+char *blankOutUnknown(char *text)
+/* Return empty string in place of uninformative text. */
+{
+if (sameWord("Not Applicable", text)
+   || sameWord("Not Specified", text)
+   || sameWord("Other - see notes", text))
+   text = "";
+return text;
+}
+
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
 /* Create a .ra and a .tab file for given reference. */
 {
@@ -149,9 +160,7 @@ for (el = list; el != NULL; el = el->next)
 	char c;
 	fprintf(ra, " ");
 	while ((c = *initials++) != 0)
-	    {
 	    fprintf(ra, "%c.", c);
-	    }
 	}
     fprintf(ra, ",");
     }
@@ -181,12 +190,16 @@ dyStringAppend(query,
 	       "GXD_Assay._ProbePrep_key as probePrepKey,"
 	       "GXD_Assay._AntibodyPrep_key as antibodyPrepKey,"
 	       "GXD_Assay._ReporterGene_key as reporterGeneKey,"
+	       "GXD_FixationMethod.fixation as fixation,"
+	       "GXD_EmbeddingMethod.embeddingMethod as embedding,"
 	       "GXD_Assay._Assay_key as assayKey\n"
 	"from MRK_Marker,"
 	     "GXD_Assay,"
 	     "GXD_Specimen,"
 	     "GXD_InSituResult,"
 	     "GXD_InSituResultImage,"
+	     "GXD_FixationMethod,"
+	     "GXD_EmbeddingMethod,"
 	     "IMG_ImagePane,"
 	     "IMG_Image,"
 	     "ACC_Accession\n"
@@ -195,6 +208,8 @@ dyStringAppend(query,
 	  "and GXD_Specimen._Specimen_key = GXD_InSituResult._Specimen_key "
 	  "and GXD_InSituResult._Result_key = GXD_InSituResultImage._Result_key "
 	  "and GXD_InSituResultImage._ImagePane_key = IMG_ImagePane._ImagePane_key "
+	  "and GXD_FixationMethod._Fixation_key = GXD_Specimen._Fixation_key "
+	  "and GXD_EmbeddingMethod._Embedding_key = GXD_Specimen._Embedding_key "
 	  "and IMG_ImagePane._Image_key = IMG_Image._Image_key "
 	  "and IMG_Image._Image_key = ACC_Accession._Object_key "
 	  "and ACC_Accession.prefixPart = 'PIX:' "
@@ -213,8 +228,12 @@ fprintf(tab, "ageMax\t");
 fprintf(tab, "paneLabel\t");
 fprintf(tab, "fileName\t");
 fprintf(tab, "submitId\t");
+fprintf(tab, "fPrimer\t");
+fprintf(tab, "rPrimer\t");
 fprintf(tab, "abName\t");
-fprintf(tab, "abTaxon\n");
+fprintf(tab, "abTaxon\t");
+fprintf(tab, "fixation\t");
+fprintf(tab, "embedding\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -228,16 +247,18 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *probePrepKey = row[8];
     char *antibodyPrepKey = row[9];
     char *reporterGeneKey = row[10];
-    char *assayKey = row[11];
+    char *fixation = row[11];
+    char *embedding = row[12];
+    char *assayKey = row[13];
     double calcAge = -1;
     char *probeColor = "";
     char *abName = NULL;
+    char *rPrimer = NULL, *fPrimer = NULL;
     char abTaxon[32];
 
     if (age == NULL)
         continue;
 
-    uglyf("assay %s, gene %s, sex %s, age %s, probePrepKey %s, antibodyPrepKey %s, reporterGeneKey %s\n", assayKey, gene, sex, age, probePrepKey, antibodyPrepKey, reporterGeneKey);
     /* Massage sex */
         {
 	if (sameString(sex, "Male"))
@@ -416,6 +437,41 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (abName == NULL)
         abName = cloneString("");
 
+    /* Get rPrimer, lPrimer */
+    /* Note that this code seems to be correct, but the
+     * Jackson database actually stores the primers very
+     * erratically.  In all the cases I can find for in situs
+     * the primers are actually stored in free text in the PRB_Notes
+     * tabel. At this point I'm going to move on rather than figure out
+     * how to dig it out of there. */
+    if (!sameString(probePrepKey, "0"))
+        {
+	struct sqlResult *sr = NULL;
+	char **row;
+	dyStringClear(query);
+	dyStringPrintf(query,
+	    "select primer1sequence,primer2sequence "
+	    "from PRB_Probe,GXD_ProbePrep "
+	    "where PRB_Probe._Probe_key = GXD_ProbePrep._Probe_key "
+	    "and GXD_ProbePrep._ProbePrep_key = %s"
+	    , probePrepKey);
+	sr = sqlGetResult(conn2, query->string);
+	row = sqlNextRow(sr);
+	if (row != NULL)
+	    {
+	    fPrimer = cloneString(row[0]);
+	    rPrimer = cloneString(row[1]);
+	    }
+	sqlFreeResult(&sr);
+	}
+    if (fPrimer == NULL)
+        fPrimer = cloneString("");
+    if (rPrimer == NULL)
+        rPrimer = cloneString("");
+
+    fixation = blankOutUnknown(fixation);
+    embedding = blankOutUnknown(embedding);
+
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -425,10 +481,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", paneLabel);
     fprintf(tab, "%s.gif\t", fileKey);
     fprintf(tab, "%s\t", imageKey);
+    fprintf(tab, "%s\t", fPrimer);
+    fprintf(tab, "%s\t", rPrimer);
     fprintf(tab, "%s\t", abName);
-    fprintf(tab, "%s\n", abTaxon);
+    fprintf(tab, "%s\t", abTaxon);
+    fprintf(tab, "%s\t", fixation);
+    fprintf(tab, "%s\n", embedding);
     gotAny = TRUE;
     freez(&abName);
+    freez(&rPrimer);
+    freez(&fPrimer);
     }
 sqlFreeResult(&sr);
 
@@ -448,22 +510,20 @@ void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *
  * each submission set.   Returns outDir. */
 {
 struct dyString *query = dyStringNew(0);
-struct slName *spec, *specList = sqlQuickList(conn, "select _Specimen_key from GXD_Specimen");
 struct slName *ref, *refList = sqlQuickList(conn, "select distinct(_Refs_key) from GXD_Assay");
 
 makeDir(outDir);
 uglyf("%d refs\n", slCount(refList));
-uglyf("%d specimens\n", slCount(specList));
 
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", outDir, ref->name);
     submitRefToFiles(conn, conn2, ref->name, path);
-    {static int count; if (++count >= 3000) uglyAbort("All for now");}
+    {static int count; if (++count >= 300) uglyAbort("All for now");}
     }
 
-slNameFreeList(&specList);
+slNameFreeList(&refList);
 }
 
 void vgLoadJax(char *jaxDb, char *visiDb)
