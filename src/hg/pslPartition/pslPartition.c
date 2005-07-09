@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: pslPartition.c,v 1.1 2005/07/05 02:45:01 markd Exp $";
+static char const rcsid[] = "$Id: pslPartition.c,v 1.2 2005/07/09 19:58:19 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -15,8 +15,8 @@ static struct optionSpec optionSpecs[] =
     {"partSize", OPTION_INT},
     {NULL, 0}
 };
-int gOutLevels = 3;
-int gPartSize = 0;
+int gOutLevels = 0;
+int gPartSize = 20000;
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -27,17 +27,18 @@ errAbort("Error: %s\n"
   "   pslPartition [options] pslFile outDir\n"
   "\n"
   "Split psl files into non-overlapping sets for use in cluster jobs,\n"
-  "limiting memory usage, etc. Multiple levels of directories are created\n"
-  "under outDir to prevent problems with huge directories.\n"
-  "The pslFile maybe compressed and will be piped through sort to ordered.\n"
+  "limiting memory usage, etc. Multiple levels of directories can be are\n"
+  "created under outDir to prevent slow access to huge directories.\n"
+  "The pslFile maybe compressed and no ordering is assumed.\n"
   "\n"
   "options:\n"
-  "  -outLevels=3 - number of output subdirectory levels.  0 puts all files\n"
+  "  -outLevels=0 - number of output subdirectory levels.  0 puts all files\n"
   "   directly in outDir, 2, will create files in the form outDir/0/0/00.psl\n"
-  "  -partSize=0 - will combine non-overlapping partitions, while attempting\n"
+  "  -partSize=20000 - will combine non-overlapping partitions, while attempting\n"
   "   to keep them under this number of PSLs.  This reduces the number of\n"
-  "   files that are created and still ensures that there are no overlaps\n"
-  "   between files\n"
+  "   files that are created while ensuring that there are no overlaps\n"
+  "   between any two PSL files.  A value of 0 creates a psl per set of\n"
+  "   overlapping PSLs.\n"
   "\n");
 }
 

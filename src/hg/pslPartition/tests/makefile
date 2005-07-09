@@ -5,20 +5,21 @@ DIFF = diff -u
 
 test: defaultsTest level0Test level1Test partSize3Test partSize10Test
 
+# not really the default any more
 defaultsTest:
-	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS=''
+	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=3 -partSize=0'
 
 level0Test:
-	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=0'
+	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=0 -partSize=0'
 
 level1Test:
-	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=1'
+	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=1 -partSize=0'
 
 partSize3Test:
-	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-partSize=3'
+	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=3 -partSize=3'
 
 partSize10Test:
-	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-partSize=10'
+	${MAKE} runTest ID=$@ IN=mrna1.psl OPTS='-outLevels=3 -partSize=10'
 
 # recursive target to execute a test
 # arguments: ID, IN, OPTS
