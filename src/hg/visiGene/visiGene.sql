@@ -93,6 +93,14 @@ CREATE TABLE journal (
     INDEX(name(8))
 );
 
+#Copyright information
+CREATE TABLE copyright (
+    id int auto_increment not null,	# ID of copyright
+    notice longblob not null,	# Text of copyright notice
+              #Indices
+    PRIMARY KEY(id)
+);
+
 #Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set

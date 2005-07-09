@@ -132,7 +132,7 @@ table allele
     (
     int id;	"ID of allele"
     int gene;	"ID of gene"
-    string name;	"Allele name"
+    string name;	"Allele name, + for wild type"
     )
 
 table genotype
