@@ -134,6 +134,39 @@ lineFileClose(&lf);
 carefulClose(&f);
 }
 
+char *genotypeFromKey(char *genotypeKey, struct sqlConnection *conn)
+/* Return dynamically allocated string describing genotype */
+{
+int key = atoi(genotypeKey);
+char *result = NULL;
+
+if (key > 0)
+    {
+    struct dyString *query = dyStringNew(0);
+    struct dyString *geno = dyStringNew(256);
+    struct sqlResult *sr;
+    char **row;
+
+    dyStringPrintf(query, 
+    	"select MRK_Marker.symbol,ALL_Allele.symbol "
+	"from GXD_AlleleGenotype,MRK_Marker,ALL_Allele "
+	"where GXD_AlleleGenotype._Genotype_key = %s "
+	"and GXD_AlleleGenotype._Marker_key = MRK_Marker._Marker_key "
+	"and GXD_AlleleGenotype._Allele_key = ALL_Allele._Allele_key "
+	, genotypeKey);
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	dyStringPrintf(geno, "%s:%s,", row[0], row[1]);
+    sqlFreeResult(&sr);
+    dyStringFree(&query);
+    result = dyStringCannibalize(&geno);
+    if (result[0] != 0) uglyf("genotype %s\n", result);
+    }
+else
+    result = cloneString("");
+return result;
+}
+
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
 /* Create a .ra and a .tab file for given reference. */
 {
@@ -217,7 +250,8 @@ dyStringAppend(query,
 	       "GXD_FixationMethod.fixation as fixation,"
 	       "GXD_EmbeddingMethod.embeddingMethod as embedding,"
 	       "GXD_Assay._Assay_key as assayKey,"
-	       "GXD_Specimen.hybridization as sliceType\n"
+	       "GXD_Specimen.hybridization as sliceType,"
+	       "GXD_Specimen._Genotype_key as genotypeKey\n"
 	"from MRK_Marker,"
 	     "GXD_Assay,"
 	     "GXD_Specimen,"
@@ -260,7 +294,8 @@ fprintf(tab, "abTaxon\t");
 fprintf(tab, "fixation\t");
 fprintf(tab, "embedding\t");
 fprintf(tab, "bodyPart\t");
-fprintf(tab, "sliceType\n");
+fprintf(tab, "sliceType\t");
+fprintf(tab, "genotype\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -278,11 +313,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *embedding = row[12];
     char *assayKey = row[13];
     char *sliceType = row[14];
+    char *genotypeKey = row[15];
     double calcAge = -1;
     char *probeColor = "";
     char *bodyPart = "";
     char *abName = NULL;
     char *rPrimer = NULL, *fPrimer = NULL;
+    char *genotype = NULL;
     char abTaxon[32];
 
     if (age == NULL)
@@ -507,6 +544,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
         sliceType = "";
 
+    genotype = genotypeFromKey(genotypeKey, conn2);
+
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -524,7 +563,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", embedding);
     fprintf(tab, "%s\t", bodyPart);
     fprintf(tab, "%s\n", sliceType);
+    fprintf(tab, "%s\n", genotype);
     gotAny = TRUE;
+    freez(&genotype);
     freez(&abName);
     freez(&rPrimer);
     freez(&fPrimer);
