@@ -5704,6 +5704,14 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
+track encodeRna
+shortLabel ENCODE RNA
+longLabel Known and Predicted RNA Transcription in the ENCODE Regions
+group encodeGenes
+priority 52
+visibility hide
+type bed 6 +
+
 searchTable wgRna
 searchMethod fuzzy
 searchType bed

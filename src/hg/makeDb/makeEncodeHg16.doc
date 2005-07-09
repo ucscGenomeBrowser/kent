@@ -2807,6 +2807,13 @@ done
 
 
 ##########################################################################
+# ENCODE RNA transcription compilation (Matt Weirauch and Todd Lowe)
+# Daryl and Matt Weirauch, July 8, 2005
+
+    cd /cluster/data/encode/ucsc/lowe
+    hgLoadBed -sqlTable=/cluster/home/daryl/kent/src/hg/lib/encodeRna.sql hg16 encodeRna encodeRna.bed -strict
+
+##########################################################################
 # ENCODE HapMap Primate Alleles
 # Daryl, July 1, 2005
 
@@ -3190,3 +3197,5 @@ close (FH);
     #   table: encodeRikenCageMappedTags
     #		Riken CAGE Tags
     #		Riken CAGE Mapped Tags - TEST TRACK ONLY
+
+

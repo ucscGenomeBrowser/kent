@@ -20,7 +20,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     dbDb.o dbSnpRs.o defaultDb.o dnaMotifSql.o dnaProbe.o \
     easyGene.o encodeErge.o encodeErgeHssCellLines.o\
     encodeHapMapAlleleFreq.o encodeIndels.o \
-    encodeRegionInfo.o encodeRegionInfoCustom.o \
+    encodeRegionInfo.o encodeRegionInfoCustom.o encodeRna.o \
     encodeStanfordPromoters.o encodeStanfordPromotersAverage.o \
     ensFace.o ensPhusionBlast.o \
     est3.o estOrientInfo.o \
