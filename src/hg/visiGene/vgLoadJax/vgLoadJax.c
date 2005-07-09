@@ -101,12 +101,18 @@ else
 }
 
 
+boolean isUnknown(char *text)
+/* Return TRUE if it looks like info really isn't in database. */
+{
+return (sameWord("Not Applicable", text)
+   || sameWord("Not Specified", text)
+   || sameWord("Other - see notes", text));
+}
+
 char *blankOutUnknown(char *text)
 /* Return empty string in place of uninformative text. */
 {
-if (sameWord("Not Applicable", text)
-   || sameWord("Not Specified", text)
-   || sameWord("Other - see notes", text))
+if (isUnknown(text))
    text = "";
 return text;
 }
@@ -134,11 +140,12 @@ lineFileClose(&lf);
 carefulClose(&f);
 }
 
-char *genotypeFromKey(char *genotypeKey, struct sqlConnection *conn)
+void genotypeAndStrainFromKey(char *genotypeKey, struct sqlConnection *conn,
+	char **retGenotype, char **retStrain)
 /* Return dynamically allocated string describing genotype */
 {
 int key = atoi(genotypeKey);
-char *result = NULL;
+char *genotype = NULL, *strain = NULL;
 
 if (key > 0)
     {
@@ -147,6 +154,7 @@ if (key > 0)
     struct sqlResult *sr;
     char **row;
 
+    /* Figure out genotype. */
     dyStringPrintf(query, 
     	"select MRK_Marker.symbol,ALL_Allele.symbol "
 	"from GXD_AlleleGenotype,MRK_Marker,ALL_Allele "
@@ -158,13 +166,27 @@ if (key > 0)
     while ((row = sqlNextRow(sr)) != NULL)
 	dyStringPrintf(geno, "%s:%s,", row[0], row[1]);
     sqlFreeResult(&sr);
+    genotype = dyStringCannibalize(&geno);
+
+    /* Figure out strain */
+    dyStringClear(query);
+    dyStringPrintf(query,
+        "select PRB_Strain.strain from GXD_Genotype,PRB_Strain "
+	"where GXD_Genotype._Genotype_key = %s "
+	"and GXD_Genotype._Strain_key = PRB_Strain._Strain_key"
+	, genotypeKey);
+    strain = sqlQuickString(conn, query->string);
+    if (isUnknown(strain))
+        freez(&strain);
+
     dyStringFree(&query);
-    result = dyStringCannibalize(&geno);
-    if (result[0] != 0) uglyf("genotype %s\n", result);
     }
-else
-    result = cloneString("");
-return result;
+if (genotype == NULL)
+    genotype = cloneString("");
+if (strain == NULL)
+    strain = cloneString("");
+*retGenotype = genotype;
+*retStrain = strain;
 }
 
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
@@ -295,7 +317,9 @@ fprintf(tab, "fixation\t");
 fprintf(tab, "embedding\t");
 fprintf(tab, "bodyPart\t");
 fprintf(tab, "sliceType\t");
-fprintf(tab, "genotype\n");
+fprintf(tab, "genotype\t");
+fprintf(tab, "strain\t");
+fprintf(tab, "priority\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -320,6 +344,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *abName = NULL;
     char *rPrimer = NULL, *fPrimer = NULL;
     char *genotype = NULL;
+    char *strain = NULL;
+    char *priority = NULL;
     char abTaxon[32];
 
     if (age == NULL)
@@ -540,11 +566,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* Massage body part and slice type.  We only handle whole mounts. */
     if (sameString(sliceType, "whole mount"))
+	{
 	bodyPart = "whole";
+	priority = "100";
+	}
     else
+	{
         sliceType = "";
+	priority = "1000";
+	}
 
-    genotype = genotypeFromKey(genotypeKey, conn2);
+    genotypeAndStrainFromKey(genotypeKey, conn2, &genotype, &strain);
 
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
@@ -562,8 +594,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", fixation);
     fprintf(tab, "%s\t", embedding);
     fprintf(tab, "%s\t", bodyPart);
-    fprintf(tab, "%s\n", sliceType);
-    fprintf(tab, "%s\n", genotype);
+    fprintf(tab, "%s\t", sliceType);
+    fprintf(tab, "%s\t", genotype);
+    fprintf(tab, "%s\t", strain);
+    fprintf(tab, "%s\n", priority);
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);
