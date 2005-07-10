@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.10 2005/06/05 14:05:44 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.11 2005/07/10 00:50:44 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1180,7 +1180,8 @@ errAbort("gbProcess - Convert GenBank flat format file to an fa file containing\
          "to use or the word null if you want no filtering."
          "options:\n"
          "     -filterFile=file - filter file\n"
-         "     -filter=filter - filter expressions, lines seperated by semi-colons"
+         "     -filter=filter - filter expressions, lines seperated by semi-colons\n"
+         "     -inclXMs - don't drop XM entries\n"
          "     -byAccPrefix=n - separate into files by the first n,\n"
          "      case-insensitive letters of the accession\n"
          "     -gbidx=name - Make an index file byte this name\n"
