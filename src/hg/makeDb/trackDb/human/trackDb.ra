@@ -513,33 +513,33 @@ shortLabel HapMap LD
 longLabel HapMap Linkage Disequilibrium - Phase I
 group varRep
 priority 144.49
-visibility dense
+visibility hide
 canPack off
 type bed 4 +
 
-track hapmapLdCeu
-subTrack hapmapLd
-shortLabel LD CEU
-longLabel HapMap Linkage Disequilibrium for the CEPH population (30 trios)
-priority 1
+    track hapmapLdCeu
+    subTrack hapmapLd
+    shortLabel LD CEU
+    longLabel HapMap Linkage Disequilibrium for the CEPH population (30 trios)
+    priority 1
 
-track hapmapLdYri
-subTrack hapmapLd off
-shortLabel LD YRI
-longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
-priority 2
+    track hapmapLdYri
+    subTrack hapmapLd off
+    shortLabel LD YRI
+    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
+    priority 2
 
-track hapmapLdJpt
-subTrack hapmapLd off
-shortLabel LD JPT
-longLabel HapMap Linkage Disequilibrium for the Japanese population (45 unrelated)
-priority 3
+    track hapmapLdJpt
+    subTrack hapmapLd off
+    shortLabel LD JPT
+    longLabel HapMap Linkage Disequilibrium for the Japanese population (45 unrelated)
+    priority 3
 
-track hapmapLdHcb
-subTrack hapmapLd off
-shortLabel LD HCB 
-longLabel HapMap Linkage Disequilibrium for the Han Chinese population (45 unrelated)
-priority 4
+    track hapmapLdHcb
+    subTrack hapmapLd off
+    shortLabel LD CHB
+    longLabel HapMap Linkage Disequilibrium for the Chinese Han population (45 unrelated)
+    priority 4
 
 track haplotype
 shortLabel Haplotype Blocks
