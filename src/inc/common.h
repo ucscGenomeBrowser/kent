@@ -400,8 +400,15 @@ struct slName
     };
 
 struct slName *newSlName(char *name);
+
 #define slNameNew newSlName
-/* Return a new name. */
+/* Return a new slName. */
+
+#define slNameFree freez
+/* Free a single slName */
+
+#define slNameFreeList slFreeList
+/* Free a list of slNames */
 
 struct slName *slNameNewN(char *name, int size);
 /* Return new slName of given size. */
