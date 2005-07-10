@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.988 2005/07/10 09:21:51 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.989 2005/07/10 17:03:38 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9951,9 +9951,9 @@ registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnp", cnpMethods);
-registerTrackHandler("cnpIafrate", cnpIafrateMethods);
-registerTrackHandler("cnpSebat", cnpSebatMethods);
-registerTrackHandler("cnpSharp", cnpSharpMethods);
+//registerTrackHandler("cnpIafrate", cnpIafrateMethods);
+//registerTrackHandler("cnpSebat", cnpSebatMethods);
+//registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
