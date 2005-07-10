@@ -14,7 +14,10 @@
 #include "gfxPoly.h"
 #include "memgfx.h"
 #include "cnpIafrate.h"
+#include "cnpSebat.h"
 #include "cnpSharp.h"
+#include "cnpSharpSample.h"
+#include "cnpSharpCutoff.h"
 
 void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
 /* Filter out items from track->itemList. */
@@ -131,6 +134,7 @@ void ldFreeItems(struct track *tg);
 void ldMethods(struct track *tg);
 /* setup special methods for Linkage Disequilibrium track */
 
+
 void loadCnpIafrate(struct track *tg);
 /* loader for cnpIafrate table */
 
@@ -142,6 +146,19 @@ Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg);
 void cnpIafrateMethods(struct track *tg);
 /* methods for cnpIafrate */
 
+
+void loadCnpSebat(struct track *tg);
+/* loader for cnpSebat table */
+
+void freeCnpSebat(struct track *tg);
+
+Color cnpSebatColor(struct track *tg, void *item, struct vGfx *vg);
+/* green for GAIN, red for LOSS, blue for both */
+
+void cnpSebatMethods(struct track *tg);
+/* methods for cnpSharp */
+
+
 void loadCnpSharp(struct track *tg);
 /* loader for cnpSharp table */
 
@@ -152,3 +169,7 @@ Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
 
 void cnpSharpMethods(struct track *tg);
 /* methods for cnpSharp */
+
+void cnpMethods(struct track *tg);
+/* methods for cnp tracks */
+
