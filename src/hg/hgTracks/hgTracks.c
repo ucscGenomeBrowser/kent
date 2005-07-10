@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.987 2005/07/09 04:08:23 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.988 2005/07/10 09:21:51 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8271,9 +8271,7 @@ if (handlerHash == NULL)
 if (hashLookup(handlerHash, name))
     warn("handler duplicated for track %s", name);
 else
-    {
     hashAdd(handlerHash, name, handler);
-    }
 }
 
 TrackHandler lookupTrackHandler(char *name)
@@ -9952,7 +9950,9 @@ registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
 registerTrackHandler("ld", ldMethods);
+registerTrackHandler("cnp", cnpMethods);
 registerTrackHandler("cnpIafrate", cnpIafrateMethods);
+registerTrackHandler("cnpSebat", cnpSebatMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
