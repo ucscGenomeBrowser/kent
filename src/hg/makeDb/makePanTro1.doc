@@ -1,3 +1,5 @@
+#!/bin/csh
+exit;
 DONE First chimp release
 
 # DOWNLOAD FILES FROM WHITEHEAD   (kate)
@@ -738,6 +740,7 @@ cat > jkStuff/chromQualsRedo.csh << 'EOF'
         endif
     end
 'EOF'
+    #
     csh jkStuff/chromQualsRedo.csh >& jkStuff/chromQualsRedo.log &
     tail -100f jkStuff/chromQualsRedo.log
     
