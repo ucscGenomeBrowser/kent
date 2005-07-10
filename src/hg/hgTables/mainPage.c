@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.86 2005/07/10 06:34:08 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.87 2005/07/10 18:49:24 kent Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -141,6 +141,7 @@ addIfExists(hash, &dbList, "uniProt");
 addIfExists(hash, &dbList, "proteome");
 addIfExists(hash, &dbList, "go");
 addIfExists(hash, &dbList, "hgFixed");
+addIfExists(hash, &dbList, "visiGene");
 addIfExists(hash, &dbList, "ultra");
 return dbList;
 }
