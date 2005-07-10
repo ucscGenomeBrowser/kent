@@ -61,7 +61,7 @@ void optionInit(int *pArgc, char *argv[], struct optionSpec *optionSpecs);
  * If optionSpecs is not NULL, it is an array of optionSpec that are
  * used to validate the options.  An option must exist in the array
  * and the value must be convertable to the type specified in flags.
- * Boolean options must no value, all other options must have one.
+ * Boolean options have must no value, all other options must have one.
  * Array is terminated by a optionSpec with a NULL name.
  * If array NULL, no validation is done.
  */
