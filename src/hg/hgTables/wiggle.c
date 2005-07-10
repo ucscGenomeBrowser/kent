@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.55 2005/07/10 00:23:18 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.56 2005/07/10 06:34:09 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -56,7 +56,7 @@ wds = wiggleDataStreamNew(); \
 \
 if (anyIntersection()) \
     { \
-    char *t2 = cartString(cart, hgtaIntersectTrack); \
+    char *t2 = cartString(cart, hgtaIntersectTable); \
     if (table && t2 && differentWord(t2,table)) \
 	table2 = t2; \
     } \
@@ -238,11 +238,10 @@ static struct bed *bedTable2(struct sqlConnection *conn,
 boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
 char *op = cartString(cart, hgtaIntersectOp);
 struct bed *bedList = NULL;
-struct trackDb *track2 = findTrack(table2, fullTrackList);
 struct lm *lm1 = lmInit(64*1024);
 
 /*	fetch table 2 as a bed list	*/
-bedList = getFilteredBeds(conn, track2->tableName, region, lm1, NULL);
+bedList = getFilteredBeds(conn, table2, region, lm1, NULL);
 
 /*	If table 2 bed list needs to be complemented (!table2), then do so */
 if (invTable2 || sameString("none", op))
@@ -319,7 +318,7 @@ static void intersectDataVector(char *table, struct dataVector *dataVector1,
  * Otherwise, handle intersection here. */
 if (anyIntersection() && !isWiggle(database, table))
     {
-    char *table2 = cartString(cart, hgtaIntersectTrack);
+    char *table2 = cartString(cart, hgtaIntersectTable);
     if (table2 && differentWord(table2, table))
 	{
 	struct trackDb *tdb2 = hTrackDbForTrack(table2);
@@ -327,8 +326,8 @@ if (anyIntersection() && !isWiggle(database, table))
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
 	char *op = cartString(cart, hgtaIntersectOp);
-	boolean dv2IsWiggle = (isWiggle(database, table) ||
-			       isBedGraph(table));
+	boolean dv2IsWiggle = (isWiggle(database, table2) ||
+			       isBedGraph(table2));
 	dataVectorIntersect(dataVector1, dataVector2,
 			    dv2IsWiggle, sameString(op, "none"));
 	dataVectorFree(&dataVector2);
@@ -456,17 +455,18 @@ static struct trackDb *trackDbWithWiggleSettings(char *table)
 /* Get trackDb for a table in the database -- or if it has a parent/composite 
  * track, then return that because it contains the wiggle settings. */
 {
-if (curTrack == NULL)
-    errAbort("curTrack is NULL but we need wiggle settings from it.");
-if (sameString(table, curTrack->tableName))
-    return curTrack;
-else if (curTrack->subtracks)
+if (curTrack != NULL)
     {
-    struct trackDb *sTdb = NULL;
-    for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+    if (sameString(table, curTrack->tableName))
+	return curTrack;
+    else if (curTrack->subtracks)
 	{
-	if (sameString(table, sTdb->tableName))
-	    return curTrack;
+	struct trackDb *sTdb = NULL;
+	for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+	    {
+	    if (sameString(table, sTdb->tableName))
+		return curTrack;
+	    }
 	}
     }
 /* OK, table is not curTrack nor any of its subtracks -- look it up (and its 
@@ -619,6 +619,13 @@ static void doOutWig(struct trackDb *track, char *table, struct sqlConnection *c
 struct region *regionList = getRegions(), *region;
 int maxOut = 0, outCount, curOut = 0;
 char *shortLabel = table, *longLabel = table;
+
+if (track == NULL)
+    errAbort("Sorry, can't find necessary track information for %s.  "
+	     "If you reached this page by selecting \"All tables\" as the "
+	     "group, please go back and select the same table via a regular "
+	     "track group if possible.",
+	     table);
 
 maxOut = wigMaxOutput();
 

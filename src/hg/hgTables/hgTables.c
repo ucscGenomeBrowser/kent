@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.117 2005/07/06 07:18:25 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.118 2005/07/10 06:34:08 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -904,36 +904,39 @@ if (trackDupe != NULL && trackDupe[0] != 0)
 freez(&trackDupe);
 }
 
-struct slName *tablesForTrack(struct trackDb *track)
+struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner)
 /* Return list of all tables associated with track. */
 {
 struct hash *uniqHash = newHash(8);
 struct slName *name, *nameList = NULL;
-struct joinerPair *jpList, *jp;
 char *trackTable = track->tableName;
 
 hashAdd(uniqHash, trackTable, NULL);
-jpList = joinerRelate(allJoiner, database, trackTable);
-for (jp = jpList; jp != NULL; jp = jp->next)
+if (useJoiner)
     {
-    struct joinerDtf *dtf = jp->b;
-    char buf[256];
-    char *s;
-    if (sameString(dtf->database, database))
-	s = dtf->table;
-    else
+    struct joinerPair *jpList, *jp;
+    jpList = joinerRelate(allJoiner, database, trackTable);
+    for (jp = jpList; jp != NULL; jp = jp->next)
 	{
-	safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
-	s = buf;
+	struct joinerDtf *dtf = jp->b;
+	char buf[256];
+	char *s;
+	if (sameString(dtf->database, database))
+	    s = dtf->table;
+	else
+	    {
+	    safef(buf, sizeof(buf), "%s.%s", dtf->database, dtf->table);
+	    s = buf;
+	    }
+	if (!hashLookup(uniqHash, s))
+	    {
+	    hashAdd(uniqHash, s, NULL);
+	    name = slNameNew(s);
+	    slAddHead(&nameList, name);
+	    }
 	}
-    if (!hashLookup(uniqHash, s))
-	{
-	hashAdd(uniqHash, s, NULL);
-	name = slNameNew(s);
-	slAddHead(&nameList, name);
-	}
+    slNameSort(&nameList);
     }
-slNameSort(&nameList);
 name = slNameNew(trackTable);
 if (!trackDbIsComposite(track))
     /* suppress for composite tracks -- only the subtracks have tables */
@@ -953,7 +956,7 @@ else if (isCustomTrack(track->tableName))
     return track->tableName;
 else
     {
-    struct slName *tableList = tablesForTrack(track);
+    struct slName *tableList = tablesForTrack(track, TRUE);
     char *table = cartUsualString(cart, var, tableList->name);
     if (slNameInList(tableList, table))
 	return table;
@@ -1431,6 +1434,14 @@ if (!sameString(curGroup->name, "allTables"))
     trackName = cartString(cart, hgtaTrack);
     track = mustFindTrack(trackName, fullTrackList);
     }
+else
+    {
+    struct trackDb *cTdb = NULL;
+    track = hTrackDbForTrack(table);
+    cTdb = hCompositeTrackDbForSubtrack(track);
+    if (cTdb)
+	track = cTdb;
+    }
 if (sameString(output, outPrimaryTable))
     doOutPrimaryTable(table, conn);
 else if (sameString(output, outSelectedFields))
@@ -1575,6 +1586,15 @@ curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;
 curTable = findSelectedTable(conn, curTrack, hgtaTable);
+if (curTrack == NULL)
+    {
+    struct trackDb *tdb = hTrackDbForTrack(curTable);
+    struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+    if (cTdb)
+	curTrack = cTdb;
+    else
+	curTrack = tdb;
+    }
 }
 
 

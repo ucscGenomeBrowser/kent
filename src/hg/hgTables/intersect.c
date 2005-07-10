@@ -14,16 +14,18 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.29 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.30 2005/07/10 06:34:08 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
 
 static char *curVars[] = {hgtaIntersectGroup, hgtaIntersectTrack,
+	hgtaIntersectTable,
 	hgtaIntersectOp, hgtaMoreThreshold, hgtaLessThreshold,
 	hgtaInvertTable, hgtaInvertTable2,
 	};
 static char *nextVars[] = {hgtaNextIntersectGroup, hgtaNextIntersectTrack,
+	hgtaNextIntersectTable,
 	hgtaNextIntersectOp, hgtaNextMoreThreshold, hgtaNextLessThreshold,
 	hgtaNextInvertTable, hgtaNextInvertTable2,
 	};
@@ -55,6 +57,7 @@ struct dyString *dy = dyStringNew(1024);
 dyStringAppend(dy, "onChange=\"");
 jsDropDownCarryOver(dy, hgtaNextIntersectGroup);
 jsDropDownCarryOver(dy, hgtaNextIntersectTrack);
+jsDropDownCarryOver(dy, hgtaNextIntersectTable);
 jsTrackedVarCarryOver(dy, hgtaNextIntersectOp, "op");
 jsTextCarryOver(dy, hgtaNextMoreThreshold);
 jsTextCarryOver(dy, hgtaNextLessThreshold);
@@ -107,10 +110,14 @@ cartSaveSession(cart);
 hPrintf("<TABLE BORDER=0>\n");
 /* Print group and track line. */
 
-hPrintf("Select a group and track to intersect with:\n");
+hPrintf("Select a group, track and table to intersect with:\n");
 iTrack = showGroupTrackRow(hgtaNextIntersectGroup, onChange, 
 	hgtaNextIntersectTrack, onChange, conn);
 iName = iTrack->shortLabel;
+
+hPrintf("<TR><TD>\n");
+showTableField(iTrack, hgtaNextIntersectTable, FALSE);
+hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 
 if (!wigOptions)
@@ -404,13 +411,11 @@ int lessThresh = cartCgiUsualInt(cart, hgtaLessThreshold, 100);
 boolean invTable = cartCgiUsualBoolean(cart, hgtaInvertTable, FALSE);
 boolean invTable2 = cartCgiUsualBoolean(cart, hgtaInvertTable2, FALSE);
 char *op = cartString(cart, hgtaIntersectOp);
-char *table2 = cartString(cart, hgtaIntersectTrack);
+char *table2 = cartString(cart, hgtaIntersectTable);
 /* Load up intersecting bedList2 (to intersect with) */
 struct hTableInfo *hti2 = getHti(database, table2);
-struct trackDb *track2 = findTrack(table2, fullTrackList);
 struct lm *lm2 = lmInit(64*1024);
-struct bed *bedList2 = getFilteredBeds(conn, track2->tableName, region, lm2, 
-	NULL);
+struct bed *bedList2 = getFilteredBeds(conn, table2, region, lm2, NULL);
 /* Set up some other local vars. */
 struct hTableInfo *hti1 = getHti(database, table1);
 int chromSize = hChromSize(region->chrom);

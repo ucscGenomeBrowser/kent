@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.85 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.86 2005/07/10 06:34:08 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -266,7 +266,7 @@ slSort(&cookedList, slNameCmp);
 return cookedList;
 }
 
-char *showTableField(struct trackDb *track)
+char *showTableField(struct trackDb *track, char *varName, boolean useJoiner)
 /* Show table control and label. */
 {
 struct slName *name, *nameList = NULL;
@@ -275,17 +275,17 @@ char *selTable;
 if (track == NULL)
     nameList = tablesForDb(findSelDb());
 else
-    nameList = tablesForTrack(track);
+    nameList = tablesForTrack(track, useJoiner);
 
 /* Get currently selected table.  If it isn't in our list
  * then revert to first in list. */
-selTable = cartUsualString(cart, hgtaTable, nameList->name);
+selTable = cartUsualString(cart, varName, nameList->name);
 if (!slNameInList(nameList, selTable))
     selTable = nameList->name;
 
 /* Print out label and drop-down list. */
 hPrintf("<B>table: </B>");
-hPrintf("<SELECT NAME=%s %s>\n", hgtaTable, onChangeTable());
+hPrintf("<SELECT NAME=%s %s>\n", varName, onChangeTable());
 for (name = nameList; name != NULL; name = name->next)
     {
     struct trackDb *tdb = NULL;
@@ -467,7 +467,7 @@ hPrintf("<TABLE BORDER=0>\n");
 /* Print table line. */
     {
     hPrintf("<TR><TD>");
-    curTable = showTableField(curTrack);
+    curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
 	struct hTableInfo *hti = getHti(database, curTable);
@@ -487,6 +487,17 @@ hPrintf("<TABLE BORDER=0>\n");
     cgiMakeButton(hgtaDoSchema, "describe table schema");
     hPrintf("</TD></TR>\n");
     }
+
+    if (curTrack == NULL)
+	{
+	struct trackDb *tdb = hTrackDbForTrack(curTable);
+	struct trackDb *cTdb = hCompositeTrackDbForSubtrack(tdb);
+	if (cTdb)
+	    curTrack = cTdb;
+	else
+	    curTrack = tdb;
+	isMaf = isMafTable(database, curTrack, curTable);
+	}
 
 /* Region line */
 {
@@ -583,7 +594,7 @@ if (isPositional)
     if (anyIntersection())
         {
 	hPrintf("<TR><TD><B>intersection with %s:</B>\n",
-		cartString(cart, hgtaIntersectTrack));
+		cartString(cart, hgtaIntersectTable));
 	cgiMakeButton(hgtaDoIntersectPage, "edit");
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "clear");

@@ -136,6 +136,9 @@ struct trackDb *showTrackField(struct grp *selGroup,
 	char *trackVar, char *trackScript);
 /* Show track control. Returns selected track. */
 
+char *showTableField(struct trackDb *track, char *varName, boolean useJoiner);
+/* Show table control and label. */
+
 int trackDbCmpShortLabel(const void *va, const void *vb);
 /* Sort track by shortLabel. */
 
@@ -194,7 +197,7 @@ struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
 /* Find user-selected group if possible.  If not then
  * go to various levels of defaults. */
 
-struct slName *tablesForTrack(struct trackDb *track);
+struct slName *tablesForTrack(struct trackDb *track, boolean useJoiner);
 /* Return list of all tables associated with track. */
 
 struct trackDb *findSelectedTrack(struct trackDb *trackList, 
@@ -495,6 +498,8 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define hgtaNextIntersectGroup "hgta_nextIntersectGroup"
 #define hgtaIntersectTrack "hgta_intersectTrack"
 #define hgtaNextIntersectTrack "hgta_nextIntersectTrack"
+#define hgtaIntersectTable "hgta_intersectTable"
+#define hgtaNextIntersectTable "hgta_nextIntersectTable"
 #define hgtaIntersectOp "hgta_intersectOp"
 #define hgtaNextIntersectOp "hgta_nextIntersectOp"
 #define hgtaMoreThreshold "hgta_moreThreshold"
