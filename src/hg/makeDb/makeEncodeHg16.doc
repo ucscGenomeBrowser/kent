@@ -2805,6 +2805,29 @@ done
     hgLoadBed -strict -sqlTable=encodeRegulomeQualityK562.sql hg16 encodeRegulomeQualityK562 K562.bed
 
 
+    ## Last Minute data fixes and additions
+    ## Daryl; July 10, 2005
+    cd /cluster/data/encode/Regulome/2005-07-08/old
+    sed 's/XXX/HepG2/' ~/kent/src/hg/lib/encodeRegulomeProb.sql    > encodeRegulomeProbHepG2.sql
+    sed 's/XXX/HepG2/' ~/kent/src/hg/lib/encodeRegulomeQuality.sql > encodeRegulomeQualityHepG2.sql
+    splitTracks.pl stdin < ENm003_QCP_HepG2.txt
+    grep -vh track t0 | hgLoadBed -strict -sqlTable=encodeRegulomeProbHepG2.sql    hg16 encodeRegulomeProbHepG2    stdin
+    grep -vh track t3 | hgLoadBed -strict -sqlTable=encodeRegulomeQualityHepG2.sql hg16 encodeRegulomeQualityHepG2 stdin
+
+    sed 's/XXX/Huh7/' ~/kent/src/hg/lib/encodeRegulomeProb.sql    > encodeRegulomeProbHuh7.sql
+    sed 's/XXX/Huh7/' ~/kent/src/hg/lib/encodeRegulomeQuality.sql > encodeRegulomeQualityHuh7.sql
+    cat EN*_QCP_Huh7.txt | splitTracks.pl stdin
+    grep -vh track t0 t5 t10 t15 | hgLoadBed -strict -sqlTable=encodeRegulomeProbHuh7.sql    hg16 encodeRegulomeProbHuh7    stdin
+    grep -vh track t3 t8 t13 t18 | hgLoadBed -strict -sqlTable=encodeRegulomeQualityHuh7.sql hg16 encodeRegulomeQualityHuh7 stdin
+
+    cd /cluster/data/encode/Regulome/2005-07-08/new
+    foreach cellLine (CACO2 GM06990 HepG2 Huh7 K562 SKNSH Adult_Erythroblast)
+	set f = encodeRegulomeBase$cellLine
+	cat EN*_QCP_${cellLine}_Baseline.wig | wigEncode stdin $f.wig $f.wib
+	ln -s `pwd`/$f.wib       /gbdb/hg16/encode/Regulome/wib
+	hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/Regulome/wib hg16 $f $f.wig
+    end
+
 
 ##########################################################################
 # ENCODE RNA transcription compilation (Matt Weirauch and Todd Lowe)
