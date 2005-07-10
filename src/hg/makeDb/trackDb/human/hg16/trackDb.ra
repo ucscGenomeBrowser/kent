@@ -4936,97 +4936,204 @@ type bed 3 .
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
 
-track encodeRegulomeHs
+track encodeRegulomeBase
 compositeTrack on
 shortLabel UW/Regulome DNAseI Sens
 longLabel ENCODE UW/Regulome Mean DNAseI sensitivity baseline
 group encodeChrom
-priority 63.5
+priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility dense
+visibility full
+maxHeightPixels 128:16:16
 type wig 0.0 3.0
 autoScaleDefault Off
 
-    track encodeRegulomeHsCACO2
-    subTrack encodeRegulomeHs
+    track encodeRegulomeBaseCACO2
+    subTrack encodeRegulomeBase
     shortLabel CACO2
     longLabel CACO2 DNAseI Sens
+    color 50,50,60
     priority 1
 
-    track encodeRegulomeHsGM06990
-    subTrack encodeRegulomeHs
-    shortLabel GM06990
-    longLabel GM06990 DNAseI Sens
+    track encodeRegulomeBaseERY
+    subTrack encodeRegulomeBase
+    shortLabel ERY
+    longLabel Adult Erythroblast DNAseI Sens
+    chromosomes chr11
+    color 50,50,90
     priority 2
 
-    track encodeRegulomeHsSKNSH
-    subTrack encodeRegulomeHs
-    shortLabel SKNSH
-    longLabel SKNSH DNAseI Sens
+    track encodeRegulomeBaseGM06990
+    subTrack encodeRegulomeBase
+    shortLabel GM06990
+    longLabel GM06990 DNAseI Sens
+    color 50,50,120
     priority 3
 
-    track encodeRegulomeHsERY
-    subTrack encodeRegulomeHs
-    shortLabel ERY
-    longLabel ERY DNAseI Sens
+    track encodeRegulomeBaseHepG2
+    subTrack encodeRegulomeBase
+    shortLabel HepG2
+    longLabel HepG2 DNAseI Sens
+    color 50,50,150
     priority 4
 
-    track encodeRegulomeHsK562
-    subTrack encodeRegulomeHs
+    track encodeRegulomeBaseHuh7
+    subTrack encodeRegulomeBase
+    shortLabel Huh7
+    longLabel Huh7 DNAseI Sens
+    color 50,50,180
+    priority 5
+
+    track encodeRegulomeBaseK562
+    subTrack encodeRegulomeBase
     shortLabel K562
     longLabel K562 DNAseI Sens
-    priority 5
+    chromosomes chr11
+    color 50,50,210
+    priority 6
+
+    track encodeRegulomeBaseSKNSH
+    subTrack encodeRegulomeBase
+    shortLabel SKNSH
+    longLabel SKNSH DNAseI Sens
+    color 50,50,240
+    priority 7
 
 track encodeRegulomeProb
 compositeTrack on
 shortLabel UW/Regulome HS Prob
 longLabel ENCODE UW/Regulome DNaseI hypersensitive sites/scores
 group encodeChrom
-priority 64.1
+priority 64.2
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility dense
+visibility full
 type bedGraph 4
 minLimit 0
 maxLimit 3
 autoScaleDefault Off
-maxHeightPixels 100:50:20
+#maxHeightPixels 100:50:20
+maxHeightPixels 128:16:16
 
     track encodeRegulomeProbCACO2
     subTrack encodeRegulomeProb
     shortLabel CACO2
     longLabel CACO2 Probability
+    color 50,50,60
     priority 1
+
+    track encodeRegulomeProbERY
+    subTrack encodeRegulomeProb
+    shortLabel ERY
+    longLabel Adult Erythroblast Probability
+    chromosomes chr11
+    color 50,50,90
+    priority 2
 
     track encodeRegulomeProbGM06990
     subTrack encodeRegulomeProb
     shortLabel GM06990
     longLabel GM06990 Probability
-    priority 2
-
-    track encodeRegulomeProbSKNSH
-    subTrack encodeRegulomeProb
-    shortLabel SKNSH
-    longLabel SKNSH Probability
+    color 50,50,120
     priority 3
 
-    track encodeRegulomeProbERY
+    track encodeRegulomeProbHepG2
     subTrack encodeRegulomeProb
-    shortLabel ERY
-    longLabel ERY Probability
+    shortLabel HepG2
+    longLabel HepG2 Probability
+    color 50,50,150
     priority 4
+
+    track encodeRegulomeProbHuh7
+    subTrack encodeRegulomeProb
+    shortLabel Huh7
+    longLabel Huh7 Probability
+    color 50,50,180
+    priority 5
 
     track encodeRegulomeProbK562
     subTrack encodeRegulomeProb
     shortLabel K562
     longLabel CACO2 Probability
+    chromosomes chr11
+    color 50,50,210
+    priority 6
+
+    track encodeRegulomeProbSKNSH
+    subTrack encodeRegulomeProb
+    shortLabel SKNSH
+    longLabel SKNSH Probability
+    color 50,50,240
+    priority 7
+
+track encodeRegulomeQuality
+compositeTrack on
+shortLabel UW/Regulome Quality
+longLabel ENCODE UW/Regulome Quality
+group encodeChrom
+priority 64.3
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility dense
+type bed 5 .
+useScore 1
+maxHeightPixels 128:16:16
+
+    track encodeRegulomeQualityCACO2
+    subTrack encodeRegulomeQuality
+    shortLabel CACO2 
+    longLabel CACO2 Quality
+    color 50,50,60
+    priority 1
+
+    track encodeRegulomeQualityERY
+    subTrack encodeRegulomeQuality
+    shortLabel ERY 
+    longLabel Adult Erythroblast Quality
+    chromosomes chr11
+    color 50,50,90
+    priority 2
+
+    track encodeRegulomeQualityGM06990
+    subTrack encodeRegulomeQuality
+    shortLabel GM06990 
+    longLabel GM06990 Quality
+    color 50,50,120
+    priority 3
+
+    track encodeRegulomeQualityHepG2
+    subTrack encodeRegulomeQuality
+    shortLabel HepG2
+    longLabel HepG2 Quality
+    color 50,50,150
+    priority 4
+
+    track encodeRegulomeQualityHuh7
+    subTrack encodeRegulomeQuality
+    shortLabel Huh7
+    longLabel Huh7 Quality
+    color 50,50,180
     priority 5
+
+    track encodeRegulomeQualityK562
+    subTrack encodeRegulomeQuality
+    shortLabel K562 
+    longLabel K562 Quality
+    chromosomes chr11
+    color 50,50,210
+    priority 6
+
+    track encodeRegulomeQualitySKNSH
+    subTrack encodeRegulomeQuality
+    shortLabel SKNSH 
+    longLabel SKNSH Quality
+    color 50,50,240
+    priority 7
 
 track encodeRegulomeAmplicon
 compositeTrack on
 shortLabel UW/Regulome Amplicon
 longLabel ENCODE UW/Regulome Amplicon
 group encodeChrom
-priority 64.0
+priority 64.4
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility dense
 type bed 5 .
@@ -5044,47 +5151,6 @@ useScore 1
     longLabel Amplicon (Even)
     priority 2
 
-
-track encodeRegulomeQuality
-compositeTrack on
-shortLabel UW/Regulome Quality
-longLabel ENCODE UW/Regulome Quality
-group encodeChrom
-priority 64.2
-chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility dense
-type bed 5 .
-useScore 1
-
-    track encodeRegulomeQualityCACO2
-    subTrack encodeRegulomeQuality
-    shortLabel CACO2 
-    longLabel CACO2 Quality
-    priority 1
-
-    track encodeRegulomeQualityGM06990
-    subTrack encodeRegulomeQuality
-    shortLabel GM06990 
-    longLabel GM06990 Quality
-    priority 2
-
-    track encodeRegulomeQualitySKNSH
-    subTrack encodeRegulomeQuality
-    shortLabel SKNSH 
-    longLabel SKNSH Quality
-    priority 3
-
-    track encodeRegulomeQualityERY
-    subTrack encodeRegulomeQuality
-    shortLabel ERY 
-    longLabel ERY Quality
-    priority 4
-
-    track encodeRegulomeQualityK562
-    subTrack encodeRegulomeQuality
-    shortLabel K562 
-    longLabel K562 Quality
-    priority 5
 
 
 track encodeAllElements
@@ -5653,29 +5719,32 @@ spectrum on
 type chain hg17
 otherDb hg17
 
-track cnpSharp
-shortLabel CNPs (Sharp) 
-longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp)
+track cnp
+compositeTrack on
+shortLabel CNPs
+longLabel Copy Number Polymorphisms
 group varRep
 priority 146
 visibility dense
 type bed 4 +
 
-track cnpIafrate
-shortLabel CNPs (Iafrate) 
-longLabel Copy Number Polymorphisms from BAC microarray analysis (Iafrate)
-group varRep
-priority 146.1
-visibility dense
-type bed 4 +
+    track cnpSharp
+    subTrack cnp 
+    shortLabel CNPs (Sharp) 
+    longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp)
+    priority 146.1
 
-track cnpSebat
-shortLabel CNPs (Sebat) 
-longLabel Copy Number Polymorphisms from ROMA (Sebat)
-group varRep
-priority 146.1
-visibility dense
-type bed 4 + 
+    track cnpIafrate
+    subTrack cnp
+    shortLabel CNPs (Iafrate) 
+    longLabel Copy Number Polymorphisms from BAC microarray analysis (Iafrate)
+    priority 146.2
+
+    track cnpSebat
+    subTrack cnp
+    shortLabel CNPs (Sebat) 
+    longLabel Copy Number Polymorphisms from ROMA (Sebat)
+    priority 146.3
 
 track fosmidDiscordant
 shortLabel Fosmid Discordants
@@ -5739,6 +5808,20 @@ searchTable encodeGisChipPet
 searchMethod exact
 searchType bed
 termRegex [0-9]+-[0-9]+
+shortCircuit 1
+searchPriority 50
+
+searchTable cnpSharp
+searchMethod exact
+searchType bed
+termRegex (CTD|RP11)*
+shortCircuit 1
+searchPriority 50
+
+searchTable cnpIafrate
+searchMethod exact
+searchType bed
+termRegex (AC|AL|AP|CI|CT|IH|II|RP|c1|co|na)*
 shortCircuit 1
 searchPriority 50
 
