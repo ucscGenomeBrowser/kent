@@ -26,7 +26,6 @@
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
-    {"verbose", OPTION_STRING},
     {"der", OPTION_STRING},
     {"versions", OPTION_STRING},
     {"xeno", OPTION_BOOLEAN},
@@ -38,7 +37,6 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-int verb = 0;
 boolean indelReport = FALSE;
 boolean unaliReport = FALSE;
 boolean mismatchReport = FALSE;
@@ -534,7 +532,6 @@ verbose(4, "\tchecking for snp\n");
 if (!checked)
     {
     haveSnp = sqlTableExists(conn, "snp");
-    haveSnp = sqlTableExists(conn, "snp_bak");
     checked = TRUE;
     if (!haveSnp)
         fprintf(stderr, "warning: no snp table in this databsae\n");
@@ -544,8 +541,7 @@ if (!checked)
 if (haveSnp)
     {
     verbose(4, "\tquerying snp table\n");
-    /* sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);*/
-    sr = hRangeQuery(conn, "snp_bak", chr, position, position+1, NULL, &rowOff);
+    sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);
     while ((row = sqlNextRow(sr)) != NULL) 
         {
         struct snp snp;
@@ -2052,10 +2048,6 @@ if (argc != 6)
     return 1;
     }
 db = optionVal("db", "hg15");
-verb = optionInt("verbose", 0);
-fprintf(stderr, "verbose = %d\n", verb);
-verboseSetLevel(verb);
-/*verboseSetLevel(5);*/
 vfName = optionVal("versions", NULL);
 dfName = optionVal("der", NULL);
 indelReport = optionExists("indels");
