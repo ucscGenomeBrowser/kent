@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.54 2005/07/09 23:28:29 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.55 2005/07/10 00:23:18 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -939,6 +939,11 @@ for (region = regionList; region != NULL; region = region->next)
     ++regionCount;
 
 htmlOpen("%s (%s) Wiggle Summary Statistics", shortLabel, table);
+
+if (anySubtrackMerge(database, curTable))
+    hPrintf("<P><EM><B>Note:</B> subtrack merge is currently ignored on this "
+	    "page (not implemented yet).  Statistics shown here are only for "
+	    "the primary table %s (%s).</EM>", shortLabel, table);
 
 fullGenome = fullGenomeRegion();
 
