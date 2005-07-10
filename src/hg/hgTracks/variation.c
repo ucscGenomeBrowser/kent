@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.32 2005/06/17 22:22:29 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.33 2005/07/10 17:06:33 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -636,7 +636,6 @@ int count=0;
 
 bedLoadItem(tg, tg->mapName, (ItemLoader)ldLoad);
 count = slCount((struct sList *)(tg->items));
-//printf("<BR>%d<BR>", count);
 tg->canPack = FALSE;
 if (count>5000)
     {
@@ -697,12 +696,12 @@ if (isLod)
 	else                    /* high LOD, high D' -> shades */
 	    {
 	    /* lodScore has a minimum value of 2 and score has a maximum magnitude of 0.5,
-	     * so lodScore-abs(score) will have a minimum value of 1.5; subtract 1.5 to 
-	     * get the minimumm of the range.  
+	     * so [lodScore-abs(score)] will have a minimum value of 1.5
+	     * subtract 1.5 to get the minimumm of the range.  
 	     * Subtract 32 from 255 to get the starting intensity at ldHighLodLowDprime 
 	     * Multiply by 2.0 to amplify the difference (reduces range also)
 	     * Use min and max to stay within the range [0,255] */
-	    int blgr = 255-max(0,min((int)((255-32)*2.0*(lodScore-abs(score)-1.5)),255));
+	    int blgr = 255-max(0,min((int)((255-32)*(lodScore-abs(score)-1.5)),255));
 	    return vgFindColorIx(vg, 255, blgr, blgr);
 	    }
 	}
@@ -927,7 +926,7 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	/* set start pointer for the first element */
 	ldsStartPtr = lds;
 	while (ldsStartPtr!=NULL && ldsStartPtr->chromStart!=el->chromStart)
-	    ldsStartPtr++;// += sizeof(struct ldStats);
+	    ldsStartPtr++;
 	/* note that the start pointer will remain constant for the */
 	/* remainder of this loop - the end pointer will increment */	   
 	/* end pointer must be greater than the start pointer */
@@ -1036,73 +1035,83 @@ tg->drawItems      = ldDrawItems;
 tg->freeItems      = ldFreeItems;
 tg->drawLeftLabels = ldDrawLeftLabels;
 tg->canPack        = FALSE;
-tg->colorShades    = ldFillColors(cartUsualString(cart, 
-						  "ldPos", ldPosDefault));
-tg->altColorShades = ldFillColors(cartUsualString(cart, 
-						  "ldNeg", ldNegDefault));
+tg->colorShades    = ldFillColors(cartUsualString(cart, "ldPos", ldPosDefault));
+tg->altColorShades = ldFillColors(cartUsualString(cart, "ldNeg", ldNegDefault));
 }
 
-void loadCnpIafrate(struct track *tg)
-{
-    bedLoadItem(tg, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
-}
-
-void loadCnpSharp(struct track *tg)
-{
-    bedLoadItem(tg, "cnpSharp", (ItemLoader)cnpSharpLoad);
-}
-
-void freeCnpIafrate(struct track *tg)
-{
-    cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
-}
-
-void freeCnpSharp(struct track *tg)
-{
-    cnpSharpFreeList((struct cnpSharp**)&tg->items);
-}
-
-Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg)
-{
-    // struct cnpIafrate *cnp = (struct cnpIafrate *)item;
-    struct cnpIafrate *cnp = item;
-    char *type = cnp->variationType;
-
-    if (sameString(type, "Gain"))
-      return MG_GREEN;
-    if (sameString(type, "Loss"))
-      return MG_RED;
-    if (sameString(type, "Gain and Loss"))
-      return MG_BLUE;
-    return MG_BLACK;
-}
-
-Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg)
-{
-    // struct cnpSharp *cnp = (struct cnpSharp *)item;
-    struct cnpSharp *cnp = item;
-    char *type = cnp->variationType;
-
-    if (sameString(type, "Gain"))
-      return MG_GREEN;
-    if (sameString(type, "Loss"))
-      return MG_RED;
-    if (sameString(type, "Gain and Loss"))
-      return MG_BLUE;
-    return MG_BLACK;
-}
-
+/*
 void cnpIafrateMethods(struct track *tg)
 {
-  tg->loadItems = loadCnpIafrate;
-  tg->freeItems = freeCnpIafrate;
-  tg->itemColor = cnpIafrateColor;
+tg->loadItems = loadCnpIafrate;
+tg->freeItems = freeCnpIafrate;
+tg->itemColor = cnpIafrateColor;
+}
+
+void cnpSebatMethods(struct track *tg)
+{
+tg->loadItems = loadCnpSebat;
+tg->freeItems = freeCnpSebat;
+tg->itemColor = cnpSebatColor;
 }
 
 void cnpSharpMethods(struct track *tg)
 {
-  tg->loadItems = loadCnpSharp;
-  tg->freeItems = freeCnpSharp;
-  tg->itemColor = cnpSharpColor;
+tg->loadItems = loadCnpSharp;
+tg->freeItems = freeCnpSharp;
+tg->itemColor = cnpSharpColor;
+}
+*/
+void cnpLoadItems(struct track *tg)
+{
+printf("<BR>cnpLoadItems %s<BR>",tg->mapName);
+if(sameString(tg->mapName,"cnpIafrate"))
+    bedLoadItem(tg, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
+else if(sameString(tg->mapName,"cnpSebat"))
+    bedLoadItem(tg, "cnpSebat", (ItemLoader)cnpSebatLoad);
+else if(sameString(tg->mapName,"cnpSharp"))
+    bedLoadItem(tg, "cnpSharp", (ItemLoader)cnpSharpLoad);
+}
+
+void cnpFreeItems(struct track *tg)
+{
+printf("<BR>cnpFreeItems %s<BR>",tg->mapName);
+if(sameString(tg->mapName,"cnpIafrate"))
+    cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
+else if(sameString(tg->mapName,"cnpSebat"))
+    cnpSebatFreeList((struct cnpSebat**)&tg->items);
+else if(sameString(tg->mapName,"cnpSharp"))
+    cnpSharpFreeList((struct cnpSharp**)&tg->items);
+}
+
+Color cnpItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct cnpIafrate *cnpIa = item;
+struct cnpSebat   *cnpSe = item;
+struct cnpSharp   *cnpSh = item;
+char *type=NULL;
+
+printf("<BR>cnpItemColor %s<BR>",tg->mapName);
+
+if(sameString(tg->mapName,"cnpIafrate"))
+    type = cnpIa->variationType;
+else if(sameString(tg->mapName,"cnpSebat"))
+    type = cnpSe->name;
+else if(sameString(tg->mapName,"cnpSharp"))
+    type = cnpSh->variationType;
+
+if (sameString(type, "Gain"))
+    return MG_GREEN;
+if (sameString(type, "Loss"))
+    return MG_RED;
+if (sameString(type, "Gain and Loss"))
+    return MG_BLUE;
+return MG_BLACK;
+}
+
+void cnpMethods(struct track *tg)
+{
+tg->loadItems = cnpLoadItems;
+tg->freeItems = cnpFreeItems;
+tg->itemColor = cnpItemColor;
 }
 
