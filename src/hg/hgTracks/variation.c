@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.33 2005/07/10 17:06:33 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.34 2005/07/10 17:51:09 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1063,7 +1063,7 @@ tg->itemColor = cnpSharpColor;
 */
 void cnpLoadItems(struct track *tg)
 {
-printf("<BR>cnpLoadItems %s<BR>",tg->mapName);
+//printf("<BR>cnpLoadItems %s<BR>",tg->mapName);
 if(sameString(tg->mapName,"cnpIafrate"))
     bedLoadItem(tg, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
 else if(sameString(tg->mapName,"cnpSebat"))
@@ -1074,7 +1074,7 @@ else if(sameString(tg->mapName,"cnpSharp"))
 
 void cnpFreeItems(struct track *tg)
 {
-printf("<BR>cnpFreeItems %s<BR>",tg->mapName);
+//printf("<BR>cnpFreeItems %s<BR>",tg->mapName);
 if(sameString(tg->mapName,"cnpIafrate"))
     cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
 else if(sameString(tg->mapName,"cnpSebat"))
@@ -1090,7 +1090,7 @@ struct cnpSebat   *cnpSe = item;
 struct cnpSharp   *cnpSh = item;
 char *type=NULL;
 
-printf("<BR>cnpItemColor %s<BR>",tg->mapName);
+//printf("<BR>cnpItemColor %s<BR>",tg->mapName);
 
 if(sameString(tg->mapName,"cnpIafrate"))
     type = cnpIa->variationType;
