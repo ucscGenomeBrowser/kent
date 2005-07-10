@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.21 2005/04/28 19:56:42 kate Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.22 2005/07/10 09:59:29 daryl Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -250,7 +250,12 @@ fprintf(f, "a score=%f\n", ali->score);
 /* Figure out length of each field. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
     {
-    int len = strlen(comp->src);
+    int len = 0;
+    /* a name like '.' will break some tools, so replace it
+    * with a generic name */
+    if (sameString(comp->src,"."))
+	comp->src=cloneString("defaultName");
+    len = strlen(comp->src);
     if (srcChars < len)
         srcChars = len;
     len = digitsBaseTen(comp->start);
