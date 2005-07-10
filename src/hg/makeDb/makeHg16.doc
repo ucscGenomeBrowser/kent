@@ -6190,6 +6190,26 @@ LOAD RNAGENES (DONE - 2004-03-09 - Hiram)
     	chimpSimpleDiff.sql
     hgLoadBed -sqlTable=simpleNucDiff.sql hg16 chimpSimpleDiff.bed
     
+  ### chimpSimpleDiff update -- panTro1 (Daryl, July 8, 2005)
+    # Convert chimp quality scores from uncompressed contig to compressed
+    # supercontig format.  This will take half an hour or so.
+
+    cd /cluster/data/panTro1
+    cat */chr*.qa | qaToQac stdin chrom.qac
+    # 22 minutes on crow
+
+    # Make single base pair high quality differences into a bed file
+    # and load into database
+    cd /cluster/data/hg16/bed
+    mkdir chimpFixedDiff
+    cd chimpFixedDiff
+
+    ## chimpHiQualDiffs was changed to allow different quality
+    ## parameters as command line options
+    time /cluster/home/daryl/bin/i386/chimpFixedDiffs /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/axtRBestNet /cluster/data/panTro1/chrom.qac chimpFixedDiffs.bed >& chimpFixedDiffs.log
+    sed 's/simpleNucDiff/chimpFixedDiff/' ~/kent/src/hg/lib/simpleNucDiff.sql > chimpFixedDiff.sql
+    hgLoadBed -sqlTable=chimpFixedDiff.sql hg16 chimpFixedDiff.bed
+    
 #  gc5Base wiggle TRACK (DONE - 2004-03-12 - Hiram)
 #	reloaded wib files 2005-05-17 to place them in /gbdb/hg16/wib/gc5Base
     # a demonstration wiggle track.  Perform a gc count with a 5 base
