@@ -4939,7 +4939,7 @@ type bed 3 .
 track encodeRegulomeBase
 compositeTrack on
 shortLabel UW/Reg DNAseI Sens
-longLabel ENCODE UW/Regulome Mean DNAseI Sensitivity Baseline
+longLabel ENCODE UW/Regulome Mean DNAseI Sensitivity
 group encodeChrom
 priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
@@ -4952,49 +4952,49 @@ smoothingWindow 2
     track encodeRegulomeBaseCACO2
     subTrack encodeRegulomeBase
     shortLabel CACO2
-    longLabel CACO2 DNAseI Sensitivity Baseline
+    longLabel CACO2 DNAseI Sensitivity
     color 60,50,240
     priority 1
 
     track encodeRegulomeBaseGM06990
     subTrack encodeRegulomeBase
     shortLabel GM06990
-    longLabel GM06990 DNAseI Sensitivity Baseline
+    longLabel GM06990 DNAseI Sensitivity
     color 90,50,210
     priority 2
 
     track encodeRegulomeBaseSKNSH
     subTrack encodeRegulomeBase
     shortLabel SKNSH
-    longLabel SKNSH DNAseI Sensitivity Baseline
+    longLabel SKNSH DNAseI Sensitivity
     color 120,50,180
     priority 3
 
     track encodeRegulomeBaseHuh7
     subTrack encodeRegulomeBase
     shortLabel Huh7
-    longLabel Huh7 DNAseI Sensitivity Baseline
+    longLabel Huh7 DNAseI Sensitivity
     color 150,50,150
     priority 4
 
     track encodeRegulomeBaseHepG2
     subTrack encodeRegulomeBase
     shortLabel HepG2
-    longLabel HepG2 DNAseI Sensitivity Baseline
+    longLabel HepG2 DNAseI Sensitivity
     color 180,50,120
     priority 5
 
     track encodeRegulomeBaseK562
     subTrack encodeRegulomeBase
     shortLabel K562
-    longLabel K562 DNAseI Sensitivity Baseline
+    longLabel K562 DNAseI Sensitivity
     color 210,50,90
     priority 6
 
     track encodeRegulomeBaseERY
     subTrack encodeRegulomeBase
     shortLabel ERY
-    longLabel Adult Erythroblast DNAseI Sensitivity Baseline
+    longLabel Adult Erythroblast DNAseI Sensitivity
     color 240,50,60
     priority 7
 
@@ -5536,6 +5536,41 @@ useScore 1
     subTrack encodeHapMapAlleleFreq
     shortLabel YRI
     longLabel HapMap Allele Frequencies (YRI)
+    priority 4
+
+track encodeHapMapCov
+compositeTrack on
+shortLabel HapMap Coverage
+longLabel ENCODE HapMap (16c.1) Resequencing Coverage
+group encodeVariation
+priority 81
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+maxHeightPixels 128:16:16
+visibility hide
+type bedGraph 4
+
+    track encodeHapMapCovCEU
+    subTrack encodeHapMapCov
+    shortLabel CEU
+    longLabel HapMap Resequencing Coverage (CEU)
+    priority 1
+
+    track encodeHapMapCovCHB
+    subTrack encodeHapMapCov
+    shortLabel CHB
+    longLabel HapMap Resequencing Coverage (CHB)
+    priority 2
+
+    track encodeHapMapCovJPT
+    subTrack encodeHapMapCov
+    shortLabel JPT
+    longLabel HapMap Resequencing Coverage (JPT)
+    priority 3
+
+    track encodeHapMapCovYRI
+    subTrack encodeHapMapCov
+    shortLabel YRI
+    longLabel HapMap Resequencing Coverage (YRI)
     priority 4
 
 track encodeRecomb
