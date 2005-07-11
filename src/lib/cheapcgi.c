@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.69 2005/07/07 22:12:31 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.70 2005/07/11 16:25:36 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -786,6 +786,17 @@ char buf[256];
 printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
     (checked ? " CHECKED" : "") );
 sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), name);
+cgiMakeHiddenVar(buf, "1");
+}
+
+void cgiMakeHiddenBoolean(char *name, boolean on)
+/* Make hidden boolean variable. Also make a shadow hidden variable so we
+ * can distinguish between variable not present and
+ * variable set to false. */
+{
+char buf[256];
+cgiMakeHiddenVar(name, on ? "on" : "off");
+safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
 }
 

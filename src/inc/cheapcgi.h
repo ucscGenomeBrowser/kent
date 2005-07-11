@@ -63,6 +63,11 @@ boolean cgiBooleanDefined(char *name);
 char *cgiBooleanShadowPrefix();
 /* Prefix for shadow variable set with boolean variables. */
 
+void cgiMakeHiddenBoolean(char *name, boolean on);
+/* Make hidden boolean variable. Also make a shadow hidden variable so we
+ * can distinguish between variable not present and
+ * variable set to false. */
+
 int cgiIntExp(char *varName);
 /* Evaluate an integer expression in varName and
  * return value. */
