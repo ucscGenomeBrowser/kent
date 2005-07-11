@@ -1,0 +1,14 @@
+include ../../../inc/common.mk
+
+L = ${MYSQLLIBS} -lm
+MYLIBDIR = ../../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+
+O = vgLoadMahoney.o mahoney.o
+
+vgLoadMahoney: $O ${MYLIBS}
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadMahoney $O ${MYLIBS} $L
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/vgLoadMahoney${EXE}
+
+clean:
+	rm -f $O
