@@ -10,8 +10,10 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     axtLib.o bactigPos.o bdgpExprLink.o bdgpGeneInfo.o bed.o bed5FloatScore.o \
     bedCart.o bed6FloatScore.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o \
-    cart.o cartDb.o ccdsInfo.o ccdsGeneMap.o celeraCoverage.o celeraDupPositive.o cgh.o chainCart.o \
-    chainDb.o chainLink.o chainNet.o chainNetDbLoad.o chicken13kInfo.o chromBins.o chr18deletions.o \
+    cart.o cartDb.o ccdsInfo.o ccdsGeneMap.o celeraCoverage.o \
+    celeraDupPositive.o cgh.o chainCart.o \
+    chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
+    chicken13kInfo.o chromBins.o chr18deletions.o \
     chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
@@ -43,7 +45,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pscreen.o \
-    pseudoGeneLink.o pslReader.o pslWScore.o qaSeq.o \
+    pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
@@ -61,7 +63,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     trackDbCustom.o trackTable.o transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o vegaInfo.o wabAli.o web.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
-    vntr.o zdobnovSynt.o putaInfo.o
+    visiGene.o vntr.o zdobnovSynt.o 
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
