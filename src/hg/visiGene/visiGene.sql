@@ -337,7 +337,7 @@ CREATE TABLE lifeTime (
 # Mouse  lifeTime
 insert into lifeTime values(10090, 19, 61, 1000);
 # Human lifeTime.
-insert into lifeTime values(9606,  266, 5840, 28470):
+insert into lifeTime values(9606,  266, 5840, 28470);
 
 #List of schemes for developmental stages
 CREATE TABLE lifeStageScheme (
@@ -366,14 +366,14 @@ insert into lifeStage values(1, "1", 0.0, "One-cell egg");
 insert into lifeStage values(1, "2", 1.0, "Dividing egg");
 insert into lifeStage values(1, "3", 2.0, "Morula");
 insert into lifeStage values(1, "4", 3.0, "Blastocyst");
-insert into lifeStage values(1, "5", 4.0 "Hatched blastocyst");
+insert into lifeStage values(1, "5", 4.0, "Hatched blastocyst");
 insert into lifeStage values(1, "6", 4.5, "Attatched blastocyst");
 insert into lifeStage values(1, "7", 5, "Implantation and egg cylinder");
 insert into lifeStage values(1, "8", 6, "Differentiation of egg cylinder");
 insert into lifeStage values(1, "9a", 6.5, "Early streak");
 insert into lifeStage values(1, "10", 7, "Mid streak");
 insert into lifeStage values(1, "10a", 7.17, "Late streak, no bud");
-insert into lifeStage values(1, "10b", 7.33, "Late streak, early bud"");
+insert into lifeStage values(1, "10b", 7.33, "Late streak, early bud");
 insert into lifeStage values(1, "11", 7.5, "Neural plate");
 insert into lifeStage values(1, "11a", 7.63, "Late neural plate");
 insert into lifeStage values(1, "11b", 7.75, "Early head fold");
