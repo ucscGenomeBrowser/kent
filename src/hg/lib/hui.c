@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.64 2005/07/11 20:18:33 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.65 2005/07/11 21:08:48 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1239,11 +1239,12 @@ compositeUiSubtracks(cart, tdb, TRUE, primarySubtrack);
 #define CLEAR_BUTTON_LABEL      "clear" 
 
 void hCompositeUi(struct cart *cart, struct trackDb *tdb, char *primarySubtrack,
-		  char *submit)
+		  char *submit, boolean betweenForms)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is 
  * non-NULL, don't allow it to be cleared.  If submit is non-NULL, make a 
  * hidden variable for it (so it will appear that this form was submitted by 
- * that button). */
+ * that button).  If betweenForms, print a "</FORM>" before starting new 
+ * form, but don't print out "</FORM>" at end -- assume caller will do so. */
 {
 int i, j, k;
 char *words[64];
@@ -1265,6 +1266,8 @@ if (trackDbSetting(tdb, "subGroup1") == NULL)
     return;
     }
 
+if (betweenForms)
+    puts("</FORM>");
 printf("<FORM ACTION=\"%s\" NAME=\"subGroupForm\" METHOD=\"%s\">",
        cgiScriptName(), cartUsualString(cart, "formMethod", "POST"));
 
@@ -1367,6 +1370,7 @@ if (displayAll)
     compositeUiAllSubtracks(cart, tdb, primarySubtrack);
 else
     compositeUiSelectedSubtracks(cart, tdb, primarySubtrack);
-puts("</FORM>");
+if (! betweenForms)
+    puts("</FORM>");
 }
 

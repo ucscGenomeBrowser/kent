@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.6 2005/07/11 20:21:43 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.7 2005/07/11 21:08:48 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -175,7 +175,7 @@ htmlOpen("Merge subtracks of %s (%s)",
 
 hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
 /* hCompositeUi makes its own form, so keep it separate from our main form: */
-hCompositeUi(cart, curTrack, curTable, hgtaDoSubtrackMergePage);
+hCompositeUi(cart, curTrack, curTable, hgtaDoSubtrackMergePage, FALSE);
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=POST>\n");
 cartSaveSession(cart);

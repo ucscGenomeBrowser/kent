@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.208 2005/07/11 20:19:55 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.209 2005/07/11 21:08:48 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1543,16 +1543,17 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
-puts("</FORM>");
 
 if (trackDbSetting(tdb, "compositeTrack"))
-    hCompositeUi(cart, tdb, NULL, NULL);
+    hCompositeUi(cart, tdb, NULL, NULL, TRUE);
 }
 
 void trackUi(struct trackDb *tdb)
 /* Put up track-specific user interface. */
 {
 char *vis = hStringFromTv(tdb->visibility);
+printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
+cartSaveSession(cart);
 printf("<H1>%s</H1>\n", tdb->longLabel);
 printf("<B>Display mode: </B>");
 hTvDropDown(tdb->tableName, 
@@ -1562,6 +1563,8 @@ cgiMakeButton("Submit", "Submit");
 printf("<BR>\n");
 
 specificUi(tdb);
+
+puts("</FORM>");
 
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 if (hTableOrSplitExists(tdb->tableName))
@@ -1657,8 +1660,6 @@ if (tdb == NULL)
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
 cartWebStart(cart, "%s Track Settings", tdb->shortLabel);
-printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
-cartSaveSession(cart);
 trackUi(tdb);
 webEnd();
 }
