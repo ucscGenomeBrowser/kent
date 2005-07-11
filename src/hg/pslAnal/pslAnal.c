@@ -1713,7 +1713,7 @@ void processCds(struct sqlConnection *conn, struct pslInfo *pi, struct dnaSeq *r
 struct acc *acc;
 char *name = cloneString(pi->psl->qName);
 
-verbose(1, "Processing %s\n", name);
+verbose(2, "Processing %s\n", name);
 /* Create the accession for the query */
 acc = createAcc(name);
 /* Compare the actual aligned parts */
@@ -1965,27 +1965,27 @@ fprintf(of, "\n");
 /* Write out detailed records of indels, if requested */
 if (indelReport) 
     {
-    verbose(1, "Writing out indels\n");
+    verbose(2, "Writing out indels\n");
     writeList(in, pi->indelList, INDEL, NULL, NULL);
     }
 
 /* Write out detailed records of indels, if requested */
 if (unaliReport) 
     {
-    verbose(1, "Writing out unaligned regions\n");
+    verbose(2, "Writing out unaligned regions\n");
     writeList(un, pi->unaliList, UNALIGNED, NULL, NULL);
     }
 
 /* Write out detailed records of mismatches, if requested */
 if (mismatchReport) 
     {
-    verbose(1, "Writing out mismatches\n");
+    verbose(2, "Writing out mismatches\n");
     writeList(mm, pi->mmList, MISMATCH, NULL, NULL);
     }
 /* Write out detailed records of codon substitutions, if requested */
 if (codonSubReport) 
     {
-    verbose(1, "Writing out codon substitutions\n");
+    verbose(2, "Writing out codon substitutions\n");
     writeList(cs, pi->codonSubList, CODONSUB, pi->psl, pi->mrna);
     }
 }
@@ -2093,23 +2093,23 @@ if (codonSubReport)
 hSetDb(db);
  if (getenv("HGDB_HOST") == NULL)
      hSetDbConnect("hgwdev.cse.ucsc.edu", db, user, password);
-verbose(1, "Reading CDS file\n");
+verbose(2, "Reading CDS file\n");
 readCds(cf);
-verbose(1, "Reading FA file\n");
+verbose(2, "Reading FA file\n");
 readRnaSeq(faFile);
-verbose(1, "Reading loci file\n");
+verbose(2, "Reading loci file\n");
 readLoci(lf);
 if (vf) 
     {
-    verbose(1, "Reading version file\n");
+    verbose(2, "Reading version file\n");
     readVersion(vf);
     }
 if (df) 
     {
-    verbose(1, "Reading refseq derived accessions file\n");
+    verbose(2, "Reading refseq derived accessions file\n");
     readRsDerived(df);
     }
-verbose(1, "Processing psl file\n");
+verbose(2, "Processing psl file\n");
 doFile(pf, of, in, mm, cs, un);
 
 if (indelReport)
