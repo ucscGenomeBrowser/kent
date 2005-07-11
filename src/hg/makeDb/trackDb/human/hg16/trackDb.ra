@@ -4938,7 +4938,7 @@ type bed 3 .
 
 track encodeRegulomeBase
 compositeTrack on
-shortLabel UW/Regulome DNAseI Sens
+shortLabel UW/Reg DNAseI Sens
 longLabel ENCODE UW/Regulome Mean DNAseI Sensitivity Baseline
 group encodeChrom
 priority 64.1
@@ -5125,7 +5125,7 @@ maxHeightPixels 128:16:16
 
 track encodeRegulomeAmplicon
 compositeTrack on
-shortLabel UW/Regulome Amplicon
+shortLabel UW/Reg Amplicon
 longLabel ENCODE UW/Regulome Amplicon
 group encodeChrom
 priority 64.4
