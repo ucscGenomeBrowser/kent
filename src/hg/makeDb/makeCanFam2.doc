@@ -197,7 +197,7 @@ exit; # don't actually run this like a script :)
     | hgsql -h genome-testdb hgcentraltest
 
 
-# REPEAT MASKING (IN PROGRESS 6/29/05 angie)
+# REPEAT MASKING (DONE braney/angie 7-10-05)
     #- Split contigs into 500kb chunks, at gaps if possible:
     ssh kkstore01
     cd /cluster/data/canFam2
@@ -256,13 +256,14 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     cd /cluster/data/canFam2/RMRun
     para create RMJobs
     para try, para check, para check, para push, para check,...
-#TODO
-#Completed: 6373 of 6373 jobs
-#CPU time in finished jobs:   24949716s  415828.60m  6930.48h  288.77d  0.791 y
-#IO & Wait Time:                220014s    3666.90m    61.12h    2.55d  0.007 y
-#Average job time:                3949s      65.82m     1.10h    0.05d
-#Longest job:                     6389s     106.48m     1.77h    0.07d
-#Submission to last job:         31173s     519.55m     8.66h    0.36d
+
+# Completed: 6149 of 6149 jobs
+# CPU time in finished jobs:   32138805s  535646.75m  8927.45h  371.98d  1.019 y
+# IO & Wait Time:                346449s    5774.15m    96.24h    4.01d  0.011 y
+# Average job time:                5283s      88.05m     1.47h    0.06d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            8642s     144.03m     2.40h    0.10d
+# Submission to last job:        147094s    2451.57m    40.86h    1.70d
 
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
     ssh kkstore01
@@ -270,15 +271,15 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     foreach d (*/chr*_?{,?})
       set contig = $d:t
       echo $contig
-      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
-        > /dev/null
+      liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out > /dev/null
     end
 
     #- Lift pseudo-contigs to chromosome level
     foreach c (`cat chrom.lst`)
       echo lifting $c
-      cd $c
-      liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` > /dev/null
+      set dir=`echo $c | sed "s/chr//" `
+      cd $dir
+      liftUp $c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` > /dev/null
       cd ..
     end
 
@@ -288,16 +289,16 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     hgLoadOut canFam2 */chr*.fa.out
 
 
-# VERIFY REPEATMASKER RESULTS (TODO 6/29/05 angie)
+# VERIFY REPEATMASKER RESULTS  (DONE 2005-07-11 braney)
     # Eyeball some repeat annotations in the browser, compare to lib seqs.
     # Run featureBits on canFam2 and on a comparable genome build, and compare:
     ssh hgwdev
     featureBits canFam2 rmsk
+# 968054174 bases of 2384996543 (40.589%) in intersection
+#canFam1 is
 #896773874 bases of 2359845093 (38.001%) in intersection
-    # Good, 35-40% seems typical for mammals...
 
-
-# SIMPLE REPEATS (TRF) (TODO 6/29/05 angie)
+# SIMPLE REPEATS (TRF)  (DONE 2005-07-11 braney)
     ssh kkstore01
     mkdir /cluster/data/canFam2/bed/simpleRepeat
     cd /cluster/data/canFam2/bed/simpleRepeat
@@ -308,8 +309,7 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
       foreach f ($d/${ctg}.fa)
         set fout = $f:t:r.bed
         echo $fout
-        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" \
-        >> jobs.csh
+        echo "/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $f /dev/null -bedAt=trf/$fout -tempDir=/tmp" >> jobs.csh
       end
     end
     csh -ef jobs.csh >&! jobs.log &
@@ -319,19 +319,22 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     ls -1 trf | wc -l
     endsInLf trf/*
     # When job is done do:
-    liftUp simpleRepeat.bed /cluster/data/canFam2/jkStuff/liftAll.lft warn \
-      trf/*.bed
+    liftUp simpleRepeat.bed /cluster/data/canFam2/jkStuff/liftAll.lft warn trf/*.bed
 
     # Load into the database:
     ssh hgwdev
     hgLoadBed canFam2 simpleRepeat \
       /cluster/data/canFam2/bed/simpleRepeat/simpleRepeat.bed \
-      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+# load of simpleRepeat did not go as planned: 637318 record(s), 0 row(s) skipped, 1172 warning(s) loading bed.tab
+
     featureBits canFam2 simpleRepeat
+# 52855902 bases of 2384996543 (2.216%) in intersection
+# canFam1 is
 #36509895 bases of 2359845093 (1.547%) in intersection
 
 
-# PROCESS SIMPLE REPEATS INTO MASK (TODO 6/29/05/ angie)
+# PROCESS SIMPLE REPEATS INTO MASK  (DONE 2005-07-11 braney)
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh kkstore01
@@ -344,24 +347,25 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     cd /cluster/data/canFam2
     mkdir bed/simpleRepeat/trfMaskChrom
     foreach c (`cat chrom.lst`)
-      if (-e $c/lift/ordered.lst) then
-        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
-          $c/lift/ordered.lst > $c/lift/oTrf.lst
-        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
-          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      set dir=`echo $c | sed "s/chr//" `
+      if (-e $dir/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' $dir/lift/ordered.lst > $dir/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$dir.bed jkStuff/liftAll.lft warn `cat $dir/lift/oTrf.lst`
       endif
     end
     # Here's the coverage for the filtered TRF:
     ssh hgwdev
-    cat /cluster/data/canFam2/bed/simpleRepeat/trfMaskChrom/*.bed \
-      > /tmp/filtTrf.bed
+    cat /cluster/data/canFam2/bed/simpleRepeat/trfMaskChrom/*.bed > /tmp/filtTrf.bed
     featureBits canFam2 /tmp/filtTrf.bed
+#23111877 bases of 2384996543 (0.969%) in intersection
+# canFam1 was
 #23017541 bases of 2359845093 (0.975%) in intersection
     featureBits canFam2 /tmp/filtTrf.bed \!rmsk
+# 1205611 bases of 2384996543 (0.051%) in intersection
+#canFam1 was
 #1275941 bases of 2359845093 (0.054%) in intersection
 
-
-# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (TODO 6/29/05 angie)
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 2005-07-11 braney)
     ssh kkstore01
     cd /cluster/data/canFam2
     # Soft-mask (lower-case) the contig and chr .fa's, 
@@ -379,6 +383,7 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     # Tons of warnings like this, mostly for L1M*:
 #WARNING: negative rEnd: -189 chrX:117586389-117586475 L1M3e
     foreach c (`cat chrom.lst`)
+      set c=`echo $c | sed "s/chr//" `
       echo "repeat- and trf-masking contigs of chr$c"
       foreach d ($c/chr*_?{,?})
         set ctg=$d:t
