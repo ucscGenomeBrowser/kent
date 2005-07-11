@@ -5151,7 +5151,7 @@ useScore 1
 track encodeAllElements
 compositeTrack on
 shortLabel Consensus Elements
-longLabel NHGRI/PSU/UCSC/Stanford TBA and MLAGAN Conserved Elements
+longLabel NHGRI/PSU/UCSC/Stanford TBA and LAGAN Conserved Elements
 group encodeCompGeno
 priority 70.0
 visibility hide
@@ -5161,14 +5161,14 @@ type bed 5 .
 
     track encodeAllUnionEl
     shortLabel Union
-    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Union Conserved Elements
+    longLabel TBA and LAGAN PhastCons/BinCons/GERP Union Conserved Elements
     subTrack encodeAllElements
     priority 1
     color 80,70,180
 
     track encodeAllNcUnionEl
     shortLabel NC Union
-    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Union NonCoding Conserved Elements
+    longLabel TBA and LAGAN PhastCons/BinCons/GERP Union NonCoding Conserved Elements
     subTrack encodeAllElements
     priority 2
     color 80,105,145
@@ -5176,14 +5176,14 @@ type bed 5 .
     track encodeAllIntersectEl
     subTrack encodeAllElements
     shortLabel Intersect
-    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Intersection Conserved Elements
+    longLabel TBA and LAGAN PhastCons/BinCons/GERP Intersection Conserved Elements
     priority 3
     color 80,145,105
 
     track encodeAllNcIntersectEl
     subTrack encodeAllElements
     shortLabel NC Intersect
-    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
+    longLabel TBA and LAGAN PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
     priority 4
     color 80,180,80
 
