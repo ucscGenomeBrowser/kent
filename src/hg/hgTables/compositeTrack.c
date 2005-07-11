@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.4 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.5 2005/07/11 16:26:26 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -172,7 +172,7 @@ struct trackDb *subtrack = NULL;
 char option[64];
 
 safef(option, sizeof(option), "%s_sel", curTable);
-cgiMakeHiddenVar(option, "on");
+cgiMakeHiddenBoolean(option, TRUE);
 
 hPrintf("\n<TABLE>\n");
 slSort(&(curTrack->subtracks), trackDbCmp);
