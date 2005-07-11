@@ -4939,69 +4939,68 @@ type bed 3 .
 track encodeRegulomeBase
 compositeTrack on
 shortLabel UW/Regulome DNAseI Sens
-longLabel ENCODE UW/Regulome Mean DNAseI sensitivity baseline
+longLabel ENCODE UW/Regulome Mean DNAseI Sensitivity Baseline
 group encodeChrom
 priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility full
 maxHeightPixels 128:16:16
-type wig 0.0 3.0
+type wig 1.0 3.0
 autoScaleDefault Off
+smoothingWindow 2
 
     track encodeRegulomeBaseCACO2
     subTrack encodeRegulomeBase
     shortLabel CACO2
-    longLabel CACO2 DNAseI Sens
-    color 50,50,60
+    longLabel CACO2 DNAseI Sensitivity Baseline
+    color 60,50,240
     priority 1
-
-    track encodeRegulomeBaseERY
-    subTrack encodeRegulomeBase
-    shortLabel ERY
-    longLabel Adult Erythroblast DNAseI Sens
-    chromosomes chr11
-    color 50,50,90
-    priority 2
 
     track encodeRegulomeBaseGM06990
     subTrack encodeRegulomeBase
     shortLabel GM06990
-    longLabel GM06990 DNAseI Sens
-    color 50,50,120
-    priority 3
+    longLabel GM06990 DNAseI Sensitivity Baseline
+    color 90,50,210
+    priority 2
 
-    track encodeRegulomeBaseHepG2
+    track encodeRegulomeBaseSKNSH
     subTrack encodeRegulomeBase
-    shortLabel HepG2
-    longLabel HepG2 DNAseI Sens
-    color 50,50,150
-    priority 4
+    shortLabel SKNSH
+    longLabel SKNSH DNAseI Sensitivity Baseline
+    color 120,50,180
+    priority 3
 
     track encodeRegulomeBaseHuh7
     subTrack encodeRegulomeBase
     shortLabel Huh7
-    longLabel Huh7 DNAseI Sens
-    color 50,50,180
+    longLabel Huh7 DNAseI Sensitivity Baseline
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeBaseHepG2
+    subTrack encodeRegulomeBase
+    shortLabel HepG2
+    longLabel HepG2 DNAseI Sensitivity Baseline
+    color 180,50,120
     priority 5
 
     track encodeRegulomeBaseK562
     subTrack encodeRegulomeBase
     shortLabel K562
-    longLabel K562 DNAseI Sens
-    chromosomes chr11
-    color 50,50,210
+    longLabel K562 DNAseI Sensitivity Baseline
+    color 210,50,90
     priority 6
 
-    track encodeRegulomeBaseSKNSH
+    track encodeRegulomeBaseERY
     subTrack encodeRegulomeBase
-    shortLabel SKNSH
-    longLabel SKNSH DNAseI Sens
-    color 50,50,240
+    shortLabel ERY
+    longLabel Adult Erythroblast DNAseI Sensitivity Baseline
+    color 240,50,60
     priority 7
 
 track encodeRegulomeProb
 compositeTrack on
-shortLabel UW/Regulome HS Prob
+shortLabel UW/Reg DNAseI HSs
 longLabel ENCODE UW/Regulome DNaseI hypersensitive sites/scores
 group encodeChrom
 priority 64.2
@@ -5016,59 +5015,57 @@ maxHeightPixels 128:16:16
 
     track encodeRegulomeProbCACO2
     subTrack encodeRegulomeProb
-    shortLabel CACO2
-    longLabel CACO2 Probability
-    color 50,50,60
+    shortLabel CACO2 
+    longLabel CACO2 DNaseI HSs
+    color 60,50,240
     priority 1
-
-    track encodeRegulomeProbERY
-    subTrack encodeRegulomeProb
-    shortLabel ERY
-    longLabel Adult Erythroblast Probability
-    chromosomes chr11
-    color 50,50,90
-    priority 2
 
     track encodeRegulomeProbGM06990
     subTrack encodeRegulomeProb
     shortLabel GM06990
-    longLabel GM06990 Probability
-    color 50,50,120
-    priority 3
+    longLabel GM06990 DNaseI HSs
+    color 90,50,210
+    priority 2
 
-    track encodeRegulomeProbHepG2
+    track encodeRegulomeProbSKNSH
     subTrack encodeRegulomeProb
-    shortLabel HepG2
-    longLabel HepG2 Probability
-    color 50,50,150
-    priority 4
+    shortLabel SKNSH
+    longLabel SKNSH DNaseI HSs
+    color 120,50,180
+    priority 3
 
     track encodeRegulomeProbHuh7
     subTrack encodeRegulomeProb
     shortLabel Huh7
-    longLabel Huh7 Probability
-    color 50,50,180
+    longLabel Huh7 DNaseI HSs
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeProbHepG2
+    subTrack encodeRegulomeProb
+    shortLabel HepG2
+    longLabel HepG2 DNaseI HSs
+    color 180,50,120
     priority 5
 
     track encodeRegulomeProbK562
     subTrack encodeRegulomeProb
     shortLabel K562
-    longLabel CACO2 Probability
-    chromosomes chr11
-    color 50,50,210
+    longLabel CACO2 DNaseI HSs
+    color 210,50,90
     priority 6
 
-    track encodeRegulomeProbSKNSH
+    track encodeRegulomeProbERY
     subTrack encodeRegulomeProb
-    shortLabel SKNSH
-    longLabel SKNSH Probability
-    color 50,50,240
+    shortLabel ERY
+    longLabel Adult Erythroblast DNaseI HSs
+    color 240,50,60
     priority 7
 
 track encodeRegulomeQuality
 compositeTrack on
-shortLabel UW/Regulome Quality
-longLabel ENCODE UW/Regulome Quality
+shortLabel UW/Reg Plate Q/A
+longLabel ENCODE UW/Regulome Plate Quality Score
 group encodeChrom
 priority 64.3
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
@@ -5081,51 +5078,49 @@ maxHeightPixels 128:16:16
     subTrack encodeRegulomeQuality
     shortLabel CACO2 
     longLabel CACO2 Quality
-    color 50,50,60
+    color 60,50,240
     priority 1
-
-    track encodeRegulomeQualityERY
-    subTrack encodeRegulomeQuality
-    shortLabel ERY 
-    longLabel Adult Erythroblast Quality
-    chromosomes chr11
-    color 50,50,90
-    priority 2
 
     track encodeRegulomeQualityGM06990
     subTrack encodeRegulomeQuality
     shortLabel GM06990 
     longLabel GM06990 Quality
-    color 50,50,120
-    priority 3
+    color 90,50,210
+    priority 2
 
-    track encodeRegulomeQualityHepG2
+    track encodeRegulomeQualitySKNSH
     subTrack encodeRegulomeQuality
-    shortLabel HepG2
-    longLabel HepG2 Quality
-    color 50,50,150
-    priority 4
+    shortLabel SKNSH 
+    longLabel SKNSH Quality
+    color 120,50,180
+    priority 3
 
     track encodeRegulomeQualityHuh7
     subTrack encodeRegulomeQuality
     shortLabel Huh7
     longLabel Huh7 Quality
-    color 50,50,180
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeQualityHepG2
+    subTrack encodeRegulomeQuality
+    shortLabel HepG2
+    longLabel HepG2 Quality
+    color 180,50,120
     priority 5
 
     track encodeRegulomeQualityK562
     subTrack encodeRegulomeQuality
     shortLabel K562 
     longLabel K562 Quality
-    chromosomes chr11
-    color 50,50,210
+    color 210,50,90
     priority 6
 
-    track encodeRegulomeQualitySKNSH
+    track encodeRegulomeQualityERY
     subTrack encodeRegulomeQuality
-    shortLabel SKNSH 
-    longLabel SKNSH Quality
-    color 50,50,240
+    shortLabel ERY 
+    longLabel Adult Erythroblast Quality
+    color 240,50,60
     priority 7
 
 track encodeRegulomeAmplicon
