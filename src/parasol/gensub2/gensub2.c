@@ -5,6 +5,9 @@
 #include "obscure.h"
 #include "options.h"
 #include "subText.h"
+#include "dystring.h"
+
+#define ARBITRARY_MAX_NUM_DIRS 30
 
 void usage()
 /* Explain usage and exit. */
@@ -22,6 +25,8 @@ errAbort(
   "       $(dir2)   - Second directory.\n"
   "       $(lastDir1) - The last directory in the first path. Includes trailing slash if any.\n"
   "       $(lastDir2) - The last directory in the second path. Includes trailing slash if any.\n"
+  "       $(lastDirs1=<n>) - The last n directories in the first path.\n"
+  "       $(lastDirs2=<n>) - The last n directories in the second path.\n"
   "       $(root1)  - First file name without directory or extension.\n"
   "       $(root2)  - Second file name without directory or extension.\n"
   "       $(ext1)   - First file extension.\n"
@@ -40,6 +45,42 @@ errAbort(
   "    -group2 - write elements in order Aa Ba Ca Ab Bb Cb Ac Bc Cc\n"
   );
 	      
+}
+
+struct slName *getLastDirs(char *pathToParse)
+/* Return a linked list of the dir names. */
+{
+struct slName *retList = NULL;
+char *slash = strchr(pathToParse,'/');
+char *dirNames[ARBITRARY_MAX_NUM_DIRS];
+char *copy = cloneString(pathToParse);
+int got, i;
+
+if (NULL == slash)   /** Do a little coping with MS-DOS style paths. */
+    {
+    char *dosSlash = strchr(pathToParse, '\\');
+    if (dosSlash != NULL)
+        {
+        subChar(pathToParse, '\\', '/');
+        slash = dosSlash;
+        }
+    }
+got = chopByChar(copy, '/', dirNames, ArraySize(dirNames));
+for (i = 0; i < got; i++) 
+    {
+    int j;
+    struct dyString *ds = newDyString(64);
+    for (j = i; j < got; j++)
+        {
+	dyStringAppend(ds, dirNames[j]);
+	if (j < got-1)
+	    dyStringAppendC(ds, '/');
+	}
+    slNameAddHead(&retList, ds->string);
+    dyStringFree(&ds);
+    }
+freeMem(copy);
+return retList;
 }
 
 void getLastDir(char *retDir, char *pathToParse)
@@ -131,11 +172,26 @@ char lastDir1[128];
 char lastDir2[128];
 struct subText *subList = NULL, *sub;
 struct slName *loopEl;
+struct slName *lastDirs1 = NULL, *lastDirs2 = NULL, *lastDirsEl;
+int k;
 
 /* Collect info for substitutions on first list. */
 splitPath(path1, dir1, root1, ext1);
 sprintf(file1, "%s%s", root1, ext1);
 getLastDir(lastDir1, dir1);
+lastDirs1 = getLastDirs(dir1);
+lastDirsEl = lastDirs1;
+for (k = 1; k <= ARBITRARY_MAX_NUM_DIRS; k++)
+    {
+    char targetText[24];
+    struct subText *tmpSub = NULL;
+    if (!lastDirsEl)
+	break;
+    safef(targetText, 24, "$(lastDirs1=%d)", k);
+    tmpSub = subTextNew(targetText, lastDirsEl->name);
+    slAddHead(&subList, tmpSub);
+    lastDirsEl = lastDirsEl->next;
+    }
 sub = subTextNew("$(path1)", path1);
 slAddHead(&subList, sub);
 sub = subTextNew("$(dir1)", dir1);
@@ -156,6 +212,19 @@ slAddHead(&subList, sub);
 splitPath(path2, dir2, root2, ext2);
 sprintf(file2, "%s%s", root2, ext2);
 getLastDir(lastDir2, dir2);
+lastDirs2 = getLastDirs(dir2);
+lastDirsEl = lastDirs2;
+for (k = 1; k <= ARBITRARY_MAX_NUM_DIRS; k++)
+    {
+    char targetText[24];
+    struct subText *tmpSub = NULL;
+    if (!lastDirsEl)
+	break;
+    safef(targetText, 24, "$(lastDirs1=%d)", k);    
+    tmpSub = subTextNew(targetText, lastDirsEl->name);
+    slAddHead(&subList, tmpSub);
+    lastDirsEl = lastDirsEl->next;
+    }
 sub = subTextNew("$(path2)", path2);
 slAddHead(&subList, sub);
 sub = subTextNew("$(dir2)", dir2);
