@@ -110,8 +110,8 @@ type bed 6 +
 mafTrack multiz10way
 
 track evofold
-shortLabel evofold
-longLabel evofold predictions of RNA secondary structure (id_strand_score)
+shortLabel EvoFold
+longLabel EvoFold predictions of RNA secondary structure (id_strand_score)
 group genes
 priority 63
 visibility hide
