@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.47 2005/07/10 06:34:08 angie Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.48 2005/07/11 21:30:38 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -792,7 +792,7 @@ static void scavengeVectorSpace(struct dataVector *dv)
  *	where each data point occupies about 8 bytes on a vector,
  *	thus: bytes saved at least 1024000 * 3 * 8 = 24,576,000
  */
-if ((dv->maxCount - dv->count) > 1024000)
+if ((dv->count > 0) && ((dv->maxCount - dv->count) > 1024000))
     {
     int *ip = NULL;
     float *fp = NULL;
@@ -864,7 +864,7 @@ v2->sumProduct = sumProducts;
  *	where each data point occupies about 8 bytes on a vector,
  *	thus: bytes saved at least 1024000 * 3 * 8 = 24,576,000
  */
-if ((v1->maxCount - v1Index) > 1024000)
+if ((v1Index > 0) && ((v1->maxCount - v1Index) > 1024000))
     {
     int *ip;
     float *fp;
