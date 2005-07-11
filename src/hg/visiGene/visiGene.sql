@@ -348,7 +348,7 @@ CREATE TABLE lifeStageScheme (
     PRIMARY KEY(id)
 );
 
-insert into lifeStageScheme values(default, 9606, "Theiler");
+insert into lifeStageScheme values(default, 10090, "Theiler");
 
 #List of life stages according to a particular scheme
 CREATE TABLE lifeStage (
@@ -381,7 +381,7 @@ insert into lifeStage values(1, "11c", 7.88, "Late head fold");
 insert into lifeStage values(1, "12", 8, "1-4 somites");
 insert into lifeStage values(1, "12a", 8.25, "5-7 somites");
 insert into lifeStage values(1, "13", 8.5, "Embryo turns");
-insert into lifeStage values(1, "14", 9, "Anterior neuropore forms and closes.");
+insert into lifeStage values(1, "14", 9, "Anterior neuropore forms and closes");
 insert into lifeStage values(1, "15", 9.5, "Posterior neuropore forms");
 insert into lifeStage values(1, "16", 10, "Posterior neuropore closes");
 insert into lifeStage values(1, "17", 10.5, "Deep lens indentation");
