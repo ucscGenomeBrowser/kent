@@ -332,6 +332,13 @@ CREATE TABLE lifeTime (
     PRIMARY KEY(taxon)
 );
 
+# http://www.koolpages.com/hokuspokus/lifespans.html is a good source for gestation age
+# and lifeSpans.  Doesn't have age of adulthood though.  
+# Mouse  lifeTime
+insert into lifeTime values(10090, 19, 61, 1000);
+# Human lifeTime.
+insert into lifeTime values(9606,  266, 5840, 28470):
+
 #List of schemes for developmental stages
 CREATE TABLE lifeStageScheme (
     id int auto_increment not null,	# ID of scheme
@@ -341,13 +348,53 @@ CREATE TABLE lifeStageScheme (
     PRIMARY KEY(id)
 );
 
+insert into lifeStageScheme values(default, 9606, "Theiler");
+
 #List of life stages according to a particular scheme
 CREATE TABLE lifeStage (
     lifeStageScheme int not null,	# Which staging scheme this is
     name varchar(255) not null,	# Name of this stage
     age float not null,	# Start age of this stage measured in days since conception
+    description varchar(255) not null, # One sentence description of stage
               #Indices
     INDEX(lifeStageScheme),
     INDEX(name(8)),
     INDEX(age)
 );
+
+insert into lifeStage values(1, "1", 0.0, "One-cell egg");
+insert into lifeStage values(1, "2", 1.0, "Dividing egg");
+insert into lifeStage values(1, "3", 2.0, "Morula");
+insert into lifeStage values(1, "4", 3.0, "Blastocyst");
+insert into lifeStage values(1, "5", 4.0 "Hatched blastocyst");
+insert into lifeStage values(1, "6", 4.5, "Attatched blastocyst");
+insert into lifeStage values(1, "7", 5, "Implantation and egg cylinder");
+insert into lifeStage values(1, "8", 6, "Differentiation of egg cylinder");
+insert into lifeStage values(1, "9a", 6.5, "Early streak");
+insert into lifeStage values(1, "10", 7, "Mid streak");
+insert into lifeStage values(1, "10a", 7.17, "Late streak, no bud");
+insert into lifeStage values(1, "10b", 7.33, "Late streak, early bud"");
+insert into lifeStage values(1, "11", 7.5, "Neural plate");
+insert into lifeStage values(1, "11a", 7.63, "Late neural plate");
+insert into lifeStage values(1, "11b", 7.75, "Early head fold");
+insert into lifeStage values(1, "11c", 7.88, "Late head fold");
+insert into lifeStage values(1, "12", 8, "1-4 somites");
+insert into lifeStage values(1, "12a", 8.25, "5-7 somites");
+insert into lifeStage values(1, "13", 8.5, "Embryo turns");
+insert into lifeStage values(1, "14", 9, "Anterior neuropore forms and closes.");
+insert into lifeStage values(1, "15", 9.5, "Posterior neuropore forms");
+insert into lifeStage values(1, "16", 10, "Posterior neuropore closes");
+insert into lifeStage values(1, "17", 10.5, "Deep lens indentation");
+insert into lifeStage values(1, "18", 11, "Lense vesicle closure");
+insert into lifeStage values(1, "19", 11.5, "Lense vesicle separates");
+insert into lifeStage values(1, "20", 12, "First sign of fingers");
+insert into lifeStage values(1, "21", 13, "Fore footplate indented");
+insert into lifeStage values(1, "22", 14, "Fingertips separate");
+insert into lifeStage values(1, "23", 15, "Fingers and toes separate");
+insert into lifeStage values(1, "24", 16, "Reposition of umbilical hernia");
+insert into lifeStage values(1, "25", 17, "Wrinkled skin");
+insert into lifeStage values(1, "26", 18, "Long whiskers");
+insert into lifeStage values(1, "27", 19, "Newborn");
+insert into lifeStage values(1, "28", 20, "Pup");
+insert into lifeStage values(1, "adult", 61, "Adult");
+insert into lifeStage values(1, "elder", 1000, "Elder");

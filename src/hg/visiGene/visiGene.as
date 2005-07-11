@@ -269,6 +269,7 @@ table lifeStageScheme
     int id;	"ID of scheme"
     int taxon;	"NCBI taxon"
     string name;	"Theiler, or whatever"
+    string description; "Description of stage"
     )
 
 table lifeStage
