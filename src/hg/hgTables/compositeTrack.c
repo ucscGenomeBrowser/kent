@@ -10,9 +10,10 @@
 #include "trackDb.h"
 #include "bed.h"
 #include "hdb.h"
+#include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.5 2005/07/11 16:26:26 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.6 2005/07/11 20:21:43 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -163,41 +164,6 @@ for (sTdb = curTrack->subtracks; sTdb != NULL; sTdb = sTdb->next)
 return primary;
 }
 
-void showSubtrackSelection(struct trackDb *primary)
-/* Offer the user a choice of which subtracks to merge in.  Don't offer a 
- * choice for the primary table -- that is automatically selected because 
- * they chose it on the main page. */
-{
-struct trackDb *subtrack = NULL;
-char option[64];
-
-safef(option, sizeof(option), "%s_sel", curTable);
-cgiMakeHiddenBoolean(option, TRUE);
-
-hPrintf("\n<TABLE>\n");
-slSort(&(curTrack->subtracks), trackDbCmp);
-for (subtrack = curTrack->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    if (! sameString(curTable, subtrack->tableName) &&
-	sameString(primary->type, subtrack->type))
-	{
-	char *words[2];
-	char *setting = NULL;
-	boolean alreadySet = TRUE;
-	puts("<TR><TD>");
-	safef(option, sizeof(option), "%s_sel", subtrack->tableName);
-	if ((setting = trackDbSetting(curTrack, "subTrack")) != NULL)
-	    if (chopLine(cloneString(setting), words) >= 2)
-		alreadySet = differentString(words[1], "off");
-	alreadySet = cartUsualBoolean(cart, option, alreadySet);
-	cgiMakeCheckBox(option, alreadySet);
-	printf ("%s", subtrack->longLabel);
-	puts("</TD></TR>");
-	}
-    }
-hPrintf("</TABLE>\n");
-}
-
 void doSubtrackMergeMore(struct sqlConnection *conn)
 /* Respond to subtrack merge create/edit button */
 {
@@ -207,15 +173,15 @@ char *dbTable = getDbTable(database, curTable);
 htmlOpen("Merge subtracks of %s (%s)",
 	 curTrack->tableName, curTrack->longLabel);
 
+hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
+/* hCompositeUi makes its own form, so keep it separate from our main form: */
+hCompositeUi(cart, curTrack, curTable, hgtaDoSubtrackMergePage);
+
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=POST>\n");
 cartSaveSession(cart);
 /* Currently selected subtrack table will be the primary subtrack in the 
  * merge. */
 cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
-
-hPrintf("<H3>Select a subset of subtracks to merge with %s:</H3>\n",
-	primary->longLabel);
-showSubtrackSelection(primary);
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
 if (isWiggle(database, curTable) || isBedGraph(curTable))
