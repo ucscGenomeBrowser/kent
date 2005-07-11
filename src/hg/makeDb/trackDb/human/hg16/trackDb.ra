@@ -4946,8 +4946,6 @@ chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility full
 maxHeightPixels 128:16:16
 type wig 0.0 3.0
-minY 1
-maxY 3
 autoScaleDefault Off
 smoothingWindow 2
 
