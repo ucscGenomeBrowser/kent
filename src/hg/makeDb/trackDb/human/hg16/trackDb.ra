@@ -5809,14 +5809,14 @@ searchPriority 50
 searchTable cnpSharp
 searchMethod exact
 searchType bed
-termRegex (CTD|RP11)*
+termRegex (CTD|RP11).*
 shortCircuit 1
 searchPriority 50
 
 searchTable cnpIafrate
 searchMethod exact
 searchType bed
-termRegex (AC|AL|AP|CI|CT|IH|II|RP|c1|co|na)*
+termRegex (AC|AL|AP|CI|CT|IH|II|RP|c1|co|na).*
 shortCircuit 1
 searchPriority 50
 
