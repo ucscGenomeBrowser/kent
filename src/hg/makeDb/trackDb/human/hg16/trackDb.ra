@@ -4945,7 +4945,9 @@ priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility full
 maxHeightPixels 128:16:16
-type wig 1.0 3.0
+type wig 0.0 3.0
+minY 1
+maxY 3
 autoScaleDefault Off
 smoothingWindow 2
 
@@ -5010,7 +5012,6 @@ type bedGraph 4
 minLimit 0
 maxLimit 3
 autoScaleDefault Off
-#maxHeightPixels 100:50:20
 maxHeightPixels 128:16:16
 
     track encodeRegulomeProbCACO2
@@ -5051,7 +5052,7 @@ maxHeightPixels 128:16:16
     track encodeRegulomeProbK562
     subTrack encodeRegulomeProb
     shortLabel K562
-    longLabel CACO2 DNaseI HSs
+    longLabel K562 DNaseI HSs
     color 210,50,90
     priority 6
 
@@ -5538,37 +5539,37 @@ useScore 1
     longLabel HapMap Allele Frequencies (YRI)
     priority 4
 
-track encodeHapMapCov
+track encodeHapMapCovWig
 compositeTrack on
 shortLabel HapMap Coverage
 longLabel ENCODE HapMap (16c.1) Resequencing Coverage
 group encodeVariation
-priority 81
+priority 80.8
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 maxHeightPixels 128:16:16
 visibility hide
-type bedGraph 4
+type wig 0.0 100.0
 
-    track encodeHapMapCovCEU
-    subTrack encodeHapMapCov
+    track encodeHapMapCovWigCEU
+    subTrack encodeHapMapCovWig
     shortLabel CEU
     longLabel HapMap Resequencing Coverage (CEU)
     priority 1
 
-    track encodeHapMapCovCHB
-    subTrack encodeHapMapCov
+    track encodeHapMapCovWigCHB
+    subTrack encodeHapMapCovWig
     shortLabel CHB
     longLabel HapMap Resequencing Coverage (CHB)
     priority 2
 
-    track encodeHapMapCovJPT
-    subTrack encodeHapMapCov
+    track encodeHapMapCovWigJPT
+    subTrack encodeHapMapCovWig
     shortLabel JPT
     longLabel HapMap Resequencing Coverage (JPT)
     priority 3
 
-    track encodeHapMapCovYRI
-    subTrack encodeHapMapCov
+    track encodeHapMapCovWigYRI
+    subTrack encodeHapMapCovWig
     shortLabel YRI
     longLabel HapMap Resequencing Coverage (YRI)
     priority 4
