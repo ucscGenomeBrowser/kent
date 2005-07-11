@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.207 2005/07/08 18:31:37 galt Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.208 2005/07/11 20:19:55 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1033,177 +1033,6 @@ puts("<P><B>Enzymes (separate with commas):</B><BR>");
 cgiMakeTextVar(cutterVar, enz, 100);
 }
 
-boolean parseAssignment(char *words, char **name, char **value)
-/* parse <name>=<value>, destroying input words in the process */
-{
-char *p;
-if ((p = index(words, '=')) == NULL)
-    return FALSE;
-*p++ = 0;
-if (name)
-    *name = words;
-if (value)
-    *value = p;
-return TRUE;
-}
-
-void compositeUiSubtracks(struct trackDb *tdb, boolean selectedOnly)
-/* UI for composite tracks -- has checkboxes for subtracks */
-{
-struct trackDb *subtrack;
-char option[64];
-char *words[2];
-
-puts("<P>");
-puts("<TABLE>");
-slSort(&(tdb->subtracks), trackDbCmp);
-for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    boolean alreadySet = TRUE;
-    char *setting;
-
-    safef(option, sizeof(option), "%s_sel", subtrack->tableName);
-    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
-        if (chopLine(cloneString(setting), words) >= 2)
-            alreadySet = differentString(words[1], "off");
-    alreadySet = cartUsualBoolean(cart, option, alreadySet);
-    if (selectedOnly && !alreadySet)
-        continue;
-    puts("<TR>");
-    puts("<TD>");
-    cgiMakeCheckBox(option, alreadySet);
-    printf ("%s", subtrack->longLabel);
-    puts("</TD>");
-    puts("</TR>");
-    }
-puts("</TABLE>");
-puts("<P>");
-}
-
-void compositeUiAll(struct trackDb *tdb)
-/* UI for composite tracks -- has checkboxes for all subtracks */
-{
-compositeUiSubtracks(tdb, FALSE);
-}
-
-#define MAX_SUBGROUP 9
-#define ADD_BUTTON_LABEL        "add" 
-#define CLEAR_BUTTON_LABEL      "clear" 
-
-void compositeUi(struct trackDb *tdb)
-/* UI for composite tracks */
-{
-int i, j, k;
-char *words[64];
-char option[64];
-int wordCnt;
-char *javascript = "onclick=\"document.subGroupForm.submit();\"";
-char *name, *value;
-char buttonVar[32];
-int nGroups;
-char setting[] = "subGroupN";
-char *button;
-struct trackDb *subtrack;
-boolean displayAll = 
-    sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
-
-if (trackDbSetting(tdb, "subGroup1") == NULL)
-    {
-    compositeUiAll(tdb);
-        return;
-    }
-printf("</FORM>\n");
-puts("<FORM ACTION=\"/cgi-bin/hgTrackUi\" NAME=\"subGroupForm\" METHOD=\"GET\">");
-puts("<P>");
-puts ("<TABLE>");
-puts("<TR><B>Select subtracks:</B></TR>");
-puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
-safef(buttonVar, sizeof buttonVar, "%s", "button.all");
-cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
-puts("</TD><TD>");
-cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
-button = cgiOptionalString(buttonVar);
-if (button)
-    {
-    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        {
-        safef(option, sizeof(option), "%s_sel", subtrack->tableName);
-        cartSetBoolean(cart, option, sameString(button, ADD_BUTTON_LABEL) ?
-                                                TRUE : FALSE);
-        }
-    }
-puts("</TD></TR>");
-puts ("</TABLE>");
-/* generate set & clear buttons for subgroups */
-for (i = 0; i < MAX_SUBGROUP; i++)
-    {
-    char *subGroup;
-    safef(setting, sizeof setting, "subGroup%d", i+1);
-    if (trackDbSetting(tdb, setting) == NULL)
-        break;
-    wordCnt = chopLine(cloneString(trackDbSetting(tdb, setting)), words);
-    if (wordCnt < 2)
-        continue;
-    subGroup = cloneString(words[0]);
-    puts ("<TABLE>");
-    printf("<TR><TD><EM><B>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
-    for (j = 2; j < wordCnt; j++)
-        {
-        if (!parseAssignment(words[j], &name, &value))
-            continue;
-        printf("<TR><TD>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; %s</TD><TD>", value);
-        safef(buttonVar, sizeof buttonVar, "%s.%s", subGroup, name);
-        cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
-        puts("</TD><TD>");
-        cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
-        puts("</TD></TR>");
-        button = cgiOptionalString(buttonVar);
-        if (!button)
-            continue;
-        for (subtrack = tdb->subtracks; subtrack != NULL; 
-                subtrack = subtrack->next)
-            {
-            char *p;
-            int n;
-            if ((p = trackDbSetting(subtrack, "subGroups")) == NULL)
-                continue;
-            n = chopLine(cloneString(p), words);
-            for (k = 0; k < n; k++)
-                {
-                char *subName, *subValue;
-                if (!parseAssignment(words[k], &subName, &subValue))
-                    continue;
-                if (sameString(subName, subGroup) && sameString(subValue, name))
-                    {
-                    safef(option, sizeof(option), 
-                            "%s_sel", subtrack->tableName);
-                    cartSetBoolean(cart, option, sameString(button, ADD_BUTTON_LABEL) ?
-                                                    TRUE : FALSE);
-                    }
-                }
-            }
-        }
-    puts ("</TABLE>");
-    }
-puts("<P>");
-puts("<TABLE>");
-puts("<TR><TD><B>Show subtracks:</B></TD><TD>");
-cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
-                                javascript);
-puts("Selected</TD><TD>");
-cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll, javascript);
-puts("All</TD>");
-puts("</TR>");
-puts("</TABLE>");
-cartSaveSession(cart);
-cgiContinueHiddenVar("g");
-nGroups = i;
-if (displayAll)
-    compositeUiAll(tdb);
-else
-    compositeUiSubtracks(tdb, TRUE);
-}
-
 struct wigMafSpecies 
     {
     struct wigMafSpecies *next;
@@ -1714,8 +1543,10 @@ else if (tdb->type != NULL)
 	}
     freeMem(typeLine);
     }
+puts("</FORM>");
+
 if (trackDbSetting(tdb, "compositeTrack"))
-    compositeUi(tdb);
+    hCompositeUi(cart, tdb, NULL, NULL);
 }
 
 void trackUi(struct trackDb *tdb)
@@ -1734,18 +1565,28 @@ specificUi(tdb);
 
 /* Make link to TB schema -- unless this is an on-the-fly (tableless) track. */
 if (hTableOrSplitExists(tdb->tableName))
+    {
+    char *tableName = tdb->tableName;
+    if (sameString(tableName, "mrna"))
+	tableName = "all_mrna";
     printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
 	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
 	   "TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, tdb->tableName, tdb->tableName);
-else if (tdb->subtracks != NULL &&
-	 hTableOrSplitExists(tdb->subtracks->tableName))
-    printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-	   "TARGET=_BLANK>"
-	   "View table schema</A></P>\n",
-	   database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+	   database, tdb->grp, tableName, tableName);
+    }
+else if (tdb->subtracks != NULL)
+    {
+    /* handle multi-word subTrack settings: */
+    char *words[2];
+    if ((chopLine(cloneString(tdb->subtracks->tableName), words) > 0) &&
+	hTableOrSplitExists(words[0]))
+	printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
+	       "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
+	       "TARGET=_BLANK>"
+	       "View table schema</A></P>\n",
+	       database, tdb->grp, tdb->tableName, tdb->subtracks->tableName);
+    }
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
@@ -1819,7 +1660,6 @@ cartWebStart(cart, "%s Track Settings", tdb->shortLabel);
 printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
 cartSaveSession(cart);
 trackUi(tdb);
-printf("</FORM>");
 webEnd();
 }
 
