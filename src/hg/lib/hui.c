@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.63 2005/07/07 23:51:29 galt Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.64 2005/07/11 20:18:33 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1159,5 +1159,214 @@ void acemblyDropDown(char *var, char *curVal)
 {
 cgiMakeDropList(var, acemblyOptions, ArraySize(acemblyOptions), 
 	curVal);
+}
+
+boolean parseAssignment(char *words, char **name, char **value)
+/* parse <name>=<value>, destroying input words in the process */
+{
+char *p;
+if ((p = index(words, '=')) == NULL)
+    return FALSE;
+*p++ = 0;
+if (name)
+    *name = words;
+if (value)
+    *value = p;
+return TRUE;
+}
+
+static void compositeUiSubtracks(struct cart *cart, struct trackDb *tdb,
+				 boolean selectedOnly, char *primarySubtrack)
+/* Show checkboxes for subtracks. */
+{
+struct trackDb *subtrack;
+char option[64];
+char *words[2];
+
+puts("<P>");
+puts("<TABLE>");
+slSort(&(tdb->subtracks), trackDbCmp);
+for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    boolean alreadySet = TRUE;
+    boolean isPrimary = FALSE;
+    char *setting;
+
+    safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+    if ((setting = trackDbSetting(tdb, "subTrack")) != NULL)
+        if (chopLine(cloneString(setting), words) >= 2)
+            alreadySet = differentString(words[1], "off");
+    alreadySet = cartUsualBoolean(cart, option, alreadySet);
+    isPrimary = (primarySubtrack &&
+		 sameString(subtrack->tableName, primarySubtrack));
+    if (selectedOnly && !alreadySet && !isPrimary)
+        continue;
+    puts("<TR>");
+    puts("<TD>");
+    if (isPrimary)
+	{
+	cgiMakeHiddenBoolean(option, TRUE);
+	puts("[on] ");
+	}
+    else
+	cgiMakeCheckBox(option, alreadySet);
+    printf ("</TD><TD>%s", subtrack->longLabel);
+    if (isPrimary)
+	puts(" [selected on main page]");
+    puts("</TD>");
+    puts("</TR>");
+    }
+puts("</TABLE>");
+puts("<P>");
+}
+
+static void compositeUiAllSubtracks(struct cart *cart, struct trackDb *tdb,
+				    char *primarySubtrack)
+/* Show checkboxes for all subtracks, not just selected ones. */
+{
+compositeUiSubtracks(cart, tdb, FALSE, primarySubtrack);
+}
+
+static void compositeUiSelectedSubtracks(struct cart *cart, struct trackDb *tdb,
+					 char *primarySubtrack)
+/* Show checkboxes only for selected subtracks. */
+{
+compositeUiSubtracks(cart, tdb, TRUE, primarySubtrack);
+}
+
+#define MAX_SUBGROUP 9
+#define ADD_BUTTON_LABEL        "add" 
+#define CLEAR_BUTTON_LABEL      "clear" 
+
+void hCompositeUi(struct cart *cart, struct trackDb *tdb, char *primarySubtrack,
+		  char *submit)
+/* UI for composite tracks: subtrack selection.  If primarySubtrack is 
+ * non-NULL, don't allow it to be cleared.  If submit is non-NULL, make a 
+ * hidden variable for it (so it will appear that this form was submitted by 
+ * that button). */
+{
+int i, j, k;
+char *words[64];
+char option[64];
+int wordCnt;
+char *javascript = "onclick=\"document.subGroupForm.submit();\"";
+char *name, *value;
+char buttonVar[32];
+int nGroups;
+char setting[] = "subGroupN";
+char *button;
+struct trackDb *subtrack;
+boolean displayAll = 
+    sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
+
+if (trackDbSetting(tdb, "subGroup1") == NULL)
+    {
+    compositeUiAllSubtracks(cart, tdb, primarySubtrack);
+    return;
+    }
+
+printf("<FORM ACTION=\"%s\" NAME=\"subGroupForm\" METHOD=\"%s\">",
+       cgiScriptName(), cartUsualString(cart, "formMethod", "POST"));
+
+if (submit != NULL)
+    cgiMakeHiddenVar(submit, "submit");
+
+puts("<P>");
+puts ("<TABLE>");
+puts("<TR><B>Select subtracks:</B></TR>");
+puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
+safef(buttonVar, sizeof buttonVar, "%s", "button.all");
+cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
+puts("</TD><TD>");
+cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
+button = cgiOptionalString(buttonVar);
+if (button)
+    {
+    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        {
+	boolean newVal = FALSE;
+        safef(option, sizeof(option), "%s_sel", subtrack->tableName);
+	newVal = sameString(button, ADD_BUTTON_LABEL);
+	if (primarySubtrack &&
+	    sameString(subtrack->tableName, primarySubtrack))
+	    newVal = TRUE;
+	cartSetBoolean(cart, option, newVal);
+        }
+    }
+puts("</TD></TR>");
+puts ("</TABLE>");
+/* generate set & clear buttons for subgroups */
+for (i = 0; i < MAX_SUBGROUP; i++)
+    {
+    char *subGroup;
+    safef(setting, sizeof setting, "subGroup%d", i+1);
+    if (trackDbSetting(tdb, setting) == NULL)
+        break;
+    wordCnt = chopLine(cloneString(trackDbSetting(tdb, setting)), words);
+    if (wordCnt < 2)
+        continue;
+    subGroup = cloneString(words[0]);
+    puts ("<TABLE>");
+    printf("<TR><TD><EM><B>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
+    for (j = 2; j < wordCnt; j++)
+        {
+        if (!parseAssignment(words[j], &name, &value))
+            continue;
+        printf("<TR><TD>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; %s</TD><TD>", value);
+        safef(buttonVar, sizeof buttonVar, "%s.%s", subGroup, name);
+        cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
+        puts("</TD><TD>");
+        cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
+        puts("</TD></TR>");
+        button = cgiOptionalString(buttonVar);
+        if (!button)
+            continue;
+        for (subtrack = tdb->subtracks; subtrack != NULL; 
+                subtrack = subtrack->next)
+            {
+            char *p;
+            int n;
+            if ((p = trackDbSetting(subtrack, "subGroups")) == NULL)
+                continue;
+            n = chopLine(cloneString(p), words);
+            for (k = 0; k < n; k++)
+                {
+                char *subName, *subValue;
+                if (!parseAssignment(words[k], &subName, &subValue))
+                    continue;
+                if (sameString(subName, subGroup) && sameString(subValue, name))
+                    {
+		    boolean newVal = FALSE;
+                    safef(option, sizeof(option), 
+                            "%s_sel", subtrack->tableName);
+		    newVal = sameString(button, ADD_BUTTON_LABEL);
+		    if (primarySubtrack &&
+			sameString(subtrack->tableName, primarySubtrack))
+			newVal = TRUE;
+                    cartSetBoolean(cart, option, newVal);
+                    }
+                }
+            }
+        }
+    puts ("</TABLE>");
+    }
+puts("<P>");
+puts("<TABLE>");
+puts("<TR><TD><B>Show subtracks:</B></TD><TD>");
+cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
+                                javascript);
+puts("Selected</TD><TD>");
+cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll, javascript);
+puts("All</TD>");
+puts("</TR>");
+puts("</TABLE>");
+cartSaveSession(cart);
+cgiContinueHiddenVar("g");
+nGroups = i;
+if (displayAll)
+    compositeUiAllSubtracks(cart, tdb, primarySubtrack);
+else
+    compositeUiSelectedSubtracks(cart, tdb, primarySubtrack);
+puts("</FORM>");
 }
 
