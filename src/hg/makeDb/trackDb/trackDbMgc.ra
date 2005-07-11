@@ -167,7 +167,7 @@ cdsDrawOptions enabled
 
 # Vancouver GSC
 track gscMgcClones
-shortLabel GSC MGCs
+shortLabel GSC RT-PCR
 longLabel  GSC RT-PCR clones for MGC
 group mgc
 priority 2105.2
@@ -176,6 +176,18 @@ color 155,0,125
 type psl .
 exonArrows on
 cdsDrawOptions enabled
+
+track gscMgcTargets
+shortLabel GSC Targets
+longLabel GSC RT-PCR targets for MGC
+group mgc
+priority 2105.3
+visibility pack
+color 200,0,50
+type genePred
+exonArrows on
+cdsDrawDefault genomic\ codons
+
 
 track exoniphy
 shortLabel Exoniphy 
