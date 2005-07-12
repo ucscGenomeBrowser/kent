@@ -5775,6 +5775,12 @@ type bed 4 +
     longLabel Copy Number Polymorphisms from ROMA (Sebat)
     priority 146.3
 
+    track cnpFosmid
+    subTrack cnp
+    shortLabel CNPs (Fosmid) 
+    longLabel Copy Number Polymorphisms from Fosmids
+    priority 146.4
+
 track fosmidDiscordant
 shortLabel Fosmid Discordants
 longLabel Fosmid Discordants
