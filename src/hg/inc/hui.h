@@ -4,6 +4,7 @@
 #define HUI_H
 
 #include "cart.h"
+#include "trackDb.h"
 
 char *hUserCookie();
 /* Return our cookie name. */
