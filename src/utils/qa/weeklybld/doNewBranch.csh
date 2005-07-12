@@ -110,7 +110,6 @@ echo
 ./doRobots.csh
 if ( $status ) then
     echo "One or more of the robots had errors.  See the logs."
-    exit 1
 else
     echo "Robots done. No errors reported."
 endif
