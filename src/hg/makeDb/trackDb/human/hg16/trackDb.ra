@@ -5760,13 +5760,13 @@ type bed 4 +
     track cnpSharp
     subTrack cnp 
     shortLabel CNPs (Sharp) 
-    longLabel Copy Number Polymorphisms from BAC microarray analysis (Sharp)
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Sharp)
     priority 146.1
 
     track cnpIafrate
     subTrack cnp
     shortLabel CNPs (Iafrate) 
-    longLabel Copy Number Polymorphisms from BAC microarray analysis (Iafrate)
+    longLabel Copy Number Polymorphisms from BAC Microarray Analysis (Iafrate)
     priority 146.2
 
     track cnpSebat
