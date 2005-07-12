@@ -5799,6 +5799,16 @@ color 20,90,0
 type bed 6 +
 mafTrack mzPt1Mm3Rn3Gg2_pHMM
 
+track encode_tba23EvoFold
+shortLabel TBA23 EvoFold
+longLabel EvoFold predictions of RNA secondary structure using TBA23 (id_strand_score)
+group encodeGenes
+priority 63.1
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack encodeTbaAlign
+
 track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
