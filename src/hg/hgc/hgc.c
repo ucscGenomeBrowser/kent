@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.914 2005/07/10 09:21:01 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.915 2005/07/12 02:11:05 jsp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16408,6 +16408,7 @@ else if (sameWord(track, "rnaGene"))
 else if (sameWord(track, "RfamSeedFolds") 
 	 || sameWord(track, "rfamTestFolds") 
 	 || sameWord(track, "evofold") 
+	 || sameWord(track, "encode_tba23EvoFold") 
 	 || sameWord(track, "rnafold") 
 	 || sameWord(track, "rnaTestFolds") 
 	 || sameWord(track, "mcFolds") 
