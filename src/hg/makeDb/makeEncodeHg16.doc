@@ -2756,6 +2756,33 @@ done
     hgLoadBed -strict -sqlTable=encodeHapMapAlleleFreqJPT.sql hg16 encodeHapMapAlleleFreqJPT allele_freqs_JPT.bed
     hgLoadBed -strict -sqlTable=encodeHapMapAlleleFreqYRI.sql hg16 encodeHapMapAlleleFreqYRI allele_freqs_YRI.bed
 
+
+##########################################################################
+# HapMap resequencing coverage
+# Daryl, July 11, 2005
+
+    foreach pop (CEU CHB JPT YRI)
+	grep $pop coverage.bed|awk '{printf "chr%s\t%d\t%d\t%s\t%d\n",$2,$3-1,$3,$1,$4}'|cut -f1-3,5>encodeHapMapCov$pop.bedGraph 
+    end
+    
+    grep CHB coverage.bed|awk '{printf "chr%s\t%d\t%d\t%s\t%d\n",$2,$3-1,$3,$1,$4}'|cut -f1-3,5>encodeHapMapCovHCB.bedGraph 
+    grep JAP coverage.bed|awk '{printf "chr%s\t%d\t%d\t%s\t%d\n",$2,$3-1,$3,$1,$4}'|cut -f1-3,5>encodeHapMapCovJPT.bedGraph 
+    
+    
+    foreach pop (CEU CHB JPT YRI)
+	    nice time hgLoadBed -bedGraph=4 -strict hg16 encodeHapMapCovBedGraph$pop encodeHapMapCov$pop.bedGraph > & load$pop.log
+    end
+    
+    set wibPath = /gbdb/hg16/encode/sanger/wib
+    foreach pop (CEU CHB JPT YRI)
+	time wigEncode encodeHapMapCov$pop.bedGraph encodeHapMapCov$pop.wig encodeHapMapCov$pop.wib
+	rm -f $wibPath/encodeHapMapCov$pop.wib
+	ln -s `pwd`/encodeHapMapCov$pop.wib $wibPath
+	chmod o+r . encodeHapMapCov$pop.wib
+	time hgLoadWiggle -pathPrefix=$wibPath hg16 encodeHapMapCov$pop encodeHapMapCov$pop.wig
+    end
+
+
 ##########################################################################
 # ENCODE Regulome 
 # Heather, June 2005
@@ -2831,7 +2858,7 @@ done
 
 ##########################################################################
 # ENCODE RNA transcription compilation (Matt Weirauch and Todd Lowe)
-# Daryl and Matt Weirauch, July 8, 2005
+# Daryl and Matt Weirauch, July 8, 2005 (reloaded with new evoFold scores on July 10)
 
     cd /cluster/data/encode/ucsc/lowe
     hgLoadBed -sqlTable=/cluster/home/daryl/kent/src/hg/lib/encodeRna.sql hg16 encodeRna encodeRna.bed -strict
@@ -3220,5 +3247,4 @@ close (FH);
     #   table: encodeRikenCageMappedTags
     #		Riken CAGE Tags
     #		Riken CAGE Mapped Tags - TEST TRACK ONLY
-
 
