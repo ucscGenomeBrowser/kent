@@ -5515,29 +5515,29 @@ useScore 1
 
     track encodeHapMapAlleleFreqCEU
     subTrack encodeHapMapAlleleFreq
-    shortLabel CEU
-    longLabel HapMap Allele Frequencies (CEU)
+    shortLabel Allele Freq CEU
+    longLabel HapMap Minor Allele Frequencies CEPH (CEU)
     priority 1
 
     track encodeHapMapAlleleFreqCHB
     subTrack encodeHapMapAlleleFreq
-    shortLabel CHB
-    longLabel HapMap Allele Frequencies (CHB)
+    shortLabel Allele Freq CHB
+    longLabel HapMap Minor Allele Frequencies Chinese (CHB)
     priority 2
 
     track encodeHapMapAlleleFreqJPT
     subTrack encodeHapMapAlleleFreq
-    shortLabel JPT
-    longLabel HapMap Allele Frequencies (JPT)
+    shortLabel Allele Freq JPT
+    longLabel HapMap Minor Allele Frequencies Japanese (JPT)
     priority 3
 
     track encodeHapMapAlleleFreqYRI
     subTrack encodeHapMapAlleleFreq
-    shortLabel YRI
-    longLabel HapMap Allele Frequencies (YRI)
+    shortLabel Allele Freq YRI
+    longLabel HapMap Minor Allele Frequencies Yoruban (YRI)
     priority 4
 
-track encodeHapMapCovWig
+track encodeHapMapCov
 compositeTrack on
 shortLabel HapMap Coverage
 longLabel ENCODE HapMap (16c.1) Resequencing Coverage
@@ -5548,32 +5548,32 @@ maxHeightPixels 128:16:16
 visibility hide
 type wig 0.0 100.0
 
-    track encodeHapMapCovWigCEU
-    subTrack encodeHapMapCovWig
-    shortLabel CEU
-    longLabel HapMap Resequencing Coverage (CEU)
+    track encodeHapMapCovCEU
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov CEU
+    longLabel HapMap Resequencing Coverage CEPH (CEU)
     priority 1
 
-    track encodeHapMapCovWigCHB
-    subTrack encodeHapMapCovWig
-    shortLabel CHB
-    longLabel HapMap Resequencing Coverage (CHB)
+    track encodeHapMapCovCHB
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov CHB
+    longLabel HapMap Resequencing Coverage Chinese (CHB)
     priority 2
 
-    track encodeHapMapCovWigJPT
-    subTrack encodeHapMapCovWig
-    shortLabel JPT
-    longLabel HapMap Resequencing Coverage (JPT)
+    track encodeHapMapCovJPT
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov JPT
+    longLabel HapMap Resequencing Coverage Japanese (JPT)
     priority 3
 
-    track encodeHapMapCovWigYRI
-    subTrack encodeHapMapCovWig
-    shortLabel YRI
-    longLabel HapMap Resequencing Coverage (YRI)
+    track encodeHapMapCovYRI
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov YRI
+    longLabel HapMap Resequencing Coverage Yoruban (YRI)
     priority 4
 
 track encodeRecomb
-shortLabel Recombination 
+shortLabel Oxford Recomb
 longLabel Recombination Rates in ENCODE regions
 group encodeVariation
 priority 86
@@ -5809,7 +5809,7 @@ color 200,80,0
 type bed 8 +
 
 track encodeRna
-shortLabel ENCODE RNA
+shortLabel Consensus RNA
 longLabel Known and Predicted RNA Transcription in the ENCODE Regions
 group encodeGenes
 priority 52
