@@ -24,6 +24,7 @@ my::
 	chmod g+w ${CGI_BIN}-${USER}/all.joiner
 	chmod a+r galaAvail.tab
 	chmod g+w galaAvail.tab
+	rm -f ${CGI_BIN}-${USER}/galaAvail.tab
 	cp galaAvail.tab ${CGI_BIN}-${USER}/galaAvail.tab
 
 alpha::
@@ -33,6 +34,7 @@ alpha::
 	chmod g+w ${CGI_BIN}/all.joiner
 	chmod a+r galaAvail.tab
 	chmod g+w galaAvail.tab
+	rm -f ${CGI_BIN}/galaAvail.tab
 	cp galaAvail.tab ${CGI_BIN}/galaAvail.tab
 	# Original source of galaAvail.tab:
 	#	wget --quiet -O ${CGI_BIN}/galaAvail.tab \
@@ -45,6 +47,7 @@ beta::
 	chmod g+w ${CGI_BIN}-beta/all.joiner
 	chmod a+r galaAvail.tab
 	chmod g+w galaAvail.tab
+	rm -f ${CGI_BIN}-beta/galaAvail.tab
 	cp galaAvail.tab ${CGI_BIN}-beta/galaAvail.tab
 	# Original source of galaAvail.tab:
 	#	wget --quiet -O ${CGI_BIN}-beta/galaAvail.tab \
