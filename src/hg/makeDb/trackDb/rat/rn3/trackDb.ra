@@ -143,8 +143,8 @@ type psl xeno mm5
 otherDb mm5
 
 track chainMm5
-shortLabel Mouse Chain 
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+shortLabel mm5 Chain 
+longLabel $o_db `($o_date/$o_db) Chained Alignments
 group compGeno
 priority 215
 visibility dense
@@ -155,8 +155,8 @@ type chain mm5
 otherDb mm5
 
 track netMm5
-shortLabel Mouse Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+shortLabel mm5 Net
+longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
 priority 216
 visibility dense
