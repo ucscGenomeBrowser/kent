@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.65 2005/07/11 21:08:48 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.66 2005/07/12 02:26:49 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1201,8 +1201,7 @@ for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		 sameString(subtrack->tableName, primarySubtrack));
     if (selectedOnly && !alreadySet && !isPrimary)
         continue;
-    puts("<TR>");
-    puts("<TD>");
+    puts("<TR><TD>");
     if (isPrimary)
 	{
 	cgiMakeHiddenBoolean(option, TRUE);
@@ -1213,8 +1212,7 @@ for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     printf ("</TD><TD>%s", subtrack->longLabel);
     if (isPrimary)
 	puts(" [selected on main page]");
-    puts("</TD>");
-    puts("</TR>");
+    puts("</TD></TR>");
     }
 puts("</TABLE>");
 puts("<P>");
@@ -1237,20 +1235,43 @@ compositeUiSubtracks(cart, tdb, TRUE, primarySubtrack);
 #define MAX_SUBGROUP 9
 #define ADD_BUTTON_LABEL        "add" 
 #define CLEAR_BUTTON_LABEL      "clear" 
+#define JBUFSIZE 2048
 
-void hCompositeUi(struct cart *cart, struct trackDb *tdb, char *primarySubtrack,
-		  char *submit, boolean betweenForms)
+static void makeAddClearSubmitTweak(char javascript[JBUFSIZE], char *formName,
+				    char *buttonVar, char *label)
+/* safef into javascript a sequence of commands that will force a refresh 
+ * of this same form, updating the values of whatever variables are necessary 
+ * to say what we want to do. */
+{
+safef(javascript, JBUFSIZE*sizeof(char), 
+      "document.%s.action = '%s'; document.%s.%s.value='%s'; "
+      "document.%s.submit();",
+      formName, cgiScriptName(), formName, buttonVar, label,
+      formName);
+}
+
+static void makeRadioSubmitTweak(char javascript[JBUFSIZE], char *formName)
+/* safef into javascript a sequence of commands that will force a refresh 
+ * of this same form, updating the values of whatever variables are necessary 
+ * to say what we want to do. */
+{
+safef(javascript, JBUFSIZE*sizeof(char), 
+      "onclick=\"document.%s.action = '%s'; "
+      "document.%s.submit();\"",
+      formName, cgiScriptName(), formName);
+}
+
+void hCompositeUi(struct cart *cart, struct trackDb *tdb,
+		  char *primarySubtrack, char *fakeSubmit, char *formName)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is 
- * non-NULL, don't allow it to be cleared.  If submit is non-NULL, make a 
- * hidden variable for it (so it will appear that this form was submitted by 
- * that button).  If betweenForms, print a "</FORM>" before starting new 
- * form, but don't print out "</FORM>" at end -- assume caller will do so. */
+ * non-NULL, don't allow it to be cleared.  If fakeSubmit is non-NULL, 
+ * add a hidden var with that name so it looks like it was pressed. */
 {
 int i, j, k;
 char *words[64];
 char option[64];
 int wordCnt;
-char *javascript = "onclick=\"document.subGroupForm.submit();\"";
+char javascript[JBUFSIZE];
 char *name, *value;
 char buttonVar[32];
 int nGroups;
@@ -1266,24 +1287,33 @@ if (trackDbSetting(tdb, "subGroup1") == NULL)
     return;
     }
 
-if (betweenForms)
-    puts("</FORM>");
-printf("<FORM ACTION=\"%s\" NAME=\"subGroupForm\" METHOD=\"%s\">",
-       cgiScriptName(), cartUsualString(cart, "formMethod", "POST"));
-
-if (submit != NULL)
-    cgiMakeHiddenVar(submit, "submit");
+if (fakeSubmit)
+    cgiMakeHiddenVar(fakeSubmit, "submit");
 
 puts("<P>");
 puts ("<TABLE>");
 puts("<TR><B>Select subtracks:</B></TR>");
 puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
-safef(buttonVar, sizeof buttonVar, "%s", "button.all");
-cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
-puts("</TD><TD>");
-cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
+safef(buttonVar, sizeof buttonVar, "%s", "button_all");
+if (formName)
+    {
+    cgiMakeHiddenVar(buttonVar, "");
+    makeAddClearSubmitTweak(javascript, formName, buttonVar,
+			    ADD_BUTTON_LABEL);
+    cgiMakeOnClickButton(javascript, ADD_BUTTON_LABEL);
+    puts("</TD><TD>");
+    makeAddClearSubmitTweak(javascript, formName, buttonVar,
+			    CLEAR_BUTTON_LABEL);
+    cgiMakeOnClickButton(javascript, CLEAR_BUTTON_LABEL);
+    }
+else
+    {
+    cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
+    puts("</TD><TD>");
+    cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
+    }
 button = cgiOptionalString(buttonVar);
-if (button)
+if (isNotEmpty(button))
     {
     for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         {
@@ -1315,14 +1345,29 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         {
         if (!parseAssignment(words[j], &name, &value))
             continue;
-        printf("<TR><TD>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; %s</TD><TD>", value);
-        safef(buttonVar, sizeof buttonVar, "%s.%s", subGroup, name);
-        cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
-        puts("</TD><TD>");
-        cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
+        printf("<TR><TD>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; %s</TD><TD>",
+	       value);
+        safef(buttonVar, sizeof buttonVar, "%s_%s", subGroup, name);
+	if (formName)
+	    {
+	    cgiMakeHiddenVar(buttonVar, "");
+	    makeAddClearSubmitTweak(javascript, formName, buttonVar,
+				    ADD_BUTTON_LABEL);
+	    cgiMakeOnClickButton(javascript, ADD_BUTTON_LABEL);
+	    puts("</TD><TD>");
+	    makeAddClearSubmitTweak(javascript, formName, buttonVar,
+				    CLEAR_BUTTON_LABEL);
+	    cgiMakeOnClickButton(javascript, CLEAR_BUTTON_LABEL);
+	    }
+	else
+	    {
+	    cgiMakeButton(buttonVar, ADD_BUTTON_LABEL);
+	    puts("</TD><TD>");
+	    cgiMakeButton(buttonVar, CLEAR_BUTTON_LABEL);
+	    }
         puts("</TD></TR>");
         button = cgiOptionalString(buttonVar);
-        if (!button)
+        if (isEmpty(button))
             continue;
         for (subtrack = tdb->subtracks; subtrack != NULL; 
                 subtrack = subtrack->next)
@@ -1356,10 +1401,21 @@ for (i = 0; i < MAX_SUBGROUP; i++)
 puts("<P>");
 puts("<TABLE>");
 puts("<TR><TD><B>Show subtracks:</B></TD><TD>");
-cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
+if (formName)
+    {
+    makeRadioSubmitTweak(javascript, formName);
+    cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
                                 javascript);
-puts("Selected</TD><TD>");
-cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll, javascript);
+    puts("Selected</TD><TD>");
+    cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,
+			      javascript);
+    }
+else
+    {
+    cgiMakeRadioButton("displaySubtracks", "selected", !displayAll);
+    puts("Selected</TD><TD>");
+    cgiMakeRadioButton("displaySubtracks", "all", displayAll);
+    }
 puts("All</TD>");
 puts("</TR>");
 puts("</TABLE>");
@@ -1370,7 +1426,5 @@ if (displayAll)
     compositeUiAllSubtracks(cart, tdb, primarySubtrack);
 else
     compositeUiSelectedSubtracks(cart, tdb, primarySubtrack);
-if (! betweenForms)
-    puts("</FORM>");
 }
 

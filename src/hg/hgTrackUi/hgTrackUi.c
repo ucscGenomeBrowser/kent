@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.209 2005/07/11 21:08:48 angie Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.210 2005/07/12 02:26:49 angie Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1545,14 +1545,14 @@ else if (tdb->type != NULL)
     }
 
 if (trackDbSetting(tdb, "compositeTrack"))
-    hCompositeUi(cart, tdb, NULL, NULL, TRUE);
+    hCompositeUi(cart, tdb, NULL, NULL, "mainForm");
 }
 
 void trackUi(struct trackDb *tdb)
 /* Put up track-specific user interface. */
 {
 char *vis = hStringFromTv(tdb->visibility);
-printf("<FORM ACTION=\"%s\">\n\n", hgTracksName());
+printf("<FORM ACTION=\"%s\" NAME=\"mainForm\">\n\n", hgTracksName());
 cartSaveSession(cart);
 printf("<H1>%s</H1>\n", tdb->longLabel);
 printf("<B>Display mode: </B>");

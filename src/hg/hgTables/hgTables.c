@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.118 2005/07/10 06:34:08 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.119 2005/07/12 02:26:49 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1501,12 +1501,17 @@ else if (cartVarExists(cart, hgtaDoCorrelateMore))
     doCorrelateMore(conn);
 else if (cartVarExists(cart, hgtaDoCorrelateSubmit))
     doCorrelateSubmit(conn);
-else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
-    doSubtrackMergePage(conn);
 else if (cartVarExists(cart, hgtaDoClearSubtrackMerge))
     doClearSubtrackMerge(conn);
+/* Hack but I don't know what else to do now: hCompositeUi makes a hidden 
+ * var for hgtaDoSubtrackMergePage, so that javascript can submit and it will 
+ * look like that button was pressed.  However when the real submit button is 
+ * pressed, it will look like both were pressed... so check the real submit 
+ * button first: */
 else if (cartVarExists(cart, hgtaDoSubtrackMergeSubmit))
     doSubtrackMergeSubmit(conn);
+else if (cartVarExists(cart, hgtaDoSubtrackMergePage))
+    doSubtrackMergePage(conn);
 else if (cartVarExists(cart, hgtaDoPasteIdentifiers))
     doPasteIdentifiers(conn);
 else if (cartVarExists(cart, hgtaDoClearPasteIdentifierText))

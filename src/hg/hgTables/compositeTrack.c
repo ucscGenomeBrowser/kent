@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.7 2005/07/11 21:08:48 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.8 2005/07/12 02:26:49 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -173,15 +173,15 @@ char *dbTable = getDbTable(database, curTable);
 htmlOpen("Merge subtracks of %s (%s)",
 	 curTrack->tableName, curTrack->longLabel);
 
-hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
-/* hCompositeUi makes its own form, so keep it separate from our main form: */
-hCompositeUi(cart, curTrack, curTable, hgtaDoSubtrackMergePage, FALSE);
-
-hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=POST>\n");
+hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=%s>\n",
+	cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
 /* Currently selected subtrack table will be the primary subtrack in the 
  * merge. */
 cgiMakeHiddenVar(hgtaNextSubtrackMergePrimary, dbTable);
+
+hPrintf("<H3>Select a subset of subtracks to merge:</H3>\n");
+hCompositeUi(cart, curTrack, curTable, hgtaDoSubtrackMergePage, "mainForm");
 
 hPrintf("<H3>Select a merge operation:</H3>\n");
 if (isWiggle(database, curTable) || isBedGraph(curTable))
