@@ -164,7 +164,7 @@ int createSubmissionId(struct sqlConnection *conn,
 	char *name,
 	char *contributors, char *publication, 
 	char *pubUrl, char *setUrl, char *itemUrl,
-	char *journal, char *journalUrl)
+	char *journal, char *journalUrl, int copyright)
 /* Add submission and contributors to database and return submission ID */
 {
 struct slName *slNameListFromString(char *s, char delimiter);
@@ -181,6 +181,7 @@ dyStringPrintf(dy, " contributors = \"%s\",\n", contributors);
 dyStringPrintf(dy, " publication = \"%s\",\n", publication);
 dyStringPrintf(dy, " pubUrl = \"%s\",\n", pubUrl);
 dyStringPrintf(dy, " journal = %d,\n", journalId);
+dyStringPrintf(dy, " copyright = %d,\n", copyright);
 dyStringPrintf(dy, " setUrl = \"%s\",\n", setUrl);
 dyStringPrintf(dy, " itemUrl = \"%s\"\n", itemUrl);
 verbose(2, "%s\n", dy->string);
@@ -214,12 +215,17 @@ char *setUrl = hashValOrDefault(raHash, "setUrl", "");
 char *itemUrl = hashValOrDefault(raHash, "itemUrl", "");
 char *journal = hashValOrDefault(raHash, "journal", "");
 char *journalUrl = hashValOrDefault(raHash, "journalUrl", "");
+char *copyright = hashFindVal(raHash, "copyright");
+int copyrightId = 0;
 int submissionId = findExactSubmissionId(conn, name, contributor);
+if (copyright != NULL)
+    copyrightId = findOrAddIdTable(conn, "copyright", "notice", copyright);
+
 if (submissionId != 0)
      return submissionId;
 else
      return createSubmissionId(conn, name, contributor, 
-     	publication, pubUrl, setUrl, itemUrl, journal, journalUrl);
+     	publication, pubUrl, setUrl, itemUrl, journal, journalUrl, copyrightId);
 }
 
 int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,
@@ -1078,8 +1084,6 @@ while (lineFileNextReal(lf, &line))
 	    "name", thumbDirHash, "thumbDir", raHash, rowHash, words);
 	int bodyPart = cachedId(conn, "bodyPart", 
 	    "name", bodyPartHash, "bodyPart", raHash, rowHash, words);
-	int copyright = cachedId(conn, "copyright", "notice",
-	    copyrightHash, "copyright", raHash, rowHash, words);
 	int embedding = cachedId(conn, "embedding", "description",
 	    embeddingHash, "embedding", raHash, rowHash, words);
 	int fixation = cachedId(conn, "fixation", "description",

@@ -109,6 +109,7 @@ CREATE TABLE submissionSet (
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     journal int not null,	# Journal for publication
+    copyright int not null,     # Copyright notice
     setUrl longblob not null,	# URL for whole set
     itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
               #Indices

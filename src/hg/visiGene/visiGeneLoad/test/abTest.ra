@@ -19,3 +19,4 @@ publication The further adventures of freen
 setUrl http://www.soe.ucsc.edu/~kent/test
 itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
 sliceType sagittal
+copyright Copyright (c) 2005 UC Regents.  Freely distributable under BSD License.
