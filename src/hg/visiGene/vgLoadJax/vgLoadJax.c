@@ -1,4 +1,6 @@
-/* vgLoadJax - Load visiGene database from jackson database. */
+/* vgLoadJax - Load visiGene database from jackson database. More 
+ * specifically create a directory full of .ra and .tab files from
+ * jackson database that can be loaded into visiGene with visiGeneLoad. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,9 +15,11 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "vgLoadJax - Load visiGene database from jackson database\n"
+  "vgLoadJax - Load visiGene database from jackson database. More\n"
+  "specifically create a directory full of .ra and .tab files from\n"
+  "jackson database that can be loaded into visiGene with visiGeneLoad.\n"
   "usage:\n"
-  "   vgLoadJax jaxDb visiDb\n"
+  "   vgLoadJax jaxDb outputDir\n"
   "Load everything in jackson database tagged after date to\n"
   "visiGene database.  Most commonly run as\n"
   "   vgLoadJax jackson visiGene\n"
@@ -28,7 +32,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *clJaxDb, *clVisiDb;
 
 struct slName *jaxSpecList(struct sqlConnection *conn)
 /* Get list of specimen id's. */
@@ -154,7 +157,9 @@ if (key > 0)
     struct sqlResult *sr;
     char **row;
 
-    /* Figure out genotype. */
+    /* Figure out genotype.  Create string that looks something like:
+     *     adh:cheap date,antp:+,  
+     * That is a comma separated list gene:allele. */
     dyStringPrintf(query, 
     	"select MRK_Marker.symbol,ALL_Allele.symbol "
 	"from GXD_AlleleGenotype,MRK_Marker,ALL_Allele "
@@ -216,6 +221,8 @@ sqlFreeResult(&sr);
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
 /* Create a .ra and a .tab file for given reference. */
 {
+/* Initially the tab file will have some duplicate lines, so
+ * write to temp file, and then filter. */
 char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN];
 FILE *ra = NULL, *tab = NULL;
 struct dyString *query = dyStringNew(0);
@@ -241,7 +248,6 @@ if (row == NULL)
 
 /* Make ra file with stuff common to whole submission set. */
 ra = mustOpen(raName, "w");
-list = charSepToSlNames(row[0], ';');
 fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
 fprintf(ra, "fullDir /gbdb/visiGene/jax/full\n");
@@ -249,7 +255,11 @@ fprintf(ra, "screenDir /gbdb/visiGene/jax/screen\n");
 fprintf(ra, "thumbDir /gbdb/visiGene/jax/thumb\n");
 fprintf(ra, "journal %s\n", row[1]);
 fprintf(ra, "publication %s\n", row[2]);
+
+/* The contributor (author) list is in format Kent WJ; Haussler DH; format in
+ * Jackson.  We convert it to Kent W.J.,Haussler D.H., format for visiGene. */
 fprintf(ra, "contributor ");
+list = charSepToSlNames(row[0], ';');
 for (el = list; el != NULL; el = el->next)
     {
     char *lastName = skipLeadingSpaces(el->name);
@@ -430,6 +440,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	if (!sameString(reporterGeneKey, "0"))
 	    {
+	    /* Fixme: make sure that reporterGene's end up in probeType table. */
 	    char *name = NULL;
 	    dyStringClear(query);
 	    dyStringPrintf(query, 
@@ -673,15 +684,12 @@ for (ref = refList; ref != NULL; ref = ref->next)
 slNameFreeList(&refList);
 }
 
-void vgLoadJax(char *jaxDb, char *visiDb)
+void vgLoadJax(char *jaxDb, char *outDir)
 /* vgLoadJax - Load visiGene database from jackson database. */
 {
 struct sqlConnection *conn = sqlConnect(jaxDb);
 struct sqlConnection *conn2 = sqlConnect(jaxDb);
-submitToDir(conn, conn2, visiDb);
-
-uglyf("vgLoadJax %s %s\n", jaxDb, visiDb);
-
+submitToDir(conn, conn2, outDir);
 sqlDisconnect(&conn2);
 sqlDisconnect(&conn);
 }
@@ -692,8 +700,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-clJaxDb = argv[1];
-clVisiDb = argv[2];
-vgLoadJax(clJaxDb, clVisiDb);
+vgLoadJax(argv[1], argv[2]);
 return 0;
 }
