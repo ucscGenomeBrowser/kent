@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.989 2005/07/10 17:03:38 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.990 2005/07/12 02:09:52 jsp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10136,6 +10136,7 @@ registerTrackHandler("RfamSeedFolds", rnaSecStrMethods);
 registerTrackHandler("rfamTestFolds", rnaSecStrMethods);
 registerTrackHandler("rnaTestFolds", rnaSecStrMethods);
 registerTrackHandler("evofold", rnaSecStrMethods);
+registerTrackHandler("encode_tba23EvoFold", rnaSecStrMethods);
 registerTrackHandler("rnafold", rnaSecStrMethods);
 registerTrackHandler("mcFolds", rnaSecStrMethods);
 registerTrackHandler("rnaEditFolds", rnaSecStrMethods);
