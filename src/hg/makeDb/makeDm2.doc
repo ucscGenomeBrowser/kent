@@ -2643,3 +2643,41 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     hgsql dm2 < ~/kent/src/hg/lib/blastRef.sql
     echo "rename table blastRef to blastFBRef01" | hgsql dm2
     echo "load data local infile 'blastFBRef01' into table blastFBRef01" | hgsql dm2
+
+
+# BLASTZ/CHAIN/NET TRICAS1 (DONE 7/11/05 Andy)
+    ssh kkstore01
+    mkdir /cluster/data/dm2/bed/blastz.triCas1.2005-07-10
+    cd /cluster/data/dm2/bed/blastz.triCas1.2005-07-10    
+    cat << "_EOF_" > DEF
+# D. melanogaster vs. T. castaneum
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm2/chrom.sizes
+
+# QUERY - D. virilis
+SEQ2_DIR=/panasas/store/triCas1/triCas1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+SEQ2_LEN=/panasas/store/triCas1/chrom.sizes
+
+BASE=/cluster/data/dm2/bed/blastz.triCas1.2005-07-10
+_EOF_
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/dm2triCas1 >& do.log &
+    tail -f do.log
+    featureBits dm2 -chrom=chr2L -enrichment flyBaseGene chainDroVir1Link
+#flyBaseGene 22.967%, chainDroVir1Link 66.657%, both 20.876%, cover 90.90%, enrich 1.36x
+    rm -f /cluster/data/dm2/bed/blastz.triCas1
+    ln -s blastz.triCas1.2005-05-19 /cluster/data/dm2/bed/blastz.triCas1
