@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.48 2005/07/11 21:30:38 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.49 2005/07/12 21:02:47 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -2248,10 +2248,10 @@ fillInTrackTable(tableList, conn);
 
 if (differentWord(table2onEntry,"none") && strlen(table2onEntry))
     {
-    htmlOpen("Correlate table '%s' with table '%s'", tableList->shortLabel, table2onEntry);
+    htmlOpen("Correlate table '%s' (%s) with table '%s'", tableList->shortLabel, tableList->tableName, table2onEntry);
     }
 else
-    htmlOpen("Correlate table '%s'", tableList->shortLabel);
+    htmlOpen("Correlate table '%s' (%s)", tableList->shortLabel, tableList->tableName);
 
 hPrintf("<FORM ACTION=\"../cgi-bin/hgTables\" NAME=\"mainForm\" METHOD=GET>\n");
 cartSaveSession(cart);

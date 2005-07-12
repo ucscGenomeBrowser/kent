@@ -15,7 +15,7 @@
 #include "correlate.h"
 #include "histogram.h"
 
-static char const rcsid[] = "$Id: correlatePlot.c,v 1.13 2005/07/09 23:00:26 angie Exp $";
+static char const rcsid[] = "$Id: correlatePlot.c,v 1.14 2005/07/12 21:02:47 hiram Exp $";
 
 #define CLIP(p,limit) if (p < 0) p = 0; if (p >= (limit)) p = (limit)-1;
 
@@ -113,14 +113,14 @@ int longLabelSize = 0;
 int textWidth = 0;
 
 /*	border around the whole thing	*/
-vgLine(vg, 0, 0, totalWidth-1, 0, MG_BLACK);	/*	top	*/
-vgLine(vg, 0, 0, 0, totalHeight-1, MG_BLACK);	/*	left	*/
-vgLine(vg, totalWidth-1, 0, totalWidth-1, totalHeight-1, MG_BLACK); /* right */
-vgLine(vg, 0, totalHeight-1, totalWidth-1, totalHeight-1, MG_BLACK);/* bottom */
+vgLine(vg, 0, 0, totalWidth-1, 0, MG_MAGENTA);	/*	top	*/
+vgLine(vg, 0, 0, 0, totalHeight-1, MG_MAGENTA);	/*	left	*/
+vgLine(vg, totalWidth-1, 0, totalWidth-1, totalHeight-1, MG_MAGENTA); /* right */
+vgLine(vg, 0, totalHeight-1, totalWidth-1, totalHeight-1, MG_MAGENTA);/* bottom */
 
 /*	border just around the graph	*/
-vgLine(vg, leftMargin, PLOT_MARGIN, leftMargin,
-	PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK); /* left */
+vgLine(vg, leftMargin-PLOT_MARGIN, PLOT_MARGIN, leftMargin-PLOT_MARGIN,
+	PLOT_MARGIN+GRAPH_HEIGHT, MG_CYAN); /* left */
 #ifdef NOT
 vgLine(vg, leftMargin, PLOT_MARGIN, totalWidth-PLOT_MARGIN,
 	PLOT_MARGIN, MG_BLACK); /* top */
@@ -128,7 +128,7 @@ vgLine(vg, totalWidth-PLOT_MARGIN, PLOT_MARGIN, /* right */
 	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT, MG_BLACK);
 #endif
 vgLine(vg, leftMargin, PLOT_MARGIN+GRAPH_HEIGHT+1,
-	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT+1, MG_BLACK);
+	totalWidth-PLOT_MARGIN, PLOT_MARGIN+GRAPH_HEIGHT+1, MG_CYAN);
 						/*	bottom	*/
 
 x1 = leftMargin;
@@ -156,7 +156,7 @@ x1 = totalWidth - PLOT_MARGIN - textWidth;
 vgText(vg, x1, y1, MG_BLACK, font, maxXStr);
 
 x1 = 0;
-x2 = leftMargin-1;
+x2 = leftMargin - PLOT_MARGIN;
 y1 = PLOT_MARGIN;
 y2 = PLOT_MARGIN + fontHeight;
 
@@ -170,7 +170,7 @@ if (minYStr)
 
 x1 = PLOT_MARGIN;
 y1 = PLOT_MARGIN + fontHeight;
-x2 = leftMargin - PLOT_MARGIN;
+x2 = leftMargin - PLOT_MARGIN - PLOT_MARGIN;
 y2 = GRAPH_HEIGHT - fontHeight;
 if (vertLabel)
     verticalTextCentered(vg, x1, y1, x2-x1, y2-y1, MG_BLACK, font, vertLabel);
@@ -407,7 +407,7 @@ for ( ; (y != NULL) && (x !=NULL); y = y->next, x=x->next)
 	}
     }
 
-leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN;
+leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN + PLOT_MARGIN;
 bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
@@ -605,7 +605,7 @@ if(debugOn)
 	}
     }
 
-leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN;
+leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN + PLOT_MARGIN;
 bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
@@ -749,7 +749,8 @@ leftLabelSize = max(mgFontStringWidth(font, minYStr),
 leftLabelSize = max(leftLabelSize,fontHeight);
 /*	the horizontal text is two label height */
 bottomLabelSize = fontHeight * 2;
-leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN;
+
+leftMargin = PLOT_MARGIN + leftLabelSize + PLOT_MARGIN + PLOT_MARGIN;
 bottomMargin = PLOT_MARGIN + bottomLabelSize + PLOT_MARGIN;
 totalWidth = leftMargin + GRAPH_WIDTH + PLOT_MARGIN;
 totalHeight = PLOT_MARGIN + GRAPH_HEIGHT + bottomMargin;
