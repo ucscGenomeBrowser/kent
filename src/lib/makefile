@@ -11,7 +11,7 @@ O = aliType.o asParse.o axt.o axtAffine.o bits.o binRange.o \
     fuzzyShow.o gapCalc.o gdf.o gemfont.o gfNet.o gff.o gfxPoly.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
     histogram.o hmmstats.o htmlPage.o htmshell.o \
-    internet.o intExp.o jointalign.o \
+    internet.o intExp.o jointalign.o jpegSize.o \
     keys.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o \
     mgTinyFont.o mgSmallFont.o mgMediumFont.o mgLargeFont.o mgHugeFont.o \
