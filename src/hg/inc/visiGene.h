@@ -82,6 +82,10 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id);
  * Substitute in submitId for %s before using.  May be null.
  * FreeMem when done. */
 
+char *visiGeneCopyright(struct sqlConnection *conn, int id);
+/* Return copyright statement if any,  NULL if none.
+ * FreeMem this when done. */
+
 enum visiGeneSearchType 
     {
     vgsNone = 0,

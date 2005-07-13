@@ -410,6 +410,21 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id)
 return stringFieldInSubmissionSet(conn, id, "itemUrl");
 }
 
+char *visiGeneCopyright(struct sqlConnection *conn, int id)
+/* Return copyright statement if any,  NULL if none.
+ * FreeMem this when done. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select copyright.notice from image,imageFile,submissionSet,copyright "
+    "where image.id = %d "
+    "and image.imageFile = imageFile.id "
+    "and imageFile.submissionSet = submissionSet.id "
+    "and submissionSet.copyright = copyright.id"
+    , id);
+return sqlQuickString(conn, query);
+}
+
 static void appendMatchHow(struct dyString *dy, char *pattern,
 	enum visiGeneSearchType how)
 /* Append clause to do search on pattern according to how on dy */
