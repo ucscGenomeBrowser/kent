@@ -5791,7 +5791,7 @@ type bed 4 .
 
 track evofold
 shortLabel EvoFold
-longLabel EvoFold predictions of RNA secondary structure (id_strand_score)
+longLabel EvoFold Predictions of RNA Secondary Structure 
 group genes
 priority 63
 visibility hide
@@ -5801,7 +5801,7 @@ mafTrack mzPt1Mm3Rn3Gg2_pHMM
 
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
-longLabel EvoFold predictions of RNA secondary structure using TBA23 (id_strand_score)
+longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
 group encodeGenes
 priority 63.1
 visibility hide
