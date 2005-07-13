@@ -4940,8 +4940,8 @@ type bed 3 .
 
 track encodeRegulomeBase
 compositeTrack on
-shortLabel UW/Reg DNAseI Sens
-longLabel ENCODE UW/Regulome Mean DNAseI Sensitivity
+shortLabel UW/Reg DNaseI Sens
+longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
 group encodeChrom
 priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
@@ -4954,55 +4954,55 @@ smoothingWindow 2
     track encodeRegulomeBaseCACO2
     subTrack encodeRegulomeBase
     shortLabel CACO2
-    longLabel CACO2 DNAseI Sensitivity
+    longLabel CACO2 DNaseI Sensitivity
     color 60,50,240
     priority 1
 
     track encodeRegulomeBaseGM06990
     subTrack encodeRegulomeBase
     shortLabel GM06990
-    longLabel GM06990 DNAseI Sensitivity
+    longLabel GM06990 DNaseI Sensitivity
     color 90,50,210
     priority 2
 
     track encodeRegulomeBaseSKNSH
     subTrack encodeRegulomeBase
     shortLabel SKNSH
-    longLabel SKNSH DNAseI Sensitivity
+    longLabel SKNSH DNaseI Sensitivity
     color 120,50,180
     priority 3
 
     track encodeRegulomeBaseHuh7
     subTrack encodeRegulomeBase
     shortLabel Huh7
-    longLabel Huh7 DNAseI Sensitivity
+    longLabel Huh7 DNaseI Sensitivity
     color 150,50,150
     priority 4
 
     track encodeRegulomeBaseHepG2
     subTrack encodeRegulomeBase
     shortLabel HepG2
-    longLabel HepG2 DNAseI Sensitivity
+    longLabel HepG2 DNaseI Sensitivity
     color 180,50,120
     priority 5
 
     track encodeRegulomeBaseK562
     subTrack encodeRegulomeBase
     shortLabel K562
-    longLabel K562 DNAseI Sensitivity
+    longLabel K562 DNaseI Sensitivity
     color 210,50,90
     priority 6
 
     track encodeRegulomeBaseERY
     subTrack encodeRegulomeBase
     shortLabel ERY
-    longLabel Adult Erythroblast DNAseI Sensitivity
+    longLabel Adult Erythroblast DNaseI Sensitivity
     color 240,50,60
     priority 7
 
 track encodeRegulomeProb
 compositeTrack on
-shortLabel UW/Reg DNAseI HSs
+shortLabel UW/Reg DNaseI HSs
 longLabel ENCODE UW/Regulome DNaseI hypersensitive sites/scores
 group encodeChrom
 priority 64.2
