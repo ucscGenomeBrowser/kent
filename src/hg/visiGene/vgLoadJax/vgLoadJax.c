@@ -624,7 +624,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", ageMin);
     fprintf(tab, "%s\t", ageMax);
     fprintf(tab, "%s\t", paneLabel);
-    fprintf(tab, "%s.gif\t", fileKey);
+    fprintf(tab, "%s.jpg\t", fileKey);
     fprintf(tab, "%s\t", imageKey);
     fprintf(tab, "%s\t", fPrimer);
     fprintf(tab, "%s\t", rPrimer);
