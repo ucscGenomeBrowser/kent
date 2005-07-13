@@ -16,7 +16,7 @@
 #include "mafSummary.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.84 2005/06/23 18:07:31 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.85 2005/07/13 06:03:35 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1289,22 +1289,21 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                  dbUpper[0] = toupper(dbUpper[0]);
                  safef(chainTable, sizeof chainTable, "%s_chain%s", 
                                              chromName, dbUpper);
-                 if (hTableExistsDb(database, chainTable))
+                if (hTableExistsDb(database, chainTable))
                     {
                     struct sqlConnection *conn;
                     char query[128];
 
-                     conn = hAllocConn();
-                     safef(query, sizeof query,
+                    conn = hAllocConn();
+                    safef(query, sizeof query,
                         "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
                                      chainTable, subStart, subEnd);
-                     if (sqlQuickNum(conn, query) > 0)
-                         processSeq(noAlignment, noAlignment,
-                                     sub->textSize, lines[mi->ix],
-                                     lineOffset, subSize);
-                     hFreeConn(&conn);
-                     continue;
-                     }
+                    if (sqlQuickNum(conn, query) > 0)
+                        processSeq(noAlignment, noAlignment,
+                            sub->textSize, lines[mi->ix], lineOffset, subSize);
+                    hFreeConn(&conn);
+                    }
+                continue;
                 }
             seq = mc->text;
             if ( (mc->size == 0) && (mc->srcSize == 0))
