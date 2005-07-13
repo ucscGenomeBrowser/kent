@@ -55,9 +55,9 @@ FILE *f = mustOpen(fileName, "w");
 
 fprintf(f, "%s",
 "submitSet mahoneyWhole01\n"
-"fullDir ../genePix/full/inSitu/Mouse/mahoney/wholeMount\n"
-"screenDir ../genePix/700/inSitu/Mouse/mahoney/wholeMount\n"
-"thumbDir ../genePix/200/inSitu/Mouse/mahoney/wholeMount\n"
+"fullDir ../visiGene/full/inSitu/Mouse/mahoney/wholeMount\n"
+"screenDir ../visiGene/700/inSitu/Mouse/mahoney/wholeMount\n"
+"thumbDir ../visiGene/200/inSitu/Mouse/mahoney/wholeMount\n"
 "priority 50\n"
 "age 10.5\n"
 "minAge 10\n"
@@ -77,9 +77,9 @@ FILE *f = mustOpen(fileName, "w");
 
 fprintf(f, "%s",
 "submitSet mahoneySlices01\n"
-"fullDir ../genePix/full/inSitu/Mouse/mahoney/slices\n"
-"screenDir ../genePix/700/inSitu/Mouse/mahoney/slices\n"
-"thumbDir ../genePix/200/inSitu/Mouse/mahoney/slices\n"
+"fullDir ../visiGene/full/inSitu/Mouse/mahoney/slices\n"
+"screenDir ../visiGene/700/inSitu/Mouse/mahoney/slices\n"
+"thumbDir ../visiGene/200/inSitu/Mouse/mahoney/slices\n"
 "priority 500\n"
 "bodyPart head\n"
 "sliceType transverse\n"
@@ -657,15 +657,15 @@ verbose(2, "Filled by PCR: locusLink %d, genbank %d\n", locusLinkFromPcr, genban
 }
 
 
-void vgLoadMahoney(char *genePixDir, char *mouseDb, char *inTab, char *pcrBed, char *outDir)
-/* vgLoadMahoney - Convert Paul Gray/Mahoney in situs into something genePixLoad can handle. */
+void vgLoadMahoney(char *visiGeneDir, char *mouseDb, char *inTab, char *pcrBed, char *outDir)
+/* vgLoadMahoney - Convert Paul Gray/Mahoney in situs into something visiGeneLoad can handle. */
 {
 struct mahoney *mahoneyList = vgLoadMahoneyList(inTab);
 struct hash *mHash = hashMahoneys(mahoneyList);
 char inFull[PATH_LEN];
 char *mahoneyPath = "inSitu/Mouse/mahoney";
 char inWholeFull[PATH_LEN], inSlicesFull[PATH_LEN];
-safef(inFull, sizeof(inFull), "%s/full", genePixDir);
+safef(inFull, sizeof(inFull), "%s/full", visiGeneDir);
 safef(inWholeFull, sizeof(inWholeFull), "%s/%s/%s", inFull, mahoneyPath, "wholeMount");
 safef(inSlicesFull, sizeof(inSlicesFull), "%s/%s/%s", inFull, mahoneyPath, "slices");
 makeDir(outDir);

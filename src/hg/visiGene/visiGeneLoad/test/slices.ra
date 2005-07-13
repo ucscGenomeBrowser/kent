@@ -1,7 +1,7 @@
 submitSet paulGraySlices01
-fullDir /gbdb/genePix/full/inSitu/Mouse/mahoney/slices
-screenDir /gbdb/genePix/700/inSitu/Mouse/mahoney/slices
-thumbDir /gbdb/genePix/200/inSitu/Mouse/mahoney/slices
+fullDir /gbdb/visiGene/full/inSitu/Mouse/mahoney/slices
+screenDir /gbdb/visiGene/700/inSitu/Mouse/mahoney/slices
+thumbDir /gbdb/visiGene/200/inSitu/Mouse/mahoney/slices
 priority 100
 bodyPart brain
 sliceType transverse
