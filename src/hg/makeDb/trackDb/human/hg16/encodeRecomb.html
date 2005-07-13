@@ -14,7 +14,6 @@ centiMorgans/Megabase in ten ENCODE regions that have been resequenced:
 <LI>ENr123 (chr12)
 <LI>ENr213 (chr18)
 </UL></P>
-
 <P>
 Observations from sperm studies (Jeffreys <em>et al</em>., 2001) and 
 patterns of genetic variation (McVean <em>et al</em>., 2004; Crawford 
@@ -43,34 +42,32 @@ configuration help</A> link.</P>
 <H2>Methods</H2>
 <P>
 Fine-scale recombination rates are estimated using the reversible-jump
-Markov Chain Monte Carlo method of McVean <em>et al</em> (2004).  The
+Markov chain Monte Carlo method (McVean <em>et al</em>. 2004).  This
 approach explores the posterior distribution of fine-scale recombination
 rate profiles, where the state-space considered is the distribution of
-piece-wise constant recombination maps.  The Markov Chain explores the
+piece-wise constant recombination maps.  The Markov chain explores the
 distribution of both the number and location of change-points, in addition
-to the rates for each segment.  A prior is set on the number of
+to the rates for each segment.  A priority is set on the number of
 change-points that increases the smoothing effect of trans-dimensional
 MCMC, which is necessary because of the composite-likelihood scheme
-employed.
- 
+employed.</P>
 <P>
-The method is implemented in the package 
-<A HREF="http://www.stats.ox.ac.uk/~mcvean/LDhat/" TARGET=_blank>LDhat</A> 
-which includes full details of installation and implementation.  
-
+This method is implemented in the package 
+<A HREF="http://www.stats.ox.ac.uk/~mcvean/LDhat/" TARGET=_blank>LDhat</A>, 
+which includes full details of installation and implementation.  </P>
 <P>
-For the ENCODE regions we used a block-penalty of 5 (calibrated by simulation and
-comparison to data from sperm-typing studies).  Each region has been
-analysed as a single run with 10,000,000 iterations asmpling every 5000th
+For the ENCODE regions, a block-penalty of 5 was used (calibrated by simulation 
+and comparison to data from sperm-typing studies).  Each region was
+analysed as a single run with 10,000,000 iterations, asmpling every 5000th
 iteration and discarding the first third of all samples as burn-in.  The
-mean posterior rate for each SNP interval is the value reported.  Note
-that because of the non-independence of the composite likelihood scheme,
+mean posterior rate for each SNP interval is the value reported.  Because of 
+the non-independence of the composite likelihood scheme,
 the quantiles of the sampling distribution do not reflect true uncertainty
-and are therefore not given.
+and are therefore not given.</P>
 <P>
-Estimates were generated separately from each of the four ENCODE resequencing populations,
-and then combined to give a single figure.   Differences between populations are
-not significant.
+Estimates were generated separately from each of the four ENCODE resequencing 
+populations, and then combined to give a single figure.  Differences between 
+populations are not significant.</P>
 
 <H2>Validation</H2>
 <P>
