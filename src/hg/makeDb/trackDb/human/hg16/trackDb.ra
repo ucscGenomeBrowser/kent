@@ -5148,11 +5148,10 @@ useScore 1
     priority 2
 
 
-
 track encodeAllElements
 compositeTrack on
-shortLabel Consensus Elements
-longLabel NHGRI/PSU/UCSC/Stanford TBA and MLAGAN Conserved Elements
+shortLabel Consens Elements
+longLabel NHGRI/PSU/UCSC/Stanford TBA and MLAGAN Consensus Conserved Elements
 group encodeCompGeno
 priority 70.0
 visibility hide
