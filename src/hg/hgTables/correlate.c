@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.49 2005/07/12 21:02:47 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.50 2005/07/13 22:35:50 hiram Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -1892,7 +1892,7 @@ for (region = regionList; (totalBases < maxLimitCount) && (region != NULL);
 	{
 	hPrintf("<P><B>warning:</B> This region: %s:%d-%d is too large",
 		region->chrom, region->start, region->end);
-	hPrintf(" to process.  This function can currenly only work on\n");
+	hPrintf(" to process.  This function can currently only work on\n");
 	hPrintf("regions of less than 64,000,000 bases. Perhaps future\n");
 	hPrintf("improvements will raise this limit.\n");
 	errAbort("");
