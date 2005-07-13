@@ -1690,14 +1690,14 @@ cdsDrawDefault genomic\ codons
 
     track encodeEgaspUpdAugustusAbinitio
     subTrack encodeEgaspUpdate
-    shortLabel Augustus 
+    shortLabel Augustus Update
     longLabel Augustus Ab Initio Gene Predictions
     color 12,50,200
     priority 1
 
     track encodeEgaspUpdAugustusEst
     subTrack encodeEgaspUpdate
-    shortLabel Augustus/EST
+    shortLabel Augustus/EST Upd
     longLabel Augustus + EST/Protein Evidence Gene Predictions
     color 12,65,165
     priority 2
@@ -1705,6 +1705,7 @@ cdsDrawDefault genomic\ codons
     track encodeEgaspUpdAugustusDual
     subTrack encodeEgaspUpdate
     shortLabel Augustus/Mouse
+    shortLabel August/Mouse Upd
     longLabel Augustus + Mouse Homology Gene Predictions
     color 12,85,135
     priority 3
@@ -1712,55 +1713,56 @@ cdsDrawDefault genomic\ codons
     track encodeEgaspUpdAugustusAny
     subTrack encodeEgaspUpdate
     shortLabel Augustus/EST/Mouse
+    shortLabel August/EST/Ms Upd
     longLabel Augustus + EST/Protein Evidence + Mouse Homology Gene Predictions
     priority 4
     color 12,100,100
 
     track encodeEgaspUpdExogean
     subTrack encodeEgaspUpdate
-    shortLabel Exogean
+    shortLabel Exogean Update
     longLabel Exogean Gene Predictions
     priority 5
     color 100,12,100
 
     track encodeEgaspUpdGeneId
     subTrack encodeEgaspUpdate
-    shortLabel GeneID 
+    shortLabel GeneID Update
     longLabel GeneID Gene Predictions
     priority 6
     color 100,12,100
 
     track encodeEgaspUpdGeneIdU12
     subTrack encodeEgaspUpdate
-    shortLabel GeneID U12
+    shortLabel GeneID U12 Upd
     longLabel GeneID U12 Intron Predictions
     priority 7
     color 200,132,12
 
     track encodeEgaspUpdJigsaw
     subTrack encodeEgaspUpdate
-    shortLabel Jigsaw 
+    shortLabel Jigsaw Update
     longLabel Jigsaw Gene Predictions
     color 22,150,20
     priority 8
 
     track encodeEgaspUpdSgp2
     subTrack encodeEgaspUpdate
-    shortLabel SGP2
+    shortLabel SGP2 Update
     longLabel SGP2 Gene Predictions
     priority 9
     color 100,12,100
 
     track encodeEgaspUpdSgp2U12
     subTrack encodeEgaspUpdate
-    shortLabel SGP2 U12
+    shortLabel SGP2 U12 Update
     longLabel SGP2 U12 Intron Predictions
     priority 10
     color 200,132,12
 
     track encodeEgaspUpdYalePseudo
     subTrack encodeEgaspUpdate
-    shortLabel Yale Pseudo
+    shortLabel Yale Pseudo Upd
     longLabel Yale Pseudogene Predictions
     priority 11
     color 130,130,130
