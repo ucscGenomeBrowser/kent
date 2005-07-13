@@ -111,7 +111,7 @@ mafTrack multiz10way
 
 track evofold
 shortLabel EvoFold
-longLabel EvoFold predictions of RNA secondary structure (id_strand_score)
+longLabel EvoFold Predictions of RNA Secondary Structure 
 group genes
 priority 63
 visibility hide
