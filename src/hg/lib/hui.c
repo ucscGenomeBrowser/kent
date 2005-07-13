@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.66 2005/07/12 02:26:49 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.67 2005/07/13 04:38:01 angie Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1175,16 +1175,36 @@ if (value)
 return TRUE;
 }
 
+static char *getPrimaryType(char *primarySubtrack, struct trackDb *tdb)
+/* Do not free when done. */
+{
+struct trackDb *subtrack = NULL;
+char *type = NULL;
+if (primarySubtrack)
+    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	{
+	if (sameString(subtrack->tableName, primarySubtrack))
+	    {
+	    type = subtrack->type;
+	    break;
+	    }
+	}
+return type;
+}
+
+
 static void compositeUiSubtracks(struct cart *cart, struct trackDb *tdb,
 				 boolean selectedOnly, char *primarySubtrack)
 /* Show checkboxes for subtracks. */
 {
 struct trackDb *subtrack;
+char *primaryType = getPrimaryType(primarySubtrack, tdb);
 char option[64];
 char *words[2];
 
 puts("<P>");
 puts("<TABLE>");
+
 slSort(&(tdb->subtracks), trackDbCmp);
 for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
@@ -1202,17 +1222,26 @@ for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     if (selectedOnly && !alreadySet && !isPrimary)
         continue;
     puts("<TR><TD>");
-    if (isPrimary)
+    if (primarySubtrack)
 	{
-	cgiMakeHiddenBoolean(option, TRUE);
-	puts("[on] ");
+	if (isPrimary)
+	    {
+	    cgiMakeHiddenBoolean(option, TRUE);
+	    puts("[on] ");
+	    printf ("</TD><TD>%s [selected on main page]</TD></TR>\n",
+		    subtrack->longLabel);
+	    }
+	else if (sameString(primaryType, subtrack->type))
+	    {
+	    cgiMakeCheckBox(option, alreadySet);
+	    printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
+	    }
 	}
     else
+	{
 	cgiMakeCheckBox(option, alreadySet);
-    printf ("</TD><TD>%s", subtrack->longLabel);
-    if (isPrimary)
-	puts(" [selected on main page]");
-    puts("</TD></TR>");
+	printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
+	}
     }
 puts("</TABLE>");
 puts("<P>");
@@ -1263,15 +1292,17 @@ safef(javascript, JBUFSIZE*sizeof(char),
 
 void hCompositeUi(struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName)
-/* UI for composite tracks: subtrack selection.  If primarySubtrack is 
- * non-NULL, don't allow it to be cleared.  If fakeSubmit is non-NULL, 
- * add a hidden var with that name so it looks like it was pressed. */
+/* UI for composite tracks: subtrack selection.  If primarySubtrack is
+ * non-NULL, don't allow it to be cleared and only offer subtracks
+ * that have the same type.  If fakeSubmit is non-NULL, add a hidden
+ * var with that name so it looks like it was pressed. */
 {
 int i, j, k;
 char *words[64];
 char option[64];
 int wordCnt;
 char javascript[JBUFSIZE];
+char *primaryType = getPrimaryType(primarySubtrack, tdb);
 char *name, *value;
 char buttonVar[32];
 int nGroups;
@@ -1320,10 +1351,15 @@ if (isNotEmpty(button))
 	boolean newVal = FALSE;
         safef(option, sizeof(option), "%s_sel", subtrack->tableName);
 	newVal = sameString(button, ADD_BUTTON_LABEL);
-	if (primarySubtrack &&
-	    sameString(subtrack->tableName, primarySubtrack))
-	    newVal = TRUE;
-	cartSetBoolean(cart, option, newVal);
+	if (primarySubtrack)
+	    {
+	    if (sameString(subtrack->tableName, primarySubtrack))
+		newVal = TRUE;
+	    if (sameString(subtrack->type, primaryType))
+		cartSetBoolean(cart, option, newVal);
+	    }
+	else
+	    cartSetBoolean(cart, option, newVal);
         }
     }
 puts("</TD></TR>");
@@ -1388,10 +1424,15 @@ for (i = 0; i < MAX_SUBGROUP; i++)
                     safef(option, sizeof(option), 
                             "%s_sel", subtrack->tableName);
 		    newVal = sameString(button, ADD_BUTTON_LABEL);
-		    if (primarySubtrack &&
-			sameString(subtrack->tableName, primarySubtrack))
-			newVal = TRUE;
-                    cartSetBoolean(cart, option, newVal);
+		    if (primarySubtrack)
+			{
+			if (sameString(subtrack->tableName, primarySubtrack))
+			    newVal = TRUE;
+			if (sameString(subtrack->type, primaryType))
+			    cartSetBoolean(cart, option, newVal);
+			}
+		    else
+			cartSetBoolean(cart, option, newVal);
                     }
                 }
             }
