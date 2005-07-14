@@ -14,15 +14,14 @@ altColor 255,128,0
 defaultViewLimits 0:100
 type wig 0 100
 
-track gbProtCode
-shortLabel GenBank CDS
-longLabel GenBank protein-coding genes
+track llOperons
+shortLabel LL Operons
+longLabel Operon predictions by Lowe Lab
 group genes
-priority 2.1
+priority 2.13
 visibility pack
-color 40,40,160
-altColor 255,0,0
-type bed 6 .
+spectrum on
+type bed 12 .
 
 track easyGene
 shortLabel EasyGenes
