@@ -4,6 +4,7 @@
 #define HUI_H
 
 #include "cart.h"
+#include "trackDb.h"
 
 char *hUserCookie();
 /* Return our cookie name. */
@@ -645,8 +646,9 @@ void acemblyDropDown(char *var, char *curVal);
 
 void hCompositeUi(struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName);
-/* UI for composite tracks: subtrack selection.  If primarySubtrack is 
- * non-NULL, don't allow it to be cleared.  If fakeSubmit is non-NULL, 
- * add a hidden var with that name so it looks like it was pressed. */
+/* UI for composite tracks: subtrack selection.  If primarySubtrack is
+ * non-NULL, don't allow it to be cleared and only offer subtracks
+ * that have the same type.  If fakeSubmit is non-NULL, add a hidden
+ * var with that name so it looks like it was pressed. */
 
 #endif /* HUI_H */

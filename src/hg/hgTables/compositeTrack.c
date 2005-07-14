@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.8 2005/07/12 02:26:49 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.9 2005/07/13 04:22:25 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -259,7 +259,8 @@ else
 for (tdb=curTrack->subtracks;  tdb != NULL;  tdb = tdb->next)
     {
     if (!sameString(tdb->tableName, curTable) &&
-	isSubtrackMerged(tdb->tableName))
+	isSubtrackMerged(tdb->tableName) &&
+	sameString(tdb->type, primary->type))
 	{
 	dyStringAppend(dy, linePrefix);
 	dyStringPrintf(dy, "  %s (%s)\n", tdb->tableName, tdb->longLabel);

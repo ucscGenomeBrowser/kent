@@ -214,7 +214,7 @@ type float knownGene name exonCount
 
 name humanOrthologs
 shortLabel Human
-longLabel Human Ortholog (Best Blastp Hit to UCSC Known hg16)
+longLabel Human Ortholog (Best Blastp Hit to UCSC Known Genes)
 priority 7.9
 visibility off
 type lookup hgBlastTab query target
@@ -222,7 +222,7 @@ itemUrl ../cgi-bin/hgTracks?org=human&position=%s
 
 name mouseOrthologs
 shortLabel Mouse
-longLabel Mouse Ortholog (Best Blastp Hit to UCSC Known mm3)
+longLabel Mouse Ortholog (Best Blastp Hit to UCSC Known Genes)
 priority 8.0
 visibility off
 type lookup mmBlastTab query target
@@ -230,7 +230,7 @@ itemUrl ../cgi-bin/hgTracks?org=mouse&position=%s
 
 name ratOrthologs
 shortLabel Rat
-longLabel Rat Ortholog (Best Blastp Hit to UCSC Known rn3)
+longLabel Rat Ortholog (Best Blastp Hit to UCSC Known Genes)
 priority 8.05
 visibility off
 type lookup rnBlastTab query target

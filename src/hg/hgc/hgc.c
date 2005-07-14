@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.915 2005/07/12 02:11:05 jsp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.916 2005/07/13 15:16:12 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15479,9 +15479,9 @@ printf("<B>Luciferase signal A:</B> %d<BR>\n", esp->lucA);
 printf("<B>Renilla signal A:</B> %d<BR>\n", esp->renA);
 printf("<B>Luciferase signal B:</B> %d<BR>\n", esp->lucB);
 printf("<B>Renilla signal B:</B> %d<BR>\n", esp->renB);
-printf("<B>Average Luciferase/Renilla Ratio:</B> %f<BR>\n", esp->avgRatio);
-printf("<B>Normalized Luciferase/Renilla Ratio:</B> %f<BR>\n", esp->normRatio);
-printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %f<BR>\n",
+printf("<B>Average Luciferase/Renilla Ratio:</B> %g<BR>\n", esp->avgRatio);
+printf("<B>Normalized Luciferase/Renilla Ratio:</B> %g<BR>\n", esp->normRatio);
+printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %g<BR>\n",
        esp->normLog2Ratio);
 }
 
@@ -15493,7 +15493,7 @@ struct encodeStanfordPromotersAverage *esp =
 bedPrintPos((struct bed *)esp, 6);
 printf("<B>Gene model ID:</B> %s<BR>\n", esp->geneModel);
 printf("<B>Gene description:</B> %s<BR>\n", esp->description);
-printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %f<BR>\n",
+printf("<B>Normalized and log2 transformed Luciferase/Renilla Ratio:</B> %g<BR>\n",
        esp->normLog2Ratio);
 }
 
@@ -15521,6 +15521,36 @@ if ((row = sqlNextRow(sr)) != NULL)
 	printESPAverageDetails(row+hasBin);
     else
 	printESPDetails(row+hasBin);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+printTrackHtml(tdb);
+}
+
+void doEncodeStanfordRtPcr(struct trackDb *tdb, char *item)
+/* Print ENCODE Stanford RTPCR data. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int start = cartInt(cart, "o");
+char fullTable[64];
+boolean hasBin = FALSE;
+char query[1024];
+
+cartWebStart(cart, tdb->longLabel);
+genericHeader(tdb, item);
+hFindSplitTable(seqName, tdb->tableName, fullTable, &hasBin);
+safef(query, sizeof(query),
+     "select * from %s where chrom = '%s' and chromStart = %d and name = '%s'",
+      fullTable, seqName, start, item);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *bed = bedLoadN(row+hasBin, 5);
+    bedPrintPos(bed, 5);
+    printf("<B>Primer pair ID:</B> %s<BR>\n", row[hasBin+5]);
+    printf("<B>Count:</B> %s<BR>\n", row[hasBin+6]);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -16882,6 +16912,10 @@ else if (sameWord(track, "encodeIndels"))
 else if (startsWith("encodeStanfordPromoters", track))
     {
     doEncodeStanfordPromoters(tdb, item);
+    }
+else if (startsWith("encodeStanfordRtPcr", track))
+    {
+    doEncodeStanfordRtPcr(tdb, item);
     }
 else if (startsWith("encodeHapMapAlleleFreq", track))
     {

@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.30 2005/07/10 06:34:08 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.31 2005/07/13 13:55:18 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -477,6 +477,25 @@ lmCleanup(&lm2);
 return intersectedBedList;
 }
 
+static char *getPrimaryType(char *primarySubtrack, struct trackDb *tdb)
+/* Do not free when done. */
+/* Copied in from hui.c...  really isSubtrackMerged should take two tdbs 
+ * and incorporate the name and type checking! */
+{
+struct trackDb *subtrack = NULL;
+char *type = NULL;
+if (primarySubtrack)
+    for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
+	{
+	if (sameString(subtrack->tableName, primarySubtrack))
+	    {
+	    type = subtrack->type;
+	    break;
+	    }
+	}
+return type;
+}
+
 struct bed *getRegionAsMergedBed(
 	char *db, char *table, 	/* Database and table. */
 	struct region *region,  /* Region to get data for. */
@@ -497,6 +516,7 @@ else
     Bits *bits2 = NULL;
     struct bed *bedMerged = NULL;
     struct trackDb *subtrack = NULL;
+    char *primaryType = getPrimaryType(table, curTrack);
     char *op = cartString(cart, hgtaSubtrackMergeOp);
     boolean isBpWise = (sameString(op, "and") || sameString(op, "or"));
     int moreThresh = cartInt(cart, hgtaSubtrackMergeMoreThreshold);
@@ -510,7 +530,8 @@ else
 	     subtrack = subtrack->next)
 	    {
 	    if (! sameString(curTable, subtrack->tableName) &&
-		isSubtrackMerged(subtrack->tableName))
+		isSubtrackMerged(subtrack->tableName) &&
+		sameString(subtrack->type, primaryType))
 		{
 		struct bed *bedList2 = 
 		    getRegionAsBed(db, subtrack->tableName, region, filter,
@@ -539,7 +560,8 @@ else
 	 subtrack = subtrack->next)
 	{
 	if (! sameString(curTable, subtrack->tableName) &&
-	    isSubtrackMerged(subtrack->tableName))
+	    isSubtrackMerged(subtrack->tableName) &&
+	    sameString(subtrack->type, primaryType))
 	    {
 	    struct hTableInfo *hti2 = getHti(database, subtrack->tableName);
 	    struct lm *lm2 = lmInit(64*1024);
