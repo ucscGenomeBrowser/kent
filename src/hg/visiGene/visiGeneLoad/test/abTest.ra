@@ -1,6 +1,5 @@
 submitSet abTest01
 fullDir /gbdb/bioImage/full/inSitu/Human/Freenish
-screenDir /gbdb/bioImage/700/inSitu/Human/Freenish
 thumbDir /gbdb/bioImage/200/inSitu/Human/Freenish
 contributor Kent W.J., Willis W.E., Haussler D., van Damm C.E.V.G., Theirry-Mieg J.
 taxon 9606

@@ -10,7 +10,6 @@
 #include "hdb.h"
 #include "hgColors.h"
 #include "visiGene.h"
-#include "jpegSize.h"
 #include "hgVisiGene.h"
 
 /* Globals */
@@ -333,16 +332,10 @@ printf(" - see also <A HREF=\"#caption\">full caption</A> below<BR>\n");
 //printf("<IMG SRC=\"%s\"></A><BR>\n", visiGeneScreenSizePath(conn, imageId));
 //printf("\n");
 
-p=visiGeneFullSizePath(conn, imageId);
 
-/* HTTP-server URL mapping not identical to unix directory structure */
-if (*p == '/')
-    safef(buf,sizeof(buf),"../htdocs%s",p);
-else if (strncmp(p,"../",3)==0)
-    safef(buf,sizeof(buf),"../htdocs/%s",p+3);
-else
-    safef(buf,sizeof(buf),"%s",p);
-jpegSize(buf,&w,&h);
+visiGeneImageSize(conn, imageId, &w, &h);
+
+p=visiGeneFullSizePath(conn, imageId);
 
 splitPath(p, dir, name, extension);
 
@@ -425,14 +418,7 @@ p=visiGeneFullSizePath(conn, imageId);
 
 //safef(buf,sizeof(buf),"../htdocs/%s",p+3); /* skip "../" */
 
-/* HTTP-server URL mapping not identical to unix directory structure */
-if (*p == '/')
-    safef(buf,sizeof(buf),"../htdocs%s",p); 
-else if (strncmp(p,"../",3)==0)
-    safef(buf,sizeof(buf),"../htdocs/%s",p+3); 
-else    
-    safef(buf,sizeof(buf),"%s",p); 
-jpegSize(buf,&w,&h);
+visiGeneImageSize(conn, imageId, &w, &h);
 
 splitPath(p, dir, name, extension);
 

@@ -274,8 +274,9 @@ CREATE TABLE imageFile (
     id int auto_increment not null,	# ID of imageFile
     fileName varchar(255) not null,	# Image file name not including directory
     priority float not null,	# Lower priorities are displayed first
+    imageWidth int not null,	# width of image in pixels
+    imageHeight int not null,	# height of image in pixels
     fullLocation int not null,	# Location of full-size image
-    screenLocation int not null,	# Location of screen-sized image
     thumbLocation int not null,	# Location of thumbnail-sized image
     submissionSet int not null,	# Submission set this is part of
     submitId varchar(255) not null,	# ID within submission set
