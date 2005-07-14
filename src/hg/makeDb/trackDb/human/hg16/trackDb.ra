@@ -5549,6 +5549,7 @@ priority 80.8
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 maxHeightPixels 128:16:16
 visibility hide
+autoScaleDefault Off
 type wig 0.0 100.0
 
     track encodeHapMapCovCEU
