@@ -52,6 +52,13 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	sacCer1 \
 	pyrAer1 \
 	pyrFur2 \
+	sulSol1\
+	metMar1\
+	nanEqu1\
+	aerPer1\
+	halMar1\
+	pyrHor1\
+	pyrAby1\
 	sc1 \
 	canHg4 mmHg4 panHg4 \
 	vibCho1 \
