@@ -11274,3 +11274,14 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
 # mm4.
 
 
+##########################################################################
+# EVOFOLD  - RNA secondary structure predictions lifted from hg17 (Jakob Skou Pedersen)
+# Jakob Skou Pedersen, July 12, 2005
+  ssh -C hgwdev
+  mkdir -p /cluster/data/hg16/bed/evofold
+  cd /cluster/data/hg16/bed/evofold
+  # lifting folds from hg17 to hg16
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from evofold;" | hgsql hg17 | sed -e 1d > foldsHg17.bed
+  liftOver -minMatch=1.0 foldsHg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg16.over.chain foldsHg16.bed unmapped.bed
+  # clean up
+  rm foldsHg17.bed unmapped.bed

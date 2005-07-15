@@ -2863,6 +2863,32 @@ done
     cd /cluster/data/encode/ucsc/lowe
     hgLoadBed -sqlTable=/cluster/home/daryl/kent/src/hg/lib/encodeRna.sql hg16 encodeRna encodeRna.bed -strict
 
+
+##########################################################################
+# TBA23 EVOFOLD  - RNA secondary structure predictions based on TBA23 (Jakob Skou Pedersen)
+# Jakob Skou Pedersen, July 12, 2005
+#
+# The evofold program is still in development and the procedures used
+# to generate the data are likely to change some over the next few
+# months. The documentation of the data generation is therefore
+# skipped and we start with a data file provided by me.
+    ssh -C hg17
+    mkdir -p /cluster/data/encode/evofold
+    cd /cluster/data/encode/evofold
+    cp /cluster/home/jsp/data/rnass/genome-scan/vertebrate/encode/tba23/tba_folds.bed tbaFolds.bed
+    # tbaFolds.bed is a 9-column bed file: column 1-6 provide standard
+    # bed information, column 7 is element length, column 8 is the RNA
+    # secondary structure in parentheses format, and column nine is a
+    # commaseparated list of position specific confidence scores
+    # (floats).
+
+    # do a little table swapping to use existing sql file  
+    echo "RENAME TABLE evofold to jsp_tmp" | hgsql hg16
+    hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql hg16 evofold tbaFolds.bed
+    echo "RENAME TABLE evofold to encodeTba23EvoFold" | hgsql hg16
+    echo "RENAME TABLE jsp_tmp to evofold" | hgsql hg16
+  
+
 ##########################################################################
 # ENCODE HapMap Primate Alleles
 # Daryl, July 1, 2005
