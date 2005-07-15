@@ -15,8 +15,12 @@ int remains = inplen % 3;
 char *result = (char *)needMem(4*words+1);
 int i=0, j=0;
 int word = 0;
-char *p = input;
-for(i=0; i<words; i++)
+unsigned char *p = (unsigned char*) input;  
+/* p must be unsigned char*,  because without "unsigned",
+sign extend messes up last group outputted
+when the value of the chars following last in input
+happens to be char 0x80 or higher */
+for(i=1; i<=words; i++)
     {
     word = 0;
     word |= *p++;
@@ -24,12 +28,18 @@ for(i=0; i<words; i++)
     word |= *p++;
     word <<= 8;
     word |= *p++;
+    if (i==words && remains>0)
+	{
+	word &= 0x00FFFF00;
+    	if (remains==1)
+    	    word &= 0x00FF0000;
+	}
     result[j++]=b64[word >> 18 & 0x3F];
     result[j++]=b64[word >> 12 & 0x3F];
     result[j++]=b64[word >> 6 & 0x3F];
     result[j++]=b64[word & 0x3F];
     }
-result[j] = 0;    
+result[j] = 0;
 if (remains >0) result[j-1] = '=';    
 if (remains==1) result[j-2] = '=';    
 return result;
