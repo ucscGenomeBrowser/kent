@@ -588,7 +588,7 @@ cat > mafProject.csh << 'EOF'
         checkTableCoords hg16 $t
     end
 
-# MLAGAN AND TBA CONSERVED ELEMENTS (2005-06-29 kate)
+# CONSENSUS ELEMENTS: MLAGAN AND TBA CONSERVED ELEMENTS (2005-06-29 kate)
     # From Elliott Margulies
     
     cd /cluster/data/encode
