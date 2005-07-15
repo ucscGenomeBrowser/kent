@@ -11155,7 +11155,7 @@ close (FH);
     #	Michel Weber for proper classification
 
 ################################################################################
-# Build hg17Kg table for KG II for hg16, using hg17 KG data (DONE 05-07-11 Fan).
+# Build hg17Kg table for KG II for hg16, using hg17 KG data (DONE 2005-07-11 Fan).
 
    ssh hgwdev
    cd /cluster/data/mm6/bed
