@@ -387,6 +387,16 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
+track encodeReseqRegions
+shortLabel ENCODE Resequencing Regions
+longLabel ENCODE Resequencing Regions
+group encodeVariation
+priority 79.9
+color 150,100,30
+chromosomes chr12,chr18,chr2,chr4,chr7,chr8,chr9
+visibility hide
+type bed 4 .
+
 track snpMap
 shortLabel SNPs
 longLabel Simple Nucleotide Polymorphisms (SNPs)
