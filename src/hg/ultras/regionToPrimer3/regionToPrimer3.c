@@ -10,6 +10,7 @@
 char *exe = "primer3_core";
 double minTm = 57.0;
 double maxTm = 63.0;
+double optTm = 60.0;
 
 char *tempInName = "rtp_tmp.in";
 char *tempOutName = "rtp_tmp.out";
@@ -25,8 +26,9 @@ errAbort(
   "options:\n"
   "   -exe=/path/to/primer3_core - Where to find primer3_core\n"
   "   -minTm=X - minimum primer melting temp (default %4.1f)\n"
-  "   -maxTm=X - max primer melting temp (default %4.1f)\n"
-  , minTm, maxTm
+  "   -maxTm=X - maximum primer melting temp (default %4.1f)\n"
+  "   -optTm=X - optimum primer melting temp (default %4.1f)\n"
+  , minTm, maxTm, optTm
   );
 }
 
@@ -34,6 +36,7 @@ static struct optionSpec options[] = {
    {"exe", OPTION_STRING},
    {"minTm", OPTION_DOUBLE},
    {"maxTm", OPTION_DOUBLE},
+   {"optTm", OPTION_DOUBLE},
    {NULL, 0},
 };
 
@@ -179,6 +182,7 @@ fprintf(f, "PRIMER_EXPLAIN_FLAG=1\n");
 fprintf(f, "PRIMER_PRODUCT_SIZE_RANGE=%d-%d\n", midSize, totalSize);
 fprintf(f, "PRIMER_MIN_TM=%5.2f\n", minTm);
 fprintf(f, "PRIMER_MAX_TM=%5.2f\n", maxTm);
+fprintf(f, "PRIMER_OPT_TM=%5.2f\n", optTm);
 fprintf(f, "PRIMER_MIN_SIZE=%d\n", primerMinSize);
 fprintf(f, "=\n");
 carefulClose(&f);
@@ -240,7 +244,8 @@ while (regionReadNext(lf, &dna, &size, &name))
     stripChar(dna, '(');
     stripChar(dna, ')');
 
-    /* Mask out G quartets and whatever RepeatMasker finds. */
+    /* Mask out G quartets and whatever else is in lower case,  */
+    /* such as regions that RepeatMasker finds.                 */
     polyToLower(dna, pOpen-dna + primerMinSize, 'G', 4);
     polyToLower(pClose+1 - primerMinSize, dna+size - pClose - 1 + primerMinSize, 'C', 4);
     lowerToN(dna, size);
@@ -260,6 +265,7 @@ if (argc != 3)
 exe = optionVal("exe", exe);
 minTm = optionDouble("minTm", minTm);
 maxTm = optionDouble("maxTm", maxTm);
+optTm = optionDouble("optTm", optTm);
 regionToPrimer3(argv[1], argv[2]);
 return 0;
 }
