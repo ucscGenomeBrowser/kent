@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.59 2005/07/11 22:52:37 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.60 2005/07/15 01:06:09 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7759,5 +7759,10 @@ idSql select kgID from kgXref where kgID = '%s'
 url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm6&acc=%s
 priority 95
 
+# REBUILT knownToPfam TABLE TO ALLOW KG REPRESENTED BY VARIANT SPLICE PROTEINS MAPPED TO PFAM (DONE 7/14/05, Fan)
+# hgMapViaSwissProt.c was updated to support this.
 
+# Create table that maps between known genes and Pfam domains
+~/bin/i386/hgMapViaSwissProt mm6 knownGene name proteinID Pfam knownToPfam
+# row count is  24650
 
