@@ -16932,3 +16932,10 @@ chainSome $(path1) $(path2)
 
     hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 
+# REBUILT knownToPfam TABLE TO ALLOW KG REPRESENTED BY VARIANT SPLICE PROTEINS MAPPED TO PFAM (DONE 7/14/05, Fan)
+# hgMapViaSwissProt.c was updated to support this.
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
+
+
