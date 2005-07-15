@@ -4748,6 +4748,7 @@ chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 minLimit 0
 maxLimit 16
 autoScaleDefault Off
+maxHeightPixels 64:32:16
 
 
 #ENCODE TRACK END
