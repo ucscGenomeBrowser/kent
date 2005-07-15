@@ -62,19 +62,19 @@ if (!map)
 	}
     for (i = 0; i < 64; ++i)
 	{
-	map[b64[i]]=i;
+	map[(int)b64[i]]=i;
 	}
     }
 for(i=0; i<words; i++)
     {
     word = 0;
-    word |= map[*p++];
+    word |= map[(int)*p++];
     word <<= 6;
-    word |= map[*p++];
+    word |= map[(int)*p++];
     word <<= 6;
-    word |= map[*p++];
+    word |= map[(int)*p++];
     word <<= 6;
-    word |= map[*p++];
+    word |= map[(int)*p++];
     result[j++]=word >> 16 & 0xFF;
     result[j++]=word >> 8 & 0xFF;
     result[j++]=word & 0xFF;
