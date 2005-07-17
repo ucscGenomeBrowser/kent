@@ -1078,6 +1078,17 @@ cat > load.csh << 'EOF'
     /cluster/bin/i386/gene-check -incl-ok -nib-dir /cluster/data/hg16/nib -details-out encodeGencodeGene.chk-details gencode.known.gp encodeGencodeGene.chk
 
 
+    # create a filtered table for use at data analysis workshop
+    cd /cluster/data/encode/Gencode/2005-06-07
+    hgsql hg16 < encodeGencodeGeneFiltered.sql
+    insert into encodeGencodeGeneFiltered select t1.* from encodeGencodeGene as t1,
+      gencodeGeneClass as t2 where t1.name = t2.name and t2.class = "Known";
+    # 2291 rows
+    insert into encodeGencodeGeneFiltered select t1.* from encodeGencodeGene as t1,
+      gencodeGeneClass as t2 where t1.name = t2.name and t2.class = "Novel_CDS";
+    # 104 rows
+
+
 ##########################################################################
 # Sanger Chip/chip  (DONE 2005-03-14 kate)
     ssh hgwdev
@@ -2795,6 +2806,7 @@ done
     cd /cluster/data/encode/Regulome/sens
     # waiting for more granular data from John Stam
     # this is wiggle data
+    # using /gbdb/hg16/encode/Regulome/june2005
 
     # John Stam told me amplicons are the same for all cell lines
     # this is bed 5
