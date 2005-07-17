@@ -4311,8 +4311,8 @@ track encodeAllElements
 compositeTrack on
 shortLabel Consens Elements
 longLabel NHGRI/PSU/UCSC/Stanford TBA and MLAGAN Consensus Conserved Elements
-group encodeCompGeno
-priority 70.0
+group encodeAnalysis
+priority 502
 visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5379,3 +5379,12 @@ priority 39
 group encodeTxLevels
 visibility hide
 type bed 4 .
+
+track encodeGencodeGeneFiltered
+shortLabel Gencode Filtered
+longLabel Gencode Filtered (Known and Novel)
+group encodeAnalysis
+priority 501
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
+visibility hide
+type genePred 
