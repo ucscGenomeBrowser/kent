@@ -5503,3 +5503,37 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 3 +
 
+track encodeDNDS
+compositeTrack on
+shortLabel dN/dS
+longLabel ENCODE Exons by dN/dS bins
+group encodeAnalysis
+priority 507
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4 +
+
+    track encodeDNDSsmall
+    subTrack encodeDNDS
+    shortLabel dN/dS 0.0 to 0.2
+    longLabel ENCODE Exons dN/dS 0.0 to 0.2
+    priority 1
+
+    track encodeDNDSmedium
+    subTrack encodeDNDS
+    shortLabel dN/dS 0.2 to 0.5
+    longLabel ENCODE Exons dN/dS 0.2 to 0.5
+    priority 2
+
+    track encodeDNDSlarge
+    subTrack encodeDNDS
+    shortLabel dN/dS 0.5 to 1.5
+    longLabel ENCODE Exons dN/dS 0.5 to 1.5
+    priority 3
+
+    track encodeDNDShuge
+    subTrack encodeDNDS
+    shortLabel dN/dS 1.5 to inf
+    longLabel ENCODE Exons dN/dS 1.5 to inf
+    priority 4
+
