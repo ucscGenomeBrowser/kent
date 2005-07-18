@@ -12,8 +12,9 @@
 #include "hash.h"
 #include "net.h"
 #include "linefile.h"
+#include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.41 2005/06/29 22:29:15 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.42 2005/07/18 18:20:58 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -242,11 +243,11 @@ if (in != NULL)
 
 void netParseUrl(char *url, struct netParsedUrl *parsed)
 /* Parse a URL into components.   A full URL is made up as so:
- *   http://hostName:port/file
+ *   http://user:password@hostName:port/file
  * This is set up so that the http:// and the port are optional. 
  */
 {
-char *s, *t, *u;
+char *s, *t, *u, *v, *w;
 char buf[1024];
 
 /* Make local copy of URL. */
@@ -280,6 +281,42 @@ else
    strncpy(parsed->file, u, sizeof(parsed->file));
    *u = 0;
    }
+
+
+/* Split off user part */
+v = strchr(s, '@');
+if (v == NULL)
+   {
+   if (sameWord(parsed->protocol,"http"))
+      {
+      strcpy(parsed->user, "");
+      strcpy(parsed->password, "");
+      }
+   if (sameWord(parsed->protocol,"ftp"))
+      {
+      strcpy(parsed->user, "anonymous");
+      strcpy(parsed->password, "x@genome.ucsc.edu");
+      }
+   }
+else
+   {
+   *v = 0;
+   /* split off password part */
+   w = strchr(s, ':');
+   if (w == NULL)
+      {
+      strncpy(parsed->user, s, sizeof(parsed->user));
+      strcpy(parsed->password, "");
+      }
+   else
+      {
+      *w = 0;
+      strncpy(parsed->user, s, sizeof(parsed->user));
+      strncpy(parsed->password, w+1, sizeof(parsed->password));
+      }
+   s = v+1;
+   }
+
 
 /* Save port if it's there.  If not default to 80. */
 t = strchr(s, ':');
@@ -429,10 +466,10 @@ int netGetOpenFtp(char *url)
 /* Return a file handle that will read the url. */
 {
 struct netParsedUrl npu;
-struct dyString *dy = newDyString(512);
 struct dyString *rs = NULL;
 int sd;
 long timeOut = 1000000; /* wait in microsec */
+char cmd[256];
 
 /* Parse the URL and connect. */
 netParseUrl(url, &npu);
@@ -446,14 +483,16 @@ sd = netMustConnect(npu.host, atoi(npu.port));
 if (readReadyWait(sd, timeOut))
     sendFtpCommand(sd, "", FALSE, FALSE);
 
-sendFtpCommand(sd, "USER anonymous\r\n", FALSE, FALSE);
+safef(cmd,sizeof(cmd),"USER %s\r\n",npu.user);
+sendFtpCommand(sd, cmd, FALSE, FALSE);
 
-sendFtpCommand(sd, "PASS x@genome.ucsc.edu\r\n", FALSE, FALSE);
+safef(cmd,sizeof(cmd),"PASS %s\r\n",npu.password);
+sendFtpCommand(sd, cmd, FALSE, FALSE);
 
 rs = sendFtpCommand(sd, "PASV\r\n", TRUE, FALSE);
 /* 227 Entering Passive Mode (128,231,210,81,222,250) */
 
-dyStringPrintf(dy, "RETR %s\r\n", npu.file);
+safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
 /* we can't wait for reply because 
    we need to start the next fetch connect 
    but then if there is an error e.g. missing file,
@@ -461,14 +500,13 @@ dyStringPrintf(dy, "RETR %s\r\n", npu.file);
    already closed the port and are waiting.
    And our timeout is long - indefinitely so?
 */
-sendFtpCommand(sd, dy->string, FALSE, TRUE);  
+sendFtpCommand(sd, cmd, FALSE, TRUE);  
 
 close(sd);
 
 sd = netMustConnect(npu.host, parsePasvPort(rs->string));
 
 /* Clean up and return handle. */
-dyStringFree(&dy);
 dyStringFree(&rs);
 return sd;
 }
@@ -495,8 +533,18 @@ dyStringPrintf(dy, "%s %s HTTP/1.0\r\n", method, npu.file);
 dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
 dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
 dyStringPrintf(dy, "Accept: */*\r\n");
+if (!sameString(npu.user,""))
+    {
+    char up[256];
+    char *b64up = NULL;
+    safef(up, sizeof(up), "%s:%s", npu.user, npu.password);
+    b64up = base64Encode(up);
+    dyStringPrintf(dy, "Authorization: Basic %s\r\n", b64up);
+    freez(&b64up);
+    }
+dyStringAppend(dy, "Accept: */*\r\n");
 if (end)
-    dyStringPrintf(dy, "\r\n", npu.host, npu.port);
+    dyStringPrintf(dy, "\r\n");
 write(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
@@ -893,6 +941,15 @@ struct dyString *dy = newDyString(512);
 dyStringPrintf(dy, "GET %s HTTP/1.1\r\n", npu->file);
 dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
 dyStringPrintf(dy, "Host: %s:%s\r\n", npu->host, npu->port);
+if (!sameString(npu->user,""))
+    {
+    char up[256];
+    char *b64up = NULL;
+    safef(up,sizeof(up), "%s:%s", npu->user, npu->password);
+    b64up = base64Encode(up);
+    dyStringPrintf(dy, "Authorization: Basic %s\r\n", b64up);
+    freez(&b64up);
+    }
 dyStringAppend(dy, "Accept: */*\r\n");
 if (keepAlive)
   {
