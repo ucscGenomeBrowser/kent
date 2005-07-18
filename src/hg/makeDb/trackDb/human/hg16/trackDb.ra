@@ -5489,3 +5489,11 @@ type bed 4
     longLabel Combined DNAseI HS
     priority 3
 
+track encodeRegulatory
+shortLabel Regulatory Elements
+longLabel ENCODE Regulatory Elements
+priority 506
+group encodeAnalysis
+visibility hide
+type bed 3 +
+
