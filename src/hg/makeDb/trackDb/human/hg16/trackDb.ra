@@ -5396,3 +5396,68 @@ priority 503
 group encodeAnalysis
 visibility hide
 type bed 3 +
+
+track encodeTransFrags
+compositeTrack on
+shortLabel TransFrags
+longLabel ENCODE TransFrags
+group encodeAnalysis
+priority 504
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4
+
+    track encodeTransFragsAffyDistal
+    subTrack encodeTransFrags
+    shortLabel Affy Dist
+    longLabel Affy Distal 
+    priority 1
+
+    track encodeTransFragsAffyIntronicDistal
+    subTrack encodeTransFrags
+    shortLabel Affy Intron Dist
+    longLabel Affy Intronic Distal 
+    priority 2
+
+    track encodeTransFragsAffyProximal
+    subTrack encodeTransFrags
+    shortLabel Affy Prox
+    longLabel Affy Proximal 
+    priority 3
+
+    track encodeTransFragsYaleIntergenicDistal
+    subTrack encodeTransFrags
+    shortLabel Yale Intergen Dist
+    longLabel Yale Intergenic Distal 
+    priority 4
+
+    track encodeTransFragsYaleIntergenicProximal
+    subTrack encodeTransFrags
+    shortLabel Yale Intergen Prox
+    longLabel Yale Intergenic Proximal
+    priority 5
+
+    track encodeTransFragsYaleIntronicDistal
+    subTrack encodeTransFrags
+    shortLabel Yale Intron Dist
+    longLabel Yale Intronic Distal
+    priority 6
+
+    track encodeTransFragsConservedDistal
+    subTrack encodeTransFrags
+    shortLabel Cons Distal
+    longLabel Conserved Distal 
+    priority 7
+
+    track encodeTransFragsConservedProximal
+    subTrack encodeTransFrags
+    shortLabel Cons Prox
+    longLabel Conserved Proximal
+    priority 8
+
+    track encodeTransFragsConservedIntronicDistal
+    subTrack encodeTransFrags
+    shortLabel Cons Intron Dist
+    longLabel Conserved Intronic Distal
+    priority 9
+
