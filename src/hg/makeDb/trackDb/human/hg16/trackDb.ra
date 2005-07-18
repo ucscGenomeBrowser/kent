@@ -5461,3 +5461,31 @@ type bed 4
     longLabel Conserved Intronic Distal
     priority 9
 
+track encodeDnase
+compositeTrack on
+shortLabel DNAseI HS
+longLabel ENCODE DNAseI HS
+group encodeAnalysis
+priority 505
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4
+
+    track encodeNhgriDnaseHs2
+    subTrack encodeDnase
+    shortLabel NHGRI DNAseI HS
+    longLabel NHGRI DNAseI HS
+    priority 1
+
+    track encodeRegulomeDnaseHs
+    subTrack encodeDnase
+    shortLabel Regulome DNAseI HS
+    longLabel Regulome DNAseI HS
+    priority 2
+
+    track encodeDnaseHs
+    subTrack encodeDnase
+    shortLabel Combined DNAseI HS
+    longLabel Combined DNAseI HS
+    priority 3
+
