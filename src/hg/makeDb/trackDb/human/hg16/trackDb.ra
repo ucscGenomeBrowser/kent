@@ -1704,7 +1704,6 @@ cdsDrawDefault genomic\ codons
 
     track encodeEgaspUpdAugustusDual
     subTrack encodeEgaspUpdate
-    shortLabel Augustus/Mouse
     shortLabel August/Mouse Upd
     longLabel Augustus + Mouse Homology Gene Predictions
     color 12,85,135
@@ -1712,7 +1711,6 @@ cdsDrawDefault genomic\ codons
 
     track encodeEgaspUpdAugustusAny
     subTrack encodeEgaspUpdate
-    shortLabel Augustus/EST/Mouse
     shortLabel August/EST/Ms Upd
     longLabel Augustus + EST/Protein Evidence + Mouse Homology Gene Predictions
     priority 4
