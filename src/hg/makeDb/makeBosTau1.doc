@@ -61,8 +61,8 @@ exit; # don't actually run this like a script :)
   diff id.fa id.qual
 
   # this takes about 5-10 minutes
-  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze >& check.out
-  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.gap linearScaffolds/Btau20040927-freeze > check.err
+  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.agp linearScaffolds/Btau20040927-freeze >& check.out
+  /cluster/bin/i386/checkAgpAndFa contigs/Btau_v1.0_20040927.agp linearScaffolds/Btau20040927-freeze > check.err
 
 # SELECTED DOWNLOAD FILES (DONE, Feb. 9, 2005, Heather)
 
