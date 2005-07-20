@@ -5037,7 +5037,7 @@ searchPriority 50
 track encodeIntergenicDistal
 compositeTrack on
 shortLabel Intergenic Distal
-longLabel Unannotated transfrags in Intergenic Distal
+longLabel Unannotated Transfrags in Intergenic Distal
 group encodeTxLevels
 priority 32
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5115,7 +5115,7 @@ altColor 0,255,0
 track encodeIntergenicProximal
 compositeTrack on
 shortLabel Intergenic Proximal
-longLabel Unannotated transfrags in Intergenic Proximal
+longLabel Unannotated Transfrags in Intergenic Proximal
 group encodeTxLevels
 priority 33
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5193,7 +5193,7 @@ altColor 0,0,0
 track encodeIntronsDistal
 compositeTrack on
 shortLabel Introns Distal
-longLabel Unannotated transfrags in IntronsDistal
+longLabel Unannotated Transfrags in Introns Distal
 group encodeTxLevels
 priority 34
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5271,7 +5271,7 @@ altColor 0,255,255
 track encodeIntronsProximal
 compositeTrack on
 shortLabel Introns Proximal
-longLabel Unannotated transfrags in Introns Proximal
+longLabel Unannotated Transfrags in Introns Proximal
 group encodeTxLevels
 priority 35
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5348,7 +5348,7 @@ altColor 128,0,128
 
 track encodeAllIntergenicDistal
 shortLabel All Intergen Dist
-longLabel All Intergenic Distal TransFrags in one track
+longLabel All Intergenic Distal Transfrags in One Track
 priority 36
 group encodeTxLevels
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5357,7 +5357,7 @@ type bed 4 .
 
 track encodeAllIntergenicProximal
 shortLabel All Intergen Prox
-longLabel All Intergenic Proximal TransFrags in one track
+longLabel All Intergenic Proximal Transfrags in One Track
 priority 37
 group encodeTxLevels
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5366,7 +5366,7 @@ type bed 4 .
 
 track encodeAllIntronsDistal
 shortLabel All Introns Dist
-longLabel All Introns Distal TransFrags in one track
+longLabel All Introns Distal Transfrags in One Track
 priority 38
 group encodeTxLevels
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5375,7 +5375,7 @@ type bed 4 .
 
 track encodeAllIntronsProximal
 shortLabel All Introns Prox
-longLabel All Introns Proximal TransFrags in one track
+longLabel All Introns Proximal Transfrags in One Track
 priority 39
 group encodeTxLevels
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5410,8 +5410,8 @@ type bed 3 +
 
 track encodeTransFrags
 compositeTrack on
-shortLabel TransFrags
-longLabel ENCODE TransFrags
+shortLabel Transfrags
+longLabel ENCODE Transfrags
 group encodeAnalysis
 priority 504
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
