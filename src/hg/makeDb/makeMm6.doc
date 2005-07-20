@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.62 2005/07/20 17:19:39 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.63 2005/07/20 23:22:04 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7856,6 +7856,7 @@ _EOF_
  
     rm /gbdb/mm6/NIAGene/T-fasta.fa
     ln -s /cluster/data/mm6/bed/NIAGene/T-fasta.fa /gbdb/mm6/NIAGene/T-fasta.fa
-    
-    hgLoadSeq mm6 /gbdb/mm6/NIAGene/T-fasta.fa
+   
+# Load the sequences.  PLEASE NOTE THE "-replace" OPTION SHOULD BE USED!!!   
+    hgLoadSeq -replace mm6 /gbdb/mm6/NIAGene/T-fasta.fa
 
