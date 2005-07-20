@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.60 2005/07/15 01:06:09 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.61 2005/07/20 00:56:49 aamp Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7759,10 +7759,82 @@ idSql select kgID from kgXref where kgID = '%s'
 url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm6&acc=%s
 priority 95
 
+
 # REBUILT knownToPfam TABLE TO ALLOW KG REPRESENTED BY VARIANT SPLICE PROTEINS MAPPED TO PFAM (DONE 7/14/05, Fan)
 # hgMapViaSwissProt.c was updated to support this.
-
 # Create table that maps between known genes and Pfam domains
 ~/bin/i386/hgMapViaSwissProt mm6 knownGene name proteinID Pfam knownToPfam
 # row count is  24650
 
+# SCDb CLONES (7/12/2005 Andy)
+    cd /cluster/data/mm6/bed
+    mkdir blat.SCDb-07-05-2005
+    cd blat.SCDb-07-05-2005/
+    ln -s `pwd` ~/scdb
+    pushd /santest/scratch/andy
+    wget http://stemcell.princeton.edu/download/scdb.fa.gz
+    mkdir scdb
+    faSplit sequence scdb.fa.gz 80 scdb/scdb_
+    popd
+    find /santest/scratch/andy/scdb -type f > scdb.lst
+    find /panasas/store/mm6/nib -type f > mm6.lst
+    cat << "_EOF_" > blat.sh
+#!/bin/bash
+cdir=${3%/*}
+mkdir -p $cdir
+blat -q=dna -t=dna -noHead -ooc=/iscratch/i/mm6/ooc/11.ooc $1 $2 $3
+_EOF_
+    cat << "_EOF_" > gsub
+#LOOP
+./blat.sh {check in exists $(path2)} {check in line+ $(path1)} {check out line /cluster/bluearc/andy/scdb.psl/$(root2)/$(root2)_$(root1).psl}
+#ENDLOOP
+_EOF_
+    chmod +x blat.sh
+    ssh kk
+    cd /cluster/data/mm6/bed/blat.SCDb-07-05-2005
+    gensub2 scdb.lst mm6.lst gsub spec
+    para create spec
+    para try
+    para push
+    para time
+#Completed: 3200 of 3200 jobs
+#CPU time in finished jobs:      24158s     402.64m     6.71h    0.28d  0.001 y
+#IO & Wait Time:                 14437s     240.61m     4.01h    0.17d  0.000 y
+#Average job time:                  12s       0.20m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             244s       4.07m     0.07h    0.00d
+#Submission to last job:           727s      12.12m     0.20h    0.01d
+    ssh hgwdev
+    cd /cluster/data/bed/blat.SCDb-07-05-2005
+    # See if things check out.
+    find /cluster/bluearc/andy/scdb.psl -type f -exec cat '{}' ';' > sbdb.all.psl
+    pslReps -singleHit scdb.all.psl scdb.best.psl info.psr
+    # All the original names
+    grep '>' scdb.fa | sed 's/^>//' | cut -f1 -d' ' | sort | uniq > names.scdb
+    # All the names from ones that hit.
+    cut -f10 scdb.all.psl | sort | uniq > all.names.scdb
+    # All the ones with a "best" hit.
+    cut -f10 scdb.best.psl | sort | uniq > best.names.scdb
+    # Yeah a bunch of them (4,443/37,386) are missing.  It seems many of the 
+    # clones aren't from mouse anyways.
+    mkdir ../scdb
+    cp scdb.best.psl ../scdb/scdb.psl
+    cp scdb.fa ../scdb/
+    cp best.names.scdb ../scdb/
+    cd ../scdb/
+    faSomeRecords scdb.fa best.names.scdb scdb.best.fa
+    rm scdb.fa
+    mkdir /gbdb/mm6/scdb
+    ln -s /cluster/data/mm6/bed/scdb/scdb.best.fa /gbdb/mm6/scdb/scdb.fa    
+    hgLoadSeq mm6 /gbdb/mm6/scdb/scdb.fa
+    # clean up the names... basically take the middle part out.   
+    sed 's/SC|\([^|]\+\)|[0-9]\+/\1/' scdb.best.fa > new.scdb.best.fa
+    sed 's/SC|\([^|]\+\)|[0-9]\+/\1/' scdb.psl > new.scdb.psl
+    mv scdb.psl old.scdb.psl
+    mv new.scdb.psl scdb.psl
+    mv scdb.best.fa old.scdb.best.fa
+    mv new.scdb.best.fa scdb.best.fa
+    hgLoadPsl -table=scdb mm6 scdb.psl
+    hgLoadSeq mm6 /gbdb/mm6/scdb/scdb.fa
+#Warning: load of seq did not go as planned: 37381 record(s), 1 row(s) skipped, 0 warning(s) loading ./seq.tab
+    # Oh well.  
