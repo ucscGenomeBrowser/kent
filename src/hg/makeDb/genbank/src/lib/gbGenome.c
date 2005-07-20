@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.37 2005/05/22 17:28:54 braney Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.38 2005/07/20 16:43:56 braney Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -35,6 +35,8 @@ static char *cbNames[] = {"Caenorhabditis briggsae", NULL};
 static char *caeRemNames[] = {"Caenorhabditis remanei", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
 static char *oryCunNames[] = {"Oryctolagus cuniculus", NULL};
+static char *loxAfrNames[] = {"Loxodonta africana", NULL};
+static char *dasNovNames[] = {"Dasypus novemcinctus", NULL};
 static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
 			      "Canis canis", NULL};
 static char *droYakNames[] = {"Drosophila yakuba", NULL};
@@ -72,6 +74,8 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"caeRei", caeRemNames, NULL}, /* db spelling mistake, should be Rem */
     {"danRer", danRerNames, NULL},
     {"canFam", canFamNames, NULL},
+    {"loxAfr", loxAfrNames, NULL},
+    {"dasNov", dasNovNames, NULL},
     {"oryCun", oryCunNames, NULL},
     {"droYak", droYakNames, NULL},
     {"droAna", droAnaNames, NULL},
