@@ -60,7 +60,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	pyrHor1\
 	pyrAby1\
 	sc1 \
-	canHg4 mmHg4 panHg4 \
+	canHg4 canHg9\
 	vibCho1 \
 	sulSol1
 
