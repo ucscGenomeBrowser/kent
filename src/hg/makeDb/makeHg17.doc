@@ -16961,5 +16961,16 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
   # (floats).
   hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql hg17 evofold foldsHg17.bed
 
-
-  
+# GLADSTONE ARRAY TRACK (DONE 7/19/2005 Andy)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir gladHumES
+    cd gladHumES/
+    cp /cluster/data/hg16/bed/geneAtlas2/geneAtlas2.bed .
+    cut -f1-12 geneAtlas2.bed > bed.hg16
+    liftOver bed.hg16 /gbdb/hg16/liftOver/hg16ToHg17.over.chain bed.hg17 /dev/null
+    hgMapMicroarray bed.hg17.data hgFixed.gladHumESRatio \
+       -bedIn bed.hg17
+#Loaded 11087 rows of expression data from hgFixed.gladHumESRatio
+#Mapped 10925,  multiply-mapped 382, missed 23266, unmapped 162
+    hgLoadBed hg17 gladHumES bed.hg17.data
