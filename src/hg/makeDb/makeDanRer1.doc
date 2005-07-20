@@ -2408,7 +2408,6 @@ table bacCloneAlias
     cp bacCloneAlias.h ../inc
     # edit bacCloneAlias.sql to add INDEX(alias) to indices
     # edit bacCloneAlias.sql to add INDEX(sangerName) to indices
-    # edit so that sangerName can be NULL
     # remove primary key, can not make a compound primary key by
     # adding sangerName column since not all the BAC clones have this
     # and it is not unique, more than one BAC clone can have the same 
@@ -4801,6 +4800,29 @@ cat > template << 'EOF'
     end
     cat *.txt >> zfin.maps
 
+2005-06-13
+    # use formatZfishSts to bring all information together about STS markers
+    $HOME/bin/i386/formatZfishSts
+    # USAGE: formatZfishSts [-verbose=<level>] <UniSTS file> <ZFIN mappings.txt> <genbank.txt> <UniSTS aliases> <ZFIN aliases> <prefix of output file(*.format)>
+    mkdir /cluster/data/danRer1/bed/STSmarkers/downloads/test
+    cd /cluster/data/danRer1/bed/STSmarkers/downloads/test
+    cat /cluster/data/ncbi/UniSTS.2005-04-12/danRer/*.txt >> UniSTSmaps.txt
+    awk 'BEGIN {FS="\t"} {print $2;}' UniSTSmaps.txt > UniSTSmaps.names
+    sort UniSTSmaps.names | uniq > UniSTSmaps.names.sort 
+    # remove blank line at top
+    awk 'BEGIN {FS="\t"} {print $3;}' markers.format | sort | uniq \
+        > UniSTS.names.sort
+    comm -12 UniSTS.names.sort UniSTSmaps.names.sort > UniSTSnamesvsmaps
+    comm -13 UniSTS.names.sort UniSTSmaps.names.sort > onlyinUniSTSmaps.names 
+    awk 'BEGIN {FS="\t"} {print $4;}' markers.format | sort | uniq \
+       > ZFIN.names.sort
+    comm -12 ZFIN.names.sort onlyinUniSTSmaps.names > ZFINnamesvsmaps
+    #  14350 ZFINnamesvsmaps
+    # 47197 onlyinUniSTSmaps.names
+    comm -13 ZFIN.names.sort onlyinUniSTSmaps.names > onlyinUniSTSmaps.names2
+    # 32847 onlyinUniSTSmaps.names2
+    awk 'BEGIN {FS="\t"} {print $6;}' markers.format > aliases.names
+    
 # ENABLE AUTO BUILD MGC GENES TRACK (DONE markd)
    - add the following lines to danRer1 entry in /cluster/data/genbank/etc/genbank.conf
       danRer1.mgcTables.default = full
@@ -4808,7 +4830,10 @@ cat > template << 'EOF'
    - wait one day for nightly build to align and load them into the db
    - rebuild trackDb
 
-# LIFTOVER CHAINS TO DANRER2 (in progress, 2005-05-13, hartera)
+# LIFTOVER CHAINS TO DANRER2 (DONE, 2005-07-20, hartera)
+# Create liftOver for only chr1-25 because chrFinished, chrUn and chrNA 
+# will cause too many false alignments.
+
     # run alignment
     # NOTE: split danRer2 to /iscratch/i is doc'ed in makeDanRer2.doc
     # make a nibDir with no chrUn and chrNA
@@ -4826,9 +4851,10 @@ cat > template << 'EOF'
     
     ssh kk
     cd /cluster/data/danRer1
+    # run 1-25, Finished and M for danRer1 vs 1-25 and M for danRer2
     makeLoChain-align danRer1 /iscratch/i/danRer1/nibNoUnandNA \
                     danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split
-    # run Un and NA separately as these could take a long time
+    # run Un and NA for danRer1 separately as these could take a long time
     makeLoChain-align danRer1 /iscratch/i/danRer1/nibUnandNA \
                     danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split
     cd /cluster/data/danRer1/bed/blat.danRer2.2005-05-24/run
@@ -4836,11 +4862,127 @@ cat > template << 'EOF'
     ssh kkusr01
     /cluster/bin/scripts/makeLoChain-lift.csh danRer1 danRer2 <lift-dir>
 
-    # Created parasol job in bed/blat.danRer1.2005-05-13/run
+    # Created parasol job in bed/blat.danRer1.2005-05-18/run
     cd bed
     rm blat.danRer2
     ln -s blat.danRer2.2005-05-18 blat.danRer2
     cd blat.danRer2/run
     para try, check, push, check etc..
-    
+# para time
+# Completed: 702 of 702 jobs
+# CPU time in finished jobs:   27720091s  462001.51m  7700.03h  320.83d  0.879 y
+# IO & Wait Time:                 50264s     837.74m    13.96h    0.58d  0.002 y
+# Average job time:               39559s     659.32m    10.99h    0.46d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:          156623s    2610.38m    43.51h    1.81d
+# Submission to last job:        541963s    9032.72m   150.55h    6.27d
+
+    ssh kk
+    cd /cluster/data/danRer1
+    makeLoChain-align danRer1 /iscratch/i/danRer1/nib \
+        danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split/UnandNA
+    # Created parasol job in bed/blat.danRer1.2005-05-31/run
+    cd bed/blat.danRer2.2005-05-31/run
+    para try, check, push, check etc..
+
+    # Lift results
+    #  the lift directory was defined in makeHg17.doc when split was performed
+    # this expects data in bed/blat.hg17, so symlink must be there 
+    # use kolossus for speed
+    ssh kolossus
+    cd /cluster/data/danRer1/bed
+    # for script to work, directory must have today's date
+    mv blat.danRer2.2005-05-18 blat.danRer2.2005-07-19
+    cd /cluster/data/danRer1/bed/blat.danRer2.2005-07-19
+    makeLoChain-lift danRer1 danRer2 \
+         /iscratch/i/danRer2/liftOver/liftSplit/lift >&! lift.log &
+    tail -100f lift.log
+    cd ..
+    mv blat.danRer2.2005-07-19 blat.danRer2.2005-05-18
+   
+    # do manually as this stops after chr1 - same problem seen with mm5->mm6
+    # when all runs are finished, combine all the results into raw dir
+    # in blat.danRer2 and do lift
+    ssh kk
+    cd /cluster/data/danRer1/bed/blat.danRer2/raw
+    bash # if not working in bash already 
+    for nib in `ls /cluster/data/danRer2/nib`; do
+       chrom=${nib%.nib}
+       echo $chrom
+       liftUp -pslQ ../psl/${chrom}.psl /iscratch/i/danRer2/liftOver/liftSplit/lift/${chrom}.lft warn chr*_${chrom}.psl
+       echo done $chrom
+    done
+    rm ../psl/chrUn.psl ../psl/chrNA.psl
+    # Un and NA are empty psls as these were not run
+
+    ssh kk9
+    cd /cluster/data/danRer1/bed
+    ln -s blat.danRer2.2005-05-18 blat.danRer2.2005-07-19
+    makeLoChain-chain danRer1 /cluster/data/danRer1/nib danRer2 \
+          /cluster/data/danRer2/nib
+    cd /cluster/data/danRer1/bed/blat.danRer2.2005-07-19/chainRun
+    para try, check, push, check etc.
+# para time
+# Completed: 26 of 26 jobs
+# CPU time in finished jobs:       2501s      41.68m     0.69h    0.03d  0.000 y
+# IO & Wait Time:                  1773s      29.55m     0.49h    0.02d  0.000 y
+# Average job time:                 164s       2.74m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             210s       3.50m     0.06h    0.00d
+# Submission to last job:           504s       8.40m     0.14h    0.01d
+    # make alignment net, need access to kkusr01
+    ssh kolossus
+    cd /cluster/data/danRer1/bed/blat.danRer2
+    # remove chrFinished - this also has Ns between contigs and could
+    # cause false alignments due to alignments bridging contigs
+    rm /cluster/data/danRer1/bed/blat.danRer2/chainRaw/chrFinished.chain
+    # run programs as in /cluster/bin/scripts/makeLoChain-net
+    # script aborts if it is not on fileserver for 
+    # this directory as no local login to kkusr01 at the moment
+    # sort chains
+    rm -fr chain
+    mkdir chain
+    chainMergeSort chainRaw/*.chain | chainSplit chain stdin
+    rm ./chain/chrFinished.chain
+    # create net
+    rm -fr net
+    mkdir net
+    cd chain
+    foreach i (*.chain)
+       echo $i:r
+       chainNet $i /cluster/data/danRer1/chrom.sizes \
+            /cluster/data/danRer2/chrom.sizes ../net/$i:r.net /dev/null
+       echo done $i
+    end
+    rm -fr ../over
+    mkdir ../over
+    foreach i (*.chain)
+       echo $i:r
+       netChainSubset ../net/$i:r.net $i ../over/$i
+    end
+    cat ../over/*.chain > ../danRer1ToDanRer2.over.chain
+    mkdir -p /cluster/data/danRer1/bed/bedOver
+    cp ../danRer1ToDanRer2.over.chain /cluster/data/danRer1/bed/bedOver/
+
+    # load into database and copy to download directory
+    ssh hgwdev
+    # makeLoChain-load does not make database entry so run manually
+    # save to download area
+    mkdir -p /usr/local/apache/htdocs/goldenPath/danRer1/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/danRer1
+    gzip -c /cluster/data/danRer1/bed/bedOver/danRer1ToDanRer2.over.chain \
+         > liftOver/danRer1ToDanRer2.over.chain.gz
+    # load into database
+    mkdir -p /gbdb/danRer1/liftOver
+    rm -f /gbdb/danRer1/liftOver/danRer1ToDanRer2.over.chain
+    ln -s /cluster/data/danRer1/bed/bedOver/danRer1ToDanRer2.over.chain \
+          /gbdb/danRer1/liftOver
+    # Need to add entry into hgcentraltest.liftOverChain
+    echo 'insert into liftOverChain values("danRer1", "danRer2", "/gbdb/danRer1/liftOver/danRer1ToDanRer2.over.chain", "0.95", "0", "0", "N", "1", "N");' \
+    | hgsql hgcentraltest
+    # check entry in db
+    echo 'select * from liftOverChain where fromDb = "danRer1";' \
+         | hgsql hgcentraltest
+    # add an entry to the pushQ in the liftOver subqueue - liftOverQueue
+   
 
