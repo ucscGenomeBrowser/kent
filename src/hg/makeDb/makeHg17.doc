@@ -10847,7 +10847,7 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     cd /cluster/data/hg17/bed
     mv rnaStruct rnaStruct.2004-10-04
     mkdir -p /cluster/data/hg17/bed/rnaStruct.2004-11-30
-    ln s rnaStruct.2004-11-30 rnaStruct
+    ln Âs rnaStruct.2004-11-30 rnaStruct
     cd /cluster/data/hg17/bed/rnaStruct
     mkdir -p utr3/split utr5/split utr3/fold utr5/fold
     utrFa hg17 knownGene utr3 utr3/utr.fa
@@ -11483,7 +11483,7 @@ hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # from supfam.mrc-lmb.cam.ac.uk
 
     mkdir /cluster/store8/superfamily/041128
-    ln s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
+    ln Âs /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
     cd /cluster/data/superfamily/041128
 # ftp over the following two files:
 ass_28-Nov-2004.tab.gz
@@ -11496,7 +11496,7 @@ ass_28-Nov-2004.tab.gz
 # This may take about an hour.
 
 # Make sure to add an index on id of the des table of superfam041128.
-    hgsql superfam041128 e "create index id on des(id);"
+    hgsql superfam041128 Âe "create index id on des(id);"
 
     hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
     hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
@@ -11552,7 +11552,7 @@ superfam041128.sfAssign;'
     mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
     mkdir /cluster/data/hg17/bed/pb.2004-12-01
     cd /cluster/data/hg17/bed
-    ln s /cluster/data/hg17/bed/pb.2004-12-01 pb
+    ln Âs /cluster/data/hg17/bed/pb.2004-12-01 pb
 
 # Move the existing PB tables by:
 
@@ -16974,3 +16974,25 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
 #Loaded 11087 rows of expression data from hgFixed.gladHumESRatio
 #Mapped 10925,  multiply-mapped 382, missed 23266, unmapped 162
     hgLoadBed hg17 gladHumES bed.hg17.data
+
+
+##########################################################################
+# TRANSFRAG PHASE 2 TABLES  - lifted from hg15 (Jakob Skou Pedersen)
+# Done: July 21, 2005
+#
+# These tables were lifted for use in my own research, but may be used
+# for the 'Affymetrix Transcriptome Project Phase 2' tracks.
+  ssh -C hgwdev
+  mkdir -p /cluster/data/hg17/bed/transfrag
+  cd /cluster/data/hg17/bed/transfrag
+  # lifting transfrag tables from hg15 via hg16 to hg17
+  for name in A375CytosolicPolyAPlusTnFg FHs738LuCytosolicPolyAPlusTnFg HepG2CytosolicPolyAMinusTnFg HepG2CytosolicPolyAPlusTnFg HepG2NuclearPolyAMinusTnFg HepG2NuclearPolyAPlusTnFg JurkatCytosolicPolyAPlusTnFg NCCITCytosolicPolyAPlusTnFg PC3CytosolicPolyAPlusTnFg SKNASCytosolicPolyAPlusTnFg U87CytosolicPolyAPlusTnFg; do
+    echo "select chrom, chromStart, chromEnd, name from ${name};" | hgsql hg15 | sed -e 1d > ${name}Hg15.bed
+    liftOver ${name}Hg15.bed /cluster/data/hg15/bed/liftOver/hg15ToHg16.over.chain ${name}Hg16.bed unmappedHg16.bed
+    liftOver ${name}Hg16.bed /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain ${name}Hg17.bed unmappedHg17.bed
+    echo "hg16 unmapped count for ${name}: " `grep "#" unmappedHg16.bed | wc -l | awk '{print $1}'`
+    echo "hg17 unmapped count for ${name}: " `grep "#" unmappedHg17.bed | wc -l | awk '{print $1}'`
+    hgLoadBed hg17 ${name} ${name}Hg17.bed
+    # clean up
+    rm ${name}Hg15.bed ${name}Hg16.bed unmappedHg16.bed unmappedHg17.bed
+  done
