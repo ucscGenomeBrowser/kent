@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.6 2005/07/21 10:52:40 galt Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.7 2005/07/21 19:08:41 galt Exp $";
 
 boolean doSort = FALSE;
 
@@ -27,74 +27,28 @@ errAbort(
 char *chromSizeFile = NULL;        /* file for chrom sizes */
 char *chromGapSizeFile = NULL;     /* file for chrom gap sizes */
 
-char *agpFile = NULL;
-char *faIn    = NULL;
-char *faOut   = NULL;
-char *seqName = "";
-struct hashEl *hel;
-struct agpFrag *agpList = NULL, *agp;
-int lastPos = 0;
-struct hash *chromSizeHash = NULL;
-FILE *fSizes = NULL;                  /* output file w/ chrom sizes */
-struct hash *chromGapSizeHash = NULL;
-int gap;                /* count of gap bases for a chrom */
-FILE *fGapSizes = NULL;               /* output file w/ chrom gap sizes */
-DNA *dna = NULL;
-struct dnaSeq *seq;
-struct hash *fragHash = NULL;
-FILE *fOut;                     /* output fasta file */
-
-void saveFa()
-{
-seqName = (char *)hel->name;
-agpList = (struct agpFrag *)hel->val;
-lastPos = hashIntVal(chromSizeHash, seqName);
-if (lastPos == 0)
-    errAbort("%s not found\n", seqName);
-if (fSizes != NULL)
-    {
-    fprintf(fSizes, "%s\t%d\n", seqName, lastPos);
-    if (hashLookup(chromGapSizeHash, seqName))
-	{
-	gap = hashIntVal(chromGapSizeHash, seqName);
-	fprintf(fGapSizes, "%s\t%d\n", seqName, gap);
-	}
-    }
-dna = needLargeMem(lastPos+1);
-memset(dna, 'n', lastPos);
-dna[lastPos] = 0;
-for (agp = agpList->next; agp != NULL; agp = agp->next)
-    {
-    int size;
-    verbose(2,"%s\n", agp->frag);
-    seq = hashFindVal(fragHash, agp->frag);
-    if (seq == NULL)
-	errAbort("Couldn't find %s in %s", agp->frag, faIn);
-    size = agp->fragEnd - agp->fragStart;
-    memcpy(dna + agp->chromStart, seq->dna + agp->fragStart, size);
-    if (agp->strand[0] == '-')
-	reverseComplement(dna + agp->chromStart, size);
-    }
-verbose(2,"Writing sequence %s, %d bases to %s\n", seqName, lastPos, faOut);
-faWriteNext(fOut, seqName, dna, lastPos);
-freeMem(dna);
-}
-
-
-void agpAllToFaFile()
+void agpAllToFaFile(char *agpFile, char *faIn, char *faOut)
 /* agpAllToFaFile - Convert a .agp file to a .fa file. */
 {
-FILE *fIn;                     /* input fasta file */
 struct lineFile *lf = lineFileOpen(agpFile, TRUE); /* input AGP file */
+FILE *fIn, *fOut;                     /* input and output fasta file */
+FILE *fSizes = NULL;                  /* output file w/ chrom sizes */
+FILE *fGapSizes = NULL;               /* output file w/ chrom gap sizes */
 char *line, *words[16];
 int lineSize, wordCount;
+int lastPos = 0;
+struct agpFrag *agpList = NULL, *agp;
 struct hash *chromHash = newHash(0);
+struct hash *chromSizeHash = newHash(0);
+struct hash *chromGapSizeHash = newHash(0);
+struct hash *fragHash = newHash(17);
+char *seqName = "";
+DNA *dna = NULL;
+struct dnaSeq *seq;
 struct hashCookie cookie;
+struct hashEl *hel;
+int gap;                /* count of gap bases for a chrom */
 struct slName *chromNames = NULL, *chromName;
-
-chromSizeHash = newHash(0);
-chromGapSizeHash = newHash(0);
-fragHash = newHash(17);
 
 /* read in AGP file, constructing hash of chrom agp lists */
 verbose(1, "Reading %s\n", agpFile);
@@ -129,10 +83,8 @@ while (lineFileNext(lf, &line, &lineSize))
             /* add to hashes of chrom agp lists and sizes */
             hashAdd(chromHash, seqName, agpList);
             hashAddInt(chromSizeHash, seqName, agp->chromEnd);
-	    
 	    if (doSort)
 		slNameAddHead(&chromNames, seqName);
-	    
             }
         slAddTail(&agpList, agp);
         lastPos = agp->chromEnd;
@@ -169,31 +121,68 @@ if (chromSizeFile != NULL)
     fGapSizes = mustOpen(chromGapSizeFile, "w");
     }
 
-/* traverse hash, writing out sequence records */
-
 
 if (doSort)
     {
- 
-    uglyf("doSort chromNames\n");
-    
     slReverse(&chromNames);
-    
-    /* traverse chromNames, writing out sequence records */
-    for(chromName=chromNames; chromName; chromName=chromName->next)	
-	{
-	hel = hashLookup(chromHash, chromName->name);
-	saveFa();
-	}
-    slNameFreeList(&chromNames);
+    chromName=chromNames; 
     }
 else
-    {
-    /* traverse hash, writing out sequence records */
     cookie = hashFirst(chromHash); 
-    while ((hel = hashNext(&cookie)) != NULL)
-	saveFa();
-    }   
+
+/* traverse hash, writing out sequence records */
+while (TRUE)
+    {
+    if (doSort)
+	{
+    	if (chromName == NULL)
+    	    break;
+	hel = hashLookup(chromHash, chromName->name);
+	}
+    else
+	{
+    	if ((hel = hashNext(&cookie)) == NULL)
+    	    break;
+	}
+	
+    seqName = (char *)hel->name;
+    agpList = (struct agpFrag *)hel->val;
+    lastPos = hashIntVal(chromSizeHash, seqName);
+    if (lastPos == 0)
+        errAbort("%s not found\n", seqName);
+    if (fSizes != NULL)
+        {
+        fprintf(fSizes, "%s\t%d\n", seqName, lastPos);
+        if (hashLookup(chromGapSizeHash, seqName))
+            {
+            gap = hashIntVal(chromGapSizeHash, seqName);
+            fprintf(fGapSizes, "%s\t%d\n", seqName, gap);
+            }
+        }
+    dna = needLargeMem(lastPos+1);
+    memset(dna, 'n', lastPos);
+    dna[lastPos] = 0;
+    for (agp = agpList->next; agp != NULL; agp = agp->next)
+        {
+        int size;
+        verbose(2,"%s\n", agp->frag);
+        seq = hashFindVal(fragHash, agp->frag);
+        if (seq == NULL)
+            errAbort("Couldn't find %s in %s", agp->frag, faIn);
+        size = agp->fragEnd - agp->fragStart;
+        memcpy(dna + agp->chromStart, seq->dna + agp->fragStart, size);
+        if (agp->strand[0] == '-')
+            reverseComplement(dna + agp->chromStart, size);
+        }
+    verbose(2,"Writing sequence %s, %d bases to %s\n", seqName, lastPos, faOut);
+    faWriteNext(fOut, seqName, dna, lastPos);
+    freeMem(dna);
+    if (doSort)
+	chromName=chromName->next;
+    }
+
+if (doSort)
+    slNameFreeList(&chromNames);
     
 }
 
@@ -213,9 +202,6 @@ if (sizeFileBase != NULL)
     }
 if (optionExists("sort"))
     doSort = TRUE;
-agpFile = argv[1];
-faIn    = argv[2];
-faOut   = argv[3];
-agpAllToFaFile();
+agpAllToFaFile(argv[1], argv[2], argv[3]);
 return 0;
 }
