@@ -62,8 +62,8 @@ priority 30
 visibility dense
 colorChromDefault off
 type psl protein
-pred hg17.blastKGPep01
-blastRef hg17.blastKGRef01
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
 
 track blatzHg17KG
 shortLabel Human mRNAs
@@ -75,9 +75,9 @@ type psl xeno
 spectrum on
 blastRef hg17.blastKGRef01
 
-track tba14way
-shortLabel TBA 14-way
-longLabel TBA 14-way Multiple Alignment
+track buildMaf
+shortLabel Build MAF
+longLabel Build MAF 
 group compGeno
 priority 110
 visibility pack
@@ -88,11 +88,11 @@ type wigMaf 0.0 1.0
 # yLinOnOff Off
 # autoScaleDefault Off
 #pairwise fakePairwise
-irows on
-speciesTree ((tenrec,elephant),(armadillo,((bosTau1, canFam1),((rabbit,(rn3,mm6)),(rheMac1,(panTro1,hg17)panHg4))mmHg4)canHg4));
-speciesTarget hg17
-summary tba14waySummary
-speciesOrder mmHg4 panHg4 hg17 panTro1 rheMac1 rabbit rn3 mm6 bosTau1 canFam1 armadillo tenrec elephant 
+# irows on
+speciesTree ((tenrec,loxAfr1),(dasNov1,((bosTau1, canFam1),((oryCun1,(rn3,mm6)),(rheMac1,(panTro1,hg17)primate))euArc)canHg9));
+speciesTarget human
+summary buildMafSummary
+speciesOrder euArc primate hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
 
 track testMaf
 shortLabel testMaf
