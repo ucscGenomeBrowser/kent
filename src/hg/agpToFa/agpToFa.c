@@ -8,7 +8,7 @@
 #include "agpGap.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.12 2005/03/14 17:50:54 hiram Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.13 2005/07/21 00:24:20 galt Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -307,7 +307,7 @@ while (lineFileNext(lf, &line, &lineSize))
 slReverse(&agpList);
 if (lastPos == 0)
     errAbort("%s not found in %s\n", agpSeq, agpFile);
-dna = needLargeMem(lastPos+1);
+dna = needHugeMem(lastPos+1);
 memset(dna, 'n', lastPos);
 dna[lastPos] = 0;
 if (optionExists("simpleMulti"))
