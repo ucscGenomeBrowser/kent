@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.7 2005/07/21 19:08:41 galt Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.8 2005/07/22 04:02:22 galt Exp $";
 
 boolean doSort = FALSE;
 
@@ -78,6 +78,8 @@ while (lineFileNext(lf, &line, &lineSize))
                         agp->chrom, agp->frag, lf->lineIx, lf->fileName);
         if (!hashFindVal(chromHash, seqName))
             {
+	    if (agpList)
+		slReverse(&agpList);
             /* new chrom */
             AllocVar(agpList);
             /* add to hashes of chrom agp lists and sizes */
@@ -86,7 +88,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	    if (doSort)
 		slNameAddHead(&chromNames, seqName);
             }
-        slAddTail(&agpList, agp);
+        slAddHead(&agpList, agp);
         lastPos = agp->chromEnd;
 	}
     else
@@ -105,6 +107,8 @@ while (lineFileNext(lf, &line, &lineSize))
         hashRemove(chromSizeHash, seqName);
     hashAddInt(chromSizeHash, seqName, lastPos);
     }
+if (agpList)
+    slReverse(&agpList);
 /* read in input fasta file */
 verbose(1, "Reading %s\n", faIn);
 fIn = mustOpen(faIn, "r");
