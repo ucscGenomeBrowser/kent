@@ -7,7 +7,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.8 2005/07/22 04:02:22 galt Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.9 2005/07/22 18:14:24 galt Exp $";
 
 boolean doSort = FALSE;
 
@@ -48,7 +48,7 @@ struct dnaSeq *seq;
 struct hashCookie cookie;
 struct hashEl *hel;
 int gap;                /* count of gap bases for a chrom */
-struct slName *chromNames = NULL, *chromName;
+struct slName *chromNames = NULL, *chromName=NULL;
 
 /* read in AGP file, constructing hash of chrom agp lists */
 verbose(1, "Reading %s\n", agpFile);
