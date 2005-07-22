@@ -60,7 +60,7 @@ priority 120
 
 name pathways
 shortLabel Pathways
-longLabel Biochemical and Signalling Pathways
+longLabel Biochemical and Signaling Pathways
 priority 130
 
 name localization
