@@ -91,14 +91,6 @@ spectrum on
 type netAlign fr1 chainFr1
 otherDb fr1
 
-track affyZebrafish
-shortLabel Affy Zebrafish
-longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
-group regulation
-priority 80
-visibility hide
-type psl .
-
 track uniGene_dr
 shortLabel UniGene
 longLabel $Organism UniGene Alignments
