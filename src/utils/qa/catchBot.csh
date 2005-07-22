@@ -81,7 +81,11 @@ while ($checked < $size)
   set timeSpan=`hgsql -N -h genome-centdb -e 'SELECT MAX(time_stamp) - MIN(time_stamp) \
       AS timeSpan FROM access_log WHERE remote_host = "'$host'"' apachelog`
   set timeHours=`echo $timeSpan | gawk '{printf  "%.1f", $1/3600}'`
-  set hitsPerHr=`echo $num $timeHours | gawk '{printf  "%.0f", $1/$2}'`
+  if ($num > 0 ) then
+    set hitsPerHr=`echo $num $timeHours | gawk '{printf  "%.0f", $1/$2}'`
+  else
+    set hitsPerHr=`echo err  $timeHours | gawk '{printf  "%.0f", $1/$2}'`
+  endif
   set hitsPerMin=`echo $hitsPerHr | gawk '{printf  "%.1f", $1/60}'`
   
 if ($debug == "true") then
@@ -151,7 +155,7 @@ endif
 if ($max > $threshhold || $maxInHour > $hourLimit) then
   cat $output
 else
-  echo "\n  no user  > $threshhold hits in last $timeHours hours" 
+  echo "\n  no user  > $threshhold hits in last $hitSpan hours" 
   echo "  and none >  $hourLimit in last hour\n"
 endif
 
