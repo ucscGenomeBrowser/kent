@@ -221,3 +221,19 @@ searchMethod prefix
 searchType psl
 shortCircuit 1
 
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+                                                                                
+searchName affyZebrafishAbbrev
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
+
