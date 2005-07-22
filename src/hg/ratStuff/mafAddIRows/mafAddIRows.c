@@ -9,7 +9,7 @@
 #include "bed.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.5 2005/04/30 14:38:22 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.6 2005/07/22 23:47:29 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -64,9 +64,8 @@ struct strandHead
     struct linkBlock *links;
 };
 
-struct mafAli *readMafs(char *mafIn)
+struct mafAli *readMafs(struct mafFile *mf)
 {
-struct mafFile *mf = mafOpen(mafIn);
 struct mafAli *maf;
 char buffer[2048];
 char buffer2[2048];
@@ -86,7 +85,7 @@ while((maf = mafNext(mf)) != NULL)
 	{
 	masterSpecies = cloneString(species);
 	masterChrom = cloneString(chrom);
-	printf("master %s %s\n",masterSpecies,masterChrom);
+	//printf("master %s %s\n",masterSpecies,masterChrom);
 	}
     else
 	{
@@ -119,7 +118,7 @@ while((maf = mafNext(mf)) != NULL)
 	sprintf(buffer2, "%s%c%s", masterChrom,mc->strand,chrom);
 	if ((strandHead = hashFindVal(subSpecies->hash, buffer2)) == NULL)
 	    {
-	 //   printf("new strand %s for species %s\n",buffer2, species);
+	    //printf("new strand %s for species %s\n",buffer2, species);
 	    AllocVar(strandHead);
 	    hashAdd(subSpecies->hash, buffer2, strandHead);
 	    strandHead->name = cloneString(buffer2);
@@ -138,7 +137,6 @@ while((maf = mafNext(mf)) != NULL)
 	}
     slAddHead(&mafList, maf);
     }
-mafFileFree(&mf);
 slReverse(&mafList);
 
 return mafList;
@@ -151,7 +149,7 @@ for(; strandHead ; strandHead = strandHead->next)
     struct linkBlock *link, *prevLink;
     int lastEnd;
 
-    printf("chaining %s %s\n",strandHead->name, strandHead->species);
+    //printf("chaining %s %s\n",strandHead->name, strandHead->species);
     slReverse(&strandHead->links);
 
     prevLink = strandHead->links;
@@ -159,21 +157,25 @@ for(; strandHead ; strandHead = strandHead->next)
     //printf("new %d %d %d %d\n",prevLink->cb.tStart,prevLink->cb.tEnd,prevLink->cb.qStart,prevLink->cb.qEnd);
     for(link = prevLink->next; link; prevLink = link, link = link->next)
 	{
-	int lastEnd = prevLink->mc->start + prevLink->mc->size;
-	int diff = link->mc->start - lastEnd;
+	int tDiff = link->cb.tStart - prevLink->cb.tEnd;
+	int qDiff = link->cb.qStart - prevLink->cb.qEnd;
 
-
-	if ((diff < -1000) || (diff > 100000))
+	if  ((tDiff > 100000) || ((qDiff < -1000) || (qDiff > 100000)))
 	    {
 	//printf("new %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
+	    prevLink->mc->rightLen = link->mc->leftLen = 0;
+	    }
+	else if (qDiff == 0)
+	    {
+	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_CONTIG_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = 0;
 	    }
 	else
 	    {
 	    //printf("cont %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_INSERT_STATUS;
-	    prevLink->mc->rightLen = link->mc->leftLen = diff;
+	    prevLink->mc->rightLen = link->mc->leftLen = qDiff;
 	    }
 	}
     prevLink->mc->rightStatus = MAF_NEW_STATUS;
@@ -188,7 +190,7 @@ struct mafComp *masterMc, *mc;
 
 for(; subSpecies; subSpecies = subSpecies->next)
     {
-    printf("bridging %s\n",subSpecies->name);
+    //printf("bridging %s\n",subSpecies->name);
     pushState = 0;
     leftLen = 0;
     for(maf = mafList; maf ;  maf = maf->next)
@@ -204,7 +206,7 @@ for(; subSpecies; subSpecies = subSpecies->next)
 	    {
 	    if (pushState)
 		{
-		printf("arched on %s: %s:%d-%d\n",mc->src,"chr22",masterMc->start, masterMc->start + masterMc->size);
+		//printf("bridged on %s: %s:%d-%d\n",mc->src,"chr22",masterMc->start, masterMc->start + masterMc->size);
 		mc->leftStatus = MAF_NEW_NESTED_STATUS;
 		mc->leftLen = leftLen;
 		}
@@ -215,20 +217,20 @@ for(; subSpecies; subSpecies = subSpecies->next)
 	    {
 	    errAbort("zero right status\n");
 	    }
-	else if (mc->rightStatus == MAF_INSERT_STATUS)
+	else if ((mc->rightStatus == MAF_CONTIG_STATUS) || (mc->rightStatus == MAF_INSERT_STATUS))
 	    leftLen = mc->rightLen;
 	else if (mc->rightStatus == MAF_NEW_STATUS)
 	    {
 	    pushState--;
 	    if (pushState)
 		{
-		printf("arched on %s: %s:%d-%d\n",mc->src,"chr22",masterMc->start, masterMc->start + masterMc->size);
+		//printf("arched on %s: %s:%d-%d\n",mc->src,"chr22",masterMc->start, masterMc->start + masterMc->size);
 		mc->rightStatus = MAF_NEW_NESTED_STATUS;
 		mc->rightLen = leftLen;
 		}
 	    }
 	}
-    printf("pushState %d\n",pushState);
+    //printf("pushState %d\n",pushState);
     }
 }
 
@@ -270,6 +272,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 		    {
 		    case MAF_NEW_NESTED_STATUS:
 		    case MAF_MAYBE_NEW_NESTED_STATUS:
+		    case MAF_CONTIG_STATUS:
 		    case MAF_INSERT_STATUS:
 			AllocVar(mc);
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
@@ -294,7 +297,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    else 
 			    	seqName = miniMasterMc->src;
 
-			    printf("hole filled from %d to %d\n",lastEnd, masterMc->start);
+			    //printf("hole filled from %d to %d\n",lastEnd, masterMc->start);
 			    seq = twoBitReadSeqFrag(twoBit, seqName, lastEnd, masterMc->start);
 			    miniMasterMc->text = seq->dna;
 
@@ -331,6 +334,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 		{
 		switch (blockStatus->mc->rightStatus)
 		    {
+		    case MAF_CONTIG_STATUS:
 		    case MAF_INSERT_STATUS:
 		    case MAF_NEW_NESTED_STATUS:
 		    case MAF_MAYBE_NEW_NESTED_STATUS:
@@ -362,14 +366,17 @@ void mafAddIRows(char *mafIn, char *twoBitIn,  char *mafOut)
 FILE *f = mustOpen(mafOut, "w");
 struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 struct mafAli *mafList, *maf;
+struct mafFile *mf = mafOpen(mafIn);
 
 speciesHash = newHash(0);
-mafList = readMafs(mafIn);
+mafList = readMafs(mf);
+mafWriteStart(f, mf->scoring);
+mafFileFree(&mf);
+
 chainStrands(strandHeads);
 bridgeSpecies(mafList, speciesList);
 fillHoles(mafList, speciesList, twoBit);
 
-fprintf(f, "##maf version=1 scoring=mafAddIRows\n");
 
 for(maf = mafList; maf ; maf = maf->next)
     mafWrite(f, maf);
