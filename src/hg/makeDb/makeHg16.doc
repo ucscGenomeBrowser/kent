@@ -11060,7 +11060,7 @@ echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N
 
 
 ##########################################################################
-# CNPs from Wash U (In progress, Heather, June 2005)
+# CNPs from University of Washington (Done, Heather and Daryl, June/July 2005)
 # data from http://humanparalogy.gs.washington.edu/structuralvariation
 
 ssh hgwdev
