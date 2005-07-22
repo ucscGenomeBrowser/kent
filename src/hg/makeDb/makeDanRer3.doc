@@ -8,6 +8,8 @@ exit; # don't actually run this like a script :)
 #    http://www.sanger.ac.uk/Projects/D_rerio/Zv5_assembly_information.shtml
 
 # DOWNLOAD SEQUENCE (DONE, 2005-06-06, hartera)
+# MOVE DANRER3 DIRECTORY AND CONTENTS TO STORE11 AS STORE3 IS FULL
+# (DONE, 2005-07-22, hartera)
      ssh kkstore01
      mkdir /cluster/store9/danRer3
      ln -s /cluster/store9/danRer3 /cluster/data
@@ -21,7 +23,14 @@ exit; # don't actually run this like a script :)
      wget --timestamp \
        ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv5release/Zv5.scaffolds.agp     wget --timestamp \
        ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv5release/Zv5.fa
-
+     # 2005-07-22 MOVE danRer3 
+     # store9 is 100% full, move danRer3 to store11 which is 10% full
+     ssh kkstore02
+     cd /cluster/store9
+     nohup nice mv danRer3 /cluster/store11 &
+     # make link to /cluster/data/danRer3
+     ln -s /cluster/store11/danRer3 /cluster/data
+     
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2005-06-13, hartera)
      ssh kkstore01
      mkdir -p /cluster/data/danRer3/M
@@ -1102,6 +1111,124 @@ getSeqs.csh $(path1)
     # to check the entries:
     echo 'select * from blatServers where db="danRer3";' \
     | hgsql hgcentraltest
+
+# AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2005-07-22, hartera)
+    # sequences already downloaded for danRer1
+    ssh hgwdev
+    cd /projects/compbio/data/microarray/affyZebrafish
+    mkdir /cluster/bluearc/affy
+    cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \       /cluster/bluearc/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer2
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer3/bed/affyZebrafish.2005-07-22
+    ln -s /cluster/data/danRer3/bed/affyZebrafish.2005-07-22 \
+          /cluster/data/danRer3/bed/affyZebrafish
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affy/Zebrafish_consensus.fa /iscratch/i/affy
+    /cluster/bin/iSync
+
+    ssh kk
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    ls -1 /iscratch/i/affy/Zebrafish_consensus.fa > affy.lst
+    ls -1 /iscratch/i/danRer3/trfFa/ > genome.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/danRer3/danRer3_11.ooc /iscratch/i/danRer3/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try, check, push ... etc.
+# para time
+# Completed: 288 of 288 jobs
+# CPU time in finished jobs:       4365s      72.75m     1.21h    0.05d  0.000 y
+# IO & Wait Time:                 10946s     182.44m     3.04h    0.13d  0.000 y
+# Average job time:                  53s       0.89m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             126s       2.10m     0.04h    0.00d
+# Submission to last job:           482s       8.03m     0.13h    0.01d
+
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyZebrafish.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # do not use minCover since a lot of sequence is in Un, NA and Finished
+    # so genes may be split up so good to see all alignments
+    pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyZebrafish.psl ../../jkStuff/liftAll.lft warn contig.psl
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.bak
+    mv affyZebrafish.psl.bak affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    hgLoadPsl danRer3 affyZebrafish.psl
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+       /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /gbdb/hgFixed/affyProbes
+                                                                                
+    hgLoadSeq -abbr=Zebrafish: danRer3 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # moved affyZebrafish.html description and trackDb.ra to
+    # ~/kent/src/hg/makeDb/trackDb/zebrafish since it is common to all 
+    # danRer assemblies. 
+
+# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (in progress, 2005-07-21, hartera)
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is a new assembly, edit the etc/genbank.conf file and add:
+# danRer3 (zebrafish)
+danRer3.genome = /iscratch/i/danRer3/nib/chr*.nib
+danRer3.lift = /cluster/data/danRer3/jkStuff/liftAll.lft
+danRer3.downloadDir = danRer3
+danRer3.mgcTables.default = full
+danRer3.mgcTables.mgc = all
+    # these last two lines enable the MGC genes track (ZGC genes for zebrafish)
+    # Default includes native genbank mRNAs and ESTs,
+    # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
+    # not xeno RefSeq
+    ssh hgwdev
+    cd /cluster/data/genbank
+    cvs commit -m "Added danRer3" etc/genbank.conf
+    # edit ~/kent/src/hg/makeDb/genbank/src/align/gbBlat 
+    # as a fair amount of new sequence was added for danRer3
+    # Change line:  DANRER_OOC=/iscratch/i/danRer3/danRer3_11.ooc
+    # changed from danRer1 ooc file to danRer3 ooc file
+    cvs diff src/align/gbBlat
+    make
+    cvs commit -m "Changed 11.ooc file for danRer to that for danRer3." \
+        src/align/gbBlat
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # danRer genome information
+    # Install to /cluster/data/genbank
+    cd $HOME/kent/src/hg/makeDb/genbank
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, all sequences
+    nice bin/gbAlignStep -verbose=1 -initial danRer3
+
+    # Load results for all sequences:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer3
+    # Move results need to be moved out the way
+    cd /cluster/data/genbank/work
+    mv initial.danRer3 initial.danRer3.allseqs
+
+FOR MGC GENES:
+ - wait one day for nightly build to align and load them into the db
+   - rebuild trackDb
 
 # BACENDS FILES
     ssh kkstore01
