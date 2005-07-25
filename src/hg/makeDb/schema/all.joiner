@@ -244,7 +244,7 @@ identifier gencodeGeneName dependency
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
-    $hg.acemblyPep.name full unique
+    $hg.acemblyPep.name unique minCheck=0.90
     $hg.acemblyClass.name full unique
 
 identifier ECgeneName dependency
@@ -906,9 +906,10 @@ identifier genBankSource
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd.gbCdnaInfo.tissue 
-    $gbd.altGraphX.mrnaTissues comma
-
+    $gbd,!rn2,!hg15.gbCdnaInfo.tissue 
+    rn2.gbCdnaInfo.tissue minCheck=0.99
+    hg15.gbCdnaInfo.tissue minCheck=0.99
+    $gbd.altGraphX.mrnaTissues comma minCheck=0.35
 
 # Some misc clone-oriented identifiers
 
@@ -1315,7 +1316,7 @@ identifier locusLinkId external=LocusLink
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.99
     $kgDb.knownToLocusLink.value minCheck=0.99
-    $dm.bdgpToLocusLink.value minCheck=0.99
+    $dm.bdgpToLocusLink.value minCheck=0.98
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
@@ -1534,6 +1535,7 @@ type psl
     $hg.affyU133Plus2
     $hg.HInvGeneMrna
     $mm.affyU74
+    $danRer.affyZebrafish
     $gbd.all_bacends
     $gbd.all_fosends
     $gbd.all_est
@@ -1791,6 +1793,10 @@ tablesIgnored $galGal
 
 tablesIgnored $danRer
     chr%_gold
+    ctgPos2
+    wz_ests
+    rhMap
+    affyZebrafish
 
 tablesIgnored $canFam
     chr%_gold
@@ -1925,9 +1931,3 @@ tablesIgnored hg16
 
 tablesIgnored hg17
     ecoresTetNig1
-
-tablesIgnored $danRer
-    wz_ests
-    rhMap
-
-    
