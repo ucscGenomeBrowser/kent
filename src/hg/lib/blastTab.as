@@ -1,8 +1,8 @@
 table blastTab
 "Tab-delimited blast output file"
     (
-    string query;	"Name of query sequence"
-    string target;	"Name of target sequence"
+    string query;	"Name of sequence in this assembly (query)"
+    string target;	"Name of sequence in other assembly (target)"
     float identity;	"Percent identity"
     uint aliLength;	"Length of alignment"
     uint mismatch;	"Number of mismatches"
