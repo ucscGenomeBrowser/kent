@@ -6,9 +6,10 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.8 2005/06/29 00:42:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.9 2005/07/25 17:04:56 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -106,14 +107,43 @@ static void reactomeLink(struct pathwayLink *pl, struct sqlConnection *conn,
 char condStr[255];
 char *protAccR;
 char *reactomeId;
+char *spID, *chp;
+
+struct sqlConnection *conn2;
+char query2[256];
+struct sqlResult *sr2;
+char **row2;
+char *eventDesc;
+char *eventID;
+
 safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
-reactomeId = sqlGetField(conn, database, "kgReactome", "reactomeId", condStr);
-if (reactomeId != NULL)
+spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
+if (spID != NULL)
     {
-    hPrintf("<BR>Reactome: ");
-    hPrintf("<A href=\"http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=%s&\">%s</A><BR>",reactomeId, reactomeId);
-    //hPrintf("<A href=\"http://www.reactome.org/cgi-bin/search?SUBMIT=1&QUERY_CLASS=ReferencePeptideSequence&QUERY=UniProt:%s\">%s</A><BR>",
-    fflush(stdout);
+    /* convert splice variant UniProt ID to its main root ID */
+    chp = strstr(spID, "-");
+    if (chp != NULL) *chp = '\0';
+    
+    hPrintf(
+    "<BR>Protein <A href=\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s\" TARGET=_blank>%s</A> participates in the following event(s):<BR><BR>" 
+    , spID, spID);
+
+    conn2= hAllocConn();
+    safef(query2,sizeof(query2), 
+    	  "select eventID, eventDesc from proteome.spReactomeEvent where spID='%s'", spID);
+    sr2 = sqlMustGetResult(conn2, query2);
+    row2 = sqlNextRow(sr2);
+    while (row2 != NULL)
+    	{
+    	eventID   = row2[0];
+    	eventDesc = row2[1];
+	hPrintf(
+	"<A href=\"http://www.reactome.org/cgi-bin/eventbrowser?DB=gk_current&ID=%s\" TARGET=_blank>%s</A> %s<BR>\n",
+	eventID, eventID, eventDesc);
+    	row2 = sqlNextRow(sr2);
+    	}
+    sqlFreeResult(&sr2);
+    hFreeConn(&conn2);
     }
 }
 
@@ -172,9 +202,24 @@ static int reactomeCount(struct pathwayLink *pl, struct sqlConnection *conn,
 {
 int ret = 0;
 char query[256];
-safef(query, sizeof(query), 
-	    "select count(*) from kgReactome where kgID='%s'", geneId);
-ret = sqlQuickNum(conn, query);
+char *spID, *chp;
+char condStr[256];
+char *origSpID;
+
+safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
+if (spID != NULL)
+    {
+    origSpID = strdup(spID);
+    /* convert splice variant UniProt ID to its main root ID */
+    chp = strstr(spID, "-");
+    if (chp != NULL) *chp = '\0';
+
+    safef(query, sizeof(query), 
+	  "select count(*) from %s.spReactomeEvent, %s.kgXref where kgID='%s' and kgXref.spID='%s' and spReactomeEvent.spID='%s'", 
+	    PROTEOME_DB_NAME, database, geneId, origSpID, spID);
+    ret = sqlQuickNum(conn, query);
+    }
 return ret;
 }
 
@@ -189,8 +234,8 @@ struct pathwayLink pathwayLinks[] =
    { "bioCarta", "BioCarta", "BioCarta from NCI Cancer Genome Anatomy Project",
    	"cgapBiocPathway cgapBiocDesc cgapAlias",
 	bioCartaCount, bioCartaLink},
-   { "reactome", "Reactome", "Reactome from CSHL, EBI, and GO",
-   	"kgReactome",
+   { "reactome", "Reactome", "Reactome (by CSHL, EBI, and GO)",
+   	"proteome.spReactomeEvent",
 	reactomeCount, reactomeLink},
 };
 
