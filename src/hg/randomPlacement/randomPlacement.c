@@ -91,10 +91,10 @@ verbose(1,
 );
 }
 
-struct gapList
+struct gap
     {
-    struct gapList *next;	/*	double linked list	*/
-    struct gapList *prev;
+    struct gap *next;	/*	double linked list	*/
+    struct gap *prev;
     struct bed *upstream;	/*	bounding item upstream of this gap */
     struct bed *downstream;	/*	bounding item downstream of this gap */
     int gapSize;		/* downstream->chromStart - upstream->chromEnd*/
@@ -102,9 +102,10 @@ struct gapList
     boolean downstreamType;	/*	FALSE == placed item	*/
     };
 
-static void freeGapList(struct gapList **gl)
+static void freeGapList(struct gap **gl)
+/*	release memory for all elements on the gap List gl	*/
 {
-struct gapList *el, *next;
+struct gap *el, *next;
 for (el = *gl; el != NULL; el = next)
     {
     next = el->next;
@@ -113,17 +114,17 @@ for (el = *gl; el != NULL; el = next)
 *gl = NULL;
 }
 
-struct chrList
-/*	a list of gapLists, one element for each chrom	*/
+struct chrGapList
+/*	a list of gap lists, one list for each chrom	*/
     {
-    struct chrList *next;
+    struct chrGapList *next;
     char *chrom;
-    struct gapList *gList;
+    struct gap *gList;
     };
 
-static void freeChrList(struct chrList **cl)
+static void freeChrList(struct chrGapList **cl)
 {
-struct chrList *el, *next;
+struct chrGapList *el, *next;
 
 for (el = *cl; el != NULL; el = next)
     {
@@ -135,9 +136,9 @@ for (el = *cl; el != NULL; el = next)
 *cl = NULL;
 }
 
-static void gapStats(struct chrList *cList)
+static void gapStats(struct chrGapList *cList)
 {
-struct chrList *cl;
+struct chrGapList *cl;
 int chrCount = 0;
 int gapCountNonZeroSize = 0;
 int gapCountZeroSize = 0;
@@ -145,16 +146,15 @@ int totalGapSize = 0;
 int averageGapSize = 0;
 int maxGap = 0;
 int minGap = BIGNUM;
-float *gapSizeArray = NULL;
+int *gapSizeArray = NULL;
 int i;
 
 /*	first count number of non-zero gaps	*/
 for (cl=cList; cl != NULL; cl = cl->next)
     {
-    struct gapList *gl;
+    struct gap *gl;
     int gapCount = 0;
     int zeroSized = 0;
-verbose(3,"chrom: %s: %d gaps\n", cl->chrom, slCount(cl->gList));
     for (gl = cl->gList; gl != NULL; gl = gl->next)
 	{
 	int gapSize = gl->gapSize;
@@ -180,15 +180,15 @@ verbose(3,"counted %d chroms and %d gaps ( + %d size zero = %d total gaps)"
     "\n\ton the bounding list\n", chrCount, gapCountNonZeroSize,
 	gapCountZeroSize, gapCountNonZeroSize+gapCountZeroSize);
 
-/*	now copy all the values to a float array for more detailed
+/*	now copy all the values to a integer array for more detailed
  *	stats measurements
  */
-gapSizeArray = needHugeMem((size_t)(sizeof(float) * gapCountNonZeroSize));
+gapSizeArray = needHugeMem((size_t)(sizeof(int) * gapCountNonZeroSize));
 i = 0;
 
 for (cl=cList; cl != NULL; cl = cl->next)
     {
-    struct gapList *gl;
+    struct gap *gl;
     for (gl = cl->gList; gl != NULL; gl = gl->next)
 	{
 	int gapSize = gl->gapSize;
@@ -199,26 +199,26 @@ for (cl=cList; cl != NULL; cl = cl->next)
 	    }
 	}
     }
-verbose(3,"assigned %d values to float array\n", i);
+verbose(3,"assigned %d values to int array\n", i);
 
-floatSort(i,gapSizeArray);
+intSort(i,gapSizeArray);
 
 averageGapSize = 0.5 + (double)totalGapSize/(double)gapCountNonZeroSize;
 verbose(2,"average gap size: %d = %d / %d (non-zero size gaps only)\n",
     averageGapSize, totalGapSize, gapCountNonZeroSize);
-verbose(2,"maximum gap size: %f\n", gapSizeArray[i-1]);
-verbose(2,"median gap size: %f\n", gapSizeArray[i/2]);
-verbose(2,"minimum gap size: %f\n", gapSizeArray[0]);
+verbose(2,"maximum gap size: %d\n", gapSizeArray[i-1]);
+verbose(2,"median gap size: %d\n", gapSizeArray[i/2]);
+verbose(2,"minimum gap size: %d\n", gapSizeArray[0]);
 verbose(2,"minimum gap: %d, maximum gap: %d\n", minGap, maxGap);
 freeMem(gapSizeArray);
 }
 
-static void placeItem(struct bed *bedEl, struct gapList *gl)
+static void placeItem(struct bed *bedEl, struct gap *gl)
 /*	create two gaps where one now exists, the bedEl splits
  *	the existing gap (== gl) which becomes the new downstream gap.
  */
 {
-struct gapList *el;
+struct gap *el;
 int gapSize = 0;
 int itemSize = bedEl->chromEnd - bedEl->chromStart;
 
@@ -244,17 +244,19 @@ AllocVar(el);		/*	a new gap	*/
 if (NULL == gl->downstream)
     errAbort("ERROR: trying to add element after last bounding element\n");
 
-el->next = gl->next;	/*	could be NULL	*/
+el->next = gl->next;	/*	could be NULL when last gap	*/
 el->prev = gl;		/*	is NEVER NULL	*/
 el->upstream = bedEl;	/*	this element is the new gap's upstream */
 el->upstreamType = FALSE;	/*	not a bounding element	*/
 el->downstream = gl->downstream;	/*	can NEVER be NULL	*/
 el->downstreamType = gl->downstreamType;
-gl->next->prev = el;
+if (gl->next)		/*	could be NULL when last gap	*/
+    gl->next->prev = el;
 gl->downstream = bedEl;
 gl->downstreamType = FALSE;	/*	not a bounding element	*/
 gl->next = el;
 
+/*	new gap size, (downstream start) - (upstream end)	*/
 gapSize = el->downstream->chromStart - bedEl->chromEnd;
 if (gapSize >= 0)
     el->gapSize = gapSize;
@@ -263,6 +265,7 @@ else
     warn("WARNING: new element insert overlaps following element\n");
     el->gapSize = 0;
     }
+/*	resize existing gap, (downstream start) - (upstream end) */
 gapSize = bedEl->chromStart - gl->upstream->chromEnd;
 if (gapSize >= 0)
     el->prev->gapSize = gapSize;
@@ -273,18 +276,18 @@ else
     }
 }
 
-static void initialPlacement(struct chrList *bounding, struct bed *placed)
+static void initialPlacement(struct chrGapList *bounding, struct bed *placed)
 {
 struct bed *bedEl;
 int unplacedCount = 0;
 
 for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
     {
-    struct chrList *cl;
+    struct chrGapList *cl;
     boolean placedOK = FALSE;
     for (cl = bounding; cl != NULL; cl = cl->next)
 	{
-	struct gapList *gl;
+	struct gap *gl;
         if (differentWord(cl->chrom, bedEl->chrom))
 		continue;
 	for (gl = cl->gList; gl != NULL; gl = gl->next)
@@ -295,9 +298,10 @@ for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
 		{
 		placeItem(bedEl, gl);
 		placedOK = TRUE;
-verbose(3,"item: %s:%d-%d, gap: %s:%d-%d\n",
-	bedEl->chrom, bedEl->chromStart, bedEl->chromEnd,
-	bedEl->chrom, gl->upstream->chromEnd, gl->downstream->chromStart);
+		verbose(5,"item: %s:%d-%d, gap: %s:%d-%d\n",
+		    bedEl->chrom, bedEl->chromStart, bedEl->chromEnd,
+			bedEl->chrom, gl->upstream->chromEnd,
+			    gl->downstream->chromStart);
 		break;
 		}
 	    }
@@ -313,35 +317,23 @@ if (unplacedCount)
     verbose(2,"Could not place %d items\n", unplacedCount);
 }
 
-static void randomPlacement(char *bounding, char *placed)
+static struct chrGapList *createGaps(struct bed *bounds)
 {
-struct bed *boundingElements = bedLoadAll(bounding);
-struct bed *placedItems = bedLoadAll(placed);
 struct bed *bedEl = NULL;
-int boundingCount = slCount(boundingElements);
-int placedCount = slCount(placedItems);
 char *prevChr = NULL;
-struct chrList *boundingChrList = NULL;
-int boundingChrCount = 0;
-struct gapList *prevGap = NULL;
+struct chrGapList *gaps = NULL;
+struct gap *prevGap = NULL;
 struct bed *prevBedEl = NULL;
-struct chrList *curChrList = NULL;
+struct chrGapList *curChrList = NULL;
+int boundingChrCount = 0;
 int overlappedBounding = 0;
 
-verbose(3,"boundingChrList at: %#x\n", (unsigned) boundingChrList);
-
-slSort(&boundingElements, bedCmp);	/* order by chrom,chromStart */
-slSort(&placedItems, bedCmp);		/* order by chrom,chromStart */
-
-verbose(2, "bounding element count: %d\n", boundingCount);
-verbose(2, "placed item count: %d\n", placedCount);
-
-for (bedEl = boundingElements; bedEl != NULL; bedEl = bedEl->next)
+for (bedEl = bounds; bedEl != NULL; bedEl = bedEl->next)
     {
     /*	the first bedEl does not yet start a new gap, must have a second */
     if ((NULL == prevChr) || differentWord(prevChr,bedEl->chrom))
 	{
-	struct chrList *cEl;
+	struct chrGapList *cEl;
 	AllocVar(cEl);
 	cEl->chrom = cloneString(bedEl->chrom);
 	cEl->gList = NULL;
@@ -350,14 +342,14 @@ for (bedEl = boundingElements; bedEl != NULL; bedEl = bedEl->next)
 	if (prevChr)
 	    freeMem(prevChr);
 	prevChr = cloneString(bedEl->chrom);
-	verbose(4,"new chrom on bounding gapList creation %s\n", prevChr);
-	slAddHead(&boundingChrList,cEl);
+	verbose(4,"new chrom on bounding gap creation %s\n", prevChr);
+	slAddHead(&gaps,cEl);
 	++boundingChrCount;
 	curChrList = cEl;
 	}
     else
 	{
-	struct gapList *gEl;
+	struct gap *gEl;
 	AllocVar(gEl);
 	gEl->prev = prevGap;	/*	first one is NULL	*/
 	gEl->upstream = prevBedEl;
@@ -401,24 +393,111 @@ for (bedEl = boundingElements; bedEl != NULL; bedEl = bedEl->next)
     }
 
 if (prevChr) freeMem(prevChr);
-slReverse(&boundingChrList);
-verbose(3,"bounding chrom count: %d (%d), overlapped items: %d\n",
-	boundingChrCount, slCount(boundingChrList), overlappedBounding);
+slReverse(&gaps);
+verbose(3,"bounding chrom count: %d (=? %d), overlapped items: %d\n",
+	boundingChrCount, slCount(gaps), overlappedBounding);
+
+return(gaps);
+}
+
+static struct chrGapList *cloneGapList(struct chrGapList *gaps)
+/*	make an independent copy of the gaps list, they share the bed
+ *	elements, but that is all.	*/
+{
+struct chrGapList *el;
+struct chrGapList *cloneGaps = NULL;
+int chrCount = 0;
+int totalGapCount = 0;
+
+for (el = gaps; el != NULL; el = el->next)
+    {
+    struct gap *gap;
+    struct chrGapList *gl;
+    struct gap *prevGap = NULL;
+    boolean firstGap = TRUE;
+    int nonZeroGapCount = 0;
+    int zeroGapCount = 0;
+
+    ++chrCount;
+    AllocVar(gl);
+    gl->chrom = cloneString(el->chrom);
+
+    for (gap = el->gList; gap != NULL; gap = gap->next)
+	{
+	struct gap *g;
+	AllocVar(g);
+	g->next = NULL;
+	g->prev = prevGap;
+	if (prevGap != NULL)
+	    prevGap->next = g;
+	g->upstream = gap->upstream;
+	g->downstream = gap->downstream;
+	g->gapSize = gap->gapSize;
+	g->upstreamType = gap->upstreamType;
+	g->downstreamType = gap->downstreamType;
+	prevGap = g;
+	if (firstGap)
+	    {
+	    gl->gList = g;
+	    firstGap = FALSE;
+	    }
+	if (gap->gapSize > 0)
+	    ++nonZeroGapCount;
+	else
+	    ++zeroGapCount;
+	}
+    totalGapCount += nonZeroGapCount;
+    slAddHead(&cloneGaps,gl);
+    }
+slReverse(&cloneGaps);
+return(cloneGaps);
+}
+
+static void randomPlacement(char *bounding, char *placed)
+{
+struct bed *boundingElements = bedLoadAll(bounding);
+struct bed *placedItems = bedLoadAll(placed);
+int boundingCount = slCount(boundingElements);
+int placedCount = slCount(placedItems);
+struct chrGapList *boundingGaps = NULL;
+struct chrGapList *duplicateGapList = NULL;
+
+slSort(&boundingElements, bedCmp);	/* order by chrom,chromStart */
+slSort(&placedItems, bedCmp);		/* order by chrom,chromStart */
+
+verbose(2, "bounding element count: %d\n", boundingCount);
+verbose(2, "placed item count: %d\n", placedCount);
+
+boundingGaps = createGaps(boundingElements);
+
+
 if (0 == trials)
-   {
-   verbose(2,"stats before initial placement:  =================\n");
-   gapStats(boundingChrList);
-   initialPlacement(boundingChrList,placedItems);
-   verbose(2,"stats after initial placement:  =================\n");
-   gapStats(boundingChrList);
-   }
+    {
+    duplicateGapList = cloneGapList(boundingGaps);
+
+    verbose(2,"stats before initial placement:  =================\n");
+    gapStats(duplicateGapList);
+
+    initialPlacement(duplicateGapList,placedItems);
+
+    verbose(2,"stats after initial placement:  =================\n");
+    gapStats(duplicateGapList);
+
+    freeChrList(&duplicateGapList);
+    }
 else
-   {
-   gapStats(boundingChrList);
-   }
+    {
+    int trial;
+    for (trial = 0; trial < trials; ++trial)
+	{
+	duplicateGapList = cloneGapList(boundingGaps);
+	gapStats(duplicateGapList);
+	freeChrList(&duplicateGapList);
+	}
+    }
 bedFreeList(&boundingElements);
 bedFreeList(&placedItems);
-freeChrList(&boundingChrList);
+freeChrList(&boundingGaps);
 }
 
 int main(int argc, char *argv[])
