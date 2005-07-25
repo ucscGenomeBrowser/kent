@@ -1052,6 +1052,7 @@ getSeqs.csh $(path1)
 # create trackDb.ra entry and html page for ctgPos2 track.
 
 # CREATE gc5Base WIGGLE TRACK (DONE, 2005-06-16, hartera)
+# FIX LINK FOR WIB FILES TO POINT TO danRer3 ON store11 (2005-07-25, hartera)
     ssh kkstore01
     mkdir -p /cluster/data/danRer3/bed/gc5Base
     cd /cluster/data/danRer3/bed/gc5Base
@@ -1073,6 +1074,8 @@ getSeqs.csh $(path1)
     hgLoadWiggle -pathPrefix=/gbdb/danRer3/wib/gc5Base \
                  danRer3 gc5Base gc5Base.wig
     # and symlink the .wib file into /gbdb
+    # fix link as danRer3 is now in store 11 (2005-07-25, hartera)
+    rm -r /gbdb/danRer3/wib/gc5Base
     mkdir -p /gbdb/danRer3/wib/gc5Base
     ln -s `pwd`/gc5Base.wib /gbdb/danRer3/wib/gc5Base
 
@@ -1178,7 +1181,8 @@ getSeqs.csh $(path1)
               /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
     # Clean up
     rm batch.bak contig.psl raw.psl
-    # moved affyZebrafish.html description and trackDb.ra to
+    # moved affyZebrafish.html description and trackDb.ra track entry and
+    # search for Affy Zebrafish track to
     # ~/kent/src/hg/makeDb/trackDb/zebrafish since it is common to all 
     # danRer assemblies. 
 
@@ -1230,7 +1234,7 @@ FOR MGC GENES:
  - wait one day for nightly build to align and load them into the db
    - rebuild trackDb
 
-# BACENDS FILES
+# BACENDS FILES (in progress, 2005-06-16, hartera)
     ssh kkstore01
     # BAC ends sequence files provided by Mario Caccamo at Sanger
     # mc2@sanger.ac.uk
@@ -1241,7 +1245,65 @@ FOR MGC GENES:
     wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/DH_bacends.fa.gz
     wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/bacend_placement.txt.gz
     gunzip *.gz  
+    # DH_bacends.fa are from the new library from a doubled haploid fish
+    # zf_bacends.fa are from the existing libraries used in danRer2 and danRer1
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/bacends
+    cat zf_bacends.fa DH_bacends.fa >> Zv5Bacends.fa
+    faSize Zv5Bacends.fa
+    # 680121953 bases (11160014 N's 668961939 real 668961939 upper 0 lower) 
+    # in 729101 sequences in 1 files
+    # Total size: mean 932.8 sd 242.6 min 26 (CHORI73_189m04.p1kSP6) 
+    # max 5717 (CHORI73_255a17.q1kT7) median 882
+    # N count: mean 15.3 sd 75.7
+    # U count: mean 917.5 sd 242.2
+    # L count: mean 0.0 sd 0.0
+    wc -l *.fa
+    # 6412741 DH_bacends.fa
+    # 14700258 Zv5Bacends.fa
+    # 8287517 zf_bacends.fa
 
+    ssh kkr1u00
+    cd /cluster/data/danRer3/bed/bacends
+    mkdir -p /iscratch/i/danRer3/bacends
+    # split up sequence for cluster runs
+    faSplit sequence Zv5Bacends.fa 20 /iscratch/i/danRer3/bacends/bacends
+    # iSync bacends to kilokluster
+    /cluster/bin/iSync
+
+    ssh kk
+    cd /cluster/data/danRer3/bed/bacends
+    ls -1S /iscratch/i/danRer3/bacends/*.fa > bacends.lst
+    ls -1S /iscratch/i/danRer3/trfFa/*.fa > genome.lst
+# use Blat parameters as for mm5 and hg17
+cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/iscratch/i/danRer3/danRer3_11.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+   # << this line keeps emacs coloring happy
+    mkdir psl
+    gensub2 genome.lst bacends.lst template jobList
+    para create jobList
+    para try, check, push, check, ...
+# para time
+# Completed: 5760 of 5760 jobs
+# CPU time in finished jobs:    3694919s   61581.99m  1026.37h   42.77d  0.117 y
+# IO & Wait Time:               1103361s   18389.34m   306.49h   12.77d  0.035 y
+# Average job time:                 833s      13.88m     0.23h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            4933s      82.22m     1.37h    0.06d
+# Submission to last job:         14338s     238.97m     3.98h    0.17d
+     ssh kkstore02
+     cd /cluster/data/danRer3/bed/bacends
+     nice pslSort dirs raw.psl temp psl
+     # use pslReps parameters used for mm6
+     pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl \
+             bacEnds.psl /dev/null
+     pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds2.psl /dev/null
+     # see how many align in each case
+    
 # VEGA
     # get transcripts in transcripts_coords from e-mail from Mario Caccamo
     # at Sanger 06/16/05.
