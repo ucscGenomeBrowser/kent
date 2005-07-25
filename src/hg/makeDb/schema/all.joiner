@@ -18,7 +18,7 @@ set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
 set ci ci1
-set danRer danRer1,danRer2
+set danRer danRer1,danRer2,danRer3
 set canFam canFam1
 set droYak droYak1
 set droMult droAna1,droMoj1,droVir1,droEre1,droSim1
@@ -1367,7 +1367,7 @@ identifier extFileId
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
     $gbd.gbExtFile.id
-    $gbd.gbSeq.gbExtFile
+    $gbd.gbSeq.gbExtFile minCheck=0.85
 
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
