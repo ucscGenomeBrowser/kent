@@ -16996,3 +16996,21 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
     # clean up
     rm ${name}Hg15.bed ${name}Hg16.bed unmappedHg16.bed unmappedHg17.bed
   done
+
+##########################################################################
+# Illumina SNPs (Heather, July 2005)
+# Source: Jeff Ohmen, PhD, johmen@illumina.com, 858/232-2702
+
+# using /cluster/store11 because /cluster/data/hg17 is on store5,
+# which is currently being restored
+
+  cd /cluster/store11/heather/illumina
+  fix.pl < LinkageIVbSNP.txt > illumina.bed
+  hgLoadBed hg17 snpIllumina -tab -strict -sqlTable=snpIllumina.sql illumina.bed
+  # Reading illumina.bed
+  # Loaded 6008 elements of size 4
+  # Sorted
+  # Saving bed.tab
+  # Loading hg17
+
+  # note: 28 rows where chrom = "chrXY"
