@@ -449,3 +449,12 @@ searchType bed
 searchMethod fuzzy
 searchPriority 50
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+
