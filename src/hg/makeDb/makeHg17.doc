@@ -14610,7 +14610,7 @@ cat out/$1/*.out >>protRefRaw.psl
 
 #####################################
 # Build alias tables.		DONE 5/18/05 Fan.
-
+# RELOAD cgapAlias TABLE AFTER REMOVING REPLICATE ROWS (hartera, 2005-07-26)
 #	kgAliasM reads from proteins050415.hugo.symbol, proteins050415.hugo.aliases
 #	proteins050415.hugo.withdraws, hg17.kgXref.kgID
 #	to create kgAliasM.tab and geneAlias.tab
@@ -14760,7 +14760,6 @@ end
     rm -r split fold err batch.bak
 
 # Build KEGG pathway tables.  DONE 5/19/05.  Fan.
-
    ssh hgwdev
    cd /cluster/store10/kg/kgHg17F
    md kegg
@@ -14774,8 +14773,10 @@ end
    hgsql hg17 <~/src/hg/lib/keggPathway.sql
    hgsql hg17 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
    hgsql hg17 -e 'load data local infile "keggPathway.tab" into table keggPathway'
-
+  
 # Build CGAP pathway tables
+# RELOAD cgapAlias TABLE. Sort and reload alias tab file to remove 
+# duplicate rows. (hartera, 2005-07-26)
 
    cd ..
    ~/src/hg/protein/KGcgap.sh kgHg17F hg17 050415
@@ -14785,7 +14786,10 @@ end
    hgsql hg17 <~/src/hg/lib/cgapAlias.sql
    hgsql hg17 <~/src/hg/lib/cgapBiocDesc.sql
    hgsql hg17 <~/src/hg/lib/cgapBiocPathway.sql
-   hgsql hg17 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
+   # cgapAlias.tab has replicated rows so sort and unique before loading
+   sort -u cgapAlias.tab > cgapAliasSorted.tab
+   hgsql hg17 -e 'load data local infile "cgapAliasSorted.tab" \
+                 into table cgapAlias'
    hgsql hg17 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql hg17 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
 
