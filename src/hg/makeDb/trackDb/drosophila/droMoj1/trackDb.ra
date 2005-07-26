@@ -44,7 +44,6 @@ spectrum on
 type psl xeno
 cdsDrawOptions enabled
 
-
 track xenoRefGene
 shortLabel Non-D. moj. RefSeq
 longLabel Non-$Organism RefSeq Genes
@@ -54,6 +53,31 @@ visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
+track blastDm1FB
+shortLabel D.mel. Proteins (dm1)
+longLabel $o_Organism ($o_date/$o_db) Proteins
+group compGeno
+priority 112
+visibility pack
+colorChromDefault off
+type psl protein
+pred dm1.blastFBPep00
+blastRef dm1.blastFBRef00
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
+otherDb dm1
+
+track blastDm2FB
+shortLabel D. mel. Proteins
+longLabel $o_Organism ($o_date/$o_db) Proteins
+group compGeno
+priority 112
+visibility pack
+colorChromDefault off
+type psl protein
+pred dm2.blastFBPep01
+blastRef dm2.blastFBRef01
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
+otherDb dm2
 
 
 searchTable bdgpLiftGene
