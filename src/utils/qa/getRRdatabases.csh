@@ -41,6 +41,10 @@ if (! -e $machpath1 ) then
   echo "  $mach1 is not a valid machine"
   echo
   exit 1
+else
+  echo
+  echo "  can't find $machpath1"
+  echo
 endif
 
 
