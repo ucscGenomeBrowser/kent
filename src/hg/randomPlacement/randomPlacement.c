@@ -98,8 +98,8 @@ struct gap
     struct bed *upstream;	/*	bounding item upstream of this gap */
     struct bed *downstream;	/*	bounding item downstream of this gap */
     int gapSize;		/* downstream->chromStart - upstream->chromEnd*/
-    boolean upstreamType;	/*	TRUE == bounding item	*/
-    boolean downstreamType;	/*	FALSE == placed item	*/
+    boolean isUpstreamBound;	/*	TRUE == bounding item	*/
+    boolean isDownstreamBound;	/*	FALSE == placed item	*/
     };
 
 static void freeGapList(struct gap **gl)
@@ -136,6 +136,23 @@ for (el = *cl; el != NULL; el = next)
 *cl = NULL;
 }
 
+static struct bed *nextDownstreamBound(struct gap *gEl)
+/*	find the next downstream bounding element	*/
+{
+struct gap *gl;
+struct bed *downstreamBound = NULL;
+
+for (gl = gEl; gl != NULL; gl = gl->next)
+    {
+    if (gl->isDownstreamBound)
+	{
+	downstreamBound = gl->downstream;
+	break;
+	}
+    }
+return (downstreamBound);
+}
+
 static void gapStats(struct chrGapList *cList)
 {
 struct chrGapList *cl;
@@ -148,6 +165,8 @@ int maxGap = 0;
 int minGap = BIGNUM;
 int *gapSizeArray = NULL;
 int i;
+int boundingElementCount = 0;
+int placedElementCount = 0;
 
 /*	first count number of non-zero gaps	*/
 for (cl=cList; cl != NULL; cl = cl->next)
@@ -155,9 +174,22 @@ for (cl=cList; cl != NULL; cl = cl->next)
     struct gap *gl;
     int gapCount = 0;
     int zeroSized = 0;
+    boolean firstOne = TRUE;
     for (gl = cl->gList; gl != NULL; gl = gl->next)
 	{
 	int gapSize = gl->gapSize;
+	if (firstOne)
+	    {
+	    firstOne = FALSE;
+	    if (gl->isUpstreamBound)
+		++boundingElementCount;
+	    else
+		++placedElementCount;
+	    }
+	if (gl->isDownstreamBound)
+	    ++boundingElementCount;
+	else
+	    ++placedElementCount;
 	if (gapSize > 0)
 	    {
 	    totalGapSize += gapSize;
@@ -210,6 +242,94 @@ verbose(2,"maximum gap size: %d\n", gapSizeArray[i-1]);
 verbose(2,"median gap size: %d\n", gapSizeArray[i/2]);
 verbose(2,"minimum gap size: %d\n", gapSizeArray[0]);
 verbose(2,"minimum gap: %d, maximum gap: %d\n", minGap, maxGap);
+verbose(2,"bounding element count: %d, placed element count: %d\n",
+	boundingElementCount, placedElementCount);
+
+/* if there are placed elements, measure their nearest neighbor statistics */
+if (placedElementCount)
+    {
+    int i;
+    int zeroDistanceCount = 0;
+    int nonZeroWithin100bp = 0;
+    int sumDistances = 0;
+    int *placedDistances =
+	needHugeMem((size_t)(sizeof(int) * placedElementCount));
+    int placedCount = 0;
+    for (cl=cList; cl != NULL; cl = cl->next)
+	{
+	struct gap *gl;
+	struct gap *next;
+	struct bed *upstreamBound = NULL;
+	struct bed *downstreamBound = NULL;
+	for (gl = cl->gList; gl != NULL; gl = next)
+	    {
+	    struct gap *gEl;
+
+	    /*	make note of upstream and downstream bounding elements */
+	    if (NULL == upstreamBound || gl->isUpstreamBound)
+		{
+		if (gl->isUpstreamBound)
+		    {
+		    upstreamBound = gl->upstream;
+		    downstreamBound = nextDownstreamBound(gl);
+		    if (NULL == downstreamBound)
+			errAbort("Can not find a downstream"
+				" bounding element ?");
+		    }
+		else
+		    errAbort("Do not find a bounding element as"
+			" first upstream item ?");
+		}
+	    /*	measure all downstream elements as long as they
+	     *	are not bounding elements
+	     */
+	    for (gEl = gl; (gEl != NULL) && (! gEl->isDownstreamBound);
+			gEl = gEl->next)
+		{
+		/* protect against negative results with the max(0,..) */
+		int upstreamDist = max(0,
+		    (gEl->downstream->chromStart - upstreamBound->chromEnd));
+		int downstreamDist = max(0,
+		    (downstreamBound->chromStart - gEl->downstream->chromEnd));
+		int minDistance = min(upstreamDist, downstreamDist);
+
+		if (minDistance < 0)
+			errAbort("minimum distance < 0 ?");
+
+		placedDistances[placedCount++] = minDistance;
+		sumDistances += minDistance;
+		}
+	    if (gEl)
+		next = gEl->next;
+	    else
+		next = NULL;
+	    }
+	}	/*	for (cl=cList; cl != NULL; cl = cl->next)	*/
+    intSort(placedCount,placedDistances);
+    verbose(2,"measured %d placed items\n", placedCount);
+    verbose(2,"mean distance: %d = %d / %d\n", sumDistances / placedCount,
+		sumDistances, placedCount);
+    verbose(2,"median distance: %d\n", placedDistances[placedCount/2]);
+    verbose(2,"maximum distance: %d\n", placedDistances[placedCount-1]);
+    for (i = 0; i < placedCount; ++i)
+	if (placedDistances[i] > 0) break;
+    zeroDistanceCount = i + 1;
+    for ( ; i < placedCount; ++i)
+	if (placedDistances[i] > 100) break;
+    nonZeroWithin100bp = (i+1) - zeroDistanceCount;
+    verbose(2,"%d - number of items zero distance to nearest "
+	"bounding element\n", zeroDistanceCount);
+    verbose(2,"%d - number of items of non-zero distance within 100 bp of "
+	"nearest bounding element\n", nonZeroWithin100bp);
+    if ((placedCount-zeroDistanceCount) > 0)
+	verbose(2,"%% %.04f - percent of of items of non-zero distance "
+	    "within 100 bp of nearest bounding element\n",
+		100.0 * nonZeroWithin100bp / (placedCount-zeroDistanceCount));
+    else
+       errAbort("something wrong with placed item count "
+		"minus zeroDistance Count");
+
+    }
 freeMem(gapSizeArray);
 }
 
@@ -247,13 +367,13 @@ if (NULL == gl->downstream)
 el->next = gl->next;	/*	could be NULL when last gap	*/
 el->prev = gl;		/*	is NEVER NULL	*/
 el->upstream = bedEl;	/*	this element is the new gap's upstream */
-el->upstreamType = FALSE;	/*	not a bounding element	*/
+el->isUpstreamBound = FALSE;	/*	not a bounding element	*/
 el->downstream = gl->downstream;	/*	can NEVER be NULL	*/
-el->downstreamType = gl->downstreamType;
+el->isDownstreamBound = gl->isDownstreamBound;
 if (gl->next)		/*	could be NULL when last gap	*/
     gl->next->prev = el;
 gl->downstream = bedEl;
-gl->downstreamType = FALSE;	/*	not a bounding element	*/
+gl->isDownstreamBound = FALSE;	/*	not a bounding element	*/
 gl->next = el;
 
 /*	new gap size, (downstream start) - (upstream end)	*/
@@ -353,9 +473,9 @@ for (bedEl = bounds; bedEl != NULL; bedEl = bedEl->next)
 	AllocVar(gEl);
 	gEl->prev = prevGap;	/*	first one is NULL	*/
 	gEl->upstream = prevBedEl;
-	gEl->upstreamType = TRUE;	/*	bounding element	*/
+	gEl->isUpstreamBound = TRUE;	/*	bounding element	*/
 	gEl->downstream = bedEl;
-	gEl->downstreamType = TRUE;	/*	bounding element */
+	gEl->isDownstreamBound = TRUE;	/*	bounding element */
 	gEl->next = NULL;		/*	not there yet	*/
 
 	if (prevGap == NULL)	/*	first one is NULL	*/
@@ -433,8 +553,8 @@ for (el = gaps; el != NULL; el = el->next)
 	g->upstream = gap->upstream;
 	g->downstream = gap->downstream;
 	g->gapSize = gap->gapSize;
-	g->upstreamType = gap->upstreamType;
-	g->downstreamType = gap->downstreamType;
+	g->isUpstreamBound = gap->isUpstreamBound;
+	g->isDownstreamBound = gap->isDownstreamBound;
 	prevGap = g;
 	if (firstGap)
 	    {
@@ -469,7 +589,6 @@ verbose(2, "bounding element count: %d\n", boundingCount);
 verbose(2, "placed item count: %d\n", placedCount);
 
 boundingGaps = createGaps(boundingElements);
-
 
 if (0 == trials)
     {
