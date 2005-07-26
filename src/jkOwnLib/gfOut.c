@@ -14,7 +14,7 @@
 #include "psl.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: gfOut.c,v 1.12 2004/10/30 04:55:54 kent Exp $";
+static char const rcsid[] = "$Id: gfOut.c,v 1.13 2005/07/26 23:37:15 fanhsu Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -256,7 +256,7 @@ boolean isTrans = (out->qIsProt && !out->tIsProt);
 if (t3Hash != NULL)
     t3List = hashMustFindVal(t3Hash, tSeq->name);
 AllocVar(gab);
-gab->tSize = tSeq->size;
+gab->tSize = chromSize;
 gab->qSize = qSeq->size;
 for (sAli = ali; sAli != NULL; sAli = eAli)
     {
