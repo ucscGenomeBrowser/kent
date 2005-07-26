@@ -4968,6 +4968,42 @@ visibility hide
 color 200,80,0
 type bed 8 +
 
+track xTBAmaf
+shortLabel xTBAmaf
+longLabel xTBAmaf
+group x
+priority 165
+visibility hide
+type wigMaf
+speciesGroups primate placental mammal vertebrate
+sGroup_primate panTro1 baboon rheMac1 marmoset galago
+sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog armadillo elephant tenrec
+sGroup_mammal monDom1 platypus 
+sGroup_vertebrate galGal2 xenTro1 danRer2 tetNig1 fr1
+# speciesGroups primate placental mammal vertebrate
+# sGroup_primate chimp baboon marmoset galago
+# sGroup_placental rat mouse cow dog armadillo 
+# sGroup_mammal platypus 
+# sGroup_vertebrate chicken 
+irows on
+summary xTBAmafSum
+
+track brMaf
+shortLabel brMaf
+longLabel brMaf
+group x
+priority 165
+visibility hide
+type wigMaf
+#speciesOrder  chimp baboon marmoset galago rat mouse cow dog armadillo  platypus  chicken
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp baboon macaque marmoset galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog armadillo elephant tenrec
+sGroup_mammal monodelphis platypus
+sGroup_vertebrate chicken xenopus zebrafish tetraodon fugu
+irows on
+summary brMafSum
+
 track encodeRna
 shortLabel Known+Pred RNA
 longLabel Known and Predicted RNA Transcription in the ENCODE Regions
