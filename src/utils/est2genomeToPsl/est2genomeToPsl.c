@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.1 2005/07/22 03:07:21 markd Exp $";
+static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.2 2005/07/26 22:27:31 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,7 +29,9 @@ errAbort(
   "Options:\n"
   "  -cdsOut=cds.file - for paragon alignments, output the predicted CDS in\n"
   "   a format that can be given to mrnaToGene.\n"
-  "  -verbose=1 - 3 dumps in-memory alignment structure \n"
+  "  -verbose=1 - \n"
+  "      >= 3 dumps in-memory alignment structure after parse \n"
+  "      >= 4 dumps after expanding abbrev (big!)\n"
   );
 }
 
@@ -270,7 +272,8 @@ int findSeqOffLen(struct parser *parser, char *line, int *seqLenRet)
 {
 /* chr22-21726147-21808795      1 a-aa */
 int off = 0;
-char *s = skipToSpaces(line);  /* skip id */
+char *s = skipLeadingSpaces(line); /* skip to id */
+s = skipToSpaces(s);            /* skip id */
 s = skipLeadingSpaces(s);      /* skip seq offset */
 s = skipToSpaces(s);           /* skip offset */
 s = skipLeadingSpaces(s);      /* skip to seq */
@@ -316,7 +319,7 @@ void parseAlignAnn(struct parser *parser, char *line, int seqOff, int seqLen)
 /* parse the annotation line */
 {
 int cnt;
-dyStringAppend(parser->alignAnn, line+seqOff);
+dyStringAppendN(parser->alignAnn, line+seqOff, seqLen);
 for (cnt = strlen(line)-seqOff; cnt < seqLen; cnt++)
     dyStringAppendC(parser->alignAnn, ' ');
 }
@@ -336,6 +339,7 @@ line = alignNeedNextLine(parser);
 parseAlignAnn(parser, line, seqOff, seqLen);
 line = alignNeedNextLine(parser);
 parseAlignSeq(parser, &parser->query, line);
+    parserDump(parser, "row");
 return TRUE;
 }
 
@@ -449,7 +453,11 @@ findAligns(parser);
 parser->query.size = hashIntVal(cdnaSizeTbl, parser->query.name->string);
 parser->target.size = hashIntVal(genomeSizeTbl, parser->target.name->string);
 parseAlignRows(parser);
+if (verboseLevel() >= 3)
+    parserDump(parser, "after parse");
 expandAbbrv(parser);
+if (verboseLevel() >= 4)
+    parserDump(parser, "after abbrev expand");
 return TRUE;
 }
 
@@ -542,8 +550,6 @@ FILE *cdsFh = (cdsFile != NULL) ? mustOpen(cdsFile, "w") : NULL;
 
 while (parseAlign(parser, cdnaSizeTbl, genomeSizeTbl))
     {
-    if (verboseLevel() >= 3)
-        parserDump(parser, NULL);
     convertToPsl(parser, pslFh);
     if (cdsFh != NULL)
         outputCds(parser, cdsFh);
