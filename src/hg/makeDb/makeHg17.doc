@@ -10973,7 +10973,7 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     cd /cluster/data/hg17/bed
     mv rnaStruct rnaStruct.2004-10-04
     mkdir -p /cluster/data/hg17/bed/rnaStruct.2004-11-30
-    ln -s rnaStruct.2004-11-30 rnaStruct
+    ln Âs rnaStruct.2004-11-30 rnaStruct
     cd /cluster/data/hg17/bed/rnaStruct
     mkdir -p utr3/split utr5/split utr3/fold utr5/fold
     utrFa hg17 knownGene utr3 utr3/utr.fa
@@ -11609,7 +11609,7 @@ hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # from supfam.mrc-lmb.cam.ac.uk
 
     mkdir /cluster/store8/superfamily/041128
-    ln -s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
+    ln Âs /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
     cd /cluster/data/superfamily/041128
 # ftp over the following two files:
 ass_28-Nov-2004.tab.gz
@@ -11622,7 +11622,7 @@ ass_28-Nov-2004.tab.gz
 # This may take about an hour.
 
 # Make sure to add an index on id of the des table of superfam041128.
-    hgsql superfam041128 -e "create index id on des(id);"
+    hgsql superfam041128 Âe "create index id on des(id);"
 
     hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
     hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
@@ -11678,7 +11678,7 @@ superfam041128.sfAssign;'
     mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
     mkdir /cluster/data/hg17/bed/pb.2004-12-01
     cd /cluster/data/hg17/bed
-    ln -s /cluster/data/hg17/bed/pb.2004-12-01 pb
+    ln Âs /cluster/data/hg17/bed/pb.2004-12-01 pb
 
 # Move the existing PB tables by:
 
@@ -14610,7 +14610,6 @@ cat out/$1/*.out >>protRefRaw.psl
 
 #####################################
 # Build alias tables.		DONE 5/18/05 Fan.
-# RELOAD cgapAlias TABLE AFTER REMOVING REPLICATE ROWS (hartera, 2005-07-26)
 #	kgAliasM reads from proteins050415.hugo.symbol, proteins050415.hugo.aliases
 #	proteins050415.hugo.withdraws, hg17.kgXref.kgID
 #	to create kgAliasM.tab and geneAlias.tab
@@ -14775,7 +14774,7 @@ end
    hgsql hg17 -e 'load data local infile "keggPathway.tab" into table keggPathway'
   
 # Build CGAP pathway tables
-# RELOAD cgapAlias TABLE. Sort and reload alias tab file to remove 
+# RELOAD cgapAlias TABLE AFTER REMOVING REPLICATE ROWS (hartera, 2005-07-26)
 # duplicate rows. (hartera, 2005-07-26)
 
    cd ..
@@ -14786,12 +14785,19 @@ end
    hgsql hg17 <~/src/hg/lib/cgapAlias.sql
    hgsql hg17 <~/src/hg/lib/cgapBiocDesc.sql
    hgsql hg17 <~/src/hg/lib/cgapBiocPathway.sql
-   # cgapAlias.tab has replicated rows so sort and unique before loading
-   sort -u cgapAlias.tab > cgapAliasSorted.tab
-   hgsql hg17 -e 'load data local infile "cgapAliasSorted.tab" \
+   hgsql hg17 -e 'load data local infile "cgapAlias.tab" \
                  into table cgapAlias'
    hgsql hg17 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql hg17 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+   # RELOAD cgapAlias TABLE. Sort and reload alias tab file to remove 
+   # duplicate rows. (hartera, 2005-07-26)
+   cd /cluster/store10/kg/kgHg17F
+   hgsql hg17 -e "drop table cgapAlias"
+   # cgapAlias.tab has replicated rows so sort and unique before loading
+   sort -nu cgapAlias.tab > cgapAliasSorted.tab
+   hgsql hg17 < ~/kent/src/hg/lib/cgapAlias.sql 
+   hgsql hg17 -e 'load data local infile "cgapAliasSorted.tab" \
+                 into table cgapAlias'
 
 # LOAD ENSEMBL GENES (DONE, 5/23/05, Fan)
 # Ensembl changed things again! Please note there are two subtle changes to make it work.
