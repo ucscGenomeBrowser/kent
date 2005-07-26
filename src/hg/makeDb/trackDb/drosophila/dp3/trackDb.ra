@@ -86,7 +86,7 @@ type netAlign dm2 chainDm2
 otherDb dm2
 
 track blastDm1FB
-shortLabel D.mel. Proteins
+shortLabel D.mel. Proteins (dm1)
 longLabel $o_Organism ($o_date/$o_db) Proteins
 group compGeno
 priority 112
