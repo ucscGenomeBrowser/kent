@@ -10973,7 +10973,7 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     cd /cluster/data/hg17/bed
     mv rnaStruct rnaStruct.2004-10-04
     mkdir -p /cluster/data/hg17/bed/rnaStruct.2004-11-30
-    ln Âs rnaStruct.2004-11-30 rnaStruct
+    ln -s rnaStruct.2004-11-30 rnaStruct
     cd /cluster/data/hg17/bed/rnaStruct
     mkdir -p utr3/split utr5/split utr3/fold utr5/fold
     utrFa hg17 knownGene utr3 utr3/utr.fa
@@ -11609,7 +11609,7 @@ hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # from supfam.mrc-lmb.cam.ac.uk
 
     mkdir /cluster/store8/superfamily/041128
-    ln Âs /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
+    ln -s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
     cd /cluster/data/superfamily/041128
 # ftp over the following two files:
 ass_28-Nov-2004.tab.gz
@@ -11622,7 +11622,7 @@ ass_28-Nov-2004.tab.gz
 # This may take about an hour.
 
 # Make sure to add an index on id of the des table of superfam041128.
-    hgsql superfam041128 Âe "create index id on des(id);"
+    hgsql superfam041128 -e "create index id on des(id);"
 
     hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
     hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
@@ -11678,7 +11678,7 @@ superfam041128.sfAssign;'
     mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
     mkdir /cluster/data/hg17/bed/pb.2004-12-01
     cd /cluster/data/hg17/bed
-    ln Âs /cluster/data/hg17/bed/pb.2004-12-01 pb
+    ln -s /cluster/data/hg17/bed/pb.2004-12-01 pb
 
 # Move the existing PB tables by:
 
