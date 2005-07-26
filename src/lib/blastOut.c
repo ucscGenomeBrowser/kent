@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.17 2005/05/02 21:10:56 kent Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.18 2005/07/26 23:35:48 fanhsu Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -242,7 +242,7 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
     {
     lineEnd = lineStart + lineSize;
     if (lineEnd > axt->symCount) lineEnd = axt->symCount;
-    fprintf(f, "Query: %*d ", digits, plusStrandPos(qOff, qSize, axt->qStrand, FALSE));
+    fprintf(f, "Query: %-*d ", digits, plusStrandPos(qOff, qSize, axt->qStrand, FALSE));
     for (i=lineStart; i<lineEnd; ++i)
 	{
 	char c = axt->qSym[i];
@@ -272,7 +272,7 @@ for (lineStart = 0; lineStart < axt->symCount; lineStart = lineEnd)
 	fputc(c, f);
 	}
     fprintf(f, "\n");
-    fprintf(f, "Sbjct: %*d ", digits, plusStrandPos(tOff, tSize, axt->tStrand, FALSE));
+    fprintf(f, "Sbjct: %-*d ", digits, plusStrandPos(tOff, tSize, axt->tStrand, FALSE));
     for (i=lineStart; i<lineEnd; ++i)
 	{
 	char c = axt->tSym[i];
@@ -495,20 +495,21 @@ boolean isTranslated = (abList->axtList->frame != 0);
 /* Print out stuff that doesn't depend on query or database. */
 if (ourId == NULL)
     ourId = "axtBlastOut";
-fprintf(f, "%s 2.2.4 [%s]\n", progType(isProt, abList, TRUE), ourId);
+fprintf(f, "%s 2.2.11 [%s]\n", progType(isProt, abList, TRUE), ourId);
 fprintf(f, "\n");
 fprintf(f, "Reference:  Kent, WJ. (2002) BLAT - The BLAST-like alignment tool\n");
 fprintf(f, "\n");
 
 /* Print query and database info. */
 queryName = abList->axtList->qName;
-fprintf(f, "Query=  %s\n", queryName);
-fprintf(f, "        (%d letters)\n", abList->qSize);
+fprintf(f, "Query= %s\n", queryName);
+fprintf(f, "         (%d letters)\n", abList->qSize);
 fprintf(f, "\n");
-fprintf(f, "Database:  %s\n",  databaseName);
+fprintf(f, "Database: %s \n",  databaseName);
 sprintLongWithCommas(asciiNum, databaseLetterCount);
 fprintf(f, "           %d sequences; %s total letters\n",  databaseSeqCount, asciiNum);
 fprintf(f, "\n");
+fprintf(f, "Searching.done\n");
 
 targetList = bundleIntoTargets(abList);
 
@@ -532,7 +533,7 @@ for (target = targetList; target != NULL; target = target->next)
     struct axtRef *ref;
     struct axt *axt;
     int matches, gaps;
-    fprintf(f, "\n\n>%s\n", target->name);
+    fprintf(f, "\n\n>%s \n", target->name);
     fprintf(f, "          Length = %d\n", target->size);
     for (ref = target->axtList; ref != NULL; ref = ref->next)
 	{
@@ -690,7 +691,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/05/02 21:10:56 $";
+    char * rcsDate = "$Date: 2005/07/26 23:35:48 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
