@@ -6455,6 +6455,8 @@ sys     16m13.770s
 
 
 #  KNOWN GENES UPDATE (DONE - 2004-01-29 - Hiram)
+# RELOADED THE cgapBiocDesc AND cgapAlias TABLES TO REMOVE REPLICATED ROWS 
+# (DONE, 2005-07-26, hartera)
     # update swissProt and proteins databases
     # You want to run these two scripts on the same day to keep the
     #	the date stamp consistent.  In this case the data stamp is 040115
@@ -6524,6 +6526,23 @@ done
     # << this line keeps emacs coloring happy
     chmod +x renameTables.sh
     ./renameTables.sh
+    # RELOAD THE cgapBiocDesc AND cgapAlias TABLES (hartera, 2005-07-26)
+    # Reload the cgapBiocDesc and cgapAlias tables as they have replicated 
+    # rows. Need to sort and unique the file before loading into the database.
+    cd /cluster/data/kgDB/bed/hg16
+    sort -u cgapBIOCARTAdesc.tab > cgapBIOCARTAdescSorted.tab
+    # for cgapAlias, the number of rows in the table is different to the
+    # tab file here so dump the table first.
+    hgsql -N -e 'select * from cgapAlias;' hg16 > cgapAliasDump.txt
+    sort -u cgapAliasDump.txt > cgapAliasDumpSorted.tab
+    hgsql hg16 -e "drop table cgapBiocDesc"
+    hgsql hg16 -e "drop table cgapAlias"
+    hgsql hg16 < ~/kent/src/hg/lib/cgapBiocDesc.sql
+    hgsql hg16 < ~/kent/src/hg/lib/cgapAlias.sql
+    hgsql hg16 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" \
+          into table cgapBiocDesc'
+    hgsql hg16 -e 'load data local infile "cgapAliasDumpSorted.tab" \
+          into table cgapAlias'
 
     # the following extra process will be included in the next version
     # of KGprocess.sh to create the kgProtMap table:
