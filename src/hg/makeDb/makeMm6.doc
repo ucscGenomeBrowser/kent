@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.64 2005/07/26 19:12:08 hartera Exp $"
+#	"$Id: makeMm6.doc,v 1.65 2005/07/26 19:16:54 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -6472,7 +6472,7 @@ end
    # REBUILD cgapAlias TABLE. Sort and reload alias tab file to remove
    # duplicate rows. (hartera, 2005-07-26)
    cd /cluster/store10/kg/kgMm6B
-   sort -u cgapAlias.tab > cgapAliasSorted.tab
+   sort -nu cgapAlias.tab > cgapAliasSorted.tab
    hgsql mm6 -e "drop table cgapAlias"
    # edit cgapAlias.sql and increase size of alias field to from 40 to
    # 80 chars as some aliases are being truncated. 

@@ -6534,7 +6534,7 @@ done
     # for cgapAlias, the number of rows in the table is different to the
     # tab file here so dump the table first.
     hgsql -N -e 'select * from cgapAlias;' hg16 > cgapAliasDump.txt
-    sort -u cgapAliasDump.txt > cgapAliasDumpSorted.tab
+    sort -nu cgapAliasDump.txt > cgapAliasDumpSorted.tab
     hgsql hg16 -e "drop table cgapBiocDesc"
     hgsql hg16 -e "drop table cgapAlias"
     hgsql hg16 < ~/kent/src/hg/lib/cgapBiocDesc.sql
