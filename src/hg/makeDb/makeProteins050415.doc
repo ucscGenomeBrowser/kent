@@ -215,14 +215,13 @@ priority 86
 cd ~/src/hg/hgGene
 make
 
-
-
-
-
-
+cd /cluster/data/reactome
 
 hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
 
 hgsql mm6 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm6.lis
 
 hgsql rn3 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >rn3.lis
+
+# Email the above 3 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
+
