@@ -11304,5 +11304,6 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
   liftOver -minMatch=1.0 foldsHg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg16.over.chain tmp.bed unmapped.bed
   # remove elements which are wrong size after lifting
   awk '$3-$2 == $7' tmp.bed > foldsHg16.bed
+  hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql hg16 evofold foldsHg16.bed
   # clean up
   rm foldsHg17.bed unmapped.bed tmp.bed
