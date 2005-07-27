@@ -67,10 +67,12 @@ Loop repeats back to here
 
 static struct optionSpec optionSpecs[] = {
     {"trials", OPTION_INT},
+    {"seed", OPTION_INT},
     {NULL, 0}
 };
 
 int trials = 0;
+int seed = 0;
 
 static void usage()
 /* Explain usage and exit. */
@@ -82,6 +84,8 @@ verbose(1,
   "options:\n"
   "   -trials=N - run N trials for final statistics (N=0 default)\n"
   "             - for N=0, the initial placement stats are displayed\n"
+  "   -seed=S - seed value for drand48() - default is zero\n"
+  "           - which produces the same set of random numbers each time.\n"
   "Methods:\n"
   "    The boundingRegions.bed defines elements between which are gaps.\n"
   "    The placedItems.bed defines a set of items to be placed in those gaps.\n"
@@ -484,9 +488,204 @@ else
     warn("WARNING: new element insert overlaps previous element\n");
     el->prev->gapSize = 0;
     }
+
+}
+
+static int gapsOfSize(struct chrGapList *bounding, int size,
+	struct gap *array[], int arraySize)
+{
+struct chrGapList *cl;
+int gapCount = 0;
+
+for (cl = bounding; (cl != NULL) && (gapCount < arraySize); cl = cl->next)
+    {
+    struct gap *gEl;
+    for (gEl = cl->gList; (gEl != NULL) && (gapCount < arraySize);
+		gEl = gEl->next)
+	{
+	if (gEl->gapSize >= size)
+	    {
+	    array[gapCount++] = gEl;
+	    }
+	}
+    }
+if (gapCount < 1)
+    errAbort("ERROR: could not find any gaps of size >= %d ?\n", size);
+if (gapCount == arraySize)
+    errAbort("ERROR: never expected to over fill the gap array ?");
+return(gapCount);
+}
+
+static int countGaps(struct chrGapList *bounding)
+{
+int gapCount = 0;
+struct chrGapList *cl;
+
+for (cl = bounding; cl != NULL; cl = cl->next)
+    {
+    struct gap *gEl;
+    for (gEl = cl->gList; gEl != NULL; gEl = gEl->next)
+	{
+	++gapCount;
+	}
+    }
+return(gapCount);
+}
+
+static void measurePlaced(struct bed *placed)
+{
+struct bed *bedEl;
+int placedCount = slCount(placed);
+int *sizeArray = NULL;
+int i = 0;
+
+sizeArray = needHugeMem((size_t)(sizeof(int) * placedCount));
+i = 0;
+for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
+    {
+    sizeArray[i++] = bedEl->chromEnd - bedEl->chromStart;
+    }
+verbose(2,"placed item size range: [%d : %d]\n", sizeArray[0], sizeArray[i-1]);
+verbose(2,"placed item median: %d\n", sizeArray[i/2]);
+intSort(i,sizeArray);
+verbose(2,"placed item size range: [%d : %d]\n", sizeArray[0], sizeArray[i-1]);
+verbose(2,"placed item median: %d\n", sizeArray[i/2]);
+}
+
+static void randomInsert(struct bed *bedEl, struct gap *gl)
+/*	insert the bedEl into the gap at a random location	*/
+{
+struct gap *gapEl;
+struct bed *newBed;
+int itemSize = bedEl->chromEnd - bedEl->chromStart;
+int spareSpace = 0;		/*	amount of gap left after insert */
+int placementOffset = 0;	/*	from beginning of gap	*/
+int newGapSize = 0;
+
+if (itemSize < 0)
+    errAbort("ERROR: trying to insert negative sized item ?\n");
+
+if (itemSize > gl->gapSize)
+    {
+    verbose(2,"item: %s:%d-%d size %d\n", bedEl->chrom, bedEl->chromStart,
+	bedEl->chromEnd, itemSize);
+    verbose(2,"gap:  %s:%d-%d size %d (%d)\n", gl->upstream->chrom,
+	gl->upstream->chromEnd, gl->downstream->chromStart,
+	gl->gapSize, gl->downstream->chromStart - gl->upstream->chromEnd );
+    errAbort("ERROR: trying to insert an item larger than gap ?\n");
+    }
+
+/*placeItem*/
+
+/*	this new bedEl goes in the gap, the existing gap remains
+ *	as the upstream gap, this new gap becomes downstream of this new
+ *	bedEl and upstream of the downstream gap of the existing gap.
+ *	The spacing of this new insert is a random amount of space.
+ */
+AllocVar(gapEl);		/*	a new gap	*/
+AllocVar(newBed);		/*	and a new bed element	*/
+		/* the bed element is *new* because it has different
+		 * coordinates than the placed bed element
+		 */
+newBed->chrom = bedEl->chrom;	/*	no need to clone, not freed	*/
+
+spareSpace = gl->gapSize - itemSize;
+/*	placementOffset is the interval: [0,spareSpace) == [0,spareSpace-1] */
+if (spareSpace > 0)
+    placementOffset = floor(spareSpace * drand48());
+else
+    placementOffset = 0;
+
+newBed->chromStart = gl->upstream->chromEnd + placementOffset;
+newBed->chromEnd = newBed->chromStart + itemSize;
+
+if (NULL == gl->downstream)
+    errAbort("ERROR: trying to add element after last bounding element\n");
+
+gapEl->next = gl->next;	/*	could be NULL when last gap	*/
+gapEl->prev = gl;		/*	is NEVER NULL	*/
+gapEl->upstream = newBed;	/* this element is the new gap's upstream */
+gapEl->isUpstreamBound = FALSE;	/*	not a bounding element	*/
+gapEl->downstream = gl->downstream;	/*	can NEVER be NULL	*/
+gapEl->isDownstreamBound = gl->isDownstreamBound;
+if (gl->next)		/*	could be NULL when last gap	*/
+    gl->next->prev = gapEl;
+gl->downstream = newBed;
+gl->isDownstreamBound = FALSE;	/*	not a bounding element	*/
+gl->next = gapEl;
+
+/*	new gap size, (downstream start) - (upstream end)	*/
+newGapSize = gapEl->downstream->chromStart - newBed->chromEnd;
+if (newGapSize >= 0)
+    gapEl->gapSize = newGapSize;
+else
+    {
+    warn("WARNING: new element insert overlaps following element\n");
+    gapEl->gapSize = 0;
+    }
+/*	resize existing gap, (downstream start) - (upstream end) */
+newGapSize = newBed->chromStart - gl->upstream->chromEnd;
+if (newGapSize >= 0)
+    gapEl->prev->gapSize = newGapSize;
+else
+    {
+    warn("WARNING: new element insert overlaps previous element\n");
+    gapEl->prev->gapSize = 0;
+    }
+}
+
+static void randomTrial(struct chrGapList *bounding, struct bed *placed)
+/*	placed has already been sorted by size descending	*/
+{
+struct bed *bedEl;
+int placedCount = slCount(placed);
+int gapCount = countGaps(bounding);
+int i;
+struct gap **sizedGaps = NULL;	/*	an array of pointers	*/
+int maxGapCount = 0;
+
+{
+    struct statistic *statEl = NULL;
+    statEl = gapStats(bounding);
+    printf("statistics on gaps before any placements:\n");
+    statsPrint(statEl);
+}
+/*	We should never have more gaps than the initial set of gaps plus
+ *	the placed item count since each placed item only creates one
+ *	new gap.  This array will be used repeatedly as lists of gaps of
+ *	specific sizes are created.  The array will be an array of
+ *	pointers to the gaps greater than the specified size.
+ *	The + 1 on the maxGapCount is to keep the array one larger than
+ *	expected maximum so that a safety check can be performed that it
+ *	never reaches past the expected maximum.
+ */
+maxGapCount = placedCount + gapCount + 1;
+sizedGaps = needHugeMem((size_t)(sizeof(struct gap *) * maxGapCount));
+i = 0;
+
+for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
+    {
+    static int done = 0;
+    int N;
+    int R;
+    int itemSize = bedEl->chromEnd - bedEl->chromStart;
+    if (itemSize < 1)
+	errAbort("ERROR: placing items less than 1 bp in length ?");
+    N = gapsOfSize(bounding,itemSize, sizedGaps, maxGapCount);
+    /*	From those N gaps, randomly select one of them	(drand48 = [0.0,1.0)*/
+    R = floor(N * drand48());	/*	interval: [0,N) == [0,N-1]	*/
+    if ((R >= N) || (R >= maxGapCount))
+	errAbort("ERROR: did not expect random number %d to be >= %d (or %d)\n", R, N, maxGapCount);
+    ++done;
+    randomInsert(bedEl,sizedGaps[R]);
+    }
 }
 
 static void initialPlacement(struct chrGapList *bounding, struct bed *placed)
+/*	simply place the items from the 'placed' list into the gaps
+ *	defined by the 'bounding' list, the locations of the 'placed'
+ *	items are what they say they are in their bed structure.
+ */
 {
 struct bed *bedEl;
 int unplacedCount = 0;
@@ -707,13 +906,22 @@ if (0 == trials)
 else
     {
     int trial;
+
+    srand48((long int)seed);	/* for default seed=0, same set of randoms */
+
+    slSort(&placedItems, bedCmpSize);	/* order by size of elements */
+    slReverse(&placedItems);		/* largest ones first	*/
+    measurePlaced(placedItems);		/* show placed item characteristics */
     for (trial = 0; trial < trials; ++trial)
 	{
 	duplicateGapList = cloneGapList(boundingGaps);
+	randomTrial(duplicateGapList,placedItems);
 	statEl = gapStats(duplicateGapList);
 	slAddHead(&statsList,statEl);
 	freeChrList(&duplicateGapList);
 	}
+    slReverse(&statsList);
+    statsPrint(statsList);
     }
 bedFreeList(&boundingElements);
 bedFreeList(&placedItems);
@@ -727,10 +935,12 @@ optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
 trials = optionInt("trials", 0);
+seed = optionInt("seed", 0);
 
 verbose(2,"bounding elements file: %s\n", argv[1]);
 verbose(2,"placed items file: %s\n", argv[2]);
 verbose(2,"number of trials: %d\n", trials);
+verbose(2,"seed value for drand48(): %d\n", seed);
 
 randomPlacement(argv[1], argv[2]);
 verbose(3,"at exit of main()\n");
