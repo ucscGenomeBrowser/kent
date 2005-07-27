@@ -8,13 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafOrder.c,v 1.1 2005/07/22 21:58:23 braney Exp $";
-
-char *masterSpecies;
-char *masterChrom;
-struct hash *speciesHash;
-struct subSpecies *speciesList;
-struct strandHead *strandHeads;
+static char const rcsid[] = "$Id: mafOrder.c,v 1.2 2005/07/27 18:30:02 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,12 +26,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct elem 
-{
-    struct elem *next;
-    char *name;
-};
-
 struct mafComp *compHolders[100];
 
 void mafOrder(char *mafIn, char *listFile,  char *mafOut)
@@ -48,16 +36,13 @@ struct lineFile *lf = lineFileOpen(listFile, TRUE);
 struct mafFile *mf = mafOpen(mafIn);
 struct mafAli *mafList, *maf;
 char *row[1];
-struct elem *elemList = NULL, *elem;
+struct slName *elemList = NULL, *elem;
 
 mafWriteStart(f, mf->scoring);
 
 while (lineFileRow(lf, row))
-    {
-    AllocVar(elem);
-    elem->name = cloneString(row[0]);
-    slAddHead(&elemList, elem);
-    }
+    slNameStore(&elemList, row[0]);
+
 lineFileClose(&lf);
 slReverse(&elemList);
 
