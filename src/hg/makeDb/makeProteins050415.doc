@@ -168,4 +168,61 @@ hgsql proteins050415 -e 'create index alias on uniProtAlias(alias)'
     
 # Release to QA for formal testing.
 
+# CREATE spVariant TABLE TO ENABLE UNIPROT VARIANT SPLICE ISOFORM PROCESSING (DONE, Fan, 7/27/05)
 
+hgsql proteome -N -e 'select accession,accession from spXref3' >j1
+cat j1 |grep "-" |sed -e 's/-/\t/'|cut -f 1,3 >j2
+
+cat j1 |grep -v "-" >>j3
+cat j2 j3 |sort -u >spVariant.tab
+
+hgsql proteome -e 'drop table spVariant'
+hgsql proteome < ~/src/hg/lib/spVariant.sql
+hgsql proteome -e 'load data local infile "spVariant.tab" into table spVariant'
+
+hgsql proteome -e 'create index parent on spVariant(parent)'
+
+# CREATE TABLES TO ENABLE LINKS TO REACTOME (DONE, Fan 7/27/05)
+
+# Obtain the Reactome_events.txt and ucsc_entity14.dat from Reactome.
+# Contact: Gopinathrao, Gopal [gopinath@cshl.edu]
+
+mkdir /cluster/store10/reactome/reactome050613
+rm /cluster/data/reacome
+ln -s /cluster/store10/reactome/reactome050613 /cluster/data/reactome
+cd /cluster/data/reactome
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "Reactome_events.txt" into table spReactomeEvent ignore 4 lines'
+
+# First remove extra LF or CR that is causing problem.
+rmLf ucsc_entity14.dat >ucsc_entity14.cleaned
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity14.cleaned" into table spReactomeId ignore 6 lines'
+
+# Add the following into src/hg/hgGene/hgGeneData/Human/links.ra and do the same for Mouse and Rat:
+
+name reactome
+shortLabel Reactome
+tables proteome.spReactomeEvent kgXref
+idSql select spReactomeId.spID from proteome.spReactomeId,proteome.spVariant,kgXref where kgXref.kgID = '%s' and kgXref.spID=variant and spReactomeId.spID=parent;
+url http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s&
+priority 86
+
+cd ~/src/hg/hgGene
+make
+
+
+
+
+
+
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+hgsql mm6 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm6.lis
+
+hgsql rn3 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >rn3.lis
