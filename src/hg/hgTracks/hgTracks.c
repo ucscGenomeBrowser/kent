@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.991 2005/07/14 17:34:36 kschneid Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.992 2005/07/27 06:24:25 donnak Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9797,10 +9797,7 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%
 
 if (gotBlat)
     {
-    /* the only zoo organism this currently works with is human.
-     * blastz tables need to be generated for the other organisms. */
-    if (!startsWith("zoo", database) || startsWith("zooHuman", database))
-        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgCoordConv?origDb=%s&position=%s:%d-%d&phase=table&%s\" class=\"topbar\">%s</A></TD>", database, chromName, winStart+1, winEnd, uiVars->string, "Convert");
+        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgLiftOver?hglft_fromOrg=%s&hglft_fromDb=%s&hgLft_toOrg=0&hglft_toDb=0&%s\" class=\"topbar\">%s</A></TD>", organism, database, uiVars->string, "Convert");
     }
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
