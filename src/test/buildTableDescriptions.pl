@@ -297,7 +297,8 @@ my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new();
 my @dbs = (defined $opt_db) ? split(',', $opt_db) : &getActiveDbs($hgConf);
 foreach my $db (@dbs) {
-  next if ($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ && $db !~ /^zoo/);
+  next if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/) ||
+	   $db =~ /^zoo/);
   my $sqlFile = "$db.tableDescriptions.sql";
   open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
   print SQL "use $db;\n";
@@ -312,7 +313,8 @@ foreach my $db (@dbs) {
   my %tableFields = &getTableFields($hgConf, $db);
   foreach my $table (sort keys %tableFields) {
     next if ($table =~ /^trackDb_/);
-    if (! defined $tableAutoSql{$table}) {
+    if ((! defined $tableAutoSql{$table}) ||
+	($tableFields{$table} ne $tableAutoSql{$table}->{fields})) {
       $tableAutoSql{$table} =
 	&matchAutoSqlByFields($tableFields{$table}, \%tableAutoSql,
 			      \%fieldsAutoSql);
