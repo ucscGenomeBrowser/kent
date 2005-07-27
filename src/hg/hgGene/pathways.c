@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.9 2005/07/25 17:04:56 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.10 2005/07/27 20:37:40 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -216,8 +216,9 @@ if (spID != NULL)
     if (chp != NULL) *chp = '\0';
 
     safef(query, sizeof(query), 
-	  "select count(*) from %s.spReactomeEvent, %s.kgXref where kgID='%s' and kgXref.spID='%s' and spReactomeEvent.spID='%s'", 
-	    PROTEOME_DB_NAME, database, geneId, origSpID, spID);
+	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.kgXref where kgID='%s' and kgXref.spID=variant and variant = '%s' and spReactomeEvent.spID=parent", 
+	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
+
     ret = sqlQuickNum(conn, query);
     }
 return ret;
