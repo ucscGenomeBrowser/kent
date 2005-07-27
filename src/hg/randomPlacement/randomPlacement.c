@@ -153,20 +153,74 @@ for (gl = gEl; gl != NULL; gl = gl->next)
 return (downstreamBound);
 }
 
-static void gapStats(struct chrGapList *cList)
+struct statistic
+/*  the statistics from a measurement of gaps and placed items	*/
+    {
+    struct statistic *next;	/*	will accumulate a number of these */
+    int chromCount;		/*	the number of chroms involved	*/
+    int totalGaps;		/*	total gaps, non zero and zero	*/
+    int sizeZeroGapCount;	/*	count of zero sized gaps	*/
+    int maxGap;			/*	maximum gap	*/
+    int minGap;			/*	minimum gap (often seen as 1)	*/
+    int medianGap;		/*	median gap (of non-zero)	*/
+    int meanGap;		/*	mean gap (of non-zero)		*/
+    int boundingElementCount;	/* # of elements defining initial set of gaps */
+    int placedItemCount;	/*	how many items were placed in gaps */
+    int meanNearestNeighbor;	/*	nearest neighbor statistics	*/
+    int medianNearestNeighbor;	/*	this is the nearest bounding element */
+    int maximumNearestNeighbor;	/*	to the placed item	*/
+    int placedWithin100bp;	/*	divide by placedItemCount for %	*/
+    int zeroNeighbor;		/*	number with zero distance to neighbor */
+    };
+
+static void statsHeader()
 {
+printf("chrom  Bounding  Total  Size 0  Maximum  Minimum  Median  Mean\n");
+printf("count  elements   gaps    gaps      gap      gap     gap   gap\n");
+}
+
+static void statsPrint(struct statistic *statList)
+{
+struct statistic *statEl;
+statsHeader();
+for (statEl = statList; statEl != NULL; statEl = statEl->next)
+    {
+    printf("%5d%10d%7d%8d%9d%9d%8d%6d\n",
+	statEl->chromCount, statEl->boundingElementCount, statEl->totalGaps,
+	statEl->sizeZeroGapCount, statEl->maxGap, statEl->minGap,
+	statEl->medianGap, statEl->meanGap);
+    if (statEl->placedItemCount)
+	{
+
+printf("Nearest neighbor statistics:\n");
+printf("    # of Maximum  Median    Mean # within %% within # within\n");
+printf("   items nearest nearest nearest   100 bp    100bp  zero bp\n");
+	printf("%8d%8d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
+	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
+	    statEl->meanNearestNeighbor, statEl->placedWithin100bp,
+	    100.0 * (double)statEl->placedWithin100bp /
+		(double)statEl->placedItemCount,
+	    statEl->zeroNeighbor);
+	}
+    }
+}
+
+static struct statistic *gapStats(struct chrGapList *cList)
+{
+struct statistic *returnStats;
 struct chrGapList *cl;
 int chrCount = 0;
 int gapCountNonZeroSize = 0;
 int gapCountZeroSize = 0;
 int totalGapSize = 0;
-int averageGapSize = 0;
 int maxGap = 0;
 int minGap = BIGNUM;
 int *gapSizeArray = NULL;
 int i;
 int boundingElementCount = 0;
-int placedElementCount = 0;
+int placedItemCount = 0;
+
+AllocVar(returnStats);
 
 /*	first count number of non-zero gaps	*/
 for (cl=cList; cl != NULL; cl = cl->next)
@@ -184,12 +238,12 @@ for (cl=cList; cl != NULL; cl = cl->next)
 	    if (gl->isUpstreamBound)
 		++boundingElementCount;
 	    else
-		++placedElementCount;
+		++placedItemCount;
 	    }
 	if (gl->isDownstreamBound)
 	    ++boundingElementCount;
 	else
-	    ++placedElementCount;
+	    ++placedItemCount;
 	if (gapSize > 0)
 	    {
 	    totalGapSize += gapSize;
@@ -207,10 +261,14 @@ for (cl=cList; cl != NULL; cl = cl->next)
     ++chrCount;
 verbose(4,"%s: %d gaps, %d of size zero\n", cl->chrom, gapCount, zeroSized);
     }
-
 verbose(3,"counted %d chroms and %d gaps ( + %d size zero = %d total gaps)"
     "\n\ton the bounding list\n", chrCount, gapCountNonZeroSize,
 	gapCountZeroSize, gapCountNonZeroSize+gapCountZeroSize);
+
+returnStats->chromCount = chrCount;
+returnStats->totalGaps = gapCountNonZeroSize + gapCountZeroSize;
+returnStats->sizeZeroGapCount = gapCountZeroSize;
+returnStats->boundingElementCount = boundingElementCount;
 
 /*	now copy all the values to a integer array for more detailed
  *	stats measurements
@@ -235,32 +293,45 @@ verbose(3,"assigned %d values to int array\n", i);
 
 intSort(i,gapSizeArray);
 
-averageGapSize = 0.5 + (double)totalGapSize/(double)gapCountNonZeroSize;
+/*	0.5 rounds up to next integer	*/
+returnStats->meanGap = 0.5 + ((double)totalGapSize/(double)gapCountNonZeroSize);
+returnStats->maxGap = gapSizeArray[i-1];
+returnStats->minGap = gapSizeArray[0];
+returnStats->medianGap = gapSizeArray[i/2];
+
 verbose(2,"average gap size: %d = %d / %d (non-zero size gaps only)\n",
-    averageGapSize, totalGapSize, gapCountNonZeroSize);
-verbose(2,"maximum gap size: %d\n", gapSizeArray[i-1]);
-verbose(2,"median gap size: %d\n", gapSizeArray[i/2]);
-verbose(2,"minimum gap size: %d\n", gapSizeArray[0]);
+    returnStats->meanGap, totalGapSize, gapCountNonZeroSize);
+verbose(2,"maximum gap size: %d\n", returnStats->maxGap);
+verbose(2,"median gap size: %d\n", returnStats->medianGap);
+verbose(2,"minimum gap size: %d\n", returnStats->minGap);
 verbose(2,"minimum gap: %d, maximum gap: %d\n", minGap, maxGap);
+if (minGap != returnStats->minGap)
+    errAbort("ERROR: didn't find the same minimum gap ?");
+if (maxGap != returnStats->maxGap)
+    errAbort("ERROR: didn't find the same maximum gap ?");
 verbose(2,"bounding element count: %d, placed element count: %d\n",
-	boundingElementCount, placedElementCount);
+	boundingElementCount, placedItemCount);
+
 
 /* if there are placed elements, measure their nearest neighbor statistics */
-if (placedElementCount)
+if (placedItemCount)
     {
     int i;
-    int zeroDistanceCount = 0;
-    int nonZeroWithin100bp = 0;
     int sumDistances = 0;
     int *placedDistances =
-	needHugeMem((size_t)(sizeof(int) * placedElementCount));
+	needHugeMem((size_t)(sizeof(int) * placedItemCount));
     int placedCount = 0;
+    int boundingElements = 0;
     for (cl=cList; cl != NULL; cl = cl->next)
 	{
 	struct gap *gl;
 	struct gap *next;
 	struct bed *upstreamBound = NULL;
 	struct bed *downstreamBound = NULL;
+
+	++boundingElements; /*	first one must be bounding	*/
+		/* after this, only need to count the downstream ones */
+
 	for (gl = cl->gList; gl != NULL; gl = next)
 	    {
 	    struct gap *gEl;
@@ -272,6 +343,7 @@ if (placedElementCount)
 		    {
 		    upstreamBound = gl->upstream;
 		    downstreamBound = nextDownstreamBound(gl);
+		    ++boundingElements;
 		    if (NULL == downstreamBound)
 			errAbort("Can not find a downstream"
 				" bounding element ?");
@@ -305,32 +377,50 @@ if (placedElementCount)
 		next = NULL;
 	    }
 	}	/*	for (cl=cList; cl != NULL; cl = cl->next)	*/
+
+    returnStats->placedItemCount = placedCount;
+    returnStats->meanNearestNeighbor = 0.5 + (double)sumDistances / placedCount;
+
+    if (boundingElements != boundingElementCount)
+	errAbort("ERROR: did not find the same number of bounding elements ? %d =! %d", boundingElementCount, returnStats->boundingElementCount);
+
+
     intSort(placedCount,placedDistances);
+    returnStats->medianNearestNeighbor = placedDistances[placedCount/2];
+    returnStats->maximumNearestNeighbor = placedDistances[placedCount-1];
+
     verbose(2,"measured %d placed items\n", placedCount);
-    verbose(2,"mean distance: %d = %d / %d\n", sumDistances / placedCount,
-		sumDistances, placedCount);
-    verbose(2,"median distance: %d\n", placedDistances[placedCount/2]);
-    verbose(2,"maximum distance: %d\n", placedDistances[placedCount-1]);
+    verbose(2,"mean distance: %d = %d / %d\n",
+	returnStats->meanNearestNeighbor, sumDistances, placedCount);
+    verbose(2,"median distance: %d\n", returnStats->medianNearestNeighbor);
+    verbose(2,"maximum distance: %d\n", returnStats->maximumNearestNeighbor);
+
     for (i = 0; i < placedCount; ++i)
 	if (placedDistances[i] > 0) break;
-    zeroDistanceCount = i + 1;
+
+    returnStats->zeroNeighbor = i + 1;
+
     for ( ; i < placedCount; ++i)
 	if (placedDistances[i] > 100) break;
-    nonZeroWithin100bp = (i+1) - zeroDistanceCount;
+
+
+    returnStats->placedWithin100bp = (i+1) - returnStats->zeroNeighbor;
+
     verbose(2,"%d - number of items zero distance to nearest "
-	"bounding element\n", zeroDistanceCount);
+	"bounding element\n", returnStats->zeroNeighbor);
     verbose(2,"%d - number of items of non-zero distance within 100 bp of "
-	"nearest bounding element\n", nonZeroWithin100bp);
-    if ((placedCount-zeroDistanceCount) > 0)
+	"nearest bounding element\n", returnStats->placedWithin100bp);
+    if ((placedCount-returnStats->zeroNeighbor) > 0)
 	verbose(2,"%% %.04f - percent of of items of non-zero distance "
 	    "within 100 bp of nearest bounding element\n",
-		100.0 * nonZeroWithin100bp / (placedCount-zeroDistanceCount));
+		100.0 * returnStats->placedWithin100bp / (placedCount-returnStats->zeroNeighbor));
     else
        errAbort("something wrong with placed item count "
 		"minus zeroDistance Count");
 
-    }
+    }	/*	if (placedItemCount)	*/
 freeMem(gapSizeArray);
+return (returnStats);
 }
 
 static void placeItem(struct bed *bedEl, struct gap *gl)
@@ -581,6 +671,8 @@ int boundingCount = slCount(boundingElements);
 int placedCount = slCount(placedItems);
 struct chrGapList *boundingGaps = NULL;
 struct chrGapList *duplicateGapList = NULL;
+struct statistic *statsList = NULL;
+struct statistic *statEl = NULL;
 
 slSort(&boundingElements, bedCmp);	/* order by chrom,chromStart */
 slSort(&placedItems, bedCmp);		/* order by chrom,chromStart */
@@ -595,14 +687,22 @@ if (0 == trials)
     duplicateGapList = cloneGapList(boundingGaps);
 
     verbose(2,"stats before initial placement:  =================\n");
-    gapStats(duplicateGapList);
+    statEl = gapStats(duplicateGapList);
+    printf("statistics on gaps before any placements:\n\t(%s)\n", bounding);
+    statsPrint(statEl);
+    slAddHead(&statsList,statEl);
 
     initialPlacement(duplicateGapList,placedItems);
 
     verbose(2,"stats after initial placement:  =================\n");
-    gapStats(duplicateGapList);
+    statEl = gapStats(duplicateGapList);
+    printf("statistics after initial placement of placed items:\n\t(%s)\n",
+		placed);
+    statsPrint(statEl);
+    slAddHead(&statsList,statEl);
 
     freeChrList(&duplicateGapList);
+    slReverse(&statsList);
     }
 else
     {
@@ -610,7 +710,8 @@ else
     for (trial = 0; trial < trials; ++trial)
 	{
 	duplicateGapList = cloneGapList(boundingGaps);
-	gapStats(duplicateGapList);
+	statEl = gapStats(duplicateGapList);
+	slAddHead(&statsList,statEl);
 	freeChrList(&duplicateGapList);
 	}
     }
