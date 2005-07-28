@@ -45,6 +45,7 @@
                 <LI><A HREF="#download25">Mapping chimp chromosome numbers to human chromsomes numbers</A>
                 <LI><A HREF="#download28">Converting genome coordinates between assemblies</A>
                 <LI><A HREF="#download23">Linking gene name with accession number</A>
+                <LI><A HREF="#download31">Obtaining a list of Known Genes</A>
                 <LI><A HREF="#download16">Repeat-masking data</A>
                 <LI><A HREF="#download17">Availability of repeat-masked data</A>
                 <LI><A HREF="#download24">RepeatMasker version differences - UCSC vs. Repeatmasker website</A>
@@ -1120,7 +1121,65 @@
 	</TABLE>
 	</TD></TR>
     </TABLE>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download31"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Obtaining a list of Known Genes</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"How can I obtain a complete list of all the genes in
+			the UCSC Known Genes table for a particular organism?
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+		    	To obtain a complete copy of the entire Known Genes 
+			data set for an organism, open the Genome Browser
+			<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html">Downloads page</A>, 
+			jump to the section specific to the organism, click the
+			Annotation database link in that section, then click the
+			link for the <em>knownGene.txt.gz</em> table.</P>
+			<P>
+			Data for a specific region or chromosome may be
+			obtained from the Table Browser by selecting the 
+			&quot;Genes and Gene Prediction Tracks&quot; group, the
+			&quot;Known Genes&quot; track and the 
+			&quot;knownGene&quot; table. Set the position to the 
+			region of interest, then click the &quot;get 
+			output&quot; button.
+			<P>
+			Pre-generated lists of all the UCSC Known Genes 
+			for human, mouse and rat can be found 
+		        <A HREF="http://genome.ucsc.edu/knownGeneLists.html"
+		  	TARGET=_blank>here</A>. These lists are updated 
+			whenever the associated knownGene tables are updated.
+			</P>
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
 <BR>
+
 
 <!--Content Table------------------------------------------------------------>
 <A NAME="download16"></A>
@@ -1624,6 +1683,44 @@
 			chrY_random and also appear (under different names) 
 			as regions on contigs MmY_110865_34, MmY_78990_34 
 			and NT_078925.</P>
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+    <BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download31"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Obtaining a list of Known Genes</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"Is it possible to run SQL queries directly on the
+			database rather than using the Table Browser interface?" 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			In response to requests from Genome Browser users, we have set up a MySQL
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
