@@ -4831,6 +4831,7 @@ cat > template << 'EOF'
    - rebuild trackDb
 
 # LIFTOVER CHAINS TO DANRER2 (DONE, 2005-07-20, hartera)
+# Added path for makeLo scripts (DONE, 2005-07-28, hartera)
 # Create liftOver for only chr1-25 because chrFinished, chrUn and chrNA 
 # will cause too many false alignments.
 
@@ -4851,16 +4852,18 @@ cat > template << 'EOF'
     
     ssh kk
     cd /cluster/data/danRer1
+    set dir = /cluster/bin/scripts
     # run 1-25, Finished and M for danRer1 vs 1-25 and M for danRer2
-    makeLoChain-align danRer1 /iscratch/i/danRer1/nibNoUnandNA \
+    $dir/makeLoChain-align danRer1 /iscratch/i/danRer1/nibNoUnandNA \
                     danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split
     # run Un and NA for danRer1 separately as these could take a long time
-    makeLoChain-align danRer1 /iscratch/i/danRer1/nibUnandNA \
+    $dir/makeLoChain-align danRer1 /iscratch/i/danRer1/nibUnandNA \
                     danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split
     cd /cluster/data/danRer1/bed/blat.danRer2.2005-05-24/run
     para try, check, push etc.
-    ssh kkusr01
-    /cluster/bin/scripts/makeLoChain-lift.csh danRer1 danRer2 <lift-dir>
+    # do this next:
+    # ssh kkusr01
+    # /cluster/bin/scripts/makeLoChain-lift.csh danRer1 danRer2 <lift-dir>
 
     # Created parasol job in bed/blat.danRer1.2005-05-18/run
     cd bed
@@ -4879,7 +4882,8 @@ cat > template << 'EOF'
 
     ssh kk
     cd /cluster/data/danRer1
-    makeLoChain-align danRer1 /iscratch/i/danRer1/nib \
+    set dir = /cluster/bin/scripts
+    $dir/makeLoChain-align danRer1 /iscratch/i/danRer1/nib \
         danRer2 /iscratch/i/danRer2/liftOver/liftSplit/split/UnandNA
     # Created parasol job in bed/blat.danRer1.2005-05-31/run
     cd bed/blat.danRer2.2005-05-31/run
@@ -4891,10 +4895,11 @@ cat > template << 'EOF'
     # use kolossus for speed
     ssh kolossus
     cd /cluster/data/danRer1/bed
+    set dir = /cluster/bin/scripts
     # for script to work, directory must have today's date
     mv blat.danRer2.2005-05-18 blat.danRer2.2005-07-19
     cd /cluster/data/danRer1/bed/blat.danRer2.2005-07-19
-    makeLoChain-lift danRer1 danRer2 \
+    $dir/makeLoChain-lift danRer1 danRer2 \
          /iscratch/i/danRer2/liftOver/liftSplit/lift >&! lift.log &
     tail -100f lift.log
     cd ..
@@ -4916,9 +4921,10 @@ cat > template << 'EOF'
     # Un and NA are empty psls as these were not run
 
     ssh kk9
+    set dir = /cluster/bin/scripts
     cd /cluster/data/danRer1/bed
     ln -s blat.danRer2.2005-05-18 blat.danRer2.2005-07-19
-    makeLoChain-chain danRer1 /cluster/data/danRer1/nib danRer2 \
+    $dir/makeLoChain-chain danRer1 /cluster/data/danRer1/nib danRer2 \
           /cluster/data/danRer2/nib
     cd /cluster/data/danRer1/bed/blat.danRer2.2005-07-19/chainRun
     para try, check, push, check etc.
