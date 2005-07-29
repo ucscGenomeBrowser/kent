@@ -17188,3 +17188,10 @@ _EOF_
 
   # note: 28 rows where chrom = "chrXY"
 
+# reload rankProp and psiBlast gene sorter tables to link with new
+# known genes (markd 2005-07-15)
+   (spLoadRankProp -noMapFile=max1k.nomap hg17 rankProp --  /cluster/bluearc/markd/rankprop/results/hs.sw+tr/max1k.rankp.gz)   >&max1k.hg17.out
+   (spLoadPsiBlast hg17 spPsiBlast  /cluster/bluearc/markd/rankprop/results/hs.sw+tr.eval.gz) >&pslBlast.hg17.out 
+
+
+
