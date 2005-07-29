@@ -229,7 +229,9 @@ for (image = imageList; image != NULL; image = image->next)
     char *imageFile = visiGeneThumbSizePath(conn, id);
     printf("<TR>");
     printf("<TD>");
-    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\">", hgVisiGeneCgiName(), 
+    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
+	"onclick=\"parent.controls.document.mainForm.ZM[0].checked=true;return true;\" "
+	">", hgVisiGeneCgiName(), 
     	sidUrl, hgpId, id, hgpDoImage);
     printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
     
@@ -341,7 +343,7 @@ splitPath(p, dir, name, extension);
 
 safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",dir,name,name,w,h);
 
-printf("<IFRAME width=\"100%%\" height=\"80%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
+printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"80%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
 
 printf("<A NAME=\"caption\"></A>");
@@ -391,6 +393,14 @@ printf(" ");
 cgiMakeTextVar(hgpListSpec, listSpec, 10);
 
 cgiMakeButton("submit", "submit");
+
+
+printf(" Zoom: ");
+printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('in');return true;\" CHECKED>in ");
+printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('center');return true;\">center ");
+printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('out');return true;\">out ");
+printf("\n");
+
 printf("</FORM>\n");
 printf("<BR> database: %s ", genomeDbForImage(conn, imageId));
 htmlEnd();

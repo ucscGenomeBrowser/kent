@@ -1,0 +1,949 @@
+<html>
+<head>
+
+<title>visiGene bigImage</title>
+
+ 
+<!-- 
+
+test22: adding over-size zoom to allow you to see expansion
+greater than actual size - will require several changes.
+Although we already have the z variable, I think when the
+level l is already 0 instead of going -1 and so on, instead
+will multiply new variable "m" for magnification.  "m" will
+now have to appear all over the code for the scaling.
+In addition we will have to change from letting the IMG
+do the size naturally to assigning the size.  I believe that
+in many cases simply setting the width is enought to scale
+the entire image (except for right edge tiles which will 
+just need a special value for the width).  I think I shall
+simply try to start at the start init() func and follow 
+the code through adding "m" where it belongs.
+
+test21:
+
+NOTE: added cmdline parm for setting the url,w,h pic size - see qsParm array and qs() func.
+
+NOTE: made progress overall e.g. old Mozilla, Firefox update bugs, but now 
+there is a flash in IE when user is moving with keyboard.  
+But test19 does not have this flash.  Therefore I can probably find and fix it
+by comparing 20 to 19. (fixed)
+
+ 
+ This is just test19 plus trying to make an over-border that will act as 
+ a kind of cache and hopefully make the scrolling a little smoother.
+
+
+test19:
+This is another attempt to fix the slowness/jerkiness of test17.
+
+This is trying to fix the slowness/jerkiness of test17 which uses .
+Test18 was still kind of flashy.  It used the replace-all-innerHTML method
+to try to synchronize, but still get a flash that clears the screen
+as the innerHTML changes, plus unloaded pix show up with icky no-pic icon,
+and I think it also hits the cache/server more than other methods.
+
+So, in test19, I will try a compromize - for low ram computers, keep only enough
+IMGs to cover the view area clipped by the myClip div. But on the other hand,
+keep the entire myImg DIV for quickly moving all IMGs at once (common base).
+Don't update the DIV except when necessary.
+
+Theory: keep div and absolute pic coords there so can
+move the entire div at once (even though google can't really do this?),
+and move img's not in view to -wSub,-hSub to hide.
+This way when we scroll a ways, we don't have to re-assign
+all the img.src's which seems slow.  Now only the parts of the
+view that are new will get img.src changing.
+Will use position:absolute on the pix.
+There will be a .visible property that is used to track them.
+A simple linear cells array will provide quick access to them.
+Only on resize will the array be rebuilt.
+Need a quick way to check if the cell is still visible in clipview.
+When it is not, it goes to the "invisible" pile for re-use
+(really this is just marked with -1,-1 for .r.c)
+For each visible position, the system searches all cells to see
+if this cell is already visible.  If not, it will draw from the
+"invisible" pile, set it's position,.src,.visible,.r.c etc.
+I think that searching the list might not be too painful,
+although this will be order n*n.  Typically n will be 15 or 20.
+If the search speed is a worry we can always use a "visible" hash
+or whatever.
+                                                                                                                             
+for each cell add to invisible stack (an array) if not visible (and remove from visible hash?),
+else add to visible hash (as an object "property") (if not already present).
+
+Then, loop again, for each position for wCnt*hCnt,
+if it is in visible hash, do not update.  Else draw
+from top of invisible stack and assign new position,.src.
+Anything remaining on the stack is truly not visible,
+move it to -wSub,-hSub to hide it.
+                                                                                                                             
+Finally, shift the entire DIV to its new position.
+                                                                                                                             
+// example of using property-names of object as a hash.
+var theStatus = new Object;
+theStatus['Home'] = somevalue;
+theStatus[somevar] = somevalue;  // somevar = ""+r+"_"+c;
+// note: if the hash is expensive to create (probably not)
+//  then I could try to keep it around and then only
+//  add or subtract from it as necessary?
+
+// example of using array as stack
+// building the stack
+stack = new Array();  // can this take an array-size initializer for a little more speed?
+  // OR just keep the stack around. No harm there?
+stacktop=-1;
+// adding to stack
+stacktop+=1;
+stack[stacktop] = newval;
+// drawing from the stacktop
+if (stacktop<0) {alert('stack underflow - need more img tags error'); return;}
+return stack[stacktop];
+stacktop-=1;
+                                                                                                                             
+-->
+
+
+<style>
+
+table  { border-collapse: collapse; border-spacing: 0; }
+tr, th, td { padding: 0px; }
+
+</style>
+
+</head>
+
+
+
+<SCRIPT LANGUAGE="javascript" TYPE="text/javascript">
+
+function showBrowser() {
+    window.status=navigator.appName+' '+navigator.appVersion;
+}
+
+// magnification for over-zoom-in.  as if there were a level -1.
+m = 1;
+maxmag = 8;  // max magnification  (doubles each time: 1,2,4,8)
+
+// number of zoom levels, level 0 = no zoom, numLevels-1=max zoom out=4
+numLevels=5;
+
+myClip = document.getElementById("myClip");
+
+myImg = document.getElementById("myImg");
+
+
+// original width and height of picture
+wOrig = new Array(numLevels);
+hOrig = new Array(numLevels);
+wOrig[0] = 7248;
+hOrig[0] = 3780;
+
+// size of subImages (tiles)
+wSub = 512; //240; //300;
+hSub = 512; //240; //300;
+
+// width of last column of tiles (since we are scaling tiles by setting width)
+wSubEdge = new Array(numLevels);
+wSubEdge[0] = wSub;  
+
+// number of extra cell rows and columns to cover in view window myClip
+wdl = wdr = 2;  
+hdl = hdr = 1;
+
+picName="T12832210aa";
+picExt =".jpg";
+
+// number of rows and columns in table
+wCnt = new Array(numLevels);
+hCnt = new Array(numLevels);
+
+zoomMode = "in";  // in out and center, rotate on user pressing 'm' key
+z = 1;  // accumulated zoom factor at level 0
+wSmallDelta = hSmallDelta =  50;
+hSmallDelta = hSmallDelta =  50;
+wBigDelta   = hBigDelta   = 300;
+hBigDelta   = hBigDelta   = 300;
+dr = 5;  // amount to scroll
+
+marginLeft = 5;
+marginTop = 5;
+
+// clip size (changes with window resize)
+wc = 800;
+hc = 600;
+
+// minimum number of tiles required to cover view area wcXhc
+wt = Math.ceil(wc/wSub) + 1;
+ht = Math.ceil(hc/hSub) + 1;
+
+
+
+// position in original picture space, not scaled by zoom
+x = 0;   
+y = 0; 
+
+// target coords (scrolls so that x,y approaches goal x,y
+xx = 0;
+yy = 0;
+
+// mouse position
+mousex = 0;
+mousey = 0;
+mouseDrag = false;
+mouseAction = false;
+mouseDragX = mousex;
+mouseDragY = mousey;
+
+// hash of visible IMGs in use
+vis = new Object;
+
+// stack of invisible IMGs heap available for use
+invistop=-1;
+invis=new Array();
+
+// cells are pointers to the IMG objects (we can walk through entire list)
+cells = new Array();
+
+var qsParm = new Array();
+
+//function to retrieve and parse parms:
+function qs() {
+var query = window.location.search.substring(1);
+var parms = query.split('&');
+for (var i=0; i<parms.length; i++) {
+   var pos = parms[i].indexOf('=');
+   if (pos > 0) {
+      var key = parms[i].substring(0,pos);
+      var val = parms[i].substring(pos+1);
+      qsParm[key] = val;
+      }
+   }
+}
+//assign default values and read parms in
+//e.g. qsParm['url'] = "junk.jpg";
+qs();  // init parm array from cmdline
+
+
+
+function onTileLoad(theImage) {  
+// does this work in all browsers we need to cover?
+// it seems to get around the FireFox bug where initial screen refreshes
+// were happening in wrong order leaving screen dirt.
+if (!theImage) var theImage = window.event;
+//alert('this='+this);
+//alert('theImage='+theImage);
+//var cell = document.getElementById(e.target);
+var cell = this;
+if ((cell.r != -1) && (cell.c != -1)) {
+    cell.style.top  = cell.r*hSub*m;
+    cell.style.left = cell.c*wSub*m;
+    if (cell.c+1==wCnt[l])
+	cell.width = wSubEdge[l]*m;
+    else
+	cell.width = wSub*m;
+//alert('onTileLoad: cell.r,cell.c='+cell.r+','+cell.c+'  m='+m+' wCnt[l]='+wCnt[l]+' cell.width='+cell.width);
+}		
+}
+
+
+function makeLevel(doHTML) { // make table of tiles large enough to cover view area wc,wh 
+
+var html = '';
+var r=0;
+var c=0;
+var cnt=0;
+
+if (doHTML) {  // since this may be expensive for old machines, skip if just a zoom rather than resize
+    html = '';
+    for(r=0; r<ht; r++) {
+	for(c=0; c<wt; c++) {
+	    html += '<IMG ID="myImg_'+cnt+'" src="dot_clear.gif" STYLE="position:absolute;left:0;top:0;">';
+	    cnt++;
+	}
+    }   
+    myImg.innerHTML=html;  // big initialization
+}
+
+myImg.style.width  = wOrig[l]*m;
+myImg.style.height = hOrig[l]*m;
+
+// hash of visible IMGs in use
+vis = new Object;
+// stack of invisible IMGs heap available for use
+invistop=-1;
+invis=new Array();
+// cells are pointers to the IMG objects (we can walk through entire list)
+cells = new Array();
+
+cnt=0;
+for(r=0; r<ht; r++) {
+    for(c=0; c<wt; c++) {
+	var cell = document.getElementById("myImg_"+cnt);
+	var cstr = "dot_clear.gif";
+	//if (c+1==wt)
+	//    cell.width = wSubEdge[l]*m;
+	//else
+	//    cell.width = wSub*m;
+	cell.style.top  = -hc-hSub*m; // move it off screen to hide
+	cell.style.left = -wc-wSub*m;
+	cell.r = -1;  // used to identify current position role
+	cell.c = -1;
+	cells[cells.length] = cell;  // save an array as a list of all IMGs
+	invis[invis.length] = cell;  // list of all invisible IMGs avail for reuse - all cells start out available
+	cell.onload = onTileLoad;
+	cell.path=cstr;    // if the property does not exist it will be created
+	cell.src=cstr; 
+	cnt++;
+    }
+}
+invistop=invis.length-1;  // point to top actual element
+
+// probably skip this as i would have to do all r,c in hCnt,wCnt to be worth using
+//theStatus[somevar] = null;   // just initialize so that it will at least exist on startup.
+
+}
+
+
+function scrollMe() {
+var m = 0;
+var dist = 0;
+var dx = 0;
+var dy = 0;
+var drz = Math.round(dr/z);  // scale up to larger motions in absolute x,y on smaller image
+
+if (typeof(y) != "number") {
+    alert('typeof(y) != "number": type='+typeof(y)+' value='+y);	
+}
+
+if ((x != xx) || (y != yy)) {
+    dist = Math.sqrt((yy-y)*(yy-y)+(xx-x)*(xx-x));
+    if (dist < drz) {
+	x = xx;
+      	y = yy;
+    } else {
+	m = (yy-y)/(xx-x);
+	if (xx==x) {
+	    dx = 0;
+	    dy = drz;
+    	    if (yy<y) dy *= -1;
+	} else {
+    	    dx = Math.sqrt((drz*drz)/(m*m+1));
+    	    if (xx<x) dx *= -1;
+	    dy = m * dx;
+	}
+	x += dx;
+	y += dy;
+    }
+    updatePos();
+}
+}
+
+
+function updatePos() {
+
+var c = Math.floor(x*z/(hSub*m));
+var r = Math.floor(y*z/(wSub*m));
+var rr = 0;
+var cc = 0;
+var cell = null;
+var cstr = "";
+var i = 0;
+var cntinv = 0;
+var cntvis = 0;
+
+wdl = Math.ceil((wc/2-(x*z)%(wSub*m))/(wSub*m)); if(wdl<0)wdl=0;
+hdl = Math.ceil((hc/2-(y*z)%(hSub*m))/(hSub*m)); if(hdl<0)hdl=0;
+
+wdr = Math.ceil((wc/2-wSub+(x*z)%(wSub*m))/(wSub*m)); if(wdr<0)wdr=0;
+hdr = Math.ceil((hc/2-hSub+(y*z)%(hSub*m))/(hSub*m)); if(hdr<0)hdr=0;
+
+// pre-fetch over-border adjustment:
+//wdl++;hdl++;wdr++;hdr++;
+
+//alert('x,y='+x+','+y+'  c,r='+c+' '+r); //debug
+//alert('wc,hc='+wc+','+hc+'  wdl,wdr,hdl,hdr='+wdl+' '+wdr+','+hdl+' '+hdr); //debug
+
+
+// for each cell add to invisible stack (an array) if not visible (and remove from visible hash?)
+// else add to visible hash (as an object "property") (if not already present).
+
+//debug
+//alert("cells.length="+cells.length+"  invistop="+invistop);
+
+for(i=0;i<cells.length;i++) {
+    var cell = cells[i];
+    if ((cell.r != -1) && // just ignore -1 it is already invisible
+    (
+    (cell.r<r-hdl) || 
+    (cell.c<c-wdl) ||
+    (cell.r>r+hdr) || 
+    (cell.c>c+wdr)
+    )
+    ) {  // it was visible, but now becomes invisible
+	invistop++;              // point to new top element position
+	invis[invistop] = cell;  // add to list of invisible IMGs avail for reuse
+	vis[""+cell.r+"_"+cell.c] = null;     // erase id from hash of visible cell.ids
+	cstr = "dot_clear.gif";
+	cell.path=cstr;
+	//cell.src=cstr; // causes IE flashes, don't even need it so skip it
+	cell.r = -1;
+	cell.c = -1;
+	//if (cell.c+1==wCnt[l])
+	//    cell.width = wSubEdge[l]*m;
+	//else
+	//    cell.width = wSub*m;
+	cell.style.top  = -hc-hSub*m; // move it off screen to hide
+	cell.style.left = -wc-wSub*m;
+	cntinv++;  // debug
+    }
+}
+
+//alert("new invistop="+invistop);
+
+// Then, loop again, for each position for wCnt*hCnt,
+// if it is in visible hash, do not update.  Else draw
+// from top of invisible stack and assign new position,.src.
+// Anything remaining on the stack is truly not visible,
+// move it to -wSub,-hSub to hide it.
+
+for(rr=r-hdl;rr-r<=hdr;rr++) {
+    for(cc=c-wdl;cc-c<=wdr;cc++) {
+	if ((rr>=0) && (rr<hCnt[l]) && (cc>=0) && (cc<wCnt[l])) {
+	    cell = vis[""+rr+"_"+cc];
+	    if (!cell) {  
+		//-- if it is not present, recycle from invisible list, add to visible list, set properties
+	        if (invistop < 0) { alert("invis stack underflow - not enough IMGs!"); return; }
+		cell = invis[invistop];
+		invistop--;
+		cell.r = rr;
+		cell.c = cc;
+		vis[""+cell.r+"_"+cell.c] = cell;  // add to visible hash
+		cstr = String(rr*wCnt[l]+cc);
+		while (cstr.length<3) cstr='0'+cstr;
+		cstr = ''+picName+'_'+l+'_'+cstr+picExt;
+
+		//debug
+		//alert("rr,cc="+rr+","+cc+" path="+cstr+"  l="+l+" wCnt[l]="+wCnt[l]);
+		
+		cell.path=cstr;
+		cell.src=cstr;
+		
+		//-- note: onload now does this better, prevents FF screen refresh bugs
+		//cell.style.top  = rr*hSub;
+		//cell.style.left = cc*wSub;
+		//if (cell.c+1==wCnt[l])
+		//    cell.width = wSubEdge[l]*m;
+		//else
+		//    cell.width = wSub*m;
+	    	    
+		cntvis++;
+		
+	    }
+	}
+    }
+}
+
+//alert("new invistop="+invistop);
+
+//-- moving the entire div should be the last thing we do
+myImg.style.left=wc/2 - x*z;
+myImg.style.top =hc/2 - y*z;
+
+//alert("myClip.style.left="+myClip.style.left+",  myClip.style.top="+myClip.style.top);
+//alert("myImg.style.left="+myImg.style.left+",  myImg.style.top="+myImg.style.top);
+
+if ((cntinv > 0) || (cntvis > 0))
+    window.status='cntinv='+cntinv+'  and cntvis='+cntvis;
+
+if ((x != xx) || (y != yy)) setTimeout('scrollMe()',100);
+
+}
+
+
+function getInnerSize(dim) {  
+// note: screen.availWidth works for both IE and Mozilla (but not in a frame?)
+var myWidth = 0, myHeight = 0;
+if( typeof( window.innerWidth ) == 'number' ) {
+  myWidth = window.innerWidth; 
+  myHeight = window.innerHeight;
+} else if( document.documentElement && 
+           (document.documentElement.clientWidth ||document.documentElement.clientHeight ) ) {
+  myWidth = document.documentElement.clientWidth; 
+  myHeight = document.documentElement.clientHeight;
+} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+  myWidth = document.body.clientWidth; 
+  myHeight = document.body.clientHeight;
+}  
+if (dim=="w") return myWidth
+else        return myHeight;
+}
+
+
+function windowResize() {
+window.onresize=null
+wc = getInnerSize("w") - 2*marginLeft;
+hc = getInnerSize("h") - 2*marginTop;
+myClip.style.width  = wc;
+myClip.style.height = hc;
+
+wSmallDelta = Math.round(wc/16);
+hSmallDelta = Math.round(hc/16);
+wBigDelta   = Math.round(wc/4);
+hBigDelta   = Math.round(hc/4);
+
+// minimum number of tiles required to cover view area wc X hc
+wt = Math.ceil(wc/(wSub*m)) + 1;
+ht = Math.ceil(hc/(hSub*m)) + 1;
+
+// increase number of tiles so that we get a sort of pre-fetch buffer going
+//wt+=2;
+//ht+=2;
+ 
+makeLevel(true);
+updatePos();
+
+window.onresize=windowResize;
+}
+
+
+function init() {
+if (!myClip)
+    myClip = document.getElementById("myClip");
+
+picName  = qsParm['url'];
+wOrig[0] = parseInt(qsParm['w']);
+hOrig[0] = parseInt(qsParm['h']);
+
+//debug
+//alert('w,h='+wOrig[0]+','+hOrig[0]+' picName='+picName);
+
+for (l=1;l<numLevels;l++) 
+    {
+    wOrig[l] = wOrig[l-1]/2;
+    hOrig[l] = hOrig[l-1]/2;
+    }
+
+for (l=0;l<numLevels;l++) 
+    {
+    wCnt[l] = Math.ceil(wOrig[l]/wSub);
+    hCnt[l] = Math.ceil(hOrig[l]/hSub);
+    }    
+
+for (l=0;l<numLevels;l++) 
+    {
+    wSubEdge[l] = wOrig[l] % wSub;
+    if (wSubEdge[l] == 0)
+	wSubEdge[l] = wSub;  
+    }
+
+var html = '';
+
+myClip.style.left = marginLeft;
+myClip.style.top  = marginTop;
+
+// one DIV for all levels
+html += '<DIV ID="myImg'+'" STYLE="position:absolute;left:1000;top:0" ></DIV>';
+myClip.innerHTML=html;  
+
+if (!myImg)
+    myImg = document.getElementById("myImg");
+
+l=0;
+z=1;
+wc = getInnerSize("w") - 2*marginLeft;
+while (wOrig[l] > wc && (l+1) < numLevels)
+    {
+    l++;
+    z = z * 0.5;
+    }
+
+x = wOrig[0]/2;
+y = hOrig[0]/2;
+xx = x;
+yy = y;
+
+setMouseCursor();
+
+windowResize();
+
+window.focus();
+
+}
+
+function moveRight(delta) {
+xx = xx + delta/z;
+if (xx > wOrig[0]) xx = wOrig[0];
+updatePos();
+}
+
+function moveLeft(delta) {
+xx = xx - delta/z;
+if (xx < 0) xx = 0;
+updatePos();
+}
+
+function moveUp(delta) {
+yy = yy - delta/z;
+if (yy < 0) yy = 0;
+updatePos();
+}
+
+function moveDown(delta) {
+yy = yy + delta/z;
+if (yy > hOrig[0]) yy = hOrig[0];
+updatePos();
+}
+
+function zoomIn(zoomout) {
+if (zoomout) {
+    if ((l<=0) && (m>=maxmag)) return;  // do not zoom too far out
+    if (l<=0)
+	m*=2;
+    else
+    	l--;
+    z*=2;
+} else {
+    if (l>=numLevels-1) return;  // do not zoom too far in
+    if (m>1)
+	m/=2;
+    else
+    	l++;
+    z/=2;
+}
+makeLevel(false);
+updatePos();
+}
+
+function cancelKey(e) {
+    if (e.preventDefault) {
+	e.preventDefault();
+	return false;
+    }
+    else {
+	e.keyCode = 0;
+	e.returnValue = false;
+    }
+}
+
+function keyPress(e)
+{  // trapping keyPress seems to be necessary only for old Mozilla browsers
+   // because normally suppressing the keyDown event should prevent keyPress from happening at all,
+   // but old Mozilla browsers ignore this canceling.
+var code;
+var result = false;
+if (!e) var e = window.event;
+if (e.keyCode) code = e.keyCode;
+else if (e.which) code = e.which;
+var character = String.fromCharCode(code);
+//alert('code='+code);
+//alert('Character was ' + character);
+
+if (character=='m') {
+    if (zoomMode=="in") 
+	zoomMode="center";
+    else if (zoomMode=="center") 
+	zoomMode="out";
+    else if (zoomMode=="out") 
+	zoomMode="in";
+    setMouseCursor();	    
+}
+
+if ((code == 32) // suppress for mozilla  ; else 
+ || (code == 39) // moveRight(wSmallDelta); else 
+ || (code == 37) // moveLeft (wSmallDelta); else
+ || (code == 38) // moveUp   (hSmallDelta); else
+ || (code == 40) // moveDown (hSmallDelta); else
+ || (code == 35) // moveRight(wBigDelta  ); else // end 
+ || (code == 36) // moveLeft (wBigDelta  ); else // home
+ || (code == 33) // moveUp   (hBigDelta  ); else // pgup
+ || (code == 34) // moveDown (hBigDelta  ); else // pgdn
+ || (code == 43) || ((code == 107) || (code == 187) || ((code == 61))) //  zoomIn(true); else // + 
+ || (code == 45) || ((code == 109) || (code == 189)) //  zoomIn(false); else // - 
+) result = false;
+else result = true;
+if (!result) {
+    cancelKey(e);
+    if (e.preventBubble)
+	e.preventBubble();
+    return false;
+}
+
+//debug
+//if (result) {
+//    alert('code='+code);
+//    alert('Character was ' + character);
+//}
+
+}
+
+function keyDown(e)
+{
+var code;
+var result = false;
+if (!e) var e = window.event;
+if (e.keyCode) code = e.keyCode;
+else if (e.which) code = e.which;
+//var character = String.fromCharCode(code);
+//alert('Character was ' + character);
+//window.status='Character was ' + character;
+window.status='Character was ' + code;
+
+//debug
+//alert('code='+code);
+//cancelKey(e);
+//if (e.preventBubble)
+//    e.preventBubble();
+//return false;
+
+if (code == 32) { /* do nothing - suppress for mozilla */ } else 
+if (code == 39) moveRight(wSmallDelta); else 
+if (code == 37) moveLeft (wSmallDelta); else
+if (code == 38) moveUp   (hSmallDelta); else
+if (code == 40) moveDown (hSmallDelta); else
+if (code == 35) moveRight(wBigDelta  ); else // end 
+if (code == 36) moveLeft (wBigDelta  ); else // home
+if (code == 33) moveUp   (hBigDelta  ); else // pgup
+if (code == 34) moveDown (hBigDelta  ); else // pgdn
+if ((code == 43) || (code == 107) || (code == 187) || ((code == 61)))  zoomIn(true); else // + 
+if ((code == 45) || (code == 109) || (code == 189))  zoomIn(false); else // - 
+result = true;
+window.status=window.status+' result='+result;  // debug
+if (!result) {
+    window.status=window.status+' canceling event'; //debug
+    cancelKey(e);
+    return false;
+}
+return result;
+}
+
+function checkMouseRange() {
+if (mousex < 0) mousex = -1;
+if (mousey < 0) mousey = -1;
+if (mousex >= wOrig[0]) mousex = -1;
+if (mousey >= hOrig[0]) mousey = -1;
+if ((mousex == -1) || (mousey == -1)) {
+    mousex = -1;
+    mousey = -1;
+}
+}    
+
+function falseFunc(e) { return false; } 
+
+function mouseMove(e) {
+document.onmousemove = falseFunc;  // disable move event
+var posx = 0;
+var posy = 0;
+if (!e) var e = window.event;
+if (mouseAction)
+    mouseAction = false; // move cancels the click action
+
+if (e.pageX || e.pageY) {
+    posx = e.pageX;
+    posy = e.pageY;
+}
+else if (e.clientX || e.clientY) {
+    // do not use scroll info because of our special handling
+    posx = e.clientX; // + document.body.scrollLeft; 
+    posy = e.clientY; // + document.body.scrollTop;
+}
+posx = posx - marginLeft;
+posy = posy - marginTop;
+
+if (posx < 0) posx = -1;
+if (posy < 0) posy = -1;
+if (posx >= wc) posx = -1;
+if (posy >= hc) posy = -1;
+
+window.status='posx,posy='+posx+','+posy;
+
+mousex = -1;
+mousey = -1;
+if ((posx >= 0) && (posy >= 0)) {
+    mousex = x+(posx - wc/2)/z;
+    mousey = y+(posy - hc/2)/z;
+    checkMouseRange();
+}    
+
+
+window.status='mousex,mousey='+mousex+','+mousey+'  mouseDrag='+mouseDrag;
+
+if (mouseDrag) {
+    if ((mousex > 0) && (mousey > 0)) {
+        x += mouseDragX-mousex;
+        y += mouseDragY-mousey;
+	xx = x;
+	yy = y;
+        updatePos();
+    } else {
+	mouseUp(e);
+    }
+}
+
+
+document.onmousemove = mouseMove;  // re-enable
+}
+
+function dblClick(e) {
+//debug testing singleclick action
+// dont need double click
+//if (!e) var e = window.event;
+//alert('dblClick() event called!');
+//clickAction();
+return;
+}
+
+function clickAction() {
+
+mouseAction = false;  // reset the flag
+if ((mousex > 0) && (mousey > 0)) {
+    var dx = mousex - x;
+    var dy = mousey - y;
+    x = mousex;
+    y = mousey;
+    xx = x;
+    yy = y;
+    updatePos();
+    // now must set new mouse position since no move event yet
+    // i.e. if user dblClicks in exactly the same spot, mousex and mousey
+    // are still pointing to the old coordinates even though the pictures has shifted.
+    mousex = mousex + dx;
+    mousey = mousey + dy;
+    checkMouseRange();
+    if (zoomMode=="in") 
+	zoomIn(true);
+    else if (zoomMode=="out") 
+	zoomIn(false);
+}
+
+}
+
+function mouseDown(e) {
+if (!e) var e = window.event;
+if ((mousex > 0) && (mousey > 0)) {
+    mouseDrag = true;
+    mouseAction = true;
+    document.body.style.cursor="move";
+    mouseDragX = mousex;
+    mouseDragY = mousey;
+    window.status='mouseDrag='+mouseDrag;
+}
+window.focus();   // in case the windows has lost focus, so we will receive keypresses.
+
+return false;  // suppress browser's own dragging.
+}
+
+
+function mouseUp(e) {
+if (!e) var e = window.event;
+if (mouseAction)
+    clickAction();
+mouseAction = false;
+mouseDrag = false;
+setMouseCursor();
+window.status='mouseDrag='+mouseDrag;
+}
+
+function changeMouse(newcursor) {
+if ((newcursor=="in") || (newcursor=="center") || (newcursor=="out")) {
+    zoomMode = newcursor;
+    setMouseCursor();
+}    
+}
+
+function setMouseCursor() {
+var cursor = "default";
+if (zoomMode=="in") 
+    cursor = "crosshair";
+else if (zoomMode=="center") 
+    cursor = "default";
+else if (zoomMode=="out") 
+    cursor = "pointer";
+document.body.style.cursor=cursor;
+}
+
+function mouseOut(e) {
+if (!e) var e = window.event;
+var tg = (window.event) ? e.srcElement : e.target;
+//window.status='tg.nodeName='+tg.nodeName;
+var reltg = (e.relatedTarget) ? e.relatedTarget : e.toElement;
+if (!reltg) { // apparently FF and IE return null when goes outside window!
+    mouseAction=false;
+    mouseUp(e);
+    return;	
+}    
+//alert('tg.nodeName='+tg.nodeName+'  reltg.nodeName='+reltg.nodeName);
+//window.status='  reltg.nodeName='+reltg.nodeName;
+//while (reltg != tg && reltg.nodeName != 'BODY')
+//	reltg= reltg.parentNode
+//if (reltg== tg) return;
+// Mouseout took place when mouse actually left layer
+// Handle event
+//mouseAction=false;
+//mouseUp(e);
+}
+
+function dragStart(e) {
+if (!e) var e = window.event;
+// suppress!
+if (e.preventDefault) 
+    e.preventDefault();
+if (e.preventBubble)
+    e.preventBubble();
+e.cancelBubble = true;
+e.returnValue = false;
+return false;
+}
+
+
+
+// Additional code for NS
+if (navigator.appName=="Netscape") {
+    //alert('Netscape event handling!');
+    document.addEventListener("keydown", keyDown, true);
+    document.addEventListener("keypress", keyPress, true);
+    document.addEventListener("dblclick", dblClick, true); // need for old Mozilla browsers
+    document.addEventListener("mouseup", mouseUp, true); // need for old Mozilla browsers
+    
+} else {
+    document.onkeydown = keyDown;
+    document.onkeypress = keyPress;
+    document.ondragstart = dragStart;
+    document.ondblclick  = dblClick; 
+    document.onmouseup   = mouseUp;
+}
+
+document.onmousemove = mouseMove;
+document.onmousedown = mouseDown;
+document.onmouseout  = mouseOut;
+
+window.onresize=windowResize
+//window.captureEvent(Event.RESIZE)
+
+</SCRIPT>
+
+<body
+onLoad="showBrowser();init();return true;" STYLE="overflow: hidden ! important" 
+>
+
+<!--
+
+NOTE: in IE if you put any spaces or newlines in the html of a table definition, 
+even between tags, you get gaps between rows in the table 
+which is so annoying!
+
+-->
+
+<DIV
+ID="myClip"
+STYLE="border:thin;position:absolute;left:60;top:60;width:750;height:600;overflow:hidden!important" 
+>
+
+
+</DIV>
+
+</DIV>
+
+
+</body>
+</html>
