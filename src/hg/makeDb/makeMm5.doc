@@ -7424,24 +7424,21 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
   updateExceptionList.pl < exceptionList.txt > updateExceptionList.sql
   hgsql mm5 < updateExceptionList.sql
 
-# HUMAN BLASTP FOR GENE SORTER (RE-DONE 7/25/05 Fan)
+# HUMAN BLASTP FOR GENE SORTER (RE-DONE 7/28/05 Fan)
     # Make human ortholog column using blastp on human known genes.
     # First make human protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    mkdir /cluster/data/hg17/bed/blastp
-    cd /cluster/data/hg17/bed/blastp
 # NOTE: THE SECTION BELOW WAS ALREADY DONE.
+    cd /cluster/data/hg17/bed/blastp
     pepPredToFa hg17 knownGenePep known.faa
     formatdb -i known.faa -t known -n known
-# PLEASE NOTE, hg17B IS USED INSTEAD OF hg17 for /iscratch/i,
-# TO GO AROUND A SUBDIRECTORY ACCESS RIGHT PROBLEM.
 
     ssh kkr1u00
-    if (-e /iscratch/i/hg17B/blastp) then
-      rm -r /iscratch/i/hg17B/blastp
+    if (-e /iscratch/i/hg17/blastp) then
+      rm -r /iscratch/i/hg17/blastp
     endif
-    mkdir -p /iscratch/i/hg17B/blastp
-    cp /cluster/data/hg17/bed/blastp/known.p?? /iscratch/i/hg17B/blastp
+    mkdir -p /iscratch/i/hg17/blastp
+    cp /cluster/data/hg17/bed/blastp/known.p?? /iscratch/i/hg17/blastp
     iSync
 
 # THE SECTION ABOVE WAS ALREADY DONE PREVIOUSLY.
@@ -7454,7 +7451,7 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
     cat > blastSome <<end
 #!/bin/csh
 setenv BLASTMAT /iscratch/i/blast/data
-/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg17B/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg17/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
 end
     chmod a+x blastSome
     # Make gensub2 file
@@ -7469,16 +7466,16 @@ end
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-# Completed: 7739 of 7739 jobs
-# CPU time in finished jobs:     129857s    2164.29m    36.07h    1.50d  0.004 y
-# IO & Wait Time:                 23778s     396.30m     6.60h    0.28d  0.001 y
-# Average job time:                  20s       0.33m     0.01h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             140s       2.33m     0.04h    0.00d
-# Submission to last job:           333s       5.55m     0.09h    0.00d
-
+Completed: 7739 of 7739 jobs
+CPU time in finished jobs:     113019s    1883.65m    31.39h    1.31d  0.004 y
+IO & Wait Time:                 22145s     369.08m     6.15h    0.26d  0.001 y
+Average job time:                  17s       0.29m     0.00h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             124s       2.07m     0.03h    0.00d
+Submission to last job:           495s       8.25m     0.14h    0.01d
     # Load into database.  
     ssh hgwdev
     cd /cluster/data/mm5/bed/blastp/hg17/run/out
     hgLoadBlastTab mm5 hgBlastTab -maxPer=1 *.tab
+
 
