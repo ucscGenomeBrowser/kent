@@ -8,61 +8,50 @@
 
 Procedure:
 
-1. Read in bed list defining regions.  Space between the regions will be
-	the gaps.  Sort to be in order by chr,chromStart
-	boundingRegions
+1. Read in bed list defining bounding regions.  Space between the bounding
+	regions will be the gaps in which items can be placed.
+	Sort to be in order by chr,chromStart.  Construct a master
+	list of gaps defined by these bounding elements to be copied
+	and used repeatedly later for placement trials (fixed or random).
 2. Read in the bed list defining the items to place in the gaps.
-	Sort to be in inverse order by size, largest sized item
-	first.  placedItems
-3.  For loop for everything below to the number of trials specified,
-	a trial count of zero should run through at least the stats
-	and show the beginning set of stats.
-4.  Construct new linked structure to the first bed list, call this
-	the gapList (one of these for each chrom):
-	next
-	prev
-	gapSize
-	bedItem Upstream
-	bedItem Downstream
-	itemType Upstream (either a bounding region, or a placed item)
-	itemType Downstream (either the bounding region, or a placed item)
+	Initially sort to be in order by chr,chromStart so they
+	can easily be placed into the bounding region gaps just to see
+	what the initial placement looks like.  Later, during the trial
+	runs, this list of elements will be sorted inverse order by size
+	so the largest items can be randomly placed first, and the list
+	worked through by size.
+3. Optionally, read in a bed list of items that are to be the measured
+	standard for nearest neighbor stats.  If there isn't one of these
+	supplied, than the original defining bounding regions are the elements
+	to measure nearest neighbor statistics.  This list too creates a
+	master gap list to be copied and used repeatedly during nearest
+	neighbor measurements.
+4. Show initial statistics on amount of gaps available between bounding
+	regions, and the length statistics of the items to be placed.
+	If zero trials are requested, simply place the items in the
+	gaps at their specified positions, and measure their nearest
+	neighbor statistics.
+5.  for() loop for everything below to the number of trials specified,
+6.  Make a copy of the master gap list for placement.
 
-	This should be a simple walk through of the sorted bed list
-	Warn if overlapping regions, call their gap size zero.
-	All these gaps will have both upstream and downstream bedItems.
-	i.e. no placements before first or after last bounding items.
+7.  For each item to be placed, largest ones first
+    a.  construct an array of pointers to gaps that are at least as
+	large as the item to be placed.
+    b.  Randomly select from that array list, one of the gaps in which
+	to place the item.
+    c.  In the gap, select a random start location for the item to
+	be placed with enough room for the item to fit from the selected
+	start location to the length of the item.
+    d.  Repeat this placement procedure for all the items to be placed
 
-Loop repeats back to here
-
-5.  Order the gapList inverse by gapSize, largest gaps first
-
-6.  if (0 == trials) then simply place the placedItems into the gaps
-
-7.  if (trials > 0) Walking down the placedItems list, largest ones first,
-
-	if its size is greater than the first gap on the gapList
-	we are in trouble, there is no gap large enough to fit.
-
-	Go through the gapList counting up the number of gaps N that
-	are larger or equal to the size of the item we need to place.
-
-	That count is used to generate a random number R between 0 and N
-
-	That random number R is the gap in which we need to add this item,
-	walk down the gapList to that gap and insert this placedItem
-
-	To insert, take (gapSize - itemSize) as a number N to generate
-	a random number R 0 to N - this R added to bedItem Downstream
-	chromEnd is the new chromStart for this placedItem
-
-	Continue this procedure step 6 for all placedItems
-
-8.  Compute statistics of the gaps with this placement.
-
-9.  If trials > 0 repeat from step 5
-
-10.  Display stats;  DONE;
-
+8.  Compute nearest neighbor statistics.  If we have been supplied
+	with an optional list to do the measurement to, copy the items
+	from the random placements into a copy of the gap list created
+	from the optional measurement items.
+9.  Display nearesot neighbor statistics.
+10.  Release the memory used by these temporary gap lists for the placements.
+11.  Repeat trial loop back to step 6.
+	
 ***************************************************************************/
 
 static struct optionSpec optionSpecs[] = {
@@ -106,13 +95,22 @@ struct gap
     boolean isDownstreamBound;	/*	FALSE == placed item	*/
     };
 
-static void freeGapList(struct gap **gl)
-/*	release memory for all elements on the gap List gl	*/
+static void freeGapList(struct gap **gl, boolean freeBedEl)
+/*	release memory for all elements on the gap List gl
+ *	If freeBedEl is TRUE, release the bed element memory too
+ *	for *only* those bed elements that are *NOT* bounding elements.
+ *	This is because during the random trials, temporary bed elements
+ *	were created for the insertions, thus they need to be released.
+ *	They only need their memory released, nothing else, for example
+ *	the chrom name was not cloned.
+ */
 {
 struct gap *el, *next;
 for (el = *gl; el != NULL; el = next)
     {
     next = el->next;
+    if ( (el->downstream != NULL) && (! el->isDownstreamBound) )
+	freeMem(el->downstream);
     freeMem(el);
     }
 *gl = NULL;
@@ -126,7 +124,11 @@ struct chrGapList
     struct gap *gList;
     };
 
-static void freeChrList(struct chrGapList **cl)
+static void freeChrList(struct chrGapList **cl, boolean freeBedEl)
+/*	free up all space on the given gap list cl, if freeBedEl is
+ *	TRUE, then also free up the space of the "inserted" bed elements
+ *	that are on the gap list.
+ */
 {
 struct chrGapList *el, *next;
 
@@ -134,7 +136,7 @@ for (el = *cl; el != NULL; el = next)
     {
     next = el->next;
     freeMem(el->chrom);
-    freeGapList(&el->gList);
+    freeGapList(&el->gList, freeBedEl);
     freeMem(el);
     }
 *cl = NULL;
@@ -186,19 +188,28 @@ printf("count  elements   gaps    gaps      gap      gap     gap   gap\n");
 static void statsPrint(struct statistic *statList)
 {
 struct statistic *statEl;
+boolean firstHeader = TRUE;
+
 statsHeader();
 for (statEl = statList; statEl != NULL; statEl = statEl->next)
     {
-    printf("%5d%10d%7d%8d%9d%9d%8d%6d\n",
-	statEl->chromCount, statEl->boundingElementCount, statEl->totalGaps,
-	statEl->sizeZeroGapCount, statEl->maxGap, statEl->minGap,
-	statEl->medianGap, statEl->meanGap);
+    if (firstHeader)
+	{
+	printf("%5d%10d%7d%8d%9d%9d%8d%6d\n",
+	    statEl->chromCount, statEl->boundingElementCount,
+	    statEl->totalGaps, statEl->sizeZeroGapCount, statEl->maxGap,
+	    statEl->minGap, statEl->medianGap, statEl->meanGap);
+	}
     if (statEl->placedItemCount)
 	{
-
-printf("Nearest neighbor statistics:\n");
-printf("    # of Maximum  Median    Mean # within %% within # within\n");
-printf("   items nearest nearest nearest   100 bp    100bp  zero bp\n");
+	if (firstHeader)
+	    {
+	    printf("Nearest neighbor statistics:\n");
+	    printf("    # of Maximum  Median    Mean # within "
+		"%% within # within\n");
+	    printf("   items nearest nearest nearest   100 bp    "
+		"100bp  zero bp\n");
+	    }
 	printf("%8d%8d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
 	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
 	    statEl->meanNearestNeighbor, statEl->placedWithin100bp,
@@ -206,6 +217,7 @@ printf("   items nearest nearest nearest   100 bp    100bp  zero bp\n");
 		(double)statEl->placedItemCount,
 	    statEl->zeroNeighbor);
 	}
+    firstHeader = FALSE;
     }
 }
 
@@ -422,6 +434,7 @@ if (placedItemCount)
        errAbort("something wrong with placed item count "
 		"minus zeroDistance Count");
 
+    freeMem(placedDistances);
     }	/*	if (placedItemCount)	*/
 freeMem(gapSizeArray);
 return (returnStats);
@@ -493,6 +506,10 @@ else
 
 static int gapsOfSize(struct chrGapList *bounding, int size,
 	struct gap *array[], int arraySize)
+/*	from bounding gap list, find gaps greater than specified size,
+ *		and add pointers to those gaps into the array, no more
+ *		than the given arraySize
+ */
 {
 struct chrGapList *cl;
 int gapCount = 0;
@@ -550,10 +567,14 @@ verbose(2,"placed item median: %d\n", sizeArray[i/2]);
 intSort(i,sizeArray);
 verbose(2,"placed item size range: [%d : %d]\n", sizeArray[0], sizeArray[i-1]);
 verbose(2,"placed item median: %d\n", sizeArray[i/2]);
+freeMem(sizeArray);
 }
 
 static void randomInsert(struct bed *bedEl, struct gap *gl)
 /*	insert the bedEl into the gap at a random location	*/
+/*	PLEASE NOTE: these specially inserted items are allocated here,
+ *	they need to be freed when the gap list they are in is freed.
+ */
 {
 struct gap *gapEl;
 struct bed *newBed;
@@ -635,7 +656,7 @@ else
 }
 
 static void randomTrial(struct chrGapList *bounding, struct bed *placed)
-/*	placed has already been sorted by size descending	*/
+/*	placed bed list has already been sorted by size descending	*/
 {
 struct bed *bedEl;
 int placedCount = slCount(placed);
@@ -644,12 +665,6 @@ int i;
 struct gap **sizedGaps = NULL;	/*	an array of pointers	*/
 int maxGapCount = 0;
 
-{
-    struct statistic *statEl = NULL;
-    statEl = gapStats(bounding);
-    printf("statistics on gaps before any placements:\n");
-    statsPrint(statEl);
-}
 /*	We should never have more gaps than the initial set of gaps plus
  *	the placed item count since each placed item only creates one
  *	new gap.  This array will be used repeatedly as lists of gaps of
@@ -675,10 +690,17 @@ for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
     /*	From those N gaps, randomly select one of them	(drand48 = [0.0,1.0)*/
     R = floor(N * drand48());	/*	interval: [0,N) == [0,N-1]	*/
     if ((R >= N) || (R >= maxGapCount))
-	errAbort("ERROR: did not expect random number %d to be >= %d (or %d)\n", R, N, maxGapCount);
+	errAbort("ERROR: did not expect random "
+	    "number %d to be >= %d (or %d)\n", R, N, maxGapCount);
     ++done;
     randomInsert(bedEl,sizedGaps[R]);
     }
+/*	sizedGaps are just a bunch of pointers, the bed element inserts
+ *	actually went into the bounding gap list which is going to be
+ *	freed up, along with the specially added bed elements back in
+ *	the loop that is managing the copying of the bounding list.
+ */
+freeMem(sizedGaps);
 }
 
 static void initialPlacement(struct chrGapList *bounding, struct bed *placed)
@@ -865,16 +887,16 @@ return(cloneGaps);
 static void randomPlacement(char *bounding, char *placed)
 {
 struct bed *boundingElements = bedLoadAll(bounding);
-struct bed *placedItems = bedLoadAll(placed);
+struct bed *placeItems = bedLoadAll(placed);
 int boundingCount = slCount(boundingElements);
-int placedCount = slCount(placedItems);
+int placedCount = slCount(placeItems);
 struct chrGapList *boundingGaps = NULL;
 struct chrGapList *duplicateGapList = NULL;
 struct statistic *statsList = NULL;
 struct statistic *statEl = NULL;
 
 slSort(&boundingElements, bedCmp);	/* order by chrom,chromStart */
-slSort(&placedItems, bedCmp);		/* order by chrom,chromStart */
+slSort(&placeItems, bedCmp);		/* order by chrom,chromStart */
 
 verbose(2, "bounding element count: %d\n", boundingCount);
 verbose(2, "placed item count: %d\n", placedCount);
@@ -891,7 +913,7 @@ if (0 == trials)
     statsPrint(statEl);
     slAddHead(&statsList,statEl);
 
-    initialPlacement(duplicateGapList,placedItems);
+    initialPlacement(duplicateGapList,placeItems);
 
     verbose(2,"stats after initial placement:  =================\n");
     statEl = gapStats(duplicateGapList);
@@ -900,7 +922,7 @@ if (0 == trials)
     statsPrint(statEl);
     slAddHead(&statsList,statEl);
 
-    freeChrList(&duplicateGapList);
+    freeChrList(&duplicateGapList, FALSE);
     slReverse(&statsList);
     }
 else
@@ -909,23 +931,27 @@ else
 
     srand48((long int)seed);	/* for default seed=0, same set of randoms */
 
-    slSort(&placedItems, bedCmpSize);	/* order by size of elements */
-    slReverse(&placedItems);		/* largest ones first	*/
-    measurePlaced(placedItems);		/* show placed item characteristics */
+    slSort(&placeItems, bedCmpSize);	/* order by size of elements */
+    slReverse(&placeItems);		/* largest ones first	*/
+    measurePlaced(placeItems);		/* show placed item characteristics */
     for (trial = 0; trial < trials; ++trial)
 	{
 	duplicateGapList = cloneGapList(boundingGaps);
-	randomTrial(duplicateGapList,placedItems);
+	randomTrial(duplicateGapList,placeItems);
 	statEl = gapStats(duplicateGapList);
 	slAddHead(&statsList,statEl);
-	freeChrList(&duplicateGapList);
+	/*	this gap list has temporary bed elements that were
+	 *	created by the randomTrial(), they need to be freed as
+	 *	the list is released, hence the TRUE signal.
+	 */
+	freeChrList(&duplicateGapList, TRUE);
 	}
     slReverse(&statsList);
     statsPrint(statsList);
     }
 bedFreeList(&boundingElements);
-bedFreeList(&placedItems);
-freeChrList(&boundingGaps);
+bedFreeList(&placeItems);
+freeChrList(&boundingGaps, FALSE);
 }
 
 int main(int argc, char *argv[])
