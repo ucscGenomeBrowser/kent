@@ -5412,26 +5412,13 @@ group encodeTxLevels
 visibility hide
 type bed 4 .
 
-track encodeAffyYaleProbes
-compositeTrack on
-shortLabel Affy/Yale Probes
-longLabel ENCODE Affy and Yale Probe locations
+track encodeAffyEncode25bpProbes
+shortLabel Affy 25bp Probes
+longLabel Affymetrix 25 bp Probe locations
 group encodeTxLevels
 visibility hide
-type bed 3 .
+type bed 4 .
 priority 41
-
-    track encodeAffyEncodeProbes22bpResolution
-    subTrack encodeAffyYaleProbes
-    shortLabel Affy Probes
-    longLabel Affymetrix 22 bp Probes
-    priority 1
-
-    track encodeYaleAffyProbes
-    subTrack encodeAffyYaleProbes
-    shortLabel Yale Probes
-    longLabel Yale 25 bp Probes
-    priority 2
 
 track encodeGencodeGeneFiltered
 shortLabel Gencode Filtered
