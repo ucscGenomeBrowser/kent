@@ -5368,41 +5368,39 @@ altColor 128,0,128
     longLabel Introns Proximal encodeYaleAffyPlacRNATars
     priority 11
 
-track encodeAllIntergenicDistal
-shortLabel All Intergen Dist
-longLabel All Intergenic Distal Transfrags in One Track
+track encodeWorkshopSelections
+compositeTrack on
+shortLabel Distal/Proximal
+longLabel Analysis workshop selections, Intergenic/Intronic, Distal/Proximal
+group encodeTxLevels
 priority 36
-group encodeTxLevels
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 4 .
+type bed 4
 
-track encodeAllIntergenicProximal
-shortLabel All Intergen Prox
-longLabel All Intergenic Proximal Transfrags in One Track
-priority 37
-group encodeTxLevels
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
+    track encodeAllIntergenicDistal
+    subTrack encodeWorkshopSelections
+    shortLabel Intergenic Distal
+    longLabel All Intergenic Distal Transfrags in One Track
+    priority 1
 
-track encodeAllIntronsDistal
-shortLabel All Introns Dist
-longLabel All Introns Distal Transfrags in One Track
-priority 38
-group encodeTxLevels
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
+    track encodeAllIntergenicProximal
+    subTrack encodeWorkshopSelections
+    shortLabel Intergenic Proximal
+    longLabel All Intergenic Proximal Transfrags in One Track
+    priority 2
 
-track encodeAllIntronsProximal
-shortLabel All Introns Prox
-longLabel All Introns Proximal Transfrags in One Track
-priority 39
-group encodeTxLevels
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
+    track encodeAllIntronsDistal
+    subTrack encodeWorkshopSelections
+    shortLabel Introns Distal
+    longLabel All Introns Distal Transfrags in One Track
+    priority 3
+
+    track encodeAllIntronsProximal
+    subTrack encodeWorkshopSelections
+    shortLabel Introns Proximal
+    longLabel All Introns Proximal Transfrags in One Track
+    priority 4
 
 track encodeGenCodeExonsOnly
 shortLabel GenCode Exons
