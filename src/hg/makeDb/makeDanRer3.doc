@@ -1186,6 +1186,111 @@ getSeqs.csh $(path1)
     # ~/kent/src/hg/makeDb/trackDb/zebrafish since it is common to all 
     # danRer assemblies. 
 
+# LIFT FILES FROM SCAFFOLDS TO chrUn AND chrNA (DONE, 2005-07-27, hartera)
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/liftSupertoChrom
+    cd /cluster/data/danRer3/liftSupertoChrom
+    # lift files are already created when scaffoldFaToAgp was run for chrUn.fa
+    # and chrNA.fa. These need to be edited as the last 500 Ns were removed 
+    # from the agp file making the sequence 184125739 bp and not 184126239 bp
+    # for chrUn, for chrNA, it is 253521007 bp instead of 253521507 bp and need 
+    # to change chrUn to chrNA
+    cp /cluster/data/danRer3/Un/tmp/chrUn.lft .
+    cp /cluster/data/danRer3/NA/tmp/chrNA.lft .
+    # edit to remove last lines of each file first
+    # then use perl to change co-ordinates
+    perl -pi.bak -e 's/184126239/184125739/' chrUn.lft
+    perl -pi.bak -e 's/253521507/253521007/' chrNA.lft
+    perl -pi.bak -e 's/chrUn/chrNA/' chrNA.lft
+    cat *.lft >> liftNAandUnScaffoldsToChrom.lft
+    # clean up 
+    rm *.bak
+
+# ENSEMBL GENES (DONE, 2005-07-29, hartera)
+    ssh hgwdev  
+    mkdir -p /cluster/data/danRer3/bed/ensembl
+    cd /cluster/data/danRer3/bed/ensembl
+    # Get the ensembl protein data from
+    # http://www.ensembl.org/Multi/martview
+    # Follow this sequence through the pages: (NOTE: this interface has changed
+    # a little since danRer2)
+    # Page 1) Select the Ensembl dataset (32 here) and the 
+    # Danio_rerio choice (ZFISH5 here). Hit next.
+    # Page 2) Then hit next.
+    # Page 3) Choose the "Structures" Attribute Page from the pulldown menu
+    # at the top. Choose GTF as the output. Choose gzip compression.  
+    # hit export. Save as ensemblGene.gtf.gz
+
+    # the Ensembl gene predictions are mapped to chromosomes except for 
+    # chrNA and chrUn. Use lift files for scaffolds to these chroms.
+    # get chrUn and chrNA Ensembl records 
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/ensembl
+    gunzip ensemblGene.gtf.gz
+    awk '$1 ~ /^Zv5_NA[0-9]+/ || $1 ~ /^Zv5_scaffold[0-9]+/' ensemblGene.gtf \
+                    > ensemblGenechrUns.gtf
+    # get records for all other chroms
+    awk '$1 ~ /^[0-9]+/' ensemblGene.gtf > ensemblGenechroms.gtf
+    wc -l *.gtf
+    # 513421 ensemblGenechroms.gtf
+    # 125319 ensemblGenechrUns.gtf
+    # 638740 ensemblGene.gtf
+    # total lines of files made equal to original file so ok
+    liftUp -type=.gtf ensemblGenechrUns.lifted \
+     /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft \ 
+     warn ensemblGenechrUns.gtf
+     # Got 29880 lifts in 
+     # /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft
+     sed -e "s/^/chr/" ensemblGenechroms.gtf > ensGene.gtf
+     cat ensemblGenechrUns.lifted >> ensGene.gtf
+     # check file sizes -ok and some of the lifted co-ordinates
+     # there were some erroneous lines with "1;" or "2;" - 8 lines total
+     # Notified Ensembl and they fixed it so downloaded file again 
+     # and reloaded into database
+     # Also remove the suffix that denotes the transcript version number. 
+     # This is not in the ensGtp or ensPep tables.
+     perl -pi.bak -e 's/\.[0-9]+//'g ensGene.gtf
+ 
+     # load into database
+     ssh hgwdev
+     cd /cluster/data/danRer3/bed/ensembl
+     hgsql -e 'drop table ensGene;' danRer3
+     /cluster/bin/i386/ldHgGene danRer3 ensGene ensGene.gtf
+     # Read 32143 transcripts in 638732 lines in 1 files
+     # 32143 groups 27 seqs 1 sources 4 feature types
+     # 32143 gene predictions
+
+     # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and
+     # hgKnownToSuper.  Use ensMart to create it as above, except:
+     # Page 3) Choose the "Features" box. In "Ensembl Attributes", check
+     # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.
+     # Choose Text, tab-separated as the output format and gzip compression.  
+     # Result name: ensGtp.
+     gunzip ensGtp.tsv.gz
+     # edit to remove first header line
+     hgsql danRer3 < ~/kent/src/hg/lib/ensGtp.sql
+     # remove header line from ensGtp.txt
+     echo "load data local infile 'ensGtp.tsv' into table ensGtp" \
+         | hgsql -N danRer3
+
+         # Get the ensembl peptide sequences from
+    # http://www.ensembl.org/Multi/martview
+    # Choose Danio Rerio as the organism
+    # Follow this sequence through the pages:
+    # Page 1) Choose the Ensembl Genes choice. Hit next.
+    # Page 2) Then hit next.
+    # Page 3) Choose "Sequences" from the Attributes pulldown menu at the top.
+    # Page 4) Choose Peptide as type of sequence to export and select 
+    # Ensembl Gene ID from Gene Attributes and 
+    # Ensembl Transcript ID and Ensembl Peptide Stable ID from 
+    # Transcript Attributes as the output,
+    # choose text/fasta and gzip compression,
+    # name the file ensemblPep.fa.gz and then hit export.
+    gunzip ensemblPep.fa.gz
+    hgPepPred danRer3 ensembl ensemblPep.fa
+    # added code to hgc.c so that the link to the Ensembl Protein
+    # is also displayed on the description page.
+
 # AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (in progress, 2005-07-21, hartera)
     ssh eieio
     cd /cluster/data/genbank
@@ -1234,7 +1339,7 @@ FOR MGC GENES:
  - wait one day for nightly build to align and load them into the db
    - rebuild trackDb
 
-# BACENDS FILES (in progress, 2005-06-16, hartera)
+# BACENDS TRACK (in progress, 2005-06-16, hartera)
     ssh kkstore01
     # BAC ends sequence files provided by Mario Caccamo at Sanger
     # mc2@sanger.ac.uk
@@ -1297,13 +1402,71 @@ cat << '_EOF_' > template
      ssh kkstore02
      cd /cluster/data/danRer3/bed/bacends
      nice pslSort dirs raw.psl temp psl
+     # PID 28757
      # use pslReps parameters used for mm6
      pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl \
              bacEnds.psl /dev/null
+     # those for hg17
      pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
                 raw.psl  bacEnds2.psl /dev/null
      # see how many align in each case
-    
+     awk '{print $10;}' bacEnds.psl | sort | uniq -c \
+         | sort -nr > bacEnds.qNames.sort
+     awk '{print $10;}' bacEnds2.psl | sort | uniq -c \
+         | sort -nr > bacEnds2.qNames.sort
+     wc -l bacEnds*qNames.sort
+     # 549086 bacEnds2.qNames.sort
+     # 519773 bacEnds.qNames.sort
+     grep '>' Zv5Bacends.fa | wc -l
+     # 729101
+     # so 71% of sequences aligned in bacEnds.psl
+     # and 75% of sequences aligned in bacEnds2.psl
+     # use textHistogram to look at number of alignments
+     # bacEnds.psl has 374002 with only 1 alignment
+     # bacEnds2.psl has 362364 with only 1 alignment
+     # bacEnds.psl - most alignments for 1 sequence is 515, 
+     # for bacEnds2.psl - most alignments for 1 sequence is 1272
+     # when these are split up into bacEndPairs, bacEndPairsBad and 
+     # bacEndSingles, the number of alignments per sequence is reduced
+     # so use bacEnds2.psl
+     mv bacEnds2.psl bacEnds.psl
+     liftUp bacEnds.lifted.psl /cluster/data/danRer3/jkStuff/liftAll.lft \
+           warn bacEnds.psl
+     wc -l bacEnds.lifted.psl
+     # 6150918 bacEnds.lifted.psl
+     # clean up
+     rm -r temp
+     rm *.sort *.hist
+     # run pslCheck
+     pslCheck bacEnds.lifted.psl >& pslCheck.log
+     # distribution of errors by chromosomes:
+     # 1 chr15
+     # 1 chr17
+     # 2 chr18
+     # 1 chr19
+     # 8 chr20
+     # 1 chr5
+     # 1 chr8
+     # 1 chrNA
+     # 621 chrUn
+     # total = 637
+     # 637/549086 => 0.12%
+     
+     # Process BAC end alignments
+     ssh kkstore02
+     mkdir -p /cluster/data/danRer3/bed/bacends/pairs
+     mkdir -p /cluster/data/danRer3/bed/bacends/bacends.1
+     cd /cluster/data/danRer3/bed/bacends/pairs
+     set bacDir = /cluster/data/danRer3/bed/bacends/bacends.1
+     # try different parameters
+      ~/bin/i386/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=2000 \
+     -max=650000 -slopval=10000 -hardMax=800000 -slop -short -long -orphan \
+     -mismatch -verbose ../bacEnds.lifted.psl $bacDir/bacEndPairs.txt \
+     all_bacends bacEnds
+
+     
+
+     
 # VEGA
     # get transcripts in transcripts_coords from e-mail from Mario Caccamo
     # at Sanger 06/16/05.
