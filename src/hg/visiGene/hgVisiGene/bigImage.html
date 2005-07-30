@@ -3,107 +3,6 @@
 
 <title>visiGene bigImage</title>
 
- 
-<!-- 
-
-test22: adding over-size zoom to allow you to see expansion
-greater than actual size - will require several changes.
-Although we already have the z variable, I think when the
-level l is already 0 instead of going -1 and so on, instead
-will multiply new variable "m" for magnification.  "m" will
-now have to appear all over the code for the scaling.
-In addition we will have to change from letting the IMG
-do the size naturally to assigning the size.  I believe that
-in many cases simply setting the width is enought to scale
-the entire image (except for right edge tiles which will 
-just need a special value for the width).  I think I shall
-simply try to start at the start init() func and follow 
-the code through adding "m" where it belongs.
-
-test21:
-
-NOTE: added cmdline parm for setting the url,w,h pic size - see qsParm array and qs() func.
-
-NOTE: made progress overall e.g. old Mozilla, Firefox update bugs, but now 
-there is a flash in IE when user is moving with keyboard.  
-But test19 does not have this flash.  Therefore I can probably find and fix it
-by comparing 20 to 19. (fixed)
-
- 
- This is just test19 plus trying to make an over-border that will act as 
- a kind of cache and hopefully make the scrolling a little smoother.
-
-
-test19:
-This is another attempt to fix the slowness/jerkiness of test17.
-
-This is trying to fix the slowness/jerkiness of test17 which uses .
-Test18 was still kind of flashy.  It used the replace-all-innerHTML method
-to try to synchronize, but still get a flash that clears the screen
-as the innerHTML changes, plus unloaded pix show up with icky no-pic icon,
-and I think it also hits the cache/server more than other methods.
-
-So, in test19, I will try a compromize - for low ram computers, keep only enough
-IMGs to cover the view area clipped by the myClip div. But on the other hand,
-keep the entire myImg DIV for quickly moving all IMGs at once (common base).
-Don't update the DIV except when necessary.
-
-Theory: keep div and absolute pic coords there so can
-move the entire div at once (even though google can't really do this?),
-and move img's not in view to -wSub,-hSub to hide.
-This way when we scroll a ways, we don't have to re-assign
-all the img.src's which seems slow.  Now only the parts of the
-view that are new will get img.src changing.
-Will use position:absolute on the pix.
-There will be a .visible property that is used to track them.
-A simple linear cells array will provide quick access to them.
-Only on resize will the array be rebuilt.
-Need a quick way to check if the cell is still visible in clipview.
-When it is not, it goes to the "invisible" pile for re-use
-(really this is just marked with -1,-1 for .r.c)
-For each visible position, the system searches all cells to see
-if this cell is already visible.  If not, it will draw from the
-"invisible" pile, set it's position,.src,.visible,.r.c etc.
-I think that searching the list might not be too painful,
-although this will be order n*n.  Typically n will be 15 or 20.
-If the search speed is a worry we can always use a "visible" hash
-or whatever.
-                                                                                                                             
-for each cell add to invisible stack (an array) if not visible (and remove from visible hash?),
-else add to visible hash (as an object "property") (if not already present).
-
-Then, loop again, for each position for wCnt*hCnt,
-if it is in visible hash, do not update.  Else draw
-from top of invisible stack and assign new position,.src.
-Anything remaining on the stack is truly not visible,
-move it to -wSub,-hSub to hide it.
-                                                                                                                             
-Finally, shift the entire DIV to its new position.
-                                                                                                                             
-// example of using property-names of object as a hash.
-var theStatus = new Object;
-theStatus['Home'] = somevalue;
-theStatus[somevar] = somevalue;  // somevar = ""+r+"_"+c;
-// note: if the hash is expensive to create (probably not)
-//  then I could try to keep it around and then only
-//  add or subtract from it as necessary?
-
-// example of using array as stack
-// building the stack
-stack = new Array();  // can this take an array-size initializer for a little more speed?
-  // OR just keep the stack around. No harm there?
-stacktop=-1;
-// adding to stack
-stacktop+=1;
-stack[stacktop] = newval;
-// drawing from the stacktop
-if (stacktop<0) {alert('stack underflow - need more img tags error'); return;}
-return stack[stacktop];
-stacktop-=1;
-                                                                                                                             
--->
-
-
 <style>
 
 table  { border-collapse: collapse; border-spacing: 0; }
@@ -793,9 +692,8 @@ function dblClick(e) {
 return;
 }
 
-function clickAction() {
-
-mouseAction = false;  // reset the flag
+function clickAction(reverse) {
+var mode = zoomMode;
 if ((mousex > 0) && (mousey > 0)) {
     var dx = mousex - x;
     var dy = mousey - y;
@@ -810,9 +708,20 @@ if ((mousex > 0) && (mousey > 0)) {
     mousex = mousex + dx;
     mousey = mousey + dy;
     checkMouseRange();
-    if (zoomMode=="in") 
+    mode = zoomMode;
+    if (reverse) {
+	if (mode=="in") 
+	    mode="out"; 
+	else if (mode=="out") 
+	    mode="in"; 
+    }
+
+    //debug
+    //alert('reverse=='+reverse+' zoomMode=='+zoomMode+'  mode=='+mode);
+	
+    if (mode=="in") 
 	zoomIn(true);
-    else if (zoomMode=="out") 
+    else if (mode=="out") 
 	zoomIn(false);
 }
 
@@ -829,19 +738,29 @@ if ((mousex > 0) && (mousey > 0)) {
     window.status='mouseDrag='+mouseDrag;
 }
 window.focus();   // in case the windows has lost focus, so we will receive keypresses.
-
-return false;  // suppress browser's own dragging.
+return false;
 }
 
 
 function mouseUp(e) {
+var clickType=1;
 if (!e) var e = window.event;
-if (mouseAction)
-    clickAction();
+if (mouseAction) {
+    if (e.which)
+	clickType = e.which;
+    if (e.button)
+	clickType = e.button;
+
+	//debug
+	//alert('clickType='+clickType);
+	
+    clickAction(clickType>1);
+}    
 mouseAction = false;
 mouseDrag = false;
 setMouseCursor();
 window.status='mouseDrag='+mouseDrag;
+return false;
 }
 
 function changeMouse(newcursor) {
@@ -895,15 +814,21 @@ e.returnValue = false;
 return false;
 }
 
+function contextMenu(e) {
+dragStart(e);
+return false;
+}
 
 
 // Additional code for NS
 if (navigator.appName=="Netscape") {
+    // need for old Mozilla browsers
     //alert('Netscape event handling!');
     document.addEventListener("keydown", keyDown, true);
     document.addEventListener("keypress", keyPress, true);
-    document.addEventListener("dblclick", dblClick, true); // need for old Mozilla browsers
-    document.addEventListener("mouseup", mouseUp, true); // need for old Mozilla browsers
+    document.addEventListener("dblclick", dblClick, true); 
+    document.addEventListener("mouseup", mouseUp, true); 
+    document.addEventListener("mousedown", mouseDown, true);
     
 } else {
     document.onkeydown = keyDown;
@@ -911,11 +836,12 @@ if (navigator.appName=="Netscape") {
     document.ondragstart = dragStart;
     document.ondblclick  = dblClick; 
     document.onmouseup   = mouseUp;
+    document.onmousedown = mouseDown;
 }
 
 document.onmousemove = mouseMove;
-document.onmousedown = mouseDown;
 document.onmouseout  = mouseOut;
+document.oncontextmenu = contextMenu;
 
 window.onresize=windowResize
 //window.captureEvent(Event.RESIZE)

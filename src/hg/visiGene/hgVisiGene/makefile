@@ -15,5 +15,5 @@ compile: $O
 	mv ${AOUT} $A${EXE}
 
 html: bigImage.html
-    cp bigImage.html /usr/local/apache/htdocs/visiGene/
+	cp bigImage.html /usr/local/apache/htdocs/visiGene/
 
