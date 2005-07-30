@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.918 2005/07/30 02:36:13 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.919 2005/07/30 19:19:28 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3313,7 +3313,9 @@ for (i=0; i<psl->blockCount; ++i)
 	{
 	int codonStart = ts + 3*j;
 	DNA *codon = &tSeq->dna[codonStart];
-	*str++ = lookupCodon(codon);
+	if ((*str = lookupCodon(codon)) == 0)
+	    *str = 'X';
+	str++;
 	}
     }
 
