@@ -820,6 +820,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.refSeqKg.kgId minCheck=0.50
     $kgDb.rankProp.query
     $kgDb.rankProp.target
+    $kgDb.pPsiBlast.kgId1
+    $kgDb.pPsiBlast.kgId2
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
