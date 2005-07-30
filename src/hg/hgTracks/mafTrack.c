@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.51 2005/06/23 18:08:59 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.52 2005/07/30 21:21:17 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -592,7 +592,7 @@ for (full = mafList; full != NULL; full = full->next)
         x1 = round((double)((int)mcMaster->start-seqStart-1)*scale) + xOff;
         x2 = round((double)((int)mcMaster->start-seqStart + mcMaster->size)*scale) + xOff;
 	w = x2-x1+1;
-        if ((mc->size == 0) && (mc->srcSize == 0))
+        if (mc->size == 0)
             {
             /* suppress chain/alignment overlap */
             if (x1 <= lastAlignX2)
@@ -607,24 +607,24 @@ for (full = mafList; full != NULL; full = full->next)
                 continue;
             lastChainX2 = x2+1;
             /* no alignment here -- just a gap/break annotation */
-            if (mc->leftStatus == MAF_INSERT_STATUS &&
-                mc->rightStatus == MAF_INSERT_STATUS)
-                    /* double gap -> display double line ala chain tracks */
-                    drawMafChain(vg, x1, yOff, w, height, TRUE);
-            if (mc->leftStatus == MAF_CONTIG_STATUS &&
-                mc->rightStatus == MAF_CONTIG_STATUS)
-                    /* single gap -> display single line ala chain tracks */
-                    drawMafChain(vg, x1, yOff, w, height, FALSE);
+            if ((mc->leftStatus == MAF_INSERT_STATUS || mc->leftStatus == MAF_CONTIG_STATUS || mc->leftStatus == MAF_NEW_NESTED_STATUS)  &&
+                (mc->rightStatus == MAF_INSERT_STATUS || mc->rightStatus == MAF_CONTIG_STATUS || mc->rightStatus == MAF_NEW_NESTED_STATUS))
+		{
+		if (mc->leftLen != 0)
+		    /* double gap -> display double line ala chain tracks */
+		    drawMafChain(vg, x1, yOff, w, height, TRUE);
+		else
+		    /* single gap -> display single line ala chain tracks */
+		    drawMafChain(vg, x1, yOff, w, height, FALSE);
+		}
             }
         else
             {
             lastAlignX2 = x2;
             AllocArray(pixelScores, w);
             mafFillInPixelScores(maf, mcMaster, pixelScores, w);
-            if (vis != tvFull && ((mc->leftStatus == MAF_NEW_NESTED_STATUS) || 
-		(mc->leftStatus == MAF_NEW_STATUS)) &&
-                winEnd - winStart <= MAF_DETAIL_VIEW)
-                    vgBox(vg, x1-3, yOff, 2, height-1, getBlueColor());
+            if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS)
+		vgBox(vg, x1-3, yOff, 2, height-1, getBlueColor());
             for (i=0; i<w; ++i)
                 {
                 if (vis == tvFull)
@@ -640,15 +640,23 @@ for (full = mafList; full != NULL; full = full->next)
                     if (shade > maxShade)
                         shade = maxShade;
                     c = shadesOfGray[shade];
-                    vgBox(vg, i+x1, yOff, 
-                        1, height-1, c);
+                    vgBox(vg, i+x1, yOff+2, 1, height-5, c);
                     }
                 }
-            if (vis != tvFull &&((mc->rightStatus == MAF_NEW_NESTED_STATUS) || 
-		(mc->rightStatus == MAF_NEW_STATUS)) &&
-                winEnd - winStart <= MAF_DETAIL_VIEW)
-                    vgBox(vg, i+x1+1, yOff, 2,
-                            height-1, getBlueColor());
+            if (vis != tvFull && mc->leftStatus == MAF_NEW_NESTED_STATUS)
+		{
+		vgBox(vg, x1-1, yOff, 2, 1, getOrangeColor());
+		vgBox(vg, x1-1, yOff, 1, height-1, getOrangeColor());
+		vgBox(vg, x1-1, yOff + height-2, 2, 1, getOrangeColor());
+		}
+            if (vis != tvFull && mc->rightStatus == MAF_NEW_NESTED_STATUS)
+		{
+		vgBox(vg, i+x1-1, yOff, 2, 1, getOrangeColor());
+		vgBox(vg, i+x1, yOff, 1, height-1, getOrangeColor());
+		vgBox(vg, i+x1-1, yOff + height-2, 2, 1, getOrangeColor());
+		}
+            if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS) 
+		vgBox(vg, i+x1+1, yOff, 2, height-1, getBlueColor());
             freez(&pixelScores);
             }
 	}
