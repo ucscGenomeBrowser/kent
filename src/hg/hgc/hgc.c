@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.917 2005/07/14 17:36:11 kschneid Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.918 2005/07/30 02:36:13 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -6314,8 +6314,8 @@ if (url != NULL && url[0] != 0)
     char *genomeStr = "";
     char *genomeStrEnsembl = "";
     struct sqlConnection *conn = hAllocConn();
-    char cond_str[256];
-    char *proteinID;
+    char cond_str[256], cond_str2[256];
+    char *proteinID = NULL;
     char *ans;
     char *ensPep;
     char *chp;
@@ -6377,7 +6377,6 @@ if (url != NULL && url[0] != 0)
   	    	    }
 		}
 	    }
-
 	if (proteinID != NULL)
 	    { 
             printf("<B>Ensembl Protein: </B>");
@@ -6426,6 +6425,17 @@ if (url != NULL && url[0] != 0)
 		}
             }
     	}
+    if (hTableExists("ensGtp") && (proteinID == NULL))
+        {
+    	sprintf(cond_str2, "transcript='%s'", shortItemName);  
+        proteinID=sqlGetField(conn, database, "ensGtp","protein",cond_str2);
+	if (proteinID != NULL)
+	    { 
+            printf("<B>Ensembl Protein: </B>");
+            printf("<A HREF=\"http://www.ensembl.org/%s/protview?peptide=%s\" target=_blank>", genomeStrEnsembl,proteinID);
+            printf("%s</A><BR>\n", proteinID);
+	    }
+        }
     free(shortItemName);
     }
 }
