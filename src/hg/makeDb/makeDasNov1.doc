@@ -221,21 +221,23 @@ Filesystem            Size  Used Avail Use% Mounted on
     wc -l /cluster/data/dasNov1/chrom.sizes
 # 304391 /cluster/data/dasNov1/chrom.sizes
 
-# CREATING GRP TABLE FOR TRACK GROUPING (DONE 11/3/04 angie)
+# CREATING GRP TABLE FOR TRACK GROUPING 
     # Copy all the data from the table "grp" 
     # in an existing database to the new database
     ssh hgwdev
     hgsql dasNov1 -e 'create table grp (PRIMARY KEY(NAME)) select * from hg17.grp'
 
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 11/4/04 angie)
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE 
     # Warning: genome and organism fields must correspond
     # with defaultDb values
+    echo 'INSERT INTO genomeClade (genome,clade,priority) values ("Armadillo", "vertebrate",56);' \
+      | hgsql -h genome-testdb hgcentraltest
     echo 'INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName, \
 	 htmlPath, hgNearOk, hgPbOk, sourceName) values  ("dasNov1", "May. 2005", "/gbdb/dasNov1", "Armadillo", \
 	 "", 1, 57,  "Armadillo", "Dasypus novemcinctus", "/gbdb/dasNov1/html/description.html",  0, 0, "Broad May 2005");'\
       | hgsql -h genome-testdb hgcentraltest
-    echo 'INSERT INTO defaultDb (genome, name) values ("Rabbit", "dasNov1");' \
+    echo 'INSERT INTO defaultDb (genome, name) values ("Armadillo", "dasNov1");' \
       | hgsql -h genome-testdb hgcentraltest
 
     # Make trackDb table so browser knows what tracks to expect:
@@ -537,10 +539,10 @@ dasNov1.perChromTables = no
     hgGcPercent dasNov1 /cluster/data/dasNov1
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 12/?/04 heather)
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 7-20-05 braney)
     ssh hgwdev
-    echo 'insert into blatServers values("dasNov1", "blat14", "17780", 1, 0); \
-          insert into blatServers values("dasNov1", "blat14", "17781", 0, 1);' \
+    echo 'insert into blatServers values("dasNov1", "blat2", "17780", 1, 0); \
+          insert into blatServers values("dasNov1", "blat2", "17781", 0, 1);' \
       | hgsql -h genome-testdb hgcentraltest
 
 
