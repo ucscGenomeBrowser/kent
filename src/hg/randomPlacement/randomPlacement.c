@@ -57,11 +57,13 @@ Procedure:
 static struct optionSpec optionSpecs[] = {
     {"trials", OPTION_INT},
     {"seed", OPTION_INT},
+    {"neighbor", OPTION_STRING},
     {NULL, 0}
 };
 
 int trials = 0;
 int seed = 0;
+char *neighbor = NULL;
 
 static void usage()
 /* Explain usage and exit. */
@@ -70,18 +72,29 @@ verbose(1,
   "randomPlacement - run placement trials on a set of elements\n"
   "usage:\n"
   "   randomPlacement [options] <boundingRegions.bed> <placedItems.bed>\n"
+  "       where the gaps between the boundingRegions items are the gaps in\n"
+  "       which the placedItems are to be randomly placed for nearest\n"
+  "       neighbor measurement to the boundingRegion items.  The usual case\n"
+  "       has the placedItems as actual, already situated, items in the gaps\n"
+  "       between the boundingRegions items.  Thus, the random placement\n"
+  "       performed here is the equivalent of picking up all the placedItems\n"
+  "       to clear the gaps completely, then dropping them back into the gaps\n"
+  "       to see if their random placement is significantly different than\n"
+  "       their already existing placement.\n"
   "options:\n"
   "   -trials=N - run N trials for final statistics (N=0 default)\n"
   "             - for N=0, the initial placement stats are displayed\n"
   "   -seed=S - seed value for drand48() - default is zero\n"
   "           - which produces the same set of random numbers each time.\n"
-  "Methods:\n"
-  "    The boundingRegions.bed defines elements between which are gaps.\n"
-  "    The placedItems.bed defines a set of items to be placed in those gaps.\n"
-  "    The usual case has the placedItems items already in the existing gaps,\n"
-  "        thus their current placement statistic (nearest bounding neighbor\n"
-  "        distance) can be measured with a -trials=0 (the default)\n"
+  "   -neighbor=<bed file> - measure nearest neighbor statistics to these\n"
+  "           - bed items instead of the boundingRegions items.  For\n"
+  "           - this case, the boundingRegions gaps should be a subset of\n"
+  "           - these neighbor gaps because otherwise items would be placed\n"
+  "           - in locations on top of these neighbor items.  Placed items\n"
+  "           - that do overlap the neighbor or boundingRegions are discarded\n"
+  "           - for the nearest neighbor measurements.\n"
 );
+exit(255);
 }
 
 struct gap
@@ -181,8 +194,8 @@ struct statistic
 
 static void statsHeader()
 {
-printf("chrom  Bounding  Total  Size 0  Maximum  Minimum  Median  Mean\n");
-printf("count  elements   gaps    gaps      gap      gap     gap   gap\n");
+printf("chrom  Bounding  Total  Size 0   Maximum  Minimum  Median  Mean\n");
+printf("count  elements   gaps    gaps       gap      gap     gap   gap\n");
 }
 
 static void statsPrint(struct statistic *statList)
@@ -195,7 +208,7 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
     {
     if (firstHeader)
 	{
-	printf("%5d%10d%7d%8d%9d%9d%8d%6d\n",
+	printf("%5d%10d%7d%8d%10d%9d%8d%6d\n",
 	    statEl->chromCount, statEl->boundingElementCount,
 	    statEl->totalGaps, statEl->sizeZeroGapCount, statEl->maxGap,
 	    statEl->minGap, statEl->medianGap, statEl->meanGap);
@@ -205,12 +218,12 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
 	if (firstHeader)
 	    {
 	    printf("Nearest neighbor statistics:\n");
-	    printf("    # of Maximum  Median    Mean # within "
+	    printf("    # of   Maximum  Median    Mean # within "
 		"%% within # within\n");
-	    printf("   items nearest nearest nearest   100 bp    "
+	    printf("   items   nearest nearest nearest   100 bp    "
 		"100bp  zero bp\n");
 	    }
-	printf("%8d%8d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
+	printf("%8d%10d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
 	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
 	    statEl->meanNearestNeighbor, statEl->placedWithin100bp,
 	    100.0 * (double)statEl->placedWithin100bp /
@@ -275,7 +288,8 @@ for (cl=cList; cl != NULL; cl = cl->next)
     gapCountNonZeroSize += gapCount;
     gapCountZeroSize += zeroSized;
     ++chrCount;
-verbose(4,"%s: %d gaps, %d of size zero\n", cl->chrom, gapCount, zeroSized);
+verbose(4,"%s: %d gaps + %d of size zero = %d\n", cl->chrom, gapCount,
+	zeroSized, gapCount+zeroSized);
     }
 verbose(3,"counted %d chroms and %d gaps ( + %d size zero = %d total gaps)"
     "\n\ton the bounding list\n", chrCount, gapCountNonZeroSize,
@@ -398,7 +412,7 @@ if (placedItemCount)
     returnStats->meanNearestNeighbor = 0.5 + (double)sumDistances / placedCount;
 
     if (boundingElements != boundingElementCount)
-	errAbort("ERROR: did not find the same number of bounding elements ? %d =! %d", boundingElementCount, returnStats->boundingElementCount);
+	errAbort("ERROR: did not find the same number of bounding elements ? %d ? %d =! %d", boundingElements, boundingElementCount, returnStats->boundingElementCount);
 
 
     intSort(placedCount,placedDistances);
@@ -440,13 +454,57 @@ freeMem(gapSizeArray);
 return (returnStats);
 }
 
+static void gapInsert(struct bed *bedEl, struct gap *gl)
+/*	insert the bedEl into the gap list item gl	*/
+{
+struct gap *newGap;
+int gapSize = 0;
+
+if (NULL == gl->downstream)
+    errAbort("ERROR: trying to add element after last bounding element\n");
+
+/*	this new bedEl goes in the gap, the existing gap remains
+ *	as the upstream gap, this new gap becomes downstream of this new
+ *	bedEl and upstream of the downstream gap of the existing gap
+ */
+AllocVar(newGap);		/*	a new gap	*/
+newGap->next = gl->next;	/*	could be NULL when last gap	*/
+newGap->prev = gl;		/*	is NEVER NULL	*/
+newGap->upstream = bedEl;	/*	this element is the new gap's upstream */
+newGap->isUpstreamBound = FALSE;	/*	not a bounding element	*/
+newGap->downstream = gl->downstream;	/*	can NEVER be NULL	*/
+newGap->isDownstreamBound = gl->isDownstreamBound;
+if (gl->next)		/*	could be NULL when last gap	*/
+    gl->next->prev = newGap;
+gl->downstream = bedEl;
+gl->isDownstreamBound = FALSE;	/*	not a bounding element	*/
+gl->next = newGap;
+
+/*	new gap size, (downstream start) - (upstream end)	*/
+gapSize = newGap->downstream->chromStart - bedEl->chromEnd;
+if (gapSize >= 0)
+    newGap->gapSize = gapSize;
+else
+    {
+    warn("WARNING: new element insert overlaps following element\n");
+    newGap->gapSize = 0;
+    }
+/*	resize existing gap, (downstream start) - (upstream end) */
+gapSize = bedEl->chromStart - gl->upstream->chromEnd;
+if (gapSize >= 0)
+    newGap->prev->gapSize = gapSize;
+else
+    {
+    warn("WARNING: new element insert overlaps previous element\n");
+    newGap->prev->gapSize = 0;
+    }
+}
+
 static void placeItem(struct bed *bedEl, struct gap *gl)
 /*	create two gaps where one now exists, the bedEl splits
  *	the existing gap (== gl) which becomes the new downstream gap.
  */
 {
-struct gap *el;
-int gapSize = 0;
 int itemSize = bedEl->chromEnd - bedEl->chromStart;
 
 if (itemSize < 0)
@@ -462,46 +520,7 @@ if (itemSize > gl->gapSize)
     errAbort("ERROR: trying to insert an item larger than gap ?\n");
     }
 
-/*	this new bedEl goes in the gap, the existing gap remains
- *	as the upstream gap, this new gap becomes downstream of this new
- *	bedEl and upstream of the downstream gap of the existing gap
- */
-AllocVar(el);		/*	a new gap	*/
-
-if (NULL == gl->downstream)
-    errAbort("ERROR: trying to add element after last bounding element\n");
-
-el->next = gl->next;	/*	could be NULL when last gap	*/
-el->prev = gl;		/*	is NEVER NULL	*/
-el->upstream = bedEl;	/*	this element is the new gap's upstream */
-el->isUpstreamBound = FALSE;	/*	not a bounding element	*/
-el->downstream = gl->downstream;	/*	can NEVER be NULL	*/
-el->isDownstreamBound = gl->isDownstreamBound;
-if (gl->next)		/*	could be NULL when last gap	*/
-    gl->next->prev = el;
-gl->downstream = bedEl;
-gl->isDownstreamBound = FALSE;	/*	not a bounding element	*/
-gl->next = el;
-
-/*	new gap size, (downstream start) - (upstream end)	*/
-gapSize = el->downstream->chromStart - bedEl->chromEnd;
-if (gapSize >= 0)
-    el->gapSize = gapSize;
-else
-    {
-    warn("WARNING: new element insert overlaps following element\n");
-    el->gapSize = 0;
-    }
-/*	resize existing gap, (downstream start) - (upstream end) */
-gapSize = bedEl->chromStart - gl->upstream->chromEnd;
-if (gapSize >= 0)
-    el->prev->gapSize = gapSize;
-else
-    {
-    warn("WARNING: new element insert overlaps previous element\n");
-    el->prev->gapSize = 0;
-    }
-
+gapInsert(bedEl, gl);
 }
 
 static int gapsOfSize(struct chrGapList *bounding, int size,
@@ -570,18 +589,16 @@ verbose(2,"placed item median: %d\n", sizeArray[i/2]);
 freeMem(sizeArray);
 }
 
-static void randomInsert(struct bed *bedEl, struct gap *gl)
+static struct bed *randomInsert(struct bed *bedEl, struct gap *gl)
 /*	insert the bedEl into the gap at a random location	*/
 /*	PLEASE NOTE: these specially inserted items are allocated here,
  *	they need to be freed when the gap list they are in is freed.
  */
 {
-struct gap *gapEl;
 struct bed *newBed;
 int itemSize = bedEl->chromEnd - bedEl->chromStart;
 int spareSpace = 0;		/*	amount of gap left after insert */
 int placementOffset = 0;	/*	from beginning of gap	*/
-int newGapSize = 0;
 
 if (itemSize < 0)
     errAbort("ERROR: trying to insert negative sized item ?\n");
@@ -596,14 +613,11 @@ if (itemSize > gl->gapSize)
     errAbort("ERROR: trying to insert an item larger than gap ?\n");
     }
 
-/*placeItem*/
-
 /*	this new bedEl goes in the gap, the existing gap remains
  *	as the upstream gap, this new gap becomes downstream of this new
  *	bedEl and upstream of the downstream gap of the existing gap.
  *	The spacing of this new insert is a random amount of space.
  */
-AllocVar(gapEl);		/*	a new gap	*/
 AllocVar(newBed);		/*	and a new bed element	*/
 		/* the bed element is *new* because it has different
 		 * coordinates than the placed bed element
@@ -620,44 +634,14 @@ else
 newBed->chromStart = gl->upstream->chromEnd + placementOffset;
 newBed->chromEnd = newBed->chromStart + itemSize;
 
-if (NULL == gl->downstream)
-    errAbort("ERROR: trying to add element after last bounding element\n");
-
-gapEl->next = gl->next;	/*	could be NULL when last gap	*/
-gapEl->prev = gl;		/*	is NEVER NULL	*/
-gapEl->upstream = newBed;	/* this element is the new gap's upstream */
-gapEl->isUpstreamBound = FALSE;	/*	not a bounding element	*/
-gapEl->downstream = gl->downstream;	/*	can NEVER be NULL	*/
-gapEl->isDownstreamBound = gl->isDownstreamBound;
-if (gl->next)		/*	could be NULL when last gap	*/
-    gl->next->prev = gapEl;
-gl->downstream = newBed;
-gl->isDownstreamBound = FALSE;	/*	not a bounding element	*/
-gl->next = gapEl;
-
-/*	new gap size, (downstream start) - (upstream end)	*/
-newGapSize = gapEl->downstream->chromStart - newBed->chromEnd;
-if (newGapSize >= 0)
-    gapEl->gapSize = newGapSize;
-else
-    {
-    warn("WARNING: new element insert overlaps following element\n");
-    gapEl->gapSize = 0;
-    }
-/*	resize existing gap, (downstream start) - (upstream end) */
-newGapSize = newBed->chromStart - gl->upstream->chromEnd;
-if (newGapSize >= 0)
-    gapEl->prev->gapSize = newGapSize;
-else
-    {
-    warn("WARNING: new element insert overlaps previous element\n");
-    gapEl->prev->gapSize = 0;
-    }
+gapInsert(newBed, gl);
+return(newBed);
 }
 
-static void randomTrial(struct chrGapList *bounding, struct bed *placed)
+static struct bed *randomTrial(struct chrGapList *bounding, struct bed *placed)
 /*	placed bed list has already been sorted by size descending	*/
 {
+struct bed *bedList = NULL;
 struct bed *bedEl;
 int placedCount = slCount(placed);
 int gapCount = countGaps(bounding);
@@ -680,7 +664,7 @@ i = 0;
 
 for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
     {
-    static int done = 0;
+    struct bed *newBed;
     int N;
     int R;
     int itemSize = bedEl->chromEnd - bedEl->chromStart;
@@ -692,8 +676,9 @@ for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
     if ((R >= N) || (R >= maxGapCount))
 	errAbort("ERROR: did not expect random "
 	    "number %d to be >= %d (or %d)\n", R, N, maxGapCount);
-    ++done;
-    randomInsert(bedEl,sizedGaps[R]);
+    /*	The newBed is the bedEl translated to a new random location */
+    newBed = randomInsert(bedEl,sizedGaps[R]);
+    slAddHead(&bedList,newBed);
     }
 /*	sizedGaps are just a bunch of pointers, the bed element inserts
  *	actually went into the bounding gap list which is going to be
@@ -701,6 +686,7 @@ for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
  *	the loop that is managing the copying of the bounding list.
  */
 freeMem(sizedGaps);
+return(bedList);
 }
 
 static void initialPlacement(struct chrGapList *bounding, struct bed *placed)
@@ -768,12 +754,21 @@ for (bedEl = bounds; bedEl != NULL; bedEl = bedEl->next)
 	AllocVar(cEl);
 	cEl->chrom = cloneString(bedEl->chrom);
 	cEl->gList = NULL;
+	if (prevChr)
+	    {
+	    if (NULL == prevGap)
+		{
+		verbose(2,"WARNING: only one element on %s ! No gap defined.\n",
+			prevChr);
+ 		slPopHead(&gaps);
+		}
+	    freeMem(prevChr);
+	    }
+	prevChr = cloneString(bedEl->chrom);
 	prevGap = NULL;
 	prevBedEl = bedEl;	/*	bounding element before first gap */
-	if (prevChr)
-	    freeMem(prevChr);
-	prevChr = cloneString(bedEl->chrom);
-	verbose(4,"new chrom on bounding gap creation %s\n", prevChr);
+	verbose(4,"new chrom on bounding gap creation %s, adding %#x\n",
+		prevChr, (unsigned) cEl);
 	slAddHead(&gaps,cEl);
 	++boundingChrCount;
 	curChrList = cEl;
@@ -878,6 +873,8 @@ for (el = gaps; el != NULL; el = el->next)
 	    ++zeroGapCount;
 	}
     totalGapCount += nonZeroGapCount;
+verbose(3,"cloneGaps: %d non-zero gaps + %d zero gaps = %d total gaps\n",
+	nonZeroGapCount, zeroGapCount, nonZeroGapCount+zeroGapCount);
     slAddHead(&cloneGaps,gl);
     }
 slReverse(&cloneGaps);
@@ -888,13 +885,24 @@ static void randomPlacement(char *bounding, char *placed)
 {
 struct bed *boundingElements = bedLoadAll(bounding);
 struct bed *placeItems = bedLoadAll(placed);
+struct bed *nearestNeighbors = NULL;
 int boundingCount = slCount(boundingElements);
 int placedCount = slCount(placeItems);
+int neighborCount = 0;
 struct chrGapList *boundingGaps = NULL;
 struct chrGapList *duplicateGapList = NULL;
+struct chrGapList *neighborGaps = NULL;
 struct statistic *statsList = NULL;
 struct statistic *statEl = NULL;
 
+if (neighbor)
+    {
+    nearestNeighbors = bedLoadAll(neighbor);
+    slSort(&nearestNeighbors, bedCmp);	/* order by chrom,chromStart */
+    neighborCount = slCount(nearestNeighbors);
+    verbose(2, "neighbor element count: %d\n", neighborCount);
+    neighborGaps = createGaps(nearestNeighbors);
+    }
 slSort(&boundingElements, bedCmp);	/* order by chrom,chromStart */
 slSort(&placeItems, bedCmp);		/* order by chrom,chromStart */
 
@@ -903,13 +911,24 @@ verbose(2, "placed item count: %d\n", placedCount);
 
 boundingGaps = createGaps(boundingElements);
 
-if (0 == trials)
+if (0 == trials)	/*	display initial placement stats only	*/
     {
-    duplicateGapList = cloneGapList(boundingGaps);
+    char *neighborName = NULL;
+
+    if (neighbor)
+	{
+	neighborName = cloneString(neighbor);
+	duplicateGapList = cloneGapList(neighborGaps);
+	}
+    else
+	{
+	neighborName = cloneString(bounding);
+	duplicateGapList = cloneGapList(boundingGaps);
+	}
 
     verbose(2,"stats before initial placement:  =================\n");
     statEl = gapStats(duplicateGapList);
-    printf("statistics on gaps before any placements:\n\t(%s)\n", bounding);
+    printf("statistics on gaps before any placements:\n\t(%s)\n", neighborName);
     statsPrint(statEl);
     slAddHead(&statsList,statEl);
 
@@ -924,6 +943,7 @@ if (0 == trials)
 
     freeChrList(&duplicateGapList, FALSE);
     slReverse(&statsList);
+    freeMem(neighborName);
     }
 else
     {
@@ -936,18 +956,38 @@ else
     measurePlaced(placeItems);		/* show placed item characteristics */
     for (trial = 0; trial < trials; ++trial)
 	{
+	struct bed *randomPlacedBedList;
 	duplicateGapList = cloneGapList(boundingGaps);
-	randomTrial(duplicateGapList,placeItems);
-	statEl = gapStats(duplicateGapList);
+	randomPlacedBedList = randomTrial(duplicateGapList,placeItems);
+	if (neighbor)
+	    {
+	    struct chrGapList *duplicateNeighborList;
+	    slSort(&randomPlacedBedList,bedCmp);/*order by chrom,chromStart*/
+	    duplicateNeighborList = cloneGapList(neighborGaps);
+	    initialPlacement(duplicateNeighborList,randomPlacedBedList);
+	    statEl = gapStats(duplicateNeighborList);
+	    freeChrList(&duplicateNeighborList, FALSE);
+	    }
+	else
+	    statEl = gapStats(duplicateGapList);
+
 	slAddHead(&statsList,statEl);
 	/*	this gap list has temporary bed elements that were
 	 *	created by the randomTrial(), they need to be freed as
 	 *	the list is released, hence the TRUE signal.
+	 *	It isn't a true freeBedList operation because the chrom
+	 *	names are left intact in the original copy of the bed
+	 *	list.  (The names were being shared.)
 	 */
 	freeChrList(&duplicateGapList, TRUE);
 	}
     slReverse(&statsList);
     statsPrint(statsList);
+    }
+if (neighbor)
+    {
+    bedFreeList(&nearestNeighbors);
+    freeChrList(&neighborGaps, FALSE);
     }
 bedFreeList(&boundingElements);
 bedFreeList(&placeItems);
@@ -962,9 +1002,12 @@ if (argc < 3)
     usage();
 trials = optionInt("trials", 0);
 seed = optionInt("seed", 0);
+neighbor = optionVal("neighbor", NULL);
 
 verbose(2,"bounding elements file: %s\n", argv[1]);
 verbose(2,"placed items file: %s\n", argv[2]);
+if (neighbor)
+    verbose(2,"nearest neighbor file: %s\n", neighbor);
 verbose(2,"number of trials: %d\n", trials);
 verbose(2,"seed value for drand48(): %d\n", seed);
 
