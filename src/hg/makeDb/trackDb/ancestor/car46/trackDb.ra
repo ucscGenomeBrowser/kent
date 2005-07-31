@@ -1,3 +1,11 @@
+track badCodons
+shortLabel badCodons
+longLabel badCodon Locations
+priority 11
+group x
+visibility hide
+type bed 3
+
 track present
 shortLabel Presentness
 longLabel Presentness
