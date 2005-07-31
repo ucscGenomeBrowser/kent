@@ -973,9 +973,9 @@ exit 1
 # Longest finished job:             194s       3.23m     0.05h    0.00d
 # Submission to last job:         23476s     391.27m     6.52h    0.27d
 
-    exit
-    # back to kksilo
-
+    ssh kki
+    cd /cluster/data/droYak1/bed/tblastn.dm2FB
+    tcsh
     cat << '_EOF_' > chainGsub
 #LOOP
 chainSome $(path1)
@@ -990,8 +990,6 @@ chainSome $(path1)
     ls -1dS `pwd`/blastOut/fb?? > chain.lst
     gensub2 chain.lst single chainGsub chainSpec
 
-    ssh kki
-    cd /cluster/data/droYak1/bed/tblastn.dm2FB
     para create chainSpec
     para push
  
