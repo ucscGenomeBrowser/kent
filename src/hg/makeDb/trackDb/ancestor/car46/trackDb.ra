@@ -4,7 +4,7 @@ longLabel Presentness
 group map
 priority 25
 visibility dense
-type wig 4 9
+type wig 33 126
 
 track correct
 shortLabel Correctness
@@ -12,7 +12,7 @@ longLabel Correctness
 group map
 priority 25
 visibility dense
-type wig 2 9
+type wig 34 126
 
 track xenoRefGene
 shortLabel All RefSeq
