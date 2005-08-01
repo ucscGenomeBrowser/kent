@@ -2316,6 +2316,8 @@ maxHeightPixels 128:16:16
 viewLimits 0:150
 autoScale Off
 windowingFunction mean
+subGroup1 samples Sample summary=Summary samples=samples1-10
+subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
 
     track encodeYaleAffyNeutRNATransMapAll
     subTrack encodeYaleAffyRNATransMap
@@ -2323,6 +2325,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Summary
     priority 1
     color 50,70,50
+    subGroups celltype=neutro samples=summary
 
     track encodeYaleAffyNeutRNATransMap01
     subTrack encodeYaleAffyRNATransMap
@@ -2330,6 +2333,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 1
     priority 2
     color 50,205,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap02
     subTrack encodeYaleAffyRNATransMap
@@ -2337,6 +2341,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 2
     priority 3
     color 50,190,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap03
     subTrack encodeYaleAffyRNATransMap
@@ -2344,6 +2349,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 3
     priority 4
     color 50,175,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap04
     subTrack encodeYaleAffyRNATransMap
@@ -2351,6 +2357,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 4
     priority 5
     color 50,160,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap05
     subTrack encodeYaleAffyRNATransMap
@@ -2358,6 +2365,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 5
     priority 6
     color 50,145,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap06
     subTrack encodeYaleAffyRNATransMap
@@ -2365,6 +2373,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 6
     priority 7
     color 50,130,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap07
     subTrack encodeYaleAffyRNATransMap
@@ -2372,6 +2381,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 7
     priority 8
     color 50,115,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap08
     subTrack encodeYaleAffyRNATransMap
@@ -2379,6 +2389,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 8
     priority 9
     color 50,100,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap09
     subTrack encodeYaleAffyRNATransMap
@@ -2386,6 +2397,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 9
     priority 10
     color 50,85,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATransMap10
     subTrack encodeYaleAffyRNATransMap
@@ -2393,6 +2405,7 @@ windowingFunction mean
     longLabel Yale Neutrophil RNA Transcript Map, Sample 10
     priority 11
     color 50,70,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyPlacRNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -2400,6 +2413,7 @@ windowingFunction mean
     longLabel Yale Placenta RNA Transcript Map
     priority 12
     color 50,50,150
+    subGroups celltype=plac
 
     track encodeYaleAffyNB4RARNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -2407,6 +2421,7 @@ windowingFunction mean
     longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
     priority 13
     color 150,50,50
+    subGroups celltype=nb4
 
     track encodeYaleAffyNB4TPARNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -2414,6 +2429,7 @@ windowingFunction mean
     longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 14
     color 120,50,50
+    subGroups celltype=nb4
 
     track encodeYaleAffyNB4UntrRNATransMap
     subTrack encodeYaleAffyRNATransMap
@@ -2421,6 +2437,7 @@ windowingFunction mean
     longLabel Yale NB4 RNA Transcript Map, Untreated
     priority 15
     color 90,50,50
+    subGroups celltype=nb4
 
 track encodeYaleAffyRNATars
 compositeTrack on
@@ -2431,6 +2448,8 @@ priority 31.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
+subGroup1 samples Sample summary=Summary samples=samples1-10
+subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
 
     track encodeYaleAffyNeutRNATarsAll
     subTrack encodeYaleAffyRNATars
@@ -2438,6 +2457,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), Summary
     priority 1
     color 50,70,50
+    subGroups celltype=neutro samples=summary
 
     track encodeYaleAffyNeutRNATars01
     subTrack encodeYaleAffyRNATars
@@ -2445,6 +2465,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 1
     priority 2
     color 50,205,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars02
     subTrack encodeYaleAffyRNATars
@@ -2452,6 +2473,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 2
     priority 3
     color 50,190,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars03
     subTrack encodeYaleAffyRNATars
@@ -2459,6 +2481,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 3
     priority 4
     color 50,175,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars04
     subTrack encodeYaleAffyRNATars
@@ -2466,6 +2489,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 4
     priority 5
     color 50,160,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars05
     subTrack encodeYaleAffyRNATars
@@ -2473,6 +2497,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 5
     priority 6
     color 50,145,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars06
     subTrack encodeYaleAffyRNATars
@@ -2480,6 +2505,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 6
     priority 7
     color 50,130,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars07
     subTrack encodeYaleAffyRNATars
@@ -2487,6 +2513,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 7
     priority 8
     color 50,115,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars08
     subTrack encodeYaleAffyRNATars
@@ -2494,6 +2521,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 8
     priority 9
     color 50,100,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars09
     subTrack encodeYaleAffyRNATars
@@ -2501,6 +2529,7 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 9
     priority 10
     color 50,85,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyNeutRNATars10
     subTrack encodeYaleAffyRNATars
@@ -2508,13 +2537,15 @@ type bed 3 .
     longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 10
     priority 11
     color 50,70,50
+    subGroups celltype=neutro samples=samples
 
     track encodeYaleAffyPlacRNATars
     subTrack encodeYaleAffyRNATars
     shortLabel Yale RNA Plcnta
-    longLabel Yale Placenta RNA Transcriptionally Active Region (TAR), Summary
+    longLabel Yale Placenta RNA Transcriptionally Active Region
     priority 12
     color 50,50,150
+    subGroups celltype=plac
 
     track encodeYaleAffyNB4RARNATars
     subTrack encodeYaleAffyRNATars
@@ -2522,6 +2553,7 @@ type bed 3 .
     longLabel Yale NB4 RNA, TAR, Treated with Retinoic Acid
     priority 13
     color 150,50,50
+    subGroups celltype=nb4
 
     track encodeYaleAffyNB4TPARNATars
     subTrack encodeYaleAffyRNATars
@@ -2529,6 +2561,7 @@ type bed 3 .
     longLabel Yale NB4 RNA, TAR, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
     priority 14
     color 120,50,50
+    subGroups celltype=nb4
 
     track encodeYaleAffyNB4UntrRNATars
     subTrack encodeYaleAffyRNATars
@@ -2536,6 +2569,7 @@ type bed 3 .
     longLabel Yale NB4 RNA, TAR, Untreated
     priority 15
     color 90,50,50
+    subGroups celltype=nb4
 
 track encodeAffyChIpHl60Pval
 compositeTrack on
