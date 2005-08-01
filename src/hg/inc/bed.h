@@ -87,6 +87,9 @@ int bedCmpScore(const void *va, const void *vb);
 int bedCmpPlusScore(const void *va, const void *vb);
 /* Compare to sort based on chrom, chromStart and score - lowest first. */
 
+int bedCmpSize(const void *va, const void *vb);
+/* Compare to sort based on size of element (end-start == size) */
+
 struct bedLine
 /* A line in a bed file with chromosome, start position parsed out. */
     {
