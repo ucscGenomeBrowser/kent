@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.992 2005/07/27 06:24:25 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.993 2005/08/01 19:12:05 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10434,11 +10434,8 @@ if (!hideControls)
 
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
-    if (showTrackControls)
-	{
-	hPrintf(" ");
-	hButton("submit", "refresh");
-	}
+    hPrintf(" ");
+    hButton("submit", "refresh");
 
     hPrintf("<BR>\n");
 
