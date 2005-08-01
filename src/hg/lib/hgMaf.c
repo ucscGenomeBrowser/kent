@@ -13,7 +13,15 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.3 2005/04/27 18:52:15 kate Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.4 2005/08/01 22:49:57 angie Exp $";
+
+int mafCmp(const void *va, const void *vb)
+/* Compare to sort based on start of first component. */
+{
+const struct mafAli *a = *((struct mafAli **)va);
+const struct mafAli *b = *((struct mafAli **)vb);
+return a->components->start - b->components->start;
+}
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end)
@@ -47,6 +55,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 mafFileFree(&mf);
 slReverse(&mafList);
+/* hRangeQuery may return items out-of-order when bin is used in the query,
+ * so sort here in order to avoid trouble at base-level view: */
+slSort(&mafList, mafCmp);
 return mafList;
 }
 
@@ -86,14 +97,6 @@ sqlFreeResult(&sr);
 lineFileClose(&lf);
 slReverse(&mafList);
 return mafList;
-}
-
-int mafCmp(const void *va, const void *vb)
-/* Compare to sort based on start of first component. */
-{
-const struct mafAli *a = *((struct mafAli **)va);
-const struct mafAli *b = *((struct mafAli **)vb);
-return a->components->start - b->components->start;
 }
 
 static void mafCheckFirstComponentSrc(struct mafAli *mafList, char *src)
