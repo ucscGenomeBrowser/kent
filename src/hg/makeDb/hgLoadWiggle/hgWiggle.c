@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.35 2005/03/22 21:24:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.36 2005/08/01 21:19:38 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -449,7 +449,7 @@ if (position)
     freeMem(clonePosition);
     }
 wds->offset = lift;
-if (lift > 0)
+if (lift != 0)
     verbose(VERBOSE_CHR_LEVEL, "#\tlifting ascii positions on output by %d\n", lift);
 if (doAscii)
     verbose(VERBOSE_CHR_LEVEL, "#\tdoAscii option on, perform the default ascii output\n");
