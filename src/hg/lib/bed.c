@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.40 2005/05/03 01:30:29 sugnet Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.41 2005/08/01 21:10:19 hiram Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -124,7 +124,6 @@ if (dif == 0)
 return dif;
 }
 
-
 int bedCmpScore(const void *va, const void *vb)
 /* Compare to sort based on score - lowest first. */
 {
@@ -146,6 +145,17 @@ if (dif == 0)
     }
 return dif;
 }
+
+int bedCmpSize(const void *va, const void *vb)
+/* Compare to sort based on size of element (end-start == size) */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int a_size = a->chromEnd - a->chromStart;
+int b_size = b->chromEnd - b->chromStart;
+return (a_size - b_size);
+}
+
 struct bedLine *bedLineNew(char *line)
 /* Create a new bedLine based on tab-separated string s. */
 {
