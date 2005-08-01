@@ -39,8 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.16 2005/04/13 06:25:58 markd Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.17 2005/08/01 21:11:12 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -293,7 +292,7 @@ if (bincount >= binsize)
  *	Currently, this is used only in customTrack input parsing.
  */
 void wigAsciiToBinary( char *wigAscii, char *wigFile, char *wibFile,
-   double *upperLimit, double *lowerLimit )
+   double *upperLimit, double *lowerLimit, struct wigEncodeOptions *options)
 /*	given the three file names, read the ascii wigAscii file and produce
  *	the wigFile and wibFile outputs
  */

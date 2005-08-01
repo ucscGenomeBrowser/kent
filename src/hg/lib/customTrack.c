@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.60 2005/06/03 22:31:26 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.61 2005/08/01 21:11:12 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1253,7 +1253,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    double upperLimit, lowerLimit;
 	    char buf[128];
 	    wigAsciiToBinary(track->wigAscii, track->wigFile, track->wibFile,
-		&upperLimit, &lowerLimit);
+		&upperLimit, &lowerLimit, NULL);
 	    fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
 	    sprintf(buf, "wig %g %g", lowerLimit, upperLimit);
 	    freeMem(track->tdb->type);
