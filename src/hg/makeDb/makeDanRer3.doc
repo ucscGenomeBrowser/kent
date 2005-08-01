@@ -1291,7 +1291,7 @@ getSeqs.csh $(path1)
     # added code to hgc.c so that the link to the Ensembl Protein
     # is also displayed on the description page.
 
-# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (in progress, 2005-07-21, hartera)
+# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (DONE, 2005-07-31, hartera)
     ssh eieio
     cd /cluster/data/genbank
     # This is a new assembly, edit the etc/genbank.conf file and add:
@@ -1322,18 +1322,30 @@ danRer3.mgcTables.mgc = all
     cd $HOME/kent/src/hg/makeDb/genbank
     make install-server
 
-    ssh eieio
+    ssh hgwdev
     cd /cluster/data/genbank
     # This is an -initial run, all sequences
-    nice bin/gbAlignStep -verbose=1 -initial danRer3
-
+    nice bin/gbAlignStep -verbose=1 -continue=run -initial danRer3 &
+    # crashed according to 
+# /cluster/data/genbank/var/build/logs/2005.07.29-21:15:56.danRer3.initalign.log
+    ssh kk
+    cd /panasas/store/genbank/work/initial.danRer3/align
+    para status >p.s
+    tawk '$1=="crash"{print $5}' p.s  | sort -u >h
+    # 6 nodes had failed so these were removed (markd, 2005-07-30)
+    # then need to repush manually with -retries of >4 as it has retried
+    # 4 times already
+    para push -retries=8 
+    para check
+    # then re-run gbAlignStep
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -verbose=1 -continue=finish -initial danRer3 &
+    # checked log and it looks like it ran ok this time
     # Load results for all sequences:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer3
-    # Move results need to be moved out the way
-    cd /cluster/data/genbank/work
-    mv initial.danRer3 initial.danRer3.allseqs
 
 FOR MGC GENES:
  - wait one day for nightly build to align and load them into the db
