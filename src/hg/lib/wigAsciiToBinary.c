@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.17 2005/08/01 21:11:12 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.18 2005/08/01 21:29:33 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -331,6 +331,13 @@ freez(&validData);
 data_values = (double *) needMem( (size_t) (binsize * sizeof(double)));
 validData = (unsigned char *)
 	    needMem( (size_t) (binsize * sizeof(unsigned char)));
+
+if (options != NULL)
+    {
+    if (options->lift != 0)
+	add_offset = options->lift;
+    }
+
 overallLowerLimit = 1.0e+300;	/* for the complete set of data */
 overallUpperLimit = -1.0e+300;	/* for the complete set of data */
 binout = mustOpen(wibFile,"w");	/*	binary data file	*/
