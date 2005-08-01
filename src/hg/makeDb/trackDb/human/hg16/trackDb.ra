@@ -1,3 +1,19 @@
+track all-b100i96
+shortLabel chimp/mouse/rat conserved
+longLabel 100bp or longer, 96% or greater identical
+priority 99
+group compGeno
+visibility dense
+type bed 4 +
+
+track rhb100i96
+shortLabel Recent Human
+longLabel Conserved w/ prob>0 of increased substitution rate in human
+priority 210
+group compGeno
+visibility dense
+type bed 4 +
+
 track gap
 shortLabel Gap
 longLabel Gap Locations
@@ -400,7 +416,13 @@ longLabel Human/Mouse(mm3)/Rat(rn3)/Chimp(pt0) Multiz Alignments
 group compGeno
 priority 103
 visibility hide
-type maf
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle multizMm3Rn3PhastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise hmrp
+speciesOrder panTro1 mm3 rn3
 
 track celeraHCM
 shortLabel Celera HPM
