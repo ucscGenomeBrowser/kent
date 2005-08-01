@@ -247,8 +247,14 @@ extern void wigDebugPrint(char * name);
 #endif
 
 /*	in lib/wigAsciiToBinary.c	*/
+struct wigEncodeOptions
+/*	passing options to the wigAsciiToBinary function	*/
+    {
+    int lift;	/*	lift all incoming coordinates by this amount	*/
+    };
+
 void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
-   double *upperLimit, double *lowerLimit );
+   double *upperLimit, double *lowerLimit, struct wigEncodeOptions *options );
 /*	given the three file names, read the wigAscii file and produce
  *	the wigFile and wibFile outputs, return the upper and lower
  *	limits for all the data
