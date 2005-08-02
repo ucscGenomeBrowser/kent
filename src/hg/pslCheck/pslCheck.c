@@ -4,7 +4,7 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslCheck.c,v 1.6 2005/07/31 00:22:49 markd Exp $";
+static char const rcsid[] = "$Id: pslCheck.c,v 1.7 2005/08/02 22:55:29 markd Exp $";
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
@@ -53,10 +53,10 @@ while ((psl = pslNext(lf)) != NULL)
     if (protCheck && !pslIsProtein(psl))
 	{
 	errCount++;
-	fprintf(stderr, "%s not a protein psl\n",psl->qName);
+	fprintf(errFh, "%s not a protein psl\n",psl->qName);
 	}
     if ((passFh != NULL) && (errCount == prevErrCnt))
-        pslTabOut( psl, passFh);
+        pslTabOut(psl, passFh);
     if ((failFh != NULL) && (errCount > prevErrCnt))
         pslTabOut(psl, failFh);
     pslFree(&psl);
