@@ -35,7 +35,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.35 2005/07/08 18:38:58 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.36 2005/08/02 03:49:48 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -115,13 +115,13 @@ errAbort(
     "pslPseudo - analyse repeats and generate genome wide best\n"
     "alignments from a sorted set of local alignments\n"
     "usage:\n"
-    "    pslPseudo db in.psl sizes.lst rmsk.bed syntenic.bed trf.bed mrna.psl out.psl outPseudo.psl outPseudoLink.txt out.axt nib.lst mrna.2bit refGene.tab mgcGene.tab kglist.tab \n\n"
+    "    pslPseudo db in.psl sizes.lst rmsk.bed syntenic.bed trf.bed all_mrna.psl out.psl outPseudo.psl outPseudoLink.txt out.axt nib.lst mrna.2bit refGene.tab mgcGene.tab kglist.tab \n\n"
     "where in.psl is an blat alignment of mrnas sorted by pslSort\n"
     "blastz.psl is an blastz alignment of mrnas sorted by pslSort\n"
     "sizes.lst is a list of chrromosome followed by size\n"
     "rmsk.bed is the repeat masker bed file\n"
     "trf.bed is the simple repeat (trf) bed file\n"
-    "mrna.psl is the blat best mrna alignments\n"
+    "all_mrna.psl is the blat best mrna alignments\n"
     "out.psl is the best mrna alignment for the gene \n"
     "and outPseudo.psl contains pseudogenes\n"
     "outPseudoLink.txt will have the link between gene and pseudogene\n"
@@ -699,8 +699,8 @@ void initWeights()
   7 8 = + coverage *((qSize-qEnd)/qSize)
   6 9 = - repeats
  */
-wt[0] = 0.3; wt[1] = 0.75; wt[2] = 0.9; wt[3] = 0.4; wt[4] = 0.3; 
-wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1.3; wt[9] = 1;
+wt[0] = 0.3; wt[1] = 0.85; wt[2] = 0.7; wt[3] = 0.4; wt[4] = 0.3; 
+wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1; wt[9] = 1;
 
 }
 void outputLink(struct psl *psl, struct pseudoGeneLink *pg , struct dyString *reason)
@@ -746,15 +746,16 @@ pseudoScore = ( wt[0]*pg->milliBad
                 + wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0)
                 - wt[9]*(pg->tReps*10)
                 ) / ScoreNorm;
-verbose(1,"##score %d mb %4.1f x %4.1f ax %4.1f pA %4.1f sy- %4.1f %4.1f ic %4.1f ov- %4.1f cv %d %d %d %4.1f r- %4.1f %s %d %s %s:%d-%d\n", 
+verbose(1,"##score %d mb %4.1f xon %d %4.1f ax %4.1f pA %4.1f syn - %4.1f %4.1f ic %d -%4.1f ov - %4.1f cov %d qe %d qsz %d %4.1f tRep - %4.1f %s %d %s %s:%d-%d\n", 
                 pseudoScore, 
                 wt[0]*pg->milliBad, 
+                pg->exonCover,
                 wt[1]*(log(pg->exonCover+1)/log(2))*200 , 
                 wt[2]*log(pg->axtScore>0?pg->axtScore:1)*70 , 
                 wt[3]*(log(pg->polyAlen+2)*200) ,
                 wt[4]*(pg->overlapDiag*10) ,
                 wt[5]*(12-log(psl->qSize-psl->qEnd))*80 , 
-                wt[6]*pow(pg->intronCount,0.5)*200 ,
+                pg->intronCount, wt[6]*pow(pg->intronCount,0.5)*200 ,
                 wt[7]*(maxOverlap*300),
                 pg->coverage, psl->qEnd, psl->qSize ,
                 wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0),
@@ -762,6 +763,8 @@ verbose(1,"##score %d mb %4.1f x %4.1f ax %4.1f pA %4.1f sy- %4.1f %4.1f ic %4.1
                 psl->qName, ScoreNorm, pg->type,psl->tName, psl->tStart, psl->tEnd
                 ) ;
 
+//wt[0] = 0.3; wt[1] = 0.85; wt[2] = 0.7; wt[3] = 0.4; wt[4] = 0.3; 
+//wt[5] = 0;   wt[6] = 1  ;  wt[7] = 0.5; wt[8] = 1;   wt[9] = 1;
 outputNoLinkScore(psl, pg, pseudoScore);
 }
 
