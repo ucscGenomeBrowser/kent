@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.66 2005/08/02 17:00:03 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.67 2005/08/02 17:51:55 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3514,6 +3514,8 @@ cat  << 'EOF' > template
 
     #	Create per-chrom individual maf files for downloads
     #		2005-08-02 - Hiram
+    ssh kkstore01
+    cd /cluster/data/mm6/bed/multiz10way
     mkdir mafDownloads
     for M in maf/chr*.maf
     do
@@ -3521,6 +3523,11 @@ cat  << 'EOF' > template
 	echo "cat ${M} | mafFilter stdin -minScore=500 > mafDownloads/${B}"
 	cat ${M} | mafFilter stdin -minScore=500 > mafDownloads/${B}
     done
+    cd mafDownloads
+    gzip chr*.maf
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm6/multiz10way
+    ln -s /cluster/data/mm6/bed/multiz10way/mafDownloads/chr*.maf.gz .
 
     # Load into database  (DONE - 2005-01-04 - Hiram)
     ssh hgwdev
