@@ -788,6 +788,10 @@ cat > load.csh << 'EOF'
     cd /cluster/data/encode/Affy/2005-06-01
     # chr7 has >150,000 rows, and >100,000 means trouble for bedGraph 
     # performance; so load this as wiggle instead.
+    #  Fixup off-by-one error in these files: 2005-08-01 - Hiram
+    #	Add the -lift=1 to the wigEncode command
+    #	The data in the .wig files is actually 0-relative, it should
+    #	have been 1-relative.  Add 1 to get it to be 1-relative.
     mkdir wig wib
     foreach f (chipchip/wig/*.median.wig.bz2)
       set track = `echo $f:t:r:r:r:r | perl -wpe \
@@ -797,7 +801,7 @@ cat > load.csh << 'EOF'
                       s/(\S+)_(\d+)hr/encodeAffyChIpHl60Pval\u\L$1\EHr$2/; \
                       s/H3k27t/H3K27me3/; s/Hish4/H4Kac4/;'`
       echo $track
-      bzcat $f | wigEncode stdin wig/$track.wig wib/$track.wib
+      bzcat $f | wigEncode -lift=1 stdin wig/$track.wig wib/$track.wib
     end
     # lower limit is 0 for all.  Upper limit varies quite a bit.
     # *Hr00: 72.60 (encodeAffyChIpHl60PvalCtcfHr00) to 534.54 (H4Kac4)
@@ -876,25 +880,33 @@ cat > load.csh << 'EOF'
     set gbdbDir = /gbdb/hg16/encode/Affy/2005-06-01
     mkdir -p $gbdbDir/wib
     set track = encodeAffyRnaGm06990Signal
+    #  Fixup off-by-one error in these files: 2005-08-01 - Hiram
     bzcat rna/wig/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig.bz2 \
-    | wigEncode stdin wig/$track.wig wib/$track.wib
+    | wigEncode -lift=1 stdin wig/$track.wig wib/$track.wib
+#    bzcat rna/wig/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig.bz2 \
+#    | wigEncode stdin wig/$track.wig wib/$track.wib
 #Converted stdin, upper limit 1686.50, lower limit -899.25
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
     nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
     set track = encodeAffyRnaHeLaSignal
+#  Fixup off-by-one error in these files: 2005-08-01 - Hiram
     bzcat rna/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig.bz2 \
-    | wigEncode stdin wig/$track.wig wib/$track.wib
+    | wigEncode -lift=1 stdin wig/$track.wig wib/$track.wib
+#    bzcat rna/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig.bz2 \
+#    | wigEncode stdin wig/$track.wig wib/$track.wib
 #Converted stdin, upper limit 1250.00, lower limit -763.50
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
     nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
     # Reloaded these four 6/29/05 after Jim and Hiram found that they'd 
     # been loaded with the HeLa data due to a copy/paste error:
+#  Fixup off-by-one error in these files: 2005-08-01 - Hiram
+#	add -lift=1 to the wigEncode command
     foreach f (rna/wig/*HL60*C01vsNULL.sig.wig.bz2)
       set track = `echo $f:t:r:r:r | perl -wpe \
        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SignalHr$1/;'`
       echo $track
       bzcat $f \
-      | wigEncode stdin wig/$track.wig wib/$track.wib
+      | wigEncode -lift=1 stdin wig/$track.wig wib/$track.wib
       ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
       nice hgLoadWiggle hg16 $track wig/$track.wig -pathPrefix=$gbdbDir
     end
@@ -1655,6 +1667,10 @@ done
 #######################################################################
 #  Yale Affy RNA data sets (DONE - 2005-06-07 - Hiram)
 #	data supplier contact: Joel Rozowsky joel.rozowsky@yale.edu
+#  NOTE 2005-08-01 ### *** It turns out something was off-by-one with the
+#  coordinates on all these data points.  At this time we are not yet
+#  certain what happened.  At any rate, this data is being reloaded to
+#  fix these coordinate problems.
     cd /cluster/data/encode/yale/affy/2005-06-01/RNA_NEUTROPHIL
     #	create symlinks to rename the files to their table names:
    ln -s encode_Yale_Affy_Neutrophil_RNA_Tars.html \
@@ -1710,13 +1726,32 @@ done
     #	stdout to hgLoadWiggle stdin.  It kept complaining about some
     #	line as if the stderr of the wigEncode was getting through the
     #	pipe.  Hence the temporary w.${TBL} file:
+    #	Re-loaded 2005-08-01 to add 1 to start,end coordinates
     mkdir -p /gbdb/hg16/encode/Yale/Affy/wib
     mkdir wib
-for T in All 01 02 03 04 05 06 07 08 09 10
+for T in All
 do
     TBL="encodeYaleAffyNeutRNATransMap${T}"
-    rm -f w.${TBL}
-    grep "^chr" ${TBL}.wig | sort -k1,1 -k2,2n | \
+    rm -f w.${TBL} wib/${TBL}.wib t.wig
+    echo -e "chr1\t148374651\t148374672\t0" > t.wig
+    grep "^chr" ${TBL}.wig | \
+	awk '{printf "%s\t%d\t%d\t%s\n", $1, $2+1, $3+1, $4}' >> t.wig
+    sort -k1,1 -k2,2n t.wig | \
+	wigEncode stdin w.${TBL} wib/${TBL}.wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/Yale/Affy hg16 ${TBL} w.${TBL}
+    rm -f /gbdb/hg16/encode/Yale/Affy/wib/${TBL}.wib
+    ln -s `pwd`/wib/${TBL}.wib \
+        /gbdb/hg16/encode/Yale/Affy/wib
+    rm -f w.${TBL} t.wig
+done
+    
+for T in 01 02 03 04 05 06 07 08 09 10
+do
+    TBL="encodeYaleAffyNeutRNATransMap${T}"
+    rm -f w.${TBL} wib/${TBL}.wib
+    grep "^chr" ${TBL}.wig | \
+	awk '{printf "%s\t%d\t%d\t%s\n", $1, $2+1, $3+1, $4}' \
+	| sort -k1,1 -k2,2n | \
 	wigEncode stdin w.${TBL} wib/${TBL}.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/Yale/Affy hg16 ${TBL} w.${TBL}
     rm -f /gbdb/hg16/encode/Yale/Affy/wib/${TBL}.wib
@@ -1729,7 +1764,9 @@ for T in All 01 02 03 04 05 06 07 08 09 10
 do
     TBL="encodeYaleAffyNeutRNATars${T}"
     echo "${TBL}.bed"
-    grep "^chr" ${TBL}.bed | sort -k1,1 -k2,2n | \
+    grep "^chr" ${TBL}.bed | \
+	awk '{printf "%s\t%d\t%d\n", $1, $2+1, $3+1}' \
+	| sort -k1,1 -k2,2n | \
 	hgLoadBed -strict hg16 ${TBL} stdin
 done
     #	The file encode_Yale_Affy_Neutrophil_RNA_Transcript_Map.wig
@@ -1762,8 +1799,14 @@ done
 	encodeYaleAffyPlacRNATransMap.wig
 
     #	There is only one of each type here
+    #	Reloaded 2005-08-01, added 1 to all start,end coordinates and
+    #	added the missing first probe at chr1 148374651 148374672
     mkdir wib
-    grep "^chr" encodeYaleAffyPlacRNATransMap.wig  | sort -k1,1 -k2,2n | \
+    rm -f t.wig
+    echo -e "chr1\t148374651\t148374672\t0" > t.wig
+    grep "^chr" encodeYaleAffyPlacRNATransMap.wig  | \
+	awk '{printf "%s\t%d\t%d\t%s\n", $1, $2+1, $3+1, $4}' >> t.wig
+    sort -k1,1 -k2,2n t.wig | \
         wigEncode stdin tmp.wig wib/encodeYaleAffyPlacRNATransMap.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/Yale/Affy hg16 \
         encodeYaleAffyPlacRNATransMap tmp.wig
@@ -1771,8 +1814,11 @@ done
     ln -s `pwd`/wib/encodeYaleAffyPlacRNATransMap.wib \
         /gbdb/hg16/encode/Yale/Affy/wib
     rm -f tmp.wig
+    rm -f t.wig
 
-    grep "^chr" encodeYaleAffyPlacRNATars.bed | sort -k1,1 -k2,2n | \
+    grep "^chr" encodeYaleAffyPlacRNATars.bed | \
+	awk '{printf "%s\t%d\t%d\n", $1, $2+1, $3+1}' \
+	| sort -k1,1 -k2,2n | \
         hgLoadBed -strict hg16 encodeYaleAffyPlacRNATars stdin
 
     #	These two were added to the previously mentioned composites:
@@ -1796,7 +1842,9 @@ done
 for T in NB4RA NB4TPA NB4Untr
 do
     TNAME=encodeYaleAffy${T}RNATars
-    grep "^chr" ${TNAME}.bed | sort -k1,1 -k2,2n | \
+    grep "^chr" ${TNAME}.bed | \
+	awk '{printf "%s\t%d\t%d\n", $1, $2+1, $3+1}' \
+	| sort -k1,1 -k2,2n | \
         hgLoadBed -strict hg16 ${TNAME} stdin
 done
 
@@ -1805,14 +1853,17 @@ mkdir wib
 for T in NB4RA NB4TPA NB4Untr
 do
     TBL=encodeYaleAffy${T}RNATransMap
-    rm -f w.${T}
-    grep "^chr" ${TBL}.wig | sort -k1,1 -k2,2n | \
+    rm -f w.${T} t.wig wib/${TBL}.wib
+    echo -e "chr1\t148374651\t148374672\t0" > t.wig
+    grep "^chr" ${TBL}.wig | \
+	awk '{printf "%s\t%d\t%d\t%s\n", $1, $2+1, $3+1, $4}' >> t.wig
+    sort -k1,1 -k2,2n t.wig | \
         wigEncode stdin w.${T} wib/${TBL}.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg16/encode/Yale/Affy hg16 \
             ${TBL} w.${T}
     rm -f /gbdb/hg16/encode/Yale/Affy/wib/${TBL}.wib
     ln -s `pwd`/wib/${TBL}.wib /gbdb/hg16/encode/Yale/Affy/wib
-    rm -f w.${T}
+    rm -f w.${T} t.wig
 done
     #	These six were added to the previously mentioned composites:
     #	encodeYaleAffyRNATransMap and encodeYaleAffyRNATars
