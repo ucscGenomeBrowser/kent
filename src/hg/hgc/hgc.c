@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.916 2005/07/13 15:16:12 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.917 2005/07/14 17:36:11 kschneid Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13632,6 +13632,7 @@ return bedWSList;
 
 /* Lowe Lab additions */
 
+/*Code to display Sargasso Sea Information*/
 void doSargassoSea(struct trackDb *tdb, char *trnaName)
 {
 struct bed *cb=NULL;
@@ -13771,7 +13772,7 @@ printf(" <tbody>\n    <tr>\n");
 printf("     <td style=\"vertical-align: top;\"><b>Organism</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>Alignment</b>");
 printf("</td>\n    </tr>\n    <tr>");
-printf("     <td style=\"vertical-align: top;\">%s where each plus(+) is approx. %f amino acids", trnaName, dashlength);
+printf("     <td style=\"vertical-align: top;\">%s where each plus(+) is approx. %.1f amino acids", trnaName, dashlength);
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<code>\n");
 for(z=0; z<60; z++)
@@ -13855,13 +13856,13 @@ void printCode(char code)
 	     printf("Anaerobic");
 	    break;
 	case 'o':
-	    printf("Nanoarchae");
+	    printf("Nanoarchaea");
 	    break;
 	case 't':
 	    printf("Thermophile");
 	    break;
 	case 'u':
-	    printf("Eukaryia");
+	    printf("Eukarya");
 	    break;
 	case 'v':
 	    printf("Viral");
@@ -13969,6 +13970,7 @@ easyGeneFreeList(&egList);
 
 void doCodeBlast(struct trackDb *tdb, char *trnaName)
 {
+struct pepPred *pp=NULL;
 struct codeBlast *cb=NULL;
 struct codeBlastScore *cbs=NULL, *cbs2, *list=NULL;
 struct sqlConnection *conn = hAllocConn();
@@ -14003,6 +14005,15 @@ if(sequenceLength<0){ sequenceLength=sequenceLength*-1;}
 sequenceLength=sequenceLength/3;
 dashlength=sequenceLength/60;
 
+conn=hAllocConn();/*sqlConnect(dupe);*/  
+sprintf(query, "select * from gbProtCodePep where name = '%s'", trnaName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    pp=pepPredLoad(row);
+    }
+
+
 /*Query the database for the extrainfo file for codeBlast*/
 conn=hAllocConn();/*sqlConnect(dupe);*/  
 safef(tempstring, sizeof(tempstring), "select * from codeBlastScore where qname = '%s'", trnaName);
@@ -14016,6 +14027,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, cbs);
     }
 
+printf(
+"<br><a\nhref=\"http://www.ncbi.nlm.nih.gov/BLAST/Blast.cgi?ALIGNMENTS=250&ALIGNMENT_VIEW=Pairwise&AUTO_FORMAT=Semiauto&CDD_SEARCH=on&CLIENT=web&DATABASE=nr&DESCRIPTIONS=500&ENTREZ_QUERY=All+organisms&EXPECT=10&FILTER=L&FORMAT_BLOCK_ON_RESPAGE=None&FORMAT_ENTREZ_QUERY=All+organisms&FORMAT_OBJECT=Alignment&FORMAT_TYPE=HTML&GAPCOSTS=11+1&GET_SEQUENCE=on&I_THRESH=0.005&LAYOUT=TwoWindows&MASK_CHAR=0&MASK_COLOR=0&MATRIX_NAME=BLOSUM62&NCBI_GI=on&NEW_FORMATTER=on&PAGE=Proteins&PROGRAM=blastp&QUERY=%s&SERVICE=plain&SET_DEFAULTS=Yes&SET_DEFAULTS.x=25&SET_DEFAULTS.y=11&SHOW_LINKOUT=on&SHOW_OVERVIEW=on&WORD_SIZE=3&END_OF_HTTPGET=Yes\">Query NCBI Blast",pp->seq);
+
 /*Print out table with Blast information*/
 printf("   </tbody>\n</table>\n<br><br><table cellpadding=\"2\" cellspacing=\"2\" border=\"1\" style=\"text-align: left; width: 100%%;\">");
 printf(" <tbody>\n    <tr>\n");
@@ -14026,7 +14040,7 @@ printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Gene Name</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Product</b>");
-printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>NCBI Link</b>");
+printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\"><b>NCBI Entry</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Evalue</b>");
 printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -14064,7 +14078,8 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    {
 	   
 	    printCode(cbs2->code[0]);
-	   
+	    
+	    /*See which database to link to*/
 	    if((sameString(cbs2->species, "Pyrococcus furiosus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrFur2&position=%s\">%s</a>",cbs2->name,cbs2->name);
@@ -14092,6 +14107,14 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    else if((sameString(cbs2->species, "Aeropyrum pernix"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=aerPer1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Pyrococcus abyssi"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrAby1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    }
+	    else if((sameString(cbs2->species, "Pyrococcus horikoshii"))){
+	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
+	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrHor1&position=%s\">%s</a>",cbs2->name,cbs2->name);
 	    }
 	    else{
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -14150,10 +14173,11 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    }  		
 	else
 	    {
-	    dashes=cbs2->seqstart-cbs2->seqend;
+	    dashes=cbs2->seqend-cbs2->seqstart;
+	    if(cbs2->length<dashes/2){dashes=dashes/3;}
 	    if(dashes<0) dashes=dashes*-1;           
 	    printf("<a name=\"%i-align\"></a>",cbs2->GI);
-            printf("<a\nhref=\"#%i-desc\">%s</a>, %s",cbs2->GI, cbs2->species,cbs2->name);
+            printf("<a\nhref=\"#%i-desc\">%s</a>, %s",cbs2->GI, cbs2->species, cbs2->name);
 	    printf("\n      </td>\n      <td style=\"vertical-align: top;\">");
 	    printf("<code>\n");
 	    dashes=dashes/dashlength;

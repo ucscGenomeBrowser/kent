@@ -7,7 +7,9 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.5 2004/09/15 16:20:45 braney Exp $";
+static char const rcsid[] = "$Id: agpAllToFaFile.c,v 1.9 2005/07/22 18:14:24 galt Exp $";
+
+boolean doSort = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +20,7 @@ errAbort(
   "   agpAllToFaFile in.agp in.fa out.fa\n"
   "   options:\n"
   "   -sizes=out - save chrom sizes in out.sizes and gap sizes in out.gaps\n"
+  "   -sort - preserve the in.agp chrom order\n"
   );
 }
 
@@ -45,6 +48,7 @@ struct dnaSeq *seq;
 struct hashCookie cookie;
 struct hashEl *hel;
 int gap;                /* count of gap bases for a chrom */
+struct slName *chromNames = NULL, *chromName=NULL;
 
 /* read in AGP file, constructing hash of chrom agp lists */
 verbose(1, "Reading %s\n", agpFile);
@@ -74,13 +78,17 @@ while (lineFileNext(lf, &line, &lineSize))
                         agp->chrom, agp->frag, lf->lineIx, lf->fileName);
         if (!hashFindVal(chromHash, seqName))
             {
+	    if (agpList)
+		slReverse(&agpList);
             /* new chrom */
             AllocVar(agpList);
             /* add to hashes of chrom agp lists and sizes */
             hashAdd(chromHash, seqName, agpList);
             hashAddInt(chromSizeHash, seqName, agp->chromEnd);
+	    if (doSort)
+		slNameAddHead(&chromNames, seqName);
             }
-        slAddTail(&agpList, agp);
+        slAddHead(&agpList, agp);
         lastPos = agp->chromEnd;
 	}
     else
@@ -99,6 +107,8 @@ while (lineFileNext(lf, &line, &lineSize))
         hashRemove(chromSizeHash, seqName);
     hashAddInt(chromSizeHash, seqName, lastPos);
     }
+if (agpList)
+    slReverse(&agpList);
 /* read in input fasta file */
 verbose(1, "Reading %s\n", faIn);
 fIn = mustOpen(faIn, "r");
@@ -115,10 +125,30 @@ if (chromSizeFile != NULL)
     fGapSizes = mustOpen(chromGapSizeFile, "w");
     }
 
-/* traverse hash, writing out sequence records */
-cookie = hashFirst(chromHash); 
-while ((hel = hashNext(&cookie)) != NULL)
+
+if (doSort)
     {
+    slReverse(&chromNames);
+    chromName=chromNames; 
+    }
+else
+    cookie = hashFirst(chromHash); 
+
+/* traverse hash, writing out sequence records */
+while (TRUE)
+    {
+    if (doSort)
+	{
+    	if (chromName == NULL)
+    	    break;
+	hel = hashLookup(chromHash, chromName->name);
+	}
+    else
+	{
+    	if ((hel = hashNext(&cookie)) == NULL)
+    	    break;
+	}
+	
     seqName = (char *)hel->name;
     agpList = (struct agpFrag *)hel->val;
     lastPos = hashIntVal(chromSizeHash, seqName);
@@ -151,7 +181,13 @@ while ((hel = hashNext(&cookie)) != NULL)
     verbose(2,"Writing sequence %s, %d bases to %s\n", seqName, lastPos, faOut);
     faWriteNext(fOut, seqName, dna, lastPos);
     freeMem(dna);
+    if (doSort)
+	chromName=chromName->next;
     }
+
+if (doSort)
+    slNameFreeList(&chromNames);
+    
 }
 
 int main(int argc, char *argv[])
@@ -168,6 +204,8 @@ if (sizeFileBase != NULL)
     chromSizeFile = addSuffix(cloneString(sizeFileBase), ".sizes");
     chromGapSizeFile = addSuffix(cloneString(sizeFileBase), ".gaps");
     }
+if (optionExists("sort"))
+    doSort = TRUE;
 agpAllToFaFile(argv[1], argv[2], argv[3]);
 return 0;
 }

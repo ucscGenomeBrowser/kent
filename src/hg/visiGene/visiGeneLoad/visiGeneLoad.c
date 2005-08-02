@@ -72,7 +72,7 @@ return val;
 
 static char *requiredItemFields[] = {"fileName", "submitId"};
 static char *requiredSetFields[] = {"contributor", "submitSet"};
-static char *requiredFields[] = {"fullDir", "screenDir", "thumbDir", "taxon", 
+static char *requiredFields[] = {"imageWidth", "imageHeight", "fullDir", "thumbDir", "taxon", 
 	"age", "probeColor", };
 static char *optionalFields[] = {
     "abName", "abDescription", "abTaxon", "bodyPart", "copyright",
@@ -164,7 +164,7 @@ int createSubmissionId(struct sqlConnection *conn,
 	char *name,
 	char *contributors, char *publication, 
 	char *pubUrl, char *setUrl, char *itemUrl,
-	char *journal, char *journalUrl)
+	char *journal, char *journalUrl, int copyright)
 /* Add submission and contributors to database and return submission ID */
 {
 struct slName *slNameListFromString(char *s, char delimiter);
@@ -181,6 +181,7 @@ dyStringPrintf(dy, " contributors = \"%s\",\n", contributors);
 dyStringPrintf(dy, " publication = \"%s\",\n", publication);
 dyStringPrintf(dy, " pubUrl = \"%s\",\n", pubUrl);
 dyStringPrintf(dy, " journal = %d,\n", journalId);
+dyStringPrintf(dy, " copyright = %d,\n", copyright);
 dyStringPrintf(dy, " setUrl = \"%s\",\n", setUrl);
 dyStringPrintf(dy, " itemUrl = \"%s\"\n", itemUrl);
 verbose(2, "%s\n", dy->string);
@@ -214,12 +215,17 @@ char *setUrl = hashValOrDefault(raHash, "setUrl", "");
 char *itemUrl = hashValOrDefault(raHash, "itemUrl", "");
 char *journal = hashValOrDefault(raHash, "journal", "");
 char *journalUrl = hashValOrDefault(raHash, "journalUrl", "");
+char *copyright = hashFindVal(raHash, "copyright");
+int copyrightId = 0;
 int submissionId = findExactSubmissionId(conn, name, contributor);
+if (copyright != NULL)
+    copyrightId = findOrAddIdTable(conn, "copyright", "notice", copyright);
+
 if (submissionId != 0)
      return submissionId;
 else
      return createSubmissionId(conn, name, contributor, 
-     	publication, pubUrl, setUrl, itemUrl, journal, journalUrl);
+     	publication, pubUrl, setUrl, itemUrl, journal, journalUrl, copyrightId);
 }
 
 int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,
@@ -654,8 +660,9 @@ return probeId;
 }
 
 int doImageFile(struct lineFile *lf, struct sqlConnection *conn, 
-	char *fileName, int fullDir, int screenDir, int thumbDir,
-	int submissionSetId, char *submitId, char *priority)
+	char *fileName, int fullDir, int thumbDir,
+	int submissionSetId, char *submitId, char *priority,
+	int imageWidth, int imageHeight)
 /* Update image file record if necessary and return image file ID. */
 {
 int imageFileId = 0;
@@ -672,8 +679,9 @@ if (imageFileId == 0)
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " fileName = '%s',\n", fileName);
     dyStringPrintf(dy, " priority = %s,\n", priority);
+    dyStringPrintf(dy, " imageWidth = %d,\n", imageWidth);
+    dyStringPrintf(dy, " imageHeight = %d,\n", imageHeight);
     dyStringPrintf(dy, " fullLocation = %d,\n", fullDir);
-    dyStringPrintf(dy, " screenLocation = %d,\n", screenDir);
     dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
     dyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
     dyStringPrintf(dy, " submitId = '%s'\n", submitId);
@@ -987,7 +995,6 @@ struct sqlConnection *conn = sqlConnect(database);
 int rowSize;
 int submissionSetId;
 struct hash *fullDirHash = newHash(0);
-struct hash *screenDirHash = newHash(0);
 struct hash *thumbDirHash = newHash(0);
 struct hash *bodyPartHash = newHash(0);
 struct hash *sexHash = newHash(0);
@@ -998,7 +1005,6 @@ struct hash *permeablizationHash = newHash(0);
 struct hash *probeColorHash = newHash(0);
 struct hash *sliceTypeHash = newHash(0);
 struct hash *sectionSetHash = newHash(0);
-struct dyString *dy = dyStringNew(0);
 int imageProbeId = 0;
 
 /* Read first line of tab file, and from it get all the field names. */
@@ -1072,14 +1078,10 @@ while (lineFileNextReal(lf, &line))
 	/* Find/add fields that are in simple id/name type tables. */
 	int fullDir = cachedId(conn, "fileLocation", "name", 
 	    fullDirHash, "fullDir", raHash, rowHash, words);
-	int screenDir = cachedId(conn, "fileLocation", "name", 
-	    screenDirHash, "screenDir", raHash, rowHash, words);
 	int thumbDir = cachedId(conn, "fileLocation", 
 	    "name", thumbDirHash, "thumbDir", raHash, rowHash, words);
 	int bodyPart = cachedId(conn, "bodyPart", 
 	    "name", bodyPartHash, "bodyPart", raHash, rowHash, words);
-	int copyright = cachedId(conn, "copyright", "notice",
-	    copyrightHash, "copyright", raHash, rowHash, words);
 	int embedding = cachedId(conn, "embedding", "description",
 	    embeddingHash, "embedding", raHash, rowHash, words);
 	int fixation = cachedId(conn, "fixation", "description",
@@ -1096,6 +1098,8 @@ while (lineFileNextReal(lf, &line))
 	/* Get required fields in tab file */
 	char *fileName = getVal("fileName", raHash, rowHash, words, NULL);
 	char *submitId = getVal("submitId", raHash, rowHash, words, NULL);
+	char *imageWidth = getVal("imageWidth", raHash, rowHash, words, NULL);
+	char *imageHeight = getVal("imageHeight", raHash, rowHash, words, NULL);
 
 	/* Get required fields that can live in tab or .ra file. */
 	char *taxon = getVal("taxon", raHash, rowHash, words, NULL);
@@ -1145,8 +1149,10 @@ while (lineFileNextReal(lf, &line))
 	geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
 	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
 	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
-	imageFileId = doImageFile(lf, conn, fileName, fullDir, screenDir, thumbDir,
-	    submissionSetId, submitId, priority);
+
+	imageFileId = doImageFile(lf, conn, fileName, fullDir, thumbDir,
+	    submissionSetId, submitId, priority, atoi(imageWidth), atoi(imageHeight));
+
 	strainId = doStrain(lf, conn, taxon, strain);
 	genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
 	specimenId = doSpecimen(lf, conn, specimenName, taxon, 

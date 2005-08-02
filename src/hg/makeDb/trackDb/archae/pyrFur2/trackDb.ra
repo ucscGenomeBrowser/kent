@@ -1,11 +1,23 @@
-track llOperons
-shortLabel LL Operons
-longLabel Operon predictions by Lowe Lab
+track codeBlast
+shortLabel BLASTP codes
+longLabel Conservation of proteins with BLASTP
+group compGeno
+priority 4.52
+visibility hide
+type bed 6 +
+canPack off
+
+track gbProtCode
+shortLabel GenBank CDS
+longLabel GenBank protein-coding genes
 group genes
-priority 2.13
+priority 2.1
 visibility pack
-spectrum on
-type bed 12 .
+color 40,40,160
+altColor 255,0,0
+type bed 6 .
+
+
 
 #track llaPfuPrintA
 #shortLabel LL microarray A
@@ -33,9 +45,22 @@ expTable llaPfuPrintCExps
 chip printA
 canPack off
 
+track llaPfuPrintC2
+shortLabel HS Microarray Temp
+longLabel Heat Shock full-genome P. furiosus microarray experiments temp
+group regulation
+priority 9.2
+visibility dense
+type loweRatio
+expScale 4.0
+expStep 0.5
+expTable llaPfuPrintCExps2
+chip printA
+canPack off
+
 track multizPyro
 shortLabel Conservation
-longLabel Pyrococcus 3-way multiz alignments
+longLabel Pyrococcus 4-way multiz alignments
 group compGeno
 priority 10.0
 visibility pack
@@ -45,4 +70,4 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
-speciesOrder pyrAby1 pyrHor1
+speciesOrder pyrAby1 pyrHor1 Thermokoda

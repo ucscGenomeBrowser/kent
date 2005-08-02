@@ -7424,22 +7424,38 @@ BASE=/cluster/data/mm5/bed/blastz.bosTau1.2005-02-19
   updateExceptionList.pl < exceptionList.txt > updateExceptionList.sql
   hgsql mm5 < updateExceptionList.sql
 
-# HUMAN BLASTP FOR GENE SORTER (RE-DONE 7/11/05 Fan)
+# HUMAN BLASTP FOR GENE SORTER (RE-DONE 7/25/05 Fan)
     # Make human ortholog column using blastp on human known genes.
     # First make human protein database and copy it to iscratch/i
     # if it doesn't exist already:
-    
+    mkdir /cluster/data/hg17/bed/blastp
+    cd /cluster/data/hg17/bed/blastp
+# NOTE: THE SECTION BELOW WAS ALREADY DONE.
+    pepPredToFa hg17 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+# PLEASE NOTE, hg17B IS USED INSTEAD OF hg17 for /iscratch/i,
+# TO GO AROUND A SUBDIRECTORY ACCESS RIGHT PROBLEM.
+
+    ssh kkr1u00
+    if (-e /iscratch/i/hg17B/blastp) then
+      rm -r /iscratch/i/hg17B/blastp
+    endif
+    mkdir -p /iscratch/i/hg17B/blastp
+    cp /cluster/data/hg17/bed/blastp/known.p?? /iscratch/i/hg17B/blastp
+    iSync
+
+# THE SECTION ABOVE WAS ALREADY DONE PREVIOUSLY.
+
     # Make parasol run directory 
     ssh kk
     mkdir -p /cluster/data/mm5/bed/blastp/hg17/run/out
     cd /cluster/data/mm5/bed/blastp/hg17/run
     # Make blast script
-    cat  << '_EOF_' > blastSome
-#!/bin/sh
-BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
--p blastp -d /cluster/bluearc/scratch/mus/mm5/blastp/known \
--i $1 -o $2 -e 0.01 -m 8 -b 1000
-'_EOF_'
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg17B/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
     chmod a+x blastSome
     # Make gensub2 file
     cat > gsub <<end
@@ -7448,18 +7464,18 @@ blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
 #ENDLOOP
 end
     # Create parasol batch
-    ls -1S /cluster/data/mm6/bed/geneSorter/blastp/split \
-    |sed -e 's/kg/..\/..\/..\/geneSorter\/blastp\/split\/kg/g' > split.lst
+    ls -1S /cluster/data/mm5/bed/geneSorter/blastp/split >split.lst
+    #EDIT split.lst to add "../../../geneSorter/blastp/split/" in front of "kg"
     gensub2 split.lst single gsub spec
     para create spec
     para try, check, push, check, ...
-Completed: 7725 of 7725 jobs
-CPU time in finished jobs:     121147s    2019.11m    33.65h    1.40d  0.004 y
-IO & Wait Time:                 20977s     349.62m     5.83h    0.24d  0.001 y
-Average job time:                  18s       0.31m     0.01h    0.00d
-Longest running job:                0s       0.00m     0.00h    0.00d
-Longest finished job:             139s       2.32m     0.04h    0.00d
-Submission to last job:          1175s      19.58m     0.33h    0.01d
+# Completed: 7739 of 7739 jobs
+# CPU time in finished jobs:     129857s    2164.29m    36.07h    1.50d  0.004 y
+# IO & Wait Time:                 23778s     396.30m     6.60h    0.28d  0.001 y
+# Average job time:                  20s       0.33m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             140s       2.33m     0.04h    0.00d
+# Submission to last job:           333s       5.55m     0.09h    0.00d
 
     # Load into database.  
     ssh hgwdev

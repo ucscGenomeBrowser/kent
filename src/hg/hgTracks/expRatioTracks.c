@@ -724,6 +724,7 @@ else
     }
 }
 
+/*For Lowe Lab arrays with M and A values*/
 Color loweExpressionScoreColor(struct track *tg, float val, struct vGfx *vg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
@@ -735,7 +736,10 @@ float maxDeviation = 1.0;
 static char *colorSchemes[] = { "rg", "rb" };
 static char *colorScheme = NULL;
 static int colorSchemeFlag = -1;
-if(val>5000){ absVal=fabs(absVal-10000);}
+int addednumber=10000;
+/*If the value is >5000 it is an A value subtract the added number to get A
+value*/
+if(val>5000){ absVal=fabs(absVal-addednumber);}
 /* set up the color scheme items if not done yet */
 if(colorScheme == NULL)
     colorScheme = cartUsualString(cart, "exprssn.color", "rg");
@@ -743,7 +747,7 @@ if(colorSchemeFlag == -1)
     colorSchemeFlag = stringArrayIx(colorScheme, colorSchemes, ArraySize(colorSchemes));
 
 /* if val is error value show make it gray */
-if(val <= -10000)
+if(val <= (-1*addednumber))
     return shadesOfGray[5];
 
 /* we approximate a float by storing it as an int,
@@ -752,7 +756,7 @@ if(val <= -10000)
  
 if(tg->limitedVis == tvDense)
     absVal = absVal/1000;
- 
+ makeLoweShades(vg);
 if(!exprBedColorsMade)
     makeRedGreenShades(vg);
 
@@ -774,14 +778,14 @@ if(absVal > maxDeviation)
  */
 colorIndex = (int)(absVal * maxRGBShade/maxDeviation);
 if(val > 0) 
-	if(val == 10001){
-		return lighterColor(vg, shadesOfSea[2]);
+	if(val == addednumber+1){
+		return shadesOfLowe1[9];
 	}
-	else if(val == 10002){
-		return lighterColor(vg, shadesOfSea[9]);
+	else if(val == addednumber+2){
+		return  shadesOfLowe2[9];
 	}
-	else if(val == 10003){
-		return shadesOfSea[9];
+	else if(val == addednumber+3){
+		return shadesOfLowe3[9];
 	}
 	else{
   return shadesOfRed[colorIndex];
@@ -803,6 +807,7 @@ struct linkedFeatures *lf = item;
 return expressionScoreColor(tg, lf->score, vg, denseMax, fullMax);
 }
 
+/*For Lowe Lab arrays with M and A values*/
 Color loweExpressionColor(struct track *tg, void *item, struct vGfx *vg,
 		 float denseMax, float fullMax) 
 /* Does the score->color conversion for various microarray tracks */
@@ -926,6 +931,7 @@ else
     }
 }
 
+/*For Lowe Lab arrays with M and A values*/
 Color loweRatioColor(struct track *tg, void *item, struct vGfx *vg)
 /* Does the score->color conversion  */
 {
@@ -1139,6 +1145,7 @@ tg->itemColor = affyUclaNormColor;
 tg->trackFilter = lfsFromAffyUclaNormBed;
 }
 
+/*For Lowe Lab arrays with M and A values*/
 void loweExpRatioMethods(struct track *tg)
 /* Set up methods for expRatio type tracks in general. */
 {

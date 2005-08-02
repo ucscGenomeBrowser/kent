@@ -1,6 +1,5 @@
 submitSet abTest01
 fullDir /gbdb/bioImage/full/inSitu/Human/Freenish
-screenDir /gbdb/bioImage/700/inSitu/Human/Freenish
 thumbDir /gbdb/bioImage/200/inSitu/Human/Freenish
 contributor Kent W.J., Willis W.E., Haussler D., van Damm C.E.V.G., Theirry-Mieg J.
 taxon 9606
@@ -19,3 +18,4 @@ publication The further adventures of freen
 setUrl http://www.soe.ucsc.edu/~kent/test
 itemUrl http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&position=%s
 sliceType sagittal
+copyright Copyright (c) 2005 UC Regents.  Freely distributable under BSD License.

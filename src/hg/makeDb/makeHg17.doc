@@ -8198,7 +8198,7 @@ XXX - running 2004-07-01 11:26
 
    # swap hg16->hg17 chains 
 
-# LIFTOVER (DROP) CHAINS TO HG16 (IN PROGRESS 2004-07-07 kate)
+ # LIFTOVER (DROP) CHAINS TO HG16 (IN PROGRESS 2004-07-07 kate)
 
     # run alignment
     # NOTE: split hg16 to /iscratch/i is doc'ed in makeHg16.doc
@@ -8230,6 +8230,132 @@ XXX - running 2004-07-01 11:26
     makeLoChain-net hg17 hg16
     ssh hgwdev
     makeLoChain-load hg17 hg16
+
+# DROPUNDER CHAIN TO HG15 (IN PROGRESS 2005-07-20 Andy)
+    # Split things up
+    ssh eieio
+    cd /cluster/bluearc
+    mkdir -p hg15/liftOver/split
+    cd hg15/liftOver/split/
+    mkdir ../lift
+    for c in `cut -f1 /cluster/data/hg15/chrom.sizes`; do
+       echo $c
+       num=${c%_random}
+       num=${num#chr}
+       faSplit -lift=../lift/${c}.lft size /cluster/data/hg15/${num}/${c}.fa -oneFile 3000 ${c}
+    done  
+
+    # Move files to santest
+    ssh hgwdev
+    cd /santest/scratch
+    mkdir hg15
+    cd hg15/
+    cp -r /cluster/bluearc/hg15/liftOver .
+
+    # run alignment
+    ssh kk
+    cd /cluster/data/hg17
+    makeLoChain-align hg17 /scratch/hg/gs.18/build35/bothMaskedNibs \
+                    hg15 /santest/scratch/hg15/liftOver/split
+    # Created parasol job in bed/blat.hg16.2004-07-07/run
+    # 2024 jobs written to batch
+    # *** IGNORE the batch created by the script.
+    ln -s bed/blat.hg15.2005-07-21 bed/blat.hg15
+    cd bed/blat.hg15/
+    mv run run.kk
+    mkdir run.kk9 run.kki
+    cd run.kk/
+    sed 's/\.fa\./\./g' spec > tmp; mv tmp spec
+    grep Un_random spec > ../run.kki/spec
+    grep -v Un_random spec > newspec
+    mv newspec spec
+    egrep "chr(1|19|X)(\.|_)" spec | grep -v random > ../run.kk9/spec
+    grep -Fv -f ../run.kk9/spec spec > newspec
+    mv newspec spec
+    wc -l spec ../run.kk9/spec ../run.kki/spec
+#   1831 spec
+#    147 ../run.kk9/spec
+#     46 ../run.kki/spec
+#   2024 total
+    # Checks out
+    
+    # Run the thing on all 3 clusters.
+    para create spec
+    para push
+#Completed: 1831 of 1831 jobs
+#CPU time in finished jobs:    8556066s  142601.10m  2376.69h   99.03d  0.271 y
+#IO & Wait Time:                 60428s    1007.13m    16.79h    0.70d  0.002 y
+#Average job time:                4706s      78.43m     1.31h    0.05d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:           46724s     778.73m    12.98h    0.54d
+#Submission to last job:         46725s     778.75m    12.98h    0.54d
+    ssh kk9
+    cd /cluster/data/hg17/bed/blat.hg15/run.kk9
+    para create spec
+    para push
+#Completed: 147 of 147 jobs
+#CPU time in finished jobs:    1698424s   28307.07m   471.78h   19.66d  0.054 y
+#IO & Wait Time:                   874s      14.56m     0.24h    0.01d  0.000 y
+#Average job time:               11560s     192.66m     3.21h    0.13d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:           31413s     523.55m     8.73h    0.36d
+#Submission to last job:         31413s     523.55m     8.73h    0.36d
+    ssh kki
+    cd /cluster/data/hg17/bed/blat.hg15/run.kki
+    para create spec
+    para push
+    # OK I don't have para time stuff for this one, but it was the shortest 
+    # by far.
+
+    # lift results
+    ssh kki
+    cd /cluster/data/hg17/bed/blat.hg15
+    mkdir lift.run
+    cd lift.run/
+    cut -f1 /cluster/data/hg15/chrom.sizes > hg15.lst
+    cut -f1 /cluster/data/hg17/chrom.sizes > hg17.lst
+    cat > lift.sh << "_EOF_"
+#!/bin/bash
+chrom=`basename $1 .psl`
+liftUp -pslQ $1 $2 warn ../raw/chr*_${chrom}.psl
+_EOF_
+    chmod +x lift.sh
+    cat > gsub << "_EOF_"
+#LOOP
+./lift.sh {check out line+ ../psl/$(path1).psl} /santest/scratch/hg15/liftOver/lift/$(path1).lft warn $(path1)
+#ENDLOOP
+_EOF_
+    gensub2 hg15.lst single gsub spec
+    para create spec
+    para push
+    # load on eieio kind of high, plus store5 at 100%... refitting
+    para finished 2>&1 | grep "^./" > done 
+    sets diff spec done newspec
+    mkdir /santest/scratch/hg15/liftOver/psl
+    sed 's/\.\./\/santest\/scratch\/hg15\/liftOver/' newspec > tmp
+    mv tmp newspec
+    ssh kk9
+    cd /cluster/data/hg17/bed/blat.hg15/lift.run
+    
+
+#    for chrom in `cut -f1 /cluster/data/hg15/chrom.sizes`; do
+    for chrom in `cat lift.run/notdone.lst`; do
+       liftUp -pslQ /cluster/bluearc/hg15/liftOver/psl/${chrom}.psl /cluster/bluearc/hg15/liftOver/lift/${chrom}.lft warn raw/chr*_${chrom}.psl
+    done
+
+    # Chain
+    ssh kk9
+    cd /cluster/data/hg17/bed/blat.hg15
+    makeLoChain-chain hg17 /scratch/hg/gs.18/build35/bothMaskedNibs hg15 /scratch/hg/gs.16/build33/chromTrfMixedNib 2> chain.error.log > chain.log
+    cd chainRun/
+    para push
+
+    ssh eieio
+    makeLoChain-net hg17 hg16
+    ssh hgwdev
+    makeLoChain-load hg17 hg16
+
+
 
 # Completed: 116281 of 116281 jobs
 # CPU time in finished jobs:   21807388s  363456.46m  6057.61h  252.40d  0.692 y
@@ -10847,7 +10973,7 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     cd /cluster/data/hg17/bed
     mv rnaStruct rnaStruct.2004-10-04
     mkdir -p /cluster/data/hg17/bed/rnaStruct.2004-11-30
-    ln �s rnaStruct.2004-11-30 rnaStruct
+    ln Âs rnaStruct.2004-11-30 rnaStruct
     cd /cluster/data/hg17/bed/rnaStruct
     mkdir -p utr3/split utr5/split utr3/fold utr5/fold
     utrFa hg17 knownGene utr3 utr3/utr.fa
@@ -11483,7 +11609,7 @@ hgMapToGene hg17 HInvGeneMrna knownGene knownToHInv
 # from supfam.mrc-lmb.cam.ac.uk
 
     mkdir /cluster/store8/superfamily/041128
-    ln �s /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
+    ln Âs /cluster/store8/superfamily/041128 /cluster/data/superfamily/041128
     cd /cluster/data/superfamily/041128
 # ftp over the following two files:
 ass_28-Nov-2004.tab.gz
@@ -11496,7 +11622,7 @@ ass_28-Nov-2004.tab.gz
 # This may take about an hour.
 
 # Make sure to add an index on id of the des table of superfam041128.
-    hgsql superfam041128 �e "create index id on des(id);"
+    hgsql superfam041128 Âe "create index id on des(id);"
 
     hgsql superfam041128 < ~/src/hg/lib/sfAssign.sql
     hgsql superfam041128 -e 'load data local infile "ass_28-Nov-2004.tab" into table 
@@ -11552,7 +11678,7 @@ superfam041128.sfAssign;'
     mv /cluster/data/hg17/bed/pb /cluster/data/hg17/bed/pb.2004-06-11
     mkdir /cluster/data/hg17/bed/pb.2004-12-01
     cd /cluster/data/hg17/bed
-    ln �s /cluster/data/hg17/bed/pb.2004-12-01 pb
+    ln Âs /cluster/data/hg17/bed/pb.2004-12-01 pb
 
 # Move the existing PB tables by:
 
@@ -16931,4 +17057,124 @@ chainSome $(path1) $(path2)
 # edit wgRna.tab to take out the first 5 lines of data field labels.
 
     hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# REBUILT knownToPfam TABLE TO ALLOW KG REPRESENTED BY VARIANT SPLICE PROTEINS MAPPED TO PFAM (DONE 7/14/05, Fan)
+# hgMapViaSwissProt.c was updated to support this.
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
+
+
+## EVOFOLD (DONE, 2005-07-15, Jakob (jsp) ) 
+# EvoFold is a new comparative method for predicting functional RNA
+# secondary structures based on multiple sequence alignnments. The
+# predictions generated for the EvoFold track are based on the most
+# conserved elements of the 8-way alignment (multiz8way). The current
+# data is the result of a pilot study (ongoing research of mine), the
+# procedure used to generate the data will therefore be simplified
+# when forthcoming evofold tracks for other organism are made. The
+# documentation therefore skips the actual data generation, and
+# instead starts with a data file I provide.
+
+  ssh -C hg17
+  mkdir -p /cluster/data/hg17/bed/evofold
+  cd /cluster/data/hg17/bed/evofold
+  cp /cluster/home/jsp/data/rnass/genome-scan/vertebrate/folds_hg17.bed foldsHg17.bed
+  # The folds_hg17.bed is a 9-column bed file: column 1-6 provide
+  # standard bed information, column 7 is element length, column 8 is
+  # the RNA secondary structure in parentheses format, and column nine
+  # is a commaseparated list of position specific confidence scores
+  # (floats).
+  hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql hg17 evofold foldsHg17.bed
+
+##########################################################################
+# TRANSFRAG PHASE 2 TABLES  - lifted from hg15 (Jakob Skou Pedersen)
+# Done: July 21, 2005
+#
+# These tables were lifted for use in my own research, but may be used
+# for the 'Affymetrix Transcriptome Project Phase 2' tracks.
+  ssh -C hgwdev
+  mkdir -p /cluster/data/hg17/bed/transfrag
+  cd /cluster/data/hg17/bed/transfrag
+  # lifting transfrag tables from hg15 via hg16 to hg17
+  for name in A375CytosolicPolyAPlusTnFg FHs738LuCytosolicPolyAPlusTnFg HepG2CytosolicPolyAMinusTnFg HepG2CytosolicPolyAPlusTnFg HepG2NuclearPolyAMinusTnFg HepG2NuclearPolyAPlusTnFg JurkatCytosolicPolyAPlusTnFg NCCITCytosolicPolyAPlusTnFg PC3CytosolicPolyAPlusTnFg SKNASCytosolicPolyAPlusTnFg U87CytosolicPolyAPlusTnFg; do
+    echo "select chrom, chromStart, chromEnd, name from ${name};" | hgsql hg15 | sed -e 1d > ${name}Hg15.bed
+    liftOver ${name}Hg15.bed /cluster/data/hg15/bed/liftOver/hg15ToHg16.over.chain ${name}Hg16.bed unmappedHg16.bed
+    liftOver ${name}Hg16.bed /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain ${name}Hg17.bed unmappedHg17.bed
+    echo "hg16 unmapped count for ${name}: " `grep "#" unmappedHg16.bed | wc -l | awk '{print $1}'`
+    echo "hg17 unmapped count for ${name}: " `grep "#" unmappedHg17.bed | wc -l | awk '{print $1}'`
+    hgLoadBed hg17 ${name} ${name}Hg17.bed
+    # clean up
+    rm ${name}Hg15.bed ${name}Hg16.bed unmappedHg16.bed unmappedHg17.bed
+  done
+
+# GLADSTONE ARRAY TRACK (DONE 7/19/2005 Andy)
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir gladHumES
+    cd gladHumES/
+    cp /cluster/data/hg16/bed/geneAtlas2/geneAtlas2.bed .
+    cut -f1-12 geneAtlas2.bed > bed.hg16
+    liftOver bed.hg16 /gbdb/hg16/liftOver/hg16ToHg17.over.chain bed.hg17 /dev/null
+    hgMapMicroarray bed.hg17.data hgFixed.gladHumESRatio \
+       -bedIn bed.hg17
+#Loaded 11087 rows of expression data from hgFixed.gladHumESRatio
+#Mapped 10925,  multiply-mapped 382, missed 23266, unmapped 162
+    hgLoadBed hg17 gladHumES bed.hg17.data
+
+# PHASTODDS GENESORTER COLUMN (NOT DONE YET Andy)
+    ssh kolossus
+    cd /panasas/store/andy
+    mkdir phastOdds
+    cd phastOdds/
+    export PATH=${PATH}:/cluster/bin/phast/x86_64
+    mkdir sso beds
+    cat > runChrom.sh << "_EOF_"
+#!/bin/bash
+c=$1
+numDir=`echo ${c#chr} | sed 's/_random//'`
+ALNDIR=/cluster/data/hg17/bed/multiz10way
+
+echo msa_view $c
+/cluster/bin/phast/x86_64/msa_view --in-format MAF ${ALNDIR}/maf/${c}.maf --refseq /cluster/data/hg17/${numDir}/${c}.fa > /tmp/${c}.sso
+
+echo phastCons $c
+/cluster/bin/phast/x86_64/phastOdds -f ${ALNDIR}/cons/run.elements/ave.cons.mod -b ${ALNDIR}/cons/run.elements/ave.noncons.mod -g kg/${c}.bed /tmp/${c}.sso > /tmp/${c}.phastOdds.gtf
+cp /tmp/${c}.sso sso/
+rm /tmp/${c}.sso
+cp /tmp/${c}.phastOdds.gtf gtfs/
+rm /tmp/${c}.phastOdds.gtf
+echo $c done
+_EOF_
+    ssh hgwdev
+    cd /panasas/store/andy/phastOdds
+    genePredToGtf hg17 knownGene kg.gtf
+    exit 
+    for c in `cut -f1 kg.gtf | sort | uniq`; do 
+       grep "\b${c}\b" kg.gtf > kg/${c}.gtf; 
+    done
+    for f in kg/*.bed; do
+       c=`basename $f .bed`;
+       echo $c;
+       ./runChrom.sh $c;
+       addPhastOddsExons $f gtfs/$c.phastOdds.gtf beds/$c.bed
+    done
+
+##########################################################################
+# Illumina SNPs (Heather, July 2005)
+# Source: Jeff Ohmen, PhD, johmen@illumina.com, 858/232-2702
+
+# using /cluster/store11 because /cluster/data/hg17 is on store5,
+# which is currently being restored
+
+  cd /cluster/store11/heather/illumina
+  fix.pl < LinkageIVbSNP.txt > illumina.bed
+  hgLoadBed hg17 snpIllumina -tab -strict -sqlTable=snpIllumina.sql illumina.bed
+  # Reading illumina.bed
+  # Loaded 6008 elements of size 4
+  # Sorted
+  # Saving bed.tab
+  # Loading hg17
+
+  # note: 28 rows where chrom = "chrXY"
 

@@ -750,15 +750,18 @@ while (row3 != NULL)
     {
     gDatabase = row3[0];
     org       = row3[1];
-    
     conn = sqlConnect(gDatabase);
     safef(cond_str, sizeof(cond_str), 
     	  "alias='%s'", queryID);
     answer = sqlGetField(conn, gDatabase, "kgSpAlias", "count(distinct spID)", cond_str);
     sqlDisconnect(&conn); 
+
     if ((answer != NULL) && (!sameWord(answer, "0")))
     	{
-	pbProteinCnt = pbProteinCnt + atoi(answer);
+	/* increase the count only by one, because new addition of splice variants to kgSpAlias 
+	   would give a count of 2 for both the parent and the variant, which caused the 
+	   problem when rescale button is pressed */
+	if (atoi(answer) > 0) pbProteinCnt++;
 	*database = strdup(gDatabase);
 	}
     row3 = sqlNextRow(srCentral);

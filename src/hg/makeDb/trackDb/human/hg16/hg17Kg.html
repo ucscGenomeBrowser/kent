@@ -24,17 +24,18 @@ and supplemented by CDS structures derived from UCSC protein-mRNA BLAT alignment
 The initial set of UCSC Known Genes candidates consists of 
 all protein-mRNA pairs with valid mRNA CDS structures.  
 A gene-check program (similar to the one used for the Consensus CDS (CCDS) project) 
-is used to remove questionable candidates, such as those with in-frame stop codons, 
-missing start or stop codons, etc.
+is used to remove questionable candidates, such as those with in-frame stop 
+codons, missing start or stop codons, etc.
 <P>From each group of gene candidates that share the same CDS structure, 
 the protein-mRNA pair having the best ranking and protein-mRNA alignment score 
 is selected as a UCSC Known Gene.  
 The ranking of a gene candidate depends on its gene-check quality measures.  
-When everything else being equal, 
+When all else is equal, 
 a preference is given to RefSeq mRNAs and next to MGC mRNAs.  
-Similarly a preference is given to gene candidates represented by Swiss-Prot proteins.  
-The protein-mRNA alignment score is calculated based on protein to 
-mRNA alignment using TBLASTN, plus weighted sub-scores according 
+Similarly, preference is given to gene candidates represented by Swiss-Prot 
+proteins.  
+The protein-mRNA alignment score is calculated based on a protein-to-mRNA 
+alignment using TBLASTN, plus weighted sub-scores according 
 to the date and length of the mRNA. 
 <H2>Credits</H2>
 <P>

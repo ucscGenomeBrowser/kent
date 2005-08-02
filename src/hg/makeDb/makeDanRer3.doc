@@ -8,6 +8,8 @@ exit; # don't actually run this like a script :)
 #    http://www.sanger.ac.uk/Projects/D_rerio/Zv5_assembly_information.shtml
 
 # DOWNLOAD SEQUENCE (DONE, 2005-06-06, hartera)
+# MOVE DANRER3 DIRECTORY AND CONTENTS TO STORE11 AS STORE3 IS FULL
+# (DONE, 2005-07-22, hartera)
      ssh kkstore01
      mkdir /cluster/store9/danRer3
      ln -s /cluster/store9/danRer3 /cluster/data
@@ -21,7 +23,14 @@ exit; # don't actually run this like a script :)
      wget --timestamp \
        ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv5release/Zv5.scaffolds.agp     wget --timestamp \
        ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv5release/Zv5.fa
-
+     # 2005-07-22 MOVE danRer3 
+     # store9 is 100% full, move danRer3 to store11 which is 10% full
+     ssh kkstore02
+     cd /cluster/store9
+     nohup nice mv danRer3 /cluster/store11 &
+     # make link to /cluster/data/danRer3
+     ln -s /cluster/store11/danRer3 /cluster/data
+     
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2005-06-13, hartera)
      ssh kkstore01
      mkdir -p /cluster/data/danRer3/M
@@ -139,7 +148,7 @@ cat << '_EOF_' > getSizes.csh
      chmod +x getSizes.csh
 cat << '_EOF_' > gsub
 #LOOP
-getSizes.csh {check in exists $(path1)}
+getSizes.csh $(path1)
 #ENDLOOP
 '_EOF_'
      # << this line makes emacs coloring happy 
@@ -857,6 +866,8 @@ if (-e /tmp/danRer3/$2/$2.cat) /bin/cp /tmp/danRer3/$2/$2.cat ./
     end
 
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION  (DONE, 2005-06-15, hartera)
+# Added link from danRer3.2bit file to the danRer3 gbdb directory
+# (2005-06-17, hartera)
     # Make symbolic links from /gbdb/danRer3/nib to the real nibs
     ssh hgwdev
     cd /cluster/data/danRer3
@@ -876,8 +887,45 @@ if (-e /tmp/danRer3/$2/$2.cat) /bin/cp /tmp/danRer3/$2/$2.cat ./
     # Make one big 2bit file as well, and make a link to it in
     # /gbdb/danRer2/nib because hgBlat looks there:
     faToTwoBit */chr*.fa danRer3.2bit
+    # add link to this 2bit file from gbdb danRer3 directory (2005-06-17)
     ln -s /cluster/data/danRer3/danRer3.2bit /gbdb/danRer3/
     # also make 2 bit files for chrUn and chrNA later on - need masked seq
+    # make 2 bit files for chrUn and chrNA scaffolds (2005-06-17)
+    ssh kkstore01
+    cd /cluster/data/danRer3
+    # make scaffolds files
+    foreach c (NA Un)
+       cd $c
+       echo "Processing $c ..."
+       mkdir scafSeqs
+       awk '{if ($5 != "N") print $6;}' chr${c}.agp > scafSeqs/scaffolds.lst
+       cd ..
+    end 
+    cd /cluster/data/danRer3/NA/scafSeqs
+cat << '_EOF_' > getSeqs.csh
+     #!/bin/csh -fe
+     set dir=/cluster/bluearc/danRer3/scaffolds
+     faOneRecord /iscratch/i/danRer3/scaffolds/Zv5.fa $1 > $dir/$1.fa
+'_EOF_'
+     # << this line makes emacs coloring happy
+     chmod +x getSeqs.csh
+cat << '_EOF_' > gsub
+#LOOP
+getSeqs.csh $(path1)
+#ENDLOOP
+'_EOF_'
+     # << this line makes emacs coloring happy 
+     ssh kk
+     cd /cluster/data/danRer3/NA/scafSeqs
+     gensub2 scaffolds.lst single gsub jobList
+     para create jobList 
+     para try,check,push,check etc...
+    
+     ssh kkstore01
+     cd /cluster/bluearc/danRer3/scaffolds
+     foreach f (*.size)
+    faToTwoBit ./chrNA/scafSeqs/*.fa danRer3ChrNA.2bit
+    faToTwoBit ./chrUn/scafSeqs *.fa danRer3ChrUn.2bit
 
 # MAKE GOLD AND GAP TRACKS (DONE, 2005-06-15, hartera)
 # Add trackDb entry and html page for gold and gap tracks (2005-06-16, hartera)
@@ -1004,6 +1052,7 @@ if (-e /tmp/danRer3/$2/$2.cat) /bin/cp /tmp/danRer3/$2/$2.cat ./
 # create trackDb.ra entry and html page for ctgPos2 track.
 
 # CREATE gc5Base WIGGLE TRACK (DONE, 2005-06-16, hartera)
+# FIX LINK FOR WIB FILES TO POINT TO danRer3 ON store11 (2005-07-25, hartera)
     ssh kkstore01
     mkdir -p /cluster/data/danRer3/bed/gc5Base
     cd /cluster/data/danRer3/bed/gc5Base
@@ -1025,6 +1074,240 @@ if (-e /tmp/danRer3/$2/$2.cat) /bin/cp /tmp/danRer3/$2/$2.cat ./
     hgLoadWiggle -pathPrefix=/gbdb/danRer3/wib/gc5Base \
                  danRer3 gc5Base gc5Base.wig
     # and symlink the .wib file into /gbdb
+    # fix link as danRer3 is now in store 11 (2005-07-25, hartera)
+    rm -r /gbdb/danRer3/wib/gc5Base
     mkdir -p /gbdb/danRer3/wib/gc5Base
     ln -s `pwd`/gc5Base.wib /gbdb/danRer3/wib/gc5Base
 
+# MAKE 10.OOC, 11.OOC FILE FOR BLAT (DONE, 2005-06-17, hartera)
+    # Use -repMatch=512 (based on size -- for human we use 1024, and
+    # the zebrafish genome is ~50% of the size of the human genome
+    ssh kkr1u00
+    mkdir /cluster/data/danRer3/bed/ooc
+    cd /cluster/data/danRer3/bed/ooc
+    mkdir -p /cluster/bluearc/danRer3
+    ls -1 /cluster/data/danRer3/nib/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/danRer3/danRer3_11.ooc -repMatch=512
+    # Wrote 50575 overused 11-mers to /cluster/bluearc/danRer3/11.ooc
+    # For 10.ooc, repMatch = 4096 for human, so use 2048
+    blat nib.lst /dev/null /dev/null -tileSize=10 \
+      -makeOoc=/cluster/bluearc/danRer3/danRer3_10.ooc -repMatch=2048
+    # Wrote 12574 overused 10-mers to /cluster/bluearc/danRer3/10.ooc 
+    # keep copies of ooc files in this directory and copy to iscratch
+    cp /cluster/bluearc/danRer3/*.ooc .
+    cp -p /cluster/bluearc/danRer3/*.ooc /iscratch/i/danRer3/
+    /cluster/bin/iSync
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR danRer3 (DONE, 2005-07-20, kuhn)
+    # hgcentraltest is now on hgwdev                                            
+    ssh hgwdev
+   # DNA port is "0", trans prot port is "1"
+ echo 'insert into blatServers values("danRer3", "blat2", "17778", "1", "0");    insert into blatServers values("danRer3", "blat2", "17779", "0", "1");' \
+    | hgsql hgcentraltest
+    # this enables blat and isPcr, isPcr is enabled by loading blat server
+    # with tilesize=5 (ask for this when request blat servers from 
+    # cluster admin).
+    # if you need to delete those entries
+    echo 'delete from blatServers where db="danRer3";' \
+    | hgsql hgcentraltest
+    # to check the entries:
+    echo 'select * from blatServers where db="danRer3";' \
+    | hgsql hgcentraltest
+
+# AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2005-07-22, hartera)
+    # sequences already downloaded for danRer1
+    ssh hgwdev
+    cd /projects/compbio/data/microarray/affyZebrafish
+    mkdir /cluster/bluearc/affy
+    cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \       /cluster/bluearc/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer2
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer3/bed/affyZebrafish.2005-07-22
+    ln -s /cluster/data/danRer3/bed/affyZebrafish.2005-07-22 \
+          /cluster/data/danRer3/bed/affyZebrafish
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affy/Zebrafish_consensus.fa /iscratch/i/affy
+    /cluster/bin/iSync
+
+    ssh kk
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    ls -1 /iscratch/i/affy/Zebrafish_consensus.fa > affy.lst
+    ls -1 /iscratch/i/danRer3/trfFa/ > genome.lst
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/iscratch/i/danRer3/danRer3_11.ooc /iscratch/i/danRer3/trfFa/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try, check, push ... etc.
+# para time
+# Completed: 288 of 288 jobs
+# CPU time in finished jobs:       4365s      72.75m     1.21h    0.05d  0.000 y
+# IO & Wait Time:                 10946s     182.44m     3.04h    0.13d  0.000 y
+# Average job time:                  53s       0.89m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             126s       2.10m     0.04h    0.00d
+# Submission to last job:           482s       8.03m     0.13h    0.01d
+
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyZebrafish.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least
+    # 95% identity in aligned region.
+    # do not use minCover since a lot of sequence is in Un, NA and Finished
+    # so genes may be split up so good to see all alignments
+    pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyZebrafish.psl ../../jkStuff/liftAll.lft warn contig.psl
+    # shorten names in psl file
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.bak
+    mv affyZebrafish.psl.bak affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # psl is good
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/affyZebrafish
+    hgLoadPsl danRer3 affyZebrafish.psl
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+       /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /gbdb/hgFixed/affyProbes
+                                                                                
+    hgLoadSeq -abbr=Zebrafish: danRer3 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+    # moved affyZebrafish.html description and trackDb.ra track entry and
+    # search for Affy Zebrafish track to
+    # ~/kent/src/hg/makeDb/trackDb/zebrafish since it is common to all 
+    # danRer assemblies. 
+
+# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (in progress, 2005-07-21, hartera)
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is a new assembly, edit the etc/genbank.conf file and add:
+# danRer3 (zebrafish)
+danRer3.genome = /iscratch/i/danRer3/nib/chr*.nib
+danRer3.lift = /cluster/data/danRer3/jkStuff/liftAll.lft
+danRer3.downloadDir = danRer3
+danRer3.mgcTables.default = full
+danRer3.mgcTables.mgc = all
+    # these last two lines enable the MGC genes track (ZGC genes for zebrafish)
+    # Default includes native genbank mRNAs and ESTs,
+    # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
+    # not xeno RefSeq
+    ssh hgwdev
+    cd /cluster/data/genbank
+    cvs commit -m "Added danRer3" etc/genbank.conf
+    # edit ~/kent/src/hg/makeDb/genbank/src/align/gbBlat 
+    # as a fair amount of new sequence was added for danRer3
+    # Change line:  DANRER_OOC=/iscratch/i/danRer3/danRer3_11.ooc
+    # changed from danRer1 ooc file to danRer3 ooc file
+    cvs diff src/align/gbBlat
+    make
+    cvs commit -m "Changed 11.ooc file for danRer to that for danRer3." \
+        src/align/gbBlat
+    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+    # danRer genome information
+    # Install to /cluster/data/genbank
+    cd $HOME/kent/src/hg/makeDb/genbank
+    make install-server
+
+    ssh eieio
+    cd /cluster/data/genbank
+    # This is an -initial run, all sequences
+    nice bin/gbAlignStep -verbose=1 -initial danRer3
+
+    # Load results for all sequences:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer3
+    # Move results need to be moved out the way
+    cd /cluster/data/genbank/work
+    mv initial.danRer3 initial.danRer3.allseqs
+
+FOR MGC GENES:
+ - wait one day for nightly build to align and load them into the db
+   - rebuild trackDb
+
+# BACENDS FILES (in progress, 2005-06-16, hartera)
+    ssh kkstore01
+    # BAC ends sequence files provided by Mario Caccamo at Sanger
+    # mc2@sanger.ac.uk
+    mkdir -p /cluster/data/danRer3/bed/bacends
+    cd /cluster/data/danRer3/bed/bacends
+
+    wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/zf_bacends.fa.gz
+    wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/DH_bacends.fa.gz
+    wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/bacend_placement.txt.gz
+    gunzip *.gz  
+    # DH_bacends.fa are from the new library from a doubled haploid fish
+    # zf_bacends.fa are from the existing libraries used in danRer2 and danRer1
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/bacends
+    cat zf_bacends.fa DH_bacends.fa >> Zv5Bacends.fa
+    faSize Zv5Bacends.fa
+    # 680121953 bases (11160014 N's 668961939 real 668961939 upper 0 lower) 
+    # in 729101 sequences in 1 files
+    # Total size: mean 932.8 sd 242.6 min 26 (CHORI73_189m04.p1kSP6) 
+    # max 5717 (CHORI73_255a17.q1kT7) median 882
+    # N count: mean 15.3 sd 75.7
+    # U count: mean 917.5 sd 242.2
+    # L count: mean 0.0 sd 0.0
+    wc -l *.fa
+    # 6412741 DH_bacends.fa
+    # 14700258 Zv5Bacends.fa
+    # 8287517 zf_bacends.fa
+
+    ssh kkr1u00
+    cd /cluster/data/danRer3/bed/bacends
+    mkdir -p /iscratch/i/danRer3/bacends
+    # split up sequence for cluster runs
+    faSplit sequence Zv5Bacends.fa 20 /iscratch/i/danRer3/bacends/bacends
+    # iSync bacends to kilokluster
+    /cluster/bin/iSync
+
+    ssh kk
+    cd /cluster/data/danRer3/bed/bacends
+    ls -1S /iscratch/i/danRer3/bacends/*.fa > bacends.lst
+    ls -1S /iscratch/i/danRer3/trfFa/*.fa > genome.lst
+# use Blat parameters as for mm5 and hg17
+cat << '_EOF_' > template
+#LOOP
+/cluster/bin/i386/blat $(path1) $(path2) -ooc=/iscratch/i/danRer3/danRer3_11.ooc {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+   # << this line keeps emacs coloring happy
+    mkdir psl
+    gensub2 genome.lst bacends.lst template jobList
+    para create jobList
+    para try, check, push, check, ...
+# para time
+# Completed: 5760 of 5760 jobs
+# CPU time in finished jobs:    3694919s   61581.99m  1026.37h   42.77d  0.117 y
+# IO & Wait Time:               1103361s   18389.34m   306.49h   12.77d  0.035 y
+# Average job time:                 833s      13.88m     0.23h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            4933s      82.22m     1.37h    0.06d
+# Submission to last job:         14338s     238.97m     3.98h    0.17d
+     ssh kkstore02
+     cd /cluster/data/danRer3/bed/bacends
+     nice pslSort dirs raw.psl temp psl
+     # use pslReps parameters used for mm6
+     pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons raw.psl \
+             bacEnds.psl /dev/null
+     pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds2.psl /dev/null
+     # see how many align in each case
+    
+# VEGA
+    # get transcripts in transcripts_coords from e-mail from Mario Caccamo
+    # at Sanger 06/16/05.
+    # also README for Vega
+    ssh kkstore01
+    mkdir -p /cluster/data/danRer3/bed/vegaGene
+    cd /cluster/data/danRer3/bed/vegaGene 

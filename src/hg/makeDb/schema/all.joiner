@@ -18,7 +18,7 @@ set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
 set ci ci1
-set danRer danRer1,danRer2
+set danRer danRer1,danRer2,danRer3
 set canFam canFam1
 set droYak droYak1
 set droMult droAna1,droMoj1,droVir1,droEre1,droSim1
@@ -244,7 +244,7 @@ identifier gencodeGeneName dependency
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
-    $hg.acemblyPep.name full unique
+    $hg.acemblyPep.name unique minCheck=0.90
     $hg.acemblyClass.name full unique
 
 identifier ECgeneName dependency
@@ -666,7 +666,7 @@ identifier wgsContigAccession typeOf=genbankAccession
 identifier wgsContigName
 "Sequencing project name for whole-genome shotgun contigs." 
     $wgs.contigAcc.contig
-    $wgs.gold.frag $split full
+    $wgs,!panTro1.gold.frag $split full
 
 identifier proteinAccession typeOf=genbankAccession fuzzy
 "Genbank protein accession."
@@ -818,6 +818,10 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.blastKGPep02.name minCheck=0.99
     $kgDb.blastKGRef02.acc minCheck=0.99
     $kgDb.refSeqKg.kgId minCheck=0.50
+    $kgDb.rankProp.query
+    $kgDb.rankProp.target
+    $kgDb.pPsiBlast.kgId1
+    $kgDb.pPsiBlast.kgId2
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
@@ -906,9 +910,10 @@ identifier genBankSource
 identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
-    $gbd.gbCdnaInfo.tissue 
-    $gbd.altGraphX.mrnaTissues comma
-
+    $gbd,!rn2,!hg15.gbCdnaInfo.tissue 
+    rn2.gbCdnaInfo.tissue minCheck=0.99
+    hg15.gbCdnaInfo.tissue minCheck=0.99
+    $gbd.altGraphX.mrnaTissues comma minCheck=0.35
 
 # Some misc clone-oriented identifiers
 
@@ -961,9 +966,15 @@ identifier stsName fuzzy
  
 identifier stsTrueName typeOf=stsName
 "STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
-    $gbd.stsInfo2.name
+    $gbd,!hg16.stsInfo2.name
     $gbd.stsAlias.trueName
     $gbd.stsMap.name
+
+identifier stsTrueNameHg16 typeOf=stsName
+"STS (Sequenced Tagged Site, aka mapping sequence) Unique Name for hg16"
+    hg16.stsInfo2.name dupeOk
+    hg16.stsAlias.trueName
+    hg16.stsMap.name
 
 identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
@@ -1260,7 +1271,7 @@ identifier bioCycMapId external=BioCyc
 
 identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
-    $gbd.keggMapDesc.mapID
+    $gbd.keggMapDesc.mapID dupeOk
     $gbd.keggPathway.mapID
 
 identifier cgapId
@@ -1315,7 +1326,7 @@ identifier locusLinkId external=LocusLink
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.99
     $kgDb.knownToLocusLink.value minCheck=0.99
-    $dm.bdgpToLocusLink.value minCheck=0.99
+    $dm.bdgpToLocusLink.value minCheck=0.98
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
@@ -1367,7 +1378,7 @@ identifier extFileId
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
     $gbd.gbExtFile.id
-    $gbd.gbSeq.gbExtFile
+    $gbd.gbSeq.gbExtFile minCheck=0.85
 
 identifier encodeRegion
 "ENCODE (extensive analysis of 1% of genome) Region"
@@ -1534,6 +1545,7 @@ type psl
     $hg.affyU133Plus2
     $hg.HInvGeneMrna
     $mm.affyU74
+    $danRer.affyZebrafish
     $gbd.all_bacends
     $gbd.all_fosends
     $gbd.all_est
@@ -1791,6 +1803,10 @@ tablesIgnored $galGal
 
 tablesIgnored $danRer
     chr%_gold
+    ctgPos2
+    wz_ests
+    rhMap
+    affyZebrafish
 
 tablesIgnored $canFam
     chr%_gold
@@ -1925,9 +1941,3 @@ tablesIgnored hg16
 
 tablesIgnored hg17
     ecoresTetNig1
-
-tablesIgnored $danRer
-    wz_ests
-    rhMap
-
-    

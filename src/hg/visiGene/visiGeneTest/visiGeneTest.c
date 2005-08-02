@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneTest.c,v 1.1 2005/07/11 21:03:06 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneTest.c,v 1.3 2005/07/14 07:17:05 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,8 +27,10 @@ static struct optionSpec options[] = {
 void printPaths(struct sqlConnection *conn, int image)
 /* Print out paths associated with image */
 {
+int imageWidth = 0, imageHeight=0;
 printf("full: %s\n", visiGeneFullSizePath(conn, image));
-printf("screen: %s\n", visiGeneScreenSizePath(conn, image));
+visiGeneImageSize(conn, image, &imageWidth, &imageHeight);
+printf("width: %d height: %d\n", imageWidth, imageHeight);
 printf("thumb: %s\n", visiGeneThumbSizePath(conn, image));
 }
 
@@ -58,9 +60,9 @@ void visiGeneTest(char *database)
 /* visiGeneTest - Test out visiGene database interface routines. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-int image = 18180;
+int image = 17;
 
-// for (image=1; image < 100000; image *= 10)
+//for (image=1; image < 100000; image *= 10)
     {
     printf("image #%d\n", image);
     printPaths(conn, image);
@@ -84,6 +86,7 @@ int image = 18180;
     printAndFreeIntList(visiGeneSelectLocusLink(conn, "15436"), "LL 15436");
     printAndFreeIntList(visiGeneSelectGenbank(conn, "J03770"), "J03770");
     printAndFreeIntList(visiGeneSelectUniProt(conn, "P12345"), "UP P12345");
+    printf("copyright: %s\n", visiGeneCopyright(conn, image));
 
     printf("\n");
     }

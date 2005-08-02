@@ -15,22 +15,22 @@ In the graphical display, an association is displayed as a block
 drawn at the location of the associated SNP.  In pack or full modes, 
 the name of the associated gene is drawn to the left of the block.  
 The shading of the block indicates the strength of the association:
-light gray indicates a (-log10) P-value close to 0 and black indicates a 
-P-value of 2 or more.  
+light gray indicates a (-log<sub>10</sub>) P-value close to 0 and 
+black indicates a P-value of 2 or more.  
 </P>
 
 <H2>Methods</H2>
 <P>
 An association analysis was performed for each ENCODE RefSeq gene with the 
 genotypes of SNPs in the same ENCODE region (cis).  Expression values were
-initially log2 transformed and subsequently normalized with quantile
+initially log<sub>2</sub> transformed and subsequently normalized with quantile
 normalization to ensure homogeneous levels between arrays. 
 Analysis of variance (ANOVA) was then performed with 1 or 2 degrees of 
 freedom (depending on whether only two or all three genotypes in the population
 were available), using 
 the genotype as a categorical variable and the normalized/transformed
 expression values as the response.  The values presented here are the
--log10 P-value.</P>
+-log<sub>10</sub> P-value.</P>
 
 <H2>Verification</H2>
 <P>

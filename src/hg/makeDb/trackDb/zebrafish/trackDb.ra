@@ -16,6 +16,14 @@ visibility hide
 spectrum on
 type psl est
 
+track affyZebrafish
+shortLabel Affy Zebrafish
+longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
+group regulation
+priority 80
+visibility hide
+type psl .
+
 track blastHg16KG
 shortLabel $o_Organism Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
@@ -212,4 +220,20 @@ searchTable wz_ests
 searchMethod prefix
 searchType psl
 shortCircuit 1
+
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex Zebrafish:.+
+searchPriority 15
+termPrefix Zebrafish:
+                                                                                
+searchName affyZebrafishAbbrev
+searchTable affyZebrafish
+searchMethod exact
+searchType psl
+shortCircuit 1
+termRegex [Dr][[:alnum:]_\.]+.*_at
+searchPriority 15
 

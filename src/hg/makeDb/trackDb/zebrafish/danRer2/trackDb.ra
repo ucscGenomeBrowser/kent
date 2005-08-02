@@ -58,14 +58,6 @@ visibility hide
 type bed 6 +
 exonArrows off
 
-track affyZebrafish
-shortLabel Affy Zebrafish
-longLabel Alignments of Affymetrix Consensus Sequences from Zebrafish Chip
-group regulation
-priority 80
-visibility hide
-type psl .
-
 track multiz6way
 shortLabel 6-Way Conservation
 longLabel 6-Way Vertebrate Multiz Alignment & Conservation
@@ -240,20 +232,3 @@ xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENSDARP[0-9]+(\.[0-9]+)?
 searchPriority 50
-                                                                                
-searchTable affyZebrafish
-searchMethod exact
-searchType psl
-shortCircuit 1
-termRegex Zebrafish:.+
-searchPriority 15
-termPrefix Zebrafish:
-                                                                                
-searchName affyZebrafishAbbrev
-searchTable affyZebrafish
-searchMethod exact
-searchType psl
-shortCircuit 1
-termRegex [Dr][[:alnum:]_\.]+.*_at
-searchPriority 15
-

@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.990 2005/07/12 02:09:52 jsp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.991 2005/07/14 17:34:36 kschneid Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1123,6 +1123,20 @@ vgMakeColorGradient(vg, &black, &red, EXPR_DATA_SHADES, shadesOfRed);
 vgMakeColorGradient(vg, &black, &green, EXPR_DATA_SHADES, shadesOfGreen);
 exprBedColorsMade = TRUE;
 }
+
+void makeLoweShades(struct vGfx *vg) 
+/* Allocate the  shades of Red, Green and Blue */
+{
+static struct rgbColor black = {0, 0, 0};
+static struct rgbColor shade1 = {120, 255, 255};
+static struct rgbColor shade2 = {80,200, 255};
+static struct rgbColor shade3 = {0,60, 255};
+vgMakeColorGradient(vg, &black, &shade1, 11, shadesOfLowe1);
+vgMakeColorGradient(vg, &black, &shade2, 11, shadesOfLowe2);
+vgMakeColorGradient(vg, &black, &shade3, 11, shadesOfLowe3);
+
+}
+
 
 Color getOrangeColor()
 {

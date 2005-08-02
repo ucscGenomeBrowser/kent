@@ -25,7 +25,7 @@ char *ptr = *ptrPtr;
 
 AllocVar(pName);
 /* legal id's are alphanumeric */
-while(isalpha(*ptr) || isdigit(*ptr))
+while(isalpha(*ptr) || isdigit(*ptr) || (*ptr == '/'))
     ptr++;
 
 /* did we read something? */

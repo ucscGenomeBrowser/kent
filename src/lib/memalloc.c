@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.23 2005/06/20 21:32:51 galt Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.24 2005/07/21 00:12:57 galt Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -86,13 +86,13 @@ void *needLargeMem(size_t size)
 void *pt;
 if (size == 0 || size >= maxAlloc)
     {
-    warn("Program error: trying to allocate %lld bytes in needLargeMem (limit: %lld)",
-         (long long)size, (long long)maxAlloc);
+    warn("Program error: trying to allocate %llu bytes in needLargeMem (limit: %llu)",
+         (unsigned long long)size, (unsigned long long)maxAlloc);
     assert(FALSE);
     }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory needLargeMem - request size %lld bytes\n",
-             (long long)size);
+    errAbort("Out of memory needLargeMem - request size %llu bytes\n",
+             (unsigned long long)size);
 return pt;
 }
 
@@ -112,13 +112,13 @@ void *needLargeMemResize(void* vp, size_t size)
 void *pt;
 if (size == 0 || size >= maxAlloc)
     {
-    warn("Program error: trying to allocate %lld bytes in needLargeMem",
-         (long long)size);
+    warn("Program error: trying to allocate %llu bytes in needLargeMem",
+         (unsigned long long)size);
     assert(FALSE);
     }
 if ((pt = mhStack->realloc(vp, size)) == NULL)
-    errAbort("Out of memory - request size %lld bytes\n",
-             (long long)size);
+    errAbort("Out of memory - request size %llu bytes\n",
+             (unsigned long long)size);
 return pt;
 }
 
@@ -143,7 +143,7 @@ if (size == 0)
     }
 if ((pt = mhStack->alloc(size)) == NULL)
     errAbort("Out of huge memory - request size %llu bytes\n",
-             (long long)size);
+             (unsigned long long)size);
 return pt;
 }
 
@@ -164,7 +164,7 @@ void *needHugeMemResize(void* vp, size_t size)
 {
 void *pt;
 if ((pt = mhStack->realloc(vp, size)) == NULL)
-    errAbort("Out of memory - request resize %lld bytes\n", (long long)size);
+    errAbort("Out of memory - request resize %llu bytes\n", (unsigned long long)size);
 return pt;
 }
 
@@ -188,13 +188,13 @@ void *needMem(size_t size)
 void *pt;
 if (size == 0 || size > 100000000)
     {
-    warn("Program error: trying to allocate %lld bytes in needMem",
-         (long long)size);
+    warn("Program error: trying to allocate %llu bytes in needMem",
+         (unsigned long long)size);
     assert(FALSE);
     }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory needMem - request size %lld bytes\n",
-             (long long)size);
+    errAbort("Out of memory needMem - request size %llu bytes\n",
+             (unsigned long long)size);
 memset(pt, 0, size);
 return pt;
 }
@@ -284,7 +284,7 @@ size_t newAlloced = size + carefulAlloced;
 size_t aliSize;
 
 if (newAlloced > carefulMaxToAlloc)
-    errAbort("Allocated too much memory - more than %lld bytes (%lld)", (long long)carefulMaxToAlloc, (long long)newAlloced);
+    errAbort("Allocated too much memory - more than %llu bytes (%llu)", (unsigned long long)carefulMaxToAlloc, (unsigned long long)newAlloced);
 carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
 cmb = carefulParent->alloc(aliSize);

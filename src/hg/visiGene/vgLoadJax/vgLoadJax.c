@@ -1,4 +1,6 @@
-/* vgLoadJax - Load visiGene database from jackson database. */
+/* vgLoadJax - Load visiGene database from jackson database. More 
+ * specifically create a directory full of .ra and .tab files from
+ * jackson database that can be loaded into visiGene with visiGeneLoad. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,17 +10,23 @@
 #include "obscure.h"
 #include "jksql.h"
 #include "spDb.h"
+#include "jpegSize.h"
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "vgLoadJax - Load visiGene database from jackson database\n"
+  "vgLoadJax - Load visiGene database from jackson database. More\n"
+  "specifically create a directory full of .ra and .tab files from\n"
+  "jackson database that can be loaded into visiGene with visiGeneLoad.\n"
   "usage:\n"
-  "   vgLoadJax jaxDb visiDb\n"
+  "   vgLoadJax /gbdb/visiGene jaxDb outputDir\n"
   "Load everything in jackson database tagged after date to\n"
   "visiGene database.  Most commonly run as\n"
-  "   vgLoadJax jackson visiGene\n"
+  "   vgLoadJax /gbdb/visiGene jackson visiGene\n"
+  "where /gbdb/visiGene is a symlink to the pictures home dir\n"
+  " used to determine file exists and\n"
+  " size (width and height in pixels)\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -28,7 +36,6 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-char *clJaxDb, *clVisiDb;
 
 struct slName *jaxSpecList(struct sqlConnection *conn)
 /* Get list of specimen id's. */
@@ -154,7 +161,9 @@ if (key > 0)
     struct sqlResult *sr;
     char **row;
 
-    /* Figure out genotype. */
+    /* Figure out genotype.  Create string that looks something like:
+     *     adh:cheap date,antp:+,  
+     * That is a comma separated list gene:allele. */
     dyStringPrintf(query, 
     	"select MRK_Marker.symbol,ALL_Allele.symbol "
 	"from GXD_AlleleGenotype,MRK_Marker,ALL_Allele "
@@ -213,9 +222,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot)
+void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot,
+	char *inJax)
 /* Create a .ra and a .tab file for given reference. */
 {
+/* Initially the tab file will have some duplicate lines, so
+ * write to temp file, and then filter. */
 char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN];
 FILE *ra = NULL, *tab = NULL;
 struct dyString *query = dyStringNew(0);
@@ -225,7 +237,9 @@ char *copyright;
 struct slName *list, *el;
 boolean gotAny = FALSE;
 struct hash *uniqAssayHash = newHash(16);
-
+int imageWidth = 0, imageHeight = 0;
+char path[PATH_LEN];
+	
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
 safef(tabName, sizeof(tabName), "%s.tab", fileRoot);
 safef(tmpName, sizeof(tmpName), "%s.tmp", fileRoot);
@@ -241,15 +255,17 @@ if (row == NULL)
 
 /* Make ra file with stuff common to whole submission set. */
 ra = mustOpen(raName, "w");
-list = charSepToSlNames(row[0], ';');
 fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
-fprintf(ra, "fullDir /gbdb/visiGene/jax/full\n");
-fprintf(ra, "screenDir /gbdb/visiGene/jax/screen\n");
-fprintf(ra, "thumbDir /gbdb/visiGene/jax/thumb\n");
+fprintf(ra, "fullDir ../visiGene/full/inSitu/Mouse/jax\n");
+fprintf(ra, "thumbDir ../visiGene/200/inSitu/Mouse/jax\n");
 fprintf(ra, "journal %s\n", row[1]);
 fprintf(ra, "publication %s\n", row[2]);
+
+/* The contributor (author) list is in format Kent WJ; Haussler DH; format in
+ * Jackson.  We convert it to Kent W.J.,Haussler D.H., format for visiGene. */
 fprintf(ra, "contributor ");
+list = charSepToSlNames(row[0], ';');
 for (el = list; el != NULL; el = el->next)
     {
     char *lastName = skipLeadingSpaces(el->name);
@@ -345,7 +361,9 @@ fprintf(tab, "bodyPart\t");
 fprintf(tab, "sliceType\t");
 fprintf(tab, "genotype\t");
 fprintf(tab, "strain\t");
-fprintf(tab, "priority\n");
+fprintf(tab, "priority\t");
+fprintf(tab, "imageWidth\t");
+fprintf(tab, "imageHeight\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -430,6 +448,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	if (!sameString(reporterGeneKey, "0"))
 	    {
+	    /* Fixme: make sure that reporterGene's end up in probeType table. */
 	    char *name = NULL;
 	    dyStringClear(query);
 	    dyStringPrintf(query, 
@@ -605,7 +624,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     genotypeAndStrainFromKey(genotypeKey, conn2, &genotype, &strain);
 
     stripChar(paneLabel, '"');	/* Get rid of a difficult quote to process. */
-
+    
+    imageWidth=0;
+    imageHeight=0;
+    safef(path, sizeof(path), "%s/%s.jpg", inJax, fileKey);
+    if (fileExists(path))
+    	jpegSize(path,&imageWidth,&imageHeight);  /* will errAbort if no valid .jpeg exists */
+    else
+	warn("Picture Missing! %s ",path);
+    
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -613,7 +640,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", ageMin);
     fprintf(tab, "%s\t", ageMax);
     fprintf(tab, "%s\t", paneLabel);
-    fprintf(tab, "%s.gif\t", fileKey);
+    fprintf(tab, "%s.jpg\t", fileKey);
     fprintf(tab, "%s\t", imageKey);
     fprintf(tab, "%s\t", fPrimer);
     fprintf(tab, "%s\t", rPrimer);
@@ -625,7 +652,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", sliceType);
     fprintf(tab, "%s\t", genotype);
     fprintf(tab, "%s\t", strain);
-    fprintf(tab, "%s\n", priority);
+    fprintf(tab, "%s\t", priority);
+    fprintf(tab, "%d\t", imageWidth);
+    fprintf(tab, "%d\n", imageHeight);
 
     if (!hashLookup(uniqAssayHash, assayKey))
         {
@@ -651,7 +680,8 @@ dyStringFree(&query);
 hashFree(&uniqAssayHash);
 }
 
-void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *outDir)
+void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *outDir,
+	char *inJax)
 /* Create directory full of visiGeneLoad .ra/.tab files from
  * jackson database connection.  Creates a pair of files for
  * each submission set.   Returns outDir. */
@@ -666,22 +696,25 @@ for (ref = refList; ref != NULL; ref = ref->next)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", outDir, ref->name);
-    submitRefToFiles(conn, conn2, ref->name, path);
+    submitRefToFiles(conn, conn2, ref->name, path, inJax);
     {static int count; if (++count >= 30000) uglyAbort("All for now");}
     }
 
 slNameFreeList(&refList);
 }
 
-void vgLoadJax(char *jaxDb, char *visiDb)
+void vgLoadJax(char *visiGeneDir, char *jaxDb, char *outDir)
 /* vgLoadJax - Load visiGene database from jackson database. */
 {
 struct sqlConnection *conn = sqlConnect(jaxDb);
 struct sqlConnection *conn2 = sqlConnect(jaxDb);
-submitToDir(conn, conn2, visiDb);
 
-uglyf("vgLoadJax %s %s\n", jaxDb, visiDb);
-
+char inFull[PATH_LEN];
+char *jaxPath = "inSitu/Mouse/jax";
+char inJax[PATH_LEN];
+safef(inFull, sizeof(inFull), "%s/full", visiGeneDir);
+safef(inJax, sizeof(inJax), "%s/%s", inFull, jaxPath);
+submitToDir(conn, conn2, outDir, inJax);
 sqlDisconnect(&conn2);
 sqlDisconnect(&conn);
 }
@@ -690,10 +723,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-clJaxDb = argv[1];
-clVisiDb = argv[2];
-vgLoadJax(clJaxDb, clVisiDb);
+vgLoadJax(argv[1], argv[2], argv[3]);
 return 0;
 }

@@ -10,7 +10,7 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.5 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.7 2005/08/01 20:12:30 heather Exp $";
 
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
@@ -117,9 +117,16 @@ static boolean altSpliceExists(struct section *section,
 /* Return TRUE if altSplice table exists and has something
  * on this one. */
 {
+char *mark = NULL;
 if (!sqlTableExists(conn, "altGraphX") || !sqlTableExists(conn, "agxBed"))
     return FALSE;
 section->items = altGraphId(conn, curGenePred);
+/* each graph can have different connected components, if there
+   is a component take the prefix for matching back to the graph.
+   i.e. cut of an '-1' or '-2' */
+if (section->items != NULL)
+    if((mark = strrchr((char *)section->items, '-')) != NULL) 
+        *mark = '\0';
 return section->items != NULL;
 }
 

@@ -253,13 +253,16 @@ char *temparray2;
 char **row;
 char *tempstring;
 int x;
+int cutoff;
+char cMode[64];
+
+/*The most common names used to display method*/
 char *codeNames[18] = {"within genus", "\t", "crenarchaea","euryarchaea","\t","bacteria", "\t", 
 "eukarya","\t","thermophile","hyperthermophile","acidophile","alkaliphile", "halophile","methanogen","strict aerobe","strict anaerobe", "anaerobe or aerobe"}; int i;
- 
-/*sprintf(query, "select * from %s where chromStart > %i AND chromEnd < %i", tg->mapName, winStart,winEnd);
-sr = sqlGetResult(conn, query);*/
+safef(cMode, sizeof(cMode), "%s.scoreFilter", tg->tdb->tableName);
+ cutoff=cartUsualInt(cart, cMode,0 );
 sr=hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, 0);
-    
+   
 while ((row = sqlNextRow(sr)) != NULL)
     {
     cb = codeBlastLoad(row);
@@ -395,6 +398,7 @@ if(tg->limitedVis != tvDense)
             {
 		struct linkedFeatures *lfList = NULL;
         	AllocVar(codeLfs);
+		/*When doing abyssi displays differnt names at the begining*/
 		
 		if(i == 0)
 		    codeLfs->name="within Pho";
@@ -411,7 +415,7 @@ if(tg->limitedVis != tvDense)
 		    if(i>2)
             	    temparray2=((char**)(lfs->features->extra))[i-1];
 		    else temparray2=((char**)(lfs->features->extra))[i];
-	   	    if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)!=-9999)
+	   	    if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)!=-9999 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
                     {
 			lf->score=atoi(temparray2);
                 	slAddHead(&lfList,lf);
@@ -435,7 +439,7 @@ if(tg->limitedVis != tvDense)
                 {
 		    lf = lfsToLf(lfs);
         	    temparray2=((char**)(lfs->features->extra))[i];
-		    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)!=-9999)
+		    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)!=-9999 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
         	    {
 			lf->score=atoi(temparray2);
         	        slAddHead(&lfList,lf);
@@ -483,7 +487,7 @@ else if (lf->score > 200)
     return shadesOfGray[3];
 else if (lf->score > 100)
     return shadesOfGray[3];
-else if (lf->score != -9999) return shadesOfGray[2];
+else if (lf->score != 0) return shadesOfGray[2];
 else return shadesOfGray[0];
 }
 

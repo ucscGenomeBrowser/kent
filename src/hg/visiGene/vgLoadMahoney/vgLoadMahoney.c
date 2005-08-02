@@ -7,6 +7,7 @@
 #include "portable.h"
 #include "jksql.h"
 #include "mahoney.h"
+#include "jpegSize.h"
 
 /* Globals set from the command line. */
 FILE *conflictLog = NULL;
@@ -55,9 +56,8 @@ FILE *f = mustOpen(fileName, "w");
 
 fprintf(f, "%s",
 "submitSet mahoneyWhole01\n"
-"fullDir ../genePix/full/inSitu/Mouse/mahoney/wholeMount\n"
-"screenDir ../genePix/700/inSitu/Mouse/mahoney/wholeMount\n"
-"thumbDir ../genePix/200/inSitu/Mouse/mahoney/wholeMount\n"
+"fullDir ../visiGene/full/inSitu/Mouse/mahoney/wholeMount\n"
+"thumbDir ../visiGene/200/inSitu/Mouse/mahoney/wholeMount\n"
 "priority 50\n"
 "age 10.5\n"
 "minAge 10\n"
@@ -77,9 +77,8 @@ FILE *f = mustOpen(fileName, "w");
 
 fprintf(f, "%s",
 "submitSet mahoneySlices01\n"
-"fullDir ../genePix/full/inSitu/Mouse/mahoney/slices\n"
-"screenDir ../genePix/700/inSitu/Mouse/mahoney/slices\n"
-"thumbDir ../genePix/200/inSitu/Mouse/mahoney/slices\n"
+"fullDir ../visiGene/full/inSitu/Mouse/mahoney/slices\n"
+"thumbDir ../visiGene/200/inSitu/Mouse/mahoney/slices\n"
 "priority 500\n"
 "bodyPart head\n"
 "sliceType transverse\n"
@@ -123,13 +122,13 @@ else
     return TRUE;
 }
 
-void wholeMountTab(struct slName *inList, struct hash *mahoneyHash,
-	char *outFile)
+void wholeMountTab(struct slName *inList, char *inFull, 
+	struct hash *mahoneyHash, char *outFile)
 /* Output tab-delimited info on each item in inList. */
 {
 struct slName *in;
 FILE *f = mustOpen(outFile, "w");
-fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\tpermeablization\n");
+fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\tpermeablization\timageWidth\timageHeight\n");
 for (in = inList; in != NULL; in = in->next)
     {
     char hex[8];
@@ -137,6 +136,8 @@ for (in = inList; in != NULL; in = in->next)
     char treatment;
     int id;
     struct mahoney *m;
+    int imageWidth = 0, imageHeight = 0;
+    char path[PATH_LEN]; 
     strncpy(mtf, in->name, 4);
     mtf[4] = 0;
     treatment = in->name[4];
@@ -164,15 +165,19 @@ for (in = inList; in != NULL; in = in->next)
 	    fprintf(f, "%s\t", m->fPrimer);
 	    fprintf(f, "%s\t", m->rPrimer);
 	    if (treatment == 'a')
-		fprintf(f, "3 min proteinase K");
+		fprintf(f, "3 min proteinase K\t");
 	    else if (treatment == 'b')
-		fprintf(f, "30 min proteinase K");
+		fprintf(f, "30 min proteinase K\t");
 	    else if (treatment == 'd')
-		fprintf(f, "3 min proteinase K/30 min proteinase K");
+		fprintf(f, "3 min proteinase K/30 min proteinase K\t");
 	    else if (treatment == 'c' || treatment == '.')
-		/* do nothing*/ ;
+		fprintf(f, "\t"); /* do nothing*/
 	    else
 		errAbort("Unrecognized treatment %c in %s", treatment, in->name);
+	    safef(path, sizeof(path), "%s/%s", inFull, in->name);
+	    jpegSize(path,&imageWidth,&imageHeight);
+	    fprintf(f, "%d\t", imageWidth);
+	    fprintf(f, "%d", imageHeight);
 	    fprintf(f, "\n");
 	    }
 	}
@@ -191,17 +196,17 @@ imageFileList = listDir(inFull, "*.jpg");
 safef(outRa, sizeof(outRa), "%s/whole.ra", outDir);
 wholeMountRa(outRa);
 safef(outTab, sizeof(outRa), "%s/whole.tab", outDir);
-wholeMountTab(imageFileList, mahoneyHash, outTab);
+wholeMountTab(imageFileList, inFull, mahoneyHash, outTab);
 }
 
-void slicesTab(struct slName *inList, struct hash *mahoneyHash,
-	char *outFile)
+void slicesTab(struct slName *inList, char *inFull,
+	struct hash *mahoneyHash, char *outFile)
 /* Output tab-delimited info on each item in inList. */
 {
 struct slName *in;
 FILE *f = mustOpen(outFile, "w");
 char lastStage = 0;
-fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\tage\tminAge\tmaxAge\tsectionSet\tsectionIx\n");
+fprintf(f, "#fileName\tsubmitId\tgene\tlocusLink\trefSeq\tgenbank\tfPrimer\trPrimer\tage\tminAge\tmaxAge\tsectionSet\tsectionIx\timageWidth\timageHeight\n");
 for (in = inList; in != NULL; in = in->next)
     {
     char hex[8];
@@ -209,6 +214,8 @@ for (in = inList; in != NULL; in = in->next)
     char stage = '1', sliceNo, nextSliceNo = '1';
     int id;
     struct mahoney *m;
+    int imageWidth = 0, imageHeight = 0;
+    char path[PATH_LEN]; 
     strncpy(mtf, in->name+1, 4);
     mtf[4] = 0;
     id = atoi(mtf);
@@ -242,7 +249,12 @@ for (in = inList; in != NULL; in = in->next)
 		fprintf(f, "19\t19\t20\t");
 	    else
 		errAbort("Unrecognized stage %c in %s", stage, in->name);
-	    fprintf(f, "0\t0\n");
+	    fprintf(f, "0\t0\t");
+	    safef(path, sizeof(path), "%s/%s", inFull, in->name);
+	    jpegSize(path,&imageWidth,&imageHeight);
+	    fprintf(f, "%d\t", imageWidth);
+	    fprintf(f, "%d", imageHeight);
+	    fprintf(f, "\n");
 	    }
 	}
     }
@@ -262,7 +274,7 @@ imageFileList = listDir(inFull, "*.jpg");
 safef(outRa, sizeof(outRa), "%s/slices.ra", outDir);
 slicesRa(outRa);
 safef(outTab, sizeof(outRa), "%s/slices.tab", outDir);
-slicesTab(imageFileList, mahoneyHash, outTab);
+slicesTab(imageFileList, inFull, mahoneyHash, outTab);
 }
 
 
@@ -657,15 +669,15 @@ verbose(2, "Filled by PCR: locusLink %d, genbank %d\n", locusLinkFromPcr, genban
 }
 
 
-void vgLoadMahoney(char *genePixDir, char *mouseDb, char *inTab, char *pcrBed, char *outDir)
-/* vgLoadMahoney - Convert Paul Gray/Mahoney in situs into something genePixLoad can handle. */
+void vgLoadMahoney(char *visiGeneDir, char *mouseDb, char *inTab, char *pcrBed, char *outDir)
+/* vgLoadMahoney - Convert Paul Gray/Mahoney in situs into something visiGeneLoad can handle. */
 {
 struct mahoney *mahoneyList = vgLoadMahoneyList(inTab);
 struct hash *mHash = hashMahoneys(mahoneyList);
 char inFull[PATH_LEN];
 char *mahoneyPath = "inSitu/Mouse/mahoney";
 char inWholeFull[PATH_LEN], inSlicesFull[PATH_LEN];
-safef(inFull, sizeof(inFull), "%s/full", genePixDir);
+safef(inFull, sizeof(inFull), "%s/full", visiGeneDir);
 safef(inWholeFull, sizeof(inWholeFull), "%s/%s/%s", inFull, mahoneyPath, "wholeMount");
 safef(inSlicesFull, sizeof(inSlicesFull), "%s/%s/%s", inFull, mahoneyPath, "slices");
 makeDir(outDir);

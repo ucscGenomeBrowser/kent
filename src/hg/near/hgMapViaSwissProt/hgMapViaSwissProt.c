@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.3 2005/02/15 17:56:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgMapViaSwissProt.c,v 1.4 2005/07/15 00:52:49 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,8 +21,8 @@ errAbort(
   "   database is a genome database like hg16\n"
   "   inTable is a table in genome database like knownGene\n"
   "   keyField is the field in inTable to put in name field of outTable\n"
-  "   spIdField is the field in inTable that is a swissProt accession or ID\n"
-  "   spExtDb is the swissProt external database name (like Pfam)\n"
+  "   spIdField is the field in inTable that is a UniProt accession or ID\n"
+  "   spExtDb is the UniProt external database name (like Pfam)\n"
   "   outTable is the output name/value table\n"
   "example:\n"
   "   hgMapViaSwissProt hg16 knownGene name proteinID Pfam knownToPfam\n"
@@ -62,6 +62,8 @@ struct sqlResult *geneSr, *sr;
 char **geneRow, **row;
 char *spExtDbId;
 char *tempDir = ".";
+char *chp;
+
 FILE *f = hgCreateTabFile(tempDir, outTable);
 struct hash *uniqHash = newHash(18);
 
@@ -69,10 +71,10 @@ struct hash *uniqHash = newHash(18);
 safef(query, sizeof(query), "select id from extDb where val = '%s'", spExtDb);
 spExtDbId = sqlQuickString(spConn, query);
 if (spExtDbId == NULL)
-    errAbort("Couldn't find %s in swissProt.extDb", spExtDb);
+    errAbort("Couldn't find %s in UniProt.extDb", spExtDb);
 
 /* Stream through input table. */
-printf("Looking up %s.%s in swissProt database\n", inTable, spIdField);
+printf("Looking up %s.%s in UniProt database\n", inTable, spIdField);
 safef(geneQuery, sizeof(geneQuery), 
 	"select %s,%s from %s", nameField, spIdField, inTable);
 geneSr = sqlGetResult(dbConn, geneQuery);
@@ -83,6 +85,9 @@ while ((geneRow = sqlNextRow(geneSr)) != NULL)
     char *acc = spFindAcc(spConn, spId);
     if (acc != NULL)
         {
+	/* chop off the tail, if the protein is a variant splice isoform. */
+	chp = strstr(acc, "-");
+	if (chp != NULL) *chp = '\0';
 	safef(query, sizeof(query), 
 		"select extAcc1 from extDbRef where acc='%s' and extDb=%s",
 		acc, spExtDbId);

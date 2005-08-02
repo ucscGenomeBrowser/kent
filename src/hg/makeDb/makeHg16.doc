@@ -11060,7 +11060,7 @@ echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N
 
 
 ##########################################################################
-# CNPs from Wash U (In progress, Heather, June 2005)
+# CNPs from University of Washington (Done, Heather and Daryl, June/July 2005)
 # data from http://humanparalogy.gs.washington.edu/structuralvariation
 
 ssh hgwdev
@@ -11153,3 +11153,137 @@ close (FH);
 	hg16.wgRna.tab
     #	this leaves 16 items classified as unknown, request to
     #	Michel Weber for proper classification
+
+################################################################################
+# Build hg17Kg table for KG II for hg16, using hg17 KG data (DONE 2005-07-11 Fan).
+
+   ssh hgwdev
+   cd /cluster/data/mm6/bed
+   mkdir hg17Kg
+   cd hg17Kg
+   hgsql hg16 -N -e "select * from all_mrna" |cut -f 2-22 >all_mrna.psl
+
+   hgsql hg16 -N -e \
+'select gbCdnaInfo.acc,cds.name from gbCdnaInfo,cds,all_mrna where all_mrna.qName=gbCdnaInfo.acc and   gbCdnaInfo.cds=cds.id' \
+   |sort -u > all_mrna.cds
+
+   bash
+   mrnaToGene -cdsFile=all_mrna.cds all_mrna.psl all_mrna.gp 2>all_mrna.err > all_mrna.log
+   exit
+
+   hgsql hg16 -e 'drop table mrnaGp'
+   hgsql hg16 < ~/src/hg/lib/mrnaGp.sql
+   hgsql hg16 -e 'load data local infile "all_mrna.gp" into table mrnaGp'
+
+   hgsql hg16 -N -e \
+   'select mrnaGp.* from mrnaGp,hg17.knownGene where mrnaGp.name = knownGene.name and mrnaGp.chrom=knownGene.chrom' \
+   |sort -u > mrnaGp2.tab
+   hgsql hg16 -e 'drop table mrnaGp2'
+   hgsql hg16 < ~/src/hg/lib/mrnaGp2.sql
+   hgsql hg16 -e 'load data local infile "mrnaGp2.tab" into table mrnaGp2'
+
+# Create hg16Kg table in hg17 to get over a hurdle that we can not do join
+# between mySQL DBs
+
+   hgsql hg17 -e 'drop table hg16Kg'
+   hgsql hg17 < ~/src/hg/lib/hg16Kg.sql
+   hgsql hg16 -N -e 'select * from knownGene' >hg16Kg.tab
+   hgsql hg17 -e 'load data local infile "hg16Kg.tab" into table hg16Kg'
+
+   hgsql hg17 -N -e \
+   'select hg16Kg.* from hg16Kg, knownGene where hg16Kg.name=knownGene.name and knownGene.name not like "NM_%" and hg16Kg.chrom=knownGene.chrom '\
+   >j
+
+   cut -f 1-10 j >j1
+
+# j1 are mRNA records through old KG process.
+# j2 are RefSeq records based on hg17 KG
+# mrnaGp2 are mRNA records based on hg17 KG non-Refseq entries and GenBank CDS data (which is incomplete).
+
+   hgsql hg16 -N -e \
+   'select refGene.* from refGene, hg17.knownGene where hg17.knownGene.name=refGene.name' >j2
+
+   cat j1 j2 mrnaGp2.tab |sort -u >j.tab
+
+   ~/kent/src/hg/protein/sortKg.pl j.tab >hg17Kg.tab
+
+   wc hg17Kg.tab
+
+   hgsql hg16 -e "delete from hg17Kg"
+
+   hgsql hg16 -e 'load data local infile "hg17Kg.tab" into table hg17Kg'
+
+####################################################################
+# Make mouse ortholog column using blastp on mm6 known genes. (DONE 7/12/05, Fan).
+
+# First make mouse protein database and copy it to /cluster/panasas
+# if it doesn't exist already
+#	This already exists.  See makeMm6.doc for procedure
+
+# Make parasol run directory 
+ssh kk
+mkdir -p /cluster/data/hg16/bed/blastp/mm6
+cd /cluster/data/hg16/bed/blastp/mm6
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/panasas/home/store/mm6/blastp/known \
+-i $1 -o $2 -e 0.001 -m 8 -b 1
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	this echo trick is used because otherwise the command line is
+#	too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+Completed: 5812 of 5812 jobs
+CPU time in finished jobs:      96031s    1600.52m    26.68h    1.11d  0.003 y
+IO & Wait Time:                 15641s     260.68m     4.34h    0.18d  0.000 y
+Average job time:                  19s       0.32m     0.01h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             168s       2.80m     0.05h    0.00d
+Submission to last job:           766s      12.77m     0.21h    0.01d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/hg16/bed/blastp/mm6/run/out
+hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
+# Scanning through 5812 files
+# Loading database with 35707 rows
+
+# Update otherOrg.ra under hg/hgGene/hgGeneData/Human/hg16 to mm6 instead of
+# mm4.
+
+
+##########################################################################
+# EVOFOLD  - RNA secondary structure predictions lifted from hg17 (Jakob Skou Pedersen)
+# Jakob Skou Pedersen, July 12, 2005
+  ssh -C hgwdev
+  mkdir -p /cluster/data/hg16/bed/evofold
+  cd /cluster/data/hg16/bed/evofold
+  # lifting folds from hg17 to hg16
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from evofold;" | hgsql hg17 | sed -e 1d > foldsHg17.bed
+  liftOver -minMatch=1.0 foldsHg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg16.over.chain tmp.bed unmapped.bed
+  # remove elements which are wrong size after lifting
+  awk '$3-$2 == $7' tmp.bed > foldsHg16.bed
+  # clean up
+  rm foldsHg17.bed unmapped.bed tmp.bed

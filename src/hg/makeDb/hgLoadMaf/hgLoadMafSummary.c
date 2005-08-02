@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.12 2005/04/28 18:13:39 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.13 2005/07/22 22:58:10 braney Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -212,15 +212,18 @@ long mafCount = 0;
 struct mafComp *mcMaster = NULL;
 struct mafAli *maf;
 struct mafFile *mf = mafOpen(fileName);
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn;
 FILE *f = hgCreateTabFile(".", table);
 long componentCount = 0;
 struct hash *componentHash = newHash(0);
 struct mafSummary *ms;
 
-hSetDb(database);
 if (!test)
+    {
+    conn = sqlConnect(database);
+    hSetDb(database);
     mafSummaryTableCreate(conn, table, hGetMinIndexLength());
+    }
 verbose(1, "Indexing and tabulating %s\n", fileName);
 
 /* process mafs */

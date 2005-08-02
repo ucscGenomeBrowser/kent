@@ -6,6 +6,15 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = vgLoadMahoney.o mahoney.o
 
+all: vgLoadMahoney
+
+mahoney.h mahoney.c: mahoney.as
+	autoSql mahoney.as mahoney
+
+mahoney.o: mahoney.h mahoney.c
+
+vgLoadMahoney.o: mahoney.o
+
 vgLoadMahoney: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadMahoney $O ${MYLIBS} $L
 #	${STRIP} ${HOME}/bin/${MACHTYPE}/vgLoadMahoney${EXE}

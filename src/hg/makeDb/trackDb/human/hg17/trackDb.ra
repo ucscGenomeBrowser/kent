@@ -111,13 +111,13 @@ mafTrack multiz10way
 
 track evofold
 shortLabel EvoFold
-longLabel EvoFold predictions of RNA secondary structure (id_strand_score)
+longLabel EvoFold Predictions of RNA Secondary Structure 
 group genes
 priority 63
 visibility hide
 color 20,90,0
 type bed 6 +
-mafTrack multiz10way
+mafTrack multiz8way
 
 track wgRna
 shortLabel sno/miRNA
@@ -1332,7 +1332,7 @@ visibility hide
 type wigMaf 0.0 1.0
 speciesOrder panTro1 panHg4 rheMac1 rabbit rn3 mm6 mmHg4 bosTau1 canFam1 canHg4 armadillo tenrec elephant 
 speciesTree ((tenrec,elephant),(armadillo,((bosTau1, canFam1),((rabbit,(rn3,mm6)),(rheMac1,(panTro1,hg17)panHg4))mmHg4)canHg4));
-speciesTarget mm6
+speciesTarget mouse
 irows on
 summary canHg4MafSum
 

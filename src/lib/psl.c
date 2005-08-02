@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.55 2005/06/02 02:54:16 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.56 2005/07/22 05:34:58 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -592,10 +592,11 @@ int wordCount;
 static int lineAlloc = 0;
 static char *chopBuf = NULL;
 
-if (!lineFileNext(lf, &line, &lineSize))
+if (!lineFileNextReal(lf, &line))
     {
     return NULL;
     }
+lineSize = strlen(line);
 if (lineSize >= lineAlloc)
     {
     lineAlloc = lineSize+256;

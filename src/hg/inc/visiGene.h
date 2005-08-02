@@ -5,13 +5,12 @@
 #ifndef VISIGENE_H
 #define VISIGENE_H
 
+void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight);
+/* Get width and height of image with given id */
+
 char *visiGeneFullSizePath(struct sqlConnection *conn, int id);
 /* Fill in path for full image visiGene of given id.  FreeMem
  * this when done */
-
-char *visiGeneScreenSizePath(struct sqlConnection *conn, int id);
-/* Fill in path for screen-sized (~700x700) image visiGene of given id. 
- * FreeMem when done. */
 
 char *visiGeneThumbSizePath(struct sqlConnection *conn, int id);
 /* Fill in path for thumbnail image (~200x200) visiGene of given id. 
@@ -81,6 +80,10 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id);
 /* Return contributor url associated with this image. 
  * Substitute in submitId for %s before using.  May be null.
  * FreeMem when done. */
+
+char *visiGeneCopyright(struct sqlConnection *conn, int id);
+/* Return copyright statement if any,  NULL if none.
+ * FreeMem this when done. */
 
 enum visiGeneSearchType 
     {

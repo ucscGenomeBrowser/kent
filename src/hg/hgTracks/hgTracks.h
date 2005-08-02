@@ -257,7 +257,9 @@ extern struct slName *browserLines; /* Custom track "browser" lines. */
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
-
+Color shadesOfLowe1[10+1];
+Color shadesOfLowe2[10+1];
+Color shadesOfLowe3[10+1];
 extern int maxShade;		  /* Highest shade in a color gradient. */
 extern Color shadesOfGray[10+1];  /* 10 shades of gray from white to black
                                    * Red is put at end to alert overflow. */
@@ -276,9 +278,11 @@ extern struct rgbColor lightSeaColor;
 extern Color shadesOfGreen[EXPR_DATA_SHADES];
 extern Color shadesOfRed[EXPR_DATA_SHADES];
 extern Color shadesOfBlue[EXPR_DATA_SHADES];
+
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
 void makeRedGreenShades(struct vGfx *vg);
+void makeLoweShades(struct vGfx *vg);
 /* Allocate the  shades of Red, Green and Blue */
 
 /* used in MAF display */

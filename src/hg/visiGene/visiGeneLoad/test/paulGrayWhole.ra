@@ -1,6 +1,5 @@
 submitSet paulGrayWhole01
 fullDir /gbdb/bioImage/full/inSitu/Mouse/mahoney/wholeMount
-screenDir /gbdb/bioImage/700/inSitu/Mouse/mahoney/wholeMount
 thumbDir /gbdb/bioImage/200/inSitu/Mouse/mahoney/wholeMount
 priority 10
 taxon 10090

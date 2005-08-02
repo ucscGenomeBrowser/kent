@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.257 2005/07/09 20:48:25 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.258 2005/07/23 03:37:52 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -600,9 +600,16 @@ struct sqlConnection *hConnectArchiveCentral()
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 {
+struct sqlConnection *conn = NULL;
 if (centralArchiveCc == NULL)
     centralArchiveCc = getCentralCcFromCfg("archivecentral");
-return sqlAllocConnection(centralArchiveCc);
+conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
+if (conn == NULL)
+    {
+    centralArchiveCc = getCentralCcFromCfg("backupcentral");
+    conn = sqlAllocConnection(centralArchiveCc);
+    }
+return(conn);
 }
 
 void hDisconnectArchiveCentral(struct sqlConnection **pConn)
@@ -1927,6 +1934,7 @@ struct sqlConnection *conn;
 char buf[128];
 char query[256];
 char *res = NULL;
+    
 conn = (archive) ? hConnectArchiveCentral() : hConnectCentral();
 sprintf(query, "select %s from dbDb where name = '%s'", field, database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)

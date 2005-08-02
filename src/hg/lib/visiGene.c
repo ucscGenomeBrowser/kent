@@ -14,6 +14,24 @@ if (s == NULL || s[0] == 0)
 return cloneString(s);
 }
 
+void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight)
+/* Get width and height of image with given id */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), 
+	"select imageFile.imageWidth, imageFile.imageHeight from image,imageFile"
+	" where image.id = %d and image.imageFile = imageFile.id "
+	, id);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("No image of id %d", id);
+*imageWidth = atoi(row[0]);
+*imageHeight = atoi(row[1]);
+sqlFreeResult(&sr);
+}
+
 static char *somePath(struct sqlConnection *conn, int id, char *locationField)
 /* Fill in path based on given location field */
 {
@@ -37,13 +55,6 @@ char *visiGeneFullSizePath(struct sqlConnection *conn, int id)
  * this when done */
 {
 return somePath(conn, id, "fullLocation");
-}
-
-char *visiGeneScreenSizePath(struct sqlConnection *conn, int id)
-/* Fill in path for screen-sized (~700x700) image visiGene of given id. 
- * FreeMem when done. */
-{
-return somePath(conn, id, "screenLocation");
 }
 
 char *visiGeneThumbSizePath(struct sqlConnection *conn, int id)
@@ -408,6 +419,21 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id)
  * FreeMem when done. */
 {
 return stringFieldInSubmissionSet(conn, id, "itemUrl");
+}
+
+char *visiGeneCopyright(struct sqlConnection *conn, int id)
+/* Return copyright statement if any,  NULL if none.
+ * FreeMem this when done. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select copyright.notice from image,imageFile,submissionSet,copyright "
+    "where image.id = %d "
+    "and image.imageFile = imageFile.id "
+    "and imageFile.submissionSet = submissionSet.id "
+    "and submissionSet.copyright = copyright.id"
+    , id);
+return sqlQuickString(conn, query);
 }
 
 static void appendMatchHow(struct dyString *dy, char *pattern,

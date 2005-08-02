@@ -82,7 +82,7 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo $f >> $WEEKLYBLD/mbt-tag.txt
+    echo "$f $r" >> $WEEKLYBLD/mbt-tag.txt
     # move the beta tag in cvs to track the change to this week's branch.
     set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
     echo $cmd
@@ -108,7 +108,7 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo $f >> $WEEKLYBLD/mbt-up.txt  
+    echo "$f $r" >> $WEEKLYBLD/mbt-up.txt  
     set msg = "$msg $f $r \n"
     @ i++
 end
