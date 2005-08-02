@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.103 2005/06/09 18:36:55 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.104 2005/08/02 13:51:03 fanhsu Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -253,7 +253,7 @@ int i, size = seq->size;
 *trimmed = *seq;
 if (trimT)
     maskHeadPolyT(dna, size);
-if (trimA)
+if (trimA || trimHardA)
     {
     int trimSize = maskTailPolyA(dna, size);
     if (trimHardA)
