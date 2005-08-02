@@ -1,7 +1,7 @@
 /* wigBedToBinary - Convert a BED file, formatted <chrom><start><end><value> to
  *                      wiggle binary format */
 
-static char const rcsid[] = "$Id: wigBedToBinary.c,v 1.3 2004/12/15 20:54:21 hiram Exp $";
+static char const rcsid[] = "$Id: wigBedToBinary.c,v 1.4 2005/08/02 16:36:07 hiram Exp $";
 
 #include "common.h"
 #include	"options.h"
@@ -28,7 +28,7 @@ void wigBedToBinary(char *bedFile, char *wigFile, char *wibFile)
 /* Convert BED file to wiggle binary representation */
 {
 double upper, lower;
-wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower);
+wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, NULL);
 fprintf(stderr, "Converted %s, upper limit %.2f, lower limit %.2f\n",
                         bedFile, upper, lower);
 }
