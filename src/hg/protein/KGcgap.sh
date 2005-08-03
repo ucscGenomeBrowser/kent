@@ -1,6 +1,6 @@
 #!/bin/sh
-#		KGprocess.sh
-#	usage: KGprocess <DB> <RO_DB> <YYMMDD>
+#		KGcgap.sh
+#	usage: KGcgap <DB> <RO_DB> <YYMMDD>
 #		<DB> - database to load, can be temporary
 #		<RO_DB> - actual organism database to read other data from
 #		<YYMMDD> - date stamp used to find protYYMMDD database
@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGcgap.sh,v 1.1 2005/07/26 16:13:08 fanhsu Exp $"
+#	"$Id: KGcgap.sh,v 1.2 2005/08/03 18:53:21 fanhsu Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -57,7 +57,7 @@ fi
 ###########################  MAIN  ###################################
 
 if [ "$#" -ne 3 ]; then
-    echo "usage: KGprocess <DB> <RO_DB> <YYMMDD>"
+    echo "usage: KGcgap <DB> <RO_DB> <YYMMDD>"
     echo -e "\t<DB> - organism database to load"
     echo -e "\t<RO_DB> - read only from this database (the target)"
     echo -e "\t<YYMMDD> - date stamp used to find protYYMMDD DB"
@@ -86,7 +86,7 @@ fi
 #	src/hg/makeDb/hgKgMrna
 #	src/hg/makeDb/hgKegg
 
-echo "`date` KGprocess.sh $*"
+echo "`date` KGcgap.sh $*"
 
 foundALL=""
 for i in hgsql kgXref rmKGPepMrna \
