@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.2 2005/07/26 22:27:31 markd Exp $";
+static char const rcsid[] = "$Id: est2genomeToPsl.c,v 1.3 2005/08/03 00:45:08 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -339,7 +339,6 @@ line = alignNeedNextLine(parser);
 parseAlignAnn(parser, line, seqOff, seqLen);
 line = alignNeedNextLine(parser);
 parseAlignSeq(parser, &parser->query, line);
-    parserDump(parser, "row");
 return TRUE;
 }
 
