@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.10 2005/07/27 20:37:40 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.11 2005/08/03 18:59:43 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -125,7 +125,7 @@ if (spID != NULL)
     if (chp != NULL) *chp = '\0';
     
     hPrintf(
-    "<BR>Protein <A href=\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s\" TARGET=_blank>%s</A> participates in the following event(s):<BR><BR>" 
+    "<BR>Protein %s (<A href=\"http://www.reactome.org/cgi-bin/link?SOURCE=UniProt&ID=%s\" TARGET=_blank>Reactome details)</A> participates in the following top level event(s):<BR><BR>" 
     , spID, spID);
 
     conn2= hAllocConn();
