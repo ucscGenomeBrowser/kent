@@ -5112,360 +5112,6 @@ termRegex (AC|AL|AP|CI|CT|IH|II|RP|c1|co|na).*
 shortCircuit 1
 searchPriority 50
 
-track encodeIntergenicDistal
-compositeTrack on
-shortLabel Intergenic Distal
-longLabel Unannotated Transfrags in Intergenic Distal
-group encodeTxLevels
-priority 32
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 0,0,255
-altColor 0,255,0
-
-    track encodeAffyRnaGm06990SitesIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeAffyRnaGm06990Sites
-    longLabel Intergenic Distal encodeAffyRnaGm06990Sites
-    priority 1
-
-    track encodeAffyRnaHeLaSitesIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeAffyRnaHeLaSites
-    longLabel Intergenic Distal encodeAffyRnaHeLaSites
-    priority 2
-
-    track encodeAffyRnaHl60SitesHr00IntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeAffyRnaHl60SitesHr00
-    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr00
-    priority 3
-
-    track encodeAffyRnaHl60SitesHr02IntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeAffyRnaHl60SitesHr02
-    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr02
-    priority 4
-
-    track encodeAffyRnaHl60SitesHr08IntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeAffyRnaHl60SitesHr08
-    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr08
-    priority 5
-
-    track encodeAffyRnaHl60SitesHr32IntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeAffyRnaHl60SitesHr32
-    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr32
-    priority 6
-
-    track encodeYaleAffyNB4RARNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeYaleAffyNB4RARNATars
-    longLabel Intergenic Distal encodeYaleAffyNB4RARNATars
-    priority 7
-
-    track encodeYaleAffyNB4TPARNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeYaleAffyNB4TPARNATars
-    longLabel Intergenic Distal encodeYaleAffyNB4TPARNATars
-    priority 8
-
-    track encodeYaleAffyNB4UntrRNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeYaleAffyNB4UntrRNATars
-    longLabel Intergenic Distal encodeYaleAffyNB4UntrRNATars
-    priority 9
-
-    track encodeYaleAffyNeutRNATarsAllIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeYaleAffyNeutRNATarsAll
-    longLabel Intergenic Distal encodeYaleAffyNeutRNATarsAll
-    priority 10
-
-    track encodeYaleAffyPlacRNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
-    shortLabel encodeYaleAffyPlacRNATars
-    longLabel Intergenic Distal encodeYaleAffyPlacRNATars
-    priority 11
-
-track encodeIntergenicProximal
-compositeTrack on
-shortLabel Intergenic Proximal
-longLabel Unannotated Transfrags in Intergenic Proximal
-group encodeTxLevels
-priority 33
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 128,128,0
-altColor 0,0,0
-
-    track encodeAffyRnaGm06990SitesIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeAffyRnaGm06990Sites
-    longLabel Intergenic Proximal encodeAffyRnaGm06990Sites
-    priority 1
-
-    track encodeAffyRnaHeLaSitesIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeAffyRnaHeLaSites
-    longLabel Intergenic Proximal encodeAffyRnaHeLaSites
-    priority 2
-
-    track encodeAffyRnaHl60SitesHr00IntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeAffyRnaHl60SitesHr00
-    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr00
-    priority 3
-
-    track encodeAffyRnaHl60SitesHr02IntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeAffyRnaHl60SitesHr02
-    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr02
-    priority 4
-
-    track encodeAffyRnaHl60SitesHr08IntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeAffyRnaHl60SitesHr08
-    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr08
-    priority 5
-
-    track encodeAffyRnaHl60SitesHr32IntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeAffyRnaHl60SitesHr32
-    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr32
-    priority 6
-
-    track encodeYaleAffyNB4RARNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeYaleAffyNB4RARNATars
-    longLabel Intergenic Proximal encodeYaleAffyNB4RARNATars
-    priority 7
-
-    track encodeYaleAffyNB4TPARNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeYaleAffyNB4TPARNATars
-    longLabel Intergenic Proximal encodeYaleAffyNB4TPARNATars
-    priority 8
-
-    track encodeYaleAffyNB4UntrRNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeYaleAffyNB4UntrRNATars
-    longLabel Intergenic Proximal encodeYaleAffyNB4UntrRNATars
-    priority 9
-
-    track encodeYaleAffyNeutRNATarsAllIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeYaleAffyNeutRNATarsAll
-    longLabel Intergenic Proximal encodeYaleAffyNeutRNATarsAll
-    priority 10
-
-    track encodeYaleAffyPlacRNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
-    shortLabel encodeYaleAffyPlacRNATars
-    longLabel Intergenic Proximal encodeYaleAffyPlacRNATars
-    priority 11
-
-track encodeIntronsDistal
-compositeTrack on
-shortLabel Introns Distal
-longLabel Unannotated Transfrags in Introns Distal
-group encodeTxLevels
-priority 34
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 255,0,255
-altColor 0,255,255
-
-    track encodeAffyRnaGm06990SitesIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeAffyRnaGm06990Sites
-    longLabel Introns Distal encodeAffyRnaGm06990Sites
-    priority 1
-
-    track encodeAffyRnaHeLaSitesIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeAffyRnaHeLaSites
-    longLabel Introns Distal encodeAffyRnaHeLaSites
-    priority 2
-
-    track encodeAffyRnaHl60SitesHr00IntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeAffyRnaHl60SitesHr00
-    longLabel Introns Distal encodeAffyRnaHl60SitesHr00
-    priority 3
-
-    track encodeAffyRnaHl60SitesHr02IntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeAffyRnaHl60SitesHr02
-    longLabel Introns Distal encodeAffyRnaHl60SitesHr02
-    priority 4
-
-    track encodeAffyRnaHl60SitesHr08IntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeAffyRnaHl60SitesHr08
-    longLabel Introns Distal encodeAffyRnaHl60SitesHr08
-    priority 5
-
-    track encodeAffyRnaHl60SitesHr32IntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeAffyRnaHl60SitesHr32
-    longLabel Introns Distal encodeAffyRnaHl60SitesHr32
-    priority 6
-
-    track encodeYaleAffyNB4RARNATarsIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeYaleAffyNB4RARNATars
-    longLabel Introns Distal encodeYaleAffyNB4RARNATars
-    priority 7
-
-    track encodeYaleAffyNB4TPARNATarsIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeYaleAffyNB4TPARNATars
-    longLabel Introns Distal encodeYaleAffyNB4TPARNATars
-    priority 8
-
-    track encodeYaleAffyNB4UntrRNATarsIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeYaleAffyNB4UntrRNATars
-    longLabel Introns Distal encodeYaleAffyNB4UntrRNATars
-    priority 9
-
-    track encodeYaleAffyNeutRNATarsAllIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeYaleAffyNeutRNATarsAll
-    longLabel Introns Distal encodeYaleAffyNeutRNATarsAll
-    priority 10
-
-    track encodeYaleAffyPlacRNATarsIntronsDistal
-    subTrack encodeIntronsDistal
-    shortLabel encodeYaleAffyPlacRNATars
-    longLabel Introns Distal encodeYaleAffyPlacRNATars
-    priority 11
-
-track encodeIntronsProximal
-compositeTrack on
-shortLabel Introns Proximal
-longLabel Unannotated Transfrags in Introns Proximal
-group encodeTxLevels
-priority 35
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 255,0,0
-altColor 128,0,128
-
-    track encodeAffyRnaGm06990SitesIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeAffyRnaGm06990Sites
-    longLabel Introns Proximal encodeAffyRnaGm06990Sites
-    priority 1
-
-    track encodeAffyRnaHeLaSitesIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeAffyRnaHeLaSites
-    longLabel Introns Proximal encodeAffyRnaHeLaSites
-    priority 2
-
-    track encodeAffyRnaHl60SitesHr00IntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeAffyRnaHl60SitesHr00
-    longLabel Introns Proximal encodeAffyRnaHl60SitesHr00
-    priority 3
-
-    track encodeAffyRnaHl60SitesHr02IntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeAffyRnaHl60SitesHr02
-    longLabel Introns Proximal encodeAffyRnaHl60SitesHr02
-    priority 4
-
-    track encodeAffyRnaHl60SitesHr08IntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeAffyRnaHl60SitesHr08
-    longLabel Introns Proximal encodeAffyRnaHl60SitesHr08
-    priority 5
-
-    track encodeAffyRnaHl60SitesHr32IntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeAffyRnaHl60SitesHr32
-    longLabel Introns Proximal encodeAffyRnaHl60SitesHr32
-    priority 6
-
-    track encodeYaleAffyNB4RARNATarsIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeYaleAffyNB4RARNATars
-    longLabel Introns Proximal encodeYaleAffyNB4RARNATars
-    priority 7
-
-    track encodeYaleAffyNB4TPARNATarsIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeYaleAffyNB4TPARNATars
-    longLabel Introns Proximal encodeYaleAffyNB4TPARNATars
-    priority 8
-
-    track encodeYaleAffyNB4UntrRNATarsIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeYaleAffyNB4UntrRNATars
-    longLabel Introns Proximal encodeYaleAffyNB4UntrRNATars
-    priority 9
-
-    track encodeYaleAffyNeutRNATarsAllIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeYaleAffyNeutRNATarsAll
-    longLabel Introns Proximal encodeYaleAffyNeutRNATarsAll
-    priority 10
-
-    track encodeYaleAffyPlacRNATarsIntronsProximal
-    subTrack encodeIntronsProximal
-    shortLabel encodeYaleAffyPlacRNATars
-    longLabel Introns Proximal encodeYaleAffyPlacRNATars
-    priority 11
-
-track encodeWorkshopSelections
-compositeTrack on
-shortLabel Distal/Proximal
-longLabel Analysis workshop selections, Intergenic/Intronic, Distal/Proximal
-group encodeTxLevels
-priority 36
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4
-
-    track encodeAllIntergenicDistal
-    subTrack encodeWorkshopSelections
-    shortLabel Intergenic Distal
-    longLabel All Intergenic Distal Transfrags in One Track
-    priority 1
-
-    track encodeAllIntergenicProximal
-    subTrack encodeWorkshopSelections
-    shortLabel Intergenic Proximal
-    longLabel All Intergenic Proximal Transfrags in One Track
-    priority 2
-
-    track encodeAllIntronsDistal
-    subTrack encodeWorkshopSelections
-    shortLabel Introns Distal
-    longLabel All Introns Distal Transfrags in One Track
-    priority 3
-
-    track encodeAllIntronsProximal
-    subTrack encodeWorkshopSelections
-    shortLabel Introns Proximal
-    longLabel All Introns Proximal Transfrags in One Track
-    priority 4
-
-track encodeGenCodeExonsOnly
-shortLabel GenCode Exons
-longLabel Exons Only Extracted from GenCode Genes in ENCODE Regions
-priority 40
-group encodeTxLevels
-visibility hide
-type bed 4 .
-
 track encodeAffyEncode25bpProbes
 shortLabel Affy 25bp Probes
 longLabel Affymetrix 25 bp Probe locations
@@ -5659,3 +5305,350 @@ type bed 4 .
     shortLabel Intergenic/Proximal
     longLabel Gencode reference gene set Intergenic Proximal region
     priority 4
+
+track encodeWorkshopSelections
+compositeTrack on
+shortLabel Distal/Proximal
+longLabel Analysis workshop selections, Intergenic/Intronic, Distal/Proximal
+group encodeAnalysis
+priority 509
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4
+
+    track encodeAllIntergenicDistal
+    subTrack encodeWorkshopSelections
+    shortLabel Intergenic Distal
+    longLabel All Intergenic Distal Transfrags in One Track
+    priority 1
+
+    track encodeAllIntergenicProximal
+    subTrack encodeWorkshopSelections
+    shortLabel Intergenic Proximal
+    longLabel All Intergenic Proximal Transfrags in One Track
+    priority 2
+
+    track encodeAllIntronsDistal
+    subTrack encodeWorkshopSelections
+    shortLabel Introns Distal
+    longLabel All Introns Distal Transfrags in One Track
+    priority 3
+
+    track encodeAllIntronsProximal
+    subTrack encodeWorkshopSelections
+    shortLabel Introns Proximal
+    longLabel All Introns Proximal Transfrags in One Track
+    priority 4
+
+track encodeIntergenicDistal
+compositeTrack on
+shortLabel Intergenic Distal
+longLabel Unannotated Transfrags in Intergenic Distal
+group encodeAnalysis
+priority 510
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4 .
+color 0,0,255
+altColor 0,255,0
+
+    track encodeAffyRnaGm06990SitesIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeAffyRnaGm06990Sites
+    longLabel Intergenic Distal encodeAffyRnaGm06990Sites
+    priority 1
+
+    track encodeAffyRnaHeLaSitesIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeAffyRnaHeLaSites
+    longLabel Intergenic Distal encodeAffyRnaHeLaSites
+    priority 2
+
+    track encodeAffyRnaHl60SitesHr00IntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeAffyRnaHl60SitesHr00
+    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr00
+    priority 3
+
+    track encodeAffyRnaHl60SitesHr02IntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeAffyRnaHl60SitesHr02
+    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr02
+    priority 4
+
+    track encodeAffyRnaHl60SitesHr08IntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeAffyRnaHl60SitesHr08
+    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr08
+    priority 5
+
+    track encodeAffyRnaHl60SitesHr32IntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeAffyRnaHl60SitesHr32
+    longLabel Intergenic Distal encodeAffyRnaHl60SitesHr32
+    priority 6
+
+    track encodeYaleAffyNB4RARNATarsIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeYaleAffyNB4RARNATars
+    longLabel Intergenic Distal encodeYaleAffyNB4RARNATars
+    priority 7
+
+    track encodeYaleAffyNB4TPARNATarsIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeYaleAffyNB4TPARNATars
+    longLabel Intergenic Distal encodeYaleAffyNB4TPARNATars
+    priority 8
+
+    track encodeYaleAffyNB4UntrRNATarsIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeYaleAffyNB4UntrRNATars
+    longLabel Intergenic Distal encodeYaleAffyNB4UntrRNATars
+    priority 9
+
+    track encodeYaleAffyNeutRNATarsAllIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeYaleAffyNeutRNATarsAll
+    longLabel Intergenic Distal encodeYaleAffyNeutRNATarsAll
+    priority 10
+
+    track encodeYaleAffyPlacRNATarsIntergenicDistal
+    subTrack encodeIntergenicDistal
+    shortLabel encodeYaleAffyPlacRNATars
+    longLabel Intergenic Distal encodeYaleAffyPlacRNATars
+    priority 11
+
+track encodeIntergenicProximal
+compositeTrack on
+shortLabel Intergenic Proximal
+longLabel Unannotated Transfrags in Intergenic Proximal
+group encodeAnalysis
+priority 511
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4 .
+color 128,128,0
+altColor 0,0,0
+
+    track encodeAffyRnaGm06990SitesIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeAffyRnaGm06990Sites
+    longLabel Intergenic Proximal encodeAffyRnaGm06990Sites
+    priority 1
+
+    track encodeAffyRnaHeLaSitesIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeAffyRnaHeLaSites
+    longLabel Intergenic Proximal encodeAffyRnaHeLaSites
+    priority 2
+
+    track encodeAffyRnaHl60SitesHr00IntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeAffyRnaHl60SitesHr00
+    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr00
+    priority 3
+
+    track encodeAffyRnaHl60SitesHr02IntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeAffyRnaHl60SitesHr02
+    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr02
+    priority 4
+
+    track encodeAffyRnaHl60SitesHr08IntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeAffyRnaHl60SitesHr08
+    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr08
+    priority 5
+
+    track encodeAffyRnaHl60SitesHr32IntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeAffyRnaHl60SitesHr32
+    longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr32
+    priority 6
+
+    track encodeYaleAffyNB4RARNATarsIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeYaleAffyNB4RARNATars
+    longLabel Intergenic Proximal encodeYaleAffyNB4RARNATars
+    priority 7
+
+    track encodeYaleAffyNB4TPARNATarsIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeYaleAffyNB4TPARNATars
+    longLabel Intergenic Proximal encodeYaleAffyNB4TPARNATars
+    priority 8
+
+    track encodeYaleAffyNB4UntrRNATarsIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeYaleAffyNB4UntrRNATars
+    longLabel Intergenic Proximal encodeYaleAffyNB4UntrRNATars
+    priority 9
+
+    track encodeYaleAffyNeutRNATarsAllIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeYaleAffyNeutRNATarsAll
+    longLabel Intergenic Proximal encodeYaleAffyNeutRNATarsAll
+    priority 10
+
+    track encodeYaleAffyPlacRNATarsIntergenicProximal
+    subTrack encodeIntergenicProximal
+    shortLabel encodeYaleAffyPlacRNATars
+    longLabel Intergenic Proximal encodeYaleAffyPlacRNATars
+    priority 11
+
+track encodeIntronsDistal
+compositeTrack on
+shortLabel Introns Distal
+longLabel Unannotated Transfrags in Introns Distal
+group encodeAnalysis
+priority 512
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4 .
+color 255,0,255
+altColor 0,255,255
+
+    track encodeAffyRnaGm06990SitesIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeAffyRnaGm06990Sites
+    longLabel Introns Distal encodeAffyRnaGm06990Sites
+    priority 1
+
+    track encodeAffyRnaHeLaSitesIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeAffyRnaHeLaSites
+    longLabel Introns Distal encodeAffyRnaHeLaSites
+    priority 2
+
+    track encodeAffyRnaHl60SitesHr00IntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeAffyRnaHl60SitesHr00
+    longLabel Introns Distal encodeAffyRnaHl60SitesHr00
+    priority 3
+
+    track encodeAffyRnaHl60SitesHr02IntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeAffyRnaHl60SitesHr02
+    longLabel Introns Distal encodeAffyRnaHl60SitesHr02
+    priority 4
+
+    track encodeAffyRnaHl60SitesHr08IntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeAffyRnaHl60SitesHr08
+    longLabel Introns Distal encodeAffyRnaHl60SitesHr08
+    priority 5
+
+    track encodeAffyRnaHl60SitesHr32IntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeAffyRnaHl60SitesHr32
+    longLabel Introns Distal encodeAffyRnaHl60SitesHr32
+    priority 6
+
+    track encodeYaleAffyNB4RARNATarsIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeYaleAffyNB4RARNATars
+    longLabel Introns Distal encodeYaleAffyNB4RARNATars
+    priority 7
+
+    track encodeYaleAffyNB4TPARNATarsIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeYaleAffyNB4TPARNATars
+    longLabel Introns Distal encodeYaleAffyNB4TPARNATars
+    priority 8
+
+    track encodeYaleAffyNB4UntrRNATarsIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeYaleAffyNB4UntrRNATars
+    longLabel Introns Distal encodeYaleAffyNB4UntrRNATars
+    priority 9
+
+    track encodeYaleAffyNeutRNATarsAllIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeYaleAffyNeutRNATarsAll
+    longLabel Introns Distal encodeYaleAffyNeutRNATarsAll
+    priority 10
+
+    track encodeYaleAffyPlacRNATarsIntronsDistal
+    subTrack encodeIntronsDistal
+    shortLabel encodeYaleAffyPlacRNATars
+    longLabel Introns Distal encodeYaleAffyPlacRNATars
+    priority 11
+
+track encodeIntronsProximal
+compositeTrack on
+shortLabel Introns Proximal
+longLabel Unannotated Transfrags in Introns Proximal
+group encodeAnalysis
+priority 513
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 4 .
+color 255,0,0
+altColor 128,0,128
+
+    track encodeAffyRnaGm06990SitesIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeAffyRnaGm06990Sites
+    longLabel Introns Proximal encodeAffyRnaGm06990Sites
+    priority 1
+
+    track encodeAffyRnaHeLaSitesIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeAffyRnaHeLaSites
+    longLabel Introns Proximal encodeAffyRnaHeLaSites
+    priority 2
+
+    track encodeAffyRnaHl60SitesHr00IntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeAffyRnaHl60SitesHr00
+    longLabel Introns Proximal encodeAffyRnaHl60SitesHr00
+    priority 3
+
+    track encodeAffyRnaHl60SitesHr02IntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeAffyRnaHl60SitesHr02
+    longLabel Introns Proximal encodeAffyRnaHl60SitesHr02
+    priority 4
+
+    track encodeAffyRnaHl60SitesHr08IntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeAffyRnaHl60SitesHr08
+    longLabel Introns Proximal encodeAffyRnaHl60SitesHr08
+    priority 5
+
+    track encodeAffyRnaHl60SitesHr32IntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeAffyRnaHl60SitesHr32
+    longLabel Introns Proximal encodeAffyRnaHl60SitesHr32
+    priority 6
+
+    track encodeYaleAffyNB4RARNATarsIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeYaleAffyNB4RARNATars
+    longLabel Introns Proximal encodeYaleAffyNB4RARNATars
+    priority 7
+
+    track encodeYaleAffyNB4TPARNATarsIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeYaleAffyNB4TPARNATars
+    longLabel Introns Proximal encodeYaleAffyNB4TPARNATars
+    priority 8
+
+    track encodeYaleAffyNB4UntrRNATarsIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeYaleAffyNB4UntrRNATars
+    longLabel Introns Proximal encodeYaleAffyNB4UntrRNATars
+    priority 9
+
+    track encodeYaleAffyNeutRNATarsAllIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeYaleAffyNeutRNATarsAll
+    longLabel Introns Proximal encodeYaleAffyNeutRNATarsAll
+    priority 10
+
+    track encodeYaleAffyPlacRNATarsIntronsProximal
+    subTrack encodeIntronsProximal
+    shortLabel encodeYaleAffyPlacRNATars
+    longLabel Introns Proximal encodeYaleAffyPlacRNATars
+    priority 11
+
