@@ -690,6 +690,9 @@ char *hHtmlPath(char *database);
 char *hFreezeDate(char *database);
 /* Return freeze date of database. Use freeMem when done. */
 
+char *hGenomeOrArchive(char *database);
+/* Return genome name associated from the regular or the archive database. */
+
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on
  * return value when done. */

@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.258 2005/07/23 03:37:52 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.259 2005/08/03 22:29:10 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1996,6 +1996,15 @@ if (!organism)
 return organism;
 }
 
+char *hGenomeOrArchive(char *database)
+/* Return genome name associated from the regular or the archive database. */
+{
+char *genome = hGenome(database);
+if (!genome)
+    genome = hArchiveDbDbOptionalField(database, "genome");
+return genome;
+}
+
 char *hGenome(char *database)
 /* Return genome associated with database.   
  * use freeMem on this when done. */
@@ -3540,7 +3549,7 @@ struct dbDb *hGetLiftOverFromDatabases()
  * from this assembly to another.
  * Dispose of this with dbDbFreeList. */
 {
-struct dbDb *allDbList = NULL;
+struct dbDb *allDbList = NULL, *regDb = NULL, *archDb = NULL;
 struct dbDb *liftOverDbList = NULL, *dbDb, *nextDbDb;
 struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
@@ -3556,7 +3565,9 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     }
 
 /* Get list of all current and archived databases */
-allDbList = slCat(hDbDbList(),hArchiveDbDbList());
+regDb = hDbDbList();
+archDb = hArchiveDbDbList();
+allDbList = slCat(regDb, archDb);
 
 /* Create a new dbDb list of all entries in the liftOver hash */
 for (dbDb = allDbList; dbDb != NULL; dbDb = nextDbDb)

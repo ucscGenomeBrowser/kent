@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.80 2005/03/30 23:14:07 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.81 2005/08/03 22:29:10 aamp Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -497,7 +497,7 @@ char *orgList[128];
 int numGenomes = 0;
 struct dbDb *cur = NULL;
 struct hash *hash = hashNew(7); // 2^^7 entries = 128
-char *selGenome = hGenome(db);
+char *selGenome = hGenomeOrArchive(db);
 char *values [128];
 char *cgiName;
 
@@ -564,7 +564,7 @@ char *assemblyList[128];
 char *values[128];
 int numAssemblies = 0;
 struct dbDb *cur = NULL;
-char *genome = hGenome(db);
+char *genome = hGenomeOrArchive(db);
 char *selAssembly = NULL;
 
 if (genome == NULL)
