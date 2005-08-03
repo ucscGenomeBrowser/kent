@@ -5,9 +5,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "memalloc.h"
-//#include "jksql.h"
+#include "jksql.h"
 //#include "hdb.h"
+//#include "sqlnum.h"
 #include "psl.h"
+#include "obscure.h"
 #include "bed.h"
 #include "axt.h"
 #include "dnautil.h"
@@ -22,6 +24,7 @@
 #include "dystring.h"
 #include "pseudoGeneLink.h"
 #include "twoBit.h"
+#include "chainNet.h"
 //#include "scoreWindow.h" TODO fix this
 #include "verbose.h"
 
@@ -35,7 +38,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.36 2005/08/02 03:49:48 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.37 2005/08/03 23:36:55 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -377,6 +380,50 @@ lineFileClose(&bf);
 lineFileClose(&lf);
 return hash;
 }
+
+struct hash *readNetToBinKeeper(char *sizeFileName, char *netFileName)
+/* read a truncated net table and return results in hash of binKeeper structure for fast query*/
+/* free net in binKeeper to save memory only start/end coord */
+/*  select tName, tStart, tEnd, level, qName, qStart, qEnd, type from netMm6 */
+{
+struct binKeeper *bk; 
+struct lineFile *lf = lineFileOpen(sizeFileName, TRUE);
+struct lineFile *nf = lineFileOpen(netFileName , TRUE);
+struct hash *hash = newHash(0);
+char *chromRow[2];
+char *row[8] ;
+
+while (lineFileRow(lf, chromRow))
+    {
+    char *name = chromRow[0];
+    int size = lineFileNeedNum(lf, chromRow, 1);
+
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+        {
+        bk = binKeeperNew(0, size);
+        assert(size > 1);
+	hashAdd(hash, name, bk);
+        }
+    }
+while (lineFileNextRow(nf, row, ArraySize(row)))
+    {
+//    char *chrom = cloneString(row[0]);
+    int chromStart = sqlUnsigned(row[1]);
+    int chromEnd = sqlUnsigned(row[2]);
+    int level = sqlUnsigned(row[3]);
+    if (differentString(row[7],"gap"))
+        {
+        bk = hashMustFindVal(hash, row[0]);
+        binKeeperAdd(bk, chromStart, chromEnd, intToPt(level));
+        }
+    }
+lineFileClose(&nf);
+lineFileClose(&lf);
+return hash;
+}
+
 struct axt *axtCreate(char *q, char *t, int size, struct psl *psl)
 /* create axt */
 {
@@ -699,7 +746,7 @@ void initWeights()
   7 8 = + coverage *((qSize-qEnd)/qSize)
   6 9 = - repeats
  */
-wt[0] = 0.3; wt[1] = 0.85; wt[2] = 0.7; wt[3] = 0.4; wt[4] = 0.3; 
+wt[0] = 0.3; wt[1] = 0.85; wt[2] = 0.7; wt[3] = 0.4; wt[4] = 1; 
 wt[5] = 0; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 1; wt[9] = 1;
 
 }
@@ -739,14 +786,14 @@ pseudoScore = ( wt[0]*pg->milliBad
                 + wt[1]*(log(pg->exonCover+1)/log(2))*200 
                 + wt[2]*log(pg->axtScore>0?pg->axtScore:1)*70 
                 + wt[3]*(log(pg->polyAlen+2)*200) 
-                - wt[4]*(pg->overlapDiag*10)
+                + wt[4]*(pg->overlapDiag*10)
                 + wt[5]*(12-log(psl->qSize-psl->qEnd))*80 
                 - wt[6]*pow(pg->intronCount,0.5)*2000 
                 - wt[7]*(maxOverlap*300)
                 + wt[8]*((pg->coverage/100.0)*(1.0-((float)(psl->qSize-psl->qEnd)/(float)psl->qSize))*300.0)
                 - wt[9]*(pg->tReps*10)
                 ) / ScoreNorm;
-verbose(1,"##score %d mb %4.1f xon %d %4.1f ax %4.1f pA %4.1f syn - %4.1f %4.1f ic %d -%4.1f ov - %4.1f cov %d qe %d qsz %d %4.1f tRep - %4.1f %s %d %s %s:%d-%d\n", 
+verbose(1,"##score %d mb %4.1f xon %d %4.1f ax %4.1f pA %4.1f syn + %4.1f %4.1f ic %d -%4.1f ov - %4.1f cov %d qe %d qsz %d %4.1f tRep - %4.1f %s %d %s %s:%d-%d\n", 
                 pseudoScore, 
                 wt[0]*pg->milliBad, 
                 pg->exonCover,
@@ -1691,16 +1738,38 @@ else
 /* calculate if pseudogene overlaps the syntenic diagonal with another species */
 if (synHash != NULL)
     {
+    int maxlevel = 0;
+    int netSize = 0;
     bk = hashFindVal(synHash, psl->tName);
     elist = binKeeperFindSorted(bk, psl->tStart , psl->tEnd ) ;
     pg->overlapDiag = 0;
     for (el = elist; el != NULL ; el = el->next)
         {
-        //bed = el->val;
-        pg->overlapDiag += positiveRangeIntersection(psl->tStart, psl->tEnd, 
+        float overlapThreshold = 0.01;
+        int level = ptToInt(el->val);
+        int size = psl->tEnd - psl->tStart;
+        int overlap = positiveRangeIntersection(psl->tStart, psl->tEnd, 
                 el->start, el->end);
+        if (level > maxlevel && (float)overlap/(float)size > overlapThreshold)
+            maxlevel = level;
         }
-    pg->overlapDiag = (pg->overlapDiag*100)/(psl->tEnd-psl->tStart);
+    for (el = elist; el != NULL ; el = el->next)
+        {
+        //bed = el->val;
+        int level = ptToInt(el->val);
+        if (maxlevel == level)
+            {
+            pg->overlapDiag += positiveRangeIntersection(psl->tStart, psl->tEnd, 
+                el->start, el->end);
+            netSize += (el->end)-(el->start);
+            }
+        }
+    if (netSize > 0)
+        {
+        verbose(3,"##score %s %d/ %d=%d level %d\n",psl->qName, pg->overlapDiag, netSize,(pg->overlapDiag*100)/(netSize), maxlevel );
+        pg->overlapDiag = (pg->overlapDiag*100)/(netSize);
+        }
+    //pg->overlapDiag = (pg->overlapDiag*100)/(psl->tEnd-psl->tStart);
     slFreeList(&elist);
     }
 if (pg->trfRatio > .5)
@@ -1776,13 +1845,13 @@ if (keepChecking && (pg->intronCount == 0 /*|| (pg->exonCover - pg->intronCount 
             }
 
 
-        if (pg->overlapDiag>= 40 && bestPsl == NULL)
+/*        if (pg->overlapDiag>= 40 && bestPsl == NULL)
            {
             verbose(1,"NO. %s %d diag %s %d  bestChrom %s\n",psl->qName, 
                     pg->overlapDiag, psl->tName, psl->tStart, bestChrom);
            dyStringAppend(reason,"diagonal;");
            keepChecking = FALSE;
-           }
+           }*/
         if (keepChecking)
            {
             verbose(2,"YES %s %d rr %3.1f rl %d ln %d %s iF %d maxE %d bestAli %d isp %d score %d match %d cover %3.1f rp %d polyA %d syn %d polyA %d start %d overlap ratio %d/%d %s\n",
@@ -2101,8 +2170,10 @@ gpList2 = genePredLoadAll(argv[15]);
 //kgLis = genePredReaderAll(gprKg);
 kgList = genePredLoadAll(argv[16]);
 
-verbose(1,"Loading Syntenic Bed %s\n",argv[5]);
-synHash = readBedCoordToBinKeeper(argv[3], argv[5], BEDCOUNT);
+//verbose(1,"Loading Syntenic Bed %s\n",argv[5]);
+//synHash = readBedCoordToBinKeeper(argv[3], argv[5], BEDCOUNT);
+verbose(1,"Loading net %s\n",argv[5]);
+synHash = readNetToBinKeeper(argv[3], argv[5]);
 verbose(1,"Loading Trf Bed %s\n",argv[6]);
 trfHash = readBedCoordToBinKeeper(argv[3], argv[6], BEDCOUNT);
 
