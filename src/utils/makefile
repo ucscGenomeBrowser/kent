@@ -55,6 +55,7 @@ DIRS = \
 	cvsTools \
 	detab \
 	endsInLf \
+	est2genomeToPsl \
 	faAlign \
 	faCmp \
 	faCount \
