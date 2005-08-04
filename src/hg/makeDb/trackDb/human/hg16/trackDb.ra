@@ -4689,7 +4689,7 @@ shortLabel NHGRI DIPs
 longLabel NHGRI Deletion/Insertion Polymorphisms in ENCODE regions
 group encodeVariation
 priority 80
-visibility dense
+visibility hide
 itemRgb on
 type bed 9 + 
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -4711,7 +4711,7 @@ longLabel ENCODE HapMap (16c.1) Allele Frequencies
 group encodeVariation
 priority 82
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-visibility dense
+visibility hide
 type bed 6 + 
 useScore 1
 
@@ -4782,7 +4782,7 @@ shortLabel Oxford Recomb
 longLabel Recombination Rates in ENCODE regions
 group encodeVariation
 priority 86
-visibility dense
+visibility hide
 type bedGraph 4
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 minLimit 0
@@ -4960,7 +4960,7 @@ shortLabel CNPs
 longLabel Copy Number Polymorphisms
 group varRep
 priority 146
-visibility dense
+visibility hide
 type bed 4 +
 
     track cnpSharp
