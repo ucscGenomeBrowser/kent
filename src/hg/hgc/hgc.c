@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.921 2005/08/04 18:57:37 galt Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.922 2005/08/04 19:09:18 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -620,7 +620,9 @@ void printPos(char *chrom, int start, int end, char *strand, boolean featDna,
 /* Print position lines.  'strand' argument may be null. */
 {
 if (sameWord(organism, "Fugu"))
-    /* use this for unmapped genomes */
+    /* Fugu is the only chrUn-based scaffold assembly, so it
+     * has non-general code here.  Later scaffold assemblies
+     * treat scaffolds as chroms.*/
     printPosOnScaffold(chrom, start, end, strand);
 else
     printPosOnChrom(chrom, start, end, strand, featDna, item);
