@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.920 2005/08/03 19:28:58 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.921 2005/08/04 18:57:37 galt Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -645,13 +645,12 @@ void bedPrintPos(struct bed *bed, int bedSize)
  * standard format. */
 {
 char *strand = NULL;
-if (bedSize > 3)
+if (bedSize >= 4)
     printf("<B>Item:</B> %s<BR>\n", bed->name);
-if (bedSize > 4)
+if (bedSize >= 5)
     printf("<B>Score:</B> %d<BR>\n", bed->score);
-if (bedSize > 5)
+if (bedSize >= 6)
    {
-   printf("<B>Strand:</B> %s<BR>\n", bed->strand);
    strand = bed->strand;
    }
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
