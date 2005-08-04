@@ -707,7 +707,7 @@ identifier xenoMrnaAccession typeOf=mrnaAccession
 identifier nativeMrnaAccession typeOf=mrnaAccession 
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName dupeOk
-    $gbd.mrnaOrientInfo.name minCheck=0.2
+    $gbd,!rn2,!ce2.mrnaOrientInfo.name minCheck=0.2
     $gbd,!mm6,!hg17.dupSpMrna.mrnaID minCheck=0.80
     $gbd,!mm6,!hg17.dupSpMrna.dupMrnaID minCheck=0.95
     $gbd,!mm6,!hg17,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
