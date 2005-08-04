@@ -1025,13 +1025,12 @@ bad rep range in: 237   149     0       152     chrUn   96855194        96855206
     ssh kksilo
     mkdir -p /cluster/data/danRer2/bed/gc5Base
     cd /cluster/data/danRer2/bed/gc5Base
-    #   The number of bases that hgGcPercent claimed it measured is calculated,     
-    #   which is not necessarily always 5 if it ran into gaps, and then the 
-    #   division by 10.0 scales down the numbers from hgGcPercent to the range
-    #   [0-100].  wigEncode now replaces wigAsciiToBinary and the previous 
-    #   processing step between these two programs. The result file is *.wig.
-    # 	Each value represents the measurement over five bases beginning with
-    #   <position>. wigEncode also calculates the zoomed set of data.
+    # The number of bases that hgGcPercent claimed it measured is calculated,       # which is not necessarily always 5 if it ran into gaps, and then the 
+    # division by 10.0 scales down the numbers from hgGcPercent to the range
+    # [0-100].  wigEncode now replaces wigAsciiToBinary and the previous 
+    # processing step between these two programs. The result file is *.wig.
+    # Each value represents the measurement over five bases beginning with
+    # <position>. wigEncode also calculates the zoomed set of data.
     
     nice hgGcPercent -wigOut -doGaps -file=stdout -win=5 danRer2 \
         /iscratch/i/danRer2/nib | \
@@ -1373,10 +1372,10 @@ danRer2.downloadDir = danRer2
 
     ssh eieio
     cd /cluster/data/genbank
-    # This is an -initial run, RefSeq mRNA only:
+    # This is an -initial run, all sequences:
     nice bin/gbAlignStep -verbose=1 -initial danRer2
  
-    # Load results for RefSeq mRNAs:
+    # Load results for all sequences:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer2
@@ -1794,7 +1793,9 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # REPLACE chr1 WITH chr1New IN chromFa and chromFaMasked - chr1 was
 # incompletely masked due to an error in the RepeatMasker output for chr1.
 # See section on "MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF"
-# (2005-06-06, hartera) 
+# (2005-06-06, hartera)
+# UPDATED README FILES WITH NEW SEQUENCE FTP FOR SANGER (2005-08-04,hartera)
+ 
     ssh kksilo
     cd /cluster/data/danRer2
     #- Build the .zip files
@@ -1937,6 +1938,9 @@ zip -j zip/chromAgp.zip [0-9A-Z]*/chr*.agp
     rm md5sum.txt
     md5sum *.zip > md5sum.txt
     # Update README.txt for each to state that a new masked chr1 was produced
+    # updated bigZips and chromosomes README.txt files with new ftp site
+    # for the assembly sequence at Sanger (2005-08-04, hartera):
+    # now ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv4release/
 
 # MAKE VSHG17 DOWNLOADABLES (DONE, 2004-12-14, hartera)
 # REMAKE FOR CHAINS AND NET AFTER USING chainAntiRepeat 
@@ -2692,7 +2696,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
     ssh kkr1u00
     cd /cluster/data/danRer2/bed/ZonLab/bacends
     mkdir -p /iscratch/i/danRer2/bacends
-    # if not split alreday, split up sequence for cluster runs
+    # if not split already, split up sequence for cluster runs
     faSplit sequence bacends.fa 20 /iscratch/i/danRer2/bacends/bacends
     # iSync bacends to kilokluster
     /cluster/bin/iSync
