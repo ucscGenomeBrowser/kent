@@ -13,7 +13,7 @@
 #include "scoredRef.h"
 #include "hgMaf.h"
 
-static char const rcsid[] = "$Id: hgMaf.c,v 1.4 2005/08/01 22:49:57 angie Exp $";
+static char const rcsid[] = "$Id: hgMaf.c,v 1.5 2005/08/05 23:04:14 braney Exp $";
 
 int mafCmp(const void *va, const void *vb)
 /* Compare to sort based on start of first component. */
@@ -253,6 +253,10 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	    {
 	    /* Extract name up to dot into 'orgName' */
 	    char buf[128], *e, *orgName;
+
+	    if (mc->srcSize == 0) /* skip over components without sequence */
+		continue;
+
 	    e = strchr(mc->src, '.');
 	    if (e == NULL)
 		orgName = mc->src;
