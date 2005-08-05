@@ -25,6 +25,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	bosTau2 \
 	dasNov1 \
 	loxAfr1 \
+	echTel1 \
 	monDom1 \
 	galGal2 \
 	xenTro1 \
