@@ -49,7 +49,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	ci1 ci2 \
 	strPur1 \
 	ce1 ce2 ce3 \
-	cb1 \
+	cb1 cb2 \
 	caeRem1 \
 	falciparum \
 	sacCer1 \
