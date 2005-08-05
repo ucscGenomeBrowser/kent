@@ -23,6 +23,27 @@ visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
+track RfamSeedFolds
+shortLabel Rfam seed folds
+longLabel Secondary structure annotation of ncRNAs from Rfam seed
+group genes
+priority 61 
+visibility hide
+color 60,70,1 
+type bed 6 +
+url http://www.sanger.ac.uk/Software/Rfam/
+mafTrack buildMaf
+
+track evofold
+shortLabel EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure 
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack buildMaf
+
 track xenoMrna
 shortLabel All mRNAs
 longLabel All Species mRNAs from GenBank
