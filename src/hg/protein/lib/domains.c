@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.6 2005/07/09 05:17:16 markd Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.7 2005/08/05 21:21:27 fanhsu Exp $";
 
 char *samGenomeDb(char *proteinId)
 /* Determin if a protein belongs to a genome DB that has SAM results */
@@ -43,8 +43,18 @@ void domainsPrint(struct sqlConnection *spConn, char *swissProtAcc)
 {
 struct slName *el, *list;
 char *samDb;
+char condStr[128];
+char *parentId;
 
-list = spExtDbAcc1List(spConn, swissProtAcc, "Interpro");
+/* Use parent protein ID for domain links */
+
+/* There may be cases that a specific variant may have some domain spliced out */
+/* But, it is better to cover most of them, than none at all */
+
+safef(condStr, sizeof(condStr), "variant='%s'", swissProtAcc);
+parentId = sqlGetField(NULL, PROTEOME_DB_NAME, "spVariant", "parent", condStr);
+
+list = spExtDbAcc1List(spConn, parentId, "Interpro");
 if (list != NULL)
     {
     char query[256], **row;
@@ -57,7 +67,7 @@ if (list != NULL)
     	"select extAcc1,extAcc2 from extDbRef,extDb"
 	" where extDbRef.acc = '%s'"
 	" and extDb.val = 'Interpro' and extDb.id = extDbRef.extDb"
-	, swissProtAcc);
+	, parentId);
 	
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -68,10 +78,11 @@ if (list != NULL)
     hPrintf("</UL>\n");
     slFreeList(&list);
     }
-list = spExtDbAcc1List(spConn, swissProtAcc, "Pfam");
+
+list = spExtDbAcc1List(spConn, parentId, "Pfam");
 if (list != NULL)
     {
-    hPrintf("<B>Pfam Domains:</B>\n<UL>");
+    hPrintf("<B>Pfam Domains:</B>\n<UL>");fflush(stdout);
     for (el = list; el != NULL; el = el->next)
 	{
 	char query[256];
@@ -89,7 +100,8 @@ if (list != NULL)
     slFreeList(&list);
     hPrintf("</UL>\n");
     }
-
+    
+/* do not use parent protein, since 3D structure is determined by specific protein sequence */
 list = spExtDbAcc1List(spConn, swissProtAcc, "PDB");
 if (list != NULL)
     {
@@ -136,6 +148,7 @@ if (samDb != NULL)
     doSamT02(swissProtAcc, samDb);
     }
     
+/* do not use parent ID, again 3D structure is dependent on specific sequence */    
 /* Do modBase link. */
     {
     hPrintf("<B>ModBase Predicted Comparative 3D Structure on ");
