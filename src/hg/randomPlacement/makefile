@@ -10,8 +10,10 @@ A = randomPlacement
 
 O = randomPlacement.o
 
-${A}:	${O}
-	${CC} -o ${A}${EXE} -g $O ${MYLIBS} ${L} 
+${A}: ${O} $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A}${EXE} \
+		$O ${MYLIBS} ${L} 
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/${A}${EXE}
 
 compile: $O 
 	${CC} -g $O ${MYLIBS} ${L} 

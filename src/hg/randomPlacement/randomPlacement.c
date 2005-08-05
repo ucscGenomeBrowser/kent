@@ -58,12 +58,14 @@ static struct optionSpec optionSpecs[] = {
     {"trials", OPTION_INT},
     {"seed", OPTION_INT},
     {"neighbor", OPTION_STRING},
+    {"bed", OPTION_STRING},
     {NULL, 0}
 };
 
 int trials = 0;
 int seed = 0;
 char *neighbor = NULL;
+char *bedOutFile = NULL;
 
 static void usage()
 /* Explain usage and exit. */
@@ -93,6 +95,7 @@ verbose(1,
   "           - in locations on top of these neighbor items.  Placed items\n"
   "           - that do overlap the neighbor or boundingRegions are discarded\n"
   "           - for the nearest neighbor measurements.\n"
+  "   -bed=<file name> - output bed file for the final trial placement\n"
 );
 exit(255);
 }
@@ -194,8 +197,8 @@ struct statistic
 
 static void statsHeader()
 {
-printf("chrom  Bounding  Total  Size 0   Maximum  Minimum  Median  Mean\n");
-printf("count  elements   gaps    gaps       gap      gap     gap   gap\n");
+printf("chrom  Bounding   Total  Size 0   Maximum  Minimum  Median  Mean\n");
+printf("count  elements    gaps    gaps       gap      gap     gap   gap\n");
 }
 
 static void statsPrint(struct statistic *statList)
@@ -208,7 +211,7 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
     {
     if (firstHeader)
 	{
-	printf("%5d%10d%7d%8d%10d%9d%8d%6d\n",
+	printf("%5d%10d%8d%8d%10d%9d%8d%6d\n",
 	    statEl->chromCount, statEl->boundingElementCount,
 	    statEl->totalGaps, statEl->sizeZeroGapCount, statEl->maxGap,
 	    statEl->minGap, statEl->medianGap, statEl->meanGap);
@@ -241,7 +244,7 @@ struct chrGapList *cl;
 int chrCount = 0;
 int gapCountNonZeroSize = 0;
 int gapCountZeroSize = 0;
-int totalGapSize = 0;
+unsigned long totalGapSize = 0;
 int maxGap = 0;
 int minGap = BIGNUM;
 int *gapSizeArray = NULL;
@@ -288,7 +291,7 @@ for (cl=cList; cl != NULL; cl = cl->next)
     gapCountNonZeroSize += gapCount;
     gapCountZeroSize += zeroSized;
     ++chrCount;
-verbose(4,"%s: %d gaps + %d of size zero = %d\n", cl->chrom, gapCount,
+verbose(4,"'%s': %d gaps + %d of size zero = %d\n", cl->chrom, gapCount,
 	zeroSized, gapCount+zeroSized);
     }
 verbose(3,"counted %d chroms and %d gaps ( + %d size zero = %d total gaps)"
@@ -303,33 +306,44 @@ returnStats->boundingElementCount = boundingElementCount;
 /*	now copy all the values to a integer array for more detailed
  *	stats measurements
  */
-gapSizeArray = needHugeMem((size_t)(sizeof(int) * gapCountNonZeroSize));
-i = 0;
-
-for (cl=cList; cl != NULL; cl = cl->next)
+if (0 == gapCountNonZeroSize)
     {
-    struct gap *gl;
-    for (gl = cl->gList; gl != NULL; gl = gl->next)
+    returnStats->meanGap = 0.0;
+    returnStats->maxGap = maxGap;
+    returnStats->minGap = minGap;
+    returnStats->medianGap = 0;
+    }
+else
+    {
+    gapSizeArray = needHugeMem((size_t)(sizeof(int) * gapCountNonZeroSize));
+    i = 0;
+
+    for (cl=cList; cl != NULL; cl = cl->next)
 	{
-	int gapSize = gl->gapSize;
-	if (gapSize > 0)
+	struct gap *gl;
+	for (gl = cl->gList; gl != NULL; gl = gl->next)
 	    {
-	    gapSizeArray[i] = gapSize;
-	    ++i;
+	    int gapSize = gl->gapSize;
+	    if (gapSize > 0)
+		{
+		gapSizeArray[i] = gapSize;
+		++i;
+		}
 	    }
 	}
+    verbose(3,"assigned %d values to int array\n", i);
+
+    intSort(i,gapSizeArray);
+
+    /*	0.5 rounds up to next integer	*/
+    returnStats->meanGap = 0.5 +
+	((double)totalGapSize/(double)gapCountNonZeroSize);
+    returnStats->maxGap = gapSizeArray[i-1];
+    returnStats->minGap = gapSizeArray[0];
+    returnStats->medianGap = gapSizeArray[i/2];
     }
-verbose(3,"assigned %d values to int array\n", i);
 
-intSort(i,gapSizeArray);
-
-/*	0.5 rounds up to next integer	*/
-returnStats->meanGap = 0.5 + ((double)totalGapSize/(double)gapCountNonZeroSize);
-returnStats->maxGap = gapSizeArray[i-1];
-returnStats->minGap = gapSizeArray[0];
-returnStats->medianGap = gapSizeArray[i/2];
-
-verbose(2,"average gap size: %d = %d / %d (non-zero size gaps only)\n",
+verbose(2,"average gap size: %d = %ul / %d (non-zero size gaps only)\n",
     returnStats->meanGap, totalGapSize, gapCountNonZeroSize);
 verbose(2,"maximum gap size: %d\n", returnStats->maxGap);
 verbose(2,"median gap size: %d\n", returnStats->medianGap);
@@ -440,13 +454,14 @@ if (placedItemCount)
 	"bounding element\n", returnStats->zeroNeighbor);
     verbose(2,"%d - number of items of non-zero distance within 100 bp of "
 	"nearest bounding element\n", returnStats->placedWithin100bp);
-    if ((placedCount-returnStats->zeroNeighbor) > 0)
+    if ((placedCount - returnStats->zeroNeighbor) > 0)
 	verbose(2,"%% %.04f - percent of of items of non-zero distance "
 	    "within 100 bp of nearest bounding element\n",
 		100.0 * returnStats->placedWithin100bp / (placedCount-returnStats->zeroNeighbor));
     else
-       errAbort("something wrong with placed item count "
-		"minus zeroDistance Count");
+       errAbort("something wrong with placed item count %d "
+	    "minus zeroDistance Count %d",
+		placedCount, returnStats->zeroNeighbor);
 
     freeMem(placedDistances);
     }	/*	if (placedItemCount)	*/
@@ -725,7 +740,7 @@ for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
 	}
     if (! placedOK)
 	{
-	verbose(4,"can not place item: %s:%d-%d\n", bedEl->chrom,
+	verbose(3,"can not place item: %s:%d-%d\n", bedEl->chrom,
 		bedEl->chromStart, bedEl->chromEnd);
 	++unplacedCount;
 	}
@@ -761,6 +776,7 @@ for (bedEl = bounds; bedEl != NULL; bedEl = bedEl->next)
 		verbose(2,"WARNING: only one element on %s ! No gap defined.\n",
 			prevChr);
  		slPopHead(&gaps);
+		--boundingChrCount;
 		}
 	    freeMem(prevChr);
 	    }
@@ -818,7 +834,19 @@ for (bedEl = bounds; bedEl != NULL; bedEl = bedEl->next)
 	}
     }
 
-if (prevChr) freeMem(prevChr);
+if (prevChr)
+    {
+    /*	potentially the last one is a single item on a chrom	*/
+    if (NULL == prevGap)
+	{
+	verbose(2,"WARNING: only one element on %s ! No gap defined.\n",
+		prevChr);
+	slPopHead(&gaps);
+	--boundingChrCount;
+	}
+    freeMem(prevChr);
+    }
+
 slReverse(&gaps);
 verbose(3,"bounding chrom count: %d (=? %d), overlapped items: %d\n",
 	boundingChrCount, slCount(gaps), overlappedBounding);
@@ -873,13 +901,68 @@ for (el = gaps; el != NULL; el = el->next)
 	    ++zeroGapCount;
 	}
     totalGapCount += nonZeroGapCount;
-verbose(3,"cloneGaps: %d non-zero gaps + %d zero gaps = %d total gaps\n",
-	nonZeroGapCount, zeroGapCount, nonZeroGapCount+zeroGapCount);
+verbose(4,"cloneGaps: '%s': %d non-zero gaps + %d zero gaps = %d total gaps\n",
+	el->chrom, nonZeroGapCount, zeroGapCount, nonZeroGapCount+zeroGapCount);
     slAddHead(&cloneGaps,gl);
     }
 slReverse(&cloneGaps);
 return(cloneGaps);
-}
+}	/*	static struct chrGapList *cloneGapList()	*/
+
+static void bedListOutput(struct chrGapList *gapList, char *bedOutFile)
+{
+struct chrGapList *el;
+FILE *outFile = mustOpen(bedOutFile, "w");
+
+verbose(2,"writing last placement to %s\n", bedOutFile);
+
+for (el = gapList; el != NULL; el = el->next)
+    {
+    int chrCount = 0;
+    struct gap *gl;
+    struct gap *next;
+    struct bed *upstreamBound = NULL;
+    struct bed *downstreamBound = NULL;
+
+    for (gl = el->gList; gl != NULL; gl = next)
+	{
+	struct gap *gEl;
+	int gapCount = 0;
+
+	/*	make note of upstream and downstream bounding elements */
+	if (NULL == upstreamBound || gl->isUpstreamBound)
+	    {
+	    if (gl->isUpstreamBound)
+		{
+		upstreamBound = gl->upstream;
+		downstreamBound = nextDownstreamBound(gl);
+		if (NULL == downstreamBound)
+		    errAbort("Can not find a downstream"
+			    " bounding element ?");
+		}
+	    else
+		errAbort("Do not find a bounding element as"
+		    " first upstream item ?");
+	    }
+	++chrCount;
+	/*	output all downstream elements as long as they
+	 *	are not bounding elements
+	 */
+	for (gEl = gl; (gEl != NULL) && (! gEl->isDownstreamBound);
+		    gEl = gEl->next)
+	    {
+	    ++gapCount;
+	    fprintf (outFile, "%s\t%d\t%d\t%s_%d.%d\n", el->chrom,
+		gEl->downstream->chromStart, gEl->downstream->chromEnd,
+		el->chrom, chrCount, gapCount);
+	    }
+	if (gEl)
+	    next = gEl->next;
+	else
+	    next = NULL;
+	}	/*	for (gl = el->gList; gl != NULL; gl = next)	*/
+    }	/*	for (el=cList; el != NULL; el = el->next)	*/
+}	/*	static void bedListOutput()	*/
 
 static void randomPlacement(char *bounding, char *placed)
 {
@@ -979,6 +1062,10 @@ else
 	 *	names are left intact in the original copy of the bed
 	 *	list.  (The names were being shared.)
 	 */
+	if ((trial == (trials - 1)) && (bedOutFile != NULL))
+	    {
+	    bedListOutput(duplicateGapList, bedOutFile);
+	    }
 	freeChrList(&duplicateGapList, TRUE);
 	}
     slReverse(&statsList);
@@ -1003,11 +1090,14 @@ if (argc < 3)
 trials = optionInt("trials", 0);
 seed = optionInt("seed", 0);
 neighbor = optionVal("neighbor", NULL);
+bedOutFile = optionVal("bed", NULL);
 
 verbose(2,"bounding elements file: %s\n", argv[1]);
 verbose(2,"placed items file: %s\n", argv[2]);
 if (neighbor)
     verbose(2,"nearest neighbor file: %s\n", neighbor);
+if (bedOutFile)
+    verbose(2,"last alignment of trials output to bed file: %s\n", bedOutFile);
 verbose(2,"number of trials: %d\n", trials);
 verbose(2,"seed value for drand48(): %d\n", seed);
 
