@@ -8,7 +8,7 @@
 #include "agpGap.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: agpToFa.c,v 1.13 2005/07/21 00:24:20 galt Exp $";
+static char const rcsid[] = "$Id: agpToFa.c,v 1.14 2005/08/05 22:52:30 hiram Exp $";
 
 static void usage()
 /* Explain usage and exit. */
@@ -326,7 +326,7 @@ else
     {
     gsFillInSequence(seqDir, agpList, dna, lastPos);
     }
-printf("Writing %d bases to %s\n", lastPos, faOut);
+verbose(2,"Writing %d bases to %s\n", lastPos, faOut);
 faWrite(faOut, agpSeq, dna, lastPos);
 }
 
