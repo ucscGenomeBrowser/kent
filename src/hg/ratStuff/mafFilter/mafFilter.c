@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.8 2005/04/30 14:35:03 braney Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.9 2005/08/05 00:24:25 kate Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -28,7 +28,8 @@ errAbort(
   "   -minFactor=N - Factor to use with -minFactor (default %d)\n"
   "   -minScore=N - Minimum allowed score (alternative to -minFactor)\n"
   "   -reject=filename - Save rejected blocks in filename\n"
-  "   -needComp=species - all alignments must have species as one of the component\n",
+  "   -needComp=species - all alignments must have species as one of the component\n"
+  "   -overlap - Reject overlapping blocks in reference (assumes ordered blocks)\n",
         DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_FACTOR
   );
 }
@@ -42,6 +43,7 @@ static struct optionSpec options[] = {
    {"minFactor", OPTION_INT},
    {"reject", OPTION_STRING},
    {"needComp", OPTION_STRING},
+   {"overlap", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -53,6 +55,8 @@ boolean gotMinFactor = FALSE;
 int minFactor = DEFAULT_FACTOR;
 char *rejectFile = NULL;
 char *needComp = NULL;
+/* for overlap detection */
+int prevRefStart = 0, prevRefEnd = 0;
 
 static jmp_buf recover;    /* Catch errors in load maf the hard way in C. */
 
@@ -74,6 +78,8 @@ int ncol = maf->textSize;
 int nrow = slCount(maf->components);
 double ncol2 = ncol * ncol;
 double fscore = -minFactor * ncol2 * nrow;
+int refStart = maf->components->start;
+int refEnd = refStart + maf->components->size;
 
 if (needComp && (mafMayFindCompPrefix(maf, needComp, "." ) == NULL))
     return FALSE;
@@ -87,8 +93,14 @@ if (nrow < minRow || ncol < minCol ||
     verbose(3, "ncol**2=%d\n", ncol * ncol);
     return FALSE;
     }
-else
-    return TRUE;
+if (optionExists("overlap"))
+    {
+    if (refStart < prevRefEnd && refEnd > prevRefStart)
+        return FALSE;
+    }
+prevRefStart = refStart;
+prevRefEnd = refEnd;
+return TRUE;
 }
 
 void mafFilter(int fileCount, char *files[])
