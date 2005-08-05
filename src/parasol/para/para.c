@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.62 2005/05/12 18:24:20 aamp Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.63 2005/08/05 23:36:26 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -836,7 +836,7 @@ double jrRealTime(struct jobResult *jr)
 /* Get real time in seconds for job. */
 {
 /* note jr->*Time are unsigned, so we need to convert to double
- * before subtracking or time moving backwards is not detected
+ * before subtracting or time moving backwards is not detected
  */
 return ((double)jr->endTime) - ((double)jr->startTime);
 }
