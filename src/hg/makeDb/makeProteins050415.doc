@@ -225,3 +225,12 @@ hgsql rn3 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,pro
 
 # Email the above 3 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
 
+
+# EXTEND pfamXref TO COVER VARIANT SPLICE PROTEINS
+
+hgsql proteome -N -e \
+'select pfamAC, variant, variant from spVariant, pfamXref where swissAC = parent and variant like "%-%" and swissAC=parent;' \
+>pfamXrefVar.tab
+
+hgsql proteome -N -e \
+'load data local infile "pfamXrefVar.tab" into table pfamXref'
