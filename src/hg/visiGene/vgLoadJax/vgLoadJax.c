@@ -259,6 +259,8 @@ fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
 fprintf(ra, "fullDir ../visiGene/full/inSitu/Mouse/jax\n");
 fprintf(ra, "thumbDir ../visiGene/200/inSitu/Mouse/jax\n");
+fprintf(ra, "setUrl http://www.informatics.jax.org/\n");
+fprintf(ra, "itemUrl http://www.informatics.jax.org/searches/image.cgi?%%s\n");
 fprintf(ra, "journal %s\n", row[1]);
 fprintf(ra, "publication %s\n", row[2]);
 
