@@ -38,7 +38,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.39 2005/08/07 20:18:10 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.40 2005/08/07 20:23:59 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -1753,7 +1753,7 @@ if (synHash != NULL)
                 el->start, el->end);
         if (level > maxlevel && (float)overlap/(float)size > overlapThreshold && ((el->end)-(el->start) > size))
             maxlevel = level;
-        verbose(3,"%s %s:%d level %d size %d net %d \n",psl->qName, psl->tName, psl->tStart, maxlevel, size, el->end-el->start);
+        verbose(3,"%s %s:%d level %d size %d net %d \n",psl->qName, psl->tName, psl->tStart, level, size, el->end-el->start);
         }
     verbose(3,"%s %s:%d max level %d \n",psl->qName, psl->tName, psl->tStart, maxlevel );
     for (el = elist; el != NULL ; el = el->next)
