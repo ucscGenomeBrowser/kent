@@ -38,6 +38,11 @@ double chainCalcScore(struct chain *chain, struct axtScoreScheme *ss,
 	struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target);
 /* Calculate chain score freshly. */
 
+double chainCalcScoreSubChain(struct chain *chain, struct axtScoreScheme *ss, 
+	struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target);
+/* Calculate chain score assuming query and target 
+   span the chained region rather than entire chrom. */
+
 void chainCalcBounds(struct chain *chain);
 /* Recalculate chain boundaries - setting qStart/qEnd/tStart/tEnd from
  * a scan of blockList. */

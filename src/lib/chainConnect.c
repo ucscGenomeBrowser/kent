@@ -7,7 +7,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: chainConnect.c,v 1.2 2005/04/10 14:41:21 markd Exp $";
+static char const rcsid[] = "$Id: chainConnect.c,v 1.3 2005/08/07 23:25:26 baertsch Exp $";
 
 double chainScoreBlock(char *q, char *t, int size, int matrix[256][256])
 /* Score block through matrix. */
@@ -29,6 +29,25 @@ for (b1 = chain->blockList; b1 != NULL; b1 = b2)
     {
     score += chainScoreBlock(query->dna + b1->qStart, 
     	target->dna + b1->tStart, b1->tEnd - b1->tStart, ss->matrix);
+    b2 = b1->next;
+    if (b2 != NULL)
+        score -=  gapCalcCost(gapCalc, b2->qStart - b1->qEnd, 
+		              b2->tStart - b1->tEnd);
+    }
+return score;
+}
+
+double chainCalcScoreSubChain(struct chain *chain, struct axtScoreScheme *ss, 
+	struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target)
+/* Calculate chain score assuming query and target 
+   span the chained region rather than entire chrom. */
+{
+struct cBlock *b1, *b2;
+double score = 0;
+for (b1 = chain->blockList; b1 != NULL; b1 = b2)
+    {
+    score += chainScoreBlock(query->dna + (b1->qStart) - chain->qStart, 
+    	target->dna + (b1->tStart) - chain->tStart, b1->tEnd - b1->tStart, ss->matrix);
     b2 = b1->next;
     if (b2 != NULL)
         score -=  gapCalcCost(gapCalc, b2->qStart - b1->qEnd, 
