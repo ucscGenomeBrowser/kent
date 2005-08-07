@@ -176,8 +176,10 @@
 #include "ccdsGeneMap.h"
 #include "cutter.h"
 #include "chicken13kInfo.h"
+#include "gapCalc.h"
+#include "chainConnect.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.923 2005/08/07 00:52:48 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.924 2005/08/07 23:27:14 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2122,8 +2124,18 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 if (subChain == NULL)
     nullSubset = TRUE;
 else
-    /* Note: chain.c's chainSubsetOnT says this is a "fake" (scaled) score. */
+    {
+    struct gapCalc *gapCalc = gapCalcDefault();
+    struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
+    struct dnaSeq *tSeq = hDnaFromSeq(subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
+    struct dnaSeq *qSeq = hDnaFromSeq(subChain->qName, subChain->qStart, subChain->qEnd, dnaLower);
+
+    if (subChain->qStrand == '-')
+        reverseComplement(qSeq->dna, qSeq->size);
+    subChain->score = chainCalcScoreSubChain(subChain, scoreScheme, gapCalc,
+    	qSeq, tSeq);
     subSetScore = subChain->score;
+    }
 chainFree(&toFree);
 
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
