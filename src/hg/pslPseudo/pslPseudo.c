@@ -38,11 +38,12 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.37 2005/08/03 23:36:55 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.38 2005/08/07 20:07:05 baertsch Exp $";
 
 char *db;
 char *nibDir;
 char *mrnaSeq;
+int verbosity = 1;
 float minAli = 0.98;
 float maxRep = 0.60;
 float minAliPseudo = 0.60;
@@ -1750,9 +1751,11 @@ if (synHash != NULL)
         int size = psl->tEnd - psl->tStart;
         int overlap = positiveRangeIntersection(psl->tStart, psl->tEnd, 
                 el->start, el->end);
-        if (level > maxlevel && (float)overlap/(float)size > overlapThreshold)
+        if (level > maxlevel && (float)overlap/(float)size > overlapThreshold && ((el->end)-(el->start) > size))
             maxlevel = level;
+        verbose(3,"%s %s:%d level %d size %d net %d \n",psl->qName, psl->tName, psl->tStart, maxlevel, size, el->end-el->start);
         }
+    verbose(3,"%s %s:%d max level %d \n",psl->qName, psl->tName, psl->tStart, maxlevel );
     for (el = elist; el != NULL ; el = el->next)
         {
         //bed = el->val;
@@ -1762,11 +1765,12 @@ if (synHash != NULL)
             pg->overlapDiag += positiveRangeIntersection(psl->tStart, psl->tEnd, 
                 el->start, el->end);
             netSize += (el->end)-(el->start);
+            verbose(3,"net size %d after %d-%d overlap %d\n",netSize, el->start, el->end, pg->overlapDiag);
             }
         }
     if (netSize > 0)
         {
-        verbose(3,"##score %s %d/ %d=%d level %d\n",psl->qName, pg->overlapDiag, netSize,(pg->overlapDiag*100)/(netSize), maxlevel );
+        verbose(3,"##score %s net %d/%d=%d level %d\n",psl->qName, pg->overlapDiag, netSize,(pg->overlapDiag*100)/(netSize), maxlevel );
         pg->overlapDiag = (pg->overlapDiag*100)/(netSize);
         }
     //pg->overlapDiag = (pg->overlapDiag*100)/(psl->tEnd-psl->tStart);
@@ -2100,7 +2104,7 @@ while (lineFileNext(in, &line, &lineSize))
     psl = pslLoad(words);
     if (stripVersion)
         chopSuffix(psl->qName);
-    verbose(1,"scoring %s version %d\n",psl->qName, stripVersion);
+    verbose(3,"scoring %s version %d\n",psl->qName, stripVersion);
     if (!sameString(lastName, psl->qName))
 	{
         slReverse(&pslList);
@@ -2131,6 +2135,8 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 17)
     usage();
 verboseSetLogFile("stdout");
+verbosity = optionInt("verbose", 1);
+verboseSetLevel(verbosity);
 ss = axtScoreSchemeDefault();
 fileHash = newHash(0);  
 tHash = newHash(20);  /* seqFilePos value. */
