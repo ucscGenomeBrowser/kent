@@ -125,7 +125,7 @@ struct gap *el, *next;
 for (el = *gl; el != NULL; el = next)
     {
     next = el->next;
-    if ( (el->downstream != NULL) && (! el->isDownstreamBound) )
+    if ( freeBedEl && (el->downstream != NULL) && (! el->isDownstreamBound) )
 	freeMem(el->downstream);
     freeMem(el);
     }
@@ -470,7 +470,8 @@ return (returnStats);
 }
 
 static void gapInsert(struct bed *bedEl, struct gap *gl)
-/*	insert the bedEl into the gap list item gl	*/
+/*	insert the bedEl into the gap list item gl, returns pointer to
+ *	a chrom name of the surrounding bounding elements	*/
 {
 struct gap *newGap;
 int gapSize = 0;
@@ -513,7 +514,7 @@ else
     warn("WARNING: new element insert overlaps previous element\n");
     newGap->prev->gapSize = 0;
     }
-}
+}	/*	static void gapInsert(struct bed *bedEl, struct gap *gl) */
 
 static void placeItem(struct bed *bedEl, struct gap *gl)
 /*	create two gaps where one now exists, the bedEl splits
@@ -637,7 +638,6 @@ AllocVar(newBed);		/*	and a new bed element	*/
 		/* the bed element is *new* because it has different
 		 * coordinates than the placed bed element
 		 */
-newBed->chrom = bedEl->chrom;	/*	no need to clone, not freed	*/
 
 spareSpace = gl->gapSize - itemSize;
 /*	placementOffset is the interval: [0,spareSpace) == [0,spareSpace-1] */
@@ -646,15 +646,20 @@ if (spareSpace > 0)
 else
     placementOffset = 0;
 
+/*  XXX the chrom name of this thing needs to be the same chrom name of
+ *  the surrounding bounding elements, not the incoming bedEl
+ */
 newBed->chromStart = gl->upstream->chromEnd + placementOffset;
 newBed->chromEnd = newBed->chromStart + itemSize;
+newBed->chrom = gl->upstream->chrom;	/* no need to clone, not freed	*/
 
 gapInsert(newBed, gl);
 return(newBed);
 }
 
 static struct bed *randomTrial(struct chrGapList *bounding, struct bed *placed)
-/*	placed bed list has already been sorted by size descending	*/
+/*	placed bed list has already been sorted by size descending,
+	return is the newly placed bed list	*/
 {
 struct bed *bedList = NULL;
 struct bed *bedEl;
@@ -684,7 +689,8 @@ for (bedEl = placed; bedEl != NULL; bedEl = bedEl->next)
     int R;
     int itemSize = bedEl->chromEnd - bedEl->chromStart;
     if (itemSize < 1)
-	errAbort("ERROR: placing items less than 1 bp in length ?");
+	errAbort("ERROR: placing items less than 1 bp in length ? %s:%d-%d",
+	bedEl->chrom, bedEl->chromEnd, bedEl->chromStart);
     N = gapsOfSize(bounding,itemSize, sizedGaps, maxGapCount);
     /*	From those N gaps, randomly select one of them	(drand48 = [0.0,1.0)*/
     R = floor(N * drand48());	/*	interval: [0,N) == [0,N-1]	*/
@@ -994,7 +1000,7 @@ verbose(2, "placed item count: %d\n", placedCount);
 
 boundingGaps = createGaps(boundingElements);
 
-if (0 == trials)	/*	display initial placement stats only	*/
+if (TRUE)	/*	display initial placement stats only	*/
     {
     char *neighborName = NULL;
 
@@ -1028,7 +1034,8 @@ if (0 == trials)	/*	display initial placement stats only	*/
     slReverse(&statsList);
     freeMem(neighborName);
     }
-else
+
+if (trials > 0)
     {
     int trial;
 
