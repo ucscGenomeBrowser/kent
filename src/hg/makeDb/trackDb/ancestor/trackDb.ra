@@ -1,0 +1,11 @@
+
+track mapHg17KG
+shortLabel Human mRNAs
+longLabel Human(hg17) Known Gene mRNAs Mapped by pslMap
+group rna
+priority 54.5
+visibility pack
+type psl xeno
+spectrum on
+blastRef hg17.blastKGRef01
+
