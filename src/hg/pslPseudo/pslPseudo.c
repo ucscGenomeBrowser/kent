@@ -38,7 +38,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.40 2005/08/07 20:23:59 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.41 2005/08/07 20:33:11 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -1772,6 +1772,11 @@ if (synHash != NULL)
         {
         verbose(3,"##score %s net %d/%d=%d level %d\n",psl->qName, pg->overlapDiag, netSize,(pg->overlapDiag*100)/(netSize), maxlevel );
         pg->overlapDiag = (pg->overlapDiag*100)/(netSize);
+        }
+    else
+        {
+        verbose(3,"##score %s net %d/%d=%d level %d\n",psl->qName, pg->overlapDiag, netSize,pg->overlapDiag, maxlevel );
+        pg->overlapDiag = -10;
         }
     //pg->overlapDiag = (pg->overlapDiag*100)/(psl->tEnd-psl->tStart);
     slFreeList(&elist);
