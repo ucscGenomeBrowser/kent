@@ -177,7 +177,7 @@
 #include "cutter.h"
 #include "chicken13kInfo.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.922 2005/08/04 19:09:18 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.923 2005/08/07 00:52:48 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4452,7 +4452,7 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
     type = temp;
     table = track;
     }
-else if ( sameWord("blatzHg17KG", track) )
+else if ( sameWord("blatzHg17KG", track) || sameWord("mapHg17KG", track) )
     {
     type = "Human mRNA";
     table = track;
@@ -16221,7 +16221,7 @@ else if (sameWord(track, "mrna") || sameWord(track, "mrna2") ||
          sameWord(track, "xenoBlastzMrna") || sameWord(track, "sim4") ||
          sameWord(track, "xenoEst") || sameWord(track, "psu") ||
          sameWord(track, "tightMrna") || sameWord(track, "tightEst") ||
-	 sameWord(track, "blatzHg17KG") ||
+	 sameWord(track, "blatzHg17KG") || sameWord(track, "mapHg17KG") ||
          sameWord(track, "mgcIncompleteMrna") ||
          sameWord(track, "mgcFailedEst") ||
          sameWord(track, "mgcPickedEst") ||
