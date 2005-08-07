@@ -38,7 +38,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.38 2005/08/07 20:07:05 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.39 2005/08/07 20:18:10 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -2137,6 +2137,7 @@ if (argc != 17)
 verboseSetLogFile("stdout");
 verbosity = optionInt("verbose", 1);
 verboseSetLevel(verbosity);
+verbose(1,"version is %s\n",rcsid);
 ss = axtScoreSchemeDefault();
 fileHash = newHash(0);  
 tHash = newHash(20);  /* seqFilePos value. */

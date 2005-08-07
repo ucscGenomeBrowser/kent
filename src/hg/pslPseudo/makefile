@@ -6,17 +6,17 @@ L = -lm $(MYSQLLIBS)
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a 
 DEBUGOPTIONS = -skipExciseRepeats -minAli=0.98 -nearTop=0.005 
-OPTIONS = -minAli=0.98 -nearTop=0.005 -verbose=4
+OPTIONS = -minAli=0.98 -nearTop=0.005 -verbose=3 -stripVersion
 #MARKDEBUG = /cse/grads/markd/compbio/dbgmalloc/debug-malloc.o
 MARKDEBUG =
 DB = hg17
-MRNA = mrnaHg17.fa 
+MRNA = mrnaHg17.2bit 
 DBDIR = /cluster/data/$(DB)
 BED = $(DBDIR)/bed
 PSEUDO = $(DBDIR)/bed/pseudo
 BUILD=gs.17/build34
 VALCMD = chr13.sizes ${PSEUDO}/rmsk.bed $(PSEUDO)/chr13mouseSyn.bed $(PSEUDO)/chr13simple.bed $(PSEUDO)/chr13_mrna.psl 
-TESTCMD = $(DBDIR)/chrom.sizes ${PSEUDO}/rmsk.bed $(PSEUDO)/mouseSyn.bed $(BED)/simpleRepeat/simpleRepeat.bed $(PSEUDO)/all_mrna.psl 
+TESTCMD = $(DBDIR)/chrom.sizes ${PSEUDO}/rmsk.bed.gz $(PSEUDO)/mouseNet.txt $(BED)/simpleRepeat/simpleRepeat.bed $(PSEUDO)/all_mrna.psl 
 #TESTCMD = $(DBDIR)/chrom.sizes mtRmsk mtSyn.bed mtSimple.bed input/test48.psl
 GENES = $(PSEUDO)/refGene.tab $(PSEUDO)/mgcGene.tab $(PSEUDO)/sortedKnownGene.tab
 
