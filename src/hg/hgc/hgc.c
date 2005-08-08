@@ -179,7 +179,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.925 2005/08/08 19:54:49 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.926 2005/08/08 21:29:45 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -3274,6 +3274,7 @@ trackDbFreeList(&tdbList);
 void doGetBlastPep(char *readName, char *table)
 /* get predicted protein */
 {
+int qStart;
 struct psl *psl;
 int start, end;
 struct sqlResult *sr;
@@ -3317,10 +3318,14 @@ for (i=0; i<psl->blockCount; ++i)
 
 str = buffer = needMem(totalSize + 1);
 
+qStart = 0;
 for (i=0; i<psl->blockCount; ++i)
     {
     int ts = psl->tStarts[i] - start;
     int sz = psl->blockSizes[i];
+
+    for (;qStart < psl->qStarts[i]; qStart++)
+	*str++ = 'X';
 
     for (j=0; j<sz; ++j)
 	{
@@ -3329,6 +3334,7 @@ for (i=0; i<psl->blockCount; ++i)
 	if ((*str = lookupCodon(codon)) == 0)
 	    *str = '*';
 	str++;
+	qStart++;
 	}
     }
 
