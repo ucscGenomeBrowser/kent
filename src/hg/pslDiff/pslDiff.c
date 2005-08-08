@@ -1,8 +1,8 @@
 /* pslDiff - compare psl files */
 #include "common.h"
-#include "pslTbl.h"
 #include "psl.h"
-#include "hash.h"
+#include "pslTbl.h"
+#include "pslSets.h"
 #include "options.h"
 
 /* command line options and values */
@@ -13,8 +13,8 @@ static struct optionSpec optionSpecs[] =
     {NULL, 0}
 };
 
-char *diffType = "counts";     /* type of diff to perform */
-boolean haveSetNames = FALSE;  /* set names in args */
+boolean gHaveSetNames = FALSE;  /* set names in args */
+boolean gNumAligns = FALSE;     /* compare by number of alignments */
 
 void usage(char *msg, ...)
 /* usage msg and exit */
@@ -26,217 +26,148 @@ errAbort("\n%s",
          "pslDiff [options] psl1 psl2 ...\n"
          "pslDiff [options] -setNames setName1 pslFile1 setName2 pslFile2 ...\n"
          "\n"
-         "Compare queries in two or more psl files by various criteria \n"
+         "Compare queries in two or more psl files \n"
          "\n"
-         "The default criteria is to compare the number of alignments of each\n"
-         "query.  This does not compare the actual alignments, only the\n"
-         "number per query. More criteria will be added in the future.\n"
-         "\n"
-         "Options:\n"
+         "   -setNames - commmand line specifies name to use for a set of alignments\n"
+         "    found in a psl file.  If this is not specified, the set names are the\n"
+         "    base nmaes of the psl files\n"
          "   -details=file - write details of psls that differ to this file\n"
          );
 }
 
-int queryAlignCount(struct pslQuery *query)
-/* count alignments for a query, allow query to be NULL */
+struct pslSets *createPslSets(int numPslSpecs, char **pslSpecs)
+/* create pslSets object from the specified psl files.  */
 {
-if (query == NULL)
-    return 0;
-else
-    return slCount(query->psls);
-}
-
-struct pslTbl *loadPslTbls(int numPslSpecs, char **pslSpecs)
-/* load list of psl files into a list of pslTbl objects */
-{
-struct pslTbl *pslTblList = NULL;
+struct pslSets *ps = pslSetsNew(numPslSpecs/(gHaveSetNames ? 2 : 1));
 int i;
-if (haveSetNames)
+if (gHaveSetNames)
     {
     for (i = 0; i < numPslSpecs; i += 2)
-        slSafeAddHead(&pslTblList, pslTblNew(pslSpecs[i+1], pslSpecs[i]));
+        pslSetsLoadSet(ps, i/2, pslSpecs[i+1], pslSpecs[i]);
     }
 else
     {
+    char setName[PATH_LEN];
     for (i = 0; i < numPslSpecs; i++)
-        slSafeAddHead(&pslTblList, pslTblNew(pslSpecs[i], NULL));
+        {
+        splitPath(pslSpecs[i], NULL, setName, NULL);
+        pslSetsLoadSet(ps, i, pslSpecs[i], setName);
+        }
     }
-slReverse(&pslTblList);
-return pslTblList;
+return ps;
 }
 
-void addQueryNames(struct hash *qNameHash, struct pslTbl *pslTbl)
-/* add query names to the hash table if they are not already there. */
+boolean pslSame(struct psl *psl1, struct psl *psl2)
+/* determine if two psls (with same query and target) are the same */
 {
-struct hashCookie hc = hashFirst(pslTbl->queryHash);
-struct pslQuery *q;
-while ((q = hashNextVal(&hc)) != NULL)
-    hashStore(qNameHash, q->qName);  /* add if not there */
-}
-
-struct slName *getQueryNames(struct pslTbl *pslTblList)
-/* get list of all query names*/
-{
-struct slName *qNames = NULL;
-struct hash *qNameHash = hashNew(21);
-struct pslTbl *pslTbl;
-struct hashCookie hc;
-struct hashEl *hel;
-
-for (pslTbl = pslTblList; pslTbl != NULL; pslTbl = pslTbl->next)
-    addQueryNames(qNameHash, pslTbl);
-
-/* copy to a list */
-hc = hashFirst(qNameHash);
-while ((hel = hashNext(&hc)) != NULL)
-    slSafeAddHead(&qNames, slNameNew(hel->name));
-hashFree(&qNameHash);
-slNameSort(&qNames);
-return qNames;
-}
-
-struct pslTblQuery
-/* Object with pslTbl and pslQuery for a give qName.  A list of these buildt
- * and then the pslQuery field filled in for each comparison.. */
-{
-    struct pslTblQuery *next;
-    struct pslTbl *pslTbl;      /* table for this query */
-    struct pslQuery *pslQuery;  /* query, or NULL if not in table */
-};
-
-struct pslTblQuery *allocPslTblQueries(struct pslTbl *pslTblList)
-/* Get list of pslQuerySet objects paralleling pslTbl */
-{
-struct pslTblQuery *pslTblQueries = NULL;
-struct pslTbl *pslTbl;
-
-for (pslTbl = pslTblList; pslTbl != NULL; pslTbl = pslTbl->next)
+int iBlk;
+if (psl1->blockCount != psl2->blockCount)
+    return FALSE;
+for(iBlk = 0; iBlk < psl1->blockCount; iBlk++)
     {
-    struct pslTblQuery *ptq;
-    AllocVar(ptq);
-    ptq->pslTbl = pslTbl;
-    slAddHead(&pslTblQueries, ptq);
+    if ((psl1->qStarts[iBlk] != psl2->qStarts[iBlk])
+        || (psl1->tStarts[iBlk] != psl2->tStarts[iBlk])
+        || (psl1->blockSizes[iBlk] != psl2->blockSizes[iBlk]))
+        return FALSE;
     }
-slReverse(&pslTblQueries);
-return pslTblQueries;
+return TRUE;
 }
 
-void getPslQueries(char *qName, struct pslTblQuery *pslTblQueries)
-/* fill in pslQuery results */
+boolean allMatchesSame(struct pslMatches *matches)
+/* determine if all sets have  matches and are same */
 {
-struct pslTblQuery *ptq;
-for (ptq = pslTblQueries; ptq != NULL; ptq = ptq->next)
-    ptq->pslQuery = hashFindVal(ptq->pslTbl->queryHash, qName);
+int iSet;
+if (matches->psls[0] == NULL)
+    return FALSE;  /* first set doesn't have a match */
+for (iSet = 1; iSet < matches->numSets; iSet++)
+    if ((matches->psls[iSet] == NULL)
+        || !pslSame(matches->psls[0], matches->psls[iSet]))
+        return FALSE;
+return TRUE;
 }
 
-/* header for details file */
-char *detailsHdr = "#setName\t"
-"qName\t" "qStart\t" "qEnd\t"
-"tName\t" "tStart\t" "tEnd\t"
-"strand\t" "nExons\t"
-"ident\t" "repMatch\t" "cover\n" 
-;
-
-void writePslDetails(char *setName, struct psl *psl, FILE *detailsFh)
-/* write details of a psl to a file */
+char getSetCategory(struct pslMatches *matches, int iSet, char *categories)
+/* get category letter for a set */
 {
-unsigned aligned = psl->match + psl->misMatch + psl->repMatch;
-float ident = ((float)(psl->match + psl->repMatch))/((float)(aligned));
-float repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
-float cover = ((float)aligned)/((float)psl->qSize);
+int iSet2;
+char lastCat = '\0';
+if (matches->psls[iSet] == NULL)
+    return '-';  /* missing */
 
-fprintf(detailsFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%s\t%d\t%0.3g\t%0.3g\t%0.3g\n",
-        setName, psl->qName, psl->qStart, psl->qEnd,
-        psl->tName, psl->tStart, psl->tEnd,
-        psl->strand, psl->blockCount,
-        ident, repMatch, cover);
-}
 
-void writeDetails(char *setName, struct pslQuery *query, FILE *detailsFh)
-/* write details of queries to a file */
-{
-struct psl *psl;
-for (psl = query->psls; psl != NULL; psl = psl->next)
-    writePslDetails(setName, psl, detailsFh);
-}
-
-void writeSetDetails(struct pslTblQuery *pslTblQueries, FILE *detailsFh)
-/* write details of queries from all sets */
-{
-struct pslTblQuery *ptq;
-for (ptq = pslTblQueries; ptq != NULL; ptq = ptq->next)
-    if (ptq->pslQuery != NULL)
-        writeDetails(ptq->pslTbl->setName, ptq->pslQuery, detailsFh);
-}
-
-boolean diffCounts(char *qName, struct pslTblQuery *pslTblQueries, FILE *outFh)
-/* basic diff on number of query psls */
-{
-struct pslTblQuery *ptq;
-int cnt0 = queryAlignCount(pslTblQueries->pslQuery);
-boolean same = TRUE;
-
-for (ptq = pslTblQueries->next; same && (ptq != NULL); ptq = ptq->next)
-    same = (queryAlignCount(ptq->pslQuery) == cnt0);
-
-if (!same)
+/* search for a matching psl, stopping when the first unassigned set is hit */
+for (iSet2 = 0; (iSet2 < matches->numSets) && (categories[iSet2] != '\0'); iSet2++)
     {
-    fputs(qName, outFh);
-    for (ptq = pslTblQueries; ptq != NULL; ptq = ptq->next)
-        fprintf(outFh, "\t%d", queryAlignCount(ptq->pslQuery));
-    fputs("\n", outFh);
+    if (pslSame(matches->psls[iSet2], matches->psls[iSet]))
+        return categories[iSet2];
+    else
+        lastCat = max(categories[iSet2], lastCat);
     }
-return same;
-}
 
-void queryDiff(char *qName, struct pslTblQuery *pslTblQueries,
-               FILE *outFh, FILE *detailsFh)
-/* do requested diff of a query */
-{
-boolean same = FALSE;
-getPslQueries(qName, pslTblQueries);
-if (sameString(diffType, "counts"))
-    same = diffCounts(qName, pslTblQueries, outFh);
+if (lastCat == '\0')
+    return 'A';  /* first category assigned */
 else
-    errAbort("invalid diff type: %s", diffType);
-if (!same && (detailsFh != NULL))
-    writeSetDetails(pslTblQueries, detailsFh);
+    return lastCat+1;
 }
 
-void writeHeader(FILE *outFh, struct pslTblQuery *pslTblQueries)
-/* write header, with a column for each psl */
-{
-struct pslTblQuery *ptq;
-fputs("#qName", outFh);
 
-for (ptq = pslTblQueries; ptq != NULL; ptq = ptq->next)
-    fprintf(outFh, "\t%s", ptq->pslTbl->setName);
-fputs("\n", outFh);
+void categorizePsls(struct pslMatches *matches, char *categories)
+/* generate categories labels for each psl.  All psls that are
+ * the same are assigned the same category letter */
+{
+int iSet;
+
+/* zero so we know which we have set */
+memset(categories, 0, matches->numSets);
+
+/* fill in categories */
+for (iSet = 0; iSet < matches->numSets; iSet++)
+    categories[iSet] = getSetCategory(matches, iSet, categories);
+}
+
+void prDiffMatches(FILE *outFh, struct pslSets *ps, char *qName,
+                   struct pslMatches *matches)
+/* print information about matched psls that are known to have differences */
+{
+static char *categories = NULL;
+int iSet;
+
+/* categories is an array of 1-character values, but add a terminating
+ * zero to make it easy to display in a debugger */
+if (categories == NULL)
+    categories = needMem(ps->numSets+1);
+categorizePsls(matches, categories);
+
+fprintf(outFh, "%s\t%s\t%d\t%d", qName,
+        matches->tName, matches->tStart, matches->tEnd);
+for (iSet = 0; iSet < ps->numSets; iSet++)
+    fprintf(outFh, "\t%c", categories[iSet]);
+fprintf(outFh, "\n");
+}
+
+void diffQuery(FILE *outFh, FILE *detailsFh, struct pslSets *ps, char *qName)
+/* diff one query */
+{
+struct pslMatches *matches;
+pslSetsMatchQuery(ps, qName);
+for (matches = ps->matches; matches != NULL; matches = matches->next)
+    if (!allMatchesSame(matches))
+        prDiffMatches(outFh, ps, qName, matches);
 }
 
 void pslDiff(int numPslSpecs, char **pslSpecs, char *detailsFile)
 /* compare psl files */
 {
-struct pslTbl *pslTblList = loadPslTbls(numPslSpecs, pslSpecs);
-struct slName *qNames = getQueryNames(pslTblList);
-struct pslTblQuery *pslTblQueries = allocPslTblQueries(pslTblList);
-struct slName *qName;
-FILE *detailsFh = NULL;
+struct pslSets *ps = createPslSets(numPslSpecs, pslSpecs);
+struct slName *queries = pslSetsQueryNames(ps);
+FILE *detailsFh = (detailsFile != NULL) ? mustOpen(detailsFile, "w") : NULL;
+struct slName *query;
+for (query = queries; query != NULL; query = query->next)
+    diffQuery(stdout, detailsFh, ps, query->name);
 
-writeHeader(stdout, pslTblQueries);
-
-if (detailsFile != NULL)
-    {
-    detailsFh = mustOpen(detailsFile, "w");
-    fputs(detailsHdr, detailsFh);
-    }
-
-for (qName = qNames; qName != NULL; qName = qName->next)
-    queryDiff(qName->name, pslTblQueries, stdout, detailsFh);
-
+slFreeList(&queries);
+pslSetsFree(&ps);
 carefulClose(&detailsFh);
-pslTblFreeList(&pslTblList);
-slFreeList(&qNames);
 }
 
 int main(int argc, char *argv[])
@@ -244,12 +175,12 @@ int main(int argc, char *argv[])
 {
 char *detailsFile;
 optionInit(&argc, argv, optionSpecs);
-haveSetNames = optionExists("setNames");
-if (((haveSetNames) && (argc < 5))
-    || ((!haveSetNames) && (argc < 3)))
+gHaveSetNames = optionExists("setNames");
+if (((gHaveSetNames) && (argc < 5))
+    || ((!gHaveSetNames) && (argc < 3)))
     usage("wrong # of args:");
 
-if (haveSetNames && ((argc-1)&1)) /* must have even number */
+if (gHaveSetNames && ((argc-1)&1)) /* must have even number */
     usage("-setNames requires pairs of setName and pslFile");
 
 detailsFile = optionVal("details", NULL);

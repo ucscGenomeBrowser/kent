@@ -6,7 +6,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-O = pslDiff.o
+O = pslSets.o pslDiff.o
+# pslDiff.o
 B =  ${HOME}/bin/${MACHTYPE}/pslDiff
 
 $B: pslDiff
@@ -16,7 +17,7 @@ $B: pslDiff
 pslDiff: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o pslDiff $O ${MYLIBS} ${MYSQLLIBS} $L
 
-pslDiff.o: pslDiff.c $H
+pslDiff.o: pslDiff.c pslSets.h
 
 test:
 	cd tests && ${MAKE} test
