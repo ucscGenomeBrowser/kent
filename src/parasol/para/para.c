@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.63 2005/08/05 23:36:26 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.64 2005/08/08 19:41:03 galt Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -86,7 +86,7 @@ errAbort(
   "   Push jobs in this database until all are done or one fails after N retries.\n"
   "para make jobList\n"
   "   Create database and run all jobs in it if possible.  If one job\n"
-  "   failes repeatedly this will fail.  Suitable for inclusion in makefiles.\n"
+  "   fails repeatedly this will fail.  Suitable for inclusion in makefiles.\n"
   "   Same as a 'create' followed by a 'shove'.\n"
   "para check\n"
   "   This checks on the progress of the jobs.\n"
