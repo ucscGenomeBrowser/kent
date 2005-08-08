@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.994 2005/08/07 00:49:58 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.995 2005/08/08 19:57:36 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10027,7 +10027,7 @@ registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("blastHg17KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("blatzHg17KG", blatzMethods);
-registerTrackHandler("mapHg17KG", blatzMethods);
+registerTrackHandler("mrnaMapHg17KG", blatzMethods);
 registerTrackHandler("blastSacCer1SG", blastMethods);
 registerTrackHandler("tblastnHg16KGPep", blastMethods);
 registerTrackHandler("xenoRefGene", xenoRefGeneMethods);
