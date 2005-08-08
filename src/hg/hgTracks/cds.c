@@ -1028,10 +1028,9 @@ if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
                                 color, lf->score, font, codon, 
                                 zoomedToCodonLevel, cdsColor,
                                 winStart, maxPixels );
-else if (sameString(tg->mapName,"mrna") || 
+else if (startsWith("mrna", tg->mapName) || 
 	 sameString(tg->mapName,"xenoMrna")||
-	 pslSequenceBases ||
-         sameString(tg->mapName,"mrnaBlastz"))
+	 pslSequenceBases )
     /*one of the chosen psl tracks with associated
      * sequences in a database*/
 
@@ -1082,10 +1081,9 @@ if (!cdsColorsMade)
    
 if(drawOptionNum>0 && zoomedToCodonLevel)
     {
-    if (sameString(tg->mapName,"mrna")   ||
+    if (startsWith("mrna", tg->mapName) || 
 	sameString(tg->mapName,"xenoMrna") ||
-	pslSequenceBases ||
-        sameString(tg->mapName,"mrnaBlastz"))
+	pslSequenceBases )
 	{
         char *database = cartUsualString(cart, "db", hGetDb());
 	*mrnaSeq = mustGetSeqUpper(lf->name,tg->mapName);
