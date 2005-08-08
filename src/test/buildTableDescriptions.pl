@@ -28,7 +28,6 @@ my $verbose   = 0;
 my $debug         = 0;
 my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
 		      "hg/lib/ggDbRep.as" => "",
-		      "hg/lib/rmskOut.as" => "",
 		      "hg/lib/genotype.as" => "",
 		      "hg/makeDb/schema/joinerGraph/all.as" => "",
 		      "hg/makeDb/schema/joinerGraph/swissProt.as" => "",
