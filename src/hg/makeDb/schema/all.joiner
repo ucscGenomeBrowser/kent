@@ -17,7 +17,7 @@ set dp dp2,dp3
 set sacCer sacCer1
 set panTro panTro1
 set galGal galGal2
-set ci ci1
+set ci ci1,ci2
 set danRer danRer1,danRer2,danRer3
 set canFam canFam1
 set droYak droYak1
@@ -1396,6 +1396,15 @@ identifier blastDm1FBPepId
      $dp.blastDm1FB.qName
      $droYak.blastDm1FB.qName
      $droMult.blastDm1FB.qName
+
+identifier blastDm2FBPepId dependency
+"dm2 proteins"
+     dm2.blastFBPep01.name
+     $anoGam.blastDm2FB.qName
+     $apiMel.blastDm2FB.qName
+     $dp.blastDm2FB.qName
+     $droYak.blastDm2FB.qName
+     $droMult.blastDm2FB.qName
 
 identifier blastHg16KGPepId
 "hg16 proteins"
