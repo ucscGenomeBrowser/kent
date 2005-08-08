@@ -5114,7 +5114,7 @@ searchPriority 50
 
 track encodeAffyEncode25bpProbes
 shortLabel Affy 25bp Probes
-longLabel Affymetrix 25 bp Probe locations
+longLabel Affymetrix 25 bp Probe Locations
 group encodeTxLevels
 visibility hide
 type bed 4 .
