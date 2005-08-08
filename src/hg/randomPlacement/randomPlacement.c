@@ -63,6 +63,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
+int verbosity = 1;
 int trials = 0;
 int seed = 0;
 int shoulder = 100;
@@ -210,6 +211,7 @@ static void statsPrint(struct statistic *statList)
 {
 struct statistic *statEl;
 boolean firstHeader = TRUE;
+int i = 0;
 
 statsHeader();
 for (statEl = statList; statEl != NULL; statEl = statEl->next)
@@ -232,6 +234,13 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
 		"%dbp  zero bp\n", shoulder, shoulder);
 	    }
 	printf("%8d%10d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
+	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
+	    statEl->meanNearestNeighbor, statEl->placedWithinShoulder,
+	    100.0 * (double)statEl->placedWithinShoulder /
+		(double)statEl->placedItemCount,
+	    statEl->zeroNeighbor);
+	printf("## %d %s %d %8d%10d%8d%8d%9d %%%7.2f%9d\n", i++, neighbor, shoulder, 
+                statEl->placedItemCount,
 	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
 	    statEl->meanNearestNeighbor, statEl->placedWithinShoulder,
 	    100.0 * (double)statEl->placedWithinShoulder /
@@ -1106,7 +1115,9 @@ seed = optionInt("seed", 0);
 shoulder = optionInt("shoulder", 100);
 neighbor = optionVal("neighbor", NULL);
 bedOutFile = optionVal("bed", NULL);
+verbosity = optionInt("verbose", 1);
 
+verboseSetLevel(verbosity);
 verbose(2,"bounding elements file: %s\n", argv[1]);
 verbose(2,"placed items file: %s\n", argv[2]);
 if (neighbor)
