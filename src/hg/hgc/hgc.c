@@ -179,7 +179,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.924 2005/08/07 23:27:14 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.925 2005/08/08 19:54:49 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4464,7 +4464,7 @@ if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameSt
     type = temp;
     table = track;
     }
-else if ( sameWord("blatzHg17KG", track) || sameWord("mapHg17KG", track) )
+else if ( sameWord("blatzHg17KG", track)  )
     {
     type = "Human mRNA";
     table = track;
