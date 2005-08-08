@@ -57,6 +57,7 @@ Procedure:
 static struct optionSpec optionSpecs[] = {
     {"trials", OPTION_INT},
     {"seed", OPTION_INT},
+    {"shoulder", OPTION_INT},
     {"neighbor", OPTION_STRING},
     {"bed", OPTION_STRING},
     {NULL, 0}
@@ -64,6 +65,7 @@ static struct optionSpec optionSpecs[] = {
 
 int trials = 0;
 int seed = 0;
+int shoulder = 100;
 char *neighbor = NULL;
 char *bedOutFile = NULL;
 
@@ -88,6 +90,9 @@ verbose(1,
   "             - for N=0, the initial placement stats are displayed\n"
   "   -seed=S - seed value for drand48() - default is zero\n"
   "           - which produces the same set of random numbers each time.\n"
+  "   -shoulder=D - distance D from bounding elements to measure percent\n"
+  "           - of items within that distance to the bounding element,\n"
+  "           - default is 100 bases\n"
   "   -neighbor=<bed file> - measure nearest neighbor statistics to these\n"
   "           - bed items instead of the boundingRegions items.  For\n"
   "           - this case, the boundingRegions gaps should be a subset of\n"
@@ -191,7 +196,7 @@ struct statistic
     int meanNearestNeighbor;	/*	nearest neighbor statistics	*/
     int medianNearestNeighbor;	/*	this is the nearest bounding element */
     int maximumNearestNeighbor;	/*	to the placed item	*/
-    int placedWithin100bp;	/*	divide by placedItemCount for %	*/
+    int placedWithinShoulder;	/*	divide by placedItemCount for %	*/
     int zeroNeighbor;		/*	number with zero distance to neighbor */
     };
 
@@ -223,13 +228,13 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
 	    printf("Nearest neighbor statistics:\n");
 	    printf("    # of   Maximum  Median    Mean # within "
 		"%% within # within\n");
-	    printf("   items   nearest nearest nearest   100 bp    "
-		"100bp  zero bp\n");
+	    printf("   items   nearest nearest nearest   %d bp    "
+		"%dbp  zero bp\n", shoulder, shoulder);
 	    }
 	printf("%8d%10d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
 	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
-	    statEl->meanNearestNeighbor, statEl->placedWithin100bp,
-	    100.0 * (double)statEl->placedWithin100bp /
+	    statEl->meanNearestNeighbor, statEl->placedWithinShoulder,
+	    100.0 * (double)statEl->placedWithinShoulder /
 		(double)statEl->placedItemCount,
 	    statEl->zeroNeighbor);
 	}
@@ -445,19 +450,21 @@ if (placedItemCount)
     returnStats->zeroNeighbor = i + 1;
 
     for ( ; i < placedCount; ++i)
-	if (placedDistances[i] > 100) break;
+	if (placedDistances[i] > shoulder) break;
 
-
-    returnStats->placedWithin100bp = (i+1) - returnStats->zeroNeighbor;
+    returnStats->placedWithinShoulder = (i+1) - returnStats->zeroNeighbor;
 
     verbose(2,"%d - number of items zero distance to nearest "
 	"bounding element\n", returnStats->zeroNeighbor);
-    verbose(2,"%d - number of items of non-zero distance within 100 bp of "
-	"nearest bounding element\n", returnStats->placedWithin100bp);
+    verbose(2,"%d - number of items of non-zero distance within %d bp of "
+	"nearest bounding element\n", returnStats->placedWithinShoulder,
+		shoulder);
     if ((placedCount - returnStats->zeroNeighbor) > 0)
 	verbose(2,"%% %.04f - percent of of items of non-zero distance "
-	    "within 100 bp of nearest bounding element\n",
-		100.0 * returnStats->placedWithin100bp / (placedCount-returnStats->zeroNeighbor));
+	    "within %d bp of nearest bounding element\n",
+		100.0 * returnStats->placedWithinShoulder /
+			(placedCount-returnStats->zeroNeighbor),
+		shoulder);
     else
        errAbort("something wrong with placed item count %d "
 	    "minus zeroDistance Count %d",
@@ -1096,6 +1103,7 @@ if (argc < 3)
     usage();
 trials = optionInt("trials", 0);
 seed = optionInt("seed", 0);
+shoulder = optionInt("shoulder", 100);
 neighbor = optionVal("neighbor", NULL);
 bedOutFile = optionVal("bed", NULL);
 
@@ -1107,6 +1115,7 @@ if (bedOutFile)
     verbose(2,"last alignment of trials output to bed file: %s\n", bedOutFile);
 verbose(2,"number of trials: %d\n", trials);
 verbose(2,"seed value for drand48(): %d\n", seed);
+verbose(2,"shoulder value: %d\n", shoulder);
 
 randomPlacement(argv[1], argv[2]);
 verbose(3,"at exit of main()\n");
