@@ -5275,8 +5275,8 @@ type bed 4 +
 
 track encodeGencodeRegions
 compositeTrack on
-shortLabel distal/proximal
-longLabel Gencode reference gene set region classification: Intronic, Intergenic, Distal, Proximal
+shortLabel Distal/Proximal
+longLabel Gencode Reference Gene Set Region Classification: Intronic, Intergenic, Distal, Proximal
 group encodeAnalysis
 priority 508
 visibility hide
@@ -5285,25 +5285,25 @@ type bed 4 .
     track encodeGencodeIntronsDistal
     subTrack encodeGencodeRegions
     shortLabel Intron/Distal
-    longLabel Gencode reference gene set Intronic Distal region
+    longLabel Gencode Reference Gene Set: Intronic Distal Region
     priority 1
 
     track encodeGencodeIntronsProximal
     subTrack encodeGencodeRegions
     shortLabel Intron/Proximal
-    longLabel Gencode reference gene set Intronic Proximal region
+    longLabel Gencode Reference Gene Set: Intronic Proximal Region
     priority 2
 
     track encodeGencodeIntergenicDistal
     subTrack encodeGencodeRegions
     shortLabel Intergenic/Distal
-    longLabel Gencode reference gene set Intergenic Distal region
+    longLabel Gencode Reference Gene Set: Intergenic Distal Region
     priority 3
 
     track encodeGencodeIntergenicProximal
     subTrack encodeGencodeRegions
     shortLabel Intergenic/Proximal
-    longLabel Gencode reference gene set Intergenic Proximal region
+    longLabel Gencode Reference Gene Set: Intergenic Proximal Region
     priority 4
 
 track encodeWorkshopSelections
