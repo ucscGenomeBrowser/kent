@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.929 2005/08/09 05:18:04 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.930 2005/08/09 06:51:08 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2140,6 +2140,8 @@ if (otherOrg == NULL)
     /* use first word of chain label (count on org name as first word) */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
+if (otherDb != NULL)
+    hSetDb2(otherDb);
 
 chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
@@ -2150,7 +2152,7 @@ else
     struct gapCalc *gapCalc = gapCalcDefault();
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
     struct dnaSeq *tSeq = hDnaFromSeq(subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
-    struct dnaSeq *qSeq = hDnaFromSeq(subChain->qName, subChain->qStart, subChain->qEnd, dnaLower);
+    struct dnaSeq *qSeq = hChromSeq2(subChain->qName, subChain->qStart, subChain->qEnd);
 
     if (subChain->qStrand == '-')
         reverseComplement(qSeq->dna, qSeq->size);
