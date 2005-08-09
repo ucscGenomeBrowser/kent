@@ -5275,8 +5275,8 @@ type bed 4 +
 
 track encodeGencodeRegions
 compositeTrack on
-shortLabel Distal/Proximal
-longLabel Gencode Reference Gene Set Region Classification: Intronic, Intergenic, Distal, Proximal
+shortLabel Gencode NC Regions
+longLabel Gencode Reference Annotation NonCoding Region Classification
 group encodeAnalysis
 priority 508
 visibility hide
@@ -5285,31 +5285,31 @@ type bed 4 .
     track encodeGencodeIntronsDistal
     subTrack encodeGencodeRegions
     shortLabel Intron/Distal
-    longLabel Gencode Reference Gene Set: Intronic Distal Region
+    longLabel Gencode Distal Intronic Region
     priority 1
 
     track encodeGencodeIntronsProximal
     subTrack encodeGencodeRegions
     shortLabel Intron/Proximal
-    longLabel Gencode Reference Gene Set: Intronic Proximal Region
+    longLabel Gencode Proximal Intronic Region
     priority 2
 
     track encodeGencodeIntergenicDistal
     subTrack encodeGencodeRegions
     shortLabel Intergenic/Distal
-    longLabel Gencode Reference Gene Set: Intergenic Distal Region
+    longLabel Gencode Distal Intergenic Region
     priority 3
 
     track encodeGencodeIntergenicProximal
     subTrack encodeGencodeRegions
     shortLabel Intergenic/Proximal
-    longLabel Gencode Reference Gene Set: Intergenic Proximal Region
+    longLabel Gencode Proximal Intergenic Region
     priority 4
 
 track encodeWorkshopSelections
 compositeTrack on
-shortLabel Transfrags
-longLabel Analysis workshop Transfrag selections, Intergenic/Intronic, Distal/Proximal
+shortLabel Consus NC Trans
+longLabel ENCODE Consensus NonCoding Transfrag Signals
 group encodeAnalysis
 priority 509
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -5318,337 +5318,393 @@ type bed 4
 
     track encodeAllIntergenicDistal
     subTrack encodeWorkshopSelections
-    shortLabel Intergenic Distal
-    longLabel All Intergenic Distal Transfrags in One Track
+    shortLabel Distal Intergenic
+    longLabel Consensus Distal Intergenic Signals
     priority 1
 
     track encodeAllIntergenicProximal
     subTrack encodeWorkshopSelections
-    shortLabel Intergenic Proximal
-    longLabel All Intergenic Proximal Transfrags in One Track
+    shortLabel Proximal Intergenic
+    longLabel Consensus Proximal Intergenic Signals
     priority 2
 
     track encodeAllIntronsDistal
     subTrack encodeWorkshopSelections
-    shortLabel Introns Distal
-    longLabel All Introns Distal Transfrags in One Track
+    shortLabel Distal Intronic
+    longLabel Consensus Distal Intronic Signals
     priority 3
 
     track encodeAllIntronsProximal
     subTrack encodeWorkshopSelections
-    shortLabel Introns Proximal
-    longLabel All Introns Proximal Transfrags in One Track
+    shortLabel Proximal Intronic
+    longLabel Consensus Proximal Intronic Signals
     priority 4
 
-track encodeIntergenicDistal
+track encodeNoncodingTransFrags
 compositeTrack on
-shortLabel Intergenic Distal
-longLabel Unannotated Transfrags in Intergenic Distal
+shortLabel NC Transfrags
+longLabel Yale and Affymetrix NonCoding TransFrag Signals
+subGroup1 distance Distance distal=Distal proximal=Proximal
+subGroup2 region Region intergenic=Intergenic intronic=Intronic
+subGroup3 celltype Cell_Type gm06990=Gm06990 hela=HeLa hl60=HL60 nb4=NB4 neut=Neutrophil plac=Placenta
+subGroup4 source Source yale=Yale affy=Affymetrix
+subGroup5 time Time_Point hr00=0hr hr02=2hr hg08=8hr hr32=32hr
 group encodeAnalysis
 priority 510
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 .
-color 0,0,255
-altColor 0,255,0
+# color 0,0,255
+# altColor 0,255,0
 
     track encodeAffyRnaGm06990SitesIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaGm06990Sites
     longLabel Intergenic Distal encodeAffyRnaGm06990Sites
+    subGroups distance=distal region=intergenic celltype=gm06990 source=affy
     priority 1
+    color 0,0,255
 
     track encodeAffyRnaHeLaSitesIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHeLaSites
     longLabel Intergenic Distal encodeAffyRnaHeLaSites
+    subGroups distance=distal region=intergenic celltype=hela source=affy
     priority 2
+    color 5,0,250
 
     track encodeAffyRnaHl60SitesHr00IntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr00
     longLabel Intergenic Distal encodeAffyRnaHl60SitesHr00
+    subGroups distance=distal region=intergenic celltype=hl60 source=affy time=hr00
     priority 3
+    color 30,0,225
 
     track encodeAffyRnaHl60SitesHr02IntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr02
     longLabel Intergenic Distal encodeAffyRnaHl60SitesHr02
+    subGroups distance=distal region=intergenic celltype=hl60 source=affy time=hr02
     priority 4
+    color 55,0,200
 
     track encodeAffyRnaHl60SitesHr08IntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr08
     longLabel Intergenic Distal encodeAffyRnaHl60SitesHr08
+    subGroups distance=distal region=intergenic celltype=hl60 source=affy time=hr08
     priority 5
+    color 80,0,175
 
     track encodeAffyRnaHl60SitesHr32IntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr32
     longLabel Intergenic Distal encodeAffyRnaHl60SitesHr32
+    subGroups distance=distal region=intergenic celltype=hl60 source=affy time=hr32
     priority 6
+    color 105,0,150
 
     track encodeYaleAffyNB4RARNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4RARNATars
     longLabel Intergenic Distal encodeYaleAffyNB4RARNATars
+    subGroups distance=distal region=intergenic celltype=nb4 source=yale
     priority 7
+    color 130,0,125
 
     track encodeYaleAffyNB4TPARNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4TPARNATars
     longLabel Intergenic Distal encodeYaleAffyNB4TPARNATars
+    subGroups distance=distal region=intergenic celltype=nb4 source=yale
     priority 8
+    color 155,0,100
 
     track encodeYaleAffyNB4UntrRNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4UntrRNATars
     longLabel Intergenic Distal encodeYaleAffyNB4UntrRNATars
+    subGroups distance=distal region=intergenic celltype=nb4 source=yale
     priority 9
+    color 180,0,75
 
     track encodeYaleAffyNeutRNATarsAllIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNeutRNATarsAll
     longLabel Intergenic Distal encodeYaleAffyNeutRNATarsAll
+    subGroups distance=distal region=intergenic celltype=neut source=yale
     priority 10
+    color 205,0,50
 
     track encodeYaleAffyPlacRNATarsIntergenicDistal
-    subTrack encodeIntergenicDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyPlacRNATars
     longLabel Intergenic Distal encodeYaleAffyPlacRNATars
+    subGroups distance=distal region=intergenic celltype=plac source=yale
     priority 11
-
-track encodeIntergenicProximal
-compositeTrack on
-shortLabel Intergenic Proximal
-longLabel Unannotated Transfrags in Intergenic Proximal
-group encodeAnalysis
-priority 511
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 128,128,0
-altColor 0,0,0
+    color 230,0,25
 
     track encodeAffyRnaGm06990SitesIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaGm06990Sites
     longLabel Intergenic Proximal encodeAffyRnaGm06990Sites
-    priority 1
+    subGroups distance=proximal region=intergenic celltype=gm06990 source=affy
+    priority 12
+    color 131,191,7
 
     track encodeAffyRnaHeLaSitesIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHeLaSites
     longLabel Intergenic Proximal encodeAffyRnaHeLaSites
-    priority 2
+    subGroups distance=proximal region=intergenic celltype=hela source=affy
+    priority 13
+    color 137,185,19
 
     track encodeAffyRnaHl60SitesHr00IntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr00
     longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr00
-    priority 3
+    subGroups distance=proximal region=intergenic celltype=hl60 source=affy time=hr00
+    priority 14
+    color 143,179,31
 
     track encodeAffyRnaHl60SitesHr02IntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr02
     longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr02
-    priority 4
+    subGroups distance=proximal region=intergenic celltype=hl60 source=affy time=hr02
+    priority 15
+    color 149,173,43
 
     track encodeAffyRnaHl60SitesHr08IntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr08
     longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr08
-    priority 5
+    subGroups distance=proximal region=intergenic celltype=hl60 source=affy time=hr08
+    priority 16
+    color 155,167,55
 
     track encodeAffyRnaHl60SitesHr32IntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr32
     longLabel Intergenic Proximal encodeAffyRnaHl60SitesHr32
-    priority 6
+    subGroups distance=proximal region=intergenic celltype=hl60 source=affy time=hr32
+    priority 17
+    color 161,161,67
 
     track encodeYaleAffyNB4RARNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4RARNATars
     longLabel Intergenic Proximal encodeYaleAffyNB4RARNATars
-    priority 7
+    subGroups distance=proximal region=intergenic celltype=nb4 source=yale
+    priority 18
+    color 167,155,79
 
     track encodeYaleAffyNB4TPARNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4TPARNATars
     longLabel Intergenic Proximal encodeYaleAffyNB4TPARNATars
-    priority 8
+    subGroups distance=proximal region=intergenic celltype=nb4 source=yale
+    priority 19
+    color 173,149,91
 
     track encodeYaleAffyNB4UntrRNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4UntrRNATars
     longLabel Intergenic Proximal encodeYaleAffyNB4UntrRNATars
-    priority 9
+    subGroups distance=proximal region=intergenic celltype=nb4 source=yale
+    priority 20
+    color 179,143,103
 
     track encodeYaleAffyNeutRNATarsAllIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNeutRNATarsAll
     longLabel Intergenic Proximal encodeYaleAffyNeutRNATarsAll
-    priority 10
+    subGroups distance=proximal region=intergenic celltype=neut source=yale
+    priority 21
+    color 185,137,115
 
     track encodeYaleAffyPlacRNATarsIntergenicProximal
-    subTrack encodeIntergenicProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyPlacRNATars
     longLabel Intergenic Proximal encodeYaleAffyPlacRNATars
-    priority 11
-
-track encodeIntronsDistal
-compositeTrack on
-shortLabel Introns Distal
-longLabel Unannotated Transfrags in Introns Distal
-group encodeAnalysis
-priority 512
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 255,0,255
-altColor 0,255,255
+    subGroups distance=proximal region=intergenic celltype=plac source=yale
+    priority 22
+    color 191,131,127
 
     track encodeAffyRnaGm06990SitesIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaGm06990Sites
     longLabel Introns Distal encodeAffyRnaGm06990Sites
-    priority 1
+    subGroups distance=distal region=intronic celltype=gm06990 source=affy
+    priority 23
+    color 250,5,255
 
     track encodeAffyRnaHeLaSitesIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHeLaSites
     longLabel Introns Distal encodeAffyRnaHeLaSites
-    priority 2
+    subGroups distance=distal region=intronic celltype=hela source=affy
+    priority 24
+    color 225,30,255
 
     track encodeAffyRnaHl60SitesHr00IntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr00
     longLabel Introns Distal encodeAffyRnaHl60SitesHr00
-    priority 3
+    subGroups distance=distal region=intronic celltype=hl60 source=affy time=hr00
+    priority 25
+    color 200,55,255
 
     track encodeAffyRnaHl60SitesHr02IntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr02
     longLabel Introns Distal encodeAffyRnaHl60SitesHr02
-    priority 4
+    subGroups distance=distal region=intronic celltype=hl60 source=affy time=hr02
+    priority 26
+    color 175,80,255
 
     track encodeAffyRnaHl60SitesHr08IntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr08
     longLabel Introns Distal encodeAffyRnaHl60SitesHr08
-    priority 5
+    subGroups distance=distal region=intronic celltype=hl60 source=affy time=hr08
+    priority 27
+    color 150,105,255
 
     track encodeAffyRnaHl60SitesHr32IntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr32
     longLabel Introns Distal encodeAffyRnaHl60SitesHr32
-    priority 6
+    subGroups distance=distal region=intronic celltype=hl60 source=affy time=hr32
+    priority 28
+    color 125,130,255
 
     track encodeYaleAffyNB4RARNATarsIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4RARNATars
     longLabel Introns Distal encodeYaleAffyNB4RARNATars
-    priority 7
+    subGroups distance=distal region=intronic celltype=nb4 source=yale
+    priority 29
+    color 100,155,255
 
     track encodeYaleAffyNB4TPARNATarsIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4TPARNATars
     longLabel Introns Distal encodeYaleAffyNB4TPARNATars
-    priority 8
+    subGroups distance=distal region=intronic celltype=nb4 source=yale
+    priority 30
+    color 75,180,255
 
     track encodeYaleAffyNB4UntrRNATarsIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4UntrRNATars
     longLabel Introns Distal encodeYaleAffyNB4UntrRNATars
-    priority 9
+    subGroups distance=distal region=intronic celltype=nb4 source=yale
+    priority 31
+    color 50,205,255
 
     track encodeYaleAffyNeutRNATarsAllIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNeutRNATarsAll
     longLabel Introns Distal encodeYaleAffyNeutRNATarsAll
-    priority 10
+    subGroups distance=distal region=intronic celltype=neut source=yale
+    priority 32
+    color 25,230,255
 
     track encodeYaleAffyPlacRNATarsIntronsDistal
-    subTrack encodeIntronsDistal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyPlacRNATars
     longLabel Introns Distal encodeYaleAffyPlacRNATars
-    priority 11
-
-track encodeIntronsProximal
-compositeTrack on
-shortLabel Introns Proximal
-longLabel Unannotated Transfrags in Introns Proximal
-group encodeAnalysis
-priority 513
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-color 255,0,0
-altColor 128,0,128
+    subGroups distance=distal region=intronic celltype=plac source=yale
+    priority 33
+    color 0,255,255
 
     track encodeAffyRnaGm06990SitesIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaGm06990Sites
     longLabel Introns Proximal encodeAffyRnaGm06990Sites
-    priority 1
+    subGroups distance=proximal region=intronic celltype=gm06990 source=affy
+    priority 34
+    color 248,0,8
 
     track encodeAffyRnaHeLaSitesIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHeLaSites
     longLabel Introns Proximal encodeAffyRnaHeLaSites
-    priority 2
+    subGroups distance=proximal region=intronic celltype=hela source=affy
+    priority 35
+    color 236,0,20
 
     track encodeAffyRnaHl60SitesHr00IntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr00
     longLabel Introns Proximal encodeAffyRnaHl60SitesHr00
-    priority 3
+    subGroups distance=proximal region=intronic celltype=hl60 source=affy time=hr00
+    priority 36
+    color 224,0,32
 
     track encodeAffyRnaHl60SitesHr02IntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr02
     longLabel Introns Proximal encodeAffyRnaHl60SitesHr02
-    priority 4
+    subGroups distance=proximal region=intronic celltype=hl60 source=affy time=hr02
+    priority 37
+    color 212,0,44
 
     track encodeAffyRnaHl60SitesHr08IntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr08
     longLabel Introns Proximal encodeAffyRnaHl60SitesHr08
-    priority 5
+    subGroups distance=proximal region=intronic celltype=hl60 source=affy time=hr08
+    priority 38
+    color 200,0,56
 
     track encodeAffyRnaHl60SitesHr32IntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeAffyRnaHl60SitesHr32
     longLabel Introns Proximal encodeAffyRnaHl60SitesHr32
-    priority 6
+    subGroups distance=proximal region=intronic celltype=hl60 source=affy time=hr32
+    priority 39
+    color 188,0,68
 
     track encodeYaleAffyNB4RARNATarsIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4RARNATars
     longLabel Introns Proximal encodeYaleAffyNB4RARNATars
-    priority 7
+    subGroups distance=proximal region=intronic celltype=nb4 source=yale
+    priority 40
+    color 176,0,80
 
     track encodeYaleAffyNB4TPARNATarsIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4TPARNATars
     longLabel Introns Proximal encodeYaleAffyNB4TPARNATars
-    priority 8
+    subGroups distance=proximal region=intronic celltype=nb4 source=yale
+    priority 41
+    color 164,0,92
 
     track encodeYaleAffyNB4UntrRNATarsIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNB4UntrRNATars
     longLabel Introns Proximal encodeYaleAffyNB4UntrRNATars
-    priority 9
+    subGroups distance=proximal region=intronic celltype=nb4 source=yale
+    priority 42
+    color 152,0,104
 
     track encodeYaleAffyNeutRNATarsAllIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyNeutRNATarsAll
     longLabel Introns Proximal encodeYaleAffyNeutRNATarsAll
-    priority 10
+    subGroups distance=proximal region=intronic celltype=neut source=yale
+    priority 43
+    color 140,0,116
 
     track encodeYaleAffyPlacRNATarsIntronsProximal
-    subTrack encodeIntronsProximal
+    subTrack encodeNoncodingTransFrags
     shortLabel encodeYaleAffyPlacRNATars
     longLabel Introns Proximal encodeYaleAffyPlacRNATars
-    priority 11
-
+    subGroups distance=proximal region=intronic celltype=plac source=yale
+    priority 44
+    color 128,0,128
