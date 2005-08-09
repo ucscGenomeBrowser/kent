@@ -9,5 +9,6 @@ CREATE TABLE dvXref2 (
     extSrc varchar(255) not null,	# external source (MIM for example)
     extAcc varchar(255) not null,	# external accession
               #Indices
-    PRIMARY KEY(varId)
+    KEY(varId),
+    KEY(extAcc)
 );
