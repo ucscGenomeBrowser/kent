@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.259 2005/08/03 22:29:10 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.260 2005/08/09 04:17:12 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -606,7 +606,7 @@ if (centralArchiveCc == NULL)
 conn = sqlMayAllocConnection(centralArchiveCc, FALSE);
 if (conn == NULL)
     {
-    centralArchiveCc = getCentralCcFromCfg("backupcentral");
+    centralArchiveCc = getCentralCcFromCfg("archivebackup");
     conn = sqlAllocConnection(centralArchiveCc);
     }
 return(conn);
