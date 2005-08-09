@@ -44,7 +44,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o mafSummary.o mapSts.o mcnBreakpoints.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
-    netAlign.o ooUtils.o \
+    netAlign.o omimTitle.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
