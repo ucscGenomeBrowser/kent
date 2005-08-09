@@ -180,8 +180,9 @@
 #include "chainConnect.h"
 #include "dv.h"
 #include "dvBed.h"
+#include "dvXref2.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.927 2005/08/08 22:53:50 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.928 2005/08/09 05:03:47 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -297,6 +298,15 @@ static void printSwissProtVariationUrl(FILE *f, char *accession)
 if (accession != NULL)
     {
     fprintf(f, "\"http://www.expasy.org/cgi-bin/get-sprot-variant.pl?%s\"", accession);
+    }
+}
+
+static void printOmimUrl(FILE *f, char *term)
+/* Print URL for OMIM data on a protein. */
+{
+if (term != NULL)
+    {
+    fprintf(f, "\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=OMIM&term=%s&doptcmdl=Detailed&tool=genome.ucsc.edu\"", term);
     }
 }
 
@@ -16164,10 +16174,11 @@ void doDv(struct trackDb *tdb, char *itemName)
 char *table = tdb->tableName;
 struct dvBed dvBed;
 struct dv *dv;
+struct dvXref2 *dvXref2;
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr, *sr1;
+struct sqlResult *sr, *sr2, *sr3;
 char **row;
-char query[256], query2[256];
+char query[256], query2[256], query3[256];
 
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
@@ -16189,10 +16200,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     dvBedStaticLoad(row+rowOffset, &dvBed);
     bedPrintPos((struct bed *)&dvBed, 3);
     }
+sqlFreeResult(&sr);
 
 safef(query2, sizeof(query2), "select * from dv where varId = '%s' ", itemName);
-sr1 = sqlGetResult(conn, query2);
-while ((row = sqlNextRow(sr1)) != NULL)
+sr2 = sqlGetResult(conn, query2);
+while ((row = sqlNextRow(sr2)) != NULL)
     {
     // use static Load?
     dv = dvLoad(row);
@@ -16201,12 +16213,28 @@ while ((row = sqlNextRow(sr1)) != NULL)
     printf("<B>Length:</B> %d <BR>\n", dv->len);
     printf("<B>Original:</B> %s <BR>\n", dv->orig);
     printf("<B>Variant:</B> %s <BR>\n", dv->variant);
+    dvFree(&dv);
     }
+sqlFreeResult(&sr2);
+
+safef(query3, sizeof(query3), "select * from dvXref2 where varId = '%s' ", itemName);
+sr3 = sqlGetResult(protDbConn, query3);
+while ((row = sqlNextRow(sr3)) != NULL)
+    {
+    dvXref2 = dvXref2Load(row);
+    if (sameString("MIM", dvXref2->extSrc)) 
+        {
+        printf("<B>OMIM:</B> ");
+        printf("<A HREF=");
+        printOmimUrl(stdout, dvXref2->extAcc);
+        printf(" Target=_blank> %s</A> <BR>\n", dvXref2->extAcc);
+	}
+    dvXref2Free(&dvXref2);
+    }
+sqlFreeResult(&sr3);
 
 printTrackHtml(tdb);
-sqlFreeResult(&sr);
 hFreeConn(&conn);
-dvFree(&dv);
 }
 
 void doMiddle()
