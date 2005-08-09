@@ -181,8 +181,9 @@
 #include "dv.h"
 #include "dvBed.h"
 #include "dvXref2.h"
+#include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.928 2005/08/09 05:03:47 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.929 2005/08/09 05:18:04 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16175,10 +16176,11 @@ char *table = tdb->tableName;
 struct dvBed dvBed;
 struct dv *dv;
 struct dvXref2 *dvXref2;
+struct omimTitle *omimTitle;
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr, *sr2, *sr3;
+struct sqlResult *sr, *sr2, *sr3, *sr4;
 char **row;
-char query[256], query2[256], query3[256];
+char query[256], query2[256], query3[256], query4[256];
 
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
@@ -16227,7 +16229,20 @@ while ((row = sqlNextRow(sr3)) != NULL)
         printf("<B>OMIM:</B> ");
         printf("<A HREF=");
         printOmimUrl(stdout, dvXref2->extAcc);
-        printf(" Target=_blank> %s</A> <BR>\n", dvXref2->extAcc);
+        printf(" Target=_blank> %s</A> \n", dvXref2->extAcc);
+	// nested query
+        if (hTableExists("omimTitle"))
+	    {
+            safef(query4, sizeof(query4), "select * from omimTitle where omimId = '%s' ", dvXref2->extAcc);
+            sr4 = sqlGetResult(conn, query4);
+            while ((row = sqlNextRow(sr4)) != NULL)
+                {
+		omimTitle = omimTitleLoad(row);
+		printf("%s\n", omimTitle->title);
+		omimTitleFree(&omimTitle);
+		}
+	    }
+	    printf("<BR>\n");
 	}
     dvXref2Free(&dvXref2);
     }
