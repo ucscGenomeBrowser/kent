@@ -1501,3 +1501,38 @@ chainSome $(path1)
     # back to kkstore02
     rm -rf blastOut
 # End tblastn
+
+
+##########################################################################
+# EVOFOLD  - RNA secondary structure predictions lifted from hg17
+# Jakob Skou Pedersen, Aug 5, 2005
+  ssh -C hgwdev
+  mkdir -p /cluster/data/canHg9/bed/evofold
+  cd /cluster/data/canHg9/bed/evofold
+
+  # concatenating chain files
+  cat /cluster/data/canHg9/bed/chains.hg17/hg17/*chain > hg17ToCanHg9.over.chain
+
+  # lifting evofolds from hg17 to canHg9
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from evofold;" | hgsql hg17 | sed -e 1d > foldsHg17.bed
+  liftOver -minMatch=1.0 foldsHg17.bed hg17ToCanHg9.over.chain tmp.bed unmapped.bed
+  grep "#" unmapped.bed | wc -l
+  # remove elements which are wrong size after lifting
+  awk '$3-$2 == $7' tmp.bed > foldsCanHg9.bed
+  # clean up
+  rm foldsHg17.bed unmapped.bed tmp.bed
+  hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql canHg9 evofold foldsCanHg9.bed
+
+
+##########################################################################
+#  RFAMSEEDFOLDS  - Rfam seed secondary structure annotation lifted from hg17
+# Jakob Skou Pedersen, Aug 5, 2005
+  # lifting rfamSeed from hg17 to canHg9
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from RfamSeedFolds;" | hgsql hg17 | sed -e 1d > foldsHg17.bed
+  liftOver -minMatch=1.0 foldsHg17.bed hg17ToCanHg9.over.chain tmp.bed unmapped.bed
+  grep "#" unmapped.bed | wc -l
+  # remove elements which are of wrong size after lifting
+  awk '$3-$2 == $7' tmp.bed > foldsCanHg9.bed
+  # clean up
+  rm foldsHg17.bed unmapped.bed tmp.bed
+  hgLoadBed -noBin -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/RfamSeedFolds.sql canHg9 RfamSeedFolds foldsCanHg9.bed
