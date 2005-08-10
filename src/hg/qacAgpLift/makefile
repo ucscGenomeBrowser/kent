@@ -9,5 +9,5 @@ O = qacAgpLift.o
 
 qacAgpLift: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -O -o ${BINDIR}/qacAgpLift $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/qacAgpLift
+	${STRIP} ${BINDIR}/qacAgpLift${EXE}
 
