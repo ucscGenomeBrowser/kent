@@ -179,7 +179,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.926 2005/08/08 21:29:45 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.926.2.1 2005/08/10 05:33:13 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2118,6 +2118,8 @@ if (otherOrg == NULL)
     /* use first word of chain label (count on org name as first word) */
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
+if (otherDb != NULL)
+    hSetDb2(otherDb);
 
 chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
@@ -2128,7 +2130,7 @@ else
     struct gapCalc *gapCalc = gapCalcDefault();
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
     struct dnaSeq *tSeq = hDnaFromSeq(subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
-    struct dnaSeq *qSeq = hDnaFromSeq(subChain->qName, subChain->qStart, subChain->qEnd, dnaLower);
+    struct dnaSeq *qSeq = hChromSeq2(subChain->qName, subChain->qStart, subChain->qEnd);
 
     if (subChain->qStrand == '-')
         reverseComplement(qSeq->dna, qSeq->size);
