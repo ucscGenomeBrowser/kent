@@ -19,15 +19,27 @@
 struct ace
 /* This contains information about one ace element. */
     {
-    int contigs;
-    int reads;
-    char *contigName;
-    int contigBases;
-    int contigReads;
-    struct dnaSeq *contigSeq;
+    struct aceAS aceAS;
+    struct aceCO aceCO;
     struct aceAF *afList;
     struct aceRD *rdList;
     };
+
+struct aceAS
+/* This contains an AS entry. */
+    {
+    int contigs;
+    int reads;
+    char *contigName;
+    };
+
+struct aceCO
+/* This contains a CO entry. */
+    {
+    int bases;
+    int reads;
+    struct dnaSeq *seq;
+    }
 
 struct aceAF
 /* This contains an AF entry. */
@@ -35,7 +47,7 @@ struct aceAF
     struct aceAF *next;
     char *readName;
     int startPos;
-    }
+    };
 
 struct aceRD
 /* This contains an RD entry. */
@@ -43,7 +55,7 @@ struct aceRD
     struct aceRD *next;
     char *readName;
     int bases;
-    }
+    };
 
 void aceFree(struct ace **pEl);
 /* Free an ace. */
