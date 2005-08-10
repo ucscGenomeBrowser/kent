@@ -1,4 +1,5 @@
-/* chimpChromQuals - Map chimp quality scores from contig to supercontig.. */
+/* qacAgpLift - Use AGP to combine per-scaffold qac into per-chrom qac. */
+/* Originally written by Kate as hg/chimpStuff/chimpChromQuals. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,15 +9,15 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: chimpChromQuals.c,v 1.4 2004/07/21 23:44:12 angie Exp $";
+static char const rcsid[] = "$Id: qacAgpLift.c,v 1.1 2005/08/10 19:39:47 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "chimpChromQuals - Map chimp quality scores from scaffold to chromosome.\n"
+  "qacAgpLift - Use AGP to combine per-scaffold qac into per-chrom qac.\n"
   "usage:\n"
-  "   chimpChromQuals scaffoldToChrom.agp scaffolds.qac chrom.qac\n"
+  "   qacAgpLift scaffoldToChrom.agp scaffolds.qac chrom.qac\n"
   );
 }
 
@@ -34,7 +35,6 @@ struct qac
 
 struct hash *qacReadToHash(char *fileName)
 /* Read in a qac file into a hash of qacs keyed by name. */
-/* TODO: share code with chimpSuperQuals */
 {
 boolean isSwapped;
 FILE *f = qacOpenVerify(fileName, &isSwapped);
@@ -139,8 +139,8 @@ hashFree(&chromHash);
 return chromList;
 }
 
-void chimpChromQuals(char *agpFile, char *qacInName, char *qacOutName)
-/* chimpChromQuals - Map chimp quality scores from scaffold to chrom.. */
+void qacAgpLift(char *agpFile, char *qacInName, char *qacOutName)
+/* qacAgpLift - Use AGP to combine per-scaffold qac into per-chrom qac. */
 {
 struct hash *qacHash = qacReadToHash(qacInName);
 struct chrom *chrom, *chromList = readChromScaffoldsFromAgp(agpFile);
@@ -203,6 +203,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-chimpChromQuals(argv[1], argv[2], argv[3]);
+qacAgpLift(argv[1], argv[2], argv[3]);
 return 0;
 }
