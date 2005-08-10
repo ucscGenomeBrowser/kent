@@ -178,10 +178,8 @@
 #include "chicken13kInfo.h"
 #include "gapCalc.h"
 #include "chainConnect.h"
-#include "dv.h"
-#include "dvBed.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.927 2005/08/08 22:53:50 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.926 2005/08/08 21:29:45 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -276,7 +274,7 @@ fprintf(f, entrezFormat, "OMIM", buf, "Detailed");
 }
 
 static void printSwissProtProteinUrl(FILE *f, char *accession)
-/* Print URL for Swiss-Prot NiceProt on a protein. */
+/* Print URL for Swissi-Prot NiceProt on a protein. */
 {
 char *spAcc;
 /* make sure accession number is used (not display ID) when linking to Swiss-Prot */
@@ -288,15 +286,6 @@ if (spAcc != NULL)
 else
     {
     fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
-    }
-}
-
-static void printSwissProtVariationUrl(FILE *f, char *accession)
-/* Print URL for Swiss-Prot variation data on a protein. */
-{
-if (accession != NULL)
-    {
-    fprintf(f, "\"http://www.expasy.org/cgi-bin/get-sprot-variant.pl?%s\"", accession);
     }
 }
 
@@ -16159,55 +16148,6 @@ putaInfoFree(&info);
 hFreeConn(&conn);
 }
 
-void doDv(struct trackDb *tdb, char *itemName)
-{
-char *table = tdb->tableName;
-struct dvBed dvBed;
-struct dv *dv;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr, *sr1;
-char **row;
-char query[256], query2[256];
-
-int rowOffset = hOffsetPastBin(seqName, table);
-int start = cartInt(cart, "o");
-
-genericHeader(tdb, itemName);
-
-printf("<B>Item:</B> %s <BR>\n", itemName);
-printf("<B>Outside Link:</B> ");
-printf("<A HREF=");
-printSwissProtVariationUrl(stdout, itemName);
-printf(" Target=_blank> %s </A> <BR>\n", itemName);
-
-safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    dvBedStaticLoad(row+rowOffset, &dvBed);
-    bedPrintPos((struct bed *)&dvBed, 3);
-    }
-
-safef(query2, sizeof(query2), "select * from dv where varId = '%s' ", itemName);
-sr1 = sqlGetResult(conn, query2);
-while ((row = sqlNextRow(sr1)) != NULL)
-    {
-    // use static Load?
-    dv = dvLoad(row);
-    printf("<B>Swiss-prot ID:</B> %s <BR>\n", dv->spID);
-    printf("<B>Start:</B> %d <BR>\n", dv->start);
-    printf("<B>Length:</B> %d <BR>\n", dv->len);
-    printf("<B>Original:</B> %s <BR>\n", dv->orig);
-    printf("<B>Variant:</B> %s <BR>\n", dv->variant);
-    }
-
-printTrackHtml(tdb);
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-dvFree(&dv);
-}
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -17043,10 +16983,6 @@ else if (sameString("cutters", track))
 else if (sameString("anoEstTcl", track))
     {
     doAnoEstTcl(tdb, item);
-    }
-else if (sameString("dvBed", track))
-    {
-    doDv(tdb, item);
     }
 else if (tdb != NULL)
     {
