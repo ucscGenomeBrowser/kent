@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.67 2005/08/02 17:51:55 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.68 2005/08/10 23:58:12 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7887,3 +7887,240 @@ _EOF_
 # Load the sequences.  PLEASE NOTE THE "-replace" OPTION SHOULD BE USED!!!   
     hgLoadSeq -replace mm6 /gbdb/mm6/NIAGene/T-fasta.fa
 
+# BLASTZ FOR ZEBRAFISH (danRer3) (DONE, 2005-08-10, hartera)
+    ssh kkr1u00
+    # Blastz uses lineage-specific repeats. There are none for mouse
+    # and fish so use all repeats for each species as lineage-specific.
+    mkdir -p /iscratch/i/mm6/linSpecRep.notInZebrafish
+    foreach f (/panasas/store/mm6/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/mm6/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+
+    # get only lineage specific repeats for chr1-25 and chrM
+    mkdir -p /iscratch/i/danRer3/linSpecRep.notInMouse
+    foreach f (/iscratch/i/danRer3/rmsk/chr[0-9M]*.fa.out)
+      cp -p $f /iscratch/i/danRer3/linSpecRep.notInMouse/$f:t:r:r.out.spec
+    end
+    # make a nib dir that is also just chr1-25 and chrM
+    mkdir -p /iscratch/i/danRer3/chromNib
+    cp /cluster/data/danRer3/nib/chr[0-9M]*.nib /iscratch/i/danRer3/chromNib
+    /cluster/bin/iSync
+    
+    ssh kkstore
+    mkdir /cluster/data/mm6/bed/blastz.danRer3.2005-08-05
+    cd /cluster/data/mm6/bed
+    ln -s blastz.danRer3.2005-08-05 blastz.danRer3
+    cd /cluster/data/mm6/bed/blastz.danRer3
+    # use parameters as for mm5 - see makeMm5.doc
+    cat << '_EOF_' > DEF
+# mouse (mm6) vs zebrafish (danRer3)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse (mm6)
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/iscratch/i/mm5/linSpecRep.notInZebrafish
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+# just chroms 1-25 and chrM
+SEQ2_DIR=/iscratch/i/danRer3/chromNib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=/iscratch/i/danRer3/linSpecRep.notInMouse
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastz.danRer3
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x DEF
+
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    sort -rn +1 /cluster/data/danRer3/chrom.sizes > S2.len
+    # make output directory
+    mkdir -p /panasas/store/mm6vsdanRer3Out 
+    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+       -blastzOutRoot /panasas/store/mm6vsdanRer3Out -chainMinScore=5000 \
+       -stop chainMerge >& do.log &
+    #PID 31074 on kk, 
+    # Started Fri Aug  5 21:18:13 PDT 2005
+    # Finished Aug  6 06:31
+    # for chr1-25 and chrM:
+    # blastz run:
+# para time
+# Completed: 44023 of 44023 jobs
+# CPU time in finished jobs:   12375882s  206264.70m  3437.75h  143.24d  0.392 y
+# IO & Wait Time:                979190s   16319.83m   272.00h   11.33d  0.031 y
+# Average job time:                 303s       5.06m     0.08h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1778s      29.63m     0.49h    0.02d
+# Submission to last job:         32605s     543.42m     9.06h    0.38d
+    # chain run:
+# para time
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       1075s      17.92m     0.30h    0.01d  0.000 y
+# IO & Wait Time:                   243s       4.04m     0.07h    0.00d  0.000 y
+# Average job time:                  33s       0.55m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              51s       0.85m     0.01h    0.00d
+# Submission to last job:           107s       1.78m     0.03h    0.00d
+
+    # then do a run with the zebrafish danRer3 NA and Un Scaffolds
+    # that are in a 2bit file to do blastz and make chains.
+    ssh kk
+    mkdir -p /cluster/data/mm6/bed/blastz.danRer3/NAandUnScaffolds
+    cd /cluster/data/mm6/bed/blastz.danRer3/NAandUnScaffolds
+    # copy DEF file and edit for NA and Un scaffolds
+    cat << '_EOF_' > DEF
+# mouse (mm6) vs zebrafish (danRer3) NA and Un scaffolds only
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mouse (mm6)
+SEQ1_DIR=/panasas/store/mm6/nib
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+# NA and Un Scaffolds in a 2bit file
+SEQ2_DIR=/iscratch/i/danRer3/NAandUnScafs/danRer3NAandUnScaf.2bit
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_SMSK=
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastz.danRer3/NAandUnScaffolds
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+
+#DEBUG=1
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x DEF
+    # get lengths for nibs and scaffolds
+    cp /cluster/data/mm6/chrom.sizes ./S1.len
+    # for S2.len, need sizes of the sequences in the 2bit file
+    sort -rn +1 /cluster/data/danRer3/NAandUnScafs.sizes > ./S2.len
+    # make output directory
+    mkdir -p /panasas/store/mm6vsdanRer3Out/NAandUnScafs
+    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+       -blastzOutRoot /panasas/store/mm6vsdanRer3Out/NAandUnScafs \
+       -chainMinScore=5000 -stop chainMerge >& do.log &
+    #  Start Mon Aug  8 09:04
+    #  Finish Aug  8 13:04
+    # for NA and Un Scaffolds:
+    # blastz run:
+# para time
+# Completed: 15226 of 15226 jobs
+# CPU time in finished jobs:    6074532s  101242.21m  1687.37h   70.31d  0.193 y
+# IO & Wait Time:                289788s    4829.79m    80.50h    3.35d  0.009 y
+# Average job time:                 418s       6.97m     0.12h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            7795s     129.92m     2.17h    0.09d
+# Submission to last job:         13851s     230.85m     3.85h    0.16d
+    # chain run:
+# para time
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        270s       4.50m     0.08h    0.00d  0.000 y
+# IO & Wait Time:                   252s       4.20m     0.07h    0.00d  0.000 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              29s       0.48m     0.01h    0.00d
+# Submission to last job:            54s       0.90m     0.01h    0.00d
+
+    # now need to do a liftUp to get the chromosomes co-ordinates
+    # then merge together and continue on with net step
+    ssh kkstore01
+    cd /cluster/data/mm6/bed/blastz.danRer3/NAandUnScaffolds/axtChain
+    mkdir liftedChain
+    foreach f (chain/*.chain)
+       set c=$f:t:r
+       echo $c
+       liftUp -chainQ liftedChain/${c}.lifted.chain \
+     /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft \
+       warn $f
+    end
+    # now merge these lifted chain files with the existing chain files for 
+    # the chroms and then sort by score using chainSort 
+    cd /cluster/data/mm6/bed/blastz.danRer3/axtChain
+    # gzipped file is only chains for chroms1-25 and chrM so rename
+    mv mm6.danRer3.all.chain.gz mm6.danRer3.chroms.chain.gz
+    mv chain chromChain
+    mkdir chain chainUnSorted
+    # get all chains to be merged in chainUnSorted dir
+    cp ./chromChain/*.chain ./chainUnSorted/
+    # copy scaffolds chains, these are *.lifted.chain so they do not 
+    # write over the chrom chains.
+    cp ../NAandUnScaffolds/axtChain/liftedChain/*.chain ./chainUnSorted/
+    # then merge and sort all these chains. they must be merged and all 
+    # sorted together so that all IDs are unique across all chroms.
+    # IDs are reassigned by chainMergeSort so that IDs are unique.
+    nice chainMergeSort chainUnSorted/*.chain | nice gzip -c \
+           > mm6.danRer3.all.chain.gz
+    # use chainSplit to split this into chains again
+    zcat mm6.danRer3.all.chain.gz | chainSplit chain stdin 
+
+    # then pick up the doBlastzChainNet.pl script with the net step
+    ssh kk
+    cd /cluster/data/mm6/bed/blastz.danRer3
+    cp DEF DEF.chroms
+    # edit DEF so SEQ2_DIR=/iscratch/i/danRer3/nib as need all nib files now
+    # make sure that :~/.ssh/config has only user write permission and not
+    # group otherwise the ssh will fail.
+    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+       -blastzOutRoot /panasas/store/mm6vsdanRer3Out -chainMinScore=5000 \
+       -continue net >& doNet.log &
+    # PID 2782 Start: Aug 10 13:34
+    # Finished: Aug 10 13:54
+    # it crashes at the cleanup step as it can not get to /panasas/ from 
+    # kkstore01 - should specifiy a different fileServer for this step. 
+    # run this step manually
+    cd /cluster/data/mm6/bed/blastz.danRer3
+    cleaUp.csh &
+    # All done now 
+    # check REAME.txt in downloads directory and also add html and 
+    # trackDb.ra entry for chain and net tracks for danRer3
