@@ -5308,7 +5308,7 @@ type bed 4 .
 
 track encodeWorkshopSelections
 compositeTrack on
-shortLabel Consus NC Trans
+shortLabel Consens NC Trans
 longLabel ENCODE Consensus NonCoding Transfrag Signals
 group encodeAnalysis
 priority 509
