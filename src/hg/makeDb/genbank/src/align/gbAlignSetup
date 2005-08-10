@@ -29,10 +29,15 @@ Arguments:
 
 Obtains other parameters from etc/genbank.conf:
 
-  - $db.genome - a glob pattern of where to find the genome
-     contig or chromosome fasta, nib, or 2bit files on the cluster.
+  - $db.serverGenome - a glob pattern of where to find the genome
+     contig or chromosome nib, or 2bit files on the server.
      For example: 
-       hg13.genome = /scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf
+        mm5.serverGenome = /cluster/data/mm5/nib/chr*.nib
+
+  - $db.clusterGenome - a glob pattern of where to find the genome
+     contig or chromosome nib, or 2bit files on the cluster.
+     For example: 
+        mm5.clusterGenome = /scratch/mus/mm5/softNib/chr*.nib
 
   - $db.querySplitSize - maximum size of a fasta file for alignment, in
     megabytes
@@ -56,7 +61,7 @@ Does:
    - create a list of all expected PSL files.";
 
 #
-# $Id: gbAlignSetup,v 1.12.8.4 2005/07/04 03:53:25 markd Exp $
+# $Id: gbAlignSetup,v 1.12.8.5 2005/08/10 05:21:18 markd Exp $
 #
 use strict;
 use warnings;
@@ -81,6 +86,8 @@ my @types;
 my @orgCats;
 my $noMigrate = 0;
 
+# table of database to cluster genome directory
+my %dbClusterGenomeDirs;
 
 # determine if a file is a nib file.
 sub isNibFile($) {
@@ -129,6 +136,12 @@ sub getTwoBitChromsSizes($$) {
     @chroms = sort {$sizeTblRef->{$a} - $sizeTblRef->{$b}} @chroms;
 
     return @chroms;
+}
+
+# map a genome file on the server to the cluster location
+sub mapServerGenomeToCluster($$) {
+    my($db, $serverFile) = @_;
+    return $dbClusterGenomeDirs{$db} . "/" . basename($serverFile);
 }
 
 # split unaligned string into it's component names
@@ -656,7 +669,7 @@ sub partitionGenomeFile($$@) {
 sub getGenomeFileSpecs($) {
     my($db) = @_;
     
-    my $genomeGlob = getDbConf($db, "genome");
+    my $genomeGlob = getDbConf($db, "serverGenome");
     my @gfiles = glob($genomeGlob);
     if ($#gfiles < 0) {
         gbError("no files matching genome glob: $genomeGlob");
@@ -672,13 +685,15 @@ sub getGenomeFileSpecs($) {
     foreach my $genomeFile (@gfiles) {
         push(@fileSpecs, partitionGenomeFile($db, $genomeFile, @lifts));
     }
+
     return @fileSpecs;
 }
 
 # write a single blat job
 sub writeBlatJob($$$$$$$) {
     my($jobFh, $expectedFh, $db, $genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir) = @_;
-    my $outPsl = getOutPslPath($genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir);
+    my $clusterGenomeFile = mapServerGenomeToCluster($db, $genomeFile);
+    my $outPsl = getOutPslPath($clusterGenomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir);
 
     # make sure we don't overwrite output files
     if (defined($gOutPsls{$outPsl})) {
@@ -708,7 +723,7 @@ sub writeBlatJob($$$$$$$) {
     if (defined($mondoSeqFile)) {
         $cmd .= " -seqs " . $mondoSeqFile;
     }
-    $cmd .= " $db $genomeFile $mrnaFa {check out exists $outPsl}\n";
+    $cmd .= " $db $clusterGenomeFile $mrnaFa {check out exists $outPsl}\n";
     print $jobFh $cmd;
 }
 
@@ -762,12 +777,16 @@ sub genAlignJobs($$$$$@) {
 
     if (defined($mondoNumParts)) {
         my $seqFileDir = $release . "/mondo/" . $db;
-        push(@genomeFiles, getDbConf($db, "genome"));
+        push(@genomeFiles, getDbConf($db, "serverGenome"));
         @mondoSeqFiles = partitionMondoTwoBitFile($db, $genomeFiles[0], $mondoNumParts, $seqFileDir);
     } else {
         @genomeFiles = getGenomeFileSpecs($db);
         push(@mondoSeqFiles, undef);
     }
+
+    # get directory of genome files on cluster for database
+    $dbClusterGenomeDirs{$db} = dirname(getDbConf($db, "clusterGenome"));
+
     foreach my $unaligned (@unalignedList) {
         $totalNumAlign += genAlignUpdateJobs($jobFh, $expectedFh, $release, $db, $unaligned, \@genomeFiles, \@mondoSeqFiles);
     }

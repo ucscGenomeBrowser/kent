@@ -21,8 +21,8 @@ install-rr:
 install: check-etc all
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)
 	${MKDIR} ${PREFIX}/etc
-	cp -fr bin ${PREFIX}
-	cp -rf lib ${PREFIX}
+	rsync -a bin ${PREFIX}
+	rsync -a lib ${PREFIX}
 	test -e ${PREFIX}/etc/CVS || cp -r etc/CVS ${PREFIX}/etc
 	(cd ${PREFIX}/etc && cvs update -d)
 	cp -f src/ccds/createTables.sql src/ccds/createKeys.sql ${PREFIX}/etc

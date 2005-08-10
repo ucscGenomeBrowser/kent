@@ -37,8 +37,17 @@
     database name of <CODE>default</CODE>
 
     <UL>
-     <li> <code><em>$db</em>.genome</code> - glob pattern for genome
-          sequences, which can be NIB or FASTA files.
+     <li> <code><em>$db</em>.align.window</code> - Size of genome alignment windows, in bases.
+          the genome is partitioned in seqments of no more than this sizes for alignment.
+     <li> <code><em>$db</em>.align.overlap</code> - Number of bases of overlap in the alignment
+          windows.
+     <li> <code><em>$db</em>.align.maxGap</code> - Maximum size of a gap that is allowed in a window.
+          Gaps large that this result in a new window.
+     <li> <code><em>$db</em>.serverGenome</code> - glob pattern or file for genome
+          sequences on server. This can be NIBs or a TwoBit file.
+     <li> <code><em>$db</em>.clusterGenome</code> - glob pattern or file for genome
+          sequences on cluster. This can be NIBs or a TwoBit file. The
+          resulting list of files must match was what is on the server.
      <li> <code><em>$db</em>.lift</code> - path to lift file for genome,
           or <CODE>no</CODE> if none.
 
