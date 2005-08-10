@@ -164,6 +164,7 @@ UTIL_DIRS = \
 	near/hgWormLinks \
 	near/pepPredToFa \
 	near/hgNearTest \
+	near/hgNetDist \
 	nci60 \
 	orthoMap \
 	overlapSelect \
@@ -195,6 +196,7 @@ UTIL_DIRS = \
 	pslToBed \
 	pslUnpile \
 	qaToQac \
+	qacAgpLift \
 	qacToQa \
 	qacToWig \
 	ratStuff \
