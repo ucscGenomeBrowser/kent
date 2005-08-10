@@ -114,7 +114,6 @@ UTIL_DIRS = \
 	ctgFaToFa \
 	ctgToChromFa \
 	embossToPsl \
-#        encode \
 	fakeFinContigs \
 	fakeOut \
 	featureBits \
