@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.20 2005/05/05 23:00:27 heather Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.21 2005/08/10 17:59:00 hiram Exp $";
 
 
 void usage()
@@ -128,6 +128,7 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 	gap.chromStart -= 1;
 	fprintf(gapTab, "%u\t", hFindBin(start, end));
 	agpGapTabOut(&gap, gapTab);
+	verbose(2,"#\t%s:%d-%d\n", gap.chrom, gap.chromStart, gap.chromEnd);
 	}
     else
 	{
@@ -159,9 +160,6 @@ struct fileInfo *fiList, *fi;
 char dir[256], chrom[128], ext[64];
 char goldName[128], gapName[128];
 char *agpName;
-int lineSize;
-char *line;
-char oLine[512];
 char *ptr;
 
 fiList = listDirX(chromDir, "*.agp", TRUE);
