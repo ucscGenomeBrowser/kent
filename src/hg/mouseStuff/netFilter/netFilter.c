@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.17 2005/06/23 00:46:01 markd Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.18 2005/08/11 23:21:42 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,9 +40,11 @@ errAbort(
   "   -qOverlapEnd=N - restrict to those where the query overlaps a region ending here\n"
   "   -tOverlapStart=N - restrict to those where the target overlaps a region starting here\n"
   "   -tOverlapEnd=N - restrict to those where the target overlaps a region ending here\n"
-  "   -syn        - do filtering based on synteny.  \n"
-  "   -nonsyn     - do inverse filtering based on synteny.  \n"
   "   -type=XXX - restrict to given type, maybe repeated to allow several types\n"
+
+  "   -syn        - do filtering based on synteny (tuned for human/mouse).  \n"
+  "   -nonsyn     - do inverse filtering based on synteny (tuned for human/mouse).  \n"
+  "   -chimpSyn   - do filtering based on synteny (tuned for human/chimp).  \n"
   "   -fill - Only pass fills, not gaps. Only useful with -line.\n"
   "   -gap  - Only pass gaps, not fills. Only useful with -line.\n"
   "   -line - Do this a line at a time, not recursing\n"
