@@ -6603,12 +6603,14 @@ EOF
 # speciesOrder chimp mouse rat dog chicken fugu zebrafish
 
 
-# PHASTCONS SCORES DOWNLOADABLES (DONE 10/11/04 angie)
+# PHASTCONS SCORES DOWNLOADABLES (REDONE 6/15/05 angie)
+    # Initially done 10/11/04, but using scores from run.cons -- which 
+    # had been replaced by scores in run.elements, where I did not think 
+    # to look for scores.  :(  !
     ssh eieio
     mkdir /cluster/data/hg17/zip/mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
-    foreach d (/cluster/data/hg17/bed/multiz8way/cons/run.cons/PHASTCONS/chr*)
-      cd $d
-      set chr = $d:t
+    cd /cluster/data/hg17/bed/multiz8way/cons/run.elements/POSTPROBS
+    foreach chr (`awk '{print $1;}' /cluster/data/hg17/chrom.sizes`)
       echo $chr
       nice zcat `ls -1 $chr.*.pp.gz | sort -t\. -k2,2n` \
       | nice gzip -c \
@@ -6840,9 +6842,10 @@ EOF
     #	794 bases of 222827847 (0.000%) in intersection
 
 
-# EXTRACT LINEAGE-SPECIFIC REPEATS FOR DOG (DONE 7/1/04 angie)
-    ssh eieio
-    cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk
+# EXTRACT LINEAGE-SPECIFIC REPEATS FOR DOG (DONE 8/1/05 angie)
+    # Originally done 7/1/04 for canFam1 -- redone 8/1/05 for canFam2.
+    ssh kolossus
+    cd /san/sanvol1/scratch/hg17/rmsk
     # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
     # whether repeats in -query are also expected in -comp species.  
     # Even though we already have the human-mouse linSpecReps,
@@ -6851,21 +6854,24 @@ EOF
     # Dog in extra column 1, Mouse in extra column 2
     foreach outfl ( *.out )
         echo "$outfl"
-        /cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
+        /cluster/bluearc/RepeatMasker/DateRepeats \
           ${outfl} -query human -comp dog -comp mouse
     end
     # Now extract dog (extra column 1), ignore mouse.
-    cd /cluster/bluearc/scratch/hg/gs.18/build35
+    cd ..
     mkdir linSpecRep.notInDog
-    foreach f (rmsk/*.out_dog_mus)
+    foreach f (rmsk/*.out_canis-familiaris_mus-musculus)
         set base = $f:t:r:r
         echo $base.out.spec
         /cluster/bin/scripts/extractLinSpecReps 1 $f > \
                         linSpecRep.notInDog/$base.out.spec
     end
     # Clean up.
-    rm /cluster/bluearc/scratch/hg/gs.18/build35/rmsk/*.out_dog_mus
+    rm rmsk/*.out_canis*
+    rsync -av /san/sanvol1/scratch/hg17/linSpecRep.notInDog \
+      /cluster/bluearc/scratch/hg/gs.18/build35/
     # Ask cluster-admin for an rsync.
+
 
 
 # BLASTZ DOG (CANFAM1) (DONE 7/8/04 angie)
@@ -10491,7 +10497,7 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 #knownGenesUtr5.bed 0.266%, hg17.fr1.mafRangesCollapsed.bed 1.631%, both 0.039%, cover 14.82%, enrich 9.09x
 
 
-# ALTERNATIVE CPG ISLANDS (IN PROGRESS 10/14/04 angie)
+# ALTERNATIVE CPG ISLANDS (DONE 10/14/04 angie)
     ssh eieio
     nice tcsh
     mkdir /cluster/data/hg17/bed/cpgIslandAlt
@@ -10548,6 +10554,34 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 #|         200 |   1026.9194 |       32440 |
     hgsql hg17 -e 'select min(length), avg(length), max(length) from cpgIslandGgfAndyMasked'
 #|         200 |    698.8257 |      100308 |
+    # 1/26/05: Make better island names in cpgIslandGgfAndyMasked,
+    # for Dave Burt's cross-species island comparisons.
+    ssh eieio
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    mv cpgIslandGgfAndyMasked.bed cpgIslandGgfAndyMasked.bed.orig
+    perl -wpe '@w=split("\t"); $w[3] = "hg17.$w[0]." . ($w[1]+1) . ".$w[2]"; \
+               $_ = join("\t", @w);' \
+      cpgIslandGgfAndyMasked.bed.orig \
+    > cpgIslandGgfAndyMasked.bed
+    # Now liftOver islands from mm5, rn3, galGal2:
+    ssh kolossus
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    foreach match (50 95)
+      liftOver /cluster/data/mm5/bed/cpgIslandGgfAndy/cpgIslandGgfAndyMasked.bed \
+        /cluster/data/mm5/bed/bedOver/mm5Tohg17.chain -minMatch=0.$match \
+        cpgIslandGAMFromMm5_$match.bed cpgIslandGAMFromMm5_$match.unmapped
+      liftOver /cluster/data/rn3/bed/cpgIslandGgfAndy/cpgIslandGgfAndyMasked.bed \
+        /cluster/data/rn3/bed/bedOver/rn3ToHg17.over.chain -minMatch=0.$match \
+        cpgIslandGAMFromRn3_$match.bed cpgIslandGAMFromRn3_$match.unmapped
+      liftOver /cluster/data/galGal2/bed/cpgIslandGgfAndy/cpgIslandGgfAndyMasked.bed \
+        /cluster/data/galGal2/bed/bedOver/galGal2ToHg17.over.chain -minMatch=0.$match \
+        cpgIslandGAMFromGalGal2_$match.bed cpgIslandGAMFromGalGal2_$match.unmapped
+    end
+    # Load up the renamed islands as well as
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/cpgIslandAlt
+    hgLoadBed -noBin -tab -sqlTable=cpgIslandGgfAndyMasked.sql \
+      hg17 cpgIslandGgfAndyMasked cpgIslandGgfAndyMasked.bed
 
 
 # MAKE UNIGENE/SAGE TRACK (DONE - 2004-10-15 Fan)
@@ -12936,6 +12970,7 @@ cat > gsub << 'EOF'
 allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz10way/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
+# << for emacs
     cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
     gensub2 chrom.lst single gsub jobList
     para create jobList
@@ -13373,6 +13408,20 @@ rm $tmpfile
 #refGene:cds 1.308%, danRer1.chr1.mafRanges.bed 2.716%, both 0.847%, cover 64.81%, enrich 23.86x
 
 
+# MAKE HG17-RN3 OVER.CHAIN FOR LIFTOVER  (DONE 1/25/05 angie)
+    ssh kolossus
+    set chainDir = /cluster/data/hg17/bed/blastz.rn3/axtChain
+    netChainSubset $chainDir/rat.net.gz $chainDir/all.chain.gz \
+      /cluster/data/hg17/bed/bedOver/hg17ToRn3.over.chain
+    
+
+# MAKE HG17-GALGAL2 OVER.CHAIN FOR LIFTOVER  (DONE 1/25/05 angie)
+    ssh kolossus
+    set chainDir = /cluster/data/hg17/bed/blastz.galGal2/axtChain
+    netChainSubset $chainDir/human.net $chainDir/all.chain \
+      /cluster/data/hg17/bed/bedOver/hg17ToGalGal2.over.chain
+    
+
 # DOWNLOADS FOR 10-WAY MULTIZ (2005-01-24 kate)
 #   Use "glued" mafs
 
@@ -13527,6 +13576,7 @@ SEQ2_LEN=$BASE/S2.len
 
 # END BLASTZ BOREOEUTHERIAN
 
+
 # MAKE tfbsConsSites and tfbsConsFactors for TFBS conserved track (DONE braney 1/15/05)
 # Questions?  weirauch@soe.ucsc.edu or braney@soe.ucsc.edu
 
@@ -13560,6 +13610,28 @@ hgLoadBed -noSort hg17 tfbsConsSites -sqlTable=$HOME/kent/src/hg/lib/tfbsConsSit
 hgLoadBed -noSort hg17 tfbsConsFactors -sqlTable=$HOME/kent/src/hg/lib/tfbsConsFactors.sql tfbsConsFactors.bed -tab
 
 # Feel free to delete or gzip anything in ./tmp (particularly the huge .maf and .bed files) after the final two bed files are sucessfully loaded
+
+
+# CHICKEN RECIPROCAL-BEST NET FOR STRINGENT LIFTOVER (DONE 2/3/05 angie)
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastz.galGal2/axtChain
+    # Run chainNet again, this time keeping both of its outputs:
+    chainPreNet all.chain ../S1.len ../S2.len stdout \
+    | chainNet stdin ../S1.len ../S2.len h_g.net g_h.net
+    # Get the chicken chains from the chicken-referenced (but human-centric)
+    # net:
+    chainSwap all.chain g_h.chain
+    netChainSubset g_h.net g_h.chain stdout \
+    | chainSort stdin g_h.subset.chain
+    # Net those (sorted) chicken chains, and keep both outputs, to get 
+    # reciprocal best nets referenced to both species:
+    chainPreNet g_h.subset.chain ../S2.len ../S1.len stdout \
+    | chainNet stdin ../S2.len ../S1.len g_h.rbest.net h_g.rbest.net
+    # Get the chains from the recip-best nets for stringent liftOver:
+    netChainSubset g_h.rbest.net g_h.chain galGal2ToHg17.rbest.over.chain
+    netChainSubset h_g.rbest.net all.chain hg17ToGalGal2.rbest.over.chain
+
+
 
 ####### RE-BUILD RGD HUMAN QTL TRACKS (DONE 2/5/05 Fan) ##############
 
@@ -17193,5 +17265,43 @@ _EOF_
    (spLoadRankProp -noMapFile=max1k.nomap hg17 rankProp --  /cluster/bluearc/markd/rankprop/results/hs.sw+tr/max1k.rankp.gz)   >&max1k.hg17.out
    (spLoadPsiBlast hg17 spPsiBlast  /cluster/bluearc/markd/rankprop/results/hs.sw+tr.eval.gz) >&pslBlast.hg17.out 
 
+
+# BLASTZ/CHAIN/NET CANFAM2 (DONE 8/2/05 angie)
+    ssh eieio
+    mkdir /cluster/data/hg17/bed/blastz.canFam2.2005-08-01
+    cd /cluster/data/hg17/bed/blastz.canFam2.2005-08-01
+    cat << '_EOF_' > DEF
+# human vs. dog
+# TARGET: Human
+SEQ1_DIR=/san/sanvol1/scratch/hg17/nib
+SEQ1_RMSK=/san/sanvol1/scratch/hg17/rmsk
+SEQ1_SMSK=/san/sanvol1/scratch/hg17/linSpecRep.notInDog
+SEQ1_LEN=/cluster/data/hg17/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog
+SEQ2_DIR=/san/sanvol1/scratch/canFam2/nib
+SEQ2_RMSK=/san/sanvol1/scratch/canFam2/rmsk
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInHuman
+SEQ2_LEN=/cluster/data/canFam2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -bigClusterHub pk \
+      -blastzOutRoot /san/sanvol1/scratch/blastzHg17CanFam2Out >& do.log &
+
+    # Doh -- kki can't see /san/sanvol1 yet (and neither can eieio).  
+    # Copy out to bluearc:
+    ssh pk
+    mv /san/sanvol1/scratch/blastzHg17CanFam2Out /cluster/bluearc/
+    # back on eieio, continue with the new raw-out location:
+    # (had to replace /san/sanvol1/ path in the DEF file too)
+    doBlastzChainNet.pl -continue=cat DEF \
+      -blastzOutRoot /cluster/bluearc/blastzHg17CanFam2Out >>& do.log &
+    ln -s blastz.canFam2.2005-08-01 /cluster/data/hg17/bed/blastz.canFam2
 
 
