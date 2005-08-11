@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.5 2005/08/01 21:20:05 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.6 2005/08/11 17:43:39 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -47,6 +47,8 @@ double upper, lower;
 if (lift != 0)
     {
     struct wigEncodeOptions options;
+
+    ZeroVar(&options);	/*	make sure everything is zero	*/
     options.lift = lift;
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, &options);
     }
