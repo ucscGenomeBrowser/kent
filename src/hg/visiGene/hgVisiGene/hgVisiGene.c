@@ -48,17 +48,30 @@ return sqlQuickNum(conn, query);
 struct slName *visiGeneGeneColorName(struct sqlConnection *conn, int id)
 /* Get list of gene (color),gene (color) */
 {
-char query[256], llName[256];
+char query[512], llName[256];
 struct slName *list = NULL, *el = NULL;
 struct sqlResult *sr;
 char **row;
+
+/* Note I have found that some things originally selected
+   did not get a name here, because of the additional 
+   requirement for linking to probeColor, which was
+   a result of some having probeColor id of 0.
+   This would then mean the the picture's caption
+   is missing the gene name entirely.
+   So, to fix this, the probeColor.name lookup is 
+   now done as an outer join.
+*/
 safef(query, sizeof(query),
-      "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt,probeColor.name "
-      " from imageProbe,probe,probeColor,gene"
+      "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt,probeColor.name,image.paneLabel"
+      " from imageProbe,probe,image,gene"
+      " LEFT JOIN probeColor on imageProbe.probeColor = probeColor.id"
       " where imageProbe.image = %d"
+      " and imageProbe.image = image.id"
       " and imageProbe.probe = probe.id"
-      " and imageProbe.probeColor = probeColor.id"
-      " and probe.gene = gene.id", id);
+      " and probe.gene = gene.id"
+      , id);
+      
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -69,6 +82,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *genbank = row[3];
     char *uniProt = row[4];
     char *color = row[5];
+    char *paneLabel = row[6];
+    if (!color) 
+	color = "?";
     if (name[0] != 0)
 	geneName = name;
     else if (refSeq[0] != 0)
@@ -85,7 +101,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (geneName != NULL)
         {
 	char buf[256];
-	safef(buf, sizeof(buf), "%s (%s)", geneName, color);
+	safef(buf, sizeof(buf), "%s (%s) %s", geneName, color, paneLabel);
 	el = slNameNew(buf);
 	slAddHead(&list, el);
 	}
@@ -379,7 +395,7 @@ char *selected = NULL;
 int selIx = stringArrayIx(listHow, listHowVals, ArraySize(listHowVals));
 htmlSetBgColor(0xD0FFE0);
 htmStart(stdout, "do controls");
-printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_PARENT\" METHOD=GET>\n",
+printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 printf("Gene: ");
@@ -421,7 +437,7 @@ int w = 0, h = 0;
 htmStart(stdout, "do image");
 //printf("<A HREF=\"");
 //printf("../cgi-bin/%s?%s=%d", hgVisiGeneCgiName(), hgpId, imageId);
-//printf("\" target=_PARENT>");
+//printf("\" target=_parent>");
 //printf("<IMG SRC=\"%s\"></A><BR>\n", visiGeneFullSizePath(conn, imageId));
 
 p=visiGeneFullSizePath(conn, imageId);
