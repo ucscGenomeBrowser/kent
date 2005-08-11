@@ -1351,6 +1351,260 @@ FOR MGC GENES:
  - wait one day for nightly build to align and load them into the db
    - rebuild trackDb
 
+# SPLIT UP ZEBRAFISH MASKED SEQUENCE FROM chrUn and chrNA INTO SCAFFOLDS
+# (DONE, 2005-08-04, hartera)
+    ssh kkstore02
+    cd /cluster/data/danRer3
+    # for chrUn and chrNA, get masked sequence for soft and hard-masked 
+    foreach c (Un NA)
+      cd $c
+      mkdir scaffoldsSoftMask scaffoldsHardMask
+      awk 'BEGIN {FS="\t"}{if ($5 != "N") \
+       print "faFrag -mixed chr'${c}'.fa",$2-1, $3, $6".fa";}' chr${c}.agp \
+       >> ./scaffoldsSoftMask/faFragSoftMask.csh
+      awk 'BEGIN {FS="\t"}{if ($5 != "N") \
+        print "faFrag -mixed chr'${c}'.fa.masked",$2-1, $3, $6".fa.masked";}' \
+        chr${c}.agp >> ./scaffoldsHardMask/faFragHardMask.csh
+      cd ..
+    end 
+
+    # change permissions run scripts to get sequences
+    foreach d (Un NA)
+       chmod +x $d/scaffoldsSoftMask/faFragSoftMask.csh
+       chmod +x $d/scaffoldsHardMask/faFragHardMask.csh
+    end
+
+    cat << '_EOF_' > jkStuff/getMaskedScaffolds.csh
+#!/bin/csh
+foreach c (Un NA)
+   set dir=/cluster/data/danRer3
+   echo "Processing $c"
+   cd $dir/$c/scaffoldsSoftMask
+   cp ../chr${c}.fa .
+   echo "Getting soft-masked sequences ..." 
+   nice faFragSoftMask.csh >& faFrag.log
+   echo "Getting hard-masked sequences ..." 
+   cd $dir/$c/scaffoldsHardMask
+   cp ../chr${c}.fa.masked .
+   nice faFragHardMask.csh >& faFrag.log
+end 
+'_EOF_'
+   chmod +x jkStuff/getMaskedScaffolds.csh
+   nice ./jkStuff/getMaskedScaffolds.csh &
+   # check a few sequences that they are correct
+   # add name of scaffold to sequence fasta and cat together
+   foreach c (Un NA)
+      set dir = /cluster/data/danRer3
+      foreach d (scaffoldsSoftMask scaffoldsHardMask)
+         cd $dir/$c/$d
+         foreach f (Zv5*)
+           if ($d == "scaffoldsHardMask") then
+              set b=$f:r
+              set g=$b:r
+              set sc=scaffoldMasked${c}.fa
+           else
+              set g=$f:r
+              set sc=scaffold${c}.fa
+           endif 
+           perl -pi.bak -e "s/>chr[0-9A-Za-z\-\:]+/>$g/" $f
+           cat $f >> $sc
+           rm *.bak
+           cp scaffold* $dir/$c/
+         end
+      end
+   end
+   # check sizes of final FASTA file with all sequences. check a few
+   # sequence files to see that they are correct - ok 
+     
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2005-08-05, hartera)
+    ssh kkstore02
+    cd /cluster/data/danRer3
+    #- Build the .zip files
+    cat << '_EOF_' > jkStuff/gzipAll.csh
+rm -rf gzip
+mkdir gzip
+# chrom AGP's
+tar cvzf gzip/chromAgp.tar.gz [0-9A-Z]*/chr*.agp
+# chrom RepeatMasker out files
+tar cvzf gzip/chromOut.tar.gz */chr*.fa.out
+# soft masked chrom fasta
+tar cvzf gzip/chromFa.tar.gz */chr*.fa
+# soft masked chrNA and chrUn scaffolds
+tar cvzf gzip/scaffoldUnsFa.tar.gz NA/scaffoldNA.fa \
+    Un/scaffoldUn.fa
+# hard masked chrom fasta
+tar cvzf gzip/chromFaMasked.tar.gz */chr*.fa.masked
+# hard masked chrNA and chrUn scaffolds
+tar cvzf gzip/scaffoldUnsFaMasked.tar.gz \
+    NA/scaffoldMaskedNA.fa \
+    Un/scaffoldMaskedUn.fa
+# chrom TRF output files
+cd bed/simpleRepeat
+tar cvzf ../../gzip/chromTrf.tar.gz trfMaskChrom/chr*.bed
+cd ../..
+
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=danRer3 -native GenBank mrna \
+        /cluster/data/danRer3/gzip/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=danRer3 -xeno GenBank mrna \
+        /cluster/data/danRer3/gzip/xenoMrna.fa
+# get native RefSeq mRNAs
+./bin/i386/gbGetSeqs -db=danRer3 -native refseq mrna \
+/cluster/data/danRer3/gzip/refMrna.fa
+# get native GenBank ESTs
+./bin/i386/gbGetSeqs -db=danRer3 -native GenBank est \
+/cluster/data/danRer3/gzip/est.fa
+                                                                                
+cd /cluster/data/danRer3/gzip
+# gzip GenBank native and xeno mRNAs, native ESTs and RefSeq mRNAs
+gzip mrna.fa
+gzip xenoMrna.fa
+gzip refMrna.fa
+gzip est.fa
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x ./jkStuff/gzipAll.csh
+    csh ./jkStuff/gzipAll.csh |& tee ./jkStuff/gzipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.
+    # Make upstream files and Copy the .zip files to
+    # hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    cd /cluster/data/danRer3/gzip
+    # make upstream files for zebrafish RefSeq
+    featureBits danRer3 refGene:upstream:1000 -fa=upstream1000.fa
+    gzip upstream1000.fa
+    featureBits danRer3 refGene:upstream:2000 -fa=upstream2000.fa
+    gzip upstream2000.fa
+    set gp = /usr/local/apache/htdocs/goldenPath/danRer3
+    mkdir -p $gp/bigZips
+    cp -p *.gz $gp/bigZips
+    mkdir -p $gp/chromosomes
+    foreach f (../*/chr*.fa)
+       cp $f $gp/chromosomes
+    end
+    foreach c (NA Un)
+       cd /cluster/data/danRer3/$c
+       cp scaffold${c}.fa.gz $gp/chromosomes
+    end
+    cd $gp/bigZips
+    md5sum *.gz > md5sum.txt
+    cd $gp/chromosomes
+    # gzip the chromosome and scaffold FASTAs individually
+    foreach f (*.fa)
+      gzip $f
+    end
+    md5sum *.gz > md5sum.txt
+    # Take a look at bigZips/* and chromosomes/*
+    # copy README.txt's from danRer2 and update
+
+# MAKE NIB FILES AND 2BIT FILE FOR SOFT MASKED chrUn AND chrNA SCAFFOLDS
+# (DONE, 2005-08-06, hartera)
+    ssh kkstore02
+    cd /cluster/data/danRer3
+    mkdir scaffoldsNAandUnNib
+    # Build nib files, using the soft masking in the fa
+    foreach c (NA Un)
+       echo "Processing $c"
+       foreach f ($c/scaffoldsSoftMask/Zv5*.fa)
+         faToNib -softMask $f scaffoldsNAandUnNib/$f:t:r.nib
+       end
+    end
+    # check correct number of nib files in directory: 14941
+    # there are 14676 chrNA scaffolds and 265 chrUn scaffolds
+    # copy chromosome 1-25 and chrNA and chrUn scaffolds nibs to a directory
+    # on iscratch and iSync for use in cluster runs
+    ssh kkr1u00
+    mkdir -p /iscratch/i/danRer3/chromandScafNib
+    cp -p /cluster/data/danRer3/nib/chr[0-9]*.nib \
+       /iscratch/i/danRer3/chromandScafNib
+    foreach f (/cluster/data/danRer3/scaffoldsNAandUnNib/Zv5*.nib)
+       cp -p $f /iscratch/i/danRer3/chromandScafNib
+    end
+    ssh kkstore02
+    # make a 2 bit file of all the scaffolds for chrNA and chrUn
+    # for blastz cluster runs
+    cd /cluster/data/danRer3/
+    cat NA/scaffoldNA.fa Un/scaffoldUn.fa > danRer3NAandUnScaffolds.fa
+    grep '>' danRer3NAandUnScaffolds.fa | wc -l
+    # 14941
+    faToTwoBit danRer3NAandUnScaffolds.fa danRer3NAandUnScaf.2bit
+    ssh kkr1u00
+    mkdir -p /iscratch/i/danRer3/NAandUnScafs
+    cp /cluster/data/danRer3/danRer3NAandUnScaf.2bit \
+       /iscratch/i/danRer3/NAandUnScafs
+    /cluster/bin/iSync
+
+    # get sizes of scaffolds for the .len file used by blastz
+    ssh kolossus
+    mkdir -p /panasas/store/danRer3/NAandUnScafSizes
+    cd /cluster/data/danRer3
+cat << '_EOF_' > jkStuff/getNAandUnScafSizes.csh
+#!/bin/csh -fe
+foreach c (NA Un)
+  set sizeDir=/panasas/store/danRer3/NAandUnScafSizes
+  cd /cluster/data/danRer3/$c/scaffoldsSoftMask
+  foreach f (Zv5*.fa)
+     set g=$f:r
+     faSize detailed=on $f >> $sizeDir/NAandUnScafs.sizes
+  end
+end
+'_EOF_'
+     chmod +x jkStuff/getNAandUnScafSizes.csh
+     nohup nice jkStuff/getNAandUnScafSizes.csh >& size.log &
+     # took about 1 minute
+     wc -l /panasas/store/danRer3/NAandUnScafSizes/NAandUnScafs.sizes
+     # 14941 /panasas/store/danRer3/NAandUnScafSizes/NAandUnScafs.sizes
+     # so correct number of scaffolds
+     cp /panasas/store/danRer3/NAandUnScafSizes/NAandUnScafs.sizes \
+        /cluster/data/danRer3
+
+# BLASTZ SWAP FOR MOUSE (mm6) (DONE, 2005-08-10, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+    ssh kkr1u00
+    # blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific
+    # if not done already, get lineage-specific repeats
+    mkdir -p /iscratch/i/mm6/linSpecRep.notInZebrafish
+    foreach f (/panasas/store/mm6/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/mm6/linSpecRep.notInZebrafish/$f:t:r:r.out.spec
+    end
+
+    mkdir -p /iscratch/i/danRer3/linSpecRep.notInMouse
+    foreach f (/iscratch/i/danRer3/rmsk/chr*.fa.out)
+      cp -p $f /iscratch/i/danRer3/linSpecRep.notInMouse/$f:t:r:r.out.spec
+    end
+    /cluster/bin/iSync
+  
+    # do swap of mm6 vs danRer3 chain and net alignments to 
+    # create danRer3 vs mm6. see makeMm6.doc for details.
+    ssh kk
+    cd /cluster/data/mm6/bed/blastz.danRer3
+    mkdir -p /panasas/store/danRer3vsmm6Out
+    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+        -stop download -blastzOutRoot /panasas/store/danRer3vsmm6Out \
+        -swap -chainMinScore=5000 >& doSwap.log &
+    # Start: Aug 10 16:30
+    # Finish: Aug 10 16:54
+    # Blastz parameters are as for mm6 - see makeMm6.doc
+# BLASTZ_H=2000
+# BLASTZ_Y=3400
+# BLASTZ_L=6000
+# BLASTZ_K=2200
+# BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+# BLASTZ_ABRIDGE_REPEATS=1
+  # do cleanup step and specify a different file server as can not 
+  # access panasas from kkstore02.
+  nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+        -continue cleanup -fileServer eieio \
+        -blastzOutRoot /panasas/store/danRer3vsmm6Out \
+        -swap -chainMinScore=5000 >& doSwapCleanUp.log &
+  # make html files and trackDb.ra entry for chain and net tracks.
+  # check README.txt for downloads.
+ 
+
+
 # BACENDS TRACK (in progress, 2005-06-16, hartera)
     ssh kkstore01
     # BAC ends sequence files provided by Mario Caccamo at Sanger
@@ -1362,10 +1616,35 @@ FOR MGC GENES:
     wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/DH_bacends.fa.gz
     wget --timestamp ftp://ftp.sanger.ac.uk/pub/mc2/bacend_placement.txt.gz
     gunzip *.gz  
-    # DH_bacends.fa are from the new library from a doubled haploid fish
+    # DH_bacends.fa are from the new library from a doubled haploid zebrafish
     # zf_bacends.fa are from the existing libraries used in danRer2 and danRer1
+    # Several reads are present for some of the BAC ends and these have
+    # names like p1kaSP6 or q1kaT7 for duplicated reads and p1kSP6w or q1kT7w
+    # for multiple reads. In the trace repository, the most recent sequence
+    # is stored and the 'a' or 'w' is dropped from the name.
+    # for the DH_bacends.fa from the CHORI73 library, the names are 
+    # experiment file name                  trace_name
+    # ========================              ================
+    # CHORI73_139g06.p1kSP6                 CHORI73_139G6SP6
+    # CHORI73_165b21.q1kT7                  CHORI73_165B21T7
+    # The trace name is that stored in the trace archive with leading zeros
+    # dropped and ".p1k" or ".q1k" and lower case changed to upper. 
     ssh kkstore02
     cd /cluster/data/danRer3/bed/bacends
+    # check list of prefixes in zf_bacends.fa
+    grep '>' zf_bacends.fa > zf.names
+    perl -pi.bak -e 's/>//' zf.names
+    perl -pi.bak -e 's/^([A-Za-z]+)[0-9]+.+/$1/' zf.names
+    sort -u zf.names
+    # bZ
+    # zC
+    # zK
+    # zKp
+    # in DH_bacends.fa, all are CHORI73_
+    # For DH_bacends.fa, need to clean up, change names to Trace archive
+    # format as above. Then choose most recent sequence, those that are bad
+    # with lots of Ns should be removed at the alignment stage as they will 
+    # not pass the Blat or pslReps criteria. 
     cat zf_bacends.fa DH_bacends.fa >> Zv5Bacends.fa
     faSize Zv5Bacends.fa
     # 680121953 bases (11160014 N's 668961939 real 668961939 upper 0 lower) 
@@ -1468,6 +1747,18 @@ cat << '_EOF_' > template
      ssh kkstore02
      mkdir -p /cluster/data/danRer3/bed/bacends/pairs
      mkdir -p /cluster/data/danRer3/bed/bacends/bacends.1
+     # Downloaded BAC ends accessions from SRS
+     # Go to http://srs.sanger.ac.uk
+     # Go to "Select Databanks" tab and check DBGSS
+     # Go to "Query Form" tab
+     # Select Organism as field and enter "Danio*" as search term
+     # Select AllText as field and enter "*Sanger*" as search term
+     # Select AllText as filed and enter "T7|SP6" as search term
+     # Select a view
+     # Download as BACEndAccs.txt to bacend.1 directory 
+     cd /cluster/data/danRer3/bed/bacends/bacends.1
+     cp /cluster/data/danRer2/bed/ZonLab/bacends/bacends.1/getBacEndInfo.pl .
+     # CHORI73_ is the latest prefix
      cd /cluster/data/danRer3/bed/bacends/pairs
      set bacDir = /cluster/data/danRer3/bed/bacends/bacends.1
      # try different parameters
@@ -1476,7 +1767,6 @@ cat << '_EOF_' > template
      -mismatch -verbose ../bacEnds.lifted.psl $bacDir/bacEndPairs.txt \
      all_bacends bacEnds
 
-     
 
      
 # VEGA
