@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.68 2005/08/10 23:58:12 hartera Exp $"
+#	"$Id: makeMm6.doc,v 1.69 2005/08/11 00:03:32 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7887,7 +7887,8 @@ _EOF_
 # Load the sequences.  PLEASE NOTE THE "-replace" OPTION SHOULD BE USED!!!   
     hgLoadSeq -replace mm6 /gbdb/mm6/NIAGene/T-fasta.fa
 
-# BLASTZ FOR ZEBRAFISH (danRer3) (DONE, 2005-08-10, hartera)
+# BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
+# ZEBRAFISH (danRer3) (DONE, 2005-08-10, hartera)
     ssh kkr1u00
     # Blastz uses lineage-specific repeats. There are none for mouse
     # and fish so use all repeats for each species as lineage-specific.
@@ -7963,6 +7964,9 @@ SEQ2_LEN=$BASE/S2.len
     sort -rn +1 /cluster/data/danRer3/chrom.sizes > S2.len
     # make output directory
     mkdir -p /panasas/store/mm6vsdanRer3Out 
+    # do blastz and create chains for danRer3 chr1-25 and chrM 
+    # chickenHumanTuned.gap scoring matrix is now used by default 
+    # by axtChain.
     nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
        -blastzOutRoot /panasas/store/mm6vsdanRer3Out -chainMinScore=5000 \
        -stop chainMerge >& do.log &
@@ -8047,6 +8051,7 @@ SEQ2_LEN=$BASE/S2.len
     sort -rn +1 /cluster/data/danRer3/NAandUnScafs.sizes > ./S2.len
     # make output directory
     mkdir -p /panasas/store/mm6vsdanRer3Out/NAandUnScafs
+    # do blastz and create chains for danRer3 chrNA and chrUn scaffolds. 
     nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
        -blastzOutRoot /panasas/store/mm6vsdanRer3Out/NAandUnScafs \
        -chainMinScore=5000 -stop chainMerge >& do.log &
