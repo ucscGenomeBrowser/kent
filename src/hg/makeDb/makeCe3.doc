@@ -220,7 +220,7 @@ done
         defaultPos, active, orderKey, genome, scientificName, \
         htmlPath, hgNearOk, hgPbOk, sourceName) \
         VALUES("ce3", "March 2005", "/gbdb/ce3", "C. elegans", \
-        "chrII:14642289-146716311", 1, 59, "C. elegans", \
+        "chrII:14647078-14667002", 1, 59, "C. elegans", \
         "Caenorhabditis elegans", "/gbdb/ce3/html/description.html", 0, 0, \
         "WormBase v. WS140");' -h localhost hgcentraltest
     #	do this defaultDb entry later after there is something to see
