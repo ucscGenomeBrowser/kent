@@ -11,7 +11,7 @@ enum nlType {
  nlt_undet, /* undetermined */
  nlt_unix,  /* lf   */
  nlt_dos,   /* crlf */
- nlt_mac,   /* cr   */
+ nlt_mac    /* cr   */
 };
 
 struct lineFile
