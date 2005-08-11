@@ -179,7 +179,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.926.2.1 2005/08/10 05:33:13 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.926.2.2 2005/08/11 22:24:03 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2129,9 +2129,14 @@ else
     {
     struct gapCalc *gapCalc = gapCalcDefault();
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
+    int qStart = subChain->qStart;
+    int qEnd   = subChain->qEnd  ;
     struct dnaSeq *tSeq = hDnaFromSeq(subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
-    struct dnaSeq *qSeq = hChromSeq2(subChain->qName, subChain->qStart, subChain->qEnd);
+    struct dnaSeq *qSeq = NULL;
 
+    if (subChain->qStrand == '-')
+        reverseIntRange(&qStart, &qEnd, subChain->qSize);
+    qSeq = hChromSeq2(subChain->qName, qStart, qEnd);
     if (subChain->qStrand == '-')
         reverseComplement(qSeq->dna, qSeq->size);
     subChain->score = chainCalcScoreSubChain(subChain, scoreScheme, gapCalc,
