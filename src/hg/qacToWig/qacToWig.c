@@ -5,7 +5,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: qacToWig.c,v 1.4 2005/06/15 19:50:03 angie Exp $";
+static char const rcsid[] = "$Id: qacToWig.c,v 1.5 2005/08/11 17:21:23 angie Exp $";
 
 static char *name = NULL;
 static bool fixed = FALSE;
@@ -20,21 +20,20 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-"qacToWig - convert from compressed quality score format to wiggle format\n"
-"quality score format.\n"
+"qacToWig - convert from compressed quality score format to wiggle format.\n"
 "usage:\n"
 "   qacToWig in.qac outFileOrDir\n"
    "\t-name=name    restrict output to just this sequence name\n"
    "\t-fixed        output single file with wig headers and fixed step size\n"
-"   If -name is not used, outFileOrDir is a directory which will be created\n"
-"   if it does not already exist.  If -name is used, outFileOrDir is a file\n"
-"   (or \"stdout\").\n"
+"   If neither -name nor -fixed is used, outFileOrDir is a directory which\n"
+"   will be created if it does not already exist.  If -name and/or -fixed is\n"
+"   used, outFileOrDir is a file (or \"stdout\").\n"
     );
 
 }
 
 void wigWrite(char *fileName, struct qaSeq *qa)
-/* write a qa entry in wig format to fileNmae */
+/* write a qa entry in wig format to fileName */
 {
 int i;
 FILE *out = mustOpen(fileName, "wb");
@@ -46,7 +45,7 @@ carefulClose(&out);
 }
 
 void wigFixedWrite(FILE *out , struct qaSeq *qa)
-/* write a qa entry in wig format to fileNmae */
+/* write out a qa entry in fixed wig format */
 {
 int i;
 fprintf(out, "fixedStep chrom=%s start=1 step=1\n", qa->name);
@@ -63,22 +62,27 @@ boolean isSwapped;
 FILE *in = qacOpenVerify(inName, &isSwapped);
 FILE *out = NULL;
 struct qaSeq *qa;
-char outPath[1024];
-int i;
 int outFileCount = 0;
 
 if (fixed)
     out = mustOpen(outDir, "wb");
 else if (name == NULL)
     makeDir(outDir);
+
 while ((qa = qacReadNext(in, isSwapped)) != NULL)
     {
-    if (name != NULL && sameString(qa->name, name))
+    if (name != NULL)
 	{
-	wigWrite(outDir, qa);
-	qaSeqFree(&qa);
-	outFileCount++;
-	break;
+	if (sameString(qa->name, name))
+	    {
+	    if (fixed)
+		wigFixedWrite(out, qa);
+	    else
+		wigWrite(outDir, qa);
+	    qaSeqFree(&qa);
+	    outFileCount++;
+	    break;
+	    }
 	}
     else if (fixed)
         {
@@ -87,17 +91,22 @@ while ((qa = qacReadNext(in, isSwapped)) != NULL)
         outFileCount = 1;
         continue;
         }
-    else if (name == NULL)
+    else
 	{
+	char outPath[1024];
 	safef(outPath, sizeof outPath, "%s/%s.wig", outDir, qa->name);
 	wigWrite(outPath, qa);
-	qaSeqFree(&qa);
 	outFileCount++;
 	}
+    qaSeqFree(&qa);
     }
 carefulClose(&in);
+if (fixed)
+    carefulClose(&out);
 if (name == NULL)
     printf("Made %d .wig files in %s\n", outFileCount, outDir);
+else if (outFileCount < 1)
+    warn("Found no sequences with name \"%s\"\n", name);
 }
 
 int main(int argc, char *argv[])
