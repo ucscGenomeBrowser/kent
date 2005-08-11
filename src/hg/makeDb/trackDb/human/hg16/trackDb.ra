@@ -3592,7 +3592,7 @@ autoScale off
     priority 4
     color 58,119,40
 
-track encodeSangerChip
+track encodeSangerChipH3H4
 compositeTrack on
 shortLabel Sanger ChIP
 longLabel Sanger ChIP/Chip (histones H3,H4 antibodies, GM06990 and K562 cells) 
@@ -4682,6 +4682,15 @@ sGroup_primate chimp baboon marmoset galago
 sGroup_placental rat mouse cow dog armadillo 
 sGroup_mammal platypus 
 sGroup_vertebrate chicken 
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeUnimiCst
+shortLabel UNIMI Cons Tags
+visibility hide
+group encodeCompGeno
+priority 80.0
+color 0,60,120
+type bed 5 +
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
 track encodeIndels
