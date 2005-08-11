@@ -77,6 +77,7 @@ exit; # don't actually run this like a script :)
     twoBitInfo cb2.2bit stdout |
         awk '{printf "%s\t%s\t/gbdb/cb2/cb2.2bit\n", $1,$2}' \
         > chromInfo.tab
+    twoBitInfo cb2.2bit stdout | sort -rn +1 > chrom.sizes
 
     #	Back on hgwdev to create cluster data symlinks and start database
     ssh hgwdev
@@ -120,6 +121,16 @@ exit; # don't actually run this like a script :)
 ###########################################################################
 #	Load the gold/gap tables	(DONE - 2005-08-10 - Hiram)
     cat chr*/chr*.agp | $HOME/bin/$MACHTYPE/hgGoldGapGl cb2 stdin
+#  !!! *** The indexes do not get built when hgGoldGapGl is run like this
+#	To check:
+    hgsql -e "show index from gold;" cb2
+    hgsql -e "analyze table gold;" cb2
+    hgsql -e "show index from gold;" cb2
+    hgsql -e "show index from gap;" cb2
+    hgsql -e "analyze table gap;" cb2
+    hgsql -e "show index from gap;" cb2
+    #	The show index after the analyze will show more numbers in the
+    #	Cardinality of the index
 
     featureBits cb2 gap
 #	1019347 bases of 108124579 (0.943%) in intersection
@@ -137,7 +148,8 @@ exit; # don't actually run this like a script :)
     # PREPARE Split contigs into 100,000 bp chunks for cluster runs
     #	The chroms are split.  The randoms and chrUn simply use their
     #	fragments as is.  Anytime these fragment results need to be put
-    #	back together, :
+    #	back together, use the lift files created from the agp via the
+    #	perl scrip as used below.
     # (DONE, 2005-08-05, Hiram)
     # next machine
     ssh kkstore02
@@ -146,7 +158,8 @@ exit; # don't actually run this like a script :)
 for C in I II III IV V X
 do
     mkdir split/${C}
-    faSplit size chroms/chr${C}.fa 100000 split/${C}/c -lift=split/chr${C}.lft
+    faSplit size chroms/chr${C}.fa 100000 split/${C}/${C} \
+	-lift=split/chr${C}.lft
 done
 for C in I_random II_random III_random IV_random V_random X_random Un
 do
@@ -164,8 +177,20 @@ done
     echo "done with ${CHR}"
 done
 
-   cat split/*.lft > liftAll.lft
+   cat split/c*I.lft split/c*V.lft split/c*X.lft > liftChroms.lft
+   cat split/*_random.lft split/chrUn.lft > liftRandoms.lft
     #	push request this /scratch/hg/cb2/ directory to the kluster
+
+    #	copy the contigs for the randoms back here from the bluearc
+    #	for masking and blastz runs
+    ssh kkstore02
+    cd /cluster/data/cb2
+    mkdir randomContigs
+    for C in I_random II_random III_random IV_random V_random X_random Un
+    do
+	rsync -a --progress /cluster/bluearc/scratch/hg/cb2/split/${C}/ \
+		`pwd`/randomContigs/${C}/
+    done
 
 ############################################################################
 # Run RepeatMasker on the chromosomes (WORKING, 2005-08-09 - Hiram)
@@ -227,6 +252,9 @@ done
 # Longest running job:                0s       0.00m     0.00h    0.00d
 # Longest finished job:           12103s     201.72m     3.36h    0.14d
 # Submission to last job:         13708s     228.47m     3.81h    0.16d
+
+    #	Looks like the big contigs are the outliers here.  Most
+    #	everything else finishes in about 4 minutes.
 
     # when they are finished, liftUp and load the .out files into the database:
     # next machine
@@ -291,6 +319,40 @@ done
     featureBits cb2 simpleRepeat
     #	3974197 bases of 108124579 (3.676%) in intersection
 
+    #	And run trf on the contigs for the separate masking and blastz runs
+    ssh kki
+    mkdir /cluster/data/cb2/bed/simpleRepeat/randomContigs
+    cd /cluster/data/cb2/bed/simpleRepeat/randomContigs
+    mkdir trf
+    ls -1S /cluster/bluearc/scratch/hg/cb2/split/*_random/*.fa \
+	/cluster/bluearc/scratch/hg/cb2/split/Un/*.fa > contig.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/i386/trf {check in line+ $(path1)}  /dev/null -bedAt={check out line trf/$(root1).bed} -tempDir=/tmp
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+                                                                                
+    gensub2 contig.lst single gsub jobList
+    para create jobList
+    para try
+# Completed: 470 of 470 jobs
+# CPU time in finished jobs:        419s       6.99m     0.12h    0.00d  0.000 y
+# IO & Wait Time:                  1255s      20.91m     0.35h    0.01d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              57s       0.95m     0.02h    0.00d
+# Submission to last job:           148s       2.47m     0.04h    0.00d
+    mkdir -p trfMask
+for F in trf/*.bed
+do
+    T=${F#trf/}
+    echo "${F} > trfMask/${T}"
+    awk '{if ($5 <= 12) print;}' ${F} > trfMask/${T}
+done
+
+
 #######################################################################
 # PROCESS SIMPLE REPEATS AND RMSK INTO MASK (DONE,  2005-08-10 - Hiram)
     # After the simpleRepeats track has been built, make a filtered version
@@ -318,7 +380,7 @@ do
     echo -n "masking ${C} "
     maskOutFa ${C}/${C}.fa RMRun/${C}.fa.out \
                 softMask/${C}.fa -soft
-    maskOutFa softMask/${C}.fa \
+    maskOutFa softMask/${C}.fa
                 bed/simpleRepeat/trfMask/${C}.bed \
                 softMask/${C}.fa -softAdd
     faToNib -softMask softMask/${C}.fa nib/${C}.nib
@@ -349,24 +411,48 @@ do
     maskOutFa softMask/${C}.fa hard hardMask/${C}.fa
 done
 
+    mkdir randomContigs/softMask
+    mkdir randomContigs/hardMask
+    for C in I_random II_random III_random IV_random V_random X_random Un
+    do
+	for F in randomContigs/${C}/*.fa
+	do
+	    B=`basename ${F}`
+	    T=${B/.fa/}
+	    echo "${B} ${T}"
+	    maskOutFa ${F} RMRun/${C}/${B}.out \
+                randomContigs/softMask/${B} -soft
+	    maskOutFa randomContigs/softMask/${B} \
+                bed/simpleRepeat/randomContigs/trfMask/${T}.bed \
+                randomContigs/softMask/${B} -softAdd
+	    maskOutFa randomContigs/softMask/${B} hard \
+		randomContigs/hardMask/${B}
+	done
+    done
+    faToTwoBit randomContigs/softMask/*.fa randomContigs.2bit
+
     #	copy to iscratch for cluster runs
     ssh kkr1u00
     cd /cluster/data/cb2/softMask
-    mkdir -p /iscratch/i/worms/cb2/bothMasksFa
-    mkdir -p /iscratch/i/worms/cb2/nib
-    cp -p *.fa /iscratch/i/worms/cb2/bothMasksFa
+    mkdir -p /iscratch/i/worms/cb2/chromNib
+    mkdir -p /iscratch/i/worms/cb2/randomContigs
     cd /cluster/data/cb2/nib
-    cp -p c*.nib /iscratch/i/worms/cb2/nib
+    cp -p c*I.nib c*V.nib c*X.nib /iscratch/i/worms/cb2/chromNib
     cd  /cluster/data/cb2
     cp -p cb2.2bit /iscratch/i/worms/cb2
+    cp -p randomContigs.2bit /iscratch/i/worms/cb2
+    rsync -a --progress /cluster/data/cb2/randomContigs/softMask/ \
+	/iscratch/i/worms/cb2/randomContigs/softMask/
+    rsync -a --progress /cluster/data/cb2/randomContigs/hardMask/ \
+	/iscratch/i/worms/cb2/randomContigs/hardMask/
 
     cd /iscratch/i/worms/cb2
     #	The iSync takes too much time due to the immense size of /iscratch
     #	So just manually rsync this directory directly:
     for i in 2 3 4 5 6 7 8
 do
-    rsync -a --progress --rsh=rsh /iscratch/i/worms/cb2/ \
-	kkr${i}u00:/iscratch/i/worms/cb2/
+    rsync -a --delete --progress --rsh=rsh /iscratch/i/worms/ \
+	kkr${i}u00:/iscratch/i/worms/
 done
 
 #######################################################################

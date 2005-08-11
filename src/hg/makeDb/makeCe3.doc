@@ -112,7 +112,8 @@ done
     #	rapidly
 for i in 2 3 4 5 6 7 8
 do
-    rsync --delete -a --progress /iscratch/i/worms/ kkr${i}u00:/iscratch/i/worms
+    rsync -a --progress --delete --rsh=rsh /iscratch/i/worms/ \
+	kkr${i}u00:/iscratch/i/worms/
 done
 
 ############################################################################
@@ -305,7 +306,8 @@ done
     #	rapidly
 for i in 2 3 4 5 6 7 8
 do
-    rsync --delete -a --progress /iscratch/i/worms/ kkr${i}u00:/iscratch/i/worms
+    rsync -a --progress --delete --rsh=rsh /iscratch/i/worms/ \
+	kkr${i}u00:/iscratch/i/worms/
 done
 
 for C in I II III IV V X M
@@ -496,14 +498,17 @@ done
     rm -fr unmaskedSplit split103 unmaskedFa
 for i in 2 3 4 5 6 7 8
 do
-    rsync --delete -a --progress /iscratch/i/worms/ kkr${i}u00:/iscratch/i/worms
+    rsync -a --progress --delete --rsh=rsh /iscratch/i/worms/ \
+	kkr${i}u00:/iscratch/i/worms/
 done
 #######################################################################
 #  GOLD AND GAP TABLES (DONE - 2005-05-02 - Hiram)
     ssh hgwdev
     cd /cluster/data/ce3
-    awk '{print $1}' chrom.sizes > chrom.lst
-    hgGoldGapGl -noGl -chromLst=chrom.lst ce3 /cluster/data/ce3 sangerFa
+    awk '{print $1}' chrom.sizes | sed -e "s/chr//" > chrom.lst
+    grep -v random chrom.sizes | cut -f1 | sed -e "s/chr//" > chrom.lst
+    $HOME/bin/i386/hgGoldGapGl -verbose=2 -noGl -chromLst=chrom.lst ce3 \
+	/cluster/data/ce3 sangerFa
     #
     #	There are no gaps in this assembly, the gap tables are all empty
     #
@@ -662,3 +667,227 @@ SEQ2_LEN=$BASE/S2.len
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
 	VALUES("ce3", "blat15", 17785, 0, 1);' \
 	-h localhost hgcentraltest
+
+##########################################################################
+#	Convenient rsync for kkr1u00 to copy the worm stuff quickly
+    ssh kkr1u00
+    for i in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --delete --rsh=rsh /iscratch/i/worms/ \
+	kkr${i}u00:/iscratch/i/worms/
+done
+
+
+##########################################################################
+# BLASTZ C. elegans ce3 (WORKING - 2005-08-10 - Hiram)
+    ssh kk
+    mkdir /cluster/data/ce3/bed/blastzCb2.2005_08_10
+    cd /cluster/data/ce3/bed/blastzCb2.2005_08_10
+    cat << '_EOF_' > DEF
+# Ce3 vs Cb2
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Cb3
+SEQ1_DIR=/iscratch/i/worms/ce3/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cb2 - full chroms only, no randoms
+SEQ2_DIR=/iscratch/i/worms/cb2/chromNib
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/ce3/bed/blastzCb2.2005_08_10
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp -p /cluster/data/ce3/chrom.sizes ./S1.len
+    nibSize /iscratch/i/worms/cb2/chromNib/*.nib | \
+	awk '{printf "%s\t%s\n", $2, $3}' | sort -rn +1 > S2.len
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -stop chainMerge \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	real    85m16.486s
+    #	user    0m1.070s
+    #	sys     0m0.200s
+
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kk
+    screen -d -r
+    #	STARTED - 2005-08-10 16:22
+    #	FINISHED - 2005-08-10 17:45
+#	blastz kluster run
+# Completed: 182 of 182 jobs
+# CPU time in finished jobs:     109157s    1819.29m    30.32h    1.26d  0.003 y
+# IO & Wait Time:                  1038s      17.30m     0.29h    0.01d  0.000 y
+# Average job time:                 605s      10.09m     0.17h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            4811s      80.18m     1.34h    0.06d
+# Submission to last job:          4813s      80.22m     1.34h    0.06d
+
+#	doCatRun
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:         18s       0.29m     0.00h    0.00d  0.000 y
+# IO & Wait Time:                    54s       0.91m     0.02h    0.00d  0.000 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:            10s       0.17m     0.00h    0.00d
+
+#	doChainRun
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:        125s       2.09m     0.03h    0.00d  0.000 y
+# IO & Wait Time:                    41s       0.68m     0.01h    0.00d  0.000 y
+# Average job time:                  24s       0.40m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              42s       0.70m     0.01h    0.00d
+# Submission to last job:            42s       0.70m     0.01h    0.00d
+
+    #	And then, a run with the randomContigs
+    
+    mkdir /cluster/data/ce3/bed/blastzCb2.2005_08_10/randomContigs
+    cd /cluster/data/ce3/bed/blastzCb2.2005_08_10/randomContigs
+    cat << '_EOF_' > DEF
+# Ce3 vs Cb2
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Cb3
+SEQ1_DIR=/iscratch/i/worms/ce3/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cb2 - full chroms only, no randoms
+SEQ2_DIR=/iscratch/i/worms/cb2/randomContigs.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/ce3/bed/blastzCb2.2005_08_10/randomContigs
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp -p /cluster/data/ce3/chrom.sizes ./S1.len
+    twoBitInfo /iscratch/i/worms/cb2/randomContigs.2bit stdout | \
+	sort -rn +1 > S2.len
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -stop chainMerge \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	real    104m9.081s
+    #	user    0m1.180s
+    #	sys     0m0.150s
+
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kk
+    screen -d -r
+#	blastz kluster run
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:      36050s     600.84m    10.01h    0.42d  0.001 y
+# IO & Wait Time:                   259s       4.31m     0.07h    0.00d  0.000 y
+# Average job time:                1297s      21.61m     0.36h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6144s     102.40m     1.71h    0.07d
+# Submission to last job:          6144s     102.40m     1.71h    0.07d
+
+#	doCatRun
+# Completed: 14 of 14 jobs
+# CPU time in finished jobs:          5s       0.08m     0.00h    0.00d  0.000 y
+# IO & Wait Time:                    43s       0.72m     0.01h    0.00d  0.000 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:               5s       0.08m     0.00h    0.00d
+# Submission to last job:             7s       0.12m     0.00h    0.00d
+
+#	doChainRun
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         29s       0.48m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    25s       0.42m     0.01h    0.00d  0.000 y
+# Average job time:                   8s       0.13m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:            16s       0.27m     0.00h    0.00d
+
+    #	Now, lift those results to their chr*_random coordinates:
+
+    ssh kkstore02
+    cd /cluster/data/ce3/bed/blastzCb2.2005_08_10/randomContigs/axtChain
+    mkdir liftedChain
+    for F in chain/*.chain
+    do
+	C=${F#chain/}
+	C=${C/.chain/}
+	echo "$F -> liftedChain/$C"
+	liftUp -chainQ liftedChain/${C}.lifted.chain \
+	    /cluster/bluearc/scratch/hg/cb2/liftRandoms.lft warn $F
+    done
+    # now merge these lifted chain files with the existing chain files for 
+    # the chroms and then sort by score using chainSort 
+    cd /cluster/data/ce3/bed/blastzCb2.2005_08_10/axtChain
+    # gzipped file is only chains for chromsI-X and chrM so rename
+    mv ce3.cb2.all.chain.gz ce3.cb2.chroms.chain.gz
+    mv chain chromChain
+    mkdir chain chainUnSorted
+    # get all chains to be merged in chainUnSorted dir
+    cp -p ./chromChain/*.chain ./chainUnSorted/
+    # copy contig chains, these are *.lifted.chain so they do not 
+    # write over the chrom chains.
+    cp -p ../randomContigs/axtChain/liftedChain/*.chain ./chainUnSorted/
+    # then merge and sort all these chains. they must be merged and all 
+    # sorted together so that all IDs are unique across all chroms.
+    # IDs are reassigned by chainMergeSort so that IDs are unique.
+    chainMergeSort chainUnSorted/*.chain | gzip > ce3.cb2.all.chain.gz
+     # use chainSplit to split this into chains again
+    chainSplit chain ce3.cb2.all.chain.gz
+
+    # then pick up the doBlastzChainNet.pl script with the net step
+    ssh kk
+    cd /cluster/data/ce3/bed/blastzCb2.2005_08_10
+    cp -p DEF DEF.chroms
+    # edit DEF so SEQ2_DIR=/iscratch/i/worms/cb2/allNib
+    #	as need all nib files now
+    #	And complete S2.len
+    nibSize /iscratch/i/worms/cb2/nib/*.nib | \
+	awk '{printf "%s\t%s\n", $2, $3}' | sort -rn +1 > S2.len
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -continue net \
+	`pwd`/DEF > net.run.out 2>&1 &
+    #	real    5m32.249s
+    #	user    0m0.510s
+    #	sys     0m0.090s
+
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kk
+    screen -d -r
+
+    #	swap results to place ce3 alignments onto cb2
+    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
+	swap.run.out 2>&1 &
+    #	real    7m27.028s
+    #	user    0m1.770s
+    #	sys     0m0.190s
