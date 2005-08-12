@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.995 2005/08/08 19:57:36 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.996 2005/08/12 20:57:32 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6829,6 +6829,7 @@ Color noMatchColor = lighterColor(vg, color);
 Color clr;
 int textLength = strlen(text);
 bool selfLine = (match == text);
+cBuf[1] = '\0';  
 
 /* If we have motifs, look for them in the string. */
 if(motifString != NULL && strlen(motifString) != 0)
