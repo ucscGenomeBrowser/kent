@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.120 2005/07/13 01:57:45 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.121 2005/08/12 21:19:43 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1388,8 +1388,7 @@ for (region = regionList; region != NULL; region = region->next)
 	safef(posBuf, sizeof(posBuf), "%s:%d-%d",
 		    bed->chrom, start, end);
 	/* Construct browser anchor URL with tracks we're looking at open. */
-	hPrintf("<A HREF=\"%s?%s", hgTracksName(), cartSidUrlString(cart));
-	hPrintf("&db=%s", database);
+	hPrintf("<A HREF=\"%s?db=%s", hgTracksName(), database);
 	hPrintf("&position=%s", posBuf);
 	hPrintf("&%s=%s", table, hTrackOpenVis(table));
 	if (table2 != NULL)
