@@ -38,7 +38,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	droYak1 \
 	droAna1 droAna2 \
 	droMoj1 droMoj2 \
-	droVir1 \
+	droVir1 droVir2 \
 	droEre1 \
 	droSim1 \
 	droGri1 \
