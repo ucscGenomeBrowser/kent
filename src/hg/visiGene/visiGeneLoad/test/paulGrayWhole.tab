@@ -1,6 +1,0 @@
-#fileName	submitId	gene	locusLink	refSeq	genbank	permeablization	fPrimer	rPrimer	imageWidth	imageHeight
-0001d.jpg	1	Nkx1-2	18092	XM_127732	n/a	3 min proteinase K/30 min proteinase K	ccggaattcggaatccggatggtttgagagc	cccaagcttatggcagtaggtgagctcaggc	300	300
-0004d.jpg	4	Bapx1	12020	NM_007524	n/a	3 min proteinase K/30 min proteinase K	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	300	300
-0006a.jpg	6	Hmx1	15371	NM_010445	n/a	3 min proteinase K	cgcggatccgaacaggatgcgaagcctaggg	cccaagcttaccagttccaggagaccagagc	300	300
-0006b.jpg	6	Hmx1	15371	NM_010445	n/a	30 min proteinase K	ccggaattcggaagaggaagaggacgacgac	cccaagcttggactctcgtggtagagcaccgg	300	300
-0006c.jpg	6	Hmx-1	15371	NM_010445	n/a	15 min proteinase K	ccggaattcggaagaggaagaggacgacgac	cccaagcttggactctcgtggtagagcaccgg	300	300

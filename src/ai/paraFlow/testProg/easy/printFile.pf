@@ -1,3 +1,0 @@
-file f = fileOpen(args[0], "r");
-foreach string s in f.readLine()
-    prin(s);

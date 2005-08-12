@@ -1,8 +1,0 @@
-#fileName	submitId	gene	locusLink	refSeq	genbank	fPrimer	rPrimer	minAge	maxAge	age	sectionSet	sectionIx	imageWidth	imageHeight
-T00011110aa.jpg	1	Nkx2-6			XM_127732	ccggaattcggaatccggatggtttgagagc	cccaagcttatggcagtaggtgagctcaggc	13.0	14.0	13.5	0	0	300	300
-T00041110aa.jpg	4	Nkx2-2	18088	NM_010919	NM_010919	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	13.0	14.0	13.5	0	0	300	300
-T00041210aa.jpg	4	Nkx2-2	18088	NM_010919	NM_010919	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	13.0	14.0	13.5	0	0	300	300
-T00042110aa.jpg	4	Nkx2-2	18088	NM_010919	NM_010919	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	21.0	21.5	21.0	0	0	300	300
-T00042210aa.jpg	4	Nkx2-2	18088	NM_010919	NM_010919	cgcggatccaaggacatcttggaccttccg	cccaagcttgcatgtgctgcagcgactgcg	21.0	21.5	21.0	0	0	300	300
-T00051110aa.jpg	5	Nkx2-9	18094	NM_008701	NM_008701	cgcggatccgaacaggatgcgaagcctaggg	cccaagcttaccagttccaggagaccagagc	13.0	14.0	13.5	0	0	300	300
-T00051210aa.jpg	5	Nkx2-9	18094	NM_008701	NM_008701	cgcggatccgaacaggatgcgaagcctaggg	cccaagcttaccagttccaggagaccagagc	13.0	14.0	13.5	0	0	300	300

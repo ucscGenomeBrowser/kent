@@ -1,9 +1,0 @@
-
-class person
-// Various ways to refer to a person
-    {
-    string firstName;
-    array of string middleNames;
-    string lastName;
-    array of string nickNames;
-    }

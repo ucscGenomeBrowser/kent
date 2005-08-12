@@ -1,5 +1,0 @@
-name global
-knownGeneMrna knownGeneMrna
-summaryTables refSeqSummary kgXref
-summarySql select summary from refSeqSummary,kgXref where kgXref.kgID='%s' and (refSeqSummary.mrnaAcc=kgXref.kgID or refSeqSummary.mrnaAcc=kgXref.refseq)
-summarySource RefSeq Summary
