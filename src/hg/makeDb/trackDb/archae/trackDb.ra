@@ -1,6 +1,6 @@
 track gc20Base
 shortLabel GC Percent
-longLabel GC Percent in 20 base windows
+longLabel GC Percent in 20 Base Windows
 group map
 priority 1.7
 visibility full
@@ -25,8 +25,8 @@ altColor 255,0,0
 type bed 6 .
 
 track llOperons
-shortLabel LL Operons
-longLabel Operon predictions by Lowe Lab
+shortLabel Extended Operons
+longLabel Extendded Operon Predictions
 group genes
 priority 2.13
 visibility pack
@@ -41,16 +41,6 @@ priority 2.12
 visibility dense
 spectrum on
 type bed 6 +
-
-track gbRRNA
-shortLabel GenBank rRNA
-longLabel GenBank ribosomal RNA
-group genes
-priority 2.2
-visibility dense
-color 40,40,160
-altColor 255,0,0
-type bed 6 .
 
 track Rfam
 shortLabel Rfam
@@ -111,7 +101,7 @@ shortLabel BLASTP codes
 longLabel Conservation of proteins with BLASTP
 group compGeno
 priority 4.52
-visibility hide
+visibility full
 type bed 6 +
 canPack off
 
