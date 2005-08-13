@@ -1,12 +1,3 @@
-track codeBlast
-shortLabel BLASTP codes
-longLabel Conservation of proteins with BLASTP
-group compGeno
-priority 4.52
-visibility hide
-type bed 6 +
-canPack off
-
 track gbProtCode
 shortLabel GenBank CDS
 longLabel GenBank protein-coding genes

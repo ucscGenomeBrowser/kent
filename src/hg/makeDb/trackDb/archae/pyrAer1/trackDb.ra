@@ -1,12 +1,3 @@
-track codeBlast
-shortLabel BLASTP codes
-longLabel Conservation of proteins with BLASTP
-group compGeno
-priority 4.52
-visibility hide
-type bed 6 +
-canPack off
-
 track gbProtCode
 shortLabel GenBank CDS
 longLabel GenBank protein-coding genes
@@ -35,42 +26,6 @@ visibility dense
 color 13,124,115
 type bed 6 .
 
-track TATA1
-shortLabel TATA reg genes no alt
-longLabel TATA prediction using regular genes and no alt. sites
-group genes
-priority 2.62
-visibility dense
-color 13,124,115
-type bed 6 .
-
-track TATA2
-shortLabel TATA Mike genes no alt
-longLabel TATA prediction using Mikes genes and no alt. sites
-group genes
-priority 2.62
-visibility dense
-color 13,124,115
-type bed 6 .
-
-track TATA3
-shortLabel TATA reg genes alt
-longLabel TATA prediction using regular genes and alt. sites
-group genes
-priority 2.62
-visibility dense
-color 13,124,115
-type bed 6 .
-
-track TATA4
-shortLabel TATA reg genes alt
-longLabel TATA prediction using Mikes genes and alt. sites
-group genes
-priority 2.62
-visibility dense
-color 13,124,115
-type bed 6 .
-
 track llaPaePrintA
 shortLabel LL microarray A
 longLabel Lowe lab full-genome P. aerophilum microarray experiments
@@ -91,15 +46,6 @@ group compGeno
 priority 4.51
 visibility dense
 type bed 6 .
-canPack off
-
-track codeBlast
-shortLabel BLASTP codes
-longLabel Conservation of proteins with BLASTP
-group compGeno
-priority 4.62
-visibility dense
-type bed 6 +
 canPack off
 
 track blastzSelf
