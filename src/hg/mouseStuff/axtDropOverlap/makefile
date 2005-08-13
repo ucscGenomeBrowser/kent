@@ -1,14 +1,14 @@
 include ../../../inc/common.mk
 
-L = ${MYSQLLIBS} -lm
-MYLIBDIR = ../../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-
+L = -lm
+MYLIBDIR = ../../../lib/$(MACHTYPE)
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = axtDropOverlap.o 
 
 axtDropOverlap: $O ${MYLIBS}
-	${CC} -o ${HOME}/bin/${MACHTYPE}/axtDropOverlap $O ${MYLIBS} $L 
+	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/axtDropOverlap $O ${MYLIBS} $L
+#${STRIP} ${HOME}/bin/${MACHTYPE}/axtDropOverlap${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}
