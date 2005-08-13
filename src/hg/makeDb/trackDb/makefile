@@ -64,8 +64,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	pyrAby1\
 	sc1 \
 	canHg4 canHg9 car46\
-	vibCho1 \
-	sulSol1
+	vibCho1 
 
 MGC_DBS = \
 	hg16 hg17 \
@@ -73,6 +72,17 @@ MGC_DBS = \
 	rn3 \
 	danRer1	danRer2 \
 	xenTro1
+
+ARCH_DBS = \
+	pyrAer1 \
+	pyrFur2 \
+	sulSol1\
+	metMar1\
+	nanEqu1\
+	aerPer1\
+	halMar1\
+	pyrHor1\
+	pyrAby1
 
 update: #clean
 	@for D in *; do \
@@ -160,6 +170,35 @@ strict: clean
 			vis="" ; \
 		fi ; fi ; fi; \
 		cmd="hgTrackDb -strict -release=beta $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
+		echo $$cmd ;  $$cmd ; \
+	    fi ; \
+	done
+
+archaea: clean
+	${CVS} up -d -P .
+	@for D in *; do \
+            if [ -d "$$D" ]; then \
+                if [ -e "$$D/makefile" ]; then \
+                    ( cd $$D && echo $$D && $(MAKE) ) ;\
+                    x=$$? ; if [ $$x -ne 0 ]; then exit $$x; fi \
+                fi; \
+            fi; \
+	done
+	@for DB in $(ARCH_DBS) x; do \
+	    if test "$$DB" != "x" ; then \
+		dbpath=`ls -1 -d */$$DB 2> /dev/null` ; \
+		if test -n "$$dbpath" ; then \
+		    org=`echo $$dbpath | sed -e 's/\/.*//'` ; \
+		    if test -f $$dbpath/visibility.ra ; then \
+			vis="-visibility=$$dbpath/visibility.ra" ; \
+		    else if test -f $$org/visibility.ra ; then \
+			vis="-visibility=$$org/visibility.ra" ; \
+		    else \
+			vis="" ; \
+		fi ; fi ; fi; \
+		cmd="hgTrackDb -strict -release=alpha $$vis $$org $$DB trackDb ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec -strict $$org $$DB hgFindSpec ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
