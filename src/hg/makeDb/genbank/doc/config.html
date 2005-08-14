@@ -48,9 +48,11 @@
      <li> <code><em>$db</em>.clusterGenome</code> - glob pattern or file for genome
           sequences on cluster. This can be NIBs or a TwoBit file. The
           resulting list of files must match was what is on the server.
+     <li> <code><em>$db</em>.ooc</code> - path to blat ooc file on cluster, or 
+          <code>no</code> if no blat ooc is to be used.
+     <li> <code><em>$db</em>.maxIntron</code> - blat -maxIntron value.
      <li> <code><em>$db</em>.lift</code> - path to lift file for genome,
           or <CODE>no</CODE> if none.
-
      <li> <code><em>$db</em>.genbank.mrna.native.pslCDnaFilter</code> - Arguments
            for <CODE>pslCDnaFilter</CODE> for GenBank native mRNAs, or <CODE>no</CODE> to skip pslCDnaFilter.
      <li> <code><em>$db</em>.genbank.mrna.xeno.pslCDnaFilter</code>

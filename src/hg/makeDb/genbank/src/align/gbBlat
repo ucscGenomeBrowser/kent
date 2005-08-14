@@ -2,51 +2,52 @@
 #
 # Run blat, polyInfo and pslIntronsOnly.
 #
-# gbBlat [options] database genomeFile rnaFa out.psl
+# gbBlat [options] jobSpecFile out.psl
 #
 # Options:
 #  -keep - keep temporary files.
 #  -verbose - verbose debugging
 #  -overwrite - overwrite existing output (for debugging)
-#  -seqs seqsfile - file contains lists of sequencs to align for
-#   Mondo 2bit files (lots of small sequences).  Each line contains
-#   either the the sequence id, or {seqId seqSize seqStart seqEnd}.
+#
 # Arguments:
-#  - database - hg13, etc; used to determine ooc file to use.
-#
-#  - genomeFile - Can be in one of the following formats:
-#      - whole file, this can be a fasta, nib, or two-bit file. All
-#        sequences in the file are aligned:
-#          dirs/chr1.nib
-#          dirs/smallOrg.2bit
-#      - nib subrange, the range will be aligned and lifted back to chrom
-#        coordinates:
-#           dirs/chr1.nib:100000-200000
-#      - 2bit single sequence
-#           dirs/hg17.2bit:chr1
-#      - a two-bit file, along with a list of sequences or subsequences
-#        supplied in the -seqs argument.
-#
-#  - rnaFa - the RNA/EST query fasta file.  The name of this file
-#    must be in the form type.orgCat.* (mrna.native, est.aa.xeno, etc).  This
-#    is used to determine various parameter settings.  File should be named
-#    in the form:
-#       ..../refseq.136.0/hg16/full/mrna.xeno.0.fa
-#    so refseq.ver or genbank.ver can be used to determine srcDb.
-#    
+#  - jobSpecFile - path to a file describing the set of alignments to perform.
+#    The format is described below.
 #  - out.psl - PSL output file  The other output filenames are derived
 #    by removing the .psl from the name.  If no sequences align, an
 #    empty psl is still created to server as a job-completed marker.
 #
-# PSL files are written to a local tmp directory and then copies to the output
-# directory to minimize NFS trafic.  If no sequences align, an empty psl file
+# Job specification file:
+#   Format are lines of key words and values. Blank lines and lines where
+#   the first non-blank character is '#' are ignored.  A line ending in
+#   a '\' is continued to the next line.  Records are in the form
+#      key<whitespace+>value
+#   A job spec defines a set of queries and target to align against each
+#   other, as well as a set of parameters that control the alignment.
+#
+#   The following keys are recognized:
+#     o type - alignment type, two value, first is the orgCat (native or xeno),
+#       second is the cDNA type (mrna or est)
+#     o ooc - blat ooc file to use (optional).
+#     o tdb - target database, this is either a NIB directory or a twoBit file.
+#     o tdbSlow2bit - If yes, then this is a twoBit file with a large number
+#       of sequences.  It is most likely faster to extract the target sequence
+#       from the file than repeatedly access it (optional).
+#     o tseq - white-space separated list of target sequences, which are either
+#       a sequence id (chr1), or a sequence size and subrange
+#       (chr1:size:start-end).
+#     o qdb - white-space seperated list of query fasta files.  All sequences
+#       in the files will be queried.
+#     o preFilterOpts - pslCDnaFilter options to use for prefiltering.  This
+#       should only include the non-comparitive options.
+# PSL files are written to a local tmp directory and then copied to the output
+# directory to reduce NFS impact.  If no sequences align, an empty psl file
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
 #
 # written in Tcl because bash version was getting hideously hard and wanted
-# a language with named fuction parameters, like fortran.
+# a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.44.4.6 2005/08/09 07:10:58 markd Exp $
+# $Id: gbBlat,v 1.44.4.7 2005/08/14 04:38:48 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -62,49 +63,6 @@ set env(LD_LIBRARY_PATH) [file dir [file dir [info script]]]/lib/i386
 # use to record last command executed so that a shorter, more useful error
 # message can be generated on child process error
 set lastExec {}
-
-##
-# Choose OOC based on genome.  Will return empty string if no ooc should be used, but one
-# should still be defined.
-proc getOoc {database} {
-    switch -glob -- $database {
-        hg*       {return /scratch/hg/h/11.ooc}
-        mm*       {return /scratch/hg/h/mouse11.ooc}
-        rn*       {return /scratch/hg/h/rat11.ooc}
-        panTro*   {return /cluster/bluearc/hg/h/chimp11.ooc}
-        monDom*   {return /iscratch/i/monDom1/11.ooc}
-        galGal*   {return /iscratch/i/galGal2/11.ooc}
-        ce*       {return /iscratch/i/worms/Celegans2/11.ooc}
-        cb*       {return /iscratch/i/worms/Cbriggsae/11.ooc}
-        caeRei*   {return /iscratch/i/worms/caeRei0/11.ooc}
-        caeRem*   {return /iscratch/i/caeRem1/11.ooc}
-        danRer*   {return /iscratch/i/danRer1/11.ooc}
-        canFam*   {return /iscratch/i/canFam1/11.ooc}
-        oryCun*   {return ""}
-        tetNig*   {return /iscratch/i/tetNig1/11.ooc}
-        anoGam*   {return /iscratch/i/anoGam1/11.ooc}
-        apiMel*   {return /iscratch/i/apiMel2/11.ooc}
-        dm*       {return /iscratch/i/dm1/11.ooc}
-        dp*       {return /iscratch/i/dp3/11.ooc}
-        droYak*   {return /iscratch/i/droYak1/11.ooc}
-        droAna*   {return /iscratch/i/droAna1/11.ooc}
-        droMoj*   {return /iscratch/i/droMoj1/11.ooc}
-        droVir*   {return /iscratch/i/droVir1/11.ooc}
-        droEre*   {return /iscratch/i/droEre1/11.ooc}
-        droSim*   {return /iscratch/i/droSim1/11.ooc}
-        bosTau*   {return /iscratch/i/bosTau1/11.ooc}
-        rheMac*   {return /iscratch/i/rheMac1/11.ooc}
-        xenTro*   {return /iscratch/i/xenTro1/11.ooc}
-        fr*       {return ""}
-        sacCer*   {return ""}
-        ci*       {return ""}
-	strPur*   {return /panasas/store/strPur1/11.ooc}
-        canHg*    {return ""}
-        default   {
-            error "no blat OOC defined for $database, edit gbBlat function getOoc to add"
-        }
-    }
-}
 
 # lassign list varname ?varname..?
 proc lassign {vals args} {
@@ -166,149 +124,202 @@ proc cmdlinePopVal {opt} {
 }
 
 ##
-# Parse input cDNA file name for use in selecting parameters.
-# return {srcDb orgCat cdnaType}
-proc parseCDnaFaPath {rnaFa} {
-    set rnaBase [file tail [file root $rnaFa]]
+# read the next job spec record from the file, or empty if no more.
+proc nextJobSpec {fh} {
+    # find next record
+    set line {}
+    while {[gets $fh line] >= 0} {
+        set line [string trimleft $line]
+        if {![regexp {^(\#|$)} $line]} {
+            break
+        }
+    }
+    if {[string length $line] == 0} {
+        return {}  ;# eof
+    }
 
-    # get srcDb by looking at the directory names:
-    #  .../align/genbank.133.0/hg15test/full/mrna.native.0.fa
-    set srcDbDir [file tail [file dirname [file dirname [file dirname $rnaFa]]]]
-    switch -glob $srcDbDir {
-        genbank.* {
-            set srcDb genbank
+    # read continuation lines, ensuring a blank between each line
+    while {[regsub {\\$} $line {} line]} {
+        if {[gets $fh line2] < 0} {
+            error "EOF while parsing line continuation"
         }
-        refseq.* {
-            set srcDb refseq
-        }
-        default {
-            abort "can't determine srcDb from $rnaFa"
-        }
+        set line "$line $line2"
     }
     
-    # get cdnaType and orgCat from filename, ESTs are split by accPrefix as well
-    set parts [split $rnaBase .]
-    if {[llength $parts] < 3} {
-        abort "can't parse mrna file name to get parameters: $rnaFa"
-    }
-    set cdnaType [lindex $parts 0]
-    switch -- $cdnaType {
-        mrna {
-            set orgCat [lindex $parts 1]
-        }
-        est {
-            set orgCat [lindex $parts 2]
-        }
-        default {
-            abort "invalid type \"$cdnaType\" in mrna file name: $rnaFa"
-        }
-    }
-    if {!(($orgCat == "native") || ($orgCat == "xeno"))} {
-        abort "invalid organism category \"$orgCat\" in mrna file name: $rnaBase"
-    }
-    return [list $srcDb $orgCat $cdnaType]
+    # break into a list of words
+    regsub -all {[[:space:]]+} $line { } line
+    return [split [string trim $line]]
 }
 
+##
+# constants used in validating specs.  specsDef is an array of valid keys,
+# with the value being a list of {numValues required}.  Where numValues
+# is the required number of values, or negative of the minimum number of values.
+#    
+array set specsDef {
+    type {2 1}
+    ooc  {1 0}
+    tdb  {1 1}
+    tseq {-1 1}
+    qdb  {-1 1}
+    maxIntron {1 0}
+    tdbSlow2bit {1 0}
+    preFilterOpts {-1 0}
+}
 
-# figure out BLAT parameters bases on type of alignment
-proc determineBlatParams {database srcDb orgCat cdnaType} {
-    set ooc [getOoc $database]
-    if {$ooc != ""} {
-        set oocOpt -ooc=$ooc
-    } else {
-        set oocOpt ""
+##
+# parse open jobs specs file
+proc parseJobSpecsFh {fh specsVar} {
+    upvar $specsVar specs
+    global specsDef
+
+    # read specs
+    while {[llength [set spec [nextJobSpec $fh]]]} {
+        set specs([lindex $spec 0]) [lrange $spec 1 end]
     }
 
-    #- repeat-masking only used on xeno
+    # validate
+    foreach key [array names specs] {
+        if {![info exists specsDef($key)]} {
+            error "unknown key \"$key\""
+        }
+    }
+    foreach key [array names specsDef] {
+        set def $specsDef($key)
+        if {[lindex $def 1] && ![info exists specs($key)]} {
+            error "missing required key \"$key\""
+        }
+        if {![info exists specs($key)]} {
+            if {[lindex $def 1]} {
+                error "missing required key \"$key\""
+            }
+        } else {
+            set numVals [lindex $def 0]
+            if {$numVals >= 0} {
+                if {[llength $specs($key)] != $numVals} {
+                    error "$key requires $numVals values"
+                }
+            } else {
+                if {[llength $specs($key)] < $numVals} {
+                    error "$key requires at least $numVals values"
+                }
+            }
+        }
+    }
+    if {[lsearch {native xeno} [lindex $specs(type) 0]] < 0} {
+        error "key \"type\" orgCat should be \"native\" or \"xeno\""
+    }
+    if {[lsearch {mrna est} [lindex $specs(type) 1]] < 0} {
+        error "key \"type\" cDNA type should be \"mrna\" or \"est\""
+    }
+
+    if {[info exists specs(tdbSlow2bit)]} {
+        if {[lsearch {yes no} $specs(tdbSlow2bit)] < 0} {
+            error "value for \"tdbSlow2bit\" should be \"yes\" or \"no\", got\"$specs(tdbSlow2bit)\""
+        }
+    } else {
+        # default
+        set specs(tdbSlow2bit) no
+    }
+
+}
+
+##
+# parse the job spec file into an array indexed by key, with values being a list
+proc parseJobSpecs {specFile specsVar} {
+    upvar $specsVar specs
+    set fh [open $specFile]
+    if {[catch {
+        parseJobSpecsFh $fh specs
+    } msg]} {
+        error "$msg: $specFile" "parsing $specFile\n$::errorInfo" $::errorCode
+    }
+    close $fh
+}
+
+# figure out BLAT parameters bases on specs
+proc determineBlatParams {specsVar} {
+    upvar $specsVar specs
+    lassign $specs(type) orgCat cdnaType
+    set blatParams {}
+
+    #- repeat-masking only used on xeno, ooc not used for translated
     switch $orgCat {
         native {
             switch $cdnaType {
-                mrna {set blatParams "-q=rna -fine $oocOpt"}
-                est  {set blatParams "$oocOpt"}
+                mrna {lappend blatParams -q=rna -fine}
+                est {}
+            }
+            if {[info exists specs(ooc)]} {
+                lappend blatParams -ooc=$specs(ooc)
             }
         }
         xeno {
             switch $cdnaType {
-                mrna {set blatParams "-q=rnax -t=dnax -mask=lower"}
-                est  {set blatParams "-q=dnax -t=dnax -mask=lower"}
+                mrna {lappend blatParams -q=rnax -t=dnax -mask=lower}
+                est  {lappend blatParams -q=dnax -t=dnax -mask=lower}
             }
         }
+    }
+    # hack: until we have more orgCats, use special blatParams for human
+    set qdb0 [lindex $specs(qdb) 0]
+    if {[string match "*refseq*" $qdb0] && [string match "*/panTro*/*" $qdb0]
+        && [string match "*xeno*" $qdb0]} {
+        set blatParams "-q=rna -fine -mask=lower"
     }
 
-    # other genome-specific parameters; done here so it can override blatParams
-    switch -glob $database {
-        panTro* {
-            # until we have more orgCats, use special blatParams for human refseqs in chimp
-            if {($srcDb == "refseq") && ($orgCat == "xeno")} {
-                # override dBefaults above
-                set blatParams "-q=rna -fine -mask=lower"
-            }
-        }
-        sacCer* {
-            # limit intron size to 5K
-            set blatParams "${blatParams} -maxIntron=5000"
-        }
-        ce* {
-            # limit intron size to 100K
-            set blatParams "${blatParams} -maxIntron=100000"
-        }
-        ci* {
-            # limit intron size to 20K
-            set blatParams "${blatParams} -maxIntron=20000"
-        }
+    if {[info exists specs(maxIntron)]} {
+        lappend blatParams -maxIntron=$specs(maxIntron)
     }
+
     return $blatParams
 }
 
 ##
-# Determine type of genome input
-# return {genomeType genomeFmt}
-proc getGeneomeInputType {genomeFile} {
-    switch -glob -- [file tail $genomeFile] {
-        *.nib {
-            return {full nib}
-        }
-        *.nib:*-* {
-            return {subseq nib}
-        }
-        *.2bit {
-            return {full 2bit}
-        }
-        *.2bit:*-* {
-            return {subseq 2bit}
-        }
-        *.2bit:- {
-            return {seq 2bit}
-        }
-        *.fa {
-            return {full fa}
-        }
-        default {
-            abort "count not determine format of genome file: $genomeFile"
-        }
+# parse a target sequence spec into a list
+# return either {seqId seqSize subStart subEnd} or {seqId}
+proc parseTSeq {tseq} {
+    if {[regexp {^(.+):(.+):(.+)-(.+)$} $tseq {} seqId seqSize subStart subEnd]} {
+        return [list $seqId $seqSize $subStart $subEnd]
+    } else {
+        return [list $tseq]
     }
 }
 
 ##
-# parse the subrange spec out of the genome file
-# return {seq seqSize subStart subEnd}
-proc parseSubRangeSpec {genomeFile genomeType genomeFmt} {
-    # parse the nib/2bit spec into various components and get size
-    #    /scratch/hg/gs.18/build35/bothMaskedNibs/chr22.nib:1000000-2000000
-    #    /scratch/hg/gs.18/build35/hg16.2bit:chr22:1000000-2000000
-    # parse into chr start end
-    if {$genomeFmt == "nib"} {
-        if {![regexp {^(.+/([^/]+)\.nib):([0-9]+)-([0-9]+)$}  $genomeFile {} nibFile genomeSeq genomeSubStart genomeSubEnd]} {
-            abort "parse of subseq failed: $gemomeFile"
-        }
-        set genomeSize [callProg nibSize $nibFile | cut -f 3]
-    } else {
-        if {![regexp {^.+/[^/]+\.2bit:(.+):([0-9]+)-([0-9]+)$} $genomeFile {} genomeSeq genomeSubStart genomeSubEnd]} {
-            abort "parse of subseq failed: $gemomeFile"
-        }
-        set genomeSize [callProg twoBitInfo $genomeFile stdout | cut -f 2]
+# Extract a subsequence from a twoBit file into tmp
+proc getTwoBitSlow {genomeSeqRef seqId subStart subEnd} {
+    global tmpDir
+    set faPath $tmpDir/$seqId
+    if {$subStart != {}} {
+        append faPath :$subStart-$subEnd
     }
-    return [list $genomeSeq $genomeSize $genomeSubStart $genomeSubEnd]
+    append faPath .fa
+    if {![file exists $faPath]} {
+        doExec twoBitToFa $genomeSeqRef $faPath
+    }
+    return $faPath
+}
+
+##
+# create name referencing a genome sequence in a genome file.
+# If tdbSlow2bit is yes, then extract the target subsequence into
+# the tmpdir if it hasn't been done before.
+proc makeGenomeSeqRef {specsVar seqId subStart subEnd} {
+    upvar $specsVar specs
+    set path $specs(tdb)
+    if {[string match *.2bit $specs(tdb)]} {
+        append path : $seqId
+    } else {
+        append path /$seqId.nib
+    }
+    if {$subStart != {}} {
+        append path :$subStart-$subEnd
+    }
+    if {$specs(tdbSlow2bit) == "yes"} {
+        set path [getTwoBitSlow $path $seqId $subStart $subEnd]
+    }
+    return $path
 }
 
 # checksum a file
@@ -317,172 +328,151 @@ proc cksum {file} {
 } 
 
 ##
-# convert a list of subinfo record into a tmp lift file
-# subinfo is {seq seqSize subStart subEnd}
-proc makeLift {subInfos} {
-    global tmpDir
-    set liftFile $tmpDir/subseq.lft
+# create a temporary lift file for the specified subsequence
+proc makeLift {seqId seqSize subStart subEnd} {
+    global tmpPrefix
+    set liftFile $tmpPrefix.lft
     set fh [open $liftFile w]
-    foreach subInfo $subInfos {
-        lassign $subInfo subSeq seqSize subStart subEnd
-        set subName $subSeq:$subStart-$subEnd
-        set subSize [expr $subEnd-$subStart]
-        puts $fh [join [list $subStart $subName $subSize $subSeq $seqSize] \t]
-    }
+    set subName $seqId:$subStart-$subEnd
+    set subSize [expr $subEnd-$subStart]
+    puts $fh [join [list $subStart $subName $subSize $seqId $seqSize] \t]
     close $fh
     return $liftFile
 }
 
 ##
-# copy or lift a file.  It is copied to it's output location with a .tmp
-# extension and then renamed to it's final name
+# append a file to a cummulative tmp output file, optionally lifting
 proc liftOrCp {type inFile outFile liftFile} {
+    set outFh [open $outFile a]
     if {$liftFile == ""} {
-        set inFileSrc $inFile
+        exec cat $inFile >@$outFh
     } else {
-        # FIXME wanted to specify "error", however blat doesn't include
+        # Note: wanted to specify "error", however blat doesn't include
         # subrange if it covers the whole sequence
-        # lift to local file first and checksum before copying to global
-        # storage
-        set inFileSrc $inFile.lifted
-        doExec liftUp -nohead -nosort -type=.$type $inFileSrc $liftFile carry $inFile
+        doExec liftUp -nohead -nosort -type=.$type stdout $liftFile carry $inFile >@$outFh
     }
-    
+    close $outFh
+}  
+
+##
+# get poly-A sizes for a cDNA fasta, creating for the first time
+proc getPolyASizes {cdnaFa} {
+    global tmpPrefix
+    # name must be unique for cdna mrna
+    set polyASizes $tmpPrefix.[file root [file tail $cdnaFa]].polya
+    if {![file exists $polyASizes]} {
+        doExec faPolyASizes $cdnaFa $polyASizes
+    }
+    return $polyASizes
+}
+
+##
+# prefilter a psl file with non-comparive pslCDnaFilter options
+#
+proc preFilterAligns {specsVar cdnaFa inPsl} {
+    global tmpPrefix
+    upvar $specsVar specs
+    set outPsl $tmpPrefix.filtered.psl
+
+    set polyASizes [getPolyASizes $cdnaFa]
+    set cmd [list pslCDnaFilter -verbose=0 -nonComparative -polyASizes=$polyASizes]
+    set cmd [concat $cmd $specs(preFilterOpts)]
+    lappend cmd $inPsl $outPsl
+    eval doExec $cmd
+    return $outPsl
+}
+
+##
+# atomic install of a file to it's final location
+proc installFile {inFile outFile} {
     # copy to global storage and verify checksum
-    set inCksum [cksum $inFileSrc]
-    doExec cp $inFileSrc $outFile.tmp
+    set inCksum [cksum $inFile]
+    doExec cp $inFile $outFile.tmp
     set cpCksum [cksum $outFile.tmp]
     if {$inCksum != $cpCksum} {
-        error "check mismatch after copy to global storage: $inFileSrc ($inCksum) != $outFile.tmp ($cpCksum)"
+        error "checksum mismatch after copy to global storage: $inFile ($inCksum) != $outFile.tmp ($cpCksum)"
     }
     # atomic rename
     file rename -force $outFile.tmp $outFile
 }
 
 ##
-# align and process results
-proc alignToGenome {genomeFile rnaFa blatParams orgCat cdnaType outFiles {subInfos {}}} {
-    global tmpBase
-    lassign $outFiles outPsl outOi outIntronPsl
+# align and process results, appending results to specified cummulative output files
+proc alignToGenome {specsVar blatParams tseq cdnaFa outPsl outOi outIntronPsl} {
+    global tmpPrefix
+    upvar $specsVar specs
+    lassign $specs(type) orgCat cdnaType
 
-    # initial tmp output on local FS
-    set localPsl $tmpBase.psl
-    set localOi $tmpBase.oi
-    set localIntronPsl $tmpBase.intronPsl
+    # unfiltered tmp output on local FS
+    set localPsl $tmpPrefix.psl
+    set localOi $tmpPrefix.oi
+    set localIntronPsl $tmpPrefix.intronPsl
     file delete $localPsl $localOi $localIntronPsl
     
-    # lift file if needed
-    if {[llength $subInfos] == 0} {
-        set liftFile {}
-    } else {
-        set liftFile [makeLift $subInfos]
+    # get sequence id, optionally subrange, and path to file
+    lassign [parseTSeq $tseq] seqId seqSize subStart subEnd
+    set genomeSeqRef [makeGenomeSeqRef specs $seqId $subStart $subEnd]
+
+    # create tmp lift file, if needed
+    set liftFile {}
+    if {$subStart != {}} {
+        set liftFile [makeLift $seqId $seqSize $subStart $subEnd]
     }
 
     # align
-    eval doExec blat -noHead -repeats=lower $blatParams [list $genomeFile $rnaFa] $localPsl
+    set cmd [concat {blat -noHead -repeats=lower} $blatParams \
+                 [list $genomeSeqRef $cdnaFa $localPsl]]
+    eval doExec $cmd
+    if {[info exists specs(preFilterOpts)]} {
+        set localPsl [preFilterAligns specs $cdnaFa $localPsl]
+    }
+    liftOrCp psl $localPsl $outPsl $liftFile
 
     # orientation info info and ESTs w/intron selection is only done for
     # native and if the output file length is greater than zero
     if {([file size $localPsl] > 0) && ($orgCat == "native")} {
         # get orientation info
-        doExec polyInfo $localPsl $genomeFile $rnaFa $localOi
+        doExec polyInfo $localPsl $genomeSeqRef $cdnaFa $localOi
         liftOrCp bed $localOi $outOi $liftFile
 
         # if these are native ESTs, select ones that have introns, saving only
         # if some actually exist.
         if {$cdnaType == "est"} {
-            doExec pslIntronsOnly $localPsl $genomeFile $localIntronPsl
+            doExec pslIntronsOnly $localPsl $genomeSeqRef $localIntronPsl
             if {[file size $localIntronPsl] > 0} {
                 liftOrCp psl $localIntronPsl $outIntronPsl $liftFile
             }
         }
     }
-
-    # psl is installed last to indicate completion, even if empty
-    liftOrCp psl $localPsl $outPsl $liftFile
 }
 
 ##
-# generate alignments in normal manner, without seqs file
-proc genAlignments {database srcDb orgCat cdnaType genomeFile rnaFa outFiles subInfo} {
-    set blatParams [determineBlatParams $database $srcDb $orgCat $cdnaType]
-    alignToGenome $genomeFile $rnaFa $blatParams $orgCat $cdnaType $outFiles [list $subInfo]
-}
+# generate alignments based on the specs
+proc genAlignments {specsVar outPrefix} {
+    global tmpPrefix
+    upvar $specsVar specs
+    set blatParams [determineBlatParams specs]
 
-##
-# parse a line of of the mondo seqsFile
-proc parseSeqsFileLine {line seqsFile} {
-    set row [split $line]
-    if {[llength $row] == 1} {
-        set seqSpec [lindex $row 0] 
-        set subInfo {}
-    } elseif {[llength $row] == 4} {
-        set seqSpec [lindex $row 0]:[lindex $row 2]-[lindex $row 3]
-        set subInfo $row
-    } else {
-        error "invalid line in $seqsFile: $line"
+    # accumulate output files in tmpdir
+    set cumPsl $tmpPrefix.cum.psl
+    set cumOi $tmpPrefix.cum.oi
+    set cumIntronPsl $tmpPrefix.cum.intronPsl
+
+    # loop over each target sequence specs and each query fasta
+    foreach tseq $specs(tseq) {
+        foreach cdnaFa $specs(qdb) {
+            alignToGenome specs $blatParams $tseq $cdnaFa $cumPsl $cumOi $cumIntronPsl
+        }
     }
-    return [list $seqSpec $subInfo]
-}
 
-##
-# load mondo seqsFile into two lists of seqsSpecs and subInfos
-proc loadSeqsFile {seqsFile} {
-    set seqsSpecs {}
-    set subInfos {}
-    set fh [open $seqsFile]
-    while {[gets $fh line] >= 0} {
-        set s [parseSeqsFileLine $line $seqsFile]
-        lappend seqsSpecs [lindex $s 0]
-        lappend subInfos [lindex $s 1]
+    # install to final location, psl last to indicate completion
+    if {[file exist $cumOi]} {
+        installFile $cumOi $outPrefix.oi
     }
-    close $fh
-    return [list $seqsSpecs $subInfos]
-}
-
-##
-# count number of sequences in a fasta file
-proc faCount {fa} {
-    return [string trim [callProg faSize -detailed $fa | wc -l]]
-}
-
-##
-# extract mondo sequences into a temporary fasta file, return
-# fasta file path
-proc extractMondoSeqs {genomeFile seqsSpecs} {
-    global tmpDir
-
-    # build list of sequences to feed to twoBitToFa
-    set seqsFile $tmpDir/genomeSeqs.spec
-    set fh [open $seqsFile w]
-    foreach s $seqsSpecs {
-        puts $fh $s
+    if {[file exist $cumIntronPsl]} {
+        installFile $cumIntronPsl $outPrefix.intronPsl
     }
-    close $fh
-
-    # extract into fasta
-    set seqsFa $tmpDir/genomeSeqs.fa
-    callProg twoBitToFa -seqList=$seqsFile $genomeFile $seqsFa
-    
-    # a little paranoia is good
-    set numFa [faCount $seqsFa]
-    if {$numFa != [llength $seqsSpecs]} {
-        error "extractMondoSeqs: expected [llength $seqsSpecs] in fasta, got $numFa"
-    }
-    return $seqsFa
-}
-
-##
-# generate mondo alignments, using seqs file.  Extract sequences into
-# a temporary fasta file, since blat was really slow doing one sequence
-# at a time.
-proc genMondoAlignments {database srcDb orgCat cdnaType genomeFile rnaFa outFiles seqsFile} {
-    set blatParams [determineBlatParams $database $srcDb $orgCat $cdnaType]
-
-    # gets sequence/subsequence info and info needed to lift back
-    lassign [loadSeqsFile $seqsFile] seqsSpecs subInfos
-    set seqsFa [extractMondoSeqs $genomeFile $seqsSpecs]
-    alignToGenome $seqsFa $rnaFa $blatParams $orgCat $cdnaType $outFiles $subInfos
+    installFile $cumPsl $outPrefix.psl
 }
 
 ##
@@ -517,19 +507,46 @@ proc handleError {errorResult} {
 }
 
 ##
+# create tmp directory
+proc mkTmpDir {} {
+    global env keepTmp
+    # include user name in tmpDir name, since stale directories from another
+    # user can't be removed.  Prefer /scratch/tmp, an fall back to /var/tmp
+    set user $env(USER)
+    if {[file isdirectory /scratch/tmp]} {
+        set tmpDir /scratch/tmp/gbBlat.$user.[pid].tmp
+    } else {
+        set tmpDir /var/tmp/gbBlat.$user.[pid].tmp
+    }
+    callProg rm -rf $tmpDir
+    callProg mkdir -p -m 02775 $tmpDir
+    if {$keepTmp} {
+        puts stderr "note: will keep [callProg hostname] tmpDir $tmpDir"
+    }
+    return $tmpDir
+}
+
+##
+# create output directory Call early, so mkdir failure (usually NFS) will not happen
+# after blat has completed. Maintain group write/sticky
+proc mkOutDir {outDir} {
+    if {[catch {callProg mkdir -p -m 02775 $outDir}]} {
+        # Try twice, just because we sometimes get weird failures.  
+        callProg sleep 2
+        callProg mkdir -p -m 02775 $outDir
+    }
+}
+
+##
 # entry, parse arguments
 set keepTmp 0
 set verbose 0
 set overwrite 0
-set seqsFile {}
 while {[llength $argv] && [string match -* [lindex $argv 0]]} {
     set opt [cmdlinePop]
     switch -- $opt {
         -keep {
             set keepTmp 1
-        }
-        -seqs {
-            set seqsFile [cmdlinePopVal $opt]
         }
         -verbose {
             set verbose 1
@@ -544,30 +561,15 @@ while {[llength $argv] && [string match -* [lindex $argv 0]]} {
     }
 }
 
-if {[llength $argv] != 4} {
-    abort {Wrong \# args: gbBlat [options] database genomeFile rnaFa pslBaseDir}
+if {[llength $argv] != 2} {
+    abort {Wrong \# args: gbBlat [options] jobSpecFile out.psl}
 }
-set database [lindex $argv 0]
-set genomeFile [lindex $argv 1]
-set rnaFa [lindex $argv 2]
-set outPsl [lindex $argv 3]
+parseJobSpecs [lindex $argv 0] specs
+set outPsl [lindex $argv 1]
 
 set outDir [file dirname $outPsl]
 set outBase [file root [file tail $outPsl]]
 set outPrefix $outDir/$outBase
-set outOi $outPrefix.oi
-set outIntronPsl $outPrefix.intronPsl
-set outFiles [list $outPsl $outOi $outIntronPsl]
-
-# include user name in tmpDir name, since stale directories from another
-# user can't be removed.  Prefer /scratch/tmp, an fall back to /var/tmp
-set user $env(USER)
-
-if {[file isdirectory /scratch/tmp]} {
-    set tmpDir /scratch/tmp/gbBlat.$user.[pid].tmp
-} else {
-    set tmpDir /var/tmp/gbBlat.$user.[pid].tmp
-}
 
 # skip if output file already exists
 if {[file exists $outPsl] && !$overwrite} {
@@ -575,44 +577,13 @@ if {[file exists $outPsl] && !$overwrite} {
     exit 0
 }
 
-lassign [parseCDnaFaPath $rnaFa] srcDb orgCat cdnaType
-
-lassign [getGeneomeInputType $genomeFile] genomeType genomeFmt
-if {$genomeType == "subseq"} {
-    if {$seqsFile != ""} {
-        abort("can't specify -seqs with subrange");
-    }
-    set subInfo [parseSubRangeSpec $genomeFile $genomeType $genomeFmt]
-} else {
-    set subInfo {}
-}
-
-if {($seqsFile != "") && ($genomeFmt != "2bit")} {
-    abort("can only specify -seqs with twobit files");
-}
-
-# tmp and output setup
-# create out directory now, so mkdir failure (usually NFS) will not happen
-# after blat has completed. Maintain group write/sticky
-callProg rm -rf $tmpDir
-callProg mkdir -p -m 02775 $tmpDir
-if {[catch {callProg mkdir -p -m 02775 $outDir}]} {
-    # Try twice, just because we sometimes get weird failures.  
-    callProg sleep 2
-    callProg mkdir -p -m 02775 $outDir
-}
-set tmpBase $tmpDir/$outBase
-if {$keepTmp} {
-    puts stderr "note: will keep [callProg hostname] tmpDir $tmpDir"
-}
+set tmpDir [mkTmpDir]
+set tmpPrefix $tmpDir/$outBase
+mkOutDir $outDir
 
 # generate alignments, cleaning up tmp on error
 if {[catch {
-    if {$seqsFile == ""} {
-        genAlignments $database $srcDb $orgCat $cdnaType $genomeFile $rnaFa $outFiles $subInfo
-    } else {
-        genMondoAlignments $database $srcDb $orgCat $cdnaType $genomeFile $rnaFa $outFiles $seqsFile
-    }
+    genAlignments specs $outPrefix
 } errorResult]} {
     handleError $errorResult
 }

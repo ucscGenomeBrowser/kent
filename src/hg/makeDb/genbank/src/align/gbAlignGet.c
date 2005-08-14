@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.8 2004/10/11 17:03:19 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.8.18.1 2005/08/14 04:38:48 markd Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
@@ -50,6 +50,9 @@ struct outFa
     struct gbSelect select;   /* select info to open file */
     unsigned nextPartNum;     /* next partition number */
     struct gbFa* fa;          /* fasta object, NULL until opened */
+    int numSeqs;              /* number of sequences written to current fasta */
+    long long numBases;       /* number of base written */
+
 };
 
 struct outFa* outFaNew(struct gbSelect* select, unsigned orgCat)
@@ -73,6 +76,8 @@ assert(outFa->fa == NULL);
 safef(ext, sizeof(ext), "%d.fa", outFa->nextPartNum++);
 gbAlignedGetPath(&outFa->select, ext, workDir, path);
 outFa->fa = gbFaOpen(path, "w");
+outFa->numSeqs = 0;
+outFa->numBases = 0;
 }
 
 void outFaClose(struct outFa* outFa)
@@ -80,7 +85,9 @@ void outFaClose(struct outFa* outFa)
 {
 if (outFa->fa != NULL)
     {
-    printf("alignFa: %s\n", outFa->fa->fileName);
+    printf("alignFa: %s %s %d %lld\n", outFa->fa->fileName,
+           gbOrgCatName(outFa->select.orgCats), outFa->numSeqs,
+           outFa->numBases);
     gbFaClose(&outFa->fa);
     }
 }
@@ -102,6 +109,8 @@ if ((maxFaSize > 0) && (outFa->fa != NULL) && (outFa->fa->off > maxFaSize))
 if (outFa->fa == NULL)
     outFaOpen(outFa);
 gbFaWriteFromFa(outFa->fa, inFa, NULL);
+outFa->numSeqs++;
+outFa->numBases += inFa->seqLen;
 }
 
 boolean copyFastaRec(struct gbSelect* select, struct gbFa* inFa,
@@ -127,7 +136,7 @@ if (entry != NULL)
         }
     else if ((version == entry->selectVer) && (entry->clientFlags & ALIGN_FLAG))
         {
-        outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa), inFa );
+        outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa),  inFa);
         if (gbVerbose >= 3)
             gbVerbPr(3, "aligning %s %s", inFa->id,
                      gbOrgCatName(entry->orgCat));
