@@ -8,8 +8,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.15 2005/05/10 07:47:01 baertsch Exp $";
-#define MAXSEQ 2048
+static char const rcsid[] = "$Id: twoBit.c,v 1.16 2005/08/14 23:39:59 markd Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -612,23 +611,24 @@ struct dnaSeq *twoBitLoadAll(char *spec)
 {
 struct dnaSeq *list = NULL, *seq;
 struct twoBitFile *tbf = NULL;
-char *seqArray[MAXSEQ];
 if (twoBitIsRange(spec))
     {
     char *dupe = cloneString(spec);
-    char *file, *seqName;
+    char *file, *seqName, **seqArray;
     int start, end, i;
     int seqCount = 0;
     twoBitParseRange(dupe, &file, &seqName, &start, &end);
     tbf = twoBitOpen(file);
-    seqCount = chopString(seqName, ",", seqArray, ArraySize(seqArray));
-    assert(seqCount < MAXSEQ);
+    seqCount = chopString(seqName, ",", NULL, 0);
+    AllocArray(seqArray, seqCount);
+    chopString(seqName, ",", seqArray, seqCount);
     for (i = 0 ; i < seqCount ; i++)
         {
         seq = twoBitReadSeqFrag(tbf, seqArray[i], start, end);
         slAddHead(&list, seq);
         }
     slReverse(&list);
+    freez(&seqArray);
     freez(&dupe);
     }
 else
