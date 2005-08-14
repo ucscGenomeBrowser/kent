@@ -11,8 +11,7 @@ O = gbFileOps.o gbDefs.o gbIndex.o gbRelease.o gbGenome.o gbUpdate.o \
 PY_SRCS = py/genbank/Pipeline.py \
 	  py/genbank/__init__.py \
 	  py/genbank/fileOps.py \
-	  py/genbank/procOps.py \
-	  py/genbank/subprocess.py
+	  py/genbank/procOps.py
 
 # files to compile into lib without compiling
 LIBSRCS = gbCommon.pm gbFtp.pm gbCommon.sh ${PY_SRCS}

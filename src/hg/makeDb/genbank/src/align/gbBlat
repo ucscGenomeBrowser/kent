@@ -47,7 +47,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.44.4.7 2005/08/14 04:38:48 markd Exp $
+# $Id: gbBlat,v 1.44.4.8 2005/08/14 21:56:42 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -355,15 +355,9 @@ proc liftOrCp {type inFile outFile liftFile} {
 }  
 
 ##
-# get poly-A sizes for a cDNA fasta, creating for the first time
+# get poly-A sizes for a cDNA fasta
 proc getPolyASizes {cdnaFa} {
-    global tmpPrefix
-    # name must be unique for cdna mrna
-    set polyASizes $tmpPrefix.[file root [file tail $cdnaFa]].polya
-    if {![file exists $polyASizes]} {
-        doExec faPolyASizes $cdnaFa $polyASizes
-    }
-    return $polyASizes
+    return [file root $cdnaFa].polya
 }
 
 ##

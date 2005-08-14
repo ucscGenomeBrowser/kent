@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# $Id: gbAlignSetup,v 1.12.8.6 2005/08/14 04:38:48 markd Exp $
+# $Id: gbAlignSetup,v 1.12.8.7 2005/08/14 21:56:42 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -81,7 +81,7 @@ definedPsls = set()
 
 class GenomeWindow(object):
     "information about a single genome window"
-    __slots__ = ("seq", "start", "end", "isFullSeq", "spec", "__str__")
+    __slots__ = ("seq", "start", "end", "isFullSeq", "spec", "getSize")
 
     def __init__(self, seq, start, end):
         assert(start < end)
@@ -95,6 +95,12 @@ class GenomeWindow(object):
         else:
             self.spec = seq.id + ":" + str(seq.size) + ":" + str(start) + "-" + str(end)
 
+    def __str__(self):
+        return self.spec
+
+    def getSize(self):
+        "get the size of the window"
+        return self.end - self.start
 
 class GenomeWindows(list):
     """Class to construct overlapping windows over sequences in a genome.
@@ -107,6 +113,8 @@ class GenomeWindows(list):
             raise Exception("window overlap must be >= 0")
         if (winSize <= overlap):
             raise Exception("window size must be > overlap")
+        self.winSize = winSize
+        self.overlap = overlap
 
         for seq in genomeSeqs.itervalues():
             if seq.regions == None:
@@ -128,15 +136,22 @@ class GenomeWindows(list):
             # advance window with overlap.
             winStart += (winSize - overlap)
 
-class CDnaQueries(object):
+class CDnaQuery(object):
     "object to store info on one of the extracted cDNA fasta files"
 
-    def __init__(self, procPart, numSeqs, numBases, faPath):
-        self.procPart = procPart 
+    def __init__(self, procPart, cdnaType, orgCat, numSeqs, numBases, faPath):
+        self.procPart = procPart
+        self.cdnaType = cdnaType
+        self.orgCat = orgCat
         self.numSeqs = numSeqs  
         self.numBases = numBases 
         self.faPath = faPath
         self.name = os.path.splitext(os.path.basename(faPath))[0]
+
+    def makePolyASizes(self):
+        "create a poly-A sizes file for this fasta"
+        polyAFile = os.path.splitext(self.faPath)[0] + ".polya"
+        procOps.callProc(["faPolyASizes", self.faPath, polyAFile])
 
     def __str__(self):
         return str(self.procPart) + ": nseqs=" + str(self.numSeqs) + ", nbases=" + str(self.numBases) + ": " + self.faPath
@@ -156,7 +171,7 @@ class CDnaUnaligned(object):
         self.workDir = os.path.normpath(workDir)
         self.numAlign = 0L
         self.unaligned = [] # list of GbProcessedPart objs
-        self.queries = {} # list of CDnaQueries objs, by orgCat
+        self.queries = {} # list of CDnaQuery objs, by orgCat
         for orgCat in orgCats:
             self.queries[orgCat] = []
 
@@ -182,6 +197,29 @@ class CDnaUnaligned(object):
                 if self._needsAligned(procPart):
                     self.unaligned.append(procPart)
 
+    def _parseAlignGet(self, procPart, lines):
+        "parse output from gbAlignGet"
+        cnt = None
+        for line in lines:
+            row = line.split(" ")
+            if row[0] == "alignFa:":
+                # alignFa: path orgCat numSeqs numBases
+                cdnas = CDnaQuery(procPart, self.cdnaType, row[2], int(row[3]), long(row[4]), row[1])
+                self.queries[row[2]].append(cdnas)
+            elif row[0] == "alignCnt:":
+                cnt = long(row[1])
+            else:
+                raise Exception("unexpected output from gbAlignGet: " + line)
+        if cnt == None:
+            raise Exception("gbAlignGet did not output \"alignCnt:\"")
+        self.numAlign += cnt
+
+    def _makePolyASizes(self):
+        "create polyA sizes files for query fastas"
+        for orgCat in self.queries.iterkeys():
+            for query in self.queries[orgCat]:
+                query.makePolyASizes()
+
     def _buildPart(self, cmdBase, procPart):
         "run gbAlignGet to get fasta for one partition"
         cmd = list(cmdBase)
@@ -197,21 +235,9 @@ class CDnaUnaligned(object):
             print procOps.fmtCmd(cmd)
         lines = procOps.callProcLines(cmd)
 
-        # parse output
-        cnt = None
-        for line in lines:
-            row = line.split(" ")
-            if row[0] == "alignFa:":
-                # alignFa: path orgCat numSets numBases
-                cdnas = CDnaQueries(procPart, int(row[3]), long(row[4]), row[1])
-                self.queries[row[2]].append(cdnas)
-            elif row[0] == "alignCnt:":
-                cnt = long(row[1])
-            else:
-                raise Exception("unexpected output from gbAlignGet: " + line)
-        if cnt == None:
-            raise Exception("gbAlignGet did not output \"alignCnt:\"")
-        self.numAlign += cnt
+        # process results
+        self._parseAlignGet(procPart, lines)
+        self._makePolyASizes()
 
     def buildQueries(self):
         """build cDNA fasta files for unaligned partitions; return count of
@@ -231,16 +257,154 @@ class CDnaUnaligned(object):
             self._buildPart(cmdBase, procPart)
             return self.numAlign
 
+class Job(list):
+    """Information about a job.  This contains a single query sequence, and
+    multiple target windows."""
+    # Note: can't contain multiple queries due to gbAlignFinsh assumptions
+
+    __slots__ = ("cdnaQuery", "targetBases")
+
+    def __init__(self, cdnaQuery):
+        self.cdnaQuery = cdnaQuery
+        self.targetBases = 0L
+
+    def addTargetWin(self, win):
+        self.append(win)
+        self.targetBases += win.getSize()
+
+    def _getJobPath(self, jobGenDb):
+        "generate the path relative to the work directory that is unique to this job"
+        # follow the old conventions of a psl directory under the directory
+        # with the fasta file.  The job file goes in the psl dir too!
+        win = self[0]  # user first window in names
+        update = self.cdnaQuery.procPart.update
+        path = [update.rel, jobGenDb.db, update, "psl", self.cdnaQuery.name, win.seq.id]
+        if win.isFullSeq:
+            path.append(win.seq.id)
+        else:
+            # create subdir from start of range
+            s = str(win.start)
+            path.append(s[0])
+            path.append(s + "-" + str(win.end))
+        return "/".join(path)
+
+    def _makeWorkDirRel(self, jobGen, path):
+        "removing the workdir directories from path"
+        assert(path.startswith(jobGen.workDir))
+        return path[len(jobGen.workDir)+1:]
+        
+    def write(self, jobGenDb, preFilterOpts):
+        "write this job spec"
+        jobGen = jobGenDb.jobGen
+        jobPath = self._getJobPath(jobGenDb)
+        
+        # create job spec file
+        relJobFile = jobPath + ".job"
+        jobFile = jobGen.workDir + "/" + relJobFile
+        fileOps.ensureFileDir(jobFile)
+        fh = open(jobFile, "w")
+        prRowv(fh, "type", self.cdnaQuery.orgCat, self.cdnaQuery.cdnaType)
+        if jobGenDb.ooc != None:
+            prRowv(fh, "ooc", jobGenDb.ooc)
+
+        prRowv(fh, "tdb", jobGenDb.clusterGenome)
+        fh.write("tseq")
+        for win in self:
+            fh.write("\t")
+            fh.write(win.spec)
+        fh.write("\n")
+        if jobGenDb.slow2bit:
+            prRowv(fh, "tdbSlow2bit", "yes")
+        prRowv(fh, "qdb", self._makeWorkDirRel(jobGen, self.cdnaQuery.faPath))
+        prRowv(fh, "preFilterOpts", preFilterOpts)
+
+        # add job
+        relPslFile = jobPath + ".psl"
+        if relPslFile in definedPsls:
+            raise Exception("BUG: psl file already used: " + relPslFile)
+        definedPsls.add(relPslFile)
+        fileOps.prLine(jobGen.jobFh, gbBlatPath, " ", relJobFile, " {check out exists ", relPslFile, "}")
+        fileOps.prLine(jobGen.expectFh, relPslFile)
+
+class Jobs(list):
+    """job to to partition target sequence windows into jobs.  This builds
+    a list of Job objects for a given update and query fasta and packs
+    multiple targets smaller than the window size into jobs."""
+
+    def __init__(self, jobGenDb, cdnaQuery):
+        self.jobGenDb = jobGenDb
+        self.winSize = jobGenDb.windows.winSize
+        self.overlap = jobGenDb.windows.overlap
+        self.cdnaQuery = cdnaQuery
+        self.pending = []
+
+        for win in jobGenDb.windows:
+            self._addWindow(win)
+
+    def _addWindow(self, win):
+        "add a window to the object"
+        i = self._findJobWithRoom(win)
+        if i < 0:
+            # make new job
+            job = Job(self.cdnaQuery)
+            job.addTargetWin(win)
+            if job.targetBases < self.winSize:
+                self.pending.append(job)
+            else:
+                self.append(job)
+        else:
+            # add to existing job
+            job = self.pending[i]
+            job.addTargetWin(win)
+            if job.targetBases >= self.winSize:
+                # now full
+                del(self.pending[i])
+                self.append(job)
+
+    def _findJobWithRoom(self, win):
+        """find a job with room for this window, alowing jobs to be overflow
+        by the overlap amount"""
+        need = win.getSize() - self.overlap
+        for i in xrange(len(self.pending)):
+            if self.pending[i].targetBases + need < self.winSize:
+                return i
+        return -1
+
+    def write(self, preFilterOpts):
+        "write jobs"
+        for job in self:
+            job.write(self.jobGenDb, preFilterOpts)
+        for job in self.pending:
+            job.write(self.jobGenDb, preFilterOpts)
+
+    def prStats(self):
+        "print stats about jobs for debugging purposes"
+        allJobs = self + self.pending
+        job = allJobs[0]
+        minBases = job.targetBases
+        maxBases = job.targetBases
+        minSeqs = len(job)
+        maxSeqs = len(job)
+        for job in allJobs:
+            minBases = min(minBases, job.targetBases)
+            maxBases = max(maxBases, job.targetBases)
+            minSeqs = min(minSeqs, len(job))
+            maxSeqs = max(maxSeqs, len(job))
+            
+        pp = self.cdnaQuery.procPart
+        print >>sys.stderr, "Jobs:",pp.update.rel, pp.update, pp, self.jobGenDb.db, "jobs:", len(allJobs), "minBases:", minBases, "maxBases:", maxBases, "minSeqs:", minSeqs, "maxSeqs:", maxSeqs
+
 class JobGenDb(object):
     "object to generate alignment jobs for a database"
-    def __init__(self, jobs, db):
-        self.jobs = jobs
-        self.conf = jobs.conf
+    def __init__(self, jobGen, db):
+        self.jobGen = jobGen
+        self.conf = jobGen.conf
         self.db = db
         self.querySplitSize = 1024*1024*self.conf.getDbInt(db, "querySplitSize")
         self.ooc = self.conf.getDbStrNo(db, "ooc")
         self.genome = None
         self.numAlign = 0L
+        self.slow2bit = False
 
     # matches pre-filter options
     preFilterOptsRe = re.compile("(-minId=)|(-minCover=)|(-maxRepMatch=)|(-minQSize=)|(-polyASizes=)")
@@ -266,6 +430,8 @@ class JobGenDb(object):
         self.clusterGenome = self.conf.getDbStr(self.db, "clusterGenome")
         if self.clusterGenome.endswith(".nib"):
             self.clusterGenome = os.path.dirname(self.clusterGenome)
+        elif len(self.genome) >= 100000:
+            self.slow2bit = True
         lift = self.conf.getDbStrNo(self.db, "lift")
         if lift != None:
             self.genome.addMaxGapRegions(lift, self.conf.getDbInt(self.db, "align.maxGap"))
@@ -273,67 +439,23 @@ class JobGenDb(object):
                                      self.conf.getDbInt(self.db, "align.window"),
                                      self.conf.getDbInt(self.db, "align.overlap"))
 
-    def _makeWorkDirRel(self, path):
-        "removing the workdir directories from path"
-        assert(path.startswith(self.jobs.workDir))
-        return path[len(self.jobs.workDir)+1:]
-        
-    def _getJobPath(self, cdnaType, orgCat, win, queryFa):
-        "generate the path relative to the work directory that is unique to a job"
-        # follow the old conventions of a psl directory under the directory
-        # with the fasta file.  The job file goes in the psl dir too!
-        update = queryFa.procPart.update
-        path = [update.rel, self.db, update, "psl", queryFa.name, win.seq.id]
-        if win.isFullSeq:
-            path.append(win.seq.id)
-        else:
-            # create subdir from start of range
-            s = str(win.start)
-            path.append(s[0])
-            path.append(s + "-" + str(win.end))
-        return "/".join(path)
-
-    def _makeJob(self, cdnaType, orgCat, win, queryFa, preFilterOpts):
-        "create a single job"
-        jobPath = self._getJobPath(cdnaType, orgCat, win, queryFa)
-        
-        # create job spec file
-        relJobFile = jobPath + ".job"
-        jobFile = self.jobs.workDir + "/" + relJobFile
-        fileOps.ensureFileDir(jobFile)
-        fh = open(jobFile, "w")
-        prRowv(fh, "type", orgCat, cdnaType)
-        if self.ooc != None:
-            prRowv(fh, "ooc", self.ooc)
-        prRowv(fh, "tdb", self.clusterGenome)
-        prRowv(fh, "tseq", win.spec)
-        prRowv(fh, "qdb", self._makeWorkDirRel(queryFa.faPath))
-        prRowv(fh, "preFilterOpts", preFilterOpts)
-
-        # add job
-        relPslFile = jobPath + ".psl"
-        if relPslFile in definedPsls:
-            raise Exception("BUG: psl file already used: " + relPslFile)
-        definedPsls.add(relPslFile)
-        fileOps.prLine(self.jobs.jobFh, gbBlatPath, " ", relJobFile, " {check out exists ", relPslFile, "}")
-        fileOps.prLine(self.jobs.expectFh, relPslFile)
-
-    def _addQueryJobs(self, rel, cdnaType, orgCat, queries):
+    def _addOrgCatJobs(self, rel, cdnaType, orgCat, queries):
         "make query jobs for a given orgCat"
         if self.genome == None:
             self._loadGenome()  # lazy
         preFilterOpts = self._getPreFilterOpts(rel, cdnaType, orgCat)
-        for win in self.windows:
-            for queryFa in queries:
-                self._makeJob(cdnaType, orgCat, win, queryFa, preFilterOpts)
+        for cdnaQuery in queries:
+            jobs = Jobs(self, cdnaQuery)
+            jobs.write(preFilterOpts)
+            jobs.prStats()
         
     def _addJobSet(self, rel, cdnaType, orgCats):
         cdnaQueries = CDnaUnaligned(self.db, rel, cdnaType, orgCats,
                                     self.querySplitSize,
-                                    self.jobs.workDir)
+                                    self.jobGen.workDir)
         if cdnaQueries.buildQueries() > 0:
             for orgCat in orgCats:
-                self._addQueryJobs(rel, cdnaType, orgCat, cdnaQueries.queries[orgCat])
+                self._addOrgCatJobs(rel, cdnaType, orgCat, cdnaQueries.queries[orgCat])
             self.numAlign += cdnaQueries.numAlign
 
     def _getOrgCats(self, rel, cdnaType):
@@ -347,7 +469,7 @@ class JobGenDb(object):
     def addJobs(self):
         "add jobs, returning the total number of sequences needing align"
         for srcDb in cmdOpts.srcDbs:
-            rel = self.jobs.gbIndex[srcDb].getLatestRel()
+            rel = self.jobGen.gbIndex[srcDb].getLatestRel()
             if rel != None:
                 for cdnaType in cmdOpts.cdnaTypes:
                     if cdnaType in rel.cdnaTypes:
@@ -450,5 +572,4 @@ def main():
 
 
 main()
-# FIXME: verify panTro hack, add setting tdbSlow2bit
 
