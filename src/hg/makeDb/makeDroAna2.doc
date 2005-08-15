@@ -54,9 +54,10 @@ exit; # don't actually run this like a script :)
 
 
 # RUN REPEAT MASKER (DONE 8/5/05 angie)
-    # January ("March") '04 version of RepeatMasker and libs.
-    # make the run directory, output directory, and job list
     ssh kkstore02
+    cat /cluster/bluearc/RepeatMasker/Libraries/version 
+#RepBase Update 9.11, RM database version 20050112
+    # make the run directory, output directory, and job list
     cd /cluster/data/droAna2
     cat << '_EOF_' > jkStuff/RMDrosophila
 #!/bin/csh -fe
@@ -245,7 +246,7 @@ popd
     iSync
 
 
-# PRODUCING GENSCAN PREDICTIONS (TODO 8/5/05 angie)
+# PRODUCING GENSCAN PREDICTIONS (DONE 8/5/05 angie)
     ssh kkstore02
     # Make hard-masked scaffolds and split up for processing:
     cd /cluster/data/droAna2
@@ -265,15 +266,15 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 #ENDLOOP
 '_EOF_'
     # << this line keeps emacs coloring happy
-    gensub2 chunks.list single gsub jobList
     ssh kki
     cd /cluster/data/droAna2/bed/genscan
-    para create jobList
-    para try, check, push, check, ...
-#Completed: 463 of 463 jobs
-#Average job time:                  12s       0.21m     0.00h    0.00d
-#Longest job:                      317s       5.28m     0.09h    0.00d
-#Submission to last job:           445s       7.42m     0.12h    0.01d
+    gensub2 chunks.list single gsub jobList
+    para make jobList
+    para time
+#Completed: 534 of 534 jobs
+#Average job time:                  16s       0.27m     0.00h    0.00d
+#Longest finished job:             904s      15.07m     0.25h    0.01d
+#Submission to last job:           904s      15.07m     0.25h    0.01d
 
     # If there are crashes, diagnose with "para problems".  
     # If a job crashes due to genscan running out of memory, re-run it 
@@ -291,7 +292,6 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/droAna2/bed/genscan
-    # Reloaded without -genePredExt 1/6/05:
     ldHgGene -gtf droAna2 genscan genscan.gtf
     hgPepPred droAna2 generic genscanPep genscan.pep
     hgLoadBed droAna2 genscanSubopt genscanSubopt.bed
@@ -356,7 +356,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # at this point!  
 
 
-# AUTO UPDATE GENBANK MRNA RUN (IN PROGRESS 8/5/05 angie)
+# AUTO UPDATE GENBANK MRNA RUN (DONE 8/15/05 angie)
     ssh hgwdev
 
     # Update genbank config and source in CVS:
@@ -385,7 +385,6 @@ droAna2.perChromTables = no
     cvs ci src/align/gbBlat
 
     # Install to /cluster/data/genbank:
-#TODO
     make install-server
 
     ssh `fileServer /cluster/data/genbank/`
@@ -398,7 +397,7 @@ droAna2.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droAna2
     featureBits droAna2 xenoRefGene
-#16520385 bases of 165766797 (9.966%) in intersection
+#17034272 bases of 214456699 (7.943%) in intersection
     # Clean up:
     rm -rf work/initial.droAna2
 
@@ -410,11 +409,32 @@ droAna2.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droAna2
     featureBits droAna2 all_mrna
-#19602 bases of 165766797 (0.012%) in intersection
+#20415 bases of 214456699 (0.010%) in intersection
     featureBits droAna2 xenoMrna
-#17295487 bases of 165766797 (10.434%) in intersection
+#18170022 bases of 214456699 (8.473%) in intersection
     # Clean up:
     rm -rf work/initial.droAna2
+
+
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 8/9/05 angie)
+    mkdir /cluster/data/droAna2/bed/blastz.dm2.swap
+    cd /cluster/data/droAna2/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droAna2/DEF \
+      >& do.log
+    echo "check /cluster/data/droAna2/bed/blastz.dm2.swap/do.log" \
+    | mail -s "check do.log" $USER
+    # Add {chain,net}Dm2 to trackDb.ra if necessary.
+
+
+# MAKE GCPERCENT (DONE 8/9/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droAna2/bed/gc5Base
+    cd /cluster/data/droAna2/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=2 droAna2 \
+       /cluster/data/droAna2 | wigEncode stdin gc5Base.wig gc5Base.wib
+    mkdir /gbdb/droAna2/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/droAna2/wib
+    hgLoadWiggle -pathPrefix=/gbdb/droAna2/wib droAna2 gc5Base gc5Base.wig
 
 
 # MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (TODO 8/?/05 angie)
