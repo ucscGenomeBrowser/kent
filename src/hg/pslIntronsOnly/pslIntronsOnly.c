@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.8 2004/10/13 06:50:14 markd Exp $";
+static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.9 2005/08/15 03:35:13 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,132 +28,43 @@ errAbort(
   "With the second form, a sequence id of file:start-end will be used.\n");
 }
 
-/* cache of current sequence */
-struct dnaSeq *genoSeqCache = NULL;
-
-/* input file */
-char genoFileName[PATH_LEN];
-
-/* data for seqments or subrange nibs */
-boolean isSubrange = FALSE;
-FILE *nibFile = NULL;
-int nibStart = 0, nibEnd = 0, nibSize = 0;
-int nibSegTargetSize = 32*1024*1024;
-
-/* data for fasta sequences */
-struct dnaSeq *faAllSeqs = NULL;
-
-struct dnaSeq* chromNibGet(char *tName, int tStart, int tEnd, int *tOffsetPtr)
-/* Get the DNA sequence from a chromosome nib */
+struct hash *loadGeno(char *genoFile)
+/* load genome sequences into a hash.  This supports the multi-sequence
+ * specs of twoBitLoadAll */
 {
-int pslSegSize = tEnd - tStart;
-if (rangeIntersection(tStart, tEnd, nibStart, nibEnd) < pslSegSize)
-    {
-    freeDnaSeq(&genoSeqCache);
-    nibStart = tStart;
-    nibEnd = nibStart + nibSegTargetSize;
-    if (tEnd > nibEnd)
-        nibEnd = tEnd;
-    if (nibEnd > nibSize)
-        nibEnd = nibSize;
-    genoSeqCache = nibLdPart(genoFileName, nibFile, nibSize, nibStart,
-                             nibEnd - nibStart);
-    tolowers(genoSeqCache->dna);
-    }
-*tOffsetPtr = nibStart;
-return genoSeqCache;
-}
+struct dnaSeq *genos = NULL, *geno;
+struct hash *genoHash = hashNew(0);
 
-struct dnaSeq* subRangeGet(char *tName, int tStart, int tEnd, int *tOffsetPtr)
-/* Get the DNA sequence from a subrange nib or twobit */
-{
-if (!sameString(tName, genoSeqCache->name))
-    errAbort("sequence name %s does not match subrange name %s from %s",
-             tName, genoSeqCache->name, genoFileName);
-*tOffsetPtr = 0;
-return genoSeqCache;
-}
-
-struct dnaSeq* faGet(char *tName, int tStart, int tEnd, int *tOffsetPtr)
-/* Get the DNA sequence from a fasta file */
-{
-if ((genoSeqCache == NULL) || !sameString(tName, genoSeqCache->name))
-    {
-    for (genoSeqCache = faAllSeqs; genoSeqCache != NULL;
-         genoSeqCache = genoSeqCache->next)
-        {
-        if (sameString(tName, genoSeqCache->name))
-            break;
-        }
-    if (genoSeqCache == NULL)
-        errAbort("sequence %s not found in %s", tName, genoFileName);
-    tolowers(genoSeqCache->dna);
-    }
-*tOffsetPtr = 0;
-return genoSeqCache;
-}
-
-void initGenoRead(char *inGenoFile)
-/* initialize for reading the genome sequence */
-{
-strcpy(genoFileName, inGenoFile);
-if (nibIsRange(inGenoFile))
-    {
-    isSubrange = TRUE;
-    genoSeqCache = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME,
-                                    genoFileName);
-    tolowers(genoSeqCache->dna);
-    }
-else if (nibIsFile(inGenoFile))
-    {
-    nibOpenVerify(genoFileName, &nibFile, &nibSize);
-    }
-else if (twoBitIsFileOrRange(inGenoFile))
-    {
-    isSubrange = TRUE;
-    genoSeqCache = twoBitLoadAll(inGenoFile);
-    tolowers(genoSeqCache->dna);
-    }
+if (nibIsFile(genoFile))
+    genos = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
+else if (twoBitIsFileOrRange(genoFile))
+    genos = twoBitLoadAll(genoFile);
 else
+    genos = faReadDna(genoFile);
+
+while ((geno = slPopHead(&genos)) != NULL)
     {
-    faAllSeqs = faReadAllDna(genoFileName);
+    tolowers(geno->dna);
+    hashAdd(genoHash, geno->name, geno);
     }
+return genoHash;
 }
 
-struct dnaSeq *getDnaSeq(char *tName, int tStart, int tEnd, int *tOffsetPtr)
-/* get the DNA sequence containing the range. */
-{
-struct dnaSeq *genoSeq;
-if (isSubrange)
-    genoSeq = subRangeGet(tName, tStart, tEnd, tOffsetPtr);
-else if (nibFile != NULL)
-    genoSeq = chromNibGet(tName, tStart, tEnd, tOffsetPtr);
-else
-    genoSeq = faGet(tName, tStart, tEnd, tOffsetPtr);
-if (tEnd > (genoSeq->size+*tOffsetPtr))
-    errAbort("sequence %s in PSL is longer than sequence in %s", tName,
-             genoFileName);
-return genoSeq;
-}
-
-void pslIntronsOnly(char *inPslName, char *inName, char *outPslName)
+void pslIntronsOnly(char *inPslName, char *genoFile, char *outPslName)
 /* pslIntronsOnly - Filter psl files to only include those with introns. */
 {
 struct lineFile *lf = NULL;
 FILE *outFile = NULL;
-int genoSeqOff = 0;
+struct hash *genoHash = loadGeno(genoFile);
 struct psl *psl;
 int count = 0, intronCount = 0;
-
-initGenoRead(inName);
 
 lf = pslFileOpen(inPslName);
 outFile = mustOpen(outPslName, "w");
 while ((psl = pslNext(lf)) != NULL)
     {
-    struct dnaSeq* genoSeq = getDnaSeq(psl->tName, psl->tStart, psl->tEnd,
-                                       &genoSeqOff);
-    if (pslHasIntron(psl, genoSeq, genoSeqOff))
+    struct dnaSeq *geno = hashMustFindVal(genoHash, psl->tName);
+    if (pslHasIntron(psl, geno, 0))
         {
 	++intronCount;
 	pslTabOut(psl, outFile);
@@ -162,7 +73,6 @@ while ((psl = pslNext(lf)) != NULL)
     ++count;
     }
 carefulClose(&outFile);
-carefulClose(&nibFile);
 lineFileClose(&lf);
 printf("%d of %d in %s have introns\n", intronCount, count, inPslName);
 }
