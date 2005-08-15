@@ -914,9 +914,8 @@ identifier genBankTissue
 "Connects genBank mRNA/EST and tissue mRNA isolated from"
     $gbd.tissue.id
     $gbd,!rn2,!hg15.gbCdnaInfo.tissue 
-    rn2.gbCdnaInfo.tissue minCheck=0.99
-    hg15.gbCdnaInfo.tissue minCheck=0.99
-    $gbd.altGraphX.mrnaTissues comma minCheck=0.35
+    hg15,rn2.gbCdnaInfo.tissue minCheck=0.99
+    $gbd,!hg15.altGraphX.mrnaTissues comma
 
 # Some misc clone-oriented identifiers
 
