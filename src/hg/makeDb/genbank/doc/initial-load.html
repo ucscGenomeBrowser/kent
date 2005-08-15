@@ -14,6 +14,13 @@
     process for a new genome or new assembly. It's assumed that the
     automated download and build already in place and in <CODE>/cluster/data/genbank/</CODE>.
 
+    <H3>Recent changes</H3>
+    <OL>
+    <LI> The working directory for initial alignments is now removed
+    unless <CODE>-keep</CODE> is spoecified.
+    </OL>
+
+
     <H3>Initial Alignment</H3>
     Building the initial alignments is a long process, involving gigabytes
     of disk space and over a day of cluster time.  Do not be surprised if
@@ -126,12 +133,6 @@
               the jobs, one can use the <CODE>parasol recover</CODE>
               command to generate a new jobs file with the jobs
               that have not completed.
-      <LI> When run with the <CODE>-initial</CODE>, the working directory
-           is not deleted.  This is to assist in debugging any problems.
-           After doing the initial load of the database anc checking
-           the results, <CODE>work/initial.$db</CODE> should be
-           removed.  Note that this hierarchy is very large, its good
-           remove it on the NFS server for the file system.
     </OL>
 
     <H3>Initial Database Load</H3>

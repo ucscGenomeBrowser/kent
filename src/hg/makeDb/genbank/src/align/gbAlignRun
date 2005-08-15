@@ -9,12 +9,12 @@
 #   -paraHub=kk - Run parasol on this host. Must be able to ssh
 #    to the host without a key prompt.  Overrides configuration value for
 #    cluster.paraHub.
-#  -verbose=n - print details.
+#   -verbose=n - print details.
 #
 # Note: rsh does not return the exit code of the remote process, thus
 # ssh is used.
 #
-# $Id: gbAlignRun,v 1.7.16.1 2005/07/04 03:53:25 markd Exp $
+# $Id: gbAlignRun,v 1.7.16.2 2005/08/15 06:39:19 markd Exp $
 #
 use strict;
 use warnings;
@@ -28,7 +28,7 @@ use gbCommon;
 # failing.  Don't set it too low, or it takes longer to run.
 my $PARA_MAX_PUSH = 200000;
 my $PARA_MAX_QUEUE = 250000;
-my $PARA_PRIORITY = 1000;
+my $PARA_PRIORITY = 10;
 
 # Entry
 setTaskName("gbAlignRun");

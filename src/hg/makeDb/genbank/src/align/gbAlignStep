@@ -38,7 +38,7 @@ Options:
        - finish - finish processing the alignments.
    Continue the blat portion by using parasol directly.
    
-  -keep - Keep work directory; this is set if -initial is specified
+  -keep - Keep work directory
 
   -verbose=n - Set verbose level.
 
@@ -57,7 +57,7 @@ Alignment step, runs:
  - gbAlignFinish - Process PSL files and install in data directory";
 
 #
-# $Id: gbAlignStep,v 1.12.16.1 2005/08/14 04:38:48 markd Exp $
+# $Id: gbAlignStep,v 1.12.16.2 2005/08/15 06:39:19 markd Exp $
 #
 use strict;
 use warnings;
@@ -278,13 +278,9 @@ if (inList("finish", @tasks) && !-e $alignNone) {
     }
     runProg($cmd);
 }
-if (!$keep && !$initialBuild) {
+if (!$keep) {
     runProg("rm -rf $localWorkDir");
     my $workParent = dirname($localWorkDir);
     rmdir($workParent);  # don't complain if can't remove
-}
-if ($initialBuild) {
-    print STDERR "*** Note: -initial doesn't remove working directory:\n";
-    print STDERR "***       $localWorkDir\n";
 }
 endTask();
