@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.13 2004/12/04 17:03:51 kent Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.14 2005/08/15 01:48:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -200,22 +200,36 @@ if (ei->signalPos == 0 && ei->revSignalPos == 0)
 dnaSeqFree(&revEst);
 }
 
+struct hash *loadGeno(char *genoFile)
+/* load genome sequences into a hash.  This supports the multi-sequence
+ * specs of twoBitLoadAll */
+{
+struct dnaSeq *genos = NULL, *geno;
+struct hash *genoHash = hashNew(0);
+
+if (nibIsFile(genoFile))
+    genos = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
+else if (twoBitIsFileOrRange(genoFile))
+    genos = twoBitLoadAll(genoFile);
+else
+    genos = faReadDna(genoFile);
+
+while ((geno = slPopHead(&genos)) != NULL)
+    {
+    tolowers(geno->dna);
+    hashAdd(genoHash, geno->name, geno);
+    }
+return genoHash;
+}
+
 void polyInfo(char *pslFile, char *genoFile, char *estFile, char *outputFile)
 /* polyInfo - Collect info on polyAdenylation signals etc. */
 {
 struct hash *pslHash = NULL;
-struct dnaSeq *geno = NULL;
+struct hash *genoHash = loadGeno(genoFile);
 static struct dnaSeq est;
 struct lineFile *lf = NULL;
 FILE *f = NULL;
-
-if (nibIsFile(genoFile))
-    geno = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
-else if (twoBitIsFileOrRange(genoFile))
-    geno = twoBitLoadAll(genoFile);
-else
-    geno = faReadDna(genoFile);
-tolowers(geno->dna);
 
 pslHash = pslIntoHash(pslFile);
 lf = lineFileOpen(estFile, TRUE);
@@ -230,6 +244,7 @@ while (faSpeedReadNext(lf, &est.dna, &est.size, &est.name))
         {
 	for (psl = pl->list; psl != NULL; psl = psl->next)
 	    {
+            struct dnaSeq *geno = hashMustFindVal(genoHash, psl->tName);
 	    ZeroVar(&ei);
 	    fillInEstInfo(&ei, &est, geno, psl);
 	    estOrientInfoTabOut(&ei, f);
