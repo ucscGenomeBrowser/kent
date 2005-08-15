@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.997 2005/08/15 22:57:54 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.998 2005/08/15 22:59:46 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10788,12 +10788,6 @@ void tracksDisplay()
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
-/* This var motifString should be removed because it does nothing anyway,
-char *motifString = cartOptionalString(cart,BASE_MOTIFS);
-*/
-/* reported as unused
-boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
-*/
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
@@ -10932,29 +10926,10 @@ sprintf(newPos, "%s:%d-%d", chromName, winStart+1, winEnd);
 cartSetString(cart, "org", organism);
 cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
-/* If are viewing the negative strand on ruler have
-   to reverse the motifs to highlight. */
-
-/* This var motifString should be removed because it does nothing anyway,
- because motifString is a local string on the stack and 
- it's not used nor passed down to any of the called subs
- so it's not needed at all.  The only way it could be 
- saved would be to make it a global var and use it.
- 
-if(complementRulerBases && motifString != NULL)
-    reverseBytes(motifString, strlen(motifString));
-*/
-
 if (cgiVarExists("hgt.psOutput"))
     handlePostscript();
 else
     doTrackForm(NULL);
-/* Same mistake as a few lines back for same reason.
-   If motifs were reversed, put them back in original
-   order.
-if(complementRulerBases && motifString != NULL)
-    reverseBytes(motifString, strlen(motifString));
-*/    
 }
 
 
