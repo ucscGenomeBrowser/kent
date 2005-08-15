@@ -168,9 +168,7 @@ exit; # don't actually run this like a script :)
     hgsql canFam2 -e "create table chrM_gap select * from chr1_gap where 0=1"
 
 
-# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CANFAM1 (TODO 6/28/04 angie)
-    ssh hgwdev
-    # Make trackDb table so browser knows what tracks to expect:
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE FOR CANFAM2 (DONE 8/1/05 angie)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/trackDb
     cvs up -d -P
@@ -180,21 +178,20 @@ exit; # don't actually run this like a script :)
     mkdir -p dog/canFam2
     cvs add dog dog/canFam2
     cvs ci -m "trackDb dir for dog genome(s)" dog/canFam2
+    # Do this in a clean (up-to-date, no edits) tree:
     make alpha
 
-    # Add dbDb and defaultDb entries:
-    echo 'insert into dbDb (name, description, nibPath, organism,  \
+    # Add dbDb entry (not a new organism so defaultDb and genomeClade already 
+    # have entries):
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'insert into dbDb (name, description, nibPath, organism,  \
           defaultPos, active, orderKey, genome, scientificName,  \
           htmlPath, hgNearOk, hgPbOk, sourceName)  \
-          values("canFam2", "Jul. 2004", \
+          values("canFam2", "May 2005", \
           "/gbdb/canFam2/nib", "Dog", "chr14:10666612-10673232", 1, \
           18, "Dog", "Canis familiaris", \
           "/gbdb/canFam2/html/description.html", 0, 0, \
-          "Broad Institute v. 1.0");' \
-    | hgsql -h genome-testdb hgcentraltest
-    # If there's another dog assembly, this will be an update not insert:
-    echo 'insert into defaultDb (genome, name) values("Dog", "canFam2");' \
-    | hgsql -h genome-testdb hgcentraltest
+          "Broad Institute v. 1.0");'
 
 
 # REPEAT MASKING (DONE braney/angie 7-10-05)
@@ -404,14 +401,7 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     ln -s /cluster/data/canFam2/canFam2.2bit /gbdb/canFam2/nib/
 
 
-# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR CANFAM1 (TODO 7/13/04 angie)
-    ssh hgwdev
-    echo 'insert into blatServers values("canFam2", "blat9", "17778", 1, 0); \
-          insert into blatServers values("canFam2", "blat9", "17779", 0, 1);' \
-      | hgsql -h genome-testdb hgcentraltest
-
-
-# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (TODO 7/6/04 angie)
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE 8/1/05 angie)
     ssh hgwdev
     mkdir /gbdb/canFam2/html
     # Write ~/kent/src/hg/makeDb/trackDb/dog/canFam2/description.html 
@@ -421,50 +411,42 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
     # /gbdb/canFam2/html
 
 
-# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (TODO 6/29/05 angie)
-    ssh kkr1u00
-    # Chrom-level mixed nibs that have been repeat- and trf-masked:
-    rm -rf /iscratch/i/canFam2/nib
-    mkdir /iscratch/i/canFam2/nib
-    cp -p /cluster/data/canFam2/nib/chr*.nib /iscratch/i/canFam2/nib
-    # Pseudo-contig fa that have been repeat- and trf-masked:
-    rm -rf /iscratch/i/canFam2/maskedContigs
-    mkdir /iscratch/i/canFam2/maskedContigs
-    foreach d (/cluster/data/canFam2/*/chr*_?{,?})
-      cp $d/$d:t.fa /iscratch/i/canFam2/maskedContigs
-    end
-    cp -p /cluster/data/canFam2/canFam2.2bit /iscratch/i/canFam2/
-    du -sh /iscratch/i/canFam2/*
-#631M    /iscratch/i/canFam2/canFam2.2bit
-#2.5G    /iscratch/i/canFam2/maskedContigs
-#1.2G    /iscratch/i/canFam2/nib
-    iSync
-    # Put nibs and rmsk files in /scratch for big cluster blastz.
-    mkdir /cluster/bluearc/scratch/hg/canFam2
-    cp -pR /iscratch/i/canFam2/nib /cluster/bluearc/scratch/hg/canFam2
-    ssh kkstore01
-    mkdir /cluster/bluearc/scratch/hg/canFam2/rmsk
+# PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 8/1/05 angie)
+    # pitakluster (blastz etc):
+    ssh pk
+    mkdir /san/sanvol1/scratch/canFam2
+    rsync -av /cluster/data/canFam2/nib /san/sanvol1/scratch/canFam2/
+    mkdir /san/sanvol1/scratch/canFam2/rmsk
     cp -p /cluster/data/canFam2/*/chr*.fa.out \
-       /cluster/bluearc/scratch/hg/canFam2/rmsk
-    # Ask cluster-admin for an rsync after the next step.  
-
-
-# MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (TODO 6/29/05 angie)
+       /san/sanvol1/scratch/canFam2/rmsk
+    # small cluster (chaining etc):
+    ssh kkr1u00
+    mkdir -p /iscratch/i/canFam2/nib
+    rsync -av /cluster/data/canFam2/nib /iscratch/i/canFam2/
+    iSync
+    # big cluster (genbank):
     ssh kkstore01
-    cd /cluster/bluearc/scratch/hg/canFam2/rmsk
+    mkdir /cluster/bluearc/scratch/hg/canFam2
+    rsync -av /cluster/data/canFam2/nib /cluster/bluearc/scratch/hg/canFam2/
+    # ask cluster-admin to rsync that to all big cluster nodes' /scratch/...
+
+
+# MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (DONE 8/1/05 angie)
+    ssh kolossus
+    cd /san/sanvol1/scratch/canFam2/rmsk
     # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
     # whether repeats in -query are also expected in -comp species.  
     # Human in extra column 1, Mouse in extra column 2
     foreach outfl ( *.out )
         echo "$outfl"
-        /cluster/bluearc/RepeatMasker/DateRepsinRMoutput.pl \
+        /cluster/bluearc/RepeatMasker/DateRepeats \
           ${outfl} -query dog -comp human -comp mouse
     end
     # Now extract human (extra column 1), mouse (extra column).
-    cd /cluster/bluearc/scratch/hg/canFam2
+    cd ..
     mkdir linSpecRep.notInHuman
     mkdir linSpecRep.notInMouse
-    foreach f (rmsk/*.out_hum_mus)
+    foreach f (rmsk/*.out_homo-sapiens_mus-musculus)
         set base = $f:t:r:r
         echo $base.out.spec
         /cluster/bin/scripts/extractLinSpecReps 1 $f > \
@@ -473,54 +455,102 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
                         linSpecRep.notInMouse/$base.out.spec
     end
     wc -l rmsk/*.out
-#4337285 total
+#4533630 total
     wc -l linSpecRep.notInHuman/*
-#1333452 total
+#1542788 total
     wc -l linSpecRep.notInMouse/*
-#1333452 total
-    # The linSpecReps.notIn{Human,Mouse} files are the same.  I asked Arian 
-    # if that's a bad thing last week (human vs. {dog,mouse} -> same).  
-    # Haven't heard back yet, but hey, we're all mammals here...
-    foreach f (linSpecRep.notInHuman/*)
-      echo $f:t
-      diff $f linSpecRep.notInMouse/$f:t | wc -l | g -vw 0
-    end
+#1546408 total
     # Clean up.
-    rm /cluster/bluearc/scratch/hg/canFam2/rmsk/*.out_hum_mus
-    # Ask cluster-admin for an rsync.
+    rm rmsk/*.out_h*
 
 
-# MAKE 10.OOC, 11.OOC FILES FOR BLAT (TODO 6/29/05 angie)
-    # Use -repMatch=843 (based on size -- for human we use 1024, and 
-    # dog size is 2359845093 / 2866216770 = ~82.3% of human judging by 
-    # gapless genome size from featureBits)
+# PRODUCING GENSCAN PREDICTIONS (DONE 8/11/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/canFam2/bed/genscan
+    cd /cluster/data/canFam2/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/canFam2/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    rm -f genome.list
+    touch genome.list
+    foreach f ( `ls -1S /cluster/data/canFam2/*/chr*_*/chr*_?{,?}.fa.masked` )
+      egrep '[ACGT]' $f > /dev/null
+      if ($status == 0) echo $f >> genome.list
+    end
+    wc -l genome.list
+#495
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para make jobList
+#Completed: 493 of 495 jobs
+#Crashed: 2 jobs
+#Average job time:                 918s      15.30m     0.25h    0.01d
+#Longest finished job:           30383s     506.38m     8.44h    0.35d
+#Submission to last job:        132236s    2203.93m    36.73h    1.53d
+    # If there are crashes, diagnose with "para problems" and "para crashed".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    ssh kkr7u00
+    cd /cluster/data/canFam2/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/data/canFam2/1/chr1_23/chr1_23.fa.masked gtf/chr1_23.fa.gtf -trans=pep/chr1_23.fa.pep -subopt=subopt/chr1_23.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+    /cluster/bin/x86_64/gsBig /cluster/data/canFam2/27/chr27_1/chr27_1.fa.masked gtf/chr27_1.fa.gtf -trans=pep/chr27_1.fa.pep -subopt=subopt/chr27_1.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000   
+    ls -1 gtf | wc -l
+#    495
+    endsInLf gtf/*
+
+    # Convert these to chromosome level files as so:
+    ssh kkstore01
+    cd /cluster/data/canFam2/bed/genscan
+    liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/*.gtf
+    liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft warn subopt/*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/genscan
+    ldHgGene -gtf canFam2 genscan genscan.gtf
+    hgPepPred canFam2 generic genscanPep genscan.pep
+    hgLoadBed canFam2 genscanSubopt genscanSubopt.bed
+
+
+# MAKE 10.OOC, 11.OOC FILES FOR BLAT (DONE 8/1/05 angie)
     ssh kolossus
+    # numerator is canFam2 gapless bases as reported by featureBits, 
+    # denominator is hg17 gapless bases as reported by featureBits,
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2384996543 / 2867328468 \) \* 1024
+# ( 2384996543 / 2867328468 ) * 1024 = 851.746316
+    # ==> use -repMatch=852 according to size scaled down from 1024 for human.
+    mkdir /cluster/bluearc/canFam2
     mkdir /cluster/data/canFam2/bed/ooc
     cd /cluster/data/canFam2/bed/ooc
     ls -1 /cluster/data/canFam2/nib/chr*.nib > nib.lst
     blat nib.lst /dev/null /dev/null -tileSize=11 \
-      -makeOoc=/cluster/bluearc/canFam2/11.ooc -repMatch=843
-#Wrote 26268 overused 11-mers to /cluster/bluearc/canFam2/11.ooc
-    blat nib.lst /dev/null /dev/null -tileSize=10 \
-      -makeOoc=/cluster/bluearc/canFam2/10.ooc -repMatch=843
-#Wrote 143003 overused 10-mers to /cluster/bluearc/canFam2/10.ooc
-    ssh kkr1u00
-    cp -p /cluster/bluearc/canFam2/*.ooc /iscratch/i/canFam2/
-    iSync
+      -makeOoc=/cluster/bluearc/canFam2/11.ooc -repMatch=852
+#Wrote 27388 overused 11-mers to /cluster/bluearc/canFam2/11.ooc
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (TODO 6/29/05 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 8/8/05 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
     cvsup .
-    # See if /cluster/data/genbank/etc/genbank.conf has had any un-checked-in
-    # edits, check them in if necessary:
-    diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
 
     # Edit etc/genbank.conf and add these lines:
 # canFam2 (dog)
-canFam2.genome = /iscratch/i/canFam2/nib/chr*.nib
+canFam2.genome = /scratch/hg/canFam2/nib/chr*.nib
 canFam2.lift = /cluster/data/canFam2/jkStuff/liftAll.lft
 canFam2.refseq.mrna.native.load = no
 canFam2.refseq.mrna.xeno.load = yes
@@ -530,13 +560,7 @@ canFam2.genbank.est.xeno.load = no
 canFam2.downloadDir = canFam2
 
     cvs ci etc/genbank.conf
-    # Since dog is a new species for us, edit src/lib/gbGenome.c.  
-    # Pick some other browser species, & monkey-see monkey-do.  
-    cvs diff src/lib/gbGenome.c
-    make
-    cvs ci src/lib/gbGenome.c
-
-    # Edit src/align/gbBlat to add /iscratch/i/canFam2/11.ooc
+    # Edit src/align/gbBlat to add /cluster/bluearc/canFam2/11.ooc
     cvs diff src/align/gbBlat
     make
     cvs ci src/align/gbBlat
@@ -552,9 +576,9 @@ canFam2.downloadDir = canFam2
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad canFam2
     featureBits canFam2 xenoRefGene
-#39066569 bases of 2359845093 (1.655%) in intersection
+#41278562 bases of 2384996543 (1.731%) in intersection
     # Clean up:
-    rm -r work/initial.canFam2
+    rm -rf work/initial.canFam2
 
     ssh eieio
     cd /cluster/data/genbank
@@ -565,11 +589,11 @@ canFam2.downloadDir = canFam2
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad canFam2
     featureBits canFam2 mrna
-#1850373 bases of 2359845093 (0.078%) in intersection
+#2061533 bases of 2384996543 (0.086%) in intersection
     featureBits canFam2 xenoMrna
-#62236255 bases of 2359845093 (2.637%) in intersection
+#63057460 bases of 2384996543 (2.644%) in intersection
     # Clean up:
-    rm -r work/initial.canFam2
+    rm -rf work/initial.canFam2
 
     ssh eieio
     # -initial for ESTs:
@@ -579,10 +603,210 @@ canFam2.downloadDir = canFam2
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 canFam2 &
     featureBits canFam2 intronEst
-#4090352 bases of 2359845093 (0.173%) in intersection
+#16241242 bases of 2384996543 (0.681%) in intersection
     featureBits canFam2 est
-#10958036 bases of 2359845093 (0.464%) in intersection
+#41719045 bases of 2384996543 (1.749%) in intersection
     # Clean up:
-    rm -r work/initial.canFam2
+    rm -rf work/initial.canFam2
+
+
+# SWAP CHAINS FROM HG17, BUILD NETS ETC. (DONE 8/3/05 angie)
+    mkdir /cluster/data/canFam2/bed/blastz.hg17.swap
+    cd /cluster/data/canFam2/bed/blastz.hg17.swap
+    doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.canFam2/DEF \
+      >& do.log &
+    tail -f do.log
+    # Add {chain,net}Hg17 to trackDb.ra if necessary.
+
+
+# QUALITY SCORES (DONE 8/11/05 angie)
+    ssh kkstore01
+    mkdir /cluster/data/canFam2/bed/quality
+    cd /cluster/data/canFam2/bed/quality
+    qaToQac ../../broad/contigs.quals.gz stdout \
+    | qacAgpLift ../../broad/UCSC_Dog2.0.agp stdin chrom.qac
+    mkdir wigData
+    # Build .wig, .wib files in current directory so that "wigData/" doesn't 
+    # appear in the .wig's:
+    cd wigData
+    foreach agp (../../../*/chr*.agp)
+      set chr = $agp:t:r
+      set abbrev = `echo $chr | sed -e 's/^chr//;  s/_random/r/;'`
+      echo $chr to qual_$abbrev wiggle
+      qacToWig -fixed ../chrom.qac -name=$chr stdout \
+      | wigEncode stdin qual_$abbrev.{wig,wib}
+    end
+    # Verify size of .wib file = chrom length
+    foreach f (*.wib)
+      set abbrev = $f:t:r
+      set chr = `echo $abbrev | sed -e 's/^qual_/chr/;  s/r$/_random/;'`
+      set wibLen = `ls -l $f | awk '{print $5;}'`
+      set chromLen = `grep -w $chr ../../../chrom.sizes | awk '{print $2;}'`
+      if ($wibLen != $chromLen) then
+        echo "ERROR: $chr size is $chromLen but wib size is $wibLen"
+      else
+        echo $chr OK.
+      endif
+    end
+
+    # /gbdb & load:
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/quality/wigData
+    mkdir -p /gbdb/canFam2/wib
+    ln -s `pwd`/*.wib /gbdb/canFam2/wib
+    hgLoadWiggle canFam2 quality *.wig
+
+
+# GC 5 BASE WIGGLE TRACK (DONE 8/11/05 angie)
+    ssh kki
+    mkdir /cluster/data/canFam2/bed/gc5Base
+    cd /cluster/data/canFam2/bed/gc5Base
+    cat > doGc5Base.csh <<'_EOF_'
+#!/bin/csh -fe
+set chr = $1
+set c = `echo $chr | sed -e 's/^chr//;  s/_random/r/;'`
+/cluster/bin/x86_64/hgGcPercent \
+  -chr=${chr} -wigOut -doGaps -file=stdout -win=5 canFam2 \
+  /iscratch/i/canFam2/nib \
+| /cluster/bin/x86_64/wigEncode stdin gc5Base_${c}{.wig,.wib}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doGc5Base.csh
+    cp /dev/null spec
+    foreach c (`cat ../../chrom.lst`)
+      echo "./doGc5Base.csh $c" >> spec
+    end
+    para make spec
+    para time
+#Completed: 41 of 41 jobs
+#Average job time:                  23s       0.38m     0.01h    0.00d
+#Longest finished job:              44s       0.73m     0.01h    0.00d
+#Submission to last job:           259s       4.32m     0.07h    0.00d
+    # /gbdb and load track on hgwdev
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/gc5Base
+    mkdir -p /gbdb/canFam2/wib
+    ln -s `pwd`/*.wib /gbdb/canFam2/wib
+    hgLoadWiggle canFam2 gc5Base *.wig
+
+
+# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 8/12/05 angie)
+    ssh kolossus
+    cd /panasas/store/canFam2/rmsk
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
+    # whether repeats in -query are also expected in -comp species.  
+    foreach outfl ( *.out )
+        echo "$outfl"
+        /cluster/bluearc/RepeatMasker/DateRepeats \
+          ${outfl} -query dog -comp rat
+    end
+    # Now extract rat (extra column 1):
+    cd ..
+    mkdir linSpecRep.notInRat
+    foreach f (rmsk/*.out_rattus)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractRepeats 1 $f > \
+		linSpecRep.notInRat/$base.out.spec
+    end
+    # Clean up.
+    rm rmsk/*.out_rat*
+
+
+# LOAD CPGISSLANDS (DONE 8/12/05 angie)
+    ssh hgwdev
+    mkdir -p /cluster/data/canFam2/bed/cpgIsland
+    cd /cluster/data/canFam2/bed/cpgIsland
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    mv cpglh.exe /cluster/data/canFam2/bed/cpgIsland/
+    
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/cpgIsland
+    foreach f (../../*/chr*.fa.masked)
+      set fout=$f:t:r:r.cpg
+      echo running cpglh on $f to $fout
+      ./cpglh.exe $f > $fout
+    end
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+/* Input columns: */
+/* chrom, start, end, len, CpG: cpgNum, perGc, cpg:gpc, observed:expected */
+/* chr1\t 41776\t 42129\t 259\t CpG: 34\t 65.8\t 0.92\t 0.94 */
+/* Output columns: */
+/* chrom, start, end, name, length, cpgNum, gcNum, perCpg, perGc, obsExp */
+/* chr1\t41775\t42129\tCpG: 34\t354\t34\t233\t19.2\t65.8\to0.94 */
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk chr*.cpg > cpgIsland.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/cpgIsland
+    hgLoadBed canFam2 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    wc -l cpgIsland.bed 
+#  47804 cpgIsland.bed
+    featureBits canFam2 cpgIslandExt
+#38974374 bases of 2384996543 (1.634%) in intersection
+
+
+# ANDY LAW CPGISSLANDS (DONE 8/12/05 angie)
+    # See notes in makeGalGal2.doc.
+    ssh kolossus
+    mkdir /cluster/data/canFam2/bed/cpgIslandGgfAndy
+    cd /cluster/data/canFam2/bed/cpgIslandGgfAndy
+    # Use masked sequence since this is a mammal...
+    cp /dev/null cpgIslandGgfAndyMasked.bed
+    foreach f (../../*/chr*.fa.masked)
+      set chr = $f:t:r:r
+      echo preproc and run on masked $chr
+      /cluster/home/angie/bin/i386/preProcGgfAndy $f \
+      | /cluster/home/angie/ggf-andy-cpg-island.pl \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndyMasked.bed
+    end
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed canFam2 cpgIslandGgfAndyMasked -tab -noBin \
+      -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
+    featureBits canFam2 cpgIslandExt
+#38974374 bases of 2384996543 (1.634%) in intersection
+    featureBits canFam2 cpgIslandGgfAndyMasked
+#99187178 bases of 2384996543 (4.159%) in intersection
+    wc -l ../cpgIsland/cpgIsland.bed *bed
+#   47804 ../cpgIsland/cpgIsland.bed
+#  138037 cpgIslandGgfAndyMasked.bed
+
+
+# SWAP CHAINS FROM MM6, BUILD NETS ETC. (TODO 8/12/05 angie)
+    mkdir /cluster/data/canFam2/bed/blastz.mm6.swap
+    cd /cluster/data/canFam2/bed/blastz.mm6.swap
+    doBlastzChainNet.pl -swap /cluster/data/mm6/bed/blastz.canFam2/DEF \
+      >& do.log
+    echo "check /cluster/data/canFam2/bed/blastz.mm6.swap/do.log" \
+    | mail -s "check do.log" $USER
+    # Add {chain,net}Mm6 to trackDb.ra if necessary.
+
+
+# MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (TODO 8/?/05 angie)
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'update defaultDb set name = "canFam2" where genome = "Dog";'
 
 
