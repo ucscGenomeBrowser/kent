@@ -84,18 +84,18 @@ file, insert a track line at the beginning of each new set of data.
 <P><B><I>Example:</I></B><BR>
 Here is an example of an annotation file that defines 2 separate
 annotation tracks in BED format. The first track displays blue one-base
-tick marks every 10000 bases at the beginning of chr 22. 
+tick marks every 10000 bases on chr 22. 
 The second track displays red 100-base features alternating with 
 blank space in the same region of chr 22.
-<PRE><TT>browser position chr22:1-20001
-track name=spacer description="My blue ticks" color=0,0,255
-chr22   0        1
-chr22   10000 10001
-chr22   20000 20001
-track name=even description="My red 100 bases tracks" color=255,0,0
-chr22   0       100 first
-chr22   200     300 second
-chr22   400     500 third</TT></PRE>
+<PRE><TT>browser position chr22:20100000-20140000
+track name=spacer description="Blue ticks every 10000 bases" color=0,0,255,
+chr22   20100000 20100001
+chr22   20110000 20110001
+chr22   20120000 20120001
+track name=even description="Red ticks every 100 bases, skip 100" color=255,0,0
+chr22   20100000 20100100	first
+chr22   20100200 20100300	second
+chr22   20100400 20100500	third</TT></PRE>
 
 <P><B><I>Example:</I></B><BR>
 This example shows an annotation file containing one data set in BED
@@ -628,13 +628,15 @@ Construct a URL that will link this annotation file to the Genome
 Browser. The URL must contain 3 pieces of information specific
 to your annotation data: 
 <UL>
-<LI>The genome assembly on which your annotation data is based. This
-information is of the form <tt>db=database_name</tt>, where
-<I>database_name</I> is to the UCSC code for the genome assembly. For a list
-of these codes, see the Genome Browser <A
+<LI>The species or genome assembly on which your annotation data is based. 
+To automatically display the most recent assembly for a given organism, set 
+the <em>org</em> parameter: <em>e.g.</em> <tt>org=human</tt>. To specify a 
+particular genome assembly for an organism, use the <em>db</em> parameter, 
+<tt>db=database_name</tt>, where <I>database_name</I> is to the UCSC code for 
+the genome assembly. For a list of these codes, see the Genome Browser <A
 HREF="/FAQ/FAQreleases#release1" TARGET=_blank>FAQ</A>.
-Examples of this include: db=hg16 (Human July 2003 assembly), db=mm3 
-(Mouse Feb 2003 assembly).
+Examples of this include: db=hg16 (Human July 2003 assembly), db=mm6 
+(Mouse Mar. 2005 assembly). 
 <LI>The genome position to which the Genome Browser should initially 
 open. This information is of the form
 <tt>position=chr_position</tt>, where <I>chr_position</I> is a 
@@ -650,18 +652,17 @@ TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.
 <P>Combine the above pieces of information into a URL of the following
 format (the information specific to your annotation file is highlighted):
 <BR><BR>
-<tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=<font color="000099"><I>database_name</I></font>&amp;<BR>position=<font
+<tt>http://genome.ucsc.edu/cgi-bin/hgTracks?org=<font color="000099"><I>organism_name</I></font>&amp;<BR>position=<font
 color="000099"><I>chr_position</I></font>&amp;hgt.customText=<font color="000099"><I>URL</I></font></tt>.
 
 <P><B><I>Example:</I></B><BR>
 The following URL will open up the Genome Browser 
-window to display chr 22 of the July 2003 assembly of the 
-human genome (hg16), and will display the annotation track 
-pointed to by the URL
+window to display chr 22 of the latest human genome assembly
+and will show the annotation track pointed to by the URL
 http://genome.ucsc.edu/goldenPath/help/test.bed:<BR><BR>
 
-<font color="000099"><A HREF="../../cgi-bin/hgTracks?db=hg16&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
-TARGET=_BLANK><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg16&amp;position=chr22&amp;<br>hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
+<font color="000099"><A HREF="../../cgi-bin/hgTracks?org=human&amp;position=chr22&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed"
+TARGET=_BLANK><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&amp;position=chr22&amp;<br>hgt.customText=http://genome.ucsc.edu/goldenPath/help/test.bed</tt></A></font><BR><BR>
 
 <P><B>Step 3.</B> Provide the URL to others. To upload a custom annotation
 pointed to by a URL into the Genome Browser, paste the URL into the large text edit 
