@@ -402,6 +402,17 @@ droVir2.perChromTables = no
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 
+# MAKE GCPERCENT (DONE 8/15/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droVir2/bed/gc5Base
+    cd /cluster/data/droVir2/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=2 droVir2 \
+       /cluster/data/droVir2 | wigEncode stdin gc5Base.wig gc5Base.wib
+    mkdir /gbdb/droVir2/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/droVir2/wib
+    hgLoadWiggle -pathPrefix=/gbdb/droVir2/wib droVir2 gc5Base gc5Base.wig
+
+
 # MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (TODO 8/?/05 angie)
     hgsql -h genome-testdb hgcentraltest -e \
       'UPDATE defaultDb set name = "droVir2" where genome = "D. virilis";'
