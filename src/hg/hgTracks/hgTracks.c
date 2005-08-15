@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.998 2005/08/15 22:59:46 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.999 2005/08/15 23:21:00 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8123,9 +8123,6 @@ if (rulerMode != tvHide)
                 drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
                                     font, cdsColor, winStart, MAXPIXELS,
                                     zoomedToBaseLevel || zoomedToCodonLevel);
-		//		    
-		//drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
-		//      	baseColor, font, complementRulerBases, seq);
                 }
             }
         }
