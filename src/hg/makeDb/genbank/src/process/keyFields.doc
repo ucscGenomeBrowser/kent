@@ -61,4 +61,3 @@ translExcept - space-seperated list of /transl_except= values.
 exception - space separated list /exception= values, with spaces in
     individual values replaces by '_'.
 selenocysteine - set to "yes" if the /selenocysteine attribute is specified.
-

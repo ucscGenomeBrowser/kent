@@ -864,8 +864,5 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
     NM_016178	ribosomal slippage (translational frameshift)	reviewed
                     no /exception
 
----------------
-genbank alignment to-do
-   - non-compartive filtering.
    - deal with unordered chromosomes (e.g. zerbafish).  Probably
      need lift that only covers some of "chromosomes".

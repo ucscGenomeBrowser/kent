@@ -11,7 +11,7 @@
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
 
-static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.2.4.2 2005/07/04 04:38:49 markd Exp $";
+static char const rcsid[] = "$Id: ccdsMkTables.c,v 1.2.4.3 2005/08/15 18:26:49 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -108,7 +108,6 @@ void processCcdsInfoRow(char **row, FILE *outFh)
 /* process a row from ccdsInfoSelect */
 {
 struct ccdsInfo ci;
-ZeroVar(&ci);
 safef(ci.ccds, sizeof(ci.ccds), "CCDS%s.%s", row[0], row[1]);
 if (sameString(row[2], "NCBI"))
     {

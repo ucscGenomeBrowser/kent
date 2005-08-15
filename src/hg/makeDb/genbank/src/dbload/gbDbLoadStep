@@ -4,7 +4,7 @@
 #
 # Load databases on the current server.
 #
-# $Id: gbDbLoadStep,v 1.28.10.2 2005/07/04 04:38:49 markd Exp $
+# $Id: gbDbLoadStep,v 1.28.10.3 2005/08/15 18:26:49 markd Exp $
 #
 use strict;
 use warnings;
@@ -139,6 +139,7 @@ sub loadMgc($$) {
         runProg("mgcDbLoad " . join(" ", @mgcArgs)
                 . " $db $mgcDir/mgcFullStatus.tab.gz");
     }
+
     # build ccds to mgcGene map if there is a CCDS on this genome
     my $ccdsMgcMapTmp = "$mgcWorkDir/ccdsMgcMap.txt";
     makeFileDir($ccdsMgcMapTmp);
