@@ -348,7 +348,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     nice md5sum *.gz > md5sum.txt
 
 
-# MAKE 11.OOC FILE FOR BLAT (TODO 8/5/05 angie)
+# MAKE 11.OOC FILE FOR BLAT (DONE 8/8/05 angie)
     # Use -repMatch=100 (based on size -- for human we use 1024, and 
     # fly size is ~4.4% of human judging by gapless dm1 genome size from 
     # featureBits -- we would use 45, but bump that up a bit to be more 
@@ -357,12 +357,12 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     mkdir /cluster/bluearc/droGri1
     blat /cluster/data/droGri1/droGri1.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=/cluster/bluearc/droGri1/11.ooc -repMatch=100
-#Wrote 6050 overused 11-mers to /cluster/bluearc/droGri1/11.ooc
+#Wrote 19750 overused 11-mers to /cluster/bluearc/droGri1/11.ooc
     cp -p /cluster/bluearc/droGri1/*.ooc /iscratch/i/droGri1/
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN (TODO 8/5/05 angie)
+# AUTO UPDATE GENBANK MRNA RUN (DONE 8/11/05 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -376,8 +376,9 @@ droGri1.lift = no
 droGri1.refseq.mrna.native.load = no
 droGri1.refseq.mrna.xeno.load = yes
 droGri1.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
+# GenBank has no D. grimshawi mRNAs nor ESTs at this point... that may change.
+droGri1.genbank.mrna.native.load = no
 droGri1.genbank.mrna.xeno.load = yes
-# GenBank has no D. grimshawi ESTs at this point... that may change.
 droGri1.genbank.est.native.load = no
 droGri1.genbank.est.xeno.load = no
 droGri1.downloadDir = droGri1
@@ -407,8 +408,7 @@ droGri1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droGri1
     featureBits droGri1 xenoRefGene
-#25095898 bases of 133575709 (18.788%) in intersection
-
+#11126253 bases of 214363807 (5.190%) in intersection
     # Clean up:
     rm -rf work/initial.droGri1
 
@@ -419,11 +419,19 @@ droGri1.perChromTables = no
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droGri1
-    featureBits droGri1 all_mrna
-#245 bases of 189814987 (0.000%) in intersection
     featureBits droGri1 xenoMrna
-#14690077 bases of 189814987 (7.739%) in intersection
+#16072365 bases of 214363807 (7.498%) in intersection
     # Clean up:
     rm -rf work/initial.droGri1
+
+
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 8/9/05 angie)
+    mkdir /cluster/data/droGri1/bed/blastz.dm2.swap
+    cd /cluster/data/droGri1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droGri1/DEF \
+      >& do.log
+    echo "check /cluster/data/droGri1/bed/blastz.dm2.swap/do.log" \
+    | mail -s "check do.log" $USER
+    # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 

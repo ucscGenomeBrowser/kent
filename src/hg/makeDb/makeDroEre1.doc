@@ -183,7 +183,7 @@ popd
 # MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE 8/3/05 angie)
     ssh kkstore02
     cd /cluster/data/droEre1
-    maskOutFa -soft downloads/dere/assembly.bases \
+    maskOutFa -soft scaffolds.fa \
       bed/simpleRepeat/trfMask.bed scaffolds.fa
     maskOutFa -softAdd scaffolds.fa RMOut/scaffolds.fa.out scaffolds.fa
     # Now clean up the unmasked chunks to avoid confusion later.
@@ -265,7 +265,7 @@ popd
     hgLoadWiggle -pathPrefix=/gbdb/droEre1/wib droEre1 gc5Base gc5Base.wig
 
 
-# PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 8/3/05 angie)
+# PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 8/4/05 angie)
     # First, agglomerate small scaffolds into chunks of ~500k median:
     ssh kkstore02
     cd /cluster/data/droEre1
@@ -304,9 +304,9 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     para make jobList
     para time
 #Completed: 56 of 56 jobs
-#Average job time:                 100s       1.66m     0.03h    0.00d
-#Longest finished job:             994s      16.57m     0.28h    0.01d
-#Submission to last job:           994s      16.57m     0.28h    0.01d
+#Average job time:                 103s       1.71m     0.03h    0.00d
+#Longest finished job:             954s      15.90m     0.27h    0.01d
+#Submission to last job:           954s      15.90m     0.27h    0.01d
 
     # If there are crashes, diagnose with "para problems".  
     # If a job crashes due to genscan running out of memory, re-run it 
@@ -327,6 +327,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     ldHgGene -gtf droEre1 genscan genscan.gtf
     hgPepPred droEre1 generic genscanPep genscan.pep
     hgLoadBed droEre1 genscanSubopt genscanSubopt.bed
+    rm *.tab
 
 
 # MAKE DOWNLOADABLE FILES (DONE 8/4/05 angie)
@@ -361,7 +362,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN (IN PROGRESS 8/4/05 angie)
+# AUTO UPDATE GENBANK MRNA RUN (DONE 8/10/05 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -406,23 +407,22 @@ droEre1.perChromTables = no
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droEre1
     featureBits droEre1 xenoRefGene
-#25095898 bases of 133575709 (18.788%) in intersection
+#26320687 bases of 145196667 (18.128%) in intersection
 
     # Clean up:
     rm -rf work/initial.droEre1
 
     # This is an -initial run, mRNA only:
     nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droEre1 &
-#TODO
     tail -f [its logfile]
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
     nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droEre1
     featureBits droEre1 all_mrna
-#245 bases of 189814987 (0.000%) in intersection
+#5187 bases of 145196667 (0.004%) in intersection
     featureBits droEre1 xenoMrna
-#14690077 bases of 189814987 (7.739%) in intersection
+#23307305 bases of 145196667 (16.052%) in intersection
     # Clean up:
     rm -rf work/initial.droEre1
 
@@ -550,5 +550,19 @@ chainSome $(path1)
     hgLoadPsl droEre1 blastDm1FB.psl
 
 # End tblastn
+
+    mkdir /cluster/data/droEre1/bed/blastz.dm2.swap
+    cd /cluster/data/droEre1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droEre1/DEF \
+      >& do.log &
+    tail -f do.log
+
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 8/9/05 angie)
+    mkdir /cluster/data/droEre1/bed/blastz.dm2.swap
+    cd /cluster/data/droEre1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droEre1/DEF \
+      >& do.log &
+    tail -f do.log
+    # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 
