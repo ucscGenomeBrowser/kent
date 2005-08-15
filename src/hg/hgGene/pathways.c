@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.11 2005/08/03 18:59:43 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.12 2005/08/15 13:34:09 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -116,6 +116,9 @@ char **row2;
 char *eventDesc;
 char *eventID;
 
+/* check the existence of kgXref table first */
+if (!sqlTableExists(conn, "kgXref")) return;
+
 safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
 spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
 if (spID != NULL)
@@ -205,6 +208,9 @@ char query[256];
 char *spID, *chp;
 char condStr[256];
 char *origSpID;
+
+/* check the existence of kgXref table first */
+if (!sqlTableExists(conn, "kgXref")) return(0);
 
 safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
 spID = sqlGetField(conn, database, "kgXref", "spID", condStr);
