@@ -16,7 +16,7 @@
 #include "mafSummary.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.85 2005/07/13 06:03:35 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.86 2005/08/15 22:57:54 galt Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1373,7 +1373,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 charifyInserts(insertLine, insertCounts, winBaseCount);
 mi = miList;
 spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
-                getOrangeColor(), font, insertLine, winBaseCount);
+                getOrangeColor(), font, insertLine, winBaseCount, FALSE);
 y += mi->height;
 
 /* draw alternating colors behind base-level alignments */
@@ -1411,7 +1411,7 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     /* draw sequence letters for alignment */
     vgSetClip(vg, x, y, width, mi->height-1);
     spreadAlignString(vg, x, y, width, mi->height-1, color,
-                        font, line, selfLine, winBaseCount, dots);
+                        font, line, selfLine, winBaseCount, dots, FALSE);
     vgUnclip(vg);
     y += mi->height;
     }

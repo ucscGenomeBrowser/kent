@@ -49,10 +49,10 @@ if (zoomed)
 
     if (chromEnd - chromStart == 3)
         spreadBasesString(vg,x1,y,w,height,whiteIndex(),
-		     font,text,strlen(text));
+		     font,text,strlen(text), TRUE);
     else if (chromEnd - chromStart < 3)
         spreadBasesString(vg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
-		     text,strlen(text));
+		     text,strlen(text), TRUE);
     else
         {
         int thisX,thisX2;

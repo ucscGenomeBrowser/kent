@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.996 2005/08/12 20:57:32 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.997 2005/08/15 22:57:54 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6805,7 +6805,7 @@ int spreadStringCharWidth(int width, int count)
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
 		       Color color, MgFont *font, char *text, 
-		       char *match, int count, bool dots)
+		       char *match, int count, bool dots, bool isCodon)
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color (or 
@@ -6832,9 +6832,10 @@ bool selfLine = (match == text);
 cBuf[1] = '\0';  
 
 /* If we have motifs, look for them in the string. */
-if(motifString != NULL && strlen(motifString) != 0)
+if(motifString != NULL && strlen(motifString) != 0 && !isCodon)
     {
     touppers(motifString);
+    eraseWhiteSpace(motifString);
     motifString = cloneString(motifString);
     motifCount = chopString(motifString, ",", NULL, 0);
     if (complementsToo)
@@ -6852,6 +6853,7 @@ if(motifString != NULL && strlen(motifString) != 0)
 	    }
 	motifCount *= 2;	/* now we have this many	*/
 	}
+	
     AllocArray(inMotif, textLength);
     for(i = 0; i < motifCount; i++)
 	{
@@ -6960,11 +6962,11 @@ freez(&inMotif);
 
 void spreadBasesString(struct vGfx *vg, int x, int y, int width, 
                         int height, Color color, MgFont *font, 
-                        char *s, int count)
+                        char *s, int count, bool isCodon)
 /* Draw evenly spaced letters in string. */
 {
 spreadAlignString(vg, x, y, width, height, color, font, s, 
-                        NULL, count, FALSE);
+                        NULL, count, FALSE, isCodon);
 }
 
 static void drawBases(struct vGfx *vg, int x, int y, int width, int height,
@@ -6982,7 +6984,7 @@ else
 if (complementSeq)
     complement(seq->dna, seq->size);
 spreadBasesString(vg, x, y, width, height, color, font, 
-                                seq->dna, seq->size);
+                                seq->dna, seq->size, FALSE);
 
 if (thisSeq == NULL)
     freeDnaSeq(&seq);
@@ -8121,6 +8123,9 @@ if (rulerMode != tvHide)
                 drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
                                     font, cdsColor, winStart, MAXPIXELS,
                                     zoomedToBaseLevel || zoomedToCodonLevel);
+		//		    
+		//drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
+		//      	baseColor, font, complementRulerBases, seq);
                 }
             }
         }
@@ -10783,8 +10788,12 @@ void tracksDisplay()
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
+/* This var motifString should be removed because it does nothing anyway,
 char *motifString = cartOptionalString(cart,BASE_MOTIFS);
+*/
+/* reported as unused
 boolean complementRulerBases = cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE);
+*/
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
@@ -10924,17 +10933,28 @@ cartSetString(cart, "org", organism);
 cartSetString(cart, "db", database);
 cartSetString(cart, "position", newPos);
 /* If are viewing the negative strand on ruler have
-   to revsere the motifs to highlight. */
+   to reverse the motifs to highlight. */
+
+/* This var motifString should be removed because it does nothing anyway,
+ because motifString is a local string on the stack and 
+ it's not used nor passed down to any of the called subs
+ so it's not needed at all.  The only way it could be 
+ saved would be to make it a global var and use it.
+ 
 if(complementRulerBases && motifString != NULL)
     reverseBytes(motifString, strlen(motifString));
+*/
+
 if (cgiVarExists("hgt.psOutput"))
     handlePostscript();
 else
     doTrackForm(NULL);
-/* If motifs were reversed, put them back in original
-   order. */
+/* Same mistake as a few lines back for same reason.
+   If motifs were reversed, put them back in original
+   order.
 if(complementRulerBases && motifString != NULL)
     reverseBytes(motifString, strlen(motifString));
+*/    
 }
 
 

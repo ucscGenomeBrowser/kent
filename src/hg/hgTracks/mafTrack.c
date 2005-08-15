@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.53 2005/08/01 18:00:12 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.54 2005/08/15 22:57:54 galt Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -830,7 +830,7 @@ for (mi = miList, i=0; mi->next != NULL; mi = mi->next, ++i)
     if (line == insertLine)
 	x -= (width/winBaseCount)/2;
     spreadBasesString(vg, x, y, width, mi->height-1, color, font, 
-    	line, winBaseCount);
+    	line, winBaseCount, FALSE);
     y += mi->height;
     }
 

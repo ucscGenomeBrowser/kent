@@ -534,7 +534,7 @@ int getFilterColor(char *type, int colorIx);
 /* Get color corresponding to type - MG_RED for "red" etc. */
 
 void spreadBasesString(struct vGfx *vg, int x, int y, int width, int height,
-	Color color, MgFont *font, char *s, int count);
+	Color color, MgFont *font, char *s, int count, bool isCodon);
 /* Draw evenly spaced base letters in string. */
 
 void spreadStringAlternateBackground(struct vGfx *vg, int x, int y, 
@@ -544,7 +544,7 @@ void spreadStringAlternateBackground(struct vGfx *vg, int x, int y,
 
 void spreadAlignString(struct vGfx *vg, int x, int y, int width, int height,
                         Color color, MgFont *font, char *s, 
-                        char *match, int count, bool dots);
+                        char *match, int count, bool dots, bool isCodon);
 /* Draw evenly spaced letters in string.  For multiple alignments,
  * supply a non-NULL match string, and then matching letters will be colored
  * with the main color, mismatched letters will have alt color. 
