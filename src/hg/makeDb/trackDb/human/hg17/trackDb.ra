@@ -197,6 +197,7 @@ shortLabel Sgo/EIO DNaseI HS
 longLabel Sangamo - European Inst. of Oncology DNaseI-Hypersensitive Sites  (CD34+ Cells)
 group regulation
 priority 99.0
+color 100,30,150
 visibility hide
 type bed 5 .
 
