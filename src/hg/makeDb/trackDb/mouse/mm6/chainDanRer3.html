@@ -27,26 +27,20 @@ location (in thousands) of the match for each matching alignment.</P>
 <P>
 Transposons that have been inserted since the $o_organism/$organism
 split were removed from the assemblies. The abbreviated genomes were
-aligned with blastz, and the transposons were then added back in. The chrNA
-and chrUn chromosomes are unordered scaffolds separated by 500 Ns. Using these
-chromosomes in the blastz alignment runs the risk of getting false 
+aligned with blastz, and the transposons were then added back in.  
+Note that the $o_organism chrNA
+and chrUn chromosomes contain unordered scaffolds separated by 500 Ns. By 
+including these chromosomes in the blastz alignment, one risks generating false 
 alignments that bridge scaffolds in these chromosomes that are not, in reality,
 contiguous. To avoid this situation, the blastz alignments and subsequent
-chaining was performed on the scaffolds and then the co-ordinates were lifted
-up to the chromosome level.  The resulting alignments were converted into psl format using the lavToPsl program. The axt alignments were fed into axtChain, 
+chaining were performed on the scaffolds, and the coordinates were then lifted
+up to the chromosome level. The resulting alignments were converted into psl format using the lavToPsl program. The axt alignments were fed into axtChain, 
 which organizes all alignments between a single $o_organism chromosome and a 
 single $organism chromosome into a group and creates a kd-tree out
 of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
 blocks. Chains scoring below a threshold of 5000 were discarded; the remaining
-chains are displayed in this track. The chrNA and chrUn zebrafish danRer3 
-chromosomes are composed of unordered scaffolds separated by 500 Ns. Using these
-chromosomes in the blastz alignment runs the risk of creating false
-alignments that bridge scaffolds in these chromosomes that are not, in reality,
-contiguous. To avoid this situation, the blastz alignments and subsequent
-chaining was performed on the scaffolds and then the co-ordinates were lifted
-up to the chromosome level.
-</P>
+chains are displayed in this track.  </P>
 
 <H2>Credits</H2>
 <P>
