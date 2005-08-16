@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.70 2005/07/03 20:51:04 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.71 2005/08/16 18:04:15 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -401,7 +401,9 @@ if (isGtf)
     /* must check for stop_codon here, because GTF put it outside of the
      * CDS */
     return (sameWord(feat, "CDS") || sameWord(feat, "stop_codon")
-            || sameWord(feat, "start_codon") || sameWord(feat, "exon"));
+            || sameWord(feat, "start_codon") || sameWord(feat, "exon")
+            || sameWord(feat, "utr") || sameWord(feat, "5utr")
+            || sameWord(feat, "3utr"));
     }
 else
     {
