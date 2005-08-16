@@ -67,4 +67,12 @@ spectrum on
 type rmsk
 canPack off
 
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 
