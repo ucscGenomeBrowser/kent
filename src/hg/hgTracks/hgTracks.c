@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.999 2005/08/15 23:21:00 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1000 2005/08/16 18:44:05 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8055,7 +8055,7 @@ if (rulerMode != tvHide)
         chromSize = hChromSize(chromName);
         end = min(winEnd + 3, chromSize);
         extraSeq = hDnaFromSeq(chromName, start, end, dnaUpper);
-        if (start != winStart - 3 || winEnd != winEnd + 3)
+        if (start != winStart - 3 || end != winEnd + 3)
             {
             /* at chromosome boundaries, pad with N's to assure
              * leading & trailing 3 bases */
