@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.70 2005/08/16 21:34:37 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.71 2005/08/16 23:11:54 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8206,3 +8206,26 @@ cut -f 1,3-11 >ensGeneNew.tab
 # Compress everthing to save space
     gzip *
     
+#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2005-08-16 - Fan)
+
+# PLEASE NOTE THAT THE ENSEMBLXREF3 TABLE IS BUILT USING ENSEMBL BIOMART DATA OF MOUSE BUILD 34.
+# THIS TABLE IS NEEDED TO SUPPORT SUPERFAMILY TRACK OF THE PROTEOME BROWSER.
+# SINCE ENSEMBL CHANGED THE DATA FORMAT AGAIN (AS USUAL :-(  ), THERE IS NO VERSION NUMBER
+# IN THEIR IDs, A FAKE "0" IS GENERATED FOR EACH ID IN ensemblXref3 TABLE.
+    # Get the ensembl gene/protein cross-reference data BioMart
+    # Follow this sequence through the pages:
+    # 1) Make sure that the Mus musculus choice is selected. Hit next.
+    # 2) Choose the "Feature" box, select Ensembl gene, transcript, and peptid IDs,
+	      SPTrEMBL ID, SWISSPROT ID, and SWISSPROT AC 
+    # 3) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref
+
+    load data local infile "ensXref.tsv" into table ensemblXref3Temp ignore 1 lines;
+
+    hgsql mm6 -N -e 'select gene, "0", transcript, "0", protein, "0", tremblAcc, swissDisplayId, swissAcc from ensemblXref3Temp' \
+    > ensemblXref3.tab
+
+    hgsql mm6 -e 'drop table ensemblXref3'
+    hgsql mm6 <~/src/hg/lib/ensemblXref3.sql
+    hgsql mm6 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
+
