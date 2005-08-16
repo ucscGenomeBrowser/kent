@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1000 2005/08/16 18:44:05 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1001 2005/08/16 21:47:05 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8071,7 +8071,9 @@ if (rulerMode != tvHide)
         /* for drawing bases, must clip off leading and trailing 3 bases */
         seq = cloneDnaSeq(extraSeq);
         seq = newDnaSeq(seq->dna+3, seq->size-6, seq->name);
-        drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
+
+        if (zoomedToBaseLevel)
+    	    drawBases(vg, insideX, y+rulerHeight, insideWidth, baseHeight, 
 		  baseColor, font, complementRulerBases, seq);
 
         /* set up clickable area to toggle ruler visibility */
