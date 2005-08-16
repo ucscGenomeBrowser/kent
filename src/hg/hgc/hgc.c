@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.931 2005/08/11 06:29:53 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.932 2005/08/16 01:42:50 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14087,7 +14087,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, cbs);
     }
 
-printf(
+if (pp!=NULL)
+    printf(
 "<br><a\nhref=\"http://www.ncbi.nlm.nih.gov/BLAST/Blast.cgi?ALIGNMENTS=250&ALIGNMENT_VIEW=Pairwise&AUTO_FORMAT=Semiauto&CDD_SEARCH=on&CLIENT=web&DATABASE=nr&DESCRIPTIONS=500&ENTREZ_QUERY=All+organisms&EXPECT=10&FILTER=L&FORMAT_BLOCK_ON_RESPAGE=None&FORMAT_ENTREZ_QUERY=All+organisms&FORMAT_OBJECT=Alignment&FORMAT_TYPE=HTML&GAPCOSTS=11+1&GET_SEQUENCE=on&I_THRESH=0.005&LAYOUT=TwoWindows&MASK_CHAR=0&MASK_COLOR=0&MATRIX_NAME=BLOSUM62&NCBI_GI=on&NEW_FORMATTER=on&PAGE=Proteins&PROGRAM=blastp&QUERY=%s&SERVICE=plain&SET_DEFAULTS=Yes&SET_DEFAULTS.x=25&SET_DEFAULTS.y=11&SHOW_LINKOUT=on&SHOW_OVERVIEW=on&WORD_SIZE=3&END_OF_HTTPGET=Yes\">Query NCBI Blast",pp->seq);
 
 /*Print out table with Blast information*/
