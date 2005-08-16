@@ -5922,6 +5922,21 @@ exit $status
     mv rBest/human.rbest.chain.gz ..
     rm -fr rBest
 
+# RECIPROCAL BEST AXT'S FROM RECIPROCAL BEST CHAIN (2005-08-16)
+#       (requested by Daryl)
+    cd /cluster/data/hg17/bed/blastz.panTro1
+    mkdir -p axtRBestNet
+cat > makeRbestAxt.csh << 'EOF'
+foreach f (axtChain/rBest/rBestChain/*.chain)
+    set c = $f:t:t:r
+    echo $c
+    chainToAxt $f /cluster/data/hg17/nib  /cluster/data/panTro1/nib stdout \
+        | axtSort stdin axtRBestNet/$c.axt
+    end
+'EOF'
+# << for emacs
+    csh makeRbestAxt.csh >&! makeRbestAxt.log &
+
 
 # GENERATE CHIMP MAF FOR MULTIZ FROM NET (DONE 2004-06-24 kate)
     ssh eieio
@@ -17304,4 +17319,17 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
       -blastzOutRoot /cluster/bluearc/blastzHg17CanFam2Out >>& do.log &
     ln -s blastz.canFam2.2005-08-01 /cluster/data/hg17/bed/blastz.canFam2
 
+############
+# Sangamo/EIO DNaseI Hypersensitive Sites (2005-08-15 kate)
+#   (Sangamo Biosciences and European Inst. Oncology)
+#   Contact: Fyodor Umov (fumov@sangamo.com)
 
+    cd /cluster/data/hg17/bed
+    mkdir sangamo
+    cd sangamo
+    grep chr 3314_hs_sites_browser.bed | grep -v browser | \
+        hgLoadBed -noBin hg17 sangamoDnaseHs stdin
+            # Loaded 3314 elements of size 6
+    checkTableCoords -table=sangamoDnaseHs hg17
+
+    # use "antiword" to create plain text from .doc description file
