@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.69 2005/08/11 00:03:32 hartera Exp $"
+#	"$Id: makeMm6.doc,v 1.70 2005/08/16 21:34:37 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8129,3 +8129,80 @@ SEQ2_LEN=$BASE/S2.len
     # All done now 
     # check REAME.txt in downloads directory and also add html and 
     # trackDb.ra entry for chain and net tracks for danRer3
+
+#### LOAD ENSEMBL GENES (DONE - 2005-08-10 Fan)
+#	needed for Gene Sorter procedure below
+#	Ensembl released Mouse build 34 the week of August 10th, 2005
+   mkdir -p /cluster/store11/mm6/bed/ensGene
+   ln -s /cluster/store11/mm6/bed/ensGene /cluster/data/mm6/bed/ensGene
+   cd /cluster/data/mm6/bed/ensGene
+
+        Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
+        Choose Ensembl 32 and Mus musculus, click next
+        Follow this sequence through the pages:
+        1) Select "Known genes" in the Gene seciont. Hit next.
+        2) Select "Structures". 
+        3) Choose GTF as the output, choose gzip compression, name the
+	output file ensGeneMm6.gtf.gz and then hit Export
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+     zcat ensGeneMm6.gtf.gz | grep -v ^6_DR51 | grep -v NT_ > unrandom.gtf
+#	Let's see how much it loses:
+#  	None.
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene
+
+    sed -e "s/^/chr/" unrandom.gtf | sed -e "s/chrMT/chrM/" > ensGene.gtf
+    ldHgGene mm6 ensGene ensGene.gtf
+# Read 38200 transcripts in 674378 lines in 1 files
+#   38200 groups 22 seqs 1 sources 4 feature types
+# 38200 gene predictions
+
+hgsql mm6 -N -e 'select * from ensGene' | sed -e 's/\./\t/' |\
+cut -f 1,3-11 >ensGeneNew.tab
+
+#	save space, gzip them:
+    gzip unrandom.gtf
+    gzip ensGene.gtf
+
+# Load Ensembl peptides:
+        Get the ensembl protein data from BioMar
+        Choose Mus musculus as the organism
+        Follow this sequence through the pages:
+        1) Choose "Known genes". Hit next.
+        2) Choose "Sequences" and "Peptide" and "Ensembl Transcript ID",
+	     choose text/fasta and gzip compression,
+	     name the file ensPep and then hit export.
+
+     zcat ensPep.fasta.gz|faToTab -type=protein stdin j1.tmp
+     cat j1.tmp|grep -v "SEQXENCEXNAVAILAXLE" >j2.tmp  
+     cat j2.tmp |awk '{print ">" $1;print $2}' > ensPep.fa
+     rm j1.tmp j2.tmp
+
+     hgPepPred mm6 generic ensPep ensPep.fa
+
+# Load ensGtp table.
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  
+
+    # Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
+    # Choose Ensembl 32 and Mus musculus, click next
+    # Follow this sequence through the pages:
+    # 1) Select "Known genes" in the Gene seciont. Hit next.
+    # 2) Select "Structures".
+    # 3) select Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID. 
+    # 4) select "Text, tab separated" and name the output file as "ensGtp"
+    # 5) download the output file "ensGtp.tsv.gz"  
+
+    gunzip ensGtp.tsv.gz
+    hgsql mm6 < ~/kent/src/hg/lib/ensGtp.sql
+    hgsql mm6 -N -e 'load data local infile "ensGtp.tsv" into table ensGtp ignore 1 lines;' 
+
+# Create knownToEnsembl column
+    hgMapToGene mm6 ensGene knownGene knownToEnsembl
+
+# Compress everthing to save space
+    gzip *
+    
