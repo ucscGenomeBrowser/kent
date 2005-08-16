@@ -1,0 +1,16 @@
+net chr4_random 1030282
+ fill 1619 92637 chr3 + 63437436 96380 id 417 score 1645271 ali 65828 qDup 731 type top tN 0 qN 2324 tR 26944 qR 24136 tOldR 13275 qOldR 14943 tTrf 2966 qTrf 1277
+  gap 1704 1 chr3 + 63437727 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 3402 711 chr3 + 63439465 711 tN 0 qN 674 tR 69 qR 0 tOldR 69 qOldR 0 tTrf 0 qTrf 0
+   fill 3402 538 chrUn + 50896457 546 id 67891 score 14689 ali 478 qDup 0 type nonSyn tN 0 qN 0 tR 69 qR 0 tOldR 69 qOldR 0 tTrf 0 qTrf 0
+    gap 3417 1 chrUn + 50896473 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 4254 2 chr3 + 63440355 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 0 qTrf 0
+  gap 55382 178 chr3 + 63489746 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 175 qTrf 0
+   fill 55421 139 chr33 - 33835556 132 id 3556105 score 5151 ali 132 qDup 132 type nonSyn tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 139 qTrf 130
+    gap 55437 2 chr33 - 33835672 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 2 qTrf 0
+    gap 55468 5 chr33 - 33835643 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 5 qTrf 0
+  gap 55569 21 chr3 + 63489755 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 21 qTrf 0
+  gap 55604 68 chr3 + 63489769 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 68 qTrf 0
+   fill 55604 68 chr33 - 33835444 67 id 3556105 score 2614 ali 67 qDup 67 type nonSyn tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 68 qTrf 67
+    gap 55640 1 chr33 - 33835475 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 1 qTrf 0
+  gap 55680 10 chr3 + 63489777 0 tN 0 qN 0 tR 0 qR 0 tOldR 0 qOldR 0 tTrf 10 qTrf 0

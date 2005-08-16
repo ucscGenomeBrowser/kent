@@ -11,15 +11,17 @@
 #include "axt.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.21 2005/02/25 23:47:35 angie Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.22 2005/08/16 17:53:13 kate Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
+boolean splitOnInsert = TRUE;
 
 static struct optionSpec optionSpecs[] = {
     {"qChain", OPTION_BOOLEAN},
     {"maxGap", OPTION_INT},
     {"gapOut", OPTION_STRING},
+    {"noSplit", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -36,6 +38,7 @@ errAbort(
   "   -qChain - net is with respect to the q side of chains.\n"
   "   -maxGap=N - maximum size of gap before breaking. Default %d\n"
   "   -gapOut=gap.tab - Output gap sizes to file\n"
+  "   -noSplit - Don't split chain when there is an insertion of another chain\n"
   ,  maxGap
   );
 }
@@ -61,40 +64,89 @@ struct axt *axt, *axtList;
 if (gapFile != NULL)
     writeGaps(chain, gapFile);
 axtList = chainToAxt(chain, qSeq, qOffset, tSeq, tOffset, maxGap, BIGNUM);
+verbose(9, "%d axts\n", slCount(axtList));
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
 axtFreeList(&axtList);
 }
 
-void convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
+void writeChainPart(struct dnaSeq *tChrom,
 	struct nibTwoCache *qNtc, char *nibDir,
-	struct chain *chain, FILE *f, FILE *gapFile)
-/* Convert subset of chain as defined by fill to axt. */
+	struct chain *chain, int tStart, int tEnd, FILE *f, FILE *gapFile)
+/* write out axt's from subset of chain */
 {
 struct dnaSeq *qSeq;
 boolean isRev = (chain->qStrand == '-');
 struct chain *subChain, *chainToFree;
-int qOffset;
 char path[PATH_LEN];
+int fullSeqSize;
+int qStart;
+
+chainSubsetOnT(chain, tStart, tEnd, &subChain, &chainToFree);
+if (subChain == NULL)
+    errAbort("null subchain in chain ID %d\n", chain->id);
 
 /* Get query sequence fragment. */
-    {
-    int fullSeqSize;
-    qSeq = nibTwoCacheSeqPart(qNtc, fill->qName, fill->qStart, fill->qSize, &fullSeqSize);
-    if (isRev)
-	{
-        reverseComplement(qSeq->dna, qSeq->size);
-	qOffset = fullSeqSize - (fill->qStart + fill->qSize);
-	}
-    else
-	qOffset = fill->qStart;
-    }
-chainSubsetOnT(chain, fill->tStart, fill->tStart + fill->tSize, 
-	&subChain, &chainToFree);
-assert(subChain != NULL);
-writeAxtFromChain(subChain, qSeq, qOffset, tChrom, 0, f, gapFile);
+nibTwoCacheSeqPart(qNtc, chain->qName, 1, 1, &fullSeqSize);
+qStart = (isRev ? fullSeqSize - subChain->qEnd : subChain->qStart);
+qSeq = nibTwoCacheSeqPart(qNtc, subChain->qName, qStart, 
+                                subChain->qEnd - subChain->qStart, NULL);
+if (isRev)
+    reverseComplement(qSeq->dna, qSeq->size);
+
+verbose(9, "fill chain id, subchain %d %s %d %d %c qOffset=%d\n", 
+                subChain->id, subChain->qName,
+                tStart, tEnd, subChain->qStrand, qStart);
+writeAxtFromChain(subChain, qSeq, subChain->qStart, tChrom, 0, f, gapFile);
 chainFree(&chainToFree);
 freeDnaSeq(&qSeq);
+}
+
+struct cnFill *nextGapWithInsert(struct cnFill *gapList)
+/* Find next in list that has a non-empty child.   */
+{
+struct cnFill *gap;
+for (gap = gapList; gap != NULL; gap = gap->next)
+    {
+    if (gap->children != NULL)
+        break;
+    }
+return gap;
+}
+
+void splitWrite(struct cnFill *fill, struct dnaSeq *tChrom,
+	struct nibTwoCache *qNtc, char *qNibDir,
+	struct chain *chain, FILE *f, FILE *gapFile)
+/* Split chain into pieces if it has inserts.  Write out
+ * each piece. */
+{
+int tStart = fill->tStart, tEnd;
+struct cnFill *child = fill->children;
+
+for (;;)
+    {
+    child = nextGapWithInsert(child);
+    if (child == NULL)
+        break;
+    writeChainPart(tChrom, qNtc, qNibDir,
+                        chain, tStart, child->tStart, f, gapFile);
+    tStart = child->tStart + child->tSize;
+    child = child->next;
+    }
+writeChainPart(tChrom, qNtc, qNibDir, 
+                        chain, tStart, fill->tStart + fill->tSize, f, gapFile);
+}
+
+void convertFill(struct cnFill *fill, struct dnaSeq *tChrom,
+        struct nibTwoCache *qNtc, char *qNibDir,
+	struct chain *chain, FILE *f, FILE *gapFile)
+/* Convert subset of chain as defined by fill to axt. */
+{
+if (splitOnInsert)
+    splitWrite(fill, tChrom, qNtc, qNibDir, chain, f, gapFile);
+else
+    writeChainPart(tChrom, qNtc, qNibDir, 
+                chain, fill->tStart, fill->tStart + fill->tSize, f, gapFile);
 }
 
 void rConvert(struct cnFill *fillList, struct dnaSeq *tChrom,
@@ -170,6 +222,7 @@ dnaUtilOpen();
 optionInit(&argc, argv, optionSpecs);
 qChain = optionExists("qChain");
 maxGap = optionInt("maxGap", maxGap);
+splitOnInsert = !optionExists("noSplit");
 if (argc != 6)
     usage();
 netToAxt(argv[1], argv[2], argv[3], argv[4], argv[5]);
