@@ -5335,7 +5335,7 @@ type bed 4
     track encodeAllIntronsDistal
     subTrack encodeWorkshopSelections
     shortLabel Intronic Dist
-    longLabel Consensus Intronic Dist
+    longLabel Consensus Intronic Distal
     priority 2
 
     track encodeAllIntergenicProximal
