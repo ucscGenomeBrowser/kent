@@ -193,7 +193,7 @@ urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
 track sangamoDnaseHs
-shortLabel Sgo/EIO DNaseI HS
+shortLabel SGMO/EIO DNase HS
 longLabel Sangamo - European Inst. of Oncology DNaseI-Hypersensitive Sites  (CD34+ Cells)
 group regulation
 priority 99.0
