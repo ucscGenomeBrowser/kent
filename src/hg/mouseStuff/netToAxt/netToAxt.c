@@ -11,7 +11,7 @@
 #include "axt.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.22 2005/08/16 17:53:13 kate Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.23 2005/08/16 17:56:36 kate Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -78,7 +78,6 @@ void writeChainPart(struct dnaSeq *tChrom,
 struct dnaSeq *qSeq;
 boolean isRev = (chain->qStrand == '-');
 struct chain *subChain, *chainToFree;
-char path[PATH_LEN];
 int fullSeqSize;
 int qStart;
 
@@ -120,7 +119,7 @@ void splitWrite(struct cnFill *fill, struct dnaSeq *tChrom,
 /* Split chain into pieces if it has inserts.  Write out
  * each piece. */
 {
-int tStart = fill->tStart, tEnd;
+int tStart = fill->tStart;
 struct cnFill *child = fill->children;
 
 for (;;)
