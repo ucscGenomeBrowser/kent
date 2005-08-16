@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.12.8.8 2005/08/15 06:39:19 markd Exp $
+# $Id: gbAlignSetup,v 1.12.8.9 2005/08/16 23:20:17 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -55,6 +55,11 @@ Does:
 #
 
 import sys, os, os.path, re
+
+# require 2.4 or newer
+if (sys.version_info[0] <= 2) and (sys.version_info[1] < 4):
+    raise Exception("python 2.4 or new required, using " + sys.version)
+
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(myBinDir + "/../lib/py")
 from optparse import OptionParser
@@ -69,8 +74,10 @@ absBinDir = os.path.abspath(myBinDir)
 mach = os.uname()[4]
 if mach == "i686":
     mach = "i386"
-machBinDir = absBinDir + "/" + mach
-os.environ["PATH"] = machBinDir + ":" + os.environ["PATH"]
+machBinPath = absBinDir + "/" + mach
+if mach != "i386":
+    machBinPath += ":" + absBinDir + "/i386" # use on x86_64 for now
+os.environ["PATH"] = machBinPath + ":" + os.environ["PATH"]
 gbBlatPath = absBinDir + "/gbBlat"
 
 cmdOpts = None
@@ -148,11 +155,6 @@ class CDnaQuery(object):
         self.faPath = faPath
         self.name = os.path.splitext(os.path.basename(faPath))[0]
 
-    def makePolyASizes(self):
-        "create a poly-A sizes file for this fasta"
-        polyAFile = os.path.splitext(self.faPath)[0] + ".polya"
-        procOps.callProc(["faPolyASizes", self.faPath, polyAFile])
-
     def __str__(self):
         return str(self.procPart) + ": nseqs=" + str(self.numSeqs) + ", nbases=" + str(self.numBases) + ": " + self.faPath
         
@@ -214,12 +216,6 @@ class CDnaUnaligned(object):
             raise Exception("gbAlignGet did not output \"alignCnt:\"")
         self.numAlign += cnt
 
-    def _makePolyASizes(self):
-        "create polyA sizes files for query fastas"
-        for orgCat in self.queries.iterkeys():
-            for query in self.queries[orgCat]:
-                query.makePolyASizes()
-
     def _buildPart(self, cmdBase, procPart):
         "run gbAlignGet to get fasta for one partition"
         cmd = list(cmdBase)
@@ -231,31 +227,32 @@ class CDnaUnaligned(object):
             cmd.append(self.cdnaType + "." + procPart.accPrefix)
         cmd.append(self.db)
 
-        if cmdOpts.verbose:
+        if cmdOpts.verbose > 0:
             print procOps.fmtCmd(cmd)
         lines = procOps.callProcLines(cmd)
 
         # process results
         self._parseAlignGet(procPart, lines)
-        self._makePolyASizes()
 
     def buildQueries(self):
         """build cDNA fasta files for unaligned partitions; return count of
         unaligned sequences"""
 
         # build first part of gbAlignGet command with options
-        cmdBase = ["gbAlignGet"];
+        cmdBase = ["gbAlignGet",
+                   "-workdir=" + self.workDir,
+                   "-orgCats=" + ",".join(self.orgCats),
+                   "-polyASizes"];
         if self.querySplitSize > 0:
             cmdBase.append("-fasize=" + str(self.querySplitSize))
         if cmdOpts.verbose:
-            cmdBase.append("-verbose=" + str(verbose))
+            cmdBase.append("-verbose=" + str(cmdOpts.verbose))
         if cmdOpts.noMigrate:
             cmdBase.append("-noMigrate")
-        cmdBase.extend(["-workdir=" + self.workDir,
-                        "-orgCats=" + ",".join(self.orgCats)])
         for procPart in self.unaligned:
             self._buildPart(cmdBase, procPart)
-            return self.numAlign
+
+        return self.numAlign
 
 class Job(list):
     """Information about a job.  This contains a single query sequence, and
@@ -447,7 +444,8 @@ class JobGenDb(object):
         for cdnaQuery in queries:
             jobs = Jobs(self, cdnaQuery)
             jobs.write(preFilterOpts)
-            jobs.prStats()
+            if cmdOpts.verbose > 3:
+                jobs.prStats()
         
     def _addJobSet(self, rel, cdnaType, orgCats):
         cdnaQueries = CDnaUnaligned(self.db, rel, cdnaType, orgCats,
@@ -474,8 +472,8 @@ class JobGenDb(object):
                 for cdnaType in cmdOpts.cdnaTypes:
                     if cdnaType in rel.cdnaTypes:
                         orgCats = self._getOrgCats(rel, cdnaType)
-                if len(orgCats) > 0:
-                    self._addJobSet(rel, cdnaType, orgCats)
+                        if len(orgCats) > 0:
+                            self._addJobSet(rel, cdnaType, orgCats)
         
 class JobGen(object):
     "object to generate alignment jobs"
@@ -573,3 +571,6 @@ def main():
 
 main()
 
+# Local Variables:
+# mode: python
+# End:

@@ -63,7 +63,7 @@ BEGIN {
     } else {
         die("can't determine system/arch");
     }
-    $newPath .= "$rootDir/bin:$rootDir/bin/$arch:/cluster/bin/$arch";
+    $newPath .= "$rootDir/bin:$rootDir/bin/$arch:$rootDir/bin/i386:/cluster/bin/$arch";
     $main::ENV{PATH} = $newPath . ":" . $main::ENV{PATH};
 
     # eieio has LANG set to en_US.UTF-8, which broken sort.

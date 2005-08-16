@@ -12,6 +12,7 @@ PROGS = ${BINDIR}/gbAlignSetup \
 	${BINDIR}/gbAlignStep \
 	${BINDIR}/gbBlat \
 	${BINDIR}/alignStats \
+	${BINDIR}/gbPython \
 	${BINARCH}/gbAlignGet \
 	${BINARCH}/gbAlignInstall
 

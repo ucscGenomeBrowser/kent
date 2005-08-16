@@ -1,4 +1,5 @@
 #!/usr/bin/env tclsh
+
 #
 # Run blat, polyInfo and pslIntronsOnly.
 #
@@ -8,6 +9,7 @@
 #  -keep - keep temporary files.
 #  -verbose - verbose debugging
 #  -overwrite - overwrite existing output (for debugging)
+#  -tmpDir - use this tmpdir (for debugging).
 #
 # Arguments:
 #  - jobSpecFile - path to a file describing the set of alignments to perform.
@@ -43,11 +45,13 @@
 # directory to reduce NFS impact.  If no sequences align, an empty psl file
 # is still produced.  This script is very careful to exit non-zero if an error
 # occurs.
-#
+
+
+
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.44.4.9 2005/08/15 06:39:19 markd Exp $
+# $Id: gbBlat,v 1.44.4.10 2005/08/16 23:20:17 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -59,9 +63,9 @@ if {$tcl_platform(machine) == "i686"} {
     set arch $tcl_platform(machine)
 }
 
-set gbBin [file dir [info script]]/$arch
-set stdBin /cluster/bin/$arch
-set env(PATH) "$gbBin:$stdBin:$env(PATH)"
+# include i386 as a fall back on x86_64 platforms
+set gbBinDir [file dir [info script]]
+set env(PATH) "$gbBinDir/$arch:$gbBinDir/i386:/cluster/bin/$arch:$env(PATH)"
 
 # FXIME: tmp workaround for libmysqlclient.so.* not being on cluster
 set env(LD_LIBRARY_PATH) [file dir [file dir [info script]]]/lib/i386
@@ -462,8 +466,9 @@ proc alignToGenome {specsVar blatParams tSeqSpec cdnaFa outPsl outOi outIntronPs
 proc partitionTargetSeqs {specsVar} {
     upvar $specsVar specs
     if {![string match *.2bit $specs(tdb)]} {
-        # nib
-        return [list $specs(tseq)]
+        # nib, each sequence individually
+        puts stderr "ret=[list $specs(tseq)]"
+        return $specs(tseq)
     }
     # split into subseqs and whole seqs
     set subSpecs {}
@@ -553,15 +558,18 @@ proc handleError {errorResult} {
 
 ##
 # create tmp directory
-proc mkTmpDir {} {
+proc mkTmpDir {tmpArg} {
     global env keepTmp
     # include user name in tmpDir name, since stale directories from another
     # user can't be removed.  Prefer /scratch/tmp, an fall back to /var/tmp
-    set user $env(USER)
-    if {[file isdirectory /scratch/tmp]} {
-        set tmpDir /scratch/tmp/gbBlat.$user.[pid].tmp
+    set dirName gbBlat.$env(USER).[pid].tmp
+
+    if {$tmpArg != {}} {
+        set tmpDir $tmpArg/$dirName
+    } elseif {[file isdirectory /scratch/tmp]} {
+        set tmpDir /scratch/tmp/$dirName
     } else {
-        set tmpDir /var/tmp/gbBlat.$user.[pid].tmp
+        set tmpDir /var/tmp/$dirName
     }
     callProg rm -rf $tmpDir
     callProg mkdir -p -m 02775 $tmpDir
@@ -587,6 +595,7 @@ proc mkOutDir {outDir} {
 set keepTmp 0
 set verbose 0
 set overwrite 0
+set tmpArg {}
 while {[llength $argv] && [string match -* [lindex $argv 0]]} {
     set opt [cmdlinePop]
     switch -- $opt {
@@ -598,6 +607,9 @@ while {[llength $argv] && [string match -* [lindex $argv 0]]} {
         }
         -overwrite {
             set overwrite 1
+        }
+        -tmpDir {
+            set tmpArg [cmdlinePopVal $opt]
         }
         default {
             puts stderr "Error: invalid option: $opt"
@@ -622,7 +634,7 @@ if {[file exists $outPsl] && !$overwrite} {
     exit 0
 }
 
-set tmpDir [mkTmpDir]
+set tmpDir [mkTmpDir $tmpArg]
 set tmpPrefix $tmpDir/$outBase
 mkOutDir $outDir
 
