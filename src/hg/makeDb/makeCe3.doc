@@ -53,14 +53,18 @@ done
     # translate to unzipped .fa, all upper case, and
     # rename the agp files so hgGoldGap can find them
     mkdir sangerFa
+
 for C in I II III IV V X M
 do
     echo -n "${C} "
     zcat WS140/chr${C}.fa.gz | tr '[a-z]' '[A-Z]' | \
 	    sed -e "s/CHROMOSOME_/chr/" > sangerFa/chr${C}.fa
     mkdir -p sangerFa/${C}
-    ln -s `pwd`/WS140/chr${C}.agp sangerFa/${C}/chr${C}.agp
+    ln -s ${C} sangerFa/chr${C}
+    sed -e "s/^/chr/" `pwd`/WS140/chr${C}.agp > sangerFa/${C}/chr${C}.agp
 done
+
+#    ln -s `pwd`/WS140/chr${C}.agp sangerFa/${C}/chr${C}.agp
 
     #	verify faCount still has the same amount of sequence as listed above
     cd sangerFa
@@ -507,8 +511,8 @@ done
     cd /cluster/data/ce3
     awk '{print $1}' chrom.sizes | sed -e "s/chr//" > chrom.lst
     grep -v random chrom.sizes | cut -f1 | sed -e "s/chr//" > chrom.lst
-    $HOME/bin/i386/hgGoldGapGl -verbose=2 -noGl -chromLst=chrom.lst ce3 \
-	/cluster/data/ce3 sangerFa
+    grep -v random chrom.sizes | cut -f1 > chrom.lst
+    hgGoldGapGl -noGl -chromLst=chrom.lst ce3 /cluster/data/ce3 sangerFa
     #
     #	There are no gaps in this assembly, the gap tables are all empty
     #
@@ -598,6 +602,45 @@ XXXXX Stopped here 2005-05-02 14:30
     # geneNames.notin.sangerLinks and add to file, SPIds.wormPep.WS120
     # Create a perl script to parse out Swiss-Prot IDs for those genes that 
     # have them and create the sql statements to insert them into sangerLinks
+
+# CREATE SANGERPEP TABLE (DONE, 2005-08-15, hiram)
+#	Must be done after sangerGene table load to have time stamps
+#	correct for joinerCheck
+    mkdir -p /cluster/data/ce3/bed/sangerPep
+    cd /cluster/data/ce3/bed/sangerPep
+    # Download peptide sequences from the Sanger Centre ftp site:
+    wget -o ce3.fetch.log -r -l1 --no-directories --timestamping \
+        ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep140/wormpep140
+    # Load into database
+    hgPepPred ce3 generic sangerPep wormpep140
+    # the sangerPep table is used by the sangerGene track
+    gzip wormpep140
+    ssh kkr1u00
+    cd /iscratch/i/worms/ce3
+    zcat /cluster/data/ce3/bed/sangerPep/wormpep140.gz > wormpep140
+    mkdir splitPep
+    faSplit sequence wormpep140 1000 splitPep/wp
+    #	rsync
+    for i in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --delete --rsh=rsh /iscratch/i/worms/ \
+	kkr${i}u00:/iscratch/i/worms/
+done
+
+
+# CREATE ORFTOGENE TABLE (Used by hgGene and hgNear) (NOT DONE)
+   mkdir /cluster/data/ce3/bed/orfToGene
+   cd !$
+   # gene_names.txt for WS120 was created and provided by todd.harris@cshl.edu
+   # ORF e.g. Y110A7A.10 gene e.g. aap-1
+   awk -F '\t' '$2 == "Caenorhabditis elegans" && $3 == "Gene" {printf("%s\t%s\n", $4, $1)}' gene_names.txt > orfToGene.txt
+   # reformat this for use in creating Sanger Links with hgWormLinks
+   awk 'NF == 2' orfToGene.txt > orfToGene.txt2
+   # use perl script to move ORFs with the same gene name onto separate lines
+   # and remove lines where there is a gene name with an alternate name
+   # in parentheses. this output file is used for Sanger Links
+   /cluster/data/ce3/jkStuff/formatorfToGene.pl < orfToGene.txt2 > orfToGene.tab2   
+   hgCeOrfToGene ce3 gene_names.txt sangerGene orfToGene
 
 #########################################################################
 # BLASTZ HUMAN Cb1 (WORKING - 2005-05-02 Hiram)
