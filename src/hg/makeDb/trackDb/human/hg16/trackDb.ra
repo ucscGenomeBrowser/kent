@@ -5285,7 +5285,7 @@ type bed 4 +
 track encodeGencodeRegions
 compositeTrack on
 shortLabel Gencode Unann
-longLabel Gencode Reference Annotation Unannotated Region Classification
+longLabel Gencode Unannotated Region Classification
 group encodeAnalysis
 priority 508
 visibility hide
