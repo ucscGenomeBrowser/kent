@@ -473,3 +473,132 @@ _EOF_
     ssh kk
     cd /cluster/data/caeRem1/bed/tblastn.hg17KG
     para create blastSpec
+
+#######################################################################
+# sangerGeneWS140 - mapping Ce3 sangerGene onto this sequence
+#	(DONE - 2005-08-17 - Hiram)
+#
+    ssh pk
+    mkdir /san/sanvol1/scratch/worms/caeRem1/blastDb
+    cd /san/sanvol1/scratch/worms/caeRem1/blastDb
+    faSplit sequence /cluster/data/caeRem1/maskedFa/remanei.softMasked.fa 10 c_
+
+    #	And construct the blast database
+    ssh kkr10u01
+    for i in *.fa
+    do
+    /cluster/bluearc/blast2211x86_64/bin/formatdb -i $i -p F
+    done
+    exit
+
+    mkdir -p /cluster/data/caeRem1/bed/tblastn.sangerGene
+    cd /cluster/data/caeRem1/bed/tblastn.sangerGene
+
+    ls -1S /san/sanvol1/scratch/worms/caeRem1/blastDb/*.fa > query.lst
+    ls -1S /san/sanvol1/scratch/worms/ce3/splitPep/*.fa > pep.lst
+
+    mkdir blastOut
+    for i in `cat pep.lst`; do mkdir blastOut/`basename $i .fa`; done
+
+    cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check in line+ $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast2211x86_64/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast2211x86_64/bin/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        if pslCheck -prot $f.2
+        then
+            cp -p $f.2 $3
+            rm -f $f.1 $f.2
+        fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $f.8
+exit 1
+'_EOF_'
+    #	happy emacs
+    chmod +x blastSome
+    
+    gensub2 query.lst pep.lst gsub jobList
+    para create jobList
+    para try; push; check ... etc ...
+# Completed: 8170 of 8170 jobs
+# CPU time in finished jobs:     119476s    1991.26m    33.19h    1.38d  0.004 y
+# IO & Wait Time:                 21472s     357.87m     5.96h    0.25d  0.001 y
+# Average job time:                  17s       0.29m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              33s       0.55m     0.01h    0.00d
+# Submission to last job:          1258s      20.97m     0.35h    0.01d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=7000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    #	happy emacs
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/wp???? > chain.lst
+    gensub2 chain.lst single chainGsub chainJobs
+    para create chainJobs
+    para try; push; check ... etc ...
+# Completed: 817 of 817 jobs
+# CPU time in finished jobs:         40s       0.67m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                  2092s      34.87m     0.58h    0.02d  0.000 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:            97s       1.62m     0.03h    0.00d
+    ssh kkstore01 
+    cd /cluster/data/caeRem1/bed/tblastn.sangerGene/blastOut
+    for i in wp????
+    do
+        awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+        sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+        awk "((\$1 / \$11) ) > 0.60 {print}" c60.$i.psl > m60.$i.psl
+        echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n \
+	| uniq  > ../preblastSangerGene.psl
+XXXX
+    cd ..
+#  haven't tried this yet - 2005-08-12 - should be interesting, need a
+#  psl file indicating where the sangerGene's are on Ce3 and alias name list
+    blatDir=/cluster/data/hg16/bed/blat.hg16KG
+    protDat -kg preblastHg16KG.psl $blatDir/hg16KG.psl $blatDir/kg.mapNames blastHg16KG.psl
+XXXX
+
+    ssh hgwdev
+    cd /cluster/data/caeRem1/bed/tblastn.sangerGene
+    hgLoadPsl -table=blastSangerGene caeRem1 preblastSangerGene.psl
+    
+    # clean up
+    ssh kkstore01
+    cd /cluster/data/cb2/bed/tblastn.sangerGene
+    rm -rf blastOut
