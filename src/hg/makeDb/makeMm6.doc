@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.71 2005/08/16 23:11:54 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.72 2005/08/17 21:59:22 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8228,4 +8228,70 @@ cut -f 1,3-11 >ensGeneNew.tab
     hgsql mm6 -e 'drop table ensemblXref3'
     hgsql mm6 <~/src/hg/lib/ensemblXref3.sql
     hgsql mm6 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
+    
+# load the table into proteome DB also    
+    hgsql proteome -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
+
+#### BUILD SUPERFAMILY RELATED TABLES (DONE - 2005-08-17 - Fan)
+
+# Download Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+    mkdir -p /cluster/store11/superfamily/050817
+    ln -s /cluster/store11/superfamily/050817 /cluster/data/superfamily/050817
+    cd /cluster/data/superfamily/050817
+# ftp over the following two files:
+
+    supfam_14-Aug-2005.sql.gz
+    ass_14-Aug-2005.tab.gz
+    
+    gzip -d *.gz
+# Load the Superfamily database
+    hgsql mm6 -e "create database superfam050817"
+    zcat supfam_14-Aug-2005.sql.gz | hgsql superfam050817
+
+# This may take about an hour.
+
+# Make sure to add an index on id of the des table of superfam050817.
+    hgsql superfam050817 -e "create index id on des(id);"
+    gzip -d ass_14-Aug-2005.tab.gz
+    hgsql superfam050817 < ~/src/hg/lib/sfAssign.sql
+    hgsql superfam050817 -e \
+    'load data local infile "ass_14-Aug-2005.tab" into table superfam050817.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql mm6 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/data/superfamily/050817  
+   hgsql mm6 -e 'load data local infile "ass_14-Aug-2005.tab" into table mm6.sfAssign;'
+
+# If mm6.sfDes already exists, drop it.
+
+   hgsql superfam050817 -e "select * from des" >sfDes.tab
+   hgsql mm6 < ~/src/hg/lib/sfDes.sql
+   hgsql mm6 -e 'load data local infile "sfDes.tab" into table mm6.sfDes ignore 1 lines;'
+
+# If mm6.superfamily already exists, drop it.
+   cd /cluster/data/mm6/bed
+   mkdir /cluster/data/mm6/sf.2005-0817
+   ln -s sf.2005-0817 sf
+   hgSuperfam mm6 superfam050817 > sf.log
+
+# It is normal that many proteins does not have corresponding Superfamily entries.
+
+# If mm6.sfDescription exists, drop it.
+
+   hgsql mm6 < ~/src/hg/lib/sfDescription.sql
+   hgsql mm6 -e 'LOAD DATA local INFILE "sfDescription.tab" into table mm6.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed mm6 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+   
+   cat /cluster/data/superfamily/050817/ass_14-Aug-2005.tab | hgKnownToSuper mm6 mm stdin
+# 21185 records output 
 
