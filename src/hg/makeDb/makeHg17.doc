@@ -3538,7 +3538,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 
 
 # EXTRACT AXT'S AND MAF'S FROM THE NET (kate)
-    ssh eieio
+    # NOTE: Redo 2005-08-16 to fix overlap problem (use 8/05 netToAxt)
+    ssh kkstore2
     cd /cluster/data/hg17/bed/blastz.fr1/axtChain
     netSplit human.net humanNet
     mkdir -p ../axtNet ../mafNet
@@ -3554,6 +3555,8 @@ cat > makeMaf.csh << 'EOF'
 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp ../mafNet /cluster/bluearc/hg17/mafNet/fr1
 
 
 # FUGU FR1 DOWNLOADS (DONE 2004-09-17 kate)
@@ -3858,6 +3861,8 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
 
 # NET RN3 (DONE - 2004-06-15 - Hiram)
 #	Re-done due to Chain being re-done 2004-06-23
+#       NOTE: Redo net axt's and net maf's to fix overlaps,
+#       (using 8/05 netToAxt). (2005-08-16 kate)
 
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.rn3/axtChain
@@ -3936,25 +3941,14 @@ doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} out/$(
     #	sys     1m7.230s
 
     # extract axts from net 
-    mkdir ../axtNet 
+    mkdir ../axtNet ../mafNet
+cat << 'EOF' > makeMaf.csh
     foreach n (ratNet/chr*.net)
 	set c=$n:t:r
-	echo "netToAxt: $c.net -> $c.axt"
-	rm -f ../axtNet/$c.axt
+        echo $c
 	netToAxt ratNet/$c.net chain/$c.chain \
-		/cluster/data/hg17/nib \
-		/cluster/data/rn3/nib stdout ../axtNet/$c.axt
-	echo "Complete: $c.net -> axtNet/$c.axt"
-    end
-    # sort axt's and convert to maf format
-    mkdir ../mafNet
-cat << 'EOF' > makeMaf.csh
-    foreach f (../axtNet/chr*.axt)
-        set c=$f:t:r
-        echo $c.axt
-        mv ../axtNet/$c.axt ../axtNet/$c.unsorted.axt
-        axtSort ../axtNet/$c.unsorted.axt ../axtNet/$c.axt
-        rm ../axtNet/$c.unsorted.axt
+		/cluster/data/hg17/nib  /cluster/data/rn3/nib stdout | \
+                    axtSort stdin ../axtNet/$c.axt
         axtToMaf ../axtNet/$c.axt \
             /cluster/data/hg17/chrom.sizes /cluster/data/rn3/chrom.sizes \
                 ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=rn3.
@@ -3962,6 +3956,8 @@ cat << 'EOF' > makeMaf.csh
 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp ../mafNet /cluster/bluearc/hg17/mafNet/rn3
 
     ssh hgwdev
     mkdir -p /cluster/data/hg17/bed/blastz.rn3/axtBest
@@ -5939,12 +5935,11 @@ foreach f (axtChain/rBest/rBestChain/*.chain)
 
 
 # GENERATE CHIMP MAF FOR MULTIZ FROM NET (DONE 2004-06-24 kate)
-    ssh eieio
+    # Redo to fix overlap problem using 8/05 netToAxt (2005-08-16 kate)
+    ssh kkstore02
     cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
     netSplit human.net net
 
-    ssh kolossus
-    cd /cluster/data/hg17/bed/blastz.panTro1.2004-06-22/axtChain
     mkdir axtNet mafNet
 cat > makeMaf.csh << 'EOF'
 foreach f (axtChain/net/*.net)
@@ -5959,6 +5954,9 @@ foreach f (axtChain/net/*.net)
 # << for emacs
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp mafNet /cluster/bluearc/hg17/mafNet/panTro1
 
 
 # MAKE PANTRO1 DOWNLOADABLES (DONE 2004-09-14 kate)
@@ -6093,25 +6091,28 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
 # The results of this are also symlinked under hg17/bed
 
 # GENERATE GALGAL2 MAF FOR MULTIZ FROM NET (DONE 6/23/04 angie)
-    ssh eieio
+#       Redo net axt's and maf's to fix overlap problem (use 8/05 netToAxt)
+#               (2005-08-16 kate)
+    ssh kkstore02
     cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
     netSplit human.net net
-    ssh kolossus
-    cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14
-    mkdir axtNet
+    cd ..
+    mkdir axtNet mafNet
+cat > makeMaf.csh << 'EOF'
     foreach f (axtChain/net/*)
       set chr = $f:t:r
       netToAxt $f axtChain/chain/$chr.chain /cluster/data/hg17/nib \
         /cluster/data/galGal2/nib stdout \
       | axtSort stdin axtNet/$chr.axt
-    end
-    mkdir mafNet
-    foreach f (axtNet/chr*.axt)
-      set maf = mafNet/$f:t:r.hg.maf
-      axtToMaf $f \
+      axtToMaf axtNet/$chr.axt \
             /cluster/data/hg17/chrom.sizes /cluster/data/galGal2/chrom.sizes \
-            $maf -tPrefix=hg17. -qPrefix=galGal2.
+            mafNet/$chr.maf -tPrefix=hg17. -qPrefix=galGal2.
     end
+'EOF'
+# << for emacs
+    csh makeMaf.csh >&! makeMaf.log &
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp mafNet /cluster/bluearc/hg17/mafNet/galGal2
 
 
 # MAKE VSGALGAL2 DOWNLOADABLES (REDONE 9/13/04 angie)
@@ -6145,8 +6146,8 @@ axtChain -scoreScheme=/cluster/data/blastz/HoxD55.q \
     md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
-
 # 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (DONE 2004-07-13 kate)
+#       Redo, below to fix overlapping alignments (2005-08-16 kate)
     ssh eieio
     set multizDir = multiz.2004-07-13
     set workingDir = /cluster/bluearc/hg17/$multizDir
@@ -6325,6 +6326,7 @@ mkdir -p $3:h
     cd /usr/local/apache/htdocs/goldenPath/hg17
     ln -s mzPt1Mm5Rn3Cf1Gg2Fr1Dr1 multiz8way
     mv /cluster/data/hg17/bed/multiz8way/upstream*.maf.gz multiz8way
+
 
 
 # PHYLO-HMM (PHASTCONS) CONSERVATION FOR 8-WAY WITH MM5 (DONE 2004-07-20 kate)
@@ -7132,24 +7134,28 @@ axtChain $1 \
 
 
 # GENERATE CANFAM1 MAF FOR MULTIZ FROM NET (DONE 7/9/04 angie)
-    ssh kksilo
+# Redo net axt's and maf's to fix overlaps (use 8/5 netToAxt)
+#       (2005-08-16 kate)
+    ssh kkstore02
     cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08/axtChain
     netSplit dog.net net
     cd /cluster/data/hg17/bed/blastz.canFam1.2004-07-08
-    mkdir axtNet
+    mkdir axtNet mafNet
+cat > makeMaf.csh << 'EOF'
     foreach f (axtChain/net/*)
       set chr = $f:t:r
+      echo $chr
       netToAxt $f axtChain/chain/$chr.chain /cluster/data/hg17/nib \
         /cluster/data/canFam1/nib stdout \
       | axtSort stdin axtNet/$chr.axt
-    end
-    mkdir mafNet
-    foreach f (axtNet/chr*.axt)
-      set maf = mafNet/$f:t:r.hg.maf
-      axtToMaf $f \
+      axtToMaf axtNet/$chr.axt \
             /cluster/data/hg17/chrom.sizes /cluster/data/canFam1/chrom.sizes \
-            $maf -tPrefix=hg17. -qPrefix=canFam1.
+            mafNet/$chr.maf -tPrefix=hg17. -qPrefix=canFam1.
     end
+'EOF'
+    csh makeMaf.csh >&! makeMaf.log &
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp mafNet /cluster/bluearc/hg17/mafNet/canFam1
 
 
 # BLASTZ MM5 (DONE - 2004-06-22 - Hiram)
@@ -7465,7 +7471,9 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     #	sys     1m13.490s
 
     #	extract axt's from net, and convert to maf's
-    ssh eieio
+    # NOTE: Redo the net axt's and maf's using 8/05 netToAxt
+    # in order to remove overlaps (2005-08-16 kate)
+    ssh kkstore02
     cd /cluster/data/hg17/bed/blastz.mm5/axtChain
     mkdir ../axtNet ../mafNet
 cat > makeMaf.csh << '_EOF_'
@@ -7486,7 +7494,8 @@ cat > makeMaf.csh << '_EOF_'
 # << for emacs
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
-
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp ../mafNet /cluster/bluearc/hg17/mafNet/mm5
 
     ssh hgwdev
     mkdir /cluster/data/hg17/bed/blastz.mm5/axtBest
@@ -7958,53 +7967,29 @@ axtFilter $1 \
 # (DONE, 2004-06-24, hartera) used net where hg17 ancient Repeat table used
 # sorted axts and remade mafs as multiz needs axts to be sorted
 # (DONE, 2004-06-25, kate)
+# Redone to fix overlaps using 8/05 axtToNet (2005-08-16 kate)
     ssh eieio
     # create axts
     cd /cluster/data/hg17/bed/blastz.danRer1.swap/axtChain
     netSplit zebrafish.net zebrafishNet
-    mkdir -p ../axtNet
-cat > axtNet.csh << 'EOF'
+    mkdir -p ../axtNet ../mafNet
+cat > makeMaf.csh << 'EOF'
     foreach f (zebrafishNet/chr*.net)
         set c = $f:t:r
-        echo "axtNet on $c"
+        echo $c
         netToAxt zebrafishNet/$c.net chain/$c.chain \
-        /cluster/data/hg17/nib /cluster/data/danRer1/nib ../axtNet/$c.axt
-    echo "Complete: $c.net -> $c.axt"
-    end
-'EOF'
-
-    chmod +x axtNet.csh
-    csh axtNet.csh >&! axtNet.log &
-    tail -100f axtNet.log
-
-    # sort axts before making mafs - must be sorted for multiz
-    #  (DONE, 2004-05-25, kate)
-    cd /cluster/data/hg17/bed/blastz.danRer1.swap
-    mv axtNet axtNet.unsorted
-    mkdir axtNet
-    foreach f (axtNet.unsorted/*.axt)
-        set c = $f:t:r
-        echo "Sorting $c"
-        axtSort $c axtNet/$c.axt
-    end
-
-    # create maf
-    ssh eieio
-    cd /cluster/data/hg17/bed/blastz.danRer1.swap
-    cd axtNet
-    mkdir ../mafNet
-
-cat > makeMaf.csh << 'EOF'
-    foreach f (chr*.axt)
-      set maf = $f:t:r.danRer1.maf
-      echo translating $f to $maf
-      axtToMaf $f \
+        /cluster/data/hg17/nib /cluster/data/danRer1/nib stdout | \
+               axtSort stdin ../axtNet/$c.axt
+        axtToMaf ../axtNet/$c.axt \
             /cluster/data/hg17/chrom.sizes /cluster/data/danRer1/chrom.sizes \
-            ../mafNet/$maf -tPrefix=hg17. -qPrefix=danRer1.
+            ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=danRer1.
     end
 'EOF'
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
+    mkdir -p /cluster/bluearc/hg17/mafNet
+    cp -rp ../mafNet /cluster/bluearc/hg17/mafNet/danRer1
+
 
 # BLASTZ ZEBRAFISH (danRer1) CLEAN UP (DONE, 2004-07-19, hartera)
      ssh eieio
@@ -8031,7 +8016,6 @@ cat > makeMaf.csh << 'EOF'
     cp /cluster/data/hg17/bed/blastz.danRer1.swap/axtNet/*.axt.gz .
     md5sum *.gz > md5sum.txt
     # Copy and edit README.txt
-
       
  
 # MAKING MOUSE SYNTENY (DONE - 2004-07-03 - Hiram)
@@ -12880,6 +12864,109 @@ cat > makeMaf.csh << 'EOF'
     tail -100f makeMaf.log
 
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
+
+
+# REDO 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (WORKING 2005-08-16 kate)
+
+    ssh kkstore02
+    set multizDir = multiz8way.2005-08-16
+    cd /cluster/data/hg17/bed
+    mkdir -p $multizDir
+    rm multiz8way
+    ln -s $multizDir multiz8way
+    
+    # Redo net axt's using 8/05 netToAxt to assure single-coverage
+    # See section for each species, above:
+    #    panTro1, canFam1, mm5, rn3, galGal2, danRer1, fr1
+    # Copy to /cluster/bluearc/hg17/mafNet
+
+    cd /cluster/bluearc/hg17
+    mkdir -p $multizDir
+    rm multiz8way
+    ln -s $multizDir multiz8way
+
+    # make output dir and run dir
+    ssh kk9
+    cd /cluster/data/hg17/bed
+    cd multiz8way
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run multiz on cluster
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/$user/multiz8way.$c
+    set pairs = /cluster/bluearc/hg17/multiz8way
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    set s1 = $2
+    set s2 = $3
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s2}${s1}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2"
+        /cluster/bin/penn/multiz $f1 $f2 - > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << for emacs
+chmod +x oneMultiz.csh
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+
+set c = $1
+oneMultiz.csh $c mm5 panTro1
+oneMultiz.csh $c rn3 panTro1mm5 
+oneMultiz.csh $c canFam1 panTro1mm5rn3 
+oneMultiz.csh $c galGal2 panTro1mm5rn3canFam1
+oneMultiz.csh $c fr1 panTro1mm5rn3canFam1galGal2
+oneMultiz.csh $c danRer1 panTro1mm5rn3canFam1galGal2fr1
+# get final alignment file
+cp /scratch/$user/multiz8way.$c/panTro1mm5rn3canFam1galGal2fr1danRer1/$c.maf /cluster/data/hg17/bed/multiz8way/maf/$c.maf
+#cleanup
+oneMultiz.csh $c
+'EOF'
+# << for emacs
+chmod +x allMultiz.csh
+
+cat > gsub << 'EOF'
+#LOOP
+allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz8way/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+    cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single gsub jobList
+    para create jobList
+    para try; para check
+    para push
 
 
 # 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (DONE 2004-12-22 kate)
