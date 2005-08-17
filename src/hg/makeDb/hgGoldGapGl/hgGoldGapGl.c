@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.21 2005/08/10 17:59:00 hiram Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.22 2005/08/17 16:48:03 hiram Exp $";
 
 
 void usage()
@@ -22,8 +22,10 @@ errAbort(
   "hgGoldGapGl - Put chromosome .agp and .gl files into browser database.\n"
   "usage:\n"
   "   hgGoldGapGl database gsDir ooSubDir\n"
+  "	(this usage creates split gold and gap tables)\n"
   "or\n"
   "   hgGoldGapGl database agpFile\n"
+  "	(this usage creates single gold and gap tables)\n"
   "options:\n"
   "   -noGl  - don't do gl bits\n"
   "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
@@ -320,7 +322,7 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
     {
     if (chrFi->isDir &&
 	((strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name) ||
-	 hashLookup(chromDirHash, chrFi->name)))
+	 (NULL != hashLookup(chromDirHash, chrFi->name))))
         {
 	if (oneChrom == NULL || sameWord(chrFi->name, oneChrom))
 	    {
