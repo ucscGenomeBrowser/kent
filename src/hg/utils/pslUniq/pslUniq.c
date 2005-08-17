@@ -4,8 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "psl.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: pslUniq.c,v 1.3 2004/02/07 20:28:23 braney Exp $";
+static char const rcsid[] = "$Id: pslUniq.c,v 1.4 2005/08/17 20:56:24 hiram Exp $";
 
 int numAllow = 1;
 
@@ -19,27 +20,23 @@ errAbort("usage: pslUniq in.psl out.psl\n"
 
 void pslUniq( char *pslName, char *outName, int numAllow)
 {
-int size;
-char *name;
 struct psl *psl;
 struct hash *pslHash = newHash(0);
 struct hashEl *hel;
-char *start;
 FILE *out = mustOpen(outName, "w");
-struct lineFile *list;
 struct lineFile *pslF = pslFileOpen(pslName);
 
-while ( psl = pslNext(pslF))
+while ((struct psl *)NULL != (psl = pslNext(pslF)))
     {
     if ( (hel = hashLookup(pslHash, psl->qName)) == NULL)
 	{
-	hashAdd(pslHash, psl->qName, 1);
+	hashAdd(pslHash, psl->qName, intToPt(1));
 	pslTabOut(psl, out); 
 	}
     else
 	{
 	hel->val++;
-	if (hel->val <= numAllow)
+	if (ptToInt(hel->val) <= numAllow)
 	    pslTabOut(psl, out); 
 	}
 
