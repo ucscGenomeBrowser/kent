@@ -193,8 +193,8 @@ urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
 track sangamoDnaseHs
-shortLabel SGMO/EIO DNase HS
-longLabel Sangamo - European Inst. of Oncology DNaseI-Hypersensitive Sites  (CD34+ Cells)
+shortLabel SGMO/EIO CD34 HS
+longLabel Sangamo - European Inst. of Oncology Nuclease Hypersensitive Sites  (CD34+ Cells)
 group regulation
 priority 99.0
 color 100,30,150
