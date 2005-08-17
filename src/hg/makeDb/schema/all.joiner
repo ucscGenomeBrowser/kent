@@ -567,6 +567,20 @@ identifier mouseLandscapeSampleId
      hgFixed.mouseLandscapeExps.id
      hgFixed.mouseLandscape.expScores comma indexOf full
 
+identifier gladHumES
+"Gladstone Human gene probe ID (same as GNF Atlas 2)"
+    hgFixed.gladHumES.name
+    hgFixed.gladHumESRatio.name unique
+    $hg.knownToGnfAtlas2.value
+    $hg.gnfAtlas2.name
+    $hg.affyGnf1h.qName
+
+identifier gladHumESSampleId
+"Identifiers of RNA samples used in Gladstone Arrays"
+     hgFixed.gladHumESExps.id
+     hgFixed.gladHumES.expScores comma indexOf full
+     hgFixed.gladHumESRatio.expScores comma indexOf full
+
 # Stuff to link together alignment chains and nets
 
 identifier chainSelf
@@ -1477,6 +1491,7 @@ identifier anoEstTclId
 
 # Dependencies not already captured in identifiers
 
+dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
 dependency $mm.mouseLandscapeDistance $mm.knownToXM hgFixed.mouseLandscape
 dependency $mm.affyGnfU74ADistance $mm.knownToU74  hgFixed.gnfMouseU74aMedianRatio
 dependency $mm.affyGnfU74BDistance $mm.knownToU74  hgFixed.gnfMouseU74bMedianRatio
@@ -1519,6 +1534,7 @@ dependency $pbDb.pbAaDistW $pbDb.kgProtMap
 dependency $pbDb.pbAaDistY $pbDb.kgProtMap
 dependency $pbDb2.superfamily $pbDb.ensGene $pbDb.ensTranscript $pbDb.sfAssign $pbDb.sfDes $pbDb.sfDescription
 dependency $pbDb3.superfamily $pbDb.ensGene $pbDb.ensemblXref3 $pbDb.sfAssign $pbDb.sfDes $pbDb.sfDescription
+
 
 # Table types - only needed when the table does not have the same name .as file record.
 type genePred
@@ -1590,6 +1606,7 @@ type expRecord
     hgFixed.kimWormLifeAllExps
     hgFixed.kimWormLifeMedianExps
     hgFixed.yeastChoCellCycleExps
+    hgFixed.gladHumESExps
 
 type expData
     hgFixed.kimWormLifeAllRatio
@@ -1618,6 +1635,8 @@ type expData
     hgFixed.kimWormLifeMedianRatio
     hgFixed.yeastChoCellCycle
     hgFixed.yeastChoCellCycleRatio
+    hgFixed.gladHumES
+    hgFixed.gladHumESRatio
 
 type exprBed
     $hg.affyRatio
@@ -1640,6 +1659,7 @@ type expDistance
     $ce.kimExpDistance
     $dm.arbExpDistance
     $sacCer.choExpDistance
+    $hg.gladHumESDistance
 
 type chain
     $gbd.chr%_chain%
