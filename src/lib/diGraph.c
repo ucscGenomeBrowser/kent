@@ -4,7 +4,7 @@
 #include "dlist.h"
 #include "diGraph.h"
 
-static char const rcsid[] = "$Id: diGraph.c,v 1.8 2005/04/11 08:00:56 markd Exp $";
+static char const rcsid[] = "$Id: diGraph.c,v 1.9 2005/08/17 03:01:29 galt Exp $";
 
 struct diGraph *dgNew()
 /* Return a new directed graph object. */
@@ -402,7 +402,7 @@ return rRefList;
 
 struct dgNodeRef *dgFindNextConnectedWithVals(struct diGraph *dg)
 /* Like dgFindConnected, but only considers graph nodes that
- * have a val attatched. */
+ * have a val attached. */
 {
 struct dgNode *a;
 

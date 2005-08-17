@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.36 2005/05/17 23:40:08 galt Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.37 2005/08/17 03:01:29 galt Exp $";
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -44,7 +44,7 @@ lf->pl = pl;
 return lf;
 }
 
-struct lineFile *lineFileAttatch(char *fileName, bool zTerm, int fd)
+struct lineFile *lineFileAttach(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */
 {
 struct lineFile *lf;
@@ -84,7 +84,7 @@ lf->bufSize = newSize;
 struct lineFile *lineFileStdin(bool zTerm)
 /* Wrap a line file around stdin. */
 {
-return lineFileAttatch("stdin", zTerm, fileno(stdin));
+return lineFileAttach("stdin", zTerm, fileno(stdin));
 }
 
 struct lineFile *lineFileMayOpen(char *fileName, bool zTerm)
@@ -99,7 +99,7 @@ else
     int fd = open(fileName, O_RDONLY);
     if (fd == -1)
         return NULL;
-    return lineFileAttatch(fileName, zTerm, fd);
+    return lineFileAttach(fileName, zTerm, fd);
     }
 }
 

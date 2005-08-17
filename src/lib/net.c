@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.42 2005/07/18 18:20:58 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.43 2005/08/17 03:01:30 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -680,7 +680,7 @@ return TRUE;
 }
 
 struct lineFile *netLineFileMayOpen(char *url)
-/* Return a lineFile attatched to url. Skipp
+/* Return a lineFile attached to url. Skipp
  * http header.  Return NULL if there's a problem. */
 {
 int sd = netUrlOpen(url);
@@ -691,7 +691,7 @@ if (sd < 0)
     }
 else
     {
-    struct lineFile *lf = lineFileAttatch(url, TRUE, sd);
+    struct lineFile *lf = lineFileAttach(url, TRUE, sd);
     if (startsWith("http://",url))
 	{
 	if (!netSkipHttpHeaderLines(lf))
@@ -702,7 +702,7 @@ else
 }
 
 struct lineFile *netLineFileOpen(char *url)
-/* Return a lineFile attatched to url.  This one
+/* Return a lineFile attached to url.  This one
  * will skip any headers.   Free this with
  * lineFileClose(). */
 {
@@ -926,7 +926,7 @@ if (sd < 0)
     return NULL;
 
 /* Return handle. */
-lf = lineFileAttatch(url, TRUE, sd);
+lf = lineFileAttach(url, TRUE, sd);
 return lf;
 } /* netHttpLineFileMayOpen */
 

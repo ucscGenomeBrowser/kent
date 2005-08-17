@@ -133,7 +133,7 @@ int netUrlHead(char *url, struct hash *hash);
  * lines, including hopefully Content-Type: */
 
 struct lineFile *netLineFileOpen(char *url);
-/* Return a lineFile attatched to url.  This one
+/* Return a lineFile attached to url.  This one
  * will skip any headers.   Free this with
  * lineFileClose(). */
 

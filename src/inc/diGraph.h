@@ -130,7 +130,7 @@ struct dgNodeRef *dgFindNextConnected(struct diGraph *dg);
 
 struct dgNodeRef *dgFindNextConnectedWithVals(struct diGraph *dg);
 /* Like dgFindConnected, but only considers graph nodes that
- * have a val attatched. */
+ * have a val attached. */
 
 int dgConnectedComponents(struct diGraph *dg);
 /* Count number of connected components and set component field
