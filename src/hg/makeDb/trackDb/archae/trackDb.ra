@@ -210,6 +210,14 @@ query select chrom,chromStart,chromEnd,tigrCommon from %s where tigrCommon like 
 searchDescription Common Name of TIGR Locus
 searchPriority 61
 
+searchName tigrCmrORFsPrimLocus
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,primLocus from %s where primLocus like '%%%s%%'
+searchDescription Primary Name of TIGR Locus
+searchPriority 61
+
 searchName tigrCmrORFsMainRole
 searchTable tigrCmrORFs
 searchType bed
@@ -231,3 +239,4 @@ searchType bed
 searchMethod prefix
 searchDescription Intergenics on microarray
 searchPriority 70
+
