@@ -108,6 +108,9 @@ struct hash *chainReadAllSwap(char *fileName, boolean swapQ);
 struct hash *chainReadAll(char *fileName);
 /* Read chains into a hash keyed by id. */
     
+struct hash *chainReadAllWithMeta(char *fileName, FILE *f);
+/* Read chains into a hash keyed by id and outputs meta data */
+
 struct chain *chainLookup(struct hash *hash, int id);
 /* Find chain in hash. */
 
