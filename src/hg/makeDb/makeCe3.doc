@@ -722,7 +722,7 @@ done
 
 
 ##########################################################################
-# BLASTZ C. elegans ce3 (WORKING - 2005-08-10 - Hiram)
+# BLASTZ C. elegans ce3 (DONE - 2005-08-10 - Hiram)
     ssh kk
     mkdir /cluster/data/ce3/bed/blastzCb2.2005_08_10
     cd /cluster/data/ce3/bed/blastzCb2.2005_08_10
@@ -934,3 +934,72 @@ SEQ2_LEN=$BASE/S2.len
     #	real    7m27.028s
     #	user    0m1.770s
     #	sys     0m0.190s
+
+##########################################################################
+# BLASTZ C. remanei caeRem1 (DONE - 2005-08-18 - Hiram)
+    ssh pk
+    mkdir /cluster/data/ce3/bed/blastzCaeRem1.2005_08_18
+    cd /cluster/data/ce3/bed/blastzCaeRem1.2005_08_18
+    cat << '_EOF_' > DEF
+# Ce3 vs Cb2
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Cb3
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce3/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: CaeRem1
+SEQ2_DIR=/san/sanvol1/scratch/worms/caeRem1/caeRem1.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/ce3/bed/blastzCaeRem1.2005_08_18
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp -p /cluster/data/ce3/chrom.sizes ./S1.len
+    twoBitInfo /san/sanvol1/scratch/worms/caeRem1/caeRem1.2bit stdout | \
+	sort -rn +1  > S2.len
+
+    #	establish a screen to control this job
+    #	altered local copy of doBlastzChainNet.pl to fix santest location
+    #	and run everything on pk since the san location is unique here
+    #	and these jobs are not going to be very large anyway
+    screen
+    time ./doBlastzChainNet.pl \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-workhorse=pk \
+	-fileServer=kkstore02 \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	real    33m25.177s
+    #	user    0m0.561s
+    #	sys     0m0.222s
+
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh kk
+    screen -d -r
+
+    #	swap results to place ce3 alignments onto caeRem1
+    cd /cluster/data/ce3/bed/blastzCaeRem1.2005_08_18
+    time ./doBlastzChainNet.pl -swap \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-workhorse=pk \
+	-fileServer=kkstore02 \
+	`pwd`/DEF > swap.run.out 2>&1 &
+    #	real    17m13.957s
+    #	user    0m0.395s
+    #	sys     0m0.148s
