@@ -14,6 +14,14 @@ enum nlType {
  nlt_mac    /* cr   */
 };
 
+struct metaOutput
+/* struct to store list of file handles to output meta data to 
+ * meta data is text after # */
+    {
+    struct metaOutput *next;    /* next file handle */
+    FILE *metaFile;             /* file to write metadata to */
+    };
+
 struct lineFile
 /* Structure to handle fast, line oriented
  * fileIo. */
@@ -33,6 +41,7 @@ struct lineFile
     bool reuse;			/* Set if reusing input. */
     char *buf;			/* Buffer. */
     struct pipeline *pl;        /* pipeline if reading compressed */
+    struct metaOutput *metaOutput;   /* list of FILE handles to write metaData to */
     };
 
 struct lineFile *lineFileMayOpen(char *fileName, bool zTerm);
@@ -151,6 +160,10 @@ struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 				       boolean chunked, int contentLength);
 /* Return a dyString that contains the http response body in lf.  Handle 
  * chunk-encoding and content-length. */
+
+void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f);
+/* set file to write meta data to,
+ * should be called before reading from input file */
 
 #endif /* LINEFILE_H */
 

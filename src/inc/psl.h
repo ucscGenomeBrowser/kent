@@ -129,10 +129,18 @@ struct lineFile *pslFileOpen(char *fileName);
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it. */
 
+struct lineFile *pslFileOpenWithMeta(char *fileName, FILE *f);
+/* Read header part of psl and make sure it's right. 
+ * Return line file handle to it and send meta data to output file f */
+
 void pslxFileOpen(char *fileName, enum gfType *retQueryType, 
 	enum gfType *retTargetType, struct lineFile **retLf);
 /* Read header part of psl and make sure it's right.  Return
  * sequence types and file handle. */
+
+void pslxFileOpenWithMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f);
+/* Read header part of psl and make sure it's right.  Return
+ * sequence types and file handle and send meta data to output file f */
 
 int pslCmpQuery(const void *va, const void *vb);
 /* Compare to sort based on query. */
