@@ -11,7 +11,12 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.37 2005/08/17 03:01:29 galt Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.38 2005/08/18 07:20:06 baertsch Exp $";
+
+/* pointer to input stream to grab meta Data , 
+ * also contains pointer to output File list.
+ * currently handles one input stream and 
+ * multiple output streams */
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -29,6 +34,29 @@ else if (endsWith(fileName, ".bz2"))
     return BZ2_READ;
 else
     return NULL;
+}
+
+static void metaDataAdd(struct lineFile *lf, char *line)
+/* write a line of metaData to output file 
+ * internal function called by lineFileNext */
+{
+struct metaOutput *meta = NULL;
+for (meta = lf->metaOutput ; meta != NULL ; meta = meta->next)
+    if (line != NULL && meta->metaFile != NULL)
+        fprintf(meta->metaFile,"%s\n", line);
+}
+
+void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f)
+/* set file to write meta data to,
+ * should be called before reading from input file */
+{
+struct metaOutput *meta = NULL;
+if (lf == NULL)
+    return;
+AllocVar(meta);
+meta->next = NULL;
+meta->metaFile = f;
+slAddHead(&lf->metaOutput, meta);
 }
 
 static struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
@@ -195,6 +223,8 @@ if (lf->reuse)
     if (retSize != NULL)
 	*retSize = lf->lineEnd - lf->lineStart;
     *retStart = buf + lf->lineStart;
+    if (*retStart[0] == '#')
+        metaDataAdd(lf, *retStart);
     return TRUE;
     }
 
@@ -260,6 +290,8 @@ while (!gotLf)
 	if (retSize != NULL)
 	    *retSize = endIx - newStart;
 	*retStart = buf + newStart;
+        if (*retStart[0] == '#')
+            metaDataAdd(lf, *retStart);
 	return TRUE;
 	}
     else if (readSize <= 0)
@@ -330,6 +362,8 @@ lf->lineEnd = endIx;
 if (retSize != NULL)
     *retSize = endIx - newStart;
 *retStart = buf + newStart;
+if (*retStart[0] == '#')
+    metaDataAdd(lf, *retStart);
 return TRUE;
 }
 
@@ -396,8 +430,12 @@ while (lineFileNext(lf, retStart, NULL))
     {
     s = skipLeadingSpaces(*retStart);
     c = s[0];
+    if (c == '#')
+        metaDataAdd(lf, *retStart);
     if (c != 0 && c != '#')
+        {
 	return TRUE;
+        }
     }
 return FALSE;
 }
