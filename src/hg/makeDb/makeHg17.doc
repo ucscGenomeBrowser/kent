@@ -268,6 +268,19 @@ done >> seq_contig.md
     # Copy over grp table (for track grouping) from another database:
     hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" hg17
 
+    # ENCODE groups
+    # Added 2005-08016 kate
+    echo 'UPDATE grp SET priority=7 WHERE name="varRep"'| hgsql hg17
+    echo 'UPDATE grp SET priority=8 WHERE name="encode"'| hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeGenes", "ENCODE Regions and Genes", 8.1)' | hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeTxLevels", "ENCODE Transcript Levels", 8.2)' | hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeChip", "ENCODE Chromatin Immunoprecipitation", 8.3)' | hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeChrom", "ENCODE Chromosome, Chromatin and DNA Structure", 8.4)' | hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeCompGeno", "ENCODE Comparative Genomics", 8.5)' | hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeVariation", "ENCODE Variation", 8.6)' | hgsql hg17
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeAnalysis", "ENCODE Analysis", 8.9)' | hgsql hg17
+    
+
 # MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS
 #	(DONE - 2004-05-21 - Hiram)
     #	RE-DONE with new NIBS - 2004-06-03
