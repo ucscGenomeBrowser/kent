@@ -87,6 +87,7 @@ struct axtScoreScheme
     int matrix[256][256];   /* Look up with letters. */
     int gapOpen;	/* Gap open cost. */
     int gapExtend;	/* Gap extension. */
+    char *extra;        /* extra parameters */
     };
 
 void axtScoreSchemeFree(struct axtScoreScheme **pObj);
@@ -125,6 +126,20 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName);
     -123  -31 -114   91
     O = 400, E = 30
  * axtScoreSchemeFree this when done. */
+
+struct axtScoreScheme *axtScoreSchemeReadLf(struct lineFile *lf );
+/* Read in scoring scheme from file. Looks like
+    A    C    G    T
+    91 -114  -31 -123
+    -114  100 -125  -31
+    -31 -125  100 -114
+    -123  -31 -114   91
+    O = 400, E = 30
+ * axtScoreSchemeFree this when done. */
+
+void axtScoreSchemeDnaWrite(struct axtScoreScheme *ss, FILE *f, char *name);
+/* output the score dna based score matrix in meta Data format to File f,
+name should be set to the name of the program that is using the matrix */
 
 int axtScoreSym(struct axtScoreScheme *ss, int symCount, char *qSym, char *tSym);
 /* Return score without setting up an axt structure. */
