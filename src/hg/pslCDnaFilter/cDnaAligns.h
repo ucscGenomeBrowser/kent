@@ -51,6 +51,7 @@ struct cDnaAligns
     struct cDnaCnts coverTopCnts;      /* number dropped less that top cover */
     struct cDnaCnts maxRepMatchCnts;   /* number dropped due maxRepMatch */
     struct cDnaCnts maxAlignsCnts;     /* number dropped due to over max */
+    struct cDnaCnts minSpanCnts;       /* number dropped due to under minSpan */
 };
 
 struct cDnaAligns *cDnaAlignsNew(char *pslFile, float coverWeight,

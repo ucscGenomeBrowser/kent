@@ -3,8 +3,10 @@ include ../../../inc/common.mk
 PSLFILT = ../pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
-test: noopTest overlapTest maxAlignTest minQSizeTest \
-	nonCompareTest repMatchTest noDropCntBugTest
+test:	noopTest overlapTest maxAlignTest minQSizeTest \
+	nonCompareTest repMatchTest noDropCntBugTest \
+	minSpan100Test minSpan10Test
+
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -33,6 +35,13 @@ repMatchTest:
 # file that causes the count of queries kept to be one more than total
 noDropCntBugTest:
 	${MAKE} doFilter name=$@ inPsl=noDropCntBug.psl filtArgs=''
+
+# minSpan tests
+minSpan100Test:
+	${MAKE} doFilter name=$@ inPsl=pseudoRetro.psl filtArgs='-minSpan=1.0'
+
+minSpan10Test:
+	${MAKE} doFilter name=$@ inPsl=pseudoRetro.psl filtArgs='-minSpan=0.1'
 
 
 # Recursive targets:

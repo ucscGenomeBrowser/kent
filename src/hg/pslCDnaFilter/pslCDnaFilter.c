@@ -33,9 +33,12 @@ errAbort("%s\n%s", msg,
          "   -coverNearTop=1.0 - keep alignments within this fraction of\n"
          "    the top coverage alignment. If -polyASizes is specified and the query\n"
          "    is in the file, the ploy-A is not included in coverage calculation.\n"
-         "   -coverWeight=0.0 - weight of coverage vs identity in critera that\n"
+         "   -coverWeight=0.5 - weight of coverage vs identity in critera that\n"
          "    select between alignments. A value of 0.75 would put 3/4 of the\n"
          "    weight on coverage and 1/4 on identity.\n"
+         "   -minSpan=0.0 - Keep only alignments whose target length are at least this fraction of the\n"
+         "    longest alignment passing the other filters.  This can be useful for removing possible\n"
+         "    retroposed genes.\n"
          "   -minQSize=0 - drop queries shorter than this size\n"
          "   -maxAligns=-1 - maximum number of alignments for a given query. If\n"
          "    exceeded, then alignments are sorted by weighed coverage and\n"
@@ -82,6 +85,7 @@ errAbort("%s\n%s", msg,
          "    highest identity alignment.\n"
          "  o By coverage near top, only keeping alignments with coverNearTop of\n"
          "    highest coverage alignment.\n"
+         "  o By minSpan, if specified\n"
          "  o By maxAligns, if specified\n");
 }
 
@@ -97,6 +101,7 @@ static struct optionSpec optionSpecs[] =
     {"maxRepMatch", OPTION_FLOAT},
     {"minQSize", OPTION_INT},
     {"maxAligns", OPTION_INT},
+    {"minSpan", OPTION_FLOAT},
     {"bestOverlap", OPTION_BOOLEAN},
     {"polyASizes", OPTION_STRING},
     {"dropped", OPTION_STRING},
@@ -106,7 +111,11 @@ static struct optionSpec optionSpecs[] =
 };
 
 /* options that are comparative */
-char *comparativeOpts[] = {"idNearTop", "coverNearTop", "bestOverlap", "weirdOverlapped", NULL};
+char *comparativeOpts[] = {
+    "idNearTop", "coverNearTop", "coverWeight", "minSpan",
+    "maxAligns", "bestOverlap", "weirdOverlapped", 
+    NULL
+};
 
 char *gPolyASizes = NULL;       /* polyA size file */
 char *gDropped = NULL;          /* save dropped psls here */
@@ -117,6 +126,7 @@ float gMinCover = 0.0;          /* minimum coverage */
 float gCoverNearTop = 1.0;      /* keep within this fraction of best cover */
 float gCoverWeight = 0.5;       /* weight of cover vs id */
 float gMaxRepMatch = 1.0;       /* maximum repeat match/aligned */
+float gMinSpan = 0.0;           /* minimum target span allowed */
 int gMinQSize = 0;              /* drop queries shorter than this */
 int gMaxAligns = -1;            /* only allow this many alignments for a query
                                  * -1 disables check. */
@@ -142,7 +152,7 @@ if (devNull == NULL)
 return (pslCheck("", devNull, psl) == 0);
 }
 
-void invalidPslFilter(struct cDnaAligns *cdAlns)
+static void invalidPslFilter(struct cDnaAligns *cdAlns)
 /* filter for invalid PSL */
 {
 struct cDnaAlign *aln;
@@ -155,7 +165,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
-void minQSizeFilter(struct cDnaAligns *cdAlns)
+static void minQSizeFilter(struct cDnaAligns *cdAlns)
 /* filter by minimum query size */
 {
 struct cDnaAlign *aln;
@@ -169,7 +179,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
-void identFilter(struct cDnaAligns *cdAlns)
+static void identFilter(struct cDnaAligns *cdAlns)
 /* filter by fraction identity */
 {
 struct cDnaAlign *aln;
@@ -182,7 +192,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
-float getMaxIdent(struct cDnaAligns *cdAlns)
+static float getMaxIdent(struct cDnaAligns *cdAlns)
 /* get the maximum ident  */
 {
 float maxIdent = 0.0;
@@ -193,7 +203,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
 return maxIdent;
 }
 
-void identNearTopFilter(struct cDnaAligns *cdAlns)
+static void identNearTopFilter(struct cDnaAligns *cdAlns)
 /* filter by fraction identity near the top */
 {
 float maxIdent = getMaxIdent(cdAlns);
@@ -209,19 +219,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
-void coverFilterAln(struct cDnaAligns *cdAlns,
-                    struct cDnaAlign *aln)
-/* filter an alignment based on coverage */
-{
-if (aln->cover < gMinCover)
-    {
-    aln->drop = TRUE;
-    cdAlns->minCoverCnts.aligns++;
-    cDnaAlignVerb(3, aln->psl, "drop: min cover %0.4g", aln->cover);
-    }
-}
-
-void coverFilter(struct cDnaAligns *cdAlns)
+static void coverFilter(struct cDnaAligns *cdAlns)
 /* filter by coverage */
 {
 struct cDnaAlign *aln;
@@ -236,7 +234,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
-float getMaxCover(struct cDnaAligns *cdAlns)
+static float getMaxCover(struct cDnaAligns *cdAlns)
 /* get the maximum coverage */
 {
 float maxCover = 0.0;
@@ -249,7 +247,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
 return maxCover;
 }
 
-void coverNearTopFilter(struct cDnaAligns *cdAlns)
+static void coverNearTopFilter(struct cDnaAligns *cdAlns)
 /* filter by coverage */
 {
 float maxCover = getMaxCover(cdAlns);
@@ -266,7 +264,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
         }
 }
 
-void repMatchFilter(struct cDnaAligns *cdAlns)
+static void repMatchFilter(struct cDnaAligns *cdAlns)
 /* filter by maxRepMatch */
 {
 struct cDnaAlign *aln;
@@ -283,7 +281,7 @@ for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
     }
 }
 
-struct cDnaAlign *findMaxAlign(struct cDnaAligns *cdAlns)
+static struct cDnaAlign *findMaxAlign(struct cDnaAligns *cdAlns)
 /* find first alignment over max size */
 {
 struct cDnaAlign *aln;
@@ -296,7 +294,8 @@ for (aln = cdAlns->alns, cnt = 0; (aln != NULL) && (cnt < gMaxAligns);
     }
 return aln;
 }
-void maxAlignFilter(struct cDnaAligns *cdAlns)
+
+static void maxAlignFilter(struct cDnaAligns *cdAlns)
 /* filter by maximum number of alignments */
 {
 struct cDnaAlign *aln;
@@ -310,8 +309,40 @@ for (aln = findMaxAlign(cdAlns); aln != NULL; aln = aln->next)
         }
 }
 
-void filterQuery(struct cDnaAligns *cdAlns,
-                 FILE *outPslFh, FILE *dropPslFh, FILE *weirdOverPslFh)
+static int getTargetSpan(struct cDnaAlign *aln)
+/* get the target span for an alignment */
+{
+return (aln->psl->tEnd - aln->psl->tStart);
+}
+
+static void minSpanFilter(struct cDnaAligns *cdAlns)
+/* Filter by fraction of target length of maximum longest passing the other
+ * filters.  This can be useful for removing possible retroposed genes.
+ * Suggested by Jeltje van Baren.*/
+{
+int longestSpan = 0;
+int minSpanLen;
+struct cDnaAlign *aln;
+
+/* find longest span */
+for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
+    if (!aln->drop)
+        longestSpan = max(longestSpan, getTargetSpan(aln));
+
+/* filter by under this amount  */
+minSpanLen = gMinSpan*longestSpan;
+for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
+    if ((!aln->drop) && (getTargetSpan(aln) < minSpanLen))
+        {
+        aln->drop = TRUE;
+        cdAlns->minSpanCnts.aligns++;
+        cDnaAlignVerb(3, aln->psl, "drop: minSpan span %d, min is %d (%0.2f)",
+                      getTargetSpan(aln), minSpanLen, ((float)getTargetSpan(aln))/longestSpan);
+        }
+}
+
+static void filterQuery(struct cDnaAligns *cdAlns,
+                        FILE *outPslFh, FILE *dropPslFh, FILE *weirdOverPslFh)
 /* filter the current query set of alignments in cdAlns */
 {
 /* n.b. order should agree with doc */
@@ -330,6 +361,8 @@ if (gIdNearTop < 1.0)
     identNearTopFilter(cdAlns);
 if (gCoverNearTop < 1.0)
     coverNearTopFilter(cdAlns);
+if (gMinSpan > 0.0)
+    minSpanFilter(cdAlns);
 if (gMaxAligns >= 0)
     maxAlignFilter(cdAlns);
 cDnaAlignsWriteKept(cdAlns, outPslFh);
@@ -339,7 +372,7 @@ if (weirdOverPslFh != NULL)
     cDnaAlignsWriteWeird(cdAlns, weirdOverPslFh);
 }
 
-void verbStats(char *label, struct cDnaCnts *cnts)
+static void verbStats(char *label, struct cDnaCnts *cnts)
 /* output stats */
 {
 if (cnts->aligns > 0)
@@ -347,7 +380,7 @@ if (cnts->aligns > 0)
             cnts->multAlnQueries);
 }
 
-void pslCDnaFilter(char *inPsl, char *outPsl)
+static void pslCDnaFilter(char *inPsl, char *outPsl)
 /* filter cDNA alignments in psl format */
 {
 struct cDnaAligns *cdAlns = cDnaAlignsNew(inPsl, gCoverWeight, gPolyASizes);
@@ -379,11 +412,12 @@ verbStats("drop idNearTop", &cdAlns->idTopCnts);
 verbStats("drop minCover", &cdAlns->minCoverCnts);
 verbStats("drop coverNearTop", &cdAlns->coverTopCnts);
 verbStats("drop maxRepMatch", &cdAlns->maxRepMatchCnts);
+verbStats("drop minSpan", &cdAlns->minSpanCnts);
 verbStats("drop maxAligns", &cdAlns->maxAlignsCnts);
 cDnaAlignsFree(&cdAlns);
 }
 
-float optionFrac(char *name, float def)
+static float optionFrac(char *name, float def)
 /* get an option that must be in the range 0.0 and 1.0 */
 {
 float val = optionFloat(name, def);
@@ -408,6 +442,7 @@ gCoverNearTop = optionFrac("coverNearTop", gCoverNearTop);
 gCoverWeight = optionFrac("coverWeight", gCoverWeight);
 gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
 gMinQSize = optionInt("minQSize", gMinQSize);
+gMinSpan = optionFrac("minSpan", gMinSpan);
 gMaxAligns = optionInt("maxAligns", gMaxAligns);
 gBestOverlap = optionExists("bestOverlap");
 gAlignStats = optionVal("alignStats", gAlignStats);

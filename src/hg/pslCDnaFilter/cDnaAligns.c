@@ -202,6 +202,7 @@ updateCounter(&cdAlns->minCoverCnts);
 updateCounter(&cdAlns->coverTopCnts);
 updateCounter(&cdAlns->maxRepMatchCnts);
 updateCounter(&cdAlns->maxAlignsCnts);
+updateCounter(&cdAlns->minSpanCnts);
 }
 
 boolean cDnaAlignsNext(struct cDnaAligns *cdAlns)
