@@ -3,11 +3,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "axt.h"
 
-static char const rcsid[] = "$Id: lavToPsl.c,v 1.8 2005/06/01 20:43:22 jill Exp $";
+static char const rcsid[] = "$Id: lavToPsl.c,v 1.9 2005/08/18 07:44:41 baertsch Exp $";
 
 /* strand to us for target */
 char* targetStrand = "+";
+boolean bed = FALSE;
 char* lavScoreFile = NULL;
 
 void usage()
@@ -18,7 +20,8 @@ errAbort(
   "usage:\n"
   "   lavToPsl in.lav out.psl\n"
   "options:\n"
-  "   -target-strand=c     set the target strand to c (default is no strand)\n"
+  "   -target-strand=c set the target strand to c (default is no strand)\n"
+  "   -bed output bed instead of psl\n"
   "   -scoreFile=filename  output lav scores to side file, such that\n"
   "                        each psl line in out.psl is matched by a score line.\n"
   );
@@ -31,6 +34,7 @@ struct block
     int qStart, qEnd;	/* Query position. */
     int tStart, tEnd;	/* Target position. */
     int percentId;	/* Percentage identity. */
+    int score;
     };
 
 void outputBlocks(struct block *blockList, FILE *f, boolean isRc, 
@@ -107,7 +111,7 @@ if (psl)
     }
 else  /* Output bed line. */
     {
-    score = (match - mismatch - qNumInsert*2) * 1000 / (qTotalEnd - qTotalStart);
+    score = block->score;
     fprintf(f, "%s\t%d\t%d\t%s\t%d\t", tName, tTotalStart, tTotalEnd,
 	qName, score);
     fprintf(f, "%c\t", (isRc ? '-' : '+'));
@@ -150,6 +154,30 @@ if (!lineFileRow(lf, words))
 if (!lineFileRow(lf, words))
     unexpectedEof(lf);
 *qSize = lineFileNeedNum(lf, words, 2);
+seekEndOfStanza(lf);
+}
+
+void parseD(struct lineFile *lf, char **matrix, char **command, FILE *f)
+/* Parse d stanza and return matrix and blastz command line */
+{
+char *line, *words[64];
+int i, size, wordCount = 0;
+struct axtScoreScheme *ss = NULL;
+freez(matrix);
+freez(command);
+if (!lineFileNext(lf, &line, &size))
+   unexpectedEof(lf);
+if (stringIn("blastz",line))
+    {
+    stripChar(line,'"');
+    wordCount = chopLine(line, words);
+    fprintf(f, "##aligner=%s",words[0]);
+    for (i = 3 ; i <wordCount ; i++)
+        fprintf(f, " %s ",words[i]);
+    fprintf(f,"\n");
+    ss = axtScoreSchemeReadLf(lf);
+    axtScoreSchemeDnaWrite(ss, f, "blastz");
+    }
 seekEndOfStanza(lf);
 }
 
@@ -223,8 +251,9 @@ for (i=0; ; ++i)
 struct block *parseA(struct lineFile *lf, FILE* ff)
 /* Parse an alignment stanza into a block list. */
 {
-struct block *block, *blockList = NULL;
+struct block *block = NULL, *blockList = NULL;
 char *line, *words[6];
+int score = 0;
 int wordCount,lavScore;
 
 while (lineFileNext(lf, &line, NULL))
@@ -236,10 +265,16 @@ while (lineFileNext(lf, &line, NULL))
     wordCount = chopLine(line, words);
     if (wordCount == 0)
 	continue;
+    if (words[0][0] == 's')
+        {
+	lineFileExpectWords(lf, 2, wordCount) ;
+	score  = lineFileNeedNum(lf, words, 1) - 1 ;
+        }
     if (words[0][0] == 'l')
 	{
-	lineFileExpectWords(lf, 6, wordCount);
 	AllocVar(block);
+	lineFileExpectWords(lf, 6, wordCount);
+        block->score = score;
 	block->tStart = lineFileNeedNum(lf, words, 1) - 1;
 	block->tEnd = lineFileNeedNum(lf, words, 3);
 	block->qStart = lineFileNeedNum(lf, words, 2) - 1;
@@ -272,6 +307,7 @@ double scale;
 int id;
 boolean isRc = FALSE;
 char *tName = NULL, *qName = NULL;
+char *matrix = NULL, *command = NULL;
 int qSize = 0, tSize = 0;
 
 /* Check header. */
@@ -290,10 +326,15 @@ while (lineFileNext(lf, &line, NULL))
         {
 	parseH(lf, &tName, &qName, &isRc);
 	}
+    else if (startsWith("d {", line))
+        {
+	parseD(lf, &matrix, &command, f);
+	}
     else if (startsWith("a {", line))
         {
 	blockList = parseA(lf,ff);
-	outputBlocks(blockList, f, isRc, qName, qSize, tName, tSize, TRUE);
+        bed = optionExists("bed");
+	outputBlocks(blockList, f, isRc, qName, qSize, tName, tSize, !bed);
 	slFreeList(&blockList);
 	}
     }
@@ -306,6 +347,7 @@ void lavToPsl(char *lavIn, char *pslOut)
 {
 FILE *f = mustOpen(pslOut, "w");
 FILE *ff = NULL;
+
 
 if (lavScoreFile!=NULL)
     ff = mustOpen(lavScoreFile, "w");
