@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.42 2005/04/11 07:20:03 markd Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.43 2005/08/18 07:17:03 baertsch Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -612,7 +612,7 @@ freeMem(string);
 return ss;
 }
 
-struct axtScoreScheme *axtScoreSchemeRead(char *fileName)
+struct axtScoreScheme *axtScoreSchemeReadLf(struct lineFile *lf )
 /* Read in scoring scheme from file. Looks like
     A    C    G    T
     91 -114  -31 -123
@@ -622,7 +622,6 @@ struct axtScoreScheme *axtScoreSchemeRead(char *fileName)
     O = 400, E = 30
 */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *row[4], *parts[32];
 int i,j, partCount;
 struct axtScoreScheme *ss;
@@ -630,6 +629,7 @@ boolean gotO = FALSE, gotE = FALSE;
 static int trans[4] = {'a', 'c', 'g', 't'};
 
 AllocVar(ss);
+ss->extra = NULL;
 if (!lineFileRow(lf, row))
     shortScoreScheme(lf);
 if (row[0][0] != 'A' || row[1][0] != 'C' || row[2][0] != 'G' 
@@ -644,6 +644,7 @@ for (i=0; i<4; ++i)
     }
 if (lineFileNext(lf, &line, NULL))
     {
+    ss->extra = cloneString(line);
     partCount = chopString(line, " =,\t", parts, ArraySize(parts));
     for (i=0; i<partCount-1; i += 2)
 	{
@@ -669,8 +670,59 @@ else
     ss->gapExtend = 30;
     }
 propagateCase(ss);
-lineFileClose(&lf);
 return ss;
+}
+
+struct axtScoreScheme *axtScoreSchemeRead(char *fileName)
+/* Read in scoring scheme from file. Looks like
+    A    C    G    T
+    91 -114  -31 -123
+    -114  100 -125  -31
+    -31 -125  100 -114
+    -123  -31 -114   91
+    O = 400, E = 30
+*/
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct axtScoreScheme *ss = axtScoreSchemeReadLf(lf);
+return ss;
+}
+
+void axtScoreSchemeDnaWrite(struct axtScoreScheme *ss, FILE *f, char *name)
+/* output the score dna based score matrix in meta Data format to File f,
+name should be set to the name of the program that is using the matrix */
+{
+if (ss == NULL)
+    return;
+if (f == NULL)
+    return;
+fprintf(f, "##matrix=%s 16 %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
+        name,
+    ss->matrix['a']['a'],
+    ss->matrix['a']['c'],
+    ss->matrix['a']['g'],
+    ss->matrix['a']['t'],
+
+    ss->matrix['c']['a'],
+    ss->matrix['c']['c'],
+    ss->matrix['c']['g'],
+    ss->matrix['c']['t'],
+
+    ss->matrix['g']['a'],
+    ss->matrix['g']['c'],
+    ss->matrix['g']['g'],
+    ss->matrix['g']['t'],
+
+    ss->matrix['t']['a'],
+    ss->matrix['t']['c'],
+    ss->matrix['t']['g'],
+    ss->matrix['t']['t']);
+if (ss->extra!=NULL)
+    {
+    stripChar(ss->extra,' ');
+    stripChar(ss->extra,'"');
+    fprintf(f, "##blastzParms=%s\n", ss->extra);
+    }
 }
 
 void axtSwap(struct axt *axt, int tSize, int qSize)
