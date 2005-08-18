@@ -11,8 +11,9 @@
 #include "axt.h"
 #include "fa.h"
 
-struct dnaSeq *faList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.18 2004/10/21 21:10:05 kent Exp $";
+struct dnaSeq *qFaList;
+struct dnaSeq *tFaList;
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.19 2005/08/18 07:43:56 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,6 +26,7 @@ errAbort(
   "twoBit file\n"
   "options:\n"
   "   -fa  qNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
+  "   -tfa tNibDir is interpreted as a fasta file of multiple dna seq instead of directory of nibs\n"
   "   -dropSelf  drops alignment blocks on the diagonal for self alignments\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file.\n"
   "                (only used in conjunction with -dropSelf, to rescore \n"
@@ -33,6 +35,7 @@ errAbort(
 }
 
 boolean qIsFa = FALSE;	/* Corresponds to -fa flag. */
+boolean tIsFa = FALSE;	/* Corresponds to -tfa flag. */
 boolean dropSelf = FALSE;	/* Corresponds to -dropSelf flag. */
 struct axtScoreScheme *scoreScheme = NULL;  /* -scoreScheme flag. */
 
@@ -198,7 +201,7 @@ if (isRc)
     reverseIntRange(&qStart, &qEnd, qSize);
     if (qIsFa)
         {
-        for (seq = faList ; seq != NULL ; seq = seq->next)
+        for (seq = qFaList ; seq != NULL ; seq = seq->next)
             if (sameString(qName, seq->name))
                 break;
         if (seq != NULL)
@@ -209,7 +212,7 @@ if (isRc)
             qSeq->dna = cloneMem((seq->dna)+qStart, qSeq->size);
             }
         else
-            errAbort("sequence not found %d\n",qName);
+            errAbort("sequence not found %s\n",qName);
         }
     else
         qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize, qIsTwoBit);
@@ -220,7 +223,7 @@ else
     {    
     if (qIsFa)
         {
-        for (seq = faList ; seq != NULL ; seq = seq->next)
+        for (seq = qFaList ; seq != NULL ; seq = seq->next)
 	    {
             if (sameString(qName, seq->name))
                 break;
@@ -233,12 +236,28 @@ else
 	    qSeq->dna = (seq->dna)+qStart;
 	    }
 	else
-	    errAbort("sequence not found %d\n",qName);
+	    errAbort("sequence not found %s\n",qName);
         }
     else
         qSeq = readFromCache(qCache, qNibDir, qName, qStart, qEnd - qStart, qSize, qIsTwoBit);
     }
-tSeq = readFromCache(tCache, tNibDir, tName, tStart, tEnd - tStart, tSize, tIsTwoBit);
+    if (tIsFa)
+        {
+        for (seq = tFaList ; seq != NULL ; seq = seq->next)
+            if (sameString(tName, seq->name))
+                break;
+        if (seq != NULL)
+            {
+            AllocVar(tSeq);
+            tSeq->size = tEnd - tStart;
+            tSeq->name = cloneString(tName);
+            tSeq->dna = cloneMem((seq->dna)+tStart, tSeq->size);
+            }
+        else
+            errAbort("sequence not found %s\n",tName);
+        }
+    else
+        tSeq = readFromCache(tCache, tNibDir, tName, tStart, tEnd - tStart, tSize, tIsTwoBit);
 
 /* Loop through blocks copying sequence into dynamic strings. */
 for (block = blockList; block != NULL; block = block->next)
@@ -362,6 +381,21 @@ if (e == NULL)
     return s;
 else
     return e+1;
+}
+
+void parseD(struct lineFile *lf, char **matrix, char **command, FILE *f)
+/* Parse d stanza and return matrix and blastz command line */
+{
+char *line, *words[3];
+int size;
+struct axtScoreScheme *ss = NULL;
+freez(matrix);
+freez(command);
+if (!lineFileNext(lf, &line, &size))
+   unexpectedEof(lf);
+ss = axtScoreSchemeReadLf(lf);
+axtScoreSchemeDnaWrite(ss, f, "blastz");
+seekEndOfStanza(lf);
 }
 
 
@@ -553,6 +587,7 @@ char *line;
 struct block *blockList = NULL;
 boolean isRc = FALSE;
 char *tName = NULL, *qName = NULL;
+char *matrix = NULL, *command = NULL;
 int qSize = 0, tSize = 0;
 int score = 0;
 
@@ -571,6 +606,10 @@ while (lineFileNext(lf, &line, NULL))
     else if (startsWith("h {", line))
         {
 	parseH(lf, &tName, &qName, &isRc);
+	}
+    else if (startsWith("d {", line))
+        {
+	parseD(lf, &matrix, &command, f);
 	}
     else if (startsWith("a {", line))
         {
@@ -623,7 +662,12 @@ if (argc != 5)
 if (optionExists("fa"))
     {
     qIsFa = TRUE;
-    faList = faReadAllMixed(argv[3]);
+    qFaList = faReadAllMixed(argv[3]);
+    }
+if (optionExists("tfa"))
+    {
+    tIsFa = TRUE;
+    tFaList = faReadAllMixed(argv[2]);
     }
 scoreSchemeFile = optionVal("scoreScheme", scoreSchemeFile);
 if (scoreSchemeFile != NULL)
