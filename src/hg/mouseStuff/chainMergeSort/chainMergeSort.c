@@ -6,7 +6,7 @@
 #include "dlist.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainMergeSort.c,v 1.6 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: chainMergeSort.c,v 1.7 2005/08/18 07:40:43 baertsch Exp $";
 
 boolean saveId = FALSE;
 
@@ -45,6 +45,7 @@ for (i=0; i<fileCount; ++i)
     {
     AllocVar(cf);
     cf->lf = lineFileOpen(files[i], TRUE);
+    lineFileSetMetaDataOutput(cf->lf, stdout);
     cf->chain = chainRead(cf->lf);
     if (cf->chain != NULL)
 	dlAddValTail(list, cf);

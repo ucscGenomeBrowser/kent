@@ -11,7 +11,7 @@
 #include "axt.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: netToAxt.c,v 1.23 2005/08/16 17:56:36 kate Exp $";
+static char const rcsid[] = "$Id: netToAxt.c,v 1.24 2005/08/18 07:47:24 baertsch Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 100;
@@ -198,6 +198,7 @@ FILE *gapFile = NULL;
 
 if (gapFileName)
     gapFile = mustOpen(gapFileName, "w");
+lineFileSetMetaDataOutput(lf, f);
 chainHash = chainReadUsedSwap(chainName, qChain, usedBits);
 bitFree(&usedBits);
 while ((net = chainNetRead(lf)) != NULL)

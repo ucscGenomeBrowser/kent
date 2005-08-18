@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSort.c,v 1.4 2003/06/21 18:40:20 baertsch Exp $";
+static char const rcsid[] = "$Id: chainSort.c,v 1.5 2005/08/18 07:42:12 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,7 +28,9 @@ void chainSort(char *inFile, char *outFile)
 {
 struct chain *chainList = NULL, *chain;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
-FILE *f;
+FILE *f = mustOpen(outFile, "w");
+
+lineFileSetMetaDataOutput(lf, f);
 
 /* Read in all chains. */
 while ((chain = chainRead(lf)) != NULL)
@@ -46,7 +48,6 @@ else
     slSort(&chainList, chainCmpScore);
 
 /* Output. */
-f = mustOpen(outFile, "w");
 for (chain = chainList; chain != NULL; chain = chain->next)
     chainWrite(chain, f);
 carefulClose(&f);

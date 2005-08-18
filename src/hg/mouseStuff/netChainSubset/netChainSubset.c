@@ -6,7 +6,7 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.9 2005/06/22 22:35:56 markd Exp $";
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.10 2005/08/18 07:45:58 baertsch Exp $";
 
 char *type = NULL;
 boolean splitOnInsert = FALSE;
@@ -149,7 +149,7 @@ FILE *gapFile = NULL;
 
 if (gapFileName)
     gapFile = mustOpen(gapFileName, "w");
-chainHash = chainReadAll(chainIn);
+chainHash = chainReadAllWithMeta(chainIn, f);
 while ((net = chainNetRead(lf)) != NULL)
     {
     verbose(1, "Processing %s\n", net->name);

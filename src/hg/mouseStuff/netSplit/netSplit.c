@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netSplit.c,v 1.3 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: netSplit.c,v 1.4 2005/08/18 07:46:35 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,16 +23,25 @@ errAbort(
 void netSplit(char *inNet, char *outDir)
 /* netSplit - Split a genome net file into chromosome net files. */
 {
-char fileName[512];
+char fileName[512], tpath[512], cmd[512];
 struct lineFile *lf = lineFileOpen(inNet, TRUE);
-FILE *f;
+FILE *f, *meta ;
 struct chainNet *net;
+bool metaOpen = TRUE;
+sprintf(tpath, "%s/meta.tmp", outDir);
 
 makeDir(outDir);
+meta = mustOpen(tpath,"w");
+lineFileSetMetaDataOutput(lf, meta);
 while ((net = chainNetRead(lf)) != NULL)
     {
     sprintf(fileName, "%s/%s.net", outDir, net->name);
-    f = mustOpen(fileName, "w");
+    if (metaOpen)
+        fclose(meta);
+    metaOpen = FALSE;
+    sprintf(cmd, "cat %s | sort -u > %s", tpath, fileName);
+    system(cmd);
+    f = mustOpen(fileName, "a");
     printf("Writing %s\n", fileName);
     chainNetWrite(net, f);
     carefulClose(&f);

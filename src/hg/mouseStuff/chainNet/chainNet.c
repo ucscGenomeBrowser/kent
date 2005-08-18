@@ -8,7 +8,7 @@
 #include "rbTree.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.33 2005/01/10 00:37:52 kent Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.34 2005/08/18 07:41:16 baertsch Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -687,10 +687,9 @@ if (subScore >= minScore && subSize >= minFill)
     }
 }
 
-void outputNetSide(struct chrom *chromList, char *fileName, boolean isQ)
+void outputNetSide(struct chrom *chromList, FILE *f, boolean isQ)
 /* Output one side of net */
 {
-FILE *f = mustOpen(fileName, "w");
 struct chrom *chrom;
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
@@ -738,6 +737,8 @@ struct chain *chain;
 double lastScore = -1;
 struct lm *lm = lmInit(0);
 struct rbTreeNode **rbStack;
+FILE *tNetFile = mustOpen(tNet, "w");
+FILE *qNetFile = mustOpen(qNet, "w");
 
 
 lmAllocArray(lm, rbStack, 256);
@@ -745,6 +746,8 @@ makeChroms(qSizes, lm, rbStack, &qHash, &qChromList);
 makeChroms(tSizes, lm, rbStack, &tHash, &tChromList);
 verbose(1, "Got %d chroms in %s, %d in %s\n", slCount(tChromList), tSizes,
        slCount(qChromList), qSizes);
+lineFileSetMetaDataOutput(lf, tNetFile);
+lineFileSetMetaDataOutput(lf, qNetFile);
 
 /* Loop through chain file building up net. */
 while ((chain = chainRead(lf)) != NULL)
@@ -786,9 +789,9 @@ finishNet(tChromList, FALSE);
 
 /* Write out basic net files. */
 verbose(1, "writing %s\n", tNet);
-outputNetSide(tChromList, tNet, FALSE);
+outputNetSide(tChromList, tNetFile, FALSE);
 verbose(1, "writing %s\n", qNet);
-outputNetSide(qChromList, qNet, TRUE);
+outputNetSide(qChromList, qNetFile, TRUE);
 if (verboseLevel() > 1)
     printMem(stderr);
 }

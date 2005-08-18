@@ -6,7 +6,7 @@
 #include "chainBlock.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: chainPreNet.c,v 1.7 2005/01/10 00:37:52 kent Exp $";
+static char const rcsid[] = "$Id: chainPreNet.c,v 1.8 2005/08/18 07:41:42 baertsch Exp $";
 
 int dots = 0;  /* How often to put out a dot. */
 int pad = 1;   /* How much to pad around chain. */
@@ -128,6 +128,7 @@ struct chain *chain;
 double score, lastScore = 9e99;
 struct chrom *qChrom, *tChrom;
 
+lineFileSetMetaDataOutput(lf, f);
 while ((chain = chainRead(lf)) != NULL)
     {
     /* Report progress. */

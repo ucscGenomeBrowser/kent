@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSplit.c,v 1.5 2004/10/25 19:01:35 kent Exp $";
+static char const rcsid[] = "$Id: chainSplit.c,v 1.6 2005/08/18 07:42:36 baertsch Exp $";
 
 boolean splitOnQ = FALSE;
 int lump = 0;
@@ -58,12 +58,19 @@ void chainSplit(char *outDir, int inCount, char *inFiles[])
 {
 struct hash *hash = newHash(0);
 int inIx;
+char tpath[512];
+FILE *meta ;
+bool metaOpen = TRUE;
 makeDir(outDir);
+sprintf(tpath, "%s/meta.tmp", outDir);
+meta = mustOpen(tpath,"w");
+
 for (inIx = 0; inIx < inCount; ++inIx)
     {
     struct lineFile *lf = lineFileOpen(inFiles[inIx], TRUE);
     struct chain *chain;
     FILE *f;
+    lineFileSetMetaDataOutput(lf, meta);
     while ((chain = chainRead(lf)) != NULL)
         {
 	char *name = (splitOnQ ? chain->qName : chain->tName);
@@ -71,9 +78,14 @@ for (inIx = 0; inIx < inCount; ++inIx)
 	    name = lumpName(name);
 	if ((f = hashFindVal(hash, name)) == NULL)
 	    {
-	    char path[512];
+	    char path[512], cmd[512];
 	    sprintf(path, "%s/%s.chain", outDir, name);
-	    f = mustOpen(path, "w");
+            if (metaOpen)
+                fclose(meta);
+            metaOpen = FALSE;
+	    sprintf(cmd, "cat %s | sort -u > %s", tpath, path);
+            system(cmd);
+	    f = mustOpen(path, "a");
 	    hashAdd(hash, name, f);
 	    }
 	chainWrite(chain, f);

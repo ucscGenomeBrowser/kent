@@ -9,7 +9,7 @@
 #include "nibTwo.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.3 2005/01/10 00:37:00 kent Exp $";
+static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.4 2005/08/18 07:40:19 baertsch Exp $";
 
 int minScore = 5000;
 int noCheckScore = 200000;
@@ -123,6 +123,7 @@ struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct chain *chain;
 struct nibTwoCache *qc, *tc;
+lineFileSetMetaDataOutput(lf, f);
 
 isLowerDna['a'] = isLowerDna['c'] = isLowerDna['g'] = isLowerDna['t'] = 
 	isLowerDna['n'] = TRUE;

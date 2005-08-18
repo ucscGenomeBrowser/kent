@@ -8,7 +8,7 @@
 #include "axt.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: axtToMaf.c,v 1.6 2004/10/27 22:57:32 kent Exp $";
+static char const rcsid[] = "$Id: axtToMaf.c,v 1.7 2005/08/18 07:39:34 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,6 +87,7 @@ if (tSplit)
 else
     {
     f = mustOpen(out, "w");
+    lineFileSetMetaDataOutput(lf, f);
     mafWriteStart(f, "blastz");
     }
 while ((axt = axtRead(lf)) != NULL)
