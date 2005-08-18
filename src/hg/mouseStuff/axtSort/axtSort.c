@@ -7,7 +7,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtSort.c,v 1.6 2004/03/27 17:24:36 braney Exp $";
+static char const rcsid[] = "$Id: axtSort.c,v 1.7 2005/08/18 07:31:30 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,6 +29,9 @@ struct axt *axtList = NULL, *axt;
 struct lineFile *lf = lineFileOpen(in, TRUE);
 FILE *f;
 
+
+f = mustOpen(out, "w");
+lineFileSetMetaDataOutput(lf, f);
 while ((axt = axtRead(lf)) != NULL)
     {
     slAddHead(&axtList, axt);
@@ -40,7 +43,6 @@ else if (byQuery)
 else
     slSort(&axtList, axtCmpTarget);
 lineFileClose(&lf);
-f = mustOpen(out, "w");
 for (axt = axtList; axt != NULL; axt = axt->next)
     axtWrite(axt, f);
 }

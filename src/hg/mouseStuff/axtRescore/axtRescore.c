@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtRescore.c,v 1.1 2004/02/28 02:42:03 angie Exp $";
+static char const rcsid[] = "$Id: axtRescore.c,v 1.2 2005/08/18 07:29:04 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,6 +28,8 @@ struct lineFile *lf = lineFileOpen(in, TRUE);
 FILE *f = mustOpen(out, "w");
 struct axt *axt;
 
+lineFileSetMetaDataOutput(lf, f);
+axtScoreSchemeDnaWrite(scoreScheme, f, "axtRescore");
 for (;;)
     {
     axt = axtRead(lf);

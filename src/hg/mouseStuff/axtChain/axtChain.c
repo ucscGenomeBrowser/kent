@@ -16,7 +16,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.31 2005/01/10 00:36:36 kent Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.32 2005/08/18 07:25:44 baertsch Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;
@@ -304,13 +304,15 @@ for (chain = chainList; chain != NULL; chain = next)
     }
 }
 
-struct seqPair *readAxtBlocks(char *fileName, struct hash *pairHash)
+struct seqPair *readAxtBlocks(char *fileName, struct hash *pairHash, FILE *f)
 /* Read in axt file and parse blocks into pairHash */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct dyString *dy = newDyString(512);
 struct axt *axt;
 struct seqPair *spList = NULL, *sp;
+
+lineFileSetMetaDataOutput(lf, f);
 while ((axt = axtRead(lf)) != NULL)
     {
     dyStringClear(dy);
@@ -335,11 +337,11 @@ slSort(&spList, seqPairCmp);
 return spList;
 }
 
-struct seqPair *readPslBlocks(char *fileName, struct hash *pairHash)
+struct seqPair *readPslBlocks(char *fileName, struct hash *pairHash, FILE *f)
 /* Read in psl file and parse blocks into pairHash */
 {
 struct seqPair *spList = NULL, *sp;
-struct lineFile *lf = pslFileOpen(fileName);
+struct lineFile *lf = pslFileOpenWithMeta(fileName, f);
 struct dyString *dy = newDyString(512);
 struct psl *psl;
 
@@ -387,13 +389,15 @@ FILE *faF;
 boolean qIsTwoBit = twoBitIsFile(qNibDir);
 boolean tIsTwoBit = twoBitIsFile(tNibDir);
 
+axtScoreSchemeDnaWrite(scoreScheme, f, "axtChain");
+
 if (detailsName != NULL)
     details = mustOpen(detailsName, "w");
 /* Read input file and divide alignments into various parts. */
 if (optionExists("psl"))
-    spList = readPslBlocks(axtIn, pairHash);
+    spList = readPslBlocks(axtIn, pairHash, f);
 else
-    spList = readAxtBlocks(axtIn, pairHash);
+    spList = readAxtBlocks(axtIn, pairHash, f);
 
 if (optionExists("faQ"))
     {

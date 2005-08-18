@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.11 2005/06/09 01:51:40 jill Exp $";
+static char const rcsid[] = "$Id: axtFilter.c,v 1.12 2005/08/18 07:26:27 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -91,6 +91,7 @@ for (i=0; i<inCount; ++i)
     char *fileName = inNames[i];
     struct lineFile *lf = lineFileOpen(fileName, TRUE);
     struct axt *axt;
+    lineFileSetMetaDataOutput(lf, stdout);
     while ((axt = axtRead(lf)) != NULL)
         {
 	boolean writeIt = TRUE;

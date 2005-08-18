@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.16 2004/07/16 22:49:43 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.17 2005/08/18 07:25:02 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,7 @@ errAbort(
   "   -minOutSize=N - Minimum score of piece to output. Default 10\n"
   "   -matrix=file.mat - override default scoring matrix\n"
   "   -verbose=N - Alter verbosity (default 1)\n"
+  "   -reads - allow reads to be split across introns but not chromosomes\n"
   "   chrom=all - read all records and group by tName (in.axt must be axtSorted)\n"
   "Alignments scoring over minScore (where each matching base counts\n"
   "about +100 in the default scoring scheme) are projected onto the\n"
@@ -31,7 +32,10 @@ errAbort(
   "is calculated, and the best scoring alignments in each window are\n"
   "marked.  Alignments that are never the best are thrown out.\n"
   "The best scoring alignment for each window is the output, chopping\n"
-  "up alignments if necessary\n");
+  "up alignments if necessary\n"
+  "Note: -reads option requires reads to be in tName (preprocess with axtSwap)\n"
+  "set the chrom parameter for all for the -reads option.\n"
+  );
 }
 
 struct optionSpec options[] = {
@@ -39,6 +43,7 @@ struct optionSpec options[] = {
    {"minScore", OPTION_INT},
    {"minOutSize", OPTION_INT},
    {"matrix", OPTION_STRING},
+   {"reads", OPTION_BOOLEAN},
    {NULL,0}
 };
 
@@ -46,6 +51,7 @@ struct optionSpec options[] = {
 int winSize = 10000;
 int minScore = 1000;
 int minOutSize = 10;
+bool reads = FALSE;
 
 /* Variables to keep statistics on aligments. */
 int writeCount = 0;	/* Keep track of number actually written. */
@@ -99,11 +105,12 @@ slReverse(&list);
 return list;
 }
 struct axt *readAllAxt(char *fileName, struct axtScoreScheme *ss, int threshold,
-	char *chromName)
+	char *chromName, FILE *f)
 /* Read all axt's in a file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct axt *list = NULL, *axt;
+lineFileSetMetaDataOutput(lf, f);
 while ((axt = axtRead(lf)) != NULL)
     {
     if (!axtCheck(axt, lf))
@@ -357,7 +364,7 @@ void axtBestList(struct axt *axtList, char *inName, struct axtScoreScheme *ss, F
 int chromStart, chromEnd;
 int rangeSize;
 struct bestKeep *bk = NULL;
-struct axt *axt, *nextAxt, *goodList = NULL;
+struct axt *axt, *nextAxt, *goodList = NULL, *readList = NULL;
 int i;
 if (axtList == NULL)
     {
@@ -400,6 +407,24 @@ verbose(2,"%d elements in after soft filter.\n", slCount(goodList));
  * output them. */
 memset(bk->axts, 0, rangeSize * sizeof(bk->axts[0]));
 bestKeepInitScores(bk);
+/* find top scoring chromosome for reads and only keep
+ * reads from that chromosome within max intron size */
+if (reads)
+    {
+    int maxScore = 0;
+    char *bestChrom = NULL;
+    for (axt = goodList; axt != NULL; axt = axt->next)
+        {
+        maxScore = max(maxScore,axt->score);
+        if (maxScore == axt->score)
+            bestChrom = axt->qName;
+        }
+    for (axt = goodList; axt != NULL; axt = axt->next)
+        if (sameString(bestChrom,axt->qName))
+            slAddHead(&readList, axt);
+    slReverse(&readList);
+    goodList = readList;
+    }
 for (axt = goodList; axt != NULL; axt = axt->next)
     markBest(axt, bk, chromStart, rangeSize, ss, winSize, FALSE);
 outputBestRanges(bk, chromStart, rangeSize, ss, f);
@@ -419,9 +444,11 @@ if (matrixName == NULL)
     ss = axtScoreSchemeDefault();
 else
     ss = axtScoreSchemeRead(matrixName);
+axtScoreSchemeDnaWrite(ss, f, "axtBest");
 if (sameString(chromName,"all"))
     {
     struct lineFile *lf = lineFileOpen(inName, TRUE);
+    lineFileSetMetaDataOutput(lf, f);
     while ((axtList = readNextTnameList(lf, ss, minScore)) != NULL)
         {
         verbose(2,"Read %d elements from %s %s\n", slCount(axtList), inName, axtList->tName);
@@ -431,7 +458,7 @@ if (sameString(chromName,"all"))
     }
 else
     {
-    axtList = readAllAxt(inName, ss, minScore, chromName);
+    axtList = readAllAxt(inName, ss, minScore, chromName, f);
     verbose(2,"Read %d elements from %s\n", slCount(axtList), inName);
     axtBestList(axtList, inName, ss, f);
     }
@@ -451,6 +478,7 @@ winSize = optionInt("winSize", winSize);
 minScore = optionInt("minScore", minScore);
 minOutSize = optionInt("minOutSize", minOutSize);
 maxAlloc = optionInt("maxAlloc", maxAlloc)*1024*1024;
+reads = optionExists("reads");
 dnaUtilOpen();
 setMaxAlloc(maxAlloc);
 axtBest(argv[1], argv[2], argv[3]);
