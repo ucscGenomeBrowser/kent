@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.56 2005/07/22 05:34:58 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.57 2005/08/18 07:18:29 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -558,6 +558,12 @@ else
     else
         {
 	char *s = cloneString(line);
+        while (line[0] == '#')
+            {
+            freeMem(s);
+            lineFileNext(lf, &line, &lineSize);
+            s = cloneString(line);
+            }
 	wordCount = chopLine(s, words);
 	if (wordCount < 21 || wordCount > 23 || (words[8][0] != '+' && words[8][0] != '-'))
 	    errAbort("%s is not a psLayout file", fileName);
@@ -571,6 +577,70 @@ else
 *retLf = lf;
 }
 
+void pslxFileOpenWithMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f)
+/* Read header part of psl and make sure it's right.  Return
+ * sequence types and file handle and send meta data to output file f */
+{
+char *line;
+int lineSize;
+char *words[30];
+char *version;
+int wordCount;
+int i;
+enum gfType qt = gftRna,  tt = gftDna;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+
+lineFileSetMetaDataOutput(lf, f);
+if (!lineFileNext(lf, &line, &lineSize))
+    warn("%s is empty", fileName);
+else
+    {
+    if (startsWith("psLayout version", line))
+	{
+	wordCount = chopLine(line, words);
+	if (wordCount < 3)
+	    errAbort("%s is not a psLayout file", fileName);
+	version = words[2];
+	if (sameString(version, "3"))
+	    {
+	    }
+	else if (sameString(version, "4"))
+	    {
+	    qt = gfTypeFromName(words[3]);
+	    tt = gfTypeFromName(words[4]);
+	    }
+	else
+	    {
+	    errAbort("%s is version %s of psLayout, this program can only handle through version 4",
+		fileName,  version);
+	    }
+	for (i=0; i<4; ++i)
+	    {
+	    if (!lineFileNext(lf, &line, &lineSize))
+		errAbort("%s severely truncated", fileName);
+	    }
+	}
+    else
+        {
+	char *s = cloneString(line);
+        while (line[0] == '#')
+            {
+            freeMem(s);
+            lineFileNext(lf, &line, &lineSize);
+            s = cloneString(line);
+            }
+	wordCount = chopLine(s, words);
+	if (wordCount < 21 || wordCount > 23 || (words[8][0] != '+' && words[8][0] != '-'))
+	    errAbort("%s is not a psLayout file", fileName);
+	else
+	    lineFileReuse(lf); 
+	freeMem(s);
+	}
+    }
+*retQueryType = qt;
+*retTargetType = tt;
+*retLf = lf;
+}
 struct lineFile *pslFileOpen(char *fileName)
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it. */
@@ -578,6 +648,16 @@ struct lineFile *pslFileOpen(char *fileName)
 enum gfType qt, tt;
 struct lineFile *lf;
 pslxFileOpen(fileName, &qt, &tt, &lf);
+return lf;
+}
+
+struct lineFile *pslFileOpenWithMeta(char *fileName, FILE *f)
+/* Read header part of psl and make sure it's right. 
+ * Return line file handle to it. */
+{
+enum gfType qt, tt;
+struct lineFile *lf;
+pslxFileOpenWithMeta(fileName, &qt, &tt, &lf, f);
 return lf;
 }
 
@@ -1002,6 +1082,11 @@ for (i = 0; i < psl->blockCount; i++)
     {
     psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
     psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
+    if (psl->qSequence != NULL)
+        {
+        reverseComplement(psl->tSequence[i], psl->blockSizes[i]);
+        reverseComplement(psl->qSequence[i], psl->blockSizes[i]);
+        }
     }
 reverseUnsigned(psl->tStarts, psl->blockCount);
 reverseUnsigned(psl->qStarts, psl->blockCount);
