@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.933 2005/08/19 01:12:25 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.934 2005/08/19 21:30:09 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16226,7 +16226,7 @@ safef(query2, sizeof(query2), "select * from dv where varId = '%s' ", itemName);
 sr2 = sqlGetResult(conn, query2);
 while ((row = sqlNextRow(sr2)) != NULL)
     {
-    // use static Load?
+    /* not using static load */
     dv = dvLoad(row);
     printf("<B>Swiss-prot ID:</B> %s <BR>\n", dv->spID);
     printf("<B>Start:</B> %d <BR>\n", dv->start);
@@ -16248,7 +16248,7 @@ while ((row = sqlNextRow(sr3)) != NULL)
         printf("<A HREF=");
         printOmimUrl(stdout, dvXref2->extAcc);
         printf(" Target=_blank> %s</A> \n", dvXref2->extAcc);
-	// nested query
+	/* nested query here */
         if (hTableExists("omimTitle"))
 	    {
             safef(query4, sizeof(query4), "select * from omimTitle where omimId = '%s' ", dvXref2->extAcc);
