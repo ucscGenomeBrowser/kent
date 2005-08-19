@@ -6,9 +6,10 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.14 2004/08/11 23:50:21 hartera Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.15 2005/08/19 07:05:28 markd Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
+boolean pslxFmt = FALSE; /* output in pslx format */
 
 struct block
 /* coordinates of a block */
@@ -30,6 +31,7 @@ struct block
 static struct optionSpec optionSpecs[] = {
     {"scores", OPTION_STRING},
     {"eVal", OPTION_DOUBLE},
+    {"pslx", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -49,6 +51,7 @@ errAbort(
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
   "          an integer, double or 1e-10. Default is no filter.\n"
+  "  -pslx - create PSLX output (includes sequences for blocks)\n" 
   );
 }
 
@@ -58,7 +61,6 @@ struct psl* createPsl(struct blastBlock *bb, int pslMax)
 struct psl* psl;
 struct blastGappedAli *ba = bb->gappedAli;
 
-int newSize = (pslMax * sizeof(unsigned));
 AllocVar(psl);
 psl->qName = cloneString(ba->query->query);
 psl->qSize = ba->query->queryBaseCount;
@@ -71,9 +73,14 @@ psl->strand[1] = (bb->tStrand > 0) ? '+' : '-';
 psl->strand[2] = '\0';
 
 /* allocate initial array space */
-psl->blockSizes = needMem(newSize);
-psl->qStarts = needMem(newSize);
-psl->tStarts = needMem(newSize);
+AllocArray(psl->blockSizes, pslMax);
+AllocArray(psl->qStarts, pslMax);
+AllocArray(psl->tStarts, pslMax);
+if (pslxFmt)
+    {
+    AllocArray(psl->qSequence, pslMax);
+    AllocArray(psl->tSequence, pslMax);
+    }
 return psl;
 }
 
@@ -113,22 +120,29 @@ void growPsl(struct psl* psl, int* pslMax)
 int newMax = 2 * *pslMax;
 int oldSize = (psl->blockCount * sizeof(unsigned));
 int newSize = (newMax * sizeof(unsigned));
-psl->blockSizes = needMoreMem(psl->blockSizes, oldSize, newSize);
-psl->qStarts = needMoreMem(psl->qStarts, oldSize, newSize);
-psl->tStarts = needMoreMem(psl->tStarts, oldSize, newSize);
+ExpandArray(psl->blockSizes, psl->blockCount, newMax);
+ExpandArray(psl->qStarts, psl->blockCount, newMax);
+ExpandArray(psl->tStarts, psl->blockCount, newMax);
+if (pslxFmt)
+    {
+    ExpandArray(psl->qSequence, psl->blockCount, newMax);
+    ExpandArray(psl->tSequence,psl->blockCount, newMax);
+    }
 *pslMax = newMax;
 }
 
-void addPslBlock(struct psl* psl, struct block* blk, int* pslMax)
+void addPslBlock(struct psl* psl, struct blastBlock *bb, struct block* blk,
+                 int* pslMax)
 /* add a block to a psl */
 {
 unsigned newIBlk = psl->blockCount;
+unsigned blkSize = blk->qEnd - blk->qStart;
 if (newIBlk >= *pslMax)
     growPsl(psl, pslMax);
 psl->qStarts[newIBlk] = blk->qStart;
 psl->tStarts[newIBlk] = blk->tStart;
-/* use query size so protein psl is right */
-psl->blockSizes[newIBlk] = blk->qEnd - blk->qStart;
+/* uses query size so protein psl is right */
+psl->blockSizes[newIBlk] = blkSize;
 
 /* keep bounds current */
 psl->qStart = psl->qStarts[0];
@@ -141,6 +155,11 @@ psl->tEnd = psl->tStarts[newIBlk]
 if (psl->strand[1] == '-')
     reverseIntRange(&psl->tStart, &psl->tEnd, psl->tSize);
 
+if (pslxFmt)
+    {
+    psl->qSequence[newIBlk] = cloneStringZ(bb->qSym + blk->alnStart, blkSize);
+    psl->tSequence[newIBlk] = cloneStringZ(bb->tSym + blk->alnStart, blkSize);
+    }
 psl->blockCount++;
 }
 
@@ -263,7 +282,7 @@ blk.tSizeMult = (flags & PROT_DNA_ALIGN) ? 3 : 1;
 while (nextUngappedBlk(bb, &blk))
     {
     countBlock(bb, &blk, &prevBlk, psl);
-    addPslBlock(psl, &blk, &pslMax);
+    addPslBlock(psl, bb, &blk, &pslMax);
     prevBlk = blk;
     }
 if (psl->blockCount > 0 && (bb->eVal <= eVal || eVal == -1))
@@ -322,6 +341,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 eVal = optionDouble("eVal", eVal);
+pslxFmt = optionExists("pslx");
 if (argc != 3)
     usage();
 blastToPsl(argv[1], argv[2], optionVal("scores", NULL));
