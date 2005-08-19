@@ -1,0 +1,97 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+#	Creating the assembly for Monodelphis domestica
+#	South American, Short-tailed Opossum
+#	http://www.genome.gov/11510687
+#	http://www.genome.gov/12512285
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2005-08-18 - Hiram)
+    ssh kkstore01
+    mkdir -p /cluster/store1/monDom2/broad.mit.edu
+    ln -s /cluster/store1/monDom2 /cluster/data/monDom2
+    cd /cluster/data/monDom2/broad.mit.edu
+    wget --timestamping --force-directories --directory-prefix=. \
+        --dont-remove-listing --recursive --level=4 --no-parent \
+        --no-host-directories --cut-dirs=4 \
+        ftp://ftp.broad.mit.edu/distribution/assemblies/mammals/monDom2/*
+    #	That takes a number of hours, ending up with:
+# -rw-rw-r--  1        843 Jun 14 17:34 ForDistribution.command
+# -rw-rw-r--  1 1199352275 Jun 14 17:35 V3.0_prel.agp.chromosome.fasta.gz
+# -rw-rw-r--  1    6918810 Jun 14 17:36 assembly.agp
+# -rw-rw-r--  1  470824048 Jun 14 17:36 V3.0_prel.agp.chromosome.qual.gz
+# -rw-rw-r--  1  467679128 Jun 14 17:37 assembly.quals.gz
+# -rw-rw-r--  1   14839262 Jun 14 17:37 assembly.markup
+# -rw-rw-r--  1    2577871 Jun 14 17:37 assembly.links
+# -rw-rw-r--  1 1196979152 Jun 14 17:37 assembly.bases.gz
+# -rw-rw-r--  1         64 Jun 14 17:41 source
+# -rw-rw-r--  1  175152051 Jun 14 17:41 assembly.unplaced
+# -rw-rw-r--  1 3568712708 Jun 14 17:41 assembly.reads
+# -rw-rw-r--  1  760535060 Jun 14 17:42 unplaced.fasta.gz
+# -rw-rw-r--  1 2092672289 Jun 14 17:43 unplaced.qual.gz
+
+#########################################################################
+# DATA INTEGRITY VERIFICATION (DONE - 2005-08-18 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/monDom2/dataCheck
+    cd /cluster/data/monDom2/dataCheck
+    zcat ../broad.mit.edu/assembly.bases.gz | grep "^>" \
+	| sed -e "s/^>//" > contigs.names 
+    #	should be no duplicates
+    sort contigs.names | wc
+    #	65946   65946  846188
+    sort -u contigs.names | wc
+    #	65946   65946  846188
+
+    sort contigs.names | head -3
+    #	contig_0
+    #	contig_1
+    #	contig_10
+    sort contigs.names | tail -3
+    #	contig_9997
+    #	contig_9998
+    #	contig_9999
+    wc contigs.names
+    #	65946  65946 846188 contigs.names
+    zcat ../broad.mit.edu/assembly.quals.gz | grep "^>" \
+	| sed -e "s/^>//" > contigs.quals.names 
+    #	should be the same:
+    sum -r contigs*
+    #	39126   827 contigs.names
+    #	39126   827 contigs.quals.names
+    awk '{print $6}' ../broad.mit.edu/assembly.agp \
+	| grep contig_ > assembly.agp.contig.names
+    #   The assembly agp contig list appears to be the same contig list
+    sum -r assembly.agp.contig.names
+    #	39126   827
+    awk '{print $1}' ../broad.mit.edu/assembly.agp \
+	| sort -u > assembly.agp.scaffold.names
+    wc assembly.agp.scaffold.names
+    #	5077  5077 69968 assembly.agp.scaffold.names
+    head -3 assembly.agp.scaffold.names
+    #	scaffold_0
+    #	scaffold_1
+    #	scaffold_10
+    tail -3 assembly.agp.scaffold.names
+    #	scaffold_997
+    #	scaffold_998
+    #	scaffold_999
+    zcat ../broad.mit.edu/V3.0_prel.agp.chromosome.fasta.gz | \
+	grep "^>" | sed -e "s/^>//; s/\..*//" > assembly.fasta.scaffold.names
+    #	600 duplicate names in this listing:
+    sort assembly.fasta.scaffold.names | wc
+    #	5677    5677   76915
+    sort -u  assembly.fasta.scaffold.names | wc
+    #	5077    5077   69968
+    #	This is due to their partitioning of large sequences into
+    #	5 Mb chunks, e.g:
+    #	>scaffold_0.1-5000000 (TestV3.0_prel)
+    #	>scaffold_0.5000001-10000000 (TestV3.0_prel)
+    #	>scaffold_0.10000001-15000000 (TestV3.0_prel)
+    faCount ../broad.mit.edu/V3.0_prel.agp.chromosome.fasta.gz \
+	> faCount.assembly.agp.fasta
+    #	Shortest contig:
+    sort -k2,2n faCount.assembly.agp.fasta | head
+    #	scaffold_5076 at 2002 bases
+    #	And many at the 5,000,000 chunk size.
