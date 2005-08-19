@@ -301,3 +301,17 @@ zip -j mrna.zip mrna.fa
     # cd $gp/chromosomes
     # md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+#######################################################################
+# GC5BASE (DONE - 2005-08-19 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/ci2/bed/gc5Base
+    cd /cluster/data/ci2/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 ci2 \
+        /cluster/data/ci2 | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    ssh hgwdev
+    cd /cluster/data/ci2/bed/gc5Base
+    mkdir /gbdb/ci2/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/ci2/wib
+    hgLoadWiggle ci2 gc5Base gc5Base.wig
