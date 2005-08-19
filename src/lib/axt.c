@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.44 2005/08/19 01:11:24 baertsch Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.45 2005/08/19 04:40:37 baertsch Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -477,7 +477,7 @@ int matrixSize = chopString(text, ",", matrixDna, 32);
 if (matrixSize != 16)
     return ss;
 if (ss == NULL)
-    return;
+    return NULL;
 ss->gapOpen = gapOpen;
 ss->gapExtend = gapExtend;
 ss->matrix['a']['a'] = atoi(matrixDna[0]);
