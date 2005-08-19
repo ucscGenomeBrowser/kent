@@ -1317,11 +1317,6 @@ SEQ2_LEN=$BASE/S2.len
     # add html for details pages to this directory:
     # ecoresMm3.html, ecoresRn3.html and ecoresHg16.html
 
-<<<<<<< makeFr1.doc
-<<<<<<< makeFr1.doc
->>>>>>> 1.10
-=======
-=======
 # SWAP ZEBRAFISH-FUGU BLASTZ TO FUGU-ZEBRAFISH (danRer1) 
 # (DONE, 2004-06-16, hartera)
     ssh kolossus
@@ -1365,7 +1360,6 @@ SEQ2_LEN=$BASE/S2.len
       echo "$f Done"
     end
 
->>>>>>> 1.14
 # MAKE Human Proteins track
     ssh eieio
     mkdir -p /cluster/data/fr1/blastDb
@@ -1494,9 +1488,6 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
-<<<<<<< makeFr1.doc
->>>>>>> 1.12
-=======
 
 # BLASTZ SWAP FOR danRer2 vs. fr1 BLASTZ TO CREATE fr1 vs. danRer2
 # (DONE, 2004-12-15, hartera)
@@ -1685,9 +1676,6 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     nice gzip axtChain/all.chain.antirepeat axtChain/chainAR/*.chain &
     nice rm -fr axtChain/chain axtChain/chainRaw &
     
-<<<<<<< makeFr1.doc
->>>>>>> 1.14
-=======
 # MAKE VSDANRER2 DOWNLOADABLES (DONE, 2004-12-23, hartera)
     ssh hgwdev
     cd /cluster/data/fr1/bed/blastz.danRer2.swap/axtChrom
@@ -1709,9 +1697,6 @@ axtChain $1 /cluster/bluearc/fugu/fr1/chromNib \
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
-<<<<<<< makeFr1.doc
->>>>>>> 1.15
-=======
 # MAKE Human Proteins track (hg17 DONE 
     ssh eieio
     mkdir -p /cluster/data/fr1/blastDb
@@ -1842,11 +1827,94 @@ chainSome $(path1)
     # back to eieio
     rm -rf blastOut
 # End tblastn
->>>>>>> 1.16
-
 
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
+# SPLIT MASKED chrUn SEQUENCE INTO SCAFFOLDS AND MAKE SCAFFOLDS 2BIT FILE
+# (DONE, 2005-08-13, hartera)
+     ssh eieio
+     cd /cluster/data/fr1/Un
+     # for chrUn get masked sequence for soft-masked
+     mkdir scaffoldsSoftMask
+     mkdir -p /panasas/store/fr1/scaffolds
+     set outDir=/panasas/store/fr1/scaffolds
+     awk 'BEGIN {FS="\t"}{if ($5 != "N") \
+ print "/cluster/data/fr1/Un/scaffoldsSoftMask/getMaskedFaFrags.csh /iscratch/i/fr1/chrUn.fa",$2-1, $3, "'$outDir/'"$6".fa", "'$outDir/'"$6".log";}' \
+         chrUn.agp >> ./scaffoldsSoftMask/faFragSoftMask 
+     # check number of scaffolds
+     grep "scaffold" chrUn.agp | wc -l
+     # 20379
+     wc -l ./scaffoldsSoftMask/faFragSoftMask
+     # 20379 ./scaffoldsSoftMask/faFragSoftMask
+     # since there are so many, then use kilokluster
+     # need to make a wrapper round faFrag as parasol can not
+     # deal with redirects.
+     cd scaffoldsSoftMask
 
+cat << '_EOF_' > getMaskedFaFrags.csh
+#!/bin/csh -fe
+set $inFa=$1
+set $st = $2
+set $end = $3
+set $outFa = $4
+set $outLog = $5
 
+faFrag -mixed $inFa $st $end $outFa >& $outLog
+'_EOF_'
+     chmod +x getMaskedFaFrags.csh 
+     ssh kkr1u00
+     cp /cluster/data/fr1/Un/chrUn.fa /iscratch/i/fr1
+     /cluster/bin/iSync 
+     ssh kk
+     cd /cluster/data/fr1/Un/scaffoldsSoftMask
+     mkdir run 
+     cd run 
+     cp ../faFragSoftMask jobList
+     para create jobList
+     para try, check, push, check etc.
+# para time
+# Completed: 20379 of 20379 jobs
+# CPU time in finished jobs:     518059s    8634.32m   143.91h    6.00d  0.016 y
+# IO & Wait Time:               2831188s   47186.46m   786.44h   32.77d  0.090 y
+# Average job time:                 164s       2.74m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             469s       7.82m     0.13h    0.01d
+# Submission to last job:         10106s     168.43m     2.81h    0.12d
+ 
+     # check a few sequences to see that they are correct
+     ssh kolossus
+     cd /cluster/data/fr1/Un/scaffoldsSoftMask
+     foreach f (/panasas/store/fr1/scaffolds/scaf*.fa)
+        set g=$f:t:r  
+        echo $g >> names
+        perl -pi.bak -e "s/>chr[0-9A-Za-z\-\:]+/>$g/" $f
+        cat $f >> /panasas/store/fr1/scaffolds/scaffoldMaskedUnFr1.fa
+     end
+     grep ">" /panasas/store/fr1/scaffolds/scaffoldMaskedUnFr1.fa | wc -l
+     # 20379
+     # then make 2bit file for blastz cluster runs
+     faToTwoBit /panasas/store/fr1/scaffolds/scaffoldMaskedUnFr1.fa \
+               /cluster/data/fr1/fr1UnScaffolds.2bit
+     ssh kkr1u00
+     mkdir -p /iscratch/i/fr1/UnScaffolds
+     cp /cluster/data/fr1/fr1UnScaffolds.2bit /iscratch/i/fr1/UnScaffolds/
+     /cluster/bin/iSync 
+
+# BLASTZ SWAP FOR FUGU (fr1) (DONE, 2005-08-18, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+     ssh hgwdev
+     # TO DO
+     # do swap of danRer3 vs fr1 chain and net alignments to 
+     # create fr1 vs danRer3. see makeDanRer3.doc for details.
+     # there a no lineage-specific repeats for these species
+     cd /cluster/data/danRer3/bed/blastz.fr1
+     nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+        -workhorse kkr1u00 -swap -chainMinScore=5000 >& doSwap.log &
+     # Start: Aug 18 13:11
+     # Finish: Aug 18 13:29
+     # Blastz parameters are as for danRer3 vs. fr1 - see makeDanRer3.doc
+# BLASTZ_H=2000
+# BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+# BLASTZ_ABRIDGE_REPEATS=0
+      
