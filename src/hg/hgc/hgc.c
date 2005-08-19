@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.932 2005/08/16 01:42:50 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.933 2005/08/19 01:12:25 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2155,6 +2155,16 @@ else
     int qEnd   = subChain->qEnd  ;
     struct dnaSeq *tSeq = hDnaFromSeq(subChain->tName, subChain->tStart, subChain->tEnd, dnaLower);
     struct dnaSeq *qSeq = NULL;
+    char *matrix = trackDbSetting(tdb, "matrix");
+    if (matrix != NULL)
+        {
+        char *words[64];
+        int size = chopByWhite(matrix, words, 64) ;
+        if (size == 2 && atoi(words[0]) == 16)
+            {
+            scoreScheme = axtScoreSchemeFromBlastzMatrix(words[1], 400, 30);
+            }
+        }
 
     if (subChain->qStrand == '-')
         reverseIntRange(&qStart, &qEnd, subChain->qSize);
