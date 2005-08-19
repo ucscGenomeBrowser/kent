@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.72 2005/08/17 21:59:22 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.73 2005/08/19 20:33:09 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -7889,6 +7889,7 @@ _EOF_
 
 # BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
 # ZEBRAFISH (danRer3) (DONE, 2005-08-10, hartera)
+# REMAKE AXTNET AND COPY TO DOWNLOADS. REMAKE MAFNET (DONE, 2005-08-17, hartera)
     ssh kkr1u00
     # Blastz uses lineage-specific repeats. There are none for mouse
     # and fish so use all repeats for each species as lineage-specific.
@@ -8119,16 +8120,79 @@ SEQ2_LEN=$BASE/S2.len
     nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
        -blastzOutRoot /panasas/store/mm6vsdanRer3Out -chainMinScore=5000 \
        -continue net >& doNet.log &
-    # PID 2782 Start: Aug 10 13:34
+    # Start: Aug 10 13:34
     # Finished: Aug 10 13:54
     # it crashes at the cleanup step as it can not get to /panasas/ from 
     # kkstore01 - should specifiy a different fileServer for this step. 
     # run this step manually
     cd /cluster/data/mm6/bed/blastz.danRer3
-    cleaUp.csh &
+    cleanUp.csh &
     # All done now 
-    # check REAME.txt in downloads directory and also add html and 
+    # check README.txt in downloads directory and also add html and 
     # trackDb.ra entry for chain and net tracks for danRer3
+# featureBits -chrom=chr1 mm6 refGene:cds chainDanRer3Link -enrichment
+# refGene:cds 0.808%, chainDanRer3Link 5.196%, both 0.522%, cover 64.64%, 
+# enrich 12.44x
+# featureBits -chrom=chr1 mm5 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 0.818%, chainDanRer2Link 2.058%, both 0.546%, cover 66.75%, 
+# enrich 32.43x
+# featureBits -chrom=chr1 mm6 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 0.808%, chainDanRer2Link 6.412%, both 0.542%, cover 67.04%, 
+# enrich 10.46x
+    # Remake axtNet and then remake mafNet from these  (2005-08-17, harterA)
+    # netToAxt was processing nets incorrectly so remake these with 
+    # new version of netToAxt 
+    # and transfer to downloads dir.
+    ssh eieio
+    cd /cluster/data/mm6/bed/blastz.danRer3
+    rm -r axtNet
+    # Make axtNet for download: one .axt per mm6 seq.
+    # remake noClass.net
+    #Make nets("noClass", i.e. without rmsk/class stats which are added later):
+    cd axtChain
+    chainPreNet mm6.danRer3.all.chain.gz /cluster/data/mm6/bed/blastz.danRer3/S1.len /cluster/data/mm6/bed/blastz.danRer3/S2.len stdout \
+| chainNet stdin -minSpace=1 /cluster/data/mm6/bed/blastz.danRer3/S1.len /cluster/data/mm6/bed/blastz.danRer3/S2.len stdout /dev/null \
+| netSyntenic stdin noClass.net
+    # create net for each chrom again
+    netSplit noClass.net net
+    # also split up chains again
+    mkdir chain
+    zcat mm6.danRer3.all.chain.gz | chainSplit chain stdin
+    cd ..
+    # make axtNet again using new version of axtNet, the previous version was
+    # not processing the nets correctly.
+    mkdir axtNet
+    foreach f (axtChain/net/*.net)
+      netToAxt $f axtChain/chain/$f:t:r.chain \
+      /panasas/store/mm6/nib /iscratch/i/danRer3/nib stdout \
+      | axtSort stdin stdout \
+      | gzip -c > axtNet/$f:t:r.mm6.danRer3.net.axt.gz
+    end
+    # cleanup
+    cd axtChain
+    rm noClass.net
+    rm -r net
+    rm -r chain
+    # remake mafNet from the new axtNet
+    cd /cluster/data/mm6/bed/blastz.danRer3
+    rm -r mafNet
+    # Make mafNet for multiz: one .maf per mm6 seq.
+    mkdir mafNet
+    foreach f (axtNet/*.mm6.danRer3.net.axt.gz)
+      axtToMaf -tPrefix=mm6. -qPrefix=danRer3. $f \
+      /cluster/data/mm6/bed/blastz.danRer3/S1.len /cluster/data/mm6/bed/blastz.danRer3/S2.len \
+      stdout \
+      | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+    end
+    # remove old axtNet downloads and add links to new axtNet files
+    ssh hgwdev
+    rm -r /usr/local/apache/htdocs/goldenPath/mm6/vsDanRer3/axtNet
+    cd /usr/local/apache/htdocs/goldenPath/mm6/vsDanRer3
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm6/vsDanRer3/axtNet
+    ln -s /cluster/data/mm6/bed/blastz.danRer3/axtNet/*.axt.gz axtNet/
+    # make md5sum.txt again
+    rm md5sum.txt
+    md5sum *.gz */*.gz > md5sum.txt
 
 #### LOAD ENSEMBL GENES (DONE - 2005-08-10 Fan)
 #	needed for Gene Sorter procedure below
