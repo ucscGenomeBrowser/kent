@@ -2,8 +2,9 @@ include ../../../inc/common.mk
 
 all:
 
-test: protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
-	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test
+test:	protMrnaTest protDnaTest mrnaDnaTest mrnaDnaxTest \
+	blockBugTest identityBugTest protMrnaEval1Test protMrnaEval2Test \
+	longDbNameTest
 
 
 protMrnaTest: mkdirs
@@ -52,6 +53,12 @@ protMrnaEval2Test: mkdirs
 	pslCheck output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 	diff -u expected/$@.bscores output/$@.bscores
+
+longDbNameTest: mkdirs
+	../blastToPsl input/longDbName.blast output/$@.psl
+	pslCheck output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
 
 # this test is currently disabled, mega-blast is painful because
 # Database: comes before Query= and there are multiple queries for each

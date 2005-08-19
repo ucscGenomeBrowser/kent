@@ -197,22 +197,34 @@ static void parseDatabaseLines(struct blastFile *bf, char *line, struct blastQue
  *        977 sequences; 95,550,797 total letters
  */
 {
+static struct dyString *tmpBuf = NULL;
 char *words[16];
 int wordCount;
 if (bq->database != NULL)
     bfError(bf, "already parse Database:");
 
+if (tmpBuf == NULL)
+    tmpBuf = dyStringNew(512);
+
 /* parse something like
- * Database: celegans98 */
+ * Database: celegans98
+ * some versions of blastp include the absolute path, but
+ * then split it across lines.
+ */
 wordCount = chopLine(line, words);
 if (wordCount < 2)
     bfError(bf, "Expecting database name");
-bq->database = cloneString(words[1]);
+dyStringClear(tmpBuf);
+dyStringAppend(tmpBuf, words[1]);
+while (line = bfNeedNextLine(bf), !isspace(line[0]))
+    {
+    dyStringAppend(tmpBuf, line);
+    }
+bq->database = cloneString(tmpBuf->string);
 
 /* Process something like:
  *        977 sequences; 95,550,797 total letters
  */
-line = bfNeedNextLine(bf);
 wordCount = chopLine(line, words);
 if (wordCount < 3 || !isdigit(words[0][0]) || !isdigit(words[2][0]))
     bfError(bf, "Expecting database info");
