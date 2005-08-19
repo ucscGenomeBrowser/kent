@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.43 2005/08/18 07:17:03 baertsch Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.44 2005/08/19 01:11:24 baertsch Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -467,6 +467,40 @@ if (ss == NULL)
 return ss;
 }
 
+struct axtScoreScheme *axtScoreSchemeFromBlastzMatrix(char *text, int gapOpen, int gapExtend)
+/* return scoring schema from a string in the following format */
+/* 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91 */
+{
+char *matrixDna[32];
+struct axtScoreScheme *ss = axtScoreSchemeDefault();
+int matrixSize = chopString(text, ",", matrixDna, 32);
+if (matrixSize != 16)
+    return ss;
+if (ss == NULL)
+    return;
+ss->gapOpen = gapOpen;
+ss->gapExtend = gapExtend;
+ss->matrix['a']['a'] = atoi(matrixDna[0]);
+ss->matrix['a']['c'] = atoi(matrixDna[1]);
+ss->matrix['a']['g'] = atoi(matrixDna[2]);
+ss->matrix['a']['t'] = atoi(matrixDna[3]);
+
+ss->matrix['c']['a'] = atoi(matrixDna[4]);
+ss->matrix['c']['c'] = atoi(matrixDna[5]);
+ss->matrix['c']['g'] = atoi(matrixDna[6]);
+ss->matrix['c']['t'] = atoi(matrixDna[7]);
+
+ss->matrix['g']['a'] = atoi(matrixDna[8]);
+ss->matrix['g']['c'] = atoi(matrixDna[9]);
+ss->matrix['g']['g'] = atoi(matrixDna[10]);
+ss->matrix['g']['t'] = atoi(matrixDna[11]);
+
+ss->matrix['t']['a'] = atoi(matrixDna[12]);
+ss->matrix['t']['c'] = atoi(matrixDna[13]);
+ss->matrix['t']['g'] = atoi(matrixDna[14]);
+ss->matrix['t']['t'] = atoi(matrixDna[15]);
+return ss;
+}
 
 char blosumText[] = {
 "#  Matrix made by matblas from blosum62.iij\n"
