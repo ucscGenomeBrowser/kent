@@ -105,6 +105,10 @@ struct axtScoreScheme *axtScoreSchemeRnaDefault();
  * within the same species.  Do NOT axtScoreSchemeFree
  * this. */
 
+struct axtScoreScheme *axtScoreSchemeFromBlastzMatrix(char *text, int gapOpen, int gapExtend);
+/* return scoring schema from a string in the following format */
+/* 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91 */
+
 struct axtScoreScheme *axtScoreSchemeRnaFill();
 /* Return scoreing scheme a little more relaxed than 
  * RNA/DNA defaults for filling in gaps. */
