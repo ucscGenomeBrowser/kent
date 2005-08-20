@@ -3337,3 +3337,36 @@ close (FH);
     #		Riken CAGE Tags
     #		Riken CAGE Mapped Tags - TEST TRACK ONLY
 
+#########################################################################
+# Affy 25bp Probe locations (DONE - 2005-07-29 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/encode/Affy/2005-07-18
+    wget --timestamping \
+'http://transcriptome.affymetrix.com/download/ENCODE/affy_june1/soft/RNA/EC_AS_GM06990_RCyP+_C01vsNULL.sig.soft.bz2' \
+	-O EC_AS_GM06990_RCyP+_C01vsNULL.sig.soft.bz2
+    bunzip2 EC_AS_GM06990_RCyP+_C01vsNULL.sig.soft.bz2
+    #       After some experimentation, it was determined that the
+    #       coordinates in this EC* file are actually zero-relative
+    #       and thus should be taken at face value.  No need to translate
+    #       anything.  There remains a question of why there was
+    #       confusion about whether this was a 1 or 0 relative file.
+
+grep "^chr" EC_AS_GM06990_RCyP+_C01vsNULL.sig.soft \
+	| awk '{print $1}' | sed -e "s/_/ /" | awk '
+BEGIN {count=1}
+{
+printf "%s\t%d\t%d\t%d\n", $1, $2, $2+25, count; ++count;
+}
+' | sort -k1,1 -k2,2n | gzip > encodeAffyEncode25bpProbes.bed.gz
+
+    hgLoadBed -strict hg16 encodeAffyEncode25bpProbes \
+        encodeAffyEncode25bpProbes.bed.gz
+    #	Create trackDb entry, was in human/hg16/trackDb.ra later moved
+    #	up to human/trackDb.ra as ENCODE moves to hg17:
+track encodeAffyEncode25bpProbes
+shortLabel Affy 25bp Probes
+longLabel Affymetrix 25 bp Probe Locations
+group encodeTxLevels
+visibility hide
+type bed 4 .
+priority 41
