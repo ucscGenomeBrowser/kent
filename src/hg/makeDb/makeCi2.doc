@@ -138,6 +138,7 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
     cd /cluster/data/ci2/bed/gcPercent
     hgsql ci2  < ~/kent/src/hg/lib/gcPercent.sql
     hgGcPercent ci2 ../../nib
+#dropped gcPercent table (DONE braney 2005-08-19)
 
 ### AUTO UPDATE GENBANK MRNA RUN 
     # Update genbank config and source in CVS:
@@ -301,6 +302,14 @@ zip -j mrna.zip mrna.fa
     # cd $gp/chromosomes
     # md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
+
+# MAKE 11.OOC FILE FOR BLAT 
+    mkdir /cluster/bluearc/ci2
+    blat /cluster/data/ci2/ci2.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/cluster/bluearc/ci2/11.ooc -repMatch=100
+# Wrote 10830 overused 11-mers to /cluster/bluearc/ci2/11.ooc
+    cp -p /cluster/bluearc/ci2/*.ooc /iscratch/i/ci2/
+    iSync
 
 #######################################################################
 # GC5BASE (DONE - 2005-08-19 - Hiram)
