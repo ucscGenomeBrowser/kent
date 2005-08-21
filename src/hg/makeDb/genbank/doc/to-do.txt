@@ -863,4 +863,32 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
                     no /exception
     NM_016178	ribosomal slippage (translational frameshift)	reviewed
                     no /exception
+- need to deal with 
+  NM_133378 TTN, which just has a /codon_start at CDS, also
+
+            http://www.ncbi.nlm.nih.gov/projects/collab/FT/index.html
+  indicates joins should be used for ribosomal slippage.
+
+- why is AY073210  DNA in genbank (source of NM_001001809),
+  found with mgc orthoGeneMap refSeqGetDerived
+  
+- CDS parser blows it:
+ AK002774	Predictor,Longest-ORF)"
+ AK003936	Predictor,Longest-ORF)
+ AK005344	Predictor,Longest-ORF)"
+ AK005444	Predictor)"
+
+- gbLoadMRna procuces message that is not in ignore.idx format:
+  entry S79794 2005-07-02 organism previously specified as "Rattus sp." (xeno), is specfied as "Mus musculus" (native) in ./data/processed/genbank.148.0/daily.0803/mrna.gbidx, add one to ignored.idx
+
+- refseqs endup in mrnaOrientInfo, which causes grief for the joiner
+
+- this query is slow..
+    explain SELECT acc,version,modDate,type,srcDb,orgCat,gbSeq,numAligns,seqRelease,seqUpdate,metaRelease,metaUpdate,extRelease,extUpdate,time FROM gbStatus WHERE (type='EST')  AND  (srcDb='GenBank')  AND  (acc LIKE 'AB');
+    +----------+-------+---------------------------+------+---------+------+------+-------------+
+    | table    | type  | possible_keys             | key  | key_len | ref  | rows | Extra       |
+    +----------+-------+---------------------------+------+---------+------+------+-------------+
+    | gbStatus | range | PRIMARY,acc,typeSrcDbAcc2 | acc  |      12 | NULL |    1 | Using where |
+    +----------+-------+---------------------------+------+---------+------+------+-------------+
+    maybe add a first two character of the acc column???
 
