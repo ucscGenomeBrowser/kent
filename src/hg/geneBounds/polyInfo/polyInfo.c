@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.14 2005/08/15 01:48:11 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.15 2005/08/21 04:35:30 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -209,7 +209,7 @@ struct hash *genoHash = hashNew(0);
 
 if (nibIsFile(genoFile))
     genos = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
-else if (twoBitIsFileOrRange(genoFile))
+else if (twoBitIsSpec(genoFile))
     genos = twoBitLoadAll(genoFile);
 else
     genos = faReadDna(genoFile);

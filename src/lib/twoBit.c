@@ -4,11 +4,12 @@
 #include "dnautil.h"
 #include "sig.h"
 #include "localmem.h"
+#include "linefile.h"
 #include "obscure.h"
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.16 2005/08/14 23:39:59 markd Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.17 2005/08/21 04:35:30 markd Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -595,54 +596,36 @@ twoBitSeekTo(tbf, name);
 return readBits32(tbf->f, tbf->isSwapped);
 }
 
-
 struct dnaSeq *twoBitLoadAll(char *spec)
-/* Return list of all sequences matching spec.  If
- * spec is a simple file name then this will be
- * all sequence in file. Otherwise it will be
- * the sequence in the file specified by spec,
- * which is in format
- *    file/path/name:seqName:start-end
- * or
- *    file/path/name:seqName 
- * or
- *    file/path/name:seqName1,seqName2,seqName3,...
- */
+/* Return list of all sequences matching spec, which is in
+ * the form:
+ *
+ *    file/path/input.2bit[:seqSpec1][,seqSpec2,...]
+ *
+ * where seqSpec is either
+ *     seqName
+ *  or
+ *     seqName:start-end */
 {
-struct dnaSeq *list = NULL, *seq;
-struct twoBitFile *tbf = NULL;
-if (twoBitIsRange(spec))
+struct twoBitSpec *tbs = twoBitSpecNew(spec);
+struct twoBitFile *tbf = twoBitOpen(tbs->fileName);
+struct dnaSeq *list = NULL;
+if (tbs->seqs != NULL)
     {
-    char *dupe = cloneString(spec);
-    char *file, *seqName, **seqArray;
-    int start, end, i;
-    int seqCount = 0;
-    twoBitParseRange(dupe, &file, &seqName, &start, &end);
-    tbf = twoBitOpen(file);
-    seqCount = chopString(seqName, ",", NULL, 0);
-    AllocArray(seqArray, seqCount);
-    chopString(seqName, ",", seqArray, seqCount);
-    for (i = 0 ; i < seqCount ; i++)
-        {
-        seq = twoBitReadSeqFrag(tbf, seqArray[i], start, end);
-        slAddHead(&list, seq);
-        }
-    slReverse(&list);
-    freez(&seqArray);
-    freez(&dupe);
+    struct twoBitSeqSpec *tbss;
+    for (tbss = tbs->seqs; tbss != NULL; tbss = tbss->next)
+        slSafeAddHead(&list, twoBitReadSeqFrag(tbf, tbss->name,
+                                               tbss->start, tbss->end));
     }
 else
     {
     struct twoBitIndex *index;
-    tbf = twoBitOpen(spec);
     for (index = tbf->indexList; index != NULL; index = index->next)
-	{
-	seq = twoBitReadSeqFrag(tbf, index->name, 0, 0);
-	slAddHead(&list, seq);
-	}
-    slReverse(&list);
+	slSafeAddHead(&list, twoBitReadSeqFrag(tbf, index->name, 0, 0));
     }
+slReverse(&list);
 twoBitClose(&tbf);
+twoBitSpecFree(&tbs);
 return list;
 }
 
@@ -749,5 +732,138 @@ boolean twoBitIsFileOrRange(char *spec)
 /* Return TRUE if it is a two bit file or subrange. */
 {
 return twoBitIsFile(spec) || twoBitIsRange(spec);
+}
+
+static struct twoBitSeqSpec *parseSeqSpec(char *seqSpecStr)
+/* parse one sequence spec */
+{
+boolean isOk = TRUE;
+char *s, *e;
+struct twoBitSeqSpec *seq;
+AllocVar(seq);
+seq->name = cloneString(seqSpecStr);
+
+/* Grab start */
+s = strchr(seq->name, ':');
+if (s == NULL)
+    return seq;  /* no range spec */
+*s++ = 0;
+seq->start = strtol(s, &e, 0);
+if (*e != '-')
+    isOk = FALSE;
+else
+    {
+    /* Grab end */
+    s = e+1;
+    seq->end = strtol(s, &e, 0);
+    if (*e != '\0')
+        isOk = FALSE;
+    }
+if (!isOk || (seq->end < seq->start))
+    errAbort("invalid twoBit sequence specification: \"%s\"", seqSpecStr);
+return seq;
+}
+
+boolean twoBitIsSpec(char *spec)
+/* Return TRUE spec is a valid 2bit spec (see twoBitSpecNew) */
+{
+struct twoBitSpec *tbs = twoBitSpecNew(spec);
+boolean isSpec = (tbs != NULL);
+twoBitSpecFree(&tbs);
+return isSpec;
+}
+
+struct twoBitSpec *twoBitSpecNew(char *specStr)
+/* Parse a .2bit file and sequence spec into an object.
+ * The spec is a string in the form:
+ *
+ *    file/path/input.2bit[:seqSpec1][,seqSpec2,...]
+ *
+ * where seqSpec is either
+ *     seqName
+ *  or
+ *     seqName:start-end
+ *
+ * free result with twoBitSpecFree().
+ */
+{
+char *s, *e;
+int i, numSeqs;
+char **seqSpecs;
+struct twoBitSpec *spec;
+AllocVar(spec);
+spec->fileName = cloneString(specStr);
+
+/* start with final file name  */
+s = strrchr(spec->fileName, '/');
+if (s == NULL)
+    s = spec->fileName;
+else
+    s++;
+
+/* find end of file name and zero-terminate */
+e = strchr(s, ':');
+if (e == NULL)
+    s = NULL; /* just file name */
+else
+    {
+    *e++ = '\0';
+    s = e;
+    }
+if (!endsWith(spec->fileName, ".2bit"))
+    {
+    twoBitSpecFree(&spec);
+    return NULL; /* not a 2bit file */
+    }
+
+if (s != NULL)
+    {
+    /* chop seqs at commas and parse */
+    numSeqs = chopString(s, ",", NULL, 0);
+    AllocArray(seqSpecs, numSeqs);
+    chopString(s, ",", seqSpecs, numSeqs);
+    for (i = 0; i< numSeqs; i++)
+        slSafeAddHead(&spec->seqs, parseSeqSpec(seqSpecs[i]));
+    slReverse(&spec->seqs);
+    }
+return spec;
+}
+
+struct twoBitSpec *twoBitSpecNewFile(char *twoBitFile, char *specFile)
+/* parse a file containing a list of specifications for sequences in the
+ * specified twoBit file. Specifications are one per line in forms:
+ *     seqName
+ *  or
+ *     seqName:start-end
+ */
+{
+struct lineFile *lf = lineFileOpen(specFile, TRUE);
+char *line;
+struct twoBitSpec *spec;
+AllocVar(spec);
+spec->fileName = cloneString(twoBitFile);
+while (lineFileNextReal(lf, &line))
+    slSafeAddHead(&spec->seqs, parseSeqSpec(trimSpaces(line)));
+slReverse(&spec->seqs);
+lineFileClose(&lf);
+return spec;
+}
+
+void twoBitSpecFree(struct twoBitSpec **specPtr)
+/* free a twoBitSpec object */
+{
+struct twoBitSpec *spec = *specPtr;
+if (spec != NULL)
+    {
+    struct twoBitSeqSpec *seq;
+    while ((seq = slPopHead(&spec->seqs)) != NULL)
+        {
+        freeMem(seq->name);
+        freeMem(seq);
+        }
+    freeMem(spec->fileName);
+    freeMem(spec);
+    *specPtr = NULL;
+    }
 }
 

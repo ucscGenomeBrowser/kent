@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.7 2005/03/24 22:51:26 baertsch Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.8 2005/08/21 04:35:30 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,6 +27,8 @@ errAbort(
   "file name using the syntax:\n"
   "      /path/input.2bit:name\n"
   "   or\n"
+  "      /path/input.2bit:name\n"
+  "   or\n"
   "      /path/input.2bit:name:start-end\n"
   );
 }
@@ -34,7 +36,7 @@ errAbort(
 char *clSeq = NULL;	/* Command line sequence. */
 int clStart = 0;	/* Start from command line. */
 int clEnd = 0;		/* End from command line. */
-char *seqList = NULL;    /* file containing list of seq names */
+char *clSeqList = NULL; /* file containing list of seq names */
 
 static struct optionSpec options[] = {
    {"seq", OPTION_STRING},
@@ -53,47 +55,50 @@ faWriteNext(f, seq->name, seq->dna, seq->size);
 dnaSeqFree(&seq);
 }
 
+static void processAllSeqs(struct twoBitFile *tbf, FILE *outFile)
+/* get all sequences in a file */
+{
+struct twoBitIndex *index;
+for (index = tbf->indexList; index != NULL; index = index->next)
+    outputOne(tbf, index->name, outFile, 0, 0);
+}
+
+static void processSeqSpecs(struct twoBitFile *tbf, struct twoBitSeqSpec *tbss,
+                            FILE *outFile)
+/* process list of twoBitSeqSpec objects */
+{
+struct twoBitSeqSpec *s;
+for (s = tbss; s != NULL; s = s->next)
+    outputOne(tbf, s->name, outFile, s->start, s->end);
+}
+
 void twoBitToFa(char *inName, char *outName)
 /* twoBitToFa - Convert all or part of twoBit file to fasta. */
 {
-FILE *outFile = mustOpen(outName, "w");
 struct twoBitFile *tbf;
-struct twoBitIndex *index;
-char *line = NULL;
-int lineSize = 0;
-char seqSpec[PATH_LEN];
-    
-if (seqList != NULL)
-    {
-    struct lineFile *seqFile = lineFileOpen(seqList, TRUE);
-    tbf = twoBitOpen(inName);
-    while (lineFileNextReal(seqFile, &line))
-        {
-        line = trimSpaces(line);
-        safef(seqSpec, sizeof(seqSpec),"%s:%s",inName,line);
-        twoBitParseRange(seqSpec, NULL, &clSeq, &clStart, &clEnd);
-	outputOne(tbf, clSeq, outFile, clStart, clEnd);
-        }
-    }
-else
-/* check for sequence/range in path */
-    {
-    if (twoBitIsRange(inName))
-        twoBitParseRange(inName, &inName, &clSeq, &clStart, &clEnd);
-        tbf = twoBitOpen(inName);
+FILE *outFile = mustOpen(outName, "w");
+struct twoBitSpec *tbs;
 
-    if (clSeq == NULL)
-        {
-        for (index = tbf->indexList; index != NULL; index = index->next)
-            {
-            outputOne(tbf, index->name, outFile, clStart, clEnd);
-            }
-        }
+if (clSeq != NULL)
+    {
+    char seqSpec[2*PATH_LEN];
+    if (clEnd > clStart)
+        safef(seqSpec, sizeof(seqSpec), "%s:%s:%d-%d", inName, clSeq, clStart, clEnd);
     else
-        {
-        outputOne(tbf, clSeq, outFile, clStart, clEnd);
-        }
+        safef(seqSpec, sizeof(seqSpec), "%s:%s", inName, clSeq);
+    tbs = twoBitSpecNew(seqSpec);
     }
+else if (clSeqList != NULL)
+    tbs = twoBitSpecNewFile(inName, clSeqList);
+else
+    tbs = twoBitSpecNew(inName);
+tbf = twoBitOpen(tbs->fileName);
+if (tbs->seqs == NULL)
+    processAllSeqs(tbf, outFile);
+else
+    processSeqSpecs(tbf, tbs->seqs, outFile);
+twoBitSpecFree(&tbs);
+carefulClose(&outFile);
 twoBitClose(&tbf);
 }
 
@@ -106,7 +111,11 @@ if (argc != 3)
 clSeq = optionVal("seq", clSeq);
 clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
-seqList = optionVal("seqList", seqList);
+clSeqList = optionVal("seqList", clSeqList);
+if ((clStart > clEnd) && (clSeq == NULL))
+    errAbort("must specify -seq with -start and -end");
+if ((clSeq != NULL) && (clSeqList != NULL))
+    errAbort("can't specify both -seq and -seqList");
 dnaUtilOpen();
 twoBitToFa(argv[1], argv[2]);
 return 0;

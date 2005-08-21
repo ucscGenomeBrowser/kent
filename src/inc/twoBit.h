@@ -43,6 +43,23 @@ struct twoBitFile
     struct hash *hash;	/* Hash of sequences. */
     };
 
+struct twoBitSpec
+/* parsed .2bit file and sequence specs */
+{
+    char *fileName;                 /* path to file */
+    struct twoBitSeqSpec *seqs;     /* list of sequences and subsequences */
+};
+
+struct twoBitSeqSpec
+/* specification for a seq or subsequence in a .2bit file */
+{
+    struct twoBitSeqSpec *next;
+    char *name;                 /* name of sequence */
+    bits32 start;              /* start of subsequence 0 */
+    bits32 end;                /* end of subsequence;
+                                 * 0 if not a subsequence */
+};
+
 struct twoBitFile *twoBitOpen(char *fileName);
 /* Open file, read in header and index.  
  * Squawk and die if there is a problem. */
@@ -65,14 +82,15 @@ struct dnaSeq *twoBitReadSeqFragLower(struct twoBitFile *tbf, char *name,
 /* Same as twoBitReadSeqFrag, but sequence is returned in lower case. */
 
 struct dnaSeq *twoBitLoadAll(char *spec);
-/* Return list of all sequences matching spec.  If
- * spec is a simple file name then this will be
- * all sequence in file. Otherwise it will be
- * the sequence in the file specified by spec,
- * which is in format
- *    file/path/name:seqName:start-end
- * or
- *    file/path/name:seqName */
+/* Return list of all sequences matching spec, which is in
+ * the form:
+ *
+ *    file/path/input.2bit[:seqSpec1][,seqSpec2,...]
+ *
+ * where seqSpec is either
+ *     seqName
+ *  or
+ *     seqName:start-end */
 
 struct slName *twoBitSeqNames(char *fileName);
 /* Get list of all sequences in twoBit file. */
@@ -109,5 +127,33 @@ boolean twoBitIsRange(char *rangeSpec);
 
 boolean twoBitIsFileOrRange(char *spec);
 /* Return TRUE if it is a two bit file or subrange. */
+
+boolean twoBitIsSpec(char *spec);
+/* Return TRUE spec is a valid 2bit spec (see twoBitSpecNew) */
+
+struct twoBitSpec *twoBitSpecNew(char *specStr);
+/* Parse a .2bit file and sequence spec into an object.
+ * The spec is a string in the form:
+ *
+ *    file/path/input.2bit[:seqSpec1][,seqSpec2,...]
+ *
+ * where seqSpec is either
+ *     seqName
+ *  or
+ *     seqName:start-end
+ *
+ * free result with twoBitSpecFree().
+ */
+
+struct twoBitSpec *twoBitSpecNewFile(char *twoBitFile, char *specFile);
+/* parse a file containing a list of specifications for sequences in the
+ * specified twoBit file. Specifications are one per line in forms:
+ *     seqName
+ *  or
+ *     seqName:start-end
+ */
+
+void twoBitSpecFree(struct twoBitSpec **specPtr);
+/* free a twoBitSpec object */
 
 #endif /* TWOBIT_H */
