@@ -11,7 +11,7 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.6 2005/07/09 05:18:56 markd Exp $";
+static char const rcsid[] = "$Id: spLoadRankProp.c,v 1.7 2005/08/21 04:27:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -45,7 +45,7 @@ errAbort(
   "  -noMapFile=file - write list of swissprots or uniref ids that couldn't\n"
   "   be mapped.  First column is id, second column is R if it wasn't found\n"
   "   in uniref, or K if it couldn't be associated with a known gene\n"
-  "  -verbose=n - n >=2 lists dropped entries\n"
+  "  -verbose=n - n >= 3 lists mappings\n"
   "\n"
   "Load a file in the format:\n"
   "   prot1Acc prot2Acc ranking eVal12 eVal21\n"
@@ -63,29 +63,9 @@ char createString[] =
     "    INDEX(query(12))\n"
     ");\n";
 
-
-void outputHit(FILE *tabFh, struct rankPropProt *rpRec, struct spMapperPairs *kgPairs)
-/* output a rankProp hit for the kg query/target pairs */
-{
-struct rankProp outRec;
-struct spMapperPairs *pairs;
-struct spMapperId *tId;
-outRec.score = rpRec->score;
-
-for (pairs = kgPairs; pairs != NULL; pairs = pairs->next)
-    {
-    outRec.query = pairs->qId;
-    for (tId = pairs->tIds; tId != NULL; tId = tId->next)
-        {
-        outRec.target = tId->id;
-        rankPropTabOut(&outRec, tabFh);
-        }
-    }
-}
-
-void processRow(char **row, struct spMapper *mapper, FILE *tabFh, int *zeroScoreCntPtr)
+void processRow(char **row, struct spMapper *mapper, int *zeroScoreCntPtr)
 /* Parse and process on row of a rankProp file, converting ids to known gene
- * ids. Only output if score is greater than zero */
+ * ids. Only save if score is greater than zero */
 {
 struct rankPropProt rpRec;
 rankPropProtStaticLoad(row, &rpRec);
@@ -97,24 +77,47 @@ if (rpRec.score == 0.0)
     }
 else 
     {
-    struct spMapperPairs *kgPairs = spMapperMapPair(mapper, rpRec.qSpId, rpRec.tSpId);
-    outputHit(tabFh, &rpRec, kgPairs);
-    spMapperPairsFree(&kgPairs);
+    spMapperMapPair(mapper, rpRec.qSpId, rpRec.tSpId, rpRec.score);
     }
 }
 
-void processRankProp(struct sqlConnection *conn, char *rankPropFile, char *unirefFile, FILE *tabFh)
-/* process rankProp file, creating load file */
+void outputHit(FILE *tabFh, struct kgPair *kgPair)
+/* output rankProp record for a kg query/target pair */
 {
-char *organism = hScientificName(sqlGetDatabase(conn));
+/* output both directions */
+struct rankProp outRec;
+outRec.score = kgPair->score;
+
+outRec.query = kgPair->kg1Entry->id;
+outRec.target = kgPair->kg2Entry->id;
+rankPropTabOut(&outRec, tabFh);
+
+if (!sameString(kgPair->kg1Entry->id, kgPair->kg2Entry->id))
+    {
+    outRec.query = kgPair->kg2Entry->id;
+    outRec.target = kgPair->kg1Entry->id;
+    rankPropTabOut(&outRec, tabFh);
+    }
+}
+
+void outputHits(FILE *tabFh, struct spMapper *mapper)
+/* output save pairs and scores */
+{
+struct kgPair *kgPair;
+for (kgPair = mapper->kgPairList; kgPair != NULL; kgPair = kgPair->next)
+    outputHit(tabFh, kgPair);
+}
+
+void processRankProp(struct spMapper *mapper, char *rankPropFile, char *unirefFile)
+/* process rankProp file, loading into mapper */
+{
 struct lineFile *inLf = lineFileOpen(rankPropFile, TRUE);
-struct spMapper *mapper = spMapperNew(conn, unirefFile, organism);
 char *row[RANKPROPPROT_NUM_COLS];
 int zeroScoreCnt = 0;
 
 /* copy file, converting ids */
 while (lineFileNextRowTab(inLf, row, RANKPROPPROT_NUM_COLS))
-    processRow(row, mapper, tabFh, &zeroScoreCnt);
+    processRow(row, mapper, &zeroScoreCnt);
 lineFileClose(&inLf);
 
 if (mapper->qtNoUnirefMapCnt > 0)
@@ -127,20 +130,25 @@ if (mapper->noSpIdMapCnt > 0)
     verbose(1, "%d swissprot ids not mapped known genes\n", mapper->noSpIdMapCnt);
 if (zeroScoreCnt > 0)
     verbose(1, "%d entries dropped due to zero score\n", zeroScoreCnt);
-verbose(1, "%d pairs loaded\n", mapper->qtMapCnt);
+verbose(1, "%d pairs mapped\n", mapper->qtMapCnt);
 if (gNoMapFile != NULL)
     spMapperPrintNoMapInfo(mapper, gNoMapFile);
-spMapperFree(&mapper);
-freeMem(organism);
 }
 
+/* output rankProp record for a kg query/target pair */
 void spLoadRankProp(char *database, char *table, char *rankPropFile,
                     char *unirefFile)
-/* spLoadRankProp - load a rankProp table */
+/* load a rankProp table */
 {
 char query[1024];
 struct sqlConnection *conn = sqlConnect(database);
-FILE *tabFh = hgCreateTabFile(".", table);
+char *organism = hScientificName(database);
+struct spMapper *mapper = spMapperNew(conn, 1, unirefFile, organism);
+FILE *tabFh;
+
+processRankProp(mapper, rankPropFile, unirefFile);
+tabFh = hgCreateTabFile(".", table);
+outputHits(tabFh, mapper);
 
 if (gLoad)
     {
@@ -150,7 +158,6 @@ if (gLoad)
     else
         sqlRemakeTable(conn, table, query);
     }
-processRankProp(conn, rankPropFile, unirefFile, tabFh);
 
 if (gLoad)
     hgLoadTabFileOpts(conn, ".", table, SQL_TAB_FILE_ON_SERVER, &tabFh);
@@ -160,6 +167,8 @@ if (!gKeep)
     hgRemoveTabFile(".", table);
 
 sqlDisconnect(&conn);
+spMapperFree(&mapper);
+freeMem(organism);
 }
 
 int main(int argc, char *argv[])

@@ -2,6 +2,8 @@
  * building gene sorter tables.  Can optionally map uniref entry ids. */
 #include "common.h"
 #include "spMapper.h"
+#include "localmem.h"
+#include "hash.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "spKgMap.h"
@@ -11,49 +13,85 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spMapper.c,v 1.1 2005/07/09 05:18:56 markd Exp $";
+static char const rcsid[] = "$Id: spMapper.c,v 1.2 2005/08/21 04:27:22 markd Exp $";
 
 /* values for noMapTbl */
 char noUnirefMapping = 'R';           /* indicates no uniref mapping */
 char noKGMapping = 'K';               /* indicates no kg mapping */
 
-static void spMapperIdAdd(struct spMapperId **head, char *id)
-/* add a new spMapperId to a list if it doesn't exist. id is not copy,
- * memory must be stable. */
+static struct kgEntry *kgEntryAdd(struct spMapper *sm, struct hashEl* kgHel, struct kgPair *kgPair)
+/* Add a new kgEntry to a hash chain */
 {
-struct spMapperId *ent;
-for (ent = *head; (ent != NULL) && !sameString(ent->id, id); ent = ent->next)
-    continue;
-if (ent == NULL)
+struct kgEntry *kgEntry;
+lmAllocVar(sm->kgPairMap->lm, kgEntry);
+kgEntry->id = kgHel->name;
+kgEntry->kgPair = kgPair;
+slAddHead((struct kgEntry**)&kgHel->val, kgEntry);
+return kgEntry;
+}
+
+static void kgPairAdd(struct spMapper *sm, struct hashEl* kg1Hel,
+                      struct hashEl* kg2Hel, float score)
+/* add a new kgPair object to the hash */
+{
+struct kgPair *kgPair;
+
+lmAllocVar(sm->kgPairMap->lm, kgPair);
+kgPair->score = score;
+slAddHead(&sm->kgPairList, kgPair);
+
+/* link both kgId objects in struct */
+kgPair->kg1Entry = kgEntryAdd(sm, kg1Hel, kgPair);
+kgPair->kg2Entry = kgEntryAdd(sm, kg2Hel, kgPair);
+}
+
+static struct kgPair *kgPairFind(struct hashEl* queryHel, struct hashEl* targetHel)
+/* find a kgPair object for a pair of kg ids, or NULL if not in table */
+{
+struct kgEntry *entry;
+
+/* search for an entry for the pair.  Ok to compare string ptrs here, since
+ * they are in same local memory.  Don't know order in structure, so must
+ * check both ways.
+ */
+for (entry = queryHel->val; entry != NULL; entry = entry->next)
     {
-    /* new entry */
-    AllocVar(ent);
-    ent->id = id;
-    slAddHead(head, ent);
+    if (((entry->kgPair->kg1Entry->id == queryHel->name)
+         && (entry->kgPair->kg2Entry->id == targetHel->name))
+        || ((entry->kgPair->kg1Entry->id == targetHel->name)
+            && (entry->kgPair->kg2Entry->id == queryHel->name)))
+        return entry->kgPair;
+    }
+return NULL;
+}
+
+static void kgPairSave(struct spMapper *sm, char *qSpId, char *tSpId,
+                       char *queryId, char *targetId, float score)
+/* save a bi-directional e-value for a query/target pair */
+{
+struct hashEl *queryHel = hashStore(sm->kgPairMap, queryId);
+struct hashEl *targetHel = hashStore(sm->kgPairMap, targetId);
+struct kgPair *kgPair = kgPairFind(queryHel, targetHel);
+if (kgPair != NULL)
+    {
+    if (((sm->scoreDir < 0) && (score < kgPair->score))
+        || ((sm->scoreDir > 0) && (score > kgPair->score)))
+        {
+        kgPair->score = score; /* better score */
+        verbose(3, "updating: %s <> %s -> %s <> %s: %0.3f\n", qSpId, tSpId,
+                queryId, targetId, score);
+        }
+    }
+else
+    {
+    kgPairAdd(sm, queryHel, targetHel, score);
+    verbose(3, "mapping: %s <> %s -> %s <> %s: %0.3f\n", qSpId, tSpId,
+            queryId, targetId, score);
     }
 }
 
-static void spMapperPairsAdd(struct spMapperPairs **head, char *qId, char *tId)
-/* add to kg id pair to list, if not already defined.  Ids not copied, memory
- * must be stable */
-{
-/* ok that this is O(N^2), since lists should be small */
-struct spMapperPairs *pairs;
-for (pairs = *head; (pairs != NULL) && !sameString(pairs->qId, qId);
-     pairs = pairs->next)
-    continue;
-
-if (pairs == NULL)
-    {
-    /* new entry */
-    AllocVar(pairs);
-    pairs->qId = qId;
-    slAddHead(head, pairs);
-    }
-spMapperIdAdd(&pairs->tIds, tId);
-}
-
-static void spMapperPairsAddIds(struct spMapperPairs **spMapperPairs, struct slName *qIds, struct slName *tIds)
+static void savePairs(struct spMapper *sm, char *qSpId, char *tSpId,
+                      struct slName *qIds, struct slName *tIds, float score)
 /* add all combinations of ids. */
 {
 struct slName *qId, *tId;
@@ -62,32 +100,26 @@ struct slName *qId, *tId;
 for (qId = qIds; qId != NULL; qId = qId->next)
     {
     for (tId = tIds; tId != NULL; tId = tId->next)
-        spMapperPairsAdd(spMapperPairs, qId->name, tId->name);
+        kgPairSave(sm, qSpId, tSpId, qId->name, tId->name, score);
     }
 }
 
-void spMapperPairsFree(struct spMapperPairs **head)
-/* free list of spMapperPairs objects */
-{
-struct spMapperPairs *pairs;
-for (pairs = *head;  pairs != NULL; pairs = pairs->next)
-    slFreeList(&pairs->tIds);
-slFreeList(head);
-}
-
-struct spMapper *spMapperNew(struct sqlConnection *conn,
+struct spMapper *spMapperNew(struct sqlConnection *conn, int scoreDir,
                              char *unirefFile, char *orgFilter)
-/* construct a new spMapper object. If unirefFile is not null, this is a tab
- * file reformatting of the uniref xml file with member data extracted (see
- * uniref.h).  If orgFilter is not null, then only uniref members from
- * this organism are loaded.
+/* construct a new spMapper object. scoreDir is 1 if higher score is better,
+ * -1 if lower score is better If unirefFile is not null, this is a tab file
+ * reformatting of the uniref xml file with member data extracted (see
+ * uniref.h).  If orgFilter is not null, then only uniref members from this
+ * organism are loaded.
  */
 {
 struct spMapper *sm;
 AllocVar(sm);
+sm->scoreDir = scoreDir;
 sm->spKgMap = spKgMapNew(conn);
 if (unirefFile != NULL)
     sm->unirefTbl = unirefTblNew(unirefFile, orgFilter);
+sm->kgPairMap = hashNew(23);
 sm->noMapTbl = hashNew(22);
 return sm;
 }
@@ -137,12 +169,11 @@ if (hel->val == NULL)
 hel->val = intToPt(reason);
 }
 
-static struct spMapperPairs *mapUniprot(struct spMapper *sm, char *qSpId, char *tSpId)
+static void mapUniprot(struct spMapper *sm, char *qSpId, char *tSpId, float score)
 /* map uniprot/swissprot ids without uniref mappings */
 {
 struct slName *qIds = mapSpId(sm, qSpId);
 struct slName *tIds = mapSpId(sm, tSpId);
-struct spMapperPairs *pairs = NULL;
 
 if ((qIds == NULL) || (tIds == NULL))
     {
@@ -154,18 +185,16 @@ if ((qIds == NULL) || (tIds == NULL))
     }
 else 
     {
-    spMapperPairsAddIds(&pairs, qIds, tIds);
+    savePairs(sm, qSpId, tSpId, qIds, tIds, score);
     sm->qtMapCnt++;
     }
-return pairs;
 }
 
-static struct spMapperPairs * mapUnirefEntries(struct spMapper *sm,
-                                               struct uniref *qUniref, struct uniref *tUniref,
-                                               char *qSpId, char *tSpId)
-/* all combinations of uniref entries */
+static void mapUnirefEntries(struct spMapper *sm,
+                             struct uniref *qUniref, struct uniref *tUniref,
+                             char *qSpId, char *tSpId, float score)
+/* add all combinations of uniref entries */
 {
-struct spMapperPairs *pairs = NULL;
 struct uniref *qUniprot, *tUniprot;
 boolean qKgFound = FALSE, tKgFound = FALSE;
 
@@ -182,10 +211,10 @@ for (qUniprot = qUniref; qUniprot != NULL; qUniprot = qUniprot->next)
         if (tIds != NULL)
             tKgFound = TRUE;
         if ((qIds != NULL) && (tIds != NULL))
-            spMapperPairsAddIds(&pairs, qIds, tIds);
+            savePairs(sm, qSpId, tSpId, qIds, tIds, score);
         }
     }
-if (pairs == NULL)
+if (!(qKgFound && tKgFound))
     {
     /* couldn't map to known genes */
     if (!qKgFound)
@@ -198,13 +227,11 @@ else
     {
     sm->qtMapCnt++;
     }
-return pairs;
 }
 
-static struct spMapperPairs *mapUniref(struct spMapper *sm, char *qSpId, char *tSpId)
+static void mapUniref(struct spMapper *sm, char *qSpId, char *tSpId, float score)
 /* load a rankProt with uniref mappings */
 {
-struct spMapperPairs *pairs = NULL;
 struct uniref *qUniref = unirefTblGetEntryById(sm->unirefTbl, qSpId);
 struct uniref *tUniref = unirefTblGetEntryById(sm->unirefTbl, tSpId);
 
@@ -219,19 +246,18 @@ if ((qUniref == NULL) || (tUniref == NULL))
     }
 else
     {
-    pairs = mapUnirefEntries(sm, qUniref, tUniref, qSpId, tSpId);
+    mapUnirefEntries(sm, qUniref, tUniref, qSpId, tSpId, score);
     }
-return pairs;
 }
 
-struct spMapperPairs *spMapperMapPair(struct spMapper *sm, char *qSpId, char *tSpId)
+void spMapperMapPair(struct spMapper *sm, char *qSpId, char *tSpId, float score)
 /* map a pair of swissprot/uniprot ids to one or more pairs of known gene
- * ids. */
+ * ids and add them to the table */
 {
 if (sm->unirefTbl != NULL)
-    return mapUniref(sm, qSpId, tSpId);
+    return mapUniref(sm, qSpId, tSpId, score);
 else
-    return mapUniprot(sm, qSpId, tSpId);
+    return mapUniprot(sm, qSpId, tSpId, score);
 }
 
 void spMapperPrintNoMapInfo(struct spMapper *sm, char *outFile)

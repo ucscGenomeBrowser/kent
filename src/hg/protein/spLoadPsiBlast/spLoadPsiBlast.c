@@ -15,7 +15,7 @@
  * is not used due to a different in-memory representation.
  */
 
-static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.3 2005/07/09 05:18:56 markd Exp $";
+static char const rcsid[] = "$Id: spLoadPsiBlast.c,v 1.4 2005/08/21 04:27:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -76,93 +76,6 @@ char createString[] =
     ");\n";
 
 
-
-/* hash table of best evalues for query and target ids.  A naive
- * implementation would have the pair as a single string, but this greatly
- * increase the memory usage.  Instead, both are entered separately, point to
- * the same struct. */
-struct hash *gPairEvalHash = NULL;
-struct pairEval *gPairEvalList = NULL;
-
-struct kgEntry
-/* struct used to store a known gene id with a link to the next entry
- * and the associated pairEval struct */
-{
-    struct kgEntry *next;
-    char *id;                    /* kd id, memory not owned by this struct */
-    struct pairEval *pairEval;   /* containing object shared e-value */
-};
-
-struct pairEval
-/* structure used to keep the best e-value of a pair of kg ids. */
-{
-    struct pairEval *next;
-    struct kgEntry *kg1Entry;   /* pointers back to each entry */
-    struct kgEntry *kg2Entry;
-    float eValue;   /* best e-value for the pair */
-};
-
-struct kgEntry *kgEntryAdd(struct hashEl* kgHel, struct pairEval *pairEval)
-/* Add a new kgEntry to a hash chain */
-{
-struct kgEntry *kgEntry;
-lmAllocVar(gPairEvalHash->lm, kgEntry);
-kgEntry->id = kgHel->name;
-kgEntry->pairEval = pairEval;
-slAddHead((struct kgEntry**)&kgHel->val, kgEntry);
-return kgEntry;
-}
-
-void pairEvalAdd(struct hashEl* kg1Hel, struct hashEl* kg2Hel, 
-                 float eValue)
-/* add a new pairEval object to the hash */
-{
-struct pairEval *pairEval;
-
-lmAllocVar(gPairEvalHash->lm, pairEval);
-pairEval->eValue = eValue;
-slAddHead(&gPairEvalList, pairEval);
-
-/* link both kgId objects in struct */
-pairEval->kg1Entry = kgEntryAdd(kg1Hel, pairEval);
-pairEval->kg2Entry = kgEntryAdd(kg2Hel, pairEval);
-}
-
-struct pairEval *pairEvalFind(struct hashEl* queryHel, struct hashEl* targetHel)
-/* find a pairEval object for a pair of kg ids, or NULL if not in table */
-{
-struct kgEntry *entry;
-
-/* search for an entry for the pair.  Ok to compare string ptrs here, since
- * they are in same local memory.  Don't know order in structure, so must
- * check both ways.
- */
-for (entry = queryHel->val; entry != NULL; entry = entry->next)
-    {
-    if (((entry->pairEval->kg1Entry->id == queryHel->name)
-         && (entry->pairEval->kg2Entry->id == targetHel->name))
-        || ((entry->pairEval->kg1Entry->id == targetHel->name)
-            && (entry->pairEval->kg2Entry->id == queryHel->name)))
-        return entry->pairEval;
-    }
-return NULL;
-}
-
-void pairEvalSave(char *queryId, char *targetId, float eValue)
-/* save a bi-directional e-value for a query/target pair */
-{
-struct hashEl *queryHel = hashStore(gPairEvalHash, queryId);
-struct hashEl *targetHel = hashStore(gPairEvalHash, targetId);
-struct pairEval *pairEval = pairEvalFind(queryHel, targetHel);
-if (pairEval != NULL)
-    {
-    if (eValue < pairEval->eValue)
-        pairEval->eValue = eValue;
-    }
-else
-    pairEvalAdd(queryHel, targetHel, eValue);
-}
-
 #define MAX_QUERY_ID  256 /* maximum size of an id + 1 */
 
 boolean readQueryHeader(struct lineFile* inLf,
@@ -209,23 +122,6 @@ if (nCols < 3)
 return row[2];  /* memory is in lineFile buffer */
 }
 
-void processQueryHit(struct lineFile* inLf, struct spMapper *mapper, char *querySpId,
-                     char *targetSpId, float eValue)
-/* Process a query hit, save in table if it can be mapped to a known gene id */
-{
-struct spMapperPairs *kgPairs = spMapperMapPair(mapper, querySpId, targetSpId);
-struct spMapperPairs *pairs;
-struct spMapperId *tId;
-    
-for (pairs = kgPairs; pairs != NULL; pairs = pairs->next)
-    {
-    for (tId = pairs->tIds; tId != NULL; tId = tId->next)
-        {
-        pairEvalSave(pairs->qId, tId->id, eValue);
-        }
-    }
-}
-
 boolean processQuery(struct lineFile* inLf, struct spMapper *mapper, int *maxEvalCntPtr)
 /* Read and process a query and target hits */
 {
@@ -237,19 +133,17 @@ if (!readQueryHeader(inLf, querySpId))
 while ((targetSpId = readHit(inLf, &eValue)) != NULL)
     {
     if (eValue <= gMaxEval)
-        processQueryHit(inLf, mapper, querySpId, targetSpId, eValue);
+        spMapperMapPair(mapper, querySpId, targetSpId, eValue);
     else
         (*maxEvalCntPtr)++;
     }
 return TRUE;
 }
 
-void processBlastFile(struct sqlConnection *conn, char *blastFile, char *unirefFile)
+void processBlastFile(struct spMapper *mapper, char *blastFile, char *unirefFile)
 /* read the reformat psl-blast results */
 {
-char *organism = hScientificName(sqlGetDatabase(conn));
 struct lineFile* inLf = lineFileOpen(blastFile, TRUE);
-struct spMapper *mapper = spMapperNew(conn, unirefFile, organism);
 int maxEvalCnt = 0;
 
 while (processQuery(inLf, mapper, &maxEvalCnt))
@@ -269,21 +163,20 @@ if (maxEvalCnt > 0)
 verbose(1, "%d pairs loaded\n", mapper->qtMapCnt);
 if (gNoMapFile != NULL)
     spMapperPrintNoMapInfo(mapper, gNoMapFile);
-spMapperFree(&mapper);
-freeMem(organism);
 }
 
-void writePairs(FILE *tabFh)
+void writePairs(struct spMapper *mapper, FILE *tabFh)
 /* write saves pairs abd best e-value to file */
 {
-struct pairEval *pairEval;
-for (pairEval = gPairEvalList; pairEval != NULL; pairEval = pairEval->next)
+struct kgPair *kgPair;
+for (kgPair = mapper->kgPairList; kgPair != NULL; kgPair = kgPair->next)
     {
     /* write both directions */
-    fprintf(tabFh, "%s\t%s\t%0.4g\n", pairEval->kg1Entry->id, pairEval->kg2Entry->id,
-            pairEval->eValue);
-    fprintf(tabFh, "%s\t%s\t%0.4g\n", pairEval->kg2Entry->id, pairEval->kg1Entry->id,
-            pairEval->eValue);
+    fprintf(tabFh, "%s\t%s\t%0.4g\n", kgPair->kg1Entry->id, kgPair->kg2Entry->id,
+            kgPair->score);
+    if (!sameString(kgPair->kg1Entry->id, kgPair->kg2Entry->id))
+        fprintf(tabFh, "%s\t%s\t%0.4g\n", kgPair->kg2Entry->id, kgPair->kg1Entry->id,
+                kgPair->score);
     }
 }
 
@@ -291,13 +184,14 @@ void spLoadPsiBlast(char *database, char *table, char *blastFile, char *unirefFi
 /* spLoadPsiBlast - load table of swissprot all-against-all PSI-BLAST data */
 {
 struct sqlConnection *conn = sqlConnect(database);
+char *organism = hScientificName(database);
+struct spMapper *mapper = spMapperNew(conn, -1, unirefFile, organism);
 FILE *tabFh;
-gPairEvalHash = hashNew(22);
 
-processBlastFile(conn, blastFile, unirefFile);
-
+processBlastFile(mapper, blastFile, unirefFile);
 tabFh = hgCreateTabFile(".", table);
-writePairs(tabFh);
+writePairs(mapper, tabFh);
+
 if (gLoad)
     {
     char query[1024];
@@ -312,6 +206,8 @@ if (gLoad)
 if (!gKeep)
     hgRemoveTabFile(".", table);
 sqlDisconnect(&conn);
+spMapperFree(&mapper);
+freeMem(organism);
 }
 
 int main(int argc, char *argv[])
