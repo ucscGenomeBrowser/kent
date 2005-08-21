@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.12.8.9 2005/08/16 23:20:17 markd Exp $
+# $Id: gbAlignSetup,v 1.12.8.10 2005/08/21 04:37:54 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -10,23 +10,8 @@ Do setup for the alignment step.
 Arguments:
   - database - databases to align
 
-Obtains other parameters from etc/genbank.conf:
-
-  - $db.serverGenome - a glob pattern of where to find the genome
-     contig or chromosome nib, or 2bit files on the server.
-     For example: 
-        mm5.serverGenome = /cluster/data/mm5/nib/chr*.nib
-
-  - $db.clusterGenome - a glob pattern of where to find the genome
-     contig or chromosome nib, or 2bit files on the cluster.
-     For example: 
-        mm5.clusterGenome = /scratch/mus/mm5/softNib/chr*.nib
-
-  - $db.querySplitSize - maximum size of a fasta file for alignment, in
-    megabytes
-
-  - $db.lift - the lift file is used find gaps when partitioning sequences.
-    optional.
+Obtains other parameters from etc/genbank.conf, see doc/config.html for
+details.
 
 Does:
    - Find updates that are missing alignments in the latest releases for
@@ -82,66 +67,125 @@ gbBlatPath = absBinDir + "/gbBlat"
 
 cmdOpts = None
 
+# FIXME: tmp for debugging
+import time
+global startTime, lastTime
+startTime = lastTime = time.time()
+def ptm(*objs):
+    fh = sys.stderr
+    global startTime, lastTime
+    now = time.time()
+    fh.write(("%0.3f" % (now-startTime)))
+    fh.write(" ")
+    fh.write(("%0.3f" % (now-lastTime)))
+    lastTime = now
+    for o in objs:
+        fh.write(" ")
+        fh.write(str(o))
+    fh.write("\n")
+    fh.write
+
 # global table to make sure we don't generate output file more than
 # once
 definedPsls = set()
 
 class GenomeWindow(object):
     "information about a single genome window"
-    __slots__ = ("seq", "start", "end", "isFullSeq", "spec", "getSize")
+    __slots__ = ("seq", "start", "end", "size", "isFullSeq", "getSpec")
 
     def __init__(self, seq, start, end):
         assert(start < end)
         self.seq = seq
         self.start = start
         self.end = end
-        self.isFullSeq = (start == 0) and (end == seq.size)
-        # specification for gbBlat (includes size if subrange)
+        self.size = end - start
+        self.isFullSeq = (self.size == seq.size)
+
+    def getSpec(self):
+        "get specification for gbBlat (includes size if subrange)"
         if self.isFullSeq:
-            self.spec = seq.id
+            return self.seq.id
         else:
-            self.spec = seq.id + ":" + str(seq.size) + ":" + str(start) + "-" + str(end)
+            return self.seq.id + ":" + str(self.seq.size) + ":" + str(self.start) + "-" + str(self.end)
 
     def __str__(self):
-        return self.spec
+        return self.getSpec()
 
-    def getSize(self):
-        "get the size of the window"
-        return self.end - self.start
+    def dump(self, fh):
+        "print object for debugging purposes"
+        prRowv(fh, self.seq.id, self.start, self.end)
 
 class GenomeWindows(list):
     """Class to construct overlapping windows over sequences in a genome.
     contains ordered list of GenomeWindow objects"""
 
-    def __init__(self, genomeSeqs, winSize, overlap):
-        if (winSize <= 0):
+    def __init__(self, db, genomeSeqs, conf):
+        self.winSize = conf.getDbInt(db, "align.window")
+        self.overlap = conf.getDbInt(db, "align.overlap")
+        if (self.winSize <= 0):
             raise Exception("window size must be > 0")
-        if (overlap < 0):
+        if (self.overlap < 0):
             raise Exception("window overlap must be >= 0")
-        if (winSize <= overlap):
+        if (self.winSize <= self.overlap):
             raise Exception("window size must be > overlap")
-        self.winSize = winSize
-        self.overlap = overlap
 
+        self.maxGap = conf.getDbInt(db, "align.maxGap")
+
+        # unplaced chromosome handling
+        unChroms = conf.getDbWordsNone(db, "align.unplacedChroms")
+        if unChroms != None:
+            if conf.getDbStrNo(db, "lift") == None:
+                raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
+            self.unplacedChroms = frozenset(unChroms)
+        else:
+            self.unplacedChroms = frozenset()
+
+        self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
+        if (self.minUnplacedSize != None) and (unChroms == None):
+            raise Exception(db + ".align.minUnplacedSize requires " + db + ".align.unplacedChroms")
+        
         for seq in genomeSeqs.itervalues():
-            if seq.regions == None:
-                self._partitionRange(seq, 0, seq.size, winSize, overlap)
+            if seq.id in self.unplacedChroms:
+                self._partitionUnplaced(seq)
             else:
-                for reg in seq.regions:
-                    self._partitionRange(seq, reg[0], reg[1], winSize, overlap)
+                self._partitionSeq(seq)
+                
+    def _partitionSeq(self, seq):
+        "partition a sequence"
+        start = seq.regions[0][0]
+        end = seq.regions[0][1]
+        for reg in seq.regions[1:]:
+            if (reg[0] - end) >= self.maxGap:
+                self._partitionRange(seq, start, end)
+                start = reg[0]
+            end = reg[1]
+        self._partitionRange(seq, start, end)
 
-    def _partitionRange(self, seq, start, end, winSize, overlap):
+    def _partitionUnplaced(self, seq):
+        "partition a pseudo-chromosome containing unplaced sequences"
+        # assumed lift file divded chromosome into unplaced sequences
+        minSize = self.minUnplacedSize
+        for reg in seq.regions:
+            if (reg[1] - reg[0]) >= minSize:
+                self.append(GenomeWindow(seq, reg[0], reg[1]))
+
+    def _partitionRange(self, seq, start, end):
         "partition a range into windows"
         assert(start < end)
         winStart = start
         while winStart < end:
-            winEnd = winStart + winSize
-            if winEnd+overlap >= end:
+            winEnd = winStart + self.winSize
+            if winEnd+self.overlap >= end:
                 # past end or next overlap will take us to end
                 winEnd = end
             self.append(GenomeWindow(seq, winStart, winEnd))
             # advance window with overlap.
-            winStart += (winSize - overlap)
+            winStart += (self.winSize - self.overlap)
+
+    def dump(self, fh):
+        "print object for debugging purposes"
+        for win in self:
+            win.dump(fh)            
 
 class CDnaQuery(object):
     "object to store info on one of the extracted cDNA fasta files"
@@ -179,6 +223,10 @@ class CDnaUnaligned(object):
 
         rel.loadAlignedParts(db)
         self._findUnaligned()
+        if cmdOpts.verbose >= 2:
+            sys.stderr.write("=========== GENBANK INDEX ===========\n")
+            self.rel.dump(sys.stderr)
+            sys.stderr.flush()
 
     def _needsAligned(self, procPart):
         "determine if procPart is all or partially unaligned"
@@ -228,7 +276,7 @@ class CDnaUnaligned(object):
         cmd.append(self.db)
 
         if cmdOpts.verbose > 0:
-            print procOps.fmtCmd(cmd)
+            prLine(sys.stderr, procOps.fmtCmd(cmd))
         lines = procOps.callProcLines(cmd)
 
         # process results
@@ -267,7 +315,7 @@ class Job(list):
 
     def addTargetWin(self, win):
         self.append(win)
-        self.targetBases += win.getSize()
+        self.targetBases += win.size
 
     def _getJobPath(self, jobGenDb):
         "generate the path relative to the work directory that is unique to this job"
@@ -308,7 +356,7 @@ class Job(list):
         fh.write("tseq")
         for win in self:
             fh.write("\t")
-            fh.write(win.spec)
+            fh.write(win.getSpec())
         fh.write("\n")
         if jobGenDb.slow2bit:
             prRowv(fh, "tdbSlow2bit", "yes")
@@ -332,40 +380,56 @@ class Jobs(list):
         self.jobGenDb = jobGenDb
         self.winSize = jobGenDb.windows.winSize
         self.overlap = jobGenDb.windows.overlap
+        # threshold for just sticking a window in it's own job
+        self.singleWinJobSize = self.winSize - self.overlap
+        self.maxWinsPerJob = jobGenDb.maxWinsPerJob
         self.cdnaQuery = cdnaQuery
         self.pending = []
 
         for win in jobGenDb.windows:
             self._addWindow(win)
 
-    def _addWindow(self, win):
-        "add a window to the object"
-        i = self._findJobWithRoom(win)
-        if i < 0:
-            # make new job
-            job = Job(self.cdnaQuery)
-            job.addTargetWin(win)
-            if job.targetBases < self.winSize:
-                self.pending.append(job)
-            else:
-                self.append(job)
-        else:
-            # add to existing job
-            job = self.pending[i]
-            job.addTargetWin(win)
-            if job.targetBases >= self.winSize:
-                # now full
-                del(self.pending[i])
-                self.append(job)
-
     def _findJobWithRoom(self, win):
         """find a job with room for this window, alowing jobs to be overflow
-        by the overlap amount"""
-        need = win.getSize() - self.overlap
+        by the overlap amount. Returns None if none found, or index in
+        pending list """
+        need = win.size - self.overlap
         for i in xrange(len(self.pending)):
             if self.pending[i].targetBases + need < self.winSize:
                 return i
-        return -1
+        return None
+
+    def _addWindow(self, win):
+        """add a window to the object.  Performance sensitive due to
+        pseudo-chromosomes with unplaced sequence"""
+        if win.size >= self.singleWinJobSize:
+            # win is only one in job
+            job = Job(self.cdnaQuery)
+            job.addTargetWin(win)
+            self.append(job)
+        else:
+            i = self._findJobWithRoom(win)
+            if i == None:
+                # new job, add to pending unless only one per job allowed
+                job = Job(self.cdnaQuery)
+                job.addTargetWin(win)
+                if self.maxWinsPerJob > 1:
+                    self.pending.append(job)
+                else:
+                    self.append(job)
+            else:
+                # pack into existing job
+                job = self.pending[i]
+                job.addTargetWin(win)
+                if ((len(job) > self.maxWinsPerJob)
+                    or (job.targetBases >= self.singleWinJobSize)):
+                    # now full, remove from pending, and shuffle last
+                    # pending job it's postion in array (assumes this is
+                    # faster).
+                    iLast = len(self.pending)-1
+                    self.pending[i] = self.pending[iLast]
+                    del(self.pending[iLast])
+                    self.append(job)
 
     def write(self, preFilterOpts):
         "write jobs"
@@ -385,11 +449,11 @@ class Jobs(list):
         for job in allJobs:
             minBases = min(minBases, job.targetBases)
             maxBases = max(maxBases, job.targetBases)
-            minSeqs = min(minSeqs, len(job))
+            minSeqs = min(minSeqs, len(job)) 
             maxSeqs = max(maxSeqs, len(job))
             
         pp = self.cdnaQuery.procPart
-        print >>sys.stderr, "Jobs:",pp.update.rel, pp.update, pp, self.jobGenDb.db, "jobs:", len(allJobs), "minBases:", minBases, "maxBases:", maxBases, "minSeqs:", minSeqs, "maxSeqs:", maxSeqs
+        prLine(sys.stderr, "Jobs: ",pp.update.rel, " ", pp.update, " ", pp, " ", self.jobGenDb.db, " jobs:", len(allJobs), " minBases:", minBases, " maxBases:", maxBases, " minSeqs:", minSeqs, " maxSeqs:", maxSeqs)
 
 class JobGenDb(object):
     "object to generate alignment jobs for a database"
@@ -399,6 +463,7 @@ class JobGenDb(object):
         self.db = db
         self.querySplitSize = 1024*1024*self.conf.getDbInt(db, "align.querySplitSize")
         self.ooc = self.conf.getDbStrNo(db, "ooc")
+        self.maxWinsPerJob = self.conf.getDbInt(db, "align.maxWinsPerJob")
         self.genome = None
         self.numAlign = 0L
         self.slow2bit = False
@@ -422,7 +487,9 @@ class JobGenDb(object):
 
     def _loadGenome(self):
         "load genome sequence info"
-        self.genome = GenomeSeqs(self.conf.getDbStr(self.db, "serverGenome"))
+        skipChroms = self.conf.getDbWordsNone(self.db, "align.skipChroms")
+        self.genome = GenomeSeqs(self.conf.getDbStr(self.db, "serverGenome"),
+                                 skipChroms)
         # get nib dir or 2bit file on cluster (FIXME: shouldn't really be a glob)
         self.clusterGenome = self.conf.getDbStr(self.db, "clusterGenome")
         if self.clusterGenome.endswith(".nib"):
@@ -431,10 +498,14 @@ class JobGenDb(object):
             self.slow2bit = True
         lift = self.conf.getDbStrNo(self.db, "lift")
         if lift != None:
-            self.genome.addMaxGapRegions(lift, self.conf.getDbInt(self.db, "align.maxGap"))
-        self.windows = GenomeWindows(self.genome,
-                                     self.conf.getDbInt(self.db, "align.window"),
-                                     self.conf.getDbInt(self.db, "align.overlap"))
+            self.genome.addUnGappedRegions(lift)
+        self.windows = GenomeWindows(self.db, self.genome, self.conf)
+        if cmdOpts.verbose >= 2:
+            sys.stderr.write("=========== GENOME REGIONS ===========\n")
+            self.genome.dump(sys.stderr)
+            sys.stderr.write("=========== WINDOWS ===========\n")
+            self.windows.dump(sys.stderr)
+            sys.stderr.flush()
 
     def _addOrgCatJobs(self, rel, cdnaType, orgCat, queries):
         "make query jobs for a given orgCat"
@@ -444,7 +515,7 @@ class JobGenDb(object):
         for cdnaQuery in queries:
             jobs = Jobs(self, cdnaQuery)
             jobs.write(preFilterOpts)
-            if cmdOpts.verbose > 3:
+            if cmdOpts.verbose >= 3:
                 jobs.prStats()
         
     def _addJobSet(self, rel, cdnaType, orgCats):
@@ -567,7 +638,6 @@ def main():
     for db in databases:
         jobGen.addJobs(db)
     jobGen.finish()
-
 
 main()
 

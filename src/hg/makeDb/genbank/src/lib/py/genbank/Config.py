@@ -1,10 +1,10 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.1.2.1 2005/08/14 04:38:48 markd Exp $
+# $Id: Config.py,v 1.1.2.2 2005/08/21 04:37:54 markd Exp $
 #
 
-import re
+import re, string
 
 class Config(dict):
     "object to parse and contain the genbank.conf"
@@ -58,6 +58,14 @@ class Config(dict):
             value = self.get("default." + key)
         return value
 
+    def getDbWordsNone(self, db, key):
+        """get a configuration value for a database, or the default, or None
+        if neither are specified. split white-space separated words."""
+        value = self.getDbStrNone(db, key)
+        if value == None:
+            return None;
+        return string.split(value)
+
     def getDbStr(self, db, key):
         """get a configuration value for a database, or the default, or error
         if neither are specified"""
@@ -91,6 +99,15 @@ class Config(dict):
         """get a interger configuration value for a database, or the default, or error
         if neither are specified"""
         return int(self.getDbStr(db, key))
+
+    def getDbIntNone(self, db, key):
+        """get a interger configuration value for a database, or the default, or None
+        if neither are specified"""
+        val = self.getDbStrNone(db, key)
+        if val != None:
+            return int(val)
+        else:
+            return None
 
     def getDbBool(self, db, key):
         """get a boolean configuration value for a database, or the default,

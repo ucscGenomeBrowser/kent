@@ -41,8 +41,27 @@
           the genome is partitioned in seqments of no more than this sizes for alignment.
      <li> <code><em>$db</em>.align.overlap</code> - Number of bases of overlap in the alignment
           windows.
-     <li> <code><em>$db</em>.align.maxGap</code> - Maximum size of a gap that is allowed in a window.
-          Gaps large that this result in a new window.
+     <li> <code><em>$db</em>.align.maxGap</code> - Gaps no larger than this
+          value are contained within a window rather then starting a 
+          new window.  This allows gaps within introns.
+     <li> <code><em>$db</em>.align.maxWinsPerJob</code> - Maximum number
+          of small windows to pack into a job.
+          Windows smaller than the specified window size are packed into
+          jobs until the number of bases in the jobs is approximately
+          the window size.  However a large number of small jobs can be very
+          slow.  This parameters sets an absolute limit on the number of
+          windows in a job.
+     <li> <code><em>$db</em>.align.unplacedChroms</code> - 
+          White-space separated list of pseudo-chromosome that contain
+          unplaced sequences.  Alignments will not be allowed to span
+          gaps on these chromsomes. Requires a lift file to specify the
+          gaps.
+     <li> <code><em>$db</em>.align.minUnplacedSize</code> - Skip
+          unplaced sequences smaller than this size.
+     <li> <code><em>$db</em>.align.skipChroms</code> - 
+          White-space separated list of chromosome to skip.  Optimization
+          normally used to ignore pseudo-chromosomes containing large
+          number of unplaced sequences.
      <li> <code><em>$db</em>.serverGenome</code> - glob pattern or file for genome
           sequences on server. This can be NIBs or a TwoBit file.
      <li> <code><em>$db</em>.clusterGenome</code> - glob pattern or file for genome
@@ -52,7 +71,9 @@
           <code>no</code> if no blat ooc is to be used.
      <li> <code><em>$db</em>.maxIntron</code> - blat -maxIntron value.
      <li> <code><em>$db</em>.lift</code> - path to lift file for genome,
-          or <CODE>no</CODE> if none.
+          or <CODE>no</CODE> if none.  Lift file is used to find gaps when partitioning the
+          sequence for alignment.  It does not have to contain all chromosomes.
+          Sequences named <code>gap</code> are treated as gaps.
      <li> <code><em>$db</em>.genbank.mrna.native.pslCDnaFilter</code> - Arguments
            for <CODE>pslCDnaFilter</CODE> for GenBank native mRNAs, or <CODE>no</CODE> to skip pslCDnaFilter.
      <li> <code><em>$db</em>.genbank.mrna.xeno.pslCDnaFilter</code>

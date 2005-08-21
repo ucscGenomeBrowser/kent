@@ -17,7 +17,7 @@
     <H3>Recent changes</H3>
     <OL>
     <LI> The working directory for initial alignments is now removed
-    unless <CODE>-keep</CODE> is spoecified.
+    unless <CODE>-keep</CODE> is specified.
     <LI> <CODE>gbBlat</CODE> no longer needs to be modified to specify
     the ooc file.  It is now specified in the <CODE>genbank.conf</CODE>
     file.
@@ -57,48 +57,43 @@
            to update the round-robin code.
 
       </UL>
-      <LI> Edit <A HREF="config.html"><CODE>/cluster/data/etc/genbank.conf</CODE></A> to 
-           configure this databases.  Must set:
+      <LI> Edit <A HREF="config.html"><CODE>kent/src/hg/makeDb/genbank/etc/genbank.conf</CODE></A> to 
+           configure this databases.   Must set:
            <UL>
-           <LI> <CODE>$db.genome</CODE>
+           <LI> <CODE>$db.serverGenome</CODE>
+           <LI> <CODE>$db.clusterGenome</CODE>
            <LI> <CODE>$db.lift</CODE>
            </UL>
            You may want to set some database load options to override the defaults.
+           If you have a pseudo chromosome with unplaced sequence, be sure to
+           specify <code><em>$db</em>.align.maxGapChrs</code> and a lift file.
+           <p>
+           Commit your changes and then go to the top of the genbank source
+           tree and update the installed genbank etc files with:
+           <PRE>
+           make update-etc
+           </PRE>
            
-      <LI><CODE>ssh eieio</CODE><BR>
-          <EM>It is important to run on <CODE>eieio</CODE> to avoid creating
-             a heavy NFS load</EM> .
+      <LI><CODE>ssh <em>fileServer</em></CODE><BR>
+          Where <CODE><em>fileServer</em></CODE> is the NFS server with
+          <CODE>/cluster/data/genbank/</CODE>.
 
       <LI><CODE>cd /cluster/data/genbank</CODE><BR>
           This directory is <CODE>$gbRoot</CODE>.
 
-      <LI> <CODE>nice bin/gbAlignStep -initial <EM>$db</EM>&</CODE><BR>
+      <LI> <CODE>nice bin/gbAlignStep -initial <EM>$db</EM>&amp;</CODE><BR>
            <P>This will run the entire alignment process.
            The <CODE>-initial</CODE> option defaults several parameters for
            and initial alignment and prevents this alignment from blocking
-           the automatic daily alignments.  In particular:
-           <UL>
-           <LI> Temporary working directory is <CODE>work/initial.$db/align</CODE>.
-           <LI> Log file will be in the form <CODE>var/initial/2003.05.23-21:51:12.$db.align.log</CODE>.
-           <LI> No semaphore files are created, so this doesn't block the
-                daily build.
-           </UL>
-           <P>
-           If you want to use the <EM>bluearc</EM> cluster file system, add
-           <UL>
-           <LI><CODE>-iserver=no -clusterRootDir=/cluster/bluearc/genbank</CODE> 
-           </UL>
-           before the <CODE><EM>$db</EM></CODE>.
+           the automatic daily alignments.
            <BLOCKQUOTE>
            Warning: <CODE>gbAlignStep</CODE> and other GenBank do not currently accept options after
-           the positional arguments.
+           the positional arguments (i.e. the databases).
            </BLOCKQUOTE>
 
-           <P>If you use the <EM>iservers</EM>, <A HREF="config.html"><CODE>/cluster/data/genbank/etc/genbank.conf</CODE></A>
-           should already have the list of working servers. 
            <P>
            All output is saved in the log file.
-           <P> If this is the first time a databases is built for an organism,
+           <P> If your organism has xeno ESTs enabled,
                it's a good idea to start out by aligning and loading just the
                the mRNAs, as this will go much faster.  Two options control
                what is aligned:
@@ -147,6 +142,13 @@
                tables and load with the <CODE>-initialLoad</CODE> option
                when loading the ESTs.
           </UL>
+      <LI> After an initial review of the loaded alignments:
+          <ul>
+          <li> Enable daily alignment of the databases by adding the databases to <code>etc/align.dbs</code>.
+          <li> Enable databases update of hgwdev by adding the databases to <code>etc/hgwdev.dbs</code>.
+          <li> <code> make update-etc</code>
+
+          </ul>
     </OL>
 
     <H3>Realigning Tracks</H3>

@@ -10,6 +10,7 @@
 #  -verbose - verbose debugging
 #  -overwrite - overwrite existing output (for debugging)
 #  -tmpDir - use this tmpdir (for debugging).
+#  
 #
 # Arguments:
 #  - jobSpecFile - path to a file describing the set of alignments to perform.
@@ -31,9 +32,6 @@
 #       second is the cDNA type (mrna or est)
 #     o ooc - blat ooc file to use (optional).
 #     o tdb - target database, this is either a NIB directory or a twoBit file.
-#     o tdbSlow2bit - If yes, then this is a twoBit file with a large number
-#       of sequences.  It is most likely faster to extract the target sequence
-#       from the file than repeatedly access it (optional).
 #     o tseq - white-space separated list of target sequences, which are either
 #       a sequence id (chr1), or a sequence size and subrange
 #       (chr1:size:start-end).
@@ -51,7 +49,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.44.4.10 2005/08/16 23:20:17 markd Exp $
+# $Id: gbBlat,v 1.44.4.11 2005/08/21 04:37:54 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -173,7 +171,6 @@ array set specsDef {
     tseq {-1 1}
     qdb  {-1 1}
     maxIntron {1 0}
-    tdbSlow2bit {1 0}
     preFilterOpts {-1 0}
 }
 
@@ -222,16 +219,6 @@ proc parseJobSpecsFh {fh specsVar} {
     if {[lsearch {mrna est} [lindex $specs(type) 1]] < 0} {
         error "key \"type\" cDNA type should be \"mrna\" or \"est\""
     }
-
-    if {[info exists specs(tdbSlow2bit)]} {
-        if {[lsearch {yes no} $specs(tdbSlow2bit)] < 0} {
-            error "value for \"tdbSlow2bit\" should be \"yes\" or \"no\", got\"$specs(tdbSlow2bit)\""
-        }
-    } else {
-        # default
-        set specs(tdbSlow2bit) no
-    }
-
 }
 
 ##
@@ -286,34 +273,21 @@ proc determineBlatParams {specsVar} {
 }
 
 ##
-# Extract a subsequence from a twoBit file into tmp
-proc getTwoBitSlow {genomeSeqRef seqId subStart subEnd} {
-    global tmpDir
-    set faPath $tmpDir/$seqId
-    if {$subStart != {}} {
-        append faPath :$subStart-$subEnd
-    }
-    append faPath .fa
-    if {![file exists $faPath]} {
-        doExec twoBitToFa $genomeSeqRef $faPath
-    }
-    return $faPath
-}
-
-##
 # create name referencing a genome sequences in a genome file.
-proc makeGenomeSeqRef {specsVar tSeqSpec} {
+proc makeGenomeSeqRef {specsVar tSeqSet} {
     upvar $specsVar specs
     set path $specs(tdb)
     if {[string match *.2bit $specs(tdb)]} {
         # either single subrange, or list of whole sequences
-        append path : [join $tSeqSpec ,]
+        append path : [join $tSeqSet ,]
     } else {
-        # nib whole sequence of subrange
-        lassign [parseTSeq [lindex $tSeqSpec 0]] seqId seqSize subStart subEnd
-        append path /$seqId.nib
-        if {$subStart != {}} {
-            append path :$subStart-$subEnd
+        # nib is single whole sequence or subrange
+        if {![regexp {^([^:]+)(:([0-9]+)-([0-9]+))?$} [lindex $tSeqSet 0] {} id {} start end]} {
+            error "can't parse sequence spec [lindex $tSeqSet 0]"
+        }
+        append path /$id.nib
+        if {$start != {}} {
+            append path :$start-$end
         }
     }
     return $path
@@ -328,39 +302,35 @@ proc cksum {file} {
 # parse a target sequence spec into a list
 # return either {seqId seqSize subStart subEnd} or {seqId}
 proc parseTSeq {tseq} {
-    if {[regexp {^(.+):(.+):(.+)-(.+)$} $tseq {} seqId seqSize subStart subEnd]} {
-        return [list $seqId $seqSize $subStart $subEnd]
+    if {[regexp {^(.+):(.+):(.+)-(.+)$} $tseq {} id size start end]} {
+        return [list $id $size $start $end]
     } else {
         return [list $tseq]
     }
 }
 
 ##
-# create a temporary lift file for the specified subsequence
-proc makeLift {seqId seqSize subStart subEnd} {
-    global tmpPrefix
-    set liftFile $tmpPrefix.lft
-    set fh [open $liftFile w]
-    set subName $seqId:$subStart-$subEnd
-    set subSize [expr $subEnd-$subStart]
-    puts $fh [join [list $subStart $subName $subSize $seqId $seqSize] \t]
-    close $fh
-    return $liftFile
-}
-
-##
 # create a lift file, if needed, otherwise return {}.
-# seqSpecs is a list, will only make a lift if this is a single sequecne with
-# a subrange.
-# 
-proc makeLiftIfNeeded {tSeqSpec} {
-    set liftFile {}
-    if {[llength $tSeqSpec] == 1} {
-        lassign [parseTSeq [lindex $tSeqSpec 0]] seqId seqSize subStart subEnd
-        if {$subStart != {}} {
-            set liftFile [makeLift $seqId $seqSize $subStart $subEnd]
+proc makeLiftIfNeeded {specsVar} {
+    upvar $specsVar specs
+
+    # build rows of lift file
+    set rows {}
+    foreach seq $specs(tseq) {    
+        lassign [parseTSeq $seq] id size start end
+        if {$start != {}} {
+            set name $id:$start-$end
+            lappend rows [join [list $start $name [expr $end-$start] $id $size] \t]
         }
     }
+    set liftFile {}
+    if {[llength $rows] > 0} {
+        global tmpPrefix
+        set liftFile $tmpPrefix.lft
+        set fh [open $liftFile w]
+        puts $fh [join $rows \n]
+        close $fh
+    } 
     return $liftFile
 }
 
@@ -414,11 +384,10 @@ proc installFile {inFile outFile} {
     file rename -force $outFile.tmp $outFile
 }
 
-##
-# Align and process results, appending results to specified cummulative output
-# files.  This may either align a single sequence with subseq specs, or if 
-# this is a nib, a list of whole sequences.
-proc alignToGenome {specsVar blatParams tSeqSpec cdnaFa outPsl outOi outIntronPsl} {
+## 
+# Align a set of target seqs or subsequences and process results, appending
+# results to specified cummulative output files.
+proc alignToGenome {specsVar blatParams liftFile tSeqSet cdnaFa outPsl outOi outIntronPsl} {
     global tmpPrefix
     upvar $specsVar specs
     lassign $specs(type) orgCat cdnaType
@@ -426,11 +395,10 @@ proc alignToGenome {specsVar blatParams tSeqSpec cdnaFa outPsl outOi outIntronPs
     # unfiltered tmp output on local FS
     set localPsl $tmpPrefix.psl
     set localOi $tmpPrefix.oi
-    set localIntronPsl $tmpPrefix.intronPsl
+    set localIntronPsl $tmpPrefix.intronPslB
     file delete $localPsl $localOi $localIntronPsl
     
-    set genomeSeqRef [makeGenomeSeqRef specs $tSeqSpec]
-    set liftFile [makeLiftIfNeeded $tSeqSpec]
+    set genomeSeqRef [makeGenomeSeqRef specs $tSeqSet]
 
     # align
     set cmd [concat {blat -noHead -repeats=lower} $blatParams \
@@ -460,40 +428,64 @@ proc alignToGenome {specsVar blatParams tSeqSpec cdnaFa outPsl outOi outIntronPs
 }
 
 ##
-# partation target sequences into sets that can be passed to alignToGenome.
+# partition target seqs for nibs, which is one sequence or subrange per set
+proc partitionNibTargetSeqs {specsVar} {
+    upvar $specsVar specs
+    set tSeqSets {}
+    foreach tseq $specs(tseq) {
+        lassign [parseTSeq $tseq] id {} start end
+        if {$start == {}} {
+            set spec $id
+        } else {
+            set spec $id:$start-$end
+        }
+        lappend tSeqSets [list $spec]
+    }
+    return $tSeqSets
+}
+
+# partition target seqs for twoBits
+proc partitionTwoBitTargetSeqs {specsVar} {
+    upvar $specsVar specs
+    set maxSpecsLen 20000
+    set tSeqSets {}
+    set fnameLen [string length $specs(tdb)]
+    set seqSet {}
+    set totalLen $fnameLen
+    foreach tseq $specs(tseq) {
+        lassign [parseTSeq $tseq] id {} start end
+        if {$start == {}} {
+            set spec $id
+        } else {
+            set spec $id:$start-$end
+        }
+        set len [string length $spec]
+        if {$totalLen+$len+1 > $maxSpecsLen} {
+            # set is full
+            lappend tSeqSets $seqSet
+            set seqSet {}
+            set totalLen $fnameLen
+        }
+        lappend seqSet $spec
+        set totalLen [expr {$totalLen+$len+1}]
+    }
+    if {[llength $seqSet] > 0} {
+        lappend tSeqSets $seqSet
+    }
+    return $tSeqSets
+}
+
+##
+# partition target sequences into sets that can be passed to alignToGenome.
 # This optimize 2bit access by group whole seqs together, but avoiding
-# overflowing command lines
+# overflowing command lines.  Returns {{seq1 seq2 ...} ...}
 proc partitionTargetSeqs {specsVar} {
     upvar $specsVar specs
-    if {![string match *.2bit $specs(tdb)]} {
-        # nib, each sequence individually
-        puts stderr "ret=[list $specs(tseq)]"
-        return $specs(tseq)
+    if {[string match *.2bit $specs(tdb)]} {
+        return [partitionTwoBitTargetSeqs specs]
+    } else {
+        return [partitionNibTargetSeqs specs]
     }
-    # split into subseqs and whole seqs
-    set subSpecs {}
-    set wholeSpecs {}
-    foreach tseq $specs(tseq) {
-        if {[string match *:*-* $tseq]} {
-            lassign [parseTSeq $tseq] seqId {} subStart subEnd
-            lappend subSpecs $seqId:$subStart-$subEnd
-        } else {
-            lappend wholeSpecs $tseq
-        }
-    }
-    # build partitions
-    set tSeqSpecs {}
-    if {[llength $wholeSpecs] > 0} {
-        set maxSeqsPerLine 8000
-        set nSeqs [llength $wholeSpecs]
-        for {set i 0} {$i < $nSeqs} {incr i $maxSeqsPerLine} {
-            lappend tSeqSpecs [lrange $wholeSpecs $i [expr $i+($maxSeqsPerLine)-1]]
-        }
-        if {[llength $subSpecs] > 0} {
-            set tSeqSpecs [concat $tSeqSpecs $subSpecs]
-        }
-    }
-    return [concat $tSeqSpecs $subSpecs]
 }
 
 ##
@@ -508,10 +500,12 @@ proc genAlignments {specsVar outPrefix} {
     set cumOi $tmpPrefix.cum.oi
     set cumIntronPsl $tmpPrefix.cum.intronPsl
 
+    set liftFile [makeLiftIfNeeded specs]
+
     # loop over each target sequence set and each query fasta
-    foreach tSeqSpec [partitionTargetSeqs specs] {
+    foreach tSeqSet [partitionTargetSeqs specs] {
         foreach cdnaFa $specs(qdb) {
-            alignToGenome specs $blatParams $tSeqSpec $cdnaFa $cumPsl $cumOi $cumIntronPsl
+            alignToGenome specs $blatParams $liftFile $tSeqSet $cdnaFa $cumPsl $cumOi $cumIntronPsl
         }
     }
 

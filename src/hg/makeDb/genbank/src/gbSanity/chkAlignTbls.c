@@ -12,7 +12,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.7 2004/09/03 04:08:26 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.7.28.1 2005/08/21 04:37:54 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -36,7 +36,7 @@ sr = sqlGetResult(conn, "SELECT chrom,size FROM chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned sz = gbParseUnsigned(NULL, row[1]);
-    hashAdd(gChromSizes, row[0], (void*)sz);
+    hashAddInt(gChromSizes, row[0], sz);
     slSafeAddHead(&gChroms, newSlName(row[0]));
     }
 sqlFreeResult(&sr);
@@ -54,7 +54,7 @@ hel = hashLookup(gChromSizes, chrom);
 if (hel == NULL)
     return 0;
 else
-    return (unsigned)hel->val;
+    return (unsigned)(size_t)hel->val;
 }
 
 static void chkPsl(struct psl* psl, unsigned iRow, char* database,

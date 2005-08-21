@@ -17,7 +17,7 @@
 #include "hdb.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.7 2004/09/15 16:31:50 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.7.26.1 2005/08/21 04:37:54 markd Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -268,7 +268,7 @@ if (access(extPath, R_OK) < 0)
 else if (fileSize(extPath) != extFile->size)
     {
     gbError("%s: disk file size (%lld) does not match ext.size (%lld): %s",
-            md->acc, fileSize(extPath), extFile->size, extPath);
+            md->acc, (long long)fileSize(extPath), (long long)extFile->size, extPath);
     flagReported(missingExtFiles, extPath);
     badSeq = TRUE;
     }
@@ -484,6 +484,9 @@ if (md->inGbCdnaInfo)
     if (md->gbsSrcDb != (md->typeFlags & GB_SRC_DB_MASK))
         gbError("%s: gbStatus.srcDb (%s) not same gbCdnaInfo.srcDb (%s)", md->acc,
                 gbFmtSelect(md->gbsSrcDb), gbFmtSelect(md->typeFlags));
+    if (md->gbsVersion != md->gbCdnaInfoVersion)
+        gbError("%s: gbStatus.version (%d) not same gbCdnaInfo.version (%d)", md->acc,
+                md->gbsVersion, md->gbCdnaInfoVersion);
     if ((md->gbsModDate != md->gbCdnaInfoModdate))
         gbError("%s: gbStatus.modDate (%s) not same gbCdnaInfo.moddate (%s)", md->acc,
                 gbFormatDate(md->gbsModDate), gbFormatDate(md->gbCdnaInfoModdate));

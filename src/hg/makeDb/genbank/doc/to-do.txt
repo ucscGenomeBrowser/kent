@@ -866,3 +866,67 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
    - deal with unordered chromosomes (e.g. zerbafish).  Probably
      need lift that only covers some of "chromosomes".
+
+- 2bit for cDNA needs:
+  - fast open and access (disk-based hash)
+  - > 4gb size
+  - expandable
+  - support incremental additions with rsync
+  - store est direction (??)
+  - store length of polyA tail/polyT head (??)
+
+
+----- Original Message ----- 
+From: "Yasuyuki Fujii" <yfujii@jbirc.aist.go.jp>
+To: <genome@soe.ucsc.edu>
+Sent: Wednesday, August 17, 2005 4:39 AM
+Subject: [Genome] all_est.txt and estOrientInfo.txt
+
+> estOrientInfo.txt contains information of each aligned ESTs in
+> all_est.txt.
+> Hence the numbers of entries (= lines )in the two files must be same.
+> However, when I downloaded the current version of the files of hg17 and
+> counted the number of the line, these are not same.
+>
+> $ wc -l all_est.txt
+> 6181760 all_est.txt
+> $ wc -l estOrientInfo.txt
+> 6181727 estOrientInfo.txt
+>
+> The problem is that 33 aligned ESTs in all_est.txt are not covered.
+>
+> And then I counted the lines of each chromosome in the files.
+> ("random"s are not included.)
+>
+> all_est estOrientInfo difference
+> chr1 580272 580270 2
+> chr2 403504 403502 2
+> chr3 326327 326324 3
+> chr4 222074 222071 3
+> chr5 289996 289996 0
+> chr6 336685 336685 0
+> chr7 317882 317882 0
+> chr8 209052 209052 0
+> chr9 230102 230096 6
+> chr10 222385 222385 0
+> chr11 372960 372958 2
+> chr12 394979 394979 0
+> chr13 99651 99651 0
+> chr14 193553 193553 0
+> chr15 199437 199431 6
+> chr16 272605 272603 2
+> chr17 361383 361381 2
+> chr18 85175 85175 0
+> chr19 351769 351769 0
+> chr20 155595 155595 0
+> chr21 59173 59172 1
+> chr22 150707 150707 0
+> chrX 198266 198263 3
+> chrY 16068 16068 0
+> chrM 80357 80356 1
+>
+> A half of chromosomes includes same number of the entries and these are
+> not problem.
+> Remains which show difference seem to be insufficient.
+> Please tell me what is the difference in the number of entreies in the two
+> files.

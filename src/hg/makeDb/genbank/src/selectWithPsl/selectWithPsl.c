@@ -7,7 +7,7 @@ struct sqlConnection;
 #include "psl.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: selectWithPsl.c,v 1.1.112.1 2005/02/15 17:15:42 markd Exp $";
+static char const rcsid[] = "$Id: selectWithPsl.c,v 1.1.112.2 2005/08/21 04:37:54 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -51,7 +51,7 @@ char key[ROW_KEY_BUFSZ];
 struct hashEl* hel;
 makeRowKey(chrom, start, end, name, key);
 hel = hashLookup(keyHash, key);
-if ((hel != NULL) && (((int)(hel->val)++) == 0))
+if ((hel != NULL) && (((size_t)(hel->val)++) == 0))
     return TRUE;
 else
     return FALSE;
