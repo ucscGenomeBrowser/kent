@@ -20,8 +20,8 @@ void gfClientFileArray(char *fileName, char ***retFiles, int *retFileCount)
 boolean gotSingle = FALSE;
 char *buf;		/* This will leak memory but won't matter. */
 
-if (nibIsFile(fileName) || twoBitIsSpec(fileName)
-    || sameString(fileName, "stdin"))
+if (nibIsFile(fileName) || twoBitIsFileOrRange(fileName) 
+	|| sameString(fileName, "stdin"))
     gotSingle = TRUE;
 /* Detect .fa files (where suffix is not standardized)
  * by first character being a '>'. */
@@ -178,7 +178,7 @@ for (i=0; i<fileCount; ++i)
     fileName = files[i];
     if (nibIsFile(fileName))
 	list = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, fileName);
-    else if (twoBitIsSpec(fileName))
+    else if (twoBitIsFileOrRange(fileName))
 	list = twoBitLoadAll(fileName);
     else if (isProt)
       list = faReadAllPep(fileName);
