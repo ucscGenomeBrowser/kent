@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.27 2005/07/04 18:44:44 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.28 2005/08/21 04:21:28 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -28,7 +28,8 @@ errAbort(
   "Where outputFile is a tab-separated file describing the clustering,\n"
   "database is a genome database such as mm4 or hg16,\n"
   "and the table parameters are either tables in genePred format in that\n"
-  "database or genePred tab seperated files.\n"
+  "database or genePred tab seperated files. If the database argument is 'no', \n"
+  "then no database is used and -chrom= must be specified (useful for cluster runs).\n"
   "options:\n"
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -chrom=chrN - Just work this chromosome, maybe repeated.\n"
@@ -42,6 +43,8 @@ errAbort(
   "   -joinContained - join genes that are contained within a larger loci\n"
   "    into that loci. Intended as a way to handled fragments and exon-level\n"
   "    predictsions, as genes-in-introns on the same strand are very rare.\n"
+  "   -noConflicted - don't detect or output conflicted loci. This can reduce\n"
+  "    memory and the size of the output file on large datasets.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -57,6 +60,7 @@ static struct optionSpec options[] = {
    {"flatBed", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"joinContained", OPTION_BOOLEAN},
+   {"noConflicted", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -65,6 +69,7 @@ boolean gUseCds;
 boolean gTrackNames;
 struct track *gTracks = NULL;  /* all tracks */
 boolean gJoinContained = FALSE;
+boolean gDetectConflicted = TRUE;
 
 struct track
 /*  Object representing a track. */
@@ -75,7 +80,8 @@ struct track
     boolean isDb;          /* is this a database table or file? */
 };
 
-struct track* trackNew(char* name,
+struct track* trackNew(struct sqlConnection *conn,
+                       char* name,
                        char *table)
 /* create a new track, adding it to the global list, if name is NULL,
  * name is derived from table. */
@@ -83,8 +89,8 @@ struct track* trackNew(char* name,
 struct track* track;
 AllocVar(track);
 
-/* determin if table or file */
-if (fileExists(table))
+/* determine if table or file, if name contains */
+if (fileExists(table) || strchr(table, '.') || (conn == NULL))
     {
     track->isDb = FALSE;
     /* can't read pipes, due to read per chromsome and per strand */
@@ -478,7 +484,8 @@ for (node = cm->clusters->tail; !dlStart(node); node=node->prev)
     }
 slSort(&clusterList, clusterCmp);
 
-getConflicts(clusterList);
+if (gDetectConflicted)
+    getConflicts(clusterList);
 
 /* assign ids */
 for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
@@ -709,9 +716,9 @@ for (cluster = clusterList; cluster != NULL; cluster = cluster->next)
             prGene(outFh, cluster, cg);
         ++totalClusterCount;
         if (clBedFh != NULL)
-            fprintf(clBedFh, "%s\t%d\t%d\tcl%d\n",
+            fprintf(clBedFh, "%s\t%d\t%d\t%d\t0\t%c\n",
                     cluster->chrom, cluster->start, cluster->end,
-                    cluster->id);
+                    cluster->id, strand);
         if (flatBedFh != NULL)
             outputFlatBed(cluster, strand, flatBedFh);
         }
@@ -725,7 +732,8 @@ void clusterGenesOnStrand(struct sqlConnection *conn,
 struct genePred *gpList = NULL;
 struct cluster *clusterList = NULL;
 struct track* track;
-struct clusterMaker *cm = clusterMakerStart(hChromSize(chrom));
+int chromSize = (conn != NULL) ? hChromSize(chrom) : 400000000;
+struct clusterMaker *cm = clusterMakerStart(chromSize);
 
 for (track = gTracks; track != NULL; track = track->next)
     loadGenes(cm, conn, track, chrom, strand, &gpList);
@@ -737,7 +745,7 @@ genePredFreeList(&gpList);
 clusterFreeList(&clusterList);
 }
 
-struct track *buildTrackList(int specCount, char *specs[])
+struct track *buildTrackList(struct sqlConnection *conn, int specCount, char *specs[])
 /* build list of tracks, consisting of list of tables, files, or
  * pairs of trackNames and files */
 {
@@ -746,12 +754,12 @@ int i;
 if (gTrackNames)
     {
     for (i = 0; i < specCount; i += 2)
-        slSafeAddHead(&tracks, trackNew(specs[i], specs[i+1]));
+        slSafeAddHead(&tracks, trackNew(conn, specs[i], specs[i+1]));
     }
 else
     {
     for (i = 0; i < specCount; i++)
-        slSafeAddHead(&tracks, trackNew(NULL, specs[i]));
+        slSafeAddHead(&tracks, trackNew(conn, NULL, specs[i]));
     }
 slReverse(&tracks);
 return tracks;
@@ -780,20 +788,27 @@ void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
 /* clusterGenes - Cluster genes from genePred tracks. */
 {
 struct slName *chromList, *chrom;
-struct sqlConnection *conn;
+struct sqlConnection *conn = NULL;;
 FILE *outFh = NULL;
 FILE *clBedFh = NULL;
 FILE *flatBedFh = NULL;
 
-hSetDb(database);
+if (!sameString(database, "no"))
+    {
+    hSetDb(database);
+    conn = hAllocConn();
+    }
+
 chromList = optionMultiVal("chrom", NULL);
 if (chromList == NULL)
+    {
+    if (conn == NULL)
+        errAbort("must specify -chrom with a database of \"no\"");
     chromList = hAllChromNames();
+    }
 slNameSort(&chromList);
 
-gTracks  = buildTrackList(specCount, specs);
-
-conn = hAllocConn();
+gTracks  = buildTrackList(conn, specCount, specs);
 
 outFh = openOutput(outFile);
 if (optionExists("clusterBed"))
@@ -818,6 +833,7 @@ optionInit(&argc, argv, options);
 gUseCds = optionExists("cds");
 gTrackNames = optionExists("trackNames");
 gJoinContained = optionExists("joinContained");
+gDetectConflicted = !optionExists("noConflicted");
 
 if (!gTrackNames)
     {
