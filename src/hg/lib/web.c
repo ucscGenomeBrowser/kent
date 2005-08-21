@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.81 2005/08/03 22:29:10 aamp Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.82 2005/08/21 04:23:30 markd Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -18,6 +18,7 @@ boolean webInTextMode = FALSE;
 static char *dbCgiName = "db";
 static char *orgCgiName = "org";
 static char *cladeCgiName = "clade";
+static char *extraStyle = NULL;
 
 void textVaWarn(char *format, va_list args)
 {
@@ -46,6 +47,12 @@ void webPopErrHandlers()
 popWarnHandler();
 popAbortHandler();
 }
+
+void webSetStyle(char *style)
+/* set a style to add to the header */
+{
+extraStyle = style;
+} 
 
 void webStartText()
 /* output the head for a text page */
@@ -127,7 +134,10 @@ if (withHtmlHeader)
     htmlTextOut(newString);
     puts(
 	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n"
+	"	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
+    if (extraStyle != NULL)
+        puts(extraStyle);
+    puts(
 	"</HEAD>" "\n"
 	"<BODY BGCOLOR=\"#"HG_COL_OUTSIDE"\" LINK=\"0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">" 
 	);

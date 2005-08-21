@@ -6,6 +6,9 @@
 #include "cart.h"
 #include "dbDb.h"
 
+void webSetStyle(char *style);
+/* set a style to add to the header */
+  
 void webStartText();
 /* output the head for a text page */
 
