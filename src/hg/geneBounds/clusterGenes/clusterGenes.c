@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.28 2005/08/21 04:21:28 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.29 2005/08/21 14:30:12 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -788,7 +788,7 @@ void clusterGenes(char *outFile, char *database, int specCount, char *specs[])
 /* clusterGenes - Cluster genes from genePred tracks. */
 {
 struct slName *chromList, *chrom;
-struct sqlConnection *conn = NULL;;
+struct sqlConnection *conn = NULL;
 FILE *outFh = NULL;
 FILE *clBedFh = NULL;
 FILE *flatBedFh = NULL;
