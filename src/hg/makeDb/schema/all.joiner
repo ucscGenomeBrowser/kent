@@ -753,7 +753,7 @@ identifier refSeqId typeOf=mrnaAccession
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!rn2,!ce2,!danRer3 mrnaOrientInfo.name minCheck=0.78
+    $gbd,!rn2,!ce2,!danRer3.mrnaOrientInfo.name minCheck=0.78
     ce2.mrnaOrientInfo.name minCheck=0.90
     danRer3.mrnaOrientInfo.name minCheck=0.40
     $gbd.refFlat.name
@@ -791,6 +791,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.rnBlastTab.query
     $kgDb.scBlastTab.query
     $kgDb.dupSpMrna.mrnaID
+    $kgDb.pseudoGeneLink.kgName
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
