@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.71 2005/08/16 18:04:15 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.72 2005/08/21 19:37:38 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1240,9 +1240,6 @@ if (iExon > 0)
     unsigned prevExonEnd = gp->exonEnds[iExon-1];
     if (exonStart < prevExonEnd)
         gpError("%s: %s exon %u overlaps previous exon", desc,
-                gp->name, iExon);
-    if (exonStart == prevExonEnd)
-        gpError("%s: %s exon %u follows zero length intron", desc,
                 gp->name, iExon);
     }
 
