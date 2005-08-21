@@ -13,9 +13,9 @@ errAbort("%s\n%s", msg,
          "\n"
          "Filter cDNA alignments in psl format.  Filtering parameters are\n"
          "comparative and non-comparative.  Comparative filters select the\n"
-         "best alignments for each query and requre input be sorted by query\n"
-         "name.  Non-comparative filters are based only on the quality of an\n"
-         "individual alignement.\n"
+         "best alignments for each query and REQUIRES THE INPUT TO BE SORTED\n"
+         "BY QUERY NAME.  Non-comparative filters are based only on the quality\n"
+         "of an individual alignment.\n"
          "\n"
          "The default values don't do any filtering, so if no filtering criteria\n"
          "are specified, all PSL should be passed though, except those that are\n"
@@ -86,7 +86,9 @@ errAbort("%s\n%s", msg,
          "  o By coverage near top, only keeping alignments with coverNearTop of\n"
          "    highest coverage alignment.\n"
          "  o By minSpan, if specified\n"
-         "  o By maxAligns, if specified\n");
+         "  o By maxAligns, if specified\n"
+         "\n"
+         "THE INPUT MUST BE BE SORTED BY QUERY for the comparitive filters.\n");
 }
 
 /* command line options and values */
