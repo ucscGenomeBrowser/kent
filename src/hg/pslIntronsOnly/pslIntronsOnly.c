@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.9 2005/08/15 03:35:13 markd Exp $";
+static char const rcsid[] = "$Id: pslIntronsOnly.c,v 1.10 2005/08/21 15:49:45 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,7 +37,7 @@ struct hash *genoHash = hashNew(0);
 
 if (nibIsFile(genoFile))
     genos = nibLoadAllMasked(NIB_MASK_MIXED|NIB_BASE_NAME, genoFile);
-else if (twoBitIsFileOrRange(genoFile))
+else if (twoBitIsSpec(genoFile))
     genos = twoBitLoadAll(genoFile);
 else
     genos = faReadDna(genoFile);
