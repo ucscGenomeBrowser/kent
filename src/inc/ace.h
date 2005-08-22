@@ -21,12 +21,12 @@ struct aceAS
     {
     int contigs;
     int reads;
-    char *contigName;
     };
 
 struct aceCO
 /* This contains a CO entry. */
     {
+    char *contigName;
     int bases;
     int reads;
     struct dnaSeq *seq;
