@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.8 2005/03/18 17:28:12 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.9 2005/08/22 23:44:06 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -429,33 +429,38 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 	/* invariant: chrom must be described in chromInfo. */
         /* items with bad chrom will be invisible to hGetBedRange(), so 
 	 * catch them here by SQL query. */
-	dyStringClear(bigQuery);
-	dyStringPrintf(bigQuery, "select count(*) from %s where ", table);
-	for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
+	/* The SQL query is too huge for scaffold-based db's, check count: */
+	if (hChromCount() <= HDB_MAX_SEQS_FOR_SPLIT)
 	    {
-	    dyStringPrintf(bigQuery, "%s != '%s' ",
-			   hti->chromField, chromPtr->name);
-	    if (chromPtr->next != NULL)
-		dyStringAppend(bigQuery, "AND ");
-	    }
-	gotError |= reportErrors(BAD_CHROM, table,
-				 sqlQuickNum(conn, bigQuery->string));
-	for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
-	    {
-	    char *chrom = chromPtr->name;
-	    int chromSize = hChromSize(chrom);
-	    struct bed *bedList = hGetBedRange(table, chrom, 0, chromSize,
-					       NULL);
-	    struct bed *bed = NULL;
-	    if (hti->isSplit)
-		gotError |= checkSplitTableOnlyChrom(bedList, table, hti,
-						     tableChrom);
-	    gotError |= checkStartEnd(bedList, table, hti, hChromSize(chrom));
-	    if (hti->hasCDS)
-		gotError |= checkCDSStartEnd(bedList, table, hti);
-	    if (hti->hasBlocks && !ignoreBlocks)
-		gotError |= checkBlocks(bedList, table, hti);
-	    bedFreeList(&bedList);
+	    dyStringClear(bigQuery);
+	    dyStringPrintf(bigQuery, "select count(*) from %s where ", table);
+	    for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
+		{
+		dyStringPrintf(bigQuery, "%s != '%s' ",
+			       hti->chromField, chromPtr->name);
+		if (chromPtr->next != NULL)
+		    dyStringAppend(bigQuery, "AND ");
+		}
+	    gotError |= reportErrors(BAD_CHROM, table,
+				     sqlQuickNum(conn, bigQuery->string));
+	    for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
+		{
+		char *chrom = chromPtr->name;
+		int chromSize = hChromSize(chrom);
+		struct bed *bedList = hGetBedRange(table, chrom, 0, chromSize,
+						   NULL);
+		struct bed *bed = NULL;
+		if (hti->isSplit)
+		    gotError |= checkSplitTableOnlyChrom(bedList, table, hti,
+							 tableChrom);
+		gotError |= checkStartEnd(bedList, table, hti,
+					  hChromSize(chrom));
+		if (hti->hasCDS)
+		    gotError |= checkCDSStartEnd(bedList, table, hti);
+		if (hti->hasBlocks && !ignoreBlocks)
+		    gotError |= checkBlocks(bedList, table, hti);
+		bedFreeList(&bedList);
+		}
 	    }
 	}
     }
