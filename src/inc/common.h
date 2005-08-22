@@ -859,4 +859,7 @@ void uglyTime(char *label, ...);
 #define INFINITY (1.0/0.0)
 #endif 
 
+void makeDirs(char* path);
+/* make a directory, including parent directories */
+
 #endif /* COMMON_H */

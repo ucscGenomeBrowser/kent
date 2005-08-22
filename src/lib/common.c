@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.81 2005/05/14 21:10:41 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.82 2005/08/22 07:03:48 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1760,5 +1760,26 @@ if (label != NULL)
     }
 lastTime = time;
 va_end(args);
+}
+
+void makeDirs(char* path)
+/* make a directory, including parent directories */
+{
+char pathBuf[PATH_LEN];
+char* next = pathBuf;
+
+strcpy(pathBuf, path);
+if (*next == '/')
+    next++;
+
+while((*next != '\0')
+      && (next = strchr(next, '/')) != NULL)
+    {
+    *next = '\0';
+    makeDir(pathBuf);
+    *next = '/';
+    next++;
+    }
+makeDir(pathBuf);
 }
 
