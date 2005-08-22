@@ -51,6 +51,7 @@ struct aceRD
 struct ace
 /* This contains information about one ace element. */
     {
+    struct ace *next;
     struct aceAS aceAS;
     struct aceCO aceCO;
     struct aceAF *afList;
