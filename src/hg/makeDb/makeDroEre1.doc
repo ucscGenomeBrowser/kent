@@ -426,7 +426,6 @@ droEre1.perChromTables = no
     # Clean up:
     rm -rf work/initial.droEre1
 
-
     mkdir /cluster/data/droEre1/bed/blastz.dm2.swap
     cd /cluster/data/droEre1/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droEre1/DEF \
@@ -442,3 +441,137 @@ droEre1.perChromTables = no
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 
+# MAKE Drosophila Proteins track (DONE braney 08-22-05)
+    ssh kkstore02
+    mkdir -p /cluster/data/droEre1/blastDb
+    cd /cluster/data/droEre1/blastDb
+    faSplit sequence ../scaffolds.fa 400 x
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/droEre1/blastDb
+    cp /cluster/data/droEre1/blastDb/* /iscratch/i/droEre1/blastDb
+    (iSync) 2>&1 > sync.out
+    
+    ssh kk
+    mkdir -p /cluster/data/droEre1/bed/tblastn.dm2FB
+    cd /cluster/data/droEre1/bed/tblastn.dm2FB
+    ls -1S /iscratch/i/droEre1/blastDb/*.nsq | sed "s/\.nsq//" > target.lst
+    mkdir fbfa
+    # calculate a reasonable number of jobs 
+    calc `wc /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl|awk "{print \\\$1}"`/\(80000/`wc target.lst | awk "{print \\\$1}"`\)
+# 18929/(80000/396) = 93.698550
+
+    split -l 94 /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir -p /cluster/bluearc/droEre1/bed/tblastn.dm2FB/blastOut  
+    ln -s /cluster/bluearc/droEre1/bed/tblastn.dm2FB/blastOut  
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/dm2/bed/blat.dm2FB/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3 $f.4
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.3 $f.8 $f.4
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 target.lst fb.lst blastGsub blastSpec
+
+    para create blastSpec
+    para push
+
+# Completed: 79992 of 79992 jobs
+# CPU time in finished jobs:    3738871s   62314.51m  1038.58h   43.27d  0.119 y
+# IO & Wait Time:                521880s    8698.00m   144.97h    6.04d  0.017 y
+# Average job time:                  53s       0.89m     0.01h    0.00d
+# Longest finished job:           19718s     328.63m     5.48h    0.23d
+# Submission to last job:         97938s    1632.30m    27.20h    1.13d
+
+    ssh kk
+    cd /cluster/data/droEre1/bed/tblastn.dm2FB
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    para create chainSpec
+    para maxNode 20
+    para push
+
+# Completed: 202 of 202 jobs
+# CPU time in finished jobs:        997s      16.62m     0.28h    0.01d  0.000 y
+# IO & Wait Time:                  2230s      37.16m     0.62h    0.03d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:             165s       2.75m     0.05h    0.00d
+# Submission to last job:           258s       4.30m     0.07h    0.00d
+
+    cd /cluster/data/droEre1/bed/tblastn.dm2FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/droEre1/bed/tblastn.dm2FB/blastDm2FB.psl
+    cd ..
+    wc blastDm2FB.psl
+# 20730  435330 3667709 blastDm2FB.psl
+    pslUniq blastDm2FB.psl stdout | wc                                                                                    
+# 18827  395367 3415913
+    cat fbfa/*fa | grep ">" | wc
+# 82338   82338 1300520
+
+    ssh hgwdev
+    cd /cluster/data/droEre1/bed/tblastn.dm2FB
+    hgLoadPsl droEre1 blastDm2FB.psl
+    featureBits droEre1 blastDm2FB
+# 21113188 bases of 145196667 (14.541%) in intersection
+    exit
+
+    # back to kkstore02
+    rm -rf blastOut
+
+# End tblastn
