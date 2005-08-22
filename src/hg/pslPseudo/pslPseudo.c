@@ -38,7 +38,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.42 2005/08/22 20:34:26 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.43 2005/08/22 21:21:15 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -1730,8 +1730,8 @@ int tReps , qReps;
 int trf = 0, rep = 0;
 bool keepChecking = TRUE;
 
-verbose(1,"\nchecking new %s %s:%d-%d %s best %s:%d-%d\n", 
-    psl->qName, psl->tName, psl->tStart, psl->tEnd,  bestChrom, bestStart, bestEnd);
+verbose(1,"\nchecking new %s %s:%d-%d best %s:%d-%d\n", 
+        psl->qName, psl->tName, psl->tStart, psl->tEnd,  bestChrom, bestStart, bestEnd);
 
 AllocVar(pg);
 pg->exonCount = maxExons;
