@@ -49,14 +49,14 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.44.4.11 2005/08/21 04:37:54 markd Exp $
+# $Id: gbBlat,v 1.44.4.12 2005/08/22 08:24:33 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
 # overridden by puting them under gbRoot/bin/$ARCH.  Use path to this script to
 # find bin dir.
 if {$tcl_platform(machine) == "i686"} {
-    set arch $tcl_platform(machine)
+    set arch i386
 } else {
     set arch $tcl_platform(machine)
 }
@@ -64,6 +64,8 @@ if {$tcl_platform(machine) == "i686"} {
 # include i386 as a fall back on x86_64 platforms
 set gbBinDir [file dir [info script]]
 set env(PATH) "$gbBinDir/$arch:$gbBinDir/i386:/cluster/bin/$arch:$env(PATH)"
+
+puts $env(PATH)
 
 # FXIME: tmp workaround for libmysqlclient.so.* not being on cluster
 set env(LD_LIBRARY_PATH) [file dir [file dir [info script]]]/lib/i386
@@ -395,7 +397,7 @@ proc alignToGenome {specsVar blatParams liftFile tSeqSet cdnaFa outPsl outOi out
     # unfiltered tmp output on local FS
     set localPsl $tmpPrefix.psl
     set localOi $tmpPrefix.oi
-    set localIntronPsl $tmpPrefix.intronPslB
+    set localIntronPsl $tmpPrefix.intronPsl
     file delete $localPsl $localOi $localIntronPsl
     
     set genomeSeqRef [makeGenomeSeqRef specs $tSeqSet]

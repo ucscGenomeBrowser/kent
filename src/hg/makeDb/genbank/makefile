@@ -1,10 +1,29 @@
+GBROOT = .
 include ../../../inc/common.mk
+include ${GBROOT}/common.mk
 
 SUBDIRS = src tests
 
-all: ${SUBDIRS:%=%.suball}
+all: ${SUBDIRS:%=%.suball} jkprogs
 %.suball:
 	${MAKE} -C $* all
+
+# special version of these programs needed for now
+jkprogs: ${BINARCH}/blat \
+	 ${BINARCH}/polyInfo \
+	 ${BINARCH}/pslIntronsOnly
+
+${BINARCH}/blat:
+	@${MKDIR} ${BINARCH}
+	HOME=`pwd` ${MAKE} -C ${KENT}/blat
+
+${BINARCH}/polyInfo:
+	@${MKDIR} ${BINARCH}
+	HOME=`pwd` ${MAKE} -C ${KENT}/hg/geneBounds/polyInfo
+
+${BINARCH}/pslIntronsOnly:
+	@${MKDIR} ${BINARCH}
+	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslIntronsOnly
 
 clean: ${SUBDIRS:%=%.subclean}
 %.subclean:
