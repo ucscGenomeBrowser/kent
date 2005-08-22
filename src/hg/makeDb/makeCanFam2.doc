@@ -795,7 +795,19 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 #  138037 cpgIslandGgfAndyMasked.bed
 
 
-# SWAP CHAINS FROM MM6, BUILD NETS ETC. (TODO 8/12/05 angie)
+# MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN & BEYOND (DONE 8/15/05 angie)
+    # In an email 2/13/04, Arian said we could treat all human repeats as 
+    # lineage-specific for human-chicken blastz.  Do the same for dog.  
+    # Scripts expect *.out.spec filenames, so set that up:
+    ssh kkstore01
+    cd /cluster/data/canFam2
+    mkdir /panasas/store/canFam2/linSpecRep.notInNonMammal
+    foreach f (/panasas/store/canFam2/rmsk/chr*.fa.out)
+      ln $f /panasas/store/canFam2/linSpecRep.notInNonMammal/$f:t:r:r.out.spec
+    end
+
+
+# SWAP CHAINS FROM MM6, BUILD NETS ETC. (DONE 8/15/05 angie)
     mkdir /cluster/data/canFam2/bed/blastz.mm6.swap
     cd /cluster/data/canFam2/bed/blastz.mm6.swap
     doBlastzChainNet.pl -swap /cluster/data/mm6/bed/blastz.canFam2/DEF \
@@ -803,6 +815,16 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     echo "check /cluster/data/canFam2/bed/blastz.mm6.swap/do.log" \
     | mail -s "check do.log" $USER
     # Add {chain,net}Mm6 to trackDb.ra if necessary.
+
+
+# SWAP CHAINS FROM RN3, BUILD NETS ETC. (DONE 8/16/05 angie)
+    mkdir /cluster/data/canFam2/bed/blastz.rn3.swap
+    cd /cluster/data/canFam2/bed/blastz.rn3.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn3/bed/blastz.canFam2/DEF \
+      >& do.log
+    echo "check /cluster/data/canFam2/bed/blastz.rn3.swap/do.log" \
+    | mail -s "check do.log" $USER
+    # Add {chain,net}Rn3 to trackDb.ra if necessary.
 
 
 # MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (TODO 8/?/05 angie)
