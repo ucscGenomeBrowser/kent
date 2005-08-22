@@ -5,7 +5,7 @@
 #include "sqlDeleter.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.3 2005/03/22 06:32:11 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.4 2005/08/22 19:55:35 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -35,7 +35,7 @@ if (gotSize < 0)
     errAbort("External file %s does not exist\n", ef->path);
 if ((lastChar != '/') && (ef->size != gotSize))
     errAbort("External file %s out of sync. size in extTable: %lld, actual size %lld\n",
-             ef->path, ef->size, gotSize);
+             ef->path, (long long)ef->size, (long long)gotSize);
 }
 
 static struct extFile *addEntry(struct extFileTbl *eft, HGID id, char* path,
@@ -107,7 +107,7 @@ else
                  path);
     id = hgGetMaxId(conn, EXT_FILE_TBL) + 1;
     safef(query, sizeof(query), "INSERT INTO gbExtFile VALUES(%d, '%s', %llu)",
-          id, path, size);
+          id, path, (long long)size);
     sqlUpdate(conn, query);
     extFile = addEntry(eft, id, path, size);
     }

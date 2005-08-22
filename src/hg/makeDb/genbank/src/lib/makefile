@@ -7,12 +7,21 @@ O = gbFileOps.o gbDefs.o gbIndex.o gbRelease.o gbGenome.o gbUpdate.o \
     gbIgnore.o gbVerb.o sqlDeleter.o gbLoadedTbl.o mgcStatusTbl.o \
     gbPipeline.o gbConf.o gbSql.o
 
+# python sources to copy to the lib
+PY_SRCS = \
+	py/genbank/Config.py \
+	py/genbank/GbIndex.py \
+	py/genbank/GenomeSeqs.py \
+	py/genbank/Pipeline.py \
+	py/genbank/__init__.py \
+	py/genbank/fileOps.py \
+	py/genbank/procOps.py
+
 # files to compile into lib without compiling
-LIBSRCS = gbCommon.pm gbFtp.pm gbCommon.sh
+LIBSRCS = gbCommon.pm gbFtp.pm gbCommon.sh ${PY_SRCS}
 INSTLIBSRCS = ${LIBSRCS:%=${LIBDIR}/%}
 
 all: ${LIBGENBANK} ${INSTLIBSRCS}
-
 
 ${LIBGENBANK}: $(O) 
 	@${MKDIR} `dirname $@`

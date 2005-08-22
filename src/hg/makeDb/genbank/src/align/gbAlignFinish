@@ -16,7 +16,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.11 2004/10/16 05:02:48 markd Exp $
+# $Id: gbAlignFinish,v 1.12 2005/08/22 19:55:34 markd Exp $
 #
 use strict;
 use warnings;
@@ -108,15 +108,15 @@ sub getTypeOrgCat($) {
     return ($type, $orgCat);
 }
 
-# Determine pslReps parameters to use from config file.  Return undef to skip
-# PSL reps.
-sub getPslRepsArgs($$$) {
+# Determine pslCDnaFilter parameters to use from config file.  Return undef to
+# skip PSL filtering.
+sub getPslCDnaFilterArgs($$$) {
     my ($db, $release, $typePrefix) = @_;
 
     my $srcDb = getSrcDb($release);
     my($type, $orgCat) = getTypeOrgCat($typePrefix);
 
-    my $args = getDbConf($db, "$srcDb.$type.$orgCat.pslReps");
+    my $args = getDbConf($db, "$srcDb.$type.$orgCat.pslCDnaFilter");
     if ($args eq "no") {
         return undef;
     } else {
@@ -129,27 +129,31 @@ sub getPslRepsArgs($$$) {
 # added.
 #
 # We do this as a pipeline, to avoid intermediate disk I/O if possible.  We
-# need to sort by query for pslReps.  We use sort rather than pslSort, since
+# need to sort by query for pslCDnaFilter.  We use sort rather than pslSort, since
 # pslSort can't read from a pipe (and sort is much faster).  We use the gbBlat
 # naming convention where query file is the first level of directory to group
-# into small batches for pslRep processing.  However, we need to save the
-# output of pslRep for use by selectWithPsl.  Instead of writing the data
+# into small batches for pslCDnaFilter processing.  However, we need to save the
+# output of pslCDnaFilter for use by selectWithPsl.  Instead of writing the data
 # twice, we just save the offsets in the output PSL file.  These are used by
 # selectWithPsl to only load a subset of the PSL.
 sub combinePslSet($$$$$$) {
-    my($queryDir, $pslRepsArgs, $tmpDir, $outPsl, $outRawPsl,
+    my($queryDir, $pslCDnaFilterArgs, $tmpDir, $outPsl, $outRawPsl,
        $pslQueryOffsets) = @_;
 
     my $startOff = (-e $outPsl) ? getFileSize($outPsl) : 0;
 
-    # sort by query for pslReps
+    # sort by query for pslCDnaFilter
     my $cmd = "find $queryDir -name '*.psl' | xargs cat "
         . "| sort -T $tmpDir -k 10,10 -k 12n,12n ";
     if (defined($outRawPsl)) {
         $cmd .= "| tee -a $outRawPsl "
     }
-    if (defined($pslRepsArgs)) {
-        $cmd .= "| pslReps -nohead $pslRepsArgs stdin stdout /dev/null "
+
+    if (defined($pslCDnaFilterArgs)) {
+        # ugly hack, generate poly-A file from queryDir
+        my $polyA = $queryDir . ".polya";
+        $polyA =~ s/\/psl\//\//;
+        $cmd .= "| pslCDnaFilter $pslCDnaFilterArgs -polyASizes=$polyA stdin stdout "
     }
     $cmd .= " >> $outPsl";
     runPipe($cmd);
@@ -163,6 +167,8 @@ sub combinePslSet($$$$$$) {
 sub combinePsls($$$$$$$@) {
     my($db, $release, $type, $typePrefix, $updWorkDir, $tmpDir,
        $pslQueryOffsets, @queryDirs) = @_;
+
+    my $pslCDnaFilterArgs = getPslCDnaFilterArgs($db, $release, $typePrefix);
     
     # tmp file for combined PSLs
     my $outPsl = "$updWorkDir/$typePrefix.psl";
@@ -171,22 +177,21 @@ sub combinePsls($$$$$$$@) {
     }
     
     # for mRNAs, we save the files before PSL reps for expermental work.
-    # this is not done for ESTs, as there are so many.
+    # this is not done for ESTs, as there are so many. Also not done
+    # if we are not filterting, as this would be redundant.
     my $outRawPsl;
-    if ($type eq "mrna") {
+    if (($type eq "mrna") && defined($pslCDnaFilterArgs)) {
         $outRawPsl = "$updWorkDir/$typePrefix.rawPsl";
         if (-e $outRawPsl) {
             unlink($outRawPsl) || die("unlink $outRawPsl");
         }
     }
 
-    my $pslRepsArgs = getPslRepsArgs($db, $release, $typePrefix);
-
     # Process each query dir in a pipeline with error checking, use find to
     # avoid possible comand line overflow. Sort by qName,qStart,qEnd for
-    # pslReps.
+    # pslCDnaFilter.
     foreach my $queryDir (@queryDirs) {
-        combinePslSet($queryDir, $pslRepsArgs, $tmpDir, $outPsl, $outRawPsl,
+        combinePslSet($queryDir, $pslCDnaFilterArgs, $tmpDir, $outPsl, $outRawPsl,
                       $pslQueryOffsets);
     }
 
@@ -237,7 +242,7 @@ sub combineOIs($$$$$$@) {
     my($type, $typePrefix, $updWorkDir, $tmpDir, $outPsl, $pslQueryOffsets, @queryDirs) = @_;
 
     # Process each query dir in a pipeline, selecting the ones kept
-    # by pslReps.
+    # by pslCDnaFilter.
     my $outOI = "$updWorkDir/$typePrefix.oi";
     if (-e $outOI) {
         unlink($outOI) || die("unlink $outOI");
@@ -288,7 +293,7 @@ sub combineIntronPsls($$$$$$@) {
     }
 
     # Process each query dir in a pipeline, selecting the ones kept
-    # by pslReps.
+    # by pslCDnaFilter.
     foreach my $queryDir (@queryDirs) {
         combineIntronPslSet($queryDir, $outPsl, $pslQueryOffsets,
                             $outIntronPsl);

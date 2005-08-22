@@ -5,7 +5,7 @@
 #include "jksql.h"
 #include "sqlUpdater.h"
 
-static char const rcsid[] = "$Id: uniqueStrTbl.c,v 1.2 2003/06/14 07:52:59 markd Exp $";
+static char const rcsid[] = "$Id: uniqueStrTbl.c,v 1.3 2005/08/22 19:55:35 markd Exp $";
 
 /*
  * The id is not auto_increment, as the zero id didn't work with mysqlimport
@@ -58,7 +58,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     HGID id = gbParseUnsigned(NULL, row[0]);
     if (id != 0)
-        hashAdd(ust->hash, row[1], (void*)id);
+        hashAddInt(ust->hash, row[1], id);
     }
 sqlFreeResult(&sr);
 }
@@ -104,7 +104,7 @@ safef(query, qlen, "SELECT id FROM %s WHERE (crc = %u) and (name = '%s')",
 
 id = sqlQuickNum(conn, query);
 if (id != 0)
-    hel = hashAdd(ust->hash, str, (void*)id);
+    hel = hashAddInt(ust->hash, str, id);
 return hel;
 }
 
@@ -123,7 +123,7 @@ if (hel != NULL)
     {
     if (strVal != NULL)
         *strVal = hel->name;
-    return (unsigned)hel->val;
+    return (unsigned)(size_t)hel->val;
     }
 else
     {
@@ -144,11 +144,11 @@ bits32 crc = hashCrc(str);
 char *escStr = sqlEscapeTabFileString2(alloca(2*strlen(str)+1), str);
 
 sqlUpdaterAddRow(ust->updater, "%u\t%s\t%u", ust->nextId, escStr, crc);
-el = hashAdd(ust->hash, str, (void*)ust->nextId);
+el = hashAddInt(ust->hash, str, ust->nextId);
 ust->nextId++;
 if (strVal != NULL)
     *strVal = el->name;
-return (unsigned)el->val;
+return (unsigned)(size_t)el->val;
 }
 
 HGID uniqueStrTblGet(struct uniqueStrTbl *ust, struct sqlConnection *conn,

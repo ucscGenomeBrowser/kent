@@ -9,7 +9,7 @@
 #include "hgRelate.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: ccdsImport.c,v 1.2 2005/03/18 07:20:02 markd Exp $";
+static char const rcsid[] = "$Id: ccdsImport.c,v 1.3 2005/08/22 19:55:34 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -93,7 +93,7 @@ ZeroVar(&tm);
 
 /* don't corrupt original for error messages */
 if (strlen(colVal) != sizeof(colCp)-1)
-    errAbort("expected date/time strlen of %d, got %d", sizeof(colCp)-1, strlen(colVal));
+    errAbort("expected date/time strlen of %lld, got %lld", (long long)sizeof(colCp)-1, (long long)strlen(colVal));
 strcpy(colCp, colVal);
 
 /* Feb  8 2005  3:35:01:270PM

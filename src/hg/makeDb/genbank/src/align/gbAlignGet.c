@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.8 2004/10/11 17:03:19 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.9 2005/08/22 19:55:34 markd Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
@@ -35,6 +35,7 @@ static struct optionSpec optionSpecs[] =
     {"workdir", OPTION_STRING},
     {"orgCats", OPTION_STRING},
     {"noMigrate", OPTION_BOOLEAN},
+    {"polyASizes", OPTION_BOOLEAN},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
@@ -42,6 +43,7 @@ static struct optionSpec optionSpecs[] =
 /* global parameters from command line */
 static char* workDir;
 static unsigned maxFaSize;
+static boolean createPolyASizes = FALSE;
 
 struct outFa
 /* Output fasta file info, opened in a lazy manner, split into native and
@@ -50,6 +52,9 @@ struct outFa
     struct gbSelect select;   /* select info to open file */
     unsigned nextPartNum;     /* next partition number */
     struct gbFa* fa;          /* fasta object, NULL until opened */
+    int numSeqs;              /* number of sequences written to current fasta */
+    long long numBases;       /* number of base written */
+    FILE *polyAFh;            /* file for poly-A sizes, if not NULL */
 };
 
 struct outFa* outFaNew(struct gbSelect* select, unsigned orgCat)
@@ -70,9 +75,19 @@ char ext[64];
 char path[PATH_LEN];
 assert(outFa->fa == NULL);
 
-safef(ext, sizeof(ext), "%d.fa", outFa->nextPartNum++);
+safef(ext, sizeof(ext), "%d.fa", outFa->nextPartNum);
 gbAlignedGetPath(&outFa->select, ext, workDir, path);
 outFa->fa = gbFaOpen(path, "w");
+outFa->numSeqs = 0;
+outFa->numBases = 0;
+
+if (createPolyASizes)
+    {
+    safef(ext, sizeof(ext), "%d.polya", outFa->nextPartNum);
+    gbAlignedGetPath(&outFa->select, ext, workDir, path);
+    outFa->polyAFh = mustOpen(path, "w");
+    }
+outFa->nextPartNum++;
 }
 
 void outFaClose(struct outFa* outFa)
@@ -80,8 +95,11 @@ void outFaClose(struct outFa* outFa)
 {
 if (outFa->fa != NULL)
     {
-    printf("alignFa: %s\n", outFa->fa->fileName);
+    printf("alignFa: %s %s %d %lld\n", outFa->fa->fileName,
+           gbOrgCatName(outFa->select.orgCats), outFa->numSeqs,
+           outFa->numBases);
     gbFaClose(&outFa->fa);
+    carefulClose(&outFa->polyAFh);
     }
 }
 
@@ -102,6 +120,16 @@ if ((maxFaSize > 0) && (outFa->fa != NULL) && (outFa->fa->off > maxFaSize))
 if (outFa->fa == NULL)
     outFaOpen(outFa);
 gbFaWriteFromFa(outFa->fa, inFa, NULL);
+outFa->numSeqs++;
+outFa->numBases += inFa->seqLen;
+
+if (outFa->polyAFh != NULL)
+    {
+    /* note, this modifies the fasta sequence, but we don't care any more */
+    fprintf(outFa->polyAFh, "%s\t%d\t%d\t%d\n", inFa->id, inFa->seqLen,
+            maskTailPolyA(inFa->seq, inFa->seqLen),
+            maskHeadPolyT(inFa->seq, inFa->seqLen));
+    }
 }
 
 boolean copyFastaRec(struct gbSelect* select, struct gbFa* inFa,
@@ -127,7 +155,7 @@ if (entry != NULL)
         }
     else if ((version == entry->selectVer) && (entry->clientFlags & ALIGN_FLAG))
         {
-        outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa), inFa );
+        outFaWrite(((entry->orgCat == GB_NATIVE) ? nativeFa : xenoFa),  inFa);
         if (gbVerbose >= 3)
             gbVerbPr(3, "aligning %s %s", inFa->id,
                      gbOrgCatName(entry->orgCat));
@@ -274,6 +302,8 @@ errAbort("   gbAlignGet [options] relname update typeAccPrefix db\n"
          "     bytes. Fasta files are split for cluster partitioning. \n"
          "    -orgCats=native,xeno - processon the specified organism \n"
          "     categories\n"
+         "    -polyASizes - If specified, create *.polya files for each fasta file,\n"
+         "     in the same format as faPolyASizes.\n"
          "    -noMigrate - don't migrate existing alignments\n"
          "    -verbose=n - enable verbose output, values greater than 1\n"
          "     increase verbosity.\n"
@@ -303,6 +333,7 @@ if (argc != 5)
 maxFaSize = optionInt("fasize", -1);
 workDir = optionVal("workdir", "work/align");
 noMigrate = optionExists("noMigrate");
+createPolyASizes = optionExists("polyASizes");
 gbVerbInit(optionInt("verbose", 0));
 relName = argv[1];
 updateName = argv[2];

@@ -1,884 +1,646 @@
-#!/usr/bin/perl
+#!/usr/bin/env /cluster/data/genbank/bin/gbPython
+#
+# $Id: gbAlignSetup,v 1.15 2005/08/22 19:55:34 markd Exp $
+#
 
-$main::usage="
-gbAlignSetup [options] database ...
+usage="""gbAlignSetup [options] database ...
 
 Do setup for the alignment step.
-
-Options:
-  -workdir=work/align - work directory where alignment is built.
-   See gbAlignStep for details;.
-
-  -clusterWorkDir=dir - location of work directory on cluster.
-
-  -verbose=n - print details
-
-  -srcDb=name - Restrict the source database to either \"genbank\" or \"refseq\".
-
-  -type=name - Restrict the type of sequence processeed to either \"mrna\"
-   or \"est\".
-
-  -orgCat=name - Restrict type of sequences to processe to native or xeon
-   If not speicifed, categories that are to be loaded are used from
-   genbank.conf.  Maybe repeated.
-
-  -noMigrate - Don't migrate alignments.
 
 Arguments:
   - database - databases to align
 
-Obtains other parameters from etc/genbank.conf:
-
-  - $db.genome - a glob pattern of where to find the genome
-     contig or chromosome fasta, nib, or 2bit files on the cluster.
-     For example: 
-       hg13.genome = /scratch/hg/gs.14/build31/trfFa.1204/NT_*.fa.trf
-
-  - $db.lift - the lift file is used to split up nibs.  If fasta files or
-     whole nibs are used, it is ignored and can be empty or no.
-
-  - $db.mondoTwoBitParts - If specified, genome file is s two-bit file
-    with lots (tens of K) of small scaffolds.  This splits the genome into
-    this number of parts for alignment.
+Obtains other parameters from etc/genbank.conf, see doc/config.html for
+details.
 
 Does:
    - Find updates that are missing alignments in the latest releases for
      each specified database. 
    - Extract tmp fasta file to align into the alignment work directory.
    - Produce a single parasol jobs file to do all of the alignments.
-   - This checks if the contig alignments exist in the work/align directory
-     before adding the job.  This allows this program to be re-run as a last
-     ditch way of restarting on failure.  Normally, using parasol to restart
-     the failed jobs is the way to recover.
-   - create a list of all expected PSL files.";
+   - create a list of all expected PSL files."""
 
+
+# Note: jobs-specific paths are created in a multi-level tree
+# to avoid large number off files in a single directory. 
 #
-# $Id: gbAlignSetup,v 1.14 2005/04/06 19:46:34 markd Exp $
+# An alignment of .../mrna.0.fa and  .../chr10.nib will end up in:
 #
-use strict;
-use warnings;
-use File::Basename;
-use FindBin;
-use lib "$FindBin::Bin/../lib";
-use gbCommon;
-
-# Maximum size of an individual fasta file, in bytes.
-my $maxFaSize = 64*1024*1024; # 64mb
-
-# global table to make sure we don't generate output file more than
-# once
-my %gOutPsls;
-
-# other globals
-my $workDir = "work/align";
-my $clusterWorkDir;
-my $gbBlatPath;
-my $srcDbs;
-my $cwd = `pwd`;
-chomp($cwd);
-my @srcDbs;
-my @types;
-my @orgCats;
-my $noMigrate = 0;
-
-
-# determine if a file is a nib file.
-sub isNibFile($) {
-    my($genomeFile) = @_;
-    return ($genomeFile =~ /\.nib$/);
-}
-
-# get chrom for a NIB
-sub getNibChrom($) {
-    my($genomeFile) = @_;
-    my $chrom = $genomeFile;
-    $chrom =~ s/^.+\///;
-    $chrom =~ s/\.nib$//;
-    return $chrom;
-}
-
-# get the size of a chromosome from a nib
-sub getNibSize($) {
-    my($nibFile) = @_;
-    my $nibSizeOut = callProg("nibSize $nibFile", 1);
-    chomp($nibSizeOut);
-    my @nibSizeInfo = split(/\t/, $nibSizeOut);
-    return $nibSizeInfo[2];
-}
-
-# determine if a file is a 2bit file.
-sub isTwoBitFile($) {
-    my($genomeFile) = @_;
-    return ($genomeFile =~ /\.2bit$/);
-}
-
-# get chroms and size in a twobit file.  This is does in one pass because
-# there can be a lot of scaffolds in a twobit. Return list of chroms, sorted in
-# assending size order, fill in hash with sizes.
-sub getTwoBitChromsSizes($$) {
-    my($genomeFile, $sizeTblRef) = @_;
-    my @chroms;
-    # warning: can't use pipe here, would be nice to just: | sort -k 2,2n
-    my $twoBitOut = callProg("twoBitInfo $genomeFile stdout");
-    foreach my $line (split(/\n/, $twoBitOut)) {
-        my @row = split(/\t/, $line);
-        $sizeTblRef->{$row[0]} = $row[1];
-        push(@chroms, $row[0]);
-    }
-    
-    @chroms = sort {$sizeTblRef->{$a} - $sizeTblRef->{$b}} @chroms;
-
-    return @chroms;
-}
-
-# split unaligned string into it's component names
-# $release/$db/$update/$typeAccPrefix/$orgCatsStr
-# $orgCatsStr  = native,xeno
-sub splitUnaligned($) {
-    my($unaligned) = @_;
-    my($release, $db, $update, $typeAccPrefix, $orgCatsStr) = split(/\//, $unaligned);
-    if (!defined($release)) {
-        die("invalid unaligned spec: $unaligned");
-    }
-    my @orgCats = split(",", $orgCatsStr);
-    return ($release, $db, $update, $typeAccPrefix, @orgCats);
-}
-
-# get unaligned for an update
-sub getUpdateUnaligned($$$$@) {
-    my($release, $update, $db, $type, @orgCats) = @_;
-    my %unaligned;
-    my @gbIdxFiles = ($type eq "est")
-        ? glob("data/processed/$release/$update/$type.*.gbidx")
-        : glob("data/processed/$release/$update/$type.gbidx");
-
-    foreach my $gbIdx (@gbIdxFiles) {
-        # will produce both native and xeno indices
-        my $typeAccPrefix = basename($gbIdx, ".gbidx");
-        my $baseIdx = "data/aligned/$release/$db/$update/$typeAccPrefix";
-        my $nativeAlIdx = "$baseIdx.native.alidx";
-        my $xenoAlIdx = "$baseIdx.xeno.alidx";
-        my @missingOrgCats;
-        if (inList("native", @orgCats) && !-e $nativeAlIdx) {
-            push(@missingOrgCats, "native");
-        }
-        if (inList("xeno", @orgCats) && !-e $xenoAlIdx) {
-            push(@missingOrgCats, "xeno");
-        }
-        if ($#missingOrgCats >= 0) {
-            my $name = "$release/$db/$update/$typeAccPrefix/"
-                . join(",", @missingOrgCats);
-            $unaligned{$name} = 1;
-        }
-    }
-    return sort(keys(%unaligned));
-}
-
-# build list of release/db/update/typeAccPrefix that need to be aligned
-# for a release.  Returned with updates sorted.
-sub findUnaligned($$$@) {
-    my($release, $db, $type, @orgCats) = @_;
-    my $srcDb = $release;
-    $srcDb =~ s/\..+$//;
-    if ($#orgCats < 0) {
-        # set orgCats from config
-        if (getDbConf($db, "$srcDb.$type.native.load") eq "yes") {
-            push(@orgCats, "native");
-        }
-        if (getDbConf($db, "$srcDb.$type.xeno.load") eq "yes") {
-            push(@orgCats, "xeno");
-        }
-    }
-
-    my @unalignedList = ();
-    foreach my $update (getUpdates("processed", $release)) {
-        push(@unalignedList, getUpdateUnaligned($release, $update, $db, $type, @orgCats));
-    }
-
-    return @unalignedList;
-}
-
-# Extract fasta files of sequences to align for an update and type by running
-# gbAlignGet. Return list with number of sequences to align and the fully
-# qualified paths to the fasta files.
-sub extractMRnaFastas($) {
-    my($unaligned) = @_;
-    my($release, $db, $update, $typeAccPrefix, @orgCats) = splitUnaligned($unaligned);
-
-    # check if it already extracted
-    my @alignsList = glob("$workDir/$unaligned.*.aligns");
-    if ($#alignsList >= 0) {
-        gbError("setup already done, don't know why we found: "
-                . join(" ", @alignsList));
-    }
-
-    # run program to extract fasta files, get back count and number.
-    my $cmd = "gbAlignGet";
-    if ($maxFaSize > 0) {
-        $cmd .= " -fasize=$maxFaSize";
-    }
-    if ($gbCommon::verbose) {
-        $cmd .= " -verbose=$gbCommon::verbose";
-    }
-    if ($noMigrate) {
-        $cmd .= " -noMigrate";
-    }
-    $cmd .= " -workdir=$workDir -orgCats=" . join(",", @orgCats)
-        . " $release $update $typeAccPrefix $db";
-    my $out = callProg($cmd);
-    my $numAlign;
-    my @mrnaFas = ();
-    
-    foreach my $line (split('\n', $out)) {
-        chomp($line);
-        my @parts = split(' ',$line);
-        if ($parts[0] eq "alignFa:") {
-            push(@mrnaFas, $parts[1]);
-        } elsif ($parts[0] eq "alignCnt:") {
-            $numAlign = int($parts[1]);
-        } else {
-            gbError("unexpected line returned from \"$cmd\": $line");
-        }
-    }
-    
-    if (!defined($numAlign)) {
-        gbError("numAligned not returned from \"$cmd\"");
-    }
-    if ((($numAlign == 0) && ($#mrnaFas >= 0))
-        || (($numAlign > 0) && ($#mrnaFas < 0))) {
-        gbError("numAlign ($numAlign) does not make sense with number of fastas ($#mrnaFas) returned from \"$cmd\"");
-    }
-    
-    return ($numAlign, @mrnaFas);
-}
-
-# parse NIB subrange file references for getOutPslPath
-sub parseNibSubrangePath($) {
-    my($nibBase) = @_;
-
-    # build33/chromTrfMixedNib/chr1.nib:50000-217280
-    #   dir1 is chrom
-    #   dir2 is first digit of start
-    #   base is chr:start-end
-    my($chrom, $range) = ($nibBase =~ /^(.+)\.nib:(.+)$/);
-
-    return ($chrom, substr($range, 0, 1), $chrom . ":" . $range);
-}
-
-# parse twobit subrange file references for getOutPslPath
-sub parseTwoBitSubrangePath($) {
-    my($twoBitBase) = @_;
-
-    # build33/hg15.2bit:chr1:50000-217280
-    #   dir1 is chrom
-    #   dir2 is first digit of start
-    #   base is chr:start-end
-    my($chrom, $range) = ($twoBitBase =~ /^.+.2bit:(.+):(.+)$/);
-
-    return ($chrom, substr($range, 0, 1), $chrom . ":" . $range);
-}
-
-# parse mondo seq file subrange file references for getOutPslPath
-sub parseMondoSeqFilePath($) {
-    my($mondoSeqFile) = @_;
-
-    # genbank.37.0/mondo/bosTau1/scaffold1000.seqs
-    #   dir1 is scaffold
-    #   dir2 is last char
-    #   base is scaffold
-    my $chrom = basename($mondoSeqFile, ("\.seqs"));
-    return ($chrom, substr($chrom, length($chrom)-1), $chrom);
-}
-
-# parse a fasta or full nib file path for getOutPslPath
-sub parseFullFilePath($) {
-    my($filePath) = @_;
-    my($dir1, $dir2);
-
-    my $fileBase = basename($filePath, ("\.fa\.trf", "\.fa", "\.nib", "\.2bit"));
-    if ($dir1 =~ /.+_.+/) {
-        # form dirs from name part
-        ($dir1, $dir2) = split(/_/, $dir1);
-    } else {
-        # use first and last char
-        $dir1 = substr($fileBase, 0, 1);
-        $dir2 = substr($fileBase, -1, 1);
-    }
-    return ($dir1, $dir2, $fileBase);
-}
-
-# Create the path to the PSL (or other) output file.  This will output the
-# files into subdirectories of a directory psl.  A multi-level tree is created
-# to avoid too many files in a single directory, which drives NFS nuts.
-# care is also be take to generate unique names (which is sanity checked
-# later).
-#
-# An alignment of .../mrna.0.fa and  .../NT_035745.fa.trf will end up in:
-#
-#   $pslBaseDir/mrna.0/4/5/NT_035745.psl
+#   refseq.12/hg17/full/mrna.0/chr10/chr10.psl
 #
 # The way the directory names are derived depends on the the genome file
 # name:
 #
-#    NT_035745.fa.trf -> 4/5/NT_035745.psl
-#    chr1_10.nib -> chr1/10/chr1_10.psl
-#    chr1.nib:207000000-217000000 -> chr1/2/0/chr1.psl
+#    chr22.nib -> chr22/chr22.psl
+#    chr1.nib:207000000-217000000 -> chr1/2/207000000-217000000.psl
 #    
 # IMPORTANT NOTE: gbAlignFinish takes advantage of a one-to-one mapping between
 # query file and the first directory level to make sorting more efficient, so
 # don't change this with understanding what is going on.
 #
-sub getOutPslPath($$$$) {
-    my($genomeFile, $mondoSeqFile, $rnaFa, $pslBaseDir) = @_;
-    my $rnaBase = basename($rnaFa, "\.fa");
-    my $genomeBase = basename($genomeFile);
 
-    my($dir1, $dir2, $base);
+import sys, os, os.path, re
 
-    if (defined($mondoSeqFile)) {
-        ($dir1, $dir2, $base) = parseMondoSeqFilePath($mondoSeqFile);
-    } elsif ($genomeBase =~ /^.+\.nib:.+$/) {
-        ($dir1, $dir2, $base) = parseNibSubrangePath($genomeBase);
-    } elsif ($genomeBase =~ /^.+\.2bit:.+$/) {
-        ($dir1, $dir2, $base) = parseTwoBitSubrangePath($genomeBase);
-    } else {
-        ($dir1, $dir2, $base) = parseFullFilePath($genomeFile);
-    }
-    return "$pslBaseDir/$rnaBase/$dir1/$dir2/$base.psl";
-}
+# require 2.4 or newer
+if (sys.version_info[0] <= 2) and (sys.version_info[1] < 4):
+    raise Exception("python 2.4 or new required, using " + sys.version)
 
-# load a lift file into a list of hash-refs
-sub loadLiftFile($) {
-    my($liftFile) = @_;
+myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
+sys.path.append(myBinDir + "/../lib/py")
+from optparse import OptionParser
+from genbank import procOps, fileOps
+from genbank.Config import Config
+from genbank.GbIndex import GbIndex, GenBank, RefSeq, MRNA, EST, Native, Xeno
+from genbank.GenomeSeqs import GenomeSeqs
+from genbank.fileOps import prLine, prRow, prRowv
+import glob
 
-    # lift format: offset oldName oldSize newName newSize
-    # old name maybe in the form 1/NT_034471
-    open(LIFTFH, $liftFile) || die("can't open $liftFile");
-    my(@lifts);
-    my $line;
-    my $lineCnt = 0;
-    while (($line = <LIFTFH>)) {
-        chomp($line);
-        $lineCnt++;
-        if (!($line =~ /\#.*$/)) {
-            my($offset, $oldName, $oldSize, $newName, $newSize) = split(/\t/,$line);
-            if (!defined($newSize)) {
-                die("$liftFile:$lineCnt: lift file line must have at least 5 tab-separated columns");
-            }
-            if ($oldName ne "gap") {
-                $oldName =~ s/^.+\///;  # 1/NT_034471 => NT_034471
-                my $row = {
-                    'offset' => $offset,
-                    'oldName' => $oldName,
-                    'oldSize' => $oldSize,
-                    'newName' => $newName,
-                    'newSize' => $newSize,
-                };
-                push(@lifts, $row);
-            }
-        }
-    }
-    close(LIFTFH) || die("close failed");
+absBinDir = os.path.abspath(myBinDir)
+mach = os.uname()[4]
+if mach == "i686":
+    mach = "i386"
+machBinPath = absBinDir + "/" + mach
+if mach != "i386":
+    machBinPath += ":" + absBinDir + "/i386" # use on x86_64 for now
+os.environ["PATH"] = machBinPath + ":" + os.environ["PATH"]
+gbBlatPath = absBinDir + "/gbBlat"
 
-    return @lifts;
-}
+cmdOpts = None
 
-# get lifts for a chrom, sorted in assending offset order
-sub getChromLifts($@) {
-    my($chrom, @lifts) = @_;
+# FIXME: tmp for debugging
+import time
+global startTime, lastTime
+startTime = lastTime = time.time()
+def ptm(*objs):
+    fh = sys.stderr
+    global startTime, lastTime
+    now = time.time()
+    fh.write(("%0.3f" % (now-startTime)))
+    fh.write(" ")
+    fh.write(("%0.3f" % (now-lastTime)))
+    lastTime = now
+    for o in objs:
+        fh.write(" ")
+        fh.write(str(o))
+    fh.write("\n")
+    fh.write
 
-    my(@chromLifts);
-    for my $lift (@lifts) {
-        if ($lift->{newName} eq $chrom) {
-            push(@chromLifts, $lift);
-        }
-    }
-    # look, more syntax (gag)
-    @chromLifts = sort {$a->{offset} <=> $b->{offset}} @chromLifts;
+# global table to make sure we don't generate output file more than
+# once
+definedPsls = set()
 
-    return @chromLifts;
-}
+class GenomeWindow(object):
+    "information about a single genome window"
+    __slots__ = ("seq", "start", "end", "size", "isFullSeq", "getSpec")
 
-# Partition part or all of a genome file into overlaping (or non-overlapping)
-# ranges.  This maybe called on an entire chromosome on an ungapped range.
-sub partitionRange($$$$$$$) {
-    my($db, $genomeFile, $chrom, $start, $end, $winSize, $winOverlap) = @_;
-    my @specs;
+    def __init__(self, seq, start, end):
+        assert(start < end)
+        self.seq = seq
+        self.start = start
+        self.end = end
+        self.size = end - start
+        self.isFullSeq = (self.size == seq.size)
 
-    my $winStart = $start;
-    while ($winStart < $end) {
-        # get window
-        my $winEnd = $winStart + $winSize;
-        if ($winEnd > $end) {
-            $winEnd = $end;
-        } elsif ($winEnd+$winOverlap >= $end)  {
-            # next overlap will take us to end, just included it now
-            $winEnd = $end
-        }
-        if ($winEnd <= $winStart) {
-            die("partitionRange: confused window $winStart to $winEnd");
-        }
+    def getSpec(self):
+        "get specification for gbBlat (includes size if subrange)"
+        if self.isFullSeq:
+            return self.seq.id
+        else:
+            return self.seq.id + ":" + str(self.seq.size) + ":" + str(self.start) + "-" + str(self.end)
 
-        # construct subrange spec
-        my $spec;
-        if (isNibFile($genomeFile)) {
-            $spec = $genomeFile . ":" . $winStart . "-" . $winEnd;
-        } else {
-            # include chrom name for 2bit
-            $spec = $genomeFile . ":" . $chrom . ":" . $winStart . "-" . $winEnd;
-        }
-        push(@specs, $spec);
+    def __str__(self):
+        return self.getSpec()
 
-        # advance window with overlap.
-        $winStart += ($winSize - $winOverlap);
-    }
-    return @specs;
-}
+    def dump(self, fh):
+        "print object for debugging purposes"
+        prRowv(fh, self.seq.id, self.start, self.end)
 
-# Partition a genome file and chromosome using lifts to skip gaps.
-sub partitionWithLift($$$$@) {
-    my($db, $genomeFile, $chrom, $chromSize, @lifts) = @_;
-    my $winSize = getDbConf($db, "align.window");
-    if ($winSize <= 0) {
-        $winSize = $chromSize;
-    }
-    my $winOverlap = getDbConf($db, "align.overlap");
-    my @specs;
-    
-    foreach my $lift (getChromLifts($chrom, @lifts)) {
-        my @rspec = partitionRange($db, $genomeFile, $chrom,
-                                   $lift->{offset}, $lift->{offset}+$lift->{oldSize},
-                                   $winSize, $winOverlap);
-        push(@specs, @rspec);
-    }
-    return @specs;
-}
+class GenomeWindows(list):
+    """Class to construct overlapping windows over sequences in a genome.
+    contains ordered list of GenomeWindow objects"""
 
+    def __init__(self, db, genomeSeqs, conf):
+        self.winSize = conf.getDbInt(db, "align.window")
+        self.overlap = conf.getDbInt(db, "align.overlap")
+        if (self.winSize <= 0):
+            raise Exception("window size must be > 0")
+        if (self.overlap < 0):
+            raise Exception("window overlap must be >= 0")
+        if (self.winSize <= self.overlap):
+            raise Exception("window size must be > overlap")
 
-# Partition a genome file by windows across a whole chromosome
-sub partitionByWindows($$$$) {
-    my($db, $genomeFile, $chrom, $chromSize) = @_;
-    my $winSize = getDbConf($db, "align.window");
-    if ($winSize <= 0) {
-        $winSize = $chromSize;
-    }
-    my $winOverlap = getDbConf($db, "align.overlap");
-    return partitionRange($db, $genomeFile, $chrom, 0, $chromSize,
-                          $winSize, $winOverlap);
-}
+        self.maxGap = conf.getDbInt(db, "align.maxGap")
 
-# partition a nib file into a list of fileSepces
-sub partitionNibFile($$@) {
-    my($db, $nibFile, @lifts) = @_;
-    my @fileSpecs;
-    foreach my $chrom (getNibChrom($nibFile)) {
-        if ($#lifts >= 0) {
-            push(@fileSpecs,
-                 partitionWithLift($db, $nibFile, $chrom, getNibSize($nibFile), @lifts));
-        } else {
-            push(@fileSpecs,
-                 partitionByWindows($db, $nibFile, $chrom, getNibSize($nibFile)));
-        }
-    }
-    return @fileSpecs;
-}
+        # unplaced chromosome handling
+        unChroms = conf.getDbWordsNone(db, "align.unplacedChroms")
+        if unChroms != None:
+            if conf.getDbStrNo(db, "lift") == None:
+                raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
+            self.unplacedChroms = frozenset(unChroms)
+        else:
+            self.unplacedChroms = frozenset()
 
-# partition a 2bit file into a list of fileSpecs
-sub partitionTwoBitFile($$@) {
-    my($db, $twoBitFile, @lifts) = @_;
-    my @fileSpecs;
-    my %sizeTbl;
-    my @chroms = getTwoBitChromsSizes($twoBitFile, \%sizeTbl);
-    foreach my $chrom (@chroms) {
-        if ($#lifts >= 0) {
-            push(@fileSpecs,
-                 partitionWithLift($db, $twoBitFile, $chrom, $sizeTbl{$chrom}, @lifts));
-        } else {
-            push(@fileSpecs,
-                 partitionByWindows($db, $twoBitFile, $chrom, $sizeTbl{$chrom}));
-        }
-    }
-    return @fileSpecs;
-}
-
-# Crude attempt to sort mondo sequences so that jobs with an even number
-# of sequences still have a mixture of large and small sequences.
-sub mondoBalance($@) {
-    my($sizeTblRef, @chroms) = @_;
-    # assumes chroms is sorted in assending order
-    my $iTop = 0;
-    my $iBot = $#chroms;
-    my @newChroms;
-
-    while ($iTop <= $iBot) {
-        # 1 from bottom (larger)
-        push(@newChroms, $chroms[$iBot--]);
-        # 4 from top
-        for (my $i = 0; ($i < 4) && ($iTop <= $iBot); $i++) {
-            push(@newChroms, $chroms[$iTop++]);
-        }
-    }
-    if ($#newChroms != $#chroms) {
-        die("mondoBalance logic error, chrom lists different sizes: "
-            . "  old: " . $#chroms  . "  new: " . $#newChroms);
-    }
-    return @newChroms;
-}
-
-# partition on chrom in a mondo 2bit and write to SEQIDS
-sub partitionMondoTwoBitChrom($$$$@) {
-    my($db, $twoBitFile, $chrom, $sizeTblRef, @lifts) = @_;
-
-    # get list of file specs the standard way
-    my @fileSpecs;
-    if ($#lifts >= 0) {
-        push(@fileSpecs,
-             partitionWithLift($db, $twoBitFile, $chrom, $sizeTblRef->{$chrom}, @lifts));
-    } else {
-        push(@fileSpecs,
-             partitionByWindows($db, $twoBitFile, $chrom, $sizeTblRef->{$chrom}));
-    }
-
-    # now split it up, fileSpecs is either
-    #   "dir/foo.2bit:seqid:start-end"
-    #   "dir/foo.2bit:seqid"
-    foreach my $spec (@fileSpecs) {
-        # results is 4 parts:
-        #   (seqId, :st-end, st, end)
-        # or
-        #   (seqId, , , )
-        my(@parts) = ($spec =~ /\/[^\/]+\.2bit:([^:]+)(:([0-9]+)-([0-9]+))?/);
-        if (($#parts != 3) || (($parts[1] ne "") and ($parts[3] eq ""))) {
-            die("can't parse file spec: $spec");
-        }
-        if (!defined($sizeTblRef->{$parts[0]})) {
-            die("size not defined for seq $parts[0] from file spec: $spec");
-        }
-        if ($parts[1] ne "") {
-            print SEQIDS $parts[0],"\t",$sizeTblRef->{$parts[0]},"\t",$parts[2],"\t",$parts[3],"\n";
-        } else {
-            print SEQIDS $parts[0],"\n";
-        }
-    }
-}
-
-# partition a 2bit file with lots of small sequences in it.  Write files in
-# $outDir/$id.seqs, where id is the first sequence in the list.  Return list
-# of workDir relative seq files. This was done for bosTau1, which had 450K
-# scaffolds, lots of small ones.  Balancing is a hack.
-sub partitionMondoTwoBitFile($$$$) {
-    my($db, $twoBitFile, $numParts, $outDir) = @_;
-    my @seqFiles;
-    my %sizeTbl;
-    my @chroms = getTwoBitChromsSizes($twoBitFile, \%sizeTbl);
-    @chroms = mondoBalance(\%sizeTbl, @chroms);
-
-    my $liftFile = getDbConfNo($db, "lift");
-    my @lifts;
-    if (defined($liftFile)) {
-        @lifts = loadLiftFile($liftFile);
-    }
-
-    makeDir($workDir . "/" . $outDir);
-
-    # determine number of parts per jobs
-    my $chromsPerPart = ($#chroms+$numParts)/$numParts;
-    for (my $iChr = 0; $iChr <= $#chroms;) {
-        my $seqFile = $outDir . "/" . $chroms[$iChr] . ".seqs";
-        my $seqPath = $workDir . "/" . $seqFile;
-        open(SEQIDS, ">", $seqPath) || gbError("can't create $seqPath");
-        for (my $i = 0; ($iChr <= $#chroms) && $i < $chromsPerPart; $i++, $iChr++) {
-            partitionMondoTwoBitChrom($db, $twoBitFile, $chroms[$iChr], \%sizeTbl, @lifts)
-        }
-        close(SEQIDS) || gbError("error writing $seqFile");
-        push(@seqFiles, $seqFile);
-    }
-    return @seqFiles;
-}
-
-# partition a single genome file into a list of fileSepces
-sub partitionGenomeFile($$@) {
-    my($db, $genomeFile, @lifts) = @_;
-    my @fileSpecs;
-    # partition if we have a file format that supprot subrange spec.
-    if (isNibFile($genomeFile)) {
-        push(@fileSpecs, partitionNibFile($db, $genomeFile, @lifts));
-    } elsif (isTwoBitFile($genomeFile)) {
-        push(@fileSpecs, partitionTwoBitFile($db, $genomeFile, @lifts));
-    } else {
-        push(@fileSpecs, $genomeFile);
-    }
-    return @fileSpecs;
-}
-
-# Generate the list of genome target files.  For fasta files, this is a
-# simple glob, for nib files, we use the lift file to generate subsequence
-# requests to blat.
-sub getGenomeFileSpecs($) {
-    my($db) = @_;
-    
-    my $genomeGlob = getDbConf($db, "genome");
-    my @gfiles = glob($genomeGlob);
-    if ($#gfiles < 0) {
-        gbError("no files matching genome glob: $genomeGlob");
-    }
-    my $liftFile = getDbConfNo($db, "lift");
-    my @lifts;
-    if (defined($liftFile)) {
-        @lifts = loadLiftFile($liftFile);
-    }
-
-    # genrate specs.
-    my @fileSpecs;
-    foreach my $genomeFile (@gfiles) {
-        push(@fileSpecs, partitionGenomeFile($db, $genomeFile, @lifts));
-    }
-    return @fileSpecs;
-}
-
-# write a single blat job
-sub writeBlatJob($$$$$$$) {
-    my($jobFh, $expectedFh, $db, $genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir) = @_;
-    my $outPsl = getOutPslPath($genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir);
-
-    # make sure we don't overwrite output files
-    if (defined($gOutPsls{$outPsl})) {
-        gbError("BUG: multiple output files named $outPsl");
-    }
-    $gOutPsls{$outPsl} = 1;
-
-    # add to list of expected
-    print($expectedFh $outPsl . "\n");
-    if (-e "$workDir/$outPsl") {
-        if ($gbCommon::verbose) {
-            print(STDERR "output psl already exists, skipping: $outPsl\n");
-        }
-        return;  # exists
-    }
-    # make mrna fa relative to workdir (make . not wild in RE)
-    my $qWorkDir = quotemeta($workDir);
-    my $qWorkDirRE = "^(\.\/)?$qWorkDir\/";
-    $mrnaFa =~ s/$qWorkDirRE//;
+        self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
+        if (self.minUnplacedSize != None) and (unChroms == None):
+            raise Exception(db + ".align.minUnplacedSize requires " + db + ".align.unplacedChroms")
         
-    # if all the cluster, prefix with that dir.
-    if (defined($clusterWorkDir)) {
-        $mrnaFa = $clusterWorkDir . "/" . $mrnaFa;
-    }
+        for seq in genomeSeqs.itervalues():
+            if seq.id in self.unplacedChroms:
+                self._partitionUnplaced(seq)
+            else:
+                self._partitionSeq(seq)
+                
+    def _partitionSeq(self, seq):
+        "partition a sequence"
+        start = seq.regions[0][0]
+        end = seq.regions[0][1]
+        for reg in seq.regions[1:]:
+            if (reg[0] - end) >= self.maxGap:
+                self._partitionRange(seq, start, end)
+                start = reg[0]
+            end = reg[1]
+        self._partitionRange(seq, start, end)
+
+    def _partitionUnplaced(self, seq):
+        "partition a pseudo-chromosome containing unplaced sequences"
+        # assumed lift file divded chromosome into unplaced sequences
+        minSize = self.minUnplacedSize
+        for reg in seq.regions:
+            if (reg[1] - reg[0]) >= minSize:
+                self.append(GenomeWindow(seq, reg[0], reg[1]))
+
+    def _partitionRange(self, seq, start, end):
+        "partition a range into windows"
+        assert(start < end)
+        winStart = start
+        while winStart < end:
+            winEnd = winStart + self.winSize
+            if winEnd+self.overlap >= end:
+                # past end or next overlap will take us to end
+                winEnd = end
+            self.append(GenomeWindow(seq, winStart, winEnd))
+            # advance window with overlap.
+            winStart += (self.winSize - self.overlap)
+
+    def dump(self, fh):
+        "print object for debugging purposes"
+        for win in self:
+            win.dump(fh)            
+
+class CDnaQuery(object):
+    "object to store info on one of the extracted cDNA fasta files"
+
+    def __init__(self, procPart, cdnaType, orgCat, numSeqs, numBases, faPath):
+        self.procPart = procPart
+        self.cdnaType = cdnaType
+        self.orgCat = orgCat
+        self.numSeqs = numSeqs  
+        self.numBases = numBases 
+        self.faPath = faPath
+        self.name = os.path.splitext(os.path.basename(faPath))[0]
+
+    def __str__(self):
+        return str(self.procPart) + ": nseqs=" + str(self.numSeqs) + ", nbases=" + str(self.numBases) + ": " + self.faPath
         
-    my $cmd = $gbBlatPath;
-    if (defined($mondoSeqFile)) {
-        $cmd .= " -seqs " . $mondoSeqFile;
-    }
-    $cmd .= " $db $genomeFile $mrnaFa {check out exists $outPsl}\n";
-    print $jobFh $cmd;
-}
+                        
+class CDnaUnaligned(object):
+    """object used to find unaligned cDNA partitions and extract fasta files
+    to query against genome.  Does all specified orgCats at once, to avoid
+    multiple passes throught the cDNA fasta files files"""
 
-# generate blat jobs
-sub genBlatJobs($$$@) {
-    my($jobFh, $expectedFh, $genomeFilesRef, $mondoSeqFilesRef, $unaligned, $mrnaFasRef) = @_;
-    my($release, $db, $update, $typeAccPrefix) = splitUnaligned($unaligned);
-    
-    # relative to work/align
-    my $pslBaseDir = "$release/$db/$update/psl";
+    def __init__(self, db, rel, cdnaType, orgCats, querySplitSize, workDir):
+        self.db = db
+        self.rel = rel
+        self.cdnaType = cdnaType
+        self.orgCats = orgCats
+        self.querySplitSize = querySplitSize
+        self.workDir = os.path.normpath(workDir)
+        self.numAlign = 0L
+        self.unaligned = [] # list of GbProcessedPart objs
+        self.queries = {} # list of CDnaQuery objs, by orgCat
+        for orgCat in orgCats:
+            self.queries[orgCat] = []
 
-    foreach my $genomeFile (@{$genomeFilesRef}) {
-        foreach my $mondoSeqFile (@{$mondoSeqFilesRef}) {
-            foreach my $mrnaFa (@{$mrnaFasRef}) {
-                writeBlatJob($jobFh, $expectedFh, $db, $genomeFile, $mondoSeqFile, $mrnaFa, $pslBaseDir);
-            }
-        }
-    }
-}
+        rel.loadAlignedParts(db)
+        self._findUnaligned()
+        if cmdOpts.verbose >= 2:
+            sys.stderr.write("=========== GENBANK INDEX ===========\n")
+            self.rel.dump(sys.stderr)
+            sys.stderr.flush()
 
-# generate jobs for on update. $mondoSeqFiles should be a list with one undef if
-# not being used
-sub genAlignUpdateJobs($$$$$$$) {
-    my($jobFh, $expectedFh, $release, $db, $unaligned, $genomeFilesRef, $mondoSeqFilesRef) = @_;
-    my $totalNumAlign = 0;
-    if ($gbCommon::verbose) {
-        print STDERR "gbAlignSetup: $unaligned\n";
-    }
-    my ($numAlign, @mrnaFas) = extractMRnaFastas($unaligned);
-    if ($gbCommon::verbose) {
-        print STDERR "  $numAlign unaligned\n";
-    }
-    if ($numAlign > 0) {
-        genBlatJobs($jobFh, $expectedFh, $genomeFilesRef, $mondoSeqFilesRef, $unaligned, \@mrnaFas);
-        $totalNumAlign += $numAlign;
-    }
-    return $totalNumAlign;
-}
+    def _needsAligned(self, procPart):
+        "determine if procPart is all or partially unaligned"
+        if (procPart.cdnaType != self.cdnaType):
+            return False  # not interested
+        alnPart = procPart.getAlignedPart()
+        if alnPart == None:
+            return True
+        # check if all requested orgCats are there
+        if not alnPart.orgCats.issuperset(self.orgCats):
+            return True
+        return False
 
-# Do all setup for blat alignment jobs for a release and update; extracting 
-# sequences to align, checking for existing tmp output alignments, etc.
-sub genAlignJobs($$$$$@) {
-    my($jobFh, $expectedFh, $release, $db, $type, @orgCats) = @_;
-    my @unalignedList = findUnaligned($release, $db, $type, @orgCats);
-    my $totalNumAlign = 0;
+    def _findUnaligned(self):
+        "find unaligned processed partitions and add them to the object"
+        for upd in self.rel.updates:
+            for procPart in upd.procParts:
+                if self._needsAligned(procPart):
+                    self.unaligned.append(procPart)
 
-    # different setups depending on if we have the mondoTwoBitParts conf option
+    def _parseAlignGet(self, procPart, lines):
+        "parse output from gbAlignGet"
+        cnt = None
+        for line in lines:
+            row = line.split(" ")
+            if row[0] == "alignFa:":
+                # alignFa: path orgCat numSeqs numBases
+                cdnas = CDnaQuery(procPart, self.cdnaType, row[2], int(row[3]), long(row[4]), row[1])
+                self.queries[row[2]].append(cdnas)
+            elif row[0] == "alignCnt:":
+                cnt = long(row[1])
+            else:
+                raise Exception("unexpected output from gbAlignGet: " + line)
+        if cnt == None:
+            raise Exception("gbAlignGet did not output \"alignCnt:\"")
+        self.numAlign += cnt
 
-    my $mondoNumParts = getDbConfUndef($db, "mondoTwoBitParts");
-    my(@genomeFiles, @mondoSeqFiles);
+    def _buildPart(self, cmdBase, procPart):
+        "run gbAlignGet to get fasta for one partition"
+        cmd = list(cmdBase)
+        cmd.append(self.rel)
+        cmd.append(procPart.update)
+        if procPart.accPrefix == None:
+            cmd.append(self.cdnaType)
+        else:
+            cmd.append(self.cdnaType + "." + procPart.accPrefix)
+        cmd.append(self.db)
 
-    if (defined($mondoNumParts)) {
-        my $seqFileDir = $release . "/mondo/" . $db;
-        push(@genomeFiles, getDbConf($db, "genome"));
-        @mondoSeqFiles = partitionMondoTwoBitFile($db, $genomeFiles[0], $mondoNumParts, $seqFileDir);
-    } else {
-        @genomeFiles = getGenomeFileSpecs($db);
-        push(@mondoSeqFiles, undef);
-    }
-    foreach my $unaligned (@unalignedList) {
-        $totalNumAlign += genAlignUpdateJobs($jobFh, $expectedFh, $release, $db, $unaligned, \@genomeFiles, \@mondoSeqFiles);
-    }
-    return $totalNumAlign;
-}
+        if cmdOpts.verbose > 0:
+            prLine(sys.stderr, procOps.fmtCmd(cmd))
+        lines = procOps.callProcLines(cmd)
 
-# Entry, don't allow odd number of arguments.
-setTaskName("gbAlignSetup");
+        # process results
+        self._parseAlignGet(procPart, lines)
 
-# parse into globals used in program
-while (($#ARGV >= 0) && ($ARGV[0] =~/^-.*/)) {
-    my $opt = $ARGV[0];
-    shift @ARGV;
-    if ($opt =~ /^-workdir($|=)/) {
-        $workDir = parseOptEq($opt);
-    } elsif ($opt =~ /^-clusterWorkDir($|=)/) {
-        $clusterWorkDir = parseOptEq($opt);
-    } elsif ($opt eq "-noMigrate") {
-        $noMigrate = 1;
-    } elsif ($opt eq "-verbose") {
-        $gbCommon::verbose = 1;
-    } elsif ($opt =~ /^-verbose=/) {
-        $gbCommon::verbose = parseOptEq($opt);
-    } elsif ($opt =~ /^-srcDb($|=)/) {
-        my $srcDb = parseOptEq($opt);
-        if (!inList($srcDb, ("genbank", "refseq"))) {
-            gbError("-srcDb must have a value of \"genbank\" or \"refseq\", got \"$srcDb\"");
-        }
-        push(@srcDbs, $srcDb);
-    } elsif ($opt =~ /^-type($|=)/) {
-        my $type = parseOptEq($opt);
-        if (!inList($type, ("mrna", "est"))) {
-            gbError("-type must have a value of \"mrna\" or \"est\", got \"$type\"");
-        }
-        push(@types, $type);
-    } elsif ($opt =~ /^-orgCat($|=)/) {
-        my $orgCat = parseOptEq($opt);
-        if (!inList($orgCat, ("native", "xeno"))) {
-            gbError("-orgCat must have a values of \"native\" or \"xeno\", got \"$orgCat\"");
-        }
-        push(@orgCats, $orgCat);
-    } else {
-        gbError("invalid option \"$opt\"");
-    }
-}
+    def buildQueries(self):
+        """build cDNA fasta files for unaligned partitions; return count of
+        unaligned sequences"""
 
-if ($#ARGV < 0) {
-    gbError("wrong # args: $main::usage");
-}
+        # build first part of gbAlignGet command with options
+        cmdBase = ["gbAlignGet",
+                   "-workdir=" + self.workDir,
+                   "-orgCats=" + ",".join(self.orgCats),
+                   "-polyASizes"];
+        if self.querySplitSize > 0:
+            cmdBase.append("-fasize=" + str(self.querySplitSize))
+        if cmdOpts.verbose:
+            cmdBase.append("-verbose=" + str(cmdOpts.verbose))
+        if cmdOpts.noMigrate:
+            cmdBase.append("-noMigrate")
+        for procPart in self.unaligned:
+            self._buildPart(cmdBase, procPart)
 
-my @databases;
-while ($#ARGV >= 0) {
-    push(@databases, $ARGV[0]);
-    shift @ARGV;
-}
+        return self.numAlign
 
-makeDir($workDir);
+class Job(list):
+    """Information about a job.  This contains a single query sequence, and
+    multiple target windows."""
+    # Note: can't contain multiple queries due to gbAlignFinsh assumptions
 
-$gbBlatPath = callProg("sh -c 'which gbBlat'");
-chomp($gbBlatPath);
+    __slots__ = ("cdnaQuery", "targetBases")
 
-# default options
-if ($#srcDbs < 0) {
-    @srcDbs = ("genbank", "refseq");
-}
-if ($#types < 0) {
-    @types = ("mrna", "est");
-}
+    def __init__(self, cdnaQuery):
+        self.cdnaQuery = cdnaQuery
+        self.targetBases = 0L
 
-# for now, make sure windows are not in use.
-for my $db (@databases) {
-    if (getDbConf($db, "align.window") > 0) {
-        die("align.window not debugged, must be zero");
-    }
-    if (getDbConf($db, "align.overlap") > 0) {
-        die("align.overlap not debugged, must be zero");
-    }
-}
+    def addTargetWin(self, win):
+        self.append(win)
+        self.targetBases += win.size
 
-# Get last releases, allow one to be missing for testing
-my $gbRelease = undef;
-if (inList("genbank", @srcDbs)) {
-    $gbRelease = getLastRelease("processed", "genbank");
-}
+    def _getJobPath(self, jobGenDb):
+        "generate the path relative to the work directory that is unique to this job"
+        # follow the old conventions of a psl directory under the directory
+        # with the fasta file.  The job file goes in the psl dir too!
+        win = self[0]  # user first window in names
+        update = self.cdnaQuery.procPart.update
+        path = [update.rel, jobGenDb.db, update, "psl", self.cdnaQuery.name, win.seq.id]
+        if win.isFullSeq:
+            path.append(win.seq.id)
+        else:
+            # create subdir from start of range
+            s = str(win.start)
+            path.append(s[0])
+            path.append(s + "-" + str(win.end))
+        return "/".join(path)
 
-my $rsRelease = undef;
-if (inList("refseq", @srcDbs)) {
-    $rsRelease = getLastRelease("processed", "refseq");
-}
-if (!(defined($gbRelease) || defined($rsRelease))) {
-    gbError("no data/processed/genbank.* or data/processed/refseq.* directories found in "
-            . $cwd);
-}
+    def _makeWorkDirRel(self, jobGen, path):
+        "removing the workdir directories from path"
+        assert(path.startswith(jobGen.workDir))
+        return path[len(jobGen.workDir)+1:]
+        
+    def write(self, jobGenDb, preFilterOpts):
+        "write this job spec"
+        jobGen = jobGenDb.jobGen
+        jobPath = self._getJobPath(jobGenDb)
+        
+        # create job spec file
+        relJobFile = jobPath + ".job"
+        jobFile = jobGen.workDir + "/" + relJobFile
+        fileOps.ensureFileDir(jobFile)
+        fh = open(jobFile, "w")
+        prRowv(fh, "type", self.cdnaQuery.orgCat, self.cdnaQuery.cdnaType)
+        if jobGenDb.ooc != None:
+            prRowv(fh, "ooc", jobGenDb.ooc)
 
-# setup jobs file
-my $alignJobs = "$workDir/align.jobs";
-my $alignJobsTmp = "$alignJobs.tmp";
+        prRowv(fh, "tdb", jobGenDb.clusterGenome)
+        fh.write("tseq")
+        for win in self:
+            fh.write("\t")
+            fh.write(win.getSpec())
+        fh.write("\n")
+        if jobGenDb.slow2bit:
+            prRowv(fh, "tdbSlow2bit", "yes")
+        prRowv(fh, "qdb", self._makeWorkDirRel(jobGen, self.cdnaQuery.faPath))
+        prRowv(fh, "preFilterOpts", preFilterOpts)
 
-if (-e $alignJobs) {
-    gbError("job file exists, not overwriting: $alignJobs");
-}
-if (-e $alignJobsTmp) {
-    gbError("tmp job file exists: $alignJobs");
-}
+        # add job
+        relPslFile = jobPath + ".psl"
+        if relPslFile in definedPsls:
+            raise Exception("BUG: psl file already used: " + relPslFile)
+        definedPsls.add(relPslFile)
+        fileOps.prLine(jobGen.jobFh, gbBlatPath, " ", relJobFile, " {check out exists ", relPslFile, "}")
+        fileOps.prLine(jobGen.expectFh, relPslFile)
 
-open(JOBS, ">>", $alignJobsTmp)
-    || gbError("can't create $alignJobsTmp");
-my $jobFh = \*JOBS;  # gag..
+class Jobs(list):
+    """job to to partition target sequence windows into jobs.  This builds
+    a list of Job objects for a given update and query fasta and packs
+    multiple targets smaller than the window size into jobs."""
 
-# setup expected file
-my $alignExpected = "$workDir/align.expected";
-my $alignExpectedTmp = "$alignExpected.tmp";
+    def __init__(self, jobGenDb, cdnaQuery):
+        self.jobGenDb = jobGenDb
+        self.winSize = jobGenDb.windows.winSize
+        self.overlap = jobGenDb.windows.overlap
+        # threshold for just sticking a window in it's own job
+        self.singleWinJobSize = self.winSize - self.overlap
+        self.maxWinsPerJob = jobGenDb.maxWinsPerJob
+        self.cdnaQuery = cdnaQuery
+        self.pending = []
 
-open(EXPECTED, ">>", $alignExpectedTmp)
-    || gbError("can't create $alignExpectedTmp");
-my $expectedFh = \*EXPECTED;  # gag #2..
+        for win in jobGenDb.windows:
+            self._addWindow(win)
 
-my $totalNumAlign = 0;
+    def _findJobWithRoom(self, win):
+        """find a job with room for this window, alowing jobs to be overflow
+        by the overlap amount. Returns None if none found, or index in
+        pending list """
+        need = win.size - self.overlap
+        for i in xrange(len(self.pending)):
+            if self.pending[i].targetBases + need < self.winSize:
+                return i
+        return None
 
-# GenBank releases
-if (defined($gbRelease)) {
-    foreach my $db (@databases) {
-        if (inList("mrna", @types)) {
-            $totalNumAlign += genAlignJobs($jobFh, $expectedFh, $gbRelease, $db, "mrna", @orgCats);
-        }
-        if (inList("est", @types)) {
-            $totalNumAlign += genAlignJobs($jobFh, $expectedFh, $gbRelease, $db, "est", @orgCats);
-        }
-    }
-}
+    def _addWindow(self, win):
+        """add a window to the object.  Performance sensitive due to
+        pseudo-chromosomes with unplaced sequence"""
+        if win.size >= self.singleWinJobSize:
+            # win is only one in job
+            job = Job(self.cdnaQuery)
+            job.addTargetWin(win)
+            self.append(job)
+        else:
+            i = self._findJobWithRoom(win)
+            if i == None:
+                # new job, add to pending unless only one per job allowed
+                job = Job(self.cdnaQuery)
+                job.addTargetWin(win)
+                if self.maxWinsPerJob > 1:
+                    self.pending.append(job)
+                else:
+                    self.append(job)
+            else:
+                # pack into existing job
+                job = self.pending[i]
+                job.addTargetWin(win)
+                if ((len(job) > self.maxWinsPerJob)
+                    or (job.targetBases >= self.singleWinJobSize)):
+                    # now full, remove from pending, and shuffle last
+                    # pending job it's postion in array (assumes this is
+                    # faster).
+                    iLast = len(self.pending)-1
+                    self.pending[i] = self.pending[iLast]
+                    del(self.pending[iLast])
+                    self.append(job)
 
-# RefSeq releases
-if (defined($rsRelease)) {
-    foreach my $db (@databases) {
-        $totalNumAlign += genAlignJobs($jobFh, $expectedFh, $rsRelease, $db, "mrna");
-    }
-}
+    def write(self, preFilterOpts):
+        "write jobs"
+        for job in self:
+            job.write(self.jobGenDb, preFilterOpts)
+        for job in self.pending:
+            job.write(self.jobGenDb, preFilterOpts)
 
-print("numAlign: $totalNumAlign\n");
-# install jobs and expected file.
-close(EXPECTED) || die("close failed");
-close(JOBS) || die("close failed");
-if ($totalNumAlign > 0) {
-    renameFile($alignExpectedTmp, $alignExpected);
-    renameFile($alignJobsTmp, $alignJobs);
-} else {
-    unlink($alignExpectedTmp, $alignJobsTmp);
-    
-    # leave flag indicating nothing to align
-    my $alignNone = "$workDir/align.none";
-    open(NONE, ">$alignNone") || die("can't create $alignNone");
-    close(NONE) || die("close failed");
-}
+    def prStats(self):
+        "print stats about jobs for debugging purposes"
+        allJobs = self + self.pending
+        job = allJobs[0]
+        minBases = job.targetBases
+        maxBases = job.targetBases
+        minSeqs = len(job)
+        maxSeqs = len(job)
+        for job in allJobs:
+            minBases = min(minBases, job.targetBases)
+            maxBases = max(maxBases, job.targetBases)
+            minSeqs = min(minSeqs, len(job)) 
+            maxSeqs = max(maxSeqs, len(job))
+            
+        pp = self.cdnaQuery.procPart
+        prLine(sys.stderr, "Jobs: ",pp.update.rel, " ", pp.update, " ", pp, " ", self.jobGenDb.db, " jobs:", len(allJobs), " minBases:", minBases, " maxBases:", maxBases, " minSeqs:", minSeqs, " maxSeqs:", maxSeqs)
+
+class JobGenDb(object):
+    "object to generate alignment jobs for a database"
+    def __init__(self, jobGen, db):
+        self.jobGen = jobGen
+        self.conf = jobGen.conf
+        self.db = db
+        self.querySplitSize = 1024*1024*self.conf.getDbInt(db, "align.querySplitSize")
+        self.ooc = self.conf.getDbStrNo(db, "ooc")
+        self.maxWinsPerJob = self.conf.getDbInt(db, "align.maxWinsPerJob")
+        self.genome = None
+        self.numAlign = 0L
+        self.slow2bit = False
+
+    # matches pre-filter options
+    preFilterOptsRe = re.compile("(-minId=)|(-minCover=)|(-maxRepMatch=)|(-minQSize=)|(-polyASizes=)")
+
+    def _getPreFilterOpts(self, rel, cdnaType, orgCat):
+        "select non-comparitive pslCDnaFilter options for blat job filtering"
+        filterOpts = self.conf.getvDbStrNo(self.db, rel.srcDb, cdnaType, orgCat, "pslCDnaFilter")
+        if filterOpts == None:
+            return None
+        preOpts = []
+        for opt in filterOpts.split():
+            if JobGenDb.preFilterOptsRe.match(opt):
+                preOpts.append(opt)
+        if len(preOpts) == 0:
+            return None
+        else:
+            return " ".join(preOpts)
+
+    def _loadGenome(self):
+        "load genome sequence info"
+        skipChroms = self.conf.getDbWordsNone(self.db, "align.skipChroms")
+        self.genome = GenomeSeqs(self.conf.getDbStr(self.db, "serverGenome"),
+                                 skipChroms)
+        # get nib dir or 2bit file on cluster (FIXME: shouldn't really be a glob)
+        self.clusterGenome = self.conf.getDbStr(self.db, "clusterGenome")
+        if self.clusterGenome.endswith(".nib"):
+            self.clusterGenome = os.path.dirname(self.clusterGenome)
+        elif len(self.genome) >= 100000:
+            self.slow2bit = True
+        lift = self.conf.getDbStrNo(self.db, "lift")
+        if lift != None:
+            self.genome.addUnGappedRegions(lift)
+        self.windows = GenomeWindows(self.db, self.genome, self.conf)
+        if cmdOpts.verbose >= 2:
+            sys.stderr.write("=========== GENOME REGIONS ===========\n")
+            self.genome.dump(sys.stderr)
+            sys.stderr.write("=========== WINDOWS ===========\n")
+            self.windows.dump(sys.stderr)
+            sys.stderr.flush()
+
+    def _addOrgCatJobs(self, rel, cdnaType, orgCat, queries):
+        "make query jobs for a given orgCat"
+        if self.genome == None:
+            self._loadGenome()  # lazy
+        preFilterOpts = self._getPreFilterOpts(rel, cdnaType, orgCat)
+        for cdnaQuery in queries:
+            jobs = Jobs(self, cdnaQuery)
+            jobs.write(preFilterOpts)
+            if cmdOpts.verbose >= 3:
+                jobs.prStats()
+        
+    def _addJobSet(self, rel, cdnaType, orgCats):
+        cdnaQueries = CDnaUnaligned(self.db, rel, cdnaType, orgCats,
+                                    self.querySplitSize,
+                                    self.jobGen.workDir)
+        if cdnaQueries.buildQueries() > 0:
+            for orgCat in orgCats:
+                self._addOrgCatJobs(rel, cdnaType, orgCat, cdnaQueries.queries[orgCat])
+            self.numAlign += cdnaQueries.numAlign
+
+    def _getOrgCats(self, rel, cdnaType):
+        "determine orgCats that are to be loaded"
+        orgCats = set()
+        for orgCat in cmdOpts.orgCats:
+            if self.conf.getvDbBool(self.db, rel.srcDb, cdnaType, orgCat, "load"):
+                orgCats.add(orgCat)
+        return orgCats
+
+    def addJobs(self):
+        "add jobs, returning the total number of sequences needing align"
+        for srcDb in cmdOpts.srcDbs:
+            rel = self.jobGen.gbIndex[srcDb].getLatestRel()
+            if rel != None:
+                for cdnaType in cmdOpts.cdnaTypes:
+                    if cdnaType in rel.cdnaTypes:
+                        orgCats = self._getOrgCats(rel, cdnaType)
+                        if len(orgCats) > 0:
+                            self._addJobSet(rel, cdnaType, orgCats)
+        
+class JobGen(object):
+    "object to generate alignment jobs"
+    def __init__(self, conf, gbIndex, workDir):
+        self.conf = conf
+	self.gbIndex = gbIndex
+        self.workDir = os.path.normpath(workDir)
+        self.jobsFile = workDir + "/align.jobs"
+        self.jobsFileTmp = self.jobsFile + ".tmp"
+        self.expectFile = workDir + "/align.expected"
+        self.expectFileTmp = self.expectFile + ".tmp"
+        self.numAlign = 0L
+
+        fileOps.ensureDir(workDir)
+        if os.path.exists(self.jobsFile):
+            raise Exception("job file exists, not overwriting: " + self.jobsFile);
+        if os.path.exists(self.jobsFileTmp):
+            raise Exception("tmp job file exists, ensure no other alignment is running, then remove working directory: " + self.workDir);
+
+        self.jobFh = open(self.jobsFileTmp, "w")
+        self.expectFh = open(self.expectFileTmp, "w")
+
+    def addJobs(self, db):
+        "add jobs for unaligned sequences in a database"
+        j = JobGenDb(self, db)
+        j.addJobs()
+        self.numAlign += j.numAlign
+
+    def finish(self):
+        "finish jobs file creation"
+        self.expectFh.close()
+        self.jobFh.close()
+
+        if self.numAlign == 0:
+            # leave flag indicating nothing to align
+            open(self.workDir + "/align.none", "w").close()
+            os.remove(self.expectFileTmp)
+            os.remove(self.jobsFileTmp)
+        else:
+            os.rename(self.expectFileTmp, self.expectFile)
+            os.rename(self.jobsFileTmp, self.jobsFile) # must be last
+
+def convertOptToSet(optName, optValue, valid):
+    """convert one of the restriction options to a set, validating it's values
+    and defaulting to all valid if none are specified"""
+    if optValue == None:
+        opts = set(valid)
+    else:
+        opts = set(optValue)
+        for o in optValue:
+            if not o in valid:
+                raise Exception("\"" + o + "\" is not a valid value for " + optName
+                                + ", expected one of: " + ", ".join(valid))
+            opts.add(o)
+    return opts
+
+def main():
+    "entry point"
+    parser = OptionParser(usage=usage)
+    parser.add_option("--workdir", action="store", dest="workdir", default="work/align",
+                      help="=work directory where alignment is built. See gbAlignStep for details. Defaults to work/align")
+    parser.add_option("--clusterWorkDir",  action="store", dest="clusterWorkDir", default=None,
+                      help="location of work directory on cluster.")
+    parser.add_option("--verbose", action="store", dest="verbose", type="int", default=0,
+                      help="print details")
+    parser.add_option("--srcDb", action="append", dest="srcDbs", default=None,
+                      help="Restrict the source database to either \"genbank\" or \"refseq\". Maybe repeated.")
+    parser.add_option("--type", action="append", dest="cdnaTypes", default=None,
+                      help="Restrict the type of sequence processeed to either \"mrna\" or \"est\". Maybe repeated.")
+    parser.add_option("--orgCat", action="append", dest="orgCats", default=None,
+                      help="""Restrict type of sequences to process to \"native\" or \"xeno\". If not speicifed, categories that are to be loaded are used from genbank.conf. Maybe repeated.""")
+    parser.add_option("--noMigrate", action="store_true", dest="noMigrate", default=False,
+                      help="Don't migrate alignments.")
+    global cmdOpts
+    (cmdOpts, databases) = parser.parse_args()
+    if len(databases) == 0:
+        parser.error("wrong number of arguments")
+
+    # convert restriction options to sets
+    cmdOpts.srcDbs = convertOptToSet("--srcDb", cmdOpts.srcDbs, (GenBank, RefSeq))
+    cmdOpts.cdnaTypes = convertOptToSet("--type", cmdOpts.cdnaTypes, (MRNA, EST))
+    cmdOpts.orgCats = convertOptToSet("--orgCat", cmdOpts.orgCats, (Native, Xeno))
+
+    confFile = "etc/genbank.conf"
+    if not os.path.exists(confFile):
+        raise Exception(confFile + " not found, must be run from genbank root directory")
+    conf = Config(confFile)
+
+    gbIndex = GbIndex()
+    jobGen = JobGen(conf, gbIndex, cmdOpts.workdir)
+    for db in databases:
+        jobGen.addJobs(db)
+    jobGen.finish()
+
+main()
+
+# Local Variables:
+# mode: python
+# End:

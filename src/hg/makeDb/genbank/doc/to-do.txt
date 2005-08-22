@@ -892,3 +892,12 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
     +----------+-------+---------------------------+------+---------+------+------+-------------+
     maybe add a first two character of the acc column???
 
+- 2bit for cDNA needs:
+  - fast open and access (disk-based hash)
+  - > 4gb size
+  - expandable
+  - support incremental additions with rsync
+  - store est direction (??)
+  - store length of polyA tail/polyT head (??)
+
+

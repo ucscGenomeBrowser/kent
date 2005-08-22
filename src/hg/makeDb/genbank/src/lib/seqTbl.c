@@ -4,7 +4,7 @@
 #include "gbDefs.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: seqTbl.c,v 1.3 2004/02/23 07:40:19 markd Exp $";
+static char const rcsid[] = "$Id: seqTbl.c,v 1.4 2005/08/22 19:55:35 markd Exp $";
 
 /*
  * Note: don't use autoincrement for id column, as it causes problems for
@@ -83,8 +83,8 @@ HGID seqTblAdd(struct seqTbl *st, char* acc, int version, char* type,
 {
 assert(st->updater != NULL);
 sqlUpdaterAddRow(st->updater, "%u\t%s\t%d\t%u\t%u\t%llu\t%u\t%s\t%s",
-                   st->nextId, acc, version, seqSize,
-                   extFileId, fileOff, recSize, type, srcDb);
+                 st->nextId, acc, version, seqSize,
+                 extFileId, (long long)fileOff, recSize, type, srcDb);
 return st->nextId++;
 }
 
@@ -102,7 +102,7 @@ if (extFileId != 0)
     len += safef(query+len, sizeof(query)-len,
                  "%ssize=%u, gbExtFile=%u, file_offset=%lld, file_size=%d",
                  ((len != 0) ? ", " : ""),
-                 seqSize, extFileId, fileOff, recSize);
+                 seqSize, extFileId, (long long)fileOff, recSize);
 len += safef(query+len, sizeof(query)-len, " WHERE id=%u", id);
 
 sqlUpdaterModRow(st->updater, 1, "%s", query);

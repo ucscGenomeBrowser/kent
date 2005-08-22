@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.11 2005/07/10 00:50:44 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.12 2005/08/22 19:55:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -163,7 +163,7 @@ void addContig(int start, int end)
 /* Add a new contig. */
 {
 if (contigCount >= ArraySize(contigStarts) )
-    errAbort("Too many contigs, can only handle %d\n", ArraySize(contigStarts));
+    errAbort("Too many contigs, can only handle %lld\n", (long long)ArraySize(contigStarts));
 contigStarts[contigCount] = start;
 contigEnds[contigCount] = end;
 ++contigCount;
@@ -218,7 +218,7 @@ for (i=0; i<dnaSize; ++i)
 if (open)
     {
     if (contigCount >= ArraySize(contigStarts) )
-        errAbort("Too many contigs, can only handle %d\n", ArraySize(contigStarts));
+        errAbort("Too many contigs, can only handle %lld\n", (long long)ArraySize(contigStarts));
     contigStarts[contigCount] = firstIx;
     contigEnds[contigCount] = i;
     ++contigCount;
@@ -937,7 +937,7 @@ if ((gPepFa != NULL) && (gbProteinIdField->val->stringSize > 0)
           gbTranslationField->val->stringSize);
     kvtAdd(kvt, "prs", pepSizeStr);
 
-    safef(pepFaOffStr, sizeof(pepFaOffStr), "%lld", gPepFa->recOff);
+    safef(pepFaOffStr, sizeof(pepFaOffStr), "%lld", (long long)gPepFa->recOff);
     kvtAdd(kvt, "pfo", pepFaOffStr);
 
     faSize = gPepFa->off - gPepFa->recOff;
@@ -1128,7 +1128,7 @@ if (dna != NULL)
         safef(accVer, sizeof(accVer), "%s.%d", accession, version);
         gbFaWriteSeq(faFile, accVer, NULL, dna, -1);
         faSize = faFile->off - faFile->recOff;
-        safef(faOffStr, sizeof(faOffStr), "%lld", faFile->recOff);
+        safef(faOffStr, sizeof(faOffStr), "%lld", (long long)faFile->recOff);
         kvtAdd(kvt, "fao", faOffStr);
         safef(faSizeStr, sizeof(faSizeStr), "%d", faSize);
         kvtAdd(kvt, "fas", faSizeStr);

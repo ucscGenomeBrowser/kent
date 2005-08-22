@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.12 2005/06/05 18:55:12 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.13 2005/08/22 19:55:35 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -646,7 +646,7 @@ if (end == NULL)
     warn("Warning: %s: can't parse derived from genomic acc in RefSeq comment", getCurAcc());
     return;
     }
-safef(genomicAcc, sizeof(genomicAcc), "%1.*s", end-start, start);
+safef(genomicAcc, sizeof(genomicAcc), "%1.*s", (int)(end-start), start);
 
 /* now parse associated accessions */
 next = strstr(next, derivedStr);
