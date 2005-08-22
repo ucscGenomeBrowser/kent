@@ -849,17 +849,14 @@ chainSome $(path1)
       into table flyBase2004Xref'
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/4/05 angie)
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 5/23/05 angie) 
     ssh kksilo
     mkdir /cluster/data/dp3/bed/blastz.dm2.swap
     cd /cluster/data/dp3/bed/blastz.dm2.swap
-    # kolossus can't see /iscratch at the moment so the script failed the 
-    # first time around.  small cluster is quiet so use kk7u00 as workhorse:
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.dp3/DEF \
       -workhorse kkr7u00 >& do.log &
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
-    # Add /usr/local/apache/htdocs/goldenPath/dp3/vsDm2/README.txt
 
 
 # MAKE Drosophila Proteins track  (DONE 06-30-05 braney)
@@ -980,3 +977,15 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEID PREDICTIONS FROM IMIM (DONE 7/26/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dp3/bed/geneid
+    cd /cluster/data/dp3/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/D.pseudoobscura/golden_path_200411/geneidv1.2/$chr.gtf
+    end
+    ldHgGene -gtf -genePredExt dp3 geneid *.gtf
+
+

@@ -659,11 +659,11 @@ droSim1.downloadDir = droSim1
       | hgsql -h genome-testdb hgcentraltest
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 4/13/05 angie)
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 5/23/05 angie)
     mkdir /cluster/data/droSim1/bed/blastz.dm2.swap
     cd /cluster/data/droSim1/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droSim1/DEF \
-      -fileServer kolossus >& do.log &
+      >& do.log &
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
     ln -s blastz.dm2.swap /cluster/data/droSim1/bed/blastz.dm2
@@ -1621,3 +1621,15 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEID PREDICTIONS FROM IMIM (DONE 7/26/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droSim1/bed/geneid
+    cd /cluster/data/droSim1/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/D.simulans/golden_path_200504/geneidv1.2/$chr.gtf
+    end
+    ldHgGene -gtf -genePredExt droSim1 geneid *.gtf
+
+

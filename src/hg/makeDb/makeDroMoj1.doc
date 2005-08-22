@@ -619,8 +619,8 @@ chainSome $(path1)
 # End tblastn
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/11/05 angie)
-    ssh kksilo
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (REDONE 5/23/05 angie)
+# Originally done 3/11/05 -- redone (better params) 5/23/05.
     mkdir /cluster/data/droMoj1/bed/blastz.dm2.swap
     cd /cluster/data/droMoj1/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droMoj1/DEF \
@@ -744,3 +744,13 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEID PREDICTIONS FROM IMIM (DONE 7/26/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droMoj1/bed/geneid
+    cd /cluster/data/droMoj1/bed/geneid
+    wget http://genome.imim.es/genepredictions/D.mojavensis/golden_path_200408/geneidv1.2/scaffolds.gtf
+    ldHgGene -gtf -genePredExt droMoj1 geneid *.gtf
+
+

@@ -895,15 +895,14 @@ chainSome $(path1)
     iSync
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/2/05 angie)
-    ssh kksilo
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (REDONE 5/23/05 angie)
+# Originally done 3/2/05 -- redone (better params) 5/23/05.
     mkdir /cluster/data/droYak1/bed/blastz.dm2.swap
     cd /cluster/data/droYak1/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droYak1/DEF \
       >& do.log &
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
-    # Add /usr/local/apache/htdocs/goldenPath/droYak1/vsDm2/README.txt
 
 
 # MAKE Drosophila Proteins track  (DONE braney 06-30-05)
@@ -1021,3 +1020,15 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEID PREDICTIONS FROM IMIM (DONE 7/26/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droYak1/bed/geneid
+    cd /cluster/data/droYak1/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/D.yakuba/golden_path_200404/geneidv1.2/$chr.gtf
+    end
+    ldHgGene -gtf -genePredExt droYak1 geneid *.gtf
+
+

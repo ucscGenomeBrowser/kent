@@ -651,15 +651,14 @@ chainSome $(path1)
 # End tblastn
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 3/2/05 angie)
-    ssh kksilo
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (REDONE 5/23/05 angie)
+# Originally done 3/2/05 -- redone (better params) 5/23/05.
     mkdir /cluster/data/droAna1/bed/blastz.dm2.swap
     cd /cluster/data/droAna1/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droAna1/DEF \
       >& do.log &
     tail -f do.log
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
-    # Add /usr/local/apache/htdocs/goldenPath/droAna1/vsDm2/README.txt
 
 # MAKE Drosophila Proteins track (DONE braney 06-30-05)
     ssh kk
@@ -776,3 +775,13 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEID PREDICTIONS FROM IMIM (DONE 7/26/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droAna1/bed/geneid
+    cd /cluster/data/droAna1/bed/geneid
+    wget http://genome.imim.es/genepredictions/D.ananassae/golden_path_200407/geneidv1.2/scaffolds.gtf
+    ldHgGene -gtf -genePredExt droAna1 geneid *.gtf
+
+
