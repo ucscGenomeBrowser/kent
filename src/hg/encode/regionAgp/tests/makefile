@@ -1,6 +1,17 @@
-test:   namePrefixTest namePrefixDirTest simpleTest dirTest zeroTest
+test:   singleNegStrand firstNegStrand \
+	        namePrefixTest namePrefixDirTest simpleTest dirTest zeroTest
+
+#VERBOSE=-verbose=3
 
 PROG=regionAgp
+
+singleNegStrand:     mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -namePrefix=chicken_ -contigFile=input/chicken.contig.tab input/chick.ENm006_6.bed input/chick.chr19.agp output/chicken_ENm006_6.agp
+	diff -b expected/chicken_ENm006_6.agp output
+
+firstNegStrand:     mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -namePrefix=chicken_ -contigFile=input/chicken.contig.tab input/chick.ENm001_1.bed input/chick.chr1.agp output/chicken_ENm001_1.agp
+	diff expected/chicken_ENm001_1.agp output
 
 namePrefixTest:     mkdirs
 	${HOME}/bin/${MACHTYPE}/${PROG} -namePrefix=rat_ input/test.bed input/test.agp output/testNamePrefix.agp

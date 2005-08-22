@@ -12,7 +12,7 @@
 #include "agpGap.h"
 #include "contigAcc.h"
 
-static char const rcsid[] = "$Id: regionAgp.c,v 1.14 2005/03/16 02:49:24 kate Exp $";
+static char const rcsid[] = "$Id: regionAgp.c,v 1.15 2005/08/22 20:50:54 kate Exp $";
 
 #define DIR_OPTION              "dir"
 #define NAME_PREFIX_OPTION      "namePrefix"
@@ -71,7 +71,6 @@ void regionAgp(char *bedFile, char *agpIn, char *agpOut)
 struct bed *pos, *posList;
 struct hash *agpHash;
 struct agp *agpList, *agp;
-struct lineFile *lf = lineFileOpen(agpIn, TRUE);
 FILE *fout = NULL;
 int start = 1;
 int seqNum = 1;
