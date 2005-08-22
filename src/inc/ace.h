@@ -16,15 +16,6 @@
 #include "dnaseq.h"
 #endif
 
-struct ace
-/* This contains information about one ace element. */
-    {
-    struct aceAS aceAS;
-    struct aceCO aceCO;
-    struct aceAF *afList;
-    struct aceRD *rdList;
-    };
-
 struct aceAS
 /* This contains an AS entry. */
     {
@@ -39,7 +30,7 @@ struct aceCO
     int bases;
     int reads;
     struct dnaSeq *seq;
-    }
+    };
 
 struct aceAF
 /* This contains an AF entry. */
@@ -55,6 +46,15 @@ struct aceRD
     struct aceRD *next;
     char *readName;
     int bases;
+    };
+
+struct ace
+/* This contains information about one ace element. */
+    {
+    struct aceAS aceAS;
+    struct aceCO aceCO;
+    struct aceAF *afList;
+    struct aceRD *rdList;
     };
 
 void aceFree(struct ace **pEl);
