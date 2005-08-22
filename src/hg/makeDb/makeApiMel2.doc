@@ -1031,7 +1031,8 @@ EOF
     hgPepPred apiMel2 generic ensPep ensPep.fa
 
 
-# NCBI ANNOTATIONS (XM_* PREDICTED REFSEQS) (DONE 5/17/05 angie)
+# NCBI ANNOTATIONS (XM_* PREDICTED REFSEQS) (REDONE 5/26/05 angie)
+    # Originally done 5/17; reloaded w/new data from Barbara Ruef @ncbi 5/26.
     ssh hgwdev
     mkdir /cluster/data/apiMel2/bed/ncbi
     cd /cluster/data/apiMel2/bed/ncbi
@@ -1053,12 +1054,8 @@ EOF
                $words[1] = $b2n{$words[1]}; \
                print join("\t", @words) . "\n"; \
              }' ../../jkStuff/scaffolds.lft > ../../jkStuff/ncbiScaffolds.lft
-    # Also, looks like their frames are backwards relative to the spec 
-    # http://genes.cs.wustl.edu/GTF2.html, so complement them mod 3.
-    liftUp -type=.gff stdout ../../jkStuff/ncbiScaffolds.lft warn \
-      NCBI.gff.gz \
-    | awk -F"\t" '$8 == 1 || $8 == 2 {OFS="\t"; $8 = 3 - $8;} {print;}' \
-      > apiMel2.RefSeq.gff
+    liftUp -type=.gff apiMel2.RefSeq.gff ../../jkStuff/ncbiScaffolds.lft warn \
+      NCBI.gff.gz
     # Some warnings about NC_001566.1, the mitochondrion, which wasn't 
     # included in apiMel2 -- OK.  
     # At first I wasn't sure if we wanted to load this up, so I made it 
@@ -1071,6 +1068,7 @@ EOF
     # The proteins XP_* don't seem to correspond to the XM_* genes with 
     # the same numbers, so don't load them up -- the predicted proteins 
     # are straight from genomic sequence anyway.  
+
 
 # EXONERATE TRACK (IN PROGRESS 5/23/2005 Andy)
     ssh kk
@@ -1367,3 +1365,30 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# BEEBASE GENE MODELS (DONE 7/27/05 angie)
+    mkdir /cluster/data/apiMel2/bed/beeBase
+    cd /cluster/data/apiMel2/bed/beeBase
+    set bbpassword = # emailed from Chris Elsik at TAMU
+    wget ftp://guest:$bbpassword@trixie.tamu.edu/official_gene_sets/Amel_abinitio.gff
+    wget ftp://guest:$bbpassword@trixie.tamu.edu/official_gene_sets/Amel_predicted_glean3.gff
+    sed -e 's/gene_id //' Amel_abinitio.gff \
+    | liftUp -type=.gff stdout ../../jkStuff/scaffolds.lft warn stdin \
+    | ldHgGene apiMel2 beeBaseAbinitio stdin
+    perl -wpe 's/GenePrediction (\w+-\w+).*/$1/' Amel_predicted_glean3.gff \
+    | liftUp -type=.gff stdout ../../jkStuff/scaffolds.lft warn stdin \
+    | ldHgGene apiMel2 beeBaseGlean3 stdin
+    # Make a custom track for Hugh Robertson and Chris to use in the meantime 
+    # (until they can send more complete descriptions).
+    echo 'track name=beeBaseGlean3 description="BeeBase GLEAN3 Gene Models" color=175,175,0 grp=genes priority=41 visibility=pack' > beeBaseCustomTracks.txt
+    perl -wpe 's/GenePrediction (\w+-\w+).*/$1/' Amel_predicted_glean3.gff \
+    | liftUp -type=.gff stdout ../../jkStuff/scaffolds.lft warn stdin \
+    >> beeBaseCustomTracks.txt
+    echo 'track name=beeBaseAbinitio description="BeeBase Ab Initio Gene Models" color=150,120,10 grp=genes priority=42 visibility=pack' >> beeBaseCustomTracks.txt
+    sed -e 's/gene_id //' Amel_abinitio.gff \
+    | liftUp -type=.gff stdout ../../jkStuff/scaffolds.lft warn stdin \
+    >> beeBaseCustomTracks.txt
+    cp beeBaseCustomTracks.txt /usr/local/apache/htdocs/angie/
+
+
