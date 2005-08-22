@@ -1135,3 +1135,15 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEID PREDICTIONS FROM IMIM (DONE 7/26/05 angie)
+    ssh hgwdev
+    mkdir /cluster/data/anoGam1/bed/geneid
+    cd /cluster/data/anoGam1/bed/geneid
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/A.gambiae/golden_path_200302/geneidv1.2/$chr.gtf
+    end
+    ldHgGene -gtf -genePredExt anoGam1 geneid *.gtf
+
+
