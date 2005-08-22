@@ -16,7 +16,7 @@ BED = $(DBDIR)/bed
 PSEUDO = $(DBDIR)/bed/pseudo
 BUILD=gs.17/build34
 VALCMD = chr13.sizes ${PSEUDO}/rmsk.bed $(PSEUDO)/chr13mouseSyn.bed $(PSEUDO)/chr13simple.bed $(PSEUDO)/chr13_mrna.psl 
-TESTCMD = $(DBDIR)/chrom.sizes ${PSEUDO}/rmsk.bed.gz $(PSEUDO)/mouseNet.txt $(BED)/simpleRepeat/simpleRepeat.bed $(PSEUDO)/all_mrna.psl 
+TESTCMD = $(DBDIR)/chrom.sizes ${PSEUDO}/rmsk.bed.gz $(PSEUDO)/mouseNet.txt $(PSEUDO)/dogNet.txt $(BED)/simpleRepeat/simpleRepeat.bed $(PSEUDO)/all_mrna.psl 
 #TESTCMD = $(DBDIR)/chrom.sizes mtRmsk mtSyn.bed mtSimple.bed input/test48.psl
 GENES = $(PSEUDO)/refGene.tab $(PSEUDO)/mgcGene.tab $(PSEUDO)/sortedKnownGene.tab
 
