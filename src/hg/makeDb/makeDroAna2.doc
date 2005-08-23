@@ -204,7 +204,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droAna2", "Aug. 2005", "/gbdb/droAna2", "D. ananassae", \
-             "scaffold_0", 1, 57, \
+             "scaffold_12916:2717000-2741384", 1, 57, \
              "D. ananassae", \
              "Drosophila ananassae", "/gbdb/droAna2/html/description.html", \
              0, 0, "Agencourt 1 August 2005");'

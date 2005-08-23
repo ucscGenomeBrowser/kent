@@ -205,7 +205,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droMoj2", "Aug. 2005", "/gbdb/droMoj2", "D. mojavensis", \
-             "scaffold_0", 1, 57, \
+             "scaffold_6500:23838548-23875233", 1, 57, \
              "D. mojavensis", \
              "Drosophila mojavensis", "/gbdb/droMoj2/html/description.html", \
              0, 0, "Agencourt 1 August 2005");'

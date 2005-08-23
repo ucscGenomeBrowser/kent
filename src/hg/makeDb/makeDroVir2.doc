@@ -226,7 +226,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droVir2", "Aug. 2005", "/gbdb/droVir2", "D. virilis", \
-             "scaffold_0", 1, 57, \
+             "scaffold_12963:19375824-19416317", 1, 57, \
              "D. virilis", \
              "Drosophila virilis", "/gbdb/droVir2/html/description.html", \
              0, 0, "Agencourt 1 August 2005");'
