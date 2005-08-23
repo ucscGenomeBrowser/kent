@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.19 2005/06/16 10:14:29 jill Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.20 2005/08/23 23:42:57 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
@@ -18,9 +18,11 @@ int minSizeT = 0;
 int minSizeQ = 0;
 int minChainT = 0;
 int minChainQ = 0;
+int bedPlus = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
+bool hasBin = FALSE;
 char *chainTable = NULL;
 
 void usage()
@@ -42,6 +44,8 @@ errAbort(
   "         after liftOver\n"
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
+  "   -bedPlus=N - File is bed N+ format\n"
+  "   -hasBin - File has bin value (used only with -bedPlus)\n"
   "   -pslT - File is in psl format, map target side only\n"
   "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
   "                  (default %3.2f)\n"
@@ -86,6 +90,11 @@ else if (optionExists("sample"))
 else if (optionExists("pslT"))
     liftOverPsl(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
+else if (optionExists("bedPlus"))
+    liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
+                minSizeT, minSizeQ, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+		chainTable, bedPlus, hasBin, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
@@ -112,6 +121,10 @@ minSizeT = optionInt("minSizeT", minChainT); /* note: we're setting minChainT */
 minSizeQ = optionInt("minSizeQ", minSizeQ);
 minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
+bedPlus = optionInt("bedPlus", bedPlus);
+hasBin = optionExists("hasBin");
+if (hasBin && !bedPlus)
+    usage();
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
     errAbort(liftOverErrHelp());
