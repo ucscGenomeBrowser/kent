@@ -17337,7 +17337,7 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
 #Mapped 10925,  multiply-mapped 382, missed 23266, unmapped 162
     hgLoadBed hg17 gladHumES bed.hg17.data
 
-# PHASTODDS GENESORTER COLUMN (NOT DONE YET Andy)
+# PHASTODDS GENESORTER COLUMN (DONE 7/28/2005 Andy)
     ssh kolossus
     cd /panasas/store/andy
     mkdir phastOdds
@@ -17374,6 +17374,25 @@ _EOF_
        ./runChrom.sh $c;
        addPhastOddsExons $f gtfs/$c.phastOdds.gtf beds/$c.bed
     done
+    cat beds/* | sort -k4,4 -k1,1 -k2,2n -k3,3n > phastOdds.kg.bed
+    cat > phastOdds.sql << "EOF"
+CREATE TABLE phastOdds (
+    bin smallint not null, # Speedup.
+    chrom varchar(255) not null,        # Human chromosome or FPC contig
+    chromStart int unsigned not null,   # Start position in chromosome
+    chromEnd int unsigned not null,     # End position in chromosome
+    name varchar(255) not null, # Name of item
+              #Indices
+    score float not null, # phastOdds score.
+    index(chrom(8),bin),
+    index(name(10))
+);
+EOF
+# <<
+    hgLoadBed -sqlTable=phastOdds.sql hg17 phastOdds phastOdds.kg.bed
+    # Actually I probably don't need that hg17 table.
+    echo create table phastOdds select name, score from hg17.phastOdds | hgsql hgFixed
+    echo create index nameIndex on phastOdds (name(10)) | hgsql hgFixed    
 
 ##########################################################################
 # Illumina SNPs (Heather, July 2005)
