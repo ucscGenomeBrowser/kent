@@ -143,7 +143,7 @@ _EOF_
     # Lift results.
     ssh eieio
     cd /cluster/data/strPur1/RMOut
-    head -n 3 0/0/0/0000.fa.out > header
+    head -n 3 0/0/0/97000.fa.out > header
     find . -name "*.fa.out" -exec tail +4 '{}' ';' > rmsk.out 
     cat header rmsk.out > all.out
     rm rmsk.out header
@@ -486,45 +486,39 @@ _EOF_
 # BLASTZ CI1 (DONE 5/23/2005 Andy)
     ssh eieio
     cd /cluster/data/strPur1/bed
-    mkdir blastz.ci1.2005-05-27
-    cd blastz.ci1.2005-05-27/
-    cat << _EOF_ > DEF
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
-BLASTZ_L=6000
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-
-# TARGET - Sea urchin
-SEQ1_DIR=/iscratch/i/strPur1/strPur1.2bit
-SEQ1_CHUNK=1000000
-SEQ1_LAP=10000
-
-# QUERY - Sea squirt
-SEQ2_DIR=/iscratch/i/ci1/nib/ci1.2bit
-SEQ2_CHUNK=5000000
-SEQ2_LAP=10000
-
-BASE=/cluster/data/strPur1/bed/blastz.ci1.2005-05-27
-
-DEF=\$BASE/DEF
-RAW=\$BASE/raw
-CDBDIR=\$BASE
-SEQ1_LEN=/cluster/bluearc/strPur1/S1.len
-SEQ2_LEN=\$BASE/S2.len
-_EOF_
-    # << this line keeps emacs coloring happy
-    
-    sort -rn +1 /cluster/data/strPur1/chrom.sizes | cut -f1-2 > /panasas/store/strPur1/S1.len
-    cp /cluster/bluearc/strPur1/S1.len .
+    mkdir blastz.ci1.2005-07-14
+    ln -s blastz.ci1.2005-07-14 blastz.ci1
+    cd blastz.ci1/
     twoBitInfo /cluster/data/ci1/ci1.2bit /dev/stdout | sort -rn +1 > S2.len
-    #	establish a screen to control this job
+    cat << "_EOF_" > DEF
+# D. melanogaster vs. T. castaneum
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+BASE=/cluster/data/strPur1/bed/blastz.ci1
+
+# QUERY - Sea urchin
+SEQ2_DIR=/santest/scratch/strPur1/strPur1.2bit
+SEQ2_CHUNK=20000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/strPur1/chrom.sizes
+
+# TARGET - Sea squirt
+SEQ1_DIR=/santest/scratch/ci1/nib
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=$BASE/S2.len
+_EOF_
+#<< Emacs
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
-	blast.run.out 2>&1 &
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
+    doBlastzChainNet.pl DEF -blastzOutRoot \
+        /santest/scratch/bz.strPur1.ci1 >& do.log &
+    screen -d
 
 # HUMAN PROTEINS TBLASTN TRACK (hg17 In Progress 5/27/2005 Andy)
     ssh eieio
@@ -658,3 +652,195 @@ _EOF_
     # back to kolossus
     rm -rf blastOut
 # End tblastn
+
+# REDO REPEATMASKING (DONE 8/3/2005 Andy)
+    # Currently the repeat-masking is too low-coverage.
+    ssh hgwdev
+    /cluster/bluearc/RepeatMasker/util/queryRepeatDatabase.pl -species Deuterostomia -stat
+#Total Sequence Length = 3617796 bp
+    mv RMOut RMOut.bad
+    mv RMRun RMRun.bad
+    mkdir rmsk
+    cd rmsk/
+    mkdir -p /santest/scratch/rmsk/run /santest/scratch/rmsk/out
+    ln -s /santest/scratch/rmsk/run run
+    ln -s /santest/scratch/rmsk/out out
+    cd run/
+    cat << "_EOF_" > rmsk.sh
+#!/bin/bash 
+animal=Deuterostomia
+genome=strPur1
+outloc=`dirname $2`
+input=`basename $1`
+tmp=/scratch/${genome}.$$
+
+mkdir $tmp
+mkdir -p $outloc
+cd $outloc
+pushd $tmp
+cp $1 .
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -spec $animal $input
+popd
+cp $tmp/${input}.out .
+rm -fr $tmp
+_EOF_
+    # << this line makes emacs coloring happy
+    chmod +x rmsk.sh
+    find /panasas/store/strPur1/unmaskedSplits -name "*.fa" > splits.lst
+    cat << "_EOF_" > gsub
+#LOOP
+./rmsk.sh {check in line+ $(path1)} {check out line+ ../out/$(lastDirs1=3)/$(root1).fa.out}
+#ENDLOOP
+_EOF_
+
+    # Tested out OK, run this when cluster is back online.
+    ~/kent/src/parasol/bin/gensub2 splits.lst single gsub spec
+    ssh kk
+    cd /cluster/data/strPur1/rmsk/run
+    para create spec
+    para push
+    para time
+    
+    # Cat and lift.
+    ssh hgwdev
+    cd /cluster/data/strPur1/rmsk/out
+    # Find one with a header. ls -l 0/0/0  
+    head -n 3 0/0/0/97000.fa.out > header
+    find . -name "*.fa.out" -exec tail +4 '{}' ';' > rest
+    cat header rest > all.out
+    rm header rest
+    liftUp rmsk.lifted.out ../unmaskedSplits/splits.lft warn all.out
+    rm all.out
+
+    # Load results... before shot:
+    featureBits -or strPur1 rmsk simpleRepeat
+#90840012 bases of 835421305 (10.874%) in intersection
+    hgLoadOut strPur1 rmsk.lifted.out
+    hgsql strPur1 -e 'rename table rmsk_rmsk to rmsk'
+    hgsql strPur1 -e 'drop index bin       on rmsk; \
+                  drop index genoStart on rmsk; \
+                  drop index genoEnd   on rmsk; \
+                  create index bin       on rmsk (genoName(11), bin); \
+                  create index genoStart on rmsk (genoName(11), genoStart); \
+                  create index genoEnd   on rmsk (genoName(11), genoEnd);' 
+    # So how did we do?
+    featureBits -or strPur1 rmsk simpleRepeat
+#94138492 bases of 835421305 (11.268%) in intersection
+    # Well... that sucks too.
+    # Move stuff off santest.
+    ssh hgwdev
+    cd /cluster/data/strPur1/rmsk
+    rm out run
+    cp -r /santest/scratch/strPur1/rmsk/* .
+    rm -rf /santest/scratch/strPur1/rmsk
+
+# REPEAT SCOUT DENOVO REPEAT FINDER (STILL IN PROGRESS 8/22/2005 Andy)
+    ssh kolossus
+    cd /scratch/andy
+    cp /cluster/data/strPur1/downloads/urchinScaffolds.fa .
+    wget http://repeatscout.bioprojects.org/RepeatScout-1.0.0.tar.gz
+    tar xfz RepeatScout-1.0.0.tar.gz
+    cd RepeatScout-1.0.0
+    make
+    cd ../
+    screen
+    ./RepeatScout-1.0.0/build_lmer_table -l 15 -sequence urchinScaffolds.fa -freq lmers.txt -v >& rscout.1.log
+    # Control+a+d
+    # Also re-niced this process: nice +10
+    # Started about 2:10pm
+    # Finished around 3:15pm.  
+    cat rscout.1.log
+#  Done allocating headptr
+#  Done building headptr
+#  There are 66717762 l-mers
+#  Done sorting headptr
+    ./RepeatScout-1.0.0/RepeatScout-v1 -seq urchinScaffolds.fa -output rscout.out -freqlmers.txt -l 15
+    # THIS DOESN'T RUN
+    # Hahaha.  Dumb cause of problem: -seq should be -sequence.  However, after 
+    # exchanging a ton of e-mail with Neil Jones at UCSD, it's become apparent
+    # that -l shouldn't be specified normally.  1.0.0 needed -l, so Neil 
+    # put 1.0.1 online.  In addition, it's clear that the RepeatScout-v1 program
+    # takes much longer to run than build_lmer_table, so that's becoming a cluster
+    # run now.
+   
+# PILER DENOVO REPEAT FINDING (STALLED 8/4/2005 Andy)
+    ssh hgwdev
+    cd /cluster/data/strPur1
+    mkdir -p piler/src
+    cd piler/src/
+    wget http://www.drive5.com/piler/piler_source.tar.gz
+    wget http://www.drive5.com/muscle/downloads3.52/muscle3.52_src.tar.gz
+    wget http://www.drive5.com/pals/pals_source.tar.gz
+    tar xfz muscle3.52_src.tar.gz
+    tar xfz pals_source.tar.gz
+    tar xfz piler_source.tar.gz
+    mkdir pals piler 
+    mv pals*.gz pals
+    mv piler*.gz piler
+    rm muscle*.gz
+    cd muscle3.52_src/
+    sed 's/pentiumpro/opteron/g' Makefile > Makefile.opteron
+    mv Makefile Makefile.default
+    mv Makefile.opteron Makefile
+    make
+    cp muscle /cluster/bin/x86_64
+    cd ../pals/
+    tar xfz pals_source.tar.gz
+    rm pals_source.tar.gz
+    sed 's/pentiumpro/opteron/g' Makefile > Makefile.opteron
+    mv Makefile Makefile.default
+    mv Makefile.opteron Makefile
+    make
+    cp pals /cluster/bin/x86_64
+    cd ../piler/
+    tar xfz piler_source.tar.gz
+    rm piler_source.tar.gz
+    sed 's/pentiumpro/opteron/g' Makefile > Makefile.opteron
+    mv Makefile Makefile.default
+    mv Makefile.opteron Makefile
+    make
+    cp piler /cluster/bin/x86_64
+    # Split up genome into 20 chunks on SAN.
+    ssh kkstore02
+    cd /cluster/data/strPur1/piler
+    mkdir splits
+    cd splits/
+    faSplit sequence ../../downloads/urchinScaffolds.fa 20 urch_    
+    ssh pk
+    cd /cluster/data/strPur1/piler
+    mkdir -p /san/sanvol1/scratch/strPur1/piler/splits
+    cp splits/* /san/sanvol1/scratch/strPur1/piler/splits
+    rm -rf splits/
+    ln -s /san/sanvol1/scratch/strPur1/piler/splits splits
+    mkdir -p /san/sanvol1/scratch/strPur1/piler/palsSelfOut  
+    ln -s /san/sanvol1/scratch/strPur1/piler/palsSelfOut
+    mkdir -p /san/sanvol1/scratch/strPur1/piler/palsSelfRun
+    ln -s /san/sanvol1/scratch/strPur1/piler/palsSelfRun
+    cd palsSelfRun/
+    ls -1 ../splits/ > fa.lst
+cat > doPalsSelf.sh << "EOF"
+#!/bin/sh
+tmp=/scratch/`basename $2` > /cluster/bin/x86_64/pals -self $1 -out $tmp > cp $tmp $2
+rm $tmp
+EOF
+    chmod +x doPalsSelf.sh 
+    #<<;
+    cat > gsub << "EOF"
+#LOOP
+./doPalsSelf.sh {check in line+ ../splits/$(path1)} {check out line+ ../palsSelfOut/pals_$(root1).gff}
+#ENDLOOP
+EOF
+    # <<;
+    gensub2 fa.lst single gsub spec
+    para create spec
+    para push
+    para time
+#Completed: 19 of 20 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:      12863s     214.39m     3.57h    0.15d  0.000 y
+#IO & Wait Time:                   161s       2.68m     0.04h    0.00d  0.000 y
+#Average job time:                 685s      11.42m     0.19h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1308s      21.80m     0.36h    0.02d
+#Submission to last job:          1356s      22.60m     0.38h    0.02d
+    # The crashing one is a PROBLEM.  Andy needs to e-mail Bob Edgar about this.
