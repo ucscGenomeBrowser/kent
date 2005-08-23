@@ -8249,7 +8249,7 @@ XXX - running 2004-07-01 11:26
     ssh hgwdev
     makeLoChain-load hg17 hg16
 
-# DROPUNDER CHAIN TO HG15 (IN PROGRESS 2005-07-20 Andy)
+# DROPUNDER CHAIN TO HG15 (DONE 2005-07-21 Andy)
     # Split things up
     ssh eieio
     cd /cluster/bluearc
@@ -8326,55 +8326,73 @@ XXX - running 2004-07-01 11:26
     # by far.
 
     # lift results
-    ssh kki
-    cd /cluster/data/hg17/bed/blat.hg15
-    mkdir lift.run
-    cd lift.run/
-    cut -f1 /cluster/data/hg15/chrom.sizes > hg15.lst
-    cut -f1 /cluster/data/hg17/chrom.sizes > hg17.lst
-    cat > lift.sh << "_EOF_"
-#!/bin/bash
-chrom=`basename $1 .psl`
-liftUp -pslQ $1 $2 warn ../raw/chr*_${chrom}.psl
-_EOF_
-    chmod +x lift.sh
-    cat > gsub << "_EOF_"
-#LOOP
-./lift.sh {check out line+ ../psl/$(path1).psl} /santest/scratch/hg15/liftOver/lift/$(path1).lft warn $(path1)
-#ENDLOOP
-_EOF_
-    gensub2 hg15.lst single gsub spec
-    para create spec
-    para push
-    # load on eieio kind of high, plus store5 at 100%... refitting
-    para finished 2>&1 | grep "^./" > done 
-    sets diff spec done newspec
-    mkdir /santest/scratch/hg15/liftOver/psl
-    sed 's/\.\./\/santest\/scratch\/hg15\/liftOver/' newspec > tmp
-    mv tmp newspec
-    ssh kk9
     cd /cluster/data/hg17/bed/blat.hg15/lift.run
-    
-
-#    for chrom in `cut -f1 /cluster/data/hg15/chrom.sizes`; do
-    for chrom in `cat lift.run/notdone.lst`; do
+    for chrom in `cut -f1 /cluster/data/hg15/chrom.sizes`; do
        liftUp -pslQ /cluster/bluearc/hg15/liftOver/psl/${chrom}.psl /cluster/bluearc/hg15/liftOver/lift/${chrom}.lft warn raw/chr*_${chrom}.psl
     done
 
     # Chain
+    # There's been some problems with store5.  
     ssh kk9
-    cd /cluster/data/hg17/bed/blat.hg15
-    makeLoChain-chain hg17 /scratch/hg/gs.18/build35/bothMaskedNibs hg15 /scratch/hg/gs.16/build33/chromTrfMixedNib 2> chain.error.log > chain.log
+    cd /cluster/store12/store5/gs.18/build35/bed/blat.hg15.2005-07-21
+    mkdir chainRun
+    mkdir -p /panasas/store/hg15/chainRaw
+    ln -s /panasas/store/hg15/chainRaw chainRaw
     cd chainRun/
+    ls -1S ../psl/*.psl > in.lst
+    cat > chain.sh << "_EOF_"
+#!/bin/bash
+tmp=/scratch/`basename $4`
+axtChain -psl $1 $2 $3 $tmp
+cp $tmp $4
+rm $tmp  
+_EOF_
+    chmod +x chain.sh
+    cat > gsub << "_EOF_"
+#LOOP
+./chain.sh $(path1) /scratch/hg/gs.18/build35/bothMaskedNibs /scratch/hg/gs.16/build33/chromTrfMixedNib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+_EOF_
+    # <<
+    cd chainRun/
+    gensub2 in.lst single gsub spec
+    para create spec
     para push
+#Completed: 44 of 44 jobs
+#CPU time in finished jobs:       7448s     124.13m     2.07h    0.09d  0.000 y
+#IO & Wait Time:                  9591s     159.85m     2.66h    0.11d  0.000 y
+#Average job time:                 387s       6.45m     0.11h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1906s      31.77m     0.53h    0.02d
+#Submission to last job:          1906s      31.77m     0.53h    0.02d
+    ssh kolossus
+    cd /panasas/store/hg15/chainRaw    
+    chainMergeSort *.chain | chainSplit /scratch/andy/chain stdin
+    cd /scratch/andy
+    mkdir net over
+    cd chain/
+    for chain in *; do
+       c=${chain%.chain}
+       echo $c
+       chainNet $chain /cluster/store12/store5/gs.18/build35/chrom.sizes \
+          /cluster/store12/store5/gs.16/build33/chrom.sizes \
+          ../net/${c}.net /dev/null
+       netChainSubset ../net/${c}.net $chain ../over/${c}.over
+    done
+    cd ../over/
+    cat * >> ../hg17ToHg15.over.chain
+    cd ../
+    cp -r hg17* over/ /cluster/store12/store5/gs.18/build35/bed/blat.hg15.2005-07-21/
+    cd ../
+    rm -rf andy/
+    rm -rf /panasas/store/hg15    
+    cd /cluster/bluearc/hg15/liftOver/psl
+    for psl in *; do
+       gzip $psl
+    done
+    cd ../
 
-    ssh eieio
-    makeLoChain-net hg17 hg16
-    ssh hgwdev
-    makeLoChain-load hg17 hg16
-
-
-
+    
 # Completed: 116281 of 116281 jobs
 # CPU time in finished jobs:   21807388s  363456.46m  6057.61h  252.40d  0.692 y
 # IO & Wait Time:               2319383s   38656.39m   644.27h   26.84d  0.074 y
