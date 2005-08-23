@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.74 2005/08/22 23:28:10 angie Exp $"
+#	"$Id: makeMm6.doc,v 1.75 2005/08/23 00:12:17 aamp Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -5315,7 +5315,7 @@ hgsql mm6 -e 'load data local infile "pepPi.tab" into table mm6.pepPi;'
   pbStamp.tab file and then delete and reload the pbStamp table. 
 
 # Perform preliminary review of Proteome Browser for mm6, then
-# notify QA for formal review.
+  notify QA for formal review.
 
 #####################################################################
 # MAP CONTIGS TRACK (DONE - 2005-04-21 - Hiram)
@@ -6472,8 +6472,8 @@ end
    hgsql mm6 -e 'load data local infile "keggPathway.tab" into table keggPathway'
 
 # Build CGAP pathway tables
-# REBUILD cgapAlias TABLE AFTER REMOVING REPLICATE ROWS (hartera, 2005-07-26)
 
+   cd ..
    ~/src/hg/protein/KGcgap.sh kgMm6B mm6 050415
    hgsql mm6 -e "drop table cgapAlias"
    hgsql mm6 -e "drop table cgapBiocDesc"
@@ -6485,17 +6485,6 @@ end
    hgsql mm6 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql mm6 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
 
-   # REBUILD cgapAlias TABLE. Sort and reload alias tab file to remove
-   # duplicate rows. (hartera, 2005-07-26)
-   cd /cluster/store10/kg/kgMm6B
-   sort -nu cgapAlias.tab > cgapAliasSorted.tab
-   hgsql mm6 -e "drop table cgapAlias"
-   # edit cgapAlias.sql and increase size of alias field to from 40 to
-   # 80 chars as some aliases are being truncated. 
-   # alias varchar(80) NOT NULL default '',
-   hgsql mm6 < ~/kent/src/hg/lib/cgapAlias.sql
-   hgsql mm6 -e 'load data local infile "cgapAliasSorted.tab" \
-          into table cgapAlias'
 
 ######## RE-BUILD GENE SORTER TABLES #######  (DONE - 2005-05-30 - Fan)
 # These are instructions for building the
@@ -7832,9 +7821,9 @@ _EOF_
 #Longest finished job:             244s       4.07m     0.07h    0.00d
 #Submission to last job:           727s      12.12m     0.20h    0.01d
     ssh hgwdev
-    cd /cluster/data/bed/blat.SCDb-07-05-2005
+    cd /cluster/data/mm6/bed/blat.SCDb-07-05-2005
     # See if things check out.
-    find /cluster/bluearc/andy/scdb.psl -type f -exec cat '{}' ';' > sbdb.all.psl
+    find /cluster/bluearc/andy/scdb.psl -type f -exec cat '{}' ';' > scdb.all.psl
     pslReps -singleHit scdb.all.psl scdb.best.psl info.psr
     # All the original names
     grep '>' scdb.fa | sed 's/^>//' | cut -f1 -d' ' | sort | uniq > names.scdb
@@ -7865,7 +7854,14 @@ _EOF_
     hgLoadSeq mm6 /gbdb/mm6/scdb/scdb.fa
 #Warning: load of seq did not go as planned: 37381 record(s), 1 row(s) skipped, 0 warning(s) loading ./seq.tab
     # Oh well. 
-
+    # Update 7/26/2005: I'm going more restrictive on the pslReps.
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blat.SCDb-07-05-2005
+    pslReps -minCover=0.8 -singleHit scdb.all.psl tmp scdb.psr
+    sed 's/SC|\([^|]\+\)|[0-9]\+/\1/' tmp > scdb.psl
+    rm tmp
+    hgLoadPsl mm6 scdb.psl
+    
 ## REBUILD NIA Mouse Gene Index - (DONE - 2005-07-20 Fan)
 #       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
     ssh hgwdev 
