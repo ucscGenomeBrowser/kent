@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.82 2005/08/21 04:23:30 markd Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.83 2005/08/23 23:58:28 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -836,7 +836,7 @@ else
         {
         *retGenome = hGenome(*retDb);
         }
-    else if (*retGenome)
+    else if (*retGenome && !sameWord(*retGenome, "0"))
 	{
 	*retDb = hDefaultDbForGenome(*retGenome);
 	}
