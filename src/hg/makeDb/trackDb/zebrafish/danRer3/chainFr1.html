@@ -25,12 +25,11 @@ location (in thousands) of the match for each matching alignment.</P>
 
 <H2>Methods</H2>
 <P>
-Note that the $organism chrNA and chrUn chromosomes and also the $o_organism 
-chrUn are composed of unordered scaffolds separated by 500 Ns for $organism 
-and 1000 Ns for $o_organism.  By including these chromosomes in the blastz 
-alignment, one risks generating false alignments that bridge scaffolds in these chromosomes that are not, in reality, contiguous. To avoid this situation, 
-the blastz alignments and subsequent chaining were performed on the scaffolds, 
-and the coordinates were then lifted up to the chromosome level. </P>
+Because the $organism chrNA and chrUn chromosomes, as well as $o_organism 
+chrUn, are composed of unordered scaffolds separated by <em>N</em>s, 
+the blastz alignments and subsequent chaining were first performed on the 
+scaffolds, and the coordinates were then lifted up to the chromosome level. 
+This avoided false alignments across the <em>N</em>s.</P>
 <P>
 The resulting alignments were converted into psl format using the lavToPsl 
 program. The axt alignments were fed into axtChain, 
