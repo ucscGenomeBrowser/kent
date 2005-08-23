@@ -46,6 +46,7 @@ struct aceRD
     struct aceRD *next;
     char *readName;
     int bases;
+    struct dnaSeq *seq;
     };
 
 struct ace
