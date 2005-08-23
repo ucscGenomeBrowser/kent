@@ -8943,7 +8943,7 @@ CREATE TABLE mitopred (
     # Googling... can buy a converter for $40... free trial .exe...
 
 
-# CREATING REFFULL (DONE - 2004-08-02 - Hiram)
+# CREATING REFFULL - DBTSS MRNA (DONE - 2004-08-02 - Hiram)
 
     ssh to eieio
     mkdir /cluster/data/hg17/bed/refFull
