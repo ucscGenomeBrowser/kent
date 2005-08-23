@@ -301,8 +301,6 @@ _EOF_
     blat /cluster/data/triCas1/triCas1.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=/panasas/store/triCas1/11.ooc -repMatch=300
 
-
-
 # PRODUCING GENSCAN PREDICTIONS (DONE 7/6/2005 Andy)
     ssh kkstore01
     # Make hard-masked scaffolds and split up for processing:
@@ -376,5 +374,247 @@ _EOF_
 #  11187 Tribolium castaneum
 #     67 Tribolium confusum
 
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 4/23/2005 Andy)
+    ssh hgwdev
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update
+    cd etc/
+    # Edit genbank.conf
+triCas1.genome = /cluster/bluearc/triCas1/triCas1.2bit
+triCas1.mondoTwoBitParts = 1000
+triCas1.lift = no
+triCas1.refseq.mrna.native.load = yes
+triCas1.refseq.mrna.xeno.load = yes
+triCas1.refseq.mrna.xeno.pslReps = -minCover=0.25 -minAli=0.15 -minAli=0.60 -nearTop=0.005
+triCas1.genbank.mrna.xeno.load = yes
+triCas1.genbank.est.native.load = no
+triCas1.genbank.est.xeno.load = no
+triCas1.downloadDir = triCas1
+triCas1.perChromTables = no
 
+    cvs commit -m 'triCas1 added to genbank update.' etc/genbank.conf 
+    # Edit src/align/gbBlat to add /panasas/store/triCas1/11.ooc
+    cvs commit -m 'Sea urchin added' src/align/gbBlat
+    # Install to /cluster/data/genbank:
+    make install-server
+    ssh `fileServer /cluster/data/genbank/`
+    cd /cluster/data/genbank
 
+    # This is an -initial run, mRNA only:
+    nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial triCas1 &
+    tail -f [its logfile]
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad triCas1 &
+    featureBits triCas1 all_mrna
+#13122660 bases of 835421305 (1.571%) in intersection
+    featureBits triCas1 xenoMrna
+    # Clean up:
+    rm -rf work/initial.triCas1
+
+# BLASTZ/CHAIN/NET DM2 (DONE 7/14/05 Andy)
+    ssh kkstore01
+    cd /cluster/data/triCas1/bed
+    mkdir blastz.dm2.2005-07-14
+    ln -s blastz.dm2.2005-07-14 blastz.dm2
+    cd blastz.dm2/
+    cat << "_EOF_" > DEF
+# T. castaneum vs. D. melanogaster
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - T. castaneum
+SEQ1_DIR=/panasas/store/triCas1/triCas1.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/panasas/store/triCas1/chrom.sizes
+
+# QUERY - D. melanogaster
+SEQ2_DIR=/iscratch/i/dm2/nib
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/dm2/chrom.sizes
+
+BASE=/cluster/data/triCas1/bed/blastz.dm2
+_EOF_
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/triCas1Dm2 >& do.log &
+    tail -f do.log
+
+# BLASTZ/CHAIN/NET APIMEL2 (DONE 7/14/05 Andy)
+    ssh kkstore01
+    cd /cluster/data/triCas1/bed
+    mkdir blastz.apiMel2.2005-07-14
+    ln -s blastz.apiMel2.2005-07-14 blastz.apiMel2
+    cd blastz.spiMel2/
+    cat << "_EOF_" > DEF
+# T. castaneum vs. D. melanogaster
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - T. castaneum
+SEQ1_DIR=/panasas/store/triCas1/triCas1.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/panasas/store/triCas1/chrom.sizes
+
+# QUERY - A. mellifer
+SEQ2_DIR=/iscratch/i/apiMel2/nib
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+SEQ2_LEN=/cluster/data/apiMel2/chrom.sizes
+
+BASE=/cluster/data/triCas1/bed/blastz.apiMel2
+_EOF_
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/triCas1ApiMel2 >& do.log &
+    tail -f do.log
+    # GOT PROBLEMS.  Too many alignments.  Netting fails (out of memory):
+#chainPreNet triCas1.apiMel2.all.chain.gz /panasas/store/triCas1/chrom.sizes /cluster/data/apiMel2/chrom.sizes stdout
+#Got 4366 chroms in /panasas/store/triCas1/chrom.sizes, 17 in /cluster/data/apiMel2/chrom.sizes
+#Out of memory needMem - request size 28 bytes
+#
+#memory usage 10211328, utime 0 s/100, stime 0
+#
+#gzip: stdout: Broken pipe
+#Command failed:
+#ssh -x kolossus nice /cluster/data/triCas1/bed/blastz.apiMel2/axtChain/netChains.csh
+    # The pslParts/ subdir has 4.4GB worth of data, which 50-100x more than I was expecting.
+    # I guess I'll try changing the DEF file's SEQ2_LAP to 10000.
+    ssh hgwdev
+    cd /cluster/data/triCas1/bed
+    mkdir blastz.apiMel2.2005-07-18
+    rm blastz.apiMel2
+    ln -s blastz.apiMel2.2005-07-18 blastz.apiMel2
+    cd blastz.apiMel2/
+    cat << "_EOF_" > DEF
+# T. castaneum vs. A. mellifer
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - T. castaneum
+SEQ1_DIR=/panasas/store/triCas1/triCas1.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/panasas/store/triCas1/chrom.sizes
+
+# QUERY - A. mellifer
+SEQ2_DIR=/iscratch/i/apiMel2/nib
+SEQ2_CHUNK=1000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/apiMel2/chrom.sizes
+
+BASE=/cluster/data/triCas1/bed/blastz.apiMel2
+_EOF_
+    # << this line keeps emacs coloring happy
+    screen
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/triCas1ApiMel2 >& do.log &
+    screen -d
+
+# REPEAT REPEATMASKER (IN PROGROSS WAITING FOR CLUSTER 7/27/2005 Andy)
+    # Problems like with sea urchin. Retry with a broader species library
+    ssh hgwdev
+    /cluster/bluearc/RepeatMasker/util/queryRepeatDatabase.pl -stat -species Endopterygota
+#   Total Sequence Length = 1556344 bp
+    cd /cluster/data/triCas1
+    mv rmsk rmsk.bad
+    mkdir rmsk
+    mkdir -p /santest/scratch/triCas1/rmsk/{out,run}
+    ln -s /santest/scratch/triCas1/rmsk/out rmsk/out
+    ln -s /santest/scratch/triCas1/rmsk/run rmsk/run
+    cd rmsk/run/
+    cat << "_EOF_" > rmsk.sh
+#!/bin/bash 
+
+splitDir=${2#../out/}
+splitDir=${splitDir%/*}
+file=`basename $1`
+chunk=${file%.fa}
+
+cd /cluster/data/triCas1/rmsk/out
+mkdir -p $splitDir
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -spec Endopterygota $1
+cp $1.out /cluster/data/triCas1/rmsk/out/$splitDir/$chunk.out
+rm -rf $1.*
+_EOF_
+    # <<;
+    chmod +x rmsk.sh
+    cat << "_EOF_" > gsub
+#LOOP
+./rmsk.sh {check in line+ $(path1)} {check out line+ ../out/$(lastDirs1=1)/$(root1).out}
+#ENDLOOP
+_EOF_
+    find /panasas/store/triCas1/rmskSplits -name '*.fa' > fastas.lst
+    ~/kent/src/parasol/bin/gensub2 fastas.lst single gsub spec
+
+    # **** LEFT HERE ********
+
+    # Tested out OK, run this when cluster is back online.
+    ssh pk
+    cd /cluster/data/triCas1/rmsk/run
+    para create spec
+    para try
+    para push
+    para time
+#Completed: 4626 of 4626 jobs
+#CPU time in finished jobs:    2744778s   45746.31m   762.44h   31.77d  0.087 y
+#IO & Wait Time:                 20146s     335.76m     5.60h    0.23d  0.001 y
+#Average job time:                 598s       9.96m     0.17h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            4904s      81.73m     1.36h    0.06d
+#Submission to last job:         19309s     321.82m     5.36h    0.22d
+    # Changed some stuff around for pk cluster run.   
+ 
+    # Cat and lift.
+    ssh hgwdev
+    cd /cluster/data/strPur1/rmsk/out
+    # Find one with a header. ls -l 0  
+    #head -n 3 0/beet.fa.out > header
+    find . -name "*.fa.out" -exec tail +4 '{}' ';' > rest
+    cat header rest > all.out
+    rm header rest
+    liftUp rmsk.lifted.out ../../rmskSplits/rmsk.lft warn all.out
+    rm all.out
+    
+    featureBits -or triCas1 rmsk simpleRepeat
+#10028249 bases of 150025805 (6.684%) in intersection
+    # Load results
+    hgLoadOut triCas1 rmsk.lifted.out
+    hgsql triCas1 -e 'rename table rmsk_rmsk to rmsk'
+    hgsql triCas1 -e 'drop index bin       on rmsk; \
+                  drop index genoStart on rmsk; \
+                  drop index genoEnd   on rmsk; \
+                  create index bin       on rmsk (genoName(11), bin); \
+                  create index genoStart on rmsk (genoName(11), genoStart); \
+                  create index genoEnd   on rmsk (genoName(11), genoEnd);' 
+
+    # So how did we do?
+    featureBits triCas1 -or rmsk simpleRepeat
+#10456754 bases of 150025805 (6.970%) in intersection
+
+    # Move stuff off santest.
+    ssh hgwdev
+    cd /cluster/data/triCas1/rmsk
+    rm out run
+    cp -r /santest/scratch/triCas1/rmsk/* .
+    rm -rf /santest/scratch/triCas1/rmsk
