@@ -11,7 +11,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.36 2005/08/01 21:19:38 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.37 2005/08/23 18:19:32 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -47,6 +47,7 @@ struct cart *cart;
 static struct optionSpec optionSpecs[] = {
     {"db", OPTION_STRING},
     {"chr", OPTION_STRING},
+    {"chrom", OPTION_STRING},
     {"chromLst", OPTION_STRING},
     {"position", OPTION_STRING},
     {"bedFile", OPTION_STRING},
@@ -82,6 +83,7 @@ verbose(VERBOSE_ALWAYS_ON,
   "options:\n"
   "   -db=<database> - use specified database\n"
   "   -chr=chrN - examine data only on chrN\n"
+  "   -chrom=chrN - same as -chr option above\n"
   "   -position=[chrN:]start-end - examine data in window start-end (1-relative)\n"
   "             (the chrN: is optional)\n"
   "   -chromLst=<file> - file with list of chroms to examine\n"
@@ -351,6 +353,8 @@ optionInit(&argc, argv, optionSpecs);
 
 db = optionVal("db", NULL);
 chr = optionVal("chr", NULL);
+if (NULL == chr)
+    chr = optionVal("chrom", NULL);
 chromLst = optionVal("chromLst", NULL);
 position = optionVal("position", NULL);
 bedFile = optionVal("bedFile", NULL);
