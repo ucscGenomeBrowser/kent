@@ -1340,61 +1340,6 @@ getSeqs.csh $(path1)
     # added code to hgc.c so that the link to the Ensembl Protein
     # is also displayed on the description page.
 
-# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (DONE, 2005-07-31, hartera)
-    ssh eieio
-    cd /cluster/data/genbank
-    # This is a new assembly, edit the etc/genbank.conf file and add:
-# danRer3 (zebrafish)
-danRer3.genome = /iscratch/i/danRer3/nib/chr*.nib
-danRer3.lift = /cluster/data/danRer3/jkStuff/liftAll.lft
-danRer3.downloadDir = danRer3
-danRer3.mgcTables.default = full
-danRer3.mgcTables.mgc = all
-    # these last two lines enable the MGC genes track (ZGC genes for zebrafish)
-    # Default includes native genbank mRNAs and ESTs,
-    # genbank xeno mRNAs but no xenoESTs, native RefSeq mRNAs but
-    # not xeno RefSeq
-    ssh hgwdev
-    cd /cluster/data/genbank
-    cvs commit -m "Added danRer3" etc/genbank.conf
-    # edit ~/kent/src/hg/makeDb/genbank/src/align/gbBlat 
-    # as a fair amount of new sequence was added for danRer3
-    # Change line:  DANRER_OOC=/iscratch/i/danRer3/danRer3_11.ooc
-    # changed from danRer1 ooc file to danRer3 ooc file
-    cvs diff src/align/gbBlat
-    make
-    cvs commit -m "Changed 11.ooc file for danRer to that for danRer3." \
-        src/align/gbBlat
-    # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
-    # danRer genome information
-    # Install to /cluster/data/genbank
-    cd $HOME/kent/src/hg/makeDb/genbank
-    make install-server
-
-    ssh hgwdev
-    cd /cluster/data/genbank
-    # This is an -initial run, all sequences
-    nice bin/gbAlignStep -verbose=1 -continue=run -initial danRer3 &
-    # crashed according to 
-# /cluster/data/genbank/var/build/logs/2005.07.29-21:15:56.danRer3.initalign.log
-    ssh kk
-    cd /panasas/store/genbank/work/initial.danRer3/align
-    para status >p.s
-    tawk '$1=="crash"{print $5}' p.s  | sort -u >h
-    # 6 nodes had failed so these were removed (markd, 2005-07-30)
-    # then need to repush manually with -retries of >4 as it has retried
-    # 4 times already
-    para push -retries=8 
-    para check
-    # then re-run gbAlignStep
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbAlignStep -verbose=1 -continue=finish -initial danRer3 &
-    # checked log and it looks like it ran ok this time
-    # Load results for all sequences:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad danRer3
 
 FOR MGC GENES:
  - wait one day for nightly build to align and load them into the db
@@ -2611,3 +2556,46 @@ for ($i = 0; $i <= $#f && ($found eq "FALSE"); $i++)
     ssh kkstore01
     mkdir -p /cluster/data/danRer3/bed/vegaGene
     cd /cluster/data/danRer3/bed/vegaGene 
+
+# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (DONE, 2005-08-22, markd)
+    # align with revised genbank process
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add danRer3, had to run on pk, due to kk
+    # being down.  Set temporary locations for server files
+
+# danRer3 (zebrafish)
+# Lift file partitions unplaced sequence pseudo-chroms (disabled)
+danRer3.serverGenome = /cluster/data/danRer3/danRer3.2bit
+##danRer3.clusterGenome = /iscratch/i/danRer3/danRer3.2bit
+##danRer3.ooc = /iscratch/i/danRer3/danRer3_11.ooc
+danRer3.clusterGenome = /san/sanvol1/scratch/danRer3/danRer3.2bit
+danRer3.ooc = /san/sanvol1/scratch/danRer3/danRer3_11.ooc
+##danRer3.align.unplacedChroms = chrNA chrUn
+##danRer3.lift = /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft
+danRer3.lift = no
+danRer3.downloadDir = danRer3
+danRer3.mgcTables.default = full
+danRer3.mgcTables.mgc = all
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial danRer3 &
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  danRer3&
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # add danRer3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs 
+    cvs commit
+    make etc-update
