@@ -1,6 +1,8 @@
 # make VERBOSE=-verbose=2 will echo out positions as they convert
 
-test:   enm001 enm006 enr112 enr223
+all:
+
+test:   simpleTest minus enm001 chuckTest chuckBigTest enr223
 
 PROG=liftOver
 
@@ -14,7 +16,7 @@ simpleTest:     mkdirs
                 diff - expected/mouseRegions.bed
 
 minus:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE} \
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
                 input/enr223.S.bed \
                     /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
                     output/enr223.S.good.bed \
@@ -47,16 +49,40 @@ chuckBigTest:	mkdirs
 	cat output/chuckBigTest.{good,bad}.bed | \
                 diff - expected/chuckBigTest.bed
 
+# missing expected file
+m7rat:	mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
+            input/m7rat.bed \
+            /cluster/data/hg16/bed/blastz.rn3/axtChain/subset/chr19.chain \
+                output/m7rat.good.bed output/m7rat.bad.bed
+	${HOME}/bin/${MACHTYPE}/liftOverMerge ${VERBOSE} -mergeGap=2000 \
+                output/m7rat.good.bed output/m7rat.merged.bed
+	cat output/m7rat.merged.bed | \
+                diff - expected/m7rat.bed
+
+# problem with config setting needed to access chain table
+m4mouse:	mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple -chainTable=hg16.chainMm5\
+            input/m4mouse.bed \
+            /cluster/data/hg16/bed/blastz.mm5/axtChain/subset/chr22.chain \
+                output/m4mouse.good.bed output/m4mouse.bad.bed
+	cat output/m4mouse.{good,bad}.bed | \
+                diff - expected/m4mouse.bed
+
+# differs from expected -- it doesn't merge (this function done by
+# liftOverMerge now ?
+mergeTest: enm006
 enm006:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -minMatch=.01 -multiple \
+	${HOME}/bin/${MACHTYPE}/${PROG} ${VERBOSE} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple \
             input/enm006.bed \
             /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chrX.chain \
                 output/enm006.good.bed output/enm006.bad.bed
 	cat output/enm006.{good,bad}.bed | \
                 diff - expected/enm006.bed
 
+# missing expected file
 enr112:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE} \
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
                 input/enr112.bed \
                     /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr2.chain \
                     output/enr112.good.bed \
@@ -64,17 +90,19 @@ enr112:	mkdirs
 	cat output/enr112.{good,bad}.bed | \
                 diff - expected/enr112.bed
 
+orderTest: enr223
 enr223:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE} \
-                input/enr223.bed \
-                    /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE} \
+            input/enr223.bed \
+                /cluster/data/hg16/bed/blastz.mm3/axtChain/subset/chr6.chain \
                     output/enr223.good.bed \
                     output/enr223.bad.bed
 	cat output/enr223.{good,bad}.bed | \
                 diff - expected/enr223.bed
 
+# too slow -- don't use in default test suite
 mm3:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE}\
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
                 /cluster/data/hg16/bed/encodeRegions/encodeRegions.bed \
                     /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
                     output/mm3.all.good.bed \
@@ -82,8 +110,9 @@ mm3:	mkdirs
 	cat output/mm3.all.{good,bad}.bed | \
                 diff - expected/mm3.all.bed
 
+# too slow -- don't use in default test suite
 multiple:	mkdirs
-	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 -multiple ${VERBOSE}\
+	${HOME}/bin/${MACHTYPE}/${PROG} -minMatch=.01 minSizeT=4000 minSizeQ=20000 -multiple ${VERBOSE}\
                 input/mm3.multiple.bed \
                     /cluster/data/hg16/bed/liftOver/hg16Tomm3.chain \
                     output/mm3.multiple.good.bed \
