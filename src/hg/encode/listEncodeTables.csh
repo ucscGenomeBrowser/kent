@@ -7,12 +7,14 @@ set db = $1
 ssh hgwbeta "echo select tableName from trackDb where tableName like \'encode%\' and settings not like \'%composite%\' order by tableName | hgsql -N $db" > tables.txt
 foreach t (`cat tables.txt`)
     set type = `ssh hgwbeta "echo select type from trackDb where tableName=\'$t\' | hgsql -N $db"`
+    set grp = `ssh hgwbeta "echo select grp from trackDb where tableName=\'$t\' | hgsql -N $db"`
     if ( "$type" == "" ) then
         set settings = `ssh hgwbeta "echo select settings from trackDb where tableName=\'$t\' | hgsql -N $db"`
         set composite = `echo $settings | perl -wpe 's/.*subTrack (.*)\\n.*/$1/'`
         set type = `ssh hgwbeta "echo select type from trackDb where tableName=\'$composite\' | hgsql -N $db"`
+        set grp = `ssh hgwbeta "echo select grp from trackDb where tableName=\'$composite\' | hgsql -N $db"`
     endif
-    echo "$t	$type"
+    echo "$t	$grp	$type"
 end
 
 
