@@ -4,6 +4,14 @@ test:   bedPlus3 simpleTest minus enm001 chuckTest chuckBigTest enr223
 
 PROG=liftOver
 
+bin:    mkdirs
+	${HOME}/bin/${MACHTYPE}/${PROG} -hasBin -bedPlus=6\
+            input/bin.bed \
+            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain \
+                output/bin.good.bed output/bin.bad.bed
+	cat output/bin.{good,bad}.bed | \
+                diff - expected/bin.bed
+
 bedPlus3:	mkdirs
 	${HOME}/bin/${MACHTYPE}/${PROG} -bedPlus=3 \
             input/bedPlus.bed \
