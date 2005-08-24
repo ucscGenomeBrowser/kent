@@ -6,12 +6,15 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMask.c,v 1.5 2005/08/03 06:39:21 heather Exp $";
+static char const rcsid[] = "$Id: snpMask.c,v 1.6 2005/08/24 17:27:33 heather Exp $";
 
 #define FLANKSIZE 20
 
 char *database = NULL;
 char *chromName = NULL;
+
+boolean printGenes = FALSE;
+boolean printChrom = TRUE;
 
 // call this something else
 struct snp
@@ -409,6 +412,45 @@ dyStringFree(&dy);
 
 }
 
+void doPrintGenes(char *chromName, struct dnaSeq *seq)
+{
+struct genePred *genes = NULL;
+struct genePred *gene = NULL;
+struct snp *snps = NULL;
+struct snp *snp = NULL;
+int startPos = 0;
+int endPos = 0;
+int exonPos = 0;
+
+genes = readGenes(chromName);
+
+for (gene = genes; gene != NULL; gene = gene->next)
+    {
+    // printf("gene = %s %s:%d-%d\n", gene->name, chromName, gene->txStart, gene->txEnd);
+    snps = readSnpsFromGene(gene, chromName);
+    for (snp = snps; snp != NULL; snp = snp->next)
+        {
+        // for each SNP, figure out flanking start and stop
+        // first figure out which exon contains the snp
+        exonPos = findExonPos(gene, snp->chromStart);
+        // exonPos will return -1 if the position isn't in any exon
+        if (exonPos == -1) continue;
+        // exonPos should also never be 0
+        if (exonPos == 0) continue;
+        // printf("  snp %s at %d\n", snp->name, snp->chromStart);
+        // printf("  exonPos = %d\n", exonPos);
+        startPos = findStartPos(FLANKSIZE, snp->chromStart, gene, exonPos);
+        endPos = findEndPos(FLANKSIZE, snp->chromStart, gene, exonPos);
+        // printf("flank start = %d, flank end = %d\n", startPos, endPos);
+        printExons(snp->name, gene, chromName, startPos, endPos, seq);
+        }
+    snpFreeList(&snps);
+    }
+
+geneFreeList(&genes);
+
+}
+
 void snpMask(char *nibFile, char *outFile)
 /* snpMask - Print a nib file, using IUPAC codes for single base substitutions. */
 {
@@ -416,11 +458,6 @@ struct dnaSeq *seq;
 char *ptr;
 struct snp *snps = NULL;
 struct snp *snp = NULL;
-struct genePred *genes = NULL;
-struct genePred *gene = NULL;
-int startPos = 0;
-int endPos = 0;
-int exonPos = 0;
 
 seq = nibLoadAll(nibFile);
 ptr = seq->dna;
@@ -437,40 +474,16 @@ for (snp = snps; snp != NULL; snp = snp->next)
     // printSnpSeq(snp, seq);
     // }
 
-// UNCOMMENT THIS
-// faWrite(outFile, chromName, seq->dna, seq->size);
+if (printChrom)
+    faWrite(outFile, chromName, seq->dna, seq->size);
 
-// free this list because we'll create a different one
 snpFreeList(&snps);
 
-genes = readGenes(chromName);
+if (printGenes) doPrintGenes(chromName, seq);
 
-for (gene = genes; gene != NULL; gene = gene->next)
-    {
-    // printf("gene = %s %s:%d-%d\n", gene->name, chromName, gene->txStart, gene->txEnd);
-    snps = readSnpsFromGene(gene, chromName);
-    for (snp = snps; snp != NULL; snp = snp->next)
-        {
-        // for each SNP, figure out flanking start and stop
-	// first figure out which exon contains the snp
-	exonPos = findExonPos(gene, snp->chromStart);
-	// exonPos will return -1 if the position isn't in any exon
-	if (exonPos == -1) continue;
-	// exonPos should also never be 0
-	if (exonPos == 0) continue;
-	// printf("  snp %s at %d\n", snp->name, snp->chromStart);
-	// printf("  exonPos = %d\n", exonPos);
-	startPos = findStartPos(FLANKSIZE, snp->chromStart, gene, exonPos);
-	endPos = findEndPos(FLANKSIZE, snp->chromStart, gene, exonPos);
-	// printf("flank start = %d, flank end = %d\n", startPos, endPos);
-	printExons(snp->name, gene, chromName, startPos, endPos, seq);
-        }
-    snpFreeList(&snps);
-    }
-geneFreeList(&genes);
 dnaSeqFree(&seq);  
-}
 
+}
 
 
 int main(int argc, char *argv[])
