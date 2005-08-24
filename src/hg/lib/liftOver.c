@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.25 2005/08/23 23:42:57 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.26 2005/08/24 23:19:02 kate Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -293,11 +293,16 @@ bedFree(&bed);
 return NULL;
 }
 
-int chopLineBin(char *line, char *words[], int maxWord, bool hasBin)
+int chopLineBin(char *line, char *words[], int maxWord, 
+                bool hasBin, bool tabSep)
 /* Chop line by white space, leaving out bin value, if present */
 {
 int i;
-int wordCount = chopByWhite(line, words, maxWord);
+int wordCount;
+if (tabSep)
+    wordCount = chopByChar(line, '\t', words, maxWord);
+else
+    wordCount = chopByWhite(line, words, maxWord);
 if (hasBin)
     {
     wordCount--;
@@ -309,11 +314,16 @@ if (wordCount <= 0)
 return wordCount;
 }
 
-int lineFileChopBin(struct lineFile *lf, char *words[], int maxWord, bool hasBin)
+int lineFileChopBin(struct lineFile *lf, char *words[], int maxWord, 
+                        bool hasBin, bool tabSep)
 /* Return next non-blank line that doesn't start with '#' chopped into words,
    leaving out the bin value, if present. */
 {
-int wordCount = lineFileChopNext(lf, words, maxWord);
+int wordCount;
+if (tabSep)
+    wordCount = lineFileChopCharNext(lf, '\t', words, maxWord);
+else
+    wordCount = lineFileChopNext(lf, words, maxWord);
 if (hasBin)
     {
     int i;
@@ -327,11 +337,11 @@ return wordCount;
 }
 
 static int bedOverSmall(struct lineFile *lf, int fieldCount, 
-                        struct hash *chainHash, double minMatch, 
-                        int minSizeT, int minSizeQ, 
-                        int minChainT, int minChainQ, 
+                        struct hash *chainHash, double minMatch, int minSizeT, 
+                        int minSizeQ, int minChainT, int minChainQ, 
 			FILE *mapped, FILE *unmapped, bool multiple, 
-                        char *chainTable, int bedPlus, bool hasBin, int *errCt)
+                        char *chainTable, int bedPlus, bool hasBin, 
+                        bool tabSep, int *errCt)
 /* Do a bed without a block-list.
  * NOTE: it would be preferable to have all of the lift
  * functions work at the line level, rather than the file level.
@@ -360,7 +370,8 @@ if (chainTable)
     db = chainTable;
     chopSuffix(chainTable);
     }
-while ((wordCount = lineFileChopBin(lf, words, ArraySize(words), hasBin)) != 0)
+while ((wordCount = 
+            lineFileChopBin(lf, words, ArraySize(words), hasBin, tabSep)) != 0)
     {
     FILE *f = mapped;
     chrom = words[0];
@@ -937,7 +948,7 @@ return error;
 static int bedOverBig(struct lineFile *lf, int refCount, 
                     struct hash *chainHash, double minMatch, double minBlocks,
                     bool fudgeThick, FILE *mapped, FILE *unmapped, int bedPlus,
-                    bool hasBin, int *errCt)
+                    bool hasBin, bool tabSep, int *errCt)
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
@@ -950,7 +961,7 @@ int i;
 while (lineFileNextReal(lf, &line))
     {
     struct bed *bed;
-    wordCount = chopLineBin(line, words, ArraySize(words), hasBin);
+    wordCount = chopLineBin(line, words, ArraySize(words), hasBin, tabSep);
     if (refCount != wordCount)
 	lineFileExpectWords(lf, refCount, wordCount);
     if (wordCount == bedPlus)
@@ -988,38 +999,43 @@ if (errCt)
 return ct;
 }
 
-int liftOverBedPlus(char *fileName, struct hash *chainHash, 
-                        double minMatch,  double minBlocks, 
-                        int minSizeT, int minSizeQ,
-                        int minChainT, int minChainQ,
-                        bool fudgeThick, FILE *f, FILE *unmapped, bool multiple,
-                        char *chainTable, int bedPlus, bool hasBin, int *errCt)
+int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,  
+                    double minBlocks, int minSizeT, int minSizeQ, int minChainT,
+                    int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
+                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool tabSep, int *errCt)
 /* Lift bed N+ file.
  * Return the number of records successfully converted */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
+int bedFieldCount = bedPlus;
 char *line;
-char *words[16];
+char *words[32];
 int ct = 0;
 
 if (lineFileNextReal(lf, &line))
     {
     line = cloneString(line);
-    wordCount = chopLine(line, words);
+    if (tabSep)
+        wordCount = chopByChar(line, '\t', words, ArraySize(words));
+    else
+        wordCount = chopLine(line, words);
     if (hasBin)
         wordCount--;
     lineFileReuse(lf);
     freez(&line);
     if (wordCount < 3)
 	 errAbort("Data format error: expecting at least 3 fields in BED file (%s)", fileName);
-    if (wordCount <= 10)
+    if (bedFieldCount == 0)
+        bedFieldCount = wordCount;
+    if (bedFieldCount <= 10)
 	 ct = bedOverSmall(lf, wordCount, chainHash, minMatch, 
-                        minSizeT, minSizeQ, minChainT, minChainQ, f, 
-                        unmapped, multiple, chainTable, bedPlus, hasBin, errCt);
+                        minSizeT, minSizeQ, minChainT, minChainQ, f, unmapped, 
+                        multiple, chainTable, bedPlus, hasBin, tabSep, errCt);
     else
 	 ct = bedOverBig(lf, wordCount, chainHash, minMatch, minBlocks, 
-                            fudgeThick, f, unmapped, bedPlus, hasBin, errCt);
+                        fudgeThick, f, unmapped, bedPlus, hasBin, tabSep, errCt);
     }
 lineFileClose(&lf);
 return ct;
@@ -1037,7 +1053,7 @@ int liftOverBed(char *fileName, struct hash *chainHash,
 return liftOverBedPlus(fileName, chainHash, minMatch, minBlocks,
                         minSizeT, minSizeQ, minChainT, minChainQ,
                         fudgeThick, f, unmapped, multiple, chainTable,
-                        0, FALSE, errCt);
+                        0, FALSE, FALSE, errCt);
 }
 
 #define LIFTOVER_FILE_PREFIX    "liftOver"
@@ -1052,7 +1068,7 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-char *words[16];
+char *words[32];
 int wordCount;
 int ct = 0;
 struct tempName bedTn, mappedBedTn, unmappedBedTn;
