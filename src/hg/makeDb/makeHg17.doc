@@ -17482,3 +17482,24 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
     # for these.
     ldHgGene -gtf -genePredExt hg17 nscanGene  NCBI35_NSCAN_4-11-2005/chr_gtf/chr*.gtf
     ldHgGene -gtf -genePredExt hg17 nscanEstGene NCBI35_NSCAN_EST_4-16-2005/chr_gtf/chr*.gtf
+
+# UPDATE WGRNA TRACK (DONE, 2005-08-24, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg17/bed
+
+  mkdir wgRna-2005-08-24
+  cd wgRna-2005-08-24
+
+# Received the data file, wgtrack_aug2005.txt, from Michel Weber's email 
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg17/bed/wgRna-2005-08-24.
+
+  cut -f 2-10 wgtrack_aug2005.txt >wgRna.tab
+  vi wgRna.tab
+  
+# edit wgRna.tab to take out the first line of data field labels.
+
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# Compared to 7/5 data, one record updated, one record dropped, one record added, out of 741 records.
