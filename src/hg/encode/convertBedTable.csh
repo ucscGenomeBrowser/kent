@@ -49,7 +49,7 @@ else
 endif
 
 # convert data coordinates
-echo ~/bin/i386/liftOver $table.txt $opts -tab -bedPlus=$fields $chain $table.tab $table.unmapped
+~/bin/i386/liftOver $table.txt $opts -tab -bedPlus=$fields $chain $table.tab $table.unmapped
 if ($status != 0) then
     echo "Liftover error: converting $table.txt $opts -bedPlus=$fields"
     exit 1
