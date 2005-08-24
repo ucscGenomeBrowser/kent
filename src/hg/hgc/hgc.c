@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.934 2005/08/19 21:30:09 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.935 2005/08/24 21:33:32 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17077,7 +17077,7 @@ else if (startsWith("flyreg", track))
     doFlyreg(tdb, item);
     }
 /* ENCODE tracks */
-else if (startsWith("encodeGencodeIntron", track))
+else if (sameWord("encodeGencodeIntron", track))
     {
     doGencodeIntron(tdb, item);
     }
