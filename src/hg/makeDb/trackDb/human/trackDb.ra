@@ -4847,7 +4847,7 @@ type bed 4 .
     track encodeGencodeIntergenicProximal
     subTrack encodeGencodeRegions
     shortLabel Intergenic Prox
-    longLabel Gencode Integenic Proximal Regions
+    longLabel Gencode Intergenic Proximal Regions
     priority 3
 
     track encodeGencodeIntergenicDistal
@@ -4957,7 +4957,7 @@ type bed 4 .
     track encodeYaleAffyNB4RARNATarsIntergenicDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale Ig Dst NB4 RA
-    longLabel Yale Intergenic Distal NB4 Retinoic Transfrags
+    longLabel Yale Intergenic Distal NB4 Retinoic TARs
     subGroups region=intergenicDistal celltype=nb4 source=yale
     priority 7
     color 130,0,125
@@ -4965,7 +4965,7 @@ type bed 4 .
     track encodeYaleAffyNB4TPARNATarsIntergenicDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale Ig Dst NB4 TPA
-    longLabel Yale Intergenic Distal TPA-Treated NB4 Transfrags
+    longLabel Yale Intergenic Distal TPA-Treated NB4 TARs
     subGroups region=intergenicDistal celltype=nb4 source=yale
     priority 8
     color 155,0,100
@@ -4973,7 +4973,7 @@ type bed 4 .
     track encodeYaleAffyNB4UntrRNATarsIntergenicDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale Ig Dst NB4 Un
-    longLabel Yale Intergenic Distal Untreated NB4 Transfrags
+    longLabel Yale Intergenic Distal Untreated NB4 TARs
     subGroups region=intergenicDistal celltype=nb4 source=yale
     priority 9
     color 180,0,75
@@ -4981,7 +4981,7 @@ type bed 4 .
     track encodeYaleAffyNeutRNATarsAllIntergenicDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale Ig Dst Neu
-    longLabel Yale Intergenic Distal Neutrophil Transfrags
+    longLabel Yale Intergenic Distal Neutrophil TARs
     subGroups region=intergenicDistal celltype=neut source=yale
     priority 10
     color 205,0,50
@@ -4989,7 +4989,7 @@ type bed 4 .
     track encodeYaleAffyPlacRNATarsIntergenicDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale Ig Dst Plac
-    longLabel Yale Intergenic Distal Placental Transfrags
+    longLabel Yale Intergenic Distal Placental TARs
     subGroups region=intergenicDistal celltype=plac source=yale
     priority 11
     color 230,0,25
@@ -5167,7 +5167,7 @@ type bed 4 .
     track encodeYaleAffyPlacRNATarsIntronsDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale In Dst Plac 
-    longLabel Yale Intergenic Distal Placental TARs
+    longLabel Yale Intronic Distal Placental TARs
     subGroups region=intronicDistal celltype=plac source=yale
     priority 33
     color 0,255,255
