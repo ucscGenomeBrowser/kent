@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.76 2005/08/24 15:01:34 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.77 2005/08/24 15:35:56 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8301,7 +8301,12 @@ cut -f 1,3-11 >ensGeneNew.tab
     mkdir -p /cluster/store11/superfamily/050817
     ln -s /cluster/store11/superfamily/050817 /cluster/data/superfamily/050817
     cd /cluster/data/superfamily/050817
-# ftp over the following two files:
+
+# add the following line to ~/.netrc
+
+    machine supfam.mrc-lmb.cam.ac.uk login license password XXXXX
+
+# ftp over to supfam.mrc-lmb.cam.ac.uk and get the following two files:
 
     supfam_14-Aug-2005.sql.gz
     ass_14-Aug-2005.tab.gz
