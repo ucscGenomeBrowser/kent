@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.72 2005/06/02 21:38:46 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.73 2005/08/24 18:32:29 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2543,11 +2543,12 @@ for(i=0;i<=l;i++)
 safef(s, l+1, "%s", ss);
 }
 
+#define BLSIZE 4096  /* size of strings for processing big lists of tables and files */
 
 void doShowSizes()
 /* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
 {
-char tbl[1024] = "";
+char tbl[BLSIZE] = "";
 char  db[1024] = "";
 unsigned long size = 0;
 long long totalsize = 0;
@@ -2564,14 +2565,14 @@ char dbsSpace[1024];
 char dbsVal[1024];
 char d;
 
-char tempComma[1024];
-char tempSpace[1024];
-char tempVal[1024];
+char tempComma[BLSIZE];
+char tempSpace[BLSIZE];
+char tempVal[BLSIZE];
 char c;
 
-char gComma[1024];
-char gSpace[1024];
-char gVal[1024];
+char gComma[BLSIZE];
+char gSpace[BLSIZE];
+char gVal[BLSIZE];
 char gc;
 char cgiPath[1024];
 char pathName[1024];
