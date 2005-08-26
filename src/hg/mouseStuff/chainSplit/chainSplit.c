@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSplit.c,v 1.6 2005/08/18 07:42:36 baertsch Exp $";
+static char const rcsid[] = "$Id: chainSplit.c,v 1.7 2005/08/26 20:58:55 baertsch Exp $";
 
 boolean splitOnQ = FALSE;
 int lump = 0;
@@ -62,7 +62,7 @@ char tpath[512];
 FILE *meta ;
 bool metaOpen = TRUE;
 makeDir(outDir);
-sprintf(tpath, "%s/meta.tmp", outDir);
+safef(tpath, sizeof(tpath), "%s/meta.tmp", outDir);
 meta = mustOpen(tpath,"w");
 
 for (inIx = 0; inIx < inCount; ++inIx)
@@ -79,11 +79,11 @@ for (inIx = 0; inIx < inCount; ++inIx)
 	if ((f = hashFindVal(hash, name)) == NULL)
 	    {
 	    char path[512], cmd[512];
-	    sprintf(path, "%s/%s.chain", outDir, name);
+	    safef(path, sizeof(path),"%s/%s.chain", outDir, name);
             if (metaOpen)
                 fclose(meta);
             metaOpen = FALSE;
-	    sprintf(cmd, "cat %s | sort -u > %s", tpath, path);
+	    safef(cmd,sizeof(cmd), "cat %s | sort -u > %s", tpath, path);
             system(cmd);
 	    f = mustOpen(path, "a");
 	    hashAdd(hash, name, f);

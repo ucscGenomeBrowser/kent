@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netSplit.c,v 1.4 2005/08/18 07:46:35 baertsch Exp $";
+static char const rcsid[] = "$Id: netSplit.c,v 1.5 2005/08/26 21:02:12 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,18 +28,18 @@ struct lineFile *lf = lineFileOpen(inNet, TRUE);
 FILE *f, *meta ;
 struct chainNet *net;
 bool metaOpen = TRUE;
-sprintf(tpath, "%s/meta.tmp", outDir);
+safef(tpath, sizeof(tpath), "%s/meta.tmp", outDir);
 
 makeDir(outDir);
 meta = mustOpen(tpath,"w");
 lineFileSetMetaDataOutput(lf, meta);
 while ((net = chainNetRead(lf)) != NULL)
     {
-    sprintf(fileName, "%s/%s.net", outDir, net->name);
+    safef(fileName, sizeof(fileName), "%s/%s.net", outDir, net->name);
     if (metaOpen)
         fclose(meta);
     metaOpen = FALSE;
-    sprintf(cmd, "cat %s | sort -u > %s", tpath, fileName);
+    safef(cmd,sizeof(cmd), "cat %s | sort -u > %s", tpath, fileName);
     system(cmd);
     f = mustOpen(fileName, "a");
     printf("Writing %s\n", fileName);
