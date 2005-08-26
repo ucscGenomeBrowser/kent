@@ -44,8 +44,8 @@ install: install-bin install-etc
 
 install-bin: check-prefix
 	${MKDIR} ${PREFIX}
-	rsync -a bin ${PREFIX}
-	rsync -a lib ${PREFIX}
+	rsync -r bin ${PREFIX}
+	rsync -r lib ${PREFIX}
 
 install-etc: check-prefix
 	@echo checking if etc/ is committed
