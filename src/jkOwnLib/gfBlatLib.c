@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.12 2005/08/26 18:32:49 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.13 2005/08/26 18:35:44 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1521,7 +1521,7 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     verbose(2, " alignments: %d before stitching,", slCount(bun->ffList));
     ssStitch(bun, ffCdna, minScore, ssAliCount);
-    verbose(2, " alignments: %d after,", slCount(bun->ffList));
+    verbose(2, " alignments: %d after\n", slCount(bun->ffList));
     if (!fastMap && !band)
 	refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
@@ -1584,7 +1584,7 @@ for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     verbose(2, " alignments: %d before stitching,", slCount(bun->ffList));
     ssStitch(bun, ffCdna, minScore, ssAliCount);
-    verbose(2, " alignments: %d after,", slCount(bun->ffList));
+    verbose(2, " alignments: %d after\n", slCount(bun->ffList));
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, qIsRc, tIsRc, stringency, minScore, out);
     }
