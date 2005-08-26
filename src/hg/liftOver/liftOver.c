@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.20 2005/08/23 23:42:57 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.21 2005/08/26 16:34:28 kate Exp $";
 
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
@@ -23,6 +23,7 @@ bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
 bool hasBin = FALSE;
+bool tabSep = FALSE;
 char *chainTable = NULL;
 
 void usage()
@@ -46,6 +47,7 @@ errAbort(
   "   -sample - File is in sample format\n"
   "   -bedPlus=N - File is bed N+ format\n"
   "   -hasBin - File has bin value (used only with -bedPlus)\n"
+  "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
   "   -pslT - File is in psl format, map target side only\n"
   "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
   "                  (default %3.2f)\n"
@@ -94,7 +96,7 @@ else if (optionExists("bedPlus"))
     liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
                 minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
-		chainTable, bedPlus, hasBin, &errCt);
+		chainTable, bedPlus, hasBin, tabSep, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
@@ -123,6 +125,7 @@ minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
 bedPlus = optionInt("bedPlus", bedPlus);
 hasBin = optionExists("hasBin");
+tabSep = optionExists("tabSep");
 if (hasBin && !bedPlus)
     usage();
 chainTable = optionVal("chainTable", chainTable);

@@ -21,12 +21,11 @@ int liftOverBed(char *fileName, struct hash *chainHash,
 /* Open up file, decide what type of bed it is, and lift it. 
  * Return the number of records successfully converted */
 
-int liftOverBedPlus(char *fileName, struct hash *chainHash, 
-                        double minMatch,  double minBlocks, 
-                        int minSizeT, int minSizeQ,
-                        int minChainT, int minChainQ,
-                        bool fudgeThick, FILE *f, FILE *unmapped, bool multiple,
-                        char *chainTable, int bedPlus, bool hasBin, int *errCt);
+int liftOverBedPlus(char *fileName, struct hash *chainHash, double minMatch,  
+                    double minBlocks, int minSizeT, int minSizeQ, int minChainT,
+                    int minChainQ, bool fudgeThick, FILE *f, FILE *unmapped, 
+                    bool multiple, char *chainTable, int bedPlus, bool hasBin, 
+                    bool tabSep, int *errCt);
 /* Lift bed with N+ (where n=bedPlus param) format.
  * Return the number of records successfully converted */
 
