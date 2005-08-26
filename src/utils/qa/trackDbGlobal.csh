@@ -59,7 +59,7 @@ set today=`date +%Y-%m-%d`
 set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
 mkdir -p $dirPath/$today
-set summaryFile=$dirPath/$today/$today.trackDb.html
+set summaryFile=$dirPath/$today/index.html
 set summaryUrl=$urlPath/$today/$today.trackDb.html
 rm -f $summaryFile
 echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLE></HEAD><BODY>\n<PRE> \
@@ -69,17 +69,16 @@ echo "db      diffs"
 echo "-------------"
 foreach db ( $dbs )
   set todaysPath="$dirPath/$today"
-  set summaryOut="$db.$machine.trackDbAll"
-  set htmlOut="$db.$machine.htmlOut"
-  set outfile="$todaysPath/$summaryOut"
-  set htmlfile="$todaysPath/$htmlOut"
+  set dbSummaryOut="$db.$machine.trackDbAll"
+  set dbHtmlOut="$db.$machine.htmlOut"
+  set outfile="$todaysPath/$dbSummaryOut"
+  set htmlfile="$todaysPath/$dbHtmlOut"
   compareTrackDbAll.csh $db hgwbeta $machine $mode >& $outfile
   if ( $status ) then
     echo "$db err" | gawk '{printf "%7s %3s", $1, $2}'
     echo 
-    echo '<A HREF ="'$summaryOut'">'$db'</A> error \n\n' \
+    echo '<A HREF ="'$dbSummaryOut'">'$db'</A> error \n\n' \
         >> $summaryFile
-    # echo "${db}: error detected from compareTrackDbAll.csh"  >> $summaryFile
   else
     set diffs=`cat $outfile | egrep "Diff|The diff" | wc -l` 
     echo "$db $diffs" | gawk '{printf "%7s %2d", $1, $2}'
@@ -88,11 +87,16 @@ foreach db ( $dbs )
       echo "$db number of diffs:" >> $summaryFile
       # rm -f $outfile
     else
-      echo '<A HREF ="'$summaryOut'">'$db'</A> number of diffs ' \
-       '\n<A HREF ="'$htmlOut'">html</A> field' >> $summaryFile
+      echo '<A HREF ="'$dbSummaryOut'">'$db'</A> number of diffs:' \
+        >> $summaryFile
+      tail $outfile | grep "Differences exist in html field" > /dev/null
+      if (! $status ) then
+        echo '<A HREF ="'$dbHtmlOut'">html</A> field' >> $summaryFile
+      endif
     endif
     echo "    $diffs\n<P>" >> $summaryFile
   endif
+  # get output again for html field for display purposes
   compareTrackDbFast.csh hgwbeta $machine $db html >& $htmlfile
 end
 

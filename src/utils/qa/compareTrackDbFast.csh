@@ -126,19 +126,24 @@ else
     else
       set pubMySqlFlag=1
       mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
-        -e 'SELECT '$field' FROM trackDb'  $db > $mach.$db.$table
+        -e "SELECT $field FROM trackDb"  $db > $mach.$db.$table
     endif
   end
 endif
+
+# DO NOT CHANGE this output, unless you want to change all of the following, too:
+# compareTrackDbs.csh
+# compareTrackDbAll.csh
+# trackDbGlobal.csh
   
 echo
 echo "---------------------------------------------------------------"
 echo 
+# if the line begins with a digit, substitute a newline at the beginning
+# | perl -pw -e "s/^(\d)/\nx/"
 diff $machine1.$db.$table $machine2.$db.$table | sed -e "/^[0123456789]/s/^/\n/" >& $db.temp
-   # if the line begins with a digit, substitute a newline at the beginning
-   # | perl -pw -e "s/^(\d)/\nx/"
 if ( $status ) then
-  echo "\n$db.$table.$field : Differences between $machine1 and $machine2 \n"
+  echo "\n$db.$table.$field : Differences exist between $machine1 and $machine2 \n"
   if ( $pubMySqlFlag == 1 ) then
     echo "(RR fields taken from public MySql server, not individual machine)"
   endif

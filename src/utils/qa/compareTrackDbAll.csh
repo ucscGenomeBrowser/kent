@@ -84,11 +84,15 @@ endif
 
 foreach field ( $fields )
   if ( $mode2 == "fast" || $field == "settings" ) then
+    # echo "\nmode2 = $mode2"
+    # echo "field  = $field"
     compareTrackDbFast.csh $machine1 $machine2 $db $field
     if ( $status ) then
       exit 1
     endif
   else
+    # echo "\nmode2 = $mode2"
+    # echo "field  = $field"
     compareTrackDbs.csh $machine1 $machine2 $db $field
     if ( $status ) then
       exit 1
@@ -96,17 +100,29 @@ foreach field ( $fields )
   endif
 end
 
-echo "----------------------------------------------------"
+echo
+echo "---------------------------------------------------------------"
 set field="html"
 if ( $mode == "terse" ) then
-  set modeDiff=`compareTrackDbFast.csh $machine1 $machine2 $db $field | grep "difference"`
-  echo $modeDiff | grep "are found" > /dev/null 
-  if (! $status ) then
-    echo "\n$db.$table.$field : Differences exist between $machine1 and $machine2 \n"
+  # expecting one of these two types of output from compareTrackDbFast.csh:
+  # hg17.trackDb.html : Differences exist between hgw1 and hgwbeta
+  # hg17.trackDb.html : No differences between hgw1 and hgw2
+
+  set diffLine=`compareTrackDbFast.csh $machine1 $machine2 $db $field | grep -i differences`
+  echo $diffLine | grep "exist between $machine1" > /dev/null 
+  if ( $status ) then  # errStatus of 1 says there are no diffs
+
+  # DO NOT CHANGE this output, unless you want to change trackDbGlobal parsing, too.
+    echo
+    echo "  No differences in $field field"
+    echo
   else
-    echo "\n$db.$table.$field : No differences between $machine1 and $machine2 \n"
+    echo
+    echo "  Differences exist in $field field"
+    echo
   endif
 else
+  # mode is verbose: spew results to stdout 
   echo
   compareTrackDbFast.csh $machine1 $machine2 $db $field 
 endif

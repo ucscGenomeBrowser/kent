@@ -103,13 +103,24 @@ if ($field != "html" && $field != "settings") then
   sort $machine1.$db.$table > $machine1.$db.$table$sort 
   sort $machine2.$db.$table > $machine2.$db.$table$sort 
 endif
-diff $machine1.$db.$table$sort $machine2.$db.$table$sort 
+
+# DO NOT CHANGE this output, unless you want to change all of the following, too:
+# compareTrackDbFast.csh
+# compareTrackDbAll.csh
+# trackDbGlobal.csh
+
+echo
+echo "---------------------------------------------------------------"
+echo 
+# if the line begins with a digit, substitute a newline at the beginning
+# | perl -pw -e "s/^(\d)/\nx/"
+diff $machine1.$db.$table$sort $machine2.$db.$table$sort | sed -e "/^[0123456789]/s/^/\n/" >& $db.temp
 if ( $status ) then
-  echo "\nThe differences above are found in $table.$field"
-  echo "between $machine1 and $machine2\n"
-else
-  echo "\n  No differences in $db.$table.$field \n  between $machine1 and $machine2 "
+  echo "\n$db.$table.$field : Differences exist between $machine1 and $machine2 \n"
+  cat $db.temp
   echo
+else
+  echo "\n$db.$table.$field : No differences between $machine1 and $machine2 \n"
 endif
 
 # clean up
