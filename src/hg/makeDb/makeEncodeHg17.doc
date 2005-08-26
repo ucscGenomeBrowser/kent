@@ -1,0 +1,453 @@
+#!/bin/csh -f
+exit
+
+# create work area
+mkdir /cluster/data/encode/convertHg17
+cd  /cluster/data/encode/convertHg17
+ln -s /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain hg16ToHg17.chain
+
+# Inventory ENCODE tables on hg16 (hgwbeta)
+
+ssh hgwbeta "echo select tableName from trackDb where tableName like \'encode%\' and settings not like \'%composite%\' order by tableName | hgsql hg16" > tables.txt
+wc -l tables.txt
+    #     350 tables.txt
+
+set encodeBin = /cluster/data/encode/bin/scripts
+csh $encodeBin/listEncodeTables.csh hg16 > tableTypes.txt
+grep bed tableTypes.txt > tables.bed.txt
+
+##########################################################################
+# GIS PET RNA  (2005-08-23 kate)
+
+    cd  /cluster/data/encode/convertHg17
+
+    # use mysqldump to generate .sql w/ schema, and .txt with data
+    set t = encodeGisRnaPetHCT116
+    $encodeBin/dumpTable.csh hg16 $t
+    wc -l $t.txt
+        # 112782 encodeGisRnaPetHCT116.txt
+
+    # create table
+    hgsql hg17 < $t.sql
+
+    # convert data coordinates
+    ~/bin/i386/liftOver $t.txt -hasBin -bedPlus=12 \
+            hg16ToHg17.chain $t.tab $t.unmapped
+    wc -l $t.tab $t.unmapped
+         # 112701 encodeGisRnaPetHCT116.tab
+         #    162 encodeGisRnaPetHCT116.unmapped
+
+    # load into database
+    echo "LOAD DATA local INFILE '$t.tab' INTO TABLE $t" | hgsql hg17
+    hgsql hg17 -N -s -e "SELECT COUNT(*) FROM $t"
+        # 112701
+    checkTableCoords hg17 $t
+
+    # Now try scripted version
+    csh $encodeBin/convertBedTable.csh hg16 hg17 encodeGisRnaPetMCF7 12
+    # encodeGisRnaPetMCF7     hg16 104304   hg17 104187
+
+##########################################################################
+# KNOWN+PRED RNA (2005-08-23 kate)
+
+    cd  /cluster/data/encode/convertHg17
+    grep encodeRna tables.bed.txt
+        # encodeRna       encodeGenes     bed 6 +
+
+    $encodeBin/convertBedTable.csh hg16 hg17 encodeRna 6
+    # Segmentation violation -- line too long for liftOver ??
+
+##########################################################################
+# TBA23 Evofold (2005-08-23 kate)
+
+    cd  /cluster/data/encode/convertHg17
+    csh $encodeBin/convertBedTable.csh hg16 hg17 encode_tba23EvoFold 6
+            # 739 encode_tba23EvoFold.txt
+        # Reading liftover chains
+        # Mapping coordinates
+            # 739 encode_tba23EvoFold.tab
+              # 0 encode_tba23EvoFold.unmapped
+            # 739 total
+        # encode_tba23EvoFold     hg16 739   hg17 739
+
+
+##########################################################################
+# GENCODE Sanger Havana annotations  (2005-08-18 kate)
+    # Used latest (6/7/05) data submission, which was submitted
+    #   in hg17 coords and lifted to hg16.  This was described in makeEncodeHg16.doc
+    ssh hgwdev
+    cd /cluster/data/encode/Gencode
+    cd 2005-06-07
+
+    # converting to genePred before lifting to create gene track
+    #  due to problems in liftOver -gff found by Mark D.
+    # Exclude non-Vega sources as per France Denoued at IMIM 
+    ldHgGene -gtf hg17 encodeGencodeGene gencode.vega.gtf
+        # 2888 gene predictions
+    checkTableCoords hg17 encodeGencodeGene
+
+    grep intron gencode.gtf | wc -l
+        # 15814
+    grep -v not_tested gencode.gtf | sed -e 's/-intron/-/g' | \
+        ldGencodeIntron hg17 encodeGencodeIntron stdin
+            # 469 introns
+
+    # load gene class table 
+    hgsql hg17 < ~/kent/src/hg/lib/gencodeGeneClass.sql
+    echo "LOAD DATA LOCAL INFILE 'gencodeGeneClass.tab' into table gencodeGeneClass" | hgsql hg17
+    wc -l gencodeGeneClass.tab
+        #    2888 gencodeGeneClass.tab
+
+
+##########################################################################
+# EGASP Partial (2005-08-18 kate)
+# Gene tracks submitted for the EGASP competition were hg17-based
+#       by the Gencode group (Roderic Guigo, Julien Legarde, IMIM) 
+# These were lifted to hg17, as described in makeEncodeHg16.doc
+    cd /cluster/data/encode
+    cd EGASP/Partial
+    wc -l lab/*.gtf
+       # 1778 lab/ASPic.gtf
+       # 4215 lab/AceSCAN.gtf
+       # 2692 lab/Augustus_EST-Protein.gtf
+       # 2347 lab/Augustus_abinitio.gtf
+       # 2736 lab/Augustus_any.gtf
+       # 2567 lab/Augustus_dualgenome.gtf
+       # 3458 lab/GeneZilla.gtf
+       # 2194 lab/SAGA.gtf
+    # NOTE: exclude ASPic, which contains only intron records
+    # Filenames above, with _CHR_COORDS_hg17.gff appended, are chrom coordinate versions
+
+    # GeneZilla
+    ldHgGene hg17 encodeEgaspPartGenezilla lab/GeneZilla.*.gff
+        # 656 gene predictions
+    genePredCheck -db=hg17 encodeEgaspPartGenezilla
+
+    # SAGA
+    # Strip out trailing ## on lines where manual changes were made
+    #   (see notes in .gtf file)
+    sed -e 's/ ##.*//' lab/SAGA.*.gff | \
+        ldHgGene hg17 encodeEgaspPartSaga stdin
+        # 378 gene predictions
+    genePredCheck -db=hg17 encodeEgaspPartSaga
+
+    # Augustus
+   ln -s lab/Augustus_EST-Protein.gtf_CHR_COORDS_hg17.gff augustus.est.gff
+   ln -s lab/Augustus_abinitio.gtf_CHR_COORDS_hg17.gff augustus.abinitio.gff
+   ln -s lab/Augustus_any.gtf_CHR_COORDS_hg17.gff augustus.any.gff
+   ln -s lab/Augustus_dualgenome.gtf_CHR_COORDS_hg17.gff augustus.dual.gff
+
+    foreach f (augustus.*.gff)
+        set t = `echo $f | sed -e 's/augustus.\(.*\).gff/encodeEgaspPartAugustus\u\1/'`
+        ldHgGene -genePredExt hg17 $t $f
+        checkTableCoords hg17 $t
+    end
+        # augustus.abinitio.gff 418 gene predictions
+        # augustus.any.gff      399 gene predictions
+        # augustus.dual.gff     413 gene predictions
+        # augustus.est.gff      381 gene predictions
+
+    # AceSCAN
+    # Split into two tracks -- conserved, and other, based on feature
+    ldHgGene -predTab hg17 encodeEgaspPartAceCons aceCons.gp
+        # 117 gene predictions
+    ldHgGene -predTab hg17 encodeEgaspPartAceOther aceOther.gp
+        # 727 gene predictions
+    genePredCheck -db=hg17 encodeEgaspPartAceCons encodeEgaspPartAceOther
+
+##########################################################################
+# EGASP Full (2005-06-27 kate)
+# Gene tracks submitted for the EGASP competition were hg17-based
+#       by the Gencode group (Roderic Guigo, Julien Legarde, IMIM) 
+    cd /cluster/data/encode
+    cd EGASP/Full
+
+    # Process "standard" gff files
+    # NOTE: must dummy out scores -- float values
+cat > doGene.hg17.csh << 'EOF'
+ls *.gp | grep -v hg16 > gpList
+foreach f (`cat gpList`)
+    wc -l $f 
+    set b = $f:r
+    set t = encodeEgaspFull$b
+    ldHgGene -predTab hg17 $t $f
+    genePredCheck -db=hg17 $t
+end
+'EOF'
+csh doGene.hg17.csh >&! doGene.hg17.log
+
+    # process special files
+    cd custom
+cat > doGene.hg17.csh << 'EOF'
+foreach f (Jigsaw.gp Ensembl.gp EnsemblPseudo.gp Exonhunter.gp GeneId.gp Sgp2.gp Twinscan.gp)
+    set b = $f:r
+    set t = encodeEgaspFull$b
+    ldHgGene -genePredExt -predTab hg17 $t $b.gp
+    genePredCheck -db=hg17 $t
+end
+'EOF'
+# << for emacs
+csh doGene.hg17.csh >&! doGene.hg17.log
+    # NOTE: OK to have missing exonFrames
+# Reading Ensembl.gp
+# 735 gene predictions
+# Reading EnsemblPseudo.gp
+# 34 gene predictions
+# Reading Exonhunter.gp
+# 1435 gene predictions
+# Reading GeneId.gp
+# 476 gene predictions
+# Reading Sgp2.gp
+# 930 gene predictions
+# Reading Twinscan.gp
+# 954 gene predictions
+
+end
+'EOF'
+# << for emacs
+csh doGene.hg17.csh >&! doGene.hg17.log
+
+    # process others
+    set t = "encodeEgaspFullGenemark"
+    ldHgGene -predTab hg17 $t Genemark.gp
+        # 890 gene predictions
+    genePredCheck -db=hg17 $t
+
+    # create genepreds containing just exons flanking U12 introns
+    set t = encodeEgaspFullGeneIdU12
+    ldHgGene -predTab -genePredExt hg17 $t geneId.introns.gp
+        # 24 gene predictions
+    genePredCheck -db=hg17 $t
+    set t = encodeEgaspFullSgp2U12
+    ldHgGene -predTab -genePredExt hg17 $t sgp2.introns.gp
+        # 20 gene predictions
+    genePredCheck -db=hg17 $t
+
+
+##########################################################################
+# EGASP Update
+# Submitted in hg17 coords
+
+    # Jigsaw
+    cd /cluster/data/encode
+    cd EGASP/Jigsaw/2005-06-01
+    ldHgGene -predTab -genePredExt hg17 encodeEgaspUpdJigsaw jigsaw.gp
+        # 454 gene predictions
+    genePredCheck -db=hg17 encodeEgaspUpdJigsaw
+
+    # Augustus
+    cd /cluster/data/encode
+    cd EGASP/Augustus/2005-06-22
+    foreach f (abinitio.gp any.gp dual.gp est.gp)
+        genePredCheck $f
+        set t = `echo $f | sed -e 's/\(.*\).gp/encodeEgaspUpdAugustus\u\1/'`
+        ldHgGene -predTab -genePredExt hg17 $t $f
+        checkTableCoords hg17 $t
+    end
+        # Reading abinitio.gp
+        # 622 gene predictions
+        # Reading any.gp
+        # 571 gene predictions
+        # Reading dual.gp
+        # 617 gene predictions
+        # Reading est.gp
+        # 543 gene predictions
+
+    # Exogean
+    cd /cluster/data/encode
+    cd EGASP/Exogean/2005-06-23
+    ldHgGene -predTab hg17 encodeEgaspUpdExogean exogean.gp
+        # 850 gene predictions
+    genePredCheck -db=hg17 encodeEgaspUpdExogean
+
+    # GeneIDU12 and SgpU12
+    cd /cluster/data/encode
+    cd EGASP/GeneIdU12/2005-06-10/
+    # TODO 
+
+    # EGASP Yale Pseudogenes
+    # Submitted for hg17 by Tyler Alioto 8/18/05
+    cd /cluster/data/encode
+    mkdir -p EGASP/yale/2005-06-20/lab
+    cd EGASP/yale/2005-06-20
+    wc -l lab/*.submitted
+        #  184 lab/YalePgene-NCBI34.gtf.submitted
+
+    # munge to create CDS entries to display, and assign pseudogene
+    # name as transcript_id, and pseudogene type as gene_id so
+    # it displays on details page
+    sed -e 's/pseudogene\t/CDS\t/' -e 's/pgene_type/gene_id/'  \
+        -e 's/alt_name ENCODE_Yale/transcript_id /' \
+                lab/YalePgene-NCBI35.gtf.submitted > yale.hg17.gtf
+    ldHgGene -genePredExt hg17 encodeEgaspUpdYalePseudo yale.hg17.gtf
+        # 184 gene predictions 
+    genePredCheck -db=hg17 encodeEgaspUpdYalePseudo
+    
+
+##########################################################################
+# Transcription Levels Group
+# BU FIRST EXON
+    grep encodeBu tables.bed.txt
+        # encodeBuFirstExonCerebrum       encodeTxLevels  bed 12 +
+        # encodeBuFirstExonColon  encodeTxLevels  bed 12 +
+        # encodeBuFirstExonHeart  encodeTxLevels  bed 12 +
+        # encodeBuFirstExonKidney encodeTxLevels  bed 12 +
+        # encodeBuFirstExonLiver  encodeTxLevels  bed 12 +
+        # encodeBuFirstExonLung   encodeTxLevels  bed 12 +
+        # encodeBuFirstExonSkMuscle       encodeTxLevels  bed 12 +
+        # encodeBuFirstExonSpleen encodeTxLevels  bed 12 +
+        # encodeBuFirstExonStomach        encodeTxLevels  bed 12 +
+        # encodeBuFirstExonTestis encodeTxLevels  bed 12 +
+    
+    set buTables = `echo "SHOW TABLES LIKE 'encodeBuFirstExon%'" | hgsql -N -s hg16`
+    foreach t ($buTables)
+        csh $encodeBin/convertBedTable.csh hg16 hg17 $t 12
+    end
+
+
+# RIKEN CAGE
+    grep encodeRikenCage tables.bed.txt
+        # encodeRikenCageMinus    encodeTxLevels  bedGraph 4
+        # encodeRikenCagePlus     encodeTxLevels  bedGraph 4
+
+    csh $encodeBin/convertBedTable.csh hg16 hg17 encodeRikenCageMinus 4
+        # Creating hg16 encodeRikenCageMinus.sql and encodeRikenCageMinus.txt
+           # 6156 encodeRikenCageMinus.txt
+        # Reading liftover chains
+        # Mapping coordinates
+           # 6153 encodeRikenCageMinus.tab
+              # 6 encodeRikenCageMinus.unmapped
+           # 6159 total
+        # encodeRikenCageMinus    hg16 6156   hg17 6153
+
+    csh $encodeBin/convertBedTable.csh hg16 hg17 encodeRikenCagePlus 4
+            # csh $encodeBin/convertBedTable.csh hg16 hg17 encodeRikenCagePlus 4
+        # Creating hg16 encodeRikenCagePlus.sql and encodeRikenCagePlus.txt
+           # 5688 encodeRikenCagePlus.txt
+        # Reading liftover chains
+        # Mapping coordinates
+           # 5639 encodeRikenCagePlus.tab
+             # 98 encodeRikenCagePlus.unmapped
+           # 5737 total
+        # encodeRikenCagePlus     hg16 5688   hg17 5639
+
+
+# STANFORD PROMOTERS
+    grep encodeStanfordProm tables.bed.txt
+        # encodeStanfordPromotersAGS      encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersAverage  encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersBe2C     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersCRL1690  encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersG402     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersHCT116   encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersHela     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersHepG2    encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersHMCB     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersHT1080   encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersHTB11    encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersJEG3     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersMG63     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersMRC5     encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersPanc1    encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersSnu182   encodeTxLevels  bed 9 +
+        # encodeStanfordPromotersU87      encodeTxLevels  bed 9 +
+
+    set stanTables = `echo "SHOW TABLES LIKE 'encodeStanfordProm%'" | hgsql -N -s hg16`
+    foreach t ($stanTables)
+        csh $encodeBin/convertBedTable.csh hg16 hg17 $t 9
+    end
+        # invalid unsigned number: "NM_005997"
+        # Liftover error: converting encodeStanfordPromotersAverage.txt -hasBin -bedPlus=9
+
+##########################################################################
+# CHIP/CHIP GROUP
+# 
+# Skip Affy and Sanger (they will be providing hg17)
+
+# STANFORD CHIP
+# encodeStanfordChip* bedGraph 4 tracks
+
+cat > doStan.csh << 'EOF'
+    set stanTables = \
+        `echo "SHOW TABLES LIKE 'encodeStanfordChip%'" | hgsql -N -s hg16`
+    foreach t ($stanTables)
+        csh /cluster/data/encode/bin/scripts/convertBedTable.csh \
+                hg16 hg17 $t 4
+    end
+'EOF'
+    csh doStan.csh >&! doStan.log
+    grep hg17 doStan.log | wc -l
+        # 12 tracks (6 smoothed)
+        # encodeStanfordChipHCT116Sp1     hg16 369633   hg17 369465
+        # encodeStanfordChipSmoothedHCT116Sp1     hg16 137439   hg17 137361
+
+# UCD Ng
+        csh $encodeBin/convertBedTable.csh hg16 hg17 encodeUCDavisE2F1Median 4
+        # encodeUCDavisE2F1Median hg16 382884   hg17 382713
+
+# UCSD/LI CHIP
+# encodeUcsdChip* bedGraph 4 tracks (total 36)
+
+cat > doUcsd.csh << 'EOF'
+    set ucsdTables = \
+        `echo "SHOW TABLES LIKE 'encodeUcsdChip%'" | hgsql -N -s hg16`
+    foreach t ($ucsdTables)
+        csh /cluster/data/encode/bin/scripts/convertBedTable.csh \
+                hg16 hg17 $t 4
+    end
+'EOF'
+    csh doUcsd.csh >&! doUcsd.log
+    grep hg17 doUcsd.log | wc -l
+    # 36 tracks
+    # encodeUcsdChipAch3Imr90 hg16 24348   hg17 24339
+    # encodeUcsdChipHeLaH3H4tmH3K4_p30        hg16 24537   hg17 24528
+
+
+##########################################################################
+# TRANSCRIPTION LEVELS TRACKS (2005-08-24 kate)
+
+    # grep encodeTxLevels in tables.bed.txt and edit out already
+    # completed tracks.  Prefix each table with a call to convertBedTable
+    # and suffix with bed field count
+    # Tracks are: Stanford RTPCR, Yale TARS
+
+    csh doTx.csh >&! doTx.log
+    grep hg17 doTx.log | wc -l
+        # 9 tracks
+
+##########################################################################
+# CHROMATIN & CHROMOSOMES TRACKS (2005-08-24 kate)
+
+    # Regulome, NHGRI DNase, Stanford Meth, UVA
+    csh doChrom.csh >&! doChrom.log
+    # 37 tables
+
+##########################################################################
+# CHIP/CHIP TRACKS (2005-08-24 kate)
+# Sanger, UCSD Nimblegen
+
+    doChip.csh >&! doChip.log
+
+##########################################################################
+# VARIATION TRACKS (2005-08-24 kate)
+#  HapMap, Reseq, Sanger Gene Expr
+
+    csh doVar.csh >&! doVar.log
+    grep hg17 doVar.log
+        # encodeReseqRegions      hg16 10   hg17 10
+        # encodeSangerGenoExprAssociation hg16 13674   hg17 13674
+
+#  Error converting HapMap
+
+##########################################################################
+# AFFY CHIP/CHIP TRACKS (2005-08-24 kate)
+    csh doAffy.csh >&! doAffy.log
+    grep hg17 doAffy.log
+        # 41 tables
+
+##########################################################################
+# WIG TRACKS (2005-08-24 kate)
+        doWig.csh
+        # 75 tables
+
+
