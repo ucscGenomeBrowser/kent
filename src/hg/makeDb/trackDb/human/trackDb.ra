@@ -3685,7 +3685,7 @@ longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
 group encodeChrom
 priority 64.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility full
+visibility hide
 maxHeightPixels 128:16:16
 type wig 0.0 3.0
 autoScaleDefault Off
@@ -3747,7 +3747,7 @@ longLabel ENCODE UW/Regulome DNaseI hypersensitive sites/scores
 group encodeChrom
 priority 64.2
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility full
+visibility hide
 type bedGraph 4
 minLimit 0
 maxLimit 3
@@ -3810,7 +3810,7 @@ longLabel ENCODE UW/Regulome Plate Quality Score
 group encodeChrom
 priority 64.3
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility dense
+visibility hide
 type bed 5 .
 useScore 1
 maxHeightPixels 128:16:16
@@ -3871,7 +3871,7 @@ longLabel ENCODE UW/Regulome Amplicon
 group encodeChrom
 priority 64.4
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility dense
+visibility hide
 type bed 5 .
 useScore 1
 
