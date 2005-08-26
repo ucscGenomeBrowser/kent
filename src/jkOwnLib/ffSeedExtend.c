@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.21 2004/09/27 21:49:28 angie Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.22 2005/08/26 18:19:50 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1283,10 +1283,12 @@ struct gfRange *rangeList = NULL, *range;
 struct dnaSeq *tSeq;
 
 clumpList = gfFindClumpsWithQmask(gf, qSeq, qMaskBits, qOffset, lm, &hitCount);
+verbose(2, "clumps: %d\n", slCount(clumpList));
 for (clump = clumpList; clump != NULL; clump = clump->next)
     clumpToExactRange(clump, qSeq, gf->tileSize, 0, NULL, &rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
+verbose(2, "ranges: %d\n", slCount(rangeList));
 for (range = rangeList; range != NULL; range = range->next)
     {
     range->qStart += qOffset;
@@ -1300,6 +1302,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
     aliCount = ssStitch(bun, ffCdna, 16, 10);
+    verbose(3, "  aliCount %d\n", aliCount);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     slAddHead(&bunList, bun);
     }
