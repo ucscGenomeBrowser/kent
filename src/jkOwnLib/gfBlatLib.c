@@ -17,7 +17,7 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.9 2005/01/26 22:34:47 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.10 2005/08/26 18:25:40 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1516,7 +1516,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     *endPos = saveEnd;
     }
-
+verbose(2, "bundles %d\n", slCount(bigBunList));
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna, minScore, ssAliCount);
