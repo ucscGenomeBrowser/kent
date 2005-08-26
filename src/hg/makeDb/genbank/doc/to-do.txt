@@ -901,3 +901,29 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   - store length of polyA tail/polyT head (??)
 
 
+- Repeat filtering:
+  - Jen suggest using amount of clone remaining after removing repeats rather
+    than just fraction of repeats matching.  
+
+- genome categories:
+
+  - finished (human)
+    > 
+  - well ordered whole genome shotgun (dog, mm2-mm6)
+  - low coverage (< 4x), lots of contigs., N50 scaffol size < 1mb
+  - not well ordered, cow! (baylor stuff)
+
+- make sure blat still works with file of specs
+- apply to nibs
+- update ussage message in polyInfo pslIntronsOnly
+- min cover too high ***, max repeats too low.
+
+
+- local best in genome (don't drop exons!!!)
+  1) score that is weight heavily by percent id (local score)
+     - was ration with weak gap epnality
+     - added intron bonus
+  2) foreach base of mRNA, store: base score at that base
+  3) for each alignment, count the # of bases within nearTop
+     of best score for base
+  4) if alignment has >= minCoiver of bases over near top, keep alignment.

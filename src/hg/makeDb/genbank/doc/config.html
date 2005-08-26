@@ -51,6 +51,8 @@
           the window size.  However a large number of small jobs can be very
           slow.  This parameters sets an absolute limit on the number of
           windows in a job.
+<!--
+     *** currently not used due to concerns that about losing useful alignments **
      <li> <code><em>$db</em>.align.unplacedChroms</code> - 
           White-space separated list of pseudo-chromosome that contain
           unplaced sequences.  Alignments will not be allowed to span
@@ -62,6 +64,7 @@
           White-space separated list of chromosome to skip.  Optimization
           normally used to ignore pseudo-chromosomes containing large
           number of unplaced sequences.
+-->
      <li> <code><em>$db</em>.serverGenome</code> - glob pattern or file for genome
           sequences on server. This can be NIBs or a TwoBit file.
      <li> <code><em>$db</em>.clusterGenome</code> - glob pattern or file for genome
@@ -73,7 +76,8 @@
      <li> <code><em>$db</em>.lift</code> - path to lift file for genome,
           or <CODE>no</CODE> if none.  Lift file is used to find gaps when partitioning the
           sequence for alignment.  It does not have to contain all chromosomes.
-          Sequences named <code>gap</code> are treated as gaps.
+          Sequences named <code>gap</code> are treated as gaps as well as gaps in
+          contig placement.
      <li> <code><em>$db</em>.genbank.mrna.native.pslCDnaFilter</code> - Arguments
            for <CODE>pslCDnaFilter</CODE> for GenBank native mRNAs, or <CODE>no</CODE> to skip pslCDnaFilter.
      <li> <code><em>$db</em>.genbank.mrna.xeno.pslCDnaFilter</code>
