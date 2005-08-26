@@ -11,12 +11,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.38 2005/08/18 07:20:06 baertsch Exp $";
-
-/* pointer to input stream to grab meta Data , 
- * also contains pointer to output File list.
- * currently handles one input stream and 
- * multiple output streams */
+static char const rcsid[] = "$Id: linefile.c,v 1.39 2005/08/26 21:25:03 baertsch Exp $";
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
