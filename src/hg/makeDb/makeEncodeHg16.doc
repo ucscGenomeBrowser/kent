@@ -3370,3 +3370,218 @@ group encodeTxLevels
 visibility hide
 type bed 4 .
 priority 41
+
+#########################################################################
+#  Gencode Unannotated Region Classification (DONE - 2005-08-02 - Hiram)
+    #	A number of table browser operations are going to be performed.
+    #	Saving the results into this directory:
+    ssh hgwdev
+    mkdir /cluster/data/encode/analysis/genes_transcripts
+    #	Using the table browser on genome-test
+    #	clade: Vertebrate, genome: Human, Assembly: July 2003
+    #	track: Gencode Genes, group: encodeGencodeGene, 
+    #	region: genome
+    #	no filter, no intersection, no correlation
+    #	output format: "chosen fields from selected and related tables"
+    #	output file: genCodeTxStartEnd.gtfLike
+    #	file type returned: gzip compressed
+    #	press the "get output" button and select the "Linked Tables"
+    #	of gencodeGeneClass, press the "Allow Selection from Checked Tables"
+    #	and then select fields:
+    #	name, chrom, strand, txStart, txEnd, gencodeGeneClass.class
+    #	the "get output" will now send you the file:
+    #	genCodeTxStartEnd.gtfLike.gz
+
+    #	convert that output to a bed file:
+zcat genCodeTxStartEnd.gtfLike.gz | awk '
+{
+printf "%s\t%d\t%d\t%s_%s\t0\t%s\n", $2, $4, $5, $1, $6, $3
+}
+' | sort -k1,1 -k2,2n > genCode.bed
+
+    #	And filter that for the "reference set" of Gencode genes:
+    egrep \
+"Known|Novel_CDS|Novel_transcript_gencode_conf|Putative_gencode_conf" \
+        genCode.bed > referenceGeneExtents.bed
+
+    #	This becomes our filter to find the exons of interest,
+    #	Add a custom track line to this file:
+    echo \
+'track name="referenceGencodeExtents" description="reference Gencode gene set, txStart to txEnd"' \
+	> referenceGeneExtents.bed.ct
+    cat referenceGeneExtents.bed >> referenceGeneExtents.bed.ct
+    #	And then load up this file as a custom track on hg16
+    #	Back in the table browser, select Gencode Genes, full genome,
+    #	custom track type of output, and ask for
+    #	"Exons plus 0 bases at each end"
+    #	get custom track in table browser
+    #	Now you have two custom tracks,
+    #	Intersect those two custom tracks, AND type of intersection,
+    #	to produce a bed file referenceGencodeExons.bed
+    #	Add a custom track header to this file:
+    echo \
+'track name="referenceGencodeExons" description="Reference Gencode Exons" visibility=3' > referenceGencodeExons.bed.ct
+    cat referenceGencodeExons.bed >> referenceGencodeExons.bed.ct
+    #	add the referenceGeneExtents.bed.ct to that:
+    cat referenceGeneExtents.bed.ct > customTracks.bed.ct
+    cat referenceGencodeExons.bed.ct >> customTracks.bed.ct
+    #	And load that file as a new set of two custom tracks.
+    #	Again in the table browser, do an intersection between the
+    #	geneExtents track and this Exon track, but invert the Exons
+    #	to give you a result that is NOT Exon which == Introns
+    # Complement referenceGencodeExons before intersection/union
+    #	AND of referenceGencodeExtents and referenceGencodeExons
+    #	Select bed file output, file name:
+    #	referenceGencodeIntrons.bed
+
+    #	Create a special custom track that is simply a definition of all
+    #	the chrom extents in hg16 to be used for intersection purposes
+    echo \
+'track name="chromDefinitions" description="hg16 chromosome extents, 0 to N"'
+	> hg16.chroms.bed.ct
+    hgsql -N -e "select chrom, size from chromInfo;" hg16 | grep -v _random \
+	| awk '{ printf "%s\t0\t%d\n", $1, $2}' >> hg16.chroms.bed.ct
+    #	Add this to the growing collection of tracks:
+    cat hg16.chroms.bed.ct >> customTracks.bed.ct
+    #	And load it up for more intersections.
+    #	Again in the table browser, intersect the chromDefinitions with
+    #	the referenceGencodeExtents
+    #	AND of chromDefinitions and referenceGencodeExtents 
+    #	Complement referenceGencodeExtents before intersection/union
+    #	A bed file result of this gives you the Intergenic regions
+    #	referenceIntergenicGencode.bed
+    #	Now you are ready to calculate the regions
+for T in referenceGencodeIntrons referenceIntergenicGencode
+do
+zcat ${T}.bed.ct.gz | grep -v track | sort -k1,1 -k2,2n |
+awk '
+    {
+    if (($3 - $2) > 10000)
+        { printf "%s\t%d\t%d\t%s\n", $1, $2+5000, $3-5000, $4 }
+    }
+' > ${T}.distal.bed4
+
+zcat ${T}.bed.ct.gz | grep -v track | sort -k1,1 -k2,2n |
+awk '
+{
+if (($3 - $2) > 10000)
+        {
+        printf "%s\t%d\t%d\t%s_5\n", $1, $2, $2+5000, $4
+        printf "%s\t%d\t%d\t%s_3\n", $1, $3-5000, $3, $4
+        } else {
+        printf "%s\t%d\t%d\t%s_unshaved\n", $1, $2, $3, $4
+        }
+}
+' > ${T}.proximal.bed4
+
+done
+    #	The results of these are the files to load:
+-rw-rw-r--    1    23830 Aug  2 16:21 referenceIntergenicGencode.proximal.bed4
+-rw-rw-r--    1     8343 Aug  2 16:21 referenceIntergenicGencode.distal.bed4
+-rw-rw-r--    1   194964 Aug  2 16:21 referenceGencodeIntrons.proximal.bed4
+-rw-rw-r--    1    12032 Aug  2 16:21 referenceGencodeIntrons.distal.bed4
+    #	Load them into database and create trackDb entries:
+    hgLoadBed -strict hg16 encodeGencodeIntronsDistal \
+	referenceGencodeIntrons.distal.bed4
+    hgLoadBed -strict hg16 encodeGencodeIntronsProximal \
+	referenceGencodeIntrons.proximal.bed4
+    hgLoadBed -strict hg16 encodeGencodeIntergenicDistal \
+	referenceIntergenicGencode.distal.bed4
+    hgLoadBed -strict hg16 encodeGencodeIntergenicProximal \
+	referenceIntergenicGencode.proximal.bed4
+    #	composite track: encodeGencodeRegions
+    #	with those four subTracks
+    #	track encodeGencodeRegions
+    #	shortLabel Gencode Unann
+    #	longLabel Gencode Unannotated Region Classification
+
+#########################################################################
+#	Classifing 6 Affy transfrag tracks and 5 Yale TAR tracks into
+#	four location catagories  - (DONE - 2005-08-03 - Hiram)
+#  With the Gencode Unannotated Region Classification completed above
+#	And loaded into the database, this is partially a tables browser
+#	operation and partially a command line operation.
+#  In the table browser, create an intersection between one of
+#	the four regions, for example IntronsDistal and one of these
+#	eleven tracks, for example encodeAffyRnaGm06990Sites
+#	Note the URL in your WEB browser for that intersected result,
+#	then using your own hgTables binary, run the following loop with
+#	the hgsid from the URL you see you your WEB browser.  What's
+#	happening here is that there are some variables that are coming
+#	from your cart, and some being changed on this command line:
+ssh hgwdev
+cd /cluster/data/encode/analysis/genes_transcripts
+mkdir -p fetchedTracks
+
+hgTables=$HOME/kent/src/hg/hgTables/hgTables
+
+for G in encodeGencodeIntronsDistal encodeGencodeIntronsProximal \
+        encodeGencodeIntergenicDistal encodeGencodeIntergenicProximal
+do
+for Q in encodeAffyRnaGm06990Sites encodeAffyRnaHeLaSites \
+    encodeAffyRnaHl60SitesHr00 encodeAffyRnaHl60SitesHr02 \
+    encodeAffyRnaHl60SitesHr08 encodeAffyRnaHl60SitesHr32
+do
+echo "Genome: ${G}"
+echo "Query:  ${Q}"
+${hgTables} \
+"hgsid=1235494&hgta_printCustomTrackHeaders=on&boolshad.hgta_printCustomTrackHea
+ders=1&hgta_ctName=tb_${G}&hgta_ctDesc=table+browser+query+on+${G}&hgta_ctVis=pa
+ck&hgta_ctUrl=&fbQual=whole&fbUpBases=200&fbDownBases=200&hgta_doGetBed=get+BED"
+ \
+hgta_table=${G} \
+hgta_intersectTable=${Q} | \
+sed -e "/^Set-/d; /^Content-/d; /^$/d" > "fetchedTracks/${G}.${Q}.txt"
+done
+done
+    #	Then, loading those 44 result files:
+for R in IntergenicDistal IntergenicProximal \
+        IntronsDistal IntronsProximal
+do
+    for T in encodeAffyRnaGm06990Sites \
+        encodeAffyRnaHeLaSites \
+        encodeAffyRnaHl60SitesHr00 \
+        encodeAffyRnaHl60SitesHr02 \
+        encodeAffyRnaHl60SitesHr08 \
+        encodeAffyRnaHl60SitesHr32 \
+        encodeYaleAffyNB4RARNATars \
+        encodeYaleAffyNB4TPARNATars \
+        encodeYaleAffyNB4UntrRNATars \
+        encodeYaleAffyNeutRNATarsAll \
+        encodeYaleAffyPlacRNATars
+    do
+    grep -v "^track" fetchedTracks/encodeGencode${R}.${T}.txt | \
+        sort -k1,1 -k2,2n | hgLoadBed -strict hg16 ${T}${R} stdin
+    done
+done
+    #	Create the trackDb entry for these 44 tables with a single
+    #	composite container track:
+    #	track encodeNoncodingTransFrags
+    #	shortLabel Unann Transfrags
+    #	longLabel Yale and Affymetrix Unannotated TransFrags
+
+#########################################################################
+#	Collapse the 44 tables into four tables (DONE - 2005-08-03 - Hiram)
+#	Using the table browser, select 11 of the tables from that track
+#	to use in the subtrack merge, do this four times for each of the
+#	four regions.  Merging 11 tables at a time, saving four files:
+ssh hgwdev
+cd /cluster/data/encode/analysis/genes_transcripts
+-rw-rw-r--    1    29102 Aug  3 15:34 allintergenicDistal.bed.gz
+-rw-rw-r--    1    15294 Aug  3 15:38 allintergenicProximal.bed.gz
+-rw-rw-r--    1    16319 Aug  3 15:43 allintronsDistal.bed.gz
+-rw-rw-r--    1    79296 Aug  3 15:46 allintronsProximal.bed.gz
+
+#	And loading those four tracks:
+zcat allintergenicDistal.bed.gz | hgLoadBed -strict hg16 \
+        encodeAllIntergenicDistal stdin
+zcat allintergenicProximal.bed.gz | hgLoadBed -strict hg16 \
+        encodeAllIntergenicProximal stdin
+zcat allintronsDistal.bed.gz | hgLoadBed -strict hg16 \
+        encodeAllIntronsDistal stdin
+zcat allintronsProximal.bed.gz | hgLoadBed -strict hg16 \
+        encodeAllIntronsProximal stdin 
+    #	Create trackDb entry for a composite track containing those four:
+    #	track encodeWorkshopSelections
+    #	shortLabel Consens Unann TF
+    #	longLabel ENCODE Consensus Unannotated Transfrags
