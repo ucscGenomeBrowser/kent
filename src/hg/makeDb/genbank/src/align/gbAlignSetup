@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.15 2005/08/22 19:55:34 markd Exp $
+# $Id: gbAlignSetup,v 1.16 2005/08/27 07:46:59 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -299,7 +299,6 @@ class CDnaUnaligned(object):
             cmdBase.append("-noMigrate")
         for procPart in self.unaligned:
             self._buildPart(cmdBase, procPart)
-
         return self.numAlign
 
 class Job(list):
@@ -358,10 +357,9 @@ class Job(list):
             fh.write("\t")
             fh.write(win.getSpec())
         fh.write("\n")
-        if jobGenDb.slow2bit:
-            prRowv(fh, "tdbSlow2bit", "yes")
         prRowv(fh, "qdb", self._makeWorkDirRel(jobGen, self.cdnaQuery.faPath))
-        prRowv(fh, "preFilterOpts", preFilterOpts)
+        if preFilterOpts != None:
+            prRowv(fh, "preFilterOpts", preFilterOpts)
 
         # add job
         relPslFile = jobPath + ".psl"
@@ -466,7 +464,6 @@ class JobGenDb(object):
         self.maxWinsPerJob = self.conf.getDbInt(db, "align.maxWinsPerJob")
         self.genome = None
         self.numAlign = 0L
-        self.slow2bit = False
 
     # matches pre-filter options
     preFilterOptsRe = re.compile("(-minId=)|(-minCover=)|(-maxRepMatch=)|(-minQSize=)|(-polyASizes=)")
@@ -494,8 +491,6 @@ class JobGenDb(object):
         self.clusterGenome = self.conf.getDbStr(self.db, "clusterGenome")
         if self.clusterGenome.endswith(".nib"):
             self.clusterGenome = os.path.dirname(self.clusterGenome)
-        elif len(self.genome) >= 100000:
-            self.slow2bit = True
         lift = self.conf.getDbStrNo(self.db, "lift")
         if lift != None:
             self.genome.addUnGappedRegions(lift)

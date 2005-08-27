@@ -6,10 +6,78 @@
 #include "dystring.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.1 2003/07/10 16:49:28 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.2 2005/08/27 07:47:00 markd Exp $";
 
 /* standard conf file */
 char *GB_CONF_FILE = "etc/genbank.conf";
+
+static char *findVarEnd(struct lineFile* lf, char *vstart)
+/* find the end of a variable reference, returning char after close '}' */
+{
+char *vend = NULL;
+assert(*vstart = '$');
+if (vstart[1] == '{')
+    {
+    char *sep = strchr(vstart, '}');
+    if (sep != NULL)
+        vend = sep+1;
+    }
+if (vend == NULL)
+    errAbort("invalid config variable reference at: %s:%d:%s",
+             lf->fileName, lf->lineIx, vstart);
+return vend;
+}
+
+static void expandVarRef(struct lineFile* lf, struct gbConf* conf,
+                         char *vstart, char *vend, struct dyString *valueBuf)
+/* expand a variable reference and append to valueBuf */
+{
+char vname[512];
+char *vval;
+safef(vname, sizeof(vname), "var.%.*s", ((vend-1)-(vstart+2)), vstart+2);
+vval = hashFindVal(conf->hash, vname);
+if (vval == NULL)
+    errAbort("undefined variable referenced in config file: %s:%d:%s", lf->fileName, lf->lineIx, vname);
+dyStringAppend(valueBuf, vval);
+}
+
+static void parseConfVal(struct lineFile* lf, struct gbConf* conf,
+                         char *value, struct dyString *valueBuf)
+/* copy value to valueBuf, expanding variables as encountered */
+{
+char *vstart, *vend;
+dyStringClear(valueBuf);
+while (*value != '\0')
+    {
+    /* search for next variable reference, or end of string */
+    vstart = strchr(value, '$');
+    if (vstart == NULL)
+        break;  /* no more variables */
+    /* append before valiable */
+    dyStringAppendN(valueBuf, value, vstart-value);
+    /* expand variable */
+    vend = findVarEnd(lf, vstart);
+    expandVarRef(lf, conf, vstart, vend, valueBuf);
+    value = vend;
+    }
+/* remainder of value, if any */
+dyStringAppend(valueBuf, value);
+}
+
+static void parseConfLine(struct lineFile* lf, struct gbConf* conf, char *line,
+                          struct dyString *valueBuf)
+/* parse a configuration data line, expanding variables.*/
+{
+char *name, *sep;
+
+sep = strchr(line, '=');
+if (sep == NULL)
+    errAbort("invalid config file line: %s:%d:%s", lf->fileName, lf->lineIx, line);
+*sep = '\0';
+name = trimSpaces(line);
+parseConfVal(lf, conf, trimSpaces(sep+1), valueBuf);
+hashAdd(conf->hash, name, lmCloneString(conf->hash->lm, valueBuf->string));
+}
 
 struct gbConf* gbConfNew(char *confFile)
 /* parse a configuration object into the hash */
@@ -17,33 +85,21 @@ struct gbConf* gbConfNew(char *confFile)
 struct gbConf* conf;
 struct lineFile* lf;
 struct dyString* lineBuf = dyStringNew(512);
-char *line, *name, *value, *sep;
-int size;
+struct dyString* valueBuf = dyStringNew(512);
+char *line;
 AllocVar(conf);
 conf->hash = hashNew(10);
 
+/* dyString line buffer avoids trimSpaces mangling lineFile input.*/
 lf = lineFileOpen(confFile, TRUE);
-while (lineFileNext(lf, &line, &size))
+while (lineFileNextReal(lf, &line))
     {
-    line = trimSpaces(line);
-    if(!((line[0] == '#') || (line[0] == '\0')))
-        {
-        /* parse the key/value pair; must put in tmp buffer due to
-         * trimSpaces.*/
-        dyStringClear(lineBuf);
-        dyStringAppend(lineBuf, line); 
-
-        sep = strchr(lineBuf->string, '=');
-        if (sep == NULL)
-            errAbort("invalid config file line: %s:%d:%s",
-                     lf->fileName, lf->lineIx, line);
-        *sep = '\0';
-        name = trimSpaces(lineBuf->string);
-        value = trimSpaces(sep+1);
-        hashAdd(conf->hash, name, lmCloneString(conf->hash->lm, value));
-        }
+    dyStringClear(lineBuf);
+    dyStringAppend(lineBuf, line); 
+    parseConfLine(lf, conf, lineBuf->string, valueBuf);
     }
 dyStringFree(&lineBuf);
+dyStringFree(&valueBuf);
 return conf;
 }
 

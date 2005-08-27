@@ -1,33 +1,78 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.2 2005/08/22 19:55:35 markd Exp $
+# $Id: Config.py,v 1.3 2005/08/27 07:47:00 markd Exp $
 #
 
 import re, string
 
-class Config(dict):
-    "object to parse and contain the genbank.conf"
+class ConfigParser(object):
+    "parse config file"
 
     # REs for parsing, which trim leading and training blanks
     ignoreRe = re.compile("^\s*(#.*)?$") # blank or comment
     keyValRe = re.compile("^\s*([^\s=]+)\s*=\s*(.*)\s*$")
 
-    def _parseLine(self, fh, line):
+    # RE for splitting line around variable reference
+    varRe = re.compile("^([^\$]*)(\$*\{([^\}]+)\}(.*))?$")
+
+    def __init__(self, conf):
+        self.conf = conf
+        self.fh = None
+        self.lineNum = 0
+
+    def _splitValue(self, value):
+        """split a conf value substring at the first variable reference and
+        return (beforeRef, varRef, afterRef).  If no more variable references,
+        varRef and afterRef are undef"""
+        m = ConfigParser.varRe.match(value)
+        if m == None:
+            raise Exception(self.fh.name + ":" + str(self.lineNum) + ": bug, can't split line ")
+        (beforeRef, junk, varName, afterRef) = m.groups()
+        return (beforeRef, varName, afterRef)
+
+    def _expandVar(self, varName):
+        val = self.conf.get("var." + varName)
+        if val == None:
+            raise Exception(self.fh.name + ":" + str(self.lineNum) + ": reference to undefined variable: " + varName)
+        return val
+
+    def _expandVars(self, value):
+        "expand a value, replacing variable refererences with their value"
+        expVal = ""
+        while value != None:
+            (beforeRef, varName, afterRef) = self._splitValue(value)
+            expVal += beforeRef
+            if varName != None:
+                expVal += self._expandVar(varName)
+            value = afterRef
+        return expVal
+
+    def _parseLine(self, line):
         "parse a line from the conf file and key/value to object"
-        if not Config.ignoreRe.match(line):
-            m = Config.keyValRe.match(line)
+        if not ConfigParser.ignoreRe.match(line):
+            m = ConfigParser.keyValRe.match(line)
             if m == None:
                 raise Exception(fh.name + ":" + "can't parse conf line: " + line)
-            self[m.group(1)] = m.group(2)
+            self.conf[m.group(1)] = self._expandVars(m.group(2))
+
+    def parse(self, confFile):
+        "parse conf file"
+        self.fh = open(confFile)
+        for line in self.fh:
+            self.lineNum += 1
+            self._parseLine(line)
+        self.fh.close()
+        
+
+class Config(dict):
+    "object to parse and contain the genbank.conf"
 
     def __init__(self, confFile):
         "read conf file into object"
         self.confFile = confFile
-        fh = open(confFile)
-        for line in fh:
-            self._parseLine(fh, line)
-        fh.close()
+        parser= ConfigParser(self)
+        parser.parse(confFile)
 
     def getStr(self, key):
         "get a configuration value, or error if not found"

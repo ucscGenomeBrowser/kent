@@ -13,9 +13,28 @@
     <CODE>.hg.conf</CODE>:
     <UL>
     <LI> blank lines or lines where the first non-blank character is a &quot;#&quot; are ignored.
-    <LI> records are lines of:<BR>
+    <LI> records are lines of:
+         <blockquote>
          <CODE><EM>name</EM>=<EM>value</EM></CODE>
+         </blockquote>
+    <LI> By convention, names consist of dot separated words used to define a hierarchy.  Yes, this
+         is ugly and verbose.
     </UL>
+    <H3>Variables</H3>
+    Variables are available in the configuration file.  A variable is defined using the syntax:
+    <blockquote>
+         <CODE>var.<EM>varname</EM>=<EM>value</EM></CODE>
+    </blockquote>
+    Variables maybe referenced in any value using the syntax:
+    <blockquote>
+         <CODE>${<EM>varname</EM>}</CODE>
+    </blockquote>
+    A variable must be defined before it is referenced in the file, and are expanded immediately.
+    A variable definition may reference another variable.
+    <p>
+    The program <code>gbConf</code> can be used to print the configuration file with variables
+    expanded for debugging purposes.
+
     <H3>Global configuration parameters</H3>
     <UL>
     <LI> <CODE>cluster.iservers</CODE> - space-separated list of iservers to use
