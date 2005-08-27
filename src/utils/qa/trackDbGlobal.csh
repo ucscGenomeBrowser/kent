@@ -60,7 +60,7 @@ set dirPath="/usr/local/apache/htdocs/qa/test-results/trackDb"
 set urlPath="http://hgwdev.cse.ucsc.edu/qa/test-results/trackDb"
 mkdir -p $dirPath/$today
 set summaryFile=$dirPath/$today/index.html
-set summaryUrl=$urlPath/$today/$today.trackDb.html
+set summaryUrl=$urlPath/$today/index.html
 rm -f $summaryFile
 echo "<HTML><HEAD><TITLE>trackDb Diffs $today</TITLE></HEAD><BODY>\n<PRE> \
       \n" >! $summaryFile
