@@ -14,6 +14,7 @@ struct pslSets
     struct pslMatches *matchesPool;  /* recycled pslMatches objects */
     struct pslRef *refPool;          /* recycled pslMatches objects */
     struct lm *lm;                   /* pool for allocating objects */
+    int nameWidth;                   /* max witdh of any set name */
 };
 
 struct pslMatches

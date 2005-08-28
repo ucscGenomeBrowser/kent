@@ -144,17 +144,10 @@ for (iSet = 0; iSet < matches->numSets; iSet++)
 }
 
 void prDiffMatches(FILE *outFh, struct pslSets *ps, char *qName,
-                   struct pslMatches *matches)
+                   struct pslMatches *matches, char *categories)
 /* print information about matched psls that are known to have differences */
 {
-static char *categories = NULL;
 int iSet;
-
-/* categories is an array of 1-character values, but add a terminating
- * zero to make it easy to display in a debugger */
-if (categories == NULL)
-    categories = needMem(ps->numSets+1);
-categorizePsls(matches, categories);
 
 fprintf(outFh, "%s\t%s\t%d\t%d", qName,
         matches->tName, matches->tStart, matches->tEnd);
@@ -163,14 +156,48 @@ for (iSet = 0; iSet < ps->numSets; iSet++)
 fprintf(outFh, "\n");
 }
 
+void prDiffDetails(FILE *outFh, struct pslSets *ps, char *qName,
+                   struct pslMatches *matches, char *categories)
+/* print details of differing psls */
+{
+int iSet;
+fprintf(outFh, "%s <=> %s:%d-%d (%s)\n", qName,
+        matches->tName, matches->tStart, matches->tEnd,
+        matches->strand);
+
+for (iSet = 0; iSet < ps->numSets; iSet++)
+    {
+    fprintf(outFh, "  %*s\t%c", -ps->nameWidth, ps->sets[iSet]->setName, categories[iSet]);
+    if (matches->psls[iSet] != NULL)
+        {
+        fprintf(outFh, "\t");
+        pslTabOut(matches->psls[iSet], outFh);
+        }
+    else
+        fprintf(outFh, "\n");
+    }
+
+}
+
 void diffQuery(FILE *outFh, FILE *detailsFh, struct pslSets *ps, char *qName)
 /* diff one query */
 {
+static char *categories = NULL;
 struct pslMatches *matches;
+/* categories is an array of 1-character values, but add a terminating
+ * zero to make it easy to display in a debugger */
+if (categories == NULL)
+    categories = needMem(ps->numSets+1);
+
 pslSetsMatchQuery(ps, qName);
 for (matches = ps->matches; matches != NULL; matches = matches->next)
     if (!allMatchesSame(matches))
-        prDiffMatches(outFh, ps, qName, matches);
+        {
+        categorizePsls(matches, categories);
+        prDiffMatches(outFh, ps, qName, matches, categories);
+        if (detailsFh != NULL)
+            prDiffDetails(detailsFh, ps, qName, matches, categories);
+        }
 }
 
 void prHeader(FILE *outFh, struct pslSets *ps)

@@ -42,6 +42,7 @@ struct pslTbl *pt = pslTblNew(pslFile, setName);
 assert(iSet < ps->numSets); 
 assert(ps->sets[iSet] == NULL);
 ps->sets[iSet] = pt;
+ps->nameWidth = max(ps->nameWidth, strlen(setName));
 }
 
 static struct pslMatches *pslMatchesAlloc(struct pslSets *ps)
