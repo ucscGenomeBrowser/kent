@@ -165,6 +165,12 @@ colExclude: mkout
 	    input/gene.select input/gene.clusters output/$@.cluster
 	${DIFF} expected/$@.cluster output/$@.cluster
 
+# select by column, including strand
+colSelectStrand: mkout
+	${OVERSEL} -strand -selectCoordCols=1,2,3,4 -inCoordCols=3,4,5,6 \
+	    input/gene.select input/gene.clusters output/$@.cluster
+	${DIFF} expected/$@.cluster output/$@.cluster
+
 ###
 # CDS overlap tests
 ###

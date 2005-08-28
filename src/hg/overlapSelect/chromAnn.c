@@ -261,7 +261,7 @@ numCols = chopByChar(line, '\t', row, cols->minNumCols);
 lineFileExpectAtLeast(lf, cols->minNumCols, numCols);
 colVals = coordColParseRow(cols, lf, row, numCols);
 
-ca = chromAnnNew(colVals.chrom, '\0', NULL, recLine);
+ca = chromAnnNew(colVals.chrom, colVals.strand, NULL, recLine);
 chromAnnBlkNew(ca, colVals.start, colVals.end);
 freez(&row);
 return ca;
