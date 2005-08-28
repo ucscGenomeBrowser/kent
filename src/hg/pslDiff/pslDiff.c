@@ -30,8 +30,22 @@ errAbort("\n%s",
          "\n"
          "   -setNames - commmand line specifies name to use for a set of alignments\n"
          "    found in a psl file.  If this is not specified, the set names are the\n"
-         "    base nmaes of the psl files\n"
+         "    base names of the psl files\n"
          "   -details=file - write details of psls that differ to this file\n"
+         "\n"
+         "The program matches psls in sets by exon structure.  The output\n"
+         "list the that are not the same in all sets.  A psl is identified\n"
+         "by it's qName and target location.  There is then a column per\n"
+         "input set that indicates which sets have the psl and where they\n"
+         "match.  A set not contain the psl has a '-' in it's column.\n"
+         "Otherwise, there is a letter indicating which set has matching\n"
+         "psls.  All columns with the same letter have the same psl.  The\n"
+         "letters are assigned independently for each row.  For example:\n"
+         "\n"
+         "#qName          tName  tStart     tEnd       reps  cdnafilt\n"
+         "NM_001001944.1  chr12  23614031   23614102   -     A\n"
+         "NM_001006007.1  chrUn  142900969  142902487  A     -\n"
+         "NM_001024180.1  chr14  540798     559130     A     B\n"
          );
 }
 
@@ -61,7 +75,11 @@ boolean pslSame(struct psl *psl1, struct psl *psl2)
 /* determine if two psls (with same query and target) are the same */
 {
 int iBlk;
+if ((psl1 == NULL) || (psl2 == NULL))
+    return FALSE;
 if (psl1->blockCount != psl2->blockCount)
+    return FALSE;
+if (!sameString(psl1->strand, psl2->strand))
     return FALSE;
 for(iBlk = 0; iBlk < psl1->blockCount; iBlk++)
     {
@@ -74,7 +92,7 @@ return TRUE;
 }
 
 boolean allMatchesSame(struct pslMatches *matches)
-/* determine if all sets have  matches and are same */
+/* determine if all sets have matches and are same */
 {
 int iSet;
 if (matches->psls[0] == NULL)
@@ -100,7 +118,7 @@ for (iSet2 = 0; (iSet2 < matches->numSets) && (categories[iSet2] != '\0'); iSet2
     {
     if (pslSame(matches->psls[iSet2], matches->psls[iSet]))
         return categories[iSet2];
-    else
+    else if (categories[iSet2] != '-')
         lastCat = max(categories[iSet2], lastCat);
     }
 
@@ -155,6 +173,16 @@ for (matches = ps->matches; matches != NULL; matches = matches->next)
         prDiffMatches(outFh, ps, qName, matches);
 }
 
+void prHeader(FILE *outFh, struct pslSets *ps)
+/* generate output header */
+{
+int i;
+fprintf(outFh, "#qName\ttName\ttStart\ttEnd");
+for (i = 0; i < ps->numSets; i++)
+    fprintf(outFh, "\t%s", ps->sets[i]->setName);
+fprintf(outFh, "\n");
+}
+
 void pslDiff(int numPslSpecs, char **pslSpecs, char *detailsFile)
 /* compare psl files */
 {
@@ -162,6 +190,8 @@ struct pslSets *ps = createPslSets(numPslSpecs, pslSpecs);
 struct slName *queries = pslSetsQueryNames(ps);
 FILE *detailsFh = (detailsFile != NULL) ? mustOpen(detailsFile, "w") : NULL;
 struct slName *query;
+prHeader(stdout, ps);
+
 for (query = queries; query != NULL; query = query->next)
     diffQuery(stdout, detailsFh, ps, query->name);
 
