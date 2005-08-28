@@ -2097,6 +2097,13 @@ xrefTable refLink
 xrefQuery select mrnaAcc, name from %s where name like '%s%%'
 searchPriority 2.5
 
+searchName pseudoGeneUniProt
+searchTable pseudoGeneLink
+query select chrom, chromStart,chromEnd, kgName from %s where kgName = '%s'
+xrefTable kgXref
+xrefQuery select kgID, spDisplayID from %s where spDisplayID like '%s%%'
+searchPriority 2.6
+
 searchTable superfamily
 searchType bed
 searchMethod fuzzy
