@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.24 2005/08/29 18:07:27 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.25 2005/08/29 18:12:43 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1312,8 +1312,9 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
     aliCount = ssStitch(bun, ffCdna, 16, 10);
-    verbose(3, "  aliCount %d\n", aliCount);
+    verbose(3, "  aliCount %d", aliCount);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
+    verbose(3, "  refined to  %d", slCount(bun->ffList));
     slAddHead(&bunList, bun);
     }
 gfRangeFreeList(&rangeList);
