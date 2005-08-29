@@ -105,7 +105,7 @@ assert(qStart1 == qEnd1);
 assert(tStart1 == (psl1->tStarts[iBlk1]+psl1->blockSizes[iBlk1]));
 }
 
-static boolean similarAligns(struct cDnaAligns *cdAlns,
+static boolean similarAligns(struct cDnaQuery *cdna,
                              struct cDnaAlign *aln1,
                              struct cDnaAlign *aln2)
 /* Test if two genes have similar alignments.  Similar means that two
@@ -137,23 +137,23 @@ if (((float)(alnSim.same)/((float)(alnSim.same + alnSim.diff))) < dissimFrac)
         }
     /* don't double count ones flagged as weird */
     if (!aln1->weirdOverlap)
-        cdAlns->weirdOverCnts.aligns++;
+        cdna->stats->weirdOverCnts.aligns++;
     aln1->weirdOverlap = TRUE;
     if (!aln2->weirdOverlap)
-        cdAlns->weirdOverCnts.aligns++;
+        cdna->stats->weirdOverCnts.aligns++;
     aln2->weirdOverlap = TRUE;
     return FALSE;
     }
 return TRUE;
 }
 
-static int overlapCmp(struct cDnaAligns *cdAlns,
+static int overlapCmp(struct cDnaQuery *cdna,
                       struct cDnaAlign *aln1,
                       struct cDnaAlign *aln2)
 /* compare two overlapping alignments to see which to keep. Returns 
  * -1 to keep the first, 1 to keep the second, or 0 to keep both */
 {
-if (!similarAligns(cdAlns, aln1, aln2))
+if (!similarAligns(cdna, aln1, aln2))
     return 0;  /* weird alignment, keep both */
 
 /* next criteria, keep one with the most coverage */
@@ -169,7 +169,7 @@ else
     return 1;
 }
 
-static void overlapFilterAln(struct cDnaAligns *cdAlns,
+static void overlapFilterAln(struct cDnaQuery *cdna,
                              struct cDnaAlign *aln)
 /* Filter the given alignment for overlaps against all alignments following it
  * in the list */
@@ -179,7 +179,7 @@ for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
     {
     if ((!aln2->drop) && overlapTest(aln, aln2))
         {
-        int cmp = overlapCmp(cdAlns, aln, aln2);
+        int cmp = overlapCmp(cdna, aln, aln2);
         if (cmp < 0)
             {
             aln2->drop = TRUE;
@@ -191,21 +191,21 @@ for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
             cDnaAlignVerb(3, aln->psl, "drop: overlap: ");
             }
         if (cmp != 0)
-            cdAlns->overlapCnts.aligns++;
+            cdna->stats->overlapCnts.aligns++;
         }
     }
 }
 
-void overlapFilter(struct cDnaAligns *cdAlns)
+void overlapFilter(struct cDnaQuery *cdna)
 /* Remove overlapping alignments, keeping only one by some criteria.  This is
  * designed to be used with windowed alignments, so one alignment might be
  * trucated. */
 {
 struct cDnaAlign *aln;
-for (aln = cdAlns->alns; aln != NULL; aln = aln->next)
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (!aln->drop)
-        overlapFilterAln(cdAlns, aln);
+        overlapFilterAln(cdna, aln);
     }
 }
 

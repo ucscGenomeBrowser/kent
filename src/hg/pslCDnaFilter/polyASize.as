@@ -1,4 +1,4 @@
-table polyASizes
+table polyASize
 "used to read output of faPolyASizes"
     (
     string id;            "sequence id"

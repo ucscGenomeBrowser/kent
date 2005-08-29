@@ -6,8 +6,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = cDnaAligns.h overlapFilter.h polyASizes.h
-O = pslCDnaFilter.o cDnaAligns.o overlapFilter.o polyASizes.o
+H = cDnaAligns.h overlapFilter.h polyASize.h usage.h
+O = cDnaAligns.o overlapFilter.o polyASize.o pslCDnaFilter.o
 B =  ${HOME}/bin/${MACHTYPE}/pslCDnaFilter
 
 $B: pslCDnaFilter
@@ -22,12 +22,17 @@ cDnaAligns.o: cDnaAligns.c $H
 overlapFilter.o: overlapFilter.c $H
 polyASizes.o: polyASizes.c polyASizes.h
 
+# create usage msg from text
+usage.h: usage.txt
+	awk '!/^#/{print "\"" $$0 "\\n\""}' $< > $@
+
 test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O $B
+	rm -f $O pslCDnaFilter usage.h
 	cd tests && ${MAKE} clean
 
 savebak:
-	savebak pslCDnaFilter *.c *.h *.as makefile tests/input debug/bin
+	savebak pslCDnaFilter *.c *.h *.as usage.txt makefile tests/makefile tests/input
+

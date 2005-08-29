@@ -1,8 +1,7 @@
                    	seqs	aligns	multAlnSeqs
              total:	6	17	6
-              kept:	6	12	3
-        weird over:	3	9	3
-        kept weird:	3	7	1
-      drop overlap:	2	3	1
-    drop idNearTop:	1	1	0
      drop minCover:	1	1	0
+        weird over:	2	7	2
+        kept weird:	2	7	2
+      drop overlap:	2	3	1
+              kept:	6	13	4
