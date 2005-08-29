@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.73 2005/08/24 18:32:29 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.74 2005/08/29 22:13:40 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1347,20 +1347,26 @@ lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
 releaseLog = sqlEscapeString(el->releaseLog);
 
+/* had to split this up because dyStringPrintf only up to 4000 chars at one time */
 dyStringPrintf(update, 
-"update %s set "
-"pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',"
-"track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
-"makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
-"sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
-"where qid='%s'", 
-	tableName,  
-	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
-	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
-	onlineHelp,  ndxYN,  joinerYN,  stat,  
-	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, 
+    "update %s set "
+    "pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',track='%s',",
+    tableName,  pqid,  priority, el->rank,  qadate, newYN, track);
+dyStringPrintf(update, "dbs='%s',",dbs);
+dyStringPrintf(update, "tbls='%s',",tbls);
+dyStringPrintf(update, "cgis='%s',",cgis);
+dyStringPrintf(update, "files='%s',",files);
+dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
+    "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
+    "sponsor='%s',reviewer='%s',extSource='%s',",
+    el->sizeMB ,  currLoc,  makeDocYN,  
+    onlineHelp,  ndxYN,  joinerYN,  stat,  
+    sponsor,  reviewer,  extSource);
+dyStringPrintf(update, "openIssues='%s',",openIssues);
+dyStringPrintf(update, "notes='%s',",notes);
+dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
+	"where qid='%s'", 
+	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, 
 	qid
 	);
 
