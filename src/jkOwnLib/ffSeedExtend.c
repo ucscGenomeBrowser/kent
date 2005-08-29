@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.31 2005/08/29 20:51:33 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.32 2005/08/29 20:59:45 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1234,42 +1234,12 @@ struct ssFfItem *ffi;
 int seedSize;
 struct gfSeqSource *target = gfFindNamedSource(gf, tSeq->name);
 
-/* Debugging */
-    {
-    int aliCount = 0, blockCount = 0;
-    for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
-        {
-	aliCount += 1;
-	blockCount += ffAliCount(ffi->ff);
-	}
-    verbose(3, "    before expandGapless: aliCount %d, blockCount %d\n", aliCount, blockCount);
-    }
 /* First do gapless expansions and restitch. */
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     ffi->ff = expandGapless(qSeq, tSeq, ffi->ff);
     }
-/* Debugging */
-    {
-    int aliCount = 0, blockCount = 0;
-    for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
-        {
-	aliCount += 1;
-	blockCount += ffAliCount(ffi->ff);
-	}
-    verbose(3, "    after expandGapless: aliCount %d, blockCount %d\n", aliCount, blockCount);
-    }
 ssStitch(bun, ffCdna, 16, 16);
-/* Debugging */
-    {
-    int aliCount = 0, blockCount = 0;
-    for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
-        {
-	aliCount += 1;
-	blockCount += ffAliCount(ffi->ff);
-	}
-    verbose(3, "    after ssStitch: aliCount %d, blockCount %d\n", aliCount, blockCount);
-    }
 
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
@@ -1313,22 +1283,10 @@ struct gfRange *rangeList = NULL, *range;
 struct dnaSeq *tSeq;
 
 clumpList = gfFindClumpsWithQmask(gf, qSeq, qMaskBits, qOffset, lm, &hitCount);
-verbose(2, "clumps: %d\n", slCount(clumpList));
 for (clump = clumpList; clump != NULL; clump = clump->next)
     clumpToExactRange(clump, qSeq, gf->tileSize, 0, NULL, &rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
-verbose(2, "exactRanges: %d\n", slCount(rangeList));
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
-verbose(2, "bundledRanges: %d\n", slCount(rangeList));
-#define DEBUG
-#ifdef DEBUG
-    {
-    int totalSize = 0;
-    for (range = rangeList; range != NULL; range = range->next)
-        totalSize += range->tEnd - range->tStart;
-    verbose(2, "ranges: %d, total bases %d\n", slCount(rangeList), totalSize);
-    }
-#endif /* DEBUG */
 for (range = rangeList; range != NULL; range = range->next)
     {
     range->qStart += qOffset;
@@ -1342,9 +1300,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
     aliCount = ssStitch(bun, ffCdna, 16, 10);
-    verbose(3, "  aliCount %d\n", aliCount);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
-    verbose(3, "  refined to  %d\n", slCount(bun->ffList));
     slAddHead(&bunList, bun);
     }
 gfRangeFreeList(&rangeList);

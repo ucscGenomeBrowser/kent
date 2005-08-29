@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.16 2005/08/29 18:04:56 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.17 2005/08/29 20:59:45 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1446,7 +1446,6 @@ for (fi = bun->ffList; fi != NULL; fi = fi->next)
     }
 }
 
-#define DEBUG
 #ifdef DEBUG
 static void dumpBunList(struct ssBundle *bunList)
 /* Write out summary info on bundle list. */
@@ -1469,7 +1468,7 @@ for (bun = bunList; bun != NULL; bun = bun->next)
 	totalItems += 1;
 	}
     }
-verbose(2, "bundles %d, alignments %d, blocks %d, bases %d\n", 
+printf(2, "bundles %d, alignments %d, blocks %d, bases %d\n", 
     slCount(bunList), totalItems, totalBlocks, totalBases);
 }
 #endif /* DEBUG */
@@ -1527,10 +1526,6 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     if (band)
 	{
 	oneBunList = ffSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore, isRc);
-	#ifdef DEBUG
-	verbose(2, "oneBun ");
-	dumpBunList(oneBunList);
-	#endif /* DEBUG */
 	}
     else
 	{
@@ -1554,9 +1549,7 @@ dumpBunList(bigBunList);
 #endif /* DEBUG */
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    verbose(2, " alignments: %d before stitching,", slCount(bun->ffList));
     ssStitch(bun, ffCdna, minScore, ssAliCount);
-    verbose(2, " alignments: %d after\n", slCount(bun->ffList));
     if (!fastMap && !band)
 	refineSmallExonsInBundle(bun);
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
@@ -1617,9 +1610,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     }
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
-    verbose(2, " alignments: %d before stitching,", slCount(bun->ffList));
     ssStitch(bun, ffCdna, minScore, ssAliCount);
-    verbose(2, " alignments: %d after\n", slCount(bun->ffList));
     saveAlignments(bun->genoSeq->name, bun->genoSeq->size, 0, 
 	bun, NULL, qIsRc, tIsRc, stringency, minScore, out);
     }
