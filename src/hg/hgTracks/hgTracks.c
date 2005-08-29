@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1001 2005/08/16 21:47:05 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1002 2005/08/29 17:43:55 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8957,7 +8957,7 @@ return sameClass;
 }
 
 void loadGenePred(struct track *tg)
-/* Convert bed info in window to linked feature. */
+/* Convert gene pred in window to linked feature. */
 {
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 /* filter items on selected criteria if filter is available */
@@ -8967,7 +8967,7 @@ filterItems(tg, genePredClassFilter, "include");
 }
 
 void loadGenePredWithName2(struct track *tg)
-/* Convert bed info in window to linked feature. Include alternate name
+/* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name)*/
 {
 struct sqlConnection *conn = hAllocConn();
@@ -8979,7 +8979,7 @@ filterItems(tg, genePredClassFilter, "include");
 }
 
 void loadGenePredWithConfiguredName(struct track *tg)
-/* Convert bed info in window to linked feature. Include name
+/* Convert gene pred info in window to linked feature. Include name
  * in "extra" field (gene name, accession, or both, depending on UI) */
 {
 char buf[64];
@@ -8996,7 +8996,7 @@ loadGenePredWithName2(tg);
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
-    if (useGeneName)
+    if (useGeneName && lf->extra)
         dyStringAppend(name, lf->extra);
     if (useGeneName && useAcc)
         dyStringAppendC(name, '/');
@@ -10165,10 +10165,6 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeIntronMay", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeGeneMay", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeIntronOld", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeGeneOld", gencodeGeneMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
