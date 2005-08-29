@@ -33,8 +33,9 @@ install:
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
+	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
 	cp -p --remove-destination runJoiner.csh           ${SCRIPTS}
+	cp -p --remove-destination showProcesslist.csh     ${SCRIPTS}
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
-	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}
