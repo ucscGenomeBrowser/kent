@@ -4895,7 +4895,7 @@ track encodeNoncodingTransFrags
 compositeTrack on
 shortLabel Unann Transfrags
 longLabel Yale and Affymetrix Unannotated TransFrags
-subGroup1 region Region/Distance intronicProximal=Intronic_Proximal lintronicDistal=Intronic_Distal intergenicProximal=Intergenic_Proximal intergenicDistal=Intergenic_Distal
+subGroup1 region Region/Distance intronicProximal=Intronic_Proximal intronicDistal=Intronic_Distal intergenicProximal=Intergenic_Proximal intergenicDistal=Intergenic_Distal
 subGroup2 celltype Cell_Type gm06990=Gm06990 hela=HeLa hl60=HL60 nb4=NB4 neut=Neutrophil plac=Placenta
 subGroup3 source Source yale=Yale affy=Affymetrix
 group encodeAnalysis
@@ -4910,7 +4910,7 @@ type bed 4 .
     subTrack encodeNoncodingTransFrags
     shortLabel Affy In Prx GM06990
     longLabel Affy Intronic Proximal GM06990 Transfrags
-    subGroups region=intronicDistal celltype=gm06990 source=affy
+    subGroups region=intronicProximal celltype=gm06990 source=affy
     priority 1
     color 248,0,8
 
