@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.30 2005/08/29 20:18:33 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.31 2005/08/29 20:51:33 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -198,7 +198,7 @@ while (h <= he)
     ++h;
     }
 ffList = ffMakeRightLinks(ffList);
-ffList = ffMergeClose(ffList);
+ffList = ffMergeClose(ffList, nStart, hStart);
 lmCleanup(&lm);
 return ffList;
 }
@@ -1345,7 +1345,6 @@ for (range = rangeList; range != NULL; range = range->next)
     verbose(3, "  aliCount %d\n", aliCount);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     verbose(3, "  refined to  %d\n", slCount(bun->ffList));
-    if (aliCount == 3) uglyAbort("All for now");
     slAddHead(&bunList, bun);
     }
 gfRangeFreeList(&rangeList);
