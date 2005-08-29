@@ -6,7 +6,7 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.6 2005/08/29 20:22:23 kent Exp $";
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.7 2005/08/29 20:28:12 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list
@@ -134,9 +134,11 @@ for (mid = aliList->right; mid != NULL; mid = mid->right)
 	nOverlap = nEnd - nStart;
 	/* Overlap or perfectly abut in needle, and needle/hay
 	 * offset the same. */
+	verbose(3, "    nOverlap %d, nStart %d, nEnd %d\n", nOverlap, nStart, nEnd);
 	if (nOverlap >= closeEnough)
 	    {
 	    int diag = ali->nStart - ali->hStart;
+	    verbose(3, "      nOverlap %d, diag %d, mid_diag %d*\n", nOverlap, diag, mid->nStart - mid->hStart);
 	    if (diag == mid->nStart - mid->hStart)
 		{
 		/* Make mid encompass both, and make ali empty. */
