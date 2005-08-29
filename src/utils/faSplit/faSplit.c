@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.27 2005/08/21 21:17:55 braney Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.28 2005/08/29 23:06:09 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,8 +34,9 @@ errAbort(
   "This breaks up input.fa into 2000 base chunks\n"
   "   faSplit about est.fa 20000 outRoot\n"
   "This will break up est.fa into files of about 20000 bytes each by record.\n"
-  "   faSplit byname scaffolds.fa outRoot \n"
+  "   faSplit byname scaffolds.fa outRoot/ \n"
   "This breaks up scaffolds.fa using sequence names as file names.\n"
+  "       Use the terminating / on the outRoot to get it to work correctly.\n"
   "   faSplit gap chrN.fa 20000 outRoot\n"
   "This breaks up chrN.fa into files of at most 20000 bases each, \n"
   "at gap boundaries if possible.  If the sequence ends in N's, the last\n"
