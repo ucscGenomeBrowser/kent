@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.23 2005/08/29 17:45:34 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.24 2005/08/29 18:07:27 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1287,7 +1287,9 @@ verbose(2, "clumps: %d\n", slCount(clumpList));
 for (clump = clumpList; clump != NULL; clump = clump->next)
     clumpToExactRange(clump, qSeq, gf->tileSize, 0, NULL, &rangeList);
 slSort(&rangeList, gfRangeCmpTarget);
+verbose(2, "exactRanges: %d\n", slCount(rangeList));
 rangeList = gfRangesBundle(rangeList, ffIntronMax);
+verbose(2, "bundledRanges: %d\n", slCount(rangeList));
 #define DEBUG
 #ifdef DEBUG
     {

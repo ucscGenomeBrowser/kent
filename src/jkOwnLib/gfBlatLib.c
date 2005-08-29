@@ -17,9 +17,8 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-#define DEBUG
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.15 2005/08/29 18:00:37 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.16 2005/08/29 18:04:56 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1447,6 +1446,7 @@ for (fi = bun->ffList; fi != NULL; fi = fi->next)
     }
 }
 
+#define DEBUG
 #ifdef DEBUG
 static void dumpBunList(struct ssBundle *bunList)
 /* Write out summary info on bundle list. */
@@ -1529,7 +1529,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 	oneBunList = ffSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore, isRc);
 	#ifdef DEBUG
 	verbose(2, "oneBun ");
-	dumpBuns(oneBunList);
+	dumpBunList(oneBunList);
 	#endif /* DEBUG */
 	}
     else
@@ -1550,7 +1550,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     *endPos = saveEnd;
     }
 #ifdef DEBUG
-dumpBuns(bigBunList);
+dumpBunList(bigBunList);
 #endif /* DEBUG */
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
