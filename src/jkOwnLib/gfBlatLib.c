@@ -17,7 +17,9 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.14 2005/08/29 17:54:26 kent Exp $";
+#define DEBUG
+
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.15 2005/08/29 18:00:37 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1445,6 +1447,33 @@ for (fi = bun->ffList; fi != NULL; fi = fi->next)
     }
 }
 
+#ifdef DEBUG
+static void dumpBunList(struct ssBundle *bunList)
+/* Write out summary info on bundle list. */
+{
+int totalItems = 0;
+int totalBlocks = 0;
+int totalBases = 0;
+struct ssBundle *bun;
+for (bun = bunList; bun != NULL; bun = bun->next)
+    {
+    struct ssFfItem *item;
+    for (item = bun->ffList; item != NULL; item = item->next)
+	{
+	struct ffAli *ff;
+	for (ff = item->ff; ff != NULL; ff = ff->right)
+	    {
+	    totalBases += ff->hEnd - ff->hStart;
+	    totalBlocks += 1;
+	    }
+	totalItems += 1;
+	}
+    }
+verbose(2, "bundles %d, alignments %d, blocks %d, bases %d\n", 
+    slCount(bunList), totalItems, totalBlocks, totalBases);
+}
+#endif /* DEBUG */
+
 static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList, 
     bioSeq *seq, boolean isRc,  int minMatch, 
     struct gfOutput *out, boolean isProt, enum ffStringency stringency);
@@ -1498,6 +1527,10 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     if (band)
 	{
 	oneBunList = ffSeedExtInMem(gf, &subQuery, qMaskBits, subOffset, lm, minScore, isRc);
+	#ifdef DEBUG
+	verbose(2, "oneBun ");
+	dumpBuns(oneBunList);
+	#endif /* DEBUG */
 	}
     else
 	{
@@ -1516,29 +1549,8 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     *endPos = saveEnd;
     }
-#define DEBUG
 #ifdef DEBUG
-    {
-    int totalItems = 0;
-    int totalBlocks = 0;
-    int totalBases = 0;
-    for (bun = bigBunList; bun != NULL; bun = bun->next)
-        {
-	struct ssFfItem *item;
-	for (item = bun->ffList; item != NULL; item = item->next)
-	    {
-	    struct ffAli *ff;
-	    for (ff = item->ff; ff != NULL; ff = ff->right)
-	        {
-		totalBases += ff->hEnd - ff->hStart;
-		totalBlocks += 1;
-		}
-	    totalItems += 1;
-	    }
-	}
-    verbose(2, "bundles %d, alignments %d, blocks %d, bases %d\n", 
-    	slCount(bigBunList), totalItems, totalBlocks, totalBases);
-    }
+dumpBuns(bigBunList);
 #endif /* DEBUG */
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
