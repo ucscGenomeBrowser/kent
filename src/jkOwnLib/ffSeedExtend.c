@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.27 2005/08/29 20:02:19 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.28 2005/08/29 20:07:11 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1234,10 +1234,30 @@ struct ssFfItem *ffi;
 int seedSize;
 struct gfSeqSource *target = gfFindNamedSource(gf, tSeq->name);
 
+/* Debugging */
+    {
+    int aliCount = 0, blockCount = 0;
+    for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
+        {
+	aliCount += 1;
+	blockCount += ffAliCount(ffi->ff);
+	}
+    verbose(3, "    before expandGapless: aliCount %d, blockCount %d\n", aliCount, blockCount);
+    }
 /* First do gapless expansions and restitch. */
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     ffi->ff = expandGapless(qSeq, tSeq, ffi->ff);
+    }
+/* Debugging */
+    {
+    int aliCount = 0, blockCount = 0;
+    for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
+        {
+	aliCount += 1;
+	blockCount += ffAliCount(ffi->ff);
+	}
+    verbose(3, "    after expandGapless: aliCount %d, blockCount %d\n", aliCount, blockCount);
     }
 ssStitch(bun, ffCdna, 16, 16);
 
@@ -1312,7 +1332,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
     aliCount = ssStitch(bun, ffCdna, 16, 10);
-    verbose(3, "  aliCount %d", aliCount);
+    verbose(3, "  aliCount %d\n", aliCount);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     verbose(3, "  refined to  %d\n", slCount(bun->ffList));
     if (aliCount == 3) uglyAbort("All for now");
