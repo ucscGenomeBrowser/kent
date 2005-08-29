@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.30 2005/01/26 22:34:47 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.31 2005/08/29 20:18:33 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -741,6 +741,7 @@ int newAliCount = 0;
 int totalFfCount = 0;
 boolean firstTime = TRUE;
 
+verbose(3, "    ssStitch bundle of %d, minScore %d\n", slCount(bundle->ffList), minScore);
 if (bundle->ffList == NULL)
     return 0;
 
@@ -758,6 +759,10 @@ slFreeList(&bundle->ffList);
 
 ffAliSort(&ffList, ffCmpHitsNeedleFirst);
 ffList = ffMergeClose(ffList);
+    { /* debug */
+    verbose(3, "      after ffMergeClose: blockCount %d\n", ffAliCount(ffList));
+    }
+
 while (ffList != NULL)
     {
     ssFindBest(ffList, qSeq, genoSeq, stringency, 

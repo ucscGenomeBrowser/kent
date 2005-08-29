@@ -6,7 +6,7 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.5 2005/01/10 00:29:49 kent Exp $";
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.6 2005/08/29 20:22:23 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list
@@ -140,6 +140,7 @@ for (mid = aliList->right; mid != NULL; mid = mid->right)
 	    if (diag == mid->nStart - mid->hStart)
 		{
 		/* Make mid encompass both, and make ali empty. */
+		verbose(3, "      *merging*\n");
 		mid->nStart = min(ali->nStart, mid->nStart);
 		mid->nEnd = max(ali->nEnd, mid->nEnd);
 		mid->hStart = mid->nStart-diag;
