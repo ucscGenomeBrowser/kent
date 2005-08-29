@@ -38,7 +38,9 @@
 #     o qdb - white-space seperated list of query fasta files.  All sequences
 #       in the files will be queried.
 #     o preFilterOpts - pslCDnaFilter options to use for prefiltering.  This
-#       should only include the non-comparitive options.
+#       should only include the non-comparitive options.  The -polyASizes
+#       option should not have an argument, it will be added.
+#
 # PSL files are written to a local tmp directory and then copied to the output
 # directory to reduce NFS impact.  If no sequences align, an empty psl file
 # is still produced.  This script is very careful to exit non-zero if an error
@@ -49,7 +51,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.66 2005/08/22 19:55:34 markd Exp $
+# $Id: gbBlat,v 1.67 2005/08/29 23:43:40 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -357,6 +359,21 @@ proc getPolyASizes {cdnaFa} {
 }
 
 ##
+# get prefiltering options, adding in polyA file if needed
+proc getPreFilterOpts {specsVar cdnaFa} {
+    upvar $specsVar specs
+    # Find -polyASize and modify if needed
+    set opts [split $specs(preFilterOpts)]
+    if {[lsearch -glob $opts -polyASizes=*] >= 0} {
+        error "-polyASizes in preFilterOpts  should not have an argument"
+    }
+    if {[set i [lsearch $opts -polyASizes]] >= 0} {
+        set opts [lreplace $opts $i $i -polyASizes=[getPolyASizes $cdnaFa]]
+    }
+    return [concat {-verbose=0} $opts]
+}
+
+##
 # prefilter a psl file with non-comparive pslCDnaFilter options
 #
 proc preFilterAligns {specsVar cdnaFa inPsl} {
@@ -364,10 +381,8 @@ proc preFilterAligns {specsVar cdnaFa inPsl} {
     upvar $specsVar specs
     set outPsl $tmpPrefix.filtered.psl
 
-    set polyASizes [getPolyASizes $cdnaFa]
-    set cmd [list pslCDnaFilter -verbose=0 -nonComparative -polyASizes=$polyASizes]
-    set cmd [concat $cmd $specs(preFilterOpts)]
-    lappend cmd $inPsl $outPsl
+    set cmd [concat {pslCDnaFilter} [getPreFilterOpts specs $cdnaFa] \
+                 [list  $inPsl $outPsl]]
     eval doExec $cmd
     return $outPsl
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.16 2005/08/27 07:46:59 markd Exp $
+# $Id: gbAlignSetup,v 1.17 2005/08/29 23:43:39 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -67,26 +67,8 @@ gbBlatPath = absBinDir + "/gbBlat"
 
 cmdOpts = None
 
-# FIXME: tmp for debugging
-import time
-global startTime, lastTime
-startTime = lastTime = time.time()
-def ptm(*objs):
-    fh = sys.stderr
-    global startTime, lastTime
-    now = time.time()
-    fh.write(("%0.3f" % (now-startTime)))
-    fh.write(" ")
-    fh.write(("%0.3f" % (now-lastTime)))
-    lastTime = now
-    for o in objs:
-        fh.write(" ")
-        fh.write(str(o))
-    fh.write("\n")
-    fh.write
-
-# global table to make sure we don't generate output file more than
-# once
+# global table to make sure we don't generate an output file more than
+# once.
 definedPsls = set()
 
 class GenomeWindow(object):
@@ -137,13 +119,11 @@ class GenomeWindows(list):
             if conf.getDbStrNo(db, "lift") == None:
                 raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
             self.unplacedChroms = frozenset(unChroms)
+            self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
         else:
             self.unplacedChroms = frozenset()
+            self.minUnplacedSize = None
 
-        self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
-        if (self.minUnplacedSize != None) and (unChroms == None):
-            raise Exception(db + ".align.minUnplacedSize requires " + db + ".align.unplacedChroms")
-        
         for seq in genomeSeqs.itervalues():
             if seq.id in self.unplacedChroms:
                 self._partitionUnplaced(seq)

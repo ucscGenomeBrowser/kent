@@ -908,7 +908,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 - genome categories:
 
   - finished (human)
-    > 
   - well ordered whole genome shotgun (dog, mm2-mm6)
   - low coverage (< 4x), lots of contigs., N50 scaffol size < 1mb
   - not well ordered, cow! (baylor stuff)

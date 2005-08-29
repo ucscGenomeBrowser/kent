@@ -11,7 +11,8 @@ all: ${SUBDIRS:%=%.suball} jkprogs
 # special version of these programs needed for now
 jkprogs: ${BINARCH}/blat \
 	 ${BINARCH}/polyInfo \
-	 ${BINARCH}/pslIntronsOnly
+	 ${BINARCH}/pslIntronsOnly \
+	 ${BINARCH}/pslCDnaFilter
 
 ${BINARCH}/blat:
 	@${MKDIR} ${BINARCH}
@@ -24,6 +25,10 @@ ${BINARCH}/polyInfo:
 ${BINARCH}/pslIntronsOnly:
 	@${MKDIR} ${BINARCH}
 	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslIntronsOnly
+
+${BINARCH}/pslCDnaFilter:
+	@${MKDIR} ${BINARCH}
+	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslCDnaFilter
 
 clean: ${SUBDIRS:%=%.subclean}
 %.subclean:
