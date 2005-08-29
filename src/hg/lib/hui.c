@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.67 2005/07/13 04:38:01 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.68 2005/08/29 21:05:58 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1441,23 +1441,23 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     }
 puts("<P>");
 puts("<TABLE>");
-puts("<TR><TD><B>Show subtracks:</B></TD><TD>");
+puts("<TR><TD><B>Show checkboxes for:</B></TD><TD>");
 if (formName)
     {
     makeRadioSubmitTweak(javascript, formName);
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
                                 javascript);
-    puts("Selected</TD><TD>");
+    puts("Only selected subtracks</TD><TD>");
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,
 			      javascript);
     }
 else
     {
     cgiMakeRadioButton("displaySubtracks", "selected", !displayAll);
-    puts("Selected</TD><TD>");
+    puts("Only selected subtracks</TD><TD>");
     cgiMakeRadioButton("displaySubtracks", "all", displayAll);
     }
-puts("All</TD>");
+puts("All subtracks</TD>");
 puts("</TR>");
 puts("</TABLE>");
 cartSaveSession(cart);
