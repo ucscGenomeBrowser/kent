@@ -34,11 +34,13 @@ if ($status == 0) then
 endif
 
 # use mysqldump to generate .sql w/ schema, and .txt with data
-$encodeBin/dumpTable.csh $from $table
+hgsqldump  -T . $from $table
 if ($status == 1) then
     echo "Error dumping table $from $table"
     exit 1
 endif
+echo "Creating $db $table.sql and $table.txt"
+wc -l $table.txt
 
 # determine if table has bin field
 hgsql -N -s $from -e "desc $table" | head -1 | grep -q "^bin"
@@ -49,7 +51,7 @@ else
 endif
 
 # convert data coordinates
-~/bin/i386/liftOver $table.txt $opts -tab -bedPlus=$fields $chain $table.tab $table.unmapped
+liftOver $table.txt $opts -tab -bedPlus=$fields $chain $table.tab $table.unmapped
 if ($status != 0) then
     echo "Liftover error: converting $table.txt $opts -bedPlus=$fields"
     exit 1
