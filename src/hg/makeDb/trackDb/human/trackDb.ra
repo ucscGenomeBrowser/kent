@@ -5068,7 +5068,7 @@ type bed 4 .
     track encodeYaleAffyNeutRNATarsAllIntronsDistal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale In Dst Neu
-    longLabel Yale Intronic Distal Neutrophil Summary TARs
+    longLabel Yale Intronic Distal Neutrophil TARs
     subGroups region=intronicDistal celltype=neut source=yale
     priority 21
     color 25,230,255
@@ -5156,7 +5156,7 @@ type bed 4 .
     track encodeYaleAffyNeutRNATarsAllIntergenicProximal
     subTrack encodeNoncodingTransFrags
     shortLabel Yale Ig Prx Neu
-    longLabel Yale Intergenic Proximal Neutrophil Summary TARs
+    longLabel Yale Intergenic Proximal Neutrophil TARs
     subGroups region=intergenicProximal celltype=neut source=yale
     priority 32
     color 185,137,115
