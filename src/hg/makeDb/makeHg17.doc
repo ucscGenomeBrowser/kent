@@ -5881,6 +5881,8 @@ exit $status
     cd rBest
 
     # net the best chains from the chimp net and pull the human-ref net
+    # (Daryl accidentally deleted human.rbest.net and rebuilt it with the 
+    #  same command on 8/14/2005, resulting in a file of the same size)
     time chainPreNet chimp.best.chain ../../S2.len ../../S1.len stdout | \
        chainNet stdin -minSpace=10 ../../S2.len ../../S1.len \
                          /dev/null human.rbest.net
@@ -9298,6 +9300,54 @@ for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov 
     # 132 chimpDels.unmapped
     # 27794 total
     hgLoadBed hg17 chimpDels chimpDels.bed -noBin
+
+### CREATE chimpFixedDiff -- panTro1 (Daryl, August 18, 2005)
+
+    # Convert chimp quality scores from uncompressed to compressed
+    # chromosome format.  This took 22 minutes on crow.
+    ## previously done for hg16
+    # cd /cluster/data/panTro1
+    # cat */chr*.qa | qaToQac stdin chrom.qac
+
+    # Make single base pair high quality differences into a bed file
+    # and load into database
+    cd /cluster/data/hg17/bed
+    mkdir chimpFixedDiff
+    cd chimpFixedDiff
+    sed 's/simpleNucDiff/chimpFixedDiff/' ~/kent/src/hg/lib/simpleNucDiff.sql > chimpFixedDiffs.sql
+
+    # chimpHiQualDiffs was changed to allow different 
+    #    quality parameters as command line options
+
+    set axtDir = /cluster/data/hg17/bed/blastz.panTro1/axtRBestNet
+    # This crashed twice at the same place, but ran successfully when
+    # each chromosome was run separately.
+    ##  time chimpFixedDiffs /$axtDir /cluster/data/panTro1/chrom.qac chimpFixedDiffs.bed >& chimpFixedDiffs.log
+    mkdir chroms; cd chroms
+    ls -1 $axtDir | grep chr | grep axt | sed 's/.axt//' | xargs mkdir
+    # rmdir chr*random
+    touch cfd.log
+    foreach f (chr*)
+	echo -n $f "  "
+	ln -s /$axtDir/$f.axt $f/$f.axt
+	time nice chimpFixedDiffs $f /cluster/data/panTro1/chrom.qac $f.chimpFixedDiffs.bed>>& cfd.log
+    end
+    rm ../chimpFixedDiffs.bed
+    cat chr*bed > ../chimpFixedDiffs.bed
+
+    ## The load (sort) ran out of memory on hgwdev, so I sorted the
+    ## file first on kolossus (3 minutes) and then loaded it on hgwdev
+    ssh kolossus
+    hgLoadBed -strict -sqlTable=chimpFixedDiffs.sql -noLoad hg16 chimpFixedDiff chimpFixedDiffs.bed
+    exit
+    ## hgwdev (37 minutes)
+    hgLoadBed -hasBin -noSort -sqlTable=chimpFixedDiffs.sql hg16 chimpFixedDiff bed.tab
+
+    TODO: need to filter out polymorphic sites (SNPs)
+
+
+
+
 
 #  Load firstEF track (DONE 2004-08-18 braney)
     ssh hgwdev
