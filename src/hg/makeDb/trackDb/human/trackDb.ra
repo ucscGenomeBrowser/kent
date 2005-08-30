@@ -405,6 +405,37 @@ priority 144
 visibility hide
 type bed 4 .
 
+track hapmapLdHotspot
+compositeTrack on
+shortLabel HapMap LD Hotspots
+longLabel Hotspots of Linkage Disequilibrium in the HapMap
+group varRep
+visibility hide
+priority 144.55
+minLimit 0
+maxLimit 16
+autoScaleDefault Off
+maxHeightPixels 64:32:16
+type bedGraph 4 
+
+    track hapmapLdHotspotCEU
+    subTrack hapmapLdHotspot
+    shortLabel LD Hotspot CEU
+    longLabel  Hotspots of Linkage Disequilibrium in the CEPH HapMap (CEU)
+    priority 1
+    
+    track hapmapLdHotspotCJ
+    subTrack hapmapLdHotspot
+    shortLabel LD Hotspot CJ
+    longLabel  Hotspots of Linkage Disequilibrium in the Chinese/Japanese HapMap (CHB and JPT)
+    priority 2
+
+    track hapmapLdHotspotYRI
+    subTrack hapmapLdHotspot
+    shortLabel LD Hotspot YRI
+    longLabel  Hotspots of Linkage Disequilibrium in the Yoruban HapMap (YRI)
+    priority 3
+
 track tajdSnp
 compositeTrack on
 shortLabel Tajima's D SNPs
@@ -414,29 +445,29 @@ priority 144.6
 visibility hide
 type bed 4 . 
 
-track tajdSnpAD
-subTrack tajdSnp
-shortLabel SNPs AD
-longLabel  SNPs from African Descent
-color 200,100,0
-altColor 0,100,200
-priority 1
+    track tajdSnpAD
+    subTrack tajdSnp
+    shortLabel SNPs AD
+    longLabel  SNPs from African Descent
+    color 200,100,0
+    altColor 0,100,200
+    priority 1
 
-track tajdSnpED
-subTrack tajdSnp
-shortLabel SNPs ED
-longLabel  SNPs from European Descent
-color 200,100,0
-altColor 0,100,200
-priority 3
+    track tajdSnpED
+    subTrack tajdSnp
+    shortLabel SNPs ED
+    longLabel  SNPs from European Descent
+    color 200,100,0
+    altColor 0,100,200
+    priority 3
 
-track tajdSnpXD
-subTrack tajdSnp
-shortLabel SNPs XD
-longLabel  SNPs from Chinese Descent
-color 200,100,0
-altColor 0,100,200
-priority 5
+    track tajdSnpXD
+    subTrack tajdSnp
+    shortLabel SNPs XD
+    longLabel  SNPs from Chinese Descent
+    color 200,100,0
+    altColor 0,100,200
+    priority 5
 
 track tajD
 compositeTrack on
@@ -447,29 +478,29 @@ visibility hide
 priority 144.65
 type bedGraph 4 
 
-track tajdAD
-subTrack tajD
-shortLabel Tajima's D AD
-longLabel  Tajima's D from African Descent 
-color 200,100,0
-altColor 0,100,200
-priority 2
+    track tajdAD
+    subTrack tajD
+    shortLabel Tajima's D AD
+    longLabel  Tajima's D from African Descent 
+    color 200,100,0
+    altColor 0,100,200
+    priority 2
+    
+    track tajdED
+    subTrack tajD
+    shortLabel Tajima's D ED
+    longLabel  Tajima's D from European Descent
+    color 200,100,0
+    altColor 0,100,200
+    priority 4
 
-track tajdED
-subTrack tajD
-shortLabel Tajima's D ED
-longLabel  Tajima's D from European Descent
-color 200,100,0
-altColor 0,100,200
-priority 4
-
-track tajdXD
-subTrack tajD
-shortLabel Tajima's D XD
-longLabel  Tajima's D from Chinese Descent
-color 200,100,0
-altColor 0,100,200
-priority 6
+    track tajdXD
+    subTrack tajD
+    shortLabel Tajima's D XD
+    longLabel  Tajima's D from Chinese Descent
+    color 200,100,0
+    altColor 0,100,200
+    priority 6
 
 track perlegen
 shortLabel Perlegen Haplotypes
@@ -483,39 +514,39 @@ altColor 0,0,0
 spectrum on
 type bed 12 .
 
-track ld
-compositeTrack on
-shortLabel old HapMap LD
-longLabel HapMap Linkage Disequilibrium
-group varRep
-priority 144.5
-visibility hide
-canPack off
-type bed 4 +
+#track ld
+#compositeTrack on
+#shortLabel old HapMap LD
+#longLabel HapMap Linkage Disequilibrium
+#group varRep
+#priority 144.5
+#visibility hide
+#canPack off
+#type bed 4 +
 
-track ldCeu
-subTrack ld
-shortLabel LD CEU
-longLabel HapMap Linkage Disequilibrium for the CEPH population
-priority 1
+#track ldCeu
+#subTrack ld
+#shortLabel LD CEU
+#longLabel HapMap Linkage Disequilibrium for the CEPH population
+#priority 1
 
-track ldYri
-subTrack ld off
-shortLabel LD YRI
-longLabel HapMap Linkage Disequilibrium for the Yoruban population
-priority 2
+#track ldYri
+#subTrack ld off
+#shortLabel LD YRI
+#longLabel HapMap Linkage Disequilibrium for the Yoruban population
+#priority 2
 
-track ldJpt
-subTrack ld off
-shortLabel LD JPT
-longLabel HapMap Linkage Disequilibrium for the Japanese population
-priority 3
+#track ldJpt
+#subTrack ld off
+#shortLabel LD JPT
+#longLabel HapMap Linkage Disequilibrium for the Japanese population
+#priority 3
 
-track ldHcb
-subTrack ld off
-shortLabel LD HCB 
-longLabel HapMap Linkage Disequilibrium for the Han Chinese population
-priority 4
+#track ldHcb
+#subTrack ld off
+#shortLabel LD HCB 
+#longLabel HapMap Linkage Disequilibrium for the Han Chinese population
+#priority 4
 
 track hapmapLd
 compositeTrack on
