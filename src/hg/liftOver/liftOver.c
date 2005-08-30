@@ -10,14 +10,8 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.21 2005/08/26 16:34:28 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.22 2005/08/30 23:59:02 kate Exp $";
 
-double minMatch = LIFTOVER_MINMATCH;
-double minBlocks = LIFTOVER_MINBLOCKS;
-int minSizeT = 0;
-int minSizeQ = 0;
-int minChainT = 0;
-int minChainQ = 0;
 int bedPlus = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
@@ -82,7 +76,10 @@ fprintf(stderr, "Reading liftover chains\n");
 readLiftOverMap(mapFile, chainHash);
 fprintf(stderr, "Mapping coordinates\n");
 if (optionExists("gff"))
+    {
+    fprintf(stderr, "WARNING: -gff is not recommended.\nUse 'ldHgGene -out=<file.gp>' and then 'liftOver -genePred <file.gp>'\n");
     liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped);
+    }
 else if (optionExists("genePred"))
     liftOverGenePred(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
@@ -108,6 +105,13 @@ carefulClose(&unmapped);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int minSizeT = 0;
+int minSizeQ = 0;
+int minChainT = 0;
+int minChainQ = 0;
+double minMatch = LIFTOVER_MINMATCH;
+double minBlocks = LIFTOVER_MINBLOCKS;
+
 optionHash(&argc, argv);
 minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
