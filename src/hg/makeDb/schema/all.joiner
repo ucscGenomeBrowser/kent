@@ -1782,6 +1782,7 @@ tablesIgnored $gbd
     rnaGene
     regPotential%
     sangerGenefinder
+    sangamoDnaseHs
     simpleRepeat
     tableDescriptions
     tigrGeneIndex
