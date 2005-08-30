@@ -514,40 +514,6 @@ altColor 0,0,0
 spectrum on
 type bed 12 .
 
-#track ld
-#compositeTrack on
-#shortLabel old HapMap LD
-#longLabel HapMap Linkage Disequilibrium
-#group varRep
-#priority 144.5
-#visibility hide
-#canPack off
-#type bed 4 +
-
-#track ldCeu
-#subTrack ld
-#shortLabel LD CEU
-#longLabel HapMap Linkage Disequilibrium for the CEPH population
-#priority 1
-
-#track ldYri
-#subTrack ld off
-#shortLabel LD YRI
-#longLabel HapMap Linkage Disequilibrium for the Yoruban population
-#priority 2
-
-#track ldJpt
-#subTrack ld off
-#shortLabel LD JPT
-#longLabel HapMap Linkage Disequilibrium for the Japanese population
-#priority 3
-
-#track ldHcb
-#subTrack ld off
-#shortLabel LD HCB 
-#longLabel HapMap Linkage Disequilibrium for the Han Chinese population
-#priority 4
-
 track hapmapLd
 compositeTrack on
 shortLabel HapMap LD
