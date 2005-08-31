@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.937 2005/08/29 19:32:46 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.938 2005/08/31 07:29:52 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14165,39 +14165,39 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    /*See which database to link to*/
 	    if((sameString(cbs2->species, "Pyrococcus furiosus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrFur2&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrFur2&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Sulfolobus solfataricus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=sulSol1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=sulSol1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrobaculum aerophilum"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrAer2&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrAer2&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Nanoarchaeum equitans"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=nanEqu1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=nanEqu1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Methanococcus maripaludis"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=metMar1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=metMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Haloarcula marismortui"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=halMar1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=halMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Aeropyrum pernix"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=aerPer1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=aerPer1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrococcus abyssi"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrAby1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrAby1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrococcus horikoshii"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrHor1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrHor1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else{
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
