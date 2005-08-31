@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/blastz-run-ucsc instead.
@@ -7,10 +7,11 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.9 2005/03/15 17:42:02 angie Exp $
+# $Id: blastz-run-ucsc,v 1.10 2005/08/31 16:41:45 hiram Exp $
 
 use Getopt::Long;
 use strict;
+use warnings;
 
 use vars qw/
     $opt_outFormat
