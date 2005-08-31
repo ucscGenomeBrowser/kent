@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1004 2005/08/31 07:27:07 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1005 2005/08/31 07:35:42 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11128,7 +11128,6 @@ int sessionId = cgiUsualInt(cartSessionVarName(), 0);
 char *hguidString = findCookieData(cookieName);
 int userId = (hguidString == NULL ? 0 : atoi(hguidString));
 struct cart *oldCart = cartNew(userId, sessionId, NULL, NULL);
-printf("resetvars");
 cartRemoveExcept(oldCart, except);
 cartCheckout(&oldCart);
 cgiVarExcludeExcept(except);
