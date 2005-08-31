@@ -204,7 +204,7 @@ url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$
 
 track sangamoDnaseHs
 shortLabel SGMO/EIO CD34 HS
-longLabel Sangamo - European Inst. of Oncology Nuclease Hypersensitive Sites  (CD34+ Cells)
+longLabel Sangamo - Eur. Inst. Oncology DNase Hypersensitive Sites
 group regulation
 priority 99.0
 visibility hide
