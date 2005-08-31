@@ -248,7 +248,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 
 char **temparray3;
-char *temparray[16];
+char *temparray[32];
 char *temparray2;
 char **row;
 char *tempstring;
@@ -413,9 +413,9 @@ if(tg->limitedVis != tvDense)
             	{
 	    	    lf = lfsToLf(lfs);
 		    if(i>2)
-            	    temparray2=((char**)(lfs->features->extra))[i-1];
+            	    temparray2=((char**)(lfs->features->extra))[i-0];
 		    else temparray2=((char**)(lfs->features->extra))[i];
-	   	    if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)!=-9999 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
+	   	    if (i!=2 && i!=5 && i!=7 && i!=9 && atoi(temparray2)>-9997 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
                     {
 			lf->score=atoi(temparray2);
                 	slAddHead(&lfList,lf);
