@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.2 2005/08/27 07:47:00 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.3 2005/08/31 14:41:05 markd Exp $";
 
 /* standard conf file */
 char *GB_CONF_FILE = "etc/genbank.conf";
@@ -34,7 +34,7 @@ static void expandVarRef(struct lineFile* lf, struct gbConf* conf,
 {
 char vname[512];
 char *vval;
-safef(vname, sizeof(vname), "var.%.*s", ((vend-1)-(vstart+2)), vstart+2);
+safef(vname, sizeof(vname), "var.%.*s", (int)((vend-1)-(vstart+2)), vstart+2);
 vval = hashFindVal(conf->hash, vname);
 if (vval == NULL)
     errAbort("undefined variable referenced in config file: %s:%d:%s", lf->fileName, lf->lineIx, vname);
