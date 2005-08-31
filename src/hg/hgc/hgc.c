@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.938 2005/08/31 07:29:52 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.939 2005/08/31 08:00:07 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13956,7 +13956,7 @@ void printCode(char code)
 	    printf("Halophile");
     	    break;
 	case 'r':
-	    printf("Both Aerobic and Anerobic");
+	    printf("Both Aerobic and Anaerobic");
     	    break;
 	default:
 	    break;
