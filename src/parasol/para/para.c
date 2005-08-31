@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.65 2005/08/31 20:26:35 markd Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.66 2005/08/31 22:41:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -1713,7 +1713,8 @@ if (runningCount > 0)
 if (timedCount > 0)
     {
     printTimes("Average job time:", totalWall/timedCount, FALSE);
-    printTimes("Longest running job:", longestRun, FALSE);
+    if (runningCount > 0)
+        printTimes("Longest running job:", longestRun, FALSE);
     printTimes("Longest finished job:", longestWall, FALSE);
     printTimes("Submission to last job:", calcFirstToLast(db), FALSE);
     if (runningCount < 1)
