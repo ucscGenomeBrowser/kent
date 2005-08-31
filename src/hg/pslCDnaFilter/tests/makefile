@@ -4,7 +4,7 @@ PSLFILT = ../pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
-	repMatchTest nonRepLenTest noDropCntBugTest \
+	repMatchTest minAlnSizeTest nonRepSizeTest noDropCntBugTest \
 	minSpan100Test minSpan10Test \
 	localBestTest globalBestTest
 
@@ -26,8 +26,11 @@ minQSizeTest:
 repMatchTest:
 	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-maxRepMatch=0.2'
 
-nonRepLenTest:
-	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minNonRepLen=30'
+minAlnSizeTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minAlnSize=50'
+
+nonRepSizeTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minNonRepSize=30'
 
 # file that causes the count of queries kept to be one more than total
 noDropCntBugTest:

@@ -9,6 +9,14 @@
 #include "localmem.h"
 #include "polyASize.h"
 
+static void alignInfoVerb(int level, struct cDnaAlign *aln, char *desc)
+/* print info about and alignment */
+{
+cDnaAlignVerb(5, aln->psl, "%s: id=%0.4g cov=%0.4g rep=%0.4g alnPolyAT=%d score=%0.4g mat=%d mis=%d repMat=%d",
+              desc, aln->ident, aln->cover, aln->repMatch, aln->alnPolyAT, aln->score,
+              aln->psl->match, aln->psl->misMatch, aln->psl->repMatch);
+}
+
 static float calcIdent(struct psl *psl)
 /* get fraction ident for a psl */
 {
@@ -94,7 +102,7 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     /* get block, adjusted for poly-A/T, and find what was omitted */
     struct cDnaRange adj = cDnaQueryBlk(cdna, psl, iBlk);
     int start =  psl->qStarts[iBlk];
-    int end = adj.start+psl->blockSizes[iBlk];
+    int end = start+psl->blockSizes[iBlk];
     if (psl->strand[0] == '-')
         reverseIntRange(&start, &end, psl->qSize);
     alnSize += (adj.start - start) + (end - adj.end);
@@ -113,12 +121,11 @@ aln->ident = calcIdent(psl);
 aln->cover = calcCover(cdna, psl);
 aln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
 aln->score = calcScore(psl);
-aln-> alnPolyAT = getAlnPolyATLen(cdna, psl);
-
+aln->alnPolyAT = getAlnPolyATLen(cdna, psl);
+assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch));
 
 if (verboseLevel() >= 5)
-    cDnaAlignVerb(5, psl, "align: id=%0.4g cov=%0.4g rep=%0.4g score=%0.4g",
-                  aln->ident, aln->cover, aln->repMatch, aln->score);
+    alignInfoVerb(5, aln, "align");
 return aln;
 }
 
@@ -140,6 +147,7 @@ else
     /* adjust only with poly-A tail */
     cdna->adjQEnd -= polyASize->tailPolyASize;
     }
+assert(cdna->adjQStart <= cdna->adjQEnd);
 }
 
 static struct cDnaQuery *cDnaQueryNew(struct cDnaReader *reader, struct psl *psl,
@@ -228,8 +236,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
         if (aln->weirdOverlap)
             cdna->stats->weirdKeptCnts.aligns++;
         if (verboseLevel() >= 4)
-            cDnaAlignVerb(4, aln->psl, "keep: id=%0.4g score=%0.4g cov=%0.4g",
-                          aln->ident, aln->score, aln->cover);
+            alignInfoVerb(4, aln, "keep");
         }
     }
 }
@@ -310,7 +317,8 @@ updateCounter(&stats->minQSizeCnts);
 updateCounter(&stats->overlapCnts);
 updateCounter(&stats->minIdCnts);
 updateCounter(&stats->minCoverCnts);
-updateCounter(&stats->minNonRepLenCnts);
+updateCounter(&stats->minAlnSizeCnts);
+updateCounter(&stats->minNonRepSizeCnts);
 updateCounter(&stats->maxRepMatchCnts);
 updateCounter(&stats->maxAlignsCnts);
 updateCounter(&stats->localBestCnts);

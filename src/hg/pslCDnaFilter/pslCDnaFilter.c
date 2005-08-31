@@ -26,7 +26,8 @@ static struct optionSpec optionSpecs[] =
     {"minSpan", OPTION_FLOAT},
     {"minQSize", OPTION_INT},
     {"maxAligns", OPTION_INT},
-    {"minNonRepLen", OPTION_INT},
+    {"minAlnSize", OPTION_INT},
+    {"minNonRepSize", OPTION_INT},
     {"maxRepMatch", OPTION_FLOAT},
     {"polyASizes", OPTION_STRING},
     {"usePolyTHead", OPTION_BOOLEAN},
@@ -44,7 +45,8 @@ static float gMinCover = 0.0;          /* minimum coverage */
 static float gMinSpan = 0.0;           /* minimum target span allowed */
 static int gMinQSize = 0;              /* drop queries shorter than this */
 static int gMaxAligns = -1;            /* only allow this many alignments for a query */
-static int gMinNonRepLen = 0;          /* minimum non-repeat bases that must be aligned */
+static int gMinAlnSize = 0;            /* minimum bases that must be aligned */
+static int gMinNonRepSize = 0;         /* minimum non-repeat bases that must be aligned */
 static float gMaxRepMatch = 1.0;       /* maximum repeat match/aligned */
 static char *gPolyASizes = NULL;       /* polyA size file */
 static boolean gUsePolyTHead = FALSE;  /* adjust bounds with longs of polyA tail or polyT head */
@@ -129,8 +131,27 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
         }
 }
 
-static void nonRepLenFilter(struct cDnaQuery *cdna)
-/* filter by minNonRepLen */
+static void alnSizeFilter(struct cDnaQuery *cdna)
+/* filter by alnRepSize */
+{
+struct cDnaAlign *aln;
+
+/* drop those that are over max */
+for (aln = cdna->alns; aln != NULL; aln = aln->next)
+    {
+    /* don't included poly-A length. */
+    int alnSize = ((aln->psl->match + aln->psl->repMatch + aln->psl->misMatch) - aln->alnPolyAT);
+    if ((!aln->drop) && (alnSize < gMinAlnSize))
+        {
+        aln->drop = TRUE;
+        cdna->stats->minAlnSizeCnts.aligns++;
+        cDnaAlignVerb(3, aln->psl, "drop: min align size %d", alnSize);
+        }
+    }
+}
+
+static void nonRepSizeFilter(struct cDnaQuery *cdna)
+/* filter by minNonRepSize */
 {
 struct cDnaAlign *aln;
 
@@ -139,12 +160,13 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     /* don't included poly-A length, although we are not sure if it's aligned
      * to a repeat. */
-    int nonRepAln = ((aln->psl->match + aln->psl->misMatch) - aln->alnPolyAT);
-    if ((!aln->drop) && (nonRepAln < gMinNonRepLen))
+    int nonRepSize = ((aln->psl->match + aln->psl->misMatch) - aln->alnPolyAT);
+    assert(nonRepSize >= 0);
+    if ((!aln->drop) && (nonRepSize < gMinNonRepSize))
         {
         aln->drop = TRUE;
-        cdna->stats->minNonRepLenCnts.aligns++;
-        cDnaAlignVerb(3, aln->psl, "drop: min non-rep len %d", nonRepAln);
+        cdna->stats->minNonRepSizeCnts.aligns++;
+        cDnaAlignVerb(3, aln->psl, "drop: min non-rep size %d", nonRepSize);
         }
     }
 }
@@ -338,8 +360,10 @@ static void filterQuery(struct cDnaQuery *cdna,
 invalidPslFilter(cdna);
 if (gMinQSize > 0)
     minQSizeFilter(cdna);
-if (gMinNonRepLen > 0)
-    nonRepLenFilter(cdna);
+if (gMinAlnSize > 0)
+    alnSizeFilter(cdna);
+if (gMinNonRepSize > 0)
+    nonRepSizeFilter(cdna);
 if (gMaxRepMatch < 1.0)
     repMatchFilter(cdna);
 if (gMinId > 0.0)
@@ -394,7 +418,8 @@ carefulClose(&outPslFh);
 verbose(1,"%18s \tseqs\taligns\tmultAlnSeqs\n", "");
 verbStats("total", &stats->totalCnts, FALSE);
 verbStats("drop invalid", &stats->badCnts, FALSE);
-verbStats("drop minNonRepLen", &stats->minNonRepLenCnts, FALSE);
+verbStats("drop minAlnSize", &stats->minAlnSizeCnts, FALSE);
+verbStats("drop minNonRepSize", &stats->minNonRepSizeCnts, FALSE);
 verbStats("drop maxRepMatch", &stats->maxRepMatchCnts, FALSE);
 verbStats("drop min size", &stats->minQSizeCnts, FALSE);
 verbStats("drop minIdent", &stats->minIdCnts, FALSE);
@@ -436,7 +461,8 @@ gMinCover = optionFrac("minCover", gMinCover);
 gMinSpan = optionFrac("minSpan", gMinSpan);
 gMinQSize = optionInt("minQSize", gMinQSize);
 gMaxAligns = optionInt("maxAligns", gMaxAligns);
-gMinNonRepLen = optionInt("minNonRepLen", gMinNonRepLen);
+gMinAlnSize = optionInt("minAlnSize", gMinAlnSize);
+gMinNonRepSize = optionInt("minNonRepSize", gMinNonRepSize);
 gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
 gPolyASizes = optionVal("polyASizes", NULL);
 gUsePolyTHead = optionExists("usePolyTHead");

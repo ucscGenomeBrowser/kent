@@ -47,16 +47,19 @@ Options:
 
    -minQSize=0 - drop queries shorter than this size
 
-   -maxAligns=-1 - maximum number of alignments for a given query. If
-    exceeded, then alignments are sorted by score and only this number
-    will be saved.  A value of -1 disables (default)
+   -minAlnSize=0 - minimum number of aligned bases.  This includes
+    repeats, but excludes poly-A/poly-T bases if available.
 
-   -minNonRepLen=0 - Minimum aligned bases that are not repeats.
+   -minNonRepSize=0 - Minimum aligned bases that are not repeats.
     Must use -repeats on BLAT if doing unmasked alignments.
 
    -maxRepMatch=1.0 - Maximum fraction of matching aligned bases
     that are repeats.  Must use -repeats on BLAT if doing
     unmasked alignments.
+
+   -maxAligns=-1 - maximum number of alignments for a given query. If
+    exceeded, then alignments are sorted by score and only this number
+    will be saved.  A value of -1 disables (default)
 
    -polyASizes=file - tab separate file with information about
     poly-A tails and poly-T heads.  Format is outputted by

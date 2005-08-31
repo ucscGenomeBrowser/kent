@@ -53,7 +53,8 @@ struct cDnaStats
     struct cDnaCnts overlapCnts;       /* number dropped due to overlap */
     struct cDnaCnts minIdCnts;         /* number dropped less that min id */
     struct cDnaCnts minCoverCnts;      /* number dropped less that min cover */
-    struct cDnaCnts minNonRepLenCnts;  /* number dropped due minNonRepLen */
+    struct cDnaCnts minAlnSizeCnts;    /* number dropped due minAlnSize */
+    struct cDnaCnts minNonRepSizeCnts; /* number dropped due minNonRepSize */
     struct cDnaCnts maxRepMatchCnts;   /* number dropped due maxRepMatch */
     struct cDnaCnts maxAlignsCnts;     /* number dropped due to over max */
     struct cDnaCnts localBestCnts;     /* number dropped due to local near best */
