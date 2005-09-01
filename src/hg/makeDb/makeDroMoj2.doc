@@ -452,5 +452,46 @@ droMoj2.perChromTables = no
     nice ./bin/gbDbLoadStep -drop -initialLoad  droMoj2&
 
 
+# AUTO UPDATE GENBANK MRNA AND EST GENES RUN (DONE, 2005-08-31, markd)
+    # redo genbank revised alignment procedure once again to
+    # pickup local near best pslCDnaFilter
+
+    # align with revised genbank process
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add droMoj2
+# droMoj2 (D. mojavensis)
+# genbank has 1 mRNA and 0 ESTs at time of initial build
+droMoj2.serverGenome = /cluster/data/droMoj2/droMoj2.2bit
+droMoj2.clusterGenome = /iscratch/i/droMoj2/droMoj2.2bit
+droMoj2.ooc = /iscratch/i/droMoj2/11.ooc
+droMoj2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+droMoj2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+droMoj2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+droMoj2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+droMoj2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+droMoj2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+droMoj2.lift = no
+droMoj2.refseq.mrna.native.load = no
+droMoj2.refseq.mrna.xeno.load = yes
+droMoj2.genbank.mrna.xeno.load = yes
+droMoj2.genbank.est.native.load = no
+droMoj2.genbank.est.xeno.load = no
+droMoj2.downloadDir = droMoj2
+droMoj2.perChromTables = no
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial droMoj2 &
+
+    # when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  droMoj2&
+
+
 
 
