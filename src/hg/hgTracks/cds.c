@@ -384,8 +384,8 @@ else
     getMrnaCds(psl->qName, &cds);
     }
 
-/*cds not in genbank - revert to normal*/
-if (!(cds.startComplete || cds.endComplete))
+/* cds not in genbank or not parsable - revert to normal*/
+if (cds.start == cds.end)
     {
     int grayIx = pslGrayIx(psl, isXeno, maxShade);
     sfList = sfFromPslX(psl, grayIx, sizeMul);
@@ -398,7 +398,6 @@ else
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
     sfList = splitGenePredByCodon(chrom, lf, gp, retGaps, extraInfo);
-    genePredTabOut(gp, stderr);
     genePredFree(&gp);
     }
 return(sfList);
