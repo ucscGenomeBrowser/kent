@@ -6,13 +6,13 @@
 #include "hdb.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.3 2005/09/01 20:32:43 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.4 2005/09/01 23:24:44 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
 
 // make this an option
-boolean strict = FALSE;
+boolean strict = TRUE;
 
 void usage()
 /* Explain usage and exit. */
