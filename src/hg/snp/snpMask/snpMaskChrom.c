@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.2 2005/09/01 04:12:54 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.3 2005/09/01 20:32:43 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -179,6 +179,7 @@ return list;
 boolean isComplex(char mychar)
 /* helper function: distinguish bases from IUPAC */
 {
+    if (mychar == 'N' || mychar == 'n') return TRUE;
     if (ntChars[mychar] == 0) return TRUE;
     return FALSE;
 }
