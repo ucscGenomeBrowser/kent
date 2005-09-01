@@ -233,7 +233,7 @@ FILE *ra = NULL, *tab = NULL;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
-char *copyright;
+char *copyright, *pubMed;
 struct slName *list, *el;
 boolean gotAny = FALSE;
 struct hash *uniqAssayHash = newHash(16);
@@ -289,6 +289,18 @@ for (el = list; el != NULL; el = el->next)
 fprintf(ra, "\n");
 slNameFreeList(&list);
 sqlFreeResult(&sr);
+
+/* Add in link to PubMed record on publication. */
+dyStringClear(query);
+dyStringPrintf(query,
+   "select ACC_Accession.accID from ACC_Accession,ACC_LogicalDB "
+   "where ACC_Accession._Object_key = %s "
+   "and ACC_Accession._LogicalDB_key = ACC_LogicalDB._LogicalDB_key "
+   "and ACC_LogicalDB.name = 'PubMed'", ref);
+pubMed = sqlQuickString(conn, query->string);
+if (pubMed != NULL)
+    fprintf(ra, "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=%s\n", pubMed);
+freez(&pubMed);
 
 /* Add in copyright notice */
 dyStringClear(query);
