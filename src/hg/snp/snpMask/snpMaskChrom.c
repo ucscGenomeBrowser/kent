@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.1 2005/09/01 03:52:37 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskChrom.c,v 1.2 2005/09/01 04:12:54 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -86,7 +86,7 @@ struct snpSimple
 struct snpSimple *snpSimpleLoad(char **row)
 /* Load a snpSimple from row fetched from snp table
  * in database.  Dispose of this with snpSimpleFree().
-   Complement observed if negative strand. */
+   Complement observed if negative strand, preserving alphabetical order. */
 {
 struct snpSimple *ret;
 int obsLen, i;
@@ -100,23 +100,20 @@ ret->observed   = cloneString(row[3]);
 
 if (ret->strand == '+') return ret;
 
-// use complement function from dnaUtil
 obsLen = strlen(ret->observed);
 obsComp = needMem(obsLen + 1);
 strcpy(obsComp, ret->observed);
 for (i = 0; i < obsLen; i = i+2)
     {
-    if (ret->observed[i] == 'A') obsComp[obsLen-i-1] = 'T';
-    else if (ret->observed[i] == 'T') obsComp[obsLen-i-1] = 'A';
-    else if (ret->observed[i] == 'C') obsComp[obsLen-i-1] = 'G';
-    else if (ret->observed[i] == 'G') obsComp[obsLen-i-1] = 'C';
+    char c = ret->observed[i];
+    obsComp[obsLen-i-1] = ntCompTable[c];
     }
 
 verbose(2, "negative strand detected for snp %s\n", ret->name);
 verbose(2, "original observed string = %s\n", ret->observed);
 verbose(2, "complemented observed string = %s\n", obsComp);
 
-// free observed here
+freeMem(ret->observed);
 ret->observed=obsComp;
 return ret;
 }
@@ -243,7 +240,7 @@ char iupac(char *name, char *observed, char orig)
 
     if (isComplex(orig)) 
         {
-	observed2 = lookupIupacReverse(orig);
+	observed2 = lookupIupacReverse(toupper(orig));
 	if (!sameString(observed, observed2)) 
 	    {
 	    verbose(1, "differing observed strings %s, %s, %s\n", name, observed, observed2);
@@ -264,15 +261,21 @@ struct dnaSeq *seq;
 char *ptr;
 struct snpSimple *snps = NULL;
 struct snpSimple *snp = NULL;
+boolean inRep = FALSE;
 
 seq = nibLoadAllMasked(NIB_MASK_MIXED, nibFile);
 ptr = seq->dna;
 snps = readSnpsFromChrom(chromName);
 
 /* do all substitutions */
+
 for (snp = snps; snp != NULL; snp = snp->next)
     {
+    if (islower(ptr[snp->chromStart])) inRep = TRUE;
+    else inRep = FALSE;
     ptr[snp->chromStart] = iupac(snp->name, snp->observed, ptr[snp->chromStart]);
+    if (inRep)
+        ptr[snp->chromStart] = tolower(ptr[snp->chromStart]);
     }
 
 faWrite(outFile, chromName, seq->dna, seq->size);
@@ -289,22 +292,13 @@ if (argc != 5)
     usage();
 database = argv[1];
 if(!hDbExists(database))
-    {
-    printf("%s does not exist\n", database);
-    return -1;
-    }
+    errAbort("%s does not exist\n", database);
 hSetDb(database);
 if(!hTableExistsDb(database, "snp"))
-    {
-    printf("no snp table in %s\n", database);
-    return -2;
-    }
+    errAbort("no snp table in %s\n", database);
 chromName = argv[2];
 if(hgOfficialChromName(chromName) == NULL)
-    {
-    printf("no such chromosome %s in %s\n", chromName, database);
-    return -3;
-    }
+    errAbort("no such chromosome %s in %s\n", chromName, database);
 // check that nib file exists
 // or, use hNibForChrom from hdb.c
 snpMaskChrom(argv[3], argv[4]);
