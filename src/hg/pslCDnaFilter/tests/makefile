@@ -5,8 +5,8 @@ DIFF = diff -u --exclude CVS -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	repMatchTest minAlnSizeTest nonRepSizeTest noDropCntBugTest \
-	minSpan100Test minSpan10Test \
-	localBestTest globalBestTest
+	minSpan100Test minSpan10Test localBestTest globalBestTest \
+	ignoreNsCoverTest ignoreNsMinAlnTest ignoreNsLocalBestTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -50,6 +50,16 @@ localBestTest:
 # global best in genome
 globalBestTest:
 	${MAKE} doFilter name=$@ inPsl=many.psl filtArgs='-globalNearBest=0.01'
+
+# ignore Ns in cover and score
+ignoreNsCoverTest:
+	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -minCover=0.4'
+
+ignoreNsMinAlnTest:
+	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -minAlnSize=80'
+
+ignoreNsLocalBestTest:
+	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -localNearBest=0.005'
 
 # Recursive targets.  Results are sorted to allow consistent comparisons, as somethimes
 # internal sorting done by pslCDnaFilter is not stable.
