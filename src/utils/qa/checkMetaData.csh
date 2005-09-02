@@ -184,9 +184,9 @@ endif
 set metatable="genomeClade"
 
 # get lookup for clade check
-hgsql $host1 -e 'SELECT * FROM genomeClade WHERE genome LIKE "%'$genome'"' \
+hgsql $host1 -e 'SELECT * FROM genomeClade WHERE genome LIKE "'$genome'"' \
   $centdb1 > $metatable.$db.$out1 
-hgsql $host2 -e 'SELECT * FROM genomeClade WHERE genome LIKE  "%'$genome'"' \
+hgsql $host2 -e 'SELECT * FROM genomeClade WHERE genome LIKE  "'$genome'"' \
   $centdb2 > $metatable.$db.$out2
  
 set metatable=""
