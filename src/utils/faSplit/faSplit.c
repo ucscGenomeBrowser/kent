@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.28 2005/08/29 23:06:09 hiram Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.29 2005/09/02 20:27:48 heather Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -83,7 +83,7 @@ unsigned long long estimateFaSize(char *fileName)
 /* Estimate number of bases from file size. */
 {
 off_t size = fileSize(fileName);
-printf("size is %lld\n",size);
+printf("size is %lld\n",(long long)size);
 return 0.5 + size * 0.99;
 }
 
