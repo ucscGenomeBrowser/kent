@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.58 2005/06/20 14:43:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.59 2005/09/02 17:35:11 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -434,7 +434,7 @@ if (protAcc != NULL)
 		cartOptionalString(cart, hggEnd));
     	kgProteinID = sqlGetField(conn, database, "knownGene", "proteinID", condStr);
     	}
-	
+
     hPrintf("<B>Protein: ");
     if (strstr(kgProteinID, "-") != NULL)
         {
@@ -593,6 +593,7 @@ addGoodSection(localizationSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(transRegCodeMotifSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(pathwaysSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(mrnaDescriptionsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(pseudoGeneSection(conn, sectionRa), conn, &sectionList);
 // addGoodSection(xyzSection(conn, sectionRa), conn, &sectionList);
 
 slSort(&sectionList, sectionCmpPriority);
