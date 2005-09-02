@@ -84,6 +84,10 @@ struct section *methodSection(struct sqlConnection *conn,
         struct hash *sectionRa);
 /* Create UCSC KG Method section. */
 
+struct section *pseudoGeneSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create pseudoGene section. */
+
 struct section *mrnaDescriptionsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create mrnaDescriptions section. */
