@@ -11,10 +11,11 @@ struct cDnaAlign
 {
     struct cDnaAlign *next;
     struct psl *psl;     /* alignment */
+    int adjMisMatch;     /* number of misMatches if Ns are ignored */
     float ident;         /* fraction ident */
     float cover;         /* fraction of cDNA aligned, excluding polyA if
                           * it is available */
-    int alnPolyAT;       /* bases of poly-A head or poly-T tail that are aligned */      
+    int alnPolyAT;       /* bases of poly-A head or poly-T tail that are aligned */
     float score;         /* score weight by having introns and length */
     float repMatch;      /* fraction repeat match */
     boolean drop;         /* drop this psl if set */
@@ -62,6 +63,15 @@ struct cDnaStats
     struct cDnaCnts minSpanCnts;       /* number dropped due to under minSpan */
 };
 
+
+enum cDnaOpts
+/* bit set of options to control scoring */
+{
+    cDnaUsePolyTHead = 0x01,  /* use poly-T head if longer than poly-A tail (as in 3' ESTs),
+                               * otherwise just use poly-A tail */
+    cDnaIgnoreNs     = 0x02   /* don't include Ns while calculating the score and coverage.*/
+};
+
 struct cDnaReader
 /* Object to read cDNA alignments.  To minimize memory requirements,
  * alignments are read for one cDNA at a time and processed.  Also collects
@@ -69,8 +79,7 @@ struct cDnaReader
 {
     struct lineFile *pslLf;       /* object for reading psl rows */
     struct cDnaQuery *cdna;       /* current cDNA */
-    boolean usePolyTHead;         /* use poly-T head if longer than poly-A tail (as in 3' ESTs),
-                                   * otherwise just use poly-A tail */
+    unsigned opts;                /* option bit set from cDnaOpts */
     struct psl *nextCDnaPsl;      /* if not null, psl for next cDNA */
     struct hash *polyASizes;      /* hash of polyASizes */
     struct cDnaStats stats;       /* all statistics */
@@ -84,7 +93,7 @@ struct cDnaRange
     int end;
 };
 
-struct cDnaReader *cDnaReaderNew(char *pslFile, boolean usePolyTHead, char *polyASizeFile);
+struct cDnaReader *cDnaReaderNew(char *pslFile, unsigned opts, char *polyASizeFile);
 /* construct a new object, opening the psl file */
 
 void cDnaReaderFree(struct cDnaReader **readerPtr);

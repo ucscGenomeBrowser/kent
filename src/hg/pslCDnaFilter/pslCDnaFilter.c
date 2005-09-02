@@ -21,6 +21,7 @@ static struct optionSpec optionSpecs[] =
 {
     {"localNearBest", OPTION_FLOAT},
     {"globalNearBest", OPTION_FLOAT},
+    {"ignoreNs", OPTION_BOOLEAN},
     {"minId", OPTION_FLOAT},
     {"minCover", OPTION_FLOAT},
     {"minSpan", OPTION_FLOAT},
@@ -40,6 +41,7 @@ static struct optionSpec optionSpecs[] =
 
 static float gLocalNearBest = -1.0;    /* local near best in genome */
 static float gGlobalNearBest = -1.0;   /* global near best in genome */
+static unsigned gCDnaOpts = 0;         /* options for cDnaReader */
 static float gMinId = 0.0;             /* minimum fraction id */
 static float gMinCover = 0.0;          /* minimum coverage */
 static float gMinSpan = 0.0;           /* minimum target span allowed */
@@ -49,7 +51,6 @@ static int gMinAlnSize = 0;            /* minimum bases that must be aligned */
 static int gMinNonRepSize = 0;         /* minimum non-repeat bases that must be aligned */
 static float gMaxRepMatch = 1.0;       /* maximum repeat match/aligned */
 static char *gPolyASizes = NULL;       /* polyA size file */
-static boolean gUsePolyTHead = FALSE;  /* adjust bounds with longs of polyA tail or polyT head */
 static boolean gBestOverlap = FALSE;   /* filter overlaping, keeping only the best */
 static char *gDropped = NULL;          /* save dropped psls here */
 static char *gWeirdOverlappped = NULL; /* save weird overlapping psls here */
@@ -140,7 +141,8 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     /* don't included poly-A length. */
-    int alnSize = ((aln->psl->match + aln->psl->repMatch + aln->psl->misMatch) - aln->alnPolyAT);
+    struct psl *psl = aln->psl;
+    int alnSize = ((psl->match + psl->repMatch + aln->adjMisMatch) - aln->alnPolyAT);
     if ((!aln->drop) && (alnSize < gMinAlnSize))
         {
         aln->drop = TRUE;
@@ -160,8 +162,9 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     /* don't included poly-A length, although we are not sure if it's aligned
      * to a repeat. */
-    int nonRepSize = ((aln->psl->match + aln->psl->misMatch) - aln->alnPolyAT);
-    assert(nonRepSize >= 0);
+    int nonRepSize = ((aln->psl->match + aln->adjMisMatch) - aln->alnPolyAT);
+    if (nonRepSize < 0)
+        nonRepSize = 0;
     if ((!aln->drop) && (nonRepSize < gMinNonRepSize))
         {
         aln->drop = TRUE;
@@ -398,7 +401,7 @@ if ((cnts->aligns > 0) || always)
 static void pslCDnaFilter(char *inPsl, char *outPsl)
 /* filter cDNA alignments in psl format */
 {
-struct cDnaReader *reader = cDnaReaderNew(inPsl, gUsePolyTHead, gPolyASizes);
+struct cDnaReader *reader = cDnaReaderNew(inPsl, gCDnaOpts, gPolyASizes);
 struct cDnaStats *stats = &reader->stats;
 FILE *outPslFh = mustOpen(outPsl, "w");
 FILE *dropPslFh = NULL;
@@ -456,6 +459,10 @@ gLocalNearBest = optionFrac("localNearBest", gLocalNearBest);
 gGlobalNearBest = optionFrac("globalNearBest", gGlobalNearBest);
 if ((gLocalNearBest >= 0.0) && (gGlobalNearBest >= 0.0))
     errAbort("can only specify one of -localNearBest and -gLocalNearBest");
+if (optionExists("usePolyTHead"))
+    gCDnaOpts |= cDnaUsePolyTHead;
+if (optionExists("ignoreNs"))
+    gCDnaOpts |= cDnaIgnoreNs;
 gMinId = optionFrac("minId", gMinId);
 gMinCover = optionFrac("minCover", gMinCover);
 gMinSpan = optionFrac("minSpan", gMinSpan);
@@ -465,8 +472,7 @@ gMinAlnSize = optionInt("minAlnSize", gMinAlnSize);
 gMinNonRepSize = optionInt("minNonRepSize", gMinNonRepSize);
 gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
 gPolyASizes = optionVal("polyASizes", NULL);
-gUsePolyTHead = optionExists("usePolyTHead");
-if (gUsePolyTHead && (gPolyASizes = NULL))
+if (optionExists("usePolyTHead") && (gPolyASizes == NULL))
     errAbort("must specify -polyASizes with -usePolyTHead");
 gBestOverlap = optionExists("bestOverlap");
 gDropped = optionVal("dropped", NULL);

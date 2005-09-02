@@ -41,9 +41,37 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     if (q.start < q.end)
         alnSize += (q.end - q.start);
     }
+if (cdna->reader->opts & cDnaIgnoreNs)
+    alnSize -= psl->nCount;
 return ((float)alnSize)/((float)(cdna->adjQEnd - cdna->adjQStart));
 }
 
+static int alignMilliBadness(struct psl *psl, int adjMisMatch)
+/* Determine a badness score.  This is the pslCalcMilliBad()
+ * algorithm, with an option of not counting Ns. */
+{
+int sizeMul = pslIsProtein(psl) ? 3 : 1;
+int qAliSize, tAliSize, aliSize;
+int milliBad = 0;
+int sizeDif;
+int insertFactor;
+int total;
+
+qAliSize = sizeMul * (psl->qEnd - psl->qStart);
+tAliSize = psl->tEnd - psl->tStart;
+aliSize = min(qAliSize, tAliSize);
+if (aliSize <= 0)
+    return 0;
+sizeDif = qAliSize - tAliSize;
+if (sizeDif < 0)
+    sizeDif = 0;
+insertFactor = psl->qNumInsert;
+
+total = (sizeMul * (psl->match + psl->repMatch + adjMisMatch));
+if (total != 0)
+    milliBad = (1000 * (adjMisMatch*sizeMul + insertFactor + round(3*log(1+sizeDif)))) / total;
+return milliBad;
+}
 
 static float intronFactor(struct psl *psl)
 /* Figure bonus for having introns.  An intron is worth 3 bases... 
@@ -81,11 +109,11 @@ static float sizeFactor(struct psl *psl)
 return (4.0*sqrt(psl->match + psl->repMatch/4))/1000.0;
 }
 
-static float calcScore(struct psl *psl)
+static float calcScore(struct psl *psl, int adjMisMatch)
 /* calculate an alignment score, with weighting towards alignments with
  * introns and longer alignments.  The algorithm is based pslReps. */
 {
-float score = (1000.0-pslCalcMilliBad(psl, TRUE))/1000.0;
+float score = (1000.0-alignMilliBadness(psl, adjMisMatch))/1000.0;
 score += sizeFactor(psl) + intronFactor(psl);
 return score;
 }
@@ -117,10 +145,11 @@ static struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna,
 struct cDnaAlign *aln;
 AllocVar(aln);
 aln->psl = psl;
+aln->adjMisMatch = psl->misMatch - ((cdna->reader->opts & cDnaIgnoreNs) ? psl->nCount : 0);
 aln->ident = calcIdent(psl);
 aln->cover = calcCover(cdna, psl);
 aln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
-aln->score = calcScore(psl);
+aln->score = calcScore(psl, aln->adjMisMatch);
 aln->alnPolyAT = getAlnPolyATLen(cdna, psl);
 assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch));
 
@@ -134,7 +163,7 @@ static void polyAAdjBounds(struct cDnaQuery *cdna,
                            struct polyASize *polyASize)
 /* adjust mRNA bounds for poly-A/poly-Ts */
 {
-if (cdna->reader->usePolyTHead)
+if (cdna->reader->opts & cDnaUsePolyTHead)
     {
     /* use longest of poly-A tail or poly-T head */
     if (polyASize->headPolyTSize > polyASize->tailPolyASize)
@@ -357,16 +386,16 @@ reader->nextCDnaPsl = psl;  /* save for next time (or NULL) */
 return TRUE;
 }
 
-struct cDnaReader *cDnaReaderNew(char *pslFile, boolean usePolyTHead, char *polyASizeFile)
+struct cDnaReader *cDnaReaderNew(char *pslFile, unsigned opts, char *polyASizeFile)
 /* construct a new object, opening the psl file */
 {
-struct cDnaReader *alns;
-AllocVar(alns);
-alns->pslLf = lineFileOpen(pslFile, TRUE);
-alns->usePolyTHead = usePolyTHead;
+struct cDnaReader *reader;
+AllocVar(reader);
+reader->opts = opts;
+reader->pslLf = lineFileOpen(pslFile, TRUE);
 if (polyASizeFile != NULL)
-    alns->polyASizes = polyASizeLoadHash(polyASizeFile);
-return alns;
+    reader->polyASizes = polyASizeLoadHash(polyASizeFile);
+return reader;
 }
 
 void cDnaReaderFree(struct cDnaReader **readerPtr)

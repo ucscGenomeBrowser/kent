@@ -32,6 +32,11 @@ Options:
     value of zero keeps only the best alignment.  A value of -1.0
     disables (default).
 
+   -ignoreNs - don't include Ns while calculating the score and
+    coverage. That is treat them as unaligned rather than
+    mismatches.  Ns are still counts as mismatches when calculating
+    the identity.
+
    -minId=0.0 - only keep alignments with at least this fraction
     identity.
 
