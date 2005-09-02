@@ -17554,3 +17554,15 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
     hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
 
 # Compared to 7/5 data, one record updated, one record dropped, one record added, out of 741 records.
+
+# Generate snpMask files (Done Heather Sept. 1, 2005)
+# Takes about 10-15 minutes
+# Consumes about 1 gig of disk
+  ssh hgwdev
+  cd /usr/local/apache/htdocs/goldenPath/hg17
+  mkdir snpMask
+  cd snpMask
+  foreach chrom ( `cat /cluster/data/hg17/chrom.lst` )
+      snpMaskChrom hg17 ${chrom} /gbdb/hg17/nib/${chrom}.nib ${chrom}.ambigs.fa
+      gzip ${chrom}.ambigs.fa
+  end
