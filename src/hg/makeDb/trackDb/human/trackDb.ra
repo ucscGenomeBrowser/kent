@@ -1008,6 +1008,7 @@ gClass_Putative  84,188,0
 gClass_Artifact 163,168,163
 gClass_Processed_pseudogene 0,91,191
 gClass_Unprocessed_pseudogene 0,91,191
+origAssembly hg17
 
 track encodeGencodeIntron
 shortLabel Gencode Introns
@@ -1017,6 +1018,7 @@ priority 11.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
 type bed 6 +
+origAssembly hg17
 
 track encodeEgaspFull
 compositeTrack on
@@ -1028,6 +1030,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
+origAssembly hg17
 
     track encodeEgaspFullAceview
     subTrack encodeEgaspFull
@@ -1179,6 +1182,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
+origAssembly hg17
 
     track encodeEgaspPartAceCons
     subTrack encodeEgaspPartial
@@ -1247,6 +1251,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
+origAssembly hg17
 
     track encodeEgaspUpdAugustusAbinitio
     subTrack encodeEgaspUpdate
@@ -1335,6 +1340,7 @@ priority 49.2
 visibility hide
 itemRgb on
 type bed 12
+origAssembly hg16
 
     track encodeGisRnaPetMCF7
     subTrack encodeGisRnaPet
@@ -1361,6 +1367,7 @@ type wig -1168.00 1686.5
 maxHeightPixels 128:16:16
 autoScale off
 viewLimits 0:25
+origAssembly hg16
 
     track encodeAffyRnaGm06990Signal
     subTrack encodeAffyRnaSignal
@@ -1413,6 +1420,7 @@ priority 19.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
+origAssembly hg16
 
     track encodeAffyRnaGm06990Sites
     subTrack encodeAffyRnaTransfrags
@@ -1466,6 +1474,7 @@ priority 22.0
 chromosomes chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 visibility hide
 type bed 12 +
+origAssembly hg16
 
     track encodeBuFirstExonCerebrum
     subTrack encodeBuFirstExon
@@ -1542,6 +1551,7 @@ maxLimit 4316
 viewLimits 1.0:10.0
 windowingFunction mean
 autoScale Off
+origAssembly hg16
 
     track encodeRikenCagePlus
     subTrack encodeRikenCage
@@ -1720,6 +1730,7 @@ chromosomes chr1,chr11,chr13,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5
 visibility hide
 useScore 1
 type bed 5 +
+origAssembly hg16
 
 track encodeYaleMASPlacRNATransMap
 compositeTrack on
@@ -1734,6 +1745,7 @@ maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 10.536
 autoScale Off
+origAssembly hg16
 
     track encodeYaleMASNB4RNANprotTMFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
@@ -1792,6 +1804,7 @@ priority 29.0
 chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
 visibility hide
 type bed 6 .
+origAssembly hg16
 
     track encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
@@ -1856,6 +1869,7 @@ autoScale Off
 windowingFunction mean
 subGroup1 samples Sample summary=Summary samples=samples1-10
 subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
+origAssembly hg16
 
     track encodeYaleAffyNeutRNATransMapAll
     subTrack encodeYaleAffyRNATransMap
@@ -1988,6 +2002,7 @@ visibility hide
 type bed 3 .
 subGroup1 samples Sample summary=Summary samples=samples1-10
 subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
+origAssembly hg16
 
     track encodeYaleAffyNeutRNATarsAll
     subTrack encodeYaleAffyRNATars
@@ -2123,6 +2138,7 @@ type wig 0.0 534.54
 viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
+origAssembly hg16
 
     track encodeAffyChIpHl60PvalBrg1Hr00
     subTrack encodeAffyChIpHl60Pval
@@ -2463,6 +2479,7 @@ priority 43.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
+origAssembly hg16
 
     track encodeAffyChIpHl60SitesBrg1Hr00
     subTrack encodeAffyChIpHl60Sites
@@ -2803,6 +2820,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
 visibility hide
 useScore 1
 type bed 12
+origAssembly hg16
 
 track encodeLIChIP
 compositeTrack on
@@ -2817,6 +2835,7 @@ autoScale Off
 maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 16
+origAssembly hg16
 
     track encodeUcsdChipRnapHela_f
     subTrack encodeLIChIP
@@ -2913,6 +2932,7 @@ autoScale Off
 maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 16
+origAssembly hg16
 
     track encodeUcsdChipHeLaH3H4dmH3K4_p0
     subTrack encodeLIChIPgIF
@@ -3026,6 +3046,7 @@ maxLimit 5
 viewLimits -1:3
 windowingFunction mean
 autoScale off
+origAssembly hg17
 
     track encodeUcsdNgHeLaH3K4me3_p0
     subTrack encodeUcsdNgGif
@@ -3063,6 +3084,7 @@ type wig -5.61 6.47
 viewLimits -1:2
 windowingFunction mean
 autoScale off
+origAssembly hg16
 
     track encodeUcsdNgChipSignal
     subTrack encodeUcsdNgChip
@@ -3102,6 +3124,7 @@ maxLimit 8
 viewLimits -1:3
 windowingFunction mean
 autoScale off
+origAssembly hg16
 
     track encodeUcsdNgValChipH3ac
     subTrack encodeUcsdNgValChip
@@ -3144,6 +3167,7 @@ minLimit -46.1
 maxLimit 75
 viewLimits 0:10
 autoScale Off
+origAssembly hg16
 
     track encodeSangerChipH3K4me1
     subTrack encodeSangerChipH3H4
@@ -3224,6 +3248,7 @@ autoScale off
 minLimit 0
 maxLimit 114
 viewLimits 0:10
+origAssembly hg16
 
     track encodeStanfordChipHCT116Sp1
     subTrack encodeStanfordChip
@@ -3277,6 +3302,7 @@ autoScale off
 minLimit 0
 maxLimit 721474
 viewLimits 0:1000
+origAssembly hg16
 
     track encodeStanfordChipSmoothedHCT116Sp1
     subTrack encodeStanfordChipSmoothed
@@ -3329,6 +3355,7 @@ viewLimits 0:2.2
 color 32,128,180
 altColor 180,128,32
 autoScale Off
+origAssembly hg16
 
 track encodeYaleChIPSTAT1Pval
 compositeTrack on
@@ -3345,6 +3372,7 @@ maxLimit 18.2
 autoScale Off
 windowingFunction mean
 viewLimits 0:10
+origAssembly hg16
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
     subTrack encodeYaleChIPSTAT1Pval
@@ -3388,6 +3416,7 @@ color 44,44,200
 altColor 200,44,44
 viewLimits 0.22:0.5
 autoScale Off
+origAssembly hg16
 
 
 track encodeYaleChIPSTAT1Sig
@@ -3405,6 +3434,7 @@ maxLimit 3.69
 windowingFunction mean
 viewLimits 0:2
 autoScale Off
+origAssembly hg16
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
     subTrack encodeYaleChIPSTAT1Sig
@@ -3490,6 +3520,7 @@ chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr2
 visibility hide
 type bed 5 .
 useScore 1
+origAssembly hg16
 
     track encodeNhgriDnaseHsNonAct
     subTrack encodeNhgriDnaseHs
@@ -3519,6 +3550,7 @@ autoScale off
 minLimit 0
 maxLimit 114
 viewLimits 0:10
+origAssembly hg16
 
     track encodeStanfordMethBe2C
     subTrack encodeStanfordMeth
@@ -3584,6 +3616,7 @@ autoScale off
 minLimit 0
 maxLimit 364088
 viewLimits 0:1000
+origAssembly hg16
 
     track encodeStanfordMethSmoothedBe2C
     subTrack encodeStanfordMethSmoothed
@@ -3644,6 +3677,7 @@ visibility hide
 color 60,75,60
 altColor 10,130,10
 type bed 3 .
+origAssembly hg16
 
     track encodeUvaDnaRep0
     subTrack encodeUvaDnaRep
@@ -3687,6 +3721,7 @@ maxHeightPixels 128:16:16
 type wig 0.0 3.0
 autoScaleDefault Off
 smoothingWindow 2
+origAssembly hg16
 
     track encodeRegulomeBaseCACO2
     subTrack encodeRegulomeBase
@@ -3750,6 +3785,7 @@ minLimit 0
 maxLimit 3
 autoScaleDefault Off
 maxHeightPixels 128:16:16
+origAssembly hg16
 
     track encodeRegulomeProbCACO2
     subTrack encodeRegulomeProb
@@ -3811,6 +3847,7 @@ visibility hide
 type bed 5 .
 useScore 1
 maxHeightPixels 128:16:16
+origAssembly hg16
 
     track encodeRegulomeQualityCACO2
     subTrack encodeRegulomeQuality
@@ -3871,6 +3908,7 @@ chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 type bed 5 .
 useScore 1
+origAssembly hg16
 
     track encodeRegulomeAmpliconOdd
     subTrack encodeRegulomeAmplicon
@@ -4250,6 +4288,7 @@ chromosomes chr2,chr7,chr8,chr9,chr12,chr18
 visibility hide
 type bed5FloatScore
 useScore 1
+origAssembly hg16
 
 track encodeHapMapAlleleFreq
 compositeTrack on
@@ -4261,6 +4300,7 @@ chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 visibility hide
 type bed 6 + 
 useScore 1
+origAssembly hg16
 
     track encodeHapMapAlleleFreqCEU
     subTrack encodeHapMapAlleleFreq
@@ -4336,6 +4376,7 @@ minLimit 0
 maxLimit 16
 autoScaleDefault Off
 maxHeightPixels 64:32:16
+origAssembly hg16
 
 
 #ENCODE TRACK END
@@ -4561,6 +4602,7 @@ visibility hide
 color 20,90,0
 type bed 6 +
 mafTrack encodeTbaAlign
+origAssembly hg16
 
 track wgRna
 shortLabel sno/miRNA
@@ -4614,6 +4656,7 @@ group encodeGenes
 priority 52
 visibility hide
 type bed 6 +
+origAssembly hg16
 
 searchTable wgRna
 searchMethod fuzzy
@@ -4666,6 +4709,7 @@ group encodeTxLevels
 visibility hide
 type bed 4 .
 priority 41
+origAssembly hg16
 
 track encodeGencodeGeneFiltered
 shortLabel Gencode Filtered
