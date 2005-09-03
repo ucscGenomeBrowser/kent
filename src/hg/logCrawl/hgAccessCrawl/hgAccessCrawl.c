@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.9 2005/01/26 16:05:50 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.10 2005/09/03 01:58:05 kent Exp $";
 
 FILE *errLog = NULL;
 int errCode = 0;
@@ -246,6 +246,16 @@ else if (startsWith("httpunit", program))
     return TRUE;
 else if (startsWith("Teleport Pro", program))
     return TRUE;
+else if (startsWith("WWW-Mechanize", program))
+    return TRUE;
+else if (startsWith("Bio::Das::", program))
+    return TRUE;
+else if (stringIn("Googlebot", program))
+    return TRUE;
+else if (sameString("-", program))
+    return TRUE;
+else if (startsWith("Microsoft Data Access", program))
+    return TRUE;
 if (roboHash == NULL)
     {
     roboHash = hashNew(0);
@@ -256,6 +266,7 @@ if (roboHash == NULL)
     hashAdd(roboHash, "64-170-97-98.ded.pacbell.net", NULL);
     hashAdd(roboHash, "ce.hosts.jhmi.edu", NULL);
     hashAdd(roboHash, "technetium.hgsc.bcm.tmc.edu", NULL);
+    hashAdd(roboHash, "62.232.24.178", NULL);
     }
 return hashLookup(roboHash, ip) != NULL;
 }
