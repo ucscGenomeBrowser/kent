@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.940 2005/09/02 01:05:06 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.941 2005/09/03 00:00:03 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2032,12 +2032,37 @@ if (hTableOrSplitExists(tdb->tableName))
     }
 }
 
+void printOrigAssembly(struct trackDb *tdb)
+/* If this annotation has been lifted, print the original
+ * freeze, as indicated by the "origAssembly" trackDb setting */ 
+{
+char *origAssembly, *freeze, *composite;
+struct trackDb *fullTdb = NULL;
+
+if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
+    /* look in composite's settings */
+    fullTdb = hashFindVal(trackHash, composite);
+if (fullTdb == NULL)
+    fullTdb = tdb;
+if ((origAssembly = trackDbSetting(fullTdb, "origAssembly")) != NULL)
+    {
+    if (differentString(origAssembly, database))
+        {
+        freeze = hFreezeFromDb(origAssembly);
+        if (freeze == NULL)
+            freeze = origAssembly;
+        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"http://genome.ucsc.edu/cgi-bin/hgLiftOver\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
+        }
+    }
+}
+
 void printTrackHtml(struct trackDb *tdb)
 /* If there's some html associated with track print it out. Also print
  * last update time for data table and make a link 
  * to the TB table schema page for this table. */
 {
 printTBSchemaLink(tdb);
+printOrigAssembly(tdb);
 if (hTableExists(tdb->tableName))
     {
     struct sqlConnection *conn = hAllocConn();
@@ -16323,7 +16348,7 @@ if (seqName == NULL)
     else
 	seqName = hDefaultChrom();
     }
-trackHash = makeTrackHash(database, seqName);
+trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
 if (parentWigMaf)
     {
     int wordCount, i;
