@@ -619,6 +619,11 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
+struct hash *makeTrackHashWithComposites(char *database, char *chrom, 
+                                        bool withComposites);
+/* Make hash of trackDb items for this chromosome, optionally includingc
+   omposites, not just the subtracks. */
+
 struct hash *makeTrackHash(char *database, char *chrom);
 /* Make hash of trackDb items for this chromosome. */
 
