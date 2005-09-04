@@ -926,3 +926,8 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   3) for each alignment, count the # of bases within nearTop
      of best score for base
   4) if alignment has >= minCoiver of bases over near top, keep alignment.
+
+
+gbLoadRna: selected refseq.12 droMoj2 xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=167629 orphan=0 noChg=0
+Warning: NR_001829: malformed RefSeq CDS: 
+Warning: NR_001874: malformed RefSeq CDS: 
