@@ -15,7 +15,7 @@
 # Note: rsh does not return the exit code of the remote process, thus
 # ssh is used.
 #
-# $Id: gbAlignRun,v 1.9 2005/08/27 07:46:59 markd Exp $
+# $Id: gbAlignRun,v 1.10 2005/09/04 22:30:48 markd Exp $
 #
 use strict;
 use warnings;
@@ -28,7 +28,6 @@ use gbCommon;
 # amount.  This will cause para shove to exit sooner if the jobs are
 # failing.  Don't set it too low, or it takes longer to run.
 my $PARA_MAX_PUSH = 200000;
-my $PARA_PRIORITY = 10;
 
 # Entry
 setTaskName("gbAlignRun");
@@ -94,7 +93,7 @@ makeDir("err");
 # this runs to completion
 my $paraCmd = "para make -maxPush=$PARA_MAX_PUSH";
 if (defined($paraPriority)) {
-    $paraCmd .= " $paraPriority";
+    $paraCmd .= " -priority=$paraPriority";
 }
 $paraCmd .= " align.jobs";
 runProg("$sshCmd $paraCmd </dev/null");
