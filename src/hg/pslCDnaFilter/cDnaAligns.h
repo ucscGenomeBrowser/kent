@@ -10,16 +10,18 @@ struct cDnaAlign
 /* information for a single cDNA alignment */
 {
     struct cDnaAlign *next;
-    struct psl *psl;     /* alignment */
-    int adjMisMatch;     /* number of misMatches if Ns are ignored */
-    float ident;         /* fraction ident */
-    float cover;         /* fraction of cDNA aligned, excluding polyA if
-                          * it is available */
-    int alnPolyAT;       /* bases of poly-A head or poly-T tail that are aligned */
-    float score;         /* score weight by having introns and length */
-    float repMatch;      /* fraction repeat match */
-    boolean drop;         /* drop this psl if set */
-    boolean weirdOverlap; /* weird overlap was detected */
+    struct cDnaQuery *cdna;  /* query object for alignment */
+    struct psl *psl;         /* alignment */
+    int adjMisMatch;         /* number of misMatches; includes Ns unless the
+                              * are ignored */
+    float ident;             /* fraction ident */
+    float cover;             /* fraction of cDNA aligned, excluding polyA if
+                              * it is available */
+    int alnPolyAT;           /* bases of poly-A head or poly-T tail that are aligned */
+    float score;             /* score weight by having introns and length */
+    float repMatch;          /* fraction repeat match */
+    boolean drop;            /* drop this psl if set */
+    boolean weirdOverlap;    /* weird overlap was detected */
 };
 
 struct cDnaQuery
@@ -29,7 +31,9 @@ struct cDnaQuery
     struct cDnaStats *stats;    /* stats object in reader */
     char *id;                   /* id for this cDNA  (memory not owned) */
     int adjQStart;              /* query range, possibly poly A/T adjusted */
-    int adjQEnd;    
+    int adjQEnd;
+    int numAln;                 /* number of alignments */
+    int numDrop;                /* number of dropped alignments */
     struct cDnaAlign *alns;     /* alignment list */
 };
 
@@ -38,7 +42,6 @@ struct cDnaCnts
 {
     unsigned queries;        /* count of queries; */
     unsigned aligns;         /* count of alignments */
-    unsigned multAlnQueries; /* count of queries with multiple alignments */
     unsigned prevAligns;     /* previous aligns count, used to update queires */
 };
 
@@ -85,7 +88,6 @@ struct cDnaReader
     struct cDnaStats stats;       /* all statistics */
 };
 
-
 struct cDnaRange
 /* range within a cDNA */
 {
@@ -121,6 +123,9 @@ void cDnaQueryWriteDrop(struct cDnaQuery *cdna,
 void cDnaQueryWriteWeird(struct cDnaQuery *cdna,
                          FILE *outFh);
 /* write the current set of psls that are flagged as weird overlap */
+
+void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts);
+/* flag an alignment as dropped */
 
 void cDnaAlignVerb(int level, struct psl *psl, char *msg, ...);
 /* write verbose messager followed by location of a cDNA alignment */

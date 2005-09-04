@@ -1,4 +1,3 @@
-                   	seqs	aligns	multAlnSeqs
-             total:	1	2	1
-    drop localBest:	1	1	0
-              kept:	1	1	0
+                   	seqs	aligns
+             total:	1	2
+              kept:	1	2

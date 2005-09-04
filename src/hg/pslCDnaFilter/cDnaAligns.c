@@ -12,9 +12,9 @@
 static void alignInfoVerb(int level, struct cDnaAlign *aln, char *desc)
 /* print info about and alignment */
 {
-cDnaAlignVerb(5, aln->psl, "%s: id=%0.4g cov=%0.4g rep=%0.4g alnPolyAT=%d score=%0.4g mat=%d mis=%d repMat=%d",
+cDnaAlignVerb(5, aln->psl, "%s: id=%0.3f cov=%0.3f rep=%0.3f alnPolyAT=%d score=%0.3f mat=%d mis=%d repMat=%d nCnt=%d adjMis=%d",
               desc, aln->ident, aln->cover, aln->repMatch, aln->alnPolyAT, aln->score,
-              aln->psl->match, aln->psl->misMatch, aln->psl->repMatch);
+              aln->psl->match, aln->psl->misMatch, aln->psl->repMatch, aln->psl->nCount, aln->adjMisMatch);
 }
 
 static float calcIdent(struct psl *psl)
@@ -30,6 +30,7 @@ else
 static float calcCover(struct cDnaQuery *cdna, struct psl *psl)
 /* calculate coverage less poly-A tail */
 {
+unsigned totAlnSize = 0;  /* for sanity checking */
 unsigned alnSize = 0;
 int iBlk;
 
@@ -40,9 +41,12 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     struct cDnaRange q = cDnaQueryBlk(cdna, psl, iBlk);
     if (q.start < q.end)
         alnSize += (q.end - q.start);
+    totAlnSize += psl->blockSizes[iBlk];
     }
 if (cdna->reader->opts & cDnaIgnoreNs)
     alnSize -= psl->nCount;
+if (totAlnSize != (psl->match+psl->misMatch+psl->repMatch+psl->nCount))
+    cDnaAlignVerb(1, psl, "Warning: total alignment size doesn't match counts");
 return ((float)alnSize)/((float)(cdna->adjQEnd - cdna->adjQStart));
 }
 
@@ -78,7 +82,6 @@ static float intronFactor(struct psl *psl)
  * An intron in this case is just a gap of 0 bases in query and
  * 30 or more in target. */
 {
-/* FIXME should exclude polyA/T */
 int i, blockCount = psl->blockCount;
 int ts, qs, te, qe, sz;
 int bonus = 0;
@@ -144,20 +147,20 @@ static struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna,
 {
 struct cDnaAlign *aln;
 AllocVar(aln);
+aln->cdna = cdna;
 aln->psl = psl;
-aln->adjMisMatch = psl->misMatch - ((cdna->reader->opts & cDnaIgnoreNs) ? psl->nCount : 0);
+aln->adjMisMatch = psl->misMatch + ((cdna->reader->opts & cDnaIgnoreNs) ? 0 : psl->nCount);
 aln->ident = calcIdent(psl);
 aln->cover = calcCover(cdna, psl);
 aln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
 aln->score = calcScore(psl, aln->adjMisMatch);
 aln->alnPolyAT = getAlnPolyATLen(cdna, psl);
-assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch));
+assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch+psl->nCount));
 
 if (verboseLevel() >= 5)
     alignInfoVerb(5, aln, "align");
 return aln;
 }
-
 
 static void polyAAdjBounds(struct cDnaQuery *cdna,
                            struct polyASize *polyASize)
@@ -179,6 +182,16 @@ else
 assert(cdna->adjQStart <= cdna->adjQEnd);
 }
 
+void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts)
+/* flag an alignment as dropped */
+{
+assert(!aln->drop);       /* not allowing multiple drops keeps counts sane */
+aln->drop = TRUE;
+aln->cdna->numDrop++;
+cnts->aligns++;
+assert(aln->cdna->numDrop <= aln->cdna->numAln);
+}
+
 static struct cDnaQuery *cDnaQueryNew(struct cDnaReader *reader, struct psl *psl,
                                       struct polyASize *polyASize)
 /* construct a new cDnaQuery and add initial alignment.  polyASize is null if
@@ -194,6 +207,7 @@ cdna->adjQEnd = psl->qSize;
 if (polyASize != NULL)
     polyAAdjBounds(cdna, polyASize);
 cdna->alns = cDnaAlignNew(cdna, psl);
+cdna->numAln++;
 return cdna;
 }
 
@@ -324,12 +338,13 @@ return psl;
 }
 
 static void updateCounter(struct cDnaCnts *cnts)
-/* update counts after processing a batch of queries */
+/* update counts after processing a query */
 {
 if (cnts->aligns > cnts->prevAligns)
+    {
+    /* at least one alignment dropped from query */
     cnts->queries++;
-if (cnts->aligns > cnts->prevAligns+1)
-    cnts->multAlnQueries++;
+    }
 cnts->prevAligns = cnts->aligns;
 }
 
@@ -362,10 +377,13 @@ struct psl *psl;
 struct cDnaQuery *cdna;
 struct polyASize *polyASize = NULL;
 
-updateCounters(reader);
-cDnaQueryFree(&reader->cdna);
+if (reader->cdna != NULL)
+    {
+    updateCounters(reader);
+    cDnaQueryFree(&reader->cdna);
+    }
 
-/* first alignment */
+/* first alignment for query */
 psl = readNextPsl(reader);
 if (psl == NULL)
     return FALSE;
@@ -379,6 +397,7 @@ while (((psl = readNextPsl(reader)) != NULL)
        && sameString(psl->qName, cdna->id))
     {
     slSafeAddHead(&cdna->alns, cDnaAlignNew(cdna, psl));
+    cdna->numAln++;
     reader->stats.totalCnts.aligns++;
     }
 

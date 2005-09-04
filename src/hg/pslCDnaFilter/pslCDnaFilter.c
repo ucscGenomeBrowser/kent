@@ -84,8 +84,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && !validPsl(aln->psl))
         {
-        aln->drop = TRUE;
-        cdna->stats->badCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->badCnts);
         cDnaAlignVerb(2, aln->psl, "drop: invalid psl");
         }
 }
@@ -98,8 +97,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && (aln->psl->qSize < gMinQSize))
         {
-        aln->drop = TRUE;
-        cdna->stats->minQSizeCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->minQSizeCnts);
         cDnaAlignVerb(3, aln->psl, "drop: min query size %0.4g", aln->psl->qSize);
         }
 }
@@ -111,8 +109,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && (aln->ident < gMinId))
         {
-        aln->drop = TRUE;
-        cdna->stats->minIdCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->minIdCnts);
         cDnaAlignVerb(3, aln->psl, "drop: min ident %0.4g", aln->ident);
         }
 }
@@ -126,8 +123,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && (aln->cover < gMinCover))
         {
-        aln->drop = TRUE;
-        cdna->stats->minCoverCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->minCoverCnts);
         cDnaAlignVerb(3, aln->psl, "drop: min cover %0.4g", aln->cover);
         }
 }
@@ -145,8 +141,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     int alnSize = ((psl->match + psl->repMatch + aln->adjMisMatch) - aln->alnPolyAT);
     if ((!aln->drop) && (alnSize < gMinAlnSize))
         {
-        aln->drop = TRUE;
-        cdna->stats->minAlnSizeCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->minAlnSizeCnts);
         cDnaAlignVerb(3, aln->psl, "drop: min align size %d", alnSize);
         }
     }
@@ -167,8 +162,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
         nonRepSize = 0;
     if ((!aln->drop) && (nonRepSize < gMinNonRepSize))
         {
-        aln->drop = TRUE;
-        cdna->stats->minNonRepSizeCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->minNonRepSizeCnts);
         cDnaAlignVerb(3, aln->psl, "drop: min non-rep size %d", nonRepSize);
         }
     }
@@ -184,8 +178,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if ((!aln->drop) && (aln->repMatch > gMaxRepMatch))
         {
-        aln->drop = TRUE;
-        cdna->stats->maxRepMatchCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->maxRepMatchCnts);
         cDnaAlignVerb(3, aln->psl, "drop: max repMatch %0.4g", aln->repMatch);
         }
     }
@@ -213,8 +206,7 @@ cDnaQueryRevScoreSort(cdna);
 for (aln = findMaxAlign(cdna); aln != NULL; aln = aln->next)
     if (!aln->drop)
         {
-        aln->drop = TRUE;
-        cdna->stats->maxAlignsCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->maxAlignsCnts);
         cDnaAlignVerb(3, aln->psl, "drop: max aligns");
         }
 }
@@ -244,8 +236,7 @@ minSpanLen = gMinSpan*longestSpan;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && (getTargetSpan(aln) < minSpanLen))
         {
-        aln->drop = TRUE;
-        cdna->stats->minSpanCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->minSpanCnts);
         cDnaAlignVerb(3, aln->psl, "drop: minSpan span %d, min is %d (%0.2f)",
                       getTargetSpan(aln), minSpanLen, ((float)getTargetSpan(aln))/longestSpan);
         }
@@ -284,27 +275,50 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
 return baseScores;
 }
 
+static void localNearBestVerb(struct cDnaAlign *aln, boolean pass,
+                              float nearScore, int topCnt, int chkCnt,
+                              float minBest, float maxBest)
+/* verbose tracing for isLocalNearBest */
+{
+cDnaAlignVerb(5, aln->psl, "isLocalNearBest: %s nearScore: %0.3f %d in %d best: %0.3f .. %0.3f",
+              (pass ? "yes" : "no "), nearScore, topCnt, chkCnt, 
+              minBest, maxBest);
+}
+
 static boolean isLocalNearBest(struct cDnaQuery *cdna, struct cDnaAlign *aln,
                                float *baseScores)
 /* check if aligned blocks pass local near-beast filter. */
 {
-float near = (1.0-gLocalNearBest);
+float nearScore = aln->score * (1.0+gLocalNearBest);
 struct psl *psl = aln->psl;
 int iBlk, i;
-int topCnt = 0;
+int chkCnt = 0, topCnt = 0;
+float minBest = 0.0, maxBest = 0.0;
 
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     struct cDnaRange q = cDnaQueryBlk(cdna, psl, iBlk);
     for (i = q.start; i < q.end; i++)
         {
-        if (aln->score >= baseScores[i]*near)
+        if (chkCnt == 0)
+            minBest = maxBest = baseScores[i];
+        else
+            {
+            minBest = min(minBest, baseScores[i]);
+            maxBest = max(maxBest, baseScores[i]);
+            }
+        chkCnt++;
+        if (nearScore >= baseScores[i])
             {
             if (++topCnt >= gMinLocalBestCnt)
+                {
+                localNearBestVerb(aln, TRUE, nearScore, topCnt, chkCnt, minBest, maxBest);
                 return TRUE;
+                }
             }
         }
     }
+localNearBestVerb(aln, FALSE, nearScore, topCnt, chkCnt, minBest, maxBest);
 return FALSE;
 }
 
@@ -318,8 +332,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if ((!aln->drop) && !isLocalNearBest(cdna, aln, baseScores))
         {
-        aln->drop = TRUE;
-        cdna->stats->localBestCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->localBestCnts);
         cDnaAlignVerb(3, aln->psl, "drop: local near best %0.4g",
                       aln->score);
         }
@@ -348,8 +361,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if ((!aln->drop) && (aln->score < thresh))
         {
-        aln->drop = TRUE;
-        cdna->stats->globalBestCnts.aligns++;
+        cDnaAlignDrop(aln, &cdna->stats->globalBestCnts);
         cDnaAlignVerb(3, aln->psl, "drop: global near best %0.4g, best=%0.4g, th=%0.4g",
                       aln->score, best, thresh);
         }
@@ -394,8 +406,7 @@ static void verbStats(char *label, struct cDnaCnts *cnts, boolean always)
 /* output stats */
 {
 if ((cnts->aligns > 0) || always)
-    verbose(1, "%18s:\t%d\t%d\t%d\n", label, cnts->queries, cnts->aligns,
-            cnts->multAlnQueries);
+    verbose(1, "%18s:\t%d\t%d\n", label, cnts->queries, cnts->aligns);
 }
 
 static void pslCDnaFilter(char *inPsl, char *outPsl)
@@ -418,7 +429,7 @@ carefulClose(&dropPslFh);
 carefulClose(&weirdOverPslFh);
 carefulClose(&outPslFh);
 
-verbose(1,"%18s \tseqs\taligns\tmultAlnSeqs\n", "");
+verbose(1,"%18s \tseqs\taligns\n", "");
 verbStats("total", &stats->totalCnts, FALSE);
 verbStats("drop invalid", &stats->badCnts, FALSE);
 verbStats("drop minAlnSize", &stats->minAlnSizeCnts, FALSE);
