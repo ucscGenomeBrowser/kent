@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.17 2005/08/29 23:43:39 markd Exp $
+# $Id: gbAlignSetup,v 1.18 2005/09/04 16:21:46 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -450,6 +450,11 @@ class JobGenDb(object):
 
     def _getPreFilterOpts(self, rel, cdnaType, orgCat):
         "select non-comparitive pslCDnaFilter options for blat job filtering"
+
+        # return None or True if enabled!
+        if self.conf.getDbBoolNone(self.db, "align.prefilter") == False:
+            return None
+
         filterOpts = self.conf.getvDbStrNo(self.db, rel.srcDb, cdnaType, orgCat, "pslCDnaFilter")
         if filterOpts == None:
             return None

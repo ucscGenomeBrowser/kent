@@ -1,7 +1,7 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.3 2005/08/27 07:47:00 markd Exp $
+# $Id: Config.py,v 1.4 2005/09/04 16:21:47 markd Exp $
 #
 
 import re, string
@@ -171,3 +171,21 @@ class Config(dict):
         value for a database, or the default, or error if neither are
         specified"""
         return self.getDbBool(db, ".".join(keys))
+
+    def getDbBoolNone(self, db, key):
+        """get a boolean configuration value for a database, or the default, or None
+        if neither are specified"""
+        
+        value = self.get(db + "." + key)
+        if value == None:
+            value = self.get("default." + key)
+        if val == None:
+            return None
+        elif val == "yes":
+            return True
+        elif val == "no":
+            return False
+        else:
+            raise Exception("invalid value for " + db + "." + key + ": \""
+                            + val + "\", expected \"yes\" or \"no\"")
+
