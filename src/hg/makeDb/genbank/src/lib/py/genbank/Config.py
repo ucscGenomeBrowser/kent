@@ -1,7 +1,7 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.4 2005/09/04 16:21:47 markd Exp $
+# $Id: Config.py,v 1.5 2005/09/04 16:59:21 markd Exp $
 #
 
 import re, string
@@ -176,9 +176,9 @@ class Config(dict):
         """get a boolean configuration value for a database, or the default, or None
         if neither are specified"""
         
-        value = self.get(db + "." + key)
-        if value == None:
-            value = self.get("default." + key)
+        val = self.get(db + "." + key)
+        if val == None:
+            val = self.get("default." + key)
         if val == None:
             return None
         elif val == "yes":
