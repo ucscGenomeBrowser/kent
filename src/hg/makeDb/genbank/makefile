@@ -34,10 +34,10 @@ clean: ${SUBDIRS:%=%.subclean}
 %.subclean:
 	${MAKE} -C $* clean
 
-install-server:
+install-server: all
 	${MAKE} install PREFIX=/cluster/data/genbank
 
-install-rr:
+install-rr: all
 	${MAKE} install PREFIX=/genbank
 
 etc-update:
@@ -47,7 +47,7 @@ etc-update:
 # any changes must be committed (and this is checked).
 install: install-bin install-etc
 
-install-bin: check-prefix
+install-bin: check-prefix all
 	${MKDIR} ${PREFIX}
 	rsync -r bin ${PREFIX}
 	rsync -r lib ${PREFIX}
