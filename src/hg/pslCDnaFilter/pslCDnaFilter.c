@@ -323,7 +323,22 @@ return FALSE;
 }
 
 static void localNearBestFilter(struct cDnaQuery *cdna)
-/* local near best in genome filter. */
+/* Local near best in genome filter. Algorithm is based on
+ * pslReps.  This avoids dropping exons in drafty genomes.
+ *
+ * 1) Assign a score to each alignment that is weight heavily by percent id
+ *    and has a bonus for apparent introns.
+ * 2) Create a per-mRNA base vector of near-best scores:
+ *    - foreach alignment:
+ *      - foreach base of the alignment:
+ *        - if the alignment's score is greater than the score at the position
+ *          in the vector, replaced the vector score.
+ * 3) Foreach alignment:
+ *    - count the number of bases within the near-top range of the best
+ *     score for the base.
+ * 4) If an alignment has at least 30 of it's bases within near-top, keep the
+ *    alignment.
+ */
 {
 float *baseScores = computeLocalScores(cdna);
 struct cDnaAlign *aln;
@@ -469,7 +484,7 @@ if (argc != 3)
 gLocalNearBest = optionFrac("localNearBest", gLocalNearBest);
 gGlobalNearBest = optionFrac("globalNearBest", gGlobalNearBest);
 if ((gLocalNearBest >= 0.0) && (gGlobalNearBest >= 0.0))
-    errAbort("can only specify one of -localNearBest and -gLocalNearBest");
+    errAbort("can only specify one of -localNearBest and -globalNearBest");
 if (optionExists("usePolyTHead"))
     gCDnaOpts |= cDnaUsePolyTHead;
 if (optionExists("ignoreNs"))
