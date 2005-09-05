@@ -1,7 +1,7 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.5 2005/09/04 16:59:21 markd Exp $
+# $Id: Config.py,v 1.6 2005/09/05 17:29:29 markd Exp $
 #
 
 import re, string
@@ -46,7 +46,8 @@ class ConfigParser(object):
             if varName != None:
                 expVal += self._expandVar(varName)
             value = afterRef
-        return expVal
+            
+        return expVal.strip()
 
     def _parseLine(self, line):
         "parse a line from the conf file and key/value to object"
