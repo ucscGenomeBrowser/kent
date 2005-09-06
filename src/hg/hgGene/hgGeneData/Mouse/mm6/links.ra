@@ -15,3 +15,10 @@ idSql select kgID from kgXref where kgID = '%s'
 url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm6&acc=%s
 priority 95
 
+name geneNetwork
+shortLabel GeneNetwork
+tables geneNetworkId
+idSql select Id from geneNetworkId, knownToRefSeq where Id = value and name='%s'
+url http://www.genenetwork.org/cgi-bin/WebQTL.py?cmd=sch&refseq=%s&species=mouse
+priority 140
+
