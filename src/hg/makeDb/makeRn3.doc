@@ -4999,4 +4999,14 @@ mkdir -p $3:h
     hgsql rn3 < ~/src/hg/lib/kgReactome.sql
     hgsql rn3 -e 'load data local infile "kgReactome.tab" into table kgReactome'
 
+# ADD LINK TO GENENETWORK (Done. 9/6/05 Fan).
+
+# Received the file, rat.RefSeqId, list of RefSeq IDs from GeneNetwork.
+# remove extra CR (or LF?) at end of the line.
+
+    rmLf rat.RefSeqId >rn3.geneNetworkId.tab
+
+    hgsql rn3 -e 'drop table geneNetworkId'
+    hgsql rn3 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql rn3 -e 'load data local infile "rn3.geneNetworkId.tab" into table geneNetworkId'
 
