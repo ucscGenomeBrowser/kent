@@ -1066,6 +1066,38 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track dlessCons
+shortLabel DLESS conserved
+longLabel Detection of LinEage Specific Selection (DLESS): Conserved Elements
+group compGeno
+priority 100.191
+visibility hide
+type bed 6 .
+urlLabel Detailed DLESS output:
+url http://www.cse.ucsc.edu/~acs/dless-html/$$.html
+
+track dlessBirth
+shortLabel DLESS births
+longLabel Detection of LinEage Specific Selection (DLESS): Elements Gained
+group compGeno
+priority 100.192
+visibility hide
+color 0,0,255
+type bed 6 .
+urlLabel Detailed DLESS output:
+url http://www.cse.ucsc.edu/~acs/dless-html/$$.html
+
+track dlessDeath
+shortLabel DLESS deaths
+longLabel Detection of LinEage Specific Selection (DLESS): Elements Lost
+group compGeno
+priority 100.193
+visibility hide
+color 255,0,0
+type bed 6 .
+urlLabel Detailed DLESS output:
+url http://www.cse.ucsc.edu/~acs/dless-html/$$.html
+
 track multizMm3Rn3GalGal2_phyloHMM
 shortLabel Hu/Mouse/Rat/Chick
 longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
