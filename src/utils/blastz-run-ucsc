@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.10 2005/08/31 16:41:45 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.11 2005/09/06 17:49:54 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -314,7 +314,7 @@ sub plainBlastz {
   # where $start is 1-based.  Put output in file name $raw.
   my ($target, $query, $options, $raw) = @_;
   my $blastz = $defVars{'BLASTZ'} || "blastz";
-  &run("blastz $target $query $options > $raw");
+  &run("$blastz $target $query $options > $raw");
 }
 
 sub selectRpts {
