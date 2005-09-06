@@ -19,7 +19,7 @@
 #   - buildRoot - gbRoot directory on buildServer
 #   - db1 - List of databses to update
 #
-# $Id: gbCopyStep,v 1.12 2005/07/02 17:57:25 genbank Exp $
+# $Id: gbCopyStep,v 1.13 2005/09/06 23:51:01 genbank Exp $
 #
 use strict;
 use warnings;
@@ -74,7 +74,7 @@ sub rsyncBuildFiles($$$@) {
     my($rsyncPort, $buildServer, $buildRoot, @databases) = @_;
 
     # dereference symlinks. so can't use --archive
-    my $baseCmd = "rsync --stats --copy-links --recursive --perms "
+    my $baseCmd = "rsync --copy-links --recursive --perms "
         . "--group --times " . getRSyncPortOpt($rsyncPort);
     if ($gbCommon::verbose) {
         $baseCmd .= " -v";
