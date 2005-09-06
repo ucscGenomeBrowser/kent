@@ -384,8 +384,9 @@ else
     getMrnaCds(psl->qName, &cds);
     }
 
-/* cds not in genbank or not parsable - revert to normal*/
-if (cds.start == cds.end)
+/* if cds not in genbank or not parsable - revert to normal*/
+/* if showing bases we don't want to have thin bars ala genePred format */
+if ((displayOption > 3) || (cds.start == cds.end))
     {
     int grayIx = pslGrayIx(psl, isXeno, maxShade);
     sfList = sfFromPslX(psl, grayIx, sizeMul);
@@ -855,7 +856,7 @@ boolean isDiff = (displayOption == CDS_DRAW_DIFF_CODONS ||
                   displayOption == CDS_DRAW_DIFF_BASES );
 
 if (isDiff)
-        dyStringAppend( ds, (char*)hDnaFromSeq(chromName,s,e,dnaUpper)->dna);
+    dyStringAppend( ds, (char*)hDnaFromSeq(chromName,s,e,dnaUpper)->dna);
 mrnaS = convertCoordUsingPsl( s, psl ); 
 if(mrnaS >= 0)
     {
@@ -954,21 +955,28 @@ if(mrnaS >= 0)
 
 
     if (displayOption == CDS_DRAW_MRNA_BASES)
+	{
+	if ( cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	    complement(ds2->string, strlen(ds2->string));
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, ds2->string,
 				    zoomedToBaseLevel, cdsColor,
 				    winStart, maxPixels );
+	}
     else if (displayOption == CDS_DRAW_MRNA_CODONS)
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, mrnaCodon,
 				    zoomedToCodonLevel, cdsColor,
 				    winStart, maxPixels );
     else if (displayOption == CDS_DRAW_DIFF_BASES)
+	{
+	if ( cartUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	    complement(retStrDy, strlen(retStrDy));
 	drawScaledBoxSampleWithText(vg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, retStrDy, 
                                     zoomedToBaseLevel, cdsColor, 
                                     winStart, maxPixels );
- 
+	}
     else if (displayOption == CDS_DRAW_DIFF_CODONS)
 	{
 	if (mrnaCodon[0] != codon[0])
@@ -1015,6 +1023,7 @@ boolean pslSequenceBases = cartVarExists(cart, PSL_SEQUENCE_BASES);
 char codon[2] = " ";
 Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, 
                                                 originalColor);
+
 
 if (!pslSequenceBases && tg->tdb)
 	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
