@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1005 2005/08/31 07:35:42 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1006 2005/09/06 15:46:33 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1381,6 +1381,10 @@ if (zoomedToCdsColorLevel && (vis != tvDense))
 		PSL_SEQUENCE_BASES));
     drawOptionNum = cdsColorSetup(vg, tg, cdsColor, &mrnaSeq, &psl,
             &errorColor, lf, cdsColorsMade);
+    if (drawOptionNum > 0)
+	exonArrows = FALSE;
+    if (drawOptionNum > 3)
+	pslSequenceBases=TRUE;
     }
 
 if ((tg->tdb != NULL) && (vis != tvDense))
