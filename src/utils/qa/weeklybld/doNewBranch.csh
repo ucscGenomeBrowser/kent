@@ -120,5 +120,10 @@ if ( $status ) then
  exit 1
 endif
 
-exit 0
+echo
+ssh kolossus $WEEKLYBLD/buildUtils.csh
+if ( $status ) then
+ exit 1
+endif
 
+exit 0
