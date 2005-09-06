@@ -1,7 +1,7 @@
 # Mouse-specific link info.
 
 name jax
-shortLabel Jackson Labs
+shortLabel Jackson Lab
 tables kgXref
 idSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'MGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 31
