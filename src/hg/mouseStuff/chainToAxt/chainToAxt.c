@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "chainToAxt.h"
 
-static char const rcsid[] = "$Id: chainToAxt.c,v 1.5 2003/09/19 19:21:40 baertsch Exp $";
+static char const rcsid[] = "$Id: chainToAxt.c,v 1.6 2005/08/29 17:52:34 kate Exp $";
 
 int maxGap = 100;
 int maxChain = BIGNUM;
@@ -154,7 +154,7 @@ maxGap = optionInt("maxGap", maxGap);
 maxChain = optionInt("maxChain", maxChain);
 minIdRatio = optionFloat("minId", 0.0)/100.0;
 minScore = optionFloat("minScore", minScore);
-bedOut = optionExists("bedOut");
+bedOut = optionExists("bed");
 if (argc != 5)
     usage();
 doIt(argv[1], argv[2], argv[3], argv[4]);

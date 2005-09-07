@@ -221,6 +221,10 @@ boolean hTableExistsDb(char *db, char *table);
 boolean hTableOrSplitExists(char *table);
 /* Return TRUE if table (or a chrN_table) exists in database. */
 
+char *hTableForTrack(char *db, char *trackName);
+/* Return a table for a track in db. Returns one of the split
+ * tables, or main table if not split */
+
 boolean hColExists(char *table, char *column);
 /* Return TRUE if a column exists in table. */
 

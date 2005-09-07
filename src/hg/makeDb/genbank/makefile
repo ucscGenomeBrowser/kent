@@ -11,7 +11,8 @@ all: ${SUBDIRS:%=%.suball} jkprogs
 # special version of these programs needed for now
 jkprogs: ${BINARCH}/blat \
 	 ${BINARCH}/polyInfo \
-	 ${BINARCH}/pslIntronsOnly
+	 ${BINARCH}/pslIntronsOnly \
+	 ${BINARCH}/pslCDnaFilter
 
 ${BINARCH}/blat:
 	@${MKDIR} ${BINARCH}
@@ -25,14 +26,18 @@ ${BINARCH}/pslIntronsOnly:
 	@${MKDIR} ${BINARCH}
 	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslIntronsOnly
 
+${BINARCH}/pslCDnaFilter:
+	@${MKDIR} ${BINARCH}
+	HOME=`pwd` ${MAKE} -C ${KENT}/hg/pslCDnaFilter
+
 clean: ${SUBDIRS:%=%.subclean}
 %.subclean:
 	${MAKE} -C $* clean
 
-install-server:
+install-server: all
 	${MAKE} install PREFIX=/cluster/data/genbank
 
-install-rr:
+install-rr: all
 	${MAKE} install PREFIX=/genbank
 
 etc-update:
@@ -42,10 +47,10 @@ etc-update:
 # any changes must be committed (and this is checked).
 install: install-bin install-etc
 
-install-bin: check-prefix
+install-bin: check-prefix all
 	${MKDIR} ${PREFIX}
-	rsync -a bin ${PREFIX}
-	rsync -a lib ${PREFIX}
+	rsync -r bin ${PREFIX}
+	rsync -r lib ${PREFIX}
 
 install-etc: check-prefix
 	@echo checking if etc/ is committed

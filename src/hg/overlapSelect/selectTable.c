@@ -99,9 +99,10 @@ void selectAddCoordCols(unsigned opts, struct lineFile *tabLf, struct coordCols*
 /* add records with coordiates at a specified column */
 {
 char *line;
+unsigned caOpts = getChomAnnOpts(opts);
 
 while (lineFileNextReal(tabLf, &line))
-    selectAddChromAnn(chromAnnFromCoordCols(getChomAnnOpts(opts), tabLf, line, cols));
+    selectAddChromAnn(chromAnnFromCoordCols(caOpts, tabLf, line, cols));
 }
 
 static boolean isSelfMatch(unsigned opts, struct chromAnn *inCa, struct chromAnn* selCa)

@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.78 2005/07/03 20:54:47 markd Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.79 2005/09/02 01:05:06 kate Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1431,21 +1431,30 @@ if (updateFieldIndex < 0)
 return updateFieldIndex;
 }
 
-int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
-/* Get last update time for table. */
+char *sqlTableUpdate(struct sqlConnection *conn, char *table)
+/* Get last update time for table as an SQL string */
 {
 char query[512], **row;
 struct sqlResult *sr;
 int updateIx;
-int time;
+char *ret;
 safef(query, sizeof(query), "show table status like '%s'", table);
 sr = sqlGetResult(conn, query);
 updateIx = getUpdateFieldIndex(sr);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Database table %s doesn't exist", table);
-time = sqlDateToUnixTime(row[updateIx]);
+ret = cloneString(row[updateIx]);
 sqlFreeResult(&sr);
+return ret;
+}
+
+int sqlTableUpdateTime(struct sqlConnection *conn, char *table)
+/* Get last update time for table. */
+{
+char *date = sqlTableUpdate(conn, table);
+int time = sqlDateToUnixTime(date);
+freeMem(date);
 return time;
 }
 

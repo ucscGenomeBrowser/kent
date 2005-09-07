@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.21 2004/09/27 21:49:28 angie Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.32 2005/08/29 20:59:45 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -198,7 +198,7 @@ while (h <= he)
     ++h;
     }
 ffList = ffMakeRightLinks(ffList);
-ffList = ffMergeClose(ffList);
+ffList = ffMergeClose(ffList, nStart, hStart);
 lmCleanup(&lm);
 return ffList;
 }

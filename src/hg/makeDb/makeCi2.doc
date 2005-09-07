@@ -140,46 +140,41 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
     hgGcPercent ci2 ../../nib
 #dropped gcPercent table (DONE braney 2005-08-19)
 
-### AUTO UPDATE GENBANK MRNA RUN 
+### AUTO UPDATE GENBANK MRNA RUN  (DONE markd 2005-08-17)
+    # genbank done with revised alignment procedure
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
-    cvsup .
-
+    cvs update etc
+    
     # Edit etc/genbank.conf and add these lines:
+    # NOTE: braney created a ooc and this was added after the initial alignment
 # ci2 (ciona intestinalis)
-ci2.genome = /iscratch/i/squirt/ci2/nib/Scaffold*.nib
+ci2.serverGenome = /cluster/data/ci2/ci2.2bit
+ci2.clusterGenome = /iscratch/i/ci2/ci2.2bit
+ci2.ooc = no
+ci2.maxIntron = 20000
 ci2.lift = no
 ci2.refseq.mrna.native.load = yes
 ci2.refseq.mrna.xeno.load = yes
-ci2.refseq.mrna.xeno.pslReps = -minCover=0.25 -minAli=0.15 -nearTop=0.005
+ci2.refseq.mrna.xeno.pslCDnaFilter = -minCover=0.25 -coverNearTop=0.005 -minId=0.15 -idNearTop=0.005 -maxRepMatch=0.4 -bestOverlap
 ci2.genbank.mrna.xeno.load = yes
 ci2.genbank.est.xeno.load = no
 ci2.downloadDir = ci2
 ci2.perChromTables = no
-# ci2 
 
     cvs ci etc/genbank.conf
-    make
     # Install to /cluster/data/genbank:
-    make install-server
+    make etc-update
 
     ssh kkstore02
     cd /cluster/data/genbank
-    # This is an -initial run, mRNA only:
-    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial ci2
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad ci2
-    # Clean up:
-    rm -r /cluster/bluearc/genbank/work/initial.ci2
+    # do mrnas and ests in one run
+    nice bin/gbAlignStep -initial ci2 &
 
-    ssh kkstore02
-    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial ci2
     # Load results:
     ssh hgwdev
     cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 ci2
+    nice bin/gbDbLoadStep -drop -initialLoad ci2
 
 ### gap and repeats tables
     ssh hgwdev
@@ -270,12 +265,9 @@ zip -j zip/ScaffoldFaMasked.zip maskedScaffolds/*.fa
 cd bed/simpleRepeat
 zip -j ../../zip/ScaffoldTrf.zip simpleRepeat.bed
 cd ../..
-cd /cluster/data/genbank
-./bin/i386/gbGetSeqs -db=ci2 -native GenBank mrna /cluster/data/ci2/zip/mrna.fa
-cd /cluster/data/ci2/zip
-zip -j mrna.zip mrna.fa
 '_EOF_'
     # << this line makes emacs coloring happy
+### NOTES: NEED NEW GENBANK PROCESS FOR THIS
     csh ./jkStuff/zipAll.csh |& tee zipAll.log
     cd zip
     #- Look at zipAll.log to make sure all file lists look reasonable.  
@@ -324,3 +316,50 @@ zip -j mrna.zip mrna.fa
     mkdir /gbdb/ci2/wib
     ln -s `pwd`/gc5Base.wib /gbdb/ci2/wib
     hgLoadWiggle ci2 gc5Base gc5Base.wig
+
+
+#######################################################################
+### AUTO UPDATE GENBANK MRNA RUN  (DONE markd 2005-08-31)
+    # redo genbank revised alignment procedure once again to
+    # pickup local near best pslCDnaFilter
+
+    # Update genbank config and source in CVS:
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update etc
+    
+    # Edit etc/genbank.conf and add these lines:
+# ci2 (ciona intestinalis)
+ci2.serverGenome = /cluster/data/ci2/ci2.2bit
+ci2.clusterGenome = /iscratch/i/ci2/ci2.2bit
+ci2.ooc = /iscratch/i/ci2/11.ooc
+ci2.maxIntron = 20000
+ci2.lift = no
+ci2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+ci2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+ci2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+ci2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+ci2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+ci2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+ci2.refseq.mrna.native.load = yes
+ci2.refseq.mrna.xeno.load = yes
+ci2.genbank.mrna.xeno.load = yes
+ci2.genbank.est.xeno.load = no
+ci2.downloadDir = ci2
+ci2.perChromTables = no
+
+    cvs ci etc/genbank.conf
+    # Install to /cluster/data/genbank:
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    # do mrnas and ests in one run
+    nice bin/gbAlignStep -initial ci2 &
+
+    # Load results:
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -drop -initialLoad ci2
+
+    # Note: download sequences are made as part of the first
+    # genbank update on hgdownload.

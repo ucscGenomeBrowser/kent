@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.15 2005/08/22 19:55:34 markd Exp $
+# $Id: gbAlignSetup,v 1.18 2005/09/04 16:21:46 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -67,26 +67,8 @@ gbBlatPath = absBinDir + "/gbBlat"
 
 cmdOpts = None
 
-# FIXME: tmp for debugging
-import time
-global startTime, lastTime
-startTime = lastTime = time.time()
-def ptm(*objs):
-    fh = sys.stderr
-    global startTime, lastTime
-    now = time.time()
-    fh.write(("%0.3f" % (now-startTime)))
-    fh.write(" ")
-    fh.write(("%0.3f" % (now-lastTime)))
-    lastTime = now
-    for o in objs:
-        fh.write(" ")
-        fh.write(str(o))
-    fh.write("\n")
-    fh.write
-
-# global table to make sure we don't generate output file more than
-# once
+# global table to make sure we don't generate an output file more than
+# once.
 definedPsls = set()
 
 class GenomeWindow(object):
@@ -137,13 +119,11 @@ class GenomeWindows(list):
             if conf.getDbStrNo(db, "lift") == None:
                 raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
             self.unplacedChroms = frozenset(unChroms)
+            self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
         else:
             self.unplacedChroms = frozenset()
+            self.minUnplacedSize = None
 
-        self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
-        if (self.minUnplacedSize != None) and (unChroms == None):
-            raise Exception(db + ".align.minUnplacedSize requires " + db + ".align.unplacedChroms")
-        
         for seq in genomeSeqs.itervalues():
             if seq.id in self.unplacedChroms:
                 self._partitionUnplaced(seq)
@@ -299,7 +279,6 @@ class CDnaUnaligned(object):
             cmdBase.append("-noMigrate")
         for procPart in self.unaligned:
             self._buildPart(cmdBase, procPart)
-
         return self.numAlign
 
 class Job(list):
@@ -358,10 +337,9 @@ class Job(list):
             fh.write("\t")
             fh.write(win.getSpec())
         fh.write("\n")
-        if jobGenDb.slow2bit:
-            prRowv(fh, "tdbSlow2bit", "yes")
         prRowv(fh, "qdb", self._makeWorkDirRel(jobGen, self.cdnaQuery.faPath))
-        prRowv(fh, "preFilterOpts", preFilterOpts)
+        if preFilterOpts != None:
+            prRowv(fh, "preFilterOpts", preFilterOpts)
 
         # add job
         relPslFile = jobPath + ".psl"
@@ -466,13 +444,17 @@ class JobGenDb(object):
         self.maxWinsPerJob = self.conf.getDbInt(db, "align.maxWinsPerJob")
         self.genome = None
         self.numAlign = 0L
-        self.slow2bit = False
 
     # matches pre-filter options
     preFilterOptsRe = re.compile("(-minId=)|(-minCover=)|(-maxRepMatch=)|(-minQSize=)|(-polyASizes=)")
 
     def _getPreFilterOpts(self, rel, cdnaType, orgCat):
         "select non-comparitive pslCDnaFilter options for blat job filtering"
+
+        # return None or True if enabled!
+        if self.conf.getDbBoolNone(self.db, "align.prefilter") == False:
+            return None
+
         filterOpts = self.conf.getvDbStrNo(self.db, rel.srcDb, cdnaType, orgCat, "pslCDnaFilter")
         if filterOpts == None:
             return None
@@ -494,8 +476,6 @@ class JobGenDb(object):
         self.clusterGenome = self.conf.getDbStr(self.db, "clusterGenome")
         if self.clusterGenome.endswith(".nib"):
             self.clusterGenome = os.path.dirname(self.clusterGenome)
-        elif len(self.genome) >= 100000:
-            self.slow2bit = True
         lift = self.conf.getDbStrNo(self.db, "lift")
         if lift != None:
             self.genome.addUnGappedRegions(lift)

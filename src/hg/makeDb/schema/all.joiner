@@ -314,6 +314,9 @@ identifier gnfHumanAtlas2
     hgFixed.gnfHumanAtlas2AllRatio.name unique
     hgFixed.gnfHumanAtlas2Median.name full unique
     hgFixed.gnfHumanAtlas2MedianRatio.name unique
+    hgFixed.gladHumESRatio.name unique
+    hgFixed.gladHumES.name
+    hgFixed.gladHumESOtherData.name
     $hg.knownToGnfAtlas2.value
     $hg.gnfAtlas2.name
     $hg.affyGnf1h.qName
@@ -566,14 +569,6 @@ identifier mouseLandscapeSampleId
 "Identifiers of U. Toronto RNA samples"
      hgFixed.mouseLandscapeExps.id
      hgFixed.mouseLandscape.expScores comma indexOf full
-
-identifier gladHumES
-"Gladstone Human gene probe ID (same as GNF Atlas 2)"
-    hgFixed.gladHumES.name
-    hgFixed.gladHumESRatio.name unique
-    $hg.knownToGnfAtlas2.value
-    $hg.gnfAtlas2.name
-    $hg.affyGnf1h.qName
 
 identifier gladHumESSampleId
 "Identifiers of RNA samples used in Gladstone Arrays"
@@ -1787,6 +1782,7 @@ tablesIgnored $gbd
     rnaGene
     regPotential%
     sangerGenefinder
+    sangamoDnaseHs
     simpleRepeat
     tableDescriptions
     tigrGeneIndex

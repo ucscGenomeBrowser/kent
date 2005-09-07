@@ -6,7 +6,7 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.5 2005/01/10 00:29:49 kent Exp $";
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.9 2005/08/29 20:59:45 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list
@@ -113,7 +113,8 @@ ali->hStart = hStart + 1;
 return;
 }
 
-struct ffAli *ffMergeClose(struct ffAli *aliList)
+struct ffAli *ffMergeClose(struct ffAli *aliList, 
+	DNA *needleStart, DNA *hayStart)
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors or
  * ones that could be merged at the expense of just a few mismatches.*/
@@ -127,8 +128,8 @@ for (mid = aliList->right; mid != NULL; mid = mid->right)
     {
     for (ali = aliList; ali != mid; ali = ali->right)
 	{
-	DNA *nStart, *nEnd;
-	int nOverlap, diag;
+	char *nStart, *nEnd;
+	int nOverlap;
 	nStart = max(ali->nStart, mid->nStart);
 	nEnd = min(ali->nEnd, mid->nStart);
 	nOverlap = nEnd - nStart;
@@ -136,16 +137,17 @@ for (mid = aliList->right; mid != NULL; mid = mid->right)
 	 * offset the same. */
 	if (nOverlap >= closeEnough)
 	    {
-	    int diag = ali->nStart - ali->hStart;
-	    if (diag == mid->nStart - mid->hStart)
+	    int aliDiag = (ali->nStart - needleStart) - (ali->hStart - hayStart);
+	    int midDiag = (mid->nStart - needleStart) - (mid->hStart - hayStart);
+	    if (aliDiag == midDiag)
 		{
 		/* Make mid encompass both, and make ali empty. */
 		mid->nStart = min(ali->nStart, mid->nStart);
 		mid->nEnd = max(ali->nEnd, mid->nEnd);
-		mid->hStart = mid->nStart-diag;
-		mid->hEnd = mid->nEnd-diag;
-		ali->hEnd = mid->hStart;
-		ali->nEnd = mid->nStart;
+		mid->hStart = min(ali->hStart, mid->hStart);
+		mid->hEnd = max(ali->hEnd, mid->hEnd);
+		ali->hStart = ali->hEnd = mid->hStart;
+		ali->nEnd = ali->nStart = mid->nStart;;
 		}
 	    }
 	}

@@ -14,3 +14,6 @@ liftOver: $O $(MYLIBS)
 
 liftOverMerge:  liftOverMerge.o $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/liftOverMerge liftOverMerge.o $(MYLIBS) $L
+
+test::
+	cd tests && ${MAKE} test

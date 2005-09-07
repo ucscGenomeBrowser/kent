@@ -5881,6 +5881,8 @@ exit $status
     cd rBest
 
     # net the best chains from the chimp net and pull the human-ref net
+    # (Daryl accidentally deleted human.rbest.net and rebuilt it with the 
+    #  same command on 8/14/2005, resulting in a file of the same size)
     time chainPreNet chimp.best.chain ../../S2.len ../../S1.len stdout | \
        chainNet stdin -minSpace=10 ../../S2.len ../../S1.len \
                          /dev/null human.rbest.net
@@ -8249,7 +8251,7 @@ XXX - running 2004-07-01 11:26
     ssh hgwdev
     makeLoChain-load hg17 hg16
 
-# DROPUNDER CHAIN TO HG15 (IN PROGRESS 2005-07-20 Andy)
+# DROPUNDER CHAIN TO HG15 (DONE 2005-07-21 Andy)
     # Split things up
     ssh eieio
     cd /cluster/bluearc
@@ -8326,55 +8328,73 @@ XXX - running 2004-07-01 11:26
     # by far.
 
     # lift results
-    ssh kki
-    cd /cluster/data/hg17/bed/blat.hg15
-    mkdir lift.run
-    cd lift.run/
-    cut -f1 /cluster/data/hg15/chrom.sizes > hg15.lst
-    cut -f1 /cluster/data/hg17/chrom.sizes > hg17.lst
-    cat > lift.sh << "_EOF_"
-#!/bin/bash
-chrom=`basename $1 .psl`
-liftUp -pslQ $1 $2 warn ../raw/chr*_${chrom}.psl
-_EOF_
-    chmod +x lift.sh
-    cat > gsub << "_EOF_"
-#LOOP
-./lift.sh {check out line+ ../psl/$(path1).psl} /santest/scratch/hg15/liftOver/lift/$(path1).lft warn $(path1)
-#ENDLOOP
-_EOF_
-    gensub2 hg15.lst single gsub spec
-    para create spec
-    para push
-    # load on eieio kind of high, plus store5 at 100%... refitting
-    para finished 2>&1 | grep "^./" > done 
-    sets diff spec done newspec
-    mkdir /santest/scratch/hg15/liftOver/psl
-    sed 's/\.\./\/santest\/scratch\/hg15\/liftOver/' newspec > tmp
-    mv tmp newspec
-    ssh kk9
     cd /cluster/data/hg17/bed/blat.hg15/lift.run
-    
-
-#    for chrom in `cut -f1 /cluster/data/hg15/chrom.sizes`; do
-    for chrom in `cat lift.run/notdone.lst`; do
+    for chrom in `cut -f1 /cluster/data/hg15/chrom.sizes`; do
        liftUp -pslQ /cluster/bluearc/hg15/liftOver/psl/${chrom}.psl /cluster/bluearc/hg15/liftOver/lift/${chrom}.lft warn raw/chr*_${chrom}.psl
     done
 
     # Chain
+    # There's been some problems with store5.  
     ssh kk9
-    cd /cluster/data/hg17/bed/blat.hg15
-    makeLoChain-chain hg17 /scratch/hg/gs.18/build35/bothMaskedNibs hg15 /scratch/hg/gs.16/build33/chromTrfMixedNib 2> chain.error.log > chain.log
+    cd /cluster/store12/store5/gs.18/build35/bed/blat.hg15.2005-07-21
+    mkdir chainRun
+    mkdir -p /panasas/store/hg15/chainRaw
+    ln -s /panasas/store/hg15/chainRaw chainRaw
     cd chainRun/
+    ls -1S ../psl/*.psl > in.lst
+    cat > chain.sh << "_EOF_"
+#!/bin/bash
+tmp=/scratch/`basename $4`
+axtChain -psl $1 $2 $3 $tmp
+cp $tmp $4
+rm $tmp  
+_EOF_
+    chmod +x chain.sh
+    cat > gsub << "_EOF_"
+#LOOP
+./chain.sh $(path1) /scratch/hg/gs.18/build35/bothMaskedNibs /scratch/hg/gs.16/build33/chromTrfMixedNib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+_EOF_
+    # <<
+    cd chainRun/
+    gensub2 in.lst single gsub spec
+    para create spec
     para push
+#Completed: 44 of 44 jobs
+#CPU time in finished jobs:       7448s     124.13m     2.07h    0.09d  0.000 y
+#IO & Wait Time:                  9591s     159.85m     2.66h    0.11d  0.000 y
+#Average job time:                 387s       6.45m     0.11h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1906s      31.77m     0.53h    0.02d
+#Submission to last job:          1906s      31.77m     0.53h    0.02d
+    ssh kolossus
+    cd /panasas/store/hg15/chainRaw    
+    chainMergeSort *.chain | chainSplit /scratch/andy/chain stdin
+    cd /scratch/andy
+    mkdir net over
+    cd chain/
+    for chain in *; do
+       c=${chain%.chain}
+       echo $c
+       chainNet $chain /cluster/store12/store5/gs.18/build35/chrom.sizes \
+          /cluster/store12/store5/gs.16/build33/chrom.sizes \
+          ../net/${c}.net /dev/null
+       netChainSubset ../net/${c}.net $chain ../over/${c}.over
+    done
+    cd ../over/
+    cat * >> ../hg17ToHg15.over.chain
+    cd ../
+    cp -r hg17* over/ /cluster/store12/store5/gs.18/build35/bed/blat.hg15.2005-07-21/
+    cd ../
+    rm -rf andy/
+    rm -rf /panasas/store/hg15    
+    cd /cluster/bluearc/hg15/liftOver/psl
+    for psl in *; do
+       gzip $psl
+    done
+    cd ../
 
-    ssh eieio
-    makeLoChain-net hg17 hg16
-    ssh hgwdev
-    makeLoChain-load hg17 hg16
-
-
-
+    
 # Completed: 116281 of 116281 jobs
 # CPU time in finished jobs:   21807388s  363456.46m  6057.61h  252.40d  0.692 y
 # IO & Wait Time:               2319383s   38656.39m   644.27h   26.84d  0.074 y
@@ -8925,7 +8945,7 @@ CREATE TABLE mitopred (
     # Googling... can buy a converter for $40... free trial .exe...
 
 
-# CREATING REFFULL (DONE - 2004-08-02 - Hiram)
+# CREATING REFFULL - DBTSS MRNA (DONE - 2004-08-02 - Hiram)
 
     ssh to eieio
     mkdir /cluster/data/hg17/bed/refFull
@@ -9280,6 +9300,54 @@ for i in `cat ../chrom.lst` ; do nice mafCoverage hg17 $i.maf -count=2 > $i.cov 
     # 132 chimpDels.unmapped
     # 27794 total
     hgLoadBed hg17 chimpDels chimpDels.bed -noBin
+
+### CREATE chimpFixedDiff -- panTro1 (Daryl, August 18, 2005)
+
+    # Convert chimp quality scores from uncompressed to compressed
+    # chromosome format.  This took 22 minutes on crow.
+    ## previously done for hg16
+    # cd /cluster/data/panTro1
+    # cat */chr*.qa | qaToQac stdin chrom.qac
+
+    # Make single base pair high quality differences into a bed file
+    # and load into database
+    cd /cluster/data/hg17/bed
+    mkdir chimpFixedDiff
+    cd chimpFixedDiff
+    sed 's/simpleNucDiff/chimpFixedDiff/' ~/kent/src/hg/lib/simpleNucDiff.sql > chimpFixedDiffs.sql
+
+    # chimpHiQualDiffs was changed to allow different 
+    #    quality parameters as command line options
+
+    set axtDir = /cluster/data/hg17/bed/blastz.panTro1/axtRBestNet
+    # This crashed twice at the same place, but ran successfully when
+    # each chromosome was run separately.
+    ##  time chimpFixedDiffs /$axtDir /cluster/data/panTro1/chrom.qac chimpFixedDiffs.bed >& chimpFixedDiffs.log
+    mkdir chroms; cd chroms
+    ls -1 $axtDir | grep chr | grep axt | sed 's/.axt//' | xargs mkdir
+    # rmdir chr*random
+    touch cfd.log
+    foreach f (chr*)
+	echo -n $f "  "
+	ln -s /$axtDir/$f.axt $f/$f.axt
+	time nice chimpFixedDiffs $f /cluster/data/panTro1/chrom.qac $f.chimpFixedDiffs.bed>>& cfd.log
+    end
+    rm ../chimpFixedDiffs.bed
+    cat chr*bed > ../chimpFixedDiffs.bed
+
+    ## The load (sort) ran out of memory on hgwdev, so I sorted the
+    ## file first on kolossus (3 minutes) and then loaded it on hgwdev
+    ssh kolossus
+    hgLoadBed -strict -sqlTable=chimpFixedDiffs.sql -noLoad hg16 chimpFixedDiff chimpFixedDiffs.bed
+    exit
+    ## hgwdev (37 minutes)
+    hgLoadBed -hasBin -noSort -sqlTable=chimpFixedDiffs.sql hg16 chimpFixedDiff bed.tab
+
+    TODO: need to filter out polymorphic sites (SNPs)
+
+
+
+
 
 #  Load firstEF track (DONE 2004-08-18 braney)
     ssh hgwdev
@@ -17013,6 +17081,7 @@ superfam050524.sfAssign;'
     hgsql hg17 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
 
 # BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 6/27/05 Fan.
+# make knownGeneLists.html hg17GeneList.html mm5GeneList.html rm3GeneList.html
 
     cd /cluster/data/hg17/bed
     rm -rf knownGeneList/hg17
@@ -17319,7 +17388,7 @@ hgMapViaSwissProt hg17 knownGene name proteinID Pfam knownToPfam
 #Mapped 10925,  multiply-mapped 382, missed 23266, unmapped 162
     hgLoadBed hg17 gladHumES bed.hg17.data
 
-# PHASTODDS GENESORTER COLUMN (NOT DONE YET Andy)
+# PHASTODDS GENESORTER COLUMN (DONE 7/28/2005 Andy)
     ssh kolossus
     cd /panasas/store/andy
     mkdir phastOdds
@@ -17356,6 +17425,25 @@ _EOF_
        ./runChrom.sh $c;
        addPhastOddsExons $f gtfs/$c.phastOdds.gtf beds/$c.bed
     done
+    cat beds/* | sort -k4,4 -k1,1 -k2,2n -k3,3n > phastOdds.kg.bed
+    cat > phastOdds.sql << "EOF"
+CREATE TABLE phastOdds (
+    bin smallint not null, # Speedup.
+    chrom varchar(255) not null,        # Human chromosome or FPC contig
+    chromStart int unsigned not null,   # Start position in chromosome
+    chromEnd int unsigned not null,     # End position in chromosome
+    name varchar(255) not null, # Name of item
+              #Indices
+    score float not null, # phastOdds score.
+    index(chrom(8),bin),
+    index(name(10))
+);
+EOF
+# <<
+    hgLoadBed -sqlTable=phastOdds.sql hg17 phastOdds phastOdds.kg.bed
+    # Actually I probably don't need that hg17 table.
+    echo create table phastOdds select name, score from hg17.phastOdds | hgsql hgFixed
+    echo create index nameIndex on phastOdds (name(10)) | hgsql hgFixed    
 
 ##########################################################################
 # Illumina SNPs (Heather, July 2005)
@@ -17445,3 +17533,36 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
     # for these.
     ldHgGene -gtf -genePredExt hg17 nscanGene  NCBI35_NSCAN_4-11-2005/chr_gtf/chr*.gtf
     ldHgGene -gtf -genePredExt hg17 nscanEstGene NCBI35_NSCAN_EST_4-16-2005/chr_gtf/chr*.gtf
+
+# UPDATE WGRNA TRACK (DONE, 2005-08-24, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg17/bed
+
+  mkdir wgRna-2005-08-24
+  cd wgRna-2005-08-24
+
+# Received the data file, wgtrack_aug2005.txt, from Michel Weber's email 
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg17/bed/wgRna-2005-08-24.
+
+  cut -f 2-10 wgtrack_aug2005.txt >wgRna.tab
+  vi wgRna.tab
+  
+# edit wgRna.tab to take out the first line of data field labels.
+
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# Compared to 7/5 data, one record updated, one record dropped, one record added, out of 741 records.
+
+# Generate snpMask files (Done Heather Sept. 1, 2005)
+# Takes about 10-15 minutes
+# Consumes about 1 gig of disk
+  ssh hgwdev
+  cd /usr/local/apache/htdocs/goldenPath/hg17
+  mkdir snpMask
+  cd snpMask
+  foreach chrom ( `cat /cluster/data/hg17/chrom.lst` )
+      snpMaskChrom hg17 ${chrom} /gbdb/hg17/nib/${chrom}.nib ${chrom}.ambigs.fa
+      gzip ${chrom}.ambigs.fa
+  end

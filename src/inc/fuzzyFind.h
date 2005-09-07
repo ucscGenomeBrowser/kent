@@ -171,7 +171,8 @@ void ffExpandExactRight(struct ffAli *ali, DNA *needleEnd, DNA *hayEnd);
 void ffExpandExactLeft(struct ffAli *ali, DNA *needleStart, DNA *hayStart);
 /* Expand aligned segment to left as far as can exactly. */
 
-struct ffAli *ffMergeClose(struct ffAli *aliList);
+struct ffAli *ffMergeClose(struct ffAli *aliList, 
+	DNA *needleStart, DNA *hayStart);
 /* Remove overlapping areas needle in alignment. Assumes ali is sorted on
  * ascending nStart field. Also merge perfectly abutting neighbors or
  * ones that could be merged at the expense of just a few mismatches.*/

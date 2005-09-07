@@ -1,4 +1,4 @@
-                   	seqs	aligns	multAlnSeqs
-             total:	5	5	0
-              kept:	2	2	0
-     drop min size:	3	3	0
+                   	seqs	aligns
+             total:	5	5
+     drop min size:	3	3
+              kept:	2	2

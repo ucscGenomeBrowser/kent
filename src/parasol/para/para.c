@@ -15,7 +15,7 @@
 #include "jobResult.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: para.c,v 1.64 2005/08/08 19:41:03 galt Exp $";
+static char const rcsid[] = "$Id: para.c,v 1.66 2005/08/31 22:41:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -66,8 +66,6 @@ errAbort(
   "         Default 20160 (2 weeks).\n"
   "      -delayTime=N  Number of seconds to delay before submitting next job \n"
   "         to minimize i/o load at startup - default 0.\n"
-  "      -eta  Show estimated time to completion with 'time' function.\n"
-  "         This is a rough estimated based on average job time and jobs left.\n"
   "      -priority=x  Set batch priority to high, medium, or low.\n"
   "         Default medium (use high only with approval).\n"
   "         If needed, use with make, push, create, shove, or try.\n"
@@ -144,7 +142,6 @@ int sleepTime = 5*60;
 int delayTime = 0;
 int priority = NORMAL_PRIORITY;
 int maxNode  = -1;
-boolean eta = FALSE;
 
 /* Some variable we might want to move to a config file someday. */
 char *tempName = "para.tmp";	/* Name for temp files. */
@@ -1716,23 +1713,21 @@ if (runningCount > 0)
 if (timedCount > 0)
     {
     printTimes("Average job time:", totalWall/timedCount, FALSE);
-    printTimes("Longest running job:", longestRun, FALSE);
+    if (runningCount > 0)
+        printTimes("Longest running job:", longestRun, FALSE);
     printTimes("Longest finished job:", longestWall, FALSE);
     printTimes("Submission to last job:", calcFirstToLast(db), FALSE);
-    if (eta)
-	{
-	if (runningCount < 1)
-	    printTimes("Estimated complete:", 0.0, FALSE);
-	else
-	    {
-	    int jobsInBatch = db->jobCount;
-	    int jobsToRun = jobsInBatch - timedCount;
-	    double timeMultiple = (double)jobsToRun / (double)runningCount;
-	    verbose(2, "inBatch: %d, toRun: %d, multiple: %.3f\n",
+    if (runningCount < 1)
+        printTimes("Estimated complete:", 0.0, FALSE);
+    else
+        {
+        int jobsInBatch = db->jobCount;
+        int jobsToRun = jobsInBatch - timedCount;
+        double timeMultiple = (double)jobsToRun / (double)runningCount;
+        verbose(2, "inBatch: %d, toRun: %d, multiple: %.3f\n",
 		jobsInBatch, jobsToRun, timeMultiple);
-	    printTimes("Estimated complete:",
-		timeMultiple*totalWall/timedCount, FALSE);
-	    }
+        printTimes("Estimated complete:",
+                   timeMultiple*totalWall/timedCount, FALSE);
 	}
     }
 atomicWriteBatch(db, batch);
@@ -1754,7 +1749,8 @@ maxPush = optionInt("maxPush",  maxPush);
 warnTime = optionInt("warnTime", warnTime);
 killTime = optionInt("killTime", killTime);
 delayTime = optionInt("delayTime", delayTime);
-eta = optionExists("eta");
+if (optionExists("eta"))
+    fprintf(stderr, "note: the -eta option is no longer required\n");
 command = argv[1];
 batch = "batch";
 

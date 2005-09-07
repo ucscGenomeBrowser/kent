@@ -32,6 +32,8 @@ clean:
 
 SCRIPT_FILES = \
 	blastz-make-joblist \
+	blastz-normalizeLav \
+	blastz-run-ucsc \
 	doBlastzChainNet.pl \
         iSync \
         lodToBedScore \

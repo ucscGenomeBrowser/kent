@@ -28,13 +28,12 @@ location (in thousands) of the match for each matching alignment.</P>
 Transposons that have been inserted since the $o_organism/$organism
 split were removed from the assemblies. The abbreviated genomes were
 aligned with blastz, and the transposons were then added back in.  
-Note that the $o_organism chrNA
-and chrUn chromosomes contain unordered scaffolds separated by 500 Ns. By 
-including these chromosomes in the blastz alignment, one risks generating false 
-alignments that bridge scaffolds in these chromosomes that are not, in reality,
-contiguous. To avoid this situation, the blastz alignments and subsequent
-chaining were performed on the scaffolds (without using lineage-specific 
-repeats), and the coordinates were then lifted up to the chromosome level. The 
+Because the $o_organism chrNA and chrUn chromosomes are comprised of unordered 
+scaffolds separated by 500 <em>N</em>s, the blastz alignments and subsequent 
+chaining were first performed on the scaffolds (without using lineage-specific 
+repeats), 
+and the coordinates were then lifted up to the chromosome level. This avoided 
+false alignments across the <em>N</em>s. The
 resulting alignments were converted into psl format using the lavToPsl program. The axt alignments were fed into axtChain, 
 which organizes all alignments between a single $o_organism chromosome and a 
 single $organism chromosome into a group and creates a kd-tree out

@@ -222,7 +222,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droGri1", "Aug. 2005", "/gbdb/droGri1", "D. grimshawi", \
-             "scaffold_0", 1, 57, \
+             "scaffold_24862:854980-869643", 1, 57, \
              "D. grimshawi", \
              "Drosophila grimshawi", "/gbdb/droGri1/html/description.html", \
              0, 0, "Agencourt 1 Aug 2005");' \

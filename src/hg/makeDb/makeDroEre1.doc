@@ -224,7 +224,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droEre1", "Aug. 2005", "/gbdb/droEre1", "D. erecta", \
-             "scaffold_0", 1, 53, \
+             "scaffold_4929:882464-907886", 1, 53, \
              "D. erecta", \
              "Drosophila erecta", "/gbdb/droEre1/html/description.html", \
              0, 0, "Agencourt 1 Aug 2005");' \

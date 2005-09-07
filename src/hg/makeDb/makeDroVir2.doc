@@ -226,7 +226,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droVir2", "Aug. 2005", "/gbdb/droVir2", "D. virilis", \
-             "scaffold_0", 1, 57, \
+             "scaffold_12963:19375824-19416317", 1, 57, \
              "D. virilis", \
              "Drosophila virilis", "/gbdb/droVir2/html/description.html", \
              0, 0, "Agencourt 1 August 2005");'
@@ -416,5 +416,83 @@ droVir2.perChromTables = no
 # MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (TODO 8/?/05 angie)
     hgsql -h genome-testdb hgcentraltest -e \
       'UPDATE defaultDb set name = "droVir2" where genome = "D. virilis";'
+
+
+# AUTO UPDATE GENBANK MRNA AND EST GENES RUN (DONE, 2005-08-22, markd)
+    # align with revised genbank process
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add droVir2, had to run on pk, due to kk
+    # being down.  Set temporary locations for server files
+# droVir2 (D. virilis)
+# genbank has 35 mRNAs and 633 ESTs at time of initial build
+droVir2.serverGenome = /cluster/data/droVir2/droVir2.2bit
+##droVir2.clusterGenome = /iscratch/i/droVir2/droVir2.2bit
+##droVir2.ooc = /iscratch/i/droVir2/11.ooc
+droVir2.clusterGenome = /san/sanvol1/scratch/droVir2/droVir2.2bit
+droVir2.ooc = /san/sanvol1/scratch/droVir2/11.ooc
+droVir2.lift = no
+droVir2.refseq.mrna.native.load = yes
+droVir2.refseq.mrna.xeno.load = yes
+droVir2.refseq.mrna.xeno.pslCDnaFilter = -minCover=0.15 -coverNearTop=0.005 -minId=0.60 -idNearTop=0.005 -maxRepMatch=0.4 -bestOverlap
+droVir2.genbank.mrna.xeno.load = yes
+droVir2.genbank.est.native.load = yes
+droVir2.genbank.est.xeno.load = no
+droVir2.downloadDir = droVir2
+droVir2.perChromTables = no
+
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial droVir2 &
+
+    # when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  droVir2&
+
+# AUTO UPDATE GENBANK MRNA AND EST GENES RUN (DONE, 2005-08-31, markd)
+    # redo genbank revised alignment procedure once again to
+    # pickup local near best pslCDnaFilter
+
+    # align with revised genbank process
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add droVir2
+# droVir2 (D. virilis)
+# genbank has 35 mRNAs and 633 ESTs at time of initial build
+droVir2.serverGenome = /cluster/data/droVir2/droVir2.2bit
+droVir2.clusterGenome = /iscratch/i/droVir2/droVir2.2bit
+droVir2.ooc = /iscratch/i/droVir2/11.ooc
+droVir2.lift = no
+droVir2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+droVir2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+droVir2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+droVir2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+droVir2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+droVir2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+droVir2.refseq.mrna.native.load = yes
+droVir2.refseq.mrna.xeno.load = yes
+droVir2.genbank.mrna.xeno.load = yes
+droVir2.genbank.est.native.load = yes
+droVir2.genbank.est.xeno.load = no
+droVir2.downloadDir = droVir2
+droVir2.perChromTables = no
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial droVir2 &
+
+    # when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  droVir2&
+
 
 

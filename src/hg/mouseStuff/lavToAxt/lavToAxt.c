@@ -13,7 +13,7 @@
 
 struct dnaSeq *qFaList;
 struct dnaSeq *tFaList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.19 2005/08/18 07:43:56 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.20 2005/08/26 21:07:51 baertsch Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -386,18 +386,26 @@ else
 void parseD(struct lineFile *lf, char **matrix, char **command, FILE *f)
 /* Parse d stanza and return matrix and blastz command line */
 {
-char *line, *words[3];
-int size;
+char *line, *words[64];
+int i, size, wordCount = 0;
 struct axtScoreScheme *ss = NULL;
 freez(matrix);
 freez(command);
 if (!lineFileNext(lf, &line, &size))
    unexpectedEof(lf);
-ss = axtScoreSchemeReadLf(lf);
-axtScoreSchemeDnaWrite(ss, f, "blastz");
+if (stringIn("blastz",line))
+    {
+    stripChar(line,'"');
+    wordCount = chopLine(line, words);
+    fprintf(f, "##aligner=%s",words[0]);
+    for (i = 3 ; i <wordCount ; i++)
+        fprintf(f, " %s ",words[i]);
+    fprintf(f,"\n");
+    ss = axtScoreSchemeReadLf(lf);
+    axtScoreSchemeDnaWrite(ss, f, "blastz");
+    }
 seekEndOfStanza(lf);
 }
-
 
 void parseH(struct lineFile *lf,  char **tName, char **qName, boolean *isRc)
 /* Parse out H stanza */

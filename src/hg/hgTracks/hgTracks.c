@@ -93,7 +93,7 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1001 2005/08/16 21:47:05 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1005 2005/08/31 07:35:42 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7722,11 +7722,17 @@ int rulerTranslationHeight = codonHeight * 3;        // 3 frames
 int yAfterRuler = gfxBorder;
 int yAfterBases = yAfterRuler;  // differs if base-level translation shown
 int relNumOff;
+boolean rulerCds = zoomedToCdsColorLevel;
 /* Start a global track hash. */
 trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
+if (rulerMode != tvFull)
+    {
+    rulerCds = FALSE; 
+    }
+    
 /* Figure out height of each visible track. */
 pixHeight = gfxBorder;
 if (rulerMode != tvHide)
@@ -7743,8 +7749,7 @@ if (rulerMode != tvHide)
     yAfterRuler += basePositionHeight;
     yAfterBases = yAfterRuler;
     pixHeight += basePositionHeight;
-    if (rulerMode == tvFull && 
-            (zoomedToBaseLevel || zoomedToCdsColorLevel))
+    if (rulerCds)
         {
         yAfterRuler += rulerTranslationHeight;
         pixHeight += rulerTranslationHeight;
@@ -7795,8 +7800,7 @@ brickColor = vgFindColorIx(vg, 230, 50, 110);
 blueColor = vgFindColorIx(vg, 0,114,198);
 greenColor = vgFindColorIx(vg, 28,206,40);
 
-if (rulerMode == tvFull &&
-        (zoomedToBaseLevel || zoomedToCdsColorLevel) && !cdsColorsMade)
+if (rulerCds && !cdsColorsMade)
     {
     makeCdsShades(vg, cdsColor);
     cdsColorsMade = TRUE;
@@ -7841,8 +7845,7 @@ if (withLeftLabels && psOutput == NULL)
         {
         /* draw button for Base Position pseudo-track */
         int height = basePositionHeight;
-        if (rulerMode == tvFull && 
-                        (zoomedToBaseLevel || zoomedToCdsColorLevel))
+        if (rulerCds)
             height += rulerTranslationHeight;
         drawGrayButtonBox(vg, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxUi(trackTabX, y, trackTabWidth, height, RULER_TRACK_NAME, 
@@ -7901,15 +7904,14 @@ if (withLeftLabels)
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, RULER_TRACK_LABEL);
 	y += rulerHeight;
-	if (zoomedToBaseLevel || 
-                (zoomedToCdsColorLevel && rulerMode == tvFull))
+	if (zoomedToBaseLevel || rulerCds)
 	    {		    
 	    drawComplementArrow(vg,leftLabelX, y,
 				leftLabelWidth-1, baseHeight, font);
-	    y += baseHeight;
+	    if (zoomedToBaseLevel)				    
+    		y += baseHeight;
 	    }
-        if ((rulerMode == tvFull) &&
-                (zoomedToBaseLevel || zoomedToCdsColorLevel))
+        if (rulerCds)
             y += rulerTranslationHeight;
 	}
     for (track = trackList; track != NULL; track = track->next)
@@ -8036,8 +8038,7 @@ if (rulerMode != tvHide)
 		        chromName, ns, ne, message);
 	}
     }
-    if (zoomedToBaseLevel || 
-            (zoomedToCdsColorLevel && rulerMode == tvFull))
+    if (zoomedToBaseLevel || rulerCds)
         {
         Color baseColor = MG_BLACK;
         int start, end, chromSize;
@@ -8086,8 +8087,7 @@ if (rulerMode != tvHide)
             mapBoxReinvokeExtra(insideX, y+rulerHeight, insideWidth,baseHeight, 
                                 NULL, NULL, 0, 0, "", newRulerVis);
             }
-        if (rulerMode == tvFull && 
-                                (zoomedToBaseLevel || zoomedToCdsColorLevel))
+        if (rulerCds)
             {
             /* display codons */
             int frame;
@@ -8124,7 +8124,7 @@ if (rulerMode != tvHide)
                 /* draw the codons in the list, with alternating colors */
                 drawGenomicCodons(vg, sfList, scale, insideX, y, codonHeight,
                                     font, cdsColor, winStart, MAXPIXELS,
-                                    zoomedToBaseLevel || zoomedToCodonLevel);
+                                    zoomedToCodonLevel);
                 }
             }
         }
@@ -8957,7 +8957,7 @@ return sameClass;
 }
 
 void loadGenePred(struct track *tg)
-/* Convert bed info in window to linked feature. */
+/* Convert gene pred in window to linked feature. */
 {
 tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 /* filter items on selected criteria if filter is available */
@@ -8967,7 +8967,7 @@ filterItems(tg, genePredClassFilter, "include");
 }
 
 void loadGenePredWithName2(struct track *tg)
-/* Convert bed info in window to linked feature. Include alternate name
+/* Convert gene pred in window to linked feature. Include alternate name
  * in "extra" field (usually gene name)*/
 {
 struct sqlConnection *conn = hAllocConn();
@@ -8979,7 +8979,7 @@ filterItems(tg, genePredClassFilter, "include");
 }
 
 void loadGenePredWithConfiguredName(struct track *tg)
-/* Convert bed info in window to linked feature. Include name
+/* Convert gene pred info in window to linked feature. Include name
  * in "extra" field (gene name, accession, or both, depending on UI) */
 {
 char buf[64];
@@ -8996,7 +8996,7 @@ loadGenePredWithName2(tg);
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
-    if (useGeneName)
+    if (useGeneName && lf->extra)
         dyStringAppend(name, lf->extra);
     if (useGeneName && useAcc)
         dyStringAppendC(name, '/');
@@ -10165,10 +10165,6 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeIntronMay", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeGeneMay", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeIntronOld", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeGeneOld", gencodeGeneMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 

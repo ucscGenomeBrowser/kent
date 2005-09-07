@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.260 2005/08/09 04:17:12 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.261 2005/09/07 21:06:46 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -751,6 +751,18 @@ for (tbl = tableNames;  tbl != NULL;  tbl = tbl->next)
 	return TRUE;
     }
 return FALSE;
+}
+
+char *hTableForTrack(char *db, char *trackName)
+/* Return a table for a track in db. Returns one of the split
+ * tables, or main table if not split */
+{
+struct hash *hash = tableListHash(db);
+struct slName *tableNames = NULL;
+tableNames = (struct slName *)hashFindVal(hash, trackName);
+if (tableNames != NULL)
+    return tableNames->name;
+return NULL;
 }
 
 static void parseDbTable(char *dbTable, char retDb[HDB_MAX_TABLE_STRING],

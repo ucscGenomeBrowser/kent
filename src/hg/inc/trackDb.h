@@ -111,5 +111,8 @@ bool trackDbIsComposite(struct trackDb *tdb);
 /* Determine if this is a composite track. This is currently defined
  * as a top-level dummy track, with a list of subtracks of the same type */
 
+bool trackDbIsSubtrack(struct trackDb *tdb);
+/* Determine if this is a subtrack. */
+
 #endif /* TRACKDB_H */
 

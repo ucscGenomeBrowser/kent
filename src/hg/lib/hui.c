@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.67 2005/07/13 04:38:01 angie Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.69 2005/09/03 00:01:15 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1098,8 +1098,10 @@ slFreeList(&trackList);
 return trackName;
 }
 
-struct hash *makeTrackHash(char *database, char *chrom)
-/* Make hash of trackDb items for this chromosome. */
+struct hash *makeTrackHashWithComposites(char *database, char *chrom, 
+                                        bool withComposites)
+/* Make hash of trackDb items for this chromosome, including composites,
+   not just the subtracks. */
 {
 struct trackDb *tdbs = hTrackDb(chrom);
 struct hash *trackHash = newHash(7);
@@ -1120,6 +1122,8 @@ while (tdbs != NULL)
                 subtrack->html = cloneString(tdb->html);
                 hashAdd(trackHash, subtrack->tableName, subtrack);
                 }
+            if (withComposites)
+                hashAdd(trackHash, tdb->tableName, tdb);
             }
         else
             hashAdd(trackHash, tdb->tableName, tdb);
@@ -1129,6 +1133,12 @@ while (tdbs != NULL)
     }
 
 return trackHash;
+}
+
+struct hash *makeTrackHash(char *database, char *chrom)
+/* Make hash of trackDb items for this chromosome. */
+{
+    return makeTrackHashWithComposites(database, chrom, FALSE);
 }
 
 /****** Stuff for acembly related options *******/
@@ -1202,9 +1212,7 @@ char *primaryType = getPrimaryType(primarySubtrack, tdb);
 char option[64];
 char *words[2];
 
-puts("<P>");
 puts("<TABLE>");
-
 slSort(&(tdb->subtracks), trackDbCmp);
 for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
@@ -1290,6 +1298,8 @@ safef(javascript, JBUFSIZE*sizeof(char),
       formName, cgiScriptName(), formName);
 }
 
+#define MANY_SUBTRACKS  8
+
 void hCompositeUi(struct cart *cart, struct trackDb *tdb,
 		  char *primarySubtrack, char *fakeSubmit, char *formName)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
@@ -1309,22 +1319,31 @@ int nGroups;
 char setting[] = "subGroupN";
 char *button;
 struct trackDb *subtrack;
+bool hasSubgroups = FALSE;
 boolean displayAll = 
     sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 
-if (trackDbSetting(tdb, "subGroup1") == NULL)
+if (trackDbSetting(tdb, "subGroup1") != NULL)
+    hasSubgroups = TRUE;
+
+puts("<P>");
+if (slCount(tdb->subtracks) < MANY_SUBTRACKS && !hasSubgroups)
     {
     compositeUiAllSubtracks(cart, tdb, primarySubtrack);
     return;
     }
-
 if (fakeSubmit)
     cgiMakeHiddenVar(fakeSubmit, "submit");
-
-puts("<P>");
 puts ("<TABLE>");
-puts("<TR><B>Select subtracks:</B></TR>");
-puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
+if (hasSubgroups)
+    {
+    puts("<TR><B>Select subtracks:</B></TR>");
+    puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
+    }
+else
+    {
+    puts("<TR><TD><B>All subtracks:</B></TD><TD>");
+    }
 safef(buttonVar, sizeof buttonVar, "%s", "button_all");
 if (formName)
     {
@@ -1439,25 +1458,24 @@ for (i = 0; i < MAX_SUBGROUP; i++)
         }
     puts ("</TABLE>");
     }
-puts("<P>");
 puts("<TABLE>");
-puts("<TR><TD><B>Show subtracks:</B></TD><TD>");
+puts("<TR><TD><B>Show checkboxes for:</B></TD><TD>");
 if (formName)
     {
     makeRadioSubmitTweak(javascript, formName);
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,
                                 javascript);
-    puts("Selected</TD><TD>");
+    puts("Only selected subtracks</TD><TD>");
     cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,
 			      javascript);
     }
 else
     {
     cgiMakeRadioButton("displaySubtracks", "selected", !displayAll);
-    puts("Selected</TD><TD>");
+    puts("Only selected subtracks</TD><TD>");
     cgiMakeRadioButton("displaySubtracks", "all", displayAll);
     }
-puts("All</TD>");
+puts("All subtracks</TD>");
 puts("</TR>");
 puts("</TABLE>");
 cartSaveSession(cart);

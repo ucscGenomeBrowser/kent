@@ -4,9 +4,9 @@ PSLFILT = ../pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
-	nonCompareTest repMatchTest noDropCntBugTest \
-	minSpan100Test minSpan10Test
-
+	repMatchTest minAlnSizeTest nonRepSizeTest noDropCntBugTest \
+	minSpan100Test minSpan10Test localBestTest globalBestTest \
+	ignoreNsCoverTest ignoreNsMinAlnTest ignoreNsLocalBestTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -14,23 +14,23 @@ noopTest:
 
 overlapTest:
 	${MAKE} doFilterSave name=$@ inPsl=overlap.psl inSizes=overlap.sizes \
-	    filtArgs='-bestOverlap -minCover=0.15 -minId=0.96 -idNearTop=0.001'
+	    filtArgs='-bestOverlap -minCover=0.15 -minId=0.96'
 
 maxAlignTest:
 	${MAKE} doFilter name=$@ inPsl=NM_004038.3.psl inSizes=NM_004038.3.sizes \
 	    filtArgs='-maxAligns=2'
 
 minQSizeTest:
-	${MAKE} doFilter name=$@ inPsl=misc.psl \
-	    filtArgs='-minQSize=30'
-
-nonCompareTest:
-	${MAKE} doFilter name=$@ inPsl=NM_004038.3.psl inSizes=NM_004038.3.sizes \
-	    filtArgs='-nonComparative -minCover=0.15 -minId=0.96'
+	${MAKE} doFilter name=$@ inPsl=misc.psl filtArgs='-minQSize=30'
 
 repMatchTest:
-	${MAKE} doFilter name=$@ inPsl=repMatch.psl \
-	    filtArgs='-maxRepMatch=0.2'
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-maxRepMatch=0.2'
+
+minAlnSizeTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minAlnSize=50'
+
+nonRepSizeTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minNonRepSize=30'
 
 # file that causes the count of queries kept to be one more than total
 noDropCntBugTest:
@@ -43,8 +43,26 @@ minSpan100Test:
 minSpan10Test:
 	${MAKE} doFilter name=$@ inPsl=pseudoRetro.psl filtArgs='-minSpan=0.1'
 
+# local best in genome
+localBestTest:
+	${MAKE} doFilter name=$@ inPsl=many.psl filtArgs='-localNearBest=0.01'
 
-# Recursive targets:
+# global best in genome
+globalBestTest:
+	${MAKE} doFilter name=$@ inPsl=many.psl filtArgs='-globalNearBest=0.01'
+
+# ignore Ns in cover and score
+ignoreNsCoverTest:
+	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -minCover=0.4'
+
+ignoreNsMinAlnTest:
+	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -minAlnSize=80'
+
+ignoreNsLocalBestTest:
+	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -localNearBest=0.005'
+
+# Recursive targets.  Results are sorted to allow consistent comparisons, as somethimes
+# internal sorting done by pslCDnaFilter is not stable.
 #  o name - test name
 #  o filtArgs - filter arguments
 #  o inPsl - input psl, relative to input dir
@@ -55,13 +73,19 @@ endif
 outDir=output/${name}
 doFilter:
 	@${MKDIR} ${outDir}
-	${PSLFILT} ${filtArgs} -verbose=1 input/${inPsl} ${outDir}/keep.psl >${outDir}/filt.out 2>&1
+	${PSLFILT} ${filtArgs} -verbose=1 input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
+	@sort ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
+	@rm -f ${outDir}/keep.psl.tmp
 	${DIFF} expected/${name} output/${name}
 
 # saves dropped and weirdOverlapp
 doFilterSave:
 	@${MKDIR} ${outDir}
-	${PSLFILT} ${filtArgs} -verbose=1 -dropped=${outDir}/drop.psl -weirdOverlapped=${outDir}/weird.psl input/${inPsl} ${outDir}/keep.psl >${outDir}/filt.out 2>&1
+	${PSLFILT} ${filtArgs} -verbose=1 -dropped=${outDir}/drop.psl.tmp -weirdOverlapped=${outDir}/weird.psl.tmp input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
+	@sort ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
+	@sort ${outDir}/drop.psl.tmp > ${outDir}/drop.psl 
+	@sort ${outDir}/weird.psl.tmp > ${outDir}/weird.psl
+	@rm -f ${outDir}/keep.psl.tmp ${outDir}/drop.psl.tmp ${outDir}/weird.psl.tmp
 	${DIFF} expected/${name} output/${name}
 clean:
 	rm -rf output

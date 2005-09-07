@@ -17,7 +17,8 @@
 #include "twoBit.h"
 #include "trans3.h"
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.9 2005/01/26 22:34:47 kent Exp $";
+
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.17 2005/08/29 20:59:45 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -1445,6 +1446,33 @@ for (fi = bun->ffList; fi != NULL; fi = fi->next)
     }
 }
 
+#ifdef DEBUG
+static void dumpBunList(struct ssBundle *bunList)
+/* Write out summary info on bundle list. */
+{
+int totalItems = 0;
+int totalBlocks = 0;
+int totalBases = 0;
+struct ssBundle *bun;
+for (bun = bunList; bun != NULL; bun = bun->next)
+    {
+    struct ssFfItem *item;
+    for (item = bun->ffList; item != NULL; item = item->next)
+	{
+	struct ffAli *ff;
+	for (ff = item->ff; ff != NULL; ff = ff->right)
+	    {
+	    totalBases += ff->hEnd - ff->hStart;
+	    totalBlocks += 1;
+	    }
+	totalItems += 1;
+	}
+    }
+printf(2, "bundles %d, alignments %d, blocks %d, bases %d\n", 
+    slCount(bunList), totalItems, totalBlocks, totalBases);
+}
+#endif /* DEBUG */
+
 static void gfAlignSomeClumps(struct genoFind *gf,  struct gfClump *clumpList, 
     bioSeq *seq, boolean isRc,  int minMatch, 
     struct gfOutput *out, boolean isProt, enum ffStringency stringency);
@@ -1516,7 +1544,9 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
     addToBigBundleList(&oneBunList, bunHash, &bigBunList, query);
     *endPos = saveEnd;
     }
-
+#ifdef DEBUG
+dumpBunList(bigBunList);
+#endif /* DEBUG */
 for (bun = bigBunList; bun != NULL; bun = bun->next)
     {
     ssStitch(bun, ffCdna, minScore, ssAliCount);

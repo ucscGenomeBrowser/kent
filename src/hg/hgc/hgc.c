@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.935 2005/08/24 21:33:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.944 2005/09/07 21:36:20 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2032,11 +2032,46 @@ if (hTableOrSplitExists(tdb->tableName))
     }
 }
 
+void printOrigAssembly(struct trackDb *tdb)
+/* If this annotation has been lifted, print the original
+ * freeze, as indicated by the "origAssembly" trackDb setting */ 
+{
+char *origAssembly, *freeze, *composite;
+struct trackDb *fullTdb = NULL;
+
+if ((composite = trackDbSetting(tdb, "subTrack")) != NULL)
+    /* look in composite's settings */
+    fullTdb = hashFindVal(trackHash, composite);
+if (fullTdb == NULL)
+    fullTdb = tdb;
+if ((origAssembly = trackDbSetting(fullTdb, "origAssembly")) != NULL)
+    {
+    if (differentString(origAssembly, database))
+        {
+        freeze = hFreezeFromDb(origAssembly);
+        if (freeze == NULL)
+            freeze = origAssembly;
+        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"/goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
+        }
+    }
+}
+
 void printTrackHtml(struct trackDb *tdb)
-/* If there's some html associated with track print it out. Also make a link 
+/* If there's some html associated with track print it out. Also print
+ * last update time for data table and make a link 
  * to the TB table schema page for this table. */
 {
+char *tableName;
 printTBSchemaLink(tdb);
+printOrigAssembly(tdb);
+if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
+    {
+    struct sqlConnection *conn = hAllocConn();
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+    if (date != NULL)
+        printf("<B>Data last updated:</B> %s<BR>\n", date);
+    hFreeConn(&conn);
+    }
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
@@ -2163,6 +2198,15 @@ else
         if (size == 2 && atoi(words[0]) == 16)
             {
             scoreScheme = axtScoreSchemeFromBlastzMatrix(words[1], 400, 30);
+            }
+        else
+            {
+            if (size != 2)
+                errAbort("error parsing matrix entry in trackDb, expecting 2 word got %d ",    
+                        size);
+            else
+                errAbort("error parsing matrix entry in trackDb, size 16 matrix, got %d ", 
+                        atoi(words[0]));
             }
         }
 
@@ -7813,10 +7857,13 @@ if (!hTableExists(chainTable) )
  *    safef(chainTable,sizeof(chainTable), "%sChain", org);
  *    } */
 printf("<B>Description:</B> Retrogenes are processed mRNAs that are inserted back into the genome. Most are pseudogenes, and some are functional genes or anti-sense transcripts that may impede mRNA translation.<p>\n");
-printf("<B>Syntenic&nbsp;in&nbsp;mouse: </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
+printf("<B>Percent of retro that breaks net relative to Mouse : </B>%d&nbsp;%%<br>\n",pg->overlapDiag);
+//printf("<B>Percent of retro that breaks net relative to Dog   : </B>%d&nbsp;%%<br>\n",pg->overlapDog);
 printf("<B>PolyA&nbsp;tail:</B>&nbsp;%d As&nbsp;out&nbsp;of&nbsp;%d&nbsp;bp <B>Percent&nbsp;Id:&nbsp;</B>%5.1f&nbsp;%%\n",pg->polyA,pg->polyAlen, (float)pg->polyA*100/(float)pg->polyAlen);
 printf("&nbsp;(%d&nbsp;bp&nbsp;from&nbsp;end&nbsp;of&nbsp;retrogene)<br>\n",pg->polyAstart);
 printf("<B>Exons&nbsp;Inserted:</B>&nbsp;%d&nbsp;out&nbsp;of&nbsp;%d&nbsp;<br>\n",pg->exonCover,pg->exonCount);
+//printf("<B>Conserved&nbsp;Introns:</B>&nbsp;%d &nbsp;<br>\n",pg->conservedIntrons);
+//printf("<B>Conserved&nbsp;Splice&nbsp;Sites:</B>&nbsp;%d&nbsp;<br>\n",pg->conservedSpliceSites);
 printf("<B>Bases&nbsp;matching:</B>&nbsp;%d&nbsp;\n", pg->matches);
 printf("(%d&nbsp;%% of gene)<br>\n",pg->coverage);
 if (!sameString(pg->overName, "none"))
@@ -13944,7 +13991,7 @@ void printCode(char code)
 	    printf("Halophile");
     	    break;
 	case 'r':
-	    printf("Both Aerobic and Anerobic");
+	    printf("Both Aerobic and Anaerobic");
     	    break;
 	default:
 	    break;
@@ -14153,39 +14200,39 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    /*See which database to link to*/
 	    if((sameString(cbs2->species, "Pyrococcus furiosus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrFur2&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrFur2&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Sulfolobus solfataricus"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=sulSol1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=sulSol1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrobaculum aerophilum"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrAer2&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrAer2&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Nanoarchaeum equitans"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=nanEqu1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=nanEqu1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Methanococcus maripaludis"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=metMar1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=metMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Haloarcula marismortui"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=halMar1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=halMar1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Aeropyrum pernix"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=aerPer1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=aerPer1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrococcus abyssi"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrAby1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrAby1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Pyrococcus horikoshii"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"http://hgwdev-kschneid.cse.ucsc.edu/cgi-bin/hgTracks?db=pyrHor1&position=%s\">%s</a>",cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrHor1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else{
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
@@ -16303,7 +16350,7 @@ if (seqName == NULL)
     else
 	seqName = hDefaultChrom();
     }
-trackHash = makeTrackHash(database, seqName);
+trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
 if (parentWigMaf)
     {
     int wordCount, i;

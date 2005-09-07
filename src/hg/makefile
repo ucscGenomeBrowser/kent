@@ -208,6 +208,7 @@ UTIL_DIRS = \
 	semiNorm \
 	sim4big \
 	snpException \
+	snp/snpMask \
 	snp/snpValid \
 	spideyToPsl \
 	splitFa \

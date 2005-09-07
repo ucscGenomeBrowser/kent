@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.72 2005/06/02 21:38:46 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.74 2005/08/29 22:13:40 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1347,20 +1347,26 @@ lockUser = sqlEscapeString(el->lockUser);
 lockDateTime = sqlEscapeString(el->lockDateTime);
 releaseLog = sqlEscapeString(el->releaseLog);
 
+/* had to split this up because dyStringPrintf only up to 4000 chars at one time */
 dyStringPrintf(update, 
-"update %s set "
-"pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',"
-"track='%s',dbs='%s',tbls='%s',cgis='%s',files='%s',sizeMB=%u,currLoc='%s',"
-"makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
-"sponsor='%s',reviewer='%s',extSource='%s',"
-"openIssues='%s',notes='%s',pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
-"where qid='%s'", 
-	tableName,  
-	pqid,  priority, el->rank,  qadate, newYN, track, dbs, 
-	tbls,  cgis,  files, el->sizeMB ,  currLoc,  makeDocYN,  
-	onlineHelp,  ndxYN,  joinerYN,  stat,  
-	sponsor,  reviewer,  extSource,  
-	openIssues,  notes,  pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, 
+    "update %s set "
+    "pqid='%s',priority='%s',rank=%u,qadate='%s',newYN='%s',track='%s',",
+    tableName,  pqid,  priority, el->rank,  qadate, newYN, track);
+dyStringPrintf(update, "dbs='%s',",dbs);
+dyStringPrintf(update, "tbls='%s',",tbls);
+dyStringPrintf(update, "cgis='%s',",cgis);
+dyStringPrintf(update, "files='%s',",files);
+dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
+    "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
+    "sponsor='%s',reviewer='%s',extSource='%s',",
+    el->sizeMB ,  currLoc,  makeDocYN,  
+    onlineHelp,  ndxYN,  joinerYN,  stat,  
+    sponsor,  reviewer,  extSource);
+dyStringPrintf(update, "openIssues='%s',",openIssues);
+dyStringPrintf(update, "notes='%s',",notes);
+dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
+	"where qid='%s'", 
+	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, 
 	qid
 	);
 
@@ -2543,11 +2549,12 @@ for(i=0;i<=l;i++)
 safef(s, l+1, "%s", ss);
 }
 
+#define BLSIZE 4096  /* size of strings for processing big lists of tables and files */
 
 void doShowSizes()
 /* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */
 {
-char tbl[1024] = "";
+char tbl[BLSIZE] = "";
 char  db[1024] = "";
 unsigned long size = 0;
 long long totalsize = 0;
@@ -2564,14 +2571,14 @@ char dbsSpace[1024];
 char dbsVal[1024];
 char d;
 
-char tempComma[1024];
-char tempSpace[1024];
-char tempVal[1024];
+char tempComma[BLSIZE];
+char tempSpace[BLSIZE];
+char tempVal[BLSIZE];
 char c;
 
-char gComma[1024];
-char gSpace[1024];
-char gVal[1024];
+char gComma[BLSIZE];
+char gSpace[BLSIZE];
+char gVal[BLSIZE];
 char gc;
 char cgiPath[1024];
 char pathName[1024];

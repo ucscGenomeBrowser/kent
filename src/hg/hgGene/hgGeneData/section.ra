@@ -58,6 +58,11 @@ shortLabel mRNA Descriptions
 longLabel Descriptions from all associated mRNAs.
 priority 120
 
+name pseudoGene
+shortLabel Retroposed Genes
+longLabel Retroposed Genes, Including Pseudogenes
+priority 125
+
 name pathways
 shortLabel Pathways
 longLabel Biochemical and Signaling Pathways

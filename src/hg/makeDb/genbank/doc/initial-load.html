@@ -21,6 +21,8 @@
     <LI> <CODE>gbBlat</CODE> no longer needs to be modified to specify
     the ooc file.  It is now specified in the <CODE>genbank.conf</CODE>
     file.
+    <LI> Many changed to the <a href="config.html"><CODE>genbank.conf</CODE></a>
+         file.
     </OL>
 
 
@@ -50,7 +52,7 @@
            awk 'BEGIN{FS=&quot;\t&quot;}{print $4}' processed/genbank.135.0/full/*.gbidx |sort -u &gt;species.txt
            </PRE>
            on the latest GenBank release. 
-      <LI> cd to the top of the genbank source (<CODE>kent/src/hg/makeDb/genbank/</CODE>)
+      <LI> <CODE>cd</CODE> to the top of the genbank source (<CODE>kent/src/hg/makeDb/genbank/</CODE>)
       <LI> <CODE>make</CODE> to test if the source builds
       <LI> <CODE>make install-server</CODE> to update <CODE>/cluster/data/genbank/</CODE>.
       <LI> Once these changes are debugged and committed, ask <A HREF="mailto:markd@cse.ucsc.edu"><CODE>markd</CODE></A>
@@ -194,11 +196,6 @@ FIXME:
   -  mention cd-ing to /cluster/data/genbank and then doing a du to find machine.
   - mention that build takes place on kk.
   - alignment directory, monitor with list batches
-  - building download sequences/ making writable directories..
-    ssh hgwbeta
-    cd /genbank
-    ./bin/gbDbLoadStep  -inclEsts -getDownloadSeqs=1 yourDb
-    document configuration
 -->
 
   </BODY>

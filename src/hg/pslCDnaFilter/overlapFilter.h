@@ -2,9 +2,9 @@
 #ifndef OVERLAPFILTER_H
 #define OVERLAPFILTER_H
 
-struct cDnaAligns;
+struct cDnaQuery;
 
-void overlapFilter(struct cDnaAligns *cdAlns);
+void overlapFilter(struct cDnaQuery *cdna);
 /* Remove overlapping alignments, keeping only one by some criteria.  This is
  * designed to be used with windowed alignments, so one alignment might be
  * trucated. */

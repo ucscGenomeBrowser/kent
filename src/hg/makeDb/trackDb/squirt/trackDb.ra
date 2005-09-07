@@ -56,6 +56,7 @@ priority 63
 visibility dense
 spectrum on
 type psl xeno
+cdsDrawOptions enabled
 
 track rmsk
 shortLabel RepeatMasker

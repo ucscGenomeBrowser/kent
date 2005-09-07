@@ -5,8 +5,9 @@
 #include "options.h"
 #include "obscure.h"
 #include "cheapcgi.h"
+#include "apacheLog.h"
 
-static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.9 2005/01/26 16:05:50 kent Exp $";
+static char const rcsid[] = "$Id: hgAccessCrawl.c,v 1.11 2005/09/03 02:08:18 kent Exp $";
 
 FILE *errLog = NULL;
 int errCode = 0;
@@ -34,172 +35,6 @@ static struct optionSpec options[] = {
    {"nonRobot", OPTION_STRING},
    {NULL, 0},
 };
-
-struct logLine
-/* Parsed out apache access log line */
-    {
-    struct logLine *next;
-    char *buf;		/* All memory for logLine fields is allocated at once here. */
-    char *ip;		/* IP Address: dotted quad of numbers, or xxx.com. */
-    char *dash1;	/* Unknown, usually a dash */
-    char *dash2;	/* Unknown, usually a dash */
-    char *timeStamp;	/* Time stamp like 23/Nov/2003:04:21:08 */
-    char *timeZone;	/* Extra number after timeStamp, usually -0800 */
-    char *method;	/* GET/POST etc. */
-    char *url;		/* Requested URL */
-    char *httpVersion;  /* Something like HTTP/1.1 */
-    int status;		/* Status code - 200 is good! */
-    char *num1;		/* Some number, I'm not sure what it is. */
-    char *referrer;	/* Referring URL, may be NULL. */
-    char *program;	/* Requesting program,  often Mozilla 4.0 */
-    };
-
-void logLineFree(struct logLine **pLl)
-/* Free up logLine. */
-{
-struct logLine *ll = *pLl;
-if (ll != NULL)
-    {
-    freeMem(ll->buf);
-    freez(pLl);
-    }
-}
-
-
-static void badFormat(struct logLine **pLl, char *line, char *fileName, 
-	int lineIx, char *message)
-/* Complain about format if verbose flag is on.  Free up
- * *pLl */
-{
-if (verboseLevel()  > 1)
-    {
-    if (fileName != NULL)
-	warn("%s line %d: %s", fileName, lineIx, message);
-    else
-	warn("%s", message);
-    }
-}
-
-static void unterminatedQuote(struct logLine **pLl, char *line, 
-	char *fileName, int lineIx)
-/* Complain about unterminated quote. */
-{
-badFormat(pLl, line, fileName, lineIx, 
-	"missing closing quote");
-}
-
-static void shortLine(struct logLine **pLl, char *line, 
-	char *fileName, int lineIx)
-/* Complain about short line. */
-{
-badFormat(pLl, line, fileName, lineIx, 
-	"short line");
-}
-
-static void badTimeStamp(struct logLine **pLl, char *line, 
-	char *fileName, int lineIx)
-/* Complain about bad time stamp. */
-{
-badFormat(pLl, line, fileName, lineIx, 
-	"bad time stamp");
-}
-
-struct logLine *logLineParse(char *line, char *fileName, int lineIx)
-/* Return a logLine from line.  Return NULL if there's a parsing problem, but
- * don't abort. */
-{
-struct logLine *ll;
-char *buf, *s, *e;
-AllocVar(ll);
-ll->buf = buf = cloneString(line);
-ll->ip = nextWord(&buf);
-ll->dash1 = nextWord(&buf);
-ll->dash2 = nextWord(&buf);
-if (buf == NULL)
-    {
-    shortLine(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-s = strchr(buf, '[');
-if (s == NULL)
-    {
-    badTimeStamp(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-s += 1;
-e = strchr(s, ']');
-if (e == NULL)
-    {
-    badTimeStamp(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-*e = 0;
-ll->timeStamp = nextWord(&s);
-if (!isdigit(ll->timeStamp[0]))
-    {
-    badTimeStamp(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-ll->timeZone = nextWord(&s);
-buf = e+2;
-if (buf[0] != '"')
-    {
-    badFormat(&ll, line, fileName, lineIx, "Missing quote after time stamp");
-    return NULL;
-    }
-if (!parseQuotedString(buf, buf, &e))
-    {
-    unterminatedQuote(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-ll->method = nextWord(&buf);
-ll->url = nextWord(&buf);
-ll->httpVersion = nextWord(&buf);
-if (ll->url == NULL)
-    {
-    badFormat(&ll, line, fileName, lineIx, "Missing URL");
-    return NULL;
-    }
-buf = e;
-s = nextWord(&buf);
-if (!isdigit(s[0]))
-    {
-    badFormat(&ll, line, fileName, lineIx, "Non-numerical status code");
-    return NULL;
-    }
-ll->status = atoi(s);
-ll->num1 = nextWord(&buf);
-if (buf == NULL)
-    {
-    shortLine(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-if (buf[0] != '"')
-    {
-    badFormat(&ll, line, fileName, lineIx, "Missing quote after request");
-    return NULL;
-    }
-if (!parseQuotedString(buf, buf, &e))
-    {
-    unterminatedQuote(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-if (!sameString(buf, "-"))
-    ll->referrer = buf;
-buf = e + 1;
-if (buf[0] != '"')
-    {
-    badFormat(&ll, line, fileName, lineIx, "Missing quote after referrer");
-    return NULL;
-    }
-if (!parseQuotedString(buf, buf, &e))
-    {
-    unterminatedQuote(&ll, line, fileName, lineIx);
-    return NULL;
-    }
-ll->program = buf;
-return ll;
-}
 
 boolean cgiHashVal(struct hash *cgiHash, char *var, char *val)
 /* Return TRUE if var exists in hash with given value. */
@@ -246,6 +81,16 @@ else if (startsWith("httpunit", program))
     return TRUE;
 else if (startsWith("Teleport Pro", program))
     return TRUE;
+else if (startsWith("WWW-Mechanize", program))
+    return TRUE;
+else if (startsWith("Bio::Das::", program))
+    return TRUE;
+else if (stringIn("Googlebot", program))
+    return TRUE;
+else if (sameString("-", program))
+    return TRUE;
+else if (startsWith("Microsoft Data Access", program))
+    return TRUE;
 if (roboHash == NULL)
     {
     roboHash = hashNew(0);
@@ -256,6 +101,7 @@ if (roboHash == NULL)
     hashAdd(roboHash, "64-170-97-98.ded.pacbell.net", NULL);
     hashAdd(roboHash, "ce.hosts.jhmi.edu", NULL);
     hashAdd(roboHash, "technetium.hgsc.bcm.tmc.edu", NULL);
+    hashAdd(roboHash, "62.232.24.178", NULL);
     }
 return hashLookup(roboHash, ip) != NULL;
 }
@@ -429,7 +275,7 @@ for (i=0; i<logCount; ++i)
     char *line;
     while (lineFileNext(lf, &line, NULL))
         {
-	struct logLine *ll = logLineParse(line, lf->fileName, lf->lineIx);
+	struct apacheAccessLog *ll = apacheAccessLogParse(line, lf->fileName, lf->lineIx);
 	if (ll != NULL)
 	    {
 	    if (errLog != NULL 
@@ -650,7 +496,7 @@ for (i=0; i<logCount; ++i)
 		    }
 		freez(&progName);
 		}
-	    logLineFree(&ll);
+	    apacheAccessLogFree(&ll);
 	    }
 	}
     }

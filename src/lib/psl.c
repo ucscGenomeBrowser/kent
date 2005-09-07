@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.57 2005/08/18 07:18:29 baertsch Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.58 2005/08/26 21:28:03 baertsch Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -558,7 +558,7 @@ else
     else
         {
 	char *s = cloneString(line);
-        while (line[0] == '#')
+        while (line != NULL && line[0] == '#')
             {
             freeMem(s);
             lineFileNext(lf, &line, &lineSize);

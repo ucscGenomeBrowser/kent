@@ -13,9 +13,28 @@
     <CODE>.hg.conf</CODE>:
     <UL>
     <LI> blank lines or lines where the first non-blank character is a &quot;#&quot; are ignored.
-    <LI> records are lines of:<BR>
+    <LI> records are lines of:
+         <blockquote>
          <CODE><EM>name</EM>=<EM>value</EM></CODE>
+         </blockquote>
+    <LI> By convention, names consist of dot separated words used to define a hierarchy.  Yes, this
+         is ugly and verbose.
     </UL>
+    <H3>Variables</H3>
+    Variables are available in the configuration file.  A variable is defined using the syntax:
+    <blockquote>
+         <CODE>var.<EM>varname</EM>=<EM>value</EM></CODE>
+    </blockquote>
+    Variables maybe referenced in any value using the syntax:
+    <blockquote>
+         <CODE>${<EM>varname</EM>}</CODE>
+    </blockquote>
+    A variable must be defined before it is referenced in the file, and are expanded immediately.
+    A variable definition may reference another variable.
+    <p>
+    The program <code>gbConf</code> can be used to print the configuration file with variables
+    expanded for debugging purposes.
+
     <H3>Global configuration parameters</H3>
     <UL>
     <LI> <CODE>cluster.iservers</CODE> - space-separated list of iservers to use
@@ -24,6 +43,8 @@
     <LI> <CODE>cluster.rootDir</CODE> - root directory on cluster filesystems,
          either iserver or local file systems.
     <LI> <CODE>cluster.paraHub</CODE> - Host where parasol hub is running.
+    <li> <code>cluster.iservers</code> - List of iservers to use for
+          alignment.
     <LI> <CODE>grepIndex.genbank.default</CODE> - Create <EM>grepIndex</EM> files
          for databases in the specified directory.  This value should
          correspond to the value <CODE>grepIndex.genbank</CODE> in the
@@ -59,9 +80,8 @@
      <li> <code><em>$db</em>.align.minUnplacedSize</code> - Skip
           unplaced sequences smaller than this size.
      <li> <code><em>$db</em>.align.skipChroms</code> - 
-          White-space separated list of chromosome to skip.  Optimization
-          normally used to ignore pseudo-chromosomes containing large
-          number of unplaced sequences.
+          White-space separated list of chromosome to skip.  You probably
+          don't want to use this.
      <li> <code><em>$db</em>.serverGenome</code> - glob pattern or file for genome
           sequences on server. This can be NIBs or a TwoBit file.
      <li> <code><em>$db</em>.clusterGenome</code> - glob pattern or file for genome
@@ -73,15 +93,22 @@
      <li> <code><em>$db</em>.lift</code> - path to lift file for genome,
           or <CODE>no</CODE> if none.  Lift file is used to find gaps when partitioning the
           sequence for alignment.  It does not have to contain all chromosomes.
-          Sequences named <code>gap</code> are treated as gaps.
-     <li> <code><em>$db</em>.genbank.mrna.native.pslCDnaFilter</code> - Arguments
-           for <CODE>pslCDnaFilter</CODE> for GenBank native mRNAs, or <CODE>no</CODE> to skip pslCDnaFilter.
-     <li> <code><em>$db</em>.genbank.mrna.xeno.pslCDnaFilter</code>
-     <li> <code><em>$db</em>.genbank.est.native.pslCDnaFilter</code>
-     <li> <code><em>$db</em>.genbank.est.xeno.pslCDnaFilter</code>
-     <li> <code><em>$db</em>.refseq.mrna.name.pslReps</code> - Arguments
-           for <CODE>pslReps</CODE> for RefSeq native mRNAs, or <CODE>no</CODE> to skip pslReps.
-     <li> <code><em>$db</em>.refseq.mrna.xeno.pslReps</code>
+          Sequences named <code>gap</code> are treated as gaps as well as gaps in
+          contig placement.
+     <li> <code><em>$db</em>.<em>$srcDb</em>.<em>$cdnaType</em>.<em>$orgCat</em>.pslCDnaFilter</code> - Arguments
+           for <CODE>pslCDnaFilter</CODE> for various types of alignments
+           or <CODE>no</CODE> to skip pslCDnaFilter.
+           Special handling is done for the the <CODE>-polyASizes</CODE> option.
+           This option should be supplied without an argument.  The location
+           of the generated file will be added when <code>pslCDnaFilter</code>
+           is called.
+           
+          <p>The following values are recongized in the name:
+          <ul>
+          <li> <code><em>$srcDb</em></code> - <code>genbank</code>, <code>refseq</code>
+          <li> <code><em>$cdnaType</em></code> - <code>mrna</code>, <code>est</code>
+          <li> <code><em>$orgCat</em></code> - <code>native</code>, <code>xeno</code>
+          </ul>
 
      <li> <code><em>$db</em>.mgcTables.<em>$host</em></code> - indicates which
           MGC tables to create when loading database on <CODE><em>$host</em></code>.
@@ -91,26 +118,19 @@
           MGC tables to create when the is no host-specific setting.
      <li> <code><em>$db</em>.perChromTables</code> - Set to <CODE>no</CODE>
           if per-chromosome alignment tables should not be created.
-     <li> <code><em>$db</em>.genbank.mrna.native.load</code> - Load native
-          GenBank mMRNAs, <CODE>yes</CODE> or <CODE>no</CODE>.
-          Also for type of <CODE>est</CODE> and organism category
-          of <CODE>xeno</CODE>.
-     <li> <code><em>$db</em>.refseq.mrna.native.load</code> - Load native
-          GenBank mMRNAs, <CODE>yes</CODE> or <CODE>no</CODE>.
-          Also for organism category of <CODE>xeno</CODE>.
-     <li> <code><em>$db</em>.genbank.mrna.native.loadDesc</code>
-           - Load description table for native mRNAs, <CODE>yes</CODE> or <CODE>no</CODE>.
-          Also for type of <CODE>est</CODE> and organism category
-          of <CODE>xeno</CODE>.
-     <li> <code><em>$db</em>.refseq.mrna.native.loadDesc</code>
-           - Load description table for native mRNAs, <CODE>yes</CODE> or <CODE>no</CODE>.
-          Also for type of <CODE>est</CODE> and organism category
-          of <CODE>xeno</CODE>.
-          of <CODE>xeno</CODE>.
+
+     <li> <code><em>$db</em>.<em>$srcDb</em>.<em>$cdnaType</em>.<em>$orgCat</em>.load</code> -
+          Should cDNAs be aligned and loaded into the database for the
+          specified category. Value is <CODE>yes</CODE> or <CODE>no</CODE>.
+     <li> <code><em>$db</em>.<em>$srcDb</em>.<em>$cdnaType</em>.<em>$orgCat</em>.loadDesc</code>
+          Should the description table  be loaded? Value is <CODE>yes</CODE> or <CODE>no</CODE>.
+          Descriptions are normally not loaded for ESTs as they are
+          large and not very useful
      <li> <code><em>$db</em>.downloadDir</code> - directory relative to <CODE>goldenPath/</CODE>
            where download files are stored.
-     <li> <code><em>$db</em>.iservers</code> - List of iservers to use for
-          alignment.  Normally the <CODE>default</CODE> entry is used,
+     <li> <code><em>$db</em>.align.prefilter</code> - Prefilter alignments in cluster jobs.
+           If set to <CODE>yes</CODE> or not specified do prefiltering. If set to <CODE>no</CODE>,
+           no prefiltering is done.  This is often useful for debugging.
     </UL>
   </BODY>
 </HTML>

@@ -4,7 +4,7 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-X = snpMask
+X = snpMaskChrom
 O = ${X}.o
 
 ${X}: $O ${MYLIBS}

@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.20 2005/06/22 22:34:43 angie Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.21 2005/09/02 23:59:04 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -293,4 +293,11 @@ bool trackDbIsComposite(struct trackDb *tdb)
 {
     return (tdb->subtracks && differentString(tdb->type, "wigMaf"));
 }
+
+bool trackDbIsSubtrack(struct trackDb *tdb)
+/* Determine if this is a subtrack. */
+{
+    return (trackDbSetting(tdb, "compositeTrack") != NULL);
+}
+
 

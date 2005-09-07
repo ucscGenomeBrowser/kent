@@ -681,14 +681,51 @@ sub trim($) {
     return $str;
 }
 
+# split a conf value substring at the first variable reference
+# and return (beforeRef, varRef, afterRef).  If no more variable
+# references, varRef and afterRef are undef
+sub confSplitVal($) {
+    my($value) = @_;
+    my($beforeRef, $junk, $varName, $afterRef) = ($value =~ /^([^\$]*)(\$*\{([^\}]+)\}(.*))?$/);
+    return ($beforeRef, $varName, $afterRef)
+
+}
+
+# expanded the specified variable reference
+sub confExpandVar($) {
+    my($varName) = @_;
+    my $varKey = "var." . $varName;
+    my $value = $gbCommon::conf{$varKey};
+    if (!defined($value)) {
+        die("no variable $varKey defined in $gbCommon::confFile");
+    }
+    return $value;
+}
+
+# Expand conf variable reference in value.
+sub confExpandVars($) {
+    my($value) = @_;
+    my $expVal = "";
+    while (defined($value)) {
+        my($beforeRef, $varName, $afterRef) = confSplitVal($value);
+        $expVal .= $beforeRef;
+        if (defined($varName)) {
+            $expVal .= confExpandVar($varName);
+        }
+        $value = $afterRef;
+    }
+    return $expVal;
+}
+
 # parse a line in the conf file, return (key, val) or undef.
+# variable reference in value will be expanded
 sub parseConfLine($$) {
     my($file, $line) = @_;
 
     $line = trim($line);
     if (!(($line =~ /^$/) || ($line =~ /^\#/))) {
         if ($line =~ /^([^=]+)=(.*)$/) {
-            return (trim($1), trim($2));
+            return (trim($1), confExpandVars(trim($2)));
         } else {
             die("invalid line in $file: $line");
         }

@@ -16,7 +16,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.12 2005/08/22 19:55:34 markd Exp $
+# $Id: gbAlignFinish,v 1.13 2005/08/29 23:43:39 markd Exp $
 #
 use strict;
 use warnings;
@@ -153,7 +153,8 @@ sub combinePslSet($$$$$$) {
         # ugly hack, generate poly-A file from queryDir
         my $polyA = $queryDir . ".polya";
         $polyA =~ s/\/psl\//\//;
-        $cmd .= "| pslCDnaFilter $pslCDnaFilterArgs -polyASizes=$polyA stdin stdout "
+        $pslCDnaFilterArgs =~ s/-polyASizes/-polyASizes=$polyA/;
+        $cmd .= "| pslCDnaFilter $pslCDnaFilterArgs stdin stdout "
     }
     $cmd .= " >> $outPsl";
     runPipe($cmd);

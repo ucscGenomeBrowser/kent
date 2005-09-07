@@ -1,4 +1,5 @@
-/* set of alignments, etc for a single cDNA sequence */
+/* Objects to read and score sets of cDNA alignments. Filtering decissions are
+* not made here*/
 #ifndef CDNAALIGNS_H
 #define CDNAALIGNS_H
 
@@ -9,15 +10,31 @@ struct cDnaAlign
 /* information for a single cDNA alignment */
 {
     struct cDnaAlign *next;
-    struct psl *psl;     /* alignment */
-    unsigned polyASize;  /* length of polyA tail, if known */
-    float ident;         /* fraction ident */
-    float cover;         /* fraction of cDNA aligned, excluding polyA if
-                          * it is available */
-    float score;         /* weighted combination of cover and ident */
-    float repMatch;      /* fraction repeat match */
-    boolean drop;         /* drop this psl if set */
-    boolean weirdOverlap; /* weird overlap was detected */
+    struct cDnaQuery *cdna;  /* query object for alignment */
+    struct psl *psl;         /* alignment */
+    int adjMisMatch;         /* number of misMatches; includes Ns unless the
+                              * are ignored */
+    float ident;             /* fraction ident */
+    float cover;             /* fraction of cDNA aligned, excluding polyA if
+                              * it is available */
+    int alnPolyAT;           /* bases of poly-A head or poly-T tail that are aligned */
+    float score;             /* score weight by having introns and length */
+    float repMatch;          /* fraction repeat match */
+    boolean drop;            /* drop this psl if set */
+    boolean weirdOverlap;    /* weird overlap was detected */
+};
+
+struct cDnaQuery
+/* information abourt the current cDNA query */
+{
+    struct cDnaReader *reader;  /* link back to reader */
+    struct cDnaStats *stats;    /* stats object in reader */
+    char *id;                   /* id for this cDNA  (memory not owned) */
+    int adjQStart;              /* query range, possibly poly A/T adjusted */
+    int adjQEnd;
+    int numAln;                 /* number of alignments */
+    int numDrop;                /* number of dropped alignments */
+    struct cDnaAlign *alns;     /* alignment list */
 };
 
 struct cDnaCnts
@@ -25,19 +42,12 @@ struct cDnaCnts
 {
     unsigned queries;        /* count of queries; */
     unsigned aligns;         /* count of alignments */
-    unsigned multAlnQueries; /* count of queries with multiple alignments */
     unsigned prevAligns;     /* previous aligns count, used to update queires */
 };
 
-struct cDnaAligns
-/* load and holds a set of alignments, etc for a single cDNA sequence */
+struct cDnaStats
+/* all statistics collected on cDNA filtering */
 {
-    char *id;                     /* id for this cDNA  (memory not owned) */
-    struct cDnaAlign *alns;       /* alignment list */
-    struct lineFile *pslLf;       /* object for reading psl rows */
-    float coverWeight;            /* weight used when computing score */
-    struct psl *nextCDnaPsl;      /* if not null, psl for next cDNA */
-    struct hash *polyASizes;      /* hash of polyASizes */
     struct cDnaCnts totalCnts;         /* number read */
     struct cDnaCnts keptCnts;          /* number of kept */
     struct cDnaCnts badCnts;           /* number bad that were dropped */ 
@@ -46,38 +56,76 @@ struct cDnaAligns
     struct cDnaCnts weirdKeptCnts;     /* weird overlapping PSLs not dropped  */
     struct cDnaCnts overlapCnts;       /* number dropped due to overlap */
     struct cDnaCnts minIdCnts;         /* number dropped less that min id */
-    struct cDnaCnts idTopCnts;         /* number dropped less that top id */
     struct cDnaCnts minCoverCnts;      /* number dropped less that min cover */
-    struct cDnaCnts coverTopCnts;      /* number dropped less that top cover */
+    struct cDnaCnts minAlnSizeCnts;    /* number dropped due minAlnSize */
+    struct cDnaCnts minNonRepSizeCnts; /* number dropped due minNonRepSize */
     struct cDnaCnts maxRepMatchCnts;   /* number dropped due maxRepMatch */
     struct cDnaCnts maxAlignsCnts;     /* number dropped due to over max */
+    struct cDnaCnts localBestCnts;     /* number dropped due to local near best */
+    struct cDnaCnts globalBestCnts;    /* number dropped due to global near best */
     struct cDnaCnts minSpanCnts;       /* number dropped due to under minSpan */
 };
 
-struct cDnaAligns *cDnaAlignsNew(char *pslFile, float coverWeight,
-                                 char *polyASizeFile);
+
+enum cDnaOpts
+/* bit set of options to control scoring */
+{
+    cDnaUsePolyTHead = 0x01,  /* use poly-T head if longer than poly-A tail (as in 3' ESTs),
+                               * otherwise just use poly-A tail */
+    cDnaIgnoreNs     = 0x02   /* don't include Ns while calculating the score and coverage.*/
+};
+
+struct cDnaReader
+/* Object to read cDNA alignments.  To minimize memory requirements,
+ * alignments are read for one cDNA at a time and processed.  Also collects
+ * statistics on filtering. */
+{
+    struct lineFile *pslLf;       /* object for reading psl rows */
+    struct cDnaQuery *cdna;       /* current cDNA */
+    unsigned opts;                /* option bit set from cDnaOpts */
+    struct psl *nextCDnaPsl;      /* if not null, psl for next cDNA */
+    struct hash *polyASizes;      /* hash of polyASizes */
+    struct cDnaStats stats;       /* all statistics */
+};
+
+struct cDnaRange
+/* range within a cDNA */
+{
+    int start;
+    int end;
+};
+
+struct cDnaReader *cDnaReaderNew(char *pslFile, unsigned opts, char *polyASizeFile);
 /* construct a new object, opening the psl file */
 
-void cDnaAlignsFree(struct cDnaAligns **cdAlnsPtr);
+void cDnaReaderFree(struct cDnaReader **readerPtr);
 /* free object */
 
-boolean cDnaAlignsNext(struct cDnaAligns *cdAlns);
+boolean cDnaReaderNext(struct cDnaReader *reader);
 /* load the next set of cDNA alignments, return FALSE if no more */
 
-void cDnaAlignsRevScoreSort(struct cDnaAligns *cdAlns);
+struct cDnaRange cDnaQueryBlk(struct cDnaQuery *cdna, struct psl *psl,
+                              int iBlk);
+/* Get the query range for a block of a psl, adjust to exclude a polyA tail or
+ * a polyT head */
+
+void cDnaQueryRevScoreSort(struct cDnaQuery *cdna);
 /* sort the alignments for this query by reverse cover+ident score */
 
-void cDnaAlignsWriteKept(struct cDnaAligns *cdAlns,
+void cDnaQueryWriteKept(struct cDnaQuery *cdna,
                          FILE *outFh);
 /* write the current set of psls that are flagged to keep */
 
-void cDnaAlignsWriteDrop(struct cDnaAligns *cdAlns,
-                         FILE *outFh);
+void cDnaQueryWriteDrop(struct cDnaQuery *cdna,
+                        FILE *outFh);
 /* write the current set of psls that are flagged to drop */
 
-void cDnaAlignsWriteWeird(struct cDnaAligns *cdAlns,
-                          FILE *outFh);
+void cDnaQueryWriteWeird(struct cDnaQuery *cdna,
+                         FILE *outFh);
 /* write the current set of psls that are flagged as weird overlap */
+
+void cDnaAlignDrop(struct cDnaAlign *aln, struct cDnaCnts *cnts);
+/* flag an alignment as dropped */
 
 void cDnaAlignVerb(int level, struct psl *psl, char *msg, ...);
 /* write verbose messager followed by location of a cDNA alignment */

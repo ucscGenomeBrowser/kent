@@ -33,7 +33,6 @@ visibility off
 type lookup knownToU95 name value
 search exact
 
-
 name gnfHumanAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2 Data from U133A and GNF1H Chips
@@ -143,9 +142,9 @@ visibility off
 type distance humanNormalDistance query target distance
 
 name gladHumES
-shortLabel hESC dataset
+shortLabel Gladstone Expr
 longLabel Gladstone microarray data including stem cell tissue
-priority 3.5
+priority 3.60
 visibility off
 type expMulti knownToGnfAtlas2
 selected gladHumESExps gladHumESRatio gladHumES 4,5,27,10,19,8,7,3,26,
@@ -156,6 +155,34 @@ absoluteMax 100
 name gladHumESDistance
 shortLabel Gladstone Dist
 longLabel Normalized Difference in Gladstone microarray data from selected gene
-priority 3.6
+priority 3.61
 visibility off
 type distance gladHumESDistance query target distance
+
+name gladHumESTissueQ
+shortLabel Gladstone Tiss
+longLabel Tissue associated with selected gene's Q-value
+priority 3.62
+visibility off
+type lookup gladHumESOtherData name tissueQ
+
+name gladHumESQval
+shortLabel Gladstone Q
+longLabel Q-value for selected gene
+priority 3.63
+visibility off
+type float gladHumESOtherData name qVal
+
+name gladHumESHval
+shortLabel Gladstone H
+longLabel H-value for selected gene
+priority 3.64
+visibility off
+type float gladHumESOtherData name hVal
+
+name phastOdds
+shortLabel phastOdds
+longLabel phastOdds DNA conservation score (CDS) for selected gene
+priority 4.0
+visibility off
+type float phastOdds name score

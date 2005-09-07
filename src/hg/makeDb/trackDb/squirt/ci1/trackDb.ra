@@ -23,6 +23,7 @@ priority 57
 visibility hide
 spectrum on
 intronGap 30
+pslSequenceBases no
 type psl est
 
 track all_mrna
@@ -43,6 +44,7 @@ priority 56
 visibility dense
 spectrum on
 intronGap 30
+pslSequenceBases no
 type psl est
 
 track snapGene

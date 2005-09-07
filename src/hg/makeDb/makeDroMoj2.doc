@@ -205,7 +205,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droMoj2", "Aug. 2005", "/gbdb/droMoj2", "D. mojavensis", \
-             "scaffold_0", 1, 57, \
+             "scaffold_6500:23838548-23875233", 1, 57, \
              "D. mojavensis", \
              "Drosophila mojavensis", "/gbdb/droMoj2/html/description.html", \
              0, 0, "Agencourt 1 August 2005");'
@@ -415,4 +415,215 @@ droMoj2.perChromTables = no
     hgsql -h genome-testdb hgcentraltest -e \
       'UPDATE defaultDb set name = "droMoj2" where genome = "D. mojavensis";'
 
+# MAKE Drosophila Proteins track (DONE braney 2005-08-20)
+    ssh kkstore02
+    mkdir -p /cluster/data/droMoj2/blastDb
+    cd /cluster/data/droMoj2/blastDb
+    faSplit sequence ../scaffolds.fa 400 x
+    for i in *.fa; do formatdb -i $i -p F 2> /dev/null; done
+    rm *.fa *.log
 
+    ssh kkr1u00
+    mkdir -p /iscratch/i/droMoj2/blastDb
+    cp /cluster/data/droMoj2/blastDb/* /iscratch/i/droMoj2/blastDb
+    iSync > sync.out
+    
+    ssh kk
+    mkdir -p /cluster/data/droMoj2/bed/tblastn.dm2FB
+    cd /cluster/data/droMoj2/bed/tblastn.dm2FB
+    ls -1S /iscratch/i/droMoj2/blastDb/*.nsq | sed "s/\.nsq//" > target.lst
+    mkdir fbfa
+    # calculate a reasonable number of jobs 
+    calc `wc /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl|awk "{print \\\$1}"`/\(80000/`wc target.lst | awk "{print \\\$1}"`\)
+# 18929/(80000/396) = 93.698550
+
+    split -l 94 /cluster/data/dm2/bed/blat.dm2FB/dm2FB.psl fbfa/fb
+    cd fbfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S fbfa/*.fa > fb.lst
+    mkdir -p /cluster/bluearc/droMoj2/bed/tblastn.dm2FB/blastOut  
+    ln -s /cluster/bluearc/droMoj2/bed/tblastn.dm2FB/blastOut  
+    for i in `cat fb.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/dm2/bed/blat.dm2FB/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 $f.3 $f.4
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.3 $f.8 $f.4
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 target.lst fb.lst blastGsub blastSpec
+
+    para create blastSpec
+    para push
+
+# Completed: 79991 of 79992 jobs
+# para.results: file not found.  paraHub can't write to this dir?
+# CPU time in finished jobs:    5722807s   95380.12m  1589.67h   66.24d  0.181 y
+# IO & Wait Time:                517066s    8617.76m   143.63h    5.98d  0.016 y
+# Average job time:                  78s       1.30m     0.02h    0.00d
+# Longest finished job:           44845s     747.42m    12.46h    0.52d
+# Submission to last job:         78192s    1303.20m    21.72h    0.91d
+
+    ssh pk
+    cd /cluster/data/droMoj2/bed/tblastn.dm2FB
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/fb?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    para create chainSpec
+    para maxNode 20
+    para push
+ 
+# Completed: 202 of 202 jobs
+# CPU time in finished jobs:      27335s     455.59m     7.59h    0.32d  0.001 y
+# IO & Wait Time:                  3390s      56.50m     0.94h    0.04d  0.000 y
+# Average job time:                 152s       2.54m     0.04h    0.00d
+# Longest finished job:            4228s      70.47m     1.17h    0.05d
+# Submission to last job:          4228s      70.47m     1.17h    0.05d
+
+    ssh kkstore02
+    cd /cluster/data/droMoj2/bed/tblastn.dm2FB/blastOut
+    for i in fb??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/droMoj2/bed/tblastn.dm2FB/blastDm2FB.psl
+    cd ..
+    wc blastDm2FB.psl
+# 19158  402318 5264815 blastDm2FB.psl
+    pslUniq blastDm2FB.psl stdout | wc                                                                                    
+#  17958  377118 5085091
+    cat fbfa/*fa | grep ">" | wc
+# 82338   82338 1300520
+
+    ssh hgwdev
+    cd /cluster/data/droMoj2/bed/tblastn.dm2FB
+    hgLoadPsl droMoj2 blastDm2FB.psl
+    featureBits droMoj2 blastDm2FB
+# 18239436 bases of 180520992 (10.104%) in intersection
+
+    exit
+
+    # back to kkstore02
+    rm -rf blastOut
+
+# End tblastn
+
+# AUTO UPDATE GENBANK MRNA AND EST GENES RUN (DONE, 2005-08-22, markd)
+    # align with revised genbank process
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add droMoj2, had to run on pk, due to kk
+    # being down.  Set temporary locations for server files
+# droMoj2 (D. mojavensis)
+# genbank has 1 mRNA and 0 ESTs at time of initial build
+droMoj2.serverGenome = /cluster/data/droMoj2/droMoj2.2bit
+##droMoj2.clusterGenome = /iscratch/i/droMoj2/droMoj2.2bit
+##droMoj2.ooc = /iscratch/i/droMoj2/11.ooc
+droMoj2.clusterGenome = /san/sanvol1/scratch/droMoj2/droMoj2.2bit
+droMoj2.ooc = /san/sanvol1/scratch/droMoj2/11.ooc
+droMoj2.lift = no
+droMoj2.refseq.mrna.native.load = no
+droMoj2.refseq.mrna.xeno.load = yes
+droMoj2.refseq.mrna.xeno.pslCDnaFilter = -minCover=0.15 -coverNearTop=0.005 -minId=0.75 -idNearTop=0.005 -maxRepMatch=0.4 -bestOverlap
+droMoj2.genbank.mrna.xeno.load = yes
+droMoj2.genbank.est.native.load = no
+droMoj2.genbank.est.xeno.load = no
+droMoj2.downloadDir = droMoj2
+droMoj2.perChromTables = no
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial droMoj2 &
+
+    # when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  droMoj2&
+
+# AUTO UPDATE GENBANK MRNA AND EST GENES RUN (DONE, 2005-08-31, markd)
+    # redo genbank revised alignment procedure once again to
+    # pickup local near best pslCDnaFilter
+
+    # align with revised genbank process
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add droMoj2
+# droMoj2 (D. mojavensis)
+# genbank has 1 mRNA and 0 ESTs at time of initial build
+droMoj2.serverGenome = /cluster/data/droMoj2/droMoj2.2bit
+droMoj2.clusterGenome = /iscratch/i/droMoj2/droMoj2.2bit
+droMoj2.ooc = /iscratch/i/droMoj2/11.ooc
+droMoj2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+droMoj2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+droMoj2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+droMoj2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+droMoj2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+droMoj2.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+droMoj2.lift = no
+droMoj2.refseq.mrna.native.load = no
+droMoj2.refseq.mrna.xeno.load = yes
+droMoj2.genbank.mrna.xeno.load = yes
+droMoj2.genbank.est.native.load = no
+droMoj2.genbank.est.xeno.load = no
+droMoj2.downloadDir = droMoj2
+droMoj2.perChromTables = no
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial droMoj2 &
+
+    # when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  droMoj2&

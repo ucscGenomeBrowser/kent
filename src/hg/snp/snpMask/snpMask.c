@@ -6,12 +6,20 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMask.c,v 1.5 2005/08/03 06:39:21 heather Exp $";
+static char const rcsid[] = "$Id: snpMask.c,v 1.7 2005/08/25 23:53:02 heather Exp $";
 
 #define FLANKSIZE 20
 
 char *database = NULL;
 char *chromName = NULL;
+
+char geneTable[] = "refGene";
+
+boolean snpMaskVerbose = FALSE;
+boolean printSnps = FALSE;
+boolean printGenes = FALSE;
+boolean printChrom = TRUE;
+boolean strict = FALSE;
 
 // call this something else
 struct snp
@@ -20,19 +28,46 @@ struct snp
     struct snp *next;  	        /* Next in singly linked list. */
     char *name;			/* rsId  */
     int chromStart;               /* start   */
+    char strand;
     char *observed;		/* observed variants (usually slash-separated list) */
     };
 
 struct snp *snpLoad(char **row)
 /* Load a snp from row fetched with select * from snp
  * from database.  Dispose of this with snpFree(). */
+/* Complement observed if negative strand. */
 {
 struct snp *ret;
+int obsLen, i;
+char *obsComp;
 
 AllocVar(ret);
-ret->name       = cloneString(row[0]);
-ret->chromStart   =        atoi(row[1]);
-ret->observed   = cloneString(row[2]);
+ret->name = cloneString(row[0]);
+ret->chromStart = atoi(row[1]);
+strcpy(&ret->strand, row[2]);
+ret->observed   = cloneString(row[3]);
+
+if (ret->strand == '+') return ret;
+
+obsLen = strlen(ret->observed);
+obsComp = needMem(obsLen + 1);
+strcpy(obsComp, ret->observed);
+for (i = 0; i < obsLen; i = i+2)
+    {
+    if (ret->observed[i] == 'A') obsComp[obsLen-i-1] = 'T';
+    else if (ret->observed[i] == 'T') obsComp[obsLen-i-1] = 'A';
+    else if (ret->observed[i] == 'C') obsComp[obsLen-i-1] = 'G';
+    else if (ret->observed[i] == 'G') obsComp[obsLen-i-1] = 'C';
+    }
+
+if (snpMaskVerbose)
+    {
+    printf("negative strand detected for snp %s\n", ret->name);
+    printf("original observed string = %s\n", ret->observed);
+    printf("complemented observed string = %s\n", obsComp);
+}
+
+ret->observed=obsComp;
 return ret;
 }
 
@@ -83,7 +118,19 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "select name, chromStart, observed from snp where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact' and chromStart >= %d and chromEnd <= %d", chrom, gene->txStart, gene->txEnd);
+if (strict)
+    {
+    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
+    "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact' "
+    "and chromStart >= %d and chromEnd <= %d", chrom, gene->txStart, gene->txEnd);
+    }
+else
+    {
+    /* this includes snps that are larger than one base */
+    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
+    "where chrom='%s' and class = 'snp' "
+    "and chromStart >= %d and chromEnd <= %d", chrom, gene->txStart, gene->txEnd);
+    }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -106,8 +153,17 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 
-safef(query, sizeof(query), "select name, chromStart, observed from snp "
-"where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact'", chrom);
+if (strict)
+    {
+    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
+    "where chrom='%s' and chromEnd = chromStart + 1 and class = 'snp' and locType = 'exact'", chrom);
+    }
+else
+    {
+    /* this includes snps that are larger than one base */
+    safef(query, sizeof(query), "select name, chromStart, strand, observed from snp "
+    "where chrom='%s' and class = 'snp'", chrom);
+    }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -128,7 +184,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select * from refGene where chrom='%s' ", chrom);
+safef(query, sizeof(query), "select * from %s where chrom='%s' ", geneTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -141,8 +197,96 @@ slReverse(&list);  /* could possibly skip if it made much difference in speed. *
 return list;
 }
 
-char iupac(char *observed, char orig)
+boolean isComplex(char mychar)
 {
+    if (mychar == 'A') return FALSE;
+    if (mychar == 'a') return FALSE;
+    if (mychar == 'C') return FALSE;
+    if (mychar == 'c') return FALSE;
+    if (mychar == 'G') return FALSE;
+    if (mychar == 'g') return FALSE;
+    if (mychar == 'T') return FALSE;
+    if (mychar == 't') return FALSE;
+    return TRUE;
+}
+
+char *iupacReverse(char mychar)
+{
+    if (mychar == 'M') return "A/C";
+    if (mychar == 'R') return "A/G";
+    if (mychar == 'W') return "A/T";
+    if (mychar == 'S') return "C/G";
+    if (mychar == 'Y') return "C/T";
+    if (mychar == 'K') return "G/T";
+    if (mychar == 'V') return "A/C/G";
+    if (mychar == 'H') return "A/C/T";
+    if (mychar == 'D') return "A/G/T";
+    if (mychar == 'B') return "C/G/T";
+    if (mychar == 'N') return "A/C/G/T";
+
+    return "?";
+}
+
+char *observedBlend(char *obs1, char *obs2)
+{
+
+char *s1, *s2;
+char *t = needMem(16);
+int count = 0;
+
+strcat(t, "");
+
+s1 = strchr(obs1, 'A');
+s2 = strchr(obs2, 'A');
+if (s1 != NULL || s2 != NULL) 
+    {
+    strcat(t, "A");
+    count++;
+    }
+s1 = strchr(obs1, 'C');
+s2 = strchr(obs2, 'C');
+if (s1 != NULL || s2 != NULL) 
+    {
+    if (count > 0) strcat(t, "/");
+    strcat(t, "C");
+    count++;
+    }
+s1 = strchr(obs1, 'G');
+s2 = strchr(obs2, 'G');
+if (s1 != NULL || s2 != NULL) 
+    {
+    if (count > 0) strcat(t, "/");
+    strcat(t, "G");
+    count++;
+    }
+s1 = strchr(obs1, 'T');
+s2 = strchr(obs2, 'T');
+if (s1 != NULL || s2 != NULL) 
+    {
+    if (count > 0) strcat(t, "/");
+    strcat(t, "T");
+    }
+
+printf("observedBlend returning %s\n", t);
+return t;
+}
+
+
+char iupac(char *name, char *observed, char orig)
+{
+    char *observed2;
+
+    if (isComplex(orig)) 
+        {
+        observed2 = iupacReverse(orig);
+	if (!sameString(observed, observed2)) 
+	    {
+	    printf("differing observed strings %s, %s, %s\n", name, observed, observed2);
+	    observed = observedBlend(observed, observed2);
+	    printf("---------------\n");
+	    }
+	}
+
     if (sameString(observed, "A/C")) return 'M';
     if (sameString(observed, "A/G"))  return 'R';
     if (sameString(observed, "A/T"))  return 'W';
@@ -409,39 +553,15 @@ dyStringFree(&dy);
 
 }
 
-void snpMask(char *nibFile, char *outFile)
-/* snpMask - Print a nib file, using IUPAC codes for single base substitutions. */
+void doPrintGenes(char *chromName, struct dnaSeq *seq)
 {
-struct dnaSeq *seq;
-char *ptr;
-struct snp *snps = NULL;
-struct snp *snp = NULL;
 struct genePred *genes = NULL;
 struct genePred *gene = NULL;
+struct snp *snps = NULL;
+struct snp *snp = NULL;
 int startPos = 0;
 int endPos = 0;
 int exonPos = 0;
-
-seq = nibLoadAll(nibFile);
-ptr = seq->dna;
-snps = readSnpsFromChrom(chromName);
-// do all substitutions
-for (snp = snps; snp != NULL; snp = snp->next)
-    {
-    ptr[snp->chromStart] = iupac(snp->observed, ptr[snp->chromStart]);
-    }
-
-// print
-// for (snp = snps; snp != NULL; snp = snp->next)
-    // {
-    // printSnpSeq(snp, seq);
-    // }
-
-// UNCOMMENT THIS
-// faWrite(outFile, chromName, seq->dna, seq->size);
-
-// free this list because we'll create a different one
-snpFreeList(&snps);
 
 genes = readGenes(chromName);
 
@@ -452,25 +572,63 @@ for (gene = genes; gene != NULL; gene = gene->next)
     for (snp = snps; snp != NULL; snp = snp->next)
         {
         // for each SNP, figure out flanking start and stop
-	// first figure out which exon contains the snp
-	exonPos = findExonPos(gene, snp->chromStart);
-	// exonPos will return -1 if the position isn't in any exon
-	if (exonPos == -1) continue;
-	// exonPos should also never be 0
-	if (exonPos == 0) continue;
-	// printf("  snp %s at %d\n", snp->name, snp->chromStart);
-	// printf("  exonPos = %d\n", exonPos);
-	startPos = findStartPos(FLANKSIZE, snp->chromStart, gene, exonPos);
-	endPos = findEndPos(FLANKSIZE, snp->chromStart, gene, exonPos);
-	// printf("flank start = %d, flank end = %d\n", startPos, endPos);
-	printExons(snp->name, gene, chromName, startPos, endPos, seq);
+        // first figure out which exon contains the snp
+        exonPos = findExonPos(gene, snp->chromStart);
+        // exonPos will return -1 if the position isn't in any exon
+        if (exonPos == -1) continue;
+        // exonPos should also never be 0
+        if (exonPos == 0) continue;
+        // printf("  snp %s at %d\n", snp->name, snp->chromStart);
+        // printf("  exonPos = %d\n", exonPos);
+        startPos = findStartPos(FLANKSIZE, snp->chromStart, gene, exonPos);
+        endPos = findEndPos(FLANKSIZE, snp->chromStart, gene, exonPos);
+        // printf("flank start = %d, flank end = %d\n", startPos, endPos);
+        printExons(snp->name, gene, chromName, startPos, endPos, seq);
         }
     snpFreeList(&snps);
     }
+
 geneFreeList(&genes);
-dnaSeqFree(&seq);  
+
 }
 
+void snpMask(char *nibFile, char *outFile)
+/* snpMask - Print a nib file, using IUPAC codes for single base substitutions. */
+{
+struct dnaSeq *seq;
+char *ptr;
+struct snp *snps = NULL;
+struct snp *snp = NULL;
+
+seq = nibLoadAllMasked(NIB_MASK_MIXED, nibFile);
+ptr = seq->dna;
+snps = readSnpsFromChrom(chromName);
+printf("got all snps in %s\n", chromName);
+
+/* do all substitutions */
+for (snp = snps; snp != NULL; snp = snp->next)
+    {
+    ptr[snp->chromStart] = iupac(snp->name, snp->observed, ptr[snp->chromStart]);
+    }
+
+if (printSnps)
+    {
+    for (snp = snps; snp != NULL; snp = snp->next)
+        {
+        printSnpSeq(snp, seq);
+        }
+    }
+
+if (printChrom)
+    faWrite(outFile, chromName, seq->dna, seq->size);
+
+snpFreeList(&snps);
+
+if (printGenes) doPrintGenes(chromName, seq);
+
+dnaSeqFree(&seq);  
+
+}
 
 
 int main(int argc, char *argv[])

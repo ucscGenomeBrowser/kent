@@ -1,0 +1,162 @@
+   This is the details about the automatic updating of RTDB related tracks
+for MGC.  RTDB is the RT-PCR clones for the C-list.  This C-list is only
+for human MGC genes but in general it can be for any MGC species.
+
+1. Washington U. setup
+
+   A suggested configuration of RTDB on the supplying end of the data would
+     be:
+
+    I. RTDB releases are put into a single file, i.e. a .tar.gz file, with
+       the version shown in the filename. e.g.
+ 
+           rtdb.v1.tar.gz
+           rtdb.v22.tar.gz
+
+   II. Put all RTDB databases in same directory, and keep them all.
+
+  III. When copying files to that directory, do so in an atomic manner, e.g.: 
+
+           cp rtdb.v5.tar.gz <directory>/rtdb.v5.tar.gz.TMP
+           mv <directory>/rtdb.v5.tar.gz.TMP <directory>/rtdb.v5.tar.gz
+
+   IV. RTDB files organized the following way, e.g. for rtdb.v41.tar.gz:
+
+           v41/hg17/mgcWUPcrHit.bed
+           v41/hg17/mgcWUPcrHit.ra
+           v41/hg17/mgcWUPcrHit.html
+             (C-list successes)
+           v41/hg17/mgcWUPcrInProgress.bed
+           v41/hg17/mgcWUPcrInProgress.ra
+           v41/hg17/mgcWUPcrInProgress.html
+             (c-list pending)
+           v41/hg17/mgcWUPcrFail.bed
+           v41/hg17/mgcWUPcrFail.ra
+           v41/hg17/mgcWUPcrFail.html
+             (c-list failed)
+           v41/hg17/rtdb.md5
+       
+       Note the extra subdirectory corresponding to the genome assembly the tracks
+       will appear on.  Eventually non-human tracks will be added to RTDB, so they
+       can be in their own subdirectories.  Those funny filenames are named that 
+       way to match the table names in the UCSC database.  The rtdb.md5 file is for
+       checksumming, and can be created like:
+   
+           cd v41/hg17/
+           md5sum * > rtdb.md5 
+
+    V. Make RTDB files available through HTTP, or even better FTP.
+
+2. UCSC setup
+
+    I. Configuration files and update scripts in CVS module:
+           
+           kent/src/hg/makeDb/genbank
+ 
+       specifically, put configuration file rtdb.conf in 
+
+           kent/src/hg/makeDb/genbank/etc
+
+       and all download programs and scripts in
+
+           kent/src/hg/makeDb/genbank/src/rtdb
+
+   II. Files from (I) checked out for use in /cluster/data/genbank
+       This location is also where downloaded RTDB goes.  Specifcally, while data is
+       being downloaded it goes in:
+   
+           /cluster/data/genbank/data/download/rtdb
+
+        where it gets decompressed like:
+
+           /cluster/data/genbank/data/download/rtdb/rtdb.v15.tar.gz
+                                |
+                                V
+           /cluster/data/genbank/data/download/rtdb/03.06.2005/v15/*
+
+       note the addition of the current date to the directory structure. 
+
+  III. The RTDB data goes in the database according to its directory. For example,
+       the files 
+
+           v41/hg17/mgcWUPcrHit.bed
+           v41/hg17/mgcWUPcrInProgress.bed
+           v41/hg17/mgcWUPcrFail.bed
+
+       go in the hg17 database as the tables mgcWUPcrHit, mgcWUPcrInProgress, and
+       mgcWUPcrFail.  
+
+   IV. The trackDb settings are a bit tricky because the .ra and .html files are
+       being provided with the assumption that they're updated and modified along
+       with the .bed file.  hgTrackDb works on a hierarchy like:
+
+            (i)                    (ii)                      (iii)
+
+         all species -> all assemblies of a species -> one assembly of a species
+                                                           (genome DB)
+
+       The top-level of the hierarchy is rooted at kent/src/hg/makeDb/trackDb in
+       the CVS.  Perhaps one way to easily update the information for an 
+       individual track is to modify the hgTrackDb program to recognize an even 
+       lower level to the hierarchy: (iv) one track on a specific assembly.  This
+       .ra file can just go in a subdirectory with the same name as the track, 
+       along with the .html file.  E.g. instead of:
+
+          makeDb/trackDb/human/hg17/trackDb.ra
+          makeDb/trackDb/human/hg17/mgcWUPcrHit.html
+
+       have:
+
+          makeDb/trackDb/human/hg17/mgcWUPcrHit/trackDb.ra
+          makeDb/trackDb/human/hg17/mgcWUPcrHit/mgcWUPcrHit.html
+
+       hgFindSpec would have to recognize this as well.  
+
+       In terms of a script running this update automatically, perhaps a new 
+       cluster account + apache virtual host can be made named rtdb.  rtdb 
+       can have a regular nightly CVS update and build schedule, but also do
+       a CVS update on the trackDb during the RTDB update.  rtdb's source tree
+       might as well reside in /cluster/data/genbank along with the rest of
+       the RTDB-related stuff.  During the RTDB update, files will be copied
+       from the download directory to the appropriate trackDb directory, and
+       if the trackDb directory is non-existent, it'll be created. **
+
+    V. Creation of a script that downloads, puts data in the right place, and
+       updates the the database correctly.  This script can be run by cron
+       or through the use of a CGI.  The CGI program should be non-interactive
+       and only display the status of the update script or an error if the 
+       cron is currently running the script.
+
+3. RTDB update sequence of events:
+
+    A. A cron job running every few minutes under user rtdb detects an 
+       updated RTDB.  
+
+    B. The rtdb.conf file is read and settings are such as:
+       
+           i. Lock file location.
+          ii. RTDB directory URL.
+         iii. Local download directory path.
+          iv. Location of rtdb's CVS source tree.
+
+    B. A lock file is created to prevent simultaneous updates by cron and 
+       the CGI.
+
+    C. The download directory is created in /cluster/data/genbank/download/rtdb
+
+    D. The data is downloaded to the download directory.
+
+    E. The data is decompressed and checksummed.
+
+    F. The .bed files are loaded into appropriate databases with hgLoadBed.
+
+    G. The cvs update is done on rtdb's trackDb.
+
+    H. trackDb .ra and .html files are copied from the unpacked RTDB tarball 
+       to rtdb's trackDb hierarchy in the right place.
+
+    I. rtdb does a top-level trackDb "make update".
+
+    J. The script reports a successful exit and exits after releasing the lock.
+
+** I'm wondering if this won't work through the CGI program.

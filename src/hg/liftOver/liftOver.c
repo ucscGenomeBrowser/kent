@@ -10,17 +10,14 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.19 2005/06/16 10:14:29 jill Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.22 2005/08/30 23:59:02 kate Exp $";
 
-double minMatch = LIFTOVER_MINMATCH;
-double minBlocks = LIFTOVER_MINBLOCKS;
-int minSizeT = 0;
-int minSizeQ = 0;
-int minChainT = 0;
-int minChainQ = 0;
+int bedPlus = 0;
 bool fudgeThick = FALSE;
 bool errorHelp = FALSE;
 bool multiple = FALSE;
+bool hasBin = FALSE;
+bool tabSep = FALSE;
 char *chainTable = NULL;
 
 void usage()
@@ -42,6 +39,9 @@ errAbort(
   "         after liftOver\n"
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
+  "   -bedPlus=N - File is bed N+ format\n"
+  "   -hasBin - File has bin value (used only with -bedPlus)\n"
+  "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
   "   -pslT - File is in psl format, map target side only\n"
   "   -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
   "                  (default %3.2f)\n"
@@ -76,7 +76,10 @@ fprintf(stderr, "Reading liftover chains\n");
 readLiftOverMap(mapFile, chainHash);
 fprintf(stderr, "Mapping coordinates\n");
 if (optionExists("gff"))
+    {
+    fprintf(stderr, "WARNING: -gff is not recommended.\nUse 'ldHgGene -out=<file.gp>' and then 'liftOver -genePred <file.gp>'\n");
     liftOverGff(oldFile, chainHash, minMatch, minBlocks, mapped, unmapped);
+    }
 else if (optionExists("genePred"))
     liftOverGenePred(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
@@ -86,6 +89,11 @@ else if (optionExists("sample"))
 else if (optionExists("pslT"))
     liftOverPsl(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
                         mapped, unmapped);
+else if (optionExists("bedPlus"))
+    liftOverBedPlus(oldFile, chainHash, minMatch, minBlocks, 
+                minSizeT, minSizeQ, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+		chainTable, bedPlus, hasBin, tabSep, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
@@ -97,6 +105,13 @@ carefulClose(&unmapped);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int minSizeT = 0;
+int minSizeQ = 0;
+int minChainT = 0;
+int minChainQ = 0;
+double minMatch = LIFTOVER_MINMATCH;
+double minBlocks = LIFTOVER_MINBLOCKS;
+
 optionHash(&argc, argv);
 minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
@@ -112,6 +127,11 @@ minSizeT = optionInt("minSizeT", minChainT); /* note: we're setting minChainT */
 minSizeQ = optionInt("minSizeQ", minSizeQ);
 minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
+bedPlus = optionInt("bedPlus", bedPlus);
+hasBin = optionExists("hasBin");
+tabSep = optionExists("tabSep");
+if (hasBin && !bedPlus)
+    usage();
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
     errAbort(liftOverErrHelp());
