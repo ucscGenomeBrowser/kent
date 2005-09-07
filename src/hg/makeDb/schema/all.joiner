@@ -21,6 +21,9 @@ set ci ci1,ci2
 set danRer danRer1,danRer2,danRer3
 set canFam canFam1,canFam2
 set droYak droYak1
+set droMoj droMoj1,droMoj2
+set droVir droVir1,droVir2
+set droEre droEre1
 set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
@@ -748,7 +751,7 @@ identifier refSeqId typeOf=mrnaAccession
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!rn2,!ce2,!danRer3.mrnaOrientInfo.name minCheck=0.78
+    $gbd,!rn2,!ce2,!danRer3,!droEre1,!droMoj2,!droVir2.mrnaOrientInfo.name minCheck=0.78
     ce2.mrnaOrientInfo.name minCheck=0.90
     danRer3.mrnaOrientInfo.name minCheck=0.40
     $gbd.refFlat.name
