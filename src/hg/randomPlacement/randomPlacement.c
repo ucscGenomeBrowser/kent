@@ -211,7 +211,7 @@ static void statsPrint(struct statistic *statList)
 {
 struct statistic *statEl;
 boolean firstHeader = TRUE;
-int i = 0;
+double fixedMeasure = 1.0;
 
 statsHeader();
 for (statEl = statList; statEl != NULL; statEl = statEl->next)
@@ -225,27 +225,23 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
 	}
     if (statEl->placedItemCount)
 	{
+	double shoulderPercent = 100.0 * (double)statEl->placedWithinShoulder /
+		(double)statEl->placedItemCount;
+
 	if (firstHeader)
 	    {
 	    printf("Nearest neighbor statistics:\n");
 	    printf("    # of   Maximum  Median    Mean # within "
-		"%% within # within\n");
+		"%% within # within    ratio   shoulder\n");
 	    printf("   items   nearest nearest nearest   %d bp    "
-		"%dbp  zero bp\n", shoulder, shoulder);
+		"%dbp  zero bp  fixed/random  window\n", shoulder, shoulder);
+	    fixedMeasure =  shoulderPercent;
 	    }
-	printf("%8d%10d%8d%8d%9d %%%7.2f%9d\n", statEl->placedItemCount,
+	printf("%8d%10d%8d%8d%9d %%%7.2f%9d%7.2f%8d\n", statEl->placedItemCount,
 	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
 	    statEl->meanNearestNeighbor, statEl->placedWithinShoulder,
-	    100.0 * (double)statEl->placedWithinShoulder /
-		(double)statEl->placedItemCount,
-	    statEl->zeroNeighbor);
-	printf("## %d %s %d %8d%10d%8d%8d%9d %%%7.2f%9d\n", i++, neighbor, shoulder, 
-                statEl->placedItemCount,
-	    statEl->maximumNearestNeighbor, statEl->medianNearestNeighbor,
-	    statEl->meanNearestNeighbor, statEl->placedWithinShoulder,
-	    100.0 * (double)statEl->placedWithinShoulder /
-		(double)statEl->placedItemCount,
-	    statEl->zeroNeighbor);
+	    shoulderPercent,
+	    statEl->zeroNeighbor, fixedMeasure/shoulderPercent, shoulder);
 	}
     firstHeader = FALSE;
     }
@@ -380,6 +376,7 @@ if (placedItemCount)
 	needHugeMem((size_t)(sizeof(int) * placedItemCount));
     int placedCount = 0;
     int boundingElements = 0;
+
     for (cl=cList; cl != NULL; cl = cl->next)
 	{
 	struct gap *gl;
@@ -461,7 +458,9 @@ if (placedItemCount)
     for ( ; i < placedCount; ++i)
 	if (placedDistances[i] > shoulder) break;
 
+    /*	for a while we were counting this without the zero distances */
     returnStats->placedWithinShoulder = (i+1) - returnStats->zeroNeighbor;
+    returnStats->placedWithinShoulder = i;
 
     verbose(2,"%d - number of items zero distance to nearest "
 	"bounding element\n", returnStats->zeroNeighbor);
@@ -1108,7 +1107,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc < 3)
+if (argc != 3)
     usage();
 trials = optionInt("trials", 0);
 seed = optionInt("seed", 0);
