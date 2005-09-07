@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.943 2005/09/07 21:06:46 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.944 2005/09/07 21:36:20 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2051,7 +2051,7 @@ if ((origAssembly = trackDbSetting(fullTdb, "origAssembly")) != NULL)
         freeze = hFreezeFromDb(origAssembly);
         if (freeze == NULL)
             freeze = origAssembly;
-        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"http://genome.ucsc.edu/cgi-bin/hgLiftOver\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
+        printf("<B>Data coordinates converted via <A TARGET=_BLANK HREF=\"/goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> %s (%s)<BR>\n", freeze, origAssembly);
         }
     }
 }
