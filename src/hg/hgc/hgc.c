@@ -183,7 +183,7 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.942 2005/09/07 17:23:41 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.943 2005/09/07 21:06:46 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2061,12 +2061,13 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link 
  * to the TB table schema page for this table. */
 {
+char *tableName;
 printTBSchemaLink(tdb);
 printOrigAssembly(tdb);
-if (hTableExists(tdb->tableName))
+if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
     {
     struct sqlConnection *conn = hAllocConn();
-    char *date = firstWordInLine(sqlTableUpdate(conn, tdb->tableName));
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
     if (date != NULL)
         printf("<B>Data last updated:</B> %s<BR>\n", date);
     hFreeConn(&conn);
