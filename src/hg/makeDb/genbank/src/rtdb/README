@@ -7,42 +7,40 @@ for human MGC genes but in general it can be for any MGC species.
    A suggested configuration of RTDB on the supplying end of the data would
      be:
 
-    I. RTDB releases are put into a single file, i.e. a .tar.gz file, with
-       the version shown in the filename. e.g.
+    I. RTDB releases are put into a single file for each genome assembly, 
+       i.e. a .tar.gz file, e.g.: 
  
-           rtdb.v1.tar.gz
-           rtdb.v22.tar.gz
+           rtdb.hg17.tar.gz
+           rtdb.mm6.tar.gz
 
-   II. Put all RTDB databases in same directory, and keep them all.
+   II. When copying files to that directory, do so in an atomic manner, e.g.: 
 
-  III. When copying files to that directory, do so in an atomic manner, e.g.: 
+           cp rtdb.tar.gz <directory>/rtdb.tar.gz.TMP
+           mv <directory>/rtdb.tar.gz.TMP <directory>/rtdb.tar.gz
 
-           cp rtdb.v5.tar.gz <directory>/rtdb.v5.tar.gz.TMP
-           mv <directory>/rtdb.v5.tar.gz.TMP <directory>/rtdb.v5.tar.gz
+  III. RTDB files organized the following way, e.g. for rtdb.hg17.tar.gz:
 
-   IV. RTDB files organized the following way, e.g. for rtdb.v41.tar.gz:
-
-           v41/hg17/mgcWUPcrHit.bed
-           v41/hg17/mgcWUPcrHit.ra
-           v41/hg17/mgcWUPcrHit.html
+           hg17/mgcWUPcrHit.bed
+           hg17/mgcWUPcrHit.ra
+           hg17/mgcWUPcrHit.html
              (C-list successes)
-           v41/hg17/mgcWUPcrInProgress.bed
-           v41/hg17/mgcWUPcrInProgress.ra
-           v41/hg17/mgcWUPcrInProgress.html
+           hg17/mgcWUPcrInProgress.bed
+           hg17/mgcWUPcrInProgress.ra
+           hg17/mgcWUPcrInProgress.html
              (c-list pending)
-           v41/hg17/mgcWUPcrFail.bed
-           v41/hg17/mgcWUPcrFail.ra
-           v41/hg17/mgcWUPcrFail.html
+           hg17/mgcWUPcrFail.bed
+           hg17/mgcWUPcrFail.ra
+           hg17/mgcWUPcrFail.html
              (c-list failed)
-           v41/hg17/rtdb.md5
+           hg17/rtdb.md5
        
-       Note the extra subdirectory corresponding to the genome assembly the tracks
-       will appear on.  Eventually non-human tracks will be added to RTDB, so they
-       can be in their own subdirectories.  Those funny filenames are named that 
-       way to match the table names in the UCSC database.  The rtdb.md5 file is for
-       checksumming, and can be created like:
+       Note the extra subdirectory corresponding to the genome assembly.  That's 
+       mostly because it's always sort of good practice to have tarballs unpack their
+       into a subdirectory to avoid making a mess in the working directory.  Those 
+       funny filenames are named that way to match the table names in the UCSC 
+       database.  The rtdb.md5 file is for checksumming, and can be created like:
    
-           cd v41/hg17/
+           cd hg17/
            md5sum * > rtdb.md5 
 
     V. Make RTDB files available through HTTP, or even better FTP.
@@ -69,57 +67,34 @@ for human MGC genes but in general it can be for any MGC species.
 
         where it gets decompressed like:
 
-           /cluster/data/genbank/data/download/rtdb/rtdb.v15.tar.gz
+           /cluster/data/genbank/data/download/rtdb/rtdb.tar.gz
                                 |
                                 V
-           /cluster/data/genbank/data/download/rtdb/03.06.2005/v15/*
+           /cluster/data/genbank/data/processed/rtdb/03.06.2005/*
 
        note the addition of the current date to the directory structure. 
 
-  III. The RTDB data goes in the database according to its directory. For example,
+  III. The RTDB data goes into the MySQL databases on the mgc computer.
+
+   IV. The RTDB data goes in the database according to its directory. For example,
        the files 
 
-           v41/hg17/mgcWUPcrHit.bed
-           v41/hg17/mgcWUPcrInProgress.bed
-           v41/hg17/mgcWUPcrFail.bed
+           hg17/mgcWUPcrHit.bed
+           hg17/mgcWUPcrInProgress.bed
+           hg17/mgcWUPcrFail.bed
 
        go in the hg17 database as the tables mgcWUPcrHit, mgcWUPcrInProgress, and
        mgcWUPcrFail.  
 
    IV. The trackDb settings are a bit tricky because the .ra and .html files are
        being provided with the assumption that they're updated and modified along
-       with the .bed file.  hgTrackDb works on a hierarchy like:
-
-            (i)                    (ii)                      (iii)
-
-         all species -> all assemblies of a species -> one assembly of a species
-                                                           (genome DB)
-
-       The top-level of the hierarchy is rooted at kent/src/hg/makeDb/trackDb in
-       the CVS.  Perhaps one way to easily update the information for an 
-       individual track is to modify the hgTrackDb program to recognize an even 
-       lower level to the hierarchy: (iv) one track on a specific assembly.  This
-       .ra file can just go in a subdirectory with the same name as the track, 
-       along with the .html file.  E.g. instead of:
-
-          makeDb/trackDb/human/hg17/trackDb.ra
-          makeDb/trackDb/human/hg17/mgcWUPcrHit.html
-
-       have:
-
-          makeDb/trackDb/human/hg17/mgcWUPcrHit/trackDb.ra
-          makeDb/trackDb/human/hg17/mgcWUPcrHit/mgcWUPcrHit.html
-
-       hgFindSpec would have to recognize this as well.  
-
-       In terms of a script running this update automatically, perhaps a new 
-       cluster account + apache virtual host can be made named rtdb.  rtdb 
-       can have a regular nightly CVS update and build schedule, but also do
-       a CVS update on the trackDb during the RTDB update.  rtdb's source tree
-       might as well reside in /cluster/data/genbank along with the rest of
-       the RTDB-related stuff.  During the RTDB update, files will be copied
-       from the download directory to the appropriate trackDb directory, and
-       if the trackDb directory is non-existent, it'll be created. **
+       with the .bed file.  The idea then is to run hgTrackDb upon the arrival of
+       new data, but have the destination table be trackDbLocal_rtdb, where it
+       uses the db.trackDbLocal setting in the hg.conf file to display the tracks
+       on the browser without having to update the main trackDb table.  For
+       example:
+  
+           hgTrackDb -raName=mgcWUPcrHit.ra "" hg17 trackDbLocal_rtdb trackDb.sql .
 
     V. Creation of a script that downloads, puts data in the right place, and
        updates the the database correctly.  This script can be run by cron
@@ -135,9 +110,8 @@ for human MGC genes but in general it can be for any MGC species.
     B. The rtdb.conf file is read and settings are such as:
        
            i. Lock file location.
-          ii. RTDB directory URL.
+          ii. RTDB directory URL (WashU HTTP or FTP).
          iii. Local download directory path.
-          iv. Location of rtdb's CVS source tree.
 
     B. A lock file is created to prevent simultaneous updates by cron and 
        the CGI.
@@ -146,17 +120,12 @@ for human MGC genes but in general it can be for any MGC species.
 
     D. The data is downloaded to the download directory.
 
-    E. The data is decompressed and checksummed.
+    E. The data is decompressed into the "processed" directory and checksummed.
 
     F. The .bed files are loaded into appropriate databases with hgLoadBed.
 
-    G. The cvs update is done on rtdb's trackDb.
+    G. hgTrackDb loads track information into trackDbLocal_rtdb on assembly 
+       database on mgc.
 
-    H. trackDb .ra and .html files are copied from the unpacked RTDB tarball 
-       to rtdb's trackDb hierarchy in the right place.
+    H. The script reports a successful exit and exits after releasing the lock.
 
-    I. rtdb does a top-level trackDb "make update".
-
-    J. The script reports a successful exit and exits after releasing the lock.
-
-** I'm wondering if this won't work through the CGI program.
