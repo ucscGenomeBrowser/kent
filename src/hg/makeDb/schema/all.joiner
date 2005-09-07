@@ -751,7 +751,7 @@ identifier refSeqId typeOf=mrnaAccession
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!rn2,!ce2,!danRer3,!droEre1,!droMoj2,!droVir2.mrnaOrientInfo.name minCheck=0.78
+    $gbd,!rn2,!ce2,!danRer3,!droEre1,!droMoj2,!droVir2,!droAna2.mrnaOrientInfo.name minCheck=0.78
     ce2.mrnaOrientInfo.name minCheck=0.90
     danRer3.mrnaOrientInfo.name minCheck=0.40
     $gbd.refFlat.name
