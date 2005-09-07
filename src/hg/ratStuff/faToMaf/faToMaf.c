@@ -7,7 +7,7 @@
 #include "dnaseq.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: faToMaf.c,v 1.1 2004/04/17 16:47:41 kent Exp $";
+static char const rcsid[] = "$Id: faToMaf.c,v 1.2 2005/09/07 20:47:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -74,6 +74,8 @@ for (;;)
 AllocVar(seq);
 seq->name = name;
 seq->dna = cloneString(dy->string);
+seq->size = dy->stringSize;
+verbose(2, "seq %s, %d bases\n", seq->name, seq->size);
 dyStringFree(&dy);
 return seq;
 }
