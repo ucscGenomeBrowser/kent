@@ -1378,16 +1378,6 @@ spectrum on
 type chain dm2
 otherDb dm2
 
-track netDm2
-shortLabel D. mel. Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 134
-visibility dense
-spectrum on
-type netAlign dm2 chainDm2
-otherDb dm2
-
 track chainDm2
 shortLabel (dm2) D. mel. Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
