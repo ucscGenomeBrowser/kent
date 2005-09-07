@@ -12,6 +12,8 @@
 #include "spDb.h"
 #include "jpegSize.h"
 
+int testMax=0;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -28,11 +30,12 @@ errAbort(
   " used to determine file exists and\n"
   " size (width and height in pixels)\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -testMax=N - for testing purposes only output first N directories\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"testMax", OPTION_INT},
    {NULL, 0},
 };
 
@@ -228,8 +231,8 @@ void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, c
 {
 /* Initially the tab file will have some duplicate lines, so
  * write to temp file, and then filter. */
-char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN];
-FILE *ra = NULL, *tab = NULL;
+char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN], capName[PATH_LEN];
+FILE *ra = NULL, *tab = NULL, *cap = NULL;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
@@ -237,13 +240,18 @@ char *copyright, *pubMed;
 struct slName *list, *el;
 boolean gotAny = FALSE;
 struct hash *uniqAssayHash = newHash(16);
+struct hash *uniqImageHash = newHash(0);
+struct hash *captionHash = newHash(0);
 int imageWidth = 0, imageHeight = 0;
 char path[PATH_LEN];
+struct dyString *caption = dyStringNew(0);
 	
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
 safef(tabName, sizeof(tabName), "%s.tab", fileRoot);
+safef(capName, sizeof(capName), "%s.txt", fileRoot);
 safef(tmpName, sizeof(tmpName), "%s.tmp", fileRoot);
 tab = mustOpen(tmpName, "w");
+cap = mustOpen(capName, "w");
 
 
 dyStringAppend(query, "select authors, journal, title from BIB_Refs where ");
@@ -376,6 +384,7 @@ fprintf(tab, "sliceType\t");
 fprintf(tab, "genotype\t");
 fprintf(tab, "strain\t");
 fprintf(tab, "priority\t");
+fprintf(tab, "captionId\t");
 fprintf(tab, "imageWidth\t");
 fprintf(tab, "imageHeight\n");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -405,6 +414,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *strain = NULL;
     char *priority = NULL;
     char abTaxon[32];
+    char *captionId = "";
 
     if (age == NULL)
         continue;
@@ -639,6 +649,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     stripChar(paneLabel, '"');	/* Get rid of a difficult quote to process. */
     
+    /* Fetch image dimensions from file. */
     imageWidth=0;
     imageHeight=0;
     safef(path, sizeof(path), "%s/%s.jpg", inJax, fileKey);
@@ -647,6 +658,38 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	warn("Picture Missing! %s ",path);
     
+    /* Deal caption if any.  Most of the work only happens the
+     * first time see the image. */
+    if (!hashLookup(uniqImageHash, imageKey))
+        {
+	struct sqlResult *sr = NULL;
+	char **row;
+	hashAdd(uniqImageHash, imageKey, NULL);
+	dyStringClear(caption);
+	dyStringClear(query);
+	dyStringPrintf(query,
+	    "select imageNote from IMG_ImageNote "
+	    "where _Image_key = %s "
+	    "order by sequenceNum"
+	    , imageKey);
+	sr = sqlGetResult(conn2, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
+	   dyStringAppend(caption, row[0]);
+	sqlFreeResult(&sr);
+
+	if (caption->stringSize > 0)
+	    {
+	    subChar(caption->string, '\t', ' ');
+	    subChar(caption->string, '\n', ' ');
+	    fprintf(cap, "%s\t%s\n", imageKey, caption->string);
+	    hashAdd(captionHash, imageKey, imageKey);
+	    }
+	}
+    if (hashLookup(captionHash, imageKey))
+        captionId = imageKey;
+    else
+        captionId = "";
+
     fprintf(tab, "%s\t", gene);
     fprintf(tab, "%s\t", probeColor);
     fprintf(tab, "%s\t", sex);
@@ -667,6 +710,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", genotype);
     fprintf(tab, "%s\t", strain);
     fprintf(tab, "%s\t", priority);
+    fprintf(tab, "%s\t", captionId);
     fprintf(tab, "%d\t", imageWidth);
     fprintf(tab, "%d\n", imageHeight);
 
@@ -685,13 +729,20 @@ sqlFreeResult(&sr);
 
 carefulClose(&ra);
 carefulClose(&tab);
+carefulClose(&cap);
 if (gotAny)
     undupeCopyFile(tmpName, tabName);
 else
+    {
     remove(raName);
+    remove(capName);
+    }
 remove(tmpName);
+dyStringFree(&caption);
 dyStringFree(&query);
 hashFree(&uniqAssayHash);
+hashFree(&uniqImageHash);
+hashFree(&captionHash);
 }
 
 void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *outDir,
@@ -702,16 +753,18 @@ void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *
 {
 struct dyString *query = dyStringNew(0);
 struct slName *ref, *refList = sqlQuickList(conn, "select distinct(_Refs_key) from GXD_Assay");
+int refCount = 0;
 
 makeDir(outDir);
-uglyf("%d refs\n", slCount(refList));
 
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     char path[PATH_LEN];
     safef(path, sizeof(path), "%s/%s", outDir, ref->name);
     submitRefToFiles(conn, conn2, ref->name, path, inJax);
-    {static int count; if (++count >= 30000) uglyAbort("All for now");}
+    refCount += 1;
+    if (testMax != 0 && refCount >= testMax)
+         errAbort("Reached testMax %d output dirs [%s]\n", testMax, path);
     }
 
 slNameFreeList(&refList);
@@ -737,6 +790,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+testMax = optionInt("testMax", testMax);
 if (argc != 4)
     usage();
 vgLoadJax(argv[1], argv[2], argv[3]);

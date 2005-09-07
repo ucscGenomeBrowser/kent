@@ -210,6 +210,13 @@ table probeColor
     string name;	"Color name"
     )
 
+table caption
+"An image caption.  Does not contain tabs or newlines, may have html tags"
+    (
+    int id;		"Caption ID"
+    lstring caption;	"Caption text"
+    )
+
 table imageFile
 "A biological image file"
     (
@@ -222,6 +229,7 @@ table imageFile
     int thumbLocation;	"Location of thumbnail-sized image"
     int submissionSet;	"Submission set this is part of"
     string submitId;	"ID within submission set"
+    int caption;	"Pointer to caption or 0 for none"
     )
 
 table image

@@ -17,8 +17,8 @@ void usage()
 errAbort(
   "visiGeneLoad - Load data into visiGene database\n"
   "usage:\n"
-  "   visiGeneLoad setInfo.ra itemInfo.tab\n"
-  "Please see visiGeneLoad.doc for description of the .ra and .tab files\n"
+  "   visiGeneLoad setInfo.ra itemInfo.tab captions.txt\n"
+  "Please see visiGeneLoad.doc for description of the .ra, .tab and .txtfiles\n"
   "Options:\n"
   "   -database=%s - Specifically set database\n"
   , database
@@ -659,10 +659,41 @@ dyStringFree(&dy);
 return probeId;
 }
 
+int doCaption(struct lineFile *lf, struct sqlConnection *conn,
+	char *captionExtId, struct hash *captionTextHash,
+	struct hash *captionIdHash)
+/* If captionExtId is non-empty then return internal id for
+ * caption.  If this is first time we've seen the caption then
+ * put the text in the caption table and assign an ID to it. */
+{
+if (captionExtId == NULL || captionExtId[0] == 0)
+    return 0;
+else if (hashLookup(captionIdHash, captionExtId))
+    return hashIntVal(captionIdHash, captionExtId);
+else
+    {
+    char *captionText = hashFindVal(captionTextHash, captionExtId);
+    int id;
+    struct dyString *query = dyStringNew(0);
+    if (captionText == NULL)
+        errAbort("captionId %s line %d of %s not found in caption text file",
+		captionExtId, lf->lineIx, lf->fileName);
+    dyStringAppend(query, "insert into caption values(default, \"");
+    dyStringAppend(query, captionText);
+    dyStringAppend(query, "\")");
+    verbose(2, "%s\n", query->string);
+    sqlUpdate(conn, query->string);
+    dyStringFree(&query);
+    id = sqlLastAutoId(conn);
+    hashAddInt(captionIdHash, captionExtId, id);
+    return id;
+    }
+}
+
 int doImageFile(struct lineFile *lf, struct sqlConnection *conn, 
 	char *fileName, int fullDir, int thumbDir,
 	int submissionSetId, char *submitId, char *priority,
-	int imageWidth, int imageHeight)
+	int captionId, int imageWidth, int imageHeight)
 /* Update image file record if necessary and return image file ID. */
 {
 int imageFileId = 0;
@@ -679,12 +710,13 @@ if (imageFileId == 0)
     dyStringPrintf(dy, " id = default,\n");
     dyStringPrintf(dy, " fileName = '%s',\n", fileName);
     dyStringPrintf(dy, " priority = %s,\n", priority);
-    dyStringPrintf(dy, " imageWidth = %d,\n", imageWidth);
-    dyStringPrintf(dy, " imageHeight = %d,\n", imageHeight);
     dyStringPrintf(dy, " fullLocation = %d,\n", fullDir);
     dyStringPrintf(dy, " thumbLocation = %d,\n", thumbDir);
     dyStringPrintf(dy, " submissionSet = %d,\n", submissionSetId);
-    dyStringPrintf(dy, " submitId = '%s'\n", submitId);
+    dyStringPrintf(dy, " submitId = '%s',\n", submitId);
+    dyStringPrintf(dy, " caption = %d,\n", captionId);
+    dyStringPrintf(dy, " imageWidth = %d,\n", imageWidth);
+    dyStringPrintf(dy, " imageHeight = %d\n", imageHeight);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     imageFileId = sqlLastAutoId(conn);
@@ -983,8 +1015,24 @@ if (sqlQuickNum(conn, dy->string) == 0)
 dyStringFree(&dy);
 }
 
+struct hash *readCaptions(char *fileName)
+/* Read in caption file which is composed of lines of
+ * format <id><tab><caption><newline>
+ * into a hash with id's for keys, captions for values. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = hashNew(16);
+char *line;
+while (lineFileNextReal(lf, &line))
+    {
+    char *key = nextWord(&line);
+    hashAdd(hash, key, makeEscapedString(line, '"'));
+    }
+lineFileClose(&lf);
+return hash;
+}
 
-void visiGeneLoad(char *setRaFile, char *itemTabFile)
+void visiGeneLoad(char *setRaFile, char *itemTabFile, char *captionFile)
 /* visiGeneLoad - Load data into visiGene database. */
 {
 struct hash *raHash = raReadSingle(setRaFile);
@@ -1005,6 +1053,8 @@ struct hash *permeablizationHash = newHash(0);
 struct hash *probeColorHash = newHash(0);
 struct hash *sliceTypeHash = newHash(0);
 struct hash *sectionSetHash = newHash(0);
+struct hash *captionTextHash = readCaptions(captionFile);
+struct hash *captionIdHash = newHash(0);
 int imageProbeId = 0;
 
 /* Read first line of tab file, and from it get all the field names. */
@@ -1131,12 +1181,14 @@ while (lineFileNextReal(lf, &line))
 	char *specimenNotes = getVal("specimenNotes", raHash, rowHash, words, "");
 	char *strain = getVal("strain", raHash, rowHash, words, "");
 	char *uniProt = getVal("uniProt", raHash, rowHash, words, "");
+	char *captionExtId = getVal("captionId", raHash, rowHash, words, "");
 
 	/* Some ID's we have to calculate individually. */
 	int sectionId = 0;
 	int geneId = 0;
 	int antibodyId = 0;
 	int probeId = 0;
+	int captionId = 0;
 	int imageFileId = 0;
 	int strainId = 0;
 	int genotypeId = 0;
@@ -1150,8 +1202,11 @@ while (lineFileNextReal(lf, &line))
 	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
 	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
 
+	captionId = doCaption(lf, conn, captionExtId, captionTextHash, 
+		captionIdHash);
+
 	imageFileId = doImageFile(lf, conn, fileName, fullDir, thumbDir,
-	    submissionSetId, submitId, priority, atoi(imageWidth), atoi(imageHeight));
+	    submissionSetId, submitId, priority, captionId, atoi(imageWidth), atoi(imageHeight));
 
 	strainId = doStrain(lf, conn, taxon, strain);
 	genotypeId = doGenotype(lf, conn, taxon, strainId, genotype);
@@ -1172,9 +1227,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
 database = optionVal("database", database);
-visiGeneLoad(argv[1], argv[2]);
+visiGeneLoad(argv[1], argv[2], argv[3]);
 return 0;
 }

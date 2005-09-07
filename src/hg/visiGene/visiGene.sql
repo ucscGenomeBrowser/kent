@@ -269,6 +269,15 @@ CREATE TABLE probeColor (
     PRIMARY KEY(id)
 );
 
+# An image caption.  Does not contain tabs or newlines, may have html tags
+CREATE TABLE caption (
+    id int auto_increment not null,	# Id of caption
+    caption longtext not null,	# Caption text
+              #Indices
+    PRIMARY KEY(id)
+);
+    
+
 #A biological image file
 CREATE TABLE imageFile (
     id int auto_increment not null,	# ID of imageFile
@@ -280,6 +289,7 @@ CREATE TABLE imageFile (
     thumbLocation int not null,	# Location of thumbnail-sized image
     submissionSet int not null,	# Submission set this is part of
     submitId varchar(255) not null,	# ID within submission set
+    caption int not null,	# Pointer to caption or 0 for none
               #Indices
     PRIMARY KEY(id),
     INDEX(submissionSet)
