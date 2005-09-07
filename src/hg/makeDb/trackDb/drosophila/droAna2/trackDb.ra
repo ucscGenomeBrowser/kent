@@ -5,3 +5,13 @@ priority 11
 group map
 visibility dense
 type bed 3 +
+
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility dense
+spectrum on
+type psl mrna
+
