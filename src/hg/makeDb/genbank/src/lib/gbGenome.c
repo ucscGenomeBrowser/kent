@@ -3,7 +3,7 @@
 #include "gbDefs.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbGenome.c,v 1.40 2005/08/10 15:24:43 angie Exp $";
+static char const rcsid[] = "$Id: gbGenome.c,v 1.41 2005/09/08 03:01:36 markd Exp $";
 
 struct dbToSpecies
 /* structure mapping database prefix to species (e.g. hg -> "Homo sapiens").
@@ -49,6 +49,7 @@ static char *droSimNames[] = {"Drosophila simulans", NULL};
 static char *droGriNames[] = {"Drosophila grimshawi", NULL};
 static char *anoGamNames[] = {"Anopheles gambiae", NULL};
 static char *apiMelNames[] = {"Apis mellifera", NULL};
+static char *triCasNames[] = {"Tribolium castaneum", NULL};
 static char *tetNigNames[] = {"Tetraodon nigroviridis", NULL};
 static char *bosTauNames[] = {"Bos taurus", NULL};
 static char *xenTroNames[] = {"Xenopus tropicalis", NULL};
@@ -89,7 +90,8 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"droGri", droGriNames, NULL},
     {"anoGam", anoGamNames, NULL},
     {"apiMel", apiMelNames, NULL},
-    /*  "Tetraodon" was onced used for "Tetraodon nigroviridis" */
+    {"triCas", triCasNames, NULL},
+    /*  "Tetraodon" was once used for "Tetraodon nigroviridis" */
     {"tetNig", tetNigNames, "Tetraodon"},
     {"bosTau", bosTauNames, "Bos taurus "},
     {"xenTro", xenTroNames, "Xenopus tropicalis "},
