@@ -60,6 +60,9 @@ char *visiGeneEmbedding(struct sqlConnection *conn, int id);
 char *visiGenePermeablization(struct sqlConnection *conn, int id);
 /* Return permeablization conditions if any.  FreeMem this when done.*/
 
+char *visiGeneCaption(struct sqlConnection *conn, int id);
+/* Return free text caption if any. FreeMem this when done. */
+
 char *visiGeneContributors(struct sqlConnection *conn, int id);
 /* Return comma-separated list of contributors in format Kent W.H, Wu F.Y. 
  * FreeMem this when done. */
@@ -80,6 +83,13 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id);
 /* Return contributor url associated with this image. 
  * Substitute in submitId for %s before using.  May be null.
  * FreeMem when done. */
+
+char *visiGeneAcknowledgement(struct sqlConnection *conn, int id);
+/* Return acknowledgement if any, NULL if none. 
+ * FreeMem this when done. */
+
+char *visiGeneSubmissionSource(struct sqlConnection *conn, int id);
+/* Return name of submission source. */
 
 char *visiGeneCopyright(struct sqlConnection *conn, int id);
 /* Return copyright statement if any,  NULL if none.

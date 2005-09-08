@@ -372,6 +372,19 @@ safef(query, sizeof(query),
 return sqlQuickString(conn, query);
 }
 
+char *visiGeneCaption(struct sqlConnection *conn, int id)
+/* Return free text caption if any. FreeMem this when done. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select caption.caption from image,imageFile,caption "
+    "where image.id = %d "
+    "and image.imageFile = imageFile.id "
+    "and imageFile.caption = caption.id"
+    , id);
+return sqlQuickString(conn, query);
+}
+
 static char *stringFieldInSubmissionSet(struct sqlConnection *conn, int id, 
 	char *field)
 /* Return some string field in submissionSet table when you have image id. */
@@ -382,6 +395,22 @@ safef(query, sizeof(query),
      " where image.id = %d"
      " and image.imageFile = imageFile.id "
      " and imageFile.submissionSet = submissionSet.id", field, id);
+return sqlQuickString(conn, query);
+}
+
+static char *stringFieldInSubmissionSource(struct sqlConnection *conn, int id, 
+	char *field)
+/* Return some string field in submissionSource table when you have image id. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select submissionSource.%s "
+    "from image,imageFile,submissionSet,submissionSource "
+    "where image.id = %d "
+    "and image.imageFile = imageFile.id "
+    "and imageFile.submissionSet = submissionSet.id "
+    "and submissionSet.submissionSource = submissionSource.id"
+    , field, id);
 return sqlQuickString(conn, query);
 }
 
@@ -410,7 +439,7 @@ char *visiGeneSetUrl(struct sqlConnection *conn, int id)
 /* Return contributor url associated with image set if any. 
  * FreeMem this when done. */
 {
-return stringFieldInSubmissionSet(conn, id, "setUrl");
+return stringFieldInSubmissionSource(conn, id, "setUrl");
 }
 
 char *visiGeneItemUrl(struct sqlConnection *conn, int id)
@@ -418,7 +447,20 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id)
  * Substitute in submitId for %s before using.  May be null.
  * FreeMem when done. */
 {
-return stringFieldInSubmissionSet(conn, id, "itemUrl");
+return stringFieldInSubmissionSource(conn, id, "itemUrl");
+}
+
+char *visiGeneAcknowledgement(struct sqlConnection *conn, int id)
+/* Return acknowledgement if any, NULL if none. 
+ * FreeMem this when done. */
+{
+return stringFieldInSubmissionSource(conn, id, "acknowledgement");
+}
+
+char *visiGeneSubmissionSource(struct sqlConnection *conn, int id)
+/* Return name of submission source. */
+{
+return stringFieldInSubmissionSource(conn, id, "name");
 }
 
 char *visiGeneCopyright(struct sqlConnection *conn, int id)
@@ -435,6 +477,7 @@ safef(query, sizeof(query),
     , id);
 return sqlQuickString(conn, query);
 }
+
 
 static void appendMatchHow(struct dyString *dy, char *pattern,
 	enum visiGeneSearchType how)
