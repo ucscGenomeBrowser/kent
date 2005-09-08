@@ -31,6 +31,8 @@ myClip = document.getElementById("myClip");
 
 myImg = document.getElementById("myImg");
 
+myCover = document.getElementById("myCover");
+
 
 // original width and height of picture
 wOrig = new Array(numLevels);
@@ -45,6 +47,8 @@ hSub = 512; //240; //300;
 // width of last column of tiles (since we are scaling tiles by setting width)
 wSubEdge = new Array(numLevels);
 wSubEdge[0] = wSub;  
+hSubEdge = new Array(numLevels);  // safari
+hSubEdge[0] = hSub;  
 
 // number of extra cell rows and columns to cover in view window myClip
 wdl = wdr = 2;  
@@ -124,6 +128,34 @@ for (var i=0; i<parms.length; i++) {
 qs();  // init parm array from cmdline
 
 
+function placeTile(cell) {
+
+var wSize = wSub;
+var hSize = hSub;
+if ((cell.r != -1) && (cell.c != -1)) {
+    
+    if (cell.c+1==wCnt[l])
+	{
+	wSize = wSubEdge[l];
+	}
+    if (cell.r+1==hCnt[l])
+	{
+	hSize = hSubEdge[l];
+	}
+    // safari seems to need both width and height specified.
+    // I wanted to use the style so I could express both properties at once,
+    // but it doesn't seem to work when we magnify it (m > 1)
+    cell.width  = wSize*m;
+    cell.height = hSize*m;  //safari
+    //cell.style='width:'+wSize*m+';'+'height:'+hSize*m+';';
+    //'width:100%; height: auto;';
+    
+    cell.style.top  = cell.r*hSub*m;
+    cell.style.left = cell.c*wSub*m;
+    	    
+//alert('onTileLoad: cell.r,cell.c='+cell.r+','+cell.c+'  m='+m+' wCnt[l]='+wCnt[l]+' cell.width='+cell.width);
+}		
+}
 
 function onTileLoad(theImage) {  
 // does this work in all browsers we need to cover?
@@ -134,15 +166,7 @@ if (!theImage) var theImage = window.event;
 //alert('theImage='+theImage);
 //var cell = document.getElementById(e.target);
 var cell = this;
-if ((cell.r != -1) && (cell.c != -1)) {
-    cell.style.top  = cell.r*hSub*m;
-    cell.style.left = cell.c*wSub*m;
-    if (cell.c+1==wCnt[l])
-	cell.width = wSubEdge[l]*m;
-    else
-	cell.width = wSub*m;
-//alert('onTileLoad: cell.r,cell.c='+cell.r+','+cell.c+'  m='+m+' wCnt[l]='+wCnt[l]+' cell.width='+cell.width);
-}		
+placeTile(cell);
 }
 
 
@@ -157,7 +181,7 @@ if (doHTML) {  // since this may be expensive for old machines, skip if just a z
     html = '';
     for(r=0; r<ht; r++) {
 	for(c=0; c<wt; c++) {
-	    html += '<IMG ID="myImg_'+cnt+'" src="dot_clear.gif" STYLE="position:absolute;left:0;top:0;">';
+	    html += '<IMG ID="myImg_'+cnt+'" src="dot_clear.gif" STYLE="position:absolute;left:-10000px;top:-10000px;">';
 	    cnt++;
 	}
     }   
@@ -176,16 +200,13 @@ invis=new Array();
 cells = new Array();
 
 cnt=0;
+
 for(r=0; r<ht; r++) {
     for(c=0; c<wt; c++) {
 	var cell = document.getElementById("myImg_"+cnt);
 	var cstr = "dot_clear.gif";
-	//if (c+1==wt)
-	//    cell.width = wSubEdge[l]*m;
-	//else
-	//    cell.width = wSub*m;
-	cell.style.top  = -hc-hSub*m; // move it off screen to hide
-	cell.style.left = -wc-wSub*m;
+	cell.style.top  = -hc-hSub*m; // move it off screen to hide  -hc
+	cell.style.left = -wc-wSub*m; // -wc
 	cell.r = -1;  // used to identify current position role
 	cell.c = -1;
 	cells[cells.length] = cell;  // save an array as a list of all IMGs
@@ -238,6 +259,20 @@ if ((x != xx) || (y != yy)) {
 }
 }
 
+function missingUpdateScan() {
+  // safari misses some img.onload() method calls
+  //  so try calling the image load method now:
+
+for(i=0;i<cells.length;i++) {
+    var cell = cells[i];
+    if ((cell.r != -1) && (cell.style.top < 0)) {  // it is visible, but no onload method called yet
+	alert('proof that missingUpdateScan caught something');
+    	placeTile(cell);
+    }
+}
+		
+}
+
 
 function updatePos() {
 
@@ -288,10 +323,6 @@ for(i=0;i<cells.length;i++) {
 	//cell.src=cstr; // causes IE flashes, don't even need it so skip it
 	cell.r = -1;
 	cell.c = -1;
-	//if (cell.c+1==wCnt[l])
-	//    cell.width = wSubEdge[l]*m;
-	//else
-	//    cell.width = wSub*m;
 	cell.style.top  = -hc-hSub*m; // move it off screen to hide
 	cell.style.left = -wc-wSub*m;
 	cntinv++;  // debug
@@ -327,15 +358,9 @@ for(rr=r-hdl;rr-r<=hdr;rr++) {
 		
 		cell.path=cstr;
 		cell.src=cstr;
+
+		placeTile(cell);  // safari hack, remove soon  (TODO finish after strawberry)
 		
-		//-- note: onload now does this better, prevents FF screen refresh bugs
-		//cell.style.top  = rr*hSub;
-		//cell.style.left = cc*wSub;
-		//if (cell.c+1==wCnt[l])
-		//    cell.width = wSubEdge[l]*m;
-		//else
-		//    cell.width = wSub*m;
-	    	    
 		cntvis++;
 		
 	    }
@@ -357,6 +382,8 @@ if ((cntinv > 0) || (cntvis > 0))
 
 if ((x != xx) || (y != yy)) setTimeout('scrollMe()',100);
 
+//setTimeout('missingUpdateScan()',200); // TODO finish after strawberry
+
 }
 
 
@@ -374,17 +401,28 @@ if( typeof( window.innerWidth ) == 'number' ) {
   myWidth = document.body.clientWidth; 
   myHeight = document.body.clientHeight;
 }  
+
+//debug safari
+//if (myWidth==0) myWidth=320;
+//if (myHeight==0) myHeight=200;
+
 if (dim=="w") return myWidth
 else        return myHeight;
 }
 
 
 function windowResize() {
-window.onresize=null
+
+//window.onresize=null;  // this really screws up Safari, don't do it!
+
 wc = getInnerSize("w") - 2*marginLeft;
 hc = getInnerSize("h") - 2*marginTop;
+
 myClip.style.width  = wc;
 myClip.style.height = hc;
+
+myCover.style.width  = wc;
+myCover.style.height = hc;
 
 wSmallDelta = Math.round(wc/16);
 hSmallDelta = Math.round(hc/16);
@@ -402,13 +440,17 @@ ht = Math.ceil(hc/(hSub*m)) + 1;
 makeLevel(true);
 updatePos();
 
-window.onresize=windowResize;
+//window.onresize=windowResize;   // this really screws up Safari, don't do it!
 }
 
 
 function init() {
+
 if (!myClip)
     myClip = document.getElementById("myClip");
+
+if (!myCover)
+    myCover = document.getElementById("myCover");
 
 picName  = qsParm['url'];
 wOrig[0] = parseInt(qsParm['w']);
@@ -434,6 +476,9 @@ for (l=0;l<numLevels;l++)
     wSubEdge[l] = wOrig[l] % wSub;
     if (wSubEdge[l] == 0)
 	wSubEdge[l] = wSub;  
+    hSubEdge[l] = hOrig[l] % hSub;
+    if (hSubEdge[l] == 0)
+	hSubEdge[l] = hSub;  
     }
 
 var html = '';
@@ -441,8 +486,11 @@ var html = '';
 myClip.style.left = marginLeft;
 myClip.style.top  = marginTop;
 
+myCover.style.left = marginLeft;
+myCover.style.top  = marginTop;
+
 // one DIV for all levels
-html += '<DIV ID="myImg'+'" STYLE="position:absolute;left:1000;top:0" ></DIV>';
+html += '<DIV ID="myImg'+'" STYLE="position:absolute;left:1000;top:0;z-index:1;" ></DIV>';
 myClip.innerHTML=html;  
 
 if (!myImg)
@@ -451,6 +499,20 @@ if (!myImg)
 l=0;
 z=1;
 wc = getInnerSize("w") - 2*marginLeft;
+
+//debug
+//alert('wc='+wc+' marginLeft='+marginLeft+'location.href='+location.href);
+
+//debug
+//alert(document.parent.bigImg.src);
+//alert('test:'+typeof(parent.bigImg.width));
+
+if (wc <= 0) /* safari bug work-around, just make it reload again */
+    {
+    location.href=location.href;
+    return;
+    }
+
 while (wOrig[l] > wc && (l+1) < numLevels)
     {
     l++;
@@ -466,7 +528,7 @@ setMouseCursor();
 
 windowResize();
 
-window.focus();
+if (window.focus) window.focus();
 
 }
 
@@ -535,18 +597,20 @@ if (!e) var e = window.event;
 if (e.keyCode) code = e.keyCode;
 else if (e.which) code = e.which;
 var character = String.fromCharCode(code);
-//alert('code='+code);
-//alert('Character was ' + character);
+//alert('code='+code+' Character was ' + character);
 
-if (character=='m') {
-    if (zoomMode=="in") 
-	zoomMode="center";
-    else if (zoomMode=="center") 
-	zoomMode="out";
-    else if (zoomMode=="out") 
-	zoomMode="in";
-    setMouseCursor();	    
-}
+// MAYBE I don't need this anymore.
+// I remember I was having trouble trapping 'm' on some browser, but which?
+//  code 77 works for safari and mozilla
+//if (character=='m') {
+//    if (zoomMode=="in") 
+//	zoomMode="center";
+//    else if (zoomMode=="center") 
+//	zoomMode="out";
+//    else if (zoomMode=="out") 
+//	zoomMode="in";
+//    setMouseCursor();	    
+//}
 
 if ((code == 32) // suppress for mozilla  ; else 
  || (code == 39) // moveRight(wSmallDelta); else 
@@ -606,6 +670,15 @@ if (code == 33) moveUp   (hBigDelta  ); else // pgup
 if (code == 34) moveDown (hBigDelta  ); else // pgdn
 if ((code == 43) || (code == 107) || (code == 187) || ((code == 61)))  zoomIn(true); else // + 
 if ((code == 45) || (code == 109) || (code == 189))  zoomIn(false); else // - 
+if (code==77) {  // m mode cycle
+    if (zoomMode=="in") 
+	zoomMode="center";
+    else if (zoomMode=="center") 
+	zoomMode="out";
+    else if (zoomMode=="out") 
+	zoomMode="in";
+    setMouseCursor();	    
+} else
 result = true;
 window.status=window.status+' result='+result;  // debug
 if (!result) {
@@ -630,7 +703,7 @@ if ((mousex == -1) || (mousey == -1)) {
 function falseFunc(e) { return false; } 
 
 function mouseMove(e) {
-document.onmousemove = falseFunc;  // disable move event
+//document.onmousemove = falseFunc;  // disable move event
 var posx = 0;
 var posy = 0;
 if (!e) var e = window.event;
@@ -680,7 +753,10 @@ if (mouseDrag) {
 }
 
 
-document.onmousemove = mouseMove;  // re-enable
+//document.onmousemove = mouseMove;  // re-enable
+
+//e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
+return false;
 }
 
 function dblClick(e) {
@@ -689,7 +765,8 @@ function dblClick(e) {
 //if (!e) var e = window.event;
 //alert('dblClick() event called!');
 //clickAction();
-return;
+e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
+return false;
 }
 
 function clickAction(reverse) {
@@ -737,7 +814,8 @@ if ((mousex > 0) && (mousey > 0)) {
     mouseDragY = mousey;
     window.status='mouseDrag='+mouseDrag;
 }
-window.focus();   // in case the windows has lost focus, so we will receive keypresses.
+//e.preventDefault();  // this works to prevent things like dragging in mozilla and safari but messes up window focus, drats!
+if (window.focus) window.focus();   // in case the windows has lost focus, so we will receive keypresses, if browser supports
 return false;
 }
 
@@ -760,6 +838,7 @@ mouseAction = false;
 mouseDrag = false;
 setMouseCursor();
 window.status='mouseDrag='+mouseDrag;
+//e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
 return false;
 }
 
@@ -772,13 +851,19 @@ if ((newcursor=="in") || (newcursor=="center") || (newcursor=="out")) {
 
 function setMouseCursor() {
 var cursor = "default";
-if (zoomMode=="in") 
+var zmindex = 0;
+if (zoomMode=="in") {
     cursor = "crosshair";
-else if (zoomMode=="center") 
+    zmindex = 0;
+} else if (zoomMode=="center") {
     cursor = "default";
-else if (zoomMode=="out") 
+    zmindex = 1;
+} else if (zoomMode=="out") {
     cursor = "pointer";
+    zmindex = 2;
+}    
 document.body.style.cursor=cursor;
+parent.parent.controls.document.mainForm.ZM[zmindex].checked=true;
 }
 
 function mouseOut(e) {
@@ -829,6 +914,10 @@ if (navigator.appName=="Netscape") {
     document.addEventListener("dblclick", dblClick, true); 
     document.addEventListener("mouseup", mouseUp, true); 
     document.addEventListener("mousedown", mouseDown, true);
+   
+    // safari
+    document.addEventListener("dragstart", dragStart, true);
+    document.addEventListener("drag", dragStart, true);
     
 } else {
     document.onkeydown = keyDown;
@@ -843,8 +932,15 @@ document.onmousemove = mouseMove;
 document.onmouseout  = mouseOut;
 document.oncontextmenu = contextMenu;
 
-window.onresize=windowResize
-//window.captureEvent(Event.RESIZE)
+//document.body.ondrag = function () { return false; };
+//document.body.onselectstart = function () { return false; };
+//document.ondrag = function () { return false; };
+//document.onselectstart = function () { return false; };
+
+
+window.onresize=windowResize;
+
+//window.captureEvent(Event.RESIZE)  // old NN 4 style
 
 </SCRIPT>
 
@@ -854,22 +950,35 @@ onLoad="showBrowser();init();return true;" STYLE="overflow: hidden ! important"
 
 <!--
 
-NOTE: in IE if you put any spaces or newlines in the html of a table definition, 
-even between tags, you get gaps between rows in the table 
-which is so annoying!
+myCover empty div with higher z-index appears to defeat the icky auto-drag in safari and mozilla.
+(Hope it works in ff and ie too.)
+(Any text or an image placed in myCover div will hover over our image.)
+
+
+why does safari hang on resize?
+
+STYLE="border:thin;position:absolute;left:60;top:60;width:750;height:600;overflow:hidden!important;z-index:1;filter:alpha(opacity=50%);" 
+<IMG SRC="http://hgwdev-galt.cse.ucsc.edu/images/thelastphotoievertook.jpg">
+
+This is good for making the IE hover-icons, at least reduces it to only one in upper-left corner.
+However it messes up Safari.  However the div in Safari at least still helps reduce dragging problems!
+<IMG SRC="../visiGene/1x1.gif" width="100%" height="100%">
+
+visibility:hidden;
 
 -->
 
 <DIV
 ID="myClip"
-STYLE="border:thin;position:absolute;left:60;top:60;width:750;height:600;overflow:hidden!important" 
+STYLE="position:absolute;left:1000;top:0;z-index:1;"
 >
-
-
 </DIV>
 
+<DIV
+ID="myCover"
+STYLE="position:absolute;left:1000;top:0;z-index:2;"
+>
 </DIV>
-
 
 </body>
 </html>
