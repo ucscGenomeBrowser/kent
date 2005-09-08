@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.11 2005/09/06 17:49:54 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.12 2005/09/08 22:41:19 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -452,7 +452,11 @@ my ($target, $query, $DEF, $out) = @ARGV;
 &loadSeqSizes($defVars{'SEQ2_LEN'}, \%qSizes);
 
 # Make a temporary directory for intermediate files:
-$TMP = `mktemp -d /tmp/blastz.XXXXXX` || &cleanDie("Can't mktemp");
+if (exists($defVars{'TMPDIR'})) {
+  $TMP = `mktemp -d $defVars{'TMPDIR'}/blastz.XXXXXX` || &cleanDie("Can't mktemp");
+} else {
+  $TMP = `mktemp -d /tmp/blastz.XXXXXX` || &cleanDie("Can't mktemp");
+}
 chomp $TMP;
 print STDERR "temp files in $TMP -- will attempt cleanup before die-ing.\n";
 
