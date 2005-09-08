@@ -383,9 +383,10 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
-smallCaption(conn, imageId);
+printf("<B>VisiGene</B> Click in image to zoom, drag to move.  Caption is below.<BR>\n");
+//smallCaption(conn, imageId);
 
-printf(" - see also <A HREF=\"#caption\">full caption</A> below<BR>\n");
+// printf(" - see also <A HREF=\"#caption\">full caption</A> below<BR>\n");
 
 //printf("<A HREF=\"");
 //printf("../cgi-bin/%s?%s=%d&%s=on", hgVisiGeneCgiName(), hgpId, imageId, hgpDoFullSized);
