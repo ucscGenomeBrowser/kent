@@ -70,7 +70,7 @@ for human MGC genes but in general it can be for any MGC species.
            /cluster/data/genbank/data/download/rtdb/rtdb.tar.gz
                                 |
                                 V
-           /cluster/data/genbank/data/processed/rtdb/03.06.2005/*
+           /cluster/data/genbank/data/processed/rtdb/2005.03.06/*
 
        note the addition of the current date to the directory structure. 
 
