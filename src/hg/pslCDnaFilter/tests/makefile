@@ -4,9 +4,10 @@ PSLFILT = ../pslCDnaFilter
 DIFF = diff -u --exclude CVS -r
 
 test:	noopTest overlapTest maxAlignTest minQSizeTest \
-	repMatchTest minAlnSizeTest nonRepSizeTest noDropCntBugTest \
-	minSpan100Test minSpan10Test localBestTest globalBestTest \
-	ignoreNsCoverTest ignoreNsMinAlnTest ignoreNsLocalBestTest
+	repMatchTest minAlnSizeTest nonRepSizeTest nonRepMismatchTest \
+	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
+	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
+	ignoreNsLocalBestTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -31,6 +32,11 @@ minAlnSizeTest:
 
 nonRepSizeTest:
 	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minNonRepSize=30'
+
+# check that mismatches are not counted in -minNonRepSize test, as blat doesnt'
+# include this in counts
+nonRepMismatchTest:
+	${MAKE} doFilter name=$@ inPsl=repMatch.psl filtArgs='-minNonRepSize=16'
 
 # file that causes the count of queries kept to be one more than total
 noDropCntBugTest:

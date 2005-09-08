@@ -55,10 +55,11 @@ Options:
    -minAlnSize=0 - minimum number of aligned bases.  This includes
     repeats, but excludes poly-A/poly-T bases if available.
 
-   -minNonRepSize=0 - Minimum aligned bases that are not repeats.
+   -minNonRepSize=0 - Minimum number of matching bases that are not repeats.
+    This does not include mismatches.
     Must use -repeats on BLAT if doing unmasked alignments.
 
-   -maxRepMatch=1.0 - Maximum fraction of matching aligned bases
+   -maxRepMatch=1.0 - Maximum fraction of matching bases
     that are repeats.  Must use -repeats on BLAT if doing
     unmasked alignments.
 

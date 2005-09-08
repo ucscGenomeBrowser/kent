@@ -48,8 +48,8 @@ static float gMinSpan = 0.0;           /* minimum target span allowed */
 static int gMinQSize = 0;              /* drop queries shorter than this */
 static int gMaxAligns = -1;            /* only allow this many alignments for a query */
 static int gMinAlnSize = 0;            /* minimum bases that must be aligned */
-static int gMinNonRepSize = 0;         /* minimum non-repeat bases that must be aligned */
-static float gMaxRepMatch = 1.0;       /* maximum repeat match/aligned */
+static int gMinNonRepSize = 0;         /* minimum non-repeat bases that must match */
+static float gMaxRepMatch = 1.0;       /* maximum fraction of repeat matching */
 static char *gPolyASizes = NULL;       /* polyA size file */
 static boolean gBestOverlap = FALSE;   /* filter overlaping, keeping only the best */
 static char *gDropped = NULL;          /* save dropped psls here */
@@ -156,8 +156,9 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     /* don't included poly-A length, although we are not sure if it's aligned
-     * to a repeat. */
-    int nonRepSize = ((aln->psl->match + aln->adjMisMatch) - aln->alnPolyAT);
+     * to a repeat. Also, don't include mismatches, as these are not reported
+     * by blat */
+    int nonRepSize = (aln->psl->match - aln->alnPolyAT);
     if (nonRepSize < 0)
         nonRepSize = 0;
     if ((!aln->drop) && (nonRepSize < gMinNonRepSize))
