@@ -34,6 +34,8 @@ void raCommon(FILE *f)
 /* Write parts of ra common for whole mounts and slices" */
 {
 fprintf(f, "%s",
+"submissionSource Mahoney Lab\n"
+"acknowledgement Thanks to Paul Gray for transferring the images.\n"
 "taxon 10090\n"
 "strain C57BL\n"
 "genotype wild type\n"

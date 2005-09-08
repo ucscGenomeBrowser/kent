@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: vgPatchJax.c,v 1.2 2005/09/07 23:44:14 kent Exp $";
+static char const rcsid[] = "$Id: vgPatchJax.c,v 1.3 2005/09/08 05:23:07 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,88 +28,67 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct hash *getCaptions(char *fileName, struct sqlConnection *conn)
-/* Read caption file, add it to database, and return 
- * a hash full of caption internal id's keyed by the caption external
- * ID's */
+int getSourceId(struct sqlConnection *conn,
+	struct hash *hash, struct dyString *dy, 
+	char *setUrl, char *itemUrl)
+/* If setUrl is not in hash, then make up a new submission set.
+ * Return submission set ID. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct hash *hash = newHash(0);
-char *extId, *text;
 int id;
-struct dyString *query = dyStringNew(0);
-
-struct slName *sqlQuickList(struct sqlConnection *conn, char *query);
-while (lineFileNextReal(lf, &text))
+static int uniq = 0;
+if (hashLookup(hash, setUrl))
+    id = hashIntVal(hash, setUrl);
+else
     {
-    char *escaped;
-    extId = nextWord(&text);
-    escaped = makeEscapedString(text, '"');
-    dyStringClear(query);
-    dyStringAppend(query, "insert into caption values(default, \"");
-    dyStringAppend(query, escaped);
-    dyStringAppend(query, "\")");
-    sqlUpdate(conn, query->string);
+    dyStringClear(dy);
+    dyStringPrintf(dy,
+	"insert into submissionSource values(default, "
+	"'Uniq%d', '', '%s', '%s')"
+	, ++uniq, setUrl, itemUrl);
+    uglyf("%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
     id = sqlLastAutoId(conn);
-    hashAddInt(hash, extId, id);
-    freez(&escaped);
+    hashAddInt(hash, setUrl, id);
     }
-dyStringFree(&query);
-return hash;
+return id;
 }
+
 
 void vgPatchJax(char *database, char *dir)
 /* vgPatchJax - Patch Jackson labs part of visiGene database. */
 {
-struct sqlConnection *vgConn = sqlConnect(database);
-struct sqlConnection *jaxConn = sqlConnect("jackson");
-struct dyString *query = dyStringNew(0);
-struct dyString *caption = dyStringNew(0);
-char **row;
-struct slName *imageId, *imageIdList = sqlQuickList(vgConn,
-	"select submitId from imageFile where fullLocation = 5");
+struct sqlConnection *conn1 = sqlConnect(database);
+struct sqlConnection *conn2 = sqlConnect(database);
 struct sqlResult *sr;
+char **row;
+struct dyString *query = dyStringNew(0);
+struct hash *urlHash = hashNew(0);
+struct hash *nameHash = hashNew(0);
+struct hashEl *list, *el;
 
-uglyf("Updating %d jackson labs records\n", slCount(imageIdList));
-for (imageId = imageIdList; imageId != NULL; imageId = imageId->next)
+sr = sqlGetResult(conn1, "select name,setUrl,itemUrl from submissionSet");
+while ((row = sqlNextRow(sr)) != NULL)
     {
-    dyStringClear(caption);
+    int sourceId = getSourceId(conn2, urlHash, query, row[1], row[2]);
+    hashAddInt(nameHash, row[0], sourceId);
+    }
+sqlFreeResult(&sr);
+
+list = hashElListHash(nameHash);
+for (el = list; el != NULL; el = el->next)
+    {
     dyStringClear(query);
     dyStringPrintf(query,
-	"select imageNote from IMG_ImageNote "
-	"where _Image_key = %s "
-	"order by sequenceNum"
-	, imageId->name);
-    sr = sqlGetResult(jaxConn, query->string);
-    while ((row = sqlNextRow(sr)) != NULL)
-       dyStringAppend(caption, row[0]);
-    sqlFreeResult(&sr);
-
-    if (caption->stringSize > 0)
-	{
-	char *escaped = makeEscapedString(caption->string, '"');
-	int id;
-	subChar(escaped, '\t', ' ');
-	subChar(escaped, '\n', ' ');
-	dyStringClear(query);
-	dyStringAppend(query, "insert into caption values(default, \"");
-	dyStringAppend(query, escaped);
-	dyStringAppend(query, "\")");
-	sqlUpdate(vgConn, query->string);
-	id = sqlLastAutoId(vgConn);
-
-	dyStringClear(query);
-	dyStringPrintf(query, 
-	   "update imageFile set caption=%d ", id);
-	dyStringPrintf(query,
-	   "where fullLocation = 5 and submitId='%s'", imageId->name);
-	sqlUpdate(vgConn, query->string);
-	uglyf("%s\n", query->string);
-	}
+    	"update submissionSet set submissionSource=%d "
+	"where name = '%s'"
+	, ptToInt(el->val), el->name);
+    uglyf("%s\n", query->string);
+    sqlUpdate(conn2, query->string);
     }
+sqlFreeResult(&sr);
 
-sqlDisconnect(&jaxConn);
-sqlDisconnect(&vgConn);
+sqlDisconnect(&conn2);
+sqlDisconnect(&conn1);
 }
 
 int main(int argc, char *argv[])

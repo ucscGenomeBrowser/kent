@@ -1,4 +1,6 @@
 submitSet paulGraySlices01
+submissionSource Paul Gray
+acknowledgement Thanks to Paul Gray for the use of these test images.
 fullDir /gbdb/visiGene/full/inSitu/Mouse/mahoney/slices
 thumbDir /gbdb/visiGene/200/inSitu/Mouse/mahoney/slices
 priority 100

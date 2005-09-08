@@ -72,6 +72,16 @@ table copyright
     lstring notice;	"Text of copyright notice."
     )
 
+table submissionSource
+"Source of data - an external database, a contributor, etc."
+    (
+    int id;			"ID of submission source"
+    string name;		"Short name: Jackson Labs, Paul Gray, etc."
+    string acknowledgement;	"Something extra to put in the caption after copyright"
+    lstring sourceUrl;		"URL for image source"
+    lstring itemUrl;		"URL for item.  Put %s where imageFile.submitId should go"
+    )
+
 table submissionSet
 "Info on a batch of images submitted at once"
     (
@@ -82,8 +92,7 @@ table submissionSet
     lstring pubUrl;		"Publication URL"
     int journal;		"Journal for publication"
     int copyright;		"Copyright notice"
-    lstring setUrl;		"URL for whole set"
-    lstring itemUrl;		"URL for item.  Put %s where image.submitId should go"
+    int submissionSource;	"Source of this submission"
     )
 
 table submissionContributor

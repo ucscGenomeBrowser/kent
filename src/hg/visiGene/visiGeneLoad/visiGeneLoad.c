@@ -132,6 +132,32 @@ freeMem(escValue);
 return id;
 }
 
+int findOrAddSubmissionSource(struct sqlConnection *conn, char *name, 
+	char *acknowledgement, char *setUrl, char *itemUrl)
+/* Return submissionSource table id.  If necessary creating row in 
+ * submissionSource table. */
+{
+char query[256];
+safef(query, sizeof(query), "select id from submissionSource where name = \"%s\"",
+	name);
+int id = sqlQuickNum(conn, query);
+if (id == 0)
+    {
+    struct dyString *dy = dyStringNew(0);
+    dyStringPrintf(dy,
+        "insert into submissionSource values(default, ");
+    dyStringPrintf(dy, "\"%s\", ", name);
+    dyStringPrintf(dy, "\"%s\", ", acknowledgement);
+    dyStringPrintf(dy, "\"%s\", ", setUrl);
+    dyStringPrintf(dy, "\"%s\")", itemUrl);
+    verbose(2, "%s\n", dy->string);
+    sqlUpdate(conn, dy->string);
+    dyStringFree(&dy);
+    id = sqlLastAutoId(conn);
+    }
+return id;
+}
+
 int doJournal(struct sqlConnection *conn, char *name, char *url)
 /* Update journal table if need be.  Return journal ID. */
 {
@@ -160,10 +186,11 @@ else
     }
 }
 
+
 int createSubmissionId(struct sqlConnection *conn,
 	char *name,
 	char *contributors, char *publication, 
-	char *pubUrl, char *setUrl, char *itemUrl,
+	char *pubUrl, int submissionSource,
 	char *journal, char *journalUrl, int copyright)
 /* Add submission and contributors to database and return submission ID */
 {
@@ -182,8 +209,7 @@ dyStringPrintf(dy, " publication = \"%s\",\n", publication);
 dyStringPrintf(dy, " pubUrl = \"%s\",\n", pubUrl);
 dyStringPrintf(dy, " journal = %d,\n", journalId);
 dyStringPrintf(dy, " copyright = %d,\n", copyright);
-dyStringPrintf(dy, " setUrl = \"%s\",\n", setUrl);
-dyStringPrintf(dy, " itemUrl = \"%s\"\n", itemUrl);
+dyStringPrintf(dy, " submissionSource = %d\n", submissionSource);
 verbose(2, "%s\n", dy->string);
 sqlUpdate(conn, dy->string);
 submissionSetId = sqlLastAutoId(conn);
@@ -209,14 +235,18 @@ int saveSubmissionSet(struct sqlConnection *conn, struct hash *raHash)
 {
 char *contributor = hashMustFindVal(raHash, "contributor");
 char *name = hashMustFindVal(raHash, "submitSet");
+char *submissionSource = hashMustFindVal(raHash, "submissionSource");
 char *publication = hashValOrDefault(raHash, "publication", "");
 char *pubUrl = hashValOrDefault(raHash, "pubUrl", "");
 char *setUrl = hashValOrDefault(raHash, "setUrl", "");
 char *itemUrl = hashValOrDefault(raHash, "itemUrl", "");
 char *journal = hashValOrDefault(raHash, "journal", "");
 char *journalUrl = hashValOrDefault(raHash, "journalUrl", "");
+char *acknowledgement = hashValOrDefault(raHash, "acknowledgement", "");
 char *copyright = hashFindVal(raHash, "copyright");
 int copyrightId = 0;
+int submissionSourceId = findOrAddSubmissionSource(conn, submissionSource, acknowledgement,
+	setUrl, itemUrl);
 int submissionId = findExactSubmissionId(conn, name, contributor);
 if (copyright != NULL)
     copyrightId = findOrAddIdTable(conn, "copyright", "notice", copyright);
@@ -225,7 +255,8 @@ if (submissionId != 0)
      return submissionId;
 else
      return createSubmissionId(conn, name, contributor, 
-     	publication, pubUrl, setUrl, itemUrl, journal, journalUrl, copyrightId);
+     	publication, pubUrl, submissionSourceId, journal, 
+	journalUrl, copyrightId);
 }
 
 int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,

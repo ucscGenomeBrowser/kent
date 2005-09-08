@@ -101,6 +101,19 @@ CREATE TABLE copyright (
     PRIMARY KEY(id)
 );
 
+# Source of data - an external database, a contributor, etc.
+CREATE TABLE submissionSource (
+    id int auto_increment not null, # ID of submission source"
+    name varchar(255) not null,     # Short name: Jackson Labs, Paul Gray, etc.
+    acknowledgement longtext not null, # Something extra to put in the caption after copyright.
+    setUrl longblob not null,	# URL for whole set
+    itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name(32))
+    );
+
+
 #Info on a batch of images submitted at once
 CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set
@@ -110,8 +123,9 @@ CREATE TABLE submissionSet (
     pubUrl longblob not null,	# Publication URL
     journal int not null,	# Journal for publication
     copyright int not null,     # Copyright notice
-    setUrl longblob not null,	# URL for whole set
-    itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
+    submissionSource int not null, # Source of this submission
+#    setUrl longblob not null,	# URL for whole set
+#    itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
               #Indices
     PRIMARY KEY(id),
     UNIQUE(name(32))

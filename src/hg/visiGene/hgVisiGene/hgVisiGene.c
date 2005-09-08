@@ -280,17 +280,23 @@ void printCaption(struct sqlConnection *conn, int id, struct slName *geneList)
 {
 char query[256];
 char **row;
-char *permeablization, *publication, *copyright;
+char *permeablization, *publication, *copyright, *acknowledgement;
 char *setUrl, *itemUrl;
+char *caption = visiGeneCaption(conn, id);
 
 printLabeledList("gene", geneList);
-printf(" ");
-printLabeledList("genbank", visiGeneGenbank(conn, id));
 printf(" ");
 printf("<B>organism:</B> %s  ", visiGeneOrganism(conn, id));
 printf("<B>stage:</B> %s<BR>\n", visiGeneStage(conn, id, TRUE));
 printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,id)));
-printf("<B>section type:</B> %s<BR>\n", naForNull(visiGeneSliceType(conn,id)));
+printf("<B>section type:</B> %s ", naForNull(visiGeneSliceType(conn,id)));
+printLabeledList("genbank", visiGeneGenbank(conn, id));
+printf("<BR>\n");
+if (caption != NULL)
+    {
+    printf("<B>notes:</B> %s<BR>\n", caption);
+    freez(&caption);
+    }
 permeablization = visiGenePermeablization(conn,id);
 if (permeablization != NULL)
     printf("<B>permeablization:</B> %s<BR>\n", permeablization);
@@ -310,9 +316,9 @@ setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
 if (setUrl != NULL || itemUrl != NULL)
     {
-    printf("<B>contributor links:</B> ");
+    printf("<B>%s links:</B> ", visiGeneSubmissionSource(conn, id));
     if (setUrl != NULL)
-        printf("<A HREF=\"%s\" target=_blank>image set</A> ", setUrl);
+        printf("<A HREF=\"%s\" target=_blank>top level</A> ", setUrl);
     if (itemUrl != NULL)
 	{
         printf("<A HREF=\"");
@@ -324,6 +330,10 @@ if (setUrl != NULL || itemUrl != NULL)
 copyright = visiGeneCopyright(conn, id);
 if (copyright != NULL)
     printf("<B>copyright:</B> %s<BR>\n", copyright);
+acknowledgement = visiGeneAcknowledgement(conn, id);
+if (acknowledgement != NULL)
+    printf("<B>acknowledgements:</B> %s<BR>\n", acknowledgement);
+printf("<BR>\n");
 }
 
 void doImage(struct sqlConnection *conn)
