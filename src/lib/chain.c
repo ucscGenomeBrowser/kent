@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.21 2005/08/18 07:19:24 baertsch Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.22 2005/09/08 22:12:44 baertsch Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -351,7 +351,6 @@ while ((chain = chainRead(lf)) != NULL)
     hashAdd(hash, nameBuf, chain);
     ++usedCount;
     }
-fprintf(stderr, "read %d of %d chains in %s\n", usedCount, count, fileName);
 return hash;
 }
 
