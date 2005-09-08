@@ -208,6 +208,38 @@ slReverse(&list);
 return list;
 }
 
+struct slInt *onePerImageFile(struct sqlConnection *conn, struct slInt *imageList)
+/* Return image list that filters out second occurence of
+ * same imageFile. */
+{
+struct slInt *newList = NULL, *image, *next;
+struct hash *uniqHash = newHash(0);
+char query[256];
+for (image = imageList; image != NULL; image = next)
+    {
+    char hashName[16];
+    int imageFile;
+    next = image->next;
+    safef(query, sizeof(query), "select imageFile from image where id=%d", 
+    	image->val);
+    imageFile = sqlQuickNum(conn, query);
+    if (imageFile != 0)
+	{
+	safef(hashName, sizeof(hashName), "%x", imageFile);
+	if (!hashLookup(uniqHash, hashName))
+	    {
+	    hashAdd(uniqHash, hashName, NULL);
+	    slAddHead(&newList, image);
+	    image = NULL;
+	    }
+	}
+    freez(&image);
+    }
+hashFree(&uniqHash);
+slReverse(&newList);
+return newList;
+}
+
 void doThumbnails(struct sqlConnection *conn)
 /* Write out list of thumbnail images. */
 {
@@ -238,6 +270,7 @@ else if (sameString(listHow, listHowLocusLink))
     {
     imageList = visiGeneSelectLocusLink(conn, listSpec);
     }
+imageList = onePerImageFile(conn, imageList);
 printf("<TABLE>\n");
 for (image = imageList; image != NULL; image = image->next)
     {
@@ -288,18 +321,6 @@ printLabeledList("gene", geneList);
 printf(" ");
 printf("<B>organism:</B> %s  ", visiGeneOrganism(conn, id));
 printf("<B>stage:</B> %s<BR>\n", visiGeneStage(conn, id, TRUE));
-printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,id)));
-printf("<B>section type:</B> %s ", naForNull(visiGeneSliceType(conn,id)));
-printLabeledList("genbank", visiGeneGenbank(conn, id));
-printf("<BR>\n");
-if (caption != NULL)
-    {
-    printf("<B>notes:</B> %s<BR>\n", caption);
-    freez(&caption);
-    }
-permeablization = visiGenePermeablization(conn,id);
-if (permeablization != NULL)
-    printf("<B>permeablization:</B> %s<BR>\n", permeablization);
 publication = visiGenePublication(conn,id);
 if (publication != NULL)
     {
@@ -311,6 +332,18 @@ if (publication != NULL)
         printf("%s", publication);
     printf("<BR>\n");
     }
+if (caption != NULL)
+    {
+    printf("<B>notes:</B> %s<BR>\n", caption);
+    freez(&caption);
+    }
+printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,id)));
+printf("<B>section type:</B> %s ", naForNull(visiGeneSliceType(conn,id)));
+printLabeledList("genbank", visiGeneGenbank(conn, id));
+printf("<BR>\n");
+permeablization = visiGenePermeablization(conn,id);
+if (permeablization != NULL)
+    printf("<B>permeablization:</B> %s<BR>\n", permeablization);
 printf("<B>contributors:</B> %s<BR>\n", naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
