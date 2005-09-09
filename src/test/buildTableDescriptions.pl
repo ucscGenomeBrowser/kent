@@ -102,6 +102,7 @@ sub getTableFields {
   my $password = $hgConf->lookup('db.password');
   my $dbh = DBI->connect("DBI:mysql:$db", $username, $password);
   my %tableFields = ();
+  my %tableNamesInsens = ();
   my $tables = $dbh->selectcol_arrayref("show tables;");
   foreach my $t (@{$tables}) {
     my $desc = $dbh->selectcol_arrayref("desc $t;");
@@ -115,7 +116,15 @@ sub getTableFields {
 	$tableFields{$t} ne $fields) {
       warn "Duplicate fieldSpec for table $t:\n$tableFields{$t}\n$fields";
     }
-    $tableFields{$t} = $fields;
+    my $tableInsens = $t;
+    $tableInsens =~ tr/A-Z/a-z/;
+    if (! defined $tableFields{$t} &&
+	defined $tableNamesInsens{$tableInsens}) {
+      warn "Case-insensitive duplicate for $t... dropping.";
+    } else {
+      $tableFields{$t} = $fields;
+      $tableNamesInsens{$tableInsens} = 1;
+    }
   }
   $dbh->disconnect();
   return %tableFields;
