@@ -38,7 +38,7 @@ type bed 4 +
 url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
 
 track acembly
-shortLabel Acembly Genes
+shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
 priority 41
