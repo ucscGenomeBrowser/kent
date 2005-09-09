@@ -399,7 +399,7 @@ type genePred ensEstPep
 url http://www.ensembl.org/perl/geneview?db=estgene&transcript=$$
 
 track acembly
-shortLabel Acembly Genes
+shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
 priority 41
