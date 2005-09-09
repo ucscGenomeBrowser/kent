@@ -76,7 +76,10 @@
           White-space separated list of pseudo-chromosome that contain
           unplaced sequences.  Alignments will not be allowed to span
           gaps on these chromsomes. Requires a lift file to specify the
-          gaps.
+          gaps.  The names can also be patterns similar to file name
+          glob patterns that are matched against chromosome names.  The
+          entire pattern must be matched. The meta characters are <CODE>*</CODE>
+          and <CODE>?</CODE>.  For example <CODE>*_random</CODE>.
      <li> <code><em>$db</em>.align.minUnplacedSize</code> - Skip
           unplaced sequences smaller than this size.
      <li> <code><em>$db</em>.align.skipChroms</code> - 

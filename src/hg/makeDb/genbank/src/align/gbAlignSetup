@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.18 2005/09/04 16:21:46 markd Exp $
+# $Id: gbAlignSetup,v 1.19 2005/09/09 05:21:15 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -39,7 +39,7 @@ Does:
 # don't change this with understanding what is going on.
 #
 
-import sys, os, os.path, re
+import sys, os, os.path, re, fnmatch
 
 # require 2.4 or newer
 if (sys.version_info[0] <= 2) and (sys.version_info[1] < 4):
@@ -70,6 +70,43 @@ cmdOpts = None
 # global table to make sure we don't generate an output file more than
 # once.
 definedPsls = set()
+
+class UnplacedChroms(object):
+    "object used to determine if a chromosome is unplaced"
+
+    def __init__(self, db, conf):
+        self.unplaced = set()
+        self.pats = []
+
+        # separate into patterns and simple names for performance reasons
+        unSpecs = conf.getDbWordsNone(db, "align.unplacedChroms")
+        if unSpecs != None:
+            if conf.getDbStrNo(db, "lift") == None:
+                raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
+            for spec in unSpecs:
+                if ("*" in spec) or ("?" in spec) or ("[" in spec):
+                    self.pats.append(spec)
+                else:
+                    self.unplaced.add(spec)
+        self.minSize = conf.getDbIntNone(db, "align.minUnplacedSize")
+        if self.minSize == None:
+            self.minSize = 0
+
+        if len(self.unplaced) == 0:
+            self.unplaced = None
+        if len(self.pats) == 0:
+            self.pats = None
+
+    def __contains__(self, chrom):
+        "determine if a chroms is unplaced"
+        if self.unplaced != None:
+            if chrom in self.unplaced:
+                return True
+        if self.pats != None:
+            for pat in self.pats:
+                if fnmatch.fnmatchcase(chrom, pat):
+                    return True
+        return False
 
 class GenomeWindow(object):
     "information about a single genome window"
@@ -111,21 +148,11 @@ class GenomeWindows(list):
         if (self.winSize <= self.overlap):
             raise Exception("window size must be > overlap")
 
+        self.unplaced = UnplacedChroms(db, conf)
         self.maxGap = conf.getDbInt(db, "align.maxGap")
 
-        # unplaced chromosome handling
-        unChroms = conf.getDbWordsNone(db, "align.unplacedChroms")
-        if unChroms != None:
-            if conf.getDbStrNo(db, "lift") == None:
-                raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
-            self.unplacedChroms = frozenset(unChroms)
-            self.minUnplacedSize = conf.getDbIntNone(db, "align.minUnplacedSize")
-        else:
-            self.unplacedChroms = frozenset()
-            self.minUnplacedSize = None
-
         for seq in genomeSeqs.itervalues():
-            if seq.id in self.unplacedChroms:
+            if seq.id in self.unplaced:
                 self._partitionUnplaced(seq)
             else:
                 self._partitionSeq(seq)
@@ -144,7 +171,7 @@ class GenomeWindows(list):
     def _partitionUnplaced(self, seq):
         "partition a pseudo-chromosome containing unplaced sequences"
         # assumed lift file divded chromosome into unplaced sequences
-        minSize = self.minUnplacedSize
+        minSize = self.unplaced.minSize
         for reg in seq.regions:
             if (reg[1] - reg[0]) >= minSize:
                 self.append(GenomeWindow(seq, reg[0], reg[1]))

@@ -896,10 +896,10 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   - fast open and access (disk-based hash)
   - > 4gb size
   - expandable
+  - live rsync
   - support incremental additions with rsync
   - store est direction (??)
   - store length of polyA tail/polyT head (??)
-
 
 - Repeat filtering:
   - Jen suggest using amount of clone remaining after removing repeats rather
@@ -931,3 +931,8 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 gbLoadRna: selected refseq.12 droMoj2 xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=167629 orphan=0 noChg=0
 Warning: NR_001829: malformed RefSeq CDS: 
 Warning: NR_001874: malformed RefSeq CDS: 
+
+- should be able to detect initial load, rather than require argument.
+
+- could get better overlap with expensive setup set if did setup
+  for one genome, then 
