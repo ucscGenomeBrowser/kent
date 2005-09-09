@@ -103,7 +103,7 @@ endif
 
 set msg = "The v${BRANCHNN} branch has been merged for the following:\n $msg"
 set subject = '"'"Branch merge complete."'"'
-echo "$msg" | mail -s "$subject" galt heather
+echo "$msg" | mail -s "$subject" galt heather ann
 
 exit 0
 

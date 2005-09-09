@@ -20,11 +20,11 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" == "0" ) then
  echo "errs found:"
  echo "$res2"
- echo "$res2" | mail -s "'Errors in hgNearTestRobot on $HOST'" galt heather kuhn kent
+ echo "$res2" | mail -s "'Errors in hgNearTestRobot on $HOST'" galt heather kuhn kent ann
  exit 1
 endif
 #
 echo Done.
-echo "$res2" | mail -s "'v${BRANCHNN} hgNearTest robot done successfully on $HOST.'" galt heather kuhn kent
+echo "$res2" | mail -s "'v${BRANCHNN} hgNearTest robot done successfully on $HOST.'" galt heather kuhn kent ann
 exit 0
 

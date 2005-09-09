@@ -119,7 +119,7 @@ endif
 
 set mailMsg = "The v${BRANCHNN} branch-tag has been re-moved to the following:\n$msg"
 set subject = '"'"Branch tag move complete."'"'
-echo "$mailMsg" | mail -s "$subject" galt heather kuhn
+echo "$mailMsg" | mail -s "$subject" galt heather kuhn ann
 
 date +%Y-%m-%d   >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log
 echo "$msg"    >> $BUILDDIR/v${BRANCHNN}_branch/branchMoves.log

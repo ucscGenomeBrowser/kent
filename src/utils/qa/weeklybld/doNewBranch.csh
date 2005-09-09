@@ -100,11 +100,11 @@ echo
 ssh hgwbeta $WEEKLYBLD/buildBeta.csh
 if ( $status ) then
  echo "build on beta failed for v$BRANCHNN"
- echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" galt heather kuhn
+ echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" galt heather kuhn ann
  exit 1
 endif
 echo "build on beta done for v$BRANCHNN"
-echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" galt heather kuhn kent
+echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" galt heather kuhn kent ann
 
 echo
 ./doRobots.csh
