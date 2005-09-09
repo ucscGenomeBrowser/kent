@@ -169,17 +169,54 @@ hDisconnectCentral(&cConn);
 return db;
 }
 
+struct slName *visiGeneImageFileGenes(struct sqlConnection *conn, int imageFile)
+/* Return alphabetical list of all genes associated with image file. */
+{
+struct hash *uniqHash = hashNew(0);
+struct slInt *imageList, *image;
+struct slName *geneList = NULL, *gene;
+char *name;
+
+imageList = visiGeneImagesForFile(conn, imageFile);
+for (image = imageList; image != NULL; image = image->next)
+    {
+    struct slName *oneList, *next;
+    oneList = visiGeneGeneName(conn, image->val);
+    for (gene = oneList; gene != NULL; gene = next)
+        {
+	next = gene->next;
+	if (hashLookup(uniqHash, gene->name))
+	    freeMem(gene);
+	else
+	    {
+	    hashAdd(uniqHash, gene->name, NULL);
+	    slAddHead(&geneList, gene);
+	    }
+	}
+    }
+slFreeList(&imageList);
+hashFree(&uniqHash);
+slSort(&geneList, slNameCmp);
+return geneList;
+}
+
 void smallCaption(struct sqlConnection *conn, int imageId)
 /* Write out small format caption. */
 {
+int imageFile;
 struct slName *nameList, *name;
-nameList = visiGeneGeneColorName(conn, imageId);
+char query[256];
+
+safef(query, sizeof(query), "select imageFile from image where id=%d",
+	imageId);
+imageFile = sqlQuickNum(conn, query);
+nameList = visiGeneImageFileGenes(conn, imageFile);
 printf("<B>");
 for (name = nameList; name != NULL; name = name->next)
     {
     printf("%s", name->name);
     if (name->next != NULL)
-	printf(",");
+	printf(" ");
     }
 printf("</B>");
 slFreeList(&nameList);
@@ -383,30 +420,18 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
-printf("<B>VisiGene</B> Click in image to zoom, drag to move.  Caption is below.<BR>\n");
-//smallCaption(conn, imageId);
-
-// printf(" - see also <A HREF=\"#caption\">full caption</A> below<BR>\n");
-
-//printf("<A HREF=\"");
-//printf("../cgi-bin/%s?%s=%d&%s=on", hgVisiGeneCgiName(), hgpId, imageId, hgpDoFullSized);
-//printf("\" target=_PARENT>");
-//printf("<IMG SRC=\"%s\"></A><BR>\n", visiGeneScreenSizePath(conn, imageId));
-//printf("\n");
-
+printf("<B>VisiGene</B> Click in image to zoom, drag to move.  "
+       "Caption is below.<BR>\n");
 
 visiGeneImageSize(conn, imageId, &w, &h);
-
 p=visiGeneFullSizePath(conn, imageId);
 
 splitPath(p, dir, name, extension);
+safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
+	dir,name,name,w,h);
+printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
-safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",dir,name,name,w,h);
 
-printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"80%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
-
-
-printf("<A NAME=\"caption\"></A>");
 printCaption(conn, imageId, geneList);
 htmlEnd();
 }
