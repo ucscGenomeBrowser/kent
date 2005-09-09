@@ -5,6 +5,13 @@
 #ifndef VISIGENE_H
 #define VISIGENE_H
 
+int visiGeneImageFile(struct sqlConnection *conn, int id);
+/* Return image file ID associated with image ID.  A file
+ * con contain multiple images. */
+
+struct slInt *visiGeneImagesForFile(struct sqlConnection *conn, int imageFile);
+/* Given image file ID, return list of all associated image IDs. */
+
 void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight);
 /* Get width and height of image with given id */
 

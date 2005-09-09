@@ -14,6 +14,35 @@ if (s == NULL || s[0] == 0)
 return cloneString(s);
 }
 
+int visiGeneImageFile(struct sqlConnection *conn, int id)
+/* Return image file ID associated with image ID.  A file
+ * con contain multiple images. */
+{
+char query[256];
+safef(query, sizeof(query), "select imageFile from image where id=%d",
+	id);
+return sqlQuickNum(conn, query);
+}
+
+struct slInt *visiGeneImagesForFile(struct sqlConnection *conn, 
+	int imageFile)
+/* Given image file ID, return list of all associated image IDs. */
+{
+char query[256], **row;
+struct sqlResult *sr;
+struct slInt *el, *list = NULL;
+safef(query, sizeof(query), "select id from image where imageFile = %d",
+	imageFile);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slIntNew(sqlUnsigned(row[0]));
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+return list;
+}
+
 void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight)
 /* Get width and height of image with given id */
 {
