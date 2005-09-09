@@ -59,6 +59,16 @@ visibility pack
 color 12,12,120
 type genePred refPep refMrna
 
+track blastSangerGene
+shortLabel elegans Proteins
+longLabel C. elegans WS140 proteins mapped by chained tBLASTn
+group compGeno
+priority 212.9
+visibility hide
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep01
+blastRef hg17.blastKGRef01
 
 searchName miRNAPrefix
 searchTable miRNA
