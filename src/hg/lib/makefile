@@ -19,7 +19,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     contigAcc.o coordConv.o \
     cnpIafrate.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cutter.o cytoBand.o \
-    dbDb.o dbSnpRs.o defaultDb.o dnaMotifSql.o dnaProbe.o \
+    dbDb.o dbSnpRs.o defaultDb.o dless.o dnaMotifSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
     easyGene.o encodeErge.o encodeErgeHssCellLines.o \
     encodeHapMapAlleleFreq.o encodeIndels.o \
