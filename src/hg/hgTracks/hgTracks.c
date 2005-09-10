@@ -92,8 +92,9 @@
 #include "gencodeIntron.h"
 #include "cutterTrack.h"
 #include "retroGene.h"
+#include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1006 2005/09/06 15:46:33 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1007 2005/09/10 07:42:09 acs Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9149,6 +9150,96 @@ tg->loadItems = loadGenePredWithConfiguredName;
 tg->itemName = gencodeGeneName;
 }
 
+void loadDless(struct track *tg) 
+/* Load dless items */
+{
+struct sqlConnection *conn = hAllocConn();
+struct dless *dless, *list = NULL;
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, 
+                 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    dless = dlessLoad(row+rowOffset);
+    slAddHead(&list, dless);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+tg->items = list;
+}
+
+void freeDless(struct track *tg)
+/* Free dless items. */
+{
+dlessFreeList(((struct dless **)(&tg->items)));
+}
+
+char *dlessName(struct track *tg, void *item) 
+/* Get name to use for dless item */
+{
+struct dless *dl = item;
+if (sameString(dl->type, "conserved"))
+    return dl->type; 
+else
+    return dl->branch;
+}
+
+Color dlessColor(struct track *tg, void *item, struct vGfx *vg) 
+/* Return color for dless item */
+{
+struct dless *dl = item;
+char *rgb[4];
+int count;
+char *rgbStr;
+static boolean gotColors = FALSE;
+static Color consColor, gainColor, lossColor;
+
+if (!gotColors) 
+{
+    consColor = tg->ixColor;
+    gainColor = vgFindColorIx(vg, 0, 255, 0);
+    lossColor = vgFindColorIx(vg, 255, 0, 0);
+
+    if ((rgbStr = trackDbSetting(tg->tdb, "gainColor")) != NULL)
+        {
+        count = chopString(rgbStr, ",", rgb, ArraySize(rgb));
+        if (count == 3 && isdigit(rgb[0][0]) && isdigit(rgb[1][0]) &&
+            isdigit(rgb[2][0]))
+        gainColor = vgFindColorIx(vg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2])); 
+        }
+
+    if ((rgbStr = trackDbSetting(tg->tdb, "lossColor")) != NULL)
+        {
+        count = chopString(rgbStr, ",", rgb, ArraySize(rgb));
+        if (count == 3 && isdigit(rgb[0][0]) && isdigit(rgb[1][0]) &&
+            isdigit(rgb[2][0]))
+        lossColor = vgFindColorIx(vg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2])); 
+        }
+
+    gotColors = TRUE;
+}
+
+if (sameString(dl->type, "conserved"))
+    return consColor;
+else if (sameString(dl->type, "gain"))
+    return gainColor;
+else 
+    return lossColor;
+}
+
+static void dlessMethods(struct track *tg)
+/* Load custom methods for dless track */
+{
+tg->itemColor = dlessColor;
+tg->loadItems = loadDless;
+tg->itemName = dlessName;
+tg->freeItems = freeDless;
+}
+
 char *vegaGeneName(struct track *tg, void *item)
 {
 static char cat[128];
@@ -10166,6 +10257,7 @@ registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
+registerTrackHandler("dless", dlessMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
