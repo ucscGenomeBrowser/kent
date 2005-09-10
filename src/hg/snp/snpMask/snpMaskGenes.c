@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.1 2005/09/10 03:46:02 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.2 2005/09/10 03:56:24 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -387,7 +387,7 @@ genes = readGenes(chromName);
 
 for (gene = genes; gene != NULL; gene = gene->next)
     {
-    verbose(1, "gene = %s\n", gene->name);
+    verbose(4, "gene = %s\n", gene->name);
 
     snps = readSnpsFromGene(gene, chromName);
 
