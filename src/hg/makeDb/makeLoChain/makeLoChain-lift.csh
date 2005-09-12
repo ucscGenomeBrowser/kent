@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.3 2004/09/18 00:18:57 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.4 2005/09/12 21:58:16 kate Exp $
 
 if ( $#argv != 3 ) then
     echo "usage: $0 <old-assembly> <new-assembly> <new-liftdir>"
@@ -29,15 +29,17 @@ if (`ls -1 $newLiftDir/*.lft | wc -l` < 1) then
 endif
 
 cd $blatDir/raw
-set fs = `fileServer $blatDir`
-if ( $HOST != $fs ) then
-    echo "Run this on $fs"
+set fs = `fileServer`
+if ( $fs != "" && $fs != $HOST && $HOST != "kolossus") then
+    echo "Run this on $fs or kolossus"
     exit 1
 endif
 
-foreach chr (`awk '{print $1;}' /cluster/data/$newAssembly/chrom.sizes`)
-    echo $chr
-    liftUp -pslQ ../psl/$chr.psl $newLiftDir/$chr.lft warn chr*_$chr.psl
+foreach n (`ls /cluster/data/$newAssembly/nib`)
+    set c = $n:r
+    echo $c
+    liftUp -pslQ ../psl/$c.psl $newLiftDir/$c.lft warn chr*_$c.psl
+    echo done $c
 end
 
 set execDir = $0:h

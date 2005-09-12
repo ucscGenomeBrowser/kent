@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.2 2004/09/18 00:18:57 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.3 2005/09/12 21:58:16 kate Exp $
 
 if ( $#argv != 4 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-nibdir>"
@@ -42,7 +42,7 @@ cd chainRun
 
 cat > gsub << EOF
 #LOOP
-axtChain -psl \$(path1) $oldNibDir $newNibDir {check out line+ ../chainRaw/\$(root1).chain}
+axtChain -verbose=0 -psl \$(path1) $oldNibDir $newNibDir {check out line+ ../chainRaw/\$(root1).chain}
 #ENDLOOP
 EOF
 
