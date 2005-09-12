@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.35 2005/03/25 02:39:25 markd Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.36 2005/09/12 22:40:21 baertsch Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -308,7 +308,7 @@ for (i=0; i<sourceCount; ++i)
 	continue;
 	}
     if (!pipeOut) printf("Lifting %s\n", source);
-    lf = pslFileOpen(source);
+    lf = pslFileOpenWithMeta(source, dest);
     for (;;)
         {
 	if (isExtended)
@@ -489,6 +489,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
     char *source = sources[sourceIx];
     struct lineFile *lf = lineFileOpen(source, TRUE);
     struct axt *axt;
+    lineFileSetMetaDataOutput(lf, f);
     if (!pipeOut) printf("Lifting %s\n", source);
     while ((axt = axtRead(lf)) != NULL)
         {
@@ -555,6 +556,7 @@ for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
     char *source = sources[sourceIx];
     struct lineFile *lf = lineFileOpen(source, TRUE);
     struct chain *chain;
+    lineFileSetMetaDataOutput(lf, f);
     if (!pipeOut) printf("Lifting %s\n", source);
     while ((chain = chainRead(lf)) != NULL)
 	{
@@ -720,6 +722,7 @@ void liftNet(char *destFile, struct hash *liftHash,
         char *source = sources[sourceIx];
         struct lineFile *lf = lineFileOpen(source, TRUE);
         struct chainNet *net;
+        lineFileSetMetaDataOutput(lf, f);
         if (!pipeOut) printf("Lifting %s\n", source);
         while ((net = chainNetRead(lf)) != NULL)
             {
