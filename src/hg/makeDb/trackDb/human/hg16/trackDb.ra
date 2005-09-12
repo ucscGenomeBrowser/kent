@@ -1447,3 +1447,12 @@ visibility hide
 color 173,17,162
 type genePred
 
+track encode_tba23EvoFold
+shortLabel TBA23 EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+group encodeGenes
+priority 63.1
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack encodeTbaAlign

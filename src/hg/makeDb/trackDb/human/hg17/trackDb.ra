@@ -129,6 +129,17 @@ color 20,90,0
 type bed 6 +
 mafTrack multiz8way
 
+track encode_tba23EvoFold
+shortLabel TBA23 EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+group encodeGenes
+priority 63.1
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack multiz8way
+origAssembly hg16
+
 track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
@@ -1541,6 +1552,15 @@ pred mm6.blastKGPep03
 blastRef mm6.blastKGRef03
 chromosome 13
 
+track encode_tba23EvoFold
+shortLabel TBA23 EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+group encodeGenes
+priority 63.1
+visibility hide
+color 20,90,0
+type bed 6 +
+origAssembly hg16
 
 searchTable bacendsCow
 searchMethod exact
