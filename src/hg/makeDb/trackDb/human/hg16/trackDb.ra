@@ -1076,6 +1076,16 @@ lossColor 255,0,0
 visibility hide
 type bed 4 +
 
+track dlessMD
+shortLabel DLESS (MD)
+longLabel Detection of LinEage Specific Selection (DLESS) [missing data version]
+group compGeno
+priority 100.192
+gainColor 0,255,0
+lossColor 255,0,0
+visibility hide
+type bed 4 +
+
 track multizMm3Rn3GalGal2_phyloHMM
 shortLabel Hu/Mouse/Rat/Chick
 longLabel Human/Mouse/Rat/Chicken Multiz Alignments & PhyloHMM Cons 
