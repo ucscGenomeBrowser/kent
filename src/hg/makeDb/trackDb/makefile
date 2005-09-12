@@ -63,7 +63,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	pyrHor1\
 	pyrAby1\
 	sc1 \
-	canHg4 canHg9 car46\
+	canHg4 canHg9 car46 canHg10\
 	vibCho1 
 
 MGC_DBS = \
