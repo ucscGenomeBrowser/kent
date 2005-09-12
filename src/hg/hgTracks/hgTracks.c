@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1007 2005/09/10 07:42:09 acs Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1008 2005/09/12 23:56:55 acs Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10258,6 +10258,7 @@ registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 registerTrackHandler("dless", dlessMethods);
+registerTrackHandler("dlessMD", dlessMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
