@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.945 2005/09/10 07:42:10 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.946 2005/09/12 23:56:11 acs Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17231,7 +17231,7 @@ else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
     }
-else if (sameString("dless", track))
+else if (startsWith("dless", track))
     {
     doDless(tdb, item);
     }
