@@ -17566,3 +17566,96 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
       snpMaskChrom hg17 ${chrom} /gbdb/hg17/nib/${chrom}.nib ${chrom}.ambigs.fa
       gzip ${chrom}.ambigs.fa
   end
+
+# LOAD ACEMBLY TRACK (DONE, 2005-09-12, Fan)
+    mv /cluster/data/hg17/bed/acembly /cluster/data/hg17/bed/acembly_050217
+    mkdir -p /cluster/data/hg17/bed/acembly
+    cd /cluster/data/hg17/bed/acembly
+    # Data is obtained from Jean Thierry-Mieg     mieg@ncbi.nlm.nih.gov
+ 
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35g.human.genes/acembly.ncbi_35g.genes.proteins.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35g.human.genes/acembly.ncbi_35g.genes.gff.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35g.human.genes/acembly.ncbi_35g.mrnas.fasta.tar.gz
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/acedb/ncbi_35g.human.genes/acembly.ncbi_35g.genes.pfamhits.tar.gz
+    tar xvzf acembly.ncbi_35g.genes.gff.tar.gz
+    tar xvzf acembly.ncbi_35g.genes.proteins.fasta.tar.gz
+    cd acembly.ncbi_35.genes.gff
+    # the acembly dataset for hg16 had problems with reverse blocks so
+    # check for these
+cat << '_EOF_' > checkReversedBlocks
+for i in x1*.gff
+do
+        echo -n "$i working ..."
+        awk -F"\t" '
+{
+if ($4 > $5) {
+    printf "reverse blocks problem for $1"
+        printf "\n"
+}
+}
+' $i > $i.fixed
+        echo " done"
+done
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod +x checkReversedBlocks
+    ./checkReversedBlocks  
+    ls -l *.fixed
+    # all *.fixed files are empty so remove - there is no reversing of blocks
+    rm *.fixed
+
+    foreach f (x1.acemblygenes.*.gff)
+      set c=$f:r:e
+      egrep '^[a-zA-Z0-9]+\|NT_[0-9][0-9][0-9][0-9][0-9][0-9]' $f | \
+        perl -wpe 's/^(\w+)\|(\w+)/$1\/$2/' > ctg-chr${c}_random.gff
+      if (-e ../../../$c/lift/random.lft) then
+        liftUp chr${c}_random.gff ../../../$c/lift/random.lft warn \
+          ctg-chr${c}_random.gff
+      endif
+      grep -v ^$c\| $f | grep -v ^Hs | perl -wpe 's/^/chr/;' | \
+        grep -v "^chr//" > chr$c.gff
+      echo "done $c"
+    end
+    
+    #- Load into database - use extended genePred
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/acembly
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf hg17 acembly acembly.ncbi_35.genes.gff/chr*.gff
+    # for entry with 28212470 from chr6.gff, change to chr6 
+    # and for 29124352 in chr6.gff, change to chr6 (1/13/05)
+    echo 'update acembly set chrom = "chr6" where chrom = "chr28212470";' \
+         | hgsql hg17 
+    echo 'update acembly set chrom = "chr6" where chrom = "chr29124352";' \
+         | hgsql hg17 
+    
+    # checkTableCoords and runGeneCheck to check data
+    checkTableCoords hg17 acembly
+
+hgPepPred hg17 generic acemblyPep \
+        acembly.ncbi_35.genes.proteins.fasta/*.fasta
+
+# create table of Acembly gene classifications
+cd /cluster/data/hg17/bed/acembly/acembly.ncbi_35.genes.gff
+rm acemblyClass.tab
+foreach f (x1.acemblygenes.*.gff)
+
+cut -f 9 $f |sed -e 's/;/\t/g' |sed -e 's/transcript_id //' >j.tmp
+cut -f 2 j.tmp >j2.tmp
+cut -f 3 j.tmp >j3.tmp
+paste j3.tmp j2.tmp|sed -e 's/Main_gene/main/g' |sed -e 's/Putative_gene/putative/g' |sed -e 's/ //g' >>acemblyClass.tab
+end
+
+rm *.tmp
+hgsql hg17 -e 'drop table acemblyClass'
+hgsql hg17 < ~src/hg/lib/acemblyClass.sql
+hgsql hg17 -e 'load data local infile "acemblyClass.tab" into table acemblClass.tab'
+
+# build acemblyPep table
+
+hgPepPred hg17 generic acemblyPep \
+        acembly.ncbi_35.genes.proteins.fasta/*.fasta
+
+# Please note, per email from Jean Thierry-Mieg on 9/9/05,
+# there are AceView genes (~10,000) without corresponding 
+# protein sequences.  They will fix it next time.
