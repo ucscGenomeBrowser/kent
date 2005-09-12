@@ -4,7 +4,7 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.11 2005/02/23 07:56:58 donnak Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.12 2005/09/12 17:27:02 angie Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
@@ -80,7 +80,7 @@ hPrintf("%s",
 "        displayed in a tab-separated format suitable \n"
 "        for import into spreadsheets and relational databases. The ASCII \n"
 "        format may be read in any web browser or text editor.\n"
-"        <LI><em><B>chosen fields from selected and related tables</B></em> - user-selected \n"
+"        <LI><em><B>selected fields from primary and related tables</B></em> - user-selected \n"
 "        set of tab-separated fields \n"
 "        from the selected table and (optionally) other related tables as well. \n"
 "        <LI><em><B>sequence</B></em> - DNA (or protein sequence, in some cases) \n"
