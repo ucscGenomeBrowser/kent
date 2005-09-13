@@ -51,19 +51,6 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 #
-cd $WEEKLYBLD
-./makeStrictKolossus.csh
-if ( $status ) then
- echo "trackDb make strict error."
- exit 1
-endif
-#
-echo "buildTableDescriptions.pl."
-#
-cd $BUILDDIR/$dir
-kent/src/test/buildTableDescriptions.pl -kentSrc kent/src -gbdDPath /usr/local/apache/htdocs/goldenPath/gbdDescriptions.html >& buildDescr.64.log
-echo see buildDescr.64.log for output
-#
 echo
 echo "Build libs, alpha, strict-track/zoo, table-descr  done."
 #
