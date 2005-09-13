@@ -3,7 +3,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitInfo.c,v 1.3 2005/03/24 13:26:52 baertsch Exp $";
+static char const rcsid[] = "$Id: twoBitInfo.c,v 1.4 2005/09/13 17:50:09 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -13,7 +13,8 @@ errAbort(
   "usage:\n"
   "   twoBitInfo input.2bit output.tab\n"
   "options:\n"
-  "\n"
+  "   -nBed   instead of seq sizes, output BED records that define \n"
+  "           areas with N's in sequence\n"
   "Output file has the columns::\n"
   "   seqName size\n"
   "\n"
@@ -24,8 +25,10 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"nBed", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
 
 void twoBitInfo(char *inName, char *outName)
 /* twoBitInfo - get information about sequences in a .2bit file. */
@@ -44,13 +47,24 @@ if (seqName != NULL)
     int i;
     int seqCount = chopString(seqName, ",", seqArray, ArraySize(seqArray));
     for (i = 0 ; i < seqCount ; i++)
-        fprintf(outFile, "%s\t%d\n", seqArray[i], twoBitSeqSize(tbf, seqArray[i]));
+	{
+	if (optionExists("nBed"))
+	    twoBitOutNBeds(tbf, seqArray[i], outFile);
+	else
+	    fprintf(outFile, "%s\t%d\n", seqArray[i], twoBitSeqSize(tbf, seqArray[i]));
+	}
+	
     }
 else
     {
     struct twoBitIndex *index;
     for (index = tbf->indexList; index != NULL; index = index->next)
-        fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSize(tbf, index->name));
+	{
+	if (optionExists("nBed"))
+	    twoBitOutNBeds(tbf, index->name, outFile);
+	else
+	    fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSize(tbf, index->name));
+	}
     }
 twoBitClose(&tbf);
 carefulClose(&outFile); 
