@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.9 2005/08/05 00:24:25 kate Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.10 2005/09/13 19:37:08 braney Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -149,6 +149,7 @@ for (i=0; i<fileCount; ++i)
 	popAbortHandler();
 	if (maf == NULL)
 	    break;
+	mafAliFree(&maf);
 	}
     mafFileFree(&mf);
     }
