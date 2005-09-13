@@ -60,6 +60,7 @@ static struct optionSpec optionSpecs[] = {
     {"shoulder", OPTION_INT},
     {"neighbor", OPTION_STRING},
     {"bed", OPTION_STRING},
+    {"zeroBed", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -69,6 +70,7 @@ int seed = 0;
 int shoulder = 100;
 char *neighbor = NULL;
 char *bedOutFile = NULL;
+char *zeroBedOutFile = NULL;
 
 static void usage()
 /* Explain usage and exit. */
@@ -102,6 +104,8 @@ verbose(1,
   "           - that do overlap the neighbor or boundingRegions are discarded\n"
   "           - for the nearest neighbor measurements.\n"
   "   -bed=<file name> - output bed file for the final trial placement\n"
+  "   -zeroBed=<file name> - output bed file for the items that\n"
+  "                        - are within 0bp of the measured neighbors"
 );
 exit(255);
 }
@@ -247,7 +251,7 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
     }
 }
 
-static struct statistic *gapStats(struct chrGapList *cList)
+static struct statistic *gapStats(struct chrGapList *cList, char *zeroBedFile)
 {
 struct statistic *returnStats;
 struct chrGapList *cl;
@@ -261,6 +265,7 @@ int *gapSizeArray = NULL;
 int i;
 int boundingElementCount = 0;
 int placedItemCount = 0;
+FILE *zeroFH = NULL;
 
 AllocVar(returnStats);
 
@@ -304,6 +309,10 @@ for (cl=cList; cl != NULL; cl = cl->next)
 verbose(4,"'%s': %d gaps + %d of size zero = %d\n", cl->chrom, gapCount,
 	zeroSized, gapCount+zeroSized);
     }
+
+if (((char *)NULL != zeroBedFile) && (gapCountZeroSize > 0))
+    zeroFH=mustOpen(zeroBedFile, "w");
+
 verbose(3,"counted %d chroms and %d gaps ( + %d size zero = %d total gaps)"
     "\n\ton the bounding list\n", chrCount, gapCountNonZeroSize,
 	gapCountZeroSize, gapCountNonZeroSize+gapCountZeroSize);
@@ -383,6 +392,7 @@ if (placedItemCount)
 	struct gap *next;
 	struct bed *upstreamBound = NULL;
 	struct bed *downstreamBound = NULL;
+	int chrCount = 0;
 
 	++boundingElements; /*	first one must be bounding	*/
 		/* after this, only need to count the downstream ones */
@@ -390,6 +400,9 @@ if (placedItemCount)
 	for (gl = cl->gList; gl != NULL; gl = next)
 	    {
 	    struct gap *gEl;
+	    int gapCount = 0;
+
+	    ++chrCount;
 
 	    /*	make note of upstream and downstream bounding elements */
 	    if (NULL == upstreamBound || gl->isUpstreamBound)
@@ -422,6 +435,14 @@ if (placedItemCount)
 
 		if (minDistance < 0)
 			errAbort("minimum distance < 0 ?");
+		if (zeroFH && (minDistance == 0))
+		    {
+		    ++gapCount;
+		    fprintf (zeroFH, "%s\t%d\t%d\t%s_%d.%d\n",
+			cl->chrom, gEl->downstream->chromStart,
+			gEl->downstream->chromEnd, cl->chrom,
+			chrCount, gapCount);
+		    }
 
 		placedDistances[placedCount++] = minDistance;
 		sumDistances += minDistance;
@@ -480,6 +501,7 @@ if (placedItemCount)
 
     freeMem(placedDistances);
     }	/*	if (placedItemCount)	*/
+carefulClose(&zeroFH);
 freeMem(gapSizeArray);
 return (returnStats);
 }
@@ -879,12 +901,12 @@ static struct chrGapList *cloneGapList(struct chrGapList *gaps)
 /*	make an independent copy of the gaps list, they share the bed
  *	elements, but that is all.	*/
 {
-struct chrGapList *el;
+struct chrGapList *cl;
 struct chrGapList *cloneGaps = NULL;
 int chrCount = 0;
 int totalGapCount = 0;
 
-for (el = gaps; el != NULL; el = el->next)
+for (cl = gaps; cl != NULL; cl = cl->next)
     {
     struct gap *gap;
     struct chrGapList *gl;
@@ -895,9 +917,9 @@ for (el = gaps; el != NULL; el = el->next)
 
     ++chrCount;
     AllocVar(gl);
-    gl->chrom = cloneString(el->chrom);
+    gl->chrom = cloneString(cl->chrom);
 
-    for (gap = el->gList; gap != NULL; gap = gap->next)
+    for (gap = cl->gList; gap != NULL; gap = gap->next)
 	{
 	struct gap *g;
 	AllocVar(g);
@@ -923,7 +945,7 @@ for (el = gaps; el != NULL; el = el->next)
 	}
     totalGapCount += nonZeroGapCount;
 verbose(4,"cloneGaps: '%s': %d non-zero gaps + %d zero gaps = %d total gaps\n",
-	el->chrom, nonZeroGapCount, zeroGapCount, nonZeroGapCount+zeroGapCount);
+	cl->chrom, nonZeroGapCount, zeroGapCount, nonZeroGapCount+zeroGapCount);
     slAddHead(&cloneGaps,gl);
     }
 slReverse(&cloneGaps);
@@ -932,12 +954,12 @@ return(cloneGaps);
 
 static void bedListOutput(struct chrGapList *gapList, char *bedOutFile)
 {
-struct chrGapList *el;
+struct chrGapList *cl;
 FILE *outFile = mustOpen(bedOutFile, "w");
 
 verbose(2,"writing last placement to %s\n", bedOutFile);
 
-for (el = gapList; el != NULL; el = el->next)
+for (cl = gapList; cl != NULL; cl = cl->next)
     {
     int chrCount = 0;
     struct gap *gl;
@@ -945,7 +967,7 @@ for (el = gapList; el != NULL; el = el->next)
     struct bed *upstreamBound = NULL;
     struct bed *downstreamBound = NULL;
 
-    for (gl = el->gList; gl != NULL; gl = next)
+    for (gl = cl->gList; gl != NULL; gl = next)
 	{
 	struct gap *gEl;
 	int gapCount = 0;
@@ -973,16 +995,17 @@ for (el = gapList; el != NULL; el = el->next)
 		    gEl = gEl->next)
 	    {
 	    ++gapCount;
-	    fprintf (outFile, "%s\t%d\t%d\t%s_%d.%d\n", el->chrom,
+	    fprintf (outFile, "%s\t%d\t%d\t%s_%d.%d\n", cl->chrom,
 		gEl->downstream->chromStart, gEl->downstream->chromEnd,
-		el->chrom, chrCount, gapCount);
+		cl->chrom, chrCount, gapCount);
 	    }
 	if (gEl)
 	    next = gEl->next;
 	else
 	    next = NULL;
-	}	/*	for (gl = el->gList; gl != NULL; gl = next)	*/
-    }	/*	for (el=cList; el != NULL; el = el->next)	*/
+	}	/*	for (gl = cl->gList; gl != NULL; gl = next)	*/
+    }	/*	for (cl=cList; cl != NULL; cl = cl->next)	*/
+carefulClose(&outFile);
 }	/*	static void bedListOutput()	*/
 
 static void randomPlacement(char *bounding, char *placed)
@@ -1031,7 +1054,7 @@ if (TRUE)	/*	display initial placement stats only	*/
 	}
 
     verbose(2,"stats before initial placement:  =================\n");
-    statEl = gapStats(duplicateGapList);
+    statEl = gapStats(duplicateGapList, (char *)NULL);
     printf("statistics on gaps before any placements:\n\t(%s)\n", neighborName);
     statsPrint(statEl);
     slAddHead(&statsList,statEl);
@@ -1039,7 +1062,7 @@ if (TRUE)	/*	display initial placement stats only	*/
     initialPlacement(duplicateGapList,placeItems);
 
     verbose(2,"stats after initial placement:  =================\n");
-    statEl = gapStats(duplicateGapList);
+    statEl = gapStats(duplicateGapList, zeroBedOutFile);
     printf("statistics after initial placement of placed items:\n\t(%s)\n",
 		placed);
     statsPrint(statEl);
@@ -1070,11 +1093,11 @@ if (trials > 0)
 	    slSort(&randomPlacedBedList,bedCmp);/*order by chrom,chromStart*/
 	    duplicateNeighborList = cloneGapList(neighborGaps);
 	    initialPlacement(duplicateNeighborList,randomPlacedBedList);
-	    statEl = gapStats(duplicateNeighborList);
+	    statEl = gapStats(duplicateNeighborList, (char *)NULL);
 	    freeChrList(&duplicateNeighborList, FALSE);
 	    }
 	else
-	    statEl = gapStats(duplicateGapList);
+	    statEl = gapStats(duplicateGapList, (char *)NULL);
 
 	slAddHead(&statsList,statEl);
 	/*	this gap list has temporary bed elements that were
@@ -1114,6 +1137,7 @@ seed = optionInt("seed", 0);
 shoulder = optionInt("shoulder", 100);
 neighbor = optionVal("neighbor", NULL);
 bedOutFile = optionVal("bed", NULL);
+zeroBedOutFile = optionVal("zeroBed", NULL);
 verbosity = optionInt("verbose", 1);
 
 verboseSetLevel(verbosity);
@@ -1123,6 +1147,8 @@ if (neighbor)
     verbose(2,"nearest neighbor file: %s\n", neighbor);
 if (bedOutFile)
     verbose(2,"last alignment of trials output to bed file: %s\n", bedOutFile);
+if (zeroBedOutFile)
+    verbose(2,"zero distance items to bed file: %s\n", zeroBedOutFile);
 verbose(2,"number of trials: %d\n", trials);
 verbose(2,"seed value for drand48(): %d\n", seed);
 verbose(2,"shoulder value: %d\n", shoulder);
