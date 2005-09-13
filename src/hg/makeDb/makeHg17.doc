@@ -17660,3 +17660,41 @@ hgPepPred hg17 generic acemblyPep \
 # Please note, per email from Jean Thierry-Mieg on 9/9/05,
 # there are AceView genes (~10,000) without corresponding 
 # protein sequences.  They will fix it next time.
+
+# LOADING AFFYTXNPHASE2 TRACK (sugnet)
+
+# cd to where data is downloaded.
+cd /cluster/store10/sugnet/affyTranscription/graphs/transcriptome.affymetrix.com/download/publication/polyA_minus/graphs
+
+# lift data from hg16 to hg17. This takes a long time.
+./liftWigFilesHg16ToHg17.sh
+
+# make the .wib and .wig files. This takes a long time.
+./makeWibWigHg17.sh
+
+# Copy .wib files to /cluster/data/hg17 files
+mkdir /cluster/data/hg17/bed/affyTxnPhase2/wigData/
+cp `find ./ -name "*.hg17.wib" /cluster/data/hg17/bed/affyTxnPhase2/wigData/
+chmod 775 /cluster/data/hg17/bed/affyTxnPhase2/wigData/
+chmod 664 /cluster/data/hg17/bed/affyTxnPhase2/wigData/*
+
+# Make gbdb entry
+mkdir /gbdb/hg17/wib/affyTxnPhase2
+chmod 775 /gbdb/hg17/wib/affyTxnPhase2
+cd /gbdb/hg17/wib/affyTxnPhase2
+ln -s /cluster/data/hg17/bed/affyTxnPhase2/wigData/* .
+cd -
+
+# Load the database tables (using bash) this takes a while
+for file in `find ./ -name "*hg17.wig"`; do
+  base=`basename $file .hg17.wig`
+  echo "Doing ${base}Txn"
+  hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/affyTxnPhase2  hg17 ${base}Txn $file
+done
+
+# Do the transfrags
+cd ../transfrags
+./liftHg16ToHg17.sh
+./loadHg17Tnfg.sh
+
+# End of affyTxnPhase2
