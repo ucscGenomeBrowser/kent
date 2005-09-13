@@ -10,3 +10,13 @@ spectrum on
 type chain canFam2
 otherDb canFam2
 
+track netSelf
+shortLabel Self Net
+longLabel Self Alignment Net
+group varRep
+priority 149
+visibility hide
+spectrum on
+type netAlign canFam2 chainSelf
+otherDb canFam2
+
