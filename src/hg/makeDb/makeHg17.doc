@@ -17650,6 +17650,7 @@ rm *.tmp
 hgsql hg17 -e 'drop table acemblyClass'
 hgsql hg17 < ~src/hg/lib/acemblyClass.sql
 hgsql hg17 -e 'load data local infile "acemblyClass.tab" into table acemblClass.tab'
+hgsql hg17 -e 'delete from acemblyClass where class!="main" and class!="putative"'
 
 # build acemblyPep table
 
