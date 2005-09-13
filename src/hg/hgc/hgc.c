@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.946 2005/09/12 23:56:11 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.947 2005/09/13 16:54:09 acs Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15943,7 +15943,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 boolean approx;
-enum {CONS, GAIN, LOSS} type;
+enum {CONS, GAIN, LOSS} elementType;
 
 genericHeader(tdb, itemName); 
 sprintf(query, "select * from %s where name = '%s'", tdb->tableName, itemName);
@@ -15957,26 +15957,28 @@ sqlFreeResult(&sr);
 
 approx = sameString(dless->condApprox, "approx");
 if (sameString(dless->type, "conserved")) 
-    type = CONS;
+    elementType = CONS;
 else if (sameString(dless->type, "gain")) 
-    type = GAIN;
+    elementType = GAIN;
 else
-    type = LOSS;
+    elementType = LOSS;
 
-if (type == CONS)
+if (elementType == CONS)
     printf("<B>Prediction:</B> conserved in all species<BR>\n");
 else 
     printf("<B>Prediction:</B> %s of element on branch above node labeled \"%s\"<BR>\n", 
-           type == GAIN ? "gain" : "loss", dless->branch);
+           elementType == GAIN ? "gain" : "loss", dless->branch);
 printPos(dless->chrom, dless->chromStart, dless->chromEnd, NULL, 
          FALSE, dless->name);
 printf("<B>Log-odds score:</B> %.1f bits<BR>\n", dless->score);
 
-if (type == CONS)
+if (elementType == CONS)
     {
     printf("<B>P-value of conservation:</B> %.2e<BR><BR>\n", dless->pConsSub);
     printf("<B>Numbers of substitutions:</B>\n<UL>\n");
-    printf("<LI>Null distribution: mean = %.2f, var = %.2f, 95%% c.i. = [%d, %d]\n", dless->priorMeanSub, dless->priorVarSub, dless->priorMinSub, dless->priorMaxSub);
+    printf("<LI>Null distribution: mean = %.2f, var = %.2f, 95%% c.i. = [%d, %d]\n", 
+           dless->priorMeanSub, dless->priorVarSub, dless->priorMinSub, 
+           dless->priorMaxSub);
     printf("<LI>Posterior distribution: mean = %.2f, var = %.2f\n</UL>\n", 
            dless->postMeanSub, dless->postVarSub);
     }
@@ -15994,12 +15996,14 @@ else
     printf("<LI>Null distribution: mean = %.2f, var = %.2f, 95%% c.i. = [%d, %d]\n", 
            dless->priorMeanSub, dless->priorVarSub, dless->priorMinSub, 
            dless->priorMaxSub);
-    printf("<LI>Posterior distribution: mean = %.2f, var = %.2f\n", dless->postMeanSub, dless->postVarSub);
+    printf("<LI>Posterior distribution: mean = %.2f, var = %.2f\n", 
+           dless->postMeanSub, dless->postVarSub);
     printf("</UL><B>Numbers of substitutions in rest of tree:</B>\n<UL>\n");
     printf("<LI>Null distribution: mean = %.2f, var = %.2f, 95%% c.i. = [%d, %d]\n", 
            dless->priorMeanSup, dless->priorVarSup, dless->priorMinSup, 
            dless->priorMaxSup);
-    printf("<LI>Posterior distribution: mean = %.2f, var = %.2f\n</UL>\n", dless->postMeanSup, dless->postVarSup);
+    printf("<LI>Posterior distribution: mean = %.2f, var = %.2f\n</UL>\n", 
+           dless->postMeanSup, dless->postVarSup);
     if (approx)
         printf("* = Approximate p-value (usually conservative)<BR>\n");
     }
