@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.22 2005/07/10 09:59:29 daryl Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.23 2005/09/13 17:31:00 braney Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -158,8 +158,8 @@ for (;;)
 			textSize, ali->textSize, lf->lineIx, lf->fileName);
 
 		/* Do some sanity checking. */
-		if (comp->srcSize <= 0 || comp->size <= 0)
-		     errAbort("Got a zero or negative size line %d of %s", lf->lineIx, lf->fileName);
+		if (comp->srcSize < 0 || comp->size < 0)
+		     errAbort("Got a negative size line %d of %s", lf->lineIx, lf->fileName);
 		if (comp->start < 0 || comp->start + comp->size > comp->srcSize)
 		     errAbort("Coordinates out of range line %d of %s", lf->lineIx, lf->fileName);
 		  
