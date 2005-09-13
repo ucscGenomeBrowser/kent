@@ -110,10 +110,11 @@ type wigMaf 0.0 1.0
 # autoScaleDefault Off
 #pairwise fakePairwise
 irows on
-speciesTree ((tenrec,loxAfr1),(dasNov1,((bosTau1, canFam1),((oryCun1,(rn3,mm6)),(rheMac1,(panTro1,hg17)chimp/human))mouse/human)canHg9));
+speciesTree ((echTel1,loxAfr1)afrothere,(dasNov1,((bosTau1, canFam1)laurasia,((oryCun1,(rn3,mm6)rodent)glire,(rheMac1,(panTro1,hg17)ape)primate)euArc)canHg10)nonAfro)eutherian;
 speciesTarget human
 summary buildMafSummary
-speciesOrder mouse/human chimp/human hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
+# speciesOrder mouse/human chimp/human hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
+speciesOrder euArc primate ape hg17 panTro1 rheMac1 rn3 mm6 rodent oryCun1 glire bosTau1 canFam2 laurasia dasNov1 nonAfro echTel1 loxAfr1 afrothere eutherian
 
 track testMaf
 shortLabel testMaf
@@ -350,4 +351,3 @@ searchPriority 25
 searchTable blastHg17KG
 searchMethod prefix
 searchType psl
-
