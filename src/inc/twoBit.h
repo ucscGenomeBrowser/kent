@@ -156,4 +156,7 @@ struct twoBitSpec *twoBitSpecNewFile(char *twoBitFile, char *specFile);
 void twoBitSpecFree(struct twoBitSpec **specPtr);
 /* free a twoBitSpec object */
 
+void twoBitOutNBeds(struct twoBitFile *tbf, char *seqName, FILE *outF);
+/* output a series of bed3's that enumerate the number of N's in a sequence*/
+
 #endif /* TWOBIT_H */

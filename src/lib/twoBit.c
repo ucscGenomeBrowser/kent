@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.17 2005/08/21 04:35:30 markd Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.18 2005/09/13 17:37:46 braney Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -867,3 +867,42 @@ if (spec != NULL)
     }
 }
 
+void twoBitOutNBeds(struct twoBitFile *tbf, char *seqName, FILE *outF)
+/* output a series of bed3's that enumerate the number of N's in a sequence*/
+{
+int nBlockCount;
+
+twoBitSeekTo(tbf, seqName);
+
+readBits32(tbf->f, tbf->isSwapped);
+
+/* Read in blocks of N. */
+nBlockCount = readBits32(tbf->f, tbf->isSwapped);
+
+if (nBlockCount > 0)
+    {
+    bits32 *nStarts = NULL, *nSizes = NULL;
+    int i;
+
+    AllocArray(nStarts, nBlockCount);
+    AllocArray(nSizes, nBlockCount);
+    fread(nStarts, sizeof(nStarts[0]), nBlockCount, tbf->f);
+    fread(nSizes, sizeof(nSizes[0]), nBlockCount, tbf->f);
+    if (tbf->isSwapped)
+	{
+	for (i=0; i<nBlockCount; ++i)
+	    {
+	    nStarts[i] = byteSwap32(nStarts[i]);
+	    nSizes[i] = byteSwap32(nSizes[i]);
+	    }
+	}
+
+    for (i=0; i<nBlockCount; ++i)
+	{
+	fprintf(outF, "%s\t%d\t%d\n", seqName, nStarts[i], nStarts[i] + nSizes[i]);
+	}
+
+    freez(&nStarts);
+    freez(&nSizes);
+    }
+}
