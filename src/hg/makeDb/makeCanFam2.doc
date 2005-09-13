@@ -832,3 +832,345 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       -e 'update defaultDb set name = "canFam2" where genome = "Dog";'
 
 
+# MAKE Human Proteins track (INPROGRESS 8/17 braney)
+    ssh kkstore01
+    cd /cluster/data/canFam2
+    mkdir blastDb
+    for i in */*/*_*_*.fa; do ln `pwd`/$i blastDb; done 
+    cd blastDb
+    for i in *.fa; do formatdb -p F -i $i; rm $i; done
+
+    ssh pk
+    destDir=/san/sanvol1/scratch/canFam2/blastDb
+    mkdir -p $destDir
+    cd /cluster/data/canFam2/blastDb
+    for i in nin nsq nhr; do cp *.$i $destDir; done
+    mkdir -p /cluster/data/canFam2/bed/tblastn.hg17KG
+    cd /cluster/data/canFam2/bed/tblastn.hg17KG
+    ls -1S $destDir/*.nsq | sed "s/\.nsq//" > target.lst
+
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(150000/`wc target.lst | awk "{print \\\$1}"`\)
+# 37365/(150000/498) = 124.051800
+    split -l 124 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    rm -rf  /cluster/bluearc/canFam2/bed/tblastn.hg17KG/blastOut
+    mkdir -p /cluster/bluearc/canFam2/bed/tblastn.hg17KG/blastOut
+    ln -s  /cluster/bluearc/canFam2/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 target.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/canFam2/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+
+# Completed: 150396 of 150396 jobs
+# CPU time in finished jobs:   17288756s  288145.93m  4802.43h  200.10d  0.548 y
+# IO & Wait Time:               1432927s   23882.12m   398.04h   16.58d  0.045 y
+# Average job time:                 124s       2.07m     0.03h    0.00d
+# Longest finished job:             644s      10.73m     0.18h    0.01d
+# Submission to last job:        235403s    3923.38m    65.39h    2.72d
+
+    ssh kki
+    cd /cluster/data/canFam2/bed/tblastn.hg17KG
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=100000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+
+    chmod +x chainSome
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    para create chainSpec
+    para push
+
+# Completed: 302 of 302 jobs
+# CPU time in finished jobs:        725s      12.08m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                 22191s     369.85m     6.16h    0.26d  0.001 y
+# Average job time:                  76s       1.26m     0.02h    0.00d
+# Longest finished job:             228s       3.80m     0.06h    0.00d
+# Submission to last job:          2348s      39.13m     0.65h    0.03d
+
+    ssh kkstore01
+    cd /cluster/data/canFam2/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -u -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > /cluster/data/canFam2/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/tblastn.hg17KG
+    hgLoadPsl canFam2 blastHg17KG.psl
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
+
+# BLASTZ SELF  (DONE braney 8-29-2005)
+    ssh pk
+    mkdir -p /cluster/data/canFam2/bed/blastz.canFam2
+    cd /cluster/data/canFam2/bed/blastz.canFam2
+    cat << '_EOF_' > DEF
+# dog vs. dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET
+# Dog
+SEQ1_DIR=/scratch/hg/canFam2/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY
+# Dog
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+
+BASE=/cluster/data/canFam2/bed/blastz.canFam2
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cp /cluster/data/canFam2/chrom.sizes S1.len
+    cp /cluster/data/canFam2/chrom.sizes S2.len
+    mkdir run
+    cd run
+    partitionSequence.pl 10000000 10000 /cluster/data/canFam2/nib ../S1.len \
+      -xdir xdir.sh -rawDir ../lav \
+    > canFam2.lst
+    csh -ef xdir.sh
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/scripts/blastz-run-ucsc $(path1) $(path2) ../DEF {check out line ../lav/$(file1)/$(file1)_$(file2).lav}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 canFam2.lst canFam2.lst gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+
+# Completed: 70756 of 70756 jobs
+# CPU time in finished jobs:    5743034s   95717.24m  1595.29h   66.47d  0.182 y
+# IO & Wait Time:                199800s    3330.00m    55.50h    2.31d  0.006 y
+# Average job time:                  84s       1.40m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2758s      45.97m     0.77h    0.03d
+# Submission to last job:         17852s     297.53m     4.96h    0.21d
+
+    # convert lav files to psl 
+    # First, combine all files per partition (too many files per chrom
+    # to do in one swoop!).  Then do another round to collect all files 
+    # per chrom.  
+    ssh kki
+    cd /cluster/data/canFam2/bed/blastz.canFam2.2
+    mkdir pslChrom pslParts run.lavToPsl
+    cd run.lavToPsl
+    ls -1d ../lav/* | sed -e 's@/$@@' > parts.lst
+    # For self alignments, we need lavToAxt's -dropSelf behavior, 
+    # so go lav->axt->psl... could add -dropSelf to lavToPsl, but that 
+    # might be somewhat invasive and perhaps not really much faster (?) 
+    # because the sequence must be dug up in order to rescore...
+    cat << '_EOF_' > do.csh
+#!/bin/csh -ef
+cat $1/*.lav \
+| lavToAxt -dropSelf stdin /iscratch/i/canFam2/nib \
+                           /iscratch/i/canFam2/nib stdout \
+| axtToPsl stdin ../S1.len ../S2.len stdout \
+| sort -k 14,14 -k 16n,17n \
+| gzip -c > $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x do.csh
+    cat << '_EOF_' > gsub
+#LOOP
+./do.csh $(path1) {check out exists ../pslParts/$(file1).psl.gz }
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 parts.lst single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 266 of 275 jobs
+# Crashed: 9 jobs
+# CPU time in finished jobs:       1228s      20.47m     0.34h    0.01d  0.000 y
+# IO & Wait Time:                  7117s     118.61m     1.98h    0.08d  0.000 y
+# Average job time:                  31s       0.52m     0.01h    0.00d
+# Longest finished job:              74s       1.23m     0.02h    0.00d
+# Submission to last job:           641s      10.68m     0.18h    0.01d
+
+    awk '{print $1;}' /cluster/data/canFam2/chrom.sizes > chroms.lst
+    cat << '_EOF_' > doChrom.csh
+#!/bin/csh -ef
+zcat ../pslParts/$1.*.psl.gz \
+| sort -k 14,14 -k 16n,17n \
+| gzip -c > $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChrom.csh
+    cat << '_EOF_' > gsub.chroms
+#LOOP
+./doChrom.csh $(root1) {check out exists ../pslChrom/$(root1).psl.gz }
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 chroms.lst single gsub.chroms jobList
+    para create jobList
+    para try, check, push, check, ...
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        463s       7.71m     0.13h    0.01d  0.000 y
+# IO & Wait Time:                   178s       2.97m     0.05h    0.00d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:              38s       0.63m     0.01h    0.00d
+# Submission to last job:            61s       1.02m     0.02h    0.00d
+
+# CHAIN SELF BLASTZ 
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/canFam2/bed/blastz.canFam2.2
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S ../../pslChrom/*.psl.gz > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+setenv PATH /cluster/bin/x86_64:$PATH
+axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
+                            /iscratch/i/canFam2/nib stdout \
+| chainAntiRepeat /iscratch/i/canFam2/nib /iscratch/i/canFam2/nib \
+    stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check...
+#Completed: 40 of 41 jobs
+#Crashed: 1 jobs
+#Average job time:                 185s       3.09m     0.05h    0.00d
+#Longest job:                      490s       8.17m     0.14h    0.01d
+#Submission to last job:         74789s    1246.48m    20.77h    0.87d
+
+    # now on the cluster server, sort chains
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/blastz.canFam2.2/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    chainSplit chain all.chain
+    rm run1/chain/*.chain
+
+    # take a look at score distr's
+    foreach f (chain/*.chain)
+      grep chain $f | awk '{print $2;}' | sort -nr > /tmp/score.$f:t:r
+      echo $f:t:r
+      textHistogram -binSize=10000 /tmp/score.$f:t:r
+      echo ""
+    end
+
+    # trim to minScore=20000 to cut some of the fluff
+    mkdir chainFilt
+    foreach f (chain/*.chain)
+      chainFilter -minScore=20000 $f > chainFilt/$f:t
+    end
+    gzip -c all.chain > all.chain.unfiltered.gz
+    rm -r chain
+    mv chainFilt chain
+    chainMergeSort -saveId chain/*.chain > all.chain
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastz.canFam2.2005-01-27/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain canFam2 ${c}_chainSelf $i
+    end
+
+
+# NET SELF BLASTZ 
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
+    chainPreNet all.chain.gz ../S1.len ../S2.len stdout \
+    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
+    | netSyntenic stdin noClass.net
+
+    # Add classification info using db tables:
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
+    netClass -noAr noClass.net canFam2 canFam2 self.net
+    rm noClass.net
+    # Load the nets into database 
+    netFilter -minGap=10 self.net |  hgLoadNet canFam2 netSelf stdin
+    # Add entries for chainSelf, netSelf to dog/canFam2 trackDb
