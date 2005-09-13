@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1008 2005/09/12 23:56:55 acs Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1009 2005/09/13 16:55:47 acs Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9209,7 +9209,7 @@ if (!gotColors)
         count = chopString(rgbStr, ",", rgb, ArraySize(rgb));
         if (count == 3 && isdigit(rgb[0][0]) && isdigit(rgb[1][0]) &&
             isdigit(rgb[2][0]))
-        gainColor = vgFindColorIx(vg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2])); 
+            gainColor = vgFindColorIx(vg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2])); 
         }
 
     if ((rgbStr = trackDbSetting(tg->tdb, "lossColor")) != NULL)
@@ -9217,7 +9217,7 @@ if (!gotColors)
         count = chopString(rgbStr, ",", rgb, ArraySize(rgb));
         if (count == 3 && isdigit(rgb[0][0]) && isdigit(rgb[1][0]) &&
             isdigit(rgb[2][0]))
-        lossColor = vgFindColorIx(vg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2])); 
+            lossColor = vgFindColorIx(vg, atoi(rgb[0]), atoi(rgb[1]), atoi(rgb[2])); 
         }
 
     gotColors = TRUE;
