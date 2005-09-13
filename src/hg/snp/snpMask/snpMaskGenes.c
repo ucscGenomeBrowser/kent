@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.2 2005/09/10 03:56:24 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.3 2005/09/13 20:46:52 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -400,6 +400,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
     ptr = seq->dna;
 
     /* do substitutions */
+    /* including introns; doesn't take much time, keeps code clean */
     for (snp = snps; snp != NULL; snp = snp->next)
         {
 	snpPos = snp->chromStart - gene->txStart;
