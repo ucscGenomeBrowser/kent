@@ -17567,6 +17567,94 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
       gzip ${chrom}.ambigs.fa
   end
 
+#############################################################################
+# BLASTZ Mm7 (WORKING - 2005-09-06 - Hiram)
+#	Experiment, try the alignments without the linage specific
+#	repeats
+    ssh pk
+    mkdir /cluster/data/hg17/bed/blastzMm7.2005-09-06
+    cd /cluster/data/hg17/bed
+    ln -s blastzMm7.2005-09-06 blastz.mm7
+    cd blastzMm7.2005-09-06
+    cat << '_EOF_' > DEF
+# human vs mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+BLASTZ_H=2000
+BLASTZ_M=1000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human Hg17
+SEQ1_DIR=/cluster/bluearc/hg17/bothMaskedNibs
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm7
+SEQ2_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
+SEQ2_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
+SEQ2_SELF=1
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastzMm7.2005-09-06
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # happy emacs
+
+    cp -p /cluster/data/hg17/chrom.sizes ./S1.len
+    twoBitInfo /cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit S2.len
+XXXX - working on modifications to doBlastzChainNet.pl 2005-09-06
+XXXX - to do this random contigs business properly
+
+    #	establish a screen to control this job
+    screen
+    time ./doBlastzChainNet.pl -stop chainMerge \
+	-bigClusterHub=pk \
+	`pwd`/DEF > toChainMerge.run.out 2>&1 &
+    #	STARTED - 2005-09-06 - 11:00
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=cat -stop=cat \
+	`pwd`/DEF > catStep.out 2>&1 &
+
+XXX under screen on kkstore02:
+Tue Sep 13 17:05:53 PDT 2005
+[hiram@kkstore02 /cluster/data/hg17/bed/blastzMm7.2005-09-06]
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=chainRun \
+	`pwd`/DEF > continueChainRun.out 2>&1 &
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=chainMerge -stop=chainMerge \
+	`pwd`/DEF > chainMerge.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=net -stop=net \
+	`pwd`/DEF > net.out 2>&1 &
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=load -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-swap -stop=load \
+	`pwd`/DEF > swap.out 2>&1 &
+
+=======
+
 # LOAD ACEMBLY TRACK (DONE, 2005-09-12, Fan)
     mv /cluster/data/hg17/bed/acembly /cluster/data/hg17/bed/acembly_050217
     mkdir -p /cluster/data/hg17/bed/acembly
