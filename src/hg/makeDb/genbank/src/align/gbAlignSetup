@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.19 2005/09/09 05:21:15 markd Exp $
+# $Id: gbAlignSetup,v 1.20 2005/09/14 21:10:04 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -230,7 +230,7 @@ class CDnaUnaligned(object):
 
         rel.loadAlignedParts(db)
         self._findUnaligned()
-        if cmdOpts.verbose >= 2:
+        if cmdOpts.verbose >= 3:
             sys.stderr.write("=========== GENBANK INDEX ===========\n")
             self.rel.dump(sys.stderr)
             sys.stderr.flush()
@@ -282,7 +282,7 @@ class CDnaUnaligned(object):
             cmd.append(self.cdnaType + "." + procPart.accPrefix)
         cmd.append(self.db)
 
-        if cmdOpts.verbose > 0:
+        if cmdOpts.verbose >= 2:
             prLine(sys.stderr, procOps.fmtCmd(cmd))
         lines = procOps.callProcLines(cmd)
 
@@ -507,7 +507,7 @@ class JobGenDb(object):
         if lift != None:
             self.genome.addUnGappedRegions(lift)
         self.windows = GenomeWindows(self.db, self.genome, self.conf)
-        if cmdOpts.verbose >= 2:
+        if cmdOpts.verbose >= 3:
             sys.stderr.write("=========== GENOME REGIONS ===========\n")
             self.genome.dump(sys.stderr)
             sys.stderr.write("=========== WINDOWS ===========\n")
@@ -522,7 +522,7 @@ class JobGenDb(object):
         for cdnaQuery in queries:
             jobs = Jobs(self, cdnaQuery)
             jobs.write(preFilterOpts)
-            if cmdOpts.verbose >= 3:
+            if cmdOpts.verbose >= 4:
                 jobs.prStats()
         
     def _addJobSet(self, rel, cdnaType, orgCats):

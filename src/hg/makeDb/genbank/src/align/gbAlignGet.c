@@ -18,7 +18,7 @@
 #include "gbFa.h"
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: gbAlignGet.c,v 1.9 2005/08/22 19:55:34 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignGet.c,v 1.10 2005/09/14 21:10:04 markd Exp $";
 
 /* version to set in gbEntry.selectVer to indicate an entry is being
  * migrated */
@@ -372,8 +372,8 @@ fprintf(stderr, "gbAlignGet: %s/%s/%s/%s: align=%d, migrate=%d\n",
         alignInfo.align.accTotalCnt, alignInfo.migrate.accTotalCnt);
 gbIndexFree(&index);
 
-/* print alignment count, which is read by the driver program */
-printf("alignCnt: %d\n", alignInfo.align.accTotalCnt);
+/* print alignment and migrate count, which is read by the driver program */
+printf("alignCnt: %d %d\n", alignInfo.align.accTotalCnt, alignInfo.migrate.accTotalCnt);
 return 0;
 }
 /*
