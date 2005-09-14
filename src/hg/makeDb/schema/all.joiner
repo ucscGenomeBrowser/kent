@@ -777,6 +777,12 @@ identifier xenoRefSeqId typeOf=xenoMrnaAccession
     $xrg.xenoRefSeqAli.qName full
     $xrg.xenoRefFlat.name full
 
+identifier knownToRefSeqId typeOf=mrnaAccession 
+"RefSeq mRNA accession in knownToRefSeq table"
+    $kgDb.knownToRefSeq.value dupeOk
+    mm6.geneNetworkId.id minCheck=0.70
+    rn3.geneNetworkId.id minCheck=0.40
+
 identifier knownGeneId typeOf=nativeMrnaAccession dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
