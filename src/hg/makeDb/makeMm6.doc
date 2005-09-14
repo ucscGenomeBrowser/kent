@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.77 2005/08/24 15:35:56 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.78 2005/09/14 22:29:53 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8444,4 +8444,15 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
 
    nice featureBits mm6 miRNA
 #  20898 bases of 2597150411 (0.001%) in intersection
+
+# ADD LINK TO GENENETWORK (Done. 9/6/05 Fan).
+
+# Received the file, rat.RefSeqId, list of RefSeq IDs from GeneNetwork.
+# remove extra CR (or LF?) at end of the line.
+
+    rmLf mouse.RefSeqId >mm6.geneNetworkId.tab
+
+    hgsql mm6 -e 'drop table geneNetworkId'
+    hgsql mm6 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql mm6 -e 'load data local infile "mm6.geneNetworkId.tab" into table geneNetworkId'
 
