@@ -183,7 +183,7 @@ _EOF_
         (name, description, nibPath, organism, \
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("caeRem1", "Dec. 2004", "/gbdb/caeRem1", "C. remanei", \
+        ("caeRem1", "March 2005", "/gbdb/caeRem1", "C. remanei", \
              "SuperCont12:1-12000", 1, 80, \
              "C. remanei", \
              "Caenorhabditis remanei", "/gbdb/caeRem1/html/description.html", \
@@ -602,3 +602,14 @@ XXXX
     ssh kkstore01
     cd /cluster/data/cb2/bed/tblastn.sangerGene
     rm -rf blastOut
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2005-08-31 - Hiram)
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeRem1", "blat16", "17788", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeRem1", "blat16", "17789", "0", "1");' \
+	    hgcentraltest
+
