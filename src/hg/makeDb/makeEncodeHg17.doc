@@ -577,3 +577,20 @@ cat > doLoad.csh << 'EOF'
                 NegativeControlDataStanfordPromoters.txt.gz
     # Added a README.txt (edited form Angie's hg16 version)
 
+
+##########################################################################
+# Indels from Jim Mullikin
+# Heather, Sept. 2005
+
+    ssh hgwdev
+    cd /cluster/data/encode/NHGRI/mullikin/hg17
+    hgsql hg17 < encodeIndels.sql
+    split4.pl < hg17.ENCODE.DIPtrack.Q23.bed4+ > split4.out
+    # use a modified makeColoredBed
+    ./makeColoredBed < split4.out > encodeIndels.bed  
+    # don't use -strict because we have lots of simple insertions (where chromStart = chromEnd)
+    hgLoadBed hg17 encodeIndels -tab -sqlTable=encodeIndels.sql encodeIndels.bed
+    # check reference length
+    mysql> select chrom, chromStart, chromEnd, (chromEnd-chromStart) as size, traceName, reference, length(reference) as refsize from encodeIndels where (chromEnd-chromStart) != length(reference) and length(reference) > 1;
+    # Empty set (0.07 sec)
+
