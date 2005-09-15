@@ -22,6 +22,13 @@ set encodeBin = /cluster/data/encode/bin/scripts
 csh $encodeBin/listEncodeTables.csh hg16 > tableTypes.txt
 grep bed tableTypes.txt > tables.bed.txt
 
+# Create downloads area
+
+ssh hgwdev
+mkdir -p /usr/local/apache/htdocs/hg17/encode
+cd /usr/local/apache/htdocs/hg17/encode
+mkdir datafiles
+
 !##########################################################################
 ###########################################################################
 # Tracks lifted from hg16
@@ -556,5 +563,17 @@ cat > doLoad.csh << 'EOF'
     end
 'EOF'
     csh doLoad.csh >&! doLoad.log 
-    # TODO: make NegativeControl file available for download
+
+    # Put the negative control data spreadsheet out for download.
+    ssh kkstore03
+    cd /cluster/data/encode/StanfordPromoters/latest/lab
+    nice gzip hg17_NegControlDataStanfordPromoters.txt
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/encode/datafiles
+    mkdir -p stanfordPromoters
+    cd stanfordPromoters
+    cp -p \
+        /cluster/data/encode/StanfordPromoters/latest/lab/hg17_NegControlDataStanfordPromoters.txt.gz \
+                NegativeControlDataStanfordPromoters.txt.gz
+    # Added a README.txt (edited form Angie's hg16 version)
 
