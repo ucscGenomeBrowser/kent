@@ -2777,13 +2777,6 @@ done
     # check reference length
     mysql> select chrom, chromStart, chromEnd, (chromEnd-chromStart) as size, traceName, reference, length(reference) as refsize from encodeIndels where (chromEnd-chromStart) != length(reference) and length(reference) > 1;
     # Empty set (0.07 sec)
-    mysql> select count(*) from encodeIndels where length(name) = length(reference) and name != '-' and reference != '-';
-    # +----------+
-    # | count(*) |
-    # +----------+
-    # |        0 |
-    # +----------+
-    # 1 row in set (0.10 sec)
 
 
 ##########################################################################
