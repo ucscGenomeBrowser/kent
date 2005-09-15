@@ -3,9 +3,22 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "fa.h"
-#include "cheapcgi.h"
+#include "options.h"
 
-static char const rcsid[] = "$Id: faTrans.c,v 1.5 2003/05/06 07:41:06 kate Exp $";
+static char const rcsid[] = "$Id: faTrans.c,v 1.6 2005/09/15 06:15:52 markd Exp $";
+
+/* command line options */
+static struct optionSpec optionSpecs[] =
+{
+    {"stop", OPTION_BOOLEAN},
+    {"offset", OPTION_INT},
+    {"cdsUpper", OPTION_BOOLEAN},
+    {NULL, 0}
+};
+
+boolean clStop = FALSE;
+int clOffset = 0;
+boolean clCdsUpper = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -15,11 +28,32 @@ errAbort(
   "usage:\n"
   "   faTrans in.fa out.fa\n"
   "options:\n"
-  "   -stop stop at first stop codon (otherwise puts in Z for stop codons)"
-  "   -offset=N start at a particular offset.");
+  "   -stop stop at first stop codon (otherwise puts in Z for stop codons)\n"
+  "   -offset=N start at a particular offset.\n"
+  "   -cdsUpper - cds is in upper case\n"
+);
 }
 
-void faTrans(char *inFile, char *outFile, boolean stop, int offset)
+struct dnaSeq *transOne(struct dnaSeq *dna)
+/* translate one mRNA sequence to a peptide */
+{
+int off = clOffset;
+if (clCdsUpper)
+    {
+    /* adjust offset to first upper */
+    char *p = dna->dna + off;
+    while ((*p != '\0') && islower(*p))
+        p++;
+    off = p - dna->dna;
+    /* zero-terminate at first lower */
+    while ((*p != '\0') && isupper(*p))
+        p++;
+    *p = '\0';
+    }
+return translateSeq(dna, off, clStop);
+}
+
+void faTrans(char *inFile, char *outFile)
 /* faTrans - Translate DNA .fa file to peptide. */
 {
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
@@ -27,9 +61,9 @@ FILE *f = mustOpen(outFile, "w");
 struct dnaSeq dna, *pep;
 ZeroVar(&dna);
 
-while (faSpeedReadNext(lf, &dna.dna, &dna.size, &dna.name))
+while (faMixedSpeedReadNext(lf, &dna.dna, &dna.size, &dna.name))
     {
-    pep = translateSeq(&dna, offset, stop);
+    pep = transOne(&dna);
     faWriteNext(f, pep->name, pep->dna, pep->size);
     freeDnaSeq(&pep);
     }
@@ -38,9 +72,12 @@ while (faSpeedReadNext(lf, &dna.dna, &dna.size, &dna.name))
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
-faTrans(argv[1], argv[2], cgiVarExists("stop"), cgiOptionalInt("offset", 0));
+clStop = optionExists("stop");
+clOffset = optionInt("offset", clOffset);
+clCdsUpper = optionExists("cdsUpper");
+faTrans(argv[1], argv[2]);
 return 0;
 }
