@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.9 2005/08/22 23:44:06 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.10 2005/09/16 20:25:16 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -154,8 +154,8 @@ if (! startsWith(tableChrom, table))
     if (sqlTableExists(conn, splitTable))
 	{
 	if (! sameString(table, "mrna"))
-	    printf("Table %s exists in both split and non-split forms!  "
-		   "Ignoring the non-split form.\n", table);
+	    printf("%s: Table %s exists in both split and non-split forms!  "
+		   "Ignoring the non-split form.\n", db, table);
 	gotBoth = TRUE;
 	}
     }
