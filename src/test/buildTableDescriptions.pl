@@ -53,6 +53,7 @@ $basename  [-kentSrc dir]  [-gbdDPath f]  [-noLoad]  [-help]
     -gbdDPath f:	Use f as the gbdDescriptions.html.  
 			Default: $gbdDPath.
     -db db:             Work only on db, not on all active dbs.
+    -hgConf file:       Use file instead of ~/.hg.conf.
     -noLoad:		Don't load the database, just create .sql files.
     -help:		Print this message.
 ";
@@ -277,6 +278,7 @@ use vars qw/
     $opt_gbdDPath
     $opt_noLoad
     $opt_db
+    $opt_hgConf
     $opt_help
     $opt_verbose
     /;
@@ -285,6 +287,7 @@ my $ok = GetOptions("kentSrc=s",
 		    "gbdDPath=s",
 		    "noLoad",
 		    "db=s",
+		    "hgConf=s",
 		    "help",
 		    "verbose");
 &usage(1) if (! $ok);
@@ -302,7 +305,7 @@ $verbose  = 1 if ($debug);
 my %tableAutoSql = slurpAutoSql($kentSrc);
 my %fieldsAutoSql = indexAutoSqlByFields(\%tableAutoSql);
 my %tableAnchors = parseGbdDescriptions($gbdDPath);
-my $hgConf = HgConf->new();
+my $hgConf = HgConf->new($opt_hgConf);
 my @dbs = (defined $opt_db) ? split(',', $opt_db) : &getActiveDbs($hgConf);
 foreach my $db (@dbs) {
   next if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/) ||
