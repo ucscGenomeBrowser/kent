@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.78 2005/09/14 22:29:53 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.79 2005/09/16 21:47:30 heather Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -646,6 +646,15 @@ note: 394 records dropped due to repStart > repEnd
 	/usr/local/apache/htdocs/goldenPath/mm6/bigZips/mrna.fa
     cd /usr/local/apache/htdocs/goldenPath/mm6/bigZips
     gzip mrna.fa
+
+    # add upstreams file (Heather, Sept. 2005)
+    cd /usr/local/apache/htdocs/goldenPath/mm6/bigZips
+    nice featureBits mm6 refGene:upstream:1000 -fa=upstream1000.fa
+    nice gzip upstream1000.fa
+    nice featureBits mm6 refGene:upstream:2000 -fa=upstream2000.fa
+    nice gzip upstream2000.fa
+    nice featureBits mm6 refGene:upstream:5000 -fa=upstream5000.fa
+    nice gzip upstream5000.fa
     
     md5sum *.gz > md5sum.txt
 
