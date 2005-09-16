@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.1 2005/09/14 20:46:29 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.2 2005/09/16 23:51:55 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -228,10 +228,9 @@ done
         "chr6:28912411-28925620", 1, 23, "Mouse", \
         "Mus musculus", "/gbdb/mm7/html/description.html", 0, 0, \
         "NCBI Build 35");' -h localhost hgcentraltest
-    #	do this defaultDb entry later after there is something to see
-    #	on this browser.
-    hgsql -e 'INSERT INTO defaultDb (name, genome) VALUES("mm7", "Mouse")' \
-        -h localhost hgcentraltest
+    #	It can be the default genome on genome-test
+    hgsql hgcentraltest \
+	-e 'update defaultDb set name="mm7" where genome="Mouse";'
     # start a new entry in the trackDb hierarchy
     cd $HOME/kent/src/hg/makeDb/trackDb/mouse
     mkdir mm7
@@ -404,7 +403,7 @@ cat << '_EOF_' > gsub
     # 75457193 bases of 2505900260 (3.011%) in intersection
 
 #############################################################################
-# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2005-08-29 - DONE)
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2005-08-29 - Hiram)
 
     # After the simpleRepeats track has been built, make a filtered version
     # of the trf output: keep trf's with period <= 12:
@@ -667,7 +666,7 @@ while (my $line=<FH>)
     my ($start, $contig, $length, $chrom, $chrom_length) = split('\s',$line);
     my $cmd=sprintf("twoBitToFa $twoBitFile:%s:%d-%d stdout",
         $chrom, $start, $start+$length);
-    print `$cmd | sed -e "s/^>.*/>$contig/"`;
+    print `$cmd | sed -e "s#^>.*#>$contig#"`;
     }
 close (FH);
 }
@@ -719,43 +718,70 @@ done
     cp -p nib/*.nib /cluster/bluearc/mm7/nib
 
 #############################################################################
-# BLASTZ SELF (DONE - 2005-08-29 - 2005-08-31 - Hiram)
+# BLASTZ SELF (WORKING - 2005-09-14 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzSelf
     cd /cluster/data/mm7/bed/blastzSelf
     cat << '_EOF_' > DEF
 # mouse vs mouse
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
 
-ALIGN=blastz-run.v7
-BLASTZ=blastz.v7
+BLASTZ=blastz.v7.x86_64
 BLASTZ_H=2000
-BLASTZ_M=1000
+BLASTZ_M=50
 BLASTZ_ABRIDGE_REPEATS=0
 
 # TARGET: Mouse Mm7
 SEQ1_DIR=/cluster/bluearc/mm7/nib
+SEQ1_2BIT=/cluster/bluearc/mm7/mm7.2bit
 SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=30000000
-SEQ1_LAP=10000
+SEQ1_CHUNK=500000
+SEQ1_LAP=50
 
 # QUERY: Mouse Mm7
 SEQ2_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
+SEQ2_2BIT=/cluster/bluearc/mm7/mm7.2bit
 SEQ2_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
 SEQ2_SELF=1
 SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
+SEQ2_CHUNK=3000000000
 SEQ2_LAP=0
 
 BASE=/cluster/data/mm7/bed/blastzSelf
 
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
+SEQ2_CTGLEN=$BASE/S2ctg.len
+TMPDIR=/scratch/tmp
 '_EOF_'
     # happy emacs
 
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    twoBitInfo /cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit S2.len
+    cd /cluster/data/mm7/bed/blastzSelf
+    nibSize /cluster/bluearc/mm7/nib/*.nib \
+	| awk '{printf "%s\t%s\n", $2, $3}' | sort -k2,2nr > S1.len
+    twoBitInfo /cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit stdout \
+	| sort -k2,2nr > S2ctg.len
+    twoBitInfo /cluster/bluearc/mm7/mm7.2bit stdout | sort -k2,2nr > S2.len
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=blastz \
+	`pwd`/DEF > blastz.out 2>&1 &
+XXX - Started - 2005-09-14 22:26
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=cat -stop=cat \
+	`pwd`/DEF > cat.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=chainRun -stop=chainRun \
+	`pwd`/DEF > chainRun.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=chainMerge -stop=load \
+	`pwd`/DEF > chainMergeToLoad.out 2>&1 &
+
+
 XXXX - working on the this modification to doBlastzChainNet.pl 2005-08-29
 
     #	establish a screen to control this job
@@ -861,7 +887,7 @@ XXXX - working on the this modification to doBlastzChainNet.pl 2005-08-29
 
 #############################################################################
 # PREPARE "bigZips" files for public release
-#		(DONE through mrna.fa - 2005-03-15 - Hiram)
+#		(TBD through mrna.fa - 2005-03-15 - Hiram)
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/mm7/bigZips
     cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
@@ -889,48 +915,8 @@ XXXX - working on the this modification to doBlastzChainNet.pl 2005-08-29
     
     md5sum *.gz > md5sum.txt
 
-#############################################################################
-# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2005-03-14 - Hiram)
-
-    ssh kkstore02
-    mkdir /panasas/store/mm7/rmsk
-    cd /cluster/data/mm7
-    cp -p */chr*.fa.out /panasas/store/mm7/rmsk
-    mkdir /panasas/store/mm7/rmsk.spec
-    cd /panasas/store/mm7/rmsk.spec
-    ln -s ../rmsk/*.out .
-
-    for FN in chr*.fa.out
-    do
-	echo ${FN}
-	/cluster/bluearc/RepeatMasker050305/DateRepeats \
-	    ${FN} -query mouse -comp human -comp rat -comp dog -comp cow
-    done
-    #	takes about 30 minutes
-
-    cd /panasas/store/mm7
-    mkdir linSpecRep.notInHuman
-    mkdir linSpecRep.notInRat
-    mkdir linSpecRep.notInDog
-    mkdir linSpecRep.notInCow
-    for F in rmsk.spec/chr*.out_homo-sapiens*
-    do
-	B=${F/rmsk.spec\/}
-	B=${B/.fa.out*/}
-	echo $B 
-        /cluster/bin/scripts/extractRepeats 1 ${F} > \
-		linSpecRep.notInHuman/${B}.out.spec
-        /cluster/bin/scripts/extractRepeats 2 ${F} > \
-		linSpecRep.notInRat/${B}.out.spec
-        /cluster/bin/scripts/extractRepeats 3 ${F} > \
-		linSpecRep.notInDog/${B}.out.spec
-        /cluster/bin/scripts/extractRepeats 4 ${F} > \
-		linSpecRep.notInCow/${B}.out.spec
-    done
-    #	the notInHuman, notInDog, and notInCow ended up being identical
-
 #########################################################################
-# CONTIG SPLIT UP - (DONE - 2005-03-24 - Hiram)
+# CONTIG SPLIT UP - (TBD)
     #	A first attempt was made to allow the genbank alignments to work
     #	from just the 2bit file, but that leads to some large job
     #	situations and things are not split up as best as they could be.
@@ -967,7 +953,7 @@ XXXX - working on the this modification to doBlastzChainNet.pl 2005-08-29
     cp -p jkStuff/liftAll.lft /panasas/store/mm7
 
 #########################################################################
-# GENBANK auto update started (DONE - 2005-03-15 - 2005-03-29 - Hiram)
+# GENBANK auto update started (TBD)
     ssh eieio
     cd /cluster/data/genbank
     #	edit etc/genbank.conf, add the following section:
@@ -1235,106 +1221,92 @@ mm7.mgcTables.mgc = all
 
 
 #########################################################################
-# BLASTZ HUMAN Hg17 (DONE - 2005-03-14 - 2005-03-18 - Hiram)
-    ssh pk
-    mkdir /cluster/data/mm7/bed/blastzHg17.2005_08_30
-    cd /cluster/data/mm7/bed/blastzHg17.2005_08_30
-    cat << '_EOF_' > DEF
-# mouse vs. human
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+# BLASTZ HUMAN Hg17 (WORKING - 2005-09-16 - Hiram)
+    ssh kkstore02
+    #	Create the composite chrom/contigs from randoms 2bit file
+    #	for Hg17  ***!!! THIS IS NOT NEEDED  !!!***
+    #	These can't be used with linage specific repeats
+    #	You can't use 2bit files with SMSK settings.
+    mkdir /cluster/data/hg17/randomContigs
+    cd /cluster/data/hg17
+    rm jkStuff/hg17Chroms_RandomContigs.lft
+for C in `cat chrom.lst`
+do
+    L="${C}/lift/random.lft"
+    if [ -f "${L}" ]; then
+        ls -og "${L}"
+	cat ${L} >> jkStuff/hg17Chroms_RandomContigs.lft
+        /cluster/data/mm7/jkStuff/lft2BitToFa.pl hg17.2bit ${L} \
+                > randomContigs/chr${C}_random.ctg.fa
+    fi
+done
+    #	Check that the sequence remains the same
+    faSize randomContigs/*.ctg.fa
+    # 14578373 bases  (110698 N's 14467675 real 7182813 upper 7284862
+    #	lower) in 86 sequences in 19 files
+    faSize */chr*_random.fa
+    # 17928373 bases (3460698 N's 14467675 real 7182813 upper 7284862
+    #	lower) in 19 sequences in 19 files
+    #	Note, only the N's are different
+    faToTwoBit ?/chr?.fa ??/chr??.fa 6_hla_hap?/chr*.fa \
+	randomContigs/chr*.ctg.fa hg17Chroms_RandomContigs.2bit
+    #	Verify sequence isn't broken:
+    twoBitToFa hg17Chroms_RandomContigs.2bit stdout | faSize stdin
+    # 3091666460 bases (225561672 N's 2866104788 real 1474041767
+    # upper 1392063021 lower) in 113 sequences in 1 files
+    twoBitToFa hg17.2bit stdout | faSize stdin
+    # 3095016460 bases (228911672 N's 2866104788 real 1474041767
+    # upper 1392063021 lower) in 46 sequences in 1 files
+    #	Only difference is the N count. 228911672 - 225561672 = 3350000
+    cp -p hg17Chroms_RandomContigs.2bit /cluster/bluearc/hg17
+    cp -p jkStuff/hg17Chroms_RandomContigs.lft /cluster/bluearc/hg17
 
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
+    mkdir /cluster/data/mm7/bed/blastzHg17.2005-09-16
+    cd /cluster/data/mm7/bed
+    ln -s blastzHg17.2005-09-16 blastz.mm7
+    cd /cluster/data/mm7/bed/blastzHg17.2005-09-16
+    cat << '_EOF_' > DEF
+# mouse vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
 BLASTZ_ABRIDGE_REPEATS=1
 
-# TARGET: Mouse
-SEQ1_DIR=/panasas/store/mm7/nib
-# not used
-SEQ1_RMSK=/panasas/store/mm7/rmsk
-# not used
-SEQ1_FLAG=-rodent
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInHuman
-SEQ1_IN_CONTIGS=0
+# TARGET: Mouse Mm7
+SEQ1_DIR=/cluster/bluearc/mm7/nib
+SEQ1_SMSK=/cluster/bluearc/mm7/linSpecRep/notInHumanDogCow
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
+SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
 
-# QUERY: Human
-SEQ2_DIR=/scratch/hg/hg17/bothMaskedNibs
-# RMSK not currently used
-SEQ2_RMSK=
-# FLAG not currently used
-SEQ2_FLAG=
-SEQ2_SMSK=/scratch/hg/hg17/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=30000000
+# QUERY: Human Hg17
+SEQ2_DIR=/cluster/bluearc/hg17/bothMaskedNibs
+SEQ2_SMSK=/cluster/bluearc/hg17/linSpecRep.notInMouse
+SEQ2_LEN=/cluster/bluearc/hg17/chrom.sizes
+SEQ2_CHUNK=3000000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzHg17.2005_03_14
-    cd /cluster/data/mm7/bed/blastzHg17.2005_08_30
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+BASE=/cluster/data/mm7/bed/blastzHg17.2005-09-16
+TMPDIR=/scratch/tmp
 '_EOF_'
     # << keep emacs coloring happy
 
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/hg17/chrom.sizes > S2.len
+    cd /cluster/data/mm7/bed/blastzHg17.2005-09-16
     #	establish a screen to control this job
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
-	blast.run.out 2>&1 &
-    #	real    993m28.547s
-    #	user    0m0.198s
-    #	sys     0m0.171s
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=blastz \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=cat -stop=load \
+	`pwd`/DEF > catToLoad.out 2>&1 &
+XXXX - Started 2005-09-16 14:30
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kkstore02
     screen -d -r
-    #	STARTED - 2005-03-17 21:25
-    #	FINISHED - 2005-03-18 14:00
-# Completed: 45347 of 45347 jobs
-# CPU time in finished jobs:   16921981s  282033.02m  4700.55h  195.86d  0.537 y
-# IO & Wait Time:               2381711s   39695.18m   661.59h   27.57d  0.076 y
-# Average job time:                 426s       7.09m     0.12h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            9568s     159.47m     2.66h    0.11d
-# Submission to last job:         58695s     978.25m    16.30h    0.68d
-
-# Completed: 331 of 331 jobs
-# CPU time in finished jobs:        272s       4.54m     0.08h    0.00d  0.000 y
-# IO & Wait Time:                  1145s      19.08m     0.32h    0.01d  0.000 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest job:                       24s       0.40m     0.01h    0.00d
-# Submission to last job:           265s       4.42m     0.07h    0.00d
-
-    #	The kki batch doChainRun.csh appears to have failed
-    #	due to underlying changes in the location of hg17 items
-    #	fixup the symlinks which are in a state of flux today, then,
-    #	to recover:
-    ssh kki
-    cd /cluster/data/mm7/bed/blastzHg17.2005_03_14/axtChain/run
-    rm -fr chain
-    time ./doChainRun.csh
-    #	real    22m47.917s
-    #	user    0m0.380s
-    #	sys     0m0.630s
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:       6373s     106.22m     1.77h    0.07d  0.000 y
-# IO & Wait Time:                   552s       9.20m     0.15h    0.01d  0.000 y
-# Average job time:                 173s       2.89m     0.05h    0.00d
-# Longest job:                      662s      11.03m     0.18h    0.01d
-# Submission to last job:          1200s      20.00m     0.33h    0.01d
-
-    #	That was the last part of the chainRun step, can now continue:
-    ssh kkstore02
-    cd /cluster/data/mm7/bed/blastzHg17.2005_03_14
-    time /cluster/bin/scripts/doBlastzChainNet.pl -continue chainMerge `pwd`/DEF > chainMerge.run.out 2>&1 &
-    # STARTED - 2005-03-18 15:00
-    # FINISHED 2005-03-18 16:33
 
     #	checking the numbers for sanity:
     ssh hgwdev
@@ -1443,61 +1415,46 @@ doOne ${targetDb} chain${DB1}Link
     # << keep emacs coloring happy
 
 #########################################################################
-# BLASTZ RAT Rn3 (FIRST TRY - 2005-03-15 - 2005-03-17 - Hiram)
+# BLASTZ RAT Rn3 (WORKING - 2005-09-16 - Hiram)
 #	THESE ARE THE CORRECT PARAMETERS - the second try was not used
 #		it was too restrictive and cuts out too many alignments
     ssh kkstore02
-    mkdir /cluster/data/mm7/bed/blastzRn3.2005_03_22
-    cd /cluster/data/mm7/bed/blastzRn3.2005_03_22
-    cat << '_EOF_' > DEF
-# mouse vs. human
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
+    mkdir /cluster/data/mm7/bed/blastzRn3.2005-09-16
+    cd /cluster/data/mm7/bed
+    ln -s blastzRn3.2005-09-16 blastz.rn3
+    cd blastzRn3.2005-09-16
 
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
+    cat << '_EOF_' > DEF
+# mouse vs rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
 BLASTZ_ABRIDGE_REPEATS=1
 
-# TARGET
-# Mouse
-SEQ1_DIR=/panasas/store/mm7/nib
-# not used
-SEQ1_RMSK=/panasas/store/mm7/rmsk
-# not used
-SEQ1_FLAG=-rodent
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInRat
-SEQ1_IN_CONTIGS=0
+# TARGET: Mouse Mm7
+SEQ1_DIR=/cluster/bluearc/mm7/nib
+SEQ1_SMSK=/cluster/bluearc/mm7/linSpecRep/notInRat
+SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY
-# Rat
-SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
-# RMSK not currently used
-SEQ2_RMSK=
-# FLAG not currently used
-SEQ2_FLAG=
+# QUERY: Rat Rn3 - chunk big enough to do all chroms in single whole pieces
+SEQ2_DIR=/cluster/bluearc/rat/rn3/softNib
 SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=30000000
+SEQ2_LEN=/cluster/bluearc/rat/rn3/chrom.sizes
+SEQ2_CHUNK=300000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzRn3.2005_03_15
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+BASE=/cluster/data/mm7/bed/blastzRn3.2005-09-16
+TMPDIR=/scratch/tmp
 '_EOF_'
     # << keep emacs coloring happy
 
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/rn3/chrom.sizes > S2.len
     #	establish a screen to control this job
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
-	blast.run.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > full.run.out 2>&1 &
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh kkstore02
@@ -1629,146 +1586,7 @@ netFilter -minGap=10 mm7.rn3.net.gz | hgLoadNet -verbose=0 mm7 netRn3 stdin
 
 
 #########################################################################
-# BLASTZ RAT REDONE 2005-03-22 
-#	THIS WAS AN EXPERIMENT - THESE RESULTS WERE DROPPED FROM THE DB
-#	 more stringent BLASTZ parameters and chain filtering
-#   COMPLETE 2005-03-23 - swap to place chainMm6 and netMm6 on rn3 browser
-    ssh kkstore02
-    mkdir /cluster/data/mm7/bed/blastzRn3.2005_03_22
-    cd /cluster/data/mm7/bed/blastzRn3.2005_03_22
-### XXXX - 2005-03-31 - THERE IS AN ERROR IN THIS DEF FILE SPECIFYING
-### the SEQ2_LEN but it didn't seem to matter.  The blastz run appears
-### to ahve used SEQ2 correctly despite this incorrect specification.
-    cat << '_EOF_' > DEF
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/bin/scripts:/cluster/home/angie/schwartzbin/
-
-# mouse vs. rat
-#	more stringent parameters to reduce output
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=50000
-BLASTZ_T=2
-# scoring matrix
-BLASTZ_Q=/cluster/data/blastz/mus_rat.q 
-BLASTZ_ABRIDGE_REPEATS=1
-# TARGET: Mouse (mm7)
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInRat
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Rat (rn3)
-SEQ2_DIR=/iscratch/i/rn3/bothMaskedNibs
-SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=30000000
-SEQ2_LAP=0
-SEQ2_LEN=/iscratch/i/bosTau1/chrom.sizes
-#  XXXXXXXXXXXXXXX   ^^^^^^^  wrong file ! XXXXXXXXXXXXXX
-
-BASE=/cluster/data/mm7/bed/blastzRn3.2005_03_22
-
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-'_EOF_'
-    # << keep emacs coloring happy
-
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/rn3/chrom.sizes > S2.len
-    #	establish a screen to control this job
-    screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore 5000 \
-	`pwd`/DEF > blast.run.out 2>&1 &
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
-    ssh kkstore02
-    screen -d -r
-    #	These more strict blastz parameters make this run much faster;
-# Completed: 40713 of 40713 jobs
-# CPU time in finished jobs:    4813023s   80217.06m  1336.95h   55.71d  0.153 y
-# IO & Wait Time:               1788355s   29805.91m   496.77h   20.70d  0.057 y
-# Average job time:                 162s       2.70m     0.05h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            2543s      42.38m     0.71h    0.03d
-# Submission to last job:         10945s     182.42m     3.04h    0.13d
-
-# Completed: 331 of 331 jobs
-# CPU time in finished jobs:        146s       2.43m     0.04h    0.00d  0.000 y
-# IO & Wait Time:                   840s      14.00m     0.23h    0.01d  0.000 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest job:                        7s       0.12m     0.00h    0.00d
-# Submission to last job:            66s       1.10m     0.02h    0.00d
-
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:       3870s      64.50m     1.08h    0.04d  0.000 y
-# IO & Wait Time:                   364s       6.06m     0.10h    0.00d  0.000 y
-# Average job time:                 106s       1.76m     0.03h    0.00d
-# Longest job:                      224s       3.73m     0.06h    0.00d
-# Submission to last job:           406s       6.77m     0.11h    0.00d
-
-    #	FINISHED - 2005-03-22 15:44
-
-    #	it is helpful to time these commands to make sure everything
-    #	is sane.  The times should also be similar, as are the numbers.
-
-    #	check the numbers
-    time featureBits mm7 chainRn3
-    2705309999 bases of 2597150411 (104.165%) in intersection
-    time featureBits mm5 chainRn3
-    2646682349 bases of 2615483787 (101.193%) in intersection
-    #	These chainRn3 tables on mm7 are much smaller than mm5
-    #	There was an attempt during mm5 to run the blastz on rn3 with
-    #	the stringent parameters used here, but that ran into
-    #	difficulties as there were other tracks depending upon the
-    #	older bulky alignments and it was necessary to bring the bulky
-    #	alignments back.  There is a vast difference in the number of
-    #	chains:  mm5.chr1_chainRn3: 1,865,181 rows, mm7.chr1_chainRn3: 16466
-    #	mm5.chr1_chainRn3Link: 18,252,937 rows, mm7.chr1_chainRn3Link: 2,340,447
-
-    #	trying to do the chainLink's requires kolossus, big memory
-    ssh kolossus
-    #	specify a .hg.conf file with read-only passwords:
-    #	these take about 15 and 90 minutes (the mm5's are much larger)
-    HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
-	featureBits mm7 chainRn3Link
-    #	1652692239 bases of 2597150411 (63.635%) in intersection
-    #	real 864.72
-    #	user 211.05
-    #	sys 66.95
-
-    #	1802980225 bases of 2597150411 (69.421%) in intersection
-    HGDB_CONF=~/.hg.conf.read-only /usr/bin/time --portability \
-	featureBits mm5 chainRn3Link
-    #	1798705001 bases of 2615483787 (68.771%) in intersection
-
-
-    #	the netRn3 measurements take about 2m30s
-    time featureBits mm7 netRn3
-    #	2705309999 bases of 2597150411 (104.165%) in intersection
-    time featureBits mm5 netRn3
-    #	2638255333 bases of 2615483787 (100.871%) in intersection
-
-
-    #	And then the swap of that:
-    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
-	swap.run.out 2>&1 &
-    #	STARTED - 2005-03-22 16:15
-    #	FINISHED - 2005-03-22 17:41
-
-    #	check the numbers
-    featureBits rn3 chainMm6
-    #	2819351420 bases of 2571104688 (109.655%) in intersection
-    featureBits rn3 chainMm5
-    #	2786666162 bases of 2571104688 (108.384%) in intersection
-
-    featureBits rn3 netMm6
-    #	2808675438 bases of 2571104688 (109.240%) in intersection
-    featureBits rn3 netMm5
-    #	2778454647 bases of 2571104688 (108.065%) in intersection
-
-#########################################################################
-# BLASTZ Zebrafish danRer2 (DONE - 2005-03-17 - 2005-03-18 - Hiram)
+# BLASTZ Zebrafish danRer2 (TBD)
     ssh kkstore02
     mkdir /cluster/data/mm7/bed/blastzDanRer2.2005_03_17
     cd /cluster/data/mm7/bed/blastzDanRer2.2005_03_17
@@ -1915,66 +1733,57 @@ doOne danRer2 chainMm5Link
     #   68003819 bases of 1560497282 (4.358%) in intersection
 
 #########################################################################
-# BLASTZ FUGU fr1 (DONE - 2005-03-17 - 2005-03-19 - Hiram)
-    ssh kkstore02
-    mkdir /cluster/data/mm7/bed/blastzFr1.2005_04_01
-    cd /cluster/data/mm7/bed/blastzFr1.2005_04_01
+# BLASTZ FUGU fr1 (WORKING - 2005-09-16 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzFr1.2005-09-16
+    cd /cluster/data/mm7/bed
+    ln -s blastzFr1.2005-09-16 blastz.fr1
+    cd blastzFr1.2005-09-16
 
     cat << '_EOF_' > DEF
 # mouse vs. fugu
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
 
-ALIGN=blastz-run
-BLASTZ=blastz
+BLASTZ=blastz.v7.x86_64
 
 # Reuse parameters from human-chicken, except L=6000 (more relaxed)
 BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=6000
 BLASTZ_K=2200
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
 
-# TARGET: Mouse
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
+# TARGET: Mouse Mm7 - testing 100,000,000 sized chunk on pk kluster
+SEQ1_DIR=/cluster/bluearc/mm7/nib
+SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
+SEQ1_CHUNK=100000000
 SEQ1_LAP=10000
 
-# QUERY: Fugu
-SEQ2_DIR=/iscratch/i/fr1/nib
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
+# QUERY: Fugu - chunk big enough to run the whole chrom at once
+SEQ2_DIR=/san/sanvol1/scratch/fr1/nib
+SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ2_CHUNK=400000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzFr1.2005_04_01
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+BASE=/cluster/data/mm7/bed/blastzFr1.2005-09-16
 '_EOF_'
-    # << this line keeps emacs coloring happy
+    # << happy emacs
 
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/fr1/chrom.sizes > S2.len
     #	establish a screen to control this job
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzFr1.2005-09-16
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kki \
-	-fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
-    #	STARTED - 2005-04-01 16:30
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	-continue cat -fileServer eieio -chainMinScore 5000 \
-	`pwd`/DEF > cat.run.out 2>&1 &
-    #	STARTED - 2005-04-01 16:30
-
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+    #	With 100,000,000 and 400,000,000 chunk sizes, makes only 56 jobs
+    #	for the blastz run
+    #	STARTED - 2005-09-16 16:21
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
-    ssh kkstore02
+    ssh pk
     screen -d -r
-    #	STARTED - 2005-03-17 11:00
-    #	FINISHED - 2005-03-19 00:14
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
 	-chainMinScore 5000 -swap `pwd`/DEF > swap.run.out 2>&1 &
 
@@ -2195,7 +2004,7 @@ doOne tetNig1 chainMm5Link
     #   41736750 bases of 342403326 (12.189%) in intersection
  
 #########################################################################
-# CPGISLANDS (DONE - 2005-03-17 - Hiram)
+# CPGISLANDS (TBD)
     ssh hgwdev
     mkdir -p /cluster/data/mm7/bed/cpgIsland
     cd /cluster/data/mm7/bed/cpgIsland
@@ -2269,104 +2078,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	10102968 bases of 2505900260 (0.403%) in intersection
 
 #########################################################################
-# BLASTZ Dog canFam1 (DONE - 2005-03-18 - 2005-04-03 - Hiram)
-    ssh kkstore02
-    mkdir /cluster/data/mm7/bed/blastzCanFam1.2005_03_18
-    cd /cluster/data/mm7/bed/blastzCanFam1.2005_03_18
-
-    cat << '_EOF_' > DEF
-# mouse vs. dog
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
-
-ALIGN=blastz-run
-BLASTZ=blastz
-
-# Default
-BLASTZ_H=2000
-BLASTZ_ABRIDGE_REPEATS=1
-
-# TARGET: Mouse (mm7)
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_RMSK=
-SEQ1_FLAG=
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInDog
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Dog (canFam1)
-SEQ2_DIR=/scratch/hg/canFam1/nib
-SEQ2_RMSK=
-SEQ2_FLAG=
-SEQ2_SMSK=/scratch/hg/canFam1/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/mm7/bed/blastzCanFam1.2005_03_18
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-'_EOF_'
-    # << keep emacs coloring happy
-
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/canFam1/chrom.sizes > S2.len
-    #	establish a screen to control this job
-    screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	-fileServer eieio -chainMinScore 5000 `pwd`/DEF > blast.run.out 2>&1 &
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
-    ssh kkstore02
-    screen -d -r
-    #	STARTED - 2005-03-18 09:57
-    #	BROKEN - 2005-03-20 11:00 - due to rearrangements on /scratch/
-    #		need to regenerate the linSpec not in mouse for canFam1
-    #	RESTARTED - 2005-03-30 16:25
-    #	COMPLETELY RESTARTED 2005-04-01 11:40
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	-continue cat -fileServer eieio -chainMinScore 5000 \
-	`pwd`/DEF > cat.run.out 2>&1 &
-    #	Check measurements at this point:
-    featureBits mm7 netCanFam1
-    #   2544343230 bases of 2597150411 (97.967%) in intersection
-    featureBits mm5 netCanFam1
-    #   2456773441 bases of 2615483787 (93.932%) in intersection
-    featureBits mm7 chainCanFam1
-    #   2562947250 bases of 2597150411 (98.683%) in intersection
-    featureBits mm5 chainCanFam1
-    #   2464497454 bases of 2615483787 (94.227%) in intersection
-    featureBits mm7 chainCanFam1Link
-    #   798637320 bases of 2597150411 (30.751%) in intersection
-    featureBits mm5 chainCanFam1Link
-    #   859275338 bases of 2615483787 (32.853%) in intersection
-
-    #	Those are looking pretty good, so now do the swap:
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastzCanFam1.2005_03_18
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	-swap -fileServer eieio -chainMinScore 5000 \
-	`pwd`/DEF > swap.run.out 2>&1 &
-    #	125 minutes
-    featureBits canFam1 netMm6
-    #   2305458923 bases of 2359845093 (97.695%) in intersection
-    featureBits canFam1 netMm5
-    #   2255138517 bases of 2359845093 (95.563%) in intersection
-    featureBits canFam1 chainMm6
-    #   2310615069 bases of 2359845093 (97.914%) in intersection
-    featureBits canFam1 chainMm5
-    #   2257403477 bases of 2359845093 (95.659%) in intersection
-    featureBits canFam1 chainMm6Link
-    #   783631188 bases of 2359845093 (33.207%) in intersection
-    featureBits canFam1 chainMm5Link
-    #   837236252 bases of 2359845093 (35.478%) in intersection
-
-#########################################################################
-# BLASTZ Cow bosTau1 (DONE - 2005-03-18 - 2005-04-08 - Hiram)
+# BLASTZ Cow bosTau1 (TBD)
     ssh kkstore02
     mkdir /cluster/data/mm7/bed/blastzBosTau1.2005_03_18
     cd /cluster/data/mm7/bed/blastzBosTau1.2005_03_18
@@ -2469,168 +2181,7 @@ BASE=/cluster/data/mm7/bed/blastzBosTau1.2005_03_18
     #	looks good, done.
 
 #############################################################################
-# BLASTZ SELF (DONE - 2005-03-31 - 2005-04-08 - Hiram)
-    # The procedure for lineage spec business with self is to simply
-    # use the actual repeat masker output for this mouse assembly as
-    # the lineage specific repeats for itself.  Thus, merely make
-    # symlinks to the repeat masker out files and name them as expected
-    # for blastz.  In this case they are called notInMouse but they
-    # really mean InMouse.  Yes, it is confusing, but that's just the
-    # nature of the game in this case.
-
-    ssh eieio
-    mkdir /panasas/store/mm7/linSpecRep.notInMouse
-    cd /panasas/store/mm7/linSpecRep.notInMouse
-    foreach f (../rmsk/*.fa.out)
-	set base = $f:t:r:r
-	echo $base.out.spec
-	ln -s $f $base.out.spec
-    end
-    
-    mkdir /cluster/data/mm7/bed/blastzSelf
-    cd /cluster/data/mm7/bed/blastzSelf
-    cat << '_EOF_' > DEF
-# mouse vs. mouse
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
-
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
-BLASTZ_ABRIDGE_REPEATS=1
-
-# TARGET: Mouse Mm6
-SEQ1_DIR=/panasas/store/mm7/nib
-# RMSK not currently used
-SEQ1_RMSK=/panasas/store/mm7/rmsk
-# FLAG not currently used
-SEQ1_FLAG=-rodent
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInMouse
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Mouse Mm6
-SEQ2_DIR=/panasas/store/mm7/nib
-# RMSK not currently used
-SEQ2_RMSK=/panasas/store/mm7/rmsk
-# FLAG not currently used
-SEQ2_FLAG=-rodent
-SEQ2_SMSK=/panasas/store/mm7/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/mm7/bed/blastzSelf
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-'_EOF_'
-    # << keep emacs coloring happy
-
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    cp /cluster/data/mm7/chrom.sizes ./S2.len
-    #	establish a screen to control this job
-    screen
-    #	kkstore02 was off-limits to logins as this started, use eieio
-    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
-	`pwd`/DEF > blast.run.out 2>&1 &
-    #	STARTED - 2005-03-31 - 13:53
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
-    ssh eieio
-    screen -d -r
-    #	The job had difficulties due to failing nodes on the KK
-    #	recover the job by going to kk machine and
-    #	directory /cluster/data/mm7/bed/blastzSelf
-    #	to get it to complete with para recover etc...
-    #	One job seemed to take forever, it appears the section:
-    #	chrUn_random:50000000-60010000 with the same piece, 40 hours.
-# Completed: 8861 of 8861 jobs
-# CPU time in finished jobs:    3519718s   58661.97m   977.70h   40.74d  0.112 y
-# IO & Wait Time:                460422s    7673.70m   127.89h    5.33d  0.015 y
-# Average job time:                 449s       7.49m     0.12h    0.01d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:          145760s    2429.33m    40.49h    1.69d
-# Submission to last job:        263627s    4393.78m    73.23h    3.05d
-    #	After it was complete, create the run.time file:
-    ssh kk
-    cd /cluster/data/mm7/bed/blastzSelf/run.blastz
-    para time > run.time
-    time /cluster/bin/scripts/doBlastzChainNet.pl \
-	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
-    # STARTED - 2005-04-04 11:40
-    #	three jobs failed, go to kolossus and try them there:
-    ssh kolossus
-    cd /cluster/data/mm7/bed/blastzSelf/axtChain/run
-    ./chain.csh chrUn_random.nib:chrUn_random: \
-	chain/chrUn_random.nib:chrUn_random:.chain
-    #	chrUn failed too on kolossus
-    ./chain.csh chrY_random.nib:chrY_random: \
-	chain/chrY_random.nib:chrY_random:.chain
-    #	chrY worked in 28 minutes
-    ./chain.csh chrX.nib:chrX: chain/chrX.nib:chrX:.chain
-    #	chrX worked in 44 minutes
-    #	The chrUn business, in fact any of the chr*_random's shouldn't
-    #	be chained anyway since they aren't contiguous sequence anyhow.
-    #	So, simply leave chrUn out of the chain and net stuff.
-    #	to continue:
-    ssh kk
-    cd /cluster/data/mm7/bed/blastzSelf/axtChain/run
-    para time > run.time
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastzSelf
-    time /cluster/bin/scripts/doBlastzChainNet.pl \
-	-continue chainMerge -fileServer eieio `pwd`/DEF > merge.run.out 2>&1 &
-    #	385 min = 3h 25m
-    #	that finished OK, checking the measurements:
-    #	this self alignment only appears to be present on mm3 as mouseChain
-    time featureBits mm7 netSelf
-    # 2336281173 bases of 2597150411 (89.956%) in intersection
-    time featureBits mm7 chainSelf
-    #  2579948751 bases of 2597150411 (99.338%) in intersection
-    time featureBits mm3 mouseChain
-    # 889252994 bases of 2505900260 (35.486%) in intersection
-
-    #	the chainLink measurements need kolossus:
-    ssh kolossus
-    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainSelfLink
-    #	417927047 bases of 2597150411 (16.092%) in intersection
-    #	244 minutes
-    time HGDB_CONF=~/.hg.conf.read-only featureBits mm3 mouseChainLink
-    #	383345536 bases of 2505900260 (15.298%) in intersection
-
-    #	Gill likes to see the blastzSelf track:
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastzSelf
-    #	cat the pslParts together, per-chrom, and in chromStart order:
-    ls pslParts | sed -e "s/.nib.*//" | sort -u | while read C
-    do
-	echo -n "working: ${C} ... "
-	zcat `ls pslParts/${C}.nib* | sort --field-separator=':' -k1,1 -k3,3n` \
-            | gzip > pslChrom/${C}_blastzSelf.psl.gz
-	echo "done"
-    done
-
-    # Load blastzSelf
-    ssh hgwdev
-    cd /cluster/data/mm7/bed/blastzSelf/pslChrom
-    for I in *.psl.gz
-    do
-	$HOME/bin/i386/hgLoadPsl -noTNameIx mm7 ${I}
-	echo "done: ${I}"
-    done
-    #	STARTED - 2005-04-06 15:24
-    #	4h 24m load time - chrUn_random failed to load
-    ssh kolossus
-    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 blastzSelf
-    #	8h 34m job
-    #	471978757 bases of 2597150411 (18.173%) in intersection
-
-#############################################################################
-# BLASTZ CHICKEN - (DONE - 2005-03-21 - 2005-04-08 - Hiram)
+# BLASTZ CHICKEN - (TBD)
 
     # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN
     # In an email 2/13/04, Arian said we could treat all human repeats as 
@@ -2742,7 +2293,7 @@ SEQ2_LEN=$BASE/S2.len
     #   70542788 bases of 1054197620 (6.692%) in intersection
 
 #############################################################################
-# BLASTZ OPOSSUM (DONE - 2005-04-01 - 2005-04-08 - Hiram)
+# BLASTZ OPOSSUM (TBD)
     ssh eieio
     mkdir /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
     cd /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
@@ -2878,7 +2429,7 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
     #	looks OK, done
 
 ##############################################################################
-# BLASTZ FROG Xenopus tropicalis (DONE - 2005-04-05 - 2005-04-08 - Hiram)
+# BLASTZ FROG Xenopus tropicalis (TBD)
     ssh eieio
     mkdir /cluster/data/mm7/bed/blastzXenTro1.2005_04_05
     cd /cluster/data/mm7/bed/blastzXenTro1.2005_04_05
@@ -2989,7 +2540,7 @@ SEQ2_LEN=$BASE/S2.len
     #   76415718 bases of 1381238994 (5.532%) in intersection
 
 #############################################################################
-# BLASTZ CHIMP PanTro1 (DONE - 2005-04-05 - 2005-04-15 - Hiram)
+# BLASTZ CHIMP PanTro1 (TBD)
     ssh eieio
     mkdir /cluster/data/mm7/bed/blastzPanTro1.2005_04_08
     cd /cluster/data/mm7/bed/blastzPanTro1.2005_04_08
@@ -3111,7 +2662,7 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
     #	chain tracks appear and are in the proper order.
 
 #############################################################################
-# STS MARKERS DATA DOWNLOAD (DONE - 2005-04-06 - 2005-04-18 - Hiram)
+# STS MARKERS DATA DOWNLOAD (TBD)
     ssh eieio
     mkdir -p /cluster/data/mm7/bed/STSmarkers/downloads
     cd /cluster/data/mm7/bed/STSmarkers/downloads
@@ -3550,16 +3101,8 @@ cat << '_EOF_' > template
     comm -13 mm5.nameList mm7.nameList | wc
     #	1625    1625   15090		<- 1,625 unique to mm7 list
 
-
 #############################################################################
-# HGCENTRAL DEFAULTDB UPDATE (DONE - 2005-04-08 - Hiram)
-    #	May as well make this assembly be the default on hgwdev
-    ssh hgwdev
-    hgsql hgcentraltest \
-	-e 'update defaultDb set name="mm7" where genome="Mouse";'
-
-#############################################################################
-# 10-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2005-04-08 - 2005-04-18 - Hiram)
+# 10-WAY VAR_MULTIZ - ALIGNMENTS (TBD)
     ssh eieio
     mkdir /cluster/data/mm7/bed/multiz10way
     cd /cluster/data/mm7/bed/multiz10way
@@ -3778,7 +3321,7 @@ cat  << 'EOF' > template
     cd /usr/local/apache/htdocs/goldenPath/mm7/multiz10way
     ln -s /cluster/data/mm7/bed/multiz10way/mafDownloads/chr*.maf.gz .
 
-    # Load into database  (DONE - 2005-01-04 - Hiram)
+    # Load into database  (TBD)
     ssh hgwdev
     cd /cluster/data/mm7/bed/multiz10way
     mkdir /gbdb/mm7/multiz10way
@@ -3804,7 +3347,7 @@ cat  << 'EOF' > template
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
-#		(DONE - 2005-04-18 - 2004-04-20- Hiram)
+#		(TBD)
 
 # Estimate phastCons parameters
     ssh kkstore02
@@ -4584,7 +4127,7 @@ cat out/$1/*.out >>protRefRaw.psl
     hgsql mm7 -e 'LOAD DATA local INFILE "kgProtAliasBoth.tab" into table kgProtAlias;'  
 
 
-# MAKING FOLDUTR TABLES (DONE 2005-04-21, Fan)
+# MAKING FOLDUTR TABLES (TBD)
 # First set up directory structure and extract UTR sequence on hgwdev
     ssh hgwdev
     mkdir -p /cluster/data/mm7/bed/rnaStruct
@@ -4675,7 +4218,7 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
 
 ############################################################################
 
-# CYTOBAND TRACK (DONE - 2005-04-14 - Hiram)
+# CYTOBAND TRACK (TBD)
     ssh hgwdev
     mkdir /cluster/data/mm7/cytoBand
     cd /cluster/data/mm7/cytoBand
@@ -4711,7 +4254,7 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
 ############################################################################
 
 ### MAKE THE affyU74 TRACK - needed for the Gene Sorter 
-#                              (DONE - 2005-04-14 - Fan)
+#                              (TBD)
 # MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
 # target sequences. Recalculate alignments and load data
 ----------------------------------
@@ -4777,10 +4320,10 @@ cat chrom/*.psl > affyU74.psl
 hgLoadPsl mm7 affyU74.psl
 # rm -fr chrom temp run
 
-##   MAKE THE affyGnfU74 TRACKs (DONE - 2005-04-14 - Fan)
+##   MAKE THE affyGnfU74 TRACKs (TBD)
 # Make bed files and load consensus sequences for Affy U74 chip set.
 # Fix broken symlinks to microarray data after directory structure changed
-# (DONE, 2005-05-03, hartera)
+# (TBD)
 ----------------------------------
 #This needs to be done after affyU74 is already made.
 ssh hgwdev
@@ -4831,7 +4374,7 @@ hgLoadBed -strict mm7 affyGnfU74C affyGnfU74C.bed
     hgLoadSeq -abbr=U74Bv2: mm7 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
     hgLoadSeq -abbr=U74Cv2: mm7 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
 
-### GNF ATLAS 2  [DONE Fan 2005-04-14]
+### GNF ATLAS 2  [TBD)
     # Align probes from GNF1M chip.
     ssh kk
     cd /cluster/data/mm7/bed
@@ -4880,7 +4423,7 @@ hgLoadBed -strict mm7 affyGnfU74C affyGnfU74C.bed
     # Note that the unmapped 5000 records are from all-N sequences.
     hgLoadBed -strict mm7 gnfAtlas2 gnfAtlas2.bed
 
-# MOUSE AFFYMETRIX MOE430 TRACK (DONE, 2005-04-14, Fan)
+# MOUSE AFFYMETRIX MOE430 TRACK (TBD)
 #    mkdir -p /projects/compbio/data/microarray/affyMouse
     # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
     # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
@@ -4897,7 +4440,7 @@ hgLoadBed -strict mm7 affyGnfU74C affyGnfU74C.bed
 #    cp /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \
 #       /cluster/bluearc/affy/
 
-    # THE ABOVE WAS ALREADY DONE BY RACHEL 4/16/04.
+    # THE ABOVE WAS ALREADY TBD)
 
     # Set up cluster job to align MOE430 consensus sequences to mm7
     ssh kkr1u00
@@ -4961,7 +4504,7 @@ hgLoadBed -strict mm7 affyGnfU74C affyGnfU74C.bed
     # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/mouse/
     # add affyMOE430.html file and then do make alpha to add to trackDb table
 
-######## MAKING GENE SORTER TABLES #######  (STARTED - 2005-04-15, DONE 4/18/05 - Fan)
+######## MAKING GENE SORTER TABLES #######  (TBD)
 # These are instructions for building the
 # Gene Sorter.  Don't start these until
 # there is a knownGene track and the affy tracks
@@ -5054,7 +4597,7 @@ Loading database with 1972005 rows
 
 # Create known gene mapping table and expression distance tables
 # for GNF Atlas 2.  (The hgExpDistance takes an hour.)
-# DONE (05-04-15 Fan)
+# TBD)
 
 hgMapToGene mm7 affyGnf1m knownGene knownToGnf1m
 hgExpDistance mm7 hgFixed.gnfMouseAtlas2MedianRatio \
@@ -5100,7 +4643,7 @@ hgExpDistance mm7 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownT
 hgExpDistance mm7 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
 # Got 1406 unique elements in affyGnfU74C
 
-# C.ELEGANS BLASTP FOR GENE SORTER (DONE 4/15/05 Fan)
+# C.ELEGANS BLASTP FOR GENE SORTER (TBD)
     # Make C. elegans ortholog column using blastp on wormpep.
     # First make C. elegans protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -5155,7 +4698,7 @@ end
     cd /cluster/data/mm7/bed/blastp/ce2/run/out
     hgLoadBlastTab mm7 ceBlastTab -maxPer=1 *.tab
 
-# HUMAN BLASTP FOR GENE SORTER (DONE 4/18/05 Fan)
+# HUMAN BLASTP FOR GENE SORTER (TBD)
     # Make human ortholog column using blastp on human known genes.
     # First make human protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -5209,7 +4752,7 @@ end
     cd /cluster/data/mm7/bed/blastp/hg17/run/out
     hgLoadBlastTab mm7 hgBlastTab -maxPer=1 *.tab
 
-# ZEBRAFISH BLASTP FOR GENE SORTER (DONE 4/15/05 Fan)
+# ZEBRAFISH BLASTP FOR GENE SORTER (TBD)
     # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
     # First make protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -5264,7 +4807,7 @@ end
     cd /cluster/data/mm7/bed/blastp/danRer1/run/out
     hgLoadBlastTab mm7 drBlastTab -maxPer=1 *.tab
 
-# YEAST BLASTP FOR GENE SORTER (DONE 4/15/05 Fan)
+# YEAST BLASTP FOR GENE SORTER (TBD)
     # Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on 
     # RefSeq.  First make protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -5320,7 +4863,7 @@ end
     cd /cluster/data/mm7/bed/blastp/sacCer1/run/out
     hgLoadBlastTab mm7 scBlastTab -maxPer=1 *.tab
 
-# DM1 BLASTP FOR GENE SORTER (DONE 4/18/05, Fan)
+# DM1 BLASTP FOR GENE SORTER (TBD)
     # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
     # First make protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -5373,7 +4916,7 @@ end
     cd /cluster/data/mm7/bed/blastp/dm1/run/out
     hgLoadBlastTab mm7 dmBlastTab -maxPer=1 *.tab
 
-# Create table that maps between known genes and LocusLink (DONE 4/18/05 Fan)
+# Create table that maps between known genes and LocusLink (TBD)
 hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm7 \
         > refToLl.txt
 hgMapToGene mm7 refGene knownGene knownToLocusLink -lookup=refToLl.txt
@@ -5390,11 +4933,11 @@ hgMapViaSwissProt mm7 knownGene name proteinID Pfam knownToPfam
 # Create table that maps between known genes and genePix database 
     knownToGenePix mm7
 
-# ENABLE GENE SORTER FOR mm7 IN HGCENTRALTEST (DONE 7/20/04 Fan)
+# ENABLE GENE SORTER FOR mm7 IN HGCENTRALTEST (TBD)
     echo "update dbDb set hgNearOk = 1 where name = 'mm7';" \
       | hgsql -h genome-testdb hgcentraltest
 
-# RAT BLASTP FOR GENE SORTER (DONE 4/20/05 Fan)
+# RAT BLASTP FOR GENE SORTER (TBD)
     # Make RAT ortholog column using blastp on RAT known genes.
     # First make RAT protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -5449,7 +4992,7 @@ end
 # END OF GENE SORTER STUFF
 #############################################################################
 
-### MM6 PROTEOME BROWSER TABLES BUILD ####  (DONE - 2005-04-20 - Fan)
+### MM6 PROTEOME BROWSER TABLES BUILD ####  (TBD)
 # These are instructions for building tables 
 # needed for the Proteome Browser to be used with mm7.  
 # DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
@@ -5562,7 +5105,7 @@ hgsql mm7 -e 'load data local infile "pepPi.tab" into table mm7.pepPi;'
   notify QA for formal review.
 
 #####################################################################
-# MAP CONTIGS TRACK (DONE - 2005-04-21 - Hiram)
+# MAP CONTIGS TRACK (TBD)
     ssh hgwdev
     mkdir -p /cluster/data/mm7/bed/ctgPos
     cd /cluster/data/mm7/bed/ctgPos
@@ -5628,119 +5171,7 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
     #	2557081173 bases of 3164952073 (80.794%) in intersection
 
 #########################################################################
-# BLASTZ HUMAN Hg16 (DONE - 2005-04-27 - 2005-04-29 - Hiram)
-#	to replace the Mm4 chains and links on Hg16 since Mm4 is being
-#	retired with this Mm6 release
-    ssh eieio
-    mkdir /cluster/data/mm7/bed/blastzHg16.2005_04_27
-    cd /cluster/data/mm7/bed
-    ln -s blastzHg16.2005_04_27 blastz.hg16
-    cd blastzHg16.2005_04_27
-
-    cat << '_EOF_' > DEF
-# mouse vs. human
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
-
-ALIGN=blastz-run
-BLASTZ=blastz
-BLASTZ_H=2000
-BLASTZ_ABRIDGE_REPEATS=1
-
-# TARGET: Mouse Mm6
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_FLAG=-rodent
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInHuman
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Human Hg16
-SEQ2_DIR=/scratch/hg/hg16/bothMaskedNibs
-SEQ2_SMSK=/scratch/hg/hg16/linSpecRep.notInMouse
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=30000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/mm7/bed/blastzHg16.2005_04_27
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-'_EOF_'
-    # << keep emacs coloring happy
-
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/hg16/chrom.sizes > S2.len
-    #	establish a screen to control this job
-    screen
-    cd /cluster/data/mm7/bed/blastzHg16.2005_04_27
-    time /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF > \
-	blast.run.out 2>&1 &
-    #	STARTED - 2005-04-27 12:20
-    #	FINISHED - 2005-04-28 00:11
-    #	real    712m59.223s
-    #	user    0m0.669s
-    #	sys     0m0.442s
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
-    ssh eieio
-    screen -d -r
-    #	STARTED - 2005-03-17 21:25
-    #	FINISHED - 2005-03-18 14:00
-# Completed: 44354 of 44354 jobs
-# CPU time in finished jobs:   16945019s  282416.99m  4706.95h  196.12d  0.537 y
-# IO & Wait Time:               2624756s   43745.93m   729.10h   30.38d  0.083 y
-# Average job time:                 441s       7.35m     0.12h    0.01d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            9471s     157.85m     2.63h    0.11d
-# Submission to last job:         35934s     598.90m     9.98h    0.42d
-
-# Completed: 331 of 331 jobs
-# CPU time in finished jobs:        274s       4.56m     0.08h    0.00d  0.000 y
-# IO & Wait Time:                  1104s      18.40m     0.31h    0.01d  0.000 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              15s       0.25m     0.00h    0.00d
-# Submission to last job:           101s       1.68m     0.03h    0.00d
-
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:       6328s     105.47m     1.76h    0.07d  0.000 y
-# IO & Wait Time:                   551s       9.18m     0.15h    0.01d  0.000 y
-# Average job time:                 172s       2.87m     0.05h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             620s      10.33m     0.17h    0.01d
-# Submission to last job:           830s      13.83m     0.23h    0.01d
-
-    #	swap results to place mm7 alignments onto Hg16
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastzHg16.2005_04_27
-    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
-	swap.run.out 2>&1 &
-
-    featureBits mm7 netHg16
-    #   2580637164 bases of 2597150411 (99.364%) in intersection
-    featureBits mm7 netHg17
-    #	2579747741 bases of 2597150411 (99.330%) in intersection
-    featureBits mm7 chainHg16
-    #   2597476551 bases of 2597150411 (100.013%) in intersection
-    featureBits mm7 chainHg17
-    #	2596946329 bases of 2597150411 (99.992%) in intersection
-    featureBits hg16 netMm6
-    #   2890452713 bases of 2865248791 (100.880%) in intersection
-    featureBits hg16 chainMm6
-    #   2913361200 bases of 2865248791 (101.679%) in intersection
-    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainHg16Link
-    #	966699669 bases of 2597150411 (37.222%) in intersection
-    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainHg17Link
-    #	966916309 bases of 2597150411 (37.230%) in intersection
-    HGDB_CONF=~/.hg.conf.read-only featureBits hg16 chainMm6Link
-    #	969979195 bases of 2865248791 (33.853%) in intersection
-    HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainMm5Link
-    #	1020106336 bases of 2866216770 (35.591%) in intersection
-
-####  Blat knownGene proteins to determine exons (braney 2005-05-20 DONE)
+####  Blat knownGene proteins to determine exons (TBD)
     ssh hgwdev
     cd /cluster/data/mm7/bed
     mkdir blat.mm7KG.2005-05-02
@@ -5800,7 +5231,7 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     echo "rename table blastRef to blastKGRef03" | hgsql mm7
     echo "load data local infile 'blastKGRef03' into table blastKGRef03" | hgsql mm7
 
-# LOAD GENEID GENES (DONE 5/16/05 angie)
+# LOAD GENEID GENES (TBD)
     mkdir -p /cluster/data/mm7/bed/geneid/download
     cd /cluster/data/mm7/bed/geneid/download
     foreach chr (`awk '{print $1;}' ../../../chrom.sizes`)
@@ -5927,7 +5358,7 @@ wc -l cloneEnds.fa
   # All done
 
 ############################################################################
-# BACEND SEQUENCE ALIGNMENTS (DONE - 2005-06-02 - Hiram)
+# BACEND SEQUENCE ALIGNMENTS (TBD)
     ssh kkstore01
     mkdir /cluster/data/mm7/noMask
     cd /cluster/data/mm7/
@@ -6043,7 +5474,7 @@ rm -fr /tmp/${root1}_${root2}
     cp -p bacEnds.psl /cluster/data/mm7/bacends
 
 ############################################################################
-# BACEND PAIRS TRACK (DONE  2005-06-02 - Hiram)
+# BACEND PAIRS TRACK (TBD)
 
     ssh kolossus
     cd /cluster/data/mm7/bacends
@@ -6129,7 +5560,7 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 # 1074505863 bases of 2627444668 (40.895%) in intersection
 
 
-# SGP GENES (DONE 5/25/05 angie)
+# SGP GENES (TBD)
     ssh hgwdev
     mkdir /cluster/data/mm7/bed/sgp
     cd /cluster/data/mm7/bed/sgp
@@ -6148,7 +5579,7 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 #refGene:CDS 0.983%, sgpGene 1.421%, both 0.841%, cover 85.57%, enrich 60.21x
 
 ############################################################################
-# RE-BUILD KNOWN GENES RELATED TABLES for mm7 (STARTED 5/26/05, DONE6/1/05. Fan)
+# RE-BUILD KNOWN GENES RELATED TABLES for mm7 (TBD)
 
 # First build protein databases, sp050415 and proteins050415
 # See makeProteins050415.doc for details.
@@ -6634,7 +6065,7 @@ cat out/$1/*.out >>protRefRaw.psl
     hgsql mm7 < ~/src/hg/lib/kgSpAlias.sql
     hgsql mm7 -e 'load data local infile "mm7.kgSpAlias.tab" into table kgSpAlias'
 
-# MAKE FOLDUTR TABLES (DONE 2005-05-31 Fan)
+# MAKE FOLDUTR TABLES (TBD)
 # First set up directory structure and extract UTR sequence on hgwdev
     ssh hgwdev
     cd /cluster/data/mm7/bed
@@ -6699,7 +6130,7 @@ end
     cd ../utr5
     rm -r split fold err batch.bak
 
-# Build KEGG pathway tables.  DONE 5/19/05.  Fan.
+# Build KEGG pathway tables.  TBD)
 
    ssh hgwdev
    cd /cluster/store10/kg/kgMm6B
@@ -6730,7 +6161,7 @@ end
    hgsql mm7 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
 
 
-######## RE-BUILD GENE SORTER TABLES #######  (DONE - 2005-05-30 - Fan)
+######## RE-BUILD GENE SORTER TABLES #######  (TBD)
 # These are instructions for building the
 # Gene Sorter.  Don't start these until
 # there is a knownGene track and the affy tracks
@@ -6819,7 +6250,7 @@ hgLoadBlastTab mm7 knownBlastTab *.tab
 
 # Create known gene mapping table and expression distance tables
 # for GNF Atlas 2.  (The hgExpDistance takes an hour.)
-# DONE (05-04-15 Fan)
+# TBD)
 
 hgMapToGene mm7 affyGnf1m knownGene knownToGnf1m
 hgExpDistance mm7 hgFixed.gnfMouseAtlas2MedianRatio \
@@ -6923,7 +6354,7 @@ ssh hgwdev
 cd /cluster/data/mm7/bed/blastp/ce2/run/out
 hgLoadBlastTab mm7 ceBlastTab -maxPer=1 *.tab
 
-# HUMAN BLASTP FOR GENE SORTER (DONE 4/18/05 Fan)
+# HUMAN BLASTP FOR GENE SORTER (TBD)
     # Make human ortholog column using blastp on human known genes.
     # First make human protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -7091,7 +6522,7 @@ ssh hgwdev
 cd /cluster/data/mm7/bed/blastp/sacCer1/run/out
 hgLoadBlastTab mm7 scBlastTab -maxPer=1 *.tab
 
-# DM1 BLASTP FOR GENE SORTER (DONE 5/30/05, Fan)
+# DM1 BLASTP FOR GENE SORTER (TBD)
     # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
     # First make protein database and copy it to iscratch/i
     # if it doesn't exist already:
@@ -7220,7 +6651,7 @@ hgLoadBlastTab mm7 rnBlastTab -maxPer=1 *.tab
 # END OF GENE SORTER STUFF
 #############################################################################
 
-### MM6 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2005-06-01 - Fan)
+### MM6 PROTEOME BROWSER TABLES RE-BUILD ####  (TBD)
 # These are instructions for re-building tables 
 # needed for the Proteome Browser to be used with mm7.  
 # DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
@@ -7389,7 +6820,7 @@ o Build the pepPi table
 #####################################################################
 
 ####################################################################################
-# RE-BUILD KNOWN GENES TABLES, 3RD TRIAL WITH CORRECTED kgCheck and kgGetCds (DONE 6/8/05 Fan)
+# RE-BUILD KNOWN GENES TABLES, 3RD TRIAL WITH CORRECTED kgCheck and kgGetCds (TBD)
    ssh hgwdev 
    cd /cluster/store10/kg/kgMm6B
    mkdir try2
@@ -7746,7 +7177,7 @@ Submission to last job:          8311s     138.52m     2.31h    0.10d
    hgsql mm7 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
 
  
-### MM6 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2005-06-06 - Fan)
+### MM6 PROTEOME BROWSER TABLES RE-BUILD ####  (TBD)
 # These are instructions for re-building tables 
 # needed for the Proteome Browser to be used with mm7.  
 # DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
@@ -7914,7 +7345,7 @@ o Build the pepPi table
 # END OF mm7 KG/GS/PB RE-BUILD. 6/6/05 Fan.
 #####################################################################
 
-## NIA Mouse Gene Index - (DONE - 2005-06-21 Fan)
+## NIA Mouse Gene Index - (TBD)
 #       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
     ssh hgwdev 
     mkdir -p /cluster/data/mm7/bed/NIAGene
@@ -7936,7 +7367,7 @@ o Build the pepPi table
     
         kent/src/hg/makeDb/trackDb/mouse/mm7
 
-# Update mrnaRefseq table (DONE - Fan 6/22/05)
+# Update mrnaRefseq table (TBD)
 # The old table contains non-mouse mrna/RefSeqs.
 # The new table contains only mouse mrna/RefSeq and RefSeq/RefSeq.
 
@@ -7958,7 +7389,7 @@ o Build the pepPi table
     hgsql mm7 < ~/src/hg/lib/mrnaRefseq.sql
     hgsql mm7 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
 
-# BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 6/27/05 Fan.
+# BUILD KNOWN GENE LIST FOR GOOGLE.  TBD)
 
     cd /cluster/data/mm7/bed
     rm -rf knownGeneList/mm7
@@ -7988,7 +7419,7 @@ o Build the pepPi table
     hgsql mm7 < ~/src/hg/lib/kgReactome.sql
     hgsql mm7 -e 'load data local infile "kgReactome.tab" into table kgReactome'
 
-#  miRNA track (DONE - 2005-06-29 - Fan)
+#  miRNA track (TBD)
     #   data from: Michel.Weber@ibcg.biotoul.fr
     #   notify them when done.
     cd /cluster/data/mm7/bed
@@ -8020,7 +7451,7 @@ url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm7&acc=%s
 priority 95
 
 
-# REBUILT knownToPfam TABLE TO ALLOW KG REPRESENTED BY VARIANT SPLICE PROTEINS MAPPED TO PFAM (DONE 7/14/05, Fan)
+# REBUILT knownToPfam TABLE TO ALLOW KG REPRESENTED BY VARIANT SPLICE PROTEINS MAPPED TO PFAM (TBD)
 # hgMapViaSwissProt.c was updated to support this.
 # Create table that maps between known genes and Pfam domains
 ~/bin/i386/hgMapViaSwissProt mm7 knownGene name proteinID Pfam knownToPfam
@@ -8106,7 +7537,7 @@ _EOF_
     rm tmp
     hgLoadPsl mm7 scdb.psl
     
-## REBUILD NIA Mouse Gene Index - (DONE - 2005-07-20 Fan)
+## REBUILD NIA Mouse Gene Index - (TBD)
 #       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
     ssh hgwdev 
     cd /cluster/data/mm7/bed
@@ -8128,8 +7559,8 @@ _EOF_
     hgLoadSeq -replace mm7 /gbdb/mm7/NIAGene/T-fasta.fa
 
 # BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
-# ZEBRAFISH (danRer3) (DONE, 2005-08-10, hartera)
-# REMAKE AXTNET AND COPY TO DOWNLOADS. REMAKE MAFNET (DONE, 2005-08-17, hartera)
+# ZEBRAFISH (danRer3) (TBD)
+# REMAKE AXTNET AND COPY TO DOWNLOADS. REMAKE MAFNET (TBD)
     ssh kkr1u00
     # Blastz uses lineage-specific repeats. There are none for mouse
     # and fish so use all repeats for each species as lineage-specific.
@@ -8435,7 +7866,7 @@ SEQ2_LEN=$BASE/S2.len
     md5sum *.gz */*.gz > md5sum.txt
 
 
-#### LOAD ENSEMBL GENES (DONE - 2005-08-10 Fan)
+#### LOAD ENSEMBL GENES (TBD)
 #	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 34 the week of August 10th, 2005
    mkdir -p /cluster/store11/mm7/bed/ensGene
@@ -8511,7 +7942,7 @@ cut -f 1,3-11 >ensGeneNew.tab
 # Compress everthing to save space
     gzip *
     
-#### BUILD Ensembl cross-reference table, ensemblXref3 (DONE - 2005-08-16 - Fan)
+#### BUILD Ensembl cross-reference table, ensemblXref3 (TBD)
 
 # PLEASE NOTE THAT THE ENSEMBLXREF3 TABLE IS BUILT USING ENSEMBL BIOMART DATA OF MOUSE BUILD 34.
 # THIS TABLE IS NEEDED TO SUPPORT SUPERFAMILY TRACK OF THE PROTEOME BROWSER.
@@ -8537,7 +7968,7 @@ cut -f 1,3-11 >ensGeneNew.tab
 # load the table into proteome DB also    
     hgsql proteome -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
 
-#### BUILD SUPERFAMILY RELATED TABLES (DONE - 2005-08-17 - Fan)
+#### BUILD SUPERFAMILY RELATED TABLES (TBD)
 
 # Download Superfamily data files and build the Superfamily DB
 # from supfam.mrc-lmb.cam.ac.uk
@@ -8605,62 +8036,55 @@ cut -f 1,3-11 >ensGeneNew.tab
    cat /cluster/data/superfamily/050817/ass_14-Aug-2005.tab | hgKnownToSuper mm7 mm stdin
 # 21185 records output 
 
+###########################################################################
+# BLASTZ/CHAIN/NET CANFAM2 (WORKING - 2005-09-16 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/mm7/bed/blastz.canFam2.2005-09-16
+    cd /cluster/data/mm7/bed
+    ln -s blastz.canFam2.2005-09-16 blastz.canFam2
+    cd blastz.canFam2.2005-09-16
 
-# RE-EXTRACT LINEAGE-SPECIFIC REPEATS FOR DOG (DONE 8/11/05 angie)
-    # originally done 3/14/05 -- redone 8/11/05 just in case latest RM version
-    # has any updates, before aligning to canFam2.
-    ssh kolossus
-    cd /panasas/store/mm7/rmsk
-    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
-    # whether repeats in -query are also expected in -comp species.  
-    foreach outfl ( *.out )
-        echo "$outfl"
-        /cluster/bluearc/RepeatMasker/DateRepeats \
-          ${outfl} -query mouse -comp dog
-    end
-    # Now extract dog (extra column 1):
-    cd ..
-    mkdir linSpecRep.notInDog
-    foreach f (rmsk/*.out_canis-familiaris)
-        set base = $f:t:r:r
-        echo $base.out.spec
-        /cluster/bin/scripts/extractRepeats 1 $f > \
-		linSpecRep.notInDog/$base.out.spec
-    end
-    # Clean up.
-    rm rmsk/*.out_canis*
-
-
-# BLASTZ/CHAIN/NET CANFAM2 (DONE 8/12/05 angie)
-    ssh kkstore01
-    mkdir /cluster/data/mm7/bed/blastz.canFam2.2005-08-11
-    cd /cluster/data/mm7/bed/blastz.canFam2.2005-08-11
     cat << '_EOF_' > DEF
-# mouse vs. dog
-# TARGET: Mouse
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_RMSK=/panasas/store/mm7/rmsk
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInDog
-SEQ1_LEN=/cluster/data/mm7/chrom.sizes
+# mouse vs dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/cluster/bluearc/mm7/nib
+SEQ1_SMSK=/cluster/bluearc/mm7/linSpecRep/notInHumanDogCow
+SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Dog
+# QUERY: Dog CanFam2 - chunk big enough to do all chroms in single whole pieces
 SEQ2_DIR=/scratch/hg/canFam2/nib
-SEQ2_RMSK=/panasas/store/canFam2/rmsk
-SEQ2_SMSK=/panasas/store/canFam2/linSpecRep.notInMouse
-SEQ2_LEN=/cluster/data/canFam2/chrom.sizes
-SEQ2_CHUNK=10000000
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInMouse
+SEQ2_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ2_CHUNK=200000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastz.canFam2.2005-08-11
+BASE=/cluster/data/mm7/bed/blastz.canFam2.2005-09-16
+TMPDIR=/scratch/tmp
 '_EOF_'
-    # << for emacs
-    doBlastzChainNet.pl DEF \
-      -blastzOutRoot /panasas/store/blastzMm6CanFam2Out >& do.log &
-    ln -s blastz.canFam2.2005-08-11 /cluster/data/mm7/bed/blastz.canFam2
+    # << happy emacs
 
-#  UPDATE miRNA track (DONE - 2005-08-24 - Fan)
+    ssh pk
+    #	establish a screen to control this job
+    screen
+    cd /cluster/data/mm7/bed/blastz.canFam2.2005-09-16
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+XXX - STARTED - 2005-09-16 15:50
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh pk
+    screen -d -r
+
+############################################################################
+#  UPDATE miRNA track (TBD)
 #   data from: Michel.Weber@ibcg.biotoul.fr
 #   notify them when done.
 
@@ -8704,3 +8128,55 @@ BASE=/cluster/data/mm7/bed/blastz.canFam2.2005-08-11
     #	real    2m41.929
     # Copy over to the bluearc
     cp -p 11.ooc /cluster/bluearc/mm7
+
+#############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2005-09-15 - Hiram)
+
+    ssh kkstore02
+    mkdir /cluster/data/mm7/rmsk
+    cd /cluster/data/mm7
+    cp -p */chr*.fa.out rmsk
+    cd rmsk
+
+    for FN in chr*.fa.out
+    do
+	echo ${FN}
+	/cluster/bluearc/RepeatMasker050305/DateRepeats \
+	    ${FN} -query mouse -comp human -comp rat -comp dog -comp cow
+    done
+    #	takes about 30 minutes
+
+    cd /cluster/data/mm7
+    mkdir linSpecRep
+    cd linSpecRep
+    mkdir notInHuman
+    mkdir notInRat
+    mkdir notInDog
+    mkdir notInCow
+    cd /cluster/data/mm7
+    for F in rmsk/chr*.out_homo-sapiens*
+    do
+	B=${F/rmsk\/}
+	B=${B/.fa.out*/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		linSpecRep/notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		linSpecRep/notInRat/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 3 ${F} > \
+		linSpecRep/notInDog/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		linSpecRep/notInCow/${B}.out.spec
+    done
+    #	the notInHuman, notInDog, and notInCow ended up being identical
+    #	To check identical
+    cd linSpecRep
+    find . -type f | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -u -k1,1n
+    #	Copy to bluearc for use in kluster runs
+    mkdir /cluster/bluearc/mm7/linSpecRep
+    cd /cluster/bluearc/mm7/linSpecRep
+    mkdir notInOthers notInRat
+    cp -p /cluster/data/mm7/linSpecRep/notInHuman/* ./notInOthers
+    cp -p /cluster/data/mm7/linSpecRep/notInRat/* ./notInRat
