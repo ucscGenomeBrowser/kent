@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1009 2005/09/13 16:55:47 acs Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1010 2005/09/17 00:12:45 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1317,7 +1317,8 @@ else if (tg->itemColor)
 else if (tg->colorShades) 
     {
     boolean isXeno = (tg->subType == lfSubXeno) 
-				|| (tg->subType == lfSubChain);
+				|| (tg->subType == lfSubChain) 
+                                || startsWith("mrnaBlastz", tg->mapName);
     *retColor =  tg->colorShades[lf->grayIx+isXeno];
     *retBarbColor =  tg->colorShades[(lf->grayIx>>1)];
     }
