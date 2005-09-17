@@ -1,0 +1,34 @@
+track blastzSelf
+shortLabel Self Blastz
+longLabel $Organism Blastz Self Alignments
+group varRep
+priority 162
+visibility hide
+color 0,0,0
+altColor 50,128,50
+spectrum on
+type psl xeno mm7
+otherDb mm7
+
+track chainSelf
+shortLabel Self Chain 
+longLabel Self Chained Alignments
+group varRep
+priority 163
+visibility hide
+color 100,50,0
+altColor 255,240,200
+chainColor Normalized Score
+spectrum on
+type chain mm7
+otherDb mm7
+
+track netSelf
+shortLabel Self Net
+longLabel $Organism Chained Self-Alignment Net
+group varRep
+priority 164
+visibility hide
+spectrum on
+type netAlign mm7 chainSelf
+otherDb mm7
