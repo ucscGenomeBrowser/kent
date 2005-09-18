@@ -10,6 +10,7 @@ class GenomeSeq(object):
         self.path = path
         self.id = id
         self.size = size
+        self.unplaced = False  # unplaced seq, gaps not spanned if set.
         # regions without gaps, starts as whole chr, maybe rebuilt from lift
         self.regions = [(0, size)]
     
@@ -77,14 +78,15 @@ class GenomeSeqs(dict):
         start = lifts[0][0]
         end = lifts[0][1]
         for lift in lifts[1:]:
-            if (lift[0] - end) > 0:
+            if ((lift[0] - end) > 0) or seq.unplaced:
                 seq.regions.append((start, end))
                 start = lift[0]
             end = lift[1]
         seq.regions.append((start, end))
 
     def addUnGappedRegions(self, liftFile):
-        "define regions without gaps from a lift file"
+        """define regions without gaps from a lift file.  If a sequence
+        is flagged as unplaced, adjacent lift entries are not joined"""
         lifts = self._loadLift(liftFile)
         for id in lifts.iterkeys():
             self._addSeqRegions(self[id], lifts[id])

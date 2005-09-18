@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.20 2005/09/14 21:10:04 markd Exp $
+# $Id: gbAlignSetup,v 1.21 2005/09/18 07:37:12 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -43,7 +43,7 @@ import sys, os, os.path, re, fnmatch
 
 # require 2.4 or newer
 if (sys.version_info[0] <= 2) and (sys.version_info[1] < 4):
-    raise Exception("python 2.4 or new required, using " + sys.version)
+    raise Exception("python 2.4 or newer required, using " + sys.version)
 
 myBinDir = os.path.normpath(os.path.dirname(sys.argv[0]))
 sys.path.append(myBinDir + "/../lib/py")
@@ -74,23 +74,16 @@ definedPsls = set()
 class UnplacedChroms(object):
     "object used to determine if a chromosome is unplaced"
 
-    def __init__(self, db, conf):
+    def __init__(self, db, unSpecs):
         self.unplaced = set()
         self.pats = []
 
         # separate into patterns and simple names for performance reasons
-        unSpecs = conf.getDbWordsNone(db, "align.unplacedChroms")
-        if unSpecs != None:
-            if conf.getDbStrNo(db, "lift") == None:
-                raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
-            for spec in unSpecs:
-                if ("*" in spec) or ("?" in spec) or ("[" in spec):
-                    self.pats.append(spec)
-                else:
-                    self.unplaced.add(spec)
-        self.minSize = conf.getDbIntNone(db, "align.minUnplacedSize")
-        if self.minSize == None:
-            self.minSize = 0
+        for spec in unSpecs:
+            if ("*" in spec) or ("?" in spec) or ("[" in spec):
+                self.pats.append(spec)
+            else:
+                self.unplaced.add(spec)
 
         if len(self.unplaced) == 0:
             self.unplaced = None
@@ -107,6 +100,12 @@ class UnplacedChroms(object):
                 if fnmatch.fnmatchcase(chrom, pat):
                     return True
         return False
+
+    def flagSeqs(self, seqs):
+        "flag unplaced sequences in the genome"
+        for seq in seqs.itervalues():
+            if seq.id in self:
+                seq.unplaced = True
 
 class GenomeWindow(object):
     "information about a single genome window"
@@ -147,12 +146,11 @@ class GenomeWindows(list):
             raise Exception("window overlap must be >= 0")
         if (self.winSize <= self.overlap):
             raise Exception("window size must be > overlap")
-
-        self.unplaced = UnplacedChroms(db, conf)
+        self.minUnplacedSize = conf.getDbIntDefault(db, "align.minUnplacedSize", 0)
         self.maxGap = conf.getDbInt(db, "align.maxGap")
 
         for seq in genomeSeqs.itervalues():
-            if seq.id in self.unplaced:
+            if seq.unplaced:
                 self._partitionUnplaced(seq)
             else:
                 self._partitionSeq(seq)
@@ -171,9 +169,8 @@ class GenomeWindows(list):
     def _partitionUnplaced(self, seq):
         "partition a pseudo-chromosome containing unplaced sequences"
         # assumed lift file divded chromosome into unplaced sequences
-        minSize = self.unplaced.minSize
         for reg in seq.regions:
-            if (reg[1] - reg[0]) >= minSize:
+            if (reg[1] - reg[0]) >= self.minUnplacedSize:
                 self.append(GenomeWindow(seq, reg[0], reg[1]))
 
     def _partitionRange(self, seq, start, end):
@@ -193,6 +190,43 @@ class GenomeWindows(list):
         "print object for debugging purposes"
         for win in self:
             win.dump(fh)            
+
+class GenomeTarget(object):
+    "object to store info about genome and partition it into windows"
+
+    def __init__(self, db, conf):
+        self.db = db
+        skipChroms = conf.getDbWordsNone(db, "align.skipChroms")
+        self.seqs = GenomeSeqs(conf.getDbStr(db, "serverGenome"),
+                               skipChroms)
+        # get nib dir or 2bit file on cluster (FIXME: shouldn't really be a glob)
+        self.clusterGenome = conf.getDbStr(db, "clusterGenome")
+        if self.clusterGenome.endswith(".nib"):
+            self.clusterGenome = os.path.dirname(self.clusterGenome)
+
+        # flag unplaced chroms before loading lift, as it changes
+        # partitioning
+        lift = conf.getDbStrNo(db, "lift")
+        unSpecs = conf.getDbWordsNone(db, "align.unplacedChroms")
+        if unSpecs != None:
+            if lift == None:
+                raise Exception(db + ".align.unplacedChroms requires " + db + ".lift")
+            unplaced = UnplacedChroms(db, unSpecs)
+            unplaced.flagSeqs(self.seqs)
+
+        if lift != None:
+            self.seqs.addUnGappedRegions(lift)
+        self.windows = GenomeWindows(db, self.seqs, conf)
+        if cmdOpts.verbose >= 3:
+            self.dump(sys.stderr)
+
+    def dump(self, fh):
+        "print info about object"
+        fh.write("=========== GENOME REGIONS ===========\n")
+        self.seqs.dump(fh)
+        fh.write("=========== WINDOWS ===========\n")
+        self.windows.dump(fh)
+        fh.flush()
 
 class CDnaQuery(object):
     "object to store info on one of the extracted cDNA fasta files"
@@ -284,7 +318,7 @@ class CDnaUnaligned(object):
 
         if cmdOpts.verbose >= 2:
             prLine(sys.stderr, procOps.fmtCmd(cmd))
-        lines = procOps.callProcLines(cmd)
+        lines = procOps.callProcLines(cmd, inheritStderr=True)
 
         # process results
         self._parseAlignGet(procPart, lines)
@@ -358,7 +392,7 @@ class Job(list):
         if jobGenDb.ooc != None:
             prRowv(fh, "ooc", jobGenDb.ooc)
 
-        prRowv(fh, "tdb", jobGenDb.clusterGenome)
+        prRowv(fh, "tdb", jobGenDb.genome.clusterGenome)
         fh.write("tseq")
         for win in self:
             fh.write("\t")
@@ -383,15 +417,15 @@ class Jobs(list):
 
     def __init__(self, jobGenDb, cdnaQuery):
         self.jobGenDb = jobGenDb
-        self.winSize = jobGenDb.windows.winSize
-        self.overlap = jobGenDb.windows.overlap
+        self.winSize = jobGenDb.genome.windows.winSize
+        self.overlap = jobGenDb.genome.windows.overlap
         # threshold for just sticking a window in it's own job
         self.singleWinJobSize = self.winSize - self.overlap
         self.maxWinsPerJob = jobGenDb.maxWinsPerJob
         self.cdnaQuery = cdnaQuery
         self.pending = []
 
-        for win in jobGenDb.windows:
+        for win in jobGenDb.genome.windows:
             self._addWindow(win)
 
     def _findJobWithRoom(self, win):
@@ -494,30 +528,10 @@ class JobGenDb(object):
         else:
             return " ".join(preOpts)
 
-    def _loadGenome(self):
-        "load genome sequence info"
-        skipChroms = self.conf.getDbWordsNone(self.db, "align.skipChroms")
-        self.genome = GenomeSeqs(self.conf.getDbStr(self.db, "serverGenome"),
-                                 skipChroms)
-        # get nib dir or 2bit file on cluster (FIXME: shouldn't really be a glob)
-        self.clusterGenome = self.conf.getDbStr(self.db, "clusterGenome")
-        if self.clusterGenome.endswith(".nib"):
-            self.clusterGenome = os.path.dirname(self.clusterGenome)
-        lift = self.conf.getDbStrNo(self.db, "lift")
-        if lift != None:
-            self.genome.addUnGappedRegions(lift)
-        self.windows = GenomeWindows(self.db, self.genome, self.conf)
-        if cmdOpts.verbose >= 3:
-            sys.stderr.write("=========== GENOME REGIONS ===========\n")
-            self.genome.dump(sys.stderr)
-            sys.stderr.write("=========== WINDOWS ===========\n")
-            self.windows.dump(sys.stderr)
-            sys.stderr.flush()
-
     def _addOrgCatJobs(self, rel, cdnaType, orgCat, queries):
         "make query jobs for a given orgCat"
         if self.genome == None:
-            self._loadGenome()  # lazy
+            self.genome = GenomeTarget(self.db, self.conf)
         preFilterOpts = self._getPreFilterOpts(rel, cdnaType, orgCat)
         for cdnaQuery in queries:
             jobs = Jobs(self, cdnaQuery)
@@ -612,7 +626,7 @@ def main():
     "entry point"
     parser = OptionParser(usage=usage)
     parser.add_option("--workdir", action="store", dest="workdir", default="work/align",
-                      help="=work directory where alignment is built. See gbAlignStep for details. Defaults to work/align")
+                      help="directory where alignment is built. See gbAlignStep for details. Defaults to work/align")
     parser.add_option("--clusterWorkDir",  action="store", dest="clusterWorkDir", default=None,
                       help="location of work directory on cluster.")
     parser.add_option("--verbose", action="store", dest="verbose", type="int", default=0,

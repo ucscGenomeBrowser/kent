@@ -1,7 +1,7 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.6 2005/09/05 17:29:29 markd Exp $
+# $Id: Config.py,v 1.7 2005/09/18 07:37:12 markd Exp $
 #
 
 import re, string
@@ -154,6 +154,15 @@ class Config(dict):
             return int(val)
         else:
             return None
+
+    def getDbIntDefault(self, db, key, default):
+        """get a interger configuration value for a database, or the conf file default, or
+        the supplied default"""
+        val = self.getDbStrNone(db, key)
+        if val != None:
+            return int(val)
+        else:
+            return default
 
     def getDbBool(self, db, key):
         """get a boolean configuration value for a database, or the default,

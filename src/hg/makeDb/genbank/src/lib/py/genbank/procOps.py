@@ -15,23 +15,25 @@ def procErr(cmd, code, err=None):
         msg += ": " + err
     raise Exception(msg)
 
-def callProc(cmd, keepLastNewLine=False, stderr=None):
+def callProc(cmd, keepLastNewLine=False, inheritStderr=False):
     """call a process and return stdout, exception with stderr in
-    message. optionally output stderr"""
-    p = subprocess.Popen(cmd, stdin=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    message or inherited from parent"""
+    if inheritStderr:
+        stderr = None
+    else:
+        stderr = subprocess.PIPE
+    p = subprocess.Popen(cmd, stdin=None, stdout=subprocess.PIPE, stderr=stderr)
     (out, err) = p.communicate()
-    if stderr != None:
-        stderr.write(err)
     if (p.returncode != 0):
         procErr(cmd, p.returncode, err)
     if (not keepLastNewLine) and (len(out) > 0) and (out[-1] == "\n"):
         out = out[0:-1]
     return out
 
-def callProcLines(cmd, stderr=None):
+def callProcLines(cmd, inheritStderr=False):
     """call a process and return stdout, split into a list of lines, exception
-    with stderr in message. optionally output stderr"""
-    out = callProc(cmd, stderr=stderr)
+    with message or inherited from parent"""
+    out = callProc(cmd, inheritStderr=inheritStderr)
     return out.split("\n")
 
 def _needsQuoted(w):
