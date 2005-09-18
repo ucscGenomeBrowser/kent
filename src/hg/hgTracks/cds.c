@@ -316,7 +316,7 @@ else
 static void getMrnaCds(char *acc, struct genbankCds* cds)
 
 /* Get cds start and stop from genbank, if available. Otherwise it
- * returns cds->start == cds->end. */
+ * does nothing */
 {
 char query[256];
 struct sqlConnection *conn;
@@ -326,16 +326,14 @@ char **row;
 conn = hAllocConn();
 sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
-if((row = sqlNextRow(sr)) == NULL)
-    errAbort(
-    "cds.c: getMrnaCds() - Cannot get cds for %s from table \"gbCdnaInfo\"\n", acc);
-sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
-sqlFreeResult(&sr);
-sr = sqlGetResult(conn, query);
-if((row = sqlNextRow(sr)) == NULL)
-    errAbort(
-    "cds.c: getMrnaCds() - Cannot get cds for %s from table \"cds\"\n", acc);
-genbankCdsParse(row[0], cds);
+if((row = sqlNextRow(sr)) != NULL)
+    {
+    sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
+    sqlFreeResult(&sr);
+    sr = sqlGetResult(conn, query);
+    if((row = sqlNextRow(sr)) != NULL)
+	genbankCdsParse(row[0], cds);
+    }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -381,6 +379,7 @@ if (pslIsProtein(psl))
 else
     {
     /*get CDS from genBank*/
+    memset(&cds, 0, sizeof(cds));
     getMrnaCds(psl->qName, &cds);
     }
 
@@ -524,9 +523,8 @@ static struct dnaSeq *mustGetSeqUpper(char *name, char *tableName)
     else
         mrnaSeq = hGenBankGetMrna(name, NULL);
 
-    if (mrnaSeq == NULL)
-        printf("Cannot find refGene mRNA sequence for %s<br>\n", name);
-    touppers(mrnaSeq->dna);
+    if (mrnaSeq != NULL)
+	touppers(mrnaSeq->dna);
     return mrnaSeq;
 }
 
