@@ -46,68 +46,74 @@ return sqlQuickNum(conn, query);
 }
 
 struct slName *visiGeneGeneColorName(struct sqlConnection *conn, int id)
-/* Get list of gene (color),gene (color) */
+/* Get list of genes.  If more than one in list
+ * put color of gene if available. */
 {
-char query[512], llName[256];
 struct slName *list = NULL, *el = NULL;
-struct sqlResult *sr;
-char **row;
-
-/* Note I have found that some things originally selected
-   did not get a name here, because of the additional 
-   requirement for linking to probeColor, which was
-   a result of some having probeColor id of 0.
-   This would then mean the the picture's caption
-   is missing the gene name entirely.
-   So, to fix this, the probeColor.name lookup is 
-   now done as an outer join.
-*/
-safef(query, sizeof(query),
-      "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt,probeColor.name,image.paneLabel"
-      " from imageProbe,probe,image,gene"
-      " LEFT JOIN probeColor on imageProbe.probeColor = probeColor.id"
-      " where imageProbe.image = %d"
-      " and imageProbe.image = image.id"
-      " and imageProbe.probe = probe.id"
-      " and probe.gene = gene.id"
-      , id);
-      
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+list = visiGeneGeneName(conn, id);
+if (slCount(list) > 1)
     {
-    char *geneName = NULL;
-    char *name = row[0];
-    char *locusLink = row[1];
-    char *refSeq = row[2];
-    char *genbank = row[3];
-    char *uniProt = row[4];
-    char *color = row[5];
-    char *paneLabel = row[6];
-    if (!color) 
-	color = "?";
-    if (name[0] != 0)
-	geneName = name;
-    else if (refSeq[0] != 0)
-	geneName = refSeq;
-    else if (genbank[0] != 0)
-	geneName = genbank;
-    else if (uniProt[0] != 0)
-	geneName = uniProt;
-    else if (locusLink[0] != 0)
+    char query[512], llName[256];
+    struct sqlResult *sr;
+    char **row;
+
+    slFreeList(&list);	/* We have to do it the complex way. */
+
+    /* Note I have found that some things originally selected
+       did not get a name here, because of the additional 
+       requirement for linking to probeColor, which was
+       a result of some having probeColor id of 0.
+       This would then mean the the picture's caption
+       is missing the gene name entirely.
+       So, to fix this, the probeColor.name lookup is 
+       now done as an outer join.
+    */
+    safef(query, sizeof(query),
+	  "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt,probeColor.name"
+	  " from imageProbe,probe,gene"
+	  " LEFT JOIN probeColor on imageProbe.probeColor = probeColor.id"
+	  " where imageProbe.image = %d"
+	  " and imageProbe.probe = probe.id"
+	  " and probe.gene = gene.id"
+	  , id);
+	  
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
-	safef(llName, sizeof(llName), "Entrez Gene %s", locusLink);
-	geneName = llName;
+	char *geneName = NULL;
+	char *name = row[0];
+	char *locusLink = row[1];
+	char *refSeq = row[2];
+	char *genbank = row[3];
+	char *uniProt = row[4];
+	char *color = row[5];
+	if (name[0] != 0)
+	    geneName = name;
+	else if (refSeq[0] != 0)
+	    geneName = refSeq;
+	else if (genbank[0] != 0)
+	    geneName = genbank;
+	else if (uniProt[0] != 0)
+	    geneName = uniProt;
+	else if (locusLink[0] != 0)
+	    {
+	    safef(llName, sizeof(llName), "Entrez Gene %s", locusLink);
+	    geneName = llName;
+	    }
+	if (geneName != NULL)
+	    {
+	    char buf[256];
+	    if (color)
+		safef(buf, sizeof(buf), "%s (%s)", geneName, color);
+	    else
+	        safef(buf, sizeof(buf), "%s", geneName);
+	    el = slNameNew(buf);
+	    slAddHead(&list, el);
+	    }
 	}
-    if (geneName != NULL)
-        {
-	char buf[256];
-	safef(buf, sizeof(buf), "%s (%s) %s", geneName, color, paneLabel);
-	el = slNameNew(buf);
-	slAddHead(&list, el);
-	}
+    sqlFreeResult(&sr);
+    slReverse(&list);
     }
-sqlFreeResult(&sr);
-slReverse(&list);
 return list;
 }
 
@@ -203,26 +209,15 @@ return geneList;
 void smallCaption(struct sqlConnection *conn, int imageId)
 /* Write out small format caption. */
 {
-int imageFile;
-struct slName *nameList, *name;
-char query[256];
-
-safef(query, sizeof(query), "select imageFile from image where id=%d",
-	imageId);
-imageFile = sqlQuickNum(conn, query);
-nameList = visiGeneImageFileGenes(conn, imageFile);
-printf("<B>");
-for (name = nameList; name != NULL; name = name->next)
+struct slName *geneList, *gene;
+int imageFile = visiGeneImageFile(conn, imageId);
+printf("%s", shortOrgName(visiGeneOrganism(conn, imageId)));
+geneList = visiGeneImageFileGenes(conn, imageFile);
+for (gene = geneList; gene != NULL; gene = gene->next)
     {
-    printf("%s", name->name);
-    if (name->next != NULL)
-	printf(" ");
+    printf(" %s", gene->name);
     }
-printf("</B>");
-slFreeList(&nameList);
-printf(" %s %s",
-    shortOrgName(visiGeneOrganism(conn, imageId)),
-    visiGeneStage(conn, imageId, FALSE) );
+slFreeList(&geneList);
 }
 
 struct slInt *idsInRange(struct sqlConnection *conn, int startId)
@@ -345,7 +340,7 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
-void printCaption(struct sqlConnection *conn, int id, struct slName *geneList)
+void printCaption(struct sqlConnection *conn, int id)
 /* Print information about image. */
 {
 char query[256];
@@ -353,11 +348,11 @@ char **row;
 char *permeablization, *publication, *copyright, *acknowledgement;
 char *setUrl, *itemUrl;
 char *caption = visiGeneCaption(conn, id);
+struct slName *geneList;
+int imageFile = visiGeneImageFile(conn, id);
+struct slInt *imageList, *image;
+int imageCount, imageIx=0;
 
-printLabeledList("gene", geneList);
-printf(" ");
-printf("<B>organism:</B> %s  ", visiGeneOrganism(conn, id));
-printf("<B>stage:</B> %s<BR>\n", visiGeneStage(conn, id, TRUE));
 publication = visiGenePublication(conn,id);
 if (publication != NULL)
     {
@@ -374,13 +369,40 @@ if (caption != NULL)
     printf("<B>notes:</B> %s<BR>\n", caption);
     freez(&caption);
     }
-printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,id)));
-printf("<B>section type:</B> %s ", naForNull(visiGeneSliceType(conn,id)));
-printLabeledList("genbank", visiGeneGenbank(conn, id));
-printf("<BR>\n");
-permeablization = visiGenePermeablization(conn,id);
-if (permeablization != NULL)
-    printf("<B>permeablization:</B> %s<BR>\n", permeablization);
+imageList = visiGeneImagesForFile(conn, imageFile);
+imageCount = slCount(imageList);
+for (image = imageList; image != NULL; image = image->next)
+    {
+    int paneId = image->val;
+    struct slName *geneList = visiGeneGeneColorName(conn, paneId);
+    ++imageIx;
+    if (imageCount > 1)
+        {
+	char *label = visiGenePaneLabel(conn, paneId);
+	printf("<HR>\n<B>Pane ");
+	if (label == NULL)
+	   printf("%d", imageIx);
+	else
+	   printf("%s", label);
+	printf("</B><BR>\n");
+	}
+    printLabeledList("gene", geneList);
+    printf(" ");
+    printf("<B>organism:</B> %s  ", visiGeneOrganism(conn, paneId));
+    printf("%s<BR>\n", visiGeneStage(conn, paneId, TRUE));
+    printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,paneId)));
+    printf("<B>section type:</B> %s ", 
+    	naForNull(visiGeneSliceType(conn,paneId)));
+    printLabeledList("genbank", visiGeneGenbank(conn, paneId));
+    printf("<BR>\n");
+    permeablization = visiGenePermeablization(conn,paneId);
+    if (permeablization != NULL)
+	printf("<B>permeablization:</B> %s<BR>\n", permeablization);
+
+    slFreeList(&geneList);
+    }
+if (imageCount > 1)
+    printf("<HR>\n");
 printf("<B>contributors:</B> %s<BR>\n", naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
@@ -410,7 +432,6 @@ void doImage(struct sqlConnection *conn)
 /* Put up image page. */
 {
 int imageId = cartInt(cart, hgpId);
-struct slName *geneList = visiGeneGeneName(conn, imageId);
 char buf[1024];
 char *p = NULL;
 char dir[256];
@@ -420,7 +441,9 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
-printf("<B>VisiGene</B> Click in image to zoom, drag to move.  "
+printf("<B>");
+smallCaption(conn, imageId);
+printf(".</B> Click in image to zoom, drag to move.  "
        "Caption is below.<BR>\n");
 
 visiGeneImageSize(conn, imageId, &w, &h);
@@ -431,8 +454,7 @@ safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	dir,name,name,w,h);
 printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
-
-printCaption(conn, imageId, geneList);
+printCaption(conn, imageId);
 htmlEnd();
 }
 
@@ -496,7 +518,6 @@ void doFullSized(struct sqlConnection *conn)
 /* Put up full sized image. */
 {
 int imageId = cartInt(cart, hgpId);
-struct slName *geneList = visiGeneGeneName(conn, imageId);
 char buf[1024];
 char *p = NULL;
 char dir[256];
@@ -523,7 +544,7 @@ printf("<IFRAME width=\"100%%\" height=\"80%%\" SRC=\"%s\"></IFRAME><BR>\n", buf
 
 //printf("</A><BR>\n");
 
-printCaption(conn, imageId, geneList);
+printCaption(conn, imageId);
 htmlEnd();
 freez(&p);
 }
