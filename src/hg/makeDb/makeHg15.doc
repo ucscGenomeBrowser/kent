@@ -4325,3 +4325,47 @@ done
     #	the threshold, no dramatic change should be seen in the
     #	display (while in "Mean" windowing viewing mode which isn't the
     #	default for this track.)
+
+# LOADING AFFYTXNPHASE2 track (sugnet)
+# cd to where data is downloaded.
+cd /cluster/store10/sugnet/affyTranscription/graphs/transcriptome.affymetrix.com/download/publication/polyA_minus/graphs
+
+# Affymetrix uses names with underscores (which we don't) and has the annoying tendency to 
+# put multiple data points at the same position in the genome which some of our tools 
+# (like wigEncode) don't like. This script changes the format, changes the names and
+# does averaging of the points and puts them in single chromosome files.
+./makeWigFiles.sh # takes a long time to run...
+
+# Use wigEncode to make the .wib and .wig files.
+./makeWibWigHg15.sh # takes a long time to run.
+
+# Copy .wib files to /cluster/data/hg15 files
+mkdir /cluster/data/hg15/bed/affyTranscriptionPhase2/
+cp `find ./ -name "*.wib"` /cluster/data/hg15/bed/affyTranscriptionPhase2/
+chmod 775 /cluster/data/hg15/bed/affyTranscriptionPhase2/
+chmod 664 /cluster/data/hg15/bed/affyTranscriptionPhase2/*
+
+# link /gbdb/hg15 to data
+mkdir /gbdb/hg15/wib/affyTranscriptionPhase2/
+chmod 775 /gbdb/hg15/wib/affyTranscriptionPhase2/
+cd /gbdb/hg15/wib/affyTranscriptionPhase2/
+ln -s /cluster/data/hg15/bed/affyTranscriptionPhase2/* .
+
+cd -
+# Load the database tables (using bash) this takes a while
+for file in `find ./ -name "*.wig"`; do
+  base=`basename $file .wig`
+  echo "Doing ${base}Txn"
+  hgLoadWiggle -pathPrefix=/gbdb/hg15/wib/affyTranscriptionPhase2/  hg15 ${base}Txn $file
+done
+
+# Do the transfrags
+cd ../transfrags
+
+# Make names consistent.
+./changeNames2.sh
+foreach file (`ls -1 *PlusTnFg *MinusTnFg | grep -v '_'`) 
+ set base=`echo $file | sed -e 's/@//g'`
+ echo Doing $base
+ hgLoadBed hg15 $base $base
+end
