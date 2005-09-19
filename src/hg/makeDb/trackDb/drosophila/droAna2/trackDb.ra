@@ -6,6 +6,15 @@ group map
 visibility dense
 type bed 3 +
 
+track xenoRefGene
+shortLabel Non-D. anan. RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility dense
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
 track all_mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
