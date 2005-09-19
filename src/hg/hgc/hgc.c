@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.947 2005/09/13 16:54:09 acs Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.948 2005/09/19 21:45:04 ytlu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17169,7 +17169,7 @@ else if (sameWord(track, "vntr"))
     {
     doVntr(tdb, item);
     }
-else if (sameWord(track, "luNega") || sameWord (track, "luPosi") || sameWord (track, "mRNARemains"))
+else if (sameWord(track, "luNega") || sameWord (track, "luPosi") || sameWord (track, "mRNARemains") || sameWord(track, "pseudoUcsc2"))
     {
     doPutaFrag(tdb, item);
     }
