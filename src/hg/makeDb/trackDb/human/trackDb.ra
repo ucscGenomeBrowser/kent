@@ -1364,6 +1364,13 @@ origAssembly hg17
     color 12,20,150
     priority 3
 
+    track pseudoUcsc2
+    subTrack encodePseudogene
+    shortLabel UCSC PseudoGenes
+    longLabel UCSC Pseudogene Predictions
+    color 12,20,150
+    priority 4
+
 track encodeGisRnaPet
 compositeTrack on
 shortLabel GIS PET RNA
