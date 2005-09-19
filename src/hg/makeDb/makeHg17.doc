@@ -10251,6 +10251,34 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     #	user    0m32.740s
     #	sys     0m6.140s
 
+# regulatory potential 5X track (DONE - 2005-09-19 - Daryl)
+    ssh kkstore02
+    mkdir -p /cluster/data/hg17/bed/regPotential5X/rp_scores
+    cd /cluster/data/hg17/bed/regPotential5X/rp_scores
+    wget -r -l 1 -nH http://www.bx.psu.edu/~james/rp/hg17panTro1mm5rn3canFam1/all_truncate.tar
+    tar xvf all_truncate.tar
+    cd /cluster/data/hg17/bed/regPotential5X
+    mkdir -p wigData dataLimits 
+    cd wigData
+    ## 8 minutes
+    for S in ../rp_scores/chr*.scores.truncated.gz
+    do
+	C=${S/.scores.truncated.gz}
+	C=${C#../rp_scores/}
+	echo "$S -> wigData/$C.wig"
+	zcat $S | wigEncode stdin $C.wig $C.wib 2> ../dataLimits/$C.limits
+    done
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/regPotential5X/wigData
+    mkdir -p /gbdb/hg17/wib/regPotential5X
+    chmod o+rx /gbdb/hg17/wib/regPotential5X
+    ln -s /cluster/data/hg17/bed/regPotential5X/wigData/*.wib /gbdb/hg17/wib/regPotential5X
+    chmod o+r /gbdb/hg17/wib/regPotential5X/ch*wib
+    time hgLoadWiggle -pathPrefix=/gbdb/hg17/wib/regPotential5X hg17 regPotential5X chr*.wig
+    # 57.720u 9.960s 2:26.05 46.3%    0+0k 0+0io 213pf+0w
+
 # SGP GENES (DONE 9/17/04 angie)
     ssh eieio
     mkdir /cluster/data/hg17/bed/sgp
