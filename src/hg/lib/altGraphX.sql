@@ -1,5 +1,6 @@
 
 CREATE TABLE altGraphX (
+  bin smallint unsigned not null,
   tName varchar(255) NOT NULL default '',
   tStart int(11) NOT NULL default '0',
   tEnd int(11) NOT NULL default '0',
