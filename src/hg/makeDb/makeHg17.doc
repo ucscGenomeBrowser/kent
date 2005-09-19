@@ -17786,3 +17786,135 @@ cd ../transfrags
 ./loadHg17Tnfg.sh
 
 # End of affyTxnPhase2
+
+# ALTGRAPHX TRACK (sugnet)
+
+/cluster/store1/sugnet/altSplice
+mkdir hg17-2005.03.28
+
+# First get the RNA clusters
+cd hg17-2005.03.28
+
+# Don't use RAGE libraries for clone bounds.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  hg17 rage.libs
+
+# Make spec file to run.
+foreach c (`echo 'select chrom from chromInfo' | hgsql hg17 | grep -v chrom`)
+    set out = chrom/$c.bed
+    echo "clusterRna -mrnaExclude=hg17.rage.libs hg17 /dev/null $out -chrom=$c" >> clusterRna.spec
+end
+
+# Tried running it on the minicluster, but can't connect to the 
+# cluster accounts so run it from here on hgwdev.
+./clusterRna.spec >& clusterRna.log
+
+cd ..
+
+# Make script to setup parasol job file for raw altGraphX files on human
+cat << '_EOF_' > makeRun.sh
+#!/bin/sh
+
+for chrom in `echo "select chrom from chromInfo" | hgsql hg17 | grep -v chrom`; do
+echo 'echo "Doing $chrom"'
+echo "/cluster/home/sugnet/bin/i386/altSplice -db=hg17   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/hg17.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/hg17/nib/$chrom.nib"
+done
+'_EOF_'
+    # << this line makes emacs coloring happy
+mkdir agxs
+chmod 755 makeRun.sh
+
+# Minicluster down, have to run on hgwdev.
+./makeRun.sh > toRun.sh
+chmod 755 toRun.sh
+./toRun.sh >& toRun.log &
+
+cat agxs/*.agx > hg17.agx
+
+# make raw altGraphX files for mouse
+mkdir ../mm5-2005.03.28/
+cd ../mm5-2005.03.28/
+
+# make the rnaClusters
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+
+# Don't use RAGE libraries for clone bounds.
+~/jk/hg/geneBounds/clusterRna/generateRageAccList.csh mm5 rage.libs
+# Doing select on mm5 into mm5.rage.libs
+# Done.
+
+# Make spec file to run.
+foreach c (`echo 'select chrom from chromInfo' | hgsql mm5 | grep -v chrom`)
+    set out = chrom/$c.bed
+    echo "clusterRna -mrnaExclude=mm5.rage.libs mm5 /dev/null $out -chrom=$c" >> clusterRna.spec
+end
+
+# Tried running it on the minicluster, but can't connect to the 
+# cluster accounts so run it from here on hgwdev.
+chmod 755 clusterRna.spec
+./clusterRna.spec >& clusterRna.log &
+
+
+# Make the gene bounds in rnaCluster.
+mkdir agxs
+
+# This script generates the jobs, one per chromosome.
+echo << '_EOF_' > makeRun.sh
+#!/bin/sh
+
+for chrom in `echo "select chrom from chromInfo" | hgsql mm5 | grep -v chrom`; do
+echo 'echo "Doing $chrom"'
+echo "/cluster/home/sugnet/bin/i386/altSplice -db=mm5   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/mm5.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/mm5/nib/$chrom.nib"
+done
+'_EOF_'
+chmod 755 makeRun.sh
+./makeRun.sh > toRun.sh
+chmod 755 toRun.sh
+./toRun.sh >& toRun.log & # Takes an hour or so...
+
+# Consolodiate all of the records in a single file.
+cat agxs/*.agx > mm5.agx
+
+
+# Make the orthologous splicing graphs.
+mkdir orthoSpliceExoniphy
+cd orthoSpliceExoniphy/
+
+# Get the exoniphy exons...
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql hg17 | grep -v txStart > hg17.exoniphy.bed
+
+# Set up the commands for the orthosplice run.
+echo 'select chrom, size from chromInfo' | hgsql hg17 | grep -v chrom > chromSizes.tab
+ln -s /cluster/data/hg17/bed/blastz.mm5/axtChain/mouseNet/ nets
+ln -s /cluster/data/hg17/bed/blastz.mm5/axtChain/chain/ chains
+mkdir agx report logs
+
+cat << '_EOF_' > makeRun.sh
+
+#!/usr/bin/perl -w
+
+open(IN, 'chromSizes.tab') or die "Can't open chromSizes.tab\n";
+while(<IN>) {
+    chomp;
+    @w = split;
+    print "/cluster/home/sugnet/bin/i386/orthoSplice -chromSize=$w[1] -exonFile=hg17.exoniphy.bed -trumpNum=3 -chrom=$w[0] -altInFile=../agxs/hg17.$w[0].agx -orthoAgxFile=../../mm5-2005.03.28/mm5.agx -db=hg17 -orthoDb=mm5 -netFile=nets/$w[0].net -chainFile=chains/$w[0].chain -commonFile=agx/$w[0].hg17.mm5.cons.t3.agx -reportFile=report/$w[0].hg17.report -edgeFile=report/$w[0].hg17.edge.report >& logs/$w[0].test.log\n";
+}
+'_EOF_'
+
+./makeRun.sh > orthoSplice.para.spec
+ssh kki
+cd /cluster/store1/sugnet/altSplice/hg17-2005.03.28/orthoSpliceExoniphy
+para create orthoSplice.para.spec
+para push
+
+cat agx/*.agx > hg17.mm5.t3.exoniphy.agx
+
+# Make bed file
+agxToBed hg17.mm5.t3.exoniphy.agx hg17.mm5.t3.exoniphy.bed
+
+# Load up files
+hgLoadBed hg17 agxBed hg17.mm5.t3.exoniphy.bed
+hgLoadBed -notItemRgb -sqlTable=/cluster/home/sugnet/kent/src/hg/lib/altGraphX.sql hg17 altGraphX hg17.mm5.t3.exoniphy.agx
+
+# end altGraphX track
