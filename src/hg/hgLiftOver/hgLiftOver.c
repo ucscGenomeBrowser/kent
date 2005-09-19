@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.40 2005/06/23 02:13:40 jill Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.41 2005/09/19 23:01:10 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -81,7 +81,7 @@ void webMain(struct liftOverChain *chain, char *dataFormat)
 /* set up page for entering data */
 {
 struct dbDb *dbList;
-char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb), buf[16];
+char *fromOrg = hArchiveOrganism(chain->fromDb), *toOrg = hArchiveOrganism(chain->toDb);
 cgiParagraph(
     "This tool converts genome coordinates and genome annotation files "
     "between assemblies.&nbsp;&nbsp;"
@@ -518,20 +518,17 @@ if (userData != NULL && userData[0] != '\0')
         /* some records not converted */
         cgiParagraph("");
         printf("Conversion failed on %d record", errCt);
-        printf("%s: &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
-        printf("<A HREF=%s TARGET=_blank>View Failure File</A>\n",
+        printf("%s. &nbsp;&nbsp;&nbsp;", errCt > 1 ? "s" : "");
+        printf("<A HREF=%s TARGET=_blank>Display failure file</A>&nbsp; &nbsp;\n",
                          unmappedTn.forCgi);
+        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Explain failure messages</A>\n", HGLFT_ERRORHELP_VAR);
+        puts("<P>Failed input regions:\n");
         fclose(unmapped);
         errFile = lineFileOpen(unmappedTn.forCgi, TRUE);
-        puts("<BLOCKQUOTE>\n");
-        puts("<PRE>\n");
+        puts("<BLOCKQUOTE><PRE>\n");
         while (lineFileNext(errFile, &line, &lineSize))
-            {
             puts(line);
-            }
-        puts("</PRE>\n");
-        puts("</BLOCKQUOTE>\n");
-        printf("<A HREF=\"/cgi-bin/hgLiftOver?%s=1\" TARGET=_blank>Failure Messages</A>\n", HGLFT_ERRORHELP_VAR);
+        puts("</PRE></BLOCKQUOTE>\n");
         }
     }
 webDataFormats();
