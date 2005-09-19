@@ -17918,3 +17918,70 @@ hgLoadBed hg17 agxBed hg17.mm5.t3.exoniphy.bed
 hgLoadBed -notItemRgb -sqlTable=/cluster/home/sugnet/kent/src/hg/lib/altGraphX.sql hg17 altGraphX hg17.mm5.t3.exoniphy.agx
 
 # end altGraphX track
+
+# EXONWALK TRACK (sugnet)
+
+# make altGraphX track (see above)
+
+cd /cluster/store1/sugnet/altSplice/hg17-2005.03.28/orthoSpliceExoniphy
+
+cd exonWalk
+mkdir beds
+
+# Make parasol script.
+foreach file (`ls ../agx/*.agx`)
+  set base=`basename $file .agx`
+  echo "/cluster/home/sugnet/bin/i386/exonWalk db=hg17 minPercent=0 trumpSize=100000 $file beds/$base.bed" >> exonWalk.para.spec
+end
+para create exonWalk.para.spec
+para push
+cat beds/*.bed > hg17.mm5.cons.t3.exoniphy.bed
+
+# Predict orfs
+mkdir orfs
+cd orfs
+mkdir bedOrf beds fa borf
+cp ~/store1/altSplice/hg17-2005.01.09/orthoSpliceExonify/exonWalk/orfs.mrna2/*.sh ./
+splitFile ../../hg17.mm5.cons.t3.exoniphy.bed 500 exonWalk.
+cat < < '_EOF_' > makeFa.sh
+#!/bin/sh
+
+for file in "$@"
+do
+ base=`basename $file`
+ echo "Doing $file"
+ echo "sequenceForBed -db=hg17 -bedIn=$file -fastaOut=fa/$base.fa "
+ sequenceForBed -db=hg17 -bedIn=$file -fastaOut=fa/$base.fa 
+done
+'_EOF_'
+chmod 755 makeFa.sh
+makeFa.sh beds/*
+
+# Run borf lots of times...
+makeSpec.sh beds/* > para.spec
+para create para.spec
+para push
+mkdir genePred
+cat << '_EOF_' > makeGenePred.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  /cluster/home/sugnet/bin/i386/borfMatcher -keepNmd beds/$base borf/$base.borf bedOrf/$base.bed genePred/$base.gp 
+done
+'_EOF_'
+chmod 755 makeGenePred.sh 
+makeGenePred.sh beds/*
+
+cat beds/* > hg17.mm5.exonWalk.bed
+cat genePred/*.gp > hg17.mm5.exonWalk.gp
+
+wc *.bed *.gp
+# 155470 1865640 29956585 hg17.mm5.exonWalk.bed
+#  98433  984330 32495119 hg17.mm5.exonWalk.gp
+
+# Load it into the database.
+ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp 
+
+# end exonWalk
