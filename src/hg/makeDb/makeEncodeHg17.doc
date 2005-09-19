@@ -142,8 +142,6 @@ mkdir datafiles
 ##########################################################################
 # CHIP/CHIP GROUP
 # 
-# Skip Affy and Sanger (they will be providing hg17)
-
 # STANFORD CHIP
 # encodeStanfordChip* bedGraph 4 tracks
 
@@ -201,6 +199,10 @@ cat > doUcsd.csh << 'EOF'
     # Regulome, NHGRI DNase, Stanford Meth, UVA
     csh doChrom.csh >&! doChrom.log
     # 37 tables
+    # do Stanford Meth Smoothed tables that weren't converted because
+        # hg16 tables had incorrect capitalization wrt trackDb
+        # and so weren't being displayed
+    csh doChrom2.csh >&! doChrom2.log
 
 ##########################################################################
 # CHIP/CHIP TRACKS (2005-08-24 kate)
@@ -577,6 +579,58 @@ cat > doLoad.csh << 'EOF'
                 NegativeControlDataStanfordPromoters.txt.gz
     # Added a README.txt (edited form Angie's hg16 version)
 
+##########################################################################
+# UV Replication -- Segregation, Origins, and Origin Confidence tracks
+#       New data for Oct. freeze (but submitted in hg16 coords)
+#       All data are bed3
+# Contact: Chris Taylor (cmt5n@cs.virginia.edu)
+
+    cd /cluster/data/encode/UVa
+    mv latest previous
+    mkdir -p 2005-08-30
+    ln -s 2005-08-30 latest
+
+    # Segregation data - 4 subtracks (Early, Mid, Late, Pan-S)
+    # 4 custom tracks in a single file -- use Hiram's script to split
+    /cluster/data/encode/BU/2005-06-09/splitTracks.pl \
+                lab/segchunks.hg16.qced.bed
+    # creates t0, t1, t2, t3
+    awk < lab/segchunks.hg16.qced.bed '/track/ {print $2}'
+#name=early
+#name=mid
+#name=late
+#name=pans
+    grep -v "^track" t0 > encodeUvaDnaRepEarly.hg16.bed
+    grep -v "^track" t1 > encodeUvaDnaRepMid.hg16.bed
+    grep -v "^track" t2 > encodeUvaDnaRepLate.hg16.bed
+    grep -v "^track" t3 > encodeUvaDnaRepPanS.hg16.bed
+    rm t0 t1 t2 t3
+    foreach f (encodeUvaDnaRep*.hg16.bed)
+        set d = $f:r:r
+        echo $d
+        liftOver $f /cluster/data/encode/convertHg17/hg16ToHg17.chain \
+                $d.hg17.bed $d.unmapped
+        hgLoadBed -noBin -strict hg17 $d $d.hg17.bed
+    end
+
+    # Origin predictions -- fixed at 200bp
+    set t = encodeUvaDnaRepOriginsPred
+    ln -s lab/originspred.hg16.qced.bed $t.hg16.bed
+    liftOver $t.hg16.bed \
+        /cluster/data/encode/convertHg17/hg16ToHg17.chain \
+                $t.hg17.bed $t.unmapped
+    hgLoadBed -noBin -strict hg17 $t $t.hg17.bed
+        # Loaded 289 elements of size 3
+
+    # Origin confidence intervals -- varying length for averaged origins
+    set t = encodeUvaDnaRepOriginsConf
+    ln -s  lab/originsconf.hg16.qced.bed $t.hg16.bed
+    liftOver $t.hg16.bed \
+        /cluster/data/encode/convertHg17/hg16ToHg17.chain \
+                $t.hg17.bed $t.unmapped
+    hgLoadBed -noBin -strict hg17 $t $t.hg17.bed
+        # Loaded 270 elements of size 3
+
 
 ##########################################################################
 # Indels from Jim Mullikin
@@ -594,3 +648,24 @@ cat > doLoad.csh << 'EOF'
     mysql> select chrom, chromStart, chromEnd, (chromEnd-chromStart) as size, traceName, reference, length(reference) as refsize from encodeIndels where (chromEnd-chromStart) != length(reference) and length(reference) > 1;
     # Empty set (0.07 sec)
 
+##########################################################################
+# Boston University ORChID track - (2005-09-18 kate)
+#	data developer contact:  Jay Greenbaum jj@bu.edu
+    ssh hgwdev
+    cd /cluster/data/encode/BU
+    mkdir -p orchid/2005-09-08/lab
+    cd -p orchid/2005-09-08/lab
+    wget --timestamping "http://dna.bu.edu/%7Ejj/cleavage_data_hg17/oh_cleavage_hg17.wig.gz"
+    cd ..
+    mkdir wib
+    # NOTE: continue reluctantly with non-standard table name
+    # as in hg16
+    wigEncode lab/oh_cleavage_hg17.wig.gz \
+        encodeBu_ORChID1.wig wib/encodeBu_ORChID1.wib
+                # upper limit 1.58, lower limit -0.56
+    # load
+    set dir = /gbdb/hg17/encode/Bu/2005-09-08
+    mkdir -p $dir
+    hgLoadWiggle -pathPrefix=$dir hg17 encodeBu_ORChID1 encodeBu_ORChID1.wig
+    mkdir -p $dir/wib
+    ln -s `pwd`/wib/encodeBu_ORChID1.wib $dir/wib
