@@ -170,11 +170,26 @@ scoreMin 900
 scoreMax 1000
 url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
 
+track regPotential5X
+shortLabel 5x Reg Potential
+longLabel 5-Way Regulatory Potential - Human, Chimp (Nov 2003/panTro1), Dog (Jul 2004/canFam1), Mouse (May 2004/mm5), Rat (June 2003/rn3), 
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.05
+type wig 0.0 1.0
+
 track regPotential3X
 shortLabel 3x Reg Potential
 longLabel 3-Way Regulatory Potential - Human, Mouse (May 2004/mm5), Rat (June 2003/rn3)
 group regulation
-priority 91
+priority 91.05
 visibility hide
 autoScaleDefault Off
 maxHeightPixels 128:36:16
