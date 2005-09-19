@@ -31,8 +31,10 @@ struct slInt *visiGeneImagesForFile(struct sqlConnection *conn,
 char query[256], **row;
 struct sqlResult *sr;
 struct slInt *el, *list = NULL;
-safef(query, sizeof(query), "select id from image where imageFile = %d",
-	imageFile);
+safef(query, sizeof(query), 
+	"select id from image where imageFile = %d "
+	"order by paneLabel"
+	, imageFile);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -40,7 +42,22 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, el);
     }
 sqlFreeResult(&sr);
+slReverse(&list);
 return list;
+}
+
+char *visiGenePaneLabel(struct sqlConnection *conn, int id)
+/* Return label for pane of this image in file if any, NULL if none.
+ * FreeMem this when done. */
+{
+char query[256];
+char *label;
+safef(query, sizeof(query),
+    "select paneLabel from image where id=%d", id);
+label = sqlQuickString(conn, query);
+if (label != NULL && label[0] == 0)
+    freez(&label);
+return label;
 }
 
 void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight)
@@ -506,7 +523,6 @@ safef(query, sizeof(query),
     , id);
 return sqlQuickString(conn, query);
 }
-
 
 static void appendMatchHow(struct dyString *dy, char *pattern,
 	enum visiGeneSearchType how)

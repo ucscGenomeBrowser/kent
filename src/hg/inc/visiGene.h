@@ -9,8 +9,13 @@ int visiGeneImageFile(struct sqlConnection *conn, int id);
 /* Return image file ID associated with image ID.  A file
  * con contain multiple images. */
 
-struct slInt *visiGeneImagesForFile(struct sqlConnection *conn, int imageFile);
+struct slInt *visiGeneImagesForFile(struct sqlConnection *conn, 
+	int imageFile);
 /* Given image file ID, return list of all associated image IDs. */
+
+char *visiGenePaneLabel(struct sqlConnection *conn, int id);
+/* Return label for pane of this image in file if any, NULL if none.
+ * FreeMem this when done. */
 
 void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight);
 /* Get width and height of image with given id */
