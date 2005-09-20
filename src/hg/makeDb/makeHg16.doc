@@ -7724,7 +7724,7 @@ foreach $file (@files)
     }
 }
 '_EOF_'
-# << this line makes emacs coloring happy
+    # << this line makes emacs coloring happy
 
     chmod a+x makeBed.pl
     rm -f hg16.hapmapRecombRate.bed
@@ -11384,3 +11384,10 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
   hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql hg16 evofold foldsHg16.bed
   # clean up
   rm foldsHg17.bed unmapped.bed tmp.bed
+
+# Tajima's D (DONE -- 2005-09-20 -- Daryl)
+# Data from Chris Carlson in Debbie Nickerson's lab
+# Chris Carlson [csc47<AT>u<DOT>washington<DOT>edu]
+
+    # lifted down from hg17.  See makeHg17.doc for details
+

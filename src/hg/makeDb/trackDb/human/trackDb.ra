@@ -445,7 +445,7 @@ priority 144.6
 visibility hide
 type bed 4 . 
 
-    track tajdSnpAD
+    track tajdSnpAd
     subTrack tajdSnp
     shortLabel SNPs AD
     longLabel  SNPs from African Descent
@@ -453,7 +453,7 @@ type bed 4 .
     altColor 0,100,200
     priority 1
 
-    track tajdSnpED
+    track tajdSnpEd
     subTrack tajdSnp
     shortLabel SNPs ED
     longLabel  SNPs from European Descent
@@ -461,7 +461,7 @@ type bed 4 .
     altColor 0,100,200
     priority 3
 
-    track tajdSnpXD
+    track tajdSnpXd
     subTrack tajdSnp
     shortLabel SNPs XD
     longLabel  SNPs from Chinese Descent
@@ -478,7 +478,7 @@ visibility hide
 priority 144.65
 type bedGraph 4 
 
-    track tajdAD
+    track tajdAd
     subTrack tajD
     shortLabel Tajima's D AD
     longLabel  Tajima's D from African Descent 
@@ -486,7 +486,7 @@ type bedGraph 4
     altColor 0,100,200
     priority 2
     
-    track tajdED
+    track tajdEd
     subTrack tajD
     shortLabel Tajima's D ED
     longLabel  Tajima's D from European Descent
@@ -494,7 +494,7 @@ type bedGraph 4
     altColor 0,100,200
     priority 4
 
-    track tajdXD
+    track tajdXd
     subTrack tajD
     shortLabel Tajima's D XD
     longLabel  Tajima's D from Chinese Descent
