@@ -4710,6 +4710,31 @@ visibility hide
 type bed 6 +
 origAssembly hg16
 
+
+track hapmapRecombRate
+shortLabel Recomb Rates
+longLabel Oxford Recombination Rates
+group varRep
+priority 145.5
+visibility hide
+type bedGraph 4
+origAssembly hg16
+
+track hapmapRecombHotspots
+shortLabel Recomb Hotspots
+longLabel Oxford Recombination Hotspots
+group varRep
+priority 145.6
+visibility hide
+type bed 3 .
+minLimit 0
+maxLimit 16
+autoScaleDefault Off
+maxHeightPixels 64:32:16
+origAssembly hg16
+
+
+
 searchTable wgRna
 searchMethod fuzzy
 searchType bed
