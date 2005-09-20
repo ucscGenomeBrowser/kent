@@ -936,3 +936,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - could get better overlap with expensive setup set if did setup
   for one genome, then 
+
+- got this error during load
+  mySQL error 1050: Table 'xenoEst_new_tmp' already exists

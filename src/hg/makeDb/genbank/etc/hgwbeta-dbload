@@ -20,5 +20,5 @@ copyTime=var/copy/copy.time
 # workdir is a local dir
 workdir=/scratch/tmp/genbank
 
-exec $gbRoot/etc/dbload $opts $downloadOpt $gbRoot "$databases" $copyTime $workdir
+exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $copyTime $workdir
 
