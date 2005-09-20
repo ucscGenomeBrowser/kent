@@ -1371,6 +1371,13 @@ origAssembly hg17
     color 12,20,150
     priority 4
 
+    track pseudoGIS
+    subTrack encodePseudogene
+    shortLabel GIS PseudoGenes
+    longLabel Genome Institute of Singapore Pseudogenes 
+    color 44,60,110
+    priority 5
+
 track encodeGisRnaPet
 compositeTrack on
 shortLabel GIS PET RNA
