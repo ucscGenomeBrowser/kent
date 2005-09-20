@@ -2116,6 +2116,21 @@ xrefTable kgXref
 xrefQuery select kgID, spDisplayID from %s where spDisplayID like '%s%%'
 searchPriority 2.6
 
+searchTable pseudoYaleEncode
+searchType genePred
+searchMethod exact
+searchPriority 4
+
+searchTable pseudoHavana
+searchType genePred
+searchMethod exact
+searchPriority 4
+
+searchTable pseudoGIS
+searchType genePred
+searchMethod exact
+searchPriority 4
+
 searchTable superfamily
 searchType bed
 searchMethod fuzzy
