@@ -1,53 +1,15 @@
 <H2>Description</H2>
 <P>
 
-This track shows Tajima's D (Tajima, 1989), a measure of nucleotide
+This track shows the SNPs that were used in the calculation of Tajima's D (Tajima, 1989), a measure of nucleotide
 diversity, estimated from the Perlegen data set (Hinds et al, 2005).
 Tajima's D is a statistic used to compare an observed nucleotide
 diversity against the expected diversity under the assumption that all
 polymorphisms are selectively neutral and constant population size.
-The theoretical distribution of Tajima's D (95% c.i. between -2 and
-+2) assumes that polymorphism ascertainment is independent of allele
-frequency. High values of Tajima's D suggest an excess of common
-variation in a region, which can be consistent with balancing
-selection, population contraction.  Negative values of Tajima's D, on
-the other hand, indicate an excess of rare variation, consistent with
-population growth, or positive selection.  Population admixture can
-lead to either high or low Tajima's D values in theory.  Demographic
-parameters would be expected to affect the genome more evenly than
-selective pressures, so previous analyses have suggested that using
-the empiric distribution of Tajima's D from a collection of regions
-across the genome provides advantages in assessing whether selection
-or demography might explain an observed deviation from
-expectation. Because of the ascertainment bias toward common
-polymorphism in the Perlegen data set, positive Tajima's D values are
-difficult to interpret, and modeling ascertainment is difficult.
-However, given that the ascertainment bias raises the mean of the
-distribution, extreme negative values in extended regions can be
-useful in qualitatively identifying interesting regions for full
-resequencing and more rigorous theoretical analysis of nucleotide
-diversity.  For further discussion, see Carlson et al, <B>(ref)</B>.
-<P>
-In full display mode, this track shows the nucleotide diversity across
-three human populations: 23 individuals of African American Descent
-(AD), 24 individuals of European Descent (ED) and 24 individuals of
-Chinese Descent (XD), as well as the polymorphic sites within each
-population used to estimate nucleotide diversity.  Only SNPs observed
-to be polymorphic within each subpopulation were used in the Tajima's
-D calculation.  Nucleotide diversity is shown in dense display mode
-using a grayscale density gradient, with light colors indicating low
-diversity.
-
 
 <H2>Methods</H2>
-<P>
-Tajima's D was estimated in 100 kbp sliding windows across the
-autosomal genome, reporting the Tajima's D measure at the central 10
-kbp of the window and stepping by 10 kbp.  Thus, the Tajima's D for
-the window chr1:100,001-200,000 is reported at coordinates
-chr1:145,001-155,000, the Tajima's D for the window
-chr1:110,001-210,000 is reported at coordinates chr1:155,001-165,000,
-and so forth.
+
+Please see the Tajima's D track or Carlson <I>et al.</I> for more details on the use of this track.
 
 <H2>Credits</H2>
 <P>
@@ -64,4 +26,6 @@ following programs:
 <H2>References</H2>
 <P>
 Tajima F (1989) Statistical method for testing the neutral mutation hypothesis by DNA polymorphism. <I>Genetics</I> <B>123</B>:585-595
+<P>
+Christopher S Carlson, Daryl J. Thomas, Michael Eberle, Robert Livingston, Mark Rieder, Deborah A Nickerson (2005) Genomic regions exhibiting positive selection identified from dense genotype data. <I>Genome Research</I> (in press) <!--<B>15</B>:start-stop-->
 
