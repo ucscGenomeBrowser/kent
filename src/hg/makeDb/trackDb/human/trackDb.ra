@@ -1344,8 +1344,8 @@ origAssembly hg17
 
     track pseudoHavana
     subTrack encodePseudogene
-    shortLabel Havana Pseudogenes
-    longLabel Havana Annotated Pseudogenes and Immunoglobulin Segments
+    shortLabel Havana-Gencode Pseudogenes
+    longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
     color 30,130,210
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
     priority 1
