@@ -12,7 +12,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: fuzzyShow.c,v 1.16 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: fuzzyShow.c,v 1.17 2005/09/20 21:19:23 hartera Exp $";
 
 int ffShAliPart(FILE *f, struct ffAli *aliList, 
     char *needleName, DNA *needle, int needleSize, int needleNumOffset,
@@ -238,6 +238,7 @@ if (showSideBySide)
 	}
     if (leftAli != NULL)
 	bafFlushLine(&baf);
+    fprintf( f, "<I>*Aligned Blocks with gaps <= %d bases are merged for this display</I>\n", blockMaxGap);
     fprintf(f, "</TT></PRE>\n");
     }
 if (rcNeedle)
