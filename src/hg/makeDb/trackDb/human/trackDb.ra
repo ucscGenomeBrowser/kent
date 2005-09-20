@@ -3757,6 +3757,68 @@ origAssembly hg16
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
 
+track encodeUvaDnaRepSeg
+compositeTrack on
+shortLabel UVa DNA Rep Seg
+longLabel University of Virginia DNA Replication Temporal Segmentation
+group encodeChrom
+rriority 64.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+origAssembly hg16
+
+    track encodeUvaDnaRepEarly
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep Early
+    longLabel University of Virginia Temporal Profiling of DNA Replication (Early) 
+    color 50,50,100
+    priority 1
+
+    track encodeUvaDnaRepMid
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep Mid
+    longLabel University of Virginia Temporal Profiling of DNA Replication (Mid) 
+    color 30,80,130
+    priority 2
+
+    track encodeUvaDnaRepLate
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep Late
+    longLabel University of Virginia Temporal Profiling of DNA Replication (Late) 
+    color 10,110,160
+    priority 3
+
+    track encodeUvaDnaRepPanS
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep PanS
+    longLabel University of Virginia Temporal Profiling of DNA Replication (PanS) 
+    color 100,50,50
+    priority 4
+
+track encodeUvaDnaRepOrigins
+compositeTrack on
+shortLabel UVa DNA Rep Ori
+longLabel University of Virginia DNA Replication Origins
+group encodeChrom
+rriority 65.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+
+    track encodeUvaDnaRepOriginsPred
+    subTrack encodeUvaDnaRepOrigins
+    longLabel University of Virginia Predicted DNA Replication Origins
+    shortLabel UVa DNA Rep Ori
+    priority 1
+
+    track encodeUvaDnaRepOriginsConf
+    subTrack encodeUvaDnaRepOrigins
+    shortLabel UVa DNA Rep Conf
+    longLabel University of Virginia DNA Replication Origins Confidence Intervals
+    color 100,100,100
+    priority 2
+
 track encodeRegulomeBase
 compositeTrack on
 shortLabel UW/Reg DNaseI Sens
