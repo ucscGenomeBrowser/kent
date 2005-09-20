@@ -2,7 +2,7 @@
 # geneome databases to update on hgwbeta.  These will also be copied to
 # hgnfs1
 ##
-#CORRUPT# anoGam1
+anoGam1
 apiMel1
 apiMel2
 bosTau1
