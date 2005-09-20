@@ -17999,6 +17999,7 @@ do
   /cluster/home/sugnet/bin/i386/borfMatcher -keepNmd beds/$base borf/$base.borf bedOrf/$base.bed genePred/$base.gp 
 done
 '_EOF_'
+    #
 chmod 755 makeGenePred.sh 
 makeGenePred.sh beds/*
 
@@ -18013,3 +18014,8 @@ wc *.bed *.gp
 ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp 
 
 # end exonWalk
+
+### hapmapRecombRate (Daryl; September 19, 2005)
+    Lifted from hg16; see makeHg16.doc for details
+### hapmapRecombHotspot (Daryl; September 19, 2005)
+    Lifted from hg16; see makeHg16.doc for details

@@ -7680,7 +7680,84 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
 	    from    snp 
 	    where   name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329');
     select chrom, count(*) from snp where name in ('SNP_A-1606360','SNP_A-1510197','SNP_A-1510243','SNP_A-1606356','SNP_A-1606329') group by chrom;
+
+
+### hapmapRecombRate (Daryl; September 19, 2005)
+    cd /cluster/data/hg16/bed/hapmap/recombination/rates
+    wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/Genetic_Map.tar.gz
+    tar xvfz Genetic_map.tar.gz
+
+    # Make 'makeBed.pl' to re-format the data.
+cat  << '_EOF_' > makeBed.pl
+#!/usr/local/bin/perl -W
+
+$dir   = shift || "." ;
+opendir(DIR,$dir);
+@files = grep {/txt/} readdir(DIR);
+closedir(DIR);
+
+foreach $file (@files)
+{
+    open(IN,"$dir/$file");
+    $chrom =  $file;
+    $chrom =~ s/Gen_map_//;
+    $chrom =~ s/_COMBINED.txt//;
+    $chrom =~ s/_non_par//;
+    $chrom =~ s/_par1//;
+    $chrom =~ s/_par2//;
+    $line  =  <IN>;
+    if ($line =~ /Number/) 
+    {
+        $line = <IN>; 
+    }
+    @fields=split / /,$line;
+    $chromStart=$fields[1]-1;
+    $rate=$fields[4];
+    while (<IN>)
+    {
+        chomp();
+        @fields=split / /,$_;
+        $chromEnd=$fields[1];
+        printf ("%s\t%d\t%d\t%.4f\n", $chrom, $chromStart, $chromEnd, $rate);
+        $chromStart=$chromEnd-1;
+        $rate=$fields[4];
+    }
+}
+'_EOF_'
+# << this line makes emacs coloring happy
+
+    chmod a+x makeBed.pl
+    rm -f hg16.hapmapRecombRate.bed
+    time makeBed.pl > hg16.hapmapRecombRate.bed
+    cut -f1 hg16.hapmapRecombRate.bed | sort -u
+    wc -l hg16.hapmapRecombRate.bed
+
+    time liftOver hg16.hapmapRecombRate.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.hapmapRecombRate.bed hg16ToHg17.unmapped
+
+    time hgLoadBed -bedGraph=4 hg16 hapmapRecombRate hg16.hapmapRecombRate.bed
+    time hgLoadBed -bedGraph=4 hg17 hapmapRecombRate hg17.hapmapRecombRate.bed
+
+    rm -f bed.tab
+
+### hapmapRecombHotspot (Daryl; September 19, 2005)
+
+    wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/Genomewidehots16a.txt
+    wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/chrX_non_par_hotspots.txt
+    wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/chrX_par1_hotspots.txt
+
+    # this takes about 3 seconds to run
+
+    rm -f hg*.hapmapRecombHotspots.bed 
+    tail +2 Genomewidehots16a.txt     |                    awk -F " " '{printf "chr%s\t%d\t%d\n",$1, $3-1, $4}' >  hg16.hapmapRecombHotspots.bed
+    tail +2 chrX_non_par_hotspots.txt | sed s/_non_par// | awk -F " " '{printf "chr%s\t%d\t%d\n",$1, $3-1, $4}' >> hg16.hapmapRecombHotspots.bed
+    tail +2 chrX_par1_hotspots.txt    | sed s/_par1//    | awk -F " " '{printf "chr%s\t%d\t%d\n",$1, $3-1, $4}' >> hg16.hapmapRecombHotspots.bed
     
+    liftOver hg16.hapmapRecombHotspots.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.hapmapRecombHotspots.bed hg16ToHg17.unmapped
+    
+    hgLoadBed hg16 hapmapRecombHotspots hg16.hapmapRecombHotspots.bed
+    hgLoadBed hg17 hapmapRecombHotspots hg17.hapmapRecombHotspots.bed
+    
+    rm -f bed.tab
 
 # Tajima's D (DONE -- 2005-06-04 -- Daryl)
 # Data from Chris Carlson in Debbie Nickerson's lab
