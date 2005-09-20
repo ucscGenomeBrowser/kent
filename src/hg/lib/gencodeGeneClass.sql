@@ -6,7 +6,7 @@
 #Class for Gencode genes
 CREATE TABLE gencodeGeneClass (
     name varchar(255) not null,	# Transcript ID for Gencode gene
-    class varchar(255) not null,	# Class of gene.  enum('Antisense', 'Antisense_val', 'Artifact', 'Known', 'Novel_CDS', 'Novel_transcript', 'Novel_transcript_val', 'Putative', 'Putative_val', 'TEC', 'Processed_pseudogene', 'Unprocessed_pseudogene')
+    class varchar(255) not null,	# Class of gene.  enum('Antisense', 'Antisense_val', 'Artifact', 'Known', 'Novel_CDS', 'Novel_transcript', 'Novel_transcript_val', 'Putative', 'Putative_val', 'TEC', 'Processed_pseudogene', 'Unprocessed_pseudogene', 'Pseudogene_fragment', 'Undefined')
               #Indices
     PRIMARY KEY(name)
 );
