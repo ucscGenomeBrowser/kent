@@ -2599,3 +2599,155 @@ danRer3.mgcTables.mgc = all
         etc/hgwdev.dbs 
     cvs commit
     make etc-update
+
+# MAKE Human Proteins track  (DONE 2005-09-21 braney)
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/blastDb
+    cd /cluster/data/danRer3/blastDb
+    cut -f 1 ../chrom.sizes | sed "s/chr//" | sed "/NA/d" | sed "/Un/d" > chrom.list
+    for i in `cat chrom.list`; do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
+    ln -s `cat list` .
+    for i in *.fa
+    do
+	/projects/compbio/bin/i686/formatdb -i $i -p F
+    done
+    rm *.log *.fa list
+    cd ..
+    for i in `cat blastDb/chrom.list`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+    rm blastDb/chrom.list
+
+    mkdir /cluster/data/danRer3/scaffoldBlastDb
+    cd /cluster/data/danRer3/scaffoldBlastDb
+    cat ../Un/scaffoldsSoftMask/*.fa ../NA/scaffoldsSoftMask/*.fa |  faSplit sequence stdin 500 scaf
+    for i in *.fa
+    do
+	/projects/compbio/bin/i686/formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    mkdir -p /san/sanvol1/scratch/danRer3/comboBlastDb
+    cd /cluster/data/danRer3/blastDb
+    for i in nhr nin nsq; do cp *.$i /san/sanvol1/scratch/danRer3/comboBlastDb; done
+    cd /cluster/data/danRer3/scaffoldBlastDb
+    for i in nhr nin nsq; do cp *.$i /san/sanvol1/scratch/danRer3/comboBlastDb; done
+
+    mkdir -p /cluster/data/danRer3/bed/tblastn.hg17KG
+    cd /cluster/data/danRer3/bed/tblastn.hg17KG
+    echo  /san/sanvol1/scratch/danRer3/comboBlastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
+
+    # we want around 250000 jobs
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(250000/`wc query.lst | awk "{print \\\$1}"`\)
+# 37365/(250000/3539) = 528.938940
+
+    mkdir -p /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa
+    split -l 529 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/danRer2/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/danRer2/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 ../../jkStuff/subChr.lft carry $f.2       
+        liftUp -nosort -type=".psl" -nohead $f.4 ../../jkStuff/liftAll.lft carry $f.3       
+	liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.4       
+
+        if pslCheck -prot $3.tmp                                                                          
+        then                                                                                              
+            mv $3.tmp $3                                                                                  
+            rm -f $f.1 $f.2 $f.3  $f.4
+        fi
+        exit 0                                                                                            
+    fi                                                                                                    
+fi                                                                                                        
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/danRer3/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+
+# Completed: 203170 of 203170 jobs
+# CPU time in finished jobs:   17875092s  297918.20m  4965.30h  206.89d  0.567 y
+# IO & Wait Time:               4092508s   68208.46m  1136.81h   47.37d  0.130 y
+# Average job time:                 108s       1.80m     0.03h    0.00d
+# Longest finished job:            1778s      29.63m     0.49h    0.02d
+# Submission to last job:         64970s    1082.83m    18.05h    0.75d
+
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    para create chainSpec
+    para push
+
+# Completed: 71 of 71 jobs
+# CPU time in finished jobs:      89115s    1485.25m    24.75h    1.03d  0.003 y
+# IO & Wait Time:                 35631s     593.85m     9.90h    0.41d  0.001 y
+# Average job time:                1757s      29.28m     0.49h    0.02d
+# Longest finished job:           15587s     259.78m     4.33h    0.18d
+# Submission to last job:         23380s     389.67m     6.49h    0.27d
+
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    liftUp -nohead -type=.psl stdout /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft carry u.*.psl m60* | \
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n | uniq > /cluster/data/danRer3/bed/tblastn.hg17KG/blastHg17KG.psl
+        
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/tblastn.hg17KG
+    hgLoadPsl danRer3 blastHg17KG.psl
+# 21063005 bases of 1630323462 (1.292%) in intersection
+
+    # back to kkstore02
+    rm -rf blastOut
+# End tblastn

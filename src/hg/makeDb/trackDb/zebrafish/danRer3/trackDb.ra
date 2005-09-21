@@ -78,3 +78,41 @@ termRegex (ctg|BX|AL)[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
+track blastHg17KG
+shortLabel $o_Organism Proteins
+longLabel $o_Organism ($o_date/$o_db) proteins mapped by chained tBLASTn
+group compGeno
+priority 124
+visibility squish
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
+otherDb hg17
+
+searchName blastHg17KGSprot
+searchTable blastHg17KG
+searchMethod prefix
+searchType psl
+xrefTable hg17.blastKGRef02
+xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
+searchPriority 25
+
+searchName blastHg17KGGene
+searchTable blastHg17KG
+searchMethod prefix
+searchType psl
+xrefTable hg17.blastKGRef02
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
+searchPriority 25
+
+searchTable blastHg17KG
+searchMethod prefix
+searchType psl
+searchName blastHg17KGSprot
+searchTable blastHg17KG
+searchMethod prefix
+searchType psl
+xrefTable hg17.blastKGRef02
+xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
+searchPriority 25
