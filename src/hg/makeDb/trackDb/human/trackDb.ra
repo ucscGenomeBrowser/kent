@@ -412,8 +412,7 @@ longLabel Hotspots of Linkage Disequilibrium in the HapMap
 group varRep
 visibility hide
 priority 144.55
-minLimit 0
-maxLimit 16
+defaultViewLimits 0:16
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 type bedGraph 4 
@@ -475,6 +474,10 @@ shortLabel Tajima's D
 longLabel Tajima's D
 group varRep
 visibility hide
+defaultViewLimits -2.5:3
+minLimit -4
+maxLimit 5
+autoScaleDefault Off
 priority 144.65
 type bedGraph 4 
 
@@ -4495,8 +4498,9 @@ priority 86
 visibility hide
 type bedGraph 4
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+defaultViewLimits 0:16
 minLimit 0
-maxLimit 16
+maxLimit 100
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 origAssembly hg16
@@ -4792,7 +4796,6 @@ visibility hide
 type bed 6 +
 origAssembly hg16
 
-
 track hapmapRecombRate
 shortLabel Recomb Rates
 longLabel Oxford Recombination Rates
@@ -4800,6 +4803,11 @@ group varRep
 priority 145.5
 visibility hide
 type bedGraph 4
+defaultViewLimits 0:16
+minLimit 0
+maxLimit 100
+autoScaleDefault Off
+maxHeightPixels 64:32:16
 origAssembly hg16
 
 track hapmapRecombHotspots
@@ -4809,10 +4817,6 @@ group varRep
 priority 145.6
 visibility hide
 type bed 3 .
-minLimit 0
-maxLimit 16
-autoScaleDefault Off
-maxHeightPixels 64:32:16
 origAssembly hg16
 
 
