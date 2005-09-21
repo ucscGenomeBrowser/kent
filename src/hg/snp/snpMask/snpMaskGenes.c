@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.4 2005/09/21 22:00:50 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.5 2005/09/21 22:04:23 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -370,6 +370,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
 
     size = gene->txEnd - gene->txStart;
     assert(size > 0);
+    AllocVar(seq);
+    seq->dna = needLargeMem(size+1);
     seq = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, gene->txStart, size);
 
     ptr = seq->dna;
