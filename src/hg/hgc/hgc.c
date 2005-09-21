@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.948 2005/09/19 21:45:04 ytlu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.949 2005/09/21 00:03:56 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11711,20 +11711,9 @@ sqlDisconnect(&conn);
 
 void checkAndPrintCloneRegUrl(FILE *f, char *clone)
 {
-//struct sqlConnection *conn = hAllocConn();
-//struct sqlResult *sr = NULL;
-//char query[256];
-
-//safef(query, sizeof(query), "select name from bacEndPairs where name = '%s'", clone);
-//sr = sqlGetResult(conn, query);
-//if (sqlNextRow(sr)!=NULL)
-//    {
       printf("<B>NCBI Clone Registry: </B><A href=");
       printCloneRegUrl(stdout, clone);
       printf(" target=_blank>%s</A><BR>\n",clone);
-//}
-//sqlFreeResult(&sr);
-//hFreeConn(&conn);
 }
 
 void doCnpIafrate(struct trackDb *tdb, char *itemName)
@@ -12637,6 +12626,10 @@ if (row != NULL)
             else
                 printf("<H2>%s</H2>\n", clone);
             }
+	else if (trackDbSetting(tdb, "notNCBI"))
+	    {
+	    printf("<H2>%s</H2>\n", clone);
+	    }
         else 
             {
 	    printf("<H2><A HREF=");
@@ -12723,6 +12716,10 @@ if (row != NULL)
                     }
                 sqlFreeResult(&sr2);
                 } 
+	    else if (trackDbSetting(tdb, "notNCBI"))
+		{
+		printf("<H3>%s</H3>\n", lfs->lfNames[i]);
+		}
             else
                 {
 	        printf("<H3><A HREF=");
