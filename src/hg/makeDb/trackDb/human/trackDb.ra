@@ -1394,6 +1394,13 @@ origAssembly hg17
     itemClassTbl encodePseudogeneClass
     priority 5
 
+    track pseudoEncodeConsensus
+    subTrack encodePseudogene
+    shortLabel Consensus PseudoGenes
+    longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS Encode Pseudogenes 
+    itemClassTbl encodePseudogeneClass
+    priority 5
+
 track encodeGisRnaPet
 compositeTrack on
 shortLabel GIS PET RNA
