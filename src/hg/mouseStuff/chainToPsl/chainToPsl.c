@@ -13,8 +13,9 @@
 #include "psl.h"
 #include "dystring.h"
 #include "dlist.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.13 2005/05/28 00:38:33 markd Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.14 2005/09/22 22:52:05 markd Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {
@@ -523,11 +524,11 @@ struct psl *psl;
 struct chain *chain;
 int q,t;
 
-printf("Scanning %s\n", targetList);
+verbose(1, "Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
-printf("Scanning %s\n", queryList);
+verbose(1, "Scanning %s\n", queryList);
 hashFileList(queryList, fileHash, qHash);
-printf("Converting %s\n", inName);
+verbose(1, "Converting %s\n", inName);
 
 while ((chain = chainRead(lf)) != NULL)
     {
