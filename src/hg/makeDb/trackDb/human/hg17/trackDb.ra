@@ -172,7 +172,7 @@ url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
 
 track regPotential5X
 shortLabel 5x Reg Potential
-longLabel 5-Way Regulatory Potential - Human, Chimp (Nov 2003/panTro1), Dog (Jul 2004/canFam1), Mouse (May 2004/mm5), Rat (June 2003/rn3), 
+longLabel 5-Way Regulatory Potential - Human, Chimp, Dog, Mouse, Rat
 group regulation
 priority 91
 visibility hide
