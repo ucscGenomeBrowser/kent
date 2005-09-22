@@ -1371,6 +1371,7 @@ origAssembly hg17
     shortLabel Yale Pseudo
     longLabel Yale PseudoGene Predictions
     itemClassTbl encodePseudogeneClass
+    url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
     priority 2
 
     track pseudoUcsc
