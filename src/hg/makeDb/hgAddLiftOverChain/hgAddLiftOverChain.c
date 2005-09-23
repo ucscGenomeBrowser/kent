@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.2 2005/02/02 08:46:50 aamp Exp $";
+static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.3 2005/09/23 21:50:36 galt Exp $";
 
 #define TABLE_NAME "liftOverChain"
 
@@ -97,6 +97,7 @@ if (!fileExists(chainFile))
 /* NOTE: OK for databases to not exist -- we can still
  * convert coordinates for obsolete databases with these files */
 
+ZeroVar(&loChain);
 loChain.fromDb = fromDb;
 loChain.toDb = toDb;
 loChain.path = chainFile;
