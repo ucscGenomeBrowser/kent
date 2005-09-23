@@ -1,9 +1,6 @@
 track           cpgIsland
 visibility      dense
 
-track           genscan
-visibility      dense
-
 track           gcPercent
 visibility      dense
 
