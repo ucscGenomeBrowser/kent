@@ -56,6 +56,7 @@ clean:
 test::
 	cd lib && ${MAKE} test
 	cd blat && ${MAKE} test
+	cd gfServer && ${MAKE} test
 	cd hg && ${MAKE} test
 	cd utils && ${MAKE} test
 
