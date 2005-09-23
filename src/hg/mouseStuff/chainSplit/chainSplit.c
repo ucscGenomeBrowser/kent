@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSplit.c,v 1.7 2005/08/26 20:58:55 baertsch Exp $";
+static char const rcsid[] = "$Id: chainSplit.c,v 1.8 2005/09/23 06:19:27 galt Exp $";
 
 boolean splitOnQ = FALSE;
 int lump = 0;
@@ -98,7 +98,7 @@ for (inIx = 0; inIx < inCount; ++inIx)
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 splitOnQ = optionExists("q");
 lump = optionInt("lump", 0);
 if (argc < 3)
