@@ -20,6 +20,17 @@ static FILE* gOutPsl = NULL;
 static boolean gInclVersion;
 static char* gGetWhat;
 
+static void flagUnaligned(struct gbSelect* select, unsigned orgCat)
+/* mark unaligned entries so that they are not reported as missing */
+{
+struct gbAligned* aln;
+for (aln = select->update->aligned; aln != NULL; aln = aln->updateLink)
+    {
+    if ((aln->entry->orgCat & orgCat) && (aln->numAligns == 0))
+        aln->entry->clientFlags = TRUE;
+    }
+}
+
 static void processPsl(struct gbSelect* select, struct psl* psl)
 /* process the next PSL from an update PSL file, possibly outputing
  * the alignment */
@@ -29,14 +40,13 @@ short version = gbSplitAccVer(psl->qName, acc);
 
 /* will return NULL on ignored sequences */
 struct gbEntry* entry = gbReleaseFindEntry(select->release, acc);
-if ((entry != NULL) && (version == entry->selectVer)
-    && !entry->clientFlags)
+if ((entry != NULL) && (version == entry->selectVer))
     {
     /* selected */
     if (!gInclVersion)
         strcpy(psl->qName, acc);  /* remove version */
     pslTabOut(psl, gOutPsl);
-    entry->clientFlags = TRUE; /* flag so only gotten once */
+    entry->clientFlags = TRUE; /* flag so we know we got it */
     }
 /* trace if enabled */
 if (gbVerbose >= 3)
@@ -87,12 +97,18 @@ void pslDataProcessUpdate(struct gbSelect* select)
 /* Get PSL alignments for a partition and update.  Partition processed and
  * aligned indexes should be loaded and selected versions flaged. */
 {
-if ((select->orgCats & GB_NATIVE)
-    && (select->update->numNativeAligns[gbTypeIdx(select->type)] > 0))
-    processOrgCatPsls(select, GB_NATIVE);
-if ((select->orgCats & GB_XENO)
-    && (select->update->numNativeAligns[gbTypeIdx(select->type)] > 0))
-    processOrgCatPsls(select, GB_XENO);
+if (select->orgCats & GB_NATIVE)
+    {
+    if (select->update->numNativeAligns[gbTypeIdx(select->type)] > 0)
+        processOrgCatPsls(select, GB_NATIVE);
+    flagUnaligned(select, GB_NATIVE);
+    }
+if (select->orgCats & GB_XENO)
+    {
+    if (select->update->numXenoAligns[gbTypeIdx(select->type)] > 0)
+        processOrgCatPsls(select, GB_XENO);
+    flagUnaligned(select, GB_XENO);
+    }
 }
 
 void pslDataClose()
