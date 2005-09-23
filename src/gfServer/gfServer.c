@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.48 2004/11/28 18:01:28 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.49 2005/09/23 01:28:50 angie Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"trans", OPTION_BOOLEAN},
@@ -173,14 +173,26 @@ clumpList = gfPcrClumps(gf, fPrimer, fPrimerSize, rPrimer, rPrimerSize, 0, 4*102
 endTime = clock1000();
 printf("Index searched in %4.3f seconds\n", 0.001 * (endTime - startTime));
 for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    /* Clumps from gfPcrClumps have already had target->start subtracted out 
+     * of their coords, but gfClumpDump assumes they have not and does the 
+     * subtraction; rather than write a new gfClumpDump, tweak here: */
+    clump->tStart += clump->target->start;
+    clump->tEnd += clump->target->start;
     gfClumpDump(gf, clump, stdout);
+    }
 printf("minus strand:\n");
 startTime = clock1000();
 clumpList = gfPcrClumps(gf, rPrimer, rPrimerSize, fPrimer, fPrimerSize, 0, 4*1024);
 endTime = clock1000();
 printf("Index searched in %4.3f seconds\n", 0.001 * (endTime - startTime));
 for (clump = clumpList; clump != NULL; clump = clump->next)
+    {
+    /* Same as above, tweak before gfClumpDump: */
+    clump->tStart += clump->target->start;
+    clump->tEnd += clump->target->start;
     gfClumpDump(gf, clump, stdout);
+    }
 
 genoFindFree(&gf);
 }
@@ -366,7 +378,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t%d\t%d\t-", ss->fileName, 
-        clump->tStart - ss->start, clump->tEnd - ss->start);
+        clump->tStart, clump->tEnd);
     netSendString(connectionHandle, buf);
     ++clumpCount;
     }
