@@ -112,3 +112,38 @@ hashFree(&dM->nameIndex);
 freez(pDMatrix);
 }
        
+void dMatrixWriteForSql(struct dMatrix *dM, char *tableName,
+			char *toLoad, char *sqlSpec) 
+/* Write out two files that together will make a table in an 
+   sql database. */
+{
+int i = 0, j = 0;
+FILE *sql = mustOpen(sqlSpec, "w");
+FILE *data = mustOpen(toLoad, "w");
+
+/* Make the sql file. */
+fprintf(sql, "create table %s (\n"
+	"   name varchar(255) not null,\n", tableName);
+for(i = 0; i < dM->colCount; i++)
+    {
+    char *string = cloneString(dM->colNames[i]);
+    subChar(string, '.', '_');
+    fprintf(sql, "   %s float not null,\n", string);
+    freez(&string);
+    }
+fprintf(sql, "   index(name(16))\n");
+fprintf(sql, ");\n");
+carefulClose(&sql);
+
+/* print out the data matrix. */
+for(i = 0; i < dM->rowCount; i++) 
+    {
+    fprintf(data, "%s", dM->rowNames[i]);
+    for(j = 0; j < dM->colCount; j++) 
+	{
+	fprintf(data, "\t%.4f", dM->matrix[i][j]);
+	}
+    fprintf(data, "\n");
+    }
+carefulClose(&data);
+}
