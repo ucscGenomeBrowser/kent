@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.1 2005/09/23 17:20:06 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.2 2005/09/23 23:28:29 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -324,7 +324,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
     verbose(1, "gene %d = %s\n----------\n", geneCount, gene->name);
     geneCount++;
     // short circuit
-    if (geneCount == 10) return;
+    if (geneCount == 100) return;
 
     for (exonPos = 0; exonPos < gene->exonCount; exonPos++)
         {
@@ -337,14 +337,9 @@ for (gene = genes; gene != NULL; gene = gene->next)
         snps = readSnps(gene->chrom, exonStart, exonEnd);
 	if (snps == NULL) continue;
 
-        AllocVar(seqOrig);
         AllocVar(seqMasked);
-        seqOrig->dna = needMem(exonSize+1);
         seqMasked->dna = needMem(exonSize+1);
-        seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, exonStart, exonSize);
-        memcpy(seqMasked->dna, seqOrig->dna, exonSize);
-	seqOrig->dna[exonSize] = 0;
-	seqOrig->size = exonSize;
+        seqMasked = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, exonStart, exonSize);
 
         /* first do all substitutions */
 	/* a flank may include other SNPs */
@@ -361,8 +356,21 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	/* print each snp */
 	for (snp = snps; snp != NULL; snp = snp->next)
 	    {
+            char *snpName = needMem(64);
+	    char referenceAllele;
+
 	    snpPos = snp->chromStart;
-	    verbose(1, "    snp = %s, snpPos = %d\n", snp->name, snpPos);
+
+	    /* include reference allele in fasta header line */
+            strcat(snpName, "");
+	    strcat(snpName, snp->name);
+	    strcat(snpName, " (reference = ");
+            seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, snpPos, 1);
+	    ptr = seqOrig->dna;
+	    strcat(snpName, ptr);
+	    strcat(snpName, ")");
+	    verbose(1, "    snp = %s, snpPos = %d\n", snpName, snpPos);
+
 	    AllocVar(seqFlank);
 	    flankStart = (snpPos - FLANKSIZE > exonStart) ? snpPos - FLANKSIZE - exonStart: 0;
 	    flankEnd = (snpPos + FLANKSIZE < exonEnd) ? snpPos + FLANKSIZE - exonStart: exonEnd - exonStart - 1;
@@ -372,9 +380,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	    memcpy(seqFlank->dna, seqMasked->dna+flankStart, flankSize);
 	    seqFlank->dna[flankSize] = 0;
 	    seqFlank->size = flankSize;
-	    // TO DO: construct major/minor allele for name
 	    verbose(5, "seq = %s\n", seqFlank->dna);
-	    faWriteNext(fileHandle, snp->name, seqFlank->dna, flankSize);
+	    faWriteNext(fileHandle, snpName, seqFlank->dna, flankSize);
 	    freeDnaSeq(&seqFlank);
 	    }
         verbose(1, "----------------\n");
