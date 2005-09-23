@@ -20,6 +20,8 @@ function showBrowser() {
     window.status=navigator.appName+' '+navigator.appVersion;
 }
 
+var isSafari = (navigator.userAgent.toLowerCase().indexOf("safari") >= 0);
+
 // magnification for over-zoom-in.  as if there were a level -1.
 m = 1;
 maxmag = 8;  // max magnification  (doubles each time: 1,2,4,8)
@@ -259,20 +261,6 @@ if ((x != xx) || (y != yy)) {
 }
 }
 
-function missingUpdateScan() {
-  // safari misses some img.onload() method calls
-  //  so try calling the image load method now:
-
-for(i=0;i<cells.length;i++) {
-    var cell = cells[i];
-    if ((cell.r != -1) && (cell.style.top < 0)) {  // it is visible, but no onload method called yet
-	alert('proof that missingUpdateScan caught something');
-    	placeTile(cell);
-    }
-}
-		
-}
-
 
 function updatePos() {
 
@@ -359,7 +347,8 @@ for(rr=r-hdl;rr-r<=hdr;rr++) {
 		cell.path=cstr;
 		cell.src=cstr;
 
-		placeTile(cell);  // safari hack, remove soon  (TODO finish after strawberry)
+		if (isSafari)
+    		    placeTile(cell);  // safari hack
 		
 		cntvis++;
 		
@@ -381,8 +370,6 @@ if ((cntinv > 0) || (cntvis > 0))
     window.status='cntinv='+cntinv+'  and cntvis='+cntvis;
 
 if ((x != xx) || (y != yy)) setTimeout('scrollMe()',100);
-
-//setTimeout('missingUpdateScan()',200); // TODO finish after strawberry
 
 }
 
@@ -458,6 +445,9 @@ hOrig[0] = parseInt(qsParm['h']);
 
 //debug
 //alert('w,h='+wOrig[0]+','+hOrig[0]+' picName='+picName);
+
+//debug
+//alert('isSafari='+isSafari);
 
 for (l=1;l<numLevels;l++) 
     {
@@ -597,20 +587,24 @@ if (!e) var e = window.event;
 if (e.keyCode) code = e.keyCode;
 else if (e.which) code = e.which;
 var character = String.fromCharCode(code);
+
 //alert('code='+code+' Character was ' + character);
 
-// MAYBE I don't need this anymore.
-// I remember I was having trouble trapping 'm' on some browser, but which?
-//  code 77 works for safari and mozilla
-//if (character=='m') {
-//    if (zoomMode=="in") 
-//	zoomMode="center";
-//    else if (zoomMode=="center") 
-//	zoomMode="out";
-//    else if (zoomMode=="out") 
-//	zoomMode="in";
-//    setMouseCursor();	    
-//}
+//debug
+//window.status='keypress: code='+code+' Character was ' + character;
+//return;
+
+if (character=='m') {  // m mode cycle
+    if (zoomMode=="in") 
+	zoomMode="center";
+    else if (zoomMode=="center") 
+	zoomMode="out";
+    else if (zoomMode=="out") 
+	zoomMode="in";
+    setMouseCursor();	    
+}
+if (character == '+') zoomIn(true);   // +   // bugfix for FF Mac
+if (character == '-') zoomIn(false);  // -   // bugfix for FF Mac
 
 if ((code == 32) // suppress for mozilla  ; else 
  || (code == 39) // moveRight(wSmallDelta); else 
@@ -653,6 +647,10 @@ else if (e.which) code = e.which;
 window.status='Character was ' + code;
 
 //debug
+//alert('Code was '+code + ' e.charCode='+e.charCode + ' e.ctrlKey='+e.ctrlKey + ' e.shiftKey='+e.shiftKey + ' e.type='+e.type);
+//return;
+
+//debug
 //alert('code='+code);
 //cancelKey(e);
 //if (e.preventBubble)
@@ -668,17 +666,18 @@ if (code == 35) moveRight(wBigDelta  ); else // end
 if (code == 36) moveLeft (wBigDelta  ); else // home
 if (code == 33) moveUp   (hBigDelta  ); else // pgup
 if (code == 34) moveDown (hBigDelta  ); else // pgdn
-if ((code == 43) || (code == 107) || (code == 187) || ((code == 61)))  zoomIn(true); else // + 
-if ((code == 45) || (code == 109) || (code == 189))  zoomIn(false); else // - 
-if (code==77) {  // m mode cycle
-    if (zoomMode=="in") 
-	zoomMode="center";
-    else if (zoomMode=="center") 
-	zoomMode="out";
-    else if (zoomMode=="out") 
-	zoomMode="in";
-    setMouseCursor();	    
-} else
+//disable for FF Mac bugfix, "-" key now trapped in keyPress
+//if ((code == 43) || (code == 107) || (code == 187) || ((code == 61)))  zoomIn(true); else // + 
+//if ((code == 45) || (code == 109) || (code == 189))  zoomIn(false); else // -   
+//if (code==77) {  // m mode cycle
+//    if (zoomMode=="in") 
+//	zoomMode="center";
+//    else if (zoomMode=="center") 
+//	zoomMode="out";
+//    else if (zoomMode=="out") 
+//	zoomMode="in";
+//    setMouseCursor();	    
+//} else
 result = true;
 window.status=window.status+' result='+result;  // debug
 if (!result) {
