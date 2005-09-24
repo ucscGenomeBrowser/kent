@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.262 2005/09/24 00:38:36 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.263 2005/09/24 20:31:35 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3050,9 +3050,12 @@ struct slPair *tableList = NULL;
 struct slName *nameList = hTrackDbList(), *one;
 while ((one = (struct slName *)slPopHead(&nameList)) != NULL)
     {
-    struct trackDb *tdbList = trackDbLoadWhere(conn, one->name, where);
-    slPairAdd(&tableList, one->name, tdbList);
-    slNameFree(&one);
+    if (sqlTableExists(conn, one->name))
+        {
+        struct trackDb *tdbList = trackDbLoadWhere(conn, one->name, where);
+        slPairAdd(&tableList, one->name, tdbList);
+        slNameFree(&one);
+        }
     }
 /* slReverse(&tableList); */
 return tableList;
