@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.261 2005/09/07 21:06:46 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.262 2005/09/24 00:38:36 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -53,7 +53,7 @@ static char *hdbName2 = NULL;
 static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
-static char *hdbTrackDbLocal = NULL;
+/* static char *hdbTrackDbLocal = NULL; */
 
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
@@ -195,20 +195,14 @@ if(hdbTrackDb == NULL)
 return cloneString(hdbTrackDb);
 }
 
-char *hTrackDbLocalName()
-/* return the name of the trackDbLocal from the config file, or NULL if none.
- * Freez when done */
+struct slName *hTrackDbList()
+/* Return list of trackDb tables from the config file.  Free list wen done. */
 {
-static boolean first = TRUE;
-if (first)
-    {
-    hdbTrackDbLocal = getCfgValue("HGDB_TRACKDB_LOCAL", "db.trackDbLocal");
-    first = FALSE;
-    }
-if (hdbTrackDbLocal == NULL)
-    return NULL;
-else
-    return cloneString(hdbTrackDbLocal);
+char *name = hTrackDbName();
+struct slName *list = slNameListFromComma(name);
+freez(&name);
+slReverse(&list);
+return list;
 }
 
 void hSetTrackDbName(char *trackDbName)
@@ -3040,24 +3034,28 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where)
-/* load list of trackDb objects, with optional where */
-{
-char *trackDb = hTrackDbName();
-struct trackDb *tdbList = trackDbLoadWhere(conn, trackDb, where);
-freez(&trackDb);
-return tdbList;
-}
+/* static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where) */
+/* /\* load list of trackDb objects, with optional where *\/ */
+/* { */
+/* char *trackDb = hTrackDbName(); */
+/* struct trackDb *tdbList = trackDbLoadWhere(conn, trackDb, where); */
+/* freez(&trackDb); */
+/* return tdbList; */
+/* } */
 
-static struct trackDb* loadTrackDbLocal(struct sqlConnection *conn, char* where)
-/* load list of trackDbLocal objects, with optional where */
+static struct slPair *loadTrackDbs(struct sqlConnection *conn, char *where)
+/* Load each trackDb table. */
 {
-char *trackDbLocal = hTrackDbLocalName();
-struct trackDb *tdbList = NULL;
-if ((trackDbLocal != NULL) && sqlTableExists(conn, trackDbLocal))
-    tdbList = trackDbLoadWhere(conn, trackDbLocal, where);
-freez(&trackDbLocal);
-return tdbList;
+struct slPair *tableList = NULL;
+struct slName *nameList = hTrackDbList(), *one;
+while ((one = (struct slName *)slPopHead(&nameList)) != NULL)
+    {
+    struct trackDb *tdbList = trackDbLoadWhere(conn, one->name, where);
+    slPairAdd(&tableList, one->name, tdbList);
+    slNameFree(&one);
+    }
+/* slReverse(&tableList); */
+return tableList;
 }
 
 static struct trackDb* findTrackDb(struct trackDb** tdbList, char *table)
@@ -3077,6 +3075,21 @@ for (tdb = *tdbList; tdb != NULL; prevTdb = tdb, tdb = tdb->next)
         }
     }
 return NULL;
+}
+
+static struct trackDb *findTrackDbInList(struct slPair **tdbListList, char *table)
+/* Search each table in succession and take the last one that matches.  */
+{
+struct slPair *onePair = NULL;
+struct trackDb *winner = NULL;
+for (onePair = *tdbListList; onePair != NULL; onePair = onePair->next)
+    {
+    struct trackDb *thisList = onePair->val;
+    struct trackDb *result = findTrackDb(&thisList, table);
+    if (result != NULL) 
+	winner = result;
+    }
+return winner;
 }
 
 static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
@@ -3114,8 +3127,11 @@ struct trackDb *hTrackDb(char *chrom)
  * the standard trackDb. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct trackDb *tdbList = loadTrackDb(conn, NULL);
-struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL);
+/* struct trackDb *tdbList = loadTrackDb(conn, NULL); */
+/* struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL); */
+struct slPair *tdbListList = loadTrackDbs(conn, NULL);
+struct slPair *pairTdbList = NULL;
+struct trackDb *tdbList = NULL;
 struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
 struct trackDb *tdbRetList = NULL;
 char *database = hGetDb();
@@ -3124,11 +3140,14 @@ struct hash *compositeHash = newHash(0);
 struct trackDb *tdb, *compositeTdb;
 struct trackDb *nextTdb;
 
+pairTdbList = slPopHead(&tdbListList);
+tdbList = pairTdbList->val;
+
 while (tdbList != NULL)
     {
     struct trackDb *tdbLoc;
     tdb = slPopHead(&tdbList);
-    tdbLoc = findTrackDb(&tdbLocalList, tdb->tableName);
+    tdbLoc = findTrackDbInList(&tdbListList, tdb->tableName);
     if (tdbLoc != NULL)
         {
         /* use local */
@@ -3145,16 +3164,21 @@ while (tdbList != NULL)
     }
 
 /* add remaing local trackDbs */
-while (tdbLocalList != NULL)
+while (tdbListList != NULL)
     {
-    tdb = slPopHead(&tdbLocalList);
-    if (trackDbSetting(tdb, "compositeTrack"))
-        {
-        hashAdd(compositeHash, tdb->tableName, tdb);
-        slAddHead(&tdbRetList, tdb);
-        }
-    else
-        processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
+    struct slPair *onePair = slPopHead(&tdbListList);
+    tdbList = onePair->val;
+    while (tdbList != NULL) 
+	{
+	tdb = slPopHead(&tdbList);
+	if (trackDbSetting(tdb, "compositeTrack"))
+	    {
+	    hashAdd(compositeHash, tdb->tableName, tdb);
+	    slAddHead(&tdbRetList, tdb);
+	    }
+	else
+	    processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
+	}
     }
 
 /* create new list with subtrack entries in subtracks field of composite track*/
@@ -3198,16 +3222,27 @@ hFreeConn(&conn);
 return tdbRetList;
 }
 
-static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
+/* static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn, */
+/* 					    char *where) */
+/* /\* Load trackDb object(s). Nothing done for composite tracks here. *\/ */
+/* { */
+/* struct trackDb *trackTdb = loadTrackDb(conn, where); */
+/* if (trackTdb != NULL) */
+/*     hLookupStringsInTdb(trackTdb, hGetDb()); */
+/* return trackTdb; */
+/* } */
+
+static struct trackDb *loadAndLookupTrackDbInList(struct sqlConnection *conn,
 					    char *where)
-/* Load trackDb object(s). If trackDbLocal exists, then its row is
- * used if it exists.  Nothing done for composite tracks here. */
+/* Load trackDb object(s) checking each table in succession.  
+ * Still nothing done for composite tracks here. */
 {
-struct trackDb *trackTdb = loadTrackDbLocal(conn, where);
-if (trackTdb == NULL)
-    trackTdb = loadTrackDb(conn, where);
-if (trackTdb != NULL)
-    hLookupStringsInTdb(trackTdb, hGetDb());
+struct slPair *tdbListList = loadTrackDbs(conn, where);
+struct slPair *oneList;
+struct trackDb *trackTdb = NULL;
+for (oneList = tdbListList; oneList != NULL; oneList = oneList->next)
+    if (oneList->val != NULL)
+	trackTdb = oneList->val;
 return trackTdb;
 }
 
@@ -3221,7 +3256,7 @@ struct trackDb *trackTdb = NULL;
 char where[256];
 
 safef(where, sizeof(where), "tableName = '%s'", track);
-trackTdb = loadAndLookupTrackDb(conn, where);
+trackTdb = loadAndLookupTrackDbInList(conn, where);
 
 if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
     {
@@ -3232,7 +3267,7 @@ if (trackTdb != NULL && trackDbSetting(trackTdb, "compositeTrack"))
     safef(where, sizeof(where),
 	  "settings rlike '^(.*\n)?subTrack %s([ \t\n].*)?$'",
 	  track);
-    subTdbList = loadAndLookupTrackDb(conn, where);
+    subTdbList = loadAndLookupTrackDbInList(conn, where);
     for (tdb = subTdbList; tdb != NULL; tdb = tdb->next)
 	subtrackInherit(tdb, trackTdb);
     trackTdb->subtracks = subTdbList;
@@ -3243,7 +3278,7 @@ else if (trackTdb != NULL && trackDbSetting(trackTdb, "subTrack"))
     char *subTrackSetting = cloneString(trackDbSetting(trackTdb, "subTrack"));
     char *compositeName = firstWordInLine(subTrackSetting);
     safef(where, sizeof(where), "tableName = '%s'", compositeName);
-    cTdb = loadAndLookupTrackDb(conn, where);
+    cTdb = loadAndLookupTrackDbInList(conn, where);
     if (cTdb)
 	subtrackInherit(trackTdb, cTdb);
     freez(&subTrackSetting);
