@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.23 2005/05/14 19:57:13 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.24 2005/09/25 20:57:56 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -83,6 +83,35 @@ static struct sqlUpdater* gPendingStatusUpdates = NULL;
 
 /* loaded updates table */
 static struct gbLoadedTbl* gLoadedTbl = NULL;
+
+/* mysql lock suffix, database if prefixed, just incase we want multiple
+ * gbLoadRnas on different databases*/
+static char *GB_LOCK_NAME = "genbank";
+
+void lockDb(struct sqlConnection *conn, char *db)
+/* get an advisory lock to keep two gbLoadRna process from updating
+ * the table at the same time.  If db is null, use current db */
+{
+char query[128];
+int got;
+if (db == NULL)
+    db = sqlGetDatabase(conn);
+
+safef(query, sizeof(query), "SELECT GET_LOCK(\"%s.%s\", 0)", db, GB_LOCK_NAME);
+got = sqlNeedQuickNum(conn, query);
+if (!got)
+    errAbort("failed to get lock %s.%s", db, GB_LOCK_NAME);
+}
+
+void unlockDb(struct sqlConnection *conn, char *db)
+/* free advisory lock */
+{
+char query[128];
+if (db == NULL)
+    db = sqlGetDatabase(conn);
+safef(query, sizeof(query), "SELECT RELEASE_LOCK(\"%s.%s\")", db, GB_LOCK_NAME);
+sqlUpdate(conn, query);
+}
 
 void checkForStop()
 /* called at safe places to check for stop request, either from a signal
@@ -593,6 +622,7 @@ if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
 
 conn = hAllocConn();
+lockDb(conn, NULL);
 
 if (gOptions.flags & DBLOAD_INITIAL)
     checkInitialLoad(conn);
@@ -628,6 +658,7 @@ if ((gOptions.flags & DBLOAD_EXT_FILE_UPDATE) && ((gOptions.flags & DBLOAD_DRY_R
 slFreeList(&selectList);
 gbMetaDataFree();
 gbLoadedTblFree(&gLoadedTbl);
+unlockDb(conn, NULL);
 hFreeConn(&conn);
 
 /* must go to stderr to be logged */
@@ -656,11 +687,13 @@ struct slName *tables, *tbl;
 struct sqlConnection *conn;
 hgSetDb(database);
 conn = hAllocConn();
+lockDb(conn, NULL);
 
 tables = getTableList(conn);
 for (tbl = tables; tbl != NULL; tbl = tbl->next)
     sqlDropTable(conn, tbl->name);
 slFreeList(&tables);
+unlockDb(conn, NULL);
 hFreeConn(&conn);
 }
 
@@ -696,6 +729,8 @@ struct slName *tables, *tbl;
 struct sqlConnection *conn;
 hgSetDb(srcDb);
 conn = hAllocConn();
+lockDb(conn, srcDb);
+lockDb(conn, destDb);
 
 copyChromInfo(conn, destDb);
 
@@ -706,6 +741,8 @@ for (tbl = tables; tbl != NULL; tbl = tbl->next)
     copyTable(conn, destDb, tbl->name, tbl->name);
     }
 slFreeList(&tables);
+unlockDb(conn, destDb);
+unlockDb(conn, srcDb);
 hFreeConn(&conn);
 }
 
@@ -718,6 +755,8 @@ struct dyString* sqlCmd = dyStringNew(256);
 char *sep;
 hgSetDb(srcDb);
 conn = hAllocConn();
+lockDb(conn, srcDb);
+lockDb(conn, destDb);
 
 copyChromInfo(conn, destDb);
 
@@ -734,6 +773,9 @@ for (tbl = tables; tbl != NULL; tbl = tbl->next)
 sqlUpdate(conn, sqlCmd->string);
 dyStringFree(&sqlCmd);
 slFreeList(&tables);
+
+unlockDb(conn, destDb);
+unlockDb(conn, srcDb);
 hFreeConn(&conn);
 }
 
