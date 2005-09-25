@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.213 2005/08/08 19:55:58 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.214 2005/09/25 23:14:58 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1452,7 +1452,7 @@ else if (startsWith("blastDm", track))
 else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
 else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") 
-        || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track))
+        || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
 	wigUi(tdb);
