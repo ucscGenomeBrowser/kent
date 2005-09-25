@@ -19,3 +19,13 @@ type psl xeno
 spectrum on
 blastRef hg17.blastKGRef02
 
+track mrnaXenoMap
+shortLabel mrnaXenoMap
+longLabel mrnaXenoMap
+group rna
+priority 54.5
+visibility hide
+type psl xeno
+spectrum on
+blastRef hg17.blastKGRef02
+
