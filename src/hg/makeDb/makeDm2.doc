@@ -2417,7 +2417,7 @@ BASE=/cluster/data/dm2/bed/blastz.dp3.2005-05-20
     ln -s blastz.dp3.2005-05-20 /cluster/data/dm2/bed/blastz.dp3
 
 
-# BLASTZ/CHAIN/NET DROANA1 -- LOOSER PARAMS (IN PROGRESS 5/20/05 angie)
+# BLASTZ/CHAIN/NET DROANA1 -- LOOSER PARAMS (DONE 5/21/05 angie)
     # coverage with default blastz params:
 #flyBaseGene 22.967%, chainDroAna1Link 73.508%, both 20.981%, cover 91.35%, enrich 1.24x
     # OK, let's see what droAna1 looks like at L=4000...
@@ -3203,7 +3203,7 @@ rmdir $tmpDir
     rm -rf /san/sanvol1/scratch/flyMultiz12way/
 
 
-# PHASTCONS 12WAY WITH METHODS FROM PAPER (IN PROGRESS 8/22/05 angie)
+# PHASTCONS 12WAY WITH METHODS FROM PAPER (DONE 9/20/05 angie)
 # ((((((((dm2,droSim1),(droYak1,droEre1)),droAna2),dp3),((droVir2,droMoj2),droGri1)),anoGam1),apiMel2),triCas1)
     ssh kkstore01
     mkdir -p /san/sanvol1/scratch/dm2/chrom
@@ -3471,9 +3471,8 @@ rm $tmpfile
     # Having met the CDS coverage target, load up the results.
     hgLoadBed dm2 phastConsElements12way all.bed
 
-#TODO
-    # Create wiggle on the small cluster
-    ssh kki
+    # Create wiggle
+    ssh pk
     mkdir /cluster/data/dm2/bed/multiz12way/phastCons/run.wib
     cd /cluster/data/dm2/bed/multiz12way/phastCons/run.wib
     rm -rf /san/sanvol1/scratch/dm2/phastCons/wib
@@ -3493,12 +3492,12 @@ zcat `ls -1 /san/sanvol1/scratch/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
                   | awk -F\. '{print $1}' | sort -u`)
       echo doWigEncode $chr >> jobList
     end
-    para create jobList
-    para try, check, push, check, ...
+    para make jobList
+    para time
 #Completed: 13 of 13 jobs
 #Average job time:                  10s       0.16m     0.00h    0.00d
-#Longest finished job:              23s       0.38m     0.01h    0.00d
-#Submission to last job:            23s       0.38m     0.01h    0.00d
+#Longest finished job:              24s       0.40m     0.01h    0.00d
+#Submission to last job:            99s       1.65m     0.03h    0.00d
 
     # back on kkstore01, copy wibs, wigs and POSTPROBS (people sometimes want 
     # the raw scores) from san/sanvol1
@@ -3549,7 +3548,7 @@ zcat `ls -1 /san/sanvol1/scratch/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
 #Wrote 3031 overused 11-mers to /cluster/bluearc/dm2/11.ooc
 
 
-# BAC END PAIRS (IN PROGRESS 9/19/05 angie)
+# BAC END PAIRS (DONE 9/20/05 angie)
     # Excerpt from an email from Roger Hoskins, 9/17/05:
     # > There are two end-sequenced BAC libraries. The RPCI-98 BAC library, 
     # > produced by Pieter and Kazu, is called "BDGP" on the Genoscope 
@@ -3584,6 +3583,7 @@ zcat `ls -1 /san/sanvol1/scratch/dm2/phastCons/POSTPROBS/$chr.*.pp.gz \
 #U count: mean 801.5 sd 207.4
 #L count: mean 71.7 sd 45.5
     cat banque_Projet_A* > bacends.fa
+    # Edit the <!DOCTYPE.../HTML> part out of bacends.fa.
     # Fly is much smaller than human so we can get away with one job 
     # per chrom, no splitting...
     ssh kki
@@ -3608,6 +3608,77 @@ cat > gsub << 'EOF'
     # Back on kolossus:
     cat out/*.psl \
     | pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
-        stdin bacEnds.psl /dev/null
+        stdin bacEnds.unpaired.psl /dev/null
+#..Processed 318892 alignments
+
+    # Translate the particular style of FASTA headers into bacEndPairs.txt:
+    perl -we 'while (<>) { \
+                if (/^>(\w+)\s+BAC=(\w+)\s+END=(\w+)/) { \
+                  if (! defined $bacs{$2}) { \
+                    $bacs{$2}->[0] = "";  $bacs{$2}->[1] = ""; \
+                  } \
+                  if ($3 eq "T7") { \
+                    $bacs{$2}->[0] .= "$1,"; \
+                  } else { \
+                    $bacs{$2}->[1] .= "$1,"; \
+                  } \
+                } elsif (/^>/) { \
+                  die "parse:\n$_\n"; \
+                } \
+              } \
+              foreach $bac (keys %bacs) { \
+                $t7 = $bacs{$bac}->[0];  $t7 = "," if ($t7 eq ""); \
+                $other = $bacs{$bac}->[1];   $other = "," if ($other eq ""); \
+                print "$t7\t$other\t$bac\n"; \
+              }' bacends.fa \
+    > bacEndPairs.txt
+
+    # Roger's suggested 50kb-250kb range lost some (especially on the short 
+    # side), so I ended up going with Terry's range for human, 35kb-350kb:
+    pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
+             -slopval=10000 -hardMax=500000 \
+             -slop -short -long -orphan -mismatch -verbose \
+      bacEnds.unpaired.psl bacEndPairs.txt all_bacends bacEnds
+    wc -l bacEnds.*
+#      21 bacEnds.long
+#     180 bacEnds.mismatch
+#    7037 bacEnds.orphan
+#   11417 bacEnds.pairs
+#      37 bacEnds.short
+#     126 bacEnds.slop
+#  118041 bacEnds.unpaired.psl
+      # (With Roger's sugg. 50kb-250kb, there were 575 short, 53 long)
+
+    # Filter by score and sort by {chrom,chromStart}:
+    awk '$5 >= 300 {print;}' bacEnds.pairs | sort -k1,2n > bacEndPairs.bed
+    cat bacEnds.{slop,short,long,mismatch,orphan} \
+    | awk '$5 >= 300 {print;}' | sort -k1,2n > bacEndPairsBad.bed
+    wc -l *.bed
+#  11410 bacEndPairs.bed
+#   4842 bacEndPairsBad.bed
+
+    # Filter the alignments into those we'll need in the all_bacends table:
+    extractPslLoad -noBin bacEnds.unpaired.psl \
+      bacEndPairs.bed bacEndPairsBad.bed \
+    | sorttbl tname tstart | headchg -del \
+    > bacEnds.load.psl
+
+    cd ..
+    mv /cluster/bluearc/dm2/bed/bacends /cluster/data/dm2/bed/bacends
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/bacends
+    hgLoadBed dm2 bacEndPairs bacEndPairs.bed \
+      -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql 
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed dm2 bacEndPairsBad bacEndPairsBad.bed \
+      -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    hgLoadPsl dm2 -table=all_bacends bacEnds.load.psl
+    # load BAC end sequences
+    mkdir -p /gbdb/dm2/bacends
+    ln -s /cluster/data/dm2/bed/bacends/bacends.fa /gbdb/dm2/bacends/
+    hgLoadSeq dm2 /gbdb/dm2/bacends/bacends.fa
+
 
 
