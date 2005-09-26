@@ -25,7 +25,7 @@ spectrum on
 type psl mrna
 
 track xenoMrna
-shortLabel Non-D. ere. mRNAs
+shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63
@@ -33,15 +33,6 @@ visibility hide
 spectrum on
 type psl xeno
 cdsDrawOptions enabled
-
-track xenoRefGene
-shortLabel Non-D. ere. RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
 
 track blastDm2FB
 shortLabel D. mel. Proteins

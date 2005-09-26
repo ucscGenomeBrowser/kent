@@ -35,7 +35,7 @@ type genePred bdgpLiftGenePep
 otherDb dm1
 
 track xenoMrna
-shortLabel Non-D. pseudo. mRNAs
+shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63
@@ -43,17 +43,6 @@ visibility hide
 spectrum on
 type psl xeno
 cdsDrawOptions enabled
-
-
-track xenoRefGene
-shortLabel Non-D. pseudo. RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
 
 
 searchTable bdgpLiftGene
