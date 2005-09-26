@@ -16,11 +16,11 @@ color 12,12,120
 type genePred refPep refMrna
 
 track xenoRefGene
-shortLabel Non-$Organism RefSeq
+shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1
-visibility hide
+visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
@@ -45,7 +45,7 @@ type psl est
 pslSequenceBases no
 
 track xenoMrna
-shortLabel Non-$Organism mRNAs
+shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63
