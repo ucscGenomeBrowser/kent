@@ -11,7 +11,7 @@
 #include "ra.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.21 2005/09/02 23:59:04 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.22 2005/09/26 16:33:45 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -134,6 +134,54 @@ freeMem(t);
 return canPack;
 }
 
+
+void trackDbInherit(struct trackDb *bt, struct trackDb *composite)
+/* Fill in some missing values with values from parent track */
+{
+if (bt->type == NULL)
+    bt->type = cloneString(composite->type);
+if (bt->url == NULL && composite->url != NULL)
+    bt->url = cloneString(composite->url);
+if (bt->grp == NULL)
+    bt->grp = cloneString(composite->grp);
+if (bt->canPack == 2 && composite->canPack != 2)
+    bt->canPack = composite->canPack;
+if (composite->private)
+    bt->private = TRUE;
+if (composite->useScore)
+    bt->useScore = TRUE;
+}
+
+
+void trackDbPolish(struct trackDb *bt)
+/* Fill in missing values with defaults. */
+{
+if (bt->shortLabel == NULL)
+    bt->shortLabel = cloneString(bt->tableName);
+if (bt->longLabel == NULL)
+    bt->longLabel = cloneString(bt->shortLabel);
+if (bt->altColorR == 0 && bt->altColorG == 0 && bt->altColorB == 0)
+    {
+    bt->altColorR = (255+bt->colorR)/2;
+    bt->altColorG = (255+bt->colorG)/2;
+    bt->altColorB = (255+bt->colorB)/2;
+    }
+if (bt->type == NULL)
+    bt->type = cloneString("");
+if (bt->priority == 0)
+    bt->priority = 100.0;
+if (bt->url == NULL)
+    bt->url = cloneString("");
+if (bt->html == NULL)
+    bt->html = cloneString("");
+if (bt->grp == NULL)
+    bt->grp = cloneString("x");
+if (bt->canPack == 2)
+    bt->canPack = packableType(bt->type);
+if (bt->settings == NULL)
+    bt->settings = cloneString("");
+}
+
 struct trackDb *trackDbFromRa(char *raFile)
 /* Load track info from ra file into list. */
 {
@@ -141,6 +189,7 @@ struct lineFile *lf = lineFileOpen(raFile, TRUE);
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
+struct hash *compositeHash = hashNew(8);
 
 for (;;)
     {
@@ -186,44 +235,24 @@ for (;;)
 	line = trimSpaces(line);
 	trackDbAddInfo(bt, word, line, lf);
 	}
+    if (trackDbSetting(bt, "compositeTrack") != NULL)
+        hashAdd(compositeHash, bt->tableName, bt);
     }
 lineFileClose(&lf);
+
 for (bt = btList; bt != NULL; bt = bt->next)
     {
+    struct trackDb *compositeTdb;
+    char *compositeName;
+    if ((compositeName = trackDbSetting(bt, "subTrack")) != NULL &&
+        trackDbSetting(bt, "noInherit") == NULL)
+            if ((compositeTdb = 
+                    hashFindVal(compositeHash, compositeName)) != NULL)
+                trackDbInherit(bt, compositeTdb);
     trackDbPolish(bt);
     }
 slReverse(&btList);
 return btList;
-}
-
-
-void trackDbPolish(struct trackDb *bt)
-/* Fill in missing values with defaults. */
-{
-if (bt->shortLabel == NULL)
-    bt->shortLabel = cloneString(bt->tableName);
-if (bt->longLabel == NULL)
-    bt->longLabel = cloneString(bt->shortLabel);
-if (bt->altColorR == 0 && bt->altColorG == 0 && bt->altColorB == 0)
-    {
-    bt->altColorR = (255+bt->colorR)/2;
-    bt->altColorG = (255+bt->colorG)/2;
-    bt->altColorB = (255+bt->colorB)/2;
-    }
-if (bt->type == NULL)
-    bt->type = cloneString("");
-if (bt->priority == 0)
-    bt->priority = 100.0;
-if (bt->url == NULL)
-    bt->url = cloneString("");
-if (bt->html == NULL)
-    bt->html = cloneString("");
-if (bt->grp == NULL)
-    bt->grp = cloneString("x");
-if (bt->canPack == 2)
-    bt->canPack = packableType(bt->type);
-if (bt->settings == NULL)
-    bt->settings = cloneString("");
 }
 
 void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
