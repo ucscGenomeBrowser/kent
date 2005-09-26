@@ -4,7 +4,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: faFilter.c,v 1.2 2004/12/02 04:06:50 markd Exp $";
+static char const rcsid[] = "$Id: faFilter.c,v 1.3 2005/09/26 22:41:42 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,6 +19,7 @@ errAbort("faFilter - Filter fa records, selecting ones that match the specified 
          "                      ? matches any single character.\n"
          "                      anything else etc must match the character exactly\n"
          "                      (these will will need to be quoted for the shell)\n"
+         "    -v - invert match, select non-matching records.\n"
          "    -minSize=N - Only pass sequences at least this big.\n"
          "    -maxSize=N - Only pass sequences this size or smaller.\n"
          "\n"
@@ -29,6 +30,7 @@ errAbort("faFilter - Filter fa records, selecting ones that match the specified 
 
 static struct optionSpec options[] = {
     {"name", OPTION_STRING},
+    {"v", OPTION_BOOLEAN},
     {"minSize", OPTION_INT},
     {"maxSize", OPTION_INT},
     {NULL, 0},
@@ -36,6 +38,7 @@ static struct optionSpec options[] = {
 
 /* command line options */
 char *namePat = NULL;
+boolean vOption = FALSE;
 int minSize = -1;
 int maxSize = -1;
 
@@ -81,7 +84,7 @@ char *seqHeader;
 
 while (faMixedSpeedReadNext(inLf, &seq, &seqSize, &seqHeader))
     {
-    if (recMatches(seq, seqSize, seqHeader))
+    if (vOption ^ recMatches(seq, seqSize, seqHeader))
         faWriteNext(outFh, seqHeader, seq, seqSize);
     }
 lineFileClose(&inLf);
@@ -95,6 +98,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 namePat = optionVal("name", NULL);
+vOption = optionExists("v");
 minSize = optionInt("minSize", -1);
 maxSize = optionInt("maxSize", -1);
 faFilter(argv[1],argv[2]);
