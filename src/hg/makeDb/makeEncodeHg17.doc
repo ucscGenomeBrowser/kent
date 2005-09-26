@@ -7,27 +7,61 @@ exit
 # to the subdirectories "mapped" and "unmapped" of the main\
 # work area, /cluster/data/encode/convertHg17
 
-# create work area
-mkdir /cluster/data/encode/convertHg17
-cd  /cluster/data/encode/convertHg17
-ln -s /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain hg16ToHg17.chain
+    # create work area
+    mkdir /cluster/data/encode/convertHg17
+    cd  /cluster/data/encode/convertHg17
+    ln -s /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain hg16ToHg17.chain
 
-# Inventory ENCODE tables on hg16 (hgwbeta)
+    # Inventory ENCODE tables on hg16 (hgwbeta)
 
-ssh hgwbeta "echo select tableName from trackDb where tableName like \'encode%\' and settings not like \'%composite%\' order by tableName | hgsql hg16" > tables.txt
-wc -l tables.txt
-    #     350 tables.txt
+    ssh hgwbeta "echo select tableName from trackDb where tableName like \'encode%\' and settings not like \'%composite%\' order by tableName | hgsql hg16" > tables.txt
+    wc -l tables.txt
+        #     350 tables.txt
 
-set encodeBin = /cluster/data/encode/bin/scripts
-csh $encodeBin/listEncodeTables.csh hg16 > tableTypes.txt
-grep bed tableTypes.txt > tables.bed.txt
+    set encodeBin = /cluster/data/encode/bin/scripts
+    csh $encodeBin/listEncodeTables.csh hg16 > tableTypes.txt
+    grep bed tableTypes.txt > tables.bed.txt
 
-# Create downloads area
+##########################################################################
+# DOWNLOADS
 
-ssh hgwdev
-mkdir -p /usr/local/apache/htdocs/hg17/encode
-cd /usr/local/apache/htdocs/hg17/encode
-mkdir datafiles
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/hg17
+    mkdir -p encode
+    cd encode
+    # release terms
+    cp ../../hg16/encode/README.txt .
+    # annotation database
+    # request admin set up automated database dump
+    mkdir database
+    # auxiliary data files
+    mkdir datafiles 
+    # sequences
+    mkdir regions
+    cp ../../hg16/encode/regions/README.txt regions
+    # edit README
+    cd /cluster/data/encode/convertHg17
+    hgsql hg17 -N -e \
+      "SELECT name, chrom, chromStart, chromEnd FROM encodeRegions ORDER BY name">regions.txt 
+
+    ssh kolossus
+    cd /cluster/data/encode/convertHg17
+    /cluster/data/encode/bin/scripts/encodeSequences.pl -upper \
+        regions.txt /iscratch/i/hg17/nib  > hg17.fa
+    /cluster/data/encode/bin/scripts/encodeSequences.pl -masked \
+        regions.txt /iscratch/i/hg17/nib  > hg17.msk.fa
+    gzip *.fa
+    md5sum *.fa.gz > md5sum.txt
+
+    ssh hgwdev
+    cd /cluster/data/encode/convertHg17
+    cp md5sum.txt hg17.fa.gz hg17.msk.fa.gz /usr/local/apache/htdocs/goldenPath/hg17/encode/regions
+
+
+
+
+nibFrag -upper -name=$region > 
+nibFrag -masked -name=$region
 
 !##########################################################################
 ###########################################################################
