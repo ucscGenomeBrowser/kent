@@ -456,7 +456,7 @@ BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 # TARGET - Sea urchin
 SEQ1_DIR=/iscratch/i/strPur1/strPur1.2bit
 SEQ1_CHUNK=5000000
-SEQ1_LAP=10000
+SEQ1_LAP=10000 
 
 # QUERY - Sea squirt
 SEQ2_DIR=/iscratch/i/cioSav1/nib/cioSav1.2bit
@@ -734,7 +734,7 @@ _EOF_
     cp -r /santest/scratch/strPur1/rmsk/* .
     rm -rf /santest/scratch/strPur1/rmsk
 
-# REPEAT SCOUT DENOVO REPEAT FINDER (STILL IN PROGRESS 8/22/2005 Andy)
+# REPEAT SCOUT DENOVO REPEAT FINDER (DONE 9/9/2005 Andy)
     ssh kolossus
     cd /scratch/andy
     cp /cluster/data/strPur1/downloads/urchinScaffolds.fa .
@@ -762,7 +762,204 @@ _EOF_
     # put 1.0.1 online.  In addition, it's clear that the RepeatScout-v1 program
     # takes much longer to run than build_lmer_table, so that's becoming a cluster
     # run now.
-   
+    #
+    # OK I'm basically starting over:
+    ssh hgwdev
+    cd /santest/scratch/strPur1
+    mkdir -p repeatScout/splits
+    cd repeatScout/splits/
+    faSplit about /cluster/data/strPur1/downloads/urchinScaffolds.fa 2000000 rs_urch_
+    cd ../
+    wget -r ftp://ftp.ncbi.nih.gov/pub/seg/nseg/
+    cd ftp.ncbi.nih.gov/pub/seg/nseg/
+    make
+    cp nseg nmerge /cluster/bin/i386
+    ssh kolossus
+    cd /scratch/andy
+    wget http://repeatscout.bioprojects.org/RepeatScout-1.0.1.tar.gz
+    tar xfz RepeatScout-1.0.1.tar.gz
+    cd RepeatScout-1.0.1/
+    make
+    cp RepeatScout-v1 build_lmer_table /cluster/bin/x86_64
+    cp compare-out-to-gff.prl filter-stage-{1,2}.prl /cluster/bin/scripts
+    ssh pk
+    cd /san/sanVol1/scratch/strPur1/repeatScout
+    mkdir run
+    cd run/
+    mkdir ../outputs/ ../logs ../freqs/
+    ls -1 ../splits/ > fa.lst
+    cat > rscout.sh << "_EOF_"
+#!/bin/bash
+tmp=/scratch/`basename $1 .fa`
+tmpFreq=$tmp.lmers.txt
+tmpOut=$tmp.out
+tmpLog=$tmp.log
+
+/cluster/bin/x86_64/build_lmer_table -sequence $1 -freq $tmpFreq -v >& $tmpLog
+/cluster/bin/x86_64/RepeatScout-v1 -sequence $1 -freq $tmpFreq -output $tmpOut >& $tmpLog.2
+
+cp $tmpFreq $2
+cp $tmpOut $3
+cp $tmpLog $4
+cp $tmpLog.2 $4.2
+
+rm ${tmp}*
+_EOF_
+    cat > gsub << "EOF"
+#LOOP
+./rscout.sh ../splits/$(path1) ../freqs/ ../outputs/ ../logs/
+#ENDLOOP 
+EOF
+    chmod +x rscout.sh
+    gensub2 single fa.lst gsub spec
+    para create spec
+    para try
+    para push
+    para time
+#533 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 533 of 533 jobs
+#CPU time in finished jobs:      29317s     488.61m     8.14h    0.34d  0.001 y
+#IO & Wait Time:                  2552s      42.54m     0.71h    0.03d  0.000 y
+#Average job time:                  60s       1.00m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              88s       1.47m     0.02h    0.00d
+#Submission to last job:           381s       6.35m     0.11h    0.00d
+    cd ../
+    R=0
+    for out in outputs/*; do
+       numR=`grep "R=" $out | wc -l`
+       awk 'BEGIN{FS = "="};{if (/=/) {printf(">R=%d\n", $2 + "'"$R"'")} else print $1}' $out >> all.out
+       R=$(($R + $numR))
+    done    
+    mkdir libSplits
+    faSplit 400 all.out libSplits/all_
+    mkdir run2 filtered
+    cd run2/
+    cat > filter1.sh << "EOF"
+#!/bin/bash
+input=`basename $1`
+output=`basename $2`
+cp $1 /scratch
+pushd /scratch
+/cluster/bin/scripts/filter-stage-1.prl < $input > $output
+popd
+cp /scratch/$output $2
+rm /scratch/$input
+rm /scratch/$output
+EOF
+    chmod +x filter1.sh
+    cat > gsub << "EOF"
+#LOOP
+./filter1.sh {check in line+ ../libSplits/$(path1)} {check out line+ ../filtered/$(root1).lib}
+#ENDLOOP 
+EOF
+    ls -1 ../libSplits/ > lib.lst
+    gensub2 lib.lst single gsub spec
+    para create spec
+    para push
+    para time
+#384 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 383 of 384 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:       1149s      19.15m     0.32h    0.01d  0.000 y
+#IO & Wait Time:                  1448s      24.14m     0.40h    0.02d  0.000 y
+#Average job time:                   7s       0.11m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:              66s       1.10m     0.02h    0.00d
+#Submission to last job:           303s       5.05m     0.08h    0.00d
+    # The crashed job actually worked.
+    cd ../
+    for f in filtered/*; do cat $f >> filtered.lib; done
+    cd ../
+    mkdir -p rmsk.repeatScout/{run,out}
+    ssh kkstore02
+    cd /cluster/data/strPur1
+    cp -r unmaskedSplits/ /san/sanVol1/scratch/strPur1
+    exit
+    cd rmsk.repeatScout/run/
+    cat > rmsk.sh << "EOF"
+#!/bin/bash
+
+thelib=/san/sanVol1/scratch/strPur1/repeatScout/filtered.lib
+fa=`basename $1`
+
+pushd /scratch
+oldDir=`dirs +1`
+cp $oldDir/$1 .
+/cluster/bluearc/RepeatMasker/RepeatMasker -lib $thelib $fa
+mkdir -p $oldDir/`dirname $2`
+cp $fa.out $oldDir/$2
+rm $fa*
+popd
+EOF
+    chmod +x rmsk.sh
+    find ../../unmaskedSplits/ -name "*.fa" > fa.lst
+    cat > gsub << "EOF"
+#LOOP
+./rmsk.sh {check in line+ $(path1)} {check out exists ../out/$(lastDirs1=3)/$(file1).out} 
+#ENDLOOP
+EOF
+    ~/kent/src/parasol/bin/gensub2 fa.lst single gsub spec
+    para create spec 
+    para try
+    para push
+    para time
+#Completed: 187983 of 187983 jobs
+#CPU time in finished jobs:    8288262s  138137.70m  2302.29h   95.93d  0.263 y
+#IO & Wait Time:                757852s   12630.87m   210.51h    8.77d  0.024 y
+#Average job time:                  48s       0.80m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            4578s      76.30m     1.27h    0.05d
+#Submission to last job:         50036s     833.93m    13.90h    0.58d
+    ssh hgwdev
+    cd /santest/scratch/strPur1/rmsk.repeatScout/  
+    find out/ -name "*.fa.out" -type f -size +80c -exec tail +4 '{}' ';' > initial.noheader.out
+    head -n 3 out/0/0/0/94000.fa.out > rmsk.header
+    cat rmsk.header initial.noheader.out > initial.out
+    # 100
+    cat ../repeatScout/filtered.lib | filter-stage-2.prl --cat=initial.out --thresh=100 > 100.lib
+    grep '^>' 100.lib | sed 's/^>\(R=[[:digit:]]\+\).*/\1/' > 100.lst
+    tabGrep 100.lst 10 initial.noheader.out > 100.noheader.out
+    cat rmsk.header 100.noheader.out > 100.out
+    liftUp 100.lifted.out ../unmaskedSplits/splits.lft warn 100.out
+    hgLoadOut -nosplit -table=repeatScout100 strPur1 100.lifted.out
+    # 300
+    cat ../repeatScout/filtered.lib | filter-stage-2.prl --cat=initial.out --thresh=300 > 300.lib
+    grep '^>' 300.lib | sed 's/^>\(R=[[:digit:]]\+\).*/\1/' > 300.lst
+    tabGrep 300.lst 10 initial.noheader.out > 300.noheader.out
+    cat rmsk.header 300.noheader.out > 300.out
+    liftUp 300.lifted.out ../unmaskedSplits/splits.lft warn 300.out
+    # 1000
+    cat ../repeatScout/filtered.lib | filter-stage-2.prl --cat=initial.out --thresh=1000 > 1000.lib
+    grep '^>' 1000.lib | sed 's/^>\(R=[[:digit:]]\+\).*/\1/' > 1000.lst
+    tabGrep 1000.lst 10 initial.noheader.out > 1000.noheader.out
+    cat rmsk.header 1000.noheader.out > 1000.out
+    liftUp 1000.lifted.out ../unmaskedSplits/splits.lft warn 1000.out
+    # Yeah ok finally a reduction in the amount of output.  It's probably better to filter on score 
+    # versus copy #, but that has a bias towards really long repeats, and I'm not sure that's what
+    # is desirable in terms of guessing what's biologically correct.
+
+# MAKE SOFT-MASKED FA/2BIT WITH REPEATSCOUT (DONE 9/9/2005 Andy)
+    ssh eieio
+    cd /cluster/data/strPur1
+    mkdir repeatScout/
+    cd repeatScout/
+    cp /san/sanVol1/scratch/strPur1/rmsk.repeatScout/100.lifted.out .
+    cd ../maskedFa/
+    maskOutFa -soft ../downloads/urchinScaffolds.fa ../bed/simpleRepeat/trfMask.bed urchin.softMasked.fa 
+    maskOutFa -softAdd urchin.softMasked.fa ../repeatScout/100.lifted.out urchin.softWithRepeatScout.fa
+    faSize urchin.softWithRepeatScout.fa 
+#1096072416 bases (260724172 N's 835348244 real 595793115 upper 239555129 lower) in 187943 sequences in 1 files
+#Total size: mean 5831.9 sd 25954.4 min 100 (Scaffold188639) max 962155 (Scaffold1) median 909
+#N count: mean 1387.3 sd 13142.5
+#U count: mean 3170.1 sd 12856.6
+#L count: mean 1274.6 sd 3702.0    
+    # That's like 40% masked... OK that's too much.
+
 # PILER DENOVO REPEAT FINDING (STALLED 8/4/2005 Andy)
     ssh hgwdev
     cd /cluster/data/strPur1
