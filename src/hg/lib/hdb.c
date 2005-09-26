@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.264 2005/09/26 16:33:45 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.265 2005/09/26 22:57:30 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3520,14 +3520,22 @@ struct dbDb *dbList = NULL, *db;
 char *theClade = theDb ? hClade(hGenome(theDb)) : NULL;
 
 /* Scan through dbDb table, loading into list */
-sr = sqlGetResult(conn,
+if (theClade != NULL)
+    {
+    char query[1024];
+    safef(query, sizeof(query),
+	  "select dbDb.* from dbDb,genomeClade where dbDb.active = 1 and "
+	  "dbDb.genome = genomeClade.genome and genomeClade.clade = \"%s\" "
+	  "order by dbDb.orderKey,dbDb.name desc", theClade);
+    sr = sqlGetResult(conn, query);
+    }
+    else
+	sr = sqlGetResult(conn,
 	   "select * from dbDb where active = 1 order by orderKey,name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     db = dbDbLoad(row);
-    if (theClade == NULL ||
-	sameString(hClade(hGenome(db->name)), theClade))
-	slAddHead(&dbList, db);
+    slAddHead(&dbList, db);
     }
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
