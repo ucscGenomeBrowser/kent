@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.265 2005/09/26 22:57:30 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.266 2005/09/27 23:07:22 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3034,15 +3034,6 @@ if (tdb->restrictCount > 0 && chrom != NULL)
 return chromOk;
 }
 
-/* static struct trackDb* loadTrackDb(struct sqlConnection *conn, char* where) */
-/* /\* load list of trackDb objects, with optional where *\/ */
-/* { */
-/* char *trackDb = hTrackDbName(); */
-/* struct trackDb *tdbList = trackDbLoadWhere(conn, trackDb, where); */
-/* freez(&trackDb); */
-/* return tdbList; */
-/* } */
-
 static struct slPair *loadTrackDbs(struct sqlConnection *conn, char *where)
 /* Load each trackDb table. */
 {
@@ -3239,16 +3230,6 @@ hFreeConn(&conn);
 return tdbRetList;
 }
 
-/* static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn, */
-/* 					    char *where) */
-/* /\* Load trackDb object(s). Nothing done for composite tracks here. *\/ */
-/* { */
-/* struct trackDb *trackTdb = loadTrackDb(conn, where); */
-/* if (trackTdb != NULL) */
-/*     hLookupStringsInTdb(trackTdb, hGetDb()); */
-/* return trackTdb; */
-/* } */
-
 static struct trackDb *loadAndLookupTrackDbInList(struct sqlConnection *conn,
 					    char *where)
 /* Load trackDb object(s) checking each table in succession.  
@@ -3259,7 +3240,10 @@ struct slPair *oneList;
 struct trackDb *trackTdb = NULL;
 for (oneList = tdbListList; oneList != NULL; oneList = oneList->next)
     if (oneList->val != NULL)
+	{
 	trackTdb = oneList->val;
+	hLookupStringsInTdb(trackTdb, hGetDb());
+	}
 return trackTdb;
 }
 
