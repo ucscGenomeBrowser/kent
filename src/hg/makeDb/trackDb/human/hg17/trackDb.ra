@@ -251,6 +251,7 @@ altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons10way
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 summary multiz10waySummary
@@ -271,6 +272,7 @@ altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons10way
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 summary multiz10wayGapSummary
@@ -302,9 +304,11 @@ altColor 50,50,50
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
+#summary multiz8waySummary
+pairwise netBlastz
 yLineOnOff Off
 autoScaleDefault Off
-pairwise netBlastz
+spanList 1
 speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
 
 track phastConsElements
@@ -337,6 +341,7 @@ altColor 50,50,50
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastConsVarMultiz
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
@@ -352,6 +357,7 @@ visibility hide
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle secretPhastCons
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 pairwise netBlastz
@@ -420,6 +426,7 @@ altColor 1,128,0
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastConsTba37
+spanList 1
 yLineOnOff Off
 pairwise tba37CFTR 15
 autoScaleDefault Off

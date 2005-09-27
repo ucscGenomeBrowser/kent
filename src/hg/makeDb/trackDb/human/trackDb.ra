@@ -1356,14 +1356,13 @@ cdsDrawDefault genomic\ codons
     gClass_Pseudogene_fragment 100,91,191
     gClass_Unprocessed_pseudogene 0,91,191
     itemClassTbl encodePseudogeneClass
-origAssembly hg17
+    origAssembly hg17
 
     track pseudoHavana
     subTrack encodePseudogene
     shortLabel Havana-Gencode Pseudogenes
     longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
-    itemClassTbl encodePseudogeneClass
     priority 1
 
     track pseudoYaleEncode
@@ -1378,28 +1377,24 @@ origAssembly hg17
     subTrack encodePseudogene
     shortLabel UCSC Pseudo
     longLabel UCSC RetroGene Predictions
-    itemClassTbl encodePseudogeneClass
     priority 3
 
     track pseudoUcsc2
     subTrack encodePseudogene
     shortLabel UCSC PseudoGenes
     longLabel UCSC Pseudogene Predictions
-    itemClassTbl encodePseudogeneClass
     priority 4
 
     track pseudoGIS
     subTrack encodePseudogene
     shortLabel GIS PseudoGenes
     longLabel Genome Institute of Singapore Pseudogenes 
-    itemClassTbl encodePseudogeneClass
     priority 5
 
     track pseudoEncodeConsensus
     subTrack encodePseudogene
     shortLabel Consensus PseudoGenes
     longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS Encode Pseudogenes 
-    itemClassTbl encodePseudogeneClass
     priority 5
 
 track encodeGisRnaPet
@@ -1436,6 +1431,7 @@ priority 19.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -1168.00 1686.5
+spanList 1
 maxHeightPixels 128:16:16
 autoScale off
 viewLimits 0:25
@@ -1935,6 +1931,7 @@ priority 30.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -2730 3394
+spanList 1
 maxHeightPixels 128:16:16
 viewLimits 0:150
 autoScale Off
@@ -2207,6 +2204,7 @@ priority 43.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 534.54
+spanList 1
 viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
@@ -3153,6 +3151,7 @@ priority 51.0
 visibility hide
 maxHeightPixels 128:16:16
 type wig -5.61 6.47
+spanList 50
 viewLimits -1:2
 windowingFunction mean
 autoScale off
@@ -3482,6 +3481,7 @@ priority 60.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -0.56 1.58
+spanList 1
 maxHeightPixels 128:36:16
 windowingFunction Mean
 color 44,44,200
@@ -3853,6 +3853,7 @@ chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 maxHeightPixels 128:16:16
 type wig 0.0 3.0
+spanList 250
 autoScaleDefault Off
 smoothingWindow 2
 origAssembly hg16
@@ -4358,6 +4359,7 @@ altColor 1,128,0
 type wigMaf 0.0 10.0
 maxHeightPixels 100:40:11
 wiggle binCons_encode
+spanList 1
 yLineOnOff Off
 pairwise encode_tba 15
 autoScaleDefault Off

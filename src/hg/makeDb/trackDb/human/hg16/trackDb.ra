@@ -417,8 +417,10 @@ group compGeno
 priority 103
 visibility hide
 type wigMaf 0.0 1.0
+spanList 1
 maxHeightPixels 100:40:11
 wiggle multizMm3Rn3Pt0PhastCons
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg
@@ -579,6 +581,7 @@ altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle chr7_phyloHMMcons_CFTR
+spanList 1
 yLineOnOff Off
 pairwise CFTR 20
 autoScaleDefault Off
@@ -1030,6 +1033,7 @@ visibility hide
 color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
+spanList 1
 autoScaleDefault Off
 
 track phyloHMMcons_HMR
@@ -1041,8 +1045,8 @@ visibility hide
 color 175,150,128
 altColor 255,128,0
 type wig 0.0 1.0
-autoScaleDefault Off
 spanList 1
+autoScaleDefault Off
 
 track phastCons
 shortLabel phastCons 
@@ -1096,6 +1100,7 @@ color 0, 10, 100
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle multizMm3Rn3GalGal2_phyloHMM_wig
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg 
@@ -1111,6 +1116,7 @@ visibility pack
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle mzPt1Mm3Rn3Gg2_pHMM_wig
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg
