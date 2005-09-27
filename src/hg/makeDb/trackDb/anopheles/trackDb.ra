@@ -31,7 +31,7 @@ type psl est
 pslSequenceBases no
 
 track xenoMrna
-shortLabel Non-$Organism mRNAs
+shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63

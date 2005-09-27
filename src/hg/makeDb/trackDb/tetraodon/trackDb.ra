@@ -30,16 +30,6 @@ intronGap 30
 type psl est
 pslSequenceBases no
 
-track xenoMrna
-shortLabel Non-$Organism mRNAs
-longLabel Non-$Organism mRNAs from GenBank
-group rna
-priority 63
-visibility hide
-spectrum on
-type psl xeno
-cdsDrawOptions enabled
-
 track ecoresHg17
 shortLabel $o_Organism Ecores
 longLabel Tetraodon($db)/$o_Organism ($o_date/$o_db) Evolutionary Conserved Regions

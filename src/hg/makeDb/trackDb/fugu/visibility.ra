@@ -10,9 +10,6 @@ visibility      dense
 track           est
 visibility      dense
 
-track           xenoMrna
-visibility      dense
-
 track           mrna
 visibility      pack
 
