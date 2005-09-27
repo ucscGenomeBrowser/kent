@@ -7,8 +7,16 @@
 #include "sqlUpdater.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: sqlDeleter.c,v 1.3 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: sqlDeleter.c,v 1.4 2005/09/27 21:39:36 markd Exp $";
 
+/* FIXME: the point where copying the table is more efficient varies with
+ * the size of the table.  It turned out that the 50000 row cutoff was
+ * way to small for EST tables.  So for now, try just disabling this ugly
+ * hack.
+ */
+#undef COPY_TO_DELETE_HACK
+
+#ifdef COPY_TO_DELETE_HACK
 #define DIRECT_MAX 50000  /* maximum number to directly delete */
 
 static char* GB_DELETE_TMP = "gbDelete_tmp";
@@ -17,7 +25,7 @@ static char* createGbDeleteTmp =
 "   acc varchar(20) not null primary key,"
 "   unique(acc)"
 ")"; 
-
+#endif
 
 struct sqlDeleter* sqlDeleterNew(char* tmpDir, boolean verbEnabled)
 /* create a new deleter object.  If tmpdir is NULL, this will aways
@@ -33,7 +41,9 @@ if (tmpDir != NULL)
     strcpy(sd->tmpDir, tmpDir);
     gbMakeDirs(tmpDir);
     }
+#ifdef COPY_TO_DELETE_HACK
 sd->directMax = DIRECT_MAX;
+#endif
 return sd;
 }
 
@@ -49,6 +59,7 @@ if (sd != NULL)
     }
 }
 
+#ifdef COPY_TO_DELETE_HACK
 static void initLoader(struct sqlDeleter* sd)
 /* setup loader and copy access to tab file */
 {
@@ -60,13 +71,15 @@ for (acc = sd->accs; acc != NULL; acc = acc->next)
 sd->useDeleteJoin = TRUE;
 sd->accs = NULL;  /* mark as not in use (list in localmem) */
 }
+#endif
 
 void sqlDeleterAddAcc(struct sqlDeleter* sd, char* acc)
 /* Add an accession to list to to delete. */
 {
 if (sd->deletesDone)
     errAbort("sqlDeleter: can't add accessions after a delete has been done");
-/* always use direct if not tmp dir */
+#ifdef COPY_TO_DELETE_HACK
+/* always use direct if no tmp dir */
 if ((sd->accCount < sd->directMax) || (sd->tmpDir[0] == '\0'))
     {
     struct slName* accRec = lmAlloc(sd->lm, sizeof(struct slName)+strlen(acc));
@@ -79,6 +92,13 @@ else
         initLoader(sd);
     sqlUpdaterAddRow(sd->accLoader, "%s", acc);
     }
+#else
+{
+struct slName* accRec = lmAlloc(sd->lm, sizeof(struct slName)+strlen(acc));
+strcpy(accRec->name, acc);
+slAddHead(&sd->accs, accRec);
+}
+#endif
 sd->accCount++;
 }
 
@@ -97,6 +117,7 @@ for (acc = sd->accs; acc != NULL; acc = acc->next)
     }
 }
 
+#ifdef COPY_TO_DELETE_HACK
 static void deleteJoin(struct sqlDeleter* sd, struct sqlConnection *conn,
                        char* table, char* column)
 /* delete by creating a new table with a join */
@@ -134,6 +155,7 @@ safef(query, sizeof(query), "RENAME TABLE %s TO %s, %s TO %s",
 sqlUpdate(conn, query);
 sqlDropTable(conn, oldTmpTable);
 }
+#endif
 
 void sqlDeleterDel(struct sqlDeleter* sd, struct sqlConnection *conn,
                    char* table, char* column)
@@ -143,9 +165,11 @@ if ((sd->accCount > 0) && sqlTableExists(conn, table))
     {
     if (sd->verbose)
         gbVerbMsg(gbVerbose, "deleting %d keys from %s", sd->accCount, table);
+#ifdef COPY_TO_DELETE_HACK
     if (sd->useDeleteJoin)
         deleteJoin(sd, conn, table, column);
     else
+#endif
         deleteDirect(sd, conn, table, column);
     }
 }
