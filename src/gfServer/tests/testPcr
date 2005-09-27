@@ -1,2 +1,3 @@
 gfServer pcrDirect CCTGAAGGCATCAGTGTACCCCAGGAATGCCCAA CTCATGAGTGGCTCCTAAAGCAGCTGCGTGG input/testPcr.2bit | grep -v seconds > $1 
 gfServer pcrDirect tggtgagagggggaaggtttt ggagctctgacatctgggttctg input/testPcr.2bit | grep -v seconds >> $1 
+gfServer pcrDirect GGAGCTCTGACATCTGGGTTCTGGA tggtgagagggggaaggttttcttt input/testPcr.2bit | grep -v seconds >> $1 
