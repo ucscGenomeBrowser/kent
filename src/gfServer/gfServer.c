@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.49 2005/09/23 01:28:50 angie Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.50 2005/09/27 17:54:32 angie Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"trans", OPTION_BOOLEAN},
@@ -366,7 +366,7 @@ for (clump = clumpList; clump != NULL; clump = clump->next)
     {
     struct gfSeqSource *ss = clump->target;
     safef(buf, sizeof(buf), "%s\t%d\t%d\t+", ss->fileName, 
-        clump->tStart - ss->start, clump->tEnd - ss->start);
+        clump->tStart, clump->tEnd);
     netSendString(connectionHandle, buf);
     ++clumpCount;
     }
