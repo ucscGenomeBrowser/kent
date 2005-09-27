@@ -31,7 +31,7 @@ set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1
 set monDom monDom1
-set bosTau bosTau1
+set bosTau bosTau1,bosTau2
 set rheMac rheMac1
 
 # Define all organism/assembly-specific databases.
