@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.18 2005/09/28 17:49:29 hartera Exp $
+# $Id: doBlastzChainNet.pl,v 1.19 2005/09/28 22:10:45 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -44,7 +44,7 @@ my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/santest/scratch');
 my $clusterNAS = join('/... or ', @clusterNAS) . '/...';
 my @clusterNoNo = ('/cluster/home', '/projects');
 my @fileServerNoNo = ('kkhome', 'kks00');
-my @fileServerNoLogin = ('kkusr01', '10.1.1.3');
+my @fileServerNoLogin = ('kkusr01', '10.1.1.3', 'sanhead2', '10.1.10.11');
 my $splitThreshold = 100;
 
 # Option variable names:
@@ -1022,8 +1022,6 @@ sub getBlastzParams {
       C -114  100 -125  -31
       G  -31 -125  100 -114
       T -123  -31 -114   91";
-  my $o = 400;
-  my $e = 30;
   if ($defVars{'BLASTZ_Q'}) {
     open(Q, $defVars{'BLASTZ_Q'})
       || die "Couldn't open BLASTZ_Q file $defVars{BLASTZ_Q}: $!\n";
@@ -1042,25 +1040,15 @@ sub getBlastzParams {
     }
     chomp $matrix;
     $line = <Q>;
-    if ($line) {
-      chomp $line;
-      if ($line !~ /^\s*\w\s*=\s*\d+(\s*,\s*\w\s*=\s*\d+)*$/) {
-	die "Can't parse extra-param line of $defVars{BLASTZ_Q}:\n$line";
-      }
-      my @params = split(',', $line);
-      foreach my $p (@params) {
-	my ($var, $val) = split('=', $p);
-	if ($var eq 'O') {
-	  $o = $val;
-	} elsif ($var eq 'E') {
-	  $e = $val;
-	} else {
-	  die "Unfamiliar param setting $var=$val in $defVars{BLASTZ_Q}";
-	}
-      }
+    if ($line && $line =~ /\S/) {
+      warn "\nWarning: BLASTZ_Q matrix file $defVars{BLASTZ_Q} has " .
+           "additional contents after the matrix -- those are ignored " .
+	   "by blastz.\n\n";
     }
     close(Q);
   }
+  my $o = $defVars{'BLASTZ_O'} || 400;
+  my $e = $defVars{'BLASTZ_E'} || 30;
   my $k = $defVars{'BLASTZ_K'} || 3000;
   my $l = $defVars{'BLASTZ_L'} || 2200;
   my $h = $defVars{'BLASTZ_H'} || 2000;
