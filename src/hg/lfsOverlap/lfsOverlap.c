@@ -8,7 +8,7 @@
 #include "lfs.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: lfsOverlap.c,v 1.1 2005/09/26 22:43:00 hartera Exp $";
+static char const rcsid[] = "$Id: lfsOverlap.c,v 1.2 2005/09/28 18:45:58 hartera Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -24,14 +24,15 @@ boolean hasBin = FALSE; /* Input bed file includes bin */
 boolean noBin = TRUE; /* Suppress bin field */
 boolean useName = FALSE; /*name of record must match bestMatch to be rejected */
 boolean notBlocks = FALSE; /* use chromStart and chromEnd for overlap */
-float overlapPercent = 0.02; /* minimum overlap to be removed */
+float minOverlapPercent = 0.02; /* minimum overlap to be removed */
 int verbosity = 1;
 int call;                   /* depth of stack */
 int outCall;                   /* calls to outList */
 struct lfsStub *outList;        /* global output list */
 
 struct lfsStub
-/* A line in a lfs file with chromosome, start, end position parsed out. */
+/* Contains lfs struct info with an extra variable for the complete line  */
+/* from the lfs file. */
     {
     struct lfsStub *next;       /* Next in list. */
     short bin;                  /* bin number for browser speed */
@@ -111,7 +112,7 @@ while (lineFileNext(lf, &line, NULL))
        lfs->bin = 0;
     if (lfs->score > 0)
         {
-        //uglyf("adding to list: record %s:%d-%d\n", lfs->chrom,lfs->chromStart,lfs->chromEnd);
+        verbose(4, "adding to list: record %s:%d-%d\n", lfs->chrom,lfs->chromStart,lfs->chromEnd);
         slAddHead(pList, lfs);
         }
     else
@@ -148,15 +149,16 @@ fclose(f);
 }
 
 float lfsOverlaps(struct lfsStub *lfs1, struct lfsStub *lfs2)
-/* return number of bases overlapping both beds looking at blocks */
-/* if notBlocks option is selected look just at chromStart and chromEnd */
+/* Return overlapping bases from both lfs items looking at blocks as a */
+/* percent of the total block size for the lfs with the largest total */
+/* block size. */
+/* If notBlocks option is selected look just at chromStart and chromEnd */
 {
 int count = 0 ;  /* count of overlapping bases */
 int size = 0, size2 = 0; /* total size of blocks */
 int i, j;
-float overlap;
+float overlapPercent;
 
-//uglyf("chrom1 is %s and chrom2 is %s\n", lfs1->chrom, lfs2->chrom);
 if (differentString(lfs1->chrom, lfs2->chrom))
     return 0;
 if (notBlocks)
@@ -164,52 +166,48 @@ if (notBlocks)
     count = positiveRangeIntersection(lfs1->chromStart, lfs1->chromEnd, lfs2->chromStart, lfs2->chromEnd);
     size = lfs1->chromEnd - lfs1->chromStart;
     size2 = lfs2->chromEnd - lfs2->chromStart;
-    if (size2 > size)
-        size = size2;
     verbose(4, "start1:%d, end1: %d, start2: %d and end2: %d \n", lfs1->chromStart, lfs1->chromEnd, lfs2->chromStart, lfs2->chromEnd);
     }
 else
     {
     for (i = 0 ; i < lfs1->lfCount ; i++)
         {
-        size += lfs2->lfSizes[i];
+        size += lfs1->lfSizes[i];
+        size2 += lfs2->lfSizes[i];
         for (j = 0 ; j < lfs2->lfCount; j++)
             {
             int start1 = lfs1->lfStarts[i];
             int start2 = lfs2->lfStarts[j];
             int end1 = start1 + lfs1->lfSizes[i];
             int end2 = start2 + lfs2->lfSizes[j];
-        //uglyf("start1: %d, start2: %d, end1: %d and end2: %d here\n", start1, start2, end1, end2);
+            verbose(4, "start1: %d, start2: %d, end1: %d and end2: %d here\n", start1, start2, end1, end2);
             count += positiveRangeIntersection(start1, end1, start2, end2);
-          //uglyf("count is %d here\n", count);
-           //uglyf("size is %d here\n", size);
             }
         }
      }
-//uglyf("count is %d and lfs2 size is %d here\n", count, size);
-overlap = (float)count / (float)size;
-verbose(4, "count is %d and lfs2 size: %d, overlap: %f\n", count, size, overlap);
-return overlap;
+if (size2 > size)
+    size = size2;
+overlapPercent = (float)count / (float)size;
+verbose(4, "count is %d and lfs2 size: %d, overlap percent: %f\n", count, size, overlapPercent);
+return overlapPercent;
 }
 
 void pareList(struct lfsStub **lfsList, struct lfsStub *match)
-/* remove elements from the list that overlap match */
+/* Remove elements from the list that overlap match */
 {
 struct lfsStub *lfs;
-boolean removeRecord = TRUE;                                                                  
+boolean removeRecord = TRUE; 
+float overlapPercent;                                                                 
 for (lfs = *lfsList; lfs != NULL; lfs = lfs->next)
     {
     removeRecord = TRUE;
-    float overlap = lfsOverlaps(lfs, match);
-    //uglyf("overlap is %f here\n", overlap);
+    overlapPercent = lfsOverlaps(lfs, match);
     if ((useName) && (!sameString(lfs->name, match->name)))
         {
         removeRecord = FALSE;
-      //  uglyf("removeRecord is false and name does not match\n");
         }
-    if ((overlap >= overlapPercent) && (removeRecord))
+    if ((overlapPercent >= minOverlapPercent) && (removeRecord))
         {
-       // uglyf("overlap is %f, name for lfs is %s and name is %s for match\n", overlap, lfs->name, match->name);
         verbose(4, "remove %s\n",lfs->name);
         slRemoveEl(lfsList, lfs);
         }
@@ -223,7 +221,6 @@ void removeOverlap(int lfsSize , struct lfsStub *lfsList)
 {
 struct lfsStub *lfs, *bestMatch = NULL, *prevLfs = NULL;
 bool first = TRUE;
-//char *prevChrom = cloneString("chr1");
 int prevStart = 0, prevEnd = 0;
 int bestScore = 0;
                                                                                 
@@ -236,7 +233,6 @@ for (lfs = lfsList; lfs != NULL; lfs = lfs->next)
     int start = lfs->chromStart;
     int end = lfs->chromEnd;
     int score = lfs->score;
-    //uglyf("in removeOverlap, chrom is %s, start is %d, end is %d and score is %d here\n", lfs->chrom, lfs->chromStart, lfs->chromEnd, lfs->score);                                                                            
     if (first || start <= prevEnd )
         {
         if (first)
@@ -258,7 +254,6 @@ for (lfs = lfsList; lfs != NULL; lfs = lfs->next)
     }
 if (bestMatch != NULL)
     {
-    //uglyf("bestMatch chrom: %s, start: %d, end: %d now\n", bestMatch->chrom, bestMatch->chromStart, bestMatch->chromEnd);
     slRemoveEl(&lfsList, bestMatch);
     slAddHead(&outList, bestMatch);
     verbose(4, "add to outList %d count %d\n",slCount(outList), outCall++);
@@ -303,10 +298,9 @@ verbosity = optionInt("verbose", verbosity);
 //verboseSetLogFile("stdout");
 verboseSetLevel(verbosity);
 hasBin = optionExists("hasBin");
-overlapPercent = optionFloat("minOverlap", overlapPercent);
+minOverlapPercent = optionFloat("minOverlap", minOverlapPercent);
 useName = optionExists("name");
 notBlocks = optionExists("notBlocks");
-//uglyf("min overlap is %f\n", overlapPercent);
 outList = NULL;
 lfsOverlap(argv[1], argv[2]);
 return 0;
