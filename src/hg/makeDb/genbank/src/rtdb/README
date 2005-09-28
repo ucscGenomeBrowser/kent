@@ -4,7 +4,7 @@ for human MGC genes but in general it can be for any MGC species.
 
 1. Washington U. setup
 
-   A suggested configuration of RTDB on the supplying end of the data would
+     Configuration of RTDB on the supplying end of the data would
      be:
 
     I. RTDB releases are put into a single file for each genome assembly, 
@@ -39,7 +39,13 @@ for human MGC genes but in general it can be for any MGC species.
    
            md5sum * > rtdb.md5 
 
-    V. Make RTDB files available through HTTP, or even better FTP.
+    V. Make RTDB files available through HTTP, or FTP at a specific directory.  
+       If HTTP, please set the security settings on the Wash U webserver to allow
+       directory listings, i.e. going to a web directory URL without an index.html
+       file doesn't cause an error.
+
+   VI. Going to this URL: http://mgc.ucsc.edu/cgi-bin/rtdbLoad, will trigger an 
+       update on http://mgc.ucsc.edu.
 
 2. UCSC setup
 
