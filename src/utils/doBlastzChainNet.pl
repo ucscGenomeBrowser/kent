@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.17 2005/04/27 15:33:04 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.18 2005/09/28 17:49:29 hartera Exp $
 
 # to-do items:
 # - lots of testing
@@ -716,7 +716,7 @@ _EOF_
 
 cd $runDir
 chmod a+x chain.csh
-gensub2 pslParts.lst single gsub jobList
+$gensub2 pslParts.lst single gsub jobList
 mkdir chain
 $paraRun
 _EOF_
