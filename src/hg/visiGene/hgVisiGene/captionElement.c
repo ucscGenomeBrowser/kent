@@ -74,3 +74,85 @@ for (ce = list; ce != NULL; ce = ce->next)
 return common;
 }
 
+void captionBundleFree(struct captionBundle **pBundle)
+/* Free up memory associated with captionBundle. */
+{
+struct captionBundle *bundle = *pBundle;
+if (bundle != NULL)
+    {
+    slFreeList(&bundle->elements);
+    freez(pBundle);
+    }
+}
+
+void captionBundleFreeList(struct captionBundle **pList)
+/* Free up a list of captionBundles. */
+{
+struct captionBundle *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    captionBundleFree(&el);
+    }
+*pList = NULL;
+}
+
+struct captionBundle *captionElementBundle(struct captionElement *ceList,
+	struct slInt *imageList)
+/* This organizes the caption elements into those common to all
+ * images and those specific for an image.  The common bundle if
+ * any will be the first bundle in the returned list. */
+{
+struct captionBundle *bundleList = NULL, *bundle;
+int firstImage = imageList->val;
+struct slInt *image;
+struct captionElement *ce;
+
+/* Build up common list. */
+for (ce = ceList; ce != NULL; ce = ce->next)
+    {
+    if (ce->image == firstImage)
+        {
+	if (captionElementCommon(ceList, ce->type))
+	    {
+	    if (bundleList == NULL)
+		AllocVar(bundleList);
+	    refAdd(&bundleList->elements, ce);
+	    }
+	}
+    }
+
+/* Build up other lists. */
+for (image = imageList; image != NULL; image = image->next)
+    {
+    int imageId = image->val;
+    bundle = NULL;
+    for (ce = ceList; ce != NULL; ce = ce->next)
+        {
+	if (ce->image == imageId)
+	    {
+	    if (!captionElementCommon(ceList, ce->type))
+	        {
+		if (bundle == NULL)
+		    {
+		    AllocVar(bundle);
+		    bundle->image = imageId;
+		    }
+		refAdd(&bundle->elements, ce);
+		}
+	    }
+	}
+    if (bundle != NULL)
+        {
+	slAddHead(&bundleList, bundle);
+	}
+    }
+
+/* Reverse lists since built adding to head. */
+slReverse(&bundleList);
+for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
+    slReverse(&bundle->elements);
+return bundleList;
+}
+

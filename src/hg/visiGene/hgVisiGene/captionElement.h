@@ -32,5 +32,26 @@ char *captionElementCommon(struct captionElement *list, char *type);
 /* If the value of the caption element of given type is the same for 
  * all images, then return that value,  else return NULL. */
 
+struct captionBundle
+/* A set of caption elements specific for a particular
+ * image pane, or general to all panes. */
+     {
+     struct captionBundle *next;
+     int image;		/* ID of image pane, or 0 for general stuff */
+     struct slRef *elements;	/* List of references to elements. */
+     };
+
+void captionBundleFree(struct captionBundle **pBundle);
+/* Free up memory associated with captionBundle. */
+
+void captionBundleFreeList(struct captionBundle **pList);
+/* Free up a list of captionBundles. */
+
+struct captionBundle *captionElementBundle(struct captionElement *ceList,
+	struct slInt *imageList);
+/* This organizes the caption elements into those common to all
+ * images and those specific for an image.  The common bundle if
+ * any will be the first bundle in the returned list. */
+
 #endif /* CAPTIONELEMENT_H */
 

@@ -333,7 +333,12 @@ char *makeCommaSpacedList(struct slName *list)
 if (list == NULL)
     return cloneString("n/a");
 else if (list->next == NULL)
-    return cloneString(list->name);
+    {
+    char *name = list->name;
+    if (name[0] == 0)
+        name = "n/a";
+    return cloneString(name);
+    }
 else
     {
     struct slName *el;
@@ -360,23 +365,6 @@ else
     }
 }
 
-#ifdef OLD
-#endif /* OLD */
-void printLabeledList(char *label, struct slName *list)
-/* Print label and list by it. */
-{
-struct slName *el;
-printf("<B>%s:</B> ", label);
-if (list == NULL)
-    printf("n/a");
-for (el = list; el != NULL; el = el->next)
-    {
-    printf("%s", el->name);
-    if (el->next != NULL)
-        printf(", ");
-    }
-}
-
 struct captionElement *makePaneCaptionElements(struct sqlConnection *conn,
 	struct slInt *imageList)
 /* Make list of all caption elements */
@@ -387,7 +375,10 @@ for (image = imageList; image != NULL; image = image->next)
     {
     int paneId = image->val;
     struct slName *geneList = visiGeneGeneColorName(conn, paneId);
+    struct slName *genbankList = visiGeneGenbank(conn, paneId);
     ce = captionElementNew(paneId, "gene", makeCommaSpacedList(geneList));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "genbank", makeCommaSpacedList(genbankList));
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "organism", visiGeneOrganism(conn, paneId));
     slAddHead(&ceList, ce);
@@ -406,12 +397,48 @@ slReverse(&ceList);
 return ceList;
 }
 
-void printCaptionElements(struct captionElement *captionElements, 
-	struct slInt *imageList)
+void printCaptionElements(struct sqlConnection *conn, 
+	struct captionElement *captionElements, struct slInt *imageList)
 /* Print out caption elements - common elements first and then
  * pane-specific ones. */
 {
-uglyf("<BR>%d caption elements for %d image panes<BR>\n", slCount(captionElements), slCount(imageList));
+struct captionBundle *bundleList, *bundle;
+struct slRef *ref;
+struct captionElement *ce;
+int bundleCount;
+
+bundleList = captionElementBundle(captionElements, imageList);
+bundleCount = slCount(bundleList);
+for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
+    {
+    int flipFlop = 0;
+    if (bundleCount > 1)
+	printf("<HR>\n");
+    if (bundle->image != 0)
+        {
+	char *label = visiGenePaneLabel(conn, bundle->image);
+	if (label != NULL)
+	   printf("<B>Pane %s</B><BR>\n", label);
+	}
+    else if (bundleCount > 1)
+        {
+	printf("<B>All Panes</B><BR>\n");
+	}
+    for (ref = bundle->elements; ref != NULL; ref = ref->next)
+        {
+	ce = ref->val;
+	printf("<B>%s:</B> %s", ce->type, ce->value);
+	if (flipFlop == 1)
+	    printf("<BR>\n");
+	else
+	    printf(" ");
+	flipFlop = 1 - flipFlop;
+	}
+    if (flipFlop == 1)
+	printf("<BR>\n");
+    }
+if (bundleCount > 1)
+    printf("<HR>\n");
 }
 
 void fullCaption(struct sqlConnection *conn, int id)
@@ -447,40 +474,8 @@ if (caption != NULL)
 imageList = visiGeneImagesForFile(conn, imageFile);
 imageCount = slCount(imageList);
 captionElements = makePaneCaptionElements(conn, imageList);
-printCaptionElements(captionElements, imageList);
+printCaptionElements(conn, captionElements, imageList);
 
-for (image = imageList; image != NULL; image = image->next)
-    {
-    int paneId = image->val;
-    struct slName *geneList = visiGeneGeneColorName(conn, paneId);
-    ++imageIx;
-    if (imageCount > 1)
-        {
-	char *label = visiGenePaneLabel(conn, paneId);
-	printf("<HR>\n<B>Pane ");
-	if (label == NULL)
-	   printf("%d", imageIx);
-	else
-	   printf("%s", label);
-	printf("</B><BR>\n");
-	}
-    printLabeledList("gene", geneList);
-    printf(" ");
-    printf("<B>organism:</B> %s  ", visiGeneOrganism(conn, paneId));
-    printf("%s<BR>\n", visiGeneStage(conn, paneId, TRUE));
-    printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,paneId)));
-    printf("<B>section type:</B> %s ", 
-    	naForNull(visiGeneSliceType(conn,paneId)));
-    printLabeledList("genbank", visiGeneGenbank(conn, paneId));
-    printf("<BR>\n");
-    permeablization = visiGenePermeablization(conn,paneId);
-    if (permeablization != NULL)
-	printf("<B>permeablization:</B> %s<BR>\n", permeablization);
-
-    slFreeList(&geneList);
-    }
-if (imageCount > 1)
-    printf("<HR>\n");
 printf("<B>contributors:</B> %s<BR>\n", naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
