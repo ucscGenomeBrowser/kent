@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.20 2005/09/29 18:23:31 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.21 2005/09/29 23:47:16 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -522,7 +522,7 @@ sub doBlastzClusterRun {
     (($isSelf && (! $selfSplit)) ?
      '# Self-alignment ==> use target partition for both.' :
      "$partition $defVars{SEQ2_CHUNK} $defVars{SEQ2_LAP} " .
-     "$seq1Dir $seq2Len " .
+     "$seq2Dir $seq2Len " .
      "$qPartDir > $queryList");
   my $templateCmd = ("$blastzRunUcsc -outFormat psl " .
 		     ($isSelf ? '-dropSelf ' : '') .
