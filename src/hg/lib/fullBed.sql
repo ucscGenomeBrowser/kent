@@ -5,7 +5,7 @@
 
 #Browser extensible data
 CREATE TABLE bed (
-    chrom varchar(255) not null,	# Human chromosome or FPC contig
+    chrom varchar(255) not null,	# chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Name of item
