@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.4 2005/09/29 22:50:58 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.5 2005/09/29 23:16:51 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -887,7 +887,53 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# GENBANK auto update TBD (new process done by Mark)
+# GENBANK auto update TBD (DONE 2005-09-29 markd)
+    # align with revised genbank process. drop xeno ESTs.
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add mm7
+
+# mm7
+mm7.serverGenome = /cluster/data/mm7/mm7.2bit
+mm7.clusterGenome = /cluster/bluearc/mm7/mm7.2bit
+mm7.ooc = /cluster/bluearc/mm7/11.ooc
+mm7.align.unplacedChroms = chrUn_random
+mm7.lift = /cluster/data/mm7/jkStuff/liftAll.lft
+mm7.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+mm7.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+mm7.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+mm7.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+mm7.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+mm7.downloadDir = mm7
+mm7.refseq.mrna.xeno.load  = yes
+mm7.refseq.mrna.xeno.loadDesc = yes
+mm7.mgcTables.default = full
+mm7.mgcTables.mgc = all
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial mm7 &
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  mm7&
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~kent/src/makeDb/genbank
+    cvs update -d etc
+    # add mm7 to:
+        etc/align.dbs
+        etc/hgwdev.dbs 
+    cvs commit
+    make etc-update
+
+
+
 
 #########################################################################
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2005-08-31 - 2005-09-06 - Hiram)
