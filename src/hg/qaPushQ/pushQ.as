@@ -21,7 +21,7 @@ table pushQ
     string    stat;       "Status"
     char [50] sponsor;    "Sponsor"
     char [50] reviewer;   "QA Reviewer"
-    char [50] extSource;  "External Source"
+    char [128] extSource; "External Source"
     lstring   openIssues; "Open issues"
     lstring   notes;      "Notes"
     char [1]  pushState;  "Push State = NYD = No, Yes, Done"
