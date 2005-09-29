@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.19 2005/09/28 22:10:45 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.20 2005/09/29 18:23:31 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -40,7 +40,7 @@ my $goldenPath = '/usr/local/apache/htdocs/goldenPath';
 my $downloadPath = "$dbHost:$goldenPath";
 my $clusterLocal = '/scratch/hg';
 my $clusterSortaLocal = '/iscratch/i';
-my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/santest/scratch');
+my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/san/sanvol1');
 my $clusterNAS = join('/... or ', @clusterNAS) . '/...';
 my @clusterNoNo = ('/cluster/home', '/projects');
 my @fileServerNoNo = ('kkhome', 'kks00');
@@ -65,7 +65,8 @@ use vars qw/
     /;
 
 # Numeric values of -continue/-stop options for determining precedence:
-my %stepVal = ( 'cat' => 1,
+my %stepVal = ( 'blastz' => 0,
+		'cat' => 1,
 		'chainRun' => 2,
 		'chainMerge' => 3,
 		'net' => 4,
@@ -203,7 +204,21 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
 9. DEF's BLASTZ variable can specify an alternate path for blastz.
 10. DEF's BASE variable can specify the blastz/chain/net build directory 
     (defaults to $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/).
-11. All other variables in DEF will be ignored!
+11. SEQ?_CTGDIR specifies sequence source with the contents of full chrom
+    sequences and the contig randoms and chrUn.  This keeps the contigs
+    separate during the blastz and chaining so that chains won't go through
+    across multiple contigs on the randoms.
+12. SEQ?_CTGLEN specifies a length file to be used in conjunction with the
+    special SEQ?_CTGDIR file specified above which contains the random contigs.
+13. SEQ?_LIFT specifies a lift file to lift sequences in the SEQ?_CTGDIR
+    to their random and chrUn positions.  This is useful for a 2bit file that
+    has both full chrom sequences and the contigs for the randoms.
+14. SEQ2_SELF=1 specifies the SEQ2 is already specially split for self
+    alignments and to use SEQ2 sequence for self alignment, not just a
+    copy of SEQ1
+15. TMPDIR - specifies directory on cluster node to keep temporary files
+    Typically TMPDIR=/scratch/tmp
+16. All other variables in DEF will be ignored!
 
 " if ($detailed);
   exit $status;
@@ -212,7 +227,7 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
 
 # Globals:
 my %defVars = ();
-my ($DEF, $tDb, $qDb, $QDb, $isSelf, $buildDir, $startStep, $stopStep);
+my ($DEF, $tDb, $qDb, $QDb, $isSelf, $selfSplit, $buildDir, $startStep, $stopStep);
 my ($swapDir, $splitRef);
 
 sub isInDirList {
@@ -441,6 +456,8 @@ sub checkDef {
   $tDb = &getDbFromPath('SEQ1_DIR');
   $qDb = &getDbFromPath('SEQ2_DIR');
   $isSelf = ($tDb eq $qDb);
+  # special split on SEQ2 for Self alignments
+  $selfSplit = $defVars{'SEQ2_SELF'} || 0;
   $QDb = $isSelf ? 'Self' : ucfirst($qDb);
   if ($isSelf && $opt_swap) {
     die "-swap is not supported for self-alignments\n" .
@@ -483,20 +500,29 @@ sub doBlastzClusterRun {
   }
   my $targetList = "$tDb.lst";
   my $queryList = $isSelf ? $targetList : "$qDb.lst";
+  if ($selfSplit)
+  {
+  $queryList = "$qDb.selfSplit.lst"
+  }
   my $tPartDir = '-lstDir tParts';
   my $qPartDir = '-lstDir qParts';
   my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
   my $mkOutRoot = $opt_blastzOutRoot ? "mkdir -p $opt_blastzOutRoot" : "";
+
+  my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
+  my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
+  my $seq1Len = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
+  my $seq2Len = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
+
   my $partitionTargetCmd = 
     ("$partition $defVars{SEQ1_CHUNK} $defVars{SEQ1_LAP} " .
-
-     "$defVars{SEQ1_DIR} $defVars{SEQ1_LEN} -xdir xdir.sh -rawDir $outRoot " .
+     "$seq1Dir $seq1Len -xdir xdir.sh -rawDir $outRoot " .
      "$tPartDir > $targetList");
   my $partitionQueryCmd = 
-    ($isSelf ?
+    (($isSelf && (! $selfSplit)) ?
      '# Self-alignment ==> use target partition for both.' :
      "$partition $defVars{SEQ2_CHUNK} $defVars{SEQ2_LAP} " .
-     "$defVars{SEQ2_DIR} $defVars{SEQ2_LEN} " .
+     "$seq1Dir $seq2Len " .
      "$qPartDir > $queryList");
   my $templateCmd = ("$blastzRunUcsc -outFormat psl " .
 		     ($isSelf ? '-dropSelf ' : '') .
@@ -538,7 +564,7 @@ _EOF_
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $paraHub $bossScript");
-}
+}	#	sub doBlastzClusterRun {}
 
 sub doCatRun {
   # Do a small cluster run to concatenate the lowest level of chunk result 
@@ -575,16 +601,17 @@ _EOF_
   ;
   close(GSUB);
 
+  my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
+
   open (CAT, ">$runDir/cat.csh")
     || die "Couldn't open $runDir/cat.csh for writing: $!\n";
   print CAT <<_EOF_
 #!/bin/csh -ef
-cat \$1/*.psl | gzip -c > \$2
+cat $outRoot/\$1/*.psl | gzip -c > \$2
 _EOF_
   ;
   close(CAT);
 
-  my $outRoot = $opt_blastzOutRoot ? "$opt_blastzOutRoot/psl" : '../psl';
   my $bossScript = "$runDir/doCatRun.csh";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
@@ -598,7 +625,8 @@ _EOF_
 # This script will fail if any of its commands fail.
 
 cd $runDir
-ls -1d $outRoot/* | sed -e 's@/\$@\@' > tParts.lst
+(cd $outRoot; find . -type d -maxdepth 1 | grep '^./') \\
+        | sed -e 's#/\$##; s#^./##' > tParts.lst
 chmod a+x cat.csh
 $gensub2 tParts.lst single gsub jobList
 mkdir ../pslParts
@@ -608,7 +636,7 @@ _EOF_
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $paraHub $bossScript");
-}
+}	#	sub doCatRun {}
 
 
 sub makePslPartsLst {
@@ -682,6 +710,8 @@ _EOF_
   ;
   close(GSUB);
 
+  my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
+  my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
   my $matrix = $defVars{'BLASTZ_Q'} ? "-scoreScheme=$defVars{BLASTZ_Q} " : "";
   my $minScore = $opt_chainMinScore ? "-minScore=$opt_chainMinScore" : "";
   open (CHAIN, ">$runDir/chain.csh")
@@ -690,14 +720,36 @@ _EOF_
 #!/bin/csh -ef
 zcat ../../pslParts/\$1*.psl.gz \\
 | axtChain -psl -verbose=0 $matrix $minScore stdin \\
-    $defVars{SEQ1_DIR} \\
-    $defVars{SEQ2_DIR} \\
+    $seq1Dir \\
+    $seq2Dir \\
     stdout \\
-| chainAntiRepeat $defVars{SEQ1_DIR} \\
-    $defVars{SEQ2_DIR} \\
+| chainAntiRepeat $seq1Dir \\
+    $seq2Dir \\
     stdin \$2
 _EOF_
     ;
+  if (exists($defVars{'SEQ1_LIFT'})) {
+  print CHAIN <<_EOF_
+set c=\$2:t:r
+echo "lifting \$2 to \${c}.lifted.chain"
+liftUp liftedChain/\${c}.lifted.chain \\
+    $defVars{'SEQ1_LIFT'} carry \$2
+rm \$2
+mv liftedChain/\${c}.lifted.chain \$2
+_EOF_
+    ;
+  }
+  if (exists($defVars{'SEQ2_LIFT'})) {
+  print CHAIN <<_EOF_
+set c=\$2:t:r
+echo "lifting \$2 to \${c}.lifted.chain"
+liftUp -chainQ liftedChain/\${c}.lifted.chain \\
+    $defVars{'SEQ2_LIFT'} carry \$2
+rm \$2
+mv liftedChain/\${c}.lifted.chain \$2
+_EOF_
+    ;
+  }
   close(CHAIN);
 
   &makePslPartsLst();
@@ -717,14 +769,15 @@ _EOF_
 cd $runDir
 chmod a+x chain.csh
 $gensub2 pslParts.lst single gsub jobList
-mkdir chain
+mkdir chain liftedChain
 $paraRun
+rmdir liftedChain
 _EOF_
   ;
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $paraHub $bossScript");
-}
+}	#	sub doChainRun {}
 
 
 sub postProcessChains {
@@ -759,7 +812,7 @@ sub postProcessChains {
 	 "chainSplit $runDir/chain $runDir/$chain");
   }
   &nfsNoodge("$runDir/$chain");
-}
+}	#	sub postProcessChains {}
 
 
 sub getAllChain {
@@ -807,7 +860,7 @@ sub swapChains {
 	 "chainSplit $runDir/chain $runDir/$swappedChain");
   }
   &nfsNoodge("$runDir/$swappedChain");
-}
+}	#	sub swapChains {}
 
 
 sub swapGlobals {
@@ -879,6 +932,8 @@ $liftOver
 
 _EOF_
     ;
+  my $seq1Dir = $defVars{'SEQ1_DIR'};
+  my $seq2Dir = $defVars{'SEQ2_DIR'};
   if ($splitRef) {
     print SCRIPT <<_EOF_
 # Make axtNet for download: one .axt per $tDb seq.
@@ -887,7 +942,7 @@ cd ..
 mkdir axtNet
 foreach f (axtChain/net/*.net)
 netToAxt \$f axtChain/chain/\$f:t:r.chain \\
-  $defVars{SEQ1_DIR} $defVars{SEQ2_DIR} stdout \\
+  $seq1Dir $seq2Dir stdout \\
   | axtSort stdin stdout \\
   | gzip -c > axtNet/\$f:t:r.$tDb.$qDb.net.axt.gz
 end
@@ -907,7 +962,7 @@ _EOF_
 # Make axtNet for download: one .axt for all of $tDb.
 mkdir ../axtNet
 netToAxt -verbose=0 noClass.net $chain \\
-  $defVars{SEQ1_DIR} $defVars{SEQ2_DIR} stdout \\
+  $seq1Dir $seq2Dir stdout \\
 | axtSort stdin stdout \\
 | gzip -c > ../axtNet/$tDb.$qDb.net.axt.gz
 
@@ -923,7 +978,7 @@ _EOF_
   close(SCRIPT);
   &run("chmod a+x $bossScript");
   &run("ssh -x $machine nice $bossScript");
-}
+}	#	sub netChains {}
 
 
 sub loadUp {
@@ -1409,21 +1464,32 @@ if (scalar(grep /^$fileServer$/, @fileServerNoLogin)) {
 }
 
 my $step = 0;
+verbose(2,
+	"startStep: $startStep, at step $step initial blastz to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &doBlastzClusterRun($bigClusterHub);
 }
 
+#	-continue cat
 $step++;
+verbose(2,
+	"startStep: $startStep, at step $step cat to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &doCatRun($smallClusterHub);
 }
 
+#	-continue chainRun
 $step++;
+verbose(2,
+	"startStep: $startStep, at step $step chainRun to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &doChainRun($smallClusterHub);
 }
 
+#	-continue chainMerge
 $step++;
+verbose(2,
+	"startStep: $startStep, at step $step chainMerge to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   if ($opt_swap) {
     &swapChains($workhorse, $fileServer);
@@ -1434,22 +1500,32 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 &swapGlobals() if ($opt_swap);
 
+#	-continue net
 $step++;
+verbose(2,
+	"startStep: $startStep, at step $step net to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &netChains($workhorse);
 }
 
+#	-continue load
 $step++;
+verbose(2,
+	"startStep: $startStep, at step $step load to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &loadUp();
 }
 
+#	-continue download
 $step++;
+verbose(2,
+	"startStep: $startStep, at step $step download to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &makeDownloads($workhorse);
   &installDownloads();
 }
 
+#	-continue cleanup
 $step++;
 if ($startStep <= $step && $step <= $stopStep) {
   &cleanup($fileServer);
