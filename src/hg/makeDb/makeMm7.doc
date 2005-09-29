@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.3 2005/09/20 18:24:32 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.4 2005/09/29 22:50:58 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -733,14 +733,14 @@ BLASTZ_ABRIDGE_REPEATS=0
 
 # TARGET: Mouse Mm7
 SEQ1_DIR=/cluster/bluearc/mm7/nib
-SEQ1_2BIT=/cluster/bluearc/mm7/mm7.2bit
+SEQ1_CTGDIR=/cluster/bluearc/mm7/mm7.2bit
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=500000
 SEQ1_LAP=50
 
 # QUERY: Mouse Mm7
 SEQ2_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
-SEQ2_2BIT=/cluster/bluearc/mm7/mm7.2bit
+SEQ2_CTGDIR=/cluster/bluearc/mm7/mm7.2bit
 SEQ2_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
 SEQ2_SELF=1
 SEQ2_IN_CONTIGS=0
@@ -852,7 +852,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #############################################################################
 # PREPARE "bigZips" files for public release
-#		(TBD through mrna.fa - 2005-03-15 - Hiram)
+#	(DONE up to mrna, 2005-09-20 - Hiram)
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/mm7/bigZips
     cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
@@ -872,6 +872,11 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     cd /cluster/data/mm7/bed/simpleRepeat
     tar cvzf /usr/local/apache/htdocs/goldenPath/mm7/bigZips/chromTrf.tar.gz \
 	./trfMask
+
+    cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
+    md5sum *.gz > md5sum.txt
+
+ XXX - DONE to here, 2005-09-20 - Hiram
     # get GenBank native mRNAs
     cd /cluster/data/genbank
     ./bin/i386/gbGetSeqs -db=mm7 -native GenBank mrna \
@@ -882,153 +887,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# GENBANK auto update started (TBD)
-    ssh eieio
-    cd /cluster/data/genbank
-    #	edit etc/genbank.conf, add the following section:
-# mm7
-mm7.genome = /panasas/store/mm7/mm7.2bit
-mm7.lift = /panasas/store/mm7/liftAll.lft
-mm7.downloadDir = mm7
-mm7.genbank.est.xeno.load = yes
-mm7.mgcTables.default = full
-mm7.mgcTables.mgc = all
-
-    #	Do the refseq's first, they are the quick ones
-    nice bin/gbAlignStep -srcDb=refseq -type=mrna -verbose=1 -initial mm7
-    #	var/build/logs/2005.03.25-12:18:01.mm7.initalign.log
-    #	real    109m23.547s
-    #	user    4m8.057s
-    #	sys     1m18.459s
-# Completed: 5190 of 5190 jobs
-# CPU time in finished jobs:      44385s     739.76m    12.33h    0.51d  0.001 y
-# IO & Wait Time:                 20723s     345.38m     5.76h    0.24d  0.001 y
-# Average job time:                  13s       0.21m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             278s       4.63m     0.08h    0.00d
-# Submission to last job:          6017s     100.28m     1.67h    0.07d
-
-    # Load the results from the above
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm7
-    #	var/dbload/hgwdev/logs/2005.03.25-15:31:22.dbload.log
-    #	real    2m28.355s
-    #	user    0m19.830s
-    #	sys     0m10.180s
-
-    #	check the RefSeq Genes track shows up in the browser
-    #	table browser query on RefSeq Genes whole genome, summary stats
-    #	indicates 18,397 items covering 713,077,002 (%27.46) bases
-
-    #	To get the genbank started, the above results need to be
-    #	moved out of the way.  These things can be removed if there are
-    #	no problems to debug
-    ssh eieio
-    cd /cluster/data/genbank/work
-    mv initial.mm7 initial.mm7.refseq.mrna
-    # or: rm -fr initial.mm7
-
-    cd /cluster/data/genbank
-    nice bin/gbAlignStep -srcDb=genbank -type=mrna -verbose=1 -initial mm7
-    #	logFile: var/build/logs/2005.03.25-17:13:13.mm7.initalign.log
-    #	RUNNING - 2005-03-25 17:30
-    #	There was one incredibly long job that occupied most of the time
-    #	real    741m1.285s
-    #	user    88m31.751s
-    #	sys     25m6.943s
-# Completed: 27680 of 27680 jobs
-# CPU time in finished jobs:    5495665s   91594.42m  1526.57h   63.61d  0.174 y
-# IO & Wait Time:                114623s    1910.38m    31.84h    1.33d  0.004 y
-# Average job time:                 203s       3.38m     0.06h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           13544s     225.73m     3.76h    0.16d
-# Submission to last job:         37663s     627.72m    10.46h    0.44d
-
-    # Load the results from the above
-    ssh hgwdev
-    cd /cluster/data/genbank
-    # There is a lock file present, I believe from the previous load:
-    [hiram@hgwdev /cluster/data/genbank/var/dbload/hgwdev/run] ls -l
-    #	-rw-r--r--    1 hiram    protein        18 Mar 15 10:08 dbload.lock
-    # checking that it is actually owned by yourself, it is safe to remove
-    #	it.  The next load will not proceed with this lock in place.
-    rm var/dbload/hgwdev/run/dbload.lock
-
-    time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm7
-    #	var/dbload/hgwdev/logs/2005.03.26-08:47:42.dbload.log
-    #	22 minute load time
-
-    #	And finally, the big est run - expect several days on this one
-    ssh eieio
-    cd /cluster/data/genbank/work
-    mv initial.mm7 initial.mm7.genbank.mrna
-
-    #	since it is going to run several days, create a screen for it to
-    #	run in.  detach and reattach as necessary to view the progress
-    #	of the job
-    cd /cluster/data/genbank
-    screen
-    nice bin/gbAlignStep -srcDb=genbank -type=est -verbose=1 -initial mm7
-    #	var/build/logs/2005.03.26-09:00:22.mm7.initalign.log
-    #	STARTED 2005-03-26 09:13
-    #	FINISHED 2005-03-28 11:53
-    #	about 50 hours run time
-
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
-    ssh eieio
-    screen -d -r
-# Completed: 159852 of 159852 jobs
-# CPU time in finished jobs:  110196174s 1836602.90m 30610.05h 1275.42d  3.494 y
-# IO & Wait Time:               1230416s   20506.93m   341.78h   14.24d  0.039 y
-# Average job time:                 697s      11.62m     0.19h    0.01d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           41516s     691.93m    11.53h    0.48d
-# Submission to last job:        137193s    2286.55m    38.11h    1.59d
-
-    ssh hgwdev
-    cd /cluster/data/genbank
-    time nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad mm7
-    #	many tables are loaded by this load:
-    #	refFlat, refGene, refLink, refSeqAli, refSeqStatus, refSeqSummary
-    #	mgcGenes mgcFullMrna mgcFullStatus intronEst all_est chr*est
-    #	estOrientInfo xenoEst
-    #	var/dbload/hgwdev/logs/2005.03.28-13:38:13.dbload.log
-    #	LOADING - 2005-03-28 - 13:35
-    #	FINISHED - 2005-03-29 - 00:43
-    #	real    665m1.596s
-    #	user    105m19.790s
-    #	sys     33m10.390s
-    #	Note, that is an 11 hour load time.
-    #	Measurements:  (these are interesting in the table browser too)
-    #	RefSeq Genes
-    featureBits mm7 refGene
-    #	41752877 bases of 2597150411 (1.608%) in intersection
-    #	MGC Genes
-    featureBits mm7 refFlat
-    #	41752877 bases of 2597150411 (1.608%) in intersection
-    featureBits mm7 refSeqAli
-    #	41738603 bases of 2597150411 (1.607%) in intersection
-    #	additionally created tables by the genbank process that can not
-    #	be measured with featureBits
-    #	refLink, refSeqStatus, refSeqSummary
-    featureBits mm7 mgcGenes
-    #	27174785 bases of 2597150411 (1.046%) in intersection
-    #	Mouse mRNAs
-    featureBits mm7 all_mrna
-    #	112068807 bases of 2597150411 (4.315%) in intersection
-    #	Spliced ESTs
-    featureBits mm7 intronEst
-    #	52812872 bases of 2597150411 (2.033%) in intersection
-    #	Mouse ESTs
-    featureBits mm7 est
-    #	236687034 bases of 2597150411 (9.113%) in intersection
-    #	Non-Mouse mRNAs
-    featureBits mm7 xenoMrna
-    #	52119099 bases of 2597150411 (2.007%) in intersection
-    #	Non-Mouse ESTs
-    featureBits mm7 xenoEst
+# GENBANK auto update TBD (new process done by Mark)
 
 #########################################################################
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2005-08-31 - 2005-09-06 - Hiram)
@@ -1248,13 +1107,61 @@ XXXX - Started 2005-09-16 14:30
 	-bigClusterHub=pk \
 	-swap -stop=load \
 	`pwd`/DEF > swapLoadReady.out 2>&1 &
-    #	Manually loaded tables chainHg16noLSR, chainHg16noLSRLink and
-    #	netHg17noLSR
+    #	Manually loaded tables chainHg17LSR, chainHg17LSRLink and
+    #	netHg17LSR
+    #	real    268m48.953s
+    #	user    21m46.640s
+    #	sys     5m0.510s
+
     featureBits mm7 chainHg17noLSRLink
     #	952987983 bases of 2583394090 (36.889%) in intersection
     time featureBits mm7 chainHg17Link
     #	961671385 bases of 2583394090 (37.225%) in intersection
+    #	And, their intersection:
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainHg17Link chainHg17noLSRLink
+    #	950261805 bases of 2583394090 (36.783%) in intersection
+    #	real    33m16.210s
+    #	user    8m39.179s
+    #	sys     2m33.198s
 
+    #	Loading lineage specific repeats for measurement purposes:
+    ssh kkstore02
+    cd /cluster/bluearc/mm7/linSpecRep/notInHumanDogCow
+    time grep -h chr chr*.out.spec | awk '{print $5,$6,$7,$10,$1}' \
+	| sort -k1,1 -k2,2n \
+	> /cluster/data/mm7/bed/blastzHg17.2005-09-16/mm7LSRhg.bed 
+    cd /cluster/bluearc/hg17/linSpecRep.notInMouse
+    time grep -h chr chr*.out.spec | awk '{print $5,$6,$7,$10,$1}' \
+	| sort -k1,1 -k2,2n \
+	> /cluster/data/mm7/bed/blastzHg17.2005-09-16/hg17LSRmm.bed 
+
+    ssh hgwdev
+    cd  /cluster/data/mm7/bed/blastzHg17.2005-09-16
+    hgLoadBed mm7 linSpecRepNotHg -strict mm7LSRhg.bed
+    #	Loaded 2816082 elements of size 5
+    hgLoadBed hg17 linSpecRepNotMm -strict hg17LSRmm.bed
+    #	had one broken line in the file, removed it
+    #	Expecting 5 words line 298322 of hg17LSRmm.bed got 4
+    #	Loaded 1639435 elements of size 5
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzHg17.2005-09-16
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainHg17Link linSpecRepNotHg \
+	> fbMm7.chainHg17Link.linSpecRepNotHg 2>&1
+XXXX - working
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainHg17noLSRLink linSpecRepNotHg \
+	> fbMm7.chainHg17noLSRLink.linSpecRepNotHg 2>&1
+
+
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
+	chainMm7LSRLink linSpecRepNotMm \
+	> fbHg17.chainMm7LSRLink.linSpecRepNotMm
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
+	chainMm7Link linSpecRepNotMm \
+	> fbHg17.chainMm7Link.linSpecRepNotMm
 
 ##########################################################################
     #	A measurement script to do all featureBits combinations:
@@ -1636,7 +1543,7 @@ sys     0m0.052s
 
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (WORKING - 2005-09-20 - Hiram)
-    ssh kkstore02
+    ssh pk
     mkdir /cluster/data/mm7/bed/blastzTetNig1.2005-09-20
     cd /cluster/data/mm7/bed
     ln -s blastzTetNig1.2005-09-20 blastz.tetNig1
@@ -1660,7 +1567,7 @@ BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
 # TARGET: Mouse (mm7)
 #	small enough chunk to get reasonable running time
 SEQ1_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
-SEQ1_2BIT=/cluster/bluearc/mm7/mm7.2bit
+SEQ1_CTGDIR=/cluster/bluearc/mm7/mm7.2bit
 SEQ1_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
 SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
 SEQ1_CTGLEN=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.sizes
@@ -1671,7 +1578,7 @@ SEQ1_LAP=1000
 # QUERY: Tetraodon (tetNig1)
 #  large enough chunk to do all genome in one piece
 SEQ2_DIR=/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit
-SEQ2_2BIT=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
+SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
 SEQ2_LIFT=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.lft
 SEQ2_LEN=/san/sanvol1/scratch/tetNig1/chrom.sizes
 SEQ2_CTGLEN=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.sizes
@@ -1679,20 +1586,24 @@ SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=410000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzTetNig1.2005_03_17
+BASE=/cluster/data/mm7/bed/blastzTetNig1.2005-09-20
 TMPDIR=/scratch/tmp
 '_EOF_'
     # < happy emacs
 
-XXXX just about ready to go here, need the chromsAndScafs.lft
-
     #	establish a screen to control this job
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -bigClusterHub kk9 \
-	`pwd`/DEF > blast.run.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+XXX - STARTED 2005-09-20 11:30
+
+XXXX just about ready to go here, need the chromsAndScafs.lft
+
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
-    ssh kkstore02
+    ssh pk
     screen -d -r
     #	STARTED 2005-03-17 21:30
     #	FINISHED 2005-03-18 05:10
@@ -1784,7 +1695,7 @@ doOne tetNig1 chainMm5Link
     #   41736750 bases of 342403326 (12.189%) in intersection
  
 #########################################################################
-# CPGISLANDS (TBD)
+# CPGISLANDS (DONE - 2005-09-20 - Hiram)
     ssh hgwdev
     mkdir -p /cluster/data/mm7/bed/cpgIsland
     cd /cluster/data/mm7/bed/cpgIsland
@@ -1809,16 +1720,14 @@ doOne tetNig1 chainMm5Link
 	./cpglh.exe ${F} > ${C}.cpg
     done > cpglh.out 2>&1 &
 
-    #	three warnings:
     #	Bad char 0x52 = 'R' at line 164245, base 8212187, sequence chr14
     #	Bad char 0x53 = 'S' at line 167424, base 8371114, sequence chr14
     #	Bad char 0x53 = 'S' at line 167426, base 8371198, sequence chr14
     #	Several chroms have 0 results:
-    #	-rw-rw-r--  1     0 Mar 17 12:13 chr10_random.cpg
-    #	-rw-rw-r--  1     0 Mar 17 12:18 chr9_random.cpg
-    #	-rw-rw-r--  1     0 Mar 17 12:18 chrM.cpg
-    #	-rw-rw-r--  1     0 Mar 17 12:18 chrY.cpg
-    #	-rw-rw-r--  1     0 Mar 17 12:18 chrY_random.cpg
+    #	-rw-rw-r--  1     0 Sep 20 11:52 chrM.cpg
+    #	-rw-rw-r--  1     0 Sep 20 11:52 chrY.cpg
+    #	-rw-rw-r--  1     0 Sep 20 11:52 chrY_random.cpg
+
 # XXX - this is interesting that chrY, either one, have nothing.
 #	the previous mm5 release did have some on chrY
 #	Evidently the new chrY is too short - this chrY is being
@@ -1837,18 +1746,20 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 }
 '_EOF_'
     # << this line makes emacs coloring happy
-    awk -f filter.awk chr*.cpg > cpgIsland.bed
+    awk -f filter.awk chr*.cpg | sort -k1,1 -k2,2n > cpgIsland.bed
 
     ssh hgwdev
     cd /cluster/data/mm7/bed/cpgIsland
     hgLoadBed -strict mm7 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
     #	Reading cpgIsland.bed
-    #	Loaded 16100 elements of size 10
+    #	Loaded 16030 elements of size 10
     #	Sorted
     #	Saving bed.tab
     #	Loading mm7
     featureBits mm7 cpgIslandExt
+    #	10439328 bases of 2583394090 (0.404%) in intersection
+    featureBits mm6 cpgIslandExt
     #	10432360 bases of 2597150411 (0.402%) in intersection
     featureBits mm5 cpgIslandExt
     #	10422989 bases of 2615483787 (0.399%) in intersection
@@ -1858,31 +1769,104 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	10102968 bases of 2505900260 (0.403%) in intersection
 
 #########################################################################
-# BLASTZ Cow bosTau1 (TBD)
+# ANDY LAW CPGISSLANDS (DONE - 2005-09-20 - Hiram)
+    # See notes in makeGalGal2.doc and makeCanFam2.doc
     ssh kkstore02
-    mkdir /cluster/data/mm7/bed/blastzBosTau1.2005_03_18
-    cd /cluster/data/mm7/bed/blastzBosTau1.2005_03_18
+    mkdir /cluster/data/mm7/bed/cpgIslandGgfAndy
+    cd /cluster/data/mm7/bed/cpgIslandGgfAndy
+
+    #	Build the preProcGgfAndy program in
+    #	kent/src/oneShot/preProcGgfAndy into your ~/bin/$MACHTYPE
+
+    # Use masked sequence since this is a mammal...
+    for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo preproc and run on masked "${C} ${F}" 1>/dev/stderr
+	~/bin/$MACHTYPE/preProcGgfAndy ${F} \
+	| /cluster/home/angie/ggf-andy-cpg-island.pl \
+	| perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g1,$oE) = split("\t"); $s--;
+                   $gc=$c+$g1;  $pCpG=(100.0 * 2 * $cpg / $n);
+                   $pGc=(100.0 * $gc / $n);
+                   $_="'${C}'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" .
+                        "$pCpG\t$pGc\t$oE\n";'
+    done | sort -k1,1 -k2,2n > cpgIslandGgfAndyMasked.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed mm7 cpgIslandGgfAndyMasked -tab -noBin \
+      -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
+    #	Loaded 67616 elements of size 10
+    featureBits mm7 cpgIslandExt
+    #	10439328 bases of 2583394090 (0.404%) in intersection
+    featureBits mm7 cpgIslandGgfAndyMasked
+    #	38774242 bases of 2583394090 (1.501%) in intersection
+    wc -l ../cpgIsland/cpgIsland.bed *bed
+    #	16030 ../cpgIsland/cpgIsland.bed
+    #	67616 cpgIslandGgfAndyMasked.bed
+
+#########################################################################
+# BLASTZ Cow bosTau2 (WORKING - 2005-09-20 - Hiram)
+    ssh kkstore02
+    #	There is no need to use the chrBin0 in this alignment
+    #	Create a bosTau2 2bit file without the chrBin0 sequence
+    mkdir /cluster/data/bosTau2/noBin0
+    cd /cluster/data/bosTau2/noBin0
+    twoBitInfo ../bosTau2.2bit stdout | grep -v chrBin0 \
+        | awk '{print $1}' > chrList
+    twoBitToFa ../bosTau2.2bit stdout -seqList=chrList \
+	| faToTwoBit stdin bosTau2.noBin0.2bit
+    twoBitInfo bosTau2.noBin0.2bit noBin0.sizes
+    rm chrList
+
+    mkdir /cluster/data/mm7/bed/blastzBosTau2.2005-09-20
+    cd /cluster/data/mm7/bed
+    ln -s blastzBosTau2.2005-09-20 blastz.bosTau2
+    cd blastzBosTau2.2005-09-20
 
     cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=50
+
 # mouse vs. cow
+
 # TARGET: Mouse (mm7)
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-SEQ1_LEN=/cluster/data/mm7/chrom.sizes
+#	small enough chunk to get reasonable running time
+SEQ1_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
+SEQ1_CTGDIR=/cluster/bluearc/mm7/mm7.2bit
+SEQ1_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
+SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
+SEQ1_CTGLEN=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=500000
+SEQ1_LAP=50
 
-# QUERY: Cow (bosTau1)
-SEQ2_DIR=/iscratch/i/bosTau1/nib/bosTau1.2bit
-SEQ2_CHUNK=5000000
+# QUERY: Cow (bosTau2)
+#  large enough chunk to do all the genome in one piece
+SEQ2_DIR=/san/sanvol1/scratch/bosTau2/bosTau2.noBin0.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau2/noBin0.sizes
+SEQ2_CHUNK=3200000000
 SEQ2_LAP=0
-SEQ2_LEN=/iscratch/i/bosTau1/chrom.sizes
 
-BASE=/cluster/data/mm7/bed/blastzBosTau1.2005_03_18
+BASE=/cluster/data/mm7/bed/blastzBosTau2.2005-09-20
+TMPDIR=/scratch/tmp
 '_EOF_'
     # << keep emacs coloring happy
 
     #	establish a screen to control this job
     screen
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+XXX - STARTED - 2005-09-20 - 17:10
+
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	`pwd`/DEF > blast.run.out 2>&1 &
     #	detach from screen session: Ctrl-a Ctrl-d
@@ -2442,33 +2426,22 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
     #	chain tracks appear and are in the proper order.
 
 #############################################################################
-# STS MARKERS DATA DOWNLOAD (TBD)
-    ssh eieio
+# STS MARKERS DATA DOWNLOAD (WORKING - 2005-09-29 - Hiram)
+    ssh kkstore02
     mkdir -p /cluster/data/mm7/bed/STSmarkers/downloads
     cd /cluster/data/mm7/bed/STSmarkers/downloads
     # these files appear to be new almost every day
-    #	AND, they were incorrect when I fetched them on April 6th,
-    #	they were corrected on April 8th
-    #	HOWEVER, they still appear to be incorrect.  There are IDs in
-    #	the UniSTS_mouse.sts file that do not appear in the aliases file
-    #	2005-04-14 Further information on this says that some IDs do not
-    #	have aliases, thus need no entries in the alises file.
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_mouse.sts
     wget --timestamping \
 	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
 
-    # these map files used to be static for some years, now they appear
-    # to be new
+    #	The new feature in the .aliases file this time are names with
+    #	spaces in them !  This changes our parsing business below,
+    #	hopefully the spaces in the names won't cause trouble elsewhere.
+
     wget --timestamping \
 ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
-    #	These files used to be unchanging.  This time they seem to be
-    #	new files:
-    #	   396858 Jan 28 19:15 10090.MGI.txt
-    #	   173344 Mar 16 19:45 10090.WI-Genetic.txt
-    #	   240688 Mar 16 19:45 10090.WI-YAC.txt
-    #	   390139 Mar 16 20:16 10090.WI_MRC_RH.txt
-    #  Will have to watch below to see how these figure into the construction.
 
     # these reports from jax.org appear to be changing daily
     wget --timestamping \
@@ -2477,6 +2450,17 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 	ftp://ftp.informatics.jax.org/pub/reports/MRK_Sequence.rpt
     wget --timestamping \
 	ftp://ftp.informatics.jax.org/pub/reports/PRB_PrimerSeq.rpt
+    ls -ogrt
+#	-r--r--r--  1      676 Mar 11  2004 README
+#	-r--r--r--  1   396858 Jan 28  2005 10090.MGI.txt
+#	-r--r--r--  1   240688 Mar 16  2005 10090.WI-YAC.txt
+#	-r--r--r--  1   390139 Mar 16  2005 10090.WI_MRC_RH.txt
+#	-r--r--r--  1   173344 Mar 16  2005 10090.WI-Genetic.txt
+#	-rw-rw-r--  1  4540721 Sep 29 02:18 MRK_Dump2.rpt
+#	-rw-rw-r--  1  2520760 Sep 29 02:19 PRB_PrimerSeq.rpt
+#	-rw-rw-r--  1  4345973 Sep 29 02:19 MRK_Sequence.rpt
+#	-r--r--r--  1 13832082 Sep 29 07:20 UniSTS.aliases
+#	-r--r--r--  1  4106299 Sep 29 07:21 UniSTS_mouse.sts
 
 
     # back to our work area, update the bed file
@@ -2484,34 +2468,14 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     # it is created by a combination of information from several
     # of the above files ! AND ! the previous stsInfoMouse.bed file
 
-    cp -p /cluster/data/mm5/bed/STSmarkers/downloads/*.sh .
-    cp -p /cluster/data/mm5/bed/STSmarkers/downloads/*.pl .
+    cd /cluster/data/mm7/bed/STSmarkers/downloads
+    cp -p /cluster/data/mm6/bed/STSmarkers/downloads/*.sh .
+    cp -p /cluster/data/mm6/bed/STSmarkers/downloads/*.pl .
     #	There is a line in the fetchAllAliases.sh script that needs to
     #	be updated, it must point to the previous bed file:
-    #   BEDFile=/cluster/data/mm5/bed/STSmarkers/stsInfoMouse.bed
+    #   BEDFile=/cluster/data/mm6/bed/STSmarkers/stsInfoMouse.bed
     #	Next time, this should read:
     #   BEDFile=/cluster/data/mm7/bed/STSmarkers/stsInfoMouse.bed
-
-    #	The perl scripts were reworked, updated, cleaned up, and fixed
-    #	to handle a new type of format found in the UniSTS.aliases file.
-    #	*!*! ACTUALLY there was an error in the UniSTS.aliases file
-    #	format, it was not correct.  Upon submitting a query to Deanna
-    #	Church, I got the following answer:
-    #	Dear Hiram,
-
-    #	Thanks for reporting formatting problems in UniSTS.aliases file.
-
-    #	It was fixed in the program and correct file was put to ftp site.
-
-    #	-Wonhee Jang
-    #	---------------------------------------------------
-    #	Wonhee Jang, Ph.D
-    #	National Center for Biotechnology Information/NIH
-    #	Building 45, Room 5AS43D-49, Bethesda, MD 20894
-    #	jang@ncbi.nlm.nih.gov  phone)301-402-9307
-    #	fax) 301-480-2484
-    #	---------------------------------------------------
-
 
     #	This process has been captured in the script:
     #	/cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
@@ -2527,11 +2491,21 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     #    | sort -n > UniSTS_mouse.alias
 
     time ./fetchAllAliases.sh
+    #	Here is a normal set of errors:
+# processing UniSTS_mouse.sts to find aliases
+# #       ERROR: KNOWN(==OK) duplicate ID: '108991' encountered at line
+# #       2388
+# processing MGI.aliases
+# fetching existing aliases from previous stsInfoMouse.bed file
+# found 27615 potential errors in /cluster/data/mm6/bed/STSmarkers/stsInfoMouse.bed
+# to see the errors: grep ERROR stsInfoAliases.txt
+# verify those stsInfoMouse.bed aliases with UniSTS.aliases
 
     # with that, we can create a new stsInfoMouse.bed file:
+    #	Update the mm6 directory name here to mm7
     cd /cluster/data/mm7/bed/STSmarkers
     /cluster/store5/mouseMarker/code/updateBed.pl \
-	/cluster/data/mm5/bed/STSmarkers/stsInfoMouse.bed \
+	/cluster/data/mm6/bed/STSmarkers/stsInfoMouse.bed \
 	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
 	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
 	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
@@ -2542,20 +2516,27 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     # copy the stsInfoMouse.bed file from working dir to the marker info storage fold.
     # added 2 new steps by Yontao	
     mv /cluster/store5/mouseMarker/stsInfoMouse.bed \
-	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm6
     cp -p stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed
 
-    # comparing to Mm5
-    #	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
-    #	/cluster/store5/mouseMarker/stsInfoMouse.bed
-    58493   778055  6524821 stsInfoMouse.bed_mm5
-    58980   784786  6690105 stsInfoMouse.bed
+    # comparing to previous
+    wc /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm6 \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
+    #	59843   794642  6802825 /cluster/store5/mouseMarker/stsInfoMouse.bed
+    #	58980   784786  6690105 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm6
+    #	58493   778055  6524821 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
 
     # and from that, create new primer fa, epcr, etc:
     /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
 	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
     # the mouseC.fa file will be empty
     wc mouse?.*
+    #      0       0       0 mouseC.fa
+    # 300968  300914 6798466 mouseP.fa
+    #  33838  169275 2153113 mouseP.info
+    # 334806  470189 8951579 total
+    #	the equivalent Mm6 files:
     #	     0       0       0 mouseC.fa
     #	293305  293251 6624638 mouseP.fa
     #	 32890  164528 2087271 mouseP.info
@@ -2566,14 +2547,18 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
     #	 32232  161234 2044810 mouseP.info
     #	318972  447920 8519703 total
 
-    #	copy the primers over to the panasas for the kluster run
-    mkdir /panasas/store/mm7/STSmarkers
-    cp -p mouseP.fa /panasas/store/mm7/STSmarkers
-    cp -p mouseP.info /panasas/store/mm7/STSmarkers
+    #	copy the primers over to the san for the kluster run
+    ssh pk
+    mkdir -p /san/sanvol1/scratch/mm7/fasta
+    cd /cluster/data/mm7
+    time cp --verbose -p ?/*.fa ??/*.fa /san/sanvol1/scratch/mm7/fasta
+    cd /cluster/data/mm7/bed/STSmarkers
+    mkdir -p /san/sanvol1/scratch/mm7/STSmarkers
+    cp -p mouseP.fa /san/sanvol1/scratch/mm7/STSmarkers
+    cp -p mouseP.info /san/sanvol1/scratch/mm7/STSmarkers
 
     #  CLUSTER RUN FOR THE STS PRIMERS
 
-    ssh kk9
     mkdir -p /cluster/data/mm7/bed/STSmarkers/primer
     mkdir -p /cluster/data/mm7/bed/STSmarkers/ePCR
     cd /cluster/data/mm7/bed/STSmarkers/primer
@@ -2584,18 +2569,18 @@ ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
 
 cat << '_EOF_' > template
 #LOOP
-/cluster/bin/i386/blat.2 $(path1) /panasas/store/mm7/STSmarkers/mouseP.fa -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
+/cluster/bin/i386/blat.2 $(path1) /san/sanvol1/scratch/mm7/STSmarkers/mouseP.fa -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
 #ENDLOOP
 '_EOF_'
     mkdir primers.out
 
-    ls -1S /panasas/store/mm7/fasta/chr*.fa > contig.lst
+    ls -1S /san/sanvol1/scratch/mm7/fasta/chr*.fa > contig.lst
     gensub2 contig.lst single template jobList
     para create jobList
     para try
     para check
     para push
-    #	STARTED - 2005-04-14 15:40 
+    #	STARTED - 2005-09-20 14:26 
 # Completed: 40 of 40 jobs
 # CPU time in finished jobs:     445070s    7417.83m   123.63h    5.15d  0.014 y
 # IO & Wait Time:                   463s       7.72m     0.13h    0.01d  0.000 y
@@ -5032,51 +5017,48 @@ http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.prot
 #refGene 1.623%, geneid 1.561%, both 0.794%, cover 48.91%, enrich 31.34x
 
 ##############################################################################
-# CLONE ENDS - BACEND TRACK (started - 2005-05-20 - Heather)
+# CLONE ENDS - BACEND TRACK (DONE - 2005-09-29 - Hiram)
 
-  ssh kkstore01
-  cd /cluster/data/mm7
-  # check disk space: 120 Gigs free
-  cd bed
-  mkdir cloneend
-  cd cloneend
-  mkdir ncbi
-  cd ncbi
+    ssh kkstore02
+    cd /cluster/data/mm7
+    # check disk space: 73Gb free
+    df -h .
+# Filesystem            Size  Used Avail Use% Mounted on
+# /export/cluster/store5
+#                       1.5T  1.3T   73G  95% /cluster/store5
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
 
-  ftp ftp.ncbi.nih.gov
-  # anonymous login
-  cd genomes/CLONEEND/mus_musculus
-  binary
-  prompt 
-  mget *
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/mus_musculus/*
 
-  gunzip *
-  # 650 megs
+    cd /cluster/data/mm7/bed/cloneend
+    # seems like the *.mfa files were split just for convenience
+    # concatenate
+    for F in ncbi/*.mfa.gz
+    do
+	zcat ${F}
+    done | gzip > all.mfa.gz
 
-  # seems like the *.mfa files were split just for convenience
-  # concatenate
-  foreach f (*.mfa)
-    cat $f >> all.mfa
-  end
-
-  # Convert the title line of the all.mfa file
-  # Location of perl different on kkstore01
-  cat << '_EOF_' > convert.pl
-#!/usr/bin/perl -w
+    # Convert the title line of the all.mfa file
+    cat << '_EOF_' > convert.pl
+#!/usr/bin/env perl
 
 use strict;
+use warnings;
 
 while (my $line = <>) {
-    if (substr($line,0,1) ne ">") {
-        print $line;
+    if ($line !~ m/^>/) {
+	print $line
     } else {
-        my @fields = split(/\|/, $line);
+        my @fields = split('\|', $line);
+	my $fieldCount = scalar(@fields);
         my $printed = 0;
-        for (my $i = 0; $i < $#fields; $i++) {
-                if ($fields[$i] eq "gb" || $fields[$1] eq "dbj") {
+        for (my $i = 0; $i < $fieldCount; $i++) {
+                if ($fields[$i] eq "gb" || $fields[$i] eq "dbj") {
                         (my $name, my $vers) = split(/\./,$fields[$i+1]);
                         print ">$name\n";
-                        $i= $#fields;
+                        $i= $fieldCount;
                         $printed = 1;
                 }
         }
@@ -5086,60 +5068,71 @@ while (my $line = <>) {
     }
 }
 '_EOF_'
-    # << for emacs
-chmod +x convert.pl
-./convert.pl < all.mfa > cloneEnds.fa
+    # < happy emacs
+    chmod +x convert.pl
+    zcat all.mfa | ./convert.pl | gzip > cloneEnds.fa.gz
 
-# check that files still have the same number of lines
-# expecting 8290734
-wc -l all.mfa
-wc -l cloneEnds.fa
+    #	make sure nothing got broken:
+    faSize all.mfa.gz
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214 lower) in 789466 sequences in 1 files
+    faSize cloneEnds.fa.gz
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214 lower) in 789466 sequences in 1 files
+    #	identical numbers
 
-  # concatenate the text files, too
-  foreach f (*.txt)
-    cat $f >> all.txt
-  end
+    # concatenate the text files, too
+    for F in ncbi/*.txt.gz
+    do
+	zcat ${F}
+    done | gzip > all.txt.gz
 
-  # generate cloneEndPairs.txt and cloneEndSingles.txt
-  ./convertTxt.pl all.txt
+    # generate cloneEndPairs.txt and cloneEndSingles.txt
+    cp -p /cluster/data/mm6/bed/cloneend/ncbi/convertTxt.pl .
+    zcat all.txt.gz | ./convertTxt.pl stdin
 
-  # Reading in end info
-  # Writing out pair info
-  # Writing out singleton info
-  # 354485 pairs and 78424 singles
+    # Reading in end info
+    # Writing out pair info
+    # Writing out singleton info
+    # 354485 pairs and 78423 singles
 
-  # a bit of cleanup
-  mkdir archive
-  mv 10090* archive
+    #	faSplit does not function correctly if given a .gz source file
+    #	AND, we need the unzipped file for sequence loading below
+    gunzip cloneEnds.fa.gz
+    # split
+    mkdir splitdir
+    cd splitdir
+    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    #	Check to ensure no breakage:
+    cat *.fa | faSize stdin
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214 lower) in 789466 sequences in 1 files
+    #	same numbers as before
 
-  # split
-  mkdir splitdir
-  faSplit sequence cloneEnds.fa 100 cloneEnds
-  mkdir /cluster/bluearc/scratch/mus/mm7
-  mkdir /cluster/bluearc/scratch/mus/mm7/cloneEnds
-  mv cloneEnds???.fa /cluster/bluearc/scratch/mus/mm7/cloneEnds
-  cp -p cloneEnds.fa /cluster/bluearc/scratch/mus/mm7/cloneEnds
-  # request updateLocal to make available on /scratch/mus/mm7/cloneEnds on the cluster
+    #	Copy to san for cluster runs
+    ssh pk
+    cd /cluster/data/mm7/bed/cloneend/splitDir
+    mkdir /san/sanvol1/scratch/mm7/cloneEnds
+    cp -p *.fa /san/sanvol1/scratch/mm7/cloneEnds
+    rm *
+    cd ..
+    rmdir splitDir
 
-  # load sequences
-  ssh hgwdev
-  cd /gbdb/mm7
-  mkdir cloneend
-  cd cloneend
-  ln -s /cluster/data/mm7/bed/cloneend/ncbi/cloneEnds.fa .
-  cd /tmp
-  hgLoadSeq mm7 /gbdb/mm7/cloneend/cloneEnds.fa
-  #  Advisory lock created
-  # Creating .tab file
-  # Adding /gbdb/mm7/cloneend/cloneEnds.fa
-  # 789467 sequences
-  # Updating seq table
-  # Advisory lock has been released
-  # All done
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/mm7/cloneend
+    cd /gbdb/mm7/cloneend
+      ln -s /cluster/data/mm7/bed/cloneend/cloneEnds.fa .
+    cd /tmp
+    hgLoadSeq mm7 /gbdb/mm7/cloneend/cloneEnds.fa
+    #  Advisory lock created
+    # Creating .tab file
+    # Adding /gbdb/mm7/cloneend/cloneEnds.fa
+    # 789466 sequences
+    # Updating seq table
+    # Advisory lock has been released
+    # All done
 
 ############################################################################
-# BACEND SEQUENCE ALIGNMENTS (TBD)
-    ssh kkstore01
+# BACEND SEQUENCE ALIGNMENTS (WORKING - 2005-09-29 - Hiram)
+    ssh kkstore02
     mkdir /cluster/data/mm7/noMask
     cd /cluster/data/mm7/
     #	Need an unmasked sequence for this work
@@ -5153,24 +5146,17 @@ wc -l cloneEnds.fa
     done
     mkdir ooc
     ls noMask/chr*.fa > fa.list
-    blat -makeOoc=ooc/11.ooc -repMatch=1024 fa.list fa.list output.psl
-    #	Wrote 25952 overused 11-mers to ooc/11.ooc
-    ssh kkr1u00
-    mkdir /iscratch/i/mm7/ooc
-    cp -p /cluster/data/mm7/ooc/11.ooc /iscratch/i/mm7/ooc
-    mkdir /iscratch/i/mm7/noMask
-    cp -p /cluster/data/mm7/noMask/chr*.fa /iscratch/i/mm7/noMask
-    for U in 2 3 4 5 6 7 8
-    do
-	rsync -a --progress /iscratch/i/mm7/ooc/ kkr${U}u00:/iscratch/i/mm7/ooc
-	rsync -a --progress /iscratch/i/mm7/noMask/ \
-		kkr${U}u00:/iscratch/i/mm7/noMask
-	echo "done kkr${U}u00"
-    done
+    #	ooc file was created earlier into /cluster/bluearc/mm7/11.ooc
+    #	and /san/sanvol1/scratch/mm7/11.ooc
+
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm7/noMask
+    cd /san/sanvol1/scratch/mm7/noMask
+    time cp --verbose -p /cluster/data/mm7/noMask/chr*.fa .
     
     # allow blat to run politely in /tmp while it writes output, then
     # copy results to results file:
-    ssh kk
+
     mkdir /cluster/data/mm7/bed/bacends
     cd /cluster/data/mm7/bed/bacends
 
@@ -5184,8 +5170,8 @@ result=$5
 rm -fr /tmp/${root1}_${root2}
 mkdir /tmp/${root1}_${root2}
 pushd /tmp/${root1}_${root2}
-/cluster/bin/i386/blat ${path1} ${path2} -ooc=/iscratch/i/mm7/ooc/11.ooc \
-	${root1}.${root2}.psl
+/cluster/bin/x86_64/blat ${path1} ${path2} \
+	-ooc=/san/sanvol1/scratch/mm7/11.ooc ${root1}.${root2}.psl
 popd
 rm -f ${result}
 mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
@@ -5201,7 +5187,7 @@ rm -fr /tmp/${root1}_${root2}
 '_EOF_'
     # << emacs happy
 
-    ls -1S /scratch/mus/mm7/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    ls -1S /san/sanvol1/scratch/mm7/cloneEnds/cloneEnds???.fa > bacEnds.lst
     mkdir bacEnds.out
     #	create results directories for each to avoid the all result files in
     #	one directory problem
@@ -5211,11 +5197,12 @@ rm -fr /tmp/${root1}_${root2}
 	mkdir bacEnds.out/$b
     end
 
-    ls -1S /iscratch/i/mm7/noMask/chr*.fa > contig.lst
+    ls -1S /san/sanvol1/scratch/mm7/noMask/chr*.fa > contig.lst
     gensub2 contig.lst bacEnds.lst template jobList
     para create jobList
-    # 7850 jobs written to batch
+    # 3920 jobs written to batch
     para try, check, push, etc ...
+    XXX - STARTED - 2005-09-29 - Hiram
 # Completed: 3920 of 3920 jobs
 # CPU time in finished jobs:    2681337s   44688.95m   744.82h   31.03d  0.085 y
 # IO & Wait Time:                110523s    1842.05m    30.70h    1.28d  0.004 y
@@ -7386,7 +7373,7 @@ BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 # TARGET: Mouse (mm7)
 #	small enough chunk to get reasonable running time
 SEQ1_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
-SEQ1_2BIT=/cluster/bluearc/mm7/mm7.2bit
+SEQ1_CTGDIR=/cluster/bluearc/mm7/mm7.2bit
 SEQ1_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
 SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
 SEQ1_CTGLEN=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.sizes
@@ -7397,7 +7384,7 @@ SEQ1_LAP=100
 # QUERY: Zebrafish (danRer3)
 #  large enough chunk to do all genome in one piece
 SEQ2_DIR=/cluster/bluearc/danRer3/chrUnNA.2bit
-SEQ2_2BIT=/cluster/bluearc/danRer3/danRer3.2bit
+SEQ2_CTGDIR=/cluster/bluearc/danRer3/danRer3.2bit
 SEQ2_LIFT=/cluster/bluearc/danRer3/liftNAandUnScaffoldsToChrom.lft
 SEQ2_LEN=/cluster/bluearc/danRer3/chrom.sizes
 SEQ2_CTGLEN=/cluster/bluearc/danRer3/chrUnNA.sizes
