@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.266 2005/09/27 23:07:22 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.267 2005/09/30 23:50:28 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2160,6 +2160,47 @@ subOut(tdb, &tdb->longLabel, subList);
 subOut(tdb, &tdb->html, subList);
 }
 
+static char *matrixHtml(char *matrix, char *matrixHeader)
+    /* Generate HTML table from $matrix setting in trackDb */
+{
+    char *words[100];
+    char *headerWords[10];
+    struct dyString *m;
+    int size;
+    int i, j, k;
+    int wordCount = 0, headerCount = 0;
+
+    wordCount = chopString(matrix, ", \t", words, ArraySize(words));
+    if (matrixHeader != NULL)
+        headerCount = chopString(matrixHeader, ", \t", headerWords, 
+                        ArraySize(headerWords));
+    m = dyStringNew(0);
+    size = sqrt(sqlDouble(words[0]));
+    if (errno)
+        errAbort("Invalid matrix size in doc: %s\n", words[0]);
+    dyStringAppend(m, "The following matrix was used:<P>\n");
+    k = 1;
+    dyStringAppend(m, "<TABLE BORDER=1 CELLPADDING=3>\n");
+    if (matrixHeader)
+        {
+        dyStringAppend(m, "<TR ALIGN=right><TD></TD>");
+        for (i = 0; i < size && i < headerCount; i++)
+            dyStringPrintf(m, "<TD>%s</TD>", headerWords[i]);
+        dyStringAppend(m, "</TR>\n");
+        }
+    for (i = 0; i < size; i++)
+        {
+        dyStringAppend(m, "<TR ALIGN=right>");
+        if (matrixHeader)
+            dyStringPrintf(m, "<TD>%s</TD>", headerWords[i]);
+        for (j = 0; j < size && k < wordCount ; j++)
+            dyStringPrintf(m, "<TD>%s</TD>", words[k++]);
+        dyStringAppend(m, "</TR>\n");
+        }
+    dyStringAppend(m, "</TABLE></P>\n");
+    return m->string;
+}
+
 void hLookupStringsInTdb(struct trackDb *tdb, char *database)
 /* Lookup strings in track database. */
 {
@@ -2181,10 +2222,16 @@ if (tdb->settings != NULL && tdb->settings[0] != 0)
     struct subText *subList = NULL;
     char *otherDb = trackDbSetting(tdb, "otherDb");
     char *blurb = trackDbSetting(tdb, "blurb");
+    char *matrix = trackDbSetting(tdb, "matrix");
+    char *matrixHeader = trackDbSetting(tdb, "matrixHeader");
+    char *matrixSub;
     if (blurb != NULL)
 	addSubVar("", "blurb", blurb, &subList);
     if (otherDb != NULL)
 	hAddDbSubVars("o_", otherDb, &subList);
+    if (matrix != NULL)
+        if ((matrixSub = matrixHtml(matrix, matrixHeader)) != NULL)
+            addSubVar("", "matrix", matrixSub, &subList);
     subOutAll(tdb, subList);
     subTextFreeList(&subList);
     }
