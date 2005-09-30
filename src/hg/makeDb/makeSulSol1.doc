@@ -42,15 +42,18 @@ multiz sulSol1-sulTok1.maf sulSol1-sulAci1.maf - > sulSol1-sulTok1-sulAci1.maf
 /cluster/bin/phast/phyloFit -i SS sulSol1.ss -t "(sulSol1,(sulTok1,sulAci1))" 
 /cluster/bin/phast/msa_view -i SS sulSol1.ss --summary-only
 /cluster/bin/phast/phastCons sulSol1.ss phyloFit.mod --gc 0.3527 \
- --target-coverage 0.5 --estimate-trees sul-tree \
- --expected-lengths 7 --no-post-probs --ignore-missing \
+ --target-coverage 0.7 --estimate-trees sul-tree \
+ --expected-lengths 25 --no-post-probs --ignore-missing \
  --nrates 1,1
 /cluster/bin/phast/phastCons sulSol1.ss \
  sul-tree.cons.mod,sul-tree.noncons.mod \
- --target-coverage 0.5 --expected-lengths 75 \
+ --target-coverage 0.7 --expected-lengths 25 \
  --viterbi sulSol-elements.bed --score \
  --require-informative 0 --seqname chr > cons.dat
 wigEncode cons.dat phastCons.wig phastCons.wib
+draw_tree phyloFit.mod > sul-tree.ps
+#make .ai and .jpg files in Illustrator 
+cp sul-tree.jpg /usr/local/apache/htdocs/images/
 
 #move data
 mkdir wib
@@ -72,6 +75,7 @@ hgLoadWiggle sulSol1 phastCons /cluster/data/sulSol1/bed/conservation/wib/phastC
 hgLoadMaf -warn sulSol1 multizSs1St1Sa1
 hgLoadMaf -warn sulSol1 sulTok1_pwMaf -pathPrefix=/gbdb/sulSol1/pwMaf/sulTok1_pwMaf
 hgLoadMaf -warn sulSol1 sulAci1_pwMaf -pathPrefix=/gbdb/sulSol1/pwMaf/sulTok1_pwMaf
+hgLoadBed sulSol1 phastConsElements sulSol-elements.bed 
 
 #trackDb.ra entry
  # track multizSs1St1Sa1
