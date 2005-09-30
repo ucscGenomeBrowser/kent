@@ -388,7 +388,7 @@ visibility hide
 type bed 4 .
 
 track encodeReseqRegions
-shortLabel ENCODE Resequencing Regions
+shortLabel Reseq Regions
 longLabel ENCODE Resequencing Regions
 group encodeVariation
 priority 79.9
