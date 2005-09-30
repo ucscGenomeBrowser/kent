@@ -1291,18 +1291,25 @@ origAssembly hg17
     priority 5
     color 100,12,100
 
+    track encodeEgaspUpdFgenesh
+    subTrack encodeEgaspUpdate
+    shortLabel FGenesh++ Upd
+    longLabel Fgenesh++ Gene Predictions
+    priority 6
+    color 22,150,20
+
     track encodeEgaspUpdGeneId
     subTrack encodeEgaspUpdate
     shortLabel GeneID Update
     longLabel GeneID Gene Predictions
-    priority 6
+    priority 7
     color 100,12,100
 
     track encodeEgaspUpdGeneIdU12
     subTrack encodeEgaspUpdate
     shortLabel GeneID U12 Upd
     longLabel GeneID U12 Intron Predictions
-    priority 7
+    priority 8
     color 200,132,12
 
     track encodeEgaspUpdJigsaw
@@ -1310,28 +1317,21 @@ origAssembly hg17
     shortLabel Jigsaw Update
     longLabel Jigsaw Gene Predictions
     color 22,150,20
-    priority 8
+    priority 9
 
     track encodeEgaspUpdSgp2
     subTrack encodeEgaspUpdate
     shortLabel SGP2 Update
     longLabel SGP2 Gene Predictions
-    priority 9
+    priority 10
     color 100,12,100
 
     track encodeEgaspUpdSgp2U12
     subTrack encodeEgaspUpdate
     shortLabel SGP2 U12 Update
     longLabel SGP2 U12 Intron Predictions
-    priority 10
-    color 200,132,12
-
-    track encodeEgaspUpdFgenesh
-    subTrack encodeEgaspUpdate
-    shortLabel FGenesh++ Upd
-    longLabel Fgenesh++ Gene Predictions
     priority 11
-    color 22,150,20
+    color 200,132,12
 
     track encodeEgaspUpdYalePseudo
     subTrack encodeEgaspUpdate
