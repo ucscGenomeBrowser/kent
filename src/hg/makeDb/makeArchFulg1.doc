@@ -1,7 +1,5 @@
 #!/bin/csh -f # set emacs mode
 exit; # don't actually run this like a script :)
-
-12/6/1997
  
 # This file describes building the browser database for the archaeal
 # species Methanosarcina acetivorans.
@@ -101,5 +99,7 @@ exit; # don't actually run this like a script :)
     # Write ~/kent/src/hg/makeDb/trackDb/archae/archFulg1/description.html
     chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/archFulg1/description.html
     # Check it in.
+    mkdir -p /cluster/data/archFulg1/html/
+    cp ~/kent/src/hg/makeDb/trackDb/archae/archFulg1/description.html /cluster/data/archFulg1/html/description.html
     mkdir /gbdb/archFulg1/html
     ln -s /cluster/data/archFulg1/html/description.html /gbdb/archFulg1/html/
