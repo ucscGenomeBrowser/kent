@@ -80,6 +80,30 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
+track nscan
+compositeTrack on
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+type genePred
+cdsDrawDefault genomic\ codons
+
+    track nscanEstGene
+    subTrack nscan
+    shortLabel N-SCAN+EST
+    longLabel N-SCAN+EST Gene Predictions
+    color 34,139,34
+    priority 1
+
+    track nscanGene
+    subTrack nscan
+    shortLabel N-SCAN
+    longLabel N-SCAN Gene Predictions
+    color 84,119,34
+    priority 2
+
 track augustus
 shortLabel Augustus Genes
 longLabel Augustus Gene Predictions
@@ -1640,3 +1664,14 @@ searchTable LLncRNAarray
 searchMethod exact
 searchType bed
 searchPriority 10
+
+searchTable nscanGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
+searchPriority 50
+
+searchTable nscanEstGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
+searchPriority 50
+

@@ -453,30 +453,6 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
-track nscan
-compositeTrack on
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
-visibility hide
-type genePred
-cdsDrawDefault genomic\ codons
-
-    track nscanEstGene
-    subTrack nscan
-    shortLabel N-SCAN+EST
-    longLabel N-SCAN+EST Gene Predictions
-    color 34,139,34
-    priority 1
-
-    track nscanGene
-    subTrack nscan
-    shortLabel N-SCAN
-    longLabel N-SCAN Gene Predictions
-    color 84,119,34
-    priority 2
-
 track ucscFromMouse
 shortLabel UCSC Mm3
 longLabel UCSC Gene Predictions from Known Mouse Genes Mapped to Human

@@ -3681,4 +3681,16 @@ cat > gsub << 'EOF'
     hgLoadSeq dm2 /gbdb/dm2/bacends/bacends.fa
 
 
+# NSCAN track - (2005-09-29 markd)
+    cd /cluster/data/dm2/bed/nscan/
+    # obtained NSCAN-EST predictions from michael brent's group at WUSTL
+    wget http://genome.cse.wustl.edu/predictions/Drosophila/Dm2_09_19_05/Dm2_09_19_05.tar.gz
+    tar -zxf Dm2_09_19_05.tar.gz
+
+    ldHgGene -gtf -genePredExt dm2 nscanGene  chr_gtf/chr*.gtf
+    rm -rf chr_* genePred.tab 
+
+    # update trackDb; need a dm2-specific page to describe informants
+    mouse/dm2/nscanGene.html    
+    mouse/dm2/trackDb.ra
 

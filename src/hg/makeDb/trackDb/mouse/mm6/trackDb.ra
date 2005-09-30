@@ -112,7 +112,22 @@ sGroup_mammal rn3 hg17 canFam1 bosTau1
 sGroup_vertebrate monDom1 galGal2 xenTro1 danRer2 tetNig1
 treeImage phylo/Mm6_10way.jpg
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred
+cdsDrawDefault genomic\ codons
+
 searchTable scdb
 searchMethod prefix
 searchType psl
+searchPriority 50
+
+searchTable nscanGene
+searchType genePred
+termRegex (chr)?.*\.[0-9]+\.[0-9]+\.[a-z]
 searchPriority 50

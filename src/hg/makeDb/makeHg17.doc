@@ -17541,18 +17541,6 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
 
     # use "antiword" to create plain text from .doc description file
 
-# NSCAN composite track - (2005-08-16 markd)
-    # obtained NSCAN and NSCAN-EST predictions from michael brent's group
-    # at WUSTL
-    NCBI35_NSCAN_4-11-2005/chr_gtf/*.gtf
-    NCBI35_NSCAN_EST_4-16-2005/chr_gtf/*.gtf
-
-    # load tracks.  Note that these have *utr features, rather than
-    # exon featres.  currently ldHgGene creates separate genePred exons
-    # for these.
-    ldHgGene -gtf -genePredExt hg17 nscanGene  NCBI35_NSCAN_4-11-2005/chr_gtf/chr*.gtf
-    ldHgGene -gtf -genePredExt hg17 nscanEstGene NCBI35_NSCAN_EST_4-16-2005/chr_gtf/chr*.gtf
-
 # UPDATE WGRNA TRACK (DONE, 2005-08-24, Fan)
 
   ssh hgwdev
@@ -18010,3 +17998,26 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
     Lifted from hg16; see makeHg16.doc for details
 ### hapmapRecombHotspot (Daryl; September 19, 2005)
     Lifted from hg16; see makeHg16.doc for details
+
+# NSCAN composite track - (2005-09-29 markd)
+    cd /cluster/data/hg17/bed/nscan/
+    # obtained NSCAN and NSCAN-EST predictions from michael brent's group
+    # at WUSTL
+    wget http://genome.cse.wustl.edu/predictions/human/hg17_nscan_mm5_9_14_2005/hg17_nscan_mm5_9_14_2005.tar.gz
+    tar -zxf hg17_nscan_mm5_9_14_2005.tar.gz 
+
+    wget http://genome.cse.wustl.edu/predictions/human/NCBI35_NSCAN_EST_4-16-2005.tar  
+    gzip -9 NCBI35_NSCAN_EST_4-16-2005.tar
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon featres.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -gtf -genePredExt hg17 nscanGene  chr_gtf/chr*.gtf
+    rm -rf chr_*
+    ldHgGene -gtf -genePredExt hg17 nscanEstGene NCBI35_NSCAN_EST_4-16-2005/chr_gtf/chr*.gtf
+    rm -rf NCBI35_NSCAN_EST_4-16-2005 genePred.tab 
+
+    # update trackDb; need a hg17-specific page to describe informants
+    human/hg17/nscan.html    
+    human/hg17/trackDb.ra
+
