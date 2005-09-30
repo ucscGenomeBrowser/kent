@@ -424,7 +424,7 @@ spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 pairwise hmrg
-speciesOrder panTro1 mm3 rn3
+speciesOrder pt0 mm3 rn3
 
 track celeraHCM
 shortLabel Celera HPM
