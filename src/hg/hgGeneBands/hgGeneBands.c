@@ -1,10 +1,11 @@
 /* hgGeneBands: print genes with band info */
 #include "common.h"
 #include "cytoBand.h"
+#include "hCommon.h"
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgGeneBands.c,v 1.3 2005/09/29 22:03:10 heather Exp $";
+static char const rcsid[] = "$Id: hgGeneBands.c,v 1.4 2005/09/30 19:44:23 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -20,6 +21,27 @@ errAbort(
     "    hgGeneBands database chrom \n");
 }
 
+char *getAltName(char *name)
+/* query refLink */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[512];
+struct sqlResult *sr;
+char **row;
+char *altName = needMem(32);
+
+safef(query, sizeof(query), "select name from refLink where mrnaAcc = '%s' ", name);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL) 
+    strcpy(altName, "n/a");
+else
+    strcpy(altName, row[0]);
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return altName;
+}
 
 struct genePred *readGenes(char *chrom)
 /* Slurp in the genes for one chrom */
@@ -57,6 +79,7 @@ char query1[256], query2[256], name1[64], name2[64];
 struct sqlResult *sr = NULL;
 char **row = NULL;
 struct sqlConnection *conn = NULL;
+char *altName = NULL;
 
 genes = readGenes(chromName);
 
@@ -90,10 +113,11 @@ for (gene = genes; gene != NULL; gene = gene->next)
         sprintf(name2, "%s", row[0]);
 	}
 
+    altName = getAltName(gene->name);
     if (sameString(name1, name2))
-        printf("%s %d %d %s\n", gene->name, start, end, name1);
+        printf("%s %s %d %d %s%s\n", gene->name, altName, start, end, skipChr(chromName), name1);
     else
-        printf("%s %d %d %s %s\n", gene->name, start, end, name1, name2);
+        printf("%s %s %d %d %s%s %s%s\n", gene->name, altName, start, end, skipChr(chromName), name1, skipChr(chromName), name2);
     }
 
 genePredFreeList(&genes);
