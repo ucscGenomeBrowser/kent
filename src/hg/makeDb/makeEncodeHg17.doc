@@ -50,18 +50,14 @@ exit
         regions.txt /iscratch/i/hg17/nib  > hg17.fa
     /cluster/data/encode/bin/scripts/encodeSequences.pl -masked \
         regions.txt /iscratch/i/hg17/nib  > hg17.msk.fa
+    faSize detailed=on hg17.fa > hg17_count.txt
     gzip *.fa
     md5sum *.fa.gz > md5sum.txt
 
     ssh hgwdev
     cd /cluster/data/encode/convertHg17
-    cp md5sum.txt hg17.fa.gz hg17.msk.fa.gz /usr/local/apache/htdocs/goldenPath/hg17/encode/regions
+    cp hg17_count.txt md5sum.txt hg17.fa.gz hg17.msk.fa.gz /usr/local/apache/htdocs/goldenPath/hg17/encode/regions
 
-
-
-
-nibFrag -upper -name=$region > 
-nibFrag -masked -name=$region
 
 !##########################################################################
 ###########################################################################
@@ -530,6 +526,20 @@ csh doGene.hg17.csh >&! doGene.hg17.log
     ldHgGene -genePredExt hg17 encodeEgaspUpdYalePseudo yale.hg17.gtf
         # 184 gene predictions 
     genePredCheck -db=hg17 encodeEgaspUpdYalePseudo
+
+    # Fgenesh++
+    # Update submitted 9/30/05 by Victor Solovyev to Julien Legarde at
+    # IMIM, to fix 4 regions (predictions originally on hg16, redone
+    # for hg17)
+    cd /cluster/data/encode/EGASP
+    mkdir -p Fgenesh/2005-09-30/lab
+    cd Fgenesh/2005-09-30/lab
+    wget ftp://genome.imim.es/pub/projects/gencode/data/egasp05/submitted_predictions/EGASP_Update/FGenesh++_corrected_update.gtf_CHR_COORDS_hg17.gff
+    wget ftp://genome.imim.es/pub/projects/gencode/data/egasp05/submitted_predictions/EGASP_partial/FGenesh++_corrected_partial.gtf_CHR_COORDS_hg17.gff
+    cd ..
+    cat *.gff | ldHgGene hg17 encodeEgaspUpdFgenesh stdin
+    genePredCheck -db=hg17 encodeEgaspUpdFgenesh
+        # 820 gene predictions
     
 ##########################################################################
 # UCSD/LI Nimblegen Hela
@@ -703,3 +713,53 @@ cat > doLoad.csh << 'EOF'
     hgLoadWiggle -pathPrefix=$dir hg17 encodeBu_ORChID1 encodeBu_ORChID1.wig
     mkdir -p $dir/wib
     ln -s `pwd`/wib/encodeBu_ORChID1.wib $dir/wib
+
+##########################################################################
+# Genome Institute of Singapore -ChIP/PET of STAT1 TFBS (2005-09-29 kate)
+# Submitted 9/19 by Atif Shahab
+    cd /cluster/data/encode/GIS
+    mkdir chip
+    mkdir -p 2005-09-19/lab
+    ln -s 2005-09-19 latest
+    cd latest
+    # copy files from FTP dir to lab subdi4
+    # files: 2 bed files (stim and nonstim) and 1 doc file
+    # use antiword to convert doc file to txt
+    ln -s lab/STAT1+stimulation.bed Gif.bed
+    ln -s lab/STAT1+w:o_stimulation.bed NoGif.bed
+
+    # Use cluster-count info, now embedded into the name, to make scored BED:
+    # (Angie's methods)
+    foreach f (Gif.bed NoGif.bed)
+        set d = $f:r
+        echo $d
+        set table = encodeGisChipPetStat1$d
+        perl -wpe 'chomp; @w = split; \
+                 if ($w[3] =~ /^\d+-(\d+)$/) { \
+                   $w[4] = ($1 >= 4 ? 1000 : ($1 >= 3 ? 800 : 333)); \
+                 } else { die "parse"; } \
+                 $_ = join("\t", @w) . "\n";' \
+               $f > ${table}.tab
+       hgLoadBed hg17 $table ${table}.tab
+       checkTableCoords hg17 $table
+    end
+    # Reading encodeGisChipPetStat1Gif.tab
+    # Loaded 4007 elements of size 12
+    # Reading encodeGisChipPetStat1NoGif.tab
+    # Loaded 3180 elements of size 12
+    # NOTE: These counts correspond with the doc file they provided
+    # Better to have genome-wide.. I'll request this
+
+    # Create composite track, encodeGisChipPetStat, with 2 subtracks
+
+##########################################################################
+# UCSD/Ludwig Institute (Bing Ren lab)
+
+    cd /cluster/data/encode/UCSD/nimblegen
+    mkdir 2005-09-29
+    cd 2005-09-29
+    mkdir lab
+    # copy file from FTP dir, unzip and untar, into lab dir
+    # 12 data files and README
+
+    
