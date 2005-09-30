@@ -1,0 +1,99 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+ 
+# This file describes building the browser database for the archaeal
+# species Methanosarcina acetivorans.
+
+# DOWNLOAD SEQUENCE FROM GENBANK (DONE 9/30/05)
+
+    ssh hgwdev
+    mkdir /cluster/store5/archae/picrTorr1
+    ln -s /cluster/store5/archae/picrTorr1 /cluster/data/picrTorr1
+    cd /cluster/data/picrTorr1
+    cp /projects/lowelab/db/Bacteria/Picrophilus_torridus_DSM_9790/Picr_torr_DSM_9790.fa chr.fa
+    # Edit header of chr.fa to '> picrTorr1'
+
+# CREATE DATABASES AND A BUNCH OF INITIAL STUFF (DONE 9/30/05)
+
+    echo 'create database picrTorr1' | hgsql ''
+    cd /cluster/data/picrTorr1
+    mkdir nib
+    faToNib chr.fa nib/chr.nib
+    hgNibSeq picrTorr1 /cluster/data/picrTorr1/nib chr.fa
+    faSize -detailed chr.fa > chrom.sizes
+    mkdir -p /gbdb/picrTorr1/nib
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" \
+	    | hgsql picrTorr1
+    echo 'INSERT INTO dbDb \
+        (name, description, nibPath, organism, \
+                defaultPos, active, orderKey, genome, scientificName, \
+                htmlPath, hgNearOk) values \
+        ("picrTorr1", "June 2004", "/gbdb/picrTorr1/nib", "Picrophilus torridus", \
+               "chr:500000-550000", 1, 282, "Picrophilus torridus", \
+                "Picrophilus torridus DSM", "/gbdb/picrTorr1/html/description.html", \
+                0);' \
+      | hgsql hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("Picrophilus torridus", "picrTorr1");' \
+      | hgsql hgcentraltest
+    echo 'INSERT INTO genomeClade (genome, clade, priority) values ("Picrophilus torridus", "archaea",282);'  \
+      | hgsql hgcentraltest
+
+    cd ~/kent/src/hg/makeDb/trackDb
+    # add the trackDb directories
+    mkdir -p archae/picrTorr1
+    cvs add archae/picrTorr1
+    cvs commit archae/picrTorr1
+
+# GC20BASE (DONE - 9/30/05)
+    mkdir -p /cluster/data/picrTorr1/bed/gc20Base
+    cd /cluster/data/picrTorr1/bed/gc20Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=20 picrTorr1 \
+        /cluster/data/picrTorr1/nib | wigEncode stdin gc20Base.wig gc20Base.wib
+    cd /cluster/data/picrTorr1/bed/gc20Base
+    mkdir /gbdb/picrTorr1/wib
+    ln -s `pwd`/gc20Base.wib /gbdb/picrTorr1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/picrTorr1/wib picrTorr1 gc20Base gc20Base.wig
+    #	verify index is correct: check cardinality column
+    hgsql picrTorr1 -e "show index from gc20Base;"
+
+# TANDEM REPEAT MASKER (DONE - 9/30/05)
+
+    mkdir -p /cluster/data/picrTorr1/bed/simpleRepeat
+    cd /cluster/data/picrTorr1
+    trfBig chr.fa /dev/null -bedAt=/cluster/data/picrTorr1/bed/simpleRepeat/chr.bed
+    cd /cluster/data/picrTorr1/bed/simpleRepeat
+    cat chr.bed | sed -e 's/picrTorr1/chr/' > temp
+    mv temp chr.bed
+    hgLoadBed picrTorr1 simpleRepeat *.bed -sqlTable=/cluster/home/kpollard/kent/src/hg/lib/simpleRepeat.sql
+
+# TIGR GENES (STARTED 9/30/05)
+    # First go to http://www.tigr.org/tigr-scripts/CMR2/gene_attribute_form.dbi
+    # and fill out the web form as follows:
+    #   - Pick "Retrieve attributes for the specified DNA feature within a specific 
+    #     organism and/or a specific role category".
+    #       * Pick genome, and "Primary and TIGR annotation ORFs" 
+    #         from the 1st and 3rd box.
+    #       * Select everything from "Choose TIGR Annotation Gene Attributes"
+    #       * Select "Primary Locus Name" from "Choose Primary Annotation Gene Attributes"
+    #       * Select everything from "Choose Other Gene Attributes"
+    #   - Click submit, and click save as tab-delimited file.
+
+    mkdir /cluster/data/picrTorr1/bed/tigrCmrORFs
+    cp picrTorr1-tigr.tab /cluster/data/picrTorr1/bed/tigrCmrORFs
+    cd /cluster/data/picrTorr1/bed/tigrCmrORFs
+    /projects/lowelab/users/aamp/bin/i386/tigrCmrToBed picrTorr1-tigr.tab picrTorr1-tigr.bed
+    #GOT TO HERE SEG FAULT - CHECKING WITH ANDY
+    cat picrTorr1-tigr.bed | sed -e 's/chr1/chr/' > temp
+    mv temp picrTorr1-tigr.bed
+    hgLoadBed -tab picrTorr1 tigrCmrGene picrTorr1-tigr.bed -sqlTable=/cluster/home/kpollard/kent/src/hg/lib/tigrCmrGene.sql
+    echo "rename table tigrCmrGene to tigrCmrORFs;" | hgsql picrTorr1
+
+# DESCRIPTION PAGE (DONE 9/29/05)
+
+    # Write ~/kent/src/hg/makeDb/trackDb/archae/picrTorr1/description.html
+    chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/picrTorr1/description.html
+    # Check it in.
+    mkdir -p /cluster/data/picrTorr1/html/
+    cp ~/kent/src/hg/makeDb/trackDb/archae/picrTorr1/description.html /cluster/data/picrTorr1/html/description.html
+    mkdir /gbdb/picrTorr1/html
+    ln -s /cluster/data/picrTorr1/html/description.html /gbdb/picrTorr1/html/
