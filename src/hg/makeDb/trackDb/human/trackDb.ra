@@ -1326,11 +1326,18 @@ origAssembly hg17
     priority 10
     color 200,132,12
 
+    track encodeEgaspUpdFgenesh
+    subTrack encodeEgaspUpdate
+    shortLabel FGenesh++ Upd
+    longLabel Fgenesh++ Gene Predictions
+    priority 11
+    color 22,150,20
+
     track encodeEgaspUpdYalePseudo
     subTrack encodeEgaspUpdate
     shortLabel Yale Pseudo Upd
     longLabel Yale Pseudogene Predictions
-    priority 11
+    priority 12
     color 130,130,130
 
 track encodePseudogene
@@ -2891,6 +2898,28 @@ visibility hide
 useScore 1
 type bed 12
 origAssembly hg16
+
+track encodeGisChipPetStat1
+compositeTrack on
+shortLabel GIS STAT1 gIF HeLa
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on HeLa cells
+group encodeChip
+color 135, 158,35
+priority 47.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+visibility hide
+useScore 1
+type bed 12
+
+track encodeGisChipPetStat1Gif
+subTrack encodeGisChipPetStat1
+shortLabel GIS STAT1 +gIF HeLa
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
+
+track encodeGisChipPetStat1NoGif
+subTrack encodeGisChipPetStat1
+shortLabel GIS STAT1 -gIF HeLa
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
 
 track encodeLIChIP
 compositeTrack on
