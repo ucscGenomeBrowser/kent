@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1010 2005/09/17 00:12:45 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1011 2005/10/01 00:21:24 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11035,12 +11035,14 @@ puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/for
 cartSaveSession(cart);
 
 puts(
-"<P>Display your own annotation tracks in the browser using \n"
+"<P>Display your own custom annotation tracks in the browser using \n"
 "the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.  Annotations may be uploaded from files or\n"
-"pasted into the text box below. You can also paste a URL or a list of URLs \n"
-"into the large text box that refer to \n"
-"files in one of the supported formats.</P>\n"
+"procedure described here</A>.<br>\n"
+"Custom tracks in the supported formats may be uploaded using one of these ways:<br>\n"
+"1. Paste the custom annotation text directly into the large text box below.<br>\n"
+"2. Click browse and choose a custom annotation file on your computer.<br>\n"
+"3. Enter a URL for the custom annotation in the large text box below.<br>\n"
+"<P>\n"
 "Click \n"
 "<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
 "to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
@@ -11066,6 +11068,17 @@ puts("<BR>\n");
 cgiMakeCheckBox("hgt.customAppend", cgiBooleanDefined("hgt.customAppend"));
 puts("Check box to add this sequence to existing custom tracks<BR>If unchecked, all existing custom tracks will be cleared.</FORM>\n");
 #endif
+
+puts(
+"<BR>\n"
+"Multiple URLs may be entered, one per line.<br>\n"
+"Supported URL protocols are HTTP and FTP (passive only).<br>\n"
+"The data may be compressed by any of these formats, signified by the extension: .gz (gzip), .Z (compress) or .bz2 (bzip2).<br>\n"
+"User/password if required may be specified in the URL as protocol://user:password@server.com/somepath.<br>\n"
+"Only basic authentication is supported for http.<br>\n"
+"<P>\n"
+);
+
 
 puts("</FORM>");
 }
