@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1011 2005/10/01 00:21:24 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1012 2005/10/01 00:25:45 galt Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11075,7 +11075,7 @@ puts(
 "Supported URL protocols are HTTP and FTP (passive only).<br>\n"
 "The data may be compressed by any of these formats, signified by the extension: .gz (gzip), .Z (compress) or .bz2 (bzip2).<br>\n"
 "User/password if required may be specified in the URL as protocol://user:password@server.com/somepath.<br>\n"
-"Only basic authentication is supported for http.<br>\n"
+"Only Basic Authentication is supported for HTTP.<br>\n"
 "<P>\n"
 );
 
