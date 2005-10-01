@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.949 2005/09/21 00:03:56 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.950 2005/10/01 00:58:06 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2026,10 +2026,11 @@ if (hTableOrSplitExists(tdb->tableName))
 	    trackTable = words[0];
 	}
     printf("<P><A HREF=\"/cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s"
-	   "&hgta_table=%s&hgta_doSchema=describe+table+schema\" "
-	   "TARGET=_BLANK>"
+	   "&hgta_table=%s&position=%s:%d-%d&"
+	   "hgta_doSchema=describe+table+schema\" TARGET=_BLANK>"
 	   "View table schema</A></P>\n",
-	   database, tdb->grp, trackTable, tableName);
+	   database, tdb->grp, trackTable, tableName,
+	   seqName, winStart+1, winEnd);
     }
 }
 
