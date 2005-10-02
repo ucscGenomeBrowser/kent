@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1012 2005/10/01 00:25:45 galt Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1013 2005/10/02 18:59:22 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6889,46 +6889,6 @@ for (i=0; i<count; i++, text++, textPos++)
 	textPos++;
         i--;
         vgBox(vg, x+x1, y, 1, height, getOrangeColor());
-        continue;
-        }
-    if (match != NULL && i < count-1 && *text == ' ' &&
-            text[1] == MAF_PART_BREAK_BEFORE)
-        /* synteny break w/ unaligned sequence at contig/chrom boundary
-         * before alignment.
-         * display as vertical red bar followed by '=' */
-        {
-        vgBox(vg, x+x1, y, 1, height, getBlueColor());
-        text[1] = MAF_DOUBLE_GAP;
-        i--;
-	continue;
-        }
-    
-    if (match != NULL && (*text == MAF_PART_BREAK_BEFORE || *text == MAF_PART_BREAK_AFTER))
-        {
-        /* ignore if we lack room at window start to display this */
-        i--;
-        continue;
-        }
-    if (match != NULL && i < count && text[1] == ' ' &&
-            *text == MAF_PART_BREAK_AFTER)
-        /* synteny break w/ unaligned sequence at contig/chrom boundary
-         * after alignment.
-         * display as '=' followed by vertical red bar */
-        {
-        vgBox(vg, x+x2, y, 1, height, getBlueColor());
-        text[1] = MAF_DOUBLE_GAP;
-        text++;
-        textPos++;
-        i--;
-        }
-    if (match != NULL && 
-            (*text == MAF_FULL_BREAK_BEFORE ||
-             *text == MAF_FULL_BREAK_AFTER))
-        /* synteny break at chrom/contig boundary.
-         * display as vertical red bar */
-        {
-        vgBox(vg, x+x1, y, 1, height, getBlueColor());
-        i--;
         continue;
         }
     cBuf[0] = *text;
