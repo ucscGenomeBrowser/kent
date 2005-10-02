@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.214 2005/09/25 23:14:58 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.215 2005/10/02 18:47:19 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1051,6 +1051,7 @@ char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
 char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
 char *speciesGroup = trackDbSetting(tdb, SPECIES_GROUP_VAR);
+char *framesTable = trackDbSetting(tdb, "frames");
 char *species[100];
 char *groups[20];
 char sGroup[24];
@@ -1097,6 +1098,7 @@ puts("<P><B>Pairwise alignments:</B><BR>" );
 treeImage = trackDbSetting(tdb, "treeImage");
 if (treeImage)
     printf("<IMG ALIGN=right SRC=\"/images/%s\">", treeImage);
+
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
@@ -1163,9 +1165,15 @@ puts("Display bases identical to reference as dots<BR>" );
 safef(option, sizeof option, "%s.%s", tdb->tableName, MAF_CHAIN_VAR);
 cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, FALSE));
 if (trackDbSetting(tdb, "irows") != NULL)
-    puts("Display chains between alignments");
+    puts("Display chains between alignments<BR>");
 else
-    puts("Display unaligned bases with spanning chain as 'o's");
+    puts("Display unaligned bases with spanning chain as 'o's<BR>");
+safef(option, sizeof option, "%s.%s", tdb->tableName, "codons");
+if (framesTable)
+    {
+    cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
+    puts("Translate codons in gene regions");
+    }
 
 puts("<P><B>Codon highlighting:</B><BR>" );
 
