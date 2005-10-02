@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.72 2005/08/21 19:37:38 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.73 2005/10/02 20:09:51 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -873,36 +873,33 @@ else
     }
 }
 
-static int getFrame(struct psl *psl, int mrnaStart, int mrnaEnd,
+static int getFrame(struct psl *psl, int start, int end,
                     struct genbankCds* cds)
-/* get the starting frame for an exon of a mRNA.  mrnaStart and mrnaEnd are
+/* get the starting frame for an exon of a mRNA.  start and end are
  * the bounds of the exon within the mRNA.  This may cover multiple psl
  * blocks due to merging of small gaps. */
 {
-/* if we have CDS, the 3' end is used if it's complete, as it is more often
- * accurate. */
+/* use the 3' end is used if it's complete, as it is more often accurate when
+ * genes are defined from mRNAs sequenced with reverse-transcriptase. */
 int frame = -1;
-if ((cds != NULL) && (cds->startComplete || cds->endComplete))
-    {
-    /* map to mRNA coords in CDS since frame for an exon is in direction of
-     * transcription. */
-    if (psl->strand[0] == '-')
-        reverseIntRange(&mrnaStart, &mrnaEnd, psl->qSize);
-    if (mrnaStart < cds->start)
-        mrnaStart = cds->start;
-    if (mrnaEnd > cds->end)
-        mrnaEnd = cds->end;
+/* map to mRNA coords in CDS since frame for an exon is in direction of
+ * transcription. */
+if (psl->strand[0] == '-')
+    reverseIntRange(&start, &end, psl->qSize);
+if (start < cds->start)
+    start = cds->start;
+if (end > cds->end)
+    end = cds->end;
 
-    if (mrnaStart < mrnaEnd)
+if (start < end)
+    {
+    if (cds->endComplete)
         {
-        if (cds->endComplete)
-            {
-            int fr = (cds->end-mrnaStart) % 3;
-            frame = (fr == 2) ? 1 : ((fr == 1) ? 2 : 0);
-            }
-        else if (cds->startComplete)
-            frame = (mrnaStart-cds->start) % 3;
+        int fr = (cds->end-start) % 3;
+        frame = (fr == 2) ? 1 : ((fr == 1) ? 2 : 0);
         }
+    else
+        frame = (start-cds->start) % 3;
     }
 return frame;
 }
@@ -957,7 +954,8 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     gene->exonEnds[iExon] = tEnd;
     /* only set frame if it hasn't already been set for this exon. This will give
      * the frame for the first CDS block that is merged into the exon */
-    if ((gene->optFields & genePredExonFramesFld) && (gene->exonFrames[iExon] < 0))
+    if ((gene->optFields & genePredExonFramesFld) && (gene->exonFrames[iExon] < 0)
+        && (cds != NULL))
 	{
 	if (pslIsProtein(psl))
 	    gene->exonFrames[iExon] = getFrame(psl, psl->qStarts[iBlk], psl->qStarts[iBlk]+3*psl->blockSizes[iBlk], cds);
@@ -1379,3 +1377,62 @@ else
     errAbort("genePredNmdsTarget() - Don't recognize strand: %s\n", gp->strand);
 return FALSE;
 }
+
+void genePredAddExonFrames(struct genePred *gp)
+/* Add exonFrames array to a genePred that doesn't have it. Frame is assumed
+ * to be contiguous. */
+{
+int iExon, start, end, iBase = 0;
+int iStart, iEnd, iDir;
+
+/* initial array to all -1, for no frame */
+AllocArray(gp->exonFrames, gp->exonCount);
+gp->optFields |= genePredExonFramesFld;
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    gp->exonFrames[iExon] = -1;
+
+if (sameString(gp->strand, "+"))
+    {
+    iStart = 0;
+    iEnd = gp->exonCount;
+    iDir = 1;
+    }
+else
+    {
+    iStart = gp->exonCount-1;
+    iEnd = -1;
+    iDir = -1;
+    }
+for (iExon = iStart; iExon != iEnd; iExon += iDir)
+    {
+    if (genePredCdsExon(gp, iExon, &start, &end))
+        {
+        gp->exonFrames[iExon] = iBase % 3;
+        iBase += (end - start);
+        }
+    }
+}
+
+void genePredRc(struct genePred *gp, int chromSize)
+/* Reverse complement a genePred (project it to the opposite strand).  Useful
+ * when doing analysis that is simplified by having things on the same strand.
+ */
+{
+int iExon;
+gp->strand[0] = (gp->strand[0] == '+') ? '-' : '+';
+reverseUnsignedRange(&gp->txStart, &gp->txEnd, chromSize);
+reverseUnsignedRange(&gp->cdsStart, &gp->cdsEnd, chromSize);
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    reverseUnsignedRange(&gp->exonStarts[iExon], &gp->exonEnds[iExon], chromSize);
+reverseUnsigned(gp->exonStarts, gp->exonCount);
+reverseUnsigned(gp->exonEnds, gp->exonCount);
+if (gp->optFields & genePredCdsStatFld)
+    {
+    enum cdsStatus hold =  gp->cdsStartStat;
+    gp->cdsStartStat = gp->cdsEndStat;
+    gp->cdsEndStat = hold;
+    }
+if (gp->optFields & genePredExonFramesFld)
+    reverseInts(gp->exonFrames, gp->exonCount);
+}
+
