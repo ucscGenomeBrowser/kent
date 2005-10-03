@@ -87,7 +87,7 @@ exit; # don't actually run this like a script :)
     hgLoadBed -tab picrTorr1 tigrCmrGene picrTorr1-tigr.bed -sqlTable=/cluster/home/kpollard/kent/src/hg/lib/tigrCmrGene.sql
     echo "rename table tigrCmrGene to tigrCmrORFs;" | hgsql picrTorr1
 
-# DESCRIPTION PAGE (DONE 9/29/05)
+# DESCRIPTION PAGE (DONE 10/3/05)
 
     # Write ~/kent/src/hg/makeDb/trackDb/archae/picrTorr1/description.html
     chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/picrTorr1/description.html
