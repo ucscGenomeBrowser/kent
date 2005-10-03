@@ -1,5 +1,0 @@
-flow swap(var a, var b) into (var x, var y)
-{
-x = b;
-y = a;
-}

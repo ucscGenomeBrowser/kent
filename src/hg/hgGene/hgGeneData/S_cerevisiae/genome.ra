@@ -1,6 +1,0 @@
-name global
-knownGene sgdGene
-knownGenePep sgdPep
-nameSql select value from sgdToName where name = '%s'
-descriptionSql select description from sgdDescription where name = '%s'
-proteinSql select value from sgdToSwissProt where name = '%s'

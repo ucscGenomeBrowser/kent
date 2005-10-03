@@ -1,3 +1,0 @@
-setenv CLASSPATH .:classes:/usr/java/j2sdk1.4.1/jre/lib/rt.jar:/usr/java/jdbc/mysql-connector-java-3.0.8-stable-bin.jar:/cse/staff/heather/httpunit-1.5.4/httpunit-1.5.4/lib/httpunit.jar:/cse/staff/heather/httpunit-1.5.4/httpunit-1.5.4/jars/Tidy.jar
-setenv JAVA_HOME /usr/java/j2sdk1.4.1
-set path=($JAVA_HOME/bin $path)

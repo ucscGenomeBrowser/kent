@@ -1,8 +1,0 @@
-array[20] of int a;
-for (int i=0; i<a.size; i += 1)
-    a[i] = 2*i;
-print(a);
-
-// array of tree of string ats;
-// 
-// string s;
