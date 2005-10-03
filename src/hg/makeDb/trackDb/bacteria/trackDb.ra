@@ -1,8 +1,0 @@
-track easyGene
-shortLabel Easy Genes
-longLabel EasyGene 1.2 - Prokaryotic gene prediction
-group genes
-priority 37
-visibility pack
-color 0,100,180
-type genePred 
