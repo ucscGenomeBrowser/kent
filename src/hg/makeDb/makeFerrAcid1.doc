@@ -1,0 +1,456 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+ 
+# This file describes building the browser database for the archaeal
+# species Methanosarcina acetivorans.
+#
+# if this is the first time you are making your own hgwdev browser, need to do 
+# cd ~/kent/src/, then a make
+
+# DOWNLOAD SEQUENCE FROM GENBANK (DONE 01/07/04)
+
+    mkdir /cluster/store5/archae/ferrAcid1
+    ln -s /cluster/store5/archae/ferrAcid1 /cluster/data/ferrAcid1
+    cd /cluster/data/ferrAcid1
+    cp /projects/lowelab/db/Bacteria/Ferroplasma_acidarmanus/Ferr_acid* .
+    mv Ferr_acid.fa ferrAcid1.fa
+    grep ">" ferrAcid1.fa
+    # Edit header of ferrAcid1.fa seqs to '>chr >plasmid_pNRC100 >plasmid_pNRC200'
+   
+    faToTwoBit ferrAcid1.fa ferrAcid1.2bit 
+
+    mkdir /gbdb/ferrAcid1
+    ln -s /cluster/data/ferrAcid1/ferrAcid1.2bit /gbdb/ferrAcid1/ferrAcid1.2bit
+
+# CREATE DATABASES AND A BUNCH OF INITIAL STUFF (DONE 01/12/04)
+
+    ssh hgwdev
+    echo 'create database ferrAcid1' | hgsql ''
+    cd /cluster/data/ferrAcid1
+
+    faSize -detailed ferrAcid1.fa > chrom.sizes
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" | hgsql ferrAcid1
+    echo 'INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName, htmlPath, hgNearOk) values ("ferrAcid1", "Jun 2005 Draft", "/gbdb/ferrAcid1", "Ferroplasma acidarmanus", "chr:500000-550000", 1, 280, "Ferroplasma acidarmanus","Ferroplasma acidarmanus Fer1", "/gbdb/ferrAcid1/html/description.html", 0);' | hgsql hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("Ferroplasma acidarmanus", "ferrAcid1");' | hgsql hgcentraltest
+    echo 'INSERT INTO genomeClade (genome, clade, priority) values ("Ferroplasma acidarmanus", "archaea",85);'  | hgsql hgcentraltest
+
+# CREATE CHROMINFO TABLE 
+  ssh hgwdev
+  cd /cluster/data/ferrAcid1
+
+   cp ~baertsch/kent/src/hg/lib/chromInfo.sql .
+   hgsql ferrAcid1 < chromInfo.sql
+   echo "load data local infile 'chrom.sizes' into table chromInfo" | hgsql ferrAcid1
+   echo "update chromInfo set fileName = '/gbdb/ferrAcid1/ferrAcid1.2bit'" | hgsql ferrAcid1
+
+    cd ~/kent/src/hg/makeDb/trackDb
+
+    # add the trackDb directories
+    mkdir -p archae/ferrAcid1
+    cvs add archae/ferrAcid1
+    cvs commit archae/ferrAcid1
+
+    make DBS=ferrAcid1
+
+
+# GC20BASE (DONE - 9/29/05)
+    mkdir -p /cluster/data/ferrAcid1/bed/gc20Base
+    cd /cluster/data/ferrAcid1/bed/gc20Base
+    hgGcPercent -wigOut -doGaps -file=stdout -overlap=10 -win=20 ferrAcid1 /cluster/data/ferrAcid1/ | wigEncode stdin gc20Base.wig gc20Base.wib
+
+    cd /cluster/data/ferrAcid1/bed/gc20Base
+    mkdir /gbdb/ferrAcid1/wib
+    ln -s `pwd`/gc20Base.wib /gbdb/ferrAcid1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/ferrAcid1/wib ferrAcid1 gc20Base gc20Base.wig
+    #	verify index is correct:
+    hgsql ferrAcid1 -e "show index from gc20Base;"
+    #	should see good numbers in Cardinality column
+
+
+# TANDEM REPEAT MASKER ()
+
+    ssh hgwdev
+    mkdir -p /cluster/data/ferrAcid1/bed/simpleRepeat
+    cd /cluster/data/ferrAcid1
+    trfBig ferrAcid1.fa /dev/null -bedAt=/cluster/data/ferrAcid1/bed/simpleRepeat/chr.bed
+    cd /cluster/data/ferrAcid1/bed/simpleRepeat
+    hgLoadBed ferrAcid1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/src/hg/lib/simpleRepeat.sql
+
+# DESCRIPTION PAGE (DONE 01/12/04)
+
+    ssh hgwdev
+    # Write ~/kent/src/hg/makeDb/trackDb/archae/ferrAcid1/description.html
+    chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/ferrAcid1/description.html
+    # Check it in.
+    mkdir /gbdb/ferrAcid1/html
+    ln -s /cluster/data/ferrAcid1/html/description.html /gbdb/ferrAcid1/html/
+
+# GENBANK PROTEIN-CODING GENES (DONE 01/14/04)
+
+    ssh hgwdev
+    mkdir /cluster/data/ferrAcid1/genbank
+    cd /cluster/data/ferrAcid1/genbank
+    cp /projects/lowelab/db/Bacteria/Ferroplasma_acidarmanus/ .
+    
+    mv NC_003552.gbk ferrAcid1.gbk
+    # Create 3 files to assist parsing of the genbank
+    # 1. for a bed file
+    echo 'chr
+start
+end
+gene
+1000
+strand' > ferrAcid1-params-bed.txt
+    # 2. for the peptide parts
+    echo 'gene
+translation' > ferrAcid1-params-pep.txt
+    # 3. for the other gene information
+    echo 'gene
+product
+note' > ferrAcid1-params-xra.txt
+    # Now extract the genes and information:
+    gbArchaeGenome ferrAcid1.gbk ferrAcid1-params-bed.txt ferrAcid1-genbank-cds.bed
+    gbArchaeGenome ferrAcid1.gbk ferrAcid1-params-pep.txt ferrAcid1-genbank-cds.pep
+    gbArchaeGenome ferrAcid1.gbk ferrAcid1-params-xra.txt ferrAcid1-genbank-cds.xra
+    hgLoadBed ferrAcid1 gbProtCode ferrAcid1-genbank-cds.bed
+    hgsql ferrAcid1 < ~/kent/src/hg/lib/pepPred.sql
+    hgsql ferrAcid1 < ~/kent/src/hg/lib/minGeneInfo.sql
+    echo rename table pepPred to gbProtCodePep | hgsql ferrAcid1
+    echo rename table minGeneInfo to gbProtCodeXra | hgsql ferrAcid1
+    echo load data local infile \'ferrAcid1-genbank-cds.pep\' into table gbProtCodePep | hgsql ferrAcid1
+    echo load data local infile \'ferrAcid1-genbank-cds.xra\' into table gbProtCodeXra | hgsql ferrAcid1
+
+#genbank to genePred
+
+csh
+tawk '{print $1,$2,$3,$4,$5,$6,$2,$3,0,1,$3-$2,0}' ferrAcid1-genbank-cds.bed | bedToGenePred stdin tmp.gp
+tawk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,substr($1,3,4),name2,"cmpl","cmpl",0}' tmp.gp  > tmp2.gp
+join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1.15  tmp2.gp ferrAcid1-genbank-cds.xra > ferrAcid1.gp
+
+# GENBANK rRNA GENES (NOT QUITE DONE)
+    ssh hgdev
+    cd /cluster/data/ferrAcid1/genbank
+    gbArchaeGenome -kind=rRNA ferrAcid1.gbk ferrAcid1-params-bed.txt ferrAcid1-rrnas.bed
+    echo 'gene product NA' > ferrAcid1-params-rrna-xra.txt
+    gbArchaeGenome -kind=rRNA ferrAcid1.gbk ferrAcid1-params-rrna-xra.txt ferrAcid1-rrnas-xra.txt
+    hgLoadBed ferrAcid1 gbRRNA ferrAcid1-rrnas.bed
+    hgsql ferrAcid1 < ~/kent/src/hg/lib/minGeneInfo.sql
+    echo rename table minGeneInfo to gbRRNAXra | hgsql ferrAcid1
+    echo load data local infile \'ferrAcid1-rrnas-xra.txt\' into table gbRRNAXra | hgsql ferrAcid1
+
+# COG STUFF
+    # Cut and paste http://www.ncbi.nlm.nih.gov/cgi-bin/COG/palox into emacs (COG list)
+    # and save as cogpage.txt
+    awk '{printf("%s\t%s\n",$6,$5)}' < cogpage.txt | sed -e 's/\[//' -e 's/\]//' > cogs.txt
+    rm cogpage.txt
+    # Now we have the basic list of cogs and the letter code for each one.
+    
+
+# TODD LOWE tRNA GENES (DONE 01/15/04)
+
+    # This one is a bed 6+ file created by hand of 46 tRNAs and 1 pseudo tRNA by Todd
+    # Lowe.  See ~/kent/src/hg/lib/loweTrnaGene.as for a description of the fields.
+    # **Showing the tRNAScanSE instructions would be nice in the future.  
+    ssh hgwdev
+    mkdir /cluster/data/ferrAcid1/bed/loweTrnaGene
+    cd /cluster/data/ferrAcid1/bed/loweTrnaGene
+    hgLoadBed -tab ferrAcid1 loweTrnaGene ferrAcid1-lowe-trnas.bed -sqlTable=~/kent/src/hg/lib/loweTrnaGene.sql
+
+# TODD LOWE snoRNA GENES (DONE 01/16/04)
+    # This is a bed 6 file created by hand.
+    ssh hgwdev
+    mkdir /cluster/data/ferrAcid1/bed/loweSnoGene
+    cd /cluster/data/ferrAcid1/bed/loweSnoGene
+    hgLoadBed -tab ferrAcid1 loweSnoGene ferrAcid1-snos.bed
+
+# TIGR GENES (DONE 02/09/04)
+    # First go to http://www.tigr.org/tigr-scripts/CMR2/gene_attribute_form.dbi
+    # and fill out the web form as follows:
+    #   - Pick "Retrieve attributes for the specified DNA feature within a specific 
+    #     organism and/or a specific role category".
+    #       * Pick "Pyrobaculum aerophilum IM2", and "Primary and TIGR annotation ORFs" 
+    #         from the 1st and 3rd box.
+    #       * Select everything from "Choose TIGR Annotation Gene Attributes"
+    #       * Select "Primary Locus Name" from "Choose Primary Annotation Gene Attributes"
+    #       * Select everything from "Choose Other Gene Attributes"
+    #   - Click submit, and click save as tab-delimited file.
+    ssh hgwdev
+    mkdir /cluster/data/ferrAcid1/bed/tigrCmrORFs
+    cp ferrAcid1-tigr.tab /cluster/data/ferrAcid1/bed/tigrCmrORFs
+    cd /cluster/data/ferrAcid1/bed/tigrCmrORFs
+    /projects/lowelab/users/aamp/bin/i386/tigrCmrToBed ferrAcid1-tigr.tab ferrAcid1-tigr.bed
+    hgLoadBed -tab ferrAcid1 tigrCmrORFs ferrAcid1-tigr.bed -sqlTable=~/kent/src/hg/lib/tigrCmrGene.sql
+
+###########################################################
+#mulitz pHMM conservation track for 3 Methosarcina species#
+###########################################################
+## DONE: 8/14/05 (baertsch)
+
+cd /cluster/data/ferrAcid1/bed
+mkdir conservation
+cd conservation
+cp /cluster/data/pyrFur2/bed/conservation/HoxD55.q .
+
+#get fastas
+cp ../../chr.fa ferrAcid1.chr
+cp /projects/lowelab/db/blastdb/Meth_maze.fa metMaz1.fa
+wget ftp://ftp.jgi-psf.org/pub/JGI_data/Microbial/methanosarcina/031109/2351479_fasta.screen.contigs
+mv 2351479_fasta.screen.contigs metBak0.chr
+ftp://ftp.jgi-psf.org/pub/JGI_data/Microbial/methanococcoides_burtonii/041112/2662199.fsa
+mv 2662199.fsa metBur0.chr
+#edit > lines to say ferrAcid1.chr, metBak0.contigN, and metMaz1.chr
+
+#make nibs and 2bits
+/cluster/bin/i386/faToNib ferrAcid1.chr ferrAcid1.chr.nib
+/cluster/bin/i386/faToNib metMaz1.chr metMaz1.chr.nib
+/cluster/bin/i386/faToTwoBit metBak0.chr metBak0.2bit
+/cluster/bin/i386/faToTwoBit metBur0.chr metBur0.2bit
+
+
+#chrom sizes
+faSize -detailed *.chr > chrom.sizes
+
+#blastz
+blastz ferrAcid1.chr metBak0.chr Q=HoxD55.q > ferrAcid1-metBak0.lav
+blastz ferrAcid1.chr metMaz1.chr Q=HoxD55.q > ferrAcid1-metMaz1.lav
+blastz ferrAcid1.chr metBur0.chr Q=HoxD55.q > ferrAcid1-metBur0.lav
+/cluster/bin/i386/lavToAxt ferrAcid1-metBak0.lav . metBak0.2bit ferrAcid1-metBak0.axt
+/cluster/bin/i386/lavToAxt ferrAcid1-metMaz1.lav . . ferrAcid1-metMaz1.axt
+/cluster/bin/i386/lavToAxt ferrAcid1-metBur0.lav . metBur0.2bit ferrAcid1-metBur0.axt
+
+axtBest ferrAcid1-metBak0.axt ferrAcid1.chr -winSize=500 -minScore=5000 ferrAcid1-metBak0-best.axt
+axtBest ferrAcid1-metMaz1.axt ferrAcid1.chr -winSize=500 -minScore=5000 ferrAcid1-metMaz1-best.axt
+axtBest ferrAcid1-metBur0.axt ferrAcid1.chr -winSize=500 -minScore=5000 ferrAcid1-metBur0-best.axt
+axtToMaf ferrAcid1-metBak0-best.axt chrom.sizes chrom.sizes ferrAcid1-metBak0.maf
+axtToMaf ferrAcid1-metMaz1-best.axt chrom.sizes chrom.sizes ferrAcid1-metMaz1.maf
+axtToMaf ferrAcid1-metBur0-best.axt chrom.sizes chrom.sizes ferrAcid1-metBur0.maf
+
+#multiz: v10 has new parameter (3rd par), 0=2 seqs not align to ref, else 1.
+# stick with v8 for now.
+multiz ferrAcid1-metBak0.maf ferrAcid1-metMaz1.maf - > ferrAcid1-metBak0-metMaz1.maf
+
+
+#phyloHMM
+/cluster/bin/phast/msa_view -i MAF -M ferrAcid1.chr -o SS ferrAcid1-metBak0-metMaz1.maf > ferrAcid1.ss
+/cluster/bin/phast/phyloFit -i SS ferrAcid1.ss -t "(ferrAcid1,(metBak0,metMaz1))" 
+/cluster/bin/phast/msa_view -i SS ferrAcid1.ss --summary-only
+#descrip.                      A          C          G          T        G+C     length   all_gaps  some_gaps
+#ferrAcid1.ss               0.2892     0.2088     0.2089     0.2931     0.4177    6057454          0     580625
+/cluster/bin/phast/phastCons ferrAcid1.ss phyloFit.mod --gc 0.4177 \
+ --target-coverage 0.5 --estimate-trees met-tree \
+ --expected-lengths 7 --no-post-probs --ignore-missing \
+ --nrates 1,1
+/cluster/bin/phast/phastCons ferrAcid1.ss \
+ met-tree.cons.mod,met-tree.noncons.mod \
+ --target-coverage 0.5 --expected-lengths 75 \
+ --viterbi metAce-elements.bed --score \
+ --require-informative 0 --seqname chr > cons.dat
+wigEncode cons.dat phastCons.wig phastCons.wib
+
+#phlyloHmmm new
+
+multiz ferrAcid1-metMaz1.maf ferrAcid1-metBak0.maf - > ferrAcid1-metMaz1-metBak0.maf
+/cluster/bin/phast/msa_view -i MAF -M ferrAcid1.chr -o SS ferrAcid1-metMaz1-metBak0.maf > ferrAcid1new.ss
+/cluster/bin/phast/phyloFit -i SS ferrAcid1new.ss -t "(metBak0,(ferrAcid1,metMaz1))" -o Ma1Mz1Mb0
+/cluster/bin/phast/msa_view -i SS ferrAcid1new.ss --summary-only 
+#descrip.                      A          C          G          T        G+C     length   all_gaps  some_gaps
+#ferrAcid1new.ss            0.2892     0.2088     0.2090     0.2930     0.4178    6057224          0     579124
+/cluster/bin/phast/phastCons ferrAcid1new.ss Ma1Mz1Mb0.mod --gc 0.4177 \
+ --target-coverage 0.7 --estimate-trees met-tree2 \
+ --expected-lengths 7 --no-post-probs --ignore-missing \
+ --nrates 1,1
+/cluster/bin/phast/phastCons ferrAcid1new.ss \
+ met-tree2.cons.mod,met-tree2.noncons.mod \
+ --target-coverage 0.7 --expected-lengths 75 \
+ --viterbi metAce-elements2.bed --score \
+ --require-informative 0 --seqname chr > cons2.dat
+wigEncode cons2.dat phastCons2.wig phastCons2.wib
+
+
+#move data
+mkdir wib
+mv phastCons.wib wib/phastCons.wib
+mv phastCons.wig wib/phastCons.wig
+ln -s /cluster/data/ferrAcid1/bed/conservation/wib/phastCons.wib /gbdb/ferrAcid1/wib
+mkdir /gbdb/ferrAcid1/pwMaf
+mkdir -p otherMet/metBak0 otherMet/metMaz1
+mv ferrAcid1-metBak0.maf otherMet/metBak0/chr.maf
+mv ferrAcid1-metMaz1.maf otherMet/metMaz1/chr.maf
+ln -s /cluster/data/ferrAcid1/bed/conservation/otherMet/metBak0 /gbdb/ferrAcid1/pwMaf/metBak0_pwMaf
+ln -s /cluster/data/ferrAcid1/bed/conservation/otherMet/metMaz1 /gbdb/ferrAcid1/pwMaf/metMaz1_pwMaf
+mkdir multiz
+mv ferrAcid1-metBak0-metMaz1.maf multiz/chr.maf
+ln -s /cluster/data/ferrAcid1/bed/conservation/multiz /gbdb/ferrAcid1/multizMa1Mb1Mz1
+
+#load
+hgLoadWiggle ferrAcid1 phastCons /cluster/data/ferrAcid1/bed/conservation/wib/phastCons.wig
+hgLoadMaf -warn ferrAcid1 multizMa1Mb1Mz1
+hgLoadMaf -warn ferrAcid1 metBak0_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/metBak0_pwMaf
+hgLoadMaf -warn ferrAcid1 metMaz1_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/metMaz1_pwMaf
+
+#trackDb.ra entry
+ # track multizMa1Mb1Mz1
+ # shortLabel Conservation
+ # longLabel Methosarcina  3-way multiz alignments
+ # group compGeno
+ # priority 10.0
+ # visibility pack
+ # type wigMaf 0.0 1.0
+ # maxHeightPixels 100:40:11
+ # wiggle phastCons
+ # yLineOnOff Off
+ # autoScaleDefault Off
+ # pairwise pwMaf
+ # speciesOrder metBak0 metMaz1
+cd ~/kent/src/hg/makeDb/trackDb/archae/ferrAcid1
+cvs commit -m "Added multiz track" trackDb.ra
+
+#html page for multizMa1Mb1Mz1
+cd ~/kent/src/hg/makeDb/trackDb/archae/ferrAcid1
+cvs add multizMa1Mb1Mz1.html
+cvs commit -m "Details page for multiz track" multizMa1Mb1Mz1.html
+
+## 4 way
+multiz ferrAcid1-metBur0.maf ferrAcid1-metMaz1-metBak0.maf - > ferrAcid1-metMaz1-metBak0-metBur0.maf
+/cluster/bin/phast/msa_view -i MAF -M ferrAcid1.chr -o SS ferrAcid1-metMaz1-metBak0-metBur0.maf > metAce4way.ss
+/cluster/bin/phast/phyloFit -i SS metAce4way.ss -t "(metBur0,(metBak0,(ferrAcid1,metMaz1)))" -o Ma1Mz1Mbk0Mbr0
+/cluster/bin/phast/msa_view -i SS metAce4way.ss --summary-only 
+#descrip.                      A          C          G          T        G+C     length   all_gaps  some_gaps
+#metAce4way.ss            0.2887     0.2092     0.2094     0.2926     0.4186    6100179          0     710386
+/cluster/bin/phast/phastCons metAce4way.ss Ma1Mz1Mbk0Mbr0.mod --gc 0.4186 \
+ --target-coverage 0.7 --estimate-trees met-tree4 \
+ --expected-lengths 7 --no-post-probs --ignore-missing \
+ --nrates 1,1
+/cluster/bin/phast/phastCons metAce4way.ss \
+ met-tree4.cons.mod,met-tree4.noncons.mod \
+ --target-coverage 0.7 --expected-lengths 75 \
+ --viterbi metAce-elements2.bed --score \
+ --require-informative 0 --seqname chr > cons4.dat
+wigEncode cons4.dat phastCons4.wig phastCons4.wib
+
+draw_tree Ma1Mz1Mbk0Mbr0.mod  > tree4.ps
+ps2pdf tree4.ps tree4.pdf
+#move data
+mv phastCons4.wib wib/phastCons4.wib
+mv phastCons4.wig wib/phastCons4.wig
+ln -s /cluster/data/ferrAcid1/bed/conservation/wib/phastCons4.wib /gbdb/ferrAcid1/wib
+mkdir -p otherMet/metBur0 
+mv ferrAcid1-metBur0.maf otherMet/metBur0/chr.maf
+ln -s /cluster/data/ferrAcid1/bed/conservation/otherMet/metBur0 /gbdb/ferrAcid1/pwMaf/metBur0_pwMaf
+mkdir multiz4way
+mv ferrAcid1-metMaz1-metBak0-metBur0.maf multiz4way/chr.maf
+ln -s /cluster/data/ferrAcid1/bed/conservation/multiz4way /gbdb/ferrAcid1/multizMa1Mz1Mbk0Mbr0
+
+#load
+hgLoadWiggle ferrAcid1 phastCons4 /cluster/data/ferrAcid1/bed/conservation/wib/phastCons4.wig
+hgLoadMaf -warn ferrAcid1 multizMa1Mz1Mbk0Mbr0
+hgLoadMaf -warn ferrAcid1 metBur0_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/metBur0_pwMaf
+   
+#trackDb.ra entry
+ # track multizMa1Mz1Mbk0Mbr0
+ # shortLabel Cons 4way
+ # longLabel Methosarcina Acetivorans/Mazei/Bakeri 3-way multiz alignments + Methanobacteriodes Burtonii
+ # group compGeno
+ # priority 10.0
+ # visibility pack
+ # type wigMaf 0.0 1.0
+ # maxHeightPixels 100:40:11
+ # wiggle phastCons
+ # yLineOnOff Off
+ # autoScaleDefault Off
+ # pairwise pwMaf
+ # speciesOrder metMaz1 metBak0 metBur0
+
+
+## re-run with 25 expected length parameter
+/cluster/bin/phast/phastCons metAce4way.ss Ma1Mz1Mbk0Mbr0.mod --gc 0.4186 \
+ --target-coverage 0.7 --estimate-trees met-tree4.25 \
+ --expected-lengths 25 --no-post-probs --ignore-missing \
+ --nrates 1,1
+/cluster/bin/phast/phastCons metAce4way.ss \
+ met-tree4.25.cons.mod,met-tree4.25.noncons.25.mod \
+ --target-coverage 0.7 --expected-lengths 25 \
+ --viterbi metAce-elements.25.bed --score \
+ --require-informative 0 --seqname chr > cons4.25.dat
+
+wigEncode cons4.25.dat phastCons4.25.wig phastCons4.25.wib
+mkdir wib
+mv phastCons4.25.wib wib/phastCons4.25.wib
+mv phastCons4.25.wig wib/phastCons4.25.wig
+ln -s /cluster/data/ferrAcid1/bed/conservation/wib/phastCons.wib /gbdb/ferrAcid1/wib
+hgLoadWiggle ferrAcid1 phastCons4_25 /cluster/data/ferrAcid1/bed/conservation/phastCons4.25.wig
+# 3 states, 2 conserved , 1 nonconserved
+nice /cluster/bin/phast/phastCons metAce4way.ss Ma1Mz1Mbk0Mbr0.mod --gc 0.4186 \
+ --target-coverage 0.7 --estimate-trees met-tree4.25.3state  \
+ --expected-lengths 25 --no-post-probs --ignore-missing  \
+ --nrates 2,1 
+
+/cluster/bin/phast/phastCons metAce4way.ss \
+ met-tree4.25.cons1.mod,met-tree4.25.cons2.mod,met-tree4.25.3state.noncons.25.mod \
+ --target-coverage 0.7 --expected-lengths 25 \
+ --viterbi metAce-elements.3state.25.bed --score \
+ --require-informative 0 --seqname chr > cons4.25.3state.dat
+# Lowe Lab Microarrays (DONE 02/09/04)
+    ssh hgwdev
+    mkdir /cluster/data/ferrAcid1/bed/llaPaePrintA
+    cp Pae-arrays.{bed,exps} /cluster/data/ferrAcid1/bed/llaPaePrintA
+    cd /cluster/data/ferrAcid1/bed/llaPaePrintA
+    hgLoadBed ferrAcid1 llaPaePrintA Pae-arrays.bed
+    hgsql ferrAcid1 < ~/kent/src/hg/lib/expRecord.sql
+    echo RENAME TABLE expRecord to llaPaePrintAExps | hgsql ferrAcid1
+    echo LOAD DATA LOCAL INFILE \'Pae-arrays.exps\' INTO TABLE llaPaePrintAExps | hgsql ferrAcid1
+    # for now I'm using both hgFixed and the ferrAcid1 database for this... that will change.
+    hgsql hgFixed < ~/kent/src/hg/lib/expRecord.sql
+    echo RENAME TABLE expRecord to llaPaePrintAExps | hgsql hgFixed
+    echo LOAD DATA LOCAL INFILE \'Pae-arrays.exps\' INTO TABLE llaPaePrintAExps | hgsql hgFixed
+
+# AORF TRACK
+    # This is another hand-created file, provided originally by Sorel Fitz-Gibbon and massaged to be a bed.
+    ssh hgwdev
+    mkdir /cluster/data/ferrAcid1/bed/primAORF
+    cp aorfs.bed /cluster/data/ferrAcid1/bed/primAORF
+    cd /cluster/data/ferrAcid1/bed/primAORF
+    hgLoadBed ferrAcid1 primAORF aorfs.bed
+
+
+# Pae promoter track
+
+    cd /cluster/data/ferrAcid1/wiggle
+    mkdir promoterScanPos
+    mkdir promoterScanNeg
+    cd promoterScanPos
+    cp prom.neg.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=promoterScanPos prom.pos.gz
+    hgLoadWiggle ferrAcid1 promoterScanPos promoterScanPos.wig
+    cd ../promoterScanNeg
+    cp prom.neg.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=promoterScanNeg prom.neg.gz
+    hgLoadWiggle ferrAcid1 promoterScanNeg promoterScanNeg.wig
+    cd /gbdb/ferrAcid1/wib  
+    ln -s /cluster/data/ferrAcid1/wiggle/promoterScanPos/promoterScanPos.wib promoterScanPos.wib
+    ln -s /cluster/data/ferrAcid1/wiggle/promoterScanNeg/promoterScanNeg.wib promoterScanNeg.wib
+
+# shine DG track
+
+    cd /cluster/data/ferrAcid1/wiggle
+    mkdir shineDGPos
+    mkdir shineDGNeg
+    cd shineDGPos
+    cp shine.pos.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=shineDGPos shine.pos.gz
+    hgLoadWiggle ferrAcid1 shineDGPos shineDGPos.wig
+    cd ../shineDGNeg
+    cp shine.neg.gz .
+    wigAsciiToBinary -chrom=chr -wibFile=shineDGNeg shine.neg.gz
+    hgLoadWiggle ferrAcid1 shineDGNeg shineDGNeg.wig
+    cd /gbdb/ferrAcid1/wib  
+    ln -s /cluster/data/ferrAcid1/wiggle/shineDGPos/shineDGPos.wib shineDGPos.wib
+    ln -s /cluster/data/ferrAcid1/wiggle/shineDGNeg/shineDGNeg.wib shineDGNeg.wib
+
+# RNA genes
+
+cd /cluster/data/ferrAcid1/bed
+mkdir rnaGenes
+cp paeAllRNA.bed .
+cp ~/kent/src/hg/lib/rnaGenes.sql .
+hgLoadBed -sqlTable=rnaGenes.sql ferrAcid1 rnaGenes paeAllRNA.bed
