@@ -16,7 +16,7 @@
 #include "mafSummary.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.86 2005/08/15 22:57:54 galt Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87 2005/10/03 15:01:10 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -601,11 +601,6 @@ for (i=0; outLine[i]; i++)
         previousInserts++;
         i++;    /* skip count after escape char */
         }
-    if (outLine[i] == MAF_FULL_BREAK_BEFORE ||
-        outLine[i] == MAF_FULL_BREAK_AFTER ||
-        outLine[i] == MAF_PART_BREAK_BEFORE ||
-        outLine[i] == MAF_PART_BREAK_AFTER)
-            previousBreaks++;
     }
 outLine = outLine + offset + previousBreaks + (previousInserts * 2);
 for (i=0; i < textSize && outPositions < outSize;  i++)
@@ -1340,26 +1335,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 for (p = seq, i = 0; i < size; p++, i++)
                     *p = ' ';
                 p = seq;
-                if (mc->leftStatus == MAF_NEW_STATUS)
-                    {
-                    /* determine if alignment ends on chrom/contig
-                     * boundary */
-                    *seq = ((mc->start == 0 || 
-                                mc->start + mc->size == mc->srcSize) ?
-                            MAF_FULL_BREAK_BEFORE: MAF_PART_BREAK_BEFORE);
-                    subSize++;
-                    p++;
-                    }
                 if (mc->size != 0)
                     strcpy(p, mc->text);
-                if (mc->rightStatus == MAF_NEW_STATUS)
-                    {
-                    *(seq+size-1) = 
-                        ((mc->start == 0 || 
-                          mc->start + mc->size == mc->srcSize) ?
-                            MAF_FULL_BREAK_AFTER: MAF_PART_BREAK_AFTER);
-                    subSize++;
-                    }
                 }
             processSeq(seq, mcMaster->text, size,
                                 lines[mi->ix], lineOffset, subSize);
