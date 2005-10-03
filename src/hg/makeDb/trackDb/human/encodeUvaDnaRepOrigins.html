@@ -17,19 +17,19 @@ genome-tiling Affymetrix array comprised of all unique probes
 within the ENCODE regions. 
 
 The time of replication of 50% (TR50) of each microarray probe was
-calculated by accumulating the sum over the 5 time points and
+calculated by accumulating the sum over the five time points and
 linearly interpolating the time when 50% was reached.  Each probe
 was also classed as temporally specific or non-specific based on
 whether at least 50% of the accumulated signal appeared in a single
 time point or not.
 
 The TR50 data for the temporally specific probes was then smoothed
-within a 95KB window using lowess smoothing.  This smoothing was done
+within a 95 kb window using lowess smoothing.  This smoothing was done
 for three replicates (two biological and one technical) and for the
 average of the three replicates.  Local minima were identified on the
 smoothed TR50 profiles to identify possible origins of replication.
-The predictions were take from the average of the replicates and then
-given a width of 200bp for display in the browser.  The confidence
+The predictions were taken from the average of the replicates and then
+given a width of 200 bp for display in the browser.  The confidence
 intervals were identified as concensus sites among the three replicates
 with endpoints taken on the outlying replicates for each concensus site.
 
