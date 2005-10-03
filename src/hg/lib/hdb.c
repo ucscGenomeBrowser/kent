@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.267 2005/09/30 23:50:28 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.268 2005/10/03 18:33:38 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2180,7 +2180,7 @@ static char *matrixHtml(char *matrix, char *matrixHeader)
         errAbort("Invalid matrix size in doc: %s\n", words[0]);
     dyStringAppend(m, "The following matrix was used:<P>\n");
     k = 1;
-    dyStringAppend(m, "<TABLE BORDER=1 CELLPADDING=3>\n");
+    dyStringAppend(m, "<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=3>\n");
     if (matrixHeader)
         {
         dyStringAppend(m, "<TR ALIGN=right><TD></TD>");
@@ -2197,7 +2197,7 @@ static char *matrixHtml(char *matrix, char *matrixHeader)
             dyStringPrintf(m, "<TD>%s</TD>", words[k++]);
         dyStringAppend(m, "</TR>\n");
         }
-    dyStringAppend(m, "</TABLE></P>\n");
+    dyStringAppend(m, "</TABLE></BLOCKQUOTE></P>\n");
     return m->string;
 }
 
