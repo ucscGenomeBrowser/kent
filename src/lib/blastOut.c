@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.18 2005/07/26 23:35:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.19 2005/10/03 21:15:14 fanhsu Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -480,7 +480,7 @@ else
 
 /* special global variable needed for Known Genes track building.  Fan 1/21/03 */
 int answer_for_kg;
-
+extern double minIdentity;
 static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
 	FILE *f, char *databaseName, int databaseSeqCount, 
 	double databaseLetterCount, char *ourId)
@@ -519,11 +519,33 @@ fprintf(f, "Sequences producing significant alignments:                      (bi
 fprintf(f, "\n");
 for (target = targetList; target != NULL; target = target->next)
     {
-    int bit = blastzScoreToNcbiBits(target->score);
-    double expectation = blastzScoreToNcbiExpectation(target->score);
-    fprintf(f, "%-67s  %4d   ", target->name, bit);
-    ncbiPrintE(f, expectation);
-    fprintf(f, "\n");
+    struct axtRef *ref;
+    struct axt *axt;
+    int matches;
+    double identity;
+
+    for (ref = target->axtList; ref != NULL; ref = ref->next)
+	{
+	axt = ref->axt;
+	
+	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+	if (isProt)
+	    {
+	    identity = round(100.0 * matches / axt->symCount);
+	    }
+	else
+	    {
+	    identity = round(100.0 * matches / axt->symCount);
+	    }
+	/* skip output if minIdentity not reached */
+	if (identity < minIdentity) continue;
+    
+    	int bit = blastzScoreToNcbiBits(axt->score);
+    	double expectation = blastzScoreToNcbiExpectation(axt->score);
+    	fprintf(f, "%-67s  %4d   ", target->name, bit);
+    	ncbiPrintE(f, expectation);
+    	fprintf(f, "\n");
+    	}
     }
 fprintf(f, "\n");
 
@@ -533,18 +555,37 @@ for (target = targetList; target != NULL; target = target->next)
     struct axtRef *ref;
     struct axt *axt;
     int matches, gaps;
-    fprintf(f, "\n\n>%s \n", target->name);
-    fprintf(f, "          Length = %d\n", target->size);
+
+    int ii = 0;
+    double identity;
     for (ref = target->axtList; ref != NULL; ref = ref->next)
 	{
+	ii++;
 	axt = ref->axt;
+	
+	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+	if (isProt)
+	    {
+	    identity = round(100.0 * matches / axt->symCount);
+	    }
+	else
+	    {
+	    identity = round(100.0 * matches / axt->symCount);
+	    }
+	
+	/* skip output if minIdentity not reached */
+	if (identity < minIdentity) continue;
+        
+	fprintf(f, "\n\n>%s \n", target->name);
+        fprintf(f, "          Length = %d\n", target->size);
+	
 	fprintf(f, "\n");
 	fprintf(f, " Score = %d bits (%d), Expect = ",
 	     blastzScoreToNcbiBits(axt->score),
 	     blastzScoreToNcbiScore(axt->score));
 	ncbiPrintE(f, blastzScoreToNcbiExpectation(axt->score));
 	fprintf(f, "\n");
-	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
+	
 	if (isProt)
 	    {
 	    int positives = countPositives(axt->qSym, axt->tSym, axt->symCount);
@@ -691,7 +732,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/07/26 23:35:48 $";
+    char * rcsDate = "$Date: 2005/10/03 21:15:14 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
