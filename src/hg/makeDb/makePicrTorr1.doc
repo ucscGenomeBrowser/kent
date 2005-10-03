@@ -66,7 +66,7 @@ exit; # don't actually run this like a script :)
     mv temp chr.bed
     hgLoadBed picrTorr1 simpleRepeat *.bed -sqlTable=/cluster/home/kpollard/kent/src/hg/lib/simpleRepeat.sql
 
-# TIGR GENES (STARTED 9/30/05)
+# TIGR GENES (FINISHED 10/3/05)
     # First go to http://www.tigr.org/tigr-scripts/CMR2/gene_attribute_form.dbi
     # and fill out the web form as follows:
     #   - Pick "Retrieve attributes for the specified DNA feature within a specific 
@@ -81,8 +81,7 @@ exit; # don't actually run this like a script :)
     mkdir /cluster/data/picrTorr1/bed/tigrCmrORFs
     cp picrTorr1-tigr.tab /cluster/data/picrTorr1/bed/tigrCmrORFs
     cd /cluster/data/picrTorr1/bed/tigrCmrORFs
-    /projects/lowelab/users/aamp/bin/i386/tigrCmrToBed picrTorr1-tigr.tab picrTorr1-tigr.bed
-    #GOT TO HERE SEG FAULT - CHECKING WITH ANDY
+    ~aamp/bin/i386/tigrCmrToBed picrTorr1-tigr.tab picrTorr1-tigr.bed
     cat picrTorr1-tigr.bed | sed -e 's/chr1/chr/' > temp
     mv temp picrTorr1-tigr.bed
     hgLoadBed -tab picrTorr1 tigrCmrGene picrTorr1-tigr.bed -sqlTable=/cluster/home/kpollard/kent/src/hg/lib/tigrCmrGene.sql
