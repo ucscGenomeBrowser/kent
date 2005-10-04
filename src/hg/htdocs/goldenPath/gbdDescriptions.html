@@ -1933,7 +1933,7 @@ TrEMBL-NEW and their corresponding mRNAs from GenBank
   known (RefSeq) gene track) 
   <LI><A 
   href="#RefLink">refLink</A> 
-  - Relates RefSeq mRNA accession to LocusLink, HUGO, etc. (Dec. 2000 and later) 
+  - Relates RefSeq mRNA accession to LocusLink ID, HUGO Gene Nomenclature Committee  symbol, etc. (Dec. 2000 and later) 
   <LI><A 
   href="#MrnaPredictions">refMrna</A> 
   - RefSeq mRNA (Dec. 2000 and later, not present in incrementally-updated assemblies) 
@@ -3509,7 +3509,7 @@ Last used Apr. 2001.
 <PRE>table geneBands
 "Band locations of known genes"
    (
-   string name;         "Gene name (HUGO if possible)"
+   string name;         "Gene name (HUGO Gene Nomenclature Committee symbol, if possible)"
    string mrnaAcc;      "RefSeq mRNA accession"
    int    count;        "Number of times this accession maps to the genome"
    string[count] bands; "List of chromosome bands to which it maps"
@@ -3694,13 +3694,13 @@ genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPe
 )
 </PRE>
 
-<H4><A name=Hugo></A>Hugo Cross-Reference</H4>
+<H4><A name=Hugo></A>Hugo Gene Nomenclature Committee (HGNC) Cross-Reference</H4>
 <PRE>table hugo
-"A cross-reference table between hugo and other databases."
+"A cross-reference table between HGNC and other databases"
    (
    string hgnc;            "HGNC number"
-   string symbol;          "HUGO gene symbol"
-   string name;            "HUGO gene name"
+   string symbol;          "HGNC gene symbol"
+   string name;            "HGNC gene name"
    string map;             "Gene map location"
    string mim;             "MIM ID"
    string pmid1;           "pmid 1"
@@ -3765,7 +3765,7 @@ genscanPep, knownGenePep, refPep, sanger22Pep, softberryPep, twinscanPep, vegaPe
 <PRE>table jaxOrtholog
 "Jackson Labs Mouse Orthologs"
     (
-    string humanSymbol;	"Human HUGO symbol"
+    string humanSymbol;	"Human HUGO Gene Nomenclature Committee symbol"
     string humanBand;   "Human chromosomal location"
     string mgiId;       "Mouse database id"
     string mouseSymbol; "Mouse human symbol"
@@ -3953,14 +3953,14 @@ Last used Oct. 2000 <BR><BR>
     string gbPgi;         "GenBank GI of protein sequence"   
     uint   omimId;        "OMIM ID or 0 if none"  
     string omimName;      "OMIM primary name"  
-    uint   hugoId;        "HUGO Nomeclature Committee ID or 0 if none" 
-    string hugoSymbol;    "HUGO short name"  
-    string hugoName;      "HUGO descriptive name" 
-    string hugoMap;       "HUGO Map position" 
-    uint   pmId1;         "I have no idea - grabbed from a HUGO nomeids.txt" 
-    uint   pmId2;         "Likewise, I have no idea" 
+    uint   hugoId;        "HUGO Gene Nomeclature Committee (HGNC) ID, or 0 if none" 
+    string hugoSymbol;    "HGNC short name"  
+    string hugoName;      "HGNC descriptive name" 
+    string hugoMap;       "HGNC Map position" 
+    uint   pmId1;         "Data from HGNC nomeids.txt" 
+    uint   pmId2;         "Data from HGNC nomeids.txt"
     string refSeqAcc;     "Accession of RefSeq mRNA" 
-    string aliases;       "Aliases if any.  Comma and space separated list" 
+    string aliases;       "Aliases, if any.  Comma and space separated list" 
     uint   locusLinkId;   "Locus link ID" 
     string gdbId;         "NCBI GDB database ID" 
     )
@@ -4509,7 +4509,7 @@ table pseudoGeneLink
 <H4><A name=RefLink></A>RefSeq Link</H4>
 First used Dec. 2000
 <PRE>table refLink
-"Link between RefSeq mRNAs and HUGO, LocusLink etc."
+"Link between RefSeq mRNAs and HUGO Gene Nomenclature Committee, LocusLink etc."
     (
     string name;        "Name displayed in UI"
     string product;     "Name of protein product"
@@ -5508,8 +5508,8 @@ The bacEndPairs table uses all fields.
    int    bioentryID;      "Biosql bioentry ID"
    int    biodatabaseID;   "Biosql biodatabase ID"
    string description;     "Description"
-   string hugoSymbol;      "HUGO gene symbol"
-   string hugoDesc;        "HUGO gene description"
+   string hugoSymbol;      "HUGO Gene Nomenclature Committee gene symbol"
+   string hugoDesc;        "HUGO Gene Nomenclature Committee gene description"
    )
 </PRE>
 
