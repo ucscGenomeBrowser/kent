@@ -26,7 +26,7 @@ table sliceType
 "Horizontal, coronal, whole mount, etc."
     (
     int id;	"ID of section"
-    string name;	"Name of horizontal/whole mount, etc"
+    string name;	"Name of horizontal/whole mount, etc."
     )
 
 table fixation
@@ -62,14 +62,14 @@ table journal
     (
     int id;	"ID of journal"
     string name;	"Name of journal"
-    string url;	"Journal's main url"
+    string url;	"Journal's main URL"
     )
 
 table copyright
 "Copyright information"
     (
     int id;	"ID of copyright"
-    lstring notice;	"Text of copyright notice."
+    lstring notice;	"Text of copyright notice"
     )
 
 table submissionSource
@@ -87,7 +87,7 @@ table submissionSet
     (
     int id;			"ID of submission set"
     string name;		"Name of submission set"
-    lstring contributors;	"Comma separated list of contributors in format Kent W.J., Wu F.Y."
+    lstring contributors;	"Comma-separated list of contributors in format Kent W.J., Wu F.Y."
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     int journal;		"Journal for publication"
@@ -105,7 +105,7 @@ table submissionContributor
 table sectionSet
 "Info on a bunch of sections through same sample"
     (
-    int id;	"Section id"
+    int id;	"Section ID"
     )
 
 table antibody
@@ -121,11 +121,11 @@ table gene
 "Info on a gene"
     (
     int id;		"ID of gene"
-    string name;	"Gene symbol (HUGO if available)"
-    string locusLink;	"NCBI locus link ID or blank if none"
-    string refSeq;	"RefSeq ID or blank if none"
-    string genbank;	"Genbank/EMBL accession or blank if none"
-    string uniProt;	"SwissProt/Uniprot accession or blank if none"
+    string name;	"Gene symbol (HUGO Gene Nomenclature Committee, if available)"
+    string locusLink;	"NCBI LocusLink ID, or blank if none"
+    string refSeq;	"RefSeq ID, or blank if none"
+    string genbank;	"GenBank/EMBL accession, or blank if none"
+    string uniProt;	"SwissProt/Uniprot accession, or blank if none"
     int taxon;		"NCBI taxon ID of organism"
     )
 
@@ -147,10 +147,10 @@ table allele
 table genotype
 "How different from wild type.  Associated with genotypeAllele table"
     (
-    int id;	"Genotype id"
+    int id;	"Genotype ID"
     int taxon;	"NCBI Taxon of organism"
     int strain;	"Strain of organism"
-    lstring alleles; "Comma separated list of gene:allele in alphabetical order"
+    lstring alleles; "Comma-separated list of gene:allele in alphabetical order"
     )
 
 table genotypeAllele
@@ -204,18 +204,18 @@ table probe
 "Info on a probe"
     (
     int id;		"ID of probe"
-    int gene;		"Associated gene if any"
-    int antibody;	"Associated antibody if any"
-    int probeType;	"Type of probe - antibody, RNA, etc.."
-    string fPrimer;	"Forward PCR primer if any"
-    string rPrimer;	"Reverse PCR primer if any"
-    lstring seq;	"Associated sequence if any"
+    int gene;		"Associated gene, if any"
+    int antibody;	"Associated antibody, if any"
+    int probeType;	"Type of probe - antibody, RNA, etc."
+    string fPrimer;	"Forward PCR primer, if any"
+    string rPrimer;	"Reverse PCR primer, if any"
+    lstring seq;	"Associated sequence, if any"
     )
 
 table probeColor
 "Color - what color probe is in"
     (
-    int id;		"Id of color"
+    int id;		"ID of color"
     string name;	"Color name"
     )
 
@@ -230,15 +230,15 @@ table imageFile
 "A biological image file"
     (
     int id;		"ID of imageFile"
-    string fileName;	"Image file name not including directory"
+    string fileName;	"Image file name, not including directory"
     float priority;	"Lower priorities are displayed first"
-    int imageWidth;     "width of image in pixels"
-    int imageHeight;    "height of image in pixels"
-    int fullLocation;	"Location of full-size image"
+    int imageWidth;     "Width of image in pixels"
+    int imageHeight;    "Height of image in pixels"
+    int fullLocation;	"Location of full-sized image"
     int thumbLocation;	"Location of thumbnail-sized image"
     int submissionSet;	"Submission set this is part of"
     string submitId;	"ID within submission set"
-    int caption;	"Pointer to caption or 0 for none"
+    int caption;	"Pointer to caption, or 0 for none"
     )
 
 table image
@@ -249,8 +249,8 @@ table image
     int imageFile;	"ID of image file"
     int imagePos;	"Position in image file, starting with 0"
     string paneLabel;   "Label of this pane in image file"
-    int sectionSet;	"Set of sections this is part of or 0 if none"
-    int sectionIx;	"Position (0 based) within set of sections"
+    int sectionSet;	"Set of sections this is part of, or 0 if none"
+    int sectionIx;	"Position (0-based) within set of sections"
     int specimen;	"Pointer to info on specimen"
     int preparation;	"Pointer to info on how specimen prepared"
     )
