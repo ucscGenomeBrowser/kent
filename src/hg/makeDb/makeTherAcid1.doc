@@ -7,7 +7,7 @@ exit; # don't actually run this like a script :)
 # if this is the first time you are making your own hgwdev browser, need to do 
 # cd ~/kent/src/, then a make
 
-# DOWNLOAD SEQUENCE FROM GENBANK (DONE 01/07/04)
+# DOWNLOAD SEQUENCE FROM GENBANK (DONE 10/2/05)
 
     mkdir /cluster/store5/archae/therAcid1
     ln -s /cluster/store5/archae/therAcid1 /cluster/data/therAcid1
@@ -22,7 +22,7 @@ exit; # don't actually run this like a script :)
     mkdir /gbdb/therAcid1
     ln -s /cluster/data/therAcid1/therAcid1.2bit /gbdb/therAcid1/therAcid1.2bit
 
-# CREATE DATABASES AND A BUNCH OF INITIAL STUFF (DONE 01/12/04)
+# CREATE DATABASES AND A BUNCH OF INITIAL STUFF (DONE 10/2/05)
 
     ssh hgwdev
     echo 'create database therAcid1' | hgsql ''
@@ -53,7 +53,7 @@ exit; # don't actually run this like a script :)
     make DBS=therAcid1
 
 
-# GC20BASE (DONE - 9/29/05)
+# GC20BASE (DONE 10/2/05)
     mkdir -p /cluster/data/therAcid1/bed/gc20Base
     cd /cluster/data/therAcid1/bed/gc20Base
     hgGcPercent -wigOut -doGaps -file=stdout -overlap=10 -win=20 therAcid1 /cluster/data/therAcid1/ | wigEncode stdin gc20Base.wig gc20Base.wib
@@ -67,7 +67,7 @@ exit; # don't actually run this like a script :)
     #	should see good numbers in Cardinality column
 
 
-# TANDEM REPEAT MASKER ()
+# TANDEM REPEAT MASKER (DONE 10/2/05)
 
     ssh hgwdev
     mkdir -p /cluster/data/therAcid1/bed/simpleRepeat
@@ -76,16 +76,38 @@ exit; # don't actually run this like a script :)
     cd /cluster/data/therAcid1/bed/simpleRepeat
     hgLoadBed therAcid1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/src/hg/lib/simpleRepeat.sql
 
-# DESCRIPTION PAGE (DONE 01/12/04)
+# TIGR GENES (DONE 10/3/05)
+    # First go to http://www.tigr.org/tigr-scripts/CMR2/gene_attribute_form.dbi
+    # and fill out the web form as follows:
+    #   - Pick "Retrieve attributes for the specified DNA feature within a specific 
+    #     organism and/or a specific role category".
+    #       * Pick genome and "Primary and TIGR annotation ORFs" 
+    #         from the 1st and 3rd box.
+    #       * Select everything from "Choose TIGR Annotation Gene Attributes"
+    #       * Select "Primary Locus Name" from "Choose Primary Annotation Gene Attributes"
+    #       * Select everything from "Choose Other Gene Attributes"
+    #   - Click submit, and click save as tab-delimited file.
+   
+    mkdir /cluster/data/therAcid1/bed/tigrCmrORFs
+    cp therAcid1-tigr.tab /cluster/data/therAcid1/bed/tigrCmrORFs
+    cd /cluster/data/therAcid1/bed/tigrCmrORFs
+    ~aamp/bin/i386/tigrCmrToBed therAcid1-tigr.tab therAcid1-tigr.bed
+    cat therAcid1-tigr.bed | sed -e 's/chr1/chr/' > temp
+    mv temp therAcid1-tigr.bed
+    hgLoadBed -tab therAcid1 tigrCmrGene therAcid1-tigr.bed -sqlTable=/cluster/home/kpollard/kent/src/hg/lib/tigrCmrGene.sql
+    echo "rename table tigrCmrGene to tigrCmrORFs;" | hgsql therAcid1
 
-    ssh hgwdev
+# DESCRIPTION PAGE (STARTED 10/3/05)
+
     # Write ~/kent/src/hg/makeDb/trackDb/archae/therAcid1/description.html
     chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/therAcid1/description.html
-    # Check it in.
-    mkdir /gbdb/therAcid1/html
+    mkdir -p /cluster/data/therAcid1/html/
+    cp ~/kent/src/hg/makeDb/trackDb/archae/therAcid1/description.html /cluster/data/therAcid1/html/description.html
+    #PERMISSIONS PROBLEM HERE
+    mkdir -p /gbdb/therAcid1/html
     ln -s /cluster/data/therAcid1/html/description.html /gbdb/therAcid1/html/
 
-# GENBANK PROTEIN-CODING GENES (DONE 01/14/04)
+# GENBANK PROTEIN-CODING GENES
 
     ssh hgwdev
     mkdir /cluster/data/therAcid1/genbank
@@ -127,7 +149,7 @@ tawk '{print $1,$2,$3,$4,$5,$6,$2,$3,0,1,$3-$2,0}' therAcid1-genbank-cds.bed | b
 tawk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,substr($1,3,4),name2,"cmpl","cmpl",0}' tmp.gp  > tmp2.gp
 join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1.15  tmp2.gp therAcid1-genbank-cds.xra > therAcid1.gp
 
-# GENBANK rRNA GENES (NOT QUITE DONE)
+# GENBANK rRNA GENES
     ssh hgdev
     cd /cluster/data/therAcid1/genbank
     gbArchaeGenome -kind=rRNA therAcid1.gbk therAcid1-params-bed.txt therAcid1-rrnas.bed
@@ -146,7 +168,7 @@ join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1
     # Now we have the basic list of cogs and the letter code for each one.
     
 
-# TODD LOWE tRNA GENES (DONE 01/15/04)
+# TODD LOWE tRNA GENES 
 
     # This one is a bed 6+ file created by hand of 46 tRNAs and 1 pseudo tRNA by Todd
     # Lowe.  See ~/kent/src/hg/lib/loweTrnaGene.as for a description of the fields.
@@ -156,35 +178,18 @@ join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1
     cd /cluster/data/therAcid1/bed/loweTrnaGene
     hgLoadBed -tab therAcid1 loweTrnaGene therAcid1-lowe-trnas.bed -sqlTable=~/kent/src/hg/lib/loweTrnaGene.sql
 
-# TODD LOWE snoRNA GENES (DONE 01/16/04)
+# TODD LOWE snoRNA GENES 
     # This is a bed 6 file created by hand.
     ssh hgwdev
     mkdir /cluster/data/therAcid1/bed/loweSnoGene
     cd /cluster/data/therAcid1/bed/loweSnoGene
     hgLoadBed -tab therAcid1 loweSnoGene therAcid1-snos.bed
 
-# TIGR GENES (DONE 02/09/04)
-    # First go to http://www.tigr.org/tigr-scripts/CMR2/gene_attribute_form.dbi
-    # and fill out the web form as follows:
-    #   - Pick "Retrieve attributes for the specified DNA feature within a specific 
-    #     organism and/or a specific role category".
-    #       * Pick "Pyrobaculum aerophilum IM2", and "Primary and TIGR annotation ORFs" 
-    #         from the 1st and 3rd box.
-    #       * Select everything from "Choose TIGR Annotation Gene Attributes"
-    #       * Select "Primary Locus Name" from "Choose Primary Annotation Gene Attributes"
-    #       * Select everything from "Choose Other Gene Attributes"
-    #   - Click submit, and click save as tab-delimited file.
-    ssh hgwdev
-    mkdir /cluster/data/therAcid1/bed/tigrCmrORFs
-    cp therAcid1-tigr.tab /cluster/data/therAcid1/bed/tigrCmrORFs
-    cd /cluster/data/therAcid1/bed/tigrCmrORFs
-    /projects/lowelab/users/aamp/bin/i386/tigrCmrToBed therAcid1-tigr.tab therAcid1-tigr.bed
-    hgLoadBed -tab therAcid1 tigrCmrORFs therAcid1-tigr.bed -sqlTable=~/kent/src/hg/lib/tigrCmrGene.sql
 
 ###########################################################
 #mulitz pHMM conservation track for 3 Methosarcina species#
 ###########################################################
-## DONE: 8/14/05 (baertsch)
+## DONE ()
 
 cd /cluster/data/therAcid1/bed
 mkdir conservation
