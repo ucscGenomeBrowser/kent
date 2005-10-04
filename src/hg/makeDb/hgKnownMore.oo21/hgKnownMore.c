@@ -7,7 +7,7 @@
 #include "hugoMulti.h"
 #include "knownInfo.h"
 
-static char const rcsid[] = "$Id: hgKnownMore.c,v 1.2 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgKnownMore.c,v 1.3 2005/10/04 22:59:31 donnak Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,7 +18,7 @@ errAbort(
   "   hgKnownMore database omim_to_transcript.map omimIds nomeids.txt\n"
   "where omim_to_transcript.map comes from Affymetrix and connect genie predictions to\n"
   "OMIM ids, omimIds connects names and omimIds and is from NCBI, and nomeids \n"
-  "has lots of stuff and is from HUGO.\n"
+  "has lots of information and is from HUGO Gene Nomenclature Committee.\n"
   );
 }
 

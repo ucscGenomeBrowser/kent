@@ -54,7 +54,7 @@ embedding - usually either 'cryosection' or 'paraffin'
 fixation - formaldehyde, methanol, etc
 fPrimer - Forward PCR primer used to generate RNA probe
 genbank - Genbank/EMBL accession 
-gene - HUGO or other official gene symbol
+gene - HUGO Gene Nomenclature Committee or other official gene symbol
 genotype - 'wild type' or comma separated list of mutations
 imagePos [0] - Zero based index of image in file
 itemUrl - Contributor-supplied URL associated with this particular image.  Should
