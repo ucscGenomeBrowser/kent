@@ -1,12 +1,12 @@
 table spXref3
-"A xref table between SWISS-PROT ids and other databases."
+"An cross-reference table between SWISS-PROT IDs and other databases."
 	(
 	string accession;	"SWISS-PROT accession number"
 	string displayID;	"SWISS-PROT display ID"
 	string division;	"SWISS-PROT division"
-	int    bioentryID;	"biosql bioentry ID"
-	int    biodatabaseID;   "biosql biodatabase ID"
-	string description;	"description"
-	string hugoSymbol;	"HUGO gene symbol"
-	string hugoDesc;	"HUGO gene description"
+	int    bioentryID;	"Biosql bioentry ID"
+	int    biodatabaseID;   "Biosql biodatabase ID"
+	string description;	"Description"
+	string hugoSymbol;	"HUGO Gene Nomenclature Committee (HGNC) gene symbol"
+	string hugoDesc;	"HGNC gene description"
 	)
