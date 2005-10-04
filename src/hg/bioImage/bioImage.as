@@ -16,7 +16,7 @@ table sliceType
 "Horizontal, coronal, whole mount, etc."
     (
     int id;	"ID of section"
-    string name;	"Name of horizontal/whole mount, etc"
+    string name;	"Name of horizontal/whole mount, etc."
     )
 
 table treatment
@@ -44,7 +44,7 @@ table submissionSet
 "Info on a batch of images submitted at once"
     (
     int id;			"ID of submission set"
-    lstring contributors;	"Comma separated list of contributors in format Kent W.J., Wu F.Y."
+    lstring contributors;	"Comma-separated list of contributors in format Kent W.J., Wu F.Y."
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     lstring setUrl;		"URL for whole set"
@@ -61,25 +61,25 @@ table submissionContributor
 table sectionSet
 "Info on a bunch of sections through same sample"
     (
-    int id;	"Section id"
+    int id;	"Section ID"
     )
 
 table image
 "A single biological image"
     (
     int id;		"ID of image"
-    string fileName;	"Image file name not including directory"
-    int fullLocation;	"Location of full-size image"
+    string fileName;	"Image file name, not including directory"
+    int fullLocation;	"Location of full-sized image"
     int screenLocation;	"Location of screen-sized image"
     int thumbLocation;	"Location of thumbnail-sized image"
     int submissionSet;	"Submission set this is part of"
-    int sectionSet;	"Set of sections this is part of or 0 if none"
-    int sectionIx;	"Position (0 based) within set of sections"
+    int sectionSet;	"Set of sections this is part of, or 0 if none"
+    int sectionIx;	"Position (0-based) within set of sections"
     string submitId;	"ID within submission set"
-    string gene;	"Gene symbol (HUGO if available)"
-    string locusLink;	"Locus link ID or blank if none"
-    string refSeq;	"RefSeq ID or blank if none"
-    string genbank;	"Genbank accession or blank if none"
+    string gene;	"Gene symbol (HGNC if available)"
+    string locusLink;	"Locus link ID, or blank if none"
+    string refSeq;	"RefSeq ID, or blank if none"
+    string genbank;	"Genbank accession, or blank if none"
     float priority;	"Lower priorities are displayed first"
     int taxon;		"NCBI taxon ID of organism"
     byte isEmbryo;	"TRUE if embryonic.  Age will be relative to conception"
