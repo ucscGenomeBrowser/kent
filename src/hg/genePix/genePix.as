@@ -80,7 +80,7 @@ table gene
 "Info on a gene"
     (
     int id;		"ID of gene"
-    string name;	"Gene symbol (HUGO if available)"
+    string name;	"Gene symbol (HGNC if available)"
     string locusLink;	"NCBI locus link ID or blank if none"
     string refSeq;	"RefSeq ID or blank if none"
     string genbank;	"Genbank/EMBL accession or blank if none"
