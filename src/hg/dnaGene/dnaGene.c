@@ -174,7 +174,7 @@ while (row2 != NULL)
 		    }
 		else
 		    {
-		    //printf("HUGO has a non-NULL but empty swissprot field ");
+		    //printf("HGNC has a non-NULL but empty swissprot field ");
 		    //printf("for %s\n", refAC);fflush(stdout);
 		    }
 		}
