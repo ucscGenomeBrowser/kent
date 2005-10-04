@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.5 2005/09/29 23:16:51 markd Exp $"
+#	"$Id: makeMm7.doc,v 1.6 2005/10/04 20:23:07 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -887,7 +887,7 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     md5sum *.gz > md5sum.txt
 
 #########################################################################
-# GENBANK auto update TBD (DONE 2005-09-29 markd)
+# GENBANK auto update (DONE 2005-09-29 markd)
     # align with revised genbank process. drop xeno ESTs.
     cd ~kent/src/makeDb/genbank
     cvs update -d etc
@@ -1097,7 +1097,7 @@ done
 
     mkdir /cluster/data/mm7/bed/blastzHg17.2005-09-16
     cd /cluster/data/mm7/bed
-    ln -s blastzHg17.2005-09-16 blastz.mm7
+    ln -s blastzHg17.2005-09-16 blastz.hg17
     cd /cluster/data/mm7/bed/blastzHg17.2005-09-16
     cat << '_EOF_' > DEF
 # mouse vs human
@@ -1145,6 +1145,10 @@ XXXX - Started 2005-09-16 14:30
     #	to reattach to this screen session:
     ssh kkstore02
     screen -d -r
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=download \
+	`pwd`/DEF > download-cleanup.out 2>&1 &
 
     #	Special swap, the load scripts have been disabled so these can
     #	be loaded manually to give them special names for comparison
@@ -1507,7 +1511,7 @@ doOne danRer2 chainMm5Link
     #   68003819 bases of 1560497282 (4.358%) in intersection
 
 #########################################################################
-# BLASTZ FUGU fr1 (WORKING - 2005-09-16 - Hiram)
+# BLASTZ FUGU fr1 (WORKING - 2005-09-16 - 2005-10-04 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzFr1.2005-09-16
     cd /cluster/data/mm7/bed
@@ -1525,7 +1529,7 @@ BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=6000
 BLASTZ_K=2200
-BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 
 # TARGET: Mouse Mm7 - testing 100,000,000 sized chunk on pk kluster
 SEQ1_DIR=/cluster/bluearc/mm7/nib
@@ -1553,39 +1557,54 @@ BASE=/cluster/data/mm7/bed/blastzFr1.2005-09-16
     #	With 100,000,000 and 400,000,000 chunk sizes, makes only 56 jobs
     #	for the blastz run
     #	STARTED - 2005-09-16 16:21
-real    708m20.607s
-user    0m0.106s
-sys     0m0.107s
-    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -continue=net -stop=load \
-	`pwd`/DEF > netThruLoad.out 2>&1 &
-real    11m37.061s
-user    0m0.054s
-sys     0m0.052s
-
-
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh pk
     screen -d -r
+    #	real    708m20.607s
+    #	user    0m0.106s
+    #	sys     0m0.107s
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -continue=net -stop=load \
+	`pwd`/DEF > netThruLoad.out 2>&1 &
+    #	real    11m37.061s
+    #	user    0m0.054s
+    #	sys     0m0.052s
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -continue=download \
+	`pwd`/DEF > download.clean.out 2>&1 &
 
-    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
-	-chainMinScore 5000 -swap `pwd`/DEF > swap.run.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -swap \
+	`pwd`/DEF > swap.out 2>&1 &
+
 
     #	measurements
+    featureBits mm7 chainFr1Link
+    #	49240999 bases of 2583394090 (1.906%) in intersection
+    featureBits mm6 chainFr1Link
+    #   55355465 bases of 2597150411 (2.131%) in intersection
     featureBits mm7 netFr1
+    #	611679163 bases of 2583394090 (23.677%) in intersection
+    featureBits mm6 netFr1
     #   618129802 bases of 2597150411 (23.800%) in intersection
     featureBits mm7 chainFr1
+    #	659036967 bases of 2583394090 (25.511%) in intersection
+    featureBits mm6 chainFr1
     #   666835089 bases of 2597150411 (25.676%) in intersection
-     featureBits mm7 chainFr1Link
-    #   55355465 bases of 2597150411 (2.131%) in intersection
 
-    featureBits fr1 netMm6
-    #   146828640 bases of 315518167 (46.536%) in intersection
-    featureBits fr1 chainMm6
-    #   160874127 bases of 315518167 (50.987%) in intersection
+    featureBits fr1 chainMm7Link
+    #	42546014 bases of 315518167 (13.484%) in intersection
     featureBits fr1 chainMm6Link
     #   46266090 bases of 315518167 (14.664%) in intersection
+    featureBits fr1 netMm7
+    #	143256422 bases of 315518167 (45.404%) in intersection
+    featureBits fr1 netMm6
+    #   146828640 bases of 315518167 (46.536%) in intersection
+    featureBits fr1 chainMm7
+    #	155565064 bases of 315518167 (49.305%) in intersection
+    featureBits fr1 chainMm6
+    #   160874127 bases of 315518167 (50.987%) in intersection
 
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (WORKING - 2005-09-20 - Hiram)
@@ -1991,29 +2010,23 @@ XXX - STARTED - 2005-09-20 - 17:10
     #	looks good, done.
 
 #############################################################################
-# BLASTZ CHICKEN - (TBD)
+# BLASTZ CHICKEN - (DONE - 2005-10-03 - Hiram)
 
     # MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN
     # In an email 2/13/04, Arian said we could treat all human repeats as 
     # lineage-specific for human-chicken blastz.  Do the same for mouse.  
-    # Scripts expect *.out.spec filenames, so set that up:
-    ssh eieio
-    mkdir /panasas/store/mm7/linSpecRep.notInChicken
-    cd /panasas/store/mm7/linSpecRep.notInChicken
-    foreach f (../rmsk/*.fa.out)
-	set base = $f:t:r:r
-	echo $base.out.spec
-	ln -s $f $base.out.spec
-    end
     
-    mkdir /cluster/data/mm7/bed/blastzGalGal2.2005_03_31
-    cd /cluster/data/mm7/bed/blastzGalGal2.2005_03_31
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzGalGal2.2005-09-29
+    cd /cluster/data/mm7/bed/
+    ln -s blastzGalGal2.2005-09-29 blastz.galGal2
+    cd blastzGalGal2.2005-09-29
+
     cat << '_EOF_' > DEF
 # mouse vs. chicken
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
 
-ALIGN=blastz-run
-BLASTZ=blastz
+BLASTZ=blastz.v7.x86_64
 
 # Specific settings for chicken (per Webb email to Brian Raney)
 BLASTZ_H=2000
@@ -2023,70 +2036,91 @@ BLASTZ_K=2200
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 BLASTZ_ABRIDGE_REPEATS=1
 
-# TARGET: Mouse Mm6
-SEQ1_DIR=/panasas/store/mm7/nib
-# RMSK not currently used
-SEQ1_RMSK=/panasas/store/mm7/rmsk
-# FLAG not currently used
-SEQ1_FLAG=-rodent
-SEQ1_SMSK=/panasas/store/mm7/linSpecRep.notInChicken
+# TARGET: Mouse (mm7)
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_SMSK=/scratch/hg/mm7/linSpecRep/notInChicken
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
 # QUERY: Chicken galGal2
-SEQ2_DIR=/iscratch/i/galGal2/nib
-SEQ2_RMSK=
-SEQ2_FLAG=
-SEQ2_SMSK=/iscratch/i/galGal2/linSpecRep
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/scratch/hg/galGal2/chrom.sizes
+SEQ2_SMSK=/scratch/hg/galGal2/linSpecRep
 SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
+SEQ2_CHUNK=30000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzGalGal2.2005_03_31
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+BASE=/cluster/data/mm7/bed/blastzGalGal2.2005-09-29
+TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastzGalGal2.2005_03_31
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/galGal2/chrom.sizes > S2.len
-    #	establish a screen to control this job
+    #	Probably should have done this with chainMinScore=5000
+    #	But it doesn't seem to have made much difference according to the
+    #	featureBits output measurements.
+    ssh pk
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
-    #	STARTED 2005-04-01 11:30
+    cd /cluster/data/mm7/bed/blastzGalGal2.2005-09-29
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
-    ssh kkstore02
+    ssh pk
     screen -d -r
-    #	CRASHED due to kkstore02 problems, finished batch manually, then
-    #	continuing:
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
+# Completed: 24480 of 24480 jobs
+# CPU time in finished jobs:    4362447s   72707.44m  1211.79h   50.49d  0.138 y
+# IO & Wait Time:                 80948s    1349.14m    22.49h    0.94d  0.003 y
+# Average job time:                 182s       3.03m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             645s      10.75m     0.18h    0.01d
+# Submission to last job:         13853s     230.88m     3.85h    0.16d
+
+# Completed: 306 of 306 jobs
+# CPU time in finished jobs:         34s       0.56m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                  1060s      17.67m     0.29h    0.01d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:            72s       1.20m     0.02h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        935s      15.58m     0.26h    0.01d  0.000 y
+# IO & Wait Time:                   182s       3.04m     0.05h    0.00d  0.000 y
+# Average job time:                  28s       0.47m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              82s       1.37m     0.02h    0.00d
+# Submission to last job:           104s       1.73m     0.03h    0.00d
+
+
     #	measurements are looking good:
-    featureBits mm7 netGalGal2
-    #   1937053597 bases of 2597150411 (74.584%) in intersection
-    featureBits mm5 netGalGal2
-    #   1958796258 bases of 2615483787 (74.892%) in intersection
-    featureBits mm7 chainGalGal2
-    #   1969505681 bases of 2597150411 (75.833%) in intersection
-    featureBits mm5 chainGalGal2
-    #   1990102297 bases of 2615483787 (76.089%) in intersection
     featureBits mm7 chainGalGal2Link
+    #	80992755 bases of 2583394090 (3.135%) in intersection
+    featureBits mm6 chainGalGal2Link
     #   82018349 bases of 2597150411 (3.158%) in intersection
     featureBits mm5 chainGalGal2Link
     #   78951466 bases of 2615483787 (3.019%) in intersection
 
+    featureBits mm7 netGalGal2
+    #	1946029450 bases of 2583394090 (75.328%) in intersection
+    featureBits mm6 netGalGal2
+    #   1937053597 bases of 2597150411 (74.584%) in intersection
+    featureBits mm5 netGalGal2
+    #   1958796258 bases of 2615483787 (74.892%) in intersection
+
+    featureBits mm7 chainGalGal2
+    #	1975402545 bases of 2583394090 (76.465%) in intersection
+    featureBits mm6 chainGalGal2
+    #   1969505681 bases of 2597150411 (75.833%) in intersection
+    featureBits mm5 chainGalGal2
+    #   1990102297 bases of 2615483787 (76.089%) in intersection
+
     #	Since those are OK, now do the swap:
-    ssh eieio
-    time /cluster/bin/scripts/doBlastzChainNet.pl -swap -chainMinScore=5000 \
-	-fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -swap -chainMinScore=5000 \
+	`pwd`/DEF > swap.out 2>&1 &
 
     #	and measure:
     featureBits galGal2 netMm6
@@ -2103,18 +2137,20 @@ SEQ2_LEN=$BASE/S2.len
     #   70542788 bases of 1054197620 (6.692%) in intersection
 
 #############################################################################
-# BLASTZ OPOSSUM (TBD)
-    ssh eieio
-    mkdir /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
-    cd /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
+# BLASTZ OPOSSUM (WORKING - 2005-10-03 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzMonDom2.2005-10-03
+    cd /cluster/data/mm7/bed
+    ln -s blastzMonDom2.2005-10-03 blastz.monDom2
+    cd blastzMonDom2.2005-10-03
 
     cat << '_EOF_' > DEF
 # mouse vs. opossum
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
 
-ALIGN=blastz-run
-BLASTZ=blastz
-#	Using parameters from monDom1<->mm5 alignments, see notes there.
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
 BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=10000
@@ -2122,41 +2158,57 @@ BLASTZ_K=2200
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 BLASTZ_ABRIDGE_REPEATS=0
 
-# TARGET: Mouse Mm6
-SEQ1_DIR=/panasas/store/mm7/nib
+# TARGET: Mouse (mm7)
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Opossum MonDom1
-SEQ2_DIR=/iscratch/i/monDom1/monDom1.2bit
-SEQ2_IN_CONTIGS=1
-SEQ2_CHUNK=10000000
+# QUERY: Chicken galGal2
+SEQ2_DIR=/scratch/hg/monDom2/monDom2.2bit
+SEQ2_LEN=/scratch/hg/monDom2/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzMonDom1.2005_04_01
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+BASE=/cluster/data/mm7/bed/blastzMonDom2.2005-10-03
+TMPDIR=/scratch/tmp
 '_EOF_'
-  # << this line keeps emacs coloring happy
+    # << this line keeps emacs coloring happy
 
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/monDom1/chrom.sizes > S2.len
-    #	establish a screen to control this job
+    #	Probably should have done this with chainMinScore=5000
+    #	But it doesn't seem to have made much difference according to the
+    #	featureBits output measurements.
+    ssh pk
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
-    #	STARTED 2005-04-01 11:30
+    cd /cluster/data/mm7/bed/blastzMonDom2.2005-10-03
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	STARTED 2005-10-03 14:30
+    #	real    579m33.438s
+    #	user    0m0.064s
+    #	sys     0m0.043s
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
-    ssh kkstore02
+
+    ssh pk
     screen -d -r
+# Completed: 44370 of 44370 jobs
+# CPU time in finished jobs:    7966937s  132782.29m  2213.04h   92.21d  0.253 y
+# IO & Wait Time:                195416s    3256.93m    54.28h    2.26d  0.006 y
+# Average job time:                 184s       3.07m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6810s     113.50m     1.89h    0.08d
+# Submission to last job:         60543s    1009.05m    16.82h    0.70d
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=cat \
+	`pwd`/DEF > continue.cat.out 2>&1 &
+XXXX  2005-10-04 09:25
+
     # CRASHED due to kkstore02 problems, finished batch manually and
     #	created the run.time file
     #	continuing
@@ -2239,21 +2291,20 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
     #	looks OK, done
 
 ##############################################################################
-# BLASTZ FROG Xenopus tropicalis (TBD)
-    ssh eieio
-    mkdir /cluster/data/mm7/bed/blastzXenTro1.2005_04_05
-    cd /cluster/data/mm7/bed/blastzXenTro1.2005_04_05
+# BLASTZ FROG Xenopus tropicalis (WORKING - 2005-10-03 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzXenTro1.2005-10-03
+    cd /cluster/data/mm7/bed
+    ln -s blastzXenTro1.2005-10-03 blastz.xenTro1
+    cd blastzXenTro1.2005-10-03
 
     cat << '_EOF_' > DEF
 # mouse vs. frog
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
 
-ALIGN=blastz-run
-BLASTZ=blastz
+BLASTZ=blastz.v7.x86_64
 
-# Set up blastz parameters using parameters between chicken and fish,
-# but not abridging repeats since can't do that with scaffolds, and
-# it's not very relevant at this evolutionary distance.
+# Specific settings for chicken (per Webb email to Brian Raney)
 BLASTZ_H=2000
 BLASTZ_Y=3400
 BLASTZ_L=8000
@@ -2261,34 +2312,36 @@ BLASTZ_K=2200
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 BLASTZ_ABRIDGE_REPEATS=0
 
-# TARGET: mouse mm7
-SEQ1_DIR=/panasas/store/mm7/nib
+# TARGET: Mouse (mm7)
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
 SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Frog xenTro1
-SEQ2_DIR=/iscratch/i/xenTro1/xenTro1.2bit
-SEQ2_IN_CONTIGS=1
-SEQ2_CHUNK=10000000
+# QUERY: Chicken galGal2
+SEQ2_DIR=/scratch/hg/xenTro1/xenTro1.2bit
+SEQ2_LEN=/scratch/hg/xenTro1/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/mm7/bed/blastzXenTro1.2005_04_05
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+BASE=/cluster/data/mm7/bed/blastzXenTro1.2005-10-03
+TMPDIR=/scratch/tmp
 '_EOF_'
     # << keep emacs coloring happy
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    sort -rn +1 /cluster/data/xenTro1/chrom.sizes > S2.len
-    #	establish a screen to control this job
+
     screen
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-fileServer eieio `pwd`/DEF > blast.run.out 2>&1 &
-    #	STARTED 2005-04-05 10:30 - new machine serving this filesystem today
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 -chainMinScore=5000 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	STARTED 2005-10-03 14:30
+    #	real    918m58.309s
+    #	user    0m0.063s
+    #	sys     0m0.056s
+
+XXXX
+
     #	635 min = 10h 35m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
@@ -2350,15 +2403,46 @@ SEQ2_LEN=$BASE/S2.len
     #   76415718 bases of 1381238994 (5.532%) in intersection
 
 #############################################################################
-# BLASTZ CHIMP PanTro1 (TBD)
-    ssh eieio
-    mkdir /cluster/data/mm7/bed/blastzPanTro1.2005_04_08
-    cd /cluster/data/mm7/bed/blastzPanTro1.2005_04_08
+# BLASTZ CHIMP PanTro1 (WORKING - 2005-10-04 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/mm7/bed/blastzPanTro1.2005-10-04
+    cd /cluster/data/mm7/bed
+    ln -s blastzPanTro1.2005-10-04 blastz.panTro1
+    cd blastzPanTro1.2005-10-04
 
     #	same parameters as Human alignment, except for the use of the
     #	SMSK linSpecRepeats - in this case, using none.  Should be an
     #	interesting comparison if the lineage specific repeats make much
     #	difference in the result.
+    cat << '_EOF_' > DEF
+# human vs mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=50
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mouse (mm7)
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_CTG
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=500000
+SEQ1_LAP=5000
+
+# QUERY: Chimp panTro1
+SEQ2_DIR=/san/sanvol1/scratch/panTro1/nib
+SEQ2_LEN=/san/sanvol1/scratch/panTro1/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzPanTro1.2005-10-04
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # happy emacs
+
     cat << '_EOF_' > DEF
 # mouse vs. human
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/home/angie/schwartzbin:/cluster/home/kent/bin/i386
@@ -2374,11 +2458,6 @@ SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY: Chimp panTro1
-SEQ2_DIR=/scratch/chimp/panTro1/nib
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
-SEQ2_LAP=0
 
 BASE=/cluster/data/mm7/bed/blastzPanTro1.2005_04_08
 
@@ -2627,43 +2706,55 @@ cat << '_EOF_' > template
     para check
     para push
     #	STARTED - 2005-09-20 14:26 
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:     445070s    7417.83m   123.63h    5.15d  0.014 y
-# IO & Wait Time:                   463s       7.72m     0.13h    0.01d  0.000 y
-# Average job time:               11138s     185.64m     3.09h    0.13d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           53053s     884.22m    14.74h    0.61d
-# Submission to last job:         53053s     884.22m    14.74h    0.61d
+Completed: 40 of 40 jobs
+CPU time in finished jobs:     367939s    6132.32m   102.21h    4.26d  0.012 y
+IO & Wait Time:                   739s      12.31m     0.21h    0.01d  0.000 y
+Average job time:                9217s     153.62m     2.56h    0.11d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:           42051s     700.85m    11.68h    0.49d
+Submission to last job:         42051s     700.85m    11.68h    0.49d
 
     # on the file server
     ssh kkstore02
     cd /cluster/data/mm7/bed/STSmarkers/primer
-    /cluster/bin/i386/pslSort dirs primers.psl temp primers.out
+    pslSort dirs primers.psl temp primers.out
     rmdir temp
 
     # a rough comparison with previous results:
     wc primers.psl
-    #	5724127 120206606 615248041 primers.psl
+    #	5921712 124355891 636898117 primers.psl
+    wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl
+    #	5724127 120206606 615248041
     wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl
     #	5719969 120119288 590806241
     wc /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
     #	5745617 120657896 592135728 
 
     # another kluster run for the ePCR
-    ssh kk9
+    ssh pk
     cd /cluster/data/mm7/bed/STSmarkers/ePCR
-    ls -1S /panasas/store/mm7/fasta/chr*.fa > contig.lst
+    ls -1S /san/sanvol1/scratch/mm7/fasta/chr*.fa > contig.lst
+
+    #	pick up e-PCR source from
+    #	ftp://ftp.ncbi.nlm.nih.gov/pub/schuler/e-PCR/
+    #	version 2.3.1 11 Feb 2005
+    #	Had to add the following to both re-PCR_main.cpp and
+    #	e-PCR_main.cpp to get them to compile on kolossus:
+// max and min Copied from /usr/include/mysql/my_global.h
+#define max(a, b)       ((a) >? (b))
+#define min(a, b)       ((a) <? (b))
+
     mkdir epcr.out
     cat << '_EOF_' > runPCR.csh
 #!/bin/csh -fe
-/cluster/bin/i386/e-PCR $1 $2 N=1 M=50 W=5 > $3
+/cluster/bin/x86_64/e-PCR $1 $2 N=1 M=50 W=5 > $3
 '_EOF_'
     # emacs happy ?
     chmod +x runPCR.csh
 
     cat << '_EOF_' > template
 #LOOP
-./runPCR.csh /panasas/store/mm7/STSmarkers/mouseP.info $(path1) {check out line+ epcr.out/$(num1).epcr}
+./runPCR.csh /san/sanvol1/scratch/mm7//STSmarkers/mouseP.info $(path1) {check out line+ epcr.out/$(num1).epcr}
 #ENDLOOP
 '_EOF_'
     # the mouseP.info was created above
@@ -2673,21 +2764,24 @@ cat << '_EOF_' > template
     para check
     para push
     ... etc ...
+    # STARTED 2005-09-30 11:45
 # Completed: 40 of 40 jobs
-# CPU time in finished jobs:      77676s    1294.60m    21.58h    0.90d  0.002 y
-# IO & Wait Time:                   370s       6.17m     0.10h    0.00d  0.000 y
-# Average job time:                1951s      32.52m     0.54h    0.02d
+# CPU time in finished jobs:      62439s    1040.64m    17.34h    0.72d  0.002 y
+# IO & Wait Time:                   180s       3.01m     0.05h    0.00d  0.000 y
+# Average job time:                1565s      26.09m     0.43h    0.02d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            6173s     102.88m     1.71h    0.07d
-# Submission to last job:          6173s     102.88m     1.71h    0.07d
+# Longest finished job:            4582s      76.37m     1.27h    0.05d
+# Submission to last job:          4608s      76.80m     1.28h    0.05d
 
-    ssh hgwdev
+    ssh kkstore02
     cd /cluster/data/mm7/bed/STSmarkers/ePCR
     # all those results become all.epcr
     cat epcr.out/*.epcr > all.epcr
 
     # comparing to previous results:
     wc all.epcr
+    #	57709  230836 3185188 all.epcr
+    wc /cluster/data/mm6/bed/STSmarkers/ePCR/all.epcr
     #	55871  223484 3086148 all.epcr
     wc /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
     #	55677  222708 2945623 /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
@@ -2713,6 +2807,8 @@ cat << '_EOF_' > template
     #	Determining ePCR not found
     #
     wc primers.psl.filter.blat
+    #	34674  728154 3718714 primers.psl.filter.blat
+    wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.blat
     #	33662  706902 3605847 primers.psl.filter.blat
     wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.blat
     #	33476  702996 3442402 
@@ -5177,7 +5273,7 @@ while (my $line = <>) {
     # All done
 
 ############################################################################
-# BACEND SEQUENCE ALIGNMENTS (WORKING - 2005-09-29 - Hiram)
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2005-09-29 - 2005-10-03 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/mm7/noMask
     cd /cluster/data/mm7/
@@ -5248,17 +5344,17 @@ rm -fr /tmp/${root1}_${root2}
     para create jobList
     # 3920 jobs written to batch
     para try, check, push, etc ...
-    XXX - STARTED - 2005-09-29 - Hiram
+    XXX - STARTED - 2005-10-02 - Hiram
+
 # Completed: 3920 of 3920 jobs
-# CPU time in finished jobs:    2681337s   44688.95m   744.82h   31.03d  0.085 y
-# IO & Wait Time:                110523s    1842.05m    30.70h    1.28d  0.004 y
-# Average job time:                 712s      11.87m     0.20h    0.01d
+# CPU time in finished jobs:     683325s   11388.75m   189.81h    7.91d  0.022 y
+# IO & Wait Time:                 51220s     853.67m    14.23h    0.59d  0.002 y
+# Average job time:                 187s       3.12m     0.05h    0.00d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            5203s      86.72m     1.45h    0.06d
-# Submission to last job:          6402s     106.70m     1.78h    0.07d
+# Longest finished job:            1388s      23.13m     0.39h    0.02d
+# Submission to last job:         65899s    1098.32m    18.31h    0.76d
 
-
-    ssh kkstore01
+    ssh kkstore02
     cd /cluster/data/mm7/bed/bacends
     screen
 
@@ -5287,7 +5383,7 @@ rm -fr /tmp/${root1}_${root2}
     cp -p bacEnds.psl /cluster/data/mm7/bacends
 
 ############################################################################
-# BACEND PAIRS TRACK (TBD)
+# BACEND PAIRS TRACK (DONE - 2005-10-03 - 2005-10-04 - Hiram)
 
     ssh kolossus
     cd /cluster/data/mm7/bacends
@@ -5295,7 +5391,7 @@ rm -fr /tmp/${root1}_${root2}
 time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
 -mismatch -verbose bacEnds.psl \
-	../bed/cloneend/ncbi/cloneEndPairs.txt all_bacends bacEnds
+	../bed/cloneend/cloneEndPairs.txt all_bacends bacEnds
 
     # create header required by "rdb" tools
     echo -e \
@@ -5319,10 +5415,6 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 
     rm j1.out j2.out
 
-    # load into database
-    ssh hgwdev
-    cd /cluster/data/mm7/bacends
-
     #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
     awk '{print $5}' bacEndPairs.bed | sort -u
     #	result should be the scores, no extraneous strings:
@@ -5333,46 +5425,52 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 #	750
     #	edit the file and fix it if it has a bad name.
 
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm7/bacends
     hgLoadBed -strict -notItemRgb mm7 bacEndPairs bacEndPairs.bed \
 	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
-    #	Loaded 226279 elements of size 11
+    #	Loaded 231570 elements of size 11
 
     # note - this track isn't pushed to RR, just used for assembly QA
     hgLoadBed -strict -notItemRgb mm7 bacEndPairsBad bacEndPairsBad.bed \
 	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
-    #	Loaded 104221 elements of size 11
+    #	Loaded 95099 elements of size 11
 
     # NOTE: truncates file to 0 if -nobin is used
     hgLoadPsl mm7 -table=all_bacends bacEnds.load.psl
-# load of all_bacends did not go as planned: 9046691 record(s), 0 row(s)
-#	skipped, 37 warning(s) loading psl.tab
+# load of all_bacends did not go as planned: 8397416 record(s), 0 row(s)
+#	skipped, 1 warning(s) loading psl.tab
+#	This takes about 40 minutes
 
-#	real    36m1.178s
-#	user    5m55.630s
-#	sys     0m41.380s
-
-# featureBits mm7 all_bacends
+    featureBits mm7 all_bacends
+# 334161740 bases of 2583394090 (12.935%) in intersection
+    featureBits mm6 all_bacends
 # 336981828 bases of 2597150411 (12.975%) in intersection
-# featureBits mm5 all_bacends
+    featureBits mm5 all_bacends
 # 268502414 bases of 2615483787 (10.266%) in intersection
-# featureBits mm4 all_bacends
+    featureBits mm4 all_bacends
 # 243096171 bases of 2627444668 (9.252%) in intersection
 
-# featureBits mm7 bacEndPairs
+    featureBits mm7 bacEndPairs
+# 2578837424 bases of 2583394090 (99.824%) in intersection
+    featureBits mm6 bacEndPairs
 # 2570768812 bases of 2597150411 (98.984%) in intersection
-# featureBits mm5 bacEndPairs
+    featureBits mm5 bacEndPairs
 # 2567958504 bases of 2615483787 (98.183%) in intersection
-# featureBits mm4 bacEndPairs
+    featureBits mm4 bacEndPairs
 # 2549945356 bases of 2627444668 (97.050%) in intersection
 
-# featureBits mm7 bacEndPairsBad
+    featureBits mm7 bacEndPairsBad
+# 954662115 bases of 2583394090 (36.954%) in intersection
+    featureBits mm6 bacEndPairsBad
 # 1006314997 bases of 2597150411 (38.747%) in intersection
-# featureBits mm5 bacEndPairsBad
+    featureBits mm5 bacEndPairsBad
 # 541027882 bases of 2615483787 (20.686%) in intersection
-# featureBits mm4 bacEndPairsBad
+    featureBits mm4 bacEndPairsBad
 # 1074505863 bases of 2627444668 (40.895%) in intersection
 
-
+############################################################################
 # SGP GENES (TBD)
     ssh hgwdev
     mkdir /cluster/data/mm7/bed/sgp
@@ -7902,6 +8000,10 @@ sys     0m0.103s
     #	to reattach to this screen session:
     ssh pk
     screen -d -r
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -continue=download \
+	`pwd`/DEF > download-cleanup.out 2>&1 &
 
 ############################################################################
 #  UPDATE miRNA track (TBD)
