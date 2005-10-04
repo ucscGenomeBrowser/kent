@@ -4111,10 +4111,10 @@ tables, dbtssAli, and uniGene.<BR><BR>
     uint    tSize;        	  "Target sequence size" 
     uint    tStart;       	  "Alignment start position in target" 
     uint    tEnd;         	  "Alignment end position in target" 
-    uint    blockCount;   	  "Number of blocks in alignment" 
+    uint    blockCount;   	  "Number of blocks in alignment. A block contains no gaps." 
     uint[blockCount] blockSizes;  "Size of each block" 
-    uint[blockCount] qStarts;     "Start of each block in query." 
-    uint[blockCount] tStarts;     "Start of each block in target."
+    uint[blockCount] qStarts;     "Start of each block in query" 
+    uint[blockCount] tStarts;     "Start of each block in target"
     )  
 </PRE>
 There is a little gotcha in this table format. It has to 
