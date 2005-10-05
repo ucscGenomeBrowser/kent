@@ -192,7 +192,7 @@ void axtBundleFreeList(struct axtBundle **pList);
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	char *blastType, char *ourId);
+	char *blastType, char *ourId, double minIdentity);
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
