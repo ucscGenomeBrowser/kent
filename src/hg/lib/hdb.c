@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.268 2005/10/03 18:33:38 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.269 2005/10/05 12:04:24 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -4109,7 +4109,7 @@ else
 return buffer;
 }
 
-static struct grp* loadGrp(struct sqlConnection *conn, char *confName, char *defaultTbl)
+static struct grp* loadGrps(struct sqlConnection *conn, char *confName, char *defaultTbl)
 /* load all of the grp rows from a table.  The table name is first looked up
  * in hg.conf with confName. If not there, use defaultTbl.  If the table
  * doesn't exist, return NULL */
@@ -4117,33 +4117,28 @@ static struct grp* loadGrp(struct sqlConnection *conn, char *confName, char *def
 char query[128];
 struct grp *grps = NULL;
 char *tbl = cfgOption(confName);
+struct slName *tables = NULL, *table;
+
 if (tbl == NULL)
     tbl = defaultTbl;
-if (sqlTableExists(conn, tbl))
+tables = slNameListFromComma(tbl);
+slReverse(&tables);
+
+for (table = tables; table != NULL; table = table->next)
     {
-    safef(query, sizeof(query), "select * from %s", tbl);
-    grps = grpLoadByQuery(conn, query);
+    struct grp *oneTable = NULL;
+    if (sqlTableExists(conn, table->name))
+	{
+	safef(query, sizeof(query), "select * from %s", table->name);
+	oneTable = grpLoadByQuery(conn, query);
+	}
+    slUniqify(&oneTable, grpCmpName, grpFree);    
+    if (grps && oneTable)
+	grpSuperimpose(&grps, &oneTable);
+    else if (!grps)
+	grps = oneTable;
     }
 return grps;
-}
-
-static struct grp* findGrp(struct grp** grpList, char* name)
-/* search a list of grp objects for a object of the particular name and remove
- * from list.  Return NULL if not found  */
-{
-struct grp *grp, *prevGrp = NULL;
-for (grp = *grpList; grp != NULL; prevGrp = grp, grp = grp->next)
-    {
-    if (sameString(grp->name, name))
-        {
-        if (prevGrp == NULL)
-            *grpList = grp->next;
-        else
-            prevGrp->next = grp->next;
-        return grp;
-        }
-    }
-return NULL;
 }
 
 struct grp* hLoadGrps()
@@ -4154,31 +4149,11 @@ struct grp* hLoadGrps()
  * priority. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct grp *grpList = loadGrp(conn, "db.grp", "grp");
-struct grp *grpLocalList = loadGrp(conn, "db.grpLocal", "grpLocal");
-struct grp *grps = NULL;
-
-/* check each object from grp table to see if it's grpLocal overrides it */
-while (grpList != NULL)
-    {
-    struct grp *grp = slPopHead(&grpList);
-    struct grp *grpLocal = findGrp(&grpLocalList, grp->name);
-    if (grpLocal != NULL)
-        {
-        grpFree(&grp);
-        grp = grpLocal;
-        }
-    slAddHead(&grps, grp);
-    }
-
-/* add remainder of grpLocal */
-grps = slCat(grps, grpLocalList);
-
+struct grp *grps = loadGrps(conn, "db.grp", "grp");
 slSort(&grps, grpCmpPriority);
 hFreeConn(&conn);
 return grps;
 }
-
 
 int chrStrippedCmp(char *chrA, char *chrB)
 /*	compare chrom names after stripping chr, Scaffold_ or ps_ prefix
