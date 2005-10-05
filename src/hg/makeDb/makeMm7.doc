@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.6 2005/10/04 20:23:07 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.7 2005/10/05 00:02:56 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -876,11 +876,11 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
     md5sum *.gz > md5sum.txt
 
- XXX - DONE to here, 2005-09-20 - Hiram
     # get GenBank native mRNAs
     cd /cluster/data/genbank
     ./bin/i386/gbGetSeqs -db=mm7 -native GenBank mrna \
 	/usr/local/apache/htdocs/goldenPath/mm7/bigZips/mrna.fa
+ XXX - DONE to here, 2005-09-20 - Hiram
     cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
     gzip mrna.fa
     
@@ -1055,7 +1055,7 @@ mm7.mgcTables.mgc = all
 
 
 #########################################################################
-# BLASTZ HUMAN Hg17 (WORKING - 2005-09-16 - Hiram)
+# BLASTZ HUMAN Hg17 (WORKING - 2005-09-16 - 2005-10-04 - Hiram)
     ssh kkstore02
     #	Create the composite chrom/contigs from randoms 2bit file
     #	for Hg17  ***!!! THIS IS NOT NEEDED  !!!***
@@ -1136,7 +1136,6 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	-continue=cat -stop=load \
 	`pwd`/DEF > catToLoad.out 2>&1 &
-XXXX - Started 2005-09-16 14:30
     #	real    335m51.785s
     #	user    0m0.080s
     #	sys     0m0.051s
@@ -1283,8 +1282,6 @@ doOne ${targetDb} chain${DB1}Link
 
 #########################################################################
 # BLASTZ RAT Rn3 (WORKING - 2005-09-16 - Hiram)
-#	THESE ARE THE CORRECT PARAMETERS - the second try was not used
-#		it was too restrictive and cuts out too many alignments
     ssh kkstore02
     mkdir /cluster/data/mm7/bed/blastzRn3.2005-09-16
     cd /cluster/data/mm7/bed
@@ -1315,13 +1312,14 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm7/bed/blastzRn3.2005-09-16
 TMPDIR=/scratch/tmp
 '_EOF_'
-    # << keep emacs coloring happy
+    # happy emacs
 
     #	establish a screen to control this job
     screen
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > full.run.out 2>&1 &
+    #	various debugging situations as the script is reorganized
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=load -stop=load -bigClusterHub=pk \
 	`pwd`/DEF > load.out 2>&1 &
@@ -1351,75 +1349,18 @@ TMPDIR=/scratch/tmp
 # Longest job:                     1016s      16.93m     0.28h    0.01d
 # Submission to last job:          1482s      24.70m     0.41h    0.02d
 
-    #	After this was complete, realized that it needs a minScore
-    #	filter on the chaining step.   Also, we need some pslChrom files
-    #	for Gill's work:
-    ssh kkstore02
-    /cluster/data/mm7/bed/blastzRn3.2005_03_15
-    cat << '_EOF_' > mkPslChrom.sh
-#!/bin/sh
-
-if [ -d pslChrom ]; then
-    mv pslChrom pslChrom.0
-    rm -fr pslChrom.0 &
-fi
-
-mkdir pslChrom
-
-ls pslParts | sed -e "s/.nib.*//" | sort -u | while read C
-do
-    echo -n "working: ${C} ... "
-    zcat `ls pslParts/${C}.nib* | sort --field-separator=':' -k1,1 -k3,3n` \
-            > pslChrom/${C}.psl
-    echo "done"
-done
-'_EOF_'
-    # << keep emacs coloring happy
-    chmod +x mkPslChrom.sh
-    ./mkPslChrom.sh
-
-    #	After the experiment of 2005-03-22
-    #	RELOADING these chains and nets
-    ssh hgwdev
-    hgsql mm7 -e "drop table netRn3;"
-    hgsql mm7 -e "show tables;" | grep chainRn3 | while read T
-    do
-	hgsql mm7 -e "drop table ${T};"
-	echo ${T}
-    done
-    #	kkstore02 currently off-limits to logins due to hardware difficulties
-    ssh kolossus
-    cd /cluster/data/mm7/bed/blastzRn3.2005_03_15/axtChain
-    chainSplit chain mm7.rn3.all.chain.gz
-    ssh hgwdev
-    cat << '_EOF_' > reLoad.csh
-#!/bin/csh -ef
-# Load chains:
-cd /cluster/data/mm7/bed/blastzRn3.2005_03_15/axtChain/chain
-foreach f (*.chain)
-    set c = $f:r
-    echo "hgLoadChain mm7 ${c}_chainRn3 $f"
-    hgLoadChain mm7 ${c}_chainRn3 $f
-end
-
-cd /cluster/data/mm7/bed/blastzRn3.2005_03_15/axtChain
-# Load nets:
-netFilter -minGap=10 mm7.rn3.net.gz | hgLoadNet -verbose=0 mm7 netRn3 stdin
-'_EOF_'
-    # << keep emacs coloring happy
-
-    chmod +x reLoad.csh
-    time ./reLoad.csh
-    #	~ 188m == 3 hours 8 min
-
     #	Measurements:
     time featureBits mm7 netRn3
+    #	2644171540 bases of 2583394090 (102.353%) in intersection
+    time featureBits mm6 netRn3
     #	expect ~ 2m 12s
     #	2720144602 bases of 2597150411 (104.736%) in intersection
     time featureBits mm5 netRn3
     #	2638255333 bases of 2615483787 (100.871%) in intersection
 
     time featureBits mm7 chainRn3
+    #	2690727913 bases of 2583394090 (104.155%) in intersection
+    time featureBits mm6 chainRn3
     #	expect ~ 10m 30s to 13m 25s
     #	2768422449 bases of 2597150411 (106.595%) in intersection
     time featureBits mm5 chainRn3
@@ -1427,34 +1368,30 @@ netFilter -minGap=10 mm7.rn3.net.gz | hgLoadNet -verbose=0 mm7 netRn3 stdin
 
     ssh kolossus
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainRn3Link
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainRn3Link
     #	1802980225 bases of 2597150411 (69.421%) in intersection
     #	real    94m48.021s
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm5 chainRn3Link
     #	1798705001 bases of 2615483787 (68.771%) in intersection
     #	real    76m44.580s
 
-    #	Prepare for a re-run of the swap, move the 2005_03_22 swap
-    #	results out of the way
-    ssh hgwdev
-    cd /cluster/data/rn3/bed
-    mv blastz.mm7.swap blastz.mm7.swap.2005_03_22
-
-    cd /cluster/data/mm7/bed/blastzRn3.2005_03_15
-    time /cluster/bin/scripts/doBlastzChainNet.pl -swap `pwd`/DEF > \
-	swap.run_1.out 2>&1 &
-    #	STARTED - 2005-03-29 15:55
-    #	FINI - 2005-03-30 05:21
-    #	real    807m3.833s
-    #	user    0m2.200s
-    #	sys     0m1.150s
+    ssh kkstore02
+    screen -r -d
+    cd /cluster/data/mm7/bed/blastzRn3.2005-09-16
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk \
+	`pwd`/DEF > swap.out 2>&1 &
+    #	STARTED - 2005-10-04 16:29
+XXXX
 
     ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm7Link
+
     time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm6Link
     #	1812992492 bases of 2571104688 (70.514%) in intersection
     time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm5Link
     #	1673171206 bases of 2571104688 (65.076%) in intersection
 
-#########################################################################
 #########################################################################
     cat << '_EOF_' > measurements.sh
 #!/bin/sh
@@ -5012,7 +4949,7 @@ hgsql mm7 -e 'load data local infile "pepPi.tab" into table mm7.pepPi;'
   notify QA for formal review.
 
 #####################################################################
-# MAP CONTIGS TRACK (TBD)
+# MAP CONTIGS TRACK (DONE - 2005-10-04 - Hiram)
     ssh hgwdev
     mkdir -p /cluster/data/mm7/bed/ctgPos
     cd /cluster/data/mm7/bed/ctgPos
@@ -5066,13 +5003,15 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
 
     # /cluster/data/mm7/ncbi/seq_contig.md contains more than just C57BL/6J.
     # Filter those out with the grep.
-    zcat ../../seq_contig.md.gz | grep C57BL | \
+    cat ../../seq_contig.md | grep C57BL | \
 	./seqContigToCtgPos.pl > ctgPos.tab
 
     hgsql mm7 < ~/kent/src/hg/lib/ctgPos.sql
     hgsql mm7 -e 'load data local infile "ctgPos.tab" into table ctgPos;'
 
     featureBits -countGaps mm7 ctgPos
+    #	2608810329 bases of 2847717329 (91.611%) in intersection
+    featureBits -countGaps mm6 ctgPos
     #	2638893452 bases of 3079633452 (85.689%) in intersection
     featureBits -countGaps mm5 ctgPos
     #	2557081173 bases of 3164952073 (80.794%) in intersection
