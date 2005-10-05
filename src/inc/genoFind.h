@@ -179,7 +179,7 @@ struct gfOutput *gfOutputAny(char *format,
 	int goodPpt, boolean qIsProt, boolean tIsProt, 
 	boolean noHead, char *databaseName,
 	int databaseSeqCount, double databaseLetters,
-	FILE *f);
+	double minIdentity, FILE *f);
 /* Initialize output in a variety of formats in file or memory. 
  * Parameters:
  *    format - either 'psl', 'pslx', 'blast', 'wublast', 'axt'
@@ -210,7 +210,7 @@ struct gfOutput *gfOutputBlast(int goodPpt,
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
 	char *blastType, /* blast, blast8, blast9, wublast, or xml */
-	FILE *f);
+	double minIdentity, FILE *f);
 /* Setup output for blast/wublast format. */
 
 void gfOutputQuery(struct gfOutput *out, FILE *f);
