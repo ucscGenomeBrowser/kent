@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.104 2005/08/02 13:51:03 fanhsu Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.105 2005/10/05 10:11:45 fanhsu Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -556,7 +556,7 @@ for (seq = dbSeqList; seq != NULL; seq = seq->next)
     databaseLetters += seq->size;
 
 gvo = gfOutputAny(outputFormat, minIdentity*10, qIsProt, tIsProt, noHead, 
-	databaseName, databaseSeqCount, databaseLetters, f);
+	databaseName, databaseSeqCount, databaseLetters, minIdentity, f);
 
 if (bothSimpleNuc || bothSimpleProt)
     {

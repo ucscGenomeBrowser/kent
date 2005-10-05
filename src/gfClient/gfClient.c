@@ -9,7 +9,7 @@
 #include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.31 2004/08/24 18:54:43 markd Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.32 2005/10/05 10:13:28 fanhsu Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"prot", OPTION_BOOLEAN},
@@ -101,7 +101,7 @@ struct hash *tFileCache = gfFileCacheNew();
 snprintf(databaseName, sizeof(databaseName), "%s:%s", hostName, portName);
 
 gvo = gfOutputAny(outputFormat,  round(minIdentity*10), qType == gftProt, tType == gftProt,
-	optionExists("nohead"), databaseName, 23, 3.0e9, out);
+	optionExists("nohead"), databaseName, 23, 3.0e9, minIdentity, out);
 gfOutputHead(gvo, out);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, qType != gftProt))
     {
