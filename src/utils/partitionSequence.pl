@@ -9,7 +9,7 @@
 # Actual batch list creation can be done with gensub2 and a spec,
 # using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.5 2005/01/27 17:36:25 angie Exp $
+# $Id: partitionSequence.pl,v 1.6 2005/10/05 21:41:18 aamp Exp $
 
 use Getopt::Long;
 use strict;
@@ -54,6 +54,7 @@ options:
                   This option is required when partitioning a .2bit that 
                   contains sequences smaller than the chunk parameter!  
 \n";
+#"
   exit $status;
 }
 
@@ -153,7 +154,7 @@ sub partitionMonolith {
   # partition sequences into job specs using the hash of sequence sizes.  
   # Very large sequences (>$chunk+$lap) are split into overlapping chunks;
   # smaller sequences are glommed together to reduce the batch size.
-  my ($sizesRef, $file, $chunk, $lap) = @_;
+  my ($sizesRef, $file, $chunk, $lap, $seqLimit) = @_;
   my @partitions = ();
   my $glomSize = 0;
   my @gloms = ();
@@ -174,7 +175,7 @@ sub partitionMonolith {
 	$checkedLstDir = 1;
       }
       # glom it (but first see if it would make existing glom too big):
-      if ($glomSize > 0 && ($glomSize + $size) > $chunk) {
+      if ($glomSize > 0 && (($glomSize + $size) > $chunk) || (scalar(@gloms) >= $seqLimit)) {
 	my ($lstBase, $lstFile) = &makeLst(@gloms);
 	push @partitions, [$lstBase, $lstFile];
 	$glomSize = 0;
@@ -225,7 +226,7 @@ sub partitionPerSeqFiles {
 }
 
 sub partitionSeqs {
-  my ($seqSizesRef, $filesRef, $chunk, $lap) = @_;
+  my ($seqSizesRef, $filesRef, $chunk, $lap, $seqLimit) = @_;
   my @partitions = ();
   my @seqFiles = ();
   foreach my $file (@{$filesRef}) {
@@ -236,7 +237,7 @@ sub partitionSeqs {
 	# mean pre-partitioning like chunked .fa, but I don't see a demand 
 	# so won't implement and test that at this point.
       }
-      return &partitionMonolith($seqSizesRef, $file, $chunk, $lap);
+      return &partitionMonolith($seqSizesRef, $file, $chunk, $lap, $seqLimit);
     } elsif ($file =~ /^(.*\/)?(.*)\.fa(\.gz)?$/) {
       my $root = $2;
       if (! exists $seqSizesRef->{$root}) {
@@ -271,12 +272,12 @@ my $ok = GetOptions("oneBased",
 		    "help");
 &usage(1) if (!$ok);
 &usage(0) if ($opt_help);
-&usage(1) if (scalar(@ARGV) != 4);
-my ($chunk, $lap, $seqDir, $chromSizes) = @ARGV;
+&usage(1) if (scalar(@ARGV) != 5);
+my ($chunk, $lap, $seqDir, $chromSizes, $seqLimit) = @ARGV;
 
 my %sizes = %{&loadSeqSizes($chromSizes)};
 my @files = @{&listSeqFiles($seqDir)};
-my @partRefs = @{&partitionSeqs(\%sizes, \@files, $chunk, $lap)};
+my @partRefs = @{&partitionSeqs(\%sizes, \@files, $chunk, $lap, $seqLimit)};
 
 $opt_rawDir = "raw" if (! defined $opt_rawDir);
 if ($opt_xdir) {
