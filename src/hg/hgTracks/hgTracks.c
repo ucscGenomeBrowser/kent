@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1013 2005/10/02 18:59:22 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1014 2005/10/05 22:25:39 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9863,7 +9863,7 @@ if (gotBlat)
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
 if (sameString(database, "hg17")
-            || sameString(database, "mm5")
+            || sameString(database, "mm6")
             || sameString(database, "rn3") 
             || sameString(database, "fr1"))
     {
