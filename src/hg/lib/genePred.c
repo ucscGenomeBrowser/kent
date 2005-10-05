@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.73 2005/10/02 20:09:51 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.74 2005/10/05 04:57:40 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -636,7 +636,7 @@ for (gl = group->lineList; gl != NULL; gl = gl->next)
      * just for the full CDS range.
      */
     if ((optFields & genePredExonFramesFld)
-        && genePredCdsIntersect(gp, eStarts[i], eEnds[i])
+        && (rangeIntersection(gp->cdsStart, gp->cdsEnd, eStarts[i], eEnds[i]) > 0)
         && !sameWord(gl->feature, "stop_codon"))
         {
         /* set frame if this is a CDS, convert from GFF/GTF definition.
@@ -1194,12 +1194,6 @@ if (startPtr != NULL)
 if (endPtr != NULL)
     *endPtr = end;
 return (start < end);
-}
-
-boolean genePredCdsIntersect(struct genePred *gp, int start, int end)
-/* Check if a range intersects the CDS */
-{
-return (rangeIntersection(gp->cdsStart, gp->cdsEnd, start, end) > 0);
 }
 
 /* state for genePredCheck */
