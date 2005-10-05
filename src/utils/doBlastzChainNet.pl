@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.22 2005/10/05 21:41:18 aamp Exp $
+# $Id: doBlastzChainNet.pl,v 1.23 2005/10/05 23:30:05 aamp Exp $
 
 # to-do items:
 # - lots of testing
@@ -25,7 +25,7 @@ use strict;
 # Hardcoded paths/command sequences:
 my $getFileServer = '/cluster/bin/scripts/fileServer';
 my $blastzRunUcsc = '/cluster/bin/scripts/blastz-run-ucsc';
-my $partition = '/cluster/home/aamp/kent/src/utils/partitionSequence.pl';
+my $partition = '/cluster/bin/scripts/partitionSequence.pl';
 my $gensub2 = '/parasol/bin/gensub2';
 my $para = '/parasol/bin/para';
 my $paraRun = ("$para make jobList\n" .
@@ -174,7 +174,13 @@ Assumptions:
 5. DEF's SEQ1_CHUNK and SEQ1_LAP determine the step size and overlap size 
    of chunks into which large target sequences are to be split before 
    alignment.  SEQ2_CHUNK and SEQ2_LAP: ditto for query.
-6. DEF's BLASTZ_ABRIDGE_REPEATS should be set to something nonzero if 
+6. DEF's SEQ1_LIMIT and SEQ2_LIMIT decide what the maximum number of 
+   sequences should be for any partitioned file (the files created in the
+   tParts and qParts directories).  This limit only effects SEQ1 or SEQ2
+   when they are 2bit files.  Some 2bit files have too many contigs.  This
+   reduces the number of blastz hippos (jobs taking forever compared to 
+   the other jobs).
+7. DEF's BLASTZ_ABRIDGE_REPEATS should be set to something nonzero if 
    abridging of lineage-specific repeats is to be performed.  If so, the 
    following additional constraints apply:
    a. Both target and query assemblies must be structured as one nib file 
@@ -185,7 +191,7 @@ Assumptions:
       a RepeatMasker .out file (usually filtered by DateRepeats).  The 
       directory should be under $clusterLocal or $clusterSortaLocal .
       SEQ2_SMSK: ditto for query.
-7. DEF's BLASTZ_[A-Z] variables will be translated into blastz command line 
+8. DEF's BLASTZ_[A-Z] variables will be translated into blastz command line 
    options (e.g. BLASTZ_H=foo --> H=foo, BLASTZ_Q=foo --> Q=foo).  
    For human-mouse evolutionary distance/sensitivity, none of these are 
    necessary (blastz-run-ucsc defaults will be used).  Here's what we have 
@@ -198,28 +204,28 @@ BLASTZ_Q=$clusterData/blastz/HoxD55.q
    Blastz parameter tuning is somewhat of an art and is beyond the scope 
    here.  Webb Miller and Jim can provide guidance on how to set these for 
    a new pair of organisms.  
-8. DEF's PATH variable, if set, must specify a path that contains programs 
+9. DEF's PATH variable, if set, must specify a path that contains programs 
    necessary for blastz to run: blastz, and if BLASTZ_ABRIDGE_REPEATS is set, 
    then also fasta_subseq, strip_rpts, restore_rpts, and revcomp.  
    If DEF does not contain a PATH, blastz-run-ucsc will use its own default.
-9. DEF's BLASTZ variable can specify an alternate path for blastz.
-10. DEF's BASE variable can specify the blastz/chain/net build directory 
+10. DEF's BLASTZ variable can specify an alternate path for blastz.
+11. DEF's BASE variable can specify the blastz/chain/net build directory 
     (defaults to $clusterData/\$tDb/$trackBuild/blastz.\$qDb.\$date/).
-11. SEQ?_CTGDIR specifies sequence source with the contents of full chrom
+12. SEQ?_CTGDIR specifies sequence source with the contents of full chrom
     sequences and the contig randoms and chrUn.  This keeps the contigs
     separate during the blastz and chaining so that chains won't go through
     across multiple contigs on the randoms.
-12. SEQ?_CTGLEN specifies a length file to be used in conjunction with the
+13. SEQ?_CTGLEN specifies a length file to be used in conjunction with the
     special SEQ?_CTGDIR file specified above which contains the random contigs.
-13. SEQ?_LIFT specifies a lift file to lift sequences in the SEQ?_CTGDIR
+14. SEQ?_LIFT specifies a lift file to lift sequences in the SEQ?_CTGDIR
     to their random and chrUn positions.  This is useful for a 2bit file that
     has both full chrom sequences and the contigs for the randoms.
-14. SEQ2_SELF=1 specifies the SEQ2 is already specially split for self
+15. SEQ2_SELF=1 specifies the SEQ2 is already specially split for self
     alignments and to use SEQ2 sequence for self alignment, not just a
     copy of SEQ1
-15. TMPDIR - specifies directory on cluster node to keep temporary files
+16. TMPDIR - specifies directory on cluster node to keep temporary files
     Typically TMPDIR=/scratch/tmp
-16. All other variables in DEF will be ignored!
+17. All other variables in DEF will be ignored!
 
 " if ($detailed);
   exit $status;
