@@ -966,6 +966,15 @@ priority 89.15
 visibility hide
 type psl .
 
+track nhgriDnaseHs
+shortLabel NHGRI DNaseI-HS
+longLabel NHGRI DNaseI-Hypersensitive Sites
+group regulation
+priority 100
+visibility hide
+type bed 5 .
+useScore 1
+
 track blastDm1FB
 shortLabel D. mel. Proteins
 longLabel D. melanogaster Proteins
