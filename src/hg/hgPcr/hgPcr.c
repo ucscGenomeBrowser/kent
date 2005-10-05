@@ -22,7 +22,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.11 2005/03/03 07:12:45 donnak Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.12 2005/10/05 20:45:30 donnak Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -104,7 +104,7 @@ void doHelp()
 {
 puts(
 "In-Silico PCR searches a sequence database with a pair of\n"
-"PCR primers.  It uses an indexing strategy to do this quickly.\n"
+"PCR primers, using an indexing strategy for fast performance.\n"
 "\n"
 "<H3>Configuration Options</H3>\n"
 "<B>Genome and Assembly</B> - The sequence database to search.<BR>\n"
@@ -113,7 +113,7 @@ puts(
 "<B>Max Product Size</B> - Maximum size of amplified region.<BR>\n"
 "<B>Min Perfect Match</B> - Number of bases that match exactly on 3' end of primers.  Minimum match size is 15.<BR>\n"
 "<B>Min Good Match</B> - Number of bases on 3' end of primers where at least 2 out of 3 bases match.<BR>\n"
-"<B>Flip Reverse Primer</B> - Invert the sequence order and reverse complement the reverse primer.<BR>\n"
+"<B>Flip Reverse Primer</B> - Invert the sequence order of the reverse primer and complement it.<BR>\n"
 "\n"
 "<H3>Output</H3>\n"
 "When successful, the search returns a sequence output file in fasta format \n"
