@@ -3,8 +3,9 @@
 #include "common.h"
 #include "dystring.h"
 #include "ensFace.h"
+#include "hCommon.h"
 
-static char const rcsid[] = "$Id: ensFace.c,v 1.3 2003/08/12 07:11:51 kate Exp $";
+static char const rcsid[] = "$Id: ensFace.c,v 1.4 2005/10/05 21:05:13 heather Exp $";
 
 struct stringPair
 /* A pair of strings. */
@@ -43,29 +44,11 @@ struct dyString *ensContigViewUrl(
                             char *ensOrg, char *chrom, int chromSize,
                             int winStart, int winEnd)
 /* Return a URL that will take you to ensembl's contig view. */
+/* Not using chromSize. */
 {
 struct dyString *dy = dyStringNew(0);
-int bigStart, bigEnd, smallStart, smallEnd;
-int winSize = winEnd - winStart;
-bigStart = smallStart = winStart;
-bigEnd = smallEnd = winEnd;
-
-if (winSize < 1000000)
-    {
-    bigStart -= 500000;
-    if (bigStart < 0) bigStart = 0;
-    bigEnd += 500000;
-    if (bigEnd > chromSize) bigEnd = chromSize;
-    dyStringPrintf(dy, "http://www.ensembl.org/%s/contigview"
-	   "?chr=%s&vc_start=%d&vc_end=%d&wvc_start=%d&wvc_end=%d",
-	    ensOrg, chrom, bigStart, bigEnd, smallStart, smallEnd);
-    }
-else
-    {
-    dyStringPrintf(dy, "http://www.ensembl.org/%s/contigview"
-	   "?chr=%s&vc_start=%d&vc_end=%d",
-	    ensOrg, chrom, bigStart, bigEnd);
-    }
+dyStringPrintf(dy, 
+               "http://www.ensembl.org/%s/contigview?chr=%s&start=%d&end=%d", ensOrg, skipChr(chrom), winStart, winEnd);
 return dy;
 }
 
