@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.19 2005/10/03 21:15:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.20 2005/10/05 10:06:52 fanhsu Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -480,10 +480,9 @@ else
 
 /* special global variable needed for Known Genes track building.  Fan 1/21/03 */
 int answer_for_kg;
-extern double minIdentity;
 static void ncbiBlastOut(struct axtBundle *abList, int queryIx, boolean isProt, 
 	FILE *f, char *databaseName, int databaseSeqCount, 
-	double databaseLetterCount, char *ourId)
+	double databaseLetterCount, char *ourId, double minIdentity)
 /* Do ncbiblast-like output at end of processing query. */
 {
 char asciiNum[32];
@@ -732,7 +731,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/10/03 21:15:14 $";
+    char * rcsDate = "$Date: 2005/10/05 10:06:52 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
@@ -788,7 +787,7 @@ targetHitsFreeList(&targetList);
 void axtBlastOut(struct axtBundle *abList, 
 	int queryIx, boolean isProt, FILE *f, 
 	char *databaseName, int databaseSeqCount, double databaseLetterCount, 
-	char *blastType, char *ourId)
+	char *blastType, char *ourId, double minIdentity)
 /* Output a bundle of axt's on the same query sequence in blast format.
  * The parameters in detail are:
  *   ab - the list of bundles of axt's. 
@@ -809,7 +808,7 @@ else if (sameWord(blastType, "xml"))
         databaseSeqCount, databaseLetterCount, ourId);
 else if (sameWord(blastType, "blast"))
     ncbiBlastOut(abList, queryIx, isProt, f, databaseName,
-        databaseSeqCount, databaseLetterCount, ourId);
+        databaseSeqCount, databaseLetterCount, ourId, minIdentity);
 else if (sameWord(blastType, "blast8"))
     tabBlastOut(abList, queryIx, isProt, f, databaseName,
     	databaseSeqCount, databaseLetterCount, ourId, FALSE);
