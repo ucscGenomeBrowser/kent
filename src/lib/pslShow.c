@@ -9,7 +9,7 @@
 #include "cda.h"
 #include "seqOut.h"
 
-static char const rcsid[] = "$Id: pslShow.c,v 1.4 2005/04/10 14:41:25 markd Exp $";
+static char const rcsid[] = "$Id: pslShow.c,v 1.5 2005/10/05 19:07:43 kent Exp $";
 
 static void pslShowAlignmentStranded(struct psl *psl, boolean isProt,
 	char *qName, bioSeq *qSeq, int qStart, int qEnd,
@@ -229,7 +229,12 @@ fprintf(f, "<PRE><TT>");
 		}
 	    bafFlushLine(&baf);
 	    }
-	fprintf( f, "<I>*when aa is different, BLOSUM positives are in green, BLOSUM negatives in red</I>\n");
+	fprintf( f, 
+"<I>*When the translated amino acid in the genomic sequence differs from the \n"
+"corresponding amino acid in the protein, the coloring indicates the\n"
+"similarity of the two amino acids.  Similar amino acids are green, \n"
+"dissimilar amino acids are red.  The sign of the corresponding entry in\n"
+"the BLOSUM 62 matrix is used as the basis of this coloring.</I>\n");
 	}
     else
 	{
