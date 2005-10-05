@@ -161,7 +161,8 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     bun->axtList = chainToAxt(chain, qSeq, 0, target, 0, 40, BIGNUM);
     axtOffset(bun->axtList, queryStart, queryEnd, querySize, 
 	index->targetStart, index->targetParentSize);
-    axtBlastOut(bun, 0, FALSE, f, "database", targetHash->elCount, dbSize, blastType, "blatz");
+    /* set input parameter minIdentity to 0.0 */
+    axtBlastOut(bun, 0, FALSE, f, "database", targetHash->elCount, dbSize, blastType, "blatz", 0.0);
     axtBundleFree(&bun);
     }
 dnaSeqFree(&rQuery);
