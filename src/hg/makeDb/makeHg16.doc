@@ -572,9 +572,19 @@ exit; # don't actually run this like a script :)
     echo "create table grp (PRIMARY KEY(NAME)) select * from hg15.grp" \
     | hgsql hg16
     # add ENCODE track.  Move Repeats lower in priority
-    echo 'UPDATE grp SET priority=8 WHERE name="varRep"'| hgsql hg16
+    echo 'UPDATE grp SET priority=7 WHERE name="varRep"'| hgsql hg16
 
-    echo 'INSERT INTO grp (name, label, priority) VALUES ("encode", "ENCODE Tracks", 7)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encode", "ENCODE Tracks", 8)' | hgsql hg16
+
+    # New ENCODE groups
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeGenes", "ENCODE Regions and Genes", 8.1)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeTxLevels", "ENCODE Transcript Levels", 8.2)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeChip", "ENCODE Chromatin Immunoprecipitation", 8.3)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeChrom", "ENCODE Chromosome, Chromatin and DNA Structure", 8.4)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeCompGeno", "ENCODE Comparative Genomics", 8.5)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeVariation", "ENCODE Variation", 8.6)' | hgsql hg16
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeAnalysis", "ENCODE Analysis", 8.9)' | hgsql hg16
+    
 
 # MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2003-07-26 - Hiram)
     ssh hgwdev
@@ -4237,6 +4247,17 @@ end
         -tPrefix=hg16. -qPrefix=panTro1.
     end
 
+    # copy reciprocal net axt's for download (2004-10-04 kate)
+    cd axtRBestNet
+    gzip *.axt
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg16/vsPanTro1
+    mkdir axtRBestNet
+    cd axtRBestNet
+    cp /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/axtRBestNet/*.gz .
+    md5sum *.gz > md5sum.txt
+    
     # load renumbered chains into database  (2004-03-14 kate)
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz-blat.panTro1.lifted/rBestChain
@@ -8070,6 +8091,9 @@ cat > net.csh << 'EOF'
     netChainSubset chimp.newId.net all.newId.swp.chain over.newId.chain
     cp over.newId.chain \
         /cluster/data/hg16/bed/liftOver/hg16ToPanTro1.newId.over.chain
+    mv hg16TopanTro1.chain hg16Topantro1.chain.old
+    cd /cluster/data/hg16/bed/liftOver
+    ln -s hg16ToPanTro1.newId.over.chain hg16TopanTro1.chain
 
     ssh hgwdev
     cd /cluster/data/hg16/bed/blastz-blat.panTro1
@@ -9869,8 +9893,25 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     # load into database and copy to download directory
     ssh hgwdev
     makeLoChain-load hg16 hg17
+    cp /cluster/data/hg16/bed/blat.hg17/over.chain \
+        /cluster/data/hg16/bed/liftOver/hg16ToHg17.chain
         # Finished loading hg16ToHg17.over.chain
         # Now, add download link for /usr/local/apache/htdocs/goldenPath/hg16/liftOver/hg16ToHg17.over.chain.gz
+
+
+# LIFTOVER CHAIN FROM HG17 TO HG16 (IN PROGRESS 2005-01-03 kate)
+
+    ssh kolossus
+    cd /cluster/data/hg16/bed/blast.hg17
+    mkdir net.hg17
+    cd chain
+    chainMergeSort
+    chainNet stdin /cluster/data/hg16/chrom.sizes \
+                   /cluster/data/hg17/chrom.sizes \
+                        /dev/null ../net.hg17
+    time chainSwap 
+    netChainSubset net.hg17
+
 
 
 # ENCODE Regions        (kate)
@@ -11005,6 +11046,8 @@ SEQ2_LEN=$BASE/S2.len
     para create jobList
         # 57630 jobs
     para try, check, push, check, ....
+# Average job time:                 477s       7.95m     0.13h    0.01d
+# Longest job:                    12147s     202.45m     3.37h    0.14d
 
     # second cluster run: lift raw alignments -> lav dir
     ssh kki
@@ -11016,13 +11059,11 @@ SEQ2_LEN=$BASE/S2.len
     cd run.1
     wc -l jobList
     para create jobList
-        # 170 jobs
+        # 339 jobs
     para try
     para check 
     para push
-#Average job time:                 104s       1.73m     0.03h    0.00d
-#Longest job:                      564s       9.40m     0.16h    0.01d
-#Submission to last job:          1242s      20.70m     0.34h    0.01d
+        # GOT HERE
 
     # third run: lav -> axt
     ssh kki
@@ -11050,6 +11091,53 @@ cat `ls -1 *.lav | sort -g` \
     wc -l jobList
     head jobList
     para create jobList
+<<<<<<< makeHg16.doc
+        # 42 jobs
+
+    # GOT HERE
+
+# CHAIN TETRAODON (tetNig1) BLASTZ (DONE, 2004-08-26, hartera)
+# Make chains with rescored blastz
+    # Run axtChain on little cluster
+    ssh kki
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    mkdir -p axtChain/run1
+    cd axtChain/run1
+    mkdir out chain
+    ls -1S /cluster/data/hg17/bed/blastz.tetNig1/axtChrom/*.axt \
+        > input.lst
+cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain} {check out line+ out/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    # Make our own linear gap file with reduced gap penalties, 
+    # in hopes of getting longer chains - works well for species at 
+    # chicken-human distance or greater
+    cat << '_EOF_' > ../../chickenHumanTuned.gap
+tablesize	11
+smallSize	111
+position	1	2	3	11	111	2111	12111	32111	72111	152111	252111
+qGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+tGap	325	360	400	450	600	1100	3600	7600	15600	31600	56600
+bothGap	625	660	700	750	900	1400	4000	8000	16000	32000	57000
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+cat << '_EOF_' > doChain
+#!/bin/csh
+axtChain -linearGap=../../chickenHumanTuned.gap $1 \
+    /iscratch/i/gs.18/build35/bothMaskedNibs \
+    /iscratch/i/tetNig1/nib $2 >& $3
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    ara try, check, push, check,...
+=======
         # 29 jobs
     para try, check, push, check,...
 
@@ -11093,6 +11181,9 @@ cat `ls -1 *.lav | sort -g` \
     rm celeraOverlay.bed bed.tab
 
 
+<<<<<<< makeHg16.doc
+>>>>>>> 1.203
+=======
 # YALE PSEUDOGENES (started Robert Baertsch, finished JK 2/21/05)
     ssh hgwdev
     cd /cluster/data/hg16/bed
@@ -11101,7 +11192,13 @@ cat `ls -1 *.lav | sort -g` \
     # Place file obtained from Mark Gerstein at yale in pseudoYale.gtf
     ldHgGene hg16 pseudoYale pseudoYale.gtf
     # Note - I'm guessing how this goes.  Robert left no record. -jk
+<<<<<<< makeHg16.doc
+>>>>>>> 1.206
+=======
 
+<<<<<<< makeHg16.doc
+>>>>>>> 1.211
+=======
 ## refresh vega tracks with vega build30        (done 5/4/04 Robert)
 ##download vega mysql tables
 cd /cluster/store8/ensembl
@@ -11149,12 +11246,18 @@ ldHgGene hg16 vegaGene -predTab vegaGeneHg16.gp -gtf
 ldHgGene hg16 vegaPseudoGene -predTab vegaPseudoGeneHg16.gp -gtf 
 echo 'truncate table vegaInfo' | hgsql hg16 -N -B
 echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N -B
+<<<<<<< makeHg16.doc
+>>>>>>> 1.213
+=======
 
 
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
 
+<<<<<<< makeHg16.doc
+>>>>>>> 1.214
+=======
 ##########################################################################
 # CNPs from University of Washington (Done, Heather and Daryl, June/July 2005)
 # data from http://humanparalogy.gs.washington.edu/structuralvariation
@@ -11199,6 +11302,9 @@ hgLoadBed hg16 cnpIafrate -tab -sqlTable=cnpIafrate.sql cnpIafrate.bed
 cp Sebat.txt cnpSebat.bed
 hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 
+<<<<<<< makeHg16.doc
+>>>>>>> 1.219
+=======
 ##########################################################################
 # sno/miRNA track from Michel Weber (DONE - 2005-06-16 - Hiram)
 #	received the data file UCSC_snotrack_hg16.txt via email
@@ -11249,6 +11355,9 @@ close (FH);
 	hg16.wgRna.tab
     #	this leaves 16 items classified as unknown, request to
     #	Michel Weber for proper classification
+<<<<<<< makeHg16.doc
+>>>>>>> 1.220
+=======
 
 ################################################################################
 # Build hg17Kg table for KG II for hg16, using hg17 KG data (DONE 2005-07-11 Fan).
@@ -11390,4 +11499,36 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
 # Chris Carlson [csc47<AT>u<DOT>washington<DOT>edu]
 
     # lifted down from hg17.  See makeHg17.doc for details
+
+##########################################################################
+# NHGRI DNASE I HYPERSENSITIVE SITES (2005-10-05 kate)
+#  Submitted by Greg Crawford via web site,
+#  http://research.nhgri.nih.gov/DNaseHS/May2005/
+
+    # Same display as ENCODE track by Angie...
+    # Jim asked to add scores for grayscale-coloring:
+    #   clusters of 2 drawn in 50%,  clusters of 3 drawn in 75%,
+    #   and clusters of 4 or more drawn in 100% black.
+
+    mkdir /cluster/data/hg17/bed/nhgri/lab
+    cd /cluster/data/hg17/bed/nhgri/lab
+    foreach c (`cut -f 1 /cluster/data/hg17/chrom.sizes`)
+        echo $c
+        wget -nd http://research.nhgri.nih.gov/DNaseHS/May2005/clusters/$c.LynxClusters.bed 
+    end
+    cd ..
+
+    # special handling for ID's on chrM (they are preceded by 'M_')
+    ls lab/chr*.bed | grep -v chrM | xargs cat | grep '^chr'  \
+        | perl -wpe 'if (/500bp_(\d+)_(\d+)/) { \
+                   $id = $1 . "_" . $2; \
+                   $score = ($2 >= 4) ? 1000 : $2 * 250; \
+                   s/500bp.+/$id\t$score/; } else { die "parse"; }' > hs.bed
+
+    cat lab/chrM*.bed | grep '^chr'  \
+        | perl -wpe 'if (/500bp_(M_\d+)_(\d+)/) { \
+                   $id = $1 . "_" . $2; \
+                   $score = ($2 >= 4) ? 1000 : $2 * 250; \
+                   s/500bp.*/$id\t$score/; } else { die "parse"; }' > chrM.hs.bed
+    cat hs.bed chrM.hs.bed | hgLoadBed hg16 nhgriDnaseHs stdin
 
