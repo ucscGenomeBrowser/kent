@@ -14,7 +14,7 @@
 #include "psl.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: gfOut.c,v 1.13 2005/07/26 23:37:15 fanhsu Exp $";
+static char const rcsid[] = "$Id: gfOut.c,v 1.14 2005/10/05 18:02:48 fanhsu Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -31,6 +31,7 @@ struct axtData
     int databaseSeqCount;	/* Just used for blast. */
     double databaseLetters; /* Just used for blast. */
     char *blastType;	/* 'blast' or 'wublast' or 'xml' or 'blast8' or 'blast9' */
+    double minIdentity; /* Just used for blast. */
     };
 
 static void savePslx(char *chromName, int chromSize, int chromOffset,
@@ -408,7 +409,7 @@ static void blastQueryOut(struct gfOutput *out, FILE *f)
 struct axtData *aod = out->data;
 axtBlastOut(aod->bundleList, out->queryIx, out->qIsProt, f,
 	aod->databaseName, aod->databaseSeqCount, aod->databaseLetters,
-	aod->blastType, "blat");
+	aod->blastType, "blat", aod->minIdentity);
 axtBundleFreeList(&aod->bundleList);
 }
 
@@ -496,7 +497,7 @@ return out;
 struct gfOutput *gfOutputBlast(int goodPpt, 
 	boolean qIsProt, boolean tIsProt, 
 	char *databaseName, int databaseSeqCount, double databaseLetters,
-	char *blastType, FILE *f)
+	char *blastType, double minIdentity, FILE *f)
 /* Setup output for blast format. */
 {
 struct gfOutput *out = gfOutputAxtMem(goodPpt, qIsProt, tIsProt);
@@ -505,6 +506,7 @@ ad->databaseName = databaseName;
 ad->databaseSeqCount = databaseSeqCount;
 ad->databaseLetters = databaseLetters;
 ad->blastType = blastType;
+ad->minIdentity = minIdentity;
 out->queryOut = blastQueryOut;
 return out;
 }
@@ -513,6 +515,7 @@ struct gfOutput *gfOutputAny(char *format,
 	int goodPpt, boolean qIsProt, boolean tIsProt, 
 	boolean noHead, char *databaseName,
 	int databaseSeqCount, double databaseLetters,
+	double minIdentity,
 	FILE *f)
 /* Initialize output in a variety of formats in file or memory. 
  * Parameters:
@@ -524,6 +527,7 @@ struct gfOutput *gfOutputAny(char *format,
  *    databaseName - name of database.  Only used for blast output
  *    databaseSeq - number of sequences in database - only for blast
  *    databaseLetters - number of bases/aas in database - only blast
+ *    minIdentity - minimum identity - only blast
  *    FILE *f - file.  
  */
 {
@@ -540,7 +544,8 @@ else if (sameWord(format, "sim4"))
     out = gfOutputSim4(goodPpt, qIsProt, tIsProt, databaseName);
 else if (stringArrayIx(format, blastTypes, ArraySize(blastTypes)) >= 0)
     out = gfOutputBlast(goodPpt, qIsProt, tIsProt, 
-	    databaseName, databaseSeqCount, databaseLetters, format, f);
+	    databaseName, databaseSeqCount, databaseLetters, format, 
+	    minIdentity, f);
 else if (sameWord(format, "axt"))
     out = gfOutputAxt(goodPpt, qIsProt, tIsProt, f);
 else if (sameWord(format, "maf"))
