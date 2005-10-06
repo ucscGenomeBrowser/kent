@@ -58,6 +58,14 @@ exit
     cd /cluster/data/encode/convertHg17
     cp hg17_count.txt md5sum.txt hg17.fa.gz hg17.msk.fa.gz /usr/local/apache/htdocs/goldenPath/hg17/encode/regions
 
+    # October MSA freeze
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/encode
+    mkdir alignments
+    ln -s /cluster/data/encode/downloads/msa/SEP-2005 .
+    # terms of use
+    cp /usr/local/apache/htdocs/goldenPath/hg16/encode/alignments/README.txt .
+
 
 !##########################################################################
 ###########################################################################
@@ -748,12 +756,14 @@ cat > doLoad.csh << 'EOF'
     # Reading encodeGisChipPetStat1NoGif.tab
     # Loaded 3180 elements of size 12
     # NOTE: These counts correspond with the doc file they provided
-    # Better to have genome-wide.. I'll request this
+    # Unlike the previous GIS Chip/chip dataset, these are only
+    # in the ENCODE regions.  I requested the genome-wide
+    # data -- they will provide  this later.
 
     # Create composite track, encodeGisChipPetStat, with 2 subtracks
 
 ##########################################################################
-# UCSD/Ludwig Institute (Bing Ren lab)
+# UCSD/Ludwig Institute (Bing Ren lab) (kate)
 
     cd /cluster/data/encode/UCSD/nimblegen
     mkdir 2005-09-29
@@ -761,5 +771,46 @@ cat > doLoad.csh << 'EOF'
     mkdir lab
     # copy file from FTP dir, unzip and untar, into lab dir
     # 12 data files and README
+
+##########################################################################
+# UT-Austin (Vishy Iyer lab) Chip/chip  (kate)
+
+    cd /cluster/data/encode
+    mkdir UTexas/2005-10-01/lab
+    cd UTexas/2005-10-01/lab
+    # copy file from FTP dir
+    # 8 .wig data files (2 tracks, 4 experiments), plus description file
+
+    
+##########################################################################
+# Affy Chip/chip and RNA (kate)
+# submitted by Hari_Tammana@affymetrix.com (Oct. 3)
+#  with clarifications as to display from Phil Kapranov at Affy
+
+    cd /cluster/data/encode/Affy
+    mkdir 2005-10-03/lab
+    cd 2005-10-03/lab
+    # copy file from FTP dir (500M) affy_oct1.tar.gz
+    # two data dirs: CHIP, RNA
+    # 10 descriptions for CHIP dir, 3 for RNA dir
+    # RNA has 2 dirs (bed, wig) with each
+    #   having 3 cell lines (GM06990, HeLa, HL60; the HL60
+    #   data has 4 timepoints (0, 2, 8, 32)
+    #  README's (and discussions with Phil) indicate the 
+    #     wig's are replacements for previous RNA Signal
+    #     data, and bed's are replacement Transfrags
+    # The CHIP .wig files are similar to the previous
+    #   Affy Pval data, but analyzed with stricter analysis
+    #   criteria.  The .bed files are comparable to the Sites
+    #  track.  2 factors are repeats from previous track
+    #   (HisH4 TetraAc, Pol2), and 3 are new (H3K9K14DiAc, 
+    # p63_ActD (with Actinomycin D treatment), 
+    # p63_mActD (without Actinomycin D treatment)
+    #  The Pol2, HisH4, and H3* data are at 4 timepoints.
+    # These should be loaded in addition to previous tracks
+    #  (not replacements).  Later the earlier ("lenient")
+    #  analysis will be submitted for the 3 new factors,
+    #  and these will be added to the previous Affy Chip/chip tracks
+    #  on hg17.
 
     
