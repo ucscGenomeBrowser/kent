@@ -11504,22 +11504,24 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
 # NHGRI DNASE I HYPERSENSITIVE SITES (2005-10-05 kate)
 #  Submitted by Greg Crawford via web site,
 #  http://research.nhgri.nih.gov/DNaseHS/May2005/
+#  In addition, a file containing the 'randoms' was FTP'ed by Greg
 
     # Same display as ENCODE track by Angie...
     # Jim asked to add scores for grayscale-coloring:
     #   clusters of 2 drawn in 50%,  clusters of 3 drawn in 75%,
     #   and clusters of 4 or more drawn in 100% black.
 
-    mkdir /cluster/data/hg17/bed/nhgri/lab
-    cd /cluster/data/hg17/bed/nhgri/lab
-    foreach c (`cut -f 1 /cluster/data/hg17/chrom.sizes`)
+    mkdir /cluster/data/hg16/bed/nhgri/lab
+    cd /cluster/data/hg16/bed/nhgri/lab
+    foreach c (`cut -f 1 /cluster/data/hg16/chrom.sizes`)
         echo $c
         wget -nd http://research.nhgri.nih.gov/DNaseHS/May2005/clusters/$c.LynxClusters.bed 
     end
     cd ..
 
     # special handling for ID's on chrM (they are preceded by 'M_')
-    ls lab/chr*.bed | grep -v chrM | xargs cat | grep '^chr'  \
+    ls lab/chr*.bed lab/crawford_random_DNase_clusters.txt \
+        | grep -v chrM | xargs cat | grep '^chr'  \
         | perl -wpe 'if (/500bp_(\d+)_(\d+)/) { \
                    $id = $1 . "_" . $2; \
                    $score = ($2 >= 4) ? 1000 : $2 * 250; \
@@ -11529,6 +11531,8 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
         | perl -wpe 'if (/500bp_(M_\d+)_(\d+)/) { \
                    $id = $1 . "_" . $2; \
                    $score = ($2 >= 4) ? 1000 : $2 * 250; \
-                   s/500bp.*/$id\t$score/; } else { die "parse"; }' > chrM.hs.bed
-    cat hs.bed chrM.hs.bed | hgLoadBed hg16 nhgriDnaseHs stdin
+                   s/500bp.*/$id\t$score/; } else { die "parse"; }' >> hs.bed
+    hgLoadBed hg16 nhgriDnaseHs hs.bed
+        # Loaded 14225 elements of size 5
+
 
