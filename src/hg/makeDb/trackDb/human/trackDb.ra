@@ -974,6 +974,7 @@ priority 100
 visibility hide
 type bed 5 .
 useScore 1
+origAssembly hg16
 
 track blastDm1FB
 shortLabel D. mel. Proteins
