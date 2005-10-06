@@ -11500,6 +11500,132 @@ hgLoadBlastTab hg16 mmBlastTab -maxPer=1 *.tab
 
     # lifted down from hg17.  See makeHg17.doc for details
 
+# AFFYHUEX1 track (sugnet Wed Oct  5 12:18:18 PDT 2005)
+
+mkdir hg16
+cd hg16
+pwd
+# /cluster/store1/sugnet/affymetrixHumanAllExon/hg16
+mkdir gff beds annot
+cd gff
+# download gff design files
+cp ../../hg17/gff/parseGff.pl .
+# parse gff script...
+#!/usr/bin/perl -w
+if(scalar(@ARGV) == 0) {
+    print STDERR "parseGff.pl - Parse out affymetrixes gff annotation 
+probesets for human all exon design.
+usage:
+   parseGff.pl file1.design.gff file2.design.gff ... fileN.design.gff
+";
+    exit(1);
+}
+
+sub splitField($) {
+    my $l = shift(@_);
+    my @w = split / /, $l;
+    return $w[1];
+}
+
+while($file = shift(@ARGV)) {
+    if(!($file =~ /(.+)\.gff/)) {
+	die "$file doesn't have .gff suffix\n";
+    }
+    $prefix = $1;
+    print STDERR "Doing file $file.\n";
+    open(IN, $file) or die "Can't open $file to read.";
+    open(BED, ">../beds/$prefix.pset.bed") or die "Can't open ../beds/$prefix.pset.bed to write.";
+    open(ANNOT, ">../annot/$prefix.tab") or die "Can't open ../annot/$prefix.tab to write.";
+    while($line = <IN>) {
+	# Only want the probeset records.
+	if($line =~ /\tprobeset\t/) {
+	    $score = 0;
+	    $cds = 0;
+	    $bounded = 0;
+	    chomp($line);
+	    # pop off an microsoft line endings.
+	    $line =~ s/\r$//;
+	    @words = split /\t/, $line;
+	    # This makes the evidence be comman separated.
+	    $words[8] =~ s/\" \"/,/g;
+	    # This gets rid of pesky quotes.
+	    $words[8] =~ s/\"//g;
+
+	    # Set the score based on the annotation type
+	    if($words[8] =~ /full/) {
+		$score = 200;
+	    }
+	    elsif($words[8] =~ /extended/) {
+		$score = 500;
+	    }
+	    elsif($words[8] =~ /core/) {
+		$score = 900;
+	    }
+	    if($words[8] =~ /bounded/) {
+		$score -= 200;
+	    }
+	    if($words[8] =~ /cds/) {
+		$score += 100;
+	    }
+	    if($score <= 0) {
+		$score = 100;
+	    }
+		
+	    # Print out the annotation fields.
+	    @fields = split /; /,$words[8];
+	    $id = splitField($fields[1]);
+	    $f = shift(@fields);
+	    $f = splitField($f);
+	    print ANNOT "$f";
+	    while($f = shift(@fields)) {
+		if($f =~ /^bounded/) {
+		    $bounded = 1;
+		}
+		if($f =~ /^cds/) {
+		    $cds = 1;
+		}
+		if(!($f =~ /^bounded/ || $f =~ /^cds/)) {
+		    $f = splitField($f);
+		    print ANNOT "\t$f";
+		}
+	    }
+	    print ANNOT "\t$bounded\t$cds";
+	    print ANNOT "\n";
+	    print BED "$words[0]\t$words[3]\t$words[4]\t$id\t$score\t$words[6]\n";
+	}
+    }
+    close(IN);
+    close(BED);
+    close(ANNOT);
+}
+
+./parseGff.pl *.gff
+cat beds/*.bed > affyHuEx1.bed
+hgLoadBed hg16 affyHuEx1 affyHuEx1.bed -strict
+cat annot/*.tab > affyHuEx1.annot.tab 
+cp ../hg17/affyHuEx1Annot.sql ./
+# Contents of affyHuEx1Annot.sql file
+CREATE TABLE affyHuEx1Annot (
+  numIndependentProbes smallint not null,
+  probesetId int(11) not null,
+  exonClustId int(11) not null,
+  numNonOverlapProbes smallint not null,
+  probeCount smallint not null,
+  transcriptClustId int(11) not null,
+  probesetType smallint not null,
+  numXHybeProbe smallint not null,
+  psrId int(11) not null,
+  level varchar(10) not null,
+  evidence varchar(255) not null,
+  bounded smallint not null,
+  cds smallint not null,
+  PRIMARY KEY (probesetId)
+);
+hg16S -A < affyHuEx1Annot.sql 
+echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" | hg16S -A
+
+# end AFFYHUEX1 track
+
 ##########################################################################
 # NHGRI DNASE I HYPERSENSITIVE SITES (2005-10-05 kate)
 #  Submitted by Greg Crawford via web site,

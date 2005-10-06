@@ -275,6 +275,17 @@ altColor 0,0,255
 chromosomes chr22,chr21
 type sample
 
+track affyHuEx1
+shortLabel Affy HuEx 1.0
+longLabel Affymetrix Human Exon 1.0 Probe Sets
+group regulation
+priority 88.5
+visibility hide
+url http://www.affymetrix.com/analysis/netaffx/exon/probe_set.affx?pk=$$
+useScore 1
+type bed 6 .
+exonArrows on
+
 track affyU133
 shortLabel Affy U133
 longLabel Alignments of Affymetrix Consensus/Exemplars from HG-U133
