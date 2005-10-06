@@ -111,7 +111,6 @@ speciesGroups mammal vertebrate
 sGroup_mammal rn3 hg17 canFam1 bosTau1
 sGroup_vertebrate monDom1 galGal2 xenTro1 danRer2 tetNig1
 treeImage phylo/Mm6_10way.jpg
-<<<<<<< trackDb.ra
 
 track bacEndPairs
 shortLabel BAC End Pairs
@@ -122,7 +121,6 @@ visibility hide
 type bed 6 +
 exonArrows off
 
-=======
 
 track nscanGene
 shortLabel N-SCAN
