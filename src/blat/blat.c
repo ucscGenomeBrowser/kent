@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.105 2005/10/05 10:11:45 fanhsu Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.106 2005/10/06 21:58:40 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -90,7 +90,7 @@ printf(
   "                 dnax - DNA sequence translated in six frames to protein\n"
   "                 rnax - DNA sequence translated in three frames to protein\n"
   "               The default is dna\n"
-  "   -prot       Synonymous with -d=prot -q=prot\n"
+  "   -prot       Synonymous with -t=prot -q=prot\n"
   "   -ooc=N.ooc  Use overused tile file N.ooc.  N should correspond to \n"
   "               the tileSize\n"
   "   -tileSize=N sets the size of match that triggers an alignment.  \n"
