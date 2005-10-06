@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.269 2005/10/05 12:04:24 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.270 2005/10/06 00:18:08 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2180,19 +2180,19 @@ static char *matrixHtml(char *matrix, char *matrixHeader)
         errAbort("Invalid matrix size in doc: %s\n", words[0]);
     dyStringAppend(m, "The following matrix was used:<P>\n");
     k = 1;
-    dyStringAppend(m, "<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=3>\n");
+    dyStringAppend(m, "<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR=\"#aaaaaa\">\n");
     if (matrixHeader)
         {
         dyStringAppend(m, "<TR ALIGN=right><TD></TD>");
         for (i = 0; i < size && i < headerCount; i++)
-            dyStringPrintf(m, "<TD>%s</TD>", headerWords[i]);
+            dyStringPrintf(m, "<TD><B>%s</B></TD>", headerWords[i]);
         dyStringAppend(m, "</TR>\n");
         }
     for (i = 0; i < size; i++)
         {
         dyStringAppend(m, "<TR ALIGN=right>");
         if (matrixHeader)
-            dyStringPrintf(m, "<TD>%s</TD>", headerWords[i]);
+            dyStringPrintf(m, "<TD><B>%s<B></TD>", headerWords[i]);
         for (j = 0; j < size && k < wordCount ; j++)
             dyStringPrintf(m, "<TD>%s</TD>", words[k++]);
         dyStringAppend(m, "</TR>\n");
