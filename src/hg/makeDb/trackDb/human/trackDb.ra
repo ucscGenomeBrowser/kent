@@ -2910,7 +2910,7 @@ origAssembly hg16
 
 track encodeGisChipPetStat1
 compositeTrack on
-shortLabel GIS STAT1 gIF HeLa
+shortLabel GIS STAT1 HeLa
 longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on HeLa cells
 group encodeChip
 color 135, 158,35
