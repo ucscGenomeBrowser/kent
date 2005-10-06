@@ -5,10 +5,11 @@
 #include "options.h"
 #include "dystring.h"
 #include "obscure.h"
+#include "rbTree.h"
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.1 2005/10/03 20:13:02 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.2 2005/10/06 21:10:07 kent Exp $";
 
 char *database = "visiGene";
 
@@ -28,6 +29,93 @@ static struct optionSpec options[] = {
    {"db", OPTION_STRING},
    {NULL, 0},
 };
+
+struct visiMatch
+/* Info on a score of an image in free format search. */
+    {
+    struct visiMatch *next;
+    int imageId;	/* Image ID associated with search. */
+    double weight;	/* The higher the weight the better the match */
+    };
+
+int visiMatchCmpImageId(void *va, void *vb)
+/* rbTree comparison function to tree on imageId. */
+{
+struct visiMatch *a = va, *b = vb;
+return a->imageId - b->imageId;
+}
+
+int visiMatchCmpWeight(const void *va, const void *vb)
+/* Compare to sort based on match. */
+{
+const struct visiMatch *a = *((struct visiMatch **)va);
+const struct visiMatch *b = *((struct visiMatch **)vb);
+double dif = b->weight - a->weight;
+if (dif > 0)
+   return 1;
+else if (dif < 0)
+   return -1;
+else
+   return 0;
+}
+
+
+struct visiSearcher
+/* This collects together information for free format searches. */
+    {
+    struct visiSearcher *next;		/* Next search */
+    struct visiMatch *matchList;	/* List of matching images. */
+    struct rbTree *tree;		/* Tree for near random access. */
+    };
+
+struct visiSearcher *visiSearcherNew()
+/* Create a new, empty search structure. */
+{
+struct visiSearcher *searcher;
+AllocVar(searcher);
+searcher->tree = rbTreeNew(visiMatchCmpImageId);
+return searcher;
+}
+
+void visiSearcherFree(struct visiSearcher **pSearcher)
+/* Free up memory associated with *pSearcher */
+{
+struct visiSearcher *searcher = *pSearcher;
+if (searcher != NULL)
+    {
+    slFreeList(&searcher->matchList);
+    rbTreeFree(&searcher->tree);
+    freez(pSearcher);
+    }
+}
+
+struct visiMatch *visiSearcherAdd(struct visiSearcher *searcher,
+	int imageId, double weight)
+/* Add given weight to match involving imageId,  creating
+ * a fresh match if necessary for imageId. */
+{
+struct visiMatch key, *match;
+key.imageId = imageId;
+match = rbTreeFind(searcher->tree, &key);
+if (match == NULL)
+    {
+    AllocVar(match);
+    match->imageId = imageId;
+    slAddHead(&searcher->matchList, match);
+    rbTreeAdd(searcher->tree, match);
+    }
+match->weight += weight;
+return match;
+}
+
+struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
+/* Get sorted list of match results from searcher. 
+ * You don't own the list returned though.  It will evaporate
+ * with visiSearcherFree. */
+{
+slSort(&searcher->matchList, visiMatchCmpWeight);
+return searcher->matchList;
+}
 
 char *stripSpacesEtc(char *s)
 /* Return a copy of s with spaces, periods, and dashes removed */
@@ -74,8 +162,8 @@ freeMem(stripped);
 return count;
 }
 
-struct slInt *visiGeneSelectContributor(struct sqlConnection *conn, 
-        char *contributors)
+void visiGeneMatchContributor(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, char *contributors)
 /* Return ids of images that were contributed by all people in list. 
  * We want the behavior to be such that given a list of last names,
  * say "Smith Mahoney" it will return only those that match both 
@@ -94,7 +182,6 @@ struct slInt *visiGeneSelectContributor(struct sqlConnection *conn,
 {
 struct slName *wordList = stringToSlNames(contributors);
 struct slName *word;
-struct slInt *idList = NULL;
 struct hash *hash = hashNew(0);
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
@@ -139,16 +226,21 @@ for (word = wordList; word != NULL;  )
 dyStringFree(&query);
 hashFree(&hash);
 slFreeList(&wordList);
-return idList;
 }
 
 void visiGeneSearch(char *searchString)
 /* visiGeneSearch - Test out search routines for VisiGene. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct slInt *matchIdList;
+struct visiMatch *matchList, *match;
+struct visiSearcher *searcher = visiSearcherNew();
 printf("Searching %s for \"%s\"\n", database, searchString);
-matchIdList = visiGeneSelectContributor(conn, searchString);
+visiGeneMatchContributor(searcher, conn, searchString);
+matchList = visiSearcherSortResults(searcher);
+for (match = matchList; match != NULL; match = match->next)
+    {
+    printf("%f %d\n", match->weight, match->imageId);
+    }
 }
 
 int main(int argc, char *argv[])
