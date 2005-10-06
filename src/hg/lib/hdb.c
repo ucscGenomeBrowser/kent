@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.268 2005/10/03 18:33:38 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.268.2.1 2005/10/06 22:06:50 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2170,9 +2170,9 @@ static char *matrixHtml(char *matrix, char *matrixHeader)
     int i, j, k;
     int wordCount = 0, headerCount = 0;
 
-    wordCount = chopString(matrix, ", \t", words, ArraySize(words));
+    wordCount = chopString(cloneString(matrix), ", \t", words, ArraySize(words));
     if (matrixHeader != NULL)
-        headerCount = chopString(matrixHeader, ", \t", headerWords, 
+        headerCount = chopString(cloneString(matrixHeader), ", \t", headerWords, 
                         ArraySize(headerWords));
     m = dyStringNew(0);
     size = sqrt(sqlDouble(words[0]));
