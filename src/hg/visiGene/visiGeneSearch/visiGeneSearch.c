@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.2 2005/10/06 21:10:07 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.3 2005/10/07 02:25:47 kent Exp $";
 
 char *database = "visiGene";
 
@@ -149,7 +149,7 @@ for (word = wordList; word != NULL; word = word->next)
     if (startsWith(w, pt))
         {
 	count += 1;
-	pt += strlen(word->name);
+	pt += strlen(w);
 	freeMem(w);
 	}
     else
@@ -160,6 +160,32 @@ for (word = wordList; word != NULL; word = word->next)
     }
 freeMem(stripped);
 return count;
+}
+
+
+static void addImagesMatchingName(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *contributor)
+/* Add images that are contributed by given contributor to
+ * searcher with a weight of one.  Use dy for scratch space for
+ * the query. */
+{
+int contributorId;
+struct sqlResult *sr;
+char **row;
+
+dyStringClear(dy);
+dyStringPrintf(dy, 
+   "select image.id from "
+   "contributor,submissionContributor,imageFile,image "
+   "where contributor.name = \"%s\" "
+   "and contributor.id = submissionContributor.contributor "
+   "and submissionContributor.submissionSet = imageFile.submissionSet "
+   "and imageFile.id = image.imageFile"
+   , contributor);
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+sqlFreeResult(&sr);
 }
 
 void visiGeneMatchContributor(struct visiSearcher *searcher, 
@@ -182,49 +208,43 @@ void visiGeneMatchContributor(struct visiSearcher *searcher,
 {
 struct slName *wordList = stringToSlNames(contributors);
 struct slName *word;
-struct hash *hash = hashNew(0);
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
 
 for (word = wordList; word != NULL;  )
     {
-    struct slName *lastNameList, *lastName;
-    struct slName *matchList = NULL, *match;
+    struct slName *nameList, *name;
     int maxWordsUsed = 0;
     dyStringClear(query);
     dyStringAppend(query, "select name from contributor where name like \"");
     dyStringAppend(query, word->name);
     dyStringAppend(query, " %\"");
-    uglyf("Searching starting at %s\n", word->name);
-    lastNameList = sqlQuickList(conn, query->string);
-    if (lastNameList == NULL)
-        {
-	slFreeList(&matchList);
-	break;
-	}
-    for (lastName = lastNameList; lastName != NULL; lastName = lastName->next)
-        {
-	int wordsUsed = countWordsUsedInName(lastName->name, word);
-	if (wordsUsed > maxWordsUsed)
-	    maxWordsUsed = wordsUsed;
-	}
-    for (lastName = lastNameList; lastName != NULL; lastName = lastName->next)
-        {
-	if (countWordsUsedInName(lastName->name, word) == maxWordsUsed)
+    nameList = sqlQuickList(conn, query->string);
+    if (nameList != NULL)
+	{
+	for (name = nameList; name != NULL; name = name->next)
 	    {
-	    match = slNameNew(lastName->name);
-	    slAddHead(&matchList, match);
-	    uglyf("%d %s\n", maxWordsUsed, lastName->name);
+	    int wordsUsed = countWordsUsedInName(name->name, word);
+	    if (wordsUsed > maxWordsUsed)
+		maxWordsUsed = wordsUsed;
 	    }
+	for (name = nameList; name != NULL; name = name->next)
+	    {
+	    if (countWordsUsedInName(name->name, word) == maxWordsUsed)
+		{
+		addImagesMatchingName(searcher, conn, query, name->name);
+		}
+	    }
+	while (--maxWordsUsed >= 0)
+	    word = word->next;
 	}
-    while (--maxWordsUsed >= 0)
+    else
         word = word->next;
-    slFreeList(&lastNameList);
+    slFreeList(&nameList);
     }
    
 dyStringFree(&query);
-hashFree(&hash);
 slFreeList(&wordList);
 }
 
