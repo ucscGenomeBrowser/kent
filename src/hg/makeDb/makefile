@@ -38,6 +38,7 @@ DIRS = \
 	hgLoadGenePred \
 	hgLoadItemAttr \
 	hgLoadMaf \
+	hgLoadMafFrames \
 	hgLoadNet \
 	hgLoadOut \
 	hgLoadPsl \
