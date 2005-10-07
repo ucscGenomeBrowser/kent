@@ -154,7 +154,7 @@ type netAlign dp2 chainDp2
 otherDb dp2
 
 track xenoRefGene
-shortLabel Non-$Organism RefSeq
+shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1

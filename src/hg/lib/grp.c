@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "grp.h"
 
-static char const rcsid[] = "$Id: grp.c,v 1.4 2005/04/13 06:25:54 markd Exp $";
+static char const rcsid[] = "$Id: grp.c,v 1.5 2005/10/05 12:04:25 aamp Exp $";
 
 void grpStaticLoad(char **row, struct grp *ret)
 /* Load a row from grp table into ret.  The contents of ret will
@@ -142,3 +142,48 @@ if (dif > 0) return 1;
 return 0;
 }
 
+int grpCmpName(const void *va, const void *vb)
+/* Compare to sort based on name. */
+{
+const struct grp *a = *((struct grp **)va);
+const struct grp *b = *((struct grp **)vb);
+return strcmp(a->name, b->name);
+}
+
+void replaceOrAdd(struct grp **pList, struct grp *newone)
+/* Add the grp to the list no matter what.  Replace the grp
+ * one the list with the new grp if their names match. */
+{
+struct grp *newList = NULL;
+boolean replaced = FALSE;
+while (*pList != NULL)
+    {
+    struct grp *oldone = slPopHead(pList);
+    if (sameString(oldone->name, newone->name))
+	{
+	grpFree(&oldone);
+	slAddHead(&newList, newone);
+	replaced = TRUE;
+	newList = slCat(newList, *pList);
+	break;
+	}
+    else 
+	slAddHead(&newList, oldone);
+    }
+if (!replaced)
+    slAddHead(&newList, newone);
+*pList = newList;
+}
+
+void grpSuperimpose(struct grp **listA, struct grp **listB)
+/* Replace all the grps in listA with the same names of those in
+ * listB.  Ones in B that aren't the same get put in A too.  
+ * The function returns with the new list A, and the empty list
+ * B. */
+{
+while (*listB != NULL)
+    {
+    struct grp *newone = slPopHead(listB);
+    replaceOrAdd(listA, newone);
+    }
+}

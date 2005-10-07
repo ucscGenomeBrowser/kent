@@ -626,11 +626,7 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
 
 - rawPsl files don't get migrated.
 
-- gbGetSeqs of psl missed NM_012335, others.
-
 - take over creation of mrnaRefseq table.
-
-- gbGetSeqs of psl missed NM_012335, others.
 
 - align.none file stayed around on failed align,. shpould purge up front.
 
@@ -641,15 +637,6 @@ Warning: NM_181796: malformed RefSeq CDS: join(76,77..708)
   the ~Oct 25th release of genbank 138
 
 - browser doesn't display mrnas/ests if nochrom loads are specified.
-
-- gbGetSeqs -gbRoot=/cluster/data/genbank -accFile=tmp/accs.tmp -get=seq -inclVersion refseq mrna stdout
-  where accs.tmp contains NM_005504.2 corrupts header. Doesn't happen if
-  sent to a file.
-
-- *** gbGetSets on psls reports sequences that didn't align as missing and
-  *** only returns the fist one
-
-- rawPsl handling looks broken
 
 - move all genome specific config to genbank.conf, including gbBlat stuff.
 
@@ -936,3 +923,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - could get better overlap with expensive setup set if did setup
   for one genome, then 
+
+- got this error during load
+  mySQL error 1050: Table 'xenoEst_new_tmp' already exists

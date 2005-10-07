@@ -18,6 +18,9 @@ struct chromBins
 struct chromBins *chromBinsNew(chromBinsFreeFunc *freeFunc);
 /* create a new chromBins object */
 
+void chromBinsFree(struct chromBins **chromBinsPtr);
+/* free chromBins object, calling freeFunc on each entry if it was specified */
+
 struct slName *chromBinsGetChroms(struct chromBins *chromBins);
 /* get list of chromosome names in the object.  Result should
  * be freed with slFreeList() */

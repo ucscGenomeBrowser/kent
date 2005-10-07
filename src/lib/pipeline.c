@@ -265,15 +265,30 @@ for (proc = pl->procs; proc != NULL; proc = proc->next)
     }
 }
 
+static int openOtherEndAsFD(char *otherEndFile)
+/* open the other end as if it were a fd number */
+{
+int fd = -1;
+if (startsWith("fd>",otherEndFile))
+    {
+    fd = atoi(otherEndFile+3);
+    }
+return fd;    
+}
+
 static int openOtherRead(char *otherEndFile)
 /* open the other end of the pipeline for reading */
 {
 int fd;
 if (otherEndFile != NULL)
     {
-    fd = open(otherEndFile, O_RDONLY);
+    fd = openOtherEndAsFD(otherEndFile);
     if (fd < 0)
-        errnoAbort("can't open for read access: %s", otherEndFile);
+	{
+	fd = open(otherEndFile, O_RDONLY);
+	if (fd < 0)
+	    errnoAbort("can't open for read access: %s", otherEndFile);
+	}
     }
 else
     fd = STDIN_FILENO;
@@ -286,9 +301,13 @@ static int openOtherWrite(char *otherEndFile)
 int fd;
 if (otherEndFile != NULL)
     {
-    fd = open(otherEndFile, O_WRONLY|O_CREAT, 0666);
+    fd = openOtherEndAsFD(otherEndFile);
     if (fd < 0)
-        errnoAbort("can't open for write access: %s", otherEndFile);
+	{
+	fd = open(otherEndFile, O_WRONLY|O_CREAT, 0666);
+    	if (fd < 0)
+	    errnoAbort("can't open for write access: %s", otherEndFile);
+	}
     }
 else 
     fd = STDOUT_FILENO;
@@ -349,7 +368,7 @@ return pipelineOpen(cmds, opts, otherEndFile);
 }
 
 char *pipelineDesc(struct pipeline *pl)
-/* Get the desciption of a pipeline for use in error messages */
+/* Get the description of a pipeline for use in error messages */
 {
 return pl->procName;
 }

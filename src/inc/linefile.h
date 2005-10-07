@@ -44,6 +44,9 @@ struct lineFile
     struct metaOutput *metaOutput;   /* list of FILE handles to write metaData to */
     };
 
+struct lineFile *lineFileDecompressFD(char *name, bool zTerm, int fd);
+/* open a linefile with decompression from a file or socket descriptor */
+
 struct lineFile *lineFileMayOpen(char *fileName, bool zTerm);
 /* Try and open up a lineFile. If fileName ends in .gz, .Z, or .bz2,
  * it will be read from a decompress pipeline. */

@@ -31,7 +31,7 @@ set cioSav cioSav1
 set tetNig tetNig1
 set xenTro xenTro1
 set monDom monDom1
-set bosTau bosTau1
+set bosTau bosTau1,bosTau2
 set rheMac rheMac1
 
 # Define all organism/assembly-specific databases.
@@ -42,7 +42,7 @@ set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$can
 set wgs $rn,$panTro,$galGal,$canFam,$bosTau
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn
+set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
@@ -1457,6 +1457,14 @@ identifier blastHg17KGPep01Id
      $danRer.blastHg17KG.qName
      $bosTau.blastHg17KG.qName
 
+identifier blastHg17KGPep02Id 
+"hg17 peptides 02"
+     $hg.blastKGPep02.name
+     $hg.knownGene.name  minCheck=0.95
+     $hg.blastKGRef02.acc
+     $danRer.blastHg17KG.qName
+     $bosTau.blastHg17KG.qName
+
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
      $hg.blastKGRef01.extra1 dupeOk
@@ -1891,6 +1899,7 @@ tablesIgnored $hg
     slamNonCodingRat
     syntenyMouse
     syntenyRat
+    targetScanS
     encodeAffyChIpRnapHl60PvalHr00
     encodeAffyChIpRnapHl60PvalHr02
     encodeAffyChIpRnapHl60PvalHr08

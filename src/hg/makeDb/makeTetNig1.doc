@@ -2492,6 +2492,22 @@ chainSome $(path1)
 
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
-
-
-
+#########################################################################
+# MOUSE NET/CHAINS MM7 - Info contained in makeMm7.doc (200503 Hiram)
+#########################################################################
+#	Prep for the Mm7 net/chains, need a lift file for the randoms
+#	(DONE - 2005-09-20 - Hiram)
+    ssh kkstore003
+    cd /cluster/data/tetNig1
+    #	We need the lift information from the random.agp files
+    cp -p /cluster/data/cb2/scripts/agpToLift.pl ./jkStuff
+    mkdir liftScaffoldsToChrom
+    for AGP in ?_random/*_random.agp ??_random/*_random.agp
+do
+    CHR=`dirname ${AGP}`
+    grep -v fragment "${AGP}" | ./jkStuff/agpToLift.pl /dev/stdin \
+	> liftScaffoldsToChrom/${CHR}.lft
+done
+    cat liftScaffoldsToChrom/*.lft > jkStuff/chromsAndScafs.lft
+    cp -p jkStuff/chromsAndScafs.lft \
+	/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.lft

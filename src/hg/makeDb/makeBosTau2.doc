@@ -1518,5 +1518,18 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     featureBits bosTau2 cpgIslandExt
     # 69207600 bases of 2812203870 (2.461%) in intersection
 
-
-
+#CHROMSOMES DOWNLOAD DIRECTORY (done 2005-09-26 galt)
+    ssh kkstore02
+    cd /cluster/data/bosTau2
+    mkdir chromosomes
+    cd chromosomes
+    faFilter -name=scaffold* ../bosTau2.softmask2.fa scaffolds.fa
+    /cluster/home/galt/bin/i386/faFilter -v -name=scaffold* ../bosTau2.softmask2.fa nonscaffolds.fa
+    faSplit byname nonscaffolds.fa ./
+    rm nonscaffolds.fa
+    gzip *.fa
+    md5sum *.gz > md5sum.txt
+    hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/bosTau2/
+    mv /cluster/data/bosTau2/chromosomes/ .
+     

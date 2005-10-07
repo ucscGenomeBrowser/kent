@@ -24,4 +24,9 @@ void dMatrixWrite(struct dMatrix *dm, FILE *out);
 void dMatrixFree(struct dMatrix **pDMatrix);
 /* Free up the memory used by a dMatrix. */
 
+void dMatrixWriteForSql(struct dMatrix *dM, char *tableName,
+			char *toLoad, char *sqlSpec);
+/* Write out two files that together will make a table in an 
+   sql database. */
+
 #endif /* DMATRIX_H */

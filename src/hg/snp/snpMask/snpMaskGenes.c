@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.3 2005/09/13 20:46:52 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskGenes.c,v 1.5 2005/09/21 22:04:23 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -299,29 +299,6 @@ char iupac(char *name, char *observed, char orig)
 }
 
 
-// stolen from hgc.c
-
-void printLines(FILE *f, char *s, int lineSize)
-/* Print s, lineSize characters (or less) per line. */
-{
-int len = strlen(s);
-int start;
-int oneSize;
-
-verbose(3, "len = %d\n", len);
-for (start = 0; start < len; start += lineSize)
-    {
-    oneSize = len - start;
-    if (oneSize > lineSize)
-        oneSize = lineSize;
-    mustWrite(f, s+start, oneSize);
-    fputc('\n', f);
-    }
-if (start != len)
-    fputc('\n', f);
-}
-
-
 
 void printExons(struct genePred *gene, struct dnaSeq *seq, FILE *f)
 /* print the sequence from the exons */
@@ -391,10 +368,10 @@ for (gene = genes; gene != NULL; gene = gene->next)
 
     snps = readSnpsFromGene(gene, chromName);
 
-    // remember zero-based start, one-based end
-    // probably need txStart + 1
     size = gene->txEnd - gene->txStart;
     assert(size > 0);
+    AllocVar(seq);
+    seq->dna = needLargeMem(size+1);
     seq = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, gene->txStart, size);
 
     ptr = seq->dna;

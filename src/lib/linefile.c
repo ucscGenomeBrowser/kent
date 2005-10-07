@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: linefile.c,v 1.39 2005/08/26 21:25:03 baertsch Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.40 2005/09/30 20:58:41 galt Exp $";
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -52,6 +52,19 @@ AllocVar(meta);
 meta->next = NULL;
 meta->metaFile = f;
 slAddHead(&lf->metaOutput, meta);
+}
+
+struct lineFile *lineFileDecompressFD(char *name, bool zTerm, int fd)
+/* open a linefile with decompression from a file or socket descriptor */
+{
+struct pipeline *pl;
+struct lineFile *lf;
+char fdString[128];
+safef(fdString, sizeof(fdString), "fd>%d", fd);
+pl = pipelineOpen1(getDecompressor(name), pipelineRead, fdString);
+lf = lineFileAttach(name, zTerm, pipelineFd(pl));
+lf->pl = pl;
+return lf;
 }
 
 static struct lineFile *lineFileDecompress(char *fileName, bool zTerm)

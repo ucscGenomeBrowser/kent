@@ -7,15 +7,6 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
-track xenoRefGene
-shortLabel Non-Ciona RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility hide
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
 track mrna
 shortLabel $Organism mRNAs
 longLabel $Organism mRNAs from GenBank 
@@ -49,7 +40,7 @@ type psl est
 pslSequenceBases no
 
 track xenoMrna
-shortLabel Non-Ciona mRNAs
+shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63

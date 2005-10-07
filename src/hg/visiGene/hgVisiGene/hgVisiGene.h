@@ -20,4 +20,5 @@
 #define listHowGenbank "listHowGenbank"
 #define listHowLocusLink "listHowLocusLink"
 
+
 #endif /* HGVISIGENE_H */

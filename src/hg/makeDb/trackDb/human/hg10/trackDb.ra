@@ -1,12 +1,3 @@
-track genscan
-shortLabel Genscan Genes
-longLabel Genscan Gene Predictions
-group genes
-priority 50
-visibility hide
-color 170,100,0
-type genePred genscanPep
-
 track aarMm2
 shortLabel Ancient Repeats
 longLabel Mouse (Feb. 2002/mm2) Aligned Ancient Repeats

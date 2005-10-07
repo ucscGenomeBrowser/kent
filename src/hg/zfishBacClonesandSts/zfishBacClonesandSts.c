@@ -83,7 +83,7 @@ struct hash *extNameHash;
 struct hash *aliasHash; 
 struct hash *sangerByExtNameHash;
 
-char *intNamePrefix[] = {"zC", "ZC", "zK", "zKp", "bZ", "dZ", "bY", "zH", "bP"};
+char *intNamePrefix[] = {"zC", "ZC", "zK", "zKp", "bZ", "dZ", "bY", "CHORI73_", "bP"};
 char *extNamePrefix[] = {"CH211-", "CH211-", "DKEY-", "DKEYP-", "RP71-", "BUSM1-", "XX-", "CH73-", "CT7-"};
 
 struct hashEl *addHashElUnique(struct hash *hash, char *name, void *val)

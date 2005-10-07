@@ -4,7 +4,7 @@ for human MGC genes but in general it can be for any MGC species.
 
 1. Washington U. setup
 
-   A suggested configuration of RTDB on the supplying end of the data would
+     Configuration of RTDB on the supplying end of the data would
      be:
 
     I. RTDB releases are put into a single file for each genome assembly, 
@@ -15,35 +15,37 @@ for human MGC genes but in general it can be for any MGC species.
 
    II. When copying files to that directory, do so in an atomic manner, e.g.: 
 
-           cp rtdb.tar.gz <directory>/rtdb.tar.gz.TMP
-           mv <directory>/rtdb.tar.gz.TMP <directory>/rtdb.tar.gz
+           cp rtdb.hg17.tar.gz <directory>/rtdb.hg17.tar.gz.TMP
+           mv <directory>/rtdb.hg17.tar.gz.TMP <directory>/rtdb.hg17.tar.gz
 
   III. RTDB files organized the following way, e.g. for rtdb.hg17.tar.gz:
 
-           hg17/mgcWUPcrHit.bed
-           hg17/mgcWUPcrHit.ra
-           hg17/mgcWUPcrHit.html
+           mgcWUPcrHit.bed
+           mgcWUPcrHit.ra
+           mgcWUPcrHit.html
              (C-list successes)
-           hg17/mgcWUPcrInProgress.bed
-           hg17/mgcWUPcrInProgress.ra
-           hg17/mgcWUPcrInProgress.html
+           mgcWUPcrInProgress.bed
+           mgcWUPcrInProgress.ra
+           mgcWUPcrInProgress.html
              (c-list pending)
-           hg17/mgcWUPcrFail.bed
-           hg17/mgcWUPcrFail.ra
-           hg17/mgcWUPcrFail.html
+           mgcWUPcrFail.bed
+           mgcWUPcrFail.ra
+           mgcWUPcrFail.html
              (c-list failed)
-           hg17/rtdb.md5
+           rtdb.md5
        
-       Note the extra subdirectory corresponding to the genome assembly.  That's 
-       mostly because it's always sort of good practice to have tarballs unpack their
-       into a subdirectory to avoid making a mess in the working directory.  Those 
-       funny filenames are named that way to match the table names in the UCSC 
+       The funny filenames are named that way to match the table names in the UCSC 
        database.  The rtdb.md5 file is for checksumming, and can be created like:
    
-           cd hg17/
            md5sum * > rtdb.md5 
 
-    V. Make RTDB files available through HTTP, or even better FTP.
+    V. Make RTDB files available through HTTP, or FTP at a specific directory.  
+       If HTTP, please set the security settings on the Wash U webserver to allow
+       directory listings, i.e. going to a web directory URL without an index.html
+       file doesn't cause an error.
+
+   VI. Going to this URL: http://mgc.ucsc.edu/cgi-bin/rtdbLoad, will trigger an 
+       update on http://mgc.ucsc.edu.
 
 2. UCSC setup
 
@@ -59,6 +61,10 @@ for human MGC genes but in general it can be for any MGC species.
 
            kent/src/hg/makeDb/genbank/src/rtdb
 
+       The rtdb.conf file has the following basic format:
+ 
+           hg17 = http://somewhere.edu/rtdb.hg17.tar.gz
+
    II. Files from (I) checked out for use in /cluster/data/genbank
        This location is also where downloaded RTDB goes.  Specifcally, while data is
        being downloaded it goes in:
@@ -67,21 +73,35 @@ for human MGC genes but in general it can be for any MGC species.
 
         where it gets decompressed like:
 
-           /cluster/data/genbank/data/download/rtdb/rtdb.tar.gz
+           /cluster/data/genbank/data/download/rtdb/2005.03.06/rtdb.hg17.tar.gz
                                 |
                                 V
            /cluster/data/genbank/data/processed/rtdb/2005.03.06/*
 
-       note the addition of the current date to the directory structure. 
+       If the RTDB is updated on the same day, another directory in the 
+       data/download/ area is created, but the directory in data/processed/
+       area is recreated.  For example, if RTDB is updated three times in a 
+       single day, there's:
+
+           /cluster/data/genbank/data/download/rtdb/2005.03.06/rtdb.hg17.tar.gz
+           /cluster/data/genbank/data/download/rtdb/2005.03.06-2/rtdb.hg17.tar.gz
+           /cluster/data/genbank/data/download/rtdb/2005.03.06-3/rtdb.hg17.tar.gz
+
+       but only one:
+
+           /cluster/data/genbank/data/processed/rtdb/2005.03.06/*
+
+       In addition to the rtdb.conf file being put in /cluster/data/genbank/etc,
+       a fresh copy of kent/src/hg/lib/trackDb.sql should be there also.
 
   III. The RTDB data goes into the MySQL databases on the mgc computer.
 
    IV. The RTDB data goes in the database according to its directory. For example,
        the files 
 
-           hg17/mgcWUPcrHit.bed
-           hg17/mgcWUPcrInProgress.bed
-           hg17/mgcWUPcrFail.bed
+           mgcWUPcrHit.bed
+           mgcWUPcrInProgress.bed
+           mgcWUPcrFail.bed
 
        go in the hg17 database as the tables mgcWUPcrHit, mgcWUPcrInProgress, and
        mgcWUPcrFail.  
@@ -94,7 +114,7 @@ for human MGC genes but in general it can be for any MGC species.
        on the browser without having to update the main trackDb table.  For
        example:
   
-           hgTrackDb -raName=mgcWUPcrHit.ra "" hg17 trackDbLocal_rtdb trackDb.sql .
+           hgTrackDb  "" hg17 trackDbLocal_rtdb trackDb.sql .
 
     V. Creation of a script that downloads, puts data in the right place, and
        updates the the database correctly.  This script can be run by cron
@@ -102,30 +122,38 @@ for human MGC genes but in general it can be for any MGC species.
        and only display the status of the update script or an error if the 
        cron is currently running the script.
 
-3. RTDB update sequence of events:
+3. A perl script called rtdbUpdate lives in the CVS at 
+   kent/src/hg/makeDb/genbank/src/rtdb.  This program should be run from
+   /cluster/data/genbank like:
 
-    A. A cron job running every few minutes under user rtdb detects an 
-       updated RTDB.  
+   rtdbUpdate [-verbose] [-http-verbose] [-force] database
 
-    B. The rtdb.conf file is read and settings are such as:
-       
-           i. Lock file location.
-          ii. RTDB directory URL (WashU HTTP or FTP).
-         iii. Local download directory path.
+   The -verbose and -http-verbose print additional information to the log
+   file it creates in /cluster/data/genbank/var/rtdbbuild/logs.  The -force
+   option allows the RTDB to be downloaded multiple times in a day.  Otherwise
+   rtdbUpdate dies.  The database parameter specifies what RTDB URL to fetch
+   based on the rtdb.conf file.
 
-    B. A lock file is created to prevent simultaneous updates by cron and 
-       the CGI.
+   rtdbUpdate does the following:
+      
+     A. Creates a lockfile for the entire update process, and logs the progress.
+   
+     B. Downloads the appropriate RTDB tarball from the URL specified in the
+        rtdb.conf and stores that file in the data/download/ directory and
+        unpacks the files into the data/processed/ directory after checksumming
+        them as a validation.
+    
+     C. Loads each .bed file into a table in the database, and each .ra file
+        into a big trackDb.ra file, which gets loaded into the trackDbLocal_rtdb
+        table in the database.
 
-    C. The download directory is created in /cluster/data/genbank/download/rtdb
+     D. The lock is released and the program exits normally.
 
-    D. The data is downloaded to the download directory.
+4. Things to implement:
 
-    E. The data is decompressed into the "processed" directory and checksummed.
+    I. trackDbLocal search path:  In the hg.conf, instead of just one trackDbLocal
+       setting, allow a comma-delimited list of trackDbLocal tables, and order that
+       list so that each table (if it exists) going left-to-right overrides the 
+       previous table.
 
-    F. The .bed files are loaded into appropriate databases with hgLoadBed.
-
-    G. hgTrackDb loads track information into trackDbLocal_rtdb on assembly 
-       database on mgc.
-
-    H. The script reports a successful exit and exits after releasing the lock.
-
+   II. Cron and CGI programs to initiate updates of RTDB.

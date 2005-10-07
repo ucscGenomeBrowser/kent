@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1010 2005/09/17 00:12:45 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1015 2005/10/07 17:56:56 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6891,46 +6891,6 @@ for (i=0; i<count; i++, text++, textPos++)
         vgBox(vg, x+x1, y, 1, height, getOrangeColor());
         continue;
         }
-    if (match != NULL && i < count-1 && *text == ' ' &&
-            text[1] == MAF_PART_BREAK_BEFORE)
-        /* synteny break w/ unaligned sequence at contig/chrom boundary
-         * before alignment.
-         * display as vertical red bar followed by '=' */
-        {
-        vgBox(vg, x+x1, y, 1, height, getBlueColor());
-        text[1] = MAF_DOUBLE_GAP;
-        i--;
-	continue;
-        }
-    
-    if (match != NULL && (*text == MAF_PART_BREAK_BEFORE || *text == MAF_PART_BREAK_AFTER))
-        {
-        /* ignore if we lack room at window start to display this */
-        i--;
-        continue;
-        }
-    if (match != NULL && i < count && text[1] == ' ' &&
-            *text == MAF_PART_BREAK_AFTER)
-        /* synteny break w/ unaligned sequence at contig/chrom boundary
-         * after alignment.
-         * display as '=' followed by vertical red bar */
-        {
-        vgBox(vg, x+x2, y, 1, height, getBlueColor());
-        text[1] = MAF_DOUBLE_GAP;
-        text++;
-        textPos++;
-        i--;
-        }
-    if (match != NULL && 
-            (*text == MAF_FULL_BREAK_BEFORE ||
-             *text == MAF_FULL_BREAK_AFTER))
-        /* synteny break at chrom/contig boundary.
-         * display as vertical red bar */
-        {
-        vgBox(vg, x+x1, y, 1, height, getBlueColor());
-        i--;
-        continue;
-        }
     cBuf[0] = *text;
     clr = color;
     if (dots)
@@ -9903,9 +9863,16 @@ if (gotBlat)
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
 if (sameString(database, "hg17")
-            || sameString(database, "mm5")
+            || sameString(database, "mm6")
             || sameString(database, "rn3") 
-            || sameString(database, "fr1"))
+            || sameString(database, "anoGam1") 
+            || sameString(database, "apiMel2") 
+            || sameString(database, "bosTau1") 
+            || sameString(database, "canFam1") 
+            || sameString(database, "dm2") 
+            || sameString(database, "galGal2")
+            || sameString(database, "panTro1")
+            || sameString(database, "tetNig1"))
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
@@ -11035,12 +11002,14 @@ puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/for
 cartSaveSession(cart);
 
 puts(
-"<P>Display your own annotation tracks in the browser using \n"
+"<P>Display your own custom annotation tracks in the browser using \n"
 "the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.  Annotations may be uploaded from files or\n"
-"pasted into the text box below. You can also paste a URL or a list of URLs \n"
-"into the large text box that refer to \n"
-"files in one of the supported formats.</P>\n"
+"procedure described here</A>.<br>\n"
+"Custom tracks in the supported formats may be uploaded using one of these ways:<br>\n"
+"1. Paste the custom annotation text directly into the large text box below.<br>\n"
+"2. Click browse and choose a custom annotation file on your computer.<br>\n"
+"3. Enter a URL for the custom annotation in the large text box below.<br>\n"
+"<P>\n"
 "Click \n"
 "<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
 "to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
@@ -11066,6 +11035,17 @@ puts("<BR>\n");
 cgiMakeCheckBox("hgt.customAppend", cgiBooleanDefined("hgt.customAppend"));
 puts("Check box to add this sequence to existing custom tracks<BR>If unchecked, all existing custom tracks will be cleared.</FORM>\n");
 #endif
+
+puts(
+"<BR>\n"
+"Multiple URLs may be entered, one per line.<br>\n"
+"Supported URL protocols are HTTP and FTP (passive only).<br>\n"
+"The data may be compressed by any of these formats, signified by the extension: .gz (gzip), .Z (compress) or .bz2 (bzip2).<br>\n"
+"User/password if required may be specified in the URL as protocol://user:password@server.com/somepath.<br>\n"
+"Only Basic Authentication is supported for HTTP.<br>\n"
+"<P>\n"
+);
+
 
 puts("</FORM>");
 }

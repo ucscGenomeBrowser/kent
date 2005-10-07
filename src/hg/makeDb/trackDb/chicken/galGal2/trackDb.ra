@@ -34,15 +34,6 @@ visibility hide
 color 20,20,170
 type genePred
 
-track xenoRefGene
-shortLabel Non-$Organism RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
 track uniGene_gg
 shortLabel UniGene
 longLabel $Organism UniGene Alignments

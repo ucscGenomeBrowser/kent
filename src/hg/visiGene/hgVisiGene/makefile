@@ -6,7 +6,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgVisiGene
 
-O = hgVisiGene.o
+O = hgVisiGene.o captionElement.o
 
 include ../../../inc/cgi_build_rules.mk
 

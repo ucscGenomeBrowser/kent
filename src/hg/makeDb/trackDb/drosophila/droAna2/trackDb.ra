@@ -7,7 +7,7 @@ visibility dense
 type bed 3 +
 
 track all_mrna
-shortLabel $Organism mRNAs
+shortLabel D. anan. mRNAs
 longLabel $Organism mRNAs from GenBank 
 group rna
 priority 54

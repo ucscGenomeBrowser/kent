@@ -33,12 +33,13 @@
 #define POLYASLIDINGWINDOW 10
 #define POLYAREGION 70
 #define INTRONMAGIC 10 /* allow more introns if lots of exons covered - if (exonCover - intronCount > INTRONMAGIC) */
+
 /* label for classification stored in pseudoGeneLink table */
 #define PSEUDO 1
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.43 2005/08/22 21:21:15 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.44 2005/10/01 18:49:44 baertsch Exp $";
 
 char *db;
 char *nibDir;

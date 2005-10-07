@@ -15,15 +15,6 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
-track xenoRefGene
-shortLabel Non-$Organism RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility hide
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
 track genscan
 shortLabel Genscan Genes
 longLabel Genscan Gene Predictions
@@ -43,16 +34,6 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
-
-track xenoMrna
-shortLabel Non-$Organism mRNAs
-longLabel Non-$Organism mRNAs from GenBank
-group rna
-priority 63
-visibility hide
-spectrum on
-type psl xeno
-cdsDrawOptions enabled
 
 track mzDy1Dp2Ag1_phast
 shortLabel Conservation
@@ -375,6 +356,15 @@ priority 34.5
 visibility pack
 color 30,130,210
 type genePred 
+
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility dense
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
 
 track blastDm1FB
 shortLabel D. mel. Proteins

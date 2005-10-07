@@ -53,15 +53,15 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	caeRem1 \
 	falciparum \
 	sacCer1 \
-	pyrAer1 \
-	pyrFur2 \
-	sulSol1\
-	metMar1\
+	pyrAer1 aerPer1\
+	sulSol1 sulfAcid1 sulfToko1 \
+	archFulg1 \
+	pyrFur2 pyrHor1 pyrAby1 therKoda1\
+	halMar1 haloHalo1 \
+	metMar1 methJann1 methTher1 methKand1\
+	metAce1 methBark1 methMaze1 methBurt1 \
+	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
 	nanEqu1\
-	aerPer1\
-	halMar1\
-	pyrHor1\
-	pyrAby1\
 	sc1 \
 	canHg4 canHg9 car46 canHg10\
 	vibCho1 
@@ -74,15 +74,15 @@ MGC_DBS = \
 	xenTro1
 
 ARCH_DBS = \
-	pyrAer1 \
-	pyrFur2 \
-	sulSol1\
-	metMar1\
+	pyrAer1 aerPer1\
+	sulSol1 sulfAcid1 sulfToko1 \
+	archFulg1 \
+	pyrFur2 pyrHor1 pyrAby1 therKoda1\
+	halMar1 haloHalo1 \
+	metMar1 methJann1 methTher1 methKand1\
+	metAce1 methBark1 methMaze1 methBurt1 \
+	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
 	nanEqu1\
-	aerPer1\
-	halMar1\
-	pyrHor1\
-	pyrAby1
 
 update: #clean
 	@for D in *; do \

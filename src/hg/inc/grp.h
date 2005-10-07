@@ -59,5 +59,14 @@ void grpOutput(struct grp *el, FILE *f, char sep, char lastSep);
 int grpCmpPriority(const void *va, const void *vb);
 /* Compare to sort based on priority. */
 
+int grpCmpName(const void *va, const void *vb);
+/* Compare to sort based on name. */
+
+void grpSuperimpose(struct grp **listA, struct grp **listB);
+/* Replace all the grps in listA with the same names of those in
+ * listB.  Ones in B that aren't the same get put in A too.  
+ * The function returns with the new list A, and the empty list
+ * B. */
+
 #endif /* GRP_H */
 

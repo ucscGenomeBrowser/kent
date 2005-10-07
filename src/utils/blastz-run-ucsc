@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.12 2005/09/08 22:41:19 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.13 2005/09/29 18:23:31 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -418,10 +418,10 @@ sub liftLav {
 sub convertOutput {
   # Convert lav file to psl or axt file, optionally dropping trivial self al's.
   my ($lav, $out) = @_;
-  my $tSeq = $defVars{'SEQ1_DIR'};
-  my $qSeq = $defVars{'SEQ2_DIR'};
-  my $tSizes = $defVars{'SEQ1_LEN'};
-  my $qSizes = $defVars{'SEQ2_LEN'};
+  my $tSeq = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
+  my $qSeq = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
+  my $tSizes = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
+  my $qSizes = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
   if ($opt_outFormat eq 'axt') {
     my $dropSelf = ($opt_dropSelf ? "-dropSelf " : "");
     &run("lavToAxt $dropSelf $lav $tSeq $qSeq $out");
@@ -448,8 +448,12 @@ my ($target, $query, $DEF, $out) = @ARGV;
 &cleanDie("$out already exists\n") if (-f "$out");
 
 &loadDef($DEF);
-&loadSeqSizes($defVars{'SEQ1_LEN'}, \%tSizes);
-&loadSeqSizes($defVars{'SEQ2_LEN'}, \%qSizes);
+my $seq1Dir = $defVars{'SEQ1_CTGDIR'} || $defVars{'SEQ1_DIR'};
+my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
+my $seq1Len = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
+my $seq2Len = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
+&loadSeqSizes($seq1Len, \%tSizes);
+&loadSeqSizes($seq2Len, \%qSizes);
 
 # Make a temporary directory for intermediate files:
 if (exists($defVars{'TMPDIR'})) {
@@ -467,8 +471,8 @@ $defVars{'BLASTZ_M'} = 40000000 if (! defined $defVars{'BLASTZ_M'});
 
 my $blastzOptions = &getBlastzParams(%defVars);
 
-my @tFileSpecs = &enumerateFileSpecs($target, $defVars{'SEQ1_DIR'});
-my @qFileSpecs = &enumerateFileSpecs($query, $defVars{'SEQ2_DIR'});
+my @tFileSpecs = &enumerateFileSpecs($target, $seq1Dir);
+my @qFileSpecs = &enumerateFileSpecs($query, $seq2Dir);
 if ($defVars{'BLASTZ_ABRIDGE_REPEATS'} && scalar(@qFileSpecs) > 1) {
   &cleanDie("Sorry, DEF can't have BLASTZ_ABRIDGE_REPEATS set if a list of " .
 	    "query sequences is passed in -- not supported.\n");
@@ -486,9 +490,9 @@ my $littleConv = "$TMP/little.conv";
 
 # Run blastz on each {target, query} pair;  lift and collect results.
 foreach my $tSpec (@tFileSpecs) {
-  my ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $defVars{'SEQ1_DIR'}, 't');
+  my ($tSeq, $tLocal) = &unpackForBlastz($tSpec, $seq1Dir, 't');
   foreach my $qSpec (@qFileSpecs) {
-    my ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $defVars{'SEQ2_DIR'}, 'q');
+    my ($qSeq, $qLocal) = &unpackForBlastz($qSpec, $seq2Dir, 'q');
     if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
       &abridgeLinSpecReps($tLocal, $qLocal, $blastzOptions, $littleRaw);
     } else {

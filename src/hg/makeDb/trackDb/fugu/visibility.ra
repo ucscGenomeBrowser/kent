@@ -1,9 +1,6 @@
 track           cpgIsland
 visibility      dense
 
-track           genscan
-visibility      dense
-
 track           gcPercent
 visibility      dense
 
@@ -11,9 +8,6 @@ track           simpleRepeat
 visibility      dense
 
 track           est
-visibility      dense
-
-track           xenoMrna
 visibility      dense
 
 track           mrna

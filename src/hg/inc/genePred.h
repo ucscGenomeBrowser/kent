@@ -216,5 +216,14 @@ boolean genePredNmdTarget(struct genePred *gp);
 /* Return TRUE if cds end is more than 50bp upstream of
    last intron. */
 
+void genePredAddExonFrames(struct genePred *gp);
+/* Add exonFrames array to a genePred that doesn't have it. Frame is assumed
+ * to be contiguous. */
+
+void genePredRc(struct genePred *gp, int chromSize);
+/* Reverse complement a genePred (project it to the opposite strand).  Useful
+ * when doing analysis that is simplified by having things on the same strand.
+ */
+
 #endif /* GENEPRED_H */
 

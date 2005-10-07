@@ -11,6 +11,7 @@
 #include "hgColors.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
+#include "captionElement.h"
 
 /* Globals */
 struct cart *cart;		/* Current CGI values */
@@ -325,22 +326,122 @@ printf("</TABLE>\n");
 htmlEnd();
 }
 
-void printLabeledList(char *label, struct slName *list)
-/* Print label and list by it. */
+char *makeCommaSpacedList(struct slName *list)
+/* Turn linked list of strings into a single string with
+ * elements separated by a comma and a space. */
 {
-struct slName *el;
-printf("<B>%s:</B> ", label);
 if (list == NULL)
-    printf("n/a");
-for (el = list; el != NULL; el = el->next)
+    return cloneString("n/a");
+else if (list->next == NULL)
     {
-    printf("%s", el->name);
-    if (el->next != NULL)
-        printf(", ");
+    char *name = list->name;
+    if (name[0] == 0)
+        name = "n/a";
+    return cloneString(name);
+    }
+else
+    {
+    struct slName *el;
+    int totalSize = 0;
+    int elCount = 0;
+    char *result, *pt;
+    for (el = list; el != NULL; el = el->next)
+	{
+	totalSize += strlen(el->name);
+	elCount += 1;
+	}
+    totalSize += 2*(elCount-1);	/* Space for ", " */
+    pt = result = needMem(totalSize+1);
+    strcpy(pt, list->name);
+    pt += strlen(list->name);
+    for (el = list->next; el != NULL; el = el->next)
+        {
+	*pt++ = ',';
+	*pt++ = ' ';
+	strcpy(pt, el->name);
+	pt += strlen(el->name);
+	}
+    return result;
     }
 }
 
-void printCaption(struct sqlConnection *conn, int id)
+struct captionElement *makePaneCaptionElements(struct sqlConnection *conn,
+	struct slInt *imageList)
+/* Make list of all caption elements */
+{
+struct slInt *image;
+struct captionElement *ceList = NULL, *ce;
+for (image = imageList; image != NULL; image = image->next)
+    {
+    int paneId = image->val;
+    struct slName *geneList = visiGeneGeneColorName(conn, paneId);
+    struct slName *genbankList = visiGeneGenbank(conn, paneId);
+    ce = captionElementNew(paneId, "gene", makeCommaSpacedList(geneList));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "genbank", makeCommaSpacedList(genbankList));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "organism", visiGeneOrganism(conn, paneId));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "stage", visiGeneStage(conn, paneId, TRUE));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "body part",
+    	naForNull(visiGeneBodyPart(conn, paneId)));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "section type",
+    	naForNull(visiGeneSliceType(conn, paneId)));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "permeablization",
+    	naForNull(visiGenePermeablization(conn, paneId)));
+    }
+slReverse(&ceList);
+return ceList;
+}
+
+void printCaptionElements(struct sqlConnection *conn, 
+	struct captionElement *captionElements, struct slInt *imageList)
+/* Print out caption elements - common elements first and then
+ * pane-specific ones. */
+{
+struct captionBundle *bundleList, *bundle;
+struct slRef *ref;
+struct captionElement *ce;
+int bundleCount;
+
+bundleList = captionElementBundle(captionElements, imageList);
+bundleCount = slCount(bundleList);
+for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
+    {
+    int flipFlop = 0;
+    if (bundleCount > 1)
+	printf("<HR>\n");
+    if (bundle->image != 0)
+        {
+	char *label = visiGenePaneLabel(conn, bundle->image);
+	if (label != NULL)
+	   printf("<B>Pane %s</B><BR>\n", label);
+	}
+    else if (bundleCount > 1)
+        {
+	printf("<B>All Panes</B><BR>\n");
+	}
+    for (ref = bundle->elements; ref != NULL; ref = ref->next)
+        {
+	ce = ref->val;
+	printf("<B>%s:</B> %s", ce->type, ce->value);
+	if (flipFlop == 1)
+	    printf("<BR>\n");
+	else
+	    printf(" ");
+	flipFlop = 1 - flipFlop;
+	}
+    if (flipFlop == 1)
+	printf("<BR>\n");
+    }
+if (bundleCount > 1)
+    printf("<HR>\n");
+}
+
+void fullCaption(struct sqlConnection *conn, int id)
 /* Print information about image. */
 {
 char query[256];
@@ -352,6 +453,7 @@ struct slName *geneList;
 int imageFile = visiGeneImageFile(conn, id);
 struct slInt *imageList, *image;
 int imageCount, imageIx=0;
+struct captionElement *captionElements;
 
 publication = visiGenePublication(conn,id);
 if (publication != NULL)
@@ -371,38 +473,9 @@ if (caption != NULL)
     }
 imageList = visiGeneImagesForFile(conn, imageFile);
 imageCount = slCount(imageList);
-for (image = imageList; image != NULL; image = image->next)
-    {
-    int paneId = image->val;
-    struct slName *geneList = visiGeneGeneColorName(conn, paneId);
-    ++imageIx;
-    if (imageCount > 1)
-        {
-	char *label = visiGenePaneLabel(conn, paneId);
-	printf("<HR>\n<B>Pane ");
-	if (label == NULL)
-	   printf("%d", imageIx);
-	else
-	   printf("%s", label);
-	printf("</B><BR>\n");
-	}
-    printLabeledList("gene", geneList);
-    printf(" ");
-    printf("<B>organism:</B> %s  ", visiGeneOrganism(conn, paneId));
-    printf("%s<BR>\n", visiGeneStage(conn, paneId, TRUE));
-    printf("<B>body part:</B> %s ", naForNull(visiGeneBodyPart(conn,paneId)));
-    printf("<B>section type:</B> %s ", 
-    	naForNull(visiGeneSliceType(conn,paneId)));
-    printLabeledList("genbank", visiGeneGenbank(conn, paneId));
-    printf("<BR>\n");
-    permeablization = visiGenePermeablization(conn,paneId);
-    if (permeablization != NULL)
-	printf("<B>permeablization:</B> %s<BR>\n", permeablization);
+captionElements = makePaneCaptionElements(conn, imageList);
+printCaptionElements(conn, captionElements, imageList);
 
-    slFreeList(&geneList);
-    }
-if (imageCount > 1)
-    printf("<HR>\n");
 printf("<B>contributors:</B> %s<BR>\n", naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
@@ -454,7 +527,7 @@ safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	dir,name,name,w,h);
 printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
-printCaption(conn, imageId);
+fullCaption(conn, imageId);
 htmlEnd();
 }
 
@@ -514,6 +587,7 @@ htmlEnd();
 
 }
 
+#ifdef OLD
 void doFullSized(struct sqlConnection *conn)
 /* Put up full sized image. */
 {
@@ -544,10 +618,11 @@ printf("<IFRAME width=\"100%%\" height=\"80%%\" SRC=\"%s\"></IFRAME><BR>\n", buf
 
 //printf("</A><BR>\n");
 
-printCaption(conn, imageId);
+fullCaption(conn, imageId);
 htmlEnd();
 freez(&p);
 }
+#endif /* OLD */
 
 
 void doFrame(struct sqlConnection *conn)
@@ -628,8 +703,10 @@ else if (cartVarExists(cart, hgpDoImage))
     doImage(conn);
 else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
+#ifdef OLD
 else if (cartVarExists(cart, hgpDoFullSized))
     doFullSized(conn);
+#endif /* OLD */
 else if (cartVarExists(cart, hgpDoId))
     doId(conn);
 else

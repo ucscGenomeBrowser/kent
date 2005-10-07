@@ -388,7 +388,7 @@ visibility hide
 type bed 4 .
 
 track encodeReseqRegions
-shortLabel ENCODE Resequencing Regions
+shortLabel Reseq Regions
 longLabel ENCODE Resequencing Regions
 group encodeVariation
 priority 79.9
@@ -412,8 +412,7 @@ longLabel Hotspots of Linkage Disequilibrium in the HapMap
 group varRep
 visibility hide
 priority 144.55
-minLimit 0
-maxLimit 16
+defaultViewLimits 0:16
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 type bedGraph 4 
@@ -445,7 +444,7 @@ priority 144.6
 visibility hide
 type bed 4 . 
 
-    track tajdSnpAD
+    track tajdSnpAd
     subTrack tajdSnp
     shortLabel SNPs AD
     longLabel  SNPs from African Descent
@@ -453,7 +452,7 @@ type bed 4 .
     altColor 0,100,200
     priority 1
 
-    track tajdSnpED
+    track tajdSnpEd
     subTrack tajdSnp
     shortLabel SNPs ED
     longLabel  SNPs from European Descent
@@ -461,7 +460,7 @@ type bed 4 .
     altColor 0,100,200
     priority 3
 
-    track tajdSnpXD
+    track tajdSnpXd
     subTrack tajdSnp
     shortLabel SNPs XD
     longLabel  SNPs from Chinese Descent
@@ -475,10 +474,14 @@ shortLabel Tajima's D
 longLabel Tajima's D
 group varRep
 visibility hide
+defaultViewLimits -2.5:3
+minLimit -4
+maxLimit 5
+autoScaleDefault Off
 priority 144.65
 type bedGraph 4 
 
-    track tajdAD
+    track tajdAd
     subTrack tajD
     shortLabel Tajima's D AD
     longLabel  Tajima's D from African Descent 
@@ -486,7 +489,7 @@ type bedGraph 4
     altColor 0,100,200
     priority 2
     
-    track tajdED
+    track tajdEd
     subTrack tajD
     shortLabel Tajima's D ED
     longLabel  Tajima's D from European Descent
@@ -494,7 +497,7 @@ type bedGraph 4
     altColor 0,100,200
     priority 4
 
-    track tajdXD
+    track tajdXd
     subTrack tajD
     shortLabel Tajima's D XD
     longLabel  Tajima's D from Chinese Descent
@@ -1288,18 +1291,25 @@ origAssembly hg17
     priority 5
     color 100,12,100
 
+    track encodeEgaspUpdFgenesh
+    subTrack encodeEgaspUpdate
+    shortLabel FGenesh++ Upd
+    longLabel Fgenesh++ Gene Predictions
+    priority 6
+    color 22,150,20
+
     track encodeEgaspUpdGeneId
     subTrack encodeEgaspUpdate
     shortLabel GeneID Update
     longLabel GeneID Gene Predictions
-    priority 6
+    priority 7
     color 100,12,100
 
     track encodeEgaspUpdGeneIdU12
     subTrack encodeEgaspUpdate
     shortLabel GeneID U12 Upd
     longLabel GeneID U12 Intron Predictions
-    priority 7
+    priority 8
     color 200,132,12
 
     track encodeEgaspUpdJigsaw
@@ -1307,27 +1317,27 @@ origAssembly hg17
     shortLabel Jigsaw Update
     longLabel Jigsaw Gene Predictions
     color 22,150,20
-    priority 8
+    priority 9
 
     track encodeEgaspUpdSgp2
     subTrack encodeEgaspUpdate
     shortLabel SGP2 Update
     longLabel SGP2 Gene Predictions
-    priority 9
+    priority 10
     color 100,12,100
 
     track encodeEgaspUpdSgp2U12
     subTrack encodeEgaspUpdate
     shortLabel SGP2 U12 Update
     longLabel SGP2 U12 Intron Predictions
-    priority 10
+    priority 11
     color 200,132,12
 
     track encodeEgaspUpdYalePseudo
     subTrack encodeEgaspUpdate
     shortLabel Yale Pseudo Upd
     longLabel Yale Pseudogene Predictions
-    priority 11
+    priority 12
     color 130,130,130
 
 track encodePseudogene
@@ -1340,13 +1350,25 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
-origAssembly hg17
+    geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene Pseudogene_fragment Undefined
+    gClass_Known 33,91,51
+    gClass_Novel_CDS 33,91,51
+    gClass_Novel_transcript_gencode_conf 33,91,51
+    gClass_Putative_gencode_conf 33,91,51
+    gClass_Novel_transcript  84,188,0
+    gClass_TEC  84,188,0
+    gClass_Putative  84,188,0
+    gClass_Undefined 163,168,163
+    gClass_Processed_pseudogene 200,91,191
+    gClass_Pseudogene_fragment 100,91,191
+    gClass_Unprocessed_pseudogene 0,91,191
+    itemClassTbl encodePseudogeneClass
+    origAssembly hg17
 
     track pseudoHavana
     subTrack encodePseudogene
-    shortLabel Havana Pseudogenes
-    longLabel Havana Annotated Pseudogenes and Immunoglobulin Segments
-    color 30,130,210
+    shortLabel Havana-Gencode Pseudogenes
+    longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
     priority 1
 
@@ -1354,22 +1376,33 @@ origAssembly hg17
     subTrack encodePseudogene
     shortLabel Yale Pseudo
     longLabel Yale PseudoGene Predictions
-    color 22,150,20
+    itemClassTbl encodePseudogeneClass
+    url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
     priority 2
 
     track pseudoUcsc
     subTrack encodePseudogene
     shortLabel UCSC Pseudo
     longLabel UCSC RetroGene Predictions
-    color 12,20,150
     priority 3
 
     track pseudoUcsc2
     subTrack encodePseudogene
     shortLabel UCSC PseudoGenes
     longLabel UCSC Pseudogene Predictions
-    color 12,20,150
     priority 4
+
+    track pseudoGIS
+    subTrack encodePseudogene
+    shortLabel GIS PseudoGenes
+    longLabel Genome Institute of Singapore Pseudogenes 
+    priority 5
+
+    track pseudoEncodeConsensus
+    subTrack encodePseudogene
+    shortLabel Consensus PseudoGenes
+    longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS Encode Pseudogenes 
+    priority 5
 
 track encodeGisRnaPet
 compositeTrack on
@@ -1405,6 +1438,7 @@ priority 19.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -1168.00 1686.5
+spanList 1
 maxHeightPixels 128:16:16
 autoScale off
 viewLimits 0:25
@@ -1904,6 +1938,7 @@ priority 30.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -2730 3394
+spanList 1
 maxHeightPixels 128:16:16
 viewLimits 0:150
 autoScale Off
@@ -2176,6 +2211,7 @@ priority 43.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 0.0 534.54
+spanList 1
 viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
@@ -2863,6 +2899,28 @@ useScore 1
 type bed 12
 origAssembly hg16
 
+track encodeGisChipPetStat1
+compositeTrack on
+shortLabel GIS STAT1 gIF HeLa
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on HeLa cells
+group encodeChip
+color 135, 158,35
+priority 47.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
+visibility hide
+useScore 1
+type bed 12
+
+track encodeGisChipPetStat1Gif
+subTrack encodeGisChipPetStat1
+shortLabel GIS STAT1 +gIF HeLa
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
+
+track encodeGisChipPetStat1NoGif
+subTrack encodeGisChipPetStat1
+shortLabel GIS STAT1 -gIF HeLa
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
+
 track encodeLIChIP
 compositeTrack on
 shortLabel LI ChIP Various
@@ -3122,6 +3180,7 @@ priority 51.0
 visibility hide
 maxHeightPixels 128:16:16
 type wig -5.61 6.47
+spanList 50
 viewLimits -1:2
 windowingFunction mean
 autoScale off
@@ -3451,6 +3510,7 @@ priority 60.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -0.56 1.58
+spanList 1
 maxHeightPixels 128:36:16
 windowingFunction Mean
 color 44,44,200
@@ -3750,6 +3810,68 @@ origAssembly hg16
     longLabel University of Virginia Temporal Profiling of DNA Replication (8-10 hrs) 
     priority 5
 
+track encodeUvaDnaRepSeg
+compositeTrack on
+shortLabel UVa DNA Rep Seg
+longLabel University of Virginia DNA Replication Temporal Segmentation
+group encodeChrom
+priority 63.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+origAssembly hg16
+
+    track encodeUvaDnaRepEarly
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep Early
+    longLabel University of Virginia Temporal Profiling of DNA Replication (Early) 
+    color 50,50,100
+    priority 1
+
+    track encodeUvaDnaRepMid
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep Mid
+    longLabel University of Virginia Temporal Profiling of DNA Replication (Mid) 
+    color 30,80,130
+    priority 2
+
+    track encodeUvaDnaRepLate
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep Late
+    longLabel University of Virginia Temporal Profiling of DNA Replication (Late) 
+    color 10,110,160
+    priority 3
+
+    track encodeUvaDnaRepPanS
+    subTrack encodeUvaDnaRepSeg
+    shortLabel UVa DNA Rep PanS
+    longLabel University of Virginia Temporal Profiling of DNA Replication (PanS) 
+    color 100,50,50
+    priority 4
+
+track encodeUvaDnaRepOrigins
+compositeTrack on
+shortLabel UVa DNA Rep Ori
+longLabel University of Virginia DNA Replication Origins
+group encodeChrom
+priority 63.2
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+
+    track encodeUvaDnaRepOriginsPred
+    subTrack encodeUvaDnaRepOrigins
+    longLabel University of Virginia Predicted DNA Replication Origins
+    shortLabel UVa DNA Rep Ori
+    priority 1
+
+    track encodeUvaDnaRepOriginsConf
+    subTrack encodeUvaDnaRepOrigins
+    shortLabel UVa DNA Rep Conf
+    longLabel University of Virginia DNA Replication Origins Confidence Intervals
+    color 100,100,100
+    priority 2
+
 track encodeRegulomeBase
 compositeTrack on
 shortLabel UW/Reg DNaseI Sens
@@ -3760,6 +3882,7 @@ chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 maxHeightPixels 128:16:16
 type wig 0.0 3.0
+spanList 250
 autoScaleDefault Off
 smoothingWindow 2
 origAssembly hg16
@@ -4265,6 +4388,7 @@ altColor 1,128,0
 type wigMaf 0.0 10.0
 maxHeightPixels 100:40:11
 wiggle binCons_encode
+spanList 1
 yLineOnOff Off
 pairwise encode_tba 15
 autoScaleDefault Off
@@ -4413,8 +4537,9 @@ priority 86
 visibility hide
 type bedGraph 4
 chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+defaultViewLimits 0:16
 minLimit 0
-maxLimit 16
+maxLimit 100
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 origAssembly hg16
@@ -4709,6 +4834,31 @@ priority 52
 visibility hide
 type bed 6 +
 origAssembly hg16
+
+track hapmapRecombRate
+shortLabel Recomb Rates
+longLabel Oxford Recombination Rates
+group varRep
+priority 145.5
+visibility hide
+type bedGraph 4
+defaultViewLimits 0:16
+minLimit 0
+maxLimit 100
+autoScaleDefault Off
+maxHeightPixels 64:32:16
+origAssembly hg16
+
+track hapmapRecombHotspots
+shortLabel Recomb Hotspots
+longLabel Oxford Recombination Hotspots
+group varRep
+priority 145.6
+visibility hide
+type bed 3 .
+origAssembly hg16
+
+
 
 searchTable wgRna
 searchMethod fuzzy

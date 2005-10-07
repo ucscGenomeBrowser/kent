@@ -1237,4 +1237,187 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
 
+TODO:
  
+# LIFTOVER CHAIN TO BOSTAU2 (DONE 2005-09-08 galt)
+    ssh kkstore02
+    cd /cluster/data/bosTau2
+    mkdir liftSplits/
+    mkdir liftSplits/lift
+    mkdir liftSplits/split
+    cat << _EOF_ > split.csh
+#!/bin/tcsh
+set liftDir = /cluster/data/bosTau2/liftSplits
+cd /cluster/data/bosTau2/softmask-split
+foreach n (*.fa)
+    echo \$n
+    faSplit -lift=\$liftDir/lift/\$n:r.lft size \$n -oneFile 3000 \$liftDir/split/\$n:r
+end
+_EOF_
+    chmod +x split.csh
+    ./split.csh
+    mkdir /san/sanvol1/scratch/bosTau2
+    cp -r liftSplits/ /san/sanvol1/scratch/bosTau2
+    
+    cd /cluster/data/bosTau1
+    mkdir softTwoBit
+    cd softTwoBit
+    faSplit sequence ../bosTau1.softmask2.fa 33 x
+    # 33 files avg size 75 MB
+
+    foreach f ( *.fa )
+    faToTwoBit $f $f:r.2bit
+    rm $f
+    end
+    # 33 files avg size 20MB
+
+    cd ..
+    mkdir /san/sanvol1/scratch/bosTau1
+    cp -r softTwoBit/ /san/sanvol1/scratch/bosTau1
+
+    cd /cluster/data/bosTau1
+    cp `which makeLoChain-align` .
+    vi makeLoChain-align
+    cp /cluster/bluearc/bosTau1/11.ooc /san/sanvol1/scratch/bosTau1/
+    # change so that it accepts 2bit files, not just nibs 
+    #  Jim says using ooc file on target bosTau1 is important
+
+    
+    ssh pk 
+    ./makeLoChain-align bosTau1 /san/sanvol1/scratch/bosTau1/softTwoBit \
+                        bosTau2 /san/sanvol1/scratch/bosTau2/liftSplits/split \
+			/san/sanvol1/scratch/bosTau1/11.ooc
+			
+
+#Setting up blat in /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20
+#Checking input files
+#3003 jobs written to batch
+# 
+#First two lines of para spec:
+#blat /san/sanvol1/scratch/bosTau1/softTwoBit/x31.2bit /san/sanvol1/scratch/bosTau2/liftSplits/split/x089.fa {check out line+ ../raw/x31_x089.psl}  -tileSize=11 -ooc=/san/sanvol1/scratch/bosTau1/11.ooc -minScore=100 -minIdentity=98 -fastMap
+#blat /san/sanvol1/scratch/bosTau1/softTwoBit/x09.2bit /san/sanvol1/scratch/bosTau2/liftSplits/split/x089.fa {check out line+ ../raw/x09_x089.psl}  -tileSize=11 -ooc=/san/sanvol1/scratch/bosTau1/11.ooc -minScore=100 -minIdentity=98 -fastMap
+# 
+#DO THIS NEXT:
+#    cd /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/run
+#    para try, check, push, check, ...
+#    ssh kkstore02
+#    ./makeLoChain-lift.csh bosTau1 bosTau2 <lift-dir>
+
+    cd /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/run
+    /parasol/bin/para push
+
+#3003 jobs in batch
+#1525 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 3003 of 3003 jobs
+#CPU time in finished jobs:     150921s    2515.34m    41.92h    1.75d  0.005 y
+#IO & Wait Time:                 12002s     200.04m     3.33h    0.14d  0.000 y
+#Average job time:                  54s       0.90m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             651s      10.85m     0.18h    0.01d
+#Submission to last job:          3472s      57.87m     0.96h    0.04d
+
+    # Lifting
+    ssh kkstore02
+    cd /cluster/data/bosTau1/
+    cp `which makeLoChain-lift` .
+    vi makeLoChain-lift
+    # changed so uses softmask-split/ instead of nib/
+    #  and uses x??_$c.psl instead of chr*_$c.psl
+    # use kolossus because we lost our mapping to /san/sanvol1/ again
+    ssh kolossus 
+    cd /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/
+    ../../makeLoChain-lift bosTau1 bosTau2 /san/sanvol1/scratch/bosTau2/liftSplits/lift > lift.log &
+    tail -f lift.log
+
+    ssh kki
+    cd /cluster/data/bosTau1
+    cp `which makeLoChain-chain` .
+    vi makeLoChain-chain
+    # fix to tolerate 2bit instead of only nib
+    cd /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/
+    
+    ../../makeLoChain-chain bosTau1 /cluster/data/bosTau1/bosTau1.2bit \
+                            bosTau2 /cluster/data/bosTau2/bosTau2.2bit
+    
+    cd /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/chainRun
+    para push
+    para check
+    para time
+
+#[kki:/cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/chainRun> para time
+#91 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 91 of 91 jobs
+#CPU time in finished jobs:     560372s    9339.53m   155.66h    6.49d  0.018 y
+#IO & Wait Time:                 14128s     235.47m     3.92h    0.16d  0.000 y
+#Average job time:                6313s     105.22m     1.75h    0.07d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:          220728s    3678.80m    61.31h    2.55d
+#Submission to last job:        220728s    3678.80m    61.31h    2.55d
+
+
+    #------ Optional Speedup -------------------------------
+    # Because I am having trouble with the bin0 x089.psl 1.4G 12million lines,
+    # I am going to split it carefully into a multiple cluster job, since this
+    # hippo has been running for days.  I checked out the structure of the 
+    # psl and chain files and the order that everything is sorted in.
+    # I believe this will work correctly without side-effects.
+    ssh kkstore02
+    cd /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/psl/
+    ~/bin/i386/pslSplitOnTarget -maxTargetCount=100 -lump x089.psl bin0/
+    # made 100 psl files 000.psl to 099.psl in bin0/ from 7MB to 32MB in size
+
+    ls -1S *.psl > pslList
+    wc -l pslList
+    # Create gsub
+    {
+    cat << '_EOF_' > gsub
+    #LOOP
+    axtChain -psl {check in line+ $(path1)} /cluster/data/bosTau1/bosTau1.2bit /cluster/data/bosTau2/bosTau2.2bit {check out line $(root1).chain} 
+    #ENDLOOP
+    '_EOF_'
+    # << this line makes emacs coloring happy
+    }
+    /cluster/bin/i386/gensub2 pslList single gsub jobList
+    ssh kk
+    /cluster/data/bosTau1/bed/blat.bosTau2.2005-09-20/psl/bin0
+    para create jobList
+    para try, check, push, check, ...
+
+    #re-merge using chainMergeSort to x089.chain:
+    chainMergeSort *.chain > ../../chainRaw/x089.chain
+
+    #This approach seems to work well for this situation.
+    #Feel free to use it if you have 
+    # one big artificial chrom query against many small scaffolds target
+    #-------------------------------------
+
+    ssh kkstore02
+    cd /cluster/data/bosTau1/
+    cp `which makeLoChain-net` .
+    vi makeLoChain-net
+    # added option -lump=33 to chainSplit command 
+    #  (because otherwise it says "too many files open" since cow1 has many SCAFFOLDS)
+    #  chainSplit splits by target by default (cow1)
+    #  script expects directory with current date
+    cd bed
+    ln -s blat.bosTau2.2005-09-20 blat.bosTau2.2005-09-23
+    cd ..
+    # do it
+    ./makeLoChain-net bosTau1 bosTau2 >& mklc-net.log
+
+    ssh hgwdev
+    cd /cluster/data/bosTau1/
+    cp /cluster/scripts/makeLoChain-load .
+    # Make sure your .hg.conf central and backupcentral
+    # are pointing to the right thing for hgAddLiftOverChain
+    makeLoChain-load bosTau1 bosTau2 >& mklc-load.log
+
+    #Connected to central database
+    #Inserting record in liftOverChain
+    #Finished loading bosTau1ToBosTau2.over.chain
+    #Now, add download link to hgLiftOver for 
+    #/usr/local/apache/htdocs/goldenPath/bosTau1/liftOver/bosTau1ToBosTau2.over.chain.gz
+

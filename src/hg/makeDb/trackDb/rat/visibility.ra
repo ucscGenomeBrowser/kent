@@ -34,9 +34,6 @@ visibility	dense
 track	est
 visibility	hide
 
-track	xenoMrna
-visibility	dense
-
 track	rnaCluster
 visibility	hide
 

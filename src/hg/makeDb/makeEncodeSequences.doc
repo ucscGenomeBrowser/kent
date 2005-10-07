@@ -13,31 +13,42 @@ exit;
 
 cd /cluster/bluearc/encode
 rm -rf makeLists.pl >& /dev/null
-cat > makeLists.pl << EOF
+cat > makeLists.pl << 'EOF'
 #!/usr/bin/perl -W
 
 %libOptions = 
     (
-     "armadillo" => "-mammal ",
-     "baboon"    => "        ",
-     "cat"       => "-cat    ",
-     "chicken"   => "-chicken",
-     "chimp"     => "        ",
-     "cow"       => "-cow    ",
-     "dog"       => "-dog    ",
-     "fugu"      => "-fugu   ",
-     "galago"    => "        ",
-     "human"     => "        ",
-     "marmoset"  => "        ",
-     "mouse"     => "-mus    ",
-     "pig"       => "-pig    ",
-     "platypus"  => "-mammal ",
-     "rat"       => "-rat    ",
-     "ratb"      => "-rat    ",
-     "tetraodon" => "-danio  ",
-     "zebrafish" => "-danio  ",
-     "zfish"     => "-danio  "
-     );
+	"armadillo"      => "-mam    ",
+	"baboon"         => "        ",
+	"cat"            => "-cat    ",
+	"chicken"        => "-chicken",
+	"chimp"          => "        ",
+	"cow"            => "-cow    ",
+	"colobus_monkey" => "        ",
+	"dog"            => "-dog    ",
+	"dusky_titi"     => "-cow    ",
+	"elephant"       => "-mam    ",
+	"fugu"           => "-fugu   ",
+	"galago"         => "        ",
+	"hedgehog"       => "-mam    ",
+	"human"          => "        ",
+	"monodelphis"    => "-mam    ",
+	"macaque"        => "        ",
+	"marmoset"       => "        ",
+	"mouse"          => "-mus    ",
+	"mouse_lemur"    => "        ",
+	"owl_monkey"     => "        ",
+	"pig"            => "-pig    ",
+	"platypus"       => "-mam    ",
+	"rat"            => "-rat    ",
+	"rabbit"         => "-mam    ",
+	"rfbat"          => "-mam    ",
+	"shrew"          => "-mam    ",
+	"tenrec"         => "-mam    ",
+	"tetraodon"      => "-danio  ",
+	"zebrafish"      => "-danio  ",
+	"xenopus"        => "        ",
+	);
 
 $efetchURL  = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta";
 $bluearc    = "/cluster/bluearc/encode";
@@ -77,12 +88,21 @@ while (<METADATA>)
     die ("Missing species: ". lc(${species}) . "\n") unless (defined $libOptions{lc($species)});
     print(MASKLIST "/cluster/bin/scripts/maskOne.csh $acc $libOptions{lc($species)}\n");
 } 
-EOF
+'EOF'
 #
 chmod ug+x makeLists.pl
 
-set freezeDate = "OCT-2004"
 set bluearc = /cluster/bluearc/encode
+set freezeDate = "SEP-2005"
+
+## Elliott addition:
+mkdir /usr/local/apache/htdocs/encode/downloads/msa/$freezeDate
+## from my machine, scp apollo:/data/projects/encode/SEP-2005/prep/metadata.txt hgwdev.cse.ucsc.edu:/usr/local/apache/htdocs/encode/downloads/msa/SEP-2005/
+
+mkdir para
+mkdir $freezeDate.test
+
+
 ./makeLists.pl $freezeDate
 chmod ug+x $bluearc/wgetList $bluearc/para/maskList $bluearc/$freezeDate.test/runNibFragDiff
 
@@ -93,7 +113,7 @@ $bluearc/wgetList
 # This is still done manually and needs to be updated
 
 rm -rf getLengths.pl >& /dev/null
-cat > getLengths.pl << EOF
+cat > getLengths.pl << 'EOF'
 #!/usr/bin/perl -W
 
 opendir(DIR,"/cluster/bluearc/encode/original");
@@ -113,7 +133,7 @@ foreach $file (@files)
     $n = ($seq =~ tr/nN//);
     print "$file\t" . ($a+$c+$g+$t+$n) . "\t$n\n";
 }
-EOF
+'EOF'
 #
 chmod ug+x getLengths.pl
 
@@ -124,7 +144,7 @@ rm -f lengths
 # mask sequences
 
 rm -f /cluster/bin/scripts/maskOne.csh
-cat > /cluster/bin/scripts/maskOne.csh << EOF
+cat > /cluster/bin/scripts/maskOne.csh << 'EOF'
 #!/bin/csh
 
 if ( $#argv < 1 ) then
@@ -151,7 +171,7 @@ cd /tmp
 /bin/mv -f $acc.bed /cluster/bluearc/encode/trf
 /bin/rm -f $acc*
 echo
-EOF
+'EOF'
 #
 chmod ug+x /cluster/bin/scripts/maskOne.csh
 
@@ -164,7 +184,7 @@ chmod ug+x /cluster/bin/scripts/maskOne.csh
 # rewrite files with new headers
 
 rm -f writeEncodeFasta.pl >& /dev/null
-cat > writeEncodeFasta.pl << EOF
+cat > writeEncodeFasta.pl << 'EOF'
 #!/usr/bin/perl -W
 
 # echo "select * from encodeOrthology where release_date='releaseDate'"|mysql $database > metadata
@@ -196,7 +216,7 @@ while (<HEADERLIST>)
     close(SOURCE);
     close(DEST);
 }
-EOF
+'EOF'
 #
 chmod ug+x writeEncodeFasta.pl
 

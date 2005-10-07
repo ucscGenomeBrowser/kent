@@ -6,15 +6,15 @@
  *     - aligned version matches latest version in release
  *     - moddate matches latest moddate for version in release
  *     - number of alignments for acc match
- *   - all gbCdnaInfo table entries are in seq table
- *   - seq table sizes seem sane for mRNAs/ESTs
- *   - mRNAs/ESTs have extFFiile entries an seq offset and size makes sense
- *     with extFile size.
- *   - File exists and is readable for extFile and the size matches.
+ *   - all gbCdnaInfo table entries are in gbSeq table
+ *   - gbSeq table sizes seem sane for mRNAs/ESTs
+ *   - mRNAs/ESTs have gbExtFiile entries an seq offset and size makes sense
+ *     with gbExtFile size.
+ *   - File exists and is readable for gbExtFile and the size matches.
  *   - check that number of PSL entries for each acc in all and per-chrom
  *     tables matches number in gbStatus table.
  *   - check PSL target fields against chrom sizes
- *   - check PSL query fields against seq table.
+ *   - check PSL query fields against gbSeq table.
  */
 
 #include "common.h"
@@ -38,7 +38,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.10 2004/09/15 16:31:50 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.11 2005/09/23 23:08:17 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

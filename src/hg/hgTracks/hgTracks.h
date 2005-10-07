@@ -289,18 +289,6 @@ void makeLoweShades(struct vGfx *vg);
 #define UNALIGNED_SEQ 'o'
 #define MAF_DOUBLE_GAP '='
 
-/* used for internal representation of synteny breaks
- * in multiple alignments. "Full break" indicates that
- * flanking alignment is on a different chromosome/contig, and
- * that the alignment ended at a chrom/contig end.
- * "Partial break" indicates there is additional unaligned sequence
- * following on the chrom/contig */
-
-#define MAF_FULL_BREAK_BEFORE '^'
-#define MAF_FULL_BREAK_AFTER 'V'
-#define MAF_PART_BREAK_BEFORE 'X'
-#define MAF_PART_BREAK_AFTER 'Z'
-
 struct track *getTrackList(struct group **pGroupList);
 /* Return list of all tracks. */
 

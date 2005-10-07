@@ -4496,7 +4496,7 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
 
 
 
-# Tajima's D (DONE -- 2005-06-04 -- Daryl)
+# Tajima's D (DONE -- 2005-09-20 -- Daryl)
 # Data from Chris Carlson in Debbie Nickerson's lab
 # Chris Carlson [csc47<AT>u<DOT>washington<DOT>edu]
 
@@ -4513,57 +4513,48 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     set dir=/cluster/data/$db/bed/tajdpoly/latest
     cd $dir
     
-    foreach p (AD ED XD)
-	set f = $p.SNP.track
-	echo `date` $f "=>" $f.bed4
-	rm -f $f.bed*
-	mac2unix < $f | grep -v description | awk '{printf "%s\t%d\t%d\t1\n", $1, $2, $3}' > $f.bed4
-	hgLoadBed -bedGraph=4 $db tajdSnp$p $f.bed4
-	head -3 $f*
-	hgsql -e "select * from tajdSnp$p limit 3" $db
-    end
-    foreach p (AD ED XD)
-	set f = $p.tajd.track
-	echo `date` $f "=>" $f.bedGraph
-	rm -f $f.bed*
-	mac2unix < $f | grep -v description | awk '{printf "%s\t%d\t%d\t%.2f\n", $1, $2-1, $3, $4}' > $f.bedGraph
-	hgLoadBed -bedGraph=4 $db tajd$p $f.bedGraph
-	head -3 $f*
-	hgsql -e "select * from tajd$p limit 3" $db
-    end
-    rm -f bed.tab
-    echo `date`
+    tar xvfz TajDtracks.tar.gz
 
-    # deleting elements that overlap with gaps -- tajd files have overlaps due to the windowing scheme (snps are not found in gaps)
-    rm -f delete.sql
-    touch delete.sql
-    set $where="where t.chrom=g.chrom and (t.chromStart between g.chromStart and g.chromEnd or t.chromEnd between g.chromStart and g.chromEnd)"
-    foreach p (AD ED XD SnpAD SnpED SnpXD)
-	foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
-	    echo "select 'tajd$p' as pop, t.chrom, t.chromStart from tajd${p} t, chr${c}_gap g $where " | \
-		hgsql hg17 | grep -v pop | \
-		awk '{printf "delete from %s where chrom=\"%s\" and chromStart=%d;\n", $1, $2, $3}' >> delete.sql
+    mac2unix < AD.SNP.track  | grep -v track | sed 's/1\.02e+08/102000000/;s/8\.8e+07/88000000/;s/1\.5e+07/15000000/' > hg17.tajdSnpAd.bed
+    mac2unix < ED.SNP.track  | grep -v track | sed 's/1\.02e+08/102000000/;s/8\.8e+07/88000000/;s/1\.5e+07/15000000/' > hg17.tajdSnpEd.bed
+    mac2unix < XD.SNP.track  | grep -v track | sed 's/1\.02e+08/102000000/;s/8\.8e+07/88000000/;s/1\.5e+07/15000000/' > hg17.tajdSnpXd.bed
+    mac2unix < AD.tajd.track | grep -v track | awk '{printf"%s\t%s\t%d\t%.3f\n",$1,$2,$3,$4}' > hg17.tajdAd.bedGraph
+    mac2unix < ED.tajd.track | grep -v track | awk '{printf"%s\t%s\t%d\t%.3f\n",$1,$2,$3,$4}' > hg17.tajdEd.bedGraph
+    mac2unix < XD.tajd.track | grep -v track | awk '{printf"%s\t%s\t%d\t%.3f\n",$1,$2,$3,$4}' > hg17.tajdXd.bedGraph
+    
+    set chain = /cluster/data/hg17/bed/bedOver/hg17ToHg16.over.chain
+
+    foreach pop (Ad Ed Xd)
+	liftOver hg17.tajdSnp$pop.bed   $chain hg16.tajdSnp$pop.bed   hg17ToHg16.tajdSnp$pop.unmapped
+	liftOver hg17.tajd$pop.bedGraph $chain hg16.tajd$pop.bedGraph hg17ToHg16.tajd$pop.unmapped
+	foreach db (hg16 hg17)
+	    hgLoadBed -bedGraph=4 $db tajd$pop    $db.tajd$pop.bedGraph
+	    hgLoadBed             $db tajdSnp$pop $db.tajdSnp$pop.bed
 	end
     end
-    $db < delete.sql
 
-    # cleanup elements that didn't get deleted properly
-    ## cleanup.pl
-    #!/usr/bin/perl -W
-    $pop=shift;
-    while (<>)
-    {   
-	if (/^(chr..?)\s+(\d+)/) 
-	{ print "delete from tajd$pop where chrom='$1' and chromStart<$2 and chromEnd>$2;\n"; }
-    }
-    ##
-
-    foreach p (AD ED XD)
-	featureBits $db tajd$p gap -bed=$p.inGaps.bed
-	cleanup.pl < $p.inGaps.bed $p | $db
-	featureBits $db tajd$p gap -bed=$p.inGaps.bed ## should be empty now
+    set where1 = "where t.bin=g.bin and t.chrom=g.chrom and (t.chromStart between g.chromStart and g.chromEnd or t.chromEnd between g.chromStart and g.chromEnd)"
+    set where2 = "t, chromInfo c where t.chromStart < 0 or (t.chrom=c.chrom and t.chromEnd > c.size)"
+    set list = "as pop, t.chrom, t.chromStart from"
+    foreach db (hg16 hg17)
+	rm -f $db.delete.sql
+	touch $db.delete.sql
+	foreach p (Ad Ed Xd SnpAd SnpEd SnpXd)
+	    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+		echo "select 'tajd$p' $list tajd${p} t,chr${c}_gap g $where1" | \
+		    hgsql $db | \
+		    grep -v pop | \
+		    awk '{printf "delete from %s where chrom=\"%s\" and chromStart=%d;\n",$1,$2,$3}' \
+		    >> $db.delete.sql
+	    end
+	    echo "select 'tajd$p' $list tajd${p} $where2" | \
+		hgsql $db | \
+		grep -v pop | \
+		awk '{printf "delete from %s where chrom=\"%s\" and chromStart=%d;\n",$1,$2,$3}'\
+		>> $db.delete.sql
+	end
+	hgsql $db < $db.delete.sql
     end
-
 
 
 # GENE SORTER (AKA: FAMILY BROWSER) (DONE - 2004-06-16 - Hiram)
@@ -17550,18 +17541,6 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
 
     # use "antiword" to create plain text from .doc description file
 
-# NSCAN composite track - (2005-08-16 markd)
-    # obtained NSCAN and NSCAN-EST predictions from michael brent's group
-    # at WUSTL
-    NCBI35_NSCAN_4-11-2005/chr_gtf/*.gtf
-    NCBI35_NSCAN_EST_4-16-2005/chr_gtf/*.gtf
-
-    # load tracks.  Note that these have *utr features, rather than
-    # exon featres.  currently ldHgGene creates separate genePred exons
-    # for these.
-    ldHgGene -gtf -genePredExt hg17 nscanGene  NCBI35_NSCAN_4-11-2005/chr_gtf/chr*.gtf
-    ldHgGene -gtf -genePredExt hg17 nscanEstGene NCBI35_NSCAN_EST_4-16-2005/chr_gtf/chr*.gtf
-
 # UPDATE WGRNA TRACK (DONE, 2005-08-24, Fan)
 
   ssh hgwdev
@@ -17999,6 +17978,7 @@ do
   /cluster/home/sugnet/bin/i386/borfMatcher -keepNmd beds/$base borf/$base.borf bedOrf/$base.bed genePred/$base.gp 
 done
 '_EOF_'
+    #
 chmod 755 makeGenePred.sh 
 makeGenePred.sh beds/*
 
@@ -18013,3 +17993,31 @@ wc *.bed *.gp
 ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp 
 
 # end exonWalk
+
+### hapmapRecombRate (Daryl; September 19, 2005)
+    Lifted from hg16; see makeHg16.doc for details
+### hapmapRecombHotspot (Daryl; September 19, 2005)
+    Lifted from hg16; see makeHg16.doc for details
+
+# NSCAN composite track - (2005-09-29 markd)
+    cd /cluster/data/hg17/bed/nscan/
+    # obtained NSCAN and NSCAN-EST predictions from michael brent's group
+    # at WUSTL
+    wget http://genome.cse.wustl.edu/predictions/human/hg17_nscan_mm5_9_14_2005/hg17_nscan_mm5_9_14_2005.tar.gz
+    tar -zxf hg17_nscan_mm5_9_14_2005.tar.gz 
+
+    wget http://genome.cse.wustl.edu/predictions/human/NCBI35_NSCAN_EST_4-16-2005.tar  
+    gzip -9 NCBI35_NSCAN_EST_4-16-2005.tar
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon featres.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -gtf -genePredExt hg17 nscanGene  chr_gtf/chr*.gtf
+    rm -rf chr_*
+    ldHgGene -gtf -genePredExt hg17 nscanEstGene NCBI35_NSCAN_EST_4-16-2005/chr_gtf/chr*.gtf
+    rm -rf NCBI35_NSCAN_EST_4-16-2005 genePred.tab 
+
+    # update trackDb; need a hg17-specific page to describe informants
+    human/hg17/nscan.html    
+    human/hg17/trackDb.ra
+

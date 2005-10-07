@@ -16,7 +16,7 @@ struct gencodeGeneClass
     {
     struct gencodeGeneClass *next;  /* Next in singly linked list. */
     char *name;	/* Transcript ID for Gencode gene */
-    char *class;	/* Class of gene.  enum('Antisense', 'Antisense_val', 'Artifact', 'Known', 'Novel_CDS', 'Novel_transcript', 'Novel_transcript_val', 'Putative', 'Putative_val', 'TEC', 'Processed_pseudogene', 'Unprocessed_pseudogene') */
+    char *class;	/* Class of gene.  enum('Antisense', 'Antisense_val', 'Artifact', 'Known', 'Novel_CDS', 'Novel_transcript', 'Novel_transcript_val', 'Putative', 'Putative_val', 'TEC', 'Processed_pseudogene', 'Unprocessed_pseudogene', 'Pseudogene_fragment', 'Undefined') */
     };
 
 void gencodeGeneClassStaticLoad(char **row, struct gencodeGeneClass *ret);

@@ -33,8 +33,6 @@ while [[ $1 == -* ]] ; do
             inclEsts=YES ;;
         -extFileUpdate) 
             opts="$opts -maxExtFileUpdate=$maxExtFileUpdate" ;;
-        -getDownloadSeqs=*) 
-            opts="$opts $opt" ;;
         -allowLargeDeletes)
             opts="$opts $opt" ;;
         -*) echo "Error: invalid option $opt" >&2

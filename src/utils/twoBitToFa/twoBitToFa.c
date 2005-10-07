@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitToFa.c,v 1.8 2005/08/21 04:35:30 markd Exp $";
+static char const rcsid[] = "$Id: twoBitToFa.c,v 1.9 2005/09/20 23:40:09 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +21,7 @@ errAbort(
   "   -start=X  - start at given position in sequence (zero-based)\n"
   "   -end=X - end at given position in sequence (non-inclusive)\n"
   "   -seqList=file - file containing list of sequence names \n"
-  "                    to output of form the seqSpec:[start-end]\n"
+  "                    to output of form the seqSpec[:start-end]\n"
   "\n"
   "Sequence and range may also be specified as part of the input\n"
   "file name using the syntax:\n"

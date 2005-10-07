@@ -13,7 +13,7 @@ MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a 
 
 O = spliceGraph.o exonGraph.o heap.o altSpliceSite.o pfamDat.o affyProbe.o altProbe.o dMatrix.o \
-    splice.o
+    splice.o mouseAPSetEventMap.o
 
 TESTS = heapTest
 

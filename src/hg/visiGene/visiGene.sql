@@ -394,7 +394,7 @@ insert into lifeStage values(1, "2", 1.0, "Dividing egg");
 insert into lifeStage values(1, "3", 2.0, "Morula");
 insert into lifeStage values(1, "4", 3.0, "Blastocyst");
 insert into lifeStage values(1, "5", 4.0, "Hatched blastocyst");
-insert into lifeStage values(1, "6", 4.5, "Attatched blastocyst");
+insert into lifeStage values(1, "6", 4.5, "Attached blastocyst");
 insert into lifeStage values(1, "7", 5, "Implantation and egg cylinder");
 insert into lifeStage values(1, "8", 6, "Differentiation of egg cylinder");
 insert into lifeStage values(1, "9a", 6.5, "Early streak");

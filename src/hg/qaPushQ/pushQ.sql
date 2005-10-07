@@ -25,7 +25,7 @@ CREATE TABLE pushQ (
     stat varchar(255) not null,	# Status
     sponsor char(50) not null,	# Sponsor
     reviewer char(50) not null,	# QA Reviewer
-    extSource char(50) not null,	# External Source
+    extSource char(128) not null,	# External Source
     openIssues longblob not null,	# Open issues
     notes longblob not null,	# Notes
     pushState char(1) not null,	# Push State = NYD = No, Yes, Done

@@ -1,6 +1,6 @@
 #OPT= -O2
 #OPT = -O3 -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -Wuninitialized
-OPT= -ggdb -pg
+OPT= -ggdb 
 L = $(MYSQLLIBS) -lm 
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceGraph.a 

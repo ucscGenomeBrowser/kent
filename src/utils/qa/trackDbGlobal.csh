@@ -23,6 +23,7 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo "    usage:  RRmachine, "
   echo "            [mode] (realTime|fast)"
   echo "       - defaults to fast which uses mysql-genome instead of WGET"
+  echo "       - uses fast for settings and html fields, even in realTime"
   echo
   exit 1
 else

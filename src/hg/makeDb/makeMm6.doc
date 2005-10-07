@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.79 2005/09/16 21:47:30 heather Exp $"
+#	"$Id: makeMm6.doc,v 1.80 2005/09/30 05:33:31 markd Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8464,4 +8464,17 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
     hgsql mm6 -e 'drop table geneNetworkId'
     hgsql mm6 < ~/src/hg/lib/geneNetworkId.sql
     hgsql mm6 -e 'load data local infile "mm6.geneNetworkId.tab" into table geneNetworkId'
+
+# NSCAN track - (2005-09-29 markd)
+    cd /cluster/data/mm6/bed/nscan/
+    # obtained NSCAN-EST predictions from michael brent's group at WUSTL
+    wget http://genome.cse.wustl.edu/predictions/mouse/mm6_09_14_05/mm6Predictions.tar.gz 
+    tar -zxf mm6Predictions.tar.gz 
+
+    ldHgGene -gtf -genePredExt mm6 nscanGene  chr_gtf/chr*.gtf
+    rm -rf chr_* genePred.tab 
+
+    # update trackDb; need a mm6-specific page to describe informants
+    mouse/mm6/nscanGene.html    
+    mouse/mm6/trackDb.ra
 

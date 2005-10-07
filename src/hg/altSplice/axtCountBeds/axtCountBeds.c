@@ -318,7 +318,7 @@ char query[256];
 struct dyString *axtChromFile = NULL;
 
 warn("Loading Beds.");
-bedList = bedLoadNAll(bedFile, 6);
+bedList = bedLoadAll(bedFile);
 hSetDb(db);
 conn = hAllocConn();
 if(sameString(chrom, "all"))
@@ -349,6 +349,8 @@ while((row = sqlNextRow(sr)) != NULL)
     chromKeeperForAxt(axtChromFile->string, db);
     for(bed = bedList; bed != NULL; bed = bed->next)
 	{
+	if(sameString(bed->strand,""))
+	    bed->strand[0] = '+';
 	if(differentString(bed->chrom, row[0]))
 	    continue;
 	countMatches(bed, out, axtOut, qrnaOut);

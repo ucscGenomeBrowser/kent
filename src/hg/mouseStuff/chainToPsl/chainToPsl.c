@@ -13,8 +13,10 @@
 #include "psl.h"
 #include "dystring.h"
 #include "dlist.h"
+#include "twoBit.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.13 2005/05/28 00:38:33 markd Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.15 2005/09/26 16:53:56 braney Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {
@@ -33,8 +35,8 @@ errAbort(
   "Where tSizes and qSizes are tab-delimited files with\n"
   "       <seqName><size>\n"
   "columns.\n"
-  "The target and query lists can either be fasta files, nib files, \n"
-  "or a list of fasta and/or nib files one per line\n"
+  "The target and query lists can either be fasta files, nib files, 2bit files\n"
+  "or a list of fasta, 2bit and/or nib files one per line\n"
   "options:\n"
   "   -tMasked - If specified, the target is soft-masked and the repMatch counts are\n"
   "    computed\n"
@@ -49,6 +51,7 @@ struct seqFilePos
     char *file;	/* Sequence file name, allocated in hash. */
     long pos; /* Position in fa file/size of nib. */
     bool isNib;	/* True if a nib file. */
+    bool isTwoBit;	/* True if a two bit file. */
     };
 
 boolean isFa(char *file)
@@ -100,6 +103,27 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
+void addTwoBit(char *file, struct hash *fileHash, struct hash *seqHash)
+/* Add a 2bit file to hashes. */
+{
+struct twoBitFile *lf = twoBitOpen(file);
+char root[128];
+char *rFile = hashStoreName(fileHash, file);
+struct slName *names = twoBitSeqNames(file);
+struct slName *name;
+
+for(name = names;name;name = name->next)
+    {
+    struct seqFilePos *sfp;
+    AllocVar(sfp);
+    hashAddSaveName(seqHash, name->name, sfp, &sfp->name);
+    sfp->file = rFile;
+    sfp->pos = 0;
+    }
+slFreeList(&names);
+twoBitClose(&lf);
+}
+
 
 struct cachedFile
 /* File in cache. */
@@ -147,7 +171,11 @@ if (cacheSize >= maxCacheSize)
 /* Cache new file. */
 AllocVar(cf);
 cf->name = cloneString(sfp->file);
-if (sfp->isNib)
+if (sfp->isTwoBit)
+    {
+    cf->f = (FILE *)twoBitOpen(sfp->file);
+    }
+else if (sfp->isNib)
     {
     nibOpenVerify(sfp->file, &cf->f, &size);
     if (cf->f == NULL)
@@ -169,21 +197,6 @@ if (!faReadNext(f, "", TRUE, NULL, &seq))
     errAbort("Couldn't faReadNext on %s in %s\n", sfp->name, sfp->file);
 return seq;
 }
-struct dnaSeq *readCachedSeq(char *seqName, struct hash *hash, 
-	struct dlList *fileCache)
-/* Read sequence hopefully using file cashe. */
-{
-struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
-FILE *f = openFromCache(fileCache, sfp);
-if (sfp->isNib)
-    {
-    return nibLdPart(sfp->file, f, sfp->pos, 0, sfp->pos);
-    }
-else
-    {
-    return readSeqFromFaPos(sfp, f);
-    }
-}
 
 void readCachedSeqPart(char *seqName, int start, int size, boolean getMasked,
      struct hash *hash, struct dlList *fileCache, 
@@ -193,7 +206,13 @@ void readCachedSeqPart(char *seqName, int start, int size, boolean getMasked,
 {
 struct seqFilePos *sfp = hashMustFindVal(hash, seqName);
 FILE *f = openFromCache(fileCache, sfp);
-if (sfp->isNib)
+if (sfp->isTwoBit)
+    {
+    *retSeq = twoBitReadSeqFrag((struct twoBitFile *)f, seqName, start, start + size);
+    *retOffset = start;
+    *retIsNib = TRUE;
+    }
+else if (sfp->isNib)
     {
     *retSeq = nibLdPartMasked((getMasked ? NIB_MASK_MIXED : 0), sfp->file, f, sfp->pos, start, size);
     *retOffset = start;
@@ -212,7 +231,9 @@ else
 void hashFileList(char *fileList, struct hash *fileHash, struct hash *seqHash)
 /* Read file list into hash */
 {
-if (endsWith(fileList, ".nib"))
+if (endsWith(fileList, ".2bit"))
+    addTwoBit(fileList, fileHash, seqHash);
+else if (endsWith(fileList, ".nib"))
     addNib(fileList, fileHash, seqHash);
 else if (isFa(fileList))
     addFa(fileList, fileHash, seqHash);
@@ -223,7 +244,9 @@ else
     while (lineFileRow(lf, row))
         {
 	char *file = row[0];
-	if (endsWith(file, ".nib"))
+	if (endsWith(file, ".2bit"))
+	    addTwoBit(file, fileHash, seqHash);
+	else if (endsWith(file, ".nib"))
 	    addNib(file, fileHash, seqHash);
 	else
 	    addFa(file, fileHash, seqHash);
@@ -523,11 +546,11 @@ struct psl *psl;
 struct chain *chain;
 int q,t;
 
-printf("Scanning %s\n", targetList);
+verbose(1, "Scanning %s\n", targetList);
 hashFileList(targetList, fileHash, tHash);
-printf("Scanning %s\n", queryList);
+verbose(1, "Scanning %s\n", queryList);
 hashFileList(queryList, fileHash, qHash);
-printf("Converting %s\n", inName);
+verbose(1, "Converting %s\n", inName);
 
 while ((chain = chainRead(lf)) != NULL)
     {

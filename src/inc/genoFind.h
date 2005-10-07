@@ -64,6 +64,11 @@ struct gfHit
 
 struct gfClump
 /* A clump of hits. */
+/* Note: for clumps from regular (blat) queries, tStart and tEnd include 
+ * target->start, but for clumps from gfPcrClumps(), tStart and tEnd have 
+ * already had target->start subtracted.  So tStart and tEnd in PCR clumps 
+ * are relative to that target sequence (not the collection of all target 
+ * sequences). */
     {
     struct gfClump *next;	/* Next clump. */
     bits32 qStart, qEnd;	/* Position in query. */
@@ -283,7 +288,9 @@ void gfTransTransFindClumps(struct genoFind *gfs[3], aaSeq *seqs[3],
  * reading frames. Used for translated/translated protein comparisons. */
 
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f);
-/* Print out info on clump */
+/* Print out info on clump.  This routine subtracts clump->target->start 
+ * from clump->tStart and from clump->tEnd for printing, so that printed 
+ * coords are relative to that target sequence. */
 
 
 void gfAlignAaClumps(struct genoFind *gf,  struct gfClump *clumpList, aaSeq *seq,
@@ -361,7 +368,11 @@ void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3],
 struct gfClump *gfPcrClumps(struct genoFind *gf, 
         char *fPrimer, int fPrimerSize, char *rPrimer, int rPrimerSize,
 	int minDistance, int maxDistance);
-/* Find possible PCR hits.  The fPrimer and rPrimer are on opposite strands. */
+/* Find possible PCR hits.  The fPrimer and rPrimer are on opposite strands.
+ * Note: unlike clumps from other query functions, PCR clumps from this 
+ * function have already had clump->target->start subtracted from 
+ * clump->tStart and clump->tEnd so that the coords are relative to that 
+ * target sequence (not the collection of all target sequences). */
 
 #define gfVersion 32	/* Current BLAT version number */
 

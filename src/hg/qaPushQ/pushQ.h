@@ -35,7 +35,7 @@ struct pushQ
     char *stat;	/* Status */
     char sponsor[51];	/* Sponsor */
     char reviewer[51];	/* QA Reviewer */
-    char extSource[51];	/* External Source */
+    char extSource[129];	/* External Source */
     char *openIssues;	/* Open issues */
     char *notes;	/* Notes */
     char pushState[2];	/* Push State = NYD = No, Yes, Done */

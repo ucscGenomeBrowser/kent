@@ -4,7 +4,7 @@
 #
 # create download sequences
 #
-# $Id: gbMakeDownload,v 1.6 2005/09/15 00:29:37 genbank Exp $
+# $Id: gbMakeDownload,v 1.7 2005/09/20 22:51:20 markd Exp $
 #
 use strict;
 use warnings;
@@ -57,7 +57,7 @@ sub makeSeqFa($$$$$) {
     my $loadTbl = getDbConfNo($db, "$srcDb.$type.$orgCat.load");
     if (defined($loadTbl) && ($loadTbl eq "yes")) {
         # setup out directory to put 
-        my $downloadDir = "download/" . getRelDownloadDir($db) . "/bigZips";
+        my $downloadDir = $downloadRootDir . "/" . getRelDownloadDir($db) . "/bigZips";
         makeDir($downloadDir);
 
         my $fa = "$downloadDir/$outBase.fa";
@@ -94,7 +94,7 @@ sub makeDownloadSeqs($) {
     createSeqFaGz($db, "genbank", "mrna", "xeno", "xenoMrna");
     createSeqFaGz($db, "genbank", "est", "native", "est");
     createSeqFaGz($db, "refseq", "mrna", "native", "refMrna");
-    #FIXME: not supported gbGetSeqs:
+    #FIXME: not supported by gbGetSeqs:
     #createSeqFaGz($db, "native", "refseq", "mrna", "refPep");
     # FIXME: need to add up/down stream seqs
 }

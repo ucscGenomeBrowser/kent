@@ -6,8 +6,9 @@
 #include "portable.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: pslSplitOnTarget.c,v 1.1 2004/10/21 07:53:07 kent Exp $";
+static char const rcsid[] = "$Id: pslSplitOnTarget.c,v 1.2 2005/09/29 19:07:26 galt Exp $";
 
+boolean lump = FALSE;
 int maxTargetCount = 300;
 
 void usage()
@@ -18,14 +19,43 @@ errAbort(
   "usage:\n"
   "   pslSplitOnTarget inFile.psl outDir\n"
   "options:\n"
-  "   -maxTargetCount=N - Maximum allowed targets (default is %s).\n"
+  "   -maxTargetCount=N - Maximum allowed targets (default is %d).\n"
   "        This implementation keeps an open file handle for each target.\n"
+  "   -lump - useful with scaffolds, hashes on targ name to lump together.\n"
+  "           (creates maxTargetCount lumps off scaffold name hash).\n"
+  , maxTargetCount
   );
 }
 
 static struct optionSpec options[] = {
+   {"maxTargetCount", OPTION_INT},
+   {"lump", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+char *lumpName(char *name)
+/* Look for integer part of name,  then do mod operation 
+ * on it to assign to lump. */
+{
+int lump = maxTargetCount;
+char *s = name, c;
+for (;;)
+    {
+    c = *s;
+    if (c == 0)
+        errAbort("No digits in %s,  need digits in name for lump optoin", 
+		name);
+    if (isdigit(c))
+        {
+	static char buf[32];
+	int lumpIx = atoi(s) % lump;
+	lumpIx %= lump;
+	safef(buf, sizeof(buf), "%03d", lumpIx);
+	return buf;
+	}
+    ++s;
+    }
+}
 
 void pslSplitOnTarget(char *inFile, char *outDir)
 /* pslSplitOnTarget - Split psl files into one per target.. */
@@ -49,6 +79,8 @@ while (lineFileNext(lf, &line, &lineSize))
     if (wordCount < 14)
         errAbort("Truncated line %d of %s", lf->lineIx, lf->fileName);
     target = row[13];
+    if (lump)
+	target = lumpName(target);
     f = hashFindVal(targetHash, target);
     if (f == NULL)
         {
@@ -84,6 +116,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+maxTargetCount = optionInt("maxTargetCount",maxTargetCount);
+lump = optionExists("lump");
 if (argc != 3)
     usage();
 pslSplitOnTarget(argv[1], argv[2]);

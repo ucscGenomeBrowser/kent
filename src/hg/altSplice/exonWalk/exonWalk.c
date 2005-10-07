@@ -12,31 +12,76 @@
 #include "memalloc.h"
 #include "errabort.h"
 #include "malloc.h"
+#include "options.h"
+#include "portable.h"
+#include "verbose.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.14 2005/01/27 02:26:10 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.15 2005/09/23 20:37:25 sugnet Exp $";
+
+static struct optionSpec optionSpecs[] = 
+/* Our acceptable options to be called with. */
+{
+    {"help", OPTION_BOOLEAN},
+    {"maxWalkTime", OPTION_INT},
+    {"keepFrags", OPTION_BOOLEAN},
+    {"mrnaFilter", OPTION_BOOLEAN},
+    {"db", OPTION_STRING},
+    {"mrnaWeight", OPTION_INT},
+    {"minPercent", OPTION_FLOAT},
+    {"trumpSize", OPTION_INT},
+    {"noPathMerging", OPTION_BOOLEAN},
+    {"diagnostics", OPTION_BOOLEAN},
+    {"maxMem", OPTION_INT},
+    {"debug", OPTION_BOOLEAN},
+    {"noTrim", OPTION_BOOLEAN},
+    {"verbose", OPTION_INT},
+    {NULL, 0}
+};
+
+static char *optionDescripts[] = 
+/* Description of our options for usage summary. */
+{
+    "Display this message.",
+    "Time in seconds to spend on an exon walk before giving up. (420 sec default)",
+    "Keep all fragments regardless of number of exons.",
+    "Weight mRNAs more than ESTs. Requires -db to be set.",
+    "Database to look up accessions (i.e. hg17, mm5).",
+    "How much to weight mRNAs default 20",
+    "Minimum percentage of transcripts that exon occurs in. (0.0 default)",
+    "Keep exons that are >= trumpSize (100000 default)",
+    "Don't merge paths that are the same. (debugging)",
+    "Write out files that contain:\n\t\t cleaned transcripts, splice sites, and rejected paths.",
+    "Size in bytes to use before giving up on an exonWalk. Default 256000000",
+    "Print debugging info.",
+    "Don't merge vertices in same connected component.",
+    "How verbose to be about things (default 0)"
+};
 
 void usage()
+/* Introduce ourselves. */
 {
-errAbort("exonWalk - uses altGraphX files to construct a splicing graph\n"
-	 "which is a combination of all the paths seen by RNA and EST evidence.\n"
-	 "The paths are joined where there are overlaps and the resulting super\n"
-	 "graph is walked to determine a set of transcripts which are not sub-paths\n"
-	 "of each other. Uses some heuristics to trim paths that contain rare nodes.\n"
-	 "options:\n"
-	 "\tminPercent - Minimum percentage of total transcripts that exon\n"
-	 "\t\tvertices must be seen in. (.05 default)\n"
-	 "\ttrumpSize - If unique portion of exon is >= trumpSize it will be kept\n"
-	 "\t\teven if it is below minPercent.(100 default)\n"
-	 "\tdiagnotics - flag to spit out files that contain: original transcripts,\n"
-         "\t\tsplice sites, and rejected paths.\n"
-	 "\tmaxMem=int - Size in bytes to use before giving up on an exonWalk. Default 256000000\n"
-	 "usage:\n\t"
-	 "exonWalk db=hgX <infile.altGraphX.tab> <outFile.bed>\n");
+int i = 0;
+warn("exonWalk - Genebuilding program to produce full length transcripts\n"
+     "from cDNAs.  Uses altGraphX files to reconstruct transcripts and\n"
+     "construct a exon graph which is a combination of all the paths seen by\n"
+     "RNA and EST evidence. The paths are joined where there are overlaps\n"
+     "and the resulting super graph is walked to determine a set of\n"
+     "transcripts which are not sub-paths of each other. Can use some\n"
+     "heuristics to trim paths that contain bad nodes, but it is better to\n"
+     "filter splice graphs prior to exonWalk.\n"
+     "usage:\n"
+	 "   exonWalk altGraphXFile.agx transcriptsOut.bed\n"
+     "options:");
+for(i=0; i<ArraySize(optionSpecs) -1; i++)
+    fprintf(stderr, "   -%s -- %s\n", optionSpecs[i].name, optionDescripts[i]);
+errAbort("");
 }
 
 int maxMem = 0; /* Maximum memory that a breadth first search can use. Not maximum for program. */
 int exonProblem = -1;   /* Code for a problematic exon. Will cause error handling. */
 int inActive = -10;    /* Symbol for  when an exonNode should no longer be used. */
+long maxWalkTime = 60 * 10; /* Amout of time to walk a graph before giving up in seconds. */
 boolean debug = FALSE; /** Turns on some debugging output. */
 boolean diagnostics = FALSE; /* Print out some extra tracks. */
 boolean noPathMerging = FALSE; /* Overrides usual behavior of merging two paths that are identical together. */
@@ -50,8 +95,6 @@ struct exonNodeWrap
     struct exonNodeWrap *next;   /* Next in list. */
     struct exonNode *en;         /* Pointer to exon node. */
 };
-
-
 
 void smallPathFree(struct smallPath **pEl)
 /* Free a single smallPath. */
@@ -136,13 +179,18 @@ for(i=0;i<sg->nodeCount; i++)
 	{
 	struct exonNode *target = sg->nodes[sn->edgesOut[j]];
 	if(target->class == inActive)
-	    errAbort("exonWalk::nodeSanityCheck() - How can node %d still point to node %d which is inactive?", sn->id, target->id);
+	    errAbort("exonWalk::nodeSanityCheck() - How can node %d still point to node %d which is inactive?", 
+		     sn->id, target->id);
 	if(sn->edgesOut[j] >= sg->nodeCount)
-	    errAbort("exonWalk::nodeSanityCheck() - node with id %d when max is %d\n", sn->edgesOut[j], sg->nodeCount);
-	if((rangeIntersection(sn->tStart, sn->tEnd, target->tStart, target->tEnd) > 0)	   && target->class != BIGNUM && target->class != sn->class )
-	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but that is the wrong direction.\n",  sn->id, sn->tStart, target->id, target->tStart);
+	    errAbort("exonWalk::nodeSanityCheck() - node with id %d when max is %d\n", 
+		     sn->edgesOut[j], sg->nodeCount);
+	if((rangeIntersection(sn->tStart, sn->tEnd, target->tStart, target->tEnd) > 0) && 
+	   target->class != BIGNUM && target->class != sn->class )
+	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but that is the wrong direction.\n",  
+		     sn->id, sn->tStart, target->id, target->tStart);
 	if(sn->id == target->id)
-	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but they are the same node.\n",  sn->id, sn->tStart, target->id, target->tStart);
+	    errAbort("exonWalk::nodeSanityCheck() -Node %u-%u connects to %u-%u but they are the same node.\n",  
+		     sn->id, sn->tStart, target->id, target->tStart);
 
 	}
     }
@@ -266,9 +314,6 @@ freez(&status);
 return toRet;
 }
 
-
-
-
 boolean nodesConnect(struct exonGraph *eg, struct exonNode *start, struct exonNode *end)
 /* Return TRUE if the two nodes connect FALSE if they do not. */
 {
@@ -357,8 +402,8 @@ return FALSE;
 }
 
 boolean equivalentNodes(struct exonGraph *eg, struct exonNode *unique, struct exonNode *test)
-/* Return TRUE if both needle and haystack  have the same classes of outgoing nodes and incoming nodes. 
- FALSE otherwise. */
+/* Return TRUE if both needle and haystack have the same classes of
+ outgoing nodes and incoming nodes.  FALSE otherwise. */
 {
 int i,j;
 boolean inMatch = TRUE;
@@ -521,8 +566,6 @@ for(i=0; i < mark->edgeInCount; i++)
 	    nodeIn->edgesOut[j] = unique->id;
 	    }
 	}
-/*     if(unique->id != nodeIn->id) */
-/* 	exonNodeConnect(nodeIn, unique); */
     nodeIn->edgeOutCount = mergeDuplicatesFast(nodeIn->edgeOutCount, nodeIn->edgesOut, nodeIn->id);
     }
 
@@ -761,7 +804,8 @@ en->accs[0] = cloneString(ep->qName);
 /* Check to make sure this makes sense. */
 if(en->tEnd <= en->tStart)
     {
-    warn("\nexonWalk::addNodeToPath() - exon start: %d > exon end:%d for accession %s", en->tStart, en->tEnd, ep->qName);
+    warn("\nexonWalk::addNodeToPath() - exon start: %d > exon end:%d for accession %s", 
+	 en->tStart, en->tEnd, ep->qName);
     exonNodeFree(&en);
     return exonProblem;
     }
@@ -1015,7 +1059,6 @@ for(i=0; i < agx->mrnaRefCount; i++)
 		}
 	    }
 	}
-//    warn("%d nodes in %s.", slCount(ep->nodes), ep->qName);
     finishPath(eg, &epList, ep, pathNotCorrupt, &goodPath);
     }
 altGraphXFreeEdgeMatrix(&em, agx->vertexCount);
@@ -1418,24 +1461,6 @@ if(ep->nodes->class != en->class)
 return TRUE;
 }
 
-/* boolean doSanityCheck(struct exonGraph *eg) */
-/* { */
-/* struct exonPath *ep = NULL; */
-/* struct exonNode *en = NULL; */
-/* int i; */
-/* for(i=0; i< eg->nodeCount; i++)  */
-/*     { */
-/*     en = eg->nodes[i]; */
-/*     for(ep = en->paths; ep != NULL; ep = ep->next) */
-/* 	if(ep->nodes->class != en->class) */
-/* 	    { */
-/* 	    warn("exonWalk.c::doSanityCheck() - Can't have a path to a node that doesn't include that node. Problem at %s:%d-%d", en->tName, en->tStart, en->tEnd); */
-/* 	    return FALSE; */
-/* 	    } */
-/*     } */
-/* return TRUE; */
-/* } */
-
 boolean noOutEdges(struct exonGraph *eg, struct exonNode *en)
 /* Return TRUE if there is no path out of this node that isn't
    of the same class. FALSE otherwise. */
@@ -1495,7 +1520,7 @@ boolean memOk = TRUE;
 int status;
 int *memSavings =NULL;
 int baseLineMem = 0;
-
+long startTime = clock1();
 struct mallinfo mi = mallinfo();
 assert(queue);
 /* Push the abort handler to skip this one but not die if something happens
@@ -1503,7 +1528,6 @@ assert(queue);
 pushAbortHandler(exonWalkAbort);
 memSavings = needMem(sizeof(int) * 1000);
 status = setjmp(exonWalkRecover);
-uglyTime(NULL);
 if(status == 0)
     {
     while(!heapEmpty(queue))
@@ -1512,15 +1536,30 @@ if(status == 0)
 	struct exonNode *en = heapExtractMin(queue);
 	struct smallPath *sp = NULL, *spCopy = NULL;
 	struct exonNode *enCopy = NULL;
+	long currentTime = clock1();
+
+	if(currentTime - startTime > 1)
+	    verbose(1, "Time so far: %d seconds", currentTime - startTime);
+
+	/* If this is taking too long then give up... */
+	if((currentTime - startTime) >= maxWalkTime)
+	    {
+	    warn("%s:%d-%d taking to long quitting.", eg->tName, eg->tStart, eg->tEnd);
+	    errAbort("");
+	    } 
 	for(i=0; i<en->edgeOutCount; i++)
 	    {
 	    struct exonNode *target = eg->nodes[en->edgesOut[i]];
 	    if(target->class == inActive)
 		warn("exonGraphBfs() - %s:%d-%d, target %d (%s:%d-%d) is inactive!, en = %d", 
-		     eg->tName, eg->tStart, eg->tEnd, target->id, target->tName, target->tStart, target->tEnd, en->id);
+		     eg->tName, eg->tStart, eg->tEnd, target->id, 
+		     target->tName, target->tStart, target->tEnd, en->id);
 	    for(sp = en->paths; sp != NULL; sp = sp->next)
 		{
 		struct mallinfo mem = mallinfo();
+
+
+
 		if((mem.uordblks - baseLineMem) > maxMem)
 		    errAbort("exonGraphBfs() - %s:%d-%d exceeded maximum memory usage %d for breadth first search, used %d.",
 			     eg->tName, eg->tStart, eg->tEnd, maxMem, (mem.uordblks - baseLineMem));
@@ -1543,21 +1582,17 @@ if(status == 0)
 	    /* If the haven't been seen yet, queue them up... */
 	    if(target->color == enWhite) 
 		{
-		fputc('.', stderr);
-		fflush(stderr);
+		verbose(2, ".");
 		target->color = enGray;
 		if(!heapContainsNode(queue, target))
 		    heapMinInsert(queue, target);
 		}
 	    }
-	
 	if(noOutEdges(eg,en) && en->class != BIGNUM) /* It is a terminal node...*/
 	    {
-	    fputc('M', stderr);
-	    fflush(stderr);
+	    verbose(2, "M", stderr);
 	    checkForMaximalSmallPath(eg, maximalPaths, en->paths);
-	    fputc('D', stderr);
-	    fflush(stderr);
+	    verbose(2, "D");
 	    }
 	smallPathFreeList(&en->paths);
 	en->color = enBlack;
@@ -1566,13 +1601,14 @@ if(status == 0)
 else 
     {
     freez(&memSavings);
-    warn("exonGraphBfs() - %s:%d-%d, caught error, something aborted (tried to use too much memory?). Skipping.", eg->tName, eg->tStart, eg->tEnd);
+    warn("exonGraphBfs() - %s:%d-%d, caught error, something aborted "
+	 "(tried to use too much memory or took too long?). Skipping.", 
+	 eg->tName, eg->tStart, eg->tEnd);
     smallPathFreeList(maximalPaths);
     }
-fputc('\n', stderr);
+verbose(2, "\n");
 freez(&memSavings);
 popAbortHandler();
-uglyTime("exonGraphBfs()");
 }
 
 int countNodeForAcc(struct exonGraph *eg, char *acc, boolean onlyActive)
@@ -1600,59 +1636,6 @@ for(i=0; i<eg->nodeCount; i++)
 	}
     }
 return count;
-}
-
-void exonGraphPathDfs(struct exonGraph *eg, struct exonNode *en, int nodeIndex, 
-			struct exonPath **maximalPaths, struct exonPath *history)
-/** 
-   ********* Deprecated ***********
-   Depth first search of the exonGraph starting from node at nodeIndex.
-   keeps track of path taken using history, and will check history against
-   maximal paths at black nodes. */
-{
-int i;
-struct exonNode *copy = exonNodeCopy(en);
-boolean pop = FALSE;
-struct exonNode *notCompat = NULL;
-boolean notCompatPush = FALSE;
-if(debug) { nodeSanityCheck(eg); }
-copy->next = NULL;
-
-/* Handle logic for pushing nodes onto history stack. */
-if((history->nodes == NULL || history->nodes->class != en->class) && en->class != BIGNUM)
-    {
-    if(history->nodes != NULL && overlappingExons(history->nodes, en))
-	{
-	notCompatPush = TRUE;
-	notCompat = slPopHead(&history->nodes);
-	}
-    slAddHead(&history->nodes, copy);
-    history->nodeCount++;
-    pop =TRUE;
-    }
-en->color = enGray;
-if(en->endType == ggSoftEnd && en->class != BIGNUM) /* It is a terminal node...*/
-    {
-//    printf("%s\t%d\t%d\n", en->tName, en->tStart, en->tEnd);
-    checkForMaximalPath(eg, maximalPaths, history);
-    }
-for(i=0; i<en->edgeOutCount; i++)
-    {
-    struct exonNode *next = eg->nodes[en->edgesOut[i]];
-    if(next->color == enWhite)
-	{
-	exonGraphPathDfs(eg, next, next->id, maximalPaths, history);
-	}
-    }
-if(pop)
-    {
-    slPopHead(&history->nodes);
-    history->nodeCount--;
-    if(notCompatPush)
-	slSafeAddHead(&history->nodes, notCompat);
-    }
-exonNodeFree(&copy);
-en->color = enBlack;
 }
 
 
@@ -1692,20 +1675,6 @@ slAddHead(&ep->nodes, enCopy);
 return ep;
 }
 
-void logTooComplicated(struct exonGraph *eg)
-/* Write a little ditty to the hippo log file. */
-{
-int maxNodes = cgiUsualInt("maxNodes", 100);
-int maxEdges = cgiUsualInt("maxEdges", 100);
-int activeNodes, activeEdges;
-activeNodes = countActiveNodes(eg);
-activeEdges = countActiveEdges(eg);
-warn("%s:%u-%u\tmaxNodes = %d\tmaxEdges = %d\tactiveNodes = %d\tactiveEdges = %d\n", 
-	eg->tName, eg->tStart, eg->tEnd, maxNodes, maxEdges, activeNodes, activeEdges);
-fprintf(hippos, "%s:%u-%u\tmaxNodes = %d\tmaxEdges = %d\tactiveNodes = %d\tactiveEdges = %d\n", 
-	eg->tName, eg->tStart, eg->tEnd, maxNodes, maxEdges, activeNodes, activeEdges);
-}
-
 boolean noIncomingEdges(struct exonGraph *eg, struct exonNode *en)
 /* Return TRUE if there is no node that points to this one that
    isn't of the same class. FALSE otherwise. */
@@ -1733,7 +1702,7 @@ struct heap *queue = newHeap(8, nodeStartHeapCmp);
 struct smallPath *maximalPaths = NULL, *smallPath = NULL;
 struct exonPath *ep = NULL, *epList = NULL;
 struct exonNode **orderedNodes = CloneArray(eg->nodes, eg->nodeCount);
-boolean skipTrimGraph = cgiBoolean("notrim");
+boolean skipTrimGraph = optionExists("noTrim");
 int activeNodes, activeEdges;
 int grayCount=0,whiteCount=0,blackCount=0;
 int maxOut = 0, maxIn = 0;
@@ -1743,8 +1712,8 @@ qsort(orderedNodes, eg->nodeCount, sizeof(struct exonNode *), nodeStartCmp);
 if(debug) { nodeSanityCheck(eg); }
 maxOut = maxOutNodeDegree(eg);
 maxIn = maxInNodeDegree(eg);
-warn("Before Trim: %s:%u-%u\tactiveNodes = %d\tactiveEdges = %d (maxIn %d, maxOut %d)", 
-	eg->tName, eg->tStart, eg->tEnd, activeNodes, activeEdges, maxIn, maxOut);
+/* warn("Before Trim: %s:%u-%u\tactiveNodes = %d\tactiveEdges = %d (maxIn %d, maxOut %d)",  */
+/* 	eg->tName, eg->tStart, eg->tEnd, activeNodes, activeEdges, maxIn, maxOut); */
 fflush(stderr);
 if(debug) { nodeSanityCheck(eg); }
 /* Trim the graph down to a smaller number of active nodes. */
@@ -1755,8 +1724,8 @@ if(!skipTrimGraph)
     activeEdges = countActiveEdges(eg);
     maxOut = maxOutNodeDegree(eg);
     maxIn = maxInNodeDegree(eg);
-    warn("After Trim: %s:%u-%u\tactiveNodes = %d\tactiveEdges = %d (maxIn %d, maxOut %d)", 
-	eg->tName, eg->tStart, eg->tEnd, activeNodes, activeEdges, maxIn, maxOut);
+/*     warn("After Trim: %s:%u-%u\tactiveNodes = %d\tactiveEdges = %d (maxIn %d, maxOut %d)",  */
+/* 	eg->tName, eg->tStart, eg->tEnd, activeNodes, activeEdges, maxIn, maxOut); */
     fflush(stderr);
     }
 fflush(stderr);
@@ -1774,44 +1743,36 @@ else
 	{
 	if(noIncomingEdges(eg, orderedNodes[i]) && orderedNodes[i]->class != inActive)
 	    {
-/* 	struct exonPath *ep = newExonPath(orderedNodes[i]); */
 	    struct smallPath *sp = newSmallPath(orderedNodes[i]);
 	    slAddHead(&orderedNodes[i]->paths, sp);
-/* 	ep->nodeCount++; */
-/* 	slAddHead(&orderedNodes[i]->paths, ep); */
 	    heapMinInsert(queue, orderedNodes[i]);
-//	warn("%s\t%d\t%d", orderedNodes[i]->tName, orderedNodes[i]->tStart, orderedNodes[i]->tEnd);
 	    }
 	}
     
-/* Do the exonWalk. */
+    /* Do the exonWalk. */
     if(debug) { nodeSanityCheck(eg); }
     exonGraphBfs(eg, &maximalPaths, queue);
     
-/* Do some cleanup and reporting. */
+    /* Do some cleanup and reporting. */
     for(i=0; i<eg->nodeCount; i++)
 	{
 	struct exonNode *target = eg->nodes[i];
 	if(target->class != inActive)
 	    {
-/* 	exonPathFreeList(&target->paths); */
 	    smallPathFreeList(&target->paths);
 	    if(diagnostics)
 		{
 		if(target->color == enWhite)
 		    {
-//		warn("White: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
 		    whiteCount++;
 		    fprintf(whites, "%s\t%d\t%d\n", target->tName, target->tStart, target->tEnd);
 		    }
 		else if(target->color == enGray)
 		    {
-//		warn("Gray: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
 		    grayCount++;
 		    }
 		else if(target->color == enBlack)
 		    {
-//		warn("Black: Node %s:%d-%d %d is %d should be black: %d", target->tName, target->tStart, target->tEnd, target->id, target->color, enBlack);
 		    blackCount++;
 		    }
 		else
@@ -1822,8 +1783,6 @@ else
 	    }
 	
 	}
-/* if(diagnostics) */
-/*     warn("White: %d, Gray: %d, Black: %d", whiteCount, grayCount, blackCount); */
     }
 heapFree(&queue);
 freez(&orderedNodes);
@@ -1835,29 +1794,6 @@ for(smallPath = maximalPaths; smallPath != NULL; smallPath = smallPath->next)
 slReverse(&epList);
 smallPathFreeList(&maximalPaths);
 return epList;
-}
-
-struct exonPath *exonGraphMaximalPaths(struct exonGraph *eg)
-/** Construct maximal paths through the exonGraph. Maximal paths
-   are those which are not subpaths of any other path. */
-{
-int i=0;
-int index = 0;
-struct exonPath *maximalPaths = NULL, *ep = NULL;
-struct exonNode **orderedNodes = CloneArray(eg->nodes, eg->nodeCount);
-qsort(orderedNodes, eg->nodeCount, sizeof(struct exonNode *), nodeStartCmp);
-for(i=0; i<eg->nodeCount; i++)
-    {
-    if(orderedNodes[i]->color == enWhite)
-	{
-	struct exonPath *history = NULL;
-	AllocVar(history);
-	exonGraphPathDfs(eg, orderedNodes[i], i, &maximalPaths, history);
-	freez(&history);
-	}
-    }
-freez(&orderedNodes);
-return maximalPaths;
 }
 
 void writeOutNodes(struct altGraphX *agx, FILE *f)
@@ -1943,9 +1879,9 @@ boolean confidentPath(struct hash *mrnaHash, struct exonGraph *eg,
 /** Return TRUE if all edges in ep were seen in 5% or more
    of the paths. */
 {
-double minPercent = cgiOptionalDouble("minPercent", .05);
-int trumpSize = cgiOptionalInt("trumpSize", 450);
-int mrnaVal = cgiOptionalInt("mrnaWeight", 20);
+double minPercent = optionFloat("minPercent", .05);
+int trumpSize = optionInt("trumpSize", 450);
+int mrnaVal = optionInt("mrnaWeight", 20);
 double minNum = 0;
 struct exonNode *en = NULL;
 int size = 0;
@@ -2003,7 +1939,7 @@ void addMrnaAccsToHash(struct hash *hash)
 /** Load up all the accessions from the database that are mRNAs. */
 {
 char query[256];
-char *db = cgiUsualString("db",NULL);
+char *db = optionVal("db",NULL);
 if(db == NULL)
     errAbort("Must specify a database.");
 struct sqlConnection *conn = NULL;
@@ -2059,13 +1995,14 @@ FILE *exonSites = NULL;
 FILE *cleanEsts = NULL;
 FILE *rejects = NULL;
 
-boolean mrnaFilter = cgiBoolean("mrnaFilter");
-boolean removeFrags = !cgiBoolean("keepFrags");
+boolean mrnaFilter = optionExists("mrnaFilter");
+boolean removeFrags = !optionExists("keepFrags");
 struct hash *mrnaHash = newHash(10);
 int index = 0;
 int count = 0;
 struct exonPath *ep=NULL, *epList = NULL;
 agxList = altGraphXLoadAll(inFile);
+warn("Read %d graphs from %s", slCount(agxList), inFile);
 f = mustOpen(bedOut, "w");
 hippos = mustOpen("tooBig.log", "w");
 if(mrnaFilter)
@@ -2084,12 +2021,11 @@ if(diagnostics)
     fprintf(whites, "track name=rejects description=\"exonWalk white nodes\" color=178,44,26\n"); 
     }
 /* fprintf(f, "track name=exonWalk description=\"exonWalk Final Picks\" color=23,117,15\n"); */
-warn("Creating exon graphs.");
-
+warn("Creating exon graphs %d graphs per dot.", max(round(slCount(agxList)/20), 1));
+dotForUserInit( max(round(slCount(agxList)/20), 1));
 for(agx = agxList; agx != NULL; agx = agx->next)
     {
-/*     if(count++ % 100 == 0) */
-/* 	putTic(); */
+    dotForUser();
     if(diagnostics)
 	writeOutNodes(agx, exonSites);
 
@@ -2148,18 +2084,18 @@ exonGraphFreeList(&egList);
 altGraphXFreeList(&agxList);
 }
 
-
-
-
 int main(int argc, char *argv[])
+/* Everybody's favorite function. */
 {
-if(argc < 3)
+optionInit(&argc, argv, optionSpecs);
+if(argc < 3 || optionExists("help"))
     usage();
-cgiSpoof(&argc, argv);
-diagnostics = cgiBoolean("diagnostics");
-noPathMerging = cgiBoolean("noPathMerging");
-maxMem = cgiUsualInt("maxMem", 256000000);
-debug = cgiBoolean("debug");
+diagnostics = optionExists("diagnostics");
+noPathMerging = optionExists("noPathMerging");
+maxMem = optionInt("maxMem", 256000000);
+debug = optionExists("debug");
+maxWalkTime = optionInt("maxWalkTime", 60 * 7);
+verboseSetLevel(optionInt("verbose",0));
 exonWalk(argv[1], argv[2]);
 return 0;
 }

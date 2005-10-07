@@ -33,7 +33,7 @@ formPushQ.h: formPushQ.html
 	echo ";" >> formPushQ.h
 	
 
-$(A).o: formPushQ.h ../inc/versionInfo.h
+$(A).o: pushQ.h formPushQ.h ../inc/versionInfo.h
 
 backup: clean
 	date +%Y-%m-%d-%H-%M | gawk '{printf("zip -r $(A)%s.zip *\n",$$1);}' > tempX

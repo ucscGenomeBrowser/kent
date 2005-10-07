@@ -50,6 +50,7 @@ struct row1lq *badBin = NULL;
 struct hash *probeSetHash = NULL;  /* Hash of slRefs for each probe set where slRef->val is a row1lq. */
 struct hash *killHash = NULL;      /* Hash of probes to be ignored. */
 struct hash *outputValsHash= NULL; /* Hash of probe sets to output values for. */
+FILE *outputPsSetSeqs = NULL;      /* Output probe sets and sequences used here. */
 FILE *outputIntenVals = NULL;       /* File to output intensity for individual values to. */
 FILE *outputPvals = NULL;          /* File to output pvals for individual to. */
 int minGcBin = 0;                  /* Minimum GC bin. */
@@ -67,6 +68,7 @@ FILE *gcCountFile = NULL;             /* File to output 'G' + 'C' counts per pro
 FILE *cCountsFile = NULL;              /* File to output 'C' counts per probe. */
 boolean doMedianComb = FALSE;          /* Do a median rather than Fisher's combination. */
 boolean doCombo = FALSE; /* Do a combination of median and fisher. */
+
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
 {
@@ -83,6 +85,7 @@ static struct optionSpec optionSpecs[] =
     {"doCombo", OPTION_BOOLEAN},
     {"outputVals", OPTION_STRING},
     {"outputValsList", OPTION_STRING},
+    {"outputPsSetSeqs", OPTION_STRING},
     {NULL,0}
 };
 
@@ -101,7 +104,8 @@ static char *optionDescripts[] =
     "Test the median code.",
     "Do a combination of medians and fischer's combination.",
     "Output the intensity and probability to file with this prefix.",
-    "Only output probe sets in this list."
+    "Only output probe sets in this list.",
+    "Output probe sets and sequences in 5'->3' orientation"
 };
 
 void usage()
@@ -334,6 +338,42 @@ else
     return 0;
 }
 
+/* double quantileArray(double *array, int count, double quantile) */
+/* /\* give the quantile at a given position of the array. *\/ */
+/* { */
+/* double *results = NULL; */
+/* boolean isEven = FALSE; */
+/* int i = 0; */
+/* double quant = 0; */
+
+/* assert(count); */
+/* assert(quantile >=0 && quantile <=1); */
+/* AllocArray(results, count); */
+/* if(floor(count * quantile) == ceil(count *quantile)) */
+/*     isEven = TRUE; */
+
+/* if(isEven && (count % 2 != 0)) */
+/*     errAbort("Wrong even for quantile %.2f with count %d", quantile, count); */
+/* if(!isEven && (count % 2 == 0)) */
+/*     errAbort("Wrong odd for quantile %.2f with count %d", quantile, count); */
+
+/* for(i = 0; i < count; i++) */
+/*     results[i] = array[i]; */
+/* qsort(results, count, sizeof(results[0]), doubleComp); */
+/* if(isEven) */
+/*     quant = (results[(int)floor(count * quantile)-1] + results[(int)floor(count*quantile)])/2; */
+/* else */
+/*     quant = results[(int)floor(count * quantile)]; */
+/* freez(&results); */
+/* return quant; */
+/* } */
+
+/* double medianArray(double *array, int count)  */
+/* /\* Give the median, or a quantile of an array. *\/ */
+/* { */
+/* return quantileArray(array, count, quantile); */
+/* } */
+
 double medianArray(double *array, int count)
 /* give the median of the array. */
 {
@@ -419,7 +459,24 @@ int probRepCount = 0;
 int i = 0, j = 0;
 refList = val;
 probeCount = slCount(refList);
+if(outputPsSetSeqs != NULL)
+    {
+    assert(refList);
+    row = refList->val;
+    fprintf(outputPsSetSeqs, "%s\t", row->psName);
+    for(ref = refList; ref != NULL; ref = ref->next) 
+	{
+	row = ref->val;
+	reverseBytes(row->seq, strlen(row->seq));
+	if(ref->next != NULL)
+	    fprintf(outputPsSetSeqs, "%s,", row->seq);
+	else
+	    fprintf(outputPsSetSeqs, "%s", row->seq);
 
+	reverseBytes(row->seq, strlen(row->seq));
+	}
+    fprintf(outputPsSetSeqs, "\n");
+    }
 /* Allocate some memory. */
 AllocVar(ps);
 row = refList->val;
@@ -544,6 +601,8 @@ for(row = badBin; row != NULL; row = row->next)
 	}
     }
 hashTraverseVals(probeSetHash, probeSetCalcPval);
+if(outputPsSetSeqs == NULL) 
+    carefulClose(&outputPsSetSeqs);
 slSort(&probePVals, psCmp);
 psCount = slCount(probePVals);
 /* If this is the first time through Allocate some memory. */
@@ -987,12 +1046,12 @@ if(optionExists("outputValsList"))
     initOutputValsList();
 if(optionExists("outputVals"))
     initOutputVals();
+if(optionExists("outputPsSetSeqs")) 
+    outputPsSetSeqs = mustOpen(optionVal("outputPsSetSeqs", NULL), "w");
 affy1lqName = optionVal("1lqFile", NULL);
 outFileName = optionVal("outFile", NULL);
-
 if(optionExists("testVals"))
     doInvChiSq(argc, argv);
-    
 else if(affy1lqName == NULL || outFileName == NULL)
     errAbort("Need to specify 1lqFile and outFile, use -help for usage.");
 else 

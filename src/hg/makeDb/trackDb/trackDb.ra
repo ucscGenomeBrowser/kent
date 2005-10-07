@@ -352,11 +352,11 @@ type bed 4 .
 url http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=
 
 track xenoRefGene
-shortLabel Non-$Organism RefSeq
+shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1
-visibility hide
+visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
@@ -452,30 +452,6 @@ priority 45
 visibility hide
 color 0,100,100
 type genePred twinscanPep
-
-track nscan
-compositeTrack on
-shortLabel N-SCAN
-longLabel N-SCAN Gene Predictions
-group genes
-priority 45.1
-visibility hide
-type genePred
-cdsDrawDefault genomic\ codons
-
-    track nscanEstGene
-    subTrack nscan
-    shortLabel N-SCAN+EST
-    longLabel N-SCAN+EST Gene Predictions
-    color 34,139,34
-    priority 1
-
-    track nscanGene
-    subTrack nscan
-    shortLabel N-SCAN
-    longLabel N-SCAN Gene Predictions
-    color 84,119,34
-    priority 2
 
 track ucscFromMouse
 shortLabel UCSC Mm3
@@ -621,7 +597,7 @@ spectrum on
 type psl est
 
 track xenoMrna
-shortLabel Non-$Organism mRNAs
+shortLabel Other mRNAs
 longLabel Non-$Organism mRNAs from GenBank
 group rna
 priority 63
@@ -640,7 +616,7 @@ spectrum on
 type psl xeno
 
 track xenoEst
-shortLabel Non-$Organism ESTs
+shortLabel Other ESTs
 longLabel Non-$Organism ESTs from GenBank 
 group rna
 priority 65
@@ -2115,6 +2091,21 @@ query select chrom, chromStart,chromEnd, kgName from %s where kgName = '%s'
 xrefTable kgXref
 xrefQuery select kgID, spDisplayID from %s where spDisplayID like '%s%%'
 searchPriority 2.6
+
+searchTable pseudoYaleEncode
+searchType genePred
+searchMethod exact
+searchPriority 4
+
+searchTable pseudoHavana
+searchType genePred
+searchMethod exact
+searchPriority 4
+
+searchTable pseudoGIS
+searchType genePred
+searchMethod exact
+searchPriority 4
 
 searchTable superfamily
 searchType bed
