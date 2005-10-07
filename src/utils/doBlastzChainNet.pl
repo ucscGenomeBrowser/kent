@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.23 2005/10/05 23:30:05 aamp Exp $
+# $Id: doBlastzChainNet.pl,v 1.24 2005/10/07 20:00:04 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -473,12 +473,6 @@ sub checkDef {
   verbose(1, "$DEF looks OK!\n" .
 	  "\ttDb=$tDb\n\tqDb=$qDb\n\ts1d=$defVars{SEQ1_DIR}\n" .
 	  "\tisSelf=$isSelf\n");
-  if (!$defVars{'SEQ1_LIMIT'}) {
-      $defVars{'SEQ1_LIMIT'} = 0;
-  }
-  if (!$defVars{'SEQ2_LIMIT'}) {
-      $defVars{'SEQ2_LIMIT'} = 0;
-  }  
   if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
     foreach my $s ('SEQ1_', 'SEQ2_') {
       my $var = $s. 'SMSK';
@@ -515,16 +509,18 @@ sub doPartition{
   my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
   my $seq1Len = $defVars{'SEQ1_CTGLEN'} || $defVars{'SEQ1_LEN'};
   my $seq2Len = $defVars{'SEQ2_CTGLEN'} || $defVars{'SEQ2_LEN'};
+  my $seq1Limit = $defVars{'SEQ1_LIMIT'} || 0;
+  my $seq2Limit = $defVars{'SEQ2_LIMIT'} || 0;
 
   my $partitionTargetCmd = 
     ("$partition $defVars{SEQ1_CHUNK} $defVars{SEQ1_LAP} " .
-     "$seq1Dir $seq1Len -xdir xdir.sh -rawDir $outRoot $defVars{SEQ1_LIMIT} " .
+     "$seq1Dir $seq1Len -xdir xdir.sh -rawDir $outRoot $seq1Limit " .
      "$tPartDir > $targetList");
   my $partitionQueryCmd = 
     (($isSelf && (! $selfSplit)) ?
      '# Self-alignment ==> use target partition for both.' :
      "$partition $defVars{SEQ2_CHUNK} $defVars{SEQ2_LAP} " .
-     "$seq2Dir $seq2Len $defVars{SEQ2_LIMIT} " .
+     "$seq2Dir $seq2Len $seq2Limit " .
      "$qPartDir > $queryList");
   my $bossScript = "$runDir/doPartition.csh";
   &mustMkdir($runDir);
