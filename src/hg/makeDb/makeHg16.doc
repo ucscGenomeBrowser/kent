@@ -11631,6 +11631,7 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 #  Submitted by Greg Crawford via web site,
 #  http://research.nhgri.nih.gov/DNaseHS/May2005/
 #  In addition, a file containing the 'randoms' was FTP'ed by Greg
+#     NOTE: bad chr8_random entry removed, as per G. Crawford
 
     # Same display as ENCODE track by Angie...
     # Jim asked to add scores for grayscale-coloring:
@@ -11646,7 +11647,7 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
     cd ..
 
     # special handling for ID's on chrM (they are preceded by 'M_')
-    ls lab/chr*.bed lab/crawford_random_DNase_clusters.txt \
+    ls lab/chr*.bed lab/randoms.txt \
         | grep -v chrM | xargs cat | grep '^chr'  \
         | perl -wpe 'if (/500bp_(\d+)_(\d+)/) { \
                    $id = $1 . "_" . $2; \
@@ -11659,6 +11660,7 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
                    $score = ($2 >= 4) ? 1000 : $2 * 250; \
                    s/500bp.*/$id\t$score/; } else { die "parse"; }' >> hs.bed
     hgLoadBed hg16 nhgriDnaseHs hs.bed
-        # Loaded 14225 elements of size 5
+        # Loaded 14224 elements of size 5
+    checkTableCoords hg16 nhgriDnaseHs
 
 
