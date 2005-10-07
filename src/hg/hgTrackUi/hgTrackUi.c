@@ -25,7 +25,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.215 2005/10/02 18:47:19 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.216 2005/10/07 18:33:10 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1047,6 +1047,7 @@ void wigMafUi(struct trackDb *tdb)
 /* UI for maf/wiggle track
  * NOTE: calls wigUi */
 {
+char *defaultCodonSpecies = trackDbSetting(tdb, SPECIES_CODON_DEFAULT);
 char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
 char *speciesTree = trackDbSetting(tdb, SPECIES_TREE_VAR);
 char *speciesOrder = trackDbSetting(tdb, SPECIES_ORDER_VAR);
@@ -1171,40 +1172,62 @@ else
 safef(option, sizeof option, "%s.%s", tdb->tableName, "codons");
 if (framesTable)
     {
-    cgiMakeCheckBox(option, cartCgiUsualBoolean(cart, option, TRUE));
-    puts("Translate codons in gene regions");
-    }
+    char *nodeNames[512];
+    char buffer[128];
 
-puts("<P><B>Codon highlighting:</B><BR>" );
+    printf("<BR><B>Codon Translation:</B><BR>");
+    printf("Default species for translation: ");
+    for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL; 
+			wmSpecies = wmSpecies->next, i++)
+	{
+	nodeNames[i] = wmSpecies->name;
+	}
+    cgiMakeDropList(SPECIES_CODON_DEFAULT, nodeNames, i,
+	cartUsualString(cart, SPECIES_CODON_DEFAULT, defaultCodonSpecies));
+    puts("<br>");
+    safef(buffer, sizeof(buffer), "%s.codons",tdb->tableName);
+    cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
+    printf("No codon translation<BR>");
+    cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
+    printf("Use default species for translation<BR>");
+    cartMakeRadioButton(cart, buffer,"codonFrameNone", "codonDefault");
+    printf("Use frames for species if available, otherwise no translation<BR>");
+    cartMakeRadioButton(cart, buffer,"codonFrameDef", "codonDefault");
+    printf("Use frames for species if available, otherwise use default species<BR>");
+    }
+else
+    {
+    puts("<P><B>Codon highlighting:</B><BR>" );
 
 #ifdef GENE_FRAMING
 
-safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
-currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
+    safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_FRAME_VAR);
+    currentCodonMode = cartCgiUsualString(cart, option, MAF_FRAME_GENE);
 
-/* Disable codon highlighting */
-cgiMakeRadioButton(option, MAF_FRAME_NONE, 
-                sameString(MAF_FRAME_NONE, currentCodonMode));
-puts("None &nbsp;");
+    /* Disable codon highlighting */
+    cgiMakeRadioButton(option, MAF_FRAME_NONE, 
+		    sameString(MAF_FRAME_NONE, currentCodonMode));
+    puts("None &nbsp;");
 
-/* Use gene pred */
-cgiMakeRadioButton(option, MAF_FRAME_GENE, 
-                        sameString(MAF_FRAME_GENE, currentCodonMode));
-puts("CDS-annotated frame based on");
-safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
-genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
+    /* Use gene pred */
+    cgiMakeRadioButton(option, MAF_FRAME_GENE, 
+			    sameString(MAF_FRAME_GENE, currentCodonMode));
+    puts("CDS-annotated frame based on");
+    safef(option, sizeof(option), "%s.%s", tdb->tableName, MAF_GENEPRED_VAR);
+    genePredDropDown(cart, makeTrackHash(database, chromosome), NULL, option);
 
 #else
-snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
-puts ("&nbsp; Alternate colors every");
-cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases<BR>");
-snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
-                        BASE_COLORS_OFFSET_VAR);
-puts ("&nbsp; Offset alternate colors by");
-cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
-puts ("bases<BR>");
+    snprintf(option, sizeof(option), "%s.%s", tdb->tableName, BASE_COLORS_VAR);
+    puts ("&nbsp; Alternate colors every");
+    cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+    puts ("bases<BR>");
+    snprintf(option, sizeof(option), "%s.%s", tdb->tableName, 
+			    BASE_COLORS_OFFSET_VAR);
+    puts ("&nbsp; Offset alternate colors by");
+    cgiMakeIntVar(option, cartCgiUsualInt(cart, option, 0), 1);
+    puts ("bases<BR>");
 #endif
+    }
 
 if (trackDbSetting(tdb, "wiggle"))
     {
