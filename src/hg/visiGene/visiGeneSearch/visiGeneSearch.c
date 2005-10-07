@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.5 2005/10/07 20:32:29 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.6 2005/10/07 20:40:56 kent Exp $";
 
 char *database = "visiGene";
 
@@ -328,6 +328,17 @@ dyStringPrintf(dy,
    "and bodyPart.id = expressionLevel.bodyPart "
    "and expressionLevel.imageProbe = imageProbe.id"
    , bodyPart);
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+sqlFreeResult(&sr);
+
+dyStringClear(dy);
+dyStringPrintf(dy,
+    "select image.id from bodyPart,specimen,image "
+    "where bodyPart.name = \"%s\" "
+    "and bodyPart.id = specimen.bodyPart "
+    "and specimen.id = image.specimen");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
    visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
