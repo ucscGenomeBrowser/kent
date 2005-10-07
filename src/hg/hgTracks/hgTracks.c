@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1015 2005/10/07 17:56:56 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1016 2005/10/07 18:23:23 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9893,6 +9893,21 @@ if (sameString(database, "mm6"))
     	skipChr(chromName), winStart+1, winEnd);
     hPrintf("%s</A></TD>", "NCBI");
     }
+if (sameString(database, "danRer2"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
+if (sameString(database, "galGal2"))
+    {
+    hPrintf("<TD ALIGN=CENTER>");
+    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+    	skipChr(chromName), winStart+1, winEnd);
+    hPrintf("%s</A></TD>", "NCBI");
+    }
+
 
 if (sameString(database, "ce2"))
     {
