@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.58 2005/08/26 21:28:03 baertsch Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.59 2005/10/07 22:57:13 hartera Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -623,10 +623,12 @@ else
     else
         {
 	char *s = cloneString(line);
-        while (line[0] == '#')
+        boolean eof = FALSE;
+        while ((line[0] == '#') && (!eof))
             {
             freeMem(s);
-            lineFileNext(lf, &line, &lineSize);
+            if (!lineFileNext(lf, &line, &lineSize))
+                eof = TRUE;
             s = cloneString(line);
             }
 	wordCount = chopLine(s, words);
