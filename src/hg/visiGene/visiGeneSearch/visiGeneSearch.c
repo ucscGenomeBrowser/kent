@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.3 2005/10/07 02:25:47 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.4 2005/10/07 05:50:59 kent Exp $";
 
 char *database = "visiGene";
 
@@ -189,7 +189,7 @@ sqlFreeResult(&sr);
 }
 
 void visiGeneMatchContributor(struct visiSearcher *searcher, 
-	struct sqlConnection *conn, char *contributors)
+	struct sqlConnection *conn, struct slName *wordList)
 /* Return ids of images that were contributed by all people in list. 
  * We want the behavior to be such that given a list of last names,
  * say "Smith Mahoney" it will return only those that match both 
@@ -206,7 +206,6 @@ void visiGeneMatchContributor(struct visiSearcher *searcher,
  * "de la Cruz" and the like.  Also don't forget the apostrophe
  * containing names like O'Shea. */
 {
-struct slName *wordList = stringToSlNames(contributors);
 struct slName *word;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
@@ -232,9 +231,7 @@ for (word = wordList; word != NULL;  )
 	for (name = nameList; name != NULL; name = name->next)
 	    {
 	    if (countWordsUsedInName(name->name, word) == maxWordsUsed)
-		{
 		addImagesMatchingName(searcher, conn, query, name->name);
-		}
 	    }
 	while (--maxWordsUsed >= 0)
 	    word = word->next;
@@ -243,9 +240,27 @@ for (word = wordList; word != NULL;  )
         word = word->next;
     slFreeList(&nameList);
     }
-   
 dyStringFree(&query);
-slFreeList(&wordList);
+}
+
+void visiGeneMatchGene(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Return ids of images that were contributed by all people in list. */
+{
+struct slName *word;
+for (word = wordList; word != NULL; word = word->next)
+    {
+    char *sqlPat = sqlLikeFromWild(word->name);
+    struct slInt *imageList, *image;
+    if (sqlWildcardIn(sqlPat))
+	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
+    else
+	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsExact);
+    for (image = imageList; image != NULL; image = image->next)
+	visiSearcherAdd(searcher, image->val, 1.0);
+    slFreeList(&imageList);
+    freez(&sqlPat);
+    }
 }
 
 void visiGeneSearch(char *searchString)
@@ -254,13 +269,16 @@ void visiGeneSearch(char *searchString)
 struct sqlConnection *conn = sqlConnect(database);
 struct visiMatch *matchList, *match;
 struct visiSearcher *searcher = visiSearcherNew();
+struct slName *wordList = stringToSlNames(searchString);
 printf("Searching %s for \"%s\"\n", database, searchString);
-visiGeneMatchContributor(searcher, conn, searchString);
+visiGeneMatchContributor(searcher, conn, wordList);
+visiGeneMatchGene(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 for (match = matchList; match != NULL; match = match->next)
     {
     printf("%f %d\n", match->weight, match->imageId);
     }
+slFreeList(&wordList);
 }
 
 int main(int argc, char *argv[])
