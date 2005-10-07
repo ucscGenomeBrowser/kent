@@ -14,9 +14,13 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 #include "mafSummary.h"
+#include "mafFrames.h"
 #include "phyloTree.h"
+#include "cdsColors.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87 2005/10/03 15:01:10 braney Exp $";
+extern Color cdsColor[];
+
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.1 2005/10/07 22:05:37 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -28,6 +32,9 @@ struct wigMafItem
     int group;          /* number of species group/clade */
     int ix;		/* Position in list. */
     int height;		/* Pixel height of item. */
+    int seqEnds[128];
+    int brackStarts[128];
+    int brackEnds[128];
     };
 
 static void wigMafItemFree(struct wigMafItem **pEl)
@@ -190,6 +197,8 @@ for (group = 0; group < groupCt; group++)
 	}
 
 
+    safef(option, sizeof(option), "%s.speciesOrder", track->mapName);
+    cartSetString(cart, option, speciesOrder);
     speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
         {
@@ -566,11 +575,12 @@ char c;
 for (i=0; i<size; ++i)
     {
     int b = insertCounts[i];
+
     if (b == 0)
        c = ' ';
     else if (b <= 9)
        c = b + '0';
-    else if (b % 3)
+    else if (!(b % 3))
         /* multiple of 3 gap */
        c = '+';
     else
@@ -609,8 +619,8 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
         {
         if (insertSize != 0)
             {
-            outLine[outIx++] = '|';// escape to indicate following is count
-            outLine[outIx++] = (unsigned char) max(255, insertSize);
+            //outLine[outIx++] = '|';// escape to indicate following is count
+            //outLine[outIx++] = (unsigned char) max(255, insertSize);
             insertSize = 0;
             }
 	outLine[outIx++] = text[i];
@@ -673,16 +683,27 @@ int lastX;
 
 /* draw chain before first alignment */
 ms = summaryList;
-if (chainBreaks && ms->chromStart > chromStart && 
-    (ms->leftStatus[0] == MAF_CONTIG_STATUS || 
-     ms->leftStatus[0] == MAF_INSERT_STATUS))
+if (chainBreaks && ms->chromStart > chromStart)
     {
-    isDouble = (ms->leftStatus[0] == MAF_INSERT_STATUS);
-    x1 = xOff;
-    x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
-    w = x2 - x1;
-    if (w > 0)
-        drawMafChain(vg, x1, yOff, w, height, isDouble);
+    if ((ms->leftStatus[0] == MAF_CONTIG_STATUS || 
+     ms->leftStatus[0] == MAF_INSERT_STATUS))
+	{
+	isDouble = (ms->leftStatus[0] == MAF_INSERT_STATUS);
+	x1 = xOff;
+	x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
+	w = x2 - x1;
+	if (w > 0)
+	    drawMafChain(vg, x1, yOff, w, height, isDouble);
+	}
+    else if (ms->leftStatus[0] == MAF_MISSING_STATUS )
+	{
+	Color fuzz = shadesOfGray[1];
+
+	x1 = xOff;
+	x2 = round((double)((int)ms->chromStart-1 - seqStart) * scale) + xOff;
+	w = x2 - x1;
+	vgBox(vg, x1, yOff, w, height, fuzz);
+	}
     }
 for (ms = summaryList; ms != NULL; ms = ms->next)
     {
@@ -690,20 +711,34 @@ for (ms = summaryList; ms != NULL; ms = ms->next)
                         scale, vg, xOff, yOff, height, color, vis);
 
     /* draw chain after alignment */
-    if (chainBreaks && ms->chromEnd < seqEnd && ms->next != NULL &&
-        (ms->rightStatus[0] == MAF_CONTIG_STATUS || 
+    if (chainBreaks && ms->chromEnd < seqEnd && ms->next != NULL)
+	{
+	if ((ms->rightStatus[0] == MAF_CONTIG_STATUS || 
          ms->rightStatus[0] == MAF_INSERT_STATUS))
-        {
-        isDouble = (ms->rightStatus[0] == MAF_INSERT_STATUS);
-        x1 = round((double)((int)ms->chromEnd+1 - seqStart) * scale) + xOff;
-        x2 = round((double)((int)ms->next->chromStart-1 - seqStart) * scale) 
-                + xOff;
-        w = x2 - x1;
-        if (w == 1 && x1 == lastX)
-            continue;
-        if (w > 0);
-            drawMafChain(vg, x1, yOff, w, height, isDouble);
-        }
+	    {
+	    isDouble = (ms->rightStatus[0] == MAF_INSERT_STATUS);
+	    x1 = round((double)((int)ms->chromEnd+1 - seqStart) * scale) + xOff;
+	    x2 = round((double)((int)ms->next->chromStart-1 - seqStart) * scale) 
+		    + xOff;
+	    w = x2 - x1;
+	    if (w == 1 && x1 == lastX)
+		continue;
+	    if (w > 0);
+		drawMafChain(vg, x1, yOff, w, height, isDouble);
+	    }
+	else if (ms->rightStatus[0] == MAF_MISSING_STATUS )
+	    {
+	    Color fuzz = shadesOfGray[2];
+
+	    x1 = round((double)((int)ms->chromEnd+1 - seqStart) * scale) + xOff;
+	    x2 = round((double)((int)ms->next->chromStart-1 - seqStart) * scale) + xOff ;
+	    w = x2 - x1;
+	    if (w == 1 && x1 == lastX)
+		continue;
+	    if (w > 0)
+		vgBox(vg, x1, yOff, w, height, fuzz);
+	    }
+	}
     }
 }
 
@@ -984,25 +1019,6 @@ for (mi = miList; mi != NULL; mi = mi->next)
 
     /* using maf sequences from file */
     /* create pairwise maf list from the multiple maf */
-//#define ANNOT_DEBUG
-#ifdef ANNOT_DEBUG
-{
-struct mafComp *mc;
-struct mafAli *mafList = (struct mafAli *)track->customPt;
-
-for(maf=mafList; maf; maf=maf->next)
-    {
-    mc = maf->components;
-    printf("<BR> maf %d %d - ",mc->start,mc->size);
-    for (mc=maf->components->next; mc ; mc=mc->next)
-	{
-	printf("%s %d %c %c ",mc->src,mc->size, mc->leftStatus,mc->rightStatus);
-	}
-    }
-printf("end ||");
-fflush(stdout);
-}
-#endif
     for (maf = (struct mafAli *)track->customPt; maf != NULL; maf = maf->next)
         {
         if ((mcThis = mafMayFindCompPrefix(maf, mi->db, "")) == NULL)
@@ -1136,6 +1152,95 @@ for (i = 0; i < size; i++, dna++)
     }
 }
 
+static void translateCodons(DNA *dna, int start, int length, int frame, 
+				char strand,bool alreadyComplemented,
+				int x, int y, int width, int height, 
+				struct vGfx *vg)
+{
+int size = length;
+DNA *ptr;
+int color;
+int end = start + length;
+
+dna += start;
+if (strand == '-')
+    {
+    if (alreadyComplemented)
+	reverseBytes(dna, length);
+    else
+	reverseComplement(dna, length);
+    }
+else
+    {
+    if (alreadyComplemented)
+	complement(dna, length);
+    }
+
+ptr = dna;
+
+switch(frame)
+    {
+    case 1:
+	*ptr++ = ' ';
+	*ptr++ = ' ';
+	length -= 2;
+	break;
+    case 2:
+	*ptr++ = ' ';
+	length -= 1;
+	break;
+    }
+
+color = cdsColor[CDS_EVEN];
+color = shadesOfSea[0];
+for (;length > 2; ptr +=3 , length -=3)
+    {
+#define ISGAP(x)  (((x) == '=') || (((x) == '-')))
+#define ISN(x)  ((x) == 'N') 
+#define ISSPACE(x)  ((x) == ' ') 
+#define ISGASPACEPORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
+    if (!(ISGASPACEPORN(ptr[0]) || ISGASPACEPORN(ptr[1]) || ISGASPACEPORN(ptr[2]) ))
+	{
+	int x1;
+
+	ptr[1] = lookupCodon(ptr);
+	if (ptr[1] == 0) ptr[1] = '*';
+	ptr[0] = ' ';
+	ptr[2] = ' ';
+
+	if (strand == '-')
+	    {
+	    x1 = x + ( start + length - 3) * width / winBaseCount;
+	    }
+	else
+	    {
+	    x1 = x + (end - length) * width / winBaseCount;
+	    }
+
+	if (color == shadesOfSea[0])
+	    color = shadesOfSea[1];
+	else
+	    color = shadesOfSea[0];
+	vgBox(vg, x1, y, 3*width/winBaseCount , height, color);
+	}
+
+    }
+
+switch(length)
+    {
+    case 2:
+	*ptr++ = ' ';
+	*ptr++ = ' ';
+	break;
+    case 1:
+	*ptr++ = ' ';
+	break;
+    }
+
+if (strand == '-')
+    reverseBytes(dna, size);
+}
+
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis,
@@ -1163,6 +1268,25 @@ bool dots;         /* configuration option */
 char noAlignment[2000];
 boolean useIrowChains = FALSE;
 boolean useSpanningChains = FALSE;
+int offset;
+char *framesTable = NULL;
+char *defaultCodonSpecies = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
+char *codonTransMode = NULL;
+//char *codonTranslation = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
+
+safef(buf, sizeof(buf), "%s.frames",track->mapName);
+if (cartVarExists(cart, buf))
+    framesTable = cartUsualString(cart, buf, NULL);
+else
+    framesTable = trackDbSetting(track->tdb, "frames");
+
+if (framesTable)
+    {
+    safef(buf, sizeof(buf), "%s.codons",track->mapName);
+    codonTransMode = cartUsualString(cart, buf, "codonDefault");
+    if (sameString("codonNone", codonTransMode))
+	framesTable = NULL;
+    }
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
@@ -1215,30 +1339,18 @@ for (mi = miList; mi != NULL; mi = mi->next)
 mafList = track->customPt;
 safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
 
-#ifdef ANNOT_DEBUG
-{
-struct mafComp *mc;
-
-for(maf=mafList; maf; maf=maf->next)
-    {
-    mc = maf->components;
-    printf("<BR>maf %d %d ",mc->start,mc->size);
-    for (mc=maf->components->next; mc ; mc=mc->next)
-	{
-	printf("%s %d %c %c |",mc->src,mc->size,mc->leftStatus,mc->rightStatus);
-	}
-    }
-fflush(stdout);
-}
-#endif
 for (maf = mafList; maf != NULL; maf = maf->next)
     {
+    int mafStart;
+
     /* get info about sequences from full alignment,
        for use later, when determining if sequence is unaligned or missing */
     for (mc = maf->components; mc != NULL; mc = mc->next)
         if (!hashFindVal(srcHash, mc->src))
             hashAdd(srcHash, mc->src, maf);
 
+    mcMaster = mafFindComponent(maf, dbChrom);
+    mafStart = mcMaster->start;
     /* get portion of maf in this window */
     sub = mafSubset(maf, dbChrom, winStart, winEnd);
     if (sub != NULL)
@@ -1261,6 +1373,9 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         for (mi = miList; mi != NULL; mi = mi->next)
             {
             char *seq;
+	    int seqEnds = 0;
+	    int brackStarts = 0;
+	    int brackEnds = 0;
             bool needToFree = FALSE;
             int size = sub->textSize;
             if (mi->ix == 1)
@@ -1270,36 +1385,36 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 /* not a species line -- it's the gaps line, or... */
                 continue;
             if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
-                {
-                /* no alignment for this species */
-                char chainTable[64];
-                char *dbUpper;
-
-                if (!useSpanningChains)
-                    continue;
-                 /* no irows annotation and user has requested chaining, 
-                  * so see if a * chain spans this region; 
-                  * use it to "extend" alignment */
-                 dbUpper = cloneString(mi->db);
-                 dbUpper[0] = toupper(dbUpper[0]);
-                 safef(chainTable, sizeof chainTable, "%s_chain%s", 
-                                             chromName, dbUpper);
-                if (hTableExistsDb(database, chainTable))
-                    {
-                    struct sqlConnection *conn;
-                    char query[128];
-
-                    conn = hAllocConn();
-                    safef(query, sizeof query,
-                        "SELECT count(*) from %s WHERE tStart < %d AND tEnd > %d",
-                                     chainTable, subStart, subEnd);
-                    if (sqlQuickNum(conn, query) > 0)
-                        processSeq(noAlignment, noAlignment,
-                            sub->textSize, lines[mi->ix], lineOffset, subSize);
-                    hFreeConn(&conn);
-                    }
                 continue;
-                }
+	if (mafStart == subStart)
+	{
+	if (mc->size && mc->leftStatus == MAF_INSERT_STATUS && (*mc->text != '-') &&
+	 !((lineOffset) && (((lines[mi->ix][lineOffset-1]) == '=') || (lines[mi->ix][lineOffset-1]) == '-')))
+	{
+	//printf("insert mc->text %s\n",mc->text);
+	//printf("lineOffset %d \n",lineOffset);
+	//if (lineOffset)
+	    //printf("lineOffset-1 %c\n",lines[mi->ix][lineOffset-1]);
+	//printf("insert %s type %c len %d\n",mc->src,mc->leftStatus,mc->leftLen);
+	insertCounts[lineOffset] = max(insertCounts[lineOffset],mc->leftLen);
+	//printf("insertCounts %d\n",insertCounts[lineOffset]);
+			mi->brackStarts[brackStarts] =  (subStart - seqStart)+ 1;
+			brackStarts++;
+	}
+	}
+	/*
+	if (subEnd <= seqEnd)
+	{
+	if (mc->size && mc->rightStatus == MAF_INSERT_STATUS)
+	{
+	//printf("rt insert %s type %c len %d\n",mc->src,mc->rightStatus,mc->rightLen);
+	insertCounts[lineOffset + subSize] += mc->rightLen;
+	//printf("insertCounts %d\n",insertCounts[lineOffset]);
+			mi->brackEnds[brackEnds] = (subStart - seqStart)+ subSize + 1;
+			brackEnds++;
+	}
+	}
+	*/
             seq = mc->text;
             if ( (mc->size == 0) && (mc->srcSize == 0))
                 {
@@ -1308,28 +1423,38 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                if (!useIrowChains)
                    continue;
                 if ((mc->leftStatus == MAF_CONTIG_STATUS &&
-                    mc->rightStatus == MAF_CONTIG_STATUS) ||
-                    (mc->leftStatus == MAF_INSERT_STATUS &&
-                    mc->rightStatus == MAF_INSERT_STATUS))
+                    mc->rightStatus == MAF_CONTIG_STATUS))
                     {
-                    char fill = (mc->leftStatus == MAF_CONTIG_STATUS ? 
-                                             '-' : MAF_DOUBLE_GAP);
+                    char fill = '-';
                     seq = needMem(size+1);
                     needToFree = TRUE;
                     memset(seq, fill, size);
                     }
+		else if (mc->leftStatus == MAF_INSERT_STATUS && mc->rightStatus == MAF_INSERT_STATUS)
+		    {
+		    char fill = MAF_DOUBLE_GAP;
+		    seq = needMem(size+1);
+		    needToFree = TRUE;
+		    memset(seq, fill, size);
+		    }
+		else if (mc->leftStatus == MAF_MISSING_STATUS && mc->rightStatus == MAF_MISSING_STATUS)
+		    {
+                    char fill = 'N';
+                    seq = needMem(size+1);
+                    needToFree = TRUE;
+                    memset(seq, fill, size);
+		    }
                 else
                     continue;
                 }
-            if (mc->leftStatus == MAF_NEW_STATUS ||
+
+            if (((mc->leftStatus == MAF_NEW_STATUS ||
                 mc->rightStatus == MAF_NEW_STATUS )
+            || (mc->leftStatus == MAF_NEW_NESTED_STATUS ||
+                mc->rightStatus == MAF_NEW_NESTED_STATUS )))
                 {
                 int i;
                 char *p;
-                if (mc->leftStatus == MAF_NEW_STATUS)
-                    size++;
-                if (mc->rightStatus == MAF_NEW_STATUS)
-                    size++;
                 seq = needMem(size+1);
                 needToFree = TRUE;
                 for (p = seq, i = 0; i < size; p++, i++)
@@ -1337,9 +1462,101 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 p = seq;
                 if (mc->size != 0)
                     strcpy(p, mc->text);
-                }
-            processSeq(seq, mcMaster->text, size,
-                                lines[mi->ix], lineOffset, subSize);
+                if (mc->leftStatus == MAF_NEW_STATUS)
+                    {
+		    char *m = mcMaster->text;
+		    if (mafStart == subStart)
+			mi->seqEnds[seqEnds] = (subStart - seqStart) + 1;
+		    while(*p == '-')
+			{
+			if ((*m++ != '-') && (mafStart == subStart))
+			    mi->seqEnds[seqEnds]++;
+			*p++ = ' ';
+			}
+
+		    if (mafStart == subStart)
+			seqEnds++;
+                    }
+                if (mc->leftStatus == MAF_NEW_NESTED_STATUS)
+		    {
+		    char *m = mcMaster->text;
+		    if (mafStart == subStart)
+			mi->brackStarts[brackStarts] =  (subStart - seqStart)+ 1;
+		    while(*p == '-')
+			{
+			*p++ = '=';
+			if ((*m++ != '-') && (mafStart == subStart))
+			    mi->brackStarts[brackStarts]++;
+			}
+		    if (mafStart == subStart)
+			brackStarts++;
+		    }
+                if (mc->rightStatus == MAF_NEW_NESTED_STATUS)
+		    {
+		    char *p = seq + size - 1;
+		    char *m = mcMaster->text + size - 1;
+		    if (subEnd <= seqEnd)
+			mi->brackEnds[brackEnds] = (subStart - seqStart)+ subSize + 1;
+		    while(*p == '-')
+			{
+			if ((*m-- != '-') && (subEnd <= seqEnd))
+			    mi->brackEnds[brackEnds]--;
+			*p-- = '=';
+			}
+		    if (subEnd <= seqEnd)
+		    	brackEnds++;
+		    }
+                if (mc->rightStatus == MAF_NEW_STATUS)
+		    {
+		    char *p = seq + size - 1;
+		    char *m = mcMaster->text + size - 1;
+
+		    if (mc->size && ((subEnd <= seqEnd)))
+			mi->seqEnds[seqEnds] = (subStart - seqStart)+ subSize + 1;
+		    while(*p == '-')
+			{
+			if ((*m-- != '-') && (mc->size && (subEnd <= seqEnd)))
+			    mi->seqEnds[seqEnds]--;
+			*p-- = ' ';
+			}
+		    if (mc->size && ((subEnd <= seqEnd)))
+		    	seqEnds++;
+		    }
+		}
+
+            if (mc->srcSize && ((mc->leftStatus == MAF_MISSING_STATUS))) //|| 
+		{
+                char *p = seq;
+		while(*p == '-')
+		    *p++ = 'N';
+		}
+            if (mc->srcSize && ((mc->leftStatus == MAF_INSERT_STATUS))) //|| 
+		//(mc->leftStatus == MAF_NEW_NESTED_STATUS && mc->leftLen != 0))
+		{
+                char *p = seq;
+		while(*p == '-')
+		    *p++ = '=';
+		}
+            if (mc->srcSize && ((mc->rightStatus == MAF_MISSING_STATUS)))// || 
+		//(mc->rightStatus == MAF_NEW_NESTED_STATUS && mc->rightLen != 0)))
+		{
+                char *p = seq + size - 1;
+		while(*p == '-')
+		    *p-- = 'N';
+		}
+            if (mc->srcSize && ((mc->rightStatus == MAF_INSERT_STATUS)))// || 
+		//(mc->rightStatus == MAF_NEW_NESTED_STATUS && mc->rightLen != 0)))
+		{
+		char *m = mcMaster->text + size - 1;
+                char *p = seq + size - 1;
+		while((*p == '-') || (*m == '-'))
+		    {
+		    *p-- = '=';
+		    m--;
+		    }
+		}
+            processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize);
+	    
             if (needToFree)
                 freeMem(seq);
 	    }
@@ -1374,21 +1591,124 @@ y += mi->height;
 for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
     {
     char *line;
+
     line  = lines[i];
     /* TODO: leave lower case in to indicate masking ?
        * NOTE: want to make sure that all sequences are soft-masked
        * if we do this */
-    alignSeqToUpperN(line);
+    //alignSeqToUpperN(line);
     if (complementBases)
         {
-        seq = newDnaSeq(line, strlen(line), "");
-        complementUpperAlignSeq(seq->dna, seq->size);
-        line = seq->dna;
+	complement(line, strlen(line));
         }
     /* draw sequence letters for alignment */
-    vgSetClip(vg, x, y, width, mi->height-1);
+    vgSetClip(vg, x, y-1, width, mi->height);
+
+    if (framesTable != NULL)
+	{
+	int rowOffset;
+	char **row;
+	struct sqlConnection *conn = hAllocConn();
+	struct sqlResult *sr;
+	char extra[512];
+	boolean found = FALSE;
+
+	if (sameString("codonDefault", codonTransMode))
+	    {
+	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies); 
+
+	    found = TRUE;
+	    }
+	else if (sameString("codonFrameDef", codonTransMode))
+	    {
+	    safef(extra, sizeof(extra), "src='%s'",mi->db); 
+
+	    found = FALSE;
+	    }
+	else if (sameString("codonFrameNone", codonTransMode))
+	    {
+	    safef(extra, sizeof(extra), "src='%s'",mi->db); 
+
+	    found = TRUE;
+	    }
+	else
+	    errAbort("unknown codon translation mode %s",codonTransMode);
+tryagain:
+	sr = hRangeQuery(conn, framesTable, chromName, seqStart, seqEnd, extra, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    struct mafFrames mf;
+	    int start, end, w;
+	    int frame; 
+
+	    found = TRUE;
+	    mafFramesStaticLoad(row + rowOffset, &mf);
+
+	    if (mf.chromStart < seqStart)
+		start = 0;
+	    else
+		start = mf.chromStart-seqStart;
+	    frame = mf.frame;
+	    if (mf.strand[0] == '-')
+		{
+		if (mf.chromEnd > seqEnd)
+		    frame = (frame + mf.chromEnd-seqEnd  ) % 3;
+		}
+	    else
+		{
+		if (mf.chromStart < seqStart)
+		    frame = (frame + seqStart-mf.chromStart  ) % 3;
+		}
+
+	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart; 
+	    w= end - start;
+
+	    translateCodons(line, start , w, frame, mf.strand[0],complementBases,
+				x, y, width, mi->height,  vg);
+	    
+	    }
+	sqlFreeResult(&sr);
+
+	if (!found)
+	    {
+	    /* try the default species */
+	    safef(extra, sizeof(extra), "src='%s'",defaultCodonSpecies); 
+
+	    found = TRUE; /* don't try again */
+	    goto tryagain;
+	    }
+
+	hFreeConn(&conn);
+	}
+
     spreadAlignString(vg, x, y, width, mi->height-1, color,
                         font, line, selfLine, winBaseCount, dots, FALSE);
+    for(offset = 0; mi->seqEnds[offset]; offset++)
+	{
+	int x1;
+
+	x1 = x + (mi->seqEnds[offset] -1) * width/winBaseCount;
+	vgBox(vg, x1, y-1, 1, mi->height-1, getBlueColor());
+	}
+    for(offset = 0; mi->brackStarts[offset]; offset++)
+	{
+	int x1;
+
+	x1 = x + (mi->brackStarts[offset] -1) * width/winBaseCount;
+	vgBox(vg, x1, y-1, 2, 1, getOrangeColor());
+	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
+	vgBox(vg, x1, y + mi->height-3, 2, 1, getOrangeColor());
+	}
+    for(offset = 0; mi->brackEnds[offset]; offset++)
+	{
+	int x1;
+
+	x1 = x + (mi->brackEnds[offset] -1) * width/winBaseCount;
+	vgBox(vg, x1-1, y-1, 2, 1, getOrangeColor());
+	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
+	vgBox(vg, x1-1, y + mi->height-3, 2, 1, getOrangeColor());
+	}
+
     vgUnclip(vg);
     y += mi->height;
     }
@@ -1443,6 +1763,7 @@ else
                             xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }
+    //yOff += height + 10;
     yOff += height;
     }
 return yOff;
