@@ -1386,12 +1386,18 @@ cdsDrawDefault genomic\ codons
     itemClassTbl encodePseudogeneClass
     origAssembly hg17
 
+    track pseudoEncodeConsensus
+    subTrack encodePseudogene
+    shortLabel Consensus PseudoGenes
+    longLabel CONSENSUS of Yale, Havana-Gencode, UCSC and GIS Encode Pseudogenes 
+    priority 1
+
     track pseudoHavana
     subTrack encodePseudogene
     shortLabel Havana-Gencode Pseudogenes
     longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
-    priority 1
+    priority 2
 
     track pseudoYaleEncode
     subTrack encodePseudogene
@@ -1399,31 +1405,26 @@ cdsDrawDefault genomic\ codons
     longLabel Yale PseudoGene Predictions
     itemClassTbl encodePseudogeneClass
     url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
-    priority 2
+    priority 3
 
     track pseudoUcsc
     subTrack encodePseudogene
     shortLabel UCSC Pseudo
     longLabel UCSC RetroGene Predictions
-    priority 3
+    priority 4
 
     track pseudoUcsc2
     subTrack encodePseudogene
     shortLabel UCSC PseudoGenes
     longLabel UCSC Pseudogene Predictions
-    priority 4
+    priority 5
 
     track pseudoGIS
     subTrack encodePseudogene
     shortLabel GIS PseudoGenes
     longLabel Genome Institute of Singapore Pseudogenes 
-    priority 5
+    priority 6
 
-    track pseudoEncodeConsensus
-    subTrack encodePseudogene
-    shortLabel Consensus PseudoGenes
-    longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS Encode Pseudogenes 
-    priority 5
 
 track encodeGisRnaPet
 compositeTrack on
