@@ -4,7 +4,7 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pipelineTester.c,v 1.1 2005/04/09 20:59:02 markd Exp $";
+static char const rcsid[] = "$Id: pipelineTester.c,v 1.2 2005/10/07 20:29:13 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -26,7 +26,8 @@ errAbort(
     "  -pipeData=file - for a read pipeline, data read from the pipeline is copied\n"
     "   to this file for verification.  For a write pipeline, data from this\n"
     "   file is written to the pipeline.\n"
-    "  -otherEnd=file - file for other end of pipeline\n",
+    "  -otherEnd=file - file for other end of pipeline\n"
+    "  -fdApi - use the file descriptor API\n",
     msg);
 }
 
@@ -36,12 +37,14 @@ static struct optionSpec options[] =
     {"write", OPTION_BOOLEAN},
     {"pipeData", OPTION_STRING},
     {"otherEnd", OPTION_STRING},
+    {"fdApi", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
 /* options from command line */
 boolean noAbort = FALSE;  /* don't abort, check exit code */
 int expectExitCode = 0;   /* expected exit code */
+boolean fdApi = FALSE; /* use the file descriptor API */
 boolean isWrite = FALSE; /* make a write pipeline */
 char *pipeDataFile = NULL;   /* use for input or output to the pipeline */
 char *otherEndFile = NULL;   /* file for other end of pipeline */
@@ -124,13 +127,22 @@ unsigned options = (isWrite ? pipelineWrite : pipelineRead);
 char ***cmds;
 int exitCode, endOpenCnt;
 int startOpenCnt = countOpenFiles();
+int otherEndFd = -1;
 struct pipeline *pl;
 
 if (noAbort)
     options |= pipelineNoAbort;
 cmds = splitCmds(nCmdsArgs, cmdsArgs);
 
-pl = pipelineOpen(cmds, options, otherEndFile);
+if (fdApi)
+    {
+    otherEndFd = open(otherEndFile, (isWrite ? O_WRONLY|O_CREAT|O_TRUNC : O_RDONLY), 0777);
+    if (otherEndFd < 0)
+        errnoAbort("open of %s failed", otherEndFile);
+    pl = pipelineOpenFd(cmds, options, otherEndFd, STDERR_FILENO);
+    }
+else
+    pl = pipelineOpen(cmds, options, otherEndFile);
 
 /* if no data file is specified, we just let the pipeline run without
  * interacting with it */
@@ -145,6 +157,12 @@ if (pipeDataFile != NULL)
 exitCode = pipelineWait(pl);
 if (exitCode != expectExitCode)
     errAbort("expected exitCode %d, got %d", expectExitCode, exitCode);
+
+if (fdApi)
+    {
+    if (close(otherEndFd) < 0)
+        errnoAbort("close of otherEnd file descriptor failed");
+    }
 
 endOpenCnt = countOpenFiles();
 /* it's ok to have less open, as would happen if we read from stdin */
@@ -166,8 +184,11 @@ if (optionExists("exitCode"))
     expectExitCode = optionInt("exitCode", 0);
     }
 isWrite = optionExists("write");
+fdApi = optionExists("fdApi");
 pipeDataFile = optionVal("pipeData", NULL);
 otherEndFile = optionVal("otherEnd", NULL);
+if (fdApi && (otherEndFile == NULL))
+    errAbort("-fdApi requires -otherEndFile");
 runPipeline(argc-1, argv+1);
 return 0;
 }

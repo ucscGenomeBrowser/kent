@@ -265,30 +265,15 @@ for (proc = pl->procs; proc != NULL; proc = proc->next)
     }
 }
 
-static int openOtherEndAsFD(char *otherEndFile)
-/* open the other end as if it were a fd number */
-{
-int fd = -1;
-if (startsWith("fd>",otherEndFile))
-    {
-    fd = atoi(otherEndFile+3);
-    }
-return fd;    
-}
-
 static int openOtherRead(char *otherEndFile)
-/* open the other end of the pipeline for reading */
+/* open the other end file of the pipeline for reading */
 {
 int fd;
 if (otherEndFile != NULL)
     {
-    fd = openOtherEndAsFD(otherEndFile);
+    fd = open(otherEndFile, O_RDONLY);
     if (fd < 0)
-	{
-	fd = open(otherEndFile, O_RDONLY);
-	if (fd < 0)
-	    errnoAbort("can't open for read access: %s", otherEndFile);
-	}
+        errnoAbort("can't open for read access: %s", otherEndFile);
     }
 else
     fd = STDIN_FILENO;
@@ -296,52 +281,41 @@ return fd;
 }
 
 static int openOtherWrite(char *otherEndFile)
-/* open the other end of the pipeline for writing */
+/* open the other end file of the pipeline for writing */
 {
 int fd;
 if (otherEndFile != NULL)
     {
-    fd = openOtherEndAsFD(otherEndFile);
+    fd = open(otherEndFile, O_WRONLY|O_CREAT, 0666);
     if (fd < 0)
-	{
-	fd = open(otherEndFile, O_WRONLY|O_CREAT, 0666);
-    	if (fd < 0)
-	    errnoAbort("can't open for write access: %s", otherEndFile);
-	}
+        errnoAbort("can't open for write access: %s", otherEndFile);
     }
 else 
     fd = STDOUT_FILENO;
 return fd;
 }
 
-static void pipelineStartRead(struct pipeline *pl, char *otherEndFile)
+static void pipelineStartRead(struct pipeline *pl, int stdinFd, int stderrFd)
 /* start a read pipeline */
 {
-int otherEndFd = openOtherRead(otherEndFile);
 int pipeWrFd;
-
 pl->pipeFd = pipeCreate(&pipeWrFd);
-pipelineExec(pl, otherEndFd, pipeWrFd, STDERR_FILENO);
-safeClose(&otherEndFd);
+pipelineExec(pl, stdinFd, pipeWrFd, stderrFd);
 safeClose(&pipeWrFd);
 }
 
-static void pipelineStartWrite(struct pipeline *pl, char *otherEndFile)
+static void pipelineStartWrite(struct pipeline *pl, int stdoutFd, int stderrFd)
 /* start a write pipeline */
 {
-int otherEndFd = openOtherWrite(otherEndFile);
-int pipeRdFd;
-
-pipeRdFd = pipeCreate(&pl->pipeFd);
-pipelineExec(pl, pipeRdFd, otherEndFd, STDERR_FILENO);
-safeClose(&otherEndFd);
+int pipeRdFd = pipeCreate(&pl->pipeFd);
+pipelineExec(pl, pipeRdFd, stdoutFd, stderrFd);
 safeClose(&pipeRdFd);
 }
 
-struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
-                              char *otherEndFile)
+struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
+                                int otherEndFd, int stderrFd)
 /* Create a pipeline from an array of commands.  See pipeline.h for
- * full documentation */
+ * full documentation. */
 {
 struct pipeline *pl;
 
@@ -351,10 +325,41 @@ if (((opts & (pipelineRead|pipelineWrite)) == 0)
 
 pl = pipelineNew(cmds, opts);
 if (opts & pipelineRead)
-    pipelineStartRead(pl, otherEndFile);
+    pipelineStartRead(pl, otherEndFd, stderrFd);
 else
-    pipelineStartWrite(pl, otherEndFile);
+    pipelineStartWrite(pl, otherEndFd, stderrFd);
 return pl;
+}
+
+struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
+                              char *otherEndFile)
+/* Create a pipeline from an array of commands.  See pipeline.h for
+ * full documentation */
+{
+struct pipeline *pl;
+int otherEndFd;
+
+if (((opts & (pipelineRead|pipelineWrite)) == 0)
+    || ((opts & (pipelineRead|pipelineWrite)) == (pipelineRead|pipelineWrite)))
+    errAbort("must specify one of pipelineRead or pipelineWrite to pipelineOpen");
+
+if (opts & pipelineRead)
+    otherEndFd = openOtherRead(otherEndFile);
+else
+    otherEndFd = openOtherWrite(otherEndFile);
+pl = pipelineOpenFd(cmds, opts, otherEndFd, STDERR_FILENO);
+safeClose(&otherEndFd);
+return pl;
+}
+
+struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
+                                 int otherEndFd, int stderrFd)
+/* like pipelineOpenFd(), only takes a single command */
+{
+char **cmds[2];
+cmds[0] = cmd;
+cmds[1] = NULL;
+return pipelineOpenFd(cmds, opts, otherEndFd, stderrFd);
 }
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
@@ -386,7 +391,7 @@ FILE *pipelineFile(struct pipeline *pl)
 {
 if (pl->pipeFh == NULL)
     {
-    /* create FILE* on first acess */
+    /* create FILE* on first access */
     char *mode = (pl->options & pipelineRead) ? "r" : "w";
     if (pl->pipeLf != NULL)
         errAbort("can't call pipelineFile after having associated a lineFile with a pipeline");

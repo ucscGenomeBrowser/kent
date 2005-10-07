@@ -75,6 +75,14 @@ enum pipelineOpts
                                 * Still aborts if process signals. */
     };
 
+struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
+                                int otherEndFd, int stderrFd);
+/* Create a pipeline from an array of commands.  Each command is an array of
+ * arguments.  Shell expansion is not done on the arguments.  If pipelineRead
+ * is specified, the output of the pipeline is readable from the pipeline
+ * object.  If pipelineWrite is specified, the input of the pipeline is
+ * writable from the pipeline object. */
+
 struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
                               char *otherEndFile);
 /* Create a pipeline from an array of commands.  Each command is an array of
@@ -82,6 +90,10 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * is specified, the output of the pipeline is readable from the pipeline
  * object.  If pipelineWrite is specified, the input of the pipeline is
  * writable from the pipeline object. */
+
+struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
+                                 int otherEndFd, int stderrFd);
+/* like pipelineOpenFd(), only takes a single command */
 
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
                                char *otherEndFile);

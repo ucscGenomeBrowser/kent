@@ -33,8 +33,8 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	${BIN_DIR}/htmlPageTest input/google.html > output/google.out
 	diff expected/google.out output/google.out
 
-pipelineTests: 	pipelineWrite pipelineWriteMult \
-		pipelineRead pipelineReadMult \
+pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
+		pipelineRead pipelineReadMult pipelineReadFd \
 		pipelineExitCode
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
@@ -46,6 +46,11 @@ pipelineWriteMult: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.wc "gzip -1" "gzip -dc" "wc"
 	diff expected/simple1.wc output/$@.wc
 
+pipelineWriteFd: ${BIN_DIR}/pipelineTester mkdirs
+	${BIN_DIR}/pipelineTester -fdApi -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
+	zcat output/$@.out.gz > output/$@.out
+	diff input/simple1.txt output/$@.out
+
 pipelineRead: ${BIN_DIR}/pipelineTester mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
 	${BIN_DIR}/pipelineTester -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
@@ -54,6 +59,11 @@ pipelineRead: ${BIN_DIR}/pipelineTester mkdirs
 pipelineReadMult: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -pipeData=output/$@.wc -otherEnd=input/simple1.txt "gzip -1" "gzip -dc" "wc"
 	diff expected/simple1.wc output/$@.wc
+
+pipelineReadFd: ${BIN_DIR}/pipelineTester mkdirs
+	gzip -1c input/simple1.txt >output/$@.in.gz
+	${BIN_DIR}/pipelineTester -fdApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
+	diff input/simple1.txt output/$@.out
 
 pipelineExitCode: ${BIN_DIR}/pipelineTester
 	${BIN_DIR}/pipelineTester -exitCode=1 false
