@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1014 2005/10/05 22:25:39 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1015 2005/10/07 17:56:56 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9865,7 +9865,14 @@ if (gotBlat)
 if (sameString(database, "hg17")
             || sameString(database, "mm6")
             || sameString(database, "rn3") 
-            || sameString(database, "fr1"))
+            || sameString(database, "anoGam1") 
+            || sameString(database, "apiMel2") 
+            || sameString(database, "bosTau1") 
+            || sameString(database, "canFam1") 
+            || sameString(database, "dm2") 
+            || sameString(database, "galGal2")
+            || sameString(database, "panTro1")
+            || sameString(database, "tetNig1"))
     {
     hPuts("<TD ALIGN=CENTER>");
     printEnsemblAnchor(database);
