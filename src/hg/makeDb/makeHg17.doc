@@ -3573,6 +3573,8 @@ cat > makeMaf.csh << 'EOF'
 
 
 # FUGU FR1 DOWNLOADS (DONE 2004-09-17 kate)
+#    REDO axtNet downloads for fix, above (2005-09-12 kate)
+
     ssh kksilo
     cd /cluster/data/hg17/bed/blastz.fr1/axtChain
     ln -s all.chain fugu.chain
@@ -3580,19 +3582,23 @@ cat > makeMaf.csh << 'EOF'
     gzip -c fugu.chain > gz/fugu.chain.gz
     gzip -c human.net > gz/fugu.net.gz
     cd ../axtNet
+    nice gzip *.axt
+
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/blastz.fr1/axtNet
     gzip *.axt
+    md5sum *.gz > md5sum.txt
 
     ssh hgwdev
     cd /usr/local/apache/htdocs/goldenPath/hg17
     mkdir -p vsFr1
     cd vsFr1
+    # Copy and edit README
     cp /cluster/data/hg17/bed/blastz.fr1/axtChain/gz/*.gz .
     md5sum *.gz > md5sum.txt
-    mkdir axtNet
-    cd axtNet
-    cp /cluster/data/hg17/bed/blastz.fr1/axtNet/*.axt.gz .
-    md5sum *.gz > md5sum.txt
-    # Copy and edit README
+
+    mv axtNet axtNet.old
+    ln -s /cluster/data/hg17/bed/blastz.fr1/axtNet .
 
 
 # PRODUCE FUGU BLAT ALIGNMENT (DONE - 2004-07-07 - Hiram)
@@ -4030,6 +4036,7 @@ cat << 'EOF' > makeMaf.csh
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
 
+
 # MAKING RAT SYNTENY (DONE - 2004-06-30 - Hiram)
 #	Re-Done after above done without the axtFilter
 
@@ -4100,7 +4107,6 @@ hgLoadBed hg17 ensRn3MusHom ucsc100k.bed -sqlTable=ensRn3MusHom.sql
     #	featureBits hg16 blastzTightRn3
     #	153151903 bases of 2865248791 (5.345%) in intersection
 
-
     # copy  axt's to download area
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastz.rn3/axtTight
@@ -4109,6 +4115,16 @@ hgLoadBed hg17 ensRn3MusHom ucsc100k.bed -sqlTable=ensRn3MusHom.sql
     cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3/axtTight
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
+
+    # REDO downloads with fixed axtNet's (2005=09-13 kate)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsRn3
+    mv axtNet axtNet.old
+    nice cp -rp /cluster/data/hg17/bed/blastz.rn3/axtNet .
+    cd axtNet
+    nice gzip *.axt
+    md5sum *.axt.gz > md5sum.txt
+
 
 # BLASTZ RN3 CLEAN UP (DONE - 2004-07-02 - Hiram)
     ssh eieio
@@ -5668,6 +5684,13 @@ SEQ2_LEN=$BASE/S2.len
     para create jobList
         # 160270 jobs written to batc
     para try, check, push, check, ....
+#CPU time in finished jobs:    2399227s   39987.11m   666.45h   27.77d  0.076 y
+#IO & Wait Time:                503100s    8385.00m   139.75h    5.82d  0.016 y
+#Average job time:                  18s       0.30m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            2073s      34.55m     0.58h    0.02d
+#Submission to last job:         10843s     180.72m     3.01h    0.13d
+
 
     # second cluster run: lift raw alignments -> lav dir
     ssh kki
@@ -5924,7 +5947,7 @@ exit $status
     mv rBest/human.rbest.chain.gz ..
     rm -fr rBest
 
-# RECIPROCAL BEST AXT'S FROM RECIPROCAL BEST CHAIN (2005-08-16)
+# RECIPROCAL BEST AXT'S FROM RECIPROCAL BEST CHAIN (2005-08-16 kate)
 #       (requested by Daryl)
     cd /cluster/data/hg17/bed/blastz.panTro1
     mkdir -p axtRBestNet
@@ -5967,6 +5990,7 @@ foreach f (axtChain/net/*.net)
 
 # MAKE PANTRO1 DOWNLOADABLES (DONE 2004-09-14 kate)
 #  Redo panTro1.net.gz (it was truncated) 2004-10-07 kate
+# Redo axtNets with non-overlapped versions (2005-08-29 kate)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.panTro1
     # gzip chains and nets
@@ -5986,13 +6010,12 @@ foreach f (axtChain/net/*.net)
     cd vsPanTro1
     mv /cluster/data/hg17/bed/blastz.panTro1/gz/*.gz .
     md5sum *.gz > md5sum.txt
+    # copy in README and edit
     rmdir /cluster/data/hg17/bed/blastz.panTro1/gz
     mkdir -p axtNet
     cd axtNet
     cp /cluster/data/hg17/bed/blastz.panTro1/axtNet/*.axt.gz .
-    md5sum *.gz axtNet/*.gz > md5sum.txt
     md5sum *.gz > md5sum.txt
-    # copy in README and edit
 
 
 # RESCORE CHICKEN BLASTZ (DONE 6/23/04 angie)
@@ -6122,6 +6145,7 @@ cat > makeMaf.csh << 'EOF'
 
 
 # MAKE VSGALGAL2 DOWNLOADABLES (REDONE 9/13/04 angie)
+#   REDO axtNet's to fix overlaps (2005-09-12 kate)
     ssh eieio
     cd /cluster/data/hg17/bed/blastz.galGal2.2004-06-14/axtChain
     gzip -c all.chain > /cluster/data/hg17/zip/chicken.chain.gz
@@ -6151,6 +6175,18 @@ cat > makeMaf.csh << 'EOF'
     mv /cluster/data/hg17/zip/axtNet .
     md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
+
+    # REDO axtNet downloads to fix overlaps (2005-09-13 kate)
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/blastz.galGal2/axtNet
+    nice gzip *.axt
+    md5sum *.axt.gz > md5sum.txt
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsGalGal2
+    mv axtNet axtNet.old
+    ln -s /cluster/data/hg17/bed/blastz.galGal2/axtNet .
+
 
 # 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (DONE 2004-07-13 kate)
 #       Redo, below to fix overlapping alignments (2005-08-16 kate)
@@ -6310,6 +6346,15 @@ mkdir -p $3:h
     cd /usr/local/apache/htdocs/goldenPath/hg17
     mkdir -p mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
     # gzipped & copied maf files from /cluster/data/hg17/bed/multiz8way/maf
+
+    # load summary table (2005-09-27)
+    cd /cluster/data/hg17/bed/multiz.2004-07-13/maf
+    time cat chr*.maf | hgLoadMafSummary hg17 multiz8waySummary stdin
+    # 30 minutes ?
+    # NOTE: this didn't improve track display time at 5MB, so
+    #   I'm leaving out of trackDb (sticking with pairwise maf's) for now
+    #   It may be that this helps performance only with larger numbers
+    #   of species.
 
     # Create upstream files for download (2004-09-13 kate)
     ssh hgwdev
@@ -7138,6 +7183,17 @@ axtChain $1 \
     md5sum *.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
+    # REDO downloads of axtNet's to fix overlaps (2005-09-13 kate)
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/blastz.canFam1/axtNet
+    nice gzip *.axt
+    md5sum *.axt.gz > md5sum.txt
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsCanFam1
+    mv axtNet axtNet.old
+    ln -s /cluster/data/hg17/bed/blastz.canFam1/axtNet .
+
 
 # GENERATE CANFAM1 MAF FOR MULTIZ FROM NET (DONE 7/9/04 angie)
 # Redo net axt's and maf's to fix overlaps (use 8/5 netToAxt)
@@ -7517,6 +7573,7 @@ cat > makeMaf.csh << '_EOF_'
     gzip *.axt
     # add README.txt file to dir (use previous assembly's copy as template)
     #	32 minute gzip
+    
 
     #  Convert those axt files to psl
     ssh eieio
@@ -7562,6 +7619,17 @@ cat > makeMaf.csh << '_EOF_'
     hgsql hg17 < ~/kent/src/hg/lib/axtInfo.sql
     #	table axtInfo may already exist, ignore create error.
     hgsql hg17 < axtInfoInserts.sql
+
+    # REDO: replace downloadable axtNet's to remove overlaps (2005-09-12 kate)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17/vsMm5
+    mv axtNet axtNet.old
+    mkdir axtNet
+    cd axtNet
+    cp /cluster/data/hg17/bed/blastz.mm5/axtNet/*.axt .
+    nice gzip *.axt
+    md5sum *.axt.gz > md5sum.txt
+
 
 # HG17 TO MM5 LIFTOVER CHAIN (DONE 1/6/05 Andy)
     ssh kolossus
@@ -12966,7 +13034,8 @@ cat > makeMaf.csh << 'EOF'
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
 
 
-# REDO 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (WORKING 2005-08-16 kate)
+# REDO 8-WAY MULTIZ MULTIPLE ALIGNMENT (WORKING 2005-08-16 kate)
+#  TO REMOVE OVERLAPS.  NOTE: Must use multiz.v10.5
 
     ssh kkstore02
     set multizDir = multiz8way.2005-08-16
@@ -12986,11 +13055,13 @@ cat > makeMaf.csh << 'EOF'
     ln -s $multizDir multiz8way
 
     # make output dir and run dir
-    ssh kk9
+    ssh pk
     cd /cluster/data/hg17/bed
     cd multiz8way
-    mkdir -p maf
-    mkdir -p run
+    cat > tree.nh << 'EOF'
+(((((hg17,panTro1),(rn3,mm5)),canFam1),galGal2)(fr1,danRer1))
+'EOF'
+    mkdir -p maf run
     cd run
 
     # create scripts to run multiz on cluster
@@ -12998,7 +13069,7 @@ cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
     set multi = /scratch/$user/multiz8way.$c
-    set pairs = /cluster/bluearc/hg17/multiz8way
+    set pairs = /cluster/bluearc/hg17/mafNet
 
     # special mode --
     # with 1 arg, cleanup
@@ -13007,8 +13078,16 @@ cat > oneMultiz.csh << 'EOF'
         exit
     endif
 
+    #  special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif 
+        
     set s1 = $2
     set s2 = $3
+    set flag = $4
 
     # locate input files -- in pairwise dir, or multiple dir
     set d1 = $multi
@@ -13022,13 +13101,15 @@ cat > oneMultiz.csh << 'EOF'
     set f1 = $d1/$s1/$c.maf
     set f2 = $d2/$s2/$c.maf
     # write to output dir
-    set out = $multi/${s2}${s1}
+    set out = $multi/${s1}${s2}
     mkdir -p $out
 
     # check for empty input file
     if (-s $f1 && -s $f2) then
-        echo "Aligning $f1 $f2"
-        /cluster/bin/penn/multiz $f1 $f2 - > $out/$c.maf
+        echo "Aligning $f1 $f2 $flag"
+        /cluster/bin/penn/multiz.v10.5 $f1 $f2 $flag > $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        /cluster/bin/penn/maf_project $out/$c.tmp.maf hg17.$c > $out/$c.maf
     else if (-s $f1) then
         cp $f1 $out
     else if (-s $f2) then
@@ -13040,16 +13121,15 @@ chmod +x oneMultiz.csh
 
 cat > allMultiz.csh << 'EOF'
 #!/bin/csh -fe
-
 set c = $1
-oneMultiz.csh $c mm5 panTro1
-oneMultiz.csh $c rn3 panTro1mm5 
-oneMultiz.csh $c canFam1 panTro1mm5rn3 
-oneMultiz.csh $c galGal2 panTro1mm5rn3canFam1
-oneMultiz.csh $c fr1 panTro1mm5rn3canFam1galGal2
-oneMultiz.csh $c danRer1 panTro1mm5rn3canFam1galGal2fr1
+oneMultiz.csh $c mm5 rn3 0
+oneMultiz.csh $c fr1 danRer1 0
+oneMultiz.csh $c panTro1 mm5rn3 1
+oneMultiz.csh $c panTro1mm5rn3 canFam1 1
+oneMultiz.csh $c panTro1mm5rn3canFam1 galGal2 1
+oneMultiz.csh $c panTro1mm5rn3canFam1galGal2 fr1danRer1 1
 # get final alignment file
-cp /scratch/$user/multiz8way.$c/panTro1mm5rn3canFam1galGal2fr1danRer1/$c.maf /cluster/data/hg17/bed/multiz8way/maf/$c.maf
+oneMultiz.csh $c panTro1mm5rn3canFam1galGal2fr1danRer1 /cluster/data/hg17/bed/multiz8way/maf/$c.maf
 #cleanup
 oneMultiz.csh $c
 'EOF'
@@ -13063,10 +13143,40 @@ allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz8way/maf/$(
 'EOF'
 # << for emacs
     cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
+    set path = (/parasol/bin $path);rehash
     gensub2 chrom.lst single gsub jobList
     para create jobList
+        # 46 jobs
     para try; para check
     para push
+
+# V8 run:
+#CPU time in finished jobs:      40024s     667.07m    11.12h    0.46d  0.001 y
+#IO & Wait Time:                  6287s     104.78m     1.75h    0.07d  0.000 y
+#Average job time:                1007s      16.78m     0.28h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            3574s      59.57m     0.99h    0.04d
+#Submission to last job:          6645s     110.75m     1.85h    0.08d
+
+    # check mafs for overlaps
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/multiz8way/maf
+    foreach f (*.maf)
+        echo -n "${f}: "
+        mafFilter -overlap $f > /dev/null
+    end
+
+    # load alignments into tables
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz8way
+
+    ln -s `pwd`/*.maf $mafDir
+    hgLoadMaf hg17 -warn multiz8wayFixed -pathPrefix=$mafDir
+
+    # load summary table
+    cd /cluster/data/hg17/bed/multiz8way/maf
+    time cat chr*.maf | hgLoadMafSummary hg17 multiz8waySummary stdin
+    # 30 minutes ?
 
 
 # 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (DONE 2004-12-22 kate)
@@ -17660,7 +17770,6 @@ Tue Sep 13 17:05:53 PDT 2005
 	-swap -stop=load \
 	`pwd`/DEF > swap.out 2>&1 &
 
-=======
 
 # LOAD ACEMBLY TRACK (DONE, 2005-09-12, Fan)
     mv /cluster/data/hg17/bed/acembly /cluster/data/hg17/bed/acembly_050217
@@ -18146,4 +18255,23 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
     # update trackDb; need a hg17-specific page to describe informants
     human/hg17/nscan.html    
     human/hg17/trackDb.ra
+
+##########################################################################
+# NHGRI DNASE I HYPERSENSITIVE SITES (2005-10-05 kate)
+#  Submitted by Greg Crawford via web site,
+#  http://research.nhgri.nih.gov/DNaseHS/May2005/
+#  In addition, a file containing the 'randoms' was FTP'ed by Greg
+#  Submitted for hg16 -- lifted to hg17.
+#  Details of hg16 data prep are in makeHg16.doc
+
+    mkdir /cluster/data/hg17/bed/nhgri
+    cd /cluster/data/hg17/bed/nhgri
+    cp /cluster/data/hg16/bed/nhgri/hs.bed hs.hg16.bed
+    liftOver hs.hg16.bed /gbdb/hg16/liftOver/hg16ToHg17.over.chain \
+                hs.hg17.bed hs.unmapped
+    grep '^chr' hs.unmapped | wc -l
+        # 8 unmapped
+    hgLoadBed hg17 nhgriDnaseHs hs.hg17.bed
+        # Loaded 14216 elements of size 5
+    checkTableCoords hg17 nhgriDnaseHs
 
