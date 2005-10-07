@@ -4,7 +4,8 @@ BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgPcr hgTables hg
 	hgTrackUi hgc cartDump near/hgNear protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver hgc/cgiClustalw
 
-TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl gbGetEntries \
+TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl \
+            genePredSingleCover genePredToMafFrames gbGetEntries \
             hgGetAnn mrnaToGene overlapSelect pslCDnaFilter pslDiff \
             pslHisto pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl
 
@@ -128,6 +129,8 @@ UTIL_DIRS = \
 	geneBounds \
 	genePredCheck \
 	genePredToGtf \
+	genePredSingleCover \
+	genePredToMafFrames \
 	getFeatDna \
 	getRna \
 	getRnaPred \
