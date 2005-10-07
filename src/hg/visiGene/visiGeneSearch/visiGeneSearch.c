@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.4 2005/10/07 05:50:59 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.5 2005/10/07 20:32:29 kent Exp $";
 
 char *database = "visiGene";
 
@@ -163,6 +163,61 @@ return count;
 }
 
 
+
+typedef void AdderFunc(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *exactMatch);
+/* Typedef of function to add things that are exact matches of
+ * some type to searcher.  This is broken out separately
+ * so that the visiGeneMatchMultiWord function below can be
+ * used in many contexts. */
+
+void visiGeneMatchMultiWord(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList,
+	char *table, AdderFunc adder, boolean forceMultiWord)
+/* This helps cope with matches that may involve more than
+ * one word.   It will preferentially match as many words
+ * as possible, and if there is a multiple-word match it
+ * will take that over a single-word match. */
+{
+struct slName *word;
+struct dyString *query = dyStringNew(0);
+struct sqlResult *sr;
+char **row;
+
+for (word = wordList; word != NULL;  )
+    {
+    struct slName *nameList, *name;
+    int maxWordsUsed = 0;
+    dyStringClear(query);
+    dyStringPrintf(query, "select name from %s where name like \"", table);
+    dyStringAppend(query, word->name);
+    if (forceMultiWord)
+       dyStringAppend(query, " ");
+    dyStringAppend(query, "%\"");
+    nameList = sqlQuickList(conn, query->string);
+    if (nameList != NULL)
+	{
+	for (name = nameList; name != NULL; name = name->next)
+	    {
+	    int wordsUsed = countWordsUsedInName(name->name, word);
+	    if (wordsUsed > maxWordsUsed)
+		maxWordsUsed = wordsUsed;
+	    }
+	for (name = nameList; name != NULL; name = name->next)
+	    {
+	    if (countWordsUsedInName(name->name, word) == maxWordsUsed)
+		(*adder)(searcher, conn, query, name->name);
+	    }
+	while (--maxWordsUsed >= 0)
+	    word = word->next;
+	}
+    else
+        word = word->next;
+    slFreeList(&nameList);
+    }
+dyStringFree(&query);
+}
+
 static void addImagesMatchingName(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct dyString *dy, char *contributor)
 /* Add images that are contributed by given contributor to
@@ -190,12 +245,12 @@ sqlFreeResult(&sr);
 
 void visiGeneMatchContributor(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
-/* Return ids of images that were contributed by all people in list. 
- * We want the behavior to be such that given a list of last names,
- * say "Smith Mahoney" it will return only those that match both 
+/* Put images from contributors in wordList into searcher.
+ * We want the behavior to be such that if you give it two names
+ * say "Smith Mahoney" it will weigh those that match both 
  * names.  We also want it so that if you include the initials
  * after the last name either with or without periods that will
- * just return those matching the last name and initials.  For
+ * set those matching the last name and initials.  For
  * instance "Smith JJ" or "Smith J.J." or "Smith J. J." all would
  * match a particular John Jacob Smith, but not Francis K. Smith.
  * Making this a little more interesting is a case like
@@ -206,46 +261,25 @@ void visiGeneMatchContributor(struct visiSearcher *searcher,
  * "de la Cruz" and the like.  Also don't forget the apostrophe
  * containing names like O'Shea. */
 {
-struct slName *word;
-struct dyString *query = dyStringNew(0);
-struct sqlResult *sr;
-char **row;
+visiGeneMatchMultiWord(searcher, conn, wordList, "contributor",
+    addImagesMatchingName, TRUE);
+}
 
-for (word = wordList; word != NULL;  )
-    {
-    struct slName *nameList, *name;
-    int maxWordsUsed = 0;
-    dyStringClear(query);
-    dyStringAppend(query, "select name from contributor where name like \"");
-    dyStringAppend(query, word->name);
-    dyStringAppend(query, " %\"");
-    nameList = sqlQuickList(conn, query->string);
-    if (nameList != NULL)
-	{
-	for (name = nameList; name != NULL; name = name->next)
-	    {
-	    int wordsUsed = countWordsUsedInName(name->name, word);
-	    if (wordsUsed > maxWordsUsed)
-		maxWordsUsed = wordsUsed;
-	    }
-	for (name = nameList; name != NULL; name = name->next)
-	    {
-	    if (countWordsUsedInName(name->name, word) == maxWordsUsed)
-		addImagesMatchingName(searcher, conn, query, name->name);
-	    }
-	while (--maxWordsUsed >= 0)
-	    word = word->next;
-	}
-    else
-        word = word->next;
-    slFreeList(&nameList);
-    }
-dyStringFree(&query);
+static void addImageListAndFree(struct visiSearcher *searcher,
+	struct slInt *imageList)
+/* Add images in list to searcher with weight one.
+ * Then free imageList */
+{
+struct slInt *image;
+for (image = imageList; image != NULL; image = image->next)
+    visiSearcherAdd(searcher, image->val, 1.0);
+slFreeList(&imageList);
 }
 
 void visiGeneMatchGene(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
-/* Return ids of images that were contributed by all people in list. */
+/* Add images matching genes in wordList to searcher.
+ * The wordList can include wildcards. */
 {
 struct slName *word;
 for (word = wordList; word != NULL; word = word->next)
@@ -256,11 +290,58 @@ for (word = wordList; word != NULL; word = word->next)
 	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
     else
 	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsExact);
-    for (image = imageList; image != NULL; image = image->next)
-	visiSearcherAdd(searcher, image->val, 1.0);
-    slFreeList(&imageList);
+    addImageListAndFree(searcher, imageList);
     freez(&sqlPat);
     }
+}
+
+void visiGeneMatchAccession(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Add images matching RefSeq, LocusLink, GenBank, or UniProt
+ * accessions to searcher. */
+{
+struct slName *word;
+for (word = wordList; word != NULL; word = word->next)
+    {
+    addImageListAndFree(searcher, visiGeneSelectRefSeq(conn, word->name));
+    addImageListAndFree(searcher, visiGeneSelectLocusLink(conn, word->name));
+    addImageListAndFree(searcher, visiGeneSelectGenbank(conn, word->name));
+    addImageListAndFree(searcher, visiGeneSelectUniProt(conn, word->name));
+    }
+}
+
+static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *bodyPart)
+/* Add images that are contributed by given contributor to
+ * searcher with a weight of one.  Use dy for scratch space for
+ * the query. */
+{
+int contributorId;
+struct sqlResult *sr;
+char **row;
+
+dyStringClear(dy);
+dyStringPrintf(dy, 
+   "select imageProbe.image from "
+   "bodyPart,expressionLevel,imageProbe "
+   "where bodyPart.name = \"%s\" "
+   "and bodyPart.id = expressionLevel.bodyPart "
+   "and expressionLevel.imageProbe = imageProbe.id"
+   , bodyPart);
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+sqlFreeResult(&sr);
+}
+
+void visiGeneMatchBodyPart(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct slName *wordList)
+/* Add images matching bodyPart to searcher.
+ * This is a little complicated by some body parts containing
+ * multiple words, like "choroid plexus". */
+{
+visiGeneMatchMultiWord(searcher, conn, wordList, "bodyPart",
+    addImagesMatchingBodyPart, FALSE);
 }
 
 void visiGeneSearch(char *searchString)
@@ -273,11 +354,11 @@ struct slName *wordList = stringToSlNames(searchString);
 printf("Searching %s for \"%s\"\n", database, searchString);
 visiGeneMatchContributor(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
+visiGeneMatchAccession(searcher, conn, wordList);
+visiGeneMatchBodyPart(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 for (match = matchList; match != NULL; match = match->next)
-    {
     printf("%f %d\n", match->weight, match->imageId);
-    }
 slFreeList(&wordList);
 }
 
