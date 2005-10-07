@@ -9,7 +9,7 @@
 # Actual batch list creation can be done with gensub2 and a spec,
 # using file lists created by this script.  
 
-# $Id: partitionSequence.pl,v 1.6 2005/10/05 21:41:18 aamp Exp $
+# $Id: partitionSequence.pl,v 1.7 2005/10/07 07:51:00 aamp Exp $
 
 use Getopt::Long;
 use strict;
@@ -175,7 +175,7 @@ sub partitionMonolith {
 	$checkedLstDir = 1;
       }
       # glom it (but first see if it would make existing glom too big):
-      if ($glomSize > 0 && (($glomSize + $size) > $chunk) || (scalar(@gloms) >= $seqLimit)) {
+      if ($glomSize > 0 && (($glomSize + $size) > $chunk) || ((scalar(@gloms) >= $seqLimit) && ($seqLimit > 0))) {
 	my ($lstBase, $lstFile) = &makeLst(@gloms);
 	push @partitions, [$lstBase, $lstFile];
 	$glomSize = 0;
