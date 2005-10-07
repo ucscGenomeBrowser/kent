@@ -222,5 +222,8 @@ void genePredRc(struct genePred *gp, int chromSize);
  * when doing analysis that is simplified by having things on the same strand.
  */
 
+int genePredCdsSize(struct genePred *gp);
+/* compute the number of bases of CDS */
+
 #endif /* GENEPRED_H */
 
