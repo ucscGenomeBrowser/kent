@@ -9,6 +9,7 @@
 #define SPECIES_DEFAULT_OFF_VAR "speciesDefaultOff"
 #define SPECIES_GROUP_PREFIX    "sGroup_"
 #define SPECIES_HTML_TARGET	"sT"
+#define SPECIES_CODON_DEFAULT	"speciesCodonDefault"
 #define PAIRWISE_VAR            "pairwise"
 #define SUMMARY_VAR             "summary"
 #define BASE_COLORS_VAR         "baseColors"
