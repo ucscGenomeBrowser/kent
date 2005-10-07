@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: vgPatchJax.c,v 1.3 2005/09/08 05:23:07 kent Exp $";
+static char const rcsid[] = "$Id: vgPatchJax.c,v 1.4 2005/10/07 20:07:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,7 +18,7 @@ void usage()
 errAbort(
   "vgPatchJax - Patch Jackson labs part of visiGene database\n"
   "usage:\n"
-  "   vgPatchJax database dir\n"
+  "   vgPatchJax database\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -28,75 +28,77 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int getSourceId(struct sqlConnection *conn,
-	struct hash *hash, struct dyString *dy, 
-	char *setUrl, char *itemUrl)
-/* If setUrl is not in hash, then make up a new submission set.
- * Return submission set ID. */
-{
-int id;
-static int uniq = 0;
-if (hashLookup(hash, setUrl))
-    id = hashIntVal(hash, setUrl);
-else
-    {
-    dyStringClear(dy);
-    dyStringPrintf(dy,
-	"insert into submissionSource values(default, "
-	"'Uniq%d', '', '%s', '%s')"
-	, ++uniq, setUrl, itemUrl);
-    uglyf("%s\n", dy->string);
-    sqlUpdate(conn, dy->string);
-    id = sqlLastAutoId(conn);
-    hashAddInt(hash, setUrl, id);
-    }
-return id;
-}
-
-
-void vgPatchJax(char *database, char *dir)
+void vgPatchJax(char *database)
 /* vgPatchJax - Patch Jackson labs part of visiGene database. */
 {
-struct sqlConnection *conn1 = sqlConnect(database);
-struct sqlConnection *conn2 = sqlConnect(database);
+struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
 char **row;
-struct dyString *query = dyStringNew(0);
-struct hash *urlHash = hashNew(0);
-struct hash *nameHash = hashNew(0);
-struct hashEl *list, *el;
+struct hash *parts = newHash(0);
+struct hash *forwarder = newHash(0);
+struct slName *sharpList = NULL, *sharp;
+struct dyString *dy = dyStringNew(0);
 
-sr = sqlGetResult(conn1, "select name,setUrl,itemUrl from submissionSet");
-while ((row = sqlNextRow(sr)) != NULL)
+/* Scan once through bodyPart creating a hash of all names. */
+sr = sqlGetResult(conn, "select name,id from bodyPart");
+while ((row  = sqlNextRow(sr)) != NULL)
+    hashAdd(parts, row[0], cloneString(row[1]));
+sqlFreeResult(&sr);
+
+/* Scan again for just cases that end in #, and decide whether need
+ * to just remove #, or need to also update other bodyPart references
+ * to another bodyPart that already exists without the # */
+sr = sqlGetResult(conn, "select name,id from bodyPart where name like '%#'");
+while ((row  = sqlNextRow(sr)) != NULL)
     {
-    int sourceId = getSourceId(conn2, urlHash, query, row[1], row[2]);
-    hashAddInt(nameHash, row[0], sourceId);
+    char *name = row[0];
+    int len = strlen(name);
+    char *unsharped = cloneStringZ(name, len-1);
+    char *forwardVal;
+    slNameAddHead(&sharpList, name);
+    forwardVal = hashFindVal(parts, unsharped);
+    if (forwardVal != NULL)
+        hashAdd(forwarder, name, forwardVal);
+    else
+        freez(&forwardVal);
     }
 sqlFreeResult(&sr);
 
-list = hashElListHash(nameHash);
-for (el = list; el != NULL; el = el->next)
+/* At this point we have a list of all bodyParts that have sharps, and
+ * a hash full of the ones that need forwarding in the expression table. */
+for (sharp = sharpList; sharp != NULL; sharp = sharp->next)
     {
-    dyStringClear(query);
-    dyStringPrintf(query,
-    	"update submissionSet set submissionSource=%d "
-	"where name = '%s'"
-	, ptToInt(el->val), el->name);
-    uglyf("%s\n", query->string);
-    sqlUpdate(conn2, query->string);
+    char *forwardVal = hashFindVal(forwarder, sharp->name);
+    dyStringClear(dy);
+    if (forwardVal != NULL)
+        {
+	char *oldVal = hashFindVal(parts, sharp->name);
+	dyStringPrintf(dy, "update expressionLevel set bodyPart = %s where bodyPart = %s",
+		forwardVal, oldVal);
+	sqlUpdate(conn, dy->string);
+	dyStringClear(dy);
+	dyStringPrintf(dy, "delete from bodyPart where id=%s and name=\"%s\"",
+		oldVal, sharp->name);
+	sqlUpdate(conn, dy->string);
+	}
+    else
+        {
+	int len = strlen(sharp->name);
+	char *unsharped = cloneStringZ(sharp->name, len-1);
+	dyStringPrintf(dy, "update bodyPart set name = \"%s\" where name = \"%s\"",
+		unsharped, sharp->name);
+	sqlUpdate(conn, dy->string);
+	}
     }
-sqlFreeResult(&sr);
-
-sqlDisconnect(&conn2);
-sqlDisconnect(&conn1);
+sqlDisconnect(&conn);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 2)
     usage();
-vgPatchJax(argv[1], argv[2]);
+vgPatchJax(argv[1]);
 return 0;
 }
