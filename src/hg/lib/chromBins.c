@@ -60,11 +60,15 @@ struct binKeeper *chromBinsGet(struct chromBins* chromBins, char *chrom,
 /* get chromosome binKeeper, optionally creating if it doesn't exist */
 {
 static const int MAX_CHROM_SIZE = 300000000;
-
-struct hashEl *hel = hashStore(chromBins->chromTbl, chrom);
-if ((hel->val == NULL) && create)
-    hel->val = binKeeperNew(0, MAX_CHROM_SIZE);
-return (struct binKeeper*)hel->val;
+if (create)
+    {
+    struct hashEl *hel = hashStore(chromBins->chromTbl, chrom);
+    if (hel->val == NULL)
+        hel->val = binKeeperNew(0, MAX_CHROM_SIZE);
+    return (struct binKeeper*)hel->val;
+    }
+else
+    return (struct binKeeper*)hashFindVal(chromBins->chromTbl, chrom);
 }
 
 void chromBinsAdd(struct chromBins *chromBins, char *chrom, int start, int end,
