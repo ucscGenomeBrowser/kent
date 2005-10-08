@@ -518,6 +518,7 @@ imageCount = slCount(imageList);
 captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 
+printf("<B>year:</B> %d ", visiGeneYear(conn,id));
 printf("<B>contributors:</B> %s<BR>\n", naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
