@@ -76,7 +76,7 @@ exit; # don't actually run this like a script :)
     cd /cluster/data/sulfAcid1/bed/simpleRepeat
     hgLoadBed sulfAcid1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/src/hg/lib/simpleRepeat.sql
 
-# MULTIZ (STARTED 10/7/05)
+# MULTIZ (DONE 10/8/05)
 
     cd /cluster/data/sulfAcid1/bed
     mkdir conservation
@@ -137,7 +137,7 @@ exit; # don't actually run this like a script :)
     hgLoadWiggle sulfAcid1 phastCons /cluster/data/sulfAcid1/bed/conservation/wib/phastCons.wig
     hgLoadMaf -warn sulfAcid1 multizSa1St1Ss1
     hgLoadMaf -warn sulfAcid1 sulfToko1_pwMaf -pathPrefix=/gbdb/sulfAcid1/pwMaf/sulfToko1_pwMaf
-    hgLoadMaf -warn sulfAcid1 sulAci1_pwMaf -pathPrefix=/gbdb/sulfAcid1/pwMaf/sulSol1_pwMaf
+    hgLoadMaf -warn sulfAcid1 sulSol1_pwMaf -pathPrefix=/gbdb/sulfAcid1/pwMaf/sulSol1_pwMaf
     hgLoadBed sulfAcid1 phastConsElements sulfAcid1-elements.bed 
     #trackDb
     cd ~/kent/src/hg/makeDb/trackDb/archae
@@ -157,14 +157,14 @@ exit; # don't actually run this like a script :)
     # yLineOnOff Off
     # autoScaleDefault Off
     # pairwise pwMaf
-    # speciesOrder sulTok1 sulSol1
+    # speciesOrder sulfToko1 sulSol1
     cvs add trackDb.ra
     cvs commit -m "Added multiz track" trackDb.ra
     #html page for multizSa1St1Ss1
     cd ~/kent/src/hg/makeDb/trackDb/archae/sulfAcid1
     cvs add multizSa1St1Ss1.html
     cvs commit -m "Details page for multiz track" multizSa1St1Ss1.html
-
+ 
 # DESCRIPTION PAGE (TO DO)
 
     ssh hgwdev

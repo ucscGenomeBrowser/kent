@@ -76,7 +76,7 @@ exit; # don't actually run this like a script :)
     cd /cluster/data/sulfToko1/bed/simpleRepeat
     hgLoadBed sulfToko1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/src/hg/lib/simpleRepeat.sql
 
-# MULTIZ (STARTED 10/7/05)
+# MULTIZ (DONE 10/7/05)
 
     cd /cluster/data/sulfToko1/bed
     mkdir conservation
