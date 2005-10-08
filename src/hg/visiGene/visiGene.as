@@ -88,6 +88,7 @@ table submissionSet
     int id;			"ID of submission set"
     string name;		"Name of submission set"
     lstring contributors;	"Comma-separated list of contributors in format Kent W.J., Wu F.Y."
+    int year;			"Year of publication or submission"
     lstring publication;	"Name of publication"
     lstring pubUrl;		"Publication URL"
     int journal;		"Journal for publication"

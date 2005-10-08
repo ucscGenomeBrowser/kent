@@ -80,7 +80,8 @@ sliceType - whole mount, frontal, sagittal, transverse, etc.
 specimenName - Name of specimen (John Doe).
 specimenNotes - Free text notes on specimen.
 strain - particular strain of specimen (eg C57BL for a mouse)
-publication - Title of associated publication
+publication - Title of associated publication.
+year - Year of publication or contribution to database.
 pubUrl - URL of associated publication
 setUrl - Contributor-supplied URL associated with whole submitted set of images
 seq - probe sequence

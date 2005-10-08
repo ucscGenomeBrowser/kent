@@ -119,6 +119,7 @@ CREATE TABLE submissionSet (
     id int auto_increment not null,	# ID of submission set
     name varchar(255) not null,  # Name of submission set
     contributors longblob not null,	# Comma separated list of contributors in format Kent W.J., Wu F.Y.
+    year int not null,			# Year of publication or submission
     publication longblob not null,	# Name of publication
     pubUrl longblob not null,	# Publication URL
     journal int not null,	# Journal for publication
@@ -306,8 +307,7 @@ CREATE TABLE imageFile (
     caption int not null,	# Pointer to caption or 0 for none
               #Indices
     PRIMARY KEY(id),
-    INDEX(submissionSet),
-    INDEX(imageFile)
+    INDEX(submissionSet)
 );
 
 #An image.  There may be multiple images within an imageFile
@@ -323,6 +323,7 @@ CREATE TABLE image (
     preparation int not null,	# Pointer to info on how specimen prepared
               #Indices
     PRIMARY KEY(id),
+    INDEX(imageFile),
     INDEX(submissionSet),
     INDEX(specimen)
 );

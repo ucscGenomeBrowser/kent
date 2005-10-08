@@ -191,7 +191,8 @@ int createSubmissionId(struct sqlConnection *conn,
 	char *name,
 	char *contributors, char *publication, 
 	char *pubUrl, int submissionSource,
-	char *journal, char *journalUrl, int copyright)
+	char *journal, char *journalUrl, int copyright,
+	int year)
 /* Add submission and contributors to database and return submission ID */
 {
 struct slName *slNameListFromString(char *s, char delimiter);
@@ -205,6 +206,7 @@ dyStringPrintf(dy, "insert into submissionSet set");
 dyStringPrintf(dy, " id = default,\n");
 dyStringPrintf(dy, " name = \"%s\",\n", name);
 dyStringPrintf(dy, " contributors = \"%s\",\n", contributors);
+dyStringPrintf(dy, " year = %d,\n", year);
 dyStringPrintf(dy, " publication = \"%s\",\n", publication);
 dyStringPrintf(dy, " pubUrl = \"%s\",\n", pubUrl);
 dyStringPrintf(dy, " journal = %d,\n", journalId);
@@ -235,6 +237,7 @@ int saveSubmissionSet(struct sqlConnection *conn, struct hash *raHash)
 {
 char *contributor = hashMustFindVal(raHash, "contributor");
 char *name = hashMustFindVal(raHash, "submitSet");
+char *year = hashValOrDefault(raHash, "year", "0");
 char *submissionSource = hashMustFindVal(raHash, "submissionSource");
 char *publication = hashValOrDefault(raHash, "publication", "");
 char *pubUrl = hashValOrDefault(raHash, "pubUrl", "");
@@ -256,7 +259,7 @@ if (submissionId != 0)
 else
      return createSubmissionId(conn, name, contributor, 
      	publication, pubUrl, submissionSourceId, journal, 
-	journalUrl, copyrightId);
+	journalUrl, copyrightId, atoi(year));
 }
 
 int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,
