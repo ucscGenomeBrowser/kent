@@ -1036,6 +1036,7 @@ if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
                                 winStart, maxPixels );
 else if (startsWith("mrna", tg->mapName) || 
 	 sameString(tg->mapName,"xenoMrna")||
+	 sameString(tg->mapName,"mgcIncompleteMrna")||
 	 pslSequenceBases )
     /*one of the chosen psl tracks with associated
      * sequences in a database*/
@@ -1089,6 +1090,7 @@ if(drawOptionNum>0 && zoomedToCodonLevel)
     {
     if (startsWith("mrna", tg->mapName) || 
 	sameString(tg->mapName,"xenoMrna") ||
+	 sameString(tg->mapName,"mgcIncompleteMrna")||
 	pslSequenceBases )
 	{
         char *database = cartUsualString(cart, "db", hGetDb());
