@@ -1022,7 +1022,6 @@ char codon[2] = " ";
 Color color = colorAndCodonFromGrayIx(vg, codon, grayIx, cdsColor, 
                                                 originalColor);
 
-
 if (!pslSequenceBases && tg->tdb)
 	pslSequenceBases = ((char *) NULL != trackDbSetting(tg->tdb,
 		PSL_SEQUENCE_BASES));
@@ -1037,6 +1036,11 @@ if (drawOptionNum == CDS_DRAW_GENOMIC_CODONS)
 else if (startsWith("mrna", tg->mapName) || 
 	 sameString(tg->mapName,"xenoMrna")||
 	 sameString(tg->mapName,"mgcIncompleteMrna")||
+	 sameString(tg->mapName,"mgcPickedEst")||
+	 sameString(tg->mapName,"mgcFailedEst")||
+	 sameString(tg->mapName,"mgcUnpickedEst")||
+	 sameString(tg->mapName,"baylorRtPcrGeneA")||
+	 sameString(tg->mapName,"baylorRtPcr")||
 	 pslSequenceBases )
     /*one of the chosen psl tracks with associated
      * sequences in a database*/
