@@ -1,6 +1,6 @@
 track multizSa1St1Ss1
 shortLabel Conservation
-longLabel Sulfolobus 3-way multiz alignments
+longLabel S. tokodaii (sulfToko1)/S. solfataricus (sulSol1) multiz alignments
 group compGeno
 priority 10.0
 visibility pack
@@ -10,4 +10,4 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
-speciesOrder sulTok1 sulSol1
+speciesOrder sulfToko1 sulSol1
