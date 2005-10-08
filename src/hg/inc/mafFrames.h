@@ -5,7 +5,7 @@
 #ifndef MAFFRAMES_H
 #define MAFFRAMES_H
 
-#define MAFFRAMES_NUM_COLS 7
+#define MAFFRAMES_NUM_COLS 9
 
 struct mafFrames
 /* codon frame assignment for MAF components */
@@ -18,6 +18,8 @@ struct mafFrames
     unsigned char frame;	/* frame (0,1,2) for first base(+) or last bast(-) */
     char strand[2];	/* + or - */
     char *name;	/* Name of gene used to define frame */
+    int prevEnd;	/* chromEnd of previous part of gene, or -1 if none */
+    int nextStart;	/* chromStart of next part of gene, or -1 if none */
     };
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret);

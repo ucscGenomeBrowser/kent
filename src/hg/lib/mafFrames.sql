@@ -12,4 +12,8 @@ CREATE TABLE mafFrames (
     frame tinyint unsigned not null,	# frame (0,1,2) for first base(+) or last bast(-)
     strand char(1) not null,	# + or -
     name varchar(255) not null,	# Name of gene used to define frame
+    prevEnd int not null,	# chromEnd of previous part of gene, or -1 if none
+    nextStart int not null,	# chromStart of next part of gene, or -1 if none
+              #Indices
+    PRIMARY KEY(chrom)
 );

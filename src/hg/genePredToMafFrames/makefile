@@ -5,13 +5,14 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 L = $(MYSQLLIBS) -lm
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O =  geneBins.o genePredToMafFrames.o
+O =  geneBins.o mkMafFrames.o genePredToMafFrames.o
 
 genePredToMafFrames: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/genePredToMafFrames $O $(MYLIBS) $L
 
 geneBins.o: geneBins.h geneBins.c
-genePredToMafFrames.o: genePredToMafFrames.c geneBins.h
+mkMafFrames.o: mkMafFrames.c mkMafFrames.h geneBins.h
+genePredToMafFrames.o: genePredToMafFrames.c geneBins.h mkMafFrames.h
 
 test:
 	(cd tests && ${MAKE} test)

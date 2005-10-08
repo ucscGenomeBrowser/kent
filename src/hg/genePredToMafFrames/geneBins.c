@@ -8,15 +8,7 @@
 #include "localmem.h"
 #include "dnautil.h"
 #include "maf.h"
-
-struct geneBins
-/* binRange table of genes, by chromosome */
-{
-    struct chromBins *bins;  /* map of chrom and ranges to cds exons */
-    struct lm *memPool;      /* memory for exons allocated from this pool */
-    char *curChrom;          /* cache of current string for allocating pool memory */
-    char *curGene;
-};
+#include "mafFrames.h"
 
 static char *strFromPool(struct geneBins *genes, char *str, char **cache)
 /* allocated a chrom or gene name from the pool, caching the last allocated */
@@ -37,8 +29,8 @@ if (el != NULL)
              gp->name, ((struct cdsExon*)el->val)->gene);
 }
 
-static void loadExon(struct geneBins *genes, struct binKeeper *chrBins,
-                     struct genePred *gp, int iExon, int start, int end)
+static struct cdsExon *loadExon(struct geneBins *genes, struct binKeeper *chrBins,
+                                struct genePred *gp, int iExon, int start, int end)
 {
 struct cdsExon *exon;
 checkOverlap(genes, chrBins, gp, start, end);
@@ -51,6 +43,7 @@ exon->strand = gp->strand[0];
 exon->frame = gp->exonFrames[iExon];
 exon->iExon = iExon;
 binKeeperAdd(chrBins, start, end, exon);
+return exon;
 }
 
 static void loadGene(struct geneBins *genes, struct genePred *gp)
@@ -58,11 +51,18 @@ static void loadGene(struct geneBins *genes, struct genePred *gp)
 {
 struct binKeeper *chrBins = chromBinsGet(genes->bins, gp->chrom, TRUE);
 int iExon, start, end;
+struct cdsExon *prevExon = NULL;
 
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
     if (genePredCdsExon(gp, iExon, &start, &end))
-        loadExon(genes, chrBins, gp, iExon, start, end);
+        {
+        struct cdsExon *exon = loadExon(genes, chrBins, gp, iExon, start, end);
+        if (prevExon != NULL)
+            prevExon->next = exon;
+        exon->prev = prevExon;
+        prevExon = exon;
+        }
     }
 }
 
@@ -81,12 +81,18 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
 genePredReaderFree(&gpr);
 }
 
+static void cdsExonCleanup(struct cdsExon **ep)
+/* free mafFrames objects associated with an exon */
+{
+mafFramesFreeList(&((*ep)->frames));
+}
+
 struct geneBins *geneBinsNew(char *genePredFile)
 /* construct a new geneBins object from the specified file */
 {
 struct geneBins *genes;
 AllocVar(genes);
-genes->bins = chromBinsNew(NULL);
+genes->bins = chromBinsNew(cdsExonCleanup);
 genes->memPool = lmInit(1024*1024);
 loadGenes(genes, genePredFile);
 return genes;
@@ -146,4 +152,15 @@ if (comp->strand == '-')
 exons = chromBinsFind(genes->bins, chrom, start, end);
 slSort(&exons, ((comp->strand == '+') ? cmpExonsPos : cmpExonsNeg));
 return exons;
+}
+
+struct binElement *geneBinsChromExons(struct geneBins *genes, char *chrom)
+/* Return list of references to all exons on a chromosome, sorted in
+ * assending target order. slFreeList returned list. */
+{
+struct binKeeper *chromBins = chromBinsGet(genes->bins, chrom, FALSE);
+if (chromBins != NULL)
+    return binKeeperFindAll(chromBins);
+else
+    return NULL;
 }

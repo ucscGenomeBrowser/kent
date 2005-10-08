@@ -3,17 +3,30 @@
 #define GENEBINS
 struct geneBins;
 struct mafComp;
+struct mafFrames;
+
+struct geneBins
+/* binRange table of genes, by chromosome */
+{
+    struct chromBins *bins;  /* map of chrom and ranges to cds exons */
+    struct lm *memPool;      /* memory for exons allocated from this pool */
+    char *curChrom;          /* cache of current string for allocating pool memory */
+    char *curGene;
+};
 
 struct cdsExon
 /* one CDS exon */
 {
-    char *gene;          /* gene name */
-    char *chrom;         /* chromosome range */
+    struct cdsExon* prev; /* links to previous and next exons in gene */
+    struct cdsExon* next;
+    char *gene;           /* gene name */
+    char *chrom;          /* chromosome range */
     int chromStart;
     int chromEnd;
     char strand;
-    char frame;          /* frame number */
-    int  iExon;          /* exon index in genePred */
+    char frame;           /* frame number */
+    int  iExon;           /* exon index in genePred */
+    struct mafFrames *frames;  /* frames associated with the exon */
 };
 
 struct geneBins *geneBinsNew(char *genePredFile);
@@ -24,6 +37,10 @@ void geneBinsFree(struct geneBins **genesPtr);
 
 struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp);
 /* Return list of references to exons overlapping the specified component,
- * sorted into the assending order of the component. slFree returned list. */
+ * sorted into the assending order of the component. slFreeList returned list. */
+
+struct binElement *geneBinsChromExons(struct geneBins *genes, char *chrom);
+/* Return list of references to all exons on a chromosome, sorted in
+ * assending target order. slFreeList returned list. */
 
 #endif

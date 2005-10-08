@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mafFrames.h"
 
-static char const rcsid[] = "$Id: mafFrames.c,v 1.1 2005/09/28 05:40:29 markd Exp $";
+static char const rcsid[] = "$Id: mafFrames.c,v 1.2 2005/10/08 21:19:40 markd Exp $";
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret)
 /* Load a row from mafFrames table into ret.  The contents of ret will
@@ -22,6 +22,8 @@ ret->src = row[3];
 ret->frame = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->name = row[6];
+ret->prevEnd = sqlSigned(row[7]);
+ret->nextStart = sqlSigned(row[8]);
 }
 
 struct mafFrames *mafFramesLoad(char **row)
@@ -38,6 +40,8 @@ ret->src = cloneString(row[3]);
 ret->frame = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->name = cloneString(row[6]);
+ret->prevEnd = sqlSigned(row[7]);
+ret->nextStart = sqlSigned(row[8]);
 return ret;
 }
 
@@ -47,7 +51,7 @@ struct mafFrames *mafFramesLoadAll(char *fileName)
 {
 struct mafFrames *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -65,7 +69,7 @@ struct mafFrames *mafFramesLoadAllByChar(char *fileName, char chopper)
 {
 struct mafFrames *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -93,6 +97,8 @@ ret->src = sqlStringComma(&s);
 ret->frame = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->name = sqlStringComma(&s);
+ret->prevEnd = sqlSignedComma(&s);
+ret->nextStart = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -147,6 +153,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->prevEnd);
+fputc(sep,f);
+fprintf(f, "%d", el->nextStart);
 fputc(lastSep,f);
 }
 
@@ -162,13 +172,15 @@ static char *createSql =
     "    frame tinyint unsigned not null,"  /* frame (0,1,2) for first base(+) or last bast(-) */
     "    strand char(1) not null,"          /* + or - */
     "    name varchar(255) not null,"       /* Name of gene used to define frame */
-    "    INDEX(chrom(%d),bin)"
+    "    prevEnd int not null,"             /* chromEnd of previous part of gene, or -1 if none */
+    "    nextStart int not null,"           /* chromStart of next part of gene, or -1 if none */
+    "    INDEX(chrom(%d),bin)"              /* used by range query */
     ")";
 char *mafFramesGetSql(char *table, unsigned options, int chromIdxLen)
 /* Get sql to create the table.  Returned string should be freed.  No options
  * are currently defined.*/
 {
 char sql[512];
-safef(sql, sizeof(sql), createSql, table, chromIdxLen);
+safef(sql, sizeof(sql), createSql, table, chromIdxLen, chromIdxLen);
 return cloneString(sql);
 }
