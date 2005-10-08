@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.6 2005/10/07 20:40:56 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.7 2005/10/08 00:01:16 kent Exp $";
 
 char *database = "visiGene";
 
@@ -218,6 +218,18 @@ for (word = wordList; word != NULL;  )
 dyStringFree(&query);
 }
 
+static void addImagesMatchingQuery(struct visiSearcher *searcher,
+    struct sqlConnection *conn, char *query)
+/* Add images that match query */
+{
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+sqlFreeResult(&sr);
+}
+
 static void addImagesMatchingName(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct dyString *dy, char *contributor)
 /* Add images that are contributed by given contributor to
@@ -225,8 +237,6 @@ static void addImagesMatchingName(struct visiSearcher *searcher,
  * the query. */
 {
 int contributorId;
-struct sqlResult *sr;
-char **row;
 
 dyStringClear(dy);
 dyStringPrintf(dy, 
@@ -237,10 +247,7 @@ dyStringPrintf(dy,
    "and submissionContributor.submissionSet = imageFile.submissionSet "
    "and imageFile.id = image.imageFile"
    , contributor);
-sr = sqlGetResult(conn, dy->string);
-while ((row = sqlNextRow(sr)) != NULL)
-   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
-sqlFreeResult(&sr);
+addImagesMatchingQuery(searcher, conn, dy->string);
 }
 
 void visiGeneMatchContributor(struct visiSearcher *searcher, 
@@ -316,10 +323,6 @@ static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
  * searcher with a weight of one.  Use dy for scratch space for
  * the query. */
 {
-int contributorId;
-struct sqlResult *sr;
-char **row;
-
 dyStringClear(dy);
 dyStringPrintf(dy, 
    "select imageProbe.image from "
@@ -328,10 +331,7 @@ dyStringPrintf(dy,
    "and bodyPart.id = expressionLevel.bodyPart "
    "and expressionLevel.imageProbe = imageProbe.id"
    , bodyPart);
-sr = sqlGetResult(conn, dy->string);
-while ((row = sqlNextRow(sr)) != NULL)
-   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
-sqlFreeResult(&sr);
+addImagesMatchingQuery(searcher, conn, dy->string);
 
 dyStringClear(dy);
 dyStringPrintf(dy,
@@ -339,10 +339,7 @@ dyStringPrintf(dy,
     "where bodyPart.name = \"%s\" "
     "and bodyPart.id = specimen.bodyPart "
     "and specimen.id = image.specimen");
-sr = sqlGetResult(conn, dy->string);
-while ((row = sqlNextRow(sr)) != NULL)
-   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
-sqlFreeResult(&sr);
+addImagesMatchingQuery(searcher, conn, dy->string);
 }
 
 void visiGeneMatchBodyPart(struct visiSearcher *searcher,
@@ -353,6 +350,76 @@ void visiGeneMatchBodyPart(struct visiSearcher *searcher,
 {
 visiGeneMatchMultiWord(searcher, conn, wordList, "bodyPart",
     addImagesMatchingBodyPart, FALSE);
+}
+
+void addImagesMatchingStage(struct visiSearcher *searcher,
+	struct sqlConnection *conn, int schemeId, int taxon,
+	char *minAge)
+/* Given a developmental stage scheme (schemeId) and a specific
+ * stage, return all images that match stage */
+{
+struct dyString *dy = dyStringNew(0);
+char *maxAge;
+struct sqlResult *sr;
+char **row;
+
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select age from lifeStage where lifeStageScheme = %d ", 
+    schemeId);
+dyStringPrintf(dy,
+    "and age > %s order by age", minAge);
+maxAge = sqlQuickString(conn, dy->string);
+
+dyStringClear(dy);
+dyStringPrintf(dy, "select image.id from specimen,image ");
+dyStringPrintf(dy, "where specimen.age >= %s ", minAge);
+if (maxAge != NULL)
+    dyStringPrintf(dy, "and specimen.age < %s ", maxAge);
+dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
+dyStringPrintf(dy, "and specimen.id = image.specimen");
+addImagesMatchingQuery(searcher, conn, dy->string);
+
+dyStringFree(&dy);
+}
+
+
+void visiGeneMatchStage(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct slName *wordList)
+/* Add images matching Theiler or other developmental stage */
+{
+struct slName *word;
+struct dyString *dy = dyStringNew(0);
+struct sqlResult *sr;
+char **row;
+for (word = wordList; word != NULL && word->next != NULL; word = word->next)
+    {
+    int schemeId = 0,taxon=0;
+    dyStringPrintf(dy, 
+        "select id,taxon from lifeStageScheme where name = \"%s\"",
+    	word->name);
+    sr = sqlGetResult(conn, dy->string);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+	schemeId = sqlUnsigned(row[0]);
+	taxon = sqlUnsigned(row[1]);
+	}
+    sqlFreeResult(&sr);
+    if (schemeId > 0)
+        {
+	char *specificStage = word->next->name;
+	char *minAge;
+	dyStringClear(dy);
+	dyStringPrintf(dy, "select age from lifeStage where name = \"%s\" ", 
+		specificStage);
+	dyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
+	minAge = sqlQuickString(conn, dy->string);
+	if (minAge != NULL)
+	    addImagesMatchingStage(searcher, conn, schemeId, taxon, minAge);
+	freez(&minAge);
+	}
+    }
+dyStringFree(&dy);
 }
 
 void visiGeneSearch(char *searchString)
@@ -367,6 +434,7 @@ visiGeneMatchContributor(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
 visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
+visiGeneMatchStage(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 for (match = matchList; match != NULL; match = match->next)
     printf("%f %d\n", match->weight, match->imageId);
