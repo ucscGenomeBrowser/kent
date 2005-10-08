@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.7 2005/10/08 00:01:16 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.8 2005/10/08 16:12:25 kent Exp $";
 
 char *database = "visiGene";
 
@@ -422,6 +422,42 @@ for (word = wordList; word != NULL && word->next != NULL; word = word->next)
 dyStringFree(&dy);
 }
 
+static void addImagesMatchingYears(struct visiSearcher *searcher,
+	struct sqlConnection *conn, int minYear, int maxYear)
+/* Fold in images that are published between given years */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringPrintf(dy,
+    "select image.id from submissionSet,imageFile,image "
+    "where submissionSet.year >= %d and submissionSet.year <= %d "
+    "and submissionSet.id = imageFile.submissionSet "
+    "and imageFile.id = image.imageFile"
+    , minYear, maxYear);
+addImagesMatchingQuery(searcher, conn, dy->string);
+dyStringFree(&dy);
+}
+
+void visiGeneMatchYear(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Fold in matches to a year. */
+{
+struct slName *word;
+char *now = sqlQuickString(conn, "select now()");
+int currentYear = atoi(now);
+int maxYear = currentYear+1;	/* May be slightly ahead of publication */
+int minYear = 1988;	/* Oldest record in Jackson Labs database. */
+for (word = wordList; word != NULL; word = word->next)
+    {
+    char *name = word->name;
+    if (strlen(name) == 4 && isdigit(name[0]))
+        {
+	int year = atoi(name);
+	if (year >= minYear && year <= maxYear)
+	    addImagesMatchingYears(searcher, conn, year, year);
+	}
+    }
+}
+
 void visiGeneSearch(char *searchString)
 /* visiGeneSearch - Test out search routines for VisiGene. */
 {
@@ -431,6 +467,7 @@ struct visiSearcher *searcher = visiSearcherNew();
 struct slName *wordList = stringToSlNames(searchString);
 printf("Searching %s for \"%s\"\n", database, searchString);
 visiGeneMatchContributor(searcher, conn, wordList);
+visiGeneMatchYear(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
 visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
