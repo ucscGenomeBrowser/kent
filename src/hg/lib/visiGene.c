@@ -467,6 +467,15 @@ char *visiGeneContributors(struct sqlConnection *conn, int id)
 return stringFieldInSubmissionSet(conn, id, "contributors");
 }
 
+int visiGeneYear(struct sqlConnection *conn, int id)
+/* Return year of publication. */
+{
+char *s = stringFieldInSubmissionSet(conn, id, "year");
+int year = atoi(s);
+freeMem(s);
+return year;
+}
+
 char *visiGenePublication(struct sqlConnection *conn, int id)
 /* Return name of publication associated with image if any.  
  * FreeMem this when done. */

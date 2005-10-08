@@ -79,6 +79,9 @@ char *visiGeneContributors(struct sqlConnection *conn, int id);
 /* Return comma-separated list of contributors in format Kent W.H, Wu F.Y. 
  * FreeMem this when done. */
 
+int visiGeneYear(struct sqlConnection *conn, int id);
+/* Return year of publication. */
+
 char *visiGenePublication(struct sqlConnection *conn, int id);
 /* Return name of publication associated with image if any.  
  * FreeMem this when done. */
