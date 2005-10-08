@@ -365,6 +365,45 @@ else
     }
 }
 
+char *visiGeneExpressionIn(struct sqlConnection *conn, int id)
+/* Return comma-separated list of parts where expression is
+ * observed. */
+{
+struct dyString *dy = dyStringNew(256);
+char query[512], **row;
+boolean gotAny = FALSE;
+struct sqlResult *sr;
+safef(query, sizeof(query),
+   "select bodyPart.name,expressionLevel.level "
+   "from expressionLevel,bodyPart,imageProbe "
+   "where imageProbe.image = %d "
+   "and imageProbe.id = expressionLevel.imageProbe "
+   "and expressionLevel.bodyPart = bodyPart.id "
+   "order by bodyPart.name"
+   , id);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    double level = atof(row[1]);
+    if (gotAny)
+        dyStringAppend(dy, ", ");
+    dyStringAppend(dy, row[0]);
+    if (level >= 0.1)
+       dyStringAppend(dy, "(+)");
+    else 
+       dyStringAppend(dy, "(-)");
+    gotAny = TRUE;
+    }
+sqlFreeResult(&sr);
+if (gotAny)
+    return dyStringCannibalize(&dy);
+else
+    {
+    dyStringFree(&dy);
+    return NULL;
+    }
+}
+
 struct captionElement *makePaneCaptionElements(struct sqlConnection *conn,
 	struct slInt *imageList)
 /* Make list of all caption elements */
@@ -386,6 +425,9 @@ for (image = imageList; image != NULL; image = image->next)
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "body part",
     	naForNull(visiGeneBodyPart(conn, paneId)));
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "expression",
+        naForNull(visiGeneExpressionIn(conn, paneId)));
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "section type",
     	naForNull(visiGeneSliceType(conn, paneId)));
