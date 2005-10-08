@@ -1403,7 +1403,6 @@ cdsDrawDefault genomic\ codons
     subTrack encodePseudogene
     shortLabel Yale Pseudo
     longLabel Yale PseudoGene Predictions
-    itemClassTbl encodePseudogeneClass
     url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
     priority 3
 
