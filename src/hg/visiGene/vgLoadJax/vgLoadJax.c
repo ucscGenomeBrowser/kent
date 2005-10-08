@@ -220,7 +220,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *bodyPart = skipLeadingSpaces(row[0]);
     if (bodyPart[0] != 0)
-	fprintf(f, "\texpression\t%s\t%s\n", row[0], row[1]);
+	{
+	/* Strip trailing # if any from body part. */
+	int lastChar = strlen(bodyPart)-1;
+	if (bodyPart[lastChar] == '#')
+	    bodyPart[lastChar] = 0;
+	fprintf(f, "\texpression\t%s\t%s\n", bodyPart, row[1]);
+	}
     }
 sqlFreeResult(&sr);
 }
@@ -254,7 +260,7 @@ tab = mustOpen(tmpName, "w");
 cap = mustOpen(capName, "w");
 
 
-dyStringAppend(query, "select authors, journal, title from BIB_Refs where ");
+dyStringAppend(query, "select authors,journal,title,year from BIB_Refs where ");
 dyStringPrintf(query, "_Refs_key = %s", ref);
 sr = sqlGetResult(conn, query->string);
 row = sqlNextRow(sr);
@@ -274,6 +280,7 @@ fprintf(ra, "setUrl http://www.informatics.jax.org/\n");
 fprintf(ra, "itemUrl http://www.informatics.jax.org/searches/image.cgi?%%s\n");
 fprintf(ra, "journal %s\n", row[1]);
 fprintf(ra, "publication %s\n", row[2]);
+fprintf(ra, "year %s\n", row[3]);
 
 /* The contributor (author) list is in format Kent WJ; Haussler DH; format in
  * Jackson.  We convert it to Kent W.J.,Haussler D.H., format for visiGene. */
