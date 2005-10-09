@@ -49,11 +49,20 @@ shortLabel CCDS
 longLabel Consensus CDS
 group genes
 priority 34.5
-visibility dense
+visibility hide
 color 12,120,12
 hgGene on
 type genePred
 cdsDrawDefault genomic\ codons
+
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility hide
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
 
 track vegaGene
 shortLabel Vega Genes
@@ -356,6 +365,18 @@ visibility hide
 color 0,60,120
 type genePred
 otherDb tetNig1
+
+track blastDm2FB
+shortLabel D. mel. Proteins (dm2)
+longLabel D. melanogaster Proteins (dm2)
+group compGeno
+priority 112
+visibility hide
+colorChromDefault off
+type psl protein
+pred dm2.blastFBPep01
+blastRef dm2.blastFBRef01
+url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
 track slamNonCodingMouse
 shortLabel Slam Non-Coding Mouse

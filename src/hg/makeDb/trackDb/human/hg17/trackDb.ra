@@ -27,22 +27,12 @@ type genePred knownGenePep knownGeneMrna
 hgGene on
 cdsDrawDefault genomic\ codons
 
-track dvBed
-shortLabel DV
-longLabel Disease Variation
-group genes
-priority 34.1
-visibility pack
-color 200,0,0
-type bed 4 +
-url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
-
 track acembly
 shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
 group genes
 priority 41
-visibility dense
+visibility hide
 color 155,0,125
 type genePred acemblyPep acemblyMrna
 url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=hg17&l=$$
@@ -350,7 +340,7 @@ shortLabel Candidates
 longLabel Lowe Lab ncRNA 148 microarray probes
 group compGeno
 priority 109.53
-visibility pack
+visibility hide
 type bed 6 .
 
 track varMultizMm5Rn3GalGal2Fr1
@@ -1015,6 +1005,16 @@ altColor 255,240,200
 spectrum on
 type psl xeno hg17
 otherDb hg17
+
+track dvBed
+shortLabel DV
+longLabel Disease Variation
+group varRep
+priority 145
+visibility hide
+color 200,0,0
+type bed 4 +
+url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
 
 track blastzTightSelf
 shortLabel Tight Self
