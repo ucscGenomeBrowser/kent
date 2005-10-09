@@ -266,3 +266,98 @@ wget -O easyGene.gff "http://www.binf.ku.dk/cgi-bin/easygene/output?id=129&forma
 pernilleGffToBed easyGene.gff easyGene.bed
 cp ~/kent/src/hg/lib/easyGene.sql .
 hgLoadBed -sqlTable=easyGene.sql pyrFur2 easyGene easyGene.bed
+
+# MULTIZ with P. hori, P. abyssi, T. kodakarensis
+# This is redo of an earlier run, so some files are already in place
+
+    cd /cluster/data/pyrFur2/bed/conservation
+    mv Thermokoda.chr therKoda1.chr
+    #edit headers to be pyrFur2, pyrHor1, pyrAby1, therKoda1
+    /cluster/bin/i386/faToNib pyrFur2.chr pyrFur2.chr.nib
+    /cluster/bin/i386/faToNib pyrHor1.chr pyrHor1.chr.nib
+    /cluster/bin/i386/faToNib pyrAby1.chr pyrAby1.chr.nib
+    /cluster/bin/i386/faToNib therKoda1.chr therKoda1.chr.nib
+    faSize -detailed *.chr > chrom.sizes
+    #blastz
+    blastz pyrFur2.chr pyrAby1.chr Q=HoxD55.q > pyrFur2-pyrAby1.lav
+    blastz pyrFur2.chr pyrHor1.chr Q=HoxD55.q > pyrFur2-pyrHor1.lav
+    blastz pyrFur2.chr therKoda1.chr Q=HoxD55.q > pyrFur2-therKoda1.lav
+    #lavToAxt
+    /cluster/bin/i386/lavToAxt pyrFur2-pyrAby1.lav . . pyrFur2-pyrAby1.axt
+    /cluster/bin/i386/lavToAxt pyrFur2-pyrHor1.lav . . pyrFur2-pyrHor1.axt
+    /cluster/bin/i386/lavToAxt pyrFur2-therKoda1.lav . . pyrFur2-therKoda1.axt
+    #axtBest
+    axtBest pyrFur2-pyrAby1.axt pyrFur2.chr -winSize=500 -minScore=5000 pyrFur2-pyrAby1-best.axt
+    axtBest pyrFur2-pyrHor1.axt pyrFur2.chr -winSize=500 -minScore=5000 pyrFur2-pyrHor1-best.axt
+    axtBest pyrFur2-therKoda1.axt pyrFur2.chr -winSize=500 -minScore=5000 pyrFur2-therKoda1-best.axt
+    #axtToMaf
+    axtToMaf pyrFur2-pyrAby1-best.axt chrom.sizes chrom.sizes pyrFur2-pyrAby1.maf
+     axtToMaf pyrFur2-pyrHor1-best.axt chrom.sizes chrom.sizes pyrFur2-pyrHor1.maf
+     axtToMaf pyrFur2-therKoda1-best.axt chrom.sizes chrom.sizes pyrFur2-therKoda1.maf
+    #multiz
+    #delete extra header lines from maf files
+    multiz pyrFur2-pyrAby1.maf pyrFur2-pyrHor1.maf - > pyrFur2-pyrAby1-pyrHor1.maf
+    multiz pyrFur2-therKoda1.maf pyrFur2-pyrAby1-pyrHor1.maf - > pyrFur2-pyrAby1-pyrHor1-therKoda1.maf
+    #phyloHMM
+    /cluster/bin/phast/msa_view -i MAF -M pyrFur2.chr -o SS pyrFur2-pyrAby1-pyrHor1-therKoda1.maf > pyrFur2.ss
+    /cluster/bin/phast/phyloFit -i SS pyrFur2.ss -t "((pyrFur2,(pyrAby1,pyrHor1)),therKoda1)" 
+    /cluster/bin/phast/msa_view -i SS pyrFur2.ss --summary-only
+    /cluster/bin/phast/phastCons pyrFur2.ss phyloFit.mod --gc 0.4496 \
+	--target-coverage 0.7 --estimate-trees pyr-tree \
+	--expected-lengths 25 --no-post-probs --ignore-missing \
+	--nrates 1,1
+    /cluster/bin/phast/phastCons pyrFur2.ss \
+	pyr-tree.cons.mod,pyr-tree.noncons.mod \
+	--target-coverage 0.7 --expected-lengths 25 \
+	--viterbi pyrFur2-elements.bed --score \
+	--require-informative 0 --seqname chr > cons.dat
+    wigEncode cons.dat phastCons.wig phastCons.wib
+    draw_tree phyloFit.mod > pyr-tree.ps
+    #make ai and jpg files in Illustrator
+    cp pyr-tree.jpg /usr/local/apache/htdocs/images/
+    #move data
+    mkdir wib
+    mv phastCons.wib wib/phastCons.wib
+    mv phastCons.wig wib/phastCons.wig
+    ln -s /cluster/data/pyrFur2/bed/conservation/wib/phastCons.wib /gbdb/pyrFur2/wib
+    mkdir -p /gbdb/pyrFur2/pwMaf
+    mkdir -p otherSpp/pyrAby1 otherSpp/pyrHor1 otherSpp/therKoda1
+    mv pyrFur2-pyrAby1.maf otherSpp/pyrAby1/chr.maf
+    mv pyrFur2-pyrHor1.maf otherSpp/pyrHor1/chr.maf
+    mv pyrFur2-therKoda1.maf otherSpp/therKoda1/chr.maf
+    ln -s /cluster/data/pyrFur2/bed/conservation/otherSpp/pyrAby1 /gbdb/pyrFur2/pwMaf/pyrAby1_pwMaf
+    ln -s /cluster/data/pyrFur2/bed/conservation/otherSpp/pyrHor1 /gbdb/pyrFur2/pwMaf/pyrHor1_pwMaf
+    ln -s /cluster/data/pyrFur2/bed/conservation/otherSpp/therKoda1 /gbdb/pyrFur2/pwMaf/therKoda1_pwMaf
+    mkdir multiz
+    mv pyrFur2-pyrAby1-pyrHor1-therKoda1.maf multiz/chr.maf
+    ln -s /cluster/data/pyrFur2/bed/conservation/multiz /gbdb/pyrFur2/multizPf2Pa1Ph1Tk1
+    #load
+    hgLoadWiggle pyrFur2 phastCons /cluster/data/pyrFur2/bed/conservation/wib/phastCons.wig
+    hgLoadMaf -warn pyrFur2 multizPf2Pa1Ph1Tk1
+    hgLoadMaf -warn pyrFur2 pyrAby1_pwMaf -pathPrefix=/gbdb/pyrFur2/pwMaf/pyrAby1_pwMaf
+    hgLoadMaf -warn pyrFur2 pyrHor1_pwMaf -pathPrefix=/gbdb/pyrFur2/pwMaf/pyrHor1_pwMaf
+    hgLoadMaf -warn pyrFur2 therKoda1_pwMaf -pathPrefix=/gbdb/pyrFur2/pwMaf/therKoda1_pwMaf
+    hgLoadBed pyrFur2 phastConsElements pyrFur2-elements.bed 
+    #trackDb
+    cd ~/kent/src/hg/makeDb/trackDb/archae/pyrFur2
+    #trackDb.ra entry
+    # track multizPf2Pa1Ph1Tk1
+    # shortLabel Conservation
+    # longLabel Pyrococcus 4-way multiz alignments
+    # group compGeno
+    # priority 10.0
+    # visibility pack
+    # type wigMaf 0.0 1.0
+    # maxHeightPixels 100:40:11
+    # wiggle phastCons
+    # yLineOnOff Off
+    # autoScaleDefault Off
+    # pairwise pwMaf
+    # speciesOrder pyrAby1 pyrHor1 therKoda1
+    cvs commit -m "New multiz track" trackDb.ra
+    #html page for multizPf2Pa1Ph1Tk1
+    cd ~/kent/src/hg/makeDb/trackDb/archae/pyrFur2
+    mv multizPyro.html multizPf2Pa1Ph1Tk1.html
+    cvs remove multizPyro.html
+    cvs add multizPf2Pa1Ph1Tk1.html
+    cvs commit -m "Details page for multiz track" multizPf2Pa1Ph1Tk1.html
