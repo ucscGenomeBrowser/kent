@@ -1006,16 +1006,6 @@ spectrum on
 type psl xeno hg17
 otherDb hg17
 
-track dvBed
-shortLabel DV
-longLabel Disease Variation
-group varRep
-priority 145
-visibility hide
-color 200,0,0
-type bed 4 +
-url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
-
 track blastzTightSelf
 shortLabel Tight Self
 longLabel $Organism Blastz Tight Subset of Best Self Alignments
