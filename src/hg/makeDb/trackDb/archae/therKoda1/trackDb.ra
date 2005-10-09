@@ -1,0 +1,13 @@
+track multizTk1Pa1Ph1Pf2
+shortLabel Conservation
+longLabel Pyrococcus 4-way multiz alignments
+group compGeno
+priority 10.0
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder pyrAby1 pyrHor1 pyrFur2
