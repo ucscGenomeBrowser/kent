@@ -1,6 +1,6 @@
-track multizMa1Mb1Mz1
+track multizMa1Mz1Mbk0Mbr0
 shortLabel Conservation
-longLabel Methosarcina  3-way multiz alignments
+longLabel Methosarcina 4-way multiz alignments
 group compGeno
 priority 10.0
 visibility pack
@@ -10,4 +10,4 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
-speciesOrder metBak0 metMaz1
+speciesOrder metMaz1 metBak0 metBur0
