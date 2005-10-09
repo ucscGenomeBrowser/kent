@@ -47,7 +47,7 @@ expTable llaPfuPrintCExps2
 chip printA
 canPack off
 
-track multizPyro
+track multizPf2Pa1Ph1Tk1
 shortLabel Conservation
 longLabel Pyrococcus 4-way multiz alignments
 group compGeno
@@ -59,4 +59,4 @@ wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
 pairwise pwMaf
-speciesOrder pyrAby1 pyrHor1 Thermokoda
+speciesOrder pyrAby1 pyrHor1 therKoda1
