@@ -1,4 +1,78 @@
-#No documentation of basic browser up til now...
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+ 
+# This file describes building the browser database for the archaeal
+# species Thermococcus kodakaraensis
+#
+# if this is the first time you are making your own hgwdev browser, need to do 
+# cd ~/kent/src/, then a make
+
+# DOWNLOAD SEQUENCE FROM GENBANK (DONE 10/05)
+
+    mkdir /cluster/store5/archae/therKoda1
+    ln -s /cluster/store5/archae/therKoda1 /cluster/data/therKoda1
+    cd /cluster/data/therKoda1
+    cp /projects/lowelab/db/Bacteria/Thermococcus_kodakaraensis_KOD1/Ther_koda_KOD1* .
+    mv Ther_koda_KOD1.fa therKoda1.fa
+    grep ">" therKoda1.fa
+    # Edit header of therKoda1.fa seqs to '>chr >plasmid_pNRC100 >plasmid_pNRC200'
+    faToTwoBit therKoda1.fa therKoda1.2bit 
+    mkdir /gbdb/therKoda1
+    ln -s /cluster/data/therKoda1/therKoda1.2bit /gbdb/therKoda1/therKoda1.2bit
+
+# CREATE DATABASES AND A BUNCH OF INITIAL STUFF (DONE 10/05)
+
+    ssh hgwdev
+    echo 'create database therKoda1' | hgsql ''
+    cd /cluster/data/therKoda1
+
+    faSize -detailed therKoda1.fa > chrom.sizes
+    echo "create table grp (PRIMARY KEY(NAME)) select * from hg16.grp" | hgsql therKoda1
+    echo 'INSERT INTO dbDb (name, description, nibPath, organism, defaultPos, active, orderKey, genome, scientificName, htmlPath, hgNearOk) values ("therKoda1", "May 2004", "/gbdb/therKoda1", "Thermococcus kodakaraensis", "chr:500000-550000", 1, 270, "Thermococcus kodakaraensis","Thermococcus kodakaraensis KOD1", "/gbdb/therKoda1/html/description.html", 0);' | hgsql hgcentraltest
+    echo 'INSERT INTO defaultDb (genome, name) values ("Thermococcus kodakaraensis", "therKoda1");' | hgsql hgcentraltest
+    echo 'INSERT INTO genomeClade (genome, clade, priority) values ("Thermococcus kodakaraensis", "archaea",85);'  | hgsql hgcentraltest
+
+# CREATE CHROMINFO TABLE (DONE 10/05)
+
+   ssh hgwdev
+   cd /cluster/data/therKoda1
+
+   cp ~baertsch/kent/src/hg/lib/chromInfo.sql .
+   hgsql therKoda1 < chromInfo.sql
+   echo "load data local infile 'chrom.sizes' into table chromInfo" | hgsql therKoda1
+   echo "update chromInfo set fileName = '/gbdb/therKoda1/therKoda1.2bit'" | hgsql therKoda1
+
+    cd ~/kent/src/hg/makeDb/trackDb
+
+    # add the trackDb directories
+    mkdir -p archae/therKoda1
+    cvs add archae/therKoda1
+    cvs commit archae/therKoda1
+
+    make DBS=therKoda1
+
+
+# GC20BASE (DONE 10/05)
+
+    mkdir -p /cluster/data/therKoda1/bed/gc20Base
+    cd /cluster/data/therKoda1/bed/gc20Base
+    hgGcPercent -wigOut -doGaps -file=stdout -overlap=10 -win=20 therKoda1 /cluster/data/therKoda1/ | wigEncode stdin gc20Base.wig gc20Base.wib
+    cd /cluster/data/therKoda1/bed/gc20Base
+    mkdir /gbdb/therKoda1/wib
+    ln -s `pwd`/gc20Base.wib /gbdb/therKoda1/wib
+    hgLoadWiggle -pathPrefix=/gbdb/therKoda1/wib therKoda1 gc20Base gc20Base.wig
+    #   verify index is correct:
+    hgsql therKoda1 -e "show index from gc20Base;"
+    #   should see good numbers in Cardinality column
+
+# TANDEM REPEAT MASKER (DONE 10/05)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/therKoda1/bed/simpleRepeat
+    cd /cluster/data/therKoda1
+    trfBig therKoda1.fa /dev/null -bedAt=/cluster/data/therKoda1/bed/simpleRepeat/chr.bed
+    cd /cluster/data/therKoda1/bed/simpleRepeat
+    hgLoadBed therKoda1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/src/hg/lib/simpleRepeat.sql
 
 # MULTIZ with P. abyssi, P. hori, P. furi
 # DONE (10/9/05), kpollard
