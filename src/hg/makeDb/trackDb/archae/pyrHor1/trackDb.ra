@@ -7,3 +7,17 @@ visibility pack
 color 40,40,160
 altColor 255,0,0
 type bed 6 .
+
+track multizPh1Pa1Pf2Tk1
+shortLabel Conservation
+longLabel Pyrococcus 4-way multiz alignments
+group compGeno
+priority 10.0
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder pyrAby1 pyrFur2 therKoda1
