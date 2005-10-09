@@ -269,6 +269,7 @@ hgLoadBed -sqlTable=easyGene.sql pyrFur2 easyGene easyGene.bed
 
 # MULTIZ with P. hori, P. abyssi, T. kodakarensis
 # This is redo of an earlier run, so some files are already in place
+# DONE (10/8/05), kpollard
 
     cd /cluster/data/pyrFur2/bed/conservation
     mv Thermokoda.chr therKoda1.chr
