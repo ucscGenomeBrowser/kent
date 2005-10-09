@@ -6475,9 +6475,10 @@ sys     16m13.770s
     hgsql -e "load data local infile 'vegaInfo.tab' into table vegaInfo" hg16
 
 
-#  KNOWN GENES UPDATE (DONE - 2004-01-29 - Hiram)
+# KNOWN GENES UPDATE (DONE - 2004-01-29 - Hiram)
 # RELOADED THE cgapBiocDesc AND cgapAlias TABLES TO REMOVE REPLICATED ROWS 
 # (DONE, 2005-07-26, hartera)
+# RELOADED cgapAlias AGAIN AS TOO MANY ROWS REMOVED BEFORE (hartera, 2005-10-06)
     # update swissProt and proteins databases
     # You want to run these two scripts on the same day to keep the
     #	the date stamp consistent.  In this case the data stamp is 040115
@@ -6550,12 +6551,17 @@ done
     # RELOAD THE cgapBiocDesc AND cgapAlias TABLES (hartera, 2005-07-26)
     # Reload the cgapBiocDesc and cgapAlias tables as they have replicated 
     # rows. Need to sort and unique the file before loading into the database.
+
     cd /cluster/data/kgDB/bed/hg16
     sort -u cgapBIOCARTAdesc.tab > cgapBIOCARTAdescSorted.tab
     # for cgapAlias, the number of rows in the table is different to the
     # tab file here so dump the table first.
-    hgsql -N -e 'select * from cgapAlias;' hg16 > cgapAliasDump.txt
-    sort -nu cgapAliasDump.txt > cgapAliasDumpSorted.tab
+    # RELOAD cgapAlias AGAIN AS sort -nu REMOVES MORE ROWS THAN sort -u
+    # OR sort -n | uniq.
+    #USE sort -n then uniq TO SORT ON THE IDs AND THEN UNIQ(hartera, 2005-10-06)
+    # hgsql -N -e 'select * from cgapAlias;' hg16 > cgapAliasDump.txt
+    # above command used to get alias file from hg16 before sorting
+    sort -n cgapAliasDump.txt | uniq > cgapAliasDumpSorted.tab
     hgsql hg16 -e "drop table cgapBiocDesc"
     hgsql hg16 -e "drop table cgapAlias"
     hgsql hg16 < ~/kent/src/hg/lib/cgapBiocDesc.sql

@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.80 2005/09/30 05:33:31 markd Exp $"
+#	"$Id: makeMm6.doc,v 1.81 2005/10/09 15:15:45 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -6481,6 +6481,8 @@ end
    hgsql mm6 -e 'load data local infile "keggPathway.tab" into table keggPathway'
 
 # Build CGAP pathway tables
+# Reloaded cgapAlias.tab file after removing replicate rows - 
+# see the other cgap table entry in this document (hartera, 2005-10-07).
 
    cd ..
    ~/src/hg/protein/KGcgap.sh kgMm6B mm6 050415
@@ -7497,6 +7499,8 @@ Submission to last job:          8311s     138.52m     2.31h    0.10d
    hgsql mm6 -e 'load data local infile "keggPathway.tab" into table keggPathway'
 
 # Build CGAP pathway tables
+# RELOAD cgapAlias TABLE AS THERE ARE REPLICATE ROWS IN THE TABLE.
+# (hartera, 2005-10-06)
 
    cd ..
    ~/src/hg/protein/KGcgap.sh kgMm6B mm6 050415
@@ -7506,11 +7510,17 @@ Submission to last job:          8311s     138.52m     2.31h    0.10d
    hgsql mm6 <~/src/hg/lib/cgapAlias.sql
    hgsql mm6 <~/src/hg/lib/cgapBiocDesc.sql
    hgsql mm6 <~/src/hg/lib/cgapBiocPathway.sql
-   hgsql mm6 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
-   hgsql mm6 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
-   hgsql mm6 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
-
- 
+   # Remove replicate rows from cgapAlias and do a numeric sort for the IDs 
+   # and reload the table (2005-10-06)
+   # can not use sort -nu as this removes more rows than necessary
+   sort -n cgapAlias.tab | uniq > cgapAliasSorted.tab
+   hgsql mm6 -e 'load data local infile "cgapAliasSorted.tab" \
+                 into table cgapAlias'
+   hgsql mm6 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" \
+                 into table cgapBiocDesc'
+   hgsql mm6 -e 'load data local infile "cgapBIOCARTA.tab" \
+                 into table cgapBiocPathway'
+   
 ### MM6 PROTEOME BROWSER TABLES RE-BUILD ####  (DONE - 2005-06-06 - Fan)
 # These are instructions for re-building tables 
 # needed for the Proteome Browser to be used with mm6.  

@@ -7485,9 +7485,16 @@ Submission to last job:           495s       8.25m     0.14h    0.01d
 # RE-BUILD cgapAlias TABLE 
 # ORIGINALLY TABLE WAS BUILT BY THE KNOWN GENES PROCESS
 # cgapAlias table has replicate rows so remove (DONE, 2005-07-26, hartera)
+# RELOADED cgapAlias AGAIN AS TOO MANY ROWS REMOVED BEFORE (hartera, 2005-10-06)
+
     ssh hgwdev
     cd /cluster/store6/kgDB/bed/kgMm5B
-    sort -nu cgapAlias.tab > cgapAliasSorted.tab
+    # DO TABLE RELOAD AGAIN AS sort -nu REMOVES MORE ROWS THAN sort -u
+    # OR sort -n | uniq.
+    # USE sort -n then uniq TO SORT ON THE IDs AND THEN UNIQ 
+    # (hartera, 2005-10-06)
+
+    sort -n cgapAlias.tab | uniq > cgapAliasSorted.tab
     hgsql mm5 -e "drop table cgapAlias"
     hgsql mm5 < ~/kent/src/hg/lib/cgapAlias.sql
     hgsql mm5 -e 'load data local infile "cgapAliasSorted.tab" \
