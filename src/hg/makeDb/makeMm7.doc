@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.8 2005/10/07 22:57:52 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.9 2005/10/10 23:51:51 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -4844,8 +4844,8 @@ hgMapViaSwissProt mm7 knownGene name proteinID Pfam knownToPfam
 # expression data.
     hgMapToGene mm7 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
-# Create table that maps between known genes and genePix database 
-    knownToGenePix mm7
+# Create table that maps between known genes and visiGene database 
+    knownToVisiGene mm7
 
 # ENABLE GENE SORTER FOR mm7 IN HGCENTRALTEST (TBD)
     echo "update dbDb set hgNearOk = 1 where name = 'mm7';" \
@@ -6509,8 +6509,8 @@ hgMapViaSwissProt mm7 knownGene name proteinID Pfam knownToPfam
 # expression data.
     hgMapToGene mm7 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
 
-# Create table that maps between known genes and genePix database 
-    knownToGenePix mm7
+# Create table that maps between known genes and visiGene database 
+    knownToVisiGene mm7
 
 # ENABLE GENE SORTER FOR mm7 IN HGCENTRALTEST (already done during first mm7 KG build)
     echo "update dbDb set hgNearOk = 1 where name = 'mm7';" \

@@ -7500,3 +7500,9 @@ Submission to last job:           495s       8.25m     0.14h    0.01d
     hgsql mm5 -e 'load data local infile "cgapAliasSorted.tab" \
           into table cgapAlias'
 
+# Create table that maps between known genes and visiGene database (DONE 2005-10-10 galt)
+    knownToVisiGene mm5
+    #Made hashes of image: geneImageHash 2117, locusLinkImageHash 780, refSeqImageHash 780, 
+    #genbankImageHash 1301
+    #knownToLocusLink 30303, knownToRefSeq 30291, knownToGene 266841
+
