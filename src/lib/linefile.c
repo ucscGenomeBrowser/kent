@@ -10,8 +10,24 @@
 #include "errabort.h"
 #include "linefile.h"
 #include "pipeline.h"
+#include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.40 2005/09/30 20:58:41 galt Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.41 2005/10/10 18:58:52 galt Exp $";
+
+char *getFileNameFromHdrSig(char *m)
+/* Check if header has signature of supported compression stream,
+   and return a phoney filename for it, or NULL if no sig found. */
+{
+char buf[20];
+char *ext=NULL;
+if (startsWith("\x1f\x8b",m)) ext = "gz";
+else if (startsWith("\x1f\x9d\x90",m)) ext = "Z";
+else if (startsWith("BZ",m)) ext = "bz2";
+if (ext==NULL) 
+    return NULL;
+safef(buf, sizeof(buf), "somefile.%s", ext);
+return cloneString(buf);
+}   
 
 static char **getDecompressor(char *fileName)
 /* if a file is compressed, return the command to decompress the 
@@ -54,19 +70,6 @@ meta->metaFile = f;
 slAddHead(&lf->metaOutput, meta);
 }
 
-struct lineFile *lineFileDecompressFD(char *name, bool zTerm, int fd)
-/* open a linefile with decompression from a file or socket descriptor */
-{
-struct pipeline *pl;
-struct lineFile *lf;
-char fdString[128];
-safef(fdString, sizeof(fdString), "fd>%d", fd);
-pl = pipelineOpen1(getDecompressor(name), pipelineRead, fdString);
-lf = lineFileAttach(name, zTerm, pipelineFd(pl));
-lf->pl = pl;
-return lf;
-}
-
 static struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
 /* open a linefile with decompression */
 {
@@ -79,6 +82,41 @@ lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;
 }
+
+struct lineFile *lineFileDecompressFd(char *name, bool zTerm, int fd)
+/* open a linefile with decompression from a file or socket descriptor */
+{
+struct pipeline *pl;
+struct lineFile *lf;
+pl = pipelineOpenFd1(getDecompressor(name), pipelineRead, fd, STDERR_FILENO);
+lf = lineFileAttach(name, zTerm, pipelineFd(pl));
+lf->pl = pl;
+return lf;
+}
+
+struct lineFile *lineFileDecompressMem(bool zTerm, char *mem, long size)
+/* open a linefile with decompression from a memory stream */
+{
+struct pipeline *pl;
+struct lineFile *lf;
+char **cmds[3];
+char *pString = needMem(128);
+char *fileName = getFileNameFromHdrSig(mem);
+if (fileName==NULL)
+  return NULL;
+cmds[0] = needMem(4*sizeof(char *)); 
+safef(pString, 128, "/dev/memwriter %lu %ld", (unsigned long) mem, size);
+chopByWhite(pString, cmds[0], 3);
+cmds[0][3] = NULL;
+cmds[1] = getDecompressor(fileName);
+cmds[2] = NULL;
+pl = pipelineOpen(cmds, pipelineRead, NULL);
+lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
+lf->pl = pl;
+return lf;
+}
+
+
 
 struct lineFile *lineFileAttach(char *fileName, bool zTerm, int fd)
 /* Wrap a line file around an open'd file. */

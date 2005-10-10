@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.44 2005/09/30 20:58:41 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.45 2005/10/10 18:58:52 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -639,56 +639,12 @@ close(sd);
 return dy;
 }
 
-static boolean netSkipHttpHeaderLines(struct lineFile *lf)
-/* Skip http header lines. Return FALSE if there's a problem */
-{
-char *line;
-if (lineFileNext(lf, &line, NULL))
-    {
-    if (startsWith("HTTP/", line))
-        {
-	char *version, *code;
-	version = nextWord(&line);
-	code = nextWord(&line);
-	if (code == NULL)
-	    {
-	    warn("Strange http header on %s\n", lf->fileName);
-	    return FALSE;
-	    }
-	if (startsWith("30", code) && isdigit(code[2]) && code[3] == 0)
-	    {
-	    warn("Your URL \"%s\" resulted in a redirect message "
-		 "(HTTP status code %s %s).  <BR>\n"
-		 "Sorry, redirects are not supported.  "
-		 "Please use the new location of your URL, which you "
-		 "should be able to find by viewing it in your browser: "
-		 "<A HREF=\"%s\" TARGET=_BLANK>click here to view URL</A>.",
-		 lf->fileName, code, line, lf->fileName);
-	    return FALSE;
-	    }
-	else if (!sameString(code, "200"))
-	    {
-	    warn("%s: %s %s\n", lf->fileName, code, line);
-	    return FALSE;
-	    }
-	while (lineFileNext(lf, &line, NULL))
-	    {
-	    if ((line[0] == '\r' && line[1] == 0) || line[0] == 0)
-	        break;
-	    }
-	}
-    else
-        lineFileReuse(lf);
-    }
-lf->nlType = nlt_undet;  /* reset it so the body of the response can figure it out independent of header */    
-return TRUE;
-}
-
-static boolean netSkipHttpHeaderLinesFD(int sd, char *url)
+static boolean netSkipHttpHeaderLines(int sd, char *url)
 /* Skip http header lines. Return FALSE if there's a problem.
-   The input is a standard sd or fd descriptor instead of a linefile.
-   This is meant to be able work with a re-passable stream handle,
-   e.g. can pass it to the pipes routines.
+   The input is a standard sd or fd descriptor.
+   This is meant to be able work even with a re-passable stream handle,
+   e.g. can pass it to the pipes routines, which means we can't
+   attach a linefile since filling its buffer reads in more than just the http header.
  */
 {
 char buf[2000];
@@ -697,18 +653,12 @@ int maxbuf = sizeof(buf);
 int i=0;
 char c = ' ';
 int nread = 0;
-long timeOut = 10000000; /* wait in microsec */
 while(TRUE)
     {
     i = 0;
     while (TRUE)
 	{
-	if (!readReadyWait(sd, timeOut))
-	    {
-	    warn("stream timed out > %ld microsec",timeOut);
-	    return FALSE;
-	    }
-	nread = read(sd, &c, 1);
+	nread = read(sd, &c, 1);  /* one char at a time, but http headers are small */
 	if (nread < 0)
 	    return FALSE;  /* err reading descriptor */
 	if (c == 10)
@@ -773,26 +723,21 @@ if (sd < 0)
 else
     {
     struct lineFile *lf = NULL;
+    if (startsWith("http://",url))
+	{
+	if (!netSkipHttpHeaderLines(sd, url))
+	    return NULL;     /* url needed only for err msgs*/
+	}
     if (endsWith(url, ".gz") ||
 	endsWith(url, ".Z")  ||
     	endsWith(url, ".bz2"))
 	{
-	if (startsWith("http://",url))
-	    {
-	    if (!netSkipHttpHeaderLinesFD(sd, url)) 
-		return NULL;     /* url needed only for err msgs*/
-	    }
-	lf = lineFileDecompressFD(url, TRUE, sd);
-		                 /* url needed only for compress type determination */
+	lf = lineFileDecompressFd(url, TRUE, sd);
+           /* url needed only for compress type determination */
 	}
     else
 	{
 	lf = lineFileAttach(url, TRUE, sd);
-	if (startsWith("http://",url))
-	    {
-	    if (!netSkipHttpHeaderLines(lf))
-		lineFileClose(&lf);
-	    }
 	}
     return lf;
     }
