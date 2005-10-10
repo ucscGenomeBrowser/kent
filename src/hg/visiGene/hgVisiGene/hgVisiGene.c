@@ -701,6 +701,38 @@ printf("</FORM>\n");
 webEnd();
 }
 
+
+void doDefault(struct sqlConnection *conn)
+/* Put up default page - if there is no specific do variable. */
+{
+char *listSpec = cartUsualString(cart, hgpListSpec, "");
+listSpec = skipLeadingSpaces(listSpec);
+if (listSpec[0] == 0)
+    doInitialPage();
+else
+    doFrame(conn);
+}
+
+void doId(struct sqlConnection *conn)
+/* Set up Gene Pix on given ID. */
+{
+int id = cartInt(cart, hgpDoId);
+struct slName *genes = visiGeneGeneName(conn, id);
+if (genes == NULL)
+    {
+    cartRemove(cart, hgpListSpec);
+    cartRemove(cart, hgpId);
+    }
+else
+    {
+    cartSetInt(cart, hgpId, id);
+    cartSetString(cart, hgpListSpec, genes->name);
+    }
+slFreeList(&genes);
+doDefault(conn);
+}
+
+
 void dispatch()
 /* Set up a connection to database and dispatch control
  * based on hgpDo type var. */
@@ -712,15 +744,10 @@ else if (cartVarExists(cart, hgpDoImage))
     doImage(conn);
 else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
+else if (cartVarExists(cart, hgpDoId))
+    doId(conn);
 else 
-    {
-    char *listSpec = cartUsualString(cart, hgpListSpec, "");
-    listSpec = skipLeadingSpaces(listSpec);
-    if (listSpec[0] == 0)
-        doInitialPage();
-    else
-	doFrame(conn);
-    }
+    doDefault(conn);
 cartRemovePrefix(cart, hgpDoPrefix);
 }
 

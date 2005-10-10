@@ -8,6 +8,7 @@
 #define hgpDoThumbnails "hgp_doThumbnails"
 #define hgpDoControls "hgp_doControls"
 #define hgpDoImage "hgp_doImage"
+#define hgpDoId "hgp_doId"
 
 #define hgpId "hgp_id"
 #define hgpListSpec "hgp_listSpec"
