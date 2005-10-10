@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.4 2005/10/10 22:03:41 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.5 2005/10/10 22:56:53 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -303,7 +303,7 @@ char iupac(char *name, char *observed, char orig)
 }
 
 
-
+/* return start coord in absolute coords, putting flankSize exonic bases prior to snp */
 int findStartPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
 {
     boolean firstExon = TRUE;
@@ -316,6 +316,7 @@ int findStartPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
     assert (snpPos >= 0);
     assert (flankSize > 0);
 
+    // probably can just fold this into the rest of the logic in here
     if (exonPos == 0)
         {
         endPos = snpPos;
@@ -345,6 +346,7 @@ int findStartPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
     return gene->exonStarts[0];
 }
 
+/* return end coord in absolute coords, putting flankSize exonic bases after snp */
 int findEndPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
 {
     boolean firstExon = TRUE;
@@ -427,7 +429,6 @@ if (startExon == endExon)
     return (endPos - startPos);
 
 seqSize = gene->exonEnds[startExon] - startPos;
-
 exonPos = startExon + 1;
 while (exonPos < endExon)
 {
@@ -436,7 +437,6 @@ while (exonPos < endExon)
 }
 
 seqSize = seqSize + (endPos - gene->exonStarts[endExon]);
-
 return (seqSize);
 }
 
@@ -487,7 +487,7 @@ while (exonPos < endExon)
     }
 
 exonSize = end - gene->exonStarts[endExon];
-assert (exonSize < exonSeqArray[endExon]->size);
+assert (exonSize <= exonSeqArray[endExon]->size);
 memcpy(newSeq->dna+seqPos, exonSeqArray[endExon]->dna, exonSize);
 newSeq->dna[size] = 0;
 newSeq->size = size;
@@ -519,8 +519,8 @@ genes = readGenes(chromName);
 for (gene = genes; gene != NULL; gene = gene->next)
     {
     geneCount++;
-    // short circuit
-    if (geneCount == 100) return;
+    // short circuit goes here
+    // if (geneCount == 100) return;
     verbose(1, "gene %d = %s\n", geneCount, gene->name);
 
     /* create masked sequence and store to array */
