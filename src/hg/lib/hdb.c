@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.271 2005/10/06 19:06:55 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.272 2005/10/10 20:42:37 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2224,14 +2224,16 @@ if (tdb->settings != NULL && tdb->settings[0] != 0)
     char *blurb = trackDbSetting(tdb, "blurb");
     char *matrix = trackDbSetting(tdb, "matrix");
     char *matrixHeader = trackDbSetting(tdb, "matrixHeader");
-    char *matrixSub;
+    char *matrixSub = NULL;
     if (blurb != NULL)
 	addSubVar("", "blurb", blurb, &subList);
     if (otherDb != NULL)
 	hAddDbSubVars("o_", otherDb, &subList);
     if (matrix != NULL)
-        if ((matrixSub = matrixHtml(matrix, matrixHeader)) != NULL)
-            addSubVar("", "matrix", matrixSub, &subList);
+        matrixSub = matrixHtml(matrix, matrixHeader);
+    if (matrixSub == NULL)
+        matrixSub = "";
+    addSubVar("", "matrix", matrixSub, &subList);
     subOutAll(tdb, subList);
     subTextFreeList(&subList);
     }
