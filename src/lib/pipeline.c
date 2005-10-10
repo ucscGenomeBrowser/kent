@@ -166,7 +166,27 @@ if (stderrFd != STDERR_FILENO)
 /* close other file descriptors */
 for (fd = STDERR_FILENO+1; fd < 64; fd++)
     close(fd);
-execvp(proc->cmd[0], proc->cmd);
+
+if (sameString(proc->cmd[0],"/dev/memwriter"))
+    {  /* there is no such device really */
+    char *mem = (char *)atoi(proc->cmd[1]);
+    long size = atoi(proc->cmd[2]);
+    if (proc->cmd[1]
+     && proc->cmd[2]
+     && size >= 0
+     && size < 64 * 1024 * 1024
+     && write(STDOUT_FILENO,mem,size) == size
+       )
+        {
+        close(STDOUT_FILENO);
+        exit(0);
+        }
+    /* if error fall thru */
+    }
+else
+    {
+    execvp(proc->cmd[0], proc->cmd);
+    }
 errnoAbort("exec failed: %s", proc->cmd[0]);
 }
 
