@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1017 2005/10/07 19:36:30 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1018 2005/10/10 18:14:28 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10601,7 +10601,7 @@ if (showTrackControls)
 
     if (measureTiming)
         {
-	hPrintf("track, load time, draw time<BR>\n");
+	hPrintf("track, load time, draw time, total<BR>\n");
 	for (track = trackList; track != NULL; track = track->next)
 	    {
 	    if (track->visibility == tvHide)
@@ -10612,12 +10612,14 @@ if (showTrackControls)
                 for (subtrack = track->subtracks; subtrack != NULL; 
                                                     subtrack = subtrack->next)
                     if (isSubtrackVisible(subtrack))
-                        hPrintf("%s, %d, %d<BR>\n", subtrack->shortLabel, 
-                                subtrack->loadTime, subtrack->drawTime);
+                        hPrintf("%s, %d, %d, %d<BR>\n", subtrack->shortLabel, 
+                                subtrack->loadTime, subtrack->drawTime,
+				subtrack->loadTime + subtrack->drawTime);
                 }
             else
-	        hPrintf("%s, %d, %d<BR>\n", 
-			track->shortLabel, track->loadTime, track->drawTime);
+	        hPrintf("%s, %d, %d, %d<BR>\n", 
+			track->shortLabel, track->loadTime, track->drawTime,
+			track->loadTime + track->drawTime);
 	    }
 	}
     }
