@@ -106,6 +106,116 @@ exit; # don't actually run this like a script :)
     mkdir -p /gbdb/therAcid1/html
     ln -s /cluster/data/therAcid1/html/description.html /gbdb/therAcid1/html/
 
+# MULTIZ with therVolc, picrTorr, and ferrAcid
+# DONE (10/11/05), kpollard
+
+    cd /cluster/data/therAcid1/bed/
+    mkdir conservation
+    cd conservation
+    cp /cluster/data/metAce1/bed/conservation/HoxD55.q .
+    cp ../../therAcid1.fa therAcid1.chr
+    cp /cluster/data/therVolc1/therVolc1.fa therVolc1.chr
+    cp /cluster/data/picrTorr1/chr.fa picrTorr1.chr
+    cp /cluster/data/ferrAcid1/chr.fa ferrAcid1.chr
+    #fix names to be therAcid1, therVolc1, picrTorr1 manually
+    sed s/\>C/\>ferrAcid1.C/ ferrAcid1.chr | gawk '{if(/ferrAcid1.Contig/){ print $1;}else{print toupper($0);}}' > temp
+    mv temp ferrAcid1.chr
+    faToNib therAcid1.chr therAcid1.chr.nib
+    faToNib therVolc1.chr therVolc1.chr.nib
+    faToNib picrTorr1.chr picrTorr1.chr.nib
+    faToTwoBit ferrAcid1.chr ferrAcid1.2bit
+
+    #chrom sizes
+    faSize -detailed *.chr > chrom.sizes
+
+    #blastz 
+    blastz therAcid1.chr therVolc1.chr Q=HoxD55.q > therAcid1-therVolc1.lav
+    blastz therAcid1.chr picrTorr1.chr Q=HoxD55.q > therAcid1-picrTorr1.lav
+    blastz therAcid1.chr ferrAcid1.chr Q=HoxD55.q > therAcid1-ferrAcid1.lav
+
+    /cluster/bin/i386/lavToAxt therAcid1-therVolc1.lav . . therAcid1-therVolc1.axt
+    /cluster/bin/i386/lavToAxt therAcid1-picrTorr1.lav . . therAcid1-picrTorr1.axt
+    /cluster/bin/i386/lavToAxt therAcid1-ferrAcid1.lav . ferrAcid1.2bit therAcid1-ferrAcid1.axt
+
+    axtBest therAcid1-therVolc1.axt therAcid1.chr -winSize=500 -minScore=5000 therAcid1-therVolc1-best.axt
+    axtBest therAcid1-picrTorr1.axt therAcid1.chr -winSize=500 -minScore=5000 therAcid1-picrTorr1-best.axt
+    axtBest therAcid1-ferrAcid1.axt therAcid1.chr -winSize=500 -minScore=5000 therAcid1-ferrAcid1-best.axt
+
+    axtToMaf therAcid1-therVolc1-best.axt chrom.sizes chrom.sizes therAcid1-therVolc1.maf
+    axtToMaf therAcid1-picrTorr1-best.axt chrom.sizes chrom.sizes therAcid1-picrTorr1.maf
+    axtToMaf therAcid1-ferrAcid1-best.axt chrom.sizes chrom.sizes therAcid1-ferrAcid1.maf
+
+    #multiz
+    #remove extra header lines
+    multiz therAcid1-therVolc1.maf therAcid1-picrTorr1.maf - > therAcid1-therVolc1-picrTorr1.maf
+    multiz therAcid1-ferrAcid1.maf therAcid1-therVolc1-picrTorr1.maf - > therAcid1-therVolc1-picrTorr1-ferrAcid1.maf
+
+    #phyloHMM
+    /cluster/bin/phast/msa_view -i MAF -M therAcid1.chr -o SS therAcid1-therVolc1-picrTorr1-ferrAcid1.maf > therAcid1.ss
+    /cluster/bin/phast/phyloFit -i SS therAcid1.ss -t "(ferrAcid1,(picrTorr1,(therVolc1,therAcid1)))" -o TaTvPtFa
+    /cluster/bin/phast/msa_view -i SS therAcid1.ss --summary-only
+    #add GC content to next call
+    /cluster/bin/phast/phastCons therAcid1.ss TaTvPtFa.mod --gc 0.4133 \
+    --target-coverage 0.7 --estimate-trees ther-tree \
+    --expected-lengths 25 --no-post-probs --ignore-missing \
+    --nrates 1,1
+    /cluster/bin/phast/phastCons therAcid1.ss \
+    ther-tree.cons.mod,ther-tree.noncons.mod \
+    --target-coverage 0.7 --expected-lengths 25 \
+    --viterbi therAcid1-elements.bed --score \
+    --require-informative 0 --seqname chr > cons.dat
+    wigEncode cons.dat phastCons.wig phastCons.wib
+    /cluster/bin/phast/draw_tree TaTvPtFa.mod > ther-tree.ps 
+    #make ai and jpg files in Illustrator
+    cp ther-tree.jpg /usr/local/apache/htdocs/images/therAcid1-tree.jpg
+
+    #move data
+    mkdir wib
+    mv phastCons.wib wib/phastCons.wib
+    mv phastCons.wig wib/phastCons.wig
+    ln -s /cluster/data/therAcid1/bed/conservation/wib/phastCons.wib /gbdb/therAcid1/wib
+    mkdir /gbdb/therAcid1/pwMaf
+    mkdir -p otherSpp/therVolc1 otherSpp/picrTorr1 otherSpp/ferrAcid1
+    mv therAcid1-picrTorr1.maf otherSpp/picrTorr1/chr.maf
+    mv therAcid1-therVolc1.maf otherSpp/therVolc1/chr.maf
+    mv therAcid1-ferrAcid1.maf otherSpp/ferrAcid1/chr.maf
+    ln -s /cluster/data/therAcid1/bed/conservation/otherSpp/picrTorr1 /gbdb/therAcid1/pwMaf/picrTorr1_pwMaf
+    ln -s /cluster/data/therAcid1/bed/conservation/otherSpp/ferrAcid1 /gbdb/therAcid1/pwMaf/ferrAcid1_pwMaf
+    ln -s /cluster/data/therAcid1/bed/conservation/otherSpp/therVolc1 /gbdb/therAcid1/pwMaf/therVolc1_pwMaf
+    mkdir multiz
+    mv therAcid1-therVolc1-picrTorr1-ferrAcid1.maf multiz/chr.maf
+    ln -s /cluster/data/therAcid1/bed/conservation/multiz /gbdb/therAcid1/multizTaTvPtFa
+
+    #load
+    hgLoadWiggle therAcid1 phastCons /cluster/data/therAcid1/bed/conservation/wib/phastCons.wig
+    hgLoadMaf -warn therAcid1 multizTaTvPtFa
+    hgLoadMaf -warn therAcid1 picrTorr1_pwMaf -pathPrefix=/gbdb/therAcid1/pwMaf/picrTorr1_pwMaf
+    hgLoadMaf -warn therAcid1 ferrAcid1_pwMaf -pathPrefix=/gbdb/therAcid1/pwMaf/ferrAcid1_pwMaf
+    hgLoadMaf -warn therAcid1 therVolc1_pwMaf -pathPrefix=/gbdb/therAcid1/pwMaf/therVolc1_pwMaf
+    hgLoadBed therAcid1 phastConsElements therAcid1-elements.bed 
+
+    #trackDb
+    cd ~/kent/src/hg/makeDb/trackDb/archae/therAcid1
+    #trackDb.ra entry
+    # track multizTaTvPtFa
+    # shortLabel Conservation
+    # longLabel Thermoplasma/Ferroplasma/Picrophilus multiz alignments
+    # group compGeno
+    # priority 10.0
+    # visibility pack
+    # type wigMaf 0.0 1.0
+    # maxHeightPixels 100:40:11
+    # wiggle phastCons
+    # yLineOnOff Off
+    # autoScaleDefault Off
+    # pairwise pwMaf
+    # speciesOrder therVolc1 picrTorr1 ferrAcid1
+    cvs add trackDb.ra
+    cvs commit -m "New multiz track" trackDb.ra
+    #html page
+    cvs add multizTaTvPtFa.html
+    cvs commit -m "Details page for multiz track" multizTaTvPtFa.html
+
 # GENBANK PROTEIN-CODING GENES
 
     ssh hgwdev
