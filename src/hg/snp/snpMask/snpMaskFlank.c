@@ -1,3 +1,4 @@
+
 /* snpMaskFlank - Print sequences centered on SNPs, exons only, with SNPs (single base substituions) 
    using IUPAC codes. */
 #include "common.h"
@@ -7,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.2 2005/09/23 23:28:29 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.3 2005/10/10 21:36:16 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -15,6 +16,7 @@ char *chromName = NULL;
 char geneTable[] = "refGene";
 
 #define FLANKSIZE 50
+#define MAX_EXONS 100
 
 boolean strict = TRUE;
 
@@ -233,6 +235,7 @@ boolean isComplex(char mychar)
     return FALSE;
 }
 
+// char* observedBlend(char* obs1, char* obs2)
 char *observedBlend(char *obs1, char *obs2)
 /* Used to handle dbSNP clustering errors with differing observed strings. */
 /* For example, if there are 2 SNPs with observed strings A/C and A/G
@@ -301,6 +304,201 @@ char iupac(char *name, char *observed, char orig)
 
 
 
+int findStartPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
+{
+    boolean firstExon = TRUE;
+    int bases = 0;
+    int basesNeeded = flankSize;
+    int avail = 0, endPos = 0, exonStart = 0;
+
+    assert (exonPos >= 0);
+    assert (exonPos < gene->exonCount);
+    assert (snpPos >= 0);
+    assert (flankSize > 0);
+
+    if (exonPos == 0)
+        {
+        endPos = snpPos;
+        basesNeeded = flankSize;
+	exonStart = gene->exonStarts[0];
+	avail = endPos - exonStart;
+	if (avail >= basesNeeded) return (endPos - basesNeeded);
+	return (exonStart);
+        }
+
+    while (exonPos >= 0)
+    {
+        if (firstExon) endPos = snpPos;
+        else endPos = gene->exonEnds[exonPos];
+        firstExon = FALSE;
+        basesNeeded = flankSize - bases;
+	exonStart = gene->exonStarts[exonPos];
+        avail = endPos - exonStart;
+        if (avail >= basesNeeded) 
+	    {
+	    return (endPos - basesNeeded);
+	    }
+        bases = bases + avail;
+        exonPos--;
+    }
+    /* beginning of gene */
+    return gene->exonStarts[0];
+
+}
+
+int findEndPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
+{
+    boolean firstExon = TRUE;
+    int bases = 0;
+    int basesNeeded = flankSize;
+    int avail = 0, startPos = 0, exonEnd = 0;
+
+    assert (exonPos >= 0);
+    assert (exonPos < gene->exonCount);
+    assert (snpPos >= 0);
+    assert (flankSize > 0);
+
+    if (exonPos == gene->exonCount - 1)
+        {
+	startPos = snpPos;
+	basesNeeded = flankSize;
+	exonEnd = gene->exonEnds[exonPos];
+	avail = exonEnd - startPos;
+	if (avail >= basesNeeded) 
+	    return (startPos + basesNeeded);
+	return (exonEnd);
+        }
+
+    while (exonPos <= gene->exonCount - 1)
+        {
+        if (firstExon) startPos = snpPos;
+        else startPos = gene->exonStarts[exonPos];
+        firstExon = FALSE;
+        basesNeeded = flankSize - bases;
+	exonEnd = gene->exonEnds[exonPos];
+        avail = exonEnd - startPos;
+        if (avail >= basesNeeded) 
+	    return (startPos + basesNeeded);
+        bases = bases + avail;
+        exonPos++;
+    }
+    /* end of gene */
+
+    return gene->exonEnds[gene->exonCount - 1];
+
+}
+
+
+int findExonPos(struct genePred *gene, int position)
+/* find out which exon contains position */
+/* write here first, then move to hg/lib/genePred.c */
+{
+int iExon = 0;
+unsigned exonStart = 0;
+unsigned exonEnd = 0;
+
+for (iExon = 0; iExon < gene->exonCount; iExon++)
+    {
+    exonStart = gene->exonStarts[iExon];
+    exonEnd = gene->exonEnds[iExon];
+    assert (position >= exonStart);
+    if (position <= exonEnd) return (iExon);
+    }
+    return -1;
+}
+
+
+
+/* calculate sequence size for exons given start and end in absolute coords */
+int getExonSize(int startPos, int endPos, struct genePred *gene)
+{
+int startExon = 0, endExon = 0;
+int seqSize = 0;
+int exonPos = 0;
+
+assert (endPos >= startPos);
+
+startExon = findExonPos(gene, startPos);
+assert (startExon >= 0);
+assert (startExon < gene->exonCount);
+
+endExon = findExonPos(gene, endPos);
+assert (endExon >= 0);
+assert (endExon < gene->exonCount);
+
+if (startExon == endExon)
+    return (endPos - startPos);
+
+seqSize = gene->exonEnds[startExon] - startPos;
+
+exonPos = startExon + 1;
+while (exonPos < endExon)
+{
+    seqSize = seqSize + gene->exonEnds[exonPos] - gene->exonStarts[exonPos];
+    exonPos++;
+}
+
+seqSize = seqSize + (endPos - gene->exonStarts[endExon]);
+
+return (seqSize);
+}
+
+
+/* pass in array that has array of sequences for each exon */
+/* start and end are absolute coords */
+/* size excludes intronic regions */
+struct dnaSeq *getFlankSeq(int start, int end, int size, 
+                           struct genePred *gene, struct dnaSeq *exonSeqArray[])
+{
+struct dnaSeq *newSeq;
+int startExon = findExonPos(gene, start);
+int endExon = findExonPos(gene, end);
+int exonPos = 0;
+int exonSize = 0;
+int offset = 0;
+int seqPos = 0;
+
+AllocVar(newSeq);
+newSeq->dna = needMem(size + 1);
+
+if (startExon == endExon)
+    {
+    verbose(1, "    single exonPos = %d\n", startExon);
+    exonSize = end - start;
+    assert (exonSize < exonSeqArray[startExon]->size);
+
+    offset = start - gene->exonStarts[startExon];
+    memcpy(newSeq->dna, (exonSeqArray[startExon]->dna)+offset, exonSize);
+    newSeq->dna[exonSize] = 0;
+    newSeq->size = exonSize;
+    return (newSeq);
+    }
+
+verbose(1, "    range of exonPos = %d to %d\n", startExon, endExon);
+exonSize = gene->exonEnds[startExon] - start;
+offset = start - gene->exonStarts[startExon];
+memcpy(newSeq->dna, (exonSeqArray[startExon]->dna)+offset, exonSize);
+seqPos = exonSize;
+
+exonPos = startExon + 1;
+while (exonPos < endExon)
+    {
+    exonSize = gene->exonEnds[exonPos] - gene->exonStarts[exonPos];
+    assert (exonSize <= exonSeqArray[exonPos]->size);
+    memcpy(newSeq->dna+seqPos, exonSeqArray[exonPos]->dna, exonSize);
+    seqPos = seqPos + exonSize;
+    exonPos = exonPos++;
+    }
+
+exonSize = end - gene->exonStarts[endExon];
+assert (exonSize < exonSeqArray[endExon]->size);
+memcpy(newSeq->dna+seqPos, exonSeqArray[endExon]->dna, exonSize);
+newSeq->dna[size] = 0;
+newSeq->size = size;
+return (newSeq);
+
+}
+
 
 void snpMaskFlank(char *nibFile, char *outFile)
 /* snpMaskFlank - Print sequence, centered on SNP, exons only, 
@@ -314,28 +512,31 @@ struct dnaSeq *seqOrig, *seqMasked, *seqFlank;
 char *ptr;
 int snpPos = 0;
 int flankStart = 0, flankEnd = 0, flankSize = 0;
+struct dnaSeq *exonSequence[MAX_EXONS];
+boolean gotCoord = FALSE;
+int startExon = 0, endExon = 0, snpExon = 0;
 
+// for short circuit
 int geneCount = 0;
 
 genes = readGenes(chromName);
 
 for (gene = genes; gene != NULL; gene = gene->next)
     {
-    verbose(1, "gene %d = %s\n----------\n", geneCount, gene->name);
     geneCount++;
     // short circuit
-    if (geneCount == 100) return;
+    if (geneCount == 50) return;
+    verbose(1, "gene %d = %s\n", geneCount, gene->name);
 
+    /* create masked sequence and store to array */
     for (exonPos = 0; exonPos < gene->exonCount; exonPos++)
         {
         exonStart = gene->exonStarts[exonPos];
         exonEnd   = gene->exonEnds[exonPos];
-	verbose(1, "  exon %d coords %d-%d\n----------\n", exonPos+1, exonStart, exonEnd);
         exonSize = exonEnd - exonStart;
         assert (exonSize > 0);
 
         snps = readSnps(gene->chrom, exonStart, exonEnd);
-	if (snps == NULL) continue;
 
         AllocVar(seqMasked);
         seqMasked->dna = needMem(exonSize+1);
@@ -353,7 +554,19 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	    verbose(5, "after substitution %c\n", ptr[snpPos]);
             }
 
-	/* print each snp */
+        exonSequence[exonPos] = seqMasked;
+        }
+
+    /* print each snp */
+    for (exonPos = 0; exonPos < gene->exonCount; exonPos++)
+        {
+        exonStart = gene->exonStarts[exonPos];
+        exonEnd   = gene->exonEnds[exonPos];
+	verbose(5, "exonPos = %d\n", exonPos);
+        /* could save these from last time */
+        snps = readSnps(gene->chrom, exonStart, exonEnd);
+	if (snps == NULL) continue;
+
 	for (snp = snps; snp != NULL; snp = snp->next)
 	    {
             char *snpName = needMem(64);
@@ -365,28 +578,28 @@ for (gene = genes; gene != NULL; gene = gene->next)
             strcat(snpName, "");
 	    strcat(snpName, snp->name);
 	    strcat(snpName, " (reference = ");
+            /* could do a memcpy from sequence for full exon, potentially faster */
             seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, snpPos, 1);
 	    ptr = seqOrig->dna;
 	    strcat(snpName, ptr);
 	    strcat(snpName, ")");
 	    verbose(1, "    snp = %s, snpPos = %d\n", snpName, snpPos);
 
-	    AllocVar(seqFlank);
-	    flankStart = (snpPos - FLANKSIZE > exonStart) ? snpPos - FLANKSIZE - exonStart: 0;
-	    flankEnd = (snpPos + FLANKSIZE < exonEnd) ? snpPos + FLANKSIZE - exonStart: exonEnd - exonStart - 1;
-	    flankSize = flankEnd - flankStart;
-            verbose(5, "flank: start = %d, end = %d, size = %d\n", flankStart, flankEnd, flankSize);
-	    seqFlank->dna = needMem(flankSize + 1);
-	    memcpy(seqFlank->dna, seqMasked->dna+flankStart, flankSize);
-	    seqFlank->dna[flankSize] = 0;
-	    seqFlank->size = flankSize;
-	    verbose(5, "seq = %s\n", seqFlank->dna);
+            /* get flank start and end in absolute coords */
+            flankStart = findStartPos(FLANKSIZE, snpPos, gene, exonPos);
+            flankEnd = findEndPos(FLANKSIZE, snpPos, gene, exonPos);
+            flankSize = getExonSize(flankStart, flankEnd, gene);
+            seqFlank = getFlankSeq(flankStart, flankEnd, flankSize, gene, exonSequence);
 	    faWriteNext(fileHandle, snpName, seqFlank->dna, flankSize);
 	    freeDnaSeq(&seqFlank);
+
 	    }
-        verbose(1, "----------------\n");
         snpSimpleFreeList(&snps);
         }
+
+        /* free memory in exonSequence */
+	for (exonPos = 0; exonPos < gene->exonCount; exonPos++)
+	    freeDnaSeq(&exonSequence[exonPos]);
     }
 
 geneFreeList(&genes);
@@ -414,3 +627,4 @@ if(hgOfficialChromName(chromName) == NULL)
 snpMaskFlank(argv[3], argv[4]);
 return 0;
 }
+
