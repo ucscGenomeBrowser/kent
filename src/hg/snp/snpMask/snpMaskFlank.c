@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.3 2005/10/10 21:36:16 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.4 2005/10/10 22:03:41 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -343,7 +343,6 @@ int findStartPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
     }
     /* beginning of gene */
     return gene->exonStarts[0];
-
 }
 
 int findEndPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
@@ -383,9 +382,7 @@ int findEndPos(int flankSize, int snpPos, struct genePred *gene, int exonPos)
         exonPos++;
     }
     /* end of gene */
-
     return gene->exonEnds[gene->exonCount - 1];
-
 }
 
 
@@ -444,7 +441,7 @@ return (seqSize);
 }
 
 
-/* pass in array that has array of sequences for each exon */
+/* pass in array that has sequences for each exon */
 /* start and end are absolute coords */
 /* size excludes intronic regions */
 struct dnaSeq *getFlankSeq(int start, int end, int size, 
@@ -466,7 +463,6 @@ if (startExon == endExon)
     verbose(1, "    single exonPos = %d\n", startExon);
     exonSize = end - start;
     assert (exonSize < exonSeqArray[startExon]->size);
-
     offset = start - gene->exonStarts[startExon];
     memcpy(newSeq->dna, (exonSeqArray[startExon]->dna)+offset, exonSize);
     newSeq->dna[exonSize] = 0;
@@ -496,7 +492,6 @@ memcpy(newSeq->dna+seqPos, exonSeqArray[endExon]->dna, exonSize);
 newSeq->dna[size] = 0;
 newSeq->size = size;
 return (newSeq);
-
 }
 
 
@@ -525,7 +520,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
     {
     geneCount++;
     // short circuit
-    if (geneCount == 50) return;
+    if (geneCount == 100) return;
     verbose(1, "gene %d = %s\n", geneCount, gene->name);
 
     /* create masked sequence and store to array */
@@ -590,6 +585,9 @@ for (gene = genes; gene != NULL; gene = gene->next)
             flankEnd = findEndPos(FLANKSIZE, snpPos, gene, exonPos);
             flankSize = getExonSize(flankStart, flankEnd, gene);
             seqFlank = getFlankSeq(flankStart, flankEnd, flankSize, gene, exonSequence);
+	    assert(flankSize == seqFlank->size);
+	    if (sameString(gene->strand, "-"))
+	        reverseComplement(seqFlank->dna, seqFlank->size);
 	    faWriteNext(fileHandle, snpName, seqFlank->dna, flankSize);
 	    freeDnaSeq(&seqFlank);
 
