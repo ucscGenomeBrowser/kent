@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.8 2005/10/08 16:12:25 kent Exp $";
+static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.9 2005/10/10 15:24:09 kent Exp $";
 
 char *database = "visiGene";
 
@@ -38,14 +38,14 @@ struct visiMatch
     double weight;	/* The higher the weight the better the match */
     };
 
-int visiMatchCmpImageId(void *va, void *vb)
+static int visiMatchCmpImageId(void *va, void *vb)
 /* rbTree comparison function to tree on imageId. */
 {
 struct visiMatch *a = va, *b = vb;
 return a->imageId - b->imageId;
 }
 
-int visiMatchCmpWeight(const void *va, const void *vb)
+static int visiMatchCmpWeight(const void *va, const void *vb)
 /* Compare to sort based on match. */
 {
 const struct visiMatch *a = *((struct visiMatch **)va);
@@ -68,7 +68,7 @@ struct visiSearcher
     struct rbTree *tree;		/* Tree for near random access. */
     };
 
-struct visiSearcher *visiSearcherNew()
+static struct visiSearcher *visiSearcherNew()
 /* Create a new, empty search structure. */
 {
 struct visiSearcher *searcher;
@@ -77,7 +77,7 @@ searcher->tree = rbTreeNew(visiMatchCmpImageId);
 return searcher;
 }
 
-void visiSearcherFree(struct visiSearcher **pSearcher)
+static void visiSearcherFree(struct visiSearcher **pSearcher)
 /* Free up memory associated with *pSearcher */
 {
 struct visiSearcher *searcher = *pSearcher;
@@ -89,7 +89,7 @@ if (searcher != NULL)
     }
 }
 
-struct visiMatch *visiSearcherAdd(struct visiSearcher *searcher,
+static struct visiMatch *visiSearcherAdd(struct visiSearcher *searcher,
 	int imageId, double weight)
 /* Add given weight to match involving imageId,  creating
  * a fresh match if necessary for imageId. */
@@ -108,7 +108,7 @@ match->weight += weight;
 return match;
 }
 
-struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
+static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
 /* Get sorted list of match results from searcher. 
  * You don't own the list returned though.  It will evaporate
  * with visiSearcherFree. */
@@ -117,7 +117,7 @@ slSort(&searcher->matchList, visiMatchCmpWeight);
 return searcher->matchList;
 }
 
-char *stripSpacesEtc(char *s)
+static char *stripSpacesEtc(char *s)
 /* Return a copy of s with spaces, periods, and dashes removed */
 {
 char *d = cloneString(s);
@@ -128,7 +128,7 @@ touppers(d);
 return d;
 }
 
-int countWordsUsedInName(char *name, struct slName *wordList)
+static int countWordsUsedInName(char *name, struct slName *wordList)
 /* The name here is last name followed by initials with a 
  * period after each initial and no space between initials.
  * The last name may contain multiple words.  Some complex
@@ -171,7 +171,7 @@ typedef void AdderFunc(struct visiSearcher *searcher,
  * so that the visiGeneMatchMultiWord function below can be
  * used in many contexts. */
 
-void visiGeneMatchMultiWord(struct visiSearcher *searcher, 
+static void visiGeneMatchMultiWord(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList,
 	char *table, AdderFunc adder, boolean forceMultiWord)
 /* This helps cope with matches that may involve more than
@@ -250,7 +250,7 @@ dyStringPrintf(dy,
 addImagesMatchingQuery(searcher, conn, dy->string);
 }
 
-void visiGeneMatchContributor(struct visiSearcher *searcher, 
+static void visiGeneMatchContributor(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
 /* Put images from contributors in wordList into searcher.
  * We want the behavior to be such that if you give it two names
@@ -283,7 +283,7 @@ for (image = imageList; image != NULL; image = image->next)
 slFreeList(&imageList);
 }
 
-void visiGeneMatchGene(struct visiSearcher *searcher, 
+static void visiGeneMatchGene(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
 /* Add images matching genes in wordList to searcher.
  * The wordList can include wildcards. */
@@ -302,7 +302,7 @@ for (word = wordList; word != NULL; word = word->next)
     }
 }
 
-void visiGeneMatchAccession(struct visiSearcher *searcher, 
+static void visiGeneMatchAccession(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
 /* Add images matching RefSeq, LocusLink, GenBank, or UniProt
  * accessions to searcher. */
@@ -342,7 +342,7 @@ dyStringPrintf(dy,
 addImagesMatchingQuery(searcher, conn, dy->string);
 }
 
-void visiGeneMatchBodyPart(struct visiSearcher *searcher,
+static void visiGeneMatchBodyPart(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct slName *wordList)
 /* Add images matching bodyPart to searcher.
  * This is a little complicated by some body parts containing
@@ -384,7 +384,7 @@ dyStringFree(&dy);
 }
 
 
-void visiGeneMatchStage(struct visiSearcher *searcher,
+static void visiGeneMatchStage(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct slName *wordList)
 /* Add images matching Theiler or other developmental stage */
 {
@@ -437,7 +437,7 @@ addImagesMatchingQuery(searcher, conn, dy->string);
 dyStringFree(&dy);
 }
 
-void visiGeneMatchYear(struct visiSearcher *searcher, 
+static void visiGeneMatchYear(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
 /* Fold in matches to a year. */
 {
@@ -458,14 +458,15 @@ for (word = wordList; word != NULL; word = word->next)
     }
 }
 
-void visiGeneSearch(char *searchString)
+struct slInt *visiGeneSearch(char *searchString)
 /* visiGeneSearch - Test out search routines for VisiGene. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct visiMatch *matchList, *match;
+struct slInt *imageList = NULL, *image;
 struct visiSearcher *searcher = visiSearcherNew();
 struct slName *wordList = stringToSlNames(searchString);
-printf("Searching %s for \"%s\"\n", database, searchString);
+uglyf("Searching %s for \"%s\"\n", database, searchString);
 visiGeneMatchContributor(searcher, conn, wordList);
 visiGeneMatchYear(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
@@ -474,8 +475,15 @@ visiGeneMatchBodyPart(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 for (match = matchList; match != NULL; match = match->next)
-    printf("%f %d\n", match->weight, match->imageId);
+    {
+    uglyf("%f %d\n", match->weight, match->imageId);
+    image = slIntNew(match->imageId);
+    slAddHead(&imageList, image);
+    }
+slFreeList(&matchList);
 slFreeList(&wordList);
+slReverse(&imageList);
+return imageList;
 }
 
 int main(int argc, char *argv[])
