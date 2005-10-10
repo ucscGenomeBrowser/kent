@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.70 2005/07/11 16:25:36 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.71 2005/10/10 18:59:53 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -181,6 +181,19 @@ while(namePt != 0)
 
 	    AllocVar(filenameEl);
 	    filenameEl->val = filenamePt;
+	    slAddHead(&list, filenameEl);
+	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
+	}
+
+	/* if has filename save size info, needed for binary data */
+	if(filenamePt != 0) {
+	    char varNameFilename[256];
+	    struct cgiVar *filenameEl;
+	    char sizebuf[20];
+	    snprintf(varNameFilename, 256, "%s__size", namePt);
+	    safef(sizebuf,sizeof(sizebuf),"%lu", (unsigned long)(dataEndPt - dataPt));
+	    AllocVar(filenameEl);
+	    filenameEl->val = cloneString(sizebuf);
 	    slAddHead(&list, filenameEl);
 	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
 	}
