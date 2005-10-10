@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.61 2005/08/01 21:11:12 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.62 2005/10/10 18:56:26 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -791,7 +791,18 @@ if (isFile)
 	lf = lineFileOpen(text, TRUE);
     }
 else
-    nextLine = text;
+    {
+    if (startsWith("compressed://",text))
+	{
+	char *words[3];
+	chopByWhite(text,words,3);
+	lf = lineFileDecompressMem(TRUE, (char *)atoi(words[1]), atoi(words[2]));
+	}
+    else
+	{
+    	nextLine = text;
+	}
+    }
 
 for (;;)
     {
@@ -1027,7 +1038,27 @@ customText = skipLeadingSpaces(customText);
 if (customText != NULL && bogusMacEmptyChars(customText))
     customText = NULL;
 if (customText == NULL || customText[0] == 0)
-    customText = cartOptionalString(cart, "hgt.customFile");
+    {
+    char *fileName = cartOptionalString(cart, "hgt.customFile__filename");
+    if (fileName != NULL && (
+    	endsWith(fileName,".gz") ||
+	endsWith(fileName,".Z")  ||
+    	endsWith(fileName,".bz2")))
+	{
+	char buf[256];
+	safef(buf,sizeof(buf),"compressed://%s %lu %s",
+	    fileName,   
+    	    (unsigned long) cgiOptionalString("hgt.customFile"),
+    	    cartOptionalString(cart, "hgt.customFile__size"));
+	    /* cgi functions preserve binary data, cart vars have been cloneString-ed
+	     * which is bad for a binary stream that might contain 0s  */
+    	customText = cloneString(buf);
+	}
+    else
+	{
+    	customText = cartOptionalString(cart, "hgt.customFile");
+	}
+    }
 
 customText = skipLeadingSpaces(customText);
 
