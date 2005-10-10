@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.272 2005/10/10 20:42:37 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.273 2005/10/10 20:54:50 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3129,8 +3129,12 @@ for (onePair = *tdbListList; onePair != NULL; onePair = onePair->next)
     {
     struct trackDb *thisList = onePair->val;
     struct trackDb *result = findTrackDb(&thisList, table);
-    if (result != NULL) 
+    if (result != NULL)
+	{
+	if (winner != NULL)
+	    trackDbFree(&winner);
 	winner = result;
+	}
     }
 return winner;
 }
@@ -3187,7 +3191,6 @@ struct sqlConnection *conn = hAllocConn();
 /* struct trackDb *tdbList = loadTrackDb(conn, NULL); */
 /* struct trackDb *tdbLocalList = loadTrackDbLocal(conn, NULL); */
 struct slPair *tdbListList = loadTrackDbs(conn, NULL);
-struct slPair *pairTdbList = NULL;
 struct trackDb *tdbList = NULL;
 struct trackDb *tdbFullList = NULL, *tdbSubtrackedList = NULL;
 struct trackDb *tdbRetList = NULL;
@@ -3197,29 +3200,6 @@ struct hash *compositeHash = newHash(0);
 struct trackDb *tdb, *compositeTdb;
 struct trackDb *nextTdb;
 
-pairTdbList = slPopHead(&tdbListList);
-tdbList = pairTdbList->val;
-
-while (tdbList != NULL)
-    {
-    struct trackDb *tdbLoc;
-    tdb = slPopHead(&tdbList);
-    tdbLoc = findTrackDbInList(&tdbListList, tdb->tableName);
-    if (tdbLoc != NULL)
-        {
-        /* use local */
-        trackDbFree(&tdb);
-        tdb = tdbLoc;
-        }
-    if (trackDbSetting(tdb, "compositeTrack"))
-        {
-        slAddHead(&tdbFullList, tdb);
-        hashAdd(compositeHash, tdb->tableName, tdb);
-        }
-    else
-        processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
-    }
-
 /* add remaing local trackDbs */
 while (tdbListList != NULL)
     {
@@ -3227,11 +3207,19 @@ while (tdbListList != NULL)
     tdbList = onePair->val;
     while (tdbList != NULL) 
 	{
+	struct trackDb *tdbLoc;
 	tdb = slPopHead(&tdbList);
+	tdbLoc = findTrackDbInList(&tdbListList, tdb->tableName);
+	if (tdbLoc != NULL)
+	    {
+	    /* use local */
+	    trackDbFree(&tdb);
+	    tdb = tdbLoc;
+	    }
 	if (trackDbSetting(tdb, "compositeTrack"))
 	    {
 	    hashAdd(compositeHash, tdb->tableName, tdb);
-	    slAddHead(&tdbRetList, tdb);
+	    slAddHead(&tdbFullList, tdb);
 	    }
 	else
 	    processTrackDb(database, tdb, chrom, privateHost, &tdbFullList);
