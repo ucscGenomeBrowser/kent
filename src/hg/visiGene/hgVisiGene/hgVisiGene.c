@@ -10,8 +10,9 @@
 #include "hdb.h"
 #include "hgColors.h"
 #include "visiGene.h"
-#include "hgVisiGene.h"
 #include "captionElement.h"
+#include "visiSearch.h"
+#include "hgVisiGene.h"
 
 /* Globals */
 struct cart *cart;		/* Current CGI values */
@@ -273,6 +274,7 @@ slReverse(&newList);
 return newList;
 }
 
+#ifdef OLD 
 void doThumbnails(struct sqlConnection *conn)
 /* Write out list of thumbnail images. */
 {
@@ -282,7 +284,7 @@ char *listHow = cartUsualString(cart, hgpListHow, listHowId);
 char *listSpec = cartUsualString(cart, hgpListSpec, "1");
 struct slInt *imageList = NULL, *image;
 htmlSetBgColor(0xC0C0D6);
-htmStart(stdout, "do image");
+htmStart(stdout, "doThumbnails");
 
 
 if (sameString(listHow, listHowId))
@@ -325,6 +327,41 @@ for (image = imageList; image != NULL; image = image->next)
 printf("</TABLE>\n");
 htmlEnd();
 }
+#endif /* OLD */
+
+void doThumbnails(struct sqlConnection *conn)
+/* Write out list of thumbnail images. */
+{
+char *sidUrl = cartSidUrlString(cart);
+char *listSpec = cartUsualString(cart, hgpListSpec, "");
+struct slInt *imageList = NULL, *image;
+
+htmlSetBgColor(0xC0C0D6);
+htmStart(stdout, "doThumbnails");
+imageList = visiSearch(conn, listSpec);
+imageList = onePerImageFile(conn, imageList);
+printf("<TABLE>\n");
+for (image = imageList; image != NULL; image = image->next)
+    {
+    int id = image->val;
+    char *imageFile = visiGeneThumbSizePath(conn, id);
+    printf("<TR>");
+    printf("<TD>");
+    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
+	"onclick=\"parent.controls.document.mainForm.ZM[0].checked=true;return true;\" "
+	">", hgVisiGeneCgiName(), 
+    	sidUrl, hgpId, id, hgpDoImage);
+    printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
+    
+    smallCaption(conn, id);
+    printf("<BR>\n");
+    printf("</TD>");
+    printf("</TR>");
+    }
+printf("</TABLE>\n");
+htmlEnd();
+}
+
 
 char *makeCommaSpacedList(struct slName *list)
 /* Turn linked list of strings into a single string with
@@ -519,7 +556,8 @@ captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 
 printf("<B>year:</B> %d ", visiGeneYear(conn,id));
-printf("<B>contributors:</B> %s<BR>\n", naForNull(visiGeneContributors(conn,id)));
+printf("<B>contributors:</B> %s<BR>\n", 
+	naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
 if (setUrl != NULL || itemUrl != NULL)
@@ -629,44 +667,6 @@ printf("<BR> database: %s ", genomeDbForImage(conn, imageId));
 htmlEnd();
 
 }
-
-#ifdef OLD
-void doFullSized(struct sqlConnection *conn)
-/* Put up full sized image. */
-{
-int imageId = cartInt(cart, hgpId);
-char buf[1024];
-char *p = NULL;
-char dir[256];
-char name[128];
-char extension[64];
-int w = 0, h = 0;
-htmStart(stdout, "do image");
-//printf("<A HREF=\"");
-//printf("../cgi-bin/%s?%s=%d", hgVisiGeneCgiName(), hgpId, imageId);
-//printf("\" target=_parent>");
-//printf("<IMG SRC=\"%s\"></A><BR>\n", visiGeneFullSizePath(conn, imageId));
-
-p=visiGeneFullSizePath(conn, imageId);
-
-//safef(buf,sizeof(buf),"../htdocs/%s",p+3); /* skip "../" */
-
-visiGeneImageSize(conn, imageId, &w, &h);
-
-splitPath(p, dir, name, extension);
-
-safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",dir,name,name,w,h);
-
-printf("<IFRAME width=\"100%%\" height=\"80%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
-
-//printf("</A><BR>\n");
-
-fullCaption(conn, imageId);
-htmlEnd();
-freez(&p);
-}
-#endif /* OLD */
-
 
 void doFrame(struct sqlConnection *conn)
 /* Make a html frame page.  Fill frame with thumbnail, control bar,

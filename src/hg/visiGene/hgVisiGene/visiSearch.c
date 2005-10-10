@@ -1,4 +1,5 @@
-/* visiGeneSearch - Test out search routines for VisiGene. */
+/* visiSearch - free form search of visiGene database. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,27 +9,9 @@
 #include "rbTree.h"
 #include "jksql.h"
 #include "visiGene.h"
+#include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiGeneSearch.c,v 1.10 2005/10/10 16:37:12 kent Exp $";
-
-char *database = "visiGene";
-
-void usage()
-/* Explain usage and exit. */
-{
-errAbort(
-  "visiGeneSearch - Test out search routines for VisiGene\n"
-  "usage:\n"
-  "   visiGeneSearch searchTerm\n"
-  "options:\n"
-  "   -db=XXX set another database (default visiGene)\n"
-  );
-}
-
-static struct optionSpec options[] = {
-   {"db", OPTION_STRING},
-   {NULL, 0},
-};
+static char const rcsid[] = "$Id: visiSearch.c,v 1.1 2005/10/10 16:41:27 kent Exp $";
 
 struct visiMatch
 /* Info on a score of an image in free format search. */
@@ -162,7 +145,6 @@ freeMem(stripped);
 return count;
 }
 
-
 static int countWordsUsedInPhrase(char *phrase, struct slName *wordList)
 /* Count the number of words in wordList that are used in phrase.
  * The words are in order and space-separated in phrase. */
@@ -185,6 +167,8 @@ for (word = wordList; word != NULL; word = word->next)
 freeMem(dupe);
 return count;
 }
+
+
 
 
 typedef void AdderFunc(struct visiSearcher *searcher,
@@ -241,6 +225,7 @@ for (word = wordList; word != NULL;  )
     }
 dyStringFree(&query);
 }
+
 
 static void addImagesMatchingQuery(struct visiSearcher *searcher,
     struct sqlConnection *conn, char *query)
@@ -328,6 +313,7 @@ for (word = wordList; word != NULL;  )
     }
 dyStringFree(&query);
 }
+
 
 static void addImageListAndFree(struct visiSearcher *searcher,
 	struct slInt *imageList)
@@ -516,27 +502,24 @@ for (word = wordList; word != NULL; word = word->next)
     }
 }
 
-struct slInt *visiGeneSearch(char *searchString)
-/* visiGeneSearch - Test out search routines for VisiGene. */
+struct slInt *visiSearch(struct sqlConnection *conn, char *searchString)
+/* visiSearch - return list of images that match searchString sorted
+ * by how well they match. This will search most fields in the
+ * database. */
 {
-struct sqlConnection *conn = sqlConnect(database);
 struct visiMatch *matchList, *match;
 struct slInt *imageList = NULL, *image;
 struct visiSearcher *searcher = visiSearcherNew();
 struct slName *wordList = stringToSlNames(searchString);
-uglyf("Searching %s for \"%s\"\n", database, searchString);
 visiGeneMatchContributor(searcher, conn, wordList);
 visiGeneMatchYear(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
 visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
-#ifdef SOON
 visiGeneMatchStage(searcher, conn, wordList);
-#endif /* SOON */
 matchList = visiSearcherSortResults(searcher);
 for (match = matchList; match != NULL; match = match->next)
     {
-    uglyf("%f %d\n", match->weight, match->imageId);
     image = slIntNew(match->imageId);
     slAddHead(&imageList, image);
     }
@@ -546,13 +529,3 @@ slReverse(&imageList);
 return imageList;
 }
 
-int main(int argc, char *argv[])
-/* Process command line. */
-{
-optionInit(&argc, argv, options);
-database = optionVal("db", database);
-if (argc != 2)
-    usage();
-visiGeneSearch(argv[1]);
-return 0;
-}
