@@ -15,9 +15,11 @@ errAbort(
   "knownToVisiGene - Create knownToVisiGene table by riffling through various other knownTo tables\n"
   "usage:\n"
   "   knownToVisiGene database\n"
+  );
+  /*
   "options:\n"
   "   -xxx=XXX\n"
-  );
+  */
 }
 
 static struct optionSpec options[] = {
