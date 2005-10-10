@@ -11,7 +11,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.1 2005/10/10 16:41:27 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.2 2005/10/10 19:22:31 kent Exp $";
 
 struct visiMatch
 /* Info on a score of an image in free format search. */
@@ -372,7 +372,8 @@ dyStringPrintf(dy,
    "bodyPart,expressionLevel,imageProbe "
    "where bodyPart.name = \"%s\" "
    "and bodyPart.id = expressionLevel.bodyPart "
-   "and expressionLevel.imageProbe = imageProbe.id"
+   "and expressionLevel.imageProbe = imageProbe.id "
+   "and expressionLevel.level > 0"
    , bodyPart);
 addImagesMatchingQuery(searcher, conn, dy->string);
 

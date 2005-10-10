@@ -282,14 +282,15 @@ void doThumbnails(struct sqlConnection *conn)
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 struct slInt *imageList = NULL, *image;
-int maxCount = 100, count = 0;
-int startAt = 0;
-
+int maxCount = 50, count = 0;
+int startAt = cartUsualInt(cart, hgpStartAt, 0);
+int imageCount;
 
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
 imageList = visiSearch(conn, listSpec);
 imageList = onePerImageFile(conn, imageList);
+imageCount = slCount(imageList);
 printf("<TABLE>\n");
 for (image = slElementFromIx(imageList, startAt); 
 	image != NULL; image = image->next)
@@ -312,6 +313,34 @@ for (image = slElementFromIx(imageList, startAt);
         break;
     }
 printf("</TABLE>\n");
+printf("<HR>\n");
+if (count != imageCount)
+   {
+   int start;
+   int page = 0;
+   printf("%d-%d of %d for:<BR>", startAt+1,
+   	startAt+count, imageCount);
+   printf("&nbsp;%s<BR>\n", listSpec);
+   printf("Page:\n");
+   for (start=0; start<imageCount; start += maxCount)
+       {
+       ++page;
+       printf("<A HREF=\"%s?", hgVisiGeneCgiName());
+       printf("%s&", sidUrl);
+       printf("%s=on&", hgpDoThumbnails);
+       printf("%s=%s&", hgpListSpec, listSpec);
+       if (start != 0)
+	   printf("%s=%d", hgpStartAt, start);
+       printf("\">");
+       printf("%d</A> ", page);
+       }
+   }
+else
+    {
+    printf("%d images for:<BR>", imageCount);
+    printf("&nbsp;%s<BR>\n", listSpec);
+    }
+cartRemove(cart, hgpStartAt);
 htmlEnd();
 }
 
@@ -573,26 +602,6 @@ else
 htmlEnd();
 }
 
-#ifdef OLD
-char *listHowMenu[] =
-/* This and the listHowVals must be kept in sync. */
-    {
-    "Image ID",
-    "Name (* and ? ok)",
-    "Genbank",
-    "Gene Entrez",
-    };
-
-char *listHowVals[] =
-/* This and the listHowMenu must be kept in sync. */
-    {
-    listHowId,
-    listHowName,
-    listHowGenbank,
-    listHowLocusLink,
-    };
-#endif /* OLD */
-
 void doControls(struct sqlConnection *conn)
 /* Put up controls pane. */
 {
@@ -668,26 +677,6 @@ printf("</frameset>\n");
 printf("</HTML>\n");
 }
 
-void doId(struct sqlConnection *conn)
-/* Set up VisiGene on given ID. */
-{
-int id = cartInt(cart, hgpDoId);
-struct slName *genes = visiGeneGeneName(conn, id);
-cartSetInt(cart, hgpId, id);
-if (genes == NULL)
-    {
-    cartSetString(cart, hgpListHow, listHowId);
-    cartSetInt(cart, hgpListSpec, id);
-    }
-else
-    {
-    cartSetString(cart, hgpListHow, listHowName);
-    cartSetString(cart, hgpListSpec, genes->name);
-    }
-slFreeList(&genes);
-doFrame(conn);
-}
-
 void doInitialPage()
 /* Put up page with search box that explains program and
  * some good things to search on. */
@@ -723,8 +712,6 @@ else if (cartVarExists(cart, hgpDoImage))
     doImage(conn);
 else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
-else if (cartVarExists(cart, hgpDoId))
-    doId(conn);
 else 
     {
     char *listSpec = cartUsualString(cart, hgpListSpec, "");
