@@ -9,6 +9,7 @@
 #include "hui.h"
 #include "hdb.h"
 #include "hgColors.h"
+#include "web.h"
 #include "visiGene.h"
 #include "captionElement.h"
 #include "visiSearch.h"
@@ -26,7 +27,7 @@ char *hgVisiGeneShortName()
 /* Return short descriptive name (not cgi-executable name)
  * of program */
 {
-return "Gene Pix";
+return "VisiGene";
 }
 
 char *hgVisiGeneCgiName()
@@ -161,10 +162,10 @@ return name;
 char *genomeDbForImage(struct sqlConnection *conn, int imageId)
 /* Return the genome database to associate with image or NULL if none. */
 {
+char *db;
 char *scientificName = visiGeneOrganism(conn, imageId);
 struct sqlConnection *cConn = hConnectCentral();
 char query[256];
-char *db;
 
 safef(query, sizeof(query), 
 	"select defaultDb.name from defaultDb,dbDb where "
@@ -274,60 +275,6 @@ slReverse(&newList);
 return newList;
 }
 
-#ifdef OLD 
-void doThumbnails(struct sqlConnection *conn)
-/* Write out list of thumbnail images. */
-{
-char *sidUrl = cartSidUrlString(cart);
-int imageId = cartInt(cart, hgpId);
-char *listHow = cartUsualString(cart, hgpListHow, listHowId);
-char *listSpec = cartUsualString(cart, hgpListSpec, "1");
-struct slInt *imageList = NULL, *image;
-htmlSetBgColor(0xC0C0D6);
-htmStart(stdout, "doThumbnails");
-
-
-if (sameString(listHow, listHowId))
-    imageList = idsInRange(conn, atoi(listSpec));
-else if (sameString(listHow, listHowName))
-    {
-    char *sqlPat = sqlLikeFromWild(listSpec);
-    if (sqlWildcardIn(sqlPat))
-         imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
-    else
-         imageList = visiGeneSelectNamed(conn, sqlPat, vgsExact);
-    }
-else if (sameString(listHow, listHowGenbank))
-    {
-    imageList = visiGeneSelectGenbank(conn, listSpec);
-    }
-else if (sameString(listHow, listHowLocusLink))
-    {
-    imageList = visiGeneSelectLocusLink(conn, listSpec);
-    }
-imageList = onePerImageFile(conn, imageList);
-printf("<TABLE>\n");
-for (image = imageList; image != NULL; image = image->next)
-    {
-    int id = image->val;
-    char *imageFile = visiGeneThumbSizePath(conn, id);
-    printf("<TR>");
-    printf("<TD>");
-    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
-	"onclick=\"parent.controls.document.mainForm.ZM[0].checked=true;return true;\" "
-	">", hgVisiGeneCgiName(), 
-    	sidUrl, hgpId, id, hgpDoImage);
-    printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
-    
-    smallCaption(conn, id);
-    printf("<BR>\n");
-    printf("</TD>");
-    printf("</TR>");
-    }
-printf("</TABLE>\n");
-htmlEnd();
-}
-#endif /* OLD */
 
 void doThumbnails(struct sqlConnection *conn)
 /* Write out list of thumbnail images. */
@@ -335,13 +282,17 @@ void doThumbnails(struct sqlConnection *conn)
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 struct slInt *imageList = NULL, *image;
+int maxCount = 100, count = 0;
+int startAt = 0;
+
 
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
 imageList = visiSearch(conn, listSpec);
 imageList = onePerImageFile(conn, imageList);
 printf("<TABLE>\n");
-for (image = imageList; image != NULL; image = image->next)
+for (image = slElementFromIx(imageList, startAt); 
+	image != NULL; image = image->next)
     {
     int id = image->val;
     char *imageFile = visiGeneThumbSizePath(conn, id);
@@ -357,6 +308,8 @@ for (image = imageList; image != NULL; image = image->next)
     printf("<BR>\n");
     printf("</TD>");
     printf("</TR>");
+    if (++count >= maxCount)
+        break;
     }
 printf("</TABLE>\n");
 htmlEnd();
@@ -585,7 +538,7 @@ printf("<BR>\n");
 void doImage(struct sqlConnection *conn)
 /* Put up image page. */
 {
-int imageId = cartInt(cart, hgpId);
+int imageId = cartUsualInt(cart, hgpId, 0);
 char buf[1024];
 char *p = NULL;
 char dir[256];
@@ -595,23 +548,32 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
-printf("<B>");
-smallCaption(conn, imageId);
-printf(".</B> Click in image to zoom, drag to move.  "
-       "Caption is below.<BR>\n");
+if (imageId == 0)
+    {
+    printf("Click on thumbnail image in the list to the left to see a larger, "
+           "zoomable image in this space.");
+    }
+else
+    {
+    printf("<B>");
+    smallCaption(conn, imageId);
+    printf(".</B> Click in image to zoom, drag to move.  "
+	   "Caption is below.<BR>\n");
 
-visiGeneImageSize(conn, imageId, &w, &h);
-p=visiGeneFullSizePath(conn, imageId);
+    visiGeneImageSize(conn, imageId, &w, &h);
+    p=visiGeneFullSizePath(conn, imageId);
 
-splitPath(p, dir, name, extension);
-safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
-	dir,name,name,w,h);
-printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
+    splitPath(p, dir, name, extension);
+    safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
+	    dir,name,name,w,h);
+    printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
-fullCaption(conn, imageId);
+    fullCaption(conn, imageId);
+    }
 htmlEnd();
 }
 
+#ifdef OLD
 char *listHowMenu[] =
 /* This and the listHowVals must be kept in sync. */
     {
@@ -629,31 +591,21 @@ char *listHowVals[] =
     listHowGenbank,
     listHowLocusLink,
     };
+#endif /* OLD */
 
 void doControls(struct sqlConnection *conn)
 /* Put up controls pane. */
 {
-int imageId = cartInt(cart, hgpId);
-char *listHow = cartUsualString(cart, hgpListHow, listHowId);
-char *listSpec = cartUsualString(cart, hgpListSpec, "1");
+char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *selected = NULL;
-int selIx = stringArrayIx(listHow, listHowVals, ArraySize(listHowVals));
 htmlSetBgColor(0xD0FFE0);
 htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
-printf("Gene: ");
 
-/* Put up drop-down list. */
-if (selIx >= 0)
-     selected = listHowMenu[selIx];
-cgiMakeDropListFull(hgpListHow, listHowMenu, listHowVals,
-	ArraySize(listHowMenu), selected, NULL);
-printf(" ");
 cgiMakeTextVar(hgpListSpec, listSpec, 10);
-
-cgiMakeButton("submit", "submit");
+cgiMakeButton("submit", "search");
 
 
 printf(" Zoom: ");
@@ -663,16 +615,14 @@ printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('out
 printf("\n");
 
 printf("</FORM>\n");
-printf("<BR> database: %s ", genomeDbForImage(conn, imageId));
 htmlEnd();
-
 }
 
 void doFrame(struct sqlConnection *conn)
 /* Make a html frame page.  Fill frame with thumbnail, control bar,
  * and image panes. */
 {
-int imageId = cartUsualInt(cart, hgpId, 1);
+int imageId = cartUsualInt(cart, hgpId, 0);
 char *sidUrl = cartSidUrlString(cart);
 struct slName *geneList, *gene;
 cartSetInt(cart, hgpId, imageId);
@@ -682,16 +632,19 @@ printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");
 printf("%s ", hgVisiGeneShortName());
-geneList = visiGeneGeneName(conn, imageId);
-for (gene = geneList; gene != NULL; gene = gene->next)
+if (imageId != 0)
     {
-    printf("%s", gene->name);
-    if (gene->next != NULL)
-        printf(",");
+    geneList = visiGeneGeneName(conn, imageId);
+    for (gene = geneList; gene != NULL; gene = gene->next)
+	{
+	printf("%s", gene->name);
+	if (gene->next != NULL)
+	    printf(",");
+	}
+    printf(" %s %s",
+	    visiGeneStage(conn, imageId, FALSE),
+	    shortOrgName(visiGeneOrganism(conn, imageId)));
     }
-printf(" %s %s",
-	visiGeneStage(conn, imageId, FALSE),
-	shortOrgName(visiGeneOrganism(conn, imageId)));
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
@@ -716,7 +669,7 @@ printf("</HTML>\n");
 }
 
 void doId(struct sqlConnection *conn)
-/* Set up Gene Pix on given ID. */
+/* Set up VisiGene on given ID. */
 {
 int id = cartInt(cart, hgpDoId);
 struct slName *genes = visiGeneGeneName(conn, id);
@@ -735,6 +688,30 @@ slFreeList(&genes);
 doFrame(conn);
 }
 
+void doInitialPage()
+/* Put up page with search box that explains program and
+ * some good things to search on. */
+{
+char *listSpec = NULL;
+webStartWrapper(cart, "VisiGene Image Browser", NULL, FALSE, FALSE);
+printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
+	hgVisiGeneCgiName());
+listSpec = cartUsualString(cart, hgpListSpec, "");
+cgiMakeTextVar(hgpListSpec, listSpec, 30);
+cgiMakeButton("submit", "search");
+printf("<BR>\n");
+puts(
+"You can search on gene names, authors, body parts, years, "
+"GenBank or UniProt accessions.  You can include multiple "
+"search terms.  The images matching the most terms will be "
+"at the top of the results list. For gene names you can include "
+"* and ? wildcard characters.  For instance to see images of all "
+"genes in the Hox A cluster search for hoxa*.  When searching on "
+"author names you can include the initials after the last name.");
+printf("</FORM>\n");
+webEnd();
+}
+
 void dispatch()
 /* Set up a connection to database and dispatch control
  * based on hgpDo type var. */
@@ -746,14 +723,17 @@ else if (cartVarExists(cart, hgpDoImage))
     doImage(conn);
 else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
-#ifdef OLD
-else if (cartVarExists(cart, hgpDoFullSized))
-    doFullSized(conn);
-#endif /* OLD */
 else if (cartVarExists(cart, hgpDoId))
     doId(conn);
-else
-    doFrame(conn);
+else 
+    {
+    char *listSpec = cartUsualString(cart, hgpListSpec, "");
+    listSpec = skipLeadingSpaces(listSpec);
+    if (listSpec[0] == 0)
+        doInitialPage();
+    else
+	doFrame(conn);
+    }
 cartRemovePrefix(cart, hgpDoPrefix);
 }
 
