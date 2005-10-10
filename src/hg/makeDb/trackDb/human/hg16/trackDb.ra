@@ -1463,6 +1463,46 @@ visibility hide
 color 173,17,162
 type genePred
 
+track encodeUcsdNgGif
+compositeTrack on
+shortLabel LI Ng gIF ChIP
+longLabel Ludwig Institute/UCSD ChIP/Chip Nimblegen - Gamma Interferon Experiments
+group encodeChip
+priority 50.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -5
+maxLimit 5
+viewLimits -1:3
+windowingFunction mean
+autoScale off
+origAssembly hg17
+
+    track encodeUcsdNgHeLaH3K4me3_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI Ng H3K4m3 -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me3, no gamma interferon
+    priority 1
+
+    track encodeUcsdNgHeLaH3K4me3_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI Ng H3K4m3 +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me3, 30 min after gamma interferon
+    priority 2
+
+    track encodeUcsdNgHeLaRnap_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI Ng Pol2 -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, no gamma interferon
+    priority 3
+
+    track encodeUcsdNgHeLaRnap_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI Ng Pol2 +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, 30 min after gamma interferon
+    priority 4
+
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
 longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 

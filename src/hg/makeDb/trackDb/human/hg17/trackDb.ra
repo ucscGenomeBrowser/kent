@@ -143,6 +143,153 @@ color 20,90,0
 type bed 6 +
 mafTrack multiz8way
 
+track encodeUcsdNgGif
+compositeTrack on
+shortLabel LI Ng gIF ChIP
+longLabel Ludwig Institute/UCSD ChIP/Chip Nimblegen - Gamma Interferon Experiments
+group encodeChip
+priority 50.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -5
+maxLimit 5
+viewLimits -1:3
+windowingFunction mean
+autoScale off
+subGroup1 gif Interferon no=Untreated yes=Treated
+subGroup2 factor Factor pol2=Pol2 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac stat1=STAT1
+subGroup3 peak Signal/Peak signal=Signal peak=Peak
+origAssembly hg17
+
+    track encodeUcsdNgHeLaH3K4me3_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3K4m3 -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me3, no gamma interferon
+    subGroups gif=no factor=h3k4me3 peak=signal
+    color 0,63,135
+    priority 1
+
+    track encodeUcsdNgHeLaH3K4me3_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3K4m3 +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me3, 30 min after gamma interferon
+    subGroups gif=yes factor=h3k4me3 peak=signal
+    color 0,63,135
+    priority 2
+
+    track encodeUcsdNgHeLaRnap_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI Pol2 -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, no gamma interferon
+    subGroups gif=no factor=pol2 peak=signal
+    color 33,91,51
+    priority 3
+
+    track encodeUcsdNgHeLaRnap_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI Pol2 +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, Pol2, 30 min after gamma interferon
+    color 33,91,51
+    subGroups gif=yes factor=pol2 peak=signal
+    priority 4
+
+    track encodeUcsdNgHeLaAcH3_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3ac -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3ac, no gamma interferon
+    subGroups gif=no factor=h3ac peak=signal
+    color 0,63,135
+    priority 5
+
+    track encodeUcsdNgHeLaAcH3_p0_peak
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3ac -gIF Pk
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, H3ac, no gamma interferon
+    subGroups gif=no factor=h3ac peak=peak
+    color 0,63,135
+    priority 6
+
+    track encodeUcsdNgHeLaAcH3_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3ac +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3ac, 30 min after gamma interferon
+    subGroups gif=yes factor=h3ac peak=signal
+    color 0,63,135
+    priority 7
+
+    track encodeUcsdNgHeLaAcH3_p30_peak
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3ac +gIF Pk
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, H3ac, 30 min after gamma interferon
+    subGroups gif=yes factor=h3ac peak=peak
+    color 0,63,135
+    priority 8
+
+    track encodeUcsdNgHeLaDmH3K4_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3K4me2 -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me2, no gamma interferon
+    subGroups gif=no factor=h3k4me2 peak=signal
+    color 33,91,51
+    priority 9
+
+    track encodeUcsdNgHeLaDmH3K4_p0_peak
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3K4me2 -IF Pk
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, H3K4me2, no gamma interferon
+    subGroups gif=no factor=h3k4me2 peak=peak
+    color 33,91,51
+    priority 10
+
+    track encodeUcsdNgHeLaDmH3K4_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3K4me2 +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H3K4me2, 30 min after gamma interferon
+    subGroups gif=yes factor=h3k4me2 peak=signal
+    color 33,91,51
+    priority 11
+
+    track encodeUcsdNgHeLaDmH3K4_p30_peak
+    subTrack encodeUcsdNgGif
+    shortLabel LI H3K4me2 +IF Pk
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, H3K4me2, 30 min after gamma interferon
+    subGroups gif=yes factor=h3k4me2 peak=peak
+    color 33,91,51
+    priority 12
+
+    track encodeUcsdNgHeLaAcH4_p0
+    subTrack encodeUcsdNgGif
+    shortLabel LI H4ac -gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, H4ac, no gamma interferon
+    subGroups gif=no factor=h4ac peak=signal
+    color 0,63,135
+    priority 13
+
+    track encodeUcsdNgHeLaAcH4_p0_peak
+    subTrack encodeUcsdNgGif
+    shortLabel LI H4ac -gIF Pk
+    color 0,63,135
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, H4ac, no gamma interferon
+    subGroups gif=no factor=h4ac peak=peak
+    priority 14
+
+    track encodeUcsdNgHeLaStat1_p30
+    subTrack encodeUcsdNgGif
+    shortLabel LI STAT1 +gIF
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng: HeLa, STAT1, 30 min after gamma interferon
+    subGroups gif=yes factor=stat1 peak=signal
+    color 33,91,51
+    priority 15
+
+    track encodeUcsdNgHeLaStat1_p30_peak
+    subTrack encodeUcsdNgGif
+    shortLabel LI STAT1 +gIF Pk
+    subGroups gif=yes factor=stat1 peak=peak
+    color 33,91,51
+    longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, STAT1, 30 min after gamma interferon
+    priority 16
+
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
 longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
@@ -318,8 +465,8 @@ altColor 50,50,50
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
-#summary multiz8waySummary
-pairwise netBlastz
+summary multiz8waySummary
+#pairwise netBlastz
 yLineOnOff Off
 autoScaleDefault Off
 spanList 1
