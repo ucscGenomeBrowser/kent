@@ -1,0 +1,13 @@
+track multizMz1Ma1Mbk0Mbr0
+shortLabel Cons 4way
+longLabel Methosarcina 4-way multiz alignments
+group compGeno
+priority 10.0
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder metAce1 metBak0 metBur0
