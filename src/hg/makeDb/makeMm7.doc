@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.9 2005/10/10 23:51:51 galt Exp $"
+#	"$Id: makeMm7.doc,v 1.10 2005/10/11 21:16:29 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1544,7 +1544,7 @@ BASE=/cluster/data/mm7/bed/blastzFr1.2005-09-16
     #   160874127 bases of 315518167 (50.987%) in intersection
 
 #########################################################################
-# BLASTZ TETRAODON tetNig1 (WORKING - 2005-09-20 - Hiram)
+# BLASTZ TETRAODON tetNig1 (DONE - 2005-09-20 - 2005-10-11 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzTetNig1.2005-09-20
     cd /cluster/data/mm7/bed
@@ -1598,48 +1598,45 @@ TMPDIR=/scratch/tmp
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXX - STARTED 2005-10-07 08:50
-
-XXXX just about ready to go here, need the chromsAndScafs.lft
-
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
     ssh pk
     screen -d -r
-    #	STARTED 2005-03-17 21:30
-    #	FINISHED 2005-03-18 05:10
-    #	real    461m56.901s
-    #	user    0m0.426s
-    #	sys     0m0.310s
-# Completed: 18867 of 18867 jobs
-# CPU time in finished jobs:    2396227s   39937.11m   665.62h   27.73d  0.076 y
-# IO & Wait Time:                 53160s     886.00m    14.77h    0.62d  0.002 y
-# Average job time:                 130s       2.16m     0.04h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             591s       9.85m     0.16h    0.01d
-# Submission to last job:         26573s     442.88m     7.38h    0.31d
 
-# Completed: 331 of 331 jobs
-# CPU time in finished jobs:         27s       0.45m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                   798s      13.30m     0.22h    0.01d  0.000 y
-# Average job time:                   2s       0.04m     0.00h    0.00d
-# Longest job:                        6s       0.10m     0.00h    0.00d
-# Submission to last job:           200s       3.33m     0.06h    0.00d
+# Completed: 435 of 435 jobs
+# CPU time in finished jobs:    3994116s   66568.60m  1109.48h   46.23d  0.127 y
+# IO & Wait Time:                180402s    3006.70m    50.11h    2.09d  0.006 y
+# Average job time:                9597s     159.94m     2.67h    0.11d
+# Longest finished job:           20697s     344.95m     5.75h    0.24d
+# Submission to last job:        108662s    1811.03m    30.18h    1.26d
 
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:        688s      11.47m     0.19h    0.01d  0.000 y
-# IO & Wait Time:                   169s       2.82m     0.05h    0.00d  0.000 y
-# Average job time:                  21s       0.36m     0.01h    0.00d
-# Longest job:                       55s       0.92m     0.02h    0.00d
-# Submission to last job:           212s       3.53m     0.06h    0.00d
+# Completed: 435 of 435 jobs
+# CPU time in finished jobs:         16s       0.27m     0.00h    0.00d  0.000 y
+# IO & Wait Time:                  1403s      23.38m     0.39h    0.02d  0.000 y
+# Average job time:                   3s       0.05m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:            92s       1.53m     0.03h    0.00d
+
+# Completed: 183 of 183 jobs
+# CPU time in finished jobs:       2603s      43.38m     0.72h    0.03d  0.000 y
+# IO & Wait Time:                  1175s      19.59m     0.33h    0.01d  0.000 y
+# Average job time:                  21s       0.34m     0.01h    0.00d
+# Longest finished job:             321s       5.35m     0.09h    0.00d
+# Submission to last job:        232082s    3868.03m    64.47h    2.69d
+
+    #	Broken chaining run on empty result files, finish that off
+    #	manually, then      (mistakenly overwrite blastz.out here)
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue chainMerge -bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
 
     #	swap results to place mm7 alignments onto TetNig1
     ssh hgwdev
-    cd /cluster/data/mm7/bed/blastzTetNig1.2005_03_17
-    rm -fr /usr/local/apache/htdocs/goldenPath/tetNig1/vsMm6
-    time /cluster/bin/scripts/doBlastzChainNet.pl -fileServer eieio \
-	-swap `pwd`/DEF > swap.run.out 2>&1 &
-    
+    cd /cluster/data/mm7/bed/blastzTetNig1.2005-09-20
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -fileServer kolossus \
+	`pwd`/DEF > swap.out 2>&1 &
+
     #	Measurements:
     cat << '_EOF_' > measurements.sh
 #!/bin/sh
@@ -1671,25 +1668,37 @@ doOne tetNig1 chainMm5Link
     time ./measurements.sh
 
     featureBits mm7 netTetNig1
+    #	705879667 bases of 2583394090 (27.324%) in intersection
+    featureBits mm6 netTetNig1
     #   720943295 bases of 2597150411 (27.759%) in intersection
     featureBits mm5 netTetNig1
     #   618111072 bases of 2615483787 (23.633%) in intersection
     featureBits mm7 chainTetNig1
+    #	750370420 bases of 2583394090 (29.046%) in intersection
+    featureBits mm6 chainTetNig1
     #   771732145 bases of 2597150411 (29.715%) in intersection
     featureBits mm5 chainTetNig1
     #   652622662 bases of 2615483787 (24.952%) in intersection
     featureBits mm7 chainTetNig1Link
+    #	51363209 bases of 2583394090 (1.988%) in intersection
+    featureBits mm6 chainTetNig1Link
     #   62346107 bases of 2597150411 (2.401%) in intersection
     featureBits mm5 chainTetNig1Link
     #   43905129 bases of 2615483787 (1.679%) in intersection
+    featureBits tetNig1 netMm7
+    #	160849376 bases of 342403326 (46.977%) in intersection
     featureBits tetNig1 netMm6
     #   176451958 bases of 342403326 (51.533%) in intersection
     featureBits tetNig1 netMm5
     #   152232538 bases of 342403326 (44.460%) in intersection
+    featureBits tetNig1 chainMm7
+    #	175481308 bases of 342403326 (51.250%) in intersection
     featureBits tetNig1 chainMm6
     #   197657323 bases of 342403326 (57.726%) in intersection
     featureBits tetNig1 chainMm5
     #   163683179 bases of 342403326 (47.804%) in intersection
+    featureBits tetNig1 chainMm7Link
+    #	47408068 bases of 342403326 (13.846%) in intersection
     featureBits tetNig1 chainMm6Link
     #   55282376 bases of 342403326 (16.145%) in intersection
     featureBits tetNig1 chainMm5Link
@@ -4131,19 +4140,15 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
 # foldUtr5
 
 ############################################################################
-
-# CYTOBAND TRACK (TBD)
+# CYTOBAND TRACK (DONE - 2005-10-11 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/mm7/cytoBand
     cd /cluster/data/mm7/cytoBand
     # Get file from NCBI
-    #	This one was a special delivery before it reached the usual
-    #	location in mapviewer
     WGETRC=/cluster/data/mm7/ncbi/.wgetrc
     export WGETRC
-    wget --timestamping ftp://ftp-private.ncbi.nih.gov/mouse_34/ideogram.gz
-    #	I'm guessing when the mapview is done, this file would be here:
-    # wget ftp://ftp.ncbi.nih.gov/genomes/M_musculus/maps/mapview/BUILD.34/ideogram.gz
+    wget --timestamping ftp://ftp-private.ncbi.nih.gov/mouse_35/ideogram.gz
+
     gunzip ideogram
     # Create bed file
     /cluster/bin/scripts/createNcbiCytoBand ideogram
