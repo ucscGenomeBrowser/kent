@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.5 2005/10/10 22:56:53 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.6 2005/10/11 04:31:40 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -462,7 +462,7 @@ if (startExon == endExon)
     {
     verbose(1, "    single exonPos = %d\n", startExon);
     exonSize = end - start;
-    assert (exonSize < exonSeqArray[startExon]->size);
+    assert (exonSize <= exonSeqArray[startExon]->size);
     offset = start - gene->exonStarts[startExon];
     memcpy(newSeq->dna, (exonSeqArray[startExon]->dna)+offset, exonSize);
     newSeq->dna[exonSize] = 0;
