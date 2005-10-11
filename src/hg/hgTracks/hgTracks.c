@@ -94,7 +94,7 @@
 #include "retroGene.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1018 2005/10/10 18:14:28 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1019 2005/10/11 23:27:00 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9082,7 +9082,8 @@ if (sameString(intron->status, "not_tested"))
     return vgFindColorIx(vg, 214,214,216);       /* light grey */
 if (sameString(intron->status, "RT_negative"))
     return vgFindColorIx(vg, 145,51,56);       /* red */
-if (sameString(intron->status, "RT_positive"))
+if (sameString(intron->status, "RT_positive") ||
+        sameString(intron->status, "RACE_validated"))
     return vgFindColorIx(vg, 61,142,51);       /* green */
 if (sameString(intron->status, "RT_wrong_junction"))
     return getOrangeColor(vg);                 /* orange */
@@ -10242,8 +10243,9 @@ registerTrackHandler("pscreen", simpleBedTriangleMethods);
 registerTrackHandler("dless", dlessMethods);
 registerTrackHandler("dlessMD", dlessMethods);
 /* ENCODE related */
-registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeIntronOct", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
@@ -10616,10 +10618,16 @@ if (showTrackControls)
                                 subtrack->loadTime, subtrack->drawTime,
 				subtrack->loadTime + subtrack->drawTime);
                 }
-            else
-	        hPrintf("%s, %d, %d, %d<BR>\n", 
-			track->shortLabel, track->loadTime, track->drawTime,
-			track->loadTime + track->drawTime);
+            else 
+                {
+	        hPrintf("%s, %d, %d<BR>\n", 
+			track->shortLabel, track->loadTime, track->drawTime);
+                if (startsWith("wigMaf", track->tdb->type))
+                  if (track->subtracks)
+                      if (track->subtracks->loadTime)
+                         hPrintf("&nbsp; &nbsp; %s wiggle, load %d<BR>\n", 
+                            track->shortLabel, track->subtracks->loadTime);
+                }
 	    }
 	}
     }
