@@ -786,7 +786,7 @@ cat > load.csh << 'EOF'
     # The hg16 composite only has the first 4 submitted
 
 ##########################################################################
-# UT-Austin (Vishy Iyer lab) Chip/chip  (kate)
+# UT-Austin (Vishy Iyer lab) Chip/chip  (2005-10-10 kate)
     cd /cluster/data/encode
     mkdir UTexas/2005-10-01/lab
     cd UTexas/2005-10-01/lab
@@ -836,7 +836,7 @@ cat > load.csh << 'EOF'
     #  on hg17.
 
 ##########################################################################
-# U North Carolina (Paul lab) FAIRE  (kate)
+# U North Carolina FAIRE  (kate)
     cd /cluster/data/encode
     mkdir UNC/2005-10-10/lab
     cd UNC/2005-10-010/lab
@@ -853,3 +853,62 @@ cat > load.csh << 'EOF'
         set t = $f:t
         dos2unix -l -n $f $t
     end
+
+##########################################################################
+# Gencode Genes (2005-10-10 kate)
+#    Files are on Gencode/IMIM web site, our contact for this round is France Denoed
+#    France requested 3 subtracks: genes, putatives, and pseudogenes        
+    cd /cluster/data/encode
+    mkdir -p Gencode/2005-10-07/lab
+    cd Gencode/2005-10-07/lab
+
+    wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/README
+    wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_genes_CHR_coord.gtf
+    wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_coding_CHR_coord.gtf
+    wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_putative_CHR_coord.gtf
+    wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_pseudogenes_CHR_coord.gtf
+
+    cat lab/44regions_genes_CHR_coord.gtf lab/44regions_coding_CHR_coord.gtf | \
+        ldHgGene -gtf -genePredExt hg17 encodeGencodeKnown stdin
+            # Read 2637 transcripts in 76521 lines in 1 files
+            # 2637 groups 21 seqs 13 sources 5 feature types
+            # 2608 gene predictions
+    genePredCheck -db=hg17 encodeGencodeKnown
+
+    ldHgGene -gtf -genePredExt hg17 encodeGencodePutative lab/44regions_putative_CHR_coord.gtf
+            # 156 gene predictions
+    genePredCheck -db=hg17 encodeGencodePutative
+
+    ldHgGene -gtf -genePredExt hg17 encodeGencodePseudo lab/44regions_pseudogenes_CHR_coord.gtf
+            # 197 gene predictions
+    genePredCheck -db=hg17 encodeGencodePutative
+    # create composite track: "Gencode Oct Gene" with 3 subtracks
+
+    # Introns track
+    grep intron lab/*.gtf | wc -l
+        # 25421
+    # ignore "not tested" introns
+    grep intron lab/*.gtf | grep -v not_tested | wc -l
+        # 509
+    # NOTE: need verision of loader with new status value added
+    cat lab/*.gtf | grep -v not_tested | sed -e 's/-intron/-/g' | \
+        ~/bin/i386/ldGencodeIntron hg17 encodeGencodeIntronOct stdin
+            # 509 introns in 1 files
+
+    # create gene class table
+    sed 's/gencodeGeneClass/gencodeGeneClassOct/' \
+        ~/kent/src/hg/lib/gencodeGeneClass.sql | hgsql hg17
+    cat lab/*.gtf | grep VEGA | \
+        awk '{printf "%s\t%s\n", $10, $2}' | \
+        sed -e 's/"//g' -e 's/;//' -e 's/VEGA_//' \
+            -e 's/_val/_gencode_conf/' -e 's/Antisense/Novel_transcript/' | \
+        sort | uniq > gencodeGeneClassOct.tab
+    wc -l gencodeGeneClassOct.tab
+        #  2961
+    echo "LOAD DATA LOCAL INFILE 'gencodeGeneClassOct.tab' into table gencodeGeneClassOct" | hgsql hg17
+
+
+    
+
+
+
