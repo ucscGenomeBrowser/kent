@@ -9,7 +9,7 @@ CREATE TABLE gencodeIntron (
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     name varchar(255) not null,	# Intron_id from GTF
-    status varchar(255) not null,	# enum('not_tested', 'RT_positive','RT_negative','RT_wrong_junction', 'RT_submitted')
+    enum('not_tested', 'RT_positive','RT_negative','RT_wrong_junction', 'RT_submitted', 'RACE_validated' )
     strand char(1) not null,	# + or -
     transcript varchar(255) not null,	# Transcript_id from GTF
     geneId varchar(255) not null,	# Gene_id from GTF
