@@ -86,14 +86,14 @@ visibility off
 type lookup knownToHInv name value
 search prefix
 
-name genePix
-shortLabel Gene Pix
-longLabel UCSC Gene Picture Database
+name visiGene
+shortLabel visiGene
+longLabel UCSC VisiGene in-situ image browser
 priority 2.61
 visibility off
-type lookup knownToGenePix name value
+type lookup knownToVisiGene name value
 search exact
-itemUrl ../cgi-bin/hgGenePix?hgp_doId=%s
+itemUrl ../cgi-bin/hgVisiGene?hgp_doId=%s
 hgsid on
 
 name esRegModule
