@@ -763,8 +763,9 @@ cat > doLoad.csh << 'EOF'
     # Create composite track, encodeGisChipPetStat, with 2 subtracks
 
 ##########################################################################
-# UCSD/Ludwig Institute (Bing Ren lab) (kate)
+# UCSD/Ludwig Institute Nimblegen chip/chip (2005-10-07 KATE)
 
+    ssh hgwdev
     cd /cluster/data/encode/UCSD/nimblegen
     mkdir 2005-09-29
     cd 2005-09-29
@@ -772,15 +773,36 @@ cat > doLoad.csh << 'EOF'
     # copy file from FTP dir, unzip and untar, into lab dir
     # 12 data files and README
 
+cat > load.csh << 'EOF'
+    foreach f (`ls lab/*.wig`)
+        set table = `echo $f:t:r | sed -e 's/\(.*\)/encodeUcsdNgHeLa\u\1/'`
+        echo $table
+        grep '^chr' $f | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
+        checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.csh >&! load.log
+    # Created hg17 composite track with all 16 datasets
+    # The hg16 composite only has the first 4 submitted
+
 ##########################################################################
 # UT-Austin (Vishy Iyer lab) Chip/chip  (kate)
-
     cd /cluster/data/encode
     mkdir UTexas/2005-10-01/lab
     cd UTexas/2005-10-01/lab
     # copy file from FTP dir
-    # 8 .wig data files (2 tracks, 4 experiments), plus description file
+    # 8 .wig data files (4 experiments, with raw data, and "peaks"), plus description file
 
+cat > load.csh << 'EOF'
+    foreach f (`ls lab/*.wig`)
+        set table = `echo $f:t:r | sed -e 's/HeLa/HeLa_NoSerum/;s/NoSerum//;s/Serum4hr/Stim/;s/2091/2091fib/;s/\(.*\)_\(.*\)_\(.*\)_\(.*\)/encodeUtex\1\3\2\u\4/'`
+        echo $table
+        grep '^chr' $f | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
+    checkTableCoords hg17 $table
+    end
+'EOF'
+    csh load.csh >&! load.log
+    # Created composite track with 8 subtracks
     
 ##########################################################################
 # Affy Chip/chip and RNA (kate)
@@ -813,4 +835,21 @@ cat > doLoad.csh << 'EOF'
     #  and these will be added to the previous Affy Chip/chip tracks
     #  on hg17.
 
-    
+##########################################################################
+# U North Carolina (Paul lab) FAIRE  (kate)
+    cd /cluster/data/encode
+    mkdir UNC/2005-10-10/lab
+    cd UNC/2005-10-010/lab
+    # copy files from FTP dir
+    # 8 .gff data files plus description file
+
+    # convert to UNIX format
+    foreach f (lab/*norm*.gff)
+        set t = $f:t
+        dos2unix -n $f $t
+    end
+    # slightly different format for "peaks" files
+    foreach f (lab/*fpr01*.gff)
+        set t = $f:t
+        dos2unix -l -n $f $t
+    end
