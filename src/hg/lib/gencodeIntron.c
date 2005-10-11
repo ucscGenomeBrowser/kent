@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "gencodeIntron.h"
 
-static char const rcsid[] = "$Id: gencodeIntron.c,v 1.1 2005/03/22 01:22:13 kate Exp $";
+static char const rcsid[] = "$Id: gencodeIntron.c,v 1.2 2005/10/11 02:15:50 kate Exp $";
 
 void gencodeIntronStaticLoad(char **row, struct gencodeIntron *ret)
 /* Load a row from gencodeIntron table into ret.  The contents of ret will
@@ -240,7 +240,7 @@ char *createString =
 "       chromStart int unsigned not null,	# Start position in chromosome\n"
 "       chromEnd int unsigned not null,	# End position in chromosome\n"
 "       name varchar(255) not null,	# Intron ID\n"
-"       status enum('not_tested', 'RT_positive','RT_negative','RT_wrong_junction','RT_submitted'),      # Status\n"
+"       status enum('not_tested', 'RT_positive','RT_negative','RT_wrong_junction','RT_submitted', 'RACE_validated'),      # Status\n"
 "       strand char(1) not null,	# + or -\n"
 "       transcript varchar(255) not null,	# Transcript ID from GTF\n"
 "       geneId varchar(255) not null,	# Gene ID from GTF\n"
