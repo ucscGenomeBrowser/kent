@@ -3575,7 +3575,6 @@ origAssembly hg16
     compositeTrack on
     shortLabel Yale ChIP Sites
     longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, Binding Sites)
-    group encodeChip
     priority 59.0
     chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
     visibility hide
@@ -3612,6 +3611,78 @@ origAssembly hg16
     priority 4
     color 200,50,50
     altColor 50,50,200
+
+track encodeUtexChip
+compositeTrack on
+shortLabel UT-Austin ChIP
+longLabel University of Texas, Austin ChIP/Chip
+group encodeChip
+priority 58.2
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -3.23
+maxLimit 4.35
+windowingFunction mean
+autoScale Off
+origAssembly hg17
+
+    track encodeUtexHeLaMycRaw
+    subTrack encodeUtexChip
+    shortLabel UT Myc HeLa
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, HeLa) 
+    color 120,30,50
+    priority 1
+
+    track encodeUtexHeLaMycPeaks
+    shortLabel UT Myc HeLa Pk
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, HeLa) Peaks
+    subTrack encodeUtexChip
+    color 50,0,0
+    priority 2
+
+    track encodeUtex2091fibMycRaw
+    subTrack encodeUtexChip
+    shortLabel UT Myc Fib
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, 2091 fibroblasts)
+    color 120,30,50
+    priority 3
+
+    track encodeUtex2091fibMycPeaks
+    subTrack encodeUtexChip
+    shortLabel UT Myc Fib Pk
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, 2091 fibroblasts) Peaks
+    color 50,0,0
+    priority 4
+
+    track encodeUtex2091fibMycStimRaw
+    subTrack encodeUtexChip
+    shortLabel UT Myc Fib Stim
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, FBS-stimulated 2091 fibroblasts)
+    color 120,30,50
+    priority 5
+
+    track encodeUtex2091fibMycStimPeaks
+    shortLabel UT Myc Fib St Pk
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, FBS-stimulated 2091 fibroblasts) Peaks
+    subTrack encodeUtexChip
+    color 50,0,0
+    priority 6
+
+    track encodeUtex2091fibE2F4Raw
+    subTrack encodeUtexChip
+    shortLabel UT E2F4 Fib
+    longLabel University of Texas, Austin  ChIP/Chip (E2F4, 2091 fibroblasts) 
+    color 120,30,50
+    priority 7
+
+    track encodeUtex2091fibE2F4Peaks
+    shortLabel UT E2F4 Fib St Pk
+    longLabel University of Texas, Austin  ChIP/Chip (E2F4, 2091 fibroblasts) Peaks
+    subTrack encodeUtexChip
+    color 50,0,0
+    priority 8
 
 track encodeNhgriDnaseHs
 compositeTrack on
