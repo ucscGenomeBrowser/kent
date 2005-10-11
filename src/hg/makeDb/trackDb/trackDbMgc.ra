@@ -277,16 +277,17 @@ exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
 
-track intronEstNoWustl
-shortLabel Spliced ESTs w/o PCR
-longLabel $Organism ESTs That Have Been Spliced, excluding MGC C-List PCR
+track mgcMm6TransMap
+shortLabel Mouse TransMap
+longLabel Mouse TransMap Genes
 group mgc
-priority 200
-visibility hide
-spectrum on
-intronGap 30
-type psl est
-pslSequenceBases no
+priority 112.1
+visibility dense
+type genePred
+color 12,12,120
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
 
 track mgcGreenPcrHit
 shortLabel Green Success 
