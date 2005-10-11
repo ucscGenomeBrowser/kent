@@ -12,6 +12,7 @@ install:
 	cp -p --remove-destination checkOffend.csh         ${SCRIPTS}
 	cp -p --remove-destination checkScaffoldGaps.csh   ${SCRIPTS}
 	cp -p --remove-destination checkStaticLinks.csh    ${SCRIPTS}
+	cp -p --remove-destination checkStoreUnits.csh     ${SCRIPTS}
 	cp -p --remove-destination compareHgFindSpecs.csh  ${SCRIPTS}
 	cp -p --remove-destination compareTableLists.csh   ${SCRIPTS}
 	cp -p --remove-destination compareTrackDbAll.csh   ${SCRIPTS}
