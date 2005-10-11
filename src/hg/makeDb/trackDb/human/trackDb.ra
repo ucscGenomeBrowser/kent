@@ -1092,8 +1092,8 @@ origAssembly hg17
 
     track encodeGencodeKnown
     subTrack encodeGencodeGeneOct
-    shortLabel Gencode Known
-    longLabel Gencode October Freeze Known Genes
+    shortLabel Gencode Reference
+    longLabel Gencode October Freeze Reference Genes
     color 73,76,73
     priority 1
 
