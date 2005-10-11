@@ -1031,6 +1031,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
+
 track encodeGencodeGene
 shortLabel Gencode Genes
 longLabel Gencode Gene Annotations 
@@ -1059,7 +1060,62 @@ track encodeGencodeIntron
 shortLabel Gencode Introns
 longLabel Gencode Intron Validation 
 group encodeGenes
-priority 11.0
+priority 10.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
+visibility hide
+type bed 6 +
+origAssembly hg17
+
+track encodeGencodeGeneOct
+compositeTrack on
+shortLabel Gencode Oct Genes
+longLabel Gencode October Gene Annotations
+group encodeGenes
+priority 10.5
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type genePred
+cdsDrawDefault genomic\ codons
+itemClassTbl gencodeGeneClassOct
+geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
+gClass_Known 33,91,51
+gClass_Novel_CDS 33,91,51
+gClass_Novel_transcript_gencode_conf 33,91,51
+gClass_Putative_gencode_conf 33,91,51
+gClass_Novel_transcript  84,188,0
+gClass_TEC  84,188,0
+gClass_Putative  84,188,0
+gClass_Artifact 163,168,163
+gClass_Processed_pseudogene 0,91,191
+gClass_Unprocessed_pseudogene 0,91,191
+origAssembly hg17
+
+    track encodeGencodeKnown
+    subTrack encodeGencodeGeneOct
+    shortLabel Gencode Known
+    longLabel Gencode October Freeze Known Genes
+    color 73,76,73
+    priority 1
+
+    track encodeGencodePutative
+    subTrack encodeGencodeGeneOct
+    shortLabel Gencode Putative
+    longLabel Gencode October Freeze Putative Genes
+    color 73,76,73
+    priority 2
+
+    track encodeGencodePseudo
+    subTrack encodeGencodeGeneOct
+    shortLabel Gencode Pseudo
+    longLabel Gencode October Freeze Pseudogenes
+    color 73,76,73
+    priority 3
+
+track encodeGencodeIntronOct
+shortLabel Gencode Oct Introns
+longLabel Gencode October Freeze Intron Validation 
+group encodeGenes
+priority 10.6
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
 type bed 6 +
@@ -1077,7 +1133,7 @@ type genePred
 cdsDrawDefault genomic\ codons
 origAssembly hg17
 
-    track encodeEgaspFullAceview
+track encodeEgaspFullAceview
     subTrack encodeEgaspFull
     shortLabel AceView
     longLabel AceView Gene Predictions
