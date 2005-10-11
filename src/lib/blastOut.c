@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.20 2005/10/05 10:06:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.21 2005/10/11 22:18:45 fanhsu Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -528,14 +528,7 @@ for (target = targetList; target != NULL; target = target->next)
 	axt = ref->axt;
 	
 	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
-	if (isProt)
-	    {
-	    identity = round(100.0 * matches / axt->symCount);
-	    }
-	else
-	    {
-	    identity = round(100.0 * matches / axt->symCount);
-	    }
+	identity = round(100.0 * matches / axt->symCount);
 	/* skip output if minIdentity not reached */
 	if (identity < minIdentity) continue;
     
@@ -563,14 +556,7 @@ for (target = targetList; target != NULL; target = target->next)
 	axt = ref->axt;
 	
 	matches = countMatches(axt->qSym, axt->tSym, axt->symCount);
-	if (isProt)
-	    {
-	    identity = round(100.0 * matches / axt->symCount);
-	    }
-	else
-	    {
-	    identity = round(100.0 * matches / axt->symCount);
-	    }
+	identity = round(100.0 * matches / axt->symCount);
 	
 	/* skip output if minIdentity not reached */
 	if (identity < minIdentity) continue;
@@ -731,7 +717,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/10/05 10:06:52 $";
+    char * rcsDate = "$Date: 2005/10/11 22:18:45 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
