@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.950 2005/10/01 00:58:06 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.951 2005/10/11 03:12:58 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17201,7 +17201,7 @@ else if (startsWith("flyreg", track))
     doFlyreg(tdb, item);
     }
 /* ENCODE tracks */
-else if (sameWord("encodeGencodeIntron", track))
+else if (startsWith("encodeGencodeIntron", track))
     {
     doGencodeIntron(tdb, item);
     }
