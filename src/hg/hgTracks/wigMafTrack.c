@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.1 2005/10/07 22:05:37 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.2 2005/10/12 22:16:29 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -241,7 +241,7 @@ if (winBaseCount > MAF_SUMMARY_VIEW)
     return;
 conn = hAllocConn();
 track->customPt = wigMafLoadInRegion(conn, track->mapName, 
-                                        chromName, winStart, winEnd);
+                                        chromName, winStart - 2 , winEnd + 2);
 hFreeConn(&conn);
 }
 
@@ -1152,8 +1152,14 @@ for (i = 0; i < size; i++, dna++)
     }
 }
 
-static void translateCodons(DNA *dna, int start, int length, int frame, 
-				char strand,bool alreadyComplemented,
+#define ISGAP(x)  (((x) == '=') || (((x) == '-')))
+#define ISN(x)  ((x) == 'N') 
+#define ISSPACE(x)  ((x) == ' ') 
+#define ISGASPACEPORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
+
+static void translateCodons(char *tableName, char *compName, DNA *dna, int start, int length, int frame, 
+				char strand,int prevEnd, int nextStart,
+				bool alreadyComplemented,
 				int x, int y, int width, int height, 
 				struct vGfx *vg)
 {
@@ -1161,6 +1167,15 @@ int size = length;
 DNA *ptr;
 int color;
 int end = start + length;
+int x1;
+struct sqlConnection *conn = hAllocConn();
+//char dbChrom[128];
+char masterChrom[128];
+struct mafAli *ali, *sub;
+struct mafComp *comp;
+
+safef(masterChrom, sizeof(masterChrom), "%s.%s", database, chromName);
+//safef(dbChrom, sizeof(dbChrom), "%s.%s", compName, chromName);
 
 dna += start;
 if (strand == '-')
@@ -1177,32 +1192,72 @@ else
     }
 
 ptr = dna;
+color = shadesOfSea[0];
 
-switch(frame)
+if (frame)
     {
-    case 1:
-	*ptr++ = ' ';
-	*ptr++ = ' ';
-	length -= 2;
-	break;
-    case 2:
-	*ptr++ = ' ';
-	length -= 1;
-	break;
+    int mult = 1;
+    char codon[4];
+    int fillBox = FALSE;
+
+    memset(codon, 0, sizeof(codon));
+    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd - 2, prevEnd  );
+    sub = mafSubset(ali, masterChrom, prevEnd - 2, prevEnd  );
+    comp = mafMayFindCompPrefix(sub, compName, ".");
+    switch(frame)
+	{
+	case 1:
+	    if (comp && (!(ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
+		{
+		codon[0] = comp->text[1];
+		codon[1] = ptr[0];
+		codon[2] = ptr[1];
+		fillBox = TRUE;
+		mult = 2;
+		*ptr++ = ' ';
+		*ptr++ = lookupCodon(codon);
+		}
+	    else
+		ptr+=2;
+	    length -= 2;
+	    break;
+	case 2:
+	    if (comp && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(*ptr))))
+		{
+		codon[0] = comp->text[0];
+		codon[1] = comp->text[1];
+		codon[2] = *ptr;
+		fillBox = TRUE;
+		mult = 1;
+		*ptr++ = lookupCodon(codon);
+		}
+	    else
+		ptr++;
+	    length -= 1;
+	    break;
+	}
+    if (fillBox)
+	{
+	if (strand == '-')
+	    {
+	    x1 = x + ( end -2  ) * width / winBaseCount;
+	    }
+	else
+	    {
+	    x1 = x + (start - 2) * width / winBaseCount;
+	    }
+	vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
+	}
     }
 
-color = cdsColor[CDS_EVEN];
-color = shadesOfSea[0];
+//hFreeConn(&conn);
+//return;
+
 for (;length > 2; ptr +=3 , length -=3)
+    //if (0)
     {
-#define ISGAP(x)  (((x) == '=') || (((x) == '-')))
-#define ISN(x)  ((x) == 'N') 
-#define ISSPACE(x)  ((x) == ' ') 
-#define ISGASPACEPORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
     if (!(ISGASPACEPORN(ptr[0]) || ISGASPACEPORN(ptr[1]) || ISGASPACEPORN(ptr[2]) ))
 	{
-	int x1;
-
 	ptr[1] = lookupCodon(ptr);
 	if (ptr[1] == 0) ptr[1] = '*';
 	ptr[0] = ' ';
@@ -1210,35 +1265,82 @@ for (;length > 2; ptr +=3 , length -=3)
 
 	if (strand == '-')
 	    {
-	    x1 = x + ( start + length - 3) * width / winBaseCount;
+	    x1 = x + ( start + length - 3 - 2) * width / winBaseCount;
 	    }
 	else
 	    {
-	    x1 = x + (end - length) * width / winBaseCount;
+	    x1 = x + (end - length - 2) * width / winBaseCount;
 	    }
 
 	if (color == shadesOfSea[0])
 	    color = shadesOfSea[1];
 	else
 	    color = shadesOfSea[0];
-	vgBox(vg, x1, y, 3*width/winBaseCount , height, color);
+	vgBox(vg, x1, y, 3*width/winBaseCount + 1 , height, color);
 	}
-
     }
 
-switch(length)
+if (length && (nextStart != -1))
     {
-    case 2:
-	*ptr++ = ' ';
-	*ptr++ = ' ';
-	break;
-    case 1:
-	*ptr++ = ' ';
-	break;
+    char codon[4];
+    int mult = 1;
+    boolean fillBox = FALSE;
+
+    memset(codon, 0, sizeof(codon));
+	
+    ali = mafLoadInRegion(conn, tableName, chromName, nextStart, nextStart + 2 );
+    sub = mafSubset(ali, masterChrom, nextStart, nextStart + 2);
+    comp = mafMayFindCompPrefix(sub, compName, ".");
+    if (comp)
+	{
+	switch(length)
+	    {
+	    case 2:
+		codon[0] = *ptr;
+		codon[1] = *(1 + ptr);
+		codon[2] = *comp->text;
+		if (!(ISGASPACEPORN(codon[0]) ||ISGASPACEPORN(codon[1]) ||ISGASPACEPORN(codon[2])))
+		    {
+		    fillBox = TRUE;
+		    *ptr++ = ' ';
+		    *ptr++ = lookupCodon(codon);
+		    mult = 2;
+		    }
+		break;
+	    case 1:
+		codon[0] = *ptr;
+		codon[1] = comp->text[0];
+		codon[2] = comp->text[1];
+		if (!(ISGASPACEPORN(codon[0]) ||ISGASPACEPORN(codon[1]) ||ISGASPACEPORN(codon[2])))
+		    {
+		    *ptr++ = lookupCodon(codon);
+		    fillBox = TRUE;
+		    }
+		break;
+	    }
+	if (fillBox)
+	    {
+	    if (strand == '-')
+		{
+		x1 = x + ( start    ) * width / winBaseCount;
+		}
+	    else
+		{
+		x1 = x + (end - length - 2) * width / winBaseCount;
+		}
+	    if (color == shadesOfSea[0])
+		color = shadesOfSea[1];
+	    else
+		color = shadesOfSea[0];
+	    vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
+	    }
+	}
     }
 
 if (strand == '-')
     reverseBytes(dna, size);
+
+hFreeConn(&conn);
 }
 
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
@@ -1272,8 +1374,19 @@ int offset;
 char *framesTable = NULL;
 char *defaultCodonSpecies = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
 char *codonTransMode = NULL;
-//char *codonTranslation = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
+boolean startSub2 = FALSE;
 
+//char *codonTranslation = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
+if (seqStart > 2)
+    {
+    startSub2 = TRUE;
+    seqStart -=2;
+    }
+seqEnd +=2;
+if (seqEnd > seqBaseCount)
+    seqEnd = seqBaseCount;
+
+//printf("seqBaseCount %d\n",seqBaseCount);
 safef(buf, sizeof(buf), "%s.frames",track->mapName);
 if (cartVarExists(cart, buf))
     framesTable = cartUsualString(cart, buf, NULL);
@@ -1321,9 +1434,9 @@ selfLine = lines[1];
 AllocArray(insertCounts, alignLineLength);
 
 /* Load up self-line with DNA */
-seq = hChromSeq(chromName, seqStart, seqEnd);
-memcpy(selfLine, seq->dna, winBaseCount);
-toUpperN(selfLine, winBaseCount);
+seq = hChromSeqMixed(chromName, seqStart , seqEnd);
+memcpy(selfLine, seq->dna, winBaseCount + 4);
+//toUpperN(selfLine, winBaseCount);
 freeDnaSeq(&seq);
 
 /* Make hash of species items keyed by database. */
@@ -1352,7 +1465,10 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     mcMaster = mafFindComponent(maf, dbChrom);
     mafStart = mcMaster->start;
     /* get portion of maf in this window */
-    sub = mafSubset(maf, dbChrom, winStart, winEnd);
+    if (startSub2)
+	sub = mafSubset(maf, dbChrom, winStart - 2, winEnd + 2);
+    else
+	sub = mafSubset(maf, dbChrom, winStart , winEnd + 2);
     if (sub != NULL)
         {
 	int subStart,subEnd;
@@ -1566,8 +1682,12 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 /* draw inserts line */
 charifyInserts(insertLine, insertCounts, winBaseCount);
 mi = miList;
-spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
-                getOrangeColor(), font, insertLine, winBaseCount, FALSE);
+if (startSub2)
+    spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
+		    getOrangeColor(), font, &insertLine[2], winBaseCount, FALSE);
+else
+    spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
+		    getOrangeColor(), font, insertLine, winBaseCount, FALSE);
 y += mi->height;
 
 /* draw alternating colors behind base-level alignments */
@@ -1663,7 +1783,7 @@ tryagain:
 	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart; 
 	    w= end - start;
 
-	    translateCodons(line, start , w, frame, mf.strand[0],complementBases,
+	    translateCodons(track->mapName, mi->db, line, start , w, frame, mf.strand[0],mf.prevEnd,mf.nextStart,complementBases,
 				x, y, width, mi->height,  vg);
 	    
 	    }
@@ -1681,20 +1801,24 @@ tryagain:
 	hFreeConn(&conn);
 	}
 
-    spreadAlignString(vg, x, y, width, mi->height-1, color,
+    if (startSub2)
+	spreadAlignString(vg, x, y, width, mi->height-1, color,
+                        font, &line[2], &selfLine[2], winBaseCount, dots, FALSE);
+    else
+	spreadAlignString(vg, x, y, width, mi->height-1, color,
                         font, line, selfLine, winBaseCount, dots, FALSE);
     for(offset = 0; mi->seqEnds[offset]; offset++)
 	{
 	int x1;
 
-	x1 = x + (mi->seqEnds[offset] -1) * width/winBaseCount;
+	x1 = x + (mi->seqEnds[offset] -1 - startSub2 * 2) * width/winBaseCount;
 	vgBox(vg, x1, y-1, 1, mi->height-1, getBlueColor());
 	}
     for(offset = 0; mi->brackStarts[offset]; offset++)
 	{
 	int x1;
 
-	x1 = x + (mi->brackStarts[offset] -1) * width/winBaseCount;
+	x1 = x + (mi->brackStarts[offset] -1- startSub2 * 2) * width/winBaseCount;
 	vgBox(vg, x1, y-1, 2, 1, getOrangeColor());
 	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
 	vgBox(vg, x1, y + mi->height-3, 2, 1, getOrangeColor());
@@ -1703,7 +1827,7 @@ tryagain:
 	{
 	int x1;
 
-	x1 = x + (mi->brackEnds[offset] -1) * width/winBaseCount;
+	x1 = x + (mi->brackEnds[offset] -1- startSub2 * 2) * width/winBaseCount;
 	vgBox(vg, x1-1, y-1, 2, 1, getOrangeColor());
 	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
 	vgBox(vg, x1-1, y + mi->height-3, 2, 1, getOrangeColor());
