@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.10 2005/10/11 21:16:29 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.11 2005/10/12 18:19:14 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -852,39 +852,37 @@ XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
 #############################################################################
 # PREPARE "bigZips" files for public release
-#	(DONE up to mrna, 2005-09-20 - Hiram)
-    ssh hgwdev
-    mkdir -p /usr/local/apache/htdocs/goldenPath/mm7/bigZips
-    cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
-    cp -p /usr/local/apache/htdocs/goldenPath/mm6/bigZips/README.txt .
+#	(DONE 2005-09-20 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/mm7/bigZips
+    cd /cluster/data/mm7/bigZips
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/mm6/bigZips/README.txt .
     # edit README.txt to indicate proper version of sequence and
     #	RepeatMasker
     cd /cluster/data/mm7
-    tar cvzf /usr/local/apache/htdocs/goldenPath/mm7/bigZips/chromAgp.tar.gz \
-	?/chr*.agp ??/chr*.agp
-    tar cvzf /usr/local/apache/htdocs/goldenPath/mm7/bigZips/chromFa.tar.gz \
-	?/chr*.fa ??/chr*.fa
-    tar cvzf \
-/usr/local/apache/htdocs/goldenPath/mm7/bigZips/chromFaMasked.tar.gz \
-	?/chr*.fa.masked ??/chr*.fa.masked
-    tar cvzf /usr/local/apache/htdocs/goldenPath/mm7/bigZips/chromOut.tar.gz \
-	?/chr*.fa.out ??/chr*.fa.out
+    tar cvzf bigZips/chromAgp.tar.gz ?/chr*.agp ??/chr*.agp
+    tar cvzf bigZips/chromFa.tar.gz ?/chr*.fa ??/chr*.fa
+    tar cvzf bigZips/chromFaMasked.tar.gz ?/chr*.fa.masked ??/chr*.fa.masked
+    tar cvzf bigZips/chromOut.tar.gz ?/chr*.fa.out ??/chr*.fa.out
     cd /cluster/data/mm7/bed/simpleRepeat
-    tar cvzf /usr/local/apache/htdocs/goldenPath/mm7/bigZips/chromTrf.tar.gz \
-	./trfMask
-
-    cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
-    md5sum *.gz > md5sum.txt
+    tar cvzf ../../bigZips/chromTrf.tar.gz ./trfMask
 
     # get GenBank native mRNAs
+    ssh hgwdev
     cd /cluster/data/genbank
     ./bin/i386/gbGetSeqs -db=mm7 -native GenBank mrna \
-	/usr/local/apache/htdocs/goldenPath/mm7/bigZips/mrna.fa
- XXX - DONE to here, 2005-09-20 - Hiram
-    cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
+	/cluster/data/mm7/bigZips/mrna.fa
+    cd /cluster/data/mm7/bigZips
     gzip mrna.fa
     
+    ssh kkstore02
+    cd /cluster/data/mm7/bigZips
     md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm7/bigZips
+    cd /usr/local/apache/htdocs/goldenPath/mm7/bigZips
+    ln -s /cluster/data/mm7/bigZips/* .
 
 #########################################################################
 # GENBANK auto update (DONE 2005-09-29 markd)
