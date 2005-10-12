@@ -88,7 +88,7 @@ exit; # don't actually run this like a script :)
     cd /cluster/data/haloHalo1/bed/simpleRepeat
     hgLoadBed haloHalo1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/sr/hg/lib/simpleRepeat.sql
 
-# Chains with halMar1
+# CHAIN TRACK with halMar1
 
     cd /cluster/data/haloHalo1/bed/
     mkdir conservation
@@ -97,14 +97,10 @@ exit; # don't actually run this like a script :)
     cp ../../haloHalo1.fa haloHalo1.chr
     cat /cluster/data/halMar1/*.fa > halMar1.chr
     #fix headers
-    sed s/\>plasmid/\>haloHalo1.plasmid/ haloHalo1.chr | gawk '{if(/haloHalo1.plasmid/){print $1;} else{print $0;}}' > temp
-    sed s/\>chr/\>haloHalo1.chr/ temp | gawk '{if(/haloHalo1.chr/){print $1;} else{print $0;}}' > haloHalo1.chr
-    sed s/\>Haloarcula_marismortui_ATCC_43049_/\>halMar1./ halMar1.chr | gawk '{if(/halMar1./){print $1;} else{print $0;}}' > temp
-    sed s/II/2/ temp > temp2
-    sed s/I/1/ temp2 > temp
-    sed s/_pNG// temp > temp2
-    sed s/00// temp2 > halMar1.chr
-    rm temp temp2
+    cat haloHalo1.chr | gawk '{if(/plasmid/){print $1;} else{print $0;}}' > temp
+    cat temp | gawk '{if(/chr/){print $1;} else{print $0;}}' > haloHalo1.chr
+    sed s/chrom/\>chr/ halMar1.chr | sed s/plas/\>plasmid/ | gawk '{if(/halMar1/){print $2;} else{print $0;}}' > temp
+    mv temp halMar1.chr
     faToTwoBit haloHalo1.chr haloHalo1.2bit
     faToTwoBit halMar1.chr halMar1.2bit
     faSize -detailed *.chr > chrom.sizes
@@ -136,7 +132,7 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
                        haloHalo1-halMar1.chain
     
     #load 
-    ln -s /cluster/data/haloHalo1/bed/conservation/haloHalo1-halMar1.chain /gbdb/haloHalo1/chainHalMar1
+    #ln -s /cluster/data/haloHalo1/bed/conservation/haloHalo1-halMar1.chain /gbdb/haloHalo1/chainHalMar1
     hgLoadChain haloHalo1 chainHalMar1 haloHalo1-halMar1.chain
 
     #trackDb
