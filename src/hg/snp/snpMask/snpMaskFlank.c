@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.6 2005/10/11 04:31:40 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.7 2005/10/12 20:43:34 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -66,6 +66,7 @@ AA lookupIupac(DNA *dna)
 int i = 0;
 for (i = 0; i<11; i++)
     if (sameString(dna, iupacTable[i].observed)) return iupacTable[i].iupacCode;
+verbose(5, "lookupIupac unknown char %s\n", dna);
 return '?';
 }
 
@@ -520,7 +521,7 @@ for (gene = genes; gene != NULL; gene = gene->next)
     {
     geneCount++;
     // short circuit goes here
-    // if (geneCount == 100) return;
+    if (geneCount == 2) return;
     verbose(1, "gene %d = %s\n", geneCount, gene->name);
 
     /* create masked sequence and store to array */
@@ -622,6 +623,7 @@ if(hgOfficialChromName(chromName) == NULL)
     errAbort("no such chromosome %s in %s\n", chromName, database);
 // check that nib file exists
 // or, use hNibForChrom from hdb.c
+dnaUtilOpen();
 snpMaskFlank(argv[3], argv[4]);
 return 0;
 }
