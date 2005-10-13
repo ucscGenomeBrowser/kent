@@ -134,20 +134,22 @@ note' > metAce1-params-xra.txt
     gbArchaeGenome metAce1.gbk metAce1-params-bed.txt metAce1-genbank-cds.bed
     gbArchaeGenome metAce1.gbk metAce1-params-pep.txt metAce1-genbank-cds.pep
     gbArchaeGenome metAce1.gbk metAce1-params-xra.txt metAce1-genbank-cds.xra
-    hgLoadBed metAce1 gbProtCode metAce1-genbank-cds.bed
-    hgsql metAce1 < ~/kent/src/hg/lib/pepPred.sql
-    hgsql metAce1 < ~/kent/src/hg/lib/minGeneInfo.sql
-    echo rename table pepPred to gbProtCodePep | hgsql metAce1
-    echo rename table minGeneInfo to gbProtCodeXra | hgsql metAce1
-    echo load data local infile \'metAce1-genbank-cds.pep\' into table gbProtCodePep | hgsql metAce1
-    echo load data local infile \'metAce1-genbank-cds.xra\' into table gbProtCodeXra | hgsql metAce1
+#    hgLoadBed metAce1 gbProtCode metAce1-genbank-cds.bed
+#    hgsql metAce1 < ~/kent/src/hg/lib/pepPred.sql
+#    hgsql metAce1 < ~/kent/src/hg/lib/minGeneInfo.sql
+#    echo rename table pepPred to gbProtCodePep | hgsql metAce1
+#    echo rename table minGeneInfo to gbProtCodeXra | hgsql metAce1
+#    echo load data local infile \'metAce1-genbank-cds.pep\' into table gbProtCodePep | hgsql metAce1
+#    echo load data local infile \'metAce1-genbank-cds.xra\' into table gbProtCodeXra | hgsql metAce1
 
 #genbank to genePred
 
 csh
 tawk '{print $1,$2,$3,$4,$5,$6,$2,$3,0,1,$3-$2,0}' metAce1-genbank-cds.bed | bedToGenePred stdin tmp.gp
 tawk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,substr($1,3,4),name2,"cmpl","cmpl",0}' tmp.gp  > tmp2.gp
+# hard tab between quotes use ctrl-V then press tab
 join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1.15  tmp2.gp metAce1-genbank-cds.xra > metAce1.gp
+ldHgGene metAce1 refSeq metAce1.gp -predTab -genePredExt
 
 # GENBANK rRNA GENES (NOT QUITE DONE)
     ssh hgdev
@@ -161,12 +163,13 @@ join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1
     echo load data local infile \'metAce1-rrnas-xra.txt\' into table gbRRNAXra | hgsql metAce1
 
 # COG STUFF
-    # Cut and paste http://www.ncbi.nlm.nih.gov/cgi-bin/COG/palox into emacs (COG list)
-    # and save as cogpage.txt
-    awk '{printf("%s\t%s\n",$6,$5)}' < cogpage.txt | sed -e 's/\[//' -e 's/\]//' > cogs.txt
-    rm cogpage.txt
-    # Now we have the basic list of cogs and the letter code for each one.
-    
+  awk 'NR>3{OFS="\t";print $6,$8,$7}' /projects/lowelab/db/Bacteria/Methanosarcina_acetivorans/NC_003552.ptt  > COG
+  hgsql metAce1 < /cluster/home/baertsch/kent/src/hg/lib/cogs.sql
+  echo "load data local infile 'COG' into table COG" | hgsql metAce1
+# load cog codes
+ hgsql metAce1 < /cluster/data/metAce1/genbank/COGXra.sql
+
+
 
 # TODD LOWE tRNA GENES ()
 
