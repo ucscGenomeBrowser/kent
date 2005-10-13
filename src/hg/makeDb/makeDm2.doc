@@ -3681,14 +3681,21 @@ cat > gsub << 'EOF'
     hgLoadSeq dm2 /gbdb/dm2/bacends/bacends.fa
 
 
-# NSCAN track - (2005-09-29 markd)
+##########################################################################
+# NSCAN track - (2005-09-29 markd)  loaded proteins 2005-10-13
     cd /cluster/data/dm2/bed/nscan/
     # obtained NSCAN-EST predictions from michael brent's group at WUSTL
     wget http://genome.cse.wustl.edu/predictions/Drosophila/Dm2_09_19_05/Dm2_09_19_05.tar.gz
     tar -zxf Dm2_09_19_05.tar.gz
 
+    # change protein fasta file to have transcript id in header
+    foreach f (chr_ptx/*.ptx)
+        awk '/^>/{$0=$1".a"}{print $0}' $f >$f.fix
+    end
+
     ldHgGene -gtf -genePredExt dm2 nscanGene  chr_gtf/chr*.gtf
-    rm -rf chr_* genePred.tab 
+    hgPepPred mm6 generic nscanPep chr_ptx/chr*.fix
+    rm -rf chr_* *.tab
 
     # update trackDb; need a dm2-specific page to describe informants
     mouse/dm2/nscanGene.html    
