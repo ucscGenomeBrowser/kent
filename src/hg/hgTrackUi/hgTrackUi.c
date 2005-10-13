@@ -20,12 +20,13 @@
 #include "chainCart.h"
 #include "chainDb.h"
 #include "phyloTree.h"
+#include "humanPhenotypeUi.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.216 2005/10/07 18:33:10 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.217 2005/10/13 20:16:41 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -251,6 +252,25 @@ radioButton("ldOut", ldOut, "black");
 radioButton("ldOut", ldOut, "white");
 radioButton("ldOut", ldOut, "none");
 printf("&nbsp; - Color for outlines<BR>&nbsp;&nbsp;");
+}
+
+void humanPhenotypeUi(struct trackDb *tdb) 
+/* print UI for human phenotype filters */
+{
+int i = 0; /* variable to walk through arrays */
+printf("<BR /><B>Exclude mutation type</B><BR />");
+for (i = 0; i < variantTypeSize; i++)
+    {
+    cartMakeCheckBox(cart, variantTypeString[i], FALSE);
+    printf (" %s<BR />", variantTypeLabel[i]);
+    }
+
+printf("<BR /><B>Exclude mutation location</B><BR />");
+for (i = 0; i < variantLocationSize; i++)
+    {
+    cartMakeCheckBox(cart, variantLocationString[i], FALSE);
+    printf (" %s<BR />", variantLocationLabel[i]);
+    }
 }
 
 void cbrWabaUi(struct trackDb *tdb)
@@ -1536,6 +1556,8 @@ else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
 else if (sameString(track, "transRegCode"))
     transRegCodeUi(tdb);
+else if (sameString(track, "humanPhenotype"))
+    humanPhenotypeUi(tdb);
 else if (tdb->type != NULL)
     {
     /* handle all tracks with type genePred or bed or "psl xeno <otherDb>" */

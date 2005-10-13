@@ -93,8 +93,10 @@
 #include "cutterTrack.h"
 #include "retroGene.h"
 #include "dless.h"
+#include "humPhen.h"
+#include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1019 2005/10/11 23:27:00 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1020 2005/10/13 20:21:08 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9223,6 +9225,85 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
+boolean humPhenFilterType(struct humanPhenotype *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+for (cnt = 0; cnt < variantTypeSize; cnt++)
+    {
+    if (cartVarExists(cart, variantTypeString[cnt]) && 
+        cartString(cart, variantTypeString[cnt]) != NULL &&
+        differentString(cartString(cart, variantTypeString[cnt]), "0") &&
+        sameString(variantTypeDbValue[cnt], el->baseChangeType))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
+boolean humPhenFilterLoc(struct humanPhenotype *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+for (cnt = 0; cnt < variantLocationSize; cnt++)
+    {
+    if (cartVarExists(cart, variantLocationString[cnt]) &&
+        cartString(cart, variantLocationString[cnt]) != NULL &&
+        differentString(cartString(cart, variantLocationString[cnt]), "0") &&
+        sameString(variantLocationDbValue[cnt], el->location))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
+void loadHumPhen(struct track *tg)
+/* Load human phenotype with filter */
+{
+struct bed *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+                 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct humanPhenotype *el = humanPhenotypeLoad(row);
+    struct bed *bedCopy = NULL;
+    AllocVar(bedCopy);
+    if (!humPhenFilterType(el)) 
+        {
+        humanPhenotypeFree(&el);
+        }
+    else if (!humPhenFilterLoc(el))
+        {
+        humanPhenotypeFree(&el);
+        }
+    else
+        {
+        bedCopy->chrom = cloneString(el->chrom);
+        bedCopy->chromStart = el->chromStart;
+        bedCopy->chromEnd = el->chromEnd;
+        bedCopy->name = cloneString(el->name);
+        slAddHead(&list, bedCopy);
+        humanPhenotypeFree(&el);
+        }
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+tg->items = list;
+}
+
+void humanPhenotypeMethods (struct track *tg)
+/* Simple exclude/include filtering on human phenotype items. */
+{
+tg->loadItems = loadHumPhen;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -10247,6 +10328,7 @@ registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
+registerTrackHandler("humanPhenotype", humanPhenotypeMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
