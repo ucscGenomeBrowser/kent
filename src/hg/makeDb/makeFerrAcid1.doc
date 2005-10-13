@@ -88,6 +88,197 @@ exit; # don't actually run this like a script :)
     mkdir -p /gbdb/ferrAcid1/html
     ln -s /cluster/data/ferrAcid1/html/description.html /gbdb/ferrAcid1/html/
 
+# MULTIZ with therAcid, therVolc, picrTorr
+# STARTED (10/12/05), kpollard
+
+    cd /cluster/data/ferrAcid1/bed/
+    mkdir conservation
+    cd conservation
+    cp /cluster/data/metAce1/bed/conservation/HoxD55.q .
+    cp ../../chr.fa ferrAcid1.chr
+    cp /cluster/data/therAcid1/bed/conservation/therAcid1.chr .
+    cp /cluster/data/picrTorr1/bed/conservation/picrTorr1.chr .
+    cp /cluster/data/therVolc1/bed/conservation/therVolc1.chr .
+    faToNib therVolc1.chr therVolc1.chr.nib
+    faToNib therAcid1.chr therAcid1.chr.nib
+    faToNib picrTorr1.chr picrTorr1.chr.nib
+    faToTwoBit ferrAcid1.chr ferrAcid1.2bit
+    #chrom sizes
+    faSize -detailed *.chr > chrom.sizes
+    #make fa for each contig
+    faSplit byname ferrAcid1.chr ./
+    ls Contig*.fa > contignames.txt
+    foreach f (`cat contignames.txt`)
+	set b=$f:r
+	cat $f | gawk '{if(/>Contig/){print $0;}else{print toupper($0);}}' > temp
+	mv temp $f
+	faToNib $f $b.nib
+    end
+
+    #blastz 
+    foreach f (`cat contignames.txt`)
+	set b=$f:t:r
+	echo $b
+	blastz $f therAcid1.chr Q=HoxD55.q > ferrAcid1.$b-therAcid1.lav 
+	blastz $f picrTorr1.chr Q=HoxD55.q > ferrAcid1.$b-picrTorr1.lav
+	blastz $f therVolc1.chr Q=HoxD55.q > ferrAcid1.$b-therVolc1.lav
+    end
+
+    foreach f(*.lav)
+        set b=$f:r
+	echo $b
+	lavToAxt $f . . $b.axt
+    end
+
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	echo $b
+	axtBest ferrAcid1.$b-therAcid1.axt $b -winSize=500 -minScore=5000 ferrAcid1.$b-therAcid1-best.axt
+	axtBest ferrAcid1.$b-picrTorr1.axt $b -winSize=500 -minScore=5000 ferrAcid1.$b-picrTorr1-best.axt
+	axtBest ferrAcid1.$b-therVolc1.axt $b -winSize=500 -minScore=5000 ferrAcid1.$b-therVolc1-best.axt
+    end
+
+    foreach f(*-best.axt)
+	set b=`basename $f -best.axt`
+	echo $b
+	axtToMaf $f chrom.sizes chrom.sizes $b.maf
+    end
+     
+    #multiz
+    #remove extra header lines
+    foreach f(*.maf)
+	cat $f | gawk 'BEGIN{getline; print $0; getline; getline; getline; getline;}{print $0;}' > temp
+	mv temp $f
+    end
+
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	echo $b
+	multiz ferrAcid1.$b-therAcid1.maf ferrAcid1.$b-picrTorr1.maf - > ferrAcid1.$b-therAcid1-picrTorr1.maf
+	multiz ferrAcid1.$b-therVolc1.maf ferrAcid1.$b-therAcid1-picrTorr1.maf - > ferrAcid1.$b-therAcid1-picrTorr1-therVolc1.maf
+    end
+
+    #phyloHMM
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	echo $b
+	msa_view -i MAF -M $f -o SS ferrAcid1.$b-therAcid1-picrTorr1-therVolc1.maf > ferrAcid1.$b.ss
+    end
+    
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	cat ferrAcid1.$b.ss | gawk '{if(/^NAMES/){print "NAMES = ferrAcid1,therVolc1,therAcid1,picrTorr1";} else{print $0;}}' > temp
+	mv temp ferrAcid1.$b.ss
+	phyloFit -i SS ferrAcid1.$b.ss -t "(ferrAcid1,(picrTorr1,(therAcid1,therVolc1)))" -o ${b}_MjMmMtMk
+    end
+
+    #Contig 169 has the largest NTUPLES (1051) so use it for starting mod
+    # it shows GC=0.205868+0.188380=0.394248
+    #add GC content to next call
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	echo $b
+	phastCons ferrAcid1.$b.ss Contig169_MjMmMtMk.mod \
+	--gc 0.3942 --target-coverage 0.7 --estimate-trees ${b} \
+	--expected-lengths 25 --no-post-probs --ignore-missing \
+	--nrates 1,1
+    end
+
+    #average with phyloBoot to get cons.mod and noncons.mod
+    #ls *.cons.mod > cons.txt
+    #phyloBoot --read-mods '*cons.txt' --output-average ave.cons.mod > cons_summary.txt
+    #ls *.noncons.mod > noncons.txt
+    #phyloBoot --read-mods '*noncons.txt' --output-average ave.noncons.mod > noncons_summary.txt
+    #PROBLEM: Can't do this with different numbers of species in each mod
+    #Again, just use Contig169 model
+
+    #get rid of SS files with no data
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	wc -l ferrAcid1.$b.ss | gawk '{if($1==0){print "rm "$2}}' >> rmjobs
+    end
+    chmod +x rmjobs
+    rmjobs
+
+    foreach f(*.cons.mod)
+	set b=$f:r:r
+	echo $b
+	phastCons ferrAcid1.$b.ss Contig169.cons.mod,Contig169.noncons.mod \
+	--target-coverage 0.7 --expected-lengths 25 \
+	--viterbi ${b}_ferrAcid1-elements.bed --score \
+	--require-informative 0 --seqname $b > ${b}_cons.dat
+	wigEncode ${b}_cons.dat ${b}_phastCons.wig ${b}_phastCons.wib
+    end
+
+    #combine phastCons elements into 1 bed file
+    cat Contig*.bed > phastCons.bed
+
+    #move data
+    mkdir wib
+    mv Contig*_phastCons.wib wib/.
+    mv Contig*_phastCons.wig wib/.
+    ln -s /cluster/data/ferrAcid1/bed/conservation/wib/*.wib /gbdb/ferrAcid1/wib
+    mkdir /gbdb/ferrAcid1/pwMaf
+    mkdir -p otherSpp/therAcid1 otherSpp/picrTorr1 otherSpp/therVolc1
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	echo $b
+	mv ferrAcid1.${b}-picrTorr1.maf otherSpp/picrTorr1/$b.maf
+	mv ferrAcid1.${b}-therAcid1.maf otherSpp/therAcid1/$b.maf
+	mv ferrAcid1.${b}-therVolc1.maf otherSpp/therVolc1/$b.maf
+    end
+    ln -s /cluster/data/ferrAcid1/bed/conservation/otherSpp/picrTorr1 /gbdb/ferrAcid1/pwMaf/picrTorr1_pwMaf
+    ln -s /cluster/data/ferrAcid1/bed/conservation/otherSpp/therVolc1 /gbdb/ferrAcid1/pwMaf/therVolc1_pwMaf
+    ln -s /cluster/data/ferrAcid1/bed/conservation/otherSpp/therAcid1 /gbdb/ferrAcid1/pwMaf/therAcid1_pwMaf
+    mkdir multiz
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	echo $b
+	mv ferrAcid1.${b}-therAcid1-picrTorr1-therVolc1.maf multiz/$b.maf
+    end
+    ln -s /cluster/data/ferrAcid1/bed/conservation/multiz /gbdb/ferrAcid1/multizFaTaPtTv
+    #get rid of wig files with no data
+    rm rmjobs
+    foreach f(`cat contignames.txt`)
+	set b=$f:r
+	wc -l wib/${b}_phastCons.wig | gawk '{if($1==0){print "rm "$2}}' >> rmjobs
+    end
+    chmod +x rmjobs
+    rmjobs
+
+    #load
+    hgLoadWiggle ferrAcid1 phastCons /cluster/data/ferrAcid1/bed/conservation/wib/Contig*_phastCons.wig
+    hgLoadMaf -warn ferrAcid1 multizFaTaPtTv
+    hgLoadMaf -warn ferrAcid1 picrTorr1_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/picrTorr1_pwMaf
+    hgLoadMaf -warn ferrAcid1 therVolc1_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/therVolc1_pwMaf
+    hgLoadMaf -warn ferrAcid1 therAcid1_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/therAcid1_pwMaf
+    hgLoadBed ferrAcid1 phastConsElements phastCons.bed 
+
+### NEED TO FIX REF SEQ NAME IN MAF FILES.
+
+    #trackDb
+    cd ~/kent/src/hg/makeDb/trackDb/archae/ferrAcid1
+    #trackDb.ra entry
+    # track multizFaTaPtTv
+    # shortLabel Conservation
+    # longLabel Methanogen multiz alignments
+    # group compGeno
+    # priority 10.0
+    # visibility pack
+    # type wigMaf 0.0 1.0
+    # maxHeightPixels 100:40:11
+    # wiggle phastCons
+    # yLineOnOff Off
+    # autoScaleDefault Off
+    # pairwise pwMaf
+    # speciesOrder therAcid1 picrTorr1 therVolc1
+    cvs add trackDb.ra
+    cvs commit -m "New multiz track" trackDb.ra
+    #html page
+    cvs add multizFaTaPtTv.html
+    cvs commit -m "Details page for multiz track" multizFaTaPtTv.html
+
+
 # GENBANK PROTEIN-CODING GENES ()
 
     ssh hgwdev
