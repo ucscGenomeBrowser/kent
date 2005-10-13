@@ -89,13 +89,15 @@ exit; # don't actually run this like a script :)
     ln -s /cluster/data/ferrAcid1/html/description.html /gbdb/ferrAcid1/html/
 
 # MULTIZ with therAcid, therVolc, picrTorr
-# STARTED (10/12/05), kpollard
+# DONE (10/13/05), kpollard
 
     cd /cluster/data/ferrAcid1/bed/
     mkdir conservation
     cd conservation
     cp /cluster/data/metAce1/bed/conservation/HoxD55.q .
     cp ../../chr.fa ferrAcid1.chr
+    sed s/Contig/ferrAcid1.Contig/ ferrAcid1.chr > temp
+    mv temp ferrAcid1.chr
     cp /cluster/data/therAcid1/bed/conservation/therAcid1.chr .
     cp /cluster/data/picrTorr1/bed/conservation/picrTorr1.chr .
     cp /cluster/data/therVolc1/bed/conservation/therVolc1.chr .
@@ -107,10 +109,11 @@ exit; # don't actually run this like a script :)
     faSize -detailed *.chr > chrom.sizes
     #make fa for each contig
     faSplit byname ferrAcid1.chr ./
-    ls Contig*.fa > contignames.txt
+    ls ferrAcid1.Contig*.fa > contignames.txt
+    cat contignames.txt | gawk '{print substr($1,11,length($1))}' > contigs.txt
     foreach f (`cat contignames.txt`)
 	set b=$f:r
-	cat $f | gawk '{if(/>Contig/){print $0;}else{print toupper($0);}}' > temp
+	cat $f | gawk '{if(/>ferrAcid1.Contig/){print $0;}else{print toupper($0);}}' > temp
 	mv temp $f
 	faToNib $f $b.nib
     end
@@ -119,9 +122,9 @@ exit; # don't actually run this like a script :)
     foreach f (`cat contignames.txt`)
 	set b=$f:t:r
 	echo $b
-	blastz $f therAcid1.chr Q=HoxD55.q > ferrAcid1.$b-therAcid1.lav 
-	blastz $f picrTorr1.chr Q=HoxD55.q > ferrAcid1.$b-picrTorr1.lav
-	blastz $f therVolc1.chr Q=HoxD55.q > ferrAcid1.$b-therVolc1.lav
+	blastz $f therAcid1.chr Q=HoxD55.q > ${b}-therAcid1.lav 
+	blastz $f picrTorr1.chr Q=HoxD55.q > ${b}-picrTorr1.lav
+	blastz $f therVolc1.chr Q=HoxD55.q > ${b}-therVolc1.lav
     end
 
     foreach f(*.lav)
@@ -133,9 +136,9 @@ exit; # don't actually run this like a script :)
     foreach f(`cat contignames.txt`)
 	set b=$f:r
 	echo $b
-	axtBest ferrAcid1.$b-therAcid1.axt $b -winSize=500 -minScore=5000 ferrAcid1.$b-therAcid1-best.axt
-	axtBest ferrAcid1.$b-picrTorr1.axt $b -winSize=500 -minScore=5000 ferrAcid1.$b-picrTorr1-best.axt
-	axtBest ferrAcid1.$b-therVolc1.axt $b -winSize=500 -minScore=5000 ferrAcid1.$b-therVolc1-best.axt
+	axtBest ${b}-therAcid1.axt $b -winSize=500 -minScore=5000 ${b}-therAcid1-best.axt
+	axtBest ${b}-picrTorr1.axt $b -winSize=500 -minScore=5000 ${b}-picrTorr1-best.axt
+	axtBest ${b}-therVolc1.axt $b -winSize=500 -minScore=5000 ${b}-therVolc1-best.axt
     end
 
     foreach f(*-best.axt)
@@ -154,31 +157,31 @@ exit; # don't actually run this like a script :)
     foreach f(`cat contignames.txt`)
 	set b=$f:r
 	echo $b
-	multiz ferrAcid1.$b-therAcid1.maf ferrAcid1.$b-picrTorr1.maf - > ferrAcid1.$b-therAcid1-picrTorr1.maf
-	multiz ferrAcid1.$b-therVolc1.maf ferrAcid1.$b-therAcid1-picrTorr1.maf - > ferrAcid1.$b-therAcid1-picrTorr1-therVolc1.maf
+	multiz ${b}-therAcid1.maf ${b}-picrTorr1.maf - > ${b}-therAcid1-picrTorr1.maf
+	multiz ${b}-therVolc1.maf ${b}-therAcid1-picrTorr1.maf - > ${b}-therAcid1-picrTorr1-therVolc1.maf
     end
 
     #phyloHMM
     foreach f(`cat contignames.txt`)
 	set b=$f:r
 	echo $b
-	msa_view -i MAF -M $f -o SS ferrAcid1.$b-therAcid1-picrTorr1-therVolc1.maf > ferrAcid1.$b.ss
+	msa_view -i MAF -M $f -o SS ${b}-therAcid1-picrTorr1-therVolc1.maf > $b.ss
     end
     
-    foreach f(`cat contignames.txt`)
+    foreach f(`cat contigs.txt`)
 	set b=$f:r
 	cat ferrAcid1.$b.ss | gawk '{if(/^NAMES/){print "NAMES = ferrAcid1,therVolc1,therAcid1,picrTorr1";} else{print $0;}}' > temp
-	mv temp ferrAcid1.$b.ss
-	phyloFit -i SS ferrAcid1.$b.ss -t "(ferrAcid1,(picrTorr1,(therAcid1,therVolc1)))" -o ${b}_MjMmMtMk
+	mv temp $b.ss
+	phyloFit -i SS ferrAcid1.$b.ss -t "(ferrAcid1,(picrTorr1,(therAcid1,therVolc1)))" -o ${b}_FaTaPtTv
     end
 
     #Contig 169 has the largest NTUPLES (1051) so use it for starting mod
     # it shows GC=0.205868+0.188380=0.394248
     #add GC content to next call
-    foreach f(`cat contignames.txt`)
+    foreach f(`cat contigs.txt`)
 	set b=$f:r
 	echo $b
-	phastCons ferrAcid1.$b.ss Contig169_MjMmMtMk.mod \
+	phastCons ferrAcid1.$b.ss Contig169_FaTaPtTv.mod \
 	--gc 0.3942 --target-coverage 0.7 --estimate-trees ${b} \
 	--expected-lengths 25 --no-post-probs --ignore-missing \
 	--nrates 1,1
@@ -195,7 +198,7 @@ exit; # don't actually run this like a script :)
     #get rid of SS files with no data
     foreach f(`cat contignames.txt`)
 	set b=$f:r
-	wc -l ferrAcid1.$b.ss | gawk '{if($1==0){print "rm "$2}}' >> rmjobs
+	wc -l $b.ss | gawk '{if($1==0){print "rm "$2}}' >> rmjobs
     end
     chmod +x rmjobs
     rmjobs
@@ -203,7 +206,7 @@ exit; # don't actually run this like a script :)
     foreach f(*.cons.mod)
 	set b=$f:r:r
 	echo $b
-	phastCons ferrAcid1.$b.ss Contig169.cons.mod,Contig169.noncons.mod \
+	phastCons $b.ss Contig169.cons.mod,Contig169.noncons.mod \
 	--target-coverage 0.7 --expected-lengths 25 \
 	--viterbi ${b}_ferrAcid1-elements.bed --score \
 	--require-informative 0 --seqname $b > ${b}_cons.dat
@@ -253,8 +256,6 @@ exit; # don't actually run this like a script :)
     hgLoadMaf -warn ferrAcid1 therVolc1_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/therVolc1_pwMaf
     hgLoadMaf -warn ferrAcid1 therAcid1_pwMaf -pathPrefix=/gbdb/ferrAcid1/pwMaf/therAcid1_pwMaf
     hgLoadBed ferrAcid1 phastConsElements phastCons.bed 
-
-### NEED TO FIX REF SEQ NAME IN MAF FILES.
 
     #trackDb
     cd ~/kent/src/hg/makeDb/trackDb/archae/ferrAcid1
