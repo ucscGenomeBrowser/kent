@@ -5,11 +5,7 @@
 #ifndef MINGENEINFO_H
 #define MINGENEINFO_H
 
-#ifndef JKSQL_H
-#include "jksql.h"
-#endif
-
-#define MINGENEINFO_NUM_COLS 3
+#define MINGENEINFO_NUM_COLS 5
 
 struct minGeneInfo
 /* Auxilliary info about a gene (less than the knownInfo) */
@@ -18,6 +14,8 @@ struct minGeneInfo
     char *name;	/* gene name */
     char *product;	/* gene product */
     char *note;	/* gene note */
+    char *protein;	/* gene protein */
+    char *gi;	/* gene genbank id */
     };
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret);
@@ -39,31 +37,6 @@ struct minGeneInfo *minGeneInfoLoadAllByChar(char *fileName, char chopper);
 #define minGeneInfoLoadAllByTab(a) minGeneInfoLoadAllByChar(a, '\t');
 /* Load all minGeneInfo from tab separated file.
  * Dispose of this with minGeneInfoFreeList(). */
-
-struct minGeneInfo *minGeneInfoLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all minGeneInfo from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with minGeneInfoFreeList(). */
-
-void minGeneInfoSaveToDb(struct sqlConnection *conn, struct minGeneInfo *el, char *tableName, int updateSize);
-/* Save minGeneInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use minGeneInfoSaveToDbEscaped() */
-
-void minGeneInfoSaveToDbEscaped(struct sqlConnection *conn, struct minGeneInfo *el, char *tableName, int updateSize);
-/* Save minGeneInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than minGeneInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct minGeneInfo *minGeneInfoCommaIn(char **pS, struct minGeneInfo *ret);
 /* Create a minGeneInfo out of a comma separated string. 
