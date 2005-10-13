@@ -89,6 +89,7 @@ exit; # don't actually run this like a script :)
     hgLoadBed haloHalo1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/sr/hg/lib/simpleRepeat.sql
 
 # CHAIN TRACK with halMar1
+#started 10/12/05, kpollard
 
     cd /cluster/data/haloHalo1/bed/
     mkdir conservation
@@ -101,13 +102,28 @@ exit; # don't actually run this like a script :)
     cat temp | gawk '{if(/chr/){print $1;} else{print $0;}}' > haloHalo1.chr
     sed s/chrom/\>chr/ halMar1.chr | sed s/plas/\>plasmid/ | gawk '{if(/halMar1/){print $2;} else{print $0;}}' > temp
     mv temp halMar1.chr
-    faToTwoBit haloHalo1.chr haloHalo1.2bit
+    #ref seq needs separate files for each seq
+    mv haloHalo1.chr haloHalo1.fa
+    cat haloHalo1.fa | gawk 'BEGIN{ind=0;}{if($1==">chr"){ind=1;} if(ind==0){print $0;}}' > haloHalo1.plasmid_pNRC100
+    cat haloHalo1.fa | gawk 'BEGIN{ind=1;}{if($1==">chr"){ind=0;} if($1==">plasmid_pNRC200"){ind=1;} if(ind==0){print $0;}}' > haloHalo1.chr
+    cat haloHalo1.fa | gawk 'BEGIN{ind=1;}{if($1==">plasmid_pNRC200"){ind=0;} if(ind==0){print $0;}}' > haloHalo1.plasmid_pNRC200
     faToTwoBit halMar1.chr halMar1.2bit
-    faSize -detailed *.chr > chrom.sizes
+    faToTwoBit haloHalo1.fa haloHalo1.2bit
+    faToNib haloHalo1.plasmid_pNRC100 plasmid_pNRC100.nib
+    faToNib haloHalo1.chr chr.nib
+    faToNib haloHalo1.plasmid_pNRC200 plasmid_pNRC200.nib
+    faSize -detailed haloHalo1.plasmid_pNRC100 haloHalo1.plasmid_pNRC200 haloHalo1.chr halMar1.chr > chrom.sizes
 
     #blastz 
-    blastz haloHalo1.chr halMar1.chr Q=HoxD55.q > haloHalo1-halMar1.lav
-    lavToAxt haloHalo1-halMar1.lav haloHalo1.2bit halMar1.2bit haloHalo1-halMar1.axt
+    blastz haloHalo1.plasmid_pNRC100 halMar1.chr Q=HoxD55.q > haloHalo1.p1-halMar1.lav
+    blaztz haloHalo1.plasmid_pNRC200 halMar1.chr Q=HoxD55.q > haloHalo1.p2-halMar1.lav
+    blastz haloHalo1.chr halMar1.chr Q=HoxD55.q > haloHalo1.c-halMar1.lav
+
+    lavToAxt haloHalo1.p1-halMar1.lav . halMar1.2bit haloHalo1.p1-halMar1.axt
+    lavToAxt haloHalo1.p2-halMar1.lav . halMar1.2bit haloHalo1.p2-halMar1.axt
+    lavToAxt haloHalo1.c-halMar1.lav . halMar1.2bit haloHalo1.c-halMar1.axt
+    #p2 lav is empty - remove
+    rm haloHalo1.p2-halMar1.lav haloHalo1.p2-halMar1.axt
 
     #chain
     # Reuse gap penalties from chicken run.
@@ -125,15 +141,18 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
 '_EOF_'
     sed 's/  */\t/g' temp.gap > chicken.gap
     rm temp.gap
-    axtChain -scoreScheme=HoxD55.q \
-                      -linearGap=chicken.gap \
-                      -minScore=5000 haloHalo1-halMar1.axt \
-                       haloHalo1.2bit halMar1.2bit \
-                       haloHalo1-halMar1.chain
-    
-    #load 
-    #ln -s /cluster/data/haloHalo1/bed/conservation/haloHalo1-halMar1.chain /gbdb/haloHalo1/chainHalMar1
-    hgLoadChain haloHalo1 chainHalMar1 haloHalo1-halMar1.chain
+    mkdir chains
+    foreach f (*.axt)
+	set b=$f:t:r
+	axtChain -scoreScheme=HoxD55.q -linearGap=chicken.gap \
+                      -minScore=5000 $f haloHalo1.2bit halMar1.2bit \
+                       chains/$b.chain
+    end    
+   
+    #load chains
+    cd chain
+    hgLoadChain haloHalo1 chr_chainHalMar1 haloHalo1.c-halMar1.chain
+    hgLoadChain haloHalo1 plasmid_pNRC100_chainHalMar1 haloHalo1.p1-halMar1.chain
 
     #trackDb
     cd ~/kent/src/hg/makeDb/trackDb/archae/
@@ -141,15 +160,16 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     cvs add haloHalo1
     cd haloHalo1
     # track chainHalMar1
-    # shortLabel HalMar1 Chain    
-    # longLabel Haloarcula marismortui Chained Alignments                
+    # shortLabel $o_Organism Chain    
+    # longLabel $o_Organism ($o_date/$o_db) Chained Alignments                
     # group compGeno
     # priority 150.1
     # visibility hide
     # color 100,50,0
     # altColor 255,240,200
     # spectrum on
-    # type chain    
+    # type chain halMar1
+    # otherDb halMar1
     cvs add trackDb.ra
     cvs commit -m "halMar1 chains" trackDb.ra
     cvs add chainHalMar1.html
