@@ -22,6 +22,7 @@
 #include "boxClump.h"
 #include "bzp.h"
 #include "blatz.h"
+#include "dynamic.h"
 
 static struct chain *chainsCreate(struct gapCalc *gapCalc, 
         struct axtScoreScheme *ss,
@@ -822,7 +823,6 @@ removeSimpleOverlaps(&blockList);
 chainList = chainsCreate(bzp->gapCalc, bzp->ss,
         query, strand, target, &blockList);
 thresholdChains(&chainList, bzp->minScore);
-bzpTime("final chaining");
 
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
@@ -843,13 +843,50 @@ static struct chain *blatzAlignStrand(struct bzp *bzp,
 {
 struct blatzIndex *index;
 struct chain *chainList = NULL;
+int j; // LX Oct 06 2005
 
 /* Loop through indexes, aligning against each, and collecting results
  * into chainList. */
 for (index = indexList; index != NULL; index = index->next)
     {
     struct chain *oneList = NULL, *chain, *nextChain;
+    // LX BEG Oct 06 2005
+    if(bzp->dynaLimitT<VERY_LARGE_NUMBER){
+    // scaling to query size
+    //  targetHitDLimit = bzp->dynaLimitT*(query->size/1000000)+0.5;
+      targetHitDLimit = bzp->dynaLimitT;
+      //dynaCountTtemp = calloc(index->target->size, sizeof(COUNTER_TYPE)); // LX Oct 12 2005
+      if(index->counter == NULL){
+          // allocate zeroed memory for hit counters
+             // index->counter could be set later?
+          index->counter = calloc(index->target->size, sizeof(COUNTER_TYPE));
+          globalCounter = index->counter;
+      }
+    }
+    // LX END Oct 06 2005
+    // LX BEG Oct 06 2005
+    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
+      // allocate zeroed memory for hit counters
+      dynaCountQtemp = calloc(query->size, sizeof(COUNTER_TYPE)); //LX Oct 06 2005
+    }
+    // LX END Oct 06 2005
     oneList = blatzAlignOne(bzp, index, query, strand);
+    // LX BEG Oct 06 2005
+    // Add the contents of dynaCountQtemp to dynaCountQ
+    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
+      for(j=0;j<query->size;j++){
+        dynaCountQ[j] = dynaCountQ[j]+dynaCountQtemp[j];
+      }
+    }
+    // Add the contents of dynaCountTtemp to globalCounter; LX Oct 12 2005
+    //if(bzp->dynaLimitT<VERY_LARGE_NUMBER){
+    //  for(j=0;j<index->target->size;j++){
+    //    globalCounter[j] = globalCounter[j]+dynaCountTtemp[j];
+    //  }
+    //}
+    if(dynaCountQtemp != NULL) free(dynaCountQtemp); dynaCountQtemp = NULL; 
+    //if(dynaCountTtemp != NULL) free(dynaCountTtemp); dynaCountTtemp = NULL;// LX Oct 12 2005
+    // LX END Oct 06 2005
     for (chain = oneList; chain != NULL; chain = nextChain)
         {
         nextChain = chain->next;

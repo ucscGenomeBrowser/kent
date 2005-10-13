@@ -14,6 +14,7 @@
 #include "dnaLoad.h"
 #include "bzp.h"
 #include "blatz.h"
+#include "dynamic.h" // LX Sep 06 2005
 
 void usage(struct bzp *bzp)
 /* Explain usage and exit. */
@@ -45,10 +46,38 @@ static void alignAll(struct bzp *bzp, struct blatzIndex *indexList,
 FILE *f = mustOpen(outFile, "w");
 struct dnaSeq *query;
 
+int b, bend, printing; // LX Oct 13 2005
+FILE *bedfp = mustOpen("dynamask.bed", "w");
+int j; // LX Oct 06 2005
+// LX BEG Sep 06 2005
+int i;
+// Counts all the query-target hits encountered by the program inside the 
+// loops of gapless.c
+dynaHits = 0;
+// Counts how many target and query positions reached the limit
+dynaCountTarget = 0;
+dynaCountQuery = 0;
+// This is the limit used by the program, currently just bzp->dynaLimit(QT)
+// but should be useful for scaling to sequence size
+targetHitDLimit = VERY_LARGE_NUMBER; // default
+queryHitDLimit = VERY_LARGE_NUMBER; // default
+//CounterList = NULL;
+//clist = NULL;
+// LX END Sep 06 2005
+
 while ((query = dnaLoadNext(queryDl)) != NULL)
     {
     double bestScore = 0;
     struct chain *chainList;
+    // LX BEG
+    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
+    // scaling to target size
+    //  queryHitDLimit = bzp->dynaLimitQ*(target->size/1000000)+0.5;
+      queryHitDLimit = bzp->dynaLimitQ;
+      // allocate zeroed memory for hit counters
+      dynaCountQ = calloc(query->size, sizeof(COUNTER_TYPE));
+    }
+    // LX END
     if (bzp->unmask || bzp->rna)
         toUpperN(query->dna, query->size);
     if (bzp->rna)
@@ -67,8 +96,39 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     blatzWriteChains(bzp, &chainList, query, 
     	dnaLoadCurStart(queryDl), dnaLoadCurEnd(queryDl),
 	dnaLoadCurSize(queryDl), indexList, f);
+     // LX BEG Oct 13 2005
+     // This prints the contents of the mask into the .bed file opened above
+     printing = 0;
+     for(b=0;b<query->size;b++){
+       if(dynaCountQ[b] > queryHitDLimit){
+         if(printing == 0){
+           printing = 1;
+           fprintf(bedfp,"%s %d ",query->name,b);
+         }
+       }
+       if(dynaCountQ[b] <= queryHitDLimit){
+         if(printing == 1){
+           printing = 0;
+           bend = b-1;
+           fprintf(bedfp,"%d\n",bend);
+         }
+       }
+     }
+     // LX END Oct 13 2005
     dnaSeqFree(&query);
     }
+    // LX BEG Sep 06 2005
+    // Statistics to print about how many hits were dropped (ignored)
+    dynaDrops = dynaCountTarget + dynaCountQuery;
+    dynaDropsPerc = (float)100*dynaDrops/dynaHits+0.5;
+    printf("final chaining %d dynaDrops (%d\%) at T=%d Q=%d \n", dynaDrops, dynaDropsPerc, targetHitDLimit, queryHitDLimit);
+   // LX END
+   // LX BEG Sep 06 2005
+   // Free dynamic memory used for the sequence-length-dependent counter arrays
+   if(dynaCountQ != NULL) free(dynaCountQ);
+//   if(dynaCountT != NULL) free(dynaCountT);
+carefulClose(&bedfp);
+   // LX END
 carefulClose(&f);
 }
 
@@ -91,7 +151,7 @@ int main(int argc, char *argv[])
 {
 struct bzp *bzp = bzpDefault();
 
-/* Do initialiazation. */
+/* Do initialization. */
 bzpTime(NULL);
 dnaUtilOpen();
 optionInit(&argc, argv, options);

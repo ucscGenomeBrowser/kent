@@ -36,6 +36,7 @@ if (index != NULL)
     freeMem(index->slots);
     freeMem(index->seedOffsets);
     freeMem(index->posBuf);
+    freeMem(index->counter); // LX Oct 06 2005
     freez(pIndex);
     }
 }

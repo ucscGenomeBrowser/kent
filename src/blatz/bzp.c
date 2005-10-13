@@ -10,6 +10,7 @@
 #include "portable.h"
 #include "bzp.h"
 #include "blatz.h"
+#include "dynamic.h" // LX Sep 06 2005
 
 static int minWeight = 6, maxWeight=15;
 
@@ -37,6 +38,10 @@ bzp->unmask = FALSE;
 bzp->out = "chain";
 bzp->mafQ = "";
 bzp->mafT = "";
+// LX BEG Sep 02 2005 Sep 06 2005
+bzp->dynaLimitT = VERY_LARGE_NUMBER;
+bzp->dynaLimitQ = VERY_LARGE_NUMBER;
+// LX END
 return bzp;
 }
 
@@ -94,6 +99,12 @@ printf("  -out=%s - Output in given format.  Options are chain, axt, maf, psl.\n
         bzp->out);
 printf("                For maf there are -mafT=%s and -mafQ=%s options to control\n"
        "                the sequence prefixes in maf files\n", bzp->mafT, bzp->mafQ);
+// LX BEG Sep 06 2005
+printf("  -dynaLimitT=%d For dynamic masking. This option controls\n"
+       "                the number of hits in target positions before hits get ignored\n", bzp->dynaLimitT);
+printf("  -dynaLimitQ=%d For dynamic masking. This option controls\n"
+       "                the number of hits in query before hits get ignored\n", bzp->dynaLimitQ);
+// LX END
 }
 
 void bzpSetOptions(struct bzp *bzp)
@@ -122,6 +133,10 @@ bzp->unmask = optionExists("unmask");
 bzp->out = optionVal("out", bzp->out);
 bzp->mafT = optionVal("mafT", bzp->mafT);
 bzp->mafQ = optionVal("mafQ", bzp->mafQ);
+// LX BEG Sep 06 2005
+bzp->dynaLimitT = optionInt("dynaLimitT", bzp->dynaLimitT);
+bzp->dynaLimitQ = optionInt("dynaLimitQ", bzp->dynaLimitQ);
+// LX END 
 
 /* Do some checking */
 if (bzp->weight < minWeight || bzp->weight > maxWeight)

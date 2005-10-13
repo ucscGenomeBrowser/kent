@@ -32,6 +32,7 @@ struct blatzIndex
     int targetStart;		/* Start of target in parent sequence. */
     int targetEnd;		/* End of target in parent sequence. */
     int targetParentSize;	/* Size of parent sequence. */
+    unsigned short* counter ;	/* LX Oct 06 2005 - Array with hit counters */
     bits32 *posBuf;		/* This holds memory for positions in all slots. */
     };
 

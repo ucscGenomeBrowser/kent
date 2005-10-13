@@ -13,6 +13,7 @@
 #include "chain.h"
 #include "bzp.h"
 #include "blatz.h"
+#include "dynamic.h" // LX Sep 06 2005
 
 static struct cBlock *gaplessExtendAndFilter(
     DNA *qDna, int qPos, int qSize, 
@@ -154,6 +155,10 @@ struct dlList *diagLists = NULL;
 struct diagNode *diagNodes = NULL, *diagNode = NULL;
 int diagCircIx = 0;
 
+// LX BEG Sep 06 2005
+dynaBreak = 0;
+// LX END
+ 
 if (bzp->transition)
     nbdToggleStart = (1 << (2*(index->seedWeight-1)));
 else
@@ -195,6 +200,50 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                 for (i=0; i<count; ++i)
                     {
                     int targetPos = pos[i];
+// LX BEG Sep 01 2005 Sep 06 2005 Sep 07 2005
+                    // Count all hits to report statistics later on
+                    dynaHits++;
+                    // Now let's see if dynaLimitT has been set
+                    if(targetHitDLimit<VERY_LARGE_NUMBER){
+                      // If we are over the limit, we will stop here
+                      // and continue at the next target pos
+                      if(globalCounter[targetPos] > targetHitDLimit){
+                        //printf("dynaCountT high at %d\n", targetPos);
+                        dynaCountTarget++; // statistics
+                        continue; 
+                      } else {
+                        // ... otherwise keep counting the hits at this position
+                        // but only if query pos that matters 
+                        if(queryHitDLimit<VERY_LARGE_NUMBER){
+                          // is not over its hit limit
+                          if(dynaCountQ[queryPos] <= queryHitDLimit){
+                            globalCounter[targetPos]++;
+                            //dynaCountTtemp[targetPos]++; // LX Oct 12 2005
+                          }
+                        } else {
+                          globalCounter[targetPos]++;
+                          //dynaCountTtemp[targetPos]++; // LX Oct 12 2005
+                        }
+                      }
+                    }
+                    // Now let's see if dynaLimitQ has been set
+                    if(queryHitDLimit<VERY_LARGE_NUMBER){
+                      // If we reached the limit, we will stop here
+                      // and continue evaluating the next query pos
+                      //printf("Testing if dynaLimtQ has been reached T%d Q%d\n", targetPos, queryPos);
+                      if(dynaCountQ[queryPos] > queryHitDLimit){
+                        //printf("dynaCountQ high at %d\n", queryPos);
+                        //sleep(1);
+                        dynaCountQuery++; // statistics
+                        dynaBreak = 1;
+                        break; // go to the outer loop to get the next query pos
+                      } else {
+                        // ... otherwise keep counting the hits at this position
+                        //dynaCountQ[queryPos]++; // LX Oct 06 2005
+                        dynaCountQtemp[queryPos]++;
+                      }
+                    }
+// LX END
                     int diagonal = queryPos - targetPos;
                     int diagMod = (diagonal & diagMask);
                     struct dlList *diagList = &diagLists[diagMod];
@@ -250,6 +299,14 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     diagNode->qPos = queryPos;
                     dlAddHead(diagList, &diagNode->node);
                     }
+                    // LX BEG Sep 06 2005
+                    //printf("This is the middle loop %d\n", queryPos);
+                    // Check to see if we got here from the inner loop
+                    if(dynaBreak == 1){
+                      //printf("We got here from the inner loop %d\n", queryPos);
+                      break; // we need to break again
+                    }
+                    // LX END
                 }
             else
                 {
@@ -289,6 +346,15 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
             if (tog == 0)
                 break;
             }
+            // LX BEG Sep 06 2005
+            //printf("This is the outer loop %d\n", queryPos);
+            // Check to see if we got here from the middle loop
+            if(dynaBreak == 1){
+              //printf("We got here from the middle loop %d\n", queryPos);
+              dynaBreak=0;
+              continue; // we need the next query position then
+            }
+            // LX END
         }
     }
 if (bzpTimeOn) verbose(2, "%d hits, %d double hits, %d MSPs, %d diagonals\n", hitCount, doubleHitCount, mspCount, tree->n);
