@@ -87,9 +87,8 @@ void hDefaultConnect();
 char *hTrackDbName();
 /* return the name of the track database from the config file. Freez when done */
 
-char *hTrackDbLocalName();
-/* return the name of the trackDbLocal from the config file, or NULL if none.
- * Freez when done */
+struct slName *hTrackDbList();
+/* return the names of the track databases from the config file. Freez when done */
 
 void hSetTrackDbName(char *trackDbName);
 /* Override the hg.conf db.trackDb setting. */

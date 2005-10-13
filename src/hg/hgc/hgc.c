@@ -185,7 +185,7 @@
 #include "dless.h"
 #include "humPhen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.953 2005/10/13 20:21:30 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.954 2005/10/13 23:15:46 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2288,14 +2288,20 @@ chainFree(&chain);
 char *trackTypeInfo(char *track)
 /* Return type info on track. You can freeMem result when done. */
 {
-char *trackDb = hTrackDbName();
+struct slName *trackDbs = hTrackDbList(), *oneTrackDb;
 struct sqlConnection *conn = hAllocConn();
 char buf[512];
 char query[256];
-snprintf(query, sizeof(query), 
-	 "select type from %s where tableName = '%s'",  trackDb, track);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) == NULL)
-    errAbort("%s isn't in %s", track, trackDb);
+for (oneTrackDb = trackDbs; oneTrackDb != NULL; oneTrackDb = oneTrackDb->next)
+    {
+    snprintf(query, sizeof(query), 
+	     "select type from %s where tableName = '%s'",  oneTrackDb->name, track);
+    if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+	break;
+    }
+if (oneTrackDb == NULL)
+    errAbort("%s isn't in the trackDb from the hg.conf", track);
+slNameFreeList(&trackDbs);
 hFreeConn(&conn);
 return cloneString(buf);
 }
