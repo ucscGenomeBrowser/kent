@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.951 2005/10/11 03:12:58 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.952 2005/10/13 06:02:49 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14331,6 +14331,87 @@ codeBlastFree(&cb);
 printTrackHtml(tdb);
 }
 
+void doRefSeq(struct trackDb *tdb, char *item, 
+		     char *pepTable, char *extraTable)
+/* Handle click on gene track. */
+{
+struct minGeneInfo ginfo;
+char query[256];
+char query2[256];
+struct sqlResult *sr, *sr2;
+char **row, **row2;
+char *words[16], *dupe = cloneString(tdb->type);
+int wordCount, x, length;
+int num = 0;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2;
+struct COG *COG=NULL;
+struct COGXra *COGXra=NULL;
+char *temparray[160];
+char *giwords[5];
+
+genericHeader(tdb, item);
+wordCount = chopLine(dupe, words);
+if (wordCount > 1)
+    num = atoi(words[1]);
+if (num < 3) num = 3;
+if (extraTable != NULL && hTableExists(extraTable)) 
+    {
+    conn = hAllocConn();
+    sprintf(query, "select * from %s where name = '%s'", extraTable, item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL) 
+	{
+	minGeneInfoStaticLoad(row, &ginfo);
+        medlineLinkedLine("Description", ginfo.product, ginfo.product);
+        if (differentString(ginfo.note,"gene"))
+            printf("<B>Note: </B>%s<BR>\n", ginfo.note);
+	printf("<B>Protein: </B>%s<BR>\n", ginfo.protein);
+	}
+    sqlFreeResult(&sr);
+    }
+
+    chopString(ginfo.gi,":",giwords,sizeof(giwords));
+    printf("<B>NCBI Blast Hits:</B> "
+               "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
+	       "TARGET=_BLANK>%s:%s</A><BR>\n", giwords[1],
+	       giwords[0],giwords[1]);
+if (hTableExists("COG"))
+    { 
+    conn = hAllocConn();
+    sprintf(query, "select * from COG where name = '%s'", item);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL) 
+	{
+	COG = COGLoad(row);
+	if(COG!=NULL)
+	    { 
+     	    length=chopString(COG->COG, "," , temparray, 999);
+   	    for(x=0; x<length; x++)
+		{
+		conn2 = hAllocConn();
+		sprintf(query2, "select * from COGXra where name = '%s'", temparray[x]);
+                sr2 = sqlGetResult(conn2, query2);
+		while ((row2 = sqlNextRow(sr2)) != NULL) 
+	    	    {
+		    COGXra=COGXraLoad(row2);
+		    if(COGXra!=NULL)
+    printf("<B>COG: </B> "
+               "<A HREF=\"http://www.ncbi.nlm.nih.gov/COG/old/palox.cgi?%s\" "
+	       "TARGET=_BLANK>%s</A>\n", COGXra->name, COGXra->name);
+		        printf(" %s<BR><BR>\n", COGXra->info); 
+		    }
+		    sqlFreeResult(&sr2);
+		    hFreeConn(&conn2);
+	        }
+	     }
+  	 }
+    }
+geneShowPosAndLinks(item, item, tdb, pepTable, "htcTranslatedProtein",
+		    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void llDoCodingGenes(struct trackDb *tdb, char *item, 
 		     char *pepTable, char *extraTable)
 /* Handle click on gene track. */
@@ -17021,6 +17102,10 @@ else if( sameWord(track, "altGraphX") || sameWord(track, "altGraphXCon")
 else if (sameWord(track, "gbProtCode"))
     {
     llDoCodingGenes(tdb, item,"gbProtCodePep","gbProtCodeXra");
+    }
+else if (sameWord(track, "refSeq"))
+    {
+    doRefSeq(tdb, item,"gbProtCodePep","gbProtCodeXra");
     }
 else if (sameWord(track, "sargassoSea"))
     {
