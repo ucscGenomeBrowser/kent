@@ -4,4 +4,6 @@ table minGeneInfo
     string name;     "gene name"
     string product;  "gene product"
     string note;     "gene note"
+    string protein;  "gene protein"
+    string gi;       "gene genbank id"
     )

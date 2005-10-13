@@ -8,6 +8,8 @@ CREATE TABLE minGeneInfo (
     name varchar(255) not null,	# gene name
     product varchar(255) not null,	# gene product
     note varchar(255) not null,	# gene note
+    protein varchar(255) not null,	# gene protein
+    gi varchar(255) not null,	# gene genbank id
               #Indices
     PRIMARY KEY(name)
 );

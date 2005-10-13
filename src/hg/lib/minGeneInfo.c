@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "minGeneInfo.h"
 
-static char const rcsid[] = "$Id: minGeneInfo.c,v 1.2 2005/04/13 06:25:55 markd Exp $";
+static char const rcsid[] = "$Id: minGeneInfo.c,v 1.3 2005/10/13 03:35:25 baertsch Exp $";
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 /* Load a row from minGeneInfo table into ret.  The contents of ret will
@@ -18,6 +18,8 @@ void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 ret->name = row[0];
 ret->product = row[1];
 ret->note = row[2];
+ret->protein = row[3];
+ret->gi = row[4];
 }
 
 struct minGeneInfo *minGeneInfoLoad(char **row)
@@ -30,6 +32,8 @@ AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->product = cloneString(row[1]);
 ret->note = cloneString(row[2]);
+ret->protein = cloneString(row[3]);
+ret->gi = cloneString(row[4]);
 return ret;
 }
 
@@ -39,7 +43,7 @@ struct minGeneInfo *minGeneInfoLoadAll(char *fileName)
 {
 struct minGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -57,7 +61,7 @@ struct minGeneInfo *minGeneInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct minGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -67,68 +71,6 @@ while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
 lineFileClose(&lf);
 slReverse(&list);
 return list;
-}
-
-struct minGeneInfo *minGeneInfoLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all minGeneInfo from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with minGeneInfoFreeList(). */
-{
-struct minGeneInfo *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = minGeneInfoLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void minGeneInfoSaveToDb(struct sqlConnection *conn, struct minGeneInfo *el, char *tableName, int updateSize)
-/* Save minGeneInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use minGeneInfoSaveToDbEscaped() */
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  el->name,  el->product,  el->note);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
-
-void minGeneInfoSaveToDbEscaped(struct sqlConnection *conn, struct minGeneInfo *el, char *tableName, int updateSize)
-/* Save minGeneInfo as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than minGeneInfoSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *product, *note;
-name = sqlEscapeString(el->name);
-product = sqlEscapeString(el->product);
-note = sqlEscapeString(el->note);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
-	tableName,  name,  product,  note);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&product);
-freez(&note);
 }
 
 struct minGeneInfo *minGeneInfoCommaIn(char **pS, struct minGeneInfo *ret)
@@ -143,6 +85,8 @@ if (ret == NULL)
 ret->name = sqlStringComma(&s);
 ret->product = sqlStringComma(&s);
 ret->note = sqlStringComma(&s);
+ret->protein = sqlStringComma(&s);
+ret->gi = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -157,6 +101,8 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->name);
 freeMem(el->product);
 freeMem(el->note);
+freeMem(el->protein);
+freeMem(el->gi);
 freez(pEl);
 }
 
@@ -186,6 +132,14 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->note);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->protein);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->gi);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
