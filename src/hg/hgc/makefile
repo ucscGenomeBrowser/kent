@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 HG_WARN=-Wall
 
-L = -lm ${MYSQLLIBS}
+L = -lm ${MYSQLLIBS} 
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
@@ -16,5 +16,5 @@ mgsc: compile
 	mv $A ${CGI_BIN}-mgsc/$A
 
 compile: $O 
-	${CC} $O ${F64} ${MYLIBS} ${L} 
+	${CC} $O ${F64} ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}

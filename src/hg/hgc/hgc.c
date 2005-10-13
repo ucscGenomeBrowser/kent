@@ -183,8 +183,9 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 #include "dless.h"
+#include "humPhen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.952 2005/10/13 06:02:49 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.953 2005/10/13 20:21:30 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16475,6 +16476,83 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doHumPhen (struct trackDb *tdb, char *itemName)
+/* this prints the detail page for the Human Phenotype track */
+{
+char *table = tdb->tableName;
+struct humanPhenotype *humPhen;
+struct humPhenLink *link;
+struct humPhenAlias alias;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *linkArray[50];  /* assume not more than 50 links per variant */
+int i, cnt = 0;
+
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+printf("<B>HGVS name:</B> %s <BR>\n", itemName);
+/* postion, band, genomic size */
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    /* need in bed struct for print sub */
+    struct bed *copy = NULL;
+    AllocVar(copy);
+    humPhen = humanPhenotypeLoad(row);
+    copy->chrom = cloneString(humPhen->chrom);
+    copy->chromStart = humPhen->chromStart;
+    copy->chromEnd = humPhen->chromEnd;
+    bedPrintPos(copy, 3);
+    bedFree(&copy);
+    }
+sqlFreeResult(&sr);
+
+/* print location and mutation type fields */
+printf("<B>location:</B> %s<BR />\n", humPhen->location);
+printf("<B>type:</B> %s<BR />\n", humPhen->baseChangeType);
+
+/* get list of database keys from humPhen */
+cnt = chopString(cloneString(humPhen->linkDbs), ",", linkArray, ArraySize(linkArray));
+printf("<DL><DT><B>Outside Link(s):</B>\n<DD> ");
+for (i = 0; i < cnt; i++) 
+    {
+    char *url;
+    safef(query, sizeof(query),
+          "select * from humPhenLink where linkDb = '%s'", linkArray[i]);
+    link = humPhenLinkLoadByQuery(conn, query);
+    if (link != NULL) 
+        {
+        url = replaceChars(link->url, "$$", humPhen->dbId);
+        printf("<A HREF=%s", url);
+        printf(" Target=_blank> %s </A> <BR />\n", link->linkDisplayName);
+        freeMem(url);
+        }
+    }
+
+printf("<DT><B>Aliases:</B><DD>\n ");
+safef(query, sizeof(query),
+      "select * from humPhenAlias where dbId = '%s'", humPhen->dbId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    humPhenAliasStaticLoad(row, &alias);
+    printf("%s<BR />\n", alias.name);
+    }
+sqlFreeResult(&sr);
+printf("</DL>\n");
+
+humanPhenotypeFree(&humPhen);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -17183,7 +17261,6 @@ else if( sameWord( track, "mm3Hg15L" ))
     {
     humMusClickHandler( tdb, item, "Human", "hg15", "blastzNetHuman" , 0);
     }
-
 else if( sameWord( track, "footPrinter" ))
     {
     footPrinterClickHandler( tdb, item );
@@ -17317,6 +17394,10 @@ else if (sameString("anoEstTcl", track))
 else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
+    }
+else if (sameString("humanPhenotype", track))
+    {
+    doHumPhen(tdb, item);
     }
 else if (startsWith("dless", track))
     {

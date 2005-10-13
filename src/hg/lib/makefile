@@ -64,7 +64,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     trackDbCustom.o trackTable.o transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o vegaInfo.o wabAli.o web.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
-    visiGene.o vntr.o zdobnovSynt.o 
+    visiGene.o vntr.o zdobnovSynt.o humPhen.o humanPhenotypeUi.o
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

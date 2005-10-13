@@ -107,7 +107,7 @@ update: #clean
 		    else \
 			vis="" ; \
 		fi ; fi ; fi; \
-		cmd="hgTrackDb -release=alpha $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
+		cmd="hgTrackDb $$vis $$org $$DB trackDb_${USER} ../../lib/trackDb.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
 		cmd="hgFindSpec $$org $$DB hgFindSpec_${USER} ../../lib/hgFindSpec.sql ." ; \
 		echo $$cmd ;  $$cmd ; \
