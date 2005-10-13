@@ -1792,8 +1792,8 @@ blastRef mm6.blastKGRef03
 chromosome 13
 
 track humanPhenotype
-shortLable humPhen
-longLable Human Phenotype
+shortLabel humPhen
+longLabel Human Phenotype
 group encodeGenes
 priority 63.7
 visibility hide
