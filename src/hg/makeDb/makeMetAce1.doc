@@ -135,12 +135,12 @@ note' > metAce1-params-xra.txt
     gbArchaeGenome metAce1.gbk metAce1-params-pep.txt metAce1-genbank-cds.pep
     gbArchaeGenome metAce1.gbk metAce1-params-xra.txt metAce1-genbank-cds.xra
 #    hgLoadBed metAce1 gbProtCode metAce1-genbank-cds.bed
-#    hgsql metAce1 < ~/kent/src/hg/lib/pepPred.sql
-#    hgsql metAce1 < ~/kent/src/hg/lib/minGeneInfo.sql
-#    echo rename table pepPred to gbProtCodePep | hgsql metAce1
-#    echo rename table minGeneInfo to gbProtCodeXra | hgsql metAce1
-#    echo load data local infile \'metAce1-genbank-cds.pep\' into table gbProtCodePep | hgsql metAce1
-#    echo load data local infile \'metAce1-genbank-cds.xra\' into table gbProtCodeXra | hgsql metAce1
+    hgsql metAce1 < ~/kent/src/hg/lib/pepPred.sql
+    hgsql metAce1 < ~/kent/src/hg/lib/minGeneInfo.sql
+    echo rename table pepPred to gbProtCodePep | hgsql metAce1
+    echo rename table minGeneInfo to gbProtCodeXra | hgsql metAce1
+    echo load data local infile \'metAce1-genbank-cds.pep\' into table gbProtCodePep | hgsql metAce1
+    echo load data local infile \'metAce1-genbank-cds.xra\' into table gbProtCodeXra | hgsql metAce1
 
 #genbank to genePred
 
