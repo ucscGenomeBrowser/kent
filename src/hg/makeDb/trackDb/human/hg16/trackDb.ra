@@ -1,4 +1,4 @@
-track all-b100i96
+track allb100i96
 shortLabel chimp/mouse/rat conserved
 longLabel 100bp or longer, 96% or greater identical
 priority 99
