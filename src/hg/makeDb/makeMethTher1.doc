@@ -52,7 +52,7 @@ exit; # don't actually run this like a script :)
 
     make DBS=methTher1
 
-# GC20BASE (DONE 10/05)
+# GC20BASE (DONE 10/13/05), kpollard
     mkdir -p /cluster/data/methTher1/bed/gc20Base
     cd /cluster/data/methTher1/bed/gc20Base
     hgGcPercent -wigOut -doGaps -file=stdout -win=10 -overlap=15 methTher1 /cluster/data/methTher1/ | wigEncode stdin gc20Base.wig gc20Base.wib
@@ -66,7 +66,7 @@ exit; # don't actually run this like a script :)
     #	should see good numbers in Cardinality column
 
 
-# TANDEM REPEAT MASKER (DONE 10/05)
+# TANDEM REPEAT MASKER (DONE 10/13/05), kpollard
 
     ssh hgwdev
     mkdir -p /cluster/data/methTher1/bed/simpleRepeat
@@ -75,78 +75,93 @@ exit; # don't actually run this like a script :)
     cd /cluster/data/methTher1/bed/simpleRepeat
     hgLoadBed methTher1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/src/hg/lib/simpleRepeat.sql
 
-# MULTIZ (DONE 10/8/05)
+# MULTIZ (DONE 10/13/05), kpollard
 
     cd /cluster/data/methTher1/bed
     mkdir conservation
     cd conservation
     cp /cluster/data/pyrFur2/bed/conservation/HoxD55.q .
-    cp /cluster/data/sulSol1/bed/conservation/sulAci1.chr methTher1.chr
-    cp /cluster/data/sulSol1/bed/conservation/sulTok1.chr sulfToko1.chr
-    cp /cluster/data/sulSol1/bed/conservation/sulSol1.chr .
-    #edit headers for Aci and Tok to be methTher1, sulfToko1
-    /cluster/bin/i386/faToNib methTher1.chr methTher1.chr.nib
-    /cluster/bin/i386/faToNib sulfToko1.chr sulfToko1.chr.nib
-    cp /cluster/data/sulSol1/bed/conservation/sulSol1.chr.nib .
+    cp /cluster/data/methJann1/bed/conservation/methTher1.chr .
+    cp /cluster/data/methJann1/bed/conservation/metMar1.chr .
+    cp /cluster/data/methJann1/bed/conservation/methJann1.chr .
+    cp /cluster/data/methJann1/bed/conservation/methKand1.chr .
+    cp /cluster/data/methJann1/bed/conservation/methTher1.chr.nib .
+    cp /cluster/data/methJann1/bed/conservation/metMar1.chr.nib .
+    cp /cluster/data/methJann1/bed/conservation/methJann1.2bit .
+    cp /cluster/data/methJann1/bed/conservation/methKand1.chr.nib .
     faSize -detailed *.chr > chrom.sizes
-    #blastz for Aci-Tok
-    blastz methTher1.chr sulfToko1.chr Q=HoxD55.q > methTher1-sulfToko1.lav
-    /cluster/bin/i386/lavToAxt methTher1-sulfToko1.lav . . methTher1-sulfToko1.axt
-    axtBest methTher1-sulfToko1.axt methTher1.chr -winSize=500 -minScore=5000 methTher1-sulfToko1-best.axt
-    axtToMaf methTher1-sulfToko1-best.axt chrom.sizes chrom.sizes methTher1-sulfToko1.maf
-    #blastz for Aci-Sol
-    blastz methTher1.chr sulSol1.chr Q=HoxD55.q > methTher1-sulSol1.lav
-    /cluster/bin/i386/lavToAxt methTher1-sulSol1.lav . . methTher1-sulSol1.axt
-    axtBest methTher1-sulSol1.axt methTher1.chr -winSize=500 -minScore=5000 methTher1-sulSol1-best.axt
-    axtToMaf methTher1-sulSol1-best.axt chrom.sizes chrom.sizes methTher1-sulSol1.maf
+
+    #blastz
+    blastz methTher1.chr metMar1.chr Q=HoxD55.q > methTher1-metMar1.lav
+    blastz methTher1.chr methJann1.chr Q=HoxD55.q > methTher1-methJann1.lav
+    blastz methTher1.chr methKand1.chr Q=HoxD55.q > methTher1-methKand1.lav
+
+    lavToAxt methTher1-metMar1.lav . . methTher1-metMar1.axt
+    lavToAxt methTher1-methJann1.lav . methJann1.2bit methTher1-methJann1.axt
+    lavToAxt methTher1-methKand1.lav . . methTher1-methKand1.axt
+
+    axtBest methTher1-metMar1.axt methTher1.chr -winSize=500 -minScore=5000 methTher1-metMar1-best.axt
+    axtBest methTher1-methJann1.axt methTher1.chr -winSize=500 -minScore=5000 methTher1-methJann1-best.axt
+    axtBest methTher1-methKand1.axt methTher1.chr -winSize=500 -minScore=5000 methTher1-methKand1-best.axt
+
+    axtToMaf methTher1-metMar1-best.axt chrom.sizes chrom.sizes methTher1-metMar1.maf
+    axtToMaf methTher1-methJann1-best.axt chrom.sizes chrom.sizes methTher1-methJann1.maf
+    axtToMaf methTher1-methKand1-best.axt chrom.sizes chrom.sizes methTher1-methKand1.maf
+
     #multiz
     #delete extra header lines from maf files
-    multiz methTher1-sulfToko1.maf methTher1-sulSol1.maf - > methTher1-sulfToko1-sulSol1.maf
+    multiz methTher1-metMar1.maf methTher1-methJann1.maf - > methTher1-metMar1-methJann1.maf
+    multiz methTher1-methKand1.maf methTher1-metMar1-methJann1.maf - > methTher1-metMar1-methJann1-methKand1.maf
+
     #phyloHMM
-    /cluster/bin/phast/msa_view -i MAF -M methTher1.chr -o SS methTher1-sulfToko1-sulSol1.maf > methTher1.ss
-    /cluster/bin/phast/phyloFit -i SS methTher1.ss -t "(sulSol1,(sulfToko1,methTher1))" 
+    /cluster/bin/phast/msa_view -i MAF -M methTher1.chr -o SS methTher1-metMar1-methJann1-methKand1.maf > methTher1.ss
+    /cluster/bin/phast/phyloFit -i SS methTher1.ss -t "(methKand1,(methTher1,(metMar1,methJann1)))" 
     /cluster/bin/phast/msa_view -i SS methTher1.ss --summary-only
-    /cluster/bin/phast/phastCons methTher1.ss phyloFit.mod --gc 0.3507 \
-	--target-coverage 0.7 --estimate-trees sul-tree \
+    #insert GC content into the following command
+    /cluster/bin/phast/phastCons methTher1.ss phyloFit.mod --gc 0.4634 \
+	--target-coverage 0.7 --estimate-trees meth-tree \
 	--expected-lengths 25 --no-post-probs --ignore-missing \
 	--nrates 1,1
     /cluster/bin/phast/phastCons methTher1.ss \
-	sul-tree.cons.mod,sul-tree.noncons.mod \
+	meth-tree.cons.mod,meth-tree.noncons.mod \
 	--target-coverage 0.7 --expected-lengths 25 \
 	--viterbi methTher1-elements.bed --score \
 	--require-informative 0 --seqname chr > cons.dat
     wigEncode cons.dat phastCons.wig phastCons.wib
     draw_tree phyloFit.mod > methTher1-tree.ps
-    #check that tree is similar to sul-tree.ps from sulSol1
+    #check that tree is similar to tree from metMar1
+
     #move data
     mkdir wib
     mv phastCons.wib wib/phastCons.wib
     mv phastCons.wig wib/phastCons.wig
     ln -s /cluster/data/methTher1/bed/conservation/wib/phastCons.wib /gbdb/methTher1/wib
     mkdir -p /gbdb/methTher1/pwMaf
-    mkdir -p otherSul/sulfToko1 otherSul/sulSol1
-    mv methTher1-sulfToko1.maf otherSul/sulfToko1/chr.maf
-    mv methTher1-sulSol1.maf otherSul/sulSol1/chr.maf
-    ln -s /cluster/data/methTher1/bed/conservation/otherSul/sulfToko1 /gbdb/methTher1/pwMaf/sulfToko1_pwMaf
-    ln -s /cluster/data/methTher1/bed/conservation/otherSul/sulSol1 /gbdb/methTher1/pwMaf/sulSol1_pwMaf
+    mkdir -p otherSpp/metMar1 otherSpp/methJann1 otherSpp/methKand1
+    mv methTher1-metMar1.maf otherSpp/metMar1/chr.maf
+    mv methTher1-methJann1.maf otherSpp/methJann1/chr.maf
+    mv methTher1-methKand1.maf otherSpp/methKand1/chr.maf
+    ln -s /cluster/data/methTher1/bed/conservation/otherSpp/metMar1 /gbdb/methTher1/pwMaf/metMar1_pwMaf
+    ln -s /cluster/data/methTher1/bed/conservation/otherSpp/methJann1 /gbdb/methTher1/pwMaf/methJann1_pwMaf
+    ln -s /cluster/data/methTher1/bed/conservation/otherSpp/methKand1 /gbdb/methTher1/pwMaf/methKand1_pwMaf
     mkdir multiz
-    mv methTher1-sulfToko1-sulSol1.maf multiz/chr.maf
-    ln -s /cluster/data/methTher1/bed/conservation/multiz /gbdb/methTher1/multizSa1St1Ss1
+    mv methTher1-metMar1-methJann1-methKand1.maf multiz/chr.maf
+    ln -s /cluster/data/methTher1/bed/conservation/multiz /gbdb/methTher1/multizMtMmMjMk
+
     #load
     hgLoadWiggle methTher1 phastCons /cluster/data/methTher1/bed/conservation/wib/phastCons.wig
-    hgLoadMaf -warn methTher1 multizSa1St1Ss1
-    hgLoadMaf -warn methTher1 sulfToko1_pwMaf -pathPrefix=/gbdb/methTher1/pwMaf/sulfToko1_pwMaf
-    hgLoadMaf -warn methTher1 sulSol1_pwMaf -pathPrefix=/gbdb/methTher1/pwMaf/sulSol1_pwMaf
+    hgLoadMaf -warn methTher1 multizMtMmMjMk
+    hgLoadMaf -warn methTher1 metMar1_pwMaf -pathPrefix=/gbdb/methTher1/pwMaf/metMar1_pwMaf
+    hgLoadMaf -warn methTher1 methJann1_pwMaf -pathPrefix=/gbdb/methTher1/pwMaf/methJann1_pwMaf
+   hgLoadMaf -warn methTher1 methKand1_pwMaf -pathPrefix=/gbdb/methTher1/pwMaf/methKand1_pwMaf
     hgLoadBed methTher1 phastConsElements methTher1-elements.bed 
+
     #trackDb
-    cd ~/kent/src/hg/makeDb/trackDb/archae
-    mkdir methTher1
-    cvs add methTher1
-    cd methTher1
+    cd ~/kent/src/hg/makeDb/trackDb/archae/methTher1
     #trackDb.ra entry
-    # track multizSa1St1Ss1
+    # track multizMtMmMjMk
     # shortLabel Conservation
-    # longLabel Sulfolobus 3-way multiz alignments
+    # longLabel Methanogen multiz alignments
     # group compGeno
     # priority 10.0
     # visibility pack
@@ -156,13 +171,12 @@ exit; # don't actually run this like a script :)
     # yLineOnOff Off
     # autoScaleDefault Off
     # pairwise pwMaf
-    # speciesOrder sulfToko1 sulSol1
+    # speciesOrder metMar1 methJann1 methKand1
     cvs add trackDb.ra
     cvs commit -m "Added multiz track" trackDb.ra
-    #html page for multizSa1St1Ss1
-    cd ~/kent/src/hg/makeDb/trackDb/archae/methTher1
-    cvs add multizSa1St1Ss1.html
-    cvs commit -m "Details page for multiz track" multizSa1St1Ss1.html
+    #html page for multizMtMmMjMk
+    cvs add multizMtMmMjMk.html
+    cvs commit -m "Details page for multiz track" multizMtMmMjMk.html
  
 # DESCRIPTION PAGE (TO DO)
 
