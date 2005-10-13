@@ -1,7 +1,7 @@
 track allb100i96
 shortLabel chimp/mouse/rat conserved
 longLabel 100bp or longer, 96% or greater identical
-priority 99
+priority 215
 group compGeno
 visibility dense
 type bed 4 +
