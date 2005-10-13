@@ -98,6 +98,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 	dnaLoadCurSize(queryDl), indexList, f);
      // LX BEG Oct 13 2005
      // This prints the contents of the mask into the .bed file opened above
+    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
      printing = 0;
      for(b=0;b<query->size;b++){
        if(dynaCountQ[b] > queryHitDLimit){
@@ -113,6 +114,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
            fprintf(bedfp,"%d\n",bend);
          }
        }
+     }
      }
      // LX END Oct 13 2005
     dnaSeqFree(&query);
