@@ -14,6 +14,15 @@ altColor 255,128,0
 defaultViewLimits 0:100
 type wig 0 100
 
+track refSeq
+shortLabel refSeq
+longLabel Genbank RefSeq Gene Annotations 
+group genes
+priority 2.1
+visibility pack
+color 0,100,100
+type genePred gpProtCodePep
+
 track gbProtCode
 shortLabel GenBank CDS
 longLabel GenBank protein-coding genes
