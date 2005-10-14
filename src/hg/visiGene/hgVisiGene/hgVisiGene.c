@@ -243,20 +243,20 @@ slReverse(&list);
 return list;
 }
 
-struct slInt *onePerImageFile(struct sqlConnection *conn, struct slInt *imageList)
+struct visiMatch *onePerImageFile(struct sqlConnection *conn, struct visiMatch *matchList)
 /* Return image list that filters out second occurence of
  * same imageFile. */
 {
-struct slInt *newList = NULL, *image, *next;
+struct visiMatch *newList = NULL, *match, *next;
 struct hash *uniqHash = newHash(0);
 char query[256];
-for (image = imageList; image != NULL; image = next)
+for (match = matchList; match != NULL; match = next)
     {
     char hashName[16];
     int imageFile;
-    next = image->next;
+    next = match->next;
     safef(query, sizeof(query), "select imageFile from image where id=%d", 
-    	image->val);
+    	match->imageId);
     imageFile = sqlQuickNum(conn, query);
     if (imageFile != 0)
 	{
@@ -264,11 +264,11 @@ for (image = imageList; image != NULL; image = next)
 	if (!hashLookup(uniqHash, hashName))
 	    {
 	    hashAdd(uniqHash, hashName, NULL);
-	    slAddHead(&newList, image);
-	    image = NULL;
+	    slAddHead(&newList, match);
+	    match = NULL;
 	    }
 	}
-    freez(&image);
+    freez(&match);
     }
 hashFree(&uniqHash);
 slReverse(&newList);
@@ -281,39 +281,49 @@ void doThumbnails(struct sqlConnection *conn)
 {
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
-struct slInt *imageList = NULL, *image;
+struct visiMatch *matchList = NULL, *match;
 int maxCount = 50, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);
 int imageCount;
 
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
-imageList = visiSearch(conn, listSpec);
-imageList = onePerImageFile(conn, imageList);
-imageCount = slCount(imageList);
-printf("<TABLE>\n");
-for (image = slElementFromIx(imageList, startAt); 
-	image != NULL; image = image->next)
+matchList = visiSearch(conn, listSpec);
+matchList = onePerImageFile(conn, matchList);
+imageCount = slCount(matchList);
+if (imageCount > 0)
     {
-    int id = image->val;
-    char *imageFile = visiGeneThumbSizePath(conn, id);
-    printf("<TR>");
-    printf("<TD>");
-    printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
-	"onclick=\"parent.controls.document.mainForm.ZM[0].checked=true;return true;\" "
-	">", hgVisiGeneCgiName(), 
-    	sidUrl, hgpId, id, hgpDoImage);
-    printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
-    
-    smallCaption(conn, id);
-    printf("<BR>\n");
-    printf("</TD>");
-    printf("</TR>");
-    if (++count >= maxCount)
-        break;
+    double bestWeight = matchList->weight;
+    boolean didLine = FALSE;
+    printf("<TABLE>\n");
+    for (match = slElementFromIx(matchList, startAt); 
+	    match != NULL; match = match->next)
+	{
+	int id = match->imageId;
+	char *imageFile = visiGeneThumbSizePath(conn, id);
+	if (match->weight < bestWeight && !didLine)
+	    {
+	    printf("<TR BGCOLOR=\"#D0FFE0\"><TD><HR>weaker matches:<HR></TD></TR>\n");
+	    didLine = TRUE;
+	    }
+	printf("<TR>");
+	printf("<TD>");
+	printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
+	    "onclick=\"parent.controls.document.mainForm.ZM[0].checked=true;return true;\" "
+	    ">", hgVisiGeneCgiName(), 
+	    sidUrl, hgpId, id, hgpDoImage);
+	printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
+	
+	smallCaption(conn, id);
+	printf("<BR>\n");
+	printf("</TD>");
+	printf("</TR>");
+	if (++count >= maxCount)
+	    break;
+	}
+    printf("</TABLE>\n");
+    printf("<HR>\n");
     }
-printf("</TABLE>\n");
-printf("<HR>\n");
 if (count != imageCount)
    {
    int start;

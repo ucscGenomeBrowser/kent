@@ -11,15 +11,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.2 2005/10/10 19:22:31 kent Exp $";
-
-struct visiMatch
-/* Info on a score of an image in free format search. */
-    {
-    struct visiMatch *next;
-    int imageId;	/* Image ID associated with search. */
-    double weight;	/* The higher the weight the better the match */
-    };
+static char const rcsid[] = "$Id: visiSearch.c,v 1.3 2005/10/14 19:38:55 kent Exp $";
 
 static int visiMatchCmpImageId(void *va, void *vb)
 /* rbTree comparison function to tree on imageId. */
@@ -503,7 +495,7 @@ for (word = wordList; word != NULL; word = word->next)
     }
 }
 
-struct slInt *visiSearch(struct sqlConnection *conn, char *searchString)
+struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
 /* visiSearch - return list of images that match searchString sorted
  * by how well they match. This will search most fields in the
  * database. */
@@ -519,14 +511,9 @@ visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
-for (match = matchList; match != NULL; match = match->next)
-    {
-    image = slIntNew(match->imageId);
-    slAddHead(&imageList, image);
-    }
-slFreeList(&matchList);
+searcher->matchList = NULL;	/* Transferring memory ownership to return val. */
+visiSearcherFree(&searcher);
 slFreeList(&wordList);
-slReverse(&imageList);
-return imageList;
+return matchList;
 }
 
