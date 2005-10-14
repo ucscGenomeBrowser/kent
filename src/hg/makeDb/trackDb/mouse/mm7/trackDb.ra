@@ -1,3 +1,11 @@
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility hide
+type bed 3 +
+
 track chainHg17noLSR
 shortLabel $o_Organism Chain noLSR
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments WITH blastz dynamic masking, NOT Lineage Specific Repeats
