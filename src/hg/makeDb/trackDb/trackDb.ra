@@ -749,7 +749,7 @@ altColor 128,228,128
 type bed 4 +
 
 track cpgIslandGgfAndyMasked
-shortLabel CpG Islands (AL masked)
+shortLabel CpG Islands (AL)
 longLabel CpG Islands - Andy Law, masked sequence (Islands < 300 Bases are Light Green)
 group regulation
 priority 90.001
