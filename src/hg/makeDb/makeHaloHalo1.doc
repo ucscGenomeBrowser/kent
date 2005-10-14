@@ -89,7 +89,7 @@ exit; # don't actually run this like a script :)
     hgLoadBed haloHalo1 simpleRepeat *.bed -sqlTable=/cluster/home/lowe/kent/sr/hg/lib/simpleRepeat.sql
 
 # CHAIN TRACK with halMar1
-#started 10/12/05, kpollard
+# DONE (10/13/05), kpollard
 
     cd /cluster/data/haloHalo1/bed/
     mkdir conservation
@@ -125,6 +125,9 @@ exit; # don't actually run this like a script :)
     #p2 lav is empty - remove
     rm haloHalo1.p2-halMar1.lav haloHalo1.p2-halMar1.axt
 
+    axtBest haloHalo1.c-halMar1.axt all -winSize=500 -minScore=5000 haloHalo1.c-halMar1-best.axt
+    axtBest haloHalo1.p1-halMar1.axt all -winSize=500 -minScore=5000 haloHalo1.p1-halMar1-best.axt
+
     #chain
     # Reuse gap penalties from chicken run.
     cat << '_EOF_' > temp.gap
@@ -142,21 +145,23 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     sed 's/  */\t/g' temp.gap > chicken.gap
     rm temp.gap
     mkdir chains
-    foreach f (*.axt)
-	set b=$f:t:r
+    foreach f (*best.axt)
+	set a=$f:t:r
+	set b=`basename $a -best`
 	axtChain -scoreScheme=HoxD55.q -linearGap=chicken.gap \
                       -minScore=5000 $f haloHalo1.2bit halMar1.2bit \
                        chains/$b.chain
     end    
    
     #load chains
-    cd chain
+    cd chains
     hgLoadChain haloHalo1 chr_chainHalMar1 haloHalo1.c-halMar1.chain
     hgLoadChain haloHalo1 plasmid_pNRC100_chainHalMar1 haloHalo1.p1-halMar1.chain
 
-    #load axt files
-    axtToPsl haloHalo1.c-halMar1.axt chrom.sizes chrom.sizes haloHalo1.c-halMar1.psl
-    axtToPsl haloHalo1.p1-halMar1.axt chrom.sizes chrom.sizes haloHalo1.p1-halMar1.psl
+    #load axt files for blastz track
+    cd ..
+    axtToPsl haloHalo1.c-halMar1-best.axt chrom.sizes chrom.sizes haloHalo1.c-halMar1.psl
+    axtToPsl haloHalo1.p1-halMar1-best.axt chrom.sizes chrom.sizes haloHalo1.p1-halMar1.psl
     hgLoadPsl haloHalo1 -table=chr_BlastzHalMar1 haloHalo1.c-halMar1.psl
     hgLoadPsl haloHalo1 -table=plasmid_pNRC100_BlastzHalMar1 haloHalo1.p1-halMar1.psl
 
@@ -191,7 +196,7 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     cvs add trackDb.ra
     cvs commit -m "halMar1 chains" trackDb.ra
     cvs add chainHalMar1.html
-    cvs commit -m "added malMar1 chains" chainMalMar1.html
+    cvs commit -m "added malMar1 chains" chainHalMar1.html
 
 # DESCRIPTION PAGE ()
 
