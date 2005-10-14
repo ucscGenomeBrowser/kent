@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1020 2005/10/13 20:21:08 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1021 2005/10/14 04:13:20 donnak Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11108,18 +11108,12 @@ puts("<FORM ACTION=\"/cgi-bin/hgTracks\" METHOD=\"POST\" ENCTYPE=\"multipart/for
 cartSaveSession(cart);
 
 puts(
-"<P>Display your own custom annotation tracks in the browser using \n"
-"the <A HREF=\"../goldenPath/help/customTrack.html\"> \n"
-"procedure described here</A>.<br>\n"
-"Custom tracks in the supported formats may be uploaded using one of these ways:<br>\n"
-"1. Paste the custom annotation text directly into the large text box below.<br>\n"
-"2. Click browse and choose a custom annotation file on your computer.<br>\n"
-"3. Enter a URL for the custom annotation in the large text box below.<br>\n"
-"<P>\n"
-"Click \n"
-"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
-"to view a collection of custom annotation tracks submitted by Genome Browser users.</P> \n"
-"\n"
+"<P>Display your own custom annotation tracks in the browser using the \n"
+"procedure described in the custom tracks \n"
+"<A HREF=\"../goldenPath/help/customTrack.html\" TARGET=_blank>user's \n"
+"guide</A>. For information on upload procedures and supported formats, see \n"
+"the \"Loading Custom Annotation Tracks\" section below.</P> \n"
+
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\">\n"
 );
 
@@ -11130,6 +11124,8 @@ cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 cgiMakeTextArea("hgt.customText", "", 14, 80);
 cgiTableFieldEnd();
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 cgiMakeResetButton();
 cgiTableFieldEnd();
@@ -11139,16 +11135,45 @@ cgiTableEnd();
 #if defined(NOT)	/*	NOT YET	*/
 puts("<BR>\n");
 cgiMakeCheckBox("hgt.customAppend", cgiBooleanDefined("hgt.customAppend"));
-puts("Check box to add this sequence to existing custom tracks<BR>If unchecked, all existing custom tracks will be cleared.</FORM>\n");
+puts("Check box to add this sequence to existing custom tracks.<BR>If unchecked, all existing custom tracks will be cleared.</FORM>\n");
 #endif
 
 puts(
 "<BR>\n"
-"Multiple URLs may be entered, one per line.<br>\n"
-"Supported URL protocols are HTTP and FTP (passive only).<br>\n"
-"The data may be compressed by any of these formats, signified by the extension: .gz (gzip), .Z (compress) or .bz2 (bzip2).<br>\n"
-"User/password if required may be specified in the URL as protocol://user:password@server.com/somepath.<br>\n"
-"Only Basic Authentication is supported for HTTP.<br>\n"
+"Click \n"
+"<A HREF=\"../goldenPath/customTracks/custTracks.html\" TARGET=_blank>here</A> \n"
+"to view a collection of custom annotation tracks contributed by other Genome \n"
+"Browser users.</P> \n"
+"\n"
+"<HR> \n"
+"<H2>Loading Custom Annotation Tracks</H2> \n"
+"<P>A data file in one of the supported custom track \n"
+"<A HREF=\"../goldenPath/help/customTrack.html#format\" \n"
+"TARGET=_blank>formats</A> may be uploaded \n"
+"by any of the following methods: \n"
+"<UL> \n"
+"<LI>Pasting the custom annotation text directly into the large text box above\n"
+"<LI>Clicking the &quot;browse&quot; button and choosing a custom annotation \n"
+"located on your computer\n"
+"<LI>Entering a URL for the custom annotation in the large text box above \n"
+"</UL></P>\n"
+"<P>Multiple URLs may be entered into the text box, one per line.\n"
+"The Genome Browser supports the HTTP and FTP (passive only) URL protocols.\n"
+"</P> \n"
+"<P>Data compressed by any of the following programs may be loaded: \n"
+"gzip (<em>.gz</em>), compress (<em>.Z</em>) or bzip2 (<em>.bz2</em>). \n"
+"The filename must include the extension indicated. </P>\n"
+"<P>If a login and password is required to access data loaded through \n"
+"a URL, this information can be included in the URL using the format \n"
+"<em>protocol://user:password@server.com/somepath</em>. Only Basic \n"
+"Authentication is \n"
+"supported for HTTP. Note that passwords included in URLs are <B>not</B> \n"
+"protected. If a password contains a non-alphanumeric character, such as \n"
+"@, the character must be replaced by the hexidecimal \n"
+"representation for that character. For example, in the password \n"
+"<em>mypwd@wk</em>, the @ character should be replaced by \n"
+"%40, resulting in the modified password <em>mypwd%40wk</em>. \n"
+"</P>\n"
 "<P>\n"
 );
 
