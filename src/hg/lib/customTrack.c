@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.62 2005/10/10 18:56:26 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.63 2005/10/14 07:44:29 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1088,6 +1088,8 @@ if (customText != NULL && customText[0] != 0)
     cartSetString(cart, "ct", tn.forCgi);
     cartRemove(cart, "hgt.customText");
     cartRemove(cart, "hgt.customFile");
+    cartRemove(cart, "hgt.customFile__filename");
+    cartRemove(cart, "hgt.customFile__size");
     }
 else if (fileName != NULL)
     {
