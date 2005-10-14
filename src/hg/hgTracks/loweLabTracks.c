@@ -42,7 +42,7 @@ void initializeColors(struct vGfx *vg)
     LLshadesOfCOGS['W'-'A']=vgFindColorIx(vg, 188, 252,172);
     LLshadesOfCOGS['U'-'A']=vgFindColorIx(vg, 172, 252,172);
     LLshadesOfCOGS['O'-'A']=vgFindColorIx(vg, 156, 252,172);
-    LLshadesOfCOGS['C'-'A']=vgFindColorIx(vg, 188, 252,252);
+    LLshadesOfCOGS['C'-'A']=vgFindColorIx(vg, 188, 252,252);  /* light blue  133, 233,204);  */
     LLshadesOfCOGS['G'-'A']=vgFindColorIx(vg, 204, 252,252);
     LLshadesOfCOGS['E'-'A']=vgFindColorIx(vg, 220, 252,252);
     LLshadesOfCOGS['F'-'A']=vgFindColorIx(vg, 220, 236,252);
@@ -50,8 +50,9 @@ void initializeColors(struct vGfx *vg)
     LLshadesOfCOGS['I'-'A']=vgFindColorIx(vg, 220, 204,252);
     LLshadesOfCOGS['P'-'A']=vgFindColorIx(vg, 204, 204,252);
     LLshadesOfCOGS['Q'-'A']=vgFindColorIx(vg, 188, 204,252);
-    LLshadesOfCOGS['R'-'A']=vgFindColorIx(vg, 224, 224,224);
+    LLshadesOfCOGS['R'-'A']=vgFindColorIx(vg, 224, 224,224); /* general function prediction */
     LLshadesOfCOGS['S'-'A']=vgFindColorIx(vg, 204, 204,204);
+    LLshadesOfCOGS['-'-'A']=vgFindColorIx(vg, 224, 224,224);/* no cog - same as R (general function prediction) */
     }
 
 void loadBed6(struct track *tg)
@@ -104,14 +105,14 @@ if(hTableExists("COG")){
     }
     else
         {
-        return shadesOfGray[9];
+        return blackIndex();
         }
     }
 else
     {
         hFreeConn(&conn);
 
-	return shadesOfGray[9];
+	return blackIndex();
     }
 slFreeList(&bed);
 
