@@ -325,14 +325,20 @@ if (count != imageCount)
    for (start=0; start<imageCount; start += maxCount)
        {
        ++page;
-       printf("<A HREF=\"%s?", hgVisiGeneCgiName());
-       printf("%s&", sidUrl);
-       printf("%s=on&", hgpDoThumbnails);
-       printf("%s=%s&", hgpListSpec, listSpec);
-       if (start != 0)
-	   printf("%s=%d", hgpStartAt, start);
-       printf("\">");
-       printf("%d</A> ", page);
+       if (start != startAt)
+	   {
+	   printf("<A HREF=\"%s?", hgVisiGeneCgiName());
+	   printf("%s&", sidUrl);
+	   printf("%s=on&", hgpDoThumbnails);
+	   printf("%s=%s&", hgpListSpec, listSpec);
+	   if (start != 0)
+	       printf("%s=%d", hgpStartAt, start);
+	   printf("\">");
+	   }
+       printf("%d", page);
+       if (start != startAt)
+	   printf("</A>");
+       printf(" ");
        }
    }
 else
