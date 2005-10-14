@@ -184,7 +184,7 @@
 #include "omimTitle.h"
 #include "dless.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.950 2005/10/01 00:58:06 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.950.2.1 2005/10/14 02:50:30 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2287,14 +2287,20 @@ chainFree(&chain);
 char *trackTypeInfo(char *track)
 /* Return type info on track. You can freeMem result when done. */
 {
-char *trackDb = hTrackDbName();
+struct slName *trackDbs = hTrackDbList(), *oneTrackDb;
 struct sqlConnection *conn = hAllocConn();
 char buf[512];
 char query[256];
-snprintf(query, sizeof(query), 
-	 "select type from %s where tableName = '%s'",  trackDb, track);
-if (sqlQuickQuery(conn, query, buf, sizeof(buf)) == NULL)
-    errAbort("%s isn't in %s", track, trackDb);
+
+for (oneTrackDb = trackDbs; oneTrackDb != NULL; oneTrackDb = oneTrackDb->next)
+    {
+    snprintf(query, sizeof(query), 
+	 "select type from %s where tableName = '%s'",  oneTrackDb->name, track);
+    if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+        break;
+    }
+if (oneTrackDb == NULL) 
+    errAbort("%s isn't in the trackDb from the hg.conf", track);
 hFreeConn(&conn);
 return cloneString(buf);
 }
@@ -5385,11 +5391,13 @@ struct chain *chain;
 struct psl *fatPsl, *psl = NULL;
 int id = atoi(item);
 char *track = cartString(cart, "o");
-char *type = trackTypeInfo(track);
+char *type;
 char *typeWords[2];
 char *otherDb = NULL, *org = NULL, *otherOrg = NULL;
 struct dnaSeq *qSeq = NULL;
 char name[128];
+
+type = trackTypeInfo(track);
 
 hgBotDelay();	/* Prevent abuse. */
 
