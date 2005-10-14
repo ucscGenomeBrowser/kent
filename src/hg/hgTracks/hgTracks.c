@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1021 2005/10/14 04:13:20 donnak Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1022 2005/10/14 13:15:30 baertsch Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1467,12 +1467,13 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
                 (sf->start <= winStart || sf->start == lf->start) &&
                 (sf->end >= winEnd || sf->end == lf->end))
                     {
+                    Color barbColor = contrastingColor(vg, color);
                     x1 = round((double)((int)s-winStart)*scale) + xOff;
                     x2 = round((double)((int)e-winStart)*scale) + xOff;
                     w = x2-x1;
                     clippedBarbs(vg, x1+1, midY, x2-x1-2, 
 		    		tl.barbHeight, tl.barbSpacing, lf->orientation,
-                                MG_WHITE, TRUE);
+                                barbColor, TRUE);
                     }
             }
 	}
@@ -10268,6 +10269,7 @@ registerTrackHandler("transfacHit", triangleMethods );
 registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 /* Lowe lab related */
+registerTrackHandler("refSeq", archaeaGeneMethods);
 registerTrackHandler("gbProtCode", gbGeneMethods);
 registerTrackHandler("tigrCmrORFs", tigrGeneMethods);
 registerTrackHandler("BlastPEuk",llBlastPMethods);
