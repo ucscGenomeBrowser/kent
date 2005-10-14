@@ -10,7 +10,7 @@ spectrum on
 type chain haloHalo1
 otherDb haloHalo1
 
-track BlastzHaloHalo1
+track blastzHaloHalo1
 shortLabel $o_Organism Blastz    
 longLabel $o_Organism ($o_date/$o_db) Blastz Alignments                
 group compGeno
