@@ -862,7 +862,11 @@ if (zoomMode=="in") {
     zmindex = 2;
 }    
 document.body.style.cursor=cursor;
-parent.parent.controls.document.mainForm.ZM[zmindex].checked=true;
+
+if (typeof(parent.parent) != 'undefined')
+ if (typeof(parent.parent.controls) != 'undefined')
+  if (typeof(parent.parent.controls.document) != 'undefined')
+	parent.parent.controls.document.mainForm.ZM[zmindex].checked=true;
 }
 
 function mouseOut(e) {
