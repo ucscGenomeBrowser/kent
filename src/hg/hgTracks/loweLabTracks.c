@@ -124,6 +124,69 @@ tg->loadItems = loadBed6;
 tg->itemColor = gbGeneColor;
 }
 
+Color gpGeneColor(struct track *tg, void *item, struct vGfx *vg)
+/* Return color to draw gene (genePred) in. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char query[512];
+struct linkedFeatures *lf = item;
+struct COG *COG=NULL;
+char *temparray[160];
+char **row;
+if (lf == NULL)
+    {
+    return shadesOfGray[9];
+    }
+if (lf->name == NULL)
+    {
+    return shadesOfGray[9];
+    }
+
+if(hTableExists("COG")){
+    sprintf(query, "select * from COG where name = '%s'", lf->name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+    	{
+   	    COG = COGLoad(row);
+  	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    initializeColors(vg);
+    if(COG!=NULL){
+        chopString(COG->code, "," , temparray, 9999);
+        return LLshadesOfCOGS[(temparray[0][0]-'A')];
+    }
+    else
+        {
+        return shadesOfGray[9];
+        }
+    }
+else
+    {
+        hFreeConn(&conn);
+
+	return shadesOfGray[9];
+    }
+slFreeList(&lf);
+
+}
+
+Color gpGeneNameColor(struct track *tg, void *item, struct vGfx *vg)
+/* draw name for the linked feature in blue. */
+{
+tg->ixAltColor = 1;
+return MG_BLACK;
+}
+
+void archaeaGeneMethods(struct track *tg)
+/* Track group for genbank gene tracks */
+{
+tg->itemColor = gpGeneColor;
+tg->itemNameColor = gpGeneNameColor;
+tg->loadItems = loadGenePred;
+}
+
 Color sargassoSeaGeneColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color to draw gene in. */
 {
@@ -439,7 +502,7 @@ if(tg->limitedVis != tvDense)
                 {
 		    lf = lfsToLf(lfs);
         	    temparray2=((char**)(lfs->features->extra))[i];
-		    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)!=-9999 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
+		    if (i!=1 && i!=4 && i!=6 && i!=8 && atoi(temparray2)>-9997 && atoi(temparray2)!=0 && atoi(temparray2)>=cutoff)
         	    {
 			lf->score=atoi(temparray2);
         	        slAddHead(&lfList,lf);
