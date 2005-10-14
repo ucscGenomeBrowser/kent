@@ -1451,7 +1451,7 @@ identifier blastKG01
 identifier blastHg17KGPep01Id 
 "hg17 peptides 01"
      $hg.blastKGPep01.name
-     $hg.knownGene.name  minCheck=0.95
+     $hg.knownGene.name  minCheck=0.30
      $hg.blastKGRef01.acc
      $monDom.blastHg17KG.qName
      danRer2.blastHg17KG.qName
