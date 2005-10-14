@@ -1454,16 +1454,16 @@ identifier blastHg17KGPep01Id
      $hg.knownGene.name  minCheck=0.95
      $hg.blastKGRef01.acc
      $monDom.blastHg17KG.qName
-     $danRer.blastHg17KG.qName
-     $bosTau.blastHg17KG.qName
+     danRer2.blastHg17KG.qName
+     bosTau1.blastHg17KG.qName
 
 identifier blastHg17KGPep02Id 
 "hg17 peptides 02"
      $hg.blastKGPep02.name
      $hg.knownGene.name  minCheck=0.95
      $hg.blastKGRef02.acc
-     $danRer.blastHg17KG.qName
-     $bosTau.blastHg17KG.qName
+     danRer3.blastHg17KG.qName
+     $bosTau,!bosTau1.blastHg17KG.qName
 
 identifier blastHg17KGRef01SwissId 
 "hg17 proteins swiss 01"
