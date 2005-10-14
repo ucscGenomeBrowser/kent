@@ -3000,7 +3000,7 @@ origAssembly hg16
 track encodeGisChipPetStat1
 compositeTrack on
 shortLabel GIS STAT1 HeLa
-longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on HeLa cells
+longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on (+/-)gIF HeLa cells
 group encodeChip
 color 135, 158,35
 priority 47.1
@@ -3011,12 +3011,12 @@ type bed 12
 
 track encodeGisChipPetStat1Gif
 subTrack encodeGisChipPetStat1
-shortLabel GIS STAT1 +gIF HeLa
+shortLabel GIS STAT1 +gIF
 longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
 
 track encodeGisChipPetStat1NoGif
 subTrack encodeGisChipPetStat1
-shortLabel GIS STAT1 -gIF HeLa
+shortLabel GIS STAT1 -gIF
 longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
 
 track encodeLIChIP
