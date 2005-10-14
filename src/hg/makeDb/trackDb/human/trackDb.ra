@@ -3627,14 +3627,15 @@ origAssembly hg16
     color 112,63,175
     altColor 224,66,81
 
-    track encodeYaleChIPSTAT1Sites
-    compositeTrack on
-    shortLabel Yale ChIP Sites
-    longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, Binding Sites)
-    priority 59.0
-    chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
-    visibility hide
-    type bed .
+track encodeYaleChIPSTAT1Sites
+compositeTrack on
+shortLabel Yale ChIP Sites
+longLabel Yale ChIP/Chip (STAT1 ab, Hela cells, Binding Sites)
+group encodeChip
+priority 59.0
+chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed .
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite
     subTrack encodeYaleChIPSTAT1Sites
