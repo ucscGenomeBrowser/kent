@@ -85,7 +85,7 @@ exit; # don't actually run this like a script :)
 
 
 # MULTIZ with other methanogens
-# STARTED (10/9/05), kpollard
+# DONE (10/15/05), kpollard
 
     cd /cluster/data/methBark1/bed/
     mkdir conservation
@@ -115,7 +115,164 @@ exit; # don't actually run this like a script :)
     axtToMaf metBak0-metMaz1-best.axt chrom.sizes chrom.sizes metBak0-metMaz1.maf
     axtToMaf metBak0-metBur0-best.axt chrom.sizes chrom.sizes metBak0-metBur0.maf
 
-    #STOP: SEEMS TO ONLY USE THE FIRST contig...
+    #STOP: SEEMS TO ONLY USE THE FIRST contig... Need to do separately!
+
+    #TRY AGAIN WITH methBark1 (assembled into 1 chr, 1 plasmid)
+
+    cd /cluster/data/methBark1/bed
+    mv conservation conservation.metBak0
+    mkdir conservation
+    cd conservation
+    cp ../conservation.metBak0/HoxD55.q .
+    cp ../../methBark1.fa .
+    sed s/chr/methBark1.chr/ methBark1.fa > temp
+    sed s/plas/methBark1.plas/ temp > methBark1.fa
+    cp /cluster/data/methBurt1/methBurt1.fa .
+    sed s/Contig/methBurt1.Contig/ methBurt1.fa > temp
+    cat temp | gawk '{if(/Contig/){print $1;}else{print toupper($0);}}' > methBurt1.fa
+    cp /cluster/data/metAce1/bed/conservation/metAce1.chr .
+    cp /cluster/data/metAce1/bed/conservation/metMaz1.chr methMaze1.chr 
+    sed s/tMaz/thMaze/ methMaze1.chr > temp
+    mv temp methMaze1.chr
+    faToNib metAce1.chr metAce1.chr.nib
+    faToNib methMaze1.chr methMaze1.chr.nib
+    faToTwoBit methBurt1.fa methBurt1.2bit
+    faToTwoBit methBark1.fa methBark1.2bit
+
+    #chrom sizes
+    faSize -detailed *.chr *.fa > chrom.sizes
+    
+    #split methBark1.fa
+    faSplit byname methBark1.fa ./
+    echo "chr" > chroms.txt
+    echo "plasmid1" >> chroms.txt
+
+    #blastz 
+    foreach f (`cat chroms.txt`)
+	echo $f
+	blastz methBark1.$f.fa metAce1.chr Q=HoxD55.q > methBark1.${f}-metAce1.lav
+	blastz methBark1.$f.fa methMaze1.chr Q=HoxD55.q > methBark1.${f}-methMaze1.lav
+	blastz methBark1.$f.fa methBurt1.fa Q=HoxD55.q > methBark1.${f}-methBurt1.lav
+    end
+
+    foreach f (`cat chroms.txt`)
+	echo $f
+	echo "lavToAxt"
+	lavToAxt methBark1.${f}-metAce1.lav methBark1.2bit . methBark1.${f}-metAce1.axt
+	lavToAxt methBark1.${f}-methMaze1.lav methBark1.2bit . methBark1.${f}-methMaze1.axt
+	lavToAxt methBark1.${f}-methBurt1.lav methBark1.2bit methBurt1.2bit methBark1.${f}-methBurt1.axt
+	echo "axtBest"
+	axtBest methBark1.${f}-metAce1.axt all -winSize=500 -minScore=5000  methBark1.${f}-metAce1-best.axt
+	axtBest methBark1.${f}-methMaze1.axt all -winSize=500 -minScore=5000  methBark1.${f}-methMaze1-best.axt
+	axtBest methBark1.${f}-methBurt1.axt all -winSize=500 -minScore=5000  methBark1.${f}-methBurt1-best.axt
+	echo "axtToMaf"
+	axtToMaf methBark1.${f}-metAce1-best.axt chrom.sizes chrom.sizes methBark1.${f}-metAce1.maf
+	axtToMaf methBark1.${f}-methMaze1-best.axt chrom.sizes chrom.sizes methBark1.${f}-methMaze1.maf
+	axtToMaf methBark1.${f}-methBurt1-best.axt chrom.sizes chrom.sizes methBark1.${f}-methBurt1.maf
+    end
+
+    #multiz
+    foreach f(*.maf)
+	cat $f | gawk 'BEGIN{getline; print $0; getline; getline; getline; getline;}{print $0;}' > temp
+	mv temp $f
+    end
+
+    foreach f(`cat chroms.txt`)
+	echo $f
+	multiz methBark1.${f}-metAce1.maf methBark1.${f}-methMaze1.maf - > methBark1.${f}-metAce1-methMaze1.maf
+	multiz methBark1.${f}-methBurt1.maf methBark1.${f}-metAce1-methMaze1.maf - >  methBark1.${f}-metAce1-methMaze1-methBurt1.maf
+    end
+
+    #phyloHMM
+    foreach f(`cat chroms.txt`)
+	echo $f
+	msa_view -i MAF -M methBark1.$f.fa -o SS methBark1.${f}-metAce1-methMaze1-methBurt1.maf > methBark1.$f.ss
+	cat methBark1.$f.ss | gawk '{if(/^NAMES/){print "NAMES = methBark1,metAce1,methMaze1,methBurt1";} else{print $0;}}' > temp
+	mv temp methBark1.$f.ss
+	phyloFit -i SS methBark1.$f.ss -t "(methBurt1,(methBark1,(metAce1,methMaze1)))" -o ${f}_MbaMaMmMbu
+    end
+    
+    #chr has the largest NTUPLES (1072) so use it for starting mod
+    # it shows GC=0.207678+0.206065=0.413743
+    #add GC content to next call
+    foreach f(`cat chroms.txt`)
+	echo $f
+	phastCons methBark1.$f.ss chr_MbaMaMmMbu.mod \
+	--gc 0.4137 --target-coverage 0.7 --estimate-trees ${f} \
+	--expected-lengths 25 --no-post-probs --ignore-missing \
+	--nrates 1,1
+    end
+
+    foreach f(*.cons.mod)
+	set b=$f:r:r
+	echo $b
+	phastCons methBark1.$b.ss chr.cons.mod,chr.noncons.mod \
+	--target-coverage 0.7 --expected-lengths 25 \
+	--viterbi ${b}_methBark1-elements.bed --score \
+	--require-informative 0 --seqname $b > ${b}_cons.dat
+	wigEncode ${b}_cons.dat ${b}_phastCons.wig ${b}_phastCons.wib
+    end
+
+    #combine phastCons elements into 1 bed file
+    cat *elements.bed > phastCons.bed
+
+    #move data
+    mkdir wib
+    mv chr_phastCons.wib wib/.
+    mv plasmid1_phastCons.wib wib/.
+    mv chr_phastCons.wig wib/.
+    mv plasmid1_phastCons.wig wib/.
+    ln -s /cluster/data/methBark1/bed/conservation/wib/*.wib /gbdb/methBark1/wib
+    mkdir /gbdb/methBark1/pwMaf
+    mkdir -p otherSpp/metAce1 otherSpp/methMaze1 otherSpp/methBurt1
+    foreach f(`cat chroms.txt`)
+	echo $f
+	mv methBark1.${f}-metAce1.maf otherSpp/metAce1/$f.maf
+	mv methBark1.${f}-methMaze1.maf otherSpp/methMaze1/$f.maf
+	mv methBark1.${f}-methBurt1.maf otherSpp/methBurt1/$f.maf
+    end
+    ln -s /cluster/data/methBark1/bed/conservation/otherSpp/metAce1 /gbdb/methBark1/pwMaf/metAce1_pwMaf
+    ln -s /cluster/data/methBark1/bed/conservation/otherSpp/methBurt1 /gbdb/methBark1/pwMaf/methBurt1_pwMaf
+    ln -s /cluster/data/methBark1/bed/conservation/otherSpp/methMaze1 /gbdb/methBark1/pwMaf/methMaze1_pwMaf
+    mkdir multiz
+    foreach f(`cat chroms.txt`)
+	echo $f
+	mv methBark1.${f}-metAce1-methMaze1-methBurt1.maf multiz/$f.maf
+    end
+    ln -s /cluster/data/methBark1/bed/conservation/multiz /gbdb/methBark1/multizMbaMaMmMbu
+
+    #load
+    hgLoadWiggle methBark1 phastCons /cluster/data/methBark1/bed/conservation/wib/*_phastCons.wig
+    hgLoadMaf -warn methBark1 multizMbaMaMmMbu
+    hgLoadMaf -warn methBark1 metAce1_pwMaf -pathPrefix=/gbdb/methBark1/pwMaf/metAce1_pwMaf
+    hgLoadMaf -warn methBark1 methBurt1_pwMaf -pathPrefix=/gbdb/methBark1/pwMaf/methBurt1_pwMaf
+    hgLoadMaf -warn methBark1 methMaze1_pwMaf -pathPrefix=/gbdb/methBark1/pwMaf/methMaze1_pwMaf
+    hgLoadBed methBark1 phastConsElements phastCons.bed 
+
+    #trackDb
+    cd ~/kent/src/hg/makeDb/trackDb/archae/
+    mkdir methBark1
+    cvs add methBark1
+    cd methBark1
+    #trackDb.ra entry
+    # track multizMbaMaMmMbu
+    # shortLabel Conservation
+    # longLabel Methanogen multiz alignments
+    # group compGeno
+    # priority 10.0
+    # visibility pack
+    # type wigMaf 0.0 1.0
+    # maxHeightPixels 100:40:11
+    # wiggle phastCons
+    # yLineOnOff Off
+    # autoScaleDefault Off
+    # pairwise pwMaf
+    # speciesOrder metAce1 methMaze1 methBurt1
+    cvs add trackDb.ra
+    cvs commit -m "New multiz track" trackDb.ra
+    #html page
+    cvs add multizMbaMaMmMbu.html
+    cvs commit -m "Details page for multiz track" multizMbaMaMmMbu.html
 
 # DESCRIPTION PAGE ()
 

@@ -1,5 +1,5 @@
 # MULTIZ with other methanogens
-# STARTED (10/14/05), kpollard
+# DONE (10/15/05), kpollard
 
     cd /cluster/data/methBurt1/bed
     mkdir conservation
