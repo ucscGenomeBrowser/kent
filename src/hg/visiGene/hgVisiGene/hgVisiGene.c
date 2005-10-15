@@ -5,6 +5,7 @@
 #include "options.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
+#include "portable.h"
 #include "cart.h"
 #include "hui.h"
 #include "hdb.h"
@@ -118,6 +119,36 @@ if (slCount(list) > 1)
     slReverse(&list);
     }
 return list;
+}
+
+static void saveMatchFile(char *fileName, struct visiMatch *matchList)
+/* Save out matches to file name */
+{
+struct visiMatch *match;
+FILE *f = mustOpen(fileName, "w");
+for (match = matchList; match != NULL; match = match->next)
+    fprintf(f, "%d\t%f\n", match->imageId, match->weight);
+carefulClose(&f);
+}
+
+static struct visiMatch *readMatchFile(char *fileName, 
+ 	boolean firstLineOnly)
+/* Read in match file */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+struct visiMatch *matchList = NULL, *match;
+int count;
+while (lineFileRow(lf, row))
+    {
+    AllocVar(match);
+    match->imageId = lineFileNeedNum(lf, row, 0);
+    match->weight = lineFileNeedDouble(lf, row, 1);
+    slAddHead(&matchList, match);
+    }
+lineFileClose(&lf);
+slReverse(&matchList);
+return matchList;
 }
 
 char *shortOrgName(char *binomial)
@@ -281,6 +312,7 @@ void doThumbnails(struct sqlConnection *conn)
 {
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
+char *matchFile = cartString(cart, hgpMatchFile);
 struct visiMatch *matchList = NULL, *match;
 int maxCount = 50, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);
@@ -288,8 +320,7 @@ int imageCount;
 
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
-matchList = visiSearch(conn, listSpec);
-matchList = onePerImageFile(conn, matchList);
+matchList = readMatchFile(matchFile, FALSE);
 imageCount = slCount(matchList);
 if (imageCount > 0)
     {
@@ -649,7 +680,17 @@ void doFrame(struct sqlConnection *conn)
 {
 int imageId = cartUsualInt(cart, hgpId, 0);
 char *sidUrl = cartSidUrlString(cart);
+char *listSpec = cartUsualString(cart, hgpListSpec, "");
+char *matchListFile;
 struct slName *geneList, *gene;
+struct tempName matchTempName;
+char *matchFile = NULL;
+struct visiMatch *matchList = visiSearch(conn, listSpec);
+matchList = onePerImageFile(conn, matchList);
+makeTempName(&matchTempName, "visiMatch", ".tab");
+matchFile = matchTempName.forCgi;
+saveMatchFile(matchFile, matchList);
+cartSetString(cart, hgpMatchFile, matchFile);
 cartSetInt(cart, hgpId, imageId);
 puts("\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");

@@ -10,8 +10,9 @@
 #define hgpDoImage "hgp_doImage"
 #define hgpDoId "hgp_doId"
 
-#define hgpId "hgp_id"
-#define hgpListSpec "hgp_listSpec"
-#define hgpStartAt "hgp_startAt"
+#define hgpId "hgp_id"	/* ID of image in big frame */
+#define hgpMatchFile "hgp_matchFile"	/* Name of files containing search matches */
+#define hgpListSpec "hgp_listSpec"	/* Contents of search */
+#define hgpStartAt "hgp_startAt"	/* Where in match list to start */
 
 #endif /* HGVISIGENE_H */
