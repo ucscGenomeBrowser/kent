@@ -127,16 +127,19 @@ strand' > metAce1-params-bed.txt
     echo 'gene
 translation' > metAce1-params-pep.txt
     # 3. for the other gene information
-    echo 'gene
+    echo 'locus_tag
 product
+gene
+protein_id
+db_xref
+pseudo
 note' > metAce1-params-xra.txt
     # Now extract the genes and information:
     gbArchaeGenome metAce1.gbk metAce1-params-bed.txt metAce1-genbank-cds.bed
     gbArchaeGenome metAce1.gbk metAce1-params-pep.txt metAce1-genbank-cds.pep
     gbArchaeGenome metAce1.gbk metAce1-params-xra.txt metAce1-genbank-cds.xra
-#    hgLoadBed metAce1 gbProtCode metAce1-genbank-cds.bed
-    hgsql metAce1 < ~/kent/src/hg/lib/pepPred.sql
-    hgsql metAce1 < ~/kent/src/hg/lib/minGeneInfo.sql
+    hgsql metAce1 < /cluster/home/baertsch/kent/src/hg/lib/pepPred.sql
+    hgsql metAce1 < /cluster/home/baertsch/kent/src/hg/lib/minGeneInfo.sql
     echo rename table pepPred to gbProtCodePep | hgsql metAce1
     echo rename table minGeneInfo to gbProtCodeXra | hgsql metAce1
     echo load data local infile \'metAce1-genbank-cds.pep\' into table gbProtCodePep | hgsql metAce1
@@ -145,8 +148,9 @@ note' > metAce1-params-xra.txt
 #genbank to genePred
 
 csh
-tawk '{print $1,$2,$3,$4,$5,$6,$2,$3,0,1,$3-$2,0}' metAce1-genbank-cds.bed | bedToGenePred stdin tmp.gp
-tawk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,substr($1,3,4),name2,"cmpl","cmpl",0}' tmp.gp  > tmp2.gp
+/cluster/bin/scripts/tawk '{print $1,$2,$3,$4,$5,$6,$2,$3,0,1,$3-$2,0}' metAce1-genbank-cds.bed | bedToGenePred stdin tmp.gp
+#below substr($1,3,4) must be edited so that it returns a numeric field.
+/cluster/bin/scripts/tawk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,substr($1,3,4),name2,"cmpl","cmpl",0}' tmp.gp  > tmp2.gp
 # hard tab between quotes use ctrl-V then press tab
 join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.3 1.13 1.14 1.15  tmp2.gp metAce1-genbank-cds.xra > metAce1.gp
 ldHgGene metAce1 refSeq metAce1.gp -predTab -genePredExt
