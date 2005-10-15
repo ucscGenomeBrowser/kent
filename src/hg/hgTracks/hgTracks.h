@@ -823,6 +823,9 @@ bool isSubtrackVisible(struct track *tg);
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */
 
+void loadGenePred(struct track *tg);
+/* Convert gene pred in window to linked feature. */
+
 #define textSizeVar "textSize"	/* Variable name used for text size. */
 
 #endif /* HGTRACKS_H */
