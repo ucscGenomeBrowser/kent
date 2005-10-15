@@ -665,7 +665,9 @@ cgiMakeButton(hgpDoSearch, "search");
 
 printf(" Zoom: ");
 printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('in');return true;\" CHECKED>in ");
+#ifdef UNUSED
 printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('center');return true;\">center ");
+#endif /* UNUSED */
 printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('out');return true;\">out ");
 printf("\n");
 
