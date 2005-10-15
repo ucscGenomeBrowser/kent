@@ -185,7 +185,7 @@
 #include "dless.h"
 #include "humPhen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.954 2005/10/13 23:15:46 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.955 2005/10/15 01:25:26 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14338,6 +14338,57 @@ codeBlastFree(&cb);
 printTrackHtml(tdb);
 }
 
+void modBaseAnchor(char *swissProtAcc)
+/* Print out anchor to modBase. */
+{
+printf("<A HREF=\"http://salilab.org/modbase-cgi/model_search.cgi?searchkw=name&kword=%s\" TARGET=_blank>", swissProtAcc);
+}
+
+static void goPrint( struct sqlConnection *conn, char *geneId, char *acc)
+/* Print out GO annotations. */
+{
+struct sqlConnection *goConn = sqlConnect("go");
+char query[512];
+struct sqlResult *sr;
+char **row;
+static char *aspects[3] = {"F", "P", "C"};
+static char *aspectNames[3] = {
+    "Molecular Function",
+    "Biological Process",
+    "Cellular Component",
+};
+int aspectIx;
+
+for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
+    {
+    boolean hasFirst = FALSE;
+    safef(query, sizeof(query),
+          "select term.acc,term.name"
+          " from goaPart,term"
+          " where goaPart.dbObjectId = '%s'"
+          " and goaPart.goId = term.acc"
+          " and goaPart.aspect = '%s'"
+          , acc, aspects[aspectIx]);
+    sr = sqlGetResult(goConn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *goID = row[0];
+	char *goTermName = row[1];
+	if (!hasFirst)
+	    {
+	    printf("<B>%s:</B><BR>", aspectNames[aspectIx]);
+	    hasFirst = TRUE;
+	    }
+        printf("<A HREF = \"");
+	printf("http://godatabase.org/cgi-bin/go.cgi?view=details&depth=1&query=%s", goID);
+	printf("\" TARGET=_blank>%s</A> %s<BR>\n", goID, goTermName);
+	}
+    if (hasFirst)
+        printf("<BR>");
+    sqlFreeResult(&sr);
+    }
+sqlDisconnect(&goConn);
+}
 void doRefSeq(struct trackDb *tdb, char *item, 
 		     char *pepTable, char *extraTable)
 /* Handle click on gene track. */
@@ -14352,10 +14403,13 @@ int wordCount, x, length;
 int num = 0;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2;
+struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
 struct COG *COG=NULL;
 struct COGXra *COGXra=NULL;
 char *temparray[160];
 char *giwords[5];
+char *spAcc = NULL;
+struct slName *el, *list;
 
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
@@ -14364,7 +14418,6 @@ if (wordCount > 1)
 if (num < 3) num = 3;
 if (extraTable != NULL && hTableExists(extraTable)) 
     {
-    conn = hAllocConn();
     sprintf(query, "select * from %s where name = '%s'", extraTable, item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL) 
@@ -14377,15 +14430,30 @@ if (extraTable != NULL && hTableExists(extraTable))
 	}
     sqlFreeResult(&sr);
     }
+/* lookup swissprot acc */
+    printf("<B>UniProt:</B> ");
+    printf("<A HREF=");
 
+    spAcc = uniProtFindPrimAccFromGene(item);
+    printSwissProtProteinUrl(stdout, spAcc);
+    if (spAcc == NULL)
+        {
+        printf(" TARGET=_blank>%s</A></B><BR>\n", item);
+        }
+    else
+        {
+        printf(" TARGET=_blank>%s</A></B><BR>\n", spAcc);
+        }
+
+/* ncbi blast hits */
     chopString(ginfo.gi,":",giwords,sizeof(giwords));
     printf("<B>NCBI Blast Hits:</B> "
                "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
 	       "TARGET=_BLANK>%s:%s</A><BR>\n", giwords[1],
 	       giwords[0],giwords[1]);
+/* cog description */
 if (hTableExists("COG"))
     { 
-    conn = hAllocConn();
     sprintf(query, "select * from COG where name = '%s'", item);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL) 
@@ -14414,11 +14482,152 @@ if (hTableExists("COG"))
 	     }
   	 }
     }
+list = spExtDbAcc1List(spConn, spAcc, "Interpro");
+if (list != NULL)
+    {
+    char query[256], **row, **row2;
+    struct sqlResult *sr, *sr2;
+    printf("<B>InterPro Domains: </B> ");
+    printf("<A HREF=\"http://www.ebi.ac.uk/interpro/ISpy?mode=single&ac=%s\" TARGET=_blank>",
+    	spAcc);
+    printf("Graphical view of domain structure</A><BR>");
+    safef(query, sizeof(query),
+    	"select extAcc1,extAcc2 from extDbRef,extDb"
+	" where extDbRef.acc = '%s'"
+	" and extDb.val = 'Interpro' and extDb.id = extDbRef.extDb"
+	, spAcc);
+    sr = sqlGetResult(spConn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	//printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+	//printf("%s</A> - %s<BR>\n", row[0], row[1]);
+        char interPro[256];
+        char *pdb = hPdbFromGdb(hGetDb());
+        safef(interPro, 128, "%s.interProXref", pdb);
+            if (hTableExists(interPro))
+                {
+                safef(query, sizeof(query),
+                        "select description from %s where accession = '%s' and interProId = '%s'",
+                        interPro, spAcc, row[0]);
+                sr2 = sqlGetResult(conn, query);
+                if ((row2 = sqlNextRow(sr2)) != NULL)
+                    {
+                    printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+                    printf("%s</A> - %s <BR>\n", row[0], row2[0]);
+                    }
+                sqlFreeResult(&sr2);
+                }
+            else
+                {
+                printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
+                printf("%s</A> - %s<BR>\n", row[0], row[1]);
+                }
+	}
+    printf("<BR>\n");
+    slFreeList(&list);
+    }
+
+list = spExtDbAcc1List(spConn, spAcc, "Pfam");
+if (list != NULL)
+    {
+    printf("<B>Pfam Domains:</B><BR>");
+    for (el = list; el != NULL; el = el->next)
+	{
+	char query[256];
+	char *description;
+	safef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", el->name);
+	description = sqlQuickString(conn, query);
+	if (description == NULL)
+	    description = cloneString("n/a");
+	printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
+	    el->name);
+	printf("%s</A> - %s<BR>\n", el->name, description);
+	freez(&description);
+	}
+    slFreeList(&list);
+    printf("<BR>\n");
+    }
+
+list = spExtDbAcc1List(spConn, spAcc, "PDB");
+if (list != NULL)
+    {
+    char query[256], **row;
+    struct sqlResult *sr;
+    int column = 0, maxColumn=4, rowCount=0;
+    printf("<B>Protein Data Bank (PDB) 3-D Structure</B><BR>");
+    safef(query, sizeof(query),
+    	"select extAcc1,extAcc2 from extDbRef,extDb"
+	" where extDbRef.acc = '%s'"
+	" and extDb.val = 'PDB' and extDb.id = extDbRef.extDb"
+	, spAcc);
+    sr = sqlGetResult(spConn, query);
+    printf("<TABLE><TR>\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	if (++column > maxColumn)
+	    {
+	    printf("</TR><TR>");
+	    column = 1;
+	    if (rowCount == 0)
+	        {
+		printf("<TD ALIGN=CENTER COLSPAN=4><I>To conserve bandwidth, only the images from the first %d structures are shown.</I>", maxColumn);
+		printf("</TR><TR>");
+		}
+	    ++rowCount;
+	    }
+	printf("<TD>");
+	printf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
+	if (rowCount < 1)
+	    printf("<IMG SRC=\"http://www.rcsb.org/pdb/cgi/pdbImage.cgi/%sx150.jpg\"><BR>", row[0]);
+	printf("%s</A> - %s<BR>\n", row[0], row[1]);
+	printf("</TD>");
+	}
+    printf("</TR></TABLE>\n");
+    printf("<BR>\n");
+    slFreeList(&list);
+    }
+
+/* Do SAM-T02 sub-section */
+//doSamT02(spAcc, database);
+
+/* print go terms */
+goPrint( conn, item, spAcc);
+
+/* Do modBase link. */
+    {
+    printf("<B>ModBase Predicted Comparative 3D Structure on ");
+    modBaseAnchor(spAcc);
+    printf("%s", spAcc);
+    printf("</A></B><BR>\n");
+    printf("<TABLE><TR>");
+    printf("<TD>");
+    modBaseAnchor(spAcc);
+    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s\"></A></TD>", spAcc);
+    printf("<TD>");
+    modBaseAnchor(spAcc);
+    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=x&degree=90\"></A></TD>", spAcc);
+    printf("<TD>");
+    modBaseAnchor(spAcc);
+    printf("\n<IMG SRC=\"http://salilab.org/modbaseimages/image/modbase.jpg?database_id=%s&axis=y&degree=90\"></A></TD>", spAcc);
+    printf("</TR><TR>\n");
+    printf("<TD ALIGN=CENTER>Front</TD>");
+    printf("<TD ALIGN=CENTER>Top</TD>");
+    printf("<TD ALIGN=CENTER>Side</TD>");
+    printf("</TR></TABLE>\n");
+    printf("<I>The pictures above may be empty if there is no "
+            "ModBase structure for the protein.  The ModBase structure "
+	    "frequently covers just a fragment of the protein.  You may "
+	    "be asked to log onto ModBase the first time you click on the "
+	    "pictures. It is simplest after logging in to just click on "
+	    "the picture again to get to the specific info on that model.</I><p>");
+    }
+
 geneShowPosAndLinks(item, item, tdb, pepTable, "htcTranslatedProtein",
 		    "htcGeneMrna", "htcGeneInGenome", "Predicted mRNA");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
+
 void llDoCodingGenes(struct trackDb *tdb, char *item, 
 		     char *pepTable, char *extraTable)
 /* Handle click on gene track. */
