@@ -6,4 +6,5 @@ table minGeneInfo
     string note;     "gene note"
     string protein;  "gene protein"
     string gi;       "gene genbank id"
+    string ec;       "ec number "
     )
