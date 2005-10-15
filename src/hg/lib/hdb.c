@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.274 2005/10/11 20:17:50 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.275 2005/10/15 00:00:18 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3224,6 +3224,7 @@ for (nextTdb = tdb = tdbSubtrackedList; nextTdb != NULL; tdb = nextTdb)
 	}
     }
 hFreeConn(&conn);
+slSort(&tdbRetList, trackDbCmp);
 return tdbRetList;
 }
 
