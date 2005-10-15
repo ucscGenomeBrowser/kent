@@ -131,8 +131,7 @@ for (match = matchList; match != NULL; match = match->next)
 carefulClose(&f);
 }
 
-static struct visiMatch *readMatchFile(char *fileName, 
- 	boolean firstLineOnly)
+static struct visiMatch *readMatchFile(char *fileName)
 /* Read in match file */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -320,7 +319,7 @@ int imageCount;
 
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
-matchList = readMatchFile(matchFile, FALSE);
+matchList = readMatchFile(matchFile);
 imageCount = slCount(matchList);
 if (imageCount > 0)
     {
@@ -661,7 +660,7 @@ printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METH
 cartSaveSession(cart);
 
 cgiMakeTextVar(hgpListSpec, listSpec, 10);
-cgiMakeButton("submit", "search");
+cgiMakeButton(hgpDoSearch, "search");
 
 
 printf(" Zoom: ");
@@ -674,7 +673,7 @@ printf("</FORM>\n");
 htmlEnd();
 }
 
-void doFrame(struct sqlConnection *conn)
+void doFrame(struct sqlConnection *conn, boolean forceImageToList)
 /* Make a html frame page.  Fill frame with thumbnail, control bar,
  * and image panes. */
 {
@@ -686,6 +685,8 @@ struct slName *geneList, *gene;
 struct tempName matchTempName;
 char *matchFile = NULL;
 struct visiMatch *matchList = visiSearch(conn, listSpec);
+if (forceImageToList && matchList != NULL)
+    imageId = matchList->imageId;
 matchList = onePerImageFile(conn, matchList);
 makeTempName(&matchTempName, "visiMatch", ".tab");
 matchFile = matchTempName.forCgi;
@@ -744,7 +745,7 @@ printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 listSpec = cartUsualString(cart, hgpListSpec, "");
 cgiMakeTextVar(hgpListSpec, listSpec, 30);
-cgiMakeButton("submit", "search");
+cgiMakeButton(hgpDoSearch, "search");
 printf("<BR>\n");
 puts(
 "You can search on gene names, authors, body parts, years, "
@@ -759,7 +760,7 @@ webEnd();
 }
 
 
-void doDefault(struct sqlConnection *conn)
+void doDefault(struct sqlConnection *conn, boolean newSearch)
 /* Put up default page - if there is no specific do variable. */
 {
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
@@ -767,7 +768,7 @@ listSpec = skipLeadingSpaces(listSpec);
 if (listSpec[0] == 0)
     doInitialPage();
 else
-    doFrame(conn);
+    doFrame(conn, newSearch);
 }
 
 void doId(struct sqlConnection *conn)
@@ -786,9 +787,13 @@ else
     cartSetString(cart, hgpListSpec, genes->name);
     }
 slFreeList(&genes);
-doDefault(conn);
+doDefault(conn, FALSE);
 }
 
+void doSearch(struct sqlConnection *conn)
+/* Set up Gene Pix on a new search */
+{
+}
 
 void dispatch()
 /* Set up a connection to database and dispatch control
@@ -803,8 +808,10 @@ else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
 else if (cartVarExists(cart, hgpDoId))
     doId(conn);
+else if (cartVarExists(cart, hgpDoSearch))
+    doDefault(conn, TRUE);
 else 
-    doDefault(conn);
+    doDefault(conn, FALSE);
 cartRemovePrefix(cart, hgpDoPrefix);
 }
 

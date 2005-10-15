@@ -9,6 +9,7 @@
 #define hgpDoControls "hgp_doControls"
 #define hgpDoImage "hgp_doImage"
 #define hgpDoId "hgp_doId"
+#define hgpDoSearch "hgp_doSearch"
 
 #define hgpId "hgp_id"	/* ID of image in big frame */
 #define hgpMatchFile "hgp_matchFile"	/* Name of files containing search matches */
