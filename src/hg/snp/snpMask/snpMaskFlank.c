@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.7 2005/10/12 20:43:34 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.8 2005/10/15 22:00:53 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -577,6 +577,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
             /* could do a memcpy from sequence for full exon, potentially faster */
             seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile, snpPos, 1);
 	    ptr = seqOrig->dna;
+	    if (sameString(gene->strand, "-"))
+	        reverseComplement(seqOrig->dna, 1);
 	    strcat(snpName, ptr);
 	    strcat(snpName, ")");
 	    verbose(1, "    snp = %s, snpPos = %d\n", snpName, snpPos);
