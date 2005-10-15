@@ -42,6 +42,7 @@ exon->chromEnd = end;
 exon->strand = gp->strand[0];
 exon->frame = gp->exonFrames[iExon];
 exon->iExon = iExon;
+exon->memPool = genes->memPool;
 binKeeperAdd(chrBins, start, end, exon);
 return exon;
 }
@@ -81,18 +82,12 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
 genePredReaderFree(&gpr);
 }
 
-static void cdsExonCleanup(struct cdsExon **ep)
-/* free mafFrames objects associated with an exon */
-{
-mafFramesFreeList(&((*ep)->frames));
-}
-
 struct geneBins *geneBinsNew(char *genePredFile)
 /* construct a new geneBins object from the specified file */
 {
 struct geneBins *genes;
 AllocVar(genes);
-genes->bins = chromBinsNew(cdsExonCleanup);
+genes->bins = chromBinsNew(NULL);
 genes->memPool = lmInit(1024*1024);
 loadGenes(genes, genePredFile);
 return genes;
@@ -117,6 +112,7 @@ static char *skipSrcDb(char *src)
 char *p = strchr(src, '.');
 if (p == NULL)
     errAbort("can't find \".\" in MAF component src name \"%s\"", src);
+
 return p+1;
 }
 

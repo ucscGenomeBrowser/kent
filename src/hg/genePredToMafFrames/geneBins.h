@@ -1,6 +1,7 @@
 /* geneBins - objects used to hold gene related data */
 #ifndef GENEBINS
 #define GENEBINS
+#include "mafFrames.h"
 struct geneBins;
 struct mafComp;
 struct mafFrames;
@@ -12,6 +13,17 @@ struct geneBins
     struct lm *memPool;      /* memory for exons allocated from this pool */
     char *curChrom;          /* cache of current string for allocating pool memory */
     char *curGene;
+};
+
+struct exonFrames
+/* object the hold frame information for part of an exon.  A new record
+ * is created if there is any discontinuity in the alignment */
+{
+    struct exonFrames *next;
+    int queryStart;           /* range in query coordinates */
+    int queryEnd;
+    struct mafFrames mf;      /* MAF frames object being created, this is in
+                               * the target coordinates */
 };
 
 struct cdsExon
@@ -26,7 +38,8 @@ struct cdsExon
     char strand;
     char frame;           /* frame number */
     int  iExon;           /* exon index in genePred */
-    struct mafFrames *frames;  /* frames associated with the exon */
+    struct exonFrames *frames;  /* frames associated with the exon */
+    struct lm *memPool;  /* shared memory pool for exons */
 };
 
 struct geneBins *geneBinsNew(char *genePredFile);

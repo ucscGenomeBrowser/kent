@@ -8,7 +8,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.2 2005/10/08 21:19:41 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.3 2005/10/15 00:35:05 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -19,9 +19,10 @@ static struct optionSpec optionSpecs[] = {
 static void outputExonFrames(struct cdsExon *exon, FILE *frameFh, FILE *bedFh)
 /* output mafFrames for an exon */
 {
-struct mafFrames *mf;
-for (mf = exon->frames; mf != NULL; mf = mf->next)
+struct exonFrames *ef;
+for (ef = exon->frames; ef != NULL; ef = ef->next)
     {
+    struct mafFrames *mf = &ef->mf;
     mafFramesTabOut(mf, frameFh);
     if (bedFh != NULL)
         fprintf(bedFh, "%s\t%d\t%d\t%s\t%d\t%s\n",

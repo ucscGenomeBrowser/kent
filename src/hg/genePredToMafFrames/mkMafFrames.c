@@ -8,6 +8,7 @@
 #include "chromBins.h"
 #include "binRange.h"
 #include "verbose.h"
+#include "localmem.h"
 
 /* Notes:
  * - functions are static to allow for implict inlining.
@@ -126,7 +127,7 @@ struct scanInfo
     int subEndFrame;
 };
 
-static void traceFrameDef(int level, struct scanInfo *si, struct mafFrames *mf)
+static void traceFrameDef(int level, struct scanInfo *si, struct exonFrames *ef)
 /* verbose trace to indicate why a mafFrames record was defined */
 {
 verbose(level, "exon %s[%d] %s:%d-%d %c fm: %d; ",
@@ -138,7 +139,7 @@ verbose(level, "subQuery %s:%d-%d %c fm: %d-%d; ",
         si->sc->query.pos, si->sc->query.comp->strand, si->subStartFrame, si->subEndFrame);
 verbose(level, "subTarget %s:%d-%d %c fm: %d\n",
         si->sc->target.comp->src, si->subTStart,
-        si->sc->target.pos, si->sc->target.comp->strand, mf->frame);
+        si->sc->target.pos, si->sc->target.comp->strand, ef->mf.frame);
 }
 
 static void addMafFrame(struct scanInfo *si)
@@ -146,38 +147,44 @@ static void addMafFrame(struct scanInfo *si)
  * the cursor has gone past the last query column to include in record. Resets
  * the state.*/
 {
-struct mafFrames *mf;
+struct exonFrames *ef;
 char *dot;
-AllocVar(mf);
-mf->chrom = cloneString(strchr(si->sc->target.comp->src, '.')+1);
-mf->chromStart = si->subTStart;
-mf->chromEnd = si->sc->target.pos;
+lmAllocVar(si->exon->memPool, ef);
+
+/* fill in query part */
+ef->queryStart = si->subQStart;
+ef->queryEnd = si->sc->query.pos;
+
+/* fill in mafFrames part */
+ef->mf.chrom = cloneString(strchr(si->sc->target.comp->src, '.')+1);
+ef->mf.chromStart = si->subTStart;
+ef->mf.chromEnd = si->sc->target.pos;
 
 /* strip sequence name from src */
-mf->src = cloneString(si->sc->query.comp->src);
-dot = strchr(mf->src, '.');
+ef->mf.src = cloneString(si->sc->query.comp->src);
+dot = strchr(ef->mf.src, '.');
 if (dot != NULL)
     *dot = '\0';
 
 /* frame is for first base in direction of transcription */
 if (si->scanDir > 0)
-    mf->frame = si->subStartFrame;
+    ef->mf.frame = si->subStartFrame;
 else
-    mf->frame = si->subEndFrame;
+    ef->mf.frame = si->subEndFrame;
 
 /* project strand to target */
-mf->strand[0] = (si->exon->strand == si->sc->query.comp->strand) ? '+' : '-';
+ef->mf.strand[0] = (si->exon->strand == si->sc->query.comp->strand) ? '+' : '-';
 if (si->sc->target.comp->strand == '-')
-    mf->strand[0] = (mf->strand[0] == '+') ? '-' : '+';
+    ef->mf.strand[0] = (ef->mf.strand[0] == '+') ? '-' : '+';
 
-mf->name = cloneString(si->exon->gene);
-mf->prevEnd = -1;
-mf->nextStart = -1;
+ef->mf.name = cloneString(si->exon->gene);
+ef->mf.prevFramePos = -1;
+ef->mf.nextFramePos = -1;
 
-slAddHead(&si->exon->frames, mf);
+slAddHead(&si->exon->frames, ef);
 
 if (verboseLevel() >= 3)
-    traceFrameDef(3, si, mf);
+    traceFrameDef(3, si, ef);
 
 /* reset state */
 si->subQStart = -1;
@@ -244,7 +251,7 @@ if (compCursorAtBase(&si->sc->query))
     }
 }
 
-static void mkCompExonFrames(struct scanCursor *sc, struct cdsExon *exon)
+static void mkCompExonFrames(struct geneBins *genes, struct scanCursor *sc, struct cdsExon *exon)
 /* create mafFrames objects for a mafComp and an exon. */
 {
 struct scanInfo si = scanInfoInit(sc, exon);
@@ -266,7 +273,8 @@ if (si.subTStart >= 0)
     addMafFrame(&si);
 }
 
-static void mkCompFrames(struct geneBins *genes, struct mafComp *geneComp,
+static void mkCompFrames(struct geneBins *genes,
+                         struct mafComp *geneComp,
                          struct mafComp *targetComp)
 /* create mafFrames objects for an mafComp */
 {
@@ -275,7 +283,7 @@ struct binElement *exonRefs = geneBinsFind(genes, geneComp);
 struct binElement *exonRef;
 
 for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
-    mkCompExonFrames(&sc, (struct cdsExon*)exonRef->val);
+    mkCompExonFrames(genes, &sc, (struct cdsExon*)exonRef->val);
 
 slFreeList(&exonRefs);
 }
@@ -298,75 +306,115 @@ while ((ali = mafNext(mafFile)) != NULL)
 mafFileFree(&mafFile);
 }
 
-static int mafFramesCmp(const void *va, const void *vb)
+static int exonFramesCmp(const void *va, const void *vb)
 /* compare by target order */
 {
-const struct mafFrames *a = *((struct mafFrames **)va);
-const struct mafFrames *b = *((struct mafFrames **)vb);
+struct exonFrames *a = *((struct exonFrames **)va);
+struct exonFrames *b = *((struct exonFrames **)vb);\
 int dif;
-dif = strcmp(a->chrom, b->chrom);
+dif = strcmp(a->mf.chrom, b->mf.chrom);
 if (dif == 0)
-    dif = a->chromStart - b->chromStart;
+    dif = a->mf.chromStart - b->mf.chromStart;
 return dif;
 }
 
-static void sortExonFrames(struct binElement *exonRefs)
-/* sort frames for all exons on a chrom */
+static int exonRefCmp(const void *va, const void *vb)
+/* compare binElement list of cdsExons by target order.  frames must be
+ * sorted  */
 {
+struct cdsExon *a = (*((struct binElement **)va))->val;
+struct cdsExon *b = (*((struct binElement **)vb))->val;
+int dif;
+/* sort not aligned low */
+if ((a->frames == NULL) && (b->frames == NULL))
+    return 0;
+else if (a->frames == NULL)
+    return 1;
+else if (b->frames == NULL)
+    return -1;
+dif = strcmp(a->frames->mf.chrom, b->frames->mf.chrom);
+if (dif == 0)
+    dif = a->frames->mf.chromStart - b->frames->mf.chromStart;
+return dif;
+}
+
+static void sortExons(struct binElement **exonRefs)
+/* sort frames and exons into assending target order */
+{
+/* first frames, then exons */
 struct binElement* exonRef;
-for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
+for (exonRef = *exonRefs; exonRef != NULL; exonRef = exonRef->next)
     {
     struct cdsExon *exon = exonRef->val;
-    slSort(&exon->frames, mafFramesCmp);
+    slSort(&exon->frames, exonFramesCmp);
     }
+slSort(exonRefs, exonRefCmp);
 }
 
-static int getPrevExonEnd(struct cdsExon *exon)
-/* Get the chromEnd of the last frame of previous exon, or -1 if no previous
- * exon, or it is not aligned */
+static struct exonFrames *getPrevExonFrames(struct cdsExon *exon)
+/* Get the exonFrames of the last frame of previous exon, or NULL if no
+ * previous (in target order) exon, or it is not aligned. */
 {
 if (exon->prev != NULL)
-    {
-    struct mafFrames *mf = slLastEl(exon->prev->frames);
-    if (mf != NULL)
-        return mf->chromEnd;
-    }
-return -1;
+    return slLastEl(exon->prev->frames);
+else
+    return NULL;
 }
 
-static int getNextExonStart(struct cdsExon *exon)
-/* Get the chromStart of the first frame of next exon, or -1 if no next
- * exon, or it is not aligned */
+static void linkFrames(struct exonFrames *prevEf, struct exonFrames *ef)
+/* link the previous exonFrames object to this object.  assumes prevEf
+ * is not NULL */
 {
-if ((exon->next != NULL) && (exon->next->frames != NULL))
-    return exon->next->frames->chromStart;
-return -1;
+/* prevFramePos and nextFramePos are in transcription order, and are positions
+ * of the last base, not `end' of range.  Must check for discontinuities
+ * in frame and query.*/
+
+if (ef->mf.strand[0] == '+')
+    {
+    /* positive strand */
+    int prevTLen = prevEf->mf.chromEnd - prevEf->mf.chromStart;
+    if ((ef->queryStart == prevEf->queryEnd)
+        && (ef->mf.frame == frameIncr(prevEf->mf.frame, prevTLen)))
+        {
+        /* contiguous */
+        prevEf->mf.nextFramePos = ef->mf.chromStart;
+        ef->mf.prevFramePos = prevEf->mf.chromEnd-1;
+        }
+    }
+else
+    {
+    /* negative strand */
+    int tLen = ef->mf.chromEnd - ef->mf.chromStart;
+    if ((ef->queryStart == prevEf->queryEnd)
+        && (frameIncr(ef->mf.frame, tLen) == prevEf->mf.frame))
+        {
+        /* contiguous */
+        prevEf->mf.prevFramePos = ef->mf.chromEnd-1;
+        ef->mf.nextFramePos = prevEf->mf.chromStart;
+        }
+    }
 }
 
 static void linkExonFrames(struct cdsExon *exon)
-/* link mafFrames for an exon.  Assumes this is called in assending order, so
- * preceeding exon frames have been linked.  Does not require being called
- * in gene order.  */
+/* link exonFrames for an exon.  Assumes this is called in assending target
+ * order, so preceeding exon frames for this gene have been linked. */
 {
-int prevEnd = getPrevExonEnd(exon);
-struct mafFrames *mf;
-for (mf = exon->frames; mf != NULL; mf = mf->next)
+struct exonFrames *prevEf = getPrevExonFrames(exon);
+struct exonFrames *ef;
+for (ef = exon->frames; ef != NULL; ef = ef->next)
     {
-    mf->prevEnd = prevEnd;
-    if (mf->next != NULL)
-        mf->nextStart = mf->next->chromStart;
-    else
-        mf->nextStart = getNextExonStart(exon);
-    prevEnd = mf->chromEnd;
+    if (prevEf != NULL)
+        linkFrames(prevEf, ef);
+    prevEf = ef;
     }
 }
 
 static void mkMafFramesFinishChrom(struct geneBins *genes, char *chrom)
-/* link mafFrames for a chromosome */
+/* link exonFrames for a chromosome */
 {
 struct binElement *exonRefs = geneBinsChromExons(genes, chrom);
 struct binElement *exonRef;
-sortExonFrames(exonRefs);
+sortExons(&exonRefs);
 for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
     linkExonFrames((struct cdsExon*)exonRef->val);
 slFreeList(&exonRefs);

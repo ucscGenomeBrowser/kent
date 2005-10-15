@@ -18,8 +18,8 @@ struct mafFrames
     unsigned char frame;	/* frame (0,1,2) for first base(+) or last bast(-) */
     char strand[2];	/* + or - */
     char *name;	/* Name of gene used to define frame */
-    int prevEnd;	/* chromEnd of previous part of gene, or -1 if none */
-    int nextStart;	/* chromStart of next part of gene, or -1 if none */
+    int prevFramePos;	/* target position of the previous base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous */
+    int nextFramePos;	/* target position of the next base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous */
     };
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret);

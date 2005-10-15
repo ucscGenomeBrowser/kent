@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mafFrames.h"
 
-static char const rcsid[] = "$Id: mafFrames.c,v 1.2 2005/10/08 21:19:40 markd Exp $";
+static char const rcsid[] = "$Id: mafFrames.c,v 1.3 2005/10/15 00:34:21 markd Exp $";
 
 void mafFramesStaticLoad(char **row, struct mafFrames *ret)
 /* Load a row from mafFrames table into ret.  The contents of ret will
@@ -22,8 +22,8 @@ ret->src = row[3];
 ret->frame = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->name = row[6];
-ret->prevEnd = sqlSigned(row[7]);
-ret->nextStart = sqlSigned(row[8]);
+ret->prevFramePos = sqlSigned(row[7]);
+ret->nextFramePos = sqlSigned(row[8]);
 }
 
 struct mafFrames *mafFramesLoad(char **row)
@@ -40,8 +40,8 @@ ret->src = cloneString(row[3]);
 ret->frame = sqlUnsigned(row[4]);
 strcpy(ret->strand, row[5]);
 ret->name = cloneString(row[6]);
-ret->prevEnd = sqlSigned(row[7]);
-ret->nextStart = sqlSigned(row[8]);
+ret->prevFramePos = sqlSigned(row[7]);
+ret->nextFramePos = sqlSigned(row[8]);
 return ret;
 }
 
@@ -97,8 +97,8 @@ ret->src = sqlStringComma(&s);
 ret->frame = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->name = sqlStringComma(&s);
-ret->prevEnd = sqlSignedComma(&s);
-ret->nextStart = sqlSignedComma(&s);
+ret->prevFramePos = sqlSignedComma(&s);
+ret->nextFramePos = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -154,9 +154,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->prevEnd);
+fprintf(f, "%d", el->prevFramePos);
 fputc(sep,f);
-fprintf(f, "%d", el->nextStart);
+fprintf(f, "%d", el->nextFramePos);
 fputc(lastSep,f);
 }
 
