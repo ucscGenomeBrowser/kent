@@ -162,8 +162,8 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     cd ..
     axtToPsl haloHalo1.c-halMar1-best.axt chrom.sizes chrom.sizes haloHalo1.c-halMar1.psl
     axtToPsl haloHalo1.p1-halMar1-best.axt chrom.sizes chrom.sizes haloHalo1.p1-halMar1.psl
-    hgLoadPsl haloHalo1 -table=chr_BlastzHalMar1 haloHalo1.c-halMar1.psl
-    hgLoadPsl haloHalo1 -table=plasmid_pNRC100_BlastzHalMar1 haloHalo1.p1-halMar1.psl
+    hgLoadPsl haloHalo1 -table=chr_blastzHalMar1 haloHalo1.c-halMar1.psl
+    hgLoadPsl haloHalo1 -table=plasmid_pNRC100_blastzHalMar1 haloHalo1.p1-halMar1.psl
 
     #trackDb
     cd ~/kent/src/hg/makeDb/trackDb/archae/
@@ -182,7 +182,7 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     # type chain halMar1
     # otherDb halMar1
     #
-    # track BlastzHalMar1
+    # track blastzHalMar1
     # shortLabel $o_Organism Blastz    
     # longLabel $o_Organism ($o_date/$o_db) Blastz Alignments                
     # group compGeno
@@ -197,6 +197,8 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     cvs commit -m "halMar1 chains" trackDb.ra
     cvs add chainHalMar1.html
     cvs commit -m "added malMar1 chains" chainHalMar1.html
+    cvs add blastzHalMar1.html
+    cvs commit -m "added halMar1 blastz" blastzHalMar1.html
 
 # DESCRIPTION PAGE ()
 
