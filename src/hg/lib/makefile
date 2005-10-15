@@ -32,7 +32,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbProtAnn.o gcPercent.o \
     gencodeGeneClass.o gencodeIntron.o genMapDb.o genbank.o \
-    geneBands.o geneGraph.o genePix.o genePred.o genePredReader.o genomicDups.o \
+    geneBands.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o hCommon.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
@@ -62,7 +62,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     tableDescriptions.o tfbsConsMap.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackTable.o transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o vegaInfo.o wabAli.o web.o \
+    transRegCodeProbe.o vegaInfo.o visiGene.o wabAli.o web.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
     visiGene.o vntr.o zdobnovSynt.o humPhen.o humanPhenotypeUi.o
 

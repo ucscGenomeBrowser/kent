@@ -19,11 +19,11 @@ hgsid on
 dbInUrl on
 priority 19
 
-name genePix
-shortLabel Gene Pix
-tables knownToGenePix
-idSql select value from knownToGenePix where name = '%s'
-url ../cgi-bin/hgGenePix?hgp_doId=%s
+name visiGene
+shortLabel VisiGene
+tables knownToVisiGene
+idSql select value from knownToVisiGene where name = '%s'
+url ../cgi-bin/hgVisiGene?hgp_doId=%s
 hgsid on
 dbInUrl on
 priority 20
