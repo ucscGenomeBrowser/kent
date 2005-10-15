@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "minGeneInfo.h"
 
-static char const rcsid[] = "$Id: minGeneInfo.c,v 1.4 2005/10/15 02:21:03 baertsch Exp $";
+static char const rcsid[] = "$Id: minGeneInfo.c,v 1.5 2005/10/15 02:32:57 baertsch Exp $";
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 /* Load a row from minGeneInfo table into ret.  The contents of ret will
@@ -16,11 +16,12 @@ void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 {
 
 ret->name = row[0];
-ret->product = row[1];
-ret->note = row[2];
-ret->protein = row[3];
-ret->gi = row[4];
-ret->ec = row[5];
+ret->gene = row[1];
+ret->product = row[2];
+ret->note = row[3];
+ret->protein = row[4];
+ret->gi = row[5];
+ret->ec = row[6];
 }
 
 struct minGeneInfo *minGeneInfoLoad(char **row)
@@ -31,11 +32,12 @@ struct minGeneInfo *ret;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);
-ret->product = cloneString(row[1]);
-ret->note = cloneString(row[2]);
-ret->protein = cloneString(row[3]);
-ret->gi = cloneString(row[4]);
-ret->ec = cloneString(row[5]);
+ret->gene = cloneString(row[1]);
+ret->product = cloneString(row[2]);
+ret->note = cloneString(row[3]);
+ret->protein = cloneString(row[4]);
+ret->gi = cloneString(row[5]);
+ret->ec = cloneString(row[6]);
 return ret;
 }
 
@@ -45,7 +47,7 @@ struct minGeneInfo *minGeneInfoLoadAll(char *fileName)
 {
 struct minGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -63,7 +65,7 @@ struct minGeneInfo *minGeneInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct minGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -85,6 +87,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->name = sqlStringComma(&s);
+ret->gene = sqlStringComma(&s);
 ret->product = sqlStringComma(&s);
 ret->note = sqlStringComma(&s);
 ret->protein = sqlStringComma(&s);
@@ -102,6 +105,7 @@ struct minGeneInfo *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
+freeMem(el->gene);
 freeMem(el->product);
 freeMem(el->note);
 freeMem(el->protein);
@@ -128,6 +132,10 @@ void minGeneInfoOutput(struct minGeneInfo *el, FILE *f, char sep, char lastSep)
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->gene);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

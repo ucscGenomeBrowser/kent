@@ -5,7 +5,8 @@
 
 #Auxilliary info about a gene (less than the knownInfo)
 CREATE TABLE minGeneInfo (
-    name varchar(255) not null,	# gene name
+    name varchar(255) not null,	# gene accession
+    gene varchar(255) not null,	# gene name
     product varchar(255) not null,	# gene product
     note varchar(255) not null,	# gene note
     protein varchar(255) not null,	# gene protein
