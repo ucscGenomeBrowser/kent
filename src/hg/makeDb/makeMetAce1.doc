@@ -128,12 +128,13 @@ strand' > metAce1-params-bed.txt
 translation' > metAce1-params-pep.txt
     # 3. for the other gene information
     echo 'locus_tag
-product
 gene
+product
+note
 protein_id
 db_xref
-pseudo
-note' > metAce1-params-xra.txt
+EC_number
+pseudo' > metAce1-params-xra.txt
     # Now extract the genes and information:
     gbArchaeGenome metAce1.gbk metAce1-params-bed.txt metAce1-genbank-cds.bed
     gbArchaeGenome metAce1.gbk metAce1-params-pep.txt metAce1-genbank-cds.pep
