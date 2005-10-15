@@ -38,6 +38,7 @@ my %autoSqlIgnore = ( "hg/lib/bed.as" => "",
 		      "hg/genePix/genePix.as" => "",
 		      "hg/genePix/loadMahoney/mahoney.as" => "",
 		      "hg/visiGene/visiGene.as" => "",
+		      "hg/visiGene/vgLoadMahoney/mahoney.as" => "",
 		      "lib/pslWScore.as" => "",
 		    );
 
