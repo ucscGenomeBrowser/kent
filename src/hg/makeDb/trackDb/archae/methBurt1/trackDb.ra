@@ -1,0 +1,13 @@
+track multizMbuMbaMmMa
+shortLabel Conservation
+longLabel Methanogen multiz alignments
+group compGeno
+priority 10.0
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+yLineOnOff Off
+autoScaleDefault Off
+pairwise pwMaf
+speciesOrder methBark1 methMaze1 metAce1
