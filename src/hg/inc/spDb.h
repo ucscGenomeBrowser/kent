@@ -222,4 +222,8 @@ char *newSpDisplayId(char *oldSpDisplayId);
 char *uniProtFindPrimAcc(char *id);
 /* Return primary accession given an alias. */
 
+char *uniProtFindPrimAccFromGene(char *gene);
+/* Return primary accession given gene name.
+ * NULL if not found. */
+
 #endif /* SPDB_H */
