@@ -5,7 +5,7 @@
 #ifndef MINGENEINFO_H
 #define MINGENEINFO_H
 
-#define MINGENEINFO_NUM_COLS 5
+#define MINGENEINFO_NUM_COLS 6
 
 struct minGeneInfo
 /* Auxilliary info about a gene (less than the knownInfo) */
@@ -16,6 +16,7 @@ struct minGeneInfo
     char *note;	/* gene note */
     char *protein;	/* gene protein */
     char *gi;	/* gene genbank id */
+    char *ec;	/* ec number  */
     };
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret);
