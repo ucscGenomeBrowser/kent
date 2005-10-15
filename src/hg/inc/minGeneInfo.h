@@ -5,13 +5,14 @@
 #ifndef MINGENEINFO_H
 #define MINGENEINFO_H
 
-#define MINGENEINFO_NUM_COLS 6
+#define MINGENEINFO_NUM_COLS 7
 
 struct minGeneInfo
 /* Auxilliary info about a gene (less than the knownInfo) */
     {
     struct minGeneInfo *next;  /* Next in singly linked list. */
-    char *name;	/* gene name */
+    char *name;	/* gene accession */
+    char *gene;	/* gene name */
     char *product;	/* gene product */
     char *note;	/* gene note */
     char *protein;	/* gene protein */
