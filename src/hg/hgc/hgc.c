@@ -185,7 +185,7 @@
 #include "dless.h"
 #include "humPhen.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.955 2005/10/15 01:25:26 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.956 2005/10/15 03:21:36 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14423,10 +14423,24 @@ if (extraTable != NULL && hTableExists(extraTable))
     while ((row = sqlNextRow(sr)) != NULL) 
 	{
 	minGeneInfoStaticLoad(row, &ginfo);
-        medlineLinkedLine("Description", ginfo.product, ginfo.product);
-        if (differentString(ginfo.note,"gene"))
+        if (ginfo.gene != NULL && differentString(ginfo.gene,"gene"))
+            printf("<B>Gene: </B>%s<BR>\n", ginfo.gene);
+        if (ginfo.product != NULL && differentString(ginfo.product,"product"))
+            medlineLinkedLine("Product", ginfo.product, ginfo.product);
+        if (ginfo.note != NULL && differentString(ginfo.note,"note"))
             printf("<B>Note: </B>%s<BR>\n", ginfo.note);
-	printf("<B>Protein: </B>%s<BR>\n", ginfo.protein);
+        if (ginfo.protein != NULL && differentString(ginfo.protein,"protein"))
+            printf("<B>Protein: </B>%s<BR>\n", ginfo.protein);
+        if (ginfo.ec != NULL && differentString(ginfo.ec,"EC_number"))
+            {
+            printf("<B>EC (Enzyme Commission) number:</B> "
+               "<A HREF=\"http://us.expasy.org/enzyme/%s\" "
+	       "TARGET=_BLANK>%s</A>\n", ginfo.ec, ginfo.ec);
+            printf(" <B>EC PubMed Search: </B> <A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=PubMed&details_term=%s[EC/RN%%20Number]\" "
+	       "TARGET=_BLANK>%s</A><BR>\n", ginfo.ec, ginfo.ec);
+            printf(" <B>Brenda : </B> <A HREF=\"http://www.brenda.uni-koeln.de/php/result_flat.php4?ecno=%s&organism=\" "
+	       "TARGET=_BLANK>%s</A><BR>\n", ginfo.ec, ginfo.ec);
+            }
 	}
     sqlFreeResult(&sr);
     }
