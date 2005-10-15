@@ -1,6 +1,7 @@
 /**** Lowe lab declarations ***/
 
 Color gbGeneColor(struct track *tg, void *item, struct vGfx *vg);
+void archaeaGeneMethods(struct track *tg);
 void gbGeneMethods(struct track *tg);
 Color tigeGeneColor(struct track *tg, void *item, struct vGfx *vg);
 void tigrGeneMethods(struct track *tg);
