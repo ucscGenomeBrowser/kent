@@ -4,4 +4,4 @@
 
 void getEcHtml(char *ecNumber)
 /* fetch ec codes and descriptions and output html */
-#endif EC_H
+#endif /*EC_H */
