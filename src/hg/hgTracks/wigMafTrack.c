@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.2 2005/10/12 22:16:29 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.3 2005/10/16 18:22:18 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1169,13 +1169,14 @@ int color;
 int end = start + length;
 int x1;
 struct sqlConnection *conn = hAllocConn();
-//char dbChrom[128];
 char masterChrom[128];
 struct mafAli *ali, *sub;
 struct mafComp *comp;
+int mult = 1;
+char codon[4];
+int fillBox = FALSE;
 
 safef(masterChrom, sizeof(masterChrom), "%s.%s", database, chromName);
-//safef(dbChrom, sizeof(dbChrom), "%s.%s", compName, chromName);
 
 dna += start;
 if (strand == '-')
@@ -1193,22 +1194,52 @@ else
 
 ptr = dna;
 color = shadesOfSea[0];
-
-if (frame)
+if (strand == '-')
     {
-    int mult = 1;
-    char codon[4];
-    int fillBox = FALSE;
+    int swap = prevEnd;
+    prevEnd = nextStart;
+    nextStart = swap;
+    }
 
+mult = 0;
+if (frame && (prevEnd == -1))
+    {
+    switch(frame)
+	{
+	case 1:
+	    if (!( ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1])))
+		{
+		fillBox = TRUE;
+		*ptr++ = 'X';
+		*ptr++ = 'X';
+		length -=2;
+		mult = 2;
+		}
+	    break;
+	case 2:
+	    if (!( ISGASPACEPORN(ptr[0])))
+		{
+		fillBox = TRUE;
+		*ptr++ = 'X';
+		length -=1;
+		mult = 1;
+		}
+	    break;
+	}
+    }
+else if (frame && (prevEnd != -1))
+    {
     memset(codon, 0, sizeof(codon));
-    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd - 2, prevEnd  );
-    sub = mafSubset(ali, masterChrom, prevEnd - 2, prevEnd  );
+    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd - 1, prevEnd + 1  );
+    sub = mafSubset(ali, masterChrom, prevEnd - 1, prevEnd + 1  );
     comp = mafMayFindCompPrefix(sub, compName, ".");
     switch(frame)
 	{
 	case 1:
 	    if (comp && (!(ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
 		{
+		//if (strand == '-')
+		    //complement(comp->text, 1);
 		codon[0] = comp->text[1];
 		codon[1] = ptr[0];
 		codon[2] = ptr[1];
@@ -1224,6 +1255,8 @@ if (frame)
 	case 2:
 	    if (comp && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(*ptr))))
 		{
+		//if (strand == '-')
+		    //complement(comp->text, 2);
 		codon[0] = comp->text[0];
 		codon[1] = comp->text[1];
 		codon[2] = *ptr;
@@ -1236,18 +1269,18 @@ if (frame)
 	    length -= 1;
 	    break;
 	}
-    if (fillBox)
+    }
+if (fillBox)
+    {
+    if (strand == '-')
 	{
-	if (strand == '-')
-	    {
-	    x1 = x + ( end -2  ) * width / winBaseCount;
-	    }
-	else
-	    {
-	    x1 = x + (start - 2) * width / winBaseCount;
-	    }
-	vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
+	x1 = x + ( end -4  ) * width / winBaseCount;
 	}
+    else
+	{
+	x1 = x + (start - 2) * width / winBaseCount;
+	}
+    vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
     }
 
 //hFreeConn(&conn);
@@ -1296,9 +1329,12 @@ if (length && (nextStart != -1))
 	switch(length)
 	    {
 	    case 2:
+		if (strand == '-')
+		    complement(comp->text, 1);
 		codon[0] = *ptr;
 		codon[1] = *(1 + ptr);
 		codon[2] = *comp->text;
+
 		if (!(ISGASPACEPORN(codon[0]) ||ISGASPACEPORN(codon[1]) ||ISGASPACEPORN(codon[2])))
 		    {
 		    fillBox = TRUE;
@@ -1308,6 +1344,8 @@ if (length && (nextStart != -1))
 		    }
 		break;
 	    case 1:
+		if (strand == '-')
+		    complement(comp->text, 2);
 		codon[0] = *ptr;
 		codon[1] = comp->text[0];
 		codon[2] = comp->text[1];
@@ -1783,7 +1821,7 @@ tryagain:
 	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart; 
 	    w= end - start;
 
-	    translateCodons(track->mapName, mi->db, line, start , w, frame, mf.strand[0],mf.prevEnd,mf.nextStart,complementBases,
+	    translateCodons(track->mapName, mi->db, line, start , w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,complementBases,
 				x, y, width, mi->height,  vg);
 	    
 	    }
