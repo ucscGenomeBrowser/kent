@@ -12,7 +12,31 @@ struct geneBins
     struct chromBins *bins;  /* map of chrom and ranges to cds exons */
     struct lm *memPool;      /* memory for exons allocated from this pool */
     char *curChrom;          /* cache of current string for allocating pool memory */
-    char *curGene;
+    struct gene *genes;      /* linked list of all genes */
+};
+
+struct gene
+/* A gene, one per source gene, however it maybe mapped to multiple
+ * target locations*/
+{
+    struct gene *next;
+    char *name;              /* gene name */
+    struct cdsExon *exons;   /* list of CDS exons, in transcription order */
+    struct geneBins *genes; /* link back to geneBins object */
+};
+
+struct cdsExon
+/* one CDS exon */
+{
+    struct cdsExon* next; /* link for gene's exons */
+    struct gene *gene;    /* gene object */
+    char *chrom;          /* source chromosome range */
+    int chromStart;
+    int chromEnd;
+    char strand;
+    char frame;                 /* frame number */
+    int  iExon;                 /* exon index in genePred */
+    struct exonFrames *frames;  /* frames associated with the exon */
 };
 
 struct exonFrames
@@ -20,27 +44,13 @@ struct exonFrames
  * is created if there is any discontinuity in the alignment */
 {
     struct exonFrames *next;
+    struct cdsExon *exon;     /* associated exon */
     int queryStart;           /* range in query coordinates */
     int queryEnd;
     struct mafFrames mf;      /* MAF frames object being created, this is in
                                * the target coordinates */
 };
 
-struct cdsExon
-/* one CDS exon */
-{
-    struct cdsExon* prev; /* links to previous and next exons in gene */
-    struct cdsExon* next;
-    char *gene;           /* gene name */
-    char *chrom;          /* chromosome range */
-    int chromStart;
-    int chromEnd;
-    char strand;
-    char frame;           /* frame number */
-    int  iExon;           /* exon index in genePred */
-    struct exonFrames *frames;  /* frames associated with the exon */
-    struct lm *memPool;  /* shared memory pool for exons */
-};
 
 struct geneBins *geneBinsNew(char *genePredFile);
 /* construct a new geneBins object from the specified file */
@@ -52,8 +62,15 @@ struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp);
 /* Return list of references to exons overlapping the specified component,
  * sorted into the assending order of the component. slFreeList returned list. */
 
+/* FIXME: not needed?? :*/
 struct binElement *geneBinsChromExons(struct geneBins *genes, char *chrom);
 /* Return list of references to all exons on a chromosome, sorted in
  * assending target order. slFreeList returned list. */
+
+struct exonFrames *cdsExonAddFrames(struct cdsExon *exon,
+                                    char *src, int qStart, int qEnd,
+                                    char *tName, int tStart, int tEnd,
+                                    char frame, char strand);
+/* allocate a new mafFrames object and link it exon */
 
 #endif

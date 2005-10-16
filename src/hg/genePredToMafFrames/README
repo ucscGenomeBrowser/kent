@@ -1,0 +1,19 @@
+Notes:
+    - use of static functions in many modules allowsfor for implict inlining.
+
+    - both this code and the browser required no overlapping CDS exons
+
+    - strand in mafFrames matches the direction of transcript as projected
+      onto the target species:
+              maf   maf
+         gene query target annotation
+         +    +     +      +
+         -    +     +      -
+         +    -     +      -
+         -    -     +      +
+
+    - the prevFramePos and nextFramePos are used for rendering codons that
+      are split in the target.  These fields are in the direction of
+      translation. MafFrame rows are linked by the prev or next fields 
+      if and only if the first/last codon is discontinues in the target
+      but contiguous in the query .

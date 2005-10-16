@@ -3,12 +3,13 @@
 #include "options.h"
 #include "mafFrames.h"
 #include "mkMafFrames.h"
+#include "finishMafFrames.h"
 #include "geneBins.h"
 #include "chromBins.h"
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.3 2005/10/15 00:35:05 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.4 2005/10/16 06:09:37 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -71,7 +72,7 @@ int i;
 for (i = 0; i < numMafFiles; i++)
     mkMafFramesForMaf(geneDb, targetDb, genes, mafFiles[i]);
 
-mkMafFramesFinish(genes);
+finishMafFrames(genes);
 outputFrames(genes, mafFramesFile, bedFile);
 
 geneBinsFree(&genes);

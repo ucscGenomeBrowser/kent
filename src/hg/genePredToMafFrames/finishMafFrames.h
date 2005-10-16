@@ -1,0 +1,9 @@
+/* finishMafFrames - link mafFrames objects to deal with spliced codons */
+#ifndef FINISHMAFFRAMES_H
+#define FINISHMAFFRAMES_H
+struct geneBins;
+
+void finishMafFrames(struct geneBins *genes);
+/* Finish mafFrames build, linking mafFrames prev/next fields */
+
+#endif

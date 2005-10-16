@@ -10,14 +10,13 @@
 #include "maf.h"
 #include "mafFrames.h"
 
-static char *strFromPool(struct geneBins *genes, char *str, char **cache)
-/* allocated a chrom or gene name from the pool, caching the last allocated */
+static char *chromStrAlloc(struct geneBins *genes, char *chrom)
+/* allocated a chrom name from the pool, caching the last allocated */
 {
-if ((*cache == NULL) || !sameString(str, *cache))
-    *cache = lmCloneString(genes->memPool, str);
-return *cache;
+if ((genes->curChrom == NULL) || !sameString(chrom, genes->curChrom))
+    genes->curChrom = lmCloneString(genes->memPool, chrom);
+return genes->curChrom;
 }
-
 
 static void checkOverlap(struct geneBins *genes, struct binKeeper *chrBins,
                          struct genePred *gp, int start, int end)
@@ -26,24 +25,25 @@ static void checkOverlap(struct geneBins *genes, struct binKeeper *chrBins,
 struct binElement *el = binKeeperFindLowest(chrBins, start, end);
 if (el != NULL)
     errAbort("CDS exon of %s overlaps %s, CDS must be single coverage",
-             gp->name, ((struct cdsExon*)el->val)->gene);
+             gp->name, ((struct cdsExon*)el->val)->gene->name);
 }
 
-static struct cdsExon *loadExon(struct geneBins *genes, struct binKeeper *chrBins,
+static struct cdsExon *loadExon(struct gene *gene, struct binKeeper *chrBins,
                                 struct genePred *gp, int iExon, int start, int end)
+/* load informat about an exon into various structures */
 {
 struct cdsExon *exon;
-checkOverlap(genes, chrBins, gp, start, end);
-lmAllocVar(genes->memPool, exon);
-exon->gene = strFromPool(genes, gp->name, &genes->curGene);
-exon->chrom = strFromPool(genes, gp->chrom, &genes->curChrom);
+checkOverlap(gene->genes, chrBins, gp, start, end);
+lmAllocVar(gene->genes->memPool, exon);
+exon->gene = gene;
+exon->chrom = chromStrAlloc(gene->genes, gp->chrom);
 exon->chromStart = start;
 exon->chromEnd = end;
 exon->strand = gp->strand[0];
 exon->frame = gp->exonFrames[iExon];
 exon->iExon = iExon;
-exon->memPool = genes->memPool;
 binKeeperAdd(chrBins, start, end, exon);
+slAddHead(&gene->exons, exon);
 return exon;
 }
 
@@ -51,20 +51,21 @@ static void loadGene(struct geneBins *genes, struct genePred *gp)
 /* break one gene into cds exons and add to bins. check for overlapping CDS */
 {
 struct binKeeper *chrBins = chromBinsGet(genes->bins, gp->chrom, TRUE);
+struct gene *gene;
 int iExon, start, end;
-struct cdsExon *prevExon = NULL;
+
+lmAllocVar(genes->memPool, gene);
+gene->genes = genes;
+slAddHead(&genes->genes, gene);
+gene->name = lmCloneString(genes->memPool, gp->name);
 
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
     if (genePredCdsExon(gp, iExon, &start, &end))
-        {
-        struct cdsExon *exon = loadExon(genes, chrBins, gp, iExon, start, end);
-        if (prevExon != NULL)
-            prevExon->next = exon;
-        exon->prev = prevExon;
-        prevExon = exon;
-        }
+        loadExon(gene, chrBins, gp, iExon, start, end);
     }
+if (gp->strand[0] == '+')
+    slReverse(&gene->exons);
 }
 
 static void loadGenes(struct geneBins *genes, char *genePredFile)
@@ -160,3 +161,33 @@ if (chromBins != NULL)
 else
     return NULL;
 }
+
+struct exonFrames *cdsExonAddFrames(struct cdsExon *exon,
+                                    char *src, int qStart, int qEnd,
+                                    char *tName, int tStart, int tEnd,
+                                    char frame, char strand)
+/* allocate a new mafFrames object and link it exon */
+{
+struct exonFrames *ef;
+lmAllocVar(exon->gene->genes->memPool, ef);
+ef->exon = exon;
+
+/* fill in query part */
+ef->mf.src = lmCloneString(exon->gene->genes->memPool, src);
+ef->queryStart = qStart;
+ef->queryEnd = qEnd;
+
+/* fill in mafFrames part */
+ef->mf.chrom = lmCloneString(exon->gene->genes->memPool, tName);
+ef->mf.chromStart = tStart;
+ef->mf.chromEnd = tEnd;
+ef->mf.frame = frame;
+ef->mf.strand[0] = strand;
+ef->mf.name = exon->gene->name;
+ef->mf.prevFramePos = -1;
+ef->mf.nextFramePos = -1;
+
+slAddHead(&exon->frames, ef);
+return ef;
+}
+
