@@ -6,7 +6,7 @@
 #include "obscure.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: blastOut.c,v 1.22 2005/10/15 14:02:20 fanhsu Exp $";
+static char const rcsid[] = "$Id: blastOut.c,v 1.23 2005/10/16 14:06:34 fanhsu Exp $";
 
 struct axtRef
 /* A reference to an axt. */
@@ -521,7 +521,7 @@ for (target = targetList; target != NULL; target = target->next)
     struct axtRef *ref;
     struct axt *axt;
     int matches;
-    double identity;
+    double identity, expectation;
     int bit;
     
     for (ref = target->axtList; ref != NULL; ref = ref->next)
@@ -534,7 +534,7 @@ for (target = targetList; target != NULL; target = target->next)
 	if (identity < minIdentity) continue;
     
     	bit = blastzScoreToNcbiBits(axt->score);
-    	double expectation = blastzScoreToNcbiExpectation(axt->score);
+        expectation = blastzScoreToNcbiExpectation(axt->score);
     	fprintf(f, "%-67s  %4d   ", target->name, bit);
     	ncbiPrintE(f, expectation);
     	fprintf(f, "\n");
@@ -718,7 +718,7 @@ struct targetHits *targetList = NULL, *target;
 
 if (withComment)
     {
-    char * rcsDate = "$Date: 2005/10/15 14:02:20 $";
+    char * rcsDate = "$Date: 2005/10/16 14:06:34 $";
     char dateStamp[11];
     strncpy (dateStamp, rcsDate+7, 10);
     dateStamp[10] = 0;
