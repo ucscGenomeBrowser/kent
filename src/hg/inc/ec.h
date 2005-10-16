@@ -2,6 +2,6 @@
 #ifndef EC_H
 #define EC_H
 
-void getEcHtml(char *ecNumber)
+void getEcHtml(char *ecNumber);
 /* fetch ec codes and descriptions and output html */
 #endif /*EC_H */
