@@ -627,6 +627,7 @@ wigColorBy affyTransfrags
 track affyTxnPhase2
 shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
+release alpha
 compositeTrack on
 visibility dense
 defaultViewLimits 0:150
