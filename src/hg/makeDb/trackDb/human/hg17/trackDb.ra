@@ -465,8 +465,8 @@ altColor 50,50,50
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
-summary multiz8waySummary
-#pairwise netBlastz
+#summary multiz8waySummary
+pairwise netBlastz
 yLineOnOff Off
 autoScaleDefault Off
 spanList 1
