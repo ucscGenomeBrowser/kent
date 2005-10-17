@@ -184,8 +184,9 @@
 #include "omimTitle.h"
 #include "dless.h"
 #include "humPhen.h"
+#include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.956 2005/10/15 03:21:36 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.957 2005/10/17 00:14:42 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14436,6 +14437,8 @@ if (extraTable != NULL && hTableExists(extraTable))
             printf("<B>EC (Enzyme Commission) number:</B> "
                "<A HREF=\"http://us.expasy.org/enzyme/%s\" "
 	       "TARGET=_BLANK>%s</A>\n", ginfo.ec, ginfo.ec);
+
+            getEcHtml(ginfo.ec);
             printf(" <B>EC PubMed Search: </B> <A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=PubMed&details_term=%s[EC/RN%%20Number]\" "
 	       "TARGET=_BLANK>%s</A><BR>\n", ginfo.ec, ginfo.ec);
             printf(" <B>Brenda : </B> <A HREF=\"http://www.brenda.uni-koeln.de/php/result_flat.php4?ecno=%s&organism=\" "
