@@ -33,5 +33,9 @@ void verboseSetLevel(int verbosity);
 
 void verboseSetLogFile(char *name);
 /* Set logFile for verbose messages overrides stderr. */
+
+FILE *verboseLogFile();
+/* Get the verbose log file. */
+
 #endif /* VERBOSE_H */
 
