@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.83 2005/10/13 07:42:34 markd Exp $"
+#	"$Id: makeMm6.doc,v 1.84 2005/10/17 16:53:10 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8501,3 +8501,24 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
     #genbankImageHash 1301
     #knownToLocusLink 23124, knownToRefSeq 23124, knownToGene 250882
     
+## REBUILD NIA Mouse Gene Index - (DONE - 2005-10-17 Fan)
+#       requested by: Dudekula, Dawood (NIH/NIA/IRP) DudekulaDB@grc.nia.nih.gov
+    ssh hgwdev 
+    cd /cluster/data/mm6/bed
+    mv NIAGene NIAGene_050720
+    mkdir NIAGene
+
+    cd MOAGene
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex5/download/T-psl.txt.gz
+    gzip -d T-psl.txt.gz
+
+    cut -f 1-21 T-psl.txt >NIAGene.tab
+    hgLoadPsl mm6 NIAGene.tab
+
+    wget --timestamp http://lgsun.grc.nia.nih.gov/geneindex5/download/T-fasta.fa.gz
+    gzip -d T-fasta.fa.gz
+ 
+    rm /gbdb/mm6/NIAGene/T-fasta.fa
+    ln -s /cluster/data/mm6/bed/NIAGene/T-fasta.fa /gbdb/mm6/NIAGene/T-fasta.fa
+
+    hgLoadSeq -replace mm6 /gbdb/mm6/NIAGene/T-fasta.fa
