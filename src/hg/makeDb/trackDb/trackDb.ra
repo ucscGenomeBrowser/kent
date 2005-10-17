@@ -718,7 +718,7 @@ type psl .
 
 track miRNA
 shortLabel miRNA
-longLabel MicroRNAs from the miRNA Registry
+longLabel MicroRNAs from miRBase
 group genes
 priority 63
 visibility hide
@@ -726,7 +726,7 @@ useScore 1
 color 255,64,64
 type bed 8 .
 url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$ 
-urlLabel miRNA Registry: 
+urlLabel miRBase:
 
 track cpgIsland
 shortLabel CpG Islands
