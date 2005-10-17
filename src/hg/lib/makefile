@@ -21,7 +21,8 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cutter.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dless.o dnaMotifSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
-    easyGene.o encodeErge.o encodeErgeHssCellLines.o \
+    easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \
+    encodeErge.o encodeErgeHssCellLines.o \
     encodeHapMapAlleleFreq.o encodeIndels.o \
     encodeRegionInfo.o encodeRegionInfoCustom.o encodeRna.o \
     encodeStanfordPromoters.o encodeStanfordPromotersAverage.o \
