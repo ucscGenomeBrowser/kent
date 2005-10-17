@@ -10,11 +10,11 @@ CREATE TABLE cutter (
     matchSize int unsigned not null,	# size without N's
     seq varchar(255) not null,	# Recognition sequence
     cut int unsigned not null,	# Cut site on the plus strand
-    overhang int not null,	# Overhang
+    overhang int not null,	# Overhang size and direction
     palindromic tinyint unsigned not null,	# 1 if it's panlidromic, 0 if not.
-    semicolon tinyint unsigned not null,	# 1 if it's from a REBASE record that has a semicolon in front, 0 if not.
-    numSciz int unsigned not null,	# Number of isoscizomers
-    scizs longblob not null,	# Names of isosizomers
+    semicolon tinyint unsigned not null,	# REBASE record: 0 if primary isomer, 1 if not.
+    numSciz int unsigned not null,	# Number of isoschizomers
+    scizs longblob not null,	# Names of isoschizomers
     numCompanies int unsigned not null,	# Number of companies selling this enzyme
     companies longblob not null,	# Company letters
     numRefs int unsigned not null,	# Number of references

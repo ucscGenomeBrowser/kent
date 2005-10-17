@@ -20,11 +20,11 @@ struct cutter
     unsigned matchSize;	/* size without N's */
     char *seq;	/* Recognition sequence */
     unsigned cut;	/* Cut site on the plus strand */
-    int overhang;	/* Overhang */
+    int overhang;	/* Overhang size and direction */
     unsigned char palindromic;	/* 1 if it's panlidromic, 0 if not. */
-    unsigned char semicolon;	/* 1 if it's from a REBASE record that has a semicolon in front, 0 if not. */
-    unsigned numSciz;	/* Number of isoscizomers */
-    char **scizs;	/* Names of isosizomers */
+    unsigned char semicolon;	/* REBASE record: 0 if primary isomer, 1 if not. */
+    unsigned numSciz;	/* Number of isoschizomers */
+    char **scizs;	/* Names of isoschizomers */
     unsigned numCompanies;	/* Number of companies selling this enzyme */
     char *companies;	/* Company letters */
     unsigned numRefs;	/* Number of references */
