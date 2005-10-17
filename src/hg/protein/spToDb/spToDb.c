@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: spToDb.c,v 1.10 2004/09/21 17:06:52 fanhsu Exp $";
+static char const rcsid[] = "$Id: spToDb.c,v 1.11 2005/10/17 22:13:15 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -124,6 +124,7 @@ struct spFeature
     int end;			/* Non-inclusive. */
     char *type;			/* Type of feature, more specific than class. 
                                  * May be NULL. */
+    char *FTId;			/* FT Id, may be NULL. */
     char softEndBits;/* 1 for start <, 2 for start ?, 4 for end >, 8 for end ? */
     };
 #define spFeatureStartLess 1
@@ -361,6 +362,7 @@ char *class = nextWord(&line);
 char *start = nextWord(&line);
 char *end = nextWord(&line);
 char *type = skipLeadingSpaces(line);
+char *FTId;
 char c;
 if (end == NULL || end[0] == 0)
     errAbort("Short FT line %d of %s", lf->lineIx, lf->fileName);
@@ -405,10 +407,35 @@ if (type != NULL)
 	    break;
 	    }
 	line = skipLeadingSpaces(line+strlen(sig));
-	dyStringAppend(dy, line);
+        FTId= strstr(line, "/FTId=");
+    	if (FTId != NULL)
+    	    {
+    	    FTId = lmCloneString(lm, FTId+6);
+	    stripLastPeriod(FTId);
+	    feat->FTId = FTId;
+	    }
+        else
+	    {
+	    dyStringAppend(dy, line);
+	    }
 	}
     stripLastPeriod(dy->string);
     feat->type = lmCloneString(lm, dy->string);
+    }
+else
+    {
+    lineFileNext(lf, &line, NULL);
+    FTId= strstr(line, "/FTId=");
+    if (FTId != NULL)
+    	{
+    	FTId = lmCloneString(lm, FTId+6);
+	stripLastPeriod(FTId);
+	feat->FTId = FTId;
+	}
+    else
+        {
+	lineFileReuse(lf);
+	}
     }
 slAddHead(&spr->featureList, feat);
 }
@@ -747,6 +774,7 @@ FILE *extDb = createAt(tabDir, "extDb");
 FILE *extDbRef = createAt(tabDir, "extDbRef");
 FILE *featureClass = createAt(tabDir, "featureClass");
 FILE *featureType = createAt(tabDir, "featureType");
+FILE *featureId = createAt(tabDir, "featureId");
 FILE *feature = createAt(tabDir, "feature");
 FILE *author = createAt(tabDir, "author");
 FILE *reference = createAt(tabDir, "reference");
@@ -765,6 +793,7 @@ struct uniquer *commentValUni = uniquerNew(commentVal, 18);
 struct uniquer *extDbUni = uniquerNew(extDb, 8);
 struct uniquer *featureClassUni = uniquerNew(featureClass, 10);
 struct uniquer *featureTypeUni = uniquerNew(featureType, 14);
+struct uniquer *featureIdUni = uniquerNew(featureId, 14);
 struct uniquer *authorUni = uniquerNew(author, 18);
 struct uniquer *referenceUni = uniquerNew(reference, 18);
 struct uniquer *citationRpUni = uniquerNew(citationRp, 18);
@@ -909,8 +938,9 @@ for (;;)
 	    {
 	    int class = uniqueStore(featureClassUni, feat->class);
 	    int type = uniqueStore(featureTypeUni, feat->type);
-	    fprintf(feature, "%s\t%d\t%d\t%d\t%d\t%d\n",
-	    	acc, feat->start, feat->end, class, type, feat->softEndBits);
+	    int Id   = uniqueStore(featureIdUni, feat->FTId);
+	    fprintf(feature, "%s\t%d\t%d\t%d\t%d\t%d\t%d\n",
+	    	acc, feat->start, feat->end, class, type, feat->softEndBits, Id);
 	    }
 	}
 
