@@ -454,6 +454,7 @@ showTopScorers 200
 type bed 5 .
 
 track multiz8way
+release alpha
 shortLabel Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
@@ -465,7 +466,25 @@ altColor 50,50,50
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons
-#summary multiz8waySummary
+summary multiz8waySummary
+yLineOnOff Off
+autoScaleDefault Off
+spanList 1
+speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
+
+track multiz8way
+release beta
+shortLabel Conservation
+longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
+group compGeno
+priority 109.51
+visibility pack
+#color 0, 10, 100
+altColor 50,50,50
+#altColor 255,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
 pairwise netBlastz
 yLineOnOff Off
 autoScaleDefault Off
