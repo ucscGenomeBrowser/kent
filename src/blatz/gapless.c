@@ -200,6 +200,12 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                 for (i=0; i<count; ++i)
                     {
                     int targetPos = pos[i];
+                    int diagonal = queryPos - targetPos;
+                    int diagMod = (diagonal & diagMask);
+                    struct dlList *diagList = &diagLists[diagMod];
+                    struct dlNode *node;
+                    boolean gotDoubleHit = FALSE;
+
 // LX BEG Sep 01 2005 Sep 06 2005 Sep 07 2005
                     // Count all hits to report statistics later on
                     dynaHits++;
@@ -244,11 +250,6 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                       }
                     }
 // LX END
-                    int diagonal = queryPos - targetPos;
-                    int diagMod = (diagonal & diagMask);
-                    struct dlList *diagList = &diagLists[diagMod];
-                    struct dlNode *node;
-                    boolean gotDoubleHit = FALSE;
                     ++hitCount;
                     for (node = diagList->head;  !dlEnd(node); node = node->next)
                         {
