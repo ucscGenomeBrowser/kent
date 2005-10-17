@@ -3,11 +3,11 @@
 
 #include "common.h"
 #include "dystring.h"
+#include "htmlPage.h"
 #include "options.h"
 #include "portable.h"
-#include "qa.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.2 2005/10/14 04:20:00 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.3 2005/10/17 15:55:39 heather Exp $";
 
 
 void usage()
@@ -33,6 +33,7 @@ printf("time = %ld\n", endTime - startTime);
 }
 
 int getStartPos(int chromSize, int windowSize)
+/* return a random start position */
 {
 if (windowSize >= chromSize)
     return 0;
