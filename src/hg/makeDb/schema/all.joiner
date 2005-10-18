@@ -693,7 +693,8 @@ identifier estOrMrnaAccession typeOf=genbankAccession
     $gbd.gbStatus.acc unique
     $gbd.gbCdnaInfo.acc unique
     $gbd.imageClone.acc
-    $gbd.altGraphX.mrnaRefs comma
+    $gbd,!ce2.altGraphX.mrnaRefs comma
+    ce2.altGraphX.mrnaRefs comma minCheck=0.97
 
 identifier estAccession typeOf=estOrMrnaAccession
 "Genbank EST accession"
@@ -1046,8 +1047,8 @@ identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
     $ce.sangerGene.name
     $gbd.ceBlastTab.target minCheck=0.95
-    $ce.kimExpDistance.query
-    $ce.kimExpDistance.target
+    #$ce.kimExpDistance.query
+    #$ce.kimExpDistance.target
     $ce.orfToGene.name
     $ce.sangerBlastTab.query
     $ce.sangerBlastTab.target
