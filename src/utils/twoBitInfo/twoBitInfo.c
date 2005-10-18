@@ -3,7 +3,7 @@
 #include "options.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: twoBitInfo.c,v 1.4 2005/09/13 17:50:09 braney Exp $";
+static char const rcsid[] = "$Id: twoBitInfo.c,v 1.5 2005/10/18 19:24:58 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,6 +15,7 @@ errAbort(
   "options:\n"
   "   -nBed   instead of seq sizes, output BED records that define \n"
   "           areas with N's in sequence\n"
+  "   -noNs   outputs the length of each sequence, but does not count Ns \n"
   "Output file has the columns::\n"
   "   seqName size\n"
   "\n"
@@ -26,6 +27,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"nBed", OPTION_BOOLEAN},
+   {"noNs", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -50,6 +52,8 @@ if (seqName != NULL)
 	{
 	if (optionExists("nBed"))
 	    twoBitOutNBeds(tbf, seqArray[i], outFile);
+	else if(optionExists("noNs"))
+	    fprintf(outFile, "%s\t%d\n", seqArray[i], twoBitSeqSizeNoNs(tbf, seqArray[i]));
 	else
 	    fprintf(outFile, "%s\t%d\n", seqArray[i], twoBitSeqSize(tbf, seqArray[i]));
 	}
@@ -62,6 +66,8 @@ else
 	{
 	if (optionExists("nBed"))
 	    twoBitOutNBeds(tbf, index->name, outFile);
+	else if(optionExists("noNs"))
+	    fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSizeNoNs(tbf, index->name));
 	else
 	    fprintf(outFile, "%s\t%d\n", index->name, twoBitSeqSize(tbf, index->name));
 	}
