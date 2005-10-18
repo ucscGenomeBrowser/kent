@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.8 2005/10/15 22:00:53 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlank.c,v 1.9 2005/10/18 12:33:00 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -521,7 +521,6 @@ for (gene = genes; gene != NULL; gene = gene->next)
     {
     geneCount++;
     // short circuit goes here
-    if (geneCount == 2) return;
     verbose(1, "gene %d = %s\n", geneCount, gene->name);
 
     /* create masked sequence and store to array */
@@ -581,6 +580,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	        reverseComplement(seqOrig->dna, 1);
 	    strcat(snpName, ptr);
 	    strcat(snpName, ")");
+	    if (sameString(gene->strand, "-"))
+	      strcat(snpName, " (negative strand)");
 	    verbose(1, "    snp = %s, snpPos = %d\n", snpName, snpPos);
 
             /* get flank start and end in absolute coords */
