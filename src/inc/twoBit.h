@@ -159,4 +159,7 @@ void twoBitSpecFree(struct twoBitSpec **specPtr);
 void twoBitOutNBeds(struct twoBitFile *tbf, char *seqName, FILE *outF);
 /* output a series of bed3's that enumerate the number of N's in a sequence*/
 
+int twoBitSeqSizeNoNs(struct twoBitFile *tbf, char *seqName);
+/* return the length of the sequence, not counting N's */
+
 #endif /* TWOBIT_H */
