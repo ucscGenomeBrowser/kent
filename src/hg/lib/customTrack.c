@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.63 2005/10/14 07:44:29 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.64 2005/10/18 23:07:20 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -796,7 +796,7 @@ else
 	{
 	char *words[3];
 	chopByWhite(text,words,3);
-	lf = lineFileDecompressMem(TRUE, (char *)atoi(words[1]), atoi(words[2]));
+	lf = lineFileDecompressMem(TRUE, (char *)atol(words[1]), atol(words[2]));
 	}
     else
 	{
