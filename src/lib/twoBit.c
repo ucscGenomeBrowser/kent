@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.18 2005/09/13 17:37:46 braney Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.19 2005/10/18 19:23:03 lowec Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -905,4 +905,48 @@ if (nBlockCount > 0)
     freez(&nStarts);
     freez(&nSizes);
     }
+}
+
+int twoBitSeqSizeNoNs(struct twoBitFile *tbf, char *seqName)
+/* return the size of the sequence, not counting N's*/
+{
+int nBlockCount;
+int size;
+
+twoBitSeekTo(tbf, seqName);
+
+size = readBits32(tbf->f, tbf->isSwapped);
+
+/* Read in blocks of N. */
+nBlockCount = readBits32(tbf->f, tbf->isSwapped);
+
+if (nBlockCount > 0)
+    {
+    bits32 *nStarts = NULL, *nSizes = NULL;
+    
+    int i;
+
+    AllocArray(nStarts, nBlockCount);
+    AllocArray(nSizes, nBlockCount);
+    fread(nStarts, sizeof(nStarts[0]), nBlockCount, tbf->f);
+    fread(nSizes, sizeof(nSizes[0]), nBlockCount, tbf->f);
+    if (tbf->isSwapped)
+	{
+	for (i=0; i<nBlockCount; ++i)
+	    {
+	    nStarts[i] = byteSwap32(nStarts[i]);
+	    nSizes[i] = byteSwap32(nSizes[i]);
+	    }
+	}
+
+    for (i=0; i<nBlockCount; ++i)
+	{
+	size -= nSizes[i];
+	}
+
+    freez(&nStarts);
+    freez(&nSizes);
+    }
+
+return(size);
 }
