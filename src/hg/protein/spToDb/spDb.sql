@@ -195,9 +195,18 @@ CREATE TABLE feature (
     featureClass int not null,	# ID of featureClass
     featureType int not null,	# ID of featureType
     softEndBits char not null,  # 1 for start <, 2 for start ?, 4 for end >, 8 for end ?
+    featureId int(11) NOT NULL default '0', # feature Id
               #Indices
     INDEX(acc)
 );
+
+#FeatureId table
+CREATE TABLE featureId (
+  id int(11) NOT NULL default '0',	# Database id -we make this up
+  featureId varchar(40) NOT NULL default '',  # UniProt feature Id
+  PRIMARY KEY  (id),
+  KEY val (val(14))
+) TYPE=MyISAM;
 
 #A single author
 CREATE TABLE author (
