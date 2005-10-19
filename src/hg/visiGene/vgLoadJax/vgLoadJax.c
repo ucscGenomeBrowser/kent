@@ -39,11 +39,33 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+struct sqlResult *sqlGetResultVerbose(struct sqlConnection *conn, char *s)
+/* Get result, printing out query if verbosity is high enough. */
+{
+verbose(2, "%s\n", s);
+return sqlGetResult(conn, s);
+}
+
+char *sqlQuickStringVerbose(struct sqlConnection *conn, char *s)
+/* Get result, printing out query if verbosity is high enough. */
+{
+verbose(2, "%s\n", s);
+return sqlQuickString(conn, s);
+}
 
 struct slName *jaxSpecList(struct sqlConnection *conn)
 /* Get list of specimen id's. */
 {
 return sqlQuickList(conn, "select _Specimen_key from GXD_Specimen");
+}
+
+void dumpRow(char **row, int size)
+/* Dump out row if verbosity >= 3. */
+{
+int i;
+for (i=0; i<size; ++i)
+    verbose(3, "%s\t", row[i]);
+verbose(3, "\n");
 }
 
 char *colorFromLabel(char *label, char *gene)
@@ -174,7 +196,7 @@ if (key > 0)
 	"and GXD_AlleleGenotype._Marker_key = MRK_Marker._Marker_key "
 	"and GXD_AlleleGenotype._Allele_key = ALL_Allele._Allele_key "
 	, genotypeKey);
-    sr = sqlGetResult(conn, query->string);
+    sr = sqlGetResultVerbose(conn, query->string);
     while ((row = sqlNextRow(sr)) != NULL)
 	dyStringPrintf(geno, "%s:%s,", row[0], row[1]);
     sqlFreeResult(&sr);
@@ -187,7 +209,7 @@ if (key > 0)
 	"where GXD_Genotype._Genotype_key = %s "
 	"and GXD_Genotype._Strain_key = PRB_Strain._Strain_key"
 	, genotypeKey);
-    strain = sqlQuickString(conn, query->string);
+    strain = sqlQuickStringVerbose(conn, query->string);
     if (isUnknown(strain))
         freez(&strain);
 
@@ -215,7 +237,7 @@ dyStringPrintf(query,
 	"and GXD_Expression._Structure_key = GXD_Structure._Structure_key "
 	"and GXD_Structure._StructureName_key = GXD_StructureName._StructureName_key"
 	, assayKey);
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResultVerbose(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *bodyPart = skipLeadingSpaces(row[0]);
@@ -245,7 +267,6 @@ char **row;
 char *copyright, *pubMed;
 struct slName *list, *el;
 boolean gotAny = FALSE;
-struct hash *uniqAssayHash = newHash(16);
 struct hash *uniqImageHash = newHash(0);
 struct hash *captionHash = newHash(0);
 int imageWidth = 0, imageHeight = 0;
@@ -262,7 +283,7 @@ cap = mustOpen(capName, "w");
 
 dyStringAppend(query, "select authors,journal,title,year from BIB_Refs where ");
 dyStringPrintf(query, "_Refs_key = %s", ref);
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResultVerbose(conn, query->string);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find _Refs_key %s in BIB_Refs", ref);
@@ -315,7 +336,7 @@ dyStringPrintf(query,
    "where ACC_Accession._Object_key = %s "
    "and ACC_Accession._LogicalDB_key = ACC_LogicalDB._LogicalDB_key "
    "and ACC_LogicalDB.name = 'PubMed'", ref);
-pubMed = sqlQuickString(conn, query->string);
+pubMed = sqlQuickStringVerbose(conn, query->string);
 if (pubMed != NULL)
     fprintf(ra, "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=%s\n", pubMed);
 freez(&pubMed);
@@ -324,14 +345,14 @@ freez(&pubMed);
 dyStringClear(query);
 dyStringPrintf(query, 
 	"select copyrightNote from IMG_Image where _Refs_key = %s", ref);
-copyright = sqlQuickString(conn, query->string);
+copyright = sqlQuickStringVerbose(conn, query->string);
 if (copyright != NULL)
     fprintf(ra, "copyright %s\n", copyright);
 freez(&copyright);
 
 dyStringClear(query);
 dyStringAppend(query, 
-	"select MRK_Marker.symbol as gene,"
+	"select distinct MRK_Marker.symbol as gene,"
                "GXD_Specimen.sex as sex,"
 	       "GXD_Specimen.age as age,"
 	       "GXD_Specimen.ageMin as ageMin,"
@@ -370,7 +391,7 @@ dyStringAppend(query,
 	  "and GXD_Assay._ImagePane_key = 0 "
 	);
 dyStringPrintf(query, "and GXD_Assay._Refs_key = %s", ref);
-sr = sqlGetResult(conn, query->string);
+sr = sqlGetResultVerbose(conn, query->string);
 
 
 fprintf(tab, "#");
@@ -425,6 +446,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *priority = NULL;
     char abTaxon[32];
     char *captionId = "";
+
+    verbose(3, "   "); dumpRow(row, 16);
 
     if (age == NULL)
         continue;
@@ -488,7 +511,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    dyStringPrintf(query, 
 	    	"select term from VOC_Term where _Term_key = %s", 
 	    	reporterGeneKey);
-	    name = sqlQuickString(conn2, query->string);
+	    name = sqlQuickStringVerbose(conn2, query->string);
 	    if (name == NULL)
 	        warn("Can't find _ReporterGene_key %s in VOC_Term", 
 			reporterGeneKey);
@@ -510,7 +533,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	      "where GXD_ProbePrep._ProbePrep_key = %s "
 	      "and GXD_ProbePrep._Visualization_key = GXD_VisualizationMethod._Visualization_key"
 	      , probePrepKey);
-	    name = sqlQuickString(conn2, query->string);
+	    name = sqlQuickStringVerbose(conn2, query->string);
 	    if (name == NULL)
 	        warn("Can't find visualization from _ProbePrep_key %s", probePrepKey);
 	    probeColor = colorFromLabel(name, gene);
@@ -523,7 +546,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		        "where GXD_ProbePrep._ProbePrep_key = %s " 
 			"and GXD_ProbePrep._Label_key = GXD_Label._Label_key"
 		        , probePrepKey);
-		name = sqlQuickString(conn2, query->string);
+		name = sqlQuickStringVerbose(conn2, query->string);
 		if (name == NULL)
 		    warn("Can't find label from _ProbePrep_key %s", 
 		    	probePrepKey);
@@ -540,7 +563,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		  "where GXD_AntibodyPrep._AntibodyPrep_key = %s "
 		  "and GXD_AntibodyPrep._Label_key = GXD_Label._Label_key"
 		  , antibodyPrepKey);
-	    name = sqlQuickString(conn2, query->string);
+	    name = sqlQuickStringVerbose(conn2, query->string);
 	    if (name == NULL)
 		warn("Can't find label from _AntibodyPrep_key %s", antibodyPrepKey);
 	    probeColor = colorFromLabel(name, gene);
@@ -562,7 +585,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		"where GXD_AntibodyPrep._AntibodyPrep_key = %s "
 		"and GXD_AntibodyPrep._Antibody_key = GXD_Antibody._Antibody_key"
 		, antibodyPrepKey);
-	sr = sqlGetResult(conn2, query->string);
+	sr = sqlGetResultVerbose(conn2, query->string);
 	row = sqlNextRow(sr);
 	if (row != NULL)
 	    {
@@ -579,7 +602,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    dyStringClear(query);
 	    dyStringPrintf(query, "select latinName from MGI_Organism "
 	                          "where _Organism_key = %d", orgKey);
-	    latinName = sqlQuickString(conn2, query->string);
+	    latinName = sqlQuickStringVerbose(conn2, query->string);
 	    if (latinName != NULL && !sameString(latinName, "Not Specified"))
 		{
 		char *e = strchr(latinName, '/');
@@ -592,7 +615,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		dyStringClear(query);
 		dyStringPrintf(query, "select commonName from MGI_Organism "
 	                          "where _Organism_key = %d", orgKey);
-		commonName = sqlQuickString(conn2, query->string);
+		commonName = sqlQuickStringVerbose(conn2, query->string);
 		if (commonName != NULL && !sameString(commonName, "Not Specified"))
 		    {
 		    spTaxon = spCommonToTaxon(sp, commonName);
@@ -626,7 +649,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "where PRB_Probe._Probe_key = GXD_ProbePrep._Probe_key "
 	    "and GXD_ProbePrep._ProbePrep_key = %s"
 	    , probePrepKey);
-	sr = sqlGetResult(conn2, query->string);
+	sr = sqlGetResultVerbose(conn2, query->string);
 	row = sqlNextRow(sr);
 	if (row != NULL)
 	    {
@@ -682,7 +705,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    "where _Image_key = %s "
 	    "order by sequenceNum"
 	    , imageKey);
-	sr = sqlGetResult(conn2, query->string);
+	sr = sqlGetResultVerbose(conn2, query->string);
 	while ((row = sqlNextRow(sr)) != NULL)
 	   dyStringAppend(caption, row[0]);
 	sqlFreeResult(&sr);
@@ -724,11 +747,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%d\t", imageWidth);
     fprintf(tab, "%d\n", imageHeight);
 
-    if (!hashLookup(uniqAssayHash, assayKey))
-        {
-	hashAdd(uniqAssayHash, assayKey, NULL);
-	printExpression(tab, assayKey, conn2);
-	}
+    printExpression(tab, assayKey, conn2);
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);
@@ -750,7 +769,6 @@ else
 remove(tmpName);
 dyStringFree(&caption);
 dyStringFree(&query);
-hashFree(&uniqAssayHash);
 hashFree(&uniqImageHash);
 hashFree(&captionHash);
 }
