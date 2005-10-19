@@ -1521,12 +1521,19 @@ origAssembly hg16
     longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
     priority 1
 
+    track encodeGisRnaPetMCF7Estr
+    subTrack encodeGisRnaPet
+    shortLabel GIS RNA MCF7 Est
+    longLabel Genome Institute of Singapore PET of PolyA+ RNA (estrogen-stim MCF7)
+    priority 2
+
     track encodeGisRnaPetHCT116
     subTrack encodeGisRnaPet
     shortLabel GIS RNA HCT116
     longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
-    priority 2
+    priority 3
     color 58,119,40
+
 
 track encodeAffyRnaSignal
 compositeTrack on
@@ -3010,15 +3017,15 @@ visibility hide
 useScore 1
 type bed 12
 
-track encodeGisChipPetStat1Gif
-subTrack encodeGisChipPetStat1
-shortLabel GIS STAT1 +gIF
-longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
+    track encodeGisChipPetStat1Gif
+    subTrack encodeGisChipPetStat1
+    shortLabel GIS STAT1 +gIF
+    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on gIF treated HeLa cells
 
-track encodeGisChipPetStat1NoGif
-subTrack encodeGisChipPetStat1
-shortLabel GIS STAT1 -gIF
-longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
+    track encodeGisChipPetStat1NoGif
+    subTrack encodeGisChipPetStat1
+    shortLabel GIS STAT1 -gIF
+    longLabel Genome Institute of Singapore ChIP-PET: STAT1 Ab on untreated HeLa cells
 
 track encodeLIChIP
 compositeTrack on
