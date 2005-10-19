@@ -244,12 +244,12 @@ if ((x != xx) || (y != yy)) {
 	x = xx;
       	y = yy;
     } else {
-	m = (yy-y)/(xx-x);
 	if (xx==x) {
 	    dx = 0;
 	    dy = drz;
     	    if (yy<y) dy *= -1;
 	} else {
+	    m = (yy-y)/(xx-x);
     	    dx = Math.sqrt((drz*drz)/(m*m+1));
     	    if (xx<x) dx *= -1;
 	    dy = m * dx;
