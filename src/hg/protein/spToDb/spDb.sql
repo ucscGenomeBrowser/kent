@@ -203,7 +203,7 @@ CREATE TABLE feature (
 #FeatureId table
 CREATE TABLE featureId (
   id int(11) NOT NULL default '0',	# Database id -we make this up
-  featureId varchar(40) NOT NULL default '',  # UniProt feature Id
+  val varchar(40) NOT NULL default '',  # UniProt feature Id
   PRIMARY KEY  (id),
   KEY val (val(14))
 ) TYPE=MyISAM;
