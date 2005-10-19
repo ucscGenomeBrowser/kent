@@ -823,7 +823,11 @@ else if (cartVarExists(cart, hgpDoId))
 else if (cartVarExists(cart, hgpDoSearch))
     doDefault(conn, TRUE);
 else 
-    doDefault(conn, FALSE);
+    {
+    char *oldListSpec = hashFindVal(oldCart, hgpListSpec);
+    char *newListSpec = cartOptionalString(cart, hgpListSpec);
+    doDefault(conn, !sameString(oldListSpec, newListSpec));
+    }
 cartRemovePrefix(cart, hgpDoPrefix);
 }
 
