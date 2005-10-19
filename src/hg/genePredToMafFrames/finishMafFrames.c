@@ -7,78 +7,6 @@
 #include "binRange.h"
 #include "localmem.h"
 
-static int exonFramesCmp(const void *va, const void *vb)
-/* compare by target transcription order */
-{
-struct exonFrames *a = *((struct exonFrames **)va);
-struct exonFrames *b = *((struct exonFrames **)vb);
-if (a->mf.strand[0] == '+')
-    return a->mf.chromStart - b->mf.chromStart;
-else
-    return b->mf.chromStart - a->mf.chromStart;
-}
-
-static void sortExonFrames(struct gene *gene)
-/* sort exon frames of a gene into target transcription order  */
-{
-struct cdsExon *exon;
-for (exon = gene->exons; exon != NULL; exon = exon->next)
-    slSort(&exon->frames, exonFramesCmp);
-}
-
-static struct exonFrames *findFirstExonFrames(struct gene *gene)
-/* find the first exons frames object, or NULL if none are found */
-{
-struct cdsExon *exon;
-for (exon = gene->exons; exon != NULL; exon = exon->next)
-    {
-    if (exon->frames != NULL)
-        return exon->frames;
-    }
-return NULL;
-}
-
-static void checkExonMultiMapping(struct cdsExon *exon,
-                                  char *chrom, char strand,
-                                  boolean *warnedPtr)
-/* check an exon for multiple mappings.  Warn on first promblem encountered.
- * Drop those that conflict with first mapping. */
-{
-struct exonFrames *ef, *keptEf = NULL;
-while ((ef = slPopHead(&exon->frames)) != NULL)
-    {
-    if (!(sameString(ef->mf.chrom, chrom) && (ef->mf.strand[0] == strand)))
-        {
-        if (!*warnedPtr)
-            {
-            fprintf(stderr, "Warning: %s maps to multiple target locations\n",
-                    exon->gene->name);
-            *warnedPtr = TRUE;
-            }
-        }
-    else
-        slAddHead(&keptEf, ef);
-    }
-slReverse(&keptEf);
-exon->frames = keptEf;
-}
-
-static void checkMultiMapping(struct gene *gene)
-/* check for a gene have multiple mappings, issue warning if it does and keep
- * only one of the mappings.  FIXME: this should latter be changed keep only
- * one. FIXME: should also check for overlap. */
-{
-struct exonFrames *firstEf = findFirstExonFrames(gene);
-if (firstEf != NULL)
-    {
-    struct cdsExon *exon;
-    boolean warned = FALSE;
-    for (exon = gene->exons; exon != NULL; exon = exon->next)
-        checkExonMultiMapping(exon, firstEf->mf.chrom, firstEf->mf.strand[0],
-                              &warned);
-    }
-}
-
 static boolean isSplitCodon(struct exonFrames *ef0, struct exonFrames *ef1) 
 /* Determine if the last codon of ef0 is split in the target sequence and is
  * continued in ef1. If codon is not split, or only partially aligned, false
@@ -87,24 +15,29 @@ static boolean isSplitCodon(struct exonFrames *ef0, struct exonFrames *ef1)
 int tLen0 = ef0->mf.chromEnd - ef0->mf.chromStart;
 if (ef1->mf.strand[0] == '+')
     {
-    if (ef1->queryStart != ef0->queryEnd)
-        return FALSE; /* not contiguous in query */
     if (ef1->mf.chromStart == ef0->mf.chromEnd)
         return FALSE; /* contiguous in target */
     }
 else
     {
-    if (ef1->queryEnd != ef0->queryStart)
-        return FALSE; /* not contiguous in query */
     if (ef1->mf.chromEnd == ef0->mf.chromStart)
         return FALSE; /* contiguous in target */
     }
+if (ef1->cdsStart != ef0->cdsEnd)
+    return FALSE; /* deletion in gene between two records */
 if (frameIncr(ef0->mf.frame, tLen0) == 0)
     return FALSE; /* codon not split */
 if (ef1->mf.frame != frameIncr(ef0->mf.frame, tLen0))
-    errAbort("isSplitCodon: frame should be contiguous: gene %s %d exons",
-             ef0->exon->gene->name, slCount(ef0->exon->gene->exons));
+    return FALSE;  /* frame not contiguous */
 return TRUE;
+}
+
+static void outOfOrderLink(struct exonFrames *ef)
+/* generate error about linking exons that are out of transcription
+ * order.  This indicates a failure to separate multiply aligned genes */
+{
+errAbort("gene %s mapped to %s (%s) has frames linking out of transcription order",
+         ef->exon->gene->name, ef->mf.chrom, ef->mf.strand);
 }
 
 static void linkFrames(struct exonFrames *prevEf, struct exonFrames *ef)
@@ -117,11 +50,17 @@ if (isSplitCodon(prevEf, ef))
         {
         prevEf->mf.nextFramePos = ef->mf.chromStart;
         ef->mf.prevFramePos = prevEf->mf.chromEnd-1;
+        if ((prevEf->mf.nextFramePos <= prevEf->mf.chromEnd)
+            || (ef->mf.prevFramePos >= ef->mf.chromStart))
+            outOfOrderLink(ef);
         }
     else
         {
-        prevEf->mf.prevFramePos = ef->mf.chromEnd-1;
-        ef->mf.nextFramePos = prevEf->mf.chromStart;
+        prevEf->mf.nextFramePos = ef->mf.chromEnd-1;
+        ef->mf.prevFramePos = prevEf->mf.chromStart;
+        if ((prevEf->mf.nextFramePos >= prevEf->mf.chromStart)
+            || (ef->mf.prevFramePos <= ef->mf.chromEnd))
+            outOfOrderLink(ef);
         }
     }
 }
@@ -145,8 +84,7 @@ static void finishGene(struct gene *gene)
 /* finish mafFrames for one gene. */
 {
 struct cdsExon *prevExon = NULL, *exon;
-checkMultiMapping(gene);
-sortExonFrames(gene);
+geneSortFramesTargetOff(gene);
 
 for (exon = gene->exons; exon != NULL; exon = exon->next)
     {

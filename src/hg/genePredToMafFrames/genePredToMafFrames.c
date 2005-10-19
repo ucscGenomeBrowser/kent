@@ -3,13 +3,14 @@
 #include "options.h"
 #include "mafFrames.h"
 #include "mkMafFrames.h"
+#include "splitMultiMappings.h"
 #include "finishMafFrames.h"
 #include "geneBins.h"
 #include "chromBins.h"
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.4 2005/10/16 06:09:37 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.5 2005/10/19 22:06:57 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -32,33 +33,38 @@ for (ef = exon->frames; ef != NULL; ef = ef->next)
     }
 }
 
-static void outputChromFrames(struct binKeeper *chromBins, FILE *frameFh, FILE *bedFh)
-/* output frames from a chromosome's bins */
-{
-struct binKeeperCookie cookie = binKeeperFirst(chromBins);
-struct binElement* exonRef;
-while ((exonRef = binKeeperNext(&cookie)) != NULL)
-    outputExonFrames((struct cdsExon*)exonRef->val, frameFh, bedFh);
-}
-
 static void outputFrames(struct geneBins *genes, char *mafFramesFile, char *bedFile)
 /* output all mafFrames rows */
 {
 FILE *frameFh = mustOpen(mafFramesFile, "w");
 FILE *bedFh = (bedFile != NULL) ? mustOpen(bedFile, "w") : NULL;
-struct slName *chroms = chromBinsGetChroms(genes->bins); 
-struct slName *chrom;
-
-for (chrom = chroms; chrom != NULL; chrom = chrom->next)
+struct gene *gene;
+struct cdsExon *exon;
+for (gene = genes->genes; gene != NULL; gene = gene->next)
     {
-    struct binKeeper *chromBins = chromBinsGet(genes->bins, chrom->name, FALSE);
-    if (chromBins != NULL)
-        outputChromFrames(chromBins, frameFh, bedFh);
+    for (exon = gene->exons; exon != NULL; exon = exon->next)
+        outputExonFrames(exon, frameFh, bedFh);
     }
 
-slFreeList(&chroms);
 carefulClose(&frameFh);
 carefulClose(&bedFh);
+}
+
+static void dumpGeneInfo(char *desc, struct geneBins *genes)
+/* dump information about genes */
+{
+FILE *fh = verboseLogFile();
+int i;
+struct gene *gene;
+for (gene = genes->genes; gene != NULL; gene = gene->next)
+    {
+    geneSortFramesOffTarget(gene);
+    fprintf(fh, "%s: ", desc);
+    geneDump(fh, gene);
+    }
+for (i = 0; i < 90; i++)
+    fputc('-', fh);
+fputc('\n', fh);
 }
 
 static void genePredToMafFrames(char *geneDb, char *targetDb, char *genePredFile,
@@ -72,7 +78,14 @@ int i;
 for (i = 0; i < numMafFiles; i++)
     mkMafFramesForMaf(geneDb, targetDb, genes, mafFiles[i]);
 
+if (verboseLevel() >= 4)
+    dumpGeneInfo("after load", genes);
+splitMultiMappings(genes);
+if (verboseLevel() >= 5)
+    dumpGeneInfo("after split", genes);
 finishMafFrames(genes);
+if (verboseLevel() >= 5)
+    dumpGeneInfo("after link", genes);
 outputFrames(genes, mafFramesFile, bedFile);
 
 geneBinsFree(&genes);
@@ -101,6 +114,9 @@ errAbort("%s\n"
     "  -bed=file - output a bed of for each mafFrame region, useful for debugging.\n"
     "  -verbose=level - enable verbose tracing, the following levels are implemented:\n"
     "     3 - print information about data used to compute each record.\n"
+    "     4 - dump information about the gene mappings that were constructed\n"
+    "     5 - dump information about the gene mappings after split processing\n"
+    "     6 - dump information about the gene mappings after frame linking\n"
     "\n", msg);
 }
 

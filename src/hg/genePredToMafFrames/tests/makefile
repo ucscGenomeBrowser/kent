@@ -2,7 +2,8 @@ include ../../../inc/common.mk
 
 DIFF = diff -u
 
-test:  oneExon splitExon revExon negNeg finishIsSplit queryDel multiMap
+test:   oneExon splitExon revExon negNeg finishIsSplit \
+	queryDel multiMap multiMap2 multiMapMondo manyExonPos unalignedExonStart
 
 oneExon: mkout
 	genePredToMafFrames hg17 canHg10 input/BC101503.gp output/$@.mafFrames input/BC101503.maf
@@ -36,6 +37,25 @@ queryDel:
 # gene that maps to multiple locations
 multiMap:
 	genePredToMafFrames hg17 canHg10 input/NM_207435.gp output/$@.mafFrames input/NM_207435.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# another gene that maps to multiple locations
+multiMap2:
+	genePredToMafFrames hg17 canHg10 input/NM_001452.gp output/$@.mafFrames input/NM_001452.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# multiple mappings, this one is ugly.
+multiMapMondo:
+	genePredToMafFrames hg17 canHg10 input/NM_020185.gp output/$@.mafFrames input/NM_020185.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# positive strand, multiple exons
+manyExonPos:
+	genePredToMafFrames hg17 canHg10 input/NM_005682.gp output/$@.mafFrames input/NM_005682.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+unalignedExonStart:
+	genePredToMafFrames hg17 canHg10 input/NM_013321.gp output/$@.mafFrames input/NM_013321.maf
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:

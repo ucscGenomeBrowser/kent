@@ -85,9 +85,12 @@ struct scanInfo
 {
     struct scanCursor *sc;  /* cursor into the alignment */
     struct cdsExon *exon;   /* exon being processed */
-    int qStart;             /* exon coordinates mapped to query strand */
-    int qEnd;
+    int exonQStart;         /* exon coords mapped query seq strand */
+    int exonQEnd;
+    int blkQStart;          /* exon coords, mapped and adjust to block bounds */
+    int blkQEnd;
     int frame;              /* current frame */
+    int frameEnd;           /* expected frame at end of scan */  /* FIXME */
     int scanDir;            /* scanning direction (+1|-1) relative to transcription */
     int subQStart;          /* query and target start of current subrange of exon,
                              * -1 for none */
@@ -100,7 +103,7 @@ static void traceFrameDef(int level, struct scanInfo *si, struct exonFrames *ef)
 /* verbose trace to indicate why a mafFrames record was defined */
 {
 verbose(level, "exon %s[%d] %s:%d-%d %c fm: %d; ",
-        si->exon->gene->name, si->exon->iExon,
+        si->exon->gene->name, si->exon->exonNum,
         si->exon->chrom, si->exon->chromStart, si->exon->chromEnd,
         si->exon->strand, si->exon->frame);
 verbose(level, "subQuery %s:%d-%d %c fm: %d-%d; ",
@@ -117,8 +120,8 @@ static void addMafFrame(struct scanInfo *si)
  * the state.*/
 {
 struct exonFrames *ef;
-char src[256], *tName, strand, *dot;
-char frame;
+char src[256], *tName, strand, *dot, frame;
+int cdsOff;
 
 /* target excludes organism */
 tName = (strchr(si->sc->target.comp->src, '.')+1);
@@ -140,14 +143,20 @@ dot = strchr(src, '.');
 if (dot != NULL)
     *dot = '\0';
 
+/* compute offset within CDS */
+if (si->scanDir > 0)
+    cdsOff = si->exon->cdsOff + (si->subQStart - si->exonQStart);
+else
+    cdsOff = si->exon->cdsOff + (si->exonQEnd - si->sc->query.pos);
+
 /* create and link exon */
 ef = cdsExonAddFrames(si->exon, src, si->subQStart, si->sc->query.pos,
                       tName, si->subTStart, si->sc->target.pos,
-                      frame, strand);
+                      frame, strand, cdsOff);
 
-if (verboseLevel() >= 3)
-    traceFrameDef(3, si, ef);
-assert((ef->queryEnd-ef->queryStart) == (ef->mf.chromEnd-ef->mf.chromStart));
+if (verboseLevel() >= 2)
+    traceFrameDef(2, si, ef);
+assert((ef->srcEnd-ef->srcStart) == (ef->mf.chromEnd-ef->mf.chromStart));
 
 /* reset state */
 si->subQStart = -1;
@@ -161,27 +170,54 @@ static struct scanInfo scanInfoInit(struct scanCursor *sc, struct cdsExon *exon)
  * aligned position in the exon */
 {
 struct scanInfo si;
+int queryEnd = sc->query.comp->start + sc->query.comp->size;
+int frameStart, frameEnd;
+
+ZeroVar(&si);
 si.sc = sc;
 si.exon = exon;
 si.subTStart = -1;
 si.subStartFrame = -1;
 si.subEndFrame = -1;
 
-/* genePred coordinates are always on the positive strand, we need to reverse
- * them to search the strand-specific MAF coords if the component is on the
- * negative strand */
-si.qStart = exon->chromStart;
-si.qEnd = exon->chromEnd;
-if (sc->query.comp->strand == '-')
-    reverseIntRange(&si.qStart, &si.qEnd, sc->query.comp->srcSize);
-
 /* direction frame will increment */
 si.scanDir = (exon->strand == sc->query.comp->strand) ? 1 : -1;
 
-/* Get frame of the first base of the exon that will be scanned. */
-si.frame =  (si.scanDir > 0) ? exon->frame
-    : frameIncr(exon->frame, (exon->chromEnd-exon->chromStart)-1);
-assertFrame(si.frame);
+/* get coordinates and frame at each end of the exon */
+si.exonQStart = exon->chromStart;
+si.exonQEnd = exon->chromEnd;
+frameStart = (exon->strand == '+')
+    ? exon->frame : frameIncr(exon->frame, (si.exonQEnd - si.exonQStart)-1);
+frameEnd = (exon->strand == '+')
+    ? frameIncr(exon->frame, (si.exonQEnd - si.exonQStart)-1) : exon->frame;
+
+/* genePred coordinates are always on the positive strand, we need to reverse
+ * them to search the strand-specific MAF coords if the component is on the
+ * negative strand */
+if (sc->query.comp->strand == '-')
+    {
+    int hold = frameStart;
+    frameStart = frameEnd;
+    frameEnd = hold;
+    reverseIntRange(&si.exonQStart, &si.exonQEnd, sc->query.comp->srcSize);
+    }
+
+/* adjust to bounds of query in maf block */
+si.blkQStart = si.exonQStart;
+si.blkQEnd = si.exonQEnd;
+if (si.blkQStart < sc->query.comp->start)
+    {
+    int delta = sc->query.comp->start - si.blkQStart;
+    si.blkQStart = sc->query.comp->start;
+    frameStart = frameIncr(frameStart, si.scanDir*delta);
+    }
+if (si.blkQEnd > queryEnd)
+    {
+    int delta = si.blkQEnd - queryEnd;
+    si.blkQEnd = queryEnd;
+    frameEnd = frameIncr(frameEnd, -1*si.scanDir*delta);
+    }
+si.frame = frameStart;
 return si;
 }
 
@@ -227,12 +263,12 @@ struct scanInfo si = scanInfoInit(sc, exon);
 
 /* advance to start of exon in component, which must be there due
  * to the bin search */
-if (!scanCursorAdvToQueryPos(sc, si.qStart))
+if (!scanCursorAdvToQueryPos(sc, si.blkQStart))
     errAbort("BUG: should have found exon in this component");
-si.frame = frameIncr(si.frame, si.scanDir*(sc->query.pos - si.qStart));
+si.frame = frameIncr(si.frame, si.scanDir*(sc->query.pos - si.blkQStart));
 
 /* scan columns of alignment overlapping exon */
-while (sc->query.pos < si.qEnd)
+while (sc->query.pos < si.blkQEnd)
     {
     processColumn(&si);
     if (!scanCursorIncr(si.sc))
@@ -240,6 +276,17 @@ while (sc->query.pos < si.qEnd)
     }
 if (si.subTStart >= 0)
     addMafFrame(&si);
+#if 0 /* FIXME */
+assert(si.sc->query.pos == si.blkQEnd);
+#else
+#if 0 /* FIXME */
+fprintf(stderr, "Warning: %s %d si.sc->query.pos != si.blkQEnd: %d != %d\n",
+        si.exon->gene->name, si.exon->exonNum, si.sc->query.pos, si.blkQEnd);
+#endif
+#endif
+#if 0 /* FIXME */
+assert(si.frame == si.frameEnd);
+#endif
 }
 
 static void mkCompFrames(struct geneBins *genes,
