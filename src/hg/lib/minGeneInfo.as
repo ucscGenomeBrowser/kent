@@ -8,4 +8,5 @@ table minGeneInfo
     string protein;  "gene protein"
     string gi;       "gene genbank id"
     string ec;       "ec number "
+    string entrezGene;       "entrez gene id"
     )

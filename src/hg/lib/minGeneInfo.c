@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "minGeneInfo.h"
 
-static char const rcsid[] = "$Id: minGeneInfo.c,v 1.5 2005/10/15 02:32:57 baertsch Exp $";
+static char const rcsid[] = "$Id: minGeneInfo.c,v 1.6 2005/10/19 01:10:13 baertsch Exp $";
 
 void minGeneInfoStaticLoad(char **row, struct minGeneInfo *ret)
 /* Load a row from minGeneInfo table into ret.  The contents of ret will
@@ -22,6 +22,7 @@ ret->note = row[3];
 ret->protein = row[4];
 ret->gi = row[5];
 ret->ec = row[6];
+ret->entrezGene = row[7];
 }
 
 struct minGeneInfo *minGeneInfoLoad(char **row)
@@ -38,6 +39,7 @@ ret->note = cloneString(row[3]);
 ret->protein = cloneString(row[4]);
 ret->gi = cloneString(row[5]);
 ret->ec = cloneString(row[6]);
+ret->entrezGene = cloneString(row[7]);
 return ret;
 }
 
@@ -47,7 +49,7 @@ struct minGeneInfo *minGeneInfoLoadAll(char *fileName)
 {
 struct minGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -65,7 +67,7 @@ struct minGeneInfo *minGeneInfoLoadAllByChar(char *fileName, char chopper)
 {
 struct minGeneInfo *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -93,6 +95,7 @@ ret->note = sqlStringComma(&s);
 ret->protein = sqlStringComma(&s);
 ret->gi = sqlStringComma(&s);
 ret->ec = sqlStringComma(&s);
+ret->entrezGene = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -111,6 +114,7 @@ freeMem(el->note);
 freeMem(el->protein);
 freeMem(el->gi);
 freeMem(el->ec);
+freeMem(el->entrezGene);
 freez(pEl);
 }
 
@@ -156,6 +160,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->ec);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->entrezGene);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
