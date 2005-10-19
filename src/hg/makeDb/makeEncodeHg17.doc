@@ -76,6 +76,7 @@ exit
 
 ##########################################################################
 # GIS PET (2005-08-23 kate)
+# NOTE: This track will be replaced with a new data submission
 
     cd  /cluster/data/encode/convertHg17
 
@@ -763,10 +764,45 @@ cat > doLoad.csh << 'EOF'
     # in the ENCODE regions.  I requested the genome-wide
     # data -- they will provide  this later.
 
-    # Create composite track, encodeGisChipPetStat, with 2 subtracks
+
+##########################################################################
+# Genome Institute of Singapore - PET RNA (2005-10-19 kate)
+# Submitted 10/11 by Atif Shahab
+#       3 datasets - 5FU treated HCT116 cells, 
+#                    MCF7 untreated 
+#                    Estrogen-treated MCF7 (new)
+# Replace data in existing subtracks, and add new one
+    cd /cluster/data/encode/GIS
+    mkdir -p rna/2005-10-11/lab
+    # copy files from FTP dir
+    cd rna/2005-10-11/lab
+    ln -s MCF7_estrogen_treated.bed lab/MCF7Estr-hg17.bed
+
+    # use Angie's loading process from hg16
+cat > load.csh << 'EOF'
+    foreach f (lab/HCT116-hg17.bed lab/MCF7-hg17.bed lab/MCF7Estr-hg17.bed)
+      set cellType = `echo $f:t:r | sed -e 's/-hg17//'`
+      echo $cellType
+      set table = encodeGisRnaPet$cellType
+      grep '^chr' $f | \
+      perl -wpe \
+     'chomp; @w = split; \
+      if ($w[3] =~ /\d+-(\d+)-(\d+)/) { \
+        ($mc, $ac) = ($1, $2, $3); \
+        if ($mc == 1)   { $w[8] = ($ac > 1) ? "35,35,175" : "160,160,188"; } \
+        elsif ($mc > 1) { $w[8] = ($ac > 1) ? "180,120,0" : "225,150,0"; } \
+        else { die "mc $mc" } \
+      } else { die "parse"; } \
+      $_ = join(" ", @w) . "\n";'  > $table.bed
+      hgLoadBed hg17 $table $table.bed
+    end
+'EOF'
+csh load.csh >&! load.log
+    rm *.bed
 
 ##########################################################################
 # UCSD/Ludwig Institute Nimblegen chip/chip (2005-10-07 KATE)
+#   New data submission
 
     ssh hgwdev
     cd /cluster/data/encode/UCSD/nimblegen
