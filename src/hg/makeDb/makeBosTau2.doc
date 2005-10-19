@@ -1532,4 +1532,37 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgwdev
     cd /usr/local/apache/htdocs/goldenPath/bosTau2/
     mv /cluster/data/bosTau2/chromosomes/ .
-     
+
+# LOAD GENEID PREDICTIONS (DONE galt 2005-10-19)
+    ssh kksilo
+    mkdir /cluster/data/bosTau2/bed/geneid
+    cd /cluster/data/bosTau2/bed/geneid
+    {
+    rm -f bosTau2.gtf
+    rm -f bosTau2.prot
+    set base = 'http://genome.imim.es/genepredictions/B.taurus/golden_path_200503/geneidv1.2/'
+    foreach f ( `htmlCheck getLinks $base | grep '[.]gtf$'` )
+      echo $f
+      set url = "$base$f"
+      echo "$url"
+      wget $url
+      set url = "$base$f:r.prot"
+      echo "$url"
+      wget $url
+    end
+    cat {c,s}*.gtf > bosTau2.gtf
+    cat {c,s}*.prot > bosTau2.prot
+    }
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    perl -wpe 's/^(>scaffold\S+|>chr\S+)/$1.1/' bosTau2.prot > geneid.fa
+    ssh hgwdev
+    cd /cluster/data/bosTau2/bed/geneid
+    ldHgGene -gtf -genePredExt bosTau2 geneid bosTau2.gtf
+    #Reading bosTau2.gtf
+    #Read 98183 transcripts in 399106 lines in 1 files
+    #  98183 groups 65717 seqs 1 sources 3 feature types
+    #98183 gene predictions
+    hgPepPred bosTau2 generic geneidPep geneid.fa
+    #Processing geneid.fa
+
+
