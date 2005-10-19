@@ -523,6 +523,15 @@ int differentWord(char *s1, char *s2);
 #define differentString(a,b) (strcmp(a,b))
 /* Returns FALSE if two strings same. */
 
+int differentStringNullOk(char *a, char *b);
+/* Returns 0 if two strings (either of which may be NULL)
+ * are the same.  Otherwise it returns a positive or negative
+ * number depending on the alphabetical order of the two
+ * strings.
+ * This is basically a strcmp that can handle NULLs in
+ * the input.  If used in a sort the NULLs will end
+ * up before any of the cases with data.   */
+
 #define sameString(a,b) (strcmp(a,b)==0)
 /* Returns TRUE if two strings same. */
 

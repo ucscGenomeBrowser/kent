@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.82 2005/08/22 07:03:48 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.83 2005/10/19 18:23:23 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -749,6 +749,25 @@ for (;;)
     if (c1 == 0)  /* Take care of end of string in both. */
 	return 0;
     }
+}
+
+int differentStringNullOk(char *a, char *b)
+/* Returns 0 if two strings (either of which may be NULL)
+ * are the same.  Otherwise it returns a positive or negative
+ * number depending on the alphabetical order of the two
+ * strings.
+ * This is basically a strcmp that can handle NULLs in
+ * the input.  If used in a sort the NULLs will end
+ * up before any of the cases with data.   */
+{
+if (a == b)
+    return FALSE;
+else if (a == NULL)
+    return -1;
+else if (b == NULL)
+    return 1;
+else
+    return strcmp(a,b) != 0;
 }
 
 boolean startsWith(char *start,char *string)
