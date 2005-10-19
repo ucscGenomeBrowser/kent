@@ -752,3 +752,28 @@ my $AGP_FILE="/cluster/data/monDom2/broad.mit.edu/assembly.agp";
     #	verify index:
     hgsql -e "show index from quality;" monDom2
     #	check that Cardinality is a number and is not NULL
+
+# BLASTZ SWAP FOR ZEBRAFISH (danRer3) (DONE, 2005-10-19, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
+
+    # do swap of danRer3 vs. monDom2 chain and net alignments to 
+    # create monDom2 vs. danRer3. see makeDanRer3.doc for details.
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.monDom2/chromsAndScafsRun
+    mkdir -p /san/sanvol1/scratch/monDom2/monDom2vsdanRer3Out
+    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
+       -bigClusterHub=pk \
+       -blastzOutRoot /san/sanvol1/scratch/monDom2/monDom2vsdanRer3Out \
+       -swap -chainMinScore=5000 >& doSwap.log &
+    # Start: Tue Oct 18 21:36 Finished: Oct 18 22:22
+# Parameters used for danRer3 vs monDom2 BLASTZ:
+# BLASTZ_H=2000
+# BLASTZ_Y=3400
+# BLASTZ_L=10000
+# BLASTZ_K=2200
+# BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+# BLASTZ_ABRIDGE_REPEATS=0
+# Add entries for danRer3 chains and net to trackDb.ra for monDom2 and
+# modify descriptions to describe the process using scaffolds for danRer3
+# chrNA and chrUn.
+
