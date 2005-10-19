@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.957 2005/10/17 00:14:42 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.958 2005/10/19 18:38:03 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14424,15 +14424,15 @@ if (extraTable != NULL && hTableExists(extraTable))
     while ((row = sqlNextRow(sr)) != NULL) 
 	{
 	minGeneInfoStaticLoad(row, &ginfo);
-        if (ginfo.gene != NULL && differentString(ginfo.gene,"gene"))
+        if (ginfo.gene != NULL && differentString(ginfo.gene,"none"))
             printf("<B>Gene: </B>%s<BR>\n", ginfo.gene);
-        if (ginfo.product != NULL && differentString(ginfo.product,"product"))
+        if (ginfo.product != NULL && differentString(ginfo.product,"none"))
             medlineLinkedLine("Product", ginfo.product, ginfo.product);
-        if (ginfo.note != NULL && differentString(ginfo.note,"note"))
+        if (ginfo.note != NULL && differentString(ginfo.note,"none"))
             printf("<B>Note: </B>%s<BR>\n", ginfo.note);
-        if (ginfo.protein != NULL && differentString(ginfo.protein,"protein"))
+        if (ginfo.protein != NULL && differentString(ginfo.protein,"none"))
             printf("<B>Protein: </B>%s<BR>\n", ginfo.protein);
-        if (ginfo.ec != NULL && differentString(ginfo.ec,"EC_number"))
+        if (ginfo.ec != NULL && differentString(ginfo.ec,"none"))
             {
             printf("<B>EC (Enzyme Commission) number:</B> "
                "<A HREF=\"http://us.expasy.org/enzyme/%s\" "
