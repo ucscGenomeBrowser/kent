@@ -807,6 +807,7 @@ slFreeList(&genes);
 doDefault(conn, FALSE);
 }
 
+
 void dispatch()
 /* Set up a connection to database and dispatch control
  * based on hgpDo type var. */
@@ -826,7 +827,8 @@ else
     {
     char *oldListSpec = hashFindVal(oldCart, hgpListSpec);
     char *newListSpec = cartOptionalString(cart, hgpListSpec);
-    doDefault(conn, !sameString(oldListSpec, newListSpec));
+    boolean isNew = differentStringNullOk(oldListSpec, newListSpec);
+    doDefault(conn, isNew);
     }
 cartRemovePrefix(cart, hgpDoPrefix);
 }
