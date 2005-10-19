@@ -649,7 +649,6 @@ identifier danRerBacExtName
     $danRer.bacCloneXRef.name dupeOk
     $danRer.bacEndPairs.name
     $danRer.bacEndSingles.name
-    $danRer.bacEndPairsBad.name minCheck=0.70
 
 identifier bacAccession typeOf=genbankAccession external=genbank
 "Genbank accession of a sequenced BAC (~150kb of genomic sequence)."
