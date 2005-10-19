@@ -63,7 +63,7 @@ picExt =".jpg";
 wCnt = new Array(numLevels);
 hCnt = new Array(numLevels);
 
-zoomMode = "in";  // in out and center, rotate on user pressing 'm' key
+zoomMode = "in";  // in and out (center removed for now), rotate on user pressing 'm' key
 z = 1;  // accumulated zoom factor at level 0
 wSmallDelta = hSmallDelta =  50;
 hSmallDelta = hSmallDelta =  50;
@@ -596,8 +596,8 @@ var character = String.fromCharCode(code);
 
 if (character=='m') {  // m mode cycle
     if (zoomMode=="in") 
-	zoomMode="center";
-    else if (zoomMode=="center") 
+    //	zoomMode="center";
+    //else if (zoomMode=="center") 
 	zoomMode="out";
     else if (zoomMode=="out") 
 	zoomMode="in";
@@ -842,7 +842,7 @@ return false;
 }
 
 function changeMouse(newcursor) {
-if ((newcursor=="in") || (newcursor=="center") || (newcursor=="out")) {
+if ((newcursor=="in") || (newcursor=="out")){  // || (newcursor=="center")) {
     zoomMode = newcursor;
     setMouseCursor();
 }    
@@ -854,19 +854,19 @@ var zmindex = 0;
 if (zoomMode=="in") {
     cursor = "crosshair";
     zmindex = 0;
-} else if (zoomMode=="center") {
-    cursor = "default";
-    zmindex = 1;
+//} else if (zoomMode=="center") {
+//    cursor = "default";
+//    zmindex = 1;
 } else if (zoomMode=="out") {
     cursor = "pointer";
-    zmindex = 2;
+    zmindex = 1; // 2;
 }    
 document.body.style.cursor=cursor;
 
 if (typeof(parent.parent) != 'undefined')
  if (typeof(parent.parent.controls) != 'undefined')
   if (typeof(parent.parent.controls.document) != 'undefined')
-	parent.parent.controls.document.mainForm.ZM[zmindex].checked=true;
+	parent.parent.controls.document.mainForm.hgp_zm[zmindex].checked=true;
 }
 
 function mouseOut(e) {

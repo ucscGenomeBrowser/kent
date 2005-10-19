@@ -354,7 +354,7 @@ if (imageCount > 0)
 	printf("<TR>");
 	printf("<TD>");
 	printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
-	    "onclick=\"parent.controls.document.mainForm.ZM[0].checked=true;return true;\" "
+	    "onclick=\"parent.controls.document.mainForm.hgp_zm[0].checked=true;return true;\" "
 	    ">", hgVisiGeneCgiName(), 
 	    sidUrl, hgpId, id, hgpDoImage);
 	printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
@@ -679,11 +679,8 @@ cgiMakeButton(hgpDoSearch, "search");
 
 
 printf(" Zoom: ");
-printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('in');return true;\" CHECKED>in ");
-#ifdef UNUSED
-printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('center');return true;\">center ");
-#endif /* UNUSED */
-printf("<INPUT TYPE=RADIO NAME=ZM onclick=\"parent.image.bigImg.changeMouse('out');return true;\">out ");
+printf("<INPUT TYPE=RADIO NAME=hgp_zm onclick=\"parent.image.bigImg.changeMouse('in');return true;\" CHECKED>in ");
+printf("<INPUT TYPE=RADIO NAME=hgp_zm onclick=\"parent.image.bigImg.changeMouse('out');return true;\">out ");
 printf("\n");
 
 printf("</FORM>\n");
