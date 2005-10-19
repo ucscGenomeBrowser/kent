@@ -29,7 +29,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.166 2005/04/13 06:25:54 markd Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.167 2005/10/19 21:48:53 fanhsu Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -345,6 +345,58 @@ hFreeConn(&conn);
 return ok;
 }
 
+static boolean findKnownGeneDescLike(char *spec, struct hgPositions *hgp,
+				 char *tableName)
+/* Look for position in gene prediction table. */
+{
+struct sqlConnection *conn;
+struct sqlResult *sr = NULL;
+struct dyString *query;
+char **row;
+boolean ok = FALSE;
+struct hgPosTable *table = NULL;
+struct hgPos *pos = NULL;
+int rowOffset;
+char *localName;
+
+localName = spec;
+if (!hTableExists(tableName))
+    return FALSE;
+rowOffset = hOffsetPastBin(NULL, tableName);
+conn = hAllocConn();
+query = newDyString(256);
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s, kgXref "
+	       "WHERE description LIKE '%%%s%%' and kgId=name",
+	       tableName, localName);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (ok == FALSE)
+        {
+	ok = TRUE;
+	AllocVar(table);
+	dyStringClear(query);
+	table->description = cloneString("Known Genes");
+	dyStringPrintf(query, "%s", tableName);
+	table->name = cloneString("knownGene");
+	slAddHead(&hgp->tableList, table);
+	}
+
+    AllocVar(pos);
+    pos->chrom = hgOfficialChromName(row[0]);
+    pos->chromStart = atoi(row[1]);
+    pos->chromEnd = atoi(row[2]);
+    pos->name = cloneString(row[3]);
+    pos->browserName = cloneString(row[3]);
+    slAddHead(&table->posList, pos);
+    }
+if (table != NULL)
+    slReverse(&table->posList);
+freeDyString(&query);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ok;
+}
 static boolean findKnownGeneLike(char *spec, struct hgPositions *hgp,
 				 char *tableName)
 /* Look for position in gene prediction table. */
@@ -432,7 +484,14 @@ else
 	    }
 	else
 	    {
-	    return(findKnownGeneLike(spec, hgp, tableName));
+	    if (findKnownGeneLike(spec, hgp, tableName) == TRUE)
+	    	{
+		return(TRUE);
+		}
+	    else
+	    	{
+	    	return(findKnownGeneDescLike(spec, hgp, tableName));
+	    	}
 	    }
 	}
     }
