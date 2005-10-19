@@ -1437,19 +1437,26 @@ done
     #	they were pretty sparse
 
 # GIS RNA PET (2005-06-03 angie)
+# Data updated (previous data was mistakenly in hg17 coords) (2006-10-19 kate)
     # Data saved to:
-    cd /cluster/data/encode/GIS/rna5fu/2005-05-31
-    ln -s 2005-05-31 /cluster/data/encode/GIS/rna5fu/latest
+    #cd /cluster/data/encode/GIS/rna5fu/2005-05-31
+    #ln -s 2005-05-31 /cluster/data/encode/GIS/rna5fu/latest
+    cd /cluster/data/encode/GIS/rna/2005-10-31
+
     # Jim requested colored bed.  Names are of the form $id-$mapCount-$atCount.
     # Coloring scheme (inspired by Chuck's transcriptome track):
     #  ($mapCount == 1 && $atCount > 1):  dark blue
     #  ($mapCount == 1 && $atCount == 1): light blue
     #  ($mapCount > 1  && $atCount > 1):  medium brown
     #  ($mapCount > 1  && $atCount == 1): light brown
-    foreach f (*.bed)
-      set cellType = `echo $f:r | sed -e 's/GIS-PET-//'`
-      tail +2 $f \
-      | perl -wpe \
+    # Angie's process, slightly modified (kate)
+cat > load.hg16.csh << 'EOF'
+    foreach f (lab/HCT116-hg16.bed lab/MCF7-hg16.bed)
+      set cellType = `echo $f:t:r | sed -e 's/-hg16//'`
+      echo $cellType
+      set table = encodeGisRnaPet$cellType
+      grep '^chr' $f | \
+      perl -wpe \
      'chomp; @w = split; \
       if ($w[3] =~ /\d+-(\d+)-(\d+)/) { \
         ($mc, $ac) = ($1, $2, $3); \
@@ -1457,9 +1464,12 @@ done
         elsif ($mc > 1) { $w[8] = ($ac > 1) ? "180,120,0" : "225,150,0"; } \
         else { die "mc $mc" } \
       } else { die "parse"; } \
-      $_ = join(" ", @w) . "\n";' \
-      | hgLoadBed hg16 encodeGisRnaPet$cellType stdin
+      $_ = join(" ", @w) . "\n";'  > $table.bed
+      hgLoadBed hg16 $table $table.bed
     end
+'EOF'
+csh load.hg16.csh >&! load.hg16.log
+    rm *.bed
 
 
 # UCSD/LI Nimblegen whole genome TAF1 & condensed validation (2005-06-02 angie)
@@ -2629,7 +2639,7 @@ done
 # Boston University ORChID track - (DONE - 2005-06-09 - Hiram)
 #	data developer contact:  Jay Greenbaum jj@bu.edu
     ssh hgwdev
-    cd /cluster/data/encode/BU/2005-06-09
+    cd /cluster/data/encode/BU/orchid/2005-06-09
     wget --timestamping "http://orchid.bu.edu/encode/tracks/description.html" \
         -O description.html
     wget --timestamping "http://orchid.bu.edu/encode/tracks/oh_cleavage.wig" \
@@ -3402,9 +3412,6 @@ group encodeTxLevels
 visibility hide
 type bed 4 .
 priority 41
-<<<<<<< makeEncodeHg16.doc
->>>>>>> 1.80
-=======
 
 #########################################################################
 #  Gencode Unannotated Region Classification (DONE - 2005-08-02 - Hiram)
@@ -3620,4 +3627,3 @@ zcat allintronsProximal.bed.gz | hgLoadBed -strict hg16 \
     #	track encodeWorkshopSelections
     #	shortLabel Consens Unann TF
     #	longLabel ENCODE Consensus Unannotated Transfrags
->>>>>>> 1.81
