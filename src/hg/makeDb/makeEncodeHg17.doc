@@ -46,17 +46,20 @@ exit
 
     ssh kolossus
     cd /cluster/data/encode/convertHg17
+    mkdir regions
+    cd regions
     /cluster/data/encode/bin/scripts/encodeSequences.pl -upper \
-        regions.txt /iscratch/i/hg17/nib  > hg17.fa
+        ../regions.txt /iscratch/i/hg17/nib  > hg17.fa
     /cluster/data/encode/bin/scripts/encodeSequences.pl -masked \
-        regions.txt /iscratch/i/hg17/nib  > hg17.msk.fa
+        ../regions.txt /iscratch/i/hg17/nib  > hg17.msk.fa
     faSize detailed=on hg17.fa > hg17_count.txt
     gzip *.fa
     md5sum *.fa.gz > md5sum.txt
+    # copy regions/README.txt from hg16 and edit
 
     ssh hgwdev
-    cd /cluster/data/encode/convertHg17
-    cp hg17_count.txt md5sum.txt hg17.fa.gz hg17.msk.fa.gz /usr/local/apache/htdocs/goldenPath/hg17/encode/regions
+    cd /usr/local/apache/htdocs/goldenPath/hg17/encode
+    ln -s /cluster/data/encode/convertHg17/regions .
 
     # October MSA freeze
     ssh hgwdev
@@ -864,12 +867,12 @@ cat > load.csh << 'EOF'
 
     wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/README
     wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_genes_CHR_coord.gtf
-    wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_coding_CHR_coord.gtf
     wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_putative_CHR_coord.gtf
     wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_pseudogenes_CHR_coord.gtf
 
-    cat lab/44regions_genes_CHR_coord.gtf lab/44regions_coding_CHR_coord.gtf | \
-        ldHgGene -gtf -genePredExt hg17 encodeGencodeKnown stdin
+    ldHgGene -gtf -genePredExt hg17 encodeGencodeKnown \
+        lab/44regions_genes_CHR_coord.gtf
+
             # Read 2637 transcripts in 76521 lines in 1 files
             # 2637 groups 21 seqs 13 sources 5 feature types
             # 2608 gene predictions
@@ -889,11 +892,11 @@ cat > load.csh << 'EOF'
         # 25421
     # ignore "not tested" introns
     grep intron lab/*.gtf | grep -v not_tested | wc -l
-        # 509
+        # 483
     # NOTE: need verision of loader with new status value added
     cat lab/*.gtf | grep -v not_tested | sed -e 's/-intron/-/g' | \
         ~/bin/i386/ldGencodeIntron hg17 encodeGencodeIntronOct stdin
-            # 509 introns in 1 files
+            # 483 introns in 1 files
 
     # create gene class table
     sed 's/gencodeGeneClass/gencodeGeneClassOct/' \
@@ -908,7 +911,12 @@ cat > load.csh << 'EOF'
     echo "LOAD DATA LOCAL INFILE 'gencodeGeneClassOct.tab' into table gencodeGeneClassOct" | hgsql hg17
 
 
-    
+##########################################################################
+# NHGRI DNaseI HS (kate)
+#       Submitter: Greg Crawford
+#       2 datasets:  CD4, GM06690 with different methodology from previous
 
-
-
+    cd /cluster/data/encode/NHGRI
+    mkdir -p 2005-10-11/lab
+    cd 2005-10-11/lab
+    # copy 2 data files from FTP site
