@@ -3661,14 +3661,38 @@ close MARKERS;
     # so use the HoxD55.q matrix in for blastz.
     # blastz requires lineage-specific repeats but there are none
     # available between these two fish species 
-    ssh pk
-    mkdir -p /cluster/data/danRer3/bed/blastz.tetNig1.2005-09-16
+    
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/blastz.tetNig1.2005-10-11
     cd /cluster/data/danRer3/bed
-    ln -s blastz.tetNig1.2005-09-16 blastz.tetNig1
+    ln -s blastz.tetNig1.2005-10-11 blastz.tetNig1
     cd /cluster/data/danRer3/bed/blastz.tetNig1
-    mkdir -p /san/sanvol1/scratch/danRer3/chromNib
-    cp /cluster/bluearc/danRer3/nib/chr[0-9M]*nib \
-       /san/sanvol1/scratch/danRer3/chromNib/
+    # create a 2bit file for danRer3 with all chroms (1-25 and M) and the
+    # scaffolds for NA and Un if it does not exist already
+    cd /cluster/data/danRer3
+    faToTwoBit [1-9]/chr*.fa [12][0-9]/chr*.fa M/chrM.fa \
+               Un/scaffoldUn.fa NA/scaffoldNA.fa danRer3ChrUnNAScafs.2bit
+    ssh hgwdev
+    # move the 2 bit file for danRer3 to the san if not there already
+    mkdir -p /san/sanvol1/scratch/danRer3/
+    mv /cluster/data/danRer3/danRer3ChrUnNAScafs.2bit \
+       /san/sanvol1/scratch/danRer3/
+    # also copy over the danRer3 2 bit file for all chroms and the
+    # lift file for NA and Un scaffolds to chrNA and chrUn.
+    cp /cluster/data/danRer3/danRer3.2bit /san/sanvol/scratch/danRer3/
+    cp /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft \
+       /san/sanvol1/scratch/danRer3/
+
+    # also copy over tetraodon sequences to the san
+    mkdir -p /san/sanvol1/scratch/tetNig1/contigs
+    cp /cluster/bluearc/tetNig1/contigs/tetNig1ChrContigsRandomScafs.2bit \
+    # see makeTetNig1.doc for making tetNig1ChrContigsRandomScafs.2bit
+    # make output and run directories
+    mkdir -p /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun
+    mkdir -p /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsOut
+    cd /cluster/data/danRer3/bed/blastz.tetNig1
+    ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun
+    ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsOut
     # also copy over tetraodon sequences to the san
     mkdir -p /san/sanvol1/scratch/tetNig1/contigs
     cp /cluster/bluearc/tetNig1/contigs/tetNig1ChrContigsRandomScafs.2bit \
@@ -3685,16 +3709,8 @@ close MARKERS;
 # merge together all chains from above.
     # get all contigs from mapped ordered chroms and make 2bit file
     # see makeTetNig1.doc
-    # try again on pk
-    # copy chrom nibs to bluearc
-    cd /cluster/data/danRer3/bed/blastz.tetNig1
-    mkdir -p /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsRun
-    ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsRun
-    # create blastz output directory
-    mkdir -p /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsOut
-    ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsOut
 
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun
 cat << '_EOF_' > DEF
 # zebrafish (danRer3) vs. tetraodon (tetNig1)
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
@@ -3707,17 +3723,20 @@ BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 #BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
 BLASTZ_ABRIDGE_REPEATS=0
 
-# TARGET - zebrafish (danRer3) soft-masked chr1-25 and chrM
-SEQ1_DIR=/san/sanvol1/scratch/danRer3/chromNib
+# TARGET - zebrafish (danRer3) soft-masked chr1-25 and chrM and scaffolds
+SEQ1_DIR=/san/sanvol1/scratch/danRer3/danRer3.2bit
+SEQ1_CTGDIR=/san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit
+SEQ1_LIFT=/san/sanvol1/scratch/danRer3/liftNAandUnScaffoldsToChrom.lft
 SEQ1_RMSK=
 # lineage-specific repeats
 # we don't have that information for these species
 SEQ1_SMSK=
 SEQ1_FLAG=
+SEQ1_LIMIT=30
 SEQ1_IN_CONTIGS=0
-# 0.5 Mb chunk for target
+# 0.5 Mb chunk for target with 5 kb overlap
 SEQ1_CHUNK=500000
-SEQ1_LAP=500
+SEQ1_LAP=5000
 
 # QUERY - Tetraodon (tetNig1)
 # soft-masked 500 kb contigs for chroms, scaffolds for randoms
@@ -3729,63 +3748,82 @@ SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=1000000000
 SEQ2_LAP=0
 
-BASE=/san/sanvol1/scratch/danRer3/blastzTetNig1/chromsRun
+BASE=/san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun
 
 DEF=$BASE/DEF
 RAW=$BASE/raw
 CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
+SEQ1_CTGLEN=$BASE/chromsUnNAScafs.sizes
 SEQ2_LEN=$BASE/S2.len
+TMPDIR=/scratch/tmp
 
 #DEBUG=1
 '_EOF_'
     # << this line keeps emacs coloring happy
     chmod +x DEF
-    ssh pk
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun
-   
-    cp /cluster/data/danRer3/chrom.sizes ./S1.len 
+    cp /cluster/data/danRer3/chrom.sizes ./S1.len
+    twoBitInfo /san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit \
+               chromsUnNAScafs.sizes
     twoBitInfo \
 /san/sanvol1/scratch/tetNig1/contigs/tetNig1ChrContigsRandomScafs.2bit ./S2.len
     nice /cluster/bin/scripts/doBlastzChainNet.pl \
-         -bigClusterHub=pk \
-         -smallClusterHub=pk \
-         -workhorse=pk \
-         -fileServer=kkstore02 \
-         -stop cat \
-         -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsOut \
-         -chainMinScore=5000 \
-         `pwd`/DEF >& do.log &
-# PID 11274 Start: Sat Sep 17 17:58 Finish: Mon Sep 19 13:12
-# last 10 jobs got stuck, ssh'd to machines to kill processes without a proper 
-# name e.g. 1-17:24:24 and then parasol restarted these.
-    # doCatRun.csh crashed as too many files for ls for the tParts.lst 
-    # so change this ls line to:
-    # foreach f (/san/sanvol1/scratch/danRer3/blastzTetNig1/chromsOut/psl/*)
-    # ls -1d $f | sed -e 's@/$@@' >> tParts.lst
-    # end
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun/run.cat
-    nohup nice doCatRun.csh >& catRun.log &
-    # Took 3 minutes
-    # one job crashed and failed 4 times. using a file called chr18.nib:c
-    # this is not a directory but a file. total of 2426 jobs here, 
-    # should be 2425.
-    # check that all output directories and files for chr18 exist.
-    # also checked a few alignments from this file and found them in other
-    # psl files for chr18 so maybe this is an old temporary file so can
-    # remove it.
-    # next step requires a run.time file here
-    /cluster/bin/i386/para time > run.time
-    # liftUp contig files for tetraodon query: 
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun
+  -bigClusterHub=pk -smallClusterHub=pk -workhorse=pk -stop cat \
+  -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsOut \
+  `pwd`/DEF >& do.log &
+   # PID 32339  Start: Tue Oct 11 14:55
+   # use Hiram's script to kill 4 empty shell commands on Thurs Oct 13th
+   # /cluster/bin/scripts/findEmpty.sh -r to find
+   # /cluster/bin/scripts/findEmpty.sh -K to kill
+# Fri Oct 14 10:41
+# Checking finished jobs
+# crashed: 32
+# running: 20
+# ranOk: 3716
+# failed 4 times: 32
+# total jobs in batch: 3768
+# check problems:
+
+# 141 jobs crashed on host: kkr10u19.kilokluster.ucsc.edu
+# Just removed this machine with parasol remove machine as over 9000 jobs 
+# crashed for opossum run on this machine.
+# run again with para push -retries=20
+# By 16:00 on Fri Oct 14, all jobs finished but 2 failed 4 times so repush
+# with para push -retries=20.
+# para time
+# Completed: 3768 of 3768 jobs
+# CPU time in finished jobs:   12465019s  207750.32m  3462.51h  144.27d  0.395 y
+# IO & Wait Time:                873594s   14559.90m   242.66h   10.11d  0.028 y
+# Average job time:                3540s      59.00m     0.98h    0.04d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           19777s     329.62m     5.49h    0.23d
+# Submission to last job:        264857s    4414.28m    73.57h    3.07d
+    ssh pk
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun/run.blastz
+    para time > run.time
+    # run doBlastzChainNet.pl to continue with cat step since the script
+    # crashed when some of the jobs failed 4 times.
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun
+    nice /cluster/bin/scripts/doBlastzChainNet.pl \
+  -bigClusterHub=pk -smallClusterHub=pk -workhorse=pk -continue cat -stop cat \
+  -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsOut \
+  `pwd`/DEF >& doCat.log &
+    # Took about 7 minutes.
+    # Now need to liftUp the contigs for tetNig1 to chrom-level but
+    # not the scaffolds. All the scaffolds will be lifted after the 
+    # chaining step.
+    ssh kolossus
+    # liftUp contigs for tetraodon query: 
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun
     mv pslParts pslPartsNotLifted
-    mkdir /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsRun/liftedPsl
-    set dir=/san/sanvol1/scratch/danRer3/blastzTetNig1/chromsRun
+    mkdir /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun/liftedPsl
+    set dir=/san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun
     # use carry for "how" as this will carry items not in liftSpec to dest
     # file without translation. lift file is only for contigs not scaffolds.
     # use nohead option otherwise psl header added at the top of each file.
     # need to add the blastz params header
-    zcat ./pslPartsNotLifted/chrM.nib:chrM:0-16596.psl.gz | head -3 > header
+    zcat ./pslPartsNotLifted/part958.lst.psl.gz | head -3 > header
 
     # first lift to pseudo-contig level and then to chroms
   foreach f (./pslPartsNotLifted/*.psl.gz) 
@@ -3805,53 +3843,16 @@ SEQ2_LEN=$BASE/S2.len
        mv ${f}.gz $dir/pslParts/
     end
     # carry on with doBlastzChainNet.pl from the chaining step
-    ssh pk
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun
-    # need to make a new 2bit file of tetNig1 chroms plus scaffolds
-    # see makeTetNig1.doc
-    # tetNig1ChromsRandomScafs.2bit has full chroms for ordered chroms
-    # and randoms as scaffolds
-    cp DEF DEF.contigsandscafs
-    mkdir -p /san/sanvol1/scratch/tetNig1/chromsAndScafs
-    cp /cluster/bluearc/tetNig1/twoBit/tetNig1ChromsRandomScafs.2bit \
-      /san/sanvol1/scratch/tetNig1/chromsAndScafs/
-    # edit DEF to have this path and file name for SEQ2
-    mv S2.len S2.len.contigsandscafs
-    twoBitInfo \
-/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit \
-    ./S2.len
-    
-    nice /cluster/bin/scripts/doBlastzChainNet.pl \
-         -bigClusterHub=pk \
-         -smallClusterHub=pk \
-         -workhorse=pk \
-         -fileServer=kolossus \
-         -continue chainRun \
-         -stop chainMerge \
-         -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsOut \
-         -chainMinScore=5000 \
-         `pwd`/DEF >& doChains.log &
-    # Took 1 minute to run
-    # need to lift up the scaffolds for tetNig1 and scaffolds for danRer3
-    # to chrom level.
-
-
-    # need to run danRer3 scaffolds against tetNig1 contigs and scaffolds
-    mkdir /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsRun
-    mkdir /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut
-    cd /cluster/data/danRer3/bed/blastz.tetNig1
-    ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsRun
-    ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun
-    # copy over danRer3 scaffolds 2bit file
-    mkdir /san/sanvol1/scratch/danRer3/scaffoldsNAandUn
-    cp /cluster/bluearc/scratch/danRer3/danRer3NAandUnScaf.2bit \
-       /san/sanvol1/scratch/danRer3/scaffoldsNAandUn/
-
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun
+    cp DEF DEF.tetraContigs
+    # edit DEF file so that tetNig1 now has a 2bit file of the chroms and 
+    # scaffolds for randoms in the CTGDIR and also there is a lift file
+    # for the scaffolds.
 cat << '_EOF_' > DEF
 # zebrafish (danRer3) vs. tetraodon (tetNig1)
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
-
+                                                                                
 ALIGN=blastz-run
 BLASTZ=blastz.v7.x86_64
 BLASTZ_M=50
@@ -3859,240 +3860,89 @@ BLASTZ_H=2500
 BLASTZ_Q=/cluster/data/blastz/HoxD55.q
 #BLASTZ_ABRIDGE_REPEATS=1 if SMSK is specified
 BLASTZ_ABRIDGE_REPEATS=0
-
-# TARGET - zebrafish (danRer3) soft-masked scaffolds for NA and Un
-SEQ1_DIR=/san/sanvol1/scratch/danRer3/scaffoldsNAandUn/danRer3NAandUnScaf.2bit
+                                                                                
+# TARGET - zebrafish (danRer3) soft-masked chr1-25 and chrM and scaffolds
+SEQ1_DIR=/san/sanvol1/scratch/danRer3/danRer3.2bit
+SEQ1_CTGDIR=/san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit
+SEQ1_LIFT=/san/sanvol1/scratch/danRer3/liftNAandUnScaffoldsToChrom.lft
 SEQ1_RMSK=
 # lineage-specific repeats
 # we don't have that information for these species
 SEQ1_SMSK=
 SEQ1_FLAG=
+SEQ1_LIMIT=30
 SEQ1_IN_CONTIGS=0
-# 0.5 Mb chunk for target
+# 0.5 Mb chunk for target with 5 kb overlap
 SEQ1_CHUNK=500000
-SEQ1_LAP=500
-
+SEQ1_LAP=5000
+                                                                                
 # QUERY - Tetraodon (tetNig1)
-# soft-masked 500 kb contigs for chroms, scaffolds for randoms
-SEQ2_DIR=/san/sanvol1/scratch/tetNig1/contigs/tetNig1ChrContigsRandomScafs.2bit
+# soft-masked chroms, and scaffolds for randoms
+SEQ2_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
+SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.lft
 SEQ2_RMSK=
 SEQ2_SMSK=
 SEQ2_FLAG=
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=1000000000
 SEQ2_LAP=0
-
-BASE=/san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsRun
-
+                                                                                
+BASE=/san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun
+                                                                                
 DEF=$BASE/DEF
 RAW=$BASE/raw
 CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
+SEQ1_CTGLEN=$BASE/chromsUnNAScafs.sizes
 SEQ2_LEN=$BASE/S2.len
-
+SEQ2_CTGLEN=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.sizes
+TMPDIR=/scratch/tmp
+                                                                                
 #DEBUG=1
 '_EOF_'
-    # << this line keeps emacs coloring happy
-    chmod +x DEF
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun
-   
+    # if it does not exist already, make the file of sizes for the tetNig1
+    # chroms and scaffolds.
     twoBitInfo \
-       /san/sanvol1/scratch/danRer3/scaffoldsNAandUn/danRer3NAandUnScaf.2bit \
-       ./S1.len
-
-    twoBitInfo \
-       /san/sanvol1/scratch/tetNig1/contigs/tetNig1ChrContigsRandomScafs.2bit \
-       ./S2.len
+/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit \
+    /san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.sizes
+    # then run doBlastzChainNet.pl script again
     nice /cluster/bin/scripts/doBlastzChainNet.pl \
          -bigClusterHub=pk \
          -smallClusterHub=pk \
          -workhorse=pk \
          -fileServer=kolossus \
-         -stop cat \
-        -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut \
+         -continue chainRun \
          -chainMinScore=5000 \
-         `pwd`/DEF >& do.log &
-    # PID: 14142   Start: Mon Sep 19 21:15 Finish: Sep 22 15:18
-    # doBlastzChainNet.pl script failed as one job failed 4 times 
-    #  and 4 were unsuccessful so repush manually (para push). This pushed
-    # 4 jobs but not the one that crashed 4 times. To restart this use:
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun/run.blastz
-    /cluster/bin/i386/para push -retries=10
-    # found that output file exists for crashed job so it need to be
-    # removed to restart the job again.
-    # need to remove psl/part608.lst/part608.lst_part000.lst.psl
-    # and then run job again.
-    mv /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut/psl/part608.lst/part608.lst_part000.lst.psl /san/sanvol1/scratch/danRer3/blastzTetNig1/
-    /cluster/bin/i386/para push -retries=10
-    # then the job ran again
-    /cluster/bin/i386/para time > run.time
-    # need to cat files as in the doBlastzChainNet.pl script
-    ssh pk 
-    mkdir /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun/run.cat
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun/run.cat
-    cat << _EOF_ > cat.csh
-#!/bin/csh -ef
-cat \$1/*.psl | gzip -c > \$2
-_EOF_
-    chmod +x cat.csh
-    cat << _EOF_ > doCatRun.csh
-#!/bin/csh -efx
-# It sets up and performs a small cluster run to concatenate all files in
-# each subdirectory of /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut
-# into a per-target-chunk file.
-# This script will fail if any of its commands fail.
-                                                                                
-cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun/run.cat
-foreach f (/san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut/psl/*)
-   ls -1d $f | sed -e 's@/\$@\@' >> tParts.lst
-end
-chmod a+x cat.csh
-/parasol/bin/gensub2 tParts.lst single gsub jobList
-mkdir ../pslParts
-/parasol/bin/para make jobList
-/parasol/bin/para check
-/parasol/bin/para time > run.time
-cat run.time
-_EOF_
-    chmod +x doCatRun.csh
-    cat << _EOF_ > gsub
-#LOOP
-./cat.csh \$(path1) {check out exists ../pslParts/\$(file1).psl.gz }
-#ENDLOOP
-_EOF_
-    doCatRun.csh >& cat.log &
-    # liftUp contig files for tetraodon query: 
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun
-    mv pslParts pslPartsNotLifted
-    mkdir /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsRun/liftedPsl
-    set dir=/san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsRun
-    # use carry for "how" as this will carry items not in liftSpec to dest
-    # file without translation. lift file is only for contigs not scaffolds.
-    # use nohead option otherwise psl header added at the top of each file.
-    # need to add the blastz params header
-    zcat ./pslPartsNotLifted/part644.lst.psl.gz | head -3 > header
-    # if file is empty, then liftUp gets stuck reading commented lines
-    # so make a list of files which contain alignment data and not just
-    # commented lines starting with # (blastz parameters)
-    foreach f (./pslPartsNotLifted/*.psl.gz)
-        zcat $f | awk '{if ($1 !~ /#/) print "'$f'";}' >> pslParts.lst
-    end
-    sort pslParts.lst | uniq > pslPartsNotEmpty.lst 
-    # first lift to pseudo-contig level and then to chroms
-    foreach f (`cat pslPartsNotEmpty.lst`) 
-       set g=$f:r:t
-       zcat $f | liftUp -pslQ -nohead $dir/liftedPsl/${g}.lifted.psl \
-  /cluster/data/tetNig1/bed/blastzSelf/contigSeqs/500kbcontigs.lft carry stdin
-       liftUp -pslQ -nohead $dir/liftedPsl/${g}.lifted2.psl \
-  /cluster/data/tetNig1/jkStuff/liftAll.lft carry $dir/liftedPsl/${g}.lifted.psl
-       cat header $dir/liftedPsl/${g}.lifted2.psl > $dir/liftedPsl/${g}
-       rm $dir/liftedPsl/${g}.lifted*
-    end
-    # check a couple of files and see that they have the correct number of lines
-    # then move the contents of this directory to pslParts
-    mv liftedPsl pslParts
-    # then carry on with chaining for these danRer3 NA and Un scaffolds
-    # tetNig1ChromsRandomScafs.2bit has full chroms for ordered chroms
-    # and randoms as scaffolds
-    cp DEF DEF.contigsandscafs
-    # copy over 2bit file with chroms and random scafs for tetNig1 if not
-    # there already.
-    mkdir -p /san/sanvol1/scratch/tetNig1/chromsAndScafs
-    cp /cluster/bluearc/tetNig1/twoBit/tetNig1ChromsRandomScafs.2bit \
-      /san/sanvol1/scratch/tetNig1/chromsAndScafs/
-    # edit DEF to have this path and file name for SEQ2
-    mv S2.len S2.len.contigsandscafs
-    twoBitInfo \
-/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit \
-    ./S2.len
-    
-    nice /cluster/bin/scripts/doBlastzChainNet.pl \
-       -bigClusterHub=pk \
-       -smallClusterHub=pk \
-       -workhorse=pk \
-       -fileServer=kolossus \
-       -continue chainRun \
-       -stop chainMerge \
-       -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzTetNig1/scaffoldsOut\
-       -chainMinScore=5000 \
-       `pwd`/DEF >& doChains.log &
-    # Took 2 minutes
-    # Merge these chains with those for danRer3 chroms vs tetNig1, then
-    # need to lift up the scaffolds for tetNig1 and scaffolds for danRer3
-
-    # The log file says it is finished. chainSplit was not run as SEQ1 has
-    # is not < 100 sequences. Need to do liftUp before running chainSplit.
-    # first do lift up for the tetNig1 randoms for the danRer3 chroms run
-    ssh kolossus
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun/axtChain
-    # Lifting up chains:
-    # first for tetNig1 in the danRer3 chrom run
-    mkdir liftedChain
-    foreach f (chain/*.chain)
-       set c=$f:t:r
-       echo $c
-       liftUp -chainQ liftedChain/${c}.lifted.chain \
-             /cluster/data/tetNig1/jkStuff/chromsAndScafs.lft carry $f
-    end
-    # lift up for danRer3 scaffolds run.
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/scaffoldsRun/axtChain
-    # first lift tetNig1 query, there is no split chains here as there
-    # were not < 100 sequences for the target.
-    zcat danRer3.tetNig1.all.chain.gz | liftUp -chainQ \
-          danRer3.tetNig1.liftedQall.chain \
-          /cluster/data/tetNig1/jkStuff/chromsAndScafs.lft carry stdin
-    # then liftUp target coords for danRer3 
-    liftUp danRer3.tetNig1.liftedQandTall.chain \
-      /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft \
-      carry danRer3.tetNig1.liftedQall.chain
-    # gzip lifted danRer3.tetNig1 chain file
-    gzip danRer3.tetNig1.liftedQandTall.chain
-    # merge the chains from the danRer3 chrom run and the danRer3
-    # NA and Un scaffolds run. chains are sorted by score and IDs are uniqued.
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun/axtChain
-    mv danRer3.tetNig1.all.chain.gz danRer3.tetNig1.chroms.chain.gz
-    set blastz=/cluster/data/danRer3/bed/blastz.tetNig1
-    # copy over lifted chains for danRer3 scaffolds vs tetNig1 
-    cp $blastz/scaffoldsRun/axtChain/danRer3.tetNig1.liftedQandTall.chain.gz \ 
-       ./liftedChain/
-    gunzip ./liftedChain/*.gz
-    nice chainMergeSort liftedChain/*.chain \
-         | nice gzip -c > danRer3.tetNig1.all.chain.gz
-    # then split up into chains again
-    mv chain chromChain
-    mkdir chain
-    nice zcat danRer3.tetNig1.all.chain.gz | chainSplit chain stdin
-    # then pick up the doBlastzChainNet.pl script at the net step.
+         `pwd`/DEF >& doChains.log &
+    # Start: Fri Oct 14 17:47 Finished: Oct 14 17:57
+    # crashed as one job failed after 4 retries, problem is that 
+    # part958.lst.psl.gz is not recognized as a psLayout file. It is empty
+    # except for parameter comment lines so it can be ignored.
+    ssh pk
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun/axtChain/run/
+    para time > run.time
     ssh hgwdev
-    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsRun
-    cp DEF DEF.chroms
-    mkdir /san/sanvol1/scratch/tetNig1/nib
-    cp /cluster/bluearc/tetNig1/nib/*.nib /san/sanvol1/scratch/tetNig1/nib/
-    # edit DEF file to include the all nib files for danRer3 and the 
-    # nib files for tetraodon. Since all the coords have now
-    # been lifted to chrom level then these are now needed.
-    # SEQ1_DIR=/san/sanvol1/scratch/danRer3/nib
-    # SEQ2_DIR=/san/sanvol1/scratch/tetNig1/nib
-    # use kkr1u00 for computationally intensive steps as kolossus is down.
-    # need to create new S2.len for whole chrUn for Fugu
-    mv S2.len S2.scaffolds.len
-    cp /cluster/data/tetNig1/chrom.sizes S2.len 
-    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
-       -chainMinScore=5000 \
-       -workhorse kolossus -continue net >& doNet.log &
-    # PID: 16426 Start: Tue Sep 27 21:46 Finished: Sep 27 22:02
-     # failed - it could not parse the extra parameters line in HoxD55.q
-    # matrix. It turns out that Blastz does not use this line anyway so
-    # remove this extra line from the /cluster/data/blastz and 
-    # /san/sanvol1/scratch/blastz copies of HoxD55.q. Angie added a warning
-    # to the doBlastzChainNet.pl script and this will be given if a matrix 
-    # file contains extra lines.
-    # remove README.txt file from axtChain dir and start from downloads step
-    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
-       -workhorse kolossus -continue download >& doDownload.log &
-    # Start: Thu Sep 29 14:13 
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun
+    # crashes while doing chainMerge so add a flag into DEF file to indicate
+    # that the genomes are in scaffolds so there is a large number of chain 
+    # files. Changed doBlastzChainNet.pl so that if this flag is seen then 
+    # the chain files are concatentated and then chainSort is used to sort 
+    # the resulting chain file by score and chainMergeSort is used to renumber 
+    # the chain IDs so that they are unique. chainMergeSort expects chain 
+    # files sorted by score as input.
+    # add this line to the DEF file: GENOME_IN_SCAFFOLDS=1 
+    nice ./doBlastzChainNet.pl \
+         -bigClusterHub=pk \
+         -smallClusterHub=pk \
+         -workhorse=pk \
+         -fileServer=kolossus \
+         -continue chainMerge \
+         -chainMinScore=5000 \
+         `pwd`/DEF >& doChainMergeNet.log &
+     # PID 26614 Start: Wed Oct 19 12:11     
 
-    # test for chr2 and chrUn
+    # Test Runs for chr2 and chrUn
     cd /cluster/data/danRer3/bed/blastz.tetNig1
     mkdir -p /san/sanvol1/scratch/danRer3/blastzTetNig1/chrUnand2Run
     ln -s /san/sanvol1/scratch/danRer3/blastzTetNig1/chrUnand2Run
@@ -4315,12 +4165,10 @@ chrUn	56259		56360
 # no HoxD55 or using the mm6 parameters with HoxD55. However, using HoxD55
 # seems to increase the number of higher scoring chains.
 
-# BLASTZ, CHAIN AND NET FOR OPOSSUM (monDom2) (in progress, 2005-10-03, hartera)
+# BLASTZ, CHAIN AND NET FOR OPOSSUM (monDom2) (DONE, 2005-10-18, hartera)
     ssh kkstore02
-    # mkdir -p /cluster/data/danRer3/bed/blastz.monDom2.2005-10-03
     mkdir -p /cluster/data/danRer3/bed/blastz.monDom2.2005-10-07
     cd /cluster/data/danRer3/bed
-    # ln -s blastz.monDom2.2005-10-03 blastz.monDom2
     ln -s blastz.monDom2.2005-10-07 blastz.monDom2
     # create a 2 bit for danRer3 with all chroms (1-25 and M) and the
     # scaffolds for NA and Un.
@@ -4377,7 +4225,6 @@ SEQ2_CHUNK=30000000
 SEQ2_LAP=0
                                                                                 
 BASE=/san/sanvol1/scratch/danRer3/blastzMonDom2/chromsAndScafsRun
-TMPDIR=/scratch/tmp
                                                                                 
 DEF=$BASE/DEF
 RAW=$BASE/raw
@@ -4405,13 +4252,326 @@ TMPDIR=/scratch/tmp
   -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzMonDom2/chromsAndScafsOut \
   -chainMinScore=5000 \
   `pwd`/DEF >& do.log &
-    # PID 11016  Start: Tue Oct  4 11:13
-    # 73158 jobs
-    # allRun2 PID 13343 Start: Mon Oct  3 22:41 Stopped around 1pm on
-    # Friday Oct 7th, down to last 21 jobs but did not look like it would 
-    # finish.
-    # chromsAndScars PID 19811      Start: Fri Oct  7 15:16
+    # chromsAndScafs PID 19811      Start: Fri Oct  7 15:16
+    # Friday Oct 14th 10:30 - 
+# Checking finished jobs
+# crashed: 3271
+# ranOk: 90399
+# failed 4 times: 3271
+# total jobs in batch: 93670
+# more than 9000 crashed on one machine: kkr10u19.kilokluster.ucsc.edu
+# so remove this machine.
+# run again with para push -retries=20
+
+    # still 7 jobs crashed so repush again with para push -retries=20
     # Now try using the SEQ1_LIMIT option in the DEF file to limit the 
     # number of sequences in a partition file to 30. Before, there would 
     # be a lot of small sequences in a partition file that would take a long
     # time to run.
+    # finished around 21:40 Fri Oct 14 Took about 7 days, maybe a little less 
+    # as a number of jobs crashed last night.
+    # carry on from the cat step to the end
+    ssh pk
+    cd /cluster/data/danRer3/bed/blastz.monDom2/chromsAndScafsRun/run.blastz
+    para time > run.time
+# para time
+# Completed: 93670 of 93670 jobs
+# CPU time in finished jobs:   55738486s  928974.77m 15482.91h  645.12d  1.767 y
+# IO & Wait Time:               1276213s   21270.22m   354.50h   14.77d  0.040 y
+# Average job time:                 609s      10.14m     0.17h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1470s      24.50m     0.41h    0.02d
+# Submission to last job:        627367s   10456.12m   174.27h    7.26d
+
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.monDom2/chromsAndScafsRun
+  nice /cluster/bin/scripts/doBlastzChainNet.pl \
+  -bigClusterHub=pk \
+  -smallClusterHub=pk \
+  -workhorse=pk \
+  -fileServer=kolossus \
+  -continue cat \
+  -blastzOutRoot /san/sanvol1/scratch/danRer3/blastzMonDom2/chromsAndScafsOut \
+  -chainMinScore=5000 \
+  `pwd`/DEF >& doCatChainNet.log &
+  # Took 13 minutes to cat then chain. It had 70 jobs crash at the chaining
+  # step. These are empty files - when axtChain opens them using 
+  # pslxFileOpenWithMeta (in psl.c) it aborts as the file is empty apart from
+  # meta data and therefore not psLayout format. Ignore these crashed jobs
+  # for now and then modify psl.c so it will skip over these empty files.
+  # Next, the script crashed on the chainMergeSort step
+  # since there are too many chains due to opossum being scaffold-based. 
+  # chainMergeSort opens all the files at once.
+  # Added a flag to the DEF file to show if an assembly is scaffold-based:
+  # GENOME_IN_SCAFFOLDS=1 
+  # and then modify doBlastzChainNet.pl so that if it sees this flag, then
+  # chains are merged into one file then run chainSort to sort the file 
+  # and then chainMergeSort to change the IDs so they are unqiue.
+  # chainMergeSort assumes that the input files are sorted already.
+  nice ./doBlastzChainNet.pl \
+  -bigClusterHub=pk \
+  -smallClusterHub=pk \
+  -workhorse=pk \
+  -fileServer=kolossus \
+  -continue chainMerge \
+  -chainMinScore=5000 \
+  `pwd`/DEF >& doChainMergeNet.log &
+  # Start: Tue Oct 18 12:55 Finished: 15:02
+# add trackDb.ra entries for monDom2 chain and net tracks and add html for
+# these tracks too. Modified html pages to describe the process using 
+# scaffolds for chrUn and chrNA for danRer3.
+# Modify the downloads README.txt to include a description of the process
+# of running blastz with scaffolds for the chrUn and chrNA unordered chroms.
+# Finally run the swap for this to get danRer3 chains and net tracks 
+# on monDom2 - see makeMonDom2.doc. 
+   
+# RADIATION HYBRID (RH) MAP TRACK (in progress, 2005-09-06, hartera)
+    # Data from Leonard Zon's lab at the Childrens Hospital, Boston
+    # Provided by Anhua Song: asong@enders.tch.harvard.edu
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/seq
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
+    # download data from e-mail to this directory
+    # sequences are in rhSequenceFasta082905.zip
+    unzip rhSequenceFasta082905.zip
+    # sequences are now in rhSequence092105.zip
+    unzip rhSequence092105.zip
+    # get rhSequenceFastaNewNotMapped.txt, rhSequenceFastaOld092005.txt,
+    # rhSequenceFastaNewNotMapped.txt
+    cat rhSequenceFastaOld092005.txt rhSequenceFastaNewMapped.txt \
+        rhSequenceFastaNewNotMapped.txt > rhMap092105.fa
+    # first remove ^M from end of lines
+    dos2unix rhMap092105.fa
+    dos2unix rhSequenceFasta082905.txt
+    # those sequences in rhSequenceFasta082905.fa but not in the latest
+    # set of sequences are those that have been RH typed but did not
+    # make it on to the current map. 
+    grep '>' rhSequenceFastaOld092005.txt | wc -l
+    # 10945
+    grep '>' rhSequenceFastaNewMapped.txt | wc -l
+    # 272
+    grep '>' rhSequenceFastaNewNotMapped.txt | wc -l
+    # 257
+    grep '>' rhMap092105.fa > rhMap092105.names
+    wc -l rhMap092105.names
+    # 11474
+    grep '>' rhSequenceFasta082905.txt > rhMap082905.names
+    wc -l rhMap082905.names
+    # remove '>' from names and grab first field
+    perl -pi.bak -e 's/>//' *.names
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap092105.names | sort | uniq \
+        > rhMap092105.namesOnly.sort
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap082905.names | sort | uniq \
+        > rhMap082905.namesOnly.sort
+    wc -l *.sort
+    # 12127 rhMap082905.namesOnly.sort
+    # 11470 rhMap092105.namesOnly.sort
+    # so some replicates names
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap092105.names | sort | uniq -c \
+        | sort -nr | less
+    # 2 hi2479 - insertion sites, appears in New Mapped and in New Not Mapped
+    # 2 GA897T7 - ThisseClone, in New Mapped and New Not Mapped
+    # 2 GA476T3 - ThisseClone, in New Mapped and New Not Mapped
+    # 2 AJH1 - GeneCustom, appears twice in New Not Mapped
+    # in all cases, sequence is the same. asked Anhua Song and Yi Zhou
+    # about this as Boston Children's Hospital - they said to keep just
+    # one copy of each hi2479, GA897T7 and GA476T3 are all now Mapped.
+    # so remove the New Not Mapped versions from rhMap092105.fa and from
+    # rhSequenceFastaNewNotMapped.txt. For AJH1, just remove one copy.
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap082905.names | sort | uniq -c \
+        | sort -nr | less
+    # 2 GA476 - 2 copies, sequence identical, CHZF0040579 and CHZF0040580
+    # 2 GA3542 - 2 copies, sequence identical, CHZF0040582 and CHZF0040583
+    # 2 CHUNP6983 - 2 copies, sequence identical, CHZF0006983 and CHZF0006984
+    # compare the 2 sets of names:
+    comm -12 rhMap082905.namesOnly.sort rhMap092105.namesOnly.sort \
+         > bothSets.names
+    comm -23 rhMap082905.namesOnly.sort rhMap092105.namesOnly.sort \
+         > rhMap082905Only.names
+    wc -l *.names
+    # 11205 bothSets.names
+    # 12130 rhMap082905.names
+    # 922 rhMap082905Only.names
+    # 11474 rhMap092105.names
+    # this set of 922 sequences in rhMap082905Only.names are those that 
+    # were RH typed but do not appear on the current map.
+    # However, some of these do appear in rhMap092105.fa but with a slightly
+    # different name but the same CHZF ID e.g. 1005f11 is 
+    # Zfish35940-1005f11.q1c in rhMap092105.fa and CHZF0035421
+    # write a script to match these up:
+    # get list of sequence names and CHZF IDs
+    # 8200/12130 have CHZF IDs for rhSequenceFasta082905.txt
+    awk 'BEGIN {FS="|"} {OFS="\t"} {if ($2 ~ /CHZF/) print $1,$2; \
+        else if ($3 ~ /CHZF/) print $1,$3;}' rhMap082905.names \
+        > rhMap082905.namesAndIds
+    wc -l rhMap082905.namesAndIds
+    # 8200 rhMap082905.namesAndIds
+    # 7544/11474 have CHZF IDs for rhMap092105.fa
+    awk 'BEGIN {FS="|"} {OFS="\t"} {if ($3 ~ /CHZF/) print $1,$3; \
+        else if ($5 ~ /CHZF/) print $1,$5;}' rhMap092105.names \
+        > rhMap092105.namesAndIds
+    wc -l rhMap092105.namesAndIds
+    # 7544 rhMap092105.namesAndIds
+    # write script to store names and IDs from both sets and use list of 
+    # names from rhMap082905Only.names to find these in rhMap092105 through
+    # the common CHZF ID if there is one.
+    # remove extra space after name in list of names
+    perl -pi.bak -e 's/\s//' rhMap082905Only.names
+    chmod +x matchIds.pl
+    perl matchIds.pl rhMap082905Only.names rhMap082905.namesAndIds \
+         rhMap092105.namesAndIds > rhMap082905FoundIn092105.names
+    # looked at a few of these and the sequences look the same in the 2 files
+    # just different names. there are 468 of these.
+    # get this list of names and subtract from rhMap082905Only.names
+    awk '{print $1}' rhMap082905FoundIn092105.names | sort > namesList
+    sort rhMap082905Only.names | uniq > rhMap082905Only.names.sort
+    wc -l rhMap082905Only.names.sort
+    # 922 rhMap082905Only.names.sort
+    comm -23 rhMap082905Only.names.sort namesList \
+         > rhMap082905Only.names.reduced
+    wc -l rhMap082905Only.names.reduced
+    # 454 rhMap082905Only.names.reduced 
+    # can use faSomeRecords to get these sequences from the 
+    # rhSequenceFasta082905.txt file.
+    faSomeRecords rhSequenceFasta082905.txt rhMap082905Only.names.reduced \
+                  rhMap082905Only.fa
+    grep '>' rhMap082905Only.fa | wc -l
+    # 454
+    # so all sequences were retrieved - this is the set of sequences from 
+    # rhSequenceFasta082905.txt that are NOT in the rhSequence092105 set and 
+    # are therefore unmapped in the current RH map and they are mostly CHUNPs.
+    # They are Children's Hospital Unpublished markers. There are only 15 that
+    # are not CHUNPs in this set. 
+    # For the moment, just align those sequences from the rhMap092105.fa set.
+    
+    awk 'BEGIN {FS="|"} {if ($1 ~ />/) print $1"."$2; else print;}' \
+        rhMap092105.fa > rhMapFormat.fa
+    # remove space between name and extension
+    perl -pi.bak -e 's/\s\./\./' rhMapFormat.fa
+    # get all names and sequence into upper case. 
+    tr '[a-z]' '[A-Z]' < rhMapFormat.fa > rhMapUpperNames.fa
+    
+    # previous version of RH map (on danRer1 and danRer2) had the following 
+    # suffixes: SHORTGUN, WU_ZFEST, WZ and CLONEEND and then some 
+    # EMBL sequences e.g. EMB:BI896341
+    # Rename some of the sequences and make sure names are similar to those 
+    # for the previous version of RH map.
+    # Rename ncbiZfEst to other_zfEst
+    perl -pi.bak -e 's/NCBIZFEST/OTHER_ZFEST/' rhMapUpperNames.fa
+    # Need to change WU_EST=Wu_EST=wu_zfEst
+    # Rename WU_EST to WU_ZFEST
+    perl -pi.bak -e 's/WU_EST/WU_ZFEST/' rhMapUpperNames.fa
+    # change SANGER SHOTGUN to SHOTGUN
+    perl -pi.bak -e 's/SANGER SHOTGUN/SHOTGUN/' rhMapUpperNames.fa
+    # remove numbering at beginning of some lines like in 
+    # Z35723-A297H08.Q1C.SANGER SHOTGUN and returns at end of those lines
+    # write a C program to do this and put in OneShot dir.
+    # reformat the FASTA file:
+    formatFastaSeq rhMapUpperNames.fa rhMap.fa
+    # There are 11470 sequences in the FASTA file.
+    # check that it is formatted correctly
+cat << '_EOF_' > checkFaFormat.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($faFile, $found, $lineCt);
+
+$found = "FALSE";
+$lineCt = 0;
+
+$faFile = $ARGV[0];
+open (FAFILE, $faFile) || die "Can not open $faFile : $!\n";
+open (STDERR, ">error.log") || die "Can not create error.log : $!\n";
+
+# check the file format
+while (<FAFILE>)
+{
+my ($l);
+$lineCt++;
+chomp;
+$l = $_;
+
+if ($l =~ /^>.+/)
+   {
+   # first line should have a ">" and then description
+   if ($lineCt == 1)
+      {
+      print STDERR "First line is in FASTA format as expected.\n";
+      }
+   $found = "TRUE";
+   } 
+elsif ($found eq "TRUE")
+   {
+   # then next line should be DNA sequence
+   if ($l !~ /^[ACGTN]/i)
+      {
+      print STDERR "Line: $lineCt is not DNA sequence.\n";
+      }
+   $found = "FALSE";
+   }
+else
+   {
+   print STDERR "Line: $lineCt is in unexpected format\n";
+   }
+}
+close FAFILE;
+close STDERR;
+'_EOF_'
+    chmod +x checkFaFormat.pl
+    perl checkFaFormat.pl rhMap.fa
+    # check error.log and the format is good.
+    
+   # awk 'BEGIN {FS="|"} {if ($1 ~ />/) print $1; else print;}' \
+    #    rhSequenceFasta082905.txt > rhMap.fa
+    ssh pk
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
+    mkdir -p /san/sanvol1/scratch/danRer3/rhMap
+    cp rhMap.fa /san/sanvol1/scratch/danRer3/rhMap/ 
+    # for running and output:
+    mkdir -p /san/sanvol1/scratch/danRer3/rhMap/chromsRun
+    mkdir -p /san/sanvol1/scratch/danRer3/rhMap/chromsPsl
+    # link to cluster dir
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap
+    ln -s /san/sanvol1/scratch/danRer3/rhMap/chromsRun
+    ln -s /san/sanvol1/scratch/danRer3/rhMap/chromsPsl
+    # run soft-masked chroms 1-25 and M and soft-masked scaffolds
+    mv /san/sanvol1/scratch/danRer3/trfFaChroms \
+       /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs 
+    foreach c (NA Un)
+       foreach f (/cluster/data/danRer3/${c}/scaffoldsSoftMask/*.fa)
+           rsync -a --progress $f \
+                 /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/
+       end
+    end
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/chromsRun
+    ls -1 /san/sanvol1/scratch/danRer3/rhMap/*.fa > seqs.lst
+    foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/*.fa)
+        ls -1 $f >> genome.lst
+    end
+    wc -l genome.lst
+    # 15151 genome.lst 
+    echo '#LOOP\n/cluster/bin/x86_64/blat -mask=lower -minIdentity=95 -ooc=/san/sanvol1/scratch/danRer3/danRer3_11.ooc $(path1) $(path2) {check out line+ /san/sanvol1/scratch/danRer3/rhMap/chromsPsl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst seqs.lst template.sub para.spec
+    para create para.spec
+    para try, check, push ... etc.
+# para time
+# Completed: 15151 of 15151 jobs
+# CPU time in finished jobs:      21540s     358.99m     5.98h    0.25d  0.001 y
+# IO & Wait Time:                 38720s     645.34m    10.76h    0.45d  0.001 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1369s      22.82m     0.38h    0.02d
+# Submission to last job:          3150s      52.50m     0.88h    0.04d
+
+# STS MARKERS (in progress, 2005-10-13, hartera)
+    # DOWNLOADED RECENTLY FROM NCBI
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/stsMarkers
+    cd /cluster/data/danRer3/bed/stsMarkers
+    # UniSTS is the a unique subset of markers that are STS markers from the
+    # six zebrafish mapping panels: GAT, HS, LN54, MGH, MOP, T51, and also
+    # ZMAP which contains markers from the other panels. Among markers in 
+    # these map, a subset that are STSs and with available primers sequences
+    # were imported to UniSTS. These include submitted maps and those from
+    # the Zebrafish Information Network (ZFIN).
