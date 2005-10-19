@@ -1241,7 +1241,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     mm3.ensemblXref2.transcript_name chopAfter=. minCheck=0.20
     $gbd,!mm4.ensGtp.transcript chopAfter=. minCheck=0.94
     mm4.ensGtp.transcript chopAfter=. minCheck=0.94
-    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.98
+    $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.96
     mm4.ensPep.name chopAfter=. minCheck=0.94
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
     $kgDb.knownToEnsembl.value chopAfter=.
