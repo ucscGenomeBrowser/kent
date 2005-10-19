@@ -733,13 +733,13 @@ printf("</TITLE>\n");
 printf("</HEAD>\n");
 
 printf("<frameset cols=\"230,*\"> \n");
-printf("  <frame src=\"../cgi-bin/%s?%s=go&%s/\" noresize frameborder=\"0\" name=\"list\">\n",
-    hgVisiGeneCgiName(), hgpDoThumbnails, sidUrl);
+printf("  <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize frameborder=\"0\" name=\"list\">\n",
+    hgVisiGeneCgiName(), hgpDoThumbnails, sidUrl, hgpId, imageId);
 printf("  <frameset rows=\"30,*\">\n");
-printf("    <frame name=\"controls\" src=\"../cgi-bin/%s?%s=go&%s\" noresize marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\">\n",
-    hgVisiGeneCgiName(), hgpDoControls, sidUrl);
-printf("    <frame src=\"../cgi-bin/%s?%s=go&%s/\" name=\"image\" noresize frameborder=\"0\">\n",
-    hgVisiGeneCgiName(), hgpDoImage, sidUrl);
+printf("    <frame name=\"controls\" src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\">\n",
+    hgVisiGeneCgiName(), hgpDoControls, sidUrl, hgpId, imageId);
+printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d/\" name=\"image\" noresize frameborder=\"0\">\n",
+    hgVisiGeneCgiName(), hgpDoImage, sidUrl, hgpId, imageId);
 printf("  </frameset>\n");
 printf("  <noframes>\n");
 printf("  <body>\n");
@@ -805,11 +805,6 @@ else
     }
 slFreeList(&genes);
 doDefault(conn, FALSE);
-}
-
-void doSearch(struct sqlConnection *conn)
-/* Set up Gene Pix on a new search */
-{
 }
 
 void dispatch()
