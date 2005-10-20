@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.37 2005/07/12 01:45:07 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.38 2005/10/20 06:32:22 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -657,7 +657,8 @@ static void mapDiamondUi(int xl, int yl, int xt, int yt,
 {
 hPrintf("<AREA SHAPE=POLY COORDS=\"%d,%d,%d,%d,%d,%d,%d,%d\" ", 
 	xl, yl, xt, yt, xr, yr, xb, yb);
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=ld&i=%s\"", hgTrackUiName(), 
+// change 'hapmapLd' to use parent composite table name
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=hapmapLd&i=%s\"", hgTrackUiName(), 
 	cartSessionVarName(), cartSessionId(cart), chromName, name);
 mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
@@ -689,11 +690,11 @@ if (abs(score)>1)
 	     score);
 if (isLod)
     {
-    if (lodScore>2)             /* high LOD */
+    if (lodScore>=2)             /* high LOD */
 	{
-	if (abs(score)<0.5)          /* high LOD, low D' -> pink */
+	if (abs(score)<0.5)     /* high LOD, low D'  -> pink */
 	    return ldHighLodLowDprime;
-	else                    /* high LOD, high D' -> shades */
+	else                    /* high LOD, high D' -> shades of red*/
 	    {
 	    /* lodScore has a minimum value of 2 and score has a maximum magnitude of 0.5,
 	     * so [lodScore-abs(score)] will have a minimum value of 1.5
@@ -702,17 +703,20 @@ if (isLod)
 	     * Multiply by 2.0 to amplify the difference (reduces range also)
 	     * Use min and max to stay within the range [0,255] */
 	    int blgr = 255-max(0,min((int)((255-32)*(lodScore-abs(score)-1.5)),255));
+	    /* This version is from Mark Daly's group, via Lalitha Krishnan at DCC
+	     *    double blgr = (255-32)*2*(1-d);
+	     * int blgr =  min(255, 446 * (int)(lodScore - abs(score))); */
 	    return vgFindColorIx(vg, 255, blgr, blgr);
 	    }
 	}
-    else if (abs(score)>0.99)        /* high D', low LOD -> blue */
+    else if (abs(score)>0.99)   /* high D', low LOD  -> blue */
 	return ldHighDprimeLowLod;
     else                        /* no LD */
 	return MG_WHITE;
     }
 if (score>=0)
-    return posShades[(int)(score * LD_DATA_SHADES)];
-return negShades[(int)(-score * LD_DATA_SHADES)];
+    return posShades[(int)(score * (LD_DATA_SHADES-1))];
+return negShades[(int)(-score * (LD_DATA_SHADES-1))];
 }
 
 void drawDiamond(struct vGfx *vg, 
@@ -734,7 +738,7 @@ gfxPolyFree(&poly);
 void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, 
 		   int xOff, int yOff, int i, int j, int k, int l, 
 		   double score, double lodScore, char *name, 
-		   char *shortLabel, boolean drawOutline, 
+		   boolean drawOutline, 
 		   Color outlineColor, double scale, boolean isLod)
 /* Draw and map a single pairwise LD box */
 {
@@ -752,7 +756,7 @@ if (yb<=0)
     yb=1;
 drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, color, drawOutline, 
 	    outlineColor);
-mapDiamondUi(   xl, yl, xt, yt, xr, yr, xb, yb, name, shortLabel);
+mapDiamondUi(   xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
 }
 
 void drawNecklace(struct track *tg, int width, int xOff, int yOff, 
@@ -772,7 +776,7 @@ if (!trim || (chromStarts[0] <= winEnd        /* clip right to triangle */
 	      && ld->chromStart >= winStart)) /* clip left to triangle */
     ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0], 
 		  ld->chromStart, chromStarts[0], values[0], lodValues[0], 
-		  ld->name, tg->shortLabel, drawOutline, outlineColor, scale,
+		  ld->name, drawOutline, outlineColor, scale,
 		  isLod);
 for (n=0; n < ld->ldCount-1; n++)
     {
@@ -788,7 +792,7 @@ for (n=0; n < ld->ldCount-1; n++)
 	continue;
     ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0],
 		  chromStarts[n], chromStarts[n+1], values[n], lodValues[n],
-		  ld->name, tg->shortLabel, drawOutline, outlineColor, scale,
+		  ld->name, drawOutline, outlineColor, scale,
 		  isLod);
     }
 }
