@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.59 2005/10/07 22:57:13 hartera Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.60 2005/10/20 21:09:12 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1449,24 +1449,28 @@ lineFileClose(&sf);
 return hash;
 }
 
-static void countInserts(char *s, int size, int *retNumInsert, int *retBaseInsert)
-/* Count up number and total size of inserts in s. */
+static void countInserts(char *s, char *otherSeq, int size,
+                         int *retNumInsert, int *retBaseInsert)
+/* Count up number and total size of inserts in s.  Other seq required
+ * to skip columns not aligned in either sequence*/
 {
-char c, lastC = s[0];
+char lastC = s[0];
 int i;
 int baseInsert = 0, numInsert = 0;
 if (lastC == '-')
     errAbort("%s starts with -", s);
 for (i=0; i<size; ++i)
     {
-    c = s[i];
-    if (c == '-')
+    if (otherSeq[i] != '-')
         {
-	if (lastC != '-')
-	     numInsert += 1;
-	baseInsert += 1;
-	}
-    lastC = c;
+        if (s[i] == '-')
+            {
+            if (lastC != '-')
+                numInsert += 1;
+            baseInsert += 1;
+            }
+        lastC = s[i];
+        }
     }
 *retNumInsert = numInsert;
 *retBaseInsert = baseInsert;
@@ -1596,8 +1600,8 @@ trimAlignment(psl, &qString, &tString, &aliSize);
      }
 
 /* First count up number of blocks and inserts. */
-countInserts(qString, aliSize, &psl->qNumInsert, &psl->qBaseInsert);
-countInserts(tString, aliSize, &psl->tNumInsert, &psl->tBaseInsert);
+countInserts(qString, tString, aliSize, &psl->qNumInsert, &psl->qBaseInsert);
+countInserts(tString, qString, aliSize, &psl->tNumInsert, &psl->tBaseInsert);
 psl->blockCount = 1 + psl->qNumInsert + psl->tNumInsert;
 
 /* Count up match/mismatch/repMatch. */
@@ -1662,9 +1666,8 @@ for (i=0; i<aliSize; ++i)
     {
     char q = qString[i];
     char t = tString[i];
-    if (q == '-' || t == '-')
+    if (((q == '-') || (t == '-')) && !((q == '-') && (t == '-')))
         {
-        assert(!((q == '-') && (t == '-')));  /* not supported */
 	if (!eitherInsert)
 	    {
 	    psl->blockSizes[blockIx] = qe - qs;
