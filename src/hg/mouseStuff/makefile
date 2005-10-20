@@ -54,6 +54,7 @@ DIRS = \
 	lavToPsl \
 	libScan \
 	mafCoverage \
+	mafFetch \
 	mafRanges \
 	mafToAxt \
 	mmUnmix \
