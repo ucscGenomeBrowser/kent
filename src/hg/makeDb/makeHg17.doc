@@ -18292,3 +18292,24 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
         # Loaded 14216 elements of size 5
     checkTableCoords hg17 nhgriDnaseHs
 
+# UPDATE WGRNA TRACK (DONE, 2005-10-20, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg17/bed
+
+  mkdir wgRna-2005-10-20
+  cd wgRna-2005-10-20
+
+# Received the data file, wgtrack_no_bin_oct2005.txt, from Michel Weber's email 
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg17/bed/wgRna-2005-10-20.
+
+  cp wgtrack_no_bin_oct2005.txt wgRna.tab
+  vi wgRna.tab
+  
+# edit wgRna.tab to take out the first line of data field labels.
+
+    hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# Compared to 8/24/05 data, a few records were changed.
+
