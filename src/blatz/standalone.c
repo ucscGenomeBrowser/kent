@@ -46,11 +46,15 @@ static void alignAll(struct bzp *bzp, struct blatzIndex *indexList,
 FILE *f = mustOpen(outFile, "w");
 struct dnaSeq *query;
 
-int b, bend, printing; // LX Oct 13 2005
-FILE *bedfp = mustOpen("dynamask.bed", "w");
-int j; // LX Oct 06 2005
-// LX BEG Sep 06 2005
+// LX BEG
+int b, bend, printing; 
+FILE *bedfp = NULL;
+int j; 
 int i;
+// See if bed file output of the mask was requested
+if(strcmp(bzp->dynaBedFile,"") != 0){
+  bedfp = mustOpen(bzp->dynaBedFile, "w");
+}
 // Counts all the query-target hits encountered by the program inside the 
 // loops of gapless.c
 dynaHits = 0;
@@ -59,11 +63,9 @@ dynaCountTarget = 0;
 dynaCountQuery = 0;
 // This is the limit used by the program, currently just bzp->dynaLimit(QT)
 // but should be useful for scaling to sequence size
-targetHitDLimit = VERY_LARGE_NUMBER; // default
-queryHitDLimit = VERY_LARGE_NUMBER; // default
-//CounterList = NULL;
-//clist = NULL;
-// LX END Sep 06 2005
+targetHitDLimit = VERY_LARGE_NUMBER; // perhaps unnecessary default
+queryHitDLimit = VERY_LARGE_NUMBER; // perhaps unnecessary default
+// LX END
 
 while ((query = dnaLoadNext(queryDl)) != NULL)
     {
@@ -71,8 +73,6 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     struct chain *chainList;
     // LX BEG
     if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
-    // scaling to target size
-    //  queryHitDLimit = bzp->dynaLimitQ*(target->size/1000000)+0.5;
       queryHitDLimit = bzp->dynaLimitQ;
       // allocate zeroed memory for hit counters
       dynaCountQ = calloc(query->size, sizeof(COUNTER_TYPE));
@@ -96,40 +96,45 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     blatzWriteChains(bzp, &chainList, query, 
     	dnaLoadCurStart(queryDl), dnaLoadCurEnd(queryDl),
 	dnaLoadCurSize(queryDl), indexList, f);
-     // LX BEG Oct 13 2005
-     // This prints the contents of the mask into the .bed file opened above
-    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
-     printing = 0;
-     for(b=0;b<query->size;b++){
-       if(dynaCountQ[b] > queryHitDLimit){
-         if(printing == 0){
-           printing = 1;
-           fprintf(bedfp,"%s %d ",query->name,b);
-         }
-       }
-       if(dynaCountQ[b] <= queryHitDLimit){
-         if(printing == 1){
-           printing = 0;
-           bend = b-1;
-           fprintf(bedfp,"%d\n",bend);
-         }
-       }
-     }
-     }
-     // LX END Oct 13 2005
+    // LX BEG
+    // This prints the contents of the mask into the .bed file opened above
+    if(bedfp != NULL){
+      if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
+        printing = 0;
+        for(b=0;b<query->size;b++){
+          if(dynaCountQ[b] > queryHitDLimit){
+            if(printing == 0){
+              printing = 1;
+              fprintf(bedfp,"%s %d ",query->name,b);
+            }
+          }
+          if(dynaCountQ[b] <= queryHitDLimit){
+            if(printing == 1){
+              printing = 0;
+              bend = b-1;
+              fprintf(bedfp,"%d\n",bend);
+            }
+          }
+        }
+      } else {
+        fprintf(bedfp,"No dynamic masking data to print.\n");
+      }
+    }
+    // LX END
     dnaSeqFree(&query);
     }
-    // LX BEG Sep 06 2005
+    // LX BEG
     // Statistics to print about how many hits were dropped (ignored)
     dynaDrops = dynaCountTarget + dynaCountQuery;
     dynaDropsPerc = (float)100*dynaDrops/dynaHits+0.5;
     printf("final chaining %d dynaDrops (%f%%) at T=%d Q=%d \n", dynaDrops, (double)dynaDropsPerc, targetHitDLimit, queryHitDLimit);
-   // LX END
-   // LX BEG Sep 06 2005
    // Free dynamic memory used for the sequence-length-dependent counter arrays
    if(dynaCountQ != NULL) free(dynaCountQ);
-//   if(dynaCountT != NULL) free(dynaCountT);
-carefulClose(&bedfp);
+   if(bedfp != NULL){
+     carefulClose(&bedfp);
+   }
+   //if(dynaWordCount != NULL) free(dynaWordCount); // ?! I don't know why 
+   // this causes segmentation fault
    // LX END
 carefulClose(&f);
 }
@@ -138,6 +143,16 @@ static void loadAndAlignAll(struct bzp *bzp,
         char *target, char *query, char *output)
 /* blatz - Align genomic dna across species. */
 {
+// LX BEG
+if(bzp->dynaWordCoverage > 0){
+  dynaNumWords = (pow(4,bzp->weight)); // ?? check with Jim if this is correct
+  dynaWordCount = calloc(dynaNumWords,sizeof(unsigned int));
+  printf("Allocated word count table of size %d\n",dynaNumWords);
+  dynaWordLimit = bzp->dynaWordCoverage; // cheating, should be more like:
+  //dynaWordLimit = bzp->dynaWordCoverage*dynaSequenceSize/dynaNumWords;
+  printf("Set word limit to  %d\n",dynaWordLimit);
+}
+// LX END
 struct dnaLoad *queryDl = dnaLoadOpen(query);
 struct dnaLoad *targetDl = dnaLoadOpen(target);
 struct blatzIndex *indexList = blatzIndexDl(targetDl, bzp->weight, bzp->unmask);

@@ -13,7 +13,7 @@
 #include "chain.h"
 #include "bzp.h"
 #include "blatz.h"
-#include "dynamic.h" // LX Sep 06 2005
+#include "dynamic.h" // LX
 
 static struct cBlock *gaplessExtendAndFilter(
     DNA *qDna, int qPos, int qSize, 
@@ -155,10 +155,6 @@ struct dlList *diagLists = NULL;
 struct diagNode *diagNodes = NULL, *diagNode = NULL;
 int diagCircIx = 0;
 
-// LX BEG Sep 06 2005
-dynaBreak = 0;
-// LX END
- 
 if (bzp->transition)
     nbdToggleStart = (1 << (2*(index->seedWeight-1)));
 else
@@ -177,13 +173,19 @@ if (multiHits)
         }
     }
 
+// LX BEG Sep 06 2005
+dynaBreak = 0;
+// LX END
+ 
 /* Scan through query collecting hits. */
 for (queryPos=0; queryPos<=lastBase; ++queryPos)
     {
     int key = blatzIndexKey(query->dna + queryPos, 
                             index->seedOffsets, index->seedWeight);
-    if (key >= 0)
+    if ((key >= 0) && ((dynaWordLimit == 0 ) || (dynaWordCount[key]<=2*dynaWordLimit)))
+    //if (key >= 0) // LX
         {
+        if(dynaWordLimit>0) dynaWordCount[key]++; // LX
         /* Add key, and everything that differs by a single transition 
          * from key to index.  This relies on the fact that the binary
          * representation we've chosen for DNA is a little unusual, and
@@ -206,7 +208,7 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     struct dlNode *node;
                     boolean gotDoubleHit = FALSE;
 
-// LX BEG Sep 01 2005 Sep 06 2005 Sep 07 2005
+                    // LX BEG
                     // Count all hits to report statistics later on
                     dynaHits++;
                     // Now let's see if dynaLimitT has been set
@@ -214,7 +216,6 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                       // If we are over the limit, we will stop here
                       // and continue at the next target pos
                       if(globalCounter[targetPos] > targetHitDLimit){
-                        //printf("dynaCountT high at %d\n", targetPos);
                         dynaCountTarget++; // statistics
                         continue; 
                       } else {
@@ -224,11 +225,9 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                           // is not over its hit limit
                           if(dynaCountQ[queryPos] <= queryHitDLimit){
                             globalCounter[targetPos]++;
-                            //dynaCountTtemp[targetPos]++; // LX Oct 12 2005
                           }
                         } else {
                           globalCounter[targetPos]++;
-                          //dynaCountTtemp[targetPos]++; // LX Oct 12 2005
                         }
                       }
                     }
@@ -236,20 +235,17 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     if(queryHitDLimit<VERY_LARGE_NUMBER){
                       // If we reached the limit, we will stop here
                       // and continue evaluating the next query pos
-                      //printf("Testing if dynaLimtQ has been reached T%d Q%d\n", targetPos, queryPos);
                       if(dynaCountQ[queryPos] > queryHitDLimit){
-                        //printf("dynaCountQ high at %d\n", queryPos);
-                        //sleep(1);
                         dynaCountQuery++; // statistics
                         dynaBreak = 1;
                         break; // go to the outer loop to get the next query pos
                       } else {
                         // ... otherwise keep counting the hits at this position
-                        //dynaCountQ[queryPos]++; // LX Oct 06 2005
+                        //dynaCountQ[queryPos]++; // postponing setting the mask
                         dynaCountQtemp[queryPos]++;
                       }
                     }
-// LX END
+                    // LX END
                     ++hitCount;
                     for (node = diagList->head;  !dlEnd(node); node = node->next)
                         {
@@ -300,11 +296,9 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     diagNode->qPos = queryPos;
                     dlAddHead(diagList, &diagNode->node);
                     }
-                    // LX BEG Sep 06 2005
-                    //printf("This is the middle loop %d\n", queryPos);
+                    // LX BEG
                     // Check to see if we got here from the inner loop
                     if(dynaBreak == 1){
-                      //printf("We got here from the inner loop %d\n", queryPos);
                       break; // we need to break again
                     }
                     // LX END
@@ -347,11 +341,9 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
             if (tog == 0)
                 break;
             }
-            // LX BEG Sep 06 2005
-            //printf("This is the outer loop %d\n", queryPos);
+            // LX BEG
             // Check to see if we got here from the middle loop
             if(dynaBreak == 1){
-              //printf("We got here from the middle loop %d\n", queryPos);
               dynaBreak=0;
               continue; // we need the next query position then
             }

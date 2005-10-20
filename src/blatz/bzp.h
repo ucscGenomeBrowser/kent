@@ -30,9 +30,11 @@ struct bzp
     char *out;		/* Output format.  Chain, axt, psl, etc. */
     char *mafQ;		/* Prefix for query side of maf output. */
     char *mafT;		/* Prefix for target side of maf output. */
-// LX BEG Sep 02 2005
+// LX BEG
     int dynaLimitT;		/* Hit limit for dynamic masking. */
     int dynaLimitQ;		/* Hit limit for dynamic masking. */
+    int dynaWordCoverage;	/* Word hit limit for dynamic masking. */
+    char *dynaBedFile;		/* filename to use for dynamic mask output */
 // LX END
     boolean bestChainOnly;	/* Only keep best scoring chain (from MSP on). Not exported */
     };
@@ -53,7 +55,6 @@ void bzpServerOptionsHelp(struct bzp *bzp);
 #define BZP_SERVER_OPTIONS \
    {"weight", OPTION_INT}, 
 
-// LX BEG Sep 02 2005
 #define BZP_CLIENT_OPTIONS \
    {"rna", OPTION_BOOLEAN}, \
    {"minScore", OPTION_INT}, \
@@ -74,8 +75,9 @@ void bzpServerOptionsHelp(struct bzp *bzp);
    {"mafQ", OPTION_STRING}, \
    {"mafT", OPTION_STRING}, \
    {"dynaLimitT", OPTION_INT}, \
-   {"dynaLimitQ", OPTION_INT},
-// LX END
+   {"dynaLimitQ", OPTION_INT}, \
+   {"dynaWordCoverage", OPTION_INT}, \
+   {"dynaBedFile", OPTION_STRING},
 
 #define bzpDefaultPort 18273
 

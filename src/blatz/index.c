@@ -9,6 +9,7 @@
 #include "localmem.h"
 #include "spacedSeed.h"
 #include "blatz.h"
+#include "dynamic.h"
 
 int blatzIndexKey(DNA *dna, int *seedOffsets, int seedWeight)
 /* Calculate which slot in index to look into.  Returns -1 if
@@ -36,7 +37,7 @@ if (index != NULL)
     freeMem(index->slots);
     freeMem(index->seedOffsets);
     freeMem(index->posBuf);
-    freeMem(index->counter); // LX Oct 06 2005
+    freeMem(index->counter); // for position-based dynamic masking
     freez(pIndex);
     }
 }
@@ -71,8 +72,10 @@ lmAllocArray(lm, slots, slotCount);
 for (i=0; i<=lastBase; ++i)
     {
     int key = blatzIndexKey(dna + i, seedOffsets, weight);
-    if (key >= 0)
+    if ((key >= 0) && ((dynaWordLimit == 0) || (dynaWordCount[key]<=dynaWordLimit)))
+    //if (key >= 0)
         {
+        if(dynaWordLimit>0) dynaWordCount[key]++;
         struct seqPos *pos, **slot;
         lmAllocVar(lm, pos);
         pos->pos = i;
