@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.60 2005/10/20 21:09:12 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.61 2005/10/20 22:36:12 hartera Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -632,7 +632,7 @@ else
             s = cloneString(line);
             }
 	wordCount = chopLine(s, words);
-	if (wordCount < 21 || wordCount > 23 || (words[8][0] != '+' && words[8][0] != '-'))
+	if ((wordCount < 21 || wordCount > 23 || (words[8][0] != '+' && words[8][0] != '-')) && (!eof))
 	    errAbort("%s is not a psLayout file", fileName);
 	else
 	    lineFileReuse(lf); 
