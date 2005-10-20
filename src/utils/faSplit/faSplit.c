@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.30 2005/09/02 20:33:55 braney Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.31 2005/10/20 03:19:11 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -79,21 +79,21 @@ static struct optionSpec optionSpecs[] = {
 
 static int outDirDepth = 0;
 
-unsigned long long estimateFaSize(char *fileName)
+off_t estimateFaSize(char *fileName)
 /* Estimate number of bases from file size. */
 {
 off_t size = fileSize(fileName);
 return 0.5 + size * 0.99;
 }
 
-unsigned long calcNextEnd(int fileIx, int totalFiles, unsigned long long estSize)
+off_t calcNextEnd(int fileIx, int totalFiles, off_t estSize)
 /* Return next end to break at. */
 {
 if (fileIx == totalFiles)
      return 0xefffffff;	/* bignum */
 else
     {
-    unsigned long nextEnd = round((double)fileIx*(double)estSize/(double)totalFiles/16.0);
+    off_t nextEnd = round((double)fileIx*(double)estSize/(double)totalFiles/16.0);
     return nextEnd<<4;
     }
 }
@@ -125,7 +125,7 @@ if (digits)
     sprintf(outPath+strlen(outPath), "%s%0*d.fa", fname, digits, fileCount);
 }
 
-void splitByBase(char *inName, int splitCount, char *outRoot, unsigned long long estSize)
+void splitByBase(char *inName, int splitCount, char *outRoot, off_t estSize)
 /* Split into a file base by base. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
@@ -136,8 +136,8 @@ char dir[PATH_LEN], seqName[128], outFile[128], outPathName[PATH_LEN];
 int digits = digitsBaseTen(splitCount);
 boolean warnedMultipleRecords = FALSE;
 int fileCount = 0;
-unsigned long nextEnd = 0;
-unsigned long curPos = 0;
+off_t nextEnd = 0;
+off_t curPos = 0;
 FILE *f = NULL;
 int linePos = 0;
 int outLineSize = 50;
@@ -209,14 +209,14 @@ if (f != NULL)
 lineFileClose(&lf);
 }
 
-void splitByRecord(char *inName, int splitCount, char *outRoot, unsigned long long estSize)
+void splitByRecord(char *inName, int splitCount, char *outRoot, off_t estSize)
 /* Split into a file base by base. */
 {
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 int digits = digitsBaseTen(splitCount);
-unsigned long nextEnd = 0;
-unsigned long curPos = 0;
+off_t nextEnd = 0;
+off_t curPos = 0;
 int fileCount = 0;
 FILE *f = NULL;
 char outPath[PATH_LEN];
@@ -239,14 +239,14 @@ carefulClose(&f);
 lineFileClose(&lf);
 }
 
-void splitAbout(char *inName, unsigned long approxSize, char *outRoot)
+void splitAbout(char *inName, off_t approxSize, char *outRoot)
 /* Split into chunks of about approxSize.  Don't break up
  * sequence though. */
 {
 struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 int digits = 2;
-unsigned long curPos = approxSize;
+off_t curPos = approxSize;
 int fileCount = 0;
 FILE *f = NULL;
 char outPath[PATH_LEN];
@@ -408,10 +408,10 @@ for (i=0; i<size; ++i)
     }
 }
 
-void splitByCount(char *inName, int pieceSize, char *outRoot, unsigned long long estSize)
+void splitByCount(char *inName, int pieceSize, char *outRoot, off_t estSize)
 /* Split up file into pieces pieceSize long. */
 {
-unsigned long long pieces = (estSize + pieceSize-1)/pieceSize;
+off_t pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
 int maxN = optionInt("maxN", pieceSize-1);
 boolean oneFile = optionExists("oneFile");
@@ -570,7 +570,7 @@ void splitByGap(char *inName, int pieceSize, char *outRoot, long long estSize)
 /* Split up file into pieces at most pieceSize bases long, at gap boundaries 
  * if possible. */
 {
-unsigned long long pieces = (estSize + pieceSize-1)/pieceSize;
+off_t pieces = (estSize + pieceSize-1)/pieceSize;
 int digits = digitsBaseTen(pieces);
 int minGapSize = optionInt("minGapSize", 1000);
 boolean noGapDrops = optionExists("noGapDrops");
@@ -687,7 +687,7 @@ printf("%d pieces of %d written\n", writeCount, pieceIx);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-unsigned long long estSize;
+off_t estSize;
 char *how = NULL;
 char *inName = NULL;
 int count;
