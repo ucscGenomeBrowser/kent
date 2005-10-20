@@ -254,22 +254,19 @@ else
 return dyStringCannibalize(&dy);
 }
 
-struct slName *visiGeneGeneName(struct sqlConnection *conn, int id)
-/* Return list of gene names  - HUGO if possible, RefSeq/GenBank, etc if not. 
- * slNameFreeList this when done. */
+char *vgGeneNameFromId(struct sqlConnection *conn, int geneId)
+/* Return gene name associated with gene ID  - HUGO if possible, 
+ * RefSeq/GenBank, etc if not. You can freeMem this when done.  */
 {
-struct slName *list = NULL, *el = NULL;
 struct sqlResult *sr;
+char *result = "";
 char **row;
 char query[256], buf[256];
 safef(query, sizeof(query),
-      "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt"
-      " from imageProbe,probe,gene"
-      " where imageProbe.image = %d"
-      " and imageProbe.probe = probe.id"
-      " and probe.gene = gene.id", id);
+      "select name,locusLink,refSeq,genbank,uniProt from gene"
+      " where id = %d", geneId);
 sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
     char *locusLink = row[1];
@@ -277,23 +274,50 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *genbank = row[3];
     char *uniProt = row[4];
     if (name[0] != 0)
-        el = slNameNew(name);
+	result = name;
     else if (refSeq[0] != 0)
-        el = slNameNew(refSeq);
+	result = refSeq;
     else if (genbank[0] != 0)
-        el = slNameNew(genbank);
+	result = genbank;
     else if (uniProt[0] != 0)
-        el = slNameNew(uniProt);
+	result = uniProt;
     else if (locusLink[0] != 0)
 	{
 	safef(buf, sizeof(buf), "Entrez Gene %s", locusLink);
-        el = slNameNew(buf);
+	result = buf;
 	}
-    slAddHead(&list, el);
     }
+else
+    {
+    internalErr();
+    }
+result = cloneString(result);
 sqlFreeResult(&sr);
-slReverse(&list);
-return list;
+return result;
+}
+
+struct slName *visiGeneGeneName(struct sqlConnection *conn, int id)
+/* Return list of gene names  - HUGO if possible, RefSeq/GenBank, etc if not. 
+ * slNameFreeList this when done. */
+{
+struct slInt *geneList, *gene;
+struct slName *nameList = NULL, *name;
+char query[256];
+safef(query, sizeof(query), 
+    "select probe.gene from imageProbe,probe "
+    " where imageProbe.image = %d"
+    " and imageProbe.probe = probe.id", id);
+geneList = sqlQuickNumList(conn, query);
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    char *s = vgGeneNameFromId(conn, gene->val);
+    name = slNameNew(s);
+    slAddHead(&nameList, name);
+    freeMem(s);
+    }
+slFreeList(&geneList);
+slReverse(&nameList);
+return nameList;
 }
 
 static struct slName *extNamesForId(struct sqlConnection *conn, int id, 

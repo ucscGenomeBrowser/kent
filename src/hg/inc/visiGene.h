@@ -137,4 +137,8 @@ struct slInt *visiGeneSelectUniProt(struct sqlConnection *conn, char *acc);
 /* Return ids of images that have probes involving UniProt accessioned
  * sequence. */
 
+char *vgGeneNameFromId(struct sqlConnection *conn, int geneId);
+/* Return gene name associated with gene ID  - HUGO if possible, 
+ * RefSeq/GenBank, etc if not. You can freeMem this when done.  */
+
 #endif /* VISIGENE_H */
