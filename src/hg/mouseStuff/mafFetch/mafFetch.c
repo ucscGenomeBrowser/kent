@@ -6,9 +6,9 @@
 #include "maf.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: mafFetch.c,v 1.2 2005/10/20 09:03:12 markd Exp $";
+static char const rcsid[] = "$Id: mafFetch.c,v 1.3 2005/10/20 17:17:20 markd Exp $";
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -49,8 +49,8 @@ if (dif == 0)
 return dif;
 }
 
-struct scoredRef *loadMafRefs(struct sqlConnection *conn, char *table,
-                                 struct bed *beds)
+static struct scoredRef *loadMafRefs(struct sqlConnection *conn, char *table,
+                                     struct bed *beds)
 /* load all maf refs and sort to make unique */
 {
 struct bed *bed;
@@ -63,51 +63,38 @@ slUniqify(&refs, cmpScoredRef, scoredRefFree);
 return refs;
 }
 
-
-void mafFetchBed(struct sqlConnection *conn, char *table, struct bed *bed,
-                 FILE *mafFh)
-/* copy maf records overlapping bed */
-{
-struct mafAli *ali, *aliLst;
-aliLst = mafLoadInRegion(conn, table, bed->chrom, bed->chromStart, bed->chromEnd);
-
-for (ali = aliLst; ali != NULL; ali = ali->next)
-    mafWrite(mafFh, ali);
-
-mafAliFree(&ali);
-}
-
-void copyMafs(struct sqlConnection *conn, struct scoredRef *refs, FILE *outFh)
+static void copyMafs(struct sqlConnection *conn,
+                     struct scoredRef *refs, FILE *outFh)
 /* copy mafs */
 {
-struct mafFile *maf = NULL;
+struct mafFile *mf = NULL;
 unsigned extFile = 0;
 unsigned recCnt = 0;
 struct scoredRef *ref;
-struct mafAli *ali;
+struct mafAli *maf;
 
 for (ref = refs; ref != NULL; ref = ref->next)
     {
     if ((maf == NULL) || (extFile != ref->extFile))
         {
-        mafFileFree(&maf);
-        maf = mafOpen(hExtFileName("extFile", ref->extFile));
+        mafFileFree(&mf);
+        mf = mafOpen(hExtFileName("extFile", ref->extFile));
         extFile = ref->extFile;
         if (recCnt == 0)
-            mafWriteStart(outFh, maf->scoring);
+            mafWriteStart(outFh, mf->scoring);
         }
-    lineFileSeek(maf->lf, ref->offset, SEEK_SET);
-    ali = mafNext(maf);
-    if (ali == NULL)
-        errAbort("unexpected EOF on MAF %s", maf->lf->fileName);
-    mafWrite(outFh, ali);
-    mafAliFree(&ali);
+    lineFileSeek(mf->lf, ref->offset, SEEK_SET);
+    maf = mafNext(mf);
+    if (maf == NULL)
+        errAbort("unexpected EOF on MAF %s", mf->lf->fileName);
+    mafWrite(outFh, maf);
+    mafAliFree(&maf);
     recCnt++;
     }
-mafFileFree(&maf);
+mafFileFree(&mf);
 }
 
-void mafFetch(char *db, char *table, char *overBed, char *mafOut)
+static void mafFetch(char *db, char *table, char *overBed, char *mafOut)
 /* mafFetch - get overlapping records from an MAF using an index table */
 {
 struct bed *beds;
