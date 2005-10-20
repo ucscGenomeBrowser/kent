@@ -3627,6 +3627,72 @@ done
     # to preserve the Notes field
 
 
+# LIFTOVER CHAINS TO MM6 (2005-09-25 kate)
+    # NOTE: split mm6 is doc'ed in makeMm5.doc
+    
+    ssh kkstore01
+    cp -r /cluster/data/mm6/liftSplits/ /san/sanvol1/scratch/mm6
+
+    ssh pk
+    cd /cluster/data/mm3
+    makeLoChain-align mm3 /scratch/hg/mm3/chromTrfMixedNib \
+        mm6 /san/sanvol1/scratch/mm6/liftSplits/split /scratch/hg/h/mouse11.ooc
+        #Setting up blat in /cluster/data/mm3/bed/blat.mm6.2005-09-24/run
+        # 1480 jobs
+    cd bed
+    rm -f blat.mm6
+    ln -s blat.mm6.2005-09-24 blat.mm6
+    cd blat.mm6/run
+    para try
+    para check
+
+    # jobs tie up pk cluster (4G) -- the chrom sequence files should be split
+    # up to create more, smaller cluster jobs
+
+    # stopped with 1 hippo and 1 crashed.  Resubmit
+# CPU time in finished jobs:    1586754s   26445.90m   440.77h   18.37d  0.050 y
+# IO & Wait Time:                 86144s    1435.73m    23.93h    1.00d  0.003 y
+# Time in running jobs:          111814s    1863.57m    31.06h    1.29d  0.004 y
+# Average job time:                1132s      18.86m     0.31h    0.01d
+# Longest running job:           111814s    1863.57m    31.06h    1.29d
+# Longest finished job:           22685s     378.08m     6.30h    0.26d
+# Submission to last job:         29164s     486.07m     8.10h    0.34d
+
+    # retry chrUn vs chrUn (hippo) on kolossus
+    # NOTE: this took _days_.  Needs to be split up.
+    ssh kolossus
+    blat /scratch/hg/mm3/chromTrfMixedNib/chrUn_random.nib /san/sanvol1/scratch/mm6/liftSplits/split/chrUn_random.fa ../raw/chrUn_random_chrUn_random.psl -tileSize=11 -ooc=/scratch/hg/h/mouse11.ooc -minScore=100 -minIdentity=98 -fastMap
+
+    # GOT HERE
+
+    # lift results
+    # the lift directory was defined in makeMm5.doc when split was performed
+    # this expects data in bed/blat.mm6, so symlink must be there 
+    # use kolossus for speed
+    ssh kolossus
+    cd /cluster/data/mm3/bed/blat.mm6
+    # NOTE: had to make a local copy of makeLoChain-lift and edit
+    # to remove dependence on date of previous run.
+    makeLoChain-lift mm3 mm6 /san/sanvol1/scratch/mm6/liftSplits/lift
+                        >&! lift.log &
+    tail -100f lift.log
+
+    # chain alignments
+    ssh kki
+    cd /cluster/data/mm3/bed/blat.mm6
+    makeLoChain-chain mm3 /cluster/data/mm3/nib mm6 /cluster/data/mm6/nib
+        # Created parasol job in /cluster/data/mm3/bed/blat.mm6/chainRun
+    cd /cluster/data/mm3/bed/blat.mm6/chainRun
+    para try
+        # 46 jobs
+    para check
+    para push
+
+    ssh kkstore01
+    cd /cluster/data/mm3/bed/blat.mm6
+    makeLoChain-net mm3 mm6
+
+
 # LIFTOVER CHAINS TO MM5 (WORKING 2004-09-29 kate)
 
     # run alignment
