@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.4 2005/06/15 00:23:27 sugnet Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.5 2005/10/20 01:15:32 sugnet Exp $";
 
 
 
@@ -209,6 +209,8 @@ enum trackVisibility tnfgVis = tvHide;
 char *visString = cartUsualString(cart, "hgt.affyPhase2.tnfg", "hide");
 tnfgVis = hTvFromString(visString);
 
+slReverse(&track->subtracks);
+
 /* After a megabase, just give the packed view. */
 if(tooBig && track->visibility == tvFull)
     track->limitedVis = tvDense;
@@ -222,11 +224,15 @@ if(track->limitedVis != tvFull)
 /* Override composite default settings. */
 for(sub = track->subtracks; sub != NULL; sub = sub->next)
     {
-    if(stringIn("bed", sub->tdb->type) && track->limitedVis == tvFull)
+    if(stringIn("bed", sub->tdb->type) && track->limitedVis == tvFull) 
+	{
 	sub->visibility = tnfgVis;
+	sub->mapsSelf = TRUE;
+	sub->mapItem = affyTxnPhase2MapItem;
+	}
     if(stringIn("wig", sub->tdb->type))
 	{
-	sub->mapItem = affyTxnPhase2MapItem;
+//	sub->mapItem = affyTxnPhase2MapItem;
 	sub->mapsSelf = FALSE;
 	sub->extraUiData = CloneVar((struct wigCartOptions *)track->extraUiData);
 	if(trackDbSetting(sub->tdb, "wigColorBy") != NULL)
@@ -249,9 +255,23 @@ if(track->limitedVis == tvDense)
 	    dyStringPrintf(s, "%s (%s)", track->longLabel, sub->shortLabel);
 	    freez(&sub->shortLabel);
 	    sub->shortLabel = cloneString(track->shortLabel);
-	    freez(&sub->longLabel);
-	    sub->longLabel = cloneString(s->string);
+	    freez(&track->longLabel);
+	    track->longLabel = cloneString(s->string);
 	    dyStringFree(&s);
+	    assert(sub->tdb->settingsHash);
+	    assert(track->tdb->settingsHash);
+	    /* For legacy carts remove existing track settings. */
+	    if(trackDbSetting(sub->tdb, "centerLabelsDense"))
+		hashRemove(sub->tdb->settingsHash, "centerLabelsDense");
+	    if(trackDbSetting(track->tdb, "centerLabelsDense"))
+		hashRemove(track->tdb->settingsHash, "centerLabelsDense");
+	    
+	    /* When in dense mode a composite track is supposed to print its center
+	       label and surpress the center lable of subtracks, otherwise the
+	       click map gets out of sync. Since we are going to draw using the
+	       first track, turn its labels off and the label for the main track on. */
+	    hashAdd(sub->tdb->settingsHash, "centerLabelsDense", "off");
+	    hashAdd(track->tdb->settingsHash, "centerLabelsDense", "on");
 	    first = FALSE;
 	    }
 	else 
@@ -261,6 +281,13 @@ if(track->limitedVis == tvDense)
 	    sub->limitedVisSet = TRUE;
 	    }
 	}
+    }
+else
+    {
+    assert(track->tdb->settingsHash);
+    if(trackDbSetting(track->tdb, "centerLabelsDense"))
+	hashRemove(track->tdb->settingsHash, "centerLabelsDense");
+    hashAdd(track->tdb->settingsHash, "centerLabelsDense", "off");
     }
 
 /* Load up everything appropriate. */

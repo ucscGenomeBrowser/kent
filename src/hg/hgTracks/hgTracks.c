@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1022 2005/10/14 13:15:30 baertsch Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1023 2005/10/20 01:15:31 sugnet Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -756,6 +756,7 @@ if (xEnd > tl.picWidth) xEnd = tl.picWidth;
 if (x < xEnd)
     {
     char *encodedItem = cgiEncode(item);
+
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (doHgGene)
         {
@@ -7153,10 +7154,10 @@ static boolean isWithCenterLabels(struct track *track)
 if (track != NULL)
     {
     char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
-    if (centerLabelsDense && !sameWord(centerLabelsDense, "off"))
+    if (centerLabelsDense) 
 	{
-	if (isCompositeTrack(track))
-	    return FALSE;
+	boolean on =  sameWord(centerLabelsDense, "on") && withCenterLabels;
+	return on;
 	}
     else if (((limitVisibility(track) == tvDense) && isSubtrack(track)) ||
 	     ((limitVisibility(track) != tvDense) && isCompositeTrack(track)))
@@ -8197,7 +8198,20 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (track->limitedVis != tvHide)
-	y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
+	{
+	if(isCompositeTrack(track)) 
+	    {
+	    struct track *subtrack = NULL;
+	    if (isWithCenterLabels(track))
+		y += fontHeight;
+	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+		y = doTrackMap(subtrack, y, fontHeight, trackPastTabX, trackPastTabWidth);
+	    }
+	else 
+	    {
+		y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
+	    }
+	}
     }
 
 /* Finish map. */
