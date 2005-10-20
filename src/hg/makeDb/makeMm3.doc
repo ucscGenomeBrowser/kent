@@ -3663,10 +3663,7 @@ done
     ssh kolossus
     blat /scratch/hg/mm3/chromTrfMixedNib/chrUn_random.nib /san/sanvol1/scratch/mm6/liftSplits/split/chrUn_random.fa ../raw/chrUn_random_chrUn_random.psl -tileSize=11 -ooc=/scratch/hg/h/mouse11.ooc -minScore=100 -minIdentity=98 -fastMap
 
-    # GOT HERE
-
     # lift results
-    # the lift directory was defined in makeMm5.doc when split was performed
     # this expects data in bed/blat.mm6, so symlink must be there 
     # use kolossus for speed
     ssh kolossus
@@ -3691,6 +3688,9 @@ done
     ssh kkstore01
     cd /cluster/data/mm3/bed/blat.mm6
     makeLoChain-net mm3 mm6
+
+    # GOT HERE
+    # Can't load into liftOverChain table -- format has changed
 
 
 # LIFTOVER CHAINS TO MM5 (WORKING 2004-09-29 kate)
@@ -3724,26 +3724,6 @@ done
         # 25 minutes 
 
     # GOT HERE
-
-    # chain alignments
-    ssh kki
-    makeLoChain-chain mm3 /cluster/data/mm3/nib mm5 /cluster/data/mm5/nib
-        # Created parasol job in /cluster/data/mm3/bed/blat.mm5/chainRun
-    cd /cluster/data/mm3/bed/blat.mm5/chainRun
-    para try
-        # 46 jobs
-    para check
-    para push
-
-    # make alignment net
-    ssh kolossus
-    makeLoChain-net mm3 mm5
-
-    # load into database and copy to download directory
-    ssh hgwdev
-    makeLoChain-load mm3 mm5
-        # Finished loading mm3ToHg17.over.chain
-        # Now, add download link for /usr/local/apache/htdocs/goldenPath/mm3/liftOver/mm3ToHg17.over.chain.gz
 
 
 # HUMAN HG13 BLASTZ CLEANUP (DONE 2004-09-20 kate)
