@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.959 2005/10/20 13:24:11 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.960 2005/10/20 14:44:14 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14412,6 +14412,29 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+void keggOtherGenes(struct sqlConnection *conn, char *geneId)
+/* Print out genes linked to a kegg pathway. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+char *extraTable = "gbProtCodeXra";
+if (hTableExists(extraTable)) 
+    {
+    safef(query, sizeof(query), 
+            "select x.name, x.gene, x.product from keggPathway k2, keggPathway k1, %s x  "
+            "where k1.mapID = k2.mapID and k2.kgID = x.name and k1.KgId = '%s';"
+            , extraTable, geneId );
+    sr = sqlGetResult(conn, query);
+    printf("<table>\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<tr><td> %s</td><td> %s</td><td> %s</td></tr>\n",
+            row[0], row[1], row[2]);
+        }
+    sqlFreeResult(&sr);
+    printf("</table>\n");
+    }
+}
 int keggCount(struct sqlConnection *conn, char *geneId)
 /* Count up number of hits. */
 {
@@ -14534,6 +14557,8 @@ if (keggCount(conn, item) > 0)
     {
     printf("<B>Kegg Pathway: </b><BR>");
     keggLink(conn, item);
+    printf("<B>Other Genes in Kegg Pathway: </b><BR>");
+    keggOtherGenes(conn, item);
     printf("<BR>\n");
     }
 /* interpro domains */
