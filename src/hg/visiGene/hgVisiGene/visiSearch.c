@@ -11,7 +11,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.3 2005/10/14 19:38:55 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.4 2005/10/20 22:32:31 kent Exp $";
 
 static int visiMatchCmpImageId(void *va, void *vb)
 /* rbTree comparison function to tree on imageId. */
@@ -220,14 +220,25 @@ dyStringFree(&query);
 
 
 static void addImagesMatchingQuery(struct visiSearcher *searcher,
-    struct sqlConnection *conn, char *query)
+    struct sqlConnection *conn, char *query, struct hash *uniqHash)
 /* Add images that match query */
 {
 struct sqlResult *sr;
 char **row;
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
-   visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+    {
+    boolean skip = FALSE;
+    if (uniqHash)
+	{
+	if (hashLookup(uniqHash, row[0]))
+	    skip = TRUE;
+	else
+	    hashAdd(uniqHash, row[0], NULL);
+	}
+   if (!skip)
+       visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+   }
 sqlFreeResult(&sr);
 }
 
@@ -248,7 +259,7 @@ dyStringPrintf(dy,
    "and submissionContributor.submissionSet = imageFile.submissionSet "
    "and imageFile.id = image.imageFile"
    , contributor);
-addImagesMatchingQuery(searcher, conn, dy->string);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL);
 }
 
 static void visiGeneMatchContributor(struct visiSearcher *searcher, 
@@ -358,6 +369,7 @@ static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
  * searcher with a weight of one.  Use dy for scratch space for
  * the query. */
 {
+struct hash *uniqHash = newHash(0);
 dyStringClear(dy);
 dyStringPrintf(dy, 
    "select imageProbe.image from "
@@ -367,7 +379,7 @@ dyStringPrintf(dy,
    "and expressionLevel.imageProbe = imageProbe.id "
    "and expressionLevel.level > 0"
    , bodyPart);
-addImagesMatchingQuery(searcher, conn, dy->string);
+addImagesMatchingQuery(searcher, conn, dy->string, uniqHash);
 
 dyStringClear(dy);
 dyStringPrintf(dy,
@@ -375,7 +387,8 @@ dyStringPrintf(dy,
     "where bodyPart.name = \"%s\" "
     "and bodyPart.id = specimen.bodyPart "
     "and specimen.id = image.specimen");
-addImagesMatchingQuery(searcher, conn, dy->string);
+addImagesMatchingQuery(searcher, conn, dy->string, uniqHash);
+hashFree(&uniqHash);
 }
 
 static void visiGeneMatchBodyPart(struct visiSearcher *searcher,
@@ -414,7 +427,7 @@ if (maxAge != NULL)
     dyStringPrintf(dy, "and specimen.age < %s ", maxAge);
 dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
 dyStringPrintf(dy, "and specimen.id = image.specimen");
-addImagesMatchingQuery(searcher, conn, dy->string);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL);
 
 dyStringFree(&dy);
 }
@@ -470,7 +483,7 @@ dyStringPrintf(dy,
     "and submissionSet.id = imageFile.submissionSet "
     "and imageFile.id = image.imageFile"
     , minYear, maxYear);
-addImagesMatchingQuery(searcher, conn, dy->string);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL);
 dyStringFree(&dy);
 }
 
