@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.960 2005/10/20 14:44:14 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.961 2005/10/20 18:34:43 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14418,12 +14418,13 @@ void keggOtherGenes(struct sqlConnection *conn, char *geneId)
 char query[512], **row;
 struct sqlResult *sr;
 char *extraTable = "gbProtCodeXra";
+char *keggTable = "keggPathway";
 if (hTableExists(extraTable)) 
     {
     safef(query, sizeof(query), 
-            "select x.name, x.gene, x.product from keggPathway k2, keggPathway k1, %s x  "
+            "select x.name, x.gene, x.product from %s k2, %s k1, %s x  "
             "where k1.mapID = k2.mapID and k2.kgID = x.name and k1.KgId = '%s';"
-            , extraTable, geneId );
+            , keggTable,keggTable,  extraTable, geneId );
     sr = sqlGetResult(conn, query);
     printf("<table>\n");
     while ((row = sqlNextRow(sr)) != NULL)
@@ -14439,8 +14440,11 @@ int keggCount(struct sqlConnection *conn, char *geneId)
 /* Count up number of hits. */
 {
 char query[256];
+char *keggTable = "keggPathway";
+if (!hTableExists(keggTable)) 
+    return 0;
 safef(query, sizeof(query), 
-	"select count(*) from keggPathway where kgID='%s'", geneId);
+	"select count(*) from %s where kgID='%s'", keggTable, geneId);
 return sqlQuickNum(conn, query);
 }
 void doRefSeq(struct trackDb *tdb, char *item, 
