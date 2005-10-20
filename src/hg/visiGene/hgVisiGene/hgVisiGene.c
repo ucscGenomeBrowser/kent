@@ -32,12 +32,12 @@ return "VisiGene";
 }
 
 char *hgVisiGeneCgiName()
-/* Return short descriptive name (not cgi-executable name)
- * of program */
+/* Return name of executable. */
 {
 return "hgVisiGene";
 }
 
+#ifdef UNUSED
 int visiGeneMaxImageId(struct sqlConnection *conn)
 /* Get the largest image ID.  Currently all images between
  * 1 and this exist, though I wouldn't count on this always
@@ -48,8 +48,9 @@ safef(query, sizeof(query),
     "select max(id) from image");
 return sqlQuickNum(conn, query);
 }
+#endif /* UNUSED */
 
-struct slName *visiGeneGeneColorName(struct sqlConnection *conn, int id)
+static struct slName *geneColorName(struct sqlConnection *conn, int id)
 /* Get list of genes.  If more than one in list
  * put color of gene if available. */
 {
@@ -150,7 +151,7 @@ slReverse(&matchList);
 return matchList;
 }
 
-char *shortOrgName(char *binomial)
+static char *shortOrgName(char *binomial)
 /* Return short name for taxon - scientific or common whatever is
  * shorter */
 {
@@ -189,7 +190,7 @@ if (name == NULL)
 return name;
 }
 
-char *genomeDbForImage(struct sqlConnection *conn, int imageId)
+static char *genomeDbForImage(struct sqlConnection *conn, int imageId)
 /* Return the genome database to associate with image or NULL if none. */
 {
 char *db;
@@ -208,7 +209,7 @@ hDisconnectCentral(&cConn);
 return db;
 }
 
-struct slName *visiGeneImageFileGenes(struct sqlConnection *conn, int imageFile)
+struct slName *vgImageFileGenes(struct sqlConnection *conn, int imageFile)
 /* Return alphabetical list of all genes associated with image file. */
 {
 struct hash *uniqHash = hashNew(0);
@@ -239,13 +240,13 @@ slSort(&geneList, slNameCmp);
 return geneList;
 }
 
-void smallCaption(struct sqlConnection *conn, int imageId)
+static void smallCaption(struct sqlConnection *conn, int imageId)
 /* Write out small format caption. */
 {
 struct slName *geneList, *gene;
 int imageFile = visiGeneImageFile(conn, imageId);
 printf("%s", shortOrgName(visiGeneOrganism(conn, imageId)));
-geneList = visiGeneImageFileGenes(conn, imageFile);
+geneList = vgImageFileGenes(conn, imageFile);
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
     printf(" %s", gene->name);
@@ -253,27 +254,8 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 slFreeList(&geneList);
 }
 
-struct slInt *idsInRange(struct sqlConnection *conn, int startId)
-/* Select first 50 id's including and after startId */
-{
-char query[256], **row;
-struct sqlResult *sr;
-struct slInt *list = NULL, *el;
-
-safef(query, sizeof(query), "select id from image where id >= %d limit %d",
-	startId, 50);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = slIntNew(sqlUnsigned(row[0]));
-    slAddHead(&list, el);
-    }
-sqlFreeResult(&sr);
-slReverse(&list);
-return list;
-}
-
-struct visiMatch *onePerImageFile(struct sqlConnection *conn, struct visiMatch *matchList)
+static struct visiMatch *onePerImageFile(struct sqlConnection *conn, 
+	struct visiMatch *matchList)
 /* Return image list that filters out second occurence of
  * same imageFile. */
 {
@@ -305,8 +287,7 @@ slReverse(&newList);
 return newList;
 }
 
-
-void doThumbnails(struct sqlConnection *conn)
+static void doThumbnails(struct sqlConnection *conn)
 /* Write out list of thumbnail images. */
 {
 char *sidUrl = cartSidUrlString(cart);
@@ -406,7 +387,7 @@ htmlEnd();
 }
 
 
-char *makeCommaSpacedList(struct slName *list)
+static char *makeCommaSpacedList(struct slName *list)
 /* Turn linked list of strings into a single string with
  * elements separated by a comma and a space. */
 {
@@ -441,47 +422,9 @@ else
     }
 }
 
-char *visiGeneExpressionIn(struct sqlConnection *conn, int id)
-/* Return comma-separated list of parts where expression is
- * observed. */
-{
-struct dyString *dy = dyStringNew(256);
-char query[512], **row;
-boolean gotAny = FALSE;
-struct sqlResult *sr;
-safef(query, sizeof(query),
-   "select bodyPart.name,expressionLevel.level "
-   "from expressionLevel,bodyPart,imageProbe "
-   "where imageProbe.image = %d "
-   "and imageProbe.id = expressionLevel.imageProbe "
-   "and expressionLevel.bodyPart = bodyPart.id "
-   "order by bodyPart.name"
-   , id);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    double level = atof(row[1]);
-    if (gotAny)
-        dyStringAppend(dy, ", ");
-    dyStringAppend(dy, row[0]);
-    if (level >= 0.1)
-       dyStringAppend(dy, "(+)");
-    else 
-       dyStringAppend(dy, "(-)");
-    gotAny = TRUE;
-    }
-sqlFreeResult(&sr);
-if (gotAny)
-    return dyStringCannibalize(&dy);
-else
-    {
-    dyStringFree(&dy);
-    return NULL;
-    }
-}
 
-
-struct slName *expTissuesForProbeInImage(struct sqlConnection *conn, int imageId,
+static struct slName *expTissuesForProbeInImage(struct sqlConnection *conn, 
+	int imageId,
 	int probeId)
 /* Get list of tissue where we have expression info in gene.
  * Put + or - depending on expression level. */
@@ -518,49 +461,6 @@ dyStringFree(&dy);
 return tissueList;
 }
 
-char *vgGeneNameFromId(struct sqlConnection *conn, int geneId)
-/* Return list of gene names  - HUGO if possible, RefSeq/GenBank, etc if not. 
- * slNameFreeList this when done. */
-{
-struct slName *list = NULL, *el = NULL;
-struct sqlResult *sr;
-char *result = "";
-char **row;
-char query[256], buf[256];
-safef(query, sizeof(query),
-      "select name,locusLink,refSeq,genbank,uniProt from gene"
-      " where id = %d", geneId);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *name = row[0];
-    char *locusLink = row[1];
-    char *refSeq = row[2];
-    char *genbank = row[3];
-    char *uniProt = row[4];
-    if (name[0] != 0)
-	result = name;
-    else if (refSeq[0] != 0)
-	result = refSeq;
-    else if (genbank[0] != 0)
-	result = genbank;
-    else if (uniProt[0] != 0)
-	result = uniProt;
-    else if (locusLink[0] != 0)
-	{
-	safef(buf, sizeof(buf), "Entrez Gene %s", locusLink);
-	result = buf;
-	}
-    }
-else
-    {
-    internalErr();
-    }
-result = cloneString(result);
-sqlFreeResult(&sr);
-return result;
-}
-
 struct expInfo 
 /* Info on expression in various tissues for a particular gene. */
     {
@@ -571,7 +471,7 @@ struct expInfo
     struct slName *tissueList;  /* List of tissues where gene expressed */
     };
 
-void expInfoFree(struct expInfo **pExp)
+static void expInfoFree(struct expInfo **pExp)
 /* Free up memory associated with expInfo. */
 {
 struct expInfo *exp = *pExp;
@@ -583,7 +483,7 @@ if (exp != NULL)
     }
 }
 
-void expInfoFreeList(struct expInfo **pList)
+static void expInfoFreeList(struct expInfo **pList)
 /* Free a list of dynamically allocated expInfo's */
 {
 struct expInfo *el, *next;
@@ -597,7 +497,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct expInfo *expInfoForImage(struct sqlConnection *conn, int imageId)
+static struct expInfo *expInfoForImage(struct sqlConnection *conn, int imageId)
 /* Return list of expression info for a given pane. */
 {
 struct dyString *dy = dyStringNew(0);
@@ -632,7 +532,7 @@ for (exp = expList; exp != NULL; exp = exp->next)
 return expList;
 }
 
-void addExpressionInfo(struct sqlConnection *conn, int imageId,
+static void addExpressionInfo(struct sqlConnection *conn, int imageId,
 	struct captionElement **pCeList)
 /* Add information about expression to caption element list.
  * Since the pane can contain multiple genes each with
@@ -677,8 +577,8 @@ else
     }
 }
 
-struct captionElement *makePaneCaptionElements(struct sqlConnection *conn,
-	struct slInt *imageList)
+static struct captionElement *makePaneCaptionElements(
+	struct sqlConnection *conn, struct slInt *imageList)
 /* Make list of all caption elements */
 {
 struct slInt *image;
@@ -686,7 +586,7 @@ struct captionElement *ceList = NULL, *ce;
 for (image = imageList; image != NULL; image = image->next)
     {
     int paneId = image->val;
-    struct slName *geneList = visiGeneGeneColorName(conn, paneId);
+    struct slName *geneList = geneColorName(conn, paneId);
     struct slName *genbankList = visiGeneGenbank(conn, paneId);
     ce = captionElementNew(paneId, "gene", makeCommaSpacedList(geneList));
     slAddHead(&ceList, ce);
@@ -710,7 +610,7 @@ slReverse(&ceList);
 return ceList;
 }
 
-void printCaptionElements(struct sqlConnection *conn, 
+static void printCaptionElements(struct sqlConnection *conn, 
 	struct captionElement *captionElements, struct slInt *imageList)
 /* Print out caption elements - common elements first and then
  * pane-specific ones. */
@@ -762,7 +662,7 @@ if (bundleCount > 1)
     printf("<HR>\n");
 }
 
-void fullCaption(struct sqlConnection *conn, int id)
+static void fullCaption(struct sqlConnection *conn, int id)
 /* Print information about image. */
 {
 char query[256];
