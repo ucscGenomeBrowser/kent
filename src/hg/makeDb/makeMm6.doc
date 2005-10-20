@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.85 2005/10/17 23:41:17 fanhsu Exp $"
+#	"$Id: makeMm6.doc,v 1.86 2005/10/20 18:23:38 fanhsu Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8523,7 +8523,7 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
 
     hgLoadSeq -replace mm6 /gbdb/mm6/NIAGene/T-fasta.fa
 
-#  UPDATE miRNA track (DONE - 2005-10-17 - Fan)
+#  UPDATE miRNA track (DONE - 2005-10-20 - Fan)
 #   data from: Michel.Weber@ibcg.biotoul.fr
 #   notify them when done.
 
@@ -8533,6 +8533,7 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
    cd miRNA
 
 #  save miRNA_track_mm6_oct2005.txt file from email
+#  MANUALLY EDIT ONE LINE PER WEB's EMAIL OF 10/18/05.   
    
    cp miRNA_track_mm6_oct2005.txt miRNA.tab
    vi miRNA.tab
