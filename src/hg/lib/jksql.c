@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.79 2005/09/02 01:05:06 kate Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.80 2005/10/20 21:39:21 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1050,6 +1050,24 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     n = slNameNew(row[0]);
+    slAddHead(&list, n);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+struct slInt *sqlQuickNumList(struct sqlConnection *conn, char *query)
+/* Return a list of slInts for a single column query.
+ * Do a slFreeList on result when done. */
+{
+struct slInt *list = NULL, *n;
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    n = slIntNew(sqlSigned(row[0]));
     slAddHead(&list, n);
     }
 sqlFreeResult(&sr);
