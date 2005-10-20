@@ -3656,10 +3656,10 @@ close MARKERS;
    # ctgnames file and is in the bacCloneXRef table so that is ok.
    # All data looks good in these tables now.
 
-# BLASTZ TETRAODON (tetNig1) (in progress, 2005-08-19, hartera)
+# BLASTZ TETRAODON (tetNig1) (DONE, 2005-10-20, hartera)
     # Tetraodon is quite distant from zebrafish, more distant than human/chicken
-    # so use the HoxD55.q matrix in for blastz.
-    # blastz requires lineage-specific repeats but there are none
+    # so use the HoxD55.q matrix for the Blastz alignments.
+    # Blastz requires lineage-specific repeats but there are none
     # available between these two fish species 
     
     ssh kkstore02
@@ -3698,15 +3698,12 @@ close MARKERS;
     cp /cluster/bluearc/tetNig1/contigs/tetNig1ChrContigsRandomScafs.2bit \
        /san/sanvol1/scratch/tetNig1/contigs/
 # use tetraodon sequence in contigs for dynamic masking - see below
-# for dynamic masking: M=50
-# NEED TO DO danRer3 chroms vs tetNig1 chroms (non-random) with chroms
-# in contigs. lift up after blastz for chroms. carry on to chainMerge
-# danRer3 chroms vs tetNig1 randoms and through to chainMerge then lift up
-# danRer3 scaffolds vs tetNig1 chroms (non-random) to after blastz, lift up
-# for tetNig1, then go to chainMerge, lift up for danRer3.
-# danRer3 scaffolds vs tetNig1 randoms as scaffolds through to chainMerge step
-# lift up both danRer3 and tetNig1
-# merge together all chains from above.
+# for dynamic masking: M=50. Each time a base is hit at least 50 times, it
+# is masked out.
+# Blastz danRer3 chroms and scaffolds vs tetNig1 ordered chrom contigs and 
+# scaffolds from random chromosomes. lift up the tetNig1 contigs to chrom 
+# level. Then make the chains and then liftUp all the scaffolds to chrom 
+# level before sorting and merging chains and then netting.
     # get all contigs from mapped ordered chroms and make 2bit file
     # see makeTetNig1.doc
 
@@ -3906,6 +3903,10 @@ TMPDIR=/scratch/tmp
     twoBitInfo \
 /san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit \
     /san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.sizes
+    # Also, need to change the sequence sizes file for tetNig1 to the 
+    # chrom sizes and not the scaffolds and contigs sizes.
+    cp S2.len S2contigsAndScafs.len
+    cp /cluster/data/tetNig1/chrom.sizes S2.len
     # then run doBlastzChainNet.pl script again
     nice /cluster/bin/scripts/doBlastzChainNet.pl \
          -bigClusterHub=pk \
@@ -3919,6 +3920,8 @@ TMPDIR=/scratch/tmp
     # crashed as one job failed after 4 retries, problem is that 
     # part958.lst.psl.gz is not recognized as a psLayout file. It is empty
     # except for parameter comment lines so it can be ignored.
+    # Also, need to change the sequence sizes file for tetNig1 to the 
+    # chrom sizes and not the scaffolds and contigs sizes.
     ssh pk
     cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun/axtChain/run/
     para time > run.time
@@ -3940,7 +3943,27 @@ TMPDIR=/scratch/tmp
          -continue chainMerge \
          -chainMinScore=5000 \
          `pwd`/DEF >& doChainMergeNet.log &
-     # PID 26614 Start: Wed Oct 19 12:11     
+    # Start: Wed Oct 19 12:52 Finish: Oct 19 13:13   
+    # Add a trackDb.ra entry for chainTetNig1 and netTetNig1 and add html 
+    # pages. Modify track descriptions to describe the process using 
+    # scaffolds for danRer3 chrNA and chrUn and the fact that dynamic 
+    # masking was used for the Blastz alignments Edit the README for 
+    # the downloads to add in information about using scaffolds for Blastz 
+    # for danRer3 chrNA and chrUn and for tetNig1 random unordered chroms, 
+    # and how the tetNig1 genome was aligned as a file of contigs for chroms
+    # and scaffolds for randoms for the Blastz alignments and so that
+    # each danRer3 chunk was aligned with the whole of the tetraodon 
+    # genome to take advantage of dynamic masking (M=50).
+    # Finally, run a doBlastzChainNet.pl swap for this to create danRer3 
+    # chains and net tracks on tetNig1 - see makeTetNig1.doc.
+ 
+# featureBits -chrom=chr2 danRer3 refGene:cds chainTetNig1Link -enrichment
+# refGene:cds 0.746%, chainTetNig1Link 7.167%, both 0.672%, cover 90.17%, 
+# enrich 12.58x
+# featureBits -chrom=chr2 danRer2 refGene:cds chainTetNig1Link -enrichment
+# refGene:cds 0.750%, chainTetNig1Link 4.463%, both 0.621%, cover 82.84%, 
+# enrich 18.56x
+# so better coverage for danRer3 but less enrichment than for danRer2.
 
     # Test Runs for chr2 and chrUn
     cd /cluster/data/danRer3/bed/blastz.tetNig1
