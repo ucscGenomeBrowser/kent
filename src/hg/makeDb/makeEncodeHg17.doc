@@ -897,6 +897,7 @@ cat > load.csh << 'EOF'
 # Gencode Genes (2005-10-10 kate)
 #    Files are on Gencode/IMIM web site, our contact for this round is France Denoed
 #    France requested 3 subtracks: genes, putatives, and pseudogenes        
+# NTOE: reloaded encodeGencodeKnown from updated _genes_ file 10/14 (kate)
     cd /cluster/data/encode
     mkdir -p Gencode/2005-10-07/lab
     cd Gencode/2005-10-07/lab
@@ -906,10 +907,11 @@ cat > load.csh << 'EOF'
     wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_putative_CHR_coord.gtf
     wget ftp://genome.imim.es/pub/other/gencode/data/havana-encode/current/44regions/44regions_pseudogenes_CHR_coord.gtf
 
+    cd ..
     ldHgGene -gtf -genePredExt hg17 encodeGencodeKnown \
         lab/44regions_genes_CHR_coord.gtf
 
-            # Read 2637 transcripts in 76521 lines in 1 files
+            # Read 2637 transcripts in 45565 lines in 1 files
             # 2637 groups 21 seqs 13 sources 5 feature types
             # 2608 gene predictions
     genePredCheck -db=hg17 encodeGencodeKnown
