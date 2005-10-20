@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1023 2005/10/20 01:15:31 sugnet Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1024 2005/10/20 21:25:19 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9566,22 +9566,8 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 
     slAddHead(&track->subtracks, subtrack);
     }
-/* count number of visible subtracks for this track */
-subtrackCt = 0;
-for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    subtrackVisible(subtrack);
-    /* visibilities have not been set yet, so don't use isSubtrackVisible 
-     * which gates with visibility: */
-    if (isSubtrackSelected(subtrack))
-        subtrackCt++;
-    }
-/* if no subtracks are selected in cart, turn them all on */
-if (subtrackCt == 0)
-    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-        setSubtrackVisible(subtrack->mapName, TRUE);
-
 slSort(&track->subtracks, trackPriCmp);
+
 }
 
 struct track *trackFromTrackDb(struct trackDb *tdb)
@@ -10110,6 +10096,32 @@ else
 hButton(var, paddedLabel);
 }
 
+void compositeTrackVis(struct track *track)
+/* set visibilities of subtracks */
+{
+int subtrackCt = 0;
+struct track *subtrack;
+
+if (track->visibility == tvHide)
+    return;
+
+/* count number of visible subtracks for this track */
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    subtrackVisible(subtrack);
+    /* visibilities have not been set yet, so don't use isSubtrackVisible 
+     * which gates with visibility: */
+    if (isSubtrackSelected(subtrack))
+        subtrackCt++;
+    }
+/* if no subtracks are selected in cart, turn them all on */
+if (subtrackCt == 0)
+    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+        setSubtrackVisible(subtrack->mapName, TRUE);
+for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    if(!subtrack->limitedVisSet)
+        subtrack->visibility = track->visibility;
+}
 
 struct track *getTrackList( struct group **pGroupList)
 /* Return list of all tracks. */
@@ -10365,7 +10377,7 @@ for (track = trackList; track != NULL; track = track->next)
     char *s = cartOptionalString(cart, track->mapName);
     if (cgiOptionalString( "hideTracks"))
 	{
-	s = cgiOptionalString( track->mapName);
+	s = cgiOptionalString(track->mapName);
 	if (s != NULL)
 	    cartSetString(cart, track->mapName, s);
 	}
@@ -10373,15 +10385,7 @@ for (track = trackList; track != NULL; track = track->next)
 	{
 	track->visibility = hTvFromString(s);
 	if (isCompositeTrack(track))
-	    {
-	    struct track *subtrack;
-	    for (subtrack = track->subtracks; subtrack != NULL;
-		 subtrack = subtrack->next)
-		{
-		if(!subtrack->limitedVisSet)
-		    subtrack->visibility = track->visibility;
-		}
-	    }
+            compositeTrackVis(track);
 	}
     }
 
