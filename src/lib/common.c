@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.83 2005/10/19 18:23:23 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.84 2005/10/20 19:58:33 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -287,8 +287,8 @@ while (next != NULL)
 *ppt = newList;
 }
 
-/* Free list */
 void slFreeList(void *listPt)
+/* Free list */
 {
 struct slList **ppt = (struct slList**)listPt;
 struct slList *next = *ppt;
