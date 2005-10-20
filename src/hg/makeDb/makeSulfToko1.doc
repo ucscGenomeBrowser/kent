@@ -165,14 +165,19 @@ exit; # don't actually run this like a script :)
     cvs add multizSt1Sa1Ss1.html
     cvs commit -m "Details page for multiz track" multizSt1Sa1Ss1.html
 
-# DESCRIPTION PAGE (TO DO)
+# DESCRIPTION PAGE (DONE 10/20/05), kpollard
 
-    ssh hgwdev
     # Write ~/kent/src/hg/makeDb/trackDb/archae/sulfToko1/description.html
-    chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/sulfToko1/description.html
-    # Check it in.
-    mkdir /gbdb/sulfToko1/html
+    cd ~/kent/src/hg/makeDb/trackDb/archae/sulfToko1/
+    chmod a+r description.html
+    cvs add description.html
+    cvs commit -m "description page" description.html
+    mkdir -p /cluster/data/sulfToko1/html/
+    cp ~/kent/src/hg/makeDb/trackDb/archae/sulfToko1/description.html \
+	/cluster/data/sulfToko1/html/description.html
+    mkdir -p /gbdb/sulfToko1/html
     ln -s /cluster/data/sulfToko1/html/description.html /gbdb/sulfToko1/html/
+
 
 # GENBANK PROTEIN-CODING GENES (TO DO)
 

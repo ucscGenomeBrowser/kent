@@ -166,3 +166,16 @@ exit; # don't actually run this like a script :)
     #html page for multizTk1Pa1Ph1Pf2
     cvs add multizTk1Pa1Ph1Pf2.html
     cvs commit -m "Details page for multiz track" multizTk1Pa1Ph1Pf2.html
+
+# DESCRIPTION PAGE (DONE 10/20/05), kpollard
+
+    # Write ~/kent/src/hg/makeDb/trackDb/archae/therKoda1/description.html
+    cd ~/kent/src/hg/makeDb/trackDb/archae/therKoda1/
+    chmod a+r description.html
+    cvs add description.html
+    cvs commit -m "description page" description.html
+    mkdir -p /cluster/data/therKoda1/html/
+    cp ~/kent/src/hg/makeDb/trackDb/archae/therKoda1/description.html \
+	/cluster/data/therKoda1/html/description.html
+    mkdir -p /gbdb/therKoda1/html
+    ln -s /cluster/data/therKoda1/html/description.html /gbdb/therKoda1/html/

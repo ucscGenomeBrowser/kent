@@ -200,13 +200,17 @@ bothGap 625     660     700     750     900     1400    4000    8000    16000
     cvs add blastzHalMar1.html
     cvs commit -m "added halMar1 blastz" blastzHalMar1.html
 
-# DESCRIPTION PAGE ()
+# DESCRIPTION PAGE (DONE 10/20/05), kpollard
 
-    ssh hgwdev
     # Write ~/kent/src/hg/makeDb/trackDb/archae/haloHalo1/description.html
-    chmod a+r ~/kent/src/hg/makeDb/trackDb/archae/haloHalo1/description.html
-    # Check it in.
-    mkdir /gbdb/haloHalo1/html
+    cd ~/kent/src/hg/makeDb/trackDb/archae/haloHalo1/
+    chmod a+r description.html
+    cvs add description.html
+    cvs commit -m "description page" description.html
+    mkdir -p /cluster/data/haloHalo1/html/
+    cp ~/kent/src/hg/makeDb/trackDb/archae/haloHalo1/description.html \
+	/cluster/data/haloHalo1/html/description.html
+    mkdir -p /gbdb/haloHalo1/html
     ln -s /cluster/data/haloHalo1/html/description.html /gbdb/haloHalo1/html/
 
 # GENBANK PROTEIN-CODING GENES ()
