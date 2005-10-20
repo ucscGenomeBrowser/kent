@@ -12,7 +12,7 @@ struct captionElement
      {
      struct captionElement *next;
      int image;		/* ID of image this is associated with. */
-     char *type;	/* Feature type. Memory not allocated here. */
+     char *type;	/* Feature type. Memory allocated here. */
      char *value;	/* Specific info.  Memory allocated here. */
      };
 

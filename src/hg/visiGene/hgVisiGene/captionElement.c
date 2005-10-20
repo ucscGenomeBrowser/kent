@@ -12,7 +12,7 @@ struct captionElement *captionElementNew(int image, char *type, char *value)
 struct captionElement *ce;
 AllocVar(ce);
 ce->image = image;
-ce->type = type;
+ce->type = cloneString(type);
 ce->value = value;
 return ce;
 }
@@ -23,6 +23,7 @@ void captionElementFree(struct captionElement **pCe)
 struct captionElement *ce = *pCe;
 if (ce != NULL)
     {
+    freeMem(ce->type);
     freeMem(ce->value);
     freez(pCe);
     }

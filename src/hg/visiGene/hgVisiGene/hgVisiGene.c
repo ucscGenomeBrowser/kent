@@ -484,6 +484,203 @@ else
     }
 }
 
+
+struct slName *expTissuesForProbeInImage(struct sqlConnection *conn, int imageId,
+	int probeId)
+/* Get list of tissue where we have expression info in gene.
+ * Put + or - depending on expression level. */
+{
+struct dyString *dy = dyStringNew(0);
+struct slName *tissueList = NULL, *tissue;
+char query[512], **row;
+struct sqlResult *sr;
+safef(query, sizeof(query),
+   "select bodyPart.name,expressionLevel.level "
+   "from expressionLevel,bodyPart,imageProbe "
+   "where imageProbe.image = %d "
+   "and imageProbe.probe = %d "
+   "and imageProbe.id = expressionLevel.imageProbe "
+   "and expressionLevel.bodyPart = bodyPart.id "
+   "order by bodyPart.name"
+   , imageId, probeId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    double level = atof(row[1]);
+    dyStringClear(dy);
+    dyStringAppend(dy, row[0]);
+    if (level >= 0.1)
+       dyStringAppend(dy, "(+)");
+    else 
+       dyStringAppend(dy, "(-)");
+    tissue = slNameNew(dy->string);
+    slAddHead(&tissueList, tissue);
+    }
+sqlFreeResult(&sr);
+slReverse(&tissueList);
+dyStringFree(&dy);
+return tissueList;
+}
+
+char *vgGeneNameFromId(struct sqlConnection *conn, int geneId)
+/* Return list of gene names  - HUGO if possible, RefSeq/GenBank, etc if not. 
+ * slNameFreeList this when done. */
+{
+struct slName *list = NULL, *el = NULL;
+struct sqlResult *sr;
+char *result = "";
+char **row;
+char query[256], buf[256];
+safef(query, sizeof(query),
+      "select name,locusLink,refSeq,genbank,uniProt from gene"
+      " where id = %d", geneId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *name = row[0];
+    char *locusLink = row[1];
+    char *refSeq = row[2];
+    char *genbank = row[3];
+    char *uniProt = row[4];
+    if (name[0] != 0)
+	result = name;
+    else if (refSeq[0] != 0)
+	result = refSeq;
+    else if (genbank[0] != 0)
+	result = genbank;
+    else if (uniProt[0] != 0)
+	result = uniProt;
+    else if (locusLink[0] != 0)
+	{
+	safef(buf, sizeof(buf), "Entrez Gene %s", locusLink);
+	result = buf;
+	}
+    }
+else
+    {
+    internalErr();
+    }
+result = cloneString(result);
+sqlFreeResult(&sr);
+return result;
+}
+
+struct expInfo 
+/* Info on expression in various tissues for a particular gene. */
+    {
+    struct expInfo *next;	/* Next in list. */
+    int probeId;		/* Id in probe table. */
+    int geneId;			/* Id in gene table. */
+    char *geneName;		/* Name of gene. */
+    struct slName *tissueList;  /* List of tissues where gene expressed */
+    };
+
+void expInfoFree(struct expInfo **pExp)
+/* Free up memory associated with expInfo. */
+{
+struct expInfo *exp = *pExp;
+if (exp != NULL)
+    {
+    freeMem(exp->geneName);
+    slFreeList(&exp->tissueList);
+    freez(pExp);
+    }
+}
+
+void expInfoFreeList(struct expInfo **pList)
+/* Free a list of dynamically allocated expInfo's */
+{
+struct expInfo *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    expInfoFree(&el);
+    }
+*pList = NULL;
+}
+
+
+struct expInfo *expInfoForImage(struct sqlConnection *conn, int imageId)
+/* Return list of expression info for a given pane. */
+{
+struct dyString *dy = dyStringNew(0);
+struct expInfo *expList = NULL, *exp;
+char query[512], **row;
+struct sqlResult *sr;
+
+/* Get list of probes associated with image, and start building
+ * expList around it. */
+safef(query, sizeof(query), 
+   "select imageProbe.probe,probe.gene from imageProbe,probe "
+   "where imageProbe.image = %d "
+   "and imageProbe.probe = probe.id", imageId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(exp);
+    exp->probeId = sqlUnsigned(row[0]);
+    exp->geneId = sqlUnsigned(row[1]);
+    slAddHead(&expList, exp);
+    }
+sqlFreeResult(&sr);
+slReverse(&expList);
+
+/* Finish filling in expInfo and return. */
+for (exp = expList; exp != NULL; exp = exp->next)
+    {
+    exp->geneName = vgGeneNameFromId(conn, exp->geneId);
+    exp->tissueList = expTissuesForProbeInImage(conn, imageId, exp->probeId);
+    }
+
+return expList;
+}
+
+void addExpressionInfo(struct sqlConnection *conn, int imageId,
+	struct captionElement **pCeList)
+/* Add information about expression to caption element list.
+ * Since the pane can contain multiple genes each with
+ * separate caption information this is more complex than
+ * the other caption elements.  We'll make one captionElement
+ * for each gene that we have expression info on. */
+{
+int geneWithDataCount = 0, expCount = 0;
+struct expInfo *exp, *expList = expInfoForImage(conn, imageId);
+struct captionElement *ce;
+
+/* Figure out how much data we really have.  */
+for (exp = expList; exp != NULL; exp = exp->next)
+    {
+    if (exp->tissueList != NULL)
+        ++geneWithDataCount;
+    ++expCount;
+    }
+
+/* If no data just add n/a */
+if (geneWithDataCount == 0)
+    {
+    ce = captionElementNew(imageId, "expression", cloneString("n/a"));
+    slAddHead(pCeList, ce);
+    }
+else
+    {
+    for (exp = expList; exp != NULL; exp = exp->next)
+        {
+	if (exp->tissueList != NULL)
+	    {
+	    char label[256];
+	    if (expCount == 1)
+	        safef(label, sizeof(label), "expression");
+	    else
+	        safef(label, sizeof(label), "expression of %s", exp->geneName);
+	    ce = captionElementNew(imageId, label, 
+	    	makeCommaSpacedList(exp->tissueList));
+	    slAddHead(pCeList, ce);
+	    }
+	}
+    }
+}
+
 struct captionElement *makePaneCaptionElements(struct sqlConnection *conn,
 	struct slInt *imageList)
 /* Make list of all caption elements */
@@ -506,9 +703,7 @@ for (image = imageList; image != NULL; image = image->next)
     ce = captionElementNew(paneId, "body part",
     	naForNull(visiGeneBodyPart(conn, paneId)));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "expression",
-        naForNull(visiGeneExpressionIn(conn, paneId)));
-    slAddHead(&ceList, ce);
+    addExpressionInfo(conn, paneId, &ceList);
     ce = captionElementNew(paneId, "section type",
     	naForNull(visiGeneSliceType(conn, paneId)));
     slAddHead(&ceList, ce);
@@ -528,12 +723,13 @@ struct captionBundle *bundleList, *bundle;
 struct slRef *ref;
 struct captionElement *ce;
 int bundleCount;
+int maxCharsInLine = 80;
 
 bundleList = captionElementBundle(captionElements, imageList);
 bundleCount = slCount(bundleList);
 for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
     {
-    int flipFlop = 0;
+    int charsInLine = 0, charsInEl;
     if (bundleCount > 1)
 	printf("<HR>\n");
     if (bundle->image != 0)
@@ -549,14 +745,21 @@ for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
     for (ref = bundle->elements; ref != NULL; ref = ref->next)
         {
 	ce = ref->val;
+	charsInEl = strlen(ce->type) + strlen(ce->value) + 2;
+	if (charsInLine != 0)
+	    {
+	    if (charsInLine + charsInEl > maxCharsInLine )
+		{
+		printf("<BR>\n");
+		charsInLine = 0;
+		}
+	    else if (charsInLine != 0)
+		printf(" ");
+	    }
 	printf("<B>%s:</B> %s", ce->type, ce->value);
-	if (flipFlop == 1)
-	    printf("<BR>\n");
-	else
-	    printf(" ");
-	flipFlop = 1 - flipFlop;
+	charsInLine += charsInEl;
 	}
-    if (flipFlop == 1)
+    if (charsInLine != 0)
 	printf("<BR>\n");
     }
 if (bundleCount > 1)
