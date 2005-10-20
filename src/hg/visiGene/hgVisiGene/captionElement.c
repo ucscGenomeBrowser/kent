@@ -53,26 +53,32 @@ return FALSE;
 }
 
 
-char *captionElementCommon(struct captionElement *list, char *type)
+boolean captionElementCommon(struct captionElement *list, char *type,
+	struct slInt *imageList)
 /* If the value of the caption element of given type is the same for 
- * all images, then return that value,  else return NULL. */
+ * all images, then return TRUE. */
 {
 struct captionElement *ce;
 char *common = NULL;
+int imageCount = slCount(imageList);
+int sameCount = 0;
 for (ce = list; ce != NULL; ce = ce->next)
     {
     if (sameString(ce->type, type))
         {
 	if (common == NULL)
+	    {
 	    common = ce->value;
+	    sameCount = 1;
+	    }
 	else
 	    {
-	    if (!sameString(common, ce->value))
-	        return NULL;
+	    if (sameString(common, ce->value))
+		sameCount += 1;
 	    }
 	}
     }
-return common;
+return sameCount == imageCount;
 }
 
 void captionBundleFree(struct captionBundle **pBundle)
@@ -115,7 +121,7 @@ for (ce = ceList; ce != NULL; ce = ce->next)
     {
     if (ce->image == firstImage)
         {
-	if (captionElementCommon(ceList, ce->type))
+	if (captionElementCommon(ceList, ce->type, imageList))
 	    {
 	    if (bundleList == NULL)
 		AllocVar(bundleList);
@@ -133,7 +139,7 @@ for (image = imageList; image != NULL; image = image->next)
         {
 	if (ce->image == imageId)
 	    {
-	    if (!captionElementCommon(ceList, ce->type))
+	    if (!captionElementCommon(ceList, ce->type, imageList))
 	        {
 		if (bundle == NULL)
 		    {

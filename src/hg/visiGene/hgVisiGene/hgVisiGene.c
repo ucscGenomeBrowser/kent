@@ -410,26 +410,22 @@ char *makeCommaSpacedList(struct slName *list)
 /* Turn linked list of strings into a single string with
  * elements separated by a comma and a space. */
 {
-if (list == NULL)
-    return cloneString("n/a");
-else if (list->next == NULL)
+int totalSize = 0, elCount = 0;
+struct slName *el;
+
+for (el = list; el != NULL; el = el->next)
     {
-    char *name = list->name;
-    if (name[0] == 0)
-        name = "n/a";
-    return cloneString(name);
-    }
-else
-    {
-    struct slName *el;
-    int totalSize = 0;
-    int elCount = 0;
-    char *result, *pt;
-    for (el = list; el != NULL; el = el->next)
+    if (el->name[0] != 0)
 	{
 	totalSize += strlen(el->name);
 	elCount += 1;
 	}
+    }
+if (elCount == 0)
+    return cloneString("n/a");
+else
+    {
+    char *pt, *result;
     totalSize += 2*(elCount-1);	/* Space for ", " */
     pt = result = needMem(totalSize+1);
     strcpy(pt, list->name);

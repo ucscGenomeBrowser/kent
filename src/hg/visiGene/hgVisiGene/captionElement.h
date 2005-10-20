@@ -28,9 +28,10 @@ void captionElementFreeList(struct captionElement **pList);
 boolean captionElementTypeExists(struct captionElement *list, char *type);
 /* Return TRUE if element of type exists in list. */
 
-char *captionElementCommon(struct captionElement *list, char *type);
+boolean captionElementCommon(struct captionElement *list, char *type,
+	struct slInt *imageList);
 /* If the value of the caption element of given type is the same for 
- * all images, then return that value,  else return NULL. */
+ * all images, then return TRUE. */
 
 struct captionBundle
 /* A set of caption elements specific for a particular
