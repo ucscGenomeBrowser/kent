@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.11 2005/10/12 18:19:14 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.12 2005/10/20 22:41:01 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -765,6 +765,10 @@ TMPDIR=/scratch/tmp
 
 XXXX - working on the modifications to doBlastzChainNet.pl 2005-08-29
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	-stop=blastz \
@@ -1279,7 +1283,7 @@ doOne ${targetDb} chain${DB1}Link
     # << keep emacs coloring happy
 
 #########################################################################
-# BLASTZ RAT Rn3 (WORKING - 2005-09-16 - Hiram)
+# BLASTZ RAT Rn3 (DONE - 2005-09-16 - 2005-10-18 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/mm7/bed/blastzRn3.2005-09-16
     cd /cluster/data/mm7/bed
@@ -1347,6 +1351,10 @@ TMPDIR=/scratch/tmp
 # Longest job:                     1016s      16.93m     0.28h    0.01d
 # Submission to last job:          1482s      24.70m     0.41h    0.02d
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=download -bigClusterHub=pk -fileServer=kolossus \
+	`pwd`/DEF > download-clean.out 2>&1 &
+
     #	Measurements:
     time featureBits mm7 netRn3
     #	2644171540 bases of 2583394090 (102.353%) in intersection
@@ -1366,6 +1374,7 @@ TMPDIR=/scratch/tmp
 
     ssh kolossus
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainRn3Link
+    #	1798351560 bases of 2583394090 (69.612%) in intersection
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainRn3Link
     #	1802980225 bases of 2597150411 (69.421%) in intersection
     #	real    94m48.021s
@@ -1380,73 +1389,21 @@ TMPDIR=/scratch/tmp
 	-swap -bigClusterHub=pk \
 	`pwd`/DEF > swap.out 2>&1 &
     #	STARTED - 2005-10-04 16:29
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -continue=download -bigClusterHub=pk -fileServer=kolossus \
+	`pwd`/DEF > swap-download-clean.out 2>&1 &
 XXXX
 
     ssh kolossus
     time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm7Link
-
+    #	1802674646 bases of 2571104688 (70.113%) in intersection
     time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm6Link
     #	1812992492 bases of 2571104688 (70.514%) in intersection
     time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm5Link
     #	1673171206 bases of 2571104688 (65.076%) in intersection
 
 #########################################################################
-    cat << '_EOF_' > measurements.sh
-#!/bin/sh
-
-doOne()
-{
-db=$1
-tbl=$2
-echo "    featureBits $db $tbl"
-echo -en "    #\t"
-time featureBits $db $tbl
-}
-
-doOne mm7 netDanRer2
-doOne mm5 netDanRer2
-doOne mm7 chainDanRer2
-doOne mm5 chainDanRer2
-doOne mm7 chainDanRer2Link
-doOne mm5 chainDanRer2Link
-doOne danRer2 netMm6
-doOne danRer2 netMm5
-doOne danRer2 chainMm6
-doOne danRer2 chainMm5
-doOne danRer2 chainMm6Link
-doOne danRer2 chainMm5Link
-'_EOF_'
-    # << keep emacs happy
-    chmod +x measurements.sh
-    time ./measurements.sh > measures.out 2>&1 &
-
-    featureBits mm7 netDanRer2
-    #   686375730 bases of 2597150411 (26.428%) in intersection
-    featureBits mm5 netDanRer2
-    #   553450442 bases of 2615483787 (21.161%) in intersection
-    featureBits mm7 chainDanRer2
-    #   782392894 bases of 2597150411 (30.125%) in intersection
-    featureBits mm5 chainDanRer2
-    #   598864029 bases of 2615483787 (22.897%) in intersection
-    featureBits mm7 chainDanRer2Link
-    #   162226493 bases of 2597150411 (6.246%) in intersection
-    featureBits mm5 chainDanRer2Link
-    #   59978861 bases of 2615483787 (2.293%) in intersection
-    featureBits danRer2 netMm6
-    #   576283947 bases of 1560497282 (36.930%) in intersection
-    featureBits danRer2 netMm5
-    #   476966014 bases of 1560497282 (30.565%) in intersection
-    featureBits danRer2 chainMm6
-    #   641696461 bases of 1560497282 (41.121%) in intersection
-    featureBits danRer2 chainMm5
-    #   505097651 bases of 1560497282 (32.368%) in intersection
-    featureBits danRer2 chainMm6Link
-    #   176391894 bases of 1560497282 (11.304%) in intersection
-    featureBits danRer2 chainMm5Link
-    #   68003819 bases of 1560497282 (4.358%) in intersection
-
-#########################################################################
-# BLASTZ FUGU fr1 (WORKING - 2005-09-16 - 2005-10-04 - Hiram)
+# BLASTZ FUGU fr1 (DONE - 2005-09-16 - 2005-10-04 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzFr1.2005-09-16
     cd /cluster/data/mm7/bed
@@ -2064,6 +2021,10 @@ TMPDIR=/scratch/tmp
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -swap -chainMinScore=5000 \
 	`pwd`/DEF > swap.out 2>&1 &
+    #	Had a failure during loading, finished it manually, then
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -continue=download -swap -chainMinScore=5000 \
+	`pwd`/DEF > swap.download-clean.out 2>&1 &
 
     #	and measure:
     featureBits galGal2 netMm6
@@ -2120,6 +2081,10 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
+    #	This should have been done with chainMinScore=5000
+    #	After this was all finished, went back manually and reran the
+    #	chaining step to get a -minScore=5000 in there.
+
     #	Probably should have done this with chainMinScore=5000
     #	But it doesn't seem to have made much difference according to the
     #	featureBits output measurements.
@@ -2150,6 +2115,11 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	-continue=cat \
 	`pwd`/DEF > continue.cat.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-swap -fileServer=kolossus \
+	`pwd`/DEF > swap.out 2>&1 &
 XXXX  2005-10-04 09:25
 
     # CRASHED due to kkstore02 problems, finished batch manually and
@@ -2325,14 +2295,20 @@ XXXX
     #	70 minutes
     #	Measurements:
 
+    featureBits xenTro1 netMm7
+    #	681240580 bases of 1381238994 (49.321%) in intersection
     featureBits xenTro1 netMm6
     #   683225633 bases of 1381238994 (49.465%) in intersection
     featureBits xenTro1 netMm5
     #   697384254 bases of 1381238994 (50.490%) in intersection
+    featureBits xenTro1 chainMm7
+    #	697097012 bases of 1381238994 (50.469%) in intersection
     featureBits xenTro1 chainMm6
     #   700638086 bases of 1381238994 (50.725%) in intersection
     featureBits xenTro1 chainMm5
     #   721494705 bases of 1381238994 (52.235%) in intersection
+    HGDB_CONF=~/.hg.conf.read-only featureBits xenTro1 chainMm7Link
+    #	59339777 bases of 1381238994 (4.296%) in intersection
     featureBits xenTro1 chainMm6Link
     #   64584213 bases of 1381238994 (4.676%) in intersectio
     featureBits xenTro1 chainMm5Link
@@ -2518,6 +2494,7 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
 
 #############################################################################
 # STS MARKERS DATA DOWNLOAD (DONE - 2005-09-29 - 2005-10-07 - Hiram)
+#	Applied a filter to primers.psl - 2005-10-20 - Hiram
     ssh kkstore02
     mkdir -p /cluster/data/mm7/bed/STSmarkers/downloads
     cd /cluster/data/mm7/bed/STSmarkers/downloads
@@ -2683,11 +2660,22 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     # on the file server
     ssh kkstore02
     cd /cluster/data/mm7/bed/STSmarkers/primer
-    pslSort dirs primers.psl temp primers.out
+    #	filter alignments for (qEnd-qStart) vs. (tEnd-tStart)    2005-10-20
+    #	should not be more than 100 bases different.
+    #	This filters out about 1,028,202 alignments, or
+    #	%17.4 = 100.0 * 1028202 / 5921712
+    pslSort dirs stdout temp primers.out | awk -F"\t" '
+{ if (((($13 - $12) - ($17 - $16)) > -100) &&
+	((($13 - $12) - ($17 - $16)) < 100)) {print}
+}
+' > primers.psl.100
+
     rmdir temp
 
     # a rough comparison with previous results:
-    wc primers.psl
+    wc primers.psl.100
+    #	4893510  102763628  510563575 primers.psl.100
+    wc primers.psl  (unfiltered, Mm7)
     #	5921712 124355891 636898117 primers.psl
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl
     #	5724127 120206606 615248041
@@ -2758,7 +2746,7 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     cd /cluster/data/mm7/bed/STSmarkers/primer
 
     /cluster/bin/scripts/filterSTSPrimers \
-    -mouse ../stsInfoMouse.bed primers.psl \
+    -mouse ../stsInfoMouse.bed primers.psl.100 \
         ../mouseP.info ../ePCR/all.epcr > primers.psl.filter.blat
 
     #  The output should show an increasing count:
@@ -2772,7 +2760,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     #	5700000
     #	Determining ePCR not found
     #
-    wc primers.psl.filter.blat
+    wc primers.psl.filter.blat  (after filter applied above to primers.psl)
+    #	33986  713706 3637462 primers.psl.filter.blat
+    wc primers.psl.filter.blat  (before filter applied above to primers.psl)
     #	34674  728154 3718714 primers.psl.filter.blat
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.blat
     #	33662  706902 3605847 primers.psl.filter.blat
@@ -2854,7 +2844,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     #	814    8134   47566 total
 
     cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
-    wc primers.psl.filter
+    wc primers.psl.filter  (after filter applied above to primers.psl)
+    #	34460  723660 3684750 primers.psl.filter
+    wc primers.psl.filter  (before filter applied above to primers.psl)
     #	35148  738108 3766002 primers.psl.filter
 
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter
@@ -2866,7 +2858,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     # create primers.psl.filter.lifted.initial
     PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/extractPslInfo \
 	primers.psl.filter
-    wc primers.psl.filter.initial
+    wc primers.psl.filter.initial (after filter applied above to primers.psl)
+    #	34443  206658 1833793 primers.psl.filter.initial
+    wc primers.psl.filter.initial (before filter applied above to primers.psl)
     #	35131  210786 1870800 primers.psl.filter.initial
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.initial
     #	34048  204288 1815222 primers.psl.filter.initial
@@ -2877,7 +2871,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     /cluster/bin/scripts/findAccession -agp \
 	-mouse primers.psl.filter.initial /cluster/data/mm7
     #	it complains about missing _random items, it is OK
-    wc primers.psl.filter.initial.acc
+    wc primers.psl.filter.initial.acc (after filter applied above to primers.psl)
+    #	34443  241101 2160540 primers.psl.filter.initial.acc
+    wc primers.psl.filter.initial.acc (before filter applied above to primers.psl)
     #	35131  245917 2204115 primers.psl.filter.initial.acc
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.psl.filter.initial.acc
     #	34048  238336 2154798 primers.psl.filter.initial.acc
@@ -2890,7 +2886,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     /cluster/bin/scripts/getStsId -rat \
 	../stsInfoMouse.bed  primers.psl.filter.initial.acc \
 	> primers.initial.acc.trans
-    wc primers.initial.acc.trans
+    wc primers.initial.acc.trans  (after filter applied above to primers.psl)
+    #	34443  241101 1830431 primers.initial.acc.trans
+    wc primers.initial.acc.trans  (before filter applied above to primers.psl)
     #	35131  245917 1867180 primers.initial.acc.trans
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.initial.acc.trans
     wc primers.initial.acc.trans
@@ -2905,7 +2903,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     #	No id for 63746_RH127126
 
     sort -k 4n primers.initial.acc.trans > primers.final
-    wc primers.final
+    wc primers.final  (after filter applied above to primers.psl)
+    #	34443  241101 1830431 primers.final
+    wc primers.final  (before filter applied above to primers.psl)
     #	35131  245917 1867180 primers.final
     wc /cluster/data/mm6/bed/STSmarkers/primer/primers.final 
     #	34041  238287 1829724 primers.final
@@ -2919,7 +2919,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     touch stsMarkers.final dummy
     PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/combineSeqPrimerPos \
 	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
-    wc stsMarkers_pos.rdb
+    wc stsMarkers_pos.rdb  (after filter applied to primers.psl above)
+    #	32869  230083 1868276 stsMarkers_pos.rdb
+    wc stsMarkers_pos.rdb  (before filter applied to primers.psl above)
     #	33421  233947 1903951 stsMarkers_pos.rdb
     wc /cluster/data/mm6/bed/STSmarkers/stsMarkers_pos.rdb
     #	32350  226450 1909506 stsMarkers_pos.rdb
@@ -2930,7 +2932,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
 
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
-    wc stsMapMouse.bed
+    wc stsMapMouse.bed  (after filter applied to primers.psl above)
+    #	29842  308123 2135776 stsMapMouse.bed
+    wc stsMapMouse.bed  (before filter applied to primers.psl above)
     #	30296  312257 2166725 stsMapMouse.bed
     wc /cluster/data/mm6/bed/STSmarkers/stsMapMouse.bed
     #	29079  301678 2097544 stsMapMouse.bed
@@ -2945,7 +2949,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     #	this does leave messages in ucscStsAlias.warnings but they seem
     #	to be very similar to Mm6 with just a few new ones
      
-    wc ucscStsAlias.tab
+    wc ucscStsAlias.tab  (after applying filter to primers.psl above)
+    #	144570  433667 3366815 ucscStsAlias.tab
+    wc ucscStsAlias.tab  (before applying filter to primers.psl above)
     #	144570  433667 3366815 ucscStsAlias.tab
     wc /cluster/data/mm6/bed/STSmarkers/ucscStsAlias.tab
     #	141585  424725 3284106 ucscStsAlias.tab
@@ -2966,6 +2972,9 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
      'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm7
 
     hgLoadPsl -nobin -table=all_sts_primer mm7 primer/primers.psl.filter
+    #	load of all_sts_primer did not go as planned: 34460 record(s),
+    #	0 row(s) skipped, 21 warning(s) loading primer/primers.psl.filter
+
     #	load of all_sts_primer did not go as planned: 35148 record(s), 0
     #	row(s) skipped, 21 warning(s) loading primer/primers.psl.filter
 
@@ -2982,6 +2991,17 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     #  Adding /gbdb/mm7/stsMarker/mouseP.fa
     #  33838 sequences
 
+    #	After applying the filter to primers.psl above  (and in mm6 too)
+    featureBits mm7 all_sts_primer
+    #	3757119 bases of 2583394090 (0.145%) in intersection
+    featureBits mm6 all_sts_primer
+    #	3706406 bases of 2597150411 (0.143%) in intersection
+    featureBits mm7 stsMapMouseNew
+    #	4805958 bases of 2583394090 (0.186%) in intersection
+    featureBits mm6 stsMapMouseNew
+    #	4638338 bases of 2597150411 (0.179%) in intersection
+
+    #	Before applying the filter to primers.psl above
     featureBits mm7 all_sts_primer
     #	3794153 bases of 2583394090 (0.147%) in intersection
     featureBits mm6 all_sts_primer
@@ -3002,6 +3022,8 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     hgsql -N mm5 -e "select count(*) from stsAlias;"
     #	122944
     hgsql -N mm7 -e "select count(*) from stsInfoMouseNew;"
+    #	59843
+    hgsql -N mm6 -e "select count(*) from stsInfoMouseNew;"
     #	58980
     hgsql -N mm5 -e "select count(*) from stsInfoMouseNew;"
     #	58493
@@ -3010,6 +3032,15 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     awk '{print $4}' /cluster/data/mm6/bed/STSmarkers/stsMapMouse.bed | \
 	sort -u > mm6.nameList
     awk '{print $4}' stsMapMouse.bed | sort -u > mm7.nameList
+    #	After applying the filter to primers.psl above  (and in mm6 too)
+    comm -12 mm?.nameList | wc
+    #	27320   27320  265970		<- 27,320 names in common
+    comm -23 mm6.nameList mm7.nameList | wc
+    #	188     188    1695		<- 188 unique to mm6 list
+    comm -13 mm6.nameList mm7.nameList | wc
+    #	1107    1107   12626		<- 1,107 unique to mm7 list
+
+    #	Before applying the filter to primers.psl above
     comm -12 mm?.nameList | wc
     #	27658   27658  268827		<- 27,658 names in commmon
     comm -23 mm6.nameList mm7.nameList | wc
@@ -7558,237 +7589,39 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
 XXX - Started - 2005-10-07 12:13
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=chainMerge -chainMinScore=5000 -bigClusterHub=pk \
+	-fileServer=kolossus \
+	`pwd`/DEF > chainMerge.out 2>&1 &
 
-    # do blastz and create chains for danRer3 chr1-25 and chrM 
-    # chickenHumanTuned.gap scoring matrix is now used by default 
-    # by axtChain.
-    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
-       -blastzOutRoot /panasas/store/mm7vsdanRer3Out -chainMinScore=5000 \
-       -stop chainMerge >& do.log &
-    #PID 31074 on kk, 
-    # Started Fri Aug  5 21:18:13 PDT 2005
-    # Finished Aug  6 06:31
-    # for chr1-25 and chrM:
-    # blastz run:
-# para time
-# Completed: 44023 of 44023 jobs
-# CPU time in finished jobs:   12375882s  206264.70m  3437.75h  143.24d  0.392 y
-# IO & Wait Time:                979190s   16319.83m   272.00h   11.33d  0.031 y
-# Average job time:                 303s       5.06m     0.08h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1778s      29.63m     0.49h    0.02d
-# Submission to last job:         32605s     543.42m     9.06h    0.38d
-    # chain run:
-# para time
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:       1075s      17.92m     0.30h    0.01d  0.000 y
-# IO & Wait Time:                   243s       4.04m     0.07h    0.00d  0.000 y
-# Average job time:                  33s       0.55m     0.01h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              51s       0.85m     0.01h    0.00d
-# Submission to last job:           107s       1.78m     0.03h    0.00d
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -chainMinScore=5000 -bigClusterHub=pk \
+	-fileServer=kolossus \
+	`pwd`/DEF > swap.out 2>&1 &
 
-    # then do a run with the zebrafish danRer3 NA and Un Scaffolds
-    # that are in a 2bit file to do blastz and make chains.
-    ssh kk
-    mkdir -p /cluster/data/mm7/bed/blastz.danRer3/NAandUnScaffolds
-    cd /cluster/data/mm7/bed/blastz.danRer3/NAandUnScaffolds
-    # copy DEF file and edit for NA and Un scaffolds
-    cat << '_EOF_' > DEF
-# mouse (mm7) vs zebrafish (danRer3) NA and Un scaffolds only
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
-
-ALIGN=blastz-run
-BLASTZ=blastz
-
-# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_Q=/cluster/data/blastz/HoxD55.q
-BLASTZ_ABRIDGE_REPEATS=0
-
-# TARGET: Mouse (mm7)
-SEQ1_DIR=/panasas/store/mm7/nib
-SEQ1_RMSK=
-SEQ1_FLAG=
-SEQ1_SMSK=
-SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-
-# QUERY: Zebrafish (danRer3)
-# NA and Un Scaffolds in a 2bit file
-SEQ2_DIR=/iscratch/i/danRer3/NAandUnScafs/danRer3NAandUnScaf.2bit
-SEQ2_RMSK=
-SEQ2_FLAG=
-SEQ2_SMSK=
-SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=1700000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/mm7/bed/blastz.danRer3/NAandUnScaffolds
-
-DEF=$BASE/DEF
-RAW=$BASE/raw
-CDBDIR=$BASE
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
-
-#DEBUG=1
-'_EOF_'
-    # << this line keeps emacs coloring happy
-    chmod +x DEF
-    # get lengths for nibs and scaffolds
-    cp /cluster/data/mm7/chrom.sizes ./S1.len
-    # for S2.len, need sizes of the sequences in the 2bit file
-    sort -rn +1 /cluster/data/danRer3/NAandUnScafs.sizes > ./S2.len
-    # make output directory
-    mkdir -p /panasas/store/mm7vsdanRer3Out/NAandUnScafs
-    # do blastz and create chains for danRer3 chrNA and chrUn scaffolds. 
-    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
-       -blastzOutRoot /panasas/store/mm7vsdanRer3Out/NAandUnScafs \
-       -chainMinScore=5000 -stop chainMerge >& do.log &
-    #  Start Mon Aug  8 09:04
-    #  Finish Aug  8 13:04
-    # for NA and Un Scaffolds:
-    # blastz run:
-# para time
-# Completed: 15226 of 15226 jobs
-# CPU time in finished jobs:    6074532s  101242.21m  1687.37h   70.31d  0.193 y
-# IO & Wait Time:                289788s    4829.79m    80.50h    3.35d  0.009 y
-# Average job time:                 418s       6.97m     0.12h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            7795s     129.92m     2.17h    0.09d
-# Submission to last job:         13851s     230.85m     3.85h    0.16d
-    # chain run:
-# para time
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:        270s       4.50m     0.08h    0.00d  0.000 y
-# IO & Wait Time:                   252s       4.20m     0.07h    0.00d  0.000 y
-# Average job time:                  13s       0.22m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:              29s       0.48m     0.01h    0.00d
-# Submission to last job:            54s       0.90m     0.01h    0.00d
-
-    # now need to do a liftUp to get the chromosomes co-ordinates
-    # then merge together and continue on with net step
-    ssh kkstore01
-    cd /cluster/data/mm7/bed/blastz.danRer3/NAandUnScaffolds/axtChain
-    mkdir liftedChain
-    foreach f (chain/*.chain)
-       set c=$f:t:r
-       echo $c
-       liftUp -chainQ liftedChain/${c}.lifted.chain \
-     /cluster/data/danRer3/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft \
-       warn $f
-    end
-    # now merge these lifted chain files with the existing chain files for 
-    # the chroms and then sort by score using chainSort 
-    cd /cluster/data/mm7/bed/blastz.danRer3/axtChain
-    # gzipped file is only chains for chroms1-25 and chrM so rename
-    mv mm7.danRer3.all.chain.gz mm7.danRer3.chroms.chain.gz
-    mv chain chromChain
-    mkdir chain chainUnSorted
-    # get all chains to be merged in chainUnSorted dir
-    cp ./chromChain/*.chain ./chainUnSorted/
-    # copy scaffolds chains, these are *.lifted.chain so they do not 
-    # write over the chrom chains.
-    cp ../NAandUnScaffolds/axtChain/liftedChain/*.chain ./chainUnSorted/
-    # then merge and sort all these chains. they must be merged and all 
-    # sorted together so that all IDs are unique across all chroms.
-    # IDs are reassigned by chainMergeSort so that IDs are unique.
-    nice chainMergeSort chainUnSorted/*.chain | nice gzip -c \
-           > mm7.danRer3.all.chain.gz
-    # use chainSplit to split this into chains again
-    zcat mm7.danRer3.all.chain.gz | chainSplit chain stdin 
-
-    # then pick up the doBlastzChainNet.pl script with the net step
-    ssh kk
-    cd /cluster/data/mm7/bed/blastz.danRer3
-    cp DEF DEF.chroms
-    # edit DEF so SEQ2_DIR=/iscratch/i/danRer3/nib as need all nib files now
-    # make sure that :~/.ssh/config has only user write permission and not
-    # group otherwise the ssh will fail.
-    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl `pwd`/DEF \
-       -blastzOutRoot /panasas/store/mm7vsdanRer3Out -chainMinScore=5000 \
-       -continue net >& doNet.log &
-    # Start: Aug 10 13:34
-    # Finished: Aug 10 13:54
-    # it crashes at the cleanup step as it can not get to /panasas/ from 
-    # kkstore01 - should specifiy a different fileServer for this step. 
-    # run this step manually
-    cd /cluster/data/mm7/bed/blastz.danRer3
-    cleanUp.csh &
-    # All done now 
-    # check README.txt in downloads directory and also add html and 
-    # trackDb.ra entry for chain and net tracks for danRer3
 # featureBits -chrom=chr1 mm7 refGene:cds chainDanRer3Link -enrichment
+# refGene:cds 0.810%, chainDanRer3Link 2.365%, both 0.536%, cover 66.19%,
+# enrich 27.99x
+# featureBits -chrom=chr1 mm6 refGene:cds chainDanRer3Link -enrichment
 # refGene:cds 0.808%, chainDanRer3Link 5.196%, both 0.522%, cover 64.64%, 
 # enrich 12.44x
 # featureBits -chrom=chr1 mm5 refGene:cds chainDanRer2Link -enrichment
 # refGene:cds 0.818%, chainDanRer2Link 2.058%, both 0.546%, cover 66.75%, 
 # enrich 32.43x
-# featureBits -chrom=chr1 mm7 refGene:cds chainDanRer2Link -enrichment
+# featureBits -chrom=chr1 mm6 refGene:cds chainDanRer2Link -enrichment
 # refGene:cds 0.808%, chainDanRer2Link 6.412%, both 0.542%, cover 67.04%, 
 # enrich 10.46x
-    # Remake axtNet and then remake mafNet from these  (2005-08-17, harterA)
-    # netToAxt was processing nets incorrectly so remake these with 
-    # new version of netToAxt 
-    # and transfer to downloads dir.
-    ssh eieio
-    cd /cluster/data/mm7/bed/blastz.danRer3
-    rm -r axtNet
-    # Make axtNet for download: one .axt per mm7 seq.
-    # remake noClass.net
-    #Make nets("noClass", i.e. without rmsk/class stats which are added later):
-    cd axtChain
-    chainPreNet mm7.danRer3.all.chain.gz /cluster/data/mm7/bed/blastz.danRer3/S1.len /cluster/data/mm7/bed/blastz.danRer3/S2.len stdout \
-| chainNet stdin -minSpace=1 /cluster/data/mm7/bed/blastz.danRer3/S1.len /cluster/data/mm7/bed/blastz.danRer3/S2.len stdout /dev/null \
-| netSyntenic stdin noClass.net
-    # create net for each chrom again
-    netSplit noClass.net net
-    # also split up chains again
-    mkdir chain
-    zcat mm7.danRer3.all.chain.gz | chainSplit chain stdin
-    cd ..
-    # make axtNet again using new version of axtNet, the previous version was
-    # not processing the nets correctly.
-    mkdir axtNet
-    foreach f (axtChain/net/*.net)
-      netToAxt $f axtChain/chain/$f:t:r.chain \
-      /panasas/store/mm7/nib /iscratch/i/danRer3/nib stdout \
-      | axtSort stdin stdout \
-      | gzip -c > axtNet/$f:t:r.mm7.danRer3.net.axt.gz
-    end
-    # cleanup
-    cd axtChain
-    rm noClass.net
-    rm -r net
-    rm -r chain
-    # remake mafNet from the new axtNet
-    cd /cluster/data/mm7/bed/blastz.danRer3
-    rm -r mafNet
-    # Make mafNet for multiz: one .maf per mm7 seq.
-    mkdir mafNet
-    foreach f (axtNet/*.mm7.danRer3.net.axt.gz)
-      axtToMaf -tPrefix=mm7. -qPrefix=danRer3. $f \
-      /cluster/data/mm7/bed/blastz.danRer3/S1.len /cluster/data/mm7/bed/blastz.danRer3/S2.len \
-      stdout \
-      | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
-    end
-    # remove old axtNet downloads and add links to new axtNet files
-    ssh hgwdev
-    rm -r /usr/local/apache/htdocs/goldenPath/mm7/vsDanRer3/axtNet
-    cd /usr/local/apache/htdocs/goldenPath/mm7/vsDanRer3
-    mkdir -p /usr/local/apache/htdocs/goldenPath/mm7/vsDanRer3/axtNet
-    ln -s /cluster/data/mm7/bed/blastz.danRer3/axtNet/*.axt.gz axtNet/
-    # make md5sum.txt again
-    rm md5sum.txt
-    md5sum *.gz */*.gz > md5sum.txt
 
+    time featureBits mm7 chainDanRer3Link
+    #	69591785 bases of 2583394090 (2.694%) in intersection
+    time featureBits mm6 chainDanRer3Link
+    #	134615477 bases of 2597150411 (5.183%) in intersection
+    time featureBits danRer3 chainMm7Link
+    #	71277532 bases of 1630323462 (4.372%) in intersectio
+    time featureBits danRer2 chainMm6Link
+    #	176391894 bases of 1560497282 (11.304%) in intersection
 
+###########################################################################
 #### LOAD ENSEMBL GENES (TBD)
 #	needed for Gene Sorter procedure below
 #	Ensembl released Mouse build 34 the week of August 10th, 2005
@@ -7891,6 +7724,7 @@ cut -f 1,3-11 >ensGeneNew.tab
 # load the table into proteome DB also    
     hgsql proteome -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
 
+###########################################################################
 #### BUILD SUPERFAMILY RELATED TABLES (TBD)
 
 # Download Superfamily data files and build the Superfamily DB
@@ -8017,6 +7851,20 @@ sys     0m0.103s
 	-bigClusterHub=pk -continue=download \
 	`pwd`/DEF > download-cleanup.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -swap -fileServer=kolossus \
+	`pwd`/DEF > swap.out 2>&1 &
+
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainCanFam2Link
+    #	791921556 bases of 2583394090 (30.654%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits canFam2 chainMm7Link
+    #	773143256 bases of 2384996543 (32.417%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits canFam2 chainMm6Link
+    #	780509502 bases of 2384996543 (32.726%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm6 chainCanFam1Link
+    #	798637320 bases of 2597150411 (30.751%) in intersection
+
+
 ############################################################################
 #  UPDATE miRNA track (TBD)
 #   data from: Michel.Weber@ibcg.biotoul.fr
@@ -8114,3 +7962,180 @@ sys     0m0.103s
     mkdir notInOthers notInRat
     cp -p /cluster/data/mm7/linSpecRep/notInHuman/* ./notInOthers
     cp -p /cluster/data/mm7/linSpecRep/notInRat/* ./notInRat
+
+#############################################################################
+# macaca mulatta vs. Mm7 (WORKING - 2005-10-19 - Hiram)
+    ssh kk
+
+    mkdir /cluster/data/mm7/bed/blastzRheMac1.2005-10-19
+    cd /cluster/data/mm7/bed
+    ln -s blastzRheMac1.2005-10-19 blastz.rheMac1
+    cd blastzRheMac1.2005-10-19
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# TARGET - Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY - macaca mulatta
+SEQ2_DIR=/scratch/hg/rheMac1/rheMac1.2bit
+SEQ2_LEN=/scratch/hg/rheMac1/chrom.sizes
+SEQ2_LIMIT=300
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzRheMac1.2005-10-19
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+#############################################################################
+# Elephant vs. Mm7 (WORKING - 2005-10-20 - Hiram)
+    ssh pk
+
+    mkdir /cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
+    cd /cluster/data/mm7/bed
+    ln -s blastzLoxAfr1.2005-10-20 blastz.loxAfr1
+    cd blastzLoxAfr1.2005-10-20
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET - Mouse mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY - Elephant loxAfr1
+SEQ2_DIR=/scratch/hg/loxAfr1/loxAfr1.2bit
+SEQ2_LEN=/scratch/hg/loxAfr1/chrom.sizes
+SEQ2_LIMIT=300
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+#############################################################################
+# Hedgehog vs. Mm7 (WORKING - 2005-10-20 - Hiram)
+    ssh pk
+
+    mkdir /cluster/data/mm7/bed/blastzEchTel1.2005-10-20
+    cd /cluster/data/mm7/bed
+    ln -s blastzEchTel1.2005-10-20 blastz.echTel1
+    cd blastzEchTel1.2005-10-20
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET - Mouse mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY - Hedgehog echTel1
+SEQ2_DIR=/scratch/hg/echTel1/echTel1.2bit
+SEQ2_LEN=/scratch/hg/echTel1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzEchTel1.2005-10-20
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+#############################################################################
+# Rabbit vs. Mm7 (WORKING - 2005-10-20 - Hiram)
+    ssh pk
+
+    mkdir /cluster/data/mm7/bed/blastzOryCun1.2005-10-20
+    cd /cluster/data/mm7/bed
+    ln -s blastzOryCun1.2005-10-20 blastz.oryCun1
+    cd blastzOryCun1.2005-10-20
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET - Mouse mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY - Rabbit oryCun1
+SEQ2_DIR=/scratch/hg/oryCun1/oryCun1.2bit
+SEQ2_LEN=/scratch/hg/oryCun1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzOryCun1.2005-10-20
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+#############################################################################
+# Armadillo vs. Mm7 (WORKING - 2005-10-20 - Hiram)
+    ssh pk
+
+    mkdir /cluster/data/mm7/bed/blastzDasNov1.2005-10-20
+    cd /cluster/data/mm7/bed
+    ln -s blastzDasNov1.2005-10-20 blastz.dasNov1
+    cd blastzDasNov1.2005-10-20
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET - Mouse mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY - Armadillo dasNov1
+SEQ2_DIR=/scratch/hg/dasNov1/dasNov1.2bit
+SEQ2_LEN=/scratch/hg/dasNov1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+#############################################################################
