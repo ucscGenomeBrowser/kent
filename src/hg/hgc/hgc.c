@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.958 2005/10/19 18:38:03 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.959 2005/10/20 13:24:11 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14390,6 +14390,36 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
     }
 sqlDisconnect(&goConn);
 }
+
+void keggLink(struct sqlConnection *conn, char *geneId)
+/* Print out kegg database link. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+safef(query, sizeof(query), 
+	"select keggPathway.locusID,keggPathway.mapID,keggMapDesc.description"
+	" from keggPathway,keggMapDesc"
+	" where keggPathway.kgID='%s'"
+	" and keggPathway.mapID = keggMapDesc.mapID"
+	, geneId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<A HREF=\"http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s\" TARGET=_blank>",
+    	row[1], row[0]);
+    printf("%s</A> - %s<BR>", row[1], row[2]);
+    }
+sqlFreeResult(&sr);
+}
+
+int keggCount(struct sqlConnection *conn, char *geneId)
+/* Count up number of hits. */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select count(*) from keggPathway where kgID='%s'", geneId);
+return sqlQuickNum(conn, query);
+}
 void doRefSeq(struct trackDb *tdb, char *item, 
 		     char *pepTable, char *extraTable)
 /* Handle click on gene track. */
@@ -14499,6 +14529,14 @@ if (hTableExists("COG"))
 	     }
   	 }
     }
+/* kegg pathway links */
+if (keggCount(conn, item) > 0)
+    {
+    printf("<B>Kegg Pathway: </b><BR>");
+    keggLink(conn, item);
+    printf("<BR>\n");
+    }
+/* interpro domains */
 list = spExtDbAcc1List(spConn, spAcc, "Interpro");
 if (list != NULL)
     {
@@ -14516,8 +14554,6 @@ if (list != NULL)
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-	//printf("<A HREF=\"http://www.ebi.ac.uk/interpro/IEntry?ac=%s\" TARGET=_blank>", row[0]);
-	//printf("%s</A> - %s<BR>\n", row[0], row[1]);
         char interPro[256];
         char *pdb = hPdbFromGdb(hGetDb());
         safef(interPro, 128, "%s.interProXref", pdb);
@@ -14544,6 +14580,7 @@ if (list != NULL)
     slFreeList(&list);
     }
 
+/* pfam domains */
 list = spExtDbAcc1List(spConn, spAcc, "Pfam");
 if (list != NULL)
     {
