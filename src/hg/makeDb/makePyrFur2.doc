@@ -362,3 +362,8 @@ hgLoadBed -sqlTable=easyGene.sql pyrFur2 easyGene easyGene.bed
     cvs remove multizPyro.html
     cvs add multizPf2Pa1Ph1Tk1.html
     cvs commit -m "Details page for multiz track" multizPf2Pa1Ph1Tk1.html
+#KEGG
+    cd ~/kent/src/hg/makeDb/trackDb/archae/pyrFur2/bed
+    mkdir kegg
+    cd kegg
+    ~/kent/src/hg/protein/KGpath.sh pyrFur2  pyrFur2  051019

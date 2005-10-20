@@ -98,3 +98,8 @@ cvs commit -m "Added multiz track" trackDb.ra
 cd ~/kent/src/hg/makeDb/trackDb/archae/sulSol1
 cvs add multizSs1St1Sa1.html
 cvs commit -m "Details page for multiz track" multizSs1St1Sa1.html
+#KEGG
+cd ~/kent/src/hg/makeDb/trackDb/archae/sulSol1/bed
+mkdir kegg
+cd kegg
+~/kent/src/hg/protein/KGpath.sh sulSol1 sulSol1 051020&
