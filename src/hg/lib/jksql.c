@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.80 2005/10/20 21:39:21 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.81 2005/10/21 02:08:50 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1037,6 +1037,16 @@ char *s = sqlQuickString(sc, query);
 if (s == NULL)
     errAbort("query not found: %s", query);
 return s;
+}
+
+char *sqlQuickNonemptyString(struct sqlConnection *conn, char *query)
+/* Return first result of given query.  If it is an empty string
+ * convert it to NULL. */
+{
+char *result = sqlQuickString(conn, query);
+if (result != NULL && result[0] == 0)
+    freez(&result);
+return result;
 }
 
 struct slName *sqlQuickList(struct sqlConnection *conn, char *query)

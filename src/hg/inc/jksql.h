@@ -190,6 +190,10 @@ char *sqlNeedQuickString(struct sqlConnection *sc, char *query);
  * string that should eventually be freeMem'd.  This will
  * print an error message and abort if result returns empty. */
 
+char *sqlQuickNonemptyString(struct sqlConnection *conn, char *query);
+/* Return first result of given query.  If it is an empty string
+ * convert it to NULL. */
+
 struct slName *sqlQuickList(struct sqlConnection *conn, char *query);
 /* Return a list of slNames for a single column query.
  * Do a slFreeList on result when done. */
