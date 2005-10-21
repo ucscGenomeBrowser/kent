@@ -1093,23 +1093,23 @@ origAssembly hg17
 
     track encodeGencodeGeneKnown
     subTrack encodeGencodeGeneOct
-    shortLabel Gencode Reference
+    shortLabel Gencode Ref
     longLabel Gencode October Freeze Reference Genes
-    color 73,76,73
+    color 33,91,51
     priority 1
 
     track encodeGencodeGenePutative
     subTrack encodeGencodeGeneOct
     shortLabel Gencode Putative
     longLabel Gencode October Freeze Putative Genes
-    color 73,76,73
+    color  84,188,0
     priority 2
 
     track encodeGencodeGenePseudo
     subTrack encodeGencodeGeneOct
     shortLabel Gencode Pseudo
     longLabel Gencode October Freeze Pseudogenes
-    color 73,76,73
+    color 0,91,191
     priority 3
 
 track encodeGencodeIntronOct
@@ -1501,38 +1501,6 @@ cdsDrawDefault genomic\ codons
     shortLabel GIS PseudoGenes
     longLabel Genome Institute of Singapore Pseudogenes 
     priority 6
-
-
-track encodeGisRnaPet
-compositeTrack on
-shortLabel GIS PET RNA
-longLabel Genome Institute of Singapore PET of PolyA+ RNA
-group encodeGenes
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-priority 49.2
-visibility hide
-itemRgb on
-type bed 12
-origAssembly hg16
-
-    track encodeGisRnaPetMCF7
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA MCF7
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (log phase MCF7)
-    priority 1
-
-    track encodeGisRnaPetMCF7Estr
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA MCF7 Est
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (estrogen-stim MCF7)
-    priority 2
-
-    track encodeGisRnaPetHCT116
-    subTrack encodeGisRnaPet
-    shortLabel GIS RNA HCT116
-    longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
-    priority 3
-    color 58,119,40
 
 
 track encodeAffyRnaSignal
@@ -3690,6 +3658,7 @@ maxHeightPixels 128:16:16
 minLimit -3.23
 maxLimit 4.35
 windowingFunction mean
+viewLimits 0:2
 autoScale Off
 origAssembly hg17
 
@@ -4996,8 +4965,6 @@ visibility hide
 type bed 3 .
 origAssembly hg16
 
-
-
 searchTable wgRna
 searchMethod fuzzy
 searchType bed
@@ -5006,20 +4973,6 @@ searchPriority 10
 searchTable encodeIndels
 query select chrom, chromStart, chromEnd, name from %s where traceName like '%s'
 searchPriority 10
-
-searchTable encodeGisRnaPetHCT116
-searchMethod exact
-searchType bed
-termRegex [0-9]+-[0-9]+-[0-9]+
-shortCircuit 1
-searchPriority 50
-
-searchTable encodeGisRnaPetMCF7
-searchMethod exact
-searchType bed
-termRegex [0-9]+-[0-9]+-[0-9]+
-shortCircuit 1
-searchPriority 50
 
 searchTable encodeGisChipPet
 searchMethod exact
