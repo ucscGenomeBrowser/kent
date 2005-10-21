@@ -394,7 +394,6 @@ char *visiGeneStrain(struct sqlConnection *conn, int id)
 /* Return strain of organism if any.  FreeMem this when done. */
 {
 char query[256];
-char *result;
 safef(query, sizeof(query),
     "select strain.name from image,specimen,genotype,strain "
     "where image.id = %d "
@@ -402,11 +401,21 @@ safef(query, sizeof(query),
     "and specimen.genotype = genotype.id "
     "and genotype.strain = strain.id"
     , id);
-result  = sqlQuickString(conn, query);
-/* Convert empty string to NULL */
-if (result != NULL && result[0] == 0)
-    freez(&result);
-return result;
+return sqlQuickNonemptyString(conn, query);
+}
+
+char *visiGeneGenotype(struct sqlConnection *conn, int id)
+/* Return genotype of organism if any.  This is either "wild type"
+ * or a comma separated list of gene:allele.  FreeMem this when done. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select genotype.alleles from image,specimen,genotype "
+    "where image.id = %d "
+    "and image.specimen = specimen.id "
+    "and specimen.genotype = genotype.id"
+    , id);
+return sqlQuickNonemptyString(conn, query);
 }
 
 
