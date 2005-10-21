@@ -3,7 +3,8 @@ include ../../../inc/common.mk
 DIFF = diff -u
 
 test:   oneExon splitExon revExon negNeg finishIsSplit \
-	queryDel multiMap multiMap2 multiMapMondo manyExonPos unalignedExonStart
+	queryDel multiMap multiMap2 multiMapMondo \
+	manyExonPos unalignedExonStart lostBlock
 
 oneExon: mkout
 	genePredToMafFrames hg17 canHg10 input/BC101503.gp output/$@.mafFrames input/BC101503.maf
@@ -56,6 +57,11 @@ manyExonPos:
 
 unalignedExonStart:
 	genePredToMafFrames hg17 canHg10 input/NM_013321.gp output/$@.mafFrames input/NM_013321.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# part of exon lost in mm6 but not human
+lostBlock:
+	genePredToMafFrames mm6 canHg10 input/NM_145830.gp output/$@.mafFrames input/NM_145830.maf
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:

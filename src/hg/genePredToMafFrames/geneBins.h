@@ -62,9 +62,11 @@ struct geneBins *geneBinsNew(char *genePredFile);
 void geneBinsFree(struct geneBins **genesPtr);
 /* free geneBins object */
 
-struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp);
+struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp,
+                                int sortDir);
 /* Return list of references to exons overlapping the specified component,
- * sorted into the assending order of the component. slFreeList returned list. */
+ * sorted into assending order sortDir is 1, descending if it's -1.
+ * slFreeList the returned list. */
 
 struct gene* geneClone(struct gene *gene);
 /* clone a gene and it's exons.  Does not clone exonFrames.  Used when

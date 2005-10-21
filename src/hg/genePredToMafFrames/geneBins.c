@@ -136,8 +136,8 @@ if (p == NULL)
 return p+1;
 }
 
-static int cmpExonsPos(const void *va, const void *vb)
-/* compare binElement containing cdsExons for positive strand sort.  Assumes
+static int cmpExonsAscend(const void *va, const void *vb)
+/* compare binElement referencing cdsExons into assending order.  Assumes
  * sames chrom. */
 {
 const struct cdsExon *a = (*((struct binElement **)va))->val;
@@ -148,25 +148,30 @@ if (dif == 0)
 return dif;
 }
 
-static int cmpExonsNeg(const void *va, const void *vb)
-/* compare binElement containing cds exon for reverse strand sort. */
+static int cmpExonsDescend(const void *va, const void *vb)
+/* compare binElement referencing cdsExons into descending order.  Assumes
+ * sames chrom. */
 {
-return !cmpExonsPos(va, vb);
+return cmpExonsAscend(vb, va);
 }
 
-struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp)
+struct binElement *geneBinsFind(struct geneBins *genes, struct mafComp *comp,
+                                int sortDir)
 /* Return list of references to exons overlapping the specified component,
- * sorted into the assending order of the component. slFree returned list. */
+ * sorted into assending order sortDir is 1, descending if it's -1.
+ * slFreeList the returned list. */
 {
 char *chrom = skipSrcDb(comp->src);
 int start = comp->start;
 int end = (comp->start + comp->size)-1;
 struct binElement *exons;
+
+/* get positive strand coordinate to match exon */
 if (comp->strand == '-')
     reverseIntRange(&start, &end, comp->srcSize);
 
 exons = chromBinsFind(genes->bins, chrom, start, end);
-slSort(&exons, ((comp->strand == '+') ? cmpExonsPos : cmpExonsNeg));
+slSort(&exons, (sortDir > 0) ? cmpExonsAscend : cmpExonsDescend);
 return exons;
 }
 

@@ -8,12 +8,6 @@
  * alignments and split */
 #define MAX_INTRON_SIZE 2000000
 
-#undef DBG /* FIXME */
-#ifdef DBG
-static boolean enabled = FALSE;
-#endif
-
-
 static struct cdsExon *getGeneRestExon(struct cdsExon *exon,
                                        struct gene **geneRestRet)
 /* get the corresponding exon in the geneRest; cloning gene if
@@ -30,16 +24,6 @@ static void moveExonFrames(struct exonFrames *prevEf, struct exonFrames *ef,
 {
 struct cdsExon *exon = ef->exon;
 struct cdsExon *exonRest = getGeneRestExon(exon, geneRestRet);
-
-#ifdef DBG
-if (enabled)
-    {
-    fprintf(stderr, "  move: prevEf: %d-%d  ef: %d-%d\n",
-            ((prevEf == NULL) ? -1 : prevEf->cdsStart),
-            ((prevEf == NULL) ? -1 : prevEf->cdsEnd),
-            ef->cdsStart, ef->cdsEnd); 
-    }
-#endif
 assert((prevEf == NULL) || (prevEf->next == ef));
 
 /* unlink from gene */
@@ -124,24 +108,8 @@ static struct exonFrames *splitConflicting(struct exonFrames *ef, struct gene **
  * exonFrames */
 {
 struct exonFrames *nextEf;
-#ifdef DBG
-/* 488-508*/
-if (ef->cdsStart == 488)
-    enabled = TRUE;
-
-if (enabled)
-    {
-    fprintf(stderr, "split:   "); exonFramesDump(stderr, ef);
-    }
-#endif
 for (nextEf = exonFramesNext(ef); isNextConflicting(ef, nextEf); nextEf = exonFramesNext(ef))
     {
-#ifdef DBG
-    if (enabled)
-        {
-        fprintf(stderr, "  nextEf:"); exonFramesDump(stderr, nextEf);
-        }
-#endif
     /* pass null for prevEf if we switched to a new exon */
     moveExonFrames(((ef->next == NULL) ? NULL : ef), nextEf, geneRestRet);
     }

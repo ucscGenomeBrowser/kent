@@ -90,8 +90,7 @@ struct scanInfo
     int blkQStart;          /* exon coords, mapped and adjust to block bounds */
     int blkQEnd;
     int frame;              /* current frame */
-    int frameEnd;           /* expected frame at end of scan */  /* FIXME */
-    int scanDir;            /* scanning direction (+1|-1) relative to transcription */
+    int frScanDir;          /* frame scanning direction (+1|-1) relative to transcription */
     int subQStart;          /* query and target start of current subrange of exon,
                              * -1 for none */
     int subTStart;
@@ -102,16 +101,19 @@ struct scanInfo
 static void traceFrameDef(int level, struct scanInfo *si, struct exonFrames *ef)
 /* verbose trace to indicate why a mafFrames record was defined */
 {
-verbose(level, "exon %s[%d] %s:%d-%d %c fm: %d; ",
+verbose(level, "exon %s[%d] %s:%d-%d [%d] %c fm: %d; ",
         si->exon->gene->name, si->exon->exonNum,
         si->exon->chrom, si->exon->chromStart, si->exon->chromEnd,
+        (si->exon->chromEnd - si->exon->chromStart),
         si->exon->strand, si->exon->frame);
-verbose(level, "subQuery %s:%d-%d %c fm: %d-%d; ",
-        si->sc->query.comp->src, si->subQStart,
-        si->sc->query.pos, si->sc->query.comp->strand, si->subStartFrame, si->subEndFrame);
-verbose(level, "subTarget %s:%d-%d %c fm: %d\n",
-        si->sc->target.comp->src, si->subTStart,
-        si->sc->target.pos, si->sc->target.comp->strand, ef->mf.frame);
+verbose(level, "subQuery %s:%d-%d [%d] %c fm: %d-%d; ",
+        si->sc->query.comp->src, si->subQStart, si->sc->query.pos,
+        (si->sc->query.pos - si->subQStart),
+        si->sc->query.comp->strand, si->subStartFrame, si->subEndFrame);
+verbose(level, "subTarget %s:%d-%d [%d] %c fm: %d\n",
+        si->sc->target.comp->src, si->subTStart, si->sc->target.pos, 
+        (si->sc->target.pos - si->subTStart), 
+        si->sc->target.comp->strand, ef->mf.frame);
 }
 
 static void addMafFrame(struct scanInfo *si)
@@ -127,7 +129,7 @@ int cdsOff;
 tName = (strchr(si->sc->target.comp->src, '.')+1);
 
 /* frame is for first base in direction of transcription */
-if (si->scanDir > 0)
+if (si->frScanDir > 0)
     frame = si->subStartFrame;
 else
     frame = si->subEndFrame;
@@ -144,7 +146,7 @@ if (dot != NULL)
     *dot = '\0';
 
 /* compute offset within CDS */
-if (si->scanDir > 0)
+if (si->frScanDir > 0)
     cdsOff = si->exon->cdsOff + (si->subQStart - si->exonQStart);
 else
     cdsOff = si->exon->cdsOff + (si->exonQEnd - si->sc->query.pos);
@@ -181,7 +183,8 @@ si.subStartFrame = -1;
 si.subEndFrame = -1;
 
 /* direction frame will increment */
-si.scanDir = (exon->strand == sc->query.comp->strand) ? 1 : -1;
+assert(sc->target.comp->strand == '+');
+si.frScanDir = (exon->strand == sc->query.comp->strand) ? 1 : -1;
 
 /* get coordinates and frame at each end of the exon */
 si.exonQStart = exon->chromStart;
@@ -209,13 +212,13 @@ if (si.blkQStart < sc->query.comp->start)
     {
     int delta = sc->query.comp->start - si.blkQStart;
     si.blkQStart = sc->query.comp->start;
-    frameStart = frameIncr(frameStart, si.scanDir*delta);
+    frameStart = frameIncr(frameStart, si.frScanDir*delta);
     }
 if (si.blkQEnd > queryEnd)
     {
     int delta = si.blkQEnd - queryEnd;
     si.blkQEnd = queryEnd;
-    frameEnd = frameIncr(frameEnd, -1*si.scanDir*delta);
+    frameEnd = frameIncr(frameEnd, -1*si.frScanDir*delta);
     }
 si.frame = frameStart;
 return si;
@@ -243,20 +246,25 @@ if (compCursorAtBase(&si->sc->query))
         {
         /* target does not align position */
         if (si->subTStart >= 0)
+            {
             addMafFrame(si);
+            }
         }
     /* advance frame */
-    si->frame = frameIncr(si->frame, si->scanDir); 
+    si->frame = frameIncr(si->frame, si->frScanDir); 
     }
 else
     {
     /* query not aligned, if target is aligned, output current frame */
     if (compCursorAtBase(&si->sc->target) && (si->subTStart >= 0))
+        {
         addMafFrame(si);
+        }
     }
 }
 
-static void mkCompExonFrames(struct geneBins *genes, struct scanCursor *sc, struct cdsExon *exon)
+static void mkCompExonFrames(struct geneBins *genes, struct scanCursor *sc,
+                             struct cdsExon *exon)
 /* create mafFrames objects for a mafComp and an exon. */
 {
 struct scanInfo si = scanInfoInit(sc, exon);
@@ -265,7 +273,7 @@ struct scanInfo si = scanInfoInit(sc, exon);
  * to the bin search */
 if (!scanCursorAdvToQueryPos(sc, si.blkQStart))
     errAbort("BUG: should have found exon in this component");
-si.frame = frameIncr(si.frame, si.scanDir*(sc->query.pos - si.blkQStart));
+si.frame = frameIncr(si.frame, si.frScanDir*(sc->query.pos - si.blkQStart));
 
 /* scan columns of alignment overlapping exon */
 while (sc->query.pos < si.blkQEnd)
@@ -276,27 +284,21 @@ while (sc->query.pos < si.blkQEnd)
     }
 if (si.subTStart >= 0)
     addMafFrame(&si);
-#if 0 /* FIXME */
-assert(si.sc->query.pos == si.blkQEnd);
-#else
-#if 0 /* FIXME */
-fprintf(stderr, "Warning: %s %d si.sc->query.pos != si.blkQEnd: %d != %d\n",
-        si.exon->gene->name, si.exon->exonNum, si.sc->query.pos, si.blkQEnd);
-#endif
-#endif
-#if 0 /* FIXME */
-assert(si.frame == si.frameEnd);
-#endif
 }
 
 static void mkCompFrames(struct geneBins *genes,
-                         struct mafComp *geneComp,
+                         struct mafComp *queryComp,
                          struct mafComp *targetComp)
 /* create mafFrames objects for an mafComp */
 {
-struct scanCursor sc = scanCursorNew(geneComp, targetComp);
-struct binElement *exonRefs = geneBinsFind(genes, geneComp);
+struct scanCursor sc = scanCursorNew(queryComp, targetComp);
+
+/* n.b. the order of scanning is very important here or will miss some exons
+ * if they share a block */
+int sortDir =  (queryComp->strand == targetComp->strand) ? 1 : -1;
+struct binElement *exonRefs = geneBinsFind(genes, queryComp, sortDir);
 struct binElement *exonRef;
+
 
 for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
     mkCompExonFrames(genes, &sc, (struct cdsExon*)exonRef->val);
@@ -313,10 +315,10 @@ struct mafAli *ali;
 
 while ((ali = mafNext(mafFile)) != NULL)
     {
-    struct mafComp *geneComp = mafMayFindComponentDb(ali, geneDb);
+    struct mafComp *queryComp = mafMayFindComponentDb(ali, geneDb);
     struct mafComp *targetComp = mafMayFindComponentDb(ali, targetDb);
-    if ((geneComp != NULL) && (targetComp != NULL))
-        mkCompFrames(genes, geneComp, targetComp);
+    if ((queryComp != NULL) && (targetComp != NULL))
+        mkCompFrames(genes, queryComp, targetComp);
     mafAliFree(&ali);
     }
 mafFileFree(&mafFile);
