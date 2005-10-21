@@ -73,6 +73,8 @@ enum pipelineOpts
     pipelineNoAbort    = 0x04, /* don't abort if a process exits non-zero,
                                 * wait will return exit code instead.
                                 * Still aborts if process signals. */
+    /* these are internal options */
+    pipelineMemInput   = 0x08  /* pipeline takes input from memory */
     };
 
 struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
@@ -91,6 +93,13 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
  * object.  If pipelineWrite is specified, the input of the pipeline is
  * writable from the pipeline object. */
 
+struct pipeline *pipelineOpenMem(char ***cmds, unsigned opts,
+                                 void *otherEndBuf, size_t otherEndBufSize,
+                                 int stderrFd);
+/* Create a pipeline from an array of commands, with the pipeline input/output
+ * in a memory buffer.  See pipeline.h for full documentation.  Currently only
+ * input to a read pipeline is supported  */
+
 struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
                                  int otherEndFd, int stderrFd);
 /* like pipelineOpenFd(), only takes a single command */
@@ -98,6 +107,11 @@ struct pipeline *pipelineOpenFd1(char **cmd, unsigned opts,
 struct pipeline *pipelineOpen1(char **cmd, unsigned opts,
                                char *otherEndFile);
 /* like pipelineOpen(), only takes a single command */
+
+struct pipeline *pipelineOpenMem1(char **cmd, unsigned opts,
+                                  void *otherEndBuf, size_t otherEndBufSize,
+                                  int stderrFd);
+/* like pipelineOpenMem(), only takes a single command */
 
 char *pipelineDesc(struct pipeline *pl);
 /* Get the desciption of a pipeline for use in error messages */

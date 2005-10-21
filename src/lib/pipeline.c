@@ -11,7 +11,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-/* FIXME: add close-on-exec startup hack */
+/* FIXME: add close-on-exec startup error reporting */
 
 struct plProc
 /* A single process in a pipeline */
@@ -128,8 +128,8 @@ static void childAbortHandler()
 exit(100);
 }
 
-static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
-/* child part of process startup */
+static void plProcSetup(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
+/* setup signal, error handling, and file descriptors after fork */
 {
 int fd;
 struct sigaction sigAct;
@@ -166,7 +166,12 @@ if (stderrFd != STDERR_FILENO)
 /* close other file descriptors */
 for (fd = STDERR_FILENO+1; fd < 64; fd++)
     close(fd);
+}
 
+static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
+/* child part of process startup. */
+{
+plProcSetup(proc, stdinFd, stdoutFd, stderrFd);
 if (sameString(proc->cmd[0],"/dev/memwriter"))
     {  /* there is no such device really */
     char *mem = (char *)atol(proc->cmd[1]);
@@ -181,24 +186,28 @@ if (sameString(proc->cmd[0],"/dev/memwriter"))
         close(STDOUT_FILENO);
         exit(0);
         }
-    /* if error fall thru */
+    errnoAbort("/dev/memwriter failed: %s", proc->cmd[0]);
     }
-else
-    {
-    execvp(proc->cmd[0], proc->cmd);
-    }
+
+/* FIXME: add close-on-exec startup error reporting here */
+execvp(proc->cmd[0], proc->cmd);
 errnoAbort("exec failed: %s", proc->cmd[0]);
 }
 
-static void plProcExec(struct plProc* proc, int stdinFd, int stdoutFd, int stderrFd)
-/* Start one process in a pipeline with the supplied stdio files.  Setting
- * stderrFh to STDERR_FILENO cause stderr to be passed through the pipeline
- * along with stdout */
+static void plProcMemWrite(struct plProc* proc, int stdoutFd, int stderrFd, void *otherEndBuf, size_t otherEndBufSize)
+/* implements child process to write memory buffer to pipeline after
+ * fork */
 {
-if ((proc->pid = fork()) < 0)
-    errnoAbort("can't fork");
-if (proc->pid == 0)
-    plProcExecChild(proc, stdinFd, stdoutFd, stderrFd);
+int wrCnt;
+plProcSetup(proc, STDIN_FILENO, stdoutFd, stderrFd);
+wrCnt = write(STDOUT_FILENO, otherEndBuf, otherEndBufSize);
+if (wrCnt < 0)
+    errnoAbort("pipeline input buffer write failed");
+else if (wrCnt != otherEndBufSize)
+    errAbort("pipeline input buffer short write %d, expected %d",
+             wrCnt, otherEndBufSize);
+else
+    exit(0);
 }
 
 static void plProcWait(struct plProc* proc)
@@ -221,6 +230,7 @@ proc->pid = -1;
 static struct pipeline* pipelineNew(char ***cmds, unsigned options)
 /* create a new pipeline object. Doesn't start processes */
 {
+static char *memPseudoCmd[] = {"[mem]", NULL};
 struct pipeline *pl;
 int iCmd;
 
@@ -229,10 +239,17 @@ pl->pipeFd = -1;
 pl->options = options;
 pl->procName = joinCmds(cmds);
 
+if (cmds[0] == NULL)
+    errAbort("no commands in pipeline");
+
+if (options & pipelineMemInput)
+    {
+    /* add proc for forked process to write memory to pipeline */
+    slAddTail(&pl->procs, plProcNew(memPseudoCmd, pl));
+    }
+
 for(iCmd = 0; cmds[iCmd] != NULL; iCmd++)
     slAddTail(&pl->procs, plProcNew(cmds[iCmd], pl));
-if (pl->procs == NULL)
-    errAbort("no commands in pipeline");
 
 return pl;
 }
@@ -256,7 +273,43 @@ if (pl != NULL)
     }
 }
 
-static void pipelineExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd)
+static int pipelineExecProc(struct pipeline* pl, struct plProc *proc,
+                            int prevStdoutFd, int stdinFd, int stdoutFd, int stderrFd,
+                            void *otherEndBuf, size_t otherEndBufSize)
+/* start a process in the pipeline, return the stdout fd of the process */
+{
+/* determine stdin/stdout to use */
+int procStdinFd, procStdoutFd;
+if (proc == pl->procs)
+    procStdinFd = stdinFd; /* first process in pipeline */
+else
+    procStdinFd = prevStdoutFd;
+if (proc->next == NULL)
+    procStdoutFd = stdoutFd; /* last process in pipeline */
+else
+    prevStdoutFd = pipeCreate(&procStdoutFd);
+
+/* start process */
+if ((proc->pid = fork()) < 0)
+    errnoAbort("can't fork");
+if (proc->pid == 0)
+    {
+    if (otherEndBuf != NULL)
+        plProcMemWrite(proc, procStdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
+    else
+        plProcExecChild(proc, procStdinFd, procStdoutFd, stderrFd);
+    }
+
+/* don't leave intermediate pipes open in parent */
+if (proc != pl->procs)
+    safeClose(&procStdinFd);
+if (proc->next != NULL)
+    safeClose(&procStdoutFd);
+return prevStdoutFd;
+}
+
+static void pipelineExec(struct pipeline* pl, int stdinFd, int stdoutFd, int stderrFd,
+                         void *otherEndBuf, size_t otherEndBufSize)
 /* Start all processes in a pipeline, stdinFd and stdoutFd are the ends of
  * the pipeline, stderrFd is applied to all processed */
 {
@@ -264,24 +317,11 @@ struct plProc *proc;
 int prevStdoutFd = -1;
 for (proc = pl->procs; proc != NULL; proc = proc->next)
     {
-    /* determine stdin/stdout to use */
-    int procStdinFd, procStdoutFd;
-    if (proc == pl->procs)
-        procStdinFd = stdinFd; /* first process in pipeline */
-    else
-        procStdinFd = prevStdoutFd;
-    if (proc->next == NULL)
-        procStdoutFd = stdoutFd; /* last process in pipeline */
-    else
-        prevStdoutFd = pipeCreate(&procStdoutFd);
-
-    plProcExec(proc, procStdinFd, procStdoutFd, stderrFd);
-
-    /* don't leave intermediate pipes open in parent */
-    if (proc != pl->procs)
-        safeClose(&procStdinFd);
-    if (proc->next != NULL)
-        safeClose(&procStdoutFd);
+    prevStdoutFd = pipelineExecProc(pl, proc, prevStdoutFd,
+                                    stdinFd, stdoutFd, stderrFd,
+                                    otherEndBuf, otherEndBufSize);
+    otherEndBuf = NULL;  /* only for first process (read pipes) */
+    otherEndBufSize = 0;
     }
 }
 
@@ -306,7 +346,7 @@ static int openOtherWrite(char *otherEndFile)
 int fd;
 if (otherEndFile != NULL)
     {
-    fd = open(otherEndFile, O_WRONLY|O_CREAT, 0666);
+    fd = open(otherEndFile, O_WRONLY|O_CREAT|O_TRUNC, 0666);
     if (fd < 0)
         errnoAbort("can't open for write access: %s", otherEndFile);
     }
@@ -315,12 +355,13 @@ else
 return fd;
 }
 
-static void pipelineStartRead(struct pipeline *pl, int stdinFd, int stderrFd)
+static void pipelineStartRead(struct pipeline *pl, int stdinFd, int stderrFd,
+                              void *otherEndBuf, size_t otherEndBufSize)
 /* start a read pipeline */
 {
 int pipeWrFd;
 pl->pipeFd = pipeCreate(&pipeWrFd);
-pipelineExec(pl, stdinFd, pipeWrFd, stderrFd);
+pipelineExec(pl, stdinFd, pipeWrFd, stderrFd, otherEndBuf, otherEndBufSize);
 safeClose(&pipeWrFd);
 }
 
@@ -328,8 +369,16 @@ static void pipelineStartWrite(struct pipeline *pl, int stdoutFd, int stderrFd)
 /* start a write pipeline */
 {
 int pipeRdFd = pipeCreate(&pl->pipeFd);
-pipelineExec(pl, pipeRdFd, stdoutFd, stderrFd);
+pipelineExec(pl, pipeRdFd, stdoutFd, stderrFd, NULL, 0);
 safeClose(&pipeRdFd);
+}
+
+static void checkOpts(unsigned opts)
+/* check option set for consistency */
+{
+if (((opts & (pipelineRead|pipelineWrite)) == 0)
+    || ((opts & (pipelineRead|pipelineWrite)) == (pipelineRead|pipelineWrite)))
+    errAbort("must specify one of pipelineRead or pipelineWrite to pipelineOpen");
 }
 
 struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
@@ -339,13 +388,10 @@ struct pipeline *pipelineOpenFd(char ***cmds, unsigned opts,
 {
 struct pipeline *pl;
 
-if (((opts & (pipelineRead|pipelineWrite)) == 0)
-    || ((opts & (pipelineRead|pipelineWrite)) == (pipelineRead|pipelineWrite)))
-    errAbort("must specify one of pipelineRead or pipelineWrite to pipelineOpen");
-
+checkOpts(opts);
 pl = pipelineNew(cmds, opts);
 if (opts & pipelineRead)
-    pipelineStartRead(pl, otherEndFd, stderrFd);
+    pipelineStartRead(pl, otherEndFd, stderrFd, NULL, 0);
 else
     pipelineStartWrite(pl, otherEndFd, stderrFd);
 return pl;
@@ -359,16 +405,31 @@ struct pipeline *pipelineOpen(char ***cmds, unsigned opts,
 struct pipeline *pl;
 int otherEndFd;
 
-if (((opts & (pipelineRead|pipelineWrite)) == 0)
-    || ((opts & (pipelineRead|pipelineWrite)) == (pipelineRead|pipelineWrite)))
-    errAbort("must specify one of pipelineRead or pipelineWrite to pipelineOpen");
-
+checkOpts(opts);
 if (opts & pipelineRead)
     otherEndFd = openOtherRead(otherEndFile);
 else
     otherEndFd = openOtherWrite(otherEndFile);
 pl = pipelineOpenFd(cmds, opts, otherEndFd, STDERR_FILENO);
 safeClose(&otherEndFd);
+return pl;
+}
+
+struct pipeline *pipelineOpenMem(char ***cmds, unsigned opts,
+                                 void *otherEndBuf, size_t otherEndBufSize,
+                                 int stderrFd)
+/* Create a pipeline from an array of commands, with the pipeline input/output
+ * in a memory buffer.  See pipeline.h for full documentation.  Currently only
+ * input to a read pipeline is supported  */
+{
+struct pipeline *pl;
+checkOpts(opts);
+if (opts & pipelineWrite)
+    errAbort("pipelineOpenMem only supports read pipelines at this time");
+opts |= pipelineMemInput;
+
+pl = pipelineNew(cmds, opts);
+pipelineStartRead(pl, STDIN_FILENO, stderrFd, otherEndBuf, otherEndBufSize);
 return pl;
 }
 
@@ -390,6 +451,17 @@ char **cmds[2];
 cmds[0] = cmd;
 cmds[1] = NULL;
 return pipelineOpen(cmds, opts, otherEndFile);
+}
+
+struct pipeline *pipelineOpenMem1(char **cmd, unsigned opts,
+                                  void *otherEndBuf, size_t otherEndBufSize,
+                                  int stderrFd)
+/* like pipelineOpenMem(), only takes a single command */
+{
+char **cmds[2];
+cmds[0] = cmd;
+cmds[1] = NULL;
+return pipelineOpenMem(cmds, opts, otherEndBuf, otherEndBufSize, stderrFd);
 }
 
 char *pipelineDesc(struct pipeline *pl)

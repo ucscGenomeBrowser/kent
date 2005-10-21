@@ -4,7 +4,7 @@
 #include "linefile.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: pipelineTester.c,v 1.2 2005/10/07 20:29:13 markd Exp $";
+static char const rcsid[] = "$Id: pipelineTester.c,v 1.3 2005/10/21 18:46:06 markd Exp $";
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -23,6 +23,7 @@ errAbort(
     "  -exitCode=n - run with no-abort and expect this error code,\n"
     "   which can be zero.\n"
     "  -write - create a write pipeline\n"
+    "  -memApi - test memory buffer API\n"
     "  -pipeData=file - for a read pipeline, data read from the pipeline is copied\n"
     "   to this file for verification.  For a write pipeline, data from this\n"
     "   file is written to the pipeline.\n"
@@ -35,6 +36,7 @@ static struct optionSpec options[] =
 {
     {"exitCode", OPTION_INT},
     {"write", OPTION_BOOLEAN},
+    {"memApi", OPTION_BOOLEAN},
     {"pipeData", OPTION_STRING},
     {"otherEnd", OPTION_STRING},
     {"fdApi", OPTION_BOOLEAN},
@@ -46,6 +48,7 @@ boolean noAbort = FALSE;  /* don't abort, check exit code */
 int expectExitCode = 0;   /* expected exit code */
 boolean fdApi = FALSE; /* use the file descriptor API */
 boolean isWrite = FALSE; /* make a write pipeline */
+boolean memApi = FALSE; /* test memory buffer API */
 char *pipeDataFile = NULL;   /* use for input or output to the pipeline */
 char *otherEndFile = NULL;   /* file for other end of pipeline */
 
@@ -120,6 +123,19 @@ while (lineFileNext(dataLf, &line, NULL))
 lineFileClose(&dataLf);
 }
 
+void *loadMemData(char *dataFile, size_t *dataSizeRet)
+/* load a file into memory */
+{
+off_t dataSize = fileSize(dataFile);
+void *buf = needLargeMem(dataSize);
+FILE *fh = mustOpen(dataFile, "r");
+
+mustRead(fh, buf, dataSize);
+carefulClose(&fh);
+*dataSizeRet = dataSize;
+return buf;
+}
+
 void runPipeline(int nCmdsArgs, char **cmdsArgs)
 /* pipeline tester */
 {
@@ -128,6 +144,8 @@ char ***cmds;
 int exitCode, endOpenCnt;
 int startOpenCnt = countOpenFiles();
 int otherEndFd = -1;
+void *otherEndBuf = NULL;
+size_t otherEndBufSize = 0;
 struct pipeline *pl;
 
 if (noAbort)
@@ -140,6 +158,11 @@ if (fdApi)
     if (otherEndFd < 0)
         errnoAbort("open of %s failed", otherEndFile);
     pl = pipelineOpenFd(cmds, options, otherEndFd, STDERR_FILENO);
+    }
+else if (memApi)
+    {
+    otherEndBuf = loadMemData(otherEndFile, &otherEndBufSize);
+    pl = pipelineOpenMem(cmds, options, otherEndBuf, otherEndBufSize, STDERR_FILENO);
     }
 else
     pl = pipelineOpen(cmds, options, otherEndFile);
@@ -184,11 +207,16 @@ if (optionExists("exitCode"))
     expectExitCode = optionInt("exitCode", 0);
     }
 isWrite = optionExists("write");
+memApi = optionExists("memApi");
 fdApi = optionExists("fdApi");
+if (fdApi && memApi)
+    errAbort("can't specify both -fdApi and -memApi");
 pipeDataFile = optionVal("pipeData", NULL);
 otherEndFile = optionVal("otherEnd", NULL);
 if (fdApi && (otherEndFile == NULL))
     errAbort("-fdApi requires -otherEndFile");
+if (memApi && (otherEndFile == NULL))
+    errAbort("-memApi requires -otherEndFile");
 runPipeline(argc-1, argv+1);
 return 0;
 }

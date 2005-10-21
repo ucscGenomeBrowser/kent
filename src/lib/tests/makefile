@@ -34,7 +34,7 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 	diff expected/google.out output/google.out
 
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
-		pipelineRead pipelineReadMult pipelineReadFd \
+		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
 		pipelineExitCode
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
@@ -42,7 +42,9 @@ pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	zcat output/$@.out.gz > output/$@.out
 	diff input/simple1.txt output/$@.out
 
+# add come junk to make sure output gets truncated
 pipelineWriteMult: ${BIN_DIR}/pipelineTester mkdirs
+	cat input/google.html > output/$@.wc
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.wc "gzip -1" "gzip -dc" "wc"
 	diff expected/simple1.wc output/$@.wc
 
@@ -63,6 +65,11 @@ pipelineReadMult: ${BIN_DIR}/pipelineTester mkdirs
 pipelineReadFd: ${BIN_DIR}/pipelineTester mkdirs
 	gzip -1c input/simple1.txt >output/$@.in.gz
 	${BIN_DIR}/pipelineTester -fdApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
+	diff input/simple1.txt output/$@.out
+
+pipelineReadMem: ${BIN_DIR}/pipelineTester mkdirs
+	gzip -1c input/simple1.txt >output/$@.in.gz
+	${BIN_DIR}/pipelineTester -memApi -otherEnd=output/$@.in.gz -pipeData=output/$@.out "gzip -dc"
 	diff input/simple1.txt output/$@.out
 
 pipelineExitCode: ${BIN_DIR}/pipelineTester
