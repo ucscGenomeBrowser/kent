@@ -874,6 +874,57 @@ cat > load.csh << 'EOF'
     #  and these will be added to the previous Affy Chip/chip tracks
     #  on hg17.
 
+    # RNA Sites/Transfrags (6 subtracks)
+    cd /cluster/data/encode/Affy/2005-10-03
+    tail +2 lab/RNA/bed/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.gr.bed \
+    | hgLoadBed -noBin hg17 encodeAffyRnaGm06990SitesOct stdin
+        # 4377 elements
+    tail +2 lab/RNA/bed/HeLa/EC_AS_HeLaS3_RCyP+_C01vsNULL.sig.gr.bed \
+    | hgLoadBed -noBin hg17 encodeAffyRnaHeLaSitesOct stdin
+        # 2037 elements
+cat > loadSites.csh << 'EOF'
+    foreach f (lab/RNA/bed/HL60/??/*HL60*.bed)
+      set track = `echo $f:t:r:r:r | perl -wpe \
+        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SitesHr$1Oct/;'`
+      echo $track
+      tail +2 $f \
+        | hgLoadBed -noBin hg17 $track stdin
+    end    
+'EOF'
+    csh loadSites.csh >&! loadSites.log
+
+    # RNA Signal (6 subtracks)
+    #  NOTE: check for off-by-one error in these files
+    set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
+    mkdir -p $gbdbDir/wib
+mkdir wib wig
+
+    set track = encodeAffyRnaGm06990SignalOct
+    cat lab/RNA/wig/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig \
+    | wigEncode stdin wig/$track.wig wib/$track.wib
+    ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+    nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+
+    set track = encodeAffyRnaHeLaSignalOct
+    cat lab/RNA/wig/HeLa/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig \
+    | wigEncode stdin wig/$track.wig wib/$track.wib
+    ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+    nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+
+cat > loadSig.csh << 'EOF'
+    set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
+    foreach f (lab/RNA/wig/HL60/??/*HL60*C01vsNULL.sig.wig)
+      set track = `echo $f:t:r:r:r | perl -wpe \
+       's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SignalHr$1Oct/;'`
+      echo $track
+      cat $f \
+      | wigEncode stdin wig/$track.wig wib/$track.wib
+      ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+      nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+    end
+'EOF'
+    csh loadSig.csh >&! loadSig.log
+
 ##########################################################################
 # U North Carolina FAIRE  (kate)
     cd /cluster/data/encode
