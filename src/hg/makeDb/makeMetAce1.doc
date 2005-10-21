@@ -116,15 +116,25 @@ type bed 4 .
     wget ftp://ftp.ncbi.nlm.nih.gov/genomes/Bacteria/Methanosarcina_acetivorans/NC_003552.gbk
     mv NC_003552.gbk metAce1.gbk
     # Create 3 files to assist parsing of the genbank
-    # 1. for a bed file
-    echo 'chr
+    # 1. for a genePred file
+
+echo 'locus_tag
+chr
+strand
 start
 end
+start
+end
+1
+start
+end
+lineNumber
 gene
-1000
-strand' > metAce1-params-bed.txt
+cmpl
+cmpl
+0' > metAce1-params-gp.txt
     # 2. for the peptide parts
-    echo 'gene
+    echo 'locus_tag
 translation' > metAce1-params-pep.txt
     # 3. for the other gene information
     echo 'locus_tag
@@ -134,9 +144,9 @@ note
 protein_id
 db_xref
 EC_number
-pseudo' > metAce1-params-xra.txt
+db_xref2' > metAce1-params-xra.txt
     # Now extract the genes and information:
-    gbArchaeGenome metAce1.gbk metAce1-params-bed.txt metAce1-genbank-cds.bed
+    gbArchaeGenome metAce1.gbk metAce1-params-gp.txt metAce1-genbank-cds.gp
     gbArchaeGenome metAce1.gbk metAce1-params-pep.txt metAce1-genbank-cds.pep
     gbArchaeGenome metAce1.gbk metAce1-params-xra.txt metAce1-genbank-cds.xra
     hgsql metAce1 < /cluster/home/baertsch/kent/src/hg/lib/pepPred.sql
@@ -145,16 +155,15 @@ pseudo' > metAce1-params-xra.txt
     echo rename table minGeneInfo to gbProtCodeXra | hgsql metAce1
     echo load data local infile \'metAce1-genbank-cds.pep\' into table gbProtCodePep | hgsql metAce1
     echo load data local infile \'metAce1-genbank-cds.xra\' into table gbProtCodeXra | hgsql metAce1
+    ldHgGene metAce1 refSeq metAce1.gp -predTab -genePredExt
 
-#genbank to genePred
+# COG STUFF
+  awk 'NR>3{OFS="\t";print $6,$8,$7}' /projects/lowelab/db/Bacteria/Methanosarcina_acetivorans/NC_003552.ptt  > COG
+  hgsql metAce1 < /cluster/home/baertsch/kent/src/hg/lib/cogs.sql
+  echo "load data local infile 'COG' into table COG" | hgsql metAce1
+# load cog codes
+ hgsql metAce1 < /cluster/data/metAce1/genbank/COGXra.sql
 
-csh
-/cluster/bin/scripts/tawk '{print $1,$2,$3,$4,$5,$6,$2,$3,0,1,$3-$2,0}' metAce1-genbank-cds.bed | bedToGenePred stdin tmp.gp
-#below substr($1,3,4) must be edited so that it returns a numeric field.
-/cluster/bin/scripts/tawk '{print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,substr($1,3,4),name2,"cmpl","cmpl",0}' tmp.gp  > tmp2.gp
-# hard tab between quotes use ctrl-V then press tab
-join -t "     " -o 1.1,1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 2.2 1.13 1.14 1.15  tmp2.gp metAce1-genbank-cds.xra > metAce1.gp
-ldHgGene metAce1 refSeq metAce1.gp -predTab -genePredExt
 
 # GENBANK rRNA GENES (NOT QUITE DONE)
     ssh hgdev
@@ -166,14 +175,6 @@ ldHgGene metAce1 refSeq metAce1.gp -predTab -genePredExt
     hgsql metAce1 < ~/kent/src/hg/lib/minGeneInfo.sql
     echo rename table minGeneInfo to gbRRNAXra | hgsql metAce1
     echo load data local infile \'metAce1-rrnas-xra.txt\' into table gbRRNAXra | hgsql metAce1
-
-# COG STUFF
-  awk 'NR>3{OFS="\t";print $6,$8,$7}' /projects/lowelab/db/Bacteria/Methanosarcina_acetivorans/NC_003552.ptt  > COG
-  hgsql metAce1 < /cluster/home/baertsch/kent/src/hg/lib/cogs.sql
-  echo "load data local infile 'COG' into table COG" | hgsql metAce1
-# load cog codes
- hgsql metAce1 < /cluster/data/metAce1/genbank/COGXra.sql
-
 
 
 # TODD LOWE tRNA GENES ()
