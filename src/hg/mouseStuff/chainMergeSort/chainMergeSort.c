@@ -7,8 +7,9 @@
 #include "chainBlock.h"
 #include "verbose.h"
 #include "portable.h"
+#include "quickHeap.h"
 
-static char const rcsid[] = "$Id: chainMergeSort.c,v 1.8 2005/10/20 21:29:42 galt Exp $";
+static char const rcsid[] = "$Id: chainMergeSort.c,v 1.9 2005/10/21 05:38:13 galt Exp $";
 
 #define MAXFILES 250
 
@@ -51,16 +52,25 @@ struct chainFile
     };
 
 
-static void cfEof(struct chainFile *cf, int level)
+static void cfEof(struct chainFile **pCf, int level)
 /* deal with EOF */
 {
+struct chainFile *cf = *pCf;
 char fname[256];  /* order important next few lines */
 safef(fname,sizeof(fname),"%s",cf->lf->fileName);
 lineFileClose(&cf->lf);
 if (level > 0)          /* if not original input level, then */
     remove(fname);      /* remove temp file */
-AllocVar(cf->chain);    /* make a sentinel stand-in  */
-cf->chain->score = -1;  /* special handling like EOF */
+freez(pCf);
+}
+
+static int cmpChainScores(const void *elem1,  const void *elem2)
+/* compare two chains by score, return elem1-score - elem2-score 
+ * where the scores will be positive or 0 */
+{
+struct chainFile *e1 = (struct chainFile *) elem1;
+struct chainFile *e2 = (struct chainFile *) elem2;
+return  e1->chain->score - e2->chain->score;
 }
 
 void chainMergeSort(int fileCount, char *files[], FILE *out, int level)
@@ -69,9 +79,9 @@ void chainMergeSort(int fileCount, char *files[], FILE *out, int level)
 int i, n, p, c1, c2;   /* node, parent, child1, child2 */
 struct chainFile *cf;
 int id = 0;
-struct chainFile **cfHeap = NULL;
+struct quickHeap *h = NULL;
 
-cfHeap = needMem(fileCount*sizeof(struct chainFile*));
+h = newQuickHeap(fileCount, &cmpChainScores);
 
 /* Open up all input files and read first chain. */
 for (i=0; i<fileCount; ++i)
@@ -80,76 +90,32 @@ for (i=0; i<fileCount; ++i)
     cf->lf = lineFileOpen(files[i], TRUE);
     lineFileSetMetaDataOutput(cf->lf, out);
     cf->chain = chainRead(cf->lf);
-    if (!cf->chain)
-	{
-	cfEof(cf,level);  /* deal with EOF */
-	}
-    cfHeap[i] = cf;
-    /* preserve heap property as it grows */
-    n = i;
-    p = (n-1)/2;
-    while (n > 0 && cfHeap[p]->chain->score < cfHeap[n]->chain->score)
-	{
-	struct chainFile *temp = cfHeap[p];
-	cfHeap[p] = cfHeap[n];
-	cfHeap[n] = temp;
-	n = p;
-	p = (n-1)/2;
-	}
+    if (cf->chain)
+    	addToQuickHeap(h, cf);
+    else
+	cfEof(&cf,level);  /* deal with EOF */
     }
 
-/* cf heap maintains its structure - static during processing,
- * even eof on an input file just keeps score -1.
- * We are done when top of heap has score -1, 
- * i.e. all file data has been used up, all eof, all -1 
- * Otherwise, maintaining the heap is quick and easy since
- * we just use an array with the following relationships:
- * children(n) == 2n+1,2n+2. parent(n) == (n-1)/2.
- * The highest score is always at the top of the heap in 
- * position 0. When the top file's chain is consumed and 
- * sent to output and the next chain for the previously top file is 
- * read in, we simply balance the heap to maintain the heap property
- * by swapping with the largest child until both children 
- * are smaller, or we hit the end of the array (==fileCount).
- * Also note that scores are not unique, two heap members
- * of the heap may have equal score.  So A parent need not
- * be greater than the children, it may also be equal.
- */
-
-while (cfHeap[0]->chain->score != -1)
+while (!quickHeapEmpty(h))
     {
-    cf = cfHeap[0];
+    cf = peekQuickHeapTop(h);
     if (!saveId)
 	cf->chain->id = ++id;		/* We reset id's here. */
     chainWrite(cf->chain, out);
     chainFree(&cf->chain);
-    if ((cf->chain = chainRead(cf->lf)) == NULL)
+    if ((cf->chain = chainRead(cf->lf)))
 	{
-	cfEof(cf,level);  /* deal with EOF */
+	quickHeapTopChanged(h);
 	}
-    /* balance heap - swap node with biggest child until both children are 
-     * either less or equal or hit end of heap (no more children) */
-    n = 0;
-    c1 = 2*n+1;
-    c2 = 2*n+2;
-    while (TRUE)
-	{
-	struct chainFile *temp = NULL;
-	int bestc = n;
-	if (c1 < fileCount && cfHeap[c1]->chain->score > cfHeap[bestc]->chain->score)
-	    bestc = c1;
-	if (c2 < fileCount && cfHeap[c2]->chain->score > cfHeap[bestc]->chain->score)
-	    bestc = c2;
-	if (bestc == n)
-	    break;
-	temp = cfHeap[bestc];
-	cfHeap[bestc] = cfHeap[n];
-	cfHeap[n] = temp;
-	n = bestc;
-	c1 = 2*n+1;
-    	c2 = 2*n+2;
+    else
+	{ /* deal with EOF */
+	if (!removeFromQuickHeapByElem(h, cf))
+	    errAbort("unexpected error: chainFile not found on heap");
+	cfEof(&cf,level);  
 	}
     }
+
+freeQuickHeap(&h);
 
 }
 
