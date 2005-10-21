@@ -390,6 +390,26 @@ safef(query, sizeof(query),
 return sqlQuickString(conn, query);
 }
 
+char *visiGeneStrain(struct sqlConnection *conn, int id)
+/* Return strain of organism if any.  FreeMem this when done. */
+{
+char query[256];
+char *result;
+safef(query, sizeof(query),
+    "select strain.name from image,specimen,genotype,strain "
+    "where image.id = %d "
+    "and image.specimen = specimen.id "
+    "and specimen.genotype = genotype.id "
+    "and genotype.strain = strain.id"
+    , id);
+result  = sqlQuickString(conn, query);
+/* Convert empty string to NULL */
+if (result != NULL && result[0] == 0)
+    freez(&result);
+return result;
+}
+
+
 char *visiGeneSliceType(struct sqlConnection *conn, int id)
 /* Return slice type if any.  FreeMem this when done. */
 {
