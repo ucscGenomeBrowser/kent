@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1024 2005/10/20 21:25:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1025 2005/10/21 17:50:54 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9496,16 +9496,31 @@ struct trackDb *subTdb;
 int subtrackCt = slCount(tdb->subtracks);
 int altColors = subtrackCt - 1;
 struct track *subtrack = NULL;
-
 TrackHandler handler;
+char table[64];
+struct hashEl *hel, *hels = NULL;
+int len;
+boolean smart = FALSE;
 
 /* ignore if no subtracks */
 if (!subtrackCt)
     return;
 
+/* look out for tracks that manage their own subtracks */
+if (startsWith("wig", tdb->type) || startsWith("bedGraph", tdb->type) ||
+    rStringIn("smart", trackDbSetting(tdb, "compositeTrack")))
+        smart = TRUE;
+
 /* setup function handlers for composite track */
-track->loadItems = compositeLoad;
-track->totalHeight = compositeTotalHeight;
+handler = lookupTrackHandler(tdb->tableName);
+if (smart && handler != NULL)
+    /* handles it's own load and height */
+    handler(track);
+else
+    {
+    track->loadItems = compositeLoad;
+    track->totalHeight = compositeTotalHeight;
+    }
 
 if (altColors && (finalR || finalG || finalB))
     {
@@ -9515,27 +9530,47 @@ if (altColors && (finalR || finalG || finalB))
     deltaG = (finalG - altG) / altColors;
     deltaB = (finalB - altB) / altColors;
     }
+/* get cart variables for the composite, unless track handles it's own */
+if (!smart)
+    {
+    safef(table, sizeof table, "%s.", track->mapName);
+    hels = cartFindPrefix(cart, table);
+    len = strlen(track->mapName);
+    for (hel = hels; hel != NULL; hel = hel->next)
+            strcpy(hel->name, hel->name+len+1);
+    }
 
 /* fill in subtracks of composite track */
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     {
     /* initialize from composite track settings */
-    if(trackDbSetting(subTdb, "noInherit"))
-	{
-	subtrack = trackFromTrackDb(subTdb);
-	handler = lookupTrackHandler(subTdb->tableName);
-	}
-    else 
+    if (trackDbSetting(subTdb, "noInherit") == NULL)
 	{
 	/* install parent's track handler */
 	subtrack = trackFromTrackDb(tdb);
 	handler = lookupTrackHandler(tdb->tableName);
 	}
+    else 
+	{
+	subtrack = trackFromTrackDb(subTdb);
+	handler = lookupTrackHandler(subTdb->tableName);
+	}
     if (handler != NULL)
 	handler(subtrack);
 
-    if(trackDbSetting(subTdb, "noInherit")==NULL)
+    if (trackDbSetting(subTdb, "noInherit") == NULL)
 	{
+        if (!smart)
+            {
+            /* add cart variables from parent */
+            char cartVar[64];
+            for (hel = hels; hel != NULL; hel = hel->next)
+                {
+                safef(cartVar, sizeof cartVar, "%s.%s",
+                                   subTdb->tableName, hel->name);
+                cartSetString(cart, cartVar, hel->val);
+                }
+            }
 	/* add subtrack settings (table, colors, labels, vis & pri) */
 	subtrack->mapName = subTdb->tableName;
 	subtrack->shortLabel = subTdb->shortLabel;
@@ -9639,10 +9674,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
     if (slCount(tdb->subtracks) != 0)
         makeCompositeTrack(track, tdb);
-
-    handler = lookupTrackHandler(tdb->tableName);
-    if (handler != NULL)
-	handler(track);
+    else
+        {
+        handler = lookupTrackHandler(tdb->tableName);
+        if (handler != NULL)
+            handler(track);
+        }
 
     if (track->loadItems == NULL)
         warn("No load handler for %s", tdb->tableName);
@@ -10353,6 +10390,7 @@ registerTrackHandler("dless", dlessMethods);
 registerTrackHandler("dlessMD", dlessMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeGeneOct", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
