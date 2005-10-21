@@ -357,6 +357,9 @@ for (image = imageList; image != NULL; image = image->next)
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "organism", visiGeneOrganism(conn, paneId));
     slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "strain", 
+    	naForNull(visiGeneStrain(conn, paneId)));
+    slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "stage", visiGeneStage(conn, paneId, TRUE));
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "body part",
