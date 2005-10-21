@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "htmshell.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
 #include "captionElement.h"
@@ -360,6 +361,9 @@ for (image = imageList; image != NULL; image = image->next)
     ce = captionElementNew(paneId, "strain", 
     	naForNull(visiGeneStrain(conn, paneId)));
     slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "genotype",
+        naForNull(visiGeneGenotype(conn, paneId)));
+    slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "stage", visiGeneStage(conn, paneId, TRUE));
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "body part",
@@ -418,7 +422,8 @@ for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
 	    else if (charsInLine != 0)
 		printf(" ");
 	    }
-	printf("<B>%s:</B> %s", ce->type, ce->value);
+	printf("<B>%s:</B> ", ce->type);
+	htmTextOut(stdout, ce->value);
 	charsInLine += charsInEl;
 	}
     if (charsInLine != 0)
