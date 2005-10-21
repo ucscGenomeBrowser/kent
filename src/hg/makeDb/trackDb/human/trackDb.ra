@@ -628,7 +628,7 @@ track affyTxnPhase2
 shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
 release alpha
-compositeTrack on
+compositeTrack on smart
 visibility dense
 defaultViewLimits 0:150
 autoScaleDefault Off
@@ -1038,7 +1038,7 @@ shortLabel Gencode Genes
 longLabel Gencode Gene Annotations 
 group encodeGenes
 color 73,76,73
-priority 10.0
+priority 10.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type genePred
@@ -1061,7 +1061,7 @@ track encodeGencodeIntron
 shortLabel Gencode Introns
 longLabel Gencode Intron Validation 
 group encodeGenes
-priority 10.1
+priority 10.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
 type bed 6 +
@@ -1091,21 +1091,21 @@ gClass_Processed_pseudogene 0,91,191
 gClass_Unprocessed_pseudogene 0,91,191
 origAssembly hg17
 
-    track encodeGencodeKnown
+    track encodeGencodeGeneKnown
     subTrack encodeGencodeGeneOct
     shortLabel Gencode Reference
     longLabel Gencode October Freeze Reference Genes
     color 73,76,73
     priority 1
 
-    track encodeGencodePutative
+    track encodeGencodeGenePutative
     subTrack encodeGencodeGeneOct
     shortLabel Gencode Putative
     longLabel Gencode October Freeze Putative Genes
     color 73,76,73
     priority 2
 
-    track encodeGencodePseudo
+    track encodeGencodeGenePseudo
     subTrack encodeGencodeGeneOct
     shortLabel Gencode Pseudo
     longLabel Gencode October Freeze Pseudogenes
@@ -5740,4 +5740,38 @@ searchTable ecoresTetNig1
 searchType genePred
 shortcircuit 1
 termRegex EG3HTT[0-9]+
+searchPriority 50
+
+searchTable encodeGencodeGeneKnown
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+#termRegex [A-Z]+[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 1.5
+
+searchTable encodeGencodeGeneKnown
+searchName gencodeKnown2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 1.5
+
+searchTable encodeGencodeGenePseudo
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 50
+
+searchTable encodeGencodeGenePseudo
+searchName gencodePseudo2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
+searchPriority 50
+
+searchTable encodeGencodeGenePutative
+searchType genePred
+termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
+searchPriority 50
+
+searchTable encodeGencodeGenePutative
+searchName gencodePutative2
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
