@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.22 2005/07/01 01:26:17 baertsch Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.23 2005/10/22 15:26:33 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -141,8 +141,10 @@ int wordCount;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 int i,j;
 int minData = maxBinCount, maxData = 0;
+int totalTooBig = 0;
 double maxCount = 0;
 double maxCt;
+double maxVal = 0;
 int truncation = 0;
 int begin, end;
 unsigned long long totalCounts = 0;
@@ -169,6 +171,8 @@ while ((wordCount = lineFileChop(lf, row)))
 	{
 	double d;
 	d = lineFileNeedDouble(lf, row, col);
+	if (d > maxVal)
+	    maxVal = d;
 	if (d >= minValR)
 	    {
 	    d -= minValR;
@@ -178,6 +182,8 @@ while ((wordCount = lineFileChop(lf, row)))
     else
 	{
 	x = lineFileNeedNum(lf, row, col);
+	if (x > maxVal)
+	    maxVal = x;
 	if (x >= minVal)
 	    {
 	    x -= minVal;
@@ -199,6 +205,7 @@ while ((wordCount = lineFileChop(lf, row)))
 	    {
 	    verbose(2, "truncating index %d\n", x);
 	    truncation = (x > truncation) ? x : truncation;
+	    totalTooBig += 1;
 	    }
     }
 
@@ -210,6 +217,7 @@ if (truncation > 0)
 	fprintf(stderr,"large values truncated: need %d bins or larger binSize than %g\n",truncation, binSizeR);
     else
 	fprintf(stderr,"large values truncated: need %d bins or larger binSize than %d\n",truncation, binSize);
+    printf("Maximum value %f\n", maxVal);
     }
 
 /* Figure out range that has data, maximum data
@@ -281,13 +289,21 @@ if (verboseLevel()>1)
 
 cpd = 0.0;	/*	cumulative probability distribution	*/
 /* Output results. */
-for (i=begin; i<end; ++i)
+for (i=begin; i<=end; ++i)
     {
-    int count = hist[i];
     double ct;
     double binStartR = 0.0;
     int binStart = 0;
+    int count;
 
+    if (i != end)
+	count = hist[i];
+    else
+	{
+	if (totalTooBig == 0)
+	    break;
+        count = totalTooBig;
+	}
     if (real)
 	binStartR = i*binSizeR + minValR;
     else
@@ -312,6 +328,8 @@ for (i=begin; i<end; ++i)
 	ct = log(ct);
     if (noStar)
 	{
+	if (i == end)
+	    printf(">=");
 	if (verboseLevel()>1)
 	    printf("%02d\t", i);
 	if (real)
@@ -327,7 +345,9 @@ for (i=begin; i<end; ++i)
 		printf("%3d %g:%g\t%f", i, binStartR, binStartR+binSizeR, ct);
 	    }
 	else
+	    {
 	    printf("%d\t%f", binStart, ct);
+	    }
 	if (pValues)
 	    {
 	    if (ct > 0)
@@ -345,6 +365,8 @@ for (i=begin; i<end; ++i)
     else
 	{
 	int astCount = round(ct * 60.0 / maxCt);
+	if (i == end)
+	    printf(">=");
 	if (verboseLevel()>1)
 	    printf("%2d ", i);
 	if (real)
