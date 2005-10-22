@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.31 2005/06/07 14:04:09 giardine Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.32 2005/10/22 03:20:18 hartera Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -246,6 +246,7 @@ const struct joinerPair *jpB = *((struct joinerPair **)vb);
 struct joinerDtf *a = jpA->b;
 struct joinerDtf *b = jpB->b;
 int diff;
+
 diff = strcmp(a->database, b->database);
 if (diff == 0)
    {
@@ -322,7 +323,9 @@ if (asObj != NULL)
 describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
-slSort(&jpList, joinerPairCmpOnB);
+/* sort and unique list */
+slUniqify(&jpList, joinerPairCmpOnB, joinerPairFree);
+
 if (jpList != NULL)
     {
     webNewSection("Connected Tables and Joining Fields");
