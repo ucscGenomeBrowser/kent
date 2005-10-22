@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.5 2005/10/22 00:38:37 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.6 2005/10/22 00:54:06 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -121,6 +121,15 @@ char *chrom = "chr1";
 int chromSize = 0;
 int windowSize = 100000;
 struct machine *machinePos;
+time_t now;
+char testTime[100];
+char testDate[100];
+
+now = time(NULL);
+strftime(testTime, 100, "%H:%M", localtime(&now));
+printf("time = %s\n", testTime);
+strftime(testDate, 100, "%B %d, %Y", localtime(&now));
+printf("date = %s\n\n", testDate);
 
 if (argc != 3)
     usage();
