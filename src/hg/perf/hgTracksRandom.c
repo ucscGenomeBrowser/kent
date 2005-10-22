@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.6 2005/10/22 00:54:06 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.7 2005/10/22 01:04:40 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -32,9 +32,8 @@ void usage()
 errAbort(
   "hgTracksRandom - Time default view for random position\n"
   "machines is a file listing the machines to test\n"
-  "cgi is the name of a CGI\n"
   "usage:\n"
-  "  hgTracksRandom machines cgi\n");
+  "  hgTracksRandom machines\n");
 }
 
 void getMachines(char *filename)
@@ -131,7 +130,7 @@ printf("time = %s\n", testTime);
 strftime(testDate, 100, "%B %d, %Y", localtime(&now));
 printf("date = %s\n\n", testDate);
 
-if (argc != 3)
+if (argc != 2)
     usage();
 
 srand( (unsigned) time(NULL) );
@@ -149,7 +148,7 @@ getMachines(argv[1]);
 for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next)
     {
     dy = newDyString(256);
-    dyStringPrintf(dy, "%s/%s?db=hg17&position=%s:%d-%d", machinePos->name, argv[2], 
+    dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=hg17&position=%s:%d-%d", machinePos->name, 
                    chrom, startPos, startPos + windowSize);
     printf("url = %s\n", dy->string);
     hgTracksRandom(dy->string);
