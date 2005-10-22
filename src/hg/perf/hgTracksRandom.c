@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.7 2005/10/22 01:04:40 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.8 2005/10/22 02:18:03 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -91,7 +91,7 @@ return *(unsigned *)el->val;
 
 
 
-void hgTracksRandom(char *url)
+long hgTracksRandom(char *url)
 /* hgTracksRandom - Time default view for random position. */
 /* The URL can include position. */
 {
@@ -101,7 +101,7 @@ struct htmlPage *rootPage;
 startTime = clock1000();
 rootPage = htmlPageGet(url);
 endTime = clock1000();
-printf("time = %ld\n", endTime - startTime);
+return endTime - startTime;
 }
 
 int getStartPos(int chromSize, int windowSize)
@@ -123,12 +123,13 @@ struct machine *machinePos;
 time_t now;
 char testTime[100];
 char testDate[100];
+long elapsedTime = 0;
 
 now = time(NULL);
 strftime(testTime, 100, "%H:%M", localtime(&now));
-printf("time = %s\n", testTime);
+// printf("time = %s\n", testTime);
 strftime(testDate, 100, "%B %d, %Y", localtime(&now));
-printf("date = %s\n\n", testDate);
+// printf("date = %s\n\n", testDate);
 
 if (argc != 2)
     usage();
@@ -150,9 +151,10 @@ for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next
     dy = newDyString(256);
     dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=hg17&position=%s:%d-%d", machinePos->name, 
                    chrom, startPos, startPos + windowSize);
-    printf("url = %s\n", dy->string);
-    hgTracksRandom(dy->string);
+    elapsedTime = hgTracksRandom(dy->string);
+    printf("%s %ld %s %d %d %s %s\n", machinePos->name, elapsedTime, chrom, startPos, startPos + windowSize, testDate, testTime);
     }
+printf("-------------------------------------------------------------------------\n");
 
 /* free machine list */
 return 0;
