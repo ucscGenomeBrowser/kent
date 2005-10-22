@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.8 2005/10/22 02:18:03 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.9 2005/10/22 02:32:05 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -127,9 +127,8 @@ long elapsedTime = 0;
 
 now = time(NULL);
 strftime(testTime, 100, "%H:%M", localtime(&now));
-// printf("time = %s\n", testTime);
 strftime(testDate, 100, "%B %d, %Y", localtime(&now));
-// printf("date = %s\n\n", testDate);
+printf("%s %s\n", testDate, testTime);
 
 if (argc != 2)
     usage();
@@ -143,6 +142,7 @@ hSetDb(database);
 chromHash = loadAllChromInfo();
 chromSize = getChromSize(chrom);
 startPos = getStartPos(chromSize, windowSize);
+printf("%s:%d-%d\n\n", chrom, startPos, startPos + windowSize);
 
 getMachines(argv[1]);
 
@@ -152,9 +152,9 @@ for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next
     dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=hg17&position=%s:%d-%d", machinePos->name, 
                    chrom, startPos, startPos + windowSize);
     elapsedTime = hgTracksRandom(dy->string);
-    printf("%s %ld %s %d %d %s %s\n", machinePos->name, elapsedTime, chrom, startPos, startPos + windowSize, testDate, testTime);
+    printf("%s %ld\n", machinePos->name, elapsedTime);
     }
-printf("-------------------------------------------------------------------------\n");
+printf("----------------------------------\n");
 
 /* free machine list */
 return 0;
