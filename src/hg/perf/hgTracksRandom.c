@@ -8,22 +8,51 @@
 #include "hash.h"
 #include "hdb.h"
 #include "htmlPage.h"
+#include "linefile.h"
 #include "jksql.h"
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.4 2005/10/17 22:08:25 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.5 2005/10/22 00:38:37 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
+
+struct machine 
+    {
+    struct machine *next;
+    char *name;
+    };
+
+struct machine *machineList;
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "hgTracksRandom - Time default view for random position\n"
+  "machines is a file listing the machines to test\n"
+  "cgi is the name of a CGI\n"
   "usage:\n"
-  "  hgTracksRandom url \n");
+  "  hgTracksRandom machines cgi\n");
+}
+
+void getMachines(char *filename)
+/* Read in list of machines to use. */
+{
+struct lineFile *lf = lineFileOpen(filename, TRUE);
+char *line;
+int lineSize;
+struct machine *machine;
+
+while (lineFileNext(lf, &line, &lineSize))
+    {
+    AllocVar(machine);
+    machine->name = line;
+    machine->next = machineList;
+    machineList = machine;
+    }
+/* could reverse order here */
 }
 
 /* Copied from hgLoadWiggle. */
@@ -91,22 +120,32 @@ int startPos = 1;
 char *chrom = "chr1";
 int chromSize = 0;
 int windowSize = 100000;
+struct machine *machinePos;
 
-if (argc != 2)
+if (argc != 3)
     usage();
 
 srand( (unsigned) time(NULL) );
+
 database = needMem(16);
 strcpy(database, "hg17");
 hSetDb(database);
+
 chromHash = loadAllChromInfo();
 chromSize = getChromSize(chrom);
 startPos = getStartPos(chromSize, windowSize);
 
-dy = newDyString(256);
-dyStringPrintf(dy, "%s?db=hg17&position=%s:%d-%d", argv[1], chrom, startPos, startPos + windowSize);
-printf("url = %s\n", dy->string);
+getMachines(argv[1]);
 
-hgTracksRandom(dy->string);
+for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next)
+    {
+    dy = newDyString(256);
+    dyStringPrintf(dy, "%s/%s?db=hg17&position=%s:%d-%d", machinePos->name, argv[2], 
+                   chrom, startPos, startPos + windowSize);
+    printf("url = %s\n", dy->string);
+    hgTracksRandom(dy->string);
+    }
+
+/* free machine list */
 return 0;
 }
