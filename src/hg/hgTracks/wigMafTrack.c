@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.3 2005/10/16 18:22:18 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.4 2005/10/22 16:25:05 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1194,12 +1194,6 @@ else
 
 ptr = dna;
 color = shadesOfSea[0];
-if (strand == '-')
-    {
-    int swap = prevEnd;
-    prevEnd = nextStart;
-    nextStart = swap;
-    }
 
 mult = 0;
 if (frame && (prevEnd == -1))
@@ -1230,17 +1224,17 @@ if (frame && (prevEnd == -1))
 else if (frame && (prevEnd != -1))
     {
     memset(codon, 0, sizeof(codon));
-    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd - 1, prevEnd + 1  );
-    sub = mafSubset(ali, masterChrom, prevEnd - 1, prevEnd + 1  );
-    comp = mafMayFindCompPrefix(sub, compName, ".");
     switch(frame)
 	{
 	case 1:
-	    if (comp && (!(ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
+	    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd , prevEnd + 1  );
+	    sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
+	    comp = mafMayFindCompPrefix(sub, compName, ".");
+	    if (comp && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
 		{
-		//if (strand == '-')
-		    //complement(comp->text, 1);
-		codon[0] = comp->text[1];
+		if (strand == '-')
+		    complement(comp->text, 1);
+		codon[0] = comp->text[0];
 		codon[1] = ptr[0];
 		codon[2] = ptr[1];
 		fillBox = TRUE;
@@ -1253,10 +1247,21 @@ else if (frame && (prevEnd != -1))
 	    length -= 2;
 	    break;
 	case 2:
+	    if (strand == '-')
+		{
+		ali = mafLoadInRegion(conn, tableName, chromName, prevEnd  , prevEnd + 2  );
+		sub = mafSubset(ali, masterChrom, prevEnd  , prevEnd + 2  );
+		}
+	    else
+		{
+		ali = mafLoadInRegion(conn, tableName, chromName, prevEnd - 1  , prevEnd + 1  );
+		sub = mafSubset(ali, masterChrom, prevEnd - 1  , prevEnd + 1  );
+		}
+	    comp = mafMayFindCompPrefix(sub, compName, ".");
 	    if (comp && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(*ptr))))
 		{
-		//if (strand == '-')
-		    //complement(comp->text, 2);
+		if (strand == '-')
+		    reverseComplement(comp->text, 2);
 		codon[0] = comp->text[0];
 		codon[1] = comp->text[1];
 		codon[2] = *ptr;
@@ -1274,7 +1279,7 @@ if (fillBox)
     {
     if (strand == '-')
 	{
-	x1 = x + ( end -4  ) * width / winBaseCount;
+	x1 = x + ( end - ( 5 - frame)  ) * width / winBaseCount;
 	}
     else
 	{
@@ -1287,7 +1292,6 @@ if (fillBox)
 //return;
 
 for (;length > 2; ptr +=3 , length -=3)
-    //if (0)
     {
     if (!(ISGASPACEPORN(ptr[0]) || ISGASPACEPORN(ptr[1]) || ISGASPACEPORN(ptr[2]) ))
 	{
@@ -1321,8 +1325,16 @@ if (length && (nextStart != -1))
 
     memset(codon, 0, sizeof(codon));
 	
-    ali = mafLoadInRegion(conn, tableName, chromName, nextStart, nextStart + 2 );
-    sub = mafSubset(ali, masterChrom, nextStart, nextStart + 2);
+    if (strand == '-')
+	{
+	ali = mafLoadInRegion(conn, tableName, chromName, nextStart - 2 + length, nextStart + 1 );
+	sub = mafSubset(ali, masterChrom, nextStart - 2 + length, nextStart + 1);
+	}
+    else
+	{
+	ali = mafLoadInRegion(conn, tableName, chromName, nextStart , nextStart + 2 );
+	sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
+	}
     comp = mafMayFindCompPrefix(sub, compName, ".");
     if (comp)
 	{
@@ -1345,7 +1357,7 @@ if (length && (nextStart != -1))
 		break;
 	    case 1:
 		if (strand == '-')
-		    complement(comp->text, 2);
+		    reverseComplement(comp->text, 2);
 		codon[0] = *ptr;
 		codon[1] = comp->text[0];
 		codon[2] = comp->text[1];
@@ -1360,7 +1372,7 @@ if (length && (nextStart != -1))
 	    {
 	    if (strand == '-')
 		{
-		x1 = x + ( start    ) * width / winBaseCount;
+		x1 = x + ( start  - 2   ) * width / winBaseCount;
 		}
 	    else
 		{
