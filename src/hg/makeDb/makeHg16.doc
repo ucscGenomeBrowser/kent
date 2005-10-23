@@ -7766,7 +7766,7 @@ foreach $file (@files)
 
     rm -f bed.tab
 
-### hapmapRecombHotspot (Daryl; September 19, 2005)
+### hapmapRecombHotspot (Daryl; September 19, 2005; chr X data update October 21, 2005)
 
     wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/Genomewidehots16a.txt
     wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/chrX_non_par_hotspots.txt
