@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.961 2005/10/20 18:34:43 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.962 2005/10/23 07:41:54 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11429,7 +11429,7 @@ if (multiplePositions)
 void printSnpInfo(struct snp snp)
 /* print info on a snp */
 {
-if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n",          snp.strand);}
+if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n", snp.strand);}
 printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
 printf("<BR><B><A HREF=\"#Source\">Source</A>: </B>%s\n",           snp.source);
 printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
@@ -11449,20 +11449,17 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char   query[256];
-char   baseUrl[] = "http://alto.compbio.ucsf.edu/LS-SNP-cgi/SNP_query.pl?idvalue=";
+char   baseUrl[] = "http://alto.compbio.ucsf.edu/LS-SNP-cgi/LS_SNP_query.pl?idvalue=";
 char   options[] = "&RequestType=QueryById&idtype=rsID&PropertySelect=";
 
 if (!stringIn("nonsynon",snp.func) || !hTableExists("hgFixed.modBaseLsSnp"))
     return;
-safef(query, sizeof(query), "select distinct uniProtId, dbSnpRsIdStruct, dbSnpRsIdFunc from hgFixed.modBaseLsSnp "
-      "where dbSnpRsIdStruct='%s' order by uniProtId, dbSnpRsId", snp.name);
-sr = sqlGetResult(conn, query);
-while ( (row = sqlNextRow(sr)) != NULL)
+safef(query, sizeof(query), "select distinct uniProtId, dbSnpRsId from hgFixed.modBaseLsSnp "
+      "where dbSnpRsId='%s' order by uniProtId, dbSnpRsId", snp.name);
+if ( ((sr=sqlGetResult(conn, query)) != NULL) && ((row=sqlNextRow(sr)) != NULL))
     {
-    printf("<BR>Protein <A HREF=\"%s%s%sProtein_structure\" TARGET=_blank>Structure</A>", baseUrl, row[1], options);
-    if (startsWith("rs",row[2]))
-	printf(" and <A HREF=\"%s%s%sFunctional\" TARGET=_blank>Function</A>", baseUrl, row[2], options);
-    printf(" by <A href=\"#LSSNP\">LS-SNP</A> for UniProt accession %s.\n", row[0]);
+    printf("<BR><A href=\"#LSSNP\">LS-SNP</A> <A HREF=\"%s%s%s", baseUrl, row[1], options);
+    printf("Protein_structure\" TARGET=_blank>Protein Structure</A>");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -11600,14 +11597,16 @@ while ((row = sqlNextRow(sr))!=NULL)
 	printf("<BR>\n");
 	firstOne=0;
 	}
-    printf("<BR>\n");
     printSnpInfo(snp);
+    printf("<BR>\n");
     }
-printf("<BR>\n");
-printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
-printf("type=rs&rs=%s\" TARGET=_blank>dbSNP link</A>\n", itemName);
-doSnpEntrezGeneLink(tdb, itemName);
-/*printLsSnpLinks(snp);*/
+if (startsWith("rs",itemName))
+    {
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+    printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
+    doSnpEntrezGeneLink(tdb, itemName);
+    }
+printLsSnpLinks(snp);
 if (hTableExists("snpExceptions") && differentString(exception,"0"))
     writeSnpException(exception, itemName, rowOffset, chrom, chromStart);
 printTrackHtml(tdb);
@@ -11782,6 +11781,21 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void printCnpSharpDetails(struct cnpSharp cnpSharp)
+{
+printf("<B>Name:               </B> %s <BR>\n",     cnpSharp.name);
+printf("<B>Variation type:     </B> %s <BR>\n",     cnpSharp.variationType);
+printf("<B>Cytoband:           </B> %s <BR>\n",     cnpSharp.cytoName);
+printf("<B>Strain:             </B> %s <BR>\n",     cnpSharp.cytoStrain);
+printf("<B>Duplication Percent:</B> %.1f %%<BR>\n", cnpSharp.dupPercent*100);
+printf("<B>Repeat Percent:     </B> %.1f %%<BR>\n", cnpSharp.repeatsPercent*100);
+printf("<B>LINE Percent:       </B> %.1f %%<BR>\n", cnpSharp.LINEpercent*100);
+printf("<B>SINE Percent:       </B> %.1f %%<BR>\n", cnpSharp.SINEpercent*100);
+printf("<B>LTR Percent:        </B> %.1f %%<BR>\n", cnpSharp.LTRpercent*100);
+printf("<B>DNA Percent:        </B> %.1f %%<BR>\n", cnpSharp.DNApercent*100);
+printf("<B>Disease Percent:    </B> %.1f %%<BR>\n", cnpSharp.diseaseSpotsPercent*100);
+}
+
 void doCnpSharp(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
@@ -11806,18 +11820,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     cnpSharpStaticLoad(row+rowOffset, &cnpSharp);
     bedPrintPos((struct bed *)&cnpSharp, 3);
-    // could make this a function
-    printf("<B>Name:</B> %s <BR>\n", cnpSharp.name);
-    printf("<B>Variation type:</B> %s <BR>\n", cnpSharp.variationType);
-    printf("<B>Cytoband:</B> %s <BR>\n", cnpSharp.cytoName);
-    printf("<B>Strain:</B> %s <BR>\n", cnpSharp.cytoStrain);
-    printf("<B>Duplication Percent:</B> %.1f %%<BR>\n", cnpSharp.dupPercent*100);
-    printf("<B>Repeat Percent:</B> %.1f %%<BR>\n", cnpSharp.repeatsPercent*100);
-    printf("<B>LINE Percent:</B> %.1f %%<BR>\n", cnpSharp.LINEpercent*100);
-    printf("<B>SINE Percent:</B> %.1f %%<BR>\n", cnpSharp.SINEpercent*100);
-    printf("<B>LTR Percent:</B> %.1f %%<BR>\n", cnpSharp.LTRpercent*100);
-    printf("<B>DNA Percent:</B> %.1f %%<BR>\n", cnpSharp.DNApercent*100);
-    printf("<B>Disease Percent:</B> %.1f %%<BR>\n", cnpSharp.diseaseSpotsPercent*100);
+    printCnpSharpDetails(cnpSharp);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -16510,7 +16513,7 @@ exit(0);	/* Avoid cartHtmlEnd. */
 
 
 void potentPslAlign(char *htcCommand, char *item)
-{// show the detail psl alignment between genome
+{/* show the detail psl alignment between genome */
 char *pslTable = cgiString("pslTable");
 char *chrom = cgiString("chrom");
 int start = cgiInt("cStart");
@@ -16553,7 +16556,8 @@ showSomeAlignment2(psl, qSeq, gftDnaX, psl->qStart, psl->qEnd, name, item, "", p
 
 
 void doPutaFrag(struct trackDb *tdb, char *item)
-{ // display the potential pseudo and coding track
+/* display the potential pseudo and coding track */
+{
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row, table[256], query[256], *parts[6];
@@ -16566,7 +16570,7 @@ char otherString[256], *tempName = NULL;
 int partCount;
 boolean isRcnt = FALSE;
 
-// check which track to display and set parameters
+/* check which track to display and set parameters */
 if(sameWord(tdb->tableName, "rcntDupGenes"))
     {
     isRcnt = TRUE;
@@ -16603,7 +16607,7 @@ sqlFreeResult(&sr);
 tempName = cloneString(name);
 partCount = chopByChar(tempName, '|',parts, 4);
 
-// print the first line for recent dup or putative element
+/* print the first line for recent dup or putative element */
 if(isRcnt)
     printf("<B>%s</B> may be a duplicate of the known gene: <A HREF=\"", name);
 else
@@ -16612,7 +16616,7 @@ printEntrezNucleotideUrl(stdout, parts[0]);
 printf("\" TARGET=_blank>%s</A><BR>\n", parts[0]);
 printf("<B>%s </B>is aligned here with score : %d<BR><BR>\n", parts[0], info->score);
 
-// print the info about the stamper gene
+/* print the info about the stamper gene */
 printf("<B> %s</B><BR>\n", parts[0]);
 printf("<B>Genomic location of the mapped part of %s</B>: <A HREF=\""
 	   "http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:"
@@ -16622,8 +16626,7 @@ printf("<B>Mapped %s Exons</B>: %d of %d. <BR> <B>Mapped %s CDS exons</B>: %d of
 
 printf("<b>Aligned %s bases</B>:%d of %d with %f identity. <BR> <B>Aligned %s CDS bases</B>:  %d of %d with %f identity.<BR><BR>\n", parts[0],info->qBases[0], info->qBases[1], info->id[0], parts[0], info->qBases[2], info->qBases[3], info->id[1]);
 
-
-// print info about the stamp putative element
+/* print info about the stamp putative element */
 printf("<B>%s </B><BR> <B>Genomic location: </B>"
        " <A HREF=\"http://hgwdev-ytlu.cse.ucsc.edu/cgi-bin/hgTracks?org=Human&position=%s:%d-%d\" >%s(%s): %d - %d.</A> <BR> <B> Element Structure: </B> %d putative exons and %d putative cds exons<BR><BR>\n", 
        name,info->chrom, info->chromStart, info->chromEnd, info->chrom, info->strand, info->chromStart, info->chromEnd, info->tExons[0], info->tExons[1]);
@@ -16649,9 +16652,9 @@ if(info->stop >0)
     }
 
 
-// for recent dup provide other locations of the same stamper gene 
+/* for recent dup provide other locations of the same stamper gene */
 if(isRcnt)
-    {  // for Rcnt, list all other dups 
+    {  /* for Rcnt, list all other dups */
     printf("<BR><BR>Other locations %s might be duplicated to:<BR>\n", parts[0]);
     sprintf(query, "SELECT * FROM %s WHERE name like '%s%%' ", table, parts[0]);
     sr = sqlMustGetResult(conn, query);
@@ -16668,11 +16671,11 @@ if(isRcnt)
     }
 
 
-// show genome sequence
+/* show genome sequence */
 hgcAnchorSomewhere("htcGeneInGenome", cgiEncode(info->name), tdb->tableName, seqName);
 printf("View DNA for this putative fragment</A><BR>\n");
 
-// show the detail alignment
+/* show the detail alignment */
 sprintf(query, "SELECT * FROM %s WHERE "
 	"tName = '%s' AND tStart = %d "
 	"AND tEnd = %d AND strand = '%c%c'",
