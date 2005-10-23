@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1025 2005/10/21 17:50:54 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1026 2005/10/23 07:44:46 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7449,6 +7449,12 @@ if (track->subType == lfSubSample && track->items == NULL)
      y += track->lineHeight;
 if (isWithCenterLabels(track))
     y += fontHeight;
+/* override doMapItems for hapmapLd track */
+if (startsWith("hapmapLd",track->mapName))
+    {
+    y += round((double)(scaleForPixels(insideWidth)*insideWidth/2));
+    return y;
+    }
 for (item = track->items; item != NULL; item = item->next)
     {
     int height = track->itemHeight(track, item);
