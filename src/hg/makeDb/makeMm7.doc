@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.12 2005/10/20 22:41:01 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.13 2005/10/23 16:23:24 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -8032,6 +8032,9 @@ BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=cat -bigClusterHub=kk \
+	`pwd`/DEF > continue.cat.out 2>&1 &
 
 #############################################################################
 # Hedgehog vs. Mm7 (WORKING - 2005-10-20 - Hiram)
