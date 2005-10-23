@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.38 2005/10/20 06:32:22 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.39 2005/10/23 07:51:49 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -738,8 +738,8 @@ gfxPolyFree(&poly);
 void ldDrawDiamond(struct track *tg, struct vGfx *vg, int width, 
 		   int xOff, int yOff, int i, int j, int k, int l, 
 		   double score, double lodScore, char *name, 
-		   boolean drawOutline, 
-		   Color outlineColor, double scale, boolean isLod)
+		   boolean drawOutline, Color outlineColor, 
+		   double scale, boolean isLod, boolean drawMap)
 /* Draw and map a single pairwise LD box */
 {
 Color  color = ldDiamondColor(tg, vg, score, lodScore, isLod);
@@ -756,14 +756,15 @@ if (yb<=0)
     yb=1;
 drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, color, drawOutline, 
 	    outlineColor);
-mapDiamondUi(   xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
+if (drawMap && xt-xl>5 && xb-xl>5)
+    mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
 }
 
 void drawNecklace(struct track *tg, int width, int xOff, int yOff, 
 		  void *item, struct vGfx *vg, Color outlineColor,
 		  int *chromStarts, double *values, double *lodValues, 
 		  int arraySize, boolean drawOutline, double scale, 
-		  boolean trim, boolean isLod)
+		  boolean trim, boolean isLod, boolean drawMap)
 /* Draw a string of diamonds that represent the pairwise LD
  * values for the current marker */
 {
@@ -777,7 +778,7 @@ if (!trim || (chromStarts[0] <= winEnd        /* clip right to triangle */
     ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0], 
 		  ld->chromStart, chromStarts[0], values[0], lodValues[0], 
 		  ld->name, drawOutline, outlineColor, scale,
-		  isLod);
+		  isLod, drawMap);
 for (n=0; n < ld->ldCount-1; n++)
     {
     if ((chromStarts[n]+ld->chromStart)/2 > winEnd) /* left is outside window */
@@ -793,7 +794,7 @@ for (n=0; n < ld->ldCount-1; n++)
     ldDrawDiamond(tg, vg, width, xOff, yOff, ld->chromStart, chromStarts[0],
 		  chromStarts[n], chromStarts[n+1], values[n], lodValues[n],
 		  ld->name, drawOutline, outlineColor, scale,
-		  isLod);
+		  isLod, drawMap);
     }
 }
 
@@ -854,6 +855,7 @@ Color      denseColor;
 int        heightPer    = tg->heightPer;
 int        x;
 int        w            = 3;
+boolean    drawMap      = ( itemCount<200 ? TRUE :FALSE );
 
 makeLdShades(vg);
 if (drawOutline) 
@@ -885,11 +887,11 @@ if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
 	    }
 	drawNecklace(tg, width, xOff, yOff, el, vg, outlineColor, 
 		     chromStarts, values, lodValues, arraySize, 
-		     drawOutline, scale, trim, isLod);
+		     drawOutline, scale, trim, isLod, drawMap);
 	}
 else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
     {
-    struct ldStats lds[itemCount], *ldsStartPtr, *ldsEndPtr;
+    struct ldStats lds[itemCount], *ldsStartPtr=NULL, *ldsEndPtr=NULL;
 
     /* initialize array to represent SNPs and hold counts */
     for (i=0, el=tg->items; i<itemCount-1 && el!=NULL; i++, el=el->next)
@@ -897,16 +899,12 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	lds[i].chromStart           = el->chromStart;
 	lds[i].n                    = 0;
 	lds[i].sumValues            = 0;
-	lds[i].sumSquares           = 0;
 	lds[i].sumLodValues         = 0;
-	lds[i].sumLodSquares        = 0;
 	lds[itemCount-1].chromStart = el->chromEnd-1;
 	}
     lds[itemCount-1].n              = 0;
     lds[itemCount-1].sumValues      = 0;
-    lds[itemCount-1].sumSquares     = 0;
     lds[itemCount-1].sumLodValues   = 0;
-    lds[itemCount-1].sumLodSquares  = 0;
 
     /* fill up the bins */
     for (el=tg->items; el!=NULL; el=el->next)
@@ -931,11 +929,11 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	ldsStartPtr = lds;
 	while (ldsStartPtr!=NULL && ldsStartPtr->chromStart!=el->chromStart)
 	    ldsStartPtr++;
-	/* note that the start pointer will remain constant for the */
-	/* remainder of this loop - the end pointer will increment */	   
-	/* end pointer must be greater than the start pointer */
+	/* note that the start pointer will remain constant for the  */
+	/* remainder of this loop - the end pointer will increment   */	   
+	/* end pointer must be greater than the start pointer        */
 	if(ldsStartPtr==NULL)
-	    continue; // weird; check this
+	    errAbort("assert(ldsStartPtr!=NULL) failed.");
 	else
 	    ldsEndPtr = ldsStartPtr+1;
 	if (ldsEndPtr->chromStart >= el->chromEnd)
@@ -948,17 +946,12 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	    /* This loop is necessary as some lists have missing data */
 	    while ( ldsEndPtr->chromStart != chromStarts[i] && ldsEndPtr != &(lds[itemCount-1]) )
 		ldsEndPtr++;
-	    fflush(stdout);
 	    ldsStartPtr->n++;
 	    ldsStartPtr->sumValues     += values[i];
-	    ldsStartPtr->sumSquares    += values[i]*values[i];
 	    ldsStartPtr->sumLodValues  += lodValues[i];
-	    ldsStartPtr->sumLodSquares += lodValues[i]*lodValues[i];
 	    ldsEndPtr->n++;
 	    ldsEndPtr->sumValues       += values[i];
-	    ldsEndPtr->sumSquares      += values[i]*values[i];
 	    ldsEndPtr->sumLodValues    += lodValues[i];
-	    ldsEndPtr->sumLodSquares   += lodValues[i]*lodValues[i];
 	    }
 	}
 
