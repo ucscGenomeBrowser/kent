@@ -382,15 +382,25 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 type chain rheMac1
 otherDb rheMac1
 
-track netRheMac1
+track netDasNov1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 258.99
 visibility hide
 spectrum on
-type netAlign rheMac1 chainRheMac1
-otherDb rheMac1
+type netAlign dasNov1 chainDasNov1
+otherDb dasNov1
+
+track netDasNov1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 258.99
+visibility hide
+spectrum on
+type netAlign dasNov1 chainDasNov1
+otherDb dasNov1
 
 track blastzHg17
 shortLabel Human Blastz
