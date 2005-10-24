@@ -411,7 +411,7 @@ struct cDnaReader *cDnaReaderNew(char *pslFile, unsigned opts, char *polyASizeFi
 struct cDnaReader *reader;
 AllocVar(reader);
 reader->opts = opts;
-reader->pslLf = lineFileOpen(pslFile, TRUE);
+reader->pslLf = pslFileOpen(pslFile);
 if (polyASizeFile != NULL)
     reader->polyASizes = polyASizeLoadHash(polyASizeFile);
 return reader;
