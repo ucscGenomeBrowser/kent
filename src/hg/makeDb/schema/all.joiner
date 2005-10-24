@@ -118,6 +118,7 @@ identifier UniProtId external=UniProt
      proteome.uniProtAlias.alias minCheck=0.2
      proteome.spOldNew.newDisplayId minCheck=0.3
      proteome.spOldNew.oldDisplayId minCheck=0.3
+     proteome.spDisease.displayID minCheck=0.9
      go.goaPart.dbObjectSymbol minCheck=0.95
      $gbd.dupSpMrna.proteinID minCheck=0.80
      $gbd.dupSpMrna.dupProteinID minCheck=0.50
