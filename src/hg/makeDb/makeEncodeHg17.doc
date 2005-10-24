@@ -1030,3 +1030,19 @@ cat > loadChipBed.csh << 'EOF'
     mkdir -p 2005-10-11/lab
     cd 2005-10-11/lab
     # copy 2 data files from FTP site
+
+##########################################################################
+# Sanger Chip/chip (2005-10-24 kate)
+    # From Paul Flicek, at EBI 
+    # 14 files (3 cells, most with 5 factors), each file havint
+    # 3 tracks:  chip/chip, HMM regions, HMM centers
+    #  The doc suggests that the HMM regions isn't for general use,
+    # am inquiring with submitters if we need to display or just have
+    # available for download
+    # NOTE: there was also Hela data posted for 5 factors, from
+    # Christoph Koch (on 10/10).
+    cd /cluster/data/encode/sanger/chipchip
+    mkdir -p 2005-10-18/lab
+    cd 2005-10-18/lab
+    
+
