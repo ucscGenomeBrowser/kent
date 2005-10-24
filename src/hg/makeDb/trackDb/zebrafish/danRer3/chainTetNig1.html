@@ -29,10 +29,10 @@ Because the $organism chrNA and chrUn chromosomes and the $o_organism random
 chromsomes are comprised of unordered scaffolds separated by 500 <em>N</em>s, 
 the blastz alignments and subsequent chaining were first performed on the 
 scaffolds, and the coordinates were then lifted up to the chromosome level. 
-This avoided false alignments across the <em>N</em>s. Dynamic masking was 
-used for the Blastz alignments since $o_organism has no species-specific 
-repeats for RepeatMasker so it is likely that the repeats in this genome are
-not all masked. </P>
+This avoided false alignments across the <em>N</em>s. $o_Organism has no 
+species-specific repeats for RepeatMasker; therefore, dynamic masking was 
+used for the Blastz alignments because it is likely that not all the repeats 
+in the $o_Organism genome are masked. </P>
 <P>
 The resulting alignments were converted into axt format using the lavToAxt
 program. The axt alignments were fed into axtChain, which organizes all
