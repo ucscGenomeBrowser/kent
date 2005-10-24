@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.962 2005/10/23 07:41:54 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.963 2005/10/24 07:49:04 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11449,8 +11449,16 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char   query[256];
-char   baseUrl[] = "http://alto.compbio.ucsf.edu/LS-SNP-cgi/LS_SNP_query.pl?idvalue=";
+char   baseUrl[] = "http://alto.compbio.ucsf.edu/LS-SNP-cgi/";
 char   options[] = "&RequestType=QueryById&idtype=rsID&PropertySelect=";
+char  *snpScript = NULL;
+
+if (sameString("hg17", hGetDb()))
+    snpScript = cloneString("LS_SNP_query.pl");
+else if (sameString("hg16", hGetDb()))
+    snpScript = cloneString("SNP_query.pl");
+else
+    return;
 
 if (!stringIn("nonsynon",snp.func) || !hTableExists("hgFixed.modBaseLsSnp"))
     return;
@@ -11458,7 +11466,7 @@ safef(query, sizeof(query), "select distinct uniProtId, dbSnpRsId from hgFixed.m
       "where dbSnpRsId='%s' order by uniProtId, dbSnpRsId", snp.name);
 if ( ((sr=sqlGetResult(conn, query)) != NULL) && ((row=sqlNextRow(sr)) != NULL))
     {
-    printf("<BR><A href=\"#LSSNP\">LS-SNP</A> <A HREF=\"%s%s%s", baseUrl, row[1], options);
+    printf("<BR><A href=\"#LSSNP\">LS-SNP</A> <A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
     printf("Protein_structure\" TARGET=_blank>Protein Structure</A>");
     }
 sqlFreeResult(&sr);
