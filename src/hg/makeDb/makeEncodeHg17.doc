@@ -980,7 +980,6 @@ cat > loadChipBed.csh << 'EOF'
     # Oops -- lots of e-18 -- contact submitter
     # raw files range 04.81 to 5.18, w/o e- numbers
     
-    
 
 ##########################################################################
 # Gencode Genes (2005-10-10 kate)
@@ -1039,7 +1038,7 @@ cat > loadChipBed.csh << 'EOF'
 
 
 ##########################################################################
-# NHGRI DNaseI HS (kate)
+# NHGRI DNaseI HS (2005-10-24 kate)
 #       Submitter: Greg Crawford
 #       2 datasets:  CD4, GM06690 with different methodology from previous
 
@@ -1048,12 +1047,27 @@ cat > loadChipBed.csh << 'EOF'
     cd 2005-10-11/lab
     # copy 2 data files from FTP site
 
+    # lift to hg17
+    ln -s lab/Crawford_DNase_chip_CD4_hg16.txt Cd4.hg16.bed
+    ln -s lab/Crawford_DNase_chip_GM06990_hg16.txt Gm06990.hg16.bed
+cat > load.csh << 'EOF'
+    foreach f (Cd4.hg16.bed Gm06990.hg16.bed)
+        set cell = $f:r:r
+        liftOver Cd4.hg16.bed \
+                 /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
+                        $cell.hg17.bed $cell.unmapped
+        hgLoadBed hg17 encodeNgriDnaseHs$cell $cell.hg17.bed
+    end
+'EOF'
+    csh load.csh >&! load.log
+        # 1420 mapped, 6 unmapped
+
 ##########################################################################
 # Sanger Chip/chip (2005-10-24 kate)
     # From Paul Flicek, at EBI 
     # 14 files (3 cells, most with 5 factors), each file havint
     # 3 tracks:  chip/chip, HMM regions, HMM centers
-    #  The doc suggests that the HMM regions isn't for general use,
+    #  The doc suggests that the HMM regions data isn't for general use,
     # am inquiring with submitters if we need to display or just have
     # available for download
     # NOTE: there was also Hela data posted for 5 factors, from
