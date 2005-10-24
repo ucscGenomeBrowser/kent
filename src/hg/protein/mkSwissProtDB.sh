@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkSwissProtDB.sh,v 1.6 2005/05/26 16:08:43 fanhsu Exp $"
+#	"$Id: mkSwissProtDB.sh,v 1.7 2005/10/24 17:00:25 fanhsu Exp $"
 
 TOP=/cluster/data/swissprot
 export TOP
@@ -26,8 +26,8 @@ fi
 
 MACHINE=`uname -n`
 
-if [ ${MACHINE} != "kksilo" -a ${MACHINE} != "hgwdev" ]; then
-    echo "ERROR: must run this script on kksilo or hgwdev.  This is: ${MACHINE}"
+if [ ${MACHINE} != "kkstore02" -a ${MACHINE} != "hgwdev" ]; then
+    echo "ERROR: must run this script on kkstore02 or hgwdev.  This is: ${MACHINE}"
     exit 255
 fi
 
@@ -38,9 +38,7 @@ export SP SPDB
 
 echo "Creating Db: ${SP}"
 
-# kksilo is no longer accessible.
-#if [ ${MACHINE} = "kksilo" ]; then
-if [ ${MACHINE} = "hgwdev" ]; then
+if [ ${MACHINE} = "kkstore02" ]; then
 
     if [ -d "${SP}" ]; then
 	echo "WARNING: ${SP} already exists."
@@ -66,6 +64,8 @@ if [ ${MACHINE} = "hgwdev" ]; then
 	    ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/${db}.dat.gz
 	fi
     done
+    wget --timestamping \
+    ftp://us.expasy.org/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot_varsplic.fasta.gz
     
     mv uniprot_sprot.dat.gz sprot.dat.gz
     mv uniprot_trembl.dat.gz trembl.dat.gz
@@ -75,7 +75,7 @@ if [ ${MACHINE} = "hgwdev" ]; then
 else
     if [ ! -d ${TOP}/${DATE}/tabFiles ]; then
 	echo "ERROR: ${TOP}/tabFiles does not exist."
-	echo -e "\tRun this first on kksilo to fetch the data."
+	echo -e "\tRun this first on kkstore02 to fetch the data."
 	exit 255
     fi
 
@@ -92,7 +92,7 @@ else
 	echo -e "\t to drop: hgsql -e 'drop database ${SPDB};' ${SPDB}"
 	exit 255
     fi
-    hgsql -e "create database ${SPDB}" proteins040515
+    hgsql -e "create database ${SPDB}" proteins050415
     hgsql ${SPDB} < ~/kent/src/hg/protein/spToDb/spDb.sql
     cd ${TOP}/${DATE}/tabFiles
     for i in *.txt
