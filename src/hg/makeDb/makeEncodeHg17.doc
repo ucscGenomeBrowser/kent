@@ -947,12 +947,20 @@ cat > loadChipBed.csh << 'EOF'
     # Chip/chip signal
 
 ##########################################################################
-# U North Carolina FAIRE  (kate)
+# U North Carolina FAIRE  (2005-10-24 kate)
+    # submitted by Paul Giresi, from Jason Lieb's lab
+    # later, Paul submitted an "averages" file for the
+    # raw data (but doesn't include the "peaks")
     cd /cluster/data/encode
     mkdir UNC/2005-10-10/lab
     cd UNC/2005-10-010/lab
     # copy files from FTP dir
     # 8 .gff data files plus description file
+    # NOTE: these are actually .bed and .wig files!
+    # the .bed files are "peaks", and the .wig are "raw"
+    # NOTE: these files are basically replicates,
+    # we really want to show just the averages -- 
+    # inquiry in to submitter
 
     # convert to UNIX format
     foreach f (lab/*norm*.gff)
@@ -964,6 +972,15 @@ cat > loadChipBed.csh << 'EOF'
         set t = $f:t
         dos2unix -l -n $f $t
     end
+
+    # averages file
+    # wiggle0 with span=50
+    # around 380K records, so load it wiggle, not bedGraph
+    # most data in 0-1.0, range is - to -2.165, 3.6275
+    # Oops -- lots of e-18 -- contact submitter
+    # raw files range 04.81 to 5.18, w/o e- numbers
+    
+    
 
 ##########################################################################
 # Gencode Genes (2005-10-10 kate)
