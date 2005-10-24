@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "quickHeap.h"
 
-static char const rcsid[] = "$Id: chainMergeSort.c,v 1.9 2005/10/21 05:38:13 galt Exp $";
+static char const rcsid[] = "$Id: chainMergeSort.c,v 1.10 2005/10/24 18:41:10 galt Exp $";
 
 #define MAXFILES 250
 
@@ -65,12 +65,20 @@ freez(pCf);
 }
 
 static int cmpChainScores(const void *elem1,  const void *elem2)
-/* compare two chains by score, return elem1-score - elem2-score 
- * where the scores will be positive or 0 */
+/* Compare two chains by score, return elem1-score - elem2-score,
+ * where the scores will be positive or 0. 
+ * However since the scores are doubles, this is larger than the 
+ * return range of int, so return 1, 0, or -1.
+ */
 {
 struct chainFile *e1 = (struct chainFile *) elem1;
 struct chainFile *e2 = (struct chainFile *) elem2;
-return  e1->chain->score - e2->chain->score;
+double diff = e1->chain->score - e2->chain->score;
+if (diff > 0.0) 
+    return 1;
+if (diff < 0.0) 
+    return -1;
+return  0;
 }
 
 void chainMergeSort(int fileCount, char *files[], FILE *out, int level)
