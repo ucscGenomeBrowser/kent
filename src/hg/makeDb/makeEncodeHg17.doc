@@ -874,18 +874,18 @@ cat > load.csh << 'EOF'
     #  and these will be added to the previous Affy Chip/chip tracks
     #  on hg17.
 
-    # RNA Sites/Transfrags (6 subtracks)
+    # RNA Signal & Transfrags (12 subtracks)
     cd /cluster/data/encode/Affy/2005-10-03
     tail +2 lab/RNA/bed/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.gr.bed \
-    | hgLoadBed -noBin hg17 encodeAffyRnaGm06990SitesOct stdin
+    | hgLoadBed -noBin hg17 encodeAffyOctRnaGm06990Sites stdin
         # 4377 elements
     tail +2 lab/RNA/bed/HeLa/EC_AS_HeLaS3_RCyP+_C01vsNULL.sig.gr.bed \
-    | hgLoadBed -noBin hg17 encodeAffyRnaHeLaSitesOct stdin
+    | hgLoadBed -noBin hg17 encodeAffyOctRnaHeLaSites stdin
         # 2037 elements
 cat > loadSites.csh << 'EOF'
     foreach f (lab/RNA/bed/HL60/??/*HL60*.bed)
       set track = `echo $f:t:r:r:r | perl -wpe \
-        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SitesHr$1Oct/;'`
+        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyOctRnaHl60SitesHr$1/;'`
       echo $track
       tail +2 $f \
         | hgLoadBed -noBin hg17 $track stdin
@@ -897,15 +897,15 @@ cat > loadSites.csh << 'EOF'
     #  NOTE: check for off-by-one error in these files
     set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
     mkdir -p $gbdbDir/wib
-mkdir wib wig
+    mkdir wib wig
 
-    set track = encodeAffyRnaGm06990SignalOct
+    set track = encodeAffyOctRnaGm06990Signal
     cat lab/RNA/wig/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig \
     | wigEncode stdin wig/$track.wig wib/$track.wib
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
     nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
 
-    set track = encodeAffyRnaHeLaSignalOct
+    set track = encodeAffyOctRnaHeLaSignal
     cat lab/RNA/wig/HeLa/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig \
     | wigEncode stdin wig/$track.wig wib/$track.wib
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
@@ -915,7 +915,7 @@ cat > loadSig.csh << 'EOF'
     set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
     foreach f (lab/RNA/wig/HL60/??/*HL60*C01vsNULL.sig.wig)
       set track = `echo $f:t:r:r:r | perl -wpe \
-       's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SignalHr$1Oct/;'`
+       's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SignalHr$1/;'`
       echo $track
       cat $f \
       | wigEncode stdin wig/$track.wig wib/$track.wib
@@ -924,6 +924,27 @@ cat > loadSig.csh << 'EOF'
     end
 'EOF'
     csh loadSig.csh >&! loadSig.log
+
+    # CHIP/Chip sites (2005-10-24 kate)
+    cd /cluster/data/encode/Affy/2005-10-03
+    # Load up 12 tables of ChIP/chip sites at (3 factors, 4 timepoints)
+    # plus 2 more for ActD at 1 timepoint
+cat > loadChipBed.csh << 'EOF'
+    foreach f (lab/CHIP/bed/*/??/*.bed)
+      set factor = `echo $f:h:h:t | sed 's/Pol2/Rnap/; s/Hish4/H4Kac4/'`
+      set hr = $f:h:t
+      set table = encodeAffyOctChipSitesHl60${factor}Hr$hr
+      echo $table
+      grep "^chr" $f | hgLoadBed -noBin hg17 $table stdin
+    end
+    grep "^chr" lab/CHIP/bed/p63_ActD/*.bed | hgLoadBed -noBin hg17 \
+                encodeAffyOctChipSitesHl60P63_ActD stdin
+    grep "^chr" lab/CHIP/bed/p63_mActD/*.bed | hgLoadBed -noBin hg17 \
+                encodeAffyOctChipSitesHl60P63_mActD stdin
+'EOF'
+    csh loadChipBed.csh >&! loadChipBed.log
+
+    # Chip/chip signal
 
 ##########################################################################
 # U North Carolina FAIRE  (kate)
