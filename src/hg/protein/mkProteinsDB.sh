@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.7 2005/02/11 22:10:48 fanhsu Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.8 2005/10/24 16:59:28 fanhsu Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
@@ -63,7 +63,7 @@ if [ -d "$SPDB_DATE" ]; then
 	if [ "${YN}" = "Y" -o "${YN}" = "y" ]; then
 	echo "Recreating ${PDB}"
 	rm -fr ./${SPDB_DATE}
-	hgsql -e "drop database ${PDB}" proteins041115
+	hgsql -e "drop database ${PDB}" proteins050415
 	else
 	echo "Will not recreate at this time."
 	exit 255
@@ -72,13 +72,11 @@ fi
 
 mkdir ${TOP}/${SPDB_DATE}
 cd ${TOP}/${SPDB_DATE}
-echo hgsql -e "create database ${PDB};" proteins041115
-hgsql -e "create database ${PDB};" proteins041115
-hgsqldump -d proteins041115 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
+echo hgsql -e "create database ${PDB};" proteins050415
+hgsql -e "create database ${PDB};" proteins050415
+hgsqldump -d proteins050415 | ${TOP}/bin/rmSQLIndex.pl > proteins.sql
 echo "hgsql ${PDB} < proteins.sql"
 hgsql ${PDB} < proteins.sql
-hgsql ${PDB} -e "drop index i2 on spXref2"
-hgsql ${PDB} -e "drop index i3 on spXref2"
 hgsql ${PDB} -e "drop index ii2 on spXref3"
 hgsql ${PDB} -e "drop index ii3 on spXref3"
 
@@ -93,11 +91,15 @@ cd ${TOP}/${SPDB_DATE}
 #	Create and load tables in proteins
 echo spToProteins ${SPDB_DATE}
 spToProteins ${SPDB_DATE}
+echo spToProteins done.
 cd ${TOP}/${SPDB_DATE}
+echo loading spXref2 ...
 hgsql -e 'LOAD DATA local INFILE "spXref2.tab" into table spXref2;' ${PDB}
+echo loading spXref3 ...
 hgsql -e 'LOAD DATA local INFILE "spXref3.tab" into table spXref3;' ${PDB}
+echo loading spOrganism ...
 hgsql -e 'LOAD DATA local INFILE "spOrganism.tab" into table spOrganism;' ${PDB}
-
+echo buiding spSecondary ID table ...
 #	Build spSecondaryID table
 cd ${TOP}/${SPDB_DATE}
 hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
@@ -106,28 +108,29 @@ hgsql -e "select displayId.val, displayId.acc, otherAcc.val from displayId, \
 hgsql -e \
 	'LOAD DATA local INFILE "spSecondaryID.tab" into table spSecondaryID;' \
 	${PDB}
-
+echo building pfamXref ...
 #	Build pfamXref and pfamDesc tables
 mkdir /cluster/store5/proteins/pfam/${SPDB_DATE}
 cd /cluster/store5/proteins/pfam/${SPDB_DATE}
-wget --timestamping "ftp://ftp.sanger.ac.uk/pub/databases/Pfam/Pfam-A.full.gz"
+wget --timestamping "ftp://ftp.sanger.ac.uk/pub/databases/Pfam/current_release/Pfam-A.full.gz"
 #	100 Mb compressed, over 700 Mb uncompressed
 rm -f Pfam-A.full
 gunzip Pfam-A.full.gz
-pfamXref ${PDB} Pfam-A.full pfamADesc.tab pfamAXref.tab
+pfamXref ${PDB} Pfam-A.full pfamADesc.tab pfamAXref.ta >pfamXref.logb
 gzip Pfam-A.full &
 
 hgsql -e 'LOAD DATA local INFILE "pfamADesc.tab" into table pfamDesc;' ${PDB}
 hgsql -e 'LOAD DATA local INFILE "pfamAXref.tab" into table pfamXref;' ${PDB}
 
-#	Build the pdbSP table
-cd ${TOP}/${SPDB_DATE}
-wget --timestamping "http://us.expasy.org/cgi-bin/lists?pdbtosp.txt" \
-	-O pdbtosp.htm
-pdbSP ${PDB}
+#	Build the pdbSP table, new process using extDbRef data from spxxxxxx
+echo buiding pdfSP ...
+
+hgsql {SPDB} -N -e 'select extAcc1, d.val from extDbRef x, displayId d, extDb where x.acc=d.acc and extDb.val="PDB" and x.extDb=extDb.id'|sort -u >pdbSP.tab
+
 hgsql -e 'LOAD DATA local INFILE "pdbSP.tab" into table pdbSP;' ${PDB}
 
 #	Build the spDisease table
+echo building spDisease ...
 hgsql -e "select comment.acc, displayId.val, commentVal.val from \
 	comment, commentVal, displayId where comment.commentType=19 \
 	and commentVal.id=comment.commentVal and displayId.acc=comment.acc;" \
@@ -135,11 +138,18 @@ hgsql -e "select comment.acc, displayId.val, commentVal.val from \
 hgsql -e 'LOAD DATA local INFILE "spDisease.tab" into table spDisease;' ${PDB}
 
 # create swInterPro table
-wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2interpro.dat.gz"
-gzip -d protein2interpro.dat.gz
+echo building swIterProt ...
+wget --timestamping "ftp://ftp.ebi.ac.uk/pub/databases/interpro/protein2ipr.dat.gz"
+gzip -d protein2ipr.dat.gz
+# rearange col positioin to match the old format
+cut -f 1 protein2ipr.dat >j1
+cut -f 2,3 protein2ipr.dat >j23
+cut -f 4,5,6 protein2ipr.dat >j456
+paste j1 j456 j23 > protein2interpro.dat
+rm j1 j456 j23
+
 hgsql ${PDB} -e 'load data local infile "protein2interpro.dat" into table interProXref;'
 #hgsql ${PDB} -e "drop table ${PDB}.swInterPro"
 hgsql --skip-column-names ${PDB} -e 'select accession, interProId from interProXref;'|sort -u >swInterPro.tab
 hgsql ${PDB} -e 'load data local infile "swInterPro.tab" into table swInterPro;'
  
-
