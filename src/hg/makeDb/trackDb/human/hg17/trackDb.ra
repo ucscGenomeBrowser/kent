@@ -191,7 +191,7 @@ viewLimits 0:25
 subGroup1 dataType Signal/Transfrags signal=Signal transfrags=Transfrags
 subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
 
-    track encodeAffyRnaGm06990SignalOct
+    track encodeAffyOctRnaGm06990Signal
     subTrack encodeAffyRna
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Signal
@@ -199,7 +199,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     subGroups dataType=signal cellType=gm
     priority 1
 
-    track encodeAffyRnaHeLaSignalOct
+    track encodeAffyOctRnaHeLaSignal
     subTrack encodeAffyRna
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLaS3) Signal
@@ -207,7 +207,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     color 220,132,12
     priority 2
 
-    track encodeAffyRnaHl60SignalHr00Oct
+    track encodeAffyOctRnaHl60SignalHr00
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
@@ -215,7 +215,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     color 50,50,150
     priority 3
 
-    track encodeAffyRnaHl60SignalHr02Oct
+    track encodeAffyOctRnaHl60SignalHr02
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
@@ -223,7 +223,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     color 50,50,180
     priority 4
 
-    track encodeAffyRnaHl60SignalHr08Oct
+    track encodeAffyOctRnaHl60SignalHr08
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
@@ -231,7 +231,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     color 50,50,210
     priority 5
 
-    track encodeAffyRnaHl60SignalHr32Oct
+    track encodeAffyOctRnaHl60SignalHr32
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
@@ -239,7 +239,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     color 50,50,240
     priority 6
 
-    track encodeAffyRnaGm06990SitesOct
+    track encodeAffyOctRnaGm06990Sites
     subTrack encodeAffyRna
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Transfrags 
@@ -249,7 +249,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     color 150,90,0
     priority 7
 
-    track encodeAffyRnaHeLaSitesOct
+    track encodeAffyOctRnaHeLaSites
     subTrack encodeAffyRna
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLaS3) Transfrags 
@@ -259,7 +259,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     type bed 3 .
     priority 8
 
-    track encodeAffyRnaHl60SitesHr00Oct
+    track encodeAffyOctRnaHl60SitesHr00
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Transfrags 
@@ -269,7 +269,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     type bed 3 .
     priority 9
 
-    track encodeAffyRnaHl60SitesHr02Oct
+    track encodeAffyOctRnaHl60SitesHr02
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Transfrags 
@@ -279,7 +279,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     type bed 3 .
     priority 10
 
-    track encodeAffyRnaHl60SitesHr08Oct
+    track encodeAffyOctRnaHl60SitesHr08
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Transfrags 
@@ -289,7 +289,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     type bed 3 .
     priority 11
 
-    track encodeAffyRnaHl60SitesHr32Oct
+    track encodeAffyOctRnaHl60SitesHr32
     subTrack encodeAffyRna
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Transfrags 
