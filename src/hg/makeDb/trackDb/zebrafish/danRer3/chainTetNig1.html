@@ -1,16 +1,16 @@
 <H2>Description</H2>
 <P>
-This track shows alignments of $o_organism ($o_db, $o_date) to the
+This track shows alignments of $o_Organism ($o_db, $o_date) to the
 $organism genome using a gap scoring system that allows longer gaps 
 than traditional affine gap scoring systems. It can also tolerate gaps in both
-$o_organism and $organism simultaneously. These 
+$o_Organism and $organism simultaneously. These 
 &quot;double-sided&quot; gaps can be caused by local inversions and 
 overlapping deletions in both species. 
 <P>
 The chain track displays boxes joined together by either single or
 double lines. The boxes represent aligning regions.
 Single lines indicate gaps that are largely due to a deletion in the
-$o_organism assembly or an insertion in the $organism 
+$o_Organism assembly or an insertion in the $organism 
 assembly.  Double lines represent more complex gaps that involve substantial
 sequence in both species. This may result from inversions, overlapping
 deletions, an abundance of local mutation, or an unsequenced gap in one
@@ -25,7 +25,7 @@ location (in thousands) of the match for each matching alignment.</P>
 
 <H2>Methods</H2>
 <P>
-Because the $organism chrNA and chrUn chromosomes and the $o_organism random
+Because the $organism chrNA and chrUn chromosomes and the $o_Organism random
 chromsomes are comprised of unordered scaffolds separated by 500 <em>N</em>s, 
 the blastz alignments and subsequent chaining were first performed on the 
 scaffolds, and the coordinates were then lifted up to the chromosome level. 
@@ -36,7 +36,7 @@ in the $o_Organism genome are masked. </P>
 <P>
 The resulting alignments were converted into axt format using the lavToAxt
 program. The axt alignments were fed into axtChain, which organizes all
-alignments between a single $o_organism scaffold and a single
+alignments between a single $o_Organism scaffold and a single
 $organism chromosome into a group and creates a kd-tree out
 of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
