@@ -177,7 +177,7 @@ type bed 12
 
 track encodeAffyRna
 compositeTrack on
-shortLabel Affy RNA
+shortLabel Affy Oct RNA
 longLabel Affymetrix PolyA+ RNA
 group encodeTxLevels
 priority 19.01

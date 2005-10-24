@@ -1516,7 +1516,7 @@ compositeTrack on
 shortLabel Affy RNA Signal
 longLabel Affymetrix PolyA+ RNA Signal
 group encodeTxLevels
-priority 19.0
+priority 19.02
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig -1168.00 1686.5
@@ -1573,7 +1573,7 @@ compositeTrack on
 shortLabel Affy Transfrags
 longLabel Affymetrix PolyA+ RNA Transfrags
 group encodeTxLevels
-priority 19.1
+priority 19.03
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
