@@ -15,7 +15,7 @@ defaultViewLimits 0:100
 type wig 0 100
 
 track refSeq
-shortLabel refSeq
+shortLabel Genbank RefSeq
 longLabel Genbank RefSeq Gene Annotations 
 group genes
 priority 2.1
