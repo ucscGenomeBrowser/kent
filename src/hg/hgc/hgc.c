@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.963 2005/10/24 07:49:04 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.964 2005/10/25 02:04:48 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -224,13 +224,15 @@ struct bed *sageExpList = NULL;
 /* See this NCBI web doc for more info about entrezFormat:
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
 char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
-char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s&list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
+char *entrezPureSearchFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=%s&details_term=%s[%s] ";
+char *entrezUidFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=%s  &list_uids=%d&dopt=%s&tool=genome.ucsc.edu";
 /* db=unists is not mentioned in NCBI's doc... so stick with this usage: */
 char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=unists";
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
+char *uniprotFormat = "http://www.expasy.org/cgi-bin/niceprot.pl?%s";
 
 /* initialized by getCtList() if necessary: */
 struct customTrack *theCtList = NULL;
@@ -266,12 +268,22 @@ static void printEntrezPubMedUrl(FILE *f, char *term)
 fprintf(f, entrezFormat, "PubMed", term, "DocSum");
 }
 
+static void printEntrezPubMedPureSearchUrl(FILE *f, char *term, char *keyword)
+/* Print URL for Entrez browser on a PubMed search. */
+{
+fprintf(f, entrezPureSearchFormat, "PubMed", term, keyword);
+}
 void printEntrezPubMedUidUrl(FILE *f, int pmid)
 /* Print URL for Entrez browser on a PubMed search. */
 {
 fprintf(f, entrezUidFormat, "PubMed", pmid, "Summary");
 }
 
+void printEntrezGeneUrl(FILE *f, int geneid)
+/* Print URL for Entrez browser on a gene details page. */
+{
+fprintf(f, entrezUidFormat, "gene", geneid, "Graphics");
+}
 static void printEntrezOMIMUrl(FILE *f, int id)
 /* Print URL for Entrez browser on an OMIM search. */
 {
@@ -288,11 +300,11 @@ char *spAcc;
 spAcc = uniProtFindPrimAcc(accession);
 if (spAcc != NULL)
     {
-    fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", spAcc);
+    fprintf(f, uniprotFormat , spAcc);
     }
 else
     {
-    fprintf(f, "\"http://www.expasy.org/cgi-bin/niceprot.pl?%s\"", accession);
+    fprintf(f, uniprotFormat, accession);
     }
 }
 
@@ -428,6 +440,15 @@ char *tbl = cgiUsualString("table", cgiString("g"));
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
        hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
        tbl);
+}
+
+void hgcAnchorPosition(char *group, char *item) 
+/* Generate an anchor that calls click processing program with item 
+ * and group parameters. */
+{
+char *tbl = cgiUsualString("table", cgiString("g"));
+printf("<A HREF=\"%s&g=%s&i=%s&table=%s\">",
+       hgcPathAndSettings(), group, item, tbl);
 }
 
 void hgcAnchorWindow(char *group, char *item, int thisWinStart, 
@@ -3876,6 +3897,25 @@ bitFree(&iBits);
 bitFree(&bBits);
 }
 
+void medlineLinkedTermLine(char *title, char *text, char *search, char *keyword)
+/* Produce something that shows up on the browser as
+ *     TITLE: value
+ * with the value hyperlinked to medline using a specified search term. */
+{
+char *encoded = cgiEncode(search);
+char *encodedKeyword = cgiEncode(keyword);
+
+printf("<B>%s:</B> ", title);
+if (sameWord(text, "n/a") || sameWord(text, "none"))
+    printf("n/a<BR>\n");
+else
+    {
+    printf("<A HREF=\"");
+    printEntrezPubMedPureSearchUrl(stdout, encoded, encodedKeyword);
+    printf("\" TARGET=_blank>%s</A><BR>\n", text);
+    }
+freeMem(encoded);
+}
 void medlineLinkedLine(char *title, char *text, char *search)
 /* Produce something that shows up on the browser as
  *     TITLE: value
@@ -14402,11 +14442,46 @@ for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
 sqlDisconnect(&goConn);
 }
 
-void keggLink(struct sqlConnection *conn, char *geneId)
+void keggOtherGenes(struct sqlConnection *conn, char *geneId, 
+        char *table, char *mapId)
+/* Print out genes linked to a kegg pathway mapId. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+char *extraTable = "gbProtCodeXra";
+char *keggTable = "keggPathway";
+if (hTableExists(extraTable)) 
+    {
+    safef(query, sizeof(query), 
+            "select x.name, x.gene, x.product from %s k1, %s x  "
+            "where k1.mapID = '%s' and "
+            "k1.kgID = x.name ;"
+            , keggTable,  extraTable, mapId );
+    sr = sqlGetResult(conn, query);
+    printf("<table>\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<tr><td>");
+        hgcAnchorPosition(table,row[0]);
+	printf("%s</A> <BR>\n",row[0]); 
+        if (differentString(row[0],row[1]) && differentString(row[1], "none"))
+            printf("</td><td>%s</td><td>%s</td></tr>\n",
+                row[1], row[2]);
+        else
+            printf("</td><td> </td><td>%s</td></tr>\n",
+                row[2]);
+        }
+    sqlFreeResult(&sr);
+    printf("</table>\n");
+    }
+}
+void keggLink(struct sqlConnection *conn, char *geneId, 
+        char *table, char *title)
 /* Print out kegg database link. */
 {
 char query[512], **row;
 struct sqlResult *sr;
+struct sqlConnection *conn2 = hAllocConn();
 safef(query, sizeof(query), 
 	"select keggPathway.locusID,keggPathway.mapID,keggMapDesc.description"
 	" from keggPathway,keggMapDesc"
@@ -14416,37 +14491,17 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    printf("%s",title);
     printf("<A HREF=\"http://www.genome.ad.jp/dbget-bin/show_pathway?%s+%s\" TARGET=_blank>",
     	row[1], row[0]);
     printf("%s</A> - %s<BR>", row[1], row[2]);
+    printf("<B>Other Genes in Kegg Pathway: </b><BR>");
+    keggOtherGenes(conn2, geneId, table, row[1]);
+    printf("<BR>\n");
     }
 sqlFreeResult(&sr);
 }
 
-void keggOtherGenes(struct sqlConnection *conn, char *geneId)
-/* Print out genes linked to a kegg pathway. */
-{
-char query[512], **row;
-struct sqlResult *sr;
-char *extraTable = "gbProtCodeXra";
-char *keggTable = "keggPathway";
-if (hTableExists(extraTable)) 
-    {
-    safef(query, sizeof(query), 
-            "select x.name, x.gene, x.product from %s k2, %s k1, %s x  "
-            "where k1.mapID = k2.mapID and k2.kgID = x.name and k1.KgId = '%s';"
-            , keggTable,keggTable,  extraTable, geneId );
-    sr = sqlGetResult(conn, query);
-    printf("<table>\n");
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        printf("<tr><td> %s</td><td> %s</td><td> %s</td></tr>\n",
-            row[0], row[1], row[2]);
-        }
-    sqlFreeResult(&sr);
-    printf("</table>\n");
-    }
-}
 int keggCount(struct sqlConnection *conn, char *geneId)
 /* Count up number of hits. */
 {
@@ -14472,14 +14527,17 @@ int wordCount, x, length;
 int num = 0;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2;
-struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
+struct sqlConnection *spConn = NULL; 
 struct COG *COG=NULL;
 struct COGXra *COGXra=NULL;
 char *temparray[160];
 char *giwords[5];
 char *spAcc = NULL;
 struct slName *el, *list;
+char *table = tdb->tableName;
+char *pdb = hPdbFromGdb(database);
 
+spConn = sqlConnect( pdb);
 genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 if (wordCount > 1)
@@ -14507,8 +14565,7 @@ if (extraTable != NULL && hTableExists(extraTable))
 	       "TARGET=_BLANK>%s</A>\n", ginfo.ec, ginfo.ec);
 
             getEcHtml(ginfo.ec);
-            printf(" <B>EC PubMed Search: </B> <A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=PureSearch&db=PubMed&details_term=%s[EC/RN%%20Number]\" "
-	       "TARGET=_BLANK>%s</A><BR>\n", ginfo.ec, ginfo.ec);
+            medlineLinkedTermLine("EC PubMed Search", ginfo.ec, ginfo.ec, "EC/RN Number");
             printf(" <B>Brenda : </B> <A HREF=\"http://www.brenda.uni-koeln.de/php/result_flat.php4?ecno=%s&organism=\" "
 	       "TARGET=_BLANK>%s</A><BR>\n", ginfo.ec, ginfo.ec);
             }
@@ -14516,10 +14573,11 @@ if (extraTable != NULL && hTableExists(extraTable))
     sqlFreeResult(&sr);
     }
 /* lookup swissprot acc */
+spAcc = uniProtFindPrimAccFromGene(item, database);
+if (spAcc != NULL)
+    {
     printf("<B>UniProt:</B> ");
     printf("<A HREF=");
-
-    spAcc = uniProtFindPrimAccFromGene(item);
     printSwissProtProteinUrl(stdout, spAcc);
     if (spAcc == NULL)
         {
@@ -14529,7 +14587,7 @@ if (extraTable != NULL && hTableExists(extraTable))
         {
         printf(" TARGET=_blank>%s</A></B><BR>\n", spAcc);
         }
-
+    }
 /* ncbi blast hits */
     chopString(ginfo.gi,":",giwords,sizeof(giwords));
     printf("<B>NCBI Blast Hits:</B> "
@@ -14567,17 +14625,8 @@ if (hTableExists("COG"))
 	     }
   	 }
     }
-/* kegg pathway links */
-if (keggCount(conn, item) > 0)
-    {
-    printf("<B>Kegg Pathway: </b><BR>");
-    keggLink(conn, item);
-    printf("<B>Other Genes in Kegg Pathway: </b><BR>");
-    keggOtherGenes(conn, item);
-    printf("<BR>\n");
-    }
 /* interpro domains */
-list = spExtDbAcc1List(spConn, spAcc, "Interpro");
+list = spExtDbAcc1List(spConn, spAcc, "InterPro");
 if (list != NULL)
     {
     char query[256], **row, **row2;
@@ -14681,6 +14730,11 @@ if (list != NULL)
     slFreeList(&list);
     }
 
+/* kegg pathway links */
+if (keggCount(conn, item) > 0)
+    {
+    keggLink(conn, item, table, "<B>Kegg Pathway: </b><BR>");
+    }
 /* Do SAM-T02 sub-section */
 //doSamT02(spAcc, database);
 
