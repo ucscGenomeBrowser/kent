@@ -15,7 +15,7 @@
 #include "chainNet.h"
 #include "liftUp.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.36 2005/09/12 22:40:21 baertsch Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.37 2005/10/25 05:35:51 markd Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -952,11 +952,13 @@ if (ferror(dest))
 fclose(dest);
 }
 
-void liftGenePredObj(struct hash *liftHash, struct genePred* gp, struct lineFile* lf)
+boolean liftGenePredObj(struct hash *liftHash, struct genePred* gp, struct lineFile* lf)
 /* lift a genePred  */
 {
 int iExon;
 struct liftSpec *spec = findLift(liftHash, gp->chrom, lf);
+if (spec == NULL)
+    return ((how == carryMissing) ? TRUE : FALSE);
 
 gp->txStart += spec->offset;
 gp->txEnd += spec->offset;
@@ -974,6 +976,7 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
     }
 freez(&gp->chrom);
 gp->chrom = cloneString(spec->newName);
+return TRUE;
 }
 
 void liftGenePred(char *destFile, struct hash *liftHash, int sourceCount, char *sources[])
@@ -992,8 +995,8 @@ for (iSrc = 0; iSrc < sourceCount; iSrc++)
     while (lineFileChopNextTab(lf, row, ArraySize(row)))
         {
         struct genePred* gp = genePredLoad(row);
-        liftGenePredObj(liftHash, gp, lf);
-        genePredTabOut(gp, dest);
+        if (liftGenePredObj(liftHash, gp, lf))
+            genePredTabOut(gp, dest);
         genePredFree(&gp);
         }
     lineFileClose(&lf);
