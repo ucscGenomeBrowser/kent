@@ -96,6 +96,17 @@ search exact
 itemUrl ../cgi-bin/hgVisiGene?hgp_doId=%s
 hgsid on
 
+name allenBrainAtlas
+shortLabel Allen Brain
+longLabel Allen Brain Atlas In-Situ Images of Adult Mouse Brains
+priority 2.62
+visibility off
+type association knownToAllenBrain allenBrainUrl
+queryFull select name,value from knownToAllenBrain 
+queryOne select knownToAllenBrain.value,allenBrainUrl.url  from knownToAllenBrain,allenBrainUrl where knownToAllenBrain.name = '%s' and allenBrainUrl.name=knownToAllenBrain.value
+invQueryOne select name from knownToAllenBrain where value = '%s'
+itemUrl %s
+
 name esRegModule
 shortLabel Module
 longLabel Eran Segal's Transcriptional Regulation Module

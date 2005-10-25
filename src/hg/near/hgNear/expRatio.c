@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.36 2005/04/29 08:31:45 aamp Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.37 2005/10/25 16:26:24 kent Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -33,7 +33,7 @@ if (hgExpLoadVals(lookupConn, dataConn, lookupTable, gp->name, dataTable, &valCo
     for (i=0; i<representativeCount; ++i)
 	{
 	int ix = representatives[i];
-	if (i != -1)
+	if (ix != -1)
 	    {
 	    float val = vals[ix];
 	    if (val < -9999)
