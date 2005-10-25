@@ -18110,6 +18110,11 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
 
 ### hapmapRecombRate (Daryl; September 19, 2005)
     Lifted from hg16; see makeHg16.doc for details
+    # Update (Jen; October 25, 2005)
+    Data points that lifted to chroms other than 1-22 + X removed
+    before release to RR (confirmed with Daryl).
+    chr4_random: 11 data points
+    chr6_hla_hap1: 25 data points
 ### hapmapRecombHotspot (Daryl; September 19, 2005)
     Lifted from hg16; see makeHg16.doc for details
 
