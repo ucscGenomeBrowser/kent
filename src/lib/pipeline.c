@@ -198,14 +198,14 @@ static void plProcMemWrite(struct plProc* proc, int stdoutFd, int stderrFd, void
 /* implements child process to write memory buffer to pipeline after
  * fork */
 {
-int wrCnt;
+ssize_t wrCnt;
 plProcSetup(proc, STDIN_FILENO, stdoutFd, stderrFd);
 wrCnt = write(STDOUT_FILENO, otherEndBuf, otherEndBufSize);
 if (wrCnt < 0)
     errnoAbort("pipeline input buffer write failed");
 else if (wrCnt != otherEndBufSize)
-    errAbort("pipeline input buffer short write %d, expected %d",
-             wrCnt, otherEndBufSize);
+    errAbort("pipeline input buffer short write %lld, expected %lld",
+             (long long)wrCnt, (long long)otherEndBufSize);
 else
     exit(0);
 }
