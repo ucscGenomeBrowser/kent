@@ -92,7 +92,7 @@ cdsDrawDefault genomic\ codons
 track mgcWUPcrHit
 shortLabel C-List Success
 longLabel  MGC C-List sucessful RT-PCR
-group mgc
+group mgcCList
 priority 101.1
 visibility pack
 type bed 12
@@ -103,7 +103,7 @@ exonArrows on
 track mgcWUPcrInProgress
 shortLabel C-List Pending
 longLabel MGC C-List In-progress RT-PCR
-group mgc
+group mgcCList
 priority 101.2
 visibility pack
 type bed 12
@@ -114,7 +114,7 @@ exonArrows on
 track mgcWUPcrFail
 shortLabel C-List Fail
 longLabel MGC C-List Failed RT-PCR for MGC
-group mgc
+group mgcCList
 priority 101.3
 visibility pack
 type bed 12
@@ -125,7 +125,7 @@ exonArrows on
 track mgcNovelPcr
 shortLabel C-List Novel PCR
 longLabel Novel RT-PCR hits (excludes Refseq, MGC genes, A-list, B-list)
-group mgc
+group mgcCList
 priority 104.5
 visibility pack
 type bed 12
@@ -136,7 +136,7 @@ cdsDrawOptions enabled
 track mgcNovelPcrStrict
 shortLabel C-List Novel PCR Strict
 longLabel Novel RT-PCR strict hits (excludes Refseq, MGC genes, A-list, B-list, spliced ESTs)
-group mgc
+group mgcCList
 priority 104.6
 visibility pack
 type bed 12
@@ -147,7 +147,7 @@ cdsDrawOptions enabled
 track baylorRtPcrGeneA
 shortLabel Baylor GeneA
 longLabel Baylor RT-PCR GeneA for MGC
-group mgc
+group mgcCList
 priority 2105
 visibility hide
 color 10,100,15
@@ -157,7 +157,7 @@ cdsDrawOptions enabled
 track baylorRtPcr
 shortLabel Baylor RT-PCR
 longLabel Baylor RT-PCR for MGC
-group mgc
+group mgcCList
 priority 2105.1
 visibility hide
 color 10,100,150
@@ -165,34 +165,10 @@ type psl .
 exonArrows on
 cdsDrawOptions enabled
 
-# Vancouver GSC
-track gscMgcClones
-shortLabel GSC RT-PCR
-longLabel  GSC RT-PCR clones for MGC
-group mgc
-priority 2105.2
-visibility pack
-color 155,0,125
-type psl .
-exonArrows on
-cdsDrawOptions enabled
-
-track gscMgcTargets
-shortLabel GSC Targets
-longLabel GSC RT-PCR targets for MGC
-group mgc
-priority 2105.3
-visibility pack
-color 200,0,50
-type genePred
-exonArrows on
-cdsDrawDefault genomic\ codons
-
-
 track exoniphy
 shortLabel Exoniphy 
 longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
-group mgc
+group mgcCList
 priority 105
 visibility dense
 color 173,17,162
@@ -201,7 +177,7 @@ type genePred
 track exoniphyGene
 shortLabel Exoniphy Genes
 longLabel Predicted Genes and Gene Fragments from Exoniphy Exons (Human/Mouse/Rat)
-group mgc
+group mgcCList
 priority 106
 visibility dense
 color 173,17,162
@@ -210,7 +186,7 @@ type genePred
 track mgcExoniphyPcr
 shortLabel Exoniphy predicted amplicons 
 longLabel MGC Exoniphy predicted amplicons - PCR in progress
-group mgc
+group mgcCList
 priority 107
 visibility dense
 type psl
@@ -221,7 +197,7 @@ cdsDrawOptions enabled
 track mgcExoniphyWashuHits
 shortLabel Exoniphy WashU Hits
 longLabel Exoniphy Washington Univ RT-PCR Hits
-group mgc
+group mgcCList
 priority 107.5
 visibility dense
 type psl
@@ -232,7 +208,7 @@ cdsDrawOptions enabled
 track mgcTwinscan
 shortLabel TWINSCAN
 longLabel WUSTL TWINSCAN
-group mgc
+group mgcCList
 priority 110
 visibility dense
 type genePred
@@ -244,7 +220,7 @@ cdsDrawDefault genomic\ codons
 track mgcTwinscanEst
 shortLabel TWINSCAN EST
 longLabel WUSTL TWINSCAN EST
-group mgc
+group mgcCList
 priority 110.1
 visibility dense
 type genePred
@@ -256,7 +232,7 @@ cdsDrawDefault genomic\ codons
 track mgcNScan
 shortLabel N-SCAN
 longLabel WUSTL N-SCAN
-group mgc
+group mgcCList
 priority 111
 visibility dense
 type genePred
@@ -268,7 +244,7 @@ cdsDrawDefault genomic\ codons
 track mgcNScanEst
 shortLabel N-SCAN EST
 longLabel WUSTL N-SCAN EST
-group mgc
+group mgcCList
 priority 111.1
 visibility dense
 type genePred
@@ -280,7 +256,7 @@ cdsDrawDefault genomic\ codons
 track mgcMm6TransMap
 shortLabel Mouse TransMap
 longLabel Mouse TransMap Genes
-group mgc
+group mgcCList
 priority 112.1
 visibility dense
 type genePred
@@ -292,7 +268,7 @@ cdsDrawDefault genomic\ codons
 track mgcGreenPcrHit
 shortLabel Green Success 
 longLabel MGC Green C-List Success
-group mgc
+group mgcCList
 priority 540
 visibility dense
 type genePred
@@ -304,7 +280,7 @@ cdsDrawDefault genomic\ codons
 track mgcGreenPcrInProgress
 shortLabel Green Pending
 longLabel MGC Green C-List Pending
-group mgc
+group mgcCList
 priority 541
 visibility dense
 type genePred
@@ -316,7 +292,7 @@ cdsDrawDefault genomic\ codons
 track mgcGreenPcrFail
 shortLabel Green Fail
 longLabel MGC Green C-List Fail
-group mgc
+group mgcCList
 priority 542
 visibility dense
 type genePred
@@ -328,7 +304,7 @@ cdsDrawDefault genomic\ codons
 track mgcOrthoMmRefGene
 shortLabel ortho mm refGene
 longLabel orthoMapped mm6 refGene
-group mgc
+group mgcCList
 priority 210
 visibility hide
 color 34,34,139
@@ -379,6 +355,75 @@ spectrum on
 type psl est
 cdsDrawOptions enabled
 
+# Vancouver BCGSC
+track gscMgc2
+compositeTrack on
+shortLabel GSC plate 2
+longLabel GSC RT-PCR for MGC plate 2
+group mgcBCGSC
+priority 2105.2
+type bed
+visibility pack
+noInherit on
+
+    track gscMgcTargets2
+    noInherit on
+    subTrack gscMgc2
+    shortLabel GSC targets plate 2
+    longLabel GSC MGC RT-PCR targets plate 2
+    priority 1
+    visibility hide
+    color 200,0,50
+    type genePred
+    exonArrows on
+    cdsDrawDefault genomic\ codons
+
+    track gscMgcClones2
+    noInherit on
+    subTrack gscMgc2
+    shortLabel GSC clones plate 2
+    longLabel GSC MGC RT-PCR clones plate 2
+    priority 2
+    visibility hide
+    color 155,0,125
+    type psl .
+    exonArrows on
+    cdsDrawOptions enabled
+
+track gscMgc3
+compositeTrack on
+shortLabel GSC plate 3
+longLabel GSC RT-PCR for MGC plate 3
+group mgcBCGSC
+priority 2105.3
+type bed
+visibility pack
+noInherit on
+
+    track gscMgcTargets3
+    noInherit on
+    subTrack gscMgc3
+    shortLabel GSC targets plate 3
+    longLabel GSC MGC RT-PCR targets plate 3
+    priority 1
+    visibility hide
+    color 200,0,50
+    type genePred
+    exonArrows on
+    cdsDrawDefault genomic\ codons
+
+    track gscMgcClones3
+    noInherit on
+    subTrack gscMgc3
+    shortLabel GSC clones plate 3
+    longLabel GSC MGC RT-PCR clones plate 3
+    priority 2
+    visibility hide
+    color 155,0,125
+    type psl .
+    exonArrows on
+    cdsDrawOptions enabled
+
 searchName mgcWUPcrHit
 searchTable mgcWUPcrHit
 searchMethod exact
@@ -402,3 +447,5 @@ searchTable xmGene
 searchMethod exact
 searchType genePred
 searchPriority 10
+
+
