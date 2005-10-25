@@ -30,7 +30,10 @@ DIRS = \
 	kgAliasRefseq \
 	kgProtAlias \
 	kgProtAliasNCBI \
+	kgBestMrna2 \
+	kgBestRef2 \
 	kgXref \
+	pfamXref \
 	rmKGPepMrna \
 	spOrganism \
 	spTest \
