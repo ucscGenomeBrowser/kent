@@ -3669,59 +3669,68 @@ windowingFunction mean
 viewLimits 0:2
 autoScale Off
 origAssembly hg17
+subGroup1 dataType Data_Type raw=Raw peaks=Peaks
 
     track encodeUtexHeLaMycRaw
     subTrack encodeUtexChip
     shortLabel UT Myc HeLa
     longLabel University of Texas, Austin  ChIP/Chip (Myc, HeLa) 
+    subGroups dataType=raw
     color 120,30,50
     priority 1
+
+    track encodeUtex2091fibMycRaw
+    subTrack encodeUtexChip
+    shortLabel UT Myc Fb
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, 2091 fibroblasts)
+    subGroups dataType=raw
+    color 120,30,50
+    priority 2
+
+    track encodeUtex2091fibMycStimRaw
+    subTrack encodeUtexChip
+    shortLabel UT Myc st-Fb 
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, FBS-stimulated 2091 fibroblasts)
+    subGroups dataType=raw
+    color 120,30,50
+    priority 3
+
+    track encodeUtex2091fibE2F4Raw
+    subTrack encodeUtexChip
+    shortLabel UT E2F4 Fb
+    longLabel University of Texas, Austin  ChIP/Chip (E2F4, 2091 fibroblasts) 
+    subGroups dataType=raw
+    color 120,30,50
+    priority 4
 
     track encodeUtexHeLaMycPeaks
     shortLabel UT Myc HeLa Pk
     longLabel University of Texas, Austin  ChIP/Chip (Myc, HeLa) Peaks
+    subGroups dataType=peaks
     subTrack encodeUtexChip
     color 50,0,0
-    priority 2
-
-    track encodeUtex2091fibMycRaw
-    subTrack encodeUtexChip
-    shortLabel UT Myc Fib
-    longLabel University of Texas, Austin  ChIP/Chip (Myc, 2091 fibroblasts)
-    color 120,30,50
-    priority 3
+    priority 5
 
     track encodeUtex2091fibMycPeaks
     subTrack encodeUtexChip
-    shortLabel UT Myc Fib Pk
+    shortLabel UT Myc Fb Pk
     longLabel University of Texas, Austin  ChIP/Chip (Myc, 2091 fibroblasts) Peaks
-    color 50,0,0
-    priority 4
-
-    track encodeUtex2091fibMycStimRaw
-    subTrack encodeUtexChip
-    shortLabel UT Myc Fib Stim
-    longLabel University of Texas, Austin  ChIP/Chip (Myc, FBS-stimulated 2091 fibroblasts)
-    color 120,30,50
-    priority 5
-
-    track encodeUtex2091fibMycStimPeaks
-    shortLabel UT Myc Fib St Pk
-    longLabel University of Texas, Austin  ChIP/Chip (Myc, FBS-stimulated 2091 fibroblasts) Peaks
-    subTrack encodeUtexChip
+    subGroups dataType=peaks
     color 50,0,0
     priority 6
 
-    track encodeUtex2091fibE2F4Raw
+    track encodeUtex2091fibMycStimPeaks
+    shortLabel UT Myc st-Fb Pk
+    longLabel University of Texas, Austin  ChIP/Chip (Myc, FBS-stimulated 2091 fibroblasts) Peaks
+    subGroups dataType=peaks
     subTrack encodeUtexChip
-    shortLabel UT E2F4 Fib
-    longLabel University of Texas, Austin  ChIP/Chip (E2F4, 2091 fibroblasts) 
-    color 120,30,50
+    color 50,0,0
     priority 7
 
     track encodeUtex2091fibE2F4Peaks
-    shortLabel UT E2F4 Fib St Pk
+    shortLabel UT E2F4 st-Fb Pk
     longLabel University of Texas, Austin  ChIP/Chip (E2F4, 2091 fibroblasts) Peaks
+    subGroups dataType=peaks
     subTrack encodeUtexChip
     color 50,0,0
     priority 8
