@@ -9,7 +9,7 @@ A = kgXref
 O = $A.o
 
 my: compile
-	mv $A ${BINDIR}/$(MACHTYPE)
+	mv $A ${BINDIR}
 
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
