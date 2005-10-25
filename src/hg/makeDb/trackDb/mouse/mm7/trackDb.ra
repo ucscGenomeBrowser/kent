@@ -8,7 +8,7 @@ type bed 3 +
 
 track chainHg17noLSR
 shortLabel $o_Organism Chain noLSR
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments WITH blastz dynamic masking, NO Lineage-Specific Repeats
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
 group compGeno
 priority 259.01
 visibility hide
@@ -20,7 +20,7 @@ otherDb hg17
 
 track netHg17noLSR
 shortLabel $o_Organism Net noLSR
-longLabel $o_Organism ($o_date/$o_db) Alignment Net WITH blastz dynamic masking, NO Lineage-Specific Repeats
+longLabel $o_Organism ($o_date/$o_db) Alignment Net WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
 group compGeno
 priority 259.11
 visibility dense
