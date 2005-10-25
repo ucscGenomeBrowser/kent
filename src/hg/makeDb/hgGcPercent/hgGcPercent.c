@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.20 2005/06/17 01:22:48 angie Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.21 2005/10/25 22:00:39 hiram Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -97,7 +97,7 @@ if (! (previousChrom && (sameWord(previousChrom, chrom))))
     {
     freeMem(previousChrom);
     previousChrom = cloneString(chrom);
-    fprintf(f, "variableStep chrom=%s span=%d\n", chrom, winSize);
+    fprintf(f, "variableStep chrom=%s span=%d\n", chrom, winSize-overlap);
     }
 fprintf(f, "%d\t%g\n", start+1, ppt/10.0);
 }
