@@ -6,12 +6,12 @@ hgsql visiGene < ~/kent/src/hg/visiGene/visiGene.sql
 cd ~/kent/src/hg/visiGene/vgLoadMahoney
 vgLoadMahoney /gbdb/visiGene mm5 cloning.tab clonePcr.bed outDir
 cd outDir
-visiGeneLoad whole.ra whole.tab
-visiGeneLoad slices.ra slices.tab
+visiGeneLoad whole.ra whole.tab /dev/null
+visiGeneLoad slices.ra slices.tab /dev/null
 
 # Load jackson labs data.
 cd ~/kent/src/hg/visiGene/vgLoadJax
-vgLoadJax jackson visiGene
+vgLoadJax /gbdb/visiGene jackson visiGene
 ./loadAll
 
 
