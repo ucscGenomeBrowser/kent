@@ -11,7 +11,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.5 2005/10/26 19:53:02 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.6 2005/10/26 20:38:41 kent Exp $";
 
 static int visiMatchCmpImageId(void *va, void *vb)
 /* rbTree comparison function to tree on imageId. */
@@ -404,6 +404,25 @@ visiGeneMatchMultiWord(searcher, conn, wordList, "bodyPart",
     addImagesMatchingBodyPart);
 }
 
+static void visiGeneMatchSex(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct slName *wordList)
+/* Add images matching bodyPart to searcher.
+ * This is a little complicated by some body parts containing
+ * multiple words, like "choroid plexus". */
+{
+struct dyString *query = dyStringNew(0);
+struct slName *word;
+for (word = wordList; word != NULL; word = word->next)
+    {
+    dyStringClear(query);
+    dyStringAppend(query, "select image.id from sex,specimen,image ");
+    dyStringPrintf(query, "where sex.name = \"%s\" ",  word->name);
+    dyStringAppend(query, "and sex.id = specimen.sex ");
+    dyStringAppend(query, "and specimen.id = image.specimen");
+    addImagesMatchingQuery(searcher, conn, query->string, NULL, NULL);
+    }
+}
+
 void addImagesMatchingStage(struct visiSearcher *searcher,
 	struct sqlConnection *conn, int schemeId, int taxon,
 	char *minAge)
@@ -525,6 +544,7 @@ visiGeneMatchYear(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
 visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
+visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 searcher->matchList = NULL;	/* Transferring memory ownership to return val. */
