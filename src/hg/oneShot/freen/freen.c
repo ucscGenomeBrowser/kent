@@ -5,8 +5,10 @@
 #include "hash.h"
 #include "obscure.h"
 #include "dnautil.h"
+#include "jksql.h"
+#include "visiGene.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.56 2005/01/10 00:41:12 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.57 2005/10/26 20:15:51 kent Exp $";
 
 void usage()
 {
@@ -17,16 +19,22 @@ errAbort("freen - test some hair brained thing.\n"
 void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-printf("log 2 = %f\n", log(2));
-printf("1/log 2 = %f\n", 1.0/log(2));
-printf("33%%100 = %d\n", 33%100);
-printf("133%%100 = %d\n", 133%100);
-printf("-33%%100 = %d\n", -33%100);
-printf("-133%%100 = %d\n", -33%100);
-printf("33u%%100u = %d\n", 33u%100u);
-printf("133u%%100u = %d\n", 133u%100u);
-printf("-33u%%100u = %d\n", (unsigned)-33%100u);
-printf("-133u%%100u = %d\n", (unsigned)-33%100u);
+struct sqlConnection *conn = sqlConnect("visiGene");
+struct slInt *gene, *geneList = sqlQuickNumList(conn,
+	"select id from gene limit 10");
+struct slName *list, *el;
+printf("got %d genes\n", slCount(geneList));
+for (gene = geneList; gene != NULL; gene = gene->next)
+    {
+    char *name = vgGeneNameFromId(conn, gene->val);
+    printf("id %d, name %s\n", gene->val, name);
+    freeMem(name);
+    }
+
+list = visiGeneGeneName(conn, 16337);
+for (el = list; el != NULL; el = el->next)
+    printf(" %s", el->name);
+printf("\n");
 }
 
 int main(int argc, char *argv[])
