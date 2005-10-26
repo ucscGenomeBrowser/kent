@@ -227,6 +227,7 @@ CREATE TABLE specimen (
     taxon int not null,		# NCBI Taxon of specimen
     genotype int not null,	# Genotype of specimen
     bodyPart int not null,	# Body part of specimen
+    sex int not null,		# Sex of specimen
     age float not null,	# Age in days since birth or conception depending on isEmbryo
     minAge float not null,	# Minimum age.
     maxAge float not null,	# Maximum age.  May differ from minAge if uncertain of age

@@ -913,6 +913,7 @@ if (id == 0)
     dyStringPrintf(dy, "taxon = %s,\n", taxon);
     dyStringPrintf(dy, "genotype = %d,\n", genotype);
     dyStringPrintf(dy, "bodyPart = %d,\n", bodyPart);
+    dyStringPrintf(dy, "sex = %d,\n", sex);
     dyStringPrintf(dy, "age = %s,\n", age);
     dyStringPrintf(dy, "minAge = %s,\n", minAge);
     dyStringPrintf(dy, "maxAge = %s,\n", maxAge);
