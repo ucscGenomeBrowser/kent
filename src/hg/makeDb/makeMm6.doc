@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.87 2005/10/20 22:41:01 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.88 2005/10/26 20:14:20 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8600,4 +8600,126 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
 
    nice featureBits mm6 miRNA
 #  21167 bases of 2597150411 (0.001%) in intersection
+
+#############################################################################
+# Add TIGR MGI TC Alignments (In progress Oct 24, 2005 JK)
+# These are clusters of ESTs and other sequences on the mouse genome.
+
+# Create directory and download data into it.
+   cd /cluster/data/mm6/bed
+   mkdir tigrMgiTc
+   cd tigrMgiTc
+   wget ftp://ftp.tigr.org/pub/data/tgi/Mus_musculus/MGI.release_15.zip
+   unzip MGI.release_15.zip
+
+# Extract only the clusters of ESTs from their big sequence file
+# that also includes singleton ESTs.  This is about 40% the size
+# of the full file, and all we need.
+   faFilter '-name=TC???????' MGI.022505 tigrMgiTc.fa
+
+# Split sequence into pieces for cluster run
+   mkdir split
+   faSplit sequence tigrMgiTc.fa 500 split/tc
+
+# Set up cluster run
+   ssh kk
+   cd /cluster/data/mm6/bed/tigrMgiTc
+   mkdir run
+   cd run
+   mkdir psl
+   ls -1S /iscratch/i/mm6/chrom/*.fa > genome.lst
+   ls ../split/*.fa > mrna.lst
+   cat << '_EOF_' > gsub
+#LOOP
+blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+   gensub2 genome.lst mrna.lst gsub spec
+   para create spec
+# Then do the usual para try/push/time/check until the run is finished
+
+# Then do sorting and near-best-in-genome step on file server
+   ssh kkstore
+   cd /cluster/data/mm6/bed/tigrMgiTc/run
+   pslSort dirs raw.psl tmp psl
+   pslReps raw.psl ../tigrMgiTc.psl -nohead -minCover=0.25 -minAli=0.96 -nearTop=0.001 /dev/null
+
+# Clean up big files no longer needed
+   rm raw.psl
+   rm -r psl
+   rm -r ../split
+   rm ../MGI.022505
+   rm ../MGI.GO.022505
+   rm ../MGI.TC_EST.022505
+
+
+#############################################################################
+# Add NCBI XM_ alignments - note this is just to create files for
+# the Allen Brain Atlas mapping.  It does not produce a track.
+
+# Create directory and download XM_ sequence from NCBI
+   ssh kk
+   cd /cluster/data/mm6/bed
+   mkdir ncbiXm
+   cd ncbiXm
+   wget ftp://ftp.ncbi.nih.gov/refseq/M_musculus/mRNA_Prot/mouse.rna.fna.gz
+
+# Unzip, simplify fa headers, and filter out non-XM_ sequence, and split
+   mkdir split
+   zcat mouse.rna.fna.gz | faNcbiToUcsc -wordBefore=ref stdin stdout | faFilter -name=XM_\* stdin ncbiXm.fa
+   faSplit sequence ncbiXm.fa 150 split/xm
+
+# Set up cluster job
+   mkdir run
+   cd run
+   mkdir psl
+   ls -1S /iscratch/i/mm6/chrom/*.fa > genome.lst
+   ls ../split/*.fa > mrna.lst
+   cat << '_EOF_' > gsub
+#LOOP
+blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+   gensub2 genome.lst mrna.lst gsub spec
+   para create spec
+# Then do the usual para try/push/time/check until the run is finished
+
+# Then do sorting and near-best-in-genome step on file server
+   ssh kkstore
+   cd /cluster/data/mm6/bed/ncbiXm/run
+   pslSort dirs raw.psl tmp psl
+   pslReps raw.psl ../ncbiXm.psl -nohead -minCover=0.50 -minAli=0.99 -nearTop=0.001 /dev/null
+
+
+#############################################################################
+# Create Allen Brain Atlas mapping. (In progress 24 Oct 2005 JK)
+# This needs to be done after the refSeq alignments are done,
+# and after the ncbiXm and tigrMgiTc alignments are done.
+
+# Set up directory
+    ssh hgwdev
+    cd /cluster/data/mm6/bed
+    mkdir allenBrain
+    cd allenBrain
+
+# Copy in allen20051021.tab file that was converted from
+# spreadsheet mailed by Susan Sunkin <SusanS@alleninstitute.org>
+# Then extract gene names as so
+    cut -f 4 allen20051021.tab | grep -v '^$' | grep -v refSeqAccessionNumber > allen.genes
+
+# Extract refSeq alignments from database, removing bin field
+    hgsql mm6 -N -e "select * from refSeqAli" | cut  -f 2- > refSeq.psl
+
+# Make psl file with just the allen genes and load it into the database
+    pslCat refSeq.psl ../ncbiXm/ncbiXm.psl ../tigrMgiTc/tigrMgiTc.psl | pslSelect -queries=allen.genes stdin allenBrainAli.psl
+    hgLoadPsl mm6 allenBrainAli.psl
+
+# Make mapping between known genes and allenBrain
+    hgMapToGene mm6 allenBrainAli -type=psl knownGene knownToAllenBrain 
+
+# Make a new table that contains the URLs for the allen brain genes
+    awk -F '\t' '$4 != "" && NR > 1 {printf("%s\t%s\n", $4, $5);}' allen20051021.tab > allenBrainUrl.tab
+    hgsql mm6 < ~/kent/src/hg/lib/allenBrainUrl.sql
+
+
 
