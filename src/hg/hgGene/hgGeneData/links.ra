@@ -92,6 +92,13 @@ tables knownToEnsembl
 idSql select value from knownToEnsembl where name = '%s'
 priority 100
 
+name allenBrain
+shortLabel Allen Brain Atlas
+tables knownToAllenBrain allenBrainUrl
+idSql select allenBrainUrl.url from knownToAllenBrain,allenBrainUrl where knownToAllenBrain.name = '%s' and knownToAllenBrain.value = allenBrainUrl.name
+url %s
+priority 109
+
 #name modBase
 #shortLabel ModBase
 #tables hgFixed.modBaseLsSnp, kgXref
