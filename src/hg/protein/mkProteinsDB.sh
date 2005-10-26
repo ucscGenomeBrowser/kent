@@ -10,7 +10,7 @@
 #
 #	Thu Nov 20 11:31:51 PST 2003 - Created - Hiram
 #
-#	"$Id: mkProteinsDB.sh,v 1.8 2005/10/24 16:59:28 fanhsu Exp $"
+#	"$Id: mkProteinsDB.sh,v 1.9 2005/10/26 17:56:27 fanhsu Exp $"
 
 TOP=/cluster/data/proteins
 export TOP
@@ -131,10 +131,10 @@ hgsql -e 'LOAD DATA local INFILE "pdbSP.tab" into table pdbSP;' ${PDB}
 
 #	Build the spDisease table
 echo building spDisease ...
-hgsql -e "select comment.acc, displayId.val, commentVal.val from \
-	comment, commentVal, displayId where comment.commentType=19 \
-	and commentVal.id=comment.commentVal and displayId.acc=comment.acc;" \
-	${SPDB} | sed -e "1d" > spDisease.tab
+hgsql -N -e \
+'select comment.acc, displayId.val, commentVal.val from comment, commentVal, commentType ct, displayId where comment.commentType=ct.id and ct.val="DISEASE" and commentVal.id=comment.commentVal and displayId.acc=comment.acc;' \
+${SPDB} > spDiesase.tab
+
 hgsql -e 'LOAD DATA local INFILE "spDisease.tab" into table spDisease;' ${PDB}
 
 # create swInterPro table
