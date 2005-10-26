@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.45 2005/08/19 04:40:37 baertsch Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.46 2005/10/26 17:35:01 angie Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -114,8 +114,10 @@ mustWrite(f, axt->qSym, axt->symCount);
 fputc('\n', f);
 fputc('\n', f);
 if ((strlen(axt->tSym) != strlen(axt->qSym)) || (axt->symCount > strlen(axt->tSym)))
-    fprintf(stderr,"Symbol count %d != %d inconsistent in %s in record %d.\n",
-    	(int)strlen(axt->qSym),(int)strlen(axt->tSym), axt->qName, ix);
+    fprintf(stderr,"Symbol count %d != %d || %d > %d inconsistent in %s in "
+	    "record %d.\n",
+	    (int)strlen(axt->qSym), (int)strlen(axt->tSym), axt->symCount,
+	    (int)strlen(axt->tSym), axt->qName, ix);
 }
 
 int axtCmpQuery(const void *va, const void *vb)
@@ -313,7 +315,7 @@ void axtSubsetOnT(struct axt *axt, int newStart, int newEnd,
 if (newStart < axt->tStart)
     newStart = axt->tStart;
 if (newEnd > axt->tEnd)
-    newStart = axt->tEnd;
+    newEnd = axt->tEnd;
 if (newEnd <= newStart) 
     return;
 if (newStart == axt->tStart && newEnd == axt->tEnd)
