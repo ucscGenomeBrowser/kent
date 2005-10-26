@@ -60,6 +60,9 @@ char *visiGeneSubmitId(struct sqlConnection *conn, int id);
 char *visiGeneBodyPart(struct sqlConnection *conn, int id);
 /* Return body part if any.  FreeMem this when done. */
 
+char *visiGeneSex(struct sqlConnection *conn, int id);
+/* Return sex if known.  FreeMem this when done. */
+
 char *visiGeneStrain(struct sqlConnection *conn, int id);
 /* Return strain of organism if any.  FreeMem this when done. */
 

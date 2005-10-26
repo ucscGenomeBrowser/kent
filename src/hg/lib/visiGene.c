@@ -390,6 +390,19 @@ safef(query, sizeof(query),
 return sqlQuickString(conn, query);
 }
 
+char *visiGeneSex(struct sqlConnection *conn, int id)
+/* Return sex if known.  FreeMem this when done. */
+{
+char query[256];
+safef(query, sizeof(query),
+    "select sex.name from image,specimen,sex "
+    "where image.id = %d "
+    "and image.specimen = specimen.id "
+    "and specimen.sex = sex.id"
+    , id);
+return sqlQuickString(conn, query);
+}
+
 char *visiGeneStrain(struct sqlConnection *conn, int id)
 /* Return strain of organism if any.  FreeMem this when done. */
 {
