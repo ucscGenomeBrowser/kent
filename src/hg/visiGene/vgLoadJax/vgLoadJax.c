@@ -98,7 +98,7 @@ else if (sameString(label, "Cy3"))
 else if (sameString(label, "Cy5"))
     return "red";
 else if (sameString(label, "Digoxigenin"))
-    return "red";
+    return "digoxigenin";
 else if (sameString(label, "Ethidium bromide"))
     return "orange";
 else if (sameString(label, "Fluorescein"))
@@ -287,6 +287,7 @@ sr = sqlGetResultVerbose(conn, query->string);
 row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find _Refs_key %s in BIB_Refs", ref);
+
 
 /* Make ra file with stuff common to whole submission set. */
 ra = mustOpen(raName, "w");
@@ -788,14 +789,32 @@ makeDir(outDir);
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     char path[PATH_LEN];
-    safef(path, sizeof(path), "%s/%s", outDir, ref->name);
-    submitRefToFiles(conn, conn2, ref->name, path, inJax);
-    refCount += 1;
-    if (testMax != 0 && refCount >= testMax)
-         errAbort("Reached testMax %d output dirs [%s]\n", testMax, path);
+    char *pub;
+    boolean skip;
+
+    /* Check that it isn't on our skip list - one that we
+     * have already in the database from a higher resolution
+     * source. */
+    dyStringClear(query);
+    dyStringPrintf(query, "select title from BIB_Refs where _Refs_key = %s", 
+    	ref->name);
+    pub = sqlQuickString(conn, query->string);
+    skip = sameString(pub, 
+	"Mouse Brain Organization Revealed Through Direct Genome-Scale TF Expression Analysis.");
+
+     if (!skip)
+	{
+	safef(path, sizeof(path), "%s/%s", outDir, ref->name);
+	submitRefToFiles(conn, conn2, ref->name, path, inJax);
+	refCount += 1;
+	if (testMax != 0 && refCount >= testMax)
+	     errAbort("Reached testMax %d output dirs [%s]\n", testMax, path);
+	}
+    freeMem(pub);
     }
 
 slNameFreeList(&refList);
+dyStringFree(&query);
 }
 
 void vgLoadJax(char *visiGeneDir, char *jaxDb, char *outDir)
