@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.964 2005/10/25 02:04:48 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.965 2005/10/26 23:49:14 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14411,6 +14411,8 @@ static char *aspectNames[3] = {
 };
 int aspectIx;
 
+if (sqlTableExists(goConn,"goaPart") && 
+    sqlTableExists(goConn,"term")) 
 for (aspectIx = 0; aspectIx < ArraySize(aspects); ++aspectIx)
     {
     boolean hasFirst = FALSE;
@@ -14679,7 +14681,16 @@ if (list != NULL)
 	char query[256];
 	char *description;
 	safef(query, sizeof(query), "select description from proteome.pfamDesc where pfamAC='%s'", el->name);
-	description = sqlQuickString(conn, query);
+	if (!sqlTableExists(conn,"pfamDesc")) 
+	    {
+	    safef(query, sizeof(query), 
+	    "select extDbRef.extAcc1 from extDbRef,extDb "
+	    "where extDbRef.acc = '%s' "
+	    "and extDbRef.extDb = extDb.id "
+	    "and extDb.val = '%s'"
+	    , spAcc,el->name);
+	    }
+	description = sqlQuickString(spConn, query);
 	if (description == NULL)
 	    description = cloneString("n/a");
 	printf("<A HREF=\"http://www.sanger.ac.uk/cgi-bin/Pfam/getacc?%s\" TARGET=_blank>", 
