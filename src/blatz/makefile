@@ -23,3 +23,11 @@ blatzClient: client.o bzp.o ${MYLIBS}
 
 clean:
 	rm -f $O
+
+test:	doTest
+
+doTest:
+	blatz test/clock/human.fa test/clock/mouse.fa test/clock/test.chain
+	diff test/clock/expected.chain test/clock/test.chain
+	blatz test/100k/human.fa test/100k/mouse.fa test/100k/test.chain
+	diff test/100k/expected.chain test/100k/test.chain
