@@ -11,7 +11,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.4 2005/10/20 22:32:31 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.5 2005/10/26 19:53:02 kent Exp $";
 
 static int visiMatchCmpImageId(void *va, void *vb)
 /* rbTree comparison function to tree on imageId. */
@@ -220,7 +220,8 @@ dyStringFree(&query);
 
 
 static void addImagesMatchingQuery(struct visiSearcher *searcher,
-    struct sqlConnection *conn, char *query, struct hash *uniqHash)
+    struct sqlConnection *conn, char *query, struct hash *uniqHash,
+    char *searchTerm)
 /* Add images that match query */
 {
 struct sqlResult *sr;
@@ -231,10 +232,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     boolean skip = FALSE;
     if (uniqHash)
 	{
-	if (hashLookup(uniqHash, row[0]))
+	char uniqString[512];
+	safef(uniqString, sizeof(uniqString), "%s#%s", row[0], searchTerm);
+	if (hashLookup(uniqHash, uniqString))
 	    skip = TRUE;
 	else
-	    hashAdd(uniqHash, row[0], NULL);
+	    hashAdd(uniqHash, uniqString, NULL);
 	}
    if (!skip)
        visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
@@ -259,7 +262,7 @@ dyStringPrintf(dy,
    "and submissionContributor.submissionSet = imageFile.submissionSet "
    "and imageFile.id = image.imageFile"
    , contributor);
-addImagesMatchingQuery(searcher, conn, dy->string, NULL);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL);
 }
 
 static void visiGeneMatchContributor(struct visiSearcher *searcher, 
@@ -379,7 +382,7 @@ dyStringPrintf(dy,
    "and expressionLevel.imageProbe = imageProbe.id "
    "and expressionLevel.level > 0"
    , bodyPart);
-addImagesMatchingQuery(searcher, conn, dy->string, uniqHash);
+addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart);
 
 dyStringClear(dy);
 dyStringPrintf(dy,
@@ -387,7 +390,7 @@ dyStringPrintf(dy,
     "where bodyPart.name = \"%s\" "
     "and bodyPart.id = specimen.bodyPart "
     "and specimen.id = image.specimen");
-addImagesMatchingQuery(searcher, conn, dy->string, uniqHash);
+addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart);
 hashFree(&uniqHash);
 }
 
@@ -427,7 +430,7 @@ if (maxAge != NULL)
     dyStringPrintf(dy, "and specimen.age < %s ", maxAge);
 dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
 dyStringPrintf(dy, "and specimen.id = image.specimen");
-addImagesMatchingQuery(searcher, conn, dy->string, NULL);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL);
 
 dyStringFree(&dy);
 }
@@ -483,7 +486,7 @@ dyStringPrintf(dy,
     "and submissionSet.id = imageFile.submissionSet "
     "and imageFile.id = image.imageFile"
     , minYear, maxYear);
-addImagesMatchingQuery(searcher, conn, dy->string, NULL);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL);
 dyStringFree(&dy);
 }
 
