@@ -185,7 +185,7 @@ if (imageCount > 0)
     if (fullCount == imageCount)
 	printf("%d images match<BR>\n", fullCount);
     else
-        printf("%d full %d partial match<BR>\n", fullCount, partCount);
+        printf("%d full, %d partial match<BR>\n", fullCount, partCount);
     printf("</B></TD></TR>\n");
     for (match = slElementFromIx(matchList, startAt); 
 	    match != NULL; match = match->next)
