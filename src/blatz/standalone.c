@@ -143,6 +143,11 @@ static void loadAndAlignAll(struct bzp *bzp,
         char *target, char *query, char *output)
 /* blatz - Align genomic dna across species. */
 {
+struct dnaLoad *queryDl = dnaLoadOpen(query);
+struct dnaLoad *targetDl = dnaLoadOpen(target);
+struct blatzIndex *indexList = blatzIndexDl(targetDl, bzp->weight, bzp->unmask);
+bzpTime("loaded and indexed target DNA");
+
 // LX BEG
 if(bzp->dynaWordCoverage > 0){
   dynaNumWords = (pow(4,bzp->weight)); // ?? check with Jim if this is correct
@@ -153,10 +158,6 @@ if(bzp->dynaWordCoverage > 0){
   printf("Set word limit to  %d\n",dynaWordLimit);
 }
 // LX END
-struct dnaLoad *queryDl = dnaLoadOpen(query);
-struct dnaLoad *targetDl = dnaLoadOpen(target);
-struct blatzIndex *indexList = blatzIndexDl(targetDl, bzp->weight, bzp->unmask);
-bzpTime("loaded and indexed target DNA");
 
 verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
         query);

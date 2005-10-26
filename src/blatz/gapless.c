@@ -185,13 +185,13 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
     if ((key >= 0) && ((dynaWordLimit == 0 ) || (dynaWordCount[key]<=2*dynaWordLimit)))
     //if (key >= 0) // LX
         {
+        int tog;
         if(dynaWordLimit>0) dynaWordCount[key]++; // LX
         /* Add key, and everything that differs by a single transition 
          * from key to index.  This relies on the fact that the binary
          * representation we've chosen for DNA is a little unusual, and
          * has the property that flipping the least significant bit
          * is equivalent to a transition (A-G or C-T) mutation. */
-        int tog;
         for (tog = nbdToggleStart; ; tog >>= 2)
             {
             struct blatzIndexPos *iPos = &index->slots[tog^key];

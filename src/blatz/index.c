@@ -75,8 +75,8 @@ for (i=0; i<=lastBase; ++i)
     if ((key >= 0) && ((dynaWordLimit == 0) || (dynaWordCount[key]<=dynaWordLimit)))
     //if (key >= 0)
         {
-        if(dynaWordLimit>0) dynaWordCount[key]++;
         struct seqPos *pos, **slot;
+        if(dynaWordLimit>0) dynaWordCount[key]++;
         lmAllocVar(lm, pos);
         pos->pos = i;
         slot = &slots[key];
