@@ -716,6 +716,63 @@ XXXX
     #	13676954 bases of 108418926 (12.615%) in intersection
 
 #########################################################################
+# BLASTZ C. remanei caeRem1 (WORKING - 2005-09-14 Hiram)
+#	
+    ssh pk
+    mkdir /cluster/data/cb2/bed/blastzCaeRem1.2005_09_14
+    cd /cluster/data/cb2/bed/blastzCaeRem1.2005_09_14
+
+    #	utilizing small target chunks and a single query chunk so that
+    #	the dynamic masking with parameter M can function.
+
+    cat << '_EOF_' > DEF
+# Cb2 vs caeRem1
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=50
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Cb2
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit
+SEQ1_2BIT=/san/sanvol1/scratch/worms/cb2/cb2.2bit
+SEQ1_LIFT=/san/sanvol1/scratch/worms/cb2/liftRandoms.lft
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=1000000
+SEQ1_LAP=100
+
+# QUERY: remanei caeRem1
+SEQ2_DIR=/san/sanvol1/scratch/worms/caeRem1/caeRem1.2bit
+SEQ2_2BIT=/san/sanvol1/scratch/worms/caeRem1/caeRem1.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=150000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/cb2/bed/blastzCaeRem1.2005_09_14
+
+SEQ1_LEN=$BASE/S1.len
+SEQ1_CTGLEN=$BASE/S1ctg.len
+SEQ2_LEN=$BASE/S2.len
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << keep emacs coloring happy
+
+    nibSize /san/sanvol1/scratch/worms/cb2/nib/*.nib \
+	| awk '{printf "%s\t%s\n", $2, $3}' > S1.len
+    twoBitInfo /san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit S1ctg.len
+    twoBitInfo /san/sanvol1/scratch/worms/caeRem1/caeRem1.2bit S2.len
+
+    #	establish a screen to control this job
+    screen
+    cd /cluster/data/cb2/bed/blastzCaeRem1.2005_09_14
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=blastz \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	STARTED 2005-09-14 16:15
+
+#########################################################################
 # BLASTZ C. remanei caeRem1 (WORKING - 2005-08-15 Hiram)
 #	RE-DONE 2005-09-09 - Hiram
 #	
@@ -826,6 +883,9 @@ SEQ2_LEN=$BASE/S2.len
 	-continue=net \
 	`pwd`/DEF > continueNet.out 2>&1 &
 
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=load -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
 XXXX
 
     #	swap results to place cb2 alignments onto cb1
@@ -943,7 +1003,194 @@ XXXX - to do this random contigs business properly
 	-bigClusterHub=kk \
 	`pwd`/DEF > \
 	swap.run.out 2>&1 &
-
-
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
+
+#############################################################################
+#  BLASTZ SELF (experiments to test doBlastzChainNet.pl and to test
+#  dynamic masking M parameter
+    ssh pk
+    mkdir /cluster/data/cb2/bed/blastzSelfM50
+    cd /cluster/data/cb2/bed/blastzSelfM50
+
+    cat << '_EOF_' > DEF
+# cb2 vs cb2
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Cb2
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb2/nib
+SEQ1_CTGDIR=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit
+SEQ1_LIFT=/san/sanvol1/scratch/worms/cb2/liftRandoms.lft
+SEQ1_LEN=/san/sanvol1/scratch/worms/cb2/chrom.sizes
+SEQ1_CTGLEN=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=500000
+SEQ1_LAP=100
+
+# QUERY: briggsae Cb2
+SEQ2_DIR=/san/sanvol1/scratch/worms/cb2/nib
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/worms/cb2/liftRandoms.lft
+SEQ2_LEN=/san/sanvol1/scratch/worms/cb2/chrom.sizes
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.sizes
+SEQ2_SELF=1
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=110000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/cb2/bed/blastzSelfM50
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/cb2/bed/blastzSelfM50
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -stop=load \
+	`pwd`/DEF > swapLoadReady.out 2>&1 &
+# Completed: 231 of 231 jobs
+# CPU time in finished jobs:     336879s    5614.65m    93.58h    3.90d  0.011 y
+# IO & Wait Time:                 14146s     235.77m     3.93h    0.16d  0.000 y
+# Average job time:                1520s      25.33m     0.42h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           29772s     496.20m     8.27h    0.34d
+# Submission to last job:         38823s     647.05m    10.78h    0.45d
+
+# Completed: 231 of 231 jobs
+# CPU time in finished jobs:        171s       2.85m     0.05h    0.00d  0.000 y
+# IO & Wait Time:                  1070s      17.83m     0.30h    0.01d  0.000 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              11s       0.18m     0.00h    0.00d
+# Submission to last job:            80s       1.33m     0.02h    0.00d
+
+# Completed: 45 of 45 jobs
+# CPU time in finished jobs:       4293s      71.54m     1.19h    0.05d  0.000 y
+# IO & Wait Time:                   268s       4.47m     0.07h    0.00d  0.000 y
+# Average job time:                 101s       1.69m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1605s      26.75m     0.45h    0.02d
+# Submission to last job:          1639s      27.32m     0.46h    0.02d
+
+    # Crashed on one of the net steps, fix the script and continue:
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -continue=net -stop=load \
+	`pwd`/DEF > netToLoad.out 2>&1 &
+    #	real    38m41.919s
+    #	user    0m0.049s
+    #	sys     0m0.041s
+
+    #	Re-Load the tables under a special name:
+    ssh hgwdev
+    cd /cluster/data/cb2/bed/blastzSelfM50/axtChain
+    hgLoadChain -tIndex cb2 M50chainSelf cb2.cb2.all.chain.gz
+    #	Loading 5934642 chains into cb2.M50chainSelf
+    netFilter -minGap=10 cb2.cb2.net \
+	| hgLoadNet -verbose=0 cb2 M50netSelf stdin
+    # real    234m14.863s
+    # user    4m57.370s
+    # sys     2m34.100s
+    time featureBits cb2 M50chainSelfLink
+    #	57461471 bases of 108418926 (52.999%) in intersection
+
+#############################################################################
+#  BLASTZ SELF (experiments to test doBlastzChainNet.pl and to test
+#  dynamic masking M parameter
+#	Repeat experiment with M=1000
+    ssh pk
+    mkdir /cluster/data/cb2/bed/blastzSelfM1000
+    cd /cluster/data/cb2/bed/blastzSelfM1000
+
+    cat << '_EOF_' > DEF
+# cb2 vs cb2
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=1000
+
+# TARGET: elegans Cb2
+SEQ1_DIR=/san/sanvol1/scratch/worms/cb2/nib
+SEQ1_CTGDIR=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit
+SEQ1_LIFT=/san/sanvol1/scratch/worms/cb2/liftRandoms.lft
+SEQ1_LEN=/san/sanvol1/scratch/worms/cb2/chrom.sizes
+SEQ1_CTGLEN=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=500000
+SEQ1_LAP=100
+
+# QUERY: briggsae Cb2
+SEQ2_DIR=/san/sanvol1/scratch/worms/cb2/nib
+SEQ2_CTGDIR=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/worms/cb2/liftRandoms.lft
+SEQ2_LEN=/san/sanvol1/scratch/worms/cb2/chrom.sizes
+SEQ2_CTGLEN=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.sizes
+SEQ2_SELF=1
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=110000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/cb2/bed/blastzSelfM1000
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/cb2/bed/blastzSelfM1000
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -stop=load \
+	`pwd`/DEF > swapLoadReady.out 2>&1 &
+    featureBits cb2 chainSelf
+    #	108554651 bases of 108418926 (100.125%) in intersection
+
+    #	Load the tables under a special name:
+    ssh hgwdev
+cd /cluster/data/cb2/bed/blastzSelfM1000/axtChain/chain
+foreach f (*.chain)
+    set c = $f:r
+    hgLoadChain cb2 ${c}_M1000chainSelf $f
+end
+cd /cluster/data/cb2/bed/blastzSelfM1000/axtChain
+
+# Load nets:
+netFilter -minGap=10 cb2.cb2.net \
+| hgLoadNet -verbose=0 cb2 M1000netSelf stdin
+    #	real    181m56.670s
+    #	user    23m58.570s
+    #	sys     6m56.920s
+
+   #	featureBits runs out of memory on this on hgwdev 
+    ssh kolossus
+    cd /cluster/data/cb2/bed/blastzSelfM1000
+    time HGDB_CONF=~/.hg.conf.read-only featureBits cb2 \
+	M1000chainSelfLink > fbCb2.M1000chainSelfLink 2>&1
+    # 73156472 bases of 108418926 (67.476%) in intersection
+    #	real    42m33.104s
+    #	user    15m42.360s
+    #	sys     5m35.500s
+
+
+    #	The comparison numbers:
+
+    #	pk kluster runs, x86_64 blastz binary
+    #	Target chunk size of 500,000 overlap 100
+    #	Query chunk size, whole genome = 110,000,000
+    #	231 kluster jobs
+    #
+    #   BLASTZ_M parameter          M=50                  M=1000
+    #	Average job time:             25 min                  85 min
+    #   Hippos out to:               8.3 hr                  7.4 hr
+    #   chainSelf table size   5,934,642 rows         27,659,493 rows
+    #                            527,006 Kb            2,340,000 Kb
+    #   chainSelfLink table   33,604,807 rows        183,315,214 rows
+    #                              1,695 Mb                7,639 Mb
+    #   netSelf table            274,211 rows            314,441 rows
+    #                             28,967 Kb               33,345 Kb
+    #   featureBits SelfLink   5,761,471 bases        73,156,472 bases
+    #                           % 52.999 intersection   % 67.476 intersection
