@@ -46,8 +46,12 @@ void dyStringAppendMultiC(struct dyString *ds, char c, int n);
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString. */
 
-void dyStringPrintf(struct dyString *ds, char *format, ...);
+void dyStringPrintf(struct dyString *ds, char *format, ...)
 /*  Printf to end of dyString.  Don't do more than 4000 characters this way... */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+    ;
 
 #define dyStringClear(ds) (ds->string[0] = ds->stringSize = 0)
 /* Clear string. */
