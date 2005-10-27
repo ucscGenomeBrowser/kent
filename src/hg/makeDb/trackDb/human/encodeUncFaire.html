@@ -1,0 +1,45 @@
+<H2>Description</H2>
+<P>
+Formaldehyde Assisted Isolation of Regulatory Elements (FAIRE) is a procedure used to isolate chromatin that is 
+resistant to the formation of protein-DNA crosslinks.  These tracks display FAIRE data from 2091 fibroblast cells hybridized to high-resolution <A TARGET=_BLANK HREF="http://www.nimblegen.com/">
+NimbleGen</A> arrays that tile the ENCODE regions.  These four datasets, in practical terms, can be thought of as 
+independent replicates. However, they represent different cross-linking times (1, 2, 4, and 7 minutes), because 
+they were part of a series of experiments aimed at optimizing cross-linking conditions in human cells.  Although they are not displayed,
+the individual replicates can be 
+<A TARGET=BLANK HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg17/encode/datafiles/UncFaire"> downloaded</A>.
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+The data is represented by two subtracks: one is the average normalized 
+log2 ratios for the tiled probes and
+the other displays peaks.  Peaks were determined using <em>PeakFinder</em>, software supplied from Nimblegen.  A false positive rate was also 
+estimated for the sets of peaks using a permutation based method, all peaks had an FPR<0.01.
+
+<H2>Methods</H2>
+<P>
+To perform FAIRE, proteins are crosslinked to DNA using 
+1% formaldehyde solution, the complex is sheared using sonication, and a phenol/chloroform extraction is performed 
+to remove DNA fragments crosslinked to protein.  The DNA recovered in the aqueous phase is fluorescently labeled and 
+hybridized to a microarray along with fluorescently labeled genomic DNA as a control.  Ratios are scaled by subtracting the 
+Tukey Bi-weight mean for the log-ratio values from each log-ratio value, as recomended by Nimblegen.  Results in yeast are 
+consistent with enrichment for nucleosome-depleted regions of the genome. Therefore, the method may have utility as 
+a positive selection for genomic regions with properties normally detected by assays like DNAse hypersensitivity. 
+
+<H2>Verification</H2>
+<P>
+The data was verified using PCR with primers designed to promoters enriched with FAIRE and downstream coding regions.  
+
+<H2>Credits</H2>
+<P>
+Cell culture, fixing, and DNA amplification was performed by 
+Jonghwan Kim in <A TARGET=_BLANK HREF="http://microarray.icmb.utexas.edu/">Vishy Iyer's lab</A> at the University of 
+Texas, Austin.  FAIRE was performed by Paul Giresi in 
+<A TARGET=_BLANK HREF="http://www.bio.unc.edu/faculty/lieb/labpages/default.shtml">Jason Lieb's lab</A> at the University of North 
+Carolina at Chapel Hill.  Sample labeling and hybridization was performed at Nimblegen by Paul Giresi with the help of
+Mike Singer and Roland Green.  Software used for the permutation analysis was supplied by Nan Jiang at Nimblegen.
+
+<H2>References</H2>
+<P>
+Nagy, PL., Cleary ML., Brown PO., and Lieb JL. <A HREF="http://www.pnas.org/cgi/content/full/100/11/6364">
+Genomewide demarcation of RNA polymerase II transcription units revealed by physical fractionation of 
+chromatin</A>. PNAS 100(11), 6364-6369 (2003).
