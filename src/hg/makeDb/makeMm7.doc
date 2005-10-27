@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.13 2005/10/23 16:23:24 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.14 2005/10/27 22:55:30 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1429,7 +1429,7 @@ SEQ1_LEN=/cluster/bluearc/mm7/chrom.sizes
 SEQ1_CHUNK=100000000
 SEQ1_LAP=10000
 
-# QUERY: Fugu - chunk big enough to run the whole chrom at once
+# QUERY: Fugu Fr1 - chunk big enough to run the whole chrom at once
 SEQ2_DIR=/san/sanvol1/scratch/fr1/nib
 SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
 SEQ2_CHUNK=400000000
@@ -1509,7 +1509,7 @@ BASE=/cluster/data/mm7/bed/blastzFr1.2005-09-16
     #	NOTE: The BLASTZ_Q score matrix should have been the Tuned.gap
     #	one which is recreated below during the re-score
     cat << '_EOF_' > DEF
-# mouse (mm7) vs Tetraodon (tetNig1)
+# mouse (mm7) vs Tetraodon tetNig1
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
 
 BLASTZ=blastz.v7.x86_64
@@ -1532,7 +1532,7 @@ SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=10000000
 SEQ1_LAP=5000
 
-# QUERY: Tetraodon (tetNig1)
+# QUERY: Tetraodon tetNig1
 #  large enough chunk to do all genome in one piece
 SEQ2_DIR=/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit
 SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
@@ -1813,7 +1813,7 @@ SEQ1_IN_CONTIGS=0
 SEQ1_CHUNK=500000
 SEQ1_LAP=5000
 
-# QUERY: Cow (bosTau2)
+# QUERY: Cow bosTau2
 #  large enough chunk to do all the genome in one piece
 SEQ2_DIR=/san/sanvol1/scratch/bosTau2/bosTau2.noBin0.2bit
 SEQ2_LEN=/san/sanvol1/scratch/bosTau2/noBin0.sizes
@@ -1831,6 +1831,17 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
 XXX - STARTED - 2005-10-07 - 12:44
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-continue=cat -bigClusterHub=pk \
+	`pwd`/DEF > continue.cat.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-continue=chainMerge -bigClusterHub=pk \
+	`pwd`/DEF > continue.chainMerge.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-swap -bigClusterHub=pk \
+	`pwd`/DEF > swap.out 2>&1 &
 
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	`pwd`/DEF > blast.run.out 2>&1 &
@@ -2035,6 +2046,8 @@ TMPDIR=/scratch/tmp
     #   843746491 bases of 1054197620 (80.037%) in intersection
     featureBits galGal2 chainMm5
     #   846905330 bases of 1054197620 (80.336%) in intersection
+    featureBits galGal2 chainMm7Link
+    #	72046938 bases of 1054197620 (6.834%) in intersection
     featureBits galGal2 chainMm6Link
     #   72687426 bases of 1054197620 (6.895%) in intersection
     featureBits galGal2 chainMm5Link
@@ -2101,6 +2114,9 @@ TMPDIR=/scratch/tmp
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
 
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainMonDom2Link
+
     ssh pk
     screen -d -r
 # Completed: 44370 of 44370 jobs
@@ -2117,58 +2133,24 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > continue.cat.out 2>&1 &
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk \
+	-chainMinScore=5000 -bigClusterHub=pk \
 	-swap -fileServer=kolossus \
 	`pwd`/DEF > swap.out 2>&1 &
+
+    #	The load of the swapped chains can not complete, out of memory
+    #	So, try to split them up into 1000 lumps:
+    ssh kkstore01
+    cd /cluster/data/monDom2/bed/blastz.mm7.swap/axtChain
+    chainSplit -lump=1000 lump1000 monDom2.mm7.all.chain.gz
+
 XXXX  2005-10-04 09:25
 
-    # CRASHED due to kkstore02 problems, finished batch manually and
-    #	created the run.time file
-    #	continuing
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-continue cat -fileServer eieio `pwd`/DEF > cat.run.out 2>&1 &
-    #	STARTED 2005-04-03 11:45
-    #	during the load of the tables, this command failed, perhaps due
-    #	to kkstore02 crashes:
-    netClass -verbose=0 -noAr noClass.net mm7 monDom1 mm7.monDom1.net
-    #	So, trying to recover: 2005-04-04 15:15
-    ssh hgwdev
-    cd /cluster/data/mm7/bed/blastzMonDom1.2005_04_01/axtChain
-    time netClass -verbose=0 -noAr noClass.net mm7 monDom1 mm7.monDom1.net
-    #	Fails with the same error:
-Can't start query:
-select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk order by genoName,genoStart
-
-mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
-
-    #	I wonder if it is due to tmp space:
-    #	Filesystem            Size  Used Avail Use% Mounted on
-    #	/dev/sdb3             267G  244G  9.1G  97% /
-
-    #	Yes, it was that, I removed some garbage from /scratch to make
-    #	more space:
-    #	Filesystem            Size  Used Avail Use% Mounted on
-    #	/dev/sdb3             267G  242G   12G  96% /
-    #	And the command finished.  I don't know where it was keeping its
-    #	files as I was watching for something large to show up in /tmp
-    #	during this 65 minute command, but I never saw a large file
-    #	there but I did see available space get down to only a couple Gb
-    #	free.  Now, to finish the load of the nets:
-    netFilter -minGap=10 mm7.monDom1.net | hgLoadNet \
-	-verbose=0 mm7 netMonDom1 stdin
-    #	5 minute load time
-    #	continuing 2005-04-05 16:00
-    ssh eieio
-    cd  /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-continue download -fileServer eieio `pwd`/DEF > download.run.out 2>&1 &
-
-    #	And measurments:
-    ssh hgwdev
-    cd  /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
-    ../../jkStuff/netChainCheck.sh mm7 mm5 monDom1 > measurements.out 2>&1 &
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzMonDom1.2005-10-03
     
-    featureBits mm7 netMonDom1
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainMonDom2Link
+
+    featureBits mm6 netMonDom1
     #   2082064216 bases of 2597150411 (80.167%) in intersection
     featureBits mm5 netMonDom1
     #   2094316044 bases of 2615483787 (80.074%) in intersection
@@ -2181,14 +2163,10 @@ mySQL error 3: Error writing file '/tmp/MYUAGF4h' (Errcode: 28)
     featureBits mm5 chainMonDom1Link
     #   248180346 bases of 2615483787 (9.489%) in intersection
 
-    # looks OK, so to the swap:
-    ssh eieio
-    cd  /cluster/data/mm7/bed/blastzMonDom1.2005_04_01
-    time /cluster/bin/scripts/doBlastzChainNet.pl -chainMinScore=5000 \
-	-swap -fileServer eieio `pwd`/DEF > swap.run.out 2>&1 &
-    #
     #	measurements:
-     featureBits monDom1 netMm6
+    time HGDB_CONF=~/.hg.conf.read-only featureBits monDom2 chainMm7Link
+
+    featureBits monDom1 netMm6
     # 2884735370 bases of 3492108230 (82.607%) in intersection
     featureBits monDom1 netMm5
     #   2889580530 bases of 3492108230 (82.746%) in intersection
@@ -2356,6 +2334,14 @@ done
     #	upper 1272064007 lower) in 52 sequences in 1 files
     #	Only difference is the N count. 1686427263 - 721627263 = 964800000
 
+XXX something is broken for the chrUn lift file:
+faSize chrUn_random.fa
+240967748 bases (159721331 Ns 81246417 real 36386260 upper 44860157 lower)
+	in 1 sequences in 1 files
+The agp file for chrUn has a contig gap as the last entry in the file:
+ptrUn_random    240945901       240957748       29919   W       scaffold_9998   1       11848   +
+ptrUn_random    240957749       240967748       29920   N       10000   contig 
+
     twoBitInfo panTro1Chroms_RandomContigs.2bit \
 	panTro1Chroms_RandomContigs.sizes
 
@@ -2418,6 +2404,36 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > blast.run.out 2>&1 &
     #	STARTED 2005-10-07 12:48
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-continue=cat -bigClusterHub=pk \
+	`pwd`/DEF > continue.cat.out 2>&1 &
+
+    #	Had some problems due to chrom.sizes being incorrect because all
+    #	of the *_random chroms *end* with a gap !  Manually edited the
+    #	chrom.sizes file in /san/sanvol1/ to take off 50000 from the
+    #	length (or 10000 for the chrUn_random) to get the nets to
+    #	complete.
+    time /cluster/bin/scripts/doBlastzChainNet.pl \
+	-continue=chainMerge -bigClusterHub=pk \
+	`pwd`/DEF > continue.chainMerge.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=net -bigClusterHub=pk \
+	`pwd`/DEF > continue.net.out 2>&1 &
+
+    #	check feature bits
+    ssh kolossus
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainPanTro1Link
+    #	917177798 bases of 2583394090 (35.503%) in intersection
+
+    #	Looks OK, now to swap
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -fileServer=kolossus \
+	`pwd`/DEF > swap.out 2>&1 &
+    #	Had some difficulties with the netting - after fixing, then load:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=load -swap -bigClusterHub=kk \
+	`pwd`/DEF > load.swap.out 2>&1 &
+
     #	489 minutes = 8h 09m
     #	detach from screen session: Ctrl-a Ctrl-d
     #	to reattach to this screen session:
@@ -2457,7 +2473,7 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
     #   2585896564 bases of 2597150411 (99.567%) in intersection
     time featureBits mm7 chainHg17
     #	2596946329 bases of 2597150411 (99.992%) in intersection
-    featureBits mm7 chainPanTro1Link
+    featureBits mm6 chainPanTro1Link
     #   924893452 bases of 2597150411 (35.612%) in intersection
     featureBits mm7 chainHg17Link (on kolossus)
     #	966916309 bases of 2597150411 (37.230%) in intersection
@@ -3054,61 +3070,108 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
     #	1625    1625   15090		<- 1,625 unique to mm6 list
 
 #############################################################################
-# 10-WAY VAR_MULTIZ - ALIGNMENTS (TBD)
-    ssh eieio
-    mkdir /cluster/data/mm7/bed/multiz10way
-    cd /cluster/data/mm7/bed/multiz10way
-    mkdir mafLinks
-    
-    
-    mkdir mafLinks/rn3
-    mkdir mafLinks/hg17
-    mkdir mafLinks/canFam1
-    mkdir mafLinks/bosTau1
-    mkdir mafLinks/monDom1
-    mkdir mafLinks/galGal2
-    mkdir mafLinks/xenTro1
-    mkdir mafLinks/danRer2
-    mkdir mafLinks/tetNig1
+# 16-WAY VAR_MULTIZ - ALIGNMENTS (WORKING - 2005-10-25)
+    ssh kkstore02
+    mkdir /cluster/data/mm7/bed/multiz17way
+    cd /cluster/data/mm7/bed/multiz17way
+
+    #	create tree diagram to guide work below.
+    #	This tree was constructed from one that Adam is using for
+    #	ENCODE work and a 27-way alignment.  Took that file and
+    #	removed some of the entries, adding together the appropriate
+    #	distances.
+
+    cat << '_EOF_' > 17way.nh
+(((((((((
+(human_hg17:0.006690,chimp_panTro1:0.007571):0.024272,
+  macaque_rheMac1:0.0592):0.023960,
+
+  ((rat_rn3:0.081728,mouse_mm7:0.077017):0.229273,
+      rabbit_oryCun1:0.206767):0.1065):0.023026,
+
+(cow_bosTau2:0.159182,dog_canFam2:0.147731):0.039450):0.028505,
+
+armadillo_dasNov1:0.149862):0.015994,
+
+(elephant_loxAfr1:0.104891,tenrec_echTel1:0.259797):0.040371):0.218400,
+
+monodelphis_monDom2:0.371073):0.189124,
+
+chicken_galGal2:0.454691):0.123297,
+
+xenopus_xenTro1:0.782453):0.156067,
+
+((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.492961,
+    zebrafish_danRer3:0.782561):0.156067);
+'_EOF_'
+    #	happy emacs
+
+    /cluster/bin/phast/draw_tree 17way.nh > 17way.ps
+    /cluster/bin/phast/all_dists 17way.nh > 17way.distances.txt
+    grep -y mm7 17way.distances.txt | sort -k3,3n
+    #	Print out that file for reference, and use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+    #					        featureBits chainLink measures
+    #           distance                          on Mm7  chainMm7Link on other
+    #  1	0.1587 - rat rn3		(% 69.612)	(% 70.113)
+    #  2	0.4677 - human hg17		(% 37.0)xx      (LSR or not ?)
+    #  3	0.4686 - chimp panTro1		(% 35.503)	(% 33.283)
+    #  4	0.4960 - macaque rheMac1	(% 34.310)	(% 32.422)
+    #  5	0.5131 - rabbit oryCun1		(% 19.492)      (loading)
+    #  6	0.6142 - armadillo dasNov1	(% 16.975)      (fb running)
+    #  7	0.6230 - dog canFam2		(% 30.654)	(% 32.417)
+    #  8	0.6256 - elephant loxAfr1	(% 18.583)      (loading)
+    #  9	0.6344 - cow bosTau2		(% 27.132)	(% 24.448)
+    # 10	0.7805 - tenrec echTel1		(% 11.467)      (fb running)
+    # 11	1.0698 - opossum monDom2	(%  8.501)	(%  6.319)
+    # 12	1.3425 - chicken galGal2	(%  3.135)	(%  6.834)
+    # 13	1.7936 - frog xenTro1		(%  2.418)	(%  4.296)
+    # 14	2.0157 - tetraodon tetNig1	(%  1.988)	(% 13.846)
+    # 15	2.0562 - fugu fr1		(%  1.906)	(% 13.484)
+    # 16	2.1059 - zebrafish danRer3	(%  2.694)	(%  2.694)
 
     export H=/cluster/data/mm7/bed
-    ln -s ${H}/blastzRn3.2005_03_22/mafNet/*.maf.gz ./mafLinks/rn3
-    ln -s ${H}/blastzHg17.2005_03_14/mafNet/*.maf.gz ./mafLinks/hg17
-    ln -s ${H}/blastzCanFam1.2005_03_18/mafNet/*.maf.gz ./mafLinks/canFam1
-    ln -s ${H}/blastzBosTau1.2005_03_18/mafNet/*.maf.gz ./mafLinks/bosTau1
-    ln -s ${H}/blastzMonDom1.2005_04_01/mafNet/*.maf.gz ./mafLinks/monDom1
-    ln -s ${H}/blastzGalGal2.2005_03_31/mafNet/*.maf.gz ./mafLinks/galGal2
-    ln -s ${H}/blastzXenTro1.2005_04_05/mafNet/*.maf.gz ./mafLinks/xenTro1
-    ln -s ${H}/blastzDanRer2.2005_03_17/mafNet/*.maf.gz ./mafLinks/danRer2
-    ln -s ${H}/blastzTetNig1.2005_03_17/mafNet/*.maf.gz ./mafLinks/tetNig1
+    mkdir mafLinks
+    for G in rn3 hg17 panTro1 rheMac1 oryCun1 dasNov1 canFam2 \
+	loxAfr1 bosTau2 echTel1 monDom2 galGal2 xenTro1 tetNig1 fr1 danRer3
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
 
-    #	Copy MAFs to Iservers for kluster run
-    ssh kkr1u00
-    mkdir /iscratch/i/mm7/multiz10way
-    cd /iscratch/i/mm7/multiz10way
+    #	Copy MAFs to SAN for kluster run
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm7/multiz17way
+    cd /san/sanvol1/scratch/mm7/multiz17way
     rsync -a --copy-links --progress \
-	/cluster/data/mm7/bed/multiz10way/mafLinks/ .
-    #	We have about 3.2 Gb of data here, takes ~ 15-20 minutes to copy over
-    #	At least it does today, something is fishy with the connection.
+	/cluster/data/mm7/bed/multiz17way/mafLinks/ .
+
+    #	We have about 5.9 Gb of data here, takes ~ 10 minutes to copy
+
     mkdir penn
-    cp -p /cluster/bin/penn/psuCVS/multiz-tba/multiz penn
-    cp -p /cluster/bin/penn/maf_project penn
-    /cluster/bin/iSync
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
 
 #       Progressive alignment up the tree w/o stager, 
-#       using multiz.v10 (var_multiz)
+#       using multiz.v10.5 (var_multiz)
 #       Method: align internal subtrees (using 0 flag to var_multiz)
-#               Then, align these to human (using 1 flag to var_multiz)
+#               Then, align these to mouse (using 1 flag to var_multiz)
 #       NOTE: must use maf_project after each multiz run, in order
 #       to order output.  Single-cov guaranteed by use of net MAF's,
 #       so it is not necessary to run single_cov2.
 
-    ssh eieio
-    cd /cluster/data/mm7/bed/multiz
-
     # make output dir and run dir
-    ssh kki
-    cd /cluster/data/mm7/bed/multiz10way
+    ssh pk
+    cd /cluster/data/mm7/bed/multiz17way
     mkdir -p maf
     mkdir -p run
     cd run
@@ -3118,8 +3181,8 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
 cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
-    set multi = /scratch/mm7/multiz10way.$c
-    set pairs = /iscratch/i/mm7/multiz10way
+    set multi = /scratch/mm7/multiz17way.$c
+    set pairs = /san/sanvol1/scratch/mm7/multiz17way
 
     # special mode --
     # with 1 arg, cleanup
@@ -3169,11 +3232,13 @@ cat > oneMultiz.csh << 'EOF'
     # check for empty input file
     if (-s $t1 && -s $t2) then
         echo "Aligning $f1 $f2 $flag"
-        /iscratch/i/mm7/multiz10way/penn/multiz $t1 $t2 $flag $out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
+        /san/sanvol1/scratch/mm7/multiz17way/penn/multiz $t1 $t2 $flag \
+		$out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
         cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
                 $out/$c.tmp.maf
         echo "Ordering $c.maf"
-        /iscratch/i/mm7/multiz10way/penn/maf_project $out/$c.tmp.maf mm7.$c > $out/$c.maf
+        /san/sanvol1/scratch/mm7/multiz17way/penn/maf_project \
+	$out/$c.tmp.maf mm7.$c > $out/$c.maf
 	rm -f $t1 $t2
     else if (-s $t1) then
         cp -p $t1 $out/$c.maf
@@ -3185,59 +3250,58 @@ cat > oneMultiz.csh << 'EOF'
 'EOF'
 # << keep emacs coloring happy
     chmod +x oneMultiz.csh
+    cp -p oneMultiz.csh /san/sanvol1/scratch/mm7/multiz17way/penn/oneMultiz.csh
 
-    #	Copy this script to iscratch
-    ssh kkr1u00
-    cd /iscratch/i/mm7/multiz10way/penn
-    cp -p /cluster/data/mm7/bed/multiz10way/run/oneMultiz.csh .
-    /cluster/bin/iSync
-
-    #	back to run the job
-    ssh kki
-    cd /cluster/data/mm7/bed/multiz10way/run
-
-    #	This tree.nh was used in the distant past for early versions
-    #	of phastCons.  Now, this is merely a convenient reference to the
-    #	tree under construction.  This is also used to draw a graphic
-    #	tree as species.nh, see below.
-    cat << '_EOF_' > tree.nh
-((((((hg17,(mm7,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))
-'_EOF_'
-    # << this line keeps emacs coloring happy
+    #	using your tree diagram printed above, arrange these alignments
+    #	in order of the tree branches
 
 cat > allMultiz.csh << 'EOF'
 #!/bin/csh -fe
     # multiple alignment steps:
 set c = $1
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c hg17 rn3  1
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c bosTau1 canFam1 0
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c bosTau1canFam1 hg17rn3  1
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c monDom1 bosTau1canFam1hg17rn3  1
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c galGal2 monDom1bosTau1canFam1hg17rn3  1
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c xenTro1 galGal2monDom1bosTau1canFam1hg17rn3  1
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c danRer2 tetNig1 0
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c danRer2tetNig1 xenTro1galGal2monDom1bosTau1canFam1hg17rn3  1
-# get final alignment file
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c danRer2tetNig1xenTro1galGal2monDom1bosTau1canFam1hg17rn3 /cluster/data/mm7/bed/multiz10way/maf/$c.maf
+set s = "/san/sanvol1/scratch/mm7/multiz17way/penn/oneMultiz.csh"
+
+$s $c hg17 panTro1 0
+$s $c rheMac1 hg17panTro1 1
+$s $c rn3 oryCun1 0
+$s $c rn3oryCun1 rheMac1hg17panTro1 1
+$s $c canFam2 bosTau2 0
+$s $c canFam2bosTau2 rn3oryCun1rheMac1hg17panTro1 1
+$s $c loxAfr1 echTel1 0
+$s $c loxAfr1echTel1 canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+$s $c monDom2 loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+$s $c galGal2 monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+$s $c xenTro1 \
+    galGal2monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1  1
+$s $c tetNig1 fr1  0
+$s $c danRer3 tetNig1fr1  1
+$s $c danRer3tetNig1fr1 \
+xenTro1galGal2monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+#	 get final alignment file
+$s $c \
+danRer3tetNig1fr1xenTro1galGal2monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 \
+	/cluster/data/mm7/bed/multiz17way/maf/$c.maf
 #cleanup
-/iscratch/i/mm7/multiz10way/penn/oneMultiz.csh $c
+$s $c
 'EOF'
 # << keep emacs coloring happy
     chmod +x allMultiz.csh
 
 cat  << 'EOF' > template
 #LOOP
-./allMultiz.csh $(root1) {check out line+ /cluster/data/mm7/bed/multiz10way/maf/$(root1).maf}
+./allMultiz.csh $(root1) {check out line+ /cluster/data/mm7/bed/multiz17way/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
 
-    cd /cluster/data/mm7/bed/multiz10way/run
+    cd /cluster/data/mm7/bed/multiz17way/run
     awk '{print $1}' ../../../chrom.sizes > chrom.lst
 
     gensub2 chrom.lst single template jobList
     para create jobList
     para try; para check
     para push
+XXXX - running 2005-10-27
+
 # Completed: 40 of 40 jobs
 # CPU time in finished jobs:     151565s    2526.08m    42.10h    1.75d  0.005 y
 # IO & Wait Time:                 25097s     418.29m     6.97h    0.29d  0.001 y
@@ -7373,7 +7437,8 @@ o Build the pepPi table
     hgsql mm7 < ~/src/hg/lib/kgReactome.sql
     hgsql mm7 -e 'load data local infile "kgReactome.tab" into table kgReactome'
 
-#  miRNA track (TBD)
+#############################################################################
+#  miRNA track (DONE - 2005-10-27 - Hiram)
     #   data from: Michel.Weber@ibcg.biotoul.fr
     #   notify them when done.
     cd /cluster/data/mm7/bed
@@ -7387,12 +7452,14 @@ o Build the pepPi table
     hgLoadBed -strict mm7 miRNA miRNA.bed
     
 # check previous release track before update
-    nice featureBits mm5 miRNA
-    # 17957 bases of 2615483787 (0.001%) in intersection
+    featureBits mm7 miRNA
+    #	20620 bases of 2583394090 (0.001%) in intersection
+    featureBits mm6 miRNA
+    #	21167 bases of 2597150411 (0.001%) in intersection
+    featureBits mm5 miRNA
+    #	17957 bases of 2615483787 (0.001%) in intersection
 
-    nice featureBits mm7 
-    #19126 bases of 2597150411 (0.001%) in intersection
-
+#############################################################################
 # ADDED THE EXONPRIMER TO QUICK LINKS SECTION OF KG DEAILS PAGE (05/07/11, Fan) 
 
 # Added the following lines to links.ra under src/hg/hgGene/hgGeneData/Mouse/mm7
@@ -7983,7 +8050,7 @@ SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
-# QUERY - macaca mulatta
+# QUERY - Macaca mulatta rheMac1
 SEQ2_DIR=/scratch/hg/rheMac1/rheMac1.2bit
 SEQ2_LEN=/scratch/hg/rheMac1/chrom.sizes
 SEQ2_LIMIT=300
@@ -7997,6 +8064,14 @@ BASE=/cluster/data/mm7/bed/blastzRheMac1.2005-10-19
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk \
 	`pwd`/DEF > blastz.out 2>&1 &
+
+    ssh kolossus
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainRheMac1Link
+    #	86364754 bases of 2583394090 (34.310%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=kk \
+	`pwd`/DEF > swap.out 2>&1 &
 
 #############################################################################
 # Elephant vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8036,8 +8111,19 @@ BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
 	-continue=cat -bigClusterHub=kk \
 	`pwd`/DEF > continue.cat.out 2>&1 &
 
+    ssh kolossus
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainLoxAfr1Link
+    #	480074381 bases of 2583394090 (18.583%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=kk \
+	`pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=load -swap -bigClusterHub=kk \
+	`pwd`/DEF > load.swap.out 2>&1 &
+
 #############################################################################
-# Hedgehog vs. Mm7 (WORKING - 2005-10-20 - Hiram)
+# Tenrec vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
 
     mkdir /cluster/data/mm7/bed/blastzEchTel1.2005-10-20
@@ -8056,7 +8142,7 @@ SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
 SEQ1_CHUNK=30000000
 SEQ1_LAP=10000
 
-# QUERY - Hedgehog echTel1
+# QUERY - Tenrec echTel1
 SEQ2_DIR=/scratch/hg/echTel1/echTel1.2bit
 SEQ2_LEN=/scratch/hg/echTel1/chrom.sizes
 SEQ2_LIMIT=400
@@ -8070,6 +8156,17 @@ BASE=/cluster/data/mm7/bed/blastzEchTel1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=cat -bigClusterHub=pk \
+	`pwd`/DEF > continue.cat.out 2>&1 &
+
+    ssh kolossus
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainEchTel1Link
+    #	296238377 bases of 2583394090 (11.467%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk \
+	`pwd`/DEF > swap.out 2>&1 &
 
 #############################################################################
 # Rabbit vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8105,6 +8202,21 @@ BASE=/cluster/data/mm7/bed/blastzOryCun1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=cat -bigClusterHub=pk \
+	`pwd`/DEF > continue.cat.out 2>&1 &
+
+    ssh kolossus
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainOryCun1Link
+    #	503550390 bases of 2583394090 (19.492%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk \
+	`pwd`/DEF > swap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=load -swap -bigClusterHub=kk \
+	`pwd`/DEF > load.swap.out 2>&1 &
 
 #############################################################################
 # Armadillo vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8140,5 +8252,19 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=cat -bigClusterHub=pk \
+	`pwd`/DEF > continue.cat.out 2>&1 &
+
+    ssh kolossus
+    HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainDasNov1Link
+    #	438537191 bases of 2583394090 (16.975%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -fileServer=kolossus \
+	`pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=net -swap -bigClusterHub=pk \
+	`pwd`/DEF > swap.net.out 2>&1 &
 
 #############################################################################
