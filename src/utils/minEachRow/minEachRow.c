@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: minEachRow.c,v 1.1 2005/10/18 05:48:34 kent Exp $";
+static char const rcsid[] = "$Id: minEachRow.c,v 1.2 2005/10/27 03:53:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,9 +52,10 @@ if (lineFileNextReal(lf, &line))
 	if (!lineFileNextReal(lf, &line))
 	    break;
 	}
-    carefulClose(&f);
-    lineFileClose(&lf);
+    freez(&row);
     }
+carefulClose(&f);
+lineFileClose(&lf);
 }
 
 int main(int argc, char *argv[])
