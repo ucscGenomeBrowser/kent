@@ -143,7 +143,9 @@ UTIL_DIRS = \
 	hgGetAnn \
 	hgSpeciesRna \
 	hgsql \
+	hgsqladmin \
 	hgsqldump \
+	hgsqlimport \
 	intronEnds \
 	lib \
 	liftAgp \
