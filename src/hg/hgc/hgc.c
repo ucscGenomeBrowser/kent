@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.966 2005/10/27 07:02:28 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.967 2005/10/27 07:19:14 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14595,8 +14595,8 @@ if (spAcc != NULL)
     hits = chopString(ginfo.gi,":",giwords,sizeof(giwords));
     printf("<B>NCBI Blast Hits:</B> "
                "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
-	       "TARGET=_BLANK>%s:%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
-	       giwords[0],(hits == 2) ? giwords[1] : giwords[0]);
+	       "TARGET=_BLANK>%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
+	       (hits == 2) ? giwords[1] : giwords[0]);
 /* cog description */
 if (hTableExists("COG"))
     { 
