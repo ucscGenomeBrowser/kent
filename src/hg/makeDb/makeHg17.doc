@@ -17700,32 +17700,34 @@ BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-08-01
     cd blastzMm7.2005-09-06
     cat << '_EOF_' > DEF
 # human vs mouse
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin
 
-ALIGN=blastz-run.v7
-BLASTZ=blastz.v7
+BLASTZ=blastz.v7.x86_64
 BLASTZ_H=2000
-BLASTZ_M=1000
+BLASTZ_M=50
 BLASTZ_ABRIDGE_REPEATS=0
 
 # TARGET: Human Hg17
 SEQ1_DIR=/cluster/bluearc/hg17/bothMaskedNibs
+SEQ1_LEN=/cluster/bluearc/hg17/chrom.sizes
+SEQ1_CTGDIR=/cluster/bluearc/hg17/bothMaskedNibs
+SEQ1_CTGLEN=/cluster/bluearc/hg17/chrom.sizes
 SEQ1_IN_CONTIGS=0
-SEQ1_CHUNK=30000000
-SEQ1_LAP=10000
+SEQ1_CHUNK=500000
+SEQ1_LAP=50
 
 # QUERY: Mouse Mm7
-SEQ2_DIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
+SEQ2_DIR=/cluster/bluearc/mm7/mm7.2bit
+SEQ2_LEN=/cluster/bluearc/mm7/chrom.sizes
+SEQ2_CTGDIR=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit
+SEQ2_CTGLEN=/cluster/bluearc/mm7/mm7Chroms_RandomContigs.sizes
 SEQ2_LIFT=/cluster/bluearc/mm7/Chroms_RandomContigs.lft
-SEQ2_SELF=1
 SEQ2_IN_CONTIGS=0
-SEQ2_CHUNK=10000000
+SEQ2_CHUNK=3000000000
 SEQ2_LAP=0
 
 BASE=/cluster/data/hg17/bed/blastzMm7.2005-09-06
-
-SEQ1_LEN=$BASE/S1.len
-SEQ2_LEN=$BASE/S2.len
+TMPDIR=/scratch/tmp
 '_EOF_'
     # happy emacs
 
@@ -17775,6 +17777,51 @@ Tue Sep 13 17:05:53 PDT 2005
 	-swap -stop=load \
 	`pwd`/DEF > swap.out 2>&1 &
 
+    #	Create plain pslChrom files to load a simple blastz track
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/blastzMm7.2005-09-06
+    mkdir -p pslChrom
+(cd pslParts; ls | awk -F"." '{print $1}' | sort -u) | while read C
+do
+    echo -n "working ${C} ... "
+    zcat pslParts/${C}.nib*.gz | gzip -c > pslChrom/${C}.psl.gz
+    echo "done"
+done
+    #	Load those alignments
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzMm7.2005-09-06
+ls pslChrom | sed -e "s/.psl.gz//" | while read T
+do
+echo "hgLoadPsl -fastLoad -noTNameIx hg17 -table=${T}_blastzMm7 pslChrom/${T}.psl.gz"
+hgLoadPsl -fastLoad -noTNameIx hg17 -table=${T}_blastzMm7 pslChrom/${T}.psl.gz
+done
+
+
+    #	After this same alignment was done with Hg17 query and Mm7
+    #	target, came back to these swapped results in mm7 and manually loaded
+    #	the swapped tables as: chainMm7LSR, chainMm7LSRLink and
+    #	netMm7LSR
+    #	41,223,632 total rows in the chainMm7Link split tables
+    #	58,458,613 total rows in the chainMm7LSRLink table
+
+    time featureBits hg17 chainMm7LSRLink
+    #	959444893 bases of 2866216770 (33.474%) in intersection
+    #	real    36m30.822s
+    #	user    14m19.620s
+    #	sys     5m13.910s
+    time featureBits hg17 chainMm7Link
+    #	955168137 bases of 2866216770 (33.325%) in intersection
+    #	real    16m13.902s
+    #	user    10m20.780s
+    #	sys     3m42.810s
+    #	And, their intersection:
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
+	chainMm7LSRLink chainMm7Link
+    #	952667399 bases of 2866216770 (33.238%) in intersection
+    #	real    38m53.448s
+    #	user    8m38.853s
+    #	sys     2m23.362s
 
 # LOAD ACEMBLY TRACK (DONE, 2005-09-12, Fan)
     mv /cluster/data/hg17/bed/acembly /cluster/data/hg17/bed/acembly_050217
