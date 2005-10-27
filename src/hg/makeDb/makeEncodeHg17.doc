@@ -951,34 +951,62 @@ cat > loadChipBed.csh << 'EOF'
     # submitted by Paul Giresi, from Jason Lieb's lab
     # later, Paul submitted an "averages" file for the
     # raw data (but doesn't include the "peaks")
+    # On 10/24, submitted peaks averages.
     cd /cluster/data/encode
     mkdir UNC/2005-10-10/lab
-    cd UNC/2005-10-010/lab
+    cd UNC/2005-10-10/lab
     # copy files from FTP dir
     # 8 .gff data files plus description file
     # NOTE: these are actually .bed and .wig files!
     # the .bed files are "peaks", and the .wig are "raw"
     # NOTE: these files are basically replicates,
     # we really want to show just the averages -- 
-    # inquiry in to submitter
+    # Submitter says OK to just post for download
 
+    mkdir -p download
     # convert to UNIX format
     foreach f (lab/*norm*.gff)
-        set t = $f:t
-        dos2unix -n $f $t
+        set t = $f:t:r
+        echo $t
+        dos2unix -n $f download/$t.bed
     end
     # slightly different format for "peaks" files
     foreach f (lab/*fpr01*.gff)
-        set t = $f:t
-        dos2unix -l -n $f $t
+        set t = $f:t:r
+        echo $t
+        dos2unix -l -n $f download/$t.bed
     end
+    cd download
+    gzip *.bed
+    md5sum *.bed > md5sum.txt
+    # add README file with data terms
 
-    # averages file
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/hg17/encode/datafiles
+    mkdir -p $dir
+    ln -s /cluster/data/encode/UNC/2005-10-10/download $dir/UncFaire
+
+    # averages 
+    ln -s lab/FAIREavg_data.gff Signal.wig
+    ln -s lab/FAIREavg_peaks.gff Peaks.wig
+    #_data.gff:  -2.61 to 3.63
+    #_peaks.gff:   .47 to 3.63
+    # using viewLimits: .2 to 2.6
     # wiggle0 with span=50
     # around 380K records, so load it wiggle, not bedGraph
-    # most data in 0-1.0, range is - to -2.165, 3.6275
-    # Oops -- lots of e-18 -- contact submitter
-    # raw files range 04.81 to 5.18, w/o e- numbers
+cat > load.csh << 'EOF'
+    foreach f (Signal.wig Peaks.wig)
+        set type = $f:r
+        set table = encodeUncFaire$type
+        wigEncode $f $table.wig $table.wib
+        set dir = /gbdb/hg17/encode/UNC/2005-10-10
+        mkdir -p $dir
+        hgLoadWiggle -pathPrefix=$dir hg17 $table $table.wig
+        mkdir -p $dir
+        ln -s `pwd`/$table.wib $dir
+    end
+'EOF'
+    csh load.csh >&! load.log 
     
 
 ##########################################################################
@@ -1056,24 +1084,51 @@ cat > load.csh << 'EOF'
         liftOver Cd4.hg16.bed \
                  /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
                         $cell.hg17.bed $cell.unmapped
-        hgLoadBed hg17 encodeNgriDnaseHs$cell $cell.hg17.bed
+        hgLoadBed hg17 encodeNhgriDnaseHs$cell $cell.hg17.bed
     end
 'EOF'
     csh load.csh >&! load.log
         # 1420 mapped, 6 unmapped
+    # Add these two tracks to the hg17 NHGRI DNase track
 
 ##########################################################################
 # Sanger Chip/chip (2005-10-24 kate)
     # From Paul Flicek, at EBI 
-    # 14 files (3 cells, most with 5 factors), each file havint
+    # 14 files (3 cells, most with 5 factors), each file having
     # 3 tracks:  chip/chip, HMM regions, HMM centers
-    #  The doc suggests that the HMM regions data isn't for general use,
-    # am inquiring with submitters if we need to display or just have
-    # available for download
-    # NOTE: there was also Hela data posted for 5 factors, from
-    # Christoph Koch (on 10/10).
+    # Christoph says to just display the HMM regions & centers tracks
+    # from Paul's files. These were generated from June freeze
+    # chip/chip, plus newly submitted HeLa data from Christoph Koch (10/7).
     cd /cluster/data/encode/sanger/chipchip
     mkdir -p 2005-10-18/lab
     cd 2005-10-18/lab
+
+    # HeLa chip/chip
+cat > loadHela.csh << 'EOF'
+    foreach f (lab/*_HeLa-S3_1.wig.txt)
+        set b = `echo $f:t:r:r | sed 's/-S3_1//; s/_//'`
+        echo $b
+        grep "^chr" $f | sort -k1,1 -k2,2n > chip.$b.wig
+        hgLoadBed -bedGraph=4 hg17 encodeSangerChip$b chip.$b.wig 
+    end
+'EOF'
+    csh loadHela.csh >&! loadHela.log &
+
+    # split HMM tracks out of files
+cat > load.csh << 'EOF'
+    foreach f (lab/*.split.wig.txt)
+        set b = `echo $f:t:r:r:r | sed 's/-2//; s/-//g'`
+        echo $b
+        /cluster/data/encode/bin/scripts/splitTracks.pl $f
+        rm t0
+        grep '^chr' t1 | sort -k1,1 -k2,2n > $b.wig; rm t1
+        hgLoadBed -bedGraph=4 hg17 encodeSangerChipHit$b $b.wig
+        checkTableCoords hg17 encodeSangerChipHit$b
+        grep '^chr' t2 | sed 's/	1$//' > $b.bed; rm t2
+        hgLoadBed -noBin hg17 encodeSangerChipCenter$b $b.bed
+        checkTableCoords hg17 encodeSangerChipCenter$b
+    end
+'EOF'
+    csh load.csh >&! load.log 
     
 
