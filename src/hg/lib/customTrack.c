@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.64 2005/10/18 23:07:20 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.65 2005/10/27 08:46:20 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -594,7 +594,7 @@ static boolean getNextFlatLine(struct lineFile **pLf, char **pLine, char **pNext
 {
 struct lineFile *lf = *pLf;
 char *nextLine;
-char *cr;
+char c;
 if (lf != NULL)
     return lineFileNext(lf, pLine, NULL);
 if ((*pLine = nextLine = *pNextLine) == NULL)
@@ -602,16 +602,25 @@ if ((*pLine = nextLine = *pNextLine) == NULL)
 if (nextLine[0] == 0)
     return FALSE;
 /* if CR, Mac or DOS */
-cr = strchr(nextLine, '\r');
-/* now look for the next NL */
-if ((nextLine = strchr(nextLine, '\n')) != NULL)
-    *nextLine++ = 0;
-if (cr != NULL)
+
+while ((c=*nextLine++) != 0)
     {
-    *cr++ = 0;
-    if (nextLine == NULL)
-      nextLine = cr;
+    if (c == '\r')
+        {
+        nextLine[-1] = 0;
+        if (*nextLine == '\n')
+            ++nextLine;
+        break;
+        }
+    if (c == '\n')
+        {
+        nextLine[-1] = 0;
+        break;
+        }
     }
+if (c == 0)
+    --nextLine;
+
 *pNextLine = nextLine;  /* note nextLine == 0 when there is no more */
 return TRUE;
 } 
