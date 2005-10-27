@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.12 2004/07/23 16:51:55 booch Exp $";
+static char const rcsid[] = "$Id: faNcbiToUcsc.c,v 1.13 2005/10/27 22:01:23 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,7 +87,7 @@ while (lineFileNext(lf, &line, NULL))
 
         else
 	    {
-	    char *words[8];
+	    char *words[32];
 	    int wordCount, i;
 	    char *accession = NULL;
 	    wordCount = chopString(line+1, "|", words, ArraySize(words));
