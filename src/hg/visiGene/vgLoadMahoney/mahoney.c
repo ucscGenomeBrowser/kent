@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mahoney.h"
 
-static char const rcsid[] = "$Id: mahoney.c,v 1.1 2005/07/11 16:34:07 kent Exp $";
+static char const rcsid[] = "$Id: mahoney.c,v 1.2 2005/10/27 17:44:23 kent Exp $";
 
 void mahoneyStaticLoad(char **row, struct mahoney *ret)
 /* Load a row from mahoney table into ret.  The contents of ret will

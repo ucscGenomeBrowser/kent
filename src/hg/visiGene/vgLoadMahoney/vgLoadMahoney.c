@@ -42,6 +42,7 @@ fprintf(f, "%s",
 "contributor Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q.\n"
 "publication Mouse brain organization revealed through direct genome-scale TF expression analysis\n"
 "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15618518\n"
+"year 2004\n"
 "journal Science\n"
 "journalUrl http://www.sciencemag.org/\n"
 "setUrl http://mahoney.chip.org/mahoney/\n"

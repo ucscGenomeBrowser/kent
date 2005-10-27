@@ -12,20 +12,20 @@ struct mahoney
     {
     struct mahoney *next;  /* Next in singly linked list. */
     char *empty;	/* Always blank */
-    int mtf;	/* mahoney id */
-    char *sameAs;	/* comma sep list of ids */
-    char *geneName;	/* HUGO name if available */
+    int mtf;	/* Mahoney ID */
+    char *sameAs;	/* Comma-separated list of IDs */
+    char *geneName;	/* HUGO Gene Nomenclature Committee name, if available */
     char *domain;	/* Domain that marks it as a transcription factor */
-    char *genbank;	/* genbank (including refSeq) ID */
-    char *locusId;	/* locus link id */
-    char *unigene;	/* unigene id */
+    char *genbank;	/* GenBank (including refSeq) ID */
+    char *locusId;	/* LocusLink ID */
+    char *unigene;	/* Unigene ID */
     char *fragSize;	/* PCR product size */
     char *linzyme;	/* Restriction enzyme to linearize */
     char *rnaPol;	/* DNA->RNA enzyme, usually T7 */
     char *cloneVector;	/* Cloning vector */
     char *seqVerified;	/* X if true */
-    char *startLoc;	/* start base pair location */
-    char *endLoc;	/* end base pair location */
+    char *startLoc;	/* Start base pair location */
+    char *endLoc;	/* End base pair location */
     char *fPrimer;	/* Forward primer */
     char *rPrimer;	/* Reverse primer */
     char *fAdaptor;	/* Start adapter enzyme */
