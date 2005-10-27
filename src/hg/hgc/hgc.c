@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.965 2005/10/26 23:49:14 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.966 2005/10/27 07:02:28 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14527,6 +14527,7 @@ char **row, **row2;
 char *words[16], *dupe = cloneString(tdb->type);
 int wordCount, x, length;
 int num = 0;
+int hits = 0;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2;
 struct sqlConnection *spConn = NULL; 
@@ -14591,11 +14592,11 @@ if (spAcc != NULL)
         }
     }
 /* ncbi blast hits */
-    chopString(ginfo.gi,":",giwords,sizeof(giwords));
+    hits = chopString(ginfo.gi,":",giwords,sizeof(giwords));
     printf("<B>NCBI Blast Hits:</B> "
                "<A HREF=\"http://www.ncbi.nlm.nih.gov/sutils/blink.cgi?pid=%s\" "
-	       "TARGET=_BLANK>%s:%s</A><BR>\n", giwords[1],
-	       giwords[0],giwords[1]);
+	       "TARGET=_BLANK>%s:%s</A><BR>\n", (hits == 2) ? giwords[1] : giwords[0],
+	       giwords[0],(hits == 2) ? giwords[1] : giwords[0]);
 /* cog description */
 if (hTableExists("COG"))
     { 
