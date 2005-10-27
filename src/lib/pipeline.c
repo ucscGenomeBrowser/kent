@@ -169,7 +169,7 @@ for (fd = STDERR_FILENO+1; fd < 64; fd++)
 
 if (sameString(proc->cmd[0],"/dev/memwriter"))
     {  /* there is no such device really */
-    char *mem = (char *)atoi(proc->cmd[1]);
+    char *mem = (char *)atol(proc->cmd[1]);
     long size = atoi(proc->cmd[2]);
     if (proc->cmd[1]
      && proc->cmd[2]

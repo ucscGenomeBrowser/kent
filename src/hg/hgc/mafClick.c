@@ -8,11 +8,12 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 #include "genePred.h"
+#include "botDelay.h"
 #include "hgMaf.h"
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.28 2005/06/09 22:10:58 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.29 2005/10/26 00:32:29 kent Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -296,6 +297,7 @@ static char *showAll[] = {
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 /* Display details for MAF or AXT tracks. */
 {
+hgBotDelay();
 if (winEnd - winStart > 30000)
     {
     printf("Zoom so that window is 30,000 bases or less to see base-by-base alignments\n");
