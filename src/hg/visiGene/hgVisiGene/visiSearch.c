@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.8 2005/10/27 17:12:22 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.9 2005/10/27 17:23:06 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -136,7 +136,6 @@ for (match = searcher->matchList; match != NULL; match = next)
     else
         visiMatchFree(&match);
     }
-slReverse(&newList);
 searcher->matchList = newList;
 }
 
@@ -146,7 +145,9 @@ static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
  * with visiSearcherFree. */
 {
 visiSearcherWeedResults(searcher);
+#ifdef SOMEDAY
 slSort(&searcher->matchList, visiMatchCmpWeight);
+#endif 
 return searcher->matchList;
 }
 

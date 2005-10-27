@@ -162,7 +162,7 @@ char *matchFile = cartString(cart, hgpMatchFile);
 struct visiMatch *matchList = NULL, *match;
 int maxCount = 50, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);
-int imageCount = 0, fullCount = 0, partCount = 0;
+int imageCount;
 
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
@@ -170,34 +170,15 @@ matchList = readMatchFile(matchFile);
 imageCount = slCount(matchList);
 if (imageCount > 0)
     {
-    double bestWeight = matchList->weight;
-    boolean didLine = FALSE;
-    for (match = matchList; match != NULL; match = match->next)
-        {
-	if (match->weight == bestWeight)
-	    fullCount += 1;
-	else
-	    partCount += 1;
-	}
-        
     printf("<TABLE>\n");
     printf("<TR><TD><B>");
-    if (fullCount == imageCount)
-	printf("%d images match<BR>\n", fullCount);
-    else
-        printf("%d full, %d partial match<BR>\n", fullCount, partCount);
+    printf("%d images match<BR>\n", imageCount);
     printf("</B></TD></TR>\n");
     for (match = slElementFromIx(matchList, startAt); 
 	    match != NULL; match = match->next)
 	{
 	int id = match->imageId;
 	char *imageFile = visiGeneThumbSizePath(conn, id);
-	if (match->weight < bestWeight && !didLine)
-	    {
-	    printf("<TR><TD><HR></TD></TR>\n");
-	    printf("<TR BGCOLOR=\"#D0FFE0\"><TD><B>partial matches:</B></TD></TR>\n");
-	    didLine = TRUE;
-	    }
 	printf("<TR>");
 	printf("<TD>");
 	printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "

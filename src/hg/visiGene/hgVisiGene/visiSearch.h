@@ -12,7 +12,7 @@ struct visiMatch
     {
     struct visiMatch *next;
     int imageId;	/* Image ID associated with search. */
-    double weight;	/* The higher the weight the better the match */
+    double weight;	/* The higher the weight the better the match (ignored for now) */
     Bits *wordBits;	/* A bit set for each matching word in search. */
     };
 
