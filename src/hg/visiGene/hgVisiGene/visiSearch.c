@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.7 2005/10/27 15:33:20 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.8 2005/10/27 17:12:22 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -102,7 +102,7 @@ if (searcher != NULL)
 }
 
 static struct visiMatch *visiSearcherAdd(struct visiSearcher *searcher,
-	int imageId, double weight)
+	int imageId, double weight, int startWord, int wordCount)
 /* Add given weight to match involving imageId,  creating
  * a fresh match if necessary for imageId. */
 {
@@ -116,7 +116,28 @@ if (match == NULL)
     rbTreeAdd(searcher->tree, match);
     }
 match->weight += weight;
+assert(startWord + wordCount <= searcher->wordCount);
+bitSetRange(match->wordBits, startWord, wordCount);
 return match;
+}
+
+static void visiSearcherWeedResults(struct visiSearcher *searcher)
+/* Get rid of images that are just partial matches. */
+{
+struct visiMatch *newList = NULL, *match, *next;
+int wordCount = searcher->wordCount;
+for (match = searcher->matchList; match != NULL; match = next)
+    {
+    next = match->next;
+    if (bitCountRange(match->wordBits, 0, wordCount) == wordCount)
+        {
+	slAddHead(&newList, match);
+	}
+    else
+        visiMatchFree(&match);
+    }
+slReverse(&newList);
+searcher->matchList = newList;
 }
 
 static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
@@ -124,6 +145,7 @@ static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
  * You don't own the list returned though.  It will evaporate
  * with visiSearcherFree. */
 {
+visiSearcherWeedResults(searcher);
 slSort(&searcher->matchList, visiMatchCmpWeight);
 return searcher->matchList;
 }
@@ -200,7 +222,8 @@ return count;
 
 
 typedef void AdderFunc(struct visiSearcher *searcher,
-	struct sqlConnection *conn, struct dyString *dy, char *exactMatch);
+	struct sqlConnection *conn, struct dyString *dy, char *exactMatch,
+	int startWord, int wordCount);
 /* Typedef of function to add things that are exact matches of
  * some type to searcher.  This is broken out separately
  * so that the visiGeneMatchMultiWord function below can be
@@ -218,8 +241,9 @@ struct slName *word;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
+int wordIx;
 
-for (word = wordList; word != NULL;  )
+for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     {
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
@@ -242,7 +266,8 @@ for (word = wordList; word != NULL;  )
 	for (name = nameList; name != NULL; name = name->next)
 	    {
 	    if (countWordsUsedInPhrase(name->name, word) == maxWordsUsed)
-		(*adder)(searcher, conn, query, name->name);
+		(*adder)(searcher, conn, query, name->name, 
+			wordIx, maxWordsUsed);
 	    }
 	while (--maxWordsUsed >= 0)
 	    word = word->next;
@@ -257,7 +282,7 @@ dyStringFree(&query);
 
 static void addImagesMatchingQuery(struct visiSearcher *searcher,
     struct sqlConnection *conn, char *query, struct hash *uniqHash,
-    char *searchTerm)
+    char *searchTerm, int startWord, int wordCount)
 /* Add images that match query */
 {
 struct sqlResult *sr;
@@ -276,13 +301,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    hashAdd(uniqHash, uniqString, NULL);
 	}
    if (!skip)
-       visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0);
+       visiSearcherAdd(searcher, sqlUnsigned(row[0]), 1.0, 
+       	startWord, wordCount);
    }
 sqlFreeResult(&sr);
 }
 
 static void addImagesMatchingName(struct visiSearcher *searcher,
-	struct sqlConnection *conn, struct dyString *dy, char *contributor)
+	struct sqlConnection *conn, struct dyString *dy, char *contributor,
+	int startWord, int wordCount)
 /* Add images that are contributed by given contributor to
  * searcher with a weight of one.  Use dy for scratch space for
  * the query. */
@@ -298,7 +325,8 @@ dyStringPrintf(dy,
    "and submissionContributor.submissionSet = imageFile.submissionSet "
    "and imageFile.id = image.imageFile"
    , contributor);
-addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL, 
+	startWord, wordCount);
 }
 
 static void visiGeneMatchContributor(struct visiSearcher *searcher, 
@@ -323,8 +351,9 @@ struct slName *word;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
+int wordIx;
 
-for (word = wordList; word != NULL;  )
+for (word = wordList, wordIx=0; word != NULL;  wordIx++)
     {
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
@@ -344,7 +373,8 @@ for (word = wordList; word != NULL;  )
 	for (name = nameList; name != NULL; name = name->next)
 	    {
 	    if (countPartsUsedInName(name->name, word) == maxWordsUsed)
-	        addImagesMatchingName(searcher, conn, query, name->name);
+	        addImagesMatchingName(searcher, conn, query, name->name, 
+			wordIx, maxWordsUsed);
 	    }
 	while (--maxWordsUsed >= 0)
 	    word = word->next;
@@ -358,13 +388,13 @@ dyStringFree(&query);
 
 
 static void addImageListAndFree(struct visiSearcher *searcher,
-	struct slInt *imageList)
+	struct slInt *imageList, int startWord, int wordCount)
 /* Add images in list to searcher with weight one.
  * Then free imageList */
 {
 struct slInt *image;
 for (image = imageList; image != NULL; image = image->next)
-    visiSearcherAdd(searcher, image->val, 1.0);
+    visiSearcherAdd(searcher, image->val, 1.0, startWord, wordCount);
 slFreeList(&imageList);
 }
 
@@ -374,7 +404,8 @@ static void visiGeneMatchGene(struct visiSearcher *searcher,
  * The wordList can include wildcards. */
 {
 struct slName *word;
-for (word = wordList; word != NULL; word = word->next)
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     char *sqlPat = sqlLikeFromWild(word->name);
     struct slInt *imageList, *image;
@@ -382,7 +413,7 @@ for (word = wordList; word != NULL; word = word->next)
 	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
     else
 	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsExact);
-    addImageListAndFree(searcher, imageList);
+    addImageListAndFree(searcher, imageList, wordIx, 1);
     freez(&sqlPat);
     }
 }
@@ -393,22 +424,29 @@ static void visiGeneMatchAccession(struct visiSearcher *searcher,
  * accessions to searcher. */
 {
 struct slName *word;
-for (word = wordList; word != NULL; word = word->next)
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
-    addImageListAndFree(searcher, visiGeneSelectRefSeq(conn, word->name));
-    addImageListAndFree(searcher, visiGeneSelectLocusLink(conn, word->name));
-    addImageListAndFree(searcher, visiGeneSelectGenbank(conn, word->name));
-    addImageListAndFree(searcher, visiGeneSelectUniProt(conn, word->name));
+    addImageListAndFree(searcher, visiGeneSelectRefSeq(conn, word->name),
+    	wordIx, 1);
+    addImageListAndFree(searcher, visiGeneSelectLocusLink(conn, word->name),
+    	wordIx, 1);
+    addImageListAndFree(searcher, visiGeneSelectGenbank(conn, word->name),
+    	wordIx, 1);
+    addImageListAndFree(searcher, visiGeneSelectUniProt(conn, word->name),
+    	wordIx, 1);
     }
 }
 
 static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
-	struct sqlConnection *conn, struct dyString *dy, char *bodyPart)
+	struct sqlConnection *conn, struct dyString *dy, char *bodyPart,
+	int startWord, int wordCount)
 /* Add images that are contributed by given contributor to
  * searcher with a weight of one.  Use dy for scratch space for
  * the query. */
 {
 struct hash *uniqHash = newHash(0);
+
 dyStringClear(dy);
 dyStringPrintf(dy, 
    "select imageProbe.image from "
@@ -418,15 +456,18 @@ dyStringPrintf(dy,
    "and expressionLevel.imageProbe = imageProbe.id "
    "and expressionLevel.level > 0"
    , bodyPart);
-addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart);
+addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart,
+	startWord, wordCount);
 
 dyStringClear(dy);
 dyStringPrintf(dy,
     "select image.id from bodyPart,specimen,image "
     "where bodyPart.name = \"%s\" "
     "and bodyPart.id = specimen.bodyPart "
-    "and specimen.id = image.specimen");
-addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart);
+    "and specimen.id = image.specimen", bodyPart);
+
+addImagesMatchingQuery(searcher, conn, dy->string, uniqHash, bodyPart,
+	startWord, wordCount);
 hashFree(&uniqHash);
 }
 
@@ -448,20 +489,22 @@ static void visiGeneMatchSex(struct visiSearcher *searcher,
 {
 struct dyString *query = dyStringNew(0);
 struct slName *word;
-for (word = wordList; word != NULL; word = word->next)
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     dyStringClear(query);
     dyStringAppend(query, "select image.id from sex,specimen,image ");
     dyStringPrintf(query, "where sex.name = \"%s\" ",  word->name);
     dyStringAppend(query, "and sex.id = specimen.sex ");
     dyStringAppend(query, "and specimen.id = image.specimen");
-    addImagesMatchingQuery(searcher, conn, query->string, NULL, NULL);
+    addImagesMatchingQuery(searcher, conn, query->string, NULL, NULL,
+    	wordIx, 1);
     }
 }
 
 void addImagesMatchingStage(struct visiSearcher *searcher,
 	struct sqlConnection *conn, int schemeId, int taxon,
-	char *minAge)
+	char *minAge, int wordIx, int wordCount)
 /* Given a developmental stage scheme (schemeId) and a specific
  * stage, return all images that match stage */
 {
@@ -485,7 +528,8 @@ if (maxAge != NULL)
     dyStringPrintf(dy, "and specimen.age < %s ", maxAge);
 dyStringPrintf(dy, "and specimen.taxon = %d ", taxon);
 dyStringPrintf(dy, "and specimen.id = image.specimen");
-addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL,
+	wordIx, wordCount);
 
 dyStringFree(&dy);
 }
@@ -499,7 +543,10 @@ struct slName *word;
 struct dyString *dy = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
-for (word = wordList; word != NULL && word->next != NULL; word = word->next)
+int wordIx;
+
+for (word = wordList, wordIx=0; word != NULL && word->next != NULL; 
+	word = word->next, ++wordIx)
     {
     int schemeId = 0,taxon=0;
     dyStringClear(dy);
@@ -523,7 +570,8 @@ for (word = wordList; word != NULL && word->next != NULL; word = word->next)
 	dyStringPrintf(dy, "and lifeStageScheme = %d\n", schemeId);
 	minAge = sqlQuickString(conn, dy->string);
 	if (minAge != NULL)
-	    addImagesMatchingStage(searcher, conn, schemeId, taxon, minAge);
+	    addImagesMatchingStage(searcher, conn, schemeId, taxon, minAge,
+	    	wordIx, 2);
 	freez(&minAge);
 	}
     }
@@ -531,7 +579,7 @@ dyStringFree(&dy);
 }
 
 static void addImagesMatchingYears(struct visiSearcher *searcher,
-	struct sqlConnection *conn, int minYear, int maxYear)
+	struct sqlConnection *conn, int minYear, int maxYear, int wordIx)
 /* Fold in images that are published between given years */
 {
 struct dyString *dy = dyStringNew(0);
@@ -541,7 +589,8 @@ dyStringPrintf(dy,
     "and submissionSet.id = imageFile.submissionSet "
     "and imageFile.id = image.imageFile"
     , minYear, maxYear);
-addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, NULL,
+	wordIx, 1);
 dyStringFree(&dy);
 }
 
@@ -554,14 +603,15 @@ char *now = sqlQuickString(conn, "select now()");
 int currentYear = atoi(now);
 int maxYear = currentYear+1;	/* May be slightly ahead of publication */
 int minYear = 1988;	/* Oldest record in Jackson Labs database. */
-for (word = wordList; word != NULL; word = word->next)
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     char *name = word->name;
     if (strlen(name) == 4 && isdigit(name[0]))
         {
 	int year = atoi(name);
 	if (year >= minYear && year <= maxYear)
-	    addImagesMatchingYears(searcher, conn, year, year);
+	    addImagesMatchingYears(searcher, conn, year, year, wordIx);
 	}
     }
 }

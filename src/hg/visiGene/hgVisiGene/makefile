@@ -17,3 +17,6 @@ compile: $O
 html: bigImage.html
 	cp bigImage.html /usr/local/apache/htdocs/visiGene/
 
+testVisiSearch:  visiSearch.o testVisiSearch.o
+	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}
+
