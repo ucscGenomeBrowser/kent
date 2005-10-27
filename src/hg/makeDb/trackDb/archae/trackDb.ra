@@ -79,7 +79,7 @@ color 0,0,0
 altColor 255,128,0
 type bed 6 +
 
-track tRNAs
+track rnaGenes
 shortLabel tRNA genes
 longLabel tRNA genes from tRNAscan-SE
 group genes
@@ -89,19 +89,10 @@ color 160,40,40
 type bed 6 +
 
 track gbRNAs
-shortLabel Genbank RNAs
+shortLabel Genbank ncRNAs
 longLabel All Annot GenBank RNAs
 group genes
 priority 2.51
-visibility dense
-color 160,40,40
-type bed 6 +
-
-track rnaGenes
-shortLabel All RNAs
-longLabel Lowe tRNA & Lowe snoRNA & GenBank rRNA
-group genes
-priority 2.55
 visibility dense
 color 160,40,40
 type bed 6 +
