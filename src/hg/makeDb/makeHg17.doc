@@ -18365,3 +18365,17 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 
 # Compared to 8/24/05 data, a few records were changed.
 
+# REBUILD hg17.gnfAtlas2Distance TABLE.  SOMEHOW IT HAD MUCH FEWER RECORDS. (DONE 10/27/05, Fan)
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene hg17 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
+# Create expression distance table - takes about an hour
+    hgExpDistance hg17 hgFixed.gnfHumanAtlas2MedianRatio \
+        hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+        -lookup=knownToGnfAtlas2 &
+
+#       hgsql -e "select count(*) from gnfAtlas2Distance;" hg17
+#       row count changed to 32458000
+			
