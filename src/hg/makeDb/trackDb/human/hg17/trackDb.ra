@@ -212,7 +212,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
     subGroups dataType=signal cellType=hl60
-    color 50,50,150
+    color 50,50,100
     priority 3
 
     track encodeAffyOctRnaHl60SignalHr02
@@ -220,7 +220,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
     subGroups dataType=signal cellType=hl60
-    color 50,50,180
+    color 50,50,150
     priority 4
 
     track encodeAffyOctRnaHl60SignalHr08
@@ -228,7 +228,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
     subGroups dataType=signal cellType=hl60
-    color 50,50,210
+    color 50,50,200
     priority 5
 
     track encodeAffyOctRnaHl60SignalHr32
@@ -236,7 +236,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
     subGroups dataType=signal cellType=hl60
-    color 50,50,240
+    color 50,50,255
     priority 6
 
     track encodeAffyOctRnaGm06990Sites
@@ -264,7 +264,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Transfrags 
     subGroups dataType=transfrags cellType=hl60
-    color 50,50,150
+    color 50,50,100
     noInherit on
     type bed 3 .
     priority 9
@@ -274,7 +274,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Transfrags 
     subGroups dataType=transfrags cellType=hl60
-    color 50,50,180
+    color 50,50,150
     noInherit on
     type bed 3 .
     priority 10
@@ -284,7 +284,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Transfrags 
     subGroups dataType=transfrags cellType=hl60
-    color 50,50,210
+    color 50,50,200
     noInherit on
     type bed 3 .
     priority 11
@@ -295,7 +295,7 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Transfrags 
     subGroups dataType=transfrags cellType=hl60
     noInherit on
-    color 50,50,240
+    color 50,50,255
     type bed 3 .
     priority 12
 
@@ -445,6 +445,44 @@ origAssembly hg17
     color 0,63,135
     longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, STAT1, 30 min after gamma interferon
     priority 16
+
+track encodeNhgriDnaseHsChip
+compositeTrack on
+shortLabel NHGRI DNaseI-HS
+longLabel NHGRI DNaseI-Hypersensitive Sites 
+group encodeChrom
+priority 61.0
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 5 .
+useScore 1
+altColor 80,50,80
+color 120,10,120
+origAssembly hg16
+
+    track encodeNhgriDnaseHsGm06990
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase GM069 Chip
+    longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990 T-Cells, Chip method)
+    priority 1
+
+    track encodeNhgriDnaseHsCd4
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase CD4 Chip
+    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
+    priority 2
+
+    track encodeNhgriDnaseHsNonAct
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase CD4 MS 
+    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
+    priority 3
+
+    track encodeNhgriDnaseHsAct
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase CD4-act MS
+    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
+    priority 4
 
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
