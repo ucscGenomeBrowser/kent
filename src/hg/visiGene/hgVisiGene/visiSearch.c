@@ -5,13 +5,48 @@
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
+#include "bits.h"
 #include "obscure.h"
 #include "rbTree.h"
 #include "jksql.h"
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.6 2005/10/26 20:38:41 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.7 2005/10/27 15:33:20 kent Exp $";
+
+struct visiMatch *visiMatchNew(int imageId, int wordCount)
+/* Create a new visiMatch structure, as yet with no weight. */
+{
+struct visiMatch *match;
+AllocVar(match);
+match->imageId = imageId;
+match->wordBits = bitAlloc(wordCount);
+return match;
+}
+
+void visiMatchFree(struct visiMatch **pMatch)
+/* Free up memory associated with visiMatch */
+{
+struct visiMatch *match = *pMatch;
+if (match != NULL)
+    {
+    bitFree(&match->wordBits);
+    freez(pMatch);
+    }
+}
+
+void visiMatchFreeList(struct visiMatch **pList)
+/* Free up memory associated with list of visiMatch */
+{
+struct visiMatch *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    visiMatchFree(&el);
+    }
+*pList = NULL;
+}
 
 static int visiMatchCmpImageId(void *va, void *vb)
 /* rbTree comparison function to tree on imageId. */
@@ -41,14 +76,16 @@ struct visiSearcher
     struct visiSearcher *next;		/* Next search */
     struct visiMatch *matchList;	/* List of matching images. */
     struct rbTree *tree;		/* Tree for near random access. */
+    int wordCount;			/* Number of words in search. */
     };
 
-static struct visiSearcher *visiSearcherNew()
+static struct visiSearcher *visiSearcherNew(int wordCount)
 /* Create a new, empty search structure. */
 {
 struct visiSearcher *searcher;
 AllocVar(searcher);
 searcher->tree = rbTreeNew(visiMatchCmpImageId);
+searcher->wordCount = wordCount;
 return searcher;
 }
 
@@ -58,7 +95,7 @@ static void visiSearcherFree(struct visiSearcher **pSearcher)
 struct visiSearcher *searcher = *pSearcher;
 if (searcher != NULL)
     {
-    slFreeList(&searcher->matchList);
+    visiMatchFreeList(&searcher->matchList);
     rbTreeFree(&searcher->tree);
     freez(pSearcher);
     }
@@ -74,8 +111,7 @@ key.imageId = imageId;
 match = rbTreeFind(searcher->tree, &key);
 if (match == NULL)
     {
-    AllocVar(match);
-    match->imageId = imageId;
+    match = visiMatchNew(imageId, searcher->wordCount);
     slAddHead(&searcher->matchList, match);
     rbTreeAdd(searcher->tree, match);
     }
@@ -537,8 +573,9 @@ struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
 {
 struct visiMatch *matchList, *match;
 struct slInt *imageList = NULL, *image;
-struct visiSearcher *searcher = visiSearcherNew();
 struct slName *wordList = stringToSlNames(searchString);
+int wordCount = slCount(wordList);
+struct visiSearcher *searcher = visiSearcherNew(wordCount);
 visiGeneMatchContributor(searcher, conn, wordList);
 visiGeneMatchYear(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
@@ -547,7 +584,7 @@ visiGeneMatchBodyPart(searcher, conn, wordList);
 visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
-searcher->matchList = NULL;	/* Transferring memory ownership to return val. */
+searcher->matchList = NULL; /* Transferring memory ownership to return val. */
 visiSearcherFree(&searcher);
 slFreeList(&wordList);
 return matchList;
