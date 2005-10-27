@@ -3323,7 +3323,7 @@ origAssembly hg16
     shortLabel SI H3K4m2 GM06990
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, GM06990 cells)
     priority 2
-    color 10,10,10
+    color 10,10,130
 
     track encodeSangerChipH3K4me3
     subTrack encodeSangerChipH3H4
@@ -3337,7 +3337,7 @@ origAssembly hg16
     shortLabel SI H3ac GM06990
     longLabel Sanger Institute ChIP/Chip (H3ac ab, GM06990 cells) 
     priority 4
-    color 10,10,10
+    color 10,10,130
 
     track encodeSangerChipH4ac
     subTrack encodeSangerChipH3H4
@@ -3351,27 +3351,332 @@ origAssembly hg16
     shortLabel SI H3K4me2 K562
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, K562 cells)
     priority 6
-    color 10,10,130
+    color 10,10,10
 
     track encodeSangerChipH3K4me3K562
     subTrack encodeSangerChipH3H4
     shortLabel SI H3K4me3 K562
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, K562 cells)
     priority 7
-    color 10,10,130
+    color 10,10,10
 
     track encodeSangerChipH3acK562
     subTrack encodeSangerChipH3H4
     shortLabel SI H3ac K562
     longLabel Sanger Institute ChIP/Chip (H3ac ab, K562 cells)
     priority 8
-    color 10,10,130
+    color 10,10,10
 
     track encodeSangerChipH4acK562
     subTrack encodeSangerChipH3H4
     shortLabel SI H4ac K562
     longLabel Sanger Institute ChIP/Chip (H4ac ab, K562 cells)
     priority 9
+    color 10,10,10
+
+    track encodeSangerChipH3K4me1HeLa
+    subTrack encodeSangerChipH3H4
+    shortLabel SI H3K4m1 HeLa
+    longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, HeLa cells) 
+    priority 10
+    color 10,10,130
+
+    track encodeSangerChipH3K4me2Hela
+    subTrack encodeSangerChipH3H4
+    shortLabel SI H3K4m2 GM06990
+    longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, HeLa cells)
+    priority 10
+    color 10,10,130
+
+    track encodeSangerChipH3K4me3HeLa
+    subTrack encodeSangerChipH3H4
+    shortLabel SI H3K4m3 HeLa
+    longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, HeLa cells)
+    priority 11
+    color 10,10,130
+
+    track encodeSangerChipH3acHeLa
+    subTrack encodeSangerChipH3H4
+    shortLabel SI H3ac HeLa
+    longLabel Sanger Institute ChIP/Chip (H3ac ab, HeLa cells) 
+    priority 12
+    color 10,10,130
+
+    track encodeSangerChipH4acHeLa
+    subTrack encodeSangerChipH3H4
+    shortLabel SI H4ac HeLa
+    longLabel Sanger Institute ChIP/Chip (H4ac ab, HeLa cells)
+    priority 13
+    color 10,10,130
+
+track encodeSangerChipHits
+compositeTrack on
+shortLabel Sanger ChIP Hits
+longLabel Sanger ChIP/Chip Hits and Peak Centers
+group encodeChip
+priority 54.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:40:16
+minLimit 0
+maxLimit 49.45
+viewLimits 0:2
+autoScale Off
+subGroup1 datatype Data_Type hit=Hit center=Peak_Center
+subGroup2 celltype Cell_Type gm06990=GM06990 hela=HeLa  k562=K562
+subGroup3 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
+
+    track encodeSangerChipHitH3K4me1GM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m1 GM06990
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me1 ab, GM06990 cells) 
+    subGroups datatype=hit celltype=gm06990 factor=h3k4me1
+    priority 1
+    color 10,10,130
+
+    track encodeSangerChipHitH3K4me2GM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m2 GM06990
+    subGroups datatype=hit celltype=gm06990 factor=h3k4me2
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me2 ab, GM06990 cells)
+    priority 2
+    color 10,10,130
+
+    track encodeSangerChipHitH3K4me3GM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m3 GM06990
+    subGroups datatype=hit celltype=gm06990 factor=h3k4me3
+    longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, GM06990 cells)
+    priority 3
+    color 10,10,130
+
+    track encodeSangerChipHitH3acGM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3ac GM06990
+    subGroups datatype=hit celltype=gm06990 factor=h3ac
+    longLabel Sanger Institute ChIP/Chip Hits (H3ac ab, GM06990 cells) 
+    priority 4
+    color 10,10,130
+
+    track encodeSangerChipHitH4acGM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H4ac GM06990
+    subGroups datatype=hit celltype=gm06990 factor=h4ac
+    longLabel Sanger Institute ChIP/Chip Hits (H4ac ab, GM06990 cells)
+    priority 5
+    color 10,10,130
+
+    track encodeSangerChipHitH3K4me2K562
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4me2 K562
+    subGroups datatype=hit celltype=k562 factor=h3K4me2
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me2 ab, K562 cells)
+    priority 6
+    color 10,10,10
+
+    track encodeSangerChipHitH3K4me3K562
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4me3 K562
+    subGroups datatype=hit celltype=k562 factor=h3K4me3
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me3 ab, K562 cells)
+    priority 7
+    color 10,10,10
+
+    track encodeSangerChipHitH3acK562
+    subTrack encodeSangerChipHits
+    shortLabel SI H3ac K562
+    subGroups datatype=hit celltype=k562 factor=h3ac
+    longLabel Sanger Institute ChIP/Chip Hits (H3ac ab, K562 cells)
+    priority 8
+    color 10,10,10
+
+    track encodeSangerChipHitH4acK562
+    subTrack encodeSangerChipHits
+    shortLabel SI H4ac K562
+    subGroups datatype=hit celltype=k562 factor=h4ac
+    longLabel Sanger Institute ChIP/Chip Hits (H4ac ab, K562 cells)
+    priority 9
+    color 10,10,10
+
+    track encodeSangerChipHitH3K4me1HeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m1 HeLa
+    subGroups datatype=hit celltype=hela factor=h3k4me1
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me1 ab, HeLa cells) 
+    priority 10
+    color 10,10,130
+
+    track encodeSangerChipHitH3K4me2HeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m2 HeLa
+    subGroups datatype=hit celltype=hela factor=h3k4me2
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me2 ab, HeLa cells)
+    priority 11
+    color 10,10,130
+
+    track encodeSangerChipH3K4me3HeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m3 HeLa
+    subGroups datatype=hit celltype=hela factor=h3k4me3
+    longLabel Sanger Institute ChIP/Chip Hits (H3K4me3 ab, HeLa cells)
+    priority 12
+    color 10,10,130
+
+    track encodeSangerChipHitH3acHeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3ac HeLa
+    subGroups datatype=hit celltype=hela factor=h3ac
+    longLabel Sanger Institute ChIP/Chip Hits (H3ac ab, HeLa cells) 
+    priority 13
+    color 10,10,130
+
+    track encodeSangerChipHitH4acHeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H4ac HeLa
+    subGroups datatype=hit celltype=hela factor=h4ac
+    longLabel Sanger Institute ChIP/Chip Hits (H4ac ab, HeLa cells)
+    priority 14
+    color 10,10,130
+
+    track encodeSangerChipCenterH3K4me1GM06990
+    subTrack encodeSangerChipHits
+    noInherit on
+    type bed 3 .
+    shortLabel SI H3K4m1 GM06990
+    subGroups datatype=peak celltype=gm06990 factor=h3k4me1
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me1 ab, GM06990 cells) 
+    priority 15
+    color 10,10,130
+
+    track encodeSangerChipCenterH3K4me2GM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m2 GM06990
+    subGroups datatype=peak celltype=gm06990 factor=h3k4me2
+    longLabel Sanger Institute ChIP/Chip Peak Centers(H3K4me2 ab, GM06990 cells)
+    noInherit on
+    type bed 3 .
+    priority 16
+    color 10,10,130
+
+    track encodeSangerChipCenterH3K4me3GM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m3 GM06990
+    subGroups datatype=peak celltype=gm06990 factor=h3k4me3
+    longLabel Sanger Institute ChIP/Chip Peak Centers(H3K4me3 ab, GM06990 cells)
+    noInherit on
+    type bed 3 .
+    priority 17
+    color 10,10,130
+
+    track encodeSangerChipCenterH3acGM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H3ac GM06990
+    subGroups datatype=peak celltype=gm06990 factor=h3ac
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3ac ab, GM06990 cells) 
+    noInherit on
+    type bed 3 .
+    priority 18
+    color 10,10,130
+
+    track encodeSangerChipCenterH4acGM06990
+    subTrack encodeSangerChipHits
+    shortLabel SI H4ac GM06990
+    subGroups datatype=peak celltype=gm06990 factor=h4ac
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H4ac ab, GM06990 cells)
+    noInherit on
+    type bed 3 .
+    priority 19
+    color 10,10,130
+
+    track encodeSangerChipCenterH3K4me2K562
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4me2 K562
+    subGroups datatype=peak celltype=k562 factor=h3K4me2
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me2 ab, K562 cells)
+    noInherit on
+    type bed 3 .
+    priority 20
+    color 10,10,10
+
+    track encodeSangerChipCenterH3K4me3K562
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4me3 K562
+    subGroups datatype=peak celltype=k562 factor=h3K4me3
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me3 ab, K562 cells)
+    noInherit on
+    type bed 3 .
+    priority 21
+    color 10,10,10
+
+    track encodeSangerChipCenterH3acK562
+    subTrack encodeSangerChipHits
+    shortLabel SI H3ac K562
+    subGroups datatype=peak celltype=k562 factor=h3ac
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3ac ab, K562 cells)
+    noInherit on
+    type bed 3 .
+    priority 22
+    color 10,10,10
+
+    track encodeSangerChipCenterH4acK562
+    subTrack encodeSangerChipHits
+    shortLabel SI H4ac K562
+    subGroups datatype=peak celltype=k562 factor=h4ac
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H4ac ab, K562 cells)
+    noInherit on
+    type bed 3 .
+    priority 23
+    color 10,10,10
+
+    track encodeSangerChipCenterH3K4me1HeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m1 HeLa
+    subGroups datatype=peak celltype=hela factor=h3k4me1
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me1 ab, HeLa cells) 
+    noInherit on
+    type bed 3 .
+    priority 24
+    color 10,10,130
+
+    track encodeSangerChipCenterH3K4me2HeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m2 HeLa
+    subGroups datatype=peak celltype=hela factor=h3k4me2
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me2 ab, HeLa cells)
+    noInherit on
+    type bed 3 .
+    priority 25
+    color 10,10,130
+
+    track encodeSangerCenterChipH3K4me3HeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3K4m3 HeLa
+    subGroups datatype=peak celltype=hela factor=h3k4me3
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me3 ab, HeLa cells)
+    noInherit on
+    type bed 3 .
+    priority 26
+    color 10,10,130
+
+    track encodeSangerChipCenterH3acHeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H3ac HeLa
+    subGroups datatype=peak celltype=hela factor=h3ac
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H3ac ab, HeLa cells) 
+    noInherit on
+    type bed 3 .
+    priority 27
+    color 10,10,130
+
+    track encodeSangerChipCenterH4acHeLa
+    subTrack encodeSangerChipHits
+    shortLabel SI H4ac HeLa
+    subGroups datatype=peak celltype=hela factor=h4ac
+    longLabel Sanger Institute ChIP/Chip Peak Centers (H4ac ab, HeLa cells)
+    noInherit on
+    type bed 3 .
+    priority 28
     color 10,10,130
 
 track encodeStanfordChip
