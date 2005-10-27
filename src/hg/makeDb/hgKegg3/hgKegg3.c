@@ -2,6 +2,7 @@
 #include "common.h"
 #include "hCommon.h"
 #include "hdb.h"
+#include "options.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -14,6 +15,12 @@ errAbort(
   "      roDb is the read only genome database name\n"
   "example: hgKegg3 kgMm6ATemp mm6\n");
 }
+
+char *table = (char *)NULL;	/*name of table containing knownGenes or other gene prediction*/
+static struct optionSpec options[] = {
+   {"table", OPTION_STRING},
+   {NULL, 0},
+};
 
 int main(int argc, char *argv[])
 {
@@ -34,6 +41,7 @@ char *kgId;
 char *mapID;
 char *desc;
 
+optionInit(&argc, argv, options);
 if (argc != 3)  usage();
 kgTempDbName    = argv[1];
 roDbName 	= argv[2];
@@ -44,7 +52,8 @@ conn3= hAllocConn();
 o1 = fopen("j.dat",  "w");
 o2 = fopen("jj.dat", "w");
     
-sprintf(query, "select name from %s.knownGene", roDbName);
+table = optionVal("table", "knownGene");
+sprintf(query, "select name from %s.%s", roDbName, table);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 while (row != NULL)
@@ -70,7 +79,23 @@ while (row != NULL)
     else
         {
 	/* printf("%s not found in Entrez.\n", kgId);fflush(stdout);*/
-	}
+        if (differentString(table, "knownGene"))
+            {
+            sprintf(cond_str, "name='%s'", kgId);
+            locusID = sqlGetField(conn3, roDbName, table, "name2", cond_str);
+            sprintf(query3, "select * from %s.keggList where locusID = '%s'", kgTempDbName, kgId);
+            sr3 = sqlGetResult(conn3, query3);
+            while ((row3 = sqlNextRow(sr3)) != NULL)
+                {
+                mapID   = row3[1];
+                desc    = row3[2];
+                fprintf(o1, "%s\t%s\t%s\n", kgId, locusID, mapID);
+                fprintf(o2, "%s\t%s\n", mapID, desc);
+                row3 = sqlNextRow(sr3);
+                }
+            sqlFreeResult(&sr3);
+            }
+        }
     row = sqlNextRow(sr);
     }
 
