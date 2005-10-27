@@ -1003,3 +1003,136 @@ SEQ2_LEN=$BASE/S2.len
     #	real    17m13.957s
     #	user    0m0.395s
     #	sys     0m0.148s
+
+########################################################################
+# Aceview (Acembly) Gene set:  (DONE - 2005-09-07 - Hiram)
+    # Data is obtained from 
+    # Danielle et Jean Thierry-Mieg     mieg@ncbi.nlm.nih.gov
+    ssh hgwdev
+    mkdir /cluster/data/ce3/bed/aceview
+    cd /cluster/data/ce3/bed/aceview
+    wget --timestamping \
+'ftp://anonymous:ucsc@ftp.ncbi.nlm.nih.gov/repository/acedb/wormgenes/aceview.wormgenes.2005_09_06.gff.gz'
+    #	Verify no reversed blocks
+    zcat aceview.wormgenes.2005_09_06.gff.gz \
+    | awk -F"\t" '{if ($4 > $5) {printf "reverse blocks problem at:\n$0" } }'
+
+    zcat aceview.wormgenes.2005_09_06.gff.gz | \
+	sed -e "s/CHROMOSOME_/chr/; s/MtDNA/M/" \
+	| ldHgGene -gtf ce3 acembly stdin
+    #	Read 22456 transcripts in 412173 lines in 1 files
+    #	22456 groups 7 seqs 1 sources 5 feature types
+    #	Check chrom names:
+    checkTableCoords -table=acembly ce3
+    hgsql -N -e "select chrom from acembly;" ce3 | sort | uniq -c
+    #	3539 chrI
+    #	3836 chrII
+    #	3491 chrIII
+    #	3734 chrIV
+    #	   7 chrM
+    #	4629 chrV
+    #	3220 chrX
+    featureBits ce3 acembly
+    #	25509966 bases of 100291840 (25.436%) in intersection
+
+#############################################################################
+# BLASTZ Cb2 (WORKING - 2005-09-09 - Hiram)
+    ssh kk
+    mkdir /cluster/data/ce3/bed/blastzCb2.2005-09-09
+    cd /cluster/data/ce3/bed
+    ln -s blastzCb2.2005-09-09 blastz.cb2
+    cd blastzCb2.2005-09-09
+
+    #	Utilizing tiny target chunks and a single query chunk to use the
+    #	dynamic masking available via the BLASTZ_M parameter
+    cat << '_EOF_' > DEF
+# ce3 vs cb2
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+BLASTZ_H=2000
+BLASTZ_M=50
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: elegans Ce3
+SEQ1_DIR=/san/sanvol1/scratch/worms/ce3/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=1000000
+SEQ1_LAP=100
+
+# QUERY: briggsae Cb2
+SEQ2_DIR=/san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/worms/cb2/liftRandoms.lft
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/ce3/bed/blastzCb2.2005-09-09
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # happy emacs
+
+    nibSize /san/sanvol1/scratch/worms/ce3/nib/*.nib | \
+	awk '{printf "%s\t%s\n", $2, $3}' | sort -rn +1 > S1.len
+    twoBitInfo /san/sanvol1/scratch/worms/cb2/chrRandomContigs.2bit S2.len
+    twoBitInfo /san/sanvol1/scratch/worms/cb2/cb2.2bit stdout \
+	| grep random >> S2.len
+    twoBitInfo /san/sanvol1/scratch/worms/cb2/cb2.2bit stdout \
+	| grep chrUn >> S2.len
+
+XXXX - working on modifications to doBlastzChainNet.pl 2005-09-06
+XXXX - to do this random contigs business properly
+
+    #	establish a screen to control this job
+    screen
+    time ./doBlastzChainNet.pl -stop chainMerge \
+	-bigClusterHub=kk \
+	`pwd`/DEF > toChainMerge.run.out 2>&1 &
+    #	STARTED - 2005-09-09 - 16:18
+    #	with lots of kluster contention
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:     125426s    2090.44m    34.84h    1.45d  0.004 y
+# IO & Wait Time:                  1821s      30.35m     0.51h    0.02d  0.000 y
+# Average job time:                1224s      20.39m     0.34h    0.01d
+# Longest finished job:            2849s      47.48m     0.79h    0.03d
+# Submission to last job:         18148s     302.47m     5.04h    0.21d
+    time ./doBlastzChainNet.pl -continue cat -stop chainRun \
+	-bigClusterHub=kk \
+	`pwd`/DEF > toChainRun.run.out 2>&1 &
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:         31s       0.52m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                   351s       5.84m     0.10h    0.00d  0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:           211s       3.52m     0.06h    0.00d
+    time ./doBlastzChainNet.pl -continue chainRun -stop chainMerge \
+	-bigClusterHub=kk \
+	`pwd`/DEF > toChainMerge.run.out 2>&1 &
+#Completed: 7 of 7 jobs
+#CPU time in finished jobs:        347s       5.78m     0.10h    0.00d  0.000 y
+#IO & Wait Time:                    65s       1.08m     0.02h    0.00d  0.000 y
+#Average job time:                  59s       0.98m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             120s       2.00m     0.03h    0.00d
+#Submission to last job:           696s      11.60m     0.19h    0.01d
+    time ./doBlastzChainNet.pl -continue chainMerge -stop net \
+	-bigClusterHub=kk \
+	`pwd`/DEF > toNet.run.out 2>&1 &
+    time ./doBlastzChainNet.pl -continue load -stop load \
+	-bigClusterHub=kk \
+	`pwd`/DEF > loadStep.run.out 2>&1 &
+    time ./doBlastzChainNet.pl -continue download -stop cleanup \
+	-bigClusterHub=kk \
+	`pwd`/DEF > thruCleanup.run.out 2>&1 &
+    #	swap results to place ce3 alignments onto cb2
+    time ./doBlastzChainNet.pl -swap \
+	-bigClusterHub=kk \
+	`pwd`/DEF > \
+	swap.run.out 2>&1 &
+
+
+    #	detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
