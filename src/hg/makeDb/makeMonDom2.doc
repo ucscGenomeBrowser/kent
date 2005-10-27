@@ -205,7 +205,7 @@ BEGIN { name="" }
     hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
         defaultPos, active, orderKey, genome, scientificName, \
         htmlPath, hgNearOk, hgPbOk, sourceName) \
-        VALUES("monDom2", "June 2005", "/gbdb/monDom2", "M. domestica", \
+        VALUES("monDom2", "June 2005", "/gbdb/monDom2", "Opossum", \
         "scaffold_0:1000000-11000000", 1, 34, "Opossum", \
         "Monodelphis domestica", \
         "/gbdb/monDom2/html/description.html", 0, 0, \
@@ -665,23 +665,116 @@ SEQ2_LEN=$BASE/S2.len
     #	establish a screen to control this job
     #	altered local copy of doBlastzChainNet.pl to fix santest location
     #	and run everything on pk since the san location is unique here
-    #	and these jobs are not going to be very large anyway
     screen
+    #	to detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh pk
+    screen -d -r
     time ./doBlastzChainNet.pl \
 	-bigClusterHub=pk \
 	-smallClusterHub=pk \
 	-fileServer=kkstore02 \
 	`pwd`/DEF > blast.run.out 2>&1 &
-## XXX STARTED 2005-08-22 13:34
-    #	real    33m25.177s
-    #	user    0m0.561s
-    #	sys     0m0.222s
+# Completed: 140151 of 140151 jobs
+# CPU time in finished jobs:   17095319s  284921.98m  4748.70h  197.86d  0.542 y
+# IO & Wait Time:                549405s    9156.76m   152.61h    6.36d  0.017 y
+# Average job time:                 126s       2.10m     0.03h    0.00d
+# Longest finished job:           11323s     188.72m     3.15h    0.13d
+# Submission to last job:         82333s    1372.22m    22.87h    0.95d
+    #	something failed with the kluster, finished off the kluster run
+    #	manually, and then start with the next step: cat
+    time ./doBlastzChainNet.pl \
+	-continue=cat \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-fileServer=kkstore02 \
+	`pwd`/DEF > cat.run.out 2>&1 &
+    #	34 minutes to the next failure:
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22/axtChain/run
+    #	to allow script to continue after we fixup this broken part
+    para time > run.time
+    cat run.time
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      20950s     349.17m     5.82h    0.24d  0.001 y
+# IO & Wait Time:                   782s      13.03m     0.22h    0.01d  0.000 y
+# Average job time:                 483s       8.05m     0.13h    0.01d
+# Longest finished job:            2779s      46.32m     0.77h    0.03d
+# Submission to last job:          2841s      47.35m     0.79h    0.03d
 
-    #	detach from screen session: Ctrl-a Ctrl-d
-    #	to reattach to this screen session:
-    ssh kk
-    screen -d -r
+    #	34 minutes to the next failure:
+# Batch failed after 4 tries on chain.csh chr19.nib:chr19: chain/chr19.nib:chr19:.chain
+# Command failed:
+# ssh -x pk /cluster/data/hg17/bed/blastzMonDom2.2005_08_22/axtChain/run/doChainRun.csh
+    #	This is most likely because we aren't working on the kki cluster
+    #	Need to get to larger machines.  Go to kolossus to run the last job
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22/axtChain/run
+    time ./chain.csh chr19.nib:chr19: chain/chr19.nib:chr19:.chain
+    #	real    477m4.130s
+    #	user    228m6.042s
+    #	sys     162m31.903s
+    #	That is a lot of time on kolossus, almost 8 hours !
+    #	Creating a 2 Gb file:
+    #	-rw-rw-r--  1 2030235712 Aug 23 22:48 chr19.nib:chr19:.chain
 
+    #	To continue the run, back to pk
+    ssh pk
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
+    time ./doBlastzChainNet.pl \
+	-continue=chainMerge \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-fileServer=kkstore02 \
+	`pwd`/DEF > chainMerge.run.out 2>&1 &
+    #	real    195m24.430s
+    #	But it failed !
+hgLoadChain hg17 chr19_chainMonDom2 chr19.chain
+Out of memory needMem - request size 28 bytes
+
+    #	Need to go back and rescore the chains at 5000
+    #	Remove previous results
+    ssh kkstore01
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
+    time ./doBlastzChainNet.pl \
+	-continue=chainRun \
+	-chainMinScore=5000 \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-fileServer=kkstore02 \
+	`pwd`/DEF > chainRun.run.out 2>&1 &
+# Completed: 45 of 46 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      13835s     230.58m     3.84h    0.16d  0.000 y
+# IO & Wait Time:                  2943s      49.06m     0.82h    0.03d  0.000 y
+# Average job time:                 373s       6.21m     0.10h    0.00d
+# Longest finished job:            1798s      29.97m     0.50h    0.02d
+# Submission to last job:          1802s      30.03m     0.50h    0.02d
+
+    #	Same problem as before with chr19
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22/axtChain/run
+    time ./chain.csh chr19.nib:chr19: chain/chr19.nib:chr19:.chain
+    #	real    262m56.122s
+    #	user    193m29.527s
+    #	sys     68m42.523s
+    #	-rw-rw-r--  1 1450265901 Aug 26 15:27 chain/chr19.nib:chr19:.chain
+
+    #	To continue the run, back to pk
+    ssh pk
+    cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
+    time ./doBlastzChainNet.pl \
+	-continue=chainMerge \
+	-chainMinScore=5000 \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-fileServer=kkstore02 \
+	`pwd`/DEF > chainMerge.run.out 2>&1 &
+XXXX
     #	swap results to place hg17 alignments onto monDom2
     cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
     time ./doBlastzChainNet.pl -swap \
@@ -753,6 +846,389 @@ my $AGP_FILE="/cluster/data/monDom2/broad.mit.edu/assembly.agp";
     hgsql -e "show index from quality;" monDom2
     #	check that Cardinality is a number and is not NULL
 
+##########################################################################
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2005-08-23 - Hiram)
+# genscanPep table touched by alisq to satisfy joinerCheck 2005-03-32 - kuhn)
+
+    #	Need a hard masked file
+    ssh kolossus
+    mkdir /scratch/monDom2
+    cd /scratch/monDom2
+    time scp -p kkstore01:/cluster/data/monDom2/maskedScaffolds.fa.gz .
+    time maskOutFa maskedScaffolds.fa.gz hard stdout | gzip \
+	> hardMaskedScaffolds.fa.gz
+    #	12 minutes
+    #	send the result back  (these scp operations are faster than
+    #	simply copying over NFS)
+    time scp -p hardMaskedScaffolds.fa.gz kkstore01:/cluster/data/monDom2
+    #	1 minute
+    #	break all these hard masked scaffolds at 5,000,000 boundaries,
+    #	result is to a single file.  The tiny scaffolds under that
+    #	size remain intact.
+    time faSplit size hardMaskedScaffolds.fa.gz 5000000 -oneFile \
+          genscan_ -lift=genscan.lft
+    #	5677 pieces of 5677 written
+    #	real    5m6.844s
+    #	save lift file for later liftUp
+    cp -p genscan.lft /cluster/data/monDom2/scripts
+    #	Now split that single file into 200,000 chunks, keeping fa record
+    #	boundaries, this has the effect of putting all the tiny
+    #	scaffolds together in larger single files.  The 5,000,000 scaffold
+    #	chunks will be their own separate files.
+    mkdir hardMasked200K
+    time faSplit about genscan_.fa 200000 hardMasked200K/c_
+    #	2 minutes, makes 1169 files:
+    ls chunks200k | wc
+    #	1169    1169   10590
+
+    #	Clean out the /cluster/bluearc/monDom2/ files that were used
+    #	during repeat masking, then, this copy
+    cd /cluster/bluearc/monDom2
+    rm -fr chunks500k
+    mkdir hardMasked200K
+    cd hardMasked200K
+    cp -p /scratch/monDom2/hardMasked200K/* 
+
+    ssh hgwdev
+    mkdir /cluster/data/monDom2/bed/genscan
+    cd /cluster/data/monDom2/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Make 3 subdirectories for genscan to place output files
+    mkdir gtf pep subopt
+
+    #	This should not be done on the kk - these 5,000,000 sized chunks
+    #	cause too much memory to be used.
+    ssh kk
+    cd /cluster/data/monDom2/bed/genscan
+    ls -1S /cluster/bluearc/monDom2/hardMasked200K/c*.fa > chunks.list
+    cat << '_EOF_' > gsub
+#LOOP
+gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 chunks.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+    #	These jobs are too large to run on the kk - they occupy about 1 Gb
+    #	of memory which is the memory size of a kk node, two of them on
+    #	the same node cause too much swapping.
+# Completed: 1169 of 1169 jobs
+# CPU time in finished jobs:     228087s    3801.45m    63.36h    2.64d  0.007 y
+# IO & Wait Time:               1300618s   21676.96m   361.28h   15.05d  0.041 y
+# Average job time:                1308s      21.80m     0.36h    0.02d
+# Longest finished job:            7290s     121.50m     2.02h    0.08d
+# Submission to last job:          7372s     122.87m     2.05h    0.09d
+
+    # Concatenate scaffold-level results:
+    ssh kkstore01
+    cd /cluster/data/monDom2/bed/genscan
+    time cat gtf/*.gtf | liftUp genscan.gtf \
+	/cluster/data/monDom2/scripts/genscan.lft error stdin
+    time cat subopt/*.bed | liftUp genscanSubopt.bed \
+	/cluster/data/monDom2/scripts/genscan.lft error stdin
+    cat pep/*.pep > genscan.pep
+
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/monDom2/bed/genscan
+    # Reloaded without -genePredExt 1/6/05:
+    ldHgGene -gtf monDom2 genscan genscan.gtf
+    #	39815 gene predictions
+    hgPepPred monDom2 generic genscanPep genscan.pep
+    hgLoadBed monDom2 genscanSubopt genscanSubopt.bed
+    #	Loaded 490601 elements of size 6
+
+    #	Compare with other assemblies:
+    featureBits monDom2 genscan
+    #	49606440 bases of 3496445653 (1.419%) in intersection
+    featureBits monDom1 genscan
+    #	47170795 bases of 3492108230 (1.351%) in intersection
+    featureBits monDom2 genscanSubopt
+    #	53320977 bases of 3496445653 (1.525%) in intersection
+    featureBits monDom1 genscanSubopt
+    #	51805835 bases of 3492108230 (1.484%) in intersection
+    featureBits hg17 genscan
+    #	55323340 bases of 2866216770 (1.930%) in intersection
+    featureBits hg17 genscanSubopt
+    #	55986178 bases of 2866216770 (1.953%) in intersection
+
+    # Clean up
+    cd /cluster/bluearc/monDom2
+    rm -fr hardChunks hardMaskedScaffolds.fa
+    #	This kolossus clean up was actually left until much later.
+    #	I found these copies here to be useful later on.
+    ssh kolossus
+    cd /scratch/monDom2
+    rm -f *
+
+
+##########################################################################
+# MAKE Human Proteins track (WORKING - 2005-08-24 - Hiram)
+    ssh eieio
+    mkdir -p /cluster/data/monDom2/blastDb
+    cd /cluster/data/monDom2/blastDb
+    faSplit sequence ../broad.mit.edu/scaffolds.fa.unmasked 500 x 
+    for i in x*
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/monDom2/blastDb
+    cp /cluster/data/monDom2/blastDb/* /iscratch/i/monDom2/blastDb
+    (iSync) > sync.out
+    exit # back to eieio
+
+    mkdir -p /cluster/data/monDom2/bed/tblastn.hg17KG
+    cd /cluster/data/monDom2/bed/tblastn.hg17KG
+    ls -1S /iscratch/i/monDom2/blastDb/*.nsq | sed "s/\.nsq//" > query.lst
+
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(350000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(350000/499) = 60.102411
+    mkdir -p /cluster/bluearc/monDom2/bed/tblastn.hg17KG/kgfa
+    split -l 65 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/monDom2/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/monDom2/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.2
+	if pslCheck -prot $3.tmp
+	then
+	    mv $3.tmp $3
+	    rm -f $f.1 $f.2 
+	fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+
+    ssh kk
+    cd /cluster/data/monDom2/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 323851 of 323851 jobs
+# CPU time in finished jobs:  113015986s 1883599.76m 31393.33h 1308.06d  3.584 y
+# IO & Wait Time:               2732896s   45548.27m   759.14h   31.63d  0.087 y
+# Average job time:                 357s       5.96m     0.10h    0.00d
+# Longest job:                     4911s      81.85m     1.36h    0.06d
+# Submission to last job:        274144s    4569.07m    76.15h    3.17d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/monDom2/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 649 of 649 jobs
+# CPU time in finished jobs:       4726s      78.76m     1.31h    0.05d  0.000 y
+# IO & Wait Time:                 76824s    1280.41m    21.34h    0.89d  0.002 y
+# Average job time:                 126s       2.09m     0.03h    0.00d
+# Longest job:                      312s       5.20m     0.09h    0.00d
+# Submission to last job:          7487s     124.78m     2.08h    0.09d
+
+    exit
+    # back to eieio
+    cd /cluster/data/monDom2/bed/tblastn.hg17KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/monDom2/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+
+    ssh hgwdev
+    cd /cluster/data/monDom2/bed/tblastn.hg17KG
+    hgLoadPsl monDom2 blastHg17KG.psl
+
+    # back to eieio
+    rm -rf blastOut
+# End tblastn
+
+##########################################################################
+#	blastz self (NOT POSSIBLE - 2005-08-25 - Hiram)
+#	This does not work because it requires over 25,000,000
+#	kluster jobs.  This procedure would have to be done in a
+#	different way.
+    ssh pk
+    mkdir /cluster/data/monDom2/bed/blastzSelf
+    cd /cluster/data/monDom2/bed/blastzSelf
+
+    cat << '_EOF_' > DEF
+# monDom2 vs monDom2
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+#       Since we are running this without lineage specific repeats,
+#       set BLASTZ_M to limit a single sequence matching 1000 times
+BLASTZ_M=1000
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: MonDom2
+SEQ1_DIR=/san/sanvol1/scratch/monDom2/maskedNibs
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: MonDom2
+SEQ2_DIR=/san/sanvol1/scratch/monDom2/monDom2.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom2/bed/blastzSelf
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    #	happy emacs
+
+    twoBitInfo /san/sanvol1/scratch/monDom2/monDom2.2bit stdout | \
+	sort -rn +1  > S1.len
+    cp -p S1.len S2.len
+
+    #	establish a screen to control this job
+    #	altered local copy of doBlastzChainNet.pl to fix santest location
+    #	and run everything on pk since the san location is unique here
+    screen
+    #	to detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh pk
+    screen -d -r
+    time ./doBlastzChainNet.pl \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-fileServer=kkstore01 \
+	`pwd`/DEF > blast.run.out 2>&1 &
+    #	Fails on the gensub2 trying to create the jobList file
+    #	when it reaches some memory limit
+
+##########################################################################
+# BLASTZ Mouse mm6 (STARTED - 2005-08-25 - Hiram)
+    #	copied mm6 nib files from /cluster/data/mm6/nib to
+    #	/san/sanvol1/scratch/mm6/nib
+    ssh pk
+    mkdir /cluster/data/mm6/bed/blastzMonDom2.2005_08_25
+    cd /cluster/data/mm6/bed/blastzMonDom2.2005_08_25
+    cat << '_EOF_' > DEF
+# Mm6 vs monDom2
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+ALIGN=blastz-run.v7
+BLASTZ=blastz.v7
+# Set up blastz parameters using parameters between (chicken and fish ?)
+# but not abridging repeats since can't do that with scaffolds, and
+# it's not very relevant at this evolutionary distance.
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mm6
+SEQ1_DIR=/san/sanvol1/scratch/mm6/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: MonDom2
+SEQ2_DIR=/san/sanvol1/scratch/monDom2/monDom2.2bit
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzMonDom2.2005_08_25
+
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+'_EOF_'
+    # << keep emacs coloring happy
+
+    cp -p /cluster/data/mm6/chrom.sizes ./S1.len
+    twoBitInfo /san/sanvol1/scratch/monDom2/monDom2.2bit stdout | \
+	sort -rn +1  > S2.len
+
+    #	establish a screen to control this job
+    #	altered local copy of doBlastzChainNet.pl to fix santest location
+    #	and run everything on pk since the san location is unique here
+    screen
+    #	to detach from screen session: Ctrl-a Ctrl-d
+    #	to reattach to this screen session:
+    ssh pk
+    screen -d -r
+    time ./doBlastzChainNet.pl \
+	-chainMinScore=5000 \
+	-bigClusterHub=pk \
+	-smallClusterHub=pk \
+	-fileServer=kkstore01 \
+	`pwd`/DEF > blast.run.out 2>&1 &
+XXX - STARTED - 2005-08-25 16:32
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2005-08-31 - Hiram)
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("monDom2", "blat16", "17780", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("monDom2", "blat16", "17781", "0", "1");' \
+	    hgcentraltest
+
+############################################################################
 # BLASTZ SWAP FOR ZEBRAFISH (danRer3) (DONE, 2005-10-19, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
 
@@ -776,4 +1252,3 @@ my $AGP_FILE="/cluster/data/monDom2/broad.mit.edu/assembly.agp";
 # Add entries for danRer3 chains and net to trackDb.ra for monDom2 and
 # modify descriptions to describe the process using scaffolds for danRer3
 # chrNA and chrUn.
-
