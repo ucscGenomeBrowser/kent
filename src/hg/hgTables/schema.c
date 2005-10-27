@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.32 2005/10/22 03:20:18 hartera Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.33 2005/10/27 03:34:22 hartera Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -238,25 +238,38 @@ hTableEnd();
 explainCoordSystem();
 }
 
-static int joinerPairCmpOnB(const void *va, const void *vb)
-/* Compare two joinerPair based on b element of pair. */
+static int joinerPairCmpOnAandB (const void *va, const void *vb)
+/* Compare two joinerPair based on the a and b element of pair. */
 {
 const struct joinerPair *jpA = *((struct joinerPair **)va);
 const struct joinerPair *jpB = *((struct joinerPair **)vb);
-struct joinerDtf *a = jpA->b;
-struct joinerDtf *b = jpB->b;
+struct joinerDtf *a1 = jpA->a;
+struct joinerDtf *a2 = jpA->b;
+struct joinerDtf *b1 = jpB->a;
+struct joinerDtf *b2 = jpB->b;
 int diff;
 
-diff = strcmp(a->database, b->database);
+diff = strcmp(a1->database, b1->database);
 if (diff == 0)
    {
-   diff = strcmp(a->table, b->table);
+   diff = strcmp(a1->table, b1->table);
    if (diff == 0)
-       diff = strcmp(a->field, b->field);
+       {
+       diff = strcmp(a1->field, b1->field);
+       if (diff == 0)
+           {
+           diff = strcmp(a2->database, b2->database);
+           if (diff == 0)
+               {
+               diff = strcmp(a2->table, b2->table);
+               if (diff == 0)
+                   diff = strcmp(a2->field, b2->field);
+               }
+           }
+       }
    }
 return diff;
 }
-
 
 static boolean isViaIndex(struct joinerSet *jsPrimary, struct joinerDtf *dtf)
 /* Return's TRUE if dtf is part of identifier only by an array index. */
@@ -288,7 +301,6 @@ for (link = chain; link != NULL; link = link->next)
 slFreeList(&chain);
 return retVal;
 }
-
 
 static void printTrackHtml(char *table)
 /* If trackDb has html for table, print it out in a new section. */
@@ -324,7 +336,7 @@ describeFields(db, splitTable, asObj, conn);
 
 jpList = joinerRelate(joiner, db, table);
 /* sort and unique list */
-slUniqify(&jpList, joinerPairCmpOnB, joinerPairFree);
+slUniqify(&jpList, joinerPairCmpOnAandB, joinerPairFree);
 
 if (jpList != NULL)
     {
