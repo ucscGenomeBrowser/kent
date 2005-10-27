@@ -174,8 +174,12 @@ static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int 
 plProcSetup(proc, stdinFd, stdoutFd, stderrFd);
 if (sameString(proc->cmd[0],"/dev/memwriter"))
     {  /* there is no such device really */
-    char *mem = (char *)atol(proc->cmd[1]);
-    long size = atoi(proc->cmd[2]);
+    char *mem = NULL;
+    unsigned long addr = 0;
+    unsigned long size = 0;
+    sscanf(proc->cmd[1],"%lu",&addr);
+    sscanf(proc->cmd[2],"%lu",&size);
+    mem = NULL+addr;
     if (proc->cmd[1]
      && proc->cmd[2]
      && size >= 0
@@ -186,7 +190,7 @@ if (sameString(proc->cmd[0],"/dev/memwriter"))
         close(STDOUT_FILENO);
         exit(0);
         }
-    errnoAbort("/dev/memwriter failed: %s", proc->cmd[0]);
+    errnoAbort("/dev/memwriter failed: %s %lu %lu", proc->cmd[0], (unsigned long) mem, size);
     }
 
 /* FIXME: add close-on-exec startup error reporting here */
