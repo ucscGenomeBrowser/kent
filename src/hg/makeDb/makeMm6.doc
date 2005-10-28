@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.91 2005/10/28 17:16:47 kent Exp $"
+#	"$Id: makeMm6.doc,v 1.92 2005/10/28 18:37:38 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8698,7 +8698,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 # and after the ncbiXm and tigrMgiTc alignments are done.
 
 # Set up directory
-    ssh hgwdev
+    ssh kk
     cd /cluster/data/mm6/bed
     mkdir allenBrain
     cd allenBrain
@@ -8712,10 +8712,9 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
      allenCollectSeq allen20051021.tab probeSeq.20051027.fasta ../ncbiXm/ncbiNm.fa ../ncbiXm/ncbiXm.fa ../tigrMgiTc/tigrMgiTc.fa ~/kent/src/hg/makeDb/allenBrain/allenCollectSeq/extra.fa allProbes.fa allProbes.tab missing.tab allenBrainUrl.tab
     
 # Set up a blat run to align the probes.
-    ssh kk
     cd /cluster/data/mm6/bed/allenBrain
     mkdir split
-    faSplit sequence probe20051027.fa 200 split/rp
+    faSplit sequence allProbes.fa 200 split/rp
     mkdir run
     cd run
     ls -1 ../split/*.fa > mrna.lst
