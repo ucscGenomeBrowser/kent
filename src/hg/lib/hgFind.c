@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.168 2005/10/28 21:44:39 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.169 2005/10/28 23:17:28 fanhsu Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -366,7 +366,7 @@ if (!hTableExists(tableName))
 rowOffset = hOffsetPastBin(NULL, tableName);
 conn = hAllocConn();
 query = newDyString(256);
-dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name FROM %s, kgXref "
+dyStringPrintf(query, "SELECT chrom, txStart, txEnd, name, description FROM %s, kgXref "
 	       "WHERE description LIKE '%%%s%%' and kgId=name",
 	       tableName, localName);
 sr = sqlGetResult(conn, query->string);
@@ -388,6 +388,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     pos->chromStart = atoi(row[1]);
     pos->chromEnd = atoi(row[2]);
     pos->name = cloneString(row[3]);
+    pos->description = cloneString(row[4]);
     pos->browserName = cloneString(row[3]);
     slAddHead(&table->posList, pos);
     }
