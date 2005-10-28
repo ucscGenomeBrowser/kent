@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.90 2005/10/28 05:44:52 kent Exp $"
+#	"$Id: makeMm6.doc,v 1.91 2005/10/28 17:16:47 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8709,7 +8709,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 
 # Create a list of probe sequences filling ones missing from probeSeq.20050127.fa
 # with some NCBI and TIGR files, and some downloaded one at a time.
-     allenCollectSeq allen20051021.tab probeSeq.20051027.fasta ../ncbiXm/ncbiNm.fa ../ncbiXm/ncbiXm.fa ../tigrMgiTc/tigrMgiTc.fa ~/kent/src/hg/makeDb/allenBrain/allenCollectSeq/extra.fa allProbes.fa allProbes.tab missing.tab
+     allenCollectSeq allen20051021.tab probeSeq.20051027.fasta ../ncbiXm/ncbiNm.fa ../ncbiXm/ncbiXm.fa ../tigrMgiTc/tigrMgiTc.fa ~/kent/src/hg/makeDb/allenBrain/allenCollectSeq/extra.fa allProbes.fa allProbes.tab missing.tab allenBrainUrl.tab
     
 # Set up a blat run to align the probes.
     ssh kk
@@ -8744,16 +8744,19 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 # Load up database
    ssh hgwdev
    cd /cluster/data/mm6/bed/allenBrain
+
+# Make a new table that contains the URLs for the allen brain genes
+# Make this one first since all.joiner considers it the master table.
+   hgsql mm6 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgsql mm6 -e 'load data local infile "allenBrainUrl.tab" into table allenBrainUrl;'
+
+# Make probe alignment table, and load sequence.
    hgLoadPsl mm6 allenBrainAli.psl
    ln -s /cluster/data/mm6/bed/allenBrain/allProbes.fa /gbdb/mm6/allenBrain/allProbes.fa
    hgLoadSeq mm6 /gbdb/mm6/allenBrain/allProbes.fa
 
 # Make mapping between known genes and allenBrain
-    hgMapToGene mm6 allenBrainAli -type=psl knownGene knownToAllenBrain 
-
-# Make a new table that contains the URLs for the allen brain genes
-    awk -F '\t' '$4 != "" && NR > 1 {printf("%s\t%s\n", $4, $5);}' allen20051021.tab > allenBrainUrl.tab
-    hgsql mm6 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgMapToGene mm6 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
 
 
