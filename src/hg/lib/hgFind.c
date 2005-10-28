@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "web.h"
 #include "jksql.h"
 #include "hdb.h"
@@ -29,7 +30,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.167 2005/10/19 21:48:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.168 2005/10/28 21:44:39 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2044,18 +2045,24 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 	    else
 		{
 		char *matches = excludeTable ? "" : pos->browserName;
+		char *encMatches = cgiEncode(matches);
 		hgPosBrowserRange(pos, range);
 		fprintf(f, "<A HREF=\"%s%cposition=%s",
 			hgAppName, hgAppCombiner, range);
 		if (ui != NULL)
 		    fprintf(f, "&%s", ui);
-		fprintf(f, "%s&%s=%s&hgFind.matches=%s,\">%s at %s</A>",
-			extraCgi, table->name, vis,
-			matches, pos->name, range);
+		fprintf(f, "%s&%s=%s&hgFind.matches=%s,\">",
+			extraCgi, table->name, vis, encMatches);
+		htmTextOut(f, pos->name);
+		fprintf(f, " at %s</A>", range);
 		desc = pos->description;
 		if (desc)
-		    fprintf(f, " - %s", desc);
+		    {
+		    fprintf(f, " - ");
+		    htmTextOut(f, desc);
+		    }
 		fprintf(f, "\n");
+		freeMem(encMatches);
 		}
 	    }
 	if (table->htmlEnd) 
