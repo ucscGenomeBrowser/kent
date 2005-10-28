@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.38 2004/10/21 07:57:24 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.39 2005/10/28 06:20:54 galt Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -211,8 +211,24 @@ return pt+i;
 }
 
 int ptToInt(void *pt)
-/* Convert pointer to integer.  Use when really want to store an
- * int in a pointer field. */
+/* Convert pointer to integer.  Use when really want to store a
+ * pointer in an int. */
+{
+char *a = NULL, *b = pt;
+return b - a;
+}
+
+void *sizetToPt(size_t i)
+/* Convert size_t to pointer. Use when really want to store a
+ * size_t in a pointer. */
+{
+char *pt = NULL;
+return pt+i;
+}
+
+size_t ptToSizet(void *pt)
+/* Convert pointer to size_t.  Use when really want to store a
+ * pointer in a size_t. */
 {
 char *a = NULL, *b = pt;
 return b - a;

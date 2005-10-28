@@ -49,8 +49,16 @@ void *intToPt(int i);
  * int in a pointer field. */
 
 int ptToInt(void *pt);
-/* Convert pointer to integer.  Use when really want to store an
- * int in a pointer field. */
+/* Convert pointer to integer.  Use when really want to store a
+ * pointer in an int. */
+
+void *sizetToPt(size_t i);
+/* Convert size_t to pointer. Use when really want to store a
+ * size_t in a pointer. */
+
+size_t ptToSizet(void *pt);
+/* Convert pointer to size_t.  Use when really want to store a
+ * pointer in a size_t. */
 
 boolean parseQuotedString( char *in, char *out, char **retNext);
 /* Read quoted string from in (which should begin with first quote).
