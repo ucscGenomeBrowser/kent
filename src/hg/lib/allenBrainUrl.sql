@@ -8,5 +8,5 @@ CREATE TABLE allenBrainUrl (
     name varchar(255) not null,	# Allen Brain Atlas ID
     url varchar(255) not null,	# URL of link into Allen site
               #Indices
-    PRIMARY KEY(name(12))
+    PRIMARY KEY(name(16))
 );
