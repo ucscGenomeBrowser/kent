@@ -40,6 +40,7 @@ DIRS = \
 	spToDb \
 	spLoadPsiBlast \
 	spLoadRankProp \
+	spToProteinsVar \
 	spXref3 \
 	spm3 \
 	spm6 \
