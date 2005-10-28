@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.15 2004/02/28 21:07:14 kent Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.16 2005/10/28 19:22:12 markd Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -116,17 +116,25 @@ dyStringAppendN(ds, string, strlen(string));
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString. */
 {
-char string[4*1024];	/* Sprintf buffer */
-int size;
-
-size = vsnprintf(string, sizeof(string), format, args);
-if (size >= sizeof(string)-1)
-    errAbort("Sprintf size too long in dyStringVaPrintf");	/* If we're still alive... */
-dyStringAppendN(ds, string, size);
+/* attempt to format the string in the current space.  If there
+ * is not enough room, increase the buffer size and try again */
+while (TRUE) 
+    {
+    int avail = ds->bufSize - ds->stringSize;
+    int sz = vsnprintf(ds->string + ds->stringSize, avail, format, args);
+    /* note that some version return -1 if too small */
+    if ((sz < 0) || (sz >= avail))
+        dyStringExpandBuf(ds, ds->bufSize*ds->bufSize);
+    else
+        {
+        ds->stringSize += sz;
+        break;
+        }
+    }
 }
 
 void dyStringPrintf(struct dyString *ds, char *format, ...)
-/*  Printf to end of dyString.  Don't do more than 4000 characters this way... */
+/*  Printf to end of dyString. */
 {
 va_list args;
 va_start(args, format);

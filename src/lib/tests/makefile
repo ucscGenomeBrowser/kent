@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests
+test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest
 	rm -r output
 	@echo tested all
 
@@ -77,6 +77,12 @@ pipelineExitCode: ${BIN_DIR}/pipelineTester
 
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} $L
+
+dyStringTest: ${BIN_DIR}/dyStringTester mkdirs
+	${BIN_DIR}/dyStringTester
+
+${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} $L
 
 clean:
 	rm -rf *.o bin output *.tmp
