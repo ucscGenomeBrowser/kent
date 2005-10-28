@@ -97,8 +97,8 @@ altColor 128,228,128
 type bed 4 +
 
 track multiz17way
-shortLabel 17-Way Conservation
-longLabel 17-Way Vertebrate Multiz Alignment & Conservation 
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation 
 group compGeno
 priority 109.11
 visibility hide
