@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.88 2005/10/26 20:14:20 kent Exp $"
+#	"$Id: makeMm6.doc,v 1.89 2005/10/28 01:43:00 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8667,6 +8667,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 # Unzip, simplify fa headers, and filter out non-XM_ sequence, and split
    mkdir split
    zcat mouse.rna.fna.gz | faNcbiToUcsc -wordBefore=ref stdin stdout | faFilter -name=XM_\* stdin ncbiXm.fa
+   zcat mouse.rna.fna.gz | faNcbiToUcsc -wordBefore=ref stdin stdout | faFilter -name=NM_\* stdin ncbiNm.fa
    faSplit sequence ncbiXm.fa 150 split/xm
 
 # Set up cluster job
@@ -8704,6 +8705,45 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 
 # Copy in allen20051021.tab file that was converted from
 # spreadsheet mailed by Susan Sunkin <SusanS@alleninstitute.org>
+# Also copy in probeSeq.20051027.fasta, also from Susan.
+
+# Create a list of probe sequences filling ones missing from probeSeq.20050127.fa
+# with some NCBI and TIGR files, and some downloaded one at a time.
+     allenCollectSeq allen20051021.tab probeSeq.20051027.fasta ../ncbiXm/ncbiNm.fa ../ncbiXm/ncbiXm.fa ../tigrMgiTc/tigrMgiTc.fa ~/kent/src/hg/makeDb/allenBrain/allenCollectSeq/extra.fa allProbes.fa allProbes.tab missing.tab
+    
+# Set up a blat run to align the probes.
+    ssh kk
+    cd /cluster/data/mm6/bed/allenBrain
+    mkdir split
+    faSplit sequence probe20051027.fa 200 split/rp
+    mkdir run
+    cd run
+    ls -1 ../split/*.fa > mrna.lst
+    ls -1 /iscratch/i/mm6/chrom/*.fa > genome.lst
+    mkdir psl
+    cat << '_EOF_' > gsub
+#LOOP
+blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+# Then do the usual para try/push/time/check until the run is finished
+
+# Then do sorting and near-best-in-genome step on file server
+    ssh kkstore
+    cd /cluster/data/mm6/bed/allenBrain/run
+    pslSort dirs raw.psl tmp psl
+    pslReps raw.psl ../allenBrainAli.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
+
+# Clean up big files no longer needed
+   rm raw.psl
+   rm -r psl
+   rm -r ../split
+
+------------- START OLD WAY
+
+# Convert the probe sequences
 # Then extract gene names as so
     cut -f 4 allen20051021.tab | grep -v '^$' | grep -v refSeqAccessionNumber > allen.genes
 
@@ -8712,6 +8752,9 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 
 # Make psl file with just the allen genes and load it into the database
     pslCat refSeq.psl ../ncbiXm/ncbiXm.psl ../tigrMgiTc/tigrMgiTc.psl | pslSelect -queries=allen.genes stdin allenBrainAli.psl
+
+------------- END OLD WAY
+
     hgLoadPsl mm6 allenBrainAli.psl
 
 # Make mapping between known genes and allenBrain
