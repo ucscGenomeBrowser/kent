@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.967 2005/10/27 07:19:14 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.968 2005/10/28 06:24:39 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16928,6 +16928,32 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doAllenBrain(struct trackDb *tdb, char *itemName)
+/* Put up page for Allen Brain Atlas. */
+{
+char *table = tdb->tableName;
+struct psl *pslList;
+int start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+char *url, query[512];
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query), 
+	"select url from allenBrainUrl where name = '%s'", itemName);
+url = sqlQuickString(conn, query);
+printf("<H3><A HREF=\"%s\" target=_blank>", url);
+printf("Click here to open Allen Brain Atlas</A></H3><BR>");
+
+pslList = getAlignments(conn, table, itemName);
+puts("<H3>Probe/Genome Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", table, itemName);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -17773,6 +17799,10 @@ else if (sameString("dvBed", track))
 else if (sameString("humanPhenotype", track))
     {
     doHumPhen(tdb, item);
+    }
+else if (sameString("allenBrainAli", track))
+    {
+    doAllenBrain(tdb, item);
     }
 else if (startsWith("dless", track))
     {
