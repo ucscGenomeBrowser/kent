@@ -52,7 +52,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
     wgRna.o rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o rnaSecStr.o tfbsConsFactors.o \
-    roughAli.o sage.o sageCounts.o sageExp.o sample.o tfbsCons.o tfbsConsSites.o \
+    roughAli.o sage.o sageCounts.o sageExp.o sample.o sqlProg.o tfbsCons.o tfbsConsSites.o \
     sanger22extra.o sangerGene.o sargassoSeaXra.o scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
     snp.o snpExceptions.o snpMap.o snpUi.o softPromoter.o softberryHom.o \
