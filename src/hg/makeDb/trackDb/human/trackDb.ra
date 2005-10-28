@@ -4045,7 +4045,7 @@ compositeTrack on
 shortLabel UNC FAIRE
 longLabel UNC FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)
 group encodeChrom
-priority 62
+priority 63
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 type wig -2.61 3.63
 spanList 50
@@ -4229,7 +4229,7 @@ compositeTrack on
 shortLabel UVa DNA Rep
 longLabel University of Virginia Temporal Profiling of DNA Replication 
 group encodeChrom
-priority 63.0
+priority 64.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 color 60,75,60
@@ -4272,7 +4272,7 @@ compositeTrack on
 shortLabel UVa DNA Rep Seg
 longLabel University of Virginia DNA Replication Temporal Segmentation
 group encodeChrom
-priority 63.1
+priority 64.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
@@ -4311,7 +4311,7 @@ compositeTrack on
 shortLabel UVa DNA Rep Ori
 longLabel University of Virginia DNA Replication Origins
 group encodeChrom
-priority 63.2
+priority 64.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
@@ -4333,7 +4333,7 @@ track encodeUvaDnaRepTr50
 shortLabel UVa DNA Rep TR50
 longLabel University of Virginia DNA Smoothed Timing at 50% Replication
 group encodeChrom
-priority 63.3
+priority 64.3
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type wig 2.05 6.36
@@ -4348,7 +4348,7 @@ compositeTrack on
 shortLabel UW/Reg DNaseI Sens
 longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
 group encodeChrom
-priority 64.1
+priority 66.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 maxHeightPixels 128:16:16
@@ -4412,7 +4412,7 @@ compositeTrack on
 shortLabel UW/Reg DNaseI HSs
 longLabel ENCODE UW/Regulome DNaseI hypersensitive sites/scores
 group encodeChrom
-priority 64.2
+priority 66.2
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 type bedGraph 4
@@ -4476,7 +4476,7 @@ compositeTrack on
 shortLabel UW/Reg Plate Q/A
 longLabel ENCODE UW/Regulome Plate Quality Score
 group encodeChrom
-priority 64.3
+priority 66.3
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 type bed 5 .
@@ -4538,7 +4538,7 @@ compositeTrack on
 shortLabel UW/Reg Amplicon
 longLabel ENCODE UW/Regulome Amplicon
 group encodeChrom
-priority 64.4
+priority 66.4
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
 type bed 5 .
