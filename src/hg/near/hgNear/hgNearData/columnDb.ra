@@ -89,7 +89,7 @@ search prefix
 name visiGene
 shortLabel visiGene
 longLabel UCSC VisiGene in-situ image browser
-priority 2.61
+priority 2.601
 visibility off
 type lookup knownToVisiGene name value
 search exact
@@ -99,7 +99,7 @@ hgsid on
 name allenBrainAtlas
 shortLabel Allen Brain
 longLabel Allen Brain Atlas In-Situ Images of Adult Mouse Brains
-priority 2.62
+priority 2.602
 visibility off
 type association knownToAllenBrain allenBrainUrl
 queryFull select name,value from knownToAllenBrain 
