@@ -2,6 +2,7 @@
  * writing  */
 #include "pipeline.h"
 #include "common.h"
+#include "sqlNum.h"
 #include "dystring.h"
 #include "errabort.h"
 #include "portable.h"
@@ -174,12 +175,8 @@ static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int 
 plProcSetup(proc, stdinFd, stdoutFd, stderrFd);
 if (sameString(proc->cmd[0],"/dev/memwriter"))
     {  /* there is no such device really */
-    char *mem = NULL;
-    unsigned long addr = 0;
-    unsigned long size = 0;
-    sscanf(proc->cmd[1],"%lu",&addr);
-    sscanf(proc->cmd[2],"%lu",&size);
-    mem = NULL+addr;
+    char *mem = NULL+sqlUnsignedLong(proc->cmd[1]);
+    unsigned long size = sqlUnsignedLong(proc->cmd[2]);
     if (proc->cmd[1]
      && proc->cmd[2]
      && size >= 0
