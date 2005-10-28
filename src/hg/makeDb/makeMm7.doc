@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.14 2005/10/27 22:55:30 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.15 2005/10/28 00:06:06 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -3122,7 +3122,7 @@ xenopus_xenTro1:0.782453):0.156067,
     #  2	0.4677 - human hg17		(% 37.0)xx      (LSR or not ?)
     #  3	0.4686 - chimp panTro1		(% 35.503)	(% 33.283)
     #  4	0.4960 - macaque rheMac1	(% 34.310)	(% 32.422)
-    #  5	0.5131 - rabbit oryCun1		(% 19.492)      (loading)
+    #  5	0.5131 - rabbit oryCun1		(% 19.492)      (fb running)
     #  6	0.6142 - armadillo dasNov1	(% 16.975)      (fb running)
     #  7	0.6230 - dog canFam2		(% 30.654)	(% 32.417)
     #  8	0.6256 - elephant loxAfr1	(% 18.583)      (loading)
@@ -3267,19 +3267,20 @@ $s $c rn3 oryCun1 0
 $s $c rn3oryCun1 rheMac1hg17panTro1 1
 $s $c canFam2 bosTau2 0
 $s $c canFam2bosTau2 rn3oryCun1rheMac1hg17panTro1 1
+$s $c dasNov1 canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
 $s $c loxAfr1 echTel1 0
-$s $c loxAfr1echTel1 canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
-$s $c monDom2 loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
-$s $c galGal2 monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+$s $c loxAfr1echTel1 dasNov1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+$s $c monDom2 loxAfr1echTel1dasNov1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+$s $c galGal2 monDom2loxAfr1echTel1dasNov1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
 $s $c xenTro1 \
-    galGal2monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1  1
+    galGal2monDom2loxAfr1echTel1dasNov1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1  1
 $s $c tetNig1 fr1  0
 $s $c danRer3 tetNig1fr1  1
 $s $c danRer3tetNig1fr1 \
-xenTro1galGal2monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
+xenTro1galGal2monDom2loxAfr1echTel1dasNov1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 1
 #	 get final alignment file
 $s $c \
-danRer3tetNig1fr1xenTro1galGal2monDom2loxAfr1echTel1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 \
+danRer3tetNig1fr1xenTro1galGal2monDom2loxAfr1echTel1dasNov1canFam2bosTau2rn3oryCun1rheMac1hg17panTro1 \
 	/cluster/data/mm7/bed/multiz17way/maf/$c.maf
 #cleanup
 $s $c
