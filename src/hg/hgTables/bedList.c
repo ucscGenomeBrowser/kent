@@ -19,7 +19,7 @@
 #include "wiggle.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.41 2005/07/11 16:26:58 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.42 2005/10/28 16:38:54 kent Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -53,7 +53,7 @@ if (fieldCount >= 5)
     if (hti->scoreField[0] != 0)
 	dyStringPrintf(fields, ",%s", hti->scoreField);
     else
-	dyStringPrintf(fields, ",0", hti->startField);  
+	dyStringPrintf(fields, ",0");
     }
 if (fieldCount >= 6)
     {

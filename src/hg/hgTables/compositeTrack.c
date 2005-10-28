@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: compositeTrack.c,v 1.9 2005/07/13 04:22:25 angie Exp $";
+static char const rcsid[] = "$Id: compositeTrack.c,v 1.10 2005/10/28 16:38:54 kent Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -237,7 +237,7 @@ else
 	}
     else if (sameString(op, "less"))
 	{
-	dyStringPrintf(dy, "All %s records that have at most ",
+	dyStringPrintf(dy, "All %s records that have at most %s ",
 		       curTable,
 		       cartString(cart, hgtaNextSubtrackMergeLessThreshold));
 	dyStringPrintf(dy, " %% overlap with any other selected subtrack:\n");
