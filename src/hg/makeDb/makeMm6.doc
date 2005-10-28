@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.93 2005/10/28 19:15:07 kent Exp $"
+#	"$Id: makeMm6.doc,v 1.94 2005/10/28 19:15:53 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8694,8 +8694,8 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 
 #############################################################################
 # Create Allen Brain Atlas mapping. (Done 28 Oct 2005 JK)
-# This needs to be done after the refSeq alignments are done,
-# and after the ncbiXm and tigrMgiTc alignments are done.
+# This needs to be done after have created sequences in
+# ncbiXm and tigrMgiTc as above.
 
 # Set up directory
     ssh kk
