@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.66 2005/10/27 23:03:10 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.67 2005/10/28 03:34:47 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -603,25 +603,19 @@ if (nextLine[0] == 0)
     return FALSE;
 /* if CR, Mac or DOS */
 
-while ((c=*nextLine++) != 0)
+while ((c=*nextLine++) != 0 && (c != '\r') && (c != '\n'));
+    /* do nothing */
+--nextLine;
+if (c == '\r')
     {
-    if (c == '\r')
-        {
-        nextLine[-1] = 0;
-        if (*nextLine == '\n')
-            ++nextLine;
-        break;
-        }
-    if (c == '\n')
-        {
-        nextLine[-1] = 0;
-        break;
-        }
+    *nextLine++ = 0;
+    c=*nextLine;
     }
-if (c == 0)
-    --nextLine;
-
-*pNextLine = nextLine;  /* note nextLine == 0 when there is no more */
+if (c == '\n')
+    {
+    *nextLine++ = 0;
+    }
+*pNextLine = nextLine;
 return TRUE;
 } 
 
@@ -804,13 +798,11 @@ else
     if (startsWith("compressed://",text))
 	{
 	char *words[3];
-	char *mem = NULL;
-    	unsigned long addr = 0;
-	unsigned long size = 0;
+	char *mem;
+        unsigned long size;
 	chopByWhite(text,words,3);
-    	sscanf(words[1],"%lu",&addr);
-	sscanf(words[2],"%lu",&size);
-    	mem = NULL+addr;
+	mem = NULL+sqlUnsignedLong(words[1]);
+        size = sqlUnsignedLong(words[2]);
 	lf = lineFileDecompressMem(TRUE, mem, size);
 	}
     else
