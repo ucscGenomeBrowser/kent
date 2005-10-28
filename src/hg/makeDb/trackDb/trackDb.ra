@@ -728,6 +728,15 @@ type bed 8 .
 url http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$ 
 urlLabel miRBase:
 
+track allenBrainAli
+shortLabel Allen Brain
+longLabel Allen Brain Atlas Probes
+group regulation
+priority 80
+visibility hide
+color 50,0,100
+type psl .
+
 track cpgIsland
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
