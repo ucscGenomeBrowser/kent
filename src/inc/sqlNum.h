@@ -15,6 +15,11 @@ unsigned sqlUnsigned(char *s);
  * twice as fast as atoi (by not having to skip white 
  * space or stop except at the null byte.) */
 
+unsigned long sqlUnsignedLong(char *s);
+/* Convert series of digits to unsigned long about
+ * twice as fast as atol (by not having to skip white 
+ * space or stop except at the null byte.) */
+
 int sqlSigned(char *s);
 /* Convert string to signed integer.  Unlike atol assumes 
  * all of string is number. */
