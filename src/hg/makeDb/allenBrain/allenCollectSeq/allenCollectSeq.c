@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.1 2005/10/28 00:46:02 kent Exp $";
+static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.2 2005/10/28 01:25:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -165,8 +165,8 @@ while (lineFileRowTab(lf, row))
     ++hitTotal;
     }
 verbose(1, "%d (%3.1f%%) hitProbe\n", hitProbe, 100.0 * hitProbe/hitTotal);
-verbose(1, "%d (%3.1f%%) hitXm\n", hitXm, 100.0 * hitXm/hitTotal);
 verbose(1, "%d (%3.1f%%) hitNm\n", hitNm, 100.0 * hitNm/hitTotal);
+verbose(1, "%d (%3.1f%%) hitXm\n", hitXm, 100.0 * hitXm/hitTotal);
 verbose(1, "%d (%3.1f%%) hitTc\n", hitTc, 100.0 * hitTc/hitTotal);
 verbose(1, "%d (%3.1f%%) hitExtra\n", hitExtra, 100.0 * hitExtra/hitTotal);
 verbose(1, "%d (%3.1f%%) hitNone\n", hitNone, 100.0 * hitNone/hitTotal);
