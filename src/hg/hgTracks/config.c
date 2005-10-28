@@ -158,8 +158,7 @@ cartRemove(cart, configGroupTarget);
 if (sameString(groupTarget, "none"))
     freez(&groupTarget);
 
-dyStringPrintf(title, "Configure Image",
-	       hOrganism(database), hFreezeFromDb(database), database);
+dyStringPrintf(title, "Configure Image");
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=POST>\n", hgTracksName());
 webStartWrapperDetailed(cart, "", title->string, NULL, FALSE, FALSE, FALSE, FALSE);
 cartSaveSession(cart);

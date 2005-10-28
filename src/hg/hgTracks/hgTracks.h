@@ -703,6 +703,11 @@ char *getOrganism(struct sqlConnection *conn, char *acc);
 /* lookup the organism for an mrna, or NULL if not found.  Warning: static
  * return */
 
+char *getOrganismShort(struct sqlConnection *conn, char *acc);
+/* lookup the organism for an mrna, or NULL if not found.  This will
+ * only return the genus, and only the first seven letters of that.
+ * Warning: static return */
+
 char *getGeneName(struct sqlConnection *conn, char *acc);
 /* get geneName from refLink or NULL if not found.  Warning: static return */
 

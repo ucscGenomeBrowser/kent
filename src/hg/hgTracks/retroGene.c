@@ -1,7 +1,7 @@
 
 #include "retroGene.h"
 
-static char const rcsid[] = "$Id: retroGene.c,v 1.7 2005/04/13 23:04:43 baertsch Exp $";
+static char const rcsid[] = "$Id: retroGene.c,v 1.8 2005/10/28 17:02:41 kent Exp $";
 
 struct linkedFeatures *lfFromRetroGene(struct pseudoGeneLink *pg)
 /* Return a linked feature from a retroGene. */
@@ -85,11 +85,9 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         geneName = lf->name;
     if ((useGeneName || useAcc) && !isNative)
         {
-        /* append upto 7 chars of org, plus a space */
-        char *org = getOrganism(conn, lf->name);
-        org = firstWordInLine(org);
+        char *org = getOrganismShort(conn, lf->name);
         if (org != NULL)
-            dyStringPrintf(name, "%0.7s ", org);
+            dyStringPrintf(name, "%s ", org);
         }
     /* prepend retro- to parent gene name */
     dyStringAppend(name, "retro-");

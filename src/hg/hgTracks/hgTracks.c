@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1026 2005/10/23 07:44:46 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1027 2005/10/28 17:02:41 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3233,6 +3233,20 @@ if ((org != NULL) && (org[0] == '\0'))
 return org;
 }
 
+char *getOrganismShort(struct sqlConnection *conn, char *acc)
+/* lookup the organism for an mrna, or NULL if not found.  This will
+ * only return the genus, and only the first seven letters of that.
+ * Warning: static return */
+{
+int maxOrgSize = 7;
+char *org = getOrganism(conn, acc);
+org = firstWordInLine(org);
+if (strlen(org) > maxOrgSize)
+    org[maxOrgSize] = 0;
+return org;
+}
+
+
 char *getGeneName(struct sqlConnection *conn, char *acc)
 /* get geneName from refLink or NULL if not found.  Warning: static return */
 {
@@ -3292,11 +3306,9 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     struct dyString *name = dyStringNew(64);
     if ((useGeneName || useAcc) && !isNative)
         {
-        /* append upto 7 chars of org, plus a space */
-        char *org = getOrganism(conn, lf->name);
-        org = firstWordInLine(org);
+        char *org = getOrganismShort(conn, lf->name);
         if (org != NULL)
-            dyStringPrintf(name, "%0.7s ", org);
+            dyStringPrintf(name, "%s ", org);
         }
     if (useGeneName)
         {
