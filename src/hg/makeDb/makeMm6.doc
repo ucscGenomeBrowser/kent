@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.89 2005/10/28 01:43:00 kent Exp $"
+#	"$Id: makeMm6.doc,v 1.90 2005/10/28 05:44:52 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -8741,21 +8741,12 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
    rm -r psl
    rm -r ../split
 
-------------- START OLD WAY
-
-# Convert the probe sequences
-# Then extract gene names as so
-    cut -f 4 allen20051021.tab | grep -v '^$' | grep -v refSeqAccessionNumber > allen.genes
-
-# Extract refSeq alignments from database, removing bin field
-    hgsql mm6 -N -e "select * from refSeqAli" | cut  -f 2- > refSeq.psl
-
-# Make psl file with just the allen genes and load it into the database
-    pslCat refSeq.psl ../ncbiXm/ncbiXm.psl ../tigrMgiTc/tigrMgiTc.psl | pslSelect -queries=allen.genes stdin allenBrainAli.psl
-
-------------- END OLD WAY
-
-    hgLoadPsl mm6 allenBrainAli.psl
+# Load up database
+   ssh hgwdev
+   cd /cluster/data/mm6/bed/allenBrain
+   hgLoadPsl mm6 allenBrainAli.psl
+   ln -s /cluster/data/mm6/bed/allenBrain/allProbes.fa /gbdb/mm6/allenBrain/allProbes.fa
+   hgLoadSeq mm6 /gbdb/mm6/allenBrain/allProbes.fa
 
 # Make mapping between known genes and allenBrain
     hgMapToGene mm6 allenBrainAli -type=psl knownGene knownToAllenBrain 
