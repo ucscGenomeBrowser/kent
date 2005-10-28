@@ -836,6 +836,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.knownToU133.name
     $kgDb.knownToU95.name
     $kgDb.knownToU133Plus2.name
+    $kgDb.knownToAllenBrain.name
 #   $kgDb.blastKGPep00.name minCheck=0.90 (knownGene updated)
 #   $kgDb.blastKGPep01.name minCheck=0.99 (another knownGene update)
 #   $kgDb.blastKGRef01.acc minCheck=0.99
@@ -1504,6 +1505,11 @@ identifier anoEstTclId
     $anoGam.anoEstTcl.name
     $anoGam.anoEstExpressed.name minCheck=0.30
 
+identifier allenBrainProbe
+"A probe used in the Allen Brain Atlas"
+    $gbd.allenBrainUrl.name
+    $gbd.allenBrainAli.qName
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -1699,6 +1705,7 @@ type knownTo
     $gbd.knownToLocusLink
     $gbd.knownToPfam
     $gbd.knownToRefSeq
+    $gbd.knownToAllenBrain
     $hg.knownToU95
     $hg.knownToU133
     $hg.knownToU133Plus2
