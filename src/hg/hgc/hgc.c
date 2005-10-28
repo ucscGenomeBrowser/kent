@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.968 2005/10/28 06:24:39 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.969 2005/10/28 06:27:16 kent Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16943,7 +16943,7 @@ safef(query, sizeof(query),
 	"select url from allenBrainUrl where name = '%s'", itemName);
 url = sqlQuickString(conn, query);
 printf("<H3><A HREF=\"%s\" target=_blank>", url);
-printf("Click here to open Allen Brain Atlas</A></H3><BR>");
+printf("Click here to open Allen Brain Atlas on this probe.</A></H3><BR>");
 
 pslList = getAlignments(conn, table, itemName);
 puts("<H3>Probe/Genome Alignments</H3>");
