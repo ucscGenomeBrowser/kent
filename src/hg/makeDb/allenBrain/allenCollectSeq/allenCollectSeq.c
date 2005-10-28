@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.2 2005/10/28 01:25:14 kent Exp $";
+static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.3 2005/10/28 06:17:31 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "allenCollectSeq - Collect probe sequences for Allen Brain Atlas from a variety of sources\n"
   "usage:\n"
-  "   allenCollectSeq tabFile probeFile nmFile xmFile tcFile extraFile outFile.fa outFile.tab missing.tab\n"
+  "  allenCollectSeq tabFile probeFile nmFile xmFile tcFile extraFile outFile.fa refToRp.tab missing.tab rpToUrl.tab\n"
   "Where tabFile is a tab-separated file with the following fields\n"
   "\tâ#geneSymbol     geneName        entrezGeneId    refSeqAccessionNumber   urlToAtlas\n"
   "and probeFile is a fasta file containing header lines of the format\n"
@@ -25,9 +25,11 @@ errAbort(
   "and xmFile is a simple fasta file of NCBI gene model sequences (XM_ sequences)\n"
   "and tcFile is a simple fasta file of TIGR MGI TC sequence\n"
   "and extraFile is a simple fasta file of other sequence\n"
-  "The output is a simple fasta file, and a file that maps the 'refSeqAccessionNumber'\n"
-  "field in tabFile to the id's in the output fasta file, and also a file of the rows from\n"
-  "tabFile for which no probe was found.\n"
+  "The output files are\n"
+  "  outFile.fa - a fasta file containing the combined probe sequences\n"
+  "  refToRp.tab - this maps the refSeqAccessionNumber in tabFile to the outFile.fa ids\n"
+  "  missing.tab - this contains lines from tabFile where no sequence could be found\n"
+  "  rpToUrl.tab - this maps the outFile.fa ids to URLs for linking to Allen Brain Atlas\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -109,12 +111,13 @@ for (seq = seqList; seq != NULL; seq = seq->next)
 
 void allenCollectSeq(char *tabFile, char *probeFile, char *nmFile, 
 	char *xmFile, char *tcFile, char *extraFile,
-	char *outFa, char *outTab, char *outMiss)
+	char *outFa, char *outRefToRp, char *outMiss, char *outRpToUrl)
 /* allenCollectSeq - Collect probe sequences for Allen Brain Atlas from a variety of sources. */
 {
 struct lineFile *lf = lineFileOpen(tabFile, TRUE);
 FILE *fFa = mustOpen(outFa, "w");
-FILE *fTab = mustOpen(outTab, "w");
+FILE *fRefToRp = mustOpen(outRefToRp, "w");
+FILE *fRpToUrl = mustOpen(outRpToUrl, "w");
 FILE *fMiss = mustOpen(outMiss, "w");
 char *row[5];
 struct hash *nmHash = hashFa(nmFile);
@@ -159,7 +162,8 @@ while (lineFileRowTab(lf, row))
 	    safef(seqName, sizeof(seqName), "%s", seq->name);
 	else
 	    safef(seqName, sizeof(seqName), "RP_%s", seq->name);
-	fprintf(fTab, "%s\t%s\n", acc, seqName);
+	fprintf(fRefToRp, "%s\t%s\n", acc, seqName);
+	fprintf(fRpToUrl, "%s\t%s\n", seqName, row[4]);
 	faWriteNext(fFa, seqName, seq->dna, seq->size);
 	}
     ++hitTotal;
@@ -171,7 +175,8 @@ verbose(1, "%d (%3.1f%%) hitTc\n", hitTc, 100.0 * hitTc/hitTotal);
 verbose(1, "%d (%3.1f%%) hitExtra\n", hitExtra, 100.0 * hitExtra/hitTotal);
 verbose(1, "%d (%3.1f%%) hitNone\n", hitNone, 100.0 * hitNone/hitTotal);
 carefulClose(&fFa);
-carefulClose(&fTab);
+carefulClose(&fRpToUrl);
+carefulClose(&fRefToRp);
 carefulClose(&fMiss);
 }
 
@@ -179,8 +184,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 10)
+if (argc != 11)
     usage();
-allenCollectSeq(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], argv[8], argv[9]);
+allenCollectSeq(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6], argv[7], 
+	argv[8], argv[9], argv[10]);
 return 0;
 }
