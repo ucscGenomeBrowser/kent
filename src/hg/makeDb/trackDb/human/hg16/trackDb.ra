@@ -1539,15 +1539,6 @@ color 20,90,0
 type bed 6 +
 mafTrack encodeTbaAlign
 
-track humanPhenotype
-shortLabel humPhen
-longLabel Human Phenotype
-group encodeGenes
-priority 63.6
-visibility hide
-color 150,0,150
-type bed 4 +
-
 searchTable encodeGisRnaPetHCT116
 searchMethod exact
 searchType bed

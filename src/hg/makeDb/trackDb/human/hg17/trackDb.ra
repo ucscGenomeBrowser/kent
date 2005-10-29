@@ -2004,15 +2004,6 @@ pred mm6.blastKGPep03
 blastRef mm6.blastKGRef03
 chromosome 13
 
-track humanPhenotype
-shortLabel humPhen
-longLabel Human Phenotype
-group encodeGenes
-priority 63.7
-visibility hide
-color 150,0,150
-type bed 4 +
-
 searchTable bacendsCow
 searchMethod exact
 searchType bed

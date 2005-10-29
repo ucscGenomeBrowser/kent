@@ -5958,6 +5958,15 @@ type bed 4 .
     priority 44
     color 230,0,25
 
+track humanPhenotype
+shortLabel humPhen
+longLabel Human Phenotype
+group encodeGenes
+priority 63.7
+visibility hide
+color 150,0,150
+type bed 4 +
+
 searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
@@ -6092,3 +6101,18 @@ searchName gencodePutative2
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
+
+searchName humPhenAliasSearch
+searchTable humanPhenotype
+query select chrom, chromStart, chromEnd, name from %s where dbId like '%s,%%'
+xrefTable humPhenAlias
+xrefQuery select dbId, name from %s where name like '%%%s%%'
+searchMethod fuzzy
+padding 1000
+searchPriority 51
+
+searchTable humanPhenotype
+searchMethod fuzzy
+query select chrom, chromStart, chromEnd, name from %s where name like '%%%s%%'
+padding 1000
+searchPriority 51
