@@ -16,7 +16,7 @@ ${BINDIR}/pslMap: pslMap
 	${STRIP} ${BINDIR}/pslMap${EXE}
 
 pslMap: ${OBJS} ${MYLIBS}
-	${CC} ${CFLAGS} -o pslMap ${OBJS} ${LIBS} 
+	${CC} ${CFLAGS} ${COPT} -o pslMap ${OBJS} ${LIBS} 
 
 test::
 	(cd tests && ${MAKE} test)

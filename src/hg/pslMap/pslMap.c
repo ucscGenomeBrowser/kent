@@ -8,7 +8,23 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.6 2005/10/29 07:26:25 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.7 2005/10/29 16:49:52 markd Exp $";
+
+/*
+ * Notes:
+ *  - This programs is used with both large and small mapping psls.  Large
+ *    psls used for doing cross-species mappings and small psl are used for
+ *    doing protein to mRNA mappings.  This introduces some speed issues.
+ *    For chain mapping, a large amount of time is spent in getBlockMapping()
+ *    searching for the starting point of a mapping.  However an optimization
+ *    to find the starting point, such as a binKeeper, would be very
+ *    inefficient for a large number of small psls.  Implementing such
+ *    an optimzation would have to be dependent on the type of mapping.
+ *    The code was made 16x faster for genome mappings by remembering the
+ *    current location in the mapping psl between blocks (iMapBlkPtr arg).
+ *    This will do for a while.
+ */
+
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -274,66 +290,89 @@ if ((!keepTranslated) || ((inPsl->strand[1] == '\0') && (mapPslOrigStrand[1] == 
     }
 }
 
-struct block findBlockMapping(struct psl* inPsl, struct psl* mapPsl,
-                              struct block* align1Blk)
+static struct block getBeforeBlockMapping(unsigned mqStart, unsigned mqEnd,
+                                          struct block* align1Blk)
+/* map part of an ungapped psl block that occurs before a mapPsl block */
+{
+struct block mappedBlk;
+ZeroVar(&mappedBlk);
+
+/* mRNA start in genomic gap before this block, this will
+ * be an inPsl insert */
+unsigned size = (align1Blk->tEnd < mqStart)
+    ? (align1Blk->tEnd - align1Blk->tStart)
+    : (mqStart - align1Blk->tStart);
+mappedBlk.qStart = align1Blk->qStart;
+mappedBlk.qEnd = align1Blk->qStart + size;
+return mappedBlk;
+}
+
+static struct block getOverBlockMapping(unsigned mqStart, unsigned mqEnd,
+                                        unsigned mtStart, struct block* align1Blk)
+/* map part of an ungapped psl block that overlapps a mapPsl block. */
+{
+struct block mappedBlk;
+ZeroVar(&mappedBlk);
+
+/* common sequence start contained in this block, this handles aligned
+ * and genomic inserts */
+unsigned off = align1Blk->tStart - mqStart;
+unsigned size = (align1Blk->tEnd > mqEnd)
+    ? (mqEnd - align1Blk->tStart)
+    : (align1Blk->tEnd - align1Blk->tStart);
+mappedBlk.qStart = align1Blk->qStart;
+mappedBlk.qEnd = align1Blk->qStart + size;
+mappedBlk.tStart = mtStart + off;
+mappedBlk.tEnd = mtStart + off + size;
+return mappedBlk;
+}
+
+struct block getBlockMapping(struct psl* inPsl, struct psl* mapPsl,
+                             int *iMapBlkPtr, struct block* align1Blk)
 /* Map part or all of a ungapped psl block to the genome.  This returns the
  * coordinates of the sub-block starting at the beginning of the align1Blk.
  * If this is a gap, either the target or query coords are zero.  This works
- * in genomic strand space.
+ * in genomic strand space.  The search starts at the specified map block,
+ * which is updated to prevent rescanning large psls.
  */
 {
 int iBlk;
 struct block mappedBlk;
-ZeroVar(&mappedBlk);
 
 /* search for block or gap containing start of mrna block */
-for (iBlk = 0; iBlk < mapPsl->blockCount; iBlk++)
+for (iBlk = *iMapBlkPtr; iBlk < mapPsl->blockCount; iBlk++)
     {
-    unsigned mStart = mapPsl->qStarts[iBlk];
-    unsigned mEnd = mapPsl->qStarts[iBlk]+mapPsl->blockSizes[iBlk];
-    unsigned gStart = mapPsl->tStarts[iBlk];
-    if (align1Blk->tStart < mStart)
+    unsigned mqStart = mapPsl->qStarts[iBlk];
+    unsigned mqEnd = mapPsl->qStarts[iBlk]+mapPsl->blockSizes[iBlk];
+    if (align1Blk->tStart < mqStart)
         {
-        /* mRNA start in genomic gap before this block, this will
-         * be a inPsl insert */
-        unsigned size = (align1Blk->tEnd < mStart)
-            ? (align1Blk->tEnd - align1Blk->tStart)
-            : (mStart - align1Blk->tStart);
-        mappedBlk.qStart = align1Blk->qStart;
-        mappedBlk.qEnd = align1Blk->qStart + size;
-        return mappedBlk;
+        *iMapBlkPtr = iBlk;
+        return getBeforeBlockMapping(mqStart, mqEnd, align1Blk);
         }
-    if ((align1Blk->tStart >= mStart) && (align1Blk->tStart < mEnd))
+    if ((align1Blk->tStart >= mqStart) && (align1Blk->tStart < mqEnd))
         {
-        /* common sequence start contained in this block, this handles aligned
-         * and genomic inserts */
-        unsigned off = align1Blk->tStart - mStart;
-        unsigned size = (align1Blk->tEnd > mEnd)
-            ? (mEnd - align1Blk->tStart)
-            : (align1Blk->tEnd - align1Blk->tStart);
-        mappedBlk.qStart = align1Blk->qStart;
-        mappedBlk.qEnd = align1Blk->qStart + size;
-        mappedBlk.tStart = gStart + off;
-        mappedBlk.tEnd = gStart + off + size;
-        return mappedBlk;
+        *iMapBlkPtr = iBlk;
+        return getOverBlockMapping(mqStart, mqEnd, mapPsl->tStarts[iBlk], align1Blk);
         }
     }
 
 /* reached the end of the mRNA->genome alignment, finish off the 
  * rest of the the protein as an insert */
+ZeroVar(&mappedBlk);
 mappedBlk.qStart = align1Blk->qStart;
 mappedBlk.qEnd = align1Blk->qEnd;
+*iMapBlkPtr = iBlk;
 return mappedBlk;
 }
 
-boolean mapBlock(struct psl *inPsl, struct psl* mapPsl,
+boolean mapBlock(struct psl *inPsl, struct psl* mapPsl, int *iMapBlkPtr,
                  struct block *align1Blk, struct psl* mappedPsl,
                  int* mappedPslMax)
-/* Add a PSL block from a ungapped portion of an alignment alignment, mapping
- * it to the genome.  If the started of the inPsl block maps to a part of the
- * mapPsl that is aligned, it is added as a PSL block, otherwise the gap is
- * skipped.  Block starts are adjusted for next call.  Return FALSE if the end
- * of the alignment is reached. */
+/* Add a PSL block from a ungapped portion of an alignment, mapping it to the
+ * genome.  If the started of the inPsl block maps to a part of the mapPsl
+ * that is aligned, it is added as a PSL block, otherwise the gap is skipped.
+ * Block starts are adjusted for next call.  Return FALSE if the end of the
+ * alignment is reached. */
 {
 struct block mappedBlk;
 unsigned size;
@@ -345,7 +384,7 @@ if ((align1Blk->qStart >= align1Blk->qEnd) || (align1Blk->tStart >= align1Blk->t
     return FALSE;  /* end of ungapped block. */
 
 /* find block or gap with start coordinates of mrna */
-mappedBlk = findBlockMapping(inPsl, mapPsl, align1Blk);
+mappedBlk = getBlockMapping(inPsl, mapPsl, iMapBlkPtr, align1Blk);
 
 if ((mappedBlk.qEnd != 0) && (mappedBlk.tEnd != 0))
     addPslBlock(mappedPsl, &mappedBlk, mappedPslMax);
@@ -364,6 +403,7 @@ struct psl* mapAlignment(struct psl *inPsl, struct psl *mapPsl)
 /* map one pair of alignments. */
 {
 int mappedPslMax = 8; /* allocated space in output psl */
+int iMapBlk = 0;
 char mapPslOrigStrand[3];
 boolean rcMapPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
 boolean cnv1 = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
@@ -397,7 +437,8 @@ mappedPsl = createMappedPsl(inPsl, mapPsl, mappedPslMax);
 for (iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
     {
     struct block align1Blk = blockFromPslBlock(inPsl, iBlock);
-    while (mapBlock(inPsl, mapPsl, &align1Blk, mappedPsl, &mappedPslMax))
+    while (mapBlock(inPsl, mapPsl, &iMapBlk, &align1Blk, mappedPsl,
+                    &mappedPslMax))
         continue;
     }
 
@@ -416,7 +457,6 @@ if (cnv1)
 if (cnv2)
     pslNAToProt(mapPsl);
 
-
 return mappedPsl;
 }
 
@@ -427,10 +467,8 @@ struct psl* mappedPsl = mapAlignment(inPsl, mapPsl);
 
 /* only output if blocks were actually mapped */
 if ((mappedPsl != NULL) && (mappedPsl->blockCount > 0))
-    {
     pslTabOut(mappedPsl, outPslFh);
-    pslFree(&mappedPsl);
-    }
+pslFree(&mappedPsl);
 }
 
 void mapQueryPsl(struct psl* inPsl, struct hash *mapPslHash, FILE* outPslFh)
