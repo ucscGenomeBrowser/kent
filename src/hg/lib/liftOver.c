@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.26 2005/08/24 23:19:02 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.27 2005/10/29 17:29:22 kent Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -680,6 +680,7 @@ if (b == NULL)
 nextR = r->next;
 for (;;)
     {
+    /* Skip over chain blocks that end before range starts. */
     while (b->tEnd <= r->start)
 	{
 	b = b->next;
@@ -691,6 +692,8 @@ for (;;)
 	}
     if (done) 
 	break;
+
+    /* Put any range blocks that end before block starts on badList */
     while (r->end <= b->tStart)
 	{
 	slAddHead(&badList, r);
@@ -705,6 +708,8 @@ for (;;)
 	}
     if (done) 
 	break;
+
+    /* Map start and end of 'thick area' in a slightly picky fashion. */
     if (needThick)
 	{
 	if (b->tStart <= thickStart && thickStart < b->tEnd)
@@ -730,6 +735,7 @@ for (;;)
 	    fudgeThickEnd = b->qEnd;
 	    }
 	}
+
     if (b->tStart <= r->start && r->start < b->tEnd && !gotStart)
 	{
 	gotStart = TRUE;
@@ -1261,6 +1267,7 @@ struct lineFile *lf = pslFileOpen(fileName);
 pslOver(lf, chainHash, minMatch, minBlocks, fudgeThick, f, unmapped);
 lineFileClose(&lf);
 }
+
 struct bed *genePredToBed(struct genePred *gp)
 /* Convert genePred to bed.  */
 {
