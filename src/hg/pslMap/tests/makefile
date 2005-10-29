@@ -2,7 +2,8 @@ include ../../../inc/common.mk
 
 all:
 
-test: kgProt gapBoth mrnaMrnaMap mrnaMrnaXMap  mrnaMapOver
+test:	kgProt gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
+	mrnaMapOverChain mrnaMapOverChainSwap
 
 
 # basic tests of protein -> mrna -> genome mapping
@@ -37,6 +38,26 @@ mrnaMapOver: mkdirs
 	../pslMap input/mrnaToMm6.psl input/mm6ToHg17.psl output/$@.psl
 	pslCheck output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+
+# swapped mapping psl, same result as mrnaMapOver
+mrnaMapOverSwap: mkdirs
+	pslSwap -noRc input/mm6ToHg17.psl output/hg17ToMm6.psl
+	../pslMap -swapMap input/mrnaToMm6.psl output/hg17ToMm6.psl output/$@.psl
+	pslCheck output/$@.psl
+	diff -u expected/mrnaMapOver.psl output/$@.psl
+
+# use chain, same results as mrnaMapOver
+mrnaMapOverChain: mkdirs
+	../pslMap -chainMapFile input/mrnaToMm6.psl input/mm6ToHg17.chain output/$@.psl
+	pslCheck output/$@.psl
+	diff -u expected/mrnaMapOver.psl output/$@.psl
+
+# use chain swapped, same results as mrnaMapOver
+mrnaMapOverChainSwap: mkdirs
+	chainSwap input/mm6ToHg17.chain output/hg17ToMm6.chain 
+	../pslMap  -chainMapFile -swapMap input/mrnaToMm6.psl output/hg17ToMm6.chain output/$@.psl
+	pslCheck output/$@.psl
+	diff -u expected/mrnaMapOver.psl output/$@.psl
 
 clean::
 	rm -rf output

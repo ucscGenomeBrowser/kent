@@ -6,19 +6,24 @@
 #include "hash.h"
 #include "psl.h"
 #include "dnautil.h"
+#include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.5 2005/10/29 02:54:59 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.6 2005/10/29 07:26:25 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"suffix", OPTION_STRING},
     {"keepTranslated", OPTION_BOOLEAN},
+    {"chainMapFile", OPTION_BOOLEAN},
+    {"swapMap", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 /* Values parsed from command line */
 static char* suffix = NULL;
 static boolean keepTranslated = FALSE;
+static boolean chainMapFile = FALSE;
+static boolean swapMap = FALSE;
 
 /* count of non-fatal errors */
 static int errCount = 0;
@@ -32,7 +37,7 @@ struct block
     int tEnd;            /* Target end position. */
 };
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -44,12 +49,14 @@ errAbort(
   "nucleotide alignment, the resulting alignment is nucleotide to\n"
   "nucleotide alignment of a hypothetical mRNA that would code for\n"
   "the protein.  This is useful as it gives base alignments of\n"
-  "spliced codons.\n"
+  "spliced codons.  A chain file may be used instead mapPsl\n"
   "\n"
   "usage:\n"
-  "   pslMap [options] inPsl mapPsl outPsl\n"
+  "   pslMap [options] inPsl mapFile outPsl\n"
   "\n"
   "Options:\n"
+  "  -chainMapFile - mapFile is a chain file instead of a psl file\n"
+  "  -swapMap - swap query and target sides of map file.\n"
   "  -suffix=str - append str to the query ids in the output alignment.\n"
   "   Useful with protein alignments, where the result is not actually\n"
   "   and alignment of the protein.\n"
@@ -71,7 +78,7 @@ static char pslQStrand(struct psl *psl)
 return psl->strand[0];
 }
 
-void pslProtToNA(struct psl *psl)
+static void pslProtToNA(struct psl *psl)
 /* convert a protein/NA alignment to a NA/NA alignment */
 {
 int iBlk;
@@ -86,7 +93,7 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     }
 }
 
-void pslNAToProt(struct psl *psl)
+static void pslNAToProt(struct psl *psl)
 /* undo pslProtToNA */
 {
 int iBlk;
@@ -101,20 +108,85 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     }
 }
 
-struct hash* hashPsls(char *pslFile)
+/* macro to swap to variables */
+#define swapVars(a, b, tmp) ((tmp) = (a), (a) = (b), (b) = (tmp))
+
+static void swapPsl(struct psl *psl)
+/* swap query and target in psl */
+{
+int i, itmp;
+unsigned utmp;
+char ctmp, *stmp; 
+if (psl->strand[1] == '\0')
+    psl->strand[1] = '+';  /* explict strand */
+swapVars(psl->strand[0], psl->strand[1], ctmp);
+swapVars(psl->qName, psl->tName, stmp);
+swapVars(psl->qSize, psl->tSize, utmp);
+swapVars(psl->qStart, psl->tStart, itmp);
+swapVars(psl->qEnd, psl->tEnd, itmp);
+for (i = 0; i < psl->blockCount; i++)
+    swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
+}
+
+static struct psl *chainToPsl(struct chain *ch)
+/* convert a chain to a psl, ignoring match counts, etc */
+{
+struct psl *psl;
+struct cBlock *cBlk;
+int iBlk;
+char strand[2];
+strand[0] = ch->qStrand;
+strand[1] = '\0';
+
+psl = pslNew(ch->qName, ch->qSize, ch->qStart, ch->qEnd,
+             ch->tName, ch->tSize, ch->tStart, ch->tEnd,
+             strand, slCount(ch->blockList), 0);
+for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)
+    {
+    psl->blockSizes[iBlk] = (cBlk->tEnd - cBlk->tStart);
+    psl->qStarts[iBlk] = cBlk->qStart;
+    psl->tStarts[iBlk] = cBlk->tStart;
+    psl->match += psl->blockSizes[iBlk];
+    }
+psl->blockCount = iBlk;
+return psl;
+}
+
+static struct hash* loadMapChains(char *chainFile)
+/* read a chain file, convert to psls and hash by query, linking multiple PSLs
+ * for the same query.*/
+{
+struct hash* hash = hashNew(20);
+struct chain *ch;
+struct lineFile *chLf = lineFileOpen(chainFile, TRUE);
+struct hashEl *hel;
+while ((ch = chainRead(chLf)) != NULL)
+    {
+    struct psl* psl = chainToPsl(ch);
+    if (swapMap)
+        swapPsl(psl);
+    hel = hashStore(hash, psl->qName);
+    slAddHead((struct psl**)&hel->val, psl);
+    chainFree(&ch);
+    }
+lineFileClose(&chLf);
+return hash;
+}
+
+static struct hash* loadMapPsls(char *pslFile)
 /* read a psl file and hash by query, linking multiple PSLs for the
  * same query.*/
 {
 struct hash* hash = hashNew(20);
 struct psl* psl;
 struct lineFile *pslLf = pslFileOpen(pslFile);
+struct hashEl *hel;
 while ((psl = pslNext(pslLf)) != NULL)
     {
-    struct hashEl *hel = hashLookup(hash, psl->qName);
-    if (hel == NULL)
-        hashAdd(hash, psl->qName, psl);
-    else
-        slAddHead((struct psl**)&hel->val, psl);
+    if (swapMap)
+        swapPsl(psl);
+    hel = hashStore(hash, psl->qName);
+    slAddHead((struct psl**)&hel->val, psl);
     }
 lineFileClose(&pslLf);
 return hash;
@@ -125,31 +197,22 @@ struct psl* createMappedPsl(struct psl* inPsl, struct psl* mapPsl,
 /* setup a PSL for the output alignment */
 {
 struct psl* mappedPsl;
-int len;
-int newSize = (mappedPslMax * sizeof(unsigned));
+char qName[256], strand[3];
 assert(pslTStrand(inPsl) == pslQStrand(mapPsl));
-
-AllocVar(mappedPsl);
-len = strlen(inPsl->qName) + 1;
-if (suffix != NULL)
-    len += strlen(suffix);
-mappedPsl->qName = needMem(len);
-strcpy(mappedPsl->qName, inPsl->qName);
-if (suffix != NULL)
-    strcat(mappedPsl->qName, suffix);
-mappedPsl->qSize = inPsl->qSize;
-mappedPsl->tName = cloneString(mapPsl->tName);
-mappedPsl->tSize = mapPsl->tSize;
 
 /* strand can be taken from both alignments, since common sequence is in same
  * orientation. */
-mappedPsl->strand[0] = pslQStrand(inPsl);
-mappedPsl->strand[1] = pslTStrand(mapPsl);
+strand[0] = pslQStrand(inPsl);
+strand[1] = pslTStrand(mapPsl);
+strand[2] = '\n';
 
-/* allocate initial array space */
-mappedPsl->blockSizes = needMem(newSize);
-mappedPsl->qStarts = needMem(newSize);
-mappedPsl->tStarts = needMem(newSize);
+if (suffix == NULL)
+    safef(qName, sizeof(qName), "%s", inPsl->qName);
+else
+    safef(qName, sizeof(qName), "%s%s", inPsl->qName, suffix);
+mappedPsl = pslNew(qName, inPsl->qSize, 0, 0,
+                   mapPsl->tName, mapPsl->tSize, 0, 0,
+                   strand, mappedPslMax, 0);
 return mappedPsl;
 }
 
@@ -164,18 +227,6 @@ block.tEnd = psl->tStarts[iBlock] + psl->blockSizes[iBlock];
 return block;
 }
 
-void growPsl(struct psl* psl, int* pslMax)
-/* grow psl block space */
-{
-int newMax = 2 * *pslMax;
-int oldSize = (psl->blockCount * sizeof(unsigned));
-int newSize = (newMax * sizeof(unsigned));
-psl->blockSizes = needMoreMem(psl->blockSizes, oldSize, newSize);
-psl->qStarts = needMoreMem(psl->qStarts, oldSize, newSize);
-psl->tStarts = needMoreMem(psl->tStarts, oldSize, newSize);
-*pslMax = newMax;
-}
-
 void addPslBlock(struct psl* psl, struct block* blk, int* pslMax)
 /* add a block to a psl */
 {
@@ -183,7 +234,7 @@ unsigned newIBlk = psl->blockCount;
 
 assert((blk->qEnd - blk->qStart) == (blk->tEnd - blk->tStart));
 if (newIBlk >= *pslMax)
-    growPsl(psl, pslMax);
+    pslGrow(psl, pslMax);
 psl->qStarts[newIBlk] = blk->qStart;
 psl->tStarts[newIBlk] = blk->tStart;
 psl->blockSizes[newIBlk] = blk->qEnd - blk->qStart;
@@ -391,14 +442,20 @@ for (mapPsl = hashFindVal(mapPslHash, inPsl->tName); mapPsl != NULL; mapPsl = ma
     mapPslPair(inPsl, mapPsl, outPslFh);
 }
 
-void pslMap(char* inPslFile, char *mapPslFile, char *outPslFile)
+void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
 /* map SNPs to proteins */
 {
-struct hash *mapPslHash = hashPsls(mapPslFile);
+struct hash *mapPslHash;
 struct psl* inPsl;
 struct lineFile* inPslLf = pslFileOpen(inPslFile);
-FILE *outPslFh = mustOpen(outPslFile, "w");
+FILE *outPslFh;
 
+if (chainMapFile)
+    mapPslHash = loadMapChains(mapFile);
+else
+    mapPslHash = loadMapPsls(mapFile);
+
+outPslFh = mustOpen(outPslFile, "w");
 while ((inPsl = pslNext(inPslLf)) != NULL)
     {
     mapQueryPsl(inPsl, mapPslHash, outPslFh);
@@ -416,7 +473,8 @@ if (argc != 4)
     usage();
 suffix = optionVal("suffix", NULL);
 keepTranslated = optionExists("keepTranslated");
-
+chainMapFile = optionExists("chainMapFile");
+swapMap = optionExists("swapMap");
 pslMap(argv[1], argv[2], argv[3]);
 
 if (errCount > 0)
