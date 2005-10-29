@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.969 2005/10/28 06:27:16 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.970 2005/10/29 15:35:55 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16862,8 +16862,8 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *linkArray[50];  /* assume not more than 50 links per variant */
-int i, cnt = 0;
+char *linkArray[50], *idArray[50];  /* assume not more than 50 links per variant */
+int i, cnt = 0, idCnt = 0;
 
 int start = cartInt(cart, "o");
 
@@ -16895,6 +16895,9 @@ printf("<B>type:</B> %s<BR />\n", humPhen->baseChangeType);
 
 /* get list of database keys from humPhen */
 cnt = chopString(cloneString(humPhen->linkDbs), ",", linkArray, ArraySize(linkArray));
+idCnt = chopString(cloneString(humPhen->dbId), ",", idArray, ArraySize(idArray));
+if (cnt != idCnt) 
+    errAbort("dbId and linkDbs have different counts");
 printf("<DL><DT><B>Outside Link(s):</B>\n<DD> ");
 for (i = 0; i < cnt; i++) 
     {
@@ -16904,7 +16907,7 @@ for (i = 0; i < cnt; i++)
     link = humPhenLinkLoadByQuery(conn, query);
     if (link != NULL) 
         {
-        url = replaceChars(link->url, "$$", humPhen->dbId);
+        url = replaceChars(link->url, "$$", idArray[i]);
         printf("<A HREF=%s", url);
         printf(" Target=_blank> %s </A> <BR />\n", link->linkDisplayName);
         freeMem(url);
@@ -16913,7 +16916,7 @@ for (i = 0; i < cnt; i++)
 
 printf("<DT><B>Aliases:</B><DD>\n ");
 safef(query, sizeof(query),
-      "select * from humPhenAlias where dbId = '%s'", humPhen->dbId);
+      "select * from humPhenAlias where dbId = '%s'", idArray[0]);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
