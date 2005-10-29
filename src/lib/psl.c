@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.62 2005/10/29 07:23:44 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.63 2005/10/29 07:27:08 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1732,7 +1732,7 @@ psl->qStart = qStart;
 psl->qEnd = qEnd;
 psl->tName = cloneString(tName);
 psl->tSize = tSize;
-1psl->tStart = tStart;
+psl->tStart = tStart;
 psl->tEnd = tEnd;
 strncpy(psl->strand, strand, 2);
 AllocArray(psl->blockSizes, blockSpace);
