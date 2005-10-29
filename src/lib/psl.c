@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.61 2005/10/20 22:36:12 hartera Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.62 2005/10/29 07:23:44 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1714,4 +1714,52 @@ psl->qStarts[blockIx] = qs;
 psl->tStarts[blockIx] = ts;
 
 return psl;
+}
+
+struct psl* pslNew(char *qName, unsigned qSize, int qStart, int qEnd,
+                   char *tName, unsigned tSize, int tStart, int tEnd,
+                   char *strand, unsigned blockSpace, unsigned opts)
+/* create a new psl with space for the specified number of blocks allocated.
+ * pslGrow maybe used to expand this space if needed.  Valid options are
+ * PSL_XA_FORMAT. */
+{
+struct psl *psl;
+AllocVar(psl);
+assert(blockSpace > 0);
+psl->qName = cloneString(qName);
+psl->qSize = qSize;
+psl->qStart = qStart;
+psl->qEnd = qEnd;
+psl->tName = cloneString(tName);
+psl->tSize = tSize;
+1psl->tStart = tStart;
+psl->tEnd = tEnd;
+strncpy(psl->strand, strand, 2);
+AllocArray(psl->blockSizes, blockSpace);
+AllocArray(psl->qStarts, blockSpace);
+AllocArray(psl->tStarts, blockSpace);
+if (opts & PSL_XA_FORMAT)
+    {
+    AllocArray(psl->qSequence, blockSpace);
+    AllocArray(psl->tSequence, blockSpace);
+    }
+return psl;
+}
+
+void pslGrow(struct psl *psl, int *blockSpacePtr)
+/* Increase memory allocated to a psl to hold more blocks.  blockSpacePtr
+ * should point the the current maximum number of blocks and will be
+ * updated to with the new amount of space. */
+{
+int blockSpace = *blockSpacePtr;
+int newSpace = blockSpace * blockSpace;
+ExpandArray(psl->blockSizes, blockSpace, newSpace);
+ExpandArray(psl->qStarts, blockSpace, newSpace);
+ExpandArray(psl->tStarts, blockSpace, newSpace);
+if (psl->qSequence != NULL)
+    {
+    ExpandArray(psl->qSequence, blockSpace, newSpace);
+    ExpandArray(psl->tSequence, blockSpace, newSpace);
+    }
+*blockSpacePtr = newSpace;
 }

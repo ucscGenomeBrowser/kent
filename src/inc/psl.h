@@ -260,5 +260,17 @@ int pslGenoShowAlignment(struct psl *psl, boolean isProt,
 		      char *tName, bioSeq *tSeq, int tStart, int tEnd, int exnStarts[], int exnEnds[], int exnCnt, FILE *f);
 /* Show protein/DNA alignment or translated DNA alignment in HTML format. */
 
+struct psl* pslNew(char *qName, unsigned qSize, int qStart, int qEnd,
+                   char *tName, unsigned tSize, int tStart, int tEnd,
+                   char *strand, unsigned blockSpace, unsigned opts);
+/* create a new psl with space for the specified number of blocks allocated.
+ * pslGrow maybe used to expand this space if needed.  Valid options are
+ * PSL_XA_FORMAT. */
+
+void pslGrow(struct psl *psl, int *blockSpacePtr);
+/* Increase memory allocated to a psl to hold more blocks.  blockSpacePtr
+ * should point the the current maximum number of blocks and will be
+ * updated to with the new amount of space. */
+
 #endif /* PSL_H */
 
