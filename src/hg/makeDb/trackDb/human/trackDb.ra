@@ -5554,6 +5554,17 @@ type bed 4 .
     longLabel Gencode Intergenic Distal Regions
     priority 4
 
+    track encodeGencodeOtherESTs
+    subTrack encodeGencodeRegions
+    shortLabel Other ESTs
+    longLabel Gencode Other ESTs
+    priority 5
+
+    track encodeGencodeExonic
+    subTrack encodeGencodeRegions
+    shortLabel Exonic
+    longLabel Gencode Exonic Regions
+    priority 6
 
 track encodeWorkshopSelections
 compositeTrack on
