@@ -115,3 +115,13 @@ speciesGroups mammal vertebrate
 sGroup_mammal rn3 hg17 panTro1 rheMac1 oryCun1 canFam2 dasNov1 loxAfr1 bosTau2 echTel1 monDom2
 sGroup_vertebrate galGal2 xenTro1 tetNig1 fr1 danRer3
 treeImage phylo/Mm7_17way.jpg
+
+track linSpecRepNotHg
+shortLabel Lineage SpecRep Hg
+longLabel $Organism Lineage Specfic Repeats not in Human
+group compGeno
+priority 259.2
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 5 .
