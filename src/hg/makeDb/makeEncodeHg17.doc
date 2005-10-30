@@ -642,9 +642,9 @@ cat > doLoad.csh << 'EOF'
 # Contact: Chris Taylor (cmt5n@cs.virginia.edu)
 
     cd /cluster/data/encode/UVa
-    mv latest previous
     mkdir -p 2005-08-30
-    ln -s 2005-08-30 latest
+    cd 2005-08-30
+    mkdir lab
 
     # Segregation data - 4 subtracks (Early, Mid, Late, Pan-S)
     # 4 custom tracks in a single file -- use Hiram's script to split
@@ -669,6 +669,21 @@ cat > doLoad.csh << 'EOF'
         hgLoadBed -noBin -strict hg17 $d $d.hg17.bed
     end
 
+    # Redo with hg17 resubmitted data
+    cd /cluster/data/encode/UVa
+    cd 2005-10-15
+    /cluster/data/encode/bin/scripts/splitTracks.pl lab/segregation.hg17.bed
+    grep -v "^track" t0 > encodeUvaDnaRepEarly.bed
+    grep -v "^track" t1 > encodeUvaDnaRepMid.bed
+    grep -v "^track" t2 > encodeUvaDnaRepLate.bed
+    grep -v "^track" t3 > encodeUvaDnaRepPanS.bed
+    rm t0 t1 t2 t3
+    foreach f (encodeUvaDnaRep*.bed)
+        set d = $f:r
+        echo $d
+        hgLoadBed -noBin -strict hg17 $d $d.bed
+    end
+
     # Origin predictions -- fixed at 200bp
     set t = encodeUvaDnaRepOriginsPred
     ln -s lab/originspred.hg16.qced.bed $t.hg16.bed
@@ -686,6 +701,19 @@ cat > doLoad.csh << 'EOF'
                 $t.hg17.bed $t.unmapped
     hgLoadBed -noBin -strict hg17 $t $t.hg17.bed
         # Loaded 270 elements of size 3
+
+    # Smoothed TR50 data
+    #  500K 1bp float scores
+    # wiggle with span=1
+    set table = encodeUvaDnaRepTr50
+    grep -v '^track' lab/smoothedtr50.hg17.wig | \
+        wigEncode stdin $table.wig $table.wib
+            #  upper limit 6.36, lower limit 2.05
+    set dir = /gbdb/hg17/encode/UVa/2005-10-15
+    mkdir -p $dir
+    hgLoadWiggle -pathPrefix=$dir hg17 $table $table.wig
+    mkdir -p $dir
+    ln -s `pwd`/$table.wib $dir
 
 
 ##########################################################################
@@ -1070,18 +1098,19 @@ cat > load.csh << 'EOF'
 #       Submitter: Greg Crawford
 #       2 datasets:  CD4, GM06690 with different methodology from previous
 
-    cd /cluster/data/encode/NHGRI
+    cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
     cd 2005-10-11/lab
     # copy 2 data files from FTP site
 
     # lift to hg17
     ln -s lab/Crawford_DNase_chip_CD4_hg16.txt Cd4.hg16.bed
-    ln -s lab/Crawford_DNase_chip_GM06990_hg16.txt Gm06990.hg16.bed
+    awk '{printf "%s\t%s\t%s\t%s\t%s\n", $1,$2,$3,$4,$6}' \
+        lab/Crawford_DNase_chip_GM06990_hg16.txt > Gm06990.hg16.bed
 cat > load.csh << 'EOF'
     foreach f (Cd4.hg16.bed Gm06990.hg16.bed)
         set cell = $f:r:r
-        liftOver Cd4.hg16.bed \
+        liftOver $cell.hg16.bed \
                  /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
                         $cell.hg17.bed $cell.unmapped
         hgLoadBed hg17 encodeNhgriDnaseHs$cell $cell.hg17.bed
@@ -1131,4 +1160,26 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log 
     
+##########################################################################
+# UW/Regulome DnaseI HS (2005-10-28 kate)
+#       HS range 1.102-3.0
+
+    cd /cluster/data/encode/Regulome
+    mkdir -p 2005-10-14
+    cd 2005-10-14
+cat > load.csh << 'EOF'
+    foreach cell (CACO2 CD34 GM HeLa HepG2 Huh7 K562 SKNSH)
+        hgLoadBed hg17 encodeRegulomeDnaseQual$cell lab/$cell.qc.bed
+        hgLoadBed hg17 encodeRegulomeDnaseAmpOdd$cell lab/$cell.oddAmps.bed
+        hgLoadBed hg17 encodeRegulomeDnaseAmpEven$cell lab/$cell.evenAmps.bed
+        set table = encodeRegulomeDnaseSites$cell
+        echo $table
+        sed -e "s/bed5FloatScore/$table/" \
+            $HOME/kent/src/hg/lib/bed5FloatScore.sql > sites.sql
+        awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", \
+            $1, $2, $3, $4, ($5 * 300), $5}' lab/$cell.hs.bed | \
+                hgLoadBed -sqlTable=sites.sql hg17 $table stdin
+    end
+'EOF'
+    csh load.csh >&! load.log
 
