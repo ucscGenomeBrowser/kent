@@ -484,6 +484,139 @@ origAssembly hg16
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
     priority 4
 
+track encodeRegulomeDnaseSites
+compositeTrack on
+shortLabel UW/Reg Oct DNaseI HSs
+longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites
+group encodeChrom
+priority 66.12
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility hide
+type bed5FloatScore
+
+    track encodeRegulomeDnaseSitesCACO2
+    subTrack encodeRegulomeDnaseSites
+    shortLabel CACO2 
+    longLabel CACO2 DNaseI HSs
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeDnaseSitesGM
+    subTrack encodeRegulomeDnaseSites
+    shortLabel GM06990
+    longLabel GM06990 DNaseI HSs
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeDnaseSitesSKNSH
+    subTrack encodeRegulomeDnaseSites
+    shortLabel SKNSH
+    longLabel SKNSH DNaseI HSs
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeDnaseSitesHuh7
+    subTrack encodeRegulomeDnaseSites
+    shortLabel Huh7
+    longLabel Huh7 DNaseI HSs
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeDnaseSitesHepG2
+    subTrack encodeRegulomeDnaseSites
+    shortLabel HepG2
+    longLabel HepG2 DNaseI HSs
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeDnaseSitesK562
+    subTrack encodeRegulomeDnaseSites
+    shortLabel K562
+    longLabel K562 DNaseI HSs
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeDnaseSitesCD34
+    subTrack encodeRegulomeDnaseSites
+    shortLabel CD34
+    longLabel CD34 DNaseI HSs
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeDnaseSitesHeLa
+    subTrack encodeRegulomeDnaseSites
+    shortLabel HeLa
+    longLabel HeLa DNaseI HSs
+    color 60,50,240
+    priority 8
+
+track encodeRegulomeDnaseQual
+compositeTrack on
+shortLabel UW/Reg Oct Q/A
+longLabel ENCODE UW/Regulome Plate Quality Score
+group encodeChrom
+priority 66.13
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+visibility hide
+type bed 5 .
+useScore 1
+
+    track encodeRegulomeDnaseQualCACO2
+    subTrack encodeRegulomeDnaseQual
+    shortLabel CACO2 
+    longLabel CACO2 Quality
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeDnaseQualGM
+    subTrack encodeRegulomeDnaseQual
+    shortLabel GM06990 
+    longLabel GM06990 Quality
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeDnaseQualSKNSH
+    subTrack encodeRegulomeDnaseQual
+    shortLabel SKNSH 
+    longLabel SKNSH Quality
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeDnaseQualHuh7
+    subTrack encodeRegulomeDnaseQual
+    shortLabel Huh7
+    longLabel Huh7 Quality
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeDnaseQualHepG2
+    subTrack encodeRegulomeDnaseQual
+    shortLabel HepG2
+    longLabel HepG2 Quality
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeDnaseQualK562
+    subTrack encodeRegulomeDnaseQual
+    shortLabel K562 
+    longLabel K562 Quality
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeDnaseQualCD34
+    subTrack encodeRegulomeDnaseQual
+    shortLabel CD34
+    longLabel CD34 Quality
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeDnaseQualHeLa
+    subTrack encodeRegulomeDnaseQual
+    shortLabel HeLa
+    longLabel HeLa Quality
+    color 60,50,240
+    priority 8
+
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
 longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
