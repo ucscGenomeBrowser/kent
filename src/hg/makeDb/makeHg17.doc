@@ -18365,6 +18365,7 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 
 # Compared to 8/24/05 data, a few records were changed.
 
+##########################################################################
 # REBUILD hg17.gnfAtlas2Distance TABLE.  SOMEHOW IT HAD MUCH FEWER RECORDS. (DONE 10/27/05, Fan)
 
 # Create table to map between known genes and GNF Atlas2
@@ -18379,3 +18380,26 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 #       hgsql -e "select count(*) from gnfAtlas2Distance;" hg17
 #       row count changed to 32458000
 			
+##########################################################################
+# BUILD ALLEN BRAIN TRACK (DONE 10/29/05 JK)
+
+# Make the working directory
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir allenBrain
+    cd allenBrain
+
+# Remap the probe alignments from mm7 to hg17
+    zcat /cluster/data/mm7/bed/bedOver/mm7.hg17.over.chain.gz \
+        |  pslMap -chainMapFile -swapMap /cluster/data/mm7/bed/allenBrain/
+
+# Load the database
+   hgsql hg17 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgsql hg17 -e 'load data local infile "/cluster/data/mm7/bed/allenBrain/allenBrainUrl.tab" into table allenBrainUrl;'
+   hgLoadPsl hg17 allenBrainAli.psl
+   mkdir /gbdb/hg17/allenBrain
+   ln -s /cluster/data/mm7/bed/allenBrain/allProbes.fa /gbdb/hg17/allenBrain/allProbes.fa
+   hgLoadSeq hg17 /gbdb/hg17/allenBrain/allProbes.fa
+
+# Make mapping between known genes and allenBrain	
+   hgMapToGene hg17 allenBrainAli -type=psl knownGene knownToAllenBrain 
