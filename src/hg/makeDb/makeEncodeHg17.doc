@@ -862,7 +862,7 @@ cat > load.csh << 'EOF'
 
 cat > load.csh << 'EOF'
     foreach f (`ls lab/*.wig`)
-        set table = `echo $f:t:r | sed -e 's/HeLa/HeLa_NoSerum/;s/NoSerum//;s/Serum4hr/Stim/;s/2091/2091fib/;s/\(.*\)_\(.*\)_\(.*\)_\(.*\)/encodeUtex\1\3\2\u\4/'`
+        set table = `echo $f:t:r | sed -e 's/HeLa/HeLa_NoSerum/;s/NoSerum//;s/Serum4hr/Stim/;s/2091/2091fib/;s/\(.*\)_\(.*\)_\(.*\)_\(.*\)/encodeUtexChip\1\3\2\u\4/'`
         echo $table
         grep '^chr' $f | hgLoadBed -onServer -bedGraph=4 hg17 $table stdin
     checkTableCoords hg17 $table
@@ -1113,12 +1113,14 @@ cat > load.csh << 'EOF'
         liftOver $cell.hg16.bed \
                  /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
                         $cell.hg17.bed $cell.unmapped
-        hgLoadBed hg17 encodeNhgriDnaseHs$cell $cell.hg17.bed
+        hgLoadBed hg17 encodeNhgriDnaseHsChip$cell $cell.hg17.bed
     end
 'EOF'
     csh load.csh >&! load.log
-        # 1420 mapped, 6 unmapped
     # Add these two tracks to the hg17 NHGRI DNase track
+    # Rename 2 data tables lifted from hg16
+    hgsql hg17 -e "ALTER TABLE encodeNhgriDnaseHsAct RENAME TO encodeNhgriDnaseHsMpssCd4Act"
+    hgsql hg17 -e "ALTER TABLE encodeNhgriDnaseHsNonAct RENAME TO encodeNhgriDnaseHsMpssCd4"
 
 ##########################################################################
 # Sanger Chip/chip (2005-10-24 kate)
@@ -1183,3 +1185,46 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log
 
+##########################################################################
+# UC Davis Chip/chip (new C-Myc data) (2005-10-29 kate)
+# Add as subtrack to existing track
+
+    # convert to bedGraph
+    cd /cluster/data/encode/UcDavis/2005-10-12
+    /cluster/bin/scripts/varStepToBedGraph.pl lab/Myc_median.wig > \
+        myc.bed
+    hgLoadBed -strict -bedGraph=4 hg17 encodeUCDavisChipMyc myc.bed
+    # NOTE: this produces single bp items -- probably wrong 
+
+##########################################################################
+# Yale TAR's (2005-10-31 kate)
+# Submitted: 10/14 by Joel Rozowsky
+# 5 bed files (TARs) and 5 wig files (Signal)
+# Replacements for June tracks (and drop individual 10 Neu samples)
+# Methods changed somewhat -- use new description from Joel's email
+
+    cd /cluster/data/encode/yale/rna/2005-10-14
+
+##########################################################################
+# Yale Chip/chip (2005-10-31 kate)
+# Final submission: 10/26 by Zhengdong Zhang
+# signal, pval, and sites for 5 factors (50x38 array)
+
+    cd /cluster/data/encode/yale/chip/2005-10-26
+
+##########################################################################
+# UTexas STAGE (2005-10-31 kate)
+# Submitted 10/15 by Akshay Bhinge <akshayb@mail.utexas.edu>
+# 2 files - raw and peaks, for c-Myc in HeLa
+# range .001 to 1.0.  Peaks restricted to >.8
+
+    cd /cluster/data/encode/UTexas/stage/2005-10-15
+    /cluster/bin/scripts/varStepToBedGraph.pl lab/myc.stage.tag.wig > tags.bed
+    hgLoadBed -noBin -strict -bedGraph=4 hg17 encodeUtexStageMycHelaTags tags.bed
+        # 813 elements
+    /cluster/bin/scripts/varStepToBedGraph.pl lab/myc.stage.peaks.wig > peaks.bed
+    hgLoadBed -noBin -strict -bedGraph=4 hg17 encodeUtexStageMycHelaPeaks peaks.bed
+        # 26 elements
+    # Created composite track with 2 subtracks
+    # Oops -- also have span=1 here (probably wrong)
+    
