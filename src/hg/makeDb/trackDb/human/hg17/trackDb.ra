@@ -299,7 +299,6 @@ subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
     type bed 3 .
     priority 12
 
-
 track encodeUCDavisChip
 compositeTrack on
 shortLabel UCD Ng ChIP
@@ -325,7 +324,7 @@ autoScale Off
     track encodeUCDavisChipMyc
     subTrack encodeUCDavisChip
     shortLabel UCD C-Myc
-    longLabel UC Davis ChIP/Chip Nimblegen -  C-Myc ab, HeLa Cells
+    longLabel UC Davis ChIP/Chip Nimblegen - C-Myc ab, HeLa Cells
     priority 2
 
 track encodeUcsdNgGif
@@ -475,43 +474,6 @@ origAssembly hg17
     longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, STAT1, 30 min after gamma interferon
     priority 16
 
-track encodeNhgriDnaseHsChip
-compositeTrack on
-shortLabel NHGRI DNaseI-HS
-longLabel NHGRI DNaseI-Hypersensitive Sites 
-group encodeChrom
-priority 61.0
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 5 .
-useScore 1
-altColor 80,50,80
-color 120,10,120
-origAssembly hg16
-
-    track encodeNhgriDnaseHsGm06990
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase GM069 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990 T-Cells, Chip method)
-    priority 1
-
-    track encodeNhgriDnaseHsCd4
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4 Chip
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
-    priority 2
-
-    track encodeNhgriDnaseHsNonAct
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4 MS 
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
-    priority 3
-
-    track encodeNhgriDnaseHsAct
-    subTrack encodeNhgriDnaseHsChip
-    shortLabel DNase CD4-act MS
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
-    priority 4
 
 track encodeRegulomeDnaseSites
 compositeTrack on

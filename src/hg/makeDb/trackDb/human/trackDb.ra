@@ -4040,35 +4040,7 @@ subGroup1 dataType Data_Type raw=Raw peaks=Peaks
     color 50,0,0
     priority 8
 
-track encodeUncFaire
-compositeTrack on
-shortLabel UNC FAIRE
-longLabel UNC FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)
-group encodeChrom
-priority 63
-chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
-type wig -2.61 3.63
-spanList 50
-maxHeightPixels 128:16:16
-autoScale off
-windowingFunction mean
-viewLimits .2:2.6
-color 20,150,20
-altColor 50,100,50
-
-    track encodeUncFaireSignal
-    subTrack encodeUncFaire
-    shortLabel UNC FAIRE Signal
-    longLabel UNC FAIRE Signal (Formaldehyde Assisted Isolation of Regulatory Elements)
-    priority 1
-
-    track encodeUncFairePeaks
-    subTrack encodeUncFaire
-    shortLabel UNC FAIRE Peaks
-    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements)
-    priority 2
-
-track encodeNhgriDnaseHs
+track encodeNhgriDnaseHsChip
 compositeTrack on
 shortLabel NHGRI DNaseI-HS
 longLabel NHGRI DNaseI-Hypersensitive Sites 
@@ -4078,19 +4050,32 @@ chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr2
 visibility hide
 type bed 5 .
 useScore 1
-origAssembly hg16
+altColor 80,50,80
+color 120,10,120
 
-    track encodeNhgriDnaseHsNonAct
-    subTrack encodeNhgriDnaseHs
-    shortLabel DNase CD4 Unact.
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Unactivated)
+    track encodeNhgriDnaseHsChipGm06990
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase GM069 Chip
+    longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990 T-Cells, Chip method)
     priority 1
 
-    track encodeNhgriDnaseHsAct
-    subTrack encodeNhgriDnaseHs
-    shortLabel DNase CD4 Activ.
-    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated)
+    track encodeNhgriDnaseHsChipCd4
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase CD4 Chip
+    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
     priority 2
+
+    track encodeNhgriDnaseHsMpssCd4
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase CD4 MS 
+    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
+    priority 3
+
+    track encodeNhgriDnaseHsMpssCd4Act
+    subTrack encodeNhgriDnaseHsChip
+    shortLabel DNase CD4-act MS
+    longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
+    priority 4
 
 track encodeStanfordMeth
 compositeTrack on
@@ -4223,6 +4208,64 @@ origAssembly hg16
     shortLabel Stan Meth Sc U87
     longLabel Stanford Methylation Digest Smoothed Score (U87 cells)
     priority 8
+
+track encodeUncFaire
+compositeTrack on
+shortLabel UNC FAIRE
+longLabel UNC FAIRE (Formaldehyde Assisted Isolation of Regulatory Elements)
+group encodeChrom
+priority 63.0
+chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+type wig -2.61 3.63
+spanList 50
+maxHeightPixels 128:16:16
+autoScale off
+windowingFunction mean
+viewLimits .2:2.6
+color 20,150,20
+altColor 50,100,50
+
+    track encodeUncFaireSignal
+    subTrack encodeUncFaire
+    shortLabel UNC FAIRE Signal
+    longLabel UNC FAIRE Signal (Formaldehyde Assisted Isolation of Regulatory Elements)
+    priority 1
+
+    track encodeUncFairePeaks
+    subTrack encodeUncFaire
+    shortLabel UNC FAIRE Peaks
+    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements)
+    priority 2
+
+track encodeUtexStage
+compositeTrack on
+shortLabel UT-Austin STAGE
+longLabel University of Texas, Austin STAGE (Sequence Tag Analysis of Genomic Enrichment)
+group encodeChrom
+priority 63.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+color 120,30,50
+altColor 50,0,0
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit .001
+maxLimit 1.0
+windowingFunction mean
+viewLimits .5:1.0
+autoScale Off
+
+    track encodeUtexStageMycHelaTags
+    subTrack encodeUtexStage
+    shortLabel UT Myc HeLa
+    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
+    priority 1
+
+    track encodeUtexStageMycHelaPeaks
+    shortLabel UT Myc HeLa Pk
+    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Peaks
+    subTrack encodeUtexStage
+    priority 2
 
 track encodeUvaDnaRep
 compositeTrack on
