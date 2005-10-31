@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.39 2005/10/23 07:51:49 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.40 2005/10/31 23:00:47 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -936,8 +936,10 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	    errAbort("assert(ldsStartPtr!=NULL) failed.");
 	else
 	    ldsEndPtr = ldsStartPtr+1;
+/*
 	if (ldsEndPtr->chromStart >= el->chromEnd)
 	    errAbort("assert(ldsEndPtr->chromStart < el->chromEnd) failed.");
+*/
 
 	/* Walk through lists, update pointers, and store data in bins */
 	for (i=0; i<arraySize; i++)
@@ -946,6 +948,14 @@ else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	    /* This loop is necessary as some lists have missing data */
 	    while ( ldsEndPtr->chromStart != chromStarts[i] && ldsEndPtr != &(lds[itemCount-1]) )
 		ldsEndPtr++;
+
+	    if (ldsEndPtr->chromStart>winEnd)
+		break;
+	    if (chromStarts[i]<winStart)
+		continue;
+
+	    /* see code at lines 776-793) */
+
 	    ldsStartPtr->n++;
 	    ldsStartPtr->sumValues     += values[i];
 	    ldsStartPtr->sumLodValues  += lodValues[i];

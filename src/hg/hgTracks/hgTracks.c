@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1027 2005/10/28 17:02:41 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1028 2005/10/31 23:00:44 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7462,11 +7462,14 @@ if (track->subType == lfSubSample && track->items == NULL)
 if (isWithCenterLabels(track))
     y += fontHeight;
 /* override doMapItems for hapmapLd track */
+
+/* does not scale with subtracks right now, so this is commented out until it can be fixed
 if (startsWith("hapmapLd",track->mapName))
     {
     y += round((double)(scaleForPixels(insideWidth)*insideWidth/2));
     return y;
     }
+*/
 for (item = track->items; item != NULL; item = item->next)
     {
     int height = track->itemHeight(track, item);
