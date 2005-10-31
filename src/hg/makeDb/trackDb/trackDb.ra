@@ -2455,6 +2455,13 @@ searchType bed
 searchPriority 50
 termRegex pc[a-z][a-z].[[:alnum:]]+
 
+searchTable allenBrainAli
+searchMethod exact
+searchType psl
+searchPriority 5
+shortCircuit 1
+termRegex RP_.+
+
 track encodeRegions2
 shortLabel ENCODE Region Consensus (Freeze 2)
 longLabel Consensus Orthology of ENCODE Regions from liftOver and Mercator (Freeze 2)
