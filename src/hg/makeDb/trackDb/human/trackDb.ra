@@ -201,6 +201,18 @@ priority 77
 visibility hide
 type bed 12 .
 
+track gladHumES
+shortLabel Gstone Arrays
+longLabel Gladstone microarray data including stem cell tissue
+group regulation
+priority 79
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable gladHumESExps
+chip GNF1M
+
 track gnfAtlas2
 shortLabel GNF Atlas 2
 longLabel GNF Expression Atlas 2
@@ -251,6 +263,18 @@ priority 85
 visibility hide
 type bed 15 +
 expTable affyExps
+
+track gladHumES
+shortLabel hESC dataset
+longLabel Gladstone microarray data including stem cell tissue
+group regulation
+priority 85.5
+visibility hide
+type expRatio
+expScale 4.0
+expStep 0.5
+expTable gladHumESRatio
+chip GNF1M
 
 track affyRatio
 shortLabel GNF Ratio
