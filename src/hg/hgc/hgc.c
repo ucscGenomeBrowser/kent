@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.970 2005/10/29 15:35:55 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.971 2005/10/31 23:01:13 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11489,7 +11489,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char   query[256];
-char   baseUrl[] = "http://alto.compbio.ucsf.edu/LS-SNP-cgi/";
+char   baseUrl[] = "http://salilab.org/LS-SNP-cgi/";
 char   options[] = "&RequestType=QueryById&idtype=rsID&PropertySelect=";
 char  *snpScript = NULL;
 
