@@ -1064,41 +1064,6 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4 .
 
-
-track encodeGencodeGene
-shortLabel Gencode Genes
-longLabel Gencode Gene Annotations 
-group encodeGenes
-color 73,76,73
-priority 10.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type genePred
-cdsDrawDefault genomic\ codons
-itemClassTbl gencodeGeneClass
-geneClasses Artifact Known Novel_CDS Novel_transcript Novel_transcript_gencode_conf Putative Putative_gencode_conf TEC Processed_pseudogene Unprocessed_pseudogene
-gClass_Known 33,91,51
-gClass_Novel_CDS 33,91,51
-gClass_Novel_transcript_gencode_conf 33,91,51
-gClass_Putative_gencode_conf 33,91,51
-gClass_Novel_transcript  84,188,0
-gClass_TEC  84,188,0
-gClass_Putative  84,188,0
-gClass_Artifact 163,168,163
-gClass_Processed_pseudogene 0,91,191
-gClass_Unprocessed_pseudogene 0,91,191
-origAssembly hg17
-
-track encodeGencodeIntron
-shortLabel Gencode Introns
-longLabel Gencode Intron Validation 
-group encodeGenes
-priority 10.2
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
-visibility hide
-type bed 6 +
-origAssembly hg17
-
 track encodeGencodeGeneOct05
 compositeTrack on
 shortLabel Gencode Genes
