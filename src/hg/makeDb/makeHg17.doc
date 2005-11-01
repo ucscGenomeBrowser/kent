@@ -18391,7 +18391,12 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 
 # Remap the probe alignments from mm7 to hg17
     zcat /cluster/data/mm7/bed/bedOver/mm7.hg17.over.chain.gz \
-        |  pslMap -chainMapFile -swapMap /cluster/data/mm7/bed/allenBrain/
+        |  pslMap -chainMapFile -swapMap stdin  \
+	       /cluster/data/mm7/bed/allenBrain/allenBrainAli.psl stdout
+	|  sort -k 14,14 -k 16,16n > unscored.psl
+    pslRecalcMatch unscored.psl /cluster/data/hg17/nib \
+        /cluster/data/mm7/bed/allenBrain/allProbes.fa allenBrainAli.psl
+    
 
 # Load the database
    hgsql hg17 < ~/kent/src/hg/lib/allenBrainUrl.sql

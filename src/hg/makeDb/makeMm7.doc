@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.19 2005/10/28 19:15:53 kent Exp $"
+#	"$Id: makeMm7.doc,v 1.20 2005/11/01 00:30:48 kent Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -8306,7 +8306,8 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
     ssh kkstore02
     cd /cluster/data/mm7/bed/allenBrain/run
     pslSort dirs raw.psl tmp psl
-    pslReps raw.psl ../allenBrainAli.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
+    pslReps raw.psl ../best.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
+    sort -k 14,14 -k 16,16n ../best.psl > ../allenBrainAli.psl
 
 # Clean up big files no longer needed
    rm raw.psl
