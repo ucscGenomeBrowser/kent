@@ -1489,6 +1489,116 @@ type bed 12
     color 58,119,40
     priority 2
 
+track encodeAffyRnaSignal
+compositeTrack on
+shortLabel Affy RNA Signal
+longLabel Affymetrix PolyA+ RNA Signal
+group encodeTxLevels
+priority 19.02
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig -1168.00 1686.5
+spanList 1
+maxHeightPixels 128:16:16
+autoScale off
+viewLimits 0:25
+origAssembly hg16
+
+    track encodeAffyRnaGm06990Signal
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA GM06990
+    longLabel Affymetrix PolyA+ RNA (GM06990) Signal
+    color 150,90,0
+    priority 1
+
+    track encodeAffyRnaHeLaSignal
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA HeLa
+    longLabel Affymetrix PolyA+ RNA (HeLaS3) Signal
+    color 220,132,12
+    priority 2
+
+    track encodeAffyRnaHl60SignalHr00
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 0h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
+    color 50,50,150
+    priority 3
+
+    track encodeAffyRnaHl60SignalHr02
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 2h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
+    color 50,50,180
+    priority 4
+
+    track encodeAffyRnaHl60SignalHr08
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 8h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
+    color 50,50,210
+    priority 5
+
+    track encodeAffyRnaHl60SignalHr32
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 32h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
+    color 50,50,240
+    priority 6
+
+track encodeAffyRnaTransfrags
+compositeTrack on
+shortLabel Affy Transfrags
+longLabel Affymetrix PolyA+ RNA Transfrags
+group encodeTxLevels
+priority 19.03
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+origAssembly hg16
+
+    track encodeAffyRnaGm06990Sites
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA GM06990
+    longLabel Affymetrix PolyA+ RNA (GM06990) Sites 
+    color 150,90,0
+    priority 1
+
+    track encodeAffyRnaHeLaSites
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA HeLa
+    longLabel Affymetrix PolyA+ RNA (HeLaS3) Sites 
+    color 220,132,12
+    priority 2
+
+    track encodeAffyRnaHl60SitesHr00
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 0h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Sites 
+    color 50,50,150
+    priority 3
+
+    track encodeAffyRnaHl60SitesHr02
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 2h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Sites 
+    color 50,50,180
+    priority 4
+
+    track encodeAffyRnaHl60SitesHr08
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 8h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Sites 
+    color 50,50,210
+    priority 5
+
+    track encodeAffyRnaHl60SitesHr32
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 32h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Sites 
+    color 50,50,240
+    priority 6
+
 track encodeUcsdNgGif
 compositeTrack on
 shortLabel LI Ng gIF ChIP
