@@ -823,6 +823,7 @@ removeSimpleOverlaps(&blockList);
 chainList = chainsCreate(bzp->gapCalc, bzp->ss,
         query, strand, target, &blockList);
 thresholdChains(&chainList, bzp->minScore);
+bzpTime("final chaining");
 
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
@@ -856,13 +857,13 @@ for (index = indexList; index != NULL; index = index->next)
       // allocate zeroed memory for hit counters if necessary
       if(index->counter == NULL){
              // index->counter could be set later?
-          index->counter = calloc(index->target->size, sizeof(COUNTER_TYPE));
+          AllocArray(index->counter, index->target->size);
           globalCounter = index->counter;
       }
     }
     if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
       // allocate zeroed memory for hit counters
-      dynaCountQtemp = calloc(query->size, sizeof(COUNTER_TYPE)); 
+      AllocArray(dynaCountQtemp, query->size); 
     }
     // LX END
     oneList = blatzAlignOne(bzp, index, query, strand);
@@ -873,7 +874,7 @@ for (index = indexList; index != NULL; index = index->next)
         dynaCountQ[j] = dynaCountQ[j]+dynaCountQtemp[j];
       }
     }
-    if(dynaCountQtemp != NULL) free(dynaCountQtemp); dynaCountQtemp = NULL; 
+    freez(&dynaCountQtemp); 
     // LX END
     for (chain = oneList; chain != NULL; chain = nextChain)
         {

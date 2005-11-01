@@ -134,6 +134,52 @@ struct diagNode
     int qPos;                /* Query position. */
     };
     
+// LX BEG
+int doDynaCounting(int targetPos, int queryPos)
+    {
+    int retval = 0;
+                    // Count all hits to report statistics later on
+                    dynaHits++;
+                    // Now let's see if dynaLimitT has been set
+                    if(targetHitDLimit<VERY_LARGE_NUMBER){
+                      // If we are over the limit, we will stop here
+                      // and continue at the next target pos
+                      if(globalCounter[targetPos] > targetHitDLimit){
+                        dynaCountTarget++; // statistics
+                        retval = 1;
+                        //continue; 
+                      } else {
+                        // ... otherwise keep counting the hits at this position
+                        // but only if query pos that matters 
+                        if(queryHitDLimit<VERY_LARGE_NUMBER){
+                          // is not over its hit limit
+                          if(dynaCountQ[queryPos] <= queryHitDLimit){
+                            globalCounter[targetPos]++;
+                          }
+                        } else {
+                          globalCounter[targetPos]++;
+                        }
+                      }
+                    }
+                    // Now let's see if dynaLimitQ has been set
+                    if(queryHitDLimit<VERY_LARGE_NUMBER){
+                      // If we reached the limit, we will stop here
+                      // and continue evaluating the next query pos
+                      if(dynaCountQ[queryPos] > queryHitDLimit){
+                        dynaCountQuery++; // statistics
+                        dynaBreak = 1;
+                        retval = 2;
+                        //break; // go to the outer loop to get the next query pos
+                      } else {
+                        // ... otherwise keep counting the hits at this position
+                        //dynaCountQ[queryPos]++; // postponing setting the mask
+                        dynaCountQtemp[queryPos]++;
+                      }
+                    }
+    return retval;
+    }
+// LX END
+
 void blatzGaplessScan(struct bzp *bzp, struct blatzIndex *index, 
         struct dnaSeq *query, struct cBlock **pMsps)
 /* Scan index for hits, do gapless extensions into maximally
@@ -173,7 +219,7 @@ if (multiHits)
         }
     }
 
-// LX BEG Sep 06 2005
+// LX BEG
 dynaBreak = 0;
 // LX END
  
@@ -197,6 +243,7 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
             struct blatzIndexPos *iPos = &index->slots[tog^key];
             bits32 *pos = iPos->pos;
             int i, count = iPos->count;
+            int dynaRet; // LX
             if (multiHits)
                 {
                 for (i=0; i<count; ++i)
@@ -207,45 +254,9 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     struct dlList *diagList = &diagLists[diagMod];
                     struct dlNode *node;
                     boolean gotDoubleHit = FALSE;
-
-                    // LX BEG
-                    // Count all hits to report statistics later on
-                    dynaHits++;
-                    // Now let's see if dynaLimitT has been set
-                    if(targetHitDLimit<VERY_LARGE_NUMBER){
-                      // If we are over the limit, we will stop here
-                      // and continue at the next target pos
-                      if(globalCounter[targetPos] > targetHitDLimit){
-                        dynaCountTarget++; // statistics
-                        continue; 
-                      } else {
-                        // ... otherwise keep counting the hits at this position
-                        // but only if query pos that matters 
-                        if(queryHitDLimit<VERY_LARGE_NUMBER){
-                          // is not over its hit limit
-                          if(dynaCountQ[queryPos] <= queryHitDLimit){
-                            globalCounter[targetPos]++;
-                          }
-                        } else {
-                          globalCounter[targetPos]++;
-                        }
-                      }
-                    }
-                    // Now let's see if dynaLimitQ has been set
-                    if(queryHitDLimit<VERY_LARGE_NUMBER){
-                      // If we reached the limit, we will stop here
-                      // and continue evaluating the next query pos
-                      if(dynaCountQ[queryPos] > queryHitDLimit){
-                        dynaCountQuery++; // statistics
-                        dynaBreak = 1;
-                        break; // go to the outer loop to get the next query pos
-                      } else {
-                        // ... otherwise keep counting the hits at this position
-                        //dynaCountQ[queryPos]++; // postponing setting the mask
-                        dynaCountQtemp[queryPos]++;
-                      }
-                    }
-                    // LX END
+                    dynaRet = doDynaCounting(targetPos, queryPos); // LX
+                    if(dynaRet == 1) continue; // LX
+                    if(dynaRet == 2) break; // LX
                     ++hitCount;
                     for (node = diagList->head;  !dlEnd(node); node = node->next)
                         {
@@ -313,6 +324,10 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     int targetPos = pos[i];
                     int diagonal = queryPos - targetPos;
                     struct diagonalTrack sdt, *dt;
+                    int dynaRet;
+                    dynaRet = doDynaCounting(targetPos, queryPos); // LX
+                    if(dynaRet == 1) continue; // LX
+                    if(dynaRet == 2) break; // LX
                     ++hitCount;
                     sdt.diagonal = queryPos - targetPos;
                     dt = rbTreeFind(tree, &sdt);

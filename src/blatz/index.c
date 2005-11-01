@@ -82,6 +82,7 @@ for (i=0; i<=lastBase; ++i)
         slot = &slots[key];
         slAddHead(slot, pos);
         ++posCount;
+        if(dynaWordLimit>0) dynaWordCount[key]++;
         }
     }
 

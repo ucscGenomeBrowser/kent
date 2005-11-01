@@ -41,7 +41,7 @@ bzp->mafT = "";
 // LX BEG Sep 02 2005 Sep 06 2005
 bzp->dynaLimitT = VERY_LARGE_NUMBER;
 bzp->dynaLimitQ = VERY_LARGE_NUMBER;
-bzp->dynaBedFile = "";
+bzp->dynaBedFileQ = "";
 bzp->dynaWordCoverage = 0;
 // LX END
 return bzp;
@@ -106,10 +106,10 @@ printf("  -dynaLimitT=%d For dynamic masking. This option controls\n"
        "                the number of hits in target positions before hits get ignored\n", bzp->dynaLimitT);
 printf("  -dynaLimitQ=%d For dynamic masking. This option controls\n"
        "                the number of hits in query before hits get ignored\n", bzp->dynaLimitQ);
-printf("  -dynaBedFile=%s Report the dynamic mask. This option controls\n"
-       "                the creation of a bed file containing the mask\n", bzp->dynaBedFile);
+printf("  -dynaBedFileQ=%s Report the dynamic mask. This option controls\n"
+       "                the creation of a bed file containing the mask\n", bzp->dynaBedFileQ);
 printf("  -dynaWordCoverage=%s Control the number of times a word must occur\n"
-       "                to cause dynamic masking of that word\n", bzp->dynaBedFile);
+       "                to cause dynamic masking of that word\n", bzp->dynaWordCoverage);
 // LX END
 }
 
@@ -142,7 +142,7 @@ bzp->mafQ = optionVal("mafQ", bzp->mafQ);
 // LX BEG
 bzp->dynaLimitT = optionInt("dynaLimitT", bzp->dynaLimitT);
 bzp->dynaLimitQ = optionInt("dynaLimitQ", bzp->dynaLimitQ);
-bzp->dynaBedFile = optionVal("dynaBedFile", bzp->dynaBedFile);
+bzp->dynaBedFileQ = optionVal("dynaBedFileQ", bzp->dynaBedFileQ);
 bzp->dynaWordCoverage = optionInt("dynaWordCoverage", bzp->dynaWordCoverage);
 // LX END 
 
