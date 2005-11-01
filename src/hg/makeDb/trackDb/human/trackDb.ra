@@ -3971,24 +3971,28 @@ color 120,10,120
     subTrack encodeNhgriDnaseHsChip
     shortLabel DNase GM069 Chip
     longLabel NHGRI DNaseI-Hypersensitive Sites (GM06990 T-Cells, Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeNhgriDnaseHsChipCd4
     subTrack encodeNhgriDnaseHsChip
     shortLabel DNase CD4 Chip
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, Chip method)
+    dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeNhgriDnaseHsMpssCd4
     subTrack encodeNhgriDnaseHsChip
     shortLabel DNase CD4 MS 
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
     priority 3
 
     track encodeNhgriDnaseHsMpssCd4Act
     subTrack encodeNhgriDnaseHsChip
     shortLabel DNase CD4-act MS
     longLabel NHGRI DNaseI-Hypersensitive Sites (CD4+ T-Cells Activated, MPSS method)
+    dataVersion ENCODE June 2005 Freeze
     priority 4
 
 track encodeStanfordMeth
