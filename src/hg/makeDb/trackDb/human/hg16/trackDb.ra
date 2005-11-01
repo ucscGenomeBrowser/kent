@@ -1650,6 +1650,7 @@ visibility hide
 type bed 5 .
 useScore 1
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeNhgriDnaseHsNonAct
     subTrack encodeNhgriDnaseHs
