@@ -6,8 +6,10 @@
 #include "common.h"
 #include "dnaseq.h"
 #include "bits.h"
+#include "hash.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.17 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: dnaseq.c,v 1.18 2005/11/01 00:29:39 kent Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -166,5 +168,17 @@ for (i=0; i<size; ++i)
         bitSetOne(b, i);
     }
 return b;
+}
+
+struct hash *dnaSeqHash(struct dnaSeq *seqList)
+/* Return hash of sequences keyed by name. */
+{
+int size = slCount(seqList)+1;
+int sizeLog2 = digitsBaseTwo(size);
+struct hash *hash = hashNew(sizeLog2);
+struct dnaSeq *seq;
+for (seq = seqList; seq != NULL; seq = seq->next)
+    hashAddUnique(hash, seq->name, seq);
+return hash;
 }
 

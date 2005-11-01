@@ -63,5 +63,8 @@ Bits *maskFromUpperCaseSeq(bioSeq *seq);
 /* Allocate a mask for sequence and fill it in based on
  * sequence case. */
 
+struct hash *dnaSeqHash(struct dnaSeq *seqList);
+/* Return hash of sequences keyed by name. */
+
 #endif /* DNASEQ_H */
 
