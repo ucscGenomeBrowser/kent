@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1028 2005/10/31 23:00:44 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1029 2005/11/01 00:50:56 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10411,9 +10411,11 @@ registerTrackHandler("dless", dlessMethods);
 registerTrackHandler("dlessMD", dlessMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
-registerTrackHandler("encodeGencodeGeneOct", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
+registerTrackHandler("encodeGencodeGeneOct05", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
-registerTrackHandler("encodeGencodeIntronOct", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
+registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("humanPhenotype", humanPhenotypeMethods);
 
