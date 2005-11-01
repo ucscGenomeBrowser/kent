@@ -108,7 +108,7 @@ printf("  -dynaLimitQ=%d For dynamic masking. This option controls\n"
        "                the number of hits in query before hits get ignored\n", bzp->dynaLimitQ);
 printf("  -dynaBedFileQ=%s Report the dynamic mask. This option controls\n"
        "                the creation of a bed file containing the mask\n", bzp->dynaBedFileQ);
-printf("  -dynaWordCoverage=%s Control the number of times a word must occur\n"
+printf("  -dynaWordCoverage=%d Control the number of times a word must occur\n"
        "                to cause dynamic masking of that word\n", bzp->dynaWordCoverage);
 // LX END
 }
