@@ -21,7 +21,7 @@ BEGIN {
                            makeTimeFile loadTimeFile
                            beginTask beginTaskNoLock endTask gbError makeDir
                            makeFileDir removeDir renameFile getFileSize getFileModTime
-                           runProg runProgNoAbort callProg runPipe md5Files
+                           runProg runProgNoAbort callProg runPipe md5Files md5Check
                            gbChmod getReleases getLastRelease getUpdates
                            parseOptEq inList inListRef getTmpDir readFile makeAbs
                            backgroundStart backgroundWait
@@ -387,7 +387,7 @@ sub getFileModTime($) {
     my($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,
        $atime,$mtime,$ctime,$blksize,$blocks) = stat($path);
     if (!defined($dev)) {
-        die("can't stat: $path");
+        die("can\'t stat: $path");
     }
     return $mtime;
 }
@@ -469,6 +469,13 @@ sub md5Files($@) {
     runProg("md5sum " . join(' ',sort(@files)) . " >$tmpFile");
     gbChmod($tmpFile);
     renameFile($tmpFile, $outFile);
+}
+
+# Check an md5 sum file and die if anything's bad.
+sub md5Check($) {
+    my($md5File) = @_;
+    # Hopefully runProg dies if there's a problem with md5sum.
+    runProg("md5sum -c $md5File");
 }
 
 # set the permission on a list of datafiles
