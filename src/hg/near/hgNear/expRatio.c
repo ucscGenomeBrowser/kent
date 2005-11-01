@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.37 2005/10/25 16:26:24 kent Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.38 2005/11/01 00:31:54 aamp Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -660,8 +660,8 @@ void setupColumnExpMulti(struct column *col, char *parameters)
  * short or long. */
 {
 struct expMultiData *emdList = NULL;
-struct expMultiData *allEmd = makeEmd(col, "all", "all replicas", &emdList);
-struct expMultiData *medianEmd = makeEmd(col, "median", "median of replicas", &emdList);
+struct expMultiData *allEmd = makeEmd(col, "all", "all replicates", &emdList);
+struct expMultiData *medianEmd = makeEmd(col, "median", "median of replicates", &emdList);
 struct expMultiData *selectedEmd = makeEmd(col, "selected", "selected", &emdList);
 char *ratioMax = columnSetting(col, "ratioMax", "3.0");
 char *absoluteMax = columnSetting(col, "absoluteMax", "30000");
