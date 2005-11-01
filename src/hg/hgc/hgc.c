@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.971 2005/10/31 23:01:13 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.972 2005/11/01 21:31:48 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2057,6 +2057,14 @@ if (hTableOrSplitExists(tdb->tableName))
     }
 }
 
+void printDataVersion(struct trackDb *tdb)
+/* If this annotation has a dataVersion trackDb setting, print it */
+{
+char *version;
+if ((version = trackDbSetting(tdb, "dataVersion")) != NULL)
+    printf("<B>Data version:</B> %s <BR>\n", version);
+}
+
 void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */ 
@@ -2088,6 +2096,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 char *tableName;
 printTBSchemaLink(tdb);
+printDataVersion(tdb);
 printOrigAssembly(tdb);
 if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
     {
