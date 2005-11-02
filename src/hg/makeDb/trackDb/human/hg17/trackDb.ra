@@ -227,6 +227,7 @@ autoScale off
 viewLimits 0:25
 subGroup1 dataType Signal/Transfrags signal=Signal transfrags=Transfrags
 subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyRnaGm06990Signal
     subTrack encodeAffyRna
