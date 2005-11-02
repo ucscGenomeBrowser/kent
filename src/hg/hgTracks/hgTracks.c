@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1029 2005/11/01 00:50:56 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1030 2005/11/02 23:47:06 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7358,8 +7358,18 @@ switch (vis)
             else
                 {
                 /* standard item labeling */
-                vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
-                        itemHeight, labelColor, font, name);
+		if (highlightItem(track, item))
+		    {
+		    int nameWidth = mgFontStringWidth(font, name);
+		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
+		    vgBox(vg, boxStart, y, nameWidth+1, itemHeight - 1,
+			  labelColor);
+		    vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, 
+				itemHeight, MG_WHITE, font, name);
+		    }
+		else
+		    vgTextRight(vg, leftLabelX, y, leftLabelWidth - 1, 
+				itemHeight, labelColor, font, name);
                 y += itemHeight;
                 }
             }
