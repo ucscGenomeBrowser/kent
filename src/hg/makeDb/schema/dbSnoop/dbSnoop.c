@@ -3,10 +3,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "dystring.h"
 #include "jksql.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.1 2005/11/02 03:44:13 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.2 2005/11/02 05:23:10 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +19,23 @@ errAbort(
   "options:\n"
   "   -xxx=XXX\n"
   );
+}
+
+struct tableInfo
+/* Information on a table. */
+    {
+    struct tableInfo *next;  /* Next in list. */
+    char *name;    	     /* Name of table. */
+    struct slName *fieldList;/* List of fields in table. */
+    int rowCount;	     /* Number of rows. */
+    };
+
+int tableInfoCmp(const void *va, const void *vb)
+/* Compare two tableInfo. */
+{
+const struct tableInfo *a = *((struct tableInfo **)va);
+const struct tableInfo *b = *((struct tableInfo **)vb);
+return b->rowCount - a->rowCount;
 }
 
 struct fieldInfo
@@ -52,29 +70,74 @@ slNameAddHead(&fi->tableList, table);
 fi->tableCount += 1;
 }
 
+struct tableType
+/* Information on a type. */
+    {
+    struct tableType *next;	/* Next in list. */
+    char *fields;		/* Comma-separated list of fields. */
+    struct slName *tableList;	/* List of tables using this type. */
+    int tableCount;		/* Count of tables. */
+    };
+
+int tableTypeCmp(const void *va, const void *vb)
+/* Compare two tableType. */
+{
+const struct tableType *a = *((struct tableType **)va);
+const struct tableType *b = *((struct tableType **)vb);
+return b->tableCount - a->tableCount;
+}
+
+void noteType(struct hash *hash, char *fields, char *table,
+	struct tableType **pList)
+/* Keep track of tables of given type. */
+{
+struct tableType *tt = hashFindVal(hash, fields);
+if (tt == NULL)
+    {
+    AllocVar(tt);
+    hashAddSaveName(hash, fields, tt, &tt->fields);
+    slAddHead(pList, tt);
+    }
+slNameAddHead(&tt->tableList, table);
+tt->tableCount += 1;
+}
+
+
 void tableSummary(char *table, struct sqlConnection *conn, FILE *f, 
-	struct hash *fieldHash, struct fieldInfo **pList)
+	struct hash *fieldHash, struct fieldInfo **pFiList,
+	struct hash *tableHash, struct tableInfo **pTiList,
+	struct hash *typeHash, struct tableType **pTtList)
 /* Write out summary of table to file. */
 {
 char query[256];
 struct sqlResult *sr;
 int rowCount;
 char **row;
+struct dyString *fields = dyStringNew(0);
+struct tableInfo *ti;
 
+/* Make new table info, and add it to hash, list */
+AllocVar(ti);
+hashAddSaveName(tableHash, table, ti, &ti->name);
+slAddTail(pTiList, ti);
+
+/* Count rows. */
 safef(query, sizeof(query), "select count(*) from %s", table);
-rowCount = sqlQuickNum(conn, query);
-printLongWithCommas(f, rowCount);
-fprintf(f, "\t%s\t", table);
+ti->rowCount = sqlQuickNum(conn, query);
+
+/* List fields. */
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *field = row[0];
-    fprintf(f, "%s,", field);
-    noteField(fieldHash, table, field, pList);
+    slNameAddHead(&ti->fieldList, field);
+    dyStringPrintf(fields, "%s,", field);
+    noteField(fieldHash, table, field, pFiList);
     }
+
+noteType(typeHash, fields->string, table, pTtList);
 sqlFreeResult(&sr);
-fprintf(f, "\n");
 }
 
 static struct optionSpec options[] = {
@@ -90,24 +153,63 @@ struct sqlConnection *conn2 = sqlConnect(database);
 struct sqlResult *sr = sqlGetResult(conn, "show tables");
 char **row;
 struct hash *fieldHash = hashNew(0);
+struct hash *typeHash = hashNew(0);
+struct hash *tableHash = hashNew(0);
 struct fieldInfo *fiList = NULL, *fi;
+struct tableInfo *tiList = NULL, *ti;
+struct tableType *ttList = NULL, *tt;
 
-fprintf(f, "TABLE SUMMARY:\n");
-fprintf(f, "#rows\tname\tfields\n");
+/* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
-    tableSummary(row[0], conn2, f, fieldHash, &fiList);
+    tableSummary(row[0], conn2, f, 
+    	fieldHash, &fiList, tableHash, &tiList, typeHash, &ttList);
+
+/* Print summary of rows and fields in each table ordered by
+ * number of rows. */
+slSort(&tiList, tableInfoCmp);
+fprintf(f, "TABLE SUMMARY (%d):\n", slCount(tiList));
+fprintf(f, "#rows\tname\tfields\n");
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct slName *t;
+    slReverse(&ti->fieldList);
+    printLongWithCommas(f, ti->rowCount);
+    fprintf(f, "\t%s\t", ti->name);
+    for (t = ti->fieldList; t != NULL; t = t->next)
+	fprintf(f, "%s,", t->name);
+    fprintf(f, "\n");
+    }
 fprintf(f, "\n");
 
-fprintf(f, "FIELD SUMMARY:\n");
+/* Print summary of fields and tables fields are used in 
+ * ordered by the number of tables a field is in. */
 slSort(&fiList, fieldInfoCmp);
+fprintf(f, "FIELD SUMMARY (%d):\n", slCount(fiList));
+fprintf(f, "#uses\tname\ttables\n");
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
     struct slName *t;
     slReverse(&fi->tableList);
-    fprintf(f, "%d\t%s\t", slCount(fi->tableList), fi->name);
+    fprintf(f, "%d\t%s\t", fi->tableCount, fi->name);
     for (t = fi->tableList; t != NULL; t = t->next)
 	fprintf(f, "%s,", t->name);
     fprintf(f, "\n");
+    }
+fprintf(f, "\n");
+
+/* Print summary of types and tables that use types 
+ * ordered by the number of tables a type is used by. */
+slSort(&ttList, tableTypeCmp);
+fprintf(f, "TABLE TYPE SUMMARY (%d):\n", slCount(ttList));
+fprintf(f, "#uses\ttables\tfields\n");
+for (tt = ttList; tt != NULL; tt = tt->next)
+    {
+    struct slName *t;
+    slReverse(&tt->tableList);
+    fprintf(f, "%d\t", tt->tableCount);
+    for (t = tt->tableList; t != NULL; t = t->next)
+	fprintf(f, "%s,", t->name);
+    fprintf(f, "\t%s\n", tt->fields);
     }
 
 carefulClose(&f);
