@@ -264,18 +264,6 @@ visibility hide
 type bed 15 +
 expTable affyExps
 
-track gladHumES
-shortLabel hESC dataset
-longLabel Gladstone microarray data including stem cell tissue
-group regulation
-priority 85.5
-visibility hide
-type expRatio
-expScale 4.0
-expStep 0.5
-expTable gladHumESRatio
-chip GNF1M
-
 track affyRatio
 shortLabel GNF Ratio
 longLabel GNF Gene Expression Atlas Ratios Using Affymetrix GeneChips
