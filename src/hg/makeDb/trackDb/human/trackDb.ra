@@ -1774,7 +1774,7 @@ origAssembly hg16
     track encodeYaleMASNB4RNANprotTMFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
     shortLabel Yale NB4 NgF RNA
-    longLabel Yale NB4 RNA Trans Map, MAS Array, Forward Direction, Nimblegen Protocol
+    longLabel Yale NB4 RNA Trans Map, MAS Array, Forward Direction, NimbleGen Protocol
     priority 1
     color 200,50,50
     altColor 50,50,200
@@ -1782,7 +1782,7 @@ origAssembly hg16
     track encodeYaleMASNB4RNANprotTMREVMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
     shortLabel Yale NB4 NgR RNA
-    longLabel Yale NB4 RNA Trans Map, MAS Array, Reverse Direction, Nimblegen Protocol
+    longLabel Yale NB4 RNA Trans Map, MAS Array, Reverse Direction, NimbleGen Protocol
     priority 2
     color 50,50,200
     altColor 200,50,50
@@ -1790,7 +1790,7 @@ origAssembly hg16
     track encodeYaleMASPlacRNANprotTMFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
     shortLabel Yale Plc NgF RNA
-    longLabel Yale Placenta RNA Trans Map, MAS Array, Forward Direction, Nimblegen Protocol
+    longLabel Yale Placenta RNA Trans Map, MAS Array, Forward Direction, NimbleGen Protocol
     priority 3
     color 200,50,50
     altColor 50,50,200
@@ -1798,7 +1798,7 @@ origAssembly hg16
     track encodeYaleMASPlacRNANprotTMREVMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
     shortLabel Yale Plc NgR RNA
-    longLabel Yale Placenta RNA Trans Map, MAS Array, Reverse Direction, Nimblegen Protocol
+    longLabel Yale Placenta RNA Trans Map, MAS Array, Reverse Direction, NimbleGen Protocol
     priority 4
     color 50,50,200
     altColor 200,50,50
@@ -1833,7 +1833,7 @@ origAssembly hg16
     track encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
     shortLabel Yale NB4 NgF TAR
-    longLabel Yale NB4 RNA TARs, MAS array, Forward Direction, Nimblegen Protocol
+    longLabel Yale NB4 RNA TARs, MAS array, Forward Direction, NimbleGen Protocol
     priority 1
     color 200,50,50
     altColor 50,50,200
@@ -1841,7 +1841,7 @@ origAssembly hg16
     track encodeYaleMASNB4RNANProtTarsREVMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
     shortLabel Yale NB4 NgR TAR
-    longLabel Yale NB4 RNA TARs, MAS array, Reverse Direction, Nimblegen Protocol
+    longLabel Yale NB4 RNA TARs, MAS array, Reverse Direction, NimbleGen Protocol
     priority 2
     color 50,50,200
     altColor 200,50,50
@@ -1849,7 +1849,7 @@ origAssembly hg16
     track encodeYaleMASPlacRNANprotTarsFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
     shortLabel Yale Plc NgF TAR
-    longLabel Yale Placenta RNA TARs, MAS array, Forward Direction, Nimblegen Protocol
+    longLabel Yale Placenta RNA TARs, MAS array, Forward Direction, NimbleGen Protocol
     priority 3
     color 200,50,50
     altColor 50,50,200
@@ -1857,7 +1857,7 @@ origAssembly hg16
     track encodeYaleMASPlacRNANprotTarsREVMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
     shortLabel Yale Plc NgR TAR
-    longLabel Yale Placenta RNA TARs, MAS array, Reverse Direction, Nimblegen Protocol
+    longLabel Yale Placenta RNA TARs, MAS array, Reverse Direction, NimbleGen Protocol
     priority 4
     color 50,50,200
     altColor 200,50,50
@@ -3083,7 +3083,7 @@ origAssembly hg16
 track encodeUcsdNgChip
 compositeTrack on
 shortLabel LI Ng TAF1 IMR90
-longLabel Ludwig Institute Nimblegen ChIP/Chip: TAF1 antibody, IMR90 cells
+longLabel Ludwig Institute NimbleGen ChIP/Chip: TAF1 antibody, IMR90 cells
 group encodeChip
 priority 51.0
 visibility hide
@@ -3098,7 +3098,7 @@ origAssembly hg16
     track encodeUcsdNgChipSignal
     subTrack encodeUcsdNgChip
     shortLabel LI Ng TAF1 IMR90
-    longLabel Ludwig Institute Nimblegen ChIP/Chip: TAF1 antibody, IMR90 cells 
+    longLabel Ludwig Institute NimbleGen ChIP/Chip: TAF1 antibody, IMR90 cells 
     priority 1
 
     track encodeUcsdNgChipKnownSites
@@ -3656,7 +3656,7 @@ origAssembly hg16
 
 track encodeUCDavisE2F1Median
 shortLabel UCD Ng E2F1
-longLabel UC Davis ChIP/Chip Nimblegen - E2F1 ab, HeLa Cells
+longLabel UC Davis ChIP/Chip NimbleGen - E2F1 ab, HeLa Cells
 group encodeChip
 priority 56.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
