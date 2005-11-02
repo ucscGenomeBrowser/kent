@@ -5,84 +5,85 @@
 #include "hash.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "cart.h"
 #include "htmshell.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
 #include "captionElement.h"
 #include "printCaption.h"
 
-static struct slName *geneColorName(struct sqlConnection *conn, int id)
-/* Get list of genes.  If more than one in list
- * put color of gene if available. */
-{
-struct slName *list = NULL, *el = NULL;
-list = visiGeneGeneName(conn, id);
-if (slCount(list) > 1)
+struct probeAndColor
+/* Just a little structure to store probe and probeColor. */
     {
-    char query[512], llName[256];
-    struct sqlResult *sr;
-    char **row;
+    struct probeAndColor *next;
+    int probe;	/* Probe id. */
+    int probeColor;  /* ProbeColor id. */
+    };
 
-    slFreeList(&list);	/* We have to do it the complex way. */
+static struct slName *geneProbeList(struct sqlConnection *conn, int id)
+/* Get list of gene names with hyperlinks to probe info page. */
+{
+struct slName *returnList = NULL, *returnEl;
+char query[256], **row;
+struct sqlResult *sr;
+char *sidUrl = cartSidUrlString(cart);
+struct dyString *dy = dyStringNew(0);
+struct probeAndColor *pcList = NULL, *pc;
+int probeCount = 0;
 
-    /* Note I have found that some things originally selected
-       did not get a name here, because of the additional 
-       requirement for linking to probeColor, which was
-       a result of some having probeColor id of 0.
-       This would then mean the the picture's caption
-       is missing the gene name entirely.
-       So, to fix this, the probeColor.name lookup is 
-       now done as an outer join.
-    */
-    safef(query, sizeof(query),
-	  "select gene.name,gene.locusLink,gene.refSeq,gene.genbank,gene.uniProt,probeColor.name"
-	  " from imageProbe,probe,gene"
-	  " LEFT JOIN probeColor on imageProbe.probeColor = probeColor.id"
-	  " where imageProbe.image = %d"
-	  " and imageProbe.probe = probe.id"
-	  " and probe.gene = gene.id"
-	  , id);
-	  
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-	{
-	char *geneName = NULL;
-	char *name = row[0];
-	char *locusLink = row[1];
-	char *refSeq = row[2];
-	char *genbank = row[3];
-	char *uniProt = row[4];
-	char *color = row[5];
-	if (name[0] != 0)
-	    geneName = name;
-	else if (refSeq[0] != 0)
-	    geneName = refSeq;
-	else if (genbank[0] != 0)
-	    geneName = genbank;
-	else if (uniProt[0] != 0)
-	    geneName = uniProt;
-	else if (locusLink[0] != 0)
-	    {
-	    safef(llName, sizeof(llName), "Entrez Gene %s", locusLink);
-	    geneName = llName;
-	    }
-	if (geneName != NULL)
-	    {
-	    char buf[256];
-	    if (color)
-		safef(buf, sizeof(buf), "%s (%s)", geneName, color);
-	    else
-	        safef(buf, sizeof(buf), "%s", geneName);
-	    el = slNameNew(buf);
-	    slAddHead(&list, el);
-	    }
-	}
-    sqlFreeResult(&sr);
-    slReverse(&list);
+/* Make up a list of all probes in this image. */
+safef(query, sizeof(query),
+   "select probe,probeColor from imageProbe where image=%d", id);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(pc);
+    pc->probe = sqlUnsigned(row[0]);
+    pc->probeColor = sqlUnsigned(row[1]);
+    slAddHead(&pcList, pc);
+    ++probeCount;
     }
-return list;
-}
+slReverse(&pcList);
 
+for (pc = pcList; pc != NULL; pc = pc->next)
+    {
+    int geneId;
+    char *geneName;
+    int probe = pc->probe;
+
+    /* Create hyperlink to probe page around gene name. */
+    dyStringClear(dy);
+    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\">",
+    	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe);
+    safef(query, sizeof(query), 
+    	"select gene from probe where id = %d", probe);
+    geneId = sqlQuickNum(conn, query);
+    geneName = vgGeneNameFromId(conn, geneId);
+    dyStringPrintf(dy, "%s</A>", geneName);
+    freez(&geneName);
+
+    /* Add color if there's more than one probe for this image. */
+    if (probeCount > 1)
+        {
+	char *color;
+	safef(query, sizeof(query), 
+	    "select probeColor.name from probeColor "
+	    "where probeColor.id = %d"
+	    , pc->probeColor);
+	color = sqlQuickString(conn, query);
+	if (color != NULL)
+	    dyStringPrintf(dy, " (%s)", color);
+	freez(&color);
+	}
+
+    /* Add to return list. */
+    slNameAddTail(&returnList, dy->string);
+    }
+
+slFreeList(&pcList);
+slReverse(&returnList);
+return returnList;
+}
 
 #ifdef UNUSED
 static char *genomeDbForImage(struct sqlConnection *conn, int imageId)
@@ -350,9 +351,10 @@ struct captionElement *ceList = NULL, *ce;
 for (image = imageList; image != NULL; image = image->next)
     {
     int paneId = image->val;
-    struct slName *geneList = geneColorName(conn, paneId);
+    struct slName *geneList = geneProbeList(conn, paneId);
     struct slName *genbankList = visiGeneGenbank(conn, paneId);
     ce = captionElementNew(paneId, "gene", makeCommaSpacedList(geneList));
+    ce->hasHtml = TRUE;
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "genbank", makeCommaSpacedList(genbankList));
     slAddHead(&ceList, ce);
@@ -426,7 +428,10 @@ for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
 		printf(" ");
 	    }
 	printf("<B>%s:</B> ", ce->type);
-	htmTextOut(stdout, ce->value);
+	if (ce->hasHtml)
+	    printf("%s", ce->value);
+	else
+	    htmTextOut(stdout, ce->value);
 	charsInLine += charsInEl;
 	}
     if (charsInLine != 0)

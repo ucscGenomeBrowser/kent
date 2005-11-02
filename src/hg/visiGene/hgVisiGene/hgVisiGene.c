@@ -20,6 +20,8 @@
 /* Globals */
 struct cart *cart;		/* Current CGI values */
 struct hash *oldCart;		/* Previous CGI values */
+char *visiDb = "visiGene";	/* The visiGene database name */
+struct sqlConnCache *visiConnCache;  /* Cache of connections to database. */
 
 static struct optionSpec options[] = {
    {NULL, 0},
@@ -77,6 +79,19 @@ if (name == NULL)
 return name;
 }
 
+#ifdef UNUSED
+struct sqlConnection *vAllocConn()
+/* Get a connection from connection cache */
+{
+return sqlAllocConnection(visiConnCache);
+}
+
+void vFreeConn(struct sqlConnection **pConn)
+/* Free up connection from connection cache. */
+{
+sqlFreeConnection(visiConnCache, pConn);
+}
+#endif /* UNUSED */
 
 #ifdef UNUSED
 int visiGeneMaxImageId(struct sqlConnection *conn)
@@ -442,7 +457,9 @@ void doMiddle(struct cart *theCart)
 /* Save cart to global, print time, call dispatch */
 {
 cart = theCart;
+// visiConnCache = sqlNewConnCache(visiDb);
 dispatch();
+// sqlFreeConnCache(&visiConnCache);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};

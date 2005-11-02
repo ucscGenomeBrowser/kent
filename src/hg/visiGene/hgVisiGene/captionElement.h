@@ -14,6 +14,7 @@ struct captionElement
      int image;		/* ID of image this is associated with. */
      char *type;	/* Feature type. Memory allocated here. */
      char *value;	/* Specific info.  Memory allocated here. */
+     boolean hasHtml;	/* True if has html tags in it. */
      };
 
 struct captionElement *captionElementNew(int image, char *type, char *value);
