@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.169 2005/10/28 23:17:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.170 2005/11/02 00:50:28 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -217,7 +217,7 @@ pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile);
 lf = pipelineLineFile(pl);
 verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
 	indexFile, pipelineDesc(pl));
-while (lineFileRow(lf, words))
+while (lineFileChop(lf, words))
     {
     struct slName *idEl = slNameNew(words[0]);
     slAddHead(&idList, idEl);
