@@ -53,7 +53,7 @@ for (pc = pcList; pc != NULL; pc = pc->next)
 
     /* Create hyperlink to probe page around gene name. */
     dyStringClear(dy);
-    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\">",
+    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_blank>",
     	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe);
     safef(query, sizeof(query), 
     	"select gene from probe where id = %d", probe);
@@ -151,41 +151,6 @@ for (gene = geneList; gene != NULL; gene = gene->next)
 slFreeList(&geneList);
 }
 
-
-static char *makeCommaSpacedList(struct slName *list)
-/* Turn linked list of strings into a single string with
- * elements separated by a comma and a space. */
-{
-int totalSize = 0, elCount = 0;
-struct slName *el;
-
-for (el = list; el != NULL; el = el->next)
-    {
-    if (el->name[0] != 0)
-	{
-	totalSize += strlen(el->name);
-	elCount += 1;
-	}
-    }
-if (elCount == 0)
-    return cloneString("n/a");
-else
-    {
-    char *pt, *result;
-    totalSize += 2*(elCount-1);	/* Space for ", " */
-    pt = result = needMem(totalSize+1);
-    strcpy(pt, list->name);
-    pt += strlen(list->name);
-    for (el = list->next; el != NULL; el = el->next)
-        {
-	*pt++ = ',';
-	*pt++ = ' ';
-	strcpy(pt, el->name);
-	pt += strlen(el->name);
-	}
-    return result;
-    }
-}
 
 
 static struct slName *expTissuesForProbeInImage(struct sqlConnection *conn, 

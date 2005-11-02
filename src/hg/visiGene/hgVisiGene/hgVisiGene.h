@@ -32,6 +32,11 @@ char *shortOrgName(char *binomial);
 /* Return short name for taxon - scientific or common whatever is
  * shorter */
 
+char *makeCommaSpacedList(struct slName *list);
+/* Turn linked list of strings into a single string with
+ * elements separated by a comma and a space.  You can
+ * freeMem the result when done. */
+
 struct sqlConnection *vAllocConn();
 /* Get a connection from connection cache */
 

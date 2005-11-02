@@ -12,10 +12,11 @@
 #include "hgColors.h"
 #include "web.h"
 #include "visiGene.h"
-#include "captionElement.h"
-#include "printCaption.h"
-#include "visiSearch.h"
 #include "hgVisiGene.h"
+#include "captionElement.h"
+#include "visiSearch.h"
+#include "probePage.h"
+#include "printCaption.h"
 
 /* Globals */
 struct cart *cart;		/* Current CGI values */
@@ -77,6 +78,42 @@ if (name == NULL)
     hashAdd(hash, binomial, name);
     }
 return name;
+}
+
+char *makeCommaSpacedList(struct slName *list)
+/* Turn linked list of strings into a single string with
+ * elements separated by a comma and a space.  You can
+ * freeMem the result when done. */
+{
+int totalSize = 0, elCount = 0;
+struct slName *el;
+
+for (el = list; el != NULL; el = el->next)
+    {
+    if (el->name[0] != 0)
+	{
+	totalSize += strlen(el->name);
+	elCount += 1;
+	}
+    }
+if (elCount == 0)
+    return cloneString("n/a");
+else
+    {
+    char *pt, *result;
+    totalSize += 2*(elCount-1);	/* Space for ", " */
+    pt = result = needMem(totalSize+1);
+    strcpy(pt, list->name);
+    pt += strlen(list->name);
+    for (el = list->next; el != NULL; el = el->next)
+        {
+	*pt++ = ',';
+	*pt++ = ' ';
+	strcpy(pt, el->name);
+	pt += strlen(el->name);
+	}
+    return result;
+    }
 }
 
 #ifdef UNUSED
@@ -286,6 +323,13 @@ else
 htmlEnd();
 }
 
+void doProbe(struct sqlConnection *conn)
+/* Put up probe info page. */
+{
+int probeId = cartInt(cart, hgpDoProbe);
+probePage(conn, probeId);
+}
+
 void doControls(struct sqlConnection *conn)
 /* Put up controls pane. */
 {
@@ -437,6 +481,8 @@ if (cartVarExists(cart, hgpDoThumbnails))
     doThumbnails(conn);
 else if (cartVarExists(cart, hgpDoImage))
     doImage(conn);
+else if (cartVarExists(cart, hgpDoProbe))
+    doProbe(conn);
 else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
 else if (cartVarExists(cart, hgpDoId))
