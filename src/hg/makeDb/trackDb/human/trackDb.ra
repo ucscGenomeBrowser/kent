@@ -1056,6 +1056,7 @@ track encodeGencodeGeneOct05
 compositeTrack on
 shortLabel Gencode Genes
 longLabel Gencode Gene Annotations
+dataVersion ENCODE Oct 2005 Freeze
 group encodeGenes
 priority 10.5
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1079,27 +1080,28 @@ origAssembly hg17
     track encodeGencodeGeneKnownOct05
     subTrack encodeGencodeGeneOct05
     shortLabel Gencode Ref
-    longLabel Gencode October Freeze Reference Genes
+    longLabel Gencode Reference Genes
     color 33,91,51
     priority 1
 
     track encodeGencodeGenePutativeOct05
     subTrack encodeGencodeGeneOct05
     shortLabel Gencode Putative
-    longLabel Gencode October Freeze Putative Genes
+    longLabel Gencode Putative Genes
     color  84,188,0
     priority 2
 
     track encodeGencodeGenePseudoOct05
     subTrack encodeGencodeGeneOct05
     shortLabel Gencode Pseudo
-    longLabel Gencode October Freeze Pseudogenes
+    longLabel Gencode Pseudogenes
     color 0,91,191
     priority 3
 
 track encodeGencodeIntronOct05
 shortLabel Gencode Introns
 longLabel Gencode Intron Validation 
+dataVersion ENCODE Oct 2005 Freeze
 group encodeGenes
 priority 10.6
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
@@ -5994,35 +5996,35 @@ shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
 
-searchTable encodeGencodeGeneKnown
+searchTable encodeGencodeGeneKnownOct05
 searchType genePred
 termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
 #termRegex [A-Z]+[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
 searchPriority 1.5
 
-searchTable encodeGencodeGeneKnown
+searchTable encodeGencodeGeneKnownOct05
 searchName gencodeKnown2
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 1.5
 
-searchTable encodeGencodeGenePseudo
+searchTable encodeGencodeGenePseudoOct05
 searchType genePred
 termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
 searchPriority 50
 
-searchTable encodeGencodeGenePseudo
+searchTable encodeGencodeGenePseudoOct05
 searchName gencodePseudo2
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
 
-searchTable encodeGencodeGenePutative
+searchTable encodeGencodeGenePutativeOct05
 searchType genePred
 termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
 searchPriority 50
 
-searchTable encodeGencodeGenePutative
+searchTable encodeGencodeGenePutativeOct05
 searchName gencodePutative2
 searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
