@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.96 2005/11/01 00:43:37 angie Exp $"
+#	"$Id: makeMm6.doc,v 1.97 2005/11/02 19:53:04 jen Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -2873,6 +2873,7 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
 #############################################################################
 # STS MARKERS DATA DOWNLOAD (DONE - 2005-04-06 - 2005-04-18 - Hiram)
 #	Applied a filter to primers.psl - 2005-10-20 - Hiram
+#       Removed 404 rows from all_sts_primers where qName had bad format - 2005-11-02 - Jen
     ssh eieio
     mkdir -p /cluster/data/mm6/bed/STSmarkers/downloads
     cd /cluster/data/mm6/bed/STSmarkers/downloads
