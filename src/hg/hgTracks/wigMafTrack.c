@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.4 2005/10/22 16:25:05 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.5 2005/11/03 00:15:28 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -32,9 +32,14 @@ struct wigMafItem
     int group;          /* number of species group/clade */
     int ix;		/* Position in list. */
     int height;		/* Pixel height of item. */
+    int inserts[128];
+    int insertsSize;
     int seqEnds[128];
+    int seqEndsSize;
     int brackStarts[128];
+    int brackStartsSize;
     int brackEnds[128];
+    int brackEndsSize;
     };
 
 static void wigMafItemFree(struct wigMafItem **pEl)
@@ -567,30 +572,10 @@ for (i=0; i < maf->textSize && baseIx < baseCount; i++)
     }
 }
 
-static void charifyInserts(char *insertLine, int insertCounts[], int size)
-/* Create insert line from insert counts */
-{
-int i;
-char c;
-for (i=0; i<size; ++i)
-    {
-    int b = insertCounts[i];
 
-    if (b == 0)
-       c = ' ';
-    else if (b <= 9)
-       c = b + '0';
-    else if (!(b % 3))
-        /* multiple of 3 gap */
-       c = '+';
-    else
-       c = '*';
-    insertLine[i] = c;
-    }
-}
-
-static void processSeq(char *text, char *masterText, int textSize,
-                            char *outLine, int offset, int outSize)
+static int processSeq(char *text, char *masterText, int textSize,
+                            char *outLine, int offset, int outSize,
+			    int *inserts, int insertCounts)
 /* Add text to outLine, suppressing copy where there are dashes
  * in masterText.  This effectively projects the alignment onto
  * the master genome.
@@ -621,6 +606,9 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
             {
             //outLine[outIx++] = '|';// escape to indicate following is count
             //outLine[outIx++] = (unsigned char) max(255, insertSize);
+	//    printf("insertCounts %d\n", insertCounts);
+	    inserts[insertCounts++] = offset + outIx + 1;
+	 //   printf("-> %d\n", insertCounts);
             insertSize = 0;
             }
 	outLine[outIx++] = text[i];
@@ -633,6 +621,7 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
             insertSize++;
         }
     }
+return insertCounts;
 }
 
 static int drawScore(float score, int chromStart, int chromEnd, int seqStart,
@@ -1201,23 +1190,28 @@ if (frame && (prevEnd == -1))
     switch(frame)
 	{
 	case 1:
-	    if (!( ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1])))
+	    if (0)//!( ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1])))
 		{
 		fillBox = TRUE;
 		*ptr++ = 'X';
 		*ptr++ = 'X';
-		length -=2;
 		mult = 2;
 		}
+	    else
+		ptr +=2;
+	    length -=2;
 	    break;
 	case 2:
-	    if (!( ISGASPACEPORN(ptr[0])))
+	    if (0)//!( ISGASPACEPORN(ptr[0])))
 		{
 		fillBox = TRUE;
 		*ptr++ = 'X';
 		length -=1;
 		mult = 1;
 		}
+	    else
+		ptr++;
+	    length -=1;
 	    break;
 	}
     }
@@ -1539,9 +1533,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         for (mi = miList; mi != NULL; mi = mi->next)
             {
             char *seq;
-	    int seqEnds = 0;
-	    int brackStarts = 0;
-	    int brackEnds = 0;
             bool needToFree = FALSE;
             int size = sub->textSize;
             if (mi->ix == 1)
@@ -1552,35 +1543,16 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 continue;
             if ((mc = mafMayFindCompPrefix(sub, mi->db, "")) == NULL)
                 continue;
-	if (mafStart == subStart)
-	{
-	if (mc->size && mc->leftStatus == MAF_INSERT_STATUS && (*mc->text != '-') &&
-	 !((lineOffset) && (((lines[mi->ix][lineOffset-1]) == '=') || (lines[mi->ix][lineOffset-1]) == '-')))
-	{
-	//printf("insert mc->text %s\n",mc->text);
-	//printf("lineOffset %d \n",lineOffset);
-	//if (lineOffset)
-	    //printf("lineOffset-1 %c\n",lines[mi->ix][lineOffset-1]);
-	//printf("insert %s type %c len %d\n",mc->src,mc->leftStatus,mc->leftLen);
-	insertCounts[lineOffset] = max(insertCounts[lineOffset],mc->leftLen);
-	//printf("insertCounts %d\n",insertCounts[lineOffset]);
-			mi->brackStarts[brackStarts] =  (subStart - seqStart)+ 1;
-			brackStarts++;
-	}
-	}
-	/*
-	if (subEnd <= seqEnd)
-	{
-	if (mc->size && mc->rightStatus == MAF_INSERT_STATUS)
-	{
-	//printf("rt insert %s type %c len %d\n",mc->src,mc->rightStatus,mc->rightLen);
-	insertCounts[lineOffset + subSize] += mc->rightLen;
-	//printf("insertCounts %d\n",insertCounts[lineOffset]);
-			mi->brackEnds[brackEnds] = (subStart - seqStart)+ subSize + 1;
-			brackEnds++;
-	}
-	}
-	*/
+	    if (mafStart == subStart)
+		{
+		if (mc->size && mc->leftStatus == MAF_INSERT_STATUS && (*mc->text != '-') &&
+		 !((lineOffset) && (((lines[mi->ix][lineOffset-1]) == '=') || (lines[mi->ix][lineOffset-1]) == '-')))
+		    {
+		    insertCounts[lineOffset] = max(insertCounts[lineOffset],mc->leftLen);
+		    mi->inserts[mi->insertsSize] =  (subStart - seqStart)+ 1;
+		    mi->insertsSize++;
+		    }
+		}
             seq = mc->text;
             if ( (mc->size == 0) && (mc->srcSize == 0))
                 {
@@ -1614,6 +1586,9 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                     continue;
                 }
 
+            mi->insertsSize = processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize,
+	    	mi->inserts, mi->insertsSize);
+
             if (((mc->leftStatus == MAF_NEW_STATUS ||
                 mc->rightStatus == MAF_NEW_STATUS )
             || (mc->leftStatus == MAF_NEW_NESTED_STATUS ||
@@ -1632,45 +1607,45 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                     {
 		    char *m = mcMaster->text;
 		    if (mafStart == subStart)
-			mi->seqEnds[seqEnds] = (subStart - seqStart) + 1;
+			mi->seqEnds[mi->seqEndsSize] = (subStart - seqStart) + 1;
 		    while(*p == '-')
 			{
 			if ((*m++ != '-') && (mafStart == subStart))
-			    mi->seqEnds[seqEnds]++;
+			    mi->seqEnds[mi->seqEndsSize]++;
 			*p++ = ' ';
 			}
 
 		    if (mafStart == subStart)
-			seqEnds++;
+			mi->seqEndsSize++;
                     }
                 if (mc->leftStatus == MAF_NEW_NESTED_STATUS)
 		    {
 		    char *m = mcMaster->text;
 		    if (mafStart == subStart)
-			mi->brackStarts[brackStarts] =  (subStart - seqStart)+ 1;
+			mi->brackStarts[mi->brackStartsSize] =  (subStart - seqStart)+ 1;
 		    while(*p == '-')
 			{
 			*p++ = '=';
 			if ((*m++ != '-') && (mafStart == subStart))
-			    mi->brackStarts[brackStarts]++;
+			    mi->brackStarts[mi->brackStartsSize]++;
 			}
 		    if (mafStart == subStart)
-			brackStarts++;
+			mi->brackStartsSize++;
 		    }
                 if (mc->rightStatus == MAF_NEW_NESTED_STATUS)
 		    {
 		    char *p = seq + size - 1;
 		    char *m = mcMaster->text + size - 1;
 		    if (subEnd <= seqEnd)
-			mi->brackEnds[brackEnds] = (subStart - seqStart)+ subSize + 1;
+			mi->brackEnds[mi->brackEndsSize] = (subStart - seqStart)+ subSize + 1;
 		    while(*p == '-')
 			{
 			if ((*m-- != '-') && (subEnd <= seqEnd))
-			    mi->brackEnds[brackEnds]--;
+			    mi->brackEnds[mi->brackEndsSize]--;
 			*p-- = '=';
 			}
 		    if (subEnd <= seqEnd)
-		    	brackEnds++;
+		    	mi->brackEndsSize++;
 		    }
                 if (mc->rightStatus == MAF_NEW_STATUS)
 		    {
@@ -1678,40 +1653,37 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    char *m = mcMaster->text + size - 1;
 
 		    if (mc->size && ((subEnd <= seqEnd)))
-			mi->seqEnds[seqEnds] = (subStart - seqStart)+ subSize + 1;
+			mi->seqEnds[mi->seqEndsSize] = (subStart - seqStart)+ subSize + 1;
 		    while(*p == '-')
 			{
 			if ((*m-- != '-') && (mc->size && (subEnd <= seqEnd)))
-			    mi->seqEnds[seqEnds]--;
+			    mi->seqEnds[mi->seqEndsSize]--;
 			*p-- = ' ';
 			}
 		    if (mc->size && ((subEnd <= seqEnd)))
-		    	seqEnds++;
+		    	mi->seqEndsSize++;
 		    }
 		}
 
-            if (mc->srcSize && ((mc->leftStatus == MAF_MISSING_STATUS))) //|| 
+            if (mc->srcSize && ((mc->leftStatus == MAF_MISSING_STATUS))) 
 		{
                 char *p = seq;
 		while(*p == '-')
 		    *p++ = 'N';
 		}
-            if (mc->srcSize && ((mc->leftStatus == MAF_INSERT_STATUS))) //|| 
-		//(mc->leftStatus == MAF_NEW_NESTED_STATUS && mc->leftLen != 0))
+            if (mc->srcSize && ((mc->leftStatus == MAF_INSERT_STATUS))) 
 		{
                 char *p = seq;
 		while(*p == '-')
 		    *p++ = '=';
 		}
-            if (mc->srcSize && ((mc->rightStatus == MAF_MISSING_STATUS)))// || 
-		//(mc->rightStatus == MAF_NEW_NESTED_STATUS && mc->rightLen != 0)))
+            if (mc->srcSize && ((mc->rightStatus == MAF_MISSING_STATUS)))
 		{
                 char *p = seq + size - 1;
 		while(*p == '-')
 		    *p-- = 'N';
 		}
-            if (mc->srcSize && ((mc->rightStatus == MAF_INSERT_STATUS)))// || 
-		//(mc->rightStatus == MAF_NEW_NESTED_STATUS && mc->rightLen != 0)))
+            if (mc->srcSize && ((mc->rightStatus == MAF_INSERT_STATUS)))
 		{
 		char *m = mcMaster->text + size - 1;
                 char *p = seq + size - 1;
@@ -1721,7 +1693,6 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    m--;
 		    }
 		}
-            processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize);
 	    
             if (needToFree)
                 freeMem(seq);
@@ -1730,14 +1701,31 @@ for (maf = mafList; maf != NULL; maf = maf->next)
     mafAliFree(&sub);
     }
 /* draw inserts line */
-charifyInserts(insertLine, insertCounts, winBaseCount);
 mi = miList;
-if (startSub2)
-    spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
-		    getOrangeColor(), font, &insertLine[2], winBaseCount, FALSE);
-else
-    spreadBasesString(vg, x - (width/winBaseCount)/2, y, width, mi->height-1, 
-		    getOrangeColor(), font, insertLine, winBaseCount, FALSE);
+
+for(offset=startSub2*2; offset < winBaseCount + startSub2 * 2; offset++)
+    {
+    int  x1, x2;
+
+    x1 = (offset - startSub2 * 2) * width/winBaseCount;
+    x2 = ((offset - startSub2 * 2)+1) * width/winBaseCount - 1;
+    if (insertCounts[offset] != 0)
+	{
+	struct dyString *label = newDyString(20);
+	int haveRoomFor = (width/winBaseCount)/tl.mWidth;
+
+	dyStringPrintf(label, "%d",insertCounts[offset]);
+	
+	if (label->stringSize > haveRoomFor)
+	    {
+	    dyStringClear(label);
+	    dyStringPrintf(label, "%c",(insertCounts[offset] % 3) ? '*' : '+');
+	    }
+	vgTextCentered(vg, x1+x - (width/winBaseCount)/2, y, x2-x1, mi->height, 
+		getOrangeColor(), font, label->string);
+	dyStringFree(&label);
+	}
+    }
 y += mi->height;
 
 /* draw alternating colors behind base-level alignments */
@@ -1857,14 +1845,21 @@ tryagain:
     else
 	spreadAlignString(vg, x, y, width, mi->height-1, color,
                         font, line, selfLine, winBaseCount, dots, FALSE);
-    for(offset = 0; mi->seqEnds[offset]; offset++)
+    for(offset = 0; offset < mi->seqEndsSize; offset++)
 	{
 	int x1;
 
 	x1 = x + (mi->seqEnds[offset] -1 - startSub2 * 2) * width/winBaseCount;
 	vgBox(vg, x1, y-1, 1, mi->height-1, getBlueColor());
 	}
-    for(offset = 0; mi->brackStarts[offset]; offset++)
+    for(offset = 0; offset < mi->insertsSize; offset++)
+	{
+	int x1;
+
+	x1 = x + (mi->inserts[offset] -1 - startSub2 * 2) * width/winBaseCount;
+	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
+	}
+    for(offset = 0; offset < mi->brackStartsSize; offset++)
 	{
 	int x1;
 
@@ -1873,7 +1868,7 @@ tryagain:
 	vgBox(vg, x1, y-1, 1, mi->height-1, getOrangeColor());
 	vgBox(vg, x1, y + mi->height-3, 2, 1, getOrangeColor());
 	}
-    for(offset = 0; mi->brackEnds[offset]; offset++)
+    for(offset = 0; offset < mi->brackEndsSize; offset++)
 	{
 	int x1;
 
