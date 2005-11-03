@@ -8,7 +8,7 @@
 #include "errabort.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.84 2005/10/20 19:58:33 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.85 2005/11/03 17:53:57 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1749,11 +1749,20 @@ va_end(args);
 return sz;
 }
 
+static char *naStr = "n/a";
+
 char *naForNull(char *s)
 /* Return 'n/a' if s is NULL, otherwise s. */
 {
-static char *naStr = "n/a";
 if (s == NULL) 
+   s = naStr;
+return s;
+}
+
+char *naForEmpty(char *s)
+/* Return n/a if s is "" or NULL, otherwise s. */
+{
+if (s == NULL || s[0] == 0)
    s = naStr;
 return s;
 }
