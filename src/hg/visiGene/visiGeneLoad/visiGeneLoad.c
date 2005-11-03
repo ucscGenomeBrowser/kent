@@ -592,7 +592,9 @@ if (probeTypeId == 0)
 dyStringClear(dy);
 dyStringAppend(dy, "select id,gene,antibody,fPrimer,rPrimer,seq ");
 dyStringAppend(dy, "from probe ");
-dyStringPrintf(dy, "where gene=%d and antibody=%d", geneId, antibodyId);
+dyStringPrintf(dy, "where gene=%d and antibody=%d ", geneId, antibodyId);
+dyStringPrintf(dy, "and fPrimer='%s' and rPrimer='%s' ", fPrimer, rPrimer);
+dyStringPrintf(dy, "and seq='%s'", seq);
 verbose(2, "query: %s\n", dy->string);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
