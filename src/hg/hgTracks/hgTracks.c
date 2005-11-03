@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1030 2005/11/02 23:47:06 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1031 2005/11/03 16:37:08 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -6914,7 +6914,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* display bases identical to reference as dots */
         /* suppress for first line (self line) */
         if (!selfLine && match != NULL && match[i])
-            if (*text == match[i])
+            if ((*text != ' ') && (toupper(*text) == toupper(match[i])))
                 cBuf[0] = '.';
         }
     else
@@ -6922,7 +6922,7 @@ for (i=0; i<count; i++, text++, textPos++)
         /* display bases identical to reference in main color, mismatches
          * in alt color */
         if (match != NULL && match[i])
-            if (*text != match[i])
+            if ((*text != ' ') && (toupper(*text) != toupper(match[i])))
                 clr = noMatchColor;
         }
     if(inMotif != NULL && textPos < textLength && inMotif[textPos])
