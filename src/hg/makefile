@@ -134,6 +134,7 @@ UTIL_DIRS = \
 	getFeatDna \
 	getRna \
 	getRnaPred \
+	gigAssembler/checkAgpAndFa \
 	gpStats \
 	gpToGtf \
 	gpcrParser \
