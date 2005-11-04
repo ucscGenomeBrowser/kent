@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.974 2005/11/04 16:06:54 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.975 2005/11/04 18:42:04 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11529,7 +11529,7 @@ if (hTableExists("lsSnpFunction"))
     if ( (sr2 != NULL) && ((row=sqlNextRow(sr2)) != NULL))
 	{
 	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
-	printf("Protein_function\" TARGET=_blank>LS-SNP Protein Function Prediction</A>\n");
+	printf("Functional\" TARGET=_blank>LS-SNP Protein Function Prediction</A>\n");
 	}
     sqlFreeResult(&sr2);
     }
