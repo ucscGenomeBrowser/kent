@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.3 2005/11/04 19:46:42 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.4 2005/11/04 19:58:36 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -276,20 +276,6 @@ printTaggedLong(f, "index", totalIndex);
 printTaggedLong(f, "rows", totalRows);
 fprintf(f, "\n");
 
-/* Print summary of rows and fields in each table ordered alphabetically */
-fprintf(f, "TABLE FIELDS SUMMARY:\n");
-fprintf(f, "#name\tfields\n");
-for (ti = tiList; ti != NULL; ti = ti->next)
-    {
-    struct slName *t;
-    slReverse(&ti->fieldList);
-    fprintf(f, "%s\t", ti->name);
-    for (t = ti->fieldList; t != NULL; t = t->next)
-	fprintf(f, "%s,", t->name);
-    fprintf(f, "\n");
-    }
-fprintf(f, "\n");
-
 /* Print summary of table sizes ordered by size. */
 slSort(&tiList, tableInfoCmpSize);
 fprintf(f, "TABLE SIZE SUMMARY:\n");
@@ -305,6 +291,20 @@ for (ti = tiList; ti != NULL; ti = ti->next)
     printLongWithCommas(f, ti->status->dataLength);
     fprintf(f, "\t");
     printLongWithCommas(f, ti->status->indexLength);
+    fprintf(f, "\n");
+    }
+fprintf(f, "\n");
+
+/* Print summary of rows and fields in each table ordered alphabetically */
+fprintf(f, "TABLE FIELDS SUMMARY:\n");
+fprintf(f, "#name\tfields\n");
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct slName *t;
+    slReverse(&ti->fieldList);
+    fprintf(f, "%s\t", ti->name);
+    for (t = ti->fieldList; t != NULL; t = t->next)
+	fprintf(f, "%s,", t->name);
     fprintf(f, "\n");
     }
 fprintf(f, "\n");
