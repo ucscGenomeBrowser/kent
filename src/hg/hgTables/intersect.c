@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.31 2005/07/13 13:55:18 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.32 2005/11/04 18:09:39 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -534,7 +534,7 @@ else
 		sameString(subtrack->type, primaryType))
 		{
 		struct bed *bedList2 = 
-		    getRegionAsBed(db, subtrack->tableName, region, filter,
+		    getRegionAsBed(db, subtrack->tableName, region, NULL,
 				   idHash, lm, retFieldCount);
 		bedList = slCat(bedList, bedList2);
 		}
@@ -566,7 +566,7 @@ else
 	    struct hTableInfo *hti2 = getHti(database, subtrack->tableName);
 	    struct lm *lm2 = lmInit(64*1024);
 	    struct bed *bedList2 =
-		getRegionAsBed(db, subtrack->tableName, region, filter, idHash,
+		getRegionAsBed(db, subtrack->tableName, region, NULL, idHash,
 			       lm2, NULL);
 	    if (firstTime)
 		firstTime = FALSE;
