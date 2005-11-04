@@ -8,10 +8,10 @@
 #include "jksql.h"
 #include "humPhen.h"
 
-static char const rcsid[] = "$Id: humPhen.c,v 1.1 2005/10/13 20:21:32 giardine Exp $";
+static char const rcsid[] = "$Id: humPhen.c,v 1.2 2005/11/04 16:06:56 giardine Exp $";
 
-void humanPhenotypeStaticLoad(char **row, struct humanPhenotype *ret)
-/* Load a row from humanPhenotype table into ret.  The contents of ret will
+void humanPhenotypeLSDBStaticLoad(char **row, struct humanPhenotypeLSDB *ret)
+/* Load a row from humanPhenotypeLSDB table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
@@ -26,11 +26,11 @@ ret->baseChangeType = row[7];
 ret->location = row[8];
 }
 
-struct humanPhenotype *humanPhenotypeLoad(char **row)
-/* Load a humanPhenotype from row fetched with select * from humanPhenotype
- * from database.  Dispose of this with humanPhenotypeFree(). */
+struct humanPhenotypeLSDB *humanPhenotypeLSDBLoad(char **row)
+/* Load a humanPhenotypeLSDB from row fetched with select * from humanPhenotypeLSDB
+ * from database.  Dispose of this with humanPhenotypeLSDBFree(). */
 {
-struct humanPhenotype *ret;
+struct humanPhenotypeLSDB *ret;
 
 AllocVar(ret);
 ret->bin = sqlUnsigned(row[0]);
@@ -45,17 +45,17 @@ ret->location = cloneString(row[8]);
 return ret;
 }
 
-struct humanPhenotype *humanPhenotypeLoadAll(char *fileName) 
-/* Load all humanPhenotype from a whitespace-separated file.
- * Dispose of this with humanPhenotypeFreeList(). */
+struct humanPhenotypeLSDB *humanPhenotypeLSDBLoadAll(char *fileName) 
+/* Load all humanPhenotypeLSDB from a whitespace-separated file.
+ * Dispose of this with humanPhenotypeLSDBFreeList(). */
 {
-struct humanPhenotype *list = NULL, *el;
+struct humanPhenotypeLSDB *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 
 while (lineFileRow(lf, row))
     {
-    el = humanPhenotypeLoad(row);
+    el = humanPhenotypeLSDBLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -63,17 +63,17 @@ slReverse(&list);
 return list;
 }
 
-struct humanPhenotype *humanPhenotypeLoadAllByChar(char *fileName, char chopper) 
-/* Load all humanPhenotype from a chopper separated file.
- * Dispose of this with humanPhenotypeFreeList(). */
+struct humanPhenotypeLSDB *humanPhenotypeLSDBLoadAllByChar(char *fileName, char chopper) 
+/* Load all humanPhenotypeLSDB from a chopper separated file.
+ * Dispose of this with humanPhenotypeLSDBFreeList(). */
 {
-struct humanPhenotype *list = NULL, *el;
+struct humanPhenotypeLSDB *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = humanPhenotypeLoad(row);
+    el = humanPhenotypeLSDBLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -81,21 +81,21 @@ slReverse(&list);
 return list;
 }
 
-struct humanPhenotype *humanPhenotypeLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all humanPhenotype from table that satisfy the query given.  
+struct humanPhenotypeLSDB *humanPhenotypeLSDBLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all humanPhenotypeLSDB from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with humanPhenotypeFreeList(). */
+ * Dispose of this with humanPhenotypeLSDBFreeList(). */
 {
-struct humanPhenotype *list = NULL, *el;
+struct humanPhenotypeLSDB *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = humanPhenotypeLoad(row);
+    el = humanPhenotypeLSDBLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -103,14 +103,14 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void humanPhenotypeSaveToDb(struct sqlConnection *conn, struct humanPhenotype *el, char *tableName, int updateSize)
-/* Save humanPhenotype as a row to the table specified by tableName. 
+void humanPhenotypeLSDBSaveToDb(struct sqlConnection *conn, struct humanPhenotypeLSDB *el, char *tableName, int updateSize)
+/* Save humanPhenotypeLSDB as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use humanPhenotypeSaveToDbEscaped() */
+ * If worried about this use humanPhenotypeLSDBSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s','%s','%s')", 
@@ -119,11 +119,11 @@ sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void humanPhenotypeSaveToDbEscaped(struct sqlConnection *conn, struct humanPhenotype *el, char *tableName, int updateSize)
-/* Save humanPhenotype as a row to the table specified by tableName. 
+void humanPhenotypeLSDBSaveToDbEscaped(struct sqlConnection *conn, struct humanPhenotypeLSDB *el, char *tableName, int updateSize)
+/* Save humanPhenotypeLSDB as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than humanPhenotypeSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than humanPhenotypeLSDBSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
@@ -149,10 +149,10 @@ freez(&baseChangeType);
 freez(&location);
 }
 
-struct humanPhenotype *humanPhenotypeCommaIn(char **pS, struct humanPhenotype *ret)
-/* Create a humanPhenotype out of a comma separated string. 
+struct humanPhenotypeLSDB *humanPhenotypeLSDBCommaIn(char **pS, struct humanPhenotypeLSDB *ret)
+/* Create a humanPhenotypeLSDB out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new humanPhenotype */
+ * return a new humanPhenotypeLSDB */
 {
 char *s = *pS;
 
@@ -171,11 +171,11 @@ ret->location = sqlStringComma(&s);
 return ret;
 }
 
-void humanPhenotypeFree(struct humanPhenotype **pEl)
-/* Free a single dynamically allocated humanPhenotype such as created
- * with humanPhenotypeLoad(). */
+void humanPhenotypeLSDBFree(struct humanPhenotypeLSDB **pEl)
+/* Free a single dynamically allocated humanPhenotypeLSDB such as created
+ * with humanPhenotypeLSDBLoad(). */
 {
-struct humanPhenotype *el;
+struct humanPhenotypeLSDB *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
@@ -187,21 +187,246 @@ freeMem(el->location);
 freez(pEl);
 }
 
-void humanPhenotypeFreeList(struct humanPhenotype **pList)
-/* Free a list of dynamically allocated humanPhenotype's */
+void humanPhenotypeLSDBFreeList(struct humanPhenotypeLSDB **pList)
+/* Free a list of dynamically allocated humanPhenotypeLSDB's */
 {
-struct humanPhenotype *el, *next;
+struct humanPhenotypeLSDB *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    humanPhenotypeFree(&el);
+    humanPhenotypeLSDBFree(&el);
     }
 *pList = NULL;
 }
 
-void humanPhenotypeOutput(struct humanPhenotype *el, FILE *f, char sep, char lastSep) 
-/* Print out humanPhenotype.  Separate fields with sep. Follow last field with lastSep. */
+void humanPhenotypeLSDBOutput(struct humanPhenotypeLSDB *el, FILE *f, char sep, char lastSep) 
+/* Print out humanPhenotypeLSDB.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->bin);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->chrom);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->chromStart);
+fputc(sep,f);
+fprintf(f, "%u", el->chromEnd);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->dbId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->linkDbs);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->baseChangeType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->location);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void humanPhenotypeSPStaticLoad(char **row, struct humanPhenotypeSP *ret)
+/* Load a row from humanPhenotypeSP table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->bin = sqlUnsigned(row[0]);
+ret->chrom = row[1];
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
+ret->name = row[4];
+ret->dbId = row[5];
+ret->linkDbs = row[6];
+ret->baseChangeType = row[7];
+ret->location = row[8];
+}
+
+struct humanPhenotypeSP *humanPhenotypeSPLoad(char **row)
+/* Load a humanPhenotypeSP from row fetched with select * from humanPhenotypeSP
+ * from database.  Dispose of this with humanPhenotypeSPFree(). */
+{
+struct humanPhenotypeSP *ret;
+
+AllocVar(ret);
+ret->bin = sqlUnsigned(row[0]);
+ret->chrom = cloneString(row[1]);
+ret->chromStart = sqlUnsigned(row[2]);
+ret->chromEnd = sqlUnsigned(row[3]);
+ret->name = cloneString(row[4]);
+ret->dbId = cloneString(row[5]);
+ret->linkDbs = cloneString(row[6]);
+ret->baseChangeType = cloneString(row[7]);
+ret->location = cloneString(row[8]);
+return ret;
+}
+
+struct humanPhenotypeSP *humanPhenotypeSPLoadAll(char *fileName) 
+/* Load all humanPhenotypeSP from a whitespace-separated file.
+ * Dispose of this with humanPhenotypeSPFreeList(). */
+{
+struct humanPhenotypeSP *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileRow(lf, row))
+    {
+    el = humanPhenotypeSPLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct humanPhenotypeSP *humanPhenotypeSPLoadAllByChar(char *fileName, char chopper) 
+/* Load all humanPhenotypeSP from a chopper separated file.
+ * Dispose of this with humanPhenotypeSPFreeList(). */
+{
+struct humanPhenotypeSP *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[9];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = humanPhenotypeSPLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct humanPhenotypeSP *humanPhenotypeSPLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all humanPhenotypeSP from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with humanPhenotypeSPFreeList(). */
+{
+struct humanPhenotypeSP *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = humanPhenotypeSPLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void humanPhenotypeSPSaveToDb(struct sqlConnection *conn, struct humanPhenotypeSP *el, char *tableName, int updateSize)
+/* Save humanPhenotypeSP as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use humanPhenotypeSPSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s','%s','%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->dbId,  el->linkDbs,  el->baseChangeType,  el->location);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void humanPhenotypeSPSaveToDbEscaped(struct sqlConnection *conn, struct humanPhenotypeSP *el, char *tableName, int updateSize)
+/* Save humanPhenotypeSP as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than humanPhenotypeSPSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *chrom, *name, *dbId, *linkDbs, *baseChangeType, *location;
+chrom = sqlEscapeString(el->chrom);
+name = sqlEscapeString(el->name);
+dbId = sqlEscapeString(el->dbId);
+linkDbs = sqlEscapeString(el->linkDbs);
+baseChangeType = sqlEscapeString(el->baseChangeType);
+location = sqlEscapeString(el->location);
+
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s','%s','%s')", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  dbId,  linkDbs,  baseChangeType,  location);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&chrom);
+freez(&name);
+freez(&dbId);
+freez(&linkDbs);
+freez(&baseChangeType);
+freez(&location);
+}
+
+struct humanPhenotypeSP *humanPhenotypeSPCommaIn(char **pS, struct humanPhenotypeSP *ret)
+/* Create a humanPhenotypeSP out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new humanPhenotypeSP */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->bin = sqlUnsignedComma(&s);
+ret->chrom = sqlStringComma(&s);
+ret->chromStart = sqlUnsignedComma(&s);
+ret->chromEnd = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->dbId = sqlStringComma(&s);
+ret->linkDbs = sqlStringComma(&s);
+ret->baseChangeType = sqlStringComma(&s);
+ret->location = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void humanPhenotypeSPFree(struct humanPhenotypeSP **pEl)
+/* Free a single dynamically allocated humanPhenotypeSP such as created
+ * with humanPhenotypeSPLoad(). */
+{
+struct humanPhenotypeSP *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->chrom);
+freeMem(el->name);
+freeMem(el->dbId);
+freeMem(el->linkDbs);
+freeMem(el->baseChangeType);
+freeMem(el->location);
+freez(pEl);
+}
+
+void humanPhenotypeSPFreeList(struct humanPhenotypeSP **pList)
+/* Free a list of dynamically allocated humanPhenotypeSP's */
+{
+struct humanPhenotypeSP *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    humanPhenotypeSPFree(&el);
+    }
+*pList = NULL;
+}
+
+void humanPhenotypeSPOutput(struct humanPhenotypeSP *el, FILE *f, char sep, char lastSep) 
+/* Print out humanPhenotypeSP.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%u", el->bin);
 fputc(sep,f);
@@ -581,6 +806,176 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void humPhenEthnicStaticLoad(char **row, struct humPhenEthnic *ret)
+/* Load a row from humPhenEthnic table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->dbId = row[0];
+ret->ethnic = row[1];
+}
+
+struct humPhenEthnic *humPhenEthnicLoad(char **row)
+/* Load a humPhenEthnic from row fetched with select * from humPhenEthnic
+ * from database.  Dispose of this with humPhenEthnicFree(). */
+{
+struct humPhenEthnic *ret;
+
+AllocVar(ret);
+ret->dbId = cloneString(row[0]);
+ret->ethnic = cloneString(row[1]);
+return ret;
+}
+
+struct humPhenEthnic *humPhenEthnicLoadAll(char *fileName) 
+/* Load all humPhenEthnic from a whitespace-separated file.
+ * Dispose of this with humPhenEthnicFreeList(). */
+{
+struct humPhenEthnic *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileRow(lf, row))
+    {
+    el = humPhenEthnicLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct humPhenEthnic *humPhenEthnicLoadAllByChar(char *fileName, char chopper) 
+/* Load all humPhenEthnic from a chopper separated file.
+ * Dispose of this with humPhenEthnicFreeList(). */
+{
+struct humPhenEthnic *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = humPhenEthnicLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct humPhenEthnic *humPhenEthnicLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all humPhenEthnic from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with humPhenEthnicFreeList(). */
+{
+struct humPhenEthnic *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = humPhenEthnicLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void humPhenEthnicSaveToDb(struct sqlConnection *conn, struct humPhenEthnic *el, char *tableName, int updateSize)
+/* Save humPhenEthnic as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use humPhenEthnicSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( '%s','%s')", 
+	tableName,  el->dbId,  el->ethnic);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void humPhenEthnicSaveToDbEscaped(struct sqlConnection *conn, struct humPhenEthnic *el, char *tableName, int updateSize)
+/* Save humPhenEthnic as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than humPhenEthnicSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *dbId, *ethnic;
+dbId = sqlEscapeString(el->dbId);
+ethnic = sqlEscapeString(el->ethnic);
+
+dyStringPrintf(update, "insert into %s values ( '%s','%s')", 
+	tableName,  dbId,  ethnic);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&dbId);
+freez(&ethnic);
+}
+
+struct humPhenEthnic *humPhenEthnicCommaIn(char **pS, struct humPhenEthnic *ret)
+/* Create a humPhenEthnic out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new humPhenEthnic */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->dbId = sqlStringComma(&s);
+ret->ethnic = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void humPhenEthnicFree(struct humPhenEthnic **pEl)
+/* Free a single dynamically allocated humPhenEthnic such as created
+ * with humPhenEthnicLoad(). */
+{
+struct humPhenEthnic *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->dbId);
+freeMem(el->ethnic);
+freez(pEl);
+}
+
+void humPhenEthnicFreeList(struct humPhenEthnic **pList)
+/* Free a list of dynamically allocated humPhenEthnic's */
+{
+struct humPhenEthnic *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    humPhenEthnicFree(&el);
+    }
+*pList = NULL;
+}
+
+void humPhenEthnicOutput(struct humPhenEthnic *el, FILE *f, char sep, char lastSep) 
+/* Print out humPhenEthnic.  Separate fields with sep. Follow last field with lastSep. */
+{
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->dbId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->ethnic);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

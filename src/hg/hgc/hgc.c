@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.973 2005/11/04 03:39:01 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.974 2005/11/04 16:06:54 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16878,7 +16878,7 @@ void doHumPhen (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Human Phenotype track */
 {
 char *table = tdb->tableName;
-struct humanPhenotype *humPhen;
+struct humanPhenotypeLSDB *humPhen;
 struct humPhenLink *link;
 struct humPhenAlias alias;
 struct sqlConnection *conn = hAllocConn();
@@ -16903,7 +16903,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     /* need in bed struct for print sub */
     struct bed *copy = NULL;
     AllocVar(copy);
-    humPhen = humanPhenotypeLoad(row);
+    humPhen = humanPhenotypeLSDBLoad(row);
     copy->chrom = cloneString(humPhen->chrom);
     copy->chromStart = humPhen->chromStart;
     copy->chromEnd = humPhen->chromEnd;
@@ -16949,7 +16949,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printf("</DL>\n");
 
-humanPhenotypeFree(&humPhen);
+humanPhenotypeLSDBFree(&humPhen);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -17822,7 +17822,7 @@ else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
     }
-else if (sameString("humanPhenotype", track))
+else if (startsWith("humanPhenotype", track))
     {
     doHumPhen(tdb, item);
     }
