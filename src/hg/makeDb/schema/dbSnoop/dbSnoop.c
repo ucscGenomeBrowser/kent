@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.6 2005/11/04 23:28:34 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.7 2005/11/04 23:40:59 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -304,6 +304,7 @@ struct hash *groupHash = newHash(8);
 struct indexInfo *ii;
 char *tableName = ti->name;
 char splitTable[256];
+boolean isSplit = FALSE;
 
 if (unsplit)
     {
@@ -316,6 +317,7 @@ if (unsplit)
 	    if (sqlTableExists(conn, splitTable))
 		{
 		tableName = splitTable;
+		isSplit = TRUE;
 		break;
 		}
 	    }
@@ -357,7 +359,7 @@ for (group = groupList; group != NULL; group = group->next)
 	nonUnique = ii->nonUnique;
 	}
     fprintf(f, "\t%s", (nonUnique ? "MUL" : "PRI") );
-    if (maxCardinality > 0)
+    if (maxCardinality > 0 && !isSplit)
 	fprintf(f, "\t%lld", maxCardinality);
     else
         fprintf(f, "\tn/a");
