@@ -4510,7 +4510,15 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     group by chrom;;
 
 
-
+## LS-SNP links [load data only] (Daryl Thomas; November 3, 2005)
+    # Data from Rachel Karchin in the Andrej Sali lab at UCSF
+    # /cluster/data/hg17/bed/lssnp
+    hgsql hg17 < ${HOME}/kent/src/hg/lib/lsSnpFunction.sql
+    hgsql hg17 < ${HOME}/kent/src/hg/lib/lsSnpStructure.sql
+    mysql> load data local infile "snp-human3-function-predictions.txt" into table lsSnpFunction;
+    Query OK, 24337 rows affected (1.27 sec)
+    mysql> load data local infile "snp-human3-structure-predictions.txt" into table lsSnpStructure;
+    Query OK, 34764 rows affected (2.36 sec)
 
 # Tajima's D (DONE -- 2005-09-20 -- Daryl)
 # Data from Chris Carlson in Debbie Nickerson's lab

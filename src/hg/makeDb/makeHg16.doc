@@ -6254,6 +6254,17 @@ LOAD RNAGENES (DONE - 2004-03-09 - Hiram)
     TODO: need to filter out polymorphic sites (SNPs)
 
 
+## LS-SNP links [load data only] (Daryl Thomas; November 3, 2005)
+    # Data from Rachel Karchin in the Andrej Sali lab at UCSF
+    # /cluster/data/hg16/bed/lssnp
+    hgsql hg16 < ${HOME}/kent/src/hg/lib/lsSnpFunction.sql
+    hgsql hg16 < ${HOME}/kent/src/hg/lib/lsSnpStructure.sql
+    mysql> load data local infile "snp-human2-function-predictions.txt" into table lsSnpFunction;
+    Query OK, 7689 rows affected (0.52 sec)
+    mysql> load data local infile "snp-human2-structure-predictions.txt" into table lsSnpStructure;
+    Query OK, 28144 rows affected (2.39 sec)
+
+
 #  gc5Base wiggle TRACK (DONE - 2004-03-12 - Hiram)
 #	reloaded wib files 2005-05-17 to place them in /gbdb/hg16/wib/gc5Base
     # a demonstration wiggle track.  Perform a gc count with a 5 base
