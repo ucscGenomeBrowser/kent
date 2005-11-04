@@ -48,7 +48,7 @@ while ( $#list > 0 )
 	echo "$f not found on $dir"
 	set err=1
     endif
-    echo "$f $r $p"
+    echo "$f $p --> $r"
     set files = ($files $f)
     set revs = ($revs $r)
     set prevs = ($prevs $p)
@@ -94,7 +94,7 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo "$f $r" >> $WEEKLYBLD/mbt-tag.txt
+    echo "$f $p --> $r" >> $WEEKLYBLD/mbt-tag.txt
     # move the beta tag in cvs to track the change to this week's branch.
     set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
     echo $cmd
@@ -120,8 +120,8 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo "$f $r $p" >> $WEEKLYBLD/mbt-up.txt  
-    set msg = "$msg $f $r $p\n"
+    echo "$f $p --> $r" >> $WEEKLYBLD/mbt-up.txt  
+    set msg = "$msg $f $p --> $r\n"
     @ i++
 end
 if ( "$err" == "1" ) then
