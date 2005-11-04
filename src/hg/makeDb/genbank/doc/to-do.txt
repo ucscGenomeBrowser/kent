@@ -921,8 +921,14 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - should be able to detect initial load, rather than require argument.
 
-- could get better overlap with expensive setup set if did setup
-  for one genome, then 
-
 - got this error during load
   mySQL error 1050: Table 'xenoEst_new_tmp' already exists
+
+-  xeno refseq NM_167334 on droAna2 had 41 poor alignments, some with huge
+   introns.  Might need to add maxIntro.
+
+- NR_s are ending up in refLink??
+
+- mm7 NM_207243 has a bunch of repetitive alignments to the same location with  3968, plus
+  one longer one.  Should probably have ability to toss weird overlaps where the is one 
+  better alignment.

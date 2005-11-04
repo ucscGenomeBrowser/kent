@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.27 2005/03/26 17:16:17 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.28 2005/11/04 08:07:38 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -194,31 +194,31 @@ if (gbdbGenBank != NULL)
 strcpy(gTmpDir, tmpDir);
 
 if (seqTbl == NULL)
-    seqTbl = seqTblNew(conn, gTmpDir, (gbVerbose >= 2));
+    seqTbl = seqTblNew(conn, gTmpDir, (gbVerbose >= 3));
 if (imageCloneTbl == NULL)
-    imageCloneTbl = imageCloneTblNew(conn, gTmpDir, (gbVerbose >= 2));
+    imageCloneTbl = imageCloneTblNew(conn, gTmpDir, (gbVerbose >= 3));
 
 if (!sqlTableExists(conn, "gbCdnaInfo"))
     sqlUpdate(conn, gbCdnaInfoCreate);
 if (gbCdnaInfoUpd == NULL)
-    gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 2), &allUpdaters);
+    gbCdnaInfoUpd = sqlUpdaterNew("gbCdnaInfo", gTmpDir, (gbVerbose >= 3), &allUpdaters);
 
 if (gSrcDb == GB_REFSEQ)
     {
     if (!sqlTableExists(conn, "refSeqStatus"))
         sqlUpdate(conn, refSeqStatusCreate);
     if (refSeqStatusUpd == NULL)
-        refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", gTmpDir, (gbVerbose >= 2),
+        refSeqStatusUpd = sqlUpdaterNew("refSeqStatus", gTmpDir, (gbVerbose >= 3),
                                         &allUpdaters);
     if (!sqlTableExists(conn, "refSeqSummary"))
         sqlUpdate(conn, refSeqSummaryCreate);
     if (refSeqSummaryUpd == NULL)
-        refSeqSummaryUpd = sqlUpdaterNew("refSeqSummary", gTmpDir, (gbVerbose >= 2),
+        refSeqSummaryUpd = sqlUpdaterNew("refSeqSummary", gTmpDir, (gbVerbose >= 3),
                                          &allUpdaters);
     if (!sqlTableExists(conn, "refLink"))
         sqlUpdate(conn, refLinkCreate);
     if (refLinkUpd == NULL)
-        refLinkUpd = sqlUpdaterNew("refLink", gTmpDir, (gbVerbose >= 2),
+        refLinkUpd = sqlUpdaterNew("refLink", gTmpDir, (gbVerbose >= 3),
                                    &allUpdaters);
     }
 }
@@ -237,7 +237,7 @@ strcat(path, relPath);
 
 if (extFiles == NULL)
     {
-    gbVerbMsg(1, "loading extFile table");
+    gbVerbMsg(2, "loading extFile table");
     extFiles = extFileTblLoad(conn);
     }
 return extFileTblGet(extFiles, conn, path);
@@ -621,7 +621,7 @@ struct sqlDeleter* deleter;
 if (!sqlTableExists(conn, "refLink"))
     return;
 
-deleter = sqlDeleterNew(gTmpDir, (gbVerbose >= 2));
+deleter = sqlDeleterNew(gTmpDir, (gbVerbose >= 3));
 
 /* Use a join to get list of acc, which proved reasonable fastly because
 * the the list is small */
@@ -643,14 +643,14 @@ void gbMetaDataDeleteOutdated(struct sqlConnection *conn,
                               char *tmpDir)
 /* delete outdated metadata */
 {
-struct sqlDeleter* deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
+struct sqlDeleter* deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 3));
 struct gbStatus* status;
 gSrcDb = select->release->srcDb;
 gOptions = options;
 strcpy(gTmpDir, tmpDir);
 
 /* Delete any meta modified from id tables */
-deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
+deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 3));
 for (status = statusTbl->seqChgList; status != NULL; status = status->next)
     {
     if (status->stateChg & GB_META_CHG)
@@ -666,7 +666,7 @@ gbMetaDataDeleteFromIdTables(conn, deleter);
 sqlDeleterFree(&deleter);
 
 /* remove deleted and orphans from metadata. */
-deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
+deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 3));
 for (status = statusTbl->deleteList; status != NULL; status = status->next)
     sqlDeleterAddAcc(deleter, status->acc);
 for (status = statusTbl->orphanList; status != NULL; status = status->next)
