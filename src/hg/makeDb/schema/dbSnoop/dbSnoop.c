@@ -6,8 +6,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "obscure.h"
+#include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.2 2005/11/02 05:23:10 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.3 2005/11/04 19:46:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,26 +18,46 @@ errAbort(
   "usage:\n"
   "   dbSnoop database output\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -unsplit - if set will merge together tables split by chromosome\n"
   );
 }
+
+static struct optionSpec options[] = {
+   {"unsplit", OPTION_BOOLEAN},
+   {NULL, 0},
+};
+
 
 struct tableInfo
 /* Information on a table. */
     {
     struct tableInfo *next;  /* Next in list. */
     char *name;    	     /* Name of table. */
+    struct tableStatus *status;	/* Result of table status call. */
     struct slName *fieldList;/* List of fields in table. */
-    int rowCount;	     /* Number of rows. */
     };
 
-int tableInfoCmp(const void *va, const void *vb)
+int tableInfoCmpSize(const void *va, const void *vb)
 /* Compare two tableInfo. */
 {
 const struct tableInfo *a = *((struct tableInfo **)va);
 const struct tableInfo *b = *((struct tableInfo **)vb);
-return b->rowCount - a->rowCount;
+long long aSize = a->status->dataLength + a->status->indexLength;
+long long bSize = b->status->dataLength + b->status->indexLength;
+long long diff = bSize - aSize;
+if (diff < 0) return -1;
+else if (diff > 0) return 1;
+else return 0;
 }
+
+int tableInfoCmpName(const void *va, const void *vb)
+/* Compare two tableInfo. */
+{
+const struct tableInfo *a = *((struct tableInfo **)va);
+const struct tableInfo *b = *((struct tableInfo **)vb);
+return strcmp(a->name, b->name);
+}
+
 
 struct fieldInfo
 /* Information on a field. */
@@ -103,7 +124,8 @@ tt->tableCount += 1;
 }
 
 
-void tableSummary(char *table, struct sqlConnection *conn, FILE *f, 
+void tableSummary(struct tableStatus *status, 
+	struct sqlConnection *conn, FILE *f, 
 	struct hash *fieldHash, struct fieldInfo **pFiList,
 	struct hash *tableHash, struct tableInfo **pTiList,
 	struct hash *typeHash, struct tableType **pTtList)
@@ -118,39 +140,100 @@ struct tableInfo *ti;
 
 /* Make new table info, and add it to hash, list */
 AllocVar(ti);
-hashAddSaveName(tableHash, table, ti, &ti->name);
+hashAddSaveName(tableHash, status->name, ti, &ti->name);
+ti->status = status;
 slAddTail(pTiList, ti);
 
-/* Count rows. */
-safef(query, sizeof(query), "select count(*) from %s", table);
-ti->rowCount = sqlQuickNum(conn, query);
-
 /* List fields. */
-safef(query, sizeof(query), "describe %s", table);
+safef(query, sizeof(query), "describe %s", ti->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *field = row[0];
     slNameAddHead(&ti->fieldList, field);
     dyStringPrintf(fields, "%s,", field);
-    noteField(fieldHash, table, field, pFiList);
+    noteField(fieldHash, ti->name, field, pFiList);
     }
 
-noteType(typeHash, fields->string, table, pTtList);
+noteType(typeHash, fields->string, ti->name, pTtList);
 sqlFreeResult(&sr);
+} 
+
+void printTaggedLong(FILE *f, char *tag, long long val)
+/* Print out tagged value, putting commas in number */
+{
+fprintf(f, "%s:\t", tag);
+printLongWithCommas(f, val);
+fprintf(f, "\n");
 }
 
-static struct optionSpec options[] = {
-   {NULL, 0},
-};
+char *findPastChrom(char *table, struct slName *chromList)
+/* Return first character in table past the chrN_ prefix if any.
+ * if no chrN_ prefix return NULL.  The logic here depends on
+ * chromList being sorted with largest name first. */
+{
+struct slName *chrom;
+for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+    {
+    if (startsWith(chrom->name, table))
+        {
+	int len = strlen(chrom->name);
+	if (table[len] == '_')
+	    return table + len + 1;
+	}
+    }
+return NULL;
+}
 
-void dbSnoop(char *database, char *output)
+void unsplitTables(struct sqlConnection *conn, struct tableInfo **pList)
+/* Merge together information on tables that are split by chromosome. */
+{
+/* Note, this routine leaks a little memory, but in this context that's
+ * that's ok. */
+struct slName *chrom, *chromList = sqlQuickList(conn,
+	"select chrom from chromInfo order by length(chrom) desc");
+struct tableInfo *ti, *newList = NULL, *next;
+struct hash *splitHash = hashNew(0);
+
+if (chromList == NULL)
+    errAbort("Can't use unsplit because database has no chromInfo table");
+
+for (ti = *pList; ti != NULL; ti = next)
+    {
+    char *pastChrom = findPastChrom(ti->name, chromList);
+    next = ti->next;
+    if (pastChrom != NULL)
+        {
+	struct tableInfo *splitTi;
+	if ((splitTi = hashFindVal(splitHash, pastChrom)) != NULL)
+	    {
+	    splitTi->status->rows += ti->status->rows;
+	    splitTi->status->dataLength += ti->status->dataLength;
+	    splitTi->status->indexLength += ti->status->indexLength;
+	    }
+	else
+	    {
+	    ti->name = pastChrom;
+	    hashAdd(splitHash, pastChrom, ti);
+	    slAddHead(&newList, ti);
+	    }
+	}
+    else
+        {
+	slAddHead(&newList, ti);
+	}
+    }
+slSort(&newList, tableInfoCmpName);
+*pList = newList;
+}
+
+void dbSnoop(char *database, char *output, boolean unsplit)
 /* dbSnoop - Produce an overview of a database.. */
 {
 FILE *f = mustOpen(output, "w");
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect(database);
-struct sqlResult *sr = sqlGetResult(conn, "show tables");
+struct sqlResult *sr = sqlGetResult(conn, "show table status");
 char **row;
 struct hash *fieldHash = hashNew(0);
 struct hash *typeHash = hashNew(0);
@@ -158,28 +241,74 @@ struct hash *tableHash = hashNew(0);
 struct fieldInfo *fiList = NULL, *fi;
 struct tableInfo *tiList = NULL, *ti;
 struct tableType *ttList = NULL, *tt;
+long long totalData = 0, totalIndex = 0, totalRows = 0;
+int totalFields = 0;
 
 /* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
-    tableSummary(row[0], conn2, f, 
+    {
+    struct tableStatus *status = tableStatusLoad(row);
+    tableSummary(status, conn2, f, 
     	fieldHash, &fiList, tableHash, &tiList, typeHash, &ttList);
+    }
+sqlFreeResult(&sr);
 
-/* Print summary of rows and fields in each table ordered by
- * number of rows. */
-slSort(&tiList, tableInfoCmp);
-fprintf(f, "TABLE SUMMARY (%d):\n", slCount(tiList));
-fprintf(f, "#rows\tname\tfields\n");
+if (unsplit)
+    unsplitTables(conn, &tiList);
+
+/* Print overall database summary. */
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct tableStatus *status = ti->status;
+    totalFields += slCount(ti->fieldList);
+    totalData += ti->status->dataLength;
+    totalIndex += ti->status->indexLength;
+    totalRows += ti->status->rows;
+    }
+fprintf(f, "DATABASE SUMMARY\n");
+printTaggedLong(f, "tables", slCount(tiList));
+printTaggedLong(f, "fields", totalFields);
+printTaggedLong(f, "bytes", totalIndex + totalData);
+fprintf(f, "\t");
+printTaggedLong(f, "data", totalData);
+fprintf(f, "\t");
+printTaggedLong(f, "index", totalIndex);
+printTaggedLong(f, "rows", totalRows);
+fprintf(f, "\n");
+
+/* Print summary of rows and fields in each table ordered alphabetically */
+fprintf(f, "TABLE FIELDS SUMMARY:\n");
+fprintf(f, "#name\tfields\n");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
     struct slName *t;
     slReverse(&ti->fieldList);
-    printLongWithCommas(f, ti->rowCount);
-    fprintf(f, "\t%s\t", ti->name);
+    fprintf(f, "%s\t", ti->name);
     for (t = ti->fieldList; t != NULL; t = t->next)
 	fprintf(f, "%s,", t->name);
     fprintf(f, "\n");
     }
 fprintf(f, "\n");
+
+/* Print summary of table sizes ordered by size. */
+slSort(&tiList, tableInfoCmpSize);
+fprintf(f, "TABLE SIZE SUMMARY:\n");
+fprintf(f, "#bytes\tname\trows\tdata\tindex\n");
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct slName *t;
+    printLongWithCommas(f, ti->status->dataLength + ti->status->indexLength);
+    fprintf(f, "\t");
+    fprintf(f, "%s\t", ti->name);
+    printLongWithCommas(f, ti->status->rows);
+    fprintf(f, "\t");
+    printLongWithCommas(f, ti->status->dataLength);
+    fprintf(f, "\t");
+    printLongWithCommas(f, ti->status->indexLength);
+    fprintf(f, "\n");
+    }
+fprintf(f, "\n");
+
 
 /* Print summary of fields and tables fields are used in 
  * ordered by the number of tables a field is in. */
@@ -222,6 +351,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-dbSnoop(argv[1], argv[2]);
+dbSnoop(argv[1], argv[2], optionExists("unsplit"));
 return 0;
 }
