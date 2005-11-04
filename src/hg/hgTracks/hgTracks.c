@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1029 2005/11/01 00:50:56 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1029.2.1 2005/11/04 00:28:39 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8219,20 +8219,7 @@ y = yAfterRuler;
 for (track = trackList; track != NULL; track = track->next)
     {
     if (track->limitedVis != tvHide)
-	{
-	if(isCompositeTrack(track)) 
-	    {
-	    struct track *subtrack = NULL;
-	    if (isWithCenterLabels(track))
-		y += fontHeight;
-	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-		y = doTrackMap(subtrack, y, fontHeight, trackPastTabX, trackPastTabWidth);
-	    }
-	else 
-	    {
-		y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
-	    }
-	}
+	y = doTrackMap(track, y, fontHeight, trackPastTabX, trackPastTabWidth);
     }
 
 /* Finish map. */
