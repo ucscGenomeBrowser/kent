@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.16 2005/11/04 08:07:37 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.17 2005/11/04 22:40:13 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -545,15 +545,15 @@ gOptions = options;
 gbVerbose = verboseLevel;
 gErrorCnt = 0;
 
-gbVerbEnter(2, "build state table");
-gbVerbMsg(2, "reading gbSeq accessions");
+gbVerbEnter(3, "build state table");
+gbVerbMsg(4, "reading gbSeq accessions");
 ssData.select = select;
 ssData.seqHash = seqTblLoadAcc(conn, select);
 
-gbVerbMsg(2, "reading gbStatus");
+gbVerbMsg(4, "reading gbStatus");
 statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
                                   selectStatus, &ssData,
-                                  tmpDir, maxExtFileChg, (gbVerbose >= 3));
+                                  tmpDir, maxExtFileChg, (gbVerbose >= 4));
 findNewEntries(select, statusTbl);
 
 /* Don't allow deletes when select criteria has changed */
@@ -571,17 +571,19 @@ if ((gOptions->flags & DBLOAD_LARGE_DELETES) == 0)
 /* don't do other setup if we are going to stop on maxShrinkageExceeded */
 if (!*maxShrinkageExceeded)
     {
-    gbVerbMsg(2, "checking for orphans");
+    gbVerbMsg(4, "checking for orphans");
     findOrphans(conn, select, ssData.seqHash, statusTbl);
 
     if (((gOptions->flags & DBLOAD_INITIAL) == 0))
         {
-        gbVerbMsg(2, "checking for type change");
+        gbVerbMsg(4, "checking for type change");
         checkForTypeChange(conn, select, statusTbl);
         }
     }
 
 hashFree(&ssData.seqHash);
+
+gbVerbLeave(3, "build state table");
 
 /* always print stats */
 fprintf(stderr, "gbLoadRna: selected %s: delete=%u seqChg=%u metaChg=%u extChg=%u new=%u orphan=%u noChg=%u\n",
@@ -592,7 +594,6 @@ fprintf(stderr, "gbLoadRna: selected %s: delete=%u seqChg=%u metaChg=%u extChg=%
 /* this doesn't include large delete errors */
 if (gErrorCnt > 0)
     errAbort("Errors detecting when constructing state table");
-gbVerbLeave(2, "build state table");
 return statusTbl;
 }
 
@@ -618,7 +619,7 @@ seqTblAccs = seqTblLoadAcc(conn, select);
 gbStatAccs = gbStatusTblLoadAcc(conn,  statTblSelect,  NULL);
 
 /* build up deleter combining the two */
-deleter = sqlDeleterNew(tmpDirPath, (gbVerbose >= 3));
+deleter = sqlDeleterNew(tmpDirPath, (gbVerbose >= 4));
 
 cookie = hashFirst(seqTblAccs);
 while ((hel = hashNext(&cookie)) != NULL)

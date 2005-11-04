@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.25 2005/11/04 08:07:38 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.26 2005/11/04 22:40:13 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -196,18 +196,18 @@ void deleteOutdated(struct sqlConnection *conn, struct gbSelect* select,
                     struct gbStatusTbl* statusTbl, char* tmpDir)
 /* delete outdated alignments and metadata from the database. */
 {
-gbVerbEnter(2, "delete outdated");
+gbVerbEnter(3, "delete outdated");
 
 /* first the alignments */
-gbVerbMsg(2, "delete outdated alignments");
+gbVerbMsg(4, "delete outdated alignments");
 gbAlignDataDeleteOutdated(conn, select, statusTbl, tmpDir);
 
 /* now drop metadata entries */
-gbVerbMsg(2, "delete outdated metadata");
+gbVerbMsg(4, "delete outdated metadata");
 gbMetaDataDeleteOutdated(conn, select, statusTbl, &gOptions, tmpDir);
 
 /* Now it's safe to drop deleted entries from the database status table. */
-gbVerbMsg(2, "delete outdated gbStatus");
+gbVerbMsg(4, "delete outdated gbStatus");
 gbStatusTblRemoveDeleted(statusTbl, conn);
 
 /* orphaned now become new */
@@ -216,7 +216,7 @@ statusTbl->orphanList = NULL;
 statusTbl->numNew += statusTbl->numOrphan;
 statusTbl->numOrphan = 0;
 
-gbVerbLeave(2, "delete outdated");
+gbVerbLeave(3, "delete outdated");
 }
 
 bool updateHasAligned(struct gbSelect* select, struct gbUpdate* update)
@@ -313,18 +313,18 @@ void parseUpdateMetaData(struct sqlConnection *conn,
  * (as there is one per update).  This doesn't load the mrna or seq
  * tables, but might add to the unique string tables. */
 {
-gbVerbEnter(2, "process metadata for %s", gbSelectDesc(select));
+gbVerbEnter(4, "process metadata for %s", gbSelectDesc(select));
 gbMetaDataProcess(conn, statusTbl, select);
 gbUpdateClearSelectVer(select->update);
-gbVerbLeave(2, "process metadata for %s", gbSelectDesc(select));
+gbVerbLeave(4, "process metadata for %s", gbSelectDesc(select));
 }
 
 void loadMetaData(struct sqlConnection *conn)
 /* load the metadata into the database */
 {
-gbVerbEnter(2, "loading metadata");
+gbVerbEnter(3, "loading metadata");
 gbMetaDataDbLoad(conn);
-gbVerbLeave(2, "loading metadata");
+gbVerbLeave(3, "loading metadata");
 }
 
 void processMetaData(struct sqlConnection *conn, struct gbSelect* select,
@@ -333,7 +333,7 @@ void processMetaData(struct sqlConnection *conn, struct gbSelect* select,
 {
 struct gbUpdate* update;
 
-gbVerbEnter(2, "processing metadata");
+gbVerbEnter(3, "processing metadata");
 gbMetaDataInit(conn, select->release->srcDb, &gOptions, 
                gGbdbGenBank, tmpDir);
 
@@ -346,7 +346,7 @@ for (update = select->release->updates; update != NULL; update = update->next)
         }
     }
 select->update = NULL;
-gbVerbLeave(2, "processing metadata");
+gbVerbLeave(3, "processing metadata");
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
     loadMetaData(conn);
 }
@@ -372,7 +372,7 @@ void processUpdateAligns(struct sqlConnection *conn, struct gbSelect* select,
 /* Get alignements for an update.  */
 {
 select->update = update;
-gbVerbEnter(2, "process alignments: %s", gbSelectDesc(select));
+gbVerbEnter(4, "process alignments: %s", gbSelectDesc(select));
 
 if (select->orgCats & GB_NATIVE)
     processUpdateAlignsForOrgCat(conn, select, GB_NATIVE, statusTbl);
@@ -381,16 +381,16 @@ if (select->orgCats & GB_XENO)
 
 gbUpdateClearSelectVer(select->update);
 
-gbVerbLeave(2, "process alignments: %s", gbSelectDesc(select));
+gbVerbLeave(4, "process alignments: %s", gbSelectDesc(select));
 select->update = NULL;
 }
 
 void loadAligns(struct sqlConnection *conn)
 /* load pending alignments */
 {
-gbVerbEnter(2, "load alignments");
+gbVerbEnter(3, "load alignments");
 gbAlignDataDbLoad(conn);
-gbVerbLeave(2, "load alignments");
+gbVerbLeave(3, "load alignments");
 }
 
 boolean updateSelected(struct gbUpdate* update, struct gbSelect* select)
@@ -415,7 +415,7 @@ void processAligns(struct sqlConnection *conn, struct gbSelect* select,
 {
 struct gbUpdate* update;
 
-gbVerbEnter(2, "processing alignments");
+gbVerbEnter(3, "processing alignments");
 
 gbAlignDataInit(tmpDir, &gOptions);
 /* load alignments for updates that are new and actually had sequences align */
@@ -426,7 +426,7 @@ for (update = select->release->updates; update != NULL; update = update->next)
     }
 select->update = NULL;
 gbAlignDataSetStatus(statusTbl);
-gbVerbLeave(2, "processing alignments");
+gbVerbLeave(3, "processing alignments");
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
     loadAligns(conn);
 }
@@ -440,7 +440,7 @@ boolean maxShrinkageExceeded;
 char typePrefix[32], tmpDir[PATH_LEN];
 unsigned maxExtFileChg = 0;;
 
-gbVerbEnter(2, "update %s", gbSelectDesc(select));
+gbVerbEnter(3, "update %s", gbSelectDesc(select));
 
 /* Setup tmp dir for load, must be unique for each update due to
  * initialLoad feature */
@@ -477,7 +477,7 @@ if (maxShrinkageExceeded)
     }
 if (gOptions.flags & DBLOAD_DRY_RUN)
     {
-    gbVerbLeave(2, "dry run, skipping update %s", gbSelectDesc(select));
+    gbVerbLeave(3, "dry run, skipping update %s", gbSelectDesc(select));
     gbStatusTblFree(&statusTbl);
     hFreeConn(&conn);
     return;
@@ -507,7 +507,7 @@ if ((gOptions.flags & DBLOAD_INITIAL) == 0)
     gbLoadedTblCommit(gLoadedTbl, conn);
 
 /* print before freeing memory */
-gbVerbLeave(2, "update %s", gbSelectDesc(select));
+gbVerbLeave(3, "update %s", gbSelectDesc(select));
 gTotalExtChgCnt += statusTbl->numExtChg;
 gbStatusTblFree(&statusTbl);
 
@@ -600,9 +600,9 @@ void cleanExtFileTable()
 /* clean up extFile table if we change references for any seq */
 {
 struct sqlConnection *conn = hAllocConn();
-gbVerbEnter(2, "cleaning extFileTbl");
+gbVerbEnter(3, "cleaning extFileTbl");
 extFileTblClean(conn);
-gbVerbLeave(2, "cleaning extFileTbl");
+gbVerbLeave(3, "cleaning extFileTbl");
 hFreeConn(&conn);
 }
 
@@ -621,7 +621,7 @@ boolean forceLoad = (reloadList != NULL) || gReload
 if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
 
-gbVerbEnter(0, "gbLoadRna");
+gbVerbEnter(1, "gbLoadRna");
 conn = hAllocConn();
 lockDb(conn, NULL);
 
@@ -663,7 +663,7 @@ unlockDb(conn, NULL);
 hFreeConn(&conn);
 
 /* must go to stderr to be logged */
-gbVerbLeave(0, "gbLoadRna");
+gbVerbLeave(1, "gbLoadRna");
 if (gMaxShrinkageError)
     errAbort("Stoping due to maxShrinkage limit being exceeded in one or more\n"
              "partitions. Investigate and rerun with -allowLargeDeletes.");
@@ -687,7 +687,7 @@ void dropAll(char *database)
 struct slName *tables, *tbl;
 struct sqlConnection *conn;
 
-gbVerbEnter(0, "dropAll");
+gbVerbEnter(1, "dropAll");
 hgSetDb(database);
 conn = hAllocConn();
 lockDb(conn, NULL);
@@ -698,7 +698,7 @@ for (tbl = tables; tbl != NULL; tbl = tbl->next)
 slFreeList(&tables);
 unlockDb(conn, NULL);
 hFreeConn(&conn);
-gbVerbLeave(0, "dropAll");
+gbVerbLeave(1, "dropAll");
 }
 
 void copyTable(struct sqlConnection *conn, char* destDb, char* srcTable,
@@ -732,7 +732,7 @@ void copyAll(char *srcDb, char* destDb)
 struct slName *tables, *tbl;
 struct sqlConnection *conn;
 
-gbVerbEnter(0, "copyAll");
+gbVerbEnter(1, "copyAll");
 hgSetDb(srcDb);
 conn = hAllocConn();
 lockDb(conn, srcDb);
@@ -750,7 +750,7 @@ slFreeList(&tables);
 unlockDb(conn, destDb);
 unlockDb(conn, srcDb);
 hFreeConn(&conn);
-gbVerbLeave(0, "copyAll");
+gbVerbLeave(1, "copyAll");
 }
 
 void moveAll(char *srcDb, char* destDb)
@@ -761,7 +761,7 @@ struct sqlConnection *conn;
 struct dyString* sqlCmd = dyStringNew(256);
 char *sep;
 
-gbVerbEnter(0, "moveAll");
+gbVerbEnter(1, "moveAll");
 hgSetDb(srcDb);
 conn = hAllocConn();
 lockDb(conn, srcDb);
@@ -786,7 +786,7 @@ slFreeList(&tables);
 unlockDb(conn, destDb);
 unlockDb(conn, srcDb);
 hFreeConn(&conn);
-gbVerbLeave(0, "moveAll");
+gbVerbLeave(1, "moveAll");
 }
 
 void usage()
@@ -860,10 +860,12 @@ errAbort(
   "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity:\n"
-  "              n >= 1 - basic information abourt each step\n"
+  "              n >= 1 - basic information about load\n"
   "              n >= 2 - more details\n"
-  "              n >= 4 - information about each selected sequence\n"
-  "              n >= 5 - SQL queries\n"
+  "              n >= 3 - time spent in various steps\n"
+  "              n >= 4 - step details\n"
+  "              n >= 5 - information about each selected sequence\n"
+  "              n >= 6 - SQL queries\n"
   "\n"
   "     -dryRun - go throught the selection process,  but don't update.\n"
   "      This will still remove ignored accessions.\n"
