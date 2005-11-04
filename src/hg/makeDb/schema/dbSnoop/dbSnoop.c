@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.5 2005/11/04 21:02:05 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.6 2005/11/04 23:28:34 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +30,8 @@ static struct optionSpec options[] = {
 };
 
 boolean noNumberCommas = FALSE;
+boolean unsplit = FALSE;
+struct slName *chromList;	/* List of chromosomes in unsplit case. */
 
 struct fieldDescription
 /* Information on a field. */
@@ -216,11 +218,12 @@ void unsplitTables(struct sqlConnection *conn, struct tableInfo **pList)
 {
 /* Note, this routine leaks a little memory, but in this context that's
  * that's ok. */
-struct slName *chrom, *chromList = sqlQuickList(conn,
-	"select chrom from chromInfo order by length(chrom) desc");
+struct slName *chrom;
 struct tableInfo *ti, *newList = NULL, *next;
 struct hash *splitHash = hashNew(0);
 
+chromList = sqlQuickList(conn,
+	"select chrom from chromInfo order by length(chrom) desc");
 if (chromList == NULL)
     errAbort("Can't use unsplit because database has no chromInfo table");
 
@@ -253,7 +256,117 @@ slSort(&newList, tableInfoCmpName);
 *pList = newList;
 }
 
-void dbSnoop(char *database, char *output, boolean unsplit)
+struct indexInfo 
+/* Stores pertinent info from row returned by mysql in response to
+ *   show indexes from table */
+    {
+    struct indexInfo *next;
+    char *table;		/* Name of table. */
+    boolean nonUnique;		/* True if can have duplicates. */
+    char *name;			/* Name of this index. */
+    int seqInIndex;		/* For multiple part indexes, which part. */
+    char *field;		/* Name of field . */
+    long long cardinality;		/* Cardinality of index. */
+    };
+
+struct indexInfo *indexInfoLoad(char **row)
+/* Allocate and return index info based on row. */
+{
+struct indexInfo *ii;
+AllocVar(ii);
+ii->table = cloneString(row[0]);
+ii->nonUnique = sqlUnsigned(row[1]);
+ii->name = cloneString(row[2]);
+ii->seqInIndex = sqlUnsigned(row[3]);
+ii->field = cloneString(row[4]);
+if (row[6] != NULL)
+    ii->cardinality = sqlLongLong(row[6]);
+return ii;
+}
+
+struct indexGroup
+/* Info about a group of indexes, that is various parts of
+ * a multi-column index. */
+    {
+    struct indexGroup *next;
+    char *name;				/* Name of index. */
+    struct indexInfo *fieldList;	/* Various fields involved in index. */
+    };
+
+void printIndexes(FILE *f, struct sqlConnection *conn, struct tableInfo *ti)
+/* Print info about indexes on table to file. */
+{
+char query[256], **row;
+struct sqlResult *sr;
+int indexCount = 0;
+struct indexGroup *groupList = NULL, *group;
+struct hash *groupHash = newHash(8);
+struct indexInfo *ii;
+char *tableName = ti->name;
+char splitTable[256];
+
+if (unsplit)
+    {
+    struct slName *chrom;
+    if (!sqlTableExists(conn, tableName))
+	{
+	for (chrom = chromList; chrom != NULL; chrom = chrom->next)
+	    {
+	    safef(splitTable, sizeof(splitTable), "%s_%s", chrom->name, tableName);
+	    if (sqlTableExists(conn, splitTable))
+		{
+		tableName = splitTable;
+		break;
+		}
+	    }
+	}
+    }
+
+/* Build up information on indexes in this table by processing
+ * mysql show indexes command results.  This command returns 
+ * a separate row for each field in each index.  We'll group these. */
+safef(query, sizeof(query), "show indexes from %s", tableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    ii = indexInfoLoad(row);
+    group = hashFindVal(groupHash, ii->name);
+    if (group == NULL)
+        {
+	AllocVar(group);
+	hashAddSaveName(groupHash, ii->name, group, &group->name);
+	slAddTail(&groupList, group);
+	}
+    slAddTail(&group->fieldList, ii);
+    }
+sqlFreeResult(&sr);
+
+fprintf(f, "%s has %d rows and %d indexes\n", ti->name, ti->status->rows, 
+	slCount(groupList)); 
+for (group = groupList; group != NULL; group = group->next)
+    {
+    long long maxCardinality = 0, nonUnique = FALSE;
+    fprintf(f, "\t");
+    for (ii=group->fieldList; ii != NULL; ii = ii->next)
+        {
+	fprintf(f, "%s", ii->field);
+	if (ii->next != NULL)
+	    fprintf(f, ",");
+	if (ii->cardinality > maxCardinality)
+	    maxCardinality = ii->cardinality;
+	nonUnique = ii->nonUnique;
+	}
+    fprintf(f, "\t%s", (nonUnique ? "MUL" : "PRI") );
+    if (maxCardinality > 0)
+	fprintf(f, "\t%lld", maxCardinality);
+    else
+        fprintf(f, "\tn/a");
+    fprintf(f, "\n");
+    }
+hashFree(&groupHash);
+}
+
+void dbSnoop(char *database, char *output)
 /* dbSnoop - Produce an overview of a database.. */
 {
 FILE *f = mustOpen(output, "w");
@@ -339,33 +452,9 @@ for (ti = tiList; ti != NULL; ti = ti->next)
 fprintf(f, "\n");
 
 /* Print summary of indexes. */
+fprintf(f, "TABLE INDEX SUMMARY\n");
 for (ti = tiList; ti != NULL; ti = ti->next)
-    {
-    struct fieldDescription *field;
-    for (field = ti->fieldList; field != NULL; field = field->next)
-        {
-	if (field->key != NULL)
-	    indexCount += 1;
-	}
-    }
-fprintf(f, "TABLE INDEX SUMMARY (%d indices):\n", indexCount);
-for (ti = tiList; ti != NULL; ti = ti->next)
-    {
-    struct fieldDescription *field;
-    boolean gotAny = FALSE;
-    fprintf(f, "%s\t", ti->name);
-    for (field = ti->fieldList; field != NULL; field = field->next)
-        {
-	if (field->key != NULL)
-	    {
-	    gotAny = TRUE;
-	    fprintf(f, "%s(%s), ", field->name, field->key);
-	    }
-	}
-    if (!gotAny)
-        fprintf(f, "n/a");
-    fprintf(f, "\n");
-    }
+    printIndexes(f, conn, ti);
 fprintf(f, "\n");
 
 /* Print summary of fields and tables fields are used in 
@@ -410,6 +499,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 noNumberCommas = optionExists("noNumberCommas");
-dbSnoop(argv[1], argv[2], optionExists("unsplit"));
+unsplit = optionExists("unsplit");
+dbSnoop(argv[1], argv[2]);
 return 0;
 }
