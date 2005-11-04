@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "dnaLoad.h"
 
-static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.3 2005/10/28 06:17:31 kent Exp $";
+static char const rcsid[] = "$Id: allenCollectSeq.c,v 1.4 2005/11/04 16:34:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -164,6 +164,9 @@ while (lineFileRowTab(lf, row))
 	    safef(seqName, sizeof(seqName), "RP_%s", seq->name);
 	fprintf(fRefToRp, "%s\t%s\n", acc, seqName);
 	fprintf(fRpToUrl, "%s\t%s\n", seqName, row[4]);
+	if (row[4][0] == 0)
+	    warn("Missing url line %d of %s\n", lf->lineIx, lf->fileName);
+	    
 	faWriteNext(fFa, seqName, seq->dna, seq->size);
 	}
     ++hitTotal;
