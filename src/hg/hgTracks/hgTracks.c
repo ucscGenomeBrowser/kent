@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1033 2005/11/04 01:11:30 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1034 2005/11/04 16:06:42 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9250,7 +9250,7 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
-boolean humPhenFilterType(struct humanPhenotype *el)
+boolean humPhenFilterType(struct humanPhenotypeLSDB *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
@@ -9267,7 +9267,7 @@ for (cnt = 0; cnt < variantTypeSize; cnt++)
 return TRUE;
 }
 
-boolean humPhenFilterLoc(struct humanPhenotype *el)
+boolean humPhenFilterLoc(struct humanPhenotypeLSDB *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
@@ -9297,16 +9297,16 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
                  NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct humanPhenotype *el = humanPhenotypeLoad(row);
+    struct humanPhenotypeLSDB *el = humanPhenotypeLSDBLoad(row);
     struct bed *bedCopy = NULL;
     AllocVar(bedCopy);
     if (!humPhenFilterType(el)) 
         {
-        humanPhenotypeFree(&el);
+        humanPhenotypeLSDBFree(&el);
         }
     else if (!humPhenFilterLoc(el))
         {
-        humanPhenotypeFree(&el);
+        humanPhenotypeLSDBFree(&el);
         }
     else
         {
@@ -9315,7 +9315,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         bedCopy->chromEnd = el->chromEnd;
         bedCopy->name = cloneString(el->name);
         slAddHead(&list, bedCopy);
-        humanPhenotypeFree(&el);
+        humanPhenotypeLSDBFree(&el);
         }
     }
 sqlFreeResult(&sr);
