@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1032 2005/11/03 20:41:15 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1033 2005/11/04 01:11:30 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8334,9 +8334,7 @@ else
     loader = bedLoad6;
 
 /* limit to items above a specified score */
-/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
- * by default, and the variable is named after the composite track. */
-safef(option, sizeof(option), "%s.scoreFilter", tg->tdb->tableName);
+safef(option, sizeof(option), "%s.scoreFilter", tg->mapName);
 optionScoreVal = trackDbSetting(tg->tdb, "scoreFilter");
 if (optionScoreVal != NULL)
     optionScore = atoi(optionScoreVal);
@@ -8403,10 +8401,7 @@ char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
- * by default, and the variable is named after the composite track. */
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-      tg->tdb->tableName);
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (optionScore > 0) 
     {
@@ -8460,10 +8455,7 @@ char extraWhere[128] ;
 
 useItemRgb = bedItemRgb(tdb);
 
-/* Use tg->tdb->tableName because subtracks inherit composite track's tdb 
- * by default, and the variable is named after the composite track. */
-safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter",
-      tg->tdb->tableName);
+safef(optionScoreStr, sizeof(optionScoreStr), "%s.scoreFilter", tg->mapName);
 optionScore = cartUsualInt(cart, optionScoreStr, 0);
 if (optionScore > 0) 
     {
@@ -9553,14 +9545,11 @@ if (!smart)
     {
     safef(table, sizeof table, "%s.", track->mapName);
     hels = cartFindPrefix(cart, table);
-    len = strlen(track->mapName);
-    for (hel = hels; hel != NULL; hel = hel->next)
-            strcpy(hel->name, hel->name+len+1);
     }
 
 /* fill in subtracks of composite track */
 for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
-    {
+{
     /* initialize from composite track settings */
     if (trackDbSetting(subTdb, "noInherit") == NULL)
 	{
@@ -9584,8 +9573,9 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
             char cartVar[64];
             for (hel = hels; hel != NULL; hel = hel->next)
                 {
+                len = strlen(track->mapName);
                 safef(cartVar, sizeof cartVar, "%s.%s",
-                                   subTdb->tableName, hel->name);
+                                   subTdb->tableName, hel->name+len+1);
                 cartSetString(cart, cartVar, hel->val);
                 }
             }
