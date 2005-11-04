@@ -25,23 +25,33 @@ echo "Verifying files exist in $dir"
 set list = (`cat {$table}`)
 set files = ()
 set revs = ()
+set prevs = ()
 while ( $#list > 0 )
     set f = $list[1]
     shift list
     set r = "HEAD"
+    set p = "none"
     if ( $#list > 0 ) then
     	if ( $list[1] =~ [0123456789.]* ) then
     	    set r = $list[1]
     	    shift list
 	endif
     endif
-    if ( ! -e $dir/$f ) then
+    # check for the previous revision
+    if ( -e $dir/$f ) then
+    	set filter = "\/$f:t\/"
+	#echo "filter=$filter" 
+    	grep $filter  $dir/$f:h/CVS/Entries | awk -F '/' '{print $3}' > $WEEKLYBLD/tempver
+	set p = `cat $WEEKLYBLD/tempver`
+    	rm -f $WEEKLYBLD/tempver
+    else	    
 	echo "$f not found on $dir"
 	set err=1
-    endif 
-    echo "$f $r"
+    endif
+    echo "$f $r $p"
     set files = ($files $f)
     set revs = ($revs $r)
+    set prevs = ($prevs $p)
 end
 if ( "$err" == "1" ) then
  echo "some files not found."
@@ -73,6 +83,8 @@ while ( $i <= $#files )
     echo
     set f = $files[$i]
     set r = $revs[$i]
+    set p = $prevs[$i]
+
     # move the tag in cvs for this week's branch.
     set cmd = "cvs rtag -r${r} -F -B -b v${BRANCHNN}_branch kent/src/$f"
     echo $cmd
@@ -108,8 +120,8 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo "$f $r" >> $WEEKLYBLD/mbt-up.txt  
-    set msg = "$msg $f $r \n"
+    echo "$f $r $p" >> $WEEKLYBLD/mbt-up.txt  
+    set msg = "$msg $f $r $p\n"
     @ i++
 end
 if ( "$err" == "1" ) then
