@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.4 2005/11/04 19:58:36 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.5 2005/11/04 21:02:05 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,14 +19,26 @@ errAbort(
   "   dbSnoop database output\n"
   "options:\n"
   "   -unsplit - if set will merge together tables split by chromosome\n"
+  "   -noNumberCommas - if set will leave out commas in big numbers\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"unsplit", OPTION_BOOLEAN},
+   {"noNumberCommas", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
+boolean noNumberCommas = FALSE;
+
+struct fieldDescription
+/* Information on a field. */
+    {
+    struct fieldDescription *next;	/* Next in list. */
+    char *name;			/* Field name. */
+    char *type;			/* SQL type. */
+    char *key;			/* How is it indexed? PRI/MUL/etc. */
+    };
 
 struct tableInfo
 /* Information on a table. */
@@ -34,7 +46,7 @@ struct tableInfo
     struct tableInfo *next;  /* Next in list. */
     char *name;    	     /* Name of table. */
     struct tableStatus *status;	/* Result of table status call. */
-    struct slName *fieldList;/* List of fields in table. */
+    struct fieldDescription *fieldList;/* List of fields in table. */
     };
 
 int tableInfoCmpSize(const void *va, const void *vb)
@@ -149,21 +161,35 @@ safef(query, sizeof(query), "describe %s", ti->name);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *field = row[0];
-    slNameAddHead(&ti->fieldList, field);
-    dyStringPrintf(fields, "%s,", field);
-    noteField(fieldHash, ti->name, field, pFiList);
+    struct fieldDescription *field;
+    AllocVar(field);
+    field->name = cloneString(row[0]);
+    field->type = cloneString(row[1]);
+    if (row[3][0] != 0)
+	field->key = cloneString(row[3]);
+    slAddHead(&ti->fieldList, field);
+    dyStringPrintf(fields, "%s,", field->name);
+    noteField(fieldHash, ti->name, field->name, pFiList);
     }
 
 noteType(typeHash, fields->string, ti->name, pTtList);
 sqlFreeResult(&sr);
 } 
 
+void printLongNumber(FILE *f, long long val)
+/* Print long number possibly with commas. */
+{
+if (noNumberCommas)
+    fprintf(f, "%lld", val);
+else
+    printLongWithCommas(f, val);
+}
+
 void printTaggedLong(FILE *f, char *tag, long long val)
 /* Print out tagged value, putting commas in number */
 {
 fprintf(f, "%s:\t", tag);
-printLongWithCommas(f, val);
+printLongNumber(f, val);
 fprintf(f, "\n");
 }
 
@@ -243,6 +269,8 @@ struct tableInfo *tiList = NULL, *ti;
 struct tableType *ttList = NULL, *tt;
 long long totalData = 0, totalIndex = 0, totalRows = 0;
 int totalFields = 0;
+int indexCount = 0;	/* # of indexes, not bytes in indexes */
+
 
 /* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
@@ -283,32 +311,62 @@ fprintf(f, "#bytes\tname\trows\tdata\tindex\n");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
     struct slName *t;
-    printLongWithCommas(f, ti->status->dataLength + ti->status->indexLength);
+    printLongNumber(f, ti->status->dataLength + ti->status->indexLength);
     fprintf(f, "\t");
     fprintf(f, "%s\t", ti->name);
-    printLongWithCommas(f, ti->status->rows);
+    printLongNumber(f, ti->status->rows);
     fprintf(f, "\t");
-    printLongWithCommas(f, ti->status->dataLength);
+    printLongNumber(f, ti->status->dataLength);
     fprintf(f, "\t");
-    printLongWithCommas(f, ti->status->indexLength);
+    printLongNumber(f, ti->status->indexLength);
     fprintf(f, "\n");
     }
 fprintf(f, "\n");
 
 /* Print summary of rows and fields in each table ordered alphabetically */
+slSort(&tiList, tableInfoCmpName);
 fprintf(f, "TABLE FIELDS SUMMARY:\n");
 fprintf(f, "#name\tfields\n");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
-    struct slName *t;
+    struct fieldDescription *field;
     slReverse(&ti->fieldList);
     fprintf(f, "%s\t", ti->name);
-    for (t = ti->fieldList; t != NULL; t = t->next)
-	fprintf(f, "%s,", t->name);
+    for (field = ti->fieldList; field != NULL; field = field->next)
+	fprintf(f, "%s,", field->name);
     fprintf(f, "\n");
     }
 fprintf(f, "\n");
 
+/* Print summary of indexes. */
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct fieldDescription *field;
+    for (field = ti->fieldList; field != NULL; field = field->next)
+        {
+	if (field->key != NULL)
+	    indexCount += 1;
+	}
+    }
+fprintf(f, "TABLE INDEX SUMMARY (%d indices):\n", indexCount);
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct fieldDescription *field;
+    boolean gotAny = FALSE;
+    fprintf(f, "%s\t", ti->name);
+    for (field = ti->fieldList; field != NULL; field = field->next)
+        {
+	if (field->key != NULL)
+	    {
+	    gotAny = TRUE;
+	    fprintf(f, "%s(%s), ", field->name, field->key);
+	    }
+	}
+    if (!gotAny)
+        fprintf(f, "n/a");
+    fprintf(f, "\n");
+    }
+fprintf(f, "\n");
 
 /* Print summary of fields and tables fields are used in 
  * ordered by the number of tables a field is in. */
@@ -329,7 +387,7 @@ fprintf(f, "\n");
 /* Print summary of types and tables that use types 
  * ordered by the number of tables a type is used by. */
 slSort(&ttList, tableTypeCmp);
-fprintf(f, "TABLE TYPE SUMMARY (%d):\n", slCount(ttList));
+fprintf(f, "TABLE TYPE SUMMARY (%d types):\n", slCount(ttList));
 fprintf(f, "#uses\ttables\tfields\n");
 for (tt = ttList; tt != NULL; tt = tt->next)
     {
@@ -351,6 +409,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+noNumberCommas = optionExists("noNumberCommas");
 dbSnoop(argv[1], argv[2], optionExists("unsplit"));
 return 0;
 }
