@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.972 2005/11/01 21:31:48 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.973 2005/11/04 03:39:01 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -11495,7 +11495,7 @@ void printLsSnpLinks(struct snp snp)
 /* print links to ModBase and LS-SNP at UCSF */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
+struct sqlResult *sr1, *sr2;
 char **row;
 char   query[256];
 char   baseUrl[] = "http://salilab.org/LS-SNP-cgi/";
@@ -11509,16 +11509,30 @@ else if (sameString("hg16", hGetDb()))
 else
     return;
 
-if (!stringIn("nonsynon",snp.func) || !hTableExists("hgFixed.modBaseLsSnp"))
-    return;
-safef(query, sizeof(query), "select distinct uniProtId, dbSnpRsId from hgFixed.modBaseLsSnp "
-      "where dbSnpRsId='%s' order by uniProtId, dbSnpRsId", snp.name);
-if ( ((sr=sqlGetResult(conn, query)) != NULL) && ((row=sqlNextRow(sr)) != NULL))
+if (hTableExists("lsSnpStructure"))
     {
-    printf("<BR><A href=\"#LSSNP\">LS-SNP</A> <A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
-    printf("Protein_structure\" TARGET=_blank>Protein Structure</A>");
+    safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpStructure "
+	  "where rsId='%s' order by uniProtId", snp.name);
+    sr1=sqlGetResult(conn, query);
+    if ( (sr1 != NULL) && ((row=sqlNextRow(sr1)) != NULL))
+	{
+	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
+	printf("Protein_structure\" TARGET=_blank>LS-SNP Protein Structure Prediction</A>\n");
+	}
+    sqlFreeResult(&sr1);
     }
-sqlFreeResult(&sr);
+if (hTableExists("lsSnpFunction"))
+    {
+    safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpFunction "
+	  "where rsId='%s' order by uniProtId", snp.name);
+    sr2=sqlGetResult(conn, query);
+    if ( (sr2 != NULL) && ((row=sqlNextRow(sr2)) != NULL))
+	{
+	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
+	printf("Protein_function\" TARGET=_blank>LS-SNP Protein Function Prediction</A>\n");
+	}
+    sqlFreeResult(&sr2);
+    }
 hFreeConn(&conn);
 }
 
