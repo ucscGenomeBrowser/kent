@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.7 2005/11/04 23:40:59 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.8 2005/11/05 07:14:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,11 +65,19 @@ else return 0;
 }
 
 int tableInfoCmpName(const void *va, const void *vb)
-/* Compare two tableInfo. */
+/* Compare two tableInfo on name. */
 {
 const struct tableInfo *a = *((struct tableInfo **)va);
 const struct tableInfo *b = *((struct tableInfo **)vb);
 return strcmp(a->name, b->name);
+}
+
+int tableInfoCmpUpdateTime(const void *va, const void *vb)
+/* Compare two tableInfo on update time. */
+{
+const struct tableInfo *a = *((struct tableInfo **)va);
+const struct tableInfo *b = *((struct tableInfo **)vb);
+return strcmp(b->status->updateTime, a->status->updateTime);
 }
 
 
@@ -351,7 +359,7 @@ for (group = groupList; group != NULL; group = group->next)
     fprintf(f, "\t");
     for (ii=group->fieldList; ii != NULL; ii = ii->next)
         {
-	fprintf(f, "%s", ii->field);
+	fprintf(f, "%s.%s", ti->name, ii->field);
 	if (ii->next != NULL)
 	    fprintf(f, ",");
 	if (ii->cardinality > maxCardinality)
@@ -408,7 +416,7 @@ for (ti = tiList; ti != NULL; ti = ti->next)
     totalIndex += ti->status->indexLength;
     totalRows += ti->status->rows;
     }
-fprintf(f, "DATABASE SUMMARY\n");
+fprintf(f, "DATABASE SUMMARY:\t%s\n", database);
 printTaggedLong(f, "tables", slCount(tiList));
 printTaggedLong(f, "fields", totalFields);
 printTaggedLong(f, "bytes", totalIndex + totalData);
@@ -438,6 +446,18 @@ for (ti = tiList; ti != NULL; ti = ti->next)
     }
 fprintf(f, "\n");
 
+/* Print summary of table sizes ordered by size. */
+slSort(&tiList, tableInfoCmpUpdateTime);
+fprintf(f, "TABLE UPDATE SUMMARY:\n");
+fprintf(f, "#table\tupdate time\tcreate time\tcheckTime\t\n");
+for (ti = tiList; ti != NULL; ti = ti->next)
+    {
+    struct slName *t;
+    fprintf(f, "%s\t%s\t%s\t%s\n", ti->status->updateTime, ti->name,
+    	ti->status->createTime, naForNull(ti->status->checkTime));
+    }
+fprintf(f, "\n");
+
 /* Print summary of rows and fields in each table ordered alphabetically */
 slSort(&tiList, tableInfoCmpName);
 fprintf(f, "TABLE FIELDS SUMMARY:\n");
@@ -462,7 +482,7 @@ fprintf(f, "\n");
 /* Print summary of fields and tables fields are used in 
  * ordered by the number of tables a field is in. */
 slSort(&fiList, fieldInfoCmp);
-fprintf(f, "FIELD SUMMARY (%d):\n", slCount(fiList));
+fprintf(f, "FIELD SUMMARY:\t%d\n", slCount(fiList));
 fprintf(f, "#uses\tname\ttables\n");
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
