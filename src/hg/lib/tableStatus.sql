@@ -10,11 +10,11 @@ CREATE TABLE tableStatus (
     rowFormat varchar(255) not null,	# Seems to be mostly Fixed or Dynamic
     rows int unsigned not null,	# The number of rows in table
     aveRowLength int unsigned not null,	# Average length of row in bytes
-    dataLength int unsigned not null,	# Size of data in table
-    maxDataLength int unsigned not null,	# Maximum data length for this table type
-    indexLength int unsigned not null,	# Length of index in bytes
-    dataFree int unsigned not null,	# Usually zero
-    autoIncrement int unsigned not null,	# Current value of autoincrement - often rows+1
+    dataLength bigint not null,	# Size of data in table
+    maxDataLength bigint not null,	# Maximum data length for this table type
+    indexLength bigint not null,	# Length of index in bytes
+    dataFree bigint not null,	# Usually zero
+    autoIncrement varchar(255) not null,	# Current value of autoincrement - rows+1 or NULL
     createTime varchar(255) not null,	# YYYY-MM-DD HH:MM:SS format creation time
     updateTime varchar(255) not null,	# YYYY-MM-DD HH:MM:SS format last update time
     checkTime varchar(255) not null,	# YYYY-MM-DD HH:MM:SS format last check (not query) time

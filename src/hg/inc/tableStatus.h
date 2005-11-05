@@ -16,11 +16,11 @@ struct tableStatus
     char *rowFormat;	/* Seems to be mostly Fixed or Dynamic */
     unsigned rows;	/* The number of rows in table */
     unsigned aveRowLength;	/* Average length of row in bytes */
-    unsigned dataLength;	/* Size of data in table */
-    unsigned maxDataLength;	/* Maximum data length for this table type */
-    unsigned indexLength;	/* Length of index in bytes */
-    unsigned dataFree;	/* Usually zero */
-    unsigned autoIncrement;	/* Current value of autoincrement - often rows+1 */
+    long long dataLength;	/* Size of data in table */
+    long long maxDataLength;	/* Maximum data length for this table type */
+    long long indexLength;	/* Length of index in bytes */
+    long long dataFree;	/* Usually zero */
+    char *autoIncrement;	/* Current value of autoincrement - rows+1 or NULL */
     char *createTime;	/* YYYY-MM-DD HH:MM:SS format creation time */
     char *updateTime;	/* YYYY-MM-DD HH:MM:SS format last update time */
     char *checkTime;	/* YYYY-MM-DD HH:MM:SS format last check (not query) time */
