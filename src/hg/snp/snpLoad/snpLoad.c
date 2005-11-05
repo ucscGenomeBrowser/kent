@@ -1,0 +1,153 @@
+/* snpLoad - create snp table from build125 database. */
+#include "common.h"
+#include "hdb.h"
+#include "snp125.h"
+
+static char const rcsid[] = "$Id: snpLoad.c,v 1.1 2005/11/05 01:05:41 heather Exp $";
+
+char *snpDb = NULL;
+char *targetDb = NULL;
+
+void usage()
+/* Explain usage and exit. */
+{
+errAbort(
+    "snpLoad - create snp table from build125 database\n"
+    "usage:\n"
+    "    snpLoad snpDb targetDb \n");
+}
+
+void setCoords(struct snp125 *el, int snpClass, char *startString, char *endString)
+{
+char *rangeString1, *rangeString2;
+
+if (snpClass == 1) 
+    {
+    el->class = cloneString("range");
+    el->chromStart = atoi(startString);
+    rangeString1 = cloneString(endString);
+    rangeString2 = strstr(rangeString1, "..");
+    if (rangeString2 == NULL) 
+        {
+        verbose(1, "error processing range snp %s with phys_pos %s\n", rangeString1);
+        free(el);
+        return;
+        }
+    rangeString2 = rangeString2 + 2;
+    el->chromEnd = atoi(rangeString2);
+    return;
+    }
+
+if (snpClass == 2)
+    {
+    el->class = cloneString("simple");
+    el->chromStart = atoi(startString);
+    el->chromEnd = atoi(endString);
+    return;
+    }
+
+if (snpClass == 3)
+    {
+    el->class = cloneString("deletion");
+    el->chromStart = atoi(startString);
+    rangeString1 = cloneString(endString);
+    rangeString2 = strstr(rangeString1, "^");
+    if (rangeString2 == NULL) 
+        {
+        verbose(1, "error processing deletion snp %s with phys_pos %s\n", rangeString1);
+        free(el);
+        return;
+	}
+    rangeString2 = rangeString2++;
+    el->chromEnd = atoi(rangeString2);
+    return;
+    }
+
+if (snpClass == 4)
+    {
+    el->class = cloneString("insertion");
+    el->chromStart = atoi(startString);
+    el->chromEnd = atoi(endString);
+    return;
+    }
+verbose(1, "skipping snp %s with loc type %d\n", el->name, snpClass);
+}
+
+struct snp125 *readSnps()
+{
+struct snp125 *list=NULL, *el = NULL;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int snpClass;
+int pos;
+
+safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
+      "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs'");
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    pos = atoi(row[3]);
+    if (pos == 0) 
+        {
+	verbose(3, "snp %s is unaligned\n", el->name);
+	continue;
+	}
+    snpClass = atoi(row[2]);
+    if (snpClass < 1 || snpClass > 4) 
+        {
+	verbose(1, "skipping snp %s with loc_type %d\n", el->name, snpClass);
+	continue;
+	}
+    AllocVar(el);
+    el->name = cloneString(row[0]);
+    // get chrom from contig hash using ctg_id
+    setCoords(el, snpClass, row[3], row[4]);
+    el->observed = cloneString(row[6]);
+    slAddHead(&list,el);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+slReverse(&list);  /* could possibly skip if it made much difference in speed. */
+return list;
+}
+
+
+
+int main(int argc, char *argv[])
+/* Check args; read and load . */
+{
+struct snp125 *list=NULL, *el;
+
+if (argc != 3)
+    usage();
+
+snpDb = argv[1];
+targetDb = argv[2];
+if(!hDbExists(targetDb))
+    errAbort("%s does not exist\n", targetDb);
+
+hSetDb(snpDb);
+
+/* check for needed tables */
+if(!hTableExistsDb(snpDb, "ContigLoc"))
+    errAbort("no ContigLoc table in %s\n", snpDb);
+
+/* this will create a temporary table */
+list = readSnps();
+verbose(1, "DUMPING...\n");
+for (el = list; el != NULL; el = el->next)
+    {
+    verbose(1, "snp = %s, ", el->name);
+    verbose(1, "start = %d, ", el->chromStart);
+    verbose(1, "end = %d, ", el->chromEnd);
+    verbose(1, "class = %s, ", el->class);
+    verbose(1, "observed = %s\n", el->observed);
+    }
+
+hSetDb(targetDb);
+// loadSnps();
+return 0;
+}
