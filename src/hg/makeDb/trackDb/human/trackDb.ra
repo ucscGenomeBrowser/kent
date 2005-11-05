@@ -5874,6 +5874,33 @@ type bed 4 .
     longLabel Gencode Exonic Regions
     priority 6
 
+track encodeWorkshopIntersections
+compositeTrack on
+shortLabel Intersect
+longLabel ENCODE Workshop Intersections
+group encodeAnalysis
+priority 508
+visibility hide
+type bed 5
+
+    track L1_LINE
+    subTrack encodeWorkshopIntersections
+    shortLabel L1_LINE
+    longLabel L1 LINEs for Intersection
+    priority 1
+
+    track L2_LINE
+    subTrack encodeWorkshopIntersections
+    shortLabel L2_LINE
+    longLabel L2 LINEs for Intersection
+    priority 2
+
+    track Alu_SINE
+    subTrack encodeWorkshopIntersections
+    shortLabel Alu_SINE
+    longLabel Alu SINEs for Intersection
+    priority 3
+
 track encodeWorkshopSelections
 compositeTrack on
 shortLabel Consens Unann TF
@@ -5884,29 +5911,41 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 4
 
+    track encodeAllGencodeExonic
+    subTrack encodeWorkshopSelections
+    shortLabel Gencode Exonic
+    longLabel Consensus Gencode Exonic
+    priority 1
+
     track encodeAllIntronsProximal
     subTrack encodeWorkshopSelections
     shortLabel Intronic Prox
     longLabel Consensus Intronic Proximal
-    priority 1
+    priority 2
 
     track encodeAllIntronsDistal
     subTrack encodeWorkshopSelections
     shortLabel Intronic Dist
     longLabel Consensus Intronic Distal
-    priority 2
+    priority 3
 
     track encodeAllIntergenicProximal
     subTrack encodeWorkshopSelections
     shortLabel Intergenic Prox
     longLabel Consensus Intergenic Proximal
-    priority 3
+    priority 4
 
     track encodeAllIntergenicDistal
     subTrack encodeWorkshopSelections
     shortLabel Intergenic Dist
     longLabel Consensus Intergenic Distal
-    priority 4
+    priority 5
+
+    track encodeAllOtherESTs
+    subTrack encodeWorkshopSelections
+    shortLabel Other ESTs
+    longLabel Consensus Other ESTs
+    priority 6
 
 track encodeNoncodingTransFrags
 compositeTrack on
