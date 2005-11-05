@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.217 2005/10/13 20:16:41 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.218 2005/11/05 00:39:35 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1587,7 +1587,7 @@ else if (tdb->type != NULL)
 		     wgRna table has a new field 'type', which is used to store RNA type info
 		     and from which to determine the display color of each entry.
 	    */
-	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna") && !startsWith(track, "encodeGencodeIntron"))
+	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna") && !startsWith("encodeGencodeIntron", track))
 		scoreUi(tdb, 1000);
 	    }
 	else if (sameWord(words[0], "psl"))
