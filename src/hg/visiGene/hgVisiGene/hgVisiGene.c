@@ -429,13 +429,11 @@ cgiMakeTextVar(hgpListSpec, listSpec, 30);
 cgiMakeButton(hgpDoSearch, "search");
 printf("<BR>\n");
 puts(
-"You can search on gene names, authors, body parts, years, "
-"GenBank or UniProt accessions.  You can include multiple "
-"search terms.  The images matching the most terms will be "
-"at the top of the results list. For gene names you can include "
-"* and ? wildcard characters.  For instance to see images of all "
-"genes in the Hox A cluster search for hoxa*.  When searching on "
-"author names you can include the initials after the last name.");
+"You can search on gene names, authors, body parts, year of publication, "
+"GenBank or UniProt accessions, and Theiler stages.  "
+"For gene names you can include * and ? wildcard characters.  For instance to "
+"see images of all genes in the Hox A cluster search for hoxa*.  When searching on "
+"author names you can include the initials after the last name as in \"Smith AJ\".");
 printf("</FORM>\n");
 webEnd();
 }
