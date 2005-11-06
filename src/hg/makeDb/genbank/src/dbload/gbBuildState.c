@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.17 2005/11/04 22:40:13 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.18 2005/11/06 19:39:00 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -284,8 +284,7 @@ else
 #endif
         markMetaChanged(ssData->select, statusTbl, tmpStatus, processed,
                         aligned);
-    else if ((gOptions->flags & DBLOAD_EXT_FILE_UPDATE)
-             && (statusTbl->numExtChg < statusTbl->maxExtFileChg)
+    else if (statusTbl->extFileUpdate
              && !sameString(tmpStatus->extRelease,
                             ssData->select->release->version))
         markExtChanged(statusTbl, tmpStatus, processed, aligned);
@@ -530,7 +529,7 @@ struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
                                  float maxShrinkage,
                                  char* tmpDir,
                                  int verboseLevel,
-                                 unsigned maxExtFileChg,
+                                 boolean extFileUpdate,
                                  boolean* maxShrinkageExceeded)
 /* Load status table and find of state of all genbank entries in the release
  * compared to the database. */
@@ -553,7 +552,7 @@ ssData.seqHash = seqTblLoadAcc(conn, select);
 gbVerbMsg(4, "reading gbStatus");
 statusTbl = gbStatusTblSelectLoad(conn, selectFlags, select->accPrefix,
                                   selectStatus, &ssData,
-                                  tmpDir, maxExtFileChg, (gbVerbose >= 4));
+                                  tmpDir, extFileUpdate, (gbVerbose >= 4));
 findNewEntries(select, statusTbl);
 
 /* Don't allow deletes when select criteria has changed */

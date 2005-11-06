@@ -5,7 +5,7 @@
 #include "sqlDeleter.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.4 2005/08/22 19:55:35 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.5 2005/11/06 19:39:00 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -156,10 +156,11 @@ return idList;
 }
 
 static void cleanUnusedEntries(struct sqlConnection *conn,
-                               struct slName* idList)
+                               struct slName* idList,
+                               boolean verbEnabled)
 /* Remove unreferenced rows */
 {
-struct sqlDeleter* deleter = sqlDeleterNew(NULL, FALSE);
+struct sqlDeleter* deleter = sqlDeleterNew(NULL, verbEnabled);
 struct slName* id;
 for (id = idList; id != NULL; id = id->next)
     sqlDeleterAddAcc(deleter, id->name);
@@ -199,7 +200,7 @@ while ((pepEl = hashNext(&pepScan)) != NULL)
     }
 }
 
-void extFileTblClean(struct sqlConnection *conn)
+void extFileTblClean(struct sqlConnection *conn, boolean verbEnabled)
 /* Remove rows in the gbExtFile table that are not referenced in the gbSeq
  * table.  This is fast.  Also remove pep.fa file that are not associated with
  * any mrna.fa file.  This is a hack that gets around the refseq peptides not
@@ -207,7 +208,7 @@ void extFileTblClean(struct sqlConnection *conn)
 {
 struct slName* idList = getUnusedIds(conn);
 if (idList != NULL)
-    cleanUnusedEntries(conn, idList);
+    cleanUnusedEntries(conn, idList, verbEnabled);
 slFreeList(&idList);
 
 cleanRefPep(conn);

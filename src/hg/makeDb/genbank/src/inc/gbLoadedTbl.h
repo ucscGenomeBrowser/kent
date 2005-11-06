@@ -14,12 +14,19 @@ struct gbSelect;
 struct gbLoaded
 /* Entry in the table. */
 {
-    struct gbLoaded* next;
+    struct gbLoaded* next;  /* used for commit list */
+    struct gbLoaded* relNext;  /* used for release list */
     unsigned short srcDb;   /* GB_GENBANK or GB_REFSEQ */
     char *loadRelease;      /* release version */
     char *loadUpdate;       /* update (date or full) */
     unsigned type;          /* GB_MRNA or GB_EST */
     char *accPrefix;        /* Accession prefix or null */
+    boolean extFileUpdated; /* the gbExtFile tables has been updated for this
+                             * partation of the release */
+    /* this are not in the database */
+    boolean isNew;          /* entry has is not in database */
+    boolean isDirty;        /* entry has been modified; it not new,
+                             * only the extFileUpdated flag can be set */
 };
 
 struct gbLoadedTbl
@@ -46,11 +53,30 @@ void gbLoadedTblUseRelease(struct gbLoadedTbl* loadedTbl,
 
 boolean gbLoadedTblIsLoaded(struct gbLoadedTbl* loadedTbl,
                             struct gbSelect *select);
-/* Check if the type and accession has been loaded for this update */
+/* Check if the type and accPrefix has been loaded for this update */
+
+struct gbLoaded *gbLoadedTblGetEntry(struct gbLoadedTbl* loadedTbl,
+                                     struct gbSelect *select);
+/* get the specified entry, or NULL.  It may not have been commited yet */
+
+boolean gbLoadedTblHasEntry(struct gbLoadedTbl* loadedTbl,
+                            struct gbSelect *select);
+/* Check if the the specified entry exists. It may not have been commited
+ * yet */
 
 void gbLoadedTblAdd(struct gbLoadedTbl* loadedTbl,
                     struct gbSelect *select);
 /* add an entry to the table */
+
+boolean gbLoadedTblExtFileUpdated(struct gbLoadedTbl* loadedTbl,
+                                  struct gbSelect *select);
+/* Check if the type and accPrefix has had their extFile entries update
+ * for this release. */
+
+void gbLoadedTblSetExtFileUpdated(struct gbLoadedTbl* loadedTbl,
+                                  struct gbSelect *select);
+/* Flag that type and accPrefix has had their extFile entries update
+ * for this release. */
 
 void gbLoadedTblCommit(struct gbLoadedTbl* loadedTbl,
                        struct sqlConnection *conn);

@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.1 2003/06/03 01:27:46 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.2 2005/11/06 19:39:00 markd Exp $";
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =
@@ -17,6 +17,10 @@ static char* createSql =
   "loadUpdate char(10) not null,"              /* update date or full */
   "accPrefix char(2) not null,"                /* acc prefix for ESTs */
   "time timestamp not null,"                   /* time entry was added */
+  "extFileUpdated tinyint(1) not null,"        /* has the extFile entries been
+                                                * updated for this partation
+                                                * of the release (full
+                                                * only) */
   "index(srcDb,loadRelease))";
 
 #define KEY_BUF_SIZE 128
@@ -33,13 +37,23 @@ safef(key, KEY_BUF_SIZE, "%s %s %s %s", release->name, updateShort,
       gbFmtSelect(type), ((accPrefix == NULL) ? "" : accPrefix));
 }
 
+static struct hashEl *getRelease(struct gbLoadedTbl* loadedTbl,
+                                 struct gbRelease* release)
+/* get the hash entry for a release */
+{
+struct hashEl *relHashEl = hashLookup(loadedTbl->releaseHash, release->name);
+assert(relHashEl != NULL);
+return relHashEl;
+}
+
 static struct gbLoaded *addEntry(struct gbLoadedTbl* loadedTbl,
                                  struct gbRelease* release,
                                  char *updateShort, unsigned type,
-                                 char *accPrefix)
+                                 char *accPrefix, boolean extFileUpdated)
 /* add an entry to the table. */
 {
-struct gbLoaded *loaded;
+struct gbLoaded *loaded, *relHead;
+struct hashEl *relHashEl = getRelease(loadedTbl, release);
 char key[KEY_BUF_SIZE];
 
 lmAllocVar(loadedTbl->entryHash->lm, loaded);
@@ -49,10 +63,71 @@ loaded->loadUpdate = lmCloneString(loadedTbl->entryHash->lm, updateShort);
 loaded->type = type;
 if (accPrefix != NULL)
     loaded->accPrefix = lmCloneString(loadedTbl->entryHash->lm, accPrefix);
+loaded->extFileUpdated = extFileUpdated;
 
+/* add to entry hash */
 makeKey(key, release, updateShort, type, accPrefix);
 hashAdd(loadedTbl->entryHash, key, loaded);
+
+/* add to list for this release */
+relHead = relHashEl->val;
+loaded->relNext = relHead;
+relHead = loaded;
+relHashEl->val = relHead;
+
 return loaded;
+}
+
+static struct gbLoaded *getEntry(struct gbLoadedTbl* loadedTbl,
+                                 struct gbSelect *select,
+                                 char *updateOverride)
+/* get lookup an entry in the table, or return null if not found.  if
+ * updateOverride is not NULL, use that name instead of the update in
+ * select. */
+{
+char key[KEY_BUF_SIZE];
+struct gbLoaded *loaded;
+assertHaveRelease(loadedTbl, select->release);
+makeKey(key, select->release,
+        ((updateOverride != NULL) ? updateOverride : select->update->shortName),
+        select->type, select->accPrefix);
+loaded = hashFindVal(loadedTbl->entryHash, key);
+return loaded;
+}
+static struct gbLoaded *mustGetEntry(struct gbLoadedTbl* loadedTbl,
+                                     struct gbSelect *select,
+                                     char *updateOverride)
+/* get lookup an entry in the table, or abort if not found.  if updateOverride
+ * is not NULL, use that name instead of the update in select. */
+{
+struct gbLoaded *loaded = getEntry(loadedTbl, select, updateOverride);
+if (loaded == NULL)
+    errAbort("can't find entry that must be there");
+return loaded;
+}
+
+struct gbLoaded *gbLoadedTblGetEntry(struct gbLoadedTbl* loadedTbl,
+                                     struct gbSelect *select)
+/* get the specified entry, or NULL.  It may not have been commited yet */
+{
+return getEntry(loadedTbl, select, NULL);
+}
+
+boolean gbLoadedTblHasEntry(struct gbLoadedTbl* loadedTbl,
+                            struct gbSelect *select)
+/* Check if the the specified entry exists. It may not have been commited
+ * yet */
+{
+return (getEntry(loadedTbl, select, NULL) != NULL);
+}
+
+static void addedExtFileUpdCol(struct sqlConnection *conn)
+/* add the new extFileUpdated column to a table that doesn't have it */
+{
+char sql[128];
+safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN boolean extFileUpdated not null",
+      GB_LOADED_TBL);
+sqlUpdate(conn, sql);
 }
 
 struct gbLoadedTbl* gbLoadedTblNew(struct sqlConnection *conn)
@@ -67,6 +142,8 @@ loadedTbl->entryHash = hashNew(14);
 
 if (!sqlTableExists(conn, GB_LOADED_TBL))
     sqlRemakeTable(conn, GB_LOADED_TBL, createSql);
+else if (sqlFieldIndex(conn, GB_LOADED_TBL, "extFileUpdated") < 0)
+    addedExtFileUpdCol(conn);
 
 return loadedTbl;
 }
@@ -79,13 +156,14 @@ char query[256];
 struct sqlResult *result;
 char **row;
 safef(query, sizeof(query),
-      "SELECT loadUpdate, type, accPrefix FROM gbLoaded"
+      "SELECT loadUpdate, type, accPrefix, extFileUpdated FROM gbLoaded"
       " WHERE (srcDb = '%s') AND (loadRelease = '%s')",
       gbSrcDbName(release->srcDb), release->version);
 result = sqlGetResult(conn, query);
 while ((row = sqlNextRow(result)) != NULL)
     addEntry(loadedTbl, release, row[0], gbParseType(row[1]),
-             ((strlen(row[2]) > 0) ? row[2] : NULL));
+             ((strlen(row[2]) > 0) ? row[2] : NULL),
+             sqlUnsigned(row[3]));
 }
 
 void gbLoadedTblUseRelease(struct gbLoadedTbl* loadedTbl,
@@ -96,45 +174,102 @@ void gbLoadedTblUseRelease(struct gbLoadedTbl* loadedTbl,
 {
 if (hashLookup(loadedTbl->releaseHash, release->name) == NULL)
     {
+    hashAdd(loadedTbl->releaseHash, release->name, NULL);
     loadRelease(loadedTbl, conn, release);
-    hashAdd(loadedTbl->releaseHash, release->name, release);
     }
 }
 
 boolean gbLoadedTblIsLoaded(struct gbLoadedTbl* loadedTbl,
                             struct gbSelect *select)
-/* Check if the type and accession has been loaded for this update */
+/* Check if the type and accPrefix has been loaded for this update */
 {
-char key[KEY_BUF_SIZE];
-assertHaveRelease(loadedTbl, select->release);
-
-makeKey(key, select->release, select->update->shortName, select->type,
-        select->accPrefix);
-return (hashLookup(loadedTbl->entryHash, key) != NULL);
+struct gbLoaded *loaded = getEntry(loadedTbl, select, NULL);
+/* entries might be added during load process for bookkeeping, so 
+ * new doesn't count as loaded.  It is cleared during commit. */
+return (loaded != NULL) && !loaded->isNew;
 }
 
 void gbLoadedTblAdd(struct gbLoadedTbl* loadedTbl,
                     struct gbSelect *select)
 /* add an entry to the table */
 {
-struct gbLoaded *loaded;
-assertHaveRelease(loadedTbl, select->release);
+struct gbLoaded *loaded
+    = addEntry(loadedTbl, select->release, select->update->shortName,
+               select->type, select->accPrefix, FALSE);
+/* flag as uncommited */
+loaded->isNew = TRUE;
+loaded->isDirty = TRUE;
+slAddHead(&loadedTbl->uncommitted, loaded);
+}
 
-loaded = addEntry(loadedTbl, select->release, select->update->shortName,
-                  select->type, select->accPrefix);
-loaded->next = loadedTbl->uncommitted;
-loadedTbl->uncommitted = loaded;
+boolean gbLoadedTblExtFileUpdated(struct gbLoadedTbl* loadedTbl,
+                                  struct gbSelect *select)
+/* Check if the type and accPrefix has had their extFile entries update
+ * for this release. */
+{
+struct gbLoaded *loaded = mustGetEntry(loadedTbl, select, GB_FULL_UPDATE);
+return loaded->extFileUpdated;
+}
+
+static boolean samePartition(struct gbSelect *select,
+                             struct gbLoaded *loaded)
+/* check if an entry is in the selected partition; assumes releases are 
+ * the same*/
+{
+/* partation doesn't include update */
+return (select->type == loaded->type)
+    && (((select->accPrefix == NULL) && (loaded->accPrefix == NULL))
+        || ((select->accPrefix != NULL) && sameString(select->accPrefix, loaded->accPrefix)));
+}
+
+static void setExtFileUpdated(struct gbLoadedTbl* loadedTbl,
+                              struct gbLoaded *loaded)
+/* flag an entry as having it's extFiles updated */
+{
+loaded->extFileUpdated = TRUE;
+if (!loaded->isDirty)
+    {
+    loaded->isDirty = TRUE;
+    slAddHead(&loadedTbl->uncommitted, loaded);
+    }
+}
+
+void gbLoadedTblSetExtFileUpdated(struct gbLoadedTbl* loadedTbl,
+                                  struct gbSelect *select)
+/* Flag that type and accPrefix has had their extFile entries update
+ * for this release. */
+{
+/* flag all entries for this partation of the release */
+struct hashEl *relHashEl = getRelease(loadedTbl, select->release);
+struct gbLoaded *loaded;
+
+for (loaded = relHashEl->val; loaded != NULL; loaded = loaded->relNext)
+    {
+    if (samePartition(select, loaded))
+        setExtFileUpdated(loadedTbl, loaded);
+    }
 }
 
 static void insertRow(struct sqlConnection *conn, struct gbLoaded *loaded)
 /* insert a row into the table */
 {
 char query[512];
+/* null inserts current time */
 safef(query, sizeof(query), 
-      "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', NULL)",
+      "INSERT INTO %s VALUES('%s', '%s', '%s', '%s', '%s', NULL, '%d')",
       GB_LOADED_TBL, gbSrcDbName(loaded->srcDb), gbTypeName(loaded->type), 
       loaded->loadRelease, loaded->loadUpdate,
-      ((loaded->accPrefix == NULL) ? "" : loaded->accPrefix));
+      ((loaded->accPrefix == NULL) ? "" : loaded->accPrefix),
+      loaded->extFileUpdated);
+sqlUpdate(conn, query);
+}
+
+static void updateRow(struct sqlConnection *conn, struct gbLoaded *loaded)
+/* update a row in the table.  Only the extFileUpdated field can be updated */
+{
+char query[512];
+safef(query, sizeof(query), "UPDATE %s SET extFileUpdated=%d",
+      GB_LOADED_TBL,  loaded->extFileUpdated);
 sqlUpdate(conn, query);
 }
 
@@ -142,9 +277,17 @@ void gbLoadedTblCommit(struct gbLoadedTbl* loadedTbl,
                        struct sqlConnection *conn)
 /* commit pending changes */
 {
-for (; loadedTbl->uncommitted != NULL;
-     loadedTbl->uncommitted = loadedTbl->uncommitted->next)
-    insertRow(conn, loadedTbl->uncommitted);
+struct gbLoaded *loaded;
+for (loaded = loadedTbl->uncommitted;  loaded != NULL; loaded = loaded->next)
+    {
+    assert(loaded->isDirty);
+    if (loaded->isNew)
+        insertRow(conn, loaded);
+    else
+        updateRow(conn, loaded);
+    loaded->isNew = loaded->isDirty = FALSE;
+    }
+loadedTbl->uncommitted = NULL;
 }
 
 void gbLoadedTblFree(struct gbLoadedTbl** loadedTblPtr)
