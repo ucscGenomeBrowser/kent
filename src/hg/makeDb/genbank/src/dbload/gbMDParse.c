@@ -12,7 +12,7 @@
 #include "gbFileOps.h"
 #include "uniqueStrTbl.h"
 
-static char const rcsid[] = "$Id: gbMDParse.c,v 1.6 2005/11/04 22:40:13 markd Exp $";
+static char const rcsid[] = "$Id: gbMDParse.c,v 1.7 2005/11/06 22:56:26 markd Exp $";
 
 /* Info about the current file being parsed and related state. */
 static struct dbLoadOptions* gOptions = NULL; /* options from cmdline and conf */
@@ -67,7 +67,7 @@ struct raField *raf;
 AllocVar(raf);
 
 if (hashPow2Size == 0)
-    hashPow2Size = 14; /* 16kb */
+    hashPow2Size = 15; /* 32kb */
 
 hel = hashAdd(gRaFields, raName, raf);
 raf->raName = hel->name;
@@ -92,8 +92,8 @@ static void raFieldsInit()
 {
 assert(gRaFieldTableList == NULL);
 
-gRaFields = hashNew(8);
-/* default is 16kb */
+gRaFields = hashNew(14);
+/* default is 32kb hash */
 raFieldDefine(gConn, "source", "src", 0);
 raFieldDefine(gConn, "organism", "org", 0);
 raFieldDefine(gConn, "library", "lib", 0);

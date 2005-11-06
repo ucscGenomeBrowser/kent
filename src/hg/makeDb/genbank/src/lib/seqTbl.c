@@ -4,7 +4,7 @@
 #include "gbDefs.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: seqTbl.c,v 1.4 2005/08/22 19:55:35 markd Exp $";
+static char const rcsid[] = "$Id: seqTbl.c,v 1.5 2005/11/06 22:56:26 markd Exp $";
 
 /*
  * Note: don't use autoincrement for id column, as it causes problems for
@@ -146,7 +146,7 @@ struct hash* seqTblLoadAcc(struct sqlConnection *conn,
 char query[512];
 char **row;
 struct sqlResult *sr;
-struct hash* seqHash = hashNew(19);
+struct hash* seqHash = hashNew(22);
 
 if (sqlTableExists(conn, SEQ_TBL))
     {

@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.2 2005/11/06 19:39:00 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.3 2005/11/06 22:56:26 markd Exp $";
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =
@@ -137,8 +137,8 @@ struct gbLoadedTbl* gbLoadedTblNew(struct sqlConnection *conn)
 struct gbLoadedTbl* loadedTbl;
 
 AllocVar(loadedTbl);
-loadedTbl->releaseHash = hashNew(8);
-loadedTbl->entryHash = hashNew(14);
+loadedTbl->releaseHash = hashNew(10);
+loadedTbl->entryHash = hashNew(19);
 
 if (!sqlTableExists(conn, GB_LOADED_TBL))
     sqlRemakeTable(conn, GB_LOADED_TBL, createSql);

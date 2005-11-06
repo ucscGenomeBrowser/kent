@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.27 2005/11/06 19:39:00 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.28 2005/11/06 22:56:26 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -645,7 +645,9 @@ if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
     errAbort("-initialLoad specified and no sequences were found to load");
 
 /* clean up any ignored entries before setting anything up */
+gbVerbEnter(3, "delete ignored");
 gbIgnoredDelete(selectList, gWorkDir);
+gbVerbLeave(3, "delete ignored");
 
 /* loaded table to track updates that have been processed */
 gLoadedTbl = gbLoadedTblNew(conn);

@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.21 2005/11/04 22:40:13 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.22 2005/11/06 22:56:26 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -192,7 +192,7 @@ static FILE* getChromPslTabFile(char* rootTable, char* chrom,
 struct hashEl* hel;
 if (*chromHashPtr == NULL)
     {
-    *chromHashPtr = hashNew(8);
+    *chromHashPtr = hashNew(12);
     createPerChromPslTables(rootTable, conn);
     }
 hel = hashLookup(*chromHashPtr, chrom);

@@ -8,7 +8,7 @@
 #include "gbIndex.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: gbIgnore.c,v 1.3 2004/04/21 20:27:22 genbank Exp $";
+static char const rcsid[] = "$Id: gbIgnore.c,v 1.4 2005/11/06 22:56:26 markd Exp $";
 
 /* column indices in ignore.idx files */
 #define IGIDX_ACC_COL       0
@@ -68,7 +68,7 @@ static char *IGNORE_IDX = "etc/ignore.idx";
 char ignoreIdx[PATH_LEN];
 struct gbIgnore* ignore;
 gbReleaseAllocEntryVar(release, ignore);
-ignore->accHash = hashNew(0);
+ignore->accHash = hashNew(22);
 
 safef(ignoreIdx, sizeof(ignoreIdx), "%s/%s", release->index->gbRoot,
       IGNORE_IDX);
