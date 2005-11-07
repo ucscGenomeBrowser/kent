@@ -627,15 +627,16 @@ static void findBestGapPos(struct axtScoreScheme *ss,
 int maxSize = max(qSize, tSize);
 int gapSize = qGap + tGap;  /* One of qGap or tGap is zero */
 int matchSize = maxSize - gapSize;
-int pos, bestPos = 0;
+int pos, bestPos = 0, rightPos;
 int bestScore = -BIGNUM;
 int score;
 
-for (pos=0; pos<matchSize; ++pos)
+for (pos=0; pos<=matchSize; ++pos)
     {
-    score = axtScoreUngapped(ss, qStart+pos, tStart+pos, pos);
-    score += axtScoreUngapped(ss, qStart+pos+qGap, tStart+pos+tGap, 
-                              matchSize - pos);
+    rightPos = matchSize-pos;
+    score = axtScoreUngapped(ss, qStart, tStart, pos);
+    score += axtScoreUngapped(ss, qStart+qSize-rightPos, 
+    			tStart+tSize-rightPos, rightPos);
     if (score > bestScore)
         {
         bestScore = score;
@@ -812,6 +813,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         slideIntronsInChain(chain, query, target);
     }
 
+#ifdef DEBUG
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     double oldScore = chain->score;
@@ -819,6 +821,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     if (oldScore != chain->score)
          warn("score inconsistency %f vs %f", oldScore, chain->score);
     }
+#endif /* DEBUG */
 
 bzpTime("reduced double to single gaps");
 return chainList;
