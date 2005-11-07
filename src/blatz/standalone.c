@@ -126,7 +126,8 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     // Statistics to print about how many hits were dropped (ignored)
     dynaDrops = dynaCountTarget + dynaCountQuery;
     dynaDropsPerc = (float)100*dynaDrops/dynaHits+0.5;
-    printf("%d dynaDrops (%f%%) at T=%d Q=%d \n", dynaDrops, (double)dynaDropsPerc, targetHitDLimit, queryHitDLimit);
+    verbose(2, "%d dynaDrops (%f%%) at T=%d Q=%d \n", 
+    	dynaDrops, (double)dynaDropsPerc, targetHitDLimit, queryHitDLimit);
    // Free dynamic memory used for the sequence-length-dependent counter arrays
    freeMem(dynaCountQ);
    if(bedfp != NULL){

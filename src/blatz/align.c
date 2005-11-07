@@ -647,26 +647,6 @@ for (pos=0; pos<matchSize; ++pos)
 }
 
 
-#ifdef DEBUG
-double chainCalcScore(struct chain *chain, struct axtScoreScheme *ss, 
-        struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target)
-/* Calculate chain score freshly. */
-{
-struct cBlock *b1, *b2;
-double score = 0;
-for (b1 = chain->blockList; b1 != NULL; b1 = b2)
-    {
-    score += axtScoreUngapped(ss, query->dna + b1->qStart, 
-            target->dna + b1->tStart, b1->tEnd - b1->tStart);
-    b2 = b1->next;
-    if (b2 != NULL)
-        score -=  gapCalcCost(gapCalc, b2->qStart - b1->qEnd, 
-                              b2->tStart - b1->tEnd);
-    }
-return score;
-}
-#endif /* DEBUG */
-
 static void reduceGaps(struct bzp *bzp, 
         struct dnaSeq *query, struct dnaSeq *target, struct chain *chain)
 /* Go through chain looking for small double-sided gaps that
@@ -831,8 +811,16 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     if (bzp->rna)
         slideIntronsInChain(chain, query, target);
     }
-bzpTime("reduced double to single gaps");
 
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    double oldScore = chain->score;
+    chain->score = chainCalcScore(chain, bzp->ss, bzp->gapCalc, query, target); 
+    if (oldScore != chain->score)
+         warn("score inconsistency %f vs %f", oldScore, chain->score);
+    }
+
+bzpTime("reduced double to single gaps");
 return chainList;
 }
 
