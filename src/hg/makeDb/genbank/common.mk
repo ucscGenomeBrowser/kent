@@ -1,6 +1,6 @@
 #Optimized for performance or debugging
-#OPT= -ggdb
-OPT= -ggdb -O3
+OPT= -ggdb
+#OPT= -ggdb -O3
 #OPT= -ggdb -O
 #OPT= -ggdb -O3 -pg
 

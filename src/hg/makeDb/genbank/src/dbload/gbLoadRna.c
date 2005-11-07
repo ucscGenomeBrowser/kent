@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.28 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.29 2005/11/07 03:53:11 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -259,12 +259,6 @@ bool updateNeedsLoaded(struct gbSelect* select, struct gbUpdate* update)
 struct gbUpdate *updateHold = select->update;
 boolean needsLoaded = FALSE;
 select->update = update;
-
-/* need to make sure the full entry is there, or the extFile flagging will not
- * work.  This is for testing purposes, normally the full entry will always
- * be there */
-if (update->isFull && !gbLoadedTblHasEntry(gLoadedTbl, select))
-    gbLoadedTblAdd(gLoadedTbl, select);
 
 /* If the table indicates that this partition has not been loaded or extFile
  * links need to be updated, we check to see if there are readable alignments

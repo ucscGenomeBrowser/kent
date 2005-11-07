@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.3 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.4 2005/11/07 03:53:11 markd Exp $";
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =
@@ -19,8 +19,7 @@ static char* createSql =
   "time timestamp not null,"                   /* time entry was added */
   "extFileUpdated tinyint(1) not null,"        /* has the extFile entries been
                                                 * updated for this partation
-                                                * of the release (full
-                                                * only) */
+                                                * of the release */
   "index(srcDb,loadRelease))";
 
 #define KEY_BUF_SIZE 128
@@ -94,17 +93,6 @@ makeKey(key, select->release,
 loaded = hashFindVal(loadedTbl->entryHash, key);
 return loaded;
 }
-static struct gbLoaded *mustGetEntry(struct gbLoadedTbl* loadedTbl,
-                                     struct gbSelect *select,
-                                     char *updateOverride)
-/* get lookup an entry in the table, or abort if not found.  if updateOverride
- * is not NULL, use that name instead of the update in select. */
-{
-struct gbLoaded *loaded = getEntry(loadedTbl, select, updateOverride);
-if (loaded == NULL)
-    errAbort("can't find entry that must be there");
-return loaded;
-}
 
 struct gbLoaded *gbLoadedTblGetEntry(struct gbLoadedTbl* loadedTbl,
                                      struct gbSelect *select)
@@ -125,7 +113,7 @@ static void addedExtFileUpdCol(struct sqlConnection *conn)
 /* add the new extFileUpdated column to a table that doesn't have it */
 {
 char sql[128];
-safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN boolean extFileUpdated not null",
+safef(sql, sizeof(sql), "ALTER TABLE %s ADD COLUMN extFileUpdated tinyint(1) not null",
       GB_LOADED_TBL);
 sqlUpdate(conn, sql);
 }
@@ -202,14 +190,6 @@ loaded->isDirty = TRUE;
 slAddHead(&loadedTbl->uncommitted, loaded);
 }
 
-boolean gbLoadedTblExtFileUpdated(struct gbLoadedTbl* loadedTbl,
-                                  struct gbSelect *select)
-/* Check if the type and accPrefix has had their extFile entries update
- * for this release. */
-{
-struct gbLoaded *loaded = mustGetEntry(loadedTbl, select, GB_FULL_UPDATE);
-return loaded->extFileUpdated;
-}
 
 static boolean samePartition(struct gbSelect *select,
                              struct gbLoaded *loaded)
@@ -220,6 +200,27 @@ static boolean samePartition(struct gbSelect *select,
 return (select->type == loaded->type)
     && (((select->accPrefix == NULL) && (loaded->accPrefix == NULL))
         || ((select->accPrefix != NULL) && sameString(select->accPrefix, loaded->accPrefix)));
+}
+
+boolean gbLoadedTblExtFileUpdated(struct gbLoadedTbl* loadedTbl,
+                                  struct gbSelect *select)
+/* Check if the type and accPrefix has had their extFile entries update
+ * for this release. */
+{
+/* check all updates in the release for the specified partition.
+ * if any are not marked as updated, then the partition is not
+ * updated.  If there are no updates for this partition, it is
+ * considered updated  */
+struct hashEl *relHashEl = getRelease(loadedTbl, select->release);
+struct gbLoaded *loaded;
+
+for (loaded = relHashEl->val; loaded != NULL; loaded = loaded->relNext)
+    {
+    if (samePartition(select, loaded) && !loaded->extFileUpdated)
+        return FALSE;
+        
+    }
+return TRUE;
 }
 
 static void setExtFileUpdated(struct gbLoadedTbl* loadedTbl,
