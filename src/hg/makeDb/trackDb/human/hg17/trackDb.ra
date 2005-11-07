@@ -338,9 +338,164 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
 track encodeYaleAffyRNATransMap
+release beta
 compositeTrack on
-shortLabel Yale RNA Jun05
-longLabel Yale RNA Transcript Map (Neutrophil, Placenta and NB4 cells) -- June 2005 Freeze
+shortLabel Yale RNA 
+longLabel Yale RNA Transcript Map (Neutrophil, Placenta and NB4 cells) 
+group encodeTxLevels
+priority 30.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig -2730 3394
+spanList 1
+maxHeightPixels 128:16:16
+viewLimits 0:150
+autoScale Off
+windowingFunction mean
+subGroup1 samples Sample summary=Summary samples=samples1-10
+subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeYaleAffyNeutRNATransMapAll
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu Sum
+    longLabel Yale Neutrophil RNA Transcript Map, Summary
+    priority 1
+    color 50,70,50
+    subGroups celltype=neutro samples=summary
+
+    track encodeYaleAffyNeutRNATransMap01
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 1
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 1
+    priority 2
+    color 50,205,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap02
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 2
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 2
+    priority 3
+    color 50,190,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap03
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 3
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 3
+    priority 4
+    color 50,175,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap04
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 4
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 4
+    priority 5
+    color 50,160,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap05
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 5
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 5
+    priority 6
+    color 50,145,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap06
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 6
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 6
+    priority 7
+    color 50,130,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap07
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 7
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 7
+    priority 8
+    color 50,115,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap08
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 8
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 8
+    priority 9
+    color 50,100,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap09
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 9
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 9
+    priority 10
+    color 50,85,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyNeutRNATransMap10
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Neu 10
+    longLabel Yale Neutrophil RNA Transcript Map, Sample 10
+    priority 11
+    color 50,70,50
+    subGroups celltype=neutro samples=samples
+
+    track encodeYaleAffyPlacRNATransMap
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA Plcnta
+    longLabel Yale Placenta RNA Transcript Map
+    priority 12
+    color 50,50,150
+    subGroups celltype=plac
+
+    track encodeYaleAffyNB4RARNATransMap
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA NB4 RA
+    longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
+    priority 13
+    color 150,50,50
+    subGroups celltype=nb4
+
+    track encodeYaleAffyNB4TPARNATransMap
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA NB4 TPA
+    longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
+    priority 14
+    color 120,50,50
+    subGroups celltype=nb4
+
+    track encodeYaleAffyNB4UntrRNATransMap
+    release beta
+    subTrack encodeYaleAffyRNATransMap
+    shortLabel Yale RNA NB4 Un
+    longLabel Yale NB4 RNA Transcript Map, Untreated
+    priority 15
+    color 90,50,50
+    subGroups celltype=nb4
+
+track encodeYaleAffyRNATransMap
+release alpha
+compositeTrack on
+shortLabel Yale RNA
+longLabel Yale RNA Transcript Map (Neutrophil, Placenta and NB4 cells)
 group encodeTxLevels
 priority 30.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -352,10 +507,10 @@ viewLimits 0:150
 autoScale Off
 windowingFunction mean
 subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
-dataVersion ENCODE June 2005 Freeze
-#dataVersion ENCODE Oct 2005 Freeze
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeYaleAffyNeutRNATransMap
+    release alpha
     subTrack encodeYaleAffyRNATransMap
     shortLabel Yale RNA Neu Sum
     longLabel Yale Neutrophil RNA Transcript Map, Summary
@@ -364,6 +519,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups celltype=neutro 
 
     track encodeYaleAffyPlacRNATransMap
+    release alpha
     subTrack encodeYaleAffyRNATransMap
     shortLabel Yale RNA Plcnta
     longLabel Yale Placenta RNA Transcript Map
@@ -372,6 +528,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups celltype=plac
 
     track encodeYaleAffyNB4RARNATransMap
+    release alpha
     subTrack encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 RA
     longLabel Yale NB4 RNA Transcript Map, Treated with Retinoic Acid
@@ -380,6 +537,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups celltype=nb4
 
     track encodeYaleAffyNB4TPARNATransMap
+    release alpha
     subTrack encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 TPA
     longLabel Yale NB4 RNA Transcript Map, Treated with 12-O-tetradecanoylphorbol-13 Acetate (TPA)
@@ -388,6 +546,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups celltype=nb4
 
     track encodeYaleAffyNB4UntrRNATransMap
+    release alpha
     subTrack encodeYaleAffyRNATransMap
     shortLabel Yale RNA NB4 Un
     longLabel Yale NB4 RNA Transcript Map, Untreated
