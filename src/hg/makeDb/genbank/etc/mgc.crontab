@@ -9,5 +9,7 @@ MAILTO=genbank@cse.ucsc.edu
 # machine, MGC needs current ESTs and this is also nice sanity check for other
 # machines.  Only do extFileUpdate on weekends.
 30 22-23,00-04 * * 1-5	/genbank/etc/mgc-dbload -inclEsts
-30 22-23,00-04 * * 0,6	/genbank/etc/mgc-dbload -inclEsts -extFileUpdate
+30 22-23,00-04 * * 0,6	/genbank/etc/mgc-dbload -inclEsts
+
+# -extFileUpdate
 

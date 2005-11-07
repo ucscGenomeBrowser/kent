@@ -11,6 +11,7 @@ MAILTO=genbank@cse.ucsc.edu
 
 # on weekends, mRNAs and ESTS, and extFile table update
 # poll hourly sat 0:30 - 23:30, sun 0:30 - 18:00
-30 0-23 * * 0,6	/genbank/etc/hgwbeta-dbload -inclEsts -extFileUpdate
+30 0-23 * * 0,6	/genbank/etc/hgwbeta-dbload -inclEsts
+# -extFileUpdate
 
 
