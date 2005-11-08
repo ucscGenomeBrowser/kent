@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.218 2005/11/05 00:39:35 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.219 2005/11/08 16:12:01 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -271,6 +271,8 @@ for (i = 0; i < variantLocationSize; i++)
     cartMakeCheckBox(cart, variantLocationString[i], FALSE);
     printf (" %s<BR />", variantLocationLabel[i]);
     }
+
+printf("<BR /><B>Include subtracks</B>");
 }
 
 void cbrWabaUi(struct trackDb *tdb)
