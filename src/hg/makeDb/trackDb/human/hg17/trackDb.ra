@@ -898,6 +898,59 @@ origAssembly hg17
     longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, STAT1, 30 min after gamma interferon
     priority 16
 
+track encodeUppsalaChip
+compositeTrack on
+shortLabel Uppsala ChIP
+longLabel University of Uppsala, Sweden ChIP/Chip
+group encodeChip
+priority 61
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit .5
+maxLimit 15
+windowingFunction mean
+viewLimits .5:1.5
+autoScale on
+color 204,0,051 
+altColor 50, 50, 50
+yLineMark 2.378
+origAssembly hg17
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeUppsalaChipAch3
+    subTrack encodeUppsalaChip
+    shortLabel UU H3ac
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H3ac, HepG2) 
+    priority 1
+
+    track encodeUppsalaChipHnf3b
+    subTrack encodeUppsalaChip
+    shortLabel UU HNF-3b
+    longLabel University of Uppsala, Sweden  ChIP/Chip (HNF-3b, HepG2) 
+    priority 2
+
+    track encodeUppsalaChipHnf4a
+    subTrack encodeUppsalaChip
+    shortLabel UU HNF-3b
+    longLabel University of Uppsala, Sweden  ChIP/Chip (HNF-4a, HepG2) 
+    priority 3
+
+    track encodeUppsalaChipUsf1
+    subTrack encodeUppsalaChip
+    shortLabel UU USF-1
+    longLabel University of Uppsala, Sweden  ChIP/Chip (USF-1, HepG2) 
+    priority 4
+
+    track encodeUppsalaChipSites
+    subTrack encodeUppsalaChip
+    noInherit on
+    shortLabel UU Sites
+    longLabel University of Uppsala, Sweden  ChIP/Chip Sites (HepG2)
+    type bed 5 .
+    useScore 1
+    priority 5
 
 track encodeRegulomeDnaseSites
 compositeTrack on
