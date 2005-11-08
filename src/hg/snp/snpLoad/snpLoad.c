@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.2 2005/11/08 22:12:30 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.3 2005/11/08 22:13:21 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -107,7 +107,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* store ctg_id in chrom for now, substitute later */
     el->chrom = cloneString(row[1]);
     el->score = 0;
-    // get chrom from contig hash using ctg_id
     setCoords(el, snpClass, row[3], row[4]);
     el->observed = cloneString(row[6]);
     slAddHead(&list,el);
