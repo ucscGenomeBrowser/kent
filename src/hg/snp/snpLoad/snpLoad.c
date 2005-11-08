@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.1 2005/11/05 01:05:41 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.2 2005/11/08 22:12:30 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -74,6 +74,7 @@ verbose(1, "skipping snp %s with loc type %d\n", el->name, snpClass);
 }
 
 struct snp125 *readSnps()
+/* query ContigLoc */
 {
 struct snp125 *list=NULL, *el = NULL;
 char query[512];
@@ -103,6 +104,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     AllocVar(el);
     el->name = cloneString(row[0]);
+    /* store ctg_id in chrom for now, substitute later */
+    el->chrom = cloneString(row[1]);
+    el->score = 0;
     // get chrom from contig hash using ctg_id
     setCoords(el, snpClass, row[3], row[4]);
     el->observed = cloneString(row[6]);
@@ -114,6 +118,45 @@ slReverse(&list);  /* could possibly skip if it made much difference in speed. *
 return list;
 }
 
+boolean confirmCoords(int start1, int end1, int start2, int end2)
+/* return TRUE if start1/end1 contained within start2/end2 */
+{
+    if (start1 < start2) return FALSE;
+    if (end1 > end2) return FALSE;
+    return TRUE;
+}
+
+void lookupContigs(struct snp125 *list)
+{
+struct snp125 *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char *actualChrom;
+boolean errorFound = FALSE;
+
+for (el = list; el != NULL; el = el->next)
+    {
+    safef(query, sizeof(query), "select contig_chr, contig_start, contig_end from ContigInfo "
+      "where ctg_id = '%s'", el->chrom);
+    sr = sqlGetResult(conn, query);
+    /* have a joiner check rule that assumes the contig is unique */
+    /* also the index forces ctg_id to be unique */
+    row = sqlNextRow(sr);
+    actualChrom = cloneString(row[0]);
+    if(!confirmCoords(el->chromStart, el->chromEnd, atoi(row[1]), atoi(row[2])))
+        {
+        verbose(1, "unexpected coords contig = %s, snp = %s\n", el->chrom, el->name);
+        /* mark as error */
+	el->chrom = "ERROR";
+        }
+    else
+        el->chrom = actualChrom;
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
 
 
 int main(int argc, char *argv[])
@@ -137,10 +180,12 @@ if(!hTableExistsDb(snpDb, "ContigLoc"))
 
 /* this will create a temporary table */
 list = readSnps();
+lookupContigs(list);
 verbose(1, "DUMPING...\n");
 for (el = list; el != NULL; el = el->next)
     {
     verbose(1, "snp = %s, ", el->name);
+    verbose(1, "ctg = %s, ", el->chrom);
     verbose(1, "start = %d, ", el->chromStart);
     verbose(1, "end = %d, ", el->chromEnd);
     verbose(1, "class = %s, ", el->class);
