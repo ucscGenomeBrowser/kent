@@ -191,7 +191,10 @@ else if (wrCnt != otherEndBufSize)
     errAbort("pipeline input buffer short write %lld, expected %lld",
              (long long)wrCnt, (long long)otherEndBufSize);
 else
+    {
+    close(STDOUT_FILENO);
     exit(0);
+    }
 }
 
 static void plProcWait(struct plProc* proc)
