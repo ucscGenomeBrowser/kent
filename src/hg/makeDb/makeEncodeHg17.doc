@@ -902,18 +902,18 @@ cat > load.csh << 'EOF'
     #  and these will be added to the previous Affy Chip/chip tracks
     #  on hg17.
 
-    # RNA Signal & Transfrags (12 subtracks)
+    # Transfrags (6 subtracks)
     cd /cluster/data/encode/Affy/2005-10-03
     tail +2 lab/RNA/bed/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.gr.bed \
-    | hgLoadBed -noBin hg17 encodeAffyOctRnaGm06990Sites stdin
+    | hgLoadBed -noBin hg17 encodeAffyRnaGm06990Sites stdin
         # 4377 elements
     tail +2 lab/RNA/bed/HeLa/EC_AS_HeLaS3_RCyP+_C01vsNULL.sig.gr.bed \
-    | hgLoadBed -noBin hg17 encodeAffyOctRnaHeLaSites stdin
+    | hgLoadBed -noBin hg17 encodeAffyRnaHeLaSites stdin
         # 2037 elements
 cat > loadSites.csh << 'EOF'
     foreach f (lab/RNA/bed/HL60/??/*HL60*.bed)
       set track = `echo $f:t:r:r:r | perl -wpe \
-        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyOctRnaHl60SitesHr$1/;'`
+        's/EC_AS_HL60_RWP\+_RA_(\d+)hr_C01vsNULL/encodeAffyRnaHl60SitesHr$1/;'`
       echo $track
       tail +2 $f \
         | hgLoadBed -noBin hg17 $track stdin
@@ -927,13 +927,13 @@ cat > loadSites.csh << 'EOF'
     mkdir -p $gbdbDir/wib
     mkdir wib wig
 
-    set track = encodeAffyOctRnaGm06990Signal
+    set track = encodeAffyRnaGm06990Signal
     cat lab/RNA/wig/GM06990/EC_AS_GM06990_RCyP+_C01vsNULL.sig.wig \
     | wigEncode stdin wig/$track.wig wib/$track.wib
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
     nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
 
-    set track = encodeAffyOctRnaHeLaSignal
+    set track = encodeAffyRnaHeLaSignal
     cat lab/RNA/wig/HeLa/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig \
     | wigEncode stdin wig/$track.wig wib/$track.wib
     ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
@@ -952,6 +952,7 @@ cat > loadSig.csh << 'EOF'
     end
 'EOF'
     csh loadSig.csh >&! loadSig.log
+    # Create a single composite track for RNA and Transfrags
 
     # CHIP/Chip sites (2005-10-24 kate)
     cd /cluster/data/encode/Affy/2005-10-03
@@ -961,18 +962,59 @@ cat > loadChipBed.csh << 'EOF'
     foreach f (lab/CHIP/bed/*/??/*.bed)
       set factor = `echo $f:h:h:t | sed 's/Pol2/Rnap/; s/Hish4/H4Kac4/'`
       set hr = $f:h:t
-      set table = encodeAffyOctChipSitesHl60${factor}Hr$hr
+      set table = encodeAffyChIpHl60SitesStrict${factor}Hr$hr
       echo $table
       grep "^chr" $f | hgLoadBed -noBin hg17 $table stdin
     end
     grep "^chr" lab/CHIP/bed/p63_ActD/*.bed | hgLoadBed -noBin hg17 \
-                encodeAffyOctChipSitesHl60P63_ActD stdin
+                encodeAffyChIpHl60SitesStrictP63_ActD stdin
     grep "^chr" lab/CHIP/bed/p63_mActD/*.bed | hgLoadBed -noBin hg17 \
-                encodeAffyOctChipSitesHl60P63_mActD stdin
+                encodeAffyChIpHl60SitesStrictP63_mActD stdin
 'EOF'
     csh loadChipBed.csh >&! loadChipBed.log
 
-    # Chip/chip signal
+    # Chip/chip signal and pvalue 
+cat > loadChipWig.csh << 'EOF'
+    set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
+    foreach d (lab/CHIP/wig/p63_ActD lab/CHIP/wig/p63_mActD)
+        set factor = $d:t
+        set prefix = encodeAffyChIpHl60;
+        set track = ${prefix}SignalStrict$factor
+        echo $track
+        cat $d/*.sig.median.wig \
+            | wigEncode stdin wig/$track.wig wib/$track.wib
+        ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+        nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+        set track = ${prefix}PvalStrict$factor
+        echo $track
+        cat $d/*.pval.median.wig \
+            | wigEncode stdin wig/$track.wig wib/$track.wib
+        ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+        nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+    end
+    foreach d (lab/CHIP/wig/*/??)
+        set hr = $d:t
+        set factor = $d:h:t
+        set track = ${prefix}SignalStrict${factor}Hr$hr
+        echo $track
+        cat $d/*.sig.median.wig \
+            | wigEncode stdin wig/$track.wig wib/$track.wib
+        ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+        nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+        set track = ${prefix}PvalStrict${factor}Hr$hr
+        echo $track
+        cat $d/*.pval.median.wig \
+            | wigEncode stdin wig/$track.wig wib/$track.wib
+        ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+        nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
+    end
+'EOF'
+    csh loadChipWig.csh >&! loadChipWig.log 
+    # create 2 composite tracks:
+    #  Affy Strict ChIP  (contains Oct freeze Sites and Pval subtracks)
+    #  Affy Strict Sig  (contains Oct freeze Signal) 
+    # and reformat June freeze tracks (2 composites w/ 10 factors each) as:
+    #  Affy Loose ChIP  (contains Jun freeze Sites and Pval subtracks)
 
 ##########################################################################
 # U North Carolina FAIRE  (2005-10-24 kate)
@@ -1191,24 +1233,45 @@ cat > load.csh << 'EOF'
 
     # convert to bedGraph
     cd /cluster/data/encode/UcDavis/2005-10-12
-    /cluster/bin/scripts/varStepToBedGraph.pl lab/Myc_median.wig > \
-        myc.bed
-    hgLoadBed -strict -bedGraph=4 hg17 encodeUCDavisChipMyc myc.bed
-    # NOTE: this produces single bp items -- probably wrong 
+    set table = encodeUCDavisChipMyc
+    awk '{printf "%s\t%s\t%s\t%s\n", $1,$4,$5,$6}' lab/myc_median.gff | \
+	sort -k1,1 -k2,2n > $table.bed
+    hgLoadBed -strict -bedGraph=4 hg17 $table $table.bed
+        # Loaded 385149 elements
 
 ##########################################################################
-# Yale TAR's (2005-10-31 kate)
+# Yale TAR and TransMap (2005-10-31 kate)
 # Submitted: 10/14 by Joel Rozowsky
 # 5 bed files (TARs) and 5 wig files (Signal)
 # Replacements for June tracks (and drop individual 10 Neu samples)
 # Methods changed somewhat -- use new description from Joel's email
 
     cd /cluster/data/encode/yale/rna/2005-10-14
+cat > loadBed.csh << 'EOF'
+    foreach f (lab/*.bed)
+        set table = `echo $f:t:r | sed 's/_//g; s/CTRL/Untr/; s/ncbi35//; s/Placenta/Plac/; s/Neutrophil/Neut/'`
+        echo $table
+        hgLoadBed -strict hg17 $table $f
+    end
+'EOF'
+    csh loadBed.csh >&! loadBed.log 
+
+# PROBLEM WITH TransMaps -- overlapping regions in .wig files
+cat > loadSig.csh << 'EOF'
+    foreach f (lab/*.wig)
+        set table = `echo $f:t:r | sed 's/_//g; s/CTRL/Untr/; s/ncbi35//; s/Placenta/Plac/; s/Neutrophil/Neut/'`
+        echo $table
+        hgLoadBed -strict -bedGraph=4 hg17 $table $f
+    end
+'EOF'
+    csh loadSig.csh >&! loadSig.log 
+    
 
 ##########################################################################
 # Yale Chip/chip (2005-10-31 kate)
 # Final submission: 10/26 by Zhengdong Zhang
 # signal, pval, and sites for 5 factors (50x38 array)
+# PROBLEM WITH Signal, Pvalue -- overlapping regions in .wig files
 
     cd /cluster/data/encode/yale/chip/2005-10-26
 
@@ -1228,3 +1291,28 @@ cat > load.csh << 'EOF'
     # Created composite track with 2 subtracks
     # Oops -- also have span=1 here (probably wrong)
     
+##########################################################################
+# Univ. Uppsala, Sweden Chip/chip
+# Submitted by Claes & Ola
+
+    cd /cluster/data/encode/uppsala/2005-11-07
+    /cluster/data/encode/bin/scripts/splitTracks.pl lab/chip.wig
+    mv t0 Usf1.wig
+    mv t1 Hnf3b.wig
+    mv t2 Hnf4a.wig
+    mv t3 Ach3.wig
+    mv t4 Sites.gff
+cat > load.csh << 'EOF'
+    foreach factor (Usf1 Hnf3b Hnf4a Ach3)
+      awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $4)}' $factor.wig |\
+        hgLoadBed -strict -bedGraph=4 hg17 encodeUppsalaChip$factor stdin
+    end
+'EOF'
+    csh load.csh >&! load.log &
+    
+    # sites
+    grep -v track Sites.gff | sort -k1,1 -k2,2n | \
+        awk '{printf ("%s\t%d\t%d\tuu.%d\t%d\n", $1, $4, $5, NR, $6)}' | \
+            hgLoadBed -noSort -noBin -strict hg17 encodeUppsalaChipSites stdin
+    # NOTE: check sorting
+   
