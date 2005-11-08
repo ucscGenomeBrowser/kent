@@ -321,15 +321,16 @@ sub endTask(;$) {
 }
 
 # set directory mode to rwxrwsr-x
-sub setDirMode($) {
-  my($dir) = @_;
-  chmod(02775, $dir) || gbError("chmod $dir");
+sub setDirMode($; $) {
+  my($dir, $optMode) = @_;
+  my $mode = (defined($optMode)) ? oct($optMode) : 02775;
+  chmod($mode, $dir) || gbError("chmod $dir");
 }
 
 # create a directory (and parent directories) if they don't exist
 # (pretty lame that perl doesn't have this).
-sub makeDir($) {
-  my($dir) = @_;
+sub makeDir($;$) {
+  my($dir, $mode) = @_;
   my @parts = split("/", $dir);
   my $path;
 
@@ -346,16 +347,22 @@ sub makeDir($) {
           $path .= $part;
           if (!-d $path) {
               mkdir($path) || gbError("mkdir $path");
-              setDirMode($path);
+	      if (defined($mode))
+		  setDirMode($path, $mode);
+	      else
+		  setDirMode($path);
           }
       }
   }
 }
 
 # create a directory  (and parent directories) for a file
-sub makeFileDir($) {
-  my($dir) = @_;
-  makeDir(dirname($dir));
+sub makeFileDir($;$) {
+  my($dir,$mode) = @_;
+  if (defined($mode))
+      makeDir(dirname($dir), $mode);
+  else
+      makeDir(dirname($dir));
 }
 
 # remove a directory and it's contents.

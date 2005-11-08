@@ -82,7 +82,7 @@ sub downloadTables($) {
     my $tarFile = tarFileName();
     my $tableTar = "$downloadDir/tmp/$tarFile";
     unlink($tableTar);
-    makeFileDir($tableTar);
+    makeFileDir($tableTar, "02777");
     httpGetOrCheck(0, $tableTar);
 }
 
@@ -163,8 +163,8 @@ sub doDownload($$) {
 	    die("We have already processed into $processedDir.  Use -force to override.");
 	}
     }
-    makeDir($downloadDir);
-    makeDir($processedDir);
+    makeDir($downloadDir, "02777");
+    makeDir($processedDir, "02777");
     
     if ($gbCommon::verbose) {
 	prMsg("donwloading RTDB in $downloadDir");
