@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.975 2005/11/04 18:42:04 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.976 2005/11/08 16:14:35 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16881,6 +16881,7 @@ char *table = tdb->tableName;
 struct humanPhenotypeLSDB *humPhen;
 struct humPhenLink *link;
 struct humPhenAlias alias;
+struct humPhenEthnic ethnic;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -16941,12 +16942,31 @@ printf("<DT><B>Aliases:</B><DD>\n ");
 safef(query, sizeof(query),
       "select * from humPhenAlias where dbId = '%s'", idArray[0]);
 sr = sqlGetResult(conn, query);
+i = 0;  /* count lines, print message if none */
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    i++;
     humPhenAliasStaticLoad(row, &alias);
     printf("%s<BR />\n", alias.name);
     }
 sqlFreeResult(&sr);
+if (i == 0) 
+    printf("Not available<BR />\n");
+
+printf("<DT><B>Ethnicity/Nationality:</B><DD>\n ");
+safef(query, sizeof(query),
+      "select * from humPhenEthnic where dbId = '%s'", idArray[0]);
+sr = sqlGetResult(conn, query);
+i = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    i++;
+    humPhenEthnicStaticLoad(row, &ethnic);
+    printf("%s<BR />\n", ethnic.ethnic);
+    }
+sqlFreeResult(&sr);
+if (i == 0)
+    printf("Not available<BR />\n");
 printf("</DL>\n");
 
 humanPhenotypeLSDBFree(&humPhen);
