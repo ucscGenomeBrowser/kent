@@ -321,7 +321,7 @@ sub endTask(;$) {
 }
 
 # set directory mode to rwxrwsr-x
-sub setDirMode($; $) {
+sub setDirMode($;$) {
   my($dir, $optMode) = @_;
   my $mode = (defined($optMode)) ? oct($optMode) : 02775;
   chmod($mode, $dir) || gbError("chmod $dir");
@@ -347,10 +347,13 @@ sub makeDir($;$) {
           $path .= $part;
           if (!-d $path) {
               mkdir($path) || gbError("mkdir $path");
-	      if (defined($mode))
-		  setDirMode($path, $mode);
-	      else
+	      if (defined($mode)) {
+		  if ($mode != "none") {
+		      setDirMode($path, $mode);
+		  }
+	      } else {
 		  setDirMode($path);
+	      }
           }
       }
   }
@@ -359,10 +362,11 @@ sub makeDir($;$) {
 # create a directory  (and parent directories) for a file
 sub makeFileDir($;$) {
   my($dir,$mode) = @_;
-  if (defined($mode))
+  if (defined($mode)) {
       makeDir(dirname($dir), $mode);
-  else
+  } else {
       makeDir(dirname($dir));
+  }
 }
 
 # remove a directory and it's contents.
