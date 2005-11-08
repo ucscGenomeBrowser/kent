@@ -911,7 +911,7 @@ maxHeightPixels 128:16:16
 minLimit .5
 maxLimit 15
 windowingFunction mean
-viewLimits .5:1.5
+viewLimits .5:3
 autoScale on
 color 204,0,051 
 altColor 50, 50, 50
