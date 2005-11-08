@@ -173,23 +173,6 @@ static void plProcExecChild(struct plProc* proc, int stdinFd, int stdoutFd, int 
 /* child part of process startup. */
 {
 plProcSetup(proc, stdinFd, stdoutFd, stderrFd);
-if (sameString(proc->cmd[0],"/dev/memwriter"))
-    {  /* there is no such device really */
-    char *mem = NULL+sqlUnsignedLong(proc->cmd[1]);
-    unsigned long size = sqlUnsignedLong(proc->cmd[2]);
-    if (proc->cmd[1]
-     && proc->cmd[2]
-     && size >= 0
-     && size < 64 * 1024 * 1024
-     && write(STDOUT_FILENO,mem,size) == size
-       )
-        {
-        close(STDOUT_FILENO);
-        exit(0);
-        }
-    errnoAbort("/dev/memwriter failed: %s %lu %lu", proc->cmd[0], (unsigned long) mem, size);
-    }
-
 /* FIXME: add close-on-exec startup error reporting here */
 execvp(proc->cmd[0], proc->cmd);
 errnoAbort("exec failed: %s", proc->cmd[0]);
