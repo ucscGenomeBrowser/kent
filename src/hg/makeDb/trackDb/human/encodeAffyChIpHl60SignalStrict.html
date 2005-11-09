@@ -57,38 +57,6 @@ Wilcoxon Rank Sum test over each biological replicate treatment and
 all control signal estimates in that window.  The median of the 
 signal estimate across processed replicate data is
 displayed.</P>
-<P>
-Three independent biological replicates were generated and hybridized
-to duplicate arrays (two technical replicates). Reproducible enriched regions
-were generated from the signal, by first applying a cutoff 
-of 0.693(ln(2)=0.693) to the signal estimate, a maxgap and minrun of 500 
-and 0 basepairs respectively, to each biological replicate.  
-Since each region or site can comprise of more than a single probe, 
-a median based on the distribution of log transformed P-values 
-was computed per site for each of the respective replicates. 
-These seed sites were then ranked individually within each of the replicates. 
-If a site was absent in a replicate the maximum or worst rank of the 
-distribution was assigned to it. 
-<P>
-The following three values were computed for each
-site by combining data from all biological replicates: 
-<UL>
-<LI>average of all ranks computed among biological replicates
-<LI>sum of all pairwise differences in these ranks computed among biological
-replicates
-<LI>a combined P-value, using a chi square distribution,
-across all replicates
-</UL></P>
-<P>
-A final signal estimate based filter was applied, where sites with median
-signal estimate of at least 0.693/(total number of individual replcates) 
-were considered. This was to ensure that if a site was not 
-detected consistently in all replicates but was detected at a significant
-signal level in a subset of the replicates its detection level would
-be weighted accordingly in the final selection of sites.  
-The final sites were selected when all of the above three metrics were
-relatively low, where &quot;low&quot; corresponds to the top 25 
-percentile of the distribution.
 
 <H2>Verification</H2>
 <P>
