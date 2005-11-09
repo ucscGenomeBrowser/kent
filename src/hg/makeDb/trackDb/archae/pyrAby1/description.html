@@ -3,94 +3,47 @@
 <head>
 </head>
 <body>
-The <span style="font-style: italic;">Pyrococcus abyssi GE5</span>
-genome sequence is 1,765,118 bp long and contains approximately 1896
-protein-coding genes, plus a 3,444 bp plasmid.&nbsp; <span style="font-style: italic;">P.
-abyssi</span> is a hyperthermophilic archaeon isolated from samples taken close to a hot spring situated 3500 meters deep in the south-east Pacific.  The optimal growth conditions are 103 C at 200 atmospheres pressure.
-&nbsp; 
+The <I>Pyrococcus abyssi GE5</I> genome is 1.77 Million bp long and contains approximately 1995
+predicted genes. <I>P. abyssi</I> is a hyperthermophilic archaeon isolated from samples taken close to a hot spring situated 3500 meters deep in the south-east Pacific. The optimal growth conditions are reported as 103C at 200 atmospheres pressure.<BR><BR>
+The sequence was released March 2003 by Genoscope, and was described
+in <I>J Bacteriol</I> <B>178</B>:3232-7 (1996) Erauso G, Marsin S, Benbouzid-Rollet N, Baucher MF, Barbeyron T, <I>et al.</I> &nbsp;"<a
+ href="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=8655503">Sequence of plasmid pGT5 from the archaeon Pyrococcus abyssi: evidence for rolling-circle replication in a hyperthermophile.
+</a>"
+<blockquote><B>Abstract:</B> The plasmid pGT5 (3,444 bp) from the hyperthermophilic archaeon Pyrococcus abyssi GE5 has been completely sequenced. Two major open reading frames with a good coding probability are located on the same strand and cover 85% of the total sequence. The larger open reading frame encodes a putative polypeptide which exhibits sequence similarity with Rep proteins of plasmids using the rolling-circle mechanism for replication. Upstream of this open reading frame, we have detected an 11-bp motif identical to the double-stranded origin of several bacterial plasmids that replicate via the rolling-circle mechanism. A putative single-stranded origin exhibits similarities both to bacterial primosome-dependent single-stranded initiation sites and to bacterial primase (dnaG) start sites. A single-strande... [Click above reference link for full abstract]
+</blockquote>
 <P>
-The sequence was release in July 1999 by Genoscope, a collaboration among four teams led by
-Daniel Prieur (CNRS, Roscoff, France), Patrick Forterre (Universiti d'Orsay, France), Jean-Claude Thierry (IGBMC, Strasbourg, France), and Jacques Dietrich (IFREMER, Brest,France).
-The original source for the sequence and re-annotation efforts by the authors are located at the <a
- href="http://www.genoscope.cns.fr/Pab">Genoscope <I>P. abyssi</I> web site</a>.
 <h3>Sample position queries</h3>
 <p>
 A genome position can be specified by chromosomal coordinate range, COG
-ID, or keywords from the GenBank or TIGR description of an gene. The
-following list shows examples of valid position queries for this
-genome.&nbsp;
+ID, or keywords from the GenBank or TIGR description of a gene. 
+The available chromosome/plasmid names are:<BR><BR>
+<table border="2" cellspacing=2 cellpadding=2>
+<tr><th>Browser Chrom/Plasmid Name</th><th>Length (bp)</th><th>Gene Count</ht><th>NCBI RefSeq Accession</th></tr>
+<tr><td>chr</td><td align=right>1765118</td><td align=right>1993</td><td align=center>NC_000868</td></tr>
+<tr><td>plasmid_pGT5</td><td align=right>3444</td><td align=right>2</td><td align=center>NC_001773</td></tr>
+</table>
+
+<p>
+The following list shows examples of valid position queries for this
+genome:&nbsp;
 </p>
 <p>
-<table cellspacing="0" cellpadding="0" border="0">
-  <tbody>
-    <tr>
-      <td nowrap="nowrap" valign="top"><b>Request:</b><br>
-      </td>
-      <td colspan="2" valign="top"><b>&nbsp;&nbsp; Genome Browser
-Response:</b><br>
-      </td>
-    </tr>
-    <tr>
-      <td valign="top"><br>
-      </td>
-    </tr>
-    <tr>
-      <td nowrap="nowrap" valign="top">chr</td>
-      <td width="14"><br>
-      </td>
-      <td valign="top">Displays all of chromosome (the entire genome).<br>
-      </td>
-    </tr>
-    <tr>
-      <td nowrap="nowrap" valign="top">chr:1-10000</td>
-      <td width="14"><br>
-      </td>
-      <td valign="top">Displays first ten thousand bases on the
-chromosome.<br>
-      </td>
-    </tr>
-<!-- 
-    <TR><TD VALIGN=Top NOWRAP>ctgchr7_ctg</TD>
-       	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays region of the clone contig ctgchr7_ctg 
-                       (set "Map contigs" track to "dense" and refresh to see contigs)</TD>
-    </TR> 
--->
-    <tr>
-      <td nowrap="nowrap" valign="top">NADH</td>
-      <td width="14"><br>
-      </td>
-      <td valign="top">Lists genes with "NADH" in the description.<br>
-      </td>
-    </tr>
-    <tr>
-      <td nowrap="nowrap" valign="top">PAB1011</td>
-      <td width="14"><br>
-      </td>
-      <td valign="top">Display chromosome at position of gene <a
- href="http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=protein&val=5458949">PAB1011</a>.<br>
-      </td>
-    </tr>
-    <tr>
-      <td nowrap="nowrap" valign="top">PAB101</td>
-      <td width="14"><br>
-      </td>
-      <td valign="top">Lists genes with names beginning with "PAB101".<br>
-      </td>
-    </tr>
-    <tr>
-    </tr>
-  </tbody>
+<table cellspacing="1" cellpadding="1" border="0">
+<tr><th align=left>Request:</th><th align=left>Genome Browser Response:</th></tr>
+<tr><td>chr</td><td>Displays the entire sequence "chr" in the browser window</td></tr>
+<tr><td>chr:1-10000</td><td>Displays first ten thousand bases of the sequence "chr"</td></tr>
+<tr><td>transporter&nbsp;&nbsp;&nbsp;&nbsp;</td><td>Lists all genes with "transporter" in the name or description</td></tr>
+<tr><td>PAB0004.1n</td><td>Display genome at position of gene PAB0004.1n</td></tr>
+</tbody>
 </table>
-</p>
 <P>
 <HR>
 <H3>Credits</H3>
 The Archaeal Genome Browsers at UCSC were developed by members of the
 <a href="http://lowelab.ucsc.edu/">Lowe Lab</a> (Kevin Schneider,
-Katherine Pollard, Andy Pohl, Todd Lowe) with significant support from
+Katherine Pollard, Andy Pohl, Todd Lowe) and Robert Baertsch, with significant support from
 the <a href="http://genome.ucsc.edu/staff.html">UCSC Human Genome
-Browser group</a> (especially Robert Baertsch & Hiram Clawson).
+Browser group</a>.
 The Archaeal Browsers are run by a slightly modified
 version of the <a href="http://genome.ucsc.edu/">UCSC Human Genome
 Browser</a> system.  All queries, bug reports, content corrections, suggested improvements,
@@ -98,10 +51,11 @@ and new track data submissions should be sent to Todd Lowe (lowe
 @soe.ucsc.edu).
 
 <P>If you use the browser for your research and wish to cite it, a
-paper describing the work has been submitted to the 2006 <I>Nucleic
+paper describing the work has been accepted to the 2006 <I>Nucleic
 Acids Research</I>
-Database Issue (KL Schneider, KS Pollard, A Pohl, TM Lowe,
-submitted).  Citations will help us obtain funding to continue
+<a href="http://www3.oup.co.uk/nar/database/a/">Database Issue</a> (KL Schneider, KS Pollard, R Baertsch, A Pohl, TM Lowe). 
+Citations will help us obtain funding to continue
 development of this community resource.
+
 </body>
 </html>
