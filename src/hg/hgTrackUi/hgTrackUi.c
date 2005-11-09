@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.219 2005/11/08 16:12:01 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.220 2005/11/09 16:02:36 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -271,6 +271,16 @@ for (i = 0; i < variantLocationSize; i++)
     cartMakeCheckBox(cart, variantLocationString[i], FALSE);
     printf (" %s<BR />", variantLocationLabel[i]);
     }
+
+/* print key for colors */
+printf("<BR /><B>Color key (by mutation type)</B><BR />");
+printf("substitution = purple<BR />");
+printf("insertion = green<BR />");
+printf("deletion = blue<BR />");
+printf("duplication = orange<BR />");
+printf("complex = red<BR />");
+printf("unknown = black<BR />\n");
+printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR />\n");
 
 printf("<BR /><B>Include subtracks</B>");
 }
