@@ -89,9 +89,20 @@ type genePred
 exonArrows on
 cdsDrawDefault genomic\ codons
 
+track mgcWUPcrConfirmed
+shortLabel C-List Confirmed
+longLabel  MGC C-List RT-PCR: Confirmed
+group mgcCList
+priority 101.05
+visibility pack
+type bed 12
+color 10,100,150
+exonArrows on
+#pslSequenceBases all
+
 track mgcWUPcrHit
-shortLabel C-List Success
-longLabel  MGC C-List sucessful RT-PCR
+shortLabel C-List Hit
+longLabel  MGC C-List RT-PCR: Hit
 group mgcCList
 priority 101.1
 visibility pack
@@ -100,9 +111,9 @@ color 10,100,150
 exonArrows on
 #pslSequenceBases all
 
-track mgcWUPcrInProgress
+track mgcWUPcrPending
 shortLabel C-List Pending
-longLabel MGC C-List In-progress RT-PCR
+longLabel MGC C-List RT-PCR: Pending
 group mgcCList
 priority 101.2
 visibility pack
@@ -113,7 +124,7 @@ exonArrows on
 
 track mgcWUPcrFail
 shortLabel C-List Fail
-longLabel MGC C-List Failed RT-PCR for MGC
+longLabel MGC C-ListRT-PCR: Failed
 group mgcCList
 priority 101.3
 visibility pack
@@ -424,14 +435,20 @@ noInherit on
     exonArrows on
     cdsDrawOptions enabled
 
+searchName mgcWUPcrConfirmed
+searchTable mgcWUPcrConfirmed
+searchMethod exact
+searchType psl
+searchPriority 10
+
 searchName mgcWUPcrHit
 searchTable mgcWUPcrHit
 searchMethod exact
 searchType psl
 searchPriority 10
 
-searchName mgcWUPcrInProgress
-searchTable mgcWUPcrInProgress
+searchName mgcWUPcrPending
+searchTable mgcWUPcrPending
 searchMethod exact
 searchType psl
 searchPriority 10
