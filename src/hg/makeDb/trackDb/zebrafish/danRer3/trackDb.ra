@@ -133,8 +133,8 @@ type chain tetNig1
 otherDb tetNig1
 
 track netTetNig1
-shortLabel $o_Organism Net No Scaffolds
-longLabel $o_Organism ($o_date/$o_db) Alignment Net No Scaffolds
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 150.1
 visibility hide
