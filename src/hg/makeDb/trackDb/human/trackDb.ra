@@ -6066,7 +6066,7 @@ type bed 4 +
     shortLabel SP Phen
     longLabel Human Phenotype from Swiss-Prot
     priority 2
-    color 100,0,100
+    color 150,0,150
 
 searchTable ccdsGene
 searchType genePred

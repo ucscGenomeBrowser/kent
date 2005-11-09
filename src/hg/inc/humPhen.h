@@ -15,7 +15,6 @@ struct humanPhenotypeLSDB
 /* subtrack for human phenotype data from locus specific databases */
     {
     struct humanPhenotypeLSDB *next;  /* Next in singly linked list. */
-    unsigned short bin;	/* A field to speed indexing */
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
@@ -24,6 +23,7 @@ struct humanPhenotypeLSDB
     char *linkDbs;	/* Database keys which can link to this variant, comma sep. */
     char *baseChangeType;	/* enum('insertion', 'deletion', 'substitution','duplication','complex','unknown'). */
     char *location;	/* enum('intron', 'exon', '5'' UTR', '3'' UTR', 'not within known transcription unit'). */
+    unsigned short bin; /* A field to speed indexing */
     };
 
 void humanPhenotypeLSDBStaticLoad(char **row, struct humanPhenotypeLSDB *ret);
