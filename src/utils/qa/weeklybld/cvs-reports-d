@@ -475,6 +475,22 @@ package require Itcl
         return $fRevisionTable($rev)
     }
 
+
+    #added by galt
+    # Find most-recent dead for handling resurrections
+    #  or return "" if none. Scans backwards from to-tag rev passed in.
+    public method mostRecentDead {rev} {
+	while {$rev!="1.0"} {
+    	    set frev [getRevision $rev]
+	    set state [lindex $frev 3]
+	    if {$state=="dead"} {
+		return $rev
+	    }
+	    set rev [getPrevRev $rev]
+	}
+	return ""
+    }
+    
     # Convert to a printable string for debugging
     public method toString {{indent 0}} {
         set indentStr [replicate " " $indent]
@@ -1019,7 +1035,8 @@ proc isRevSelected {fileInfo rev} {
     ##   the tagging of removed files in ./Attic.
 
     # Too new = no from- or to- tags (we don't want to see these)
-    # New     = no from-tag but to-tag ok
+    # New     = no from-tag but to-tag ok  
+        # may be resurrected file, check rev against most-recent-dead scan back from ttr.
     # Current = both from- and -to tags ok
     # Recently removed = only from-tag, no to=tag
     # Removed long ago = no from- nor to- tags (we don't want to see these)
@@ -1036,7 +1053,10 @@ proc isRevSelected {fileInfo rev} {
     	if {[$fileInfo compareRevs $rev $ttr] >  0} {
     	    return 0
 	}
-    	if {$ftr!=""} { 
+    	if {$ftr==""} {
+	    set ftr [$fileInfo mostRecentDead $ttr]
+	}
+    	if {$ftr!=""} {
     	    if {$ftr=="$ttr"} {
     		return 0
 	    }
@@ -1398,6 +1418,7 @@ progress " which report: $gWhichReport"
 
 # update the working directory (if rdiff supported -U, we wouldn't need
 # a working dir
+
 progress "updating cvs working directory for $gModule"
 $gCvsInvoke update
 
