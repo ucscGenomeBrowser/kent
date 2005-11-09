@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.97 2005/11/02 19:53:04 jen Exp $"
+#	"$Id: makeMm6.doc,v 1.98 2005/11/09 00:29:36 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9063,6 +9063,13 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
     gensub2 genome.lst mrna.lst gsub spec
     para create spec
 # Then do the usual para try/push/time/check until the run is finished
+#Completed: 7800 of 7800 jobs
+#CPU time in finished jobs:     105907s    1765.12m    29.42h    1.23d  0.003 y
+#IO & Wait Time:                447478s    7457.96m   124.30h    5.18d  0.014 y
+#Average job time:                  71s       1.18m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             227s       3.78m     0.06h    0.00d
+#Submission to last job:          1292s      21.53m     0.36h    0.01d
 
 # Then do sorting and near-best-in-genome step on file server
     ssh kkstore
