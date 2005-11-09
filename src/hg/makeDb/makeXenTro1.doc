@@ -2329,11 +2329,79 @@ chainSome $(path1)
 
 # MAKE NIBBPICS 
 #
+    # Load image data from NIBB (contact Naoto Ueno nueno@nibb.ac.jp)
+    # from CD's into /cluster/store11/visiGene/offLine/nibbFrog
+
     # Get sequence of assembled ESTs from NIBB
     ssh hgwdev
-    mkdir -p /cluster/data/xenTro1/bed/nibPics
-    cd /cluster/data/xenTro1/bed/nibPics
-    wget -O contigs.fa http://xenopus.nibb.ac.jp/data/contigs
+    mkdir -p /cluster/data/xenTro1/bed/nibbPics
+    cd /cluster/data/xenTro1/bed/nibbPics
+    wget -O contigs.fa.gz http://xenopus.nibb.ac.jp/data/contigs.gz
+    wget -O f.fa.gz http://xenopus.nibb.ac.jp/data/f.seq.gz
+    wget -O r.fa.gz http://xenopus.nibb.ac.jp/data/r.seq.gz
+    wget -O i.fa.gz http://xenopus.nibb.ac.jp/data/i.seq.gz
+    gunzip contigs.fa.gz
+    gunzip f.fa.gz
+    gunzip r.fa.gz
+    gunzip i.fa.gz
+
+    # Figure out sequences used to probe images.
+    nibbImageProbes /cluster/store11/visiGene/offline/nibbFrog i.fa f.fa r.fa nibbImageProbes.fa nibbImageProbes.tab
+
+    # Go to pk, create directory for cluster job on SAN, and set up sequence.
+    ssh pk
+    cd /san/sanvol1/scratch/xenTro1/
+    mkdir nibbPics
+    cd nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+
+    # Set up blatz list files
+    mkdir run
+    cd run
+    mkdir psl
+    awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > genome.lst
+    ls -1 ../nibbImageProbes.fa  > mrna.lst
+
+
+    # Make a little wrapper script that runs blatz and pslFilter
+    cat << '_EOF_' > doBlatz
+#!/bin/tcsh -ef
+mkdir -p /tmp/nibPic
+blatz -rna -minScore=6000 /san/sanvol1/scratch/xenTro1/xenTro1.2bit:$1 ../$2.fa -out=psl stdout | pslFilter -minScore=100 -noHead stdin /tmp/nibPic/$1_$2.psl
+mv /tmp/nibPic/$1_$2.psl $3
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x doBlatz
+
+
+    # Make gensub2 script
+    cat << '_EOF_' > gsub
+#LOOP
+doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    #Create parasol batch
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+
+    # Then do usual para try/para push/para time
+#Completed: 27064 of 27064 jobs
+#CPU time in finished jobs:     119714s    1995.23m    33.25h    1.39d  0.004 y
+#IO & Wait Time:                 83315s    1388.59m    23.14h    0.96d  0.003 y
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             254s       4.23m     0.07h    0.00d
+#Submission to last job:          2338s      38.97m     0.65h    0.03d
+
+    # Do sorting and filtering
+    catDir psl | sort -k 10 | pslReps stdin nearBest.psl /dev/null -nohead -minAli=0.75 -nearTop=0.001 -minCover=0.25 -minNearTopSize=80
+    sort -k 14 nearBest.psl > /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.psl
+
+
+
+# MAKE NIBB EST MAPPINGS
     
     # Go to pk, create directory for cluster job on SAN, and set up sequence.
     ssh pk
@@ -2360,6 +2428,7 @@ blatz -rna -minScore=6000 /san/sanvol1/scratch/xenTro1/xenTro1.2bit:$1 ../split/
 mv /tmp/nibPic/$1_$2.psl $3
 '_EOF_'
     # << this line keeps emacs coloring happy
+    chmod a+x doBlatz
 
     # Make gensub2 script
     cat << '_EOF_' > gsub
@@ -2387,15 +2456,18 @@ doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
 
     # Sort and do additional filtering.
     cd ..
-    sort -k 10 raw.psl | pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
-    sort -k 14 nearBest.psl > nibbEstContigs.psl
+    sort -k 10 raw.psl | pslReps stdin nearBest.psl /dev/null -nohead -minAli=0.80 -nearTop=0.001 -minCover=0.25 -minNearTopSize=100
+    sort -k 14 nearBest.psl > contigs.psl
+
+    # Convert names 
+    nibbNameFix contigs.fa contigs.psl nibbEstContigs.fa nibbEstContigs.psl 
+
+    # Still TODO - massage names a little to get rid of NCBIisms in a few places
+    # and to decide how to link to NIBB.
 
     # Clean up.  This also takes a good while
     rm -r run1/psl split
     rm raw.psl nearBest.psl
-
-    # Still TODO - massage names a little to get rid of NCBIisms in a few places
-    # and to decide how to link to NIBB.
 
 
 
