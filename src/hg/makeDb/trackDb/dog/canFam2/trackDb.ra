@@ -20,3 +20,27 @@ spectrum on
 type netAlign canFam2 chainSelf
 otherDb canFam2
 
+track multiz4way
+shortLabel Conservation
+longLabel Dog/Human/Mouse/Rat Multiz Alignments & phastCons Scores
+group compGeno
+priority 105.1
+visibility pack
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons4way
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz4waySummary
+speciesOrder hg17 mm6 rn3
+
+track phastConsElements4way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements (Dog/Human/Mouse/Rat)
+group compGeno
+priority 105.2
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
