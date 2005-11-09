@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.2 2005/11/07 22:54:10 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.3 2005/11/09 18:34:02 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -259,7 +259,7 @@ while(TRUE)
 	break;
     value[i++] = c;
     if (i >= sizeof(value))
-	errAbort("error: main value too long (>%d) in MIME header Content-type:%s",sizeof(value),header);
+	errAbort("error: main value too long (>%lu) in MIME header Content-type:%s",(unsigned long)sizeof(value),header);
     }
 value[i] = 0;    
 
@@ -309,7 +309,7 @@ while(TRUE)
 	break;
     value[i++] = c;
     if (i >= sizeof(value))
-	errAbort("error: %s= value too long (>%d) in MIME header Content-type:%s",field,sizeof(value),header);
+	errAbort("error: %s= value too long (>%lu) in MIME header Content-type:%s",field,(unsigned long)sizeof(value),header);
     }
 value[i] = 0;    
 
