@@ -500,10 +500,10 @@ group encodeTxLevels
 priority 30.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type wig -2730 3394
+type wig -2658 3275
 spanList 1
 maxHeightPixels 128:16:16
-viewLimits 0:150
+viewLimits 0:100
 autoScale Off
 windowingFunction mean
 subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
@@ -513,7 +513,7 @@ dataVersion ENCODE Oct 2005 Freeze
     release alpha
     subTrack encodeYaleAffyRNATransMap
     shortLabel Yale RNA Neu Sum
-    longLabel Yale Neutrophil RNA Transcript Map, Summary
+    longLabel Yale Neutrophil RNA Transcript Map
     priority 1
     color 50,100,50
     subGroups celltype=neutro 
@@ -704,8 +704,8 @@ dataVersion ENCODE June 2005 Freeze
 track encodeYaleAffyRNATars
 release alpha
 compositeTrack on
-shortLabel Yale TAR Oct05
-longLabel Yale RNA Transcriptionally Active Regions (TARs) -- October 2005 Freeze
+shortLabel Yale TAR
+longLabel Yale RNA Transcriptionally Active Regions (TARs)
 group encodeTxLevels
 priority 31.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -718,7 +718,7 @@ dataVersion ENCODE Oct 2005 Freeze
     release alpha
     subTrack encodeYaleAffyRNATars
     shortLabel Yale TAR Neu
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), Summary
+    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
     priority 1
     color 50,100,50
     subGroups celltype=neutro
