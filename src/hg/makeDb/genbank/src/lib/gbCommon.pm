@@ -348,7 +348,7 @@ sub makeDir($;$) {
           if (!-d $path) {
               mkdir($path) || gbError("mkdir $path");
 	      if (defined($mode)) {
-		  if ($mode != "none") {
+		  if ($mode ne "none") {
 		      setDirMode($path, $mode);
 		  }
 	      } else {
