@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1034 2005/11/04 16:06:42 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1035 2005/11/09 16:13:12 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9250,6 +9250,44 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
+Color humPhenColor(struct track *tg, void *item, struct vGfx *vg)
+/* color items by type */
+{
+struct humanPhenotypeLSDB *el = item;
+
+/* warning hardcoded list of clinical links */
+if (strstr(el->linkDbs, "GenPhen")) 
+    {
+    if (sameString(el->baseChangeType, "substitution"))
+        return vgFindColorIx(vg, 204, 0, 255);
+    else if (sameString(el->baseChangeType, "deletion"))
+        return MG_BLUE;
+    else if (sameString(el->baseChangeType, "insertion"))
+        return vgFindColorIx(vg, 0, 153, 0); /* dark green */
+    else if (sameString(el->baseChangeType, "complex"))
+        return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+    else if (sameString(el->baseChangeType, "duplication"))
+        return vgFindColorIx(vg, 255, 153, 0);
+    else
+        return MG_BLACK;
+    }
+else
+    {
+    if (sameString(el->baseChangeType, "substitution"))
+        return vgFindColorIx(vg, 204, 153, 255);   /* light purple */
+    else if (sameString(el->baseChangeType, "deletion"))
+        return vgFindColorIx(vg, 102, 204, 255); /* light blue */
+    else if (sameString(el->baseChangeType, "insertion"))
+        return vgFindColorIx(vg, 0, 255, 0);     /* light green */
+    else if (sameString(el->baseChangeType, "complex"))
+        return vgFindColorIx(vg, 255, 102, 102); /* light red, pink 153 too light?*/
+    else if (sameString(el->baseChangeType, "duplication"))
+        return vgFindColorIx(vg, 255, 204, 0);   /* light orange */
+    else
+        return vgFindColorIx(vg, 153, 153, 153); /* gray */
+    }
+}
+
 boolean humPhenFilterType(struct humanPhenotypeLSDB *el)
 /* Check to see if this element should be excluded. */
 {
@@ -9287,7 +9325,7 @@ return TRUE;
 void loadHumPhen(struct track *tg)
 /* Load human phenotype with filter */
 {
-struct bed *list = NULL;
+struct humanPhenotypeLSDB *list = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -9298,8 +9336,6 @@ sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct humanPhenotypeLSDB *el = humanPhenotypeLSDBLoad(row);
-    struct bed *bedCopy = NULL;
-    AllocVar(bedCopy);
     if (!humPhenFilterType(el)) 
         {
         humanPhenotypeLSDBFree(&el);
@@ -9310,12 +9346,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         }
     else
         {
-        bedCopy->chrom = cloneString(el->chrom);
-        bedCopy->chromStart = el->chromStart;
-        bedCopy->chromEnd = el->chromEnd;
-        bedCopy->name = cloneString(el->name);
-        slAddHead(&list, bedCopy);
-        humanPhenotypeLSDBFree(&el);
+        slAddHead(&list, el);
         }
     }
 sqlFreeResult(&sr);
@@ -9327,6 +9358,8 @@ void humanPhenotypeMethods (struct track *tg)
 /* Simple exclude/include filtering on human phenotype items. */
 {
 tg->loadItems = loadHumPhen;
+tg->itemColor = humPhenColor;
+tg->itemNameColor = humPhenColor;
 }
 
 void fillInFromType(struct track *track, struct trackDb *tdb)
@@ -9337,7 +9370,6 @@ int wordCount;
 if (typeLine == NULL)
     return;
 wordCount = chopLine(cloneString(typeLine), words);
-//wordCount = chopLine(typeLine, words);
 if (wordCount <= 0)
     return;
 type = words[0];
