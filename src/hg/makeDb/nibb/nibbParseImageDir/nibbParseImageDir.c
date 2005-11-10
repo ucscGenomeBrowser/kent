@@ -8,7 +8,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: nibbParseImageDir.c,v 1.1 2005/11/10 00:11:07 kent Exp $";
+static char const rcsid[] = "$Id: nibbParseImageDir.c,v 1.2 2005/11/10 21:29:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "nibbParseImageDir - Look through nibb image directory and allowing for typos and the like create a table that maps a file name to clone name, developmental stage, and view of body part\n"
   "usage:\n"
-  "   nibbPrepImages sourceDir good.tab bad.tab\n"
+  "   nibbParseImageDir sourceDir good.tab bad.tab\n"
   "The output files, good and bad.tab, will contain 6 tab separated\n"
   "columns:\n"
   "  cloneName - XDB clone name (starts with XL)\n"
