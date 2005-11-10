@@ -825,6 +825,15 @@ visibility hide
 spectrum on
 type bed 6 .
 
+track nibbImageProbes
+shortLabel NIBB Frog Images
+longLabel Xenopus Laevis In Situ mRNA Probes from NIBB
+group regulation
+priority 92
+visibility hide
+color 50,0,100
+type psl xeno
+
 track esRegGeneToMotif
 shortLabel Regulatory Module 
 longLabel Eran Segal Regulatory Module

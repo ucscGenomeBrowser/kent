@@ -37,15 +37,6 @@ type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
-track xenLaeRna
-shortLabel X. laevis mRNAs
-longLabel Xenopus Laevis mRNAs Mapped with Blatz
-group rna
-priority 58
-visibililty pack
-spectrum on
-type psl xeno
-
 track multiz5way
 shortLabel Conservation
 longLabel Conservation in Frog/Chicken/Human/Mouse/Zebrafish
