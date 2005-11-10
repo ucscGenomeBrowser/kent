@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.3 2005/11/08 22:13:21 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.4 2005/11/10 00:50:39 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -108,6 +108,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     el->chrom = cloneString(row[1]);
     el->score = 0;
     setCoords(el, snpClass, row[3], row[4]);
+    if (atoi(row[5]) == 0) 
+        strcpy(el->strand, "+");
+    else if (atoi(row[5]) == 1)
+        strcpy(el->strand, "-");
+    else
+        strcpy(el->strand, "?");
     el->observed = cloneString(row[6]);
     slAddHead(&list,el);
     }
@@ -135,6 +141,7 @@ char **row;
 char *actualChrom;
 boolean errorFound = FALSE;
 
+verbose(1, "looking up contig chrom...\n");
 for (el = list; el != NULL; el = el->next)
     {
     safef(query, sizeof(query), "select contig_chr, contig_start, contig_end from ContigInfo "
@@ -156,7 +163,6 @@ for (el = list; el != NULL; el = el->next)
     }
 hFreeConn(&conn);
 }
-
 
 int main(int argc, char *argv[])
 /* Check args; read and load . */
@@ -184,9 +190,10 @@ verbose(1, "DUMPING...\n");
 for (el = list; el != NULL; el = el->next)
     {
     verbose(1, "snp = %s, ", el->name);
-    verbose(1, "ctg = %s, ", el->chrom);
+    verbose(1, "chrom = %s, ", el->chrom);
     verbose(1, "start = %d, ", el->chromStart);
     verbose(1, "end = %d, ", el->chromEnd);
+    verbose(1, "strand = %s, ", el->strand);
     verbose(1, "class = %s, ", el->class);
     verbose(1, "observed = %s\n", el->observed);
     }
