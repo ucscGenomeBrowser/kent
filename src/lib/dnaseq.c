@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: dnaseq.c,v 1.18 2005/11/01 00:29:39 kent Exp $";
+static char const rcsid[] = "$Id: dnaseq.c,v 1.19 2005/11/10 03:40:34 kent Exp $";
 
 
 struct dnaSeq *newDnaSeq(DNA *dna, int size, char *name)
@@ -80,17 +80,7 @@ return TRUE;
 boolean seqIsDna(bioSeq *seq)
 /* Make educated guess whether sequence is DNA or protein. */
 {
-int size = seq->size, i;
-int dnaCount = 0;
-char *poly = seq->dna;
-
-dnaUtilOpen();
-for (i=0; i<size; ++i)
-    {
-    if (ntChars[(int)poly[i]]) 
-	dnaCount += 1;
-    }
-return (dnaCount >= round(0.9 * size));
+return isDna(seq->dna, seq->size);
 }
 
 
