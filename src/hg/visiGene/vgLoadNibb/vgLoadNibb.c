@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.1 2005/11/10 20:05:05 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.2 2005/11/10 20:19:07 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,13 +19,15 @@ errAbort(
   "vgLoadNibb - Create .ra and .tab files for loading Xenopus images from\n"
   "NIBB into VisiGene\n"
   "usage:\n"
-  "   vgLoadNibb sourceImageDir parsed.tab probes.fa name.tab outDir\n"
+  "   vgLoadNibb sourceImageDir parsed.tab probes.fa name.tab stage.tab outDir\n"
   "where sourceImageDir is the image dir originally loaded from the NIBB\n"
   "CDs,  parsedTab is the output of nibbParseImageDir, \n"
   "probes.fa contains the sequence of all the probes\n"
   "name.tab is two columns with a biological name in the first column\n"
   "and the nibb probe id in the second column (created with the gene sorter)\n"
-  "and outputDir is where the output .ra and tab files go.\n"
+  "stage.tab is two columns with the stage name in the first and the age of\n"
+  "in hours in the second column, and outputDir is where the output .ra and tab\n"
+  "files go.\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -55,6 +57,27 @@ lineFileClose(&lf);
 return hash;
 }
 
+struct hash *makeStageHash(char *fileName)
+/* Return hash with keys that are stage names (st12 and the like)
+ * and values are ascii strings describing age in days. 
+ * The input is two columns - stage name, and age in hours. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[2];
+struct hash *hash = hashNew(0);
+
+while (lineFileRow(lf, row))
+    {
+    char *stage = row[0];
+    double hours = atof(row[1]);
+    char days[16];
+    safef(days, sizeof(days), "%f", hours/24);
+    hashAdd(hash, stage, cloneString(days));
+    }
+lineFileClose(&lf);
+return hash;
+}
+
 void writeRa(char *fileName)
 /* Write our .ra file with information common to all NIBB images. */
 {
@@ -78,7 +101,8 @@ carefulClose(&f);
 
 
 
-void writeTab(struct hash *seqHash, char *sourceImageDir, char *parsedTab, 
+void writeTab(struct hash *stageHash, struct hash *seqHash, 
+	char *sourceImageDir, char *parsedTab, 
 	struct hash *nameHash, char *outName)
 /* Synthasize data and write out tab-separated file with one line for
  * each image. */
@@ -96,6 +120,9 @@ fprintf(f, "fileName\t");
 fprintf(f, "imageWidth\t");
 fprintf(f, "imageHeight\t");
 fprintf(f, "bodyPart\t");
+fprintf(f, "age\t");
+fprintf(f, "minAge\t");
+fprintf(f, "maxAge\t");
 fprintf(f, "seq\n");
 
 while (lineFileRow(lf, row))
@@ -122,6 +149,15 @@ while (lineFileRow(lf, row))
     fprintf(f, "%d\t", width);
     fprintf(f, "%d\t", height);
     fprintf(f, "%s\t", part);
+    if (sameString(stage, "mixed"))
+	fprintf(f, "1\t0\t3\t");
+    else
+	{
+	char *age = hashMustFindVal(stageHash, stage);
+	fprintf(f, "%s\t", age);
+	fprintf(f, "%s\t", age);
+	fprintf(f, "%s\t", age);
+	}
     if (seq != NULL)
 	fprintf(f, "%s\n", seq->dna);
     else
@@ -132,16 +168,18 @@ carefulClose(&f);
 }
 
 void vgLoadNibb(char *sourceImageDir, char *parsedTab, char *probesFa,
-	char *nameTab, char *outDir)
+	char *nameTab, char *stageTab, char *outDir)
 /* vgLoadNibb - Create .ra and .tab files for loading Xenopus images from NIBB 
  * into VisiGene. */
 {
 struct hash *nameHash = makeNameHash(nameTab);
 struct hash *seqHash = dnaSeqHash(faReadAllDna(probesFa));
+struct hash *stageHash = makeStageHash(stageTab);
 char outPath[PATH_LEN];
 
 verbose(1, "Got %d named probes\n", nameHash->elCount);
 verbose(1, "Got %d probe sequences\n", seqHash->elCount);
+verbose(1, "Got %d stages\n", stageHash->elCount);
 
 /* Make output directory and ra file. */
 makeDir(outDir);
@@ -150,15 +188,15 @@ writeRa(outPath);
 
 /* Make tab separated file. */
 safef(outPath, sizeof(outPath), "%s/%s", outDir, "nibb.tab");
-writeTab(seqHash, sourceImageDir, parsedTab, nameHash, outPath);
+writeTab(stageHash, seqHash, sourceImageDir, parsedTab, nameHash, outPath);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 6)
+if (argc != 7)
     usage();
-vgLoadNibb(argv[1], argv[2], argv[3], argv[4], argv[5]);
+vgLoadNibb(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
