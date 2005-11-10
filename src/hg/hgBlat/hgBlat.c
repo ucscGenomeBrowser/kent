@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.92 2005/06/29 01:34:02 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.93 2005/11/10 03:41:11 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -393,6 +393,14 @@ for (i=0; i<size; ++i)
 return count;
 }
 
+void uToT(struct dnaSeq *seqList)
+/* Convert any u's in sequence to t's. */
+{
+struct dnaSeq *seq;
+for (seq = seqList; seq != NULL; seq = seq->next)
+    subChar(seq->dna, 'u', 't');
+}
+
 void blatSeq(char *userSeq, char *organism)
 /* Blat sequence user pasted in. */
 {
@@ -422,11 +430,13 @@ if(!feelingLucky)
 if (sameWord(type, "DNA"))
     {
     seqList = faSeqListFromMemText(seqLetters, TRUE);
+    uToT(seqList);
     isTx = FALSE;
     }
 else if (sameWord(type, "translated RNA") || sameWord(type, "translated DNA"))
     {
     seqList = faSeqListFromMemText(seqLetters, TRUE);
+    uToT(seqList);
     isTx = TRUE;
     isTxTx = TRUE;
     txTxBoth = sameWord(type, "translated DNA");
@@ -439,17 +449,28 @@ else if (sameWord(type, "protein"))
     }
 else 
     {
-    seqList = faSeqListFromMemText(seqLetters, FALSE);
+    seqList = faSeqListFromMemTextRaw(seqLetters);
     isTx = !seqIsDna(seqList);
     if (!isTx)
 	{
 	for (seq = seqList; seq != NULL; seq = seq->next)
 	    {
+	    seq->size = dnaFilteredSize(seq->dna);
+	    dnaFilter(seq->dna, seq->dna);
 	    toLowerN(seq->dna, seq->size);
+	    subChar(seq->dna, 'u', 't');
 	    }
 	}
     else
+	{
+	for (seq = seqList; seq != NULL; seq = seq->next)
+	    {
+	    seq->size = aaFilteredSize(seq->dna);
+	    aaFilter(seq->dna, seq->dna);
+	    toUpperN(seq->dna, seq->size);
+	    }
 	qIsProt = TRUE;
+	}
     }
 if (seqList != NULL && seqList->name[0] == 0)
     {
