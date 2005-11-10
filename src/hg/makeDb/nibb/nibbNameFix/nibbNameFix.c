@@ -3,12 +3,11 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "portable.h"
+#include "psl.h"
 #include "dnaseq.h"
 #include "fa.h"
-#include "psl.h"
 
-static char const rcsid[] = "$Id: nibbNameFix.c,v 1.1 2005/11/08 19:26:36 kent Exp $";
+static char const rcsid[] = "$Id: nibbNameFix.c,v 1.2 2005/11/10 15:26:33 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
