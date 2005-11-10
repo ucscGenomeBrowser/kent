@@ -1,13 +1,3 @@
-track gbProtCode
-shortLabel GenBank CDS
-longLabel GenBank protein-coding genes
-group genes
-priority 2.1
-visibility pack
-color 40,40,160
-altColor 255,0,0
-type bed 6 .
-
 track multizPa1Ph1Pf2Tk1
 shortLabel Conservation
 longLabel Pyrococcus 4-way multiz alignments
