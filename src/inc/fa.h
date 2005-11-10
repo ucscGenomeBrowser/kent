@@ -69,8 +69,16 @@ bioSeq *faNextSeqFromMemText(char **pText, boolean isDna);
 /* Convert fa in memory to bioSeq.  Update *pText to point to next
  * record.  Returns NULL when no more sequences left. */
 
+bioSeq *faNextSeqFromMemTextRaw(char **pText);
+/* Same as faNextSeqFromMemText, but will leave in 
+ * letters even if they aren't in DNA or protein alphabed. */
+
 bioSeq *faSeqListFromMemText(char *text, boolean isDna);
 /* Convert fa's in memory into list of dnaSeqs. */
+
+bioSeq *faSeqListFromMemTextRaw(char *text);
+/* Convert fa's in memory into list of dnaSeqs without
+ * converting chars to N's. */
 
 boolean faFastReadNext(FILE *f, DNA **retDna, int *retSize, char **retName);
 /* Read in next FA entry as fast as we can. Return FALSE at EOF. 
