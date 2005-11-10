@@ -123,7 +123,7 @@ struct column
        * the table/key/val fields above. */
    char *experimentTable;	/* Experiment table in hgFixed if any. */
    char *posTable;		/* Positional (bed12) for expression experiments. */
-   double expScale;		/* What to scale by to get expression val from -1 to 1. */
+   double brightness;		/* What to scale by to get expression val from -1 to 1. */
    int representativeCount;	/* Count of representative experiments. */
    int *representatives;	/* Array (may be null) of representatives. */
    boolean expRatioUseBlue;	/* Use blue rather than red in expRatio. */
