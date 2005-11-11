@@ -425,10 +425,12 @@ if (publication != NULL)
     {
     char *pubUrl = visiGenePubUrl(conn,id);
     printf("<B>reference:</B> ");
-    if (pubUrl != NULL)
+    if (pubUrl != NULL && pubUrl[0] != 0)
         printf("<A HREF=\"%s\" target=_blank>%s</A>", pubUrl, publication);
     else
-        printf("%s", publication);
+	{
+        printf("%s", naForEmpty(publication));
+	}
     printf("<BR>\n");
     }
 if (caption != NULL)
