@@ -890,6 +890,15 @@ dyStringFree(&dy);
 return id;
 }
 
+static void veryClose(struct dyString *query, char *field, char *val)
+/* Append clause to query to select field to be within a very
+ * small number to val (which is an ascii floating point value) */
+{
+double x = atof(val);
+double e = 0.000001;
+dyStringPrintf(query, "%s > %f and %s < %f and ", field, x-e, field, x+e);
+}
+
 int doSpecimen(struct lineFile *lf, struct sqlConnection *conn,
 	char *name, char *taxon, int genotype, int bodyPart, int sex,
 	char *age, char *minAge, char *maxAge, char *notes)
@@ -905,9 +914,10 @@ dyStringPrintf(dy, "name = \"%s\" and ", name);
 dyStringPrintf(dy, "taxon = %s and ", taxon);
 dyStringPrintf(dy, "genotype = %d and ", genotype);
 dyStringPrintf(dy, "bodyPart = %d and ", bodyPart);
-dyStringPrintf(dy, "age = %s and ", age);
-dyStringPrintf(dy, "minAge = %s and ", minAge);
-dyStringPrintf(dy, "maxAge = %s and ", maxAge);
+dyStringPrintf(dy, "sex = %d and ", sex);
+veryClose(dy, "age", age);
+veryClose(dy, "minAge", minAge);
+veryClose(dy, "maxAge", maxAge);
 dyStringPrintf(dy, "notes = \"%s\"", notes);
 id = sqlQuickNum(conn, dy->string);
 if (id == 0)
