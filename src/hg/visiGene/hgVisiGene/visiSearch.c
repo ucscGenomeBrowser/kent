@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.9 2005/10/27 17:23:06 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.10 2005/11/11 05:58:21 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -55,7 +55,7 @@ struct visiMatch *a = va, *b = vb;
 return a->imageId - b->imageId;
 }
 
-static int visiMatchCmpWeight(const void *va, const void *vb)
+int visiMatchCmpWeight(const void *va, const void *vb)
 /* Compare to sort based on match. */
 {
 const struct visiMatch *a = *((struct visiMatch **)va);

@@ -354,6 +354,38 @@ printf("</FORM>\n");
 htmlEnd();
 }
 
+void weighMatches(struct sqlConnection *conn, struct visiMatch *matchList)
+/* Set match field in match list according to priority, etc. */
+{
+struct visiMatch *match;
+struct dyString *dy = dyStringNew(0);
+
+/* Weigh matches by priority, and secondarily by age. */
+for (match = matchList; match != NULL; match = match->next)
+    {
+    double priority;
+    double age;
+
+    /* Fetch priority. */
+    dyStringClear(dy);
+    dyStringPrintf(dy, 
+    	"select imageFile.priority from imageFile,image "
+	"where image.id = %d and image.imageFile = imageFile.id"
+	, match->imageId);
+    priority = sqlQuickDouble(conn, dy->string);
+
+    /* Fetch age. */
+    dyStringClear(dy);
+    dyStringPrintf(dy,
+        "select specimen.age from image,specimen "
+	"where image.id = %d and image.specimen = specimen.id"
+	, match->imageId);
+    age = sqlQuickDouble(conn, dy->string);
+
+    match->weight = -priority - age*0.0001;
+    }
+}
+
 void doFrame(struct sqlConnection *conn, boolean forceImageToList)
 /* Make a html frame page.  Fill frame with thumbnail, control bar,
  * and image panes. */
@@ -369,6 +401,8 @@ struct visiMatch *matchList = visiSearch(conn, listSpec);
 if (forceImageToList && matchList != NULL)
     imageId = matchList->imageId;
 matchList = onePerImageFile(conn, matchList);
+weighMatches(conn, matchList);
+slSort(&matchList, visiMatchCmpWeight);
 makeTempName(&matchTempName, "visiMatch", ".tab");
 matchFile = matchTempName.forCgi;
 saveMatchFile(matchFile, matchList);
