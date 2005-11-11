@@ -1256,7 +1256,8 @@ chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr2
 dataVersion ENCODE Oct 2005 Freeze
 type bed5FloatScore
 useScore 1
-url http://dbtss.hgc.jp/cgi-bin/home.cgi?IDS=$$
+url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+urlLabel Yale DART Link:
 
     track encodeYaleChipSitesBaf155
     subTrack encodeYaleChipSites
