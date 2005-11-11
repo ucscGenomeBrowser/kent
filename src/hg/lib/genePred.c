@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.75 2005/10/07 05:18:23 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.76 2005/11/11 07:47:35 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1441,5 +1441,44 @@ for (iExon = 0; iExon < gp->exonCount; iExon++)
         cdsBases += (end - start);
     }
 return cdsBases;
+}
+
+struct genePred *genePredNew(char *name, char *chrom, char strand,
+                             unsigned txStart, unsigned txEnd,
+                             unsigned cdsStart, unsigned cdsEnd,
+                             unsigned optFields, unsigned exonSpace)
+/* create a new gene with space for the specified number of exons allocated.
+ * genePredGrow maybe used to expand this space if needed. */
+{
+struct genePred *gp;
+AllocVar(gp);
+assert(exonSpace > 0);
+
+gp->name = cloneString(name);
+gp->chrom  = cloneString(chrom);
+gp->strand[0] = strand;
+gp->txStart = txStart;
+gp->txEnd = txEnd;
+gp->cdsStart  = cdsStart;
+gp->cdsEnd = cdsEnd;
+gp->optFields = optFields;
+AllocArray(gp->exonStarts, exonSpace);
+AllocArray(gp->exonEnds, exonSpace);
+if (gp->optFields & genePredExonFramesFld)
+    AllocArray(gp->exonFrames, exonSpace);
+return gp;
+}
+
+void genePredGrow(struct genePred *gp, unsigned *exonSpacePtr)
+/* Increase memory allocated to a psl to hold more exons.  exonSpacePtr
+ * should point the the current maximum number of exons and will be
+ * updated to with the new amount of space. */
+{
+int exonSpace = *exonSpacePtr;
+int newSpace = 2 * exonSpace;
+ExpandArray(gp->exonStarts, exonSpace, newSpace);
+ExpandArray(gp->exonEnds, exonSpace, newSpace);
+if (gp->optFields & genePredExonFramesFld)
+    ExpandArray(gp->exonFrames, exonSpace, newSpace);
 }
 
