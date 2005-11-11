@@ -921,25 +921,25 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUppsalaChipAch3
     subTrack encodeUppsalaChip
-    shortLabel UU H3ac
+    shortLabel UU H3ac HepG2
     longLabel University of Uppsala, Sweden  ChIP/Chip (H3ac, HepG2) 
     priority 1
 
     track encodeUppsalaChipHnf3b
     subTrack encodeUppsalaChip
-    shortLabel UU HNF-3b
+    shortLabel UU HNF-3b HepG2
     longLabel University of Uppsala, Sweden  ChIP/Chip (HNF-3b, HepG2) 
     priority 2
 
     track encodeUppsalaChipHnf4a
     subTrack encodeUppsalaChip
-    shortLabel UU HNF-3b
+    shortLabel UU HNF-3b HepG2
     longLabel University of Uppsala, Sweden  ChIP/Chip (HNF-4a, HepG2) 
     priority 3
 
     track encodeUppsalaChipUsf1
     subTrack encodeUppsalaChip
-    shortLabel UU USF-1
+    shortLabel UU USF-1 HepG2
     longLabel University of Uppsala, Sweden  ChIP/Chip (USF-1, HepG2) 
     priority 4
 
@@ -950,6 +950,347 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel University of Uppsala, Sweden  ChIP/Chip Sites (HepG2)
     type bed 5 .
     useScore 1
+    priority 5
+
+track encodeYaleChIPSTAT1Pval
+release alpha
+compositeTrack on
+shortLabel Yale STAT1 pVal
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, P-Values)
+group encodeChip
+priority 65.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 0
+maxLimit 18.2
+autoScale Off
+windowingFunction mean
+viewLimits 0:10
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+track encodeYaleChIPSTAT1Pval
+release beta
+compositeTrack on
+shortLabel Yale ChIP pVal
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, P-Values)
+group encodeChip
+priority 65.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 0
+maxLimit 18.2
+autoScale Off
+windowingFunction mean
+viewLimits 0:10
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
+    subTrack encodeYaleChIPSTAT1Pval
+    shortLabel Yale 36-36 PVal
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, P-Values
+    priority 1
+    color 50,50,200
+
+    track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
+    subTrack encodeYaleChIPSTAT1Pval
+    shortLabel Yale 50-38 PVal
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, P-Values
+    priority 2
+    color 50,50,200
+
+    track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
+    subTrack encodeYaleChIPSTAT1Pval
+    shortLabel Yale 50-50 PVal
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, P-Values
+    priority 3
+    color 50,50,200
+
+    track encodeYaleChIPSTAT1HeLaBingRenPval
+    subTrack encodeYaleChIPSTAT1Pval
+    shortLabel Yale LI PVal
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, P-Values
+    priority 4
+    color 50,50,200
+
+track encodeYaleChIPSTAT1Sig
+release alpha
+compositeTrack on
+shortLabel Yale STAT1 Sig
+longLabel Yale ChIP/Chip: STAT1 ab, HeLa cells, Signal
+group encodeChip
+priority 65.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -4.19
+maxLimit 3.69
+windowingFunction mean
+viewLimits 0:2
+autoScale Off
+origAssembly hg16
+
+track encodeYaleChIPSTAT1Sig
+release beta
+compositeTrack on
+shortLabel Yale ChIP Sig
+longLabel Yale ChIP/Chip: STAT1 ab, HeLa cells, Signal
+group encodeChip
+priority 65.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit -4.19
+maxLimit 3.69
+windowingFunction mean
+viewLimits 0:2
+autoScale Off
+origAssembly hg16
+
+    track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
+    subTrack encodeYaleChIPSTAT1Sig
+    shortLabel Yale 36-36 Sig
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, Signal
+    priority 1
+    color 112,63,175
+    altColor 224,66,81
+
+    track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSig
+    subTrack encodeYaleChIPSTAT1Sig
+    shortLabel Yale 50-38 Sig
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, Signal
+    priority 2
+    color 112,63,175
+    altColor 224,66,81
+
+    track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSig
+    subTrack encodeYaleChIPSTAT1Sig
+    shortLabel Yale 50-50 Sig
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, Signal
+    priority 3
+    color 112,63,175
+    altColor 224,66,81
+
+    track encodeYaleChIPSTAT1HeLaBingRenSig
+    subTrack encodeYaleChIPSTAT1Sig
+    shortLabel Yale LI Sig
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, Signal
+    priority 4
+    color 112,63,175
+    altColor 224,66,81
+
+track encodeYaleChIPSTAT1Sites
+release alpha
+compositeTrack on
+shortLabel Yale STAT1 Sites
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, Binding Sites)
+group encodeChip
+priority 65.2
+chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+dataVersion ENCODE June 2005 Freeze
+origAssembly hg16
+type bed .
+
+track encodeYaleChIPSTAT1Sites
+release beta
+compositeTrack on
+shortLabel Yale ChIP Sites
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, Binding Sites)
+group encodeChip
+priority 65.2
+chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+dataVersion ENCODE June 2005 Freeze
+origAssembly hg16
+type bed .
+
+    track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSite
+    subTrack encodeYaleChIPSTAT1Sites
+    shortLabel Yale 36-36 Sites
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, Binding Sites
+    priority 1
+    color 200,50,50
+    altColor 50,50,200
+
+    track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpSite
+    subTrack encodeYaleChIPSTAT1Sites
+    shortLabel Yale 50-38 Sites
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, Binding Sites
+    priority 2
+    color 200,50,50
+    altColor 50,50,200
+
+    track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpSite
+    subTrack encodeYaleChIPSTAT1Sites
+    shortLabel Yale 50-50 Sites
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, Binding Sites
+    priority 3
+    color 200,50,50
+    altColor 50,50,200
+
+    track encodeYaleChIPSTAT1HeLaBingRenSites
+    subTrack encodeYaleChIPSTAT1Sites
+    shortLabel Yale LI Sites
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, Binding Sites
+    priority 4
+    color 200,50,50
+    altColor 50,50,200
+
+track encodeYaleChipPval
+compositeTrack on
+shortLabel Yale ChIP pVal
+longLabel Yale ChIP/Chip P-Values (HeLa cells)
+group encodeChip
+priority 65.21
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type wig 0 20
+spanList 1
+maxHeightPixels 128:16:16
+autoScale Off
+windowingFunction mean
+viewLimits 0:10
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeYaleChipPvalBaf155
+    subTrack encodeYaleChipPval
+    shortLabel Yale BAF155 Pval
+    longLabel Yale ChIP/Chip P-Values (BAF155 ab, HeLa cells)
+    color 50,50,200
+    priority 1
+
+    track encodeYaleChipPvalBaf170
+    subTrack encodeYaleChipPval
+    shortLabel Yale BAF170 Pval
+    longLabel Yale ChIP/Chip P-Values (BAF170 ab, HeLa cells)
+    color 200,50,50
+    priority 2
+
+    track encodeYaleChipPvalFos
+    subTrack encodeYaleChipPval
+    shortLabel Yale c-Fos Pval
+    longLabel Yale ChIP/Chip P-Values (c-Fos ab, HeLa cells)
+    color 112,63,175
+    priority 3
+
+    track encodeYaleChipPvalJun
+    subTrack encodeYaleChipPval
+    shortLabel Yale c-Jun Pval
+    longLabel Yale ChIP/Chip P-Values (c-Jun ab, HeLa cells)
+    color 200,50,50
+    priority 4
+
+    track encodeYaleChipPvalTaf
+    subTrack encodeYaleChipPval
+    shortLabel Yale TAF1 Pval
+    longLabel Yale ChIP/Chip P-Values (TAF1 ab, HeLa cells)
+    color 50,50,200
+    color 112,63,175
+    priority 5
+
+track encodeYaleChipSignal
+compositeTrack on
+shortLabel Yale ChIP Signal
+longLabel Yale ChIP/Chip Signal (HeLa cells)
+group encodeChip
+priority 65.22
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+maxHeightPixels 128:16:16
+type wig 0 3.35
+spanList 1
+windowingFunction mean
+viewLimits 0:2
+autoScale Off
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeYaleChipSignalBaf155
+    subTrack encodeYaleChipSignal
+    shortLabel Yale BAF155 Sig
+    longLabel Yale ChIP/Chip Signal (BAF155 ab, HeLa cells)
+    color 50,50,200
+    priority 1
+
+    track encodeYaleChipSignalBaf170
+    subTrack encodeYaleChipSignal
+    shortLabel Yale BAF170 Sig
+    longLabel Yale ChIP/Chip Signal (BAF170 ab, HeLa cells)
+    color 200,50,50
+    priority 2
+
+    track encodeYaleChipSignalFos
+    subTrack encodeYaleChipSignal
+    shortLabel Yale c-Fos Sig
+    longLabel Yale ChIP/Chip Signal (c-Fos ab, HeLa cells)
+    color 112,63,175
+    priority 3
+
+    track encodeYaleChipSignalJun
+    subTrack encodeYaleChipSignal
+    shortLabel Yale c-Jun Sig
+    longLabel Yale ChIP/Chip Signal (c-Jun ab, HeLa cells)
+    color 200,50,50
+    priority 4
+
+    track encodeYaleChipSignalTaf
+    subTrack encodeYaleChipSignal
+    shortLabel Yale TAF1 Sig
+    longLabel Yale ChIP/Chip Signal (TAF1 ab, HeLa cells)
+    color 50,50,200
+    priority 5
+
+track encodeYaleChipSites
+compositeTrack on
+shortLabel Yale ChIP Sites
+longLabel Yale ChIP/Chip Sites (HeLa cells)
+group encodeChip
+priority 65.23
+chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
+type bed5FloatScore
+useScore 1
+url http://dbtss.hgc.jp/cgi-bin/home.cgi?IDS=$$
+
+    track encodeYaleChipSitesBaf155
+    subTrack encodeYaleChipSites
+    shortLabel Yale BAF155
+    longLabel Yale ChIP/Chip Sites (BAF155 ab, HeLa cells) 
+    color 50,50,200
+    priority 1
+
+    track encodeYaleChipSitesBaf170
+    subTrack encodeYaleChipSites
+    shortLabel Yale BAF170
+    longLabel Yale ChIP/Chip Sites (BAF170 ab, HeLa cells) 
+    color 200,50,50
+    priority 2
+
+    track encodeYaleChipSitesFos
+    subTrack encodeYaleChipSites
+    shortLabel Yale c-Fos
+    longLabel Yale ChIP/Chip Sites (c-Fos ab, HeLa cells) 
+    color 112,63,175
+    priority 3
+
+    track encodeYaleChipSitesJun
+    subTrack encodeYaleChipSites
+    shortLabel Yale c-Jun
+    longLabel Yale ChIP/Chip Sites (c-Jun ab, HeLa cells) 
+    color 200,50,50
+    priority 4
+
+    track encodeYaleChipSitesTaf
+    subTrack encodeYaleChipSites
+    shortLabel Yale TAF1
+    longLabel Yale ChIP/Chip Sites (TAF1 ab, HeLa cells) 
+    color 50,50,200
     priority 5
 
 track encodeRegulomeDnaseSites
