@@ -378,6 +378,7 @@ CREATE TABLE lifeStageScheme (
 );
 
 insert into lifeStageScheme values(default, 10090, "Theiler");
+insert into lifeStageScheme values(default, 8355, "Nieuwkoop/Faber");
 
 #List of life stages according to a particular scheme
 CREATE TABLE lifeStage (
@@ -427,3 +428,54 @@ insert into lifeStage values(1, "27", 19, "Newborn");
 insert into lifeStage values(1, "28", 20, "Pup");
 insert into lifeStage values(1, "adult", 61, "Adult");
 insert into lifeStage values(1, "elder", 1000, "Elder");
+
+insert into lifeStage values(2, "St1", 0.00, "One-cell egg");
+insert into lifeStage values(2, "St2", 0.06, "Two-cell");
+insert into lifeStage values(2, "St3", 0.08, "Four-cell");
+insert into lifeStage values(2, "St4", 0.09, "Eight-cell");
+insert into lifeStage values(2, "St5", 0.11, "16-cell");
+insert into lifeStage values(2, "St6", 0.12, "32-cell");
+insert into lifeStage values(2, "St6.5", 0.15, "Blastula");
+insert into lifeStage values(2, "St7", 0.17, "Blastula");
+insert into lifeStage values(2, "St8", 0.21, "Blastula");
+insert into lifeStage values(2, "St9", 0.29, "Blastula");
+insert into lifeStage values(2, "St10", 0.38, "Early gastrula");
+insert into lifeStage values(2, "St10.5", 0.46, "Early gastrula");
+insert into lifeStage values(2, "St11", 0.49, "Middle gastrula");
+insert into lifeStage values(2, "St11.5", 0.52, "Late gastrula");
+insert into lifeStage values(2, "St12", 0.55, "Formation of neural plate");
+insert into lifeStage values(2, "St12.5", 0.59, "Definite neural plate");
+insert into lifeStage values(2, "St13", 0.61, "Early neurula");
+insert into lifeStage values(2, "St14", 0.68, "Neurula");
+insert into lifeStage values(2, "St15", 0.73, "Neurula");
+insert into lifeStage values(2, "St16", 0.76, "");
+insert into lifeStage values(2, "St17", 0.78, "");
+insert into lifeStage values(2, "St18", 0.82, "");
+insert into lifeStage values(2, "St19", 0.86, "");
+insert into lifeStage values(2, "St20", 0.91, "");
+insert into lifeStage values(2, "St21", 0.94, "");
+insert into lifeStage values(2, "St22", 1.00, "");
+insert into lifeStage values(2, "St23", 1.03, "");
+insert into lifeStage values(2, "St24", 1.09, "");
+insert into lifeStage values(2, "St25", 1.15, "");
+insert into lifeStage values(2, "St26", 1.23, "");
+insert into lifeStage values(2, "St27", 1.30, "");
+insert into lifeStage values(2, "St28", 1.35, "");
+insert into lifeStage values(2, "St29", 1.42, "");
+insert into lifeStage values(2, "St30", 1.50, "");
+insert into lifeStage values(2, "St31", 1.56, "");
+insert into lifeStage values(2, "St32", 1.67, "");
+insert into lifeStage values(2, "St33", 1.79, "");
+insert into lifeStage values(2, "St34", 1.88, "");
+insert into lifeStage values(2, "St35", 2.04, "");
+insert into lifeStage values(2, "St36", 2.12, "");
+insert into lifeStage values(2, "St37", 2.19, "");
+insert into lifeStage values(2, "St38", 2.27, "");
+insert into lifeStage values(2, "St39", 2.35, "");
+insert into lifeStage values(2, "St40", 2.75, "");
+insert into lifeStage values(2, "St41", 3.17, "");
+insert into lifeStage values(2, "St42", 3.33, "");
+insert into lifeStage values(2, "St43", 3.62, "");
+insert into lifeStage values(2, "St44", 3.85, "");
+insert into lifeStage values(2, "St45", 4.08, "");
+insert into lifeStage values(2, "St46", 4.42, "");
