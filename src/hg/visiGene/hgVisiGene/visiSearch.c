@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.10 2005/11/11 05:58:21 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.11 2005/11/11 16:18:41 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -145,9 +145,6 @@ static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
  * with visiSearcherFree. */
 {
 visiSearcherWeedResults(searcher);
-#ifdef SOMEDAY
-slSort(&searcher->matchList, visiMatchCmpWeight);
-#endif 
 return searcher->matchList;
 }
 
@@ -439,6 +436,24 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     }
 }
 
+static void visiGeneMatchSubmitId(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Add images matching submitId  accessions to searcher. */
+{
+struct slName *word;
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
+    {
+    char query[512];
+    safef(query, sizeof(query),
+    	"select image.id from image,imageFile "
+	"where imageFile.submitId = '%s' "
+	"and imageFile.id = image.imageFile", word->name);
+    addImageListAndFree(searcher, sqlQuickNumList(conn, query),
+	wordIx, 1);
+    }
+}
+
 static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct dyString *dy, char *bodyPart,
 	int startWord, int wordCount)
@@ -634,6 +649,7 @@ visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
 visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
+visiGeneMatchSubmitId(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 searcher->matchList = NULL; /* Transferring memory ownership to return val. */
 visiSearcherFree(&searcher);

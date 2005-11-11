@@ -125,8 +125,6 @@ CREATE TABLE submissionSet (
     journal int not null,	# Journal for publication
     copyright int not null,     # Copyright notice
     submissionSource int not null, # Source of this submission
-#    setUrl longblob not null,	# URL for whole set
-#    itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
               #Indices
     PRIMARY KEY(id),
     UNIQUE(name(32))
@@ -308,7 +306,8 @@ CREATE TABLE imageFile (
     caption int not null,	# Pointer to caption or 0 for none
               #Indices
     PRIMARY KEY(id),
-    INDEX(submissionSet)
+    INDEX(submissionSet),
+    INDEX(submitId(12))
 );
 
 #An image.  There may be multiple images within an imageFile
