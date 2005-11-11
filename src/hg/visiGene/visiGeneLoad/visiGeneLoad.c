@@ -594,7 +594,9 @@ dyStringAppend(dy, "select id,gene,antibody,fPrimer,rPrimer,seq ");
 dyStringAppend(dy, "from probe ");
 dyStringPrintf(dy, "where gene=%d and antibody=%d ", geneId, antibodyId);
 dyStringPrintf(dy, "and fPrimer='%s' and rPrimer='%s' ", fPrimer, rPrimer);
-dyStringPrintf(dy, "and seq='%s'", seq);
+dyStringPrintf(dy, "and seq='");
+dyStringAppend(dy, seq);
+dyStringAppend(dy, "'");
 verbose(2, "query: %s\n", dy->string);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -654,7 +656,9 @@ if (probeId == 0)
     dyStringPrintf(dy, " probeType=%d,\n", probeTypeId);
     dyStringPrintf(dy, " fPrimer='%s',\n", fPrimer);
     dyStringPrintf(dy, " rPrimer='%s',\n", rPrimer);
-    dyStringPrintf(dy, " seq='%s'\n", seq);
+    dyStringAppend(dy, " seq='");
+    dyStringAppend(dy, seq);
+    dyStringAppend(dy, "'\n");
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     probeId = sqlLastAutoId(conn);
