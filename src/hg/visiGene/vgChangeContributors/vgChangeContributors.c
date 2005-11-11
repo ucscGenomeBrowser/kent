@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: vgChangeContributors.c,v 1.1 2005/11/11 16:38:58 kent Exp $";
+static char const rcsid[] = "$Id: vgChangeContributors.c,v 1.2 2005/11/11 19:57:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ errAbort(
   "usage:\n"
   "   vgChangeContributors database submissionSetId newContributors\n"
   "example:\n"
-  "   vgChangeContributors visiGene 704 'Ueno N.,Kitayama A.,Terasaka C.,Nomoto K.,Shibamoto K.,Hiroyo N.'\n"
+  "   vgChangeContributors visiGene 704 'Ueno N., Kitayama A., Terasaka C., Nomoto K., Shibamoto K., Hiroyo N.'\n"
   );
 }
 
