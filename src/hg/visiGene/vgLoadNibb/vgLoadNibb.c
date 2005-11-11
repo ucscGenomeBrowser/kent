@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.2 2005/11/10 20:19:07 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.3 2005/11/11 05:58:29 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -85,7 +85,7 @@ FILE *f = mustOpen(fileName, "w");
 fprintf(f, "submitSet nibbXenopusLaevis3\n");
 fprintf(f, "fullDir ../visiGene/full/inSitu/XenopusLaevis/nibb\n");
 fprintf(f, "thumbDir ../visiGene/200/inSitu/XenopusLaevis/nibb\n");
-fprintf(f, "priority 200\n");
+fprintf(f, "priority 1200\n");
 fprintf(f, "sliceType wholeMount\n");
 fprintf(f, "submissionSource Japanese National Institute of Basic Biology (NIBB) XDB project\n");
 fprintf(f, "taxon 8355\n");
@@ -125,7 +125,7 @@ fprintf(f, "minAge\t");
 fprintf(f, "maxAge\t");
 fprintf(f, "seq\n");
 
-while (lineFileRow(lf, row))
+while (lineFileRowTab(lf, row))
     {
     char *clone = row[0];
     char *stage = row[1];
