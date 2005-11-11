@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.81 2005/10/21 02:08:50 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.82 2005/11/11 06:13:59 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -999,6 +999,22 @@ if (row != NULL && row[0] != NULL)
 sqlFreeResult(&sr);
 return ret;
 }
+
+double sqlQuickDouble(struct sqlConnection *conn, char *query)
+/* Get floating point numerical result from simple query */
+{
+struct sqlResult *sr;
+char **row;
+double ret = 0;
+
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL && row[0] != NULL)
+    ret = atof(row[0]);
+sqlFreeResult(&sr);
+return ret;
+}
+
 
 int sqlNeedQuickNum(struct sqlConnection *conn, char *query)
 /* Get numerical result or die trying. */

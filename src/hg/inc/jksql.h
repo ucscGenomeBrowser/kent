@@ -181,6 +181,9 @@ int sqlQuickNum(struct sqlConnection *conn, char *query);
 int sqlNeedQuickNum(struct sqlConnection *conn, char *query);
 /* Get numerical result or die trying. */
 
+double sqlQuickDouble(struct sqlConnection *conn, char *query);
+/* Get floating point numerical result from simple query */
+
 char *sqlQuickString(struct sqlConnection *conn, char *query);
 /* Return result of single-row/single column query in a
  * string that should eventually be freeMem'd. */
