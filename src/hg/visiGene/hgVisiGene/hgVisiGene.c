@@ -341,7 +341,7 @@ printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METH
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 
-cgiMakeTextVar(hgpListSpec, listSpec, 10);
+cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
 
 
