@@ -216,6 +216,19 @@ void sqlGetLock(struct sqlConnection *sc, char *name);
 void sqlReleaseLock(struct sqlConnection *sc, char *name);
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
 
+void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList, 
+	boolean isWrite);
+/* Hard lock given table list.  Unlock with sqlHardUnlockAll. */
+
+void sqlHardLockTable(struct sqlConnection *sc, char *table, boolean isWrite);
+/* Lock a single table.  Unlock with sqlHardUnlockAll. */
+
+void sqlHardLockAll(struct sqlConnection *sc, boolean isWrite);
+/* Lock all tables in current database.  Unlock with sqlHardUnlockAll. */
+
+void sqlHardUnlockAll(struct sqlConnection *sc);
+/* Unlock any hard locked tables. */
+
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already. 
  * Returns FALSE if didn't make table. */
