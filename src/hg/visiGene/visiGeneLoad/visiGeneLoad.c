@@ -10,6 +10,7 @@
 
 /* Variables you can override from command line. */
 char *database = "visiGene";
+boolean doLock = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,12 +22,15 @@ errAbort(
   "Please see visiGeneLoad.doc for description of the .ra, .tab and .txtfiles\n"
   "Options:\n"
   "   -database=%s - Specifically set database\n"
+  "   -lock - Lock down database during update - about 10% faster but all\n"
+  "           web queries will stall until it finishes.\n"
   , database
   );
 }
 
 static struct optionSpec options[] = {
    {"database", OPTION_STRING,},
+   {"lock", OPTION_BOOLEAN,},
    {NULL, 0},
 };
 
@@ -1146,6 +1150,10 @@ if (rowSize >= ArraySize(words))
 	}
     }
 
+/* Lock down the database for faster update speed. */
+if (doLock)
+    sqlHardLockAll(conn, TRUE);
+
 /* Create/find submission record. */
 submissionSetId = saveSubmissionSet(conn, raHash);
 
@@ -1272,6 +1280,8 @@ while (lineFileNextReal(lf, &line))
 	imageProbeId = doImageProbe(conn, imageId, probeId, probeColor);
 	}
     }
+if (doLock)
+    sqlHardUnlockAll(conn);
 }
 
 int main(int argc, char *argv[])
@@ -1281,6 +1291,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 database = optionVal("database", database);
+doLock = optionExists("lock");
 visiGeneLoad(argv[1], argv[2], argv[3]);
 return 0;
 }
