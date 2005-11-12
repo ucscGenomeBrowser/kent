@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.12 2005/11/12 00:18:27 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.13 2005/11/12 00:27:13 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -245,19 +245,23 @@ for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     {
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
-    dyStringClear(query);
-    dyStringPrintf(query, "select %s from %s where %s like \"", 
-    	field, table, field);
-    dyStringAppend(query, word->name);
-    dyStringAppend(query, "%\"");
-    nameList = sqlQuickList(conn, query->string);
-    if (nameList != NULL)
+
+    if (strlen(word->name) >= 3) /* Logic could be expensive on small words */
 	{
-	for (name = nameList; name != NULL; name = name->next)
+	dyStringClear(query);
+	dyStringPrintf(query, "select %s from %s where %s like \"", 
+	    field, table, field);
+	dyStringAppend(query, word->name);
+	dyStringAppend(query, "%\"");
+	nameList = sqlQuickList(conn, query->string);
+	if (nameList != NULL)
 	    {
-	    int wordsUsed = countWordsUsedInPhrase(name->name, word);
-	    if (wordsUsed > maxWordsUsed)
-		maxWordsUsed = wordsUsed;
+	    for (name = nameList; name != NULL; name = name->next)
+		{
+		int wordsUsed = countWordsUsedInPhrase(name->name, word);
+		if (wordsUsed > maxWordsUsed)
+		    maxWordsUsed = wordsUsed;
+		}
 	    }
 	}
     if (maxWordsUsed > 0)
@@ -651,12 +655,32 @@ addImagesMatchingQuery(searcher, conn, dy->string, NULL, binomial,
 	startWord, wordCount);
 }
 
+static void addImagesMatchingCommonName(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *commonName,
+	int startWord, int wordCount)
+/* Add images that match common name. */
+{
+dyStringClear(dy);
+dyStringPrintf(dy, 
+   "select distinct image.id from "
+   "image,specimen,uniProt.commonName "
+   "where uniProt.commonName.val = \"%s\" "
+   "and specimen.taxon = uniProt.commonName.taxon "
+   "and image.specimen = specimen.id"
+   , commonName);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, commonName,
+	startWord, wordCount);
+}
+
+
 static void visiGeneMatchOrganism(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList)
 /* Fold in matches to organism. */
 {
 visiGeneMatchMultiWord(searcher, conn, wordList, "uniProt.taxon", "binomial",
     addImagesMatchingBinomial);
+visiGeneMatchMultiWord(searcher, conn, wordList, "uniProt.commonName", "val",
+    addImagesMatchingCommonName);
 }
 
 struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
