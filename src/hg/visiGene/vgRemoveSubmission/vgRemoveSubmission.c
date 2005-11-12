@@ -6,7 +6,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.1 2005/11/11 19:58:34 kent Exp $";
+static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.2 2005/11/12 02:43:24 kent Exp $";
 
 boolean testOnly = FALSE;
 
@@ -23,6 +23,8 @@ errAbort(
   "   -testOnly  Report how many records would delete, but don't delete them\n"
   "   -verbose=N Set verbosity level.  0 for silent.  1 (default) for record counts\n"
   "              2 to see sql statements\n"
+  "Note: submission contributors, probes, and genes will still be listed in\n"
+  "      respective tables, since these are shared with other submission sets.\n"
   );
 }
 
