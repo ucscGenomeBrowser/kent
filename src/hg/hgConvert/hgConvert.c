@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.1 2005/11/10 06:16:45 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.2 2005/11/12 04:32:43 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -86,7 +86,7 @@ puts("<BR><BR>");
 dbList = hGetLiftOverFromDatabases();
 fromDb = matchingDb(dbList, chain->fromDb);
 printf("Convert %s from %s genome %s assembly to:", fromPos,
-	fromDb->organism, fromDb->name);
+	fromDb->organism, fromDb->description);
 puts("<BR><BR>");
 
 /* create HMTL form */
