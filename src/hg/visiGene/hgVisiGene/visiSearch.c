@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.11 2005/11/11 16:18:41 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.12 2005/11/12 00:18:27 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -229,7 +229,7 @@ typedef void AdderFunc(struct visiSearcher *searcher,
 
 static void visiGeneMatchMultiWord(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList,
-	char *table, AdderFunc adder)
+	char *table, char *field, AdderFunc adder)
 /* This helps cope with matches that may involve more than
  * one word.   It will preferentially match as many words
  * as possible, and if there is a multiple-word match it
@@ -246,7 +246,8 @@ for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
     dyStringClear(query);
-    dyStringPrintf(query, "select name from %s where name like \"", table);
+    dyStringPrintf(query, "select %s from %s where %s like \"", 
+    	field, table, field);
     dyStringAppend(query, word->name);
     dyStringAppend(query, "%\"");
     nameList = sqlQuickList(conn, query->string);
@@ -493,7 +494,8 @@ static void visiGeneMatchBodyPart(struct visiSearcher *searcher,
  * This is a little complicated by some body parts containing
  * multiple words, like "choroid plexus". */
 {
-visiGeneMatchMultiWord(searcher, conn, wordList, "bodyPart",
+visiGeneMatchMultiWord(searcher, conn, wordList, 
+    "bodyPart", "name",
     addImagesMatchingBodyPart);
 }
 
@@ -632,6 +634,31 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     }
 }
 
+static void addImagesMatchingBinomial(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *binomial,
+	int startWord, int wordCount)
+/* Add images that match binomial name. */
+{
+dyStringClear(dy);
+dyStringPrintf(dy, 
+   "select distinct image.id from "
+   "image,specimen,uniProt.taxon "
+   "where uniProt.taxon.binomial = \"%s\" "
+   "and specimen.taxon = uniProt.taxon.id "
+   "and image.specimen = specimen.id"
+   , binomial);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, binomial,
+	startWord, wordCount);
+}
+
+static void visiGeneMatchOrganism(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Fold in matches to organism. */
+{
+visiGeneMatchMultiWord(searcher, conn, wordList, "uniProt.taxon", "binomial",
+    addImagesMatchingBinomial);
+}
+
 struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
 /* visiSearch - return list of images that match searchString sorted
  * by how well they match. This will search most fields in the
@@ -650,6 +677,7 @@ visiGeneMatchBodyPart(searcher, conn, wordList);
 visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 visiGeneMatchSubmitId(searcher, conn, wordList);
+visiGeneMatchOrganism(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 searcher->matchList = NULL; /* Transferring memory ownership to return val. */
 visiSearcherFree(&searcher);
