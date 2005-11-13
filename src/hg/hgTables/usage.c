@@ -4,13 +4,16 @@
 #include "jksql.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: usage.c,v 1.12 2005/09/12 17:27:02 angie Exp $";
+static char const rcsid[] = "$Id: usage.c,v 1.13 2005/11/13 18:15:11 donnak Exp $";
 
 void printMainHelp()
 /* Put up main page help info. */
 {
 hPrintf("%s",
-"<P>Here is a line-by-line description of the table browser controls:\n"
+"<P>This section provides brief line-by-line descriptions of the Table \n"
+"Browser controls. For more information on using this program, see the \n"
+"<A HREF=\"../goldenPath/help/hgTablesHelp.html\" TARGET=_blank>Table \n"
+"Browser User's Guide</A>.\n"
 "        <UL>\n"
 "        <LI><B>clade: </B>Specifies which clade the organism is in.</LI>\n"
 "        \n"
