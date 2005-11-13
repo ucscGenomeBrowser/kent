@@ -20,6 +20,7 @@
 #include "fuzzyFind.h"
 #include "bandExt.h"
 #include "boxClump.h"
+#include "boxLump.h"
 #include "bzp.h"
 #include "blatz.h"
 #include "dynamic.h" // LX
@@ -338,8 +339,23 @@ chainList = chainsCreate(bzp->cheapGap, bzp->ss,
         query, strand, target, pBlockList);
 bzpTime("chainsCreate %d initial chains", slCount(chainList));
 
-if (bzp->bestChainOnly && chainList != NULL)
-    chainFreeList(&chainList->next);
+if (bzp->bestChainOnly)
+    {
+    if (chainList != NULL)
+	chainFreeList(&chainList->next);
+    }
+else if (bzp->maxChainsToExplore > 0)
+    {
+    struct chain *lastChain = slElementFromIx(chainList, 
+    	bzp->maxChainsToExplore-1);
+    if (lastChain != NULL)
+	{
+	verbose(2, "Trimming chain list from %d", slCount(chainList));
+        chainFreeList(&lastChain->next);
+	verbose(2, " to %d\n", slCount(chainList));
+	}
+    }
+
 
 thresholdChains(&chainList, bzp->minChain);
 bzpTime("%d chains passed threshold of %d", slCount(chainList), bzp->minChain);
@@ -540,6 +556,8 @@ if (qSize >= minSize && tSize >= minSize)
     }
 }
 
+struct boxClump *boxFindLumps(struct boxIn **pBoxList);	// uglyf
+
 static struct boxClump *clumpGapsAndEnds(struct bzp *bzp, 
         struct chain *chainList)
 /* Given a list of chains (all on same target and query) create a list of
@@ -581,7 +599,20 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         addClippedBox(&boxList, minSize, winSize, qs, qe, ts, te);
         }
     }
-clumpList = boxFindClumps(&boxList);
+clumpList = boxLump(&boxList);
+    { /* uglyf */
+    struct boxClump *clump;
+    int boxCount = 0;
+    int clumpCount = 0;
+    long clumpArea = 0;
+    for (clump = clumpList; clump != NULL; clump = clump->next)
+        {
+	boxCount += clump->boxCount;
+	clumpArea += (clump->qEnd - clump->qStart) * (clump->tEnd - clump->tStart);
+	clumpCount += 1;
+	}
+    bzpTime("%d boxes, %d clumps, %ld clump area", boxCount, clumpCount, clumpArea);
+    } /* uglyf */
 return clumpList;
 }
 

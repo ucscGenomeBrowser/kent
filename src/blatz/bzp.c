@@ -38,6 +38,8 @@ bzp->unmask = FALSE;
 bzp->out = "chain";
 bzp->mafQ = "";
 bzp->mafT = "";
+bzp->maxChainsToExplore = 1000;
+    int maxChainsToExplore;  /* Maximum number of chains to explore. */
 // LX BEG Sep 02 2005 Sep 06 2005
 bzp->dynaLimitT = VERY_LARGE_NUMBER;
 bzp->dynaLimitQ = VERY_LARGE_NUMBER;
@@ -92,6 +94,8 @@ printf("  -expandWindow=%d - Maximum size of window between blocks of chains\n"
        "                    and before and after first block in which to look\n"
        "                    for alignments using seeds of smaller weight.\n"
        , bzp->expandWindow);
+printf("  -maxChainsToExplore=%d - Maximum number of first level chains to explore further\n"
+       , bzp->maxChainsToExplore);
 printf("  -matrix=fileName - Read scoring matrix from file.\n");
 printf("  -gapCost=fileName - Read gap scoring scheme from file.\n");
 printf("  -verbose=%d - Print progress info. 0=silent, 1=default, 2=wordy\n", 

@@ -23,6 +23,7 @@ struct bzp
     int maxBandGap;   /* Maximum gap allowed in banded extension. */
     int minExpand;    /* Min score for search in area with smaller seed. */
     int expandWindow;  /* Bases to do secondary more sensitive search in. */
+    int maxChainsToExplore;  /* Maximum number of chains to explore. */
     struct axtScoreScheme *ss; /* Matrix and affine gap info. */
     struct gapCalc *cheapGap;  /* Gap calculation info for first pass. */
     struct gapCalc *gapCalc;   /* Gap calculation info for final pass. */

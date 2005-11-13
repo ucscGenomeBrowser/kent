@@ -163,6 +163,7 @@ verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
 alignAll(bzp, indexList, queryDl, output);
 }
 
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
