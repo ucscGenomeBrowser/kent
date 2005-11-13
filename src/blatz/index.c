@@ -6,7 +6,6 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "dnaLoad.h"
-#include "localmem.h"
 #include "spacedSeed.h"
 #include "blatz.h"
 #include "dynamic.h"
@@ -54,7 +53,6 @@ struct blatzIndex *blatzIndexOne(struct dnaSeq *seq, int parentStart, int parent
 	int parentSize, int weight)
 /* Create a new index of given seed weight populated by seq. */
 {
-struct lm *lm = lmInit(0);
 int seedSpan = spacedSeedSpan(weight);
 int *seedOffsets = spacedSeedOffsets(weight);
 int slotCount = (1<<(2*weight));
@@ -62,33 +60,14 @@ struct seqPos **slots, *pos;
 DNA *dna = seq->dna;
 int lastBase = seq->size - seedSpan;
 int i;
+int key;
 struct blatzIndex *index;
 size_t posCount = 0;
 bits32 *posBuf;
 struct blatzIndexPos *compactSlots;
 
-/* Build up uncompacted list of target positions in slots. */
-lmAllocArray(lm, slots, slotCount);
-for (i=0; i<=lastBase; ++i)
-    {
-    int key = blatzIndexKey(dna + i, seedOffsets, weight);
-    if ((key >= 0) && ((dynaWordLimit == 0) || (dynaWordCount[key]<=dynaWordLimit)))
-    //if (key >= 0)
-        {
-        struct seqPos *pos, **slot;
-        if(dynaWordLimit>0) dynaWordCount[key]++;
-        lmAllocVar(lm, pos);
-        pos->pos = i;
-        slot = &slots[key];
-        slAddHead(slot, pos);
-        ++posCount;
-        if(dynaWordLimit>0) dynaWordCount[key]++;
-        }
-    }
-
 /* Allocate index structure and fill in basics. */
 AllocVar(index);
-compactSlots = AllocArray(index->slots, slotCount);
 index->seedWeight = weight;
 index->seedSpan = seedSpan;
 index->seedOffsets = seedOffsets;
@@ -96,28 +75,64 @@ index->target = seq;
 index->targetStart = parentStart;
 index->targetEnd = parentEnd;
 index->targetParentSize = parentSize;
-if (posCount > 0)
-    {
-    index->posBuf = posBuf = needHugeMem(posCount * sizeof(posBuf[0]));
+compactSlots = AllocArray(index->slots, slotCount);
 
-    /* Copy over and compact the slots. */
-    for (i=0; i<slotCount; ++i)
-        {
-        int slotSize = 0;
-        struct seqPos *pos;
-        compactSlots->pos = posBuf;
-        for (pos = slots[i]; pos != NULL; pos = pos->next)
-            {
-            posBuf[slotSize] = pos->pos;
-            ++slotSize;
-            }
-        compactSlots->count = slotSize;
-        posBuf += slotSize;
-        ++compactSlots;
-        }
+/* Count up positions in each index slot. */
+for (i=0; i<=lastBase; ++i)
+    {
+    int key = blatzIndexKey(dna + i, seedOffsets, weight);
+    if (key >= 0)
+	compactSlots[key].count += 1;
     }
 
-lmCleanup(&lm);
+/* Get rid of overused keys */
+if (dynaWordLimit != 0)
+    {
+    for (key=0; key<slotCount; ++key)
+	{
+	if (compactSlots[key].count > dynaWordLimit)
+	    compactSlots[key].count = 0;
+	}
+    }
+
+/* Add up total number of positions needed. */
+for (key=0; key<slotCount; ++key)
+    posCount += compactSlots[key].count;
+
+if (posCount > 0)
+    {
+    /* Alloc array for all positions, and point slots to appropriate parts. 
+     * Leave dynamically masked slots NULL. */
+    index->posBuf = posBuf = needHugeMem(posCount * sizeof(posBuf[0]));
+    for (key=0; key < slotCount; ++key)
+        {
+	struct blatzIndexPos *slot = &compactSlots[key];
+	if (slot->count > 0)
+	    {
+	    slot->pos = posBuf;
+	    posBuf += slot->count;
+	    slot->count = 0;
+	    }
+	}
+
+    /* Scan through DNA again, this time saving key positions
+     * instead of just counting them. */
+    /* Count up positions in each index slot. */
+    for (i=0; i<=lastBase; ++i)
+	{
+	int key = blatzIndexKey(dna + i, seedOffsets, weight);
+	if (key >= 0)
+	    {
+	    struct blatzIndexPos *slot = &compactSlots[key];
+	    if (slot->pos != NULL)
+	        {
+		slot->pos[slot->count] = i;
+		slot->count += 1;
+		}
+	    }
+	}
+    }
+
 return index;
 }
 
