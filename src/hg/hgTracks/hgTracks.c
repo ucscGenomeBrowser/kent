@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1036 2005/11/11 00:30:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1037 2005/11/14 23:51:19 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7962,7 +7962,10 @@ if (withGuidelines)
 if (rulerMode != tvHide)
     {
     struct dnaSeq *seq = NULL;
-    y = 0;
+    int rulerClickY = 0;
+    int rulerClickHeight = rulerHeight;
+
+    y = rulerClickY;
     vgSetClip(vg, insideX, y, insideWidth, yAfterRuler-y+1);
     relNumOff = winStart;
     
@@ -7970,8 +7973,7 @@ if (rulerMode != tvHide)
 	{
 	vgTextCentered(vg, insideX, y, insideWidth, titleHeight, 
 			    MG_BLACK, font, baseTitle);
-        mapBoxUi(insideX, y, insideWidth, titleHeight, RULER_TRACK_NAME, 
-                                                      RULER_TRACK_LABEL);
+	rulerClickHeight += titleHeight;
 	y += titleHeight;
 	}
     if (baseShowPos||baseShowAsm)
@@ -7991,6 +7993,7 @@ if (rulerMode != tvHide)
     	    safef(txt,sizeof(txt),"%s %s",organism,freezeName);
 	vgTextCentered(vg, insideX, y, insideWidth, showPosHeight, 
 			    MG_BLACK, font, txt);
+	rulerClickHeight += showPosHeight;
 	freez(&freezeName);
 	y += showPosHeight;
 	}
@@ -8040,7 +8043,7 @@ if (rulerMode != tvHide)
 	    ns -= (ne - seqBaseCount);
 	    ne = seqBaseCount;
 	    }
-	mapBoxJumpTo(ps+insideX,y,pe-ps,rulerHeight,
+	mapBoxJumpTo(ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
 		        chromName, ns, ne, message);
 	}
     }
