@@ -61,6 +61,18 @@
   cut -f 1 j1|sed -e 's/-/\t/g' >j2
   paste j1 j2 >splicProt.tab
 
+
+# build varAcc table
+
+  hgsql sp051015 -N -e 'select acc from varProtein' |sort -u >j1
+  cat j1 |sed -e 's/-/\t/' >j2
+  paste j1 j2 >varAcc.tab
+  rm j1 j2
+
+  hgsql sp051015 -e 'drop table varAcc'
+  hgsql sp051015 < ~/src/hg/lib/varAcc.sql
+  hgsql sp051015 -e 'load data local infile "varAcc.tab" into table varAcc'
+
 #  hgsql kgHg17FTemp -e 'drop table splicProt'
 #  hgsql kgHg17FTemp <~/src/hg/lib/splicProt.sql
 #  hgsql kgHg17FTemp -e 'load data local infile "splicProt.tab" into table splicProt'
