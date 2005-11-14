@@ -39,7 +39,6 @@ bzp->out = "chain";
 bzp->mafQ = "";
 bzp->mafT = "";
 bzp->maxChainsToExplore = 1000;
-    int maxChainsToExplore;  /* Maximum number of chains to explore. */
 // LX BEG Sep 02 2005 Sep 06 2005
 bzp->dynaLimitT = VERY_LARGE_NUMBER;
 bzp->dynaLimitQ = VERY_LARGE_NUMBER;
