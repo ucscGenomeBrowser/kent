@@ -524,6 +524,11 @@ puts(
 "<LI><B>Scroll up in the image: </B>Up-arrow key or <em>PgUp</em> key \n"
 "<LI><B>Scroll down in the image: </B>Down-arrow key or <em>PgDn</em> key \n"
 "</UL></P> \n"
+"<H3>Credits</H3>\n"
+"<P> \n"
+"VisiGene was written by Jim Kent with assistance from Galt Barber. \n"
+"Contact <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim</A> if you have \n"
+"an image set you'd like to contribute for display. </P>\n"
 );
 }
 
