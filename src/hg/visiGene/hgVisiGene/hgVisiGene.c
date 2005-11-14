@@ -212,7 +212,7 @@ char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *matchFile = cartString(cart, hgpMatchFile);
 struct visiMatch *matchList = NULL, *match;
-int maxCount = 50, count = 0;
+int maxCount = 25, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);
 int imageCount;
 
@@ -398,11 +398,11 @@ struct slName *geneList, *gene;
 struct tempName matchTempName;
 char *matchFile = NULL;
 struct visiMatch *matchList = visiSearch(conn, listSpec);
-if (forceImageToList && matchList != NULL)
-    imageId = matchList->imageId;
 matchList = onePerImageFile(conn, matchList);
 weighMatches(conn, matchList);
 slSort(&matchList, visiMatchCmpWeight);
+if (forceImageToList && matchList != NULL)
+    imageId = matchList->imageId;
 makeTempName(&matchTempName, "visiMatch", ".tab");
 matchFile = matchTempName.forCgi;
 saveMatchFile(matchFile, matchList);
