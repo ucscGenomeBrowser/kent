@@ -1896,6 +1896,7 @@ viewLimits 0:100
 maxHeightPixels 128:16:16
 autoScale off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyChIpHl60PvalBrg1Hr00
     subTrack encodeAffyChIpHl60Pval
@@ -2572,11 +2573,11 @@ dataVersion ENCODE June 2005 Freeze
 
 #October freeze (strict) data
 track encodeAffyChIpHl60PvalStrict
+shortLabel Affy Strict Pval
+longLabel Affymetrix ChIP/Chip Strict P-Value (retinoic acid-treated HL-60 cells)
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
-shortLabel Affy Strict Pval
-longLabel Affymetrix ChIP/Chip Strict P-Value (retinoic acid-treated HL-60 cells)
 group encodeChip
 priority 43.7
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2702,11 +2703,11 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeAffyChIpHl60SignalStrict
+shortLabel Affy Strict Sig
+longLabel Affymetrix ChIP/Chip Strict Signal (retinoic acid-treated HL-60 cells)
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
-shortLabel Affy Strict Sig
-longLabel Affymetrix ChIP/Chip Strict Signal (retinoic acid-treated HL-60 cells)
 group encodeChip
 priority 43.8
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -2833,11 +2834,11 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 14
 
 track encodeAffyChIpHl60SitesStrict
+shortLabel Affy Strict Sites
+longLabel Affymetrix ChIP/Chip Strict Sites (retinoic acid-treated HL-60 cells)
 compositeTrack on
 subGroup1 factor Factor H3K9K14ac2=H3K9K14ac2 H4Kac4=H4Kac4 Pol2=Pol2 actd=p63_ActD mactd=p63_mActD
 subGroup2 time Timepoint 0h=0hrs 2h=2hrs 8h=8hrs 32h=32hrs
-shortLabel Affy Strict Sites
-longLabel Affymetrix ChIP/Chip Strict Sites (retinoic acid-treated HL-60 cells)
 group encodeChip
 priority 43.8
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -3776,23 +3777,6 @@ origAssembly hg16
     longLabel Stanford ChIP/chip Smoothed Score (K562 cells, Sp3 ChIP)
     priority 6
 
-track encodeUCDavisE2F1Median
-shortLabel UCD Ng E2F1
-longLabel UC Davis ChIP/Chip NimbleGen - E2F1 ab, HeLa Cells
-group encodeChip
-priority 56.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bedGraph 4
-maxHeightPixels 128:16:16
-minLimit -2.41
-maxLimit 4.59
-viewLimits 0:2.2
-color 32,128,180
-altColor 180,128,32
-autoScale Off
-origAssembly hg16
-
 
 track encodeBu_ORChID1
 shortLabel BU ORChID
@@ -4082,6 +4066,7 @@ windowingFunction mean
 viewLimits .2:2.6
 color 20,150,20
 altColor 50,100,50
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUncFaireSignal
     subTrack encodeUncFaire
