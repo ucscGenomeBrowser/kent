@@ -495,7 +495,7 @@ puts(
 "images matching the search criteria \n"
 "in the lefthand pane of the browser. By default, the image corresponding to \n"
 "the first thumbnail in the list is displayed in the main image pane. \n"
-"If more than 50 images meet the search criteria, links at the bottom of \n"
+"If more than 25 images meet the search criteria, links at the bottom of \n"
 "the thumbnail pane allow the user to toggle among pages of search results. \n"
 "To display a different image in the main browser pane, \n"
 "click the thumbnail of the image you wish to view. </P>\n"
