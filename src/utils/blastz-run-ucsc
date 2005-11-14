@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.13 2005/09/29 18:23:31 hiram Exp $
+# $Id: blastz-run-ucsc,v 1.14 2005/11/14 18:58:08 hiram Exp $
 
 use Getopt::Long;
 use strict;
@@ -329,7 +329,7 @@ sub selectRpts {
     || &cleanDie("Can't open pipe to sort -n > $selRepFile: $!\n");
   print SEL "\%:repeats\n";
   while (<ALL>) {
-    if (/^\d+/) {
+    if (/^\s*\d+/) {
       my @words = split;
       my ($repStart, $repEnd) = ($words[5], $words[6]);
       next if ((! defined $repStart) || (! defined $repEnd));
