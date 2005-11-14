@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.21 2005/11/08 01:05:58 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.22 2005/11/14 08:28:19 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -8774,4 +8774,26 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql mm7 -e  'load data local infile "kg4.gp" into table knownGene'
 
 ### to be continued .... ####
+
+############################################################################
+## build multiz17way mafFrames (multiz17wayFrames) (markd 2005/11/13)
+
+cd /cluster/data/mm7/bed/
+mkdir multiz17wayFrames/
+cd multiz17wayFrames/
+
+# created Makefile and mkMafFrames based on one for canHg11
+# create frames usins knownGenes if available, if not refseqs if availble,
+# otherwise mRNA with CDS annotation
+# created for these databases:
+
+   rn3 hg17 panTro1 rheMac1 oryCun1 canFam2 bosTau2 galGal2 xenTro1 fr1 danRer3
+
+nice make getGenes
+nice make -j 3 getFrames
+nice make loadDb
+
+# need to do a make sanClean after track verified
+
+############################################################################
 
