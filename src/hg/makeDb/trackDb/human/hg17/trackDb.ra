@@ -1444,6 +1444,42 @@ sGroup_mammal monodelphis  platypus
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
+track encodeMlaganAlign
+shortLabel MLAGAN Alignment
+longLabel Stanford MLAGAN Alignments
+group encodeCompGeno
+priority 74.0
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeMlaganSummary
+maxHeightPixels 100:40:11
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeMavidAlign
+shortLabel MAVID Alignment
+longLabel UC Berkeley MAVID Alignments
+group encodeCompGeno
+priority 74.1
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeMavidSummary
+maxHeightPixels 100:40:11
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
 longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
