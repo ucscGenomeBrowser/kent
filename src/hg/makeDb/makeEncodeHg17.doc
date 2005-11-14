@@ -1256,12 +1256,20 @@ cat > loadBed.csh << 'EOF'
 'EOF'
     csh loadBed.csh >&! loadBed.log 
 
-# PROBLEM WITH TransMaps -- overlapping regions in .wig files
+# NOTE: trim overlaps in regions resulting from array design
+# Joel should have done this for us -- he will verify the files.
 cat > loadSig.csh << 'EOF'
+    mkdir -p wig wib
+    set gdir = /gbdb/hg17/encode/YaleRna/2005-10-14
+    mkdir -p $gdir/wib
     foreach f (lab/*.wig)
-        set table = `echo $f:t:r | sed 's/_//g; s/CTRL/Untr/; s/ncbi35//; s/Placenta/Plac/; s/Neutrophil/Neut/'`
+        set table = `echo $f:t:r | sed 's/_//g; s/Transcript/Trans/; s/CTRL/Untr/; s/ncbi35//; s/Placenta/Plac/; s/Neutrophil/Neut/'`
         echo $table
-        hgLoadBed -strict -bedGraph=4 hg17 $table $f
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        wigEncode $table.trim wig/$table.wig wib/$table.wib
+        hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
+        ln -s `pwd`/wib/$table.wib $gdir/wib
     end
 'EOF'
     csh loadSig.csh >&! loadSig.log 
@@ -1271,9 +1279,65 @@ cat > loadSig.csh << 'EOF'
 # Yale Chip/chip (2005-10-31 kate)
 # Final submission: 10/26 by Zhengdong Zhang
 # signal, pval, and sites for 5 factors (50x38 array)
-# PROBLEM WITH Signal, Pvalue -- overlapping regions in .wig files
+# Sites file has URL to Gerstein lab as 5th field.
+# I'm extracting the accession from it and saving
+# as the name field in a BED5.  Score range: .602-3.23
+#  Scale *330 produces integer range 200-1000.
+# NOTE: >50% of sites are < 1 data value, so use 200 as low score
 
     cd /cluster/data/encode/yale/chip/2005-10-26
+    mkdir -p wig wib
+cat > load.csh << 'EOF'
+    set pfx = encodeYaleChip
+    foreach d (lab/{jun,fos,taf,baf155,baf170})
+        set factor = $d:t
+        set Factor = `echo $factor | sed 's/\(.*\)/\u\1/'`
+        echo $Factor
+        set p = $d/Encode_Yale_ChIpChip_${factor}_Hela_Maskless50merevery38bp
+
+        # load sites
+        set table = ${pfx}Sites$Factor
+        echo $table
+        set f = ${p}_Sites.bed
+        dos2unix $f
+        sed -e "s/bed5FloatScore/$table/" \
+            $HOME/kent/src/hg/lib/bed5FloatScore.sql > $table.sql
+        sed 's/=/ /' $f | \
+          awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n",$1,$2,$3,$6,($4 * 330),$4}' |\
+        hgLoadBed -strict -sqlTable=$table.sql hg17 $table stdin
+
+        # load pval wiggle
+        set gdir = /gbdb/hg17/encode/YaleChip/2005-10-26
+        mkdir -p $gdir/wib
+
+        set table = ${pfx}Pval$Factor
+        echo $table
+        set f = ${p}_Pvalue.wig
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        wigEncode $table.trim wig/$table.wig wib/$table.wib
+        hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
+        ln -s `pwd`/wib/$table.wib $gdir/wib
+
+        # load pval wiggle
+        set table = ${pfx}Signal$Factor
+        echo $table
+        set f = ${p}_Signal.wig
+        sort -k1,1 -k2,2n $f | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
+        wigEncode $table.trim wig/$table.wig wib/$table.wib
+        hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
+        ln -s `pwd`/wib/$table.wib $gdir/wib
+    end
+'EOF'
+    csh load.csh >&! load.log &
+    rm -f *.trim *.sql
+
+    # description files
+    # use server with "antiword" available
+    foreach d (lab/{jun,fos,taf,baf155,baf170})
+        antiword $d/*.doc > ${d:t}.txt
+    end
 
 ##########################################################################
 # UTexas STAGE (2005-10-31 kate)
@@ -1294,6 +1358,8 @@ cat > loadSig.csh << 'EOF'
 ##########################################################################
 # Univ. Uppsala, Sweden Chip/chip
 # Submitted by Claes & Ola
+# 4 files with chrom, start, end, integer score
+# Sites file in GFF format
 
     cd /cluster/data/encode/uppsala/2005-11-07
     /cluster/data/encode/bin/scripts/splitTracks.pl lab/chip.wig
@@ -1302,6 +1368,9 @@ cat > loadSig.csh << 'EOF'
     mv t2 Hnf4a.wig
     mv t3 Ach3.wig
     mv t4 Sites.gff
+
+    # load data for individual factors
+    # NOTE: rounded overly long float scores
 cat > load.csh << 'EOF'
     foreach factor (Usf1 Hnf3b Hnf4a Ach3)
       awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $4)}' $factor.wig |\
@@ -1310,9 +1379,116 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log &
     
-    # sites
+    # sites (they refer to as Tentative Binding Sites)
+    # NOTE: I added an item name, of the form "uu.#"
     grep -v track Sites.gff | sort -k1,1 -k2,2n | \
         awk '{printf ("%s\t%d\t%d\tuu.%d\t%d\n", $1, $4, $5, NR, $6)}' | \
             hgLoadBed -noSort -noBin -strict hg17 encodeUppsalaChipSites stdin
-    # NOTE: check sorting
    
+
+##########################################################################
+# MSA tracks from Sept. 2005 freeze
+# Use links from Wiki for data submission (as per Elliott Margulies)
+
+    # TBA alignments
+    cd /cluster/data/encode/TBA
+    mkdir -p SEP-05/lab
+    cd SEP-05/lab
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/tba.v2.maf.tar
+
+    cd ..
+    foreach f (lab/*/*.maf.gz)
+        echo $f
+        gunzip -c $f | sed 's/^s human/s hg17/' > $f:t:r
+    end
+    set gdir = /gbdb/hg17/encode/TBA/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/TBA/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodeTbaAlign >&! load.log
+    # lots of "score too small" messages -- these are OK.
+    cat *.maf | hgLoadMafSummary hg17 encodeTbaSummary stdin
+
+    #  MLAGAN alignments
+    cd /cluster/data/encode/MLAGAN
+    mkdir -p SEP-05/lab
+    cd SEP-05/lab
+    wget http://ai.stanford.edu/~asimenos/ENCODE_Oct-2005_maf.tgz
+    cd ..
+cat > project.csh << 'EOF'
+    mkdir -p tmp
+    set tmpDir = tmp
+    foreach d (lab/EN[mr]*)
+        set r = $d:t
+        echo $r
+        set c = `echo "SELECT chrom from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        set start =  \
+                `echo "SELECT chromStart from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        set size = \
+                `echo "SELECT size from chromInfo WHERE chrom='$c'" | \
+                        hgsql -N hg17`
+        /cluster/data/encode/MLAGAN/mafCoord.pl < $d/$r.maf \
+                human.1 hg17.$c $start $size | \
+            sed 's/^a$/a score=0.0/' > $tmpDir/$r.db.maf
+        echo "projecting $r"
+        /cluster/bin/penn/maf_project $tmpDir/$r.db.maf hg17.$c > $r.maf
+        echo "finished $r"
+    end
+'EOF'
+    set gdir = /gbdb/hg17/encode/MLAGAN/SEP-05/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/MLAGAN/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodeMlaganAlign >&! load.log
+    # lots of "score too small" messages -- these are OK.
+    cat *.maf | hgLoadMafSummary hg17 encodeMlaganSummary stdin
+
+    # MAVID alignments
+    cd /cluster/data/encode/MAVID
+    mkdir -p SEP-05/lab
+    cd SEP-05/lab
+    wget http://hanuman.math.berkeley.edu/~cdewey/encode/alignments/ENCODE_SEP-2005_MAVID_MAF_ABS.tar.gz
+    cd ..
+cat > project.csh << 'EOF'
+    set tmpDir = tmp
+    mkdir $tmpDir
+    foreach f (lab/ABS/*.maf)
+        set r = $f:t:r
+        echo $r
+        set c = `echo "SELECT chrom from encodeRegions WHERE name='$r'" | \
+                        hgsql -N hg17`
+        sed 's/^a$/a score=0.0/; s/^s  *human/s hg17/' $f > $tmpDir/$r.maf
+        echo "projecting $r"
+        /cluster/bin/penn/maf_project $tmpDir/$r.maf hg17.$c > $r.maf
+        echo "finished $r"
+    end
+'EOF'
+    set gdir = /gbdb/hg17/encode/MAVID/SEP-05/maf
+    mkdir -p $gdir
+    rm -f $gdir/*.maf
+    ln -s /cluster/data/encode/MAVID/SEP-05/*.maf $gdir
+    hgLoadMaf -pathPrefix=$gdir -WARN hg17 encodeMavidAlign >&! load.log
+    cat *.maf | hgLoadMafSummary hg17 encodeMavidSummary stdin
+
+    # conserved elements
+    cd /cluster/data/encode/MSA
+    mkdir -p SEP-05/elements/lab
+    cd SEP-05/elements/lab
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/target.align.conservation.v1.tar.gz
+
+    # consensus elements
+    cd /cluster/data/encode/MSA
+    mkdir -p SEP-05/consensus/lab
+    cd SEP-05/consensus/lab
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/consensus.conservation.v1.tar.gz
+    cd ..
+    ln -s lab/or.or.bed AllUnionEl.bed
+    ln -s lab/and.and.bed AllIntersectEl.bed
+    foreach f (All*.bed)
+        set b = $f:r
+        set t = encode$b
+        sed -e 's/$/\t500/' $f | hgLoadBed -noBin hg17 $t stdin
+        checkTableCoords hg17 $t
+    end
