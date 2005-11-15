@@ -96,7 +96,7 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1037 2005/11/14 23:51:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1038 2005/11/15 00:36:36 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7903,11 +7903,10 @@ if (withLeftLabels)
 	    y += showPosHeight;
 	    }
 	{
-	char *rulerLabel = (char *)needMem((size_t)(leftLabelWidth+1));
-	safef(rulerLabel,leftLabelWidth,"%s:",chromName);
+	char rulerLabel[64];
+	safef(rulerLabel,ArraySize(rulerLabel),"%s:",chromName);
 	vgTextRight(vg, leftLabelX, y, leftLabelWidth-1, rulerHeight, 
 		    MG_BLACK, font, rulerLabel);
-	freeMem((void *)rulerLabel);
 	}
 	y += rulerHeight;
 	if (zoomedToBaseLevel || rulerCds)
