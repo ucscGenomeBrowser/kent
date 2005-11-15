@@ -2956,5 +2956,254 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam1/newRMNib \
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
+# BAC END PAIRS TRACK (DONE, 2005-11-14, hartera)
 
+    # Use latest BAC ends data from NCBI
+    ssh kolossus
+    cd /cluster/data/ncbi
+    mkdir -p bacends/dog/bacends.1
+    cd bacends/dog/bacends.1
+    # go to the trace archive at:
+    # http://www.ncbi.nlm.nih.gov/Traces/trace.cgi
+    # Query: species_code='canis familiaris' and center_name='abc'
+    # there are 393408 items and can download 40000 items at a time so
+    # download the perl scrip to query the trace archive.
+    # see http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=show&f=doc&m=obtain&s=stips#download
+    # for instructions.
+    wget --timestamping \
+         ftp://ftp.ncbi.nih.gov/pub/TraceDB/misc/query_tracedb
+    chmod +x query_tracedb
+    ssh kolossus
+    cd 
+    cat > queryTraceDogBacEnds.csh <<'_EOF_'
+#!/bin/csh -fe
+foreach n (0 1 2 3 4 5 6 7 8 9)
+   echo "Fetching page $n ..."
+   (echo -n "retrieve_tgz all 0b"; query_tracedb "query page_size 40000 page_number $n binary species_code='CANIS FAMILIARIS' and center_name='abc'") | query_tracedb > data${n}.tgz 
+end
+'_EOF_'
+    chmod +x queryTraceDogBacEnds.csh
+    nohup nice queryTraceDogBacEnds.csh &
+    # Took about 5.5 hours.
 
+    wget --timestamping \
+         ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/canis_familiaris/9615_clone_ends001.mfa.gz
+    wget --timestamping \
+         ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/canis_familiaris/9615_clone_info001.txt.gz
+    wget --timestamping \
+         ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/README
+    nice gunzip *.gz
+    foreach n (1 2 3 4 5 6 7 8 9)
+       nice tar xvf data${n}.tar
+       nice rm -r */CANIS_FAMILIARIS/ABC/traces
+       nice rm -r */CANIS_FAMILIARIS/ABC/qscore 
+    end
+    
+    foreach f (*/CANIS_FAMILIARIS/ABC/fasta/*.fasta)
+       nice cat $f >> canFamBacends.fa
+    end
+    # took almost 3 hours 
+    # change FASTA record to have only the trace name in the header line.
+    perl -pi.bak -e 's/>gnl\|ti\|[0-9]+ name:([0-9]+)/>$1/' canFamBacends.fa
+    mv canFamBacends.fa.bak bacEndSeqs.fa
+    grep '>' canFamBacends.fa | wc -l
+    # 393408 - this is the correct number of sequences 
+    cd /cluster/data/ncbi/bacends/dog/bacends.1
+    # cat together the xml files of BAC clone end information
+    cat */*.xml > CHORI82BacEnds.xml
+    # clean up
+    rm -r 2005*
+    mkdir -p /san/sanvol1/scratch/canFam1/bacends
+    faSplit sequence /cluster/bluearc/canFam1/bacends/canFamBacends.fa \
+            100 /san/sanvol1/scratch/canFam1/bacends/bacends
+    ssh kkstore01
+    cd /cluster/data/ncbi/bacends/dog/bacends.1
+    # get mate-pair information from xml, forward is SP6, reverse is T7
+cat > getBacInfo.pl << EOF
+#!/usr/bin/perl -w
+use strict;
+
+my ($name, $clone, $dir);
+
+while (<STDIN>)
+{
+chomp;
+my $l = $_;
+if ($l =~ /<trace_name>([0-9]+)/)
+   {
+   $name = $1;
+   }
+elsif ($l =~ /<clone_id>(CH82\-[0-9A-Z]+)/)
+   {
+   $clone = $1;
+   }
+elsif ($l =~ /<trace_end>(F|R)/)
+   {
+   $dir = $1;
+   # print out end information
+   print "$clone\t$name\t0\tCHORI-82\t0";
+   if ($dir eq "F")
+      {
+      print "\tSP6\n";
+      }
+   elsif ($dir eq "R")
+      {
+      print "\tT7\n";
+      }
+   }
+}
+EOF
+    chmod +x getBacInfo.pl
+    perl getBacInfo.pl < CHORI82BacEnds.xml > bacEndInfo.txt
+    # check all the names are there 
+    grep '>' canFamBacends.fa > names
+    perl -pi.bak -e 's/>//' names
+    sort names | uniq > names.sort
+    awk '{print $2}' bacEndInfo.txt  | sort | uniq > bacEndInfo.names.sort
+    comm -13 bacEndInfo.names.sort names.sort
+# 17714318
+# 17716422
+# 17755662
+# 17798575
+# 17858308
+# 17859375
+# 17928748
+# 17967720
+# 17967763
+# 18124464
+# 18124606
+# 18261519
+    # these 12 are not in the xml file so download manually from the 
+    # trace archive. Go to http://www.ncbi.nlm.nih.gov/Traces/trace.cgi 
+    # type in search query e.g.
+    # species_code='CANIS FAMILIARIS' and center_name='ABC' and (trace_name='17967763' or trace_name='18124464' or trace_name='18124606' or trace_name='18261519')
+    # and save as Info-XML
+    foreach n (1 2 3) 
+      tar xvf trace${n}.tar
+    end
+    cat */*.xml >> CHORI82BacEnds.xml
+    # then create file of BAC end info again
+    rm bacEndInfo.txt
+    perl getBacInfo.pl < CHORI82BacEnds.xml > bacEndInfo.txt
+    # check all the names are there 
+    awk '{print $2}' bacEndInfo.txt  | sort | uniq > bacEndInfo.names.sort
+    comm -13 bacEndInfo.names.sort names.sort
+    # these are both the same so all the names were retrieved from the xml file
+    # cleanup 
+    rm -r 2005* 
+    rm *.bak *.sort names  
+    # create mate-pair information
+    /cluster/bin/scripts/convertBacEndPairInfo bacEndInfo.txt
+    # 196031 pairs and 1346 singles
+ 
+    # Do BLAT alignments of BAC ends to the genome.
+    ssh pk
+    # copy over masked contigs to the san
+    mkdir -p /san/sanvol1/scratch/canFam1/maskedContigs
+    rsync -a --progress kkr1u00:/iscratch/i/canFam1/maskedContigs/ \
+             /san/sanvol1/scratch/canFam1/maskedContigs
+    # copy over 11.ooc file to the san
+    rsync -a --progress kkr1u00:/iscratch/i/canFam1/11.ooc \
+             /san/sanvol1/scratch/canFam1
+    # make output directory
+    mkdir -p /san/sanvol1/scratch/canFam1/bacendsPsl
+    # make run directory
+    mkdir -p /san/sanvol1/scratch/canFam1/bacendsRun
+    mkdir -p /cluster/data/canFam1/bed/bacends
+    cd /cluster/data/canFam1/bed/bacends
+    ln -s /san/sanvol1/scratch/canFam1/bacendsPsl
+    ln -s /san/sanvol1/scratch/canFam1/bacendsRun
+    cd /cluster/data/canFam1/bed/bacends/bacendsRun
+    echo '#LOOP\n/cluster/bin/x86_64/blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/canFam1/11.ooc {check out line+ /san/sanvol1/scratch/canFam1/bacendsPsl/$(root1).$(root2).psl}\n#ENDLOOP' > gsub
+    ls -1S /san/sanvol1/scratch/canFam1/maskedContigs/*.fa > contigs.lst
+    ls -1S /san/sanvol1/scratch/canFam1/bacends/bacends*.fa > bacends.lst
+    gensub2 contigs.lst bacends.lst gsub jobList
+    para create jobList
+    para try, check, push, check etc.
+# para time
+# Completed: 49203 of 49203 jobs
+# CPU time in finished jobs:     185617s    3093.62m    51.56h    2.15d  0.006 y
+# IO & Wait Time:                169691s    2828.18m    47.14h    1.96d  0.005 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             212s       3.53m     0.06h    0.00d
+# Submission to last job:          1473s      24.55m     0.41h    0.02d
+    # lift alignments
+    ssh kolossus
+    cd /cluster/data/canFam1/bed/bacends
+    pslSort dirs raw.psl tmp bacendsPsl
+    # started 08:15, PID: 16561
+    pslCheck raw.psl >& check.log 
+    wc -l check.log
+    # 2467 check.log so 2467 invalid alignments with overlapping blocks
+    wc -l raw.psl
+    # 27147459 raw.psl - 0.009% of alignments have overlapping blocks.
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds.psl /dev/null
+    # Processed 27147454 alignments
+    wc -l bacEnds.psl
+    # 771166 bacEnds.psl
+    # with pslCheck, 1010 of these have overlapping blocks, 0.008%
+    liftUp bacEnds.lifted.psl /cluster/data/canFam1/jkStuff/liftAll.lft \
+           warn bacEnds.psl
+    awk '{print $10}' bacEnds.lifted.psl | sort | uniq | wc -l
+    # 317098 without headers - 80.6% aligned, 393408 total
+    # for unfiltered alignments, raw.psl, 85.7% aligned.
+    # Make BAC end pairs track: 
+    ssh kkstore03
+    # create alignment pairs
+    mkdir -p /cluster/data/canFam1/bed/bacends/pairs
+    cd /cluster/data/canFam1/bed/bacends/pairs
+    set ncbiDir = /cluster/data/ncbi/bacends/dog/bacends.1
+    /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose ../bacEnds.lifted.psl $ncbiDir/bacEndPairs.txt all_bacends bacEnds
+    wc -l *
+#     29 bacEnds.long
+#    432 bacEnds.mismatch
+#  46668 bacEnds.orphan
+# 131858 bacEnds.pairs
+#    499 bacEnds.short
+#    805 bacEnds.slop
+
+    # create header required by "rdb" tools
+    echo 'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' \
+         > header
+    echo '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    # edit header to make sure \t is/become tab character
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairs.bed
+    # Loaded 131858 elements of size 11
+    cat header  bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+        bacEnds.orphan | row score ge 300 | sorttbl chr start \
+        | headchg -del > bacEndPairsBad.bed
+    # Loaded 48406 elements of size 11
+    extractPslLoad -noBin ../bacEnds.lifted.psl bacEndPairs.bed   \
+        bacEndPairsBad.bed | sorttbl tname tstart | headchg -del \
+        > bacEnds.load.psl
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/bacends/pairs
+    hgLoadBed canFam1 bacEndPairs bacEndPairs.bed -notItemRgb \
+               -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # note - this next track isn't pushed to RR, just used for assembly QA
+    hgLoadBed canFam1 bacEndPairsBad bacEndPairsBad.bed -notItemRgb \
+              -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    hgLoadPsl canFam1 -table=all_bacends bacEnds.load.psl
+    # load of all_bacends did not go as planned: 746545 record(s), 0 row(s) 
+    # skipped, 433 warning(s) loading psl.tab 
+    # all alignments were loaded into the table.
+    # load BAC end sequences into seq table so alignments may be viewed
+    # symlink to FASTA sequence file in ncbi directory
+    mkdir -p /gbdb/canFam1/bacends
+    ln -s /cluster/data/ncbi/bacends/dog/bacends.1/canFamBacends.fa \
+          /gbdb/canFam1/bacends/canFamBacends.fa
+    hgLoadSeq canFam1 /gbdb/canFam1/bacends/canFamBacends.fa
+    # 393408 sequences
+# featureBits canFam1 all_bacends
+# 211644790 bases of 2359845093 (8.969%) in intersection
+# featureBits canFam1 bacEndPairs
+# 2334084046 bases of 2359845093 (98.908%) in intersection
+# featureBits canFam1 bacEndPairsBad
+# 548130287 bases of 2359845093 (23.227%) in intersection
+# add trackDb entry and html
+# Changes were made to hgc.c so that the BAC clone and end name links 
+# go to the relevant entries in the NCBI Trace Archive.
