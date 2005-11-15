@@ -1908,6 +1908,29 @@ set chr = "chr$c"
     featureBits -enrichment canFam1 xenoRefGene:upstream:5000 cpgIslandGgfAndyTJ
 #xenoRefGene:upstream:5000 3.047%, cpgIslandGgfAndyTJ 3.393%, both 0.570%, cover 18.72%, enrich 5.52x
 
+    # 8/25/05 -- Laura Elnitski requested unmasked.
+    cd /cluster/data/canFam1/bed/cpgIslandGgfAndy
+    cp /dev/null cpgIslandGgfAndy.bed
+    foreach f (../../*/chr*.fa)
+      set chr = $f:t:r
+      echo preproc and run on unmasked $chr
+      preProcGgfAndy $f \
+      | /cluster/home/angie/ggf-andy-cpg-island.pl \
+      | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
+                   $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
+                   $pGc = (100.0 * $gc / $n); \
+                   $_ = "'$chr'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" . \
+                        "$pCpG\t$pGc\t$oE\n";' \
+      >> cpgIslandGgfAndy.bed
+    end
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndy/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndy.sql
+    hgLoadBed canFam1 cpgIslandGgfAndy -tab -noBin \
+      -sqlTable=cpgIslandGgfAndy.sql cpgIslandGgfAndy.bed
+
 
 # RELOAD ENSEMBL GENES (TODO 9/1/04 angie)
     # previous set was sent out to dog group -- pull in the released 
