@@ -18,7 +18,7 @@ databases=`gbGetDatabases etc/hgwbeta.dbs`
 copyTime=var/copy/copy.time
 
 # workdir is a local dir
-workdir=/scratch/tmp/genbank
+workdir=/var/tmp/genbank
 
 exec $gbRoot/etc/dbload $opts $gbRoot "$databases" $copyTime $workdir
 
