@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.976 2005/11/08 16:14:35 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.977 2005/11/15 21:32:13 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -231,6 +231,7 @@ char *unistsnameScript = "http://www.ncbi.nlm.nih.gov:80/entrez/query.fcgi?db=un
 char *unistsScript = "http://www.ncbi.nlm.nih.gov/genome/sts/sts.cgi?uid=";
 char *gdbScript = "http://www.gdb.org/gdb-bin/genera/accno?accessionNum=";
 char *cloneRegScript = "http://www.ncbi.nlm.nih.gov/genome/clone/clname.cgi?stype=Name&list=";
+char *traceScript = "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 char *uniprotFormat = "http://www.expasy.org/cgi-bin/niceprot.pl?%s";
 
@@ -348,6 +349,12 @@ static void printCloneRegUrl(FILE *f, char *clone)
 /* Print URL for Clone Registry at NCBI for a clone */
 {
 fprintf(f, "\"%s%s\"", cloneRegScript, clone);
+}
+
+static void printTraceUrl(FILE *f, char *idType, char *name)
+/* Print URL for Trace Archive at NCBI for an identifier specified by type */
+{
+fprintf(f, "\"%s%s%%3D%%27%s%%27\"", traceScript, idType, name);
 }
 
 static void printGenMapDbUrl(FILE *f, char *clone)
@@ -12709,6 +12716,12 @@ if (row != NULL)
             else
                 printf("<H2>%s</H2>\n", clone);
             }
+        else if (sameString("Dog", organism))
+            {
+            printf("<H2><A HREF=");
+            printTraceUrl(stdout, "clone_id", clone);
+            printf(" TARGET=_BLANK>%s</A></H2>\n", clone);
+            }
 	else if (trackDbSetting(tdb, "notNCBI"))
 	    {
 	    printf("<H2>%s</H2>\n", clone);
@@ -12799,6 +12812,12 @@ if (row != NULL)
                     }
                 sqlFreeResult(&sr2);
                 } 
+            else if (sameString("Dog", organism))
+                {
+                printf("<H3><A HREF=");
+                printTraceUrl(stdout, "trace_name", lfs->lfNames[i]);
+                printf(" TARGET=_BLANK>%s</A></H3>\n",lfs->lfNames[i]);
+                }
 	    else if (trackDbSetting(tdb, "notNCBI"))
 		{
 		printf("<H3>%s</H3>\n", lfs->lfNames[i]);
