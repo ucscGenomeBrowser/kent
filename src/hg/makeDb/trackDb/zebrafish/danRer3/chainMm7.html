@@ -34,8 +34,9 @@ the blastz alignments and subsequent chaining were first performed on the
 scaffolds, and the coordinates were then lifted up to the chromosome level. 
 This avoided false alignments across the <em>N</em>s. </P>
 <P>
-The resulting alignments were converted into psl format using the lavToPsl program. The axt alignments were fed into axtChain, 
-which organizes all alignments between a single $o_organism chromosome and a 
+The resulting alignments were converted into psl format using the lavToPsl 
+program. The axt alignments were fed into axtChain, which organizes all 
+alignments between a single $o_organism chromosome and a 
 single $organism chromosome into a group and creates a kd-tree out
 of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
