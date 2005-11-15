@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "gapCalc.h"
 
-static char const rcsid[] = "$Id: gapCalc.c,v 1.2 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: gapCalc.c,v 1.3 2005/11/15 16:37:06 braney Exp $";
 
 struct gapCalc
 /* A structure that bundles together stuff to help us
@@ -231,9 +231,24 @@ return gapCalc;
 struct gapCalc *gapCalcFromFile(char *fileName)
 /* Return gapCalc from file. */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-struct gapCalc *gapCalc = gapCalcRead(lf);
-lineFileClose(&lf);
+struct gapCalc *gapCalc = NULL;
+
+if (sameString(fileName, "loose"))
+    {
+    verbose(2, "using loose gap costs (chicken/human)\n");
+    gapCalc = gapCalcFromString(defaultGapCosts);
+    }
+else if (sameString(fileName, "medium"))
+    {
+    verbose(2, "using medium (original) gap costs (mouse/human)\n");
+    gapCalc = gapCalcFromString(originalGapCosts);
+    }
+else
+    {
+    struct lineFile *lf = lineFileOpen(fileName, TRUE);
+    gapCalc = gapCalcRead(lf);
+    lineFileClose(&lf);
+    }
 return gapCalc;
 }
 
