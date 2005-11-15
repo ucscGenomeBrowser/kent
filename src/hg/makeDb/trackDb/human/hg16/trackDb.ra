@@ -1465,6 +1465,7 @@ type genePred
 
 # ENCODE tracks
 
+
 track encodeGencodeGene
 shortLabel Gencode Genes
 longLabel Gencode Gene Annotations
@@ -1525,6 +1526,16 @@ type bed 12
     longLabel Genome Institute of Singapore PET of PolyA+ RNA (5FU-stim HCT116)
     color 58,119,40
     priority 2
+
+track encode_tba23EvoFold
+shortLabel TBA23 EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+group encodeGenes
+priority 63.1
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack encodeTbaAlign
 
 track encodeAffyRnaSignal
 compositeTrack on
@@ -2852,15 +2863,45 @@ sGroup_vertebrate chicken x_tropicalis zebrafish tetraodon fugu
 treeImage phylo/hg16_23way.jpg
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
-track encode_tba23EvoFold
-shortLabel TBA23 EvoFold
-longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
-group encodeGenes
-priority 63.1
+track encodeAllElements
+compositeTrack on
+shortLabel Consens Elements
+longLabel NHGRI/PSU/UCSC/Stanford TBA and MLAGAN Consensus Conserved Elements
+group encodeCompGeno
+priority 70.0
 visibility hide
-color 20,90,0
-type bed 6 +
-mafTrack encodeTbaAlign
+exonArrows off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 5 .
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeAllUnionEl
+    shortLabel Union
+    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Union Conserved Elements
+    subTrack encodeAllElements
+    priority 1
+    color 80,70,180
+
+    track encodeAllNcUnionEl
+    shortLabel NC Union
+    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Union NonCoding Conserved Elements
+    subTrack encodeAllElements
+    priority 2
+    color 80,105,145
+
+    track encodeAllIntersectEl
+    subTrack encodeAllElements
+    shortLabel Intersect
+    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Intersection Conserved Elements
+    priority 3
+    color 80,145,105
+
+    track encodeAllNcIntersectEl
+    subTrack encodeAllElements
+    shortLabel NC Intersect
+    longLabel TBA and MLAGAN PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
+    priority 4
+    color 80,180,80
 
 searchTable encodeGisRnaPetHCT116
 searchMethod exact

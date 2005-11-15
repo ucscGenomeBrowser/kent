@@ -744,12 +744,14 @@ autoScale Off
     shortLabel UCD E2F1
     longLabel UC Davis ChIP/Chip NimbleGen - E2F1 ab, HeLa Cells
     priority 1
+    dataVersion ENCODE June 2005 Freeze
 
     track encodeUCDavisChipMyc
     subTrack encodeUCDavisChip
     shortLabel UCD C-Myc
     longLabel UC Davis ChIP/Chip NimbleGen - C-Myc ab, HeLa Cells
     priority 2
+    dataVersion ENCODE Oct 2005 Freeze
 
 track encodeUcsdNgGif
 compositeTrack on
@@ -1479,6 +1481,38 @@ sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephan
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeMsaElements
+compositeTrack on
+shortLabel Consens Elements
+longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Consensus Conserved Elements
+group encodeCompGeno
+priority 70.0
+visibility hide
+exonArrows off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 4 .
+
+    track encodeMsaElUnion
+    shortLabel Loose
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Loose Conserved Elements
+    subTrack encodeMsaElements
+    priority 1
+    color 80,70,180
+
+    track encodeMsaElModerate
+    subTrack encodeMsaElements
+    shortLabel Moderate
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    priority 2
+    color 80,105,148
+
+    track encodeMsaElIntersect
+    subTrack encodeMsaElements
+    shortLabel Strict
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    priority 3
+    color 80,145,105
 
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
