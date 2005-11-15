@@ -1,3 +1,21 @@
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+                                                                                
+track bacEndPairsBad
+shortLabel Incorrect BAC End Pairs
+longLabel Orphan, Long, Short and Incorrectly Oriented BAC End Pairs
+group map
+priority 16
+visibility hide
+type bed 6 +
+exonArrows off
+
 track mzHg17Mm5_phast
 shortLabel Conservation
 longLabel Dog/Human/Mouse Multiz Alignments & phastCons Scores
@@ -187,4 +205,16 @@ colorChromDefault off
 type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
+
+searchTable bacEndPairs
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
+
+searchTable bacEndPairsBad
+searchMethod exact
+searchType bed
+termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+searchPriority 8
 
