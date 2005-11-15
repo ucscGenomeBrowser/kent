@@ -10,8 +10,9 @@
 #include "hui.h"
 #include "ra.h"
 #include "hash.h"
+#include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.22 2005/09/26 16:33:45 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.23 2005/11/04 01:26:06 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -202,11 +203,24 @@ for (;;)
 	   break;
 	   }
 	line = skipLeadingSpaces(line);
-	if (startsWith("track", line))
-	   {
-	   lineFileReuse(lf);
-	   break;
-	   }
+        if (startsWith("track", line))
+            {
+            lineFileReuse(lf);
+            break;
+            }
+        else if (startsWith("#include", line))
+            {
+            struct trackDb *incTdb;
+            char incFile[256];
+            char *file;
+            splitPath(raFile, incFile, NULL, NULL);
+            nextWord(&line);
+            file = nextQuotedWord(&line);
+            strcat(incFile, file);
+            printf("found include file: %s\n", incFile);
+            incTdb = trackDbFromRa(incFile);
+            btList = slCat(btList, incTdb);
+            }
 	}
     if (done)
         break;

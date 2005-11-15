@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.9 2005/10/27 17:23:06 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.13 2005/11/12 00:27:13 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -55,7 +55,7 @@ struct visiMatch *a = va, *b = vb;
 return a->imageId - b->imageId;
 }
 
-static int visiMatchCmpWeight(const void *va, const void *vb)
+int visiMatchCmpWeight(const void *va, const void *vb)
 /* Compare to sort based on match. */
 {
 const struct visiMatch *a = *((struct visiMatch **)va);
@@ -145,9 +145,6 @@ static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
  * with visiSearcherFree. */
 {
 visiSearcherWeedResults(searcher);
-#ifdef SOMEDAY
-slSort(&searcher->matchList, visiMatchCmpWeight);
-#endif 
 return searcher->matchList;
 }
 
@@ -232,7 +229,7 @@ typedef void AdderFunc(struct visiSearcher *searcher,
 
 static void visiGeneMatchMultiWord(struct visiSearcher *searcher, 
 	struct sqlConnection *conn, struct slName *wordList,
-	char *table, AdderFunc adder)
+	char *table, char *field, AdderFunc adder)
 /* This helps cope with matches that may involve more than
  * one word.   It will preferentially match as many words
  * as possible, and if there is a multiple-word match it
@@ -248,18 +245,23 @@ for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     {
     struct slName *nameList, *name;
     int maxWordsUsed = 0;
-    dyStringClear(query);
-    dyStringPrintf(query, "select name from %s where name like \"", table);
-    dyStringAppend(query, word->name);
-    dyStringAppend(query, "%\"");
-    nameList = sqlQuickList(conn, query->string);
-    if (nameList != NULL)
+
+    if (strlen(word->name) >= 3) /* Logic could be expensive on small words */
 	{
-	for (name = nameList; name != NULL; name = name->next)
+	dyStringClear(query);
+	dyStringPrintf(query, "select %s from %s where %s like \"", 
+	    field, table, field);
+	dyStringAppend(query, word->name);
+	dyStringAppend(query, "%\"");
+	nameList = sqlQuickList(conn, query->string);
+	if (nameList != NULL)
 	    {
-	    int wordsUsed = countWordsUsedInPhrase(name->name, word);
-	    if (wordsUsed > maxWordsUsed)
-		maxWordsUsed = wordsUsed;
+	    for (name = nameList; name != NULL; name = name->next)
+		{
+		int wordsUsed = countWordsUsedInPhrase(name->name, word);
+		if (wordsUsed > maxWordsUsed)
+		    maxWordsUsed = wordsUsed;
+		}
 	    }
 	}
     if (maxWordsUsed > 0)
@@ -439,6 +441,24 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     }
 }
 
+static void visiGeneMatchSubmitId(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Add images matching submitId  accessions to searcher. */
+{
+struct slName *word;
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
+    {
+    char query[512];
+    safef(query, sizeof(query),
+    	"select image.id from image,imageFile "
+	"where imageFile.submitId = '%s' "
+	"and imageFile.id = image.imageFile", word->name);
+    addImageListAndFree(searcher, sqlQuickNumList(conn, query),
+	wordIx, 1);
+    }
+}
+
 static void addImagesMatchingBodyPart(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct dyString *dy, char *bodyPart,
 	int startWord, int wordCount)
@@ -478,7 +498,8 @@ static void visiGeneMatchBodyPart(struct visiSearcher *searcher,
  * This is a little complicated by some body parts containing
  * multiple words, like "choroid plexus". */
 {
-visiGeneMatchMultiWord(searcher, conn, wordList, "bodyPart",
+visiGeneMatchMultiWord(searcher, conn, wordList, 
+    "bodyPart", "name",
     addImagesMatchingBodyPart);
 }
 
@@ -617,6 +638,51 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     }
 }
 
+static void addImagesMatchingBinomial(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *binomial,
+	int startWord, int wordCount)
+/* Add images that match binomial name. */
+{
+dyStringClear(dy);
+dyStringPrintf(dy, 
+   "select distinct image.id from "
+   "image,specimen,uniProt.taxon "
+   "where uniProt.taxon.binomial = \"%s\" "
+   "and specimen.taxon = uniProt.taxon.id "
+   "and image.specimen = specimen.id"
+   , binomial);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, binomial,
+	startWord, wordCount);
+}
+
+static void addImagesMatchingCommonName(struct visiSearcher *searcher,
+	struct sqlConnection *conn, struct dyString *dy, char *commonName,
+	int startWord, int wordCount)
+/* Add images that match common name. */
+{
+dyStringClear(dy);
+dyStringPrintf(dy, 
+   "select distinct image.id from "
+   "image,specimen,uniProt.commonName "
+   "where uniProt.commonName.val = \"%s\" "
+   "and specimen.taxon = uniProt.commonName.taxon "
+   "and image.specimen = specimen.id"
+   , commonName);
+addImagesMatchingQuery(searcher, conn, dy->string, NULL, commonName,
+	startWord, wordCount);
+}
+
+
+static void visiGeneMatchOrganism(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Fold in matches to organism. */
+{
+visiGeneMatchMultiWord(searcher, conn, wordList, "uniProt.taxon", "binomial",
+    addImagesMatchingBinomial);
+visiGeneMatchMultiWord(searcher, conn, wordList, "uniProt.commonName", "val",
+    addImagesMatchingCommonName);
+}
+
 struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
 /* visiSearch - return list of images that match searchString sorted
  * by how well they match. This will search most fields in the
@@ -634,6 +700,8 @@ visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
 visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
+visiGeneMatchSubmitId(searcher, conn, wordList);
+visiGeneMatchOrganism(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher);
 searcher->matchList = NULL; /* Transferring memory ownership to return val. */
 visiSearcherFree(&searcher);

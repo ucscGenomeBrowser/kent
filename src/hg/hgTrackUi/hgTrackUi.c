@@ -26,7 +26,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.217 2005/10/13 20:16:41 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.220 2005/11/09 16:02:36 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -271,6 +271,18 @@ for (i = 0; i < variantLocationSize; i++)
     cartMakeCheckBox(cart, variantLocationString[i], FALSE);
     printf (" %s<BR />", variantLocationLabel[i]);
     }
+
+/* print key for colors */
+printf("<BR /><B>Color key (by mutation type)</B><BR />");
+printf("substitution = purple<BR />");
+printf("insertion = green<BR />");
+printf("deletion = blue<BR />");
+printf("duplication = orange<BR />");
+printf("complex = red<BR />");
+printf("unknown = black<BR />\n");
+printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR />\n");
+
+printf("<BR /><B>Include subtracks</B>");
 }
 
 void cbrWabaUi(struct trackDb *tdb)
@@ -1587,7 +1599,7 @@ else if (tdb->type != NULL)
 		     wgRna table has a new field 'type', which is used to store RNA type info
 		     and from which to determine the display color of each entry.
 	    */
-	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna") && !startsWith(track, "encodeGencodeIntron"))
+	    if ((atoi(words[1])>4) && !sameString(track,"jaxQTL3") && !sameString(track, "wgRna") && !startsWith("encodeGencodeIntron", track))
 		scoreUi(tdb, 1000);
 	    }
 	else if (sameWord(words[0], "psl"))

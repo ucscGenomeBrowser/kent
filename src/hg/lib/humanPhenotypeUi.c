@@ -37,8 +37,8 @@ int variantTypeSize = ArraySize(variantTypeString);
 char *variantLocationLabel[] = {
     "exon",
     "intron",
-    "5' utr",
-    "3' utr",
+    "5' UTR",
+    "3' UTR",
     "not within known transcription unit",
 };
 
@@ -54,8 +54,8 @@ char *variantLocationString[] = {
 char *variantLocationDbValue[] = {
     "exon",
     "intron",
-    "5'utr",
-    "3'utr",
+    "5' UTR",
+    "3' UTR",
     "not within known transcription unit",
 };
 

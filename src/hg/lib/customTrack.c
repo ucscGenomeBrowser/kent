@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.67 2005/10/28 03:34:47 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.69 2005/11/07 23:59:47 galt Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -801,7 +801,7 @@ else
 	char *mem;
         unsigned long size;
 	chopByWhite(text,words,3);
-	mem = NULL+sqlUnsignedLong(words[1]);
+    	mem = (char *)sqlUnsignedLong(words[1]);
         size = sqlUnsignedLong(words[2]);
 	lf = lineFileDecompressMem(TRUE, mem, size);
 	}
@@ -1053,12 +1053,20 @@ if (customText == NULL || customText[0] == 0)
     	endsWith(fileName,".bz2")))
 	{
 	char buf[256];
-	safef(buf,sizeof(buf),"compressed://%s %lu %s",
-	    fileName,   
-    	    (unsigned long) cgiOptionalString("hgt.customFile"),
-    	    cartOptionalString(cart, "hgt.customFile__size"));
-	    /* cgi functions preserve binary data, cart vars have been cloneString-ed
-	     * which is bad for a binary stream that might contain 0s  */
+    	char *cFBin = cartOptionalString(cart, "hgt.customFile__binary");
+	if (cFBin)
+	    {
+	    safef(buf,sizeof(buf),"compressed://%s %s",
+		fileName,  cFBin);
+		/* cgi functions preserve binary data, cart vars have been cloneString-ed
+		 * which is bad for a binary stream that might contain 0s  */
+	    }
+	else
+	    {
+	    char *cF = cartOptionalString(cart, "hgt.customFile");
+	    safef(buf,sizeof(buf),"compressed://%s %lu %lu",
+		fileName, (unsigned long) cF, (unsigned long) strlen(cF));
+	    }
     	customText = cloneString(buf);
 	}
     else
@@ -1096,7 +1104,7 @@ if (customText != NULL && customText[0] != 0)
     cartRemove(cart, "hgt.customText");
     cartRemove(cart, "hgt.customFile");
     cartRemove(cart, "hgt.customFile__filename");
-    cartRemove(cart, "hgt.customFile__size");
+    cartRemove(cart, "hgt.customFile__binary");
     }
 else if (fileName != NULL)
     {

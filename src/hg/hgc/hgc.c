@@ -186,7 +186,7 @@
 #include "humPhen.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.971 2005/10/31 23:01:13 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.976 2005/11/08 16:14:35 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2057,6 +2057,14 @@ if (hTableOrSplitExists(tdb->tableName))
     }
 }
 
+void printDataVersion(struct trackDb *tdb)
+/* If this annotation has a dataVersion trackDb setting, print it */
+{
+char *version;
+if ((version = trackDbSetting(tdb, "dataVersion")) != NULL)
+    printf("<B>Data version:</B> %s <BR>\n", version);
+}
+
 void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */ 
@@ -2088,6 +2096,7 @@ void printTrackHtml(struct trackDb *tdb)
 {
 char *tableName;
 printTBSchemaLink(tdb);
+printDataVersion(tdb);
 printOrigAssembly(tdb);
 if ((tableName = hTableForTrack(hGetDb(), tdb->tableName)) != NULL)
     {
@@ -11486,7 +11495,7 @@ void printLsSnpLinks(struct snp snp)
 /* print links to ModBase and LS-SNP at UCSF */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
+struct sqlResult *sr1, *sr2;
 char **row;
 char   query[256];
 char   baseUrl[] = "http://salilab.org/LS-SNP-cgi/";
@@ -11500,16 +11509,30 @@ else if (sameString("hg16", hGetDb()))
 else
     return;
 
-if (!stringIn("nonsynon",snp.func) || !hTableExists("hgFixed.modBaseLsSnp"))
-    return;
-safef(query, sizeof(query), "select distinct uniProtId, dbSnpRsId from hgFixed.modBaseLsSnp "
-      "where dbSnpRsId='%s' order by uniProtId, dbSnpRsId", snp.name);
-if ( ((sr=sqlGetResult(conn, query)) != NULL) && ((row=sqlNextRow(sr)) != NULL))
+if (hTableExists("lsSnpStructure"))
     {
-    printf("<BR><A href=\"#LSSNP\">LS-SNP</A> <A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
-    printf("Protein_structure\" TARGET=_blank>Protein Structure</A>");
+    safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpStructure "
+	  "where rsId='%s' order by uniProtId", snp.name);
+    sr1=sqlGetResult(conn, query);
+    if ( (sr1 != NULL) && ((row=sqlNextRow(sr1)) != NULL))
+	{
+	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
+	printf("Protein_structure\" TARGET=_blank>LS-SNP Protein Structure Prediction</A>\n");
+	}
+    sqlFreeResult(&sr1);
     }
-sqlFreeResult(&sr);
+if (hTableExists("lsSnpFunction"))
+    {
+    safef(query, sizeof(query), "select distinct uniProtId, rsId from lsSnpFunction "
+	  "where rsId='%s' order by uniProtId", snp.name);
+    sr2=sqlGetResult(conn, query);
+    if ( (sr2 != NULL) && ((row=sqlNextRow(sr2)) != NULL))
+	{
+	printf("<BR><A HREF=\"%s%s?idvalue=%s%s", baseUrl, snpScript, row[1], options);
+	printf("Functional\" TARGET=_blank>LS-SNP Protein Function Prediction</A>\n");
+	}
+    sqlFreeResult(&sr2);
+    }
 hFreeConn(&conn);
 }
 
@@ -16855,9 +16878,10 @@ void doHumPhen (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Human Phenotype track */
 {
 char *table = tdb->tableName;
-struct humanPhenotype *humPhen;
+struct humanPhenotypeLSDB *humPhen;
 struct humPhenLink *link;
 struct humPhenAlias alias;
+struct humPhenEthnic ethnic;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -16880,7 +16904,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     /* need in bed struct for print sub */
     struct bed *copy = NULL;
     AllocVar(copy);
-    humPhen = humanPhenotypeLoad(row);
+    humPhen = humanPhenotypeLSDBLoad(row);
     copy->chrom = cloneString(humPhen->chrom);
     copy->chromStart = humPhen->chromStart;
     copy->chromEnd = humPhen->chromEnd;
@@ -16918,15 +16942,34 @@ printf("<DT><B>Aliases:</B><DD>\n ");
 safef(query, sizeof(query),
       "select * from humPhenAlias where dbId = '%s'", idArray[0]);
 sr = sqlGetResult(conn, query);
+i = 0;  /* count lines, print message if none */
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    i++;
     humPhenAliasStaticLoad(row, &alias);
     printf("%s<BR />\n", alias.name);
     }
 sqlFreeResult(&sr);
+if (i == 0) 
+    printf("Not available<BR />\n");
+
+printf("<DT><B>Ethnicity/Nationality:</B><DD>\n ");
+safef(query, sizeof(query),
+      "select * from humPhenEthnic where dbId = '%s'", idArray[0]);
+sr = sqlGetResult(conn, query);
+i = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    i++;
+    humPhenEthnicStaticLoad(row, &ethnic);
+    printf("%s<BR />\n", ethnic.ethnic);
+    }
+sqlFreeResult(&sr);
+if (i == 0)
+    printf("Not available<BR />\n");
 printf("</DL>\n");
 
-humanPhenotypeFree(&humPhen);
+humanPhenotypeLSDBFree(&humPhen);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -17799,7 +17842,7 @@ else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
     }
-else if (sameString("humanPhenotype", track))
+else if (startsWith("humanPhenotype", track))
     {
     doHumPhen(tdb, item);
     }

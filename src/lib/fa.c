@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.32 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.33 2005/11/10 03:39:48 kent Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -132,7 +132,7 @@ else
     return seq;
 }
 
-bioSeq *faNextSeqFromMemText(char **pText, boolean isDna)
+static bioSeq *nextSeqFromMem(char **pText, boolean isDna, boolean doFilter)
 /* Convert fa in memory to bioSeq.  Update *pText to point to next
  * record.  Returns NULL when no more sequences left. */
 {
@@ -179,15 +179,17 @@ if (s != NULL)
 	++s;
 	if (!isalpha(c))
 	    continue;
-	if ((c = filter[(int)c]) != 0) 
-	    d[size++] = c;
-	else
+	if (doFilter)
 	    {
-	    if (isDna)
-		d[size++] = 'n';
-	    else
-		d[size++] = 'X';
+	    if ((c = filter[(int)c]) == 0) 
+		{
+		if (isDna)
+		    c = 'n';
+		else
+		    c = 'X';
+		}
 	    }
+	d[size++] = c;
 	}
     }
 d[size] = 0;
@@ -201,6 +203,20 @@ seq->size = size;
 return seq;
 }
 
+bioSeq *faNextSeqFromMemText(char **pText, boolean isDna)
+/* Convert fa in memory to bioSeq.  Update *pText to point to next
+ * record.  Returns NULL when no more sequences left. */
+{
+return nextSeqFromMem(pText, isDna, TRUE);
+}
+
+bioSeq *faNextSeqFromMemTextRaw(char **pText)
+/* Same as faNextSeqFromMemText, but will leave in 
+ * letters even if they aren't in DNA or protein alphabed. */
+{
+return nextSeqFromMem(pText, TRUE, FALSE);
+}
+
 bioSeq *faSeqListFromMemText(char *text, boolean isDna)
 /* Convert fa's in memory into list of dnaSeqs. */
 {
@@ -212,6 +228,20 @@ while ((seq = faNextSeqFromMemText(&text, isDna)) != NULL)
 slReverse(&seqList);
 return seqList;
 }
+
+bioSeq *faSeqListFromMemTextRaw(char *text)
+/* Convert fa's in memory into list of dnaSeqs without
+ * converting chars to N's. */
+{
+bioSeq *seqList = NULL, *seq;
+while ((seq = faNextSeqFromMemTextRaw(&text)) != NULL)
+    {
+    slAddHead(&seqList, seq);
+    }
+slReverse(&seqList);
+return seqList;
+}
+
 
 bioSeq *faSeqFromMemText(char *text, boolean isDna)
 /* Convert fa in memory to bioSeq. */

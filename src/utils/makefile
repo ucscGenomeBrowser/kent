@@ -17,6 +17,10 @@ scripts:
 	    echo cp -p $$F ${SCRIPTS}; \
 	    cp -p $$F ${SCRIPTS}; \
 	 done
+	chmod +x genePredToBed/genePredToBed;
+	rm -f ${SCRIPTS}/genePredToBed;
+	echo cp -p genePredToBed/genePredToBed ${SCRIPTS};
+	cp -p genePredToBed/genePredToBed ${SCRIPTS};
 	cd cvsTools && ${MAKE} scripts
 
 alpha: scripts all

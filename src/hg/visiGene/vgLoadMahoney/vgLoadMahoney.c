@@ -82,7 +82,7 @@ fprintf(f, "%s",
 "submitSet mahoneySlices01\n"
 "fullDir ../visiGene/full/inSitu/Mouse/mahoney/slices\n"
 "thumbDir ../visiGene/200/inSitu/Mouse/mahoney/slices\n"
-"priority 500\n"
+"priority 1500\n"
 "bodyPart head\n"
 "sliceType transverse\n"
 "embedding Cryosection\n"

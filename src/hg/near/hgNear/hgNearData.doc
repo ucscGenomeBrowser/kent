@@ -175,8 +175,7 @@ The types are:
 	        data table before display clipping.  Defaults to 3.0.
             skipName - (optional) Number of characters to skip in experiment
 	        names in labels.
-            expScale - (optional) The default brightness.  Maybe this should 
-                just be "brightness".  
+            brightness - (optional) The default brightness.  
             forceGrayscale - (optional) Force grayscale display in sorter 
                 when the data isn't a ratio, but it also isn't a raw intensity
 		(which are logged first by default).

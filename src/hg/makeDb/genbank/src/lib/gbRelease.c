@@ -14,13 +14,13 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbRelease.c,v 1.2 2003/09/12 15:24:24 markd Exp $";
+static char const rcsid[] = "$Id: gbRelease.c,v 1.3 2005/11/06 22:56:26 markd Exp $";
 
 /* size power of hash tables for shared strings */
-#define STR_MEM_HASH_SIZE   20
+#define STR_MEM_HASH_SIZE   22
 
 /* size power of hash for entries */
-#define ACC_HASH_SIZE       20
+#define ACC_HASH_SIZE       22
 
 /* Size for unhash local memory block */
 #define LM_BLOCK_SIZE       1048576

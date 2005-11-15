@@ -61,6 +61,8 @@ static struct optionSpec optionSpecs[] = {
     {"neighbor", OPTION_STRING},
     {"bed", OPTION_STRING},
     {"zeroBed", OPTION_STRING},
+    {"shoulderBed", OPTION_STRING},
+    {"distOut", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -71,6 +73,8 @@ int shoulder = 100;
 char *neighbor = NULL;
 char *bedOutFile = NULL;
 char *zeroBedOutFile = NULL;
+char *distOut = NULL;
+char *shoulderBedOutFile = NULL;
 
 static void usage()
 /* Explain usage and exit. */
@@ -104,8 +108,12 @@ verbose(1,
   "           - that do overlap the neighbor or boundingRegions are discarded\n"
   "           - for the nearest neighbor measurements.\n"
   "   -bed=<file name> - output bed file for the final trial placement\n"
+  "   -shoulderBed=<file name> - output bed file for the items that\n"
+  "                    - are within <shoulder> bp of the measured neighbors\n"
+  "   -distOut=<file name> - output bedGraph file for the items with\n"
+  "                    - their nearest distance included in column 5\n"
   "   -zeroBed=<file name> - output bed file for the items that\n"
-  "                        - are within 0bp of the measured neighbors"
+  "                    - are within 0bp of the measured neighbors"
 );
 exit(255);
 }
@@ -236,9 +244,9 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
 	    {
 	    printf("Nearest neighbor statistics:\n");
 	    printf("    # of   Maximum  Median    Mean # within "
-		"%% within # within    ratio   shoulder\n");
+		"%% within # within    ratio  shoulder\n");
 	    printf("   items   nearest nearest nearest   %d bp    "
-		"%dbp  zero bp  fixed/random  window\n", shoulder, shoulder);
+		"%dbp  zero bp  fixed/ran  window\n", shoulder, shoulder);
 	    fixedMeasure =  shoulderPercent;
 	    }
 	printf("%8d%10d%8d%8d%9d %%%7.2f%9d%7.2f%8d\n", statEl->placedItemCount,
@@ -251,13 +259,15 @@ for (statEl = statList; statEl != NULL; statEl = statEl->next)
     }
 }
 
-static struct statistic *gapStats(struct chrGapList *cList, char *zeroBedFile)
+static struct statistic *gapStats(struct chrGapList *cList, char *zeroBedFile,
+	char *shoulderBedFile, char *distanceFile)
 {
 struct statistic *returnStats;
 struct chrGapList *cl;
 int chrCount = 0;
 int gapCountNonZeroSize = 0;
 int gapCountZeroSize = 0;
+int gapCountShoulderSize = 0;
 unsigned long totalGapSize = 0;
 int maxGap = 0;
 int minGap = BIGNUM;
@@ -266,6 +276,8 @@ int i;
 int boundingElementCount = 0;
 int placedItemCount = 0;
 FILE *zeroFH = NULL;
+FILE *distFH = NULL;
+FILE *shoulderFH = NULL;
 
 AllocVar(returnStats);
 
@@ -275,6 +287,7 @@ for (cl=cList; cl != NULL; cl = cl->next)
     struct gap *gl;
     int gapCount = 0;
     int zeroSized = 0;
+    int shoulderSized = 0;
     boolean firstOne = TRUE;
     for (gl = cl->gList; gl != NULL; gl = gl->next)
 	{
@@ -296,6 +309,7 @@ for (cl=cList; cl != NULL; cl = cl->next)
 	    totalGapSize += gapSize;
 	    if (gapSize > maxGap) maxGap = gapSize;
 	    if (gapSize < minGap) minGap = gapSize;
+	    if (gapSize <= shoulder) ++shoulderSized;
 	    ++gapCount;
 	    }
 	else
@@ -305,13 +319,11 @@ for (cl=cList; cl != NULL; cl = cl->next)
 	}
     gapCountNonZeroSize += gapCount;
     gapCountZeroSize += zeroSized;
+    gapCountShoulderSize += shoulderSized;
     ++chrCount;
 verbose(4,"'%s': %d gaps + %d of size zero = %d\n", cl->chrom, gapCount,
 	zeroSized, gapCount+zeroSized);
     }
-
-if (((char *)NULL != zeroBedFile) && (gapCountZeroSize > 0))
-    zeroFH=mustOpen(zeroBedFile, "w");
 
 verbose(3,"counted %d chroms and %d gaps ( + %d size zero = %d total gaps)"
     "\n\ton the bounding list\n", chrCount, gapCountNonZeroSize,
@@ -386,6 +398,9 @@ if (placedItemCount)
     int placedCount = 0;
     int boundingElements = 0;
 
+    if (distanceFile)
+	distFH=mustOpen(distanceFile, "w");
+
     for (cl=cList; cl != NULL; cl = cl->next)
 	{
 	struct gap *gl;
@@ -401,6 +416,7 @@ if (placedItemCount)
 	    {
 	    struct gap *gEl;
 	    int gapCount = 0;
+	    int shoulderCount = 0;
 
 	    ++chrCount;
 
@@ -433,15 +449,39 @@ if (placedItemCount)
 		    (downstreamBound->chromStart - gEl->downstream->chromEnd));
 		int minDistance = min(upstreamDist, downstreamDist);
 
+		if (distFH)
+		    fprintf (distFH, "%s\t%d\t%d\t%s_%d\t%d\n",
+			    cl->chrom, gEl->downstream->chromStart,
+			    gEl->downstream->chromEnd, cl->chrom, placedCount,
+				minDistance);
+
 		if (minDistance < 0)
 			errAbort("minimum distance < 0 ?");
-		if (zeroFH && (minDistance == 0))
+		if (minDistance == 0)
 		    {
 		    ++gapCount;
-		    fprintf (zeroFH, "%s\t%d\t%d\t%s_%d.%d\n",
-			cl->chrom, gEl->downstream->chromStart,
-			gEl->downstream->chromEnd, cl->chrom,
-			chrCount, gapCount);
+		    if (zeroBedFile)
+			{
+			if (! zeroFH)
+			    zeroFH=mustOpen(zeroBedFile, "w");
+			fprintf (zeroFH, "%s\t%d\t%d\t%s_%d.%d\n",
+			    cl->chrom, gEl->downstream->chromStart,
+			    gEl->downstream->chromEnd, cl->chrom,
+			    chrCount, gapCount);
+			}
+		    }
+		else if ((minDistance > 0) && (minDistance <= shoulder))
+		    {
+		    ++shoulderCount;
+		    if (shoulderBedFile)
+			{
+			if (! shoulderFH)
+			    shoulderFH=mustOpen(shoulderBedFile, "w");
+			fprintf (shoulderFH, "%s\t%d\t%d\t%s_%d.%d\n",
+			    cl->chrom, gEl->downstream->chromStart,
+			    gEl->downstream->chromEnd, cl->chrom,
+			    chrCount, shoulderCount);
+			}
 		    }
 
 		placedDistances[placedCount++] = minDistance;
@@ -474,7 +514,9 @@ if (placedItemCount)
     for (i = 0; i < placedCount; ++i)
 	if (placedDistances[i] > 0) break;
 
+    /*	this doesn't need the + 1	*/
     returnStats->zeroNeighbor = i + 1;
+    returnStats->zeroNeighbor = i;
 
     for ( ; i < placedCount; ++i)
 	if (placedDistances[i] > shoulder) break;
@@ -502,6 +544,8 @@ if (placedItemCount)
     freeMem(placedDistances);
     }	/*	if (placedItemCount)	*/
 carefulClose(&zeroFH);
+carefulClose(&distFH);
+carefulClose(&shoulderFH);
 freeMem(gapSizeArray);
 return (returnStats);
 }
@@ -1054,7 +1098,7 @@ if (TRUE)	/*	display initial placement stats only	*/
 	}
 
     verbose(2,"stats before initial placement:  =================\n");
-    statEl = gapStats(duplicateGapList, (char *)NULL);
+    statEl = gapStats(duplicateGapList, (char *)NULL, (char *)NULL, (char *)NULL);
     printf("statistics on gaps before any placements:\n\t(%s)\n", neighborName);
     statsPrint(statEl);
     slAddHead(&statsList,statEl);
@@ -1062,7 +1106,8 @@ if (TRUE)	/*	display initial placement stats only	*/
     initialPlacement(duplicateGapList,placeItems);
 
     verbose(2,"stats after initial placement:  =================\n");
-    statEl = gapStats(duplicateGapList, zeroBedOutFile);
+    statEl = gapStats(duplicateGapList, zeroBedOutFile, shoulderBedOutFile,
+	distOut);
     printf("statistics after initial placement of placed items:\n\t(%s)\n",
 		placed);
     statsPrint(statEl);
@@ -1093,11 +1138,11 @@ if (trials > 0)
 	    slSort(&randomPlacedBedList,bedCmp);/*order by chrom,chromStart*/
 	    duplicateNeighborList = cloneGapList(neighborGaps);
 	    initialPlacement(duplicateNeighborList,randomPlacedBedList);
-	    statEl = gapStats(duplicateNeighborList, (char *)NULL);
+	    statEl = gapStats(duplicateNeighborList, (char *)NULL, (char *)NULL, (char *)NULL);
 	    freeChrList(&duplicateNeighborList, FALSE);
 	    }
 	else
-	    statEl = gapStats(duplicateGapList, (char *)NULL);
+	    statEl = gapStats(duplicateGapList, (char *)NULL, (char *)NULL, (char *)NULL);
 
 	slAddHead(&statsList,statEl);
 	/*	this gap list has temporary bed elements that were
@@ -1138,6 +1183,8 @@ shoulder = optionInt("shoulder", 100);
 neighbor = optionVal("neighbor", NULL);
 bedOutFile = optionVal("bed", NULL);
 zeroBedOutFile = optionVal("zeroBed", NULL);
+distOut = optionVal("distOut", NULL);
+shoulderBedOutFile = optionVal("shoulderBed", NULL);
 verbosity = optionInt("verbose", 1);
 
 verboseSetLevel(verbosity);
@@ -1149,6 +1196,10 @@ if (bedOutFile)
     verbose(2,"last alignment of trials output to bed file: %s\n", bedOutFile);
 if (zeroBedOutFile)
     verbose(2,"zero distance items to bed file: %s\n", zeroBedOutFile);
+if (distOut)
+    verbose(2,"distances written to bedGraph file: %s\n", distOut);
+if (shoulderBedOutFile)
+    verbose(2,"shoulder distance items to bed file: %s\n", shoulderBedOutFile);
 verbose(2,"number of trials: %d\n", trials);
 verbose(2,"seed value for drand48(): %d\n", seed);
 verbose(2,"shoulder value: %d\n", shoulder);

@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.48 2005/06/15 21:20:51 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.49 2005/11/15 00:14:12 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -214,8 +214,8 @@ if (encoded->stringSize < 16*1024 || cart->userInfo->useCount > 0)
     }
 else
     {
-    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use\n",
-    	encoded->stringSize);
+    fprintf(stderr, "Cart stuffing bot?  Not writing %d bytes to cart on first use of %d\n",
+    	encoded->stringSize, cart->userInfo->id);
     }
 
 /* Cleanup */

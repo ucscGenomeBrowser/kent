@@ -17,7 +17,7 @@ struct gbStatusTbl* gbBuildState(struct sqlConnection *conn,
                                  struct dbLoadOptions* options,
                                  float maxShrinkage,
                                  char* tmpDir, int verboseLevel,
-                                 unsigned maxExtFileChg,
+                                 boolean updateExtFiles,
                                  boolean* maxShrinkageExceeded);
 /* Load status table and find of state of all genbank entries in the release
  * compared to the database.  If maxShrinkage is exeeeded, the list of deleted

@@ -25,6 +25,9 @@ void visiMatchFree(struct visiMatch **pMatch);
 void visiMatchFreeList(struct visiMatch **pList);
 /* Free up memory associated with list of visiMatch */
 
+int visiMatchCmpWeight(const void *va, const void *vb);
+/* Compare to sort based on match. */
+
 struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString);
 /* visiSearch - return list of images that match searchString sorted
  * by how well they match. This will search most fields in the

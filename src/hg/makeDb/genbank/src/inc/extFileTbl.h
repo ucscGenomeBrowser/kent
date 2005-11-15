@@ -39,7 +39,7 @@ struct extFile* extFileTblFindById(struct extFileTbl *eft, HGID id);
 void extFileTblFree(struct extFileTbl **eftPtr);
 /* Free a extFileTbl object */
 
-void extFileTblClean(struct sqlConnection *conn);
+void extFileTblClean(struct sqlConnection *conn, boolean verbEnabled);
 /* Remove rows in the gbExtFile table that are not referenced in the gbSeq
  * table.  This is fast.  Also remove pep.fa file that are not associated with
  * any mrna.fa file.  This is a hack that gets around the refseq peptides not

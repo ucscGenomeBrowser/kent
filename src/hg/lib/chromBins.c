@@ -10,7 +10,7 @@ struct chromBins *chromBinsNew(chromBinsFreeFunc *freeFunc)
 struct chromBins *chromBins;
 AllocVar(chromBins);
 chromBins->freeFunc = freeFunc;
-chromBins->chromTbl = hashNew(8);
+chromBins->chromTbl = hashNew(19); /* handle scaffolds too */
 return chromBins;
 }
 
@@ -59,7 +59,7 @@ struct binKeeper *chromBinsGet(struct chromBins* chromBins, char *chrom,
                                boolean create)
 /* get chromosome binKeeper, optionally creating if it doesn't exist */
 {
-static const int MAX_CHROM_SIZE = 300000000;
+static const int MAX_CHROM_SIZE = 350000000;
 if (create)
     {
     struct hashEl *hel = hashStore(chromBins->chromTbl, chrom);

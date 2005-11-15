@@ -16,12 +16,12 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.1 2005/10/24 21:56:19 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.3 2005/11/09 18:34:02 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
 
-#define MAXPARTSIZE 64*1024  /* max size before gets put in a tempfile to save memory */
+#define MAXPARTSIZE 512*1024*1024  /* max size before gets put in a tempfile to save memory */
 #define MAXPARTLINESIZE 1024 /* header lines should be small, so bad if bigger than this */
 #define MAXDATASIZE 64LL*1024*1024*1024 /* max size allowable for large uploads */
 #define MAXBOUNDARY 72+5     /* max size of buffer for boundary 72+--""0 */
@@ -259,7 +259,7 @@ while(TRUE)
 	break;
     value[i++] = c;
     if (i >= sizeof(value))
-	errAbort("error: main value too long (>%d) in MIME header Content-type:%s",sizeof(value),header);
+	errAbort("error: main value too long (>%lu) in MIME header Content-type:%s",(unsigned long)sizeof(value),header);
     }
 value[i] = 0;    
 
@@ -309,7 +309,7 @@ while(TRUE)
 	break;
     value[i++] = c;
     if (i >= sizeof(value))
-	errAbort("error: %s= value too long (>%d) in MIME header Content-type:%s",field,sizeof(value),header);
+	errAbort("error: %s= value too long (>%lu) in MIME header Content-type:%s",field,(unsigned long)sizeof(value),header);
     }
 value[i] = 0;    
 

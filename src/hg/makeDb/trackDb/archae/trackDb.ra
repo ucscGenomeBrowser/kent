@@ -23,15 +23,15 @@ visibility pack
 color 0,100,100
 type genePred gpProtCodePep
 
-track gbProtCode
-shortLabel GenBank CDS
-longLabel GenBank protein-coding genes
-group genes
-priority 2.1
-visibility pack
-color 40,40,160
-altColor 255,0,0
-type bed 6 .
+#track gbProtCode
+#shortLabel GenBank CDS
+#longLabel GenBank protein-coding genes
+#group genes
+#priority 2.1
+#visibility pack
+#color 40,40,160
+#altColor 255,0,0
+#type bed 6 .
 
 track llOperons
 shortLabel Extended Operons
@@ -183,37 +183,34 @@ color 136,38,193
 altColor 255,128,0
 type wig 0 1
 
-searchName gbProtCodeName
-searchTable gbProtCode
-searchType bed
-searchMethod prefix
-searchDescription Genbank Protein-coding Genes
-searchPriority 20
+#searchName gbProtCodeName searchTable gbProtCode searchType bed
+#searchMethod prefix searchDescription Genbank Protein-coding Genes
+#searchPriority 20
 
-searchName gbProtCodeAnnoteProduct
-searchTable gbProtCode
-searchType bed
-searchMethod fuzzy
-xrefTable gbProtCodeXra
-xrefQuery select name,product from %s where product like '%%%s%%'
-searchPriority 21
+#searchName gbProtCodeAnnoteProduct
+#searchTable gbProtCode
+#searchType bed
+#searchMethod fuzzy
+#xrefTable gbProtCodeXra
+#xrefQuery select name,product from %s where product like '%%%s%%'
+#searchPriority 21
 
-searchName gbProtCodeAnnoteNote
-searchTable gbProtCode
-searchType bed
-searchMethod fuzzy
-xrefTable gbProtCodeXra
-xrefQuery select name,note from %s where note like '%%%s%%'
-searchPriority 22
+#searchName gbProtCodeAnnoteNote
+#searchTable gbProtCode
+#searchType bed
+#searchMethod fuzzy
+#xrefTable gbProtCodeXra
+#xrefQuery select name,note from %s where note like '%%%s%%'
+#searchPriority 22
 
-searchName gbProtCodeCOGName
-searchTable gbProtCode
-searchType bed
-searchMethod exact
-xrefTable COG
-xrefQuery select name,COG from %s where COG like '%s'
-searchDescription COG name search
-searchPriority 23
+#searchName gbProtCodeCOGName
+#searchTable gbProtCode
+#searchType bed
+#searchMethod exact
+#xrefTable COG
+#xrefQuery select name,COG from %s where COG like '%s'
+#searchDescription COG name search
+#searchPriority 23
 
 searchTable Rfam
 searchType bed

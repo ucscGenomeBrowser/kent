@@ -109,7 +109,7 @@ void shuffleArrayOfPointers(void *pointerArray, int arraySize,
 
 void shuffleList(void *pList, int shuffleCount);
 /* Randomize order of slList.  Usage:
- *     randomizeList(&list)
+ *     shuffleList(&list)
  * where list is a pointer to a structure that
  * begins with a next field. */
 

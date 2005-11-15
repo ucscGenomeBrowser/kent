@@ -18,7 +18,8 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
     cnpIafrate.o cnpSebat.o cnpSharpCutoff.o cnpSharpSample.o cnpSharp.o \
-    cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o customTrack.o cutter.o cytoBand.o \
+    cpgIsland.o cpgIslandExt.o ctgPos.o ctgPos2.o \
+    customTrack.o cutter.o cytoBand.o \
     dbDb.o dbSnpRs.o defaultDb.o dless.o dnaMotifSql.o dnaProbe.o \
     dv.o dvBed.o dvXref2.o \
     easyGene.o ec.o ecCode.o ecAttribute.o ecAttributeCode.o \
@@ -37,13 +38,13 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o hCommon.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
-    hgGene.o \
-    hgMaf.o hgRelate.o hgSeq.o HInv.o hui.o humanParalog.o \
-    imageClone.o isochores.o itemAttr.o jalview.o jaxOrtholog.o jaxQTL.o jaxQTL3.o\
-    jksql.o joiner.o \
+    hgGene.o hgMaf.o hgRelate.o hgSeq.o HInv.o hui.o humanParalog.o \
+    imageClone.o isochores.o itemAttr.o jalview.o \
+    jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o \
     kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     ld.o ldUi.o lfs.o liftOver.o liftOverChain.o liftUp.o \
-    llaInfo.o mafFrames.o mafSummary.o mapSts.o mcnBreakpoints.o minGeneInfo.o mrnaMisMatch.o \
+    llaInfo.o mafFrames.o mafSummary.o mapSts.o \
+    mcnBreakpoints.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o \
     netAlign.o omimTitle.o ooUtils.o \
     pbStamp.o pepPred.o plasEndPairs.o pscreen.o \
@@ -51,19 +52,22 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
-    wgRna.o rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o rnaSecStr.o tfbsConsFactors.o \
-    roughAli.o sage.o sageCounts.o sageExp.o sample.o sqlProg.o tfbsCons.o tfbsConsSites.o \
-    sanger22extra.o sangerGene.o sargassoSeaXra.o scopDes.o scoredRef.o sgdAbundance.o \
+    rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o \
+    rnaSecStr.o tfbsConsFactors.o \
+    roughAli.o sage.o sageCounts.o sageExp.o sample.o \
+    sqlProg.o tfbsCons.o tfbsConsSites.o \
+    sanger22extra.o sangerGene.o sargassoSeaXra.o \
+    scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
     snp.o snpExceptions.o snpMap.o snpUi.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
-    tableDescriptions.o tfbsConsMap.o \
+    tableDescriptions.o tableStatus.o tfbsConsMap.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackTable.o transRegCode.o transRegCodeCondition.o \
-    transRegCodeProbe.o vegaInfo.o visiGene.o wabAli.o web.o \
+    transRegCodeProbe.o vegaInfo.o visiGene.o wabAli.o web.o wgRna.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
     visiGene.o vntr.o zdobnovSynt.o humPhen.o humanPhenotypeUi.o
 

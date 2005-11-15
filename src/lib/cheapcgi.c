@@ -10,8 +10,9 @@
 #include "portable.h"
 #include "linefile.h"
 #include "errabort.h"
+#include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.71 2005/10/10 18:59:53 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.72 2005/11/07 22:36:29 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -85,6 +86,13 @@ if (s == NULL)
     errAbort("No CONTENT_LENGTH in environment.");
 if (sscanf(s, "%lu", &inputSize) != 1)
     errAbort("CONTENT_LENGTH isn't a number.");
+s = getenv("CONTENT_TYPE");
+if (s != NULL && startsWith("multipart/form-data", s))
+    {
+    /* use MIME parse on input stream instead, can handle large uploads */
+    inputString = "";  // must not be NULL so it knows it was set
+    return;  
+    }
 inputString = needMem((size_t)inputSize+1);
 for (i=0; i<inputSize; ++i)
     {
@@ -99,139 +107,155 @@ inputString[inputSize] = 0;
 #define memmem(hay, haySize, needle, needleSize) \
     memMatch(needle, needleSize, hay, haySize)
 
-static void cgiParseMultipart(char *input, struct hash **retHash, struct cgiVar **retList)
+static void cgiParseMultipart(struct hash **retHash, struct cgiVar **retList)
 /* process a multipart form */
 {
-char* s;
-char* boundary;
-char *namePt, *nameEndPt, *dataPt, *dataEndPt, *filenamePt = 0, *filenameEndPt;
+char h[1024];  /* hold mime header line */
+char *s = NULL, *ct = NULL;
+struct dyString *dy = newDyString(256);
+struct mimeBuf *mb = NULL;
+struct mimePart *mp = NULL;
+char **env = NULL;
 struct hash *hash = newHash(6);
 struct cgiVar *list = NULL, *el;
 
-char* inputEnd = input + inputSize;
+//debug
+//fprintf(stderr,"GALT: top of cgiParseMultipart()\n");
+//fflush(stderr);
 
-/* find the boundary string */
-s = getenv("CONTENT_TYPE");
-s = strstr(s, "boundary=");
-if(s == NULL) 
-    errAbort("Malformatted multipart-from.");
-
-/* skip the "boundary=" */
-s += 9;
-/* allocate enough room plus "--" and '\0' */
-boundary = needMem(strlen(s) + 2 + 1);
-/* setup the string */
-boundary[0] = '-';
-boundary[1] = '-';
-strcpy(boundary + 2, s);
-		
-namePt = input;
-while(namePt != 0) 
-    {
-    filenamePt = 0;
-    /* find the boundary */
-    namePt = memmem(namePt, inputEnd - namePt, boundary, strlen(boundary));
-    if(namePt != 0) 
+/* find the CONTENT_ environment strings, use to make Alternate Header string for MIME */
+for(env=environ; *env; env++)
+    if (startsWith("CONTENT_",*env))
 	{
-	/* skip passed the boundary */
-	namePt += strlen(boundary);	
-
-	/* if we have -, we are done */
-	if(*namePt == '-')
-	    break;
-
-	/* find the name */
-	namePt = memmem(namePt, inputEnd - namePt, "name=\"", strlen("name=\""));
-	if(namePt == 0)
-	    errAbort("Mangled CGI input (0) string %s", input);
-	namePt += strlen("name=\"");
-
-	/* find the end of the name */
-	nameEndPt = memmem(namePt, inputEnd - namePt, "\"", strlen("\""));
-	if (nameEndPt == 0)
-	    errAbort("Mangled CGI input (1) string %s", input);
-	*nameEndPt = 0;
-
-	/* find the data */
-	dataPt = memmem(nameEndPt + 1, inputEnd - nameEndPt - 1, "\n\r\n", strlen("\n\r\n"));
-	if (dataPt == 0)
-	    errAbort("Mangled CGI input (2) string %s", input);
-	dataPt += 3;
-
-	/* find the end of the data */
-	dataEndPt = memmem(dataPt, inputEnd - dataPt, boundary, strlen(boundary));
-	if (dataEndPt == 0)
-	    errAbort("Mangled CGI input (3) string %s", input);
-	dataEndPt -= 2;
-
-	*(dataEndPt) = '\0';
-
-	/* find the filename if there is one */
-	if(*(nameEndPt + 1) == ';' && *(nameEndPt + 2) == ' ' && *(nameEndPt + 3) == 'f') {
-	    char varNameFilename[256];
-	    struct cgiVar *filenameEl;
-
-	    filenamePt = nameEndPt + 13;
-	    filenameEndPt = memmem(filenamePt, inputEnd - filenamePt, "\"", strlen("\""));
-	    if(filenameEndPt == 0)
-		errAbort("Mangled CGI input (4) string %s", input);
-	    *filenameEndPt = '\0';
-
-	    snprintf(varNameFilename, 256, "%s__filename", namePt);
-
-	    AllocVar(filenameEl);
-	    filenameEl->val = filenamePt;
-	    slAddHead(&list, filenameEl);
-	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
+	//debug
+    	//fprintf(stderr,"%s\n",*env);  //debug
+	safef(h,sizeof(h),"%s",*env);
+	s = strchr(h,'_');    /* change env syntax to MIME style header, from _= to -: */
+	if (!s)
+	    errAbort("expecting '_' parsing env var %s for MIME alt header", *env);
+	*s = '-';
+	s = strchr(h,'=');
+	if (!s)
+	    errAbort("expecting '=' parsing env var %s for MIME alt header", *env);
+	*s = ':';
+	dyStringPrintf(dy,"%s\r\n",h);
 	}
+dyStringAppend(dy,"\r\n");  /* blank line at end means end of headers */
 
-	/* if has filename save size info, needed for binary data */
-	if(filenamePt != 0) {
-	    char varNameFilename[256];
-	    struct cgiVar *filenameEl;
-	    char sizebuf[20];
-	    snprintf(varNameFilename, 256, "%s__size", namePt);
-	    safef(sizebuf,sizeof(sizebuf),"%lu", (unsigned long)(dataEndPt - dataPt));
-	    AllocVar(filenameEl);
-	    filenameEl->val = cloneString(sizebuf);
-	    slAddHead(&list, filenameEl);
-	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
-	}
+//debug
+//fprintf(stderr,"Alternate Header Text:\n%s",dy->string);
+//fflush(stderr);
+mb = initMimeBuf(STDIN_FILENO);
+//debug
+//fprintf(stderr,"got past initMimeBuf(STDIN_FILENO)\n");
+//fflush(stderr);
+mp = parseMultiParts(mb, cloneString(dy->string)); /* The Alternate Header will get freed */
+freeDyString(&dy);
+if(!mp->multi) /* expecting multipart child parts */
+    errAbort("Malformatted multipart-form.");
 
-	if(filenamePt != 0 && doUseTempFile) {
-	    struct tempName uploadedFile;
-	    FILE* f;
-	    char varNameFilename[256];
-	    struct cgiVar *filenameEl;
+//debug
+//fprintf(stderr,"GALT: Wow got past parse of MIME!\n");
+//fflush(stderr);
 
-	    makeTempName(&uploadedFile, "hgSs", ".cgi");
+ct = hashFindVal(mp->hdr,"content-type");
+//debug
+//fprintf(stderr,"GALT: main content-type: %s\n",ct);
+//fflush(stderr);
+if (!startsWith("multipart/form-data",ct))
+    errAbort("main content-type expected starts with [multipart/form-data], found [%s]",ct);
 
-	    /* write the temp filename */
-	    f = mustOpen(uploadedFile.forCgi, "w");
-	    fwrite(dataPt, sizeof(char), dataEndPt - dataPt, f);
-	    carefulClose(&f);
+for(mp=mp->multi;mp;mp=mp->next)
+    {
+    char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL, *ct = NULL;
+    cd = hashFindVal(mp->hdr,"content-disposition");
+    ct = hashFindVal(mp->hdr,"content-type");
+    //debug
+    //fprintf(stderr,"GALT: content-disposition: %s\n",cd);
+    //fprintf(stderr,"GALT: content-type: %s\n",ct);
+    //fflush(stderr);
+    cdMain=getMimeHeaderMainVal(cd);
+    cdName=getMimeHeaderFieldVal(cd,"name");
+    cdFileName=getMimeHeaderFieldVal(cd,"filename");
+    //debug
+    //fprintf(stderr,"GALT: main:[%s], name:[%s], filename:[%s]\n",cdMain,cdName,cdFileName);
+    //fflush(stderr);
+    if (!sameString(cdMain,"form-data"))
+	errAbort("main content-type expected [form-data], found [%s]",cdMain);
 
-	    snprintf(varNameFilename, 256, "%s__data", namePt);
-
-	    AllocVar(filenameEl);
-	    filenameEl->val = cloneString(uploadedFile.forCgi);
-	    slAddHead(&list, filenameEl);
-	    hashAddSaveName(hash, varNameFilename, filenameEl, &filenameEl->name);
-	} else {
+    //debug
+    //fprintf(stderr,"GALT: mp->size[%llu], mp->binary=[%d], mp->fileName=[%s], mp=>data:[%s]\n",
+	//(unsigned long long) mp->size, mp->binary, mp->fileName, 
+	//mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
+    //fflush(stderr);
+    
+    /* filename if there is one */
+    if(cdFileName) 
+	{
+	char varNameFilename[256];
+	safef(varNameFilename, sizeof(varNameFilename), "%s__filename", cdName);
+	AllocVar(el);
+	el->val = cloneString(cdFileName);
+	slAddHead(&list, el);
+	hashAddSaveName(hash, varNameFilename, el, &el->name);
+    	}
+	
+    if (mp->data) 
+	{
+	if (mp->binary)
+	    {
+	    char varNameBinary[256];
+	    char addrSizeBuf[40];
+	    safef(varNameBinary,sizeof(varNameBinary),"%s__binary",cdName);
+	    safef(addrSizeBuf,sizeof(addrSizeBuf),"%lu %llu", 
+		(unsigned long)mp->data,
+		(unsigned long long)mp->size);
 	    AllocVar(el);
-	    el->val = dataPt;
+	    el->val = cloneString(addrSizeBuf);
 	    slAddHead(&list, el);
-	    hashAddSaveName(hash, namePt, el, &el->name);
+	    hashAddSaveName(hash, varNameBinary, el, &el->name);
+	    }
+	else  /* normal variable, not too big, does not contain zeros */
+	    {
+	    AllocVar(el);
+	    el->val = mp->data;
+	    slAddHead(&list, el);
+	    hashAddSaveName(hash, cdName, el, &el->name);
+	    }
+	}	    
+    else if (mp->fileName)
+	{
+	char varNameData[256];
+	safef(varNameData, sizeof(varNameData), "%s__data", cdName);
+	AllocVar(el);
+	el->val = mp->fileName; 
+	slAddHead(&list, el);
+	hashAddSaveName(hash, varNameData, el, &el->name);
+	//debug
+    	//fprintf(stderr,"GALT special: saved varNameData:[%s], mp=>fileName:[%s]\n",el->name,el->val);
+       	//fflush(stderr);
 	}
-
-	namePt = dataEndPt;
+    else if (mp->multi)
+	{
+	warn("unexpected nested MIME structures");
 	}
+    else
+	{
+	errAbort("mp-> type not data,fileName, or multi - unexpected MIME structure");
+	}
+    
+    freez(&cdMain);
+    freez(&cdName);
+    freez(&cdFileName);
     }
 
 slReverse(&list);
 *retList = list;
 *retHash = hash;
 }
+
+
+
 
 static void parseCookies(struct hash **retHash, struct cgiVar **retList)
 /* parses any cookies and puts them into the given hash and list */
@@ -408,7 +432,9 @@ _cgiFindInput(NULL);
 /* check to see if the input is a multipart form */
 s = getenv("CONTENT_TYPE");
 if (s != NULL && startsWith("multipart/form-data", s))
-    cgiParseMultipart(inputString, &inputHash, &inputList);
+    {
+    cgiParseMultipart(&inputHash, &inputList);
+    }	    
 else
     {
     cgiParseInputAbort(inputString, &inputHash, &inputList);
@@ -424,6 +450,7 @@ if (s != NULL)
 s = cgiOptionalString("JKSQL_PROF");
 if (s != NULL)
     envUpdate("JKSQL_PROF", s);
+    
 }
 
 struct cgiVar *cgiVarList() 

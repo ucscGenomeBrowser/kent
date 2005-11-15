@@ -15,7 +15,7 @@
 #include "common.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: dnautil.c,v 1.39 2005/10/15 06:21:11 heather Exp $";
+static char const rcsid[] = "$Id: dnautil.c,v 1.40 2005/11/10 03:38:56 kent Exp $";
 
 struct codonTable
 /* The dread codon table. */
@@ -878,6 +878,22 @@ if (bestScore > 10)
     }
 return trimSize;
 }
+
+boolean isDna(char *poly, int size)
+/* Return TRUE if letters in poly are at least 90% ACGTU */
+{
+int i;
+int dnaCount = 0;
+
+dnaUtilOpen();
+for (i=0; i<size; ++i)
+    {
+    if (ntChars[(int)poly[i]]) 
+	dnaCount += 1;
+    }
+return (dnaCount >= round(0.9 * size));
+}
+
 
 
 /* Tables to convert from 0-20 to ascii single letter representation

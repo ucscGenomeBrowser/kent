@@ -225,5 +225,17 @@ void genePredRc(struct genePred *gp, int chromSize);
 int genePredCdsSize(struct genePred *gp);
 /* compute the number of bases of CDS */
 
+struct genePred *genePredNew(char *name, char *chrom, char strand,
+                             unsigned txStart, unsigned txEnd,
+                             unsigned cdsStart, unsigned cdsEnd,
+                             unsigned optFields, unsigned exonSpace);
+/* create a new gene with space for the specified number of exons allocated.
+ * genePredGrow maybe used to expand this space if needed. */
+
+void genePredGrow(struct genePred *gp, unsigned *exonSpacePtr);
+/* Increase memory allocated to a psl to hold more exons.  exonSpacePtr
+ * should point the the current maximum number of exons and will be
+ * updated to with the new amount of space. */
+
 #endif /* GENEPRED_H */
 

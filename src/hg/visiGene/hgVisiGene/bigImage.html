@@ -503,7 +503,7 @@ if (wc <= 0) /* safari bug work-around, just make it reload again */
     return;
     }
 
-while (wOrig[l] > wc && (l+1) < numLevels)
+while ((wOrig[l] > wc || hOrig[l] > hc) && (l+1) < numLevels)
     {
     l++;
     z = z * 0.5;

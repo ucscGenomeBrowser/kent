@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.20 2005/11/01 00:30:48 kent Exp $"
+#	"$Id: makeMm7.doc,v 1.22 2005/11/14 08:28:19 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -8334,5 +8334,466 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 # Make mapping between known genes and allenBrain	
    hgMapToGene mm7 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
+############################################################################
+# BUILD KNOWN GENES RELATED TABLES for mm7 (STARTED 10/23/05, DONE xx/xx/05. Fan)
 
+# First build protein databases, sp051015 and proteins051015
+# See makeProteins051015.doc for details.
+# Please note that the protein and displayId tables in sp051015 have data of variant splice proteins.
+
+# Create working subdirectories and temporary databases
+
+  ssh hgwdev
+  cd /cluster/store11/kg
+  mkdir kgMm7A  
+  ln -s /cluster/store11/kg/kgMm7A /cluster/store6/kgDB/bed/kgMm7A
+  ln -s /cluster/store11/kg/kgMm7A /cluster/data/mm7/bed/kgMm7A
+
+  hgsql mm7 -e "create database kgMm7A"   
+  hgsql mm7 -e "create database kgMm7ATemp"
+
+  mkdir /cluster/bluearc/kgDB/kgMm7A
+  mkdir /cluster/bluearc/kgDB/kgMm7A/protBlat
+  ln -s /cluster/bluearc/kgDB/kgMm7A/protBlat /cluster/store11/kg/kgMm7A/protBlat
+  cd /cluster/store11/kg/kgMm7A/protBlat
+
+# Get all protein sequences for mouse
+
+  hgsql -N sp051015 -e \
+  'select proteins051015.spXref3.accession,protein.val from proteins051015.spXref3,protein where division="10090" and acc=accession' \
+  |awk '{print ">" $1;print $2}' >mm7Prot.fa
+
+# Prepare and perform cluster run for protein/genome alignment
+
+  ssh kk
+  cd /cluster/data/mm7/bed/kgMm7A/protBlat
+  mkdir prot
+  faSplit sequence mm7Prot.fa 1000 prot/prot
+  ls /cluster/bluearc/kgDB/kgMm7A/protBlat/prot/* > prot.lis
+
+  ssh hgwdev
+  cd /cluster/data/mm7/bed/kgMm7A/protBlat
+  hgsql mm7 -N -e 'select chrom from chromInfo' > chrom.lis
+  exit
+  
+
+  cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -noHead -t=dnax -q=prot /cluster/data/mm7/nib/$(path1).nib $(path2) {check out line+ /cluster/bluearc/kgDB/kgMm7A/protBlat/result/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+  mkdir result
+  gensub2 chrom.lis prot.lis gsub jobList
+
+  para create jobList
+  para try
+  para check
+  para push
+  para check ...
+#Completed: 32449 of 39600 jobs
+#Crashed: 7151 jobs
+#CPU time in finished jobs:   36332462s  605541.04m 10092.35h  420.51d  1.152 y
+#IO & Wait Time:                802269s   13371.14m   222.85h    9.29d  0.025 y
+#Average job time:                1144s      19.07m     0.32h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:           34735s     578.92m     9.65h    0.40d
+#Submission to last job:        113157s    1885.95m    31.43h    1.31d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+#39600 jobs in batch
+
+# Many output .psl files are empty, these warnings are OK.  
+# Check to see if there is any other error type.
+
+  para problems |grep empty|wc
+#   7151   21453  559219
+
+# collect BLAT results
+
+   ssh hgwdev
+   cd /cluster/data/mm7/bed/kgMm7A/protBlat
+
+   mkdir result2
+   mkdir result3
+
+   cat chrom.lis |sed -e 's/chr/do1 chr/g' >doall
+
+   cat << '_EOF_' > do1.1
+echo processing $1
+cat result/$1_prot*.psl >result2/$1.psl
+'_EOF_'
+
+   cat << '_EOF_' > do1.2
+echo processing $1
+pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 result2/$1.psl result3/$1.psl /dev/null >>j.out
+'_EOF_'
+
+   chmod +x do*
+
+   cp do1.1 do1
+   doall
+   cp do1.2 do1
+   doall
+
+   cat result3/*.psl >protBlat.psl
+   hgLoadPsl mm7 protBlat.psl
+# Processing protBlat.psl
+# load of protBlat did not go as planned: 101748 record(s), 0 row(s) skipped, 880 warning(s) loading psl.tab
+# Looked into the cause of the warnings before and found that it was due to that qBaseInsert 
+# and tBaseInsert have negative values, probably due to that this is protein alignment.
+
+# Remember to remove result2 and result3 when KG is built and validated.
+
+# VVVVVVVVVVVVVVVVVVVVVVVVVVVVV BELOW IS AN EXCURSION TO BLAT VAR SPLICE PROTEINS VVVVVVVVVVVVV
+# (Fan, STARTED 10/28/05, DONE 10/29/05)  
+# FORGOT TO FINISH VAR-SPLICE PROTEINS PROCESSING DURING MAKE PROTEINS BUILD.
+# NEXT TIME, SHOULD NOT DO THIS.
+
+  mkdir /cluster/bluearc/kgDB/kgMm7A/protBlatVar
+  ln -s /cluster/bluearc/kgDB/kgMm7A/protBlatVar /cluster/store11/kg/kgMm7A/protBlatVar
+  cd /cluster/store11/kg/kgMm7A/protBlatVar
+
+# Get all protein sequences for mouse
+
+  hgsql -N sp051015 -e \
+  'select proteins051015.spXref3.accession,protein.val from proteins051015.spXref3,protein where division="10090" and acc=accession and acc like "%-%"' \
+  |awk '{print ">" $1;print $2}' >mm7ProtVar.fa
+
+# Prepare and perform cluster run for protein/genome alignment
+
+  ssh kk
+  cd /cluster/data/mm7/bed/kgMm7A/protBlatVar
+  mkdir protVar
+  faSplit sequence mm7ProtVar.fa 100 protVar/protVar
+  ls /cluster/bluearc/kgDB/kgMm7A/protBlatVar/protVar/* > protVar.lis
+
+  ssh hgwdev
+  cd /cluster/data/mm7/bed/kgMm7A/protBlatVar
+  hgsql mm7 -N -e 'select chrom from chromInfo' > chrom.lis
+  exit
+  
+
+  cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -noHead -t=dnax -q=prot /cluster/data/mm7/nib/$(path1).nib $(path2) {check out line+ /cluster/bluearc/kgDB/kgMm7A/protBlatVar/result/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+  mkdir result
+  gensub2 chrom.lis protVar.lis gsub jobList
+
+  para create jobList
+  para try
+  para check
+  para push
+  para check ...
+# Completed: 2498 of 4000 jobs
+# Crashed: 1502 jobs
+# CPU time in finished jobs:    3234506s   53908.44m   898.47h   37.44d  0.103 y
+# IO & Wait Time:                 47651s     794.18m    13.24h    0.55d  0.002 y
+# Average job time:                1314s      21.90m     0.36h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           16756s     279.27m     4.65h    0.19d
+# Submission to last job:         18976s     316.27m     5.27h    0.22d
+
+# Many output .psl files are empty, these warnings are OK.  
+# Check to see if there is any other error type.
+
+  para problems |grep empty|wc
+#   1502    4506  125061
+
+# collect BLAT results
+
+   ssh hgwdev
+   cd /cluster/data/mm7/bed/kgMm7A/protBlatVar
+
+   mkdir result2
+   mkdir result3
+
+   cat chrom.lis |sed -e 's/chr/do1 chr/g' >doall
+
+   cat << '_EOF_' > do1.1
+echo processing $1
+cat result/$1_prot*.psl >result2/$1.psl
+'_EOF_'
+
+   cat << '_EOF_' > do1.2
+echo processing $1
+pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 result2/$1.psl result3/$1.psl /dev/null >>j.out
+'_EOF_'
+
+   chmod +x do*
+
+   cp do1.1 do1
+   doall
+   cp do1.2 do1
+   doall
+
+   cat result3/*.psl >protBlatVar.psl
+
+   cat ../protBlat/protBlat.psl protBlatVar.psl >protBlatAll.psl
+   hgLoadPsl -table=protBlat mm7 protBlatAll.psl
+
+# Processing protBlatAll.psl
+# load of protBlat did not go as planned: 104970 record(s), 0 row(s) skipped, 887 warning(s) loading psl.tab
+
+   mv ../protBlat/protBlat.psl ../protBlat/protBlat.psl.orig
+   cp -p protBlatAll.psl ../protBlat/protBlat.psl
+
+# Looked into the cause of the warnings before and found that it was due to that qBaseInsert 
+# and tBaseInsert have negative values, probably due to that this is protein alignment.
+
+# Remember to remove result2 and result3 when KG is built and validated.
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+   cd /cluster/data/mm7/bed/kgMm7A
+
+# create all_mrna.psl and tight_mrna.psl
+   hgsql mm7 -N -e "select * from all_mrna" |cut -f 2-22 >all_mrna.psl
+
+   pslReps -minCover=0.40 -minAli=0.97 -nearTop=0.002 all_mrna.psl tight_mrna.psl /dev/null
+# Processed 214613 alignments
+
+# Use overlapSelect to get protein and mRNA alignment overlaps   
+   overlapSelect -statsOutput -dropped=protOut.psl -overlapThreshold=0.90 \
+   -selectFmt=psl -inFmt=psl tight_mrna.psl protBlat/protBlat.psl protMrna.stat
+
+   overlapSelect -mergeOutput -dropped=protOut.psl -overlapThreshold=0.90 -selectFmt=psl \
+   -inFmt=psl tight_mrna.psl protBlat/protBlat.psl protMrna.out
+
+# Create protein/mRNA pair and protein lists
+   cut -f 10,31 protMrna.out|sort -u >spMrna.tab
+   cut -f 10    protMrna.out|sort -u >protein.lis
+
+# Load spMrna.tab into spMrna table in temp DB.
+   hgsql kgMm7ATemp -e 'drop table spMrna'
+   hgsql kgMm7ATemp < ~/src/hg/lib/spMrna.sql
+   hgsql kgMm7ATemp -e 'load data local infile "spMrna.tab" into table spMrna'
+   hgsql kgMm7ATemp -e 'create index mrnaID on spMrna(mrnaID)'
+
+# Prepare and perform cluster run of protein/mRNA alignment
+
+# Get mRNA fa file.
+   cd /cluster/data/mm7/bed/kgMm7A
+   /cluster/data/genbank/bin/i386/gbGetSeqs -native -db=mm7 \
+   -gbRoot=/cluster/data/genbank genbank mrna mrna.fa
+
+# Create mrnaSeq table in kgMm7ATemp DB.
+
+   faToTab mrna.fa mrnaSeq.tab
+
+   hgsql kgMm7ATemp -e 'drop table mrnaSeq'
+   hgsql kgMm7ATemp <~/src/hg/lib/mrnaSeq.sql
+   hgsql kgMm7ATemp -e 'load data local infile "mrnaSeq.tab" into table mrnaSeq'
+   rm mrnaSeq.tab
+
+# Prepare files for cluster run ??
+   ~/src/hg/protein/KG2.sh kgMm7A mm7 051015
+
+# Perform cluster run of protein/mRNA alignment
+   ~/src/hg/protein/KG3.sh kgMm7A mm7 051015
+
+# Collect cluster run results
+   cd kgBestMrna
+   ls out | sed -e 's/prot/do1 prot/g' >doall
+
+# create do1 with the following 2 lines:
+   cat << '_EOF_' > do1
+echo processing $1
+cat out/$1/*.out >>protMrnaRaw.psl
+'_EOF_'
+
+   chmod +x do*
+   doall
+
+# Filter out low quality alignments
+   pslReps -nohead -singleHit -minAli=0.9 protMrnaRaw.psl protMrnaBlat.psl /dev/null
+   cut -f 10,14 protMrnaBlat.psl |sort -u >protMrna.lis
+   wc protMrna.lis
+# 225764  451528 3587320 protMrna.lis
+
+# Load BLAT results into temp DB.
+   hgsql kgMm7ATemp < ~/src/hg/lib/protMrnaBlat.sql
+   hgsql kgMm7ATemp -e 'load data local infile "protMrnaBlat.psl" into table protMrnaBlat'
+   hgsql kgMm7ATemp -e 'create index tName on protMrnaBlat(tName)'
+
+# Create CDS files from protein/mRNA alignment results.
+   hgsql kgMm7ATemp -N -e \
+   'select qName,"_",tName,tStart+1,":",tEnd+3 from protMrnaBlat order by qName,tName,tEnd-tStart desc'\
+   |sed 's/\t_\t/_/g'|sed 's/\t:\t/../g' >protMrna.cds
+
+# Create protMrna.psl with proteinID_mrnaID as query ID.
+   cut -f 22-30 ../protMrna.out > j1.tmp
+   cut -f 32-42 ../protMrna.out > j2.tmp
+   cut -f 10,31 ../protMrna.out|sed -e 's/\t/_/g' >j3.tmp
+   paste j1.tmp j3.tmp j2.tmp >protMrna.psl
+   rm j1.tmp j2.tmp j3.tmp
+
+# Run mrnaToGene to create protMrna.gp
+   bash
+   mrnaToGene -cdsFile=protMrna.cds protMrna.psl protMrna.gp 2>protMrna.err >protMrna.log
+   exit
+
+# Prepare refGene and all_mrna gp files.
+
+   cd /cluster/data/mm7/bed/kgMm7A 
+   hgsql mm7 -N -e 'select * from refGene' >ref.gp
+
+   hgsql mm7 -N -e \
+   'select gbCdnaInfo.acc,cds.name from gbCdnaInfo,cds,all_mrna where all_mrna.qName=gbCdnaInfo.acc and   gbCdnaInfo.cds=cds.id' \
+   |sort -u > all_mrna.cds
+
+   bash
+   mrnaToGene -cdsFile=all_mrna.cds all_mrna.psl all_mrna.gp 2>all_mrna.err > all_mrna.log
+   exit
+
+# Align proteins to RefSeq.
+
+   overlapSelect -inCds -statsOutput -overlapThreshold=0.90 -selectFmt=psl -inFmt=genePred\
+   protBlat/protBlat.psl ref.gp ref.stat
+   overlapSelect -inCds -dropped=refOut1.gp -overlapThreshold=0.90 -selectFmt=psl -inFmt=genePred\
+   protBlat/protBlat.psl ref.gp protRef.gp
+
+   overlapSelect -mergeOutput -selectCds -dropped=protOut1.psl -overlapThreshold=0.80 -inFmt=psl\
+   -selectFmt=genePred ref.gp protBlat/protBlat.psl protRef.out
+
+   cut -f 10,22 protRef.out | sort -u >spRef.tab
+   cut -f 10 protRef.out    | sort -u >protRef.lis
+
+   hgsql kgMm7ATemp -e 'drop table spRef'
+   hgsql kgMm7ATemp <~/src/hg/lib/spRef.sql
+   hgsql kgMm7ATemp -e 'load data local infile "spRef.tab" into table spRef'
+
+# Prepare and perform cluster runs for protein/RefSeq alignments
+
+   ~/src/hg/protein/KGRef2.sh kgMm7A mm7 051015
+   ~/src/hg/protein/KGRef3.sh kgMm7A mm7 051015
+
+   cd kgBestRef
+   ls out | sed -e 's/prot/do1 prot/g' >doall
+
+   cat << '_EOF_' > do1
+echo processing $1
+cat out/$1/*.out >>protRefRaw.psl
+'_EOF_'
+
+   chmod +x do*
+   doall
+
+# Filter out low quality alignments.
+   pslReps -nohead -singleHit -minAli=0.9 protRefRaw.psl protRefBlat.psl /dev/null
+   cut -f 10,14 protRefBlat.psl |sort -u >protRef.lis
+   wc protRef.lis
+# 54489  108978  940797 protRef.lis
+
+   hgsql kgMm7ATemp -e 'drop table protRefBlat'
+   hgsql kgMm7ATemp < ~/src/hg/lib/protRefBlat.sql
+   hgsql kgMm7ATemp -e 'load data local infile "protRefBlat.psl" into table protRefBlat'
+   hgsql kgMm7ATemp -e 'create index tName on protRefBlat(tName)'
+
+# Run gene-check to filter out invalid gp entries
+   cd /cluster/data/mm7/bed/kgMm7A
+   cat ref.gp protMrna.gp all_mrna.gp >kgCandidate0.gp
+   gene-check  -incl-ok -ok-genepred-out kgCandidate0.passed.gp -details-out kgCandidate0.check.detail \
+   -nib-dir /cluster/data/mm7/nib kgCandidate0.gp kgCandidate0.check
+
+   hgsql kgMm7ATemp -e 'drop table kgCandidate0'
+   hgsql kgMm7ATemp < ~/src/hg/lib/kgCandidate0.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgCandidate0.gp" into table kgCandidate0'
+
+   hgsql kgMm7ATemp -e 'drop table geneCheck'
+   hgsql kgMm7ATemp < ~/src/hg/lib/geneCheck.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgCandidate0.check" into table geneCheck ignore 2 lines'
+
+# Run kgCheck to get all KG candidates that pass the KG gene check criteria
+
+   kgCheck kgMm7ATemp mm7 kgCandidate0 geneCheck kgCandidate.tab
+   hgsql kgMm7ATemp -e  'drop table kgCandidate'
+   hgsql kgMm7ATemp < ~/src/hg/lib/kgCandidate.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
+   hgsql kgMm7ATemp -e 'create index alignID on kgCandidate(alignID)'
+
+# Construct the kgCandidateX table that has alignID in the name field. 
+   cut -f 2-10 kgCandidate.tab >j2.tmp
+   cut -f 11 kgCandidate.tab >j1.tmp
+   paste j1.tmp j2.tmp >kgCandidateX.tab
+
+   hgsql kgMm7ATemp -e  'drop table kgCandidateX'
+   hgsql kgMm7ATemp < ~/src/hg/lib/kgCandidateX.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgCandidateX.tab" into table kgCandidateX'
+
+# Score protein/mRna and protein/RefSeq alignments
+
+   cd /cluster/data/mm7/bed/kgMm7A
+   kgResultBestMrna2 051015 kgMm7ATemp mm7 protMrnaBlast|sort -u >protMrnaBlastScore.tab
+   kgResultBestRef2  051015 kgMm7ATemp mm7 protRefBlat|sort -u >protRefScore.tab
+
+# Combine scoring results and load them into temp DB.
+   cat protMrnaBlastScore.tab protRefScore.tab >protMrnaScore.tab
+   hgsql kgMm7ATemp -e 'drop table protMrnaScore'
+   hgsql kgMm7ATemp < ~/src/hg/lib/protMrnaScore.sql
+   hgsql kgMm7ATemp -e 'load data local infile "protMrnaScore.tab" into table protMrnaScore'
+   hgsql kgMm7ATemp -e 'create index mrnaAcc on protMrnaScore(mrnaAcc)'
+
+# Run kgGetCds to get CDS structure of each gene
+
+   kgGetCds kgMm7ATemp 051015 kgCandidateX jY.tmp
+   cat jY.tmp |sort -u >kgCandidateY.tab
+   rm jY.tmp
+   hgsql kgMm7ATemp -e  'drop table kgCandidateY'
+   hgsql kgMm7ATemp < ~/src/hg/lib/kgCandidateY.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgCandidateY.tab" into table kgCandidateY'
+
+# Run kgPickPrep to replace long cds structure string with cdsId.
+   kgPickPrep kgMm7ATemp kgCandidateZ.tab
+   hgsql kgMm7ATemp -e  'drop table kgCandidateZ'
+   hgsql kgMm7ATemp < ~/src/hg/lib/kgCandidateZ.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgCandidateZ.tab" into table kgCandidateZ'
+   hgsql kgMm7ATemp -e 'create index cdsId on kgCandidateZ(cdsId)'
+
+# Run kgPick to pick the representative a mrna/protein pair for each unique CDS structure.
+
+   kgPick kgMm7ATemp mm7 proteins051015 kg4.tmp dupSpMrna.tmp
+   sort -u dupSpMrna.tmp >dupSpMrna.tab
+   hgsql mm7 -e  'drop table dupSpMrna'
+   hgsql mm7 < ~/src/hg/lib/dupSpMrna.sql
+   hgsql mm7 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
+
+# Sort KG genes to make the kg4.gp table file.
+   ~/kent/src/hg/protein/sortKg.pl kg4.tmp >kg4.gp
+
+   hgsql kgMm7ATemp -e  'drop table knownGene'
+   hgsql kgMm7ATemp < ~/src/hg/lib/knownGene.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kg4.gp" into table knownGene'
+
+# Load data into mm7 knownGene table.
+   hgsql mm7 -e  'drop table knownGene'
+   hgsql mm7 < ~/src/hg/lib/knownGene.sql
+   hgsql mm7 -e  'load data local infile "kg4.gp" into table knownGene'
+
+### to be continued .... ####
+
+############################################################################
+## build multiz17way mafFrames (multiz17wayFrames) (markd 2005/11/13)
+
+cd /cluster/data/mm7/bed/
+mkdir multiz17wayFrames/
+cd multiz17wayFrames/
+
+# created Makefile and mkMafFrames based on one for canHg11
+# create frames usins knownGenes if available, if not refseqs if availble,
+# otherwise mRNA with CDS annotation
+# created for these databases:
+
+   rn3 hg17 panTro1 rheMac1 oryCun1 canFam2 bosTau2 galGal2 xenTro1 fr1 danRer3
+
+nice make getGenes
+nice make -j 3 getFrames
+nice make loadDb
+
+# need to do a make sanClean after track verified
+
+############################################################################
 

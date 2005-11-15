@@ -30,7 +30,7 @@
 #include "extFileTbl.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.24 2005/09/25 20:57:56 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.29 2005/11/07 03:53:11 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -70,11 +70,10 @@ static boolean gReload = FALSE;       /* reload the select categories */
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 
 /* other globals */
-static int gTotalExtChgCnt = 0;  /* total number of extChg seqs processed */
 static boolean gStopSignaled = FALSE;  /* stop at the end of the current
                                         * partition */
 static boolean gMaxShrinkageError = FALSE;  /* exceeded maxShrinkage 
-                                             * in some partation */
+                                             * in some partition */
 static unsigned gExtFileChged = 0;      /* total number of extFile changes
                                          * done */
 
@@ -163,7 +162,7 @@ void getSelPartitions(struct gbIndex* index,
                       unsigned srcDb,
                       unsigned type,
                       struct gbSelect** selectList)
-/* find selected partations based on attributes and options */
+/* find selected partitions based on attributes and options */
 {
 unsigned orgCats = 0;
 if (dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_NATIVE)->load)
@@ -182,7 +181,7 @@ if (orgCats)
 }
 
 struct gbSelect* getPartitions(struct gbIndex* index)
-/* build a list of partations to load based on the command line and
+/* build a list of partitions to load based on the command line and
  * conf file options and whats in the index */
 {
 struct gbSelect* selectList = NULL;
@@ -196,18 +195,18 @@ void deleteOutdated(struct sqlConnection *conn, struct gbSelect* select,
                     struct gbStatusTbl* statusTbl, char* tmpDir)
 /* delete outdated alignments and metadata from the database. */
 {
-gbVerbEnter(1, "delete outdated");
+gbVerbEnter(3, "delete outdated");
 
 /* first the alignments */
-gbVerbMsg(1, "delete outdated alignments");
+gbVerbMsg(4, "delete outdated alignments");
 gbAlignDataDeleteOutdated(conn, select, statusTbl, tmpDir);
 
 /* now drop metadata entries */
-gbVerbMsg(1, "delete outdated metadata");
+gbVerbMsg(4, "delete outdated metadata");
 gbMetaDataDeleteOutdated(conn, select, statusTbl, &gOptions, tmpDir);
 
 /* Now it's safe to drop deleted entries from the database status table. */
-gbVerbMsg(1, "delete outdated gbStatus");
+gbVerbMsg(4, "delete outdated gbStatus");
 gbStatusTblRemoveDeleted(statusTbl, conn);
 
 /* orphaned now become new */
@@ -216,7 +215,7 @@ statusTbl->orphanList = NULL;
 statusTbl->numNew += statusTbl->numOrphan;
 statusTbl->numOrphan = 0;
 
-gbVerbLeave(1, "delete outdated");
+gbVerbLeave(3, "delete outdated");
 }
 
 bool updateHasAligned(struct gbSelect* select, struct gbUpdate* update)
@@ -243,6 +242,16 @@ select->orgCats = orgCatsHold;
 return hasAligns;
 }
 
+bool extFileShouldUpdate(struct gbSelect* select)
+/* determined if ext files should be updated for a partition.  This checks if
+ * they are enable, if they should be loaded, and the max number to update
+ * hasn't been exceeded */
+{
+return (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
+    && (gExtFileChged < gOptions.maxExtFileUpdate)
+    && !gbLoadedTblExtFileUpdated(gLoadedTbl, select);
+}
+
 bool updateNeedsLoaded(struct gbSelect* select, struct gbUpdate* update)
 /* check if an update and orgCat is not in the gbLoaded table, but does
  * have index files. */
@@ -251,13 +260,11 @@ struct gbUpdate *updateHold = select->update;
 boolean needsLoaded = FALSE;
 select->update = update;
 
-/* If the table indicates that this partition has not been loaded, we check to
- * see if there are readable index files.  However if we are updating the
- * extFiles, we need to visit everything
- */
+/* If the table indicates that this partition has not been loaded or extFile
+ * links need to be updated, we check to see if there are readable alignments
+ * index files. */
 needsLoaded = 
-    (!gbLoadedTblIsLoaded(gLoadedTbl, select)
-     || (gOptions.flags & DBLOAD_EXT_FILE_UPDATE))
+    (!gbLoadedTblIsLoaded(gLoadedTbl, select) || extFileShouldUpdate(select))
     && updateHasAligned(select, update);
 
 select->update = updateHold;
@@ -265,7 +272,7 @@ return needsLoaded;
 }
 
 bool anyUpdatesNeedLoaded(struct gbSelect* select)
-/* Determine if any update containing data in selected partation is not in the
+/* Determine if any update containing data in selected partition is not in the
  * gbLoaded table.  If it all are in the table, we don't have to bother doing
  * the per-sequence check. */
 {
@@ -281,14 +288,13 @@ return FALSE;
 
 void updateLoadedTblForUpdate(struct gbSelect* select, 
                               struct gbUpdate* update)
-/* update the loaded table for a partation and update */
+/* update the loaded table for a partition and update */
 {
 struct gbUpdate *updateHold = select->update;
 select->update = update;
 
-/* only add if update actually has alignments.  Prevents empty or
- * unreadable update directories from being included */
-if (!gbLoadedTblIsLoaded(gLoadedTbl, select)
+/* Only add if not already there and there are alignments. */
+if (!gbLoadedTblHasEntry(gLoadedTbl, select)
     && updateHasAligned(select, update))
     gbLoadedTblAdd(gLoadedTbl, select);
 
@@ -296,7 +302,7 @@ select->update = updateHold;
 }
 
 void updateLoadedTbl(struct gbSelect* select)
-/* update the loaded table for this partation, adding all updates that
+/* update the loaded table for this partition, adding all updates that
  * don't already exist. */
 {
 struct gbUpdate* update;
@@ -313,18 +319,18 @@ void parseUpdateMetaData(struct sqlConnection *conn,
  * (as there is one per update).  This doesn't load the mrna or seq
  * tables, but might add to the unique string tables. */
 {
-gbVerbEnter(1, "process metadata for %s", gbSelectDesc(select));
+gbVerbEnter(4, "process metadata for %s", gbSelectDesc(select));
 gbMetaDataProcess(conn, statusTbl, select);
 gbUpdateClearSelectVer(select->update);
-gbVerbLeave(1, "process metadata for %s", gbSelectDesc(select));
+gbVerbLeave(4, "process metadata for %s", gbSelectDesc(select));
 }
 
 void loadMetaData(struct sqlConnection *conn)
 /* load the metadata into the database */
 {
-gbVerbEnter(1, "loading metadata");
+gbVerbEnter(3, "loading metadata");
 gbMetaDataDbLoad(conn);
-gbVerbLeave(1, "loading metadata");
+gbVerbLeave(3, "loading metadata");
 }
 
 void processMetaData(struct sqlConnection *conn, struct gbSelect* select,
@@ -333,7 +339,7 @@ void processMetaData(struct sqlConnection *conn, struct gbSelect* select,
 {
 struct gbUpdate* update;
 
-gbVerbEnter(1, "processing metadata");
+gbVerbEnter(3, "processing metadata");
 gbMetaDataInit(conn, select->release->srcDb, &gOptions, 
                gGbdbGenBank, tmpDir);
 
@@ -346,7 +352,7 @@ for (update = select->release->updates; update != NULL; update = update->next)
         }
     }
 select->update = NULL;
-gbVerbLeave(1, "processing metadata");
+gbVerbLeave(3, "processing metadata");
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
     loadMetaData(conn);
 }
@@ -372,7 +378,7 @@ void processUpdateAligns(struct sqlConnection *conn, struct gbSelect* select,
 /* Get alignements for an update.  */
 {
 select->update = update;
-gbVerbEnter(1, "process alignments: %s", gbSelectDesc(select));
+gbVerbEnter(4, "process alignments: %s", gbSelectDesc(select));
 
 if (select->orgCats & GB_NATIVE)
     processUpdateAlignsForOrgCat(conn, select, GB_NATIVE, statusTbl);
@@ -381,16 +387,16 @@ if (select->orgCats & GB_XENO)
 
 gbUpdateClearSelectVer(select->update);
 
-gbVerbLeave(1, "process alignments: %s", gbSelectDesc(select));
+gbVerbLeave(4, "process alignments: %s", gbSelectDesc(select));
 select->update = NULL;
 }
 
 void loadAligns(struct sqlConnection *conn)
 /* load pending alignments */
 {
-gbVerbEnter(1, "load alignments");
+gbVerbEnter(3, "load alignments");
 gbAlignDataDbLoad(conn);
-gbVerbLeave(1, "load alignments");
+gbVerbLeave(3, "load alignments");
 }
 
 boolean updateSelected(struct gbUpdate* update, struct gbSelect* select)
@@ -415,7 +421,7 @@ void processAligns(struct sqlConnection *conn, struct gbSelect* select,
 {
 struct gbUpdate* update;
 
-gbVerbEnter(1, "processing alignments");
+gbVerbEnter(3, "processing alignments");
 
 gbAlignDataInit(tmpDir, &gOptions);
 /* load alignments for updates that are new and actually had sequences align */
@@ -426,7 +432,7 @@ for (update = select->release->updates; update != NULL; update = update->next)
     }
 select->update = NULL;
 gbAlignDataSetStatus(statusTbl);
-gbVerbLeave(1, "processing alignments");
+gbVerbLeave(3, "processing alignments");
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
     loadAligns(conn);
 }
@@ -438,9 +444,9 @@ struct sqlConnection *conn = hAllocConn();
 struct gbStatusTbl* statusTbl;
 boolean maxShrinkageExceeded;
 char typePrefix[32], tmpDir[PATH_LEN];
-unsigned maxExtFileChg = 0;;
+boolean extFileUpdate = FALSE;
 
-gbVerbEnter(1, "update %s", gbSelectDesc(select));
+gbVerbEnter(3, "update %s", gbSelectDesc(select));
 
 /* Setup tmp dir for load, must be unique for each update due to
  * initialLoad feature */
@@ -456,19 +462,13 @@ safef(tmpDir, sizeof(tmpDir), "%s/%s/%s/%s",
 if ((gOptions.flags & DBLOAD_DRY_RUN) == 0)
     gbMakeDirs(tmpDir);
 
-/* limit number of ext files references to change if requested.  This
- * is global for all loads. */
-if (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
-    {
-    maxExtFileChg = (gExtFileChged < gOptions.maxExtFileUpdate)
-        ? (gOptions.maxExtFileUpdate - gExtFileChged) : 0;
-    }
+extFileUpdate = extFileShouldUpdate(select);
 
 /* Build list of entries that need processed.  This also flags updates that
  * have the change and new entries so we can limit the per-update processing.
  */
 statusTbl = gbBuildState(conn, select, &gOptions, gMaxShrinkage, tmpDir,
-                         gbVerbose, maxExtFileChg, &maxShrinkageExceeded);
+                         gbVerbose, extFileUpdate, &maxShrinkageExceeded);
 if (maxShrinkageExceeded)
     {
     fprintf(stderr, "Warning: switching to dryRun mode due to maxShrinkage being exceeded\n");
@@ -477,7 +477,7 @@ if (maxShrinkageExceeded)
     }
 if (gOptions.flags & DBLOAD_DRY_RUN)
     {
-    gbVerbLeave(1, "dry run, skipping update %s", gbSelectDesc(select));
+    gbVerbLeave(3, "dry run, skipping update %s", gbSelectDesc(select));
     gbStatusTblFree(&statusTbl);
     hFreeConn(&conn);
     return;
@@ -501,14 +501,17 @@ if (gOptions.flags & DBLOAD_INITIAL)
 else
     gbStatusTblUpdate(statusTbl, conn, TRUE);
 
-/* add this and partation to the loaded table, if not already there */
+/* add this and partition to the loaded table, if not already there.
+ * set the extFile updated flag updates were done or this is the initial load    */
 updateLoadedTbl(select);
+if (extFileUpdate || (gOptions.flags & DBLOAD_INITIAL))
+    gbLoadedTblSetExtFileUpdated(gLoadedTbl, select);
+
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
     gbLoadedTblCommit(gLoadedTbl, conn);
 
 /* print before freeing memory */
-gbVerbLeave(1, "update %s", gbSelectDesc(select));
-gTotalExtChgCnt += statusTbl->numExtChg;
+gbVerbLeave(3, "update %s", gbSelectDesc(select));
 gbStatusTblFree(&statusTbl);
 
 hFreeConn(&conn);
@@ -538,7 +541,7 @@ void doLoadPartition(struct gbSelect* select)
 /* Do work of syncing the database with the state in the genbank respository for
  * a given partition.  */
 {
-gbVerbEnter(1, "load for %s", gbSelectDesc(select));
+gbVerbEnter(2, "load for %s", gbSelectDesc(select));
 
 /* load required entry date */
 gbReleaseLoadProcessed(select);
@@ -546,7 +549,7 @@ gbReleaseLoadAligned(select);
 
 databaseUpdate(select);
 
-gbVerbLeave(1, "load for %s", gbSelectDesc(select));
+gbVerbLeave(2, "load for %s", gbSelectDesc(select));
 
 /* unload entries to free memory */
 gbReleaseUnload(select->release);
@@ -600,9 +603,9 @@ void cleanExtFileTable()
 /* clean up extFile table if we change references for any seq */
 {
 struct sqlConnection *conn = hAllocConn();
-gbVerbEnter(1, "cleaning extFileTbl");
-extFileTblClean(conn);
-gbVerbLeave(1, "cleaning extFileTbl");
+gbVerbEnter(3, "cleaning extFileTbl");
+extFileTblClean(conn, (gbVerbose >= 4));
+gbVerbLeave(3, "cleaning extFileTbl");
 hFreeConn(&conn);
 }
 
@@ -615,12 +618,12 @@ struct sqlConnection* conn;
 
 /* must go through all tables if any reload is selected or
  * extFile update is requested */
-boolean forceLoad = (reloadList != NULL) || gReload
-    || ((gOptions.flags & DBLOAD_EXT_FILE_UPDATE) != 0);
+boolean forceLoad = (reloadList != NULL) || gReload;
 
 if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
     errAbort("can't specify both -reload and -dryRun");
 
+gbVerbEnter(1, "gbLoadRna");
 conn = hAllocConn();
 lockDb(conn, NULL);
 
@@ -636,12 +639,14 @@ if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
     errAbort("-initialLoad specified and no sequences were found to load");
 
 /* clean up any ignored entries before setting anything up */
+gbVerbEnter(3, "delete ignored");
 gbIgnoredDelete(selectList, gWorkDir);
+gbVerbLeave(3, "delete ignored");
 
 /* loaded table to track updates that have been processed */
 gLoadedTbl = gbLoadedTblNew(conn);
 
-/* load each partation */
+/* load each partition */
 for (select = selectList; select != NULL; select = select->next)
     loadPartition(select, conn, forceLoad);
 
@@ -662,7 +667,7 @@ unlockDb(conn, NULL);
 hFreeConn(&conn);
 
 /* must go to stderr to be logged */
-gbVerbMsg(0, "gbLoadRna");
+gbVerbLeave(1, "gbLoadRna");
 if (gMaxShrinkageError)
     errAbort("Stoping due to maxShrinkage limit being exceeded in one or more\n"
              "partitions. Investigate and rerun with -allowLargeDeletes.");
@@ -685,6 +690,8 @@ void dropAll(char *database)
 {
 struct slName *tables, *tbl;
 struct sqlConnection *conn;
+
+gbVerbEnter(1, "dropAll");
 hgSetDb(database);
 conn = hAllocConn();
 lockDb(conn, NULL);
@@ -695,6 +702,7 @@ for (tbl = tables; tbl != NULL; tbl = tbl->next)
 slFreeList(&tables);
 unlockDb(conn, NULL);
 hFreeConn(&conn);
+gbVerbLeave(1, "dropAll");
 }
 
 void copyTable(struct sqlConnection *conn, char* destDb, char* srcTable,
@@ -727,6 +735,8 @@ void copyAll(char *srcDb, char* destDb)
 {
 struct slName *tables, *tbl;
 struct sqlConnection *conn;
+
+gbVerbEnter(1, "copyAll");
 hgSetDb(srcDb);
 conn = hAllocConn();
 lockDb(conn, srcDb);
@@ -744,6 +754,7 @@ slFreeList(&tables);
 unlockDb(conn, destDb);
 unlockDb(conn, srcDb);
 hFreeConn(&conn);
+gbVerbLeave(1, "copyAll");
 }
 
 void moveAll(char *srcDb, char* destDb)
@@ -753,6 +764,8 @@ struct slName *tables, *tbl;
 struct sqlConnection *conn;
 struct dyString* sqlCmd = dyStringNew(256);
 char *sep;
+
+gbVerbEnter(1, "moveAll");
 hgSetDb(srcDb);
 conn = hAllocConn();
 lockDb(conn, srcDb);
@@ -777,6 +790,7 @@ slFreeList(&tables);
 unlockDb(conn, destDb);
 unlockDb(conn, srcDb);
 hFreeConn(&conn);
+gbVerbLeave(1, "moveAll");
 }
 
 void usage()
@@ -819,12 +833,12 @@ errAbort(
   "      genbank partition being updated.  If 1.0-(numNew/numOld) > frac,\n"
   "      an error will be generated.  This is to prevent some problem case\n"
   "      from deleting a large number of sequences. Default is 0.1\n"
-  "      For very small partations, used in testing, deleting up to 5 is\n"
+  "      For very small partitions, used in testing, deleting up to 5 is\n"
   "      allowed if maxShrinkage is not zero. If this limit is exceeded, the\n"
   "      list of accessions to delete is printed and then the loading of that\n"
-  "      partation terminated.  Other partations continue in -dryRun mode,\n"
+  "      partition terminated.  Other partitions continue in -dryRun mode,\n"
   "      This allows for examination of the cause of a large deletions without\n"
-  "      risking large deletions in other partations.  The option -allowLargeDeletes\n"
+  "      risking large deletions in other partitions.  The option -allowLargeDeletes\n"
   "      can then be use to allow the deletes to go forwards.\n"
   "\n"
   "     -allowLargeDeletes - disable -maxShrinkage checks.\n"
@@ -833,7 +847,7 @@ errAbort(
   "\n"
   "     -initialLoad - optimize for initial load of a database.  Incremental\n"
   "      load of tables in batches was much slower (~26 hrs vs ~3 hrs) than\n"
-  "      loading an empty table.  This option saves load until all partations\n"
+  "      loading an empty table.  This option saves load until all partitions\n"
   "      are processed.  While the would work with incremental load, it\n"
   "      would require more memory.\n"
   "\n"
@@ -850,17 +864,19 @@ errAbort(
   "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity:\n"
-  "              n >= 1 - basic information abourt each step\n"
+  "              n >= 1 - basic information about load\n"
   "              n >= 2 - more details\n"
-  "              n >= 4 - information about each selected sequence\n"
-  "              n >= 5 - SQL queries\n"
+  "              n >= 3 - time spent in various steps\n"
+  "              n >= 4 - step details\n"
+  "              n >= 5 - information about each selected sequence\n"
+  "              n >= 6 - SQL queries\n"
   "\n"
   "     -dryRun - go throught the selection process,  but don't update.\n"
   "      This will still remove ignored accessions.\n"
   "\n"
   "     -reloadList=file - File containing sequence ids, one per line, to\n"
   "      remove from the databases before updating.  This causes these\n" 
-  "      sequences to be reloaded.  This optional also causes all partations\n"
+  "      sequences to be reloaded.  This optional also causes all partitions\n"
   "      to be examined, which slows things down.\n"
   "\n"
   "SIGUSR1 will cause process to stop after the current partition.  This\n"
@@ -904,7 +920,7 @@ if ((drop+move+copy) > 1)
     errAbort("can only specify one of -drop, -move, or -copy");
 
 gbVerbInit(optionInt("verbose", 0));
-if (gbVerbose >= 5)
+if (gbVerbose >= 6)
     sqlMonitorEnable(JKSQL_TRACE);
 if (drop)
     dropAll(argv[1]);

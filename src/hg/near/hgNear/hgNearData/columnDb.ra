@@ -103,9 +103,19 @@ priority 2.602
 visibility off
 type association knownToAllenBrain allenBrainUrl
 queryFull select name,value from knownToAllenBrain 
-queryOne select knownToAllenBrain.value,allenBrainUrl.url  from knownToAllenBrain,allenBrainUrl where knownToAllenBrain.name = '%s' and allenBrainUrl.name=knownToAllenBrain.value
+queryOne select knownToAllenBrain.value,allenBrainUrl.url from knownToAllenBrain,allenBrainUrl where knownToAllenBrain.name = '%s' and allenBrainUrl.name=knownToAllenBrain.value
 invQueryOne select name from knownToAllenBrain where value = '%s'
 itemUrl %s
+
+name nibbImageProbes
+shortLabel NIBB Xenopus
+longLabel Probes for NIBB In-Situ Images of Xenopus Laevis Embryos
+priority 2.603
+visibility off
+type association knownToNibbImage
+queryFull select name,value from knownToNibbImage 
+queryOne select knownToNibbImage.value,knownToNibbImage.value from knownToNibbImage where knownToNibbImage.name = '%s'
+invQueryOne select name from knownToAllenBrain where value = '%s'
 
 name esRegModule
 shortLabel Module

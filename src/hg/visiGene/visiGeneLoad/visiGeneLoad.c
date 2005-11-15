@@ -10,6 +10,7 @@
 
 /* Variables you can override from command line. */
 char *database = "visiGene";
+boolean doLock = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,12 +22,15 @@ errAbort(
   "Please see visiGeneLoad.doc for description of the .ra, .tab and .txtfiles\n"
   "Options:\n"
   "   -database=%s - Specifically set database\n"
+  "   -lock - Lock down database during update - about 10% faster but all\n"
+  "           web queries will stall until it finishes.\n"
   , database
   );
 }
 
 static struct optionSpec options[] = {
    {"database", OPTION_STRING,},
+   {"lock", OPTION_BOOLEAN,},
    {NULL, 0},
 };
 
@@ -592,7 +596,11 @@ if (probeTypeId == 0)
 dyStringClear(dy);
 dyStringAppend(dy, "select id,gene,antibody,fPrimer,rPrimer,seq ");
 dyStringAppend(dy, "from probe ");
-dyStringPrintf(dy, "where gene=%d and antibody=%d", geneId, antibodyId);
+dyStringPrintf(dy, "where gene=%d and antibody=%d ", geneId, antibodyId);
+dyStringPrintf(dy, "and fPrimer='%s' and rPrimer='%s' ", fPrimer, rPrimer);
+dyStringPrintf(dy, "and seq='");
+dyStringAppend(dy, seq);
+dyStringAppend(dy, "'");
 verbose(2, "query: %s\n", dy->string);
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -652,7 +660,9 @@ if (probeId == 0)
     dyStringPrintf(dy, " probeType=%d,\n", probeTypeId);
     dyStringPrintf(dy, " fPrimer='%s',\n", fPrimer);
     dyStringPrintf(dy, " rPrimer='%s',\n", rPrimer);
-    dyStringPrintf(dy, " seq='%s'\n", seq);
+    dyStringAppend(dy, " seq='");
+    dyStringAppend(dy, seq);
+    dyStringAppend(dy, "'\n");
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     probeId = sqlLastAutoId(conn);
@@ -884,6 +894,15 @@ dyStringFree(&dy);
 return id;
 }
 
+static void veryClose(struct dyString *query, char *field, char *val)
+/* Append clause to query to select field to be within a very
+ * small number to val (which is an ascii floating point value) */
+{
+double x = atof(val);
+double e = 0.000001;
+dyStringPrintf(query, "%s > %f and %s < %f and ", field, x-e, field, x+e);
+}
+
 int doSpecimen(struct lineFile *lf, struct sqlConnection *conn,
 	char *name, char *taxon, int genotype, int bodyPart, int sex,
 	char *age, char *minAge, char *maxAge, char *notes)
@@ -899,9 +918,10 @@ dyStringPrintf(dy, "name = \"%s\" and ", name);
 dyStringPrintf(dy, "taxon = %s and ", taxon);
 dyStringPrintf(dy, "genotype = %d and ", genotype);
 dyStringPrintf(dy, "bodyPart = %d and ", bodyPart);
-dyStringPrintf(dy, "age = %s and ", age);
-dyStringPrintf(dy, "minAge = %s and ", minAge);
-dyStringPrintf(dy, "maxAge = %s and ", maxAge);
+dyStringPrintf(dy, "sex = %d and ", sex);
+veryClose(dy, "age", age);
+veryClose(dy, "minAge", minAge);
+veryClose(dy, "maxAge", maxAge);
 dyStringPrintf(dy, "notes = \"%s\"", notes);
 id = sqlQuickNum(conn, dy->string);
 if (id == 0)
@@ -1130,6 +1150,10 @@ if (rowSize >= ArraySize(words))
 	}
     }
 
+/* Lock down the database for faster update speed. */
+if (doLock)
+    sqlHardLockAll(conn, TRUE);
+
 /* Create/find submission record. */
 submissionSetId = saveSubmissionSet(conn, raHash);
 
@@ -1256,6 +1280,8 @@ while (lineFileNextReal(lf, &line))
 	imageProbeId = doImageProbe(conn, imageId, probeId, probeColor);
 	}
     }
+if (doLock)
+    sqlHardUnlockAll(conn);
 }
 
 int main(int argc, char *argv[])
@@ -1265,6 +1291,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 database = optionVal("database", database);
+doLock = optionExists("lock");
 visiGeneLoad(argv[1], argv[2], argv[3]);
 return 0;
 }

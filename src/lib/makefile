@@ -3,7 +3,7 @@ HG_WARN = ${HG_WARN_ERR}
 
 O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     base64.o bits.o binRange.o \
-    blastOut.o blastParse.o boxClump.o browserGfx.o \
+    blastOut.o blastParse.o boxClump.o boxLump.o browserGfx.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o \
     chainToPsl.o cheapcgi.o codebias.o colHash.o common.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o \
@@ -16,7 +16,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     keys.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o \
     mgTinyFont.o mgSmallFont.o mgMediumFont.o mgLargeFont.o mgHugeFont.o \
-    memalloc.o memgfx.o mgCircle.o mgPolygon.o net.o nib.o nibTwo.o \
+    memalloc.o memgfx.o mgCircle.o mgPolygon.o mime.o net.o nib.o nibTwo.o \
     nt4.o obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o phyloTree.o \
     pipeline.o portimpl.o pscmGfx.o psGfx.o psl.o pslGenoShow.o \
     pslShow.o pslTbl.o pthreadWrap.o qa.o quickHeap.o ra.o rbTree.o \

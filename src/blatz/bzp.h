@@ -23,6 +23,7 @@ struct bzp
     int maxBandGap;   /* Maximum gap allowed in banded extension. */
     int minExpand;    /* Min score for search in area with smaller seed. */
     int expandWindow;  /* Bases to do secondary more sensitive search in. */
+    int maxChainsToExplore;  /* Maximum number of chains to explore. */
     struct axtScoreScheme *ss; /* Matrix and affine gap info. */
     struct gapCalc *cheapGap;  /* Gap calculation info for first pass. */
     struct gapCalc *gapCalc;   /* Gap calculation info for final pass. */
@@ -30,12 +31,12 @@ struct bzp
     char *out;		/* Output format.  Chain, axt, psl, etc. */
     char *mafQ;		/* Prefix for query side of maf output. */
     char *mafT;		/* Prefix for target side of maf output. */
-// LX BEG
+    /* LX BEG */
     int dynaLimitT;		/* Hit limit for dynamic masking. */
     int dynaLimitQ;		/* Hit limit for dynamic masking. */
     int dynaWordCoverage;	/* Word hit limit for dynamic masking. */
-    char *dynaBedFile;		/* filename to use for dynamic mask output */
-// LX END
+    char *dynaBedFileQ;		/* filename to use for dynamic mask output */
+    /* LX END */
     boolean bestChainOnly;	/* Only keep best scoring chain (from MSP on). Not exported */
     };
 
@@ -77,7 +78,7 @@ void bzpServerOptionsHelp(struct bzp *bzp);
    {"dynaLimitT", OPTION_INT}, \
    {"dynaLimitQ", OPTION_INT}, \
    {"dynaWordCoverage", OPTION_INT}, \
-   {"dynaBedFile", OPTION_STRING},
+   {"dynaBedFileQ", OPTION_STRING},
 
 #define bzpDefaultPort 18273
 

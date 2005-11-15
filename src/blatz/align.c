@@ -20,6 +20,7 @@
 #include "fuzzyFind.h"
 #include "bandExt.h"
 #include "boxClump.h"
+#include "boxLump.h"
 #include "bzp.h"
 #include "blatz.h"
 #include "dynamic.h" // LX
@@ -338,8 +339,23 @@ chainList = chainsCreate(bzp->cheapGap, bzp->ss,
         query, strand, target, pBlockList);
 bzpTime("chainsCreate %d initial chains", slCount(chainList));
 
-if (bzp->bestChainOnly && chainList != NULL)
-    chainFreeList(&chainList->next);
+if (bzp->bestChainOnly)
+    {
+    if (chainList != NULL)
+	chainFreeList(&chainList->next);
+    }
+else if (bzp->maxChainsToExplore > 0)
+    {
+    struct chain *lastChain = slElementFromIx(chainList, 
+    	bzp->maxChainsToExplore-1);
+    if (lastChain != NULL)
+	{
+	verbose(2, "Trimming chain list from %d", slCount(chainList));
+        chainFreeList(&lastChain->next);
+	verbose(2, " to %d\n", slCount(chainList));
+	}
+    }
+
 
 thresholdChains(&chainList, bzp->minChain);
 bzpTime("%d chains passed threshold of %d", slCount(chainList), bzp->minChain);
@@ -540,6 +556,8 @@ if (qSize >= minSize && tSize >= minSize)
     }
 }
 
+struct boxClump *boxFindLumps(struct boxIn **pBoxList);	// uglyf
+
 static struct boxClump *clumpGapsAndEnds(struct bzp *bzp, 
         struct chain *chainList)
 /* Given a list of chains (all on same target and query) create a list of
@@ -581,7 +599,20 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         addClippedBox(&boxList, minSize, winSize, qs, qe, ts, te);
         }
     }
-clumpList = boxFindClumps(&boxList);
+clumpList = boxLump(&boxList);
+    { /* uglyf */
+    struct boxClump *clump;
+    int boxCount = 0;
+    int clumpCount = 0;
+    long clumpArea = 0;
+    for (clump = clumpList; clump != NULL; clump = clump->next)
+        {
+	boxCount += clump->boxCount;
+	clumpArea += (clump->qEnd - clump->qStart) * (clump->tEnd - clump->tStart);
+	clumpCount += 1;
+	}
+    bzpTime("%d boxes, %d clumps, %ld clump area", boxCount, clumpCount, clumpArea);
+    } /* uglyf */
 return clumpList;
 }
 
@@ -627,15 +658,16 @@ static void findBestGapPos(struct axtScoreScheme *ss,
 int maxSize = max(qSize, tSize);
 int gapSize = qGap + tGap;  /* One of qGap or tGap is zero */
 int matchSize = maxSize - gapSize;
-int pos, bestPos = 0;
+int pos, bestPos = 0, rightPos;
 int bestScore = -BIGNUM;
 int score;
 
-for (pos=0; pos<matchSize; ++pos)
+for (pos=0; pos<=matchSize; ++pos)
     {
-    score = axtScoreUngapped(ss, qStart+pos, tStart+pos, pos);
-    score += axtScoreUngapped(ss, qStart+pos+qGap, tStart+pos+tGap, 
-                              matchSize - pos);
+    rightPos = matchSize-pos;
+    score = axtScoreUngapped(ss, qStart, tStart, pos);
+    score += axtScoreUngapped(ss, qStart+qSize-rightPos, 
+    			tStart+tSize-rightPos, rightPos);
     if (score > bestScore)
         {
         bestScore = score;
@@ -646,26 +678,6 @@ for (pos=0; pos<matchSize; ++pos)
 *retBestScore = bestScore;
 }
 
-
-#ifdef DEBUG
-double chainCalcScore(struct chain *chain, struct axtScoreScheme *ss, 
-        struct gapCalc *gapCalc, struct dnaSeq *query, struct dnaSeq *target)
-/* Calculate chain score freshly. */
-{
-struct cBlock *b1, *b2;
-double score = 0;
-for (b1 = chain->blockList; b1 != NULL; b1 = b2)
-    {
-    score += axtScoreUngapped(ss, query->dna + b1->qStart, 
-            target->dna + b1->tStart, b1->tEnd - b1->tStart);
-    b2 = b1->next;
-    if (b2 != NULL)
-        score -=  gapCalcCost(gapCalc, b2->qStart - b1->qEnd, 
-                              b2->tStart - b1->tEnd);
-    }
-return score;
-}
-#endif /* DEBUG */
 
 static void reduceGaps(struct bzp *bzp, 
         struct dnaSeq *query, struct dnaSeq *target, struct chain *chain)
@@ -823,6 +835,7 @@ removeSimpleOverlaps(&blockList);
 chainList = chainsCreate(bzp->gapCalc, bzp->ss,
         query, strand, target, &blockList);
 thresholdChains(&chainList, bzp->minScore);
+bzpTime("final chaining");
 
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
@@ -830,8 +843,18 @@ for (chain = chainList; chain != NULL; chain = chain->next)
     if (bzp->rna)
         slideIntronsInChain(chain, query, target);
     }
-bzpTime("reduced double to single gaps");
 
+#ifdef DEBUG
+for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    double oldScore = chain->score;
+    chain->score = chainCalcScore(chain, bzp->ss, bzp->gapCalc, query, target); 
+    if (oldScore != chain->score)
+         warn("score inconsistency %f vs %f", oldScore, chain->score);
+    }
+#endif /* DEBUG */
+
+bzpTime("reduced double to single gaps");
 return chainList;
 }
 
@@ -856,13 +879,13 @@ for (index = indexList; index != NULL; index = index->next)
       // allocate zeroed memory for hit counters if necessary
       if(index->counter == NULL){
              // index->counter could be set later?
-          index->counter = calloc(index->target->size, sizeof(COUNTER_TYPE));
+          AllocArray(index->counter, index->target->size);
           globalCounter = index->counter;
       }
     }
     if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
       // allocate zeroed memory for hit counters
-      dynaCountQtemp = calloc(query->size, sizeof(COUNTER_TYPE)); 
+      AllocArray(dynaCountQtemp, query->size); 
     }
     // LX END
     oneList = blatzAlignOne(bzp, index, query, strand);
@@ -873,7 +896,7 @@ for (index = indexList; index != NULL; index = index->next)
         dynaCountQ[j] = dynaCountQ[j]+dynaCountQtemp[j];
       }
     }
-    if(dynaCountQtemp != NULL) free(dynaCountQtemp); dynaCountQtemp = NULL; 
+    freez(&dynaCountQtemp); 
     // LX END
     for (chain = oneList; chain != NULL; chain = nextChain)
         {

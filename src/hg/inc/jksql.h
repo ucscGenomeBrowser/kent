@@ -181,6 +181,9 @@ int sqlQuickNum(struct sqlConnection *conn, char *query);
 int sqlNeedQuickNum(struct sqlConnection *conn, char *query);
 /* Get numerical result or die trying. */
 
+double sqlQuickDouble(struct sqlConnection *conn, char *query);
+/* Get floating point numerical result from simple query */
+
 char *sqlQuickString(struct sqlConnection *conn, char *query);
 /* Return result of single-row/single column query in a
  * string that should eventually be freeMem'd. */
@@ -212,6 +215,19 @@ void sqlGetLock(struct sqlConnection *sc, char *name);
 
 void sqlReleaseLock(struct sqlConnection *sc, char *name);
 /* Releases an advisory lock created by GET_LOCK in sqlGetLock */
+
+void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList, 
+	boolean isWrite);
+/* Hard lock given table list.  Unlock with sqlHardUnlockAll. */
+
+void sqlHardLockTable(struct sqlConnection *sc, char *table, boolean isWrite);
+/* Lock a single table.  Unlock with sqlHardUnlockAll. */
+
+void sqlHardLockAll(struct sqlConnection *sc, boolean isWrite);
+/* Lock all tables in current database.  Unlock with sqlHardUnlockAll. */
+
+void sqlHardUnlockAll(struct sqlConnection *sc);
+/* Unlock any hard locked tables. */
 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query);
 /* Create table from query if it doesn't exist already. 

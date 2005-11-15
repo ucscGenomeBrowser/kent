@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.81 2005/10/21 02:08:50 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.83 2005/11/12 02:40:21 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -28,9 +28,10 @@ static char * indentStr = "                                                     
 struct sqlConnection
 /* This is an item on a list of sql open connections. */
     {
-    MYSQL *conn;			    /* Connection. */
-    struct dlNode *node;		    /* Pointer to list node. */
-    struct dlList *resultList;		    /* Any open results. */
+    MYSQL *conn;		    /* Connection. */
+    struct dlNode *node;	    /* Pointer to list node. */
+    struct dlList *resultList;	    /* Any open results. */
+    boolean hasHardLock;	    /* TRUE if table has a non-advisory lock. */
     };
 
 struct sqlResult
@@ -230,6 +231,8 @@ if (sc != NULL)
 	}
     if (conn != NULL)
 	{
+	if (sc->hasHardLock)
+	    sqlHardUnlockAll(sc);
         if (monitorFlags & JKSQL_TRACE)
             monitorPrintInfo(sc, "SQL_DISCONNECT");
         monitorEnter();
@@ -578,6 +581,55 @@ char query[256];
 sprintf(query, "select release_lock('%s')", name);
 sqlUpdate(sc, query);
 printf("Advisory lock has been released\n");
+}
+
+void sqlHardUnlockAll(struct sqlConnection *sc)
+/* Unlock any hard locked tables. */
+{
+if (sc->hasHardLock)
+    {
+    sqlUpdate(sc, "unlock tables");
+    sc->hasHardLock = FALSE;
+    }
+}
+
+void sqlHardLockTables(struct sqlConnection *sc, struct slName *tableList, 
+	boolean isWrite)
+/* Hard lock given table list.  Unlock with sqlHardUnlockAll. */
+{
+struct dyString *dy = dyStringNew(0);
+struct slName *table;
+char *how = (isWrite ? "WRITE" : "READ");
+
+if (sc->hasHardLock)
+    errAbort("sqlHardLockTables repeated without sqlHardUnlockAll.");
+dyStringAppend(dy, "LOCK TABLES ");
+for (table = tableList; table != NULL; table = table->next)
+    {
+    dyStringPrintf(dy, "%s %s", table->name, how);
+    if (table->next != NULL)
+       dyStringAppendC(dy, ',');
+    }
+sqlUpdate(sc, dy->string);
+
+sc->hasHardLock = TRUE;
+dyStringFree(&dy);
+}
+
+void sqlHardLockTable(struct sqlConnection *sc, char *table, boolean isWrite)
+/* Lock a single table.  Unlock with sqlHardUnlockAll. */
+{
+struct slName *list = slNameNew(table);
+sqlHardLockTables(sc, list, isWrite);
+slFreeList(&list);
+}
+
+void sqlHardLockAll(struct sqlConnection *sc, boolean isWrite)
+/* Lock all tables in current database.  Unlock with sqlHardUnlockAll. */
+{
+struct slName *tableList =  sqlListTables(sc);
+sqlHardLockTables(sc, tableList, isWrite);
+slFreeList(&tableList);
 }
                                                                                 
 boolean sqlMaybeMakeTable(struct sqlConnection *sc, char *table, char *query)
@@ -999,6 +1051,22 @@ if (row != NULL && row[0] != NULL)
 sqlFreeResult(&sr);
 return ret;
 }
+
+double sqlQuickDouble(struct sqlConnection *conn, char *query)
+/* Get floating point numerical result from simple query */
+{
+struct sqlResult *sr;
+char **row;
+double ret = 0;
+
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row != NULL && row[0] != NULL)
+    ret = atof(row[0]);
+sqlFreeResult(&sr);
+return ret;
+}
+
 
 int sqlNeedQuickNum(struct sqlConnection *conn, char *query)
 /* Get numerical result or die trying. */

@@ -1,9 +1,10 @@
 <H2>Description</H2>
 <P>
-Consolidates mutations from locus-specific databases into a single track,
+Consolidates mutations from locus-specific databases and a genome wide
+mutation database into a composite track,
 with an emphasis on those associated with phenotypic effects.
 This prototype version includes entries mostly from the globin loci, plus
-a few sample entries from the CFTR region.
+a few sample entries from the CFTR region for the locus-specific subtrack.
 </P>
 
 <a name="source">
@@ -16,6 +17,8 @@ globin loci.
 <LI>
 Coming soon: CFTR data.
 (A few sample variants from this region have already been added.)
+<LI>
+Swiss-Prot data on variants within coding regions is available genome wide.
 <LI>
 A possible connection with WayStation, the HGVS community-wide database.
 <A HREF="http://www.genomic.unimelb.edu.au/mdi/centraldb.html" TARGET="_blank">http://www.genomic.unimelb.edu.au/mdi/centraldb.html</A>
@@ -30,6 +33,25 @@ not within any known transcription unit.
 <LI>
 One can also exclude mutations by type: substitution, insertion, deletion,
 duplication, or complex.
+</UL>
+
+<H2>Color key</H2>
+The track is color coded by the mutation type.  Also the mutations with
+darker colors indicate that there is a link to clinical data on the
+details page.
+<UL>
+<LI>
+substitution = purple
+<LI>
+insertion = green
+<LI>
+deletion = blue
+<LI>
+duplication = orange
+<LI>
+complex = red
+<LI>
+unknown = black
 </UL>
 
 <H2>Supporting Details</H2>

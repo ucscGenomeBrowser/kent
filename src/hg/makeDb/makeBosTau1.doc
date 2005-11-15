@@ -1010,6 +1010,7 @@ chainSome $(path1)
 
 
 # SELF BLASTZ / BLASTZ-RUN-UCSC EXPERIMENT (DONE 1/27/05 angie)
+    # DELETED 9/20/05 angie (never used)
     # Put chrom.sizes in /iscratch/ since blastz-run-ucsc reads it when 
     # lifting, and bosTau1 chrom.sizes is large.
     ssh kkr1u00

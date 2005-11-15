@@ -53,8 +53,7 @@ workdir=$4
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
-verb=""
-#verb="-verbose=1"
+verb=3
 
 # allow 250mb core dumps
 ulimit -c 256000
@@ -91,7 +90,7 @@ else
 fi
 
 # update databases
-nice gbDbLoadStep $verb $typeArg $opts -workdir=$workdir $databases
+nice gbDbLoadStep -verbose=${verb} $typeArg $opts -workdir=$workdir $databases
 
 # on success, save time load completely and build time we started with
 mv -f $lastTimeTmp $lastTime

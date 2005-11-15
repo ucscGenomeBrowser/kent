@@ -84,7 +84,7 @@ for (group = groupList; group != NULL; group = group->next)
 	showedRuler = TRUE;
 	hPrintf("<TR>");
 	hPrintf("<TD>");
-	hPrintf("Base Position");
+	hPrintf("%s", RULER_TRACK_LABEL);
 	hPrintf("</TD>");
 	hPrintf("<TD>");
 	hTvDropDownClass("ruler", rulerMode, FALSE, rulerMode ? "normalText" : "hiddenText");

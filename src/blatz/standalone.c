@@ -52,9 +52,8 @@ FILE *bedfp = NULL;
 int j; 
 int i;
 // See if bed file output of the mask was requested
-if(strcmp(bzp->dynaBedFile,"") != 0){
-  bedfp = mustOpen(bzp->dynaBedFile, "w");
-}
+if(differentString(bzp->dynaBedFileQ, ""))
+    bedfp = mustOpen(bzp->dynaBedFileQ, "w");
 // Counts all the query-target hits encountered by the program inside the 
 // loops of gapless.c
 dynaHits = 0;
@@ -75,7 +74,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
       queryHitDLimit = bzp->dynaLimitQ;
       // allocate zeroed memory for hit counters
-      dynaCountQ = calloc(query->size, sizeof(COUNTER_TYPE));
+      AllocArray(dynaCountQ, query->size);
     }
     // LX END
     if (bzp->unmask || bzp->rna)
@@ -117,7 +116,7 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
           }
         }
       } else {
-        fprintf(bedfp,"No dynamic masking data to print.\n");
+        fprintf(bedfp,"#No dynamic masking data to print.\n");
       }
     }
     // LX END
@@ -127,14 +126,14 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     // Statistics to print about how many hits were dropped (ignored)
     dynaDrops = dynaCountTarget + dynaCountQuery;
     dynaDropsPerc = (float)100*dynaDrops/dynaHits+0.5;
-    printf("final chaining %d dynaDrops (%f%%) at T=%d Q=%d \n", dynaDrops, (double)dynaDropsPerc, targetHitDLimit, queryHitDLimit);
+    verbose(2, "%d dynaDrops (%f%%) at T=%d Q=%d \n", 
+    	dynaDrops, (double)dynaDropsPerc, targetHitDLimit, queryHitDLimit);
    // Free dynamic memory used for the sequence-length-dependent counter arrays
-   if(dynaCountQ != NULL) free(dynaCountQ);
+   freeMem(dynaCountQ);
    if(bedfp != NULL){
      carefulClose(&bedfp);
    }
-   //if(dynaWordCount != NULL) free(dynaWordCount); // ?! I don't know why 
-   // this causes segmentation fault
+   freeMem(dynaWordCount);
    // LX END
 carefulClose(&f);
 }
@@ -151,7 +150,7 @@ bzpTime("loaded and indexed target DNA");
 // LX BEG
 if(bzp->dynaWordCoverage > 0){
   dynaNumWords = (pow(4,bzp->weight)); // ?? check with Jim if this is correct
-  dynaWordCount = calloc(dynaNumWords,sizeof(unsigned int));
+  AllocArray(dynaWordCount,dynaNumWords);
   printf("Allocated word count table of size %d\n",dynaNumWords);
   dynaWordLimit = bzp->dynaWordCoverage; // cheating, should be more like:
   //dynaWordLimit = bzp->dynaWordCoverage*dynaSequenceSize/dynaNumWords;
@@ -163,6 +162,7 @@ verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
         query);
 alignAll(bzp, indexList, queryDl, output);
 }
+
 
 int main(int argc, char *argv[])
 /* Process command line. */

@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.63 2005/10/29 07:27:08 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.64 2005/11/11 03:31:39 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1752,7 +1752,7 @@ void pslGrow(struct psl *psl, int *blockSpacePtr)
  * updated to with the new amount of space. */
 {
 int blockSpace = *blockSpacePtr;
-int newSpace = blockSpace * blockSpace;
+int newSpace = 2 * blockSpace;
 ExpandArray(psl->blockSizes, blockSpace, newSpace);
 ExpandArray(psl->qStarts, blockSpace, newSpace);
 ExpandArray(psl->tStarts, blockSpace, newSpace);

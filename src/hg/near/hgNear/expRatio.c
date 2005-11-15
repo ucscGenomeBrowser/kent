@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.38 2005/11/01 00:31:54 aamp Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.39 2005/11/10 01:17:10 aamp Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -77,7 +77,7 @@ void expRatioCellPrint(struct column *col, struct genePos *gp,
 {
 hgExpCellPrint(col->name, gp->name, conn, col->table, conn, col->posTable, 
 	col->representativeCount, col->representatives,
-	col->expRatioUseBlue, col->forceGrayscale, !col->forceGrayscale, col->expScale);
+	col->expRatioUseBlue, col->forceGrayscale, !col->forceGrayscale, col->brightness);
 }
 
 
@@ -105,7 +105,7 @@ static void expBrightnessControl(struct column *col)
 /* Put up brightness text box. */
 {
 char *varName = configVarName(col, "scale");
-char *val = cartUsualString(cart, varName, columnSetting(col, "expScale", "1.0"));
+char *val = cartUsualString(cart, varName, columnSetting(col, "brightness", "1.0"));
 hPrintf("brightness: ");
 cgiMakeTextVar(varName, val, 3);
 }
@@ -408,10 +408,10 @@ else
     {
     char *varName = configVarName(col, "scale");
     char *val = cartUsualString(cart, varName, "1");
-    char *raVal = columnSetting(col, "expScale", "1");
+    char *raVal = columnSetting(col, "brightness", "1");
     double fVal = (cartVarExists(cart, varName)) ? atof(val) : atof(raVal);
     if (fVal == 0) fVal = 1.0;
-    col->expScale = fVal/atof(expMax);
+    col->brightness = fVal/atof(expMax);
     }
 
 col->exists = expRatioExists;

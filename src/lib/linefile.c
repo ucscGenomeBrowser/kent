@@ -12,7 +12,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.41 2005/10/10 18:58:52 galt Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.43 2005/11/08 00:01:34 galt Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -70,12 +70,40 @@ meta->metaFile = f;
 slAddHead(&lf->metaOutput, meta);
 }
 
-static struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
+static char * headerBytes(char *fileName, int numbytes)
+/* Return specified number of header bytes from file 
+ * if file exists as a string which should be freed. */
+{
+int fd,bytesread=0;
+char *result = NULL;
+if ((fd = open(fileName, O_RDONLY)) >= 0)
+    {
+    result=needMem(numbytes+1);
+    if ((bytesread=read(fd,result,numbytes)) < numbytes) 
+	freez(&result);  /* file too short? can read numbytes */
+    else
+	result[numbytes]=0;
+    close(fd);
+    }
+return result;
+}
+     
+
+struct lineFile *lineFileDecompress(char *fileName, bool zTerm)
 /* open a linefile with decompression */
 {
 struct pipeline *pl;
 struct lineFile *lf;
-if (access(fileName, R_OK) != 0)
+char *testName = NULL;
+char *testbytes = NULL;    /* the header signatures for .gz .bz2, .Z are all 2 or 3 bytes only */
+if (fileName==NULL)
+  return NULL;
+testbytes=headerBytes(fileName,3);
+if (!testbytes)
+    return NULL;  /* avoid error from pipeline */
+testName=getFileNameFromHdrSig(testbytes);
+freez(&testbytes);
+if (!testName)
     return NULL;  /* avoid error from pipeline */
 pl = pipelineOpen1(getDecompressor(fileName), pipelineRead, fileName);
 lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
@@ -94,23 +122,17 @@ lf->pl = pl;
 return lf;
 }
 
+
+
 struct lineFile *lineFileDecompressMem(bool zTerm, char *mem, long size)
 /* open a linefile with decompression from a memory stream */
 {
 struct pipeline *pl;
 struct lineFile *lf;
-char **cmds[3];
-char *pString = needMem(128);
 char *fileName = getFileNameFromHdrSig(mem);
 if (fileName==NULL)
   return NULL;
-cmds[0] = needMem(4*sizeof(char *)); 
-safef(pString, 128, "/dev/memwriter %lu %ld", (unsigned long) mem, size);
-chopByWhite(pString, cmds[0], 3);
-cmds[0][3] = NULL;
-cmds[1] = getDecompressor(fileName);
-cmds[2] = NULL;
-pl = pipelineOpen(cmds, pipelineRead, NULL);
+pl = pipelineOpenMem1(getDecompressor(fileName), pipelineRead, mem, size, STDERR_FILENO);
 lf = lineFileAttach(fileName, zTerm, pipelineFd(pl));
 lf->pl = pl;
 return lf;

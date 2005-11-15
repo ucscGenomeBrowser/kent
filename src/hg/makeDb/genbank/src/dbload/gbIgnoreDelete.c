@@ -65,9 +65,9 @@ while ((hel = hashNext(&cookie)) != NULL)
         if (inGbStatusTable(conn, igAcc->acc, igAcc->modDate))
             {
             if (deleter == NULL)
-                deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
+                deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
             sqlDeleterAddAcc(deleter, igAcc->acc);
-            gbVerbMsg(1, "%s %s ignored, will delete", igAcc->acc, 
+            gbVerbMsg(4, "%s %s ignored, will delete", igAcc->acc, 
                       gbFormatDate(igAcc->modDate));
             }
 
@@ -127,9 +127,9 @@ while (lineFileChopNext(lf, row, ArraySize(row)))
     if (gbGuessSrcDb(acc) == srcDb)
         {
         if (deleter == NULL)
-            deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 2));
+            deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
         sqlDeleterAddAcc(deleter, acc);
-        gbVerbMsg(1, "%s delete for reloading", acc);
+        gbVerbMsg(3, "%s delete for reloading", acc);
         }
     }
 gzLineFileClose(&lf);

@@ -331,12 +331,67 @@ cvs commit etc/genbank.conf
     ln -s `pwd`/gc5Base.wib /gbdb/xenTro1/wib
     hgLoadWiggle -pathPrefix=/gbdb/xenTro1/wib xenTro1 gc5Base gc5Base.wig
 
-# PRODUCE X. LAEVIS MRNA ALIGNMENTS (DONE 1/14/05 JK)
+# PRODUCE X. LAEVIS MRNA ALIGNMENTS (IN PROGRESS 11/6/05 JK)
     # Make working directory and get Laevis RNA
+    ssh hgwdev
+    mkdir /san/sanvol1/xenTro1/xenLaeRna
+    cd /san/sanvol1/xenTro1/xenLaeRna
+    hgSpeciesRna hg17 Xenopus laevis xenLaeRna.fa
+    cp /cluster/data/xenTro1/xenTro1.2bit /san/sanvol1/scratch/xenTro1
+
+    # Split RNA into 4
+    mkdir split
+    faSplit sequence xenoLaeRna.fa 4 split/xl
+
+    # Do blatz run on pk.
+    mkdir /san/sanvol1/xenTro1/xenLaeRna
+    mkdir run1
+    cd run1
+    mkdir psl
+    awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > genome.lst
+    ls -1 ../split/*.fa > mrna.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=6000 /san/sanvol1/scratch/xenTro1/xenTro1.2bit:$(file1) $(path2) -out=psl {check out line psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    # Then do usual para try/para push/para time
+#Completed: 108256 of 108256 jobs
+#CPU time in finished jobs:    1933198s   32219.96m   537.00h   22.37d  0.061 y
+#IO & Wait Time:                275698s    4594.97m    76.58h    3.19d  0.009 y
+#Average job time:                  20s       0.34m     0.01h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             986s      16.43m     0.27h    0.01d
+#Submission to last job:         24061s     401.02m     6.68h    0.28d
+
+    # Do sort and near-besting 
+    catDir psl | pslFilter -minScore=100 -minAli=255 -noHead stdin stdout | sort -k 10 > ../filtered.psl
+    cd ..
+    pslReps filtered.psl nearBest.psl /dev/null -nohead -minAli=0.5 -nearTop=0.01 -minCover=0.255
+    sort -k 14 nearBest.psl > xenLaeRna.psl
+
+    # Clean up
+    rm -r run1/psl 
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/xenTro1/bed/xenLaeRna
+    ln -s /cluster/data/xenTro1/bed/xenLaeRna/xenLaeRna.fa /gbdb/xenTro1/xenLaeRna.fa
+    hgLoadSeq xenTro1 /gbdb/xenTro1/xenLaeRna.fa
+    hgLoadPsl xenTro1 xenLaeRna.psl 
+
+
+
+# PRODUCE X. LAEVIS MRNA ALIGNMENTS (DONE 1/14/05 JK)
+    # Make working directory and get Laevis RNA and DNA
     ssh hgwdev
     mkdir -p /cluster/data/xenTro1/bed/xenLaeRna
     cd /cluster/data/xenTro1/bed/xenLaeRna
-    hgSpeciesRna hg17 Xenopus laevis xenLaeRna.fa
+    hgSpeciesRna hg17 Xenopus laevis xenLaeRna.faa
 
     # Split RNA into 3 and load on temp device
     ssh kkr1u00
@@ -2274,10 +2329,146 @@ chainSome $(path1)
 
 # MAKE NIBBPICS 
 #
+    # Load image data from NIBB (contact Naoto Ueno nueno@nibb.ac.jp)
+    # from CD's into /cluster/store11/visiGene/offLine/nibbFrog
+
+    # Get sequence of assembled ESTs from NIBB
     ssh hgwdev
-    mkdir -p /cluster/data/xenTro1/bed/nibPics
-    cd /cluster/data/xenTro1/bed/nibPics
-    wget -O contigs.fa http://xenopus.nibb.ac.jp/data/contigs
+    mkdir -p /cluster/data/xenTro1/bed/nibbPics
+    cd /cluster/data/xenTro1/bed/nibbPics
+    wget -O contigs.fa.gz http://xenopus.nibb.ac.jp/data/contigs.gz
+    wget -O f.fa.gz http://xenopus.nibb.ac.jp/data/f.seq.gz
+    wget -O r.fa.gz http://xenopus.nibb.ac.jp/data/r.seq.gz
+    wget -O i.fa.gz http://xenopus.nibb.ac.jp/data/i.seq.gz
+    gunzip contigs.fa.gz
+    gunzip f.fa.gz
+    gunzip r.fa.gz
+    gunzip i.fa.gz
+
+    # Figure out sequences used to probe images.
+    nibbImageProbes /cluster/store11/visiGene/offline/nibbFrog i.fa f.fa r.fa nibbImageProbes.fa nibbImageProbes.tab
+
+    # Go to pk, create directory for cluster job on SAN, and set up sequence.
+    ssh pk
+    cd /san/sanvol1/scratch/xenTro1/
+    mkdir nibbPics
+    cd nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+
+    # Set up blatz list files
+    mkdir run
+    cd run
+    mkdir psl
+    awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > genome.lst
+    ls -1 ../nibbImageProbes.fa  > mrna.lst
+
+
+    # Make a little wrapper script that runs blatz and pslFilter
+    cat << '_EOF_' > doBlatz
+#!/bin/tcsh -ef
+mkdir -p /tmp/nibPic
+blatz -rna -minScore=6000 /san/sanvol1/scratch/xenTro1/xenTro1.2bit:$1 ../$2.fa -out=psl stdout | pslFilter -minScore=100 -noHead stdin /tmp/nibPic/$1_$2.psl
+mv /tmp/nibPic/$1_$2.psl $3
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x doBlatz
+
+
+    # Make gensub2 script
+    cat << '_EOF_' > gsub
+#LOOP
+doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    #Create parasol batch
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+
+    # Then do usual para try/para push/para time
+#Completed: 27064 of 27064 jobs
+#CPU time in finished jobs:     119714s    1995.23m    33.25h    1.39d  0.004 y
+#IO & Wait Time:                 83315s    1388.59m    23.14h    0.96d  0.003 y
+#Average job time:                   8s       0.13m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             254s       4.23m     0.07h    0.00d
+#Submission to last job:          2338s      38.97m     0.65h    0.03d
+
+    # Do sorting and filtering
+    catDir psl | sort -k 10 | pslReps stdin nearBest.psl /dev/null -nohead -minAli=0.75 -nearTop=0.001 -minCover=0.25 -minNearTopSize=80
+    sort -k 14 nearBest.psl > /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.psl
+
+
+
+# MAKE NIBB EST MAPPINGS
+    
+    # Go to pk, create directory for cluster job on SAN, and set up sequence.
+    ssh pk
+    cd /san/sanvol1/scratch/xenTro1/
+    mkdir nibPics
+    cd nibPics
+    mkdir split
+    faSplit sequence /cluster/data/xenTro1/bed/nibPics/contigs.fa 16 split/xl
+    	# Note things would go smoother using 4 instead of 16 in the faSplit above
+	# I was worried about hippos, but there were none.
+
+    # Set up blatz list files
+    mkdir run2
+    cd run2
+    mkdir psl
+    awk '{print $1;}' /cluster/data/xenTro1/chrom.sizes > genome.lst
+    ls -1 ../split/*.fa > mrna.lst
+
+    # Make a little wrapper script that runs blatz and pslFilter
+    cat << '_EOF_' > doBlatz
+#!/bin/tcsh -ef
+mkdir -p /tmp/nibPic
+blatz -rna -minScore=6000 /san/sanvol1/scratch/xenTro1/xenTro1.2bit:$1 ../split/$2.fa -out=psl stdout | pslFilter -minScore=100 -noHead stdin /tmp/nibPic/$1_$2.psl
+mv /tmp/nibPic/$1_$2.psl $3
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod a+x doBlatz
+
+    # Make gensub2 script
+    cat << '_EOF_' > gsub
+#LOOP
+doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    #Create parasol batch
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+
+    # Then do usual para try/para push/para time
+#Completed: 433024 of 433024 jobs
+#CPU time in finished jobs:    5489117s   91485.29m  1524.75h   63.53d  0.174 y
+#IO & Wait Time:               1109930s   18498.83m   308.31h   12.85d  0.035 y
+#Average job time:                  15s       0.25m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             959s      15.98m     0.27h    0.01d
+#Submission to last job:         23019s     383.65m     6.39h    0.27d
+
+    # Merge results into one file.  This took at least an hour (left it going over night)
+    catDir psl > ../raw.psl
+
+    # Sort and do additional filtering.
+    cd ..
+    sort -k 10 raw.psl | pslReps stdin nearBest.psl /dev/null -nohead -minAli=0.80 -nearTop=0.001 -minCover=0.25 -minNearTopSize=100
+    sort -k 14 nearBest.psl > contigs.psl
+
+    # Convert names 
+    nibbNameFix contigs.fa contigs.psl nibbEstContigs.fa nibbEstContigs.psl 
+
+    # Still TODO - massage names a little to get rid of NCBIisms in a few places
+    # and to decide how to link to NIBB.
+
+    # Clean up.  This also takes a good while
+    rm -r run1/psl split
+    rm raw.psl nearBest.psl
+
 
 
 #########################################################################

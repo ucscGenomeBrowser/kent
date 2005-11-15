@@ -203,7 +203,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 else
     {
-    stageName = "conception";
+    stageName = "";
     stageAge = age;
     stageLetter = "";
     }

@@ -211,4 +211,7 @@ int maskHeadPolyT(DNA *dna, int size);
 /* Convert PolyT at start.  This allows a few non-T's as noise to be 
  * trimmed too.  Returns number of bases trimmed.  */
 
+boolean isDna(char *poly, int size);
+/* Return TRUE if letters in poly are at least 90% ACGTU */
+
 #endif /* DNAUTIL_H */

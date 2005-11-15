@@ -4510,7 +4510,15 @@ blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.18/build35/maskedContigs/$(
     group by chrom;;
 
 
-
+## LS-SNP links [load data only] (Daryl Thomas; November 3, 2005)
+    # Data from Rachel Karchin in the Andrej Sali lab at UCSF
+    # /cluster/data/hg17/bed/lssnp
+    hgsql hg17 < ${HOME}/kent/src/hg/lib/lsSnpFunction.sql
+    hgsql hg17 < ${HOME}/kent/src/hg/lib/lsSnpStructure.sql
+    mysql> load data local infile "snp-human3-function-predictions.txt" into table lsSnpFunction;
+    Query OK, 24337 rows affected (1.27 sec)
+    mysql> load data local infile "snp-human3-structure-predictions.txt" into table lsSnpStructure;
+    Query OK, 34764 rows affected (2.36 sec)
 
 # Tajima's D (DONE -- 2005-09-20 -- Daryl)
 # Data from Chris Carlson in Debbie Nickerson's lab
@@ -18419,8 +18427,8 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 
 # Remap the probe alignments from mm7 to hg17
     zcat /cluster/data/mm7/bed/bedOver/mm7.hg17.over.chain.gz \
-        |  pslMap -chainMapFile -swapMap stdin  \
-	       /cluster/data/mm7/bed/allenBrain/allenBrainAli.psl stdout
+        |  pslMap -chainMapFile -swapMap \
+	       /cluster/data/mm7/bed/allenBrain/allenBrainAli.psl stdin stdout
 	|  sort -k 14,14 -k 16,16n > unscored.psl
     pslRecalcMatch unscored.psl /cluster/data/hg17/nib \
         /cluster/data/mm7/bed/allenBrain/allProbes.fa allenBrainAli.psl
@@ -18436,3 +18444,60 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
 
 # Make mapping between known genes and allenBrain	
    hgMapToGene hg17 allenBrainAli -type=psl knownGene knownToAllenBrain 
+
+##########################################################################
+# BUILD NIBB IMAGE PROGES (DONE 11/07/05 JK)
+
+# Make directory on san for cluster job and copy in sequence
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg17/nibbPics
+    cd /san/sanvol1/scratch/hg17/nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+
+# Make parasol job dir and sequence list files
+    mkdir run
+    cd run
+    mkdir psl
+    ls -1 /cluster/sanvol1/scratch/hg17/nib/*.nib > genome.lst
+    echo ../nibbImageProbes.fa > rna.lst
+
+# Create parasol gensub file file
+cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+
+# Do para try/push/time etc.
+#Completed: 46 of 46 jobs
+#CPU time in finished jobs:      11818s     196.97m     3.28h    0.14d  0.000 y
+#IO & Wait Time:                   145s       2.41m     0.04h    0.00d  0.000 y
+#Average job time:                 260s       4.33m     0.07h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1022s      17.03m     0.28h    0.01d
+#Submission to last job:          1060s      17.67m     0.29h    0.01d
+
+# Make sort and filter
+    catDir psl | sort -k 10 \
+        | pslReps stdin stdout /dev/null -nohead -minAli=0.60 -nearTop=0.001 -minCover=0.10 -minNearTopSize=80 \
+	| sort -k 14,14 -k 16,16n \
+	| sed 's/..\/..\/nib\/chr/chr/' \
+	| sed 's/.nib//' > ../nibbImageProbes.psl
+
+# Make bed file and copy in stuff
+    ssh hgwdev
+    cd /cluster/data/hg17/bed
+    mkdir nibbPics
+    cd nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+    cp /san/sanvol1/scratch/hg17/nibbPics/nibbImageProbes.psl .
+
+# Load into database
+    ln -s /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa /gbdb/hg17/nibbImageProbes.fa
+    hgLoadSeq hg17 /gbdb/hg17/nibbImageProbes.fa
+    hgLoadPsl hg17 nibbImageProbes.psl
+

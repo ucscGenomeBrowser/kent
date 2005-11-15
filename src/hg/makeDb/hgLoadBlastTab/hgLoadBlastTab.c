@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.6 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.7 2005/11/03 01:22:01 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +21,7 @@ errAbort(
   "using the -m 8 flag\n"
   "options:\n"
   "   -createOnly - just create the table, don't load it\n"
-  "   -maxPer=N - maximum to load for any query sequenct\n"
+  "   -maxPer=N - maximum to load for any query sequence\n"
   );
 }
 

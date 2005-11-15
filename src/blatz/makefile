@@ -11,7 +11,7 @@ all: blatz blatzClient blatzServer
 
 blatz: standalone.o $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatz standalone.o $O ${MYLIBS} $L
-	${STRIP} ${HOME}/bin/${MACHTYPE}/blatz${EXE}
+#	${STRIP} ${HOME}/bin/${MACHTYPE}/blatz${EXE}
 
 blatzServer: server.o $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/blatzServer server.o $O ${MYLIBS} $L
