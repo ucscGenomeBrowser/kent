@@ -16,7 +16,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.32 2005/08/18 07:25:44 baertsch Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.33 2005/11/15 16:38:08 braney Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;
@@ -460,10 +460,9 @@ carefulClose(&f);
 struct gapCalc *gapCalcReadOrDefault(char *fileName)
 /* Return gaps from file, or default if fileName is NULL. */
 {
-if (fileName != NULL)
-    return gapCalcFromFile(fileName);
-else
-    return gapCalcDefault();
+if (fileName == NULL)
+    errAbort("Must specify gap costs.  Use 'loose' or 'medium' for defaults\n");
+return gapCalcFromFile(fileName);
 }
 
 int main(int argc, char *argv[])
@@ -475,6 +474,10 @@ minScore = optionInt("minScore", minScore);
 detailsName = optionVal("details", NULL);
 gapFileName = optionVal("linearGap", NULL);
 scoreSchemeName = optionVal("scoreScheme", NULL);
+
+if (argc != 5)
+    usage();
+
 if (scoreSchemeName != NULL)
     {
     verbose(1, "Reading scoring matrix from %s\n", scoreSchemeName);
@@ -485,8 +488,6 @@ else
 dnaUtilOpen();
 gapCalc = gapCalcReadOrDefault(gapFileName);
 /* testGaps(); */
-if (argc != 5)
-    usage();
 axtChain(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
