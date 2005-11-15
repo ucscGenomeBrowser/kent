@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: nibbPrepImages.c,v 1.1 2005/11/10 01:24:27 kent Exp $";
+static char const rcsid[] = "$Id: nibbPrepImages.c,v 1.2 2005/11/15 16:59:23 kent Exp $";
 
 int thumbSize = 200;
 
@@ -74,6 +74,9 @@ pyramid1(source, subdir, name, dy, "-resize 50%", 1);
 pyramid1(source, subdir, name, dy, "-resize 25%", 2);
 pyramid1(source, subdir, name, dy, "-resize 12.5%", 3);
 pyramid1(source, subdir, name, dy, "-resize 6.25%", 4);
+dyStringClear(dy);
+dyStringPrintf(dy, "ln -s %s %s/%s.jpg", source, destDir, name);
+execute(dy->string);
 }
 
 void nibbPrepImages(char *sourceDir, char *tabFile, 
