@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.15 2005/04/21 18:49:11 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.16 2005/11/16 09:41:36 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -250,7 +250,7 @@ pslFree(&psl);
 void convertPslFile(struct sqlConnection *conn, char *pslFile, FILE *genePredFh)
 /* convert mrnas in a psl file to genePred objects */
 {
-struct lineFile *lf = lineFileOpen(pslFile, TRUE);
+struct lineFile *lf = pslFileOpen(pslFile);
 char *row[PSL_NUM_COLS], cdsBuf[4096];
 
 while (lineFileNextRowTab(lf, row, PSL_NUM_COLS))
