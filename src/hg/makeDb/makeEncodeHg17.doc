@@ -1473,10 +1473,33 @@ cat > project.csh << 'EOF'
     cat *.maf | hgLoadMafSummary hg17 encodeMavidSummary stdin
 
     # conserved elements
+    # Scores:  binCons are all 1000, gerp range is 6.75 - 4813.26
+    #          phastCons is 10-18088
+    # Force gerp to integer for consistent table format, but don't
+    # bother scaling at this point (and don't use to score on display)
+    # For some reason, phastCons has + strand -- strip this out
     cd /cluster/data/encode/MSA
     mkdir -p SEP-05/elements/lab
     cd SEP-05/elements/lab
     wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/target.align.conservation.v1.tar.gz
+    cd ..
+cat > load.csh << 'EOF'
+    foreach d (lab/{tba,mlagan,mavid})
+        set align = `echo $d:t | sed 's/\(.*\)/\u\1/'`
+        set table = encode${align}BinConsEl
+        cat $d/*/*.binCons.bed | grep '^chr' | \
+            hgLoadBed -strict hg17 $table stdin
+        set table = encode${align}PhastConsEl
+        cat $d/*/*.phastCons.bed | grep '^chr' | \
+            awk '{printf("%s\t%d\t%d\t%s\t%d\n", $1,$2,$3,$4,$5)}' | \
+                hgLoadBed -strict hg17 $table stdin
+        set table = encode${align}GerpEl
+        cat $d/*/*.gerp.bed | grep '^chr' | \
+            awk '{printf("%s\t%d\t%d\t%s\t%.0f\n", $1,$2,$3,$4,$5)}' | \
+                hgLoadBed -strict hg17 $table stdin
+    end
+'EOF'
+    csh load.csh >&! load.log &
 
     # consensus elements
     cd /cluster/data/encode/MSA
@@ -1484,11 +1507,22 @@ cat > project.csh << 'EOF'
     cd SEP-05/consensus/lab
     wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/consensus.conservation.v1.tar.gz
     cd ..
-    ln -s lab/or.or.bed AllUnionEl.bed
-    ln -s lab/and.and.bed AllIntersectEl.bed
-    foreach f (All*.bed)
+    ln -s lab/or.or.bed MsaElUnion.bed
+    ln -s lab/and.and.bed MsaElIntersect.bed
+    ln -s lab/two.two.bed MsaElModerate.bed
+cat > load.csh << 'EOF'
+    foreach f (MsaEl*.bed)
+        echo $f
         set b = $f:r
         set t = encode$b
-        sed -e 's/$/\t500/' $f | hgLoadBed -noBin hg17 $t stdin
-        checkTableCoords hg17 $t
+        hgLoadBed -strict -noBin hg17 $t $f
     end
+'EOF'
+    csh load.csh >&! load.log
+        #Reading MsaElIntersect.bed
+        #Loaded 30645 elements of size 4
+        #Reading MsaElModerate.bed
+        #Loaded 36793 elements of size 4
+        #Reading MsaElUnion.bed
+        #Loaded 100543 elements of size 4
+          
