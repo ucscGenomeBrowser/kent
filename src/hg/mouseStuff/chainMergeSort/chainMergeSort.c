@@ -9,9 +9,9 @@
 #include "portable.h"
 #include "quickHeap.h"
 
-static char const rcsid[] = "$Id: chainMergeSort.c,v 1.10 2005/10/24 18:41:10 galt Exp $";
+static char const rcsid[] = "$Id: chainMergeSort.c,v 1.11 2005/11/16 07:00:27 kent Exp $";
 
-#define MAXFILES 250
+#define MAXFILES 400
 
 boolean saveId = FALSE;
 char *inputList = NULL;
