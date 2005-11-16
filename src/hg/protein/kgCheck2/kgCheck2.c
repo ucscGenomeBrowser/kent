@@ -1,4 +1,4 @@
-/* kgCheck - From the initial gene candidates, */
+/* kgCheck2 - From the initial gene candidates, */
 /* go through various criteria on gene-check results and keep the ones that pass the criteria */
 
 #include "common.h"
@@ -9,15 +9,15 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "kgCheck - from gene candidates, go through various criteria and keep the ones that pass the criteria \n"
+  "kgCheck2 - from gene candidates, go through various criteria and keep the ones that pass the criteria \n"
   "usage:\n"
-  "   kgCheck tempDb genomeDb candidateTable chkTable outfile\n"
+  "   kgCheck2 tempDb genomeDb candidateTable chkTable outfile\n"
   "      tempDb is the temp KG DB name\n"
   "      genomeDb is the genome DB where refGene and mgcGenes tables are\n"
   "      candidateTable is the gene candidates table in tempDb\n"
   "      checkTable is the table (in tempDb) storing gene-check results\n"
   "      outfile is the output file name\n"
-  "example: kgCheck kgMm6ATemp mm6 kgCandidate0 kgCandidate.tab\n");
+  "example: kgCheck2 kgMm6ATemp mm6 kgCandidate0 geneCheck kgCandidate.tab\n");
 }
 
 int main(int argc, char *argv[])
@@ -49,7 +49,7 @@ int  alignCnt = 0;
 
 char *candTable, *chkTable;
 int  orfStop, cdsGap, cdsSplice, numCdsIntrons;
-boolean passed;
+boolean passed, isRefSeq;
 float ranking;
 
 if (argc != 6) usage();
@@ -96,6 +96,17 @@ while (row2 != NULL)
 	numCdsIntrons = atoi(row3[18]);
 	causes    = row3[21];
 	
+	safef(condStr, sizeof(condStr), "name='%s'", acc);
+	answer = sqlGetField(conn, genomeDb, "refGene", "name", condStr);
+ 	if (answer != NULL) 
+	    {
+	    isRefSeq = TRUE;
+	    }
+	else
+	    {
+	    isRefSeq = FALSE;
+	    }
+	
 	ranking = 9;
 	/* all genes passed gene-check with status ok are considered good */
 	if (sameWord(stat, "ok")) 
@@ -105,8 +116,13 @@ while (row2 != NULL)
 	    }
 	else
 	    {
-	    /* exclude bad frame, orfStop */
-	    if ((!sameWord(frame, "ok")) || (orfStop != 0) )
+	    /* exclude bad frame, orfStop, noStart, noStop */
+	    if (
+	     	(!sameWord(frame, "ok")) || 
+		(orfStop != 0) ||
+		(!sameWord(start, "ok")) ||
+		(!sameWord(stop, "ok")) 
+	       )
 	    	{
 		passed = FALSE;
 		ranking = 9;
@@ -114,18 +130,17 @@ while (row2 != NULL)
 	    else
 	        {
 		passed = TRUE;
-		ranking = 4;
+		ranking = 2;
 		
-		/* award a notch higher if start codon exist */
-		if (sameWord(start, "ok"))ranking = ranking - 1.0;
-		
-		/* award a notch higher if stop codon exist */
-		if (sameWord(stop,  "ok"))ranking = ranking - 1.0;
-		    
-		/* more acceptable if  cdsSplice = 0 or (cdsSplice = 1 and numCdsIntrons > 1) */
-		if ((cdsSplice == 0) || ((numCdsIntrons > 1) && (cdsSplice == 1)))
+		/* reject entries with cdsPlice > 1 */
+		if (cdsSplice > 0)
 		    {
-		    ranking = ranking - 0.3;
+		    passed = FALSE;
+		    /* let this special case pass */
+		    if ((numCdsIntrons > 1) && (cdsSplice == 1))
+			{
+			passed = TRUE;
+			}
 		    }
 		    
 	 	/* if cdsGap > 0, degrade it ranking by 1.  If cdsGap is not 
@@ -142,9 +157,7 @@ while (row2 != NULL)
 	    }
 	    
         /* give RefSeq entries 0.5 advantage in its ranking */  
-	safef(condStr, sizeof(condStr), "name='%s'", acc);
-	answer = sqlGetField(conn, genomeDb, "refGene", "name", condStr);
- 	if (answer != NULL) 
+ 	if (isRefSeq)
 	    {
 	    ranking = ranking - 0.5;
 	    }
@@ -172,12 +185,6 @@ while (row2 != NULL)
 	/* print out entries, with their rankings, that passed the above criteria */    
 	if (passed) 
 	    {
-	    /*for (i=0; i<10; i++)
-	    	{
-		fprintf(outf, "%s\t", row2[i]);
-		}
-	    */
-
 	    geneName = strdup(row2[0]);
 	    chp = strstr(geneName, "_");
 	    if (chp != NULL)
