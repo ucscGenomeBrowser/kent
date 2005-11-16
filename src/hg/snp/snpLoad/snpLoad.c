@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.4 2005/11/10 00:50:39 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.5 2005/11/16 22:26:34 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -17,60 +17,57 @@ errAbort(
     "    snpLoad snpDb targetDb \n");
 }
 
-void setCoords(struct snp125 *el, int snpClass, char *startString, char *endString)
+boolean setCoords(struct snp125 *el, int snpClass, char *startString, char *endString)
 {
 char *rangeString1, *rangeString2;
+
+el->chromStart = atoi(startString);
 
 if (snpClass == 1) 
     {
     el->class = cloneString("range");
-    el->chromStart = atoi(startString);
     rangeString1 = cloneString(endString);
     rangeString2 = strstr(rangeString1, "..");
     if (rangeString2 == NULL) 
         {
         verbose(1, "error processing range snp %s with phys_pos %s\n", rangeString1);
-        free(el);
-        return;
+        return FALSE;
         }
     rangeString2 = rangeString2 + 2;
     el->chromEnd = atoi(rangeString2);
-    return;
+    return TRUE;
     }
 
 if (snpClass == 2)
     {
     el->class = cloneString("simple");
-    el->chromStart = atoi(startString);
     el->chromEnd = atoi(endString);
-    return;
+    return TRUE;
     }
 
 if (snpClass == 3)
     {
     el->class = cloneString("deletion");
-    el->chromStart = atoi(startString);
     rangeString1 = cloneString(endString);
     rangeString2 = strstr(rangeString1, "^");
     if (rangeString2 == NULL) 
         {
         verbose(1, "error processing deletion snp %s with phys_pos %s\n", rangeString1);
-        free(el);
-        return;
+        return FALSE;
 	}
     rangeString2 = rangeString2++;
     el->chromEnd = atoi(rangeString2);
-    return;
+    return TRUE;
     }
 
 if (snpClass == 4)
     {
     el->class = cloneString("insertion");
-    el->chromStart = atoi(startString);
     el->chromEnd = atoi(endString);
-    return;
+    return TRUE;
     }
 verbose(1, "skipping snp %s with loc type %d\n", el->name, snpClass);
+return FALSE;
 }
 
 struct snp125 *readSnps()
@@ -107,7 +104,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* store ctg_id in chrom for now, substitute later */
     el->chrom = cloneString(row[1]);
     el->score = 0;
-    setCoords(el, snpClass, row[3], row[4]);
+    if(!setCoords(el, snpClass, row[3], row[4]))
+        {
+        free(el);
+	continue;
+	}
     if (atoi(row[5]) == 0) 
         strcpy(el->strand, "+");
     else if (atoi(row[5]) == 1)
@@ -119,7 +120,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-slReverse(&list);  /* could possibly skip if it made much difference in speed. */
 return list;
 }
 
@@ -164,6 +164,7 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+
 int main(int argc, char *argv[])
 /* Check args; read and load . */
 {
@@ -172,6 +173,7 @@ struct snp125 *list=NULL, *el;
 if (argc != 3)
     usage();
 
+/* TODO: look in jksql for existence check for non-hgcentral database */
 snpDb = argv[1];
 targetDb = argv[2];
 if(!hDbExists(targetDb))
@@ -182,6 +184,8 @@ hSetDb(snpDb);
 /* check for needed tables */
 if(!hTableExistsDb(snpDb, "ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "ContigInfo"))
+    errAbort("no ContigInfo table in %s\n", snpDb);
 
 /* this will create a temporary table */
 list = readSnps();
@@ -198,7 +202,7 @@ for (el = list; el != NULL; el = el->next)
     verbose(1, "observed = %s\n", el->observed);
     }
 
-hSetDb(targetDb);
-// loadSnps();
+// hSetDb(targetDb);
+// loadDatabase(list);
 return 0;
 }
