@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.29 2005/08/21 14:30:12 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.30 2005/11/16 17:45:25 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -43,8 +43,9 @@ errAbort(
   "   -joinContained - join genes that are contained within a larger loci\n"
   "    into that loci. Intended as a way to handled fragments and exon-level\n"
   "    predictsions, as genes-in-introns on the same strand are very rare.\n"
-  "   -noConflicted - don't detect or output conflicted loci. This can reduce\n"
-  "    memory and the size of the output file on large datasets.\n"
+  "   -conflicted - detect conflicted loci. Conflicted loci are loci that\n"
+  "    contain genes that share not sequence.  This option greatly increases\n"
+  "    size of output file.\n"
   "\n"
   "The cdsConflicts and exonConflicts columns contains `y' if the cluster has\n"
   "conficts. A conflict is a cluster where all of the genes don't share exons. \n"
@@ -60,7 +61,7 @@ static struct optionSpec options[] = {
    {"flatBed", OPTION_STRING},
    {"cds", OPTION_BOOLEAN},
    {"joinContained", OPTION_BOOLEAN},
-   {"noConflicted", OPTION_BOOLEAN},
+   {"conflicted", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -69,7 +70,7 @@ boolean gUseCds;
 boolean gTrackNames;
 struct track *gTracks = NULL;  /* all tracks */
 boolean gJoinContained = FALSE;
-boolean gDetectConflicted = TRUE;
+boolean gDetectConflicted = FALSE;
 
 struct track
 /*  Object representing a track. */
@@ -625,12 +626,15 @@ for (cl = conflicts; cl != NULL; cl = cl->next)
 void prGene(FILE *f, struct cluster *cluster, struct clusterGene *cg)
 /* output info on one gene */
 {
-fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\t%s\t%c\t%c", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd,
-        cg->gp->strand,
-        (cluster->hasExonConflicts ? 'y' : 'n'),
-        (cluster->hasCdsConflicts ? 'y' : 'n'));
-prConflicts(f, cg->exonConflicts);
-prConflicts(f, cg->cdsConflicts);
+fprintf(f, "%d\t%s\t%s\t%s\t%d\t%d\t%s", cluster->id, cg->track->name, cg->gp->name, cg->gp->chrom, cg->gp->txStart, cg->gp->txEnd,
+        cg->gp->strand);
+if (gDetectConflicted)
+    {
+    fprintf(f, "\t%c\t%c", (cluster->hasExonConflicts ? 'y' : 'n'),
+            (cluster->hasCdsConflicts ? 'y' : 'n'));
+    prConflicts(f, cg->exonConflicts);
+    prConflicts(f, cg->cdsConflicts);
+    }
 fprintf(f, "\n");
 }
 
@@ -652,7 +656,7 @@ return map;
 }
 
 void outputFlatBed(struct cluster *cluster, char strand, FILE *flatBedFh)
-/* output a clusters a a single bed record */
+/* output a clusters as a single bed record */
 {
 static struct bed bed;  /* bed buffer */
 static int capacity = 0;
@@ -776,11 +780,13 @@ fputs("#"
       "chrom\t"
       "txStart\t"
       "txEnd\t"
-      "strand\t"
-      "hasExonConflicts\t"
-      "hasCdsConflicts\t"
-      "exonConflicts\t"
-      "cdsConflicts\n", f);
+      "strand", f);
+if (gDetectConflicted)
+    fputs("\thasExonConflicts\t"
+          "hasCdsConflicts\t"
+          "exonConflicts\t"
+          "cdsConflicts", f);
+fputs("\n", f);
 return f;
 }
 
@@ -833,7 +839,7 @@ optionInit(&argc, argv, options);
 gUseCds = optionExists("cds");
 gTrackNames = optionExists("trackNames");
 gJoinContained = optionExists("joinContained");
-gDetectConflicted = !optionExists("noConflicted");
+gDetectConflicted = optionExists("conflicted");
 
 if (!gTrackNames)
     {
