@@ -38,7 +38,7 @@ bzp->unmask = FALSE;
 bzp->out = "chain";
 bzp->mafQ = "";
 bzp->mafT = "";
-bzp->maxChainsToExplore = 1000;
+bzp->maxChainsToExplore = 2000;	
 // LX BEG Sep 02 2005 Sep 06 2005
 bzp->dynaLimitT = VERY_LARGE_NUMBER;
 bzp->dynaLimitQ = VERY_LARGE_NUMBER;
