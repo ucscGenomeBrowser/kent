@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.98 2005/11/09 00:29:36 kent Exp $"
+#	"$Id: makeMm6.doc,v 1.99 2005/11/16 23:21:06 aamp Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9100,5 +9100,23 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 # Make mapping between known genes and allenBrain
    hgMapToGene mm6 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
-
+# RIKEN CAGE STUFF (DONE 11-16-2005 Andy)
+    cd /cluster/data/mm6/bed
+    mkdir rikenCageCtss
+    cd rikenCageCtss/
+    hgsql mm5 -e 'select * from rikenCageTc' | cut -f2- | tail +2 > rikenCageTc.mm5.bed
+    hgsql mm5 -e 'select chrom,chromStart,chromEnd,dataValue from rikenCageCtssMinus' \
+       | tail +2 > minus.mm5.bed
+    hgsql mm5 -e 'select chrom,chromStart,chromEnd,dataValue from rikenCageCtssPlus' \
+       | tail +2 > plus.mm5.bed
+    liftOver rikenCageTc.mm5.bed /gbdb/mm5/liftOver/mm5ToMm6.over.chain rikenCageTc.mm6.bed \
+       rikenCageTc.mm6.missed
+    liftOver plus.mm5.bed /gbdb/mm5/liftOver/mm5ToMm6.over.chain plus.mm6.bed \
+       plus.mm6.missed
+    liftOver minus.mm5.bed /gbdb/mm5/liftOver/mm5ToMm6.over.chain minus.mm6.bed \
+       minus.mm6.missed
+    wc -l *.missed
+    hgLoadBed mm6 rikenCageTc rikenCageTc.mm6.bed
+    hgLoadBed -strict -bedGraph=4 mm6 rikenCageCtssMinus minus.mm6.bed 
+    hgLoadBed -strict -bedGraph=4 mm6 rikenCageCtssPlus plus.mm6.bed 
 

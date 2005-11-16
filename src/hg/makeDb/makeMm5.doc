@@ -7506,3 +7506,89 @@ Submission to last job:           495s       8.25m     0.14h    0.01d
     #genbankImageHash 1301
     #knownToLocusLink 30303, knownToRefSeq 30291, knownToGene 266841
 
+# RIKEN CAGE STUFF (DONE 11-16-2005 Andy)
+    # Make download area.
+    ssh hgwdev
+    cd /cluster/data/mm5/bed
+    mkdir rikenCageCtss
+    cd rikenCageCtss/
+    wget -r http://fantom31p.gsc.riken.jp/cage_analysis/export/mm5/
+    # stupid thing didn't work.  Tried tinkering with wget almost every way possible.
+    # Finally just did it the hard way.
+    wget -O /dev/stdout http://fantom31p.gsc.riken.jp/cage_analysis/export/mm5/ 2> /dev/null 
+          | egrep ".sql|.bz2" | grep href | sed 's/^.*href=\"//;s/\".*$//' > files.lst 
+    rm -rf fantom*
+    for f in `cat files.lst`; do
+       wget http://fantom31p.gsc.riken.jp/cage_analysis/export/mm5/$f; 
+    done
+    bunzip2 *.bz2
+
+    # Make the simple table of the CAGE-related TSSs.
+    awk 'BEGIN{FS="\t"};{printf("%s\t%s\t%s\t%s\t%s\t1000\t%s\n",$9,$4,$7,$8,$1,($6 == "F") ? "+" : "-")}' \
+       tss_summary.tsv | grep "^CAGE" | cut -f2- > basicCAGE.bed 
+    # Make CAGE wiggle tracks for plus and minus strands
+    awk 'BEGIN{FS="\t"}; {if ($4=="F") printf("%s\t%s\t%d\t%s\n", $2, $5, $5+1, $6)}' \
+        ctss_summary.tsv | wigEncode stdin ctssForward.wig ctssForward.wib
+    awk 'BEGIN{FS="\t"}; {if ($4=="R") printf("%s\t%s\t%d\t%s\n", $2, $5-1, $5, $6)}' \
+        ctss_summary.tsv | wigEncode stdin ctssReverse.wig ctssReverse.wib
+    mkdir wiggle
+    mv ctss*.wi{g,b} wiggle/
+ 
+    # Load stuff up:  
+    hgLoadBed mm5 rikenCageTc basicCAGE.bed
+    ln -s /cluster/data/mm5/bed/rikenCAGE/wiggle /gbdb/mm5/wib/ctssForward
+    ln -s /cluster/data/mm5/bed/rikenCAGE/wiggle /gbdb/mm5/wib/ctssReverse
+    hgLoadWiggle mm5 ctssForward ctssForward.wig
+    hgLoadWiggle mm5 ctssReverse ctssReverse.wig    
+
+    # OK make them bedGraphs instead.
+    cd ../
+    rm -rf wiggle/
+    rm /gbdb/mm5/wib/ctss*
+    hgsql mm5 -e 'drop table ctssForward'
+    hgsql mm5 -e 'drop table ctssReverse'
+    awk 'BEGIN{FS="\t"}; {if ($4=="F") printf("%s\t%s\t%d\t%s\n", $2, $5, $5+1, $6)}' \
+       ctss_summary.tsv | hgLoadBed -strict -bedGraph=4 mm5 rikenCageCtssPlus stdin
+    awk 'BEGIN{FS="\t"}; {if ($4=="R") printf("%s\t%s\t%d\t%s\n", $2, $5-1, $5, $6)}' \
+       ctss_summary.tsv | hgLoadBed -strict -bedGraph=4 mm5 rikenCageCtssMinus stdin
+
+    # track html:
+    cp rikenCageCtss.html ~/kent/src/hg/makeDb/trackDb/mouse/
+    # trackDb:
+track rikenCageTc
+shortLabel Riken CAGE TC
+longLabel Riken CAGE - Associated Transcript Clusters
+group genes
+priority 47.5
+visibility hide
+type bed 6 .
+
+track rikenCageCtss
+compositeTrack on
+shortLabel Riken CAGE
+longLabel Riken CAGE - Predicted Gene Start Sites
+group genes
+priority 47.51
+visibility hide
+type bedGraph 4
+maxHeightPixels 128:16:16
+minLimit 1
+maxLimit 4316
+viewLimits 1.0:10.0
+windowingFunction mean
+autoScale Off
+origAssembly hg16
+
+    track rikenCageCtssPlus
+    subTrack rikenCageCtss
+    shortLabel Riken CAGE +
+    longLabel Riken CAGE Plus Strand - Predicted Gene Start Sites
+    priority 1
+    color 109,51,43
+
+    track rikenCageCtssMinus
+    subTrack rikenCageCtss
+    shortLabel Riken CAGE -
+    longLabel Riken CAGE Minus Strand - Predicted Gene Start Sites
+    priority 2
+    color 43,51,109
