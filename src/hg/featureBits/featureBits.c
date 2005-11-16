@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.37 2005/06/19 19:53:39 jill Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.38 2005/11/16 09:59:58 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -86,16 +86,17 @@ errAbort(
   "   '-where=some sql pattern'  restrict to features matching some sql pattern\n"
   "You can include a '!' before a table name to negate it.\n"
   "Some table names can be followed by modifiers such as:\n"
-  "    :exon:N  Break into exons and add N to each end of each exon\n"
-  "    :cds     Break into coding exons\n"
-  "    :intron:N Break into introns, remove N from each end\n"
-  "    :upstream:N  Consider the region of N bases before region\n"
-  "    :end:N  Consider the region of N bases after region\n"
-  "    :score:N Consider records with score >= N \n"
-  "    :upstreamAll:N Like upstream, but doesn't filter out genes that \n"
-  "                   have txStart==cdsStart or txEnd==cdsEnd\n"
-  "    :endAll:N      Like end, but doesn't filter out genes that \n"
-  "                   have txStart==cdsStart or txEnd==cdsEnd\n"
+  "    :exon:N          Break into exons and add N to each end of each exon\n"
+  "    :cds             Break into coding exons\n"
+  "    :intron:N        Break into introns, remove N from each end\n"
+  "    :utr5, :utr3     Break into 5' or 3' UTRs\n" 
+  "    :upstream:N      Consider the region of N bases before region\n"
+  "    :end:N           Consider the region of N bases after region\n"
+  "    :score:N         Consider records with score >= N \n"
+  "    :upstreamAll:N   Like upstream, but doesn't filter out genes that \n"
+  "                     have txStart==cdsStart or txEnd==cdsEnd\n"
+  "    :endAll:N        Like end, but doesn't filter out genes that \n"
+  "                     have txStart==cdsStart or txEnd==cdsEnd\n"
   "The tables can be bed, psl, or chain files, or a directory full of\n"
   "such files as well as actual database tables.  To count the bits\n"
   "used in dir/chrN_something*.bed you'd do:\n"
