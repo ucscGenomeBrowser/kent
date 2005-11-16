@@ -8,14 +8,27 @@
 #include "maf.h"
 #include "bed.h"
 #include "twoBit.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.6 2005/07/22 23:47:29 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.7 2005/11/16 00:41:02 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
 struct hash *speciesHash;
 struct subSpecies *speciesList;
 struct strandHead *strandHeads;
+
+boolean addN = FALSE;
+boolean addDash = FALSE;
+
+struct bed3 
+/* A three field bed. */
+    {
+    struct bed3 *next;
+    char *chrom;	/* Allocated in hash. */
+    int start;		/* Start (0 based) */
+    int end;		/* End (non-inclusive) */
+    };
 
 void usage()
 /* Explain usage and exit. */
@@ -25,10 +38,23 @@ errAbort(
   "usage:\n"
   "   mafAddIRows mafIn twoBitFile mafOut\n"
   "options:\n"
+  "   -sizes=listOfChromSizes\n"
+  "       where listOfChromSizes is a list of chrom.sizes files named with\n"
+  "       the species name in the maf\n"
+  "   -nBeds=listOfBedFiles\n"
+  "       reads in list of bed files, one per species, with N locations\n"
+  "   -addN\n"
+  "       adds rows of N's into maf blocks (rather than just annotating them)\n"
+  "   -addDash\n"
+  "       adds rows of -'s into maf blocks (rather than just annotating them)\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"nBeds", OPTION_STRING},
+   {"sizes", OPTION_STRING},
+   {"addN", OPTION_BOOLEAN},
+   {"addDash", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -59,7 +85,10 @@ struct linkBlock
 struct strandHead
 {
     struct strandHead *next;
+    char strand;
     char *name;
+    char *qName;
+    int qSize;
     char *species;
     struct linkBlock *links;
 };
@@ -80,7 +109,8 @@ while((maf = mafNext(mf)) != NULL)
 
     strcpy(species, masterMc->src);
     chrom = strchr(species,'.');
-    *chrom++ = 0;
+    if (chrom)
+	*chrom++ = 0;
     if (masterSpecies == NULL)
 	{
 	masterSpecies = cloneString(species);
@@ -105,7 +135,7 @@ while((maf = mafNext(mf)) != NULL)
 
 	if ((subSpecies = hashFindVal(speciesHash, species)) == NULL)
 	    {
-	//    printf("new species %s\n",species);
+	    //printf("new species %s\n",species);
 	    AllocVar(subSpecies);
 	    subSpecies->name = cloneString(species);
 	    subSpecies->hash = newHash(0);
@@ -123,6 +153,9 @@ while((maf = mafNext(mf)) != NULL)
 	    hashAdd(subSpecies->hash, buffer2, strandHead);
 	    strandHead->name = cloneString(buffer2);
 	    strandHead->species = cloneString(species);
+	    strandHead->qName = cloneString(chrom);
+	    strandHead->qSize = mc->srcSize;
+	    strandHead->strand = mc->strand;
 	    slAddHead(&strandHeads, strandHead);
 	    }
 	AllocVar(linkBlock);
@@ -142,13 +175,18 @@ slReverse(&mafList);
 return mafList;
 }
 
-void chainStrands(struct strandHead *strandHead)
+void chainStrands(struct strandHead *strandHead, struct hash *bedHash)
 {
 for(; strandHead ; strandHead = strandHead->next)
     {
     struct linkBlock *link, *prevLink;
     int lastEnd;
+    struct hashEl *hel = hashLookup(bedHash, strandHead->species);
+    struct hash *chromHash = (hel != NULL) ? hel->val : NULL;
+    struct binKeeper *bk = (chromHash != NULL) ? hashFindVal(chromHash, strandHead->qName): NULL;
 
+    //if (chromHash == NULL)
+    //fprintf(stderr,"bk for %s %s %x\n",strandHead->species,strandHead->qName,bk);
     //printf("chaining %s %s\n",strandHead->name, strandHead->species);
     slReverse(&strandHead->links);
 
@@ -159,8 +197,41 @@ for(; strandHead ; strandHead = strandHead->next)
 	{
 	int tDiff = link->cb.tStart - prevLink->cb.tEnd;
 	int qDiff = link->cb.qStart - prevLink->cb.qEnd;
+	struct binElement *hitList = NULL, *hit;
+	int nCount = 0;
+	int nStart, nEnd;
 
-	if  ((tDiff > 100000) || ((qDiff < -1000) || (qDiff > 100000)))
+	if (strandHead->strand == '+')
+	    {
+	    nStart = prevLink->cb.qEnd;
+	    nEnd = link->cb.qStart;
+	    }
+	else
+	    {
+	    nEnd = strandHead->qSize - prevLink->cb.qEnd;
+	    nStart = strandHead->qSize - link->cb.qStart;
+	    }
+	if (bk != NULL)
+	    hitList = binKeeperFind(bk, nStart, nEnd);
+	//if (hitList && hitList->next)
+	    //printf("more than one N region in gap. Fix me");
+	for (hit = hitList; hit != NULL; hit = hit->next)
+	    nCount += positiveRangeIntersection(nStart, nEnd, hit->start, hit->end);
+	slFreeList(&hitList);
+//	    if (nCount)
+//	    printf("found %d N's in gap (%d) %c %d %d\n",nCount, qDiff,strandHead->strand, nStart, nEnd);
+
+	//tDiff -= nCount;
+	//qDiff -= nCount;
+
+	if ((qDiff && (100 * nCount / qDiff > 95))
+		&& (tDiff && (100 * nCount / tDiff > 10)))
+	    {
+	    //printf("Nfill %s qDiff %d nCount %d %d %d\n",strandHead->species,qDiff,nCount, prevLink->cb.tEnd, link->cb.tStart);
+	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_MISSING_STATUS;
+	    prevLink->mc->rightLen = link->mc->leftLen = nCount;
+	    }
+	else if  ((tDiff > 100000) || ((qDiff < -1000) || (qDiff > 100000)))
 	    {
 	//printf("new %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
@@ -173,7 +244,6 @@ for(; strandHead ; strandHead = strandHead->next)
 	    }
 	else
 	    {
-	    //printf("cont %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_INSERT_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = qDiff;
 	    }
@@ -234,6 +304,7 @@ for(; subSpecies; subSpecies = subSpecies->next)
     }
 }
 
+
 void fillHoles(struct mafAli *mafList, struct subSpecies *speciesList, struct twoBitFile *twoBit)
 {
 int lastEnd = 100000000;
@@ -265,11 +336,16 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 
 	for(species = speciesList; species; species = species->next)
 	    {
+	    mc = NULL;
+//	    printf("looking at %s\n",species->name);
 	    blockStatus = &species->blockStatus;
 	    if (blockStatus->mc)
 		{
+//	    printf("should match at %s\n",blockStatus->mc->src);
 		switch (blockStatus->mc->rightStatus)
 		    {
+		    case MAF_MISSING_STATUS:
+		    //printf("missing right\n");
 		    case MAF_NEW_NESTED_STATUS:
 		    case MAF_MAYBE_NEW_NESTED_STATUS:
 		    case MAF_CONTIG_STATUS:
@@ -278,6 +354,8 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
 			mc->src = blockStatus->mc->src;
+			mc->strand = blockStatus->mc->strand;
+			mc->start = blockStatus->mc->start + blockStatus->mc->size;
 			if (lastMc == NULL)
 			    {
 			    struct mafComp *miniMasterMc = NULL;
@@ -297,7 +375,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    else 
 			    	seqName = miniMasterMc->src;
 
-			    //printf("hole filled from %d to %d\n",lastEnd, masterMc->start);
+//			    printf("hole filled from %d to %d\n",lastEnd, masterMc->start);
 			    seq = twoBitReadSeqFrag(twoBit, seqName, lastEnd, masterMc->start);
 			    miniMasterMc->text = seq->dna;
 
@@ -311,12 +389,55 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 				mafList = newMaf;
 			    }
 			else
+			    {
+//			    printf("no fill\n");
 			    lastMc->next = mc;
+			    }
 			lastMc = mc;
+			if  (blockStatus->mc->rightStatus ==  MAF_MISSING_STATUS)
+			    {
+			    //mc->size = maf->textSize;
+//			    printf("back filling %s\n",species->name);
+//			    printf("blockStatus %s\n",mc->src);
+			    if (addN)
+				{
+				char buffer[256];
+
+				safef(buffer, sizeof(buffer), "%s.N",species->name);
+				mc->src = cloneString(buffer);
+				mc->start = 0;
+				mc->srcSize = 200000;
+				mc->size =  masterMc->start - lastEnd;
+				mc->text = needMem(mc->size + 1);
+				memset(mc->text, 'N', mc->size);
+				}
+			    }
+			else
+			    {
+			    //mc->size = maf->textSize;
+			    //char buffer[256];
+
+			    //safef(buffer, sizeof(buffer), "%s.dash",species->name);
+			    //mc->src = cloneString(buffer);
+			    //mc->start = 0;
+			    //mc->srcSize = 200000;
+			    //mc->size =  masterMc->start - lastEnd;
+
+			    if (addDash)
+				{
+				mc->srcSize = blockStatus->mc->srcSize;
+				mc->text = needMem(mc->size + 1);
+				memset(mc->text, '-', mc->size);
+				mc->size = 0;
+				}
+			    else mc->srcSize =  0;
+			    }
 			break;
 		    }
 		}
 	    }
+	//if (mc)
+	    //blockStatus->mc = mc;
 	}
     lastEnd = masterMc->start + masterMc->size;
     for(lastMc = masterMc; lastMc->next; lastMc = lastMc->next)
@@ -326,14 +447,19 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 	{
 	blockStatus = &species->blockStatus;
 	
+//printf("second round species %s\n",species->name);
+	mc = NULL;
 	if ((blockStatus->masterStart <= masterMc->start) && 
 	    (blockStatus->masterEnd > masterMc->start) && 
 	 ((mc = mafMayFindCompPrefix(maf, species->name,NULL)) == NULL))
 	    {
+	    //printf("don't have mc for %s\n",species->name);
 	    if (blockStatus->mc != NULL)
 		{
+	    //printf("have blockstatus for %s\n",blockStatus->mc->src);
 		switch (blockStatus->mc->rightStatus)
 		    {
+		    case MAF_MISSING_STATUS:
 		    case MAF_CONTIG_STATUS:
 		    case MAF_INSERT_STATUS:
 		    case MAF_NEW_NESTED_STATUS:
@@ -345,38 +471,188 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			if (mc->leftStatus == MAF_NEW_NESTED_STATUS)
 			    mc->leftStatus = MAF_INSERT_STATUS;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
+			//mc->leftLen = blockStatus->mc->start + blockStatus->mc->size;
+			//mc->rightLen = blockStatus->mc->rightLen;
 			mc->src = blockStatus->mc->src;
+			mc->strand = blockStatus->mc->strand;
+			mc->srcSize = blockStatus->mc->srcSize;
+			mc->start = blockStatus->mc->start + blockStatus->mc->size ;
 			lastMc->next = mc;
 			lastMc = mc;
+			if  (addN && blockStatus->mc->rightStatus ==  MAF_MISSING_STATUS)
+			    {
+			    char buffer[256];
+			    int ii;
+
+			    //printf("filling %s\n",species->name);
+			    safef(buffer, sizeof(buffer), "%s.N",species->name);
+			    mc->src = cloneString(buffer);
+			    mc->start = 0;
+			    mc->srcSize = 200000;
+			    mc->size = maf->textSize;
+			   // mc->size =  masterMc->size;
+			    mc->text = needMem(mc->size + 1);
+			    //for(ii=0; ii < mc->size; ii++)
+			//	{
+			//	if (masterMc->text[ii] == '-')
+			//	    mc->text[ii] = '-';
+			//	else
+			//	    mc->text[ii] = 'N';
+			//	}
+			    memset(mc->text, 'N', mc->size);
+			    }
+			else if (addDash)
+			    {
+			    //char buffer[256];
+
+			    //safef(buffer, sizeof(buffer), "%s.dash",species->name);
+			    //mc->src = cloneString(buffer);
+			    //mc->start = 0;
+			    //mc->srcSize = 200000;
+			   // mc->size =  masterMc->size;
+			    mc->size = maf->textSize;
+			    mc->text = needMem(mc->size + 1);
+			    memset(mc->text, '-', mc->size);
+			    mc->size = 0;
+			    }
+			else
+			    mc->srcSize = 0;
+			    
 			break;
 		    default:
 			break;
 		    }
 		}
 	    }
+	    //else if (mc) printf("have mc %s for species %s\n",mc->src,species->name);
+	    //else printf("no mc, no nothing\n");
 	if (mc)
+	{
+	    //printf("on species %s adding mc %s \n",species->name,mc->src);
 	    blockStatus->mc = mc;
+	}
 	}
     }
 }
 
-void mafAddIRows(char *mafIn, char *twoBitIn,  char *mafOut)
+struct hash *readSize(char *fileName)
+{
+char *row[2];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct binKeeper *bk;
+struct hash *hash = newHash(0);
+struct hashEl *hel;
+struct bed3 *bed;
+int size;
+
+while (lineFileRow(lf, row))
+    {
+    hel = hashLookup(hash, row[0]);
+    if (hel == NULL)
+	hashAdd(hash, row[0], cloneString(row[1]));
+    else
+	errAbort("already have size for %s\n",row[0]);
+    }
+lineFileClose(&lf);
+return hash;
+}
+struct hash *readBed(char *fileName, struct hash *sizeHash)
+/* Read bed and return it as a hash keyed by chromName
+ * with binKeeper values. */
+{
+char *row[3];
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct binKeeper *bk;
+struct hash *hash = newHash(0);
+struct hashEl *hel;
+struct bed3 *bed;
+int size;
+
+while (lineFileRow(lf, row))
+    {
+    hel = hashLookup(hash, row[0]);
+    if (hel == NULL)
+       {
+	if (sizeHash == NULL)
+	    errAbort("reading %s don't have size for %s\n",fileName,row[0]);
+	size = atoi(hashFindVal(sizeHash, row[0]));
+	//printf("got %d for %s\n",size,row[0]);
+	bk = binKeeperNew(0, size);
+	hel = hashAdd(hash, row[0], bk);
+	}
+    bk = hel->val;
+    AllocVar(bed);
+    bed->chrom = hel->name;
+    bed->start = lineFileNeedNum(lf, row, 1);
+    bed->end = lineFileNeedNum(lf, row, 2);
+    if (bed->start > bed->end)
+        errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
+    binKeeperAdd(bk, bed->start, bed->end, bed);
+    }
+lineFileClose(&lf);
+return hash;
+}
+
+void addSize(char *file, struct hash *fileHash)
+{
+char name[128];
+
+if (!endsWith(file, ".len"))
+    errAbort("filenames in size list must end in '.len'");
+splitPath(file, NULL, name, NULL);
+hashAdd(fileHash, name, readSize(file));
+}
+
+void addBed(char *file, struct hash *fileHash, struct hash *sizeFileHash)
+{
+char name[128];
+struct hash *sizeHash;
+
+if (!endsWith(file, ".bed"))
+    errAbort("filenames in bed list must end in '.bed'");
+
+splitPath(file, NULL, name, NULL);
+sizeHash = hashFindVal(sizeFileHash,name);
+hashAdd(fileHash, name, readBed(file,sizeHash));
+}
+
+void mafAddIRows(char *mafIn, char *twoBitIn,  char *mafOut, char *nBedFile,
+		    char *sizeFile)
 /* mafAddIRows - Filter out maf files. */
 {
 FILE *f = mustOpen(mafOut, "w");
 struct twoBitFile *twoBit = twoBitOpen(twoBitIn);
 struct mafAli *mafList, *maf;
 struct mafFile *mf = mafOpen(mafIn);
+struct hash *bedHash = newHash(0); 
+struct hash *sizeFileHash = newHash(0); 
+
+if (sizeFile != NULL)
+    {
+    struct lineFile *lf = lineFileOpen(sizeFile, TRUE);
+    char *row[1];
+    while (lineFileRow(lf, row))
+	addSize(row[0], sizeFileHash);
+    lineFileClose(&lf);
+    }
+
+if (nBedFile != NULL)
+    {
+    struct lineFile *lf = lineFileOpen(nBedFile, TRUE);
+    char *row[1];
+    while (lineFileRow(lf, row))
+	addBed(row[0], bedHash, sizeFileHash);
+    lineFileClose(&lf);
+    }
 
 speciesHash = newHash(0);
 mafList = readMafs(mf);
 mafWriteStart(f, mf->scoring);
 mafFileFree(&mf);
 
-chainStrands(strandHeads);
+chainStrands(strandHeads, bedHash);
 bridgeSpecies(mafList, speciesList);
 fillHoles(mafList, speciesList, twoBit);
-
 
 for(maf = mafList; maf ; maf = maf->next)
     mafWrite(f, maf);
@@ -386,10 +662,21 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 int totalCount;
+char *nBedFile;
+char *sizeFile;
+
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 
-mafAddIRows(argv[1], argv[2], argv[3]);
+sizeFile = optionVal("sizes", NULL);
+nBedFile = optionVal("nBeds", NULL);
+addN = optionExists("addN");
+addDash = optionExists("addDash");
+
+if (nBedFile && (sizeFile == NULL))
+    errAbort("sizes file list must be specified if nBed file list is\n");
+
+mafAddIRows(argv[1], argv[2], argv[3], nBedFile,sizeFile);
 return 0;
 }
