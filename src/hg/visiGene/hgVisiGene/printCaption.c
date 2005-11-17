@@ -285,7 +285,7 @@ for (exp = expList; exp != NULL; exp = exp->next)
 /* If no data just add n/a */
 if (geneWithDataCount == 0)
     {
-    ce = captionElementNew(imageId, "expression", cloneString("n/a"));
+    ce = captionElementNew(imageId, "Expression", cloneString("n/a"));
     slAddHead(pCeList, ce);
     }
 else
@@ -296,9 +296,9 @@ else
 	    {
 	    char label[256];
 	    if (expCount == 1)
-	        safef(label, sizeof(label), "expression");
+	        safef(label, sizeof(label), "Expression");
 	    else
-	        safef(label, sizeof(label), "expression of %s", exp->geneName);
+	        safef(label, sizeof(label), "Expression of %s", exp->geneName);
 	    ce = captionElementNew(imageId, label, 
 	    	makeCommaSpacedList(exp->tissueList));
 	    slAddHead(pCeList, ce);
@@ -318,32 +318,32 @@ for (image = imageList; image != NULL; image = image->next)
     int paneId = image->val;
     struct slName *geneList = geneProbeList(conn, paneId);
     struct slName *genbankList = visiGeneGenbank(conn, paneId);
-    ce = captionElementNew(paneId, "gene", makeCommaSpacedList(geneList));
+    ce = captionElementNew(paneId, "Gene", makeCommaSpacedList(geneList));
     ce->hasHtml = TRUE;
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "genbank", makeCommaSpacedList(genbankList));
+    ce = captionElementNew(paneId, "GenBank", makeCommaSpacedList(genbankList));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "organism", visiGeneOrganism(conn, paneId));
+    ce = captionElementNew(paneId, "Organism", visiGeneOrganism(conn, paneId));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "sex", 
+    ce = captionElementNew(paneId, "Sex", 
     	naForNull(visiGeneSex(conn, paneId)));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "strain", 
+    ce = captionElementNew(paneId, "Strain", 
     	naForNull(visiGeneStrain(conn, paneId)));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "genotype",
+    ce = captionElementNew(paneId, "Genotype",
         naForNull(visiGeneGenotype(conn, paneId)));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "stage", visiGeneStage(conn, paneId, TRUE));
+    ce = captionElementNew(paneId, "Stage", visiGeneStage(conn, paneId, TRUE));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "body part",
+    ce = captionElementNew(paneId, "Body Part",
     	naForNull(visiGeneBodyPart(conn, paneId)));
     slAddHead(&ceList, ce);
     addExpressionInfo(conn, paneId, &ceList);
-    ce = captionElementNew(paneId, "section type",
+    ce = captionElementNew(paneId, "Section Type",
     	naForNull(visiGeneSliceType(conn, paneId)));
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "permeablization",
+    ce = captionElementNew(paneId, "Permeablization",
     	naForNull(visiGenePermeablization(conn, paneId)));
     }
 slReverse(&ceList);
@@ -424,7 +424,7 @@ publication = visiGenePublication(conn,id);
 if (publication != NULL)
     {
     char *pubUrl = visiGenePubUrl(conn,id);
-    printf("<B>reference:</B> ");
+    printf("<B>Reference:</B> ");
     if (pubUrl != NULL && pubUrl[0] != 0)
         printf("<A HREF=\"%s\" target=_blank>%s</A>", pubUrl, publication);
     else
@@ -435,7 +435,7 @@ if (publication != NULL)
     }
 if (caption != NULL)
     {
-    printf("<B>notes:</B> %s<BR>\n", caption);
+    printf("<B>Notes:</B> %s<BR>\n", caption);
     freez(&caption);
     }
 imageList = visiGeneImagesForFile(conn, imageFile);
@@ -443,8 +443,8 @@ imageCount = slCount(imageList);
 captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 
-printf("<B>year:</B> %d ", visiGeneYear(conn,id));
-printf("<B>contributors:</B> %s<BR>\n", 
+printf("<B>Year:</B> %d ", visiGeneYear(conn,id));
+printf("<B>Contributors:</B> %s<BR>\n", 
 	naForNull(visiGeneContributors(conn,id)));
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
@@ -463,10 +463,10 @@ if (setUrl != NULL || itemUrl != NULL)
     }
 copyright = visiGeneCopyright(conn, id);
 if (copyright != NULL)
-    printf("<B>copyright:</B> %s<BR>\n", copyright);
+    printf("<B>Copyright:</B> %s<BR>\n", copyright);
 acknowledgement = visiGeneAcknowledgement(conn, id);
 if (acknowledgement != NULL)
-    printf("<B>acknowledgements:</B> %s<BR>\n", acknowledgement);
+    printf("<B>Acknowledgements:</B> %s<BR>\n", acknowledgement);
 printf("<BR>\n");
 }
 

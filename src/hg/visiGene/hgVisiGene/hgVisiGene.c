@@ -297,12 +297,7 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
-if (imageId == 0)
-    {
-    printf("Click on thumbnail image in the list to the left to see a larger, "
-           "zoomable image in this space.");
-    }
-else
+if (imageId != 0)
     {
     printf("<B>");
     smallCaption(conn, imageId);
@@ -406,8 +401,13 @@ struct visiMatch *matchList = visiSearch(conn, listSpec);
 matchList = onePerImageFile(conn, matchList);
 weighMatches(conn, matchList);
 slSort(&matchList, visiMatchCmpWeight);
-if (forceImageToList && matchList != NULL)
-    imageId = matchList->imageId;
+if (forceImageToList)
+    {
+    if (matchList != NULL)
+	imageId = matchList->imageId;
+    else
+        imageId = 0;
+    }
 makeTempName(&matchTempName, "visiMatch", ".tab");
 matchFile = matchTempName.forCgi;
 saveMatchFile(matchFile, matchList);
