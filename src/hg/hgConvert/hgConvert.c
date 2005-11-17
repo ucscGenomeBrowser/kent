@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.7 2005/11/17 05:46:18 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.8 2005/11/17 18:27:47 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -49,16 +49,13 @@ errAbort("Can't find %s in matchingDb", name);
 return NULL;
 }
 
-void askForDestination(struct liftOverChain *liftOver, char *fromPos)
+void askForDestination(struct liftOverChain *liftOver, char *fromPos,
+	struct dbDb *fromDb, struct dbDb *toDb)
 /* set up page for entering data */
 {
-struct dbDb *dbList, *fromDb;
-char *fromOrg = hOrganism(liftOver->fromDb);
-char *toOrg = hOrganism(liftOver->toDb);
+struct dbDb *dbList;
 
 cartWebStart(cart, "Convert %s to New Assembly", fromPos);
-dbList = hGetLiftOverFromDatabases();
-fromDb = matchingDb(dbList, liftOver->fromDb);
 
 /* create HMTL form */
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
@@ -67,7 +64,7 @@ cartSaveSession(cart);
 /* create HTML table for layout purposes */
 puts("\n<TABLE WIDTH=\"100%%\">\n");
 
-/* top two rows -- genome and assembly menus */
+/* top row -- labels */
 cgiSimpleTableRowStart();
 cgiTableField("Old Genome: ");
 cgiTableField("Old Assembly: ");
@@ -76,13 +73,15 @@ cgiTableField("New Assembly: ");
 cgiTableField(" ");
 cgiTableRowEnd();
 
+/* Next row -- data and controls */
 cgiSimpleTableRowStart();
+
+/* From organism and assembly. */
 cgiTableField(fromDb->organism);
 cgiTableField(fromDb->description);
 
 /* Destination organism. */
 cgiSimpleTableFieldStart();
-dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(liftOver->fromDb);
 printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, liftOver->toDb, dbList, onChangeToOrg);
 cgiTableFieldEnd();
@@ -105,13 +104,11 @@ puts("</FORM>\n");
 printf("<FORM ACTION=\"/cgi-bin/hgConvert\""
        " METHOD=\"GET\" NAME=\"dbForm\">");
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
-                        HGLFT_TOORG_VAR, toOrg);
+                        HGLFT_TOORG_VAR, toDb->organism);
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
                         HGLFT_TODB_VAR, liftOver->toDb);
 cartSaveSession(cart);
 puts("</FORM>");
-freeMem(fromOrg);
-freeMem(toOrg);
 cartWebEnd();
 }
 
@@ -279,7 +276,8 @@ slSort(&chainList, chainCmpScore);
 return chainList;
 }
 
-void doConvert(struct liftOverChain *liftOver, char *fromPos)
+void doConvert(struct liftOverChain *liftOver, char *fromPos,
+	struct dbDb *fromDb, struct dbDb *toDb)
 /* Actually do the conversion */
 {
 char *fileName = liftOverChainFile(liftOver->fromDb, liftOver->toDb);
@@ -289,7 +287,8 @@ int origSize;
 double percentMapping;
 struct chain *chainList, *chain;
 
-cartWebStart(cart, "Converting %s.%s to %s", liftOver->fromDb, fromPos, liftOver->toDb);
+cartWebStart(cart, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
+	fromPos, toDb->organism, toDb->description);
 if (!hgParseChromRange(fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
@@ -324,6 +323,7 @@ char *organism;
 char *db;    
 struct liftOverChain *liftOverList = NULL, *choice;
 char *fromPos = cartString(theCart, "position");
+struct dbDb *dbList, *fromDb, *toDb;
 
 cart = theCart;
 getDbAndGenome(cart, &db, &organism);
@@ -333,10 +333,13 @@ liftOverList = liftOverChainList();
 choice = currentLiftOver(liftOverList, organism, db, 
 	cartOptionalString(cart, HGLFT_TOORG_VAR),
 	cartOptionalString(cart, HGLFT_TODB_VAR));
+dbList = hDbDbList();
+fromDb = matchingDb(dbList, choice->fromDb);
+toDb = matchingDb(dbList, choice->toDb);
 if (cartVarExists(cart, HGLFT_DO_CONVERT))
-    doConvert(choice, fromPos);
+    doConvert(choice, fromPos, fromDb, toDb);
 else
-    askForDestination(choice, fromPos);
+    askForDestination(choice, fromPos, fromDb, toDb);
 liftOverChainFreeList(&liftOverList);
 }
 
