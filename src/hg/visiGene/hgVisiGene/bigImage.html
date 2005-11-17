@@ -858,7 +858,12 @@ if (cmd=="out") {
 }
 if (cmd=="fit") {
     //alert('l='+l+' m='+m+' z='+z+' wc='+wc+' hc='+hc);
-    while ((wOrig[l]*m <= wc || hOrig[l]*m <= hc) && l > 0)
+    x = wOrig[0]/2;
+    y = hOrig[0]/2;
+    xx = x;
+    yy = y;
+    updatePos();
+    while ((wOrig[l]*m <= wc || hOrig[l]*m <= hc) && m < 8)
 	{
 	zoomIn(true);
 	}
