@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.5 2005/11/17 02:58:06 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.6 2005/11/17 05:25:13 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -228,7 +228,6 @@ int chainCount = 0;
 
 while (lineFileNextReal(lf, &line))
     {
-    lineFileNextReal(lf, &line);
     if (startsWith("chain", line) && isspace(line[5]))
         {
 	++chainCount;
@@ -247,15 +246,34 @@ while (lineFileNextReal(lf, &line))
 	    else
 	        chainFree(&chain);
 	    }
-#ifdef SOON
 	else if (gotChrom)
 	    break;	/* We assume file is sorted by chromosome, so we're done. */
-#endif /* SOON */
 	}
     }
 lineFileClose(&lf);
-uglyf("Loaded %d of %d chains<BR>\n", slCount(chainList), chainCount);
+uglyf("Loaded %d of %d chains from %s<BR>\n", slCount(chainList), chainCount, fileName);
 slReverse(&chainList);
+return chainList;
+}
+
+struct chain *chainLoadAndTrimIntersecting(char *fileName,
+	char *chrom, int start, int end)
+/* Load the chains that intersect given region, and trim them
+ * to fit region. */
+{
+struct chain *rawList, *chainList = NULL, *chain, *next;
+rawList = chainLoadIntersecting(fileName, chrom, start, end);
+for (chain = rawList; chain != NULL; chain = next)
+    {
+    struct chain *subChain, *chainToFree;
+    next = chain->next;
+    chainSubsetOnT(chain, start, end, &subChain, &chainToFree);
+    if (subChain != NULL)
+	slAddHead(&chainList, subChain);
+    if (chainToFree != NULL)
+        chainFree(&chain);
+    }
+slSort(&chainList, chainCmpScore);
 return chainList;
 }
 
@@ -267,14 +285,14 @@ char *chrom;
 int start, end;
 int origSize;
 double percentMapping;
-struct chain *chainList, *chain, *subChain, *chainToFree;
+struct chain *chainList, *chain;
 
 cartWebStart(cart, "Converting %s.%s to %s", liftOver->fromDb, fromPos, liftOver->toDb);
 if (!hgParseChromRange(fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
 
-chainList = chainLoadIntersecting(fileName, chrom, start, end);
+chainList = chainLoadAndTrimIntersecting(fileName, chrom, start, end);
 uglyf("<BR>\n");
 if (chainList == NULL)
     printf("Sorry this position couldn't be found in new assembly");
@@ -283,17 +301,16 @@ else
     for (chain = chainList; chain != NULL; chain = chain->next)
         {
 	int blockSize;
-	chainSubsetOnT(chainList, start, end, &subChain, &chainToFree);
-	blockSize = chainTotalBlockSize(subChain);
+	blockSize = chainTotalBlockSize(chain);
 	printf("<A HREF=\"%s?%s=%u&db=%s&position=%s:%d-%d\">",
 	       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	       liftOver->toDb,
-	       subChain->qName, subChain->qStart, subChain->qEnd);
-	printf("%s:%d-%d",  subChain->qName, subChain->qStart, subChain->qEnd);
+	       chain->qName, chain->qStart, chain->qEnd);
+	printf("%s:%d-%d",  chain->qName, chain->qStart, chain->qEnd);
 	printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,  
-	    100.0 * (subChain->tEnd - subChain->tStart) / origSize);
+	    100.0 * (chain->tEnd - chain->tStart) / origSize);
 	}
     }
 cartWebEnd();
