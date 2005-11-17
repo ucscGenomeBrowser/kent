@@ -1671,6 +1671,7 @@ type wig 0 27
 viewLimits .5:1
 maxHeightPixels 128:16:16
 autoScale off
+windowingFunction mean
 spanList 1
 
     track encodeMsaAlignMean
