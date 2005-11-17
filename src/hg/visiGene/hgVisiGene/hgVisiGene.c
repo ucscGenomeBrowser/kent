@@ -233,9 +233,8 @@ if (imageCount > 0)
 	char *imageFile = visiGeneThumbSizePath(conn, id);
 	printf("<TR>");
 	printf("<TD>");
-	printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" "
-	    "onclick=\"parent.controls.document.mainForm.hgp_zm[0].checked=true;return true;\" "
-	    ">", hgVisiGeneCgiName(), 
+	printf("<A HREF=\"../cgi-bin/%s?%s&%s=%d&%s=do\" target=\"image\" >", 
+	    hgVisiGeneCgiName(), 
 	    sidUrl, hgpId, id, hgpDoImage);
 	printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
 	
@@ -344,11 +343,17 @@ cartSaveSession(cart);
 cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
 
-
-printf(" Zoom: ");
-printf("<INPUT TYPE=RADIO NAME=hgp_zm onclick=\"parent.image.bigImg.changeMouse('in');return true;\" CHECKED>in ");
-printf("<INPUT TYPE=RADIO NAME=hgp_zm onclick=\"parent.image.bigImg.changeMouse('out');return true;\">out ");
-printf("\n");
+printf(" &nbsp; Zoom: ");
+printf(
+"<INPUT TYPE=SUBMIT NAME=\"hgp_zmOut\" VALUE=\" out \""
+" onclick=\"parent.image.bigImg.zoomer('out');return false;\"> "
+"<INPUT TYPE=SUBMIT NAME=\"hgp_zmIn\" VALUE=\" in \""
+" onclick=\"parent.image.bigImg.zoomer('in');return false;\"> "
+"<INPUT TYPE=SUBMIT NAME=\"hgp_zmFull\" VALUE=\" full \""
+" onclick=\"parent.image.bigImg.zoomer('full');return false;\"> "
+"<INPUT TYPE=SUBMIT NAME=\"hgp_zmFit\" VALUE=\" fit \""
+" onclick=\"parent.image.bigImg.zoomer('fit');return false;\"> "
+"\n");
 
 printf("</FORM>\n");
 htmlEnd();

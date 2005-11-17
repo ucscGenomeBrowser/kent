@@ -489,6 +489,7 @@ if (!myImg)
 l=0;
 z=1;
 wc = getInnerSize("w") - 2*marginLeft;
+hc = getInnerSize("h") - 2*marginTop;
 
 //debug
 //alert('wc='+wc+' marginLeft='+marginLeft+'location.href='+location.href);
@@ -848,6 +849,35 @@ if ((newcursor=="in") || (newcursor=="out")){  // || (newcursor=="center")) {
 }    
 }
 
+function zoomer(cmd) {
+if (cmd=="in") {
+	zoomIn(true);
+}
+if (cmd=="out") {
+	zoomIn(false);
+}
+if (cmd=="fit") {
+    //alert('l='+l+' m='+m+' z='+z+' wc='+wc+' hc='+hc);
+    while ((wOrig[l]*m <= wc || hOrig[l]*m <= hc) && l > 0)
+	{
+	zoomIn(true);
+	}
+    while ((wOrig[l]*m > wc || hOrig[l]*m > hc) && (l+1) < numLevels)
+	{
+	zoomIn(false);
+	}
+}	
+if (cmd=="full") {
+    //alert('l='+l+' m='+m+' z='+z);
+    while (l > 0)
+	zoomIn(true);
+    while (m > 1)
+	zoomIn(false);
+}
+
+return false;
+}
+
 function setMouseCursor() {
 var cursor = "default";
 var zmindex = 0;
@@ -866,7 +896,9 @@ document.body.style.cursor=cursor;
 if (typeof(parent.parent) != 'undefined')
  if (typeof(parent.parent.controls) != 'undefined')
   if (typeof(parent.parent.controls.document) != 'undefined')
-	parent.parent.controls.document.mainForm.hgp_zm[zmindex].checked=true;
+   if (typeof(parent.parent.controls.document.mainForm) != 'undefined')
+    if (typeof(parent.parent.controls.document.mainForm.hgp_zm) != 'undefined')
+      parent.parent.controls.document.mainForm.hgp_zm[zmindex].checked=true;
 }
 
 function mouseOut(e) {
