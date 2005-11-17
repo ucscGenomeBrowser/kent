@@ -21,12 +21,13 @@
 #include "chainDb.h"
 #include "phyloTree.h"
 #include "humanPhenotypeUi.h"
+#include "hgMutUi.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.220 2005/11/09 16:02:36 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.221 2005/11/17 20:17:59 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -252,6 +253,51 @@ radioButton("ldOut", ldOut, "black");
 radioButton("ldOut", ldOut, "white");
 radioButton("ldOut", ldOut, "none");
 printf("&nbsp; - Color for outlines<BR>&nbsp;&nbsp;");
+}
+
+void hgMutUi(struct trackDb *tdb)
+/* print UI for human mutation filters */
+{
+int i = 0; /* variable to walk through arrays */
+char **row;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+char srcButton[128];
+
+printf("<BR /><B>Exclude mutation type</B><BR />");
+for (i = 0; i < variantTypeSize; i++)
+    {
+    cartMakeCheckBox(cart, variantTypeString[i], FALSE);
+    printf (" %s<BR />", variantTypeLabel[i]);
+    }
+
+printf("<BR /><B>Exclude mutation location</B><BR />");
+for (i = 0; i < variantLocationSize; i++)
+    {
+    cartMakeCheckBox(cart, variantLocationString[i], FALSE);
+    printf (" %s<BR />", variantLocationLabel[i]);
+    }
+
+printf("<BR /><B>Exclude data source</B><BR />");
+sr = sqlGetResult(conn, "select distinct(src) from hgMut");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(srcButton, sizeof(srcButton), "hgMut.filter.src.%s", row[0]);
+    cartMakeCheckBox(cart, srcButton, FALSE);
+    printf (" %s<BR />", row[0]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+/* print key for colors */
+printf("<BR /><B>Color key (by mutation type)</B><BR />");
+printf("substitution = purple<BR />");
+printf("insertion = green<BR />");
+printf("deletion = blue<BR />");
+printf("duplication = orange<BR />");
+printf("complex = red<BR />");
+printf("unknown = black<BR />\n");
+//printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR />\n");
 }
 
 void humanPhenotypeUi(struct trackDb *tdb) 
@@ -1568,6 +1614,8 @@ else if(sameString(track, "affyTransfrags"))
     affyTransfragUi(tdb);
 else if (sameString(track, "transRegCode"))
     transRegCodeUi(tdb);
+else if (sameString(track, "hgMut"))
+    hgMutUi(tdb);
 else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
 else if (tdb->type != NULL)
