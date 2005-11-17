@@ -1555,7 +1555,7 @@ cat > split.csh << 'EOF'
     csh split.csh >&! split.log &
     mkdir wig wib
 cat > load.csh << 'EOF'
-    set dir = /gbdb/hg17/encode/MSA/alignAgree/2005-11-16/wib
+    set dir = /gbdb/hg17/encode/MSA/alignAgree/2005-11-16
     mkdir -p $dir
     foreach f (*.wig)
         set table = encodeMsaAlign$f:r
