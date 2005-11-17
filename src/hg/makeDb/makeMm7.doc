@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.23 2005/11/17 17:43:01 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.24 2005/11/17 23:32:52 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -8619,7 +8619,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
    hgMapToGene mm7 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
 ############################################################################
-# BUILD KNOWN GENES RELATED TABLES for mm7 (STARTED 10/23/05, DONE xx/xx/05. Fan)
+# BUILD KNOWN GENES RELATED TABLES for mm7 (STARTED 10/23/05, DONE 11/17/05. Fan)
 
 # First build protein databases, sp051015 and proteins051015
 # See makeProteins051015.doc for details.
@@ -8660,7 +8660,6 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
   hgsql mm7 -N -e 'select chrom from chromInfo' > chrom.lis
   exit
   
-
   cat << '_EOF_' > gsub
 #LOOP
 /cluster/bin/i386/blat -noHead -t=dnax -q=prot /cluster/data/mm7/nib/$(path1).nib $(path2) {check out line+ /cluster/bluearc/kgDB/kgMm7A/protBlat/result/$(root1)_$(root2).psl}
@@ -8831,7 +8830,6 @@ pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 result2/$1.psl result
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
    cd /cluster/data/mm7/bed/kgMm7A
 
 # create all_mrna.psl and tight_mrna.psl
@@ -8920,6 +8918,59 @@ cat out/$1/*.out >>protMrnaRaw.psl
    mrnaToGene -cdsFile=protMrna.cds protMrna.psl protMrna.gp 2>protMrna.err >protMrna.log
    exit
 
+############################################
+
+# Redo prot-mRNA alignment using BLAST instead of BLAT, per Mark's recommendation.
+
+   ~/src/hg/protein/kgProtMrna.sh kgMm7A mm7 051015
+
+# During the following job:
+#
+#   ./kgProtMrnaBlast.csh /iscratch/i/kgDB/kgMm7A/kgProtMrna/kgProtPep/kgProtPep4993.fa
+#
+# the blastall program had a segment fault on the following protein:
+#
+#   Q8C9X7
+# Removed this protein from /iscratch/i/kgDB/kgMm7A/kgProtMrna/kgProtPep/kgProtPep4993.fa
+# on kk manually and re-ran:
+
+   ./kgProtMrnaBlast.csh /iscratch/i/kgDB/kgMm7A/kgProtMrna/kgProtPep/kgProtPep4993.fa
+
+# Collect alignment results and filter out low quality alignments
+
+   find ./psl.tmp -name '*.psl.gz' | xargs zcat | \
+   pslReps -nohead -singleHit -minAli=0.9 stdin ProtMrnaBlast.psl /dev/null
+
+   cut -f 10,14 kgProtMrna.psl |sort -u >protMrna.lis
+   wc protMrna.lis
+
+# 210958  421916 3365702 protMrna.lis
+
+# Load BLAST results into temp DB.
+   hgsql kgMm7ATemp < ~/src/hg/lib/protMrnaBlast.sql
+   hgsql kgMm7ATemp -e 'load data local infile "protMrnaBlast.psl" into table protMrnaBlast'
+   hgsql kgMm7ATemp -e 'create index tName on protMrnaBlast(tName)'
+
+# Create CDS files from protein/mRNA alignment results.
+   hgsql kgMm7ATemp -N -e \
+   'select qName,"_",tName,tStart+1,":",tEnd+3 from protMrnaBlast order by qName,tName,tEnd-tStart desc'\
+   |sed 's/\t_\t/_/g'|sed 's/\t:\t/../g' >protMrna.cds
+
+# Create protMrna.psl with proteinID_mrnaID as query ID.
+   cd /cluster/data/mm7/bed/kgMm7A
+   cut -f 22-30 protMrna.out > j1.tmp
+   cut -f 32-42 protMrna.out > j2.tmp
+   cut -f 10,31 protMrna.out|sed -e 's/\t/_/g' >j3.tmp
+   paste j1.tmp j3.tmp j2.tmp >protMrna.psl
+   rm j1.tmp j2.tmp j3.tmp
+
+# Run mrnaToGene to create protMrna.gp
+   bash
+   mrnaToGene -cdsFile=kgProtMrna/protMrna.cds protMrna.psl protMrna.gp 2>protMrna.err >protMrna.log
+   exit
+
+############################################
+
 # Prepare refGene and all_mrna gp files.
 
    cd /cluster/data/mm7/bed/kgMm7A 
@@ -8993,7 +9044,7 @@ cat out/$1/*.out >>protRefRaw.psl
 
 # Run kgCheck to get all KG candidates that pass the KG gene check criteria
 
-   kgCheck kgMm7ATemp mm7 kgCandidate0 geneCheck kgCandidate.tab
+   kgCheck2 kgMm7ATemp mm7 kgCandidate0 geneCheck kgCandidate.tab
    hgsql kgMm7ATemp -e  'drop table kgCandidate'
    hgsql kgMm7ATemp < ~/src/hg/lib/kgCandidate.sql
    hgsql kgMm7ATemp -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
@@ -9045,19 +9096,1231 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql mm7 < ~/src/hg/lib/dupSpMrna.sql
    hgsql mm7 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
 
+# Create put back list
+
+# gbGetSeqsX, a modified version of gbGetSeqs output the RefSeq IDs at the beginning of each output line.
+    gbGetSeqsX -gbRoot=/cluster/data/genbank db=mm7 -get=ra RefSeq mrna ref.ra
+
+    hgsql mm7 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 wherer.attr="selenocysteine" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and  r3.val="Mus musculus"' \
+    >kgPutBack2.tab
+
+    hgsql mm7 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="cno" and r.val like "%ribosomal frameshift%" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab
+
+    hgsql mm7 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="cno" and r.val like "%non-AUG%" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab
+
+    hgsql mm7 -N -e \
+    'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="translExcept" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab 
+
+    hgsql mm7 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="exception" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab
+
+# Add entries in the put back list
+# Obtain from Mark the put back list, kgPutBack.lis, for human RefSeq.
+
+   hgsql kgMm7ATemp -e 'drop table kgPutBack2'
+   hgsql kgMm7ATemp < ~/src/hg/lib/kgPutBack2.sql
+   hgsql kgMm7ATemp -e  'load data local infile "kgPutBack2.tab" into table kgPutBack2'
+
+   kgPutBack kgMm7ATemp mm7 proteins051015 kgPutBack2 kgPutBack2.gp
+
 # Sort KG genes to make the kg4.gp table file.
-   ~/kent/src/hg/protein/sortKg.pl kg4.tmp >kg4.gp
+   cat kgPutBack2.gp kg4.tmp > kg4B.tmp
+   ~/kent/src/hg/protein/sortKg.pl kg4B.tmp >kg4.gp
 
    hgsql kgMm7ATemp -e  'drop table knownGene'
    hgsql kgMm7ATemp < ~/src/hg/lib/knownGene.sql
    hgsql kgMm7ATemp -e  'load data local infile "kg4.gp" into table knownGene'
+
+# Perform analysis before loading kg4 table data to mm7.knownGene table.
 
 # Load data into mm7 knownGene table.
    hgsql mm7 -e  'drop table knownGene'
    hgsql mm7 < ~/src/hg/lib/knownGene.sql
    hgsql mm7 -e  'load data local infile "kg4.gp" into table knownGene'
 
-### to be continued .... ####
+# Build knownGeneMrna and knownGenePep tables.
+
+   kgPepMrna kgMm7ATemp mm7 051015
+   hgsql mm7 -e  'drop table knownGeneMrna'
+   hgsql mm7 < ~/src/hg/lib/knownGeneMrna.sql
+   hgsql mm7 -e  'load data local infile "knownGeneMrna.tab" into table knownGeneMrna'
+   hgsql mm7 -e  'drop table knownGenePep'
+   hgsql mm7 < ~/src/hg/lib/knownGenePep.sql
+   hgsql mm7 -e  'load data local infile "knownGenePep.tab" into table knownGenePep'
+
+# Build kgXref table
+
+   kgXref2 kgMm7ATemp 051015 mm7
+
+   hgsql mm7 -e  'drop table kgXref'
+   hgsql mm7 < ~/src/hg/lib/kgXref.sql
+   hgsql mm7 -e  'load data local infile "kgXref.tab" into table kgXref'
+
+# Build spMrna table
+
+   hgsql mm7 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+
+   hgsql mm7 -e  'drop table spMrna'
+   hgsql mm7 <~/src/hg/lib/spMrna.sql
+   hgsql mm7 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
+
+# Build mrnaRefseq table
+
+   mkdir /cluster/store11/entrez 
+   cd /cluster/store11/entrez
+   mkdir 051113
+   rm /cluster/data/entrez
+   ln -s /cluster/store11/entrez/051113 /cluster/data/entrez
+   cd /cluster/data/entrez
+
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2accession.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
+   gzip -d *.gz
+
+   cut -f 2,4 gene2accession | sort -u | grep -v "-" | grep -v "NM_" | sed -e 's/\./\t/g' > entrezMrna.tab
+   cut -f 2,4 gene2refseq | grep "NM_"| sort -u | grep -v "-" | sed -e 's/\./\t/g' > entrezRefseq.tab
+   cut -f 2,4,6 gene2accession | grep "NM_"| grep "NP_"|sort -u | sed -e 's/\./\t/g' > entrezRefProt.tab
+   
+   hgsql entrez -e 'drop table entrezRefseq'
+   hgsql entrez -e 'drop table entrezMrna'
+   hgsql entrez -e 'drop table entrezRefProt'
+
+   hgsql entrez < ~/src/hg/lib/entrezRefseq.sql
+   hgsql entrez < ~/src/hg/lib/entrezMrna.sql
+   hgsql entrez < ~/src/hg/lib/entrezRefProt.sql
+
+   hgsql entrez -e 'load data local infile "entrezRefseq.tab" into table entrezRefseq'
+   hgsql entrez -e 'load data local infile "entrezMrna.tab" into table entrezMrna'
+   hgsql entrez -e 'load data local infile "entrezRefProt.tab" into table entrezRefProt'
+
+   hgsql entrez -N -e \
+   'select mrna, refseq from entrezRefseq, entrezMrna where entrezRefseq.geneID=entrezMrna.geneID' \
+   >mrnaRefseq.tab
+
+   hgsql mm7 -e 'drop table mrnaRefseq'
+   hgsql mm7 < ~/src/hg/lib/mrnaRefseq.sql
+   hgsql mm7 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# Build kgProtMap table
+    cd /cluster/data/mm7/bed/kgMm7A
+    ~/src/hg/protein/kgProtMap2.sh kgMm7A mm7 051015
+
+# Update and clean up kgResultBestMrna2.c and then check it in.
+
+# Build alias tables.		
+#	kgAliasM reads from proteins051015.hugo.symbol, proteins051015.hugo.aliases
+#	proteins051015.hugo.withdraws, mm7.kgXref.kgID
+#	to create kgAliasM.tab and geneAlias.tab
+#	by picking out those kgID items from kgXref where
+#	kgXref.geneSymbol == hugo.symbol
+
+   cd /cluster/store11/kg/kgMm7A
+   mkdir alias
+   cd alias
+   kgAliasM mm7 proteins051015
+
+#	kgAliasKgXref reads from mm7.knownGene.proteinID,
+#	mm7.knownGene.name, mm7.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
+
+   kgAliasKgXref mm7
+
+#	kgAliasRefseq reads from mm7.knownGene.name,
+#	mm7.knownGene.proteinID, mm7.kgXref.refseq
+#	to create kgAliasRefseq.tab
+
+   kgAliasRefseq mm7
+
+   hgsql sp051015 -N -e 'select name,gene.val from mm7.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
+   | sort -u  > kgAliasP.tab
+
+   hgsql mm7 -N -e 'select name, name from knownGene' >kgAliasDup.tab
+   hgsql mm7 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >>kgAliasDup.tab
+   
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab kgAliasDup.tab| \
+   sort |uniq > kgAlias.tab
+
+   hgsql -e "drop table kgAlias;" mm7 
+   hgsql mm7 < ~/kent/src/hg/lib/kgAlias.sql
+   hgsql mm7 -e 'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias' 
+
+#	kgProtAlias reads from mm7.knownGene.name,
+#	mm7.knownGene.proteinID, mm7.knownGene.alignID,
+#	proteins051015.spXref3.accession, proteins051015.spSecondaryID, proteins051015.pdbSP.pdb
+#	to create kgProtAlias.tab
+
+   kgProtAlias mm7 051015
+
+   hgsql mm7 -N -e \
+   'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
+   | sort -u >kgProtAliasNCBI.tab
+
+# include variant splice protein IDs
+   
+   hgsql mm7 -N -e \
+   'select name, proteinID, parAcc from knownGene,sp051015.varAcc where varAcc=proteinID'\
+   |sort -u >kgProtAliasDup.tab
+
+# include duplicate protein IDs from dupSpMrna table
+   hgsql mm7 -N -e \
+   'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna where name=mrnaID'\
+   |sort -u >>kgProtAliasDup.tab
+
+# catch parent acc from dupProteinID too
+   hgsql mm7 -N -e\
+   'select name, knownGene.proteinID, parAcc from knownGene,dupSpMrna,sp051015.varAcc where name=mrnaID and dupProteinID=varAcc.varAcc'\
+   |sort -u >>kgProtAliasDup.tab
+    cat kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab | sort -u > kgProtAliasAll.tab
+
+    echo "`date` creating table kgProtAlias"
+    hgsql mm7 -e "drop table kgProtAlias;"
+    hgsql mm7 <~/src/hg/lib/kgProtAlias.sql; 
+    hgsql mm7 -e 'LOAD DATA local INFILE "kgProtAliasAll.tab" into table kgProtAlias;'  
+
+# Build kgSpAlias table
+
+    hgsql mm7 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm7 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm7.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm7 -e 'drop table kgSpAlias';
+    hgsql mm7 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm7 -e 'load data local infile "mm7.kgSpAlias.tab" into table kgSpAlias'
+
+# MAKE FOLDUTR TABLES (DONE 2005-11-15 Fan)
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    cd /cluster/data/mm7/bed
+    mkdir rnaStruct.2005-11-14
+    rm rnaStruct
+    ln -s rnaStruct.2005-11-14 rnaStruct
+    cd rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa mm7 knownGene utr3 utr3/utr.fa
+    utrFa mm7 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh kk
+    cd /cluster/data/mm7/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 29251 of 29251 jobs
+# CPU time in finished jobs:     732023s   12200.39m   203.34h    8.47d  0.023 y
+# IO & Wait Time:                974945s   16249.08m   270.82h   11.28d  0.031 y
+# Average job time:                  58s       0.97m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6132s     102.20m     1.70h    0.07d
+# Submission to last job:          9125s     152.08m     2.53h    0.11d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para pus
+# Completed: 27603 of 27603 jobs
+# CPU time in finished jobs:     137185s    2286.42m    38.11h    1.59d  0.004 y
+# IO & Wait Time:                582578s    9709.63m   161.83h    6.74d  0.018 y
+# Average job time:                  26s       0.43m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           10558s     175.97m     2.93h    0.12d
+# Submission to last job:         11704s     195.07m     3.25h    0.14d
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/rnaStruct/utr5
+    hgLoadRnaFold mm7 foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold mm7 foldUtr3 fold
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
+
+# Build KEGG pathway tables.  DONE 5/19/05.  Fan.
+
+   ssh hgwdev
+   cd /cluster/store11/kg/kgMm7A
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgMm7A mm7 051015
+
+   hgsql mm7 -e "drop table keggMapDesc"
+   hgsql mm7 -e "drop table keggPathway"
+   hgsql mm7 <~/src/hg/lib/keggMapDesc.sql
+   hgsql mm7 <~/src/hg/lib/keggPathway.sql
+   hgsql mm7 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql mm7 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+# Build CGAP pathway tables
+# Reloaded cgapAlias.tab file after removing replicate rows - 
+# see the other cgap table entry in this document (hartera, 2005-10-07).
+
+   cd ..
+   ~/src/hg/protein/KGcgap.sh kgMm7A mm7 051015
+   hgsql mm7 -e "drop table cgapAlias"
+   hgsql mm7 -e "drop table cgapBiocDesc"
+   hgsql mm7 -e "drop table cgapBiocPathway"
+   hgsql mm7 <~/src/hg/lib/cgapAlias.sql
+   hgsql mm7 <~/src/hg/lib/cgapBiocDesc.sql
+   hgsql mm7 <~/src/hg/lib/cgapBiocPathway.sql
+   hgsql mm7 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
+   hgsql mm7 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
+   hgsql mm7 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
+
+############################################################################
+
+### MAKE THE affyU74 TRACK - needed for the Gene Sorter 
+#                              (DONE - 2005-11-14 - Fan)
+# MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
+# target sequences. Recalculate alignments and load data
+----------------------------------
+# Load up semi-local disk with target sequences for Affy mouse U74 chips.
+# ssh kkr1u00
+# mkdir -p /iscratch/i/affy
+#	This /projects filesystem is not available on kkr1u00
+#	but it is on kk
+# ssh kk
+# cp /projects/compbio/data/microarray/affyGnfMouse/sequences/U74*consensus.fa /iscratch/i/affy
+
+ssh kkr1u00
+iSync
+
+# Run cluster job to do alignments
+ssh kk
+mkdir /cluster/data/mm7/bed/affyU74.2005-11-14
+cd /cluster/data/mm7/bed/affyU74.2005-11-14
+mkdir run
+cd run
+mkdir psl
+echo /cluster/bluearc/mm7/nib/*.nib | wordLine stdin > genome.lst
+ls -1 /iscratch/i/affy/U74*consensus.fa > affy.lst
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+gensub2 genome.lst affy.lst gsub jobList
+para create jobList
+para try
+para push
+# Completed: 120 of 120 jobs
+# CPU time in finished jobs:       6022s     100.37m     1.67h    0.07d  0.000 y
+# IO & Wait Time:                  4113s      68.55m     1.14h    0.05d  0.000 y
+# Average job time:                  84s       1.41m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             244s       4.07m     0.07h    0.00d
+# Submission to last job:           280s       4.67m     0.08h    0.00d
+# Do sort, best in genome filter, and convert to chromosome coordinates
+# to create affyU74.psl.
+ssh kk
+cd /cluster/data/mm7/bed/affyU74.2005-11-14/run
+pslSort dirs raw.psl tmp psl
+
+# change filter parameters for these sequences. only use alignments that
+# cover 30% of sequence and have at least minAli = 0.95.
+# minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+#pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl ../all_affyU74.psl /dev/null
+
+# Sort by chromosome and load into database.
+ssh hgwdev
+cd /cluster/data/mm7/bed/affyU74.2005-11-14
+pslSortAcc nohead chrom temp all_affyU74.psl
+cat chrom/*.psl > affyU74.psl
+# shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
+hgLoadPsl mm7 affyU74.psl
+# rm -fr chrom temp run
+
+##   MAKE THE affyGnfU74 TRACKs (DONE - 2005-11-14 - Fan)
+# Make bed files and load consensus sequences for Affy U74 chip set.
+# Fix broken symlinks to microarray data after directory structure changed
+# (DONE, 2005-05-03, hartera)
+----------------------------------
+#This needs to be done after affyU74 is already made.
+ssh hgwdev
+mkdir -p /cluster/data/mm7/bed/affyGnf.2005-11-14
+cd /cluster/data/mm7/bed/affyGnf.2005-11-14
+#	may need to build this command in src/hg/affyGnf
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74.2005-11-14/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 \
+	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=U74Av2
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74.2005-11-14/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt \
+	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=U74Bv2
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74.2005-11-14/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
+	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
+
+# edit 3 .bed files to shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+mkdir sav
+cp *.bed sav -p
+cat sav/affyGnfU74A.bed|sed -e "s/U74Av2://" >affyGnfU74A.bed
+cat sav/affyGnfU74B.bed|sed -e "s/U74Bv2://" >affyGnfU74B.bed
+cat sav/affyGnfU74C.bed|sed -e "s/U74Cv2://" >affyGnfU74C.bed
+
+# and reload data into table
+hgLoadBed mm7 affyGnfU74A affyGnfU74A.bed
+hgLoadBed mm7 affyGnfU74B affyGnfU74B.bed
+hgLoadBed mm7 affyGnfU74C affyGnfU74C.bed
+
+# Add in sequence data for U74 tracks.
+# Copy consensus sequence to /gbdb if it isn't already
+# [THE SYM LINKS WERE ALREADY DONE.]
+#    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
+    # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
+    # reload sequences with prefix removed so acc matches name used in
+    # other dependent tables
+                                                    
+    hgLoadSeq -abbr=U74Av2: mm7 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    hgLoadSeq -abbr=U74Bv2: mm7 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    hgLoadSeq -abbr=U74Cv2: mm7 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+
+### GNF ATLAS 2  [DONE Fan 2005-11-14]
+    # Align probes from GNF1M chip.
+    ssh kk
+    cd /cluster/data/mm7/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    #mkdir -p /cluster/bluearc/geneAtlas2
+    #cp /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /cluster/bluearc/geneAtlas2
+    #ls -1 /scratch/mus/mm7/maskedContigs/ > genome.lst
+    echo /cluster/bluearc/mm7/nib/*.nib | wordLine stdin > genome.lst
+
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1m.fa > mrna.lst
+    echo '#LOOP\nblat -fine -ooc=/scratch/hg/h/mouse11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > gsub
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para time
+# CPU time in finished jobs:      53036s     883.93m    14.73h    0.61d  0.002 y
+# IO & Wait Time:                   442s       7.37m     0.12h    0.01d  0.000 y
+# Average job time:                1337s      22.28m     0.37h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3862s      64.37m     1.07h    0.04d
+# Submission to last job:          3862s      64.37m     1.07h    0.04d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyGnf1m.psl /dev/null
+
+    #rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/geneAtlas2
+#    ln -s /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /gbdb/hgFixed/affyProbes
+    hgLoadPsl mm7 affyGnf1m.psl
+    hgLoadSeq mm7 /gbdb/hgFixed/affyProbes/gnf1m.fa
+
+    # Load up track
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfMouseAtlas2MedianRatio \
+    	affyGnf1m.psl
+    # Note that the unmapped 5000 records are from all-N sequences.
+    hgLoadBed mm7 gnfAtlas2 gnfAtlas2.bed
+
+# MOUSE AFFYMETRIX MOE430 TRACK (DONE, 2005-11-14, Fan)
+#    mkdir -p /projects/compbio/data/microarray/affyMouse
+    # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
+    # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
+#    unzip MOE430*_consensus.zip
+
+    # check for duplicate probes: there are none, all have unique names
+    # check for duplicate probes: 100 from 136745_at to 1367551_a_at
+    # remove "consensus:" and ";" from FASTA headers to shorten probeset
+    # names for database
+
+#    sed -e 's/consensus://' MOE430A_consensus | sed -e 's/;/ /' > MOE430_all.fa
+#    sed -e 's/consensus://' MOE430B_consensus | sed -e 's/;/ /' >> MOE430_all.fa
+ 
+#    cp /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \
+#       /cluster/bluearc/affy/
+
+    # THE ABOVE WAS ALREADY DONE BY RACHEL 4/16/04.
+
+    # Set up cluster job to align MOE430 consensus sequences to mm7
+    ssh kkr1u00
+    cd /cluster/data/mm7/bed
+    mkdir -p affyMOE430
+    cd affyMOE430
+#    mkdir -p /iscratch/i/affy
+#    cp /cluster/bluearc/affy/MOE430_all.fa /iscratch/i/affy
+#    iSync
+
+    ssh kk
+    cd /cluster/data/mm7/bed/affyMOE430
+    ls -1 /iscratch/i/affy/MOE430_all.fa > affy.lst
+    echo /cluster/bluearc/mm7/nib/*.nib | wordLine stdin > genome.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/mouse11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try
+    para check
+    para push
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       9533s     158.88m     2.65h    0.11d  0.000 y
+# IO & Wait Time:                   924s      15.40m     0.26h    0.01d  0.000 y
+# Average job time:                 261s       4.36m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             855s      14.25m     0.24h    0.01d
+# Submission to last job:           862s      14.37m     0.24h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl affyMOE430.psl /dev/null
+
+    # Load alignments and sequences into database
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/affyMOE430
+    # shorten names in psl file
+    sed -e 's/MOE430//' affyMOE430.psl > affyMOE430.psl.bak
+    mv affyMOE430.psl.bak affyMOE430.psl
+
+    # load track into database
+
+    hgLoadPsl mm7 affyMOE430.psl
+ 
+    # Add consensus sequences for MOE430
+    # Copy sequences to gbdb is they are not there already
+#    mkdir -p /gbdb/hgFixed/affyProbes
+#    ln -s /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \ 
+#       /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=MOE430 mm7 /gbdb/hgFixed/affyProbes/MOE430_all.fa
+    
+    # Clean up
+#    rm batch.bak contig.psl raw.psl 
+    
+    # BELOW TWO THINGS WERE DONE BY RACHEL ALREDAY FOR MM4
+    # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/mouse/
+    # add affyMOE430.html file and then do make alpha to add to trackDb table
+
+######## BUILD GENE SORTER TABLES #######  (DONE - 2005-11-15 - Fan)
+# These are instructions for building the
+# Gene Sorter.  Don't start these until
+# there is a knownGene track and the affy tracks
+
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+cd /tmp
+hgClusterGenes mm7 knownGene knownIsoforms knownCanonical
+# Got 18908 clusters, from 31449 genes in 40 chromosomes
+#	featureBits mm7 knownCanonical
+#     776952836 bases of 2583394090 (30.075%) in intersection
+#	featureBits mm6 knownCanonical
+# 	764263619 bases of 2597150411 (29.427%) in intersection
+#	featureBits mm5 knownCanonical
+#	853516995 bases of 2615483787 (32.633%) in intersection
+#	featureBits mm4 knownCanonical
+#	840021165 bases of 2627444668 (31.971%) in intersection
+#	featureBits mm3 knownCanonical
+#	825943052 bases of 2505900260 (32.960%) in intersection
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+ssh hgwdev
+mkdir -p  /cluster/data/mm7/bed/geneSorter/blastp
+cd /cluster/data/mm7/bed/geneSorter/blastp
+pepPredToFa mm7 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/cluster/bluearc/blast229/formatdb -i known.faa -t known -n known
+
+# Copy over database to bluearc scratch
+mkdir /cluster/bluearc/mm7/blastp
+cp -p /cluster/data/mm7/bed/geneSorter/blastp/known.* /cluster/bluearc/mm7/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/mm7/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory 
+ssh kk
+mkdir /cluster/data/mm7/bed/geneSorter/blastp/self
+cd /cluster/data/mm7/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/mm7/blastp/known \
+-i $1 -o $2 -e 0.01 -m 8 -b 1000
+'_EOF_'
+# << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+# << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push 
+
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      72141s    1202.34m    20.04h    0.83d  0.002 y
+# IO & Wait Time:                600180s   10003.01m   166.72h    6.95d  0.019 y
+# Average job time:                  87s       1.45m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             282s       4.70m     0.08h    0.00d
+# Submission to last job:          1745s      29.08m     0.48h    0.02d
+
+# Load into database.  This takes about an hour.
+ssh hgwdev
+cd /cluster/data/mm7/bed/geneSorter/blastp/self/run/out
+hgLoadBlastTab mm7 knownBlastTab *.tab
+# Scanning through 7729 files
+# Loading database with 3391069 rows
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes an hour.)
+
+hgMapToGene mm7 affyGnf1m knownGene knownToGnf1m
+hgExpDistance mm7 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+# Have 34863 elements in hgFixed.gnfMouseAtlas2MedianRatio
+# Got 20114 unique elements in hgFixed.gnfMouseAtlas2MedianRatio
+
+# Create table that maps between known genes and RefSeq
+hgMapToGene mm7 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene mm7 affyU74  knownGene knownToU74
+hgMapToGene mm7 affyMOE430 knownGene knownToMOE430
+hgMapToGene mm7 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+# Format and load Rinn et al sex expression data
+mkdir /cluster/data/mm7/bed/rinnSex
+cd !$
+hgMapMicroarray rinnSex.bed hgFixed.mouseRinnSexMedianRatio \
+../affyMOE430/affyMOE430.psl
+hgLoadBed mm7 rinnSex rinnSex.bed
+
+# Format and load the GNF data
+mkdir /cluster/data/mm7/bed/affyGnf95
+cd /cluster/data/mm7/bed/affyGnf95
+~/src/hg/affyGnf/affyPslAndAtlasToBed -newType ../affyU95.psl \
+/projects/compbio/data/microarray/affyGnfHuman/data_public_U95 \
+affyGnfU95.tab affyGnfU95Exps.tab -shortOut
+
+#	this .sql load was in preceeding instructions, but this .sql file
+#	appears to not exist and it doesn't seem to be needed anyway.
+#	Everything below this seems to create tables OK.
+#  hgsql mm7 < ~/kent/src/hg/affyGnf/affyGnfU95.sql
+
+# Create table that gives distance in expression space between 
+# GNF genes.  These commands take about 15 minutes each
+#	The affyGnfU74?Exps arguments appear to be unused in 
+# hgExpDistance
+cd /cluster/data/mm7/bed/geneSorter
+hgExpDistance mm7 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
+# Have 9621 elements in affyGnfU74A
+# Got 11805 unique elements in affyGnfU74A
+hgExpDistance mm7 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
+# Have 11002 elements in affyGnfU74B
+# Got 7173 unique elements in affyGnfU74B
+hgExpDistance mm7 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
+# Have 7502 elements in affyGnfU74C
+# Got 2130 unique elements in affyGnfU74C
+
+# C.ELEGANS BLASTP FOR GENE SORTER 
+    # Make C. elegans ortholog column using blastp on wormpep.
+    # First make C. elegans protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    ssh eieio
+    mkdir /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+    # to find out the latest version.  Then use that in place of 142 below.
+    wget -O wormPep142.faa ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep142/wormpep142
+    formatdb -i wormPep142.faa -t wormPep142 -n wormPep142
+    ssh kkr1u00
+    if (-e /iscratch/i/ce2/blastp) then
+      rm -r /iscratch/i/ce2/blastp
+    endif
+    mkdir -p /iscratch/i/ce2/blastp
+    cp /cluster/data/ce2/bed/blastp/wormPep142.p?? /iscratch/i/ce2/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm7/bed/blastp/ce2/run/out
+    cd /cluster/data/mm7/bed/blastp/ce2/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/ce2/blastp/wormPep142 -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+# Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+# Create parasol batch
+ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+|sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+gensub2 split.lst single gsub spec
+para create spec
+para try, check, push, check, ...
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      45124s     752.06m    12.53h    0.52d  0.001 y
+# IO & Wait Time:                274207s    4570.12m    76.17h    3.17d  0.009 y
+# Average job time:                  41s       0.69m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             354s       5.90m     0.10h    0.00d
+# Submission to last job:          1859s      30.98m     0.52h    0.02d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm7/bed/blastp/ce2/run/out
+hgLoadBlastTab mm7 ceBlastTab -maxPer=1 *.tab
+
+# HUMAN BLASTP FOR GENE SORTER 
+    # Make human ortholog column using blastp on human known genes.
+    # First make human protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+#    mkdir /cluster/data/hg17/bed/blastp
+#    cd /cluster/data/hg17/bed/blastp
+#    pepPredToFa hg17 knownGenePep known.faa
+#    formatdb -i known.faa -t known -n known
+
+#   ssh kkr1u00
+#    if (-e /iscratch/i/hg17/blastp) then
+#      rm -r /iscratch/i/hg17/blastp
+#    endif
+#    mkdir -p /iscratch/i/hg17/blastp
+#    cp /cluster/data/hg17/bed/blastp/known.p?? /iscratch/i/hg17/blastp
+#    iSync
+# ABOVE WAS ALREADY DONE DURING MM6 BUILD.
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm7/bed/blastp/hg17/run/out
+    cd /cluster/data/mm7/bed/blastp/hg17/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/hg17/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    # Create parasol batch
+ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+|sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+
+gensub2 split.lst single gsub spec
+para create spec
+para try, check, push, check, ...
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      89614s    1493.56m    24.89h    1.04d  0.003 y
+# IO & Wait Time:                151484s    2524.74m    42.08h    1.75d  0.005 y
+# Average job time:                  31s       0.52m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              88s       1.47m     0.02h    0.00d
+# Submission to last job:          1605s      26.75m     0.45h    0.02d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm7/bed/blastp/hg17/run/out
+hgLoadBlastTab mm7 hgBlastTab -maxPer=1 *.tab
+
+# ZEBRAFISH BLASTP FOR GENE SORTER 
+    # Make Danio rerio (zebrafish) ortholog column using blastp on Ensembl.
+    # First make protein database and copy it to iscratch/I
+    # The below is done by hg17, that section from makeHg17.doc is copied here.
+#    ssh kkstore
+#    mkdir /cluster/data/danRer2/bed/blastp
+#    cd /cluster/data/danRer2/bed/blastp
+#    wget ftp://ftp.ensembl.org/pub/current_zebrafish/data/fasta/pep/Danio_rerio.ZFISH4.apr.pep.fa.gz
+    
+#    zcat Dan*.pep.fa.gz > ensembl.faa
+#    formatdb -i ensembl.faa -t ensembl -n ensembl
+#    ssh kkr1u00
+#    if (-e /iscratch/i/danRer2/blastp) then
+#      rm -r /iscratch/i/danRer2/blastp
+#    endif
+#    mkdir -p /iscratch/i/danRer2/blastp
+#    cp /cluster/data/danRer2/bed/blastp/ensembl.p?? /iscratch/i/danRer2/blastp
+#    iSync
+# ABOVE WAS ALREADY DONE DURING MM6 BUILD.
+
+# The above is copied from makeHg17.doc.
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm7/bed/blastp/danRer2/run/out
+    cd /cluster/data/mm7/bed/blastp/danRer2/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/danRer2/blastp/ensembl -i \$1 -o \$2 -e 0.005 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+    
+# Create parasol batch
+ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+|sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+
+gensub2 split.lst single gsub spec
+para create spec
+para try, check, push, check, ...
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      81817s    1363.61m    22.73h    0.95d  0.003 y
+# IO & Wait Time:                148583s    2476.39m    41.27h    1.72d  0.005 y
+# Average job time:                  30s       0.50m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              93s       1.55m     0.03h    0.00d
+# Submission to last job:          2638s      43.97m     0.73h    0.03d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm7/bed/blastp/danRer2/run/out
+hgLoadBlastTab mm7 drBlastTab -maxPer=1 *.tab
+
+# YEAST BLASTP FOR GENE SORTER 
+    # Make Saccharomyces cerevisiae (yeast) ortholog column using blastp on 
+    # RefSeq.  First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+#    mkdir /cluster/data/sacCer1/bed/blastp
+#    cd /cluster/data/sacCer1/bed/blastp
+#    wget ftp://genome- ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+#    zcat orf_trans.fasta.gz > sgdPep.faa
+#    formatdb -i sgdPep.faa -t sgdPep -n sgdPep
+
+#    ssh kkr1u00
+    # Note: sacCer1 is a name conflict with SARS coronavirus... oh well, 
+    # fortunately we won't be looking for homologs there.  :)
+#    if (-e /iscratch/i/sacCer1/blastp) then
+#      rm -r /iscratch/i/sacCer1/blastp
+#    endif
+#    mkdir -p /iscratch/i/sacCer1/blastp
+#    cp /cluster/data/sacCer1/bed/blastp/sgdPep.p?? /iscratch/i/sacCer1/blastp
+#    iSync
+# ABOVE WAS ALREADY DONE DURING MM6 BUILD.
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/mm7/bed/blastp/sacCer1/run/out
+    cd /cluster/data/mm7/bed/blastp/sacCer1/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/sacCer1/blastp/sgdPep -i \$1 -o \$2 -e 0.01 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+# Create parasol batch
+ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+|sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+gensub2 split.lst single gsub spec
+para create spec
+para try, check, push, check, ...
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      13337s     222.29m     3.70h    0.15d  0.000 y
+# IO & Wait Time:                149594s    2493.23m    41.55h    1.73d  0.005 y
+# Average job time:                  21s       0.35m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             121s       2.02m     0.03h    0.00d
+# Submission to last job:         15796s     263.27m     4.39h    0.18d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm7/bed/blastp/sacCer1/run/out
+hgLoadBlastTab mm7 scBlastTab -maxPer=1 *.tab
+
+# DM1 BLASTP FOR GENE SORTER (DONE 5/30/05, Fan)
+    # Make Drosophila melanagaster ortholog column using blastp on FlyBase.
+    # First make protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+    # This is already done, see makeMm3.doc for procedure
+    # the directory: /cluster/bluearc/dm1/blastp should have data
+
+    # ssh kkr1u00
+    # if (-e /iscratch/i/dm1/blastp) then
+    #   rm -r /iscratch/i/dm1/blastp
+    # endif
+    # mkdir -p /iscratch/i/dm1/blastp
+    # cp /cluster/data/dm1/bed/blastp/bdgp.p?? /iscratch/i/dm1/blastp
+    # iSync
+    # THE ABOVE IS ALREADY DONE BY ANGIE
+# PLEASE NOTE THE SPLIT DATA WERE COPIED TO STORE3.  SEE BLASTP RUN FOR RN3 FOR DETAILS
+
+
+    # Make parasol run directory 
+    ssh kk
+#    mkdir -p /cluster/data/mm7/bed/blastp/dm1/run/out
+
+    mkdir -p /cluster/store3/mm7/bed/blastp/dm1/run/out
+    cd /cluster/data/mm7/bed/blastp/dm1/run
+    
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/dm1/blastp/bdgp -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+# Create parasol batch
+# ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+# |sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+
+ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+|sed -e 's=kg=/cluster/store3/mm7/bed/split/kg=g' >split.lst
+
+gensub2 split.lst single gsub spec
+para create spec
+para try, check, push, check, ..
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      50313s     838.55m    13.98h    0.58d  0.002 y
+# IO & Wait Time:                 49291s     821.52m    13.69h    0.57d  0.002 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              81s       1.35m     0.02h    0.00d
+# Submission to last job:           341s       5.68m     0.09h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm7/bed/blastp/dm1/run/out
+hgLoadBlastTab mm7 dmBlastTab -maxPer=1 *.tab
+
+# Create table that maps between known genes and LocusLink 
+cd /cluster/data/mm7/bed/geneSorter
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm7 > refToLl.txt
+hgMapToGene mm7 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#       row count is 23074  
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm7 knownGene name proteinID Pfam knownToPfam
+# row count is 22525 
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm7 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+
+# Create table that maps between known genes and genePix database 
+    knownToGenePix mm7
+
+# ENABLE GENE SORTER FOR mm7 IN HGCENTRALTEST (already done during first mm7 KG build)
+    echo "update dbDb set hgNearOk = 1 where name = 'mm7';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# RAT BLASTP FOR GENE SORTER 
+    # Make RAT ortholog column using blastp on RAT known genes.
+    # First make RAT protein database and copy it to iscratch/i
+    # if it doesn't exist already:
+#    mkdir /cluster/data/rn3/bed/blastp
+#    cd /cluster/data/rn3/bed/blastp
+#    pepPredToFa rn3 knownGenePep known.faa
+#    formatdb -i known.faa -t known -n known
+
+#   ssh kkr1u00
+#    if (-e /iscratch/i/rn3/blastp) then
+#      rm -r /iscratch/i/rn3/blastp
+#    endif
+#    mkdir -p /iscratch/i/rn3/blastp
+#    cp /cluster/data/rn3/bed/blastp/known.p?? /iscratch/i/rn3/blastp
+#    iSync
+# ABOVE WAS ALREADY DONE DURING MM6 BUILD.
+
+    # Make parasol run directory 
+    ssh kk
+# PLEASE NOTE THE SPLIT FILES ARE COPIED TO STORE3.  THE NEW KKSTORE-2 FILE SYSTEM
+# WHERE STORE5 IS HAS AN OS VERSION COMPATIBILITY PROBLEM THAT CAUSED A LOT 
+# I/O PAGE FAULTS.
+    mkdir -p /cluster/store3/mm7/bed 
+    cp -Rp /cluster/store5/mm7/bed/geneSorter/blastp/split .
+    cd /cluster/store5/mm7/bed/geneSorter/blastp
+    mv split split.sav
+    ln -s /cluster/store3/mm7/bed/split ./split 
+
+    mkdir -p /cluster/store3/mm7/bed/blastp/rn3/run/out
+    mv /cluster/data/mm7/bed/blastp /cluster/data/mm7/bed/blastp.sav
+    ln -s /cluster/store3/mm7/bed/blastp /cluster/data/mm7/bed/blastp
+    cd /cluster/data/mm7/bed/blastp/rn3/run
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/iscratch/i/blast/blastall -p blastp -d /iscratch/i/rn3/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+    chmod a+x blastSome
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+# Create parasol batch
+# ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+# |sed -e 's=kg=../../../geneSorter/blastp/split/kg=g' >split.lst
+ls -1S /cluster/data/mm7/bed/geneSorter/blastp/split \
+|sed -e 's=kg=/cluster/store3/mm7/bed/split/kg=g' >split.lst
+gensub2 split.lst single gsub spec
+para create spec
+para try, check, push, check, ...
+# Completed: 7720 of 7720 jobs
+# CPU time in finished jobs:      19182s     319.70m     5.33h    0.22d  0.001 y
+# IO & Wait Time:                 20477s     341.28m     5.69h    0.24d  0.001 y
+# Average job time:                   5s       0.09m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              23s       0.38m     0.01h    0.00d
+# Submission to last job:           140s       2.33m     0.04h    0.00d
+
+# Load into database.  
+ssh hgwdev
+cd /cluster/data/mm7/bed/blastp/rn3/run/out
+hgLoadBlastTab mm7 rnBlastTab -maxPer=1 *.tab
+
+# END OF GENE SORTER STUFF (DONE 11/17/05, Fan)
+#############################################################################
+
+### MM7 PROTEOME BROWSER TABLES BUILD ####  (DONE - 2005-11-14 - Fan)
+# These are instructions for re-building tables 
+# needed for the Proteome Browser to be used with mm7.  
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 051015.
+
+# Create the working directory
+   ssh hgwdev
+   mkdir /cluster/data/mm7/bed/pb.2005-11-14
+   cd /cluster/data/mm7/bed
+   rm pb
+   ln -s /cluster/data/mm7/bed/pb.2005-11-14 pb
+   cd pb
+
+# Define pep* tables in mm7 DB
+
+   cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+# edit the .sql file and get rid of non-PB table definitions, e.g. pepPred.
+
+   vi pepAll.sql
+   hgsql mm7 <pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins051015 -e \
+"select info.acc, molWeight, aaSize from sp051015.info, sp051015.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql mm7 -e 'load data local infile "pepMwAa.tab" into table mm7.pepMwAa ignore 1 lines;'
+
+o Build the pepPi table
+
+  hgsql proteins051015 -e "select info.acc from sp051015.info, sp051015.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.lis
+
+  pbCalPi protAcc.lis sp051015 pepPi.tab
+
+  hgsql mm7 -e 'load data local infile "pepPi.tab" into table mm7.pepPi;'
+
+# Calculate and load pep distributions
+
+  pbCalDist sp051015 proteins051015 10090 mm7 >pbCalDist.out
+
+    cat pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql mm7
+    load data local infile "pepExonCntDist.tab" into table mm7.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table mm7.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table mm7.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table mm7.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table mm7.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table mm7.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table mm7.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp051015 10090 mm7
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql mm7 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql mm7 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql mm7 -e 'load data local infile "pbResAvgStd.tab" into table mm7.pbResAvgStd;'
+   hgsql mm7 -e 'load data local infile "pbAnomLimit.tab" into table mm7.pbAnomLimit;'
+
+# UPDATE kgSpAlias TABLE TO BE USED BY PB 
+
+    cd /cluster/data/mm7/bed/pb
+    hgsql mm7 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm7 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm7.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm7 -e 'drop table kgSpAlias';
+    hgsql mm7 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm7 -e 'load data local infile "mm7.kgSpAlias.tab" into table kgSpAlias'
+    gzip mm7.kgSpAlias.tab
+
+# Create pbStamp table for PB
+   
+  hgsql mm7 < ~/src/hg/lib/pbStamp.sql
+  hgsql mm6 -N -e 'select * from pbStamp' > pbStamp.tab
+
+  hgsql mm7 -e 'delete from pbStamp'
+  hgsql mm7 -e 'load data local infile "pbStamp.tab" into table mm7.pbStamp'
+
+# ENABLE PROTEOME BROWSER FOR mm7 IN HGCENTRALTEST (already done previously)
+    echo "update dbDb set hgPbOk = 1 where name = 'mm7';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+# Perform preliminary review of Proteome Browser for mm7, then
+  notify QA for formal review.
+
+# Update default Browser position
+# bring up mySQL on genome-testdb and use hgcentraltest DB (done previously):
+
+   update dbDb set defaultPos="chr2:146923205-146928018" where name="mm7";
+
+# Create QA Push Queue entry with the following tables:
+
+ ceBlastTab 
+ cgapAlias 
+ cgapBiocDesc 
+ cgapBiocPathway 
+ dmBlastTab 
+ drBlastTab 
+ dupSpMrna 
+ foldUtr3 
+ foldUtr5 
+ gnfAtlas2Distance 
+ hgBlastTab 
+ keggMapDesc 
+ keggPathway 
+ kgAlias 
+ kgProtAlias 
+ kgProtMap 
+ kgXref 
+ knownBlastTab 
+ knownCanonical 
+ knownGene 
+ knownGeneMrna 
+ knownGenePep 
+ knownIsoforms 
+ knownToVisiGene 
+ knownToGnf1m 
+ knownToGnfAtlas2 
+ knownToLocusLink 
+ knownToMOE430 
+ knownToMOE430A 
+ knownToPfam 
+ knownToRefSeq 
+ knownToU74 
+ knownToXmBest 
+ rinnSex 
+ rnBlastTab 
+ scBlastTab 
+ spMrna
+
+# END OF mm7 KG/GS/PB RE-BUILD. 11/17/05 Fan.
+#####################################################################
 
 ############################################################################
 ## build multiz17way mafFrames (multiz17wayFrames) (markd 2005/11/13)
