@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.24 2005/10/07 20:00:04 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.25 2005/11/17 19:32:37 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -54,6 +54,7 @@ use vars qw/
     $opt_blastzOutRoot
     $opt_swap
     $opt_chainMinScore
+    $opt_chainLinearGap
     $opt_workhorse
     $opt_fileServer
     $opt_bigClusterHub
@@ -81,6 +82,7 @@ my $bigClusterHub = 'kk';
 my $smallClusterHub = 'kki';
 my $workhorse = 'kolossus';
 my $defaultVerbose = 1;
+my $defaultChainLinearGap = "-linearGap=loose";
 
 sub usage {
   # Usage / help / self-documentation:
@@ -110,15 +112,18 @@ options:
                           those chains (target for query), then net etc. in
                           a new directory:
                           $clusterData/\$qDb/$trackBuild/blastz.\$tDb.swap/
-    -chainMinScore n      Add -minScore=n to the axtChain command.
+    -chainMinScore n      Add -minScore=n (default: 1000) to the
+                                  axtChain command.
+    -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
+                                  axtChain command.  (default: loose)
     -workhorse machine    Use machine (default: $workhorse) for compute or
                           memory-intensive steps.
     -fileServer mach      Use mach (default: fileServer of the build directory)
                           for I/O-intensive steps.
-    -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub for blastz
-                          cluster run.
-    -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub for cat &
-                          chain cluster runs.
+    -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub
+                          for blastz cluster run.
+    -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub
+                          for cat & chain cluster runs.
     -debug                Don't actually run commands, just display them.
     -verbose num          Set verbose level to num (default $defaultVerbose).
     -help                 Show detailed help and exit.
@@ -268,6 +273,7 @@ sub checkOptions {
 		      "blastzOutRoot=s",
 		      "swap",
 		      "chainMinScore=i",
+		      "chainLinearGap=s",
 		      "workhorse=s",
 		      "fileServer=s",
 		      "bigClusterHub=s",
@@ -760,12 +766,14 @@ _EOF_
   my $seq2Dir = $defVars{'SEQ2_CTGDIR'} || $defVars{'SEQ2_DIR'};
   my $matrix = $defVars{'BLASTZ_Q'} ? "-scoreScheme=$defVars{BLASTZ_Q} " : "";
   my $minScore = $opt_chainMinScore ? "-minScore=$opt_chainMinScore" : "";
+  my $linearGap = $opt_chainLinearGap ? "-linearGap=$opt_chainLinearGap" :
+	$defaultChainLinearGap;
   open (CHAIN, ">$runDir/chain.csh")
     || die "Couldn't open $runDir/chain.csh for writing: $!\n";
   print CHAIN  <<_EOF_
 #!/bin/csh -ef
 zcat ../../pslParts/\$1*.psl.gz \\
-| axtChain -psl -verbose=0 $matrix $minScore stdin \\
+| axtChain -psl -verbose=0 $matrix $minScore $linearGap stdin \\
     $seq1Dir \\
     $seq2Dir \\
     stdout \\
