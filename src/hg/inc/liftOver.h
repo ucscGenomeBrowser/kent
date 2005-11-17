@@ -9,6 +9,9 @@
 struct liftOverChain *liftOverChainList();
 /* Get list of all liftOver chains in the central database */
 
+struct liftOverChain *liftOverChainForDb(char *fromDb);
+/* Return list of liftOverChains for this database. */
+
 char *liftOverChainFile(char *fromDb, char *toDb);
 /* Get filename of liftOver chain */
 

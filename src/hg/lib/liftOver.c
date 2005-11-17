@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.27 2005/10/29 17:29:22 kent Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.28 2005/11/17 05:25:54 kent Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1544,11 +1544,21 @@ struct liftOverChain *liftOverChainList()
 struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain *list = NULL;
 
-if (conn)
-    {
-    list = liftOverChainLoadByQuery(conn, "select * from liftOverChain");
-    hDisconnectCentral(&conn);
-    }
+list = liftOverChainLoadByQuery(conn, "select * from liftOverChain");
+hDisconnectCentral(&conn);
+return list;
+}
+
+struct liftOverChain *liftOverChainForDb(char *fromDb)
+/* Return list of liftOverChains for this database. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct liftOverChain *list = NULL;
+char query[256];
+safef(query, sizeof(query), "select * from liftOverChain where fromDb='%s'",
+	fromDb);
+list = liftOverChainLoadByQuery(conn, query);
+hDisconnectCentral(&conn);
 return list;
 }
 
