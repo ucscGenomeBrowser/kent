@@ -4080,36 +4080,6 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements)
     priority 2
 
-track encodeUtexStage
-compositeTrack on
-shortLabel UT-Austin STAGE
-longLabel University of Texas, Austin STAGE (Sequence Tag Analysis of Genomic Enrichment)
-group encodeChrom
-priority 63.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-color 120,30,50
-altColor 50,0,0
-type bedGraph 4
-maxHeightPixels 128:16:16
-minLimit .001
-maxLimit 1.0
-windowingFunction mean
-viewLimits .5:1.0
-autoScale Off
-origAssembly hg17
-
-    track encodeUtexStageMycHelaTags
-    subTrack encodeUtexStage
-    shortLabel UT Myc HeLa
-    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
-    priority 1
-
-    track encodeUtexStageMycHelaPeaks
-    shortLabel UT Myc HeLa Pk
-    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Peaks
-    subTrack encodeUtexStage
-    priority 2
 
 track encodeUvaDnaRep
 compositeTrack on
@@ -4444,8 +4414,6 @@ origAssembly hg16
     longLabel Amplicon (Even)
     priority 2
 
-
-
 track encodeTbaCons
 compositeTrack on
 shortLabel TBA Cons
@@ -4489,70 +4457,6 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
     windowingFunction mean
     color 120,80,120
     priority 3
-
-
-track encodeTbaElements
-compositeTrack on
-shortLabel TBA Elements
-longLabel NHGRI/PSU/UCSC TBA Conserved Elements
-group encodeCompGeno
-priority 73.0
-visibility hide
-#color 0, 10, 100
-#altColor 1,128,0
-exonArrows off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type bed 5 .
-
-    track encodeTbaPhastConsEl
-    subTrack encodeTbaElements
-    shortLabel TBA PhastCons
-    longLabel TBA PhastCons Conserved Elements
-    color 170,100,50
-    priority 1
-
-    track encodeTbaBinConsEl
-    subTrack encodeTbaElements
-    shortLabel TBA BinCons
-    longLabel TBA BinCons Conserved Elements
-    color 190,70,80
-    priority 2
-
-    track encodeTbaGerpEl
-    subTrack encodeTbaElements
-    shortLabel TBA GERP 
-    longLabel TBA GERP Conserved Elements
-    color 120,80,120
-    priority 3
-
-    track encodeTbaUnionEl
-    shortLabel TBA Union
-    longLabel TBA PhastCons/BinCons/GERP Union Conserved Elements
-    subTrack encodeTbaElements
-    color 80,70,180
-    priority 4
-
-    track encodeTbaNcUnionEl
-    shortLabel TBA NC Union
-    longLabel TBA PhastCons/BinCons/GERP Union NonCoding Conserved Elements
-    subTrack encodeTbaElements
-    color 80,105,145
-    priority 5
-
-    track encodeTbaIntersectEl
-    subTrack encodeTbaElements
-    shortLabel TBA Intersect
-    longLabel TBA PhastCons/BinCons/GERP Intersection Conserved Elements
-    color 80,145,105
-    priority 6
-
-    track encodeTbaNcIntersectEl
-    subTrack encodeTbaElements
-    shortLabel TBA NC Intersect
-    longLabel TBA PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
-    color 80,180,80
-    priority 7
-
 
 track encodeMlaganCons
 compositeTrack on
@@ -4598,67 +4502,6 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 # smoothingWindow 3
     color 120,80,120
     priority 3
-
-track encodeMlaganElements
-compositeTrack on
-shortLabel MLAGAN Elements
-longLabel Stanford MLAGAN Conserved Elements
-group encodeCompGeno
-priority 74.2
-visibility hide
-exonArrows off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type bed 5 .
-
-    track encodeMlaganPhastConsEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN PhastCons
-    longLabel MLAGAN PhastCons Conserved Elements
-    color 170,100,50
-    priority 1
-
-    track encodeMlaganBinConsEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN BinCons
-    longLabel MLAGAN BinCons Conserved Elements
-    color 170,5,10
-    priority 2
-
-
-    track encodeMlaganGerpEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN GERP
-    longLabel MLAGAN GERP Conserved Elements
-    color 120,80,120
-    priority 3
-
-    track encodeMlaganUnionEl
-    shortLabel MLAGAN Union
-    longLabel MLAGAN PhastCons/BinCons/GERP Union Conserved Elements
-    subTrack encodeMlaganElements
-    priority 4
-    color 80,70,180
-
-    track encodeMlaganNcUnionEl
-    shortLabel MLAGAN NC Union
-    longLabel MLAGAN PhastCons/BinCons/GERP Union NonCoding Conserved Elements
-    subTrack encodeMlaganElements
-    priority 5
-    color 80,105,145
-
-    track encodeMlaganIntersectEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN Intersect
-    longLabel MLAGAN PhastCons/BinCons/GERP Intersection Conserved Elements
-    priority 6
-    color 80,145,105
-
-    track encodeMlaganNcIntersectEl
-    subTrack encodeMlaganElements
-    shortLabel MLAGAN NC Intersect
-    longLabel MLAGAN PhastCons/BinCons/GERP Intersection NonCoding Conserved Elements
-    priority 7
-    color 80,180,80
 
 track encode_tba
 shortLabel TBA Nov04

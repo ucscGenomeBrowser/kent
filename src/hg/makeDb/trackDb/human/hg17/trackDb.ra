@@ -1317,6 +1317,33 @@ urlLabel Yale DART Link:
     color 50,50,200
     priority 5
 
+track encodeUtexStage
+compositeTrack on
+shortLabel UT-Austin STAGE
+longLabel University of Texas, Austin STAGE (Sequence Tag Analysis of Genomic Enrichment)
+group encodeChrom
+priority 63.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+color 120,30,50
+altColor 50,0,0
+type bed 6 .
+
+    track encodeUtexStageMycHelaTags
+    subTrack encodeUtexStage
+    shortLabel UT Myc HeLa Tags
+    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Tags
+    priority 1
+
+    track encodeUtexStageMycHelaPeaks
+    shortLabel UT Myc HeLa Pk
+    longLabel University of Texas, Austin STAGE (c-Myc, HeLa) Peaks
+    subTrack encodeUtexStage
+    noInherit on
+    color 120,30,50
+    type bed 5 .
+    priority 2
+
 track encodeRegulomeDnaseSites
 compositeTrack on
 shortLabel UW/Reg Oct DNaseI HSs
@@ -1632,6 +1659,67 @@ type bed 4 .
     longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
     priority 3
     color 80,145,105
+
+track encodeMsaAlignComp
+compositeTrack on
+shortLabel Align Comp
+longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Alignment Agreement
+group encodeCompGeno
+priority 75.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type wig 0 1
+spanList 1
+viewLimits .5:1
+
+    track encodeMsaAlignMean
+    subTrack encodeMsaAlignComp
+    shortLabel Mean
+    longLabel Mean Agreement MAVID-MLAGAN-TBA
+    color 0,0,255
+    priority 1
+
+    track encodeMsaAlignMavidMlagan
+    subTrack encodeMsaAlignComp
+    shortLabel MAVID-MLAGAN
+    longLabel Agreement MAVID-MLAGAN
+    color 0,0,255
+    priority 2
+
+    track encodeMsaAlignMavidTba
+    subTrack encodeMsaAlignComp
+    shortLabel MAVID-TBA
+    longLabel Agreement MAVID-TBA
+    color 0,0,255
+    priority 3
+
+    track encodeMsaAlignMlaganTba
+    subTrack encodeMsaAlignComp
+    shortLabel MLAGAN-TBA
+    longLabel Agreement MLAGAN-TBA
+    color 0,0,255
+    priority 4
+
+    track encodeMsaAlignMavidUngapped
+    subTrack encodeMsaAlignComp
+    shortLabel MAVID Ungap
+    longLabel Ungapped Species in MAVID
+    color 255,0,0
+    priority 5
+
+    track encodeMsaAlignMlaganUngapped
+    subTrack encodeMsaAlignComp
+    shortLabel MLAGAN Ungap
+    longLabel Ungapped Species in MLAGAN
+    color 255,0,0
+    priority 6
+
+    track encodeMsaAlignTbaUngapped
+    subTrack encodeMsaAlignComp
+    shortLabel TBA Ungap
+    longLabel Ungapped Species in TBA
+    color 255,0,0
+    priority 7
+
 
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
