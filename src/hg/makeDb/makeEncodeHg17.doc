@@ -712,7 +712,6 @@ cat > doLoad.csh << 'EOF'
     set dir = /gbdb/hg17/encode/UVa/2005-10-15
     mkdir -p $dir
     hgLoadWiggle -pathPrefix=$dir hg17 $table $table.wig
-    mkdir -p $dir
     ln -s `pwd`/$table.wib $dir
 
 
@@ -1213,9 +1212,9 @@ cat > load.csh << 'EOF'
     cd 2005-10-14
 cat > load.csh << 'EOF'
     foreach cell (CACO2 CD34 GM HeLa HepG2 Huh7 K562 SKNSH)
-        hgLoadBed hg17 encodeRegulomeDnaseQual$cell lab/$cell.qc.bed
-        hgLoadBed hg17 encodeRegulomeDnaseAmpOdd$cell lab/$cell.oddAmps.bed
-        hgLoadBed hg17 encodeRegulomeDnaseAmpEven$cell lab/$cell.evenAmps.bed
+        hgLoadBed -strict hg17 encodeRegulomeDnaseQual$cell lab/$cell.qc.bed
+        hgLoadBed -strict hg17 encodeRegulomeDnaseAmpOdd$cell lab/$cell.oddAmps.bed
+        hgLoadBed -strict hg17 encodeRegulomeDnaseAmpEven$cell lab/$cell.evenAmps.bed
         set table = encodeRegulomeDnaseSites$cell
         echo $table
         sed -e "s/bed5FloatScore/$table/" \
@@ -1340,20 +1339,22 @@ cat > load.csh << 'EOF'
     end
 
 ##########################################################################
-# UTexas STAGE (2005-10-31 kate)
+# UTexas STAGE (2005-10-31, 11-17 kate)
 # Submitted 10/15 by Akshay Bhinge <akshayb@mail.utexas.edu>
-# 2 files - raw and peaks, for c-Myc in HeLa
+# Resubmitted 11/17
+#  2 files - raw and peaks, for c-Myc in HeLa
 # range .001 to 1.0.  Peaks restricted to >.8
 
-    cd /cluster/data/encode/UTexas/stage/2005-10-15
-    /cluster/bin/scripts/varStepToBedGraph.pl lab/myc.stage.tag.wig > tags.bed
-    hgLoadBed -noBin -strict -bedGraph=4 hg17 encodeUtexStageMycHelaTags tags.bed
-        # 813 elements
-    /cluster/bin/scripts/varStepToBedGraph.pl lab/myc.stage.peaks.wig > peaks.bed
-    hgLoadBed -noBin -strict -bedGraph=4 hg17 encodeUtexStageMycHelaPeaks peaks.bed
-        # 26 elements
+    #cd /cluster/data/encode/UTexas/stage/2005-10-15
+    cd /cluster/data/encode/UTexas/stage/2005-11-17
+    grep '^chr' lab/myc.tag.prob.bed | \
+        hgLoadBed -noBin -strict hg17 encodeUtexStageMycHelaTags stdin
+            # 813 elements
+    grep '^chr' lab/myc.stage.peaks.bed | \
+        hgLoadBed -noBin -strict hg17 \
+                encodeUtexStageMycHelaPeaks  stdin
+            # 26 elements
     # Created composite track with 2 subtracks
-    # Oops -- also have span=1 here (probably wrong)
     
 ##########################################################################
 # Univ. Uppsala, Sweden Chip/chip
@@ -1526,3 +1527,43 @@ cat > load.csh << 'EOF'
         #Reading MsaElUnion.bed
         #Loaded 100543 elements of size 4
           
+##########################################################################
+# MSA alignment agreement
+#  From Ariel Schwartz, UC Berkeley
+
+    cd /cluster/data/encode/MSA
+    mkdir alignAgreement/2005-11-16/lab
+    cd alignAgreement/2005-11-16/lab
+    touch Mean.wig MavidMlagan.wig MavidTba.wig MlaganTba.wig 
+    touch MavidUngapped.wig MlaganUngapped.wig TbaUngapped.wig
+cat > split.csh << 'EOF'
+    foreach f (lab/*.wig.gz)
+        echo $f
+        gunzip $f
+        /cluster/data/encode/bin/scripts/splitTracks.pl $f:r
+        cat t0 >> Mean.wig
+        cat t1 >> MavidMlagan.wig
+        cat t2 >> MavidTba.wig
+        cat t3 >> MlaganTba.wig
+        cat t4 >> MavidUngapped.wig
+        cat t5 >> MlaganUngapped.wig
+        cat t6 >> TbaUngapped.wig
+        rm t?
+        gzip $f:r
+    end
+'EOF'
+    csh split.csh >&! split.log &
+    mkdir wig wib
+cat > load.csh << 'EOF'
+    set dir = /gbdb/hg17/encode/MSA/alignAgree/2005-11-16/wib
+    mkdir -p $dir
+    foreach f (*.wig)
+        set table = encodeMsaAlign$f:r
+        echo $table
+        egrep -v "browser|track" $f | \
+            wigEncode stdin wig/$table.wig wib/$table.wib
+        hgLoadWiggle -pathPrefix=$dir hg17 $table wig/$table.wig
+        ln -s `pwd`/wib/$table.wib $dir
+    end
+'EOF'
+    csh load.csh >&! load.log &
