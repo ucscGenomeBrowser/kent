@@ -306,6 +306,7 @@ CREATE TABLE imageFile (
     caption int not null,	# Pointer to caption or 0 for none
               #Indices
     PRIMARY KEY(id),
+    INDEX(fullLocation,fileName(12)),
     INDEX(submissionSet),
     INDEX(submitId(12))
 );
