@@ -101,6 +101,8 @@ chrM       1       16596   1       F       AC024175.3      1       16596   +
      # add to RepeatMasker library
      cat zebunc.ref >> RepeatMasker.lib
 
+    # This is all in: /cluster/bluearc/RepeatMasker050305/Libraries
+
 # CHECK AGP FILES AND FASTA SIZE CONSISTENCY (DONE, 2005-06-10, hartera)
 
      # The script, createAgpWithGaps.pl (see next section for creating
