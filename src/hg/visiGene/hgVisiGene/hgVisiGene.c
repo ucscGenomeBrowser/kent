@@ -351,7 +351,7 @@ printf(
 " onclick=\"parent.image.bigImg.zoomer('fit');return false;\"> "
 "\n");
 
-printf("&nbsp;&nbsp;&nbsp;<A HREF=\"/index.html\" class=\"leftbar\" target=\"_parent\">UCSC Home</A>");
+printf("&nbsp;&nbsp;&nbsp;<RIGHT><A HREF=\"/index.html\" class=\"leftbar\" target=\"_parent\">Home</A></RIGHT>");
 printf("</FORM>\n");
 htmlEnd();
 }
