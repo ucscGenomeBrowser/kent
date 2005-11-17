@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.6 2005/11/17 05:25:13 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.7 2005/11/17 05:46:18 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -115,7 +115,8 @@ freeMem(toOrg);
 cartWebEnd();
 }
 
-struct liftOverChain *findLiftOver(struct liftOverChain *liftOverList, char *fromDb, char *toDb)
+struct liftOverChain *findLiftOver(struct liftOverChain *liftOverList, 
+	char *fromDb, char *toDb)
 /* Return TRUE if there's a liftOver with both fromDb and
  * toDb. */
 {
@@ -143,7 +144,7 @@ if (toDb != NULL)
 
 /* If we have no valid choice from user then try and get
  * a different assembly from same to organism. */
-if (toOrg != NULL)
+if (choice == NULL && toOrg != NULL)
     {
     for (over = liftOverList; over != NULL; over = over->next)
 	{
@@ -160,7 +161,7 @@ if (toOrg != NULL)
 
 /* If still no valid choice try and get to a different
  * assembly of the current organism. */
-if (!choice)
+if (choice == NULL)
     {
     /* First try to find a liftOver into another assembly of same organism. */
     for (over = liftOverList; over != NULL; over = over->next)
@@ -179,7 +180,7 @@ if (!choice)
 
 /* If still can't find choice, then try and find any liftOver from
  * current assembly */
-if (!choice)
+if (choice == NULL)
     {
     for (over = liftOverList; over != NULL; over = over->next)
 	{
@@ -193,7 +194,7 @@ if (!choice)
 
 
 /* If still can't find choice we give up */
-if (!choice)
+if (choice == NULL)
     errAbort("Can't find a liftOver from %s to anywhere, sorry", fromDb);
 
 return choice;
@@ -246,12 +247,13 @@ while (lineFileNextReal(lf, &line))
 	    else
 	        chainFree(&chain);
 	    }
+#ifdef SOON	/* Put in if we index. */
 	else if (gotChrom)
 	    break;	/* We assume file is sorted by chromosome, so we're done. */
+#endif /* SOON */
 	}
     }
 lineFileClose(&lf);
-uglyf("Loaded %d of %d chains from %s<BR>\n", slCount(chainList), chainCount, fileName);
 slReverse(&chainList);
 return chainList;
 }
@@ -293,7 +295,6 @@ if (!hgParseChromRange(fromPos, &chrom, &start, &end))
 origSize = end - start;
 
 chainList = chainLoadAndTrimIntersecting(fileName, chrom, start, end);
-uglyf("<BR>\n");
 if (chainList == NULL)
     printf("Sorry this position couldn't be found in new assembly");
 else
