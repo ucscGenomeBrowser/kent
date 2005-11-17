@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.5 2005/11/16 22:26:34 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.6 2005/11/17 06:17:33 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -164,6 +164,65 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+void writeSnpTable(FILE *f, struct snp125 *list)
+{
+struct snp125 *el;
+int score = 0;
+float avHet = 0.0;
+float avHetSE = 0.0;
+
+for (el = list; el != NULL; el = el->next)
+    {
+    fprintf(f, "rs%s \t", el->name);
+    fprintf(f, "chr%s \t", el->chrom);
+    fprintf(f, "%d \t", el->chromStart);
+    fprintf(f, "%d \t", el->chromEnd);
+    fprintf(f, "%d \t", score);
+    fprintf(f, "%s \t", el->strand);
+    fprintf(f, "N \t");
+    fprintf(f, "%s \t", el->observed);
+    fprintf(f, "unknown \t");
+    fprintf(f, "%s \t", el->class);
+    fprintf(f, "unknown \t");
+    fprintf(f, "%f \t", avHet);
+    fprintf(f, "%f \t", avHetSE);
+    fprintf(f, "unknown \t");
+    fprintf(f, "dbSNP125 \t");
+    fprintf(f, "\n");
+    }
+}
+
+void loadDatabase(struct snp125 *list)
+{
+struct sqlConnection *conn = sqlConnect(snpDb);
+FILE *f = hgCreateTabFile(".", "snp125");
+
+writeSnpTable(f, list);
+
+// hGetMinIndexLength requires chromInfo
+// snp125TableCreate(conn, hGetMinIndexLength());
+snp125TableCreate(conn, 32);
+
+hgLoadTabFile(conn, ".", "snp125", &f);
+
+}
+
+void dumpSnps(struct snp125 *list)
+{
+struct snp125 *el;
+
+verbose(1, "DUMPING...\n");
+for (el = list; el != NULL; el = el->next)
+    {
+    verbose(1, "snp = %s, ", el->name);
+    verbose(1, "chrom = %s, ", el->chrom);
+    verbose(1, "start = %d, ", el->chromStart);
+    verbose(1, "end = %d, ", el->chromEnd);
+    verbose(1, "strand = %s, ", el->strand);
+    verbose(1, "class = %s, ", el->class);
+    verbose(1, "observed = %s\n", el->observed);
+    }
+}
 
 int main(int argc, char *argv[])
 /* Check args; read and load . */
@@ -190,19 +249,12 @@ if(!hTableExistsDb(snpDb, "ContigInfo"))
 /* this will create a temporary table */
 list = readSnps();
 lookupContigs(list);
-verbose(1, "DUMPING...\n");
-for (el = list; el != NULL; el = el->next)
-    {
-    verbose(1, "snp = %s, ", el->name);
-    verbose(1, "chrom = %s, ", el->chrom);
-    verbose(1, "start = %d, ", el->chromStart);
-    verbose(1, "end = %d, ", el->chromEnd);
-    verbose(1, "strand = %s, ", el->strand);
-    verbose(1, "class = %s, ", el->class);
-    verbose(1, "observed = %s\n", el->observed);
-    }
-
+verbose(1, "sorting\n");
+slSort(&list, snp125Cmp);
+// dumpSnps(list);
 // hSetDb(targetDb);
-// loadDatabase(list);
+verbose(1, "loading\n");
+loadDatabase(list);
+slFreeList(&list);
 return 0;
 }
