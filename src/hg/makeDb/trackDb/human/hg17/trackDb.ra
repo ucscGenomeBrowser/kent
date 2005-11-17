@@ -1662,62 +1662,64 @@ type bed 4 .
 
 track encodeMsaAlignComp
 compositeTrack on
-shortLabel Align Comp
+shortLabel Aligner Agree
 longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Alignment Agreement
 group encodeCompGeno
 priority 75.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type wig 0 1
-spanList 1
+type wig 0 27
 viewLimits .5:1
+maxHeightPixels 128:16:16
+autoScale off
+spanList 1
 
     track encodeMsaAlignMean
     subTrack encodeMsaAlignComp
     shortLabel Mean
     longLabel Mean Agreement MAVID-MLAGAN-TBA
-    color 0,0,255
+    color 20,20,20
     priority 1
 
     track encodeMsaAlignMavidMlagan
     subTrack encodeMsaAlignComp
     shortLabel MAVID-MLAGAN
     longLabel Agreement MAVID-MLAGAN
-    color 0,0,255
+    color 20,20,150
     priority 2
 
     track encodeMsaAlignMavidTba
     subTrack encodeMsaAlignComp
     shortLabel MAVID-TBA
     longLabel Agreement MAVID-TBA
-    color 0,0,255
+    color 20,20,150
     priority 3
 
     track encodeMsaAlignMlaganTba
     subTrack encodeMsaAlignComp
     shortLabel MLAGAN-TBA
     longLabel Agreement MLAGAN-TBA
-    color 0,0,255
+    color 20,20,150
     priority 4
 
     track encodeMsaAlignMavidUngapped
     subTrack encodeMsaAlignComp
     shortLabel MAVID Ungap
     longLabel Ungapped Species in MAVID
-    color 255,0,0
+    color 110,40,30
     priority 5
 
     track encodeMsaAlignMlaganUngapped
     subTrack encodeMsaAlignComp
     shortLabel MLAGAN Ungap
     longLabel Ungapped Species in MLAGAN
-    color 255,0,0
+    color 110,40,30
     priority 6
 
     track encodeMsaAlignTbaUngapped
     subTrack encodeMsaAlignComp
     shortLabel TBA Ungap
     longLabel Ungapped Species in TBA
-    color 255,0,0
+    color 110,40,30
     priority 7
 
 
