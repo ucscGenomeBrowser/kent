@@ -184,9 +184,10 @@
 #include "omimTitle.h"
 #include "dless.h"
 #include "humPhen.h"
+#include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.977 2005/11/15 21:32:13 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.978 2005/11/17 20:18:10 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16893,6 +16894,134 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doHgMut (struct trackDb *tdb, char *itemName)
+/* this prints the detail page for the Human Mutation track */
+{
+char *table = tdb->tableName;
+struct hgMut *mut;
+struct hgMutLink *link;
+struct hgMutAlias alias;
+struct hgMutAttr attr;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int i;
+char *prevClass = NULL, *prevName = NULL;
+
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+printf("<B>HGVS name:</B> %s <BR>\n", itemName);
+/* postion, band, genomic size */
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+/* need to deal with the possibility of more than 1 that fits above */
+/* can I send mutId instead of name?? */ 
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    mut = hgMutLoad(row);
+    bedPrintPos((struct bed *)mut, 3);
+    }
+sqlFreeResult(&sr);
+
+/* print location and mutation type fields */
+printf("<B>location:</B> %s<BR />\n", mut->location);
+printf("<B>type:</B> %s<BR />\n", mut->baseChangeType);
+
+printf("<DL><DT><B>Outside Link(s):</B></DT>\n<DD> ");
+safef(query, sizeof(query),
+      "select * from hgMutRef where mutId = '%s'", mut->mutId);
+sr = sqlGetResult(conn, query);
+i = 0;  /* count lines, print message if none */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *url;
+    i++;
+    safef(query, sizeof(query),
+          "select * from hgMutLink where srcId = '%s'", row[2]);
+    link = hgMutLinkLoadByQuery(conn2, query);
+    if (link != NULL) 
+        {
+        url = replaceChars(link->url, "$$", row[1]);
+        printf("<A HREF=%s", url);
+        printf(" Target=_blank> %s </A> <BR />\n", link->linkDisplayName);
+        freeMem(url);
+        }
+    }
+sqlFreeResult(&sr);
+printf("</DD>");
+
+printf("<DT><B>Aliases:</B></DT><DD>\n ");
+safef(query, sizeof(query),
+      "select * from hgMutAlias where mutId = '%s'", mut->mutId);
+sr = sqlGetResult(conn, query);
+i = 0;  /* count lines, print message if none */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    i++;
+    hgMutAliasStaticLoad(row, &alias);
+    printf("%s<BR />\n", alias.name);
+    }
+sqlFreeResult(&sr);
+printf("</DD>");
+if (i == 0) 
+    printf("Not available<BR />\n");
+
+/* loop through attributes */
+safef(query, sizeof(query),
+      "select hgMutAttr.* from hgMutAttr, hgMutAttrClass where hgMutAttr.mutAttrClass = hgMutAttrClass.mutAttrClassId AND mutId = '%s' ORDER BY hgMutAttrClass.displayOrder", mut->mutId);
+sr = sqlGetResult(conn, query);
+i = 0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hgMutAttrClass *class;
+    struct hgMutAttrName *name;
+    i++;
+    hgMutAttrStaticLoad(row, &attr);
+    safef(query, sizeof(query), "select * from hgMutAttrClass where mutAttrClassId = %d", attr.mutAttrClass);
+    class = hgMutAttrClassLoadByQuery(conn2, query);
+    safef(query, sizeof(query), "select * from hgMutAttrName where mutAttrNameId = %d", attr.mutAttrName);
+    name = hgMutAttrNameLoadByQuery(conn2, query);
+    /* only print name and class if different */
+    if (prevClass == NULL || differentString(prevClass, class->mutAttrClass))
+        {
+        if (prevClass != NULL)
+            printf("</DD></DL>");
+        freeMem(prevClass);
+        prevClass = cloneString(class->mutAttrClass);
+        freeMem(prevName);
+        prevName = cloneString(name->mutAttrName);
+        printf("<DT><B>%s:</B></DT><DD>\n", class->mutAttrClass);
+        printf("<DL>");
+        printf("<DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
+        }
+    else if (differentString(prevName, name->mutAttrName))
+        {
+        freeMem(prevName);
+        prevName = cloneString(name->mutAttrName);
+        printf("</DD><DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
+        }
+    printf("%s<BR />\n", attr.mutAttrVal);
+    }
+sqlFreeResult(&sr);
+if (prevClass != NULL)
+    {
+    printf("</DD></DL>");
+    freeMem(prevClass);
+    freeMem(prevName);
+    }
+printf("</DD></DL>\n");
+
+hgMutFree(&mut);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doHumPhen (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Human Phenotype track */
 {
@@ -17864,6 +17993,10 @@ else if (sameString("dvBed", track))
 else if (startsWith("humanPhenotype", track))
     {
     doHumPhen(tdb, item);
+    }
+else if (sameString("hgMut", track))
+    {
+    doHgMut(tdb, item);
     }
 else if (sameString("allenBrainAli", track))
     {

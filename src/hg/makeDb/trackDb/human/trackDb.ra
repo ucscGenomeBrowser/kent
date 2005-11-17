@@ -5671,28 +5671,6 @@ type bed 4 .
     priority 44
     color 230,0,25
 
-track humanPhenotype
-compositeTrack on 
-shortLabel humPhen
-longLabel Human Phenotype
-group varRep
-priority 144.7
-visibility hide
-type bed 4 +
-
-    track humanPhenotypeLSDB
-    subTrack humanPhenotype
-    shortLabel Hum Phen
-    longLabel Human Phenotype from locus specific databases
-    priority 1
-    color 150,0,150
-
-    track humanPhenotypeSP
-    subTrack humanPhenotype
-    shortLabel SP Phen
-    longLabel Human Phenotype from Swiss-Prot
-    priority 2
-    color 150,0,150
 
 searchTable ccdsGene
 searchType genePred
@@ -5829,17 +5807,3 @@ searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
 
-searchName humPhenAliasSearch
-searchTable humanPhenotypeLSDB
-query select chrom, chromStart, chromEnd, name from %s where dbId like '%s,%%'
-xrefTable humPhenAlias
-xrefQuery select dbId, name from %s where name like '%%%s%%'
-searchMethod fuzzy
-padding 1000
-searchPriority 51
-
-searchTable humanPhenotypeLSDB
-searchMethod fuzzy
-query select chrom, chromStart, chromEnd, name from %s where name like '%%%s%%'
-padding 1000
-searchPriority 51

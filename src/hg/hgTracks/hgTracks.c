@@ -95,8 +95,10 @@
 #include "dless.h"
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
+#include "hgMut.h"
+#include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1038 2005/11/15 00:36:36 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1039 2005/11/17 20:18:10 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9257,6 +9259,45 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
+Color hgMutColor(struct track *tg, void *item, struct vGfx *vg)
+/* color items by type */
+{
+struct hgMut *el = item;
+
+//if (sameString(el->hasPhenData, "y")) 
+    //{
+/* disable shading for now, may want later so not deleted yet */
+/* Ross - lighter implies less sure, another way of indicating phenotype data? */
+    if (sameString(el->baseChangeType, "substitution"))
+        return vgFindColorIx(vg, 204, 0, 255);
+    else if (sameString(el->baseChangeType, "deletion"))
+        return MG_BLUE;
+    else if (sameString(el->baseChangeType, "insertion"))
+        return vgFindColorIx(vg, 0, 153, 0); /* dark green */
+    else if (sameString(el->baseChangeType, "complex"))
+        return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+    else if (sameString(el->baseChangeType, "duplication"))
+        return vgFindColorIx(vg, 255, 153, 0);
+    else
+        return MG_BLACK;
+    //}
+//else
+    //{
+    //if (sameString(el->baseChangeType, "substitution"))
+        //return vgFindColorIx(vg, 204, 153, 255);   /* light purple */
+    //else if (sameString(el->baseChangeType, "deletion"))
+        //return vgFindColorIx(vg, 102, 204, 255); /* light blue */
+    //else if (sameString(el->baseChangeType, "insertion"))
+        //return vgFindColorIx(vg, 0, 255, 0);     /* light green */
+    //else if (sameString(el->baseChangeType, "complex"))
+        //return vgFindColorIx(vg, 255, 102, 102); /* light red, pink 153 too light?*/
+    //else if (sameString(el->baseChangeType, "duplication"))
+        //return vgFindColorIx(vg, 255, 204, 0);   /* light orange */
+    //else
+        //return vgFindColorIx(vg, 153, 153, 153); /* gray */
+    //}
+}
+
 Color humPhenColor(struct track *tg, void *item, struct vGfx *vg)
 /* color items by type */
 {
@@ -9295,6 +9336,45 @@ else
     }
 }
 
+boolean hgMutFilterSrc(struct hgMut *el)
+/* Check to see if this element should be excluded. */
+{
+struct hashEl *srcList = NULL;
+struct hashEl *hashel = NULL;
+
+srcList = cartFindPrefix(cart, "hgMut.filter.src.");
+if (srcList == NULL)
+    return TRUE;
+for (hashel = srcList; hashel != NULL; hashel = hashel->next)
+    {
+    if (endsWith(hashel->name, el->src) && 
+        differentString(hashel->val, "0")) 
+        {
+        hashElFreeList(&srcList);
+        return FALSE;
+        }
+    }
+hashElFreeList(&srcList);
+return TRUE;
+}
+
+boolean hgMutFilterType(struct hgMut *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+for (cnt = 0; cnt < variantTypeSize; cnt++)
+    {
+    if (cartVarExists(cart, variantTypeString[cnt]) &&
+        cartString(cart, variantTypeString[cnt]) != NULL &&
+        differentString(cartString(cart, variantTypeString[cnt]), "0") &&
+        sameString(variantTypeDbValue[cnt], el->baseChangeType))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
 boolean humPhenFilterType(struct humanPhenotypeLSDB *el)
 /* Check to see if this element should be excluded. */
 {
@@ -9305,6 +9385,23 @@ for (cnt = 0; cnt < variantTypeSize; cnt++)
         cartString(cart, variantTypeString[cnt]) != NULL &&
         differentString(cartString(cart, variantTypeString[cnt]), "0") &&
         sameString(variantTypeDbValue[cnt], el->baseChangeType))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
+boolean hgMutFilterLoc(struct hgMut *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+for (cnt = 0; cnt < variantLocationSize; cnt++)
+    {
+    if (cartVarExists(cart, variantLocationString[cnt]) &&
+        cartString(cart, variantLocationString[cnt]) != NULL &&
+        differentString(cartString(cart, variantLocationString[cnt]), "0") &&
+        sameString(variantLocationDbValue[cnt], el->location))
         {
         return FALSE;
         }
@@ -9327,6 +9424,34 @@ for (cnt = 0; cnt < variantLocationSize; cnt++)
         }
     }
 return TRUE;
+}
+
+void loadHgMut(struct track *tg)
+/* Load human mutation with filter */
+{
+struct hgMut *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+                 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hgMut *el = hgMutLoad(row);
+    if (!hgMutFilterType(el))
+        hgMutFree(&el);
+    else if (!hgMutFilterLoc(el))
+        hgMutFree(&el);
+    else if (!hgMutFilterSrc(el))
+        hgMutFree(&el);
+    else
+        slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+tg->items = list;
 }
 
 void loadHumPhen(struct track *tg)
@@ -9359,6 +9484,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 slReverse(&list);
 tg->items = list;
+}
+
+void hgMutMethods (struct track *tg)
+/* Simple exclude/include filtering on human mutation items and color. */
+{
+tg->loadItems = loadHgMut;
+tg->itemColor = hgMutColor;
+tg->itemNameColor = hgMutColor;
 }
 
 void humanPhenotypeMethods (struct track *tg)
@@ -10444,6 +10577,7 @@ registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("humanPhenotype", humanPhenotypeMethods);
+registerTrackHandler("hgMut", hgMutMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
