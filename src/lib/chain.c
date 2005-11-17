@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.22 2005/09/08 22:12:44 baertsch Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.23 2005/11/17 05:26:34 kent Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -205,15 +205,13 @@ for (b = chain->blockList; b != NULL; b = nextB)
 fputc('\n', f);
 }
 
-struct chain *chainRead(struct lineFile *lf)
-/* Read next chain from file.  Return NULL at EOF. 
- * Note that chain block scores are not filled in by
- * this. */
+struct chain *chainReadChainLine(struct lineFile *lf)
+/* Read line that starts with chain.  Allocate memory
+ * and fill in values.  However don't read link lines. */
 {
 char *row[13];
 int wordCount;
 struct chain *chain;
-int q,t;
 
 wordCount = lineFileChop(lf, row);
 if (wordCount == 0)
@@ -246,6 +244,14 @@ if (chain->qStart < 0 || chain->tStart < 0)
     errAbort("Start before zero line %d of %s", lf->lineIx, lf->fileName);
 if (chain->qEnd > chain->qSize || chain->tEnd > chain->tSize)
     errAbort("Past end of sequence line %d of %s", lf->lineIx, lf->fileName);
+return chain;
+}
+
+void chainReadBlocks(struct lineFile *lf, struct chain *chain)
+/* Read in chain blocks from file. */
+{
+char *row[3];
+int q,t;
 
 /* Now read in block list. */
 q = chain->qStart;
@@ -278,6 +284,16 @@ if (t != chain->tEnd)
     errAbort("t end mismatch %d vs %d line %d of %s\n", 
     	t, chain->tEnd, lf->lineIx, lf->fileName);
 slReverse(&chain->blockList);
+}
+
+struct chain *chainRead(struct lineFile *lf)
+/* Read next chain from file.  Return NULL at EOF. 
+ * Note that chain block scores are not filled in by
+ * this. */
+{
+struct chain *chain = chainReadChainLine(lf);
+if (chain != NULL)
+    chainReadBlocks(lf, chain);
 return chain;
 }
 

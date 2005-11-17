@@ -88,6 +88,13 @@ struct chain *chainRead(struct lineFile *lf);
  * Note that chain block scores are not filled in by
  * this. */
 
+struct chain *chainReadChainLine(struct lineFile *lf);
+/* Read line that starts with chain.  Allocate memory
+ * and fill in values.  However don't read link lines. */
+
+void chainReadBlocks(struct lineFile *lf, struct chain *chain);
+/* Read in chain blocks from file. */
+
 void chainIdReset();
 /* Reset chain id. */
 
