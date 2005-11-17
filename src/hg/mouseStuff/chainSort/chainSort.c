@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSort.c,v 1.5 2005/08/18 07:42:12 baertsch Exp $";
+static char const rcsid[] = "$Id: chainSort.c,v 1.6 2005/11/17 16:51:15 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,8 +20,20 @@ errAbort(
   "options:\n"
   "   -target sort on target start rather than score\n"
   "   -query sort on query start rather than score\n"
+  "   -index=out.tab build simple two column index file\n"
+  "                    <out file position>  <value>\n"
+  "                  where <value> is score, target, or query \n"
+  "                  depending on the sort.\n"
   );
 }
+
+static struct optionSpec options[] = {
+   {"target", OPTION_BOOLEAN},
+   {"query", OPTION_BOOLEAN},
+   {"index", OPTION_STRING},
+   {NULL, 0},
+};
+
 
 void chainSort(char *inFile, char *outFile)
 /* chainSort - Sort chains. */
@@ -29,8 +41,20 @@ void chainSort(char *inFile, char *outFile)
 struct chain *chainList = NULL, *chain;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
+FILE *index = NULL;
+char *indexName;
+boolean isQuery = optionExists("query");
+boolean isTarget = optionExists("target");
+double lastScore = -1;
+char *lastTarget = "";
+char *lastQuery = "";
 
+indexName = optionVal("index", NULL);
+if (indexName != NULL)
+    index = mustOpen(indexName, "w");
 lineFileSetMetaDataOutput(lf, f);
+
+uglyf("indexName %s, index %p\n", indexName, index);
 
 /* Read in all chains. */
 while ((chain = chainRead(lf)) != NULL)
@@ -40,23 +64,56 @@ while ((chain = chainRead(lf)) != NULL)
 lineFileClose(&lf);
 
 /* Sort. */
-if (optionExists("target"))
+if (isTarget)
     slSort(&chainList, chainCmpTarget);
-else if (optionExists("query"))
+else if (isQuery)
     slSort(&chainList, chainCmpQuery);
 else
     slSort(&chainList, chainCmpScore);
 
 /* Output. */
 for (chain = chainList; chain != NULL; chain = chain->next)
+    {
+    if (index != NULL)
+        {
+	if (isTarget)
+	    {
+	    if (!sameString(chain->tName, lastTarget))
+		{
+		lastTarget = chain->tName;
+		fprintf(index, "%lx\t", ftell(f));
+		fprintf(index, "%s\n", chain->tName);
+		}
+	    }
+	else if (isQuery)
+	    {
+	    if (!sameString(chain->qName, lastQuery))
+		{
+		lastQuery = chain->qName;
+		fprintf(index, "%lx\t", ftell(f));
+		fprintf(index, "%s\n", chain->qName);
+		}
+	    }
+	else
+	    {
+	    if (chain->score != lastScore)
+		{
+		lastScore = chain->score;
+		fprintf(index, "%lx\t", ftell(f));
+		fprintf(index, "%1.0f\n", chain->score);
+		}
+	    }
+	}
     chainWrite(chain, f);
+    }
+carefulClose(&index);
 carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-optionHash(&argc, argv);
+optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 chainSort(argv[1], argv[2]);
