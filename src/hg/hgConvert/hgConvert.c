@@ -5,6 +5,7 @@
 #include "errabort.h"
 #include "jksql.h"
 #include "linefile.h"
+#include "hCommon.h"
 #include "fa.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -16,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.4 2005/11/17 01:00:43 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.5 2005/11/17 02:58:06 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -55,6 +56,7 @@ struct dbDb *dbList, *fromDb;
 char *fromOrg = hOrganism(liftOver->fromDb);
 char *toOrg = hOrganism(liftOver->toDb);
 
+cartWebStart(cart, "Convert %s to New Assembly", fromPos);
 dbList = hGetLiftOverFromDatabases();
 fromDb = matchingDb(dbList, liftOver->fromDb);
 
@@ -110,6 +112,7 @@ cartSaveSession(cart);
 puts("</FORM>");
 freeMem(fromOrg);
 freeMem(toOrg);
+cartWebEnd();
 }
 
 struct liftOverChain *findLiftOver(struct liftOverChain *liftOverList, char *fromDb, char *toDb)
@@ -244,8 +247,10 @@ while (lineFileNextReal(lf, &line))
 	    else
 	        chainFree(&chain);
 	    }
+#ifdef SOON
 	else if (gotChrom)
 	    break;	/* We assume file is sorted by chromosome, so we're done. */
+#endif /* SOON */
 	}
     }
 lineFileClose(&lf);
@@ -264,28 +269,34 @@ int origSize;
 double percentMapping;
 struct chain *chainList, *chain, *subChain, *chainToFree;
 
+cartWebStart(cart, "Converting %s.%s to %s", liftOver->fromDb, fromPos, liftOver->toDb);
 if (!hgParseChromRange(fromPos, &chrom, &start, &end))
     errAbort("position %s is not in chrom:start-end format", fromPos);
 origSize = end - start;
 
 chainList = chainLoadIntersecting(fileName, chrom, start, end);
-uglyf("<BR><BR>\n");
+uglyf("<BR>\n");
 if (chainList == NULL)
     printf("Sorry this position couldn't be found in new assembly");
 else
     {
-    printf("Position of %s in %s:<BR>\n", fromPos, liftOver->toDb);
     for (chain = chainList; chain != NULL; chain = chain->next)
         {
 	int blockSize;
 	chainSubsetOnT(chainList, start, end, &subChain, &chainToFree);
 	blockSize = chainTotalBlockSize(subChain);
+	printf("<A HREF=\"%s?%s=%u&db=%s&position=%s:%d-%d\">",
+	       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
+	       liftOver->toDb,
+	       subChain->qName, subChain->qStart, subChain->qEnd);
 	printf("%s:%d-%d",  subChain->qName, subChain->qStart, subChain->qEnd);
+	printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,  
 	    100.0 * (subChain->tEnd - subChain->tStart) / origSize);
 	}
     }
+cartWebEnd();
 }
 
 void doMiddle(struct cart *theCart)
@@ -297,7 +308,6 @@ struct liftOverChain *liftOverList = NULL, *choice;
 char *fromPos = cartString(theCart, "position");
 
 cart = theCart;
-cartWebStart(cart, "Convert %s to New Assembly", fromPos);
 getDbAndGenome(cart, &db, &organism);
 hSetDb(db);
 
@@ -310,7 +320,6 @@ if (cartVarExists(cart, HGLFT_DO_CONVERT))
 else
     askForDestination(choice, fromPos);
 liftOverChainFreeList(&liftOverList);
-cartWebEnd();
 }
 
 /* Null terminated list of CGI Variables we don't want to save
