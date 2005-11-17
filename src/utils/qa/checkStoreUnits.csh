@@ -45,7 +45,6 @@ else
     echo "$unit\n"
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
-    continue
     ssh $machine du -m --max-depth=4 $unit | sort -nr \
       > du.$storeName.$date
     cp du.$storeName.$date $unit/du.$date
