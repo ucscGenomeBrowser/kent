@@ -1,12 +1,10 @@
 /* hgConvert - CGI-script to convert browser window coordinates 
  * using chain files */
 #include "common.h"
+#include "hash.h"
 #include "errabort.h"
-#include "hCommon.h"
 #include "jksql.h"
-#include "portable.h"
 #include "linefile.h"
-#include "dnautil.h"
 #include "fa.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -14,11 +12,11 @@
 #include "hui.h"
 #include "cart.h"
 #include "web.h"
-#include "hash.h"
+#include "chain.h"
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.3 2005/11/16 23:39:31 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.4 2005/11/17 01:00:43 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -50,19 +48,15 @@ errAbort("Can't find %s in matchingDb", name);
 return NULL;
 }
 
-void askForDestination(struct liftOverChain *chain)
+void askForDestination(struct liftOverChain *liftOver, char *fromPos)
 /* set up page for entering data */
 {
 struct dbDb *dbList, *fromDb;
-char *fromOrg = hOrganism(chain->fromDb);
-char *toOrg = hOrganism(chain->toDb);
-char *fromPos = cartString(cart, "position");
-printf("Converts the current browser position (%s) to a new assembly.",
-	fromPos);
-puts("<BR><BR>");
+char *fromOrg = hOrganism(liftOver->fromDb);
+char *toOrg = hOrganism(liftOver->toDb);
 
 dbList = hGetLiftOverFromDatabases();
-fromDb = matchingDb(dbList, chain->fromDb);
+fromDb = matchingDb(dbList, liftOver->fromDb);
 
 /* create HMTL form */
 puts("<FORM ACTION=\"../cgi-bin/hgConvert\" NAME=\"mainForm\">\n");
@@ -87,13 +81,13 @@ cgiTableField(fromDb->description);
 /* Destination organism. */
 cgiSimpleTableFieldStart();
 dbDbFreeList(&dbList);
-dbList = hGetLiftOverToDatabases(chain->fromDb);
-printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, chain->toDb, dbList, onChangeToOrg);
+dbList = hGetLiftOverToDatabases(liftOver->fromDb);
+printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, liftOver->toDb, dbList, onChangeToOrg);
 cgiTableFieldEnd();
 
 /* Destination assembly */
 cgiSimpleTableFieldStart();
-printAllAssemblyListHtmlParm(chain->toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
+printAllAssemblyListHtmlParm(liftOver->toDb, dbList, HGLFT_TODB_VAR, TRUE, "");
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -111,47 +105,44 @@ printf("<FORM ACTION=\"/cgi-bin/hgConvert\""
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
                         HGLFT_TOORG_VAR, toOrg);
 printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
-                        HGLFT_TODB_VAR, chain->toDb);
+                        HGLFT_TODB_VAR, liftOver->toDb);
 cartSaveSession(cart);
 puts("</FORM>");
 freeMem(fromOrg);
 freeMem(toOrg);
 }
 
-struct liftOverChain *findLiftOverChain(struct liftOverChain *chainList, char *fromDb, char *toDb)
-/* Return TRUE if there's a chain with both fromDb and
+struct liftOverChain *findLiftOver(struct liftOverChain *liftOverList, char *fromDb, char *toDb)
+/* Return TRUE if there's a liftOver with both fromDb and
  * toDb. */
 {
-struct liftOverChain *chain;
+struct liftOverChain *liftOver;
 if (!fromDb || !toDb)
     return NULL;
-for (chain = chainList; chain != NULL; chain = chain->next)
-    if (sameString(chain->fromDb,fromDb) && sameString(chain->toDb,toDb))
-	return chain;
+for (liftOver = liftOverList; liftOver != NULL; liftOver = liftOver->next)
+    if (sameString(liftOver->fromDb,fromDb) && sameString(liftOver->toDb,toDb))
+	return liftOver;
 return NULL;
 }
 
-struct liftOverChain *currentLiftOver(struct liftOverChain *chainList, 
+struct liftOverChain *currentLiftOver(struct liftOverChain *liftOverList, 
 	char *fromOrg, char *fromDb, char *toOrg, char *toDb)
 /* Given list of liftOvers, and given databases find 
  * liftOver that goes between databases, or failing that
- * a chain that goes from the database to something else. */
+ * a liftOver that goes from the database to something else. */
 {
 struct liftOverChain *choice = NULL;
 struct liftOverChain *over;
 
-uglyf("currentLiftOver %d liftOvers, from %s %s, to %s %s<BR>", 
-	slCount(chainList), fromOrg, fromDb, toOrg, toDb);
-
 /* See if we can find what user asked for. */
 if (toDb != NULL)
-    choice = findLiftOverChain(chainList,fromDb,toDb);
+    choice = findLiftOver(liftOverList,fromDb,toDb);
 
 /* If we have no valid choice from user then try and get
  * a different assembly from same to organism. */
 if (toOrg != NULL)
     {
-    for (over = chainList; over != NULL; over = over->next)
+    for (over = liftOverList; over != NULL; over = over->next)
 	{
 	if (sameString(over->fromDb, fromDb))
 	    {
@@ -168,8 +159,8 @@ if (toOrg != NULL)
  * assembly of the current organism. */
 if (!choice)
     {
-    /* First try to find a chain into another assembly of same organism. */
-    for (over = chainList; over != NULL; over = over->next)
+    /* First try to find a liftOver into another assembly of same organism. */
+    for (over = liftOverList; over != NULL; over = over->next)
 	{
 	if (sameString(over->fromDb, fromDb))
 	    {
@@ -183,11 +174,11 @@ if (!choice)
     }
 
 
-/* If still can't find choice, then try and find any chain from
+/* If still can't find choice, then try and find any liftOver from
  * current assembly */
 if (!choice)
     {
-    for (over = chainList; over != NULL; over = over->next)
+    for (over = liftOverList; over != NULL; over = over->next)
 	{
 	if (sameString(over->fromDb, fromDb))
 	    {
@@ -200,15 +191,101 @@ if (!choice)
 
 /* If still can't find choice we give up */
 if (!choice)
-    errAbort("Can't find a chain from %s to anywhere, sorry", fromDb);
+    errAbort("Can't find a liftOver from %s to anywhere, sorry", fromDb);
 
 return choice;
 }
 
-void doConvert(struct liftOverChain *chain)
+char *skipWord(char *s)
+/* Skip word, and any leading spaces before next word. */
+{
+return skipLeadingSpaces(skipToSpaces(s));
+}
+
+long chainTotalBlockSize(struct chain *chain)
+/* Return sum of sizes of all blocks in chain */
+{
+struct cBlock *block;
+long total = 0;
+for (block = chain->blockList; block != NULL; block = block->next)
+    total += block->tEnd - block->tStart;
+return total;
+}
+
+struct chain *chainLoadIntersecting(char *fileName, 
+	char *chrom, int start, int end)
+/* Load the chains that intersect given region. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line;
+int chromNameSize = strlen(chrom);
+struct chain *chainList = NULL, *chain;
+boolean gotChrom = FALSE;
+int chainCount = 0;
+
+while (lineFileNextReal(lf, &line))
+    {
+    lineFileNextReal(lf, &line);
+    if (startsWith("chain", line) && isspace(line[5]))
+        {
+	++chainCount;
+	line = skipWord(line);	/* Skip over 'chain' */
+	line = skipWord(line);	/* Skip over chain score */
+	if (startsWith(chrom, line) && isspace(line[chromNameSize]))
+	    {
+	    gotChrom = TRUE;
+	    lineFileReuse(lf);
+	    chain = chainReadChainLine(lf);
+	    if (rangeIntersection(chain->tStart, chain->tEnd, start, end) > 0)
+		{
+		chainReadBlocks(lf, chain);
+		slAddHead(&chainList, chain);
+		}
+	    else
+	        chainFree(&chain);
+	    }
+	else if (gotChrom)
+	    break;	/* We assume file is sorted by chromosome, so we're done. */
+	}
+    }
+lineFileClose(&lf);
+uglyf("Loaded %d of %d chains<BR>\n", slCount(chainList), chainCount);
+slReverse(&chainList);
+return chainList;
+}
+
+void doConvert(struct liftOverChain *liftOver, char *fromPos)
 /* Actually do the conversion */
 {
-uglyAbort("Sorry, don't really know how to convert yet.");
+char *fileName = liftOverChainFile(liftOver->fromDb, liftOver->toDb);
+char *chrom;
+int start, end;
+int origSize;
+double percentMapping;
+struct chain *chainList, *chain, *subChain, *chainToFree;
+
+if (!hgParseChromRange(fromPos, &chrom, &start, &end))
+    errAbort("position %s is not in chrom:start-end format", fromPos);
+origSize = end - start;
+
+chainList = chainLoadIntersecting(fileName, chrom, start, end);
+uglyf("<BR><BR>\n");
+if (chainList == NULL)
+    printf("Sorry this position couldn't be found in new assembly");
+else
+    {
+    printf("Position of %s in %s:<BR>\n", fromPos, liftOver->toDb);
+    for (chain = chainList; chain != NULL; chain = chain->next)
+        {
+	int blockSize;
+	chainSubsetOnT(chainList, start, end, &subChain, &chainToFree);
+	blockSize = chainTotalBlockSize(subChain);
+	printf("%s:%d-%d",  subChain->qName, subChain->qStart, subChain->qEnd);
+	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
+	    100.0 * blockSize/origSize,  
+	    100.0 * (subChain->tEnd - subChain->tStart) / origSize);
+	}
+    }
 }
 
 void doMiddle(struct cart *theCart)
@@ -216,21 +293,23 @@ void doMiddle(struct cart *theCart)
 {
 char *organism;
 char *db;    
-struct liftOverChain *chainList = NULL, *choice;
+struct liftOverChain *liftOverList = NULL, *choice;
+char *fromPos = cartString(theCart, "position");
 
 cart = theCart;
-cartWebStart(cart, "Convert to New Assembly");
+cartWebStart(cart, "Convert %s to New Assembly", fromPos);
 getDbAndGenome(cart, &db, &organism);
+hSetDb(db);
 
-chainList = liftOverChainList();
-choice = currentLiftOver(chainList, organism, db, 
+liftOverList = liftOverChainList();
+choice = currentLiftOver(liftOverList, organism, db, 
 	cartOptionalString(cart, HGLFT_TOORG_VAR),
 	cartOptionalString(cart, HGLFT_TODB_VAR));
 if (cartVarExists(cart, HGLFT_DO_CONVERT))
-    doConvert(choice);
+    doConvert(choice, fromPos);
 else
-    askForDestination(choice);
-liftOverChainFreeList(&chainList);
+    askForDestination(choice, fromPos);
+liftOverChainFreeList(&liftOverList);
 cartWebEnd();
 }
 
