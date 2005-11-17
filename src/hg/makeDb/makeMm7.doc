@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.22 2005/11/14 08:28:19 markd Exp $"
+#	"$Id: makeMm7.doc,v 1.23 2005/11/17 17:43:01 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1057,7 +1057,65 @@ mm7.mgcTables.mgc = all
 
 
 #########################################################################
-# BLASTZ HUMAN Hg17 (WORKING - 2005-09-16 - 2005-10-04 - Hiram)
+# BLASTZ HUMAN Hg17 second time (WORKING - 2005-11-14 - Hiram)
+    #	After fixing a bug in the lineage specific repeat snip business
+    #	in blastz-run-ucsc script
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzHg17.2005-11-14
+    cd /cluster/data/mm7/bed
+    rm blastz.hg17
+    ln -s blastzHg17.2005-11-14 blastz.hg17
+    cd lastzHg17.2005-11-14
+
+    cat << '_EOF_' > DEF
+# mouse vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_SMSK=/scratch/hg/mm7/linSpecRep/notInHumanDogCow
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+
+# QUERY: Human Hg17 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/gs.18/build35/bothMaskedNibs
+SEQ2_SMSK=/scratch/hg/gs.18/build35/linSpecRep.notInMouse
+SEQ2_LEN=/cluster/bluearc/hg17/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzHg17.2005-11-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=net \
+	`pwd`/DEF > blastz-to-net.out 2>&1 &
+XXXX - Started 2005-11-14 11:15
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=load -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+
+1005565837 bases of 2583394090 (38.924%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -swap -stop=net `pwd`/DEF > swap-to-net.out 2>&1 &
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -swap -continue=load -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+#########################################################################
+# BLASTZ HUMAN Hg17 experiment (DONE - 2005-09-16 - 2005-10-04 - Hiram)
     ssh kkstore02
     #	Create the composite chrom/contigs from randoms 2bit file
     #	for Hg17  ***!!! THIS IS NOT NEEDED  !!!***
@@ -1281,6 +1339,53 @@ doOne ${targetDb} chain${DB0}Link
 doOne ${targetDb} chain${DB1}Link
 '_EOF_'
     # << keep emacs coloring happy
+
+#########################################################################
+# BLASTZ RAT Rn3 second time (WORKING - 2005-11-14 - Hiram)
+    #	After fixing a bug in the lineage specific repeat snip business
+    #	in blastz-run-ucsc script
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzRn3.2005-11-14
+    cd /cluster/data/mm7/bed
+    rm blastz.rn3
+    ln -s blastzRn3.2005-11-14 blastz.rn3
+    cd blastzRn3.2005-11-14
+
+    cat << '_EOF_' > DEF
+# mouse vs rat
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_SMSK=/scratch/hg/mm7/linSpecRep/notInRat
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn3 - chunk big enough to do all chroms in single whole
+pieces
+SEQ2_DIR=/scratch/rat/rn3/softNib
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInMouse
+SEQ2_LEN=/cluster/bluearc/rat/rn3/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzRn3.2005-11-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=load \
+	`pwd`/DEF > to-load.out 2>&1 &
+    #	Started 2005-11-16 09:37
 
 #########################################################################
 # BLASTZ RAT Rn3 (DONE - 2005-09-16 - 2005-10-18 - Hiram)
@@ -1919,6 +2024,96 @@ XXX - STARTED - 2005-10-07 - 12:44
     #   588460684 bases of 2261116798 (26.025%) in intersection
 
     #	looks good, done.
+
+#############################################################################
+# BLASTZ CHICKEN galGal2 - second time - (WORKING - 2005-11-14 - Hiram)
+    #	After fixing a bug in the lineage specific repeat snip business
+    #	in blastz-run-ucsc script
+    ssh kk
+    mkdir /cluster/data/mm7/bed/blastzGalGal2.2005-11-14
+    cd /cluster/data/mm7/bed
+    rm blastz.galGal2
+    ln -s blastzGalGal2.2005-11-14 blastz.galGal2
+    cd blastzGalGal2.2005-11-14
+
+    cat << '_EOF_' > DEF
+# mouse vs. chicken
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin:/cluster/home/angie/schwartzbin
+
+BLASTZ=blastz.v7
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse (mm7)
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_SMSK=/scratch/hg/mm7/linSpecRep/notInChicken
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal2 - single chunk big enough for whole chroms at once
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/scratch/hg/galGal2/chrom.sizes
+SEQ2_SMSK=/scratch/hg/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzGalGal2.2005-11-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk \
+	-stop=net \
+	`pwd`/DEF > blastz-to-net.out 2>&1 &
+    #	Started 2005-11-14 15:03
+# Completed: 16524 of 16524 jobs
+# CPU time in finished jobs:   10883816s  181396.93m  3023.28h  125.97d  0.345 y
+# IO & Wait Time:                259868s    4331.13m    72.19h    3.01d  0.008 y
+# Average job time:                 674s      11.24m     0.19h    0.01d
+# Longest finished job:           10058s     167.63m     2.79h    0.12d
+# Submission to last job:         43463s     724.38m    12.07h    0.50d
+
+# Completed: 306 of 306 jobs
+# CPU time in finished jobs:         33s       0.55m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                  1244s      20.73m     0.35h    0.01d  0.000 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              11s       0.18m     0.00h    0.00d
+# Submission to last job:            82s       1.37m     0.02h    0.00d
+
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:        976s      16.27m     0.27h    0.01d  0.000 y
+# IO & Wait Time:                   229s       3.81m     0.06h    0.00d  0.000 y
+# Average job time:                  30s       0.50m     0.01h    0.00d
+# Longest finished job:              82s       1.37m     0.02h    0.00d
+# Submission to last job:           105s       1.75m     0.03h    0.00d
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk \
+	-continue=net -stop=load \
+	`pwd`/DEF > net-to-load.out 2>&1 &
+
+    #	measurements are looking good:
+    featureBits mm7 chainGalGal2Link
+    #	81103709 bases of 2583394090 (3.139%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk \
+	-swap -stop=load \
+	`pwd`/DEF > swap-to-load.out 2>&1 &
+
+    #	72202388 bases of 1054197620 (6.849%) in intersection
 
 #############################################################################
 # BLASTZ CHICKEN - (DONE - 2005-10-03 - Hiram)
@@ -3119,17 +3314,17 @@ xenopus_xenTro1:0.782453):0.156067,
     #					        featureBits chainLink measures
     #           distance                          on Mm7  chainMm7Link on other
     #  1	0.1587 - rat rn3		(% 69.612)	(% 70.113)
-    #  2	0.4677 - human hg17		(% 37.0)xx      (LSR or not ?)
+    #  2	0.4677 - human hg17		(% 38.924)      (LSR or not ?)
     #  3	0.4686 - chimp panTro1		(% 35.503)	(% 33.283)
     #  4	0.4960 - macaque rheMac1	(% 34.310)	(% 32.422)
-    #  5	0.5131 - rabbit oryCun1		(% 19.492)      (fb running)
-    #  6	0.6142 - armadillo dasNov1	(% 16.975)      (fb running)
-    #  7	0.6230 - dog canFam2		(% 30.654)	(% 32.417)
-    #  8	0.6256 - elephant loxAfr1	(% 18.583)      (fb running)
+    #  5	0.5131 - rabbit oryCun1		(% 19.492)      (% 24.380)
+    #  6	0.6142 - armadillo dasNov1	(% 16.975)      (% 20.607)
+    #  7	0.6230 - dog canFam2		(% 32.610)	(% 32.417)
+    #  8	0.6256 - elephant loxAfr1	(% 18.583)      (% 20.804)
     #  9	0.6344 - cow bosTau2		(% 27.132)	(% 24.448)
-    # 10	0.7805 - tenrec echTel1		(% 11.467)      (fb running)
+    # 10	0.7805 - tenrec echTel1		(% 11.467)      (% 14.361)
     # 11	1.0698 - opossum monDom2	(%  8.501)	(%  6.319)
-    # 12	1.3425 - chicken galGal2	(%  3.135)	(%  6.834)
+    # 12	1.3425 - chicken galGal2	(%  3.139)	(%  6.849)
     # 13	1.7936 - frog xenTro1		(%  2.418)	(%  4.296)
     # 14	2.0157 - tetraodon tetNig1	(%  1.988)	(% 13.846)
     # 15	2.0562 - fugu fr1		(%  1.906)	(% 13.484)
@@ -3349,8 +3544,8 @@ XXXX - running 2005-10-27
     #	real    31m38.754s
     hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 mm7 \
 	multiz17waySummary multiz17way.maf
-    # Processed xx components in xx mafs from multiz17way.maf
-    #	xxm xxs
+    #	Processed 50924730 components in 8995378 mafs from multiz17way.maf
+    #	real    41m2.853s
 
     # create tree image:
     cat << '_EOF_' > species.nh
@@ -7861,7 +8056,64 @@ cut -f 1,3-11 >ensGeneNew.tab
 # 21185 records output 
 
 ###########################################################################
-# BLASTZ/CHAIN/NET CANFAM2 (WORKING - 2005-09-16 - Hiram)
+# BLASTZ canFam2 second time (WORKING - 2005-11-14 Hiram)
+    #	After fixing a bug in the lineage specific repeat snip business
+    #	in blastz-run-ucsc script
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzCanFam2.2005-11-14
+    cd /cluster/data/mm7/bed
+    rm blastz.canFam2
+    ln -s blastzCanFam2.2005-11-14 blastz.canFam2
+    cd blastzCanFam2.2005-11-14
+
+    cat << '_EOF_' > DEF
+# mouse vs dog
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_SMSK=/scratch/hg/mm7/linSpecRep/notInHumanDogCow
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2 - chunk big enough to do all chroms in single whole
+pieces
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInMouse
+SEQ2_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzCanFam2.2005-11-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-stop=net \
+	`pwd`/DEF > blastz-to-net.out 2>&1 &
+XXXX - Started 2005-11-14 14:50
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-continue=load -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+
+    featureBits mm7 chainCanFam2Link
+    #	842454846 bases of 2583394090 (32.610%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -swap -stop=load `pwd`/DEF > swap-to-load.out 2>&1 &
+
+###########################################################################
+# BLASTZ/CHAIN/NET CANFAM2 (DONE - 2005-09-16 - 2005-10-12- Hiram)
     ssh kkstore02
     mkdir /cluster/data/mm7/bed/blastz.canFam2.2005-09-16
     cd /cluster/data/mm7/bed
@@ -8115,12 +8367,21 @@ BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
     HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainLoxAfr1Link
     #	480074381 bases of 2583394090 (18.583%) in intersection
 
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-swap -bigClusterHub=kk \
 	`pwd`/DEF > swap.out 2>&1 &
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=load -swap -bigClusterHub=kk \
 	`pwd`/DEF > load.swap.out 2>&1 &
+
+    ssh hgwdev
+    time featureBits loxAfr1 chainMm7Link
+    #	477557610 bases of 2295548473 (20.804%) in intersection
+    #	real    4536m4.614s
+    #	user    22m50.620s
+    #	sys     9m38.420s
+    #	*!*! NOTE: That is 75.6 hours running time !!!
 
 #############################################################################
 # Tenrec vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8167,6 +8428,14 @@ BASE=/cluster/data/mm7/bed/blastzEchTel1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-swap -bigClusterHub=pk \
 	`pwd`/DEF > swap.out 2>&1 &
+
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits echTel1 \
+	chainMm7Link > fb.echTel1.chainMm7Link 2>&1
+    #	real    3973m1.497s
+    #	user    3m19.311s
+    #	sys     1m24.524s
+    #	That is ~ 66 hours
 
 #############################################################################
 # Rabbit vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8218,6 +8487,14 @@ BASE=/cluster/data/mm7/bed/blastzOryCun1.2005-10-20
 	-continue=load -swap -bigClusterHub=kk \
 	`pwd`/DEF > load.swap.out 2>&1 &
 
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits oryCun1 \
+	chainMm7Link >fb.oryCun1.chainMm7Link 2>&1
+    #	real    7258m58.416s
+    #	user    3m38.961s
+    #	sys     1m41.555s
+    #	That is ~ 121 Hours !
+
 #############################################################################
 # Armadillo vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
@@ -8267,6 +8544,13 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
 	-continue=net -swap -bigClusterHub=pk \
 	`pwd`/DEF > swap.net.out 2>&1 &
 
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only featureBits dasNov1 \
+	chainMm7Link > fb.dasNov1.chainMm7Link 2>&1
+    #	real    8229m16.489s
+    #	user    2m56.146s
+    #	sys     1m20.550s
+    #	That is ~ 137 hours
 
 #############################################################################
 # Create Allen Brain Atlas mapping. (In progress 25 Oct 2005 JK)
