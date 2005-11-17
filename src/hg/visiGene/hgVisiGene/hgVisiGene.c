@@ -330,6 +330,7 @@ void doControls(struct sqlConnection *conn)
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *selected = NULL;
 htmlSetBgColor(0xD0FFE0);
+htmlSetStyle(htmlStyleUndecoratedLink);
 htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
@@ -350,6 +351,7 @@ printf(
 " onclick=\"parent.image.bigImg.zoomer('fit');return false;\"> "
 "\n");
 
+printf("&nbsp;&nbsp;&nbsp;<A HREF=\"/index.html\" class=\"leftbar\" target=\"_parent\">UCSC Home</A>");
 printf("</FORM>\n");
 htmlEnd();
 }
