@@ -40,7 +40,7 @@ int badGroupCount = 0;  /* count of inconsistent groups found */
 
 
 /* header for info file */
-static char *infoHeader = "#transId\tgeneId\tsource\tseq\tstart\tend\tstrand\n";
+static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\n";
 
 static void writeInfo(FILE *infoFh, struct gffGroup *group)
 /* write a row for a GTF group from the info file */
