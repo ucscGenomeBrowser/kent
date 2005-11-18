@@ -98,7 +98,7 @@ hgsid on
 
 name allenBrainAtlas
 shortLabel Allen Brain
-longLabel Allen Brain Atlas In-Situ Images of Adult Mouse Brains
+longLabel Allen Brain Atlas In Situ Images of Adult Mouse Brains
 priority 2.602
 visibility off
 type association knownToAllenBrain allenBrainUrl
