@@ -740,7 +740,6 @@ altColor 180,128,32
 autoScale Off
 
     track encodeUCDavisE2F1Median
-    release alpha
     subTrack encodeUCDavisChip
     shortLabel UCD E2F1
     longLabel UC Davis ChIP/Chip NimbleGen (E2F1 ab, HeLa Cells)
@@ -748,7 +747,6 @@ autoScale Off
     dataVersion ENCODE June 2005 Freeze
 
     track encodeUCDavisChipMyc
-    release alpha
     subTrack encodeUCDavisChip
     shortLabel UCD C-Myc
     longLabel UC Davis ChIP/Chip NimbleGen (C-Myc ab, HeLa Cells)
