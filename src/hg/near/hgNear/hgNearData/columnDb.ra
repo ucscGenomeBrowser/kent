@@ -86,9 +86,9 @@ visibility off
 type lookup knownToHInv name value
 search prefix
 
-name VisiGene
+name visigene
 shortLabel VisiGene
-longLabel UCSC VisiGene in-situ image browser
+longLabel UCSC VisiGene In Situ Image Browser
 priority 2.601
 visibility off
 type lookup knownToVisiGene name value
@@ -109,7 +109,7 @@ itemUrl %s
 
 name nibbImageProbes
 shortLabel NIBB Xenopus
-longLabel Probes for NIBB In-Situ Images of Xenopus Laevis Embryos
+longLabel Probes for NIBB In Situ Images of Xenopus Laevis Embryos
 priority 2.603
 visibility off
 type association knownToNibbImage
@@ -338,7 +338,7 @@ goaIdColumn dbObjectSymbol
 
 name description
 shortLabel Description
-longLabel Short description Line/Link to Details Page
+longLabel Short Description Line/Link to Details Page
 priority 20
 visibility on
 type knownDetails kgXref kgID description
