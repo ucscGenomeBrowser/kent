@@ -102,8 +102,8 @@ pfamXref
     hgsql proteins051015 -e 'CREATE INDEX displayID ON spXref2(displayID(24))'
     hgsql proteins051015 -e 'CREATE INDEX extAC ON spXref2(extAC(24))'
 
-    hgsql proteins051015 -e 'CREATE INDEX ii2 ON spXref3(displayID(12))'
-    hgsql proteins051015 -e 'CREATE INDEX ii3 ON spXref3(hugoSymbol(12))'
+#    hgsql proteins051015 -e 'CREATE INDEX ii2 ON spXref3(displayID(12))'
+#    hgsql proteins051015 -e 'CREATE INDEX ii3 ON spXref3(hugoSymbol(12))'
 
 # Add variant splice protein data into sp051015 tables.
 
