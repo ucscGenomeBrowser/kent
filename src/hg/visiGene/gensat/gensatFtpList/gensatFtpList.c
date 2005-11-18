@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpList.c,v 1.1 2005/11/18 04:20:47 kent Exp $";
+static char const rcsid[] = "$Id: gensatFtpList.c,v 1.2 2005/11/18 04:21:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +38,8 @@ char *fixName(char *name, struct lineFile *lf)
  *   StJude_2004Aug31_rep2/g00005/g00005_sj_g44_142_ads.jpg
  * to something that looks like:
  *   StJude_2004Aug31_rep2/g00005/g00005_sj_g44_142_ads.jpg
- * This will consume name, converting it in place. */
+ * This will consume name, converting it in place. 
+ * Some of the input names may already be in the correct format. */
 {
 /* Essentially all we do is look for three letter month,
  * and replace it with two letter number. */
