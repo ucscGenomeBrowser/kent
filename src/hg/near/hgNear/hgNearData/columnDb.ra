@@ -86,8 +86,8 @@ visibility off
 type lookup knownToHInv name value
 search prefix
 
-name visiGene
-shortLabel visiGene
+name VisiGene
+shortLabel VisiGene
 longLabel UCSC VisiGene in-situ image browser
 priority 2.601
 visibility off
