@@ -1714,6 +1714,8 @@ chainPreNet danRer3.mm6.all.chain.gz /cluster/data/mm6/bed/blastz.danRer3/S2.len
 
 # BLASTZ FOR FUGU (fr1) (DONE, 2005-08-18, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+# RECREATE DOWNLOADS AS THE FUGU DOWNLOADS DIRECTORY HAS BEEN DELETED
+# (DONE, 2005-11-17, hartera)
   ssh kk
   mkdir /cluster/data/danRer3/bed/blastz.fr1.2005-08-13
   cd /cluster/data/danRer3/bed
@@ -1987,6 +1989,16 @@ SEQ2_LEN=$BASE/S2.len
 # featureBits -chrom=chrNA danRer2 refGene:cds chainFr1Link -enrichment
 # refGene:cds 0.499%, chainFr1Link 3.901%, both 0.409%, cover 81.90%, 
 # enrich 20.99x
+    # Run directory files are already on /cluster/data. Remake downloads
+    # for fugu alignments since these have been removed from
+    # the downloads directory. (hartera, 2005-11-17)
+    ssh hgwdev 
+    # remake downloads using doBlastzChainNet.pl script
+    cd /cluster/data/danRer3/bed/blastz.fr1
+    nice /cluster/bin/scripts/doBlastzChainNet.pl \
+        -continue download -stop download `pwd`/DEF >& doDownload.log &
+    # Check README in downloads section and add a note about how the 
+    # unordered chroms were split up into scaffolds.
 
 # VEGA
     # get transcripts in transcripts_coords from e-mail from Mario Caccamo
@@ -3659,6 +3671,9 @@ close MARKERS;
    # All data looks good in these tables now.
 
 # BLASTZ TETRAODON (tetNig1) (DONE, 2005-10-20, hartera)
+# REMADE DOWNLOADS FOR net, all.chain AND over.chain AS THEY HAD BEEN DELETED.
+# MOVE ALL THE RUN FILES AND OUTPUT FROM THE SAN RUN DIRECTORY TO A DIRECTORY
+# ON /cluster/data AS THIS IS MORE PERMANENT. (DONE, 2005-11-17, hartera).
     # Tetraodon is quite distant from zebrafish, more distant than human/chicken
     # so use the HoxD55.q matrix for the Blastz alignments.
     # Blastz requires lineage-specific repeats but there are none
@@ -3967,6 +3982,51 @@ TMPDIR=/scratch/tmp
 # enrich 18.56x
 # so better coverage for danRer3 but less enrichment than for danRer2.
 
+# Make the download files for all.chain, over.chain and net again as these
+# files have been removed. Put the files on /cluster/data rather than the 
+# san so that they are not moved again. (hartera, 2005-11-17)
+    ssh kolossus
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun/axtChain
+    chainMergeSort ./run/chain/*.chain | nice gzip -c \
+                   > danRer3.tetNig1.all.chain.gz
+    # copy over.chain file from bedOver directory to axtChain directory
+    cp /cluster/data/danRer3/bed/bedOver/danRer3.tetNig1.over.chain.gz \
+       /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun/axtChain/
+    # recreate net file
+    # make noClass.net
+    #Make nets ("noClass", i.e. without rmsk/class stats which are added later) 
+    chainPreNet danRer3.tetNig1.all.chain.gz ../S1.len ../S2.len \
+         stdout | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout \
+         /dev/null | netSyntenic stdin noClass.net 
+    # memory usage 251383808, utime 562 s/100, stime 41
+    # create net file 
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun/axtChain
+    netClass -verbose=0 -noAr noClass.net danRer3 tetNig1 danRer3.tetNig1.net
+    # compress net file
+    gzip danRer3.tetNig1.net
+
+    # Move these files to /cluster/data and remake download links as the 
+    # san is not a permanent storage space.
+    mv /san/sanvol1/scratch/danRer3/blastzTetNig1/chromsAndScafsRun \
+       /cluster/data/danRer3/bed/blastz.tetNig1/
+    # Then change the symlinks in the downloads directory to point to the files
+    # on /cluster/data
+    cd /usr/local/apache/htdocs/goldenPath/danRer3/vsTetNig1/axtNet
+    set runDir=/cluster/data/danRer3/bed/blastz.tetNig1/chromsAndScafsRun
+    rm *.gz
+    foreach f ($runDir/axtNet/*.axt.gz)
+      ln -s $f .
+    end
+    cd ..
+    rm *.gz
+    foreach f ($runDir/axtChain/*.gz)
+      ln -s $f
+    end
+    # remake the md5sum file
+    rm md5sum.txt
+    md5sum *.gz */*.gz > md5sum.txt
+    
     # Test Runs for chr2 and chrUn
     cd /cluster/data/danRer3/bed/blastz.tetNig1
     mkdir -p /san/sanvol1/scratch/danRer3/blastzTetNig1/chrUnand2Run
@@ -4191,6 +4251,8 @@ chrUn	56259		56360
 # seems to increase the number of higher scoring chains.
 
 # BLASTZ, CHAIN AND NET FOR OPOSSUM (monDom2) (DONE, 2005-10-18, hartera)
+# MOVE ALL THE RUN FILES AND OUTPUT FROM THE SAN RUN DIRECTORY TO A DIRECTORY
+# ON /cluster/data AS THIS IS MORE PERMANENT. (DONE, 2005-11-17, hartera).
     ssh kkstore02
     mkdir -p /cluster/data/danRer3/bed/blastz.monDom2.2005-10-07
     cd /cluster/data/danRer3/bed
@@ -4349,7 +4411,28 @@ TMPDIR=/scratch/tmp
 # of running blastz with scaffolds for the chrUn and chrNA unordered chroms.
 # Finally run the swap for this to get danRer3 chains and net tracks 
 # on monDom2 - see makeMonDom2.doc. 
-   
+    # Move the run directory files to /cluster/data and remake download links
+    # as the san is not a permanent storage space (hartera, 2005-11-17)
+    ssh hgwdev 
+    mv /san/sanvol1/scratch/danRer3/blastzMonDom2/chromsAndScafsRun \
+       /cluster/data/danRer3/bed/blastz.monDom2/
+    # then change the symlinks in the downloads directory to point to the files
+    # on /cluster/data
+    cd /usr/local/apache/htdocs/goldenPath/danRer3/vsMonDom2/axtNet
+    set runDir=/cluster/data/danRer3/bed/blastz.monDom2/chromsAndScafsRun
+    rm *.gz
+    foreach f ($runDir/axtNet/*.axt.gz)
+      ln -s $f .
+    end
+    cd ..
+    rm *.gz
+    foreach f ($runDir/axtChain/*.gz)
+      ln -s $f
+    end
+    # remake the md5sum file
+    rm md5sum.txt
+    md5sum *.gz */*.gz > md5sum.txt
+    
 # RADIATION HYBRID (RH) MAP TRACK (in progress, 2005-09-06, hartera)
     # Data from Leonard Zon's lab at the Childrens Hospital, Boston
     # Provided by Anhua Song: asong@enders.tch.harvard.edu
@@ -4589,6 +4672,89 @@ close STDERR;
 # Longest finished job:            1369s      22.82m     0.38h    0.02d
 # Submission to last job:          3150s      52.50m     0.88h    0.04d
 
+# SELF BLASTZ (in progress, 2005-10-24, hartera)
+    ssh pk
+    mkdir -p /cluster/data/danRer3/bed/blastzSelf.2005-10-24
+    cd /cluster/data/danRer3/bed
+    ln -s blastzSelf.2005-10-24 blastzSelf
+    cd /cluster/data/danRer3/bed/blastzSelf
+    # make run and out directories on the san
+    mkdir -p /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsRun
+    mkdir -p /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsOut
+    ln -s /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsRun
+    ln -s /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsOut
+    cat << '_EOF_' > DEF
+# zebrafish vs zebrafish
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+                                                                                
+BLASTZ=blastz.v7.x86_64
+BLASTZ_L=5000
+BLASTZ_H=2500
+BLASTZ_M=50
+BLASTZ_ABRIDGE_REPEATS=0
+                                                                                
+# TARGET: Zebrafish danRer3
+SEQ1_DIR=/san/sanvol1/scratch/danRer3/danRer3.2bit
+SEQ1_CTGDIR=/san/sanvol1/scratch/danRer3/nib
+SEQ1_IN_CONTIGS=0
+SEQ1_LIMIT=30
+SEQ1_CHUNK=500000
+SEQ1_LAP=5000
+                                                                                
+# QUERY: Zebrafish danRer3
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/danRer3.2bit
+SEQ2_CTGDIR=/san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/danRer3/liftNAandUnScaffoldsToChrom.lft
+SEQ2_SELF=1
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=1800000000
+SEQ2_LAP=0
+
+BASE=/san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsRun
+                                                                                
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=$BASE/S1.len
+SEQ2_LEN=$BASE/S2.len
+SEQ2_CTGLEN=$BASE/chromsUnNAScafs.len
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    chmod +x DEF
+    cat /cluster/data/danRer3/chrom.sizes | sort -k2,2nr > S1.len
+    twoBitInfo /san/sanvol1/scratch/danRer3/danRer3.2bit stdout \
+        | sort -k2,2nr > S2.len
+    twoBitInfo /san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit stdout \
+        | sort -k2,2nr > chromsUnNAScafs.len
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastzSelf/chromsAndScafsRun
+    nice /cluster/bin/scripts/doBlastzChainNet.pl \
+         -bigClusterHub=pk \
+         -smallClusterHub=pk \
+         -workhorse=pk \
+         -fileServer=kolossus \
+         -stop cat \
+         `pwd`/DEF >& doBlastzCat.log &
+    # Start: Mon Oct 24 11:32 Finish: Oct 24 23:47
+# para time (blastz)
+# Completed: 3302 of 3302 jobs
+# CPU time in finished jobs:    9072436s  151207.27m  2520.12h  105.01d  0.288 y
+# IO & Wait Time:                855446s   14257.43m   237.62h    9.90d  0.027 y
+# Average job time:                3007s      50.11m     0.84h    0.03d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            4315s      71.92m     1.20h    0.05d
+# Submission to last job:         43798s     729.97m    12.17h    0.51d 
+    # All worked fine so carry on with chaining and netting.
+    nice /cluster/bin/scripts/doBlastzChainNet.pl \
+         -bigClusterHub=pk \
+         -smallClusterHub=pk \
+         -workhorse=pk \
+         -fileServer=kolossus \
+         -continue chainRun \
+         -chainMinScore=5000 \
+         `pwd`/DEF >& doChainNet.log &
+    # Start: Tue Oct 25 14:27 Finished: 05:55
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
     ssh kkstore02
