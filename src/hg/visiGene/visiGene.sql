@@ -55,7 +55,8 @@ CREATE TABLE fixation (
     id int auto_increment not null,	# ID of fixation
     description varchar(255) not null,	# Text string describing fixation
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(description(8))
 );
 
 #Embedding media for slices - paraffin, etc.
@@ -63,7 +64,8 @@ CREATE TABLE embedding (
     id int auto_increment not null,	# ID of embedding
     description varchar(255) not null,	# Text string describing embedding
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(description(8))
 );
 
 #Permeablization conditions
@@ -71,7 +73,8 @@ CREATE TABLE permeablization (
     id int auto_increment not null,	# ID of treatment
     description varchar(255) not null,	# Text string describing conditions
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(description(8))
 );
 
 #Info on contributor
@@ -98,7 +101,8 @@ CREATE TABLE copyright (
     id int auto_increment not null,	# ID of copyright
     notice longblob not null,	# Text of copyright notice
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(notice(26))
 );
 
 # Source of data - an external database, a contributor, etc.
@@ -249,7 +253,8 @@ CREATE TABLE preparation (
     sliceType int not null,	# How it was sliced
     notes longblob not null,	# Any other notes on preparation
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(fixation,embedding,permeablization,sliceType)
 );
 
 #Type of probe - RNA, antibody, etc.
@@ -280,7 +285,8 @@ CREATE TABLE probeColor (
     id int auto_increment not null,	# Id of color
     name varchar(255) not null,	# Color name
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(name(8))
 );
 
 # An image caption.  Does not contain tabs or newlines, may have html tags
@@ -288,7 +294,8 @@ CREATE TABLE caption (
     id int auto_increment not null,	# Id of caption
     caption longtext not null,	# Caption text
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    INDEX(caption(24))
 );
     
 
