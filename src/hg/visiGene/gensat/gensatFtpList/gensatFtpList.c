@@ -1,16 +1,18 @@
-/* gensatFtpList - Given CHECKSUM.MD5 file with the file names munged, convert to names can actually download from ftp.ncbi.nlm.gov/pub/gensat. */
+/* gensatFtpList - Given CHECKSUM.MD5 file with the file names munged, 
+ * convert to names can actually download from ftp.ncbi.nlm.gov/pub/gensat. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpList.c,v 1.2 2005/11/18 04:21:28 kent Exp $";
+static char const rcsid[] = "$Id: gensatFtpList.c,v 1.3 2005/11/18 04:22:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gensatFtpList - Given CHECKSUM.MD5 file with the file names munged, convert to names can actually download from ftp.ncbi.nlm.gov/pub/gensat\n"
+  "gensatFtpList - Given CHECKSUM.MD5 file with the file names munged,\n"
+  "convert to names can actually download from ftp.ncbi.nlm.gov/pub/gensat\n"
   "usage:\n"
   "   gensatFtpList in.md5 out.md5\n"
   "options:\n"
