@@ -88,6 +88,7 @@ DIRS = \
 	findMotif \
 	fixCr \
 	gffPeek \
+	gtfToGenePred \
 	htmlPics \
 	htmlCheck \
 	jkUniq \
