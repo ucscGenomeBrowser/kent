@@ -143,7 +143,7 @@ type distance humanNormalDistance query target distance
 
 name gladHumES
 shortLabel Gladstone Expr
-longLabel Gladstone microarray data including stem cell tissue
+longLabel Gladstone Microarray Data Including Stem Cell Tissue
 priority 3.60
 visibility off
 type expMulti knownToGnfAtlas2
@@ -155,35 +155,35 @@ absoluteMax 100
 
 name gladHumESDistance
 shortLabel Gladstone Dist
-longLabel Normalized Difference in Gladstone microarray data from selected gene
+longLabel Normalized Difference in Gladstone Microarray Data from Selected Gene
 priority 3.61
 visibility off
 type distance gladHumESDistance query target distance
 
 name gladHumESTissueQ
 shortLabel Gladstone Tiss
-longLabel Tissue associated with selected gene's Q-value
+longLabel Tissue Associated with Selected Gene's Q-value
 priority 3.62
 visibility off
 type lookup gladHumESOtherData name tissueQ
 
 name gladHumESQval
 shortLabel Gladstone Q
-longLabel Q-value for selected gene
+longLabel Q-value for Selected Gene
 priority 3.63
 visibility off
 type float gladHumESOtherData name qVal
 
 name gladHumESHval
 shortLabel Gladstone H
-longLabel H-value for selected gene
+longLabel H-value for Selected Gene
 priority 3.64
 visibility off
 type float gladHumESOtherData name hVal
 
 name phastOdds
 shortLabel phastOdds
-longLabel phastOdds DNA conservation score (CDS) for selected gene
+longLabel phastOdds DNA Conservation Score (CDS) for Selected Gene
 priority 4.0
 visibility off
 type float phastOdds name score
