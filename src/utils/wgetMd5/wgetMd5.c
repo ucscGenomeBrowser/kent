@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: wgetMd5.c,v 1.2 2005/11/18 06:47:35 kent Exp $";
+static char const rcsid[] = "$Id: wgetMd5.c,v 1.3 2005/11/18 16:37:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,8 +21,8 @@ errAbort(
   "options:\n"
   "   -tmp=XXX - Use this temporary file instead of default wgetMd5.tmp\n"
   "   -md5tmp=XXX - Use this temporary file instead of default wgetMd5.md5\n"
-  "   -maxErrs=N - Maximum errors allowed before aborting, devault 100\n"
-  "   -verbose=N - Set stderr verbosity:  0 none, 1 status, 2 debug\n");
+  "   -maxErrs=N - Maximum errors allowed before aborting, default 100\n"
+  "   -verbose=N - Set stderr verbosity:  0 quiet, 1 status, 2 debug\n");
 }
 
 char *tmpName = "wgetMd5.tmp";
