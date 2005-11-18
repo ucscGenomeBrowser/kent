@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.24 2005/11/17 23:32:52 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.25 2005/11/18 18:06:14 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -718,7 +718,56 @@ done
     cp -p nib/*.nib /cluster/bluearc/mm7/nib
 
 #############################################################################
-# BLASTZ SELF (WORKING - 2005-09-14 - Hiram)
+# BLASTZ SELF experiment 3 (WORKING - 2005-11-17 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzSelf.2005-11-17
+    cd /cluster/data/mm7/bed/blastzSelf.2005-11-17
+
+    cat << '_EOF_' > DEF
+# mouse vs mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CTGDIR=/scratch/hg/mm7/mm7Chroms_RandomContigs.2bit
+SEQ1_CTGLEN=/scratch/hg/mm7/mm7Chroms_RandomContigs.sizes
+SEQ1_LIFT=/scratch/hg/mm7/Chroms_RandomContigs.lft
+SEQ1_LIMIT=30
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm7
+SEQ2_DIR=/scratch/hg/mm7/nib
+SEQ2_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ2_CTGDIR=/scratch/hg/mm7/mm7Chroms_RandomContigs.2bit
+SEQ2_CTGLEN=/scratch/hg/mm7/mm7Chroms_RandomContigs.sizes
+SEQ2_LIFT=/scratch/hg/mm7/Chroms_RandomContigs.lft
+SEQ2_SELF=1
+SEQ2_LIMIT=30
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzSelf.2005-11-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/mm7/bed/blastzSelf.2005-11-17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-stop=net \
+	`pwd`/DEF > blastz.out 2>&1 &
+XXXX - Started 2005-11-17
+
+#############################################################################
+# BLASTZ SELF experiment 1 (DONE - 2005-09-14 - 2005-09-17 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzSelf
     cd /cluster/data/mm7/bed/blastzSelf
@@ -1114,6 +1163,25 @@ XXXX - Started 2005-11-14 11:15
 	-bigClusterHub=pk -swap -continue=load -stop=load \
 	`pwd`/DEF > swap-load.out 2>&1 &
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzHg17.2005-11-14
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzHg17.2005-11-14
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+
 #########################################################################
 # BLASTZ HUMAN Hg17 experiment (DONE - 2005-09-16 - 2005-10-04 - Hiram)
     ssh kkstore02
@@ -1387,6 +1455,35 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > to-load.out 2>&1 &
     #	Started 2005-11-16 09:37
 
+    ssh kolossus
+    cd /cluster/data/mm7/bed/blastzRn3.2005-11-14
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 chainRn3Link > \
+	fb.mm7.chainRn3Link
+    #	1779807900 bases of 2583394090 (68.894%) in intersection
+    #	real    65m22.546s
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk \
+	-swap -stop=load \
+	`pwd`/DEF > swap-to-load.out 2>&1 &
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzRn3.2005-09-16
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzRn3.2005-09-16
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+    
 #########################################################################
 # BLASTZ RAT Rn3 (DONE - 2005-09-16 - 2005-10-18 - Hiram)
     ssh kkstore02
@@ -1603,6 +1700,24 @@ BASE=/cluster/data/mm7/bed/blastzFr1.2005-09-16
     featureBits fr1 chainMm6
     #   160874127 bases of 315518167 (50.987%) in intersection
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzFr1.2005-09-16
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzFr1.2005-09-16
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    #	real    403m27.362s
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (DONE - 2005-09-20 - 2005-10-11 - Hiram)
     ssh pk
@@ -1763,6 +1878,24 @@ doOne tetNig1 chainMm5Link
     #   55282376 bases of 342403326 (16.145%) in intersection
     featureBits tetNig1 chainMm5Link
     #   41736750 bases of 342403326 (12.189%) in intersection
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzTetNig1.2005-09-20
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzTetNig1.2005-09-20
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    #	real    155m15.610s
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1
  
 #########################################################################
 # CPGISLANDS (DONE - 2005-09-20 - Hiram)
@@ -2025,6 +2158,28 @@ XXX - STARTED - 2005-10-07 - 12:44
 
     #	looks good, done.
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzBosTau2.2005-09-20
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzBosTau2.2005-09-20
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=net -stop=load \
+	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
+
 #############################################################################
 # BLASTZ CHICKEN galGal2 - second time - (WORKING - 2005-11-14 - Hiram)
     #	After fixing a bug in the lineage specific repeat snip business
@@ -2114,6 +2269,26 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > swap-to-load.out 2>&1 &
 
     #	72202388 bases of 1054197620 (6.849%) in intersection
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzGalGal2.2005-11-14
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzGalGal2.2005-11-14
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    #	real    72m11.827s
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+    #	real    13m42.163s
 
 #############################################################################
 # BLASTZ CHICKEN - (DONE - 2005-10-03 - Hiram)
@@ -2376,6 +2551,24 @@ XXXX  2005-10-04 09:25
 
     #	looks OK, done
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzMonDom2.2005-10-03
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzMonDom2.2005-10-03
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
 ##############################################################################
 # BLASTZ FROG Xenopus tropicalis (WORKING - 2005-10-03 - Hiram)
     ssh pk
@@ -2487,6 +2680,24 @@ XXXX
     featureBits xenTro1 chainMm5Link
     #   76415718 bases of 1381238994 (5.532%) in intersection
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzXenTro1.2005-10-03
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzXenTro1.2005-10-03
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    #	real    101m3.953s
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+    
 #############################################################################
 # BLASTZ CHIMP PanTro1 (WORKING - 2005-10-04 - Hiram)
     ssh kkstore03
@@ -2702,6 +2913,25 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
     #	Appears to be reasonable, check the genome-test browser on both
     #	the Mm6 assembly and the PanTro1 assembly to see if the net and
     #	chain tracks appear and are in the proper order.
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzPanTro1.2005-10-05
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzPanTro1.2005-10-05
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+    
 
 #############################################################################
 # STS MARKERS DATA DOWNLOAD (DONE - 2005-09-29 - 2005-10-07 - Hiram)
@@ -3311,24 +3541,25 @@ xenopus_xenTro1:0.782453):0.156067,
     #	And if you can fill in the table below entirely, you have
     #	succeeded in finishing all the alignments required.
     #
-    #					        featureBits chainLink measures
-    #           distance                          on Mm7  chainMm7Link on other
-    #  1	0.1587 - rat rn3		(% 69.612)	(% 70.113)
-    #  2	0.4677 - human hg17		(% 38.924)      (LSR or not ?)
-    #  3	0.4686 - chimp panTro1		(% 35.503)	(% 33.283)
-    #  4	0.4960 - macaque rheMac1	(% 34.310)	(% 32.422)
-    #  5	0.5131 - rabbit oryCun1		(% 19.492)      (% 24.380)
-    #  6	0.6142 - armadillo dasNov1	(% 16.975)      (% 20.607)
-    #  7	0.6230 - dog canFam2		(% 32.610)	(% 32.417)
-    #  8	0.6256 - elephant loxAfr1	(% 18.583)      (% 20.804)
-    #  9	0.6344 - cow bosTau2		(% 27.132)	(% 24.448)
-    # 10	0.7805 - tenrec echTel1		(% 11.467)      (% 14.361)
-    # 11	1.0698 - opossum monDom2	(%  8.501)	(%  6.319)
-    # 12	1.3425 - chicken galGal2	(%  3.139)	(%  6.849)
-    # 13	1.7936 - frog xenTro1		(%  2.418)	(%  4.296)
-    # 14	2.0157 - tetraodon tetNig1	(%  1.988)	(% 13.846)
-    # 15	2.0562 - fugu fr1		(%  1.906)	(% 13.484)
-    # 16	2.1059 - zebrafish danRer3	(%  2.694)	(%  2.694)
+#                         featureBits chainLink measures
+#                                           chainMm7Link   chain   linearGap
+#    distance                       on Mm7      on other   minScore
+#  1  0.1587 - rat rn3            (% 69.612)  (% 70.113)   3000     medium
+#  2  0.4677 - human hg17         (% 38.924)  (% 35.034)   3000     medium
+#  3  0.4686 - chimp panTro1      (% 35.503)  (% 33.283)   3000     medium
+#  4  0.4960 - macaque rheMac1    (% 34.310)  (% 32.422)   3000     medium
+#  5  0.5131 - rabbit oryCun1     (% 19.492)  (% 24.380)   3000     medium
+#  6  0.6142 - armadillo dasNov1  (% 16.975)  (% 20.607)   3000     medium
+#  7  0.6230 - dog canFam2        (% 32.610)  (% 32.417)   3000     medium
+#  8  0.6256 - elephant loxAfr1   (% 18.583)  (% 20.804)   3000     medium
+#  9  0.6344 - cow bosTau2        (% 27.132)  (% 24.448)   3000     medium
+# 10  0.7805 - tenrec echTel1     (% 11.467)  (% 14.361)   5000     loose
+# 11  1.0698 - opossum monDom2    (%  8.501)  (%  6.319)   5000     loose
+# 12  1.3425 - chicken galGal2    (%  3.139)  (%  6.849)   5000     loose
+# 13  1.7936 - frog xenTro1       (%  2.418)  (%  4.296)   5000     loose
+# 14  2.0157 - tetraodon tetNig1  (%  1.988)  (% 13.846)   5000     loose
+# 15  2.0562 - fugu fr1           (%  1.906)  (% 13.484)   5000     loose
+# 16  2.1059 - zebrafish danRer3  (%  2.694)  (%  2.694)   5000     loose
 
     export H=/cluster/data/mm7/bed
     mkdir mafLinks
@@ -7774,6 +8005,7 @@ _EOF_
 # Load the sequences.  PLEASE NOTE THE "-replace" OPTION SHOULD BE USED!!!   
     hgLoadSeq -replace mm7 /gbdb/mm7/NIAGene/T-fasta.fa
 
+############################################################################
 # BLASTZ ZEBRAFISH (danRer3) (WORKING - 2005-09-19 - Hiram)
     #	Create a single 2bit file that has the full chroms and the
     #	random contigs from chrUn and chrNA
@@ -7882,6 +8114,24 @@ XXX - Started - 2005-10-07 12:13
     #	71277532 bases of 1630323462 (4.372%) in intersectio
     time featureBits danRer2 chainMm6Link
     #	176391894 bases of 1560497282 (11.304%) in intersection
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzDanRer3.2005-09-19
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzDanRer3.2005-09-19
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    #	real    186m35.984s
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
 ###########################################################################
 #### LOAD ENSEMBL GENES (TBD)
@@ -8112,6 +8362,24 @@ XXXX - Started 2005-11-14 14:50
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -swap -stop=load `pwd`/DEF > swap-to-load.out 2>&1 &
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzCanFam2.2005-11-14
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzCanFam2.2005-11-14
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
 ###########################################################################
 # BLASTZ/CHAIN/NET CANFAM2 (DONE - 2005-09-16 - 2005-10-12- Hiram)
     ssh kkstore02
@@ -8325,6 +8593,24 @@ BASE=/cluster/data/mm7/bed/blastzRheMac1.2005-10-19
 	-swap -bigClusterHub=kk \
 	`pwd`/DEF > swap.out 2>&1 &
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzRheMac1.2005-10-19
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzRheMac1.2005-10-19
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+
 #############################################################################
 # Elephant vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
@@ -8383,6 +8669,24 @@ BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
     #	sys     9m38.420s
     #	*!*! NOTE: That is 75.6 hours running time !!!
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
 #############################################################################
 # Tenrec vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
@@ -8436,6 +8740,24 @@ BASE=/cluster/data/mm7/bed/blastzEchTel1.2005-10-20
     #	user    3m19.311s
     #	sys     1m24.524s
     #	That is ~ 66 hours
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzEchTel1.2005-10-20
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzEchTel1.2005-10-20
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
 #############################################################################
 # Rabbit vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8495,6 +8817,24 @@ BASE=/cluster/data/mm7/bed/blastzOryCun1.2005-10-20
     #	sys     1m41.555s
     #	That is ~ 121 Hours !
 
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzOryCun1.2005-10-20
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzOryCun1.2005-10-20
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+    #	real    101m1.441s
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
 #############################################################################
 # Armadillo vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
@@ -8551,6 +8891,24 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
     #	user    2m56.146s
     #	sys     1m20.550s
     #	That is ~ 137 hours
+
+    #	re-scoring the chains
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blastzDasNov1.2005-10-20
+    rm -fr axtNet mafNet axtChain
+
+    ssh pk
+    cd /cluster/data/mm7/bed/blastzDasNov1.2005-10-20
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun -stop=load \
+	`pwd`/DEF > rescoreChain.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
 #############################################################################
 # Create Allen Brain Atlas mapping. (In progress 25 Oct 2005 JK)
@@ -10343,4 +10701,3 @@ nice make loadDb
 # need to do a make sanClean after track verified
 
 ############################################################################
-
