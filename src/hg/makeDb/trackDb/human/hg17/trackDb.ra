@@ -727,7 +727,7 @@ track encodeUCDavisChip
 release alpha
 compositeTrack on
 shortLabel UCD Ng ChIP
-longLabel UC Davis ChIP/Chip NimbleGen - E2F1, Myc ab, HeLa Cells
+longLabel UC Davis ChIP/Chip NimbleGen (E2F1, Myc ab, HeLa Cells)
 group encodeChip
 priority 56.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -744,7 +744,7 @@ autoScale Off
     release alpha
     subTrack encodeUCDavisChip
     shortLabel UCD E2F1
-    longLabel UC Davis ChIP/Chip NimbleGen - E2F1 ab, HeLa Cells
+    longLabel UC Davis ChIP/Chip NimbleGen (E2F1 ab, HeLa Cells)
     priority 1
     dataVersion ENCODE June 2005 Freeze
 
@@ -752,14 +752,14 @@ autoScale Off
     release alpha
     subTrack encodeUCDavisChip
     shortLabel UCD C-Myc
-    longLabel UC Davis ChIP/Chip NimbleGen - C-Myc ab, HeLa Cells
+    longLabel UC Davis ChIP/Chip NimbleGen (C-Myc ab, HeLa Cells)
     priority 2
     dataVersion ENCODE Oct 2005 Freeze
 
 track encodeUCDavisE2F1Median
 release beta
 shortLabel UCD Ng E2F1
-longLabel UC Davis ChIP/Chip NimbleGen - E2F1 ab, HeLa Cells
+longLabel UC Davis ChIP/Chip NimbleGen (E2F1 ab, HeLa Cells)
 group encodeChip
 priority 56.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -979,7 +979,7 @@ track encodeYaleChIPSTAT1Pval
 release alpha
 compositeTrack on
 shortLabel Yale STAT1 pVal
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, P-Values)
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) P-Value
 group encodeChip
 priority 65.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -998,7 +998,7 @@ track encodeYaleChIPSTAT1Pval
 release beta
 compositeTrack on
 shortLabel Yale ChIP pVal
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, P-Values)
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) P-Value
 group encodeChip
 priority 65.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1016,28 +1016,28 @@ dataVersion ENCODE June 2005 Freeze
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpPval
     subTrack encodeYaleChIPSTAT1Pval
     shortLabel Yale 36-36 PVal
-    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, P-Values
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 36-mer, 36bp Win, P-Value
     priority 1
     color 50,50,200
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer38bpPval
     subTrack encodeYaleChIPSTAT1Pval
     shortLabel Yale 50-38 PVal
-    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, P-Values
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 38bp Win, P-Value
     priority 2
     color 50,50,200
 
     track encodeYaleChIPSTAT1HeLaMaskLess50mer50bpPval
     subTrack encodeYaleChIPSTAT1Pval
     shortLabel Yale 50-50 PVal
-    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, P-Values
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Maskless 50-mer, 50bp Win, P-Value
     priority 3
     color 50,50,200
 
     track encodeYaleChIPSTAT1HeLaBingRenPval
     subTrack encodeYaleChIPSTAT1Pval
     shortLabel Yale LI PVal
-    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, P-Values
+    longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) LI/UCSD PCR Amplicon, P-Value
     priority 4
     color 50,50,200
 
@@ -1045,7 +1045,7 @@ track encodeYaleChIPSTAT1Sig
 release alpha
 compositeTrack on
 shortLabel Yale STAT1 Sig
-longLabel Yale ChIP/Chip: STAT1 ab, HeLa cells, Signal
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Signal
 group encodeChip
 priority 65.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1063,7 +1063,7 @@ track encodeYaleChIPSTAT1Sig
 release beta
 compositeTrack on
 shortLabel Yale ChIP Sig
-longLabel Yale ChIP/Chip: STAT1 ab, HeLa cells, Signal
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Signal
 group encodeChip
 priority 65.1
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1113,7 +1113,7 @@ track encodeYaleChIPSTAT1Sites
 release alpha
 compositeTrack on
 shortLabel Yale STAT1 Sites
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, Binding Sites)
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Binding Sites
 group encodeChip
 priority 65.2
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1126,7 +1126,7 @@ track encodeYaleChIPSTAT1Sites
 release beta
 compositeTrack on
 shortLabel Yale ChIP Sites
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells, Binding Sites)
+longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Binding Sites
 group encodeChip
 priority 65.2
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1170,7 +1170,7 @@ type bed .
 track encodeYaleChipPval
 compositeTrack on
 shortLabel Yale ChIP pVal
-longLabel Yale ChIP/Chip P-Values (HeLa cells)
+longLabel Yale ChIP/Chip (HeLa cells) P-Value
 group encodeChip
 priority 65.21
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1185,35 +1185,35 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeYaleChipPvalBaf155
     subTrack encodeYaleChipPval
     shortLabel Yale BAF155 Pval
-    longLabel Yale ChIP/Chip P-Values (BAF155 ab, HeLa cells)
+    longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) P-Value
     color 50,50,200
     priority 1
 
     track encodeYaleChipPvalBaf170
     subTrack encodeYaleChipPval
     shortLabel Yale BAF170 Pval
-    longLabel Yale ChIP/Chip P-Values (BAF170 ab, HeLa cells)
+    longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) P-Value
     color 200,50,50
     priority 2
 
     track encodeYaleChipPvalFos
     subTrack encodeYaleChipPval
     shortLabel Yale c-Fos Pval
-    longLabel Yale ChIP/Chip P-Values (c-Fos ab, HeLa cells)
+    longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) P-Value
     color 112,63,175
     priority 3
 
     track encodeYaleChipPvalJun
     subTrack encodeYaleChipPval
     shortLabel Yale c-Jun Pval
-    longLabel Yale ChIP/Chip P-Values (c-Jun ab, HeLa cells)
+    longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) P-Value
     color 200,50,50
     priority 4
 
     track encodeYaleChipPvalTaf
     subTrack encodeYaleChipPval
     shortLabel Yale TAF1 Pval
-    longLabel Yale ChIP/Chip P-Values (TAF1 ab, HeLa cells)
+    longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) P-Value
     color 50,50,200
     color 112,63,175
     priority 5
@@ -1221,7 +1221,7 @@ dataVersion ENCODE Oct 2005 Freeze
 track encodeYaleChipSignal
 compositeTrack on
 shortLabel Yale ChIP Signal
-longLabel Yale ChIP/Chip Signal (HeLa cells)
+longLabel Yale ChIP/Chip (HeLa cells) Signal
 group encodeChip
 priority 65.22
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1237,42 +1237,42 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeYaleChipSignalBaf155
     subTrack encodeYaleChipSignal
     shortLabel Yale BAF155 Sig
-    longLabel Yale ChIP/Chip Signal (BAF155 ab, HeLa cells)
+    longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) Signal
     color 50,50,200
     priority 1
 
     track encodeYaleChipSignalBaf170
     subTrack encodeYaleChipSignal
     shortLabel Yale BAF170 Sig
-    longLabel Yale ChIP/Chip Signal (BAF170 ab, HeLa cells)
+    longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) Signal
     color 200,50,50
     priority 2
 
     track encodeYaleChipSignalFos
     subTrack encodeYaleChipSignal
     shortLabel Yale c-Fos Sig
-    longLabel Yale ChIP/Chip Signal (c-Fos ab, HeLa cells)
+    longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) Signal
     color 112,63,175
     priority 3
 
     track encodeYaleChipSignalJun
     subTrack encodeYaleChipSignal
     shortLabel Yale c-Jun Sig
-    longLabel Yale ChIP/Chip Signal (c-Jun ab, HeLa cells)
+    longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) Signal
     color 200,50,50
     priority 4
 
     track encodeYaleChipSignalTaf
     subTrack encodeYaleChipSignal
     shortLabel Yale TAF1 Sig
-    longLabel Yale ChIP/Chip Signal (TAF1 ab, HeLa cells)
+    longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) Signal
     color 50,50,200
     priority 5
 
 track encodeYaleChipSites
 compositeTrack on
 shortLabel Yale ChIP Sites
-longLabel Yale ChIP/Chip Sites (HeLa cells)
+longLabel Yale ChIP/Chip (HeLa cells) Sites
 group encodeChip
 priority 65.23
 chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
@@ -1285,35 +1285,35 @@ urlLabel Yale DART Link:
     track encodeYaleChipSitesBaf155
     subTrack encodeYaleChipSites
     shortLabel Yale BAF155
-    longLabel Yale ChIP/Chip Sites (BAF155 ab, HeLa cells) 
+    longLabel Yale ChIP/Chip (BAF155 ab, HeLa cells) Sites 
     color 50,50,200
     priority 1
 
     track encodeYaleChipSitesBaf170
     subTrack encodeYaleChipSites
     shortLabel Yale BAF170
-    longLabel Yale ChIP/Chip Sites (BAF170 ab, HeLa cells) 
+    longLabel Yale ChIP/Chip (BAF170 ab, HeLa cells) Sites
     color 200,50,50
     priority 2
 
     track encodeYaleChipSitesFos
     subTrack encodeYaleChipSites
     shortLabel Yale c-Fos
-    longLabel Yale ChIP/Chip Sites (c-Fos ab, HeLa cells) 
+    longLabel Yale ChIP/Chip (c-Fos ab, HeLa cells) Sites
     color 112,63,175
     priority 3
 
     track encodeYaleChipSitesJun
     subTrack encodeYaleChipSites
     shortLabel Yale c-Jun
-    longLabel Yale ChIP/Chip Sites (c-Jun ab, HeLa cells) 
+    longLabel Yale ChIP/Chip (c-Jun ab, HeLa cells) Sites 
     color 200,50,50
     priority 4
 
     track encodeYaleChipSitesTaf
     subTrack encodeYaleChipSites
     shortLabel Yale TAF1
-    longLabel Yale ChIP/Chip Sites (TAF1 ab, HeLa cells) 
+    longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) Sites
     color 50,50,200
     priority 5
 
