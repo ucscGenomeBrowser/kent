@@ -1344,138 +1344,350 @@ type bed 6 .
     type bed 5 .
     priority 2
 
-track encodeRegulomeDnaseSites
+track encodeRegulomeBase
 compositeTrack on
-shortLabel UW/Reg Oct DNaseI HSs
-longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites
+shortLabel UW/Reg DNaseI Sens
+longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
 group encodeChrom
-priority 66.12
+priority 66.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
-type bed5FloatScore
+minLimit -8.8
+maxLimit 13.15
+viewLimits 0:5
+maxHeightPixels 128:16:16
+type bedGraph 5
 
-    track encodeRegulomeDnaseSitesCACO2
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeBaseCACO2
+    subTrack encodeRegulomeBase
+    shortLabel CACO2
+    longLabel CACO2 DNaseI Sensitivity
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeBaseGM
+    subTrack encodeRegulomeBase
+    shortLabel GM06990
+    longLabel GM06990 DNaseI Sensitivity
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeBaseSKNSH
+    subTrack encodeRegulomeBase
+    shortLabel SKNSH
+    longLabel SKNSH DNaseI Sensitivity
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeBaseHuh7
+    subTrack encodeRegulomeBase
+    shortLabel Huh7
+    longLabel Huh7 DNaseI Sensitivity
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeBaseHepG2
+    subTrack encodeRegulomeBase
+    shortLabel HepG2
+    longLabel HepG2 DNaseI Sensitivity
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeBaseK562
+    subTrack encodeRegulomeBase
+    shortLabel K562
+    longLabel K562 DNaseI Sensitivity
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeBaseCD34
+    subTrack encodeRegulomeBase
+    shortLabel CD34
+    longLabel CD34 DNaseI Sensitivity
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeBaseHeLa
+    subTrack encodeRegulomeBase
+    shortLabel HeLa
+    longLabel HeLa DNaseI Sensitivity
+    color 60,50,240
+    priority 8
+
+track encodeRegulomeProb
+compositeTrack on
+shortLabel UW/Reg DNaseI HSs
+longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
+group encodeChrom
+priority 66.2
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bedGraph 5
+minLimit 1.1
+maxLimit 3.0
+viewLimits 1:2
+autoScaleDefault Off
+maxHeightPixels 128:16:16
+
+    track encodeRegulomeProbCACO2
+    subTrack encodeRegulomeProb
     shortLabel CACO2 
     longLabel CACO2 DNaseI HSs
     color 60,50,240
     priority 1
 
-    track encodeRegulomeDnaseSitesGM
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbGM
+    subTrack encodeRegulomeProb
     shortLabel GM06990
     longLabel GM06990 DNaseI HSs
     color 90,50,210
     priority 2
 
-    track encodeRegulomeDnaseSitesSKNSH
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbSKNSH
+    subTrack encodeRegulomeProb
     shortLabel SKNSH
     longLabel SKNSH DNaseI HSs
     color 120,50,180
     priority 3
 
-    track encodeRegulomeDnaseSitesHuh7
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbHuh7
+    subTrack encodeRegulomeProb
     shortLabel Huh7
     longLabel Huh7 DNaseI HSs
     color 150,50,150
     priority 4
 
-    track encodeRegulomeDnaseSitesHepG2
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbHepG2
+    subTrack encodeRegulomeProb
     shortLabel HepG2
     longLabel HepG2 DNaseI HSs
     color 180,50,120
     priority 5
 
-    track encodeRegulomeDnaseSitesK562
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbK562
+    subTrack encodeRegulomeProb
     shortLabel K562
     longLabel K562 DNaseI HSs
     color 210,50,90
     priority 6
 
-    track encodeRegulomeDnaseSitesCD34
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbCD34
+    subTrack encodeRegulomeProb
     shortLabel CD34
     longLabel CD34 DNaseI HSs
     color 240,50,60
     priority 7
 
-    track encodeRegulomeDnaseSitesHeLa
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbHeLa
+    subTrack encodeRegulomeProb
     shortLabel HeLa
     longLabel HeLa DNaseI HSs
     color 60,50,240
     priority 8
 
-track encodeRegulomeDnaseQual
+track encodeRegulomeQuality
 compositeTrack on
-shortLabel UW/Reg Oct Q/A
+shortLabel UW/Reg Q/A
 longLabel ENCODE UW/Regulome Plate Quality Score
 group encodeChrom
-priority 66.13
+priority 66.3
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility hide
 type bed 5 .
 useScore 1
 
-    track encodeRegulomeDnaseQualCACO2
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityCACO2
+    subTrack encodeRegulomeQuality
     shortLabel CACO2 
     longLabel CACO2 Quality
     color 60,50,240
     priority 1
 
-    track encodeRegulomeDnaseQualGM
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityGM
+    subTrack encodeRegulomeQuality
     shortLabel GM06990 
     longLabel GM06990 Quality
     color 90,50,210
     priority 2
 
-    track encodeRegulomeDnaseQualSKNSH
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualitySKNSH
+    subTrack encodeRegulomeQuality
     shortLabel SKNSH 
     longLabel SKNSH Quality
     color 120,50,180
     priority 3
 
-    track encodeRegulomeDnaseQualHuh7
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityHuh7
+    subTrack encodeRegulomeQuality
     shortLabel Huh7
     longLabel Huh7 Quality
     color 150,50,150
     priority 4
 
-    track encodeRegulomeDnaseQualHepG2
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityHepG2
+    subTrack encodeRegulomeQuality
     shortLabel HepG2
     longLabel HepG2 Quality
     color 180,50,120
     priority 5
 
-    track encodeRegulomeDnaseQualK562
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityK562
+    subTrack encodeRegulomeQuality
     shortLabel K562 
     longLabel K562 Quality
     color 210,50,90
     priority 6
 
-    track encodeRegulomeDnaseQualCD34
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityCD34
+    subTrack encodeRegulomeQuality
     shortLabel CD34
     longLabel CD34 Quality
     color 240,50,60
     priority 7
 
-    track encodeRegulomeDnaseQualHeLa
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityHeLa
+    subTrack encodeRegulomeQuality
     shortLabel HeLa
     longLabel HeLa Quality
     color 60,50,240
     priority 8
+
+track encodeRegulomeAmplicon
+compositeTrack on
+shortLabel UW/Reg Amplicon
+longLabel ENCODE UW/Regulome Amplicon
+group encodeChrom
+priority 66.4
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bed 5 .
+useScore 1
+subGroup1 amplicon Amplicon even=Even odd=Odd
+
+    track encodeRegulomeAmplEvenCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Even)
+    longLabel CACO2 Amplicon (Even)
+    subGroups amplicon=even
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeAmplEvenGM
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Even)
+    longLabel GM06990 Amplicon (Even)
+    subGroups amplicon=even
+    color 90,50,210
+    priority 3
+
+    track encodeRegulomeAmplEvenKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Even)
+    longLabel SKNSH Amplicon (Even)
+    subGroups amplicon=even
+    color 120,50,180
+    priority 5
+
+    track encodeRegulomeAmplEvenHuh7
+    subTrack encodeRegulomeAmplicon
+    shortLabel Huh7 (Even)
+    longLabel Huh7 Amplicon (Even)
+    subGroups amplicon=even
+    color 150,50,150
+    priority 7
+
+    track encodeRegulomeAmplEvenHepG2
+    subTrack encodeRegulomeAmplicon
+    shortLabel HepG2 (Even)
+    longLabel HepG2 Amplicon (Even)
+    subGroups amplicon=even
+    color 180,50,120
+    priority 9
+
+    track encodeRegulomeAmplEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Even)
+    longLabel K562 Amplicon (Even)
+    subGroups amplicon=even
+    color 210,50,90
+    priority 11
+
+    track encodeRegulomeAmplEvenCD34
+    subTrack encodeRegulomeAmplicon
+    shortLabel CD34 (Even)
+    longLabel CD34 Amplicon (Even)
+    subGroups amplicon=even
+    color 240,50,60
+    priority 13
+
+    track encodeRegulomeAmplEvenHeLa
+    subTrack encodeRegulomeAmplicon
+    shortLabel HeLa (Even)
+    longLabel HeLa Amplicon (Even)
+    subGroups amplicon=even
+    color 60,50,240
+    priority 15
+
+    track encodeRegulomeAmplOddCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Odd)
+    longLabel CACO2 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 60,50,240
+    priority 2
+
+    track encodeRegulomeAmplOddGM
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Odd)
+    longLabel GM06990 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 90,50,210
+    priority 4
+
+    track encodeRegulomeAmplOddKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Odd)
+    longLabel SKNSH Amplicon (Odd)
+    subGroups amplicon=odd
+    color 120,50,180
+    priority 6
+
+    track encodeRegulomeAmplOddHuh7
+    subTrack encodeRegulomeAmplicon
+    shortLabel Huh7 (Odd)
+    longLabel Huh7 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 150,50,150
+    priority 8
+
+    track encodeRegulomeAmplOddHepG2
+    subTrack encodeRegulomeAmplicon
+    shortLabel HepG2 (Odd)
+    longLabel HepG2 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 180,50,120
+    priority 10
+
+    track encodeRegulomeAmplEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Odd)
+    longLabel K562 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 210,50,90
+    priority 12
+
+    track encodeRegulomeAmplOddCD34
+    subTrack encodeRegulomeAmplicon
+    shortLabel CD34 (Odd)
+    longLabel CD34 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 240,50,60
+    priority 14
+
+    track encodeRegulomeAmplOddHeLa
+    subTrack encodeRegulomeAmplicon
+    shortLabel HeLa (Odd)
+    longLabel HeLa Amplicon (Odd)
+    subGroups amplicon=odd
+    color 60,50,240
+    priority 16
 
 track encodeTbaAlign
 shortLabel TBA Alignment
