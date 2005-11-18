@@ -1344,138 +1344,1820 @@ type bed 6 .
     type bed 5 .
     priority 2
 
-track encodeRegulomeDnaseSites
+track encodeRegulomeBase
 compositeTrack on
-shortLabel UW/Reg Oct DNaseI HSs
-longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites
+shortLabel UW/Reg DNaseI Sens
+longLabel ENCODE UW/Regulome Mean DNaseI Sensitivity
 group encodeChrom
-priority 66.12
+priority 66.1
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 visibility hide
-type bed5FloatScore
+minLimit -8.8
+maxLimit 13.15
+viewLimits 0:5
+maxHeightPixels 128:16:16
+type bedGraph 5
 
-    track encodeRegulomeDnaseSitesCACO2
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeBaseCACO2
+    subTrack encodeRegulomeBase
+    shortLabel CACO2
+    longLabel CACO2 DNaseI Sensitivity
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeBaseGM
+    subTrack encodeRegulomeBase
+    shortLabel GM06990
+    longLabel GM06990 DNaseI Sensitivity
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeBaseSKNSH
+    subTrack encodeRegulomeBase
+    shortLabel SKNSH
+    longLabel SKNSH DNaseI Sensitivity
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeBaseHuh7
+    subTrack encodeRegulomeBase
+    shortLabel Huh7
+    longLabel Huh7 DNaseI Sensitivity
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeBaseHepG2
+    subTrack encodeRegulomeBase
+    shortLabel HepG2
+    longLabel HepG2 DNaseI Sensitivity
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeBaseK562
+    subTrack encodeRegulomeBase
+    shortLabel K562
+    longLabel K562 DNaseI Sensitivity
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeBaseCD34
+    subTrack encodeRegulomeBase
+    shortLabel CD34
+    longLabel CD34 DNaseI Sensitivity
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeBaseHeLa
+    subTrack encodeRegulomeBase
+    shortLabel HeLa
+    longLabel HeLa DNaseI Sensitivity
+    color 60,50,240
+    priority 8
+
+track encodeRegulomeProb
+compositeTrack on
+shortLabel UW/Reg DNaseI HSs
+longLabel ENCODE UW/Regulome DNaseI Hypersensitive Sites/Scores
+group encodeChrom
+priority 66.2
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bedGraph 5
+minLimit 1.1
+maxLimit 3.0
+viewLimits 1:2
+autoScaleDefault Off
+maxHeightPixels 128:16:16
+
+    track encodeRegulomeProbCACO2
+    subTrack encodeRegulomeProb
     shortLabel CACO2 
     longLabel CACO2 DNaseI HSs
     color 60,50,240
     priority 1
 
-    track encodeRegulomeDnaseSitesGM
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbGM
+    subTrack encodeRegulomeProb
     shortLabel GM06990
     longLabel GM06990 DNaseI HSs
     color 90,50,210
     priority 2
 
-    track encodeRegulomeDnaseSitesSKNSH
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbSKNSH
+    subTrack encodeRegulomeProb
     shortLabel SKNSH
     longLabel SKNSH DNaseI HSs
     color 120,50,180
     priority 3
 
-    track encodeRegulomeDnaseSitesHuh7
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbHuh7
+    subTrack encodeRegulomeProb
     shortLabel Huh7
     longLabel Huh7 DNaseI HSs
     color 150,50,150
     priority 4
 
-    track encodeRegulomeDnaseSitesHepG2
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbHepG2
+    subTrack encodeRegulomeProb
     shortLabel HepG2
     longLabel HepG2 DNaseI HSs
     color 180,50,120
     priority 5
 
-    track encodeRegulomeDnaseSitesK562
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbK562
+    subTrack encodeRegulomeProb
     shortLabel K562
     longLabel K562 DNaseI HSs
     color 210,50,90
     priority 6
 
-    track encodeRegulomeDnaseSitesCD34
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbCD34
+    subTrack encodeRegulomeProb
     shortLabel CD34
     longLabel CD34 DNaseI HSs
     color 240,50,60
     priority 7
 
-    track encodeRegulomeDnaseSitesHeLa
-    subTrack encodeRegulomeDnaseSites
+    track encodeRegulomeProbHeLa
+    subTrack encodeRegulomeProb
     shortLabel HeLa
     longLabel HeLa DNaseI HSs
     color 60,50,240
     priority 8
 
-track encodeRegulomeDnaseQual
+track encodeRegulomeQuality
 compositeTrack on
-shortLabel UW/Reg Oct Q/A
+shortLabel UW/Reg Q/A
 longLabel ENCODE UW/Regulome Plate Quality Score
 group encodeChrom
-priority 66.13
+priority 66.3
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
-visibility hide
 type bed 5 .
 useScore 1
 
-    track encodeRegulomeDnaseQualCACO2
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityCACO2
+    subTrack encodeRegulomeQuality
     shortLabel CACO2 
     longLabel CACO2 Quality
     color 60,50,240
     priority 1
 
-    track encodeRegulomeDnaseQualGM
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityGM
+    subTrack encodeRegulomeQuality
     shortLabel GM06990 
     longLabel GM06990 Quality
     color 90,50,210
     priority 2
 
-    track encodeRegulomeDnaseQualSKNSH
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualitySKNSH
+    subTrack encodeRegulomeQuality
     shortLabel SKNSH 
     longLabel SKNSH Quality
     color 120,50,180
     priority 3
 
-    track encodeRegulomeDnaseQualHuh7
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityHuh7
+    subTrack encodeRegulomeQuality
     shortLabel Huh7
     longLabel Huh7 Quality
     color 150,50,150
     priority 4
 
-    track encodeRegulomeDnaseQualHepG2
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityHepG2
+    subTrack encodeRegulomeQuality
     shortLabel HepG2
     longLabel HepG2 Quality
     color 180,50,120
     priority 5
 
-    track encodeRegulomeDnaseQualK562
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityK562
+    subTrack encodeRegulomeQuality
     shortLabel K562 
     longLabel K562 Quality
     color 210,50,90
     priority 6
 
-    track encodeRegulomeDnaseQualCD34
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityCD34
+    subTrack encodeRegulomeQuality
     shortLabel CD34
     longLabel CD34 Quality
     color 240,50,60
     priority 7
 
-    track encodeRegulomeDnaseQualHeLa
-    subTrack encodeRegulomeDnaseQual
+    track encodeRegulomeQualityHeLa
+    subTrack encodeRegulomeQuality
     shortLabel HeLa
     longLabel HeLa Quality
     color 60,50,240
     priority 8
+
+track encodeRegulomeAmplicon
+compositeTrack on
+shortLabel UW/Reg Amplicon
+longLabel ENCODE UW/Regulome Amplicon
+group encodeChrom
+priority 66.4
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bed 5 .
+useScore 1
+subGroup1 amplicon Amplicon even=Even odd=Odd
+
+    track encodeRegulomeAmplEvenCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Even)
+    longLabel CACO2 Amplicon (Even)
+    subGroups amplicon=even
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeAmplEvenGM
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Even)
+    longLabel GM06990 Amplicon (Even)
+    subGroups amplicon=even
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeAmplEvenKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Even)
+    longLabel SKNSH Amplicon (Even)
+    subGroups amplicon=even
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeAmplEvenHuh7
+    subTrack encodeRegulomeAmplicon
+    shortLabel Huh7 (Even)
+    longLabel Huh7 Amplicon (Even)
+    subGroups amplicon=even
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeAmplEvenHepG2
+    subTrack encodeRegulomeAmplicon
+    shortLabel HepG2 (Even)
+    longLabel HepG2 Amplicon (Even)
+    subGroups amplicon=even
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeAmplEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Even)
+    longLabel K562 Amplicon (Even)
+    subGroups amplicon=even
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeAmplEvenCD34
+    subTrack encodeRegulomeAmplicon
+    shortLabel CD34 (Even)
+    longLabel CD34 Amplicon (Even)
+    subGroups amplicon=even
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeAmplEvenHeLa
+    subTrack encodeRegulomeAmplicon
+    shortLabel HeLa (Even)
+    longLabel HeLa Amplicon (Even)
+    subGroups amplicon=even
+    color 60,50,240
+    priority 8
+
+    track encodeRegulomeAmplOddCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Odd)
+    longLabel CACO2 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 60,50,240
+    priority 9
+
+    track encodeRegulomeAmplOddGM
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Odd)
+    longLabel GM06990 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 90,50,210
+    priority 10
+
+    track encodeRegulomeAmplOddKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Odd)
+    longLabel SKNSH Amplicon (Odd)
+    subGroups amplicon=odd
+    color 120,50,180
+    priority 11
+
+    track encodeRegulomeAmplOddHuh7
+    subTrack encodeRegulomeAmplicon
+    shortLabel Huh7 (Odd)
+    longLabel Huh7 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 150,50,150
+    priority 12
+
+    track encodeRegulomeAmplOddHepG2
+    subTrack encodeRegulomeAmplicon
+    shortLabel HepG2 (Odd)
+    longLabel HepG2 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 180,50,120
+    priority 13
+
+    track encodeRegulomeAmplEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Odd)
+    longLabel K562 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 210,50,90
+    priority 14
+
+    track encodeRegulomeAmplOddCD34
+    subTrack encodeRegulomeAmplicon
+    shortLabel CD34 (Odd)
+    longLabel CD34 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 240,50,60
+    priority 15
+
+    track encodeRegulomeAmplOddHeLa
+    subTrack encodeRegulomeAmplicon
+    shortLabel HeLa (Odd)
+    longLabel HeLa Amplicon (Odd)
+    subGroups amplicon=odd
+    color 60,50,240
+    priority 16
+
+track encodeTbaAlign
+shortLabel TBA Alignment
+longLabel NHGRI/PSU TBA Alignments
+group encodeCompGeno
+priority 70.1
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeTbaSummary
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeTbaElements
+compositeTrack on
+shortLabel TBA Elements
+longLabel NHGRI/PSU/UCSC TBA Conserved Elements
+group encodeCompGeno
+priority 70.3
+visibility hide
+#color 0, 10, 100
+#altColor 1,128,0
+exonArrows off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 5 .
+
+    track encodeTbaPhastConsEl
+    subTrack encodeTbaElements
+    shortLabel TBA PhastCons
+    longLabel TBA PhastCons Conserved Elements
+    color 170,100,50
+    priority 1
+
+    track encodeTbaBinConsEl
+    subTrack encodeTbaElements
+    shortLabel TBA BinCons
+    longLabel TBA BinCons Conserved Elements
+    color 190,70,80
+    priority 2
+
+    track encodeTbaGerpEl
+    subTrack encodeTbaElements
+    shortLabel TBA GERP 
+    longLabel TBA GERP Conserved Elements
+    color 120,80,120
+    priority 3
+
+track encodeMlaganAlign
+shortLabel MLAGAN Alignment
+longLabel Stanford MLAGAN Alignments
+group encodeCompGeno
+priority 72.0
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeMlaganSummary
+maxHeightPixels 100:40:11
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeMlaganElements
+compositeTrack on
+shortLabel MLAGAN Elements
+longLabel Stanford MLAGAN Conserved Elements
+group encodeCompGeno
+priority 72.3
+visibility hide
+exonArrows off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 5 .
+
+    track encodeMlaganPhastConsEl
+    subTrack encodeMlaganElements
+    shortLabel MLAGAN PhastCons
+    longLabel MLAGAN PhastCons Conserved Elements
+    color 170,100,50
+    priority 1
+
+    track encodeMlaganBinConsEl
+    subTrack encodeMlaganElements
+    shortLabel MLAGAN BinCons
+    longLabel MLAGAN BinCons Conserved Elements
+    color 170,5,10
+    priority 2
+
+    track encodeMlaganGerpEl
+    subTrack encodeMlaganElements
+    shortLabel MLAGAN GERP
+    longLabel MLAGAN GERP Conserved Elements
+    color 120,80,120
+    priority 3
+
+track encodeMavidAlign
+shortLabel MAVID Alignment
+longLabel UC Berkeley MAVID Alignments
+group encodeCompGeno
+priority 74.1
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeMavidSummary
+maxHeightPixels 100:40:11
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeMavidElements
+compositeTrack on
+shortLabel MAVID Elements
+longLabel UC Berkeley MAVID Conserved Elements
+group encodeCompGeno
+priority 74.3
+visibility hide
+exonArrows off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 5 .
+
+    track encodeMavidPhastConsEl
+    subTrack encodeMavidElements
+    shortLabel MAVID PhastCons
+    longLabel MAVID PhastCons Conserved Elements
+    color 170,100,50
+    priority 1
+
+    track encodeMavidBinConsEl
+    subTrack encodeMavidElements
+    shortLabel MAVID BinCons
+    longLabel MAVID BinCons Conserved Elements
+    color 170,5,10
+    priority 2
+
+    track encodeMavidGerpEl
+    subTrack encodeMavidElements
+    shortLabel MAVID GERP
+    longLabel MAVID GERP Conserved Elements
+    color 120,80,120
+    priority 3
+
+track encodeMsaElements
+compositeTrack on
+shortLabel Consens Elements
+longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Consensus Conserved Elements
+group encodeCompGeno
+priority 70.0
+visibility hide
+exonArrows off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type bed 4 .
+
+    track encodeMsaElUnion
+    shortLabel Loose
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Loose Conserved Elements
+    subTrack encodeMsaElements
+    priority 1
+    color 80,70,180
+
+    track encodeMsaElModerate
+    subTrack encodeMsaElements
+    shortLabel Moderate
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    priority 2
+    color 80,105,148
+
+    track encodeMsaElIntersect
+    subTrack encodeMsaElements
+    shortLabel Strict
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    priority 3
+    color 80,145,105
+
+track encodeMsaAlignComp
+compositeTrack on
+shortLabel Aligner Agree
+longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Alignment Agreement
+group encodeCompGeno
+priority 75.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type wig 0 27
+viewLimits 0:10
+maxHeightPixels 128:16:16
+autoScale on
+spanList 1
+
+    track encodeMsaAlignMean
+    subTrack encodeMsaAlignComp
+    shortLabel Mean
+    longLabel Mean Agreement MAVID-MLAGAN-TBA
+    color 20,20,20
+    priority 1
+
+    track encodeMsaAlignMavidMlagan
+    subTrack encodeMsaAlignComp
+    shortLabel MAVID-MLAGAN
+    longLabel Agreement MAVID-MLAGAN
+    color 20,20,150
+    priority 2
+
+    track encodeMsaAlignMavidTba
+    subTrack encodeMsaAlignComp
+    shortLabel MAVID-TBA
+    longLabel Agreement MAVID-TBA
+    color 20,20,150
+    priority 3
+
+    track encodeMsaAlignMlaganTba
+    subTrack encodeMsaAlignComp
+    shortLabel MLAGAN-TBA
+    longLabel Agreement MLAGAN-TBA
+    color 20,20,150
+    priority 4
+
+    track encodeMsaAlignMavidUngapped
+    subTrack encodeMsaAlignComp
+    shortLabel MAVID Ungap
+    longLabel Ungapped Species in MAVID
+    color 110,40,30
+    priority 5
+
+    track encodeMsaAlignMlaganUngapped
+    subTrack encodeMsaAlignComp
+    shortLabel MLAGAN Ungap
+    longLabel Ungapped Species in MLAGAN
+    color 110,40,30
+    priority 6
+
+    track encodeMsaAlignTbaUngapped
+    subTrack encodeMsaAlignComp
+    shortLabel TBA Ungap
+    longLabel Ungapped Species in TBA
+    color 110,40,30
+    priority 7
+
+
+track encode_tba23EvoFold
+shortLabel TBA23 EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure Using TBA23 
+group encodeGenes
+priority 63.1
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack multiz8way
+origAssembly hg16
+
+track wgRna
+shortLabel sno/miRNA
+longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
+group genes
+priority 63.5
+visibility hide
+color 200,80,0
+type bed 8 +
+
+track targetScanS
+shortLabel T-ScanS miRNA
+longLabel TargetScanS miRNA Regulatory Sites
+group genes
+priority 63.6
+visibility hide
+color 0,96,0
+type bed 9 .
+
+track firstEF
+shortLabel FirstEF 
+longLabel FirstEF: First-Exon and Promoter Prediction
+group regulation
+priority 90.1
+visibility hide
+spectrum on
+type bed 6 .
+scoreMin 900
+scoreMax 1000
+url http://rulai.cshl.org/tools/FirstEF/Readme/README.html
+
+track regPotential5X
+shortLabel 5x Reg Potential
+longLabel 5-Way Regulatory Potential - Human, Chimp, Dog, Mouse, Rat
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.05
+spanList 1
+type wig 0.0 1.0
+
+track regPotential3X
+shortLabel 3x Reg Potential
+longLabel 3-Way Regulatory Potential - Human, Mouse (May 2004/mm5), Rat (June 2003/rn3)
+group regulation
+priority 91.05
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.413 0.68
+spanList 1
+
+track regPotential2X
+shortLabel 2x Reg Potential
+longLabel 2-Way Regulatory Potential - Human (hg17), Mouse (May 2004/mm5)
+group regulation
+priority 91.1
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.01
+type wig -0.285 0.53
+spanList 1
+
+track tfbsConsSites
+shortLabel TFBS Conserved
+longLabel HMR Conserved Transcription Factor Binding Sites
+priority 94
+group regulation
+visibility hide
+type bed 6 +
+scoreMin 711
+scoreMax 1000
+spectrum on
+urlLabel Transfac matrix link:
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
+
+track sangamoDnaseHs
+shortLabel SGMO/EIO CD34 HS
+longLabel Sangamo - Eur. Inst. Oncology DNase Hypersensitive Sites
+group regulation
+priority 99.0
+visibility hide
+color 100,30,150
+type bed 5 .
+
+track multiz10way
+shortLabel 10-Way Conservation
+longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
+group compGeno
+priority 109.11
+visibility hide
+#color 0, 10, 100
+#altColor 50,50,50
+#altColor 255,128,0
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons10way
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz10waySummary
+#pairwise netBlastz
+speciesGroups mammal vertebrate
+sGroup_mammal panTro1 canFam1 mm5 rn3
+sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
+treeImage phylo/10way.jpg
+
+track multiz10wayGap
+shortLabel 10-Way Gap Annot Cons
+longLabel 10-Way Vertebrate Multiz Alignment & Conservation with Gap Annotation
+group compGeno
+priority 109.12
+visibility hide
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons10way
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz10wayGapSummary
+irows on
+speciesGroups mammal vertebrate
+sGroup_mammal panTro1 canFam1 mm5 rn3
+sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
+treeImage phylo/10way.jpg
+
+track phastConsElements10way
+shortLabel 10-Way Most Conserved
+longLabel PhastCons Conserved Elements, 10-Way Vertebrate Multiz Alignment
+group compGeno
+priority 109.12
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track multiz8way
+release alpha
+shortLabel Conservation
+longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
+group compGeno
+priority 109.51
+visibility pack
+#color 0, 10, 100
+altColor 50,50,50
+#altColor 255,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+spanList 1
+wiggle phastCons
+summary multiz8waySummary
+yLineOnOff Off
+autoScaleDefault Off
+spanList 1
+speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
+
+track multiz8way
+release beta
+shortLabel Conservation
+longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
+group compGeno
+priority 109.51
+visibility pack
+#color 0, 10, 100
+altColor 50,50,50
+#altColor 255,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons
+pairwise netBlastz
+yLineOnOff Off
+autoScaleDefault Off
+spanList 1
+speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
+
+track phastConsElements
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+group compGeno
+priority 109.52
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track LLncRNAarray
+shortLabel Candidates
+longLabel Lowe Lab ncRNA 148 microarray probes
+group compGeno
+priority 109.53
+visibility hide
+type bed 6 .
+
+track varMultizMm5Rn3GalGal2Fr1
+shortLabel Conservation (Std.)
+longLabel Human/Mouse/Rat/Chicken/Fugu Multiz Alignments & Standardized Conservation 
+group compGeno
+priority 109.21
+visibility hide
+#color 0, 10, 100
+altColor 50,50,50
+#altColor 255,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastConsVarMultiz
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder canFam1 mm5 rn3 galGal2 fr1
+
+track multizOldWorld
+shortLabel Old World Cons
+longLabel Hu/Chimp/Rhesus Macaque Multiz Alignments & Conservation 
+group compGeno
+priority 109.8
+visibility hide
+#color 0, 10, 100
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle secretPhastCons
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+pairwise netBlastz
+speciesOrder panTro1 monkey 
+
+track uc16
+shortLabel Ultra Conserved
+longLabel Ultraconserved Elements (200 bp 100% ID in rat/mouse/human)
+group compGeno
+priority 109.31
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+searchMethod exact
+searchType bed
+
+track ux16
+shortLabel Extended Ultras 
+longLabel Ultras Extended Until 5 Bases Below 85% in Conservation Track
+group compGeno
+priority 109.32
+visibility hide
+exonArrows off
+color 100,0,100
+type bed 4 .
+
+track bi200mD
+shortLabel Opossum Ultras
+longLabel Ultraconserved Elements (200 bp 100% ID in opossum/human inc. contam!)
+group compGeno
+priority 109.351
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+
+track bi200gG
+shortLabel Chicken Ultras
+longLabel Ultraconserved Elements (200 bp 100% ID in chicken/human, pre net screen)
+group compGeno
+priority 109.352
+visibility hide
+exonArrows off
+color 150,0,0
+type bed 4 .
+
+track cns
+shortLabel CNS
+longLabel Conserved Non-Coding (Most Conserved Minus Predicted Coding)
+priority 109.6
+group compGeno
+visibility hide
+spectrum on
+exonArrows off
+type bed 5 .
+
+track tba37CFTR
+shortLabel 37 Species CFTR
+longLabel CFTR Region 37 Species TBA Alignments & phastCons
+group compGeno
+priority 109.99
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastConsTba37
+spanList 1
+yLineOnOff Off
+pairwise tba37CFTR 15
+autoScaleDefault Off
+speciesOrder panTro1 gorilla orangutan baboon macaque vervet marmoset dusky_titi squirrel_monkey mouse_lemur lemur galago rabbit rn3 mm5 cow sheep muntjak_indian pig horse cat canFam1 ajbat cpbat hedgehog armadillo opossum monodelphis wallaby dunnart platypus galGal2 tortoise zebrafish tetra fugu
+chromosomes chr7
+
+track phastConsElementsTba37
+shortLabel Most Conserved TBA
+longLabel PhastCons Conserved Elements, TBA 37-way
+group compGeno
+priority 109.999
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track phastConsElementsPaper
+shortLabel Most Cons. (Std)
+longLabel PhastCons Conserved Elements, Standardized Across Species
+group compGeno
+priority 109.22
+visibility hide
+exonArrows off
+useScore 1
+showTopScorers 200
+type bed 5 .
+
+track varMultizHMRDEC
+shortLabel varMultiz6Way
+longLabel Human/Mouse/Rat/Dog/Elephant/Chicken VarMultiz 
+group compGeno
+priority 191
+visibility hide
+type maf
+
+track chainFr1
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 150.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain fr1
+otherDb fr1
+
+track netFr1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 150.2
+visibility hide
+spectrum on
+type netAlign fr1 chainFr1
+otherDb fr1
+
+track blastzDanRer2
+shortLabel $o_Organism Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 154.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno danRer2
+otherDb danRer2
+
+track chainDanRer2
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 154.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain danRer2
+otherDb danRer2
+
+track netDanRer2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 154.3
+visibility hide
+spectrum on
+type netAlign danRer2 chainDanRer2
+otherDb danRer2
+
+track blastzDanRer1
+shortLabel $o_db Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 155.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno danRer1
+otherDb danRer1
+
+track chainDanRer1
+shortLabel $o_db Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 155.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain danRer1
+otherDb danRer1
+
+track netDanRer1
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 155.3
+visibility hide
+spectrum on
+type netAlign danRer1 chainDanRer1
+otherDb danRer1
+
+track chainXenTro1
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 157
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain xenTro1
+otherDb xenTro1
+
+track netXenTro1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 157.5
+visibility hide
+spectrum on
+type netAlign xenTro1 chainXenTro1
+otherDb xenTro1
+
+track blastzGalGal2
+shortLabel $o_Organism Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 159.99
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno galGal2
+otherDb galGal2
+
+track chainGalGal2
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 160
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain galGal2
+otherDb galGal2
+
+track netGalGal2
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 161
+visibility hide
+spectrum on
+type netAlign galGal2 chainGalGal2
+otherDb galGal2
+
+track chainMonDom2
+shortLabel MonDom2 Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 164.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain monDom2
+otherDb monDom2
+
+track netMonDom2
+shortLabel MonDom2 Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 164.2
+visibility hide
+spectrum on
+type netAlign monDom2 chainMonDom2
+otherDb monDom2
+
+track rabbitMaf
+shortLabel Rabbit NISC/2X
+longLabel Rabbit NISC and 2X sequence blastz reciprocal best
+group x
+priority 165
+visibility hide
+type maf
+
+track blastzRn3
+shortLabel Rat Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 173
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track blastzBestRn3
+shortLabel Rat Best
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+group compGeno
+priority 174
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track blastzTightRn3
+shortLabel Rat Tight
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+group compGeno
+priority 175
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno rn3
+otherDb rn3
+
+track chainRn3
+shortLabel Rat Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 176
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain rn3
+otherDb rn3
+
+track netRn3
+shortLabel Rat Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 177
+visibility hide 
+spectrum on
+type netAlign rn3 chainRn3
+otherDb rn3
+
+track ensRn3MusHom
+shortLabel Rat Synteny
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+priority 178
+group compGeno
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6 +
+otherDb rn3
+
+track syntenyNetRn3
+shortLabel Rat Syntenic Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+group compGeno
+priority 179
+visibility hide
+spectrum on
+type netAlign rn3 chainRn3
+otherDb rn3
+
+track blastzMm4
+shortLabel Mm4 Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 182
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm4
+otherDb mm4
+
+track blastzBestMm4
+shortLabel Mm4 Best
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+group compGeno
+priority 183
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm4
+otherDb mm4
+
+track blastzTightMm4
+shortLabel Mm4 Tight
+longLabel $o_Organism ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+group compGeno
+priority 184
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm4
+otherDb mm4
+
+track chainMm4
+shortLabel Mm4 Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 185
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain mm4
+otherDb mm4
+
+track netMm4
+shortLabel Mm4 Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 186
+visibility hide
+spectrum on
+type netAlign mm4 chainMm4
+otherDb mm4
+
+track ensRatMm4Hom
+shortLabel Mm4 Synteny
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Single Coverage (100k window)
+priority 187
+group compGeno
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6 +
+otherDb mm4
+
+track syntenyNetMm4
+shortLabel Mm4 Syntenic Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+group compGeno
+priority 188
+visibility hide
+spectrum on
+type netAlign mm4 chainMm4
+otherDb mm4
+
+track blastzBestBosTau1
+shortLabel Cow Best
+longLabel Cow Blastz Reciprocal Alignments
+group compGeno
+priority 188.69
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track blastzBestOryCun1
+shortLabel Rabbit Best
+longLabel Rabbit Blastz Reciprocal Alignments
+group compGeno
+priority 188.81
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno oryCun1
+otherDb oryCun1
+colorChromDefault off
+
+track blastzCanFam1
+shortLabel $o_Organism Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 188.70
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno canFam1
+otherDb canFam1
+
+track chainCanFam1
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 189
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain canFam1
+otherDb canFam1
+
+track netCanFam1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 189.1
+visibility hide
+spectrum on
+type netAlign canFam1 chainCanFam1
+otherDb canFam1
+
+track syntenyNetCanFam1
+shortLabel $o_Organism Syntenic Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+group compGeno
+priority 189.2
+visibility hide
+spectrum on
+type netAlign canFam1 chainCanFam1
+otherDb canFam1
+
+track blastzMm5
+shortLabel Mm5 Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 182.5
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm5
+otherDb mm5
+
+track blastzBestMm5
+shortLabel Mm5 Best
+longLabel $o_Organism ($o_date/$o_db) Blastz Best-in-Genome Alignments
+group compGeno
+priority 183.5
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm5
+otherDb mm5
+
+track blastzTightMm5
+shortLabel Mm5 Tight
+longLabel Mouse ($o_date/$o_db) Blastz Tight Subset of Best Alignments
+group compGeno
+priority 184.5
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm5
+otherDb mm5
+
+track blastzMm7
+shortLabel Mm7 Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 182.49
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno mm7
+otherDb mm7
+
+track chainMm3X
+shortLabel Mouse 3X Chain 
+longLabel Mouse 3X ($o_date/$o_db) Chained Alignments
+group x
+priority 202.6
+visibility hide
+color 100,50,0
+altColor 255,240,200
+type chain mm3X
+chainColor Normalized Score
+otherDb mm3X
+
+track chainMm2X
+shortLabel Mouse 2X Chain 
+longLabel Mouse 2X ($o_date/$o_db) Chained Alignments
+group x
+priority 201.5
+visibility hide
+color 100,50,0
+altColor 255,240,200
+type chain mm2X
+chainColor Normalized Score
+otherDb mm2X
+
+track ensRatMm5Hom
+shortLabel Mouse Synteny
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny 
+priority 187.5
+group compGeno
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6 +
+otherDb mm5
+
+track mouseSynBed
+shortLabel Mouse Synteny Ucsc
+longLabel $Organism/$o_Organism ($o_date/$o_db) Synteny Using Blastz Syntenic Net 
+priority 187.5
+group compGeno
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6 +
+otherDb mm5
+
+track syntenyNetMm5
+shortLabel Mm5 Syntenic Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+group compGeno
+priority 188.5
+visibility hide
+spectrum on
+type netAlign mm5 chainMm5
+otherDb mm5
+
+track blastzSelf
+shortLabel Self Blastz
+longLabel $Organism Blastz Self Alignments
+group varRep
+priority 160
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg17
+otherDb hg17
+
+track blastzBestSelf
+shortLabel Self Best
+longLabel $Organism Blastz Best-in-Genome Self Alignments
+group varRep
+priority 161
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg17
+otherDb hg17
+
+track blastzTightSelf
+shortLabel Tight Self
+longLabel $Organism Blastz Tight Subset of Best Self Alignments
+group varRep
+priority 162
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno hg17
+otherDb hg17
+
+track chainSelf
+shortLabel Self Chain 
+longLabel $Organism Chained Self Alignments
+group varRep
+priority 163
+visibility hide
+color 100,50,0
+altColor 255,240,200
+chainColor Normalized Score
+spectrum on
+type chain hg17
+otherDb hg17
+
+track netSelf
+shortLabel Self Net
+longLabel $Organism Chained Self Alignment Net
+group varRep
+priority 164
+visibility hide
+spectrum on
+type netAlign hg17 chainSelf
+otherDb hg17
+
+track ensRatMusHg17
+shortLabel Self Synteny
+longLabel $Organism Self Synteny Using Blastz Single Coverage (100k window)
+group varRep
+priority 165
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 4 .
+
+track syntenyNetSelf
+shortLabel Self Syntenic Net
+longLabel $Organism Syntenic Self Alignment Net
+group varRep
+priority 166
+visibility hide
+spectrum on
+type netAlign hg17 chainSelf
+otherDb hg17
+
+track hgMut
+shortLabel Human Mutation
+longLabel Compilation of human disease variants and other mutations
+group varRep
+priority 144.7
+visibility hide
+color 150,0,150
+type bed 4 +
+
+track chainRheMac1
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 189.6
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain rheMac1
+otherDb rheMac1
+
+track netRheMac1
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 189.7
+visibility hide
+spectrum on
+type netAlign rheMac1 chainRheMac1
+otherDb rheMac1
+
+track blastzPanTro1
+shortLabel $o_Organism Blastz
+longLabel $o_Organism ($o_date/$o_db) Blastz Alignments
+group compGeno
+priority 190
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno panTro1
+otherDb panTro1
+
+track chainPanTro1
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 190.2
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain panTro1
+otherDb panTro1
+
+track blastzBestPanTro1
+shortLabel Chimp Best
+longLabel Chimp Blastz Best-in-Genome Alignments (axtBest)
+group compGeno
+priority 190.22
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type psl xeno 
+
+track bestChainPanTro1
+shortLabel Chimp Best Chain 
+longLabel $o_Organism ($o_date/$o_db) Best Chained Alignments (chr7)
+group compGeno
+priority 190.3
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain panTro1
+otherDb panTro1
+
+track rBestChainPanTro1
+shortLabel Chimp Recip Chain 
+longLabel $o_Organism ($o_date/$o_db) Reciprocal Best Chained Alignments (chr7)
+group compGeno
+priority 190.4
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+
+    track encodeRegulomeQualityCACO2
+    subTrack encodeRegulomeQuality
+    shortLabel CACO2 
+    longLabel CACO2 Quality
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeQualityGM
+    subTrack encodeRegulomeQuality
+    shortLabel GM06990 
+    longLabel GM06990 Quality
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeQualitySKNSH
+    subTrack encodeRegulomeQuality
+    shortLabel SKNSH 
+    longLabel SKNSH Quality
+    color 120,50,180
+    priority 3
+
+    track encodeRegulomeQualityHuh7
+    subTrack encodeRegulomeQuality
+    shortLabel Huh7
+    longLabel Huh7 Quality
+    color 150,50,150
+    priority 4
+
+    track encodeRegulomeQualityHepG2
+    subTrack encodeRegulomeQuality
+    shortLabel HepG2
+    longLabel HepG2 Quality
+    color 180,50,120
+    priority 5
+
+    track encodeRegulomeQualityK562
+    subTrack encodeRegulomeQuality
+    shortLabel K562 
+    longLabel K562 Quality
+    color 210,50,90
+    priority 6
+
+    track encodeRegulomeQualityCD34
+    subTrack encodeRegulomeQuality
+    shortLabel CD34
+    longLabel CD34 Quality
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeQualityHeLa
+    subTrack encodeRegulomeQuality
+    shortLabel HeLa
+    longLabel HeLa Quality
+    color 60,50,240
+    priority 8
+
+track encodeRegulomeAmplicon
+compositeTrack on
+shortLabel UW/Reg Amplicon
+longLabel ENCODE UW/Regulome Amplicon
+group encodeChrom
+priority 66.4
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bed 5 .
+useScore 1
+subGroup1 amplicon Amplicon even=Even odd=Odd
+
+    track encodeRegulomeAmplEvenCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Even)
+    longLabel CACO2 Amplicon (Even)
+    subGroups amplicon=even
+    color 60,50,240
+    priority 1
+
+    track encodeRegulomeAmplEvenGM
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Even)
+    longLabel GM06990 Amplicon (Even)
+    subGroups amplicon=even
+    color 90,50,210
+    priority 3
+
+    track encodeRegulomeAmplEvenKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Even)
+    longLabel SKNSH Amplicon (Even)
+    subGroups amplicon=even
+    color 120,50,180
+    priority 5
+
+    track encodeRegulomeAmplEvenHuh7
+    subTrack encodeRegulomeAmplicon
+    shortLabel Huh7 (Even)
+    longLabel Huh7 Amplicon (Even)
+    subGroups amplicon=even
+    color 150,50,150
+    priority 7
+
+    track encodeRegulomeAmplEvenHepG2
+    subTrack encodeRegulomeAmplicon
+    shortLabel HepG2 (Even)
+    longLabel HepG2 Amplicon (Even)
+    subGroups amplicon=even
+    color 180,50,120
+    priority 9
+
+    track encodeRegulomeAmplEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Even)
+    longLabel K562 Amplicon (Even)
+    subGroups amplicon=even
+    color 210,50,90
+    priority 11
+
+    track encodeRegulomeAmplEvenCD34
+    subTrack encodeRegulomeAmplicon
+    shortLabel CD34 (Even)
+    longLabel CD34 Amplicon (Even)
+    subGroups amplicon=even
+    color 240,50,60
+    priority 13
+
+    track encodeRegulomeAmplEvenHeLa
+    subTrack encodeRegulomeAmplicon
+    shortLabel HeLa (Even)
+    longLabel HeLa Amplicon (Even)
+    subGroups amplicon=even
+    color 60,50,240
+    priority 15
+
+    track encodeRegulomeAmplOddCACO2
+    subTrack encodeRegulomeAmplicon
+    shortLabel CACO2 (Odd)
+    longLabel CACO2 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 60,50,240
+    priority 2
+
+    track encodeRegulomeAmplOddGM
+    subTrack encodeRegulomeAmplicon
+    shortLabel GM06990 (Odd)
+    longLabel GM06990 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 90,50,210
+    priority 4
+
+    track encodeRegulomeAmplOddKNSH
+    subTrack encodeRegulomeAmplicon
+    shortLabel SKNSH (Odd)
+    longLabel SKNSH Amplicon (Odd)
+    subGroups amplicon=odd
+    color 120,50,180
+    priority 6
+
+    track encodeRegulomeAmplOddHuh7
+    subTrack encodeRegulomeAmplicon
+    shortLabel Huh7 (Odd)
+    longLabel Huh7 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 150,50,150
+    priority 8
+
+    track encodeRegulomeAmplOddHepG2
+    subTrack encodeRegulomeAmplicon
+    shortLabel HepG2 (Odd)
+    longLabel HepG2 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 180,50,120
+    priority 10
+
+    track encodeRegulomeAmplEvenK562
+    subTrack encodeRegulomeAmplicon
+    shortLabel K562 (Odd)
+    longLabel K562 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 210,50,90
+    priority 12
+
+    track encodeRegulomeAmplOddCD34
+    subTrack encodeRegulomeAmplicon
+    shortLabel CD34 (Odd)
+    longLabel CD34 Amplicon (Odd)
+    subGroups amplicon=odd
+    color 240,50,60
+    priority 14
+
+    track encodeRegulomeAmplOddHeLa
+    subTrack encodeRegulomeAmplicon
+    shortLabel HeLa (Odd)
+    longLabel HeLa Amplicon (Odd)
+    subGroups amplicon=odd
+    color 60,50,240
+    priority 16
 
 track encodeTbaAlign
 shortLabel TBA Alignment
