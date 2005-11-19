@@ -156,19 +156,21 @@ carefulClose(&f);
 static struct visiMatch *readMatchFile(char *fileName)
 /* Read in match file */
 {
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
 struct visiMatch *matchList = NULL, *match;
-int count;
-while (lineFileRow(lf, row))
+struct lineFile *lf = lineFileMayOpen(fileName, TRUE);
+if (lf != NULL)
     {
-    AllocVar(match);
-    match->imageId = lineFileNeedNum(lf, row, 0);
-    match->weight = lineFileNeedDouble(lf, row, 1);
-    slAddHead(&matchList, match);
+    char *row[2];
+    while (lineFileRow(lf, row))
+	{
+	AllocVar(match);
+	match->imageId = lineFileNeedNum(lf, row, 0);
+	match->weight = lineFileNeedDouble(lf, row, 1);
+	slAddHead(&matchList, match);
+	}
+    lineFileClose(&lf);
+    slReverse(&matchList);
     }
-lineFileClose(&lf);
-slReverse(&matchList);
 return matchList;
 }
 
