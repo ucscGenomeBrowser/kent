@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.8 2003/05/06 07:33:44 kate Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.9 2005/11/19 02:08:30 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
@@ -450,7 +450,7 @@ else
 		xpError(xp, "Mismatch between start tag %s and end tag %s",  stack->tag->string, dy->string);
 	    break;
 	    }
-	else if (c == '?' || c == '/' || c == '!')
+	else if (c == '?' || c == '!')
 	    xpEatComment(xp, c);
 	else
 	    {
@@ -484,9 +484,13 @@ for (;;)
 	{
 	if ((c = xpGetChar(xp)) == 0)
 	    xpUnexpectedEof(xp);
-	if (c == '?' || c == '/' || c == '!')
+	if (c == '?' || c == '!')
 	    {
 	    xpEatComment(xp, c);
+	    }
+	else if (c == '/') /* We're starting with a closing tag, treat as EOF. */
+	    {
+	    return FALSE;
 	    }
 	else
 	    {
