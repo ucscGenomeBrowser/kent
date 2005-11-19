@@ -1799,7 +1799,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 color 120,30,50
 altColor 50,0,0
-type bed 6 .
+type bed 12
 useScore 1
 
     track encodeUtexStageMycHelaTags
@@ -2347,12 +2347,12 @@ type bed 4 .
 
 track encodeMsaAlignComp
 compositeTrack on
-shortLabel Aligner Agree
-longLabel NHGRI/PSU/UCSC/UCB/Stanford TBA, MLAGAN, and MAVID Alignment Agreement
+shortLabel Align Agree
+longLabel MSA Alignment Agreement
 group encodeCompGeno
 priority 75.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-type wig 0 27
+type wig 0 1.0
 viewLimits .5:1
 maxHeightPixels 128:16:16
 autoScale on
@@ -2386,42 +2386,39 @@ spanList 1
     color 20,20,150
     priority 4
 
+track encodeMsaAlignUngapped
+compositeTrack on
+shortLabel Align Gaps
+longLabel MSA Alignment Gaps (#Ungapped Species)
+group encodeCompGeno
+priority 75.1
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+type wig 0 27
+viewLimits 0:22
+spanList 1
+autoScale on
+maxHeightPixels 128:16:16
+
     track encodeMsaAlignMavidUngapped
-    subTrack encodeMsaAlignComp
-    shortLabel MAVID Ungap
+    subTrack encodeMsaAlignUngapped
+    shortLabel MAVID
     longLabel Ungapped Species in MAVID
-    noInherit on
-    type wig 0 27
-    viewLimits 0:22
-    spanList 1
-    autoScale on
     color 110,40,30
-    priority 5
+    priority 1
 
     track encodeMsaAlignMlaganUngapped
-    subTrack encodeMsaAlignComp
-    shortLabel MLAGAN Ungap
+    subTrack encodeMsaAlignUngapped
+    shortLabel MLAGAN
     longLabel Ungapped Species in MLAGAN
-    noInherit on
-    type wig 0 27
-    viewLimits 0:22
-    spanList 1
-    autoScale on
     color 110,40,30
-    priority 6
+    priority 2
 
     track encodeMsaAlignTbaUngapped
-    subTrack encodeMsaAlignComp
-    shortLabel TBA Ungap
+    subTrack encodeMsaAlignUngapped
+    shortLabel TBA
     longLabel Ungapped Species in TBA
-    noInherit on
-    type wig 0 27
-    viewLimits 0:22
-    spanList 1
-    autoScale on
     color 110,40,30
-    priority 7
-
+    priority 3
 
 track encode_tba23EvoFold
 shortLabel TBA23 EvoFold
