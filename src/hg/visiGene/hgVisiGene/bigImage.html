@@ -430,6 +430,29 @@ updatePos();
 //window.onresize=windowResize;   // this really screws up Safari, don't do it!
 }
 
+function getThumb() {
+var result = null;
+if (typeof(parent.parent) != 'undefined')
+ if (typeof(parent.parent.list) != 'undefined')
+  if (typeof(parent.parent.list.document) != 'undefined') {
+    var imgs = parent.parent.list.document.getElementsByTagName('img');
+    var target = picName.replace("full","200");
+    target = target.substring(0,target.lastIndexOf("/"));
+    target = target+picExt;
+    alert('imgs.length='+imgs.length+' target='+target);
+    for (var i = 0; i < imgs.length; ++i) {
+	var src = imgs[i].src;
+	src = '..'+src.substring(src.indexOf("/visiGene"));
+	if (src == target) {
+	    result = imgs[i];
+	    break;
+	}
+    }
+    
+  }
+return result;
+}
+
 
 function init() {
 
@@ -520,6 +543,9 @@ setMouseCursor();
 windowResize();
 
 if (window.focus) window.focus();
+
+//debug
+//getThumb();
 
 }
 
@@ -722,34 +748,40 @@ else if (e.clientX || e.clientY) {
 posx = posx - marginLeft;
 posy = posy - marginTop;
 
-if (posx < 0) posx = -1;
-if (posy < 0) posy = -1;
-if (posx >= wc) posx = -1;
-if (posy >= hc) posy = -1;
+//if (posx < 0) posx = -1;
+//if (posy < 0) posy = -1;
+//if (posx >= wc) posx = -1;
+//if (posy >= hc) posy = -1;
 
 window.status='posx,posy='+posx+','+posy;
 
-mousex = -1;
-mousey = -1;
-if ((posx >= 0) && (posy >= 0)) {
+//mousex = -1;
+//mousey = -1;
+//if ((posx >= 0) && (posy >= 0)) {
     mousex = x+(posx - wc/2)/z;
     mousey = y+(posy - hc/2)/z;
-    checkMouseRange();
-}    
+//    checkMouseRange();
+//}    
 
 
 window.status='mousex,mousey='+mousex+','+mousey+'  mouseDrag='+mouseDrag;
 
 if (mouseDrag) {
-    if ((mousex > 0) && (mousey > 0)) {
-        x += mouseDragX-mousex;
-        y += mouseDragY-mousey;
+    //if ((mousex > 0) && (mousey > 0)) {
+        var tempx = x + mouseDragX-mousex;
+        var tempy = y + mouseDragY-mousey;
+	if (tempx < 0) tempx = 0;
+	if (tempy < 0) tempy = 0;
+	if (tempx >= wOrig[0]) tempx = wOrig[0]-1;
+	if (tempy >= hOrig[0]) tempy = hOrig[0]-1;
+	x = tempx;
+	y = tempy;
 	xx = x;
 	yy = y;
-        updatePos();
-    } else {
-	mouseUp(e);
-    }
+	updatePos();
+    //} else {
+	//mouseUp(e);
+    //}
 }
 
 
