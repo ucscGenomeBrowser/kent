@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xap.c,v 1.8 2005/04/10 14:41:26 markd Exp $";
+static char const rcsid[] = "$Id: xap.c,v 1.9 2005/11/19 02:09:18 kent Exp $";
 
 void xapError(struct xap *xap, char *format, ...)
 /* Issue an error message and abort*/
@@ -157,5 +157,57 @@ if (retType != NULL)
     *retType = cloneString(xap->topType);
 *pObj = xap->topObject;
 xapFree(&xap);
+}
+
+static void skipThrough(FILE *f, char *fileName, char *pattern)
+/* Go through file until we see pattern. */
+{
+int fileC, patC;
+int patIx = 0;
+
+for (;;)
+    {
+    patC = pattern[patIx];
+    if (patC == 0)
+         break;		/* We made it to end of pattern string! */
+    fileC = getc(f);
+    if (fileC == EOF)
+        errAbort("Couldn't find %s in %s", pattern, fileName);
+    if (fileC == patC)
+	patIx += 1;
+    else
+        patIx = 0;
+    }
+}
+
+struct xap *xapListOpen(char *fileName, char *outerType,
+	void *(*startHandler)(struct xap *xap, char *name, char **atts),
+	void (*endHandler)(struct xap *xap, char *name))
+/* This handles the common case where an xml file
+ * contains a list of repeated structures just inside
+ * the file-level tag.  We're not wanting to load
+ * the whole XML into memory necessarily.  So this
+ * routine will basically skip over the opening tag.
+ * You can then call xapListNext repeatedly on the
+ * rest of the file.   When done, call xapFree.*/
+{
+struct xap *xap = xapNew(startHandler, endHandler, fileName);
+FILE *f;
+char tag[256];
+safef(tag, sizeof(tag), "<%s>", outerType);
+xap->f = f = mustOpen(fileName, "r");
+skipThrough(f, fileName, tag);
+return xap;
+}
+
+void *xapListNext(struct xap *xap, char *listType)
+/* This returns the next item in XML file.  It returns NULL
+ * at end of file (or more properly when the outer tag closes */
+{
+if (!xpParse(xap->xp))
+    return NULL;
+if (!sameString(xap->topType, listType))
+    errAbort("Expecting %s tag, got %s tag", listType, xap->topType);
+return xap->topObject;
 }
 

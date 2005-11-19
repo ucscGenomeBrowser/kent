@@ -65,5 +65,20 @@ void xapParseAny(char *fileName, char *type,
  * example:
  *     xapParseAny("file.xml", "das", dasStartHandler, dasEndHandler, &type, &obj); */
 
+struct xap *xapListOpen(char *fileName, char *outerType,
+	void *(*startHandler)(struct xap *xap, char *name, char **atts),
+	void (*endHandler)(struct xap *xap, char *name));
+/* This handles the common case where an xml file
+ * contains a list of repeated structures just inside
+ * the file-level tag.  We're not wanting to load
+ * the whole XML into memory necessarily.  So this
+ * routine will basically skip over the opening tag.
+ * You can then call xapListNext repeatedly on the
+ * rest of the file.   When done, call xapFree.*/
+
+void *xapListNext(struct xap *xap, char *listType);
+/* This returns the next item in XML file.  It returns NULL
+ * at end of file (or more properly when the outer tag closes */
+
 #endif /* XAP_H */
 
