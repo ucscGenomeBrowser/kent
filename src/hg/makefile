@@ -1,7 +1,9 @@
 # Build all directories in utils
 
-BROWSER_BINS=cartReset das hgBlat hgCoordConv hgGateway hgGene hgPcr hgTables hgText hgTracks \
-	hgTrackUi hgc cartDump near/hgNear protein/pbGateway protein/pbTracks protein/pbGlobal \
+BROWSER_BINS=cartReset das hgBlat hgConvert hgCoordConv \
+        hgGateway hgGene hgPcr hgTables hgText hgTracks \
+	hgTrackUi hgVisiGene hgc cartDump near/hgNear \
+	protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver hgc/cgiClustalw
 
 TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl \
