@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpImages.c,v 1.2 2005/11/19 02:01:25 kent Exp $";
+static char const rcsid[] = "$Id: gensatFtpImages.c,v 1.3 2005/11/19 03:28:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -109,6 +109,7 @@ while(lineFileNext(lf, &line, NULL))
     if (endsWith(jpgImage, ".bz2"))
 	chopSuffix(jpgImage);
     if (endsWith(jpgImage, ".png") || endsWith(jpgImage, ".tif") ||
+	endsWith(jpgImage, ".tiff") || endsWith(jpgImage, ".jpeg") ||
     	endsWith(jpgImage, ".jpg") || endsWith(jpgImage, ".JPG") )
         {
 	chopSuffix(jpgImage);
