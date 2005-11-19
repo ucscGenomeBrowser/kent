@@ -3,9 +3,10 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "portable.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpList.c,v 1.3 2005/11/18 04:22:21 kent Exp $";
+static char const rcsid[] = "$Id: gensatFtpList.c,v 1.4 2005/11/19 02:02:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -91,9 +92,11 @@ char *line, *md5;
 char *oldPrefix = "/am/ftp-gensat/";
 int oldPrefixSize = strlen(oldPrefix);
 char *newPrefix = "ftp.ncbi.nlm.gov/pub/gensat/Institutions/";
+struct hash *suffixHash = newHash(0);
 
 while (lineFileNext(lf, &line, NULL))
     {
+    char dir[PATH_LEN], file[PATH_LEN], extension[PATH_LEN];
     md5 = nextWord(&line);
     line = skipLeadingSpaces(line);
     if (stringIn(".icon.", line))
@@ -104,8 +107,17 @@ while (lineFileNext(lf, &line, NULL))
         errAbort("Missing %s line %d of %s", oldPrefix, lf->lineIx, 
 		lf->fileName);
     line += oldPrefixSize;
+    if (startsWith("duplicates/", line))
+        continue;
+    if (endsWith(line, ".txt") || endsWith(line, ".psd")
+       || endsWith(line, ".zip") || endsWith(line, ".doc")
+       || endsWith(line, ".list"))
+       continue;
+    splitPath(line, dir, file, extension);
+    hashStore(suffixHash, extension);
     fprintf(f, "%s\t%s\n", md5, fixName(line, lf));
     }
+
 }
 
 int main(int argc, char *argv[])
