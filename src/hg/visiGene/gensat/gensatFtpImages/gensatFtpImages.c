@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gensatFtpImages.c,v 1.1 2005/11/18 16:36:23 kent Exp $";
+static char const rcsid[] = "$Id: gensatFtpImages.c,v 1.2 2005/11/19 02:01:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,7 +48,7 @@ dyStringClear(command);
 dyStringPrintf(command, "wget -nv --timestamping -O %s '%s'", 
     tmpName, source);
 verbose(1, "%s\n", command->string);
-if ((err = system(command->string)) < 0)
+if ((err = system(command->string)) != 0)
     {
     warn("Error %d on %s", err, command->string);
     ok = FALSE;
@@ -109,11 +109,14 @@ while(lineFileNext(lf, &line, NULL))
     if (endsWith(jpgImage, ".bz2"))
 	chopSuffix(jpgImage);
     if (endsWith(jpgImage, ".png") || endsWith(jpgImage, ".tif") ||
-    	endsWith(jpgImage, ".jpg"))
+    	endsWith(jpgImage, ".jpg") || endsWith(jpgImage, ".JPG") )
         {
 	chopSuffix(jpgImage);
 	strcat(jpgImage, ".jpg");
 	}
+    else if (endsWith(jpgImage, ".txt") || endsWith(jpgImage, ".zip")
+        || endsWith(jpgImage, ".doc"))
+        continue;
     else
         errAbort("Unrecognized image type in file %s", jpgImage);
 
@@ -132,7 +135,7 @@ while(lineFileNext(lf, &line, NULL))
 	    if (endsWith(nativeImage, ".bz2"))
 	        {
 		dyStringClear(command);
-		dyStringPrintf(command, "bunzip2 %s", nativeImage);
+		dyStringPrintf(command, "bunzip2 '%s'", nativeImage);
 		verbose(1, "%s\n", command->string);
 		err = system(command->string);
 		if (err != 0)
@@ -142,7 +145,7 @@ while(lineFileNext(lf, &line, NULL))
 	    if (!endsWith(nativeImage, ".jpg") )
 	        {
 		dyStringClear(command);
-		dyStringPrintf(command, "convert %s %s", nativeImage, jpgImage);
+		dyStringPrintf(command, "convert '%s' '%s'", nativeImage, jpgImage);
 		verbose(1, "%s\n", command->string);
 		err = system(command->string);
 		if (err != 0)
