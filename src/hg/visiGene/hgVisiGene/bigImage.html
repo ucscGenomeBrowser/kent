@@ -794,7 +794,7 @@ return false;
 function dblClick(e) {
 //debug testing singleclick action
 // dont need double click
-//if (!e) var e = window.event;
+if (!e) var e = window.event;
 //alert('dblClick() event called!');
 //clickAction();
 e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
