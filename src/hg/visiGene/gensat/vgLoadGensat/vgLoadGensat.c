@@ -7,7 +7,7 @@
 #include "xap.h"
 #include "gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.1 2005/11/18 10:39:39 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.2 2005/11/19 02:29:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +38,7 @@ for (image = imageSet->gsGensatimage; image != NULL; image = image->next)
     /* Fish fields we want out of image and info. */
     struct gsGensatimageImageInfo *info = image->gsGensatimageImageInfo;	/** Single instance required. **/
     struct gsGensatimageinfo *fileInfo = info->gsGensatimageImageInfoFullImg->gsGensatimageinfo;	/** Single instance required. **/
+    struct gsGensatimageAnnotations *annotations;
     char *fileName = fileInfo->gsGensatimageinfoFilename->text;	/** Single instance required. **/
     int width = fileInfo->gsGensatimageinfoWidth->text;
     int height = fileInfo->gsGensatimageinfoHeight->text;
@@ -64,10 +65,30 @@ for (image = imageSet->gsGensatimage; image != NULL; image = image->next)
     fprintf(f, "%d\t", width);
     fprintf(f, "%d\t", height);
     fprintf(f, "%s\n", fileName);
+
+    /* Print out expression info if any. */
+    if ((annotations = image->gsGensatimageAnnotations) != NULL)
+        {
+	struct gsGensatannotation *ann ;
+	for (ann = annotations->gsGensatannotation; ann != NULL; ann = ann->next)
+	    {
+	    char *level = ann->gsGensatannotationExpressionLevel->value;
+	    char *pattern = ann->gsGensatannotationExpressionPattern->value;
+	    char *region = NULL;
+	    char *cellType = NULL;
+	    char *cellSubtype = NULL;
+	    if (ann->gsGensatannotationRegion != NULL)
+	        region = ann->gsGensatannotationRegion->text;
+	    if (ann->gsGensatannotationCellType != NULL)
+	        cellType = ann->gsGensatannotationCellType->text;
+	    if (ann->gsGensatannotationCellSubtype != NULL)
+	        cellSubtype = ann->gsGensatannotationCellSubtype->text;
+	    fprintf(f, "\texpression\t%s\t%s\t%s\t%s\t%s\n", region, level, pattern, cellType, cellSubtype);
+	    }
+	}
     }
 carefulClose(&f);
 }
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
