@@ -95,10 +95,11 @@
 #include "dless.h"
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
+#include "liftOver.h"
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1039 2005/11/17 20:18:10 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1040 2005/11/19 17:43:44 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10156,10 +10157,14 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
 
-if (gotBlat)
+if (liftOverChainForDb(database) != NULL)
     {
-        hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgLiftOver?hglft_fromOrg=%s&hglft_fromDb=%s&hgLft_toOrg=0&hglft_toDb=0&%s\" class=\"topbar\">%s</A></TD>", organism, database, uiVars->string, "Convert");
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"");
+    hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d", 
+    	uiVars->string, database, chromName, winStart, winEnd);
+    hPrintf("\" class=\"topbar\">Convert</A></TD>");
     }
+
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
 if (sameString(database, "hg17")
