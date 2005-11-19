@@ -63,6 +63,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
 	nanEqu1\
 	sc1 \
+	canHg12 canHg11 canHg10\
 	canHg4 canHg9 car46 canHg10 canHg11\
 	vibCho1 
 
