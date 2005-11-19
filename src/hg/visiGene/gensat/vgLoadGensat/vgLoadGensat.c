@@ -7,7 +7,7 @@
 #include "xap.h"
 #include "gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.2 2005/11/19 02:29:14 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.3 2005/11/19 03:25:03 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +24,30 @@ errAbort(
 static struct optionSpec options[] = {
    {NULL, 0},
 };
+
+char *levelAsNumber(char *level)
+/* Return ascii version of floating point number between
+ * 0 and 1, or NULL, depending on level string. */
+{
+if (sameString(level, "undetectable"))
+    return "0";
+else if (sameString(level, "weak"))
+    return "0.5";
+else if (sameString(level, "strong"))
+    return "1.0";
+else
+    return NULL;
+}
+
+char *blankOutNotDone(char *s)
+/* Return s, unless it's "not-done", in which
+ * case return "". */
+{
+if (sameString(s, "not-done"))
+    s = "";
+return s;
+}
+
 
 void vgLoadGensat(char *gensatXml, char *outTab)
 /* vgLoadGensat - Parse gensat XML file and turn it into VisiGene load files. */
@@ -74,16 +98,21 @@ for (image = imageSet->gsGensatimage; image != NULL; image = image->next)
 	    {
 	    char *level = ann->gsGensatannotationExpressionLevel->value;
 	    char *pattern = ann->gsGensatannotationExpressionPattern->value;
-	    char *region = NULL;
-	    char *cellType = NULL;
-	    char *cellSubtype = NULL;
+	    char *region = "";
+	    char *cellType = "";
+	    char *cellSubtype = "";
 	    if (ann->gsGensatannotationRegion != NULL)
 	        region = ann->gsGensatannotationRegion->text;
 	    if (ann->gsGensatannotationCellType != NULL)
 	        cellType = ann->gsGensatannotationCellType->text;
 	    if (ann->gsGensatannotationCellSubtype != NULL)
 	        cellSubtype = ann->gsGensatannotationCellSubtype->text;
-	    fprintf(f, "\texpression\t%s\t%s\t%s\t%s\t%s\n", region, level, pattern, cellType, cellSubtype);
+	    level = levelAsNumber(level);
+	    cellType = blankOutNotDone(cellType);
+	    cellSubtype = blankOutNotDone(cellSubtype);
+	    if (level != NULL)
+		fprintf(f, "\texpression\t%s\t%s\t%s\t%s\t%s\n", 
+		    region, level, pattern, cellType, cellSubtype);
 	    }
 	}
     }
