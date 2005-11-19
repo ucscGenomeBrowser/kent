@@ -31,8 +31,10 @@ joinTest: mkout
 	diff -u expected/$@.flat.bed output/$@.flat.bed
 
 joinCdsTest: mkout
-	clusterGenes -joinContained -cds output/joinCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp
-	diff -u expected/joinCdsTest.gl output/joinCdsTest.gl
+	clusterGenes -joinContained -cds -clusterBed=output/$@.bed -flatBed=output/$@.flat.bed output/joinCdsTest.gl hg16 input/blatRefSeq.gp input/ncbiRefSeq.gp input/joinSmall.gp
+	diff -u expected/$@.gl output/$@.gl
+	diff -u expected/$@.bed output/$@.bed
+	diff -u expected/$@.flat.bed output/$@.flat.bed
 
 mkout:
 	${MKDIR} output

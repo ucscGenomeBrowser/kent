@@ -11,7 +11,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: clusterGenes.c,v 1.30 2005/11/16 17:45:25 markd Exp $";
+static char const rcsid[] = "$Id: clusterGenes.c,v 1.31 2005/11/19 04:52:29 markd Exp $";
 
 /* Command line driven variables. */
 char *clChrom = NULL;
@@ -644,13 +644,13 @@ Bits* mkClusterMap(struct cluster *cluster)
 int len = (cluster->end - cluster->start);
 Bits *map = bitAlloc(len);
 struct clusterGene *cg;
-int iExon;
+int exonStart, exonEnd, iExon;
 
 for (cg = cluster->genes; cg != NULL; cg = cg->next)
     {
     for (iExon = 0; iExon < cg->gp->exonCount; iExon++)
-        bitSetRange(map, (cg->gp->exonStarts[iExon]-cluster->start),
-                    (cg->gp->exonEnds[iExon]-cg->gp->exonStarts[iExon]));
+        if (gpGetExon(cg->gp, iExon, gUseCds, &exonStart, &exonEnd))
+            bitSetRange(map, (exonStart-cluster->start), (exonEnd - exonStart));
     }
 return map;
 }
