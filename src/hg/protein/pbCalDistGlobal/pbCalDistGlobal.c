@@ -4,7 +4,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-#define MAX_PROTEIN_CNT 2000000
+#define MAX_PROTEIN_CNT 4000000
 
 void usage()
 /* Explain usage and exit. */
@@ -262,6 +262,9 @@ while (row2 != NULL)
     
     row2 = sqlNextRow(sr2);
     }
+sqlFreeResult(&sr2);
+sqlDisconnect(&conn2);
+sqlDisconnect(&conn3);
 
 totalResCnt = 0;
 for (i=0; i<23; i++)
@@ -284,9 +287,6 @@ calDist(pI,  	         pIcnt,    61,     3.0, 0.2, 	"pepPiDist.tab");
 calDist(avgHydro,     	  icnt,    41,    -2.0, 0.1, 	"pepHydroDist.tab");
 calDist(cCountDouble, 	  icnt,    51,     0.0, 1.0, 	"pepCCntDist.tab");
 calDist(interProCountDouble,ipcnt, 16,     0.0, 1.0, 	"pepIPCntDist.tab");
-sqlFreeResult(&sr2);
-sqlDisconnect(&conn2);
-sqlDisconnect(&conn3);
 
 return(0);
 }
