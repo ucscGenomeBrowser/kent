@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.25 2005/11/18 18:06:14 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.26 2005/11/19 01:18:41 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -9450,9 +9450,6 @@ cat out/$1/*.out >>protRefRaw.psl
 
    kgPick kgMm7ATemp mm7 proteins051015 kg4.tmp dupSpMrna.tmp
    sort -u dupSpMrna.tmp >dupSpMrna.tab
-   hgsql mm7 -e  'drop table dupSpMrna'
-   hgsql mm7 < ~/src/hg/lib/dupSpMrna.sql
-   hgsql mm7 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
 
 # Create put back list
 
@@ -9495,6 +9492,12 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql kgMm7ATemp -e  'drop table knownGene'
    hgsql kgMm7ATemp < ~/src/hg/lib/knownGene.sql
    hgsql kgMm7ATemp -e  'load data local infile "kg4.gp" into table knownGene'
+   
+# Load dupSpMrna table after knownGene table is loaded so that joinerCheck does not complain.
+
+   hgsql mm7 -e  'drop table dupSpMrna'
+   hgsql mm7 < ~/src/hg/lib/dupSpMrna.sql
+   hgsql mm7 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
 
 # Perform analysis before loading kg4 table data to mm7.knownGene table.
 
