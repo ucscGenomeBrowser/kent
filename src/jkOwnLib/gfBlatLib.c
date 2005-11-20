@@ -18,10 +18,11 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.17 2005/08/29 20:59:45 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.18 2005/11/20 19:24:42 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
+#ifdef DEBUG
 void dumpRange(struct gfRange *r, FILE *f)
 /* Dump range to file. */
 {
@@ -35,7 +36,6 @@ struct gfRange *range;
 for (range = rangeList; range != NULL; range = range->next)
     dumpRange(range, f);
 }
-#ifdef DEBUG
 #endif /* DEBUG */
 
 void gfRangeFree(struct gfRange **pEl)
@@ -363,10 +363,6 @@ struct gfRange *gfRangesBundle(struct gfRange *exonList, int maxIntron)
  * same target sequence. */
 {
 struct gfRange *geneList = NULL, *gene = NULL, *lastExon = NULL, *exon, *nextExon;
-
-#ifdef DEBUG 
-   printf("gfRangesBundle maxIntron=%d\n", maxIntron);
-#endif
 
 for (exon = exonList; exon != NULL; exon = nextExon)
     {
@@ -1447,7 +1443,7 @@ for (fi = bun->ffList; fi != NULL; fi = fi->next)
 }
 
 #ifdef DEBUG
-static void dumpBunList(struct ssBundle *bunList)
+void dumpBunList(struct ssBundle *bunList)
 /* Write out summary info on bundle list. */
 {
 int totalItems = 0;
@@ -1459,16 +1455,19 @@ for (bun = bunList; bun != NULL; bun = bun->next)
     struct ssFfItem *item;
     for (item = bun->ffList; item != NULL; item = item->next)
 	{
+	printf("item: ");
 	struct ffAli *ff;
 	for (ff = item->ff; ff != NULL; ff = ff->right)
 	    {
 	    totalBases += ff->hEnd - ff->hStart;
 	    totalBlocks += 1;
+	    printf("%d,", ff->hEnd - ff->hStart);
 	    }
+	printf("\n");
 	totalItems += 1;
 	}
     }
-printf(2, "bundles %d, alignments %d, blocks %d, bases %d\n", 
+printf("total bundles %d, alignments %d, blocks %d, bases %d\n", 
     slCount(bunList), totalItems, totalBlocks, totalBases);
 }
 #endif /* DEBUG */
