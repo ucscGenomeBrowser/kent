@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.64 2005/11/11 03:31:39 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.65 2005/11/20 21:23:34 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1449,33 +1449,6 @@ lineFileClose(&sf);
 return hash;
 }
 
-static void countInserts(char *s, char *otherSeq, int size,
-                         int *retNumInsert, int *retBaseInsert)
-/* Count up number and total size of inserts in s.  Other seq required
- * to skip columns not aligned in either sequence*/
-{
-char lastC = s[0];
-int i;
-int baseInsert = 0, numInsert = 0;
-if (lastC == '-')
-    errAbort("%s starts with -", s);
-for (i=0; i<size; ++i)
-    {
-    if (otherSeq[i] != '-')
-        {
-        if (s[i] == '-')
-            {
-            if (lastC != '-')
-                numInsert += 1;
-            baseInsert += 1;
-            }
-        lastC = s[i];
-        }
-    }
-*retNumInsert = numInsert;
-*retBaseInsert = baseInsert;
-}
-
 static int countInitialChars(char *s, char c)
 /* Count number of initial chars in s that match c. */
 {
@@ -1484,6 +1457,21 @@ char d;
 while ((d = *s++) != 0)
     {
     if (c == d)
+        ++count;
+    else
+        break;
+    }
+return count;
+}
+
+static int countTerminalChars(char *s, char c)
+/* Count number of terminal chars in s that match c. */
+{
+int len = strlen(s), i;
+int count = 0;
+for (i=len-1; i>=0; --i)
+    {
+    if (c == s[i])
         ++count;
     else
         break;
@@ -1500,21 +1488,6 @@ int i;
 for (i=0; i<size; ++i)
     if (*s++ != '-')
         ++count;
-return count;
-}
-
-static int countTerminalChars(char *s, char c)
-/* Count number of initial chars in s that match c. */
-{
-int len = strlen(s), i;
-int count = 0;
-for (i=len-1; i>=0; --i)
-    {
-    if (c == s[i])
-        ++count;
-    else
-        break;
-    }
 return count;
 }
 
@@ -1561,6 +1534,56 @@ if (startInsert > 0 || endInsert > 0)
     trimAlignment(psl, qStringPtr, tStringPtr, aliSizePtr);
 }
 
+static void addBlock(struct psl* psl, int qs, int qe, int ts, int te,
+                     unsigned *blockSpace)
+/* add a block to the psl, growing if necessary */
+{
+assert((qe-qs) == (te-ts));  /* same lengths? */
+if (psl->blockCount == *blockSpace)
+    pslGrow(psl, blockSpace);
+psl->blockSizes[psl->blockCount] = qe - qs;
+psl->qStarts[psl->blockCount] = qs;
+psl->tStarts[psl->blockCount] = ts;
+psl->blockCount++;
+}
+
+static void accumCounts(struct psl *psl, char prevQ, char prevT,
+                        char q, char t, unsigned options)
+/* accumulate block and base counts  */
+{
+if ((q != '-') && (t != '-'))
+    {
+    /* aligned column. */
+    char qu = toupper(q);
+    char tu = toupper(t);
+    if ((q == 'N') || (t == 'N'))
+        psl->nCount++;
+    else if (qu == tu)
+        {
+        if ((options & PSL_IS_SOFTMASK) && ((qu != q) || (tu != t)))
+            psl->repMatch++;
+        else
+            psl->match++;
+        }
+    else
+        psl->misMatch++;
+    }
+else if ((q == '-') && (t != '-'))
+    {
+    /* target insert */
+    psl->tBaseInsert++;
+    if (prevQ != '-')
+        psl->tNumInsert++;
+    }
+else if ((t == '-') && (q != '-'))
+    {
+    /* query insert */
+    psl->qBaseInsert++;
+    if (prevT != '-')
+        psl->qNumInsert++;
+    }
+}
+
 struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qString,
                          char *tName, int tSize, int tStart, int tEnd, char *tString,
                          char* strand, unsigned options)
@@ -1568,138 +1591,76 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
  * bases indicate repeat masking.  Returns NULL if alignment is empty after
  * triming leading and trailing indels.*/
 {
+/* Note, the unit tests for these programs exercise this function:
+ *   hg/embossToPsl
+ *   hg/mouseStuff/axtToPsl
+ *   hg/spideyToPsl
+ *   utils/est2genomeToPsl
+ */
+
+unsigned blockSpace = 16;
 struct psl* psl = NULL;
 int aliSize = strlen(qString);
 boolean eitherInsert = FALSE;	/* True if either in insert state. */
-int blockIx=0;
 int i, qs,qe,ts,te;
+char prevQ = '\0',  prevT = '\0';
 AllocVar(psl);
 
 if (strlen(tString) != aliSize)
     errAbort("query and target alignment strings are different lengths");
 
-/* initialize PSL */
-safef(psl->strand, sizeof(psl->strand), "%s", strand);
-psl->qName = cloneString(qName);
-psl->qSize = qSize;
-psl->qStart = qStart;
-psl->qEnd = qEnd;
-
-psl->tName = cloneString(tName);
-psl->tSize = tSize;
-psl->tStart = tStart;
-psl->tEnd = tEnd;
-
+psl = pslNew(qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd,
+             strand, blockSpace, 0);
 trimAlignment(psl, &qString, &tString, &aliSize);
 
-/* Don't create if either query or target is zero length */
+/* Don't create if either query or target is zero length after trim */
  if ((psl->qStart == psl->qEnd) || (psl->tStart == psl->tEnd))
      {
      pslFree(&psl);
      return NULL;
      }
 
-/* First count up number of blocks and inserts. */
-countInserts(qString, tString, aliSize, &psl->qNumInsert, &psl->qBaseInsert);
-countInserts(tString, qString, aliSize, &psl->tNumInsert, &psl->tBaseInsert);
-psl->blockCount = 1 + psl->qNumInsert + psl->tNumInsert;
-
-/* Count up match/mismatch/repMatch. */
-for (i=0; i<aliSize; ++i)
-    {
-    char q = qString[i];
-    char t = tString[i];
-    if ((q != '-') && (t != '-'))
-	{
-        if ((options & PSL_IS_SOFTMASK) == 0)
-            {
-            q = toupper(q);
-            t = toupper(t);
-            }
-	if (q == 'N' || t == 'N' )
-            ++psl->nCount;
-        else if (q == t && isupper(q) && isupper(t))
-	    ++psl->match;
-	else if (toupper(q) == toupper(t))
-            ++psl->repMatch;
-        else
-	    ++psl->misMatch;
-	}
-    }
-
-/* Deal with minus strand. */
+/* Get range of alignment in strand-specified coordinates */
 qs = psl->qStart;
-qe = qs + psl->match + psl->misMatch + psl->repMatch + psl->tBaseInsert
-    + psl->nCount;
-if (qe != psl->qEnd)
-    errAbort("mismatch qe %d qEnd %d %s qStart %d match %d misMatch %d repmatch %d gaps %d tBaseIns %d",
-             qe, psl->qEnd, psl->qName, psl->qStart, psl->match, psl->misMatch, psl->repMatch,
-             psl->nCount, psl->tBaseInsert);
-assert(qe == psl->qEnd); 
-assert(qs < qe);
-
-ts = psl->tStart;
-te = ts + psl->match + psl->misMatch + psl->repMatch + psl->qBaseInsert
-    + psl->nCount;
-if (te != psl->tEnd)
-    errAbort("mismatch te %d tEnd %d %s tStart %d match %d misMatch %d repmatch %d gaps %d qBaseIns %d",
-             qe, psl->tEnd, psl->tName, psl->tStart, psl->match, psl->misMatch, psl->repMatch,
-             psl->nCount, psl->qBaseInsert);
-assert(te == psl->tEnd);
-assert(psl->tStart < te);
-
+qe = psl->qEnd;
 if (strand[0] == '-')
     reverseIntRange(&qs, &qe, psl->qSize);
+ts = psl->tStart;
+te = psl->tEnd;
 if (strand[1] == '-')
     reverseIntRange(&ts, &te, psl->tSize);
 
-
-/* Figure block sizes and starts. */
-AllocArray(psl->blockSizes, psl->blockCount);
-AllocArray(psl->qStarts, psl->blockCount);
-AllocArray(psl->tStarts, psl->blockCount);
-
 eitherInsert = FALSE;
-qe = qs;
+qe = qs;  /* current block coords */
 te = ts;
 for (i=0; i<aliSize; ++i)
     {
     char q = qString[i];
     char t = tString[i];
-    if (((q == '-') || (t == '-')) && !((q == '-') && (t == '-')))
+    if ((q == '-') && (t == '-'))
         {
+        continue; /* nothing in this column, just ignore it */
+        }
+    else if ((q == '-') || (t == '-'))
+        {
+        /* insert in one of the columns */
 	if (!eitherInsert)
 	    {
-	    psl->blockSizes[blockIx] = qe - qs;
-	    psl->qStarts[blockIx] = qs;
-	    psl->tStarts[blockIx] = ts;
-	    ++blockIx;
+            /* end of a block */
+            addBlock(psl, qs, qe, ts, te, &blockSpace);
 	    eitherInsert = TRUE;
 	    }
-	else if (i > 0)
-	    {
-	    /* Handle cases like
-	     *     aca---gtagtg
-	     *     acacag---gtg
-	     */
-	    if ((q == '-' && tString[i-1] == '-') || 
-	    	(t == '-' && qString[i-1] == '-'))
-	        {
-		psl->blockSizes[blockIx] = 0;
-		psl->qStarts[blockIx] = qe;
-		psl->tStarts[blockIx] = te;
-		++blockIx;
-		}
-	    }
 	if (q != '-')
-	   qe += 1;
+            qe += 1;
 	if (t != '-')
-	   te += 1;
+            te += 1;
 	}
     else
         {
+        /* columns aligned */
 	if (eitherInsert)
 	    {
+            /* start new block */
 	    qs = qe;
 	    ts = te;
 	    eitherInsert = FALSE;
@@ -1707,12 +1668,11 @@ for (i=0; i<aliSize; ++i)
 	qe += 1;
 	te += 1;
 	}
+    accumCounts(psl, prevQ, prevT, q, t, options);
+    prevQ = q; /* will not include skipped empty columns */
+    prevT = t;
     }
-assert(blockIx == psl->blockCount-1);
-psl->blockSizes[blockIx] = qe - qs;
-psl->qStarts[blockIx] = qs;
-psl->tStarts[blockIx] = ts;
-
+addBlock(psl, qs, qe, ts, te, &blockSpace);
 return psl;
 }
 

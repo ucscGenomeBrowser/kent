@@ -9,3 +9,6 @@ O = axtToPsl.o
 axtToPsl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/axtToPsl $O $(MYLIBS) $L
 	${STRIP} $(HOME)/bin/$(MACHTYPE)/axtToPsl${EXE}
+
+test:
+	(cd tests && ${MAKE} test)
