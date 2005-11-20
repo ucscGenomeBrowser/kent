@@ -6,7 +6,7 @@
 #include "fuzzyFind.h"
 #include "dnaseq.h"
 
-static char const rcsid[] = "$Id: ffAliHelp.c,v 1.9 2005/08/29 20:59:45 kent Exp $";
+static char const rcsid[] = "$Id: ffAliHelp.c,v 1.10 2005/11/20 19:24:57 kent Exp $";
 
 void ffCat(struct ffAli **pA, struct ffAli **pB)
 /* Concatenate B to the end of A. Eat up second list
@@ -183,6 +183,7 @@ if (orientation <= 0)
 return score > revScore ? score : revScore;
 }
 
+
 static int slideIntron(struct ffAli *left, struct ffAli *right, int orientation)
 /* Slides space between alignments if possible to match
  * intron consensus better.  Returns how much it slid intron. */
@@ -204,7 +205,7 @@ if (hRight-hLeft < 4)   /* Too short to be an intron. */
 if (nRight-nLeft > 2)   /* Too big of a gap to be an intron. */
     return 0;
 
-/* Slide as far to the left as possible. */
+/* Slide as far to the left as possible without inserting mismatches. */
 while (nLeft > nLeftEnd)
     {
     nl = nLeft[-1];
@@ -213,7 +214,7 @@ while (nLeft > nLeftEnd)
     hr = hRight[-1];
     if (!(nl == 'n' && nr == 'n'))  /* N's in needle freely slide. */
         {
-        if (nl != hl || nr != hr || hl != hr)
+        if (nr != hr)
             break;
         }
     nLeft -= 1;
@@ -237,10 +238,6 @@ while (nRight < nRightEnd)
         break;
     nr = nRight[0];
     hr = hRight[0];
-    if (nr != 'n' && nr != hr)
-        break;
-    if (hl != hr)
-        break;
     nLeft += 1;
     hLeft += 1;
     nRight += 1;

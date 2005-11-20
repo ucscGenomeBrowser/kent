@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.32 2005/08/29 20:59:45 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.33 2005/11/20 19:24:57 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1224,6 +1224,7 @@ while (left != NULL)
     }
 return ffList;
 }
+
 
 static void refineBundle(struct genoFind *gf, 
 	struct dnaSeq *qSeq,  Bits *qMaskBits, int qMaskOffset,
