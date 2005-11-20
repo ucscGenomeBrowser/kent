@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.16 2004/01/24 03:06:38 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.17 2005/11/20 22:20:48 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -80,6 +80,33 @@ if (word == NULL)
 return word;
 }
 
+boolean isAllUpper(char *s)
+/* Return true if all alphabetical letters in string
+ * are upper case. */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (isalpha(c) && !isupper(c))
+        return FALSE;
+    }
+return TRUE;
+}
+
+boolean isAllLower(char *s)
+/* Return true if all alphabetical letters in string
+ * are upper case. */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (isalpha(c) && !islower(c))
+        return FALSE;
+    }
+return TRUE;
+}
+
+
 char *mixedCaseName(char *orig)
 /* Convert var_like_this or VAR_LIKE_THIS or even
  * var-like-this to varLikeThis. */
@@ -89,6 +116,9 @@ char *d, *s = orig;
 char c;
 int prefixLen = strlen(prefix), len;
 boolean nextUpper;
+boolean allUpper = isAllUpper(orig); 
+boolean allLower = isAllLower(orig);
+boolean initiallyMixed = (!allUpper && !allLower);
 
 /* Allocate string big enough for prefix and all. */
 len = strlen(orig) + prefixLen;
@@ -106,7 +136,7 @@ for (;;)
        {
        if (nextUpper)
            c = toupper(c);
-       else
+       else if (!initiallyMixed)
            c = tolower(c);
        nextUpper = FALSE;
        *d++ = c;
@@ -829,9 +859,9 @@ for (el = elList; el != NULL; el = el->next)
 	if (el->textType)
 	    {
 	    if (sameString(el->textType, "#INT"))
-		fprintf(f, "    obj->%s = atoi(stack->%s->string));\n", textField, textField);
+		fprintf(f, "    obj->%s = atoi(stack->%s->string);\n", textField, textField);
 	    else if (sameString(el->textType, "#FLOAT"))
-		fprintf(f, "    obj->%s = atof(stack->%s->string));\n", textField, textField);
+		fprintf(f, "    obj->%s = atof(stack->%s->string);\n", textField, textField);
 	    else
 		fprintf(f, "    obj->%s = cloneString(stack->%s->string);\n", textField, textField);
 	    }
