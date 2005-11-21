@@ -5,9 +5,9 @@
 #include "options.h"
 #include "xp.h"
 #include "xap.h"
-#include "gs.h"
+#include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.3 2005/11/19 03:25:03 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.4 2005/11/21 17:38:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,38 +52,48 @@ return s;
 void vgLoadGensat(char *gensatXml, char *outTab)
 /* vgLoadGensat - Parse gensat XML file and turn it into VisiGene load files. */
 {
-struct gsGensatimageset *imageSet = gsGensatimagesetLoad(gensatXml);
-struct gsGensatimage *image;
+struct xap *xap = xapListOpen(gensatXml, "GensatImageSet",
+    gsStartHandler, gsEndHandler);
+struct gsGensatImage *image;
 FILE *f = mustOpen(outTab, "w");
+int i=0;
 
-uglyf("Got %d images\n", slCount(imageSet->gsGensatimage));
-for (image = imageSet->gsGensatimage; image != NULL; image = image->next)
+while ((image = xapListNext(xap, "GensatImage")) != NULL)
     {
     /* Fish fields we want out of image and info. */
-    struct gsGensatimageImageInfo *info = image->gsGensatimageImageInfo;	/** Single instance required. **/
-    struct gsGensatimageinfo *fileInfo = info->gsGensatimageImageInfoFullImg->gsGensatimageinfo;	/** Single instance required. **/
-    struct gsGensatimageAnnotations *annotations;
-    char *fileName = fileInfo->gsGensatimageinfoFilename->text;	/** Single instance required. **/
-    int width = fileInfo->gsGensatimageinfoWidth->text;
-    int height = fileInfo->gsGensatimageinfoHeight->text;
-    int id = image->gsGensatimageId->text;	/** Single instance required. **/
-    char *symbol = image->gsGensatimageGeneSymbol->text;	/** Single instance required. **/
-    char *name = image->gsGensatimageGeneName->text;	/** Single instance required. **/
+    struct gsGensatImageImageInfo *info = image->gsGensatImageImageInfo;	/** Single instance required. **/
+    struct gsGensatImageInfo *fileInfo = info->gsGensatImageImageInfoFullImg->gsGensatImageInfo;	/** Single instance required. **/
+    struct gsGensatImageAnnotations *annotations;
+    char *fileName = fileInfo->gsGensatImageInfoFilename->text;	/** Single instance required. **/
+    int width = fileInfo->gsGensatImageInfoWidth->text;
+    int height = fileInfo->gsGensatImageInfoHeight->text;
+    int id = image->gsGensatImageId->text;	/** Single instance required. **/
+    char *symbol = "";
+    char *name = "";
     int geneId = 0;
     char *acc = "";
-    char *section = image->gsGensatimageSectionPlane->value;	/** Single instance required. **/
-    char *level = image->gsGensatimageSectionLevel->text;	/** Single instance required. **/
-    if (image->gsGensatimageGeneId != NULL)
-	geneId = image->gsGensatimageGeneId->text;	/** Optional (may be NULL). **/
-    if (image->gsGensatimageGenbankAcc != NULL)
-	acc = image->gsGensatimageGenbankAcc->text;	/** Optional (may be NULL). **/
+    char *bac = NULL;
+    struct gsGensatImageSeqInfo *gsGensatImageSeqInfo;	/** Single instance required. **/
+    char *section = image->gsGensatImageSectionPlane->value;	/** Single instance required. **/
+    char *level = image->gsGensatImageSectionLevel->text;	/** Single instance required. **/
 
+    if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneSymbol != NULL)
+	symbol = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneSymbol->text;	
+    if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneName != NULL)
+	name = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneName->text;	
+    if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneId != NULL)
+	geneId = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneId->text;	
+    if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoBacAddress != NULL)
+        bac = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoBacAddress->text;
+    if (image->gsGensatImageSeqInfo->gsGensatSequenceInfo->gsGensatSequenceInfoAccession != NULL)
+	acc = image->gsGensatImageSeqInfo->gsGensatSequenceInfo->gsGensatSequenceInfoAccession->text;	
     /* Print out fields */
     fprintf(f, "%d\t", id);
     fprintf(f, "%s\t", symbol);
     // fprintf(f, "%s\t", name);
     fprintf(f, "%d\t", geneId);
     fprintf(f, "%s\t", acc);
+    fprintf(f, "%s\t", bac);
     fprintf(f, "%s\t", section);
     fprintf(f, "%s\t", level);
     fprintf(f, "%d\t", width);
@@ -91,22 +101,22 @@ for (image = imageSet->gsGensatimage; image != NULL; image = image->next)
     fprintf(f, "%s\n", fileName);
 
     /* Print out expression info if any. */
-    if ((annotations = image->gsGensatimageAnnotations) != NULL)
+    if ((annotations = image->gsGensatImageAnnotations) != NULL)
         {
-	struct gsGensatannotation *ann ;
-	for (ann = annotations->gsGensatannotation; ann != NULL; ann = ann->next)
+	struct gsGensatAnnotation *ann ;
+	for (ann = annotations->gsGensatAnnotation; ann != NULL; ann = ann->next)
 	    {
-	    char *level = ann->gsGensatannotationExpressionLevel->value;
-	    char *pattern = ann->gsGensatannotationExpressionPattern->value;
+	    char *level = ann->gsGensatAnnotationExpressionLevel->value;
+	    char *pattern = ann->gsGensatAnnotationExpressionPattern->value;
 	    char *region = "";
 	    char *cellType = "";
 	    char *cellSubtype = "";
-	    if (ann->gsGensatannotationRegion != NULL)
-	        region = ann->gsGensatannotationRegion->text;
-	    if (ann->gsGensatannotationCellType != NULL)
-	        cellType = ann->gsGensatannotationCellType->text;
-	    if (ann->gsGensatannotationCellSubtype != NULL)
-	        cellSubtype = ann->gsGensatannotationCellSubtype->text;
+	    if (ann->gsGensatAnnotationRegion != NULL)
+	        region = ann->gsGensatAnnotationRegion->text;
+	    if (ann->gsGensatAnnotationCellType != NULL)
+	        cellType = ann->gsGensatAnnotationCellType->text;
+	    if (ann->gsGensatAnnotationCellSubtype != NULL)
+	        cellSubtype = ann->gsGensatAnnotationCellSubtype->text;
 	    level = levelAsNumber(level);
 	    cellType = blankOutNotDone(cellType);
 	    cellSubtype = blankOutNotDone(cellSubtype);
@@ -115,7 +125,9 @@ for (image = imageSet->gsGensatimage; image != NULL; image = image->next)
 		    region, level, pattern, cellType, cellSubtype);
 	    }
 	}
+    gsGensatImageFree(&image);
     }
+xapFree(&xap);
 carefulClose(&f);
 }
 
