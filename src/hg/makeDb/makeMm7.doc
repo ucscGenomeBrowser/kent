@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.29 2005/11/21 17:59:37 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.30 2005/11/21 20:11:26 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1110,7 +1110,7 @@ mm7.mgcTables.mgc = all
 
 
 #########################################################################
-# BLASTZ HUMAN Hg17 second time (WORKING - 2005-11-14 - Hiram)
+# BLASTZ HUMAN Hg17 second time (DONE - 2005-11-14 - 2005-11-21 - Hiram)
     #	After fixing a bug in the lineage specific repeat snip business
     #	in blastz-run-ucsc script
     ssh pk
@@ -1152,13 +1152,11 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk \
 	-stop=net \
 	`pwd`/DEF > blastz-to-net.out 2>&1 &
-XXXX - Started 2005-11-14 11:15
+    #	Started 2005-11-14 11:15
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	-continue=load -stop=load \
 	`pwd`/DEF > load.out 2>&1 &
-
-1005565837 bases of 2583394090 (38.924%) in intersection
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -swap -stop=net `pwd`/DEF > swap-to-net.out 2>&1 &
@@ -1189,6 +1187,28 @@ XXXX - Started 2005-11-14 11:15
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -continue=load -stop=load \
 	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreDownloadSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzHg17.2005-11-14
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainHg17Link > fb.mm7.chainHg17Link.rescore 2>&1
+    cat fb.mm7.chainHg17Link.rescore
+    #	996434728 bases of 2583394090 (38.571%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
+	chainMm7Link > fb.hg17.chainMm7Link.rescore 2>&1
+    cat fb.hg17.chainMm7Link.rescore
+    #	994737081 bases of 2866216770 (34.706%) in intersection
 
 
 #########################################################################
@@ -2298,6 +2318,23 @@ TMPDIR=/scratch/tmp
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
     #	real    13m42.163s
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreDownload.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzGalGal2.2005-11-14
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainGalGal2Link > fb.mm7.chainGalGal2Link.rescore 2>&1
+    cat fb.mm7.chainGalGal2Link.rescore
+    #	79325073 bases of 2583394090 (3.071%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits galGal2 \
+	chainMm7Link > fb.galGal2.chainMm7Link.rescore 2>&1
+    cat fb.galGal2.chainMm7Link.rescore
+    #	70793655 bases of 1054197620 (6.715%) in intersection
 
 #############################################################################
 # BLASTZ CHICKEN - (DONE - 2005-10-03 - Hiram)
@@ -10776,6 +10813,11 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-continue=cat -stop=load `pwd`/DEF > cat.to.load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainMerge -stop=load \
+	`pwd`/DEF > chainMerge.to.load.out 2>&1 &
 
 ############################################################################
 # MM3/MM4/MM5/MM6 -> MM7 LIFTOVER CHAINS (DONE 11/21/2005 Andy)
