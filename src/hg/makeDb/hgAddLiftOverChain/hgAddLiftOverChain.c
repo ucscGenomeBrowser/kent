@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.3 2005/09/23 21:50:36 galt Exp $";
+static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.4 2005/11/21 09:22:11 aamp Exp $";
 
 #define TABLE_NAME "liftOverChain"
 
@@ -20,6 +20,8 @@ char *path = NULL; /* filename instead of
 float minMatch = 0.95; /* Minimum ratio of bases that must remap. */
 int minSizeT = 0; /* Minimum chain size in target. */
 int minSizeQ = 0; /* Minimum chain size in query. */
+int minChainT = 0; /* Not sure what this is. */
+int minChainQ = 0; /* Not sure what this is. */
 boolean multiple = FALSE; /* Map query to multiple regions. */
 float minBlocks = 1; /* Min ratio of alignment blocks/exons that must map. */
 boolean fudgeThick = FALSE; /* If thickStart/thickEnd is not mapped, use the,
@@ -31,6 +33,8 @@ static struct optionSpec optionSpecs[] = {
         {"minMatch", OPTION_FLOAT},
         {"minSizeT", OPTION_INT},
         {"minSizeQ", OPTION_INT},
+        {"minChainT", OPTION_INT},
+        {"minChainQ", OPTION_INT},
         {"multiple", OPTION_BOOLEAN},
         {"minBlocks", OPTION_FLOAT},
         {"fudgeThick", OPTION_BOOLEAN},
@@ -53,10 +57,10 @@ errAbort(
     "    -fudgeThick    If thickStart/thickEnd is not mapped, use the closest \n"
     "                  mapped base.  Recommended if using -minBlocks.\n"
     "    -multiple               Allow multiple output regions\n"
+    "    -minChainT, -minChainQ    (default 0, 0) target/query,\n" 
     "    -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
     "                             when mapping to multiple output regions\n"
-    "                                     (default 0, 0)"
-    );
+    "                                     (default 0, 0)", minMatch, minBlocks);
 }
 
 void hgAddLiftOverChain(char *fromDb, char *toDb, char *chainFile)
@@ -80,6 +84,8 @@ if (!sqlTableExists(conn, TABLE_NAME))
     dyStringPrintf(dy, "  minMatch float not null,\n");
     dyStringPrintf(dy, "  minSizeT int unsigned not null,\n");
     dyStringPrintf(dy, "  minSizeQ int unsigned not null,\n");
+    dyStringPrintf(dy, "  minChainT int unsigned not null,\n");
+    dyStringPrintf(dy, "  minChainQ int unsigned not null,\n");
     dyStringPrintf(dy, "  multiple char(1) not null,\n");
     dyStringPrintf(dy, "  minBlocks float not null,\n");
     dyStringPrintf(dy, "  fudgeThick char(1) not null\n");
@@ -104,6 +110,8 @@ loChain.path = chainFile;
 loChain.minMatch = minMatch;
 loChain.minSizeQ = minSizeQ;
 loChain.minSizeT = minSizeT;
+loChain.minChainQ = minChainQ;
+loChain.minChainT = minChainT;
 loChain.multiple[0] = (multiple) ? 'Y' : 'N';
 loChain.minBlocks = minBlocks;
 loChain.fudgeThick[0] = (fudgeThick) ? 'Y' : 'N';
@@ -132,7 +140,9 @@ safef(buf, sizeof(buf), "/gbdb/%s/liftOver/%sTo%s.over.chain",
 path = optionVal("path", buf);
 minMatch = optionFloat("minMatch", minMatch);
 minSizeT = optionInt("minSizeT", minSizeT);
-minSizeT = optionInt("minSizeT", minSizeQ);
+minSizeQ = optionInt("minSizeQ", minSizeQ);
+minChainT = optionInt("minChainT", minChainT);
+minChainQ = optionInt("minChainQ", minChainQ);
 multiple = optionExists("multiple");
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
