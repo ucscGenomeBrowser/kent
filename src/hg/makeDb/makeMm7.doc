@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.28 2005/11/21 11:05:39 aamp Exp $"
+#	"$Id: makeMm7.doc,v 1.29 2005/11/21 17:59:37 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -765,6 +765,10 @@ TMPDIR=/scratch/tmp
 	-stop=net \
 	`pwd`/DEF > blastz.out 2>&1 &
 XXXX - Started 2005-11-17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=cat -stop=net \
+	`pwd`/DEF > cat-to-net.out 2>&1 &
 
 #############################################################################
 # BLASTZ SELF experiment 1 (DONE - 2005-09-14 - 2005-09-17 - Hiram)
@@ -1180,6 +1184,11 @@ XXXX - Started 2005-11-14 11:15
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load -stop=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
 
 
 #########################################################################
@@ -2699,7 +2708,9 @@ XXXX
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
     
 #############################################################################
-# BLASTZ CHIMP PanTro1 (WORKING - 2005-10-04 - Hiram)
+# BLASTZ CHIMP PanTro1 (DONE - 2005-10-04 - 2005-10-20 - Hiram)
+#	This sequence didn't function correctly in the multiple
+#	alignment.  The blastz run was done a second time.
     ssh kkstore03
     #	Create the composite chrom/contigs from randoms 2bit file
     #	for PanTro1
@@ -2931,6 +2942,11 @@ Submission to last job:          1287s      21.45m     0.36h    0.01d
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load -stop=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
     
 
 #############################################################################
@@ -3544,22 +3560,22 @@ xenopus_xenTro1:0.782453):0.156067,
 #                         featureBits chainLink measures
 #                                           chainMm7Link   chain   linearGap
 #    distance                       on Mm7      on other   minScore
-#  1  0.1587 - rat rn3            (% 69.612)  (% 70.113)   3000     medium
-#  2  0.4677 - human hg17         (% 38.924)  (% 35.034)   3000     medium
-#  3  0.4686 - chimp panTro1      (% 35.503)  (% 33.283)   3000     medium
-#  4  0.4960 - macaque rheMac1    (% 34.310)  (% 32.422)   3000     medium
-#  5  0.5131 - rabbit oryCun1     (% 19.492)  (% 24.380)   3000     medium
-#  6  0.6142 - armadillo dasNov1  (% 16.975)  (% 20.607)   3000     medium
-#  7  0.6230 - dog canFam2        (% 32.610)  (% 32.417)   3000     medium
-#  8  0.6256 - elephant loxAfr1   (% 18.583)  (% 20.804)   3000     medium
-#  9  0.6344 - cow bosTau2        (% 27.132)  (% 24.448)   3000     medium
-# 10  0.7805 - tenrec echTel1     (% 11.467)  (% 14.361)   5000     loose
-# 11  1.0698 - opossum monDom2    (%  8.501)  (%  6.319)   5000     loose
-# 12  1.3425 - chicken galGal2    (%  3.139)  (%  6.849)   5000     loose
+#  1  0.1587 - rat rn3            (% 69.61x)  (% 70.11x)   3000     medium
+#  2  0.4677 - human hg17         (% 38.571)  (% 34.706)   3000     medium
+#  3  0.4686 - chimp panTro1      (% 35.085)  (% 33.28x)   3000     medium
+#  4  0.4960 - macaque rheMac1    (% 34.31x)  (% 32.42x)   3000     medium
+#  5  0.5131 - rabbit oryCun1     (% 19.49x)  (% 24.38x)   3000     medium
+#  6  0.6142 - armadillo dasNov1  (% 16.97x)  (% 20.60x)   3000     medium
+#  7  0.6230 - dog canFam2        (% 32.266)  (% 32.41x)   3000     medium
+#  8  0.6256 - elephant loxAfr1   (% 18.58x)  (% 20.80x)   3000     medium
+#  9  0.6344 - cow bosTau2        (% 26.805)  (% 24.44x)   3000     medium
+# 10  0.7805 - tenrec echTel1     (% 11.46x)  (% 14.36x)   5000     loose
+# 11  1.0698 - opossum monDom2    (%  8.50x)  (%  6.31x)   5000     loose
+# 12  1.3425 - chicken galGal2    (%  3.071)  (%  6.715)   5000     loose
 # 13  1.7936 - frog xenTro1       (%  2.418)  (%  4.296)   5000     loose
-# 14  2.0157 - tetraodon tetNig1  (%  1.988)  (% 13.846)   5000     loose
+# 14  2.0157 - tetraodon tetNig1  (%  1.956)  (% 13.661)   5000     loose
 # 15  2.0562 - fugu fr1           (%  1.906)  (% 13.484)   5000     loose
-# 16  2.1059 - zebrafish danRer3  (%  2.694)  (%  2.694)   5000     loose
+# 16  2.1059 - zebrafish danRer3  (%  2.694)  (%  4.372)   5000     loose
 
     export H=/cluster/data/mm7/bed
     mkdir mafLinks
@@ -3730,12 +3746,11 @@ cat  << 'EOF' > template
 XXXX - running 2005-10-27
 
 # Completed: 40 of 40 jobs
-# CPU time in finished jobs:     151565s    2526.08m    42.10h    1.75d  0.005 y
-# IO & Wait Time:                 25097s     418.29m     6.97h    0.29d  0.001 y
-# Average job time:                4417s      73.61m     1.23h    0.05d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           18222s     303.70m     5.06h    0.21d
-# Submission to last job:         18592s     309.87m     5.16h    0.22d
+# CPU time in finished jobs:     460579s    7676.32m   127.94h    5.33d  0.015 y
+# IO & Wait Time:                 13669s     227.81m     3.80h    0.16d  0.000 y
+# Average job time:               11856s     197.60m     3.29h    0.14d
+# Longest finished job:           48345s     805.75m    13.43h    0.56d
+# Submission to last job:         48345s     805.75m    13.43h    0.56d
 
     #	combine results into a single file for loading
     #	it is too large for kkstore02, use kolossus
@@ -3771,8 +3786,8 @@ XXXX - running 2005-10-27
     ln -s /cluster/data/mm7/bed/multiz17way/multiz17way.maf \
 	/gbdb/mm7/multiz17way
     time hgLoadMaf mm7 multiz17way
-    #	Loaded 8995378 mafs in 1 files from /gbdb/mm7/multiz17way
-    #	real    31m38.754s
+    #	Loaded 9437924 mafs in 1 files from /gbdb/mm7/multiz17way
+    #	real    34m18.818
     hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 mm7 \
 	multiz17waySummary multiz17way.maf
     #	Processed 50924730 components in 8995378 mafs from multiz17way.maf
@@ -8380,6 +8395,11 @@ XXXX - Started 2005-11-14 14:50
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load -stop=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
 ###########################################################################
 # BLASTZ/CHAIN/NET CANFAM2 (DONE - 2005-09-16 - 2005-10-12- Hiram)
     ssh kkstore02
@@ -8687,6 +8707,11 @@ BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=net -stop=load \
+	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
+
 #############################################################################
 # Tenrec vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
@@ -8909,6 +8934,11 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=net -stop=load \
+	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
 
 #############################################################################
 # Create Allen Brain Atlas mapping. (In progress 25 Oct 2005 JK)
@@ -10704,7 +10734,50 @@ nice make loadDb
 # need to do a make sanClean after track verified
 
 ############################################################################
+#  BLASTZ Chimp panTro1 second time (WORKING - 2005-11-20 - Hiram)
+#	The first attempt didn't work well when it got into the multiple
+#	alignment, it seemed to get lost in gap areas of the randoms.
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzPanTro1.2005-11-20
+    cd /cluster/data/mm7/bed
+    rm -f blastz.panTro1
+    ln -s blastzPanTro1.2005-11-20 blastz.panTro1
+    cd blastzPanTro1.2005-11-20
 
+    cat << '_EOF_' > DEF
+# mouse vs chimp
+export
+PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=50
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro1
+SEQ2_DIR=/scratch/hg/panTro1/nib
+SEQ2_DIR=/scratch/hg/panTro1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzPanTro1.2005-11-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-stop=load `pwd`/DEF > blastz.to.load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat -stop=load `pwd`/DEF > cat.to.load.out 2>&1 &
+
+############################################################################
 # MM3/MM4/MM5/MM6 -> MM7 LIFTOVER CHAINS (DONE 11/21/2005 Andy)
     # These chains hopefully don't suck.
     # Sorry I only used the makeLoChain-align script from the set of scripts 
@@ -11104,4 +11177,3 @@ EOF
     hgLoadBed mm7 rikenCageTc rikenCageTc.mm7.bed
     hgLoadBed -strict -bedGraph=4 mm7 rikenCageCtssMinus minus.mm7.bed 
     hgLoadBed -strict -bedGraph=4 mm7 rikenCageCtssPlus plus.mm7.bed 
-
