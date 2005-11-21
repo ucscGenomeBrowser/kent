@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.25 2005/11/17 19:32:37 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.26 2005/11/21 19:56:08 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -82,7 +82,8 @@ my $bigClusterHub = 'kk';
 my $smallClusterHub = 'kki';
 my $workhorse = 'kolossus';
 my $defaultVerbose = 1;
-my $defaultChainLinearGap = "-linearGap=loose";
+my $defaultChainLinearGap = "loose";
+my $defaultChainMinScore = "1000";	# from axtChain itself
 
 sub usage {
   # Usage / help / self-documentation:
@@ -112,7 +113,7 @@ options:
                           those chains (target for query), then net etc. in
                           a new directory:
                           $clusterData/\$qDb/$trackBuild/blastz.\$tDb.swap/
-    -chainMinScore n      Add -minScore=n (default: 1000) to the
+    -chainMinScore n      Add -minScore=n (default: $defaultChainMinScore) to the
                                   axtChain command.
     -chainLinearGap type  Add -linearGap=<loose|medium|filename> to the
                                   axtChain command.  (default: loose)
@@ -767,7 +768,7 @@ _EOF_
   my $matrix = $defVars{'BLASTZ_Q'} ? "-scoreScheme=$defVars{BLASTZ_Q} " : "";
   my $minScore = $opt_chainMinScore ? "-minScore=$opt_chainMinScore" : "";
   my $linearGap = $opt_chainLinearGap ? "-linearGap=$opt_chainLinearGap" :
-	$defaultChainLinearGap;
+	"-linearGap=$defaultChainLinearGap";
   open (CHAIN, ">$runDir/chain.csh")
     || die "Couldn't open $runDir/chain.csh for writing: $!\n";
   print CHAIN  <<_EOF_
@@ -1289,6 +1290,10 @@ information about the $qDb-referenced blastz and chaining process.
     print R ($isSelf ?
 "The $tDb assembly was aligned to itself" :
 "The $tDb and $qDb assemblies were aligned");
+  my $chainMinScore = $opt_chainMinScore ? "$opt_chainMinScore" :
+	$defaultChainMinScore;
+  my $chainLinearGap = $opt_chainLinearGap ? "$opt_chainLinearGap" :
+	$defaultChainLinearGap;
     print R " by the blastz alignment
 program, which is available from Webb Miller's lab at Penn State
 University (http://www.bx.psu.edu/miller_lab/).  $lap $abridging
@@ -1304,8 +1309,29 @@ regions between two alignments found in the first pass.  The minimum
 score for alignments to be interpolated between was H=$h.  $blastzOther
 
 The .lav format blastz output was translated to the .psl format with
-lavToPsl, then chained by the axtChain program.
+lavToPsl, then chained by the axtChain program.\n
+Chain minimum score: $chainMinScore, and linearGap matrix of ";
+    if ($chainLinearGap =~ m/loose/) {
+	print R "(loose):
+tablesize   11
+smallSize   111   
+position  1   2   3   11  111 2111  12111 32111 72111 152111  252111
+qGap    325 360 400  450  600 1100   3600  7600 15600  31600   56600
+tGap    325 360 400  450  600 1100   3600  7600 15600  31600   56600
+bothGap 625 660 700  750  900 1400   4000  8000 16000  32000   57000
 ";
+    } elsif ($chainLinearGap =~ m/medium/) {
+	print R "(medium):
+tableSize   11
+smallSize  111
+position  1   2   3   11  111 2111  12111 32111  72111 152111  252111
+qGap    350 425 450  600  900 2900  22900 57900 117900 217900  317900
+tGap    350 425 450  600  900 2900  22900 57900 117900 217900  317900
+bothGap 750 825 850 1000 1300 3300  23300 58300 118300 218300  318300
+";
+    } else {
+	print R "(specified):\n", `cat $chainLinearGap`, "\n";
+    }
   }
   print R "
 Chained alignments were processed into nets by the chainNet, netSyntenic,
