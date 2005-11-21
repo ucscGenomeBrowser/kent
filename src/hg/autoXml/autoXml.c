@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.17 2005/11/20 22:20:48 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.18 2005/11/21 01:35:16 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -406,6 +406,25 @@ else
     return 's';
 }
 
+void freeFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+/* Put up function prototype for elFree function. */
+{
+char *name = el->mixedCaseName;
+fprintf(f, "void %sFree(struct %s **pObj)%s", name, name, addSemi);
+fprintf(f, "\n");
+fprintf(f, "/* Free up %s. */\n",  name);
+}
+
+void freeListFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+/* Put up function prototype for elFreeList function. */
+{
+char *name = el->mixedCaseName;
+fprintf(f, "void %sFreeList(struct %s **pList)%s", name, name, addSemi);
+fprintf(f, "\n");
+fprintf(f, "/* Free up list of %s. */\n",  name);
+}
+
+
 void saveFunctionPrototype(struct element *el, FILE *f, char *addSemi)
 /* Put up function prototype for elSave function. */
 {
@@ -493,6 +512,10 @@ for (el = elList; el != NULL; el = el->next)
 	fprintf(f, "\n");
 	}
     fprintf(f, "    };\n");
+    fprintf(f, "\n");
+    freeFunctionPrototype(el, f, ";");
+    fprintf(f, "\n");
+    freeListFunctionPrototype(el, f, ";");
     fprintf(f, "\n");
     saveFunctionPrototype(el, f, ";");
     fprintf(f, "\n");
@@ -652,6 +675,56 @@ else
 	}
     fprintf(f, "fprintf(f, \"</%s>\\n\");\n", el->name);
     }
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
+void freeFunctionBody(struct element *el, FILE *f)
+/* Write out free function body. */
+{
+struct elChild *ec;
+struct attribute *att;
+
+fprintf(f, "{\n");
+fprintf(f, "struct %s *obj = *pObj;\n",  el->mixedCaseName);
+
+/* Declare variables to walk through list if need be. */
+fprintf(f, "if (obj == NULL) return;\n");
+for (att = el->attributes; att != NULL; att = att->next)
+    {
+    if (!sameString(att->type, "INT") && !sameString(att->type, "FLOAT"))
+	fprintf(f, "freeMem(obj->%s);\n", att->name);
+    }
+if (el->textType != NULL)
+    {
+    if (!sameString(el->textType, "#INT") && 
+    	!sameString(el->textType, "#FLOAT"))
+	fprintf(f, "freeMem(obj->text);\n");
+    }
+for (ec = el->children; ec != NULL; ec = ec->next)
+    {
+    char *name = ec->el->mixedCaseName;
+    if (ec->copyCode == '*' || ec->copyCode == '+')
+	fprintf(f, "%sFreeList(&obj->%s);\n", name, name);
+    else
+	fprintf(f, "%sFree(&obj->%s);\n", name, name);
+    }
+fprintf(f, "freez(pObj);\n");
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
+void freeListFunctionBody(struct element *el, FILE *f)
+/* Write out free function body. */
+{
+fprintf(f, "{\n");
+fprintf(f, "struct %s *el, *next;\n",  el->mixedCaseName);
+fprintf(f, "for (el = *pList; el != NULL; el = next)\n");
+fprintf(f, "    {\n");
+fprintf(f, "    next = el->next;\n");
+fprintf(f, "    %sFree(&el);\n", el->mixedCaseName);
+fprintf(f, "    el = next;\n");
+fprintf(f, "    }\n");
 fprintf(f, "}\n");
 fprintf(f, "\n");
 }
@@ -886,6 +959,7 @@ fprintf(f, "if (argc != 2)\n");
 fprintf(f, "    errAbort(\"Please run again with a xml filename.\");\n");
 fprintf(f, "obj = %sLoad(argv[1]);\n", symName);
 fprintf(f, "%sSave(obj, 0, stdout);\n", symName);
+fprintf(f, "%sFree(&obj);\n", symName);
 fprintf(f, "return 0;\n");
 fprintf(f, "}\n");
 }
@@ -914,6 +988,10 @@ fprintf(f, "\n");
 fprintf(f, "\n");
 for (el = elList; el != NULL; el = el->next)
     {
+    freeFunctionPrototype(el, f, "");
+    freeFunctionBody(el, f);
+    freeListFunctionPrototype(el, f, "");
+    freeListFunctionBody(el, f);
     saveFunctionPrototype(el, f, "");
     saveFunctionBody(el, f);
     loadFunctionPrototype(el, f, "");
