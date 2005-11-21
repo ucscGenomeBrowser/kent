@@ -16,7 +16,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.33 2005/11/15 16:38:08 braney Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.34 2005/11/21 18:47:55 hiram Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;
@@ -31,7 +31,7 @@ void usage()
 errAbort(
   "axtChain - Chain together axt alignments.\n"
   "usage:\n"
-  "   axtChain in.axt tNibDir qNibDir out.chain\n"
+  "   axtChain -linearGap=loose in.axt tNibDir qNibDir out.chain\n"
   "Where tNibDir/qNibDir are either directories full of nib files, or the\n"
   "name of a .2bit file\n"
   "options:\n"
@@ -41,8 +41,12 @@ errAbort(
   "   -minScore=N  Minimum score for chain, default %d\n"
   "   -details=fileName Output some additional chain details\n"
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
-  "   -linearGap=filename Read piecewise linear gap from tab delimited file\n"
-  "   sample linearGap file \n"
+  "   -linearGap=<medium|loose|filename> Specify type of linearGap to use.\n"
+  "              *Must* specify this argument to one of these choices.\n"
+  "              loose is chicken/human gap costs.\n"
+  "              medium is mouse/human gap costs.\n"
+  "              Or specify a piecewise linearGap tab delimited file.\n"
+  "   sample linearGap file (loose)\n"
   "%s"
   , minScore, gapCalcSampleFileContents()
   );
