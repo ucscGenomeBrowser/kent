@@ -2,9 +2,9 @@
 
 BROWSER_BINS=cartReset das hgBlat hgConvert hgCoordConv \
         hgGateway hgGene hgPcr hgTables hgText hgTracks \
-	hgTrackUi hgVisiGene hgc cartDump near/hgNear \
+	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
-	hgLiftOver hgc/cgiClustalw
+	hgLiftOver hgc/cgiClustalw visiGene/hgVisiGene
 
 TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredToMafFrames gbGetEntries \
