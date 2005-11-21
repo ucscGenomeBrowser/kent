@@ -6,6 +6,17 @@ group map
 visibility hide
 type bed 3 +
 
+track knownGene
+shortLabel Known Genes
+longLabel UCSC Known Genes (November, 05) Based on UniProt, RefSeq, and GenBank mRNA
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+hgGene on
+cdsDrawDefault genomic\ codons
+
 track chainDanRer3
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
