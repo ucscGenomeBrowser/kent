@@ -7,6 +7,8 @@ table liftOverChain
     float minMatch;     "Minimum ratio of bases that must remap."
     uint minSizeT;      "Minimum chain size in target."
     uint minSizeQ;      "Minimum chain size in query."
+    uint minChainT;     "Not sure."
+    uint minChainQ;     "Not sure."
     char[1] multiple;   "Use -multiple by default."
     float minBlocks;    "Min ratio of alignment blocks/exons that must map."
     char[1] fudgeThick; "If thickStart/thickEnd is not mapped, use the closest mapped base."

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: liftOverChain.c,v 1.2 2005/02/02 08:45:37 aamp Exp $";
+static char const rcsid[] = "$Id: liftOverChain.c,v 1.3 2005/11/21 09:21:21 aamp Exp $";
 
 void liftOverChainStaticLoad(char **row, struct liftOverChain *ret)
 /* Load a row from liftOverChain table into ret.  The contents of ret will
@@ -21,9 +21,11 @@ ret->path = row[2];
 ret->minMatch = atof(row[3]);
 ret->minSizeT = sqlUnsigned(row[4]);
 ret->minSizeQ = sqlUnsigned(row[5]);
-strcpy(ret->multiple, row[6]);
-ret->minBlocks = atof(row[7]);
-strcpy(ret->fudgeThick, row[8]);
+ret->minChainT = sqlUnsigned(row[6]);
+ret->minChainQ = sqlUnsigned(row[7]);
+strcpy(ret->multiple, row[8]);
+ret->minBlocks = atof(row[9]);
+strcpy(ret->fudgeThick, row[10]);
 }
 
 struct liftOverChain *liftOverChainLoad(char **row)
@@ -39,9 +41,11 @@ ret->path = cloneString(row[2]);
 ret->minMatch = atof(row[3]);
 ret->minSizeT = sqlUnsigned(row[4]);
 ret->minSizeQ = sqlUnsigned(row[5]);
-strcpy(ret->multiple, row[6]);
-ret->minBlocks = atof(row[7]);
-strcpy(ret->fudgeThick, row[8]);
+ret->minChainT = sqlUnsigned(row[6]);
+ret->minChainQ = sqlUnsigned(row[7]);
+strcpy(ret->multiple, row[8]);
+ret->minBlocks = atof(row[9]);
+strcpy(ret->fudgeThick, row[10]);
 return ret;
 }
 
@@ -51,7 +55,7 @@ struct liftOverChain *liftOverChainLoadAll(char *fileName)
 {
 struct liftOverChain *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -69,7 +73,7 @@ struct liftOverChain *liftOverChainLoadAllByChar(char *fileName, char chopper)
 {
 struct liftOverChain *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[9];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -113,8 +117,8 @@ void liftOverChainSaveToDb(struct sqlConnection *conn, struct liftOverChain *el,
  * If worried about this use liftOverChainSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,'%s',%g,'%s')", 
-	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minSizeT,  el->minSizeQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%s,%g,%u,%u,%u,%u,'%s',%g,'%s')", 
+	tableName,  el->fromDb,  el->toDb,  el->path,  el->minMatch,  el->minSizeT,  el->minSizeQ,  el->minChainT,  el->minChainQ,  el->multiple,  el->minBlocks,  el->fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -136,8 +140,8 @@ path = sqlEscapeString(el->path);
 multiple = sqlEscapeString(el->multiple);
 fudgeThick = sqlEscapeString(el->fudgeThick);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%g,%u,%u,'%s',%g,'%s')", 
-	tableName,  fromDb,  toDb,  path, el->minMatch , el->minSizeT , el->minSizeQ ,  multiple, el->minBlocks ,  fudgeThick);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s',%g,%u,%u,%u,%u,'%s',%g,'%s')", 
+	tableName,  fromDb,  toDb,  path, el->minMatch , el->minSizeT , el->minSizeQ , el->minChainT , el->minChainQ ,  multiple, el->minBlocks ,  fudgeThick);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&fromDb);
@@ -162,6 +166,8 @@ ret->path = sqlStringComma(&s);
 ret->minMatch = sqlFloatComma(&s);
 ret->minSizeT = sqlUnsignedComma(&s);
 ret->minSizeQ = sqlUnsignedComma(&s);
+ret->minChainT = sqlUnsignedComma(&s);
+ret->minChainQ = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->multiple, sizeof(ret->multiple));
 ret->minBlocks = sqlFloatComma(&s);
 sqlFixedStringComma(&s, ret->fudgeThick, sizeof(ret->fudgeThick));
@@ -215,6 +221,10 @@ fputc(sep,f);
 fprintf(f, "%u", el->minSizeT);
 fputc(sep,f);
 fprintf(f, "%u", el->minSizeQ);
+fputc(sep,f);
+fprintf(f, "%u", el->minChainT);
+fputc(sep,f);
+fprintf(f, "%u", el->minChainQ);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->multiple);

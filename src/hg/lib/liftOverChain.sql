@@ -11,8 +11,11 @@ CREATE TABLE liftOverChain (
     minMatch float not null,	# Minimum ratio of bases that must remap.
     minSizeT int unsigned not null,	# Minimum chain size in target.
     minSizeQ int unsigned not null,	# Minimum chain size in query.
+    minChainT int unsigned not null,	# Not sure.
+    minChainQ int unsigned not null,	# Not sure.
     multiple char(1) not null,	# Use -multiple by default.
     minBlocks float not null,	# Min ratio of alignment blocks/exons that must map.
     fudgeThick char(1) not null,	# If thickStart/thickEnd is not mapped, use the closest mapped base.
               #Indices
+    PRIMARY KEY(fromDb)
 );
