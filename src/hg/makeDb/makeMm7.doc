@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.26 2005/11/19 01:18:41 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.27 2005/11/21 08:59:06 aamp Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -10704,3 +10704,383 @@ nice make loadDb
 # need to do a make sanClean after track verified
 
 ############################################################################
+
+# MM3/MM4/MM5/MM6 -> MM7 LIFTOVER CHAINS (DONE 11/21/2005 Andy)
+    # These chains hopefully don't suck.
+    # Sorry I only used the makeLoChain-align script from the set of scripts 
+    # already created for this task.  I wanted more control.  I should mention 
+    # I used a size of 10kb instead of 3kb for the split (blat query) sizes in
+    # mm7.  This had a huge affect on the amount of hits in the blat, which
+    # then had a huge effect on the amount of chains.  I should also mention 
+    # that mm7 chromosomes chr1, chrX, and chrUn_random were split further 
+    # into more than a single query file.  This helped a LOT in avoiding 
+    # cluster hippos classically associated with those chroms.
+    ######## LIFTOVER PREPARATION
+    # Split up mm7
+    ssh hgwdev
+    cd /san/sanVol1/scratch/mm7
+    mkdir -p liftSplits/{split,lift}
+    for fa in /cluster/data/mm7/?{,?}/*.fa; do
+      c=`basename $fa .fa`
+      echo $c
+      faSplit -lift=liftSplits/lift/${c}.lft size $fa -oneFile 10000 liftSplits/split/$c
+    done
+    mkdir -p biggerSplits/split
+    cd biggerSplits/
+    ln -s ../liftSplits/lift
+    cd split/
+    ln -s ../../liftSplits/split/* .
+    faSplit sequence chr1.fa 5 chr1_
+    faSplit sequence chrX.fa 10 chrX_
+    rm chr{1,X}.fa
+
+    # Make some dirs
+    cd /san/sanVol1/scratch
+    mkdir -p mm{3,4,5}
+    # Copy 11.ooc files to each of mm3, mm4, mm5, mm6 dirs.
+
+    ######## LIFTOVER BLATING    
+    # MM3
+    ssh pk
+    cd /cluster/data/mm3
+    makeLoChain-align mm3 /san/sanVol1/scratch/mm3/nib mm7 /san/sanVol1/scratch/mm7/biggerSplits/split
+    cd bed/
+    mv blat.mm7.2005-11-17/ /san/sanVol1/scratch/mm3 
+    cd /san/sanVol1/scratch/mm3/blat.mm7.2005-11-17/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/andy/" $0 " mm3ToMm7"}' > newspec
+    para create newspec
+    para -maxNode=200 -priority=25 push
+    para time
+#Completed: 2109 of 2109 jobs
+#CPU time in finished jobs:    2322886s   38714.77m   645.25h   26.89d  0.074 y
+#IO & Wait Time:                 20395s     339.92m     5.67h    0.24d  0.001 y
+#Average job time:                1111s      18.52m     0.31h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:           21949s     365.82m     6.10h    0.25d
+#Submission to last job:         41513s     691.88m    11.53h    0.48d
+
+    # MM4
+    ssh pk
+    cd /cluster/data/mm4
+    makeLoChain-align mm4 /scratch/mus/mm4/softNib mm7 /san/sanVol1/scratch/mm7/biggerSplits/split
+    cd bed/
+    mv blat.mm7.2005-11-17/ /san/sanVol1/scratch/mm4 
+    cd /san/sanVol1/scratch/mm4/blat.mm7.2005-11-17/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/andy/" $0 " mm4ToMm7"}' > newspec
+    para create newspec
+    para -maxNode=200 -priority=25 push
+    para time
+#Completed: 2508 of 2508 jobs
+#CPU time in finished jobs:    1351933s   22532.22m   375.54h   15.65d  0.043 y
+#IO & Wait Time:                 13885s     231.41m     3.86h    0.16d  0.000 y
+#Average job time:                 545s       9.08m     0.15h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            6516s     108.60m     1.81h    0.08d
+#Submission to last job:         25881s     431.35m     7.19h    0.30d
+
+    # MM5
+    ssh pk
+    cd /cluster/data/mm5
+    makeLoChain-align mm5 /scratch/mus/mm5/softNib mm7 /san/sanVol1/scratch/mm7/biggerSplits/split
+    cd bed/
+    mv blat.mm7.2005-11-17/ /san/sanVol1/scratch/mm5 
+    cd /san/sanVol1/scratch/mm5/blat.mm7.2005-11-17/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/andy/" $0 " mm5ToMm7"}' > newspec
+    para create newspec
+    para -maxNode=200 -priority=25 push
+    para time
+#Completed: 2451 of 2451 jobs
+#CPU time in finished jobs:    1266001s   21100.02m   351.67h   14.65d  0.040 y
+#IO & Wait Time:                 13972s     232.87m     3.88h    0.16d  0.000 y
+#Average job time:                 522s       8.70m     0.15h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            6769s     112.82m     1.88h    0.08d
+#Submission to last job:         26506s     441.77m     7.36h    0.31d
+
+    # MM6
+    cd /cluster/data/mm6
+    makeLoChain-align mm6 /scratch/mus/mm6/nib mm7 /san/sanVol1/scratch/mm7/biggerSplits/split
+    cd bed/
+    mv blat.mm7.2005-11-17/ /san/sanVol1/scratch/mm6 
+    cd /san/sanVol1/scratch/mm6/blat.mm7.2005-11-17/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/andy/" $0 " mm6ToMm7"}' > newspec
+    para create newspec
+    para -maxNode=200 -priority=25 push
+    para time
+#Completed: 2280 of 2280 jobs
+#CPU time in finished jobs:    1250929s   20848.81m   347.48h   14.48d  0.040 y
+#IO & Wait Time:                 12983s     216.39m     3.61h    0.15d  0.000 y
+#Average job time:                 554s       9.24m     0.15h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            6575s     109.58m     1.83h    0.08d
+#Submission to last job:         26374s     439.57m     7.33h    0.31d
+
+    ######## LIFTOVER CHAINING
+    # LIFTING
+    ssh pk
+    cd /san/sanVol1/scratch/andy
+    cat << "EOF" > mm7SplitLift.sh
+EOF
+    chmod +x mm7SplitLift.sh
+    cat << "EOF" > mm7ChainMergeSplit.sh
+#!/bin/bash
+cp -r chainRaw/ /scratch/andy/mm7Lifts
+pushd /scratch/andy/mm7Lifts
+mkdir chain
+/cluster/bin/x86_64/chainMergeSort chainRaw/*.chain | /cluster/bin/x86_64/chainSplit chain stdin
+cp -r chain `dirs +1`
+rm -rf chain chainRaw
+EOF
+    chmod +x mm7ChainMergeSplit.sh
+
+    # MM3
+    cd /san/sanVol1/scratch/mm3/blat.mm7.2005-11-17/raw
+    /san/sanVol1/scratch/andy/mm7SplitLift.sh
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat > gsub << "EOF"
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -psl $(path1) /san/sanVol1/scratch/mm3/nib /san/sanVol1/scratch/mm7/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+EOF
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para push
+    para time
+#Completed: 40 of 40 jobs
+#CPU time in finished jobs:       8687s     144.79m     2.41h    0.10d  0.000 y
+#IO & Wait Time:                  2751s      45.85m     0.76h    0.03d  0.000 y
+#Average job time:                 286s       4.77m     0.08h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             920s      15.33m     0.26h    0.01d
+#Submission to last job:           921s      15.35m     0.26h    0.01d
+
+
+    # MM4
+    cd /san/sanVol1/scratch/mm4/blat.mm7.2005-11-17/raw
+    /san/sanVol1/scratch/andy/mm7SplitLift.sh
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat > gsub << "EOF"
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -psl $(path1) /scratch/mus/mm4/softNib /san/sanVol1/scratch/mm7/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+EOF
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para push
+    para time
+#Completed: 40 of 40 jobs
+#CPU time in finished jobs:       7678s     127.96m     2.13h    0.09d  0.000 y
+#IO & Wait Time:                  4254s      70.90m     1.18h    0.05d  0.000 y
+#Average job time:                 298s       4.97m     0.08h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            3087s      51.45m     0.86h    0.04d
+#Submission to last job:          3088s      51.47m     0.86h    0.04d
+
+    # MM5
+    cd /san/sanVol1/scratch/mm5/blat.mm7.2005-11-17/raw
+    /san/sanVol1/scratch/andy/mm7SplitLift.sh
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat > gsub << "EOF"
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -psl $(path1) /scratch/mus/mm5/softNib /san/sanVol1/scratch/mm7/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+EOF
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para push
+    para time
+#Completed: 40 of 40 jobs
+#CPU time in finished jobs:       8450s     140.83m     2.35h    0.10d  0.000 y
+#IO & Wait Time:                  9259s     154.32m     2.57h    0.11d  0.000 y
+#Average job time:                 443s       7.38m     0.12h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            2929s      48.82m     0.81h    0.03d
+#Submission to last job:          2968s      49.47m     0.82h    0.03d
+
+    # MM6
+    cd /san/sanVol1/scratch/mm6/blat.mm7.2005-11-17/raw
+    /san/sanVol1/scratch/andy/mm7SplitLift.sh
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat > gsub << "EOF"
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -psl $(path1) /scratch/mus/mm6/nib /san/sanVol1/scratch/mm7/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+EOF
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para push
+    para time
+#Completed: 40 of 40 jobs
+#CPU time in finished jobs:       8140s     135.66m     2.26h    0.09d  0.000 y
+#IO & Wait Time:                 13372s     222.87m     3.71h    0.15d  0.000 y
+#Average job time:                 538s       8.96m     0.15h    0.01d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            2822s      47.03m     0.78h    0.03d
+#Submission to last job:          2857s      47.62m     0.79h    0.03d
+
+    ######### CHAINMERGE/NET/NETSUBSET
+    ssh kolossus
+    cd /scratch/andy/mm7Lifts
+    cp -r ~/san/mm6/blat.mm7.2005-11-17/chainRaw/ .
+    mkdir chain
+    time /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+#real    30m32.406s
+#user    25m57.779s
+#sys     1m57.769s
+    cp -r chain ~/san/mm6/blat.mm7.2005-11-17/
+    rm -rf chain*
+    cp -r ~/san/mm5/blat.mm7.2005-11-17/chainRaw/ .
+    mkdir chain
+    time /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+#real    31m48.856s
+#user    27m19.356s
+#sys     2m4.895s
+    cp -r chain ~/san/mm5/blat.mm7.2005-11-17/
+    rm -rf chain*
+    cp -r ~/san/mm4/blat.mm7.2005-11-17/chainRaw/ .
+    mkdir chain
+    time /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+#real    26m57.181s
+#user    23m22.516s
+#sys     1m45.750s
+    cd chain/
+    for c in *.chain; do
+       echo ${c%.chain}; 
+       /cluster/bin/x86_64/chainNet $c /cluster/data/mm4/chrom.sizes \
+        /cluster/data/mm7/chrom.sizes ../net/${c%.chain}.net /dev/null
+       echo done $c
+    done
+    for chain in *; do 
+       c=${chain%.chain}
+       /cluster/bin/x86_64/netChainSubset ../net/$c.net $chain ../over/$c.over 
+    done
+    cp -r * ~/san/mm4/blat.mm7.2005-11-17/
+    rm -rf *
+    # Ehhhh... do the other ones in a cluster job
+    cp -r ~/san/mm3/blat.mm7.2005-11-17/chainRaw/ .
+    mkdir chain
+    time /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+#real    33m13.555s
+#user    28m17.531s
+#sys     2m5.165s
+    cp -r chain ~/san/mm3/blat.mm7.2005-11-17/
+    rm -rf chain*
+    ssh pk
+    cd ~/san/andy
+    cat << "EOF" > netOver.sh 
+#!/bin/bash
+
+chain=$1
+chrom=`basename $chain .chain`
+sizesMMOld=$2
+sizesMM7=/cluster/data/mm7/chrom.sizes
+chainDir=`dirname $chain`
+blatDir=`dirname $chainDir`
+net=${blatDir}/net/${chrom}.net
+over=${blatDir}/over/${chrom}.over
+
+mkdir -p ${blatDir}/{over,net}
+/cluster/bin/x86_64/chainNet $chain $sizesMMOld $sizesMM7 $net /dev/null
+/cluster/bin/x86_64/netChainSubset $net $chain $over
+EOF
+    chmod +x netOver.sh
+    mkdir netRun
+    cd netRun/
+    find /san/sanVol1/scratch/mm3/blat.mm7.2005-11-17/chain -name "*.chain" \
+     | awk '{print "/san/sanVol1/scratch/andy/netOver.sh " $1 " /cluster/data/mm3/chrom.sizes"}' >> spec
+    find /san/sanVol1/scratch/mm5/blat.mm7.2005-11-17/chain -name "*.chain" \
+     | awk '{print "/san/sanVol1/scratch/andy/netOver.sh " $1 " /cluster/data/mm5/chrom.sizes"}' >> spec
+    find /san/sanVol1/scratch/mm6/blat.mm7.2005-11-17/chain -name "*.chain" \
+     | awk '{print "/san/sanVol1/scratch/andy/netOver.sh " $1 " /cluster/data/mm6/chrom.sizes"}' >> spec
+    para create spec
+    para push
+    para time
+#Completed: 120 of 120 jobs
+#CPU time in finished jobs:       4826s      80.44m     1.34h    0.06d  0.000 y
+#IO & Wait Time:                  6816s     113.59m     1.89h    0.08d  0.000 y
+#Average job time:                  97s       1.62m     0.03h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             247s       4.12m     0.07h    0.00d
+#Submission to last job:           340s       5.67m     0.09h    0.00d
+    
+    ########## FINISHING
+    ssh hgwdev
+
+    # MM3
+    cd ~/san/mm3/blat.mm7.2005-11-17/over
+    cat * >> mm3ToMm7.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -r blat.mm7.2005-11-17/ /cluster/data/mm3/bed
+    cd /cluster/data/mm3/bed
+    ln -s blat.mm7.2005-11-17 blat.mm7
+    ln -s `pwd`/blat.mm7/mm3ToMm7.over.chain liftOver/mm3ToMm7.over.chain
+    ln -s `pwd`/liftOver/mm3ToMm7.over.chain /gbdb/mm3/liftOver/mm3ToMm7.over.chain
+    cd /usr/local/apache/htdocs/goldenPath/mm3/liftOver
+    cp /gbdb/mm3/liftOver/mm3ToMm7.over.chain .
+    gzip mm3ToMm7.over.chain
+    hgAddLiftOverChain mm3 mm7 /gbdb/mm3/liftOver/mm3ToMm7.over.chain
+
+    # MM4
+    cd ~/san/mm4/blat.mm7.2005-11-17/over
+    cat * >> ../mm4ToMm7.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -r blat.mm7.2005-11-17/ /cluster/data/mm4/bed
+    cd /cluster/data/mm4/bed
+    ln -s blat.mm7.2005-11-17 blat.mm7
+    ln -s `pwd`/blat.mm7/mm4ToMm7.over.chain liftOver/mm4ToMm7.over.chain
+    ln -s `pwd`/liftOver/mm4ToMm7.over.chain /gbdb/mm4/liftOver/mm4ToMm7.over.chain
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm4/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/mm4/liftOver
+    cp /gbdb/mm4/liftOver/mm4ToMm7.over.chain .
+    gzip mm4ToMm7.over.chain
+    hgAddLiftOverChain mm4 mm7 /gbdb/mm4/liftOver/mm4ToMm7.over.chain
+
+    # MM5
+    cd ~/san/mm5/blat.mm7.2005-11-17/over
+    cat * >> ../mm5ToMm7.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -r blat.mm7.2005-11-17/ /cluster/data/mm5/bed
+    cd /cluster/data/mm5/bed
+    ln -s blat.mm7.2005-11-17 blat.mm7
+    ln -s `pwd`/blat.mm7/mm5ToMm7.over.chain liftOver/mm5ToMm7.over.chain
+    ln -s `pwd`/liftOver/mm5ToMm7.over.chain /gbdb/mm5/liftOver/mm5ToMm7.over.chain
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm5/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/mm5/liftOver
+    cp /gbdb/mm5/liftOver/mm5ToMm7.over.chain .
+    gzip mm5ToMm7.over.chain
+    hgAddLiftOverChain mm5 mm7 /gbdb/mm5/liftOver/mm5ToMm7.over.chain
+
+    # MM6
+    cd ~/san/mm6/blat.mm7.2005-11-17/over
+    cat * >> ../mm6ToMm7.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -r blat.mm7.2005-11-17/ /cluster/data/mm6/bed
+    cd /cluster/data/mm6/bed
+    ln -s blat.mm7.2005-11-17 blat.mm7
+    ln -s `pwd`/blat.mm7/mm6ToMm7.over.chain liftOver/mm6ToMm7.over.chain
+    ln -s `pwd`/liftOver/mm6ToMm7.over.chain /gbdb/mm6/liftOver/mm6ToMm7.over.chain
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm6/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/mm6/liftOver
+    cp /gbdb/mm6/liftOver/mm6ToMm7.over.chain .
+    gzip mm6ToMm7.over.chain
+    hgAddLiftOverChain mm6 mm7 /gbdb/mm6/liftOver/mm6ToMm7.over.chain
