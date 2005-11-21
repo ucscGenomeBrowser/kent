@@ -85,6 +85,77 @@ slReverse(&returnList);
 return returnList;
 }
 
+static struct slName *getProbeList(struct sqlConnection *conn, int id)
+/* Get list of probes with hyperlinks to probe info page. */
+{
+struct slName *returnList = NULL, *returnEl;
+char query[256], **row;
+struct sqlResult *sr;
+char *sidUrl = cartSidUrlString(cart);
+struct dyString *dy = dyStringNew(0);
+struct slInt *probeList = NULL, *probe;
+int probeCount = 0;
+
+/* Make up a list of all probes in this image. */
+safef(query, sizeof(query),
+   "select probe from imageProbe where image=%d", id);
+probeList = sqlQuickNumList(conn, query);
+
+for (probe = probeList; probe != NULL; probe = probe->next)
+    {
+    char *type;
+    char *lPrimer, *rPrimer;
+
+    /* Create hyperlink to probe page around gene name. */
+    dyStringClear(dy);
+    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_blank>",
+    	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe->val);
+    safef(query, sizeof(query), 
+    	"select probeType.name from probeType,probe where probe.id = %d "
+	"and probe.probeType = probeType.id", 
+	probe->val);
+    type = sqlQuickString(conn, query);
+    dyStringPrintf(dy, "%s", naForEmpty(type));
+    if (sameWord(type, "antibody"))
+        {
+	char *abName;
+	safef(query, sizeof(query), 
+	   "select antibody.name from probe,antibody "
+	   "where probe.id = %d and probe.antibody = antibody.id"
+	   , probe->val);
+	abName = sqlQuickString(conn, query);
+	if (abName != NULL)
+	    {
+	    dyStringPrintf(dy, " %s", abName);
+	    freeMem(abName);
+	    }
+	}
+    else if (sameWord(type, "RNA"))
+        {
+	safef(query, sizeof(query),
+	    "select length(seq) from probe where id=%d", probe->val);
+	if (sqlQuickNum(conn, query) > 0)
+	    dyStringPrintf(dy, " sequenced");
+	else
+	    {
+	    safef(query, sizeof(query),
+		"select length(fPrimer) from probe where id=%d", probe->val);
+	    if (sqlQuickNum(conn, query) > 0)
+	        dyStringPrintf(dy, " from primers");
+	    }
+	}
+    dyStringPrintf(dy, "</A>");
+    freez(&type);
+
+    /* Add to return list. */
+    slNameAddTail(&returnList, dy->string);
+    }
+
+slFreeList(&probeList);
+slReverse(&returnList);
+return returnList;
+}
+
 #ifdef UNUSED
 static char *genomeDbForImage(struct sqlConnection *conn, int imageId)
 /* Return the genome database to associate with image or NULL if none. */
@@ -318,7 +389,11 @@ for (image = imageList; image != NULL; image = image->next)
     int paneId = image->val;
     struct slName *geneList = geneProbeList(conn, paneId);
     struct slName *genbankList = visiGeneGenbank(conn, paneId);
+    struct slName *probeList = getProbeList(conn, paneId);
     ce = captionElementNew(paneId, "Gene", makeCommaSpacedList(geneList));
+    ce->hasHtml = TRUE;
+    slAddHead(&ceList, ce);
+    ce = captionElementNew(paneId, "Probe", makeCommaSpacedList(probeList));
     ce->hasHtml = TRUE;
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "GenBank", makeCommaSpacedList(genbankList));
@@ -350,6 +425,33 @@ slReverse(&ceList);
 return ceList;
 }
 
+static int nonTagStrlen(char *s)
+/* Count up string length excluding everything between '<' and '>' 
+ * Since this is a non-critical function just for layout purposes
+ * it is simple, not dealing with corner cases like characters in
+ * quotes. */
+{
+char c;
+int count = 0;
+boolean inTag = FALSE;
+while ((c = *s++) != 0)
+    {
+    if (inTag)
+        {
+	if (c == '>')
+	    inTag = FALSE;
+	}
+    else
+        {
+	if (c == '<')
+	    inTag = TRUE;
+	else
+	    count += 1;
+	}
+    }
+return count;
+}
+
 static void printCaptionElements(struct sqlConnection *conn, 
 	struct captionElement *captionElements, struct slInt *imageList)
 /* Print out caption elements - common elements first and then
@@ -359,7 +461,7 @@ struct captionBundle *bundleList, *bundle;
 struct slRef *ref;
 struct captionElement *ce;
 int bundleCount;
-int maxCharsInLine = 80;
+int maxCharsInLine = 70;
 
 bundleList = captionElementBundle(captionElements, imageList);
 bundleCount = slCount(bundleList);
@@ -381,7 +483,11 @@ for (bundle = bundleList; bundle != NULL; bundle = bundle->next)
     for (ref = bundle->elements; ref != NULL; ref = ref->next)
         {
 	ce = ref->val;
-	charsInEl = strlen(ce->type) + strlen(ce->value) + 2;
+	charsInEl = strlen(ce->type) + 2;
+	if (ce->hasHtml)
+	    charsInEl += nonTagStrlen(ce->value);
+	else
+	    charsInEl += strlen(ce->value);
 	if (charsInLine != 0)
 	    {
 	    if (charsInLine + charsInEl > maxCharsInLine )
