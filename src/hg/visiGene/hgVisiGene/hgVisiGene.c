@@ -332,12 +332,16 @@ void doControls(struct sqlConnection *conn)
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *selected = NULL;
 htmlSetBgColor(0xD0FFE0);
-htmlSetStyle(htmlStyleUndecoratedLink);
+/* htmlSetStyle(htmlStyleUndecoratedLink); */
 htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 
+printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\">UCSC</A> ");
+printf("<B><A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\">VisiGene</A></B> ",
+	hgVisiGeneCgiName(), hgpListSpec);
+printf("&nbsp;&nbsp;");
 cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
 
@@ -353,7 +357,6 @@ printf(
 " onclick=\"parent.image.bigImg.zoomer('fit');return false;\"> "
 "\n");
 
-printf("&nbsp;&nbsp;&nbsp;<RIGHT><A HREF=\"/index.html\" class=\"leftbar\" target=\"_parent\">Home</A></RIGHT>");
 printf("</FORM>\n");
 htmlEnd();
 }
@@ -439,15 +442,17 @@ if (imageId != 0)
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
-printf("<frameset cols=\"230,*\"> \n");
-printf("  <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize frameborder=\"0\" name=\"list\">\n",
-    hgVisiGeneCgiName(), hgpDoThumbnails, sidUrl, hgpId, imageId);
-printf("  <frameset rows=\"30,*\">\n");
+
+printf("  <frameset rows=\"27,*\">\n");
 printf("    <frame name=\"controls\" src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\">\n",
     hgVisiGeneCgiName(), hgpDoControls, sidUrl, hgpId, imageId);
+printf("  <frameset cols=\"230,*\"> \n");
+printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize frameborder=\"0\" name=\"list\">\n",
+    hgVisiGeneCgiName(), hgpDoThumbnails, sidUrl, hgpId, imageId);
 printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d/\" name=\"image\" noresize frameborder=\"0\">\n",
     hgVisiGeneCgiName(), hgpDoImage, sidUrl, hgpId, imageId);
 printf("  </frameset>\n");
+
 printf("  <noframes>\n");
 printf("  <body>\n");
 printf("  <p>This web page uses frames, but your browser doesn't support them.</p>\n");
