@@ -2,10 +2,11 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "cheapcgi.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.18 2005/11/21 01:35:16 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.19 2005/11/21 03:57:35 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -200,6 +201,13 @@ if (line != NULL && (s = strchr(line, '(')) != NULL)
 			lf->lineIx, lf->fileName);
 	    el->textType = cloneString(name);
 	    }
+	else if (name[0] == '%')
+	    {
+	    if (sameString(name, "%INTEGER;"))
+	        el->textType = cloneString("#INT");
+	    else
+	        errAbort("Sorry, don't understand %s", name);
+	    }
 	else
 	    {
 	    AllocVar(ec);
@@ -312,6 +320,34 @@ for (;;)
     }
 }
 
+
+char *dtdxTag(struct lineFile *lf, struct dyString *buf)
+/* Return next tag. */
+{
+char *line;
+int len;
+boolean gotAny = FALSE;
+
+/* Skip until get a line that starts with '<' */
+if (!lineFileNextReal(lf,  &line))
+    return NULL;
+line = trimSpaces(line);
+if (line[0] != '<')
+    errAbort("Text outside of a tag line %d of %s", lf->lineIx, lf->fileName);
+dyStringClear(buf);
+for (;;)
+    {
+    dyStringAppend(buf, line);
+    if (buf->string[buf->stringSize-1] == '>')
+         break;
+    dyStringAppendC(buf, ' ');
+    if (!lineFileNextReal(lf, &line))
+        errAbort("End of file %s inside of a tag.", lf->fileName);
+    line = trimSpaces(line);
+    }
+return buf->string;
+}
+
 void parseDtdx(char *fileName, struct element **retList, struct hash **retHash)
 /* Parse out a dtdx file into element list/hash. */
 {
@@ -319,8 +355,9 @@ struct hash *elHash = newHash(8);
 struct element *elList = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
+struct dyString *buf = dyStringNew(0);
 
-while (lineFileNext(lf, &line, NULL))
+while ((line = dtdxTag(lf, buf)) != NULL)
     {
     line = trimSpaces(line);
     if (line == NULL || line[0] == 0 || line[0] == '#')
@@ -350,6 +387,7 @@ while (lineFileNext(lf, &line, NULL))
 	}
     }
 lineFileClose(&lf);
+dyStringFree(&buf);
 slReverse(&elList);
 fixupChildRefs(elList, elHash, fileName);
 *retHash = elHash;
