@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.30 2005/11/21 20:11:26 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.31 2005/11/21 21:11:06 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1634,7 +1634,7 @@ XXXX
     #	1673171206 bases of 2571104688 (65.076%) in intersection
 
 #########################################################################
-# BLASTZ FUGU fr1 (DONE - 2005-09-16 - 2005-10-04 - Hiram)
+# BLASTZ FUGU fr1 (DONE - 2005-09-16 - 2005-11-21 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzFr1.2005-09-16
     cd /cluster/data/mm7/bed
@@ -1746,6 +1746,28 @@ BASE=/cluster/data/mm7/bed/blastzFr1.2005-09-16
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainDownloadSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzFr1.2005-09-16
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainFr1Link > fb.mm7.chainFr1Link.rescore 2>&1
+    cat fb.mm7.chainFr1Link.rescore
+    #	49240999 bases of 2583394090 (1.906%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits fr1 \
+	chainMm7Link > fb.fr1.chainMm7Link.rescore 2>&1
+    cat fb.fr1.chainMm7Link.rescore
+    #	42546014 bases of 315518167 (13.484%) in intersection
 
 #########################################################################
 # BLASTZ TETRAODON tetNig1 (DONE - 2005-09-20 - 2005-10-11 - Hiram)
@@ -1925,7 +1947,30 @@ doOne tetNig1 chainMm5Link
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChain.out 2>&1
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainDownloadSwap.out 2>&1 &
  
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzTetNig1.2005-09-20
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainTetNig1Link > fb.mm7.chainTetNig1Link.rescore 2>&1
+    cat fb.mm7.chainTetNig1Link.rescore
+    #	50521413 bases of 2583394090 (1.956%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits tetNig1 \
+	chainMm7Link > fb.tetNig1.chainMm7Link.rescore 2>&1
+    cat fb.tetNig1.chainMm7Link.rescore
+    #	46775251 bases of 342403326 (13.661%) in intersection
+
+
 #########################################################################
 # CPGISLANDS (DONE - 2005-09-20 - Hiram)
     ssh hgwdev
@@ -2210,7 +2255,7 @@ XXX - STARTED - 2005-10-07 - 12:44
 	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
 
 #############################################################################
-# BLASTZ CHICKEN galGal2 - second time - (WORKING - 2005-11-14 - Hiram)
+# BLASTZ CHICKEN galGal2 - second time (DONE - 2005-11-14 - 2005-11-21 - Hiram)
     #	After fixing a bug in the lineage specific repeat snip business
     #	in blastz-run-ucsc script
     ssh kk
@@ -2323,6 +2368,11 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-continue=download \
 	`pwd`/DEF > rescoreDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreDownloadSwap.out 2>&1 &
 
     #	Measurements:
     ssh kolossus
@@ -2616,7 +2666,7 @@ XXXX  2005-10-04 09:25
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
 ##############################################################################
-# BLASTZ FROG Xenopus tropicalis (WORKING - 2005-10-03 - Hiram)
+# BLASTZ FROG Xenopus tropicalis (DONE - 2005-10-03 - 2005-11-21 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzXenTro1.2005-10-03
     cd /cluster/data/mm7/bed
@@ -2743,6 +2793,28 @@ XXXX
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainDownloadSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzXenTro1.2005-10-03
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainXenTro1Link > fb.mm7.chainXenTro1Link.rescore 2>&1
+    cat fb.mm7.chainXenTro1Link.rescore
+    #	62465913 bases of 2583394090 (2.418%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits xenTro1 \
+	chainMm7Link > fb.xenTro1.chainMm7Link.rescore 2>&1
+    cat fb.xenTro1.chainMm7Link.rescore
+    #	59339777 bases of 1381238994 (4.296%) in intersection
     
 #############################################################################
 # BLASTZ CHIMP PanTro1 (DONE - 2005-10-04 - 2005-10-20 - Hiram)
@@ -8058,7 +8130,7 @@ _EOF_
     hgLoadSeq -replace mm7 /gbdb/mm7/NIAGene/T-fasta.fa
 
 ############################################################################
-# BLASTZ ZEBRAFISH (danRer3) (WORKING - 2005-09-19 - Hiram)
+# BLASTZ ZEBRAFISH (danRer3) (DONE - 2005-09-19 - 2005-11-21 - Hiram)
     #	Create a single 2bit file that has the full chroms and the
     #	random contigs from chrUn and chrNA
     ssh kkstore02
@@ -8184,6 +8256,28 @@ XXX - Started - 2005-10-07 12:13
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainDownloadSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzDanRer3.2005-09-19
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainDanRer3Link > fb.mm7.chainDanRer3Link.rescore 2>&1
+    cat fb.mm7.chainDanRer3Link.rescore
+    #	69591785 bases of 2583394090 (2.694%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits danRer3 \
+	chainMm7Link > fb.danRer3.chainMm7Link.rescore 2>&1
+    cat fb.danRer3.chainMm7Link.rescore
+    #	71277532 bases of 1630323462 (4.372%) in intersection
 
 ###########################################################################
 #### LOAD ENSEMBL GENES (TBD)
