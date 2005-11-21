@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.27 2005/11/21 08:59:06 aamp Exp $"
+#	"$Id: makeMm7.doc,v 1.28 2005/11/21 11:05:39 aamp Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11084,3 +11084,24 @@ EOF
     cp /gbdb/mm6/liftOver/mm6ToMm7.over.chain .
     gzip mm6ToMm7.over.chain
     hgAddLiftOverChain mm6 mm7 /gbdb/mm6/liftOver/mm6ToMm7.over.chain
+
+# RIKEN CAGE STUFF (DONE 11-16-2005 Andy)
+    cd /cluster/data/mm7/bed
+    mkdir rikenCageCtss
+    cd rikenCageCtss/
+    hgsql mm5 -e 'select * from rikenCageTc' | cut -f2- | tail +2 > rikenCageTc.mm5.bed
+    hgsql mm5 -e 'select chrom,chromStart,chromEnd,dataValue from rikenCageCtssMinus' \
+       | tail +2 > minus.mm5.bed
+    hgsql mm5 -e 'select chrom,chromStart,chromEnd,dataValue from rikenCageCtssPlus' \
+       | tail +2 > plus.mm5.bed
+    liftOver rikenCageTc.mm5.bed /gbdb/mm5/liftOver/mm5ToMm7.over.chain rikenCageTc.mm7.bed \
+       rikenCageTc.mm7.missed
+    liftOver plus.mm5.bed /gbdb/mm5/liftOver/mm5ToMm7.over.chain plus.mm7.bed \
+       plus.mm7.missed
+    liftOver minus.mm5.bed /gbdb/mm5/liftOver/mm5ToMm7.over.chain minus.mm7.bed \
+       minus.mm7.missed
+    wc -l *.missed
+    hgLoadBed mm7 rikenCageTc rikenCageTc.mm7.bed
+    hgLoadBed -strict -bedGraph=4 mm7 rikenCageCtssMinus minus.mm7.bed 
+    hgLoadBed -strict -bedGraph=4 mm7 rikenCageCtssPlus plus.mm7.bed 
+
