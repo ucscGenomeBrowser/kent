@@ -117,10 +117,11 @@ longLabel MGC C-List RT-PCR: Pending
 group mgcCList
 priority 101.2
 visibility pack
-type bed 12
+type genePred
 color 10,100,150
 exonArrows on
-#pslSequenceBases all
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
 
 track mgcWUPcrFail
 shortLabel C-List Fail
