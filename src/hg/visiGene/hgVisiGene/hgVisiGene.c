@@ -340,6 +340,10 @@ if (imageId != 0)
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
     fullCaption(conn, imageId);
+    
+    safef(buf,sizeof(buf),"%s%s%s", dir, name, extension);
+    printf("<B>Full-size image:</B> %d x %d <A HREF='%s'> download </A>\n", w, h, buf);
+    
     }
 htmlEnd();
 }
