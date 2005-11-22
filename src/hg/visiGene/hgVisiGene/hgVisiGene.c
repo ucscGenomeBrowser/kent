@@ -218,12 +218,32 @@ int maxCount = 25, count = 0;
 int startAt = cartUsualInt(cart, hgpStartAt, 0);
 int imageCount;
 
+htmlSetStyle(
+"<STYLE TYPE=\"text/css\">\n"
+"  BODY {margin: 2px}\n"
+"  </STYLE>\n"
+);
 htmlSetBgColor(0xC0C0D6);
 htmStart(stdout, "doThumbnails");
 matchList = readMatchFile(matchFile);
 imageCount = slCount(matchList);
 if (imageCount > 0)
     {
+    printf(
+"    <DIV"
+"    ID='perspClip'"
+"    STYLE='position:absolute;left:-1000px;top:-1000px;z-index:2;visibility:visible;overflow:hidden!important;'"
+"         onmouseover='this.style.left=-1000;' "
+"    >"
+"    <DIV"
+"    ID='perspective'"
+"    STYLE='position:absolute;left:0px;top:0px;'"
+"    >"
+"    <IMG ID='perspBox' SRC='../visiGene/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 "
+">"
+"    </DIV>"
+"    </DIV>"
+    );
     printf("<TABLE>\n");
     printf("<TR><TD><B>");
     printf("%d images match<BR>\n", imageCount);
@@ -310,8 +330,13 @@ if (imageId != 0)
     p=visiGeneFullSizePath(conn, imageId);
 
     splitPath(p, dir, name, extension);
+#ifdef DEBUG
+    safef(buf,sizeof(buf),"../visiGene/bigImageTest.html?url=%s%s/%s&w=%d&h=%d",
+	    dir,name,name,w,h);
+#else	    
     safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
+#endif	    
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
     fullCaption(conn, imageId);
