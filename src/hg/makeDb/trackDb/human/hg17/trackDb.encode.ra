@@ -1627,6 +1627,15 @@ origAssembly hg16
     priority 1
 
     track encodeRegulomeBaseGM
+release alpha
+    subTrack encodeRegulomeBase
+    shortLabel GM06990
+    longLabel GM06990 DNaseI Sensitivity
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeBaseGM06990
+release beta
     subTrack encodeRegulomeBase
     shortLabel GM06990
     longLabel GM06990 DNaseI Sensitivity
@@ -1662,9 +1671,18 @@ origAssembly hg16
     priority 6
 
     track encodeRegulomeBaseCD34
+release alpha
     subTrack encodeRegulomeBase
     shortLabel CD34
     longLabel CD34 DNaseI Sensitivity
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeBaseERY
+release beta
+    subTrack encodeRegulomeBase
+    shortLabel ERY
+    longLabel Adult Erythroblast DNaseI Sensitivity
     color 240,50,60
     priority 7
 
@@ -1713,6 +1731,15 @@ maxHeightPixels 128:16:16
     priority 1
 
     track encodeRegulomeProbGM
+release alpha
+    subTrack encodeRegulomeProb
+    shortLabel GM06990
+    longLabel GM06990 DNaseI HSs
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeProbGM06990
+release beta
     subTrack encodeRegulomeProb
     shortLabel GM06990
     longLabel GM06990 DNaseI HSs
@@ -1748,9 +1775,18 @@ maxHeightPixels 128:16:16
     priority 6
 
     track encodeRegulomeProbCD34
+release alpha
     subTrack encodeRegulomeProb
     shortLabel CD34
     longLabel CD34 DNaseI HSs
+    color 240,50,60
+    priority 7
+
+    track encodeRegulomeProbERY
+release beta
+    subTrack encodeRegulomeProb
+    shortLabel ERY
+    longLabel Adult Erythroblast DNaseI HSs
     color 240,50,60
     priority 7
 
@@ -1779,6 +1815,15 @@ useScore 1
     priority 1
 
     track encodeRegulomeQualityGM
+release alpha
+    subTrack encodeRegulomeQuality
+    shortLabel GM06990 
+    longLabel GM06990 Quality
+    color 90,50,210
+    priority 2
+
+    track encodeRegulomeQualityGM06990
+release beta
     subTrack encodeRegulomeQuality
     shortLabel GM06990 
     longLabel GM06990 Quality
@@ -1813,7 +1858,16 @@ useScore 1
     color 210,50,90
     priority 6
 
+    track encodeRegulomeQualityERY
+release beta
+    subTrack encodeRegulomeQuality
+    shortLabel ERY
+    longLabel Adult Erythroblast Quality
+    color 240,50,60
+    priority 7
+
     track encodeRegulomeQualityCD34
+release alpha
     subTrack encodeRegulomeQuality
     shortLabel CD34
     longLabel CD34 Quality
