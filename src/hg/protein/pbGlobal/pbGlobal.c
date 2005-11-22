@@ -18,6 +18,7 @@
 
 static char const rcsid[] = "$Id:"
 
+
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
 struct cart *cart;	/* The cart where we keep persistent variables. */
