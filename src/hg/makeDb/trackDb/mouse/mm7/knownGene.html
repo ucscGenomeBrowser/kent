@@ -38,11 +38,11 @@ at least 80% base identity with the genomic sequence were kept.
 <P>Then the genomic mRNA and protein alignments were compared, 
 and protein-mRNA pairings were determined from their overlaps. 
 mRNA CDS data were obtained from RefSeq and GenBank data 
-and supplemented by CDS structures derived from UCSC protein-mRNA BLAT alignments. 
+and supplemented by CDS structures derived from UCSC protein-mRNA alignments using tblastn. 
 The initial set of UCSC Known Genes candidates consists of 
 all protein-mRNA pairs with valid mRNA CDS structures.  
 A gene-check program (similar to the one used for the Consensus CDS (CCDS) project) 
-is used to remove questionable candidates, such as those with in-frame stop codons, 
+is used to remove questionable candidates, such as those with in-frame stop codons, bad frame, 
 missing start or stop codons, etc.
 <P>From each group of gene candidates that share the same CDS structure, 
 the protein-mRNA pair having the best ranking and protein-mRNA alignment score 
