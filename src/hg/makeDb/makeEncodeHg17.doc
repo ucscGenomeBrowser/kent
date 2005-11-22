@@ -1203,6 +1203,17 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log 
     
+#############################################################################
+#  Measuring TARs and TransFrags distances to SINEs and LINEs
+#
+#
+#	Using the table browser on genome.ucsc.edu on Hg17, select the
+#	Alu SINEs and L1,L2 LINEs by setting filter at:
+#	repClass=LINE or SINE
+#	repFamily=L1, L2 or Alu
+#	request fields: swScore, genoName, genoStart, genoEnd, repNames
+#	save to file L1_LINE_Hg17.txt.gz, L2_LINE_Hg17.txt.gz
+#	Alu_SINE_Hg17.txt.gz
 ##########################################################################
 # UW/Regulome DnaseI HS (2005-10-28 kate)
 #       HS range 1.102-3.0
@@ -1386,7 +1397,6 @@ cat > load.csh << 'EOF'
         awk '{printf ("%s\t%d\t%d\tuu.%d\t%d\n", $1, $4, $5, NR, $6)}' | \
             hgLoadBed -noSort -noBin -strict hg17 encodeUppsalaChipSites stdin
    
-
 ##########################################################################
 # MSA tracks from Sept. 2005 freeze
 # Use links from Wiki for data submission (as per Elliott Margulies)
