@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1041 2005/11/22 07:08:19 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1042 2005/11/22 20:08:28 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2699,6 +2699,7 @@ struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn();
 char *geneSymbol;
 char *protDisplayId;
+char *mimId;
 char cond_str[256];
 char *hg17KgLabel = cartUsualString(cart, "hg17Kg.label", "gene symbol");
 
@@ -2709,6 +2710,9 @@ boolean useKgId      = sameString(hg17KgLabel, "UCSC Known Gene ID")
     || sameString(hg17KgLabel, "all");
 
 boolean useProtDisplayId = sameString(hg17KgLabel, "UniProt Display ID")
+    || sameString(hg17KgLabel, "all");
+
+boolean useMimId = sameString(hg17KgLabel, "OMIM ID")
     || sameString(hg17KgLabel, "all");
 
 boolean useAll = sameString(hg17KgLabel, "all");
@@ -2739,6 +2743,13 @@ if (hTableExists("kgXref"))
             protDisplayId = sqlGetField(conn, "hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
+        if (useMimId && hTableExists("refLink"))
+            {
+            safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            mimId = sqlQuickString(conn, cond_str);
+            if (mimId)
+                dyStringAppend(name, mimId);
+            }
     	lf->extra = dyStringCannibalize(&name);
 	}
     }
@@ -2792,6 +2803,7 @@ struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn();
 char *geneSymbol;
 char *protDisplayId;
+char *mimId;
 char cond_str[256];
 char *knownGeneLabel = cartUsualString(cart, "knownGene.label", "gene symbol");
 
@@ -2804,7 +2816,11 @@ boolean useKgId      = sameString(knownGeneLabel, "UCSC Known Gene ID")
 boolean useProtDisplayId = sameString(knownGeneLabel, "UniProt Display ID")
     || sameString(knownGeneLabel, "all");
 
+boolean useMimId = sameString(knownGeneLabel, "OMIM ID")
+    || sameString(knownGeneLabel, "all");
+
 boolean useAll = sameString(knownGeneLabel, "all");
+
 	
 if (hTableExists("kgXref"))
     {
@@ -2831,7 +2847,15 @@ if (hTableExists("kgXref"))
 	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
             protDisplayId = sqlGetField(conn, database, "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
+            if (useAll) dyStringAppendC(name, '/');
 	    }
+        if (useMimId && hTableExists("refLink")) 
+            {
+            safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            mimId = sqlQuickString(conn, cond_str);
+            if (mimId) 
+                dyStringAppend(name, mimId);
+            }
     	lf->extra = dyStringCannibalize(&name);
 	}
     }
@@ -3300,14 +3324,17 @@ struct sqlConnection *conn = hAllocConn();
 boolean isNative = sameString(tg->mapName, "refGene");
 char *refGeneLabel = cartUsualString(cart, (isNative ? "refGene.label" : "xenoRefGene.label"), "gene");
 boolean useGeneName = sameString(refGeneLabel, "gene")
-    || sameString(refGeneLabel, "both");
+    || sameString(refGeneLabel, "all");
 boolean useAcc = sameString(refGeneLabel, "accession")
-    || sameString(refGeneLabel, "both");
+    || sameString(refGeneLabel, "all");
+boolean useMim = sameString(refGeneLabel, "OMIM ID")
+    || sameString(refGeneLabel, "all");
+boolean useAll = sameString(refGeneLabel, "all");
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
-    if ((useGeneName || useAcc) && !isNative)
+    if ((useGeneName || useAcc || useMim) && !isNative)
         {
         char *org = getOrganismShort(conn, lf->name);
         if (org != NULL)
@@ -3319,12 +3346,25 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         if (gene != NULL)
             {
             dyStringAppend(name, gene);
-            if (useAcc)
+            if (useAll)
                 dyStringAppendC(name, '/');
             }
         }
     if (useAcc)
+        {
         dyStringAppend(name, lf->name);
+        if (useAll)
+            dyStringAppendC(name, '/');
+        }
+    if (useMim)
+        {
+        char *mimId;
+        char query[256];
+        safef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+        mimId = sqlQuickString(conn, query);
+        if (mimId && differentString(mimId, "0"))
+            dyStringAppend(name, mimId);
+        }
     lf->extra = dyStringCannibalize(&name);
     }
 hFreeConn(&conn);
