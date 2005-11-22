@@ -27,7 +27,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.221 2005/11/17 20:17:59 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.222 2005/11/22 20:08:17 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -646,6 +646,7 @@ geneLabel = cartUsualString(cart, varName, "gene symbol");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene symbol");
 radioButton(varName, geneLabel, "UCSC Known Gene ID");
+//radioButton(varName, geneLabel, "OMIM ID");
 radioButton(varName, geneLabel, "all");
 radioButton(varName, geneLabel, "none");
 }
@@ -662,12 +663,20 @@ void knownGeneIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
+//struct sqlConnection *conn = hAllocConn();
+//char query[256];
+//int omimAvail = 0;
+//safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
+//omimAvail = sqlQuickNum(conn, query);
+//hFreeConn(&conn);
 safef(varName, sizeof(varName), "%s.label", tdb->tableName);
 geneLabel = cartUsualString(cart, varName, "gene symbol");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene symbol");
 radioButton(varName, geneLabel, "UCSC Known Gene ID");
 radioButton(varName, geneLabel, "UniProt Display ID");
+//if (omimAvail > 0)
+    //radioButton(varName, geneLabel, "OMIM ID");
 radioButton(varName, geneLabel, "all");
 radioButton(varName, geneLabel, "none");
 }
@@ -689,7 +698,13 @@ geneLabel = cartUsualString(cart, varName, "gene");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene");
 radioButton(varName, geneLabel, "accession");
-radioButton(varName, geneLabel, "both");
+if (sameString(tdb->tableName, "refGene"))
+    {
+    radioButton(varName, geneLabel, "OMIM ID");
+    radioButton(varName, geneLabel, "all");
+    }
+else 
+    radioButton(varName, geneLabel, "both");
 radioButton(varName, geneLabel, "none");
 }
 
