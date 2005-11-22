@@ -94,7 +94,7 @@ char query[256];
 int geneId, taxon;
 char *probeType;
 
-webStartWrapper(cart, "Gene Information", NULL, FALSE, FALSE);
+webStartWrapper(cart, "Probe Information", NULL, FALSE, FALSE);
 
 /* Get gene ID. */
 safef(query, sizeof(query), "select gene from probe where id=%d", probeId);
@@ -124,7 +124,6 @@ safef(query, sizeof(query), "select uniProt from gene where id=%d", geneId);
 labeledResult("UniProt", conn, query);
 
 /* Now print probe information. */
-webNewSection("Probe Information");
 safef(query, sizeof(query),
 	"select probeType.name from probe,probeType "
 	"where probe.id = %d and probe.probeType = probeType.id"
