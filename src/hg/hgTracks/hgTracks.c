@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1040 2005/11/19 17:43:44 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1041 2005/11/22 07:08:19 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10161,7 +10161,7 @@ if (liftOverChainForDb(database) != NULL)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"");
     hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d", 
-    	uiVars->string, database, chromName, winStart, winEnd);
+    	uiVars->string, database, chromName, winStart+1, winEnd);
     hPrintf("\" class=\"topbar\">Convert</A></TD>");
     }
 
