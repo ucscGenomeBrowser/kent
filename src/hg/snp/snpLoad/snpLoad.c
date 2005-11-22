@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.6 2005/11/17 06:17:33 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.7 2005/11/22 00:31:14 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -173,10 +173,11 @@ float avHetSE = 0.0;
 
 for (el = list; el != NULL; el = el->next)
     {
-    fprintf(f, "rs%s \t", el->name);
+    fprintf(f, "0 \t");
     fprintf(f, "chr%s \t", el->chrom);
     fprintf(f, "%d \t", el->chromStart);
     fprintf(f, "%d \t", el->chromEnd);
+    fprintf(f, "rs%s \t", el->name);
     fprintf(f, "%d \t", score);
     fprintf(f, "%s \t", el->strand);
     fprintf(f, "N \t");
@@ -187,7 +188,9 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "%f \t", avHet);
     fprintf(f, "%f \t", avHetSE);
     fprintf(f, "unknown \t");
+    fprintf(f, "unknown \t");
     fprintf(f, "dbSNP125 \t");
+    fprintf(f, "0 \t");
     fprintf(f, "\n");
     }
 }
