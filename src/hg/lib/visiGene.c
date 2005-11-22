@@ -60,22 +60,31 @@ if (label != NULL && label[0] == 0)
 return label;
 }
 
-void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight)
-/* Get width and height of image with given id */
+boolean visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight)
+/* Get width and height of image with given id. 
+ * Return FALSE with warning if not found. */
 {
 char query[256];
 struct sqlResult *sr;
 char **row;
+boolean result = FALSE;
 safef(query, sizeof(query), 
 	"select imageFile.imageWidth, imageFile.imageHeight from image,imageFile"
 	" where image.id = %d and image.imageFile = imageFile.id "
 	, id);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("No image of id %d", id);
-*imageWidth = atoi(row[0]);
-*imageHeight = atoi(row[1]);
+    {
+    warn("No image of id %d", id);
+    }
+else    
+    {    
+    *imageWidth = atoi(row[0]);
+    *imageHeight = atoi(row[1]);
+    result = TRUE;
+    }    
 sqlFreeResult(&sr);
+return result;
 }
 
 static char *somePath(struct sqlConnection *conn, int id, char *locationField)

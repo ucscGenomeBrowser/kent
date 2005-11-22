@@ -17,8 +17,9 @@ char *visiGenePaneLabel(struct sqlConnection *conn, int id);
 /* Return label for pane of this image in file if any, NULL if none.
  * FreeMem this when done. */
 
-void visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight);
-/* Get width and height of image with given id */
+boolean visiGeneImageSize(struct sqlConnection *conn, int id, int *imageWidth, int *imageHeight);
+/* Get width and height of image with given id. 
+ * Return FALSE with warning if not found. */
 
 char *visiGeneFullSizePath(struct sqlConnection *conn, int id);
 /* Fill in path for full image visiGene of given id.  FreeMem

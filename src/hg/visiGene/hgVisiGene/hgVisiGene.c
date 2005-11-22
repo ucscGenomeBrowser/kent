@@ -319,6 +319,9 @@ int w = 0, h = 0;
 htmlSetBgColor(0xE0E0E0);
 htmStart(stdout, "do image");
 
+if (!visiGeneImageSize(conn, imageId, &w, &h))
+    imageId = 0;
+	
 if (imageId != 0)
     {
     printf("<B>");
@@ -326,7 +329,6 @@ if (imageId != 0)
     printf(".</B> Click in image to zoom, drag to move.  "
 	   "Caption is below.<BR>\n");
 
-    visiGeneImageSize(conn, imageId, &w, &h);
     p=visiGeneFullSizePath(conn, imageId);
 
     splitPath(p, dir, name, extension);
