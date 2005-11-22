@@ -571,10 +571,28 @@ if (thumb == null) { // no thumb to follow with, so hide box and exit
     return;
 }    
 
-var wt = thumb.width;
-var ht = thumb.height;
+var wt = thumb.offsetWidth;
+var ht = thumb.offsetHeight;
 
-//alert('0'
+//alert('img'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+
+//tox += thumb.offsetLeft+thumb.style.borderWidth;
+//toy += thumb.offsetTop+thumb.style.borderWidth;
+
+thumb = thumb.offsetParent;
+
+//alert('cell'
 //   +'\nthumb.width='+thumb.width
 //   +'\nthumb.left='+thumb.left
 //   +'\nthumb.style.left='+thumb.style.left
@@ -589,22 +607,7 @@ toy += thumb.offsetTop;
 
 thumb = thumb.offsetParent;
 
-//alert('1'
-//   +'\nthumb.width='+thumb.width
-//   +'\nthumb.left='+thumb.left
-//   +'\nthumb.style.left='+thumb.style.left
-//   +'\nthumb.offsetWidth='+thumb.offsetWidth
-//   +'\nthumb.offsetLeft='+thumb.offsetLeft
-//   +'\nthumb.offsetTop='+thumb.offsetTop
-//   +'\nthumb.offsetParent='+thumb.offsetParent
-//   +'\nthumb.src='+thumb.src);
-
-tox += thumb.offsetLeft;
-toy += thumb.offsetTop;
-
-thumb = thumb.offsetParent;
-
-//alert('2'
+//alert('table'
 //   +'\nthumb.width='+thumb.width
 //   +'\nthumb.left='+thumb.left
 //   +'\nthumb.style.left='+thumb.style.left
