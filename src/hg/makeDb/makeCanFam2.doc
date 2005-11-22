@@ -1042,6 +1042,7 @@ chainSome $(path1)
 # End tblastn
 
 # BLASTZ SELF  (DONE braney 8-29-2005)
+# For future reference -- doBlastzChainNet.pl should have been used
     ssh pk
     mkdir -p /cluster/data/canFam2/bed/blastz.canFam2
     cd /cluster/data/canFam2/bed/blastz.canFam2
@@ -1172,6 +1173,7 @@ zcat ../pslParts/$1.*.psl.gz \
 # Submission to last job:            61s       1.02m     0.02h    0.00d
 
 # CHAIN SELF BLASTZ 
+# For future reference -- doBlastzChainNet.pl should have been used
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/canFam2/bed/blastz.canFam2.2
@@ -1241,6 +1243,7 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
 
 
 # NET SELF BLASTZ 
+# For future reference -- doBlastzChainNet.pl should have been used
     ssh kolossus
     cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
     chainPreNet all.chain.gz ../S1.len ../S2.len stdout \
@@ -1255,6 +1258,18 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
     # Load the nets into database 
     netFilter -minGap=10 self.net |  hgLoadNet canFam2 netSelf stdin
     # Add entries for chainSelf, netSelf to dog/canFam2 trackDb
+
+
+# ADD SELF DOWNLOADABLE FILES (DONE 11/21/05 angie)
+# For future reference -- doBlastzChainNet.pl should have been used for 
+# all steps from blastz up to this point.
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
+    mv self.net canFam2.canFam2.net
+    gzip canFam2.canFam2.net
+    cd ..
+    doBlastzChainNet.pl -continue download -stop download DEF \
+      >& doDownload.log
+    tail -f doDownload.log
 
 
 # MULTIZ.V10 4WAY (DOG/H/M/R) (DONE 11/7/05 angie)
@@ -1706,5 +1721,47 @@ zcat `ls -1 /san/sanvol1/scratch/canFam2/phastCons/POSTPROBS/$chr/*.pp.gz \
               s/Illogical links/IL/; s/; /+/g;' \
     > uncertified.bed
     hgLoadBed -tab canFam2 uncertified uncertified.bed
+
+
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE 11/21/05 angie)
+    ssh kolossus
+    cd /cluster/data/canFam2
+    #- Build the .tar.gz files -- no genbank for now.
+    cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf bigZips
+mkdir bigZips
+tar cvzf bigZips/chromAgp.tar.gz ?{,?}/chr*.agp
+tar cvzf bigZips/chromOut.tar.gz ?{,?}/chr*.fa.out
+tar cvzf bigZips/chromFa.tar.gz ?{,?}/chr*.fa
+tar cvzf bigZips/chromFaMasked.tar.gz ?{,?}/chr*.fa.masked
+cd bed/simpleRepeat
+tar cvzf ../../bigZips/chromTrf.tar.gz trfMaskChrom/chr*.bed
+cd ../..
+'_EOF_'
+    # << this line makes emacs coloring happy
+    csh -efx ./jkStuff/zipAll.csh |& tee zipAll.log
+    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    cd bigZips
+    md5sum *.gz > md5sum.txt
+    # Make a README.txt
+    cd ..
+    mkdir chromGz
+    foreach f ( ?{,?}/chr*.fa )
+      echo $f:t:r
+      gzip -c $f > chromGz/$f:t.gz
+    end
+    cd chromGz
+    md5sum *.gz > md5sum.txt
+    # Make a README.txt
+
+    #- Link the .gz and .txt files to hgwdev:/usr/local/apache/...
+    ssh hgwdev
+    set gp = /usr/local/apache/htdocs/goldenPath/canFam2
+    mkdir -p $gp/bigZips
+    ln -s /cluster/data/canFam2/bigZips/{chrom*.tar.gz,*.txt} $gp/bigZips
+    mkdir -p $gp/chromosomes
+    ln -s /cluster/data/canFam2/chromGz/{chr*.gz,*.txt} $gp/chromosomes
+    # Take a look at bigZips/* and chromosomes/*
+    # Can't make refGene upstream sequence files - no refSeq for dog.
 
 
