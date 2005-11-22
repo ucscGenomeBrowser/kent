@@ -6,10 +6,11 @@
 #include "fa.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "nibTwo.h"
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: getRnaPred.c,v 1.16 2005/06/17 17:29:33 acs Exp $";
+static char const rcsid[] = "$Id: getRnaPred.c,v 1.17 2005/11/22 19:26:34 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -76,6 +77,43 @@ char *pslOut = NULL;
 char *suffix = "";
 int maxSize = -1;
 
+struct nibTwoCache *getNibTwoCache()
+/* get the nib or two-bit cache */
+{
+struct sqlConnection *conn = hAllocConn();
+char nibTwoPath[PATH_LEN];
+struct nibTwoCache *nibTwoCache;
+
+/* grab the first chromsome file name, if it's a nib, convert to
+ * directory name */
+sqlNeedQuickQuery(conn, "select fileName from chromInfo limit 1",
+                  nibTwoPath, sizeof(nibTwoPath));
+if (nibIsFile(nibTwoPath))
+    {
+    char *p = strrchr(nibTwoPath, '/');
+    if (p != NULL)
+        *p = '\0';
+    else
+        strcpy(nibTwoPath, "."); 
+    }
+nibTwoCache = nibTwoCacheNew(nibTwoPath);
+hFreeConn(&conn);
+return nibTwoCache;
+}
+
+struct dnaSeq *fetchDna(char *seqName, int start, int end, enum dnaCase dnaCase)
+/* Fetch DNA sequence, with caching of opens */
+{
+static struct nibTwoCache *nibTwoCache = NULL;
+struct dnaSeq *dna;
+if (nibTwoCache == NULL)
+    nibTwoCache = getNibTwoCache();
+dna = nibTwoCacheSeqPart(nibTwoCache, seqName, start, (end-start), NULL);
+if (dnaCase == dnaLower)
+    tolowers(dna->dna);
+return dna;
+}
+
 boolean hasWeirdSplice(struct genePred *gp)
 /* see if a gene has weird splice sites */
 {
@@ -88,7 +126,7 @@ for (i=1; (i<gp->exonCount) && !gotOdd; ++i)
     int size = end - start;
     if (size > 0)
         {
-        struct dnaSeq *seq = hDnaFromSeq(gp->chrom, start, end, dnaLower);
+        struct dnaSeq *seq = fetchDna(gp->chrom, start, end, dnaLower);
         DNA *s = seq->dna;
         DNA *e = seq->dna + seq->size;
         uglyf("%s %c%c/%c%c\n", gp->name, s[0], s[1], e[-2], e[-1]);
@@ -253,7 +291,7 @@ for (i=0; i<gp->exonCount; ++i)
         warn("%d sized exon in %s\n", size, gp->name);
     else
         {
-        struct dnaSeq *seq = hDnaFromSeq(gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
+        struct dnaSeq *seq = fetchDna(gp->chrom, start, end, (keepMasking ? dnaMixed : dnaLower));
         dyStringAppendN(dnaBuf, seq->dna, size);
         freeDnaSeq(&seq);
         }
