@@ -1109,12 +1109,14 @@
 			tools available on the Genome Browser web site.
 			The <A HREF="../cgi-bin/hgLiftOver">hgLiftOver</A> utility,
 			accessed via the Utilities link on the Genome Browser home page, 
-			may be used to do forward conversions of the data from one assembly to a later
-			assembly. It also handles batch conversions. The 
+			may be used to do forward (and in some instances, 
+			reverse) conversions of the data from one assembly to 
+		        another, as well as selected conversions across species.
+			It also handles batch conversions. The 
 			<A HREF="../cgi-bin/hgCoordConv">Convert</A> tool, which
 			is accessed from the menu on the Genome Browser annotation tracks page, supports
-			both forward and reverse conversions, but does not accept batch input. At the
-			current time, these tools may be used only on the human genome assembly.
+			forward, reverse, and cross-species conversions, but 
+		        does not accept batch input. 
 			<P>If you have the need to update a large number of coordinates	
 			to a different assembly and have access to a Linux platform, 
 			you may find it useful to try our <TT>liftOver</TT> tool. 
@@ -1652,9 +1654,9 @@
 			To connect to the database, you must use a computer on which the MySQL
 			client libraries have been installed. The UCSC server is running MySQL
 			4.0.20; for best results, we recommend you use clients of the same revision.
-			The latest MySQL clients may be downloaded from
-			<A HREF="http://dev.mysql.com/downloads/mysql/4.0.html" 
-		   	TARGET=_blank>http://dev.mysql.com/downloads/mysql/4.0.html</A>. 
+			The v4.0 MySQL clients may be downloaded from
+			<A HREF="http://downloads.mysql.com/archives.php?p=mysql-4.0" 
+		   	TARGET=_blank>http://downloads.mysql.com/archives.php?p=mysql-4.0</A>. 
 			Connect to the MySql server
 			using the command: 
 			<BR>
