@@ -93,7 +93,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeAffyRnaHeLaSignal
     subTrack encodeAffyRna
     shortLabel Affy RNA HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLaS3) Signal
+    longLabel Affymetrix PolyA+ RNA (HeLa) Signal
     subGroups dataType=signal cellType=hela
     color 220,132,12
     priority 2
@@ -143,7 +143,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeAffyRnaHeLaSites
     subTrack encodeAffyRna
     shortLabel Affy TF HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLaS3) Transfrags 
+    longLabel Affymetrix PolyA+ RNA (HeLa) Transfrags 
     subGroups dataType=transfrags cellType=hela
     noInherit on
     color 220,132,12
