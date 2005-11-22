@@ -1440,11 +1440,11 @@ if (sfCount == 0)
     {
     sfCount = getSuperfamilies(proteinID);
     }
-
 if (mrnaID != NULL)
     {
     getExonInfo(proteinID, &exCount, &chrom, &strand);
-    if (initialWindow) 
+    /* do the following only if pbTracks called doTracks() */
+    if (initialWindow && IAmPbTracks)
 	{
 	prevGBOffsetSav = calPrevGB(exCount, chrom, strand, l, yOffp, proteinID, mrnaID);
 	trackOrigOffset = prevGBOffsetSav;
