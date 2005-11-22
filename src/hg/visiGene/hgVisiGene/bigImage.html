@@ -369,6 +369,8 @@ myImg.style.top =hc/2 - y*z;
 if ((cntinv > 0) || (cntvis > 0))
     window.status='cntinv='+cntinv+'  and cntvis='+cntvis;
 
+thumbFollow();
+
 if ((x != xx) || (y != yy)) setTimeout('scrollMe()',100);
 
 }
@@ -439,7 +441,7 @@ if (typeof(parent.parent) != 'undefined')
     var target = picName.replace("full","200");
     target = target.substring(0,target.lastIndexOf("/"));
     target = target+picExt;
-    alert('imgs.length='+imgs.length+' target='+target);
+    //alert('imgs.length='+imgs.length+' target='+target);
     for (var i = 0; i < imgs.length; ++i) {
 	var src = imgs[i].src;
 	src = '..'+src.substring(src.indexOf("/visiGene"));
@@ -544,8 +546,96 @@ windowResize();
 
 if (window.focus) window.focus();
 
+}
+
+
+function thumbFollow() {
+
 //debug
-//getThumb();
+var thumb = getThumb();
+var tox = 0;
+var toy = 0;
+
+if (typeof(parent) == 'undefined') return;
+if (typeof(parent.parent) == 'undefined') return;
+if (typeof(parent.parent.list) == 'undefined') return;
+if (typeof(parent.parent.list.document) == 'undefined') return;
+
+var pclip = parent.parent.list.document.getElementById('perspClip');  // use to clip
+var persp = parent.parent.list.document.getElementById('perspective');  // use to position
+var pbox = parent.parent.list.document.getElementById('perspBox');  // make box using 1x1 transparent gif with border
+
+if (thumb == null) { // no thumb to follow with, so hide box and exit
+    pclip.style.left = -1000;
+    pclip.style.top = -1000;
+    return;
+}    
+
+var wt = thumb.width;
+var ht = thumb.height;
+
+//alert('0'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+
+thumb = thumb.offsetParent;
+
+//alert('1'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+
+thumb = thumb.offsetParent;
+
+//alert('2'
+//   +'\nthumb.width='+thumb.width
+//   +'\nthumb.left='+thumb.left
+//   +'\nthumb.style.left='+thumb.style.left
+//   +'\nthumb.offsetWidth='+thumb.offsetWidth
+//   +'\nthumb.offsetLeft='+thumb.offsetLeft
+//   +'\nthumb.offsetTop='+thumb.offsetTop
+//   +'\nthumb.offsetParent='+thumb.offsetParent
+//   +'\nthumb.src='+thumb.src);
+
+tox += thumb.offsetLeft;
+toy += thumb.offsetTop;
+   
+//alert('tox='+tox+' toy='+toy);
+//alert('persp.style.left='+persp.style.left+' persp.style.top='+persp.style.top);
+
+var wp = wc/z * wt/wOrig[0];
+var hp = hc/z * ht/hOrig[0];
+
+// set the width and height box, i.e. the 1x1 transparent gif with border
+pbox.width  = wp;
+pbox.height = hp;
+
+// use persp div to position the "box"
+persp.style.left = 0 - wp/2 + x*wt/wOrig[0];
+persp.style.top  = 0 - hp/2 + y*ht/hOrig[0];
+
+// position clipping div over the thumbnail
+pclip.style.left = tox;
+pclip.style.top  = toy;
+pclip.style.width = wt;
+pclip.style.height  = ht;
 
 }
 
@@ -838,6 +928,7 @@ if ((mousex > 0) && (mousey > 0)) {
 
 function mouseDown(e) {
 if (!e) var e = window.event;
+checkMouseRange();
 if ((mousex > 0) && (mousey > 0)) {
     mouseDrag = true;
     mouseAction = true;
