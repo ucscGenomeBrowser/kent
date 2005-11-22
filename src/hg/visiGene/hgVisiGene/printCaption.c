@@ -7,6 +7,7 @@
 #include "jksql.h"
 #include "cart.h"
 #include "htmshell.h"
+#include "hdb.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
 #include "captionElement.h"
@@ -19,6 +20,94 @@ struct probeAndColor
     int probe;	/* Probe id. */
     int probeColor;  /* ProbeColor id. */
     };
+
+char *getKnownGeneUrl(struct sqlConnection *conn, int geneId)
+/* Given gene ID, try and find known gene on browser in same
+ * species. */
+{
+char query[256];
+int taxon;
+char *url = NULL;
+char *binomial = NULL;
+char *genomeDb = NULL;
+
+/* Figure out taxon. */
+safef(query, sizeof(query), 
+    "select taxon from gene where id = %d", geneId);
+taxon = sqlQuickNum(conn, query);
+
+/* Figure out scientific name. */
+if (taxon != 0)
+    {
+    safef(query, sizeof(query),
+	"select binomial from uniProt.taxon where id=%d", taxon);
+    binomial = sqlQuickString(conn, query);
+    }
+
+/* Get default database for that organism. */
+if (binomial != NULL)
+    {
+    struct sqlConnection *centralConn = hConnectCentral();
+    safef(query, sizeof(query),
+        "select defaultDb.name from dbDb,defaultDb "
+	"where dbDb.scientificName='%s' "
+	"and dbDb.name not like 'zoo%%' "
+	"and dbDb.name = defaultDb.name ", binomial);
+    genomeDb = sqlQuickString(centralConn, query);
+    if (genomeDb != NULL)
+	{
+	/* Make sure known genes track exists - we may need
+	 * to tweak this at some point for model organisms. */
+	safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
+	if (!sqlTableExists(conn, query))
+	    genomeDb = NULL;
+	}
+    hDisconnectCentral(&centralConn);
+    }
+
+/* If no db for that organism revert to human. */
+if (genomeDb == NULL)
+    genomeDb = hDefaultDb();
+
+safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
+if (sqlTableExists(conn, query))
+    {
+    struct slName *imageList, *image;
+    safef(query, sizeof(query), 
+        "select imageProbe.image from probe,imageProbe "
+	"where probe.gene=%d and imageProbe.probe=probe.id", geneId);
+    imageList = sqlQuickList(conn, query);
+    if (imageList != NULL)
+        {
+	struct dyString *dy = dyStringNew(0);
+	char *knownGene = NULL;
+	dyStringPrintf(dy, 
+	   "select name from %s.knownToVisiGene ", genomeDb);
+	dyStringAppend(dy,
+	   "where value in(");
+	for (image = imageList; image != NULL; image = image->next)
+	    {
+	    dyStringPrintf(dy, "'%s'", image->name);
+	    if (image->next != NULL)
+	        dyStringAppendC(dy, ',');
+	    }
+	dyStringAppend(dy, ")");
+	knownGene = sqlQuickString(conn, dy->string);
+	if (knownGene != NULL)
+	    {
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_chrom=none",
+	    	genomeDb, knownGene);
+	    url = dyStringCannibalize(&dy);
+	    }
+	dyStringFree(&dy);
+	slFreeList(&imageList);
+	}
+    }
+freez(&binomial);
+freez(&genomeDb);
+return url;
+}
 
 static struct slName *geneProbeList(struct sqlConnection *conn, int id)
 /* Get list of gene names with hyperlinks to probe info page. */
@@ -50,16 +139,26 @@ for (pc = pcList; pc != NULL; pc = pc->next)
     int geneId;
     char *geneName;
     int probe = pc->probe;
+    char *geneUrl = NULL;
 
-    /* Create hyperlink to probe page around gene name. */
-    dyStringClear(dy);
-    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_blank>",
-    	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe);
+    /* Get gene ID and name. */
     safef(query, sizeof(query), 
     	"select gene from probe where id = %d", probe);
     geneId = sqlQuickNum(conn, query);
     geneName = vgGeneNameFromId(conn, geneId);
-    dyStringPrintf(dy, "%s</A>", geneName);
+    
+    /* Get url for known genes page if any. */
+    geneUrl = getKnownGeneUrl(conn, geneId);
+
+    /* Print gene name, surrounded by hyperlink to known genes
+     * page if possible. */
+    dyStringClear(dy);
+    if (geneUrl != NULL)
+	dyStringPrintf(dy, "<A HREF=\"%s\" target=_parent>",
+	    geneUrl);
+    dyStringPrintf(dy, "%s", geneName);
+    if (geneUrl != NULL)
+	dyStringAppend(dy, "</A>");
     freez(&geneName);
 
     /* Add color if there's more than one probe for this image. */
@@ -108,7 +207,7 @@ for (probe = probeList; probe != NULL; probe = probe->next)
 
     /* Create hyperlink to probe page around gene name. */
     dyStringClear(dy);
-    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_blank>",
+    dyStringPrintf(dy, "<A HREF=\"../cgi-bin/%s?%s&%s=%d\" target=_parent>",
     	hgVisiGeneCgiName(), sidUrl, hgpDoProbe, probe->val);
     safef(query, sizeof(query), 
     	"select probeType.name from probeType,probe where probe.id = %d "
