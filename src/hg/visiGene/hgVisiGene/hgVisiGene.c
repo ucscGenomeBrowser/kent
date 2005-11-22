@@ -239,7 +239,7 @@ if (imageCount > 0)
 "    ID='perspective'"
 "    STYLE='position:absolute;left:0px;top:0px;'"
 "    >"
-"    <IMG ID='perspBox' SRC='../visiGene/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 "
+"    <IMG ID='perspBox' SRC='../visiGene/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='border-color:#8080FF;border-width:1' "
 ">"
 "    </DIV>"
 "    </DIV>"
