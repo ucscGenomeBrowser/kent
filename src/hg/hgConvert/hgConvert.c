@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.9 2005/11/22 01:00:21 kate Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.10 2005/11/22 07:08:48 kate Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -321,12 +321,9 @@ void doMiddle(struct cart *theCart)
 {
 char *organism;
 char *db;    
-char *chrom;
-int start, end;
 struct liftOverChain *liftOverList = NULL, *choice;
 char *fromPos = cartString(theCart, "position");
 struct dbDb *dbList, *fromDb, *toDb;
-char pos[64];
 
 cart = theCart;
 getDbAndGenome(cart, &db, &organism);
@@ -339,16 +336,10 @@ choice = currentLiftOver(liftOverList, organism, db,
 dbList = hDbDbList();
 fromDb = matchingDb(dbList, choice->fromDb);
 toDb = matchingDb(dbList, choice->toDb);
-
-/* need to adjust position from cart -- it's off-by-one */
-if (!hgParseChromRange(fromPos, &chrom, &start, &end))
-    errAbort("position %s is not in chrom:start-end format", fromPos);
-safef(pos, sizeof pos, "%s:%d-%d", chrom, start+2, end);
-
 if (cartVarExists(cart, HGLFT_DO_CONVERT))
-    doConvert(choice, pos, fromDb, toDb);
+    doConvert(choice, fromPos, fromDb, toDb);
 else
-    askForDestination(choice, pos, fromDb, toDb);
+    askForDestination(choice, fromPos, fromDb, toDb);
 liftOverChainFreeList(&liftOverList);
 }
 
