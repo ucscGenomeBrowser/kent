@@ -5,6 +5,10 @@
      o Made translated blast output of protein vs. DNA give DNA
        (multiplied by three) coordinates for both start and end
        of DNA side of match.
+     o Making translated blast output work better (Fan's work).
+     o Improving splice sites handling a little in a case that
+       effects about 1 in 500 alignments.
+
 32:
      o Dealing with out of order exons in a more sophisticated way
        so as to fix another problem introduced by last change
