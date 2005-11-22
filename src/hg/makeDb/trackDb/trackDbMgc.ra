@@ -277,6 +277,46 @@ exonArrows on
 cdsDrawOptions enabled
 cdsDrawDefault genomic\ codons
 
+track mgcMm7TransMap
+compositeTrack on
+shortLabel Human TransMap
+longLabel Human TransMap Genes
+group mgcCList
+priority 112.5
+type genePred
+visibility pack
+exonArrows on
+cdsDrawOptions enabled
+cdsDrawDefault genomic\ codons
+
+    track mgcMm7TransMapAll
+    subTrack mgcMm7TransMap
+    compositeTrack on
+    shortLabel All Human TransMap
+    longLabel  All Mapped Human TransMap Genes
+    priority 1
+    visibility pack
+    type genePred
+    color 12,12,120
+    visibility pack
+    exonArrows on
+    cdsDrawOptions enabled
+    cdsDrawDefault genomic\ codons
+
+    track mgcMm7TransMapCList
+    subTrack mgcMm7TransMap
+    compositeTrack on
+    shortLabel C-List Human TransMap
+    longLabel  C-List Human TransMap Genes
+    priority 2
+    visibility pack
+    type genePred
+    color 12,120,12
+    visibility pack
+    exonArrows on
+    cdsDrawOptions enabled
+    cdsDrawDefault genomic\ codons
+
 track mgcGreenPcrHit
 shortLabel Green Success 
 longLabel MGC Green C-List Success
