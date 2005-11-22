@@ -1055,7 +1055,7 @@ identifier wormBaseId external=WormBase dependency
     $ce.sangerBlastTab.target
     $ce.sangerCanonical.transcript
     $ce.sangerIsoforms.transcript
-    $ce.sangerLinks.orfName
+    $ce.sangerLinks.orfName minCheck=0.96
     $ce.sangerPep.name
     $ce.sangerToKim.name
     $ce.sangerToPfam.name
@@ -1946,6 +1946,8 @@ tablesIgnored $hg
     encodeUcsdNgValChipH3ac
     encodeUcsdNgValChipRnap
     encodeUcsdNgValChipTaf
+    encodeUncFaireSignal
+    encodeUncFairePeaks
     encodeUvaDnaRep%
     pseudoYale
 
