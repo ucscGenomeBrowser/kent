@@ -21,6 +21,8 @@
 
 #include "spDb.h"
 
+extern boolean IAmPbTracks;	/* global flag indicating the program running is pbTracks or not */
+
 extern Color pbRed, pbBlue;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
