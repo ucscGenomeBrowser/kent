@@ -16,7 +16,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id:";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.28 2005/11/22 22:53:34 fanhsu Exp $";
 
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
