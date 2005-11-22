@@ -16,8 +16,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.28 2005/11/22 22:53:34 fanhsu Exp $";
-
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.29 2005/11/22 23:10:35 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -29,6 +28,8 @@ char *database;			/* Name of database we're using. */
 char *organism;			/* Name of organism we're working on. */
 char *hgsid;
 char hgsidStr[50];
+
+boolean IAmPbTracks = FALSE;
 
 boolean proteinInSupportedGenome;  /* The protein is in supported genome DB */
 int protCntInSupportedGenomeDb; /* The protein count in supported genome DBs */

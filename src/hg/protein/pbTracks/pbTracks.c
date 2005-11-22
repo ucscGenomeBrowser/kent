@@ -15,9 +15,11 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.40 2005/06/09 00:22:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.41 2005/11/22 23:11:53 fanhsu Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
+
+boolean IAmPbTracks = TRUE;
 
 boolean proteinInSupportedGenome=TRUE;  /* The protein is in supported genome DB */
                                         /* This is a new variable necessary for PB V1.0
