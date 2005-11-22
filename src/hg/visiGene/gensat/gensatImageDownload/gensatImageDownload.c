@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: gensatImageDownload.c,v 1.1 2005/11/21 19:45:48 kent Exp $";
+static char const rcsid[] = "$Id: gensatImageDownload.c,v 1.2 2005/11/22 17:47:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -99,6 +99,10 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
     int id = image->gsGensatImageId->text;
     char *imageFile = image->gsGensatImageImageInfo->gsGensatImageImageInfoFullImg
     			->gsGensatImageInfo->gsGensatImageInfoFilename->text;
+
+    /* Mangle file name a little */
+    subChar(imageFile, '(', '_');
+    stripChar(imageFile, ')');
 
     /* Figure out name of jpeg file in outDir. */
     verbose(1, "image %d, id %d\n", ++imageIx, id);
