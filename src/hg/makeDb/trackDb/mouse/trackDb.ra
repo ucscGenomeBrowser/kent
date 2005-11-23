@@ -115,6 +115,7 @@ group rna
 priority 75.1
 visibility hide
 type bed 6 .
+origAssembly mm5
 url http://fantom31p.gsc.riken.jp/cage_analysis/mm5/TSSSummary.php?tss_id=$$
 
 track rikenCageCtss
