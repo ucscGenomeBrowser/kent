@@ -369,14 +369,20 @@ printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METH
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 
+printf("<TABLE WIDTH=100%%><TR>");
+printf("<TD>");
 printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\">UCSC</A> ");
-printf("<B><A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\">VisiGene</A></B> ",
+printf("<A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\">VisiGene</A></B> ",
 	hgVisiGeneCgiName(), hgpListSpec);
-printf("&nbsp;&nbsp;");
+printf("</TD>");
+
+printf("<TD>");
 cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
+printf("</TD>");
 
-printf(" &nbsp; Zoom: ");
+printf("<TD>");
+printf("Zoom: ");
 printf(
 "<INPUT TYPE=SUBMIT NAME=\"hgp_zmOut\" VALUE=\" out \""
 " onclick=\"parent.image.bigImg.zoomer('out');return false;\"> "
@@ -387,7 +393,13 @@ printf(
 "<INPUT TYPE=SUBMIT NAME=\"hgp_zmFit\" VALUE=\" fit \""
 " onclick=\"parent.image.bigImg.zoomer('fit');return false;\"> "
 "\n");
+printf("</TD>");
 
+printf("<TD ALIGN=Right>");
+printf("<A HREF=\"/goldenPath/help/hgTracksHelp.html#VisiGeneHelp\" target=_parent>");
+printf("Help");
+printf("</A>");
+printf("</TD>");
 printf("</FORM>\n");
 htmlEnd();
 }
