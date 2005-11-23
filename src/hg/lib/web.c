@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.83 2005/08/23 23:58:28 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.84 2005/11/23 23:25:41 kate Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -73,6 +73,7 @@ char uiState[256];
 char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
+boolean doTopBar = TRUE;
 char textOutBuf[512];
 
 /* found that on x86_64, the args could only be used once in this safef
@@ -94,8 +95,9 @@ if (scriptName == NULL)
 if(webHeadAlreadyOutputed)
     return;
 
-if (sameString(cgiUsualString("action",""),"encodeReleaseLog"))
-    isEncode = TRUE; 
+if (sameString(cgiUsualString("action",""),"encodeReleaseLog") ||
+    rStringIn("EncodeDataVersions", scriptName))
+        isEncode = TRUE;
 
 /* Preamble. */
 dnaUtilOpen();
@@ -164,7 +166,6 @@ if (withLogo)
     puts("</TH></TR>" "\n"
     	 "" "\n" );
     }
-
 if (NULL != theCart)
     {
     char *theDb = NULL;
@@ -300,8 +301,8 @@ if(!skipSectionHeader)
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
 	 );
-    };
 
+    };
 webPushErrHandlers();
 /* set the flag */
 webHeadAlreadyOutputed = TRUE;
