@@ -81,6 +81,9 @@
 #  'select varAcc, varProtein.val from sp051015.varProtein,splicProt,proteins051015.spXref3 where accession=parAcc and varProtein.acc=splicProt.varAcc and division="9606"'| \
 #   awk '{print ">" $1;print $2}' >humanVarProt.fa
 
+# Create tableDescriptions table.
+
+  makeTableDescriptions sp051015 ~/kent/src/hg/protein/spToDb/spDbTables.as
 
 # NEXT BUILD proteins051015 DB
 
