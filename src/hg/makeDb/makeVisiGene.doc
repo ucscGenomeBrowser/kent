@@ -1,6 +1,7 @@
 # Create empty database and tables.
 hgsql -e "create database visiGene" mysql
 hgsql visiGene < ~/kent/src/hg/visiGene/visiGene.sql
+makeTableDescriptions visiGene ~/kent/src/hg/visiGene/visiGene.as
 
 # Load Paul Gray/Mahoney Lab data.
 cd ~/kent/src/hg/visiGene/vgLoadMahoney
