@@ -63,7 +63,6 @@ picExt =".jpg";
 wCnt = new Array(numLevels);
 hCnt = new Array(numLevels);
 
-zoomMode = "in";  // in and out (center removed for now), rotate on user pressing 'm' key
 z = 1;  // accumulated zoom factor at level 0
 wSmallDelta = hSmallDelta =  50;
 hSmallDelta = hSmallDelta =  50;
@@ -540,8 +539,6 @@ y = hOrig[0]/2;
 xx = x;
 yy = y;
 
-setMouseCursor();
-
 windowResize();
 
 if (window.focus) window.focus();
@@ -564,6 +561,10 @@ if (typeof(parent.parent.list.document) == 'undefined') return;
 var pclip = parent.parent.list.document.getElementById('perspClip');  // use to clip
 var persp = parent.parent.list.document.getElementById('perspective');  // use to position
 var pbox = parent.parent.list.document.getElementById('perspBox');  // make box using 1x1 transparent gif with border
+
+if (pclip == null) return;
+if (persp == null) return;
+if (pbox  == null) return;
 
 if (thumb == null) { // no thumb to follow with, so hide box and exit
     pclip.style.left = -1000;
@@ -714,15 +715,6 @@ var character = String.fromCharCode(code);
 //window.status='keypress: code='+code+' Character was ' + character;
 //return;
 
-if (character=='m') {  // m mode cycle
-    if (zoomMode=="in") 
-    //	zoomMode="center";
-    //else if (zoomMode=="center") 
-	zoomMode="out";
-    else if (zoomMode=="out") 
-	zoomMode="in";
-    setMouseCursor();	    
-}
 if (character == '+') zoomIn(true);   // +   // bugfix for FF Mac
 if (character == '-') zoomIn(false);  // -   // bugfix for FF Mac
 
@@ -789,15 +781,7 @@ if (code == 34) moveDown (hBigDelta  ); else // pgdn
 //disable for FF Mac bugfix, "-" key now trapped in keyPress
 //if ((code == 43) || (code == 107) || (code == 187) || ((code == 61)))  zoomIn(true); else // + 
 //if ((code == 45) || (code == 109) || (code == 189))  zoomIn(false); else // -   
-//if (code==77) {  // m mode cycle
-//    if (zoomMode=="in") 
-//	zoomMode="center";
-//    else if (zoomMode=="center") 
-//	zoomMode="out";
-//    else if (zoomMode=="out") 
-//	zoomMode="in";
-//    setMouseCursor();	    
-//} else
+// else
 result = true;
 window.status=window.status+' result='+result;  // debug
 if (!result) {
@@ -826,8 +810,10 @@ function mouseMove(e) {
 var posx = 0;
 var posy = 0;
 if (!e) var e = window.event;
-if (mouseAction)
+if (mouseAction) {
     mouseAction = false; // move cancels the click action
+    document.body.style.cursor="move";
+}    
 
 if (e.pageX || e.pageY) {
     posx = e.pageX;
@@ -890,41 +876,33 @@ function dblClick(e) {
 if (!e) var e = window.event;
 //alert('dblClick() event called!');
 //clickAction();
-e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
+if (e.preventDefault) 
+    e.preventDefault();
 return false;
 }
 
 function clickAction(reverse) {
-var mode = zoomMode;
 if ((mousex > 0) && (mousey > 0)) {
     var dx = mousex - x;
     var dy = mousey - y;
-    x = mousex;
-    y = mousey;
-    xx = x;
-    yy = y;
-    updatePos();
+    if (!reverse) {
+    	x = mousex;
+    	y = mousey;
+	xx = x;
+    	yy = y;
+	updatePos();
+    }
     // now must set new mouse position since no move event yet
     // i.e. if user dblClicks in exactly the same spot, mousex and mousey
     // are still pointing to the old coordinates even though the pictures has shifted.
     mousex = mousex + dx;
     mousey = mousey + dy;
     checkMouseRange();
-    mode = zoomMode;
-    if (reverse) {
-	if (mode=="in") 
-	    mode="out"; 
-	else if (mode=="out") 
-	    mode="in"; 
-    }
 
-    //debug
-    //alert('reverse=='+reverse+' zoomMode=='+zoomMode+'  mode=='+mode);
-	
-    if (mode=="in") 
-	zoomIn(true);
-    else if (mode=="out") 
+    if (reverse) 
 	zoomIn(false);
+    else 
+	zoomIn(true);
 }
 
 }
@@ -935,7 +913,6 @@ checkMouseRange();
 if ((mousex > 0) && (mousey > 0)) {
     mouseDrag = true;
     mouseAction = true;
-    document.body.style.cursor="move";
     mouseDragX = mousex;
     mouseDragY = mousey;
     window.status='mouseDrag='+mouseDrag;
@@ -962,18 +939,12 @@ if (mouseAction) {
 }    
 mouseAction = false;
 mouseDrag = false;
-setMouseCursor();
+document.body.style.cursor="default";
 window.status='mouseDrag='+mouseDrag;
 //e.preventDefault();  // this works to prevent things like dragging in mozilla and safari
 return false;
 }
 
-function changeMouse(newcursor) {
-if ((newcursor=="in") || (newcursor=="out")){  // || (newcursor=="center")) {
-    zoomMode = newcursor;
-    setMouseCursor();
-}    
-}
 
 function zoomer(cmd) {
 if (cmd=="in") {
@@ -1009,28 +980,6 @@ if (cmd=="full") {
 return false;
 }
 
-function setMouseCursor() {
-var cursor = "default";
-var zmindex = 0;
-if (zoomMode=="in") {
-    cursor = "crosshair";
-    zmindex = 0;
-//} else if (zoomMode=="center") {
-//    cursor = "default";
-//    zmindex = 1;
-} else if (zoomMode=="out") {
-    cursor = "pointer";
-    zmindex = 1; // 2;
-}    
-document.body.style.cursor=cursor;
-
-if (typeof(parent.parent) != 'undefined')
- if (typeof(parent.parent.controls) != 'undefined')
-  if (typeof(parent.parent.controls.document) != 'undefined')
-   if (typeof(parent.parent.controls.document.mainForm) != 'undefined')
-    if (typeof(parent.parent.controls.document.mainForm.hgp_zm) != 'undefined')
-      parent.parent.controls.document.mainForm.hgp_zm[zmindex].checked=true;
-}
 
 function mouseOut(e) {
 if (!e) var e = window.event;
