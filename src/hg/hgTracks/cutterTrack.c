@@ -55,12 +55,6 @@ else
 	    else if (cuts[i] >= x2)
 		cuts[i] = x2 - tickWidth;
 	    }
-/* 	if (cut->palindromic) */
-/* 	    { */
-/* 	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight * 2 + 2, color); */
-/* 	    vgBox(vg, cuts[1], y - tickHeight, tickWidth, tickHeight * 2 + 2, color);	     */
-/* 	    } */
-/* 	else */
 	if (strand == '+')
 	    {
 	    vgBox(vg, cuts[0], y - tickHeight, tickWidth, tickHeight, color);
@@ -76,7 +70,8 @@ else
 	xH = x1;
 	for (i = 0; i < strlen(cut->seq); i++)
 	    {
-	    if ((cut->seq[i] != 'A') && (cut->seq[i] != 'C') && (cut->seq[i] != 'G') && (cut->seq[i] != 'T'))
+	    char c = (strand == '+') ? cut->seq[i] : cut->seq[strlen(cut->seq)-i-1];
+	    if ((c != 'A') && (c != 'C') && (c != 'G') && (c != 'T'))
 		vgBox(vg, xH, y, letterWidth, 2, baseHighlight);
 	    xH += letterWidth;
 	    }
