@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "cart.h"
 
-static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.1 2005/11/23 23:30:40 kate Exp $";
+static char const rcsid[] = "$Id: hgEncodeDataVersions.c,v 1.2 2005/11/23 23:38:56 kate Exp $";
 
 /* Global variables */
 struct cart *cart;
@@ -129,6 +129,7 @@ for (group = groups; group != NULL; group = group->next)
                 tr->track->shortLabel, tr->track->longLabel);
                 */
     hTableEnd();
+    puts("<BR>");
     }
 cartWebEnd();
 }
