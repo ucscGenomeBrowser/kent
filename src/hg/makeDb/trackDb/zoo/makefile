@@ -7,8 +7,9 @@
 # or in the cgi-bin-$(USER)/hg.conf file. Something like: 
 # db.trackDb=trackDb_YourUserName
 
-ZOO_DBS =   zooBaboon3 zooCat3 zooChicken3 zooChimp3 zooCow3 zooDog3 zooFugu3 \
+#ZOO_DBS =   zooBaboon3 zooCat3 zooChicken3 zooChimp3 zooCow3 zooDog3 zooFugu3 \
             zooHuman3 zooMouse3 zooPig3 zooRat3 zooTetra3 zooZebrafish3 
+ZOO_DBS =
 
 update:
 	@for DB in $(ZOO_DBS) x; do \
