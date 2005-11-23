@@ -5,7 +5,7 @@
 #include "common.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafScore.c,v 1.8 2005/04/15 00:20:28 kate Exp $";
+static char const rcsid[] = "$Id: mafScore.c,v 1.9 2005/11/23 17:20:50 braney Exp $";
 
 
 typedef struct gap_scores {
@@ -110,10 +110,10 @@ if (ss['A']['A'] != HOXD70_sym[0][0]) {
 score = 0.0;
 for (i = start; i < start+size; ++i) {
 	for (c1 = maf->components; c1 != NULL; c1 = c1->next) {
-		if (c1->srcSize == 0) continue;
+		if (c1->size == 0) continue;
 		br = c1->text[i];
 		for (c2 = c1->next; c2 != NULL; c2 = c2->next) {
-			if (c2->srcSize == 0) continue;
+			if (c2->size == 0) continue;
 			bi = c2->text[i];
 			score += SS(br, bi);
 			if (i > 0) {
