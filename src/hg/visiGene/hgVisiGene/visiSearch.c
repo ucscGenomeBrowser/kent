@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.13 2005/11/12 00:27:13 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.14 2005/11/23 04:07:51 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -243,7 +243,7 @@ int wordIx;
 
 for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
     {
-    struct slName *nameList, *name;
+    struct slName *nameList = NULL, *name;
     int maxWordsUsed = 0;
 
     if (strlen(word->name) >= 3) /* Logic could be expensive on small words */
