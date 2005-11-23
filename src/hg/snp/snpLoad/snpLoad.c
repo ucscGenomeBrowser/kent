@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.7 2005/11/22 00:31:14 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.8 2005/11/23 00:19:15 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -18,6 +18,8 @@ errAbort(
 }
 
 boolean setCoords(struct snp125 *el, int snpClass, char *startString, char *endString)
+/* set coords and class */
+/* can switch to using #define */
 {
 char *rangeString1, *rangeString2;
 
@@ -164,6 +166,64 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+void lookupFunction(struct snp125 *list)
+/* get function from ContigLocusId table */
+{
+struct snp125 *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int functionValue = 0;
+
+verbose(1, "looking up function...\n");
+for (el = list; el != NULL; el = el->next)
+    {
+    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = '%s'", el->name);
+    sr = sqlGetResult(conn, query);
+    /* need a joiner check rule for this */
+    row = sqlNextRow(sr);
+    if (row == NULL)
+        {
+        el->func = cloneString("unknown");
+	continue;
+	}
+    functionValue = atoi(row[0]);
+    switch (functionValue)
+        {
+	    case 1:
+                el->func = cloneString("unknown");
+	        break;
+	    case 2:
+                el->func = cloneString("unknown");
+	        break;
+	    case 3:
+                el->func = cloneString("coding-synon");
+	        break;
+	    case 4:
+                el->func = cloneString("coding-nonsynon");
+	        break;
+	    case 5:
+                el->func = cloneString("untranslated");
+	        break;
+	    case 6:
+                el->func = cloneString("intron");
+	        break;
+	    case 7:
+                el->func = cloneString("splice-site");
+	        break;
+	    case 8:
+                el->func = cloneString("coding");
+	        break;
+	    default:
+                el->func = cloneString("unknown");
+	        break;
+	}
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
+
 void writeSnpTable(FILE *f, struct snp125 *list)
 {
 struct snp125 *el;
@@ -187,7 +247,7 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "unknown \t");
     fprintf(f, "%f \t", avHet);
     fprintf(f, "%f \t", avHetSE);
-    fprintf(f, "unknown \t");
+    fprintf(f, "%s \t", el->func);
     fprintf(f, "unknown \t");
     fprintf(f, "dbSNP125 \t");
     fprintf(f, "0 \t");
@@ -196,6 +256,7 @@ for (el = list; el != NULL; el = el->next)
 }
 
 void loadDatabase(struct snp125 *list)
+/* write the tab file, create the table and load the tab file */
 {
 struct sqlConnection *conn = sqlConnect(snpDb);
 FILE *f = hgCreateTabFile(".", "snp125");
@@ -252,6 +313,7 @@ if(!hTableExistsDb(snpDb, "ContigInfo"))
 /* this will create a temporary table */
 list = readSnps();
 lookupContigs(list);
+lookupFunction(list);
 verbose(1, "sorting\n");
 slSort(&list, snp125Cmp);
 // dumpSnps(list);
