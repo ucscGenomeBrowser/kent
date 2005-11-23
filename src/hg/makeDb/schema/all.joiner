@@ -48,7 +48,7 @@ set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac
 exclusiveSet $gbd
 
 # Define other databases that we check
-set otherDb uniProt,go,hgFixed,proteome
+set otherDb uniProt,go,hgFixed,proteome,visiGene
 
 # Define protein databases (currently not checked)
 set proteinDb proteins050315, proteins050201,proteins041115,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
@@ -165,6 +165,7 @@ identifier UniProtAccession external=UniProt
      $sacCer.sgdCanonical.protein minCheck=0.9
      $sacCer.sgdToSwissProt.value minCheck=0.9
      go.goaPart.dbObjectId minCheck=0.99
+     visiGene.gene.uniProt
 
 identifier UniProtAuthor
 "Author ID in UniProt (just use inside UCSC Relationalized UniProt)"
@@ -237,6 +238,172 @@ identifier ncbiTaxon
      uniProt.taxon.id dupeOk
      uniProt.accToTaxon.taxon full
      uniProt.commonName.taxon 
+     visiGene.antibody.taxon
+     visiGene.gene.taxon
+     visiGene.genotype.taxon
+     visiGene.specimen.taxon
+     visiGene.lifeTime.taxon
+     visiGene.lifeStageScheme.taxon
+     visiGene.strain.taxon
+
+# VisiGene Related Stuff
+
+identifier vgFileLocation
+"Where is that .jpg file? Usually a directory."
+    visiGene.fileLocation.id
+    visiGene.imageFile.fullLocation
+    visiGene.imageFile.thumbLocation
+
+identifier vgStrain
+"Er, what type of mouse is that?"
+    visiGene.strain.id
+    visiGene.genotype.strain exclude=0
+
+identifier vgBodyPart
+"Brain, eye, cerebral cortex, etc."
+    visiGene.bodyPart.id
+    visiGene.specimen.bodyPart exclude=0
+    visiGene.expressionLevel.bodyPart exclude=0
+
+identifier vgCellType
+"Neuron, glia, etc."
+    visiGene.cellType.id
+    visiGene.expressionLevel.cellType exclude=0
+
+identifier vgCellSubtype
+"More detailed splitting up of cell types.  What type of neuron, etc."
+    visiGene.cellSubtype.id
+    visiGene.expressionLevel.cellSubtype exclude=0
+
+identifier vgSliceType
+"Horizontal, coronal, wholeMount, etc."
+    visiGene.sliceType.id
+    visiGene.preparation.sliceType exclude=0
+
+identifier vgFixation
+"Fixation conditions - 3% formaldehyde or the like."
+    visiGene.fixation.id
+    visiGene.preparation.fixation exclude=0
+
+identifier vgEmbedding
+"Embedding media for slices - paraffin, etc."
+    visiGene.embedding.id
+    visiGene.preparation.embedding exclude=0
+
+identifier vgPermeablization
+"Permeablization conditions"
+    visiGene.permeablization.id
+    visiGene.preparation.permeablization exclude=0
+
+identifier vgContributor
+"Info on a contributor"
+    visiGene.contributor.id
+    visiGene.submissionContributor.contributor
+
+identifier vgJournal
+"Info on a journal"
+    visiGene.journal.id
+    visiGene.submissionSet.journal exclude=0
+
+identifier vgCopyright
+"Copyright information"
+    visiGene.copyright.id
+    visiGene.submissionSet.copyright exclude=0
+
+identifier vgSubmissionSource
+"Source of data - an external database, a contributor, etc."
+    visiGene.submissionSource.id
+    visiGene.submissionSet.submissionSource
+
+identifier vgSubmissionSet
+"Info on a batch of images submitted at once"
+    visiGene.submissionSet.id
+    visiGene.submissionContributor.submissionSet
+    visiGene.imageFile.submissionSet
+    visiGene.image.submissionSet
+
+identifier vgSectionSet
+"Info on a bunch of sections through some specimen"
+    visiGene.sectionSet.id
+    visiGene.image.sectionSet exclude=0
+
+identifier vgAntibody
+"Info on an antibody"
+    visiGene.antibody.id
+    visiGene.probe.antibody exclude=0
+
+identifier vgGene
+"Info on a gene"
+    visiGene.gene.id
+    visiGene.geneSynonym.gene
+    visiGene.allele.gene
+    visiGene.probe.gene
+
+identifier vgAllele
+"Name of a gene allele"
+    visiGene.allele.id
+    visiGene.genotypeAllele.allele
+
+identifier vgGenotype
+"How different genetically from wild type."
+    visiGene.genotype.id
+    visiGene.genotypeAllele.genotype
+    visiGene.specimen.genotype
+
+identifier vgSex
+"Sex of a specimen"
+    visiGene.sex.id
+    visiGene.specimen.sex exclude=0
+
+identifier vgSpecimen
+"A biological specimen - something mounted, possibly sliced up"
+    visiGene.specimen.id
+    visiGene.image.specimen
+
+identifier vgPreparation
+"How a specimen is prepared."
+    visiGene.preparation.id
+    visiGene.image.preparation exclude=0
+
+identifier vgProbeType
+"Type of probe - RNA, antibody, etc."
+    visiGene.probeType.id
+    visiGene.probe.probeType
+
+identifier vgProbe
+"Information on a probe used to stain or hilight image"
+    visiGene.probe.id
+    visiGene.imageProbe.probe
+    
+identifier vgProbeColor
+"Color - what color probe is in"
+    visiGene.probeColor.id
+    visiGene.imageProbe.probeColor exclude=0
+
+identifier vgCaption
+"Caption for image.  Id corresponding to text."
+    visiGene.caption.id
+    visiGene.imageFile.caption exclude=0
+
+identifier vgImageFile
+"A biological image file"
+    visiGene.imageFile.id
+    visiGene.image.imageFile
+
+identifier vgImage
+"Master identifier for a visiGene image.  May be just a pane in an image file."
+    visiGene.image.id
+    visiGene.imageProbe.image
+
+identifier vgImageProbe
+"Association between a probe and an image."
+    visiGene.imageProbe.id
+    visiGene.expressionLevel.imageProbe
+
+identifier vgLifeStageScheme
+"A scheme for describing stages of development for an organism"
+    visiGene.lifeStageScheme.id
+    visiGene.lifeStage.lifeStageScheme
 
 # Various types of gene predictions in UCSC Genome Browser
 
@@ -1027,11 +1194,13 @@ identifier hugoName external=HUGO fuzzy
     $hg.refFlat.geneName
     $hg.jaxOrtholog.humanSymbol
     hg15.geneBands.name
+    visiGene.gene.name
 
 identifier mouseGeneName fuzzy
 "Mouse gene name from Jackson Labs/RefSeq"
     $hg.jaxOrtholog.mouseSymbol
     $mm.refLink.name
+    visiGene.gene.name
 
 # Model Organism Database Identifiers
 
