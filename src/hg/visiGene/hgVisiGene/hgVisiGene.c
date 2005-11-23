@@ -600,7 +600,7 @@ puts(
 "<P> \n"
 "Valid search terms include organism names, gene names, authors, body parts, \n"
 "year of publication, GenBank or UniProt accessions, Theiler stages, and \n"
-"Nieuwkoop/Faber stages. \n"
+"Nieuwkoop/Faber stages, and may include the wildcard characters * and ?. \n"
 "See &quot;About VisiGene&quot; below for more \n"
 "information about the VisiGene browser, search options, and image \n"
 "navigation. </P> \n" 
