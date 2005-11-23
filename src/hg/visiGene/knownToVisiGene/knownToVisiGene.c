@@ -15,6 +15,9 @@ errAbort(
   "knownToVisiGene - Create knownToVisiGene table by riffling through various other knownTo tables\n"
   "usage:\n"
   "   knownToVisiGene database\n"
+  "options:\n"
+  "   -table=XXX - give another name to table other than knownToVisiGene\n"
+  "   -visiDb=XXX - used a VisiGene database other than 'visiGene'\n"
   );
   /*
   "options:\n"
@@ -22,7 +25,12 @@ errAbort(
   */
 }
 
+char *outTable = "knownToVisiGene";
+char *visiDb = "visiGene";
+
 static struct optionSpec options[] = {
+   {"table", OPTION_STRING},
+   {"visiDb", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -67,7 +75,7 @@ else if (pi->priority > priority)
 }
 
 void foldIntoHash(struct sqlConnection *conn, char *table, char *keyField, char *valField,
-	struct hash *hash)
+	struct hash *hash, struct hash *uniqHash, boolean secondary)
 /* Add key/value pairs from table into hash */
 {
 struct sqlResult *sr;
@@ -76,7 +84,19 @@ char **row;
 safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (uniqHash != NULL)
+        {
+	if (hashLookup(uniqHash, row[1]))
+	    {
+	    if (secondary)
+		continue;
+	    }
+	else
+	    hashAdd(uniqHash, row[1], NULL);
+	}
     hashAdd(hash, row[0], cloneString(row[1]));
+    }
 sqlFreeResult(&sr);
 }
 
@@ -99,10 +119,9 @@ void knownToVisiGene(char *database)
 /* knownToVisiGene - Create knownToVisiGene table by riffling through various other knownTo tables. */
 {
 char *tempDir = ".";
-char *outTable = "knownToVisiGene";
 FILE *f = hgCreateTabFile(tempDir, outTable);
 struct sqlConnection *hConn = sqlConnect(database);
-struct sqlConnection *iConn = sqlConnect("visiGene");
+struct sqlConnection *iConn = sqlConnect(visiDb);
 struct sqlResult *sr;
 char query[512];
 char **row;
@@ -113,6 +132,7 @@ struct hash *genbankImageHash = newHash(18);
 struct hash *knownToLocusLinkHash = newHash(18);
 struct hash *knownToRefSeqHash = newHash(18);
 struct hash *knownToGeneHash = newHash(18);
+struct hash *favorHugoHash = newHash(18);
 struct slName *knownList = NULL, *known;
 struct hash *dupeHash = newHash(17);
 
@@ -134,7 +154,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
     addPrioritizedImage(genbankImageHash, id, priority, row[5]);
     }
-uglyf("Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d, genbankImageHash %d\n", geneImageHash->elCount, locusLinkImageHash->elCount, refSeqImageHash->elCount, genbankImageHash->elCount);
+verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d, genbankImageHash %d\n", geneImageHash->elCount, locusLinkImageHash->elCount, refSeqImageHash->elCount, genbankImageHash->elCount);
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
@@ -153,11 +173,12 @@ slReverse(&knownList);
 sqlFreeResult(&sr);
 
 /* Build up hashes from knownGene to other things. */
-foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash);
-foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash);
-foldIntoHash(hConn, "kgAlias", "kgID", "alias", knownToGeneHash);
-foldIntoHash(hConn, "kgProtAlias", "kgID", "alias", knownToGeneHash);
-uglyf("knownToLocusLink %d, knownToRefSeq %d, knownToGene %d\n", knownToLocusLinkHash->elCount, knownToRefSeqHash->elCount, knownToGeneHash->elCount);
+foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash, NULL, FALSE);
+foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash, NULL, FALSE);
+foldIntoHash(hConn, "kgXref", "kgID", "geneSymbol", knownToGeneHash, favorHugoHash, FALSE);
+foldIntoHash(hConn, "kgAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
+foldIntoHash(hConn, "kgProtAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
+verbose(2, "knownToLocusLink %d, knownToRefSeq %d, knownToGene %d\n", knownToLocusLinkHash->elCount, knownToRefSeqHash->elCount, knownToGeneHash->elCount);
 
 /* Try and find an image for each gene. */
 for (known = knownList; known != NULL; known = known->next)
@@ -191,6 +212,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+outTable = optionVal("table", outTable);
+visiDb = optionVal("visiDb", visiDb);
 if (argc != 2)
     usage();
 knownToVisiGene(argv[1]);
