@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainSort.c,v 1.6 2005/11/17 16:51:15 kent Exp $";
+static char const rcsid[] = "$Id: chainSort.c,v 1.7 2005/11/23 22:06:01 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,7 +54,7 @@ if (indexName != NULL)
     index = mustOpen(indexName, "w");
 lineFileSetMetaDataOutput(lf, f);
 
-uglyf("indexName %s, index %p\n", indexName, index);
+verbose(2, "indexName %s, index %p\n", indexName, index);
 
 /* Read in all chains. */
 while ((chain = chainRead(lf)) != NULL)
