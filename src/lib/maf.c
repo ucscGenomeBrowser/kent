@@ -8,7 +8,7 @@
 #include "maf.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.23 2005/09/13 17:31:00 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.24 2005/11/23 17:21:38 braney Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -127,7 +127,7 @@ for (;;)
 	    word = nextWord(&line);
 	    if (word == NULL)
 		break;
-	    if (sameString(word, "s"))
+	    if (sameString(word, "s") || sameString(word, "e"))
 		{
 		struct mafComp *comp;
 		int wordCount;
@@ -146,16 +146,26 @@ for (;;)
 		comp->srcSize = lineFileNeedNum(lf, row, 5);
 		comp->strand = row[4][0];
 		comp->start = lineFileNeedNum(lf, row, 2);
-		comp->size = lineFileNeedNum(lf, row, 3);
-		comp->text = cloneString(row[6]);
-		textSize = strlen(comp->text);
 
-		/* Fill in ali->text size. */
-		if (ali->textSize == 0)
-		    ali->textSize = textSize;
-		else if (ali->textSize != textSize)
-		    errAbort("Text size inconsistent (%d vs %d) line %d of %s",
-			textSize, ali->textSize, lf->lineIx, lf->fileName);
+		if (sameString(word, "e"))
+		    {
+		    comp->size = 0;
+		    comp->rightLen = comp->leftLen = lineFileNeedNum(lf, row, 3);
+		    comp->rightStatus = comp->leftStatus = *row[6];
+		    }
+		else
+		    {
+		    comp->size = lineFileNeedNum(lf, row, 3);
+		    comp->text = cloneString(row[6]);
+		    textSize = strlen(comp->text);
+
+		    /* Fill in ali->text size. */
+		    if (ali->textSize == 0)
+			ali->textSize = textSize;
+		    else if (ali->textSize != textSize)
+			errAbort("Text size inconsistent (%d vs %d) line %d of %s",
+			    textSize, ali->textSize, lf->lineIx, lf->fileName);
+		    }
 
 		/* Do some sanity checking. */
 		if (comp->srcSize < 0 || comp->size < 0)
@@ -272,17 +282,21 @@ for (comp = ali->components; comp != NULL; comp = comp->next)
 /* Write out each component. */
 for (comp = ali->components; comp != NULL; comp = comp->next)
     {
-    if (comp->srcSize)
+    if (comp->size == 0)
+	fprintf(f, "e %-*s %*d %*d %c %*d %c\n", 
+	    srcChars, comp->src, startChars, comp->start, 
+	    sizeChars, comp->leftLen, comp->strand, 
+	    srcSizeChars, comp->srcSize, comp->leftStatus);
+    else
 	{
 	fprintf(f, "s %-*s %*d %*d %c %*d %s\n", 
 	    srcChars, comp->src, startChars, comp->start, 
 	    sizeChars, comp->size, comp->strand, 
 	    srcSizeChars, comp->srcSize, comp->text);
-	}
-    if (comp->leftStatus)
-	{
-	fprintf(f,"i %-*s %c %d %c %d\n",srcChars,comp->src,
-	    comp->leftStatus,comp->leftLen,comp->rightStatus,comp->rightLen);
+
+	if (comp->leftStatus)
+	    fprintf(f,"i %-*s %c %d %c %d\n",srcChars,comp->src,
+		comp->leftStatus,comp->leftLen,comp->rightStatus,comp->rightLen);
 	}
     }
 
@@ -498,7 +512,7 @@ if (newEnd > mcMaster->start + mcMaster->size)
 /* Translate position in master sequence to position in
  * multiple alignment. */
 s = skipIgnoringDash(mcMaster->text, newStart - mcMaster->start, TRUE);
-e = skipIgnoringDash(s, newEnd - newStart, FALSE);
+e = skipIgnoringDash(s, newEnd - newStart, TRUE);
 textStart = s - mcMaster->text;
 textSize = e - s;
 
@@ -509,17 +523,20 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     AllocVar(subMc);
     subMc->src = cloneString(mc->src);
-    if (mc->srcSize != 0)
+    subMc->srcSize = mc->srcSize;
+    subMc->strand = mc->strand;
+    if (mc->size != 0)
         {
-        subMc->srcSize = mc->srcSize;
-        subMc->strand = mc->strand;
         subMc->start = mc->start + countNonDash(mc->text, textStart);
         subMc->size = countNonDash(mc->text+textStart, textSize);
         subMc->text = cloneStringZ(mc->text + textStart, textSize);
         }
     else
+	{
         /* empty row annotation */
         subMc->size = 0;
+        subMc->start = mc->start;
+	}
     subMc->leftStatus = mc->leftStatus;
     subMc->leftLen = mc->leftLen;
     subMc->rightStatus = mc->rightStatus;
