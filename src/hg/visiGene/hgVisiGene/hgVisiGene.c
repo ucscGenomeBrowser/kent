@@ -398,7 +398,7 @@ printf("</TD>");
 printf("<TD ALIGN=Right>");
 printf("<A HREF=\"/goldenPath/help/hgTracksHelp.html#VisiGeneHelp\" target=_parent>");
 printf("Help");
-printf("</A>");
+printf("</A>&nbsp;");
 printf("</TD>");
 printf("</FORM>\n");
 htmlEnd();
