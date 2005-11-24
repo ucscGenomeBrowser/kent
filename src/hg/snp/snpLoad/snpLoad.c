@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.8 2005/11/23 00:19:15 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.9 2005/11/24 00:48:55 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -224,33 +224,63 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+
+void lookupHet(struct snp125 *list)
+/* get heterozygosity from SNP table */
+{
+struct snp125 *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+
+verbose(1, "looking up heterozygosity...\n");
+for (el = list; el != NULL; el = el->next)
+    {
+    safef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = '%s'", el->name);
+    sr = sqlGetResult(conn, query);
+    /* need a joiner check rule for this */
+    row = sqlNextRow(sr);
+    if (row == NULL)
+        {
+        el->avHet = 0.0;
+        el->avHetSE = 0.0;
+	continue;
+	}
+    el->avHet = atof(cloneString(row[0]));
+    el->avHetSE = atof(cloneString(row[1]));
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
+
+
 void writeSnpTable(FILE *f, struct snp125 *list)
+/* write tab separated file */
 {
 struct snp125 *el;
 int score = 0;
-float avHet = 0.0;
-float avHetSE = 0.0;
 
 for (el = list; el != NULL; el = el->next)
     {
-    fprintf(f, "0 \t");
-    fprintf(f, "chr%s \t", el->chrom);
-    fprintf(f, "%d \t", el->chromStart);
-    fprintf(f, "%d \t", el->chromEnd);
-    fprintf(f, "rs%s \t", el->name);
-    fprintf(f, "%d \t", score);
-    fprintf(f, "%s \t", el->strand);
-    fprintf(f, "N \t");
-    fprintf(f, "%s \t", el->observed);
-    fprintf(f, "unknown \t");
-    fprintf(f, "%s \t", el->class);
-    fprintf(f, "unknown \t");
-    fprintf(f, "%f \t", avHet);
-    fprintf(f, "%f \t", avHetSE);
-    fprintf(f, "%s \t", el->func);
-    fprintf(f, "unknown \t");
-    fprintf(f, "dbSNP125 \t");
-    fprintf(f, "0 \t");
+    fprintf(f, "0\t");
+    fprintf(f, "chr%s\t", el->chrom);
+    fprintf(f, "%d\t", el->chromStart);
+    fprintf(f, "%d\t", el->chromEnd);
+    fprintf(f, "rs%s\t", el->name);
+    fprintf(f, "%d\t", score);
+    fprintf(f, "%s\t", el->strand);
+    fprintf(f, "N\t");
+    fprintf(f, "%s\t", el->observed);
+    fprintf(f, "unknown\t");
+    fprintf(f, "%s\t", el->class);
+    fprintf(f, "unknown\t");
+    fprintf(f, "%f\t", el->avHet);
+    fprintf(f, "%f\t", el->avHetSE);
+    fprintf(f, "%s\t", el->func);
+    fprintf(f, "unknown\t");
+    fprintf(f, "dbSNP125\t");
+    fprintf(f, "0\t");
     fprintf(f, "\n");
     }
 }
@@ -314,6 +344,7 @@ if(!hTableExistsDb(snpDb, "ContigInfo"))
 list = readSnps();
 lookupContigs(list);
 lookupFunction(list);
+lookupHet(list);
 verbose(1, "sorting\n");
 slSort(&list, snp125Cmp);
 // dumpSnps(list);
