@@ -8,6 +8,7 @@
 #include "jksql.h"
 #include "mahoney.h"
 #include "jpegSize.h"
+#include "dnautil.h"
 
 /* Globals set from the command line. */
 FILE *conflictLog = NULL;
@@ -280,6 +281,24 @@ safef(outTab, sizeof(outRa), "%s/slices.tab", outDir);
 slicesTab(imageFileList, inFull, mahoneyHash, outTab);
 }
 
+void fixPrimers(struct mahoney *el)
+/* Filter out bogus looking primers. */
+{
+if (!isDna(el->fPrimer, strlen(el->fPrimer)))
+    {
+    static struct hash *uniqHash = NULL;
+    if (uniqHash == NULL)
+        uniqHash = hashNew(0);
+    if (!hashLookup(uniqHash, el->fPrimer))
+        {
+	hashAdd(uniqHash, el->fPrimer, NULL);
+	verbose(1, "Suppressing 'primer' %s\n", el->fPrimer);
+	el->fPrimer = cloneString("");
+	}
+    }
+if (!isDna(el->rPrimer, strlen(el->rPrimer)))
+    errAbort("Not a primer: %s", el->rPrimer);
+}
 
 struct hash *hashMahoneys(struct mahoney *list)
 /* Put list of mahoneys into hash keyed by mahoney id. */
@@ -305,6 +324,7 @@ char *row[MAHONEY_NUM_COLS];
 while (lineFileNextRowTab(lf, row, ArraySize(row)))
     {
     el = mahoneyLoad(row);
+    fixPrimers(el);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -693,6 +713,7 @@ processSlices(mHash, inSlicesFull, outDir);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+dnaUtilOpen();
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
