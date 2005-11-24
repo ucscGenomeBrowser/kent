@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: mrnaToGene.c,v 1.16 2005/11/16 09:41:36 markd Exp $";
+static char const rcsid[] = "$Id: mrnaToGene.c,v 1.17 2005/11/24 20:36:43 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -18,6 +18,11 @@ static struct optionSpec optionSpecs[] = {
     {"cdsFile", OPTION_STRING},
     {"requireUtr", OPTION_BOOLEAN},
     {"smallInsertSize", OPTION_INT},
+    {"insertMergeSize", OPTION_INT},
+    {"smallInsertSize", OPTION_INT},
+    {"cdsMergeSize", OPTION_INT},
+    {"cdsMergeMod3", OPTION_BOOLEAN},
+    {"utrMergeSize", OPTION_INT},
     {"genePredExt", OPTION_BOOLEAN},
     {"allCds", OPTION_BOOLEAN},
     {"keepInvalid", OPTION_BOOLEAN},
@@ -26,7 +31,9 @@ static struct optionSpec optionSpecs[] = {
 };
 
 /* command line options */
-static int gSmallInsertSize = 0;
+static int gCdsMergeSize = -1;
+static int gUtrMergeSize = -1;
+static unsigned gPslOptions = genePredPslDefaults;
 static boolean gRequireUtr = FALSE;
 static boolean gKeepInvalid = FALSE;
 static boolean gAllCds = FALSE;
@@ -59,7 +66,17 @@ errAbort(
   "  -cdsFile=file - get CDS from this database, psl is a file.\n"
   "   File is table seperate with accession as the first column and\n"
   "   CDS the second\n"
-  "  -smallInsertSize=%d - Merge inserts smaller than this many bases (default %d)\n"
+  "  -insertMergeSize=%d - Merge inserts (gaps) no larger than this many bases.\n"
+  "   A negative size disables merging of blocks.  This differs from specifying zero\n"
+  "   in that adjacent blocks will not be merged, allowing tracking of frame for\n"
+  "   each block. Defaults to %d unless -cdsMergeSize or -utrMergeSize are specified,\n"
+  "   if either of these are specified, this option is ignored.\n"
+  "  -smallInsertSize=n - alias for -insertMergetSize\n"
+  "  -cdsMergeSize=-1 - merge gaps in CDS no larger than this size.\n"
+  "   A negative values disables.\n"
+  "  -cdsMergeMod3 - only merge CDS gaps if they mod 3\n"
+  "  -utrMergeSize=-1  - merge gaps in UTR no larger than this size.\n"
+  "   A negative values disables.\n"
   "  -requireUtr - Drop sequences that don't have both 5' and 3' UTR annotated.\n"
   "  -genePredExt - create a extended genePred, including frame information.\n"
   "  -allCds - consider PSL to be all CDS.\n"
@@ -186,7 +203,6 @@ struct genePred* pslToGenePred(struct psl *psl, struct genbankCds *cds)
 /* Convert a psl to genePred with specified CDS string; return NULL
  * if should be skipped.  cdsStr maybe NULL if not available. */
 {
-struct genePred *gp;
 unsigned optFields = gGenePredExt ? (genePredAllFlds) : 0;
 
 if ((cds->start == cds->end) && !gKeepInvalid)
@@ -197,7 +213,8 @@ if (gRequireUtr && ((cds->start == 0) || (cds->end == psl->qSize)))
         fprintf(stderr, "Warning: no 5' or 3' UTR for %s\n", psl->qName);
     return NULL;
     }
-return genePredFromPsl2(psl, optFields, cds, gSmallInsertSize);
+return genePredFromPsl3(psl, cds, optFields, gPslOptions,
+                        gCdsMergeSize, gUtrMergeSize);
 }
 
 void convertPsl(struct psl *psl, struct genbankCds *cds, FILE *genePredFh)
@@ -251,7 +268,7 @@ void convertPslFile(struct sqlConnection *conn, char *pslFile, FILE *genePredFh)
 /* convert mrnas in a psl file to genePred objects */
 {
 struct lineFile *lf = pslFileOpen(pslFile);
-char *row[PSL_NUM_COLS], cdsBuf[4096];
+char *row[PSL_NUM_COLS];
 
 while (lineFileNextRowTab(lf, row, PSL_NUM_COLS))
     convertPslFileRow(conn, row, genePredFh);
@@ -264,7 +281,6 @@ void mrnaToGene(char *db, char *cdsDb, char *cdsFile, char *pslSpec,
 {
 struct sqlConnection *conn = NULL;
 FILE* genePredFh;
-int i;
 
 if (db != NULL)
     conn = sqlConnect(db);
@@ -301,7 +317,25 @@ db = optionVal("db", NULL);
 cdsDb = optionVal("cdsDb", NULL);
 cdsFile = optionVal("cdsFile", NULL);
 gRequireUtr = optionExists("requireUtr");
-gSmallInsertSize = optionInt("smallInsertSize", genePredStdInsertMergeSize);
+if (optionExists("cdsMergeMod3") && !optionExists("cdsMergeSize"))
+    errAbort("must specify -cdsMergeSize with -cdsMergeMod3");
+if (optionExists("cdsMergeSize") || optionExists("utrMergeSize"))
+    {
+    gCdsMergeSize = optionInt("cdsMergeSize", -1);
+    gUtrMergeSize = optionInt("utrMergeSize", -1);
+    if (optionExists("cdsMergeMod3"))
+        gPslOptions |= genePredPslCdsMod3;
+    if (optionExists("smallInsertSize") || optionExists("insertMergeSize"))
+        errAbort("can't specify -smallInsertSize or -insertMergeSize with -cdsMergeSize or -utrMergeSize");
+    }
+else
+    {
+    int insertMergeSize = genePredStdInsertMergeSize;
+    if (optionExists("smallInsertSize"))
+        insertMergeSize = optionInt("smallInsertSize", genePredStdInsertMergeSize);
+    insertMergeSize = optionInt("insertMergeSize", genePredStdInsertMergeSize);
+    gCdsMergeSize = gUtrMergeSize = insertMergeSize;
+    }
 gGenePredExt = optionExists("genePredExt");
 gKeepInvalid = optionExists("keepInvalid");
 gAllCds = optionExists("allCds");
