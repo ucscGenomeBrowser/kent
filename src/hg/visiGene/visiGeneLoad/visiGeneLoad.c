@@ -22,7 +22,7 @@ errAbort(
   "Please see visiGeneLoad.doc for description of the .ra, .tab and .txtfiles\n"
   "Options:\n"
   "   -database=%s - Specifically set database\n"
-  "   -lock - Lock down database during update - about 10% faster but all\n"
+  "   -lock - Lock down database during update - about 10%% faster but all\n"
   "           web queries will stall until it finishes.\n"
   , database
   );
@@ -115,25 +115,39 @@ return sqlQuickNum(conn, query);
 }
 
 int findOrAddIdTable(struct sqlConnection *conn, char *table, char *field, 
-	char *value)
+	char *value, struct hash *cache)
 /* Get ID associated with field.value in table.  */
 {
 char query[256];
 int id;
-char *escValue = makeEscapedString(value, '"');
-safef(query, sizeof(query), "select id from %s where %s = \"%s\"",
-	table, field, escValue);
-id = sqlQuickNum(conn, query);
-if (id == 0)
+if (value == NULL || value[0] == 0)
+    return 0;
+else
     {
-    safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
-    	table, escValue);
-    verbose(2, "%s\n", query);
-    sqlUpdate(conn, query);
-    id = sqlLastAutoId(conn);
+    struct hashEl *hel = hashLookup(cache, value);
+    if (hel != NULL)
+	 {
+	 id = ptToInt(hel->val);
+	 }
+    else
+	{
+	char *escValue = makeEscapedString(value, '"');
+	safef(query, sizeof(query), "select id from %s where %s = \"%s\"",
+		table, field, escValue);
+	id = sqlQuickNum(conn, query);
+	if (id == 0)
+	    {
+	    safef(query, sizeof(query), "insert into %s values(default, \"%s\")",
+		table, escValue);
+	    verbose(2, "%s\n", query);
+	    sqlUpdate(conn, query);
+	    id = sqlLastAutoId(conn);
+	    }
+	freeMem(escValue);
+	hashAddInt(cache, value, id);
+	}
+    return id;
     }
-freeMem(escValue);
-return id;
 }
 
 int findOrAddSubmissionSource(struct sqlConnection *conn, char *name, 
@@ -196,7 +210,7 @@ int createSubmissionId(struct sqlConnection *conn,
 	char *contributors, char *publication, 
 	char *pubUrl, int submissionSource,
 	char *journal, char *journalUrl, int copyright,
-	int year)
+	int year, struct hash *contributorCache)
 /* Add submission and contributors to database and return submission ID */
 {
 struct slName *slNameListFromString(char *s, char delimiter);
@@ -224,7 +238,7 @@ contribList = slNameListFromComma(contributors);
 for (contrib = contribList; contrib != NULL; contrib = contrib->next)
     {
     int contribId = findOrAddIdTable(conn, "contributor", "name", 
-    	skipLeadingSpaces(contrib->name));
+    	skipLeadingSpaces(contrib->name), contributorCache);
     safef(query, sizeof(query),
           "insert into submissionContributor values(%d, %d)",
 	  submissionSetId, contribId);
@@ -236,7 +250,8 @@ dyStringFree(&dy);
 return submissionSetId;
 }
 
-int saveSubmissionSet(struct sqlConnection *conn, struct hash *raHash)
+int saveSubmissionSet(struct sqlConnection *conn, struct hash *raHash, 
+	struct hash *copyrightCache, struct hash *contributorCache)
 /* Create submissionSet, submissionContributor, and contributor records. */
 {
 char *contributor = hashMustFindVal(raHash, "contributor");
@@ -256,14 +271,14 @@ int submissionSourceId = findOrAddSubmissionSource(conn, submissionSource, ackno
 	setUrl, itemUrl);
 int submissionId = findExactSubmissionId(conn, name, contributor);
 if (copyright != NULL)
-    copyrightId = findOrAddIdTable(conn, "copyright", "notice", copyright);
+    copyrightId = findOrAddIdTable(conn, "copyright", "notice", copyright, copyrightCache);
 
 if (submissionId != 0)
      return submissionId;
 else
      return createSubmissionId(conn, name, contributor, 
      	publication, pubUrl, submissionSourceId, journal, 
-	journalUrl, copyrightId, atoi(year));
+	journalUrl, copyrightId, atoi(year), contributorCache);
 }
 
 int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,
@@ -276,7 +291,7 @@ int cachedId(struct sqlConnection *conn, char *tableName, char *fieldName,
 char *value = getVal(raFieldName, raHash, rowHash, row, "");
 if (value[0] == 0)
     return 0;
-return findOrAddIdTable(conn, tableName, fieldName, value);
+return findOrAddIdTable(conn, tableName, fieldName, value, cache);
 }
 
 
@@ -292,7 +307,7 @@ dyStringPrintf(dy, "%s = '%s'", field, val);
 return TRUE;
 }
 
-int doSectionSet(struct sqlConnection *conn, struct hash *sectionSetHash, 
+int doSectionSet(struct sqlConnection *conn, struct hash *sectionSetCache, 
 	char *sectionSet)
 /* Update section set table if necessary.  Return section set id */
 {
@@ -705,15 +720,15 @@ return probeId;
 
 int doCaption(struct lineFile *lf, struct sqlConnection *conn,
 	char *captionExtId, struct hash *captionTextHash,
-	struct hash *captionIdHash)
+	struct hash *captionIdCache)
 /* If captionExtId is non-empty then return internal id for
  * caption.  If this is first time we've seen the caption then
  * put the text in the caption table and assign an ID to it. */
 {
 if (captionExtId == NULL || captionExtId[0] == 0)
     return 0;
-else if (hashLookup(captionIdHash, captionExtId))
-    return hashIntVal(captionIdHash, captionExtId);
+else if (hashLookup(captionIdCache, captionExtId))
+    return hashIntVal(captionIdCache, captionExtId);
 else
     {
     char *captionText = hashFindVal(captionTextHash, captionExtId);
@@ -729,7 +744,7 @@ else
     sqlUpdate(conn, query->string);
     dyStringFree(&query);
     id = sqlLastAutoId(conn);
-    hashAddInt(captionIdHash, captionExtId, id);
+    hashAddInt(captionIdCache, captionExtId, id);
     return id;
     }
 }
@@ -1046,15 +1061,19 @@ return id;
 }
 
 void doExpression(struct lineFile *lf, struct sqlConnection *conn, 
-	int imageProbe, char *bodyPart, char *level)
+	int imageProbe, char *bodyPart, struct hash *bodyPartCache,
+	char *level, char *cellType, struct hash *cellTypeCache, 
+	char *cellSubtype, struct hash *cellSubtypeCache)
 /* Add item to expression table, possibly body part table too. */
 {
 struct dyString *dy = dyStringNew(0);
-int bodyPartId = findOrAddIdTable(conn, "bodyPart", "name", bodyPart);
+int bodyPartId = findOrAddIdTable(conn, "bodyPart", "name", bodyPart, bodyPartCache);
+int cellTypeId = findOrAddIdTable(conn, "cellType", "name", cellType, cellTypeCache);
+int cellSubtypeId = findOrAddIdTable(conn, "cellSubtype", "name", cellSubtype, cellSubtypeCache);
 double lev = atof(level);
 if (lev < 0 || lev > 1.0)
-    errAbort("expression level out of range (0 to 1) line %d of %s", 
-    	lf->lineIx, lf->fileName);
+    errAbort("expression level %s out of range (0 to 1) line %d of %s", 
+    	level, lf->lineIx, lf->fileName);
 dyStringAppend(dy, "select count(*) from expressionLevel where ");
 dyStringPrintf(dy, "imageProbe=%d and bodyPart=%d", imageProbe, bodyPartId);
 if (sqlQuickNum(conn, dy->string) == 0)
@@ -1063,7 +1082,9 @@ if (sqlQuickNum(conn, dy->string) == 0)
     dyStringAppend(dy, "insert into expressionLevel set");
     dyStringPrintf(dy, " imageProbe=%d,", imageProbe);
     dyStringPrintf(dy, " bodyPart=%d,", bodyPartId);
-    dyStringPrintf(dy, " level=%f", lev);
+    dyStringPrintf(dy, " level=%f,", lev);
+    dyStringPrintf(dy, " cellType=%d,", cellTypeId);
+    dyStringPrintf(dy, " cellSubtype=%d", cellSubtypeId);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     }
@@ -1097,20 +1118,26 @@ char *line, *words[256];
 struct sqlConnection *conn = sqlConnect(database);
 int rowSize;
 int submissionSetId;
-struct hash *fullDirHash = newHash(0);
-struct hash *thumbDirHash = newHash(0);
-struct hash *bodyPartHash = newHash(0);
-struct hash *sexHash = newHash(0);
-struct hash *copyrightHash = newHash(0);
-struct hash *embeddingHash = newHash(0);
-struct hash *fixationHash = newHash(0);
-struct hash *permeablizationHash = newHash(0);
-struct hash *probeColorHash = newHash(0);
-struct hash *sliceTypeHash = newHash(0);
-struct hash *sectionSetHash = newHash(0);
 struct hash *captionTextHash = readCaptions(captionFile);
-struct hash *captionIdHash = newHash(0);
 int imageProbeId = 0;
+
+/* Local caches of values from some simple id/value tables. */
+struct hash *fullDirCache = newHash(0);
+struct hash *thumbDirCache = newHash(0);
+struct hash *bodyPartCache = newHash(0);
+struct hash *cellTypeCache = newHash(0);
+struct hash *cellSubtypeHash = newHash(0);
+struct hash *sexCache = newHash(0);
+struct hash *copyrightCache = newHash(0);
+struct hash *contributorCache = newHash(0);
+struct hash *embeddingCache = newHash(0);
+struct hash *fixationCache = newHash(0);
+struct hash *permeablizationCache = newHash(0);
+struct hash *probeColorCache = newHash(0);
+struct hash *sliceTypeCache = newHash(0);
+struct hash *sectionSetCache = newHash(0);
+struct hash *captionIdHash = newHash(0);
+
 
 /* Read first line of tab file, and from it get all the field names. */
 if (!lineFileNext(lf, &line, NULL))
@@ -1155,7 +1182,7 @@ if (doLock)
     sqlHardLockAll(conn, TRUE);
 
 /* Create/find submission record. */
-submissionSetId = saveSubmissionSet(conn, raHash);
+submissionSetId = saveSubmissionSet(conn, raHash, copyrightCache, contributorCache);
 
 /* Process rest of tab file. */
 while (lineFileNextReal(lf, &line))
@@ -1171,8 +1198,20 @@ while (lineFileNextReal(lf, &line))
 	command = words[0];
 	if (sameString(command, "expression"))
 	    {
-	    lineFileExpectWords(lf, 3, wordCount);
-	    doExpression(lf, conn, imageProbeId, words[1], words[2]);
+	    char *bodyPart, *level, *cellType = "", *cellSubtype = "";
+	    if (wordCount < 3)
+		lineFileExpectWords(lf, 3, wordCount);
+	    bodyPart = words[1];
+	    level = words[2];
+	    if (wordCount >= 4)
+	        cellType = words[3];
+	    if (wordCount >= 5)
+	        cellType = words[4];
+	    if (wordCount >= 6)
+	        lineFileExpectWords(lf, 5, wordCount);
+	    doExpression(lf, conn, imageProbeId, 
+	    	bodyPart, bodyPartCache, level, 
+		cellType, cellTypeCache, cellSubtype, cellSubtypeHash);
 	    }
 	else
 	    {
@@ -1186,23 +1225,23 @@ while (lineFileNextReal(lf, &line))
 	lineFileExpectWords(lf, rowSize, wordCount);
 	/* Find/add fields that are in simple id/name type tables. */
 	int fullDir = cachedId(conn, "fileLocation", "name", 
-	    fullDirHash, "fullDir", raHash, rowHash, words);
+	    fullDirCache, "fullDir", raHash, rowHash, words);
 	int thumbDir = cachedId(conn, "fileLocation", 
-	    "name", thumbDirHash, "thumbDir", raHash, rowHash, words);
+	    "name", thumbDirCache, "thumbDir", raHash, rowHash, words);
 	int bodyPart = cachedId(conn, "bodyPart", 
-	    "name", bodyPartHash, "bodyPart", raHash, rowHash, words);
+	    "name", bodyPartCache, "bodyPart", raHash, rowHash, words);
 	int embedding = cachedId(conn, "embedding", "description",
-	    embeddingHash, "embedding", raHash, rowHash, words);
+	    embeddingCache, "embedding", raHash, rowHash, words);
 	int fixation = cachedId(conn, "fixation", "description",
-	    fixationHash, "fixation", raHash, rowHash, words);
+	    fixationCache, "fixation", raHash, rowHash, words);
 	int permeablization = cachedId(conn, "permeablization", "description",
-	    permeablizationHash, "permeablization", raHash, rowHash, words);
+	    permeablizationCache, "permeablization", raHash, rowHash, words);
 	int probeColor = cachedId(conn, "probeColor", 
-	    "name", probeColorHash, "probeColor", raHash, rowHash, words);
+	    "name", probeColorCache, "probeColor", raHash, rowHash, words);
 	int sex = cachedId(conn, "sex", 
-	    "name", sexHash, "sex", raHash, rowHash, words);
+	    "name", sexCache, "sex", raHash, rowHash, words);
 	int sliceType = cachedId(conn, "sliceType", 
-	    "name", sliceTypeHash, "sliceType", raHash, rowHash, words);
+	    "name", sliceTypeCache, "sliceType", raHash, rowHash, words);
 	
 	/* Get required fields in tab file */
 	char *fileName = getVal("fileName", raHash, rowHash, words, NULL);
@@ -1256,7 +1295,7 @@ while (lineFileNextReal(lf, &line))
 	int imageId = 0;
 
 	verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
-	sectionId = doSectionSet(conn, sectionSetHash, sectionSet);
+	sectionId = doSectionSet(conn, sectionSetCache, sectionSet);
 	geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
 	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
 	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
