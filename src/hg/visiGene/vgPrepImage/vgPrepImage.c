@@ -6,7 +6,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: vgPrepImage.c,v 1.1 2005/11/23 18:18:14 kent Exp $";
+static char const rcsid[] = "$Id: vgPrepImage.c,v 1.2 2005/11/24 03:34:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,13 +17,16 @@ errAbort(
   "usage:\n"
   "   vgPrepImage sourceDir thumbDir fullDir image.jpg\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -noLink - don't link in original image to fullDir\n"
   );
 }
+
+boolean noLink = FALSE;
 
 int thumbSize=200;
 
 static struct optionSpec options[] = {
+   {"noLink", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -114,13 +117,15 @@ makeDirForFile(full);
 /* Make copies at various sizes. */
 makeThumbnail(source, thumb);
 makePyramid(source, pyramid);
-makeLink(source, full);
+if (!noLink)
+    makeLink(source, full);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+noLink = optionExists("noLink");
 if (argc != 5)
     usage();
 vgPrepImage(argv[1], argv[2], argv[3], argv[4]);
