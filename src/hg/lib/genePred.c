@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.77 2005/11/11 18:28:29 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.78 2005/11/24 20:37:50 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -904,20 +904,49 @@ if (start < end)
 return frame;
 }
 
+static boolean shouldMergeBlocks(struct genePred *gene, int iExon,
+                                 unsigned tStart, unsigned options,
+                                 int cdsMergeSize, int utrMergeSize)
+/* determine if a new block starting at tStart whould be merged with
+ * the preceeding exon, indicated by iExon.
+ */
+{
+/* nothing to check if no exons have been added */
+if (iExon >= 0)
+    {
+    boolean inCds = (gene->cdsStart <= tStart) && (tStart < gene->cdsEnd);
+    int gapSize = (tStart - gene->exonEnds[iExon]);
+    if (inCds)
+        {
+        if ((options & genePredPslCdsMod3) && ((gapSize % 3) != 0))
+            return FALSE;  /* not a multiple of three */
+        if ((cdsMergeSize >= 0) && (gapSize <= cdsMergeSize))
+            return TRUE;
+        }
+    else 
+        {
+        if ((utrMergeSize >= 0) && (gapSize <= utrMergeSize))
+            return TRUE;
+        }
+    }
+return FALSE; /* don't merge */
+}
+
 static void pslToExons(struct psl *psl, struct genePred *gene,
-                       struct genbankCds* cds, int insertMergeSize)
-/* Convert psl alignment blocks to genePred exons, merging together blocks
- * separated by small inserts as necessary.  Optionally add frame
- * information. */
+                       struct genbankCds* cds, unsigned options,
+                       int cdsMergeSize, int utrMergeSize)
+/* Convert psl alignment blocks to genePred exons, merging together blocks by
+ * the specified paraemeters.  Optionally add frame information. */
 {
 int iBlk, iExon;
 int startIdx, stopIdx, idxIncr;
 
+/* this is bigger than needed if blocks merge */
 gene->exonStarts = needMem(psl->blockCount*sizeof(unsigned));
 gene->exonEnds = needMem(psl->blockCount*sizeof(unsigned));
 if (gene->optFields & genePredExonFramesFld)
     {
-    /* this is bigger than needed if blocks merge; default to no frame */
+    /* default frames to indicate no frame */
     gene->exonFrames = needMem(psl->blockCount*sizeof(unsigned));
     for (iExon = 0; iExon < psl->blockCount; iExon++)
         gene->exonFrames[iExon] = -1;
@@ -945,9 +974,10 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
 	tEnd = tStart + psl->blockSizes[iBlk] * 3;
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if ((iExon < 0) || (insertMergeSize < 0)
-        || ((tStart - gene->exonEnds[iExon]) > insertMergeSize))
+    if (!shouldMergeBlocks(gene, iExon, tStart, options,
+                           cdsMergeSize, utrMergeSize))
         {
+        /* new exon */
         iExon++;
         gene->exonStarts[iExon] = tStart;
 	}
@@ -964,19 +994,23 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
 	}
     }
 gene->exonCount = iExon+1;
+assert(gene->exonCount <= psl->blockCount);
 }
 
-struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
-                                  struct genbankCds* cds, int insertMergeSize)
-/* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
- * specification string to genomic coordinates. Small inserts, no more than
- * insertMergeSize, will be dropped and the blocks merged. Use
- * genePredStdInsertMergeSize if you don't know better. A negative
- * insertMergeSize disables merging of blocks.  This differs from specifying
- * zero in that adjacent blocks will not be merged. The optfields field is a
- * set from genePredFields, indicated what fields to create.  Zero-length CDS,
- * or null cds, creates without CDS annotation.  If cds is null, it will set
- * status fields to cdsNone.  */
+struct genePred *genePredFromPsl3(struct psl *psl,  struct genbankCds* cds, 
+                                  unsigned optFields, unsigned options,
+                                  int cdsMergeSize, int utrMergeSize)
+/* Convert a PSL of an mRNA alignment to a genePred, converting a genbank CDS
+ * specification string to genomic coordinates. Small genomic inserts are
+ * merged based on the mergeSize parameters.  Gaps no larger than the
+ * specified merge sizes result in the adjacent blocks being merged into a
+ * single exon.  Gaps in CDS use cdsMergeSize, in UTR use utrMergeSize.  If
+ * the genePredPslCdsMod3 option is specified, then CDS gaps are only merged
+ * if a multiple of three.  A negative merge sizes disables merging of blocks.
+ * This differs from specifying zero in that adjacent blocks will not be
+ * merged. The optfields field is a set from genePredFields, indicated what
+ * fields to create.  Zero-length CDS, or null cds, creates without CDS
+ * annotation.  If cds is null, it will set status fields to cdsNone.  */
 {
 struct genePred *gene;
 AllocVar(gene);
@@ -999,21 +1033,31 @@ else
     }
 
 annotateCds(psl, cds, gene);
-pslToExons(psl, gene, cds, insertMergeSize);
+pslToExons(psl, gene, cds, options, cdsMergeSize, utrMergeSize);
 return gene;
+}
+
+struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
+                                  struct genbankCds* cds, int insertMergeSize)
+/* Compatibility function, genePredFromPsl3 is prefered.  See that function's
+ * documentation for details. This calls genePredFromPsl3 with no options
+ * and insertMergeSize set for CDS and UTR.
+ */
+{
+return genePredFromPsl3(psl, cds, optFields, genePredPslDefaults, insertMergeSize, insertMergeSize);
 }
 
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize)
-/* Compatibility function, genePredFromPsl2 is prefered.  See that function's
- * documentation for details.This calls genePredFromPsl2 with no options.
+/* Compatibility function, genePredFromPsl3 is prefered.  See that function's
+ * documentation for details. This calls genePredFromPsl3 with no options.
  */
 {
 struct genbankCds cds;
 ZeroVar(&cds);
 cds.start = cdsStart;
 cds.end = cdsEnd;
-return genePredFromPsl2(psl, 0, &cds, insertMergeSize);
+return genePredFromPsl3(psl, &cds, 0, genePredPslDefaults, insertMergeSize, insertMergeSize);
 }
 
 char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,

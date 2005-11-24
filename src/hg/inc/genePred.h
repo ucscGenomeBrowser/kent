@@ -28,6 +28,14 @@ enum genePredCreateOpts
 };
 
 
+enum genePredFromPslOpts
+/* bit set of options for genePredFromPsl3 */
+{
+    genePredPslDefaults = 0x00,  /* used if nothing special */
+    genePredPslCdsMod3  = 0x01   /* only merge gaps in CDS if mod 3 */
+};
+
+
 enum genePredFields
 /* Bit set to indicate which optional fields are used.
  * N.B. value order must match order in genePred */
@@ -74,6 +82,7 @@ struct genePred
  * Set to 8 due to microdeletions.
  */
 #define genePredStdInsertMergeSize 8
+
 #define GENEPRED_CLASS_VAR "geneClasses"
 #define GENEPRED_CLASS_PREFIX "gClass_"
 #define GENEPRED_CLASS_TBL "itemClassTbl"
@@ -159,22 +168,32 @@ struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *gr
  * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
  */
 
+struct genePred *genePredFromPsl3(struct psl *psl,  struct genbankCds* cds, 
+                                  unsigned optFields, unsigned options,
+                                  int cdsMergeSize, int utrMergeSize);
+/* Convert a PSL of an mRNA alignment to a genePred, converting a genbank CDS
+ * specification string to genomic coordinates. Small genomic inserts are
+ * merged based on the mergeSize parameters.  Gaps no larger than the
+ * specified merge sizes result in the adjacent blocks being merged into a
+ * single exon.  Gaps in CDS use cdsMergeSize, in UTR use utrMergeSize.  If
+ * the genePredPslCdsMod3 option is specified, then CDS gaps are only merged
+ * if a multiple of three.  A negative merge sizes disables merging of blocks.
+ * This differs from specifying zero in that adjacent blocks will not be
+ * merged. The optfields field is a set from genePredFields, indicated what
+ * fields to create.  Zero-length CDS, or null cds, creates without CDS
+ * annotation.  If cds is null, it will set status fields to cdsNone.  */
+
 struct genePred *genePredFromPsl2(struct psl *psl, unsigned optFields,
                                   struct genbankCds* cds, int insertMergeSize);
-/* Convert a PSL of an RNA alignment to a genePred, converting a genbank CDS
- * specification string to genomic coordinates. Small inserts, no more than
- * insertMergeSize, will be dropped and the blocks merged. Use
- * genePredStdInsertMergeSize if you don't know better. A negative
- * insertMergeSize disables merging of blocks.  This differs from specifying
- * zero in that adjacent blocks will not be merged. The optfields field is a
- * set from genePredFields, indicated what fields to create.  Zero-length CDS,
- * or null cds, creates without CDS annotation.  If cds is null, it will set
- * status fields to cdsNone.  */
+/* Compatibility function, genePredFromPsl3 is prefered.  See that function's
+ * documentation for details. This calls genePredFromPsl3 with no options
+ * and insertMergeSize set for CDS and UTR.
+ */
 
 struct genePred *genePredFromPsl(struct psl *psl, int cdsStart, int cdsEnd,
                                  int insertMergeSize);
-/* Compatibility function, genePredFromPsl2 is prefered.  See that function's
- * documentation for details.This calls genePredFromPsl2 with no options.
+/* Compatibility function, genePredFromPsl3 is prefered.  See that function's
+ * documentation for details. This calls genePredFromPsl3 with no options.
  */
 
 char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
