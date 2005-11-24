@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.5 2005/11/03 00:15:28 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.6 2005/11/24 01:08:26 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -546,7 +546,7 @@ int i, baseIx = 0;
 struct mafComp *mc;
 char c;
 
-for (i=0; i < maf->textSize && baseIx < baseCount; i++)
+for (i=0; i < maf->textSize /*&& baseIx < baseCount*/; i++)
     {
     c = text[i];
     if (c == '-')
@@ -557,7 +557,7 @@ for (i=0; i < maf->textSize && baseIx < baseCount; i++)
             mafSrcDb(mc->src, buf, sizeof buf);
             if (hashLookup(itemHash, buf) == NULL)
                 continue;
-            if (mc->size == 0)
+            if (mc->text == NULL)
                 /* empty row annotation */
                 continue;
             if (mc->text[i] != '-')
@@ -598,7 +598,7 @@ for (i=0; outLine[i]; i++)
         }
     }
 outLine = outLine + offset + previousBreaks + (previousInserts * 2);
-for (i=0; i < textSize && outPositions < outSize;  i++)
+for (i=0; i < textSize /*&& outPositions < outSize*/;  i++)
     {
     if (masterText[i] != '-')
         {
@@ -617,10 +617,22 @@ for (i=0; i < textSize && outPositions < outSize;  i++)
     else
         {
         /* gap in master (reference) sequence but not in this species */
-        if (text[i] != '-' && text[i] != '=')
-            insertSize++;
+	switch(text[i])
+	    {
+	    case 'N':
+	    case '-':
+	    case '=':
+	    case ' ':
+		break;
+	    default:
+		insertSize++;
+	    }
         }
     }
+    if (insertSize != 0)
+	{
+	inserts[insertCounts++] = offset + outIx + 1;
+	}
 return insertCounts;
 }
 
@@ -789,7 +801,7 @@ if ((summary = summarySetting(track)) == NULL)
     return FALSE;
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
-if (cartCgiUsualBoolean(cart, option, FALSE) && 
+if (cartCgiUsualBoolean(cart, option, TRUE) && 
     trackDbSetting(track->tdb, "irows") != NULL)
         useIrowChains = TRUE;
 
@@ -989,7 +1001,7 @@ if (miList == NULL || track->customPt == NULL)
     return FALSE;
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
-if (cartCgiUsualBoolean(cart, option, FALSE) && 
+if (cartCgiUsualBoolean(cart, option, TRUE) && 
     trackDbSetting(track->tdb, "irows") != NULL)
         useIrowChains = TRUE;
 
@@ -1330,7 +1342,7 @@ if (length && (nextStart != -1))
 	sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
 	}
     comp = mafMayFindCompPrefix(sub, compName, ".");
-    if (comp)
+    if (comp && comp->text)
 	{
 	switch(length)
 	    {
@@ -1453,7 +1465,7 @@ safef(option, sizeof(option), "%s.%s", track->mapName, MAF_DOT_VAR);
 dots = cartCgiUsualBoolean(cart, option, FALSE);
 
 safef(option, sizeof(option), "%s.%s", track->mapName, MAF_CHAIN_VAR);
-if (cartCgiUsualBoolean(cart, option, FALSE))
+if (cartCgiUsualBoolean(cart, option, TRUE))
     {
     if (trackDbSetting(track->tdb, "irows") != NULL)
         useIrowChains = TRUE;
@@ -1554,7 +1566,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    }
 		}
             seq = mc->text;
-            if ( (mc->size == 0) && (mc->srcSize == 0))
+	    //printf("mc size %d srcSize %d\n",mc->size,mc->srcSize);
+            if ( mc->text == NULL ) //(mc->size == 0))// && (mc->srcSize == 0))
                 {
                 /* if no alignment here, but MAF annotation indicates continuity
                  * of flanking alignments, fill with dashes or ='s */
@@ -1573,6 +1586,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    char fill = MAF_DOUBLE_GAP;
 		    seq = needMem(size+1);
 		    needToFree = TRUE;
+		    //printf("double gap\n");
 		    memset(seq, fill, size);
 		    }
 		else if (mc->leftStatus == MAF_MISSING_STATUS && mc->rightStatus == MAF_MISSING_STATUS)
@@ -1586,8 +1600,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                     continue;
                 }
 
-            mi->insertsSize = processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize,
-	    	mi->inserts, mi->insertsSize);
+            //mi->insertsSize = processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize,
+	    //	mi->inserts, mi->insertsSize);
 
             if (((mc->leftStatus == MAF_NEW_STATUS ||
                 mc->rightStatus == MAF_NEW_STATUS )
@@ -1601,7 +1615,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
                 for (p = seq, i = 0; i < size; p++, i++)
                     *p = ' ';
                 p = seq;
-                if (mc->size != 0)
+                if (mc->text != NULL)
                     strcpy(p, mc->text);
                 if (mc->leftStatus == MAF_NEW_STATUS)
                     {
@@ -1665,25 +1679,25 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    }
 		}
 
-            if (mc->srcSize && ((mc->leftStatus == MAF_MISSING_STATUS))) 
+            if (mc->text && ((mc->leftStatus == MAF_MISSING_STATUS))) 
 		{
                 char *p = seq;
 		while(*p == '-')
 		    *p++ = 'N';
 		}
-            if (mc->srcSize && ((mc->leftStatus == MAF_INSERT_STATUS))) 
+            if (mc->text && ((mc->leftStatus == MAF_INSERT_STATUS))) 
 		{
                 char *p = seq;
 		while(*p == '-')
 		    *p++ = '=';
 		}
-            if (mc->srcSize && ((mc->rightStatus == MAF_MISSING_STATUS)))
+            if (mc->text && ((mc->rightStatus == MAF_MISSING_STATUS)))
 		{
                 char *p = seq + size - 1;
 		while(*p == '-')
 		    *p-- = 'N';
 		}
-            if (mc->srcSize && ((mc->rightStatus == MAF_INSERT_STATUS)))
+            if (mc->text && ((mc->rightStatus == MAF_INSERT_STATUS)))
 		{
 		char *m = mcMaster->text + size - 1;
                 char *p = seq + size - 1;
@@ -1694,6 +1708,8 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    }
 		}
 	    
+            mi->insertsSize = processSeq(seq, mcMaster->text, size, lines[mi->ix], lineOffset, subSize,
+	    	mi->inserts, mi->insertsSize);
             if (needToFree)
                 freeMem(seq);
 	    }
@@ -1883,9 +1899,11 @@ tryagain:
     }
 
 /* Clean up */
+/*
 for (i=0; i<lineCount-1; ++i)
     freeMem(lines[i]);
 freez(&lines);
+*/
 hashFree(&miHash);
 return y;
 }
