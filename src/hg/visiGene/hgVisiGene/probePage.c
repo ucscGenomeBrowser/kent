@@ -69,6 +69,7 @@ static void antibodyProbeInfo(struct sqlConnection *conn, int probeId)
 char query[256];
 int abId;
 int taxon;
+char *species = "n/a";
 
 /* Lookup antibody id and taxon. */
 safef(query, sizeof(query), "select antibody from probe where id=%d", 
@@ -79,7 +80,9 @@ taxon = sqlQuickNum(conn, query);
 
 safef(query, sizeof(query), "select name from antibody where id=%d", abId);
 labeledResult("name", conn, query);
-labeledText("species", orgName(conn, taxon));
+if (taxon != 0)
+    species = orgName(conn, taxon);
+labeledText("species", species);
 printf("<BR>\n");
 safef(query, sizeof(query), "select description from antibody where id=%d", 
 	abId);
@@ -134,6 +137,7 @@ if (sameWord(probeType, "antibody"))
     antibodyProbeInfo(conn, probeId);
 else
     rnaProbeInfo(conn, probeId);
+
 webEnd();
 }
 
