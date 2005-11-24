@@ -22,6 +22,20 @@ table bodyPart
     string name;	"Name of body part"
     )
 
+table cellType
+"Neuron, glia, etc."
+    (
+    int id;	"ID of cell type"
+    string name;	"Name of cell type"
+    )
+
+table cellSubtype
+"A more detailed splitting up of cell types.  What type of neuron, etc."
+    (
+    int id;	"ID of cell subtype"
+    string name;	"Name of cell subtype"
+    )
+
 table sliceType
 "Horizontal, coronal, whole mount, etc."
     (
@@ -271,6 +285,8 @@ table expressionLevel
     int imageProbe;	"Image and probe"
     int bodyPart;	"Location of expression"
     float level;	"Expression level (0.0 to 1.0)"
+    int cellType;	"Cell type expression seen in"
+    int cellSubtype;	"Cell subtype expression seen in"
     )
 
 table lifeTime

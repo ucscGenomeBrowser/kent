@@ -31,6 +31,24 @@ CREATE TABLE bodyPart (
     INDEX(name(8))
 );
 
+# Neuron, glia, etc.
+CREATE TABLE cellType (
+    id int auto_increment not null,	# ID of cell type
+    name varchar(255),			# Name of cell type
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(name(8))
+);
+
+# A more detailed splitting up of cell types.  What type of neuron, etc.
+CREATE TABLE cellSubtype (
+    id int auto_increment not null,	# ID of cell subtype
+    name varchar(255),			# Name of cell subtype
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(name(8))
+);
+
 #Sex of a specimen
 CREATE TABLE sex (
     id int auto_increment not null,	# Sex ID
@@ -353,9 +371,13 @@ CREATE TABLE expressionLevel (
     imageProbe int not null,	# Image and probe
     bodyPart int not null,	# Location of expression
     level float not null,	# Expression level (0.0 to 1.0)
+    cellType int not null,      # Cell type expression seen in
+    cellSubtype int not null,   # Cell subtype expression seen in
               #Indices
     INDEX(imageProbe),
-    INDEX(bodyPart)
+    INDEX(bodyPart),
+    INDEX(cellType),
+    INDEX(cellSubtype)
 );
 
 #Information of ages critical points in life cycle
