@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.54 2005/08/15 22:57:54 galt Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.55 2005/11/24 00:58:07 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -607,15 +607,21 @@ for (full = mafList; full != NULL; full = full->next)
                 continue;
             lastChainX2 = x2+1;
             /* no alignment here -- just a gap/break annotation */
-            if ((mc->leftStatus == MAF_INSERT_STATUS || mc->leftStatus == MAF_CONTIG_STATUS || mc->leftStatus == MAF_NEW_NESTED_STATUS)  &&
-                (mc->rightStatus == MAF_INSERT_STATUS || mc->rightStatus == MAF_CONTIG_STATUS || mc->rightStatus == MAF_NEW_NESTED_STATUS))
+            if ((mc->leftStatus == MAF_MISSING_STATUS ) && (mc->rightStatus == MAF_MISSING_STATUS))
 		{
-		if (mc->leftLen != 0)
-		    /* double gap -> display double line ala chain tracks */
-		    drawMafChain(vg, x1, yOff, w, height, TRUE);
-		else
-		    /* single gap -> display single line ala chain tracks */
-		    drawMafChain(vg, x1, yOff, w, height, FALSE);
+		Color fuzz = shadesOfGray[2];
+		vgBox(vg, x1, yOff+2, w, height-5, fuzz);
+		}
+            else if ((mc->leftStatus == MAF_INSERT_STATUS ||  mc->leftStatus == MAF_NEW_NESTED_STATUS)  &&
+                (mc->rightStatus == MAF_INSERT_STATUS ||  mc->rightStatus == MAF_NEW_NESTED_STATUS))
+		{
+		/* double gap -> display double line ala chain tracks */
+		drawMafChain(vg, x1, yOff, w, height, TRUE);
+		}
+            else if (( mc->leftStatus == MAF_CONTIG_STATUS)  && ( mc->rightStatus == MAF_CONTIG_STATUS ))
+		{
+		/* single gap -> display single line ala chain tracks */
+		drawMafChain(vg, x1, yOff, w, height, FALSE);
 		}
             }
         else
@@ -640,6 +646,7 @@ for (full = mafList; full != NULL; full = full->next)
                     if (shade > maxShade)
                         shade = maxShade;
                     c = shadesOfGray[shade];
+                    //vgBox(vg, i+x1, yOff+2, 1, height - 5, c);
                     vgBox(vg, i+x1, yOff, 1, height - 1, c);
                     }
                 }
