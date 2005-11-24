@@ -1,21 +1,25 @@
-# Create empty database and tables.
-hgsql -e "create database visiGene" mysql
-hgsql visiGene < ~/kent/src/hg/visiGene/visiGene.sql
-makeTableDescriptions visiGene ~/kent/src/hg/visiGene/visiGene.as
+# CREATE EMPTY DATABASE AND TABLES.
+hgsql -e "create database visiGeneNew" mysql
+hgsql visiGeneNew < ~/kent/src/hg/visiGene/visiGene.sql
+makeTableDescriptions visiGeneNew ~/kent/src/hg/visiGene/visiGene.as
 
-# Load Paul Gray/Mahoney Lab data.
+# LOAD PAUL GRAY/MAHONEY LAB DATA.
+# Transferred images from Paul Gray's Mac to mine and converted
+# his spreadsheet to a tab-separated file, cloning.tab.
 cd ~/kent/src/hg/visiGene/vgLoadMahoney
 vgLoadMahoney /gbdb/visiGene mm5 cloning.tab clonePcr.bed outDir
 cd outDir
-visiGeneLoad whole.ra whole.tab /dev/null
-visiGeneLoad slices.ra slices.tab /dev/null
+visiGeneLoad whole.ra whole.tab /dev/null -database=visiGeneNew
+visiGeneLoad slices.ra slices.tab /dev/null -database=visiGeneNew
 
-# Load jackson labs data.
+# LOAD JACKSON LABS DATA.
+# First ask Galt to create a local copy of the Jackson labs
+# database.  I'm not sure how he did it.
 cd ~/kent/src/hg/visiGene/vgLoadJax
 vgLoadJax /gbdb/visiGene jackson visiGene
-./loadAll
+./loadNew
 
-# Load NIBB images
+# LOAD NIBB IMAGES
 # Do this after creating the nibbImageProbe.fa file as described
 # in makeXenTro1.doc, and after creating the nibbImageProbes table
 # in hg17 as describe in makeHg17.doc.  The image files are
@@ -46,5 +50,52 @@ vgLoadNibb /cluster/store11/visiGene/offline/nibbFrog \
 	/cluster/store11/visiGene/offline/nibbFrog.tab \
 	/cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa \
 	names.tab stage.tab outDir
-visiGeneLoad outDir/nibb.ra outDir/nibb.tab /dev/null
+visiGeneLoad outDir/nibb.ra outDir/nibb.tab /dev/null -database=visiGeneNew
 
+
+# LOAD GENSAT IMAGES
+# This was done with the assistance of Mike Dicuccio at NCBI, 
+# dicuccio@ncbi.nlm.nih.gov.  If updating probably it's best to
+# get in touch with him and make sure that the ftp site is up to
+# date.   
+
+# Download data from NCBI into /cluster/store11/visiGene/offline/gensat
+cd /cluster/store11/visiGene/offline
+mkdir gensat
+cd gensat
+mkdir RawData
+cd RawData
+wget --timeStamping ftp://ftp.ncbi.nih.gov/pub/gensat/RawData/GENSAT-20051120.xml.gz
+wget --timeStamping ftp://ftp.ncbi.nih.gov/pub/gensat/RawData/NCBI_Gensat-20051120.dtd
+
+# At this point if the dtd has changed you may need to remake 
+# kent/src/hg/visiGene/gensat/lib/gs.c with autoXml.  Once
+# this is done then do the download with gensatImageDownload.
+# It'll take about 3 days. The results will be in the Institutions dir.
+cd /cluster/store11/visiGene/offline/gensat
+zcat RawData/GENSAT-20051120.xml.gz | gensatImageDownload . download.log
+
+# Create parasol directory and a list of the jpg files.
+ssh kki
+cd /cluster/store11/visiGene/offline/gensat
+mkdir prepImageRun
+find Institutions -name '*.jpg' -print | sed 's/Institutions\//' > prepImageRun/jpg.lst
+cd prepImageRun
+
+# Create parasol batch
+cat << '_EOF_' > gsub
+#LOOP
+vgPrepImage /cluster/store11/visiGene/offline/gensat/Institutions /cluster/store11/
+visiGene/gbdb/200/inSitu/Mouse/gensat /cluster/store11/visiGene/gbdb/full/inSitu/Mo
+use/gensat $(path1)
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+gensub2 jpg.lst single gsub spec
+para make spec
+
+# Note the above procedure would take about 3 days.  I ended up copying the
+# data over to /san/sanvol1, and doing it on the pita cluster.  The job
+# there just took two hours, with just 100 cpus available.  It took
+# an hour to copy the data over, and an hour to copy it back though,
+# and some tweaking.
