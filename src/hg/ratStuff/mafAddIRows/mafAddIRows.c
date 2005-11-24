@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.7 2005/11/16 00:41:02 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.8 2005/11/24 17:13:55 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -231,7 +231,8 @@ for(; strandHead ; strandHead = strandHead->next)
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_MISSING_STATUS;
 	    prevLink->mc->rightLen = link->mc->leftLen = nCount;
 	    }
-	else if  ((tDiff > 100000) || ((qDiff < -1000) || (qDiff > 100000)))
+	//else if  ((tDiff > 100000) || ((qDiff < -1000) || (qDiff > 100000)))
+	else if  ((tDiff > 100000) || ((qDiff < 0) || (qDiff > 100000)))
 	    {
 	//printf("new %d %d %d %d\n",link->cb.tStart,link->cb.tEnd,link->cb.qStart,link->cb.qEnd);
 	    prevLink->mc->rightStatus = link->mc->leftStatus = MAF_NEW_STATUS;
@@ -354,6 +355,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			mc->rightStatus = mc->leftStatus = blockStatus->mc->rightStatus;
 			mc->rightLen = mc->leftLen = blockStatus->mc->rightLen;
 			mc->src = blockStatus->mc->src;
+			mc->srcSize = blockStatus->mc->srcSize;
 			mc->strand = blockStatus->mc->strand;
 			mc->start = blockStatus->mc->start + blockStatus->mc->size;
 			if (lastMc == NULL)
@@ -430,7 +432,7 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 				memset(mc->text, '-', mc->size);
 				mc->size = 0;
 				}
-			    else mc->srcSize =  0;
+			    //else mc->srcSize =  0;
 			    }
 			break;
 		    }
@@ -515,8 +517,8 @@ for(maf = mafList; maf ; prevMaf = maf, maf = nextMaf)
 			    memset(mc->text, '-', mc->size);
 			    mc->size = 0;
 			    }
-			else
-			    mc->srcSize = 0;
+			//else
+			    //mc->srcSize = 0;
 			    
 			break;
 		    default:
