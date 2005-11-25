@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.9 2005/11/24 00:48:55 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.10 2005/11/25 10:45:22 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -62,10 +62,11 @@ if (snpClass == 3)
     return TRUE;
     }
 
+/* set chromEnd = chromStart for insertions */
 if (snpClass == 4)
     {
     el->class = cloneString("insertion");
-    el->chromEnd = atoi(endString);
+    el->chromEnd = el->chromStart;
     return TRUE;
     }
 verbose(1, "skipping snp %s with loc type %d\n", el->name, snpClass);
@@ -260,10 +261,12 @@ void writeSnpTable(FILE *f, struct snp125 *list)
 {
 struct snp125 *el;
 int score = 0;
+int bin = 0;
 
 for (el = list; el != NULL; el = el->next)
     {
-    fprintf(f, "0\t");
+    bin = hFindBin(el->chromStart, el->chromEnd);
+    fprintf(f, "%d\t", bin);
     fprintf(f, "chr%s\t", el->chrom);
     fprintf(f, "%d\t", el->chromStart);
     fprintf(f, "%d\t", el->chromEnd);
