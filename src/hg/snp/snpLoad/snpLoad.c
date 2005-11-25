@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.10 2005/11/25 10:45:22 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.11 2005/11/25 11:52:24 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -288,19 +288,24 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
+
+
+
 void loadDatabase(struct snp125 *list)
 /* write the tab file, create the table and load the tab file */
 {
-struct sqlConnection *conn = sqlConnect(snpDb);
-FILE *f = hgCreateTabFile(".", "snp125");
+struct sqlConnection *conn2 = hAllocConn2();
 
+FILE *f = hgCreateTabFile(".", "snp125");
 writeSnpTable(f, list);
 
 // hGetMinIndexLength requires chromInfo
-// snp125TableCreate(conn, hGetMinIndexLength());
-snp125TableCreate(conn, 32);
+// could add hGetMinIndexLength2 to hdb.c
+// snp125TableCreate(conn2, hGetMinIndexLength2());
+snp125TableCreate(conn2, 32);
 
-hgLoadTabFile(conn, ".", "snp125", &f);
+hgLoadTabFile(conn2, ".", "snp125", &f);
+hFreeConn2(&conn2);
 
 }
 
@@ -332,26 +337,31 @@ if (argc != 3)
 /* TODO: look in jksql for existence check for non-hgcentral database */
 snpDb = argv[1];
 targetDb = argv[2];
-if(!hDbExists(targetDb))
-    errAbort("%s does not exist\n", targetDb);
+// if(!hDbExists(targetDb))
+    // errAbort("%s does not exist\n", targetDb);
 
 hSetDb(snpDb);
+hSetDb2(targetDb);
 
 /* check for needed tables */
 if(!hTableExistsDb(snpDb, "ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "ContigLocusId"))
+    errAbort("no ContigLocusId table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "SNP"))
+    errAbort("no SNP table in %s\n", snpDb);
 
-/* this will create a temporary table */
 list = readSnps();
 lookupContigs(list);
 lookupFunction(list);
 lookupHet(list);
+
 verbose(1, "sorting\n");
 slSort(&list, snp125Cmp);
+
 // dumpSnps(list);
-// hSetDb(targetDb);
 verbose(1, "loading\n");
 loadDatabase(list);
 slFreeList(&list);
