@@ -63,6 +63,24 @@ else
     }
 }
 
+static void bacProbeInfo(struct sqlConnection *conn, int probeId)
+/* Print out information about BAC probe. */
+{
+char query[256];
+int bacId;
+char *name = "n/a";
+
+/* Lookup bacId. */
+safef(query, sizeof(query), "select bac from probe where id=%d", probeId);
+bacId = sqlQuickNum(conn, query);
+if (bacId != 0)
+    {
+    safef(query, sizeof(query), "select name from bac where id=%d", bacId);
+    name = naForEmpty(sqlQuickString(conn, query));
+    }
+labeledResult("BAC name", conn, query);
+}
+
 static void antibodyProbeInfo(struct sqlConnection *conn, int probeId)
 /* Print out info on antibody based probe */
 {

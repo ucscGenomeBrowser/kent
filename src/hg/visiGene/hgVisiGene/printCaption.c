@@ -243,6 +243,20 @@ for (probe = probeList; probe != NULL; probe = probe->next)
 	        dyStringPrintf(dy, " from primers");
 	    }
 	}
+    else if (sameWord(type, "BAC"))
+        {
+	char *name;
+	safef(query, sizeof(query), 
+	   "select bac.name from probe,bac "
+	   "where probe.id = %d and probe.bac = bac.id"
+	   , probe->val);
+	name = sqlQuickString(conn, query);
+	if (name != NULL)
+	    {
+	    dyStringPrintf(dy, " %s", name);
+	    freeMem(name);
+	    }
+	}
     dyStringPrintf(dy, "</A>");
     freez(&type);
 
