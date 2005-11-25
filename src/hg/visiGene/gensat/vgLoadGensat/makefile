@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = ../../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = vgLoadGensat.o ../gs.o
+O = vgLoadGensat.o ../lib/gs.o
 
 vgLoadGensat: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/vgLoadGensat $O ${MYLIBS} $L
