@@ -97,5 +97,5 @@ para make spec
 # Note the above procedure would take about 3 days.  I ended up copying the
 # data over to /san/sanvol1, and doing it on the pita cluster.  The job
 # there just took two hours, with just 100 cpus available.  It took
-# an hour to copy the data over, and an hour to copy it back though,
+# an hour to copy the data over, and eight hours to copy it back though,
 # and some tweaking.
